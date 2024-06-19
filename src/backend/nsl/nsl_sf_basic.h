@@ -215,6 +215,7 @@ double nsl_sf_logarithmic(double k, double p);
 double nsl_sf_triangular(double x, double min, double max, double mode);
 double nsl_sf_triangular_P(double x, double min, double max, double mode);
 double nsl_sf_triangular_Q(double x, double min, double max, double mode);
+double nsl_sf_triangular_Quantile(double p, double min, double max, double mode);
 
 __END_DECLS
 

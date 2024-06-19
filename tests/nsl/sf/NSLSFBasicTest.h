@@ -20,6 +20,7 @@ private Q_SLOTS:
 	void test_triangular();
 	void test_triangular_P();
 	void test_triangular_Q();
+	void test_triangular_Quantile();
 	void testran_triangular();
 
 	// log2

@@ -661,3 +661,13 @@ double nsl_sf_triangular_P(double x, double min, double max, double mode) {
 double nsl_sf_triangular_Q(double x, double min, double max, double mode) {
 	return 1. - nsl_sf_triangular_P(x, min, max, mode);
 }
+double nsl_sf_triangular_Quantile(double p, double min, double max, double mode) {
+	if (p < 0 || p > 1)
+		return 0.;
+
+	/* see https://search.r-project.org/CRAN/refmans/EnvStats/html/Triangular.html */
+	if (p <= nsl_sf_triangular_P(mode, min, max, mode))
+		return min + sqrt((max - min) * (mode - min) * p);
+	else
+		return max - sqrt((max - min) * (max - mode) * (1. - p));
+}

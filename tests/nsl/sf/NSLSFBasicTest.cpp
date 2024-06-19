@@ -69,6 +69,29 @@ void NSLSFBasicTest::test_triangular_Q() {
 			nsl_sf_triangular_Q(3. * i / (double)nrPoints, 1., 2., 1.5);
 	}
 }
+void NSLSFBasicTest::test_triangular_Quantile() {
+	// out of bounds
+	QCOMPARE(nsl_sf_triangular_Quantile(0., 1., 1., 1.), 1.);
+	QCOMPARE(nsl_sf_triangular_Quantile(1., 1., 2., 1.), 2.);
+
+	// enableDebugTrace(true);
+	WARN(nsl_sf_triangular_Quantile(0.25, 1., 3., 2.))
+	WARN(nsl_sf_triangular_Quantile(0.25, 1., 4., 3.))
+	WARN(nsl_sf_triangular_Quantile(0.5, 1., 3., 2.))
+	WARN(nsl_sf_triangular_Quantile(0.75, 1., 3., 2.))
+
+	// values
+	QCOMPARE(nsl_sf_triangular_Quantile(0.25, 1., 3., 2.), 1.707106781186547);
+	QCOMPARE(nsl_sf_triangular_Quantile(0.25, 1., 4., 3.), 2.224744871391589);
+	QCOMPARE(nsl_sf_triangular_Quantile(0.5, 1., 3., 2.), 2.);
+	QCOMPARE(nsl_sf_triangular_Quantile(0.75, 1., 3., 2.), 2.292893218813453);
+
+	const int nrPoints = 1e6;
+	QBENCHMARK {
+		for (int i = 0; i < nrPoints; i++)
+			nsl_sf_triangular_Quantile(i / (double)nrPoints, 1., 2., 1.5);
+	}
+}
 void NSLSFBasicTest::testran_triangular() {
 	// out of bounds
 	QCOMPARE(nsl_sf_ran_triangular(1., 1., 1.), 0.);

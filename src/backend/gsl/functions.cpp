@@ -839,6 +839,7 @@ struct funs _functions[] = {
 	{[]() { return i18n("Probability density for a triangular distribution"); }, "triangular", nsl_sf_triangular, 4, nullptr, FunctionGroups::TriangularDistribution},
 	{[]() { return i18n("Cumulative distribution function P"); }, "triangularP", nsl_sf_triangular_P, 4, nullptr, FunctionGroups::TriangularDistribution},
 	{[]() { return i18n("Cumulative distribution function Q"); }, "triangularQ", nsl_sf_triangular_Q, 4, nullptr, FunctionGroups::TriangularDistribution},
+	{[]() { return i18n("p-th quantile"); }, "triangularQuantile", nsl_sf_triangular_Quantile, 4, nullptr, FunctionGroups::TriangularDistribution},
 };
 
 // clang-format on
