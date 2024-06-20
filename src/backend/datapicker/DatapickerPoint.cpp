@@ -126,9 +126,9 @@ DatapickerPoint::DatapickerPoint(const QString& name, DatapickerPointPrivate* dd
 DatapickerPoint::~DatapickerPoint() = default;
 
 void DatapickerPoint::finalizeAdd() {
-	// call retransform _after_ the parent (image or curve) was set and we can determin the properties of the parent (symbol, etc.)
-	// TODO: do we need a full retransform here or is calling d->updateProperties() enough?
-	retransform();
+	// after the parent (image or curve) was set, update the properties (symbol, etc.) from the parent
+	Q_D(DatapickerPoint);
+	d->updateProperties();
 }
 
 void DatapickerPoint::init() {
