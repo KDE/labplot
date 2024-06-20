@@ -1080,7 +1080,8 @@ void XYCurvePrivate::updateLines(bool performanceOptimization) {
 	if (performanceOptimization) {
 		const double widthDatarectInch = Worksheet::convertFromSceneUnits(pageRect.width(), Worksheet::Unit::Inch);
 		const auto dpi = QApplication::primaryScreen()->physicalDotsPerInchX(); // Assumption: screens have all the same dpi
-		numberOfPixelX = ceil(widthDatarectInch * dpi);
+		// multiplying by 10 because it can be zoomed into the cached pixmap and then it looks ugly
+		numberOfPixelX = ceil(widthDatarectInch * dpi) * 10;
 	}
 
 	// calculate the lines connecting the data points
