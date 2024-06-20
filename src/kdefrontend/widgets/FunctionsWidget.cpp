@@ -88,7 +88,7 @@ void FunctionsWidget::groupChanged(int index) {
 	static const QStringList& names = m_expressionParser->functionsDescriptions();
 	static const QVector<FunctionGroups>& indices = m_expressionParser->functionsGroupIndices();
 
-	QDEBUG("Index: " << FunctionGroupsToString(groupIndex));
+	QDEBUG(Q_FUNC_INFO << ", index = " << FunctionGroupsToString(groupIndex));
 
 	ui.lwFunctions->clear();
 	for (int i = 0; i < names.size(); ++i) {
@@ -126,10 +126,11 @@ void FunctionsWidget::insertClicked() {
 	static const QStringList& functions = m_expressionParser->functions();
 	static const QStringList& names = m_expressionParser->functionsDescriptions();
 
-	// determine the currently selected constant
+	// determine the currently selected function from text
 	const QString& text = ui.lwFunctions->currentItem()->text();
 	const QString& name = text.left(text.indexOf(QStringLiteral(" (")));
 	int index = names.indexOf(name);
+	QDEBUG("text = " << text << ", name = " << name << ", index = " << index)
 
 	Q_EMIT functionSelected(functions.at(index));
 }
