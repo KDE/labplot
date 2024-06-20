@@ -2821,6 +2821,10 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 			range.setEnd(plot->maximum(dim));
 		}
 
+		// check ranges for nonlinear scales
+		if (range.scale() != RangeT::Scale::Linear)
+			range = d->checkRange(range);
+
 		if (range.start() < d->dataRange(dim, index).start())
 			d->dataRange(dim, index).start() = range.start();
 
@@ -2832,10 +2836,6 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 
 	// data range is used to nice extend, so set correct scale
 	d->dataRange(dim, index).setScale(range.scale());
-
-	// check ranges for nonlinear scales
-	if (d->dataRange(dim, index).scale() != RangeT::Scale::Linear)
-		d->dataRange(dim, index) = d->checkRange(d->dataRange(dim, index));
 
 	DEBUG(Q_FUNC_INFO << ", data " << CartesianCoordinateSystem::dimensionToString(dim).toStdString()
 					  << " range = " << d->dataRange(dim, index).toStdString(false))
