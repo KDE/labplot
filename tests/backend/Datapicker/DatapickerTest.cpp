@@ -1762,4 +1762,69 @@ void DatapickerTest::datapickerImageClipboardSelectImageFromPath() {
 	QCOMPARE(image->originalPlotImage, img);
 }
 
+void DatapickerTest::saveLoad() {
+	QString savePath;
+	{
+		Project project;
+		auto* datapicker = new Datapicker(QStringLiteral("Test"));
+		project.addChild(datapicker);
+		auto* image = datapicker->image();
+
+		// Set reference points
+		datapicker->addNewPoint(QPointF(0, 1), image);
+		datapicker->addNewPoint(QPointF(0, 0), image);
+		datapicker->addNewPoint(QPointF(1, 0), image);
+
+		auto ap = image->axisPoints();
+		ap.type = DatapickerImage::GraphType::Linear;
+		image->setAxisPoints(ap);
+
+		DatapickerImageWidget w(nullptr);
+		w.setImages({image});
+		w.ui.sbPositionX1->setValue(0);
+		w.ui.sbPositionY1->setValue(10);
+		w.ui.sbPositionZ1->setValue(0);
+		w.ui.sbPositionX2->setValue(0);
+		w.ui.sbPositionY2->setValue(0);
+		w.ui.sbPositionZ2->setValue(0);
+		w.ui.sbPositionX3->setValue(10);
+		w.ui.sbPositionY3->setValue(0);
+		w.ui.sbPositionZ3->setValue(0);
+		w.logicalPositionChanged();
+
+		auto* curve = new DatapickerCurve(i18n("Curve"));
+		curve->addDatasheet(image->axisPoints().type);
+		datapicker->addChild(curve);
+
+		datapicker->addNewPoint(QPointF(0.5, 0.5), curve); // updates the curve data
+		VALUES_EQUAL(curve->posXColumn()->valueAt(0), 5.);
+		VALUES_EQUAL(curve->posYColumn()->valueAt(0), 5.);
+
+		datapicker->addNewPoint(QPointF(0.7, 0.65), curve); // updates the curve data
+		VALUES_EQUAL(curve->posXColumn()->valueAt(1), 7.);
+		VALUES_EQUAL(curve->posYColumn()->valueAt(1), 6.5);
+
+		SAVE_PROJECT("DatapickerTestProject"); // Save again to save relative path
+	}
+
+	// Load project
+	{
+		Project project;
+		QCOMPARE(project.load(savePath), true);
+
+		auto datapicker = project.child<Datapicker>(0);
+		QVERIFY(datapicker);
+
+		const auto children = datapicker->children(AspectType::DatapickerPoint);
+		QCOMPARE(children.length(), 2);
+
+		const auto* curve = datapicker->child<DatapickerCurve>(i18n("Curve"));
+		QVERIFY(curve);
+		VALUES_EQUAL(curve->posXColumn()->valueAt(0), 5.);
+		VALUES_EQUAL(curve->posYColumn()->valueAt(0), 5.);
+		VALUES_EQUAL(curve->posXColumn()->valueAt(1), 7.);
+		VALUES_EQUAL(curve->posYColumn()->valueAt(1), 6.5);
+	}
+}
+
 QTEST_MAIN(DatapickerTest)
