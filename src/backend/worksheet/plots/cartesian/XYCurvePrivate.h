@@ -26,8 +26,9 @@ public:
 	explicit XYCurvePrivate(XYCurve*);
 
 	void retransform() override;
+	void retransform(bool performanceOptimization);
 	void recalc();
-	void updateLines();
+	void updateLines(bool performanceOptimization = true);
 	void addLine(QPointF p,
 				 double& x,
 				 double& minY,
@@ -37,7 +38,8 @@ public:
 				 int numberOfPixelX,
 				 double minDiffX,
 				 RangeT::Scale scale,
-				 bool& prevPixelDiffZero); // for any x scale
+				 bool& prevPixelDiffZero,
+				 bool performanceOptimization); // for any x scale
 	static void addUniqueLine(QPointF p,
 							  double& minY,
 							  double& maxY,

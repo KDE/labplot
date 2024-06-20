@@ -826,6 +826,10 @@ void XYCurvePrivate::calculateScenePoints() {
   triggers the update of lines, drop lines, symbols etc.
 */
 void XYCurvePrivate::retransform() {
+	retransform(!q->isPrinting());
+}
+
+void XYCurvePrivate::retransform(bool performanceOptimization) {
 	const bool suppressed = !isVisible() || q->isLoading() || suppressRetransform || !plot();
 	DEBUG("\n" << Q_FUNC_INFO << ", name = " << STDSTRING(name()) << ", suppressRetransform = " << suppressRetransform);
 	trackRetransformCalled(suppressed);
@@ -855,7 +859,7 @@ void XYCurvePrivate::retransform() {
 	}
 
 	suppressRecalc = true;
-	updateLines();
+	updateLines(performanceOptimization);
 	updateDropLines();
 	updateSymbols();
 	updateRug();
@@ -962,31 +966,42 @@ void XYCurvePrivate::addLine(QPointF p,
 							 int numberOfPixelX,
 							 double minDiffX,
 							 RangeT::Scale scale,
-							 bool& prevPixelDiffZero) {
+							 bool& prevPixelDiffZero,
+							 bool performanceOptimization) {
 	if (scale == RangeT::Scale::Linear) {
-		pixelDiff = (std::round(p.x() / minDiffX) - x) != 0; // only relevant if greater zero or not
-		addUniqueLine(p, minY, maxY, lastPoint, pixelDiff, m_lines, prevPixelDiffZero);
-		if (pixelDiff > 0) // set x to next pixel
-			x = std::round(p.x() / minDiffX);
+		if (performanceOptimization) {
+			pixelDiff = (std::round(p.x() / minDiffX) - x) != 0; // only relevant if greater zero or not
+			addUniqueLine(p, minY, maxY, lastPoint, pixelDiff, m_lines, prevPixelDiffZero);
+			if (pixelDiff > 0) // set x to next pixel
+				x = std::round(p.x() / minDiffX);
+		} else {
+			pixelDiff = 1; // only relevant if greater zero or not
+			addUniqueLine(p, minY, maxY, lastPoint, pixelDiff, m_lines, prevPixelDiffZero);
+		}
 	} else {
 		// for nonlinear scaling the pixel distance must be calculated for every point
-		static const double preCalc = (double)plot()->dataRect().width() / numberOfPixelX;
-		bool visible;
-		QPointF pScene = q->cSystem->mapLogicalToScene(p, visible, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
+		if (performanceOptimization) {
+			bool visible;
+			QPointF pScene = q->cSystem->mapLogicalToScene(p, visible, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
+			static const double preCalc = (double)plot()->dataRect().width() / numberOfPixelX;
 
-		// if the point is not valid, don't create a line
-		if (!visible)
-			return;
+			// if the point is not valid, don't create a line
+			if (!visible)
+				return;
 
-		// using only the difference between the points is not sufficient, because
-		// p0 is updated always independent if new line added or not
-		const int p1Pixel = std::round((pScene.x() - plot()->dataRect().x()) / preCalc);
-		pixelDiff = p1Pixel - x;
+			// using only the difference between the points is not sufficient, because
+			// p0 is updated always independent if new line added or not
+			const int p1Pixel = std::round((pScene.x() - plot()->dataRect().x()) / preCalc);
+			pixelDiff = p1Pixel - x;
+			addUniqueLine(p, minY, maxY, lastPoint, pixelDiff, m_lines, prevPixelDiffZero);
 
-		addUniqueLine(p, minY, maxY, lastPoint, pixelDiff, m_lines, prevPixelDiffZero);
-
-		if (pixelDiff > 0) // set x to next pixel
-			x = std::round((pScene.x() - plot()->dataRect().x()) / preCalc);
+			if (pixelDiff > 0) // set x to next pixel
+				x = std::round((pScene.x() - plot()->dataRect().x()) / preCalc);
+		} else {
+			pixelDiff = 1;
+			addUniqueLine(p, minY, maxY, lastPoint, pixelDiff, m_lines, prevPixelDiffZero);
+			// x = p.x(); // x not relevant
+		}
 	}
 }
 
@@ -1004,6 +1019,7 @@ void XYCurvePrivate::addUniqueLine(QPointF p, double& minY, double& maxY, QPoint
 		maxY = std::max(p.y(), maxY);
 		minY = std::min(p.y(), minY);
 		prevPixelDiffZero = true;
+		lastPoint.setY(p.y()); // Do not change the xpos because otherwise it is slithgly off
 	} else {
 		if (prevPixelDiffZero) {
 			// If previously more than one point lied on the same pixel
@@ -1027,8 +1043,8 @@ void XYCurvePrivate::addUniqueLine(QPointF p, double& minY, double& maxY, QPoint
 		// TODO: needed?
 		//			if (p1.y() >= minY && p1.y() <= maxY && pixelDiff == 1)
 		//				return;
+		lastPoint = p;
 	}
-	lastPoint = p;
 }
 
 /*!
@@ -1037,7 +1053,7 @@ void XYCurvePrivate::addUniqueLine(QPointF p, double& minY, double& maxY, QPoint
 TODO: At the moment also the points which are outside of the scene are added. This algorithm can be improved by omitting all
   lines where both points are outside of the scene
 */
-void XYCurvePrivate::updateLines() {
+void XYCurvePrivate::updateLines(bool performanceOptimization) {
 #if PERFTRACE_CURVES
 	PERFTRACE(QLatin1String(Q_FUNC_INFO) + QStringLiteral(", curve ") + name());
 #endif
@@ -1059,10 +1075,13 @@ void XYCurvePrivate::updateLines() {
 
 	// The numberOfPixelX defines how many lines are drawn (max 2*numberOfPixelX). More lines make no sense, because then
 	// pixels are overlapping.
+	int numberOfPixelX = -1;
 	const QRectF pageRect = plot()->dataRect();
-	const double widthDatarectInch = Worksheet::convertFromSceneUnits(pageRect.width(), Worksheet::Unit::Inch);
-	const auto dpi = QApplication::primaryScreen()->physicalDotsPerInchX(); // Assumption: screens have all the same dpi
-	const int numberOfPixelX = ceil(widthDatarectInch * dpi);
+	if (performanceOptimization) {
+		const double widthDatarectInch = Worksheet::convertFromSceneUnits(pageRect.width(), Worksheet::Unit::Inch);
+		const auto dpi = QApplication::primaryScreen()->physicalDotsPerInchX(); // Assumption: screens have all the same dpi
+		numberOfPixelX = ceil(widthDatarectInch * dpi);
+	}
 
 	// calculate the lines connecting the data points
 	{
@@ -1123,11 +1142,15 @@ void XYCurvePrivate::updateLines() {
 
 			// setting initial point
 			double xPos = NAN;
-			if (scale == RangeT::Scale::Linear)
-				minDiffX = (xRange.end() - xRange.start()) / numberOfPixelX;
-			else {
-				// For nonlinear x achses, the linear scene coordinates are used
-				minDiffX = plot()->dataRect().width() / numberOfPixelX;
+			if (performanceOptimization) {
+				if (scale == RangeT::Scale::Linear)
+					minDiffX = (xRange.end() - xRange.start()) / numberOfPixelX;
+				else {
+					// For nonlinear x achses, the linear scene coordinates are used
+					minDiffX = plot()->dataRect().width() / numberOfPixelX;
+				}
+			} else {
+				minDiffX = 0;
 			}
 
 			// determine first point
@@ -1177,7 +1200,7 @@ void XYCurvePrivate::updateLines() {
 
 					if (lineIncreasingXOnly && (p1.x() < p0.x())) // skip points
 						continue;
-					addLine(p1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minDiffX, scale, prevPixelDiffZero);
+					addLine(p1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minDiffX, scale, prevPixelDiffZero, performanceOptimization);
 					p0 = p1;
 				}
 
@@ -1201,8 +1224,8 @@ void XYCurvePrivate::updateLines() {
 						continue;
 
 					tempPoint1 = QPointF(p1.x(), p0.y()); // horizontal line
-					addLine(tempPoint1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minDiffX, scale, prevPixelDiffZero);
-					addLine(p1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minDiffX, scale, prevPixelDiffZero);
+					addLine(tempPoint1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minDiffX, scale, prevPixelDiffZero, performanceOptimization);
+					addLine(p1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minDiffX, scale, prevPixelDiffZero, performanceOptimization);
 					p0 = p1;
 				}
 				// last line is a vertical line so it must be drawn manually (pixelDiff is 0)
@@ -1223,8 +1246,8 @@ void XYCurvePrivate::updateLines() {
 					if (lineIncreasingXOnly && (p1.x() < p0.x()))
 						continue;
 					tempPoint1 = QPointF(p0.x(), p1.y());
-					addLine(tempPoint1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minDiffX, scale, prevPixelDiffZero);
-					addLine(p1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minDiffX, scale, prevPixelDiffZero);
+					addLine(tempPoint1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minDiffX, scale, prevPixelDiffZero, performanceOptimization);
+					addLine(p1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minDiffX, scale, prevPixelDiffZero, performanceOptimization);
 					p0 = p1;
 				}
 
@@ -1248,9 +1271,9 @@ void XYCurvePrivate::updateLines() {
 						continue;
 					tempPoint1 = QPointF(p0.x() + (p1.x() - p0.x()) / 2., p0.y()); // horizontal until mid at p0.y level
 					tempPoint2 = QPointF(p0.x() + (p1.x() - p0.x()) / 2., p1.y()); // vertical line
-					addLine(tempPoint1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minDiffX, scale, prevPixelDiffZero);
-					addLine(tempPoint2, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minDiffX, scale, prevPixelDiffZero);
-					addLine(p1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minDiffX, scale, prevPixelDiffZero);
+					addLine(tempPoint1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minDiffX, scale, prevPixelDiffZero, performanceOptimization);
+					addLine(tempPoint2, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minDiffX, scale, prevPixelDiffZero, performanceOptimization);
+					addLine(p1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minDiffX, scale, prevPixelDiffZero, performanceOptimization);
 					p0 = p1;
 				}
 
@@ -1274,9 +1297,9 @@ void XYCurvePrivate::updateLines() {
 						continue;
 					tempPoint1 = QPointF(p0.x(), p0.y() + (p1.y() - p0.y()) / 2.);
 					tempPoint2 = QPointF(p1.x(), p0.y() + (p1.y() - p0.y()) / 2.);
-					addLine(tempPoint1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minDiffX, scale, prevPixelDiffZero);
-					addLine(tempPoint2, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minDiffX, scale, prevPixelDiffZero);
-					addLine(p1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minDiffX, scale, prevPixelDiffZero);
+					addLine(tempPoint1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minDiffX, scale, prevPixelDiffZero, performanceOptimization);
+					addLine(tempPoint2, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minDiffX, scale, prevPixelDiffZero, performanceOptimization);
+					addLine(p1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minDiffX, scale, prevPixelDiffZero, performanceOptimization);
 					p0 = p1;
 				}
 				// last line is a vertical line so it must be drawn manually (pixelDiff is 0)
@@ -1311,7 +1334,7 @@ void XYCurvePrivate::updateLines() {
 							skip = 0;
 							continue;
 						}
-						addLine(p1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minDiffX, scale, prevPixelDiffZero);
+						addLine(p1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minDiffX, scale, prevPixelDiffZero, performanceOptimization);
 						skip++;
 					} else {
 						skip = 0;
@@ -1432,7 +1455,7 @@ void XYCurvePrivate::updateLines() {
 				if (!xinterp.empty()) {
 					for (unsigned int i{0}; i < xinterp.size() - 1; i++) {
 						p0 = QPointF(xinterp[i], yinterp[i]);
-						addLine(p0, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minDiffX, scale, prevPixelDiffZero);
+						addLine(p0, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minDiffX, scale, prevPixelDiffZero, performanceOptimization);
 					}
 
 					addLine(QPointF(x[numberOfPoints - 1], y[numberOfPoints - 1]),
@@ -1444,7 +1467,8 @@ void XYCurvePrivate::updateLines() {
 							numberOfPixelX,
 							minDiffX,
 							scale,
-							prevPixelDiffZero);
+							prevPixelDiffZero,
+							performanceOptimization);
 				}
 
 				gsl_spline_free(spline);
