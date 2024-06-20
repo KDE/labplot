@@ -27,7 +27,7 @@ public:
 	void retransform();
 	virtual void recalcShapeAndBoundingRect();
 	void updatePoint();
-	void updatePropeties();
+	void updateProperties();
 	void retransformErrorBar();
 
 	bool m_printing{false};

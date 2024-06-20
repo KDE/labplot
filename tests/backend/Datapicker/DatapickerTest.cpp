@@ -1812,14 +1812,19 @@ void DatapickerTest::saveLoad() {
 		Project project;
 		QCOMPARE(project.load(savePath), true);
 
-		auto datapicker = project.child<Datapicker>(0);
+		// check the datapicker is loaded
+		const auto* datapicker = project.child<Datapicker>(0);
 		QVERIFY(datapicker);
 
-		const auto children = datapicker->children(AspectType::DatapickerPoint);
-		QCOMPARE(children.length(), 2);
+		// check axis/reference points
+		const auto& points = datapicker->image()->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+		QCOMPARE(points.length(), 3);
 
+		// check the curve
 		const auto* curve = datapicker->child<DatapickerCurve>(i18n("Curve"));
 		QVERIFY(curve);
+		const auto& curvePoints = curve->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+		QCOMPARE(curvePoints.length(), 2);
 		VALUES_EQUAL(curve->posXColumn()->valueAt(0), 5.);
 		VALUES_EQUAL(curve->posYColumn()->valueAt(0), 5.);
 		VALUES_EQUAL(curve->posXColumn()->valueAt(1), 7.);

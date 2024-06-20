@@ -125,6 +125,12 @@ DatapickerPoint::DatapickerPoint(const QString& name, DatapickerPointPrivate* dd
 // and is deleted during the cleanup in QGraphicsScene
 DatapickerPoint::~DatapickerPoint() = default;
 
+void DatapickerPoint::finalizeAdd() {
+	// call retransform _after_ the parent (image or curve) was set and we can determin the properties of the parent (symbol, etc.)
+	// TODO: do we need a full retransform here or is calling d->updateProperties() enough?
+	retransform();
+}
+
 void DatapickerPoint::init() {
 	Q_D(DatapickerPoint);
 
@@ -323,7 +329,7 @@ void DatapickerPointPrivate::retransform() {
 
 	setPos(position);
 	updatePoint();
-	updatePropeties();
+	updateProperties();
 	recalcShapeAndBoundingRect();
 	retransformErrorBar();
 }
@@ -350,7 +356,7 @@ void DatapickerPointPrivate::updatePoint() {
 		curve->updatePoint(q);
 }
 
-void DatapickerPointPrivate::updatePropeties() {
+void DatapickerPointPrivate::updateProperties() {
 	auto* curve = dynamic_cast<DatapickerCurve*>(q->parentAspect());
 	auto* image = dynamic_cast<DatapickerImage*>(q->parentAspect());
 	if (image) {
@@ -558,6 +564,5 @@ bool DatapickerPoint::load(XmlStreamReader* reader, bool preview) {
 		}
 	}
 
-	retransform();
 	return true;
 }
