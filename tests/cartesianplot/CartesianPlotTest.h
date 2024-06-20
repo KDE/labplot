@@ -50,6 +50,8 @@ private Q_SLOTS:
 
 	void invalidcSystem();
 
+	void invalidStartValueLogScaling();
+
 	void autoScaleFitCurveCalculation();
 
 	void wheelEventCenterAxes();

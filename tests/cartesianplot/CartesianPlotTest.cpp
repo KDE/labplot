@@ -754,6 +754,81 @@ void CartesianPlotTest::rangeFormatNonDefaultRange() {
 	QCOMPARE(plot->rangeFormat(Dimension::Y, 1), RangeT::Format::Numeric);
 }
 
+void CartesianPlotTest::invalidStartValueLogScaling() {
+	Project project;
+
+	Spreadsheet* sheet = new Spreadsheet(QStringLiteral("Spreadsheet"), false);
+	project.addChild(sheet);
+
+	sheet->setColumnCount(3);
+	sheet->setRowCount(3);
+
+	sheet->column(0)->setColumnMode(AbstractColumn::ColumnMode::Double);
+	sheet->column(1)->setColumnMode(AbstractColumn::ColumnMode::Double);
+	sheet->column(2)->setColumnMode(AbstractColumn::ColumnMode::Double);
+
+	sheet->column(0)->setValueAt(0, 0);
+	sheet->column(0)->setValueAt(1, 1);
+	sheet->column(0)->setValueAt(2, 2);
+
+	sheet->column(1)->setValueAt(0, 0);
+	sheet->column(1)->setValueAt(1, 1);
+	sheet->column(1)->setValueAt(2, 2);
+
+	sheet->column(2)->setValueAt(0, 0.00001);
+	sheet->column(2)->setValueAt(1, 0.1);
+	sheet->column(2)->setValueAt(2, 1);
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+
+	// Create new cSystem
+	Range<double> xRange;
+	xRange.setFormat(RangeT::Format::Numeric);
+	Range<double> yRange;
+	yRange.setFormat(RangeT::Format::Numeric);
+	yRange.setScale(RangeT::Scale::Log10);
+	plot->addXRange(xRange);
+	plot->addYRange(yRange);
+	CartesianCoordinateSystem* cSystem = new CartesianCoordinateSystem(plot);
+	cSystem->setIndex(Dimension::X, 1);
+	cSystem->setIndex(Dimension::Y, 1);
+	plot->addCoordinateSystem(cSystem);
+	plot->setNiceExtend(false);
+
+	auto* curve1 = new XYCurve(QStringLiteral("curve1"));
+	plot->addChild(curve1);
+
+	curve1->setXColumn(sheet->column(0));
+	curve1->setYColumn(sheet->column(1));
+	curve1->setCoordinateSystemIndex(1);
+
+	QCOMPARE(plot->rangeFormat(Dimension::X, 0), RangeT::Format::Numeric);
+	QCOMPARE(plot->rangeFormat(Dimension::Y, 0), RangeT::Format::Numeric);
+	QCOMPARE(plot->rangeFormat(Dimension::X, 1), RangeT::Format::Numeric);
+	QCOMPARE(plot->rangeFormat(Dimension::Y, 1), RangeT::Format::Numeric);
+
+	auto* curve2 = new XYCurve(QStringLiteral("curve2"));
+	plot->addChild(curve2);
+
+	curve2->setXColumn(sheet->column(0));
+	curve2->setYColumn(sheet->column(2));
+	curve2->setCoordinateSystemIndex(1);
+
+	plot->zoomOut(1, 1);
+
+	plot->navigate(1, CartesianPlot::NavigationOperation::ScaleAuto);
+
+	// Doesn't matter which curve is used here, because both are using the same cSystem
+	CHECK_RANGE(plot, curve1, Dimension::X, 0., 2.);
+	// 0 is not valid for log10 scaling, so use the smallest valid values of the curves
+	CHECK_RANGE(plot, curve1, Dimension::Y, 0.00001, 2);
+}
+
 /*!
  * \brief CartesianPlotTest::invalidcSystem
  * Plot with 2 CoordinateSystems (with common x range), but the second has invalid start end (0, 0).
