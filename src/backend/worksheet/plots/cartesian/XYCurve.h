@@ -124,6 +124,9 @@ public:
 	double y(double x, double& x_new, bool& valueFound) const;
 	int getNextValue(double xpos, int index, double& x, double& y, bool& valueFound) const;
 
+	static void setOptimizationLimit(int);
+	static void setDrawPathLimit(int);
+
 private Q_SLOTS:
 	void updateValues();
 	void updateErrorBars();

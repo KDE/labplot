@@ -12,6 +12,7 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Settings.h"
 #include "backend/lib/macros.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
 
 #include <KAboutData>
 #include <KColorSchemeManager>
@@ -126,6 +127,8 @@ int main(int argc, char* argv[]) {
 	const auto& group = Settings::settingsGeneral();
 	enableDebugTrace(group.readEntry<bool>(QLatin1String("DebugTrace"), false));
 	enablePerfTrace(group.readEntry<bool>(QLatin1String("PerfTrace"), false));
+	XYCurve::setOptimizationLimit(Settings::readXYCurveOptimizationLimit());
+	XYCurve::setDrawPathLimit(Settings::readXYCurveDrawPathLimit());
 
 	// TODO: add library information (GSL version, etc.) in about dialog
 

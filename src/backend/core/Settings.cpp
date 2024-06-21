@@ -13,7 +13,7 @@
  * config_name: the actual name used in the settings for reading/writing. This value must be unique within one setting_group!
  * default_value: the default value used, if no value for the setting is stored in the settings file
  */
-#define SETUP_SETTING(setting_name, datatype, settings_datatype, setting_group, config_name, default_value)                                                    \
+#define SETUP_SETTING_DEFINITION(setting_name, datatype, settings_datatype, setting_group, config_name, default_value)                                         \
 	namespace {                                                                                                                                                \
 	const QLatin1String config_name##ConfigName(#config_name);                                                                                                 \
 	}                                                                                                                                                          \
@@ -51,6 +51,7 @@ KConfigGroup settingsGeneral() {
 	return group(settingsGeneralConfigName);
 }
 
-SETUP_SETTING(DockPosBehavior, DockPosBehavior, int, settingsGeneral(), DockReopenPositionAfterClose, DockPosBehavior::AboveLastActive)
-
+SETUP_SETTING_DEFINITION(DockPosBehavior, DockPosBehavior, int, settingsGeneral(), DockReopenPositionAfterClose, DockPosBehavior::AboveLastActive)
+SETUP_SETTING_DEFINITION(XYCurveOptimizationLimit, int, int, settingsGeneral(), xycurveOptimizationLimit, 1000);
+SETUP_SETTING_DEFINITION(XYCurveDrawPathLimit, int, int, settingsGeneral(), xycurvedrawPathLimit, 500);
 } // namespace Settings

@@ -50,6 +50,20 @@
 
 #include <kdefrontend/GuiTools.h>
 
+namespace {
+
+int optimizationLimit = 1000;
+int drawPathLimit = 500;
+}
+
+void XYCurve::setOptimizationLimit(int limit) {
+	optimizationLimit = limit;
+}
+
+void XYCurve::setDrawPathLimit(int limit) {
+	drawPathLimit = limit;
+}
+
 using Dimension = CartesianCoordinateSystem::Dimension;
 
 CURVE_COLUMN_CONNECT(XYCurve, X, x, recalc)
@@ -1102,6 +1116,9 @@ void XYCurvePrivate::updateLines(bool performanceOptimization) {
 
 			if (startIndex > endIndex)
 				std::swap(startIndex, endIndex);
+
+			if (endIndex - startIndex < optimizationLimit)
+				performanceOptimization = false; // Not required
 
 			startIndex--; // use one value before
 			endIndex++;
@@ -2648,7 +2665,7 @@ void XYCurvePrivate::draw(QPainter* painter) {
 		painter->setOpacity(line->opacity());
 		painter->setPen(line->pen());
 		painter->setBrush(Qt::NoBrush);
-		if (line->pen().style() == Qt::SolidLine && !q->isPrinting()) {
+		if (line->pen().style() == Qt::SolidLine && !q->isPrinting() && m_lines.length() > drawPathLimit) {
 			// Much faster than drawPath but has problems
 			// with different styles
 			// When exporting to svg or pdf, this creates for every line
