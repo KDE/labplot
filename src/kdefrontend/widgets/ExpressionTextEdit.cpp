@@ -107,6 +107,17 @@ void ExpressionTextEdit::insertCompletion(const QString& completion) {
 }
 
 /*!
+ * check if expression uses variables
+ * if not, we don't need to check the variable columns (see function values dialog)
+ */
+bool ExpressionTextEdit::expressionUsesVariables() {
+	QString text = toPlainText().simplified();
+	auto parser = ExpressionParser::getInstance();
+
+	return !parser->isValid(text);
+}
+
+/*!
  * \brief Validates the current expression if the text was changed and highlights the text field if the expression is invalid.
  * \param force forces the validation and highlighting when no text changes were made, used when new parameters/variables were provided
  */

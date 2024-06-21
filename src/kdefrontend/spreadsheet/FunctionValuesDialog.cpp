@@ -201,28 +201,31 @@ void FunctionValuesDialog::checkValues() {
 		return;
 	}
 
-	// check the variables
-	for (int i = 0; i < m_variableDataColumns.size(); ++i) {
-		const auto& varName = m_variableLineEdits.at(i)->text();
+	// check if expression uses variables
+	if (ui.teEquation->expressionUsesVariables()) {
+		// check the variables
+		for (int i = 0; i < m_variableDataColumns.size(); ++i) {
+			const auto& varName = m_variableLineEdits.at(i)->text();
 
-		// ignore empty
-		if (varName.isEmpty())
-			continue;
+			// ignore empty
+			if (varName.isEmpty())
+				continue;
 
-		// checke whether a valid column was provided for the variable
-		auto* cb = m_variableDataColumns.at(i);
-		auto* aspect = static_cast<AbstractAspect*>(cb->currentModelIndex().internalPointer());
-		if (!aspect) {
-			m_okButton->setToolTip(i18n("Select a valid column"));
-			m_okButton->setEnabled(false);
-			return;
-		}
+			// check whether a valid column was provided for the variable
+			auto* cb = m_variableDataColumns.at(i);
+			auto* aspect = static_cast<AbstractAspect*>(cb->currentModelIndex().internalPointer());
+			if (!aspect) {
+				m_okButton->setToolTip(i18n("Select a valid column"));
+				m_okButton->setEnabled(false);
+				return;
+			}
 
-		// check whether the variable name is correct
-		if (!validVariableName(m_variableLineEdits.at(i))) {
-			m_okButton->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));
-			m_okButton->setEnabled(false);
-			return;
+			// check whether the variable name is correct
+			if (!validVariableName(m_variableLineEdits.at(i))) {
+				m_okButton->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));
+				m_okButton->setEnabled(false);
+				return;
+			}
 		}
 	}
 

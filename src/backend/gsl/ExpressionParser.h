@@ -27,7 +27,7 @@ public:
 	void setSpecialFunction1(const char* function_name, func_t1Payload funct, std::shared_ptr<Payload> payload);
 	void setSpecialFunction2(const char* function_name, func_t2Payload funct, std::shared_ptr<Payload> payload);
 
-	static bool isValid(const QString& expr, const QStringList& vars);
+	static bool isValid(const QString& expr, const QStringList& vars = QStringList());
 	QStringList getParameter(const QString& expr, const QStringList& vars);
 	bool evaluateCartesian(const QString& expr,
 						   Range<double> range,
