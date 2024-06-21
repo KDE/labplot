@@ -826,10 +826,7 @@ void XYCurvePrivate::calculateScenePoints() {
   triggers the update of lines, drop lines, symbols etc.
 */
 void XYCurvePrivate::retransform() {
-	retransform(!q->isPrinting());
-}
-
-void XYCurvePrivate::retransform(bool performanceOptimization) {
+	const bool performanceOptimization = !q->isPrinting();
 	const bool suppressed = !isVisible() || q->isLoading() || suppressRetransform || !plot();
 	DEBUG("\n" << Q_FUNC_INFO << ", name = " << STDSTRING(name()) << ", suppressRetransform = " << suppressRetransform);
 	trackRetransformCalled(suppressed);

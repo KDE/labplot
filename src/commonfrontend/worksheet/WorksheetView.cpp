@@ -2313,9 +2313,8 @@ void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, con
 	// draw the scene items
 	if (!selection) { // if no selection effects have to be exported, set the printing flag to suppress it in the paint()'s of the children
 		m_worksheet->setPrinting(true);
-		for (auto* child : m_worksheet->children<WorksheetElement>()) {
+		for (auto* child : m_worksheet->children<WorksheetElement>())
 			child->retransform();
-		}
 	}
 	scene()->render(painter, QRectF(), sourceRect);
 	if (!selection)

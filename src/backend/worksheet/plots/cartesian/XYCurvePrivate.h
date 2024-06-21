@@ -26,7 +26,6 @@ public:
 	explicit XYCurvePrivate(XYCurve*);
 
 	void retransform() override;
-	void retransform(bool performanceOptimization);
 	void recalc();
 	void updateLines(bool performanceOptimization = true);
 	void addLine(QPointF p,

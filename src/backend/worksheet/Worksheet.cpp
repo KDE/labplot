@@ -263,9 +263,8 @@ bool Worksheet::printPreview() const {
 #ifndef SDK
 	setPrinting(true);
 	// Retransform all elements with print enabled
-	for (auto* child : children<WorksheetElement>()) {
+	for (auto* child : children<WorksheetElement>())
 		child->retransform();
-	}
 	auto* dlg = new QPrintPreviewDialog(m_view);
 	connect(dlg, &QPrintPreviewDialog::paintRequested, m_view, &WorksheetView::print);
 	const auto r = dlg->exec();
