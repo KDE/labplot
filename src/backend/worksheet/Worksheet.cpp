@@ -203,9 +203,8 @@ bool Worksheet::exportView() const {
 #ifndef SDK
 	setPrinting(true);
 	// Retransform all elements with print enabled
-	for (auto* child : children<WorksheetElement>()) {
+	for (auto* child : children<WorksheetElement>())
 		child->retransform();
-	}
 	auto* dlg = new ExportWorksheetDialog(m_view);
 	dlg->setProjectFileName(const_cast<Worksheet*>(this)->project()->fileName());
 	dlg->setFileName(name());
@@ -241,9 +240,8 @@ bool Worksheet::printView() {
 #ifndef SDK
 	setPrinting(true);
 	// Retransform all elements with print enabled
-	for (auto* child : children<WorksheetElement>()) {
+	for (auto* child : children<WorksheetElement>())
 		child->retransform();
-	}
 	QPrinter printer;
 	auto* dlg = new QPrintDialog(&printer, m_view);
 	dlg->setWindowTitle(i18nc("@title:window", "Print Worksheet"));
