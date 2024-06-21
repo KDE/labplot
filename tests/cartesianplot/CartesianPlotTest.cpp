@@ -767,17 +767,17 @@ void CartesianPlotTest::invalidStartValueLogScaling() {
 	sheet->column(1)->setColumnMode(AbstractColumn::ColumnMode::Double);
 	sheet->column(2)->setColumnMode(AbstractColumn::ColumnMode::Double);
 
-	sheet->column(0)->setValueAt(0, 0);
-	sheet->column(0)->setValueAt(1, 1);
-	sheet->column(0)->setValueAt(2, 2);
+	sheet->column(0)->setValueAt(0, 0.);
+	sheet->column(0)->setValueAt(1, 1.);
+	sheet->column(0)->setValueAt(2, 2.);
 
-	sheet->column(1)->setValueAt(0, 0);
-	sheet->column(1)->setValueAt(1, 1);
-	sheet->column(1)->setValueAt(2, 2);
+	sheet->column(1)->setValueAt(0, 0.);
+	sheet->column(1)->setValueAt(1, 1.);
+	sheet->column(1)->setValueAt(2, 2.);
 
 	sheet->column(2)->setValueAt(0, 0.00001);
 	sheet->column(2)->setValueAt(1, 0.1);
-	sheet->column(2)->setValueAt(2, 1);
+	sheet->column(2)->setValueAt(2, 1.);
 
 	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
 	project.addChild(worksheet);
@@ -826,7 +826,7 @@ void CartesianPlotTest::invalidStartValueLogScaling() {
 	// Doesn't matter which curve is used here, because both are using the same cSystem
 	CHECK_RANGE(plot, curve1, Dimension::X, 0., 2.);
 	// 0 is not valid for log10 scaling, so use the smallest valid values of the curves
-	CHECK_RANGE(plot, curve1, Dimension::Y, 0.00001, 2);
+	CHECK_RANGE(plot, curve1, Dimension::Y, 0.00001, 2.);
 }
 
 /*!
