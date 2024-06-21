@@ -239,9 +239,10 @@ bool Worksheet::exportView(QPixmap& pixmap) const {
 bool Worksheet::printView() {
 #ifndef SDK
 	setPrinting(true);
-	// Retransform all elements with print enabled
-	for (auto* child : children<WorksheetElement>())
-		child->retransform();
+	// for print/export, retransform all XYCurves to get better quality with the disabled line optimization
+	for (auto* curve : children<XYCurve>())
+		curve->retransform();
+
 	QPrinter printer;
 	auto* dlg = new QPrintDialog(&printer, m_view);
 	dlg->setWindowTitle(i18nc("@title:window", "Print Worksheet"));
@@ -260,9 +261,10 @@ bool Worksheet::printView() {
 bool Worksheet::printPreview() const {
 #ifndef SDK
 	setPrinting(true);
-	// Retransform all elements with print enabled
-	for (auto* child : children<WorksheetElement>())
-		child->retransform();
+	// for print/export, retransform all XYCurves to get better quality with the disabled line optimization
+	for (auto* curve : children<XYCurve>())
+		curve->retransform();
+
 	auto* dlg = new QPrintPreviewDialog(m_view);
 	connect(dlg, &QPrintPreviewDialog::paintRequested, m_view, &WorksheetView::print);
 	const auto r = dlg->exec();
