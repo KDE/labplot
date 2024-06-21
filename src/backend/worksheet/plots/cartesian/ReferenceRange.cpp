@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Reference range on the plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -57,6 +57,7 @@ void ReferenceRange::init(bool loading) {
 	d->background->setHidden(true);
 	connect(d->background, &Background::updateRequested, [=] {
 		d->update();
+		Q_EMIT changed();
 	});
 
 	// create the border line
@@ -65,6 +66,7 @@ void ReferenceRange::init(bool loading) {
 	addChild(d->line);
 	connect(d->line, &Line::updatePixmapRequested, [=] {
 		d->update();
+		Q_EMIT changed();
 	});
 	connect(d->line, &Line::updateRequested, [=] {
 		d->recalcShapeAndBoundingRect();
@@ -475,6 +477,8 @@ void ReferenceRangePrivate::recalcShapeAndBoundingRect() {
 		m_shape.addPath(WorksheetElement::shapeFromPath(path, line->pen()));
 		m_boundingRectangle = m_shape.boundingRect();
 	}
+
+	Q_EMIT q->changed();
 }
 
 void ReferenceRangePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
@@ -484,15 +488,9 @@ void ReferenceRangePrivate::paint(QPainter* painter, const QStyleOptionGraphicsI
 	if (rect.width() == 0 || rect.height() == 0)
 		return;
 
-	// draw filling
-	if (background->enabled()) {
-		painter->setOpacity(background->opacity());
-		painter->setPen(Qt::NoPen);
-		drawFilling(painter);
-	}
-
-	// draw the background
-	painter->drawRect(rect);
+	// draw the background filling
+	if (background->enabled())
+		background->draw(painter, QPolygonF(rect));
 
 	// draw the border
 	if (line->style() != Qt::NoPen) {
@@ -511,84 +509,6 @@ void ReferenceRangePrivate::paint(QPainter* painter, const QStyleOptionGraphicsI
 	if (isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
 		painter->drawPath(m_shape);
-	}
-}
-
-void ReferenceRangePrivate::drawFilling(QPainter* painter) const {
-	if (background->type() == Background::Type::Color) {
-		switch (background->colorStyle()) {
-		case Background::ColorStyle::SingleColor: {
-			painter->setBrush(QBrush(background->firstColor()));
-			break;
-		}
-		case Background::ColorStyle::HorizontalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::VerticalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::TopLeftDiagonalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::BottomLeftDiagonalLinearGradient: {
-			QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::RadialGradient: {
-			QRadialGradient radialGrad(rect.center(), rect.width() / 2);
-			radialGrad.setColorAt(0, background->firstColor());
-			radialGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(radialGrad));
-			break;
-		}
-		}
-	} else if (background->type() == Background::Type::Image) {
-		if (!background->fileName().trimmed().isEmpty()) {
-			QPixmap pix(background->fileName());
-			switch (background->imageStyle()) {
-			case Background::ImageStyle::ScaledCropped:
-				pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				break;
-			case Background::ImageStyle::Scaled:
-				pix = pix.scaled(rect.size().toSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				break;
-			case Background::ImageStyle::ScaledAspectRatio:
-				pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				break;
-			case Background::ImageStyle::Centered:
-				painter->drawPixmap(QPointF(rect.center().x() - pix.size().width() / 2, rect.center().y() - pix.size().height() / 2), pix);
-				break;
-			case Background::ImageStyle::Tiled:
-				painter->setBrush(QBrush(pix));
-				break;
-			case Background::ImageStyle::CenterTiled:
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-			}
-		}
-	} else if (background->type() == Background::Type::Pattern) {
-		painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
 	}
 }
 

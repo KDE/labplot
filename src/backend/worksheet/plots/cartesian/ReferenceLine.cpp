@@ -58,6 +58,7 @@ void ReferenceLine::init(bool loading) {
 	addChild(d->line);
 	connect(d->line, &Line::updatePixmapRequested, [=] {
 		d->update();
+		Q_EMIT changed();
 	});
 	connect(d->line, &Line::updateRequested, [=] {
 		d->recalcShapeAndBoundingRect();
@@ -307,6 +308,8 @@ void ReferenceLinePrivate::recalcShapeAndBoundingRect() {
 		m_shape.addPath(WorksheetElement::shapeFromPath(path, line->pen()));
 		m_boundingRectangle = m_shape.boundingRect();
 	}
+
+	Q_EMIT q->changed();
 }
 
 void ReferenceLinePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {

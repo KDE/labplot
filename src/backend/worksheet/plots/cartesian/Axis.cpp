@@ -123,6 +123,7 @@ void Axis::init(Orientation orientation, bool loading) {
 	addChild(d->line);
 	connect(d->line, &Line::updatePixmapRequested, [=] {
 		d->update();
+		Q_EMIT changed();
 	});
 	connect(d->line, &Line::updateRequested, [=] {
 		d->recalcShapeAndBoundingRect();
@@ -147,6 +148,7 @@ void Axis::init(Orientation orientation, bool loading) {
 	addChild(d->majorTicksLine);
 	connect(d->majorTicksLine, &Line::updatePixmapRequested, [=] {
 		d->update();
+		Q_EMIT changed();
 	});
 	connect(d->majorTicksLine, &Line::updateRequested, [=] {
 		d->recalcShapeAndBoundingRect();
@@ -160,6 +162,7 @@ void Axis::init(Orientation orientation, bool loading) {
 	addChild(d->minorTicksLine);
 	connect(d->minorTicksLine, &Line::updatePixmapRequested, [=] {
 		d->update();
+		Q_EMIT changed();
 	});
 	connect(d->minorTicksLine, &Line::updateRequested, [=] {
 		d->recalcShapeAndBoundingRect();
@@ -172,6 +175,7 @@ void Axis::init(Orientation orientation, bool loading) {
 	addChild(d->majorGridLine);
 	connect(d->majorGridLine, &Line::updatePixmapRequested, [=] {
 		d->updateGrid();
+		Q_EMIT changed();
 	});
 	connect(d->majorGridLine, &Line::updateRequested, [=] {
 		d->retransformMajorGrid();
@@ -184,6 +188,7 @@ void Axis::init(Orientation orientation, bool loading) {
 	addChild(d->minorGridLine);
 	connect(d->minorGridLine, &Line::updatePixmapRequested, [=] {
 		d->updateGrid();
+		Q_EMIT changed();
 	});
 	connect(d->minorGridLine, &Line::updateRequested, [=] {
 		d->retransformMinorGrid();
@@ -2834,6 +2839,8 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	// request a prepareGeometryChange() for the plot in order to properly keep track of geometry changes
 	if (plot())
 		plot()->prepareGeometryChange();
+
+	Q_EMIT q->changed();
 }
 
 /*!

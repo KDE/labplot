@@ -70,6 +70,7 @@ void CustomPoint::init(bool loading) {
 	});
 	connect(d->symbol, &Symbol::updatePixmapRequested, [=] {
 		d->update();
+		Q_EMIT changed();
 	});
 
 	// init the properties
@@ -181,6 +182,8 @@ void CustomPointPrivate::recalcShapeAndBoundingRect() {
 		m_shape.addPath(WorksheetElement::shapeFromPath(trafo.map(path), symbol->pen()));
 		m_boundingRectangle = m_shape.boundingRect();
 	}
+
+	Q_EMIT q->changed();
 }
 
 void CustomPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {

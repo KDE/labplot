@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Reference range on the plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -37,7 +37,6 @@ public:
 
 	// reimplemented from QGraphicsItem
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
-	void drawFilling(QPainter*) const;
 	QPointF recalculateRect();
 
 	ReferenceRange* const q;
