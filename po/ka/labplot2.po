@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-20 01:47+0000\n"
+"POT-Creation-Date: 2024-06-21 01:42+0000\n"
 "PO-Revision-Date: 2024-02-29 03:22+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -980,41 +980,41 @@ msgstr "%1: ყველა ღერძის წერტილის წა�
 msgid "Failed to read image data"
 msgstr "გამოსახულების მონაცემების წაკითხვს შეცდომა"
 
-#: src/backend/datapicker/DatapickerPoint.cpp:212
+#: src/backend/datapicker/DatapickerPoint.cpp:218
 #: src/backend/worksheet/InfoElement.cpp:841
 #: src/backend/worksheet/WorksheetElement.cpp:757
 #, kde-format
 msgid "%1: set position"
 msgstr "%1: მდებარეობის დაყენება"
 
-#: src/backend/datapicker/DatapickerPoint.cpp:223
+#: src/backend/datapicker/DatapickerPoint.cpp:229
 #, kde-format
 msgid "%1: set +delta_X position"
 msgstr "%1: დააყენეთ +delta_X მდებარეობა"
 
-#: src/backend/datapicker/DatapickerPoint.cpp:225
-#: src/backend/datapicker/DatapickerPoint.cpp:228
+#: src/backend/datapicker/DatapickerPoint.cpp:231
+#: src/backend/datapicker/DatapickerPoint.cpp:234
 #, kde-format
 msgid "%1: set +delta X position"
 msgstr "%1: დააყენეთ +delta X მდებარეობა"
 
-#: src/backend/datapicker/DatapickerPoint.cpp:241
-#: src/backend/datapicker/DatapickerPoint.cpp:243
-#: src/backend/datapicker/DatapickerPoint.cpp:246
+#: src/backend/datapicker/DatapickerPoint.cpp:247
+#: src/backend/datapicker/DatapickerPoint.cpp:249
+#: src/backend/datapicker/DatapickerPoint.cpp:252
 #, kde-format
 msgid "%1: set -delta_X position"
 msgstr "%1: დააყენეთ -delta_X მდებარეობა"
 
-#: src/backend/datapicker/DatapickerPoint.cpp:259
-#: src/backend/datapicker/DatapickerPoint.cpp:261
-#: src/backend/datapicker/DatapickerPoint.cpp:264
+#: src/backend/datapicker/DatapickerPoint.cpp:265
+#: src/backend/datapicker/DatapickerPoint.cpp:267
+#: src/backend/datapicker/DatapickerPoint.cpp:270
 #, kde-format
 msgid "%1: set +delta_Y position"
 msgstr "%1: დააყენეთ +delta_Y მდებარეობა"
 
-#: src/backend/datapicker/DatapickerPoint.cpp:277
-#: src/backend/datapicker/DatapickerPoint.cpp:279
-#: src/backend/datapicker/DatapickerPoint.cpp:282
+#: src/backend/datapicker/DatapickerPoint.cpp:283
+#: src/backend/datapicker/DatapickerPoint.cpp:285
+#: src/backend/datapicker/DatapickerPoint.cpp:288
 #, kde-format
 msgid "%1: set -delta_Y position"
 msgstr "%1: დააყენეთ -delta_Y მდებარეობა"
@@ -4977,10 +4977,28 @@ msgstr ""
 msgid "Second synchrotron function"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:596 src/backend/gsl/functions.cpp:597
-#: src/backend/gsl/functions.cpp:598 src/backend/gsl/functions.cpp:599
-#, kde-format
-msgid "Transport function"
+#: src/backend/gsl/functions.cpp:596
+#, fuzzy, kde-format
+#| msgid "Transport function"
+msgid "Transport function J2"
+msgstr "ტრანსპორტის ფუნქცია"
+
+#: src/backend/gsl/functions.cpp:597
+#, fuzzy, kde-format
+#| msgid "Transport function"
+msgid "Transport function J3"
+msgstr "ტრანსპორტის ფუნქცია"
+
+#: src/backend/gsl/functions.cpp:598
+#, fuzzy, kde-format
+#| msgid "Transport function"
+msgid "Transport function J4"
+msgstr "ტრანსპორტის ფუნქცია"
+
+#: src/backend/gsl/functions.cpp:599
+#, fuzzy, kde-format
+#| msgid "Transport function"
+msgid "Transport function J5"
 msgstr "ტრანსპორტის ფუნქცია"
 
 #: src/backend/gsl/functions.cpp:602
@@ -5266,61 +5284,22 @@ msgstr ""
 msgid "Probability density for a unit Gaussian distribution"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:671 src/backend/gsl/functions.cpp:686
-#: src/backend/gsl/functions.cpp:693 src/backend/gsl/functions.cpp:705
-#: src/backend/gsl/functions.cpp:712 src/backend/gsl/functions.cpp:723
-#: src/backend/gsl/functions.cpp:730 src/backend/gsl/functions.cpp:737
-#: src/backend/gsl/functions.cpp:744 src/backend/gsl/functions.cpp:751
-#: src/backend/gsl/functions.cpp:758 src/backend/gsl/functions.cpp:765
-#: src/backend/gsl/functions.cpp:772 src/backend/gsl/functions.cpp:779
-#: src/backend/gsl/functions.cpp:786 src/backend/gsl/functions.cpp:793
-#: src/backend/gsl/functions.cpp:798 src/backend/gsl/functions.cpp:805
-#: src/backend/gsl/functions.cpp:813 src/backend/gsl/functions.cpp:816
-#: src/backend/gsl/functions.cpp:821 src/backend/gsl/functions.cpp:826
-#: src/backend/gsl/functions.cpp:831 src/backend/gsl/functions.cpp:840
+#: src/backend/gsl/functions.cpp:671
 #, kde-format
 msgid "Cumulative distribution function P"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:672 src/backend/gsl/functions.cpp:687
-#: src/backend/gsl/functions.cpp:694 src/backend/gsl/functions.cpp:701
-#: src/backend/gsl/functions.cpp:706 src/backend/gsl/functions.cpp:713
-#: src/backend/gsl/functions.cpp:724 src/backend/gsl/functions.cpp:731
-#: src/backend/gsl/functions.cpp:738 src/backend/gsl/functions.cpp:745
-#: src/backend/gsl/functions.cpp:752 src/backend/gsl/functions.cpp:759
-#: src/backend/gsl/functions.cpp:766 src/backend/gsl/functions.cpp:773
-#: src/backend/gsl/functions.cpp:780 src/backend/gsl/functions.cpp:787
-#: src/backend/gsl/functions.cpp:794 src/backend/gsl/functions.cpp:799
-#: src/backend/gsl/functions.cpp:806 src/backend/gsl/functions.cpp:814
-#: src/backend/gsl/functions.cpp:817 src/backend/gsl/functions.cpp:822
-#: src/backend/gsl/functions.cpp:827 src/backend/gsl/functions.cpp:832
-#: src/backend/gsl/functions.cpp:841
+#: src/backend/gsl/functions.cpp:672
 #, kde-format
 msgid "Cumulative distribution function Q"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:673 src/backend/gsl/functions.cpp:688
-#: src/backend/gsl/functions.cpp:695 src/backend/gsl/functions.cpp:707
-#: src/backend/gsl/functions.cpp:714 src/backend/gsl/functions.cpp:725
-#: src/backend/gsl/functions.cpp:732 src/backend/gsl/functions.cpp:739
-#: src/backend/gsl/functions.cpp:746 src/backend/gsl/functions.cpp:753
-#: src/backend/gsl/functions.cpp:760 src/backend/gsl/functions.cpp:767
-#: src/backend/gsl/functions.cpp:774 src/backend/gsl/functions.cpp:781
-#: src/backend/gsl/functions.cpp:788 src/backend/gsl/functions.cpp:795
-#: src/backend/gsl/functions.cpp:800
+#: src/backend/gsl/functions.cpp:673
 #, kde-format
 msgid "Inverse cumulative distribution function P"
 msgstr ""
 
-#: src/backend/gsl/functions.cpp:674 src/backend/gsl/functions.cpp:689
-#: src/backend/gsl/functions.cpp:696 src/backend/gsl/functions.cpp:708
-#: src/backend/gsl/functions.cpp:715 src/backend/gsl/functions.cpp:726
-#: src/backend/gsl/functions.cpp:733 src/backend/gsl/functions.cpp:740
-#: src/backend/gsl/functions.cpp:747 src/backend/gsl/functions.cpp:754
-#: src/backend/gsl/functions.cpp:761 src/backend/gsl/functions.cpp:768
-#: src/backend/gsl/functions.cpp:775 src/backend/gsl/functions.cpp:782
-#: src/backend/gsl/functions.cpp:789 src/backend/gsl/functions.cpp:796
-#: src/backend/gsl/functions.cpp:801
+#: src/backend/gsl/functions.cpp:674
 #, kde-format
 msgid "Inverse cumulative distribution function Q"
 msgstr ""
@@ -5365,9 +5344,53 @@ msgstr ""
 msgid "Probability density for an exponential distribution"
 msgstr ""
 
+#: src/backend/gsl/functions.cpp:686
+#, fuzzy, kde-format
+#| msgid "Fit Exponential Distribution"
+msgid "Cumulative exponential distribution function P"
+msgstr "ექსპონენტური განაწილების ჩატევა"
+
+#: src/backend/gsl/functions.cpp:687
+#, fuzzy, kde-format
+#| msgid "Fit Exponential Distribution"
+msgid "Cumulative exponential distribution function Q"
+msgstr "ექსპონენტური განაწილების ჩატევა"
+
+#: src/backend/gsl/functions.cpp:688
+#, kde-format
+msgid "Inverse cumulative exponential distribution function P"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:689
+#, kde-format
+msgid "Inverse cumulative exponential distribution function Q"
+msgstr ""
+
 #: src/backend/gsl/functions.cpp:692
 #, kde-format
 msgid "Probability density for a Laplace distribution"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:693
+#, fuzzy, kde-format
+#| msgid "Fit Laplace Distribution"
+msgid "Cumulative Laplace distribution function P"
+msgstr "Fit Laplace განაწილების ჩატევა"
+
+#: src/backend/gsl/functions.cpp:694
+#, fuzzy, kde-format
+#| msgid "Fit Laplace Distribution"
+msgid "Cumulative Laplace distribution function Q"
+msgstr "Fit Laplace განაწილების ჩატევა"
+
+#: src/backend/gsl/functions.cpp:695
+#, kde-format
+msgid "Inverse cumulative Laplace distribution function P"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:696
+#, kde-format
+msgid "Inverse cumulative Laplace distribution function Q"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:699
@@ -5376,18 +5399,69 @@ msgid "Probability density for an exponential power distribution"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:700
-#, kde-format
-msgid "cumulative distribution function P"
-msgstr ""
+#, fuzzy, kde-format
+#| msgid "Exponential Power Distribution"
+msgid "cumulative exponential power distribution function P"
+msgstr "ექსპონენტური ხარისხის განაწილება"
+
+#: src/backend/gsl/functions.cpp:701
+#, fuzzy, kde-format
+#| msgid "Exponential Power Distribution"
+msgid "Cumulative exponential power distribution function Q"
+msgstr "ექსპონენტური ხარისხის განაწილება"
 
 #: src/backend/gsl/functions.cpp:704
 #, kde-format
 msgid "Probability density for a Cauchy distribution"
 msgstr ""
 
+#: src/backend/gsl/functions.cpp:705
+#, fuzzy, kde-format
+#| msgid "Cauchy Distribution"
+msgid "Cumulative Cauchy distribution function P"
+msgstr "კოშის განაწილება"
+
+#: src/backend/gsl/functions.cpp:706
+#, fuzzy, kde-format
+#| msgid "Cauchy Distribution"
+msgid "Cumulative Cauchy distribution function Q"
+msgstr "კოშის განაწილება"
+
+#: src/backend/gsl/functions.cpp:707
+#, kde-format
+msgid "Inverse cumulative Cauchy distribution function P"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:708
+#, kde-format
+msgid "Inverse cumulative Cauchy distribution function Q"
+msgstr ""
+
 #: src/backend/gsl/functions.cpp:711
 #, kde-format
 msgid "Probability density for a Rayleigh distribution"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:712
+#, fuzzy, kde-format
+#| msgid "Rayleigh Distribution"
+msgid "Cumulative Rayleigh distribution function P"
+msgstr "რელეის განაწილება"
+
+#: src/backend/gsl/functions.cpp:713
+#, fuzzy, kde-format
+#| msgid "Rayleigh Distribution"
+msgid "Cumulative Rayleigh distribution function Q"
+msgstr "რელეის განაწილება"
+
+#: src/backend/gsl/functions.cpp:714
+#, kde-format
+msgid "Inverse cumulative Rayleigh distribution function P"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:715
+#, kde-format
+msgid "Inverse cumulative Rayleigh distribution function Q"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:716
@@ -5405,9 +5479,53 @@ msgstr ""
 msgid "Probability density for a gamma distribution"
 msgstr ""
 
+#: src/backend/gsl/functions.cpp:723
+#, fuzzy, kde-format
+#| msgid "Regulated gamma function"
+msgid "Cumulative gamma distribution function P"
+msgstr "რეგულირებული გამა ფუნქცია"
+
+#: src/backend/gsl/functions.cpp:724
+#, fuzzy, kde-format
+#| msgid "Regulated gamma function"
+msgid "Cumulative gamma distribution function Q"
+msgstr "რეგულირებული გამა ფუნქცია"
+
+#: src/backend/gsl/functions.cpp:725
+#, kde-format
+msgid "Inverse cumulative gamma distribution function P"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:726
+#, kde-format
+msgid "Inverse cumulative gamma distribution function Q"
+msgstr ""
+
 #: src/backend/gsl/functions.cpp:729
 #, kde-format
 msgid "Probability density for a uniform distribution"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:730
+#, fuzzy, kde-format
+#| msgid "Flat (Uniform) Distribution"
+msgid "Cumulative uniform distribution function P"
+msgstr "ბრტყელი (ერთგვაროვანი) განაწილება"
+
+#: src/backend/gsl/functions.cpp:731
+#, fuzzy, kde-format
+#| msgid "Flat (Uniform) Distribution"
+msgid "Cumulative uniform distribution function Q"
+msgstr "ბრტყელი (ერთგვაროვანი) განაწილება"
+
+#: src/backend/gsl/functions.cpp:732
+#, kde-format
+msgid "Inverse cumulative uniform distribution function P"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:733
+#, kde-format
+msgid "Inverse cumulative uniform distribution function Q"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:736
@@ -5415,9 +5533,53 @@ msgstr ""
 msgid "Probability density for a lognormal distribution"
 msgstr ""
 
+#: src/backend/gsl/functions.cpp:737
+#, fuzzy, kde-format
+#| msgid "Lognormal Distribution"
+msgid "Cumulative lognormal distribution function P"
+msgstr "ლოგნორმალური განაწილება"
+
+#: src/backend/gsl/functions.cpp:738
+#, fuzzy, kde-format
+#| msgid "Lognormal Distribution"
+msgid "Cumulative lognormal distribution function Q"
+msgstr "ლოგნორმალური განაწილება"
+
+#: src/backend/gsl/functions.cpp:739
+#, kde-format
+msgid "Inverse cumulative lognormal distribution function P"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:740
+#, kde-format
+msgid "Inverse cumulative lognormal distribution function Q"
+msgstr ""
+
 #: src/backend/gsl/functions.cpp:743
 #, kde-format
 msgid "Probability density for a chi squared distribution"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:744
+#, fuzzy, kde-format
+#| msgid "Chi-squared Distribution"
+msgid "Cumulative chi squared distribution function P"
+msgstr "ხი-კვადრატის განაწილება"
+
+#: src/backend/gsl/functions.cpp:745
+#, fuzzy, kde-format
+#| msgid "Chi-squared Distribution"
+msgid "Cumulative chi squared distribution function Q"
+msgstr "ხი-კვადრატის განაწილება"
+
+#: src/backend/gsl/functions.cpp:746
+#, kde-format
+msgid "Inverse cumulative chi squared distribution function P"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:747
+#, kde-format
+msgid "Inverse cumulative chi squared distribution function Q"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:750
@@ -5425,9 +5587,49 @@ msgstr ""
 msgid "Probability density for a F-distribution"
 msgstr ""
 
+#: src/backend/gsl/functions.cpp:751
+#, kde-format
+msgid "Cumulative F-distribution function P"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:752
+#, kde-format
+msgid "Cumulative F-distribution function Q"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:753
+#, kde-format
+msgid "Inverse cumulative F-distribution function P"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:754
+#, kde-format
+msgid "Inverse cumulative F-distribution function Q"
+msgstr ""
+
 #: src/backend/gsl/functions.cpp:757
 #, kde-format
 msgid "Probability density for a t-distribution"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:758
+#, kde-format
+msgid "Cumulative t-distribution function P"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:759
+#, kde-format
+msgid "Cumulative t-distribution function Q"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:760
+#, kde-format
+msgid "Inverse cumulative t-distribution function P"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:761
+#, kde-format
+msgid "Inverse cumulative t-distribution function Q"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:764
@@ -5435,9 +5637,49 @@ msgstr ""
 msgid "Probability density for a beta distribution"
 msgstr ""
 
+#: src/backend/gsl/functions.cpp:765
+#, kde-format
+msgid "Cumulative beta distribution function P"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:766
+#, kde-format
+msgid "Cumulative beta distribution function Q"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:767
+#, kde-format
+msgid "Inverse cumulative beta distribution function P"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:768
+#, kde-format
+msgid "Inverse cumulative beta distribution function Q"
+msgstr ""
+
 #: src/backend/gsl/functions.cpp:771
 #, kde-format
 msgid "Probability density for a logistic distribution"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:772
+#, kde-format
+msgid "Cumulative logistic distribution function P"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:773
+#, kde-format
+msgid "Cumulative logistic distribution function Q"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:774
+#, kde-format
+msgid "Inverse cumulative logistic distribution function P"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:775
+#, kde-format
+msgid "Inverse cumulative logistic distribution function Q"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:778
@@ -5445,9 +5687,53 @@ msgstr ""
 msgid "Probability density for a Pareto distribution"
 msgstr ""
 
+#: src/backend/gsl/functions.cpp:779
+#, fuzzy, kde-format
+#| msgid "Pareto Distribution"
+msgid "Cumulative Pareto distribution function P"
+msgstr "პარეტოს განაწილება"
+
+#: src/backend/gsl/functions.cpp:780
+#, fuzzy, kde-format
+#| msgid "Pareto Distribution"
+msgid "Cumulative Pareto distribution function Q"
+msgstr "პარეტოს განაწილება"
+
+#: src/backend/gsl/functions.cpp:781
+#, kde-format
+msgid "Inverse cumulative Pareto distribution function P"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:782
+#, kde-format
+msgid "Inverse cumulative Pareto distribution function Q"
+msgstr ""
+
 #: src/backend/gsl/functions.cpp:785
 #, kde-format
 msgid "Probability density for a Weibull distribution"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:786
+#, fuzzy, kde-format
+#| msgid "Weibull Distribution"
+msgid "Cumulative Weibull distribution function P"
+msgstr "ვეიბულის განაწილება"
+
+#: src/backend/gsl/functions.cpp:787
+#, fuzzy, kde-format
+#| msgid "Weibull Distribution"
+msgid "Cumulative Weibull distribution function Q"
+msgstr "ვეიბულის განაწილება"
+
+#: src/backend/gsl/functions.cpp:788
+#, kde-format
+msgid "Inverse cumulative Weibull distribution function P"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:789
+#, kde-format
+msgid "Inverse cumulative Weibull distribution function Q"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:792
@@ -5455,15 +5741,67 @@ msgstr ""
 msgid "Probability density for a Type-1 Gumbel distribution"
 msgstr ""
 
+#: src/backend/gsl/functions.cpp:793
+#, kde-format
+msgid "Cumulative Type-1 Gumbel distribution function P"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:794
+#, kde-format
+msgid "Cumulative Type-1 Gumbel distribution function Q"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:795
+#, kde-format
+msgid "Inverse cumulative Type-1 Gumbel distribution function P"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:796
+#, kde-format
+msgid "Inverse cumulative Type-1 Gumbel distribution function Q"
+msgstr ""
+
 #: src/backend/gsl/functions.cpp:797
 #, kde-format
 msgid "Probability density for a Type-2 Gumbel distribution"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:798
+#, kde-format
+msgid "Cumulative Type-2 Gumbel distribution function P"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:799
+#, kde-format
+msgid "Cumulative Type-2 Gumbel distribution function Q"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:800
+#, kde-format
+msgid "Inverse cumulative Type-2 Gumbel distribution function P"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:801
+#, kde-format
+msgid "Inverse cumulative Type-2 Gumbel distribution function Q"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:804
 #, kde-format
 msgid "Probability density for a Poisson distribution"
 msgstr ""
+
+#: src/backend/gsl/functions.cpp:805
+#, fuzzy, kde-format
+#| msgid "Fit Poisson Distribution"
+msgid "Cumulative Poisson distribution function P"
+msgstr "პუასონის განაწილების ჩატევა"
+
+#: src/backend/gsl/functions.cpp:806
+#, fuzzy, kde-format
+#| msgid "Fit Poisson Distribution"
+msgid "Cumulative Poisson distribution function Q"
+msgstr "პუასონის განაწილების ჩატევა"
 
 #: src/backend/gsl/functions.cpp:809
 #, kde-format
@@ -5475,9 +5813,31 @@ msgstr ""
 msgid "Probability density for a binomial distribution"
 msgstr ""
 
+#: src/backend/gsl/functions.cpp:813
+#, fuzzy, kde-format
+#| msgid "Fit Binomial Distribution"
+msgid "Cumulative binomial distribution function P"
+msgstr "ბინომური განაწილების ჩატევა"
+
+#: src/backend/gsl/functions.cpp:814
+#, fuzzy, kde-format
+#| msgid "Fit Binomial Distribution"
+msgid "Cumulative binomial distribution function Q"
+msgstr "ბინომური განაწილების ჩატევა"
+
 #: src/backend/gsl/functions.cpp:815
 #, kde-format
 msgid "Probability density for a negative binomial distribution"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:816
+#, kde-format
+msgid "Cumulative negative binomial distribution function P"
+msgstr ""
+
+#: src/backend/gsl/functions.cpp:817
+#, kde-format
+msgid "Cumulative negative binomial distribution function Q"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:820
@@ -5485,15 +5845,51 @@ msgstr ""
 msgid "Probability density for a Pascal distribution"
 msgstr ""
 
+#: src/backend/gsl/functions.cpp:821
+#, fuzzy, kde-format
+#| msgid "Pascal Distribution"
+msgid "Cumulative Pascal distribution function P"
+msgstr "პასკალის განაწილება"
+
+#: src/backend/gsl/functions.cpp:822
+#, fuzzy, kde-format
+#| msgid "Pascal Distribution"
+msgid "Cumulative Pascal distribution function Q"
+msgstr "პასკალის განაწილება"
+
 #: src/backend/gsl/functions.cpp:825
 #, kde-format
 msgid "Probability density for a geometric distribution"
 msgstr ""
 
+#: src/backend/gsl/functions.cpp:826
+#, fuzzy, kde-format
+#| msgid "Hypergeometric Distribution"
+msgid "Cumulative geometric distribution function P"
+msgstr "ჰიპერგეომეტრიული განაწილება"
+
+#: src/backend/gsl/functions.cpp:827
+#, fuzzy, kde-format
+#| msgid "Hypergeometric Distribution"
+msgid "Cumulative geometric distribution function Q"
+msgstr "ჰიპერგეომეტრიული განაწილება"
+
 #: src/backend/gsl/functions.cpp:830
 #, kde-format
 msgid "Probability density for a hypergeometric distribution"
 msgstr ""
+
+#: src/backend/gsl/functions.cpp:831
+#, fuzzy, kde-format
+#| msgid "Hypergeometric Distribution"
+msgid "Cumulative hypergeometric distribution function P"
+msgstr "ჰიპერგეომეტრიული განაწილება"
+
+#: src/backend/gsl/functions.cpp:832
+#, fuzzy, kde-format
+#| msgid "Hypergeometric Distribution"
+msgid "Cumulative hypergeometric distribution function Q"
+msgstr "ჰიპერგეომეტრიული განაწილება"
 
 #: src/backend/gsl/functions.cpp:835
 #, kde-format
@@ -5505,11 +5901,23 @@ msgstr ""
 msgid "Probability density for a triangular distribution"
 msgstr ""
 
+#: src/backend/gsl/functions.cpp:840
+#, fuzzy, kde-format
+#| msgid "Landau Distribution"
+msgid "Cumulative triangular distribution function P"
+msgstr "ლანდაუს განაწილება"
+
+#: src/backend/gsl/functions.cpp:841
+#, fuzzy, kde-format
+#| msgid "Landau Distribution"
+msgid "Cumulative triangular distribution function Q"
+msgstr "ლანდაუს განაწილება"
+
 #: src/backend/gsl/functions.cpp:842
 #, fuzzy, kde-format
-#| msgid "1st quartile"
-msgid "p-th quantile"
-msgstr "პირველი კვარტილი"
+#| msgid "Landau Distribution"
+msgid "p-th quantile for triangular distribution"
+msgstr "ლანდაუს განაწილება"
 
 #: src/backend/gsl/functions.cpp:948 src/backend/gsl/functions.cpp:960
 #: src/backend/gsl/functions.cpp:974 src/backend/gsl/functions.cpp:986
@@ -15323,17 +15731,18 @@ msgstr ""
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:222
 #, kde-format
-msgid "With Worksheet"
-msgstr "სამუშაო ფურცლით"
-
-#: src/kdefrontend/SettingsGeneralPage.cpp:223
-#, kde-format
 msgid "With Spreadsheet"
 msgstr "ელცხრილით"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:224
+#: src/kdefrontend/SettingsGeneralPage.cpp:223
 #, kde-format
-msgid "With Worksheet and Spreadsheet"
+msgid "With Worksheet"
+msgstr "სამუშაო ფურცლით"
+
+#: src/kdefrontend/SettingsGeneralPage.cpp:224
+#, fuzzy, kde-format
+#| msgid "With Worksheet and Spreadsheet"
+msgid "With Spreadsheet and Worksheet"
 msgstr "სამუშაო ფურცლითა და ელცხრილით"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:226
@@ -22873,6 +23282,11 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr "ფაილის გახსნა შეუძლებელია:"
+
+#, fuzzy
+#~| msgid "1st quartile"
+#~ msgid "p-th quantile"
+#~ msgstr "პირველი კვარტილი"
 
 #~ msgid "%1: copy %2"
 #~ msgstr "%1: %2-ის კოპირება"
