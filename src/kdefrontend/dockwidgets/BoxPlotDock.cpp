@@ -309,7 +309,7 @@ void BoxPlotDock::setDataColumns() const {
 //**********************************************************
 void BoxPlotDock::addDataColumn() {
 	auto* cb = new TreeViewComboBox(this);
-	cb->setTopLevelClasses(plotColumnTopLevelClasses());
+	cb->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
 	cb->setModel(aspectModel());
 	connect(cb, &TreeViewComboBox::currentModelIndexChanged, this, &BoxPlotDock::dataColumnChanged);
 

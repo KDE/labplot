@@ -95,7 +95,7 @@ void KDEPlotDock::setModel() {
 	model->enablePlottableColumnsOnly(true);
 	model->enableShowPlotDesignation(true);
 	model->setSelectableAspects({AspectType::Column});
-	cbDataColumn->setTopLevelClasses(plotColumnTopLevelClasses());
+	cbDataColumn->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
 	cbDataColumn->setModel(model);
 }
 

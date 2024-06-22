@@ -346,7 +346,7 @@ void XYCurveDock::setModel() {
 	model->enablePlottableColumnsOnly(true);
 	model->enableShowPlotDesignation(true);
 
-	auto list = plotColumnTopLevelClasses();
+	auto list = TreeViewComboBox::plotColumnTopLevelClasses();
 	if (cbXColumn && cbYColumn) {
 		cbXColumn->setTopLevelClasses(list);
 		cbYColumn->setTopLevelClasses(list);

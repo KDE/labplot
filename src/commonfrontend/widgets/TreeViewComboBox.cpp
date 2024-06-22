@@ -195,6 +195,27 @@ void TreeViewComboBox::setInvalid(bool invalid, const QString& tooltip) {
 }
 
 /*!
+ * returns the list of aspect types that can have Column as a child.
+ * used in the dock widgets for the different plot types to show in the combo boxes
+ * for the data source those top level aspects only that can have Column as a child.
+ */
+QList<AspectType> TreeViewComboBox::plotColumnTopLevelClasses() {
+	return {AspectType::Folder,
+			AspectType::Workbook,
+			AspectType::Datapicker,
+			AspectType::DatapickerCurve,
+			AspectType::Spreadsheet,
+			AspectType::StatisticsSpreadsheet,
+			AspectType::LiveDataSource,
+			AspectType::Column,
+			AspectType::Worksheet,
+			AspectType::CartesianPlot,
+			AspectType::XYFitCurve,
+			AspectType::XYSmoothCurve,
+			AspectType::CantorWorksheet};
+}
+
+/*!
 	Hides the non-toplevel items of the model used in the tree view.
 */
 void TreeViewComboBox::showTopLevelOnly(const QModelIndex& index) {

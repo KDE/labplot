@@ -190,7 +190,7 @@ void BarPlotDock::setModel() {
 	model->enablePlottableColumnsOnly(true);
 	model->enableShowPlotDesignation(true);
 	model->setSelectableAspects({AspectType::Column});
-	cbXColumn->setTopLevelClasses(plotColumnTopLevelClasses());
+	cbXColumn->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
 	cbXColumn->setModel(model);
 	errorBarWidget->setModel(model);
 }

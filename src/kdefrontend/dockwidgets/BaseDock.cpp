@@ -119,27 +119,6 @@ void BaseDock::updatePlotRangeList() {
 	m_cbPlotRangeList->setEnabled(cSystemCount == 1 ? false : true);
 }
 
-/*!
- * returns the list of aspect types that can have Column as a child.
- * used in the dock widgets for the different plot types to show in the combo boxes
- * for the data source those top level aspects only that can have Column as a child.
- */
-QList<AspectType> BaseDock::plotColumnTopLevelClasses() {
-	return {AspectType::Folder,
-			AspectType::Workbook,
-			AspectType::Datapicker,
-			AspectType::DatapickerCurve,
-			AspectType::Spreadsheet,
-			AspectType::StatisticsSpreadsheet,
-			AspectType::LiveDataSource,
-			AspectType::Column,
-			AspectType::Worksheet,
-			AspectType::CartesianPlot,
-			AspectType::XYFitCurve,
-			AspectType::XYSmoothCurve,
-			AspectType::CantorWorksheet};
-}
-
 //*************************************************************
 //******* SLOTs for changes triggered in the dock widget *****
 //*************************************************************

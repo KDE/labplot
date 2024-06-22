@@ -279,21 +279,14 @@ void XYFitCurveDock::setModel() {
 		hiddenAspects << curve;
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
-	QList<AspectType> list = {AspectType::Folder,
-							  AspectType::Workbook,
-							  AspectType::Spreadsheet,
-							  AspectType::LiveDataSource,
-							  AspectType::CantorWorksheet,
-							  AspectType::Datapicker,
-							  AspectType::Column};
-	cbXDataColumn->setTopLevelClasses(list);
-	cbYDataColumn->setTopLevelClasses(list);
-	cbXErrorColumn->setTopLevelClasses(list);
-	cbYErrorColumn->setTopLevelClasses(list);
+	const auto& topLevelClasses = TreeViewComboBox::plotColumnTopLevelClasses();
+	cbXDataColumn->setTopLevelClasses(topLevelClasses);
+	cbYDataColumn->setTopLevelClasses(topLevelClasses);
+	cbXErrorColumn->setTopLevelClasses(topLevelClasses);
+	cbYErrorColumn->setTopLevelClasses(topLevelClasses);
 
-	list = {AspectType::Column};
 	auto* model = aspectModel();
-	model->setSelectableAspects(list);
+	model->setSelectableAspects({AspectType::Column});
 
 	cbXDataColumn->setModel(model);
 	cbYDataColumn->setModel(model);

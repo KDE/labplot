@@ -93,7 +93,7 @@ void XYAnalysisCurveDock::setModel() {
 	}
 
 	auto* model = aspectModel();
-	const auto& topLevelClasses = plotColumnTopLevelClasses();
+	const auto& topLevelClasses = TreeViewComboBox::plotColumnTopLevelClasses();
 	if (cbY2DataColumn) {
 		cbY2DataColumn->setTopLevelClasses(topLevelClasses);
 		cbY2DataColumn->setModel(model);

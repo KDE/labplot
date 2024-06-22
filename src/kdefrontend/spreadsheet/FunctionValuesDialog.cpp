@@ -50,18 +50,14 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent)
 	ui.teEquation->setMaximumHeight(QLineEdit().sizeHint().height() * 2);
 	ui.teEquation->setFocus();
 
-	m_topLevelClasses = {AspectType::Folder, AspectType::Workbook, AspectType::Spreadsheet, AspectType::CantorWorksheet, AspectType::Column};
-	m_selectableClasses = {AspectType::Column};
-
 // needed for buggy compiler
 #if __cplusplus < 201103L
 	m_aspectTreeModel = std::auto_ptr<AspectTreeModel>(new AspectTreeModel(m_spreadsheet->project()));
 #else
 	m_aspectTreeModel = std::unique_ptr<AspectTreeModel>(new AspectTreeModel(m_spreadsheet->project()));
 #endif
-	m_aspectTreeModel->setSelectableAspects(m_selectableClasses);
+	m_aspectTreeModel->setSelectableAspects({AspectType::Column});
 	m_aspectTreeModel->enableNumericColumnsOnly(true);
-	m_aspectTreeModel->enableNonEmptyNumericColumnsOnly(true);
 
 	ui.bAddVariable->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 	ui.bAddVariable->setToolTip(i18n("Add new variable"));
@@ -295,7 +291,7 @@ void FunctionValuesDialog::addVariable() {
 	layout->addWidget(cb, row, 2, 1, 1);
 	m_variableDataColumns << cb;
 
-	cb->setTopLevelClasses(m_topLevelClasses);
+	cb->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
 	cb->setModel(m_aspectTreeModel.get());
 
 	// don't allow to select columns to be calculated as variable columns (avoid circular dependencies)
