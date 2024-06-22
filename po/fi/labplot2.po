@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-21 01:42+0000\n"
+"POT-Creation-Date: 2024-06-22 01:50+0000\n"
 "PO-Revision-Date: 2023-10-30 14:32+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -1884,8 +1884,8 @@ msgid "Number of variables: "
 msgstr "Rivien määrä: %1"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:335
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:326
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:346
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:329
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:349
 #, kde-format
 msgid "Variables:"
 msgstr "Muuttujat:"
@@ -7954,12 +7954,12 @@ msgstr "%1: aseta asettelu oikea reunus"
 msgid "%1: set bottom padding"
 msgstr "%1: aseta kiertokulma"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:281
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:286
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:88
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:231
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:102
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:101
-#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:118
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:102
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:120
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:258
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:56
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:52
@@ -7974,12 +7974,12 @@ msgstr "Vaaka"
 
 #. i18n("AvgShifted Histogram"));
 #. Orientation
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:284
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:289
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:91
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:234
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:105
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:104
-#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:121
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:105
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:123
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:259
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:57
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:53
@@ -7994,12 +7994,12 @@ msgstr "Vaaka"
 msgid "Vertical"
 msgstr "Pysty"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:304
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:309
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:99
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:242
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:113
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:121
-#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:138
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:122
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:140
 #, kde-format
 msgid "Orientation"
 msgstr "Suunta"
@@ -8009,8 +8009,8 @@ msgstr "Suunta"
 #. i18n: ectx: property (text), widget (QLabel, lEstimationLine)
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersFormat)
 #. i18n: ectx: property (text), widget (QLabel, lLine)
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:310
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:127
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:315
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:128
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:196
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:488
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:628
@@ -8025,283 +8025,283 @@ msgstr "Suunta"
 msgid "Line"
 msgstr "Viiva"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:312
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:129
-#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:146
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:317
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:130
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:148
 #, kde-format
 msgid "Style"
 msgstr "Tyyli"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:317
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:134
-#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:151
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:322
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:135
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:153
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:318
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:131
 #, kde-format
 msgid "Color"
 msgstr "Väri"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:542
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:547
 #, fuzzy, kde-format
 #| msgid "%1: set rotation angle"
 msgid "%1: set axis range type"
 msgstr "%1: aseta kiertokulma"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:567
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:572
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:621
 #, kde-format
 msgid "%1: set axis orientation"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:574
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:579
 #, kde-format
 msgid "%1: set axis position"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:582
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:587
 #, kde-format
 msgid "%1: set axis offset"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:597
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:602
 #, fuzzy, kde-format
 #| msgid "%1: set rotation angle"
 msgid "%1: set axis range"
 msgstr "%1: aseta kiertokulma"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:636
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:641
 #, fuzzy, kde-format
 #| msgid "%1: set rotation angle"
 msgid "%1: set range scale"
 msgstr "%1: aseta kiertokulma"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:643
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:648
 #, fuzzy, kde-format
 #| msgid "%1: set visible"
 msgid "%1: set scale"
 msgstr "%1: aseta näkyväksi"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:650
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:655
 #, fuzzy, kde-format
 #| msgid "%1: set major grid style"
 msgid "%1: set major tick start type"
 msgstr "%1: aseta pääruudukon tyyli"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:657
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:662
 #, fuzzy, kde-format
 #| msgid "%1: set major grid style"
 msgid "%1: set major tick start offset"
 msgstr "%1: aseta pääruudukon tyyli"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:665
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:670
 #, fuzzy, kde-format
 #| msgid "%1: set major grid style"
 msgid "%1: set major tick start value"
 msgstr "%1: aseta pääruudukon tyyli"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:677
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:682
 #, kde-format
 msgid "%1: set axis scaling factor"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:686
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:691
 #, kde-format
 msgid "%1: set axis zero offset"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:692
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:697
 #, kde-format
 msgid "%1: show scale and offset"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:699
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:704
 #, fuzzy, kde-format
 #| msgid "%1: set position"
 msgid "%1: set axis logical position"
 msgstr "%1: aseta sijainti"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:707
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:714
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:712
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:719
 #, kde-format
 msgid "%1: set title offset"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:722
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:727
 #, kde-format
 msgid "%1: set arrow type"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:729
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:734
 #, kde-format
 msgid "%1: set arrow position"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:736
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:741
 #, kde-format
 msgid "%1: set arrow size"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:744
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:749
 #, kde-format
 msgid "%1: set major ticks direction"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:751
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:756
 #, kde-format
 msgid "%1: set major ticks type"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:759
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:764
 #, kde-format
 msgid "%1: enable/disable major automatic tick numbers"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:761
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:776
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:766
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:781
 #, kde-format
 msgid "%1: set the total number of the major ticks"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:778
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:860
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:783
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:865
 #, kde-format
 msgid "%1: disable major automatic tick numbers"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:801
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:806
 #, kde-format
 msgid "%1: set the spacing of the major ticks"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:808
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:813
 #, kde-format
 msgid "%1: assign major ticks' values"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:822
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:827
 #, kde-format
 msgid "%1: set major ticks length"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:830
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:835
 #, kde-format
 msgid "%1: set minor ticks direction"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:837
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:842
 #, kde-format
 msgid "%1: set minor ticks type"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:845
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:850
 #, kde-format
 msgid "%1: enable/disable minor automatic tick numbers"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:848
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:859
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:853
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:864
 #, kde-format
 msgid "%1: set the total number of the minor ticks"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:890
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:895
 #, kde-format
 msgid "%1: set the spacing of the minor ticks"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:897
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:902
 #, kde-format
 msgid "%1: assign minor ticks' values"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:911
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:916
 #, kde-format
 msgid "%1: set minor ticks length"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:920
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:925
 #, kde-format
 msgid "%1: set labels format"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:927
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:932
 #, fuzzy, kde-format
 #| msgid "%1: set date-time format to %2"
 msgid "%1: set labels format automatic"
 msgstr "%1: aseta päiväyksen ja ajan muodoksi %2"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:934
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:941
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:939
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:946
 #, kde-format
 msgid "%1: set labels precision"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:948
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:953
 #, fuzzy, kde-format
 #| msgid "%1: set date-time format to %2"
 msgid "%1: set labels datetime format"
 msgstr "%1: aseta päiväyksen ja ajan muodoksi %2"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:955
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:960
 #, kde-format
 msgid "%1: set labels position"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:962
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:967
 #, kde-format
 msgid "%1: set label offset"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:969
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:974
 #, kde-format
 msgid "%1: set label rotation angle"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:976
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:981
 #, fuzzy, kde-format
 #| msgid "%1: set background image"
 msgid "%1: set labels text type"
 msgstr "%1: aseta taustakuva"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:983
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:988
 #, fuzzy, kde-format
 #| msgid "%1: insert empty columns"
 msgid "%1: set labels text column"
 msgstr "%1: lisää tyhjiä sarakkeita"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:997
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1002
 #, kde-format
 msgid "%1: set label color"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1004
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1009
 #, kde-format
 msgid "%1: set label font"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1011
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1016
 #, fuzzy, kde-format
 #| msgid "%1: set background image"
 msgid "%1: set labels background type"
 msgstr "%1: aseta taustakuva"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1018
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1023
 #, fuzzy, kde-format
 #| msgid "%1: set background first color"
 msgid "%1: set label background color"
 msgstr "%1: aseta ensimmäinen taustaväri"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1025
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1030
 #, kde-format
 msgid "%1: set label prefix"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1032
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1037
 #, kde-format
 msgid "%1: set label suffix"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1039
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1044
 #, kde-format
 msgid "%1: set labels opacity"
 msgstr ""
@@ -8330,8 +8330,8 @@ msgstr "%1: aseta sivukoko"
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:319
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:520
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:311
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:189
-#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:213
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:190
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:215
 #, fuzzy, kde-format
 #| msgid "%1: set position"
 msgid "%1: set orientation"
@@ -8660,7 +8660,7 @@ msgstr "Yhteys:"
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:512
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:418
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:407
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:933
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:437
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:486
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:351
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:313
@@ -8908,14 +8908,14 @@ msgid "%1: Cursor1 enable"
 msgstr "Arvot"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1706
-#: src/backend/worksheet/Worksheet.cpp:814
+#: src/backend/worksheet/Worksheet.cpp:832
 #, fuzzy, kde-format
 #| msgid "%1: add %2."
 msgid "%1: load theme %2"
 msgstr "%1: lisää %2."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1708
-#: src/backend/worksheet/Worksheet.cpp:816
+#: src/backend/worksheet/Worksheet.cpp:834
 #, fuzzy, kde-format
 #| msgid "%1: add %2."
 msgid "%1: load default theme"
@@ -8923,7 +8923,7 @@ msgstr "%1: lisää %2."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1710
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5343
-#: src/backend/worksheet/Worksheet.cpp:818
+#: src/backend/worksheet/Worksheet.cpp:836
 #, fuzzy, kde-format
 #| msgid "%1: set page size"
 msgid "%1: set theme"
@@ -9129,50 +9129,50 @@ msgid "%1: set border corner radius"
 msgstr "%1: aseta reunan kulman säde"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:245
-#: src/backend/worksheet/Worksheet.cpp:691
-#: src/backend/worksheet/Worksheet.cpp:692
+#: src/backend/worksheet/Worksheet.cpp:709
+#: src/backend/worksheet/Worksheet.cpp:710
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: aseta asettelun yläreunus"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:252
-#: src/backend/worksheet/Worksheet.cpp:701
-#: src/backend/worksheet/Worksheet.cpp:702
+#: src/backend/worksheet/Worksheet.cpp:719
+#: src/backend/worksheet/Worksheet.cpp:720
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: aseta asettelu alareunus"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:259
-#: src/backend/worksheet/Worksheet.cpp:711
-#: src/backend/worksheet/Worksheet.cpp:712
+#: src/backend/worksheet/Worksheet.cpp:729
+#: src/backend/worksheet/Worksheet.cpp:730
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: aseta asettelu vasen reunus"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:266
-#: src/backend/worksheet/Worksheet.cpp:721
-#: src/backend/worksheet/Worksheet.cpp:722
+#: src/backend/worksheet/Worksheet.cpp:739
+#: src/backend/worksheet/Worksheet.cpp:740
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: aseta asettelu oikea reunus"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:273
-#: src/backend/worksheet/Worksheet.cpp:731
-#: src/backend/worksheet/Worksheet.cpp:732
+#: src/backend/worksheet/Worksheet.cpp:749
+#: src/backend/worksheet/Worksheet.cpp:750
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: aseta asettelun pystyvälistys"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:280
-#: src/backend/worksheet/Worksheet.cpp:741
-#: src/backend/worksheet/Worksheet.cpp:742
+#: src/backend/worksheet/Worksheet.cpp:759
+#: src/backend/worksheet/Worksheet.cpp:760
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: aseta asettelun vaakavälistys"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:287
-#: src/backend/worksheet/Worksheet.cpp:761
-#: src/backend/worksheet/Worksheet.cpp:762
+#: src/backend/worksheet/Worksheet.cpp:779
+#: src/backend/worksheet/Worksheet.cpp:780
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: aseta asettelun sarakemäärä"
@@ -9357,19 +9357,19 @@ msgstr "%1: taustan tyyppi muuttunut"
 msgid "%1: set distribution"
 msgstr "%1: aseta sijainti"
 
-#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:144
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:146
 #, fuzzy, kde-format
 #| msgid "Border"
 msgid "Border Line"
 msgstr "Reuna"
 
-#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:220
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:222
 #, fuzzy, kde-format
 #| msgid "%1: set logical position"
 msgid "%1: set start logical position"
 msgstr "%1: aseta looginen sijainti"
 
-#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:227
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:229
 #, fuzzy, kde-format
 #| msgid "%1: set logical position"
 msgid "%1: set end logical position"
@@ -9910,22 +9910,22 @@ msgstr ""
 msgid "%1: set rug orientation"
 msgstr "%1: aseta sijainti"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1390
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1411
 #, kde-format
 msgid "Error: Akima spline interpolation requires a minimum of 5 points."
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1392
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1413
 #, kde-format
 msgid "Error: Could not initialize the spline function."
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1405
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1426
 #, kde-format
 msgid "x values must be monotonically increasing."
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1408
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1429
 #, kde-format
 msgid "Error: %1"
 msgstr "Virhe: %1"
@@ -10038,7 +10038,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1904
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:618
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:968
 #, kde-format
 msgid "Sum of squared residuals"
 msgstr ""
@@ -10056,14 +10056,14 @@ msgstr "ei arvoja"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1907
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:648
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:998
 #, kde-format
 msgid "Coefficient of determination"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1908
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:658
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1008
 #, kde-format
 msgid "Adj. coefficient of determination"
 msgstr ""
@@ -10222,42 +10222,42 @@ msgstr "%1: aseta reunan tyyli"
 msgid "%1: set border"
 msgstr "%1: aseta reuna"
 
-#: src/backend/worksheet/Worksheet.cpp:238
+#: src/backend/worksheet/Worksheet.cpp:248
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "Tulosta työvihko"
 
-#: src/backend/worksheet/Worksheet.cpp:661
+#: src/backend/worksheet/Worksheet.cpp:679
 #, kde-format
 msgid "%1: change size type"
 msgstr "%1: muuta koon tyyppiä"
 
-#: src/backend/worksheet/Worksheet.cpp:673
+#: src/backend/worksheet/Worksheet.cpp:691
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr ""
 
-#: src/backend/worksheet/Worksheet.cpp:681
-#: src/backend/worksheet/Worksheet.cpp:682
+#: src/backend/worksheet/Worksheet.cpp:699
+#: src/backend/worksheet/Worksheet.cpp:700
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: aseta asettelu"
 
-#: src/backend/worksheet/Worksheet.cpp:751
-#: src/backend/worksheet/Worksheet.cpp:752
+#: src/backend/worksheet/Worksheet.cpp:769
+#: src/backend/worksheet/Worksheet.cpp:770
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: aseta asettelun rivimäärä"
 
-#: src/backend/worksheet/Worksheet.cpp:792
-#: src/backend/worksheet/Worksheet.cpp:793
+#: src/backend/worksheet/Worksheet.cpp:810
+#: src/backend/worksheet/Worksheet.cpp:811
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:373
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: aseta sivukoko"
 
-#: src/backend/worksheet/Worksheet.cpp:1539
+#: src/backend/worksheet/Worksheet.cpp:1557
 #, kde-format
 msgid "Curves"
 msgstr "Käyrät"
@@ -10295,7 +10295,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:83
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:246
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:172
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:969
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:430
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:38
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:110
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:142
@@ -14192,7 +14192,7 @@ msgstr "keskitys"
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:469
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:33
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:165
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1198
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:860
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:334
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:252
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:80
@@ -14989,7 +14989,7 @@ msgstr "Tilastot"
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:359
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:452
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:56
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:504
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:343
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:479
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:389
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:166
@@ -15006,7 +15006,7 @@ msgstr "Tietotyyppi:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:804
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1191
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:517
 #, fuzzy, kde-format
 #| msgid "Degree"
 msgid "Degree:"
@@ -16586,7 +16586,7 @@ msgid "&Generate"
 msgstr "&Luo"
 
 #: src/kdefrontend/matrix/MatrixFunctionDialog.cpp:77
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:229
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:232
 #, kde-format
 msgid "Generate function values"
 msgstr ""
@@ -17690,33 +17690,33 @@ msgstr ""
 msgid "Incorrect formula syntax: "
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:216
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:218
 #, fuzzy, kde-format
 #| msgid "Select and Zoom"
 msgid "Select a valid column"
 msgstr "Valitse ja lähennä"
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:223
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:276
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:225
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:279
 #, kde-format
 msgid ""
 "Variable name can contain letters, digits and '_' only and should start with "
 "a letter"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:320
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:323
 #, kde-format
 msgid "Delete variable"
 msgstr "Poista muuttuja"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:346
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:349
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:23
 #, kde-format
 msgid "Variable:"
 msgstr "Muuttuja:"
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:392
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:395
 #, fuzzy, kde-format
 #| msgid "%1: fill cells with const values"
 msgid "%1: fill column with function values"
@@ -18454,7 +18454,7 @@ msgstr "Y-virhetyyppi:"
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:442
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:253
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:312
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:128
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:265
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:407
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:53
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:287
@@ -18504,7 +18504,7 @@ msgstr "Kommentti:"
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:43
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:340
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:101
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:474
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:93
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:101
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:242
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:73
@@ -19644,7 +19644,7 @@ msgstr "Yhteys:"
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:216
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:50
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:73
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:224
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:301
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:61
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:144
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:417
@@ -20503,7 +20503,7 @@ msgstr "x:"
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:153
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:43
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:85
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:330
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:220
 #, kde-format
 msgid "Data:"
 msgstr "Data:"
@@ -21694,7 +21694,7 @@ msgstr "Tietotyyppi:"
 #: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:75
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:161
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:404
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:484
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:870
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:358
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:173
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:90
@@ -21758,7 +21758,7 @@ msgstr "Data:"
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:85
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:63
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:324
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:279
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:475
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:453
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:23
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:211
@@ -21779,7 +21779,7 @@ msgstr "Tietotyyppi:"
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
 #. i18n: ectx: property (text), widget (QLabel, lConvolution)
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:101
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:844
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1194
 #, kde-format
 msgid "Correlation"
 msgstr "Korrelaatio"
@@ -21846,7 +21846,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:107
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:505
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:353
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:923
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:353
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:304
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:344
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:17
@@ -21903,7 +21903,7 @@ msgstr "Yhtälö"
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFunctions2)
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:241
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:384
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1159
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:589
 #: src/kdefrontend/ui/matrix/matrixfunctionwidget.ui:74
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:116
 #, kde-format
@@ -21915,7 +21915,7 @@ msgstr "Funktiot"
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbConstants2)
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:251
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:394
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1172
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:602
 #: src/kdefrontend/ui/matrix/matrixfunctionwidget.ui:84
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:126
 #, kde-format
@@ -21928,128 +21928,14 @@ msgstr "Vakiot"
 msgid "y=g(t)"
 msgstr "y=g(t)"
 
-#. i18n: ectx: property (toolTip), widget (QLabel, lCategory)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:20
-#, kde-format
-msgid "Fit model category"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lCategory)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:23
-#, kde-format
-msgid "Category:"
-msgstr "Luokka:"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, lFit)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:42
-#, kde-format
-msgid "Function to fit and options"
-msgstr "Sovitettava funktio valintoineen"
-
-#. i18n: ectx: property (text), widget (QToolButton, lFit)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:51
-#, kde-format
-msgid "Fit:"
-msgstr "Sovita:"
-
-#. i18n: ectx: property (toolTip), widget (QLabel, lComment)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:125
-#, kde-format
-msgid "Optional comment"
-msgstr "Valinnainen kommentti"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, lParameters)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:175
-#, kde-format
-msgid "Specify parameters and their properties"
-msgstr "Määritä parametrit ominaisuuksineen"
-
-#. i18n: ectx: property (text), widget (QToolButton, lParameters)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:178
-#, kde-format
-msgid "Parameters:"
-msgstr "Parametrit:"
-
-#. i18n: ectx: property (toolTip), widget (QLabel, lXWeight)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:201
-#, kde-format
-msgid "Weight for x data"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lXWeight)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:204
-#, kde-format
-msgid "X-Weight:"
-msgstr "x-paino:"
-
-#. i18n: ectx: property (toolTip), widget (QLabel, lModel)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:211
-#, kde-format
-msgid "Fit model type"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lModel)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:214
-#, kde-format
-msgid "Model:"
-msgstr "Malli:"
-
-#. i18n: ectx: property (toolTip), widget (QLabel, lDataSourceType)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:221
-#, kde-format
-msgid "Type of data source"
-msgstr "Tietolähteen tyyppi"
-
-#. i18n: ectx: property (text), widget (QLabel, lAlgorithm)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:257
-#, kde-format
-msgid "Algorithm:"
-msgstr "Algoritmi:"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, lResults)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:276
-#, kde-format
-msgid "Fit results"
-msgstr "Sovita tulokset"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, lData)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:327
-#, kde-format
-msgid "Data to fit"
-msgstr "Sovitettava data"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, lWeights)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:365
-#, kde-format
-msgid "How to weight the data points"
-msgstr "Miten datapisteitä painotetaan"
-
-#. i18n: ectx: property (text), widget (QToolButton, lWeights)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:371
-#, kde-format
-msgid "Weights:"
-msgstr "Painot:"
-
-#. i18n: ectx: property (toolTip), widget (QLabel, lEquation)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:404
-#, kde-format
-msgid "Function of fit model"
-msgstr "Malliin sovitettava funktio"
-
-#. i18n: ectx: property (text), widget (QLabel, lEquation)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:407
-#, kde-format
-msgid "f(x) ="
-msgstr "f(x) ="
-
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbOptions)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:448
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:67
 #, kde-format
 msgid "Advanced fit options"
 msgstr "Sovituksen lisäasetukset"
 
 #. i18n: ectx: property (whatsThis), widget (QPushButton, pbOptions)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:451
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:70
 #, kde-format
 msgid "Opens a dialog to change advanced fit options"
 msgstr ""
@@ -22057,7 +21943,7 @@ msgstr ""
 #. i18n: ectx: property (title), widget (QGroupBox, gbOptions)
 #. i18n: ectx: property (text), widget (QLabel, lOptions)
 #. i18n: ectx: property (text), widget (QPushButton, pbOptions)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:457
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:76
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:186
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:227
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:75
@@ -22067,25 +21953,203 @@ msgid "Options"
 msgstr "Valinnat"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lName)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:471
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:90
 #, kde-format
 msgid "Name of the fit curve"
 msgstr "Sovituskäyrän nimi"
 
-#. i18n: ectx: property (toolTip), widget (QLabel, lXColumn)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:481
+#. i18n: ectx: property (text), widget (QLabel, lYErrorCol)
+#. i18n: ectx: property (text), widget (QLabel, lXErrorCol)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:140
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:374
 #, kde-format
-msgid "Source of x data"
+msgid "col ="
+msgstr "sar ="
+
+#. i18n: ectx: property (toolTip), widget (QLabel, lYWeight)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:152
+#, kde-format
+msgid "Weight for y data"
+msgstr "y-datan painoarvo"
+
+#. i18n: ectx: property (text), widget (QLabel, lYWeight)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:155
+#, kde-format
+msgid "Y-Weight:"
+msgstr "y-paino:"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, lXWeight)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:162
+#, kde-format
+msgid "Weight for x data"
 msgstr ""
 
+#. i18n: ectx: property (text), widget (QLabel, lXWeight)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:165
+#, kde-format
+msgid "X-Weight:"
+msgstr "x-paino:"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, lCategory)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:195
+#, kde-format
+msgid "Fit model category"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lCategory)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:198
+#, kde-format
+msgid "Category:"
+msgstr "Luokka:"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, lData)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:217
+#, kde-format
+msgid "Data to fit"
+msgstr "Sovitettava data"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, lComment)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:262
+#, kde-format
+msgid "Optional comment"
+msgstr "Valinnainen kommentti"
+
+#. i18n: ectx: property (text), widget (QLabel, lAlgorithm)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:291
+#, kde-format
+msgid "Algorithm:"
+msgstr "Algoritmi:"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, lDataSourceType)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:298
+#, kde-format
+msgid "Type of data source"
+msgstr "Tietolähteen tyyppi"
+
 #. i18n: ectx: property (toolTip), widget (QLabel, lDataSourceCurve)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:501
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:340
 #, kde-format
 msgid "Source curve"
 msgstr "Lähdekäyrä"
 
+#. i18n: ectx: property (toolTip), widget (QLabel, lYColumn)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:350
+#, kde-format
+msgid "Source of y data"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, lWeights)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:398
+#, kde-format
+msgid "How to weight the data points"
+msgstr "Miten datapisteitä painotetaan"
+
+#. i18n: ectx: property (text), widget (QToolButton, lWeights)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:404
+#, kde-format
+msgid "Weights:"
+msgstr "Painot:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkVisible)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:427
+#, kde-format
+msgid "Show fit curve"
+msgstr "Näytä sovituskäyrä"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, lResults)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:472
+#, kde-format
+msgid "Fit results"
+msgstr "Sovita tulokset"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, lDegree)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:514
+#, fuzzy, kde-format
+#| msgid "degrees of freedom"
+msgid "Degree of fit model"
+msgstr "vapausastetta"
+
+#. i18n: ectx: property (whatsThis), widget (QToolButton, tbFunctions)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:592
+#, kde-format
+msgid "Select predefined function"
+msgstr "Valitse esimääritelty funktio"
+
+#. i18n: ectx: property (whatsThis), widget (QToolButton, tbConstants)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:605
+#, kde-format
+msgid "Select predefined constants"
+msgstr "Valitse esimääritetyt vakiot"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, lFit)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:640
+#, kde-format
+msgid "Function to fit and options"
+msgstr "Sovitettava funktio valintoineen"
+
+#. i18n: ectx: property (text), widget (QToolButton, lFit)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:649
+#, kde-format
+msgid "Fit:"
+msgstr "Sovita:"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, pbRecalculate)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:731
+#, fuzzy, kde-format
+#| msgid "Robust fit"
+msgid "Run fit"
+msgstr "Robusti sovitus"
+
+#. i18n: ectx: property (text), widget (QPushButton, pbRecalculate)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:734
+#, kde-format
+msgid "Run"
+msgstr "Suorita"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, lParameters)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:762
+#, kde-format
+msgid "Specify parameters and their properties"
+msgstr "Määritä parametrit ominaisuuksineen"
+
+#. i18n: ectx: property (text), widget (QToolButton, lParameters)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:765
+#, kde-format
+msgid "Parameters:"
+msgstr "Parametrit:"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, lModel)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:788
+#, kde-format
+msgid "Fit model type"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lModel)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:791
+#, kde-format
+msgid "Model:"
+msgstr "Malli:"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, lEquation)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:847
+#, kde-format
+msgid "Function of fit model"
+msgstr "Malliin sovitettava funktio"
+
+#. i18n: ectx: property (text), widget (QLabel, lEquation)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:850
+#, kde-format
+msgid "f(x) ="
+msgstr "f(x) ="
+
+#. i18n: ectx: property (toolTip), widget (QLabel, lXColumn)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:867
+#, kde-format
+msgid "Source of x data"
+msgstr ""
+
 #. i18n: ectx: property (toolTip), widget (QTabWidget, twResults)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:527
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:877
 #, fuzzy, kde-format
 #| msgid "Specify parameters and their start values"
 msgid "Resulting fit parameter and properties"
@@ -22093,168 +22157,104 @@ msgstr "Määritä parametrit alkuarvoineen"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:537
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:824
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:887
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1174
 #, kde-format
 msgid "Parameters"
 msgstr "Parametrit"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:574
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:924
 #, kde-format
 msgid "Goodness of fit"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:628
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:978
 #, kde-format
 msgid "Residual mean square"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:638
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:988
 #, fuzzy, kde-format
 #| msgid "no values"
 msgid "Root mean square deviation (RMSD, SD)"
 msgstr "ei arvoja"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:678
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1028
 #, kde-format
 msgid "F test"
 msgstr "F-testi"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:688
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1038
 #, kde-format
 msgid "P > F"
 msgstr "P > F"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:698
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1048
 #, fuzzy, kde-format
 #| msgid "no values"
 msgid "Mean absolute error (MAE)"
 msgstr "ei arvoja"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:708
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1058
 #, kde-format
 msgid "Akaike information criterion (AIC)"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:718
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1068
 #, kde-format
 msgid "Bayesian information criterion (BIC)"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:732
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1082
 #, kde-format
 msgid "Log"
 msgstr "Logaritmi"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:774
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1124
 #, kde-format
 msgid "Status"
 msgstr "Tila"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:784
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:854
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1134
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1204
 #, kde-format
 msgid "Iterations"
 msgstr "Iteraatiot"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:794
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1144
 #, kde-format
 msgid "Tolerance"
 msgstr "Toleranssi"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:804
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1154
 #, kde-format
 msgid "Calculation time"
 msgstr "Laskenta-aika"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:814
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1164
 #, kde-format
 msgid "Degrees of Freedom"
 msgstr "Vapausasteet"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:834
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1184
 #, kde-format
 msgid "X range"
 msgstr "x-ala"
-
-#. i18n: ectx: property (text), widget (QLabel, lYErrorCol)
-#. i18n: ectx: property (text), widget (QLabel, lXErrorCol)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:901
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1053
-#, kde-format
-msgid "col ="
-msgstr "sar ="
-
-#. i18n: ectx: property (toolTip), widget (QLabel, lYColumn)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:920
-#, kde-format
-msgid "Source of y data"
-msgstr ""
-
-#. i18n: ectx: property (toolTip), widget (QLabel, lYWeight)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:956
-#, kde-format
-msgid "Weight for y data"
-msgstr "y-datan painoarvo"
-
-#. i18n: ectx: property (text), widget (QLabel, lYWeight)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:959
-#, kde-format
-msgid "Y-Weight:"
-msgstr "y-paino:"
-
-#. i18n: ectx: property (toolTip), widget (QCheckBox, chkVisible)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:966
-#, kde-format
-msgid "Show fit curve"
-msgstr "Näytä sovituskäyrä"
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, pbRecalculate)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1026
-#, fuzzy, kde-format
-#| msgid "Robust fit"
-msgid "Run fit"
-msgstr "Robusti sovitus"
-
-#. i18n: ectx: property (text), widget (QPushButton, pbRecalculate)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1029
-#, kde-format
-msgid "Run"
-msgstr "Suorita"
-
-#. i18n: ectx: property (whatsThis), widget (QToolButton, tbFunctions)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1162
-#, kde-format
-msgid "Select predefined function"
-msgstr "Valitse esimääritelty funktio"
-
-#. i18n: ectx: property (whatsThis), widget (QToolButton, tbConstants)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1175
-#, kde-format
-msgid "Select predefined constants"
-msgstr "Valitse esimääritetyt vakiot"
-
-#. i18n: ectx: property (toolTip), widget (QLabel, lDegree)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1188
-#, fuzzy, kde-format
-#| msgid "degrees of freedom"
-msgid "Degree of fit model"
-msgstr "vapausastetta"
 
 #. i18n: ectx: property (text), widget (QLabel, lForm)
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:31

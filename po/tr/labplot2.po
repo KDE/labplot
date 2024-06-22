@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-21 01:42+0000\n"
-"PO-Revision-Date: 2024-06-20 13:16+0300\n"
+"POT-Creation-Date: 2024-06-22 01:50+0000\n"
+"PO-Revision-Date: 2024-06-22 01:26+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -496,7 +496,7 @@ msgstr "%1   (çizilemez veri)"
 #: src/backend/core/AspectTreeModel.cpp:188
 #, kde-format
 msgid "%1   (non-numeric data)"
-msgstr "%1 (sayı olmayan veri)"
+msgstr "%1   (sayı olmayan veri)"
 
 #: src/backend/core/AspectTreeModel.cpp:190
 #, kde-format
@@ -1751,8 +1751,8 @@ msgid "Number of variables: "
 msgstr "Değişken sayısı: "
 
 #: src/backend/datasources/filters/MatioFilter.cpp:335
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:326
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:346
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:329
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:349
 #, kde-format
 msgid "Variables:"
 msgstr "Değişkenler:"
@@ -3402,7 +3402,7 @@ msgstr "Gama Dağılımı"
 #: src/backend/gsl/functions.cpp:149
 #, kde-format
 msgid "Flat (Uniform) Distribution"
-msgstr "Düz (Değişmeyen) Dağılım"
+msgstr "Düz (Tekdüze) Dağılım"
 
 #: src/backend/gsl/functions.cpp:151
 #, kde-format
@@ -4977,28 +4977,24 @@ msgid "Second synchrotron function"
 msgstr "İkinci senkrotron işlevi"
 
 #: src/backend/gsl/functions.cpp:596
-#, fuzzy, kde-format
-#| msgid "Transport function"
+#, kde-format
 msgid "Transport function J2"
-msgstr "Taşıma işlevi"
+msgstr "Taşıma işlevi J2"
 
 #: src/backend/gsl/functions.cpp:597
-#, fuzzy, kde-format
-#| msgid "Transport function"
+#, kde-format
 msgid "Transport function J3"
-msgstr "Taşıma işlevi"
+msgstr "Taşıma işlevi J3"
 
 #: src/backend/gsl/functions.cpp:598
-#, fuzzy, kde-format
-#| msgid "Transport function"
+#, kde-format
 msgid "Transport function J4"
-msgstr "Taşıma işlevi"
+msgstr "Taşıma işlevi J4"
 
 #: src/backend/gsl/functions.cpp:599
-#, fuzzy, kde-format
-#| msgid "Transport function"
+#, kde-format
 msgid "Transport function J5"
-msgstr "Taşıma işlevi"
+msgstr "Taşıma işlevi J5"
 
 #: src/backend/gsl/functions.cpp:602
 #, kde-format
@@ -5295,32 +5291,32 @@ msgstr "Kümülatif dağılım işlevi Q"
 #: src/backend/gsl/functions.cpp:673
 #, kde-format
 msgid "Inverse cumulative distribution function P"
-msgstr "Ark kümülatif dağılım işlevi P"
+msgstr "Ters kümülatif dağılım işlevi P"
 
 #: src/backend/gsl/functions.cpp:674
 #, kde-format
 msgid "Inverse cumulative distribution function Q"
-msgstr "Ark kümülatif dağılım işlevi Q"
+msgstr "Ters kümülatif dağılım işlevi Q"
 
 #: src/backend/gsl/functions.cpp:675
 #, kde-format
 msgid "Cumulative unit distribution function P"
-msgstr "Birikimli birim dağılım işlevi P"
+msgstr "Kümülatif birim dağılım işlevi P"
 
 #: src/backend/gsl/functions.cpp:676
 #, kde-format
 msgid "Cumulative unit distribution function Q"
-msgstr "Birikimli birim dağılım işlevi Q"
+msgstr "Kümülatif birim dağılım işlevi Q"
 
 #: src/backend/gsl/functions.cpp:677
 #, kde-format
 msgid "Inverse cumulative unit distribution function P"
-msgstr "Ters birikimli birim dağılım işlevi P"
+msgstr "Ters kümülatif birim dağılım işlevi P"
 
 #: src/backend/gsl/functions.cpp:678
 #, kde-format
 msgid "Inverse cumulative unit distribution function Q"
-msgstr "Ters birikimli birim dağılım işlevi Q"
+msgstr "Ters kümülatif birim dağılım işlevi Q"
 
 #: src/backend/gsl/functions.cpp:680
 #, kde-format
@@ -5343,28 +5339,24 @@ msgid "Probability density for an exponential distribution"
 msgstr "Üstel dağılım için olasılık yoğunluğu"
 
 #: src/backend/gsl/functions.cpp:686
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function P"
+#, kde-format
 msgid "Cumulative exponential distribution function P"
-msgstr "Birikimli birim dağılım işlevi P"
+msgstr "Kümülatif üstel dağılım işlevi P"
 
 #: src/backend/gsl/functions.cpp:687
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function Q"
+#, kde-format
 msgid "Cumulative exponential distribution function Q"
-msgstr "Birikimli birim dağılım işlevi Q"
+msgstr "Kümülatif üstel dağılım işlevi Q"
 
 #: src/backend/gsl/functions.cpp:688
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative unit distribution function P"
+#, kde-format
 msgid "Inverse cumulative exponential distribution function P"
-msgstr "Ters birikimli birim dağılım işlevi P"
+msgstr "Ters kümülatif üstel dağılım işlevi P"
 
 #: src/backend/gsl/functions.cpp:689
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative unit distribution function Q"
+#, kde-format
 msgid "Inverse cumulative exponential distribution function Q"
-msgstr "Ters birikimli birim dağılım işlevi Q"
+msgstr "Ters kümülatif üstel dağılım işlevi Q"
 
 #: src/backend/gsl/functions.cpp:692
 #, kde-format
@@ -5372,28 +5364,24 @@ msgid "Probability density for a Laplace distribution"
 msgstr "Laplas dağılımı için olasılık yoğunluğu"
 
 #: src/backend/gsl/functions.cpp:693
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative Laplace distribution function P"
-msgstr "Kümülatif dağılım işlevi P"
+msgstr "Kümülatif Laplace dağılımı işlevi P"
 
 #: src/backend/gsl/functions.cpp:694
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative Laplace distribution function Q"
-msgstr "Kümülatif dağılım işlevi Q"
+msgstr "Kümülatif Laplace dağılımı işlevi Q"
 
 #: src/backend/gsl/functions.cpp:695
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative Laplace distribution function P"
-msgstr "Ark kümülatif dağılım işlevi P"
+msgstr "Ters kümülatif Laplace dağılımı işlevi P"
 
 #: src/backend/gsl/functions.cpp:696
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative Laplace distribution function Q"
-msgstr "Ark kümülatif dağılım işlevi Q"
+msgstr "Ters kümülatif Laplace dağılımı işlevi Q"
 
 #: src/backend/gsl/functions.cpp:699
 #, kde-format
@@ -5401,16 +5389,14 @@ msgid "Probability density for an exponential power distribution"
 msgstr "Üstel kuvvet dağılımı için olasılık yoğunluğu"
 
 #: src/backend/gsl/functions.cpp:700
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function P"
+#, kde-format
 msgid "cumulative exponential power distribution function P"
-msgstr "Birikimli birim dağılım işlevi P"
+msgstr "Kümülatif üstel güç dağılımı işlevi P"
 
 #: src/backend/gsl/functions.cpp:701
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function Q"
+#, kde-format
 msgid "Cumulative exponential power distribution function Q"
-msgstr "Birikimli birim dağılım işlevi Q"
+msgstr "Kümülatif üstel güç dağılımı işlevi Q"
 
 #: src/backend/gsl/functions.cpp:704
 #, kde-format
@@ -5418,28 +5404,24 @@ msgid "Probability density for a Cauchy distribution"
 msgstr "Cauchy dağılımı için olasılık yoğunluğu"
 
 #: src/backend/gsl/functions.cpp:705
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative Cauchy distribution function P"
-msgstr "Kümülatif dağılım işlevi P"
+msgstr "Kümülatif Cauchy dağılımı işlevi P"
 
 #: src/backend/gsl/functions.cpp:706
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative Cauchy distribution function Q"
-msgstr "Kümülatif dağılım işlevi Q"
+msgstr "Kümülatif Cauchy dağılımı işlevi Q"
 
 #: src/backend/gsl/functions.cpp:707
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative Cauchy distribution function P"
-msgstr "Ark kümülatif dağılım işlevi P"
+msgstr "Ters kümülatif Cauchy dağılımı işlevi P"
 
 #: src/backend/gsl/functions.cpp:708
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative Cauchy distribution function Q"
-msgstr "Ark kümülatif dağılım işlevi Q"
+msgstr "Ters kümülatif Cauchy dağılımı işlevi Q"
 
 #: src/backend/gsl/functions.cpp:711
 #, kde-format
@@ -5447,28 +5429,24 @@ msgid "Probability density for a Rayleigh distribution"
 msgstr "Rayleigh dağılımı için olasılık yoğunluğu"
 
 #: src/backend/gsl/functions.cpp:712
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative Rayleigh distribution function P"
-msgstr "Kümülatif dağılım işlevi P"
+msgstr "Kümülatif Rayleigh dağılımı işlevi P"
 
 #: src/backend/gsl/functions.cpp:713
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative Rayleigh distribution function Q"
-msgstr "Kümülatif dağılım işlevi Q"
+msgstr "Kümülatif Rayleigh dağılımı işlevi Q"
 
 #: src/backend/gsl/functions.cpp:714
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative Rayleigh distribution function P"
-msgstr "Ark kümülatif dağılım işlevi P"
+msgstr "Ters kümülatif Rayleigh dağılımı işlevi P"
 
 #: src/backend/gsl/functions.cpp:715
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative Rayleigh distribution function Q"
-msgstr "Ark kümülatif dağılım işlevi Q"
+msgstr "Ters kümülatif Rayleigh dağılım işlevi Q"
 
 #: src/backend/gsl/functions.cpp:716
 #, kde-format
@@ -5486,57 +5464,49 @@ msgid "Probability density for a gamma distribution"
 msgstr "Gama dağılımı için olasılık yoğunluğu"
 
 #: src/backend/gsl/functions.cpp:723
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative gamma distribution function P"
-msgstr "Kümülatif dağılım işlevi P"
+msgstr "Kümülatif gama dağılımı işlevi P"
 
 #: src/backend/gsl/functions.cpp:724
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative gamma distribution function Q"
-msgstr "Kümülatif dağılım işlevi Q"
+msgstr "Kümülatif gama dağılımı işlevi Q"
 
 #: src/backend/gsl/functions.cpp:725
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative gamma distribution function P"
-msgstr "Ark kümülatif dağılım işlevi P"
+msgstr "Ters kümülatif gama dağılımı işlevi P"
 
 #: src/backend/gsl/functions.cpp:726
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative gamma distribution function Q"
-msgstr "Ark kümülatif dağılım işlevi Q"
+msgstr "Ters kümülatif gama dağılımı işlevi Q"
 
 #: src/backend/gsl/functions.cpp:729
 #, kde-format
 msgid "Probability density for a uniform distribution"
-msgstr "Tekdüze dağılımı için olasılık yoğunluğu"
+msgstr "Tekdüze dağılım için olasılık yoğunluğu"
 
 #: src/backend/gsl/functions.cpp:730
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function P"
+#, kde-format
 msgid "Cumulative uniform distribution function P"
-msgstr "Birikimli birim dağılım işlevi P"
+msgstr "Kümülatif tekdüze dağılım işlevi P"
 
 #: src/backend/gsl/functions.cpp:731
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function Q"
+#, kde-format
 msgid "Cumulative uniform distribution function Q"
-msgstr "Birikimli birim dağılım işlevi Q"
+msgstr "Kümülatif tekdüze dağılım işlevi Q"
 
 #: src/backend/gsl/functions.cpp:732
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative unit distribution function P"
+#, kde-format
 msgid "Inverse cumulative uniform distribution function P"
-msgstr "Ters birikimli birim dağılım işlevi P"
+msgstr "Ters kümülatif tekdüze dağılım işlevi P"
 
 #: src/backend/gsl/functions.cpp:733
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative unit distribution function Q"
+#, kde-format
 msgid "Inverse cumulative uniform distribution function Q"
-msgstr "Ters birikimli birim dağılım işlevi Q"
+msgstr "Ters kümülatif tekdüze dağılım işlevi Q"
 
 #: src/backend/gsl/functions.cpp:736
 #, kde-format
@@ -5544,28 +5514,24 @@ msgid "Probability density for a lognormal distribution"
 msgstr "Lognormal dağılımı için olasılık yoğunluğu"
 
 #: src/backend/gsl/functions.cpp:737
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative lognormal distribution function P"
-msgstr "Kümülatif dağılım işlevi P"
+msgstr "Kümülatif lognormal dağılım işlevi P"
 
 #: src/backend/gsl/functions.cpp:738
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative lognormal distribution function Q"
-msgstr "Kümülatif dağılım işlevi Q"
+msgstr "Kümülatif lognormal dağılım işlevi Q"
 
 #: src/backend/gsl/functions.cpp:739
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative lognormal distribution function P"
-msgstr "Ark kümülatif dağılım işlevi P"
+msgstr "Ters kümülatif lognormal dağılım işlevi P"
 
 #: src/backend/gsl/functions.cpp:740
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative lognormal distribution function Q"
-msgstr "Ark kümülatif dağılım işlevi Q"
+msgstr "Ters kümülatif lognormal dağılım işlevi Q"
 
 #: src/backend/gsl/functions.cpp:743
 #, kde-format
@@ -5573,28 +5539,24 @@ msgid "Probability density for a chi squared distribution"
 msgstr "Ki kare dağılımı için olasılık yoğunluğu"
 
 #: src/backend/gsl/functions.cpp:744
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative chi squared distribution function P"
-msgstr "Kümülatif dağılım işlevi P"
+msgstr "Kümülatif ki kareli dağılım işlevi P"
 
 #: src/backend/gsl/functions.cpp:745
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative chi squared distribution function Q"
-msgstr "Kümülatif dağılım işlevi Q"
+msgstr "Kümülatif ki kareli dağılım işlevi Q"
 
 #: src/backend/gsl/functions.cpp:746
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative chi squared distribution function P"
-msgstr "Ark kümülatif dağılım işlevi P"
+msgstr "Ters kümülatif ki kareli dağılım işlevi P"
 
 #: src/backend/gsl/functions.cpp:747
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative chi squared distribution function Q"
-msgstr "Ark kümülatif dağılım işlevi Q"
+msgstr "Ters kümülatif ki kareli dağılım işlevi Q"
 
 #: src/backend/gsl/functions.cpp:750
 #, kde-format
@@ -5602,28 +5564,24 @@ msgid "Probability density for a F-distribution"
 msgstr "F dağılımı için olasılık yoğunluğu"
 
 #: src/backend/gsl/functions.cpp:751
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative F-distribution function P"
-msgstr "Kümülatif dağılım işlevi P"
+msgstr "Kümülatif F dağılımı işlevi P"
 
 #: src/backend/gsl/functions.cpp:752
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative F-distribution function Q"
-msgstr "Kümülatif dağılım işlevi Q"
+msgstr "Kümülatif F dağılımı işlevi Q"
 
 #: src/backend/gsl/functions.cpp:753
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative F-distribution function P"
-msgstr "Ark kümülatif dağılım işlevi P"
+msgstr "Ters kümülatif F dağılımı işlevi P"
 
 #: src/backend/gsl/functions.cpp:754
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative F-distribution function Q"
-msgstr "Ark kümülatif dağılım işlevi Q"
+msgstr "Ters kümülatif F dağılımı işlevi Q"
 
 #: src/backend/gsl/functions.cpp:757
 #, kde-format
@@ -5631,28 +5589,24 @@ msgid "Probability density for a t-distribution"
 msgstr "T dağılımı için olasılık yoğunluğu"
 
 #: src/backend/gsl/functions.cpp:758
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative t-distribution function P"
-msgstr "Kümülatif dağılım işlevi P"
+msgstr "Kümülatif T dağılımı işlevi P"
 
 #: src/backend/gsl/functions.cpp:759
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative t-distribution function Q"
-msgstr "Kümülatif dağılım işlevi Q"
+msgstr "Kümülatif T dağılımı işlevi Q"
 
 #: src/backend/gsl/functions.cpp:760
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative t-distribution function P"
-msgstr "Ark kümülatif dağılım işlevi P"
+msgstr "Ters kümülatif T dağılımı işlevi P"
 
 #: src/backend/gsl/functions.cpp:761
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative t-distribution function Q"
-msgstr "Ark kümülatif dağılım işlevi Q"
+msgstr "Ters kümülatif T dağılımı işlevi Q"
 
 #: src/backend/gsl/functions.cpp:764
 #, kde-format
@@ -5660,28 +5614,24 @@ msgid "Probability density for a beta distribution"
 msgstr "Beta dağılımı için olasılık yoğunluğu"
 
 #: src/backend/gsl/functions.cpp:765
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative beta distribution function P"
-msgstr "Kümülatif dağılım işlevi P"
+msgstr "Kümülatif beta dağılımı işlevi P"
 
 #: src/backend/gsl/functions.cpp:766
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative beta distribution function Q"
-msgstr "Kümülatif dağılım işlevi Q"
+msgstr "Kümülatif beta dağılımı işlevi Q"
 
 #: src/backend/gsl/functions.cpp:767
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative beta distribution function P"
-msgstr "Ark kümülatif dağılım işlevi P"
+msgstr "Ters kümülatif beta dağılımı işlevi P"
 
 #: src/backend/gsl/functions.cpp:768
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative beta distribution function Q"
-msgstr "Ark kümülatif dağılım işlevi Q"
+msgstr "Ters kümülatif beta dağılımı işlevi Q"
 
 #: src/backend/gsl/functions.cpp:771
 #, kde-format
@@ -5689,28 +5639,24 @@ msgid "Probability density for a logistic distribution"
 msgstr "Lojistik dağılımı için olasılık yoğunluğu"
 
 #: src/backend/gsl/functions.cpp:772
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function P"
+#, kde-format
 msgid "Cumulative logistic distribution function P"
-msgstr "Birikimli birim dağılım işlevi P"
+msgstr "Kümülatif lojistik dağılım işlevi P"
 
 #: src/backend/gsl/functions.cpp:773
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function Q"
+#, kde-format
 msgid "Cumulative logistic distribution function Q"
-msgstr "Birikimli birim dağılım işlevi Q"
+msgstr "Kümülatif lojistik dağılım işlevi Q"
 
 #: src/backend/gsl/functions.cpp:774
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative unit distribution function P"
+#, kde-format
 msgid "Inverse cumulative logistic distribution function P"
-msgstr "Ters birikimli birim dağılım işlevi P"
+msgstr "Ters kümülatif lojistik dağılım işlevi P"
 
 #: src/backend/gsl/functions.cpp:775
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative unit distribution function Q"
+#, kde-format
 msgid "Inverse cumulative logistic distribution function Q"
-msgstr "Ters birikimli birim dağılım işlevi Q"
+msgstr "Ters kümülatif lojistik dağılım işlevi Q"
 
 #: src/backend/gsl/functions.cpp:778
 #, kde-format
@@ -5718,28 +5664,24 @@ msgid "Probability density for a Pareto distribution"
 msgstr "Pareto dağılımı için olasılık yoğunluğu"
 
 #: src/backend/gsl/functions.cpp:779
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative Pareto distribution function P"
-msgstr "Kümülatif dağılım işlevi P"
+msgstr "Kümülatif Pareto dağılımı işlevi P"
 
 #: src/backend/gsl/functions.cpp:780
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative Pareto distribution function Q"
-msgstr "Kümülatif dağılım işlevi Q"
+msgstr "Kümülatif Pareto dağılımı işlevi Q"
 
 #: src/backend/gsl/functions.cpp:781
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative Pareto distribution function P"
-msgstr "Ark kümülatif dağılım işlevi P"
+msgstr "Ters kümülatif Pareto dağılımı işlevi P"
 
 #: src/backend/gsl/functions.cpp:782
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative Pareto distribution function Q"
-msgstr "Ark kümülatif dağılım işlevi Q"
+msgstr "Ters kümülatif Pareto dağılımı işlevi Q"
 
 #: src/backend/gsl/functions.cpp:785
 #, kde-format
@@ -5747,28 +5689,24 @@ msgid "Probability density for a Weibull distribution"
 msgstr "Weibull dağılımı için olasılık yoğunluğu"
 
 #: src/backend/gsl/functions.cpp:786
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative Weibull distribution function P"
-msgstr "Kümülatif dağılım işlevi P"
+msgstr "Kümülatif Weibull dağılımı işlevi P"
 
 #: src/backend/gsl/functions.cpp:787
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative Weibull distribution function Q"
-msgstr "Kümülatif dağılım işlevi Q"
+msgstr "Kümülatif Weibull dağılımı işlevi Q"
 
 #: src/backend/gsl/functions.cpp:788
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative Weibull distribution function P"
-msgstr "Ark kümülatif dağılım işlevi P"
+msgstr "Ters kümülatif Weibull dağılımı işlevi P"
 
 #: src/backend/gsl/functions.cpp:789
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative Weibull distribution function Q"
-msgstr "Ark kümülatif dağılım işlevi Q"
+msgstr "Ters kümülatif Weibull dağılımı işlevi Q"
 
 #: src/backend/gsl/functions.cpp:792
 #, kde-format
@@ -5776,28 +5714,24 @@ msgid "Probability density for a Type-1 Gumbel distribution"
 msgstr "Tip 1 Gumbel dağılımı için olasılık yoğunluğu"
 
 #: src/backend/gsl/functions.cpp:793
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative Type-1 Gumbel distribution function P"
-msgstr "Kümülatif dağılım işlevi P"
+msgstr "Kümülatif 1. Türden Gumbel dağılımı işlevi P"
 
 #: src/backend/gsl/functions.cpp:794
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative Type-1 Gumbel distribution function Q"
-msgstr "Kümülatif dağılım işlevi Q"
+msgstr "Kümülatif 1. Türden Gumbel dağılımı işlevi Q"
 
 #: src/backend/gsl/functions.cpp:795
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative Type-1 Gumbel distribution function P"
-msgstr "Ark kümülatif dağılım işlevi P"
+msgstr "Ters kümülatif 1. Türden Gumbel dağılımı işlevi P"
 
 #: src/backend/gsl/functions.cpp:796
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative Type-1 Gumbel distribution function Q"
-msgstr "Ark kümülatif dağılım işlevi Q"
+msgstr "Ters kümülatif 1. Türden Gumbel dağılımı işlevi Q"
 
 #: src/backend/gsl/functions.cpp:797
 #, kde-format
@@ -5805,28 +5739,24 @@ msgid "Probability density for a Type-2 Gumbel distribution"
 msgstr "Tip 2 Gumbel dağılımı için olasılık yoğunluğu"
 
 #: src/backend/gsl/functions.cpp:798
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative Type-2 Gumbel distribution function P"
-msgstr "Kümülatif dağılım işlevi P"
+msgstr "Kümülatif 2. Türden Gumbel dağılımı işlevi P"
 
 #: src/backend/gsl/functions.cpp:799
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative Type-2 Gumbel distribution function Q"
-msgstr "Kümülatif dağılım işlevi Q"
+msgstr "Kümülatif 2. Türden Gumbel dağılımı işlevi Q"
 
 #: src/backend/gsl/functions.cpp:800
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative Type-2 Gumbel distribution function P"
-msgstr "Ark kümülatif dağılım işlevi P"
+msgstr "Ters kümülatif 2. Türden Gumbel dağılımı işlevi P"
 
 #: src/backend/gsl/functions.cpp:801
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative Type-2 Gumbel distribution function Q"
-msgstr "Ark kümülatif dağılım işlevi Q"
+msgstr "Ters kümülatif 2. Türden Gumbel dağılımı işlevi Q"
 
 #: src/backend/gsl/functions.cpp:804
 #, kde-format
@@ -5834,16 +5764,14 @@ msgid "Probability density for a Poisson distribution"
 msgstr "Poisson dağılımı için olasılık yoğunluğu"
 
 #: src/backend/gsl/functions.cpp:805
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative Poisson distribution function P"
-msgstr "Kümülatif dağılım işlevi P"
+msgstr "Kümülatif Poisson dağılımı işlevi P"
 
 #: src/backend/gsl/functions.cpp:806
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative Poisson distribution function Q"
-msgstr "Kümülatif dağılım işlevi Q"
+msgstr "Kümülatif Poisson dağılımı işlevi Q"
 
 #: src/backend/gsl/functions.cpp:809
 #, kde-format
@@ -5856,16 +5784,14 @@ msgid "Probability density for a binomial distribution"
 msgstr "Binominal dağılımı için olasılık yoğunluğu"
 
 #: src/backend/gsl/functions.cpp:813
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function P"
+#, kde-format
 msgid "Cumulative binomial distribution function P"
-msgstr "Birikimli birim dağılım işlevi P"
+msgstr "Ters kümülatif Poisson dağılımı işlevi P"
 
 #: src/backend/gsl/functions.cpp:814
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function Q"
+#, kde-format
 msgid "Cumulative binomial distribution function Q"
-msgstr "Birikimli birim dağılım işlevi Q"
+msgstr "Ters kümülatif Poisson dağılımı işlevi Q"
 
 #: src/backend/gsl/functions.cpp:815
 #, kde-format
@@ -5873,16 +5799,14 @@ msgid "Probability density for a negative binomial distribution"
 msgstr "Negatif binominal dağılımı için olasılık yoğunluğu"
 
 #: src/backend/gsl/functions.cpp:816
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function P"
+#, kde-format
 msgid "Cumulative negative binomial distribution function P"
-msgstr "Birikimli birim dağılım işlevi P"
+msgstr "Kümülatif negatif binom dağılımı fonksiyonu P"
 
 #: src/backend/gsl/functions.cpp:817
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function Q"
+#, kde-format
 msgid "Cumulative negative binomial distribution function Q"
-msgstr "Birikimli birim dağılım işlevi Q"
+msgstr "Kümülatif negatif binom dağılımı fonksiyonu Q"
 
 #: src/backend/gsl/functions.cpp:820
 #, kde-format
@@ -5890,16 +5814,14 @@ msgid "Probability density for a Pascal distribution"
 msgstr "Pascal dağılımı için olasılık yoğunluğu"
 
 #: src/backend/gsl/functions.cpp:821
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative Pascal distribution function P"
-msgstr "Kümülatif dağılım işlevi P"
+msgstr "Kümülatif Pascal dağılımı fonksiyonu P"
 
 #: src/backend/gsl/functions.cpp:822
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative Pascal distribution function Q"
-msgstr "Kümülatif dağılım işlevi Q"
+msgstr "Kümülatif Pascal dağılımı fonksiyonu Q"
 
 #: src/backend/gsl/functions.cpp:825
 #, kde-format
@@ -5907,16 +5829,14 @@ msgid "Probability density for a geometric distribution"
 msgstr "Geometrik dağılımı için olasılık yoğunluğu"
 
 #: src/backend/gsl/functions.cpp:826
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative geometric distribution function P"
-msgstr "Kümülatif dağılım işlevi P"
+msgstr "Kümülatif geometrik dağılımı fonksiyonu P"
 
 #: src/backend/gsl/functions.cpp:827
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative geometric distribution function Q"
-msgstr "Kümülatif dağılım işlevi Q"
+msgstr "Kümülatif geometrik dağılımı fonksiyonu Q"
 
 #: src/backend/gsl/functions.cpp:830
 #, kde-format
@@ -5924,16 +5844,14 @@ msgid "Probability density for a hypergeometric distribution"
 msgstr "Hipergeometrik dağılım için olasılık yoğunluğu"
 
 #: src/backend/gsl/functions.cpp:831
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative hypergeometric distribution function P"
-msgstr "Kümülatif dağılım işlevi P"
+msgstr "Kümülatif hipergeometrik dağılımı fonksiyonu P"
 
 #: src/backend/gsl/functions.cpp:832
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative hypergeometric distribution function Q"
-msgstr "Kümülatif dağılım işlevi Q"
+msgstr "Kümülatif hipergeometrik dağılımı fonksiyonu Q"
 
 #: src/backend/gsl/functions.cpp:835
 #, kde-format
@@ -5946,22 +5864,19 @@ msgid "Probability density for a triangular distribution"
 msgstr "Üçgen dağılım için olasılık yoğunluğu"
 
 #: src/backend/gsl/functions.cpp:840
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative triangular distribution function P"
-msgstr "Kümülatif dağılım işlevi P"
+msgstr "Kümülatif üçgen dağılım işlevi P"
 
 #: src/backend/gsl/functions.cpp:841
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative triangular distribution function Q"
-msgstr "Kümülatif dağılım işlevi Q"
+msgstr "Kümülatif üçgen dağılım işlevi Q"
 
 #: src/backend/gsl/functions.cpp:842
-#, fuzzy, kde-format
-#| msgid "Probability density for a triangular distribution"
+#, kde-format
 msgid "p-th quantile for triangular distribution"
-msgstr "Üçgen dağılım için olasılık yoğunluğu"
+msgstr "Üçgen dağılım için p. dağılım dilimi"
 
 #: src/backend/gsl/functions.cpp:948 src/backend/gsl/functions.cpp:960
 #: src/backend/gsl/functions.cpp:974 src/backend/gsl/functions.cpp:986
@@ -6893,7 +6808,7 @@ msgstr "Gama"
 #: src/backend/nsl/nsl_sf_stats.c:25
 #, kde-format
 msgid "Flat (Uniform)"
-msgstr "Düz (Tek Tip)"
+msgstr "Düz (Tekdüze)"
 
 #: src/backend/nsl/nsl_sf_stats.c:26
 #, kde-format
@@ -7010,7 +6925,7 @@ msgstr "Üçgensel"
 #: src/backend/nsl/nsl_sf_window.c:15
 #, kde-format
 msgid "Rectangular (Uniform)"
-msgstr "Dikdörtgen (Tek Tip)"
+msgstr "Dikdörtgen (Tekdüze)"
 
 #: src/backend/nsl/nsl_sf_window.c:17
 #, kde-format
@@ -7117,7 +7032,7 @@ msgstr "Sabit"
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:160
 #, kde-format
 msgid "Uniform (Rectangular)"
-msgstr "Tek Tip (Dikdörtgen)"
+msgstr "Tekdüze (Dikdörtgen)"
 
 #: src/backend/nsl/nsl_smooth.c:26
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:162
@@ -7549,12 +7464,12 @@ msgstr "%1: Sağ boşluğu ayarla"
 msgid "%1: set bottom padding"
 msgstr "%1: Alt boşluğu ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:281
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:286
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:88
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:231
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:102
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:101
-#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:118
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:102
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:120
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:258
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:56
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:52
@@ -7569,12 +7484,12 @@ msgstr "Yatay"
 
 #. i18n("AvgShifted Histogram"));
 #. Orientation
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:284
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:289
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:91
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:234
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:105
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:104
-#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:121
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:105
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:123
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:259
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:57
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:53
@@ -7589,12 +7504,12 @@ msgstr "Yatay"
 msgid "Vertical"
 msgstr "Dikey"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:304
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:309
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:99
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:242
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:113
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:121
-#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:138
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:122
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:140
 #, kde-format
 msgid "Orientation"
 msgstr "Yönelim"
@@ -7604,8 +7519,8 @@ msgstr "Yönelim"
 #. i18n: ectx: property (text), widget (QLabel, lEstimationLine)
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersFormat)
 #. i18n: ectx: property (text), widget (QLabel, lLine)
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:310
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:127
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:315
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:128
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:196
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:488
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:628
@@ -7620,269 +7535,269 @@ msgstr "Yönelim"
 msgid "Line"
 msgstr "Çizgi"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:312
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:129
-#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:146
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:317
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:130
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:148
 #, kde-format
 msgid "Style"
 msgstr "Biçem"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:317
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:134
-#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:151
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:322
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:135
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:153
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:318
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:131
 #, kde-format
 msgid "Color"
 msgstr "Renk"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:542
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:547
 #, kde-format
 msgid "%1: set axis range type"
 msgstr "%1: Eksen erim türünü ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:567
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:572
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:621
 #, kde-format
 msgid "%1: set axis orientation"
 msgstr "%1: Eksen yönelimini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:574
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:579
 #, kde-format
 msgid "%1: set axis position"
 msgstr "%1: Eksen konumunu ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:582
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:587
 #, kde-format
 msgid "%1: set axis offset"
 msgstr "%1: Eksen ofsetini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:597
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:602
 #, kde-format
 msgid "%1: set axis range"
 msgstr "%1: Eksen erimini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:636
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:641
 #, kde-format
 msgid "%1: set range scale"
 msgstr "%1: Erim ölçeğini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:643
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:648
 #, kde-format
 msgid "%1: set scale"
 msgstr "%1: Ölçeği ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:650
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:655
 #, kde-format
 msgid "%1: set major tick start type"
 msgstr "%1: Ana imlerin başlangıç türünü ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:657
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:662
 #, kde-format
 msgid "%1: set major tick start offset"
 msgstr "%1: Ana imlerin başlangıç ofsetini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:665
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:670
 #, kde-format
 msgid "%1: set major tick start value"
 msgstr "%1: Ana imlerin başlangıç değerini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:677
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:682
 #, kde-format
 msgid "%1: set axis scaling factor"
 msgstr "%1: Eksenin ölçekleme çarpanını ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:686
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:691
 #, kde-format
 msgid "%1: set axis zero offset"
 msgstr "%1: Eksenin sıfır ofsetini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:692
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:697
 #, kde-format
 msgid "%1: show scale and offset"
 msgstr "%1: Ekseni ve ofseti göster"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:699
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:704
 #, kde-format
 msgid "%1: set axis logical position"
 msgstr "%1: Eksenin mantıksal konumunu ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:707
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:714
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:712
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:719
 #, kde-format
 msgid "%1: set title offset"
 msgstr "%1: Başlık ofsetini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:722
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:727
 #, kde-format
 msgid "%1: set arrow type"
 msgstr "%1: Ok türünü ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:729
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:734
 #, kde-format
 msgid "%1: set arrow position"
 msgstr "%1: Ok konumunu ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:736
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:741
 #, kde-format
 msgid "%1: set arrow size"
 msgstr "%1: Ok boyutunu ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:744
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:749
 #, kde-format
 msgid "%1: set major ticks direction"
 msgstr "%1: Ana imlerin yönünü ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:751
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:756
 #, kde-format
 msgid "%1: set major ticks type"
 msgstr "%1: Ana imlerin türünü ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:759
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:764
 #, kde-format
 msgid "%1: enable/disable major automatic tick numbers"
 msgstr "%1: Ana imlerin otomatik numaralandırmasını aç/kapat"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:761
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:776
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:766
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:781
 #, kde-format
 msgid "%1: set the total number of the major ticks"
 msgstr "%1: Ana imlerin toplam sayısını ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:778
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:860
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:783
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:865
 #, kde-format
 msgid "%1: disable major automatic tick numbers"
 msgstr "%1: Ana imlerin otomatik numaralandırmasını devre dışı bırak"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:801
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:806
 #, kde-format
 msgid "%1: set the spacing of the major ticks"
 msgstr "%1: Ana imlerin boşluklandırmasını ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:808
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:813
 #, kde-format
 msgid "%1: assign major ticks' values"
 msgstr "%1: Ana imlerin değerlerini ata"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:822
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:827
 #, kde-format
 msgid "%1: set major ticks length"
 msgstr "%1: Ana imlerin uzunluğunu ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:830
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:835
 #, kde-format
 msgid "%1: set minor ticks direction"
 msgstr "%1: Küçük imlerin yönünü ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:837
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:842
 #, kde-format
 msgid "%1: set minor ticks type"
 msgstr "%1: Küçük imlerin türünü ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:845
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:850
 #, kde-format
 msgid "%1: enable/disable minor automatic tick numbers"
 msgstr "%1: Küçük imlerin otomatik numaralandırmasını aç/kapat"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:848
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:859
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:853
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:864
 #, kde-format
 msgid "%1: set the total number of the minor ticks"
 msgstr "%1: Küçük imlerin toplam sayısını ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:890
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:895
 #, kde-format
 msgid "%1: set the spacing of the minor ticks"
 msgstr "%1: Küçük imlerin boşluklandırmasını ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:897
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:902
 #, kde-format
 msgid "%1: assign minor ticks' values"
 msgstr "%1: Küçük imlerin değerlerini ata"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:911
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:916
 #, kde-format
 msgid "%1: set minor ticks length"
 msgstr "%1: Küçük imlerin uzunluğunu ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:920
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:925
 #, kde-format
 msgid "%1: set labels format"
 msgstr "%1: Etiketlerin biçimini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:927
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:932
 #, kde-format
 msgid "%1: set labels format automatic"
 msgstr "%1: Etiketlerin otomatik biçimlendirmesini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:934
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:941
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:939
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:946
 #, kde-format
 msgid "%1: set labels precision"
 msgstr "%1: Etiketlerin keskinliğini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:948
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:953
 #, kde-format
 msgid "%1: set labels datetime format"
 msgstr "%1: Etiketlerin tarih–zaman biçimini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:955
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:960
 #, kde-format
 msgid "%1: set labels position"
 msgstr "%1: Etiketlerin konumunu ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:962
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:967
 #, kde-format
 msgid "%1: set label offset"
 msgstr "%1: Etiket ofsetini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:969
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:974
 #, kde-format
 msgid "%1: set label rotation angle"
 msgstr "%1: Etiket döndürme açısını ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:976
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:981
 #, kde-format
 msgid "%1: set labels text type"
 msgstr "%1: Etiketlerin metin türünü ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:983
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:988
 #, kde-format
 msgid "%1: set labels text column"
 msgstr "%1: Etiketlerin metin sütununu ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:997
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1002
 #, kde-format
 msgid "%1: set label color"
 msgstr "%1: Etiket rengini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1004
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1009
 #, kde-format
 msgid "%1: set label font"
 msgstr "%1: Etiket yazıtipini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1011
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1016
 #, kde-format
 msgid "%1: set labels background type"
 msgstr "%1: Etiketlerin arka plan türünü ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1018
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1023
 #, kde-format
 msgid "%1: set label background color"
 msgstr "%1: Etiket arka plan rengini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1025
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1030
 #, kde-format
 msgid "%1: set label prefix"
 msgstr "%1: Etiket önekini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1032
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1037
 #, kde-format
 msgid "%1: set label suffix"
 msgstr "%1: Etiket sonekini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1039
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1044
 #, kde-format
 msgid "%1: set labels opacity"
 msgstr "%1: Etiketlerin matlığını ayarla"
@@ -7908,8 +7823,8 @@ msgstr "%1: Türü ayarla"
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:319
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:520
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:311
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:189
-#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:213
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:190
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:215
 #, kde-format
 msgid "%1: set orientation"
 msgstr "%1: Yönelimi ayarla"
@@ -8207,7 +8122,7 @@ msgstr "Otomatik/Çapraz Bağlılık"
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:512
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:418
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:407
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:933
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:437
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:486
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:351
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:313
@@ -8432,20 +8347,20 @@ msgid "%1: Cursor1 enable"
 msgstr "%1: İmleç1 etkinleştir"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1706
-#: src/backend/worksheet/Worksheet.cpp:814
+#: src/backend/worksheet/Worksheet.cpp:832
 #, kde-format
 msgid "%1: load theme %2"
 msgstr "%1: %2 temasını yükle"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1708
-#: src/backend/worksheet/Worksheet.cpp:816
+#: src/backend/worksheet/Worksheet.cpp:834
 #, kde-format
 msgid "%1: load default theme"
 msgstr "%1: Öntanımlı temayı yükle"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1710
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5343
-#: src/backend/worksheet/Worksheet.cpp:818
+#: src/backend/worksheet/Worksheet.cpp:836
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1: Temayı ayarla"
@@ -8627,50 +8542,50 @@ msgid "%1: set border corner radius"
 msgstr "%1: Kenarlık köşeleri yarıçapını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:245
-#: src/backend/worksheet/Worksheet.cpp:691
-#: src/backend/worksheet/Worksheet.cpp:692
+#: src/backend/worksheet/Worksheet.cpp:709
+#: src/backend/worksheet/Worksheet.cpp:710
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: Yerleşim üst boşluğunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:252
-#: src/backend/worksheet/Worksheet.cpp:701
-#: src/backend/worksheet/Worksheet.cpp:702
+#: src/backend/worksheet/Worksheet.cpp:719
+#: src/backend/worksheet/Worksheet.cpp:720
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: Yerleşim alt boşluğunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:259
-#: src/backend/worksheet/Worksheet.cpp:711
-#: src/backend/worksheet/Worksheet.cpp:712
+#: src/backend/worksheet/Worksheet.cpp:729
+#: src/backend/worksheet/Worksheet.cpp:730
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: Yerleşim sol boşluğunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:266
-#: src/backend/worksheet/Worksheet.cpp:721
-#: src/backend/worksheet/Worksheet.cpp:722
+#: src/backend/worksheet/Worksheet.cpp:739
+#: src/backend/worksheet/Worksheet.cpp:740
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: Yerleşim sağ boşluğunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:273
-#: src/backend/worksheet/Worksheet.cpp:731
-#: src/backend/worksheet/Worksheet.cpp:732
+#: src/backend/worksheet/Worksheet.cpp:749
+#: src/backend/worksheet/Worksheet.cpp:750
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: Yerleşim dikey boşluğunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:280
-#: src/backend/worksheet/Worksheet.cpp:741
-#: src/backend/worksheet/Worksheet.cpp:742
+#: src/backend/worksheet/Worksheet.cpp:759
+#: src/backend/worksheet/Worksheet.cpp:760
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: Yerleşim yatay boşluğunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:287
-#: src/backend/worksheet/Worksheet.cpp:761
-#: src/backend/worksheet/Worksheet.cpp:762
+#: src/backend/worksheet/Worksheet.cpp:779
+#: src/backend/worksheet/Worksheet.cpp:780
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: Yerleşim sütun sayısını ayarla"
@@ -8828,19 +8743,19 @@ msgstr "%1: Gösterge görünürlüğü değişti"
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:265
 #, kde-format
 msgid "%1: set distribution"
-msgstr "%1: Dağıtım ayarla"
+msgstr "%1: Dağılımı ayarla"
 
-#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:144
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:146
 #, kde-format
 msgid "Border Line"
 msgstr "Kenarlık Çizgisi"
 
-#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:220
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:222
 #, kde-format
 msgid "%1: set start logical position"
 msgstr "%1: Mantıksal konum başlangıcı ayarla"
 
-#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:227
+#: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:229
 #, kde-format
 msgid "%1: set end logical position"
 msgstr "%1: Mantıksal konum bitişi ayarla"
@@ -9344,22 +9259,22 @@ msgstr "%1: Aradeğerleme noktalarının sayısını ayarla"
 msgid "%1: set rug orientation"
 msgstr "%1: Kilim yönelimini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1390
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1411
 #, kde-format
 msgid "Error: Akima spline interpolation requires a minimum of 5 points."
 msgstr "Hata: Akima yivi aradeğerlemesi en az 5 puan gerektirir."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1392
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1413
 #, kde-format
 msgid "Error: Could not initialize the spline function."
 msgstr "Hata: Yiv işlevi ilklendirilemedi."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1405
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1426
 #, kde-format
 msgid "x values must be monotonically increasing."
 msgstr "x değerleri monoton olarak artmalıdır."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1408
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1429
 #, kde-format
 msgid "Error: %1"
 msgstr "Hata: %1"
@@ -9465,7 +9380,7 @@ msgstr "FIT İYİLİK DURUMU"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1904
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:618
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:968
 #, kde-format
 msgid "Sum of squared residuals"
 msgstr "Kalanların karelerinin toplamı"
@@ -9482,14 +9397,14 @@ msgstr "Kök ortalama karesi sapması"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1907
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:648
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:998
 #, kde-format
 msgid "Coefficient of determination"
 msgstr "Belirleme katsayısı"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1908
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:658
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1008
 #, kde-format
 msgid "Adj. coefficient of determination"
 msgstr "Uyarlanabilir belirleme katsayısı"
@@ -9649,42 +9564,42 @@ msgstr "%1: Kenarlık şeklini ayarla"
 msgid "%1: set border"
 msgstr "%1: Kenarlık ayarla"
 
-#: src/backend/worksheet/Worksheet.cpp:238
+#: src/backend/worksheet/Worksheet.cpp:248
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "Çalışma Sayfasını Yazdır"
 
-#: src/backend/worksheet/Worksheet.cpp:661
+#: src/backend/worksheet/Worksheet.cpp:679
 #, kde-format
 msgid "%1: change size type"
 msgstr "%1: Boyut türünü değiştir"
 
-#: src/backend/worksheet/Worksheet.cpp:673
+#: src/backend/worksheet/Worksheet.cpp:691
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr "%1: “İçeriği yeniden ölçeklendir özelliği”ni değiştir"
 
-#: src/backend/worksheet/Worksheet.cpp:681
-#: src/backend/worksheet/Worksheet.cpp:682
+#: src/backend/worksheet/Worksheet.cpp:699
+#: src/backend/worksheet/Worksheet.cpp:700
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: Yerleşimi ayarla"
 
-#: src/backend/worksheet/Worksheet.cpp:751
-#: src/backend/worksheet/Worksheet.cpp:752
+#: src/backend/worksheet/Worksheet.cpp:769
+#: src/backend/worksheet/Worksheet.cpp:770
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: Yerleşim satır sayısını ayarla"
 
-#: src/backend/worksheet/Worksheet.cpp:792
-#: src/backend/worksheet/Worksheet.cpp:793
+#: src/backend/worksheet/Worksheet.cpp:810
+#: src/backend/worksheet/Worksheet.cpp:811
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:373
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: Sayfa boyutunu ayarla"
 
-#: src/backend/worksheet/Worksheet.cpp:1539
+#: src/backend/worksheet/Worksheet.cpp:1557
 #, kde-format
 msgid "Curves"
 msgstr "Eğriler"
@@ -9722,7 +9637,7 @@ msgstr "%1: Kilidi aç"
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:83
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:246
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:172
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:969
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:430
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:38
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:110
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:142
@@ -10497,7 +10412,7 @@ msgstr "Satır Numaraları"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:317
 #, kde-format
 msgid "Uniform Random Values"
-msgstr "Tektip Rastgele Değerler"
+msgstr "Tekdüze Rastgele Değerler"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:318
 #, kde-format
@@ -13510,7 +13425,7 @@ msgstr "Çizim Erimleri:"
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:469
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:33
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:165
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1198
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:860
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:334
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:252
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:80
@@ -14271,7 +14186,7 @@ msgstr "t istatistiği"
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:359
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:452
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:56
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:504
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:343
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:479
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:389
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:166
@@ -14287,7 +14202,7 @@ msgstr "Histogram:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:804
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1191
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:517
 #, kde-format
 msgid "Degree:"
 msgstr "Derece:"
@@ -14714,7 +14629,7 @@ msgstr "Tire–Nokta–Nokta Çizgisi"
 #: src/kdefrontend/GuiTools.cpp:157
 #, kde-format
 msgid "Uniform"
-msgstr "Tek Tip"
+msgstr "Tekdüze"
 
 #: src/kdefrontend/GuiTools.cpp:158
 #, kde-format
@@ -15767,7 +15682,7 @@ msgid "&Generate"
 msgstr "&Üret"
 
 #: src/kdefrontend/matrix/MatrixFunctionDialog.cpp:77
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:229
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:232
 #, kde-format
 msgid "Generate function values"
 msgstr "İşlev değerlerini üret"
@@ -15980,10 +15895,9 @@ msgid "With Worksheet"
 msgstr "Çalışma Sayfası ile"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:224
-#, fuzzy, kde-format
-#| msgid "With Worksheet and Spreadsheet"
+#, kde-format
 msgid "With Spreadsheet and Worksheet"
-msgstr "Çalışma Sayfası ve Hesap Tablosu ile"
+msgstr "Hesap Tablosu ve Çalışma Sayfası ile"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:226
 #, kde-format
@@ -16834,13 +16748,13 @@ msgstr "Boş formül ifadesi"
 msgid "Incorrect formula syntax: "
 msgstr "Yanlış formül sözdizimi: "
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:216
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:218
 #, kde-format
 msgid "Select a valid column"
 msgstr "Geçerli bir sütun seç"
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:223
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:276
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:225
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:279
 #, kde-format
 msgid ""
 "Variable name can contain letters, digits and '_' only and should start with "
@@ -16849,19 +16763,19 @@ msgstr ""
 "Değişken adı; yalnızca harfler, rakamlar ve “_” içerebilir ve yalnızca bir "
 "harfle başlamalıdır"
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:320
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:323
 #, kde-format
 msgid "Delete variable"
 msgstr "Değişkeni sil"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:346
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:349
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:23
 #, kde-format
 msgid "Variable:"
 msgstr "Değişken:"
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:392
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:395
 #, kde-format
 msgid "%1: fill column with function values"
 msgid_plural "%1: fill columns with function values"
@@ -17016,14 +16930,14 @@ msgid ""
 "software/gsl/doc/html/randist.html\">GSL documentation</a>"
 msgstr ""
 "<a href=\"https://www.gnu.org/software/gsl/doc/html/randist.html\">GSL "
-"belgelendirmesinde</a> tanımlandığı üzere rastgele sayı dağıtımı"
+"belgelendirmesinde</a> tanımlandığı üzere rastgele sayı dağılımı"
 
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:470
 #, kde-format
 msgid "%1: fill column with non-uniform random numbers"
 msgid_plural "%1: fill columns with non-uniform random numbers"
-msgstr[0] "%1: Sütunu düzgün olmayan rasgele sayılarla doldur"
-msgstr[1] "%1: Sütunları düzgün olmayan rasgele sayılarla doldur"
+msgstr[0] "%1: Sütunu tekdüze olmayan rastgele sayılarla doldur"
+msgstr[1] "%1: Sütunları tekdüze olmayan rastgele sayılarla doldur"
 
 #: src/kdefrontend/spreadsheet/RescaleDialog.cpp:31
 #, kde-format
@@ -17062,7 +16976,7 @@ msgid ""
 "the uniform distribution. </li></ul>"
 msgstr ""
 "Örnekleme yöntemi:<ul><li>Periyodik — Örnekler belirlenen aralığa göre "
-"oluşturulur.</li><li>Rastgele — Örnekler tek tip dağıtıma göre rastgele "
+"oluşturulur.</li><li>Rastgele — Örnekler tekdüze dağılıma göre rastgele "
 "oluşturulur. </li></ul>"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:62
@@ -17575,7 +17489,7 @@ msgstr "Y hatası türü:"
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:442
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:253
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:312
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:128
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:265
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:407
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:53
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:287
@@ -17625,7 +17539,7 @@ msgstr "Açıklama:"
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:43
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:340
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:101
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:474
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:93
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:101
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:242
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:73
@@ -18760,7 +18674,7 @@ msgstr "Bağlantı:"
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:216
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:50
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:73
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:224
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:301
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:61
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:144
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:417
@@ -19618,7 +19532,7 @@ msgstr "x:"
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:153
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:43
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:85
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:330
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:220
 #, kde-format
 msgid "Data:"
 msgstr "Veri:"
@@ -20670,7 +20584,7 @@ msgstr "Hesaplamaları kaydet:"
 #: src/kdefrontend/ui/spreadsheet/randomvalueswidget.ui:100
 #, kde-format
 msgid "Distribution:"
-msgstr "Dağıtım:"
+msgstr "Dağılım:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunc)
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:123
@@ -20781,7 +20695,7 @@ msgstr "Sarma yanıtı:"
 #: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:75
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:161
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:404
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:484
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:870
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:358
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:173
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:90
@@ -20843,7 +20757,7 @@ msgstr "Y verisi sinyali:"
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:85
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:63
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:324
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:279
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:475
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:453
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:23
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:211
@@ -20863,7 +20777,7 @@ msgstr "Norm. yanıt:"
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
 #. i18n: ectx: property (text), widget (QLabel, lConvolution)
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:101
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:844
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1194
 #, kde-format
 msgid "Correlation"
 msgstr "Bağlantı"
@@ -20926,7 +20840,7 @@ msgstr "Monoton artm. X:"
 #: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:107
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:505
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:353
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:923
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:353
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:304
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:344
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:17
@@ -20981,7 +20895,7 @@ msgstr "Denklem"
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFunctions2)
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:241
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:384
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1159
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:589
 #: src/kdefrontend/ui/matrix/matrixfunctionwidget.ui:74
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:116
 #, kde-format
@@ -20993,7 +20907,7 @@ msgstr "İşlevler"
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbConstants2)
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:251
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:394
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1172
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:602
 #: src/kdefrontend/ui/matrix/matrixfunctionwidget.ui:84
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:126
 #, kde-format
@@ -21006,128 +20920,14 @@ msgstr "Sabitler"
 msgid "y=g(t)"
 msgstr "y=g(t)"
 
-#. i18n: ectx: property (toolTip), widget (QLabel, lCategory)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:20
-#, kde-format
-msgid "Fit model category"
-msgstr "Model kategorisini uyumu"
-
-#. i18n: ectx: property (text), widget (QLabel, lCategory)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:23
-#, kde-format
-msgid "Category:"
-msgstr "Kategori:"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, lFit)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:42
-#, kde-format
-msgid "Function to fit and options"
-msgstr "Uyum sağlanacak işlev ve seçenekler"
-
-#. i18n: ectx: property (text), widget (QToolButton, lFit)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:51
-#, kde-format
-msgid "Fit:"
-msgstr "Uyum:"
-
-#. i18n: ectx: property (toolTip), widget (QLabel, lComment)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:125
-#, kde-format
-msgid "Optional comment"
-msgstr "İsteğe bağlı açıklama"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, lParameters)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:175
-#, kde-format
-msgid "Specify parameters and their properties"
-msgstr "Parametreleri ve özelliklerini belirt"
-
-#. i18n: ectx: property (text), widget (QToolButton, lParameters)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:178
-#, kde-format
-msgid "Parameters:"
-msgstr "Parametreler:"
-
-#. i18n: ectx: property (toolTip), widget (QLabel, lXWeight)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:201
-#, kde-format
-msgid "Weight for x data"
-msgstr "x verisi ağırlığı"
-
-#. i18n: ectx: property (text), widget (QLabel, lXWeight)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:204
-#, kde-format
-msgid "X-Weight:"
-msgstr "X Ağırlığı:"
-
-#. i18n: ectx: property (toolTip), widget (QLabel, lModel)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:211
-#, kde-format
-msgid "Fit model type"
-msgstr "Uyum veri türü"
-
-#. i18n: ectx: property (text), widget (QLabel, lModel)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:214
-#, kde-format
-msgid "Model:"
-msgstr "Model:"
-
-#. i18n: ectx: property (toolTip), widget (QLabel, lDataSourceType)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:221
-#, kde-format
-msgid "Type of data source"
-msgstr "Veri kaynağının türü"
-
-#. i18n: ectx: property (text), widget (QLabel, lAlgorithm)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:257
-#, kde-format
-msgid "Algorithm:"
-msgstr "Algoritma:"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, lResults)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:276
-#, kde-format
-msgid "Fit results"
-msgstr "Sonuçlar uyumu"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, lData)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:327
-#, kde-format
-msgid "Data to fit"
-msgstr "Uyum sağlanacak veri"
-
-#. i18n: ectx: property (toolTip), widget (QToolButton, lWeights)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:365
-#, kde-format
-msgid "How to weight the data points"
-msgstr "Veri noktalarının nasıl ağırlıklandırılacağı"
-
-#. i18n: ectx: property (text), widget (QToolButton, lWeights)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:371
-#, kde-format
-msgid "Weights:"
-msgstr "Ağırlıklar:"
-
-#. i18n: ectx: property (toolTip), widget (QLabel, lEquation)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:404
-#, kde-format
-msgid "Function of fit model"
-msgstr "Uyum modelinin işlevi"
-
-#. i18n: ectx: property (text), widget (QLabel, lEquation)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:407
-#, kde-format
-msgid "f(x) ="
-msgstr "f(x) ="
-
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbOptions)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:448
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:67
 #, kde-format
 msgid "Advanced fit options"
 msgstr "Gelişmiş uyum seçenekleri"
 
 #. i18n: ectx: property (whatsThis), widget (QPushButton, pbOptions)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:451
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:70
 #, kde-format
 msgid "Opens a dialog to change advanced fit options"
 msgstr "Gelişmiş uyum seçeneklerini değiştirmek için bir iletişim kutusu açar"
@@ -21135,7 +20935,7 @@ msgstr "Gelişmiş uyum seçeneklerini değiştirmek için bir iletişim kutusu 
 #. i18n: ectx: property (title), widget (QGroupBox, gbOptions)
 #. i18n: ectx: property (text), widget (QLabel, lOptions)
 #. i18n: ectx: property (text), widget (QPushButton, pbOptions)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:457
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:76
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:186
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:227
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:75
@@ -21145,189 +20945,303 @@ msgid "Options"
 msgstr "Seçenekler"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lName)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:471
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:90
 #, kde-format
 msgid "Name of the fit curve"
 msgstr "Uyum eğrisinin adı"
 
-#. i18n: ectx: property (toolTip), widget (QLabel, lXColumn)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:481
+#. i18n: ectx: property (text), widget (QLabel, lYErrorCol)
+#. i18n: ectx: property (text), widget (QLabel, lXErrorCol)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:140
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:374
 #, kde-format
-msgid "Source of x data"
-msgstr "x verisinin kaynağı"
+msgid "col ="
+msgstr "col ="
+
+#. i18n: ectx: property (toolTip), widget (QLabel, lYWeight)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:152
+#, kde-format
+msgid "Weight for y data"
+msgstr "y verisi için ağırlık"
+
+#. i18n: ectx: property (text), widget (QLabel, lYWeight)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:155
+#, kde-format
+msgid "Y-Weight:"
+msgstr "Y ağırlığı:"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, lXWeight)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:162
+#, kde-format
+msgid "Weight for x data"
+msgstr "x verisi ağırlığı"
+
+#. i18n: ectx: property (text), widget (QLabel, lXWeight)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:165
+#, kde-format
+msgid "X-Weight:"
+msgstr "X Ağırlığı:"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, lCategory)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:195
+#, kde-format
+msgid "Fit model category"
+msgstr "Model kategorisini uyumu"
+
+#. i18n: ectx: property (text), widget (QLabel, lCategory)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:198
+#, kde-format
+msgid "Category:"
+msgstr "Kategori:"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, lData)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:217
+#, kde-format
+msgid "Data to fit"
+msgstr "Uyum sağlanacak veri"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, lComment)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:262
+#, kde-format
+msgid "Optional comment"
+msgstr "İsteğe bağlı açıklama"
+
+#. i18n: ectx: property (text), widget (QLabel, lAlgorithm)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:291
+#, kde-format
+msgid "Algorithm:"
+msgstr "Algoritma:"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, lDataSourceType)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:298
+#, kde-format
+msgid "Type of data source"
+msgstr "Veri kaynağının türü"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lDataSourceCurve)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:501
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:340
 #, kde-format
 msgid "Source curve"
 msgstr "Kaynak eğrisi"
 
+#. i18n: ectx: property (toolTip), widget (QLabel, lYColumn)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:350
+#, kde-format
+msgid "Source of y data"
+msgstr "y verisinin kaynağı"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, lWeights)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:398
+#, kde-format
+msgid "How to weight the data points"
+msgstr "Veri noktalarının nasıl ağırlıklandırılacağı"
+
+#. i18n: ectx: property (text), widget (QToolButton, lWeights)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:404
+#, kde-format
+msgid "Weights:"
+msgstr "Ağırlıklar:"
+
+#. i18n: ectx: property (toolTip), widget (QCheckBox, chkVisible)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:427
+#, kde-format
+msgid "Show fit curve"
+msgstr "Uyum eğrisini göster"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, lResults)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:472
+#, kde-format
+msgid "Fit results"
+msgstr "Sonuçlar uyumu"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, lDegree)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:514
+#, kde-format
+msgid "Degree of fit model"
+msgstr "Uyum modelinin derecesi"
+
+#. i18n: ectx: property (whatsThis), widget (QToolButton, tbFunctions)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:592
+#, kde-format
+msgid "Select predefined function"
+msgstr "Önden tanımlanmış işlev seç"
+
+#. i18n: ectx: property (whatsThis), widget (QToolButton, tbConstants)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:605
+#, kde-format
+msgid "Select predefined constants"
+msgstr "Önden tanımlanmış sabitler seç"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, lFit)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:640
+#, kde-format
+msgid "Function to fit and options"
+msgstr "Uyum sağlanacak işlev ve seçenekler"
+
+#. i18n: ectx: property (text), widget (QToolButton, lFit)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:649
+#, kde-format
+msgid "Fit:"
+msgstr "Uyum:"
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, pbRecalculate)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:731
+#, kde-format
+msgid "Run fit"
+msgstr "Uyum çalıştır"
+
+#. i18n: ectx: property (text), widget (QPushButton, pbRecalculate)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:734
+#, kde-format
+msgid "Run"
+msgstr "Çalıştır"
+
+#. i18n: ectx: property (toolTip), widget (QToolButton, lParameters)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:762
+#, kde-format
+msgid "Specify parameters and their properties"
+msgstr "Parametreleri ve özelliklerini belirt"
+
+#. i18n: ectx: property (text), widget (QToolButton, lParameters)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:765
+#, kde-format
+msgid "Parameters:"
+msgstr "Parametreler:"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, lModel)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:788
+#, kde-format
+msgid "Fit model type"
+msgstr "Uyum veri türü"
+
+#. i18n: ectx: property (text), widget (QLabel, lModel)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:791
+#, kde-format
+msgid "Model:"
+msgstr "Model:"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, lEquation)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:847
+#, kde-format
+msgid "Function of fit model"
+msgstr "Uyum modelinin işlevi"
+
+#. i18n: ectx: property (text), widget (QLabel, lEquation)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:850
+#, kde-format
+msgid "f(x) ="
+msgstr "f(x) ="
+
+#. i18n: ectx: property (toolTip), widget (QLabel, lXColumn)
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:867
+#, kde-format
+msgid "Source of x data"
+msgstr "x verisinin kaynağı"
+
 #. i18n: ectx: property (toolTip), widget (QTabWidget, twResults)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:527
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:877
 #, kde-format
 msgid "Resulting fit parameter and properties"
 msgstr "Sonuçtaki uyum parametresi ve özellikleri"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:537
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:824
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:887
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1174
 #, kde-format
 msgid "Parameters"
 msgstr "Parametreler"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:574
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:924
 #, kde-format
 msgid "Goodness of fit"
 msgstr "Uyum derecesi"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:628
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:978
 #, kde-format
 msgid "Residual mean square"
 msgstr "Artık ortalama karesi"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:638
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:988
 #, kde-format
 msgid "Root mean square deviation (RMSD, SD)"
 msgstr "Kök ortalama karesi sapması (RMSD, SD)"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:678
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1028
 #, kde-format
 msgid "F test"
 msgstr "F sınaması"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:688
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1038
 #, kde-format
 msgid "P > F"
 msgstr "P > F"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:698
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1048
 #, kde-format
 msgid "Mean absolute error (MAE)"
 msgstr "Ortalama mutlak hata (MAE)"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:708
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1058
 #, kde-format
 msgid "Akaike information criterion (AIC)"
 msgstr "Akaike bilgi ölçütü (AIC)"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:718
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1068
 #, kde-format
 msgid "Bayesian information criterion (BIC)"
 msgstr "Bayes bilgi ölçütü (BIC)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:732
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1082
 #, kde-format
 msgid "Log"
 msgstr "Günlük"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:774
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1124
 #, kde-format
 msgid "Status"
 msgstr "Durum"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:784
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:854
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1134
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1204
 #, kde-format
 msgid "Iterations"
 msgstr "Yineleme"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:794
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1144
 #, kde-format
 msgid "Tolerance"
 msgstr "Tolerans"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:804
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1154
 #, kde-format
 msgid "Calculation time"
 msgstr "Hesaplama süresi"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:814
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1164
 #, kde-format
 msgid "Degrees of Freedom"
 msgstr "Özgürlük Dereceleri"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:834
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1184
 #, kde-format
 msgid "X range"
 msgstr "X erimi"
-
-#. i18n: ectx: property (text), widget (QLabel, lYErrorCol)
-#. i18n: ectx: property (text), widget (QLabel, lXErrorCol)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:901
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1053
-#, kde-format
-msgid "col ="
-msgstr "col ="
-
-#. i18n: ectx: property (toolTip), widget (QLabel, lYColumn)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:920
-#, kde-format
-msgid "Source of y data"
-msgstr "y verisinin kaynağı"
-
-#. i18n: ectx: property (toolTip), widget (QLabel, lYWeight)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:956
-#, kde-format
-msgid "Weight for y data"
-msgstr "y verisi için ağırlık"
-
-#. i18n: ectx: property (text), widget (QLabel, lYWeight)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:959
-#, kde-format
-msgid "Y-Weight:"
-msgstr "Y ağırlığı:"
-
-#. i18n: ectx: property (toolTip), widget (QCheckBox, chkVisible)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:966
-#, kde-format
-msgid "Show fit curve"
-msgstr "Uyum eğrisini göster"
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, pbRecalculate)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1026
-#, kde-format
-msgid "Run fit"
-msgstr "Uyum çalıştır"
-
-#. i18n: ectx: property (text), widget (QPushButton, pbRecalculate)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1029
-#, kde-format
-msgid "Run"
-msgstr "Çalıştır"
-
-#. i18n: ectx: property (whatsThis), widget (QToolButton, tbFunctions)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1162
-#, kde-format
-msgid "Select predefined function"
-msgstr "Önden tanımlanmış işlev seç"
-
-#. i18n: ectx: property (whatsThis), widget (QToolButton, tbConstants)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1175
-#, kde-format
-msgid "Select predefined constants"
-msgstr "Önden tanımlanmış sabitler seç"
-
-#. i18n: ectx: property (toolTip), widget (QLabel, lDegree)
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1188
-#, kde-format
-msgid "Degree of fit model"
-msgstr "Uyum modelinin derecesi"
 
 #. i18n: ectx: property (text), widget (QLabel, lForm)
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:31
@@ -22525,7 +22439,7 @@ msgid ""
 msgstr ""
 "<html><head/><body><p><a href=\"https://www.gnu.org/software/gsl/doc/html/"
 "randist.html\"><span style=\" text-decoration: underline; color:#2980b9;"
-"\">GSL belgelendirmesinde</span> tanımlandığı üzere rastgele sayı dağıtımı</"
+"\">GSL belgelendirmesinde</span> tanımlandığı üzere rastgele sayı dağılımı</"
 "a></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lSeed)
