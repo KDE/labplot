@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-18 03:06+0000\n"
-"PO-Revision-Date: 2024-04-30 15:54+0200\n"
+"PO-Revision-Date: 2024-06-21 13:38+0200\n"
 "Last-Translator: Vit Pelcak <vpelcak@suse.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -1006,7 +1006,7 @@ msgstr ""
 #: src/backend/datapicker/DatapickerImage.cpp:298
 #, kde-format
 msgid "%1: upload image"
-msgstr ""
+msgstr "%1: odeslat obrázek"
 
 #: src/backend/datapicker/DatapickerImage.cpp:304
 #: src/backend/worksheet/Image.cpp:161
@@ -1051,7 +1051,7 @@ msgstr ""
 #: src/backend/worksheet/WorksheetElement.cpp:592
 #, kde-format
 msgid "%1: set position"
-msgstr ""
+msgstr "%1: nastavit pozici..."
 
 #: src/backend/datapicker/DatapickerPoint.cpp:224
 #, kde-format
@@ -5285,9 +5285,9 @@ msgstr "%1: kopírovat %2"
 #, kde-format
 msgid "%1: add %2 rows"
 msgid_plural "%1: add %2 rows"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%1: přidat %2 řádků"
+msgstr[1] "%1: přidat %2 řádků"
+msgstr[2] "%1: přidat %2 řádků"
 
 #: src/backend/matrix/Matrix.cpp:562
 #, kde-format
@@ -7082,7 +7082,7 @@ msgstr "Histogram"
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:145
 #, kde-format
 msgid "Bar Plot"
-msgstr ""
+msgstr "Sloupcový graf"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:346
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1674
@@ -8831,7 +8831,7 @@ msgstr ""
 #: src/commonfrontend/worksheet/WorksheetView.cpp:508
 #, kde-format
 msgid "Magnification"
-msgstr ""
+msgstr "Zvětšení"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:527
 #, kde-format
@@ -9251,7 +9251,7 @@ msgstr "&Maska"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:266
 #, kde-format
 msgid "&Unmask"
-msgstr ""
+msgstr "&Odmaskovat"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:267
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:442
@@ -11822,7 +11822,7 @@ msgstr "Skládaný"
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:55
 #, kde-format
 msgid "Stacked 100%"
-msgstr ""
+msgstr "Skládaný 100%"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:61
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:76
@@ -14186,7 +14186,7 @@ msgstr "Soubor dat%1"
 #: src/kdefrontend/MainWin.cpp:2650
 #, kde-format
 msgid "%1 exported"
-msgstr ""
+msgstr "%1 exportováno"
 
 #: src/kdefrontend/MainWin.cpp:2657
 #, kde-format
@@ -14994,7 +14994,7 @@ msgstr "Exportovat do souboru"
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:42
 #, kde-format
 msgid "&Flatten"
-msgstr ""
+msgstr "&Zploštit"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:43
 #, kde-format
@@ -15356,7 +15356,7 @@ msgstr ""
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:63
 #, kde-format
 msgid "&Sample"
-msgstr ""
+msgstr "&Vzorek"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:64
 #, kde-format
@@ -16209,7 +16209,7 @@ msgstr ""
 #: src/kdefrontend/ui/datapickerimagewidget.ui:382
 #, kde-format
 msgid "Datetime"
-msgstr ""
+msgstr "Datum/čas"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionX3)
 #. i18n: ectx: property (text), widget (QLabel, lPositionX1)
@@ -16352,7 +16352,7 @@ msgstr "Vytvořit časové razítko "
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:159
 #, kde-format
 msgid "Remove Quotes"
-msgstr ""
+msgstr "Odstranit uvozovky"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbConvertNaNToZero)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:185
@@ -16377,7 +16377,7 @@ msgstr "Vytvořit index"
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:219
 #, kde-format
 msgid "DateTime Format:"
-msgstr ""
+msgstr "Formát data a času:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:226
@@ -18472,7 +18472,7 @@ msgstr "Logické souřadnice"
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:454
 #, kde-format
 msgid "Embedded:"
-msgstr ""
+msgstr "Vložený:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCurves)
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:32

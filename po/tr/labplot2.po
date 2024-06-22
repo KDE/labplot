@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-18 03:06+0000\n"
-"PO-Revision-Date: 2024-06-17 12:06+0300\n"
+"PO-Revision-Date: 2024-06-22 01:16+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-i18n-doc@kde.org>\n"
 "Language: tr\n"
@@ -597,7 +597,7 @@ msgstr ""
 #: src/backend/core/AspectTreeModel.cpp:183
 #, kde-format
 msgid "%1   (non-numeric data)"
-msgstr ""
+msgstr "%1   (sayı olmayan veri)"
 
 #: src/backend/core/AspectTreeModel.cpp:185
 #, kde-format
@@ -2736,7 +2736,7 @@ msgstr "Gama Dağılımı"
 #: src/backend/gsl/ExpressionParser.cpp:95
 #, kde-format
 msgid "Flat (Uniform) Distribution"
-msgstr "Düz (Değişmeyen) Dağılım"
+msgstr "Düz (Tekdüze) Dağılım"
 
 #: src/backend/gsl/ExpressionParser.cpp:96
 #, kde-format
@@ -4651,7 +4651,7 @@ msgstr "Gama dağılımı için olasılık yoğunluğu "
 #: src/backend/gsl/ExpressionParser.cpp:743
 #, kde-format
 msgid "Probability density for a uniform distribution"
-msgstr "Tekdüze dağılımı için olasılık yoğunluğu"
+msgstr "Tekdüze dağılım için olasılık yoğunluğu"
 
 #: src/backend/gsl/ExpressionParser.cpp:754
 #, kde-format
@@ -9706,7 +9706,7 @@ msgstr "Satır Numaraları"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:274
 #, kde-format
 msgid "Uniform Random Values"
-msgstr "Tektip Rastgele Değerler"
+msgstr "Tekdüze Rastgele Değerler"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:275
 #, kde-format
@@ -16393,7 +16393,7 @@ msgid ""
 "the uniform distribution. </li></ul>"
 msgstr ""
 "Örnekleme yöntemi:<ul><li>Periyodik — Örnekler belirlenen aralığa göre "
-"oluşturulur.</li><li>Rastgele — Örnekler tek tip dağıtıma göre rastgele "
+"oluşturulur.</li><li>Rastgele — Örnekler tekdüze dağılıma göre rastgele "
 "oluşturulur. </li></ul>"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:63
@@ -21810,6 +21810,10 @@ msgid ""
 "text-decoration: underline; color:#2980b9;\">GSL documentation</span></a></"
 "p></body></html>"
 msgstr ""
+"<html><head/><body><p><a href=\"https://www.gnu.org/software/gsl/doc/html/"
+"randist.html\"><span style=\" text-decoration: underline; color:#2980b9;"
+"\">GSL belgelendirmesinde</span> tanımlandığı üzere rastgele sayı dağılımı</"
+"a></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lSeed)
 #: src/kdefrontend/ui/spreadsheet/randomvalueswidget.ui:156
