@@ -1153,15 +1153,15 @@ void XYFitCurveDock::recalculateClicked() {
 	// setPlotXRange();
 
 	if (m_fitData.useResults) { // update fitParametersWidget
-		DEBUG(" nr of param names = " << m_fitData.paramNames.size())
-		DEBUG("	size of start values = " << m_fitData.paramStartValues.size())
-		DEBUG("	size of param values = " << m_fitCurve->fitResult().paramValues.size())
+		DEBUG(Q_FUNC_INFO << ", nr of param names = " << m_fitData.paramNames.size())
+		DEBUG(Q_FUNC_INFO << ", size of start values = " << m_fitData.paramStartValues.size())
+		DEBUG(Q_FUNC_INFO << ", size of param values = " << m_fitCurve->fitResult().paramValues.size())
 		if (m_fitCurve->fitResult().paramValues.size() > 0) { // may be 0 if fit fails
 			for (int i = 0; i < m_fitData.paramNames.size(); i++)
 				m_fitData.paramStartValues[i] = m_fitCurve->fitResult().paramValues.at(i);
 			fitParametersWidget->setFitData(&m_fitData);
 		} else {
-			DEBUG(" WARNING: no fit result available!")
+			DEBUG(Q_FUNC_INFO << ", WARNING: no fit result available!")
 		}
 	}
 
@@ -1182,7 +1182,11 @@ void XYFitCurveDock::recalculateClicked() {
 			m_messageWidget->setMessageType(KMessageWidget::Error);
 		else
 			m_messageWidget->setMessageType(KMessageWidget::Warning);
-		m_messageWidget->setText(status);
+
+		if (!status.isEmpty())
+			m_messageWidget->setText(status);
+		else
+			m_messageWidget->setText(i18n("Fit not possible. Please check if data is given."));
 		m_messageWidget->animatedShow();
 	} else {
 		if (m_messageWidget && m_messageWidget->isVisible())
