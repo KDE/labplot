@@ -35,6 +35,7 @@ New features:
 		* Support parsing more functions and operators for formulas and expressions
 		* Add support to show the Sparkline of each respective column
 		* Add triangular distributions (PDF, CDF) to parser and random number generation
+		* Allow to reverse the current selection of cells
 	* [notebook]
 		* Export to PDF
 		* "Configure CAS" in the menu to create a new notebook to directly allow the user to enable new backends in case not done yet

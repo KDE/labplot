@@ -132,8 +132,7 @@ private:
 	QAction* action_mask_selection{nullptr};
 	QAction* action_unmask_selection{nullptr};
 	QAction* action_clear_selection{nullptr};
-	// 		QAction* action_set_formula;
-	// 		QAction* action_recalculate;
+	QAction* action_reverse_selection{nullptr};
 	QAction* action_fill_row_numbers{nullptr};
 	QAction* action_fill_random{nullptr};
 	QAction* action_fill_equidistant{nullptr};
@@ -263,7 +262,7 @@ private Q_SLOTS:
 	void clearSelectedCells();
 	void maskSelection();
 	void unmaskSelection();
-	// 		void recalculateSelectedCells();
+	void reverseSelection();
 
 	void plotData(QAction*);
 	void plotAnalysisData();

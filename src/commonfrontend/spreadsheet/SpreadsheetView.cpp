@@ -307,6 +307,7 @@ void SpreadsheetView::initActions() {
 	action_paste_into_selection = new QAction(QIcon::fromTheme(QStringLiteral("edit-paste")), i18n("Past&e"), this);
 	action_mask_selection = new QAction(QIcon::fromTheme(QStringLiteral("edit-node")), i18n("&Mask"), this);
 	action_unmask_selection = new QAction(QIcon::fromTheme(QStringLiteral("format-remove-node")), i18n("&Unmask"), this);
+	action_reverse_selection = new QAction(QIcon::fromTheme(QStringLiteral("reverse")), i18n("&Reverse"), this);
 	action_clear_selection = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), i18n("Clea&r Content"), this);
 	action_select_all = new QAction(QIcon::fromTheme(QStringLiteral("edit-select-all")), i18n("Select All"), this);
 
@@ -590,6 +591,7 @@ void SpreadsheetView::initMenus() {
 		m_selectionMenu->addAction(action_mask_selection);
 		m_selectionMenu->addAction(action_unmask_selection);
 		m_selectionMenu->addSeparator();
+		m_selectionMenu->addAction(action_reverse_selection);
 		// 		m_selectionMenu->addAction(action_normalize_selection);
 	}
 
@@ -749,6 +751,9 @@ void SpreadsheetView::initMenus() {
 		m_columnMenu->addMenu(m_columnManipulateDataMenu);
 		m_columnMenu->addSeparator();
 
+		m_columnMenu->addMenu(m_selectionMenu);
+		m_columnMenu->addSeparator();
+
 		m_columnMenu->addAction(action_sort);
 		m_columnMenu->addAction(action_sort_asc);
 		m_columnMenu->addAction(action_sort_desc);
@@ -789,6 +794,9 @@ void SpreadsheetView::initMenus() {
 		// 		m_rowMenu->addMenu(submenu);
 		// 		m_rowMenu->addSeparator();
 
+		m_rowMenu->addMenu(m_selectionMenu);
+		m_rowMenu->addSeparator();
+
 		m_rowMenu->addAction(action_insert_row_above);
 		m_rowMenu->addAction(action_insert_row_below);
 		m_rowMenu->addSeparator();
@@ -798,12 +806,12 @@ void SpreadsheetView::initMenus() {
 		m_rowMenu->addSeparator();
 
 		m_rowMenu->addAction(action_remove_rows);
-		m_rowMenu->addAction(action_clear_selection);
 		m_rowMenu->addSeparator();
 
 		m_rowMenu->addAction(action_remove_missing_value_rows);
 		m_rowMenu->addAction(action_mask_missing_value_rows);
 	}
+
 	m_rowMenu->addSeparator();
 	m_rowMenu->addAction(action_statistics_rows);
 }
@@ -814,6 +822,7 @@ void SpreadsheetView::connectActions() {
 	connect(action_paste_into_selection, &QAction::triggered, this, &SpreadsheetView::pasteIntoSelection);
 	connect(action_mask_selection, &QAction::triggered, this, &SpreadsheetView::maskSelection);
 	connect(action_unmask_selection, &QAction::triggered, this, &SpreadsheetView::unmaskSelection);
+	connect(action_reverse_selection, &QAction::triggered, this, &SpreadsheetView::reverseSelection);
 
 	connect(action_clear_selection, &QAction::triggered, this, &SpreadsheetView::clearSelectedCells);
 	// 	connect(action_recalculate, &QAction::triggered, this, &SpreadsheetView::recalculateSelectedCells);
@@ -1393,6 +1402,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 				}
 			}
 
+			m_selectionMenu->setEnabled(hasValues > 1);
 			action_statistics_rows->setEnabled(hasValues > 1);
 			m_rowMenu->exec(global_pos);
 		} else if ((watched == m_horizontalHeader) || (m_frozenTableView && watched == m_frozenTableView->horizontalHeader()) || !selectedColumns().isEmpty()) {
@@ -1631,6 +1641,7 @@ void SpreadsheetView::checkColumnMenus(const QVector<Column*>& columns) {
 	m_columnSetAsMenu->setEnabled(numeric);
 	action_statistics_columns->setEnabled(hasEnoughValues);
 	action_clear_columns->setEnabled(hasValues);
+	m_selectionMenu->setEnabled(hasValues);
 	m_formattingMenu->setEnabled(hasValues);
 	action_formatting_remove->setVisible(hasFormat);
 
@@ -2110,6 +2121,92 @@ void SpreadsheetView::unmaskSelection() {
 
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
+}
+
+void SpreadsheetView::reverseSelection() {
+	auto* selectionModel = m_tableView->selectionModel();
+	const auto& indexes = selectionModel->selectedIndexes();
+	if (indexes.isEmpty())
+		return;
+
+	// check if complete rows only are selected, reverse the selection for rows only in this case
+	bool rowsOnly = true;
+	QVector<int> selectedRows;
+	for (const auto& index : indexes) {
+		const int row = index.row();
+		if (selectionModel->isRowSelected(row)) {
+			if (selectedRows.indexOf(row) == -1)
+				selectedRows << row;
+		} else {
+			rowsOnly = false;
+			break;
+		}
+	}
+
+	if (rowsOnly) {
+		// clear the current selection
+		m_suppressSelectionChangedEvent = true;
+		selectionModel->clearSelection();
+
+		// temporarily switch to the "multi selection" mode and select the rows, that were not selected before
+		m_tableView->setSelectionMode(QAbstractItemView::MultiSelection);
+		for (int row = 0; row < m_spreadsheet->rowCount(); ++row) {
+			if (selectedRows.indexOf(row) == -1)
+				m_tableView->selectRow(row);
+		}
+		m_tableView->setSelectionMode(QAbstractItemView::ExtendedSelection); // switch back to the extended selection
+
+		m_suppressSelectionChangedEvent = false;
+		selectionChanged(QItemSelection(), QItemSelection());
+		return;
+	}
+
+	// check if complete columns are selected only, reverse the selection for columns only in this case
+	bool columnsOnly = true;
+	QVector<int> selectedColumns;
+	for (const auto& index : indexes) {
+		const int col = index.column();
+		if (selectionModel->isColumnSelected(col)) {
+			if (selectedColumns.indexOf(col) == -1)
+				selectedColumns << col;
+		} else {
+			columnsOnly = false;
+			break;
+		}
+	}
+
+	if (columnsOnly) {
+		// clear the current selection
+		m_suppressSelectionChangedEvent = true;
+		selectionModel->clearSelection();
+
+		// temporarily switch to the "multi selection" mode and select the columns, that were not selected before
+		m_tableView->setSelectionMode(QAbstractItemView::MultiSelection);
+		for (int col = 0; col < m_spreadsheet->columnCount(); ++col) {
+			if (selectedColumns.indexOf(col) == -1)
+				m_tableView->selectColumn(col);
+		}
+		m_tableView->setSelectionMode(QAbstractItemView::ExtendedSelection); // switch back to the extended selection
+
+		m_suppressSelectionChangedEvent = false;
+		selectionChanged(QItemSelection(), QItemSelection());
+		return;
+	}
+
+	// multiple cells are selected, reverse the selection for all cells in the spreadsheet.
+	// select all cells first, after this deselect the cells that were selected before.
+	m_suppressSelectionChangedEvent = true;
+	QItemSelection itemSelection;
+	itemSelection.select(m_model->index(0, 0), m_model->index(m_model->rowCount() - 1, m_model->columnCount() - 1));
+	selectionModel->select(itemSelection, QItemSelectionModel::Select);
+
+	m_tableView->setSelectionMode(QAbstractItemView::SingleSelection); // temporarily switch to single selection
+	for (const auto& index : indexes)
+		selectionModel->select(index, QItemSelectionModel::Deselect);
+	m_tableView->setSelectionMode(QAbstractItemView::ExtendedSelection); // switch back to the extended selection
+
+	m_suppressSelectionChangedEvent = false;
+	selectionChanged(QItemSelection(), QItemSelection());
 }
 
 void SpreadsheetView::plotData(QAction* action) {
