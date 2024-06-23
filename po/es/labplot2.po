@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-18 03:06+0000\n"
-"PO-Revision-Date: 2024-06-17 16:14+0200\n"
+"PO-Revision-Date: 2024-06-23 02:57+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.05.0\n"
+"X-Generator: Lokalize 24.05.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -4573,12 +4573,12 @@ msgstr "Densidad de probabilidad para una distribución Weibull"
 #: src/backend/gsl/ExpressionParser.cpp:842
 #, kde-format
 msgid "Probability density for a Type-1 Gumbel distribution"
-msgstr "Densidad de probabilidad para una distribución de Gumbel de tipo 1"
+msgstr "Densidad de probabilidad para una distribución de Gumbel de tipo I"
 
 #: src/backend/gsl/ExpressionParser.cpp:847
 #, kde-format
 msgid "Probability density for a Type-2 Gumbel distribution"
-msgstr "Densidad de probabilidad para una distribución de Gumbel de tipo 2"
+msgstr "Densidad de probabilidad para una distribución de Gumbel de tipo II"
 
 #: src/backend/gsl/ExpressionParser.cpp:858
 #, kde-format
@@ -6114,12 +6114,12 @@ msgstr "Weibull"
 #: src/backend/nsl/nsl_sf_stats.c:34
 #, kde-format
 msgid "Gumbel Type-1 (Maximum Value; log-Weibull)"
-msgstr "Gumbel de tipo 1 (valor máximo; log-Weibull)"
+msgstr "Gumbel de tipo I (valor máximo; log-Weibull)"
 
 #: src/backend/nsl/nsl_sf_stats.c:35
 #, kde-format
 msgid "Gumbel Type-2"
-msgstr "Gumbel de tipo 2"
+msgstr "Gumbel de tipo II"
 
 #: src/backend/nsl/nsl_sf_stats.c:36
 #, kde-format
