@@ -242,6 +242,7 @@ public Q_SLOTS:
 	void pasteIntoSelection();
 
 	void fillWithRowNumbers();
+	void selectAll();
 	void selectColumn(int);
 	void deselectColumn(int);
 	void goToCell(int row, int col);

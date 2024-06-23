@@ -159,11 +159,9 @@ void SpreadsheetView::init() {
 	auto* delegate = new SpreadsheetItemDelegate(this);
 	connect(delegate, &SpreadsheetItemDelegate::returnPressed, this, &SpreadsheetView::advanceCell);
 	connect(delegate, &SpreadsheetItemDelegate::editorEntered, this, [=]() {
-		// 		action_insert_row_below->setShortcut(QKeySequence());
 		m_editorEntered = true;
 	});
 	connect(delegate, &SpreadsheetItemDelegate::closeEditor, this, [=]() {
-		// 		action_insert_row_below->setShortcut(Qt::Key_Insert);
 		m_editorEntered = false;
 	});
 
@@ -189,7 +187,7 @@ void SpreadsheetView::init() {
 	connect(m_horizontalHeader, &SpreadsheetHeaderView::sectionClicked, this, &SpreadsheetView::columnClicked);
 
 	// vertical header
-	QHeaderView* v_header = m_tableView->verticalHeader();
+	auto* v_header = m_tableView->verticalHeader();
 	v_header->setSectionResizeMode(QHeaderView::Fixed);
 	v_header->setSectionsMovable(false);
 	v_header->installEventFilter(this);
@@ -490,8 +488,6 @@ void SpreadsheetView::initActions() {
 	// row related actions
 	action_insert_row_above = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-row-above")), i18n("Insert Row Above"), this);
 	action_insert_row_below = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-row-below")), i18n("Insert Row Below"), this);
-	// TODO: setting of the following shortcut collides with the key press handling in the event filter
-	// action_insert_row_below->setShortcut(Qt::Key_Insert);
 	action_insert_rows_above = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-row-above")), i18n("Insert Multiple Rows Above"), this);
 	action_insert_rows_below = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-row-below")), i18n("Insert Multiple Rows Below"), this);
 	action_remove_rows = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-delete-row")), i18n("Remo&ve Selected Row(s)"), this);
@@ -833,7 +829,7 @@ void SpreadsheetView::connectActions() {
 	connect(action_fill_equidistant, &QAction::triggered, this, &SpreadsheetView::fillWithEquidistantValues);
 	connect(action_fill_function, &QAction::triggered, this, &SpreadsheetView::fillWithFunctionValues);
 	connect(action_fill_const, &QAction::triggered, this, &SpreadsheetView::fillSelectedCellsWithConstValues);
-	connect(action_select_all, &QAction::triggered, m_tableView, &QTableView::selectAll);
+	connect(action_select_all, &QAction::triggered, this, &SpreadsheetView::selectAll);
 	connect(action_clear_spreadsheet, &QAction::triggered, m_spreadsheet, QOverload<>::of(&Spreadsheet::clear));
 	connect(action_clear_masks, &QAction::triggered, m_spreadsheet, &Spreadsheet::clearMasks);
 	connect(action_go_to_cell, &QAction::triggered, this, static_cast<void (SpreadsheetView::*)()>(&SpreadsheetView::goToCell));
@@ -1470,6 +1466,8 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 #endif
 		else if (key_event->matches(QKeySequence::Cut))
 			cutSelection();
+		else if (key_event->matches(QKeySequence::SelectAll)) // TODO: doesn't work
+			selectAll();
 	}
 
 	return QWidget::eventFilter(watched, event);
@@ -2196,9 +2194,7 @@ void SpreadsheetView::reverseSelection() {
 	// multiple cells are selected, reverse the selection for all cells in the spreadsheet.
 	// select all cells first, after this deselect the cells that were selected before.
 	m_suppressSelectionChangedEvent = true;
-	QItemSelection itemSelection;
-	itemSelection.select(m_model->index(0, 0), m_model->index(m_model->rowCount() - 1, m_model->columnCount() - 1));
-	selectionModel->select(itemSelection, QItemSelectionModel::Select);
+	selectAll();
 
 	m_tableView->setSelectionMode(QAbstractItemView::SingleSelection); // temporarily switch to single selection
 	for (const auto& index : indexes)
@@ -3689,6 +3685,13 @@ void SpreadsheetView::updateHeaderGeometry(Qt::Orientation o, int first, int las
 	m_horizontalHeader->m_commentSlave->setStretchLastSection(false);
 }
 
+void SpreadsheetView::selectAll() {
+	// HACK: m_tableView->selectAll() doesn't work for some reasons anymore, we need to create the selection manually
+	QItemSelection itemSelection;
+	itemSelection.select(m_model->index(0, 0), m_model->index(m_model->rowCount() - 1, m_model->columnCount() - 1));
+	m_tableView->selectionModel()->select(itemSelection, QItemSelectionModel::Select);
+}
+
 /*!
   selects the column \c column in the speadsheet view .
 */
@@ -3774,7 +3777,6 @@ void SpreadsheetView::selectionChanged(const QItemSelection& /*selected*/, const
 							maskedValuesText,
 							missingValuesCountText,
 							missingValuesText);
-
 	else
 		resultString = i18n("Selected: %1 %2%3 %4 %5 %6",
 							selectedCellsCount,

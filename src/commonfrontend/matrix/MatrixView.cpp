@@ -42,9 +42,7 @@
 #include <QPrinter>
 #include <QProcess>
 #include <QScrollArea>
-#include <QShortcut>
 #include <QStackedWidget>
-#include <QStandardPaths>
 #include <QTableView>
 #include <QTextStream>
 #include <QThreadPool>
@@ -116,13 +114,6 @@ void MatrixView::init() {
 	// SLOTs
 	connect(m_matrix, &Matrix::requestProjectContextMenu, this, &MatrixView::createContextMenu);
 	connect(m_model, &MatrixModel::changed, this, &MatrixView::matrixDataChanged);
-
-	// keyboard shortcuts
-	auto* sel_all = new QShortcut(QKeySequence(tr("Ctrl+A", "Matrix: select all")), m_tableView);
-	connect(sel_all, &QShortcut::activated, m_tableView, &QTableView::selectAll);
-
-	// TODO: add shortcuts for copy&paste,
-	// for a single shortcut we need to descriminate between copy&paste for columns, rows or selected cells.
 }
 
 void MatrixView::initActions() {
