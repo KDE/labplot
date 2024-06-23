@@ -687,7 +687,7 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 		cb->setFrame(false);
 		// TODO: -> updateLocale()
 		for (const auto& name : RangeT::scaleNames)
-			cb->addItem(name);
+			cb->addItem(name.toString());
 
 		cb->setCurrentIndex(static_cast<int>(scale));
 		cb->setProperty("row", i);

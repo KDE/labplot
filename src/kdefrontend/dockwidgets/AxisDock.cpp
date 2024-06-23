@@ -253,7 +253,7 @@ void AxisDock::init() {
 
 	// scales
 	for (const auto& name : RangeT::scaleNames)
-		ui.cbScale->addItem(name);
+		ui.cbScale->addItem(name.toString());
 
 	ui.cbOrientation->addItem(i18n("Horizontal"));
 	ui.cbOrientation->addItem(i18n("Vertical"));
@@ -465,7 +465,7 @@ void AxisDock::updateLocale() {
 	// scales
 	ui.cbScale->clear();
 	for (const auto& name : RangeT::scaleNames)
-		ui.cbScale->addItem(name);
+		ui.cbScale->addItem(name.toString());
 
 	labelWidget->updateLocale();
 	lineWidget->updateLocale();
