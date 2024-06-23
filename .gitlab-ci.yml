@@ -9,7 +9,8 @@ include:
 # reuse-lint fails
 #      - /gitlab-templates/reuse-lint.yml
       - /gitlab-templates/clang-format.yml
-      - /gitlab-templates/linux.yml
+# /lib64/libQt5Core.so.5: version `Qt_5.15.13_PRIVATE_API' not found in tests
+#      - /gitlab-templates/linux.yml
       - /gitlab-templates/windows.yml
       - /gitlab-templates/linux-qt6.yml
       - /gitlab-templates/windows-qt6.yml
