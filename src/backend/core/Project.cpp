@@ -476,10 +476,8 @@ void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) {
 	writer->writeAttribute(QStringLiteral("modificationTime"), modificationTime().toString(QStringLiteral("yyyy-dd-MM hh:mm:ss:zzz")));
 	writer->writeAttribute(QStringLiteral("author"), author());
 
-	if (d->saveDockStates) {
-		writer->writeAttribute(QStringLiteral("saveDockStates"), QString::number(d->saveDockStates));
-		writer->writeAttribute(QStringLiteral("windowState"), d->windowState);
-	}
+	writer->writeAttribute(QStringLiteral("saveDockStates"), QString::number(d->saveDockStates));
+	writer->writeAttribute(QStringLiteral("windowState"), d->windowState);
 
 	if (d->saveCalculations)
 		writer->writeAttribute(QStringLiteral("saveCalculations"), QString::number(d->saveCalculations));
@@ -1138,8 +1136,7 @@ bool Project::readProjectAttributes(XmlStreamReader* reader) {
 	str = attribs.value(QStringLiteral("saveDockStates")).toString();
 	if (!str.isEmpty())
 		d->saveDockStates = str.toInt();
-	if (d->saveDockStates)
-		d->windowState = attribs.value(QStringLiteral("windowState")).toString();
+	d->windowState = attribs.value(QStringLiteral("windowState")).toString();
 
 	str = attribs.value(QStringLiteral("saveCalculations")).toString();
 	if (!str.isEmpty())

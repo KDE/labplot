@@ -187,9 +187,10 @@ MainWin::~MainWin() {
 	// save the current settings in MainWin
 	m_recentProjectsAction->saveEntries(Settings::group(QStringLiteral("Recent Files")));
 
-	KConfigGroup group = Settings::group(QStringLiteral("MainWin"));
-	group.writeEntry(QLatin1String("geometry"), saveGeometry());
-	group.writeEntry(QLatin1String("WindowState"), saveState());
+	auto group = Settings::group(QStringLiteral("MainWin"));
+	group.writeEntry(QLatin1String("geometry"), saveGeometry()); // current geometry of the main window
+	group.writeEntry(QLatin1String("WindowState"), saveState()); // current state of QMainWindow's toolbars and dockwidgets
+	group.writeEntry(QLatin1String("DockWidgetsState"), m_DockManager->saveState()); // current state of ADS's dock widgets
 	group.writeEntry(QLatin1String("lastOpenFileFilter"), m_lastOpenFileFilter);
 	group.writeEntry(QLatin1String("ShowMemoryInfo"), (m_memoryInfoWidget != nullptr));
 	Settings::sync();
@@ -220,9 +221,8 @@ void MainWin::showPresenter() {
 		if (worksheets.size() > 0) {
 			auto* view = static_cast<WorksheetView*>(worksheets.constFirst()->view());
 			view->presenterMode();
-		} else {
+		} else
 			QMessageBox::information(this, i18n("Presenter Mode"), i18n("No worksheets are available in the project. The presenter mode will not be started."));
-		}
 	}
 }
 
@@ -1128,7 +1128,7 @@ bool MainWin::warnModified() {
  * updates the state of actions, menus and toolbars (enabled or disabled)
  * on project changes (project closes and opens)
  */
-void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
+void MainWin::updateGUIOnProjectChanges() {
 	// return;
 	if (m_closing)
 		return;
@@ -1154,29 +1154,6 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 	// undo/redo actions are disabled in both cases - when the project is closed or opened
 	m_undoAction->setEnabled(false);
 	m_redoAction->setEnabled(false);
-
-	if (!windowState.isEmpty()) {
-		for (auto dock : m_DockManager->dockWidgetsMap()) {
-			auto* d = dynamic_cast<ContentDockWidget*>(dock);
-			if (d)
-				d->part()->suppressDeletion(true);
-		}
-		changeVisibleAllDocks(false);
-		for (auto dock : m_DockManager->dockWidgetsMap()) {
-			auto* d = dynamic_cast<ContentDockWidget*>(dock);
-			if (d)
-				d->part()->suppressDeletion(false);
-		}
-		m_DockManager->restoreState(windowState);
-	} else {
-		// They might be not available, if at startup the "Do nothing" option is selected
-		if (m_projectExplorerDock)
-			m_projectExplorerDock->toggleView(true);
-		if (m_propertiesDock)
-			m_propertiesDock->toggleView(true);
-		if (m_worksheetPreviewDock)
-			m_worksheetPreviewDock->toggleView(true);
-	}
 }
 
 /*
@@ -1456,15 +1433,13 @@ bool MainWin::newProject(bool createInitialContent) {
 		m_worksheetPreviewDock->setWidget(m_worksheetPreviewWidget);
 
 		// restore the position of the dock widgets:
-		//"WindowState" doesn't always contain the positions of the dock widgets,
-		// user opened the application and closed it without creating a new project
-		// and with this the dock widgets - this creates a "WindowState" section in the settings without dock widgets positions.
-		// So, we set our default positions first and then read from the saved "WindowState" section
+		// we add the standard dock widgets to our initial default and hard-coded positions first.
+		// if the user has changed the position of these docks, it was saved on application close
+		// and we restore this new and user-defined default state after this.
 		m_DockManager->addDockWidget(ads::LeftDockWidgetArea, m_projectExplorerDock);
 		m_DockManager->addDockWidget(ads::RightDockWidgetArea, m_propertiesDock);
 		m_DockManager->addDockWidget(ads::RightDockWidgetArea, m_worksheetPreviewDock, m_projectExplorerDock->dockAreaWidget());
-		if (groupMainWin.keyList().indexOf(QLatin1String("WindowState")) != -1)
-			restoreState(groupMainWin.readEntry("WindowState", QByteArray()));
+		restoreDefaultDockState();
 
 		auto* scrollArea = new QScrollArea(m_propertiesDock);
 		scrollArea->setWidgetResizable(true);
@@ -1530,6 +1505,21 @@ bool MainWin::newProject(bool createInitialContent) {
 	updateGUIOnProjectChanges();
 
 	return true;
+}
+
+/*!
+ * restores the last used positions and the sizes of the dock widgets.
+ */
+void MainWin::restoreDefaultDockState() const {
+	const auto groupMainWin = Settings::group(QStringLiteral("MainWin"));
+	if (groupMainWin.keyList().indexOf(QLatin1String("DockWidgetsState")) != -1) {
+		auto dockWidgetsState = groupMainWin.readEntry("DockWidgetsState", QString());
+		m_DockManager->restoreState(dockWidgetsState.toUtf8());
+
+		m_projectExplorerDockAction->setChecked(m_projectExplorerDock->isVisible());
+		m_propertiesDockAction->setChecked(m_propertiesDock->isVisible());
+		m_worksheetPreviewAction->setChecked(m_worksheetPreviewDock->isVisible());
+	}
 }
 
 void MainWin::openProject() {
@@ -1744,10 +1734,30 @@ void MainWin::openProject(const QString& filename) {
 	m_project->undoStack()->clear();
 	m_undoViewEmptyLabel = i18n("%1: opened", m_project->name());
 	m_recentProjectsAction->addUrl(QUrl(filename));
-	updateGUIOnProjectChanges(m_project->windowState().toUtf8());
+
+	updateGUIOnProjectChanges();
 	updateGUI(); // there are most probably worksheets or spreadsheets in the open project -> update the GUI
-	if (m_project->windowState().toUtf8().isEmpty())
+
+	const auto& dockWidgetsState = m_project->windowState().toUtf8();
+	if (!dockWidgetsState.isEmpty()) {
+		for (auto dock : m_DockManager->dockWidgetsMap()) {
+			auto* d = dynamic_cast<ContentDockWidget*>(dock);
+			if (d)
+				d->part()->suppressDeletion(true);
+		}
+		changeVisibleAllDocks(false);
+		for (auto dock : m_DockManager->dockWidgetsMap()) {
+			auto* d = dynamic_cast<ContentDockWidget*>(dock);
+			if (d)
+				d->part()->suppressDeletion(false);
+		}
+
+		m_DockManager->restoreState(dockWidgetsState);
+		if (!m_project->saveDockStates())
+			restoreDefaultDockState();
+	} else
 		updateDockWindowVisibility();
+
 	m_saveAction->setEnabled(false);
 	m_newProjectAction->setEnabled(true);
 #ifdef HAVE_PURPOSE

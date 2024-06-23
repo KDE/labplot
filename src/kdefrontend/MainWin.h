@@ -209,6 +209,7 @@ private:
 	// 	QQuickWidget* createWelcomeScreen();
 	// 	void resetWelcomeScreen();
 	void createADS();
+	void restoreDefaultDockState() const;
 
 	Spreadsheet* activeSpreadsheet() const;
 
@@ -230,7 +231,7 @@ private Q_SLOTS:
 	void dockWidgetRemoved(ads::CDockWidget*);
 	void dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now);
 	void updateGUI();
-	void updateGUIOnProjectChanges(const QByteArray& windowState = QByteArray());
+	void updateGUIOnProjectChanges();
 	void undo();
 	void redo();
 
