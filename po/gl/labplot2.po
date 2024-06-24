@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-18 03:06+0000\n"
-"PO-Revision-Date: 2024-03-29 10:45+0100\n"
+"PO-Revision-Date: 2024-06-23 10:17+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.05.0\n"
+"X-Generator: Lokalize 24.05.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2644,7 +2644,7 @@ msgstr "Distribución plana (uniforme)"
 #: src/backend/gsl/ExpressionParser.cpp:96
 #, kde-format
 msgid "Lognormal Distribution"
-msgstr "Distribución lognormal"
+msgstr "Distribución log-normal"
 
 #: src/backend/gsl/ExpressionParser.cpp:97
 #, kde-format
@@ -4550,7 +4550,7 @@ msgstr "Densidade de probabilidade para unha distribución log-normal"
 #: src/backend/gsl/ExpressionParser.cpp:765
 #, kde-format
 msgid "Probability density for a chi squared distribution"
-msgstr "Densidade de probabilidade para unha distribución de chi ao cadrado"
+msgstr "Densidade de probabilidade para unha distribución de χ²"
 
 #: src/backend/gsl/ExpressionParser.cpp:776
 #, kde-format
