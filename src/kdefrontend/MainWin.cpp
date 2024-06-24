@@ -187,6 +187,13 @@ MainWin::~MainWin() {
 	// save the current settings in MainWin
 	m_recentProjectsAction->saveEntries(Settings::group(QStringLiteral("Recent Files")));
 
+	if (m_project) {
+		delete m_guiObserver;
+		delete m_aspectTreeModel;
+		disconnect(m_project, nullptr, this, nullptr);
+		delete m_project;
+	}
+
 	auto group = Settings::group(QStringLiteral("MainWin"));
 	group.writeEntry(QLatin1String("geometry"), saveGeometry()); // current geometry of the main window
 	group.writeEntry(QLatin1String("WindowState"), saveState()); // current state of QMainWindow's toolbars and dockwidgets
@@ -199,12 +206,7 @@ MainWin::~MainWin() {
 	// 	if (dynamic_cast<QQuickWidget*>(centralWidget()))
 	// 		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
 
-	if (m_project) {
-		delete m_guiObserver;
-		delete m_aspectTreeModel;
-		disconnect(m_project, nullptr, this, nullptr);
-		delete m_project;
-	}
+
 
 	//	delete m_welcomeScreenHelper;
 }
@@ -1399,70 +1401,18 @@ bool MainWin::newProject(bool createInitialContent) {
 		statusBar()->showMessage(text);
 	});
 
-	// newProject is called for the first time, there is no project explorer yet
-	//-> initialize the project explorer,  the GUI-observer and the dock widgets.
-	if (!m_projectExplorer) {
-		const auto groupMainWin = Settings::group(QStringLiteral("MainWin"));
-
-		// project explorer
-		m_projectExplorerDock = new ads::CDockWidget(i18nc("@title:window", "Project Explorer"));
-		m_projectExplorerDock->setObjectName(QLatin1String("project-explorer"));
-		m_projectExplorerDock->setWindowTitle(m_projectExplorerDock->windowTitle().replace(QLatin1String("&"), QString()));
-		m_projectExplorerDock->toggleViewAction()->setText(QLatin1String(""));
-
-		m_projectExplorer = new ProjectExplorer(m_projectExplorerDock);
-		m_projectExplorerDock->setWidget(m_projectExplorer);
-
-		connect(m_projectExplorer, &ProjectExplorer::currentAspectChanged, this, &MainWin::handleCurrentAspectChanged);
-		connect(m_projectExplorer, &ProjectExplorer::activateView, this, &MainWin::activateSubWindowForAspect);
-		connect(m_projectExplorerDock, &ads::CDockWidget::viewToggled, this, &MainWin::projectExplorerDockVisibilityChanged);
-
-		// Properties dock
-		m_propertiesDock = new ads::CDockWidget(i18nc("@title:window", "Properties"));
-		m_propertiesDock->setObjectName(QLatin1String("properties-explorer"));
-		m_propertiesDock->setWindowTitle(m_propertiesDock->windowTitle().replace(QLatin1String("&"), QString()));
-
-		// worksheet preview
-		m_worksheetPreviewDock = new ads::CDockWidget(i18nc("@title:window", "Worksheet Preview"));
-		m_worksheetPreviewDock->setObjectName(QLatin1String("worksheet-preview"));
-		m_worksheetPreviewDock->setWindowTitle(m_worksheetPreviewDock->windowTitle().replace(QLatin1String("&"), QString()));
-		m_worksheetPreviewDock->toggleViewAction()->setText(QLatin1String(""));
-		connect(m_worksheetPreviewDock, &ads::CDockWidget::viewToggled, this, &MainWin::worksheetPreviewDockVisibilityChanged);
-
-		m_worksheetPreviewWidget = new WorksheetPreviewWidget(m_worksheetPreviewDock);
-		m_worksheetPreviewDock->setWidget(m_worksheetPreviewWidget);
-
-		// restore the position of the dock widgets:
-		// we add the standard dock widgets to our initial default and hard-coded positions first.
-		// if the user has changed the position of these docks, it was saved on application close
-		// and we restore this new and user-defined default state after this.
-		m_DockManager->addDockWidget(ads::LeftDockWidgetArea, m_projectExplorerDock);
-		m_DockManager->addDockWidget(ads::RightDockWidgetArea, m_propertiesDock);
-		m_DockManager->addDockWidget(ads::RightDockWidgetArea, m_worksheetPreviewDock, m_projectExplorerDock->dockAreaWidget());
-		restoreDefaultDockState();
-
-		auto* scrollArea = new QScrollArea(m_propertiesDock);
-		scrollArea->setWidgetResizable(true);
-
-		stackedWidget = new QStackedWidget(scrollArea);
-		scrollArea->setWidget(stackedWidget); // stacked widget inside scroll area
-		m_propertiesDock->setWidget(scrollArea); // scroll area inside dock
-
-		connect(m_propertiesDock, &ads::CDockWidget::viewToggled, this, &MainWin::propertiesDockVisibilityChanged);
-	}
-
-	m_projectExplorer->setModel(m_aspectTreeModel);
-	m_projectExplorer->setProject(m_project);
-	m_projectExplorer->setCurrentAspect(m_project);
-	m_worksheetPreviewWidget->setProject(m_project);
-
 	m_newProjectAction->setEnabled(false);
 #ifdef HAVE_PURPOSE
 	m_shareAction->setEnabled(false); // sharing is only possible after the project was saved to a file
 #endif
 
+	//initialize the default dock widgets and the GUI-observer
+	initDefaultDocks();
+	m_projectExplorer->setModel(m_aspectTreeModel);
+	m_projectExplorer->setProject(m_project);
+	m_projectExplorer->setCurrentAspect(m_project);
+	m_worksheetPreviewWidget->setProject(m_project);
 	m_guiObserver = new GuiObserver(this); // initialize after all docks were createad
-	m_guiObserver->selectedAspectsChanged({static_cast<AbstractAspect*>(m_project)}); // Trigger showing properties
 
 	connect(m_project, &Project::childAspectAdded, this, &MainWin::handleAspectAdded);
 	connect(m_project, &Project::childAspectRemoved, this, &MainWin::handleAspectRemoved);
@@ -1499,21 +1449,74 @@ bool MainWin::newProject(bool createInitialContent) {
 		}
 
 		m_project->setChanged(false); // the project was initialized on startup, nothing has changed from user's perspective
+
+		updateGUIOnProjectChanges();
+		m_undoViewEmptyLabel = i18n("%1: created", m_project->name());
 	}
 
-	m_undoViewEmptyLabel = i18n("%1: created", m_project->name());
-	updateGUIOnProjectChanges();
+	// TODO: restoreDefaultDockState();
 
 	return true;
+}
+
+void MainWin::initDefaultDocks() {
+	if (m_projectExplorer)
+		return;
+
+	const auto groupMainWin = Settings::group(QStringLiteral("MainWin"));
+
+	// project explorer
+	m_projectExplorerDock = new ads::CDockWidget(i18nc("@title:window", "Project Explorer"));
+	m_projectExplorerDock->setObjectName(QLatin1String("project-explorer"));
+	m_projectExplorerDock->setWindowTitle(m_projectExplorerDock->windowTitle().replace(QLatin1String("&"), QString()));
+	m_projectExplorerDock->toggleViewAction()->setText(QLatin1String(""));
+
+	m_projectExplorer = new ProjectExplorer(m_projectExplorerDock);
+	m_projectExplorerDock->setWidget(m_projectExplorer);
+
+	connect(m_projectExplorer, &ProjectExplorer::currentAspectChanged, this, &MainWin::handleCurrentAspectChanged);
+	connect(m_projectExplorer, &ProjectExplorer::activateView, this, &MainWin::activateSubWindowForAspect);
+	connect(m_projectExplorerDock, &ads::CDockWidget::viewToggled, this, &MainWin::projectExplorerDockVisibilityChanged);
+
+	// properties explorer
+	m_propertiesDock = new ads::CDockWidget(i18nc("@title:window", "Properties"));
+	m_propertiesDock->setObjectName(QLatin1String("properties-explorer"));
+	m_propertiesDock->setWindowTitle(m_propertiesDock->windowTitle().replace(QLatin1String("&"), QString()));
+
+	auto* scrollArea = new QScrollArea(m_propertiesDock);
+	scrollArea->setWidgetResizable(true);
+	stackedWidget = new QStackedWidget(scrollArea);
+	scrollArea->setWidget(stackedWidget); // stacked widget inside scroll area
+	m_propertiesDock->setWidget(scrollArea); // scroll area inside dock
+	connect(m_propertiesDock, &ads::CDockWidget::viewToggled, this, &MainWin::propertiesDockVisibilityChanged);
+
+	// worksheet preview
+	m_worksheetPreviewDock = new ads::CDockWidget(i18nc("@title:window", "Worksheet Preview"));
+	m_worksheetPreviewDock->setObjectName(QLatin1String("worksheet-preview"));
+	m_worksheetPreviewDock->setWindowTitle(m_worksheetPreviewDock->windowTitle().replace(QLatin1String("&"), QString()));
+	m_worksheetPreviewDock->toggleViewAction()->setText(QLatin1String(""));
+
+	m_worksheetPreviewWidget = new WorksheetPreviewWidget(m_worksheetPreviewDock);
+	m_worksheetPreviewDock->setWidget(m_worksheetPreviewWidget);
+	connect(m_worksheetPreviewDock, &ads::CDockWidget::viewToggled, this, &MainWin::worksheetPreviewDockVisibilityChanged);
+
+	// restore the position of the dock widgets:
+	// we add the standard dock widgets to our initial default and hard-coded positions first.
+	// if the user has changed the position of these docks, it was saved on application close
+	// and we restore this new and user-defined default state after this.
+	m_DockManager->addDockWidget(ads::LeftDockWidgetArea, m_projectExplorerDock);
+	m_DockManager->addDockWidget(ads::RightDockWidgetArea, m_propertiesDock/*, m_projectExplorerDock->dockAreaWidget()*/);
+	m_DockManager->addDockWidget(ads::RightDockWidgetArea, m_worksheetPreviewDock, m_projectExplorerDock->dockAreaWidget());
+	// TODO: restoreDefaultDockState();
 }
 
 /*!
  * restores the last used positions and the sizes of the dock widgets.
  */
 void MainWin::restoreDefaultDockState() const {
-	const auto groupMainWin = Settings::group(QStringLiteral("MainWin"));
-	if (groupMainWin.keyList().indexOf(QLatin1String("DockWidgetsState")) != -1) {
-		auto dockWidgetsState = groupMainWin.readEntry("DockWidgetsState", QString());
+	const auto group = Settings::group(QStringLiteral("MainWin"));
+	if (group.keyList().indexOf(QStringLiteral("DockWidgetsState")) != -1) {
+		auto dockWidgetsState = group.readEntry("DockWidgetsState", QString());
 		m_DockManager->restoreState(dockWidgetsState.toUtf8());
 
 		m_projectExplorerDockAction->setChecked(m_projectExplorerDock->isVisible());
@@ -1753,8 +1756,9 @@ void MainWin::openProject(const QString& filename) {
 		}
 
 		m_DockManager->restoreState(dockWidgetsState);
-		if (!m_project->saveDockStates())
-			restoreDefaultDockState();
+		// TODO:
+		// if (!m_project->saveDockStates())
+		// 	restoreDefaultDockState();
 	} else
 		updateDockWindowVisibility();
 

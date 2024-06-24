@@ -209,6 +209,7 @@ private:
 	// 	QQuickWidget* createWelcomeScreen();
 	// 	void resetWelcomeScreen();
 	void createADS();
+	void initDefaultDocks();
 	void restoreDefaultDockState() const;
 
 	Spreadsheet* activeSpreadsheet() const;
