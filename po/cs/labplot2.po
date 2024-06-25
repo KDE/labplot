@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-24 01:38+0000\n"
-"PO-Revision-Date: 2024-06-21 13:38+0200\n"
+"PO-Revision-Date: 2024-06-24 10:18+0200\n"
 "Last-Translator: Vit Pelcak <vpelcak@suse.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -5935,10 +5935,9 @@ msgid "Square"
 msgstr "Čtverec"
 
 #: src/backend/lib/Range.h:48
-#, fuzzy, kde-format
-#| msgid "Reverse"
+#, kde-format
 msgid "Inverse"
-msgstr "Opačné"
+msgstr "Inverzní"
 
 #: src/backend/lib/XmlStreamReader.cpp:91
 #: src/backend/lib/XmlStreamReader.cpp:95
@@ -10370,10 +10369,9 @@ msgid "&Unmask"
 msgstr "&Odmaskovat"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:308
-#, fuzzy, kde-format
-#| msgid "Reverse"
+#, kde-format
 msgid "&Reverse"
-msgstr "Opačné"
+msgstr "Ob&rátit směr"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:309
 #, kde-format

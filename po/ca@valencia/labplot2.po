@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-24 01:38+0000\n"
-"PO-Revision-Date: 2024-06-21 12:00+0200\n"
+"PO-Revision-Date: 2024-06-24 08:46+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 24.05.0\n"
 "X-Accelerator-Marker: &\n"
 
 #, kde-format
@@ -6065,10 +6065,9 @@ msgid "Square"
 msgstr "Quadrat"
 
 #: src/backend/lib/Range.h:48
-#, fuzzy, kde-format
-#| msgid "Inverse sine"
+#, kde-format
 msgid "Inverse"
-msgstr "Sinus invers"
+msgstr "Invers"
 
 #: src/backend/lib/XmlStreamReader.cpp:91
 #: src/backend/lib/XmlStreamReader.cpp:95
@@ -10519,10 +10518,9 @@ msgid "&Unmask"
 msgstr "&Desemmascara"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:308
-#, fuzzy, kde-format
-#| msgid "Reverse"
+#, kde-format
 msgid "&Reverse"
-msgstr "Invertix"
+msgstr "I&nvertix"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:309
 #, kde-format
@@ -14394,7 +14392,7 @@ msgstr "Estat de l'ajust: %1"
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1189
 #, kde-format
 msgid "Fit not possible. Please check if data is given."
-msgstr ""
+msgstr "L'ajust no és possible. Comproveu si s'han indicat les dades."
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1357
 #, kde-format

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-24 01:38+0000\n"
-"PO-Revision-Date: 2024-06-23 07:09+0200\n"
+"PO-Revision-Date: 2024-06-24 08:05+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -5994,10 +5994,9 @@ msgid "Square"
 msgstr "Kvadrat"
 
 #: src/backend/lib/Range.h:48
-#, fuzzy, kde-format
-#| msgid "Inverse sine"
+#, kde-format
 msgid "Inverse"
-msgstr "Inverzni sinus ali arkus sinus"
+msgstr "Inverz"
 
 #: src/backend/lib/XmlStreamReader.cpp:91
 #: src/backend/lib/XmlStreamReader.cpp:95
