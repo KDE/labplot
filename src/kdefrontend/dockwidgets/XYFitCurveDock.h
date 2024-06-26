@@ -36,6 +36,7 @@ private:
 	void updateSettings(const AbstractColumn*);
 	void showFitResult();
 	bool eventFilter(QObject*, QEvent*) override;
+	void checkDataColumns(); // check if data columns are available and contain data
 
 	Ui::XYFitCurveDockGeneralTab uiGeneralTab;
 	TreeViewComboBox* cbDataSourceCurve{nullptr};
