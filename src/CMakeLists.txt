@@ -493,7 +493,6 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/worksheet/WorksheetView.cpp
 	${COMMONFRONTEND_DIR}/ProjectExplorer.cpp
 	${COMMONFRONTEND_DIR}/core/ContentDockWidget.cpp
-	${COMMONFRONTEND_DIR}/core/DockWidget.cpp
 	${COMMONFRONTEND_DIR}/widgets/TreeViewComboBox.cpp
 	${COMMONFRONTEND_DIR}/widgets/qxtspanslider.cpp
 	${COMMONFRONTEND_DIR}/widgets/MemoryWidget.cpp
