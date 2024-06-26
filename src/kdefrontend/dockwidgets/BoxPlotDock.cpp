@@ -96,6 +96,27 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	symbolWidget = new SymbolWidget(ui.tabSymbol);
 	gridLayout->addWidget(symbolWidget, 2, 0, 1, 3);
 
+	msg = i18n("Select to modify the properties of the symbol for the mean value.");
+	ui.rbMean->setToolTip(msg);
+
+	msg = i18n("Select to modify the properties of the symbol for the median value.");
+	ui.rbMedian->setToolTip(msg);
+
+	msg = i18n("Select to modify the properties of the symbol for the outlier values.");
+	ui.rbOutlier->setToolTip(msg);
+
+	msg = i18n("Select to modify the properties of the symbol for the \"far out\" values.");
+	ui.rbFarOut->setToolTip(msg);
+
+	msg = i18n("Select to modify the properties of the symbol for all data values excluding the outlier and \"far out\" values.");
+	ui.rbData->setToolTip(msg);
+
+	msg = i18n("Select to modify the properties of the symbol for the ends of the whiskers.");
+	ui.rbWhiskerEnd->setToolTip(msg);
+
+	msg = i18n("Activate to randomize the positions of the symbols (\"jittering\"), helpful for dense and overlapping data points.");
+	ui.chkJitteringEnabled->setToolTip(msg);
+
 	// Tab "Whiskers"
 	gridLayout = static_cast<QGridLayout*>(ui.tabWhiskers->layout());
 	whiskersLineWidget = new LineWidget(ui.tabBox);
@@ -134,7 +155,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	connect(ui.rbMedian, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
 	connect(ui.rbOutlier, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
 	connect(ui.rbFarOut, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
-	connect(ui.rbJitter, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
+	connect(ui.rbData, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
 	connect(ui.rbWhiskerEnd, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
 	connect(ui.chkJitteringEnabled, &QCheckBox::toggled, this, &BoxPlotDock::jitteringEnabledChanged);
 
@@ -463,7 +484,7 @@ void BoxPlotDock::symbolCategoryChanged() {
 			symbols << plot->symbolOutlier();
 		else if (ui.rbFarOut->isChecked())
 			symbols << plot->symbolFarOut();
-		else if (ui.rbJitter->isChecked())
+		else if (ui.rbData->isChecked())
 			symbols << plot->symbolData();
 		else if (ui.rbWhiskerEnd->isChecked())
 			symbols << plot->symbolWhiskerEnd();

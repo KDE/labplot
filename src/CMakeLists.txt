@@ -11,13 +11,13 @@ set(SRC_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
 
 find_package(qt${QT_VERSION_MAJOR}advanceddocking CONFIG)
 if (NOT qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
-    option(LOCAL_QT_ADVANCED_DOCK_DOWNLOAD "Use local build of qt advanced dock downloaded directly from the git repository" OFF)
-    option(LOCAL_QT_ADVANCED_DOCK_COPY "Use local build of qt advanced dock copied into the Qt-Advanced-Docking-System subfolder" ON)
-    if (TARGET Qt${QT_VERSION_MAJOR}::GuiPrivate)
-        MESSAGE (STATUS "Building local version of Qt-Advanced-Docking-System.")
-    else ()
-	MESSAGE (FATAL_ERROR "Missing Qt${QT_VERSION_MAJOR}::GuiPrivate to build local version of Qt-Advanced-Docking-System.")
-    endif ()
+	option(LOCAL_QT_ADVANCED_DOCK_DOWNLOAD "Use local build of qt advanced dock downloaded directly from the git repository" OFF)
+	option(LOCAL_QT_ADVANCED_DOCK_COPY "Use local build of qt advanced dock copied into the Qt-Advanced-Docking-System subfolder" ON)
+	if (TARGET Qt${QT_VERSION_MAJOR}::GuiPrivate)
+		MESSAGE (STATUS "Building local version of Qt-Advanced-Docking-System.")
+	else ()
+		MESSAGE (FATAL_ERROR "Missing Qt${QT_VERSION_MAJOR}::GuiPrivate to build local version of Qt-Advanced-Docking-System.")
+	endif ()
 endif ()
 
 set(GUI_SOURCES
@@ -484,15 +484,16 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/note/NoteView.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetCommentsHeaderModel.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetHeaderView.cpp
-        ${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetSparkLineHeaderModel.cpp
+	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetSparkLineHeaderModel.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetItemDelegate.cpp
-        ${COMMONFRONTEND_DIR}/spreadsheet/SparklineRunnable.h
-        ${COMMONFRONTEND_DIR}/spreadsheet/SparklineRunnable.cpp
+	${COMMONFRONTEND_DIR}/spreadsheet/SparklineRunnable.h
+	${COMMONFRONTEND_DIR}/spreadsheet/SparklineRunnable.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetView.cpp
 	${COMMONFRONTEND_DIR}/workbook/WorkbookView.cpp
 	${COMMONFRONTEND_DIR}/worksheet/WorksheetView.cpp
 	${COMMONFRONTEND_DIR}/ProjectExplorer.cpp
 	${COMMONFRONTEND_DIR}/core/ContentDockWidget.cpp
+	${COMMONFRONTEND_DIR}/core/DockWidget.cpp
 	${COMMONFRONTEND_DIR}/widgets/TreeViewComboBox.cpp
 	${COMMONFRONTEND_DIR}/widgets/qxtspanslider.cpp
 	${COMMONFRONTEND_DIR}/widgets/MemoryWidget.cpp
