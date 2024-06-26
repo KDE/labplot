@@ -362,7 +362,6 @@ void XYFitCurveDock::checkDataColumns() {
 	}
 	switch (m_fitCurve->dataSourceType()) {
 	case XYAnalysisCurve::DataSourceType::Spreadsheet: {
-		DEBUG("HERE")
 		auto xColumn = m_fitCurve->xDataColumn();
 		auto yColumn = m_fitCurve->yDataColumn();
 		if (!xColumn && !yColumn)
@@ -376,14 +375,17 @@ void XYFitCurveDock::checkDataColumns() {
 		else if (yColumn->availableRowCount(1) == 0)
 			m_messageWidget->setText(i18n("No Y data available!"));
 
-		m_messageWidget->animatedShow();
+		if (!xColumn || !yColumn || xColumn->availableRowCount(1) == 0 || yColumn->availableRowCount(1) == 0)
+			m_messageWidget->animatedShow();
 		break;
 	}
 	case XYAnalysisCurve::DataSourceType::Curve:
 		// TODO: check for enough data
+		m_messageWidget->animatedHide();
 		break;
 	case XYAnalysisCurve::DataSourceType::Histogram:
 		// TODO: check for enough data
+		m_messageWidget->animatedHide();
 		break;
 	}
 }
