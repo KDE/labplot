@@ -315,7 +315,7 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	m_fitData = m_fitCurve->fitData();
 
 	DEBUG(Q_FUNC_INFO << ", model type = " << m_fitData.modelType);
-	DEBUG(Q_FUNC_INFO << ", model = " << STDSTRING(m_fitData.model));
+	DEBUG(Q_FUNC_INFO << ", model expression = " << STDSTRING(m_fitData.model));
 	DEBUG(Q_FUNC_INFO << ", model degree = " << m_fitData.degree);
 	DEBUG(Q_FUNC_INFO << ", # params = " << m_fitData.paramNames.size());
 	DEBUG(Q_FUNC_INFO << ", # start values = " << m_fitData.paramStartValues.size());
@@ -921,6 +921,8 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 		m_fitData.modelType = index;
 
 	updateModelEquation();
+	// TODO: update parameter list?
+	//  updateParameterList();
 
 	if (disableFit)
 		uiGeneralTab.pbRecalculate->setEnabled(false);
@@ -1139,6 +1141,7 @@ void XYFitCurveDock::parametersChanged(bool updateParameterWidget) {
 		fitParametersWidget->setFitData(&m_fitData);
 
 	enableRecalculate();
+	DEBUG(Q_FUNC_INFO << " DONE")
 }
 void XYFitCurveDock::parametersValid(bool valid) {
 	DEBUG(Q_FUNC_INFO << ", valid = " << valid);
