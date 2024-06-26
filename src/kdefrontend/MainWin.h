@@ -228,7 +228,6 @@ private Q_SLOTS:
 	void changeVisibleAllDocks(bool);
 	void activateNextDock();
 	void activatePreviousDock();
-	void dockWidgetAboutToBeRemoved(ads::CDockWidget*);
 	void dockWidgetRemoved(ads::CDockWidget*);
 	void dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now);
 	void updateGUI();

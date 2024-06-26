@@ -187,6 +187,13 @@ MainWin::~MainWin() {
 	// save the current settings in MainWin
 	m_recentProjectsAction->saveEntries(Settings::group(QStringLiteral("Recent Files")));
 
+	auto group = Settings::group(QStringLiteral("MainWin"));
+	group.writeEntry(QLatin1String("geometry"), saveGeometry()); // current geometry of the main window
+	group.writeEntry(QLatin1String("WindowState"), saveState()); // current state of QMainWindow's toolbars and dockwidgets
+	group.writeEntry(QLatin1String("lastOpenFileFilter"), m_lastOpenFileFilter);
+	group.writeEntry(QLatin1String("ShowMemoryInfo"), (m_memoryInfoWidget != nullptr));
+	Settings::sync();
+
 	if (m_project) {
 		delete m_guiObserver;
 		delete m_aspectTreeModel;
@@ -194,19 +201,9 @@ MainWin::~MainWin() {
 		delete m_project;
 	}
 
-	auto group = Settings::group(QStringLiteral("MainWin"));
-	group.writeEntry(QLatin1String("geometry"), saveGeometry()); // current geometry of the main window
-	group.writeEntry(QLatin1String("WindowState"), saveState()); // current state of QMainWindow's toolbars and dockwidgets
-	group.writeEntry(QLatin1String("DockWidgetsState"), m_DockManager->saveState()); // current state of ADS's dock widgets
-	group.writeEntry(QLatin1String("lastOpenFileFilter"), m_lastOpenFileFilter);
-	group.writeEntry(QLatin1String("ShowMemoryInfo"), (m_memoryInfoWidget != nullptr));
-	Settings::sync();
-
 	// if welcome screen is shown, save its settings prior to deleting it
 	// 	if (dynamic_cast<QQuickWidget*>(centralWidget()))
 	// 		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
-
-
 
 	//	delete m_welcomeScreenHelper;
 }
@@ -502,8 +499,6 @@ void MainWin::createADS() {
 
 	m_DockManager = new ads::CDockManager(this);
 	connect(m_DockManager, &ads::CDockManager::focusedDockWidgetChanged, this, &MainWin::dockFocusChanged); // TODO: seems not to work
-	// setCentralWidget(m_DockManager); // Automatically done by CDockManager
-	connect(m_DockManager, &ads::CDockManager::dockWidgetAboutToBeRemoved, this, &MainWin::dockWidgetAboutToBeRemoved);
 	connect(m_DockManager, &ads::CDockManager::dockWidgetRemoved, this, &MainWin::dockWidgetRemoved);
 
 	connect(m_closeWindowAction, &QAction::triggered, [this] {
@@ -511,10 +506,9 @@ void MainWin::createADS() {
 	});
 	connect(m_closeAllWindowsAction, &QAction::triggered, [this]() {
 		for (auto dock : m_DockManager->dockWidgetsMap()) {
-			// Do not remove them, because it makes no sense
-			if (specialDock(dock))
-				continue;
-			m_DockManager->removeDockWidget(dock);
+			// Do not remove the default/special docks, remove content docks only
+			if (!specialDock(dock))
+				m_DockManager->removeDockWidget(dock);
 		}
 	});
 
@@ -621,29 +615,8 @@ void MainWin::activatePreviousDock() {
 }
 
 void MainWin::dockWidgetRemoved(ads::CDockWidget* w) {
-	if (w == m_projectExplorerDock) {
-		delete m_projectExplorerDock;
-		m_projectExplorerDock = nullptr;
-	} else if (w == m_propertiesDock) {
-		delete m_propertiesDock;
-		m_propertiesDock = nullptr;
-	} else if (w == m_worksheetPreviewDock) {
-		delete m_worksheetPreviewDock;
-		m_worksheetPreviewDock = nullptr;
-	}
-
 	if (w == m_currentAspectDock)
 		m_currentAspectDock = nullptr;
-}
-
-void MainWin::dockWidgetAboutToBeRemoved(ads::CDockWidget* w) {
-	if (w == m_projectExplorerDock) {
-		delete m_projectExplorer;
-		m_projectExplorer = nullptr;
-	} else if (w == m_propertiesDock)
-		delete m_propertiesDock->widget();
-	else if (w == m_worksheetPreviewDock)
-		delete m_worksheetPreviewDock->widget();
 }
 
 void MainWin::dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now) {
@@ -1454,7 +1427,7 @@ bool MainWin::newProject(bool createInitialContent) {
 		m_undoViewEmptyLabel = i18n("%1: created", m_project->name());
 	}
 
-	// TODO: restoreDefaultDockState();
+	restoreDefaultDockState();
 
 	return true;
 }
@@ -1501,28 +1474,41 @@ void MainWin::initDefaultDocks() {
 	connect(m_worksheetPreviewDock, &ads::CDockWidget::viewToggled, this, &MainWin::worksheetPreviewDockVisibilityChanged);
 
 	// restore the position of the dock widgets:
-	// we add the standard dock widgets to our initial default and hard-coded positions first.
-	// if the user has changed the position of these docks, it was saved on application close
-	// and we restore this new and user-defined default state after this.
-	m_DockManager->addDockWidget(ads::LeftDockWidgetArea, m_projectExplorerDock);
-	m_DockManager->addDockWidget(ads::RightDockWidgetArea, m_propertiesDock/*, m_projectExplorerDock->dockAreaWidget()*/);
-	m_DockManager->addDockWidget(ads::RightDockWidgetArea, m_worksheetPreviewDock, m_projectExplorerDock->dockAreaWidget());
-	// TODO: restoreDefaultDockState();
+	restoreDefaultDockState();
 }
 
 /*!
- * restores the last used positions and the sizes of the dock widgets.
+ * restores the default state of the default application dock widgets (Project Explorer, etc.)
  */
 void MainWin::restoreDefaultDockState() const {
-	const auto group = Settings::group(QStringLiteral("MainWin"));
-	if (group.keyList().indexOf(QStringLiteral("DockWidgetsState")) != -1) {
-		auto dockWidgetsState = group.readEntry("DockWidgetsState", QString());
-		m_DockManager->restoreState(dockWidgetsState.toUtf8());
+	// we add the standard dock widgets to our initial default and hard-coded positions first.
+	// if the user has changed the position of these docks or saved and restored them from the project file,
+	// we put the default docks to our initial/default position when a new project is created or a project
+	// is opened where the state of the default docks was not saved.
+	// So, we always work with the same initial position of the docks and are not able to save the user-defined
+	// settings - this will be implemented later.
 
-		m_projectExplorerDockAction->setChecked(m_projectExplorerDock->isVisible());
-		m_propertiesDockAction->setChecked(m_propertiesDock->isVisible());
-		m_worksheetPreviewAction->setChecked(m_worksheetPreviewDock->isVisible());
-	}
+	const auto& docks = m_DockManager->dockWidgetsMap().values();
+
+	if (docks.indexOf(m_projectExplorerDock) != -1)
+		m_DockManager->removeDockWidget(m_projectExplorerDock);
+	if (docks.indexOf(m_propertiesDock) != -1)
+		m_DockManager->removeDockWidget(m_propertiesDock);
+	if (docks.indexOf(m_worksheetPreviewDock) != -1)
+		m_DockManager->removeDockWidget(m_worksheetPreviewDock);
+
+	m_DockManager->addDockWidget(ads::LeftDockWidgetArea, m_projectExplorerDock);
+	m_DockManager->addDockWidget(ads::RightDockWidgetArea, m_propertiesDock/*, m_projectExplorerDock->dockAreaWidget()*/);
+	m_DockManager->addDockWidget(ads::RightDockWidgetArea, m_worksheetPreviewDock, m_projectExplorerDock->dockAreaWidget());
+
+	m_projectExplorerDock->resize(m_projectExplorerDock->minimumSizeHint());
+	m_propertiesDock->resize(m_propertiesDock->minimumSizeHint());
+	m_worksheetPreviewDock->resize(m_worksheetPreviewDock->minimumSizeHint());
+
+	m_projectExplorerDockAction->setChecked(false);
+	m_propertiesDockAction->setChecked(false);
+	m_worksheetPreviewAction->setChecked(false);
+	m_worksheetPreviewDock->toggleView(false);
 }
 
 void MainWin::openProject() {
@@ -1755,10 +1741,9 @@ void MainWin::openProject(const QString& filename) {
 				d->part()->suppressDeletion(false);
 		}
 
-		m_DockManager->restoreState(dockWidgetsState);
-		// TODO:
-		// if (!m_project->saveDockStates())
-		// 	restoreDefaultDockState();
+		m_DockManager->restoreState(dockWidgetsState); // restore the state of all docks (default and user content)
+		if (!m_project->saveDockStates())
+			restoreDefaultDockState(); // the state of the default dock was not saved, restore the default state for them
 	} else
 		updateDockWindowVisibility();
 
