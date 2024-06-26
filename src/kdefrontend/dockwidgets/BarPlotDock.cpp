@@ -211,6 +211,7 @@ void BarPlotDock::loadDataColumns() {
 	ui.cbNumber->clear();
 	ui.cbErrorBarsNumber->clear();
 
+	auto* model = aspectModel();
 	if (count != 0) {
 		// box plot has already data columns, make sure we have the proper number of comboboxes
 		int diff = count - m_dataComboBoxes.count();
@@ -223,7 +224,6 @@ void BarPlotDock::loadDataColumns() {
 		}
 
 		// show the columns in the comboboxes
-		auto* model = aspectModel();
 		for (int i = 0; i < count; ++i) {
 			m_dataComboBoxes.at(i)->setModel(model); // the model might have changed in-between, reset the current model
 			m_dataComboBoxes.at(i)->setAspect(m_barPlot->dataColumns().at(i));
@@ -237,7 +237,8 @@ void BarPlotDock::loadDataColumns() {
 				ui.cbErrorBarsNumber->addItem(name);
 			}
 	} else {
-		// no data columns set in the box plot yet, we show the first combo box only
+		// no data columns set in the box plot yet, we show the first combo box only and reset its model
+		m_dataComboBoxes.first()->setModel(model);
 		m_dataComboBoxes.first()->setAspect(nullptr);
 		for (int i = 0; i < m_dataComboBoxes.count(); ++i)
 			removeDataColumn();

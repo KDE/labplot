@@ -268,10 +268,13 @@ void BoxPlotDock::loadDataColumns() {
 	// add the combobox for the first column, is always present
 	if (m_dataComboBoxes.count() == 0)
 		addDataColumn();
+	// else if (m_dataComboBoxes.count() == 1)
+
 
 	int count = m_boxPlot->dataColumns().count();
 	ui.cbNumber->clear();
 
+	auto* model = aspectModel();
 	if (count != 0) {
 		// box plot has already data columns, make sure we have the proper number of comboboxes
 		int diff = count - m_dataComboBoxes.count();
@@ -284,7 +287,6 @@ void BoxPlotDock::loadDataColumns() {
 		}
 
 		// show the columns in the comboboxes
-		auto* model = aspectModel();
 		for (int i = 0; i < count; ++i) {
 			m_dataComboBoxes.at(i)->setModel(model); // the model might have changed in-between, reset the current model
 			m_dataComboBoxes.at(i)->setAspect(m_boxPlot->dataColumns().at(i));
@@ -295,7 +297,8 @@ void BoxPlotDock::loadDataColumns() {
 			if (m_boxPlot->dataColumns().at(i))
 				ui.cbNumber->addItem(m_boxPlot->dataColumns().at(i)->name());
 	} else {
-		// no data columns set in the box plot yet, we show the first combo box only
+		// no data columns set in the box plot yet, we show the first combo box only and reset its model
+		m_dataComboBoxes.first()->setModel(model);
 		m_dataComboBoxes.first()->setAspect(nullptr);
 		for (int i = 1; i < m_dataComboBoxes.count(); ++i)
 			removeDataColumn();
