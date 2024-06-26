@@ -1379,7 +1379,7 @@ bool MainWin::newProject(bool createInitialContent) {
 	m_shareAction->setEnabled(false); // sharing is only possible after the project was saved to a file
 #endif
 
-	//initialize the default dock widgets and the GUI-observer
+	// initialize the default dock widgets and the GUI-observer
 	initDefaultDocks();
 	m_projectExplorer->setModel(m_aspectTreeModel);
 	m_projectExplorer->setProject(m_project);
@@ -1488,8 +1488,8 @@ void MainWin::restoreDefaultDockState() const {
 	// So, we always work with the same initial position of the docks and are not able to save the user-defined
 	// settings - this will be implemented later.
 
+	// remove the docks from their current and potentially non-default positions
 	const auto& docks = m_DockManager->dockWidgetsMap().values();
-
 	if (docks.indexOf(m_projectExplorerDock) != -1)
 		m_DockManager->removeDockWidget(m_projectExplorerDock);
 	if (docks.indexOf(m_propertiesDock) != -1)
@@ -1497,16 +1497,19 @@ void MainWin::restoreDefaultDockState() const {
 	if (docks.indexOf(m_worksheetPreviewDock) != -1)
 		m_DockManager->removeDockWidget(m_worksheetPreviewDock);
 
+	// add the docks at the default positions
 	m_DockManager->addDockWidget(ads::LeftDockWidgetArea, m_projectExplorerDock);
-	m_DockManager->addDockWidget(ads::RightDockWidgetArea, m_propertiesDock/*, m_projectExplorerDock->dockAreaWidget()*/);
+	m_DockManager->addDockWidget(ads::RightDockWidgetArea, m_propertiesDock);
 	m_DockManager->addDockWidget(ads::RightDockWidgetArea, m_worksheetPreviewDock, m_projectExplorerDock->dockAreaWidget());
 
+	// resize to the minimal sizes
 	m_projectExplorerDock->resize(m_projectExplorerDock->minimumSizeHint());
 	m_propertiesDock->resize(m_propertiesDock->minimumSizeHint());
 	m_worksheetPreviewDock->resize(m_worksheetPreviewDock->minimumSizeHint());
 
-	m_projectExplorerDockAction->setChecked(false);
-	m_propertiesDockAction->setChecked(false);
+	// check the actions for the project and properties explorer, uncheck for worksheet preview and hide it
+	m_projectExplorerDockAction->setChecked(true);
+	m_propertiesDockAction->setChecked(true);
 	m_worksheetPreviewAction->setChecked(false);
 	m_worksheetPreviewDock->toggleView(false);
 }
