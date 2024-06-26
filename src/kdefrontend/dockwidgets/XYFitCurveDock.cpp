@@ -324,8 +324,10 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 
 	fitParametersWidget->setFitData(&m_fitData);
 
-	if (m_messageWidget && m_messageWidget->isVisible())
+	if (m_messageWidget && m_messageWidget->isVisible()) {
+		DEBUG(Q_FUNC_INFO << ", close message")
 		m_messageWidget->animatedHide();
+	}
 
 	initGeneralTab();
 	initTabs();
@@ -357,20 +359,33 @@ void XYFitCurveDock::checkDataColumns() {
 	if (!m_messageWidget) {
 		m_messageWidget = new KMessageWidget(this);
 		uiGeneralTab.gridLayout_2->addWidget(m_messageWidget, 23, 2, 1, 2);
-		m_messageWidget->animatedShow();
 	}
-	auto xColumn = m_fitCurve->xDataColumn();
-	auto yColumn = m_fitCurve->yDataColumn();
-	if (!xColumn && !yColumn)
-		m_messageWidget->setText(i18n("No X and Y column available!"));
-	else if (!xColumn)
-		m_messageWidget->setText(i18n("No X column available!"));
-	else if (!yColumn)
-		m_messageWidget->setText(i18n("No Y column available!"));
-	else if (xColumn->availableRowCount(1) == 0)
-		m_messageWidget->setText(i18n("No X data available!"));
-	else if (yColumn->availableRowCount(1) == 0)
-		m_messageWidget->setText(i18n("No Y data available!"));
+	switch (m_fitCurve->dataSourceType()) {
+	case XYAnalysisCurve::DataSourceType::Spreadsheet: {
+		DEBUG("HERE")
+		auto xColumn = m_fitCurve->xDataColumn();
+		auto yColumn = m_fitCurve->yDataColumn();
+		if (!xColumn && !yColumn)
+			m_messageWidget->setText(i18n("No X and Y column available!"));
+		else if (!xColumn)
+			m_messageWidget->setText(i18n("No X column available!"));
+		else if (!yColumn)
+			m_messageWidget->setText(i18n("No Y column available!"));
+		else if (xColumn->availableRowCount(1) == 0)
+			m_messageWidget->setText(i18n("No X data available!"));
+		else if (yColumn->availableRowCount(1) == 0)
+			m_messageWidget->setText(i18n("No Y data available!"));
+
+		m_messageWidget->animatedShow();
+		break;
+	}
+	case XYAnalysisCurve::DataSourceType::Curve:
+		// TODO: check for enough data
+		break;
+	case XYAnalysisCurve::DataSourceType::Histogram:
+		// TODO: check for enough data
+		break;
+	}
 }
 
 //*************************************************************
@@ -933,8 +948,10 @@ void XYFitCurveDock::updateModelEquation() {
 		static_cast<XYFitCurve*>(m_curve)->initStartValues(m_fitData, m_curve);
 		// udpate parameter widget
 		fitParametersWidget->setFitData(&m_fitData);
-		if (m_messageWidget && m_messageWidget->isVisible())
+		if (m_messageWidget && m_messageWidget->isVisible()) {
+			DEBUG(Q_FUNC_INFO << ", close message")
 			m_messageWidget->animatedHide();
+		}
 
 		showFitResult(); // show result of preview
 	}
@@ -1213,8 +1230,10 @@ void XYFitCurveDock::recalculateClicked() {
 			m_messageWidget->setText(i18n("No data source available!"));
 		m_messageWidget->animatedShow();
 	} else {
-		if (m_messageWidget && m_messageWidget->isVisible())
+		if (m_messageWidget && m_messageWidget->isVisible()) {
+			DEBUG(Q_FUNC_INFO << ", close message")
 			m_messageWidget->animatedHide();
+		}
 	}
 
 	QApplication::restoreOverrideCursor();
@@ -1373,9 +1392,12 @@ void XYFitCurveDock::showFitResult() {
 
 	if (!fitResult.valid) {
 		DEBUG(Q_FUNC_INFO << ", fit result not valid");
+		checkDataColumns();
 		return;
-	} else if (m_messageWidget && m_messageWidget->isVisible())
+	} else if (m_messageWidget && m_messageWidget->isVisible()) {
+		DEBUG(Q_FUNC_INFO << ", close message")
 		m_messageWidget->animatedHide();
+	}
 
 	const auto numberLocale = QLocale();
 	// used confidence interval
