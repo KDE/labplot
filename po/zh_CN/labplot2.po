@@ -5926,10 +5926,9 @@ msgid "Square"
 msgstr ""
 
 #: src/backend/lib/Range.h:48
-#, fuzzy, kde-format
-#| msgid "Reverse"
+#, kde-format
 msgid "Inverse"
-msgstr "反向"
+msgstr ""
 
 #: src/backend/lib/XmlStreamReader.cpp:91
 #: src/backend/lib/XmlStreamReader.cpp:95
@@ -10325,10 +10324,9 @@ msgid "&Unmask"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:308
-#, fuzzy, kde-format
-#| msgid "Reverse"
+#, kde-format
 msgid "&Reverse"
-msgstr "反向"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:309
 #, kde-format

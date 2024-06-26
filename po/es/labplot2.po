@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-24 01:38+0000\n"
-"PO-Revision-Date: 2024-06-23 02:57+0200\n"
+"PO-Revision-Date: 2024-06-23 13:32+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -10420,10 +10420,9 @@ msgid "&Unmask"
 msgstr "&Desenmascarar"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:308
-#, fuzzy, kde-format
-#| msgid "Reverse"
+#, kde-format
 msgid "&Reverse"
-msgstr "Invertir"
+msgstr "&Invertir"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:309
 #, kde-format
@@ -14286,12 +14285,9 @@ msgid "Fit status: %1"
 msgstr "Estado de ajuste: %1"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1189
-#, fuzzy, kde-format
-#| msgid "LaTeX typesetting not possible. Please check the settings."
+#, kde-format
 msgid "Fit not possible. Please check if data is given."
-msgstr ""
-"La composición tipográfica con LaTeX no es posible. Por favor, compruebe la "
-"configuración."
+msgstr "El ajuste no es posible. Compruebe si se han proporcionado datos."
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1357
 #, kde-format
