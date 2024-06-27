@@ -268,8 +268,6 @@ void BoxPlotDock::loadDataColumns() {
 	// add the combobox for the first column, is always present
 	if (m_dataComboBoxes.count() == 0)
 		addDataColumn();
-	// else if (m_dataComboBoxes.count() == 1)
-
 
 	int count = m_boxPlot->dataColumns().count();
 	ui.cbNumber->clear();
