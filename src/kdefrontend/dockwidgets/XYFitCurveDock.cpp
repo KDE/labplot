@@ -365,11 +365,11 @@ void XYFitCurveDock::checkDataColumns() {
 		auto xColumn = m_fitCurve->xDataColumn();
 		auto yColumn = m_fitCurve->yDataColumn();
 		if (!xColumn && !yColumn)
-			m_messageWidget->setText(i18n("No X and Y column available!"));
+			m_messageWidget->setText(i18n("No X and Y column specified!"));
 		else if (!xColumn)
-			m_messageWidget->setText(i18n("No X column available!"));
+			m_messageWidget->setText(i18n("No X column specified!"));
 		else if (!yColumn)
-			m_messageWidget->setText(i18n("No Y column available!"));
+			m_messageWidget->setText(i18n("No Y column specified!"));
 		else if (xColumn->availableRowCount(1) == 0)
 			m_messageWidget->setText(i18n("No X data available!"));
 		else if (yColumn->availableRowCount(1) == 0)

@@ -2248,14 +2248,14 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 		DEBUG(Q_FUNC_INFO << ", WARNING: no parameter found.")
 		fitResult.available = true;
 		fitResult.valid = false;
-		fitResult.status = i18n("Model has no parameters.");
+		fitResult.status = i18n("Model has no parameters!");
 		return;
 	}
 
 	if (yErrorColumn && yErrorColumn->rowCount() < tmpXDataColumn->rowCount()) {
 		fitResult.available = true;
 		fitResult.valid = false;
-		fitResult.status = i18n("Not sufficient weight data points provided.");
+		fitResult.status = i18n("Not sufficient weight data points provided!");
 		return;
 	}
 
@@ -2332,21 +2332,21 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 	if (n == 0) {
 		fitResult.available = true;
 		fitResult.valid = false;
-		fitResult.status = i18n("No data points available.");
+		fitResult.status = i18n("No X data available!");
 		return;
 	}
 
 	if (n < np) {
 		fitResult.available = true;
 		fitResult.valid = false;
-		fitResult.status = i18n("The number of data points (%1) must be greater than or equal to the number of parameters (%2).", n, np);
+		fitResult.status = i18n("The number of data points (%1) must be greater than or equal to the number of parameters (%2)!", n, np);
 		return;
 	}
 
 	if (fitData.model.simplified().isEmpty()) {
 		fitResult.available = true;
 		fitResult.valid = false;
-		fitResult.status = i18n("Fit model not specified.");
+		fitResult.status = i18n("Fit model not specified!");
 		return;
 	}
 
