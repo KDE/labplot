@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-24 01:38+0000\n"
+"POT-Creation-Date: 2024-06-27 01:46+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -769,9 +769,8 @@ msgstr "foi encontrado o elemento desconhecido '%1'"
 msgid "Not yet loaded."
 msgstr "Ainda não carregado."
 
-#. i18n: ectx: ToolBar (main_toolbar)
 #. i18n: ectx: property (title), widget (QGroupBox, gbProject)
-#: src/backend/core/Project.cpp:169 src/kdefrontend/labplot2ui.rc:6
+#: src/backend/core/Project.cpp:169
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:17
 #, kde-format
 msgid "Project"
@@ -903,14 +902,12 @@ msgstr "elemento do selector de dados desconhecido '%1'"
 #. i18n: ectx: property (title), widget (QGroupBox, gbData)
 #. i18n: ectx: property (text), widget (QLabel, lData)
 #. i18n: ectx: property (text), widget (QLabel, label)
-#. i18n: ectx: property (text), widget (QRadioButton, rbJitter)
 #: src/backend/datapicker/DatapickerCurve.cpp:176
 #: src/commonfrontend/matrix/MatrixView.cpp:130
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:411
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:430
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:438
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:220
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:557
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:311
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:411
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:72
@@ -3135,7 +3132,7 @@ msgstr "Energia de 1 erg"
 
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2065
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1174
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1223
 #, kde-format
 msgid "Success"
 msgstr "Sucesso"
@@ -6753,7 +6750,7 @@ msgstr "Estatísticas (Distribuições)"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:242
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:171
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:277
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:749
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:787
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:81
 #, kde-format
 msgid "Custom"
@@ -11440,15 +11437,14 @@ msgstr ""
 "já não está mais disponível. Será usada automaticamente assim que for criada "
 "de novo."
 
-#. i18n: ectx: ToolBar (spreadsheet_toolbar)
 #. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
 #: src/commonfrontend/workbook/WorkbookView.cpp:52
 #: src/commonfrontend/workbook/WorkbookView.cpp:165
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:116
 #: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:57
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:75
-#: src/kdefrontend/labplot2ui.rc:32 src/kdefrontend/MainWin.cpp:719
-#: src/kdefrontend/MainWin.cpp:2095 src/kdefrontend/SettingsDialog.cpp:72
+#: src/kdefrontend/MainWin.cpp:719 src/kdefrontend/MainWin.cpp:2095
+#: src/kdefrontend/SettingsDialog.cpp:72
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:122
 #, kde-format
 msgid "Spreadsheet"
@@ -13547,20 +13543,20 @@ msgstr ""
 msgid "Scale is async with the plot"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:2043
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:2045
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
 msgstr "%1 eixos: foi carregado o modelo \"%2\""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:2045
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:522
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:706
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:2047
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:523
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:730
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1839
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:781
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:378
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:562
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:353
-#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:445
+#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:446
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:266
 #: src/kdefrontend/dockwidgets/QQPlotDock.cpp:279
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:229
@@ -13613,12 +13609,12 @@ msgid "Uncertainty Bars"
 msgstr "Barras de Incerteza"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:350
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:376
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:339
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:364
-#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:314
-#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:340
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:351
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:377
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:363
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:388
+#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:315
+#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:341
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:233
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:115
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:145
@@ -13632,9 +13628,9 @@ msgstr "Colunas:"
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksColumn)
 #. i18n: ectx: property (text), widget (QLabel, lColumn)
 #. i18n: ectx: property (text), widget (QLabel, lValuesColumn)
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:378
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:368
-#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:342
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:379
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:392
+#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:343
 #: src/kdefrontend/spreadsheet/GoToDialog.cpp:49
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:804
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1112
@@ -13645,7 +13641,7 @@ msgstr "Colunas:"
 msgid "Column:"
 msgstr "Coluna:"
 
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:520
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:521
 #, kde-format
 msgid "%1 bar plots: template \"%2\" loaded"
 msgstr "%1 gráficos de barras: foi carregado o modelo \"%2\""
@@ -13723,7 +13719,48 @@ msgstr ""
 "Indique o factor em percentagem para controlar a largura da caixa face ao "
 "seu valor predefinido."
 
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:704
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:99
+#, kde-format
+msgid "Select to modify the properties of the symbol for the mean value."
+msgstr ""
+
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:102
+#, kde-format
+msgid "Select to modify the properties of the symbol for the median value."
+msgstr ""
+
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:105
+#, kde-format
+msgid "Select to modify the properties of the symbol for the outlier values."
+msgstr ""
+
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:108
+#, kde-format
+msgid ""
+"Select to modify the properties of the symbol for the \"far out\" values."
+msgstr ""
+
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:111
+#, kde-format
+msgid ""
+"Select to modify the properties of the symbol for all data values excluding "
+"the outlier and \"far out\" values."
+msgstr ""
+
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:114
+#, kde-format
+msgid ""
+"Select to modify the properties of the symbol for the ends of the whiskers."
+msgstr ""
+
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:117
+#, kde-format
+msgid ""
+"Activate to randomize the positions of the symbols (\"jittering\"), helpful "
+"for dense and overlapping data points."
+msgstr ""
+
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:728
 #, kde-format
 msgid "%1 box plots: template \"%2\" loaded"
 msgstr "%1 gráficos em caixa: foi carregado o modelo \"%2\""
@@ -14021,17 +14058,17 @@ msgid "Expand all curves"
 msgstr "Expandir todas as curvas"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:148
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1310
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1316
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1322
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1358
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1364
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1370
 #, kde-format
 msgid "Copy Selection"
 msgstr "Copiar a Selecção"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:149
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1311
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1317
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1323
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1359
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1365
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1371
 #, kde-format
 msgid "Copy All"
 msgstr "Copiar Tudo"
@@ -14170,7 +14207,7 @@ msgstr ""
 "Não foi possível subscrever todos os tópicos disponíveis. Aconteceu algo de "
 "errado"
 
-#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:443
+#: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:444
 #, kde-format
 msgid "%1 lollipop plots: template \"%2\" loaded"
 msgstr "%1 gráficos em chupa-chupa: foi carregado o modelo \"%2\""
@@ -14538,8 +14575,38 @@ msgstr "Incerteza em %"
 msgid "t statistic"
 msgstr "Estatística 't'"
 
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:368
+#, fuzzy, kde-format
+#| msgid "No column available"
+msgid "No X and Y column available!"
+msgstr "Nenhuma coluna disponível"
+
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:370
+#, fuzzy, kde-format
+#| msgid "No column available"
+msgid "No X column available!"
+msgstr "Nenhuma coluna disponível"
+
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:372
+#, fuzzy, kde-format
+#| msgid "No column available"
+msgid "No Y column available!"
+msgstr "Nenhuma coluna disponível"
+
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:374
+#, fuzzy, kde-format
+#| msgid "No data points available."
+msgid "No X data available!"
+msgstr "Não tem pontos de dados disponíveis."
+
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:376
+#, fuzzy, kde-format
+#| msgid "No data points available."
+msgid "No Y data available!"
+msgstr "Não tem pontos de dados disponíveis."
+
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceCurve)
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:393
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:431
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:217
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:359
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:452
@@ -14553,39 +14620,40 @@ msgstr "Estatística 't'"
 msgid "Curve:"
 msgstr "Curva:"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:413
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:451
 #, kde-format
 msgid "Histogram:"
 msgstr "Histograma:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:797
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:835
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:517
 #, kde-format
 msgid "Degree:"
 msgstr "Grau:"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:854
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:895
 #, kde-format
 msgid "Number of peaks:"
 msgstr "Número de picos:"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1175
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1224
 #, kde-format
 msgid "Fit status: %1"
 msgstr "Estado do ajuste: %1"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1189
-#, kde-format
-msgid "Fit not possible. Please check if data is given."
-msgstr ""
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1235
+#, fuzzy, kde-format
+#| msgid "No data points available."
+msgid "No data source available!"
+msgstr "Não tem pontos de dados disponíveis."
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1357
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1410
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr "Nível de confiança de %1 % inferior"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1358
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1411
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr "Nível de confiança de %1 % superior"
@@ -15453,31 +15521,48 @@ msgstr ""
 msgid "Failed to Open"
 msgstr "Não foi Possível Aceder"
 
+#. i18n: ectx: ToolBar (main_toolbar)
+#: src/kdefrontend/labplot2ui.rc:6
+#, fuzzy, kde-format
+#| msgid "Project Explorer"
+msgid "Project Toolbar"
+msgstr "Explorador do Projecto"
+
 #. i18n: ectx: ToolBar (worksheet_toolbar)
-#: src/kdefrontend/labplot2ui.rc:24 src/kdefrontend/MainWin.cpp:731
-#: src/kdefrontend/MainWin.cpp:2131 src/kdefrontend/SettingsDialog.cpp:67
-#, kde-format
-msgid "Worksheet"
+#: src/kdefrontend/labplot2ui.rc:24
+#, fuzzy, kde-format
+#| msgid "Worksheet"
+msgid "Worksheet Toolbar"
 msgstr "Folha de Trabalho"
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
-#: src/kdefrontend/labplot2ui.rc:28 src/kdefrontend/MainWin.cpp:714
-#: src/kdefrontend/MainWin.cpp:2087
-#, kde-format
-msgid "Data Extractor"
+#: src/kdefrontend/labplot2ui.rc:28
+#, fuzzy, kde-format
+#| msgid "Data Extractor"
+msgid "Data Extractor Toolbar"
 msgstr "Extracção de Dados"
 
+#. i18n: ectx: ToolBar (spreadsheet_toolbar)
+#: src/kdefrontend/labplot2ui.rc:32
+#, fuzzy, kde-format
+#| msgid "Spreadsheet"
+msgid "Spreadsheet Toolbar"
+msgstr "Folha de Cálculo"
+
 #. i18n: ectx: ToolBar (notebook_toolbar)
-#: src/kdefrontend/labplot2ui.rc:36 src/kdefrontend/SettingsDialog.cpp:78
-#, kde-format
-msgid "Notebook"
+#: src/kdefrontend/labplot2ui.rc:36
+#, fuzzy, kde-format
+#| msgid "Notebook"
+msgid "Notebook Toolbar"
 msgstr "Bloco de Notas"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
 #: src/kdefrontend/labplot2ui.rc:40
-#, kde-format
-msgid "CartesianPlot"
-msgstr "Gráfico Cartesiano"
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Plot Area Templates"
+msgid "Plot Area Toolbar"
+msgstr "Modelos da Área do Gráfico"
 
 #. i18n: ectx: Menu (file)
 #: src/kdefrontend/labplot2ui.rc:44
@@ -15591,6 +15676,11 @@ msgstr ""
 "Cria uma nova área de trabalho para as folhas de cálculo, matrizes e "
 "gráficos da colecção"
 
+#: src/kdefrontend/MainWin.cpp:714 src/kdefrontend/MainWin.cpp:2087
+#, kde-format
+msgid "Data Extractor"
+msgstr "Extracção de Dados"
+
 #: src/kdefrontend/MainWin.cpp:715
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
@@ -15605,6 +15695,12 @@ msgstr "Cria uma nova folha de cálculo para a edição de dados"
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr "Cria uma nova matriz para a edição de dados"
+
+#: src/kdefrontend/MainWin.cpp:731 src/kdefrontend/MainWin.cpp:2131
+#: src/kdefrontend/SettingsDialog.cpp:67
+#, kde-format
+msgid "Worksheet"
+msgstr "Folha de Trabalho"
 
 #: src/kdefrontend/MainWin.cpp:733
 #, kde-format
@@ -16217,6 +16313,11 @@ msgstr "Preferências"
 #, kde-format
 msgid "General"
 msgstr "Geral"
+
+#: src/kdefrontend/SettingsDialog.cpp:78
+#, kde-format
+msgid "Notebook"
+msgstr "Bloco de Notas"
 
 #: src/kdefrontend/SettingsDialog.cpp:84
 #, kde-format
@@ -20093,6 +20194,12 @@ msgstr "Exteriores"
 #, kde-format
 msgid "Far Out"
 msgstr "Distantes"
+
+#. i18n: ectx: property (text), widget (QRadioButton, rbData)
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:557
+#, kde-format
+msgid "Data (excl. Outlier and Far Out)"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbWhiskerEnd)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:564
@@ -23988,6 +24095,9 @@ msgstr "o processo de conversão falhou com o código de saída ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Não foi possível aceder ao ficheiro:"
+
+#~ msgid "CartesianPlot"
+#~ msgstr "Gráfico Cartesiano"
 
 #~ msgid "cumulative distribution function P"
 #~ msgstr "Função da distribuição acumulada P"
