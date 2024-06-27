@@ -19,6 +19,7 @@
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "kdefrontend/GuiTools.h"
 
+#include <QGraphicsItem>
 #include <QPen>
 
 void WorksheetTest::cursorCurveColor() {
@@ -112,6 +113,68 @@ void WorksheetTest::exportReplaceExtension() {
 	path = QStringLiteral("/home/user/test.dir/Worksheet.pdf");
 	QCOMPARE(GuiTools::replaceExtension(path, extension), QStringLiteral("/home/user/test.dir/Worksheet.svg"));
 #endif
+}
+
+/*!
+ * tests the handling of z-values on changes in the child hierarchy.
+ */
+void WorksheetTest::zValueAfterAddMoveRemove() {
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+
+	auto* plot1 = new CartesianPlot(QStringLiteral("plot1"));
+	worksheet->addChild(plot1);
+
+	auto* plot2 = new CartesianPlot(QStringLiteral("plot2"));
+	worksheet->addChild(plot2);
+
+	auto* plot3 = new CartesianPlot(QStringLiteral("plot3"));
+	worksheet->addChild(plot3);
+
+	// after the objects were added, the order of children is
+	// * plot1
+	// * plot2
+	// * plot3
+	int zValuePlot1 = plot1->graphicsItem()->zValue();
+	int zValuePlot2 = plot2->graphicsItem()->zValue();
+	int zValuePlot3 = plot3->graphicsItem()->zValue();
+	QVERIFY(zValuePlot1 < zValuePlot2);
+	QVERIFY(zValuePlot2 < zValuePlot3);
+
+	// move plot2 up
+	worksheet->moveChild(plot2, -1);
+
+	// after the move, the order of children is
+	// * plot2
+	// * plot1
+	// * plot3
+	zValuePlot1 = plot1->graphicsItem()->zValue();
+	zValuePlot2 = plot2->graphicsItem()->zValue();
+	zValuePlot3 = plot3->graphicsItem()->zValue();
+	QVERIFY(zValuePlot2 < zValuePlot1);
+	QVERIFY(zValuePlot1 < zValuePlot3);
+
+	// move plot1 down
+	worksheet->moveChild(plot1, 1);
+
+	// after the move, the order of children is
+	// * plot2
+	// * plot3
+	// * plot1
+	zValuePlot1 = plot1->graphicsItem()->zValue();
+	zValuePlot2 = plot2->graphicsItem()->zValue();
+	zValuePlot3 = plot3->graphicsItem()->zValue();
+	QVERIFY(zValuePlot2 < zValuePlot3);
+	QVERIFY(zValuePlot3 < zValuePlot1);
+
+	// remove plot3
+	worksheet->removeChild(plot3);
+
+	// after the remove, the order of children is
+	// * plot2
+	// * plot1
+	zValuePlot1 = plot1->graphicsItem()->zValue();
+	zValuePlot2 = plot2->graphicsItem()->zValue();
+	QVERIFY(zValuePlot2 < zValuePlot1);
 }
 
 QTEST_MAIN(WorksheetTest)

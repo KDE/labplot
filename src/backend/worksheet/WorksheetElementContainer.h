@@ -50,6 +50,7 @@ protected:
 
 protected Q_SLOTS:
 	virtual void handleAspectAdded(const AbstractAspect*);
+	virtual void handleAspectMoved();
 
 private:
 	Q_DECLARE_PRIVATE(WorksheetElementContainer)
