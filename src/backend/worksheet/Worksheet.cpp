@@ -65,6 +65,7 @@ Worksheet::Worksheet(const QString& name, bool loading)
 	connect(this, &Worksheet::childAspectAdded, this, &Worksheet::handleAspectAdded);
 	connect(this, &Worksheet::childAspectAboutToBeRemoved, this, &Worksheet::handleAspectAboutToBeRemoved);
 	connect(this, &Worksheet::childAspectRemoved, this, &Worksheet::handleAspectRemoved);
+	connect(this, &Worksheet::childAspectMoved, this, &Worksheet::handleAspectMoved);
 
 	if (!loading)
 		init();
@@ -330,7 +331,8 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 		cursorModelPlotAdded(p->name());
 	}
 	qreal zVal = 0;
-	for (auto* child : children<WorksheetElement>(ChildIndexFlag::IncludeHidden))
+	const auto& children = this->children<WorksheetElement>(ChildIndexFlag::IncludeHidden);
+	for (auto* child : children)
 		child->graphicsItem()->setZValue(zVal++);
 
 	// if a theme was selected in the worksheet, apply this theme for newly added children
@@ -346,7 +348,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 		else {
 			if (plot) {
 				// make other plots non-resizable
-				const auto& containers = children<WorksheetElementContainer>();
+				const auto& containers = this->children<WorksheetElementContainer>();
 				for (auto* container : containers)
 					container->setResizeEnabled(false);
 
@@ -361,7 +363,7 @@ void Worksheet::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(Worksheet);
 	const auto* removedElement = qobject_cast<const WorksheetElement*>(aspect);
 	if (removedElement) {
-		QGraphicsItem* item = removedElement->graphicsItem();
+		auto* item = removedElement->graphicsItem();
 		// TODO: disabled until Origin project import is fixed
 		if (item->scene() == d->m_scene)
 			d->m_scene->removeItem(item);
@@ -375,6 +377,16 @@ void Worksheet::handleAspectRemoved(const AbstractAspect* /*parent*/, const Abst
 	auto* plot = dynamic_cast<const CartesianPlot*>(child);
 	if (plot)
 		cursorModelPlotRemoved(plot->name());
+}
+
+/*!
+ * called when one of the children was moved, re-adjusts the Z-values for all children.
+ */
+void Worksheet::handleAspectMoved() {
+	qreal zVal = 0;
+	const auto& children = this->children<WorksheetElement>(ChildIndexFlag::IncludeHidden);
+	for (auto* child : children)
+		child->graphicsItem()->setZValue(zVal++);
 }
 
 QGraphicsScene* Worksheet::scene() const {

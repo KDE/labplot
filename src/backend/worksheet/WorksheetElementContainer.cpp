@@ -36,11 +36,13 @@
 WorksheetElementContainer::WorksheetElementContainer(const QString& name, AspectType type)
 	: WorksheetElement(name, new WorksheetElementContainerPrivate(this), type) {
 	connect(this, &WorksheetElementContainer::childAspectAdded, this, &WorksheetElementContainer::handleAspectAdded);
+	connect(this, &WorksheetElementContainer::childAspectMoved, this, &WorksheetElementContainer::handleAspectMoved);
 }
 
 WorksheetElementContainer::WorksheetElementContainer(const QString& name, WorksheetElementContainerPrivate* dd, AspectType type)
 	: WorksheetElement(name, dd, type) {
 	connect(this, &WorksheetElementContainer::childAspectAdded, this, &WorksheetElementContainer::handleAspectAdded);
+	connect(this, &WorksheetElementContainer::childAspectMoved, this, &WorksheetElementContainer::handleAspectMoved);
 }
 
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
@@ -173,6 +175,16 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect* aspect) 
 
 	if (!isLoading())
 		d->recalcShapeAndBoundingRect();
+}
+
+/*!
+ * called when one of the children was moved, re-adjusts the Z-values for all children.
+ */
+void WorksheetElementContainer::handleAspectMoved() {
+	qreal zVal = 0;
+	const auto& children = this->children<WorksheetElement>(ChildIndexFlag::IncludeHidden);
+	for (auto* child : children)
+		child->setZValue(zVal++);
 }
 
 void WorksheetElementContainer::childHovered() {

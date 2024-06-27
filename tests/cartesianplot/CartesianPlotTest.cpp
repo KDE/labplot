@@ -1519,4 +1519,57 @@ void CartesianPlotTest::spreadsheetRemove() {
 	QCOMPARE(yColumnSpy.count(), 2);
 }
 
+/*!
+ * tests the handling of z-values on changes in the child hierarchy.
+ */
+void CartesianPlotTest::zValueAfterAddMoveRemove() {
+	LOAD_PROJECT_HISTOGRAM_FIT_CURVE
+
+	// after the objects were added, the order of children is
+	// * histogram
+	// * curve1
+	// * curve2
+	int zValueHistogram = h->graphicsItem()->zValue();
+	int zValueCurve1 = curve1->graphicsItem()->zValue();
+	int zValueCurve2 = curve2->graphicsItem()->zValue();
+	QVERIFY(zValueHistogram < zValueCurve1);
+	QVERIFY(zValueCurve1 < zValueCurve2);
+
+	// move curve1 up
+	plot->moveChild(curve1, -1);
+
+	// after the move, the order of children is
+	// * curve1
+	// * histogram
+	// * curve2
+	zValueHistogram = h->graphicsItem()->zValue();
+	zValueCurve1 = curve1->graphicsItem()->zValue();
+	zValueCurve2 = curve2->graphicsItem()->zValue();
+	QVERIFY(zValueCurve1 < zValueHistogram);
+	QVERIFY(zValueHistogram < zValueCurve2);
+
+	// move histogram down
+	plot->moveChild(h, 1);
+
+	// after the move, the order of children is
+	// * curve1
+	// * curve2
+	// * histogram
+	zValueHistogram = h->graphicsItem()->zValue();
+	zValueCurve1 = curve1->graphicsItem()->zValue();
+	zValueCurve2 = curve2->graphicsItem()->zValue();
+	QVERIFY(zValueCurve1 < zValueCurve2);
+	QVERIFY(zValueCurve2 < zValueHistogram);
+
+	// remove curve2
+	plot->removeChild(curve2);
+
+	// after the remove, the order of children is
+	// * curve1
+	// * histogram
+	zValueHistogram = h->graphicsItem()->zValue();
+	zValueCurve1 = curve1->graphicsItem()->zValue();
+	QVERIFY(zValueCurve1 < zValueHistogram);
+}
+
 QTEST_MAIN(CartesianPlotTest)

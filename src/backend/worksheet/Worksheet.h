@@ -149,6 +149,7 @@ private Q_SLOTS:
 	void handleAspectAdded(const AbstractAspect*);
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
 	void handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
+	void handleAspectMoved();
 
 	void childSelected(const AbstractAspect*) override;
 	void childDeselected(const AbstractAspect*) override;
