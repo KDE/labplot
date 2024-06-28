@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-27 01:46+0000\n"
+"POT-Creation-Date: 2024-06-28 01:51+0000\n"
 "PO-Revision-Date: 2024-04-17 05:07+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -936,8 +936,8 @@ msgstr "設定佈局"
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/WorksheetElement.cpp:162
-#: src/backend/worksheet/WorksheetElementContainer.cpp:63
-#: src/backend/worksheet/WorksheetElementContainer.cpp:64
+#: src/backend/worksheet/WorksheetElementContainer.cpp:65
+#: src/backend/worksheet/WorksheetElementContainer.cpp:66
 #, kde-format
 msgid "%1: set visible"
 msgstr ""
@@ -949,8 +949,8 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/WorksheetElement.cpp:162
 #: src/backend/worksheet/WorksheetElement.cpp:795
-#: src/backend/worksheet/WorksheetElementContainer.cpp:66
-#: src/backend/worksheet/WorksheetElementContainer.cpp:84
+#: src/backend/worksheet/WorksheetElementContainer.cpp:68
+#: src/backend/worksheet/WorksheetElementContainer.cpp:86
 #, fuzzy, kde-format
 msgid "%1: set invisible"
 msgstr "設定為隱身(&I)"
@@ -8597,14 +8597,14 @@ msgid "%1: Cursor1 enable"
 msgstr "數值"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1706
-#: src/backend/worksheet/Worksheet.cpp:832
+#: src/backend/worksheet/Worksheet.cpp:844
 #, fuzzy, kde-format
 #| msgid "%1: add %2."
 msgid "%1: load theme %2"
 msgstr "%1：新增 %2。"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1708
-#: src/backend/worksheet/Worksheet.cpp:834
+#: src/backend/worksheet/Worksheet.cpp:846
 #, fuzzy, kde-format
 #| msgid "%1: add %2."
 msgid "%1: load default theme"
@@ -8612,7 +8612,7 @@ msgstr "%1：新增 %2。"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1710
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5343
-#: src/backend/worksheet/Worksheet.cpp:836
+#: src/backend/worksheet/Worksheet.cpp:848
 #, fuzzy, kde-format
 msgid "%1: set theme"
 msgstr "設定佈局"
@@ -8810,50 +8810,50 @@ msgid "%1: set border corner radius"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:245
-#: src/backend/worksheet/Worksheet.cpp:709
-#: src/backend/worksheet/Worksheet.cpp:710
+#: src/backend/worksheet/Worksheet.cpp:721
+#: src/backend/worksheet/Worksheet.cpp:722
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:252
-#: src/backend/worksheet/Worksheet.cpp:719
-#: src/backend/worksheet/Worksheet.cpp:720
+#: src/backend/worksheet/Worksheet.cpp:731
+#: src/backend/worksheet/Worksheet.cpp:732
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:259
-#: src/backend/worksheet/Worksheet.cpp:729
-#: src/backend/worksheet/Worksheet.cpp:730
+#: src/backend/worksheet/Worksheet.cpp:741
+#: src/backend/worksheet/Worksheet.cpp:742
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:266
-#: src/backend/worksheet/Worksheet.cpp:739
-#: src/backend/worksheet/Worksheet.cpp:740
+#: src/backend/worksheet/Worksheet.cpp:751
+#: src/backend/worksheet/Worksheet.cpp:752
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:273
-#: src/backend/worksheet/Worksheet.cpp:749
-#: src/backend/worksheet/Worksheet.cpp:750
+#: src/backend/worksheet/Worksheet.cpp:761
+#: src/backend/worksheet/Worksheet.cpp:762
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:280
-#: src/backend/worksheet/Worksheet.cpp:759
-#: src/backend/worksheet/Worksheet.cpp:760
+#: src/backend/worksheet/Worksheet.cpp:771
+#: src/backend/worksheet/Worksheet.cpp:772
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:287
-#: src/backend/worksheet/Worksheet.cpp:779
-#: src/backend/worksheet/Worksheet.cpp:780
+#: src/backend/worksheet/Worksheet.cpp:791
+#: src/backend/worksheet/Worksheet.cpp:792
 #, kde-format
 msgid "%1: set layout column count"
 msgstr ""
@@ -9734,38 +9734,45 @@ msgid "Bayesian information criterion"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2251
-#, kde-format
-msgid "Model has no parameters."
-msgstr ""
+#, fuzzy, kde-format
+#| msgid "Number of points"
+msgid "Model has no parameters!"
+msgstr "點數"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2258
-#, kde-format
-msgid "Not sufficient weight data points provided."
-msgstr ""
+#, fuzzy, kde-format
+#| msgid "Number of points"
+msgid "Not sufficient weight data points provided!"
+msgstr "點數"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2335
-#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:175
-#: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:125
-#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:132
-#, kde-format
-msgid "No data points available."
-msgstr ""
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:374
+#, fuzzy, kde-format
+msgid "No X data available!"
+msgstr "全部選取"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2342
 #, kde-format
 msgid ""
 "The number of data points (%1) must be greater than or equal to the number "
-"of parameters (%2)."
+"of parameters (%2)!"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2349
 #, kde-format
-msgid "Fit model not specified."
+msgid "Fit model not specified!"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:85
 #, kde-format
 msgid "%1: set filter options and perform the Fourier filter"
+msgstr ""
+
+#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:175
+#: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:125
+#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:132
+#, kde-format
+msgid "No data points available."
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:77
@@ -9855,43 +9862,43 @@ msgstr "設定佈局"
 msgid "%1: set border"
 msgstr "設定字型"
 
-#: src/backend/worksheet/Worksheet.cpp:248
+#: src/backend/worksheet/Worksheet.cpp:249
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "列印工作表"
 
-#: src/backend/worksheet/Worksheet.cpp:679
+#: src/backend/worksheet/Worksheet.cpp:691
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: change size type"
 msgstr "%1：變更註解"
 
-#: src/backend/worksheet/Worksheet.cpp:691
+#: src/backend/worksheet/Worksheet.cpp:703
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr ""
 
-#: src/backend/worksheet/Worksheet.cpp:699
-#: src/backend/worksheet/Worksheet.cpp:700
+#: src/backend/worksheet/Worksheet.cpp:711
+#: src/backend/worksheet/Worksheet.cpp:712
 #, fuzzy, kde-format
 msgid "%1: set layout"
 msgstr "設定佈局"
 
-#: src/backend/worksheet/Worksheet.cpp:769
-#: src/backend/worksheet/Worksheet.cpp:770
+#: src/backend/worksheet/Worksheet.cpp:781
+#: src/backend/worksheet/Worksheet.cpp:782
 #, kde-format
 msgid "%1: set layout row count"
 msgstr ""
 
-#: src/backend/worksheet/Worksheet.cpp:810
-#: src/backend/worksheet/Worksheet.cpp:811
+#: src/backend/worksheet/Worksheet.cpp:822
+#: src/backend/worksheet/Worksheet.cpp:823
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:373
 #, kde-format
 msgid "%1: set page size"
 msgstr ""
 
-#: src/backend/worksheet/Worksheet.cpp:1557
+#: src/backend/worksheet/Worksheet.cpp:1569
 #, fuzzy, kde-format
 #| msgid "%1: add %2 rows"
 #| msgid_plural "%1: add %2 rows"
@@ -13460,7 +13467,7 @@ msgstr ""
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2047
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:523
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:730
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:728
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1839
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:781
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:378
@@ -13518,8 +13525,8 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:351
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:377
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:363
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:388
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:361
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:386
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:315
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:341
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:233
@@ -13536,7 +13543,7 @@ msgstr "欄位"
 #. i18n: ectx: property (text), widget (QLabel, lColumn)
 #. i18n: ectx: property (text), widget (QLabel, lValuesColumn)
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:379
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:392
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:390
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:343
 #: src/kdefrontend/spreadsheet/GoToDialog.cpp:49
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:804
@@ -13665,7 +13672,7 @@ msgid ""
 "for dense and overlapping data points."
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:728
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:726
 #, kde-format
 msgid "%1 box plots: template \"%2\" loaded"
 msgstr ""
@@ -14495,22 +14502,17 @@ msgstr "統計"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:368
 #, fuzzy, kde-format
-msgid "No X and Y column available!"
+msgid "No X and Y column specified!"
 msgstr "全部選取"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:370
 #, fuzzy, kde-format
-msgid "No X column available!"
+msgid "No X column specified!"
 msgstr "全部選取"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:372
 #, fuzzy, kde-format
-msgid "No Y column available!"
-msgstr "全部選取"
-
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:374
-#, fuzzy, kde-format
-msgid "No X data available!"
+msgid "No Y column specified!"
 msgstr "全部選取"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:376
@@ -25182,11 +25184,6 @@ msgstr "開啟失敗"
 #~| msgid "Numeric"
 #~ msgid "numeric"
 #~ msgstr "數值"
-
-#, fuzzy
-#~| msgid "Number of points"
-#~ msgid "number of parameters:"
-#~ msgstr "點數"
 
 #, fuzzy
 #~| msgid "Open project"

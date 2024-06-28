@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-27 01:46+0000\n"
+"POT-Creation-Date: 2024-06-28 01:51+0000\n"
 "PO-Revision-Date: 2024-02-29 03:22+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -909,8 +909,8 @@ msgstr "%1: შეცდომის ზოლის მონახაზის
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/WorksheetElement.cpp:162
-#: src/backend/worksheet/WorksheetElementContainer.cpp:63
-#: src/backend/worksheet/WorksheetElementContainer.cpp:64
+#: src/backend/worksheet/WorksheetElementContainer.cpp:65
+#: src/backend/worksheet/WorksheetElementContainer.cpp:66
 #, kde-format
 msgid "%1: set visible"
 msgstr "%1: ხილვადად დაყენება"
@@ -922,8 +922,8 @@ msgstr "%1: ხილვადად დაყენება"
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/WorksheetElement.cpp:162
 #: src/backend/worksheet/WorksheetElement.cpp:795
-#: src/backend/worksheet/WorksheetElementContainer.cpp:66
-#: src/backend/worksheet/WorksheetElementContainer.cpp:84
+#: src/backend/worksheet/WorksheetElementContainer.cpp:68
+#: src/backend/worksheet/WorksheetElementContainer.cpp:86
 #, kde-format
 msgid "%1: set invisible"
 msgstr "%1: უხილავად დაყენება"
@@ -8391,20 +8391,20 @@ msgid "%1: Cursor1 enable"
 msgstr "%1: Cursor1 -ის ჩართვა"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1706
-#: src/backend/worksheet/Worksheet.cpp:832
+#: src/backend/worksheet/Worksheet.cpp:844
 #, kde-format
 msgid "%1: load theme %2"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1708
-#: src/backend/worksheet/Worksheet.cpp:834
+#: src/backend/worksheet/Worksheet.cpp:846
 #, kde-format
 msgid "%1: load default theme"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1710
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5343
-#: src/backend/worksheet/Worksheet.cpp:836
+#: src/backend/worksheet/Worksheet.cpp:848
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1: თემის დაყენება"
@@ -8586,50 +8586,50 @@ msgid "%1: set border corner radius"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:245
-#: src/backend/worksheet/Worksheet.cpp:709
-#: src/backend/worksheet/Worksheet.cpp:710
+#: src/backend/worksheet/Worksheet.cpp:721
+#: src/backend/worksheet/Worksheet.cpp:722
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:252
-#: src/backend/worksheet/Worksheet.cpp:719
-#: src/backend/worksheet/Worksheet.cpp:720
+#: src/backend/worksheet/Worksheet.cpp:731
+#: src/backend/worksheet/Worksheet.cpp:732
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:259
-#: src/backend/worksheet/Worksheet.cpp:729
-#: src/backend/worksheet/Worksheet.cpp:730
+#: src/backend/worksheet/Worksheet.cpp:741
+#: src/backend/worksheet/Worksheet.cpp:742
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:266
-#: src/backend/worksheet/Worksheet.cpp:739
-#: src/backend/worksheet/Worksheet.cpp:740
+#: src/backend/worksheet/Worksheet.cpp:751
+#: src/backend/worksheet/Worksheet.cpp:752
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:273
-#: src/backend/worksheet/Worksheet.cpp:749
-#: src/backend/worksheet/Worksheet.cpp:750
+#: src/backend/worksheet/Worksheet.cpp:761
+#: src/backend/worksheet/Worksheet.cpp:762
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:280
-#: src/backend/worksheet/Worksheet.cpp:759
-#: src/backend/worksheet/Worksheet.cpp:760
+#: src/backend/worksheet/Worksheet.cpp:771
+#: src/backend/worksheet/Worksheet.cpp:772
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:287
-#: src/backend/worksheet/Worksheet.cpp:779
-#: src/backend/worksheet/Worksheet.cpp:780
+#: src/backend/worksheet/Worksheet.cpp:791
+#: src/backend/worksheet/Worksheet.cpp:792
 #, kde-format
 msgid "%1: set layout column count"
 msgstr ""
@@ -9490,37 +9490,43 @@ msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2251
 #, kde-format
-msgid "Model has no parameters."
+msgid "Model has no parameters!"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2258
 #, kde-format
-msgid "Not sufficient weight data points provided."
+msgid "Not sufficient weight data points provided!"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2335
-#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:175
-#: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:125
-#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:132
-#, kde-format
-msgid "No data points available."
-msgstr ""
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:374
+#, fuzzy, kde-format
+#| msgid "No column available"
+msgid "No X data available!"
+msgstr "სვეტი ხელმიუწვდომელია"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2342
 #, kde-format
 msgid ""
 "The number of data points (%1) must be greater than or equal to the number "
-"of parameters (%2)."
+"of parameters (%2)!"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2349
 #, kde-format
-msgid "Fit model not specified."
+msgid "Fit model not specified!"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:85
 #, kde-format
 msgid "%1: set filter options and perform the Fourier filter"
+msgstr ""
+
+#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:175
+#: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:125
+#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:132
+#, kde-format
+msgid "No data points available."
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:77
@@ -9609,42 +9615,42 @@ msgstr ""
 msgid "%1: set border"
 msgstr "%1: საზღვრის დაყენება"
 
-#: src/backend/worksheet/Worksheet.cpp:248
+#: src/backend/worksheet/Worksheet.cpp:249
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "სამუშაო ფურცლის დაბეჭდვა"
 
-#: src/backend/worksheet/Worksheet.cpp:679
+#: src/backend/worksheet/Worksheet.cpp:691
 #, kde-format
 msgid "%1: change size type"
 msgstr ""
 
-#: src/backend/worksheet/Worksheet.cpp:691
+#: src/backend/worksheet/Worksheet.cpp:703
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr ""
 
-#: src/backend/worksheet/Worksheet.cpp:699
-#: src/backend/worksheet/Worksheet.cpp:700
+#: src/backend/worksheet/Worksheet.cpp:711
+#: src/backend/worksheet/Worksheet.cpp:712
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: განლაგების დაყენება"
 
-#: src/backend/worksheet/Worksheet.cpp:769
-#: src/backend/worksheet/Worksheet.cpp:770
+#: src/backend/worksheet/Worksheet.cpp:781
+#: src/backend/worksheet/Worksheet.cpp:782
 #, kde-format
 msgid "%1: set layout row count"
 msgstr ""
 
-#: src/backend/worksheet/Worksheet.cpp:810
-#: src/backend/worksheet/Worksheet.cpp:811
+#: src/backend/worksheet/Worksheet.cpp:822
+#: src/backend/worksheet/Worksheet.cpp:823
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:373
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: გვერდის ზომის დაყენება"
 
-#: src/backend/worksheet/Worksheet.cpp:1557
+#: src/backend/worksheet/Worksheet.cpp:1569
 #, kde-format
 msgid "Curves"
 msgstr "მრუდები"
@@ -13100,7 +13106,7 @@ msgstr ""
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2047
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:523
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:730
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:728
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1839
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:781
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:378
@@ -13157,8 +13163,8 @@ msgstr "გაურკვევლობის ზოლები"
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:351
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:377
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:363
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:388
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:361
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:386
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:315
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:341
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:233
@@ -13175,7 +13181,7 @@ msgstr "სვეტი:"
 #. i18n: ectx: property (text), widget (QLabel, lColumn)
 #. i18n: ectx: property (text), widget (QLabel, lValuesColumn)
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:379
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:392
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:390
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:343
 #: src/kdefrontend/spreadsheet/GoToDialog.cpp:49
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:804
@@ -13299,7 +13305,7 @@ msgid ""
 "for dense and overlapping data points."
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:728
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:726
 #, kde-format
 msgid "%1 box plots: template \"%2\" loaded"
 msgstr ""
@@ -14095,25 +14101,19 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:368
 #, fuzzy, kde-format
 #| msgid "No column available"
-msgid "No X and Y column available!"
+msgid "No X and Y column specified!"
 msgstr "სვეტი ხელმიუწვდომელია"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:370
 #, fuzzy, kde-format
 #| msgid "No column available"
-msgid "No X column available!"
+msgid "No X column specified!"
 msgstr "სვეტი ხელმიუწვდომელია"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:372
 #, fuzzy, kde-format
 #| msgid "No column available"
-msgid "No Y column available!"
-msgstr "სვეტი ხელმიუწვდომელია"
-
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:374
-#, fuzzy, kde-format
-#| msgid "No column available"
-msgid "No X data available!"
+msgid "No Y column specified!"
 msgstr "სვეტი ხელმიუწვდომელია"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:376

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-27 01:46+0000\n"
-"PO-Revision-Date: 2024-06-23 10:17+0200\n"
+"POT-Creation-Date: 2024-06-28 01:51+0000\n"
+"PO-Revision-Date: 2024-06-27 21:20+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -913,8 +913,8 @@ msgstr "%1: definir o estilo do contorno da barra de erros"
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/WorksheetElement.cpp:162
-#: src/backend/worksheet/WorksheetElementContainer.cpp:63
-#: src/backend/worksheet/WorksheetElementContainer.cpp:64
+#: src/backend/worksheet/WorksheetElementContainer.cpp:65
+#: src/backend/worksheet/WorksheetElementContainer.cpp:66
 #, kde-format
 msgid "%1: set visible"
 msgstr "%1: definir a visibilidade"
@@ -926,8 +926,8 @@ msgstr "%1: definir a visibilidade"
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/WorksheetElement.cpp:162
 #: src/backend/worksheet/WorksheetElement.cpp:795
-#: src/backend/worksheet/WorksheetElementContainer.cpp:66
-#: src/backend/worksheet/WorksheetElementContainer.cpp:84
+#: src/backend/worksheet/WorksheetElementContainer.cpp:68
+#: src/backend/worksheet/WorksheetElementContainer.cpp:86
 #, kde-format
 msgid "%1: set invisible"
 msgstr "%1: facer invisíbel"
@@ -5998,10 +5998,9 @@ msgid "Square"
 msgstr "Cadrada"
 
 #: src/backend/lib/Range.h:48
-#, fuzzy, kde-format
-#| msgid "Inverse sine"
+#, kde-format
 msgid "Inverse"
-msgstr "Seno inverso"
+msgstr "Inverso"
 
 #: src/backend/lib/XmlStreamReader.cpp:91
 #: src/backend/lib/XmlStreamReader.cpp:95
@@ -8373,20 +8372,20 @@ msgid "%1: Cursor1 enable"
 msgstr "%1: activar de cursor1"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1706
-#: src/backend/worksheet/Worksheet.cpp:832
+#: src/backend/worksheet/Worksheet.cpp:844
 #, kde-format
 msgid "%1: load theme %2"
 msgstr "%1: cargar o tema %2"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1708
-#: src/backend/worksheet/Worksheet.cpp:834
+#: src/backend/worksheet/Worksheet.cpp:846
 #, kde-format
 msgid "%1: load default theme"
 msgstr "%1: cargar o tema predeterminado"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1710
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5343
-#: src/backend/worksheet/Worksheet.cpp:836
+#: src/backend/worksheet/Worksheet.cpp:848
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1: definir o tema"
@@ -8568,50 +8567,50 @@ msgid "%1: set border corner radius"
 msgstr "%1: definir o raio das esquinas do bordo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:245
-#: src/backend/worksheet/Worksheet.cpp:709
-#: src/backend/worksheet/Worksheet.cpp:710
+#: src/backend/worksheet/Worksheet.cpp:721
+#: src/backend/worksheet/Worksheet.cpp:722
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: definir a marxe superior da disposición"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:252
-#: src/backend/worksheet/Worksheet.cpp:719
-#: src/backend/worksheet/Worksheet.cpp:720
+#: src/backend/worksheet/Worksheet.cpp:731
+#: src/backend/worksheet/Worksheet.cpp:732
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: definir a marxe inferior da disposición"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:259
-#: src/backend/worksheet/Worksheet.cpp:729
-#: src/backend/worksheet/Worksheet.cpp:730
+#: src/backend/worksheet/Worksheet.cpp:741
+#: src/backend/worksheet/Worksheet.cpp:742
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: definir a marxe esquerda da disposición"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:266
-#: src/backend/worksheet/Worksheet.cpp:739
-#: src/backend/worksheet/Worksheet.cpp:740
+#: src/backend/worksheet/Worksheet.cpp:751
+#: src/backend/worksheet/Worksheet.cpp:752
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: definir a marxe dereita da disposición"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:273
-#: src/backend/worksheet/Worksheet.cpp:749
-#: src/backend/worksheet/Worksheet.cpp:750
+#: src/backend/worksheet/Worksheet.cpp:761
+#: src/backend/worksheet/Worksheet.cpp:762
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: definir o espazamento vertical da disposición"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:280
-#: src/backend/worksheet/Worksheet.cpp:759
-#: src/backend/worksheet/Worksheet.cpp:760
+#: src/backend/worksheet/Worksheet.cpp:771
+#: src/backend/worksheet/Worksheet.cpp:772
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: definir o espazamento horizontal da disposición"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:287
-#: src/backend/worksheet/Worksheet.cpp:779
-#: src/backend/worksheet/Worksheet.cpp:780
+#: src/backend/worksheet/Worksheet.cpp:791
+#: src/backend/worksheet/Worksheet.cpp:792
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: definir o número de columnas da disposición"
@@ -9467,41 +9466,52 @@ msgid "Bayesian information criterion"
 msgstr "Criterio de información de Bayes"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2251
-#, kde-format
-msgid "Model has no parameters."
+#, fuzzy, kde-format
+#| msgid "Model has no parameters."
+msgid "Model has no parameters!"
 msgstr "O modelo non ten parámetros."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2258
-#, kde-format
-msgid "Not sufficient weight data points provided."
+#, fuzzy, kde-format
+#| msgid "Not sufficient weight data points provided."
+msgid "Not sufficient weight data points provided!"
 msgstr "Non se forneceron puntos de datos de peso dabondo."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2335
-#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:175
-#: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:125
-#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:132
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:374
 #, kde-format
-msgid "No data points available."
-msgstr "Non hai puntos de datos dispoñíbeis."
+msgid "No X data available!"
+msgstr "Non hai datos de X dispoñíbeis!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2342
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "The number of data points (%1) must be greater than or equal to the "
+#| "number of parameters (%2)."
 msgid ""
 "The number of data points (%1) must be greater than or equal to the number "
-"of parameters (%2)."
+"of parameters (%2)!"
 msgstr ""
 "O número de puntos de datos (%1) debe ser maior ou igual que o número de "
 "parámetros (%2)."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2349
-#, kde-format
-msgid "Fit model not specified."
+#, fuzzy, kde-format
+#| msgid "Fit model not specified."
+msgid "Fit model not specified!"
 msgstr "Non se indicou o modelo de axuste."
 
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:85
 #, kde-format
 msgid "%1: set filter options and perform the Fourier filter"
 msgstr "%1: definir as opcións de filtro e aplicar o filtro de Fourier"
+
+#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:175
+#: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:125
+#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:132
+#, kde-format
+msgid "No data points available."
+msgstr "Non hai puntos de datos dispoñíbeis."
 
 #: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:77
 #, kde-format
@@ -9595,42 +9605,42 @@ msgstr "%1: definir a forma do bordo"
 msgid "%1: set border"
 msgstr "%1: definir o bordo"
 
-#: src/backend/worksheet/Worksheet.cpp:248
+#: src/backend/worksheet/Worksheet.cpp:249
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "Imprimir a folla de traballo"
 
-#: src/backend/worksheet/Worksheet.cpp:679
+#: src/backend/worksheet/Worksheet.cpp:691
 #, kde-format
 msgid "%1: change size type"
 msgstr "%1: cambiar o tipo de tamaño"
 
-#: src/backend/worksheet/Worksheet.cpp:691
+#: src/backend/worksheet/Worksheet.cpp:703
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr "%1: cambiar a propiedade «cambiar a escala do contido»"
 
-#: src/backend/worksheet/Worksheet.cpp:699
-#: src/backend/worksheet/Worksheet.cpp:700
+#: src/backend/worksheet/Worksheet.cpp:711
+#: src/backend/worksheet/Worksheet.cpp:712
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: definir a disposición"
 
-#: src/backend/worksheet/Worksheet.cpp:769
-#: src/backend/worksheet/Worksheet.cpp:770
+#: src/backend/worksheet/Worksheet.cpp:781
+#: src/backend/worksheet/Worksheet.cpp:782
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: definir o número de filas da disposición"
 
-#: src/backend/worksheet/Worksheet.cpp:810
-#: src/backend/worksheet/Worksheet.cpp:811
+#: src/backend/worksheet/Worksheet.cpp:822
+#: src/backend/worksheet/Worksheet.cpp:823
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:373
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: definir o tamaño da páxina"
 
-#: src/backend/worksheet/Worksheet.cpp:1557
+#: src/backend/worksheet/Worksheet.cpp:1569
 #, kde-format
 msgid "Curves"
 msgstr "Curvas"
@@ -10428,10 +10438,9 @@ msgid "&Unmask"
 msgstr "&Desenmascarar"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:308
-#, fuzzy, kde-format
-#| msgid "Reverse"
+#, kde-format
 msgid "&Reverse"
-msgstr "Inverter"
+msgstr "&Inverter"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:309
 #, kde-format
@@ -13254,7 +13263,7 @@ msgstr "%1 eixos: cargouse o modelo «%2»"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2047
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:523
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:730
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:728
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1839
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:781
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:378
@@ -13313,8 +13322,8 @@ msgstr "Barras de incerteza"
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:351
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:377
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:363
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:388
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:361
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:386
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:315
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:341
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:233
@@ -13331,7 +13340,7 @@ msgstr "Columnas:"
 #. i18n: ectx: property (text), widget (QLabel, lColumn)
 #. i18n: ectx: property (text), widget (QLabel, lValuesColumn)
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:379
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:392
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:390
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:343
 #: src/kdefrontend/spreadsheet/GoToDialog.cpp:49
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:804
@@ -13424,23 +13433,23 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:99
 #, kde-format
 msgid "Select to modify the properties of the symbol for the mean value."
-msgstr ""
+msgstr "Seleccionar modificar as propiedades do símbolo ao valor medio."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:102
 #, kde-format
 msgid "Select to modify the properties of the symbol for the median value."
-msgstr ""
+msgstr "Seleccionar modificar as propiedades do símbolo ao valor mediano."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:105
 #, kde-format
 msgid "Select to modify the properties of the symbol for the outlier values."
-msgstr ""
+msgstr "Seleccionar modificar as propiedades do símbolo aos valores atípicos."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:108
 #, kde-format
 msgid ""
 "Select to modify the properties of the symbol for the \"far out\" values."
-msgstr ""
+msgstr "Seleccionar modificar as propiedades do símbolo aos valores afastados."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:111
 #, kde-format
@@ -13448,12 +13457,15 @@ msgid ""
 "Select to modify the properties of the symbol for all data values excluding "
 "the outlier and \"far out\" values."
 msgstr ""
+"Seleccionar modificar as propiedades do símbolo a todos os valores de datos "
+"menor os atípicos e os afastados."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:114
 #, kde-format
 msgid ""
 "Select to modify the properties of the symbol for the ends of the whiskers."
 msgstr ""
+"Seleccionar modificar as propiedades do símbolo aos extremos dos límites."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:117
 #, kde-format
@@ -13461,8 +13473,10 @@ msgid ""
 "Activate to randomize the positions of the symbols (\"jittering\"), helpful "
 "for dense and overlapping data points."
 msgstr ""
+"Activar para facer a posición dos símbolos aleatoria. Útil para puntos de "
+"datos densos ou superpostos."
 
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:728
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:726
 #, kde-format
 msgid "%1 box plots: template \"%2\" loaded"
 msgstr "%1 gráficas de caixas: cargouse o modelo «%2»"
@@ -14276,33 +14290,26 @@ msgstr "Estatística de t"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:368
 #, fuzzy, kde-format
-#| msgid "No column available"
-msgid "No X and Y column available!"
-msgstr "Non hai ningunha columna dispoñíbel"
+#| msgid "No X and Y column available!"
+msgid "No X and Y column specified!"
+msgstr "Non hai ningunha columna X ou Y dispoñíbel!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:370
 #, fuzzy, kde-format
-#| msgid "No column available"
-msgid "No X column available!"
-msgstr "Non hai ningunha columna dispoñíbel"
+#| msgid "No X column available!"
+msgid "No X column specified!"
+msgstr "Non hai ningunha columna X dispoñíbel!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:372
 #, fuzzy, kde-format
-#| msgid "No column available"
-msgid "No Y column available!"
-msgstr "Non hai ningunha columna dispoñíbel"
-
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:374
-#, fuzzy, kde-format
-#| msgid "No data points available."
-msgid "No X data available!"
-msgstr "Non hai puntos de datos dispoñíbeis."
+#| msgid "No Y column available!"
+msgid "No Y column specified!"
+msgstr "Non hai ningunha columna Y dispoñíbel!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:376
-#, fuzzy, kde-format
-#| msgid "No data points available."
+#, kde-format
 msgid "No Y data available!"
-msgstr "Non hai puntos de datos dispoñíbeis."
+msgstr "Non hai datos de Y dispoñíbeis!"
 
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceCurve)
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:431
@@ -14342,10 +14349,9 @@ msgid "Fit status: %1"
 msgstr "Estado do axuste: %1"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1235
-#, fuzzy, kde-format
-#| msgid "No data points available."
+#, kde-format
 msgid "No data source available!"
-msgstr "Non hai puntos de datos dispoñíbeis."
+msgstr "Non hai ningunha orixe de datos dispoñíbel!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1410
 #, kde-format
@@ -15219,46 +15225,39 @@ msgstr "Non foi posíbel abrir"
 
 #. i18n: ectx: ToolBar (main_toolbar)
 #: src/kdefrontend/labplot2ui.rc:6
-#, fuzzy, kde-format
-#| msgid "Project Explorer"
+#, kde-format
 msgid "Project Toolbar"
-msgstr "Explorador de proxectos"
+msgstr "Barra de ferramentas de proxecto"
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:24
-#, fuzzy, kde-format
-#| msgid "Worksheet"
+#, kde-format
 msgid "Worksheet Toolbar"
-msgstr "Folla de traballo"
+msgstr "Barra de ferramentas de folla de traballo"
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
 #: src/kdefrontend/labplot2ui.rc:28
-#, fuzzy, kde-format
-#| msgid "Data Extractor"
+#, kde-format
 msgid "Data Extractor Toolbar"
-msgstr "Extractor de datos"
+msgstr "Barra de ferramentas de extractor de datos"
 
 #. i18n: ectx: ToolBar (spreadsheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:32
-#, fuzzy, kde-format
-#| msgid "Spreadsheet"
+#, kde-format
 msgid "Spreadsheet Toolbar"
-msgstr "Folla de cálculo"
+msgstr "Barra de ferramentas de folla de cálculo"
 
 #. i18n: ectx: ToolBar (notebook_toolbar)
 #: src/kdefrontend/labplot2ui.rc:36
-#, fuzzy, kde-format
-#| msgid "Notebook"
+#, kde-format
 msgid "Notebook Toolbar"
-msgstr "Caderno"
+msgstr "Barra de ferramentas de caderno"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
 #: src/kdefrontend/labplot2ui.rc:40
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Plot Area Templates"
+#, kde-format
 msgid "Plot Area Toolbar"
-msgstr "Modelos de zona de gráfica"
+msgstr "Barra de ferramentas de gráfico de área"
 
 #. i18n: ectx: Menu (file)
 #: src/kdefrontend/labplot2ui.rc:44
@@ -19848,7 +19847,7 @@ msgstr "Moi afastado"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:557
 #, kde-format
 msgid "Data (excl. Outlier and Far Out)"
-msgstr ""
+msgstr "Datos (excl. atípicos e afastados)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbWhiskerEnd)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:564

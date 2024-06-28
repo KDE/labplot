@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-27 01:46+0000\n"
-"PO-Revision-Date: 2024-06-24 08:05+0200\n"
+"POT-Creation-Date: 2024-06-28 01:51+0000\n"
+"PO-Revision-Date: 2024-06-27 08:23+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -920,8 +920,8 @@ msgstr "%1: nastavite sloga orisa vrstice napak"
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/WorksheetElement.cpp:162
-#: src/backend/worksheet/WorksheetElementContainer.cpp:63
-#: src/backend/worksheet/WorksheetElementContainer.cpp:64
+#: src/backend/worksheet/WorksheetElementContainer.cpp:65
+#: src/backend/worksheet/WorksheetElementContainer.cpp:66
 #, kde-format
 msgid "%1: set visible"
 msgstr "%1: nastavite vidno"
@@ -933,8 +933,8 @@ msgstr "%1: nastavite vidno"
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/WorksheetElement.cpp:162
 #: src/backend/worksheet/WorksheetElement.cpp:795
-#: src/backend/worksheet/WorksheetElementContainer.cpp:66
-#: src/backend/worksheet/WorksheetElementContainer.cpp:84
+#: src/backend/worksheet/WorksheetElementContainer.cpp:68
+#: src/backend/worksheet/WorksheetElementContainer.cpp:86
 #, kde-format
 msgid "%1: set invisible"
 msgstr "%1: nastavite nevidno"
@@ -8395,20 +8395,20 @@ msgid "%1: Cursor1 enable"
 msgstr "%1: omogočite Kazalec1"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1706
-#: src/backend/worksheet/Worksheet.cpp:832
+#: src/backend/worksheet/Worksheet.cpp:844
 #, kde-format
 msgid "%1: load theme %2"
 msgstr "%1: naložite temo %2"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1708
-#: src/backend/worksheet/Worksheet.cpp:834
+#: src/backend/worksheet/Worksheet.cpp:846
 #, kde-format
 msgid "%1: load default theme"
 msgstr "%1: naložite privzeto temo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1710
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5343
-#: src/backend/worksheet/Worksheet.cpp:836
+#: src/backend/worksheet/Worksheet.cpp:848
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1: določite temo"
@@ -8590,50 +8590,50 @@ msgid "%1: set border corner radius"
 msgstr "%1: nastavite polmer kota obrobe"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:245
-#: src/backend/worksheet/Worksheet.cpp:709
-#: src/backend/worksheet/Worksheet.cpp:710
+#: src/backend/worksheet/Worksheet.cpp:721
+#: src/backend/worksheet/Worksheet.cpp:722
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: nastavite zgornji rob postavitve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:252
-#: src/backend/worksheet/Worksheet.cpp:719
-#: src/backend/worksheet/Worksheet.cpp:720
+#: src/backend/worksheet/Worksheet.cpp:731
+#: src/backend/worksheet/Worksheet.cpp:732
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: nastavite spodnji rob postavitve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:259
-#: src/backend/worksheet/Worksheet.cpp:729
-#: src/backend/worksheet/Worksheet.cpp:730
+#: src/backend/worksheet/Worksheet.cpp:741
+#: src/backend/worksheet/Worksheet.cpp:742
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: nastavi levi rob postavitve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:266
-#: src/backend/worksheet/Worksheet.cpp:739
-#: src/backend/worksheet/Worksheet.cpp:740
+#: src/backend/worksheet/Worksheet.cpp:751
+#: src/backend/worksheet/Worksheet.cpp:752
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: nastavite desni rob postavitve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:273
-#: src/backend/worksheet/Worksheet.cpp:749
-#: src/backend/worksheet/Worksheet.cpp:750
+#: src/backend/worksheet/Worksheet.cpp:761
+#: src/backend/worksheet/Worksheet.cpp:762
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: nastavite navpični razmik postavitve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:280
-#: src/backend/worksheet/Worksheet.cpp:759
-#: src/backend/worksheet/Worksheet.cpp:760
+#: src/backend/worksheet/Worksheet.cpp:771
+#: src/backend/worksheet/Worksheet.cpp:772
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: nastavite vodoravni razmik postavitve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:287
-#: src/backend/worksheet/Worksheet.cpp:779
-#: src/backend/worksheet/Worksheet.cpp:780
+#: src/backend/worksheet/Worksheet.cpp:791
+#: src/backend/worksheet/Worksheet.cpp:792
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: nastavite število stolpcev postavitve"
@@ -9488,41 +9488,52 @@ msgid "Bayesian information criterion"
 msgstr "Bayesov informacijski kriterij"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2251
-#, kde-format
-msgid "Model has no parameters."
+#, fuzzy, kde-format
+#| msgid "Model has no parameters."
+msgid "Model has no parameters!"
 msgstr "Model nima parametrov."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2258
-#, kde-format
-msgid "Not sufficient weight data points provided."
+#, fuzzy, kde-format
+#| msgid "Not sufficient weight data points provided."
+msgid "Not sufficient weight data points provided!"
 msgstr "Ni zagotovljenih dovolj podatkovnih točk o teži."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2335
-#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:175
-#: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:125
-#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:132
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:374
 #, kde-format
-msgid "No data points available."
-msgstr "Podatkovne točke niso na voljo."
+msgid "No X data available!"
+msgstr "Podatkov X ni na voljo!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2342
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "The number of data points (%1) must be greater than or equal to the "
+#| "number of parameters (%2)."
 msgid ""
 "The number of data points (%1) must be greater than or equal to the number "
-"of parameters (%2)."
+"of parameters (%2)!"
 msgstr ""
 "Število podatkovnih točk (%1) mora biti večje ali enako številu parametrov "
 "(%2)."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2349
-#, kde-format
-msgid "Fit model not specified."
+#, fuzzy, kde-format
+#| msgid "Fit model not specified."
+msgid "Fit model not specified!"
 msgstr "Model za prileganje ni naveden."
 
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:85
 #, kde-format
 msgid "%1: set filter options and perform the Fourier filter"
 msgstr "%1: nastavite možnosti filtra in izvedite Fourierjev filter"
+
+#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:175
+#: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:125
+#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:132
+#, kde-format
+msgid "No data points available."
+msgstr "Podatkovne točke niso na voljo."
 
 #: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:77
 #, kde-format
@@ -9614,42 +9625,42 @@ msgstr "%1: nastavit obliko obrobe"
 msgid "%1: set border"
 msgstr "%1: določite obrobo"
 
-#: src/backend/worksheet/Worksheet.cpp:248
+#: src/backend/worksheet/Worksheet.cpp:249
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "Natisni delovni list"
 
-#: src/backend/worksheet/Worksheet.cpp:679
+#: src/backend/worksheet/Worksheet.cpp:691
 #, kde-format
 msgid "%1: change size type"
 msgstr "%1: spremeni vrsto velikosti"
 
-#: src/backend/worksheet/Worksheet.cpp:691
+#: src/backend/worksheet/Worksheet.cpp:703
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr "%1: spremenite lastnost »spremeni velikost vsebine«"
 
-#: src/backend/worksheet/Worksheet.cpp:699
-#: src/backend/worksheet/Worksheet.cpp:700
+#: src/backend/worksheet/Worksheet.cpp:711
+#: src/backend/worksheet/Worksheet.cpp:712
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: nastavite postavitev"
 
-#: src/backend/worksheet/Worksheet.cpp:769
-#: src/backend/worksheet/Worksheet.cpp:770
+#: src/backend/worksheet/Worksheet.cpp:781
+#: src/backend/worksheet/Worksheet.cpp:782
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: nastavite število vrstic postavitve"
 
-#: src/backend/worksheet/Worksheet.cpp:810
-#: src/backend/worksheet/Worksheet.cpp:811
+#: src/backend/worksheet/Worksheet.cpp:822
+#: src/backend/worksheet/Worksheet.cpp:823
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:373
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: nastavite velikost strani"
 
-#: src/backend/worksheet/Worksheet.cpp:1557
+#: src/backend/worksheet/Worksheet.cpp:1569
 #, kde-format
 msgid "Curves"
 msgstr "Krivulje"
@@ -13286,7 +13297,7 @@ msgstr "%1 osi: naložena predloga »%2«"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2047
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:523
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:730
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:728
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1839
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:781
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:378
@@ -13347,8 +13358,8 @@ msgstr "Črte negotovosti"
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:351
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:377
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:363
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:388
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:361
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:386
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:315
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:341
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:233
@@ -13365,7 +13376,7 @@ msgstr "Stolpci:"
 #. i18n: ectx: property (text), widget (QLabel, lColumn)
 #. i18n: ectx: property (text), widget (QLabel, lValuesColumn)
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:379
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:392
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:390
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:343
 #: src/kdefrontend/spreadsheet/GoToDialog.cpp:49
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:804
@@ -13457,23 +13468,25 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:99
 #, kde-format
 msgid "Select to modify the properties of the symbol for the mean value."
-msgstr ""
+msgstr "Izberite, če želite spremeniti lastnosti simbola za povprečje."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:102
 #, kde-format
 msgid "Select to modify the properties of the symbol for the median value."
-msgstr ""
+msgstr "Izberite, če želite spremeniti lastnosti simbola za mediano."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:105
 #, kde-format
 msgid "Select to modify the properties of the symbol for the outlier values."
-msgstr ""
+msgstr "Izberite, če želite spremeniti lastnosti simbola za osamelce."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:108
 #, kde-format
 msgid ""
 "Select to modify the properties of the symbol for the \"far out\" values."
 msgstr ""
+"Izberite, če želite spremeniti lastnosti simbola za vrednosti \"daleč zunaj"
+"\"."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:111
 #, kde-format
@@ -13481,12 +13494,14 @@ msgid ""
 "Select to modify the properties of the symbol for all data values excluding "
 "the outlier and \"far out\" values."
 msgstr ""
+"Izberite, če želite spremeniti lastnosti simbola za vse podatkovne "
+"vrednosti, razen osamelcev in \"daleč zunaj\"."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:114
 #, kde-format
 msgid ""
 "Select to modify the properties of the symbol for the ends of the whiskers."
-msgstr ""
+msgstr "Izberite, če želite spremeniti lastnosti simbola za konce ročajev."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:117
 #, kde-format
@@ -13494,8 +13509,10 @@ msgid ""
 "Activate to randomize the positions of the symbols (\"jittering\"), helpful "
 "for dense and overlapping data points."
 msgstr ""
+"Aktivirajte naključno razporeditev položajev simbolov (\"tresenje\"), kar je "
+"koristno za goste in prekrivajoče se podatkovne točke."
 
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:728
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:726
 #, kde-format
 msgid "%1 box plots: template \"%2\" loaded"
 msgstr "%1 grafikoni kvantilov: predloga \"%2\" naložena"
@@ -14306,33 +14323,26 @@ msgstr "t-statistika"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:368
 #, fuzzy, kde-format
-#| msgid "No column available"
-msgid "No X and Y column available!"
-msgstr "Stolpec ni na voljo"
+#| msgid "No X and Y column available!"
+msgid "No X and Y column specified!"
+msgstr "Stolpcev X in Y ni na voljo!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:370
 #, fuzzy, kde-format
-#| msgid "No column available"
-msgid "No X column available!"
-msgstr "Stolpec ni na voljo"
+#| msgid "No X column available!"
+msgid "No X column specified!"
+msgstr "Stolpca X ni na voljo!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:372
 #, fuzzy, kde-format
-#| msgid "No column available"
-msgid "No Y column available!"
-msgstr "Stolpec ni na voljo"
-
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:374
-#, fuzzy, kde-format
-#| msgid "No data points available."
-msgid "No X data available!"
-msgstr "Podatkovne točke niso na voljo."
+#| msgid "No Y column available!"
+msgid "No Y column specified!"
+msgstr "Stolpca Y ni na voljo!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:376
-#, fuzzy, kde-format
-#| msgid "No data points available."
+#, kde-format
 msgid "No Y data available!"
-msgstr "Podatkovne točke niso na voljo."
+msgstr "Podatkov Y ni na voljo!"
 
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceCurve)
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:431
@@ -14372,10 +14382,9 @@ msgid "Fit status: %1"
 msgstr "Stanje prileganja: %1"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1235
-#, fuzzy, kde-format
-#| msgid "No data points available."
+#, kde-format
 msgid "No data source available!"
-msgstr "Podatkovne točke niso na voljo."
+msgstr "Vira podatkov ni na voljo!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1410
 #, kde-format
@@ -15248,46 +15257,39 @@ msgstr "Odpiranje ni uspelo"
 
 #. i18n: ectx: ToolBar (main_toolbar)
 #: src/kdefrontend/labplot2ui.rc:6
-#, fuzzy, kde-format
-#| msgid "Project Explorer"
+#, kde-format
 msgid "Project Toolbar"
-msgstr "Raziskovalec projektov"
+msgstr "Orodna vrstica projektov"
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:24
-#, fuzzy, kde-format
-#| msgid "Worksheet"
+#, kde-format
 msgid "Worksheet Toolbar"
-msgstr "Delovni list"
+msgstr "Orodna vrstica delovnega lista"
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
 #: src/kdefrontend/labplot2ui.rc:28
-#, fuzzy, kde-format
-#| msgid "Data Extractor"
+#, kde-format
 msgid "Data Extractor Toolbar"
-msgstr "Izvlečnik podatkov"
+msgstr "Orodna vrstica izvlečnika podatkov"
 
 #. i18n: ectx: ToolBar (spreadsheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:32
-#, fuzzy, kde-format
-#| msgid "Spreadsheet"
+#, kde-format
 msgid "Spreadsheet Toolbar"
-msgstr "Razpredelnica"
+msgstr "Orodna vrstica razpredelnice"
 
 #. i18n: ectx: ToolBar (notebook_toolbar)
 #: src/kdefrontend/labplot2ui.rc:36
-#, fuzzy, kde-format
-#| msgid "Notebook"
+#, kde-format
 msgid "Notebook Toolbar"
-msgstr "Zvezek"
+msgstr "Orodna vrstica zvezka"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
 #: src/kdefrontend/labplot2ui.rc:40
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Plot Area Templates"
+#, kde-format
 msgid "Plot Area Toolbar"
-msgstr "Nariši predloge grafikonov"
+msgstr "Orodna vrstica risalnega področja"
 
 #. i18n: ectx: Menu (file)
 #: src/kdefrontend/labplot2ui.rc:44
@@ -19867,7 +19869,7 @@ msgstr "Daleč stran"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:557
 #, kde-format
 msgid "Data (excl. Outlier and Far Out)"
-msgstr ""
+msgstr "Podatki (brez osamelcev in daleč zunaj)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbWhiskerEnd)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:564

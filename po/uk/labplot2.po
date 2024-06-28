@@ -8,10 +8,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-27 01:46+0000\n"
-"PO-Revision-Date: 2024-06-23 08:35+0300\n"
-"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
-"Language-Team: Ukrainian\n"
+"POT-Creation-Date: 2024-06-28 01:51+0000\n"
+"PO-Revision-Date: 2024-06-27 07:42+0300\n"
+"Last-Translator: Fracture dept <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -925,8 +925,8 @@ msgstr "%1: встановити стиль контурів позначок п
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/WorksheetElement.cpp:162
-#: src/backend/worksheet/WorksheetElementContainer.cpp:63
-#: src/backend/worksheet/WorksheetElementContainer.cpp:64
+#: src/backend/worksheet/WorksheetElementContainer.cpp:65
+#: src/backend/worksheet/WorksheetElementContainer.cpp:66
 #, kde-format
 msgid "%1: set visible"
 msgstr "%1: зробити видимим"
@@ -938,8 +938,8 @@ msgstr "%1: зробити видимим"
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/WorksheetElement.cpp:162
 #: src/backend/worksheet/WorksheetElement.cpp:795
-#: src/backend/worksheet/WorksheetElementContainer.cpp:66
-#: src/backend/worksheet/WorksheetElementContainer.cpp:84
+#: src/backend/worksheet/WorksheetElementContainer.cpp:68
+#: src/backend/worksheet/WorksheetElementContainer.cpp:86
 #, kde-format
 msgid "%1: set invisible"
 msgstr "%1: зробити невидимим"
@@ -8429,20 +8429,20 @@ msgid "%1: Cursor1 enable"
 msgstr "%1: увімкнено Курсор1"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1706
-#: src/backend/worksheet/Worksheet.cpp:832
+#: src/backend/worksheet/Worksheet.cpp:844
 #, kde-format
 msgid "%1: load theme %2"
 msgstr "%1: завантажити тему %2"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1708
-#: src/backend/worksheet/Worksheet.cpp:834
+#: src/backend/worksheet/Worksheet.cpp:846
 #, kde-format
 msgid "%1: load default theme"
 msgstr "%1: завантажити типову тему"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1710
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5343
-#: src/backend/worksheet/Worksheet.cpp:836
+#: src/backend/worksheet/Worksheet.cpp:848
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1: встановити тему"
@@ -8624,50 +8624,50 @@ msgid "%1: set border corner radius"
 msgstr "%1: встановити радіус заокруглення кутів рамки"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:245
-#: src/backend/worksheet/Worksheet.cpp:709
-#: src/backend/worksheet/Worksheet.cpp:710
+#: src/backend/worksheet/Worksheet.cpp:721
+#: src/backend/worksheet/Worksheet.cpp:722
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: встановити верхнє поле компонування"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:252
-#: src/backend/worksheet/Worksheet.cpp:719
-#: src/backend/worksheet/Worksheet.cpp:720
+#: src/backend/worksheet/Worksheet.cpp:731
+#: src/backend/worksheet/Worksheet.cpp:732
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: встановити нижнє поле компонування"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:259
-#: src/backend/worksheet/Worksheet.cpp:729
-#: src/backend/worksheet/Worksheet.cpp:730
+#: src/backend/worksheet/Worksheet.cpp:741
+#: src/backend/worksheet/Worksheet.cpp:742
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: встановити ліве поле компонування"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:266
-#: src/backend/worksheet/Worksheet.cpp:739
-#: src/backend/worksheet/Worksheet.cpp:740
+#: src/backend/worksheet/Worksheet.cpp:751
+#: src/backend/worksheet/Worksheet.cpp:752
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: встановити праве поле компонування"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:273
-#: src/backend/worksheet/Worksheet.cpp:749
-#: src/backend/worksheet/Worksheet.cpp:750
+#: src/backend/worksheet/Worksheet.cpp:761
+#: src/backend/worksheet/Worksheet.cpp:762
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: встановити вертикальний інтервал компонування"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:280
-#: src/backend/worksheet/Worksheet.cpp:759
-#: src/backend/worksheet/Worksheet.cpp:760
+#: src/backend/worksheet/Worksheet.cpp:771
+#: src/backend/worksheet/Worksheet.cpp:772
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: встановити горизонтальний інтервал компонування"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:287
-#: src/backend/worksheet/Worksheet.cpp:779
-#: src/backend/worksheet/Worksheet.cpp:780
+#: src/backend/worksheet/Worksheet.cpp:791
+#: src/backend/worksheet/Worksheet.cpp:792
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: встановити кількість стовпчиків у компонуванні"
@@ -9522,41 +9522,52 @@ msgid "Bayesian information criterion"
 msgstr "Інформаційний критерій Беєса"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2251
-#, kde-format
-msgid "Model has no parameters."
+#, fuzzy, kde-format
+#| msgid "Model has no parameters."
+msgid "Model has no parameters!"
 msgstr "Модель не має параметрів."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2258
-#, kde-format
-msgid "Not sufficient weight data points provided."
+#, fuzzy, kde-format
+#| msgid "Not sufficient weight data points provided."
+msgid "Not sufficient weight data points provided!"
 msgstr "Надано недостатню кількість точок даних для зважування."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2335
-#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:175
-#: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:125
-#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:132
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:374
 #, kde-format
-msgid "No data points available."
-msgstr "Немає доступних точок даних."
+msgid "No X data available!"
+msgstr "Немає доступних даних X!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2342
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "The number of data points (%1) must be greater than or equal to the "
+#| "number of parameters (%2)."
 msgid ""
 "The number of data points (%1) must be greater than or equal to the number "
-"of parameters (%2)."
+"of parameters (%2)!"
 msgstr ""
 "Кількість точок даних (%1) має бути більшою або рівною кількості параметрів "
 "(%2)."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2349
-#, kde-format
-msgid "Fit model not specified."
+#, fuzzy, kde-format
+#| msgid "Fit model not specified."
+msgid "Fit model not specified!"
 msgstr "Не вказано модель апроксимації."
 
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:85
 #, kde-format
 msgid "%1: set filter options and perform the Fourier filter"
 msgstr "%1: встановити параметри фільтрування та виконати фільтрування Фур'є"
+
+#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:175
+#: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:125
+#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:132
+#, kde-format
+msgid "No data points available."
+msgstr "Немає доступних точок даних."
 
 #: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:77
 #, kde-format
@@ -9647,42 +9658,42 @@ msgstr "%1: встановити форму рамки"
 msgid "%1: set border"
 msgstr "%1: встановити рамку"
 
-#: src/backend/worksheet/Worksheet.cpp:248
+#: src/backend/worksheet/Worksheet.cpp:249
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "Друк робочого аркуша"
 
-#: src/backend/worksheet/Worksheet.cpp:679
+#: src/backend/worksheet/Worksheet.cpp:691
 #, kde-format
 msgid "%1: change size type"
 msgstr "%1: зміна типу розміру"
 
-#: src/backend/worksheet/Worksheet.cpp:691
+#: src/backend/worksheet/Worksheet.cpp:703
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr "%1: змінити властивість «масштабувати за вмістом»"
 
-#: src/backend/worksheet/Worksheet.cpp:699
-#: src/backend/worksheet/Worksheet.cpp:700
+#: src/backend/worksheet/Worksheet.cpp:711
+#: src/backend/worksheet/Worksheet.cpp:712
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: встановити компонування"
 
-#: src/backend/worksheet/Worksheet.cpp:769
-#: src/backend/worksheet/Worksheet.cpp:770
+#: src/backend/worksheet/Worksheet.cpp:781
+#: src/backend/worksheet/Worksheet.cpp:782
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: встановити кількість рядків у компонуванні"
 
-#: src/backend/worksheet/Worksheet.cpp:810
-#: src/backend/worksheet/Worksheet.cpp:811
+#: src/backend/worksheet/Worksheet.cpp:822
+#: src/backend/worksheet/Worksheet.cpp:823
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:373
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: встановити розмір сторінки"
 
-#: src/backend/worksheet/Worksheet.cpp:1557
+#: src/backend/worksheet/Worksheet.cpp:1569
 #, kde-format
 msgid "Curves"
 msgstr "Криві"
@@ -13331,7 +13342,7 @@ msgstr "Вісі %1: завантажено шаблон «%2»"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2047
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:523
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:730
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:728
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1839
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:781
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:378
@@ -13391,8 +13402,8 @@ msgstr "Смуги невизначеності"
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:351
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:377
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:363
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:388
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:361
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:386
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:315
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:341
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:233
@@ -13409,7 +13420,7 @@ msgstr "Стовпчики:"
 #. i18n: ectx: property (text), widget (QLabel, lColumn)
 #. i18n: ectx: property (text), widget (QLabel, lValuesColumn)
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:379
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:392
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:390
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:343
 #: src/kdefrontend/spreadsheet/GoToDialog.cpp:49
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:804
@@ -13502,22 +13513,26 @@ msgstr ""
 #, kde-format
 msgid "Select to modify the properties of the symbol for the mean value."
 msgstr ""
+"Позначте, щоб внести зміни до властивостей символу для середнього значення."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:102
 #, kde-format
 msgid "Select to modify the properties of the symbol for the median value."
 msgstr ""
+"Позначте, щоб внести зміни до властивостей символу для медіанного значення."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:105
 #, kde-format
 msgid "Select to modify the properties of the symbol for the outlier values."
 msgstr ""
+"Позначте, щоб внести зміни до властивостей символу для значень викидів."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:108
 #, kde-format
 msgid ""
 "Select to modify the properties of the symbol for the \"far out\" values."
 msgstr ""
+"Позначте, щоб внести зміни до властивостей символу для «далеких» значень."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:111
 #, kde-format
@@ -13525,12 +13540,14 @@ msgid ""
 "Select to modify the properties of the symbol for all data values excluding "
 "the outlier and \"far out\" values."
 msgstr ""
+"Позначте, щоб внести зміни до властивостей символу для усіх значень даних, "
+"окрім викидів та «далеких» значень."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:114
 #, kde-format
 msgid ""
 "Select to modify the properties of the symbol for the ends of the whiskers."
-msgstr ""
+msgstr "Позначте, щоб внести зміни до властивостей символу для кінців вус."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:117
 #, kde-format
@@ -13538,8 +13555,10 @@ msgid ""
 "Activate to randomize the positions of the symbols (\"jittering\"), helpful "
 "for dense and overlapping data points."
 msgstr ""
+"Активуйте для випадкового розташування символів («розкидання»), корисно для "
+"щільного розташування точок даних та розташування із перекриттям."
 
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:728
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:726
 #, kde-format
 msgid "%1 box plots: template \"%2\" loaded"
 msgstr "Коробкові креслення %1: завантажено шаблон «%2»"
@@ -14354,33 +14373,26 @@ msgstr "t-статистика"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:368
 #, fuzzy, kde-format
-#| msgid "No column available"
-msgid "No X and Y column available!"
-msgstr "Немає доступних стовпчиків"
+#| msgid "No X and Y column available!"
+msgid "No X and Y column specified!"
+msgstr "Немає доступних стовпчиків X та Y!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:370
 #, fuzzy, kde-format
-#| msgid "No column available"
-msgid "No X column available!"
-msgstr "Немає доступних стовпчиків"
+#| msgid "No X column available!"
+msgid "No X column specified!"
+msgstr "Немає доступного стовпчика X!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:372
 #, fuzzy, kde-format
-#| msgid "No column available"
-msgid "No Y column available!"
-msgstr "Немає доступних стовпчиків"
-
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:374
-#, fuzzy, kde-format
-#| msgid "No data points available."
-msgid "No X data available!"
-msgstr "Немає доступних точок даних."
+#| msgid "No Y column available!"
+msgid "No Y column specified!"
+msgstr "Немає доступного стовпчика Y!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:376
-#, fuzzy, kde-format
-#| msgid "No data points available."
+#, kde-format
 msgid "No Y data available!"
-msgstr "Немає доступних точок даних."
+msgstr "Немає доступних даних Y!"
 
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceCurve)
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:431
@@ -14420,10 +14432,9 @@ msgid "Fit status: %1"
 msgstr "Стан апроксимації: %1"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1235
-#, fuzzy, kde-format
-#| msgid "No data points available."
+#, kde-format
 msgid "No data source available!"
-msgstr "Немає доступних точок даних."
+msgstr "Немає доступного джерела даних!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1410
 #, kde-format
@@ -15296,46 +15307,39 @@ msgstr "Не вдалося відкрити"
 
 #. i18n: ectx: ToolBar (main_toolbar)
 #: src/kdefrontend/labplot2ui.rc:6
-#, fuzzy, kde-format
-#| msgid "Project Explorer"
+#, kde-format
 msgid "Project Toolbar"
-msgstr "Навігатор проєктом"
+msgstr "Панель інструментів проєкту"
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:24
-#, fuzzy, kde-format
-#| msgid "Worksheet"
+#, kde-format
 msgid "Worksheet Toolbar"
-msgstr "Робочий аркуш"
+msgstr "Панель інструментів робочого аркуша"
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
 #: src/kdefrontend/labplot2ui.rc:28
-#, fuzzy, kde-format
-#| msgid "Data Extractor"
+#, kde-format
 msgid "Data Extractor Toolbar"
-msgstr "Засіб видобування даних"
+msgstr "Панель інструментів видобування даних"
 
 #. i18n: ectx: ToolBar (spreadsheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:32
-#, fuzzy, kde-format
-#| msgid "Spreadsheet"
+#, kde-format
 msgid "Spreadsheet Toolbar"
-msgstr "Електронна таблиця"
+msgstr "Панель інструментів електронної таблиці"
 
 #. i18n: ectx: ToolBar (notebook_toolbar)
 #: src/kdefrontend/labplot2ui.rc:36
-#, fuzzy, kde-format
-#| msgid "Notebook"
+#, kde-format
 msgid "Notebook Toolbar"
-msgstr "Нотатник"
+msgstr "Панель інструментів нотатника"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
 #: src/kdefrontend/labplot2ui.rc:40
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Plot Area Templates"
+#, kde-format
 msgid "Plot Area Toolbar"
-msgstr "Шаблони області креслень"
+msgstr "Панель інструментів області креслень"
 
 #. i18n: ectx: Menu (file)
 #: src/kdefrontend/labplot2ui.rc:44
@@ -19933,7 +19937,7 @@ msgstr "Далеко назовні"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:557
 #, kde-format
 msgid "Data (excl. Outlier and Far Out)"
-msgstr ""
+msgstr "Дані (без викидів і далеких точок)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbWhiskerEnd)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:564
