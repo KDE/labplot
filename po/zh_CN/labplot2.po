@@ -14883,15 +14883,15 @@ msgstr ""
 
 #. i18n: ectx: ToolBar (main_toolbar)
 #: src/kdefrontend/labplot2ui.rc:6
-#, fuzzy, kde-format
+#, kde-format
 msgid "Project Toolbar"
-msgstr "项目浏览器"
+msgstr ""
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:24
-#, fuzzy, kde-format
+#, kde-format
 msgid "Worksheet Toolbar"
-msgstr "工作表"
+msgstr ""
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
 #: src/kdefrontend/labplot2ui.rc:28
@@ -14901,9 +14901,9 @@ msgstr ""
 
 #. i18n: ectx: ToolBar (spreadsheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:32
-#, fuzzy, kde-format
+#, kde-format
 msgid "Spreadsheet Toolbar"
-msgstr "数据表"
+msgstr ""
 
 #. i18n: ectx: ToolBar (notebook_toolbar)
 #: src/kdefrontend/labplot2ui.rc:36
@@ -14913,9 +14913,9 @@ msgstr ""
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
 #: src/kdefrontend/labplot2ui.rc:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Plot Area Toolbar"
-msgstr "绘制区域"
+msgstr ""
 
 #. i18n: ectx: Menu (file)
 #: src/kdefrontend/labplot2ui.rc:44

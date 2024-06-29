@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-28 01:51+0000\n"
-"PO-Revision-Date: 2024-06-27 08:23+0200\n"
+"PO-Revision-Date: 2024-06-28 06:44+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -9488,16 +9488,14 @@ msgid "Bayesian information criterion"
 msgstr "Bayesov informacijski kriterij"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2251
-#, fuzzy, kde-format
-#| msgid "Model has no parameters."
+#, kde-format
 msgid "Model has no parameters!"
-msgstr "Model nima parametrov."
+msgstr "Model nima parametrov!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2258
-#, fuzzy, kde-format
-#| msgid "Not sufficient weight data points provided."
+#, kde-format
 msgid "Not sufficient weight data points provided!"
-msgstr "Ni zagotovljenih dovolj podatkovnih točk o teži."
+msgstr "Ni zagotovljenih dovolj podatkovnih točk o teži!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2335
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:374
@@ -9506,22 +9504,18 @@ msgid "No X data available!"
 msgstr "Podatkov X ni na voljo!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2342
-#, fuzzy, kde-format
-#| msgid ""
-#| "The number of data points (%1) must be greater than or equal to the "
-#| "number of parameters (%2)."
+#, kde-format
 msgid ""
 "The number of data points (%1) must be greater than or equal to the number "
 "of parameters (%2)!"
 msgstr ""
 "Število podatkovnih točk (%1) mora biti večje ali enako številu parametrov "
-"(%2)."
+"(%2)!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2349
-#, fuzzy, kde-format
-#| msgid "Fit model not specified."
+#, kde-format
 msgid "Fit model not specified!"
-msgstr "Model za prileganje ni naveden."
+msgstr "Model za prileganje ni določen!"
 
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:85
 #, kde-format
@@ -14322,20 +14316,17 @@ msgid "t statistic"
 msgstr "t-statistika"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:368
-#, fuzzy, kde-format
-#| msgid "No X and Y column available!"
+#, kde-format
 msgid "No X and Y column specified!"
-msgstr "Stolpcev X in Y ni na voljo!"
+msgstr "Stolpca X in Y nista na voljo!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:370
-#, fuzzy, kde-format
-#| msgid "No X column available!"
+#, kde-format
 msgid "No X column specified!"
 msgstr "Stolpca X ni na voljo!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:372
-#, fuzzy, kde-format
-#| msgid "No Y column available!"
+#, kde-format
 msgid "No Y column specified!"
 msgstr "Stolpca Y ni na voljo!"
 

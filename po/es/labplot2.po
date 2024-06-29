@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-28 01:51+0000\n"
-"PO-Revision-Date: 2024-06-23 13:32+0200\n"
+"PO-Revision-Date: 2024-06-28 21:04+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -9456,29 +9456,23 @@ msgid "Bayesian information criterion"
 msgstr "Criterio de información bayesiano"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2251
-#, fuzzy, kde-format
-#| msgid "Model has no parameters."
+#, kde-format
 msgid "Model has no parameters!"
 msgstr "El modelo no tiene parámetros."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2258
-#, fuzzy, kde-format
-#| msgid "Not sufficient weight data points provided."
+#, kde-format
 msgid "Not sufficient weight data points provided!"
 msgstr "No se han proporcionado suficientes puntos sobre datos de peso."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2335
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:374
-#, fuzzy, kde-format
-#| msgid "No data points available."
+#, kde-format
 msgid "No X data available!"
-msgstr "No se dispone de puntos de datos."
+msgstr "No se dispone de datos de X."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2342
-#, fuzzy, kde-format
-#| msgid ""
-#| "The number of data points (%1) must be greater than or equal to the "
-#| "number of parameters (%2)."
+#, kde-format
 msgid ""
 "The number of data points (%1) must be greater than or equal to the number "
 "of parameters (%2)!"
@@ -9487,8 +9481,7 @@ msgstr ""
 "parámetros (%2)."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2349
-#, fuzzy, kde-format
-#| msgid "Fit model not specified."
+#, kde-format
 msgid "Fit model not specified!"
 msgstr "Modelo de ajuste no especificado."
 
@@ -13444,22 +13437,29 @@ msgstr ""
 #, kde-format
 msgid "Select to modify the properties of the symbol for the mean value."
 msgstr ""
+"Selecciónelo para modificar las propiedades del símbolo para el valor medio."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:102
 #, kde-format
 msgid "Select to modify the properties of the symbol for the median value."
 msgstr ""
+"Selecciónelo para modificar las propiedades del símbolo para el valor "
+"mediano."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:105
 #, kde-format
 msgid "Select to modify the properties of the symbol for the outlier values."
 msgstr ""
+"Selecciónelo para modificar las propiedades del símbolo para los valores "
+"atípicos."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:108
 #, kde-format
 msgid ""
 "Select to modify the properties of the symbol for the \"far out\" values."
 msgstr ""
+"Selecciónelo para modificar las propiedades del símbolo para los valores "
+"«lejanos»."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:111
 #, kde-format
@@ -13467,12 +13467,16 @@ msgid ""
 "Select to modify the properties of the symbol for all data values excluding "
 "the outlier and \"far out\" values."
 msgstr ""
+"Selecciónelo para modificar las propiedades del símbolo para todos los "
+"valores de datos excluidos los atípicos y los «lejanos»."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:114
 #, kde-format
 msgid ""
 "Select to modify the properties of the symbol for the ends of the whiskers."
 msgstr ""
+"Selecciónelo para modificar las propiedades del símbolo para los extremos de "
+"los bigotes."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:117
 #, kde-format
@@ -13480,6 +13484,8 @@ msgid ""
 "Activate to randomize the positions of the symbols (\"jittering\"), helpful "
 "for dense and overlapping data points."
 msgstr ""
+"Actívelo para aleatorizar las posiciones de los símbolos («fluctuación»), lo "
+"que resulta útil para puntos de datos densos y superpuestos."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:726
 #, kde-format
@@ -14297,28 +14303,24 @@ msgid "t statistic"
 msgstr "estadística t"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:368
-#, fuzzy, kde-format
-#| msgid "No column available"
+#, kde-format
 msgid "No X and Y column specified!"
-msgstr "No hay ninguna columna disponible."
+msgstr "No se han indicado las columnas X e Y."
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:370
-#, fuzzy, kde-format
-#| msgid "No column available"
+#, kde-format
 msgid "No X column specified!"
-msgstr "No hay ninguna columna disponible."
+msgstr "No se ha indicado la columna X."
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:372
-#, fuzzy, kde-format
-#| msgid "No column available"
+#, kde-format
 msgid "No Y column specified!"
-msgstr "No hay ninguna columna disponible."
+msgstr "No se ha indicado la columna Y."
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:376
-#, fuzzy, kde-format
-#| msgid "No data points available."
+#, kde-format
 msgid "No Y data available!"
-msgstr "No se dispone de puntos de datos."
+msgstr "No se dispone de datos de Y."
 
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceCurve)
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:431
@@ -14358,10 +14360,9 @@ msgid "Fit status: %1"
 msgstr "Estado de ajuste: %1"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1235
-#, fuzzy, kde-format
-#| msgid "No data points available."
+#, kde-format
 msgid "No data source available!"
-msgstr "No se dispone de puntos de datos."
+msgstr "No se dispone de fuentes de datos."
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1410
 #, kde-format
@@ -15235,46 +15236,39 @@ msgstr "Ha fallado la apertura"
 
 #. i18n: ectx: ToolBar (main_toolbar)
 #: src/kdefrontend/labplot2ui.rc:6
-#, fuzzy, kde-format
-#| msgid "Project Explorer"
+#, kde-format
 msgid "Project Toolbar"
-msgstr "Explorador de proyectos"
+msgstr "Barra de herramientas del proyecto"
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:24
-#, fuzzy, kde-format
-#| msgid "Worksheet"
+#, kde-format
 msgid "Worksheet Toolbar"
-msgstr "Hoja de trabajo"
+msgstr "Barra de herramientas de la hoja de trabajo"
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
 #: src/kdefrontend/labplot2ui.rc:28
-#, fuzzy, kde-format
-#| msgid "Data Extractor"
+#, kde-format
 msgid "Data Extractor Toolbar"
-msgstr "Extractor de datos"
+msgstr "Barra de herramientas del extractor de datos"
 
 #. i18n: ectx: ToolBar (spreadsheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:32
-#, fuzzy, kde-format
-#| msgid "Spreadsheet"
+#, kde-format
 msgid "Spreadsheet Toolbar"
-msgstr "Hoja de cálculo"
+msgstr "Barra de herramientas de la hoja de cálculo"
 
 #. i18n: ectx: ToolBar (notebook_toolbar)
 #: src/kdefrontend/labplot2ui.rc:36
-#, fuzzy, kde-format
-#| msgid "Notebook"
+#, kde-format
 msgid "Notebook Toolbar"
-msgstr "Bloc de notas"
+msgstr "Barra de herramientas del bloc de notas"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
 #: src/kdefrontend/labplot2ui.rc:40
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Plot Area Templates"
+#, kde-format
 msgid "Plot Area Toolbar"
-msgstr "Plantillas de área de gráfico"
+msgstr "Barra de herramientas del área de gráfico"
 
 #. i18n: ectx: Menu (file)
 #: src/kdefrontend/labplot2ui.rc:44
@@ -19872,7 +19866,7 @@ msgstr "Lejos"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:557
 #, kde-format
 msgid "Data (excl. Outlier and Far Out)"
-msgstr ""
+msgstr "Datos (excl. los atípicos y los lejanos)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbWhiskerEnd)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:564

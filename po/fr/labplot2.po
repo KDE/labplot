@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-28 01:51+0000\n"
-"PO-Revision-Date: 2024-06-16 11:11+0200\n"
+"PO-Revision-Date: 2024-06-26 21:41+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -3525,10 +3525,9 @@ msgid "Logarithmic Distribution"
 msgstr "Distribution logarithmique"
 
 #: src/backend/gsl/functions.cpp:183
-#, fuzzy, kde-format
-#| msgid "Landau Distribution"
+#, kde-format
 msgid "Triangular Distribution"
-msgstr "Distribution de Landau"
+msgstr "Distribution triangulaire"
 
 #: src/backend/gsl/functions.cpp:187
 #, kde-format
@@ -5036,28 +5035,24 @@ msgid "Second synchrotron function"
 msgstr "Fonction secondaire du synchrotron"
 
 #: src/backend/gsl/functions.cpp:596
-#, fuzzy, kde-format
-#| msgid "Transport function"
+#, kde-format
 msgid "Transport function J2"
-msgstr "Fonction de transport"
+msgstr "Fonction de transport J2"
 
 #: src/backend/gsl/functions.cpp:597
-#, fuzzy, kde-format
-#| msgid "Transport function"
+#, kde-format
 msgid "Transport function J3"
-msgstr "Fonction de transport"
+msgstr "Fonction de transport J3"
 
 #: src/backend/gsl/functions.cpp:598
-#, fuzzy, kde-format
-#| msgid "Transport function"
+#, kde-format
 msgid "Transport function J4"
-msgstr "Fonction de transport"
+msgstr "Fonction de transport J4"
 
 #: src/backend/gsl/functions.cpp:599
-#, fuzzy, kde-format
-#| msgid "Transport function"
+#, kde-format
 msgid "Transport function J5"
-msgstr "Fonction de transport"
+msgstr "Fonction de transport J5"
 
 #: src/backend/gsl/functions.cpp:602
 #, kde-format
@@ -10575,10 +10570,9 @@ msgid "&Unmask"
 msgstr "&Démasquer"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:308
-#, fuzzy, kde-format
-#| msgid "Reverse"
+#, kde-format
 msgid "&Reverse"
-msgstr "Inverser"
+msgstr "Inverse&r"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:309
 #, kde-format
@@ -11601,12 +11595,10 @@ msgid "%1: Remove selected worksheet elements."
 msgstr "%1 : supprimer les éléments sélectionnés dans la feuille de travail."
 
 #: src/kdefrontend/CASSettingsDialog.cpp:34
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Preferences"
+#, kde-format
 msgctxt "@title:window"
 msgid "CAS Preferences"
-msgstr "Préférences"
+msgstr "Préférences CAS"
 
 #: src/kdefrontend/colormaps/ColorMapsDialog.cpp:42
 #, kde-format
@@ -16246,8 +16238,7 @@ msgid "With Worksheet"
 msgstr "Avec une feuille de travail"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:224
-#, fuzzy, kde-format
-#| msgid "With Worksheet and Spreadsheet"
+#, kde-format
 msgid "With Spreadsheet and Worksheet"
 msgstr "Avec une feuille de calcul et une feuille de travail"
 
@@ -21043,10 +21034,9 @@ msgstr "Sparklines :"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:198
-#, fuzzy, kde-format
-#| msgid "Column Major"
+#, kde-format
 msgid "Column Header"
-msgstr "Colonne principale"
+msgstr "En-tête de colonne"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:222

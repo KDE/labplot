@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-28 01:51+0000\n"
-"PO-Revision-Date: 2024-06-27 11:23+0200\n"
+"PO-Revision-Date: 2024-06-28 13:06+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -9550,16 +9550,14 @@ msgid "Bayesian information criterion"
 msgstr "Criteri d'informació bayesiana"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2251
-#, fuzzy, kde-format
-#| msgid "Model has no parameters."
+#, kde-format
 msgid "Model has no parameters!"
-msgstr "El model no té paràmetres."
+msgstr "El model no té paràmetres!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2258
-#, fuzzy, kde-format
-#| msgid "Not sufficient weight data points provided."
+#, kde-format
 msgid "Not sufficient weight data points provided!"
-msgstr "No s'han proporcionat punts suficients de les dades de ponderació."
+msgstr "No s'han proporcionat punts suficients de les dades de ponderació!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2335
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:374
@@ -9568,22 +9566,18 @@ msgid "No X data available!"
 msgstr "No hi ha cap dada X disponible!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2342
-#, fuzzy, kde-format
-#| msgid ""
-#| "The number of data points (%1) must be greater than or equal to the "
-#| "number of parameters (%2)."
+#, kde-format
 msgid ""
 "The number of data points (%1) must be greater than or equal to the number "
 "of parameters (%2)!"
 msgstr ""
 "El nombre de punts de les dades (%1) ha de ser més gran o igual que el "
-"nombre de paràmetres (%2)."
+"nombre de paràmetres (%2)!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2349
-#, fuzzy, kde-format
-#| msgid "Fit model not specified."
+#, kde-format
 msgid "Fit model not specified!"
-msgstr "Model d'ajust sense especificar."
+msgstr "Model d'ajust sense especificar!"
 
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:85
 #, kde-format
@@ -14413,22 +14407,19 @@ msgid "t statistic"
 msgstr "Estadística t"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:368
-#, fuzzy, kde-format
-#| msgid "No X and Y column available!"
+#, kde-format
 msgid "No X and Y column specified!"
-msgstr "No hi ha cap columna X o Y disponible!"
+msgstr "No s'ha especificat cap columna X o Y!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:370
-#, fuzzy, kde-format
-#| msgid "No X column available!"
+#, kde-format
 msgid "No X column specified!"
-msgstr "No hi ha cap columna X disponible!"
+msgstr "No s'ha especificat cap columna X!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:372
-#, fuzzy, kde-format
-#| msgid "No Y column available!"
+#, kde-format
 msgid "No Y column specified!"
-msgstr "No hi ha cap columna Y disponible!"
+msgstr "No s'ha especificat cap columna Y!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:376
 #, kde-format

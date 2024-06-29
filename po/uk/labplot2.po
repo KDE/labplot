@@ -9,9 +9,9 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-28 01:51+0000\n"
-"PO-Revision-Date: 2024-06-27 07:42+0300\n"
-"Last-Translator: Fracture dept <yurchor@ukr.net>\n"
-"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"PO-Revision-Date: 2024-06-28 07:44+0300\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -9522,16 +9522,14 @@ msgid "Bayesian information criterion"
 msgstr "Інформаційний критерій Беєса"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2251
-#, fuzzy, kde-format
-#| msgid "Model has no parameters."
+#, kde-format
 msgid "Model has no parameters!"
-msgstr "Модель не має параметрів."
+msgstr "Модель не має параметрів!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2258
-#, fuzzy, kde-format
-#| msgid "Not sufficient weight data points provided."
+#, kde-format
 msgid "Not sufficient weight data points provided!"
-msgstr "Надано недостатню кількість точок даних для зважування."
+msgstr "Надано недостатню кількість точок даних для зважування!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2335
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:374
@@ -9540,22 +9538,18 @@ msgid "No X data available!"
 msgstr "Немає доступних даних X!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2342
-#, fuzzy, kde-format
-#| msgid ""
-#| "The number of data points (%1) must be greater than or equal to the "
-#| "number of parameters (%2)."
+#, kde-format
 msgid ""
 "The number of data points (%1) must be greater than or equal to the number "
 "of parameters (%2)!"
 msgstr ""
 "Кількість точок даних (%1) має бути більшою або рівною кількості параметрів "
-"(%2)."
+"(%2)!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2349
-#, fuzzy, kde-format
-#| msgid "Fit model not specified."
+#, kde-format
 msgid "Fit model not specified!"
-msgstr "Не вказано модель апроксимації."
+msgstr "Не вказано модель апроксимації!"
 
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:85
 #, kde-format
@@ -14372,22 +14366,19 @@ msgid "t statistic"
 msgstr "t-статистика"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:368
-#, fuzzy, kde-format
-#| msgid "No X and Y column available!"
+#, kde-format
 msgid "No X and Y column specified!"
-msgstr "Немає доступних стовпчиків X та Y!"
+msgstr "Не вказано стовпчиків X та Y!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:370
-#, fuzzy, kde-format
-#| msgid "No X column available!"
+#, kde-format
 msgid "No X column specified!"
-msgstr "Немає доступного стовпчика X!"
+msgstr "Не вказано стовпчика X!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:372
-#, fuzzy, kde-format
-#| msgid "No Y column available!"
+#, kde-format
 msgid "No Y column specified!"
-msgstr "Немає доступного стовпчика Y!"
+msgstr "Не вказано стовпчика Y!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:376
 #, kde-format

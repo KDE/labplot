@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-28 01:51+0000\n"
-"PO-Revision-Date: 2024-06-27 15:53+0300\n"
+"PO-Revision-Date: 2024-06-28 14:06+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -9442,16 +9442,14 @@ msgid "Bayesian information criterion"
 msgstr "Bayes bilgi ölçütü "
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2251
-#, fuzzy, kde-format
-#| msgid "Model has no parameters."
+#, kde-format
 msgid "Model has no parameters!"
-msgstr "Modelde parametre yok ."
+msgstr "Modelde parametre yok!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2258
-#, fuzzy, kde-format
-#| msgid "Not sufficient weight data points provided."
+#, kde-format
 msgid "Not sufficient weight data points provided!"
-msgstr "Verilen ağırlık veri noktaları yeterli değil."
+msgstr "Verilen ağırlık veri noktaları yeterli değil!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2335
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:374
@@ -9460,22 +9458,18 @@ msgid "No X data available!"
 msgstr "Kullanılabilir X verisi yok."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2342
-#, fuzzy, kde-format
-#| msgid ""
-#| "The number of data points (%1) must be greater than or equal to the "
-#| "number of parameters (%2)."
+#, kde-format
 msgid ""
 "The number of data points (%1) must be greater than or equal to the number "
 "of parameters (%2)!"
 msgstr ""
 "Veri noktalarının sayısı (%1) parametrelerin sayısına (%2) eşit veya büyük "
-"olmak zorunda."
+"olmak zorunda!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2349
-#, fuzzy, kde-format
-#| msgid "Fit model not specified."
+#, kde-format
 msgid "Fit model not specified!"
-msgstr "Sığdırma modeli belirtilmedi."
+msgstr "Uyum modeli belirtilmedi!"
 
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:85
 #, kde-format
@@ -14244,22 +14238,19 @@ msgid "t statistic"
 msgstr "t istatistiği"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:368
-#, fuzzy, kde-format
-#| msgid "No X and Y column available!"
+#, kde-format
 msgid "No X and Y column specified!"
-msgstr "Kullanılabilir X ve Y sütunu yok!"
+msgstr "Belirtilen X ve Y sütunu yok!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:370
-#, fuzzy, kde-format
-#| msgid "No X column available!"
+#, kde-format
 msgid "No X column specified!"
-msgstr "Kullanılabilir X sütunu yok!"
+msgstr "Belirtilen X sütunu yok!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:372
-#, fuzzy, kde-format
-#| msgid "No Y column available!"
+#, kde-format
 msgid "No Y column specified!"
-msgstr "Kullanılabilir Y sütunu yok!"
+msgstr "Belirtilen Y sütunu yok!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:376
 #, kde-format
