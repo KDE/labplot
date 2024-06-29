@@ -44,7 +44,6 @@
 #include <QPainter>
 #include <QScreen>
 #include <QThreadPool>
-
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_spline.h>
