@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
+find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core)
 message(STATUS "Found Qt version ${QT_VERSION_MAJOR}")
 # see also -DQT_DISABLE_DEPRECATED_BEFORE in src/CMakeLists.txt
 set(QT_MIN_VERSION "5.12.0")
@@ -64,8 +64,9 @@ find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONEN
 )
 
 # building QADS or Xlsx requires Qt${QT_VERSION_MAJOR}GuiPrivate (QADS is required, Xlsx is optional)
-find_package(Qt${QT_MAJOR_VERSION}Gui ${QT_MIN_VERSION} CONFIG REQUIRED Private)
-
+find_package(Qt${QT_MAJOR_VERSION}Gui ${QT_MIN_VERSION} CONFIG  REQUIRED Private)
+find_package(Qt6 COMPONENTS Widgets)
+find_package(Qt6 COMPONENTS Graphs)
 find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
     Archive
     Completion

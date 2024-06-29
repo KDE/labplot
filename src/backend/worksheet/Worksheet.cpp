@@ -42,6 +42,8 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
+#include <backend/worksheet/plots/3d/Surface3DPlotArea.h>
+
 /**
  * \class Worksheet
  * \brief Top-level container for worksheet elements like plot, labels, etc.
@@ -288,9 +290,20 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 
 	// add the GraphicsItem of the added child to the scene
 	DEBUG(Q_FUNC_INFO << ", ADDING child to SCENE")
-	auto* item = addedElement->graphicsItem();
-	d->m_scene->addItem(item);
 
+	if (aspect->type() == AspectType::SurfacePlot) {
+		const auto* addedElement = dynamic_cast<const Surface3DPlotArea*>(aspect);
+		const Q3DSurface* graph = addedElement->graph();
+		if (graph) {
+			QWidget* window = graph->window();
+			if (window) {
+				QGraphicsProxyWidget* proxy = d->m_scene->addWidget(window);
+			}
+		}
+	} else {
+		auto* item = addedElement->graphicsItem();
+		d->m_scene->addItem(item);
+	}
 	connect(aspect, &AbstractAspect::contextMenuRequested, this, &Worksheet::childContextMenuRequested);
 	connect(addedElement, &WorksheetElement::changed, this, &Worksheet::changed);
 
@@ -1290,7 +1303,8 @@ void Worksheet::cursorModelPlotAdded(const QString& /*name*/) {
 	//	int rowCount = treeModel->rowCount();
 	//	// add plot at the end
 	//	treeModel->insertRows(rowCount, 1); // add empty rows. Then they become filled
-	//	treeModel->setTreeData(QVariant(name), rowCount, WorksheetPrivate::TreeModelColumn::PLOTNAME); // rowCount instead of rowCount -1 because first row is
+	//	treeModel->setTreeData(QVariant(name), rowCount, WorksheetPrivate::TreeModelColumn::PLOTNAME); // rowCount instead of rowCount -1 because first row
+	// is
 	// the x value
 	updateCompleteCursorTreeModel();
 }
