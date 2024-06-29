@@ -8,15 +8,12 @@ Surface3DPlotArea::Surface3DPlotArea(const QString name)
 }
 
 Surface3DPlotArea::~Surface3DPlotArea() {
+    delete m_surface;
 }
 
 void Surface3DPlotArea::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
 }
 void Surface3DPlotArea::retransform(){};
-
-Q3DSurface* Surface3DPlotArea::graph() const {
-	return m_surface;
-}
 
 // #####################################################################
 // ################### Private implementation ##########################

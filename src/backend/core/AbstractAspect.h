@@ -51,6 +51,9 @@ enum class AspectType : quint64 {
 	ReferenceRange = 0x0210060,
 	InfoElement = 0x0210080,
 
+	// 3D plots
+	SurfacePlot = 0x0210090,
+
 	// bar plots
 	BarPlot = 0x0210200,
 	LollipopPlot = 0x0210400,

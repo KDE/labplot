@@ -46,8 +46,7 @@
 		class_name##Set##Prefix##ColumnCmd(class_name::Private* target, const AbstractColumn* newValue, const KLocalizedString& description)                   \
 			: StandardSetterCmd<class_name::Private, const AbstractColumn*>(target, &class_name::Private::prefix##Column, newValue, description)               \
 			, m_private(target)                                                                                                                                \
-			, m_column(newValue) {                                                                                                                             \
-		}                                                                                                                                                      \
+			, m_column(newValue) { }                                                                                                                           \
 		virtual void finalize() override {                                                                                                                     \
 			m_target->finalize_method();                                                                                                                       \
 			Q_EMIT m_target->q->prefix##ColumnChanged(m_target->*m_field);                                                                                     \

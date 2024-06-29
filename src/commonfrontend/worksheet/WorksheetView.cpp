@@ -28,6 +28,8 @@
 #include "kdefrontend/widgets/ThemesWidget.h"
 #include "kdefrontend/worksheet/GridDialog.h"
 #include "kdefrontend/worksheet/PresenterWidget.h"
+#include "backend/worksheet/plots/3d/Surface3DPlotArea.h"
+
 
 #ifdef Q_OS_MAC
 #include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
@@ -214,8 +216,9 @@ void WorksheetView::initActions() {
 	addCartesianPlot1Action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-plot-four-axes")), i18n("Four Axes"), addNewActionGroup);
 	addCartesianPlot2Action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes")), i18n("Two Axes"), addNewActionGroup);
 	addCartesianPlot3Action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes-centered")), i18n("Two Axes, Centered"), addNewActionGroup);
-	addCartesianPlot4Action =
-		new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes-centered-origin")), i18n("Two Axes, Crossing at Origin"), addNewActionGroup);
+    addCartesianPlot4Action =
+            new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes-centered-origin")), i18n("Two Axes, Crossing at Origin"), addNewActionGroup);
+    add3DPlotAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes")), i18n("3D plot"), addNewActionGroup);
 	addCartesianPlotTemplateAction = new QAction(QIcon::fromTheme(QStringLiteral("document-new-from-template")), i18n("Load from Template"), addNewActionGroup);
 	addTextLabelAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-text")), i18n("Text"), addNewActionGroup);
 	addImageAction = new QAction(QIcon::fromTheme(QStringLiteral("viewimage")), i18n("Image"), addNewActionGroup);
@@ -429,7 +432,9 @@ void WorksheetView::initMenus() {
 
 	m_addNewMenu = new QMenu(i18n("Add New"), this);
 	m_addNewMenu->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
-	m_addNewMenu->addMenu(m_addNewCartesianPlotMenu)->setIcon(QIcon::fromTheme(QStringLiteral("office-chart-line")));
+    m_addNewMenu->addMenu(m_addNewCartesianPlotMenu)->setIcon(QIcon::fromTheme(QStringLiteral("office-chart-line")));
+    m_addNewMenu->addAction(add3DPlotAction);
+
 	m_addNewMenu->addSeparator();
 	m_addNewMenu->addAction(addTextLabelAction);
 	m_addNewMenu->addAction(addImageAction);
@@ -1365,8 +1370,12 @@ void WorksheetView::addNew(QAction* action) {
 		aspect = l;
 	} else if (action == addImageAction) {
 		Image* image = new Image(i18n("Image"));
-		aspect = image;
-	}
+        aspect = image;
+    } else if (action == add3DPlotAction) {
+        auto* plot = new Surface3DPlotArea(i18n("3D Plot"));
+        aspect = plot;
+    }
+
 	if (!aspect)
 		return;
 

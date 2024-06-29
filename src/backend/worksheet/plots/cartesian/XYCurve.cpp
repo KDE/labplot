@@ -87,7 +87,6 @@ void XYCurve::init(bool loading) {
 		d->recalcShapeAndBoundingRect();
 		Q_EMIT appearanceChanged();
 	});
-
 	// drop line
 	d->dropLine = new Line(QStringLiteral("dropLine"));
 	d->dropLine->setPrefix(QStringLiteral("DropLine"));

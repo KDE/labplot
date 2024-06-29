@@ -287,7 +287,9 @@ int VectorBLFFilterPrivate::readDataFromFileCommonTime(const QString& fileName, 
 		while (file.good() && ((lines >= 0 && message_counter < lines) || lines < 0)) {
 			try {
 				objectHeader = file.read();
-			} catch (std::runtime_error& e) { DEBUG("Exception: " << e.what() << std::endl); }
+			} catch (std::runtime_error& e) {
+				DEBUG("Exception: " << e.what() << std::endl);
+			}
 			if (objectHeader == nullptr)
 				break;
 

@@ -116,19 +116,11 @@ private:
 // D: private var, SHARED: Q_D
 // DECL and IMPL
 #define BASIC_ACCESSOR(type, var, method, Method)                                                                                                              \
-	type method() const {                                                                                                                                      \
-		return var;                                                                                                                                            \
-	};                                                                                                                                                         \
-	void set##Method(const type value) {                                                                                                                       \
-		var = value;                                                                                                                                           \
-	}
+	type method() const { return var; };                                                                                                                       \
+	void set##Method(const type value) { var = value; }
 #define CLASS_ACCESSOR(type, var, method, Method)                                                                                                              \
-	type method() const {                                                                                                                                      \
-		return var;                                                                                                                                            \
-	};                                                                                                                                                         \
-	void set##Method(const type& value) {                                                                                                                      \
-		var = value;                                                                                                                                           \
-	}
+	type method() const { return var; };                                                                                                                       \
+	void set##Method(const type& value) { var = value; }
 
 #define BASIC_D_ACCESSOR_DECL(type, method, Method)                                                                                                            \
 	type method() const;                                                                                                                                       \
@@ -193,18 +185,10 @@ private:
 	void enable##Method(const bool value = true);
 
 #define FLAG_D_ACCESSOR_IMPL(classname, Method, var)                                                                                                           \
-	void classname::set##Method(const bool value) {                                                                                                            \
-		d->var = value;                                                                                                                                        \
-	}                                                                                                                                                          \
-	void classname::enable##Method(const bool value) {                                                                                                         \
-		d->var = value;                                                                                                                                        \
-	}                                                                                                                                                          \
-	bool classname::is##Method() const {                                                                                                                       \
-		return d->var;                                                                                                                                         \
-	}                                                                                                                                                          \
-	bool classname::has##Method() const {                                                                                                                      \
-		return d->var;                                                                                                                                         \
-	}
+	void classname::set##Method(const bool value) { d->var = value; }                                                                                          \
+	void classname::enable##Method(const bool value) { d->var = value; }                                                                                       \
+	bool classname::is##Method() const { return d->var; }                                                                                                      \
+	bool classname::has##Method() const { return d->var; }
 
 //////////////////////// Standard Setter /////////////////////
 
@@ -212,8 +196,7 @@ private:
 	class class_name##cmd_name##Cmd : public StandardSetterCmd<class_name::Private, value_type> {                                                              \
 	public:                                                                                                                                                    \
 		class_name##cmd_name##Cmd(class_name::Private* target, value_type newValue, const KLocalizedString& description)                                       \
-			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) {                            \
-		}                                                                                                                                                      \
+			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) { }                          \
 	};
 
 // setter class with finalize()
@@ -221,11 +204,8 @@ private:
 	class class_name##cmd_name##Cmd : public StandardSetterCmd<class_name::Private, value_type> {                                                              \
 	public:                                                                                                                                                    \
 		class_name##cmd_name##Cmd(class_name::Private* target, value_type newValue, const KLocalizedString& description)                                       \
-			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) {                            \
-		}                                                                                                                                                      \
-		virtual void finalize() override {                                                                                                                     \
-			m_target->finalize_method();                                                                                                                       \
-		}                                                                                                                                                      \
+			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) { }                          \
+		virtual void finalize() override { m_target->finalize_method(); }                                                                                      \
 	};
 
 // setter class with signal emitting.
@@ -233,11 +213,8 @@ private:
 	class class_name##cmd_name##Cmd : public StandardSetterCmd<class_name::Private, value_type> {                                                              \
 	public:                                                                                                                                                    \
 		class_name##cmd_name##Cmd(class_name::Private* target, value_type newValue, const KLocalizedString& description, QUndoCommand* parent = nullptr)       \
-			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description, parent) {                    \
-		}                                                                                                                                                      \
-		virtual void finalize() override {                                                                                                                     \
-			Q_EMIT m_target->q->field_name##Changed(m_target->*m_field);                                                                                       \
-		}                                                                                                                                                      \
+			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description, parent) { }                  \
+		virtual void finalize() override { Q_EMIT m_target->q->field_name##Changed(m_target->*m_field); }                                                      \
 	};
 
 // setter class with finalize() and signal emitting.
@@ -245,8 +222,7 @@ private:
 	class class_name##cmd_name##Cmd : public StandardSetterCmd<class_name::Private, value_type> {                                                              \
 	public:                                                                                                                                                    \
 		class_name##cmd_name##Cmd(class_name::Private* target, value_type newValue, const KLocalizedString& description, QUndoCommand* parent = nullptr)       \
-			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description, parent) {                    \
-		}                                                                                                                                                      \
+			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description, parent) { }                  \
 		virtual void finalize() override {                                                                                                                     \
 			m_target->finalize_method();                                                                                                                       \
 			Q_EMIT m_target->q->field_name##Changed(m_target->*m_field);                                                                                       \
@@ -258,8 +234,7 @@ private:
 	class class_name##cmd_name##Cmd : public StandardSetterCmd<class_name::Private, value_type> {                                                              \
 	public:                                                                                                                                                    \
 		class_name##cmd_name##Cmd(class_name::Private* target, value_type newValue, const KLocalizedString& description, QUndoCommand* parent = nullptr)       \
-			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description, parent) {                    \
-		}                                                                                                                                                      \
+			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description, parent) { }                  \
 		virtual void finalize() override {                                                                                                                     \
 			m_target->finalize_method();                                                                                                                       \
 			Q_EMIT m_target->q->field_name##Changed(m_target->*m_field);                                                                                       \
@@ -272,84 +247,61 @@ private:
 	class class_name##cmd_name##Cmd : public StandardMacroSetterCmd<class_name::Private, value_type> {                                                         \
 	public:                                                                                                                                                    \
 		class_name##cmd_name##Cmd(class_name::Private* target, value_type newValue, const KLocalizedString& description)                                       \
-			: StandardMacroSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) {                       \
-		}                                                                                                                                                      \
+			: StandardMacroSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) { }                     \
 		virtual void finalize() override {                                                                                                                     \
 			m_target->finalize_method();                                                                                                                       \
 			Q_EMIT m_target->q->field_name##Changed(m_target->*m_field);                                                                                       \
 		}                                                                                                                                                      \
-		virtual void finalizeUndo() override {                                                                                                                 \
-			Q_EMIT m_target->q->field_name##Changed(m_target->*m_field);                                                                                       \
-		}                                                                                                                                                      \
+		virtual void finalizeUndo() override { Q_EMIT m_target->q->field_name##Changed(m_target->*m_field); }                                                  \
 	};
 
 #define STD_SETTER_CMD_IMPL_I(class_name, cmd_name, value_type, field_name, init_method)                                                                       \
 	class class_name##cmd_name##Cmd : public StandardSetterCmd<class_name::Private, value_type> {                                                              \
 	public:                                                                                                                                                    \
 		class_name##cmd_name##Cmd(class_name::Private* target, value_type newValue, const KLocalizedString& description)                                       \
-			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) {                            \
-		}                                                                                                                                                      \
-		virtual void initialize() {                                                                                                                            \
-			m_target->init_method();                                                                                                                           \
-		}                                                                                                                                                      \
+			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) { }                          \
+		virtual void initialize() { m_target->init_method(); }                                                                                                 \
 	};
 
 #define STD_SETTER_CMD_IMPL_IF(class_name, cmd_name, value_type, field_name, init_method, finalize_method)                                                     \
 	class class_name##cmd_name##Cmd : public StandardSetterCmd<class_name::Private, value_type> {                                                              \
 	public:                                                                                                                                                    \
 		class_name##cmd_name##Cmd(class_name::Private* target, value_type newValue, const KLocalizedString& description)                                       \
-			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) {                            \
-		}                                                                                                                                                      \
-		virtual void initialize() {                                                                                                                            \
-			m_target->init_method();                                                                                                                           \
-		}                                                                                                                                                      \
-		virtual void finalize() {                                                                                                                              \
-			m_target->finalize_method();                                                                                                                       \
-		}                                                                                                                                                      \
+			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) { }                          \
+		virtual void initialize() { m_target->init_method(); }                                                                                                 \
+		virtual void finalize() { m_target->finalize_method(); }                                                                                               \
 	};
 
 #define STD_SWAP_METHOD_SETTER_CMD_IMPL(class_name, cmd_name, value_type, method_name)                                                                         \
 	class class_name##cmd_name##Cmd : public StandardSwapMethodSetterCmd<class_name::Private, value_type> {                                                    \
 	public:                                                                                                                                                    \
 		class_name##cmd_name##Cmd(class_name::Private* target, value_type newValue, const KLocalizedString& description)                                       \
-			: StandardSwapMethodSetterCmd<class_name::Private, value_type>(target, &class_name::Private::method_name, newValue, description) {                 \
-		}                                                                                                                                                      \
+			: StandardSwapMethodSetterCmd<class_name::Private, value_type>(target, &class_name::Private::method_name, newValue, description) { }               \
 	};
 
 #define STD_SWAP_METHOD_SETTER_CMD_IMPL_F(class_name, cmd_name, value_type, method_name, finalize_method)                                                      \
 	class class_name##cmd_name##Cmd : public StandardSwapMethodSetterCmd<class_name::Private, value_type> {                                                    \
 	public:                                                                                                                                                    \
 		class_name##cmd_name##Cmd(class_name::Private* target, value_type newValue, const KLocalizedString& description)                                       \
-			: StandardSwapMethodSetterCmd<class_name::Private, value_type>(target, &class_name::Private::method_name, newValue, description) {                 \
-		}                                                                                                                                                      \
-		virtual void finalize() override {                                                                                                                     \
-			m_target->finalize_method();                                                                                                                       \
-		}                                                                                                                                                      \
+			: StandardSwapMethodSetterCmd<class_name::Private, value_type>(target, &class_name::Private::method_name, newValue, description) { }               \
+		virtual void finalize() override { m_target->finalize_method(); }                                                                                      \
 	};
 
 #define STD_SWAP_METHOD_SETTER_CMD_IMPL_I(class_name, cmd_name, value_type, method_name, init_method)                                                          \
 	class class_name##cmd_name##Cmd : public StandardSwapMethodSetterCmd<class_name::Private, value_type> {                                                    \
 	public:                                                                                                                                                    \
 		class_name##cmd_name##Cmd(class_name::Private* target, value_type newValue, const KLocalizedString& description)                                       \
-			: StandardSwapMethodSetterCmd<class_name::Private, value_type>(target, &class_name::Private::method_name, newValue, description) {                 \
-		}                                                                                                                                                      \
-		virtual void initialize() {                                                                                                                            \
-			m_target->init_method();                                                                                                                           \
-		}                                                                                                                                                      \
+			: StandardSwapMethodSetterCmd<class_name::Private, value_type>(target, &class_name::Private::method_name, newValue, description) { }               \
+		virtual void initialize() { m_target->init_method(); }                                                                                                 \
 	};
 
 #define STD_SWAP_METHOD_SETTER_CMD_IMPL_IF(class_name, cmd_name, value_type, method_name, init_method, finalize_method)                                        \
 	class class_name##cmd_name##Cmd : public StandardSwapMethodSetterCmd<class_name::Private, value_type> {                                                    \
 	public:                                                                                                                                                    \
 		class_name##cmd_name##Cmd(class_name::Private* target, value_type newValue, const KLocalizedString& description)                                       \
-			: StandardSwapMethodSetterCmd<class_name::Private, value_type>(target, &class_name::Private::method_name, newValue, description) {                 \
-		}                                                                                                                                                      \
-		virtual void initialize() {                                                                                                                            \
-			m_target->init_method();                                                                                                                           \
-		}                                                                                                                                                      \
-		virtual void finalize() {                                                                                                                              \
-			m_target->finalize_method();                                                                                                                       \
-		}                                                                                                                                                      \
+			: StandardSwapMethodSetterCmd<class_name::Private, value_type>(target, &class_name::Private::method_name, newValue, description) { }               \
+		virtual void initialize() { m_target->init_method(); }                                                                                                 \
+		virtual void finalize() { m_target->finalize_method(); }                                                                                               \
 	};
 
 // setter class for QGraphicsitem settings because
@@ -372,9 +324,7 @@ private:
 			finalize();                                                                                                                                        \
 		}                                                                                                                                                      \
                                                                                                                                                                \
-		void undo() override {                                                                                                                                 \
-			redo();                                                                                                                                            \
-		}                                                                                                                                                      \
+		void undo() override { redo(); }                                                                                                                       \
 		void finalize() {                                                                                                                                      \
 			m_target->finalize_method();                                                                                                                       \
 			Q_EMIT m_target->q->field_name##Changed(m_target->field_name());                                                                                   \

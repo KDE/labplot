@@ -21,6 +21,7 @@
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/TreeModel.h"
+#include "backend/worksheet/plots/3d/Surface3DPlotArea.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
@@ -41,8 +42,6 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
-
-#include <backend/worksheet/plots/3d/Surface3DPlotArea.h>
 
 /**
  * \class Worksheet
@@ -291,15 +290,14 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	// add the GraphicsItem of the added child to the scene
 	DEBUG(Q_FUNC_INFO << ", ADDING child to SCENE")
 
-	if (aspect->type() == AspectType::SurfacePlot) {
-		const auto* addedElement = dynamic_cast<const Surface3DPlotArea*>(aspect);
-		const Q3DSurface* graph = addedElement->graph();
+    if (aspect->type() == AspectType::SurfacePlot) {
+        const auto* addedElement = static_cast<const Surface3DPlotArea*>(aspect);
+        const Q3DSurface* graph = addedElement->m_surface;
 		if (graph) {
 			QWidget* window = graph->window();
-			if (window) {
-				QGraphicsProxyWidget* proxy = d->m_scene->addWidget(window);
-			}
-		}
+            if (window)
+                QGraphicsProxyWidget* proxy = d->m_scene->addWidget(window);
+        }
 	} else {
 		auto* item = addedElement->graphicsItem();
 		d->m_scene->addItem(item);
