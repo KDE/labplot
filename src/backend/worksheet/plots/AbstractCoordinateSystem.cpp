@@ -14,7 +14,6 @@
 
 #include "backend/nsl/nsl_math.h"
 #include <cmath>
-
 /**
  * \class AbstractCoordinateSystem
  * \brief Base class of all worksheet coordinate systems.
