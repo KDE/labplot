@@ -1372,7 +1372,7 @@ void WorksheetView::addNew(QAction* action) {
 		Image* image = new Image(i18n("Image"));
         aspect = image;
     } else if (action == add3DPlotAction) {
-        auto* plot = new Surface3DPlotArea(i18n("3D Plot"));
+        auto* plot = new Surface3DPlotArea(QStringLiteral("3D Plot"));
         aspect = plot;
     }
 
