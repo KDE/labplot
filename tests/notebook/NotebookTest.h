@@ -11,9 +11,9 @@
 #ifndef NOTEBOOKTEST_H
 #define NOTEBOOKTEST_H
 
-#include <QtTest>
+#include "../CommonTest.h"
 
-class NotebookTest : public QObject {
+class NotebookTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:

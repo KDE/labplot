@@ -12,7 +12,6 @@
 #define PROJECTIMPORTTEST_H
 
 #include "tests/CommonTest.h"
-#include <QtTest>
 
 class ProjectImportTest : public CommonTest {
 	Q_OBJECT

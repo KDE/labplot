@@ -15,8 +15,8 @@
 #include <gsl/gsl_math.h>
 
 void NotebookTest::initTestCase() {
-	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
-	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
+	CommonTest::initTestCase();
+
 	QLocale::setDefault(QLocale(QLocale::C));
 }
 

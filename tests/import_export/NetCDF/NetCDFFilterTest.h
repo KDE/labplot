@@ -11,7 +11,6 @@
 #define NETCDFFILTERTEST_H
 
 #include "../../CommonTest.h"
-#include <QtTest>
 
 class NetCDFFilterTest : public CommonTest {
 	Q_OBJECT

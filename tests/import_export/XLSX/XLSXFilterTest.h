@@ -11,7 +11,6 @@
 #define XLSXFILTERTEST_H
 
 #include "../../CommonTest.h"
-#include <QtTest>
 
 class XLSXFilterTest : public CommonTest {
 	Q_OBJECT

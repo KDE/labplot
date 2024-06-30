@@ -11,7 +11,6 @@
 #define FITSFILTERTEST_H
 
 #include "../../CommonTest.h"
-#include <QtTest>
 
 class FITSFilterTest : public CommonTest {
 	Q_OBJECT
