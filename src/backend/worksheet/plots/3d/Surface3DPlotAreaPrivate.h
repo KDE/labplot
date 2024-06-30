@@ -1,8 +1,11 @@
 #ifndef SURFACE3DPLOTAREAPRIVATE_H
 #define SURFACE3DPLOTAREAPRIVATE_H
 
-#include "Surface3DPlotArea.h"
-#include "backend/worksheet/WorksheetElementPrivate.h"
+#include <backend/worksheet/WorksheetElementPrivate.h>
+
+
+class Surface3DPlotArea;
+class WorksheetElementPrivate;
 class Surface3DPlotAreaPrivate : public WorksheetElementPrivate {
 public:
 	explicit Surface3DPlotAreaPrivate(Surface3DPlotArea* owner);
@@ -10,4 +13,4 @@ public:
 	void retransform() override;
 	void recalcShapeAndBoundingRect() override;
 };
-#endif //SURFACE3DPLOTAREAPRIVATE_H
+#endif // SURFACE3DPLOTAREAPRIVATE_H
