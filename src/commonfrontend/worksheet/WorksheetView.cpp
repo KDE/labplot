@@ -1135,6 +1135,8 @@ void WorksheetView::dragEnterEvent(QDragEnterEvent* event) {
 	m_worksheet->dockWidget()->dockManager()->setDockWidgetFocused(m_worksheet->dockWidget());
 
 	event->setAccepted(true);
+#else
+	Q_UNUSED(event)
 #endif
 }
 
