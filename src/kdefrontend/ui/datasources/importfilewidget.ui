@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>613</width>
+    <width>541</width>
     <height>1211</height>
    </rect>
   </property>
@@ -244,22 +244,6 @@
         </property>
        </spacer>
       </item>
-      <item row="0" column="1">
-       <spacer name="hsName">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>10</width>
-          <height>23</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
       <item row="1" column="7">
        <widget class="QPushButton" name="bFileInfo">
         <property name="enabled">
@@ -353,6 +337,22 @@
       <item row="14" column="5" colspan="3">
        <layout class="QHBoxLayout" name="hLayoutFilter"/>
       </item>
+      <item row="1" column="1">
+       <spacer name="hsName">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>10</width>
+          <height>23</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
      </layout>
     </widget>
    </item>
@@ -389,7 +389,7 @@
       <item>
        <widget class="QTabWidget" name="tabWidget">
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="tabDataFormat">
          <property name="sizePolicy">
