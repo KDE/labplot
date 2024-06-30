@@ -439,8 +439,6 @@ ENDIF ()
 
 ### MQTT (optional) ###############################
 IF (ENABLE_MQTT)
-# ATTENTION: unit test uses qWaitFor() which needs Qt >= 5.10
-# avoid warning for the moment using QUIET
 	find_package(Qt${QT_VERSION_MAJOR}Mqtt ${QT_MIN_VERSION} NO_MODULE)
 	SET_PACKAGE_PROPERTIES (Qt${QT_VERSION_MAJOR}Mqtt PROPERTIES
 		DESCRIPTION "Qt Module to implement MQTT protocol version 3.1 and 3.1.1"
