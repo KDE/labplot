@@ -2,7 +2,7 @@
 #include "Surface3DPlotAreaPrivate.h"
 #include <QtGraphs/Q3DSurface>
 
-Surface3DPlotArea::Surface3DPlotArea(const QString name)
+Surface3DPlotArea::Surface3DPlotArea(const QString& name)
 	: WorksheetElement(name, new Surface3DPlotAreaPrivate(this), AspectType::SurfacePlot)
 	, m_surface{new Q3DSurface()} {
 }

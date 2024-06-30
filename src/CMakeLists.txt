@@ -435,6 +435,9 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYCorrelationCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/Value.cpp
         ${BACKEND_DIR}/worksheet/plots/3d/Surface3DPlotArea.cpp
+        ${BACKEND_DIR}/worksheet/plots/3d/Surface3DPlotArea.h
+        ${BACKEND_DIR}/worksheet/plots/3d/Surface3DPlotAreaPrivate.h
+
 )
 
 if(Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
@@ -611,6 +614,7 @@ target_link_libraries(labplotlib
 	Qt${QT_MAJOR_VERSION}::Sql
 	Qt${QT_MAJOR_VERSION}::PrintSupport	# QPrinter
 	Qt${QT_MAJOR_VERSION}::Graphs	# For 3D Plots
+        Qt${QT_MAJOR_VERSION}::Widgets	# For 3D Plots
 #     Qt${QT_MAJOR_VERSION}::Qml
 #     Qt${QT_MAJOR_VERSION}::Quick
 #     Qt${QT_MAJOR_VERSION}::QuickWidgets
