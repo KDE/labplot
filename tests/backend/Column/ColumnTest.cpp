@@ -33,14 +33,6 @@
 	for (int i = 0; i < c2.rowCount(); i++)                                                                                                                    \
 		VALUES_EQUAL(c2.valueAt(i), result);
 
-void ColumnTest::initTestCase() {
-	KLocalizedString::setApplicationDomain("labplot2");
-	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
-	// TODO: redesign/remove this
-	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
-	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
-}
-
 void ColumnTest::doubleMinimum() {
 	Column c(QStringLiteral("Double column"), Column::ColumnMode::Double);
 	c.setValues({-1.0, 2.0, 5.0});

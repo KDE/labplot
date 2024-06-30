@@ -12,14 +12,11 @@
 #define ASCIIFILTERTEST_H
 
 #include "../../CommonTest.h"
-#include <QtTest>
 
 class AsciiFilterTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void initTestCase();
-
 	// empty and sparse files
 	void testEmptyFileAppend();
 	void testEmptyFilePrepend();

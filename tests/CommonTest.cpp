@@ -3,20 +3,25 @@
 	Project              : LabPlot
 	Description          : General test class
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2019-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "CommonTest.h"
+#include "src/backend/core/AbstractColumn.h"
+
+#include <QUndoStack>
+
 #ifdef _WIN32
 #include <windows.h>
 #endif
 
-#include <QUndoStack>
-
 void CommonTest::initTestCase() {
 	KLocalizedString::setApplicationDomain("labplot2");
+
+	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
+	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
 
 #ifdef _WIN32
 //	if (AttachConsole(ATTACH_PARENT_PROCESS)) {

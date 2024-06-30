@@ -19,8 +19,6 @@ class ColumnTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void initTestCase();
-
 	// ranges
 	void doubleMinimum();
 	void doubleMaximum();

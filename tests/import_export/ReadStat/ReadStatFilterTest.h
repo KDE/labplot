@@ -11,14 +11,11 @@
 #define READSTATFILTERTEST_H
 
 #include "../../CommonTest.h"
-#include <QtTest>
 
 class ReadStatFilterTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void initTestCase();
-
 	void testDTAImport();
 	void testSASImport();
 	void testSAVImport();

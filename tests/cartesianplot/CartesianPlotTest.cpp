@@ -9,7 +9,6 @@
 */
 
 #include "CartesianPlotTest.h"
-#include "tests/CommonTest.h"
 
 #include "backend/core/Project.h"
 #include "backend/core/Workbook.h"
@@ -29,14 +28,6 @@
 
 #include <QAction>
 #include <QUndoStack>
-
-void CartesianPlotTest::initTestCase() {
-	KLocalizedString::setApplicationDomain("labplot2");
-	//	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
-	//	//TODO: redesign/remove this
-	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
-	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
-}
 
 // ##############################################################################
 // #####################  import of LabPlot projects ############################

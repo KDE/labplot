@@ -10,14 +10,12 @@
 #ifndef CARTESIANPLOTTEST_H
 #define CARTESIANPLOTTEST_H
 
-#include <QtTest>
+#include "../CommonTest.h"
 
-class CartesianPlotTest : public QObject {
+class CartesianPlotTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void initTestCase();
-
 	// change data in spreadsheet source
 	void changeData1();
 	void changeData2();

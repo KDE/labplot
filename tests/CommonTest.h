@@ -141,7 +141,7 @@
 class CommonTest : public QObject {
 	Q_OBJECT
 
-private Q_SLOTS:
+protected Q_SLOTS:
 	void initTestCase();
 
 protected:

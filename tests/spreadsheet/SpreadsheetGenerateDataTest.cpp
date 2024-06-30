@@ -13,9 +13,8 @@
 #include "kdefrontend/spreadsheet/EquidistantValuesDialog.h"
 
 void SpreadsheetGenerateDataTest::initTestCase() {
-	KLocalizedString::setApplicationDomain("labplot2");
-	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
-	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
+	CommonTest::initTestCase();
+
 	QLocale::setDefault(QLocale(QLocale::C));
 }
 

@@ -4,6 +4,7 @@
 	Description          : Tests for MQTT related features
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2018 Kovacs Ferencz <kferike98@gmail.com>
+	SPDX-FileCopyrightText: 2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -27,14 +28,10 @@
 #include <QVector>
 
 void MQTTUnitTest::initTestCase() {
-	KLocalizedString::setApplicationDomain("labplot2");
+	CommonTest::initTestCase();
+
 	const QString currentDir = QLatin1String(__FILE__);
 	m_dataDir = currentDir.left(currentDir.lastIndexOf(QDir::separator())) + QDir::separator() + QLatin1String("data") + QDir::separator();
-
-	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
-	// TODO: redesign/remove this
-	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
-	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
 }
 
 // ##############################################################################
