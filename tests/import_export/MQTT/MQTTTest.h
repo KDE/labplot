@@ -1,5 +1,5 @@
 /*
-	File                 : MQTTUnitTest.h
+	File                 : MQTTTest.h
 	Project              : LabPlot
 	Description          : Tests for MQTT related features
 	--------------------------------------------------------------------
@@ -8,12 +8,12 @@
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
-#ifndef MQTTUNITTEST_H
-#define MQTTUNITTEST_H
+#ifndef MQTTTEST_H
+#define MQTTTEST_H
 
 #include "../../CommonTest.h"
 
-class MQTTUnitTest : public CommonTest {
+class MQTTTest : public CommonTest {
 #ifdef HAVE_MQTT
 	Q_OBJECT
 

@@ -1,5 +1,5 @@
 /*
-	File                 : MQTTUnitTest.cpp
+	File                 : MQTTTest.cpp
 	Project              : LabPlot
 	Description          : Tests for MQTT related features
 	--------------------------------------------------------------------
@@ -9,7 +9,7 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "MQTTUnitTest.h"
+#include "MQTTTest.h"
 
 #ifdef HAVE_MQTT
 #include "backend/core/Project.h"
@@ -27,7 +27,7 @@
 #include <QTreeWidgetItem>
 #include <QVector>
 
-void MQTTUnitTest::initTestCase() {
+void MQTTTest::initTestCase() {
 	CommonTest::initTestCase();
 
 	const QString currentDir = QLatin1String(__FILE__);
@@ -37,7 +37,7 @@ void MQTTUnitTest::initTestCase() {
 // ##############################################################################
 // ###################  check superior and inferior relations  ##################
 // ##############################################################################
-void MQTTUnitTest::testContainFalse() {
+void MQTTTest::testContainFalse() {
 	MQTTClient* client = new MQTTClient(QStringLiteral("test"));
 	const QString fileName = m_dataDir + QStringLiteral("contain_false.txt");
 	QFile file(fileName);
@@ -60,7 +60,7 @@ void MQTTUnitTest::testContainFalse() {
 	}
 }
 
-void MQTTUnitTest::testContainTrue() {
+void MQTTTest::testContainTrue() {
 	MQTTClient* client = new MQTTClient(QStringLiteral("test"));
 	const QString fileName = m_dataDir + QStringLiteral("contain_true.txt");
 	QFile file(fileName);
@@ -86,7 +86,7 @@ void MQTTUnitTest::testContainTrue() {
 // ##############################################################################
 // ############################  check common topics  ###########################
 // ##############################################################################
-void MQTTUnitTest::testCommonTrue() {
+void MQTTTest::testCommonTrue() {
 	MQTTClient* client = new MQTTClient(QStringLiteral("test"));
 	const QString fileName = m_dataDir + QStringLiteral("common_true.txt");
 	QFile file(fileName);
@@ -109,7 +109,7 @@ void MQTTUnitTest::testCommonTrue() {
 	}
 }
 
-void MQTTUnitTest::testCommonFalse() {
+void MQTTTest::testCommonFalse() {
 	MQTTClient* client = new MQTTClient(QStringLiteral("test"));
 	const QString fileName = m_dataDir + QStringLiteral("common_false.txt");
 	QFile file(fileName);
@@ -135,7 +135,7 @@ void MQTTUnitTest::testCommonFalse() {
 // ##############################################################################
 // #################  test handling of data received by messages  ###############
 // ##############################################################################
-void MQTTUnitTest::testIntegerMessage() {
+void MQTTTest::testIntegerMessage() {
 	AsciiFilter* filter = new AsciiFilter();
 	filter->setAutoModeEnabled(true);
 
@@ -229,7 +229,7 @@ void MQTTUnitTest::testIntegerMessage() {
 	}
 }
 
-void MQTTUnitTest::testNumericMessage() {
+void MQTTTest::testNumericMessage() {
 	AsciiFilter* filter = new AsciiFilter();
 	filter->setAutoModeEnabled(true);
 
@@ -323,7 +323,7 @@ void MQTTUnitTest::testNumericMessage() {
 	}
 }
 
-void MQTTUnitTest::testTextMessage() {
+void MQTTTest::testTextMessage() {
 	AsciiFilter* filter = new AsciiFilter();
 	filter->setAutoModeEnabled(true);
 
@@ -403,7 +403,7 @@ void MQTTUnitTest::testTextMessage() {
 // ##############################################################################
 // #####################  test subscribing and unsubscribing  ###################
 // ##############################################################################
-/*void MQTTUnitTest::testSubscriptions() {
+/*void MQTTTest::testSubscriptions() {
 	AsciiFilter* filter = new AsciiFilter();
 	filter->setAutoModeEnabled(true);
 
@@ -600,6 +600,6 @@ void MQTTUnitTest::testTextMessage() {
 	}
 }*/
 
-QTEST_MAIN(MQTTUnitTest)
+QTEST_MAIN(MQTTTest)
 
 #endif // HAVE_MQTT
