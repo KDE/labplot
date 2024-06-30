@@ -15,6 +15,7 @@
 #include <KConfigGroup>
 
 void ImportSqlDatabaseTest::initTestCase() {
+	KLocalizedString::setApplicationDomain("labplot2");
 	// prepare the database connection
 	QString m_configPath(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() + QStringLiteral("sql_connections"));
 	KConfig config(m_configPath, KConfig::SimpleConfig);

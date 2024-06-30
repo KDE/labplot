@@ -22,6 +22,7 @@
 #include <gsl/gsl_rng.h>
 
 void AsciiFilterTest::initTestCase() {
+	KLocalizedString::setApplicationDomain("labplot2");
 	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
 	// TODO: redesign/remove this
 	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");

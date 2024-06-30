@@ -87,6 +87,7 @@ const QString ltspicePath = QStringLiteral("data/ltspice"); // relative path
 	}
 
 void SpiceFilterTest::initTestCase() {
+	KLocalizedString::setApplicationDomain("labplot2");
 	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
 	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
 	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
