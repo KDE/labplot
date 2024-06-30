@@ -23,7 +23,6 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <QPainter>
-#include <QtDataVisualization/QtDataVisualization>
 
 Background::Background(const QString& name)
 	: AbstractAspect(name, AspectType::AbstractAspect)

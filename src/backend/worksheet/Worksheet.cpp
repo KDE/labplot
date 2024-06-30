@@ -70,6 +70,8 @@ Worksheet::Worksheet(const QString& name, bool loading)
 
 	if (!loading)
 		init();
+    auto surface = new Surface3DPlotArea(i18n("3d-plot"));
+    addChild(surface);
 }
 
 Worksheet::~Worksheet() {

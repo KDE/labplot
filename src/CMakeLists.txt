@@ -435,8 +435,6 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYCorrelationCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/Value.cpp
         ${BACKEND_DIR}/worksheet/plots/3d/Surface3DPlotArea.cpp
-        ${BACKEND_DIR}/worksheet/plots/3d/Surface3DPlotArea.h
-        ${BACKEND_DIR}/worksheet/plots/3d/Surface3DPlotAreaPrivate.h
 
 )
 
