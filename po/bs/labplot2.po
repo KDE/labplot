@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-30 01:43+0000\n"
+"POT-Creation-Date: 2024-07-01 01:43+0000\n"
 "PO-Revision-Date: 2015-02-25 20:16+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -1138,7 +1138,7 @@ msgstr "Ne može se otvoriti fajl %1 za čitanje."
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:108
 #: src/commonfrontend/matrix/MatrixView.cpp:133
 #: src/commonfrontend/worksheet/WorksheetView.cpp:221
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1365
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1367
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:99
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:132
 #, fuzzy, kde-format
@@ -9163,8 +9163,8 @@ msgid "%1: add Fourier filter curve"
 msgstr "%1: dodaj %2 kolonu"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1998
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1361
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1362
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1363
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1364
 #, fuzzy, kde-format
 #| msgid "text label"
 msgid "Text Label"
@@ -10829,7 +10829,7 @@ msgstr "xy-kriva"
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4037
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4091
-#: src/commonfrontend/worksheet/WorksheetView.cpp:2215
+#: src/commonfrontend/worksheet/WorksheetView.cpp:2217
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to export"
@@ -10838,7 +10838,7 @@ msgstr "Otvaranje neuspješno"
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4037
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4091
-#: src/commonfrontend/worksheet/WorksheetView.cpp:2215
+#: src/commonfrontend/worksheet/WorksheetView.cpp:2217
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr ""
@@ -11154,7 +11154,7 @@ msgid "Search/Filter Options"
 msgstr "sakrije pretragu/opcije za filtriranje"
 
 #: src/commonfrontend/ProjectExplorer.cpp:200
-#: src/commonfrontend/ProjectExplorer.cpp:344
+#: src/commonfrontend/ProjectExplorer.cpp:349
 #, kde-format
 msgid "Columns"
 msgstr "Kolone"
@@ -11165,59 +11165,59 @@ msgstr "Kolone"
 msgid "Show All"
 msgstr "prikaži sve"
 
-#: src/commonfrontend/ProjectExplorer.cpp:512
+#: src/commonfrontend/ProjectExplorer.cpp:517
 #, kde-format
 msgid "'%1' cannot be pasted into '%2'."
 msgstr ""
 
-#: src/commonfrontend/ProjectExplorer.cpp:526
+#: src/commonfrontend/ProjectExplorer.cpp:531
 #, kde-format
 msgid ""
 "Data cannot be pasted into '%1' directly. Select a spreadsheet column for "
 "this."
 msgstr ""
 
-#: src/commonfrontend/ProjectExplorer.cpp:670
+#: src/commonfrontend/ProjectExplorer.cpp:675
 #, fuzzy, kde-format
 #| msgid "case sensitive"
 msgid "Case Sensitive"
 msgstr "osjetljivo na velika i mala slova"
 
-#: src/commonfrontend/ProjectExplorer.cpp:678
+#: src/commonfrontend/ProjectExplorer.cpp:683
 #, fuzzy, kde-format
 #| msgid "match complete word"
 msgid "Match Complete Word"
 msgstr "podudaranje kompletne riječi"
 
-#: src/commonfrontend/ProjectExplorer.cpp:687
+#: src/commonfrontend/ProjectExplorer.cpp:692
 #, kde-format
 msgid "Fuzzy Matching"
 msgstr ""
 
-#: src/commonfrontend/ProjectExplorer.cpp:903
+#: src/commonfrontend/ProjectExplorer.cpp:908
 #, fuzzy, kde-format
 #| msgid "%1: set visible"
 msgid "%1 elements: set visible: %2"
 msgstr "%1: postavi vidljivo"
 
-#: src/commonfrontend/ProjectExplorer.cpp:927
+#: src/commonfrontend/ProjectExplorer.cpp:932
 #, fuzzy, kde-format
 #| msgid "Do you really want to delete the selected object?"
 #| msgid_plural "Do you really want to delete the selected %1 objects?"
 msgid "Do you really want to delete the selected %1 objects?"
 msgstr "Da li zaista želite da obrišete odabrani %1 objekat?"
 
-#: src/commonfrontend/ProjectExplorer.cpp:929
+#: src/commonfrontend/ProjectExplorer.cpp:934
 #, fuzzy, kde-format
 #| msgid "Do you really want to delete the selected object?"
 #| msgid_plural "Do you really want to delete the selected %1 objects?"
 msgid "Do you really want to delete %1?"
 msgstr "Da li zaista želite da obrišete odabrani %1 objekat?"
 
-#: src/commonfrontend/ProjectExplorer.cpp:934
-#: src/commonfrontend/ProjectExplorer.cpp:940
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1457
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1466
+#: src/commonfrontend/ProjectExplorer.cpp:939
+#: src/commonfrontend/ProjectExplorer.cpp:945
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1459
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1468
 #, fuzzy, kde-format
 #| msgid "Delete selected objects"
 msgid "Delete selected object"
@@ -11226,7 +11226,7 @@ msgstr[0] "Izbriši odabrane objekte"
 msgstr[1] "Izbriši odabrane objekte"
 msgstr[2] "Izbriši odabrane objekte"
 
-#: src/commonfrontend/ProjectExplorer.cpp:945
+#: src/commonfrontend/ProjectExplorer.cpp:950
 #, fuzzy, kde-format
 #| msgid "Delete selected objects"
 msgid "Project Explorer: delete %1 selected object"
@@ -12337,10 +12337,10 @@ msgstr "pomjeri > na dolje"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:422
 #: src/commonfrontend/worksheet/WorksheetView.cpp:486
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1317
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1324
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1331
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1338
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1319
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1326
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1333
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1340
 #, kde-format
 msgid "Plot Area"
 msgstr "Prostor za Crtanje"
@@ -12381,8 +12381,8 @@ msgstr "Primijeni akcije na"
 msgid "Apply Cursor to"
 msgstr "Primijeni akcije na"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1456
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1465
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1458
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1467
 #, kde-format
 msgid "Do you really want to delete the selected object?"
 msgid_plural "Do you really want to delete the selected %1 objects?"
@@ -12390,7 +12390,7 @@ msgstr[0] "Da li zaista želite da obrišete odabrani %1 objekat?"
 msgstr[1] "Da li zaista želite da obrišete odabrana %1 objekta?"
 msgstr[2] "Da li zaista želite da obrišete odabranih %1 objekata?"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1472
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1474
 #, kde-format
 msgid "%1: Remove selected worksheet elements."
 msgstr "%1: Uklonik odabrane radne elmente."
@@ -19567,22 +19567,8 @@ msgstr "iteracije"
 msgid "Foreground:"
 msgstr "Pozadina"
 
-#. i18n: ectx: property (text), widget (QLabel, label_7)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:52
-#, fuzzy, kde-format
-#| msgid "Comment character"
-msgid "Comment Character:"
-msgstr "Komentar karakter"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chbSkipEmptyParts)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:59
-#: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:137
-#, kde-format
-msgid "Skip empty parts"
-msgstr "Preskoči prazne dijelove"
-
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chbSimplifyWhitespaces)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:66
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:33
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:124
 #, kde-format
 msgid ""
@@ -19593,74 +19579,88 @@ msgstr ""
 "internih praznih mjesta sa jednim praznim mjestom."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbSimplifyWhitespaces)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:69
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:36
 #, fuzzy, kde-format
 #| msgid "Simplify whitespaces"
 msgid "Simplify Whitespaces"
 msgstr "Pojednostavni prazna mjesta"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chbCreateTimestamp)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:152
-#, fuzzy, kde-format
-#| msgid "Create new color map"
-msgid "Create Timestamp "
-msgstr "Kreiraj novu mapu boja"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chbRemoveQuotes)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:159
-#, fuzzy, kde-format
-#| msgid "Remo&ve Rows"
-msgid "Remove Quotes"
-msgstr "&Ukloni redove"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chbConvertNaNToZero)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:185
-#: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:30
-#, kde-format
-msgid "Convert NaN to 0"
-msgstr ""
-
 #. i18n: ectx: property (text), widget (QCheckBox, chbHeader)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:205
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:46
 #, fuzzy, kde-format
 #| msgid "dash line"
 msgid "Names at Line:"
 msgstr "crtkasta linija"
 
+#. i18n: ectx: property (text), widget (QCheckBox, chbSkipEmptyParts)
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:99
+#: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:137
+#, kde-format
+msgid "Skip empty parts"
+msgstr "Preskoči prazne dijelove"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chbConvertNaNToZero)
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:119
+#: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:30
+#, kde-format
+msgid "Convert NaN to 0"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QCheckBox, chbCreateIndex)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:212
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:129
 #, fuzzy, kde-format
 #| msgid "Created"
 msgid "Create Index"
 msgstr "Napravljeno"
 
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:219
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:152
 #, fuzzy, kde-format
 #| msgid "Data format"
 msgid "DateTime Format:"
 msgstr "Format podataka"
 
-#. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:226
-#, fuzzy, kde-format
-#| msgid "Decimal notation"
-msgid "Decimal Separator:"
-msgstr "Decimalni zapis"
-
 #. i18n: ectx: property (text), widget (QLabel, lSeparatingCharacter)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:233
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:159
 #, fuzzy, kde-format
 #| msgid "column major"
 msgid "Column Separator:"
 msgstr "najveći u koloni"
 
+#. i18n: ectx: property (text), widget (QCheckBox, chbCreateTimestamp)
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:182
+#, fuzzy, kde-format
+#| msgid "Create new color map"
+msgid "Create Timestamp "
+msgstr "Kreiraj novu mapu boja"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:189
+#, fuzzy, kde-format
+#| msgid "Comment character"
+msgid "Comment Character:"
+msgstr "Komentar karakter"
+
 #. i18n: ectx: property (text), widget (QLabel, lVectorNames)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:240
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:196
 #, fuzzy, kde-format
 #| msgid "Custom grid"
 msgid "Custom Names:"
 msgstr "Podesi meržu"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chbRemoveQuotes)
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:203
+#, fuzzy, kde-format
+#| msgid "Remo&ve Rows"
+msgid "Remove Quotes"
+msgstr "&Ukloni redove"
+
+#. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:210
+#, fuzzy, kde-format
+#| msgid "Decimal notation"
+msgid "Decimal Separator:"
+msgstr "Decimalni zapis"
 
 #. i18n: ectx: property (text), widget (QLabel, lSkipBytes)
 #: src/kdefrontend/ui/datasources/binaryoptionswidget.ui:17
@@ -19811,7 +19811,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lSerialPort)
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:90
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:169
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:308
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:292
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:72
 #, fuzzy, kde-format
 #| msgid "portrait"
@@ -20105,20 +20105,20 @@ msgid "Relative Path:"
 msgstr "Relativna skala"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bFileInfo)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:275
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:259
 #, kde-format
 msgid "Show file info"
 msgstr "Prikaži podatke o datoteci"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaudRate)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:301
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:285
 #, kde-format
 msgid "Baud rate:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lConnection)
 #. i18n: ectx: property (text), widget (QLabel, lConnections)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:315
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:299
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:35
 #, kde-format
 msgid "Connection:"
@@ -20127,7 +20127,7 @@ msgstr "Veza:"
 #. i18n: ectx: property (text), widget (QLabel, lSourceInfo)
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceType)
 #. i18n: ectx: property (text), widget (QLabel, lSourceType)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:322
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:306
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:47
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:188
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:216
@@ -20144,7 +20144,7 @@ msgid "Source:"
 msgstr "Ime izvora"
 
 #. i18n: ectx: property (text), widget (QLabel, lDBCDatabase)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:342
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:326
 #, fuzzy, kde-format
 #| msgid "Dataset"
 msgid "DBC Database"

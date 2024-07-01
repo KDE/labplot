@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-30 01:43+0000\n"
-"PO-Revision-Date: 2024-06-23 08:49+0200\n"
+"POT-Creation-Date: 2024-07-01 01:43+0000\n"
+"PO-Revision-Date: 2024-06-30 19:49+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -1062,7 +1062,7 @@ msgstr ""
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:108
 #: src/commonfrontend/matrix/MatrixView.cpp:133
 #: src/commonfrontend/worksheet/WorksheetView.cpp:221
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1365
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1367
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:99
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:132
 #, kde-format
@@ -8494,8 +8494,8 @@ msgid "%1: add Fourier filter curve"
 msgstr "%1: lägg till fourierfilterkurva"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1998
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1361
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1362
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1363
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1364
 #, kde-format
 msgid "Text Label"
 msgstr "Textbeteckning"
@@ -9447,29 +9447,23 @@ msgid "Bayesian information criterion"
 msgstr "Bayesiskt informationskriterium"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2251
-#, fuzzy, kde-format
-#| msgid "Model has no parameters."
+#, kde-format
 msgid "Model has no parameters!"
 msgstr "Modellen har inga parametrar."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2258
-#, fuzzy, kde-format
-#| msgid "Not sufficient weight data points provided."
+#, kde-format
 msgid "Not sufficient weight data points provided!"
 msgstr "Otillräckligt antal viktade datapunkter angivna."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2335
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:374
-#, fuzzy, kde-format
-#| msgid "No data points available."
+#, kde-format
 msgid "No X data available!"
-msgstr "Inga datapunkter tillgängliga."
+msgstr "Ingen x-data tillgänglig."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2342
-#, fuzzy, kde-format
-#| msgid ""
-#| "The number of data points (%1) must be greater than or equal to the "
-#| "number of parameters (%2)."
+#, kde-format
 msgid ""
 "The number of data points (%1) must be greater than or equal to the number "
 "of parameters (%2)!"
@@ -9478,8 +9472,7 @@ msgstr ""
 "parametrar (%2)."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2349
-#, fuzzy, kde-format
-#| msgid "Fit model not specified."
+#, kde-format
 msgid "Fit model not specified!"
 msgstr "Anpassningsmodell ej angiven."
 
@@ -10027,7 +10020,7 @@ msgstr "Kurva"
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4037
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4091
-#: src/commonfrontend/worksheet/WorksheetView.cpp:2215
+#: src/commonfrontend/worksheet/WorksheetView.cpp:2217
 #, kde-format
 msgid "Failed to export"
 msgstr "Misslyckades exportera"
@@ -10035,7 +10028,7 @@ msgstr "Misslyckades exportera"
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4037
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4091
-#: src/commonfrontend/worksheet/WorksheetView.cpp:2215
+#: src/commonfrontend/worksheet/WorksheetView.cpp:2217
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "Misslyckades skriva till '%1'. Kontrollera sökvägen."
@@ -10332,7 +10325,7 @@ msgid "Search/Filter Options"
 msgstr "Sök- och filtreringsalternativ"
 
 #: src/commonfrontend/ProjectExplorer.cpp:200
-#: src/commonfrontend/ProjectExplorer.cpp:344
+#: src/commonfrontend/ProjectExplorer.cpp:349
 #, kde-format
 msgid "Columns"
 msgstr "Kolumner"
@@ -10342,12 +10335,12 @@ msgstr "Kolumner"
 msgid "Show All"
 msgstr "Visa alla"
 
-#: src/commonfrontend/ProjectExplorer.cpp:512
+#: src/commonfrontend/ProjectExplorer.cpp:517
 #, kde-format
 msgid "'%1' cannot be pasted into '%2'."
 msgstr "'%1' kan inte klistras in i '%2'."
 
-#: src/commonfrontend/ProjectExplorer.cpp:526
+#: src/commonfrontend/ProjectExplorer.cpp:531
 #, kde-format
 msgid ""
 "Data cannot be pasted into '%1' directly. Select a spreadsheet column for "
@@ -10356,47 +10349,47 @@ msgstr ""
 "Data kan inte direkt klistras in i '%1'. Markera en kolumn i kalkylarket för "
 "att göra det."
 
-#: src/commonfrontend/ProjectExplorer.cpp:670
+#: src/commonfrontend/ProjectExplorer.cpp:675
 #, kde-format
 msgid "Case Sensitive"
 msgstr "Skiftlägeskänslig"
 
-#: src/commonfrontend/ProjectExplorer.cpp:678
+#: src/commonfrontend/ProjectExplorer.cpp:683
 #, kde-format
 msgid "Match Complete Word"
 msgstr "Matcha hela ord"
 
-#: src/commonfrontend/ProjectExplorer.cpp:687
+#: src/commonfrontend/ProjectExplorer.cpp:692
 #, kde-format
 msgid "Fuzzy Matching"
 msgstr "Inexakt matchning"
 
-#: src/commonfrontend/ProjectExplorer.cpp:903
+#: src/commonfrontend/ProjectExplorer.cpp:908
 #, kde-format
 msgid "%1 elements: set visible: %2"
 msgstr "%1 element: gör synliga: %2"
 
-#: src/commonfrontend/ProjectExplorer.cpp:927
+#: src/commonfrontend/ProjectExplorer.cpp:932
 #, kde-format
 msgid "Do you really want to delete the selected %1 objects?"
 msgstr "Vill du verkligen de %1 markerade objekten?"
 
-#: src/commonfrontend/ProjectExplorer.cpp:929
+#: src/commonfrontend/ProjectExplorer.cpp:934
 #, kde-format
 msgid "Do you really want to delete %1?"
 msgstr "Vill du verkligen ta bort %1?"
 
-#: src/commonfrontend/ProjectExplorer.cpp:934
-#: src/commonfrontend/ProjectExplorer.cpp:940
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1457
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1466
+#: src/commonfrontend/ProjectExplorer.cpp:939
+#: src/commonfrontend/ProjectExplorer.cpp:945
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1459
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1468
 #, kde-format
 msgid "Delete selected object"
 msgid_plural "Delete selected objects"
 msgstr[0] "Ta bort markerat objekt"
 msgstr[1] "Ta bort markerade objekt"
 
-#: src/commonfrontend/ProjectExplorer.cpp:945
+#: src/commonfrontend/ProjectExplorer.cpp:950
 #, kde-format
 msgid "Project Explorer: delete %1 selected object"
 msgid_plural "Project Explorer: delete %1 selected objects"
@@ -11383,10 +11376,10 @@ msgstr "Flytta neråt Y"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:422
 #: src/commonfrontend/worksheet/WorksheetView.cpp:486
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1317
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1324
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1331
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1338
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1319
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1326
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1333
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1340
 #, kde-format
 msgid "Plot Area"
 msgstr "Diagramområde"
@@ -11425,15 +11418,15 @@ msgstr "Utför åtgärder för"
 msgid "Apply Cursor to"
 msgstr "Använd markör för"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1456
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1465
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1458
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1467
 #, kde-format
 msgid "Do you really want to delete the selected object?"
 msgid_plural "Do you really want to delete the selected %1 objects?"
 msgstr[0] "Vill du verkligen ta bort det markerade objektet?"
 msgstr[1] "Vill du verkligen de %1 markerade objekten?"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1472
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1474
 #, kde-format
 msgid "%1: Remove selected worksheet elements."
 msgstr "%1: Ta bort markerade arbetsbladselement."
@@ -13404,23 +13397,24 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:99
 #, kde-format
 msgid "Select to modify the properties of the symbol for the mean value."
-msgstr ""
+msgstr "Markera för att ändra egenskaperna för symbolen för medelvärdet."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:102
 #, kde-format
 msgid "Select to modify the properties of the symbol for the median value."
-msgstr ""
+msgstr "Markera för att ändra egenskaperna för symbolen för medianvärdet."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:105
 #, kde-format
 msgid "Select to modify the properties of the symbol for the outlier values."
 msgstr ""
+"Markera för att ändra egenskaperna för symbolen för ytterlighetsvärden."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:108
 #, kde-format
 msgid ""
 "Select to modify the properties of the symbol for the \"far out\" values."
-msgstr ""
+msgstr "Markera för att ändra egenskaperna för symbolen för extremvärden."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:111
 #, kde-format
@@ -13428,12 +13422,14 @@ msgid ""
 "Select to modify the properties of the symbol for all data values excluding "
 "the outlier and \"far out\" values."
 msgstr ""
+"Markera för att ändra egenskaperna för symbolen för alla datavärden utom "
+"ytterlighets- och extremvärden."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:114
 #, kde-format
 msgid ""
 "Select to modify the properties of the symbol for the ends of the whiskers."
-msgstr ""
+msgstr "Markera för att ändra egenskaperna för symbolen för streckslut."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:117
 #, kde-format
@@ -13441,6 +13437,8 @@ msgid ""
 "Activate to randomize the positions of the symbols (\"jittering\"), helpful "
 "for dense and overlapping data points."
 msgstr ""
+"Aktivera för att randomisera symbolernas positioner (\"jitter\"), vilket är "
+"användbart för täta och överlappande datapunkter."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:726
 #, kde-format
@@ -14251,28 +14249,24 @@ msgid "t statistic"
 msgstr "t-statistik"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:368
-#, fuzzy, kde-format
-#| msgid "No column available"
+#, kde-format
 msgid "No X and Y column specified!"
-msgstr "Ingen kolumn tillgänglig"
+msgstr "Inga x- och y-kolumner angivna."
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:370
-#, fuzzy, kde-format
-#| msgid "No column available"
+#, kde-format
 msgid "No X column specified!"
-msgstr "Ingen kolumn tillgänglig"
+msgstr "Ingen x-kolumn angiven."
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:372
-#, fuzzy, kde-format
-#| msgid "No column available"
+#, kde-format
 msgid "No Y column specified!"
-msgstr "Ingen kolumn tillgänglig"
+msgstr "Ingen y-kolumn angiven."
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:376
-#, fuzzy, kde-format
-#| msgid "No data points available."
+#, kde-format
 msgid "No Y data available!"
-msgstr "Inga datapunkter tillgängliga."
+msgstr "Ingen y-data tillgänglig."
 
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceCurve)
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:431
@@ -14312,10 +14306,9 @@ msgid "Fit status: %1"
 msgstr "Anpassningsstatus: %1"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1235
-#, fuzzy, kde-format
-#| msgid "No data points available."
+#, kde-format
 msgid "No data source available!"
-msgstr "Inga datapunkter tillgängliga."
+msgstr "Inga datakällor tillgängliga."
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1410
 #, kde-format
@@ -15187,46 +15180,39 @@ msgstr "Misslyckades öppna"
 
 #. i18n: ectx: ToolBar (main_toolbar)
 #: src/kdefrontend/labplot2ui.rc:6
-#, fuzzy, kde-format
-#| msgid "Project Explorer"
+#, kde-format
 msgid "Project Toolbar"
-msgstr "Projektutforskare"
+msgstr "Verktygsrad för projekt"
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:24
-#, fuzzy, kde-format
-#| msgid "Worksheet"
+#, kde-format
 msgid "Worksheet Toolbar"
-msgstr "Arbetsblad"
+msgstr "Verktygsrad för arbetsblad"
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
 #: src/kdefrontend/labplot2ui.rc:28
-#, fuzzy, kde-format
-#| msgid "Data Extractor"
+#, kde-format
 msgid "Data Extractor Toolbar"
-msgstr "Dataextrahering"
+msgstr "Verktygsrad för dataextrahering"
 
 #. i18n: ectx: ToolBar (spreadsheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:32
-#, fuzzy, kde-format
-#| msgid "Spreadsheet"
+#, kde-format
 msgid "Spreadsheet Toolbar"
-msgstr "Kalkylark"
+msgstr "Verktygsrad för kalkylark"
 
 #. i18n: ectx: ToolBar (notebook_toolbar)
 #: src/kdefrontend/labplot2ui.rc:36
-#, fuzzy, kde-format
-#| msgid "Notebook"
+#, kde-format
 msgid "Notebook Toolbar"
-msgstr "Anteckningsblock"
+msgstr "Verktygsrad för anteckningsblock"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
 #: src/kdefrontend/labplot2ui.rc:40
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Plot Area Templates"
+#, kde-format
 msgid "Plot Area Toolbar"
-msgstr "Diagramområdesmallar"
+msgstr "Verktygsrad för diagramområde"
 
 #. i18n: ectx: Menu (file)
 #: src/kdefrontend/labplot2ui.rc:44
@@ -18281,21 +18267,8 @@ msgstr "Färgmättnad:"
 msgid "Foreground:"
 msgstr "Förgrund:"
 
-#. i18n: ectx: property (text), widget (QLabel, label_7)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:52
-#, kde-format
-msgid "Comment Character:"
-msgstr "Kommentartecken:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chbSkipEmptyParts)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:59
-#: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:137
-#, kde-format
-msgid "Skip empty parts"
-msgstr "Hoppa över tomma delar"
-
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chbSimplifyWhitespaces)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:66
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:33
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:124
 #, kde-format
 msgid ""
@@ -18306,65 +18279,78 @@ msgstr ""
 "interna blanktecken med ett enda mellanslag."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbSimplifyWhitespaces)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:69
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:36
 #, kde-format
 msgid "Simplify Whitespaces"
 msgstr "Förenkla blanktecken"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chbCreateTimestamp)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:152
+#. i18n: ectx: property (text), widget (QCheckBox, chbHeader)
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:46
 #, kde-format
-msgid "Create Timestamp "
-msgstr "Skapa tidsstämpel"
+msgid "Names at Line:"
+msgstr "Namn på rad:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chbRemoveQuotes)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:159
+#. i18n: ectx: property (text), widget (QCheckBox, chbSkipEmptyParts)
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:99
+#: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:137
 #, kde-format
-msgid "Remove Quotes"
-msgstr "Ta bort citationstecken"
+msgid "Skip empty parts"
+msgstr "Hoppa över tomma delar"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbConvertNaNToZero)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:185
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:119
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:30
 #, kde-format
 msgid "Convert NaN to 0"
 msgstr "Konvertera NaN till 0"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chbHeader)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:205
-#, kde-format
-msgid "Names at Line:"
-msgstr "Namn på rad:"
-
 #. i18n: ectx: property (text), widget (QCheckBox, chbCreateIndex)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:212
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:129
 #, kde-format
 msgid "Create Index"
 msgstr "Skapa index"
 
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:219
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:152
 #, kde-format
 msgid "DateTime Format:"
 msgstr "Datum- och tidsformat:"
 
-#. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:226
-#, kde-format
-msgid "Decimal Separator:"
-msgstr "Decimaltecken:"
-
 #. i18n: ectx: property (text), widget (QLabel, lSeparatingCharacter)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:233
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:159
 #, kde-format
 msgid "Column Separator:"
 msgstr "Kolumnavskiljare:"
 
+#. i18n: ectx: property (text), widget (QCheckBox, chbCreateTimestamp)
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:182
+#, kde-format
+msgid "Create Timestamp "
+msgstr "Skapa tidsstämpel"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:189
+#, kde-format
+msgid "Comment Character:"
+msgstr "Kommentartecken:"
+
 #. i18n: ectx: property (text), widget (QLabel, lVectorNames)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:240
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:196
 #, kde-format
 msgid "Custom Names:"
 msgstr "Egna namn:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chbRemoveQuotes)
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:203
+#, kde-format
+msgid "Remove Quotes"
+msgstr "Ta bort citationstecken"
+
+#. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:210
+#, kde-format
+msgid "Decimal Separator:"
+msgstr "Decimaltecken:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSkipBytes)
 #: src/kdefrontend/ui/datasources/binaryoptionswidget.ui:17
@@ -18505,7 +18491,7 @@ msgstr "Värddator:"
 #. i18n: ectx: property (text), widget (QLabel, lSerialPort)
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:90
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:169
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:308
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:292
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:72
 #, kde-format
 msgid "Port:"
@@ -18777,20 +18763,20 @@ msgid "Relative Path:"
 msgstr "Relativ sökväg:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bFileInfo)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:275
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:259
 #, kde-format
 msgid "Show file info"
 msgstr "Visa filinformation"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaudRate)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:301
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:285
 #, kde-format
 msgid "Baud rate:"
 msgstr "Baudhastighet:"
 
 #. i18n: ectx: property (text), widget (QLabel, lConnection)
 #. i18n: ectx: property (text), widget (QLabel, lConnections)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:315
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:299
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:35
 #, kde-format
 msgid "Connection:"
@@ -18799,7 +18785,7 @@ msgstr "Anslutning:"
 #. i18n: ectx: property (text), widget (QLabel, lSourceInfo)
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceType)
 #. i18n: ectx: property (text), widget (QLabel, lSourceType)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:322
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:306
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:47
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:188
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:216
@@ -18815,7 +18801,7 @@ msgid "Source:"
 msgstr "Källa:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDBCDatabase)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:342
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:326
 #, kde-format
 msgid "DBC Database"
 msgstr "DBC-databas"
@@ -19787,7 +19773,7 @@ msgstr "Markörer"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:543
 #, kde-format
 msgid "Outlier"
-msgstr "Uteliggare"
+msgstr "Ytterlighetsvärde"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbFarOut)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:550
@@ -19799,7 +19785,7 @@ msgstr "Extremvärde"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:557
 #, kde-format
 msgid "Data (excl. Outlier and Far Out)"
-msgstr ""
+msgstr "Data (utom ytterlighets- och extremvärden)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbWhiskerEnd)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:564

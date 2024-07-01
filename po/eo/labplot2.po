@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-30 01:43+0000\n"
-"PO-Revision-Date: 2024-06-28 21:02+0200\n"
+"POT-Creation-Date: 2024-07-01 01:43+0000\n"
+"PO-Revision-Date: 2024-06-30 17:15+0200\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -1064,7 +1064,7 @@ msgstr ""
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:108
 #: src/commonfrontend/matrix/MatrixView.cpp:133
 #: src/commonfrontend/worksheet/WorksheetView.cpp:221
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1365
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1367
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:99
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:132
 #, kde-format
@@ -8481,8 +8481,8 @@ msgid "%1: add Fourier filter curve"
 msgstr "%1: aldoni kurbon de Fourier-filtrilo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1998
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1361
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1362
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1363
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1364
 #, kde-format
 msgid "Text Label"
 msgstr "Teksta Etikedo"
@@ -10006,7 +10006,7 @@ msgstr "Kurbo"
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4037
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4091
-#: src/commonfrontend/worksheet/WorksheetView.cpp:2215
+#: src/commonfrontend/worksheet/WorksheetView.cpp:2217
 #, kde-format
 msgid "Failed to export"
 msgstr "Malsukcesis eksporti"
@@ -10014,7 +10014,7 @@ msgstr "Malsukcesis eksporti"
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4037
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4091
-#: src/commonfrontend/worksheet/WorksheetView.cpp:2215
+#: src/commonfrontend/worksheet/WorksheetView.cpp:2217
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "Malsukcesis skribi al '%1'. Bonvolu kontroli la vojon."
@@ -10311,7 +10311,7 @@ msgid "Search/Filter Options"
 msgstr "Serĉu/Filtrilaj Opcioj"
 
 #: src/commonfrontend/ProjectExplorer.cpp:200
-#: src/commonfrontend/ProjectExplorer.cpp:344
+#: src/commonfrontend/ProjectExplorer.cpp:349
 #, kde-format
 msgid "Columns"
 msgstr "Kolumnoj"
@@ -10321,12 +10321,12 @@ msgstr "Kolumnoj"
 msgid "Show All"
 msgstr "Montri Ĉion"
 
-#: src/commonfrontend/ProjectExplorer.cpp:512
+#: src/commonfrontend/ProjectExplorer.cpp:517
 #, kde-format
 msgid "'%1' cannot be pasted into '%2'."
 msgstr "'%1' ne povas esti algluita en '%2'."
 
-#: src/commonfrontend/ProjectExplorer.cpp:526
+#: src/commonfrontend/ProjectExplorer.cpp:531
 #, kde-format
 msgid ""
 "Data cannot be pasted into '%1' directly. Select a spreadsheet column for "
@@ -10335,47 +10335,47 @@ msgstr ""
 "Datumoj ne povas esti algluitaj en '%1' rekte. Elektu kalkultabelan kolumnon "
 "por ĉi tio."
 
-#: src/commonfrontend/ProjectExplorer.cpp:670
+#: src/commonfrontend/ProjectExplorer.cpp:675
 #, kde-format
 msgid "Case Sensitive"
 msgstr "Usklecodistinga"
 
-#: src/commonfrontend/ProjectExplorer.cpp:678
+#: src/commonfrontend/ProjectExplorer.cpp:683
 #, kde-format
 msgid "Match Complete Word"
 msgstr "Kongrui Kompletan Vorton"
 
-#: src/commonfrontend/ProjectExplorer.cpp:687
+#: src/commonfrontend/ProjectExplorer.cpp:692
 #, kde-format
 msgid "Fuzzy Matching"
 msgstr "Fuzzy Matching"
 
-#: src/commonfrontend/ProjectExplorer.cpp:903
+#: src/commonfrontend/ProjectExplorer.cpp:908
 #, kde-format
 msgid "%1 elements: set visible: %2"
 msgstr "%1 elementoj: aro videbla: %2"
 
-#: src/commonfrontend/ProjectExplorer.cpp:927
+#: src/commonfrontend/ProjectExplorer.cpp:932
 #, kde-format
 msgid "Do you really want to delete the selected %1 objects?"
 msgstr "Ĉu vi vere volas forigi la elektitajn %1 objektojn?"
 
-#: src/commonfrontend/ProjectExplorer.cpp:929
+#: src/commonfrontend/ProjectExplorer.cpp:934
 #, kde-format
 msgid "Do you really want to delete %1?"
 msgstr "Ĉu vi vere volas forigi %1?"
 
-#: src/commonfrontend/ProjectExplorer.cpp:934
-#: src/commonfrontend/ProjectExplorer.cpp:940
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1457
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1466
+#: src/commonfrontend/ProjectExplorer.cpp:939
+#: src/commonfrontend/ProjectExplorer.cpp:945
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1459
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1468
 #, kde-format
 msgid "Delete selected object"
 msgid_plural "Delete selected objects"
 msgstr[0] "Forigi elektitan objekton"
 msgstr[1] "Forigi elektitajn objektojn"
 
-#: src/commonfrontend/ProjectExplorer.cpp:945
+#: src/commonfrontend/ProjectExplorer.cpp:950
 #, kde-format
 msgid "Project Explorer: delete %1 selected object"
 msgid_plural "Project Explorer: delete %1 selected objects"
@@ -11362,10 +11362,10 @@ msgstr "Shift Down Y"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:422
 #: src/commonfrontend/worksheet/WorksheetView.cpp:486
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1317
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1324
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1331
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1338
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1319
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1326
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1333
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1340
 #, kde-format
 msgid "Plot Area"
 msgstr "Diagramiga Areo"
@@ -11404,15 +11404,15 @@ msgstr "Apliki Agojn al"
 msgid "Apply Cursor to"
 msgstr "Apliki Kursoron al"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1456
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1465
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1458
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1467
 #, kde-format
 msgid "Do you really want to delete the selected object?"
 msgid_plural "Do you really want to delete the selected %1 objects?"
 msgstr[0] "Ĉu vi vere volas forigi la elektitan objekton?"
 msgstr[1] "Ĉu vi vere volas forigi la elektitajn %1 objektojn?"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1472
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1474
 #, kde-format
 msgid "%1: Remove selected worksheet elements."
 msgstr "%1: Forigi elektitajn laborfolio-elementojn."
@@ -13379,23 +13379,24 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:99
 #, kde-format
 msgid "Select to modify the properties of the symbol for the mean value."
-msgstr ""
+msgstr "Elektu por modifi la ecojn de la simbolo por la mezvaloro."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:102
 #, kde-format
 msgid "Select to modify the properties of the symbol for the median value."
-msgstr ""
+msgstr "Elektu por modifi la ecojn de la simbolo por la meza valoro."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:105
 #, kde-format
 msgid "Select to modify the properties of the symbol for the outlier values."
-msgstr ""
+msgstr "Elektu por modifi la ecojn de la simbolo por la ekstervaloroj."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:108
 #, kde-format
 msgid ""
 "Select to modify the properties of the symbol for the \"far out\" values."
 msgstr ""
+"Elektu por modifi la ecojn de la simbolo por la valoroj \"malproksime\"."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:111
 #, kde-format
@@ -13403,12 +13404,14 @@ msgid ""
 "Select to modify the properties of the symbol for all data values excluding "
 "the outlier and \"far out\" values."
 msgstr ""
+"Elektu por modifi la proprecojn de la simbolo por ĉiuj datenvaloroj escepte "
+"de la eksterordinaraj kaj \"malproksime\" valoroj."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:114
 #, kde-format
 msgid ""
 "Select to modify the properties of the symbol for the ends of the whiskers."
-msgstr ""
+msgstr "Elektu por modifi la ecojn de la simbolo por la finoj de la barbo."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:117
 #, kde-format
@@ -13416,6 +13419,8 @@ msgid ""
 "Activate to randomize the positions of the symbols (\"jittering\"), helpful "
 "for dense and overlapping data points."
 msgstr ""
+"Aktivigu por hazardigi la poziciojn de la simboloj (\"jittering\"), helpemaj "
+"por densaj kaj interkovritaj datumpunktoj."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:726
 #, kde-format
@@ -16113,7 +16118,7 @@ msgstr ""
 #: src/kdefrontend/SettingsGeneralPage.cpp:273
 #, kde-format
 msgid "Activates additional tracing output in the terminal."
-msgstr ""
+msgstr "Aktivigas plian spuran eligon en la terminalo."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:274
 #, kde-format
@@ -16121,6 +16126,8 @@ msgid ""
 "Debug trace - helpful to diagnose the application, can have a negative "
 "impact on the performance."
 msgstr ""
+"Sencimiga spuro - helpema por diagnozi la aplikaĵon, povas havi negativan "
+"efikon sur la agado."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:275
 #, kde-format
@@ -16128,6 +16135,8 @@ msgid ""
 "Performance trace - helpful to analyze performance relevant aspects and "
 "bottlenecks."
 msgstr ""
+"Rendimenta spuro - helpema analizi rendimentorilatajn aspektojn kaj "
+"proplempunktojn."
 
 #: src/kdefrontend/SettingsNotebookPage.cpp:23
 #, kde-format
@@ -18245,21 +18254,8 @@ msgstr "Saturiĝo:"
 msgid "Foreground:"
 msgstr "Malfono:"
 
-#. i18n: ectx: property (text), widget (QLabel, label_7)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:52
-#, kde-format
-msgid "Comment Character:"
-msgstr "Komenta Signo:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chbSkipEmptyParts)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:59
-#: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:137
-#, kde-format
-msgid "Skip empty parts"
-msgstr "Salti malplenajn partojn"
-
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chbSimplifyWhitespaces)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:66
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:33
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:124
 #, kde-format
 msgid ""
@@ -18270,65 +18266,78 @@ msgstr ""
 "sekvencon de internaj blankspacoj per ununura spaco."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbSimplifyWhitespaces)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:69
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:36
 #, kde-format
 msgid "Simplify Whitespaces"
 msgstr "Simpligi Blankspacojn"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chbCreateTimestamp)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:152
+#. i18n: ectx: property (text), widget (QCheckBox, chbHeader)
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:46
 #, kde-format
-msgid "Create Timestamp "
-msgstr "Krei Tempmarkon"
+msgid "Names at Line:"
+msgstr "Nomoj ĉe Linio:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chbRemoveQuotes)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:159
+#. i18n: ectx: property (text), widget (QCheckBox, chbSkipEmptyParts)
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:99
+#: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:137
 #, kde-format
-msgid "Remove Quotes"
-msgstr "Forigi Citaĵojn"
+msgid "Skip empty parts"
+msgstr "Salti malplenajn partojn"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbConvertNaNToZero)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:185
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:119
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:30
 #, kde-format
 msgid "Convert NaN to 0"
 msgstr "Konverti NaN al 0"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chbHeader)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:205
-#, kde-format
-msgid "Names at Line:"
-msgstr "Nomoj ĉe Linio:"
-
 #. i18n: ectx: property (text), widget (QCheckBox, chbCreateIndex)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:212
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:129
 #, kde-format
 msgid "Create Index"
 msgstr "Krei Indekson"
 
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:219
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:152
 #, kde-format
 msgid "DateTime Format:"
 msgstr "DateTime Formato:"
 
-#. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:226
-#, kde-format
-msgid "Decimal Separator:"
-msgstr "Decimala apartigilo:"
-
 #. i18n: ectx: property (text), widget (QLabel, lSeparatingCharacter)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:233
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:159
 #, kde-format
 msgid "Column Separator:"
 msgstr "Kolumna apartigilo:"
 
+#. i18n: ectx: property (text), widget (QCheckBox, chbCreateTimestamp)
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:182
+#, kde-format
+msgid "Create Timestamp "
+msgstr "Krei Tempmarkon"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:189
+#, kde-format
+msgid "Comment Character:"
+msgstr "Komenta Signo:"
+
 #. i18n: ectx: property (text), widget (QLabel, lVectorNames)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:240
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:196
 #, kde-format
 msgid "Custom Names:"
 msgstr "Propraj Nomoj:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chbRemoveQuotes)
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:203
+#, kde-format
+msgid "Remove Quotes"
+msgstr "Forigi Citaĵojn"
+
+#. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:210
+#, kde-format
+msgid "Decimal Separator:"
+msgstr "Decimala apartigilo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSkipBytes)
 #: src/kdefrontend/ui/datasources/binaryoptionswidget.ui:17
@@ -18469,7 +18478,7 @@ msgstr "Gastiganto:"
 #. i18n: ectx: property (text), widget (QLabel, lSerialPort)
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:90
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:169
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:308
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:292
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:72
 #, kde-format
 msgid "Port:"
@@ -18741,20 +18750,20 @@ msgid "Relative Path:"
 msgstr "Relativa Vojo:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bFileInfo)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:275
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:259
 #, kde-format
 msgid "Show file info"
 msgstr "Montri dosiero-informojn"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaudRate)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:301
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:285
 #, kde-format
 msgid "Baud rate:"
 msgstr "Baudrapideco:"
 
 #. i18n: ectx: property (text), widget (QLabel, lConnection)
 #. i18n: ectx: property (text), widget (QLabel, lConnections)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:315
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:299
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:35
 #, kde-format
 msgid "Connection:"
@@ -18763,7 +18772,7 @@ msgstr "Konekto:"
 #. i18n: ectx: property (text), widget (QLabel, lSourceInfo)
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceType)
 #. i18n: ectx: property (text), widget (QLabel, lSourceType)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:322
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:306
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:47
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:188
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:216
@@ -18779,7 +18788,7 @@ msgid "Source:"
 msgstr "Fonto:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDBCDatabase)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:342
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:326
 #, kde-format
 msgid "DBC Database"
 msgstr "DBC-datumbazo"
@@ -19762,7 +19771,7 @@ msgstr "Far Out"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:557
 #, kde-format
 msgid "Data (excl. Outlier and Far Out)"
-msgstr ""
+msgstr "Datumoj (krom Outlier kaj Far Out)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbWhiskerEnd)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:564

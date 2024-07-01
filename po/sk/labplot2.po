@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-30 01:43+0000\n"
+"POT-Creation-Date: 2024-07-01 01:43+0000\n"
 "PO-Revision-Date: 2019-07-11 18:46+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -1129,7 +1129,7 @@ msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:108
 #: src/commonfrontend/matrix/MatrixView.cpp:133
 #: src/commonfrontend/worksheet/WorksheetView.cpp:221
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1365
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1367
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:99
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:132
 #, fuzzy, kde-format
@@ -9067,8 +9067,8 @@ msgid "%1: add Fourier filter curve"
 msgstr "Pridať stĺpec"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1998
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1361
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1362
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1363
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1364
 #, kde-format
 msgid "Text Label"
 msgstr "Textové pole"
@@ -10697,7 +10697,7 @@ msgstr "Krivka"
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4037
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4091
-#: src/commonfrontend/worksheet/WorksheetView.cpp:2215
+#: src/commonfrontend/worksheet/WorksheetView.cpp:2217
 #, fuzzy, kde-format
 #| msgid "Failed to Open"
 msgid "Failed to export"
@@ -10706,7 +10706,7 @@ msgstr "Nepodarilo sa otvoriť"
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4037
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4091
-#: src/commonfrontend/worksheet/WorksheetView.cpp:2215
+#: src/commonfrontend/worksheet/WorksheetView.cpp:2217
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr ""
@@ -11023,7 +11023,7 @@ msgid "Search/Filter Options"
 msgstr "Hľadať/Filter:"
 
 #: src/commonfrontend/ProjectExplorer.cpp:200
-#: src/commonfrontend/ProjectExplorer.cpp:344
+#: src/commonfrontend/ProjectExplorer.cpp:349
 #, kde-format
 msgid "Columns"
 msgstr "Stĺpce"
@@ -11033,55 +11033,55 @@ msgstr "Stĺpce"
 msgid "Show All"
 msgstr "Zobraziť všetko"
 
-#: src/commonfrontend/ProjectExplorer.cpp:512
+#: src/commonfrontend/ProjectExplorer.cpp:517
 #, kde-format
 msgid "'%1' cannot be pasted into '%2'."
 msgstr ""
 
-#: src/commonfrontend/ProjectExplorer.cpp:526
+#: src/commonfrontend/ProjectExplorer.cpp:531
 #, kde-format
 msgid ""
 "Data cannot be pasted into '%1' directly. Select a spreadsheet column for "
 "this."
 msgstr ""
 
-#: src/commonfrontend/ProjectExplorer.cpp:670
+#: src/commonfrontend/ProjectExplorer.cpp:675
 #, kde-format
 msgid "Case Sensitive"
 msgstr "Rozlišovať veľkosť písmen"
 
-#: src/commonfrontend/ProjectExplorer.cpp:678
+#: src/commonfrontend/ProjectExplorer.cpp:683
 #, kde-format
 msgid "Match Complete Word"
 msgstr ""
 
-#: src/commonfrontend/ProjectExplorer.cpp:687
+#: src/commonfrontend/ProjectExplorer.cpp:692
 #, kde-format
 msgid "Fuzzy Matching"
 msgstr ""
 
-#: src/commonfrontend/ProjectExplorer.cpp:903
+#: src/commonfrontend/ProjectExplorer.cpp:908
 #, fuzzy, kde-format
 #| msgid "%1: set invisible"
 msgid "%1 elements: set visible: %2"
 msgstr "%1: zmeniť na neviditeľné"
 
-#: src/commonfrontend/ProjectExplorer.cpp:927
+#: src/commonfrontend/ProjectExplorer.cpp:932
 #, fuzzy, kde-format
 #| msgid "Do you really want to delete the connection '%1'?"
 msgid "Do you really want to delete the selected %1 objects?"
 msgstr "Naozaj chcete odstrániť pripojenie '%1'?"
 
-#: src/commonfrontend/ProjectExplorer.cpp:929
+#: src/commonfrontend/ProjectExplorer.cpp:934
 #, fuzzy, kde-format
 #| msgid "Do you really want to delete the connection '%1'?"
 msgid "Do you really want to delete %1?"
 msgstr "Naozaj chcete odstrániť pripojenie '%1'?"
 
-#: src/commonfrontend/ProjectExplorer.cpp:934
-#: src/commonfrontend/ProjectExplorer.cpp:940
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1457
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1466
+#: src/commonfrontend/ProjectExplorer.cpp:939
+#: src/commonfrontend/ProjectExplorer.cpp:945
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1459
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1468
 #, kde-format
 msgid "Delete selected object"
 msgid_plural "Delete selected objects"
@@ -11089,7 +11089,7 @@ msgstr[0] "Odstrániť označený objekt"
 msgstr[1] "Zmazať vybrané objekty"
 msgstr[2] "Zmazať vybrané objekty"
 
-#: src/commonfrontend/ProjectExplorer.cpp:945
+#: src/commonfrontend/ProjectExplorer.cpp:950
 #, fuzzy, kde-format
 #| msgid "Delete selected objects"
 msgid "Project Explorer: delete %1 selected object"
@@ -12185,10 +12185,10 @@ msgstr "Posunúť dolu"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:422
 #: src/commonfrontend/worksheet/WorksheetView.cpp:486
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1317
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1324
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1331
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1338
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1319
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1326
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1333
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1340
 #, kde-format
 msgid "Plot Area"
 msgstr "Oblasť zákresu"
@@ -12229,8 +12229,8 @@ msgstr ""
 msgid "Apply Cursor to"
 msgstr "%1: pridať %2"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1456
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1465
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1458
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1467
 #, kde-format
 msgid "Do you really want to delete the selected object?"
 msgid_plural "Do you really want to delete the selected %1 objects?"
@@ -12238,7 +12238,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1472
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1474
 #, kde-format
 msgid "%1: Remove selected worksheet elements."
 msgstr ""
@@ -19267,22 +19267,8 @@ msgstr "Sýtosť:"
 msgid "Foreground:"
 msgstr "Popredie:"
 
-#. i18n: ectx: property (text), widget (QLabel, label_7)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:52
-#, fuzzy, kde-format
-#| msgid "character"
-msgid "Comment Character:"
-msgstr "znak"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chbSkipEmptyParts)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:59
-#: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:137
-#, kde-format
-msgid "Skip empty parts"
-msgstr ""
-
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chbSimplifyWhitespaces)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:66
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:33
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:124
 #, kde-format
 msgid ""
@@ -19291,73 +19277,87 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbSimplifyWhitespaces)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:69
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:36
 #, kde-format
 msgid "Simplify Whitespaces"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QCheckBox, chbCreateTimestamp)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:152
-#, fuzzy, kde-format
-#| msgid "End column:"
-msgid "Create Timestamp "
-msgstr "Konečný stĺpec:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chbRemoveQuotes)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:159
-#, fuzzy, kde-format
-#| msgid "Remo&ve Rows"
-msgid "Remove Quotes"
-msgstr "Odstrániť riadky"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chbConvertNaNToZero)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:185
-#: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:30
-#, kde-format
-msgid "Convert NaN to 0"
-msgstr ""
-
 #. i18n: ectx: property (text), widget (QCheckBox, chbHeader)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:205
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:46
 #, fuzzy, kde-format
 #| msgid "Dash Line"
 msgid "Names at Line:"
 msgstr "Čiarkovaná čiara"
 
+#. i18n: ectx: property (text), widget (QCheckBox, chbSkipEmptyParts)
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:99
+#: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:137
+#, kde-format
+msgid "Skip empty parts"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, chbConvertNaNToZero)
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:119
+#: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:30
+#, kde-format
+msgid "Convert NaN to 0"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QCheckBox, chbCreateIndex)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:212
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:129
 #, fuzzy, kde-format
 #| msgid "Created"
 msgid "Create Index"
 msgstr "Vytvorené"
 
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:219
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:152
 #, fuzzy, kde-format
 #| msgid "Data format"
 msgid "DateTime Format:"
 msgstr "Dátový formát"
 
-#. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:226
-#, fuzzy, kde-format
-#| msgid "Decimal"
-msgid "Decimal Separator:"
-msgstr "Dekadický"
-
 #. i18n: ectx: property (text), widget (QLabel, lSeparatingCharacter)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:233
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:159
 #, fuzzy, kde-format
 #| msgid "Column"
 msgid "Column Separator:"
 msgstr "Stĺpec"
 
+#. i18n: ectx: property (text), widget (QCheckBox, chbCreateTimestamp)
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:182
+#, fuzzy, kde-format
+#| msgid "End column:"
+msgid "Create Timestamp "
+msgstr "Konečný stĺpec:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:189
+#, fuzzy, kde-format
+#| msgid "character"
+msgid "Comment Character:"
+msgstr "znak"
+
 #. i18n: ectx: property (text), widget (QLabel, lVectorNames)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:240
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:196
 #, fuzzy, kde-format
 #| msgid "Custom"
 msgid "Custom Names:"
 msgstr "Vlastný dotaz..."
+
+#. i18n: ectx: property (text), widget (QCheckBox, chbRemoveQuotes)
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:203
+#, fuzzy, kde-format
+#| msgid "Remo&ve Rows"
+msgid "Remove Quotes"
+msgstr "Odstrániť riadky"
+
+#. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:210
+#, fuzzy, kde-format
+#| msgid "Decimal"
+msgid "Decimal Separator:"
+msgstr "Dekadický"
 
 #. i18n: ectx: property (text), widget (QLabel, lSkipBytes)
 #: src/kdefrontend/ui/datasources/binaryoptionswidget.ui:17
@@ -19504,7 +19504,7 @@ msgstr "Hostiteľ:"
 #. i18n: ectx: property (text), widget (QLabel, lSerialPort)
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:90
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:169
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:308
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:292
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:72
 #, kde-format
 msgid "Port:"
@@ -19795,20 +19795,20 @@ msgid "Relative Path:"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bFileInfo)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:275
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:259
 #, kde-format
 msgid "Show file info"
 msgstr "Zobraziť informácie o súbore"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaudRate)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:301
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:285
 #, fuzzy, kde-format
 msgid "Baud rate:"
 msgstr "Prenosová rýchlosť:"
 
 #. i18n: ectx: property (text), widget (QLabel, lConnection)
 #. i18n: ectx: property (text), widget (QLabel, lConnections)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:315
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:299
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:35
 #, kde-format
 msgid "Connection:"
@@ -19817,7 +19817,7 @@ msgstr "Pripojenie:"
 #. i18n: ectx: property (text), widget (QLabel, lSourceInfo)
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceType)
 #. i18n: ectx: property (text), widget (QLabel, lSourceType)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:322
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:306
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:47
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:188
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:216
@@ -19833,7 +19833,7 @@ msgid "Source:"
 msgstr "Zdroj:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDBCDatabase)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:342
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:326
 #, fuzzy, kde-format
 #| msgid "Database"
 msgid "DBC Database"

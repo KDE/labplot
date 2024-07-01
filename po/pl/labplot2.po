@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-30 01:43+0000\n"
+"POT-Creation-Date: 2024-07-01 01:43+0000\n"
 "PO-Revision-Date: 2023-11-04 12:55+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -1067,7 +1067,7 @@ msgstr ""
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:108
 #: src/commonfrontend/matrix/MatrixView.cpp:133
 #: src/commonfrontend/worksheet/WorksheetView.cpp:221
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1365
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1367
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:99
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:132
 #, kde-format
@@ -8669,8 +8669,8 @@ msgid "%1: add Fourier filter curve"
 msgstr "%1: dodaj krzywą filtra Fouriera"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1998
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1361
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1362
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1363
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1364
 #, kde-format
 msgid "Text Label"
 msgstr "Etykieta tekstowa"
@@ -10217,7 +10217,7 @@ msgstr "Krzywa"
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4037
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4091
-#: src/commonfrontend/worksheet/WorksheetView.cpp:2215
+#: src/commonfrontend/worksheet/WorksheetView.cpp:2217
 #, kde-format
 msgid "Failed to export"
 msgstr "Nie udało się wyeksportować"
@@ -10225,7 +10225,7 @@ msgstr "Nie udało się wyeksportować"
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4037
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4091
-#: src/commonfrontend/worksheet/WorksheetView.cpp:2215
+#: src/commonfrontend/worksheet/WorksheetView.cpp:2217
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "Nie udało się zapisać do '%1'. Sprawdź ścieżkę."
@@ -10522,7 +10522,7 @@ msgid "Search/Filter Options"
 msgstr "Ustawienia szukania/filtrowania"
 
 #: src/commonfrontend/ProjectExplorer.cpp:200
-#: src/commonfrontend/ProjectExplorer.cpp:344
+#: src/commonfrontend/ProjectExplorer.cpp:349
 #, kde-format
 msgid "Columns"
 msgstr "Kolumny"
@@ -10532,12 +10532,12 @@ msgstr "Kolumny"
 msgid "Show All"
 msgstr "Pokaż wszystkie"
 
-#: src/commonfrontend/ProjectExplorer.cpp:512
+#: src/commonfrontend/ProjectExplorer.cpp:517
 #, kde-format
 msgid "'%1' cannot be pasted into '%2'."
 msgstr "Nie można '%1' wkleić do '%2'."
 
-#: src/commonfrontend/ProjectExplorer.cpp:526
+#: src/commonfrontend/ProjectExplorer.cpp:531
 #, kde-format
 msgid ""
 "Data cannot be pasted into '%1' directly. Select a spreadsheet column for "
@@ -10546,40 +10546,40 @@ msgstr ""
 "Nie można wkleić danych bezpośrednio do '%1'. Do tego zaznacz kolumnę "
 "arkusza pracy."
 
-#: src/commonfrontend/ProjectExplorer.cpp:670
+#: src/commonfrontend/ProjectExplorer.cpp:675
 #, kde-format
 msgid "Case Sensitive"
 msgstr "Rozróżniaj wielkość liter"
 
-#: src/commonfrontend/ProjectExplorer.cpp:678
+#: src/commonfrontend/ProjectExplorer.cpp:683
 #, kde-format
 msgid "Match Complete Word"
 msgstr "Poszukaj całych słów"
 
-#: src/commonfrontend/ProjectExplorer.cpp:687
+#: src/commonfrontend/ProjectExplorer.cpp:692
 #, kde-format
 msgid "Fuzzy Matching"
 msgstr "Dopasowanie rozmyte"
 
-#: src/commonfrontend/ProjectExplorer.cpp:903
+#: src/commonfrontend/ProjectExplorer.cpp:908
 #, kde-format
 msgid "%1 elements: set visible: %2"
 msgstr "%1 rzeczy: ustaw widoczne: %2"
 
-#: src/commonfrontend/ProjectExplorer.cpp:927
+#: src/commonfrontend/ProjectExplorer.cpp:932
 #, kde-format
 msgid "Do you really want to delete the selected %1 objects?"
 msgstr "Czy na pewno usunąć zaznaczone %1 obiekty?"
 
-#: src/commonfrontend/ProjectExplorer.cpp:929
+#: src/commonfrontend/ProjectExplorer.cpp:934
 #, kde-format
 msgid "Do you really want to delete %1?"
 msgstr "Czy na pewno usunąć %1?"
 
-#: src/commonfrontend/ProjectExplorer.cpp:934
-#: src/commonfrontend/ProjectExplorer.cpp:940
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1457
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1466
+#: src/commonfrontend/ProjectExplorer.cpp:939
+#: src/commonfrontend/ProjectExplorer.cpp:945
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1459
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1468
 #, kde-format
 msgid "Delete selected object"
 msgid_plural "Delete selected objects"
@@ -10587,7 +10587,7 @@ msgstr[0] "Usuń zaznaczony obiekt"
 msgstr[1] "Usuń zaznaczone obiekty"
 msgstr[2] "Usuń zaznaczone obiekty"
 
-#: src/commonfrontend/ProjectExplorer.cpp:945
+#: src/commonfrontend/ProjectExplorer.cpp:950
 #, kde-format
 msgid "Project Explorer: delete %1 selected object"
 msgid_plural "Project Explorer: delete %1 selected objects"
@@ -11585,10 +11585,10 @@ msgstr "Przesuń w dół Y"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:422
 #: src/commonfrontend/worksheet/WorksheetView.cpp:486
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1317
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1324
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1331
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1338
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1319
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1326
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1333
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1340
 #, kde-format
 msgid "Plot Area"
 msgstr "Obszar wykresu"
@@ -11627,8 +11627,8 @@ msgstr "Zastosuj działania dla"
 msgid "Apply Cursor to"
 msgstr "Zastosuj kursor do"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1456
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1465
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1458
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1467
 #, kde-format
 msgid "Do you really want to delete the selected object?"
 msgid_plural "Do you really want to delete the selected %1 objects?"
@@ -11636,7 +11636,7 @@ msgstr[0] "Czy na pewno chcesz usunąć wybrany obiekt?"
 msgstr[1] "Czy na pewno chcesz usunąć wybrane %1 obiekty?"
 msgstr[2] "Czy na pewno chcesz usunąć wybrane %1 obiektów?"
 
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1472
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1474
 #, kde-format
 msgid "%1: Remove selected worksheet elements."
 msgstr "%1: Usuń wybrane elementy arkusza kalkulacyjnego."
@@ -18531,21 +18531,8 @@ msgstr "Nasycenie:"
 msgid "Foreground:"
 msgstr "Pierwszy plan:"
 
-#. i18n: ectx: property (text), widget (QLabel, label_7)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:52
-#, kde-format
-msgid "Comment Character:"
-msgstr "Znak komentarza:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chbSkipEmptyParts)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:59
-#: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:137
-#, kde-format
-msgid "Skip empty parts"
-msgstr "Pomiń puste części"
-
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chbSimplifyWhitespaces)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:66
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:33
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:124
 #, kde-format
 msgid ""
@@ -18556,65 +18543,78 @@ msgstr ""
 "białych znaków pojedynczym odstępem."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbSimplifyWhitespaces)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:69
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:36
 #, kde-format
 msgid "Simplify Whitespaces"
 msgstr "Uprość białe znaki"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chbCreateTimestamp)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:152
+#. i18n: ectx: property (text), widget (QCheckBox, chbHeader)
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:46
 #, kde-format
-msgid "Create Timestamp "
-msgstr "Utwórz znacznik czasu"
+msgid "Names at Line:"
+msgstr "Nazwy w wierszu:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chbRemoveQuotes)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:159
+#. i18n: ectx: property (text), widget (QCheckBox, chbSkipEmptyParts)
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:99
+#: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:137
 #, kde-format
-msgid "Remove Quotes"
-msgstr "Usuń cudzysłowy"
+msgid "Skip empty parts"
+msgstr "Pomiń puste części"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbConvertNaNToZero)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:185
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:119
 #: src/kdefrontend/ui/datasources/jsonoptionswidget.ui:30
 #, kde-format
 msgid "Convert NaN to 0"
 msgstr "Przekształć NaN na 0"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chbHeader)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:205
-#, kde-format
-msgid "Names at Line:"
-msgstr "Nazwy w wierszu:"
-
 #. i18n: ectx: property (text), widget (QCheckBox, chbCreateIndex)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:212
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:129
 #, kde-format
 msgid "Create Index"
 msgstr "Utwórz indeks"
 
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:219
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:152
 #, kde-format
 msgid "DateTime Format:"
 msgstr "Format daty i czasu:"
 
-#. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:226
-#, kde-format
-msgid "Decimal Separator:"
-msgstr "Rozdzielnik dziesiętny:"
-
 #. i18n: ectx: property (text), widget (QLabel, lSeparatingCharacter)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:233
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:159
 #, kde-format
 msgid "Column Separator:"
 msgstr "Rozdzielacz kolumn:"
 
+#. i18n: ectx: property (text), widget (QCheckBox, chbCreateTimestamp)
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:182
+#, kde-format
+msgid "Create Timestamp "
+msgstr "Utwórz znacznik czasu"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:189
+#, kde-format
+msgid "Comment Character:"
+msgstr "Znak komentarza:"
+
 #. i18n: ectx: property (text), widget (QLabel, lVectorNames)
-#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:240
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:196
 #, kde-format
 msgid "Custom Names:"
 msgstr "Własne nazwy:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chbRemoveQuotes)
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:203
+#, kde-format
+msgid "Remove Quotes"
+msgstr "Usuń cudzysłowy"
+
+#. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
+#: src/kdefrontend/ui/datasources/asciioptionswidget.ui:210
+#, kde-format
+msgid "Decimal Separator:"
+msgstr "Rozdzielnik dziesiętny:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSkipBytes)
 #: src/kdefrontend/ui/datasources/binaryoptionswidget.ui:17
@@ -18755,7 +18755,7 @@ msgstr "Gospodarz:"
 #. i18n: ectx: property (text), widget (QLabel, lSerialPort)
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:90
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:169
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:308
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:292
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:72
 #, kde-format
 msgid "Port:"
@@ -19027,20 +19027,20 @@ msgid "Relative Path:"
 msgstr "Ścieżka względna:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bFileInfo)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:275
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:259
 #, kde-format
 msgid "Show file info"
 msgstr "Pokaż informacje o pliku"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaudRate)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:301
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:285
 #, kde-format
 msgid "Baud rate:"
 msgstr "Szybkość baud:"
 
 #. i18n: ectx: property (text), widget (QLabel, lConnection)
 #. i18n: ectx: property (text), widget (QLabel, lConnections)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:315
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:299
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:35
 #, kde-format
 msgid "Connection:"
@@ -19049,7 +19049,7 @@ msgstr "Połączenie:"
 #. i18n: ectx: property (text), widget (QLabel, lSourceInfo)
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceType)
 #. i18n: ectx: property (text), widget (QLabel, lSourceType)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:322
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:306
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:47
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:188
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:216
@@ -19065,7 +19065,7 @@ msgid "Source:"
 msgstr "Źródło:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDBCDatabase)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:342
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:326
 #, kde-format
 msgid "DBC Database"
 msgstr "Baza danych DBC"
