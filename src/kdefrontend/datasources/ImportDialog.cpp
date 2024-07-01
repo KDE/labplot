@@ -137,9 +137,9 @@ void ImportDialog::currentModelIndexChanged(const QModelIndex& index) {
 void ImportDialog::newDataContainer(QAction* action) {
 	DEBUG(Q_FUNC_INFO);
 	QString name = selectedObject();
-	QString type = action->iconText().split(QLatin1Char(' ')).at(1);
 	if (name.isEmpty())
 		name = action->iconText();
+	QString type = action->iconText().split(QLatin1Char(' ')).last();
 
 	bool ok;
 	// child widgets can't have own icons
@@ -156,7 +156,7 @@ void ImportDialog::newDataContainer(QAction* action) {
 			aspect = new Matrix(name);
 
 		m_mainWin->addAspectToProject(aspect);
-		QDEBUG("cbAddTo->setCurrentModelIndex() to " << m_mainWin->model()->modelIndexOfAspect(aspect));
+		QDEBUG(Q_FUNC_INFO << ", cbAddTo->setCurrentModelIndex() to " << m_mainWin->model()->modelIndexOfAspect(aspect));
 		cbAddTo->setCurrentModelIndex(m_mainWin->model()->modelIndexOfAspect(aspect));
 		checkOkButton();
 
