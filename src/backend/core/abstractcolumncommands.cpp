@@ -147,8 +147,8 @@ void AbstractColumnSetMaskedCmd::undo() {
 void AbstractColumnSetMaskedCmd::finalize() const {
 	// TODO: implement AbstractColumn::setChanged() instead of these two calls,
 	// move the already available Column::setChanged to the base class.
-	Q_EMIT m_col->owner()->dataChanged(m_col->owner());
 	m_col->owner()->invalidateProperties();
+	Q_EMIT m_col->owner()->dataChanged(m_col->owner());
 }
 
 /** ***************************************************************************
