@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-01 01:43+0000\n"
-"PO-Revision-Date: 2024-06-24 08:46+0200\n"
+"PO-Revision-Date: 2024-06-28 13:06+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.05.0\n"
+"X-Generator: Lokalize 22.12.3\n"
 "X-Accelerator-Marker: &\n"
 
 #, kde-format
@@ -9553,41 +9553,34 @@ msgid "Bayesian information criterion"
 msgstr "Criteri d'informació bayesiana"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2251
-#, fuzzy, kde-format
-#| msgid "Model has no parameters."
+#, kde-format
 msgid "Model has no parameters!"
-msgstr "El model no té paràmetres."
+msgstr "El model no té paràmetres!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2258
-#, fuzzy, kde-format
-#| msgid "Not sufficient weight data points provided."
+#, kde-format
 msgid "Not sufficient weight data points provided!"
-msgstr "No s'han proporcionat punts suficients de les dades de ponderació."
+msgstr "No s'han proporcionat punts suficients de les dades de ponderació!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2335
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:374
-#, fuzzy, kde-format
-#| msgid "No data points available."
+#, kde-format
 msgid "No X data available!"
-msgstr "No hi ha punts de dades disponibles."
+msgstr "No hi ha cap dada X disponible!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2342
-#, fuzzy, kde-format
-#| msgid ""
-#| "The number of data points (%1) must be greater than or equal to the "
-#| "number of parameters (%2)."
+#, kde-format
 msgid ""
 "The number of data points (%1) must be greater than or equal to the number "
 "of parameters (%2)!"
 msgstr ""
 "El nombre de punts de les dades (%1) ha de ser més gran o igual que el "
-"nombre de paràmetres (%2)."
+"nombre de paràmetres (%2)!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2349
-#, fuzzy, kde-format
-#| msgid "Fit model not specified."
+#, kde-format
 msgid "Fit model not specified!"
-msgstr "Model d'ajust sense especificar."
+msgstr "Model d'ajust sense especificar!"
 
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:85
 #, kde-format
@@ -13544,22 +13537,29 @@ msgstr ""
 #, kde-format
 msgid "Select to modify the properties of the symbol for the mean value."
 msgstr ""
+"Seleccioneu-ho per a modificar les propietats del símbol del valor de la "
+"mitjana."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:102
 #, kde-format
 msgid "Select to modify the properties of the symbol for the median value."
 msgstr ""
+"Seleccioneu-ho per a modificar les propietats del símbol del valor de la "
+"mediana."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:105
 #, kde-format
 msgid "Select to modify the properties of the symbol for the outlier values."
 msgstr ""
+"Seleccioneu-ho per a modificar les propietats del símbol dels valors atípics."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:108
 #, kde-format
 msgid ""
 "Select to modify the properties of the symbol for the \"far out\" values."
 msgstr ""
+"Seleccioneu-ho per a modificar les propietats del símbol dels valors «molt "
+"llunyans»."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:111
 #, kde-format
@@ -13567,12 +13567,16 @@ msgid ""
 "Select to modify the properties of the symbol for all data values excluding "
 "the outlier and \"far out\" values."
 msgstr ""
+"Seleccioneu-ho per a modificar les propietats del símbol de totes les dades "
+"excloent-hi els valors atípics i els «molt llunyans»."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:114
 #, kde-format
 msgid ""
 "Select to modify the properties of the symbol for the ends of the whiskers."
 msgstr ""
+"Seleccioneu-ho per a modificar les propietats del símbol dels extrems dels "
+"bigots."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:117
 #, kde-format
@@ -13580,6 +13584,8 @@ msgid ""
 "Activate to randomize the positions of the symbols (\"jittering\"), helpful "
 "for dense and overlapping data points."
 msgstr ""
+"Activeu-la per a aleatoritzar les posicions dels símbols («jittering»), útil "
+"per a punts de dades densos i superposats."
 
 # skip-rule: kct-box
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:726
@@ -14402,28 +14408,24 @@ msgid "t statistic"
 msgstr "Estadística t"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:368
-#, fuzzy, kde-format
-#| msgid "No column available"
+#, kde-format
 msgid "No X and Y column specified!"
-msgstr "No hi ha cap columna disponible"
+msgstr "No s'ha especificat cap columna X o Y!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:370
-#, fuzzy, kde-format
-#| msgid "No column available"
+#, kde-format
 msgid "No X column specified!"
-msgstr "No hi ha cap columna disponible"
+msgstr "No s'ha especificat cap columna X!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:372
-#, fuzzy, kde-format
-#| msgid "No column available"
+#, kde-format
 msgid "No Y column specified!"
-msgstr "No hi ha cap columna disponible"
+msgstr "No s'ha especificat cap columna Y!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:376
-#, fuzzy, kde-format
-#| msgid "No data points available."
+#, kde-format
 msgid "No Y data available!"
-msgstr "No hi ha punts de dades disponibles."
+msgstr "No hi ha cap dada Y disponible!"
 
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceCurve)
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:431
@@ -14463,10 +14465,9 @@ msgid "Fit status: %1"
 msgstr "Estat de l'ajust: %1"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1235
-#, fuzzy, kde-format
-#| msgid "No data points available."
+#, kde-format
 msgid "No data source available!"
-msgstr "No hi ha punts de dades disponibles."
+msgstr "No hi ha cap origen de dades disponible!"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1410
 #, kde-format
@@ -15342,46 +15343,39 @@ msgstr "No s'ha pogut obrir"
 
 #. i18n: ectx: ToolBar (main_toolbar)
 #: src/kdefrontend/labplot2ui.rc:6
-#, fuzzy, kde-format
-#| msgid "Project Explorer"
+#, kde-format
 msgid "Project Toolbar"
-msgstr "Explorador del projecte"
+msgstr "Barra d'eines de projecte"
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:24
-#, fuzzy, kde-format
-#| msgid "Worksheet"
+#, kde-format
 msgid "Worksheet Toolbar"
-msgstr "Full de treball"
+msgstr "Barra d'eines de full de treball"
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
 #: src/kdefrontend/labplot2ui.rc:28
-#, fuzzy, kde-format
-#| msgid "Data Extractor"
+#, kde-format
 msgid "Data Extractor Toolbar"
-msgstr "Extractor de dades"
+msgstr "Barra d'eines d'extractor de dades"
 
 #. i18n: ectx: ToolBar (spreadsheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:32
-#, fuzzy, kde-format
-#| msgid "Spreadsheet"
+#, kde-format
 msgid "Spreadsheet Toolbar"
-msgstr "Full de càlcul"
+msgstr "Barra d'eines de full de càlcul"
 
 #. i18n: ectx: ToolBar (notebook_toolbar)
 #: src/kdefrontend/labplot2ui.rc:36
-#, fuzzy, kde-format
-#| msgid "Notebook"
+#, kde-format
 msgid "Notebook Toolbar"
-msgstr "Bloc de notes"
+msgstr "Barra d'eines de bloc de notes"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
 #: src/kdefrontend/labplot2ui.rc:40
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Plot Area Templates"
+#, kde-format
 msgid "Plot Area Toolbar"
-msgstr "Plantilles d'àrea de diagrames"
+msgstr "Barra d'eines d'àrea de diagrames"
 
 #. i18n: ectx: Menu (file)
 #: src/kdefrontend/labplot2ui.rc:44
@@ -19996,7 +19990,7 @@ msgstr "Valor molt llunyà"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:557
 #, kde-format
 msgid "Data (excl. Outlier and Far Out)"
-msgstr ""
+msgstr "Dades (excl. atípics i «molt llunyans»)"
 
 # https://ca.wikipedia.org/wiki/Diagrama_de_caixa
 #. i18n: ectx: property (text), widget (QRadioButton, rbWhiskerEnd)
@@ -23888,9 +23882,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "Fit not possible. Please check if data is given."
-#~ msgstr "L'ajust no és possible. Comproveu si s'han indicat les dades."
-
-#~ msgid "CartesianPlot"
-#~ msgstr "DiagramaCartesià"
