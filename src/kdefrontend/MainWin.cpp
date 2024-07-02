@@ -1399,7 +1399,7 @@ bool MainWin::newProject(bool createInitialContent) {
 
 	// depending on the settings, create the default project content (add a worksheet, etc.)
 	if (createInitialContent) {
-		const auto newProject = (NewProject)group.readEntry(QStringLiteral("NewProject"), static_cast<int>(NewProject::WithWorksheet));
+		const auto newProject = (NewProject)group.readEntry(QStringLiteral("NewProject"), static_cast<int>(NewProject::WithSpreadsheet));
 		switch (newProject) {
 		case NewProject::WithWorksheet:
 			newWorksheet();
