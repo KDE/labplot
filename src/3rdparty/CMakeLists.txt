@@ -88,6 +88,7 @@ if (ENABLE_VECTOR_BLF)
       # dbc is the root project name
       # https://gitlab.kitware.com/cmake/cmake/-/issues/19854
       set(CMAKE_PROJECT_dbc_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/dbc_database_parser_disableTests.cmake")
+      # don't install dbc_parser_cpp
       # see https://stackoverflow.com/questions/65527126/disable-install-for-fetchcontent
       # FetchContent_MakeAvailable(dbc_parser_cpp)
       FetchContent_GetProperties(dbc_parser_cpp)
@@ -119,6 +120,7 @@ if (ENABLE_VECTOR_BLF)
         GIT_TAG 2c1a8e649328f2e06ce4d45c6223628bc39fd178
       )
       set(CMAKE_PROJECT_Vector_BLF_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/vector_blf_config.cmake")
+      # TODO: link static and don't install (see dbc_parser_cpp)
       FetchContent_MakeAvailable(vector_blf)
       # headerfiles of the projects are referring to <Vector/BLF/someheader.h> and therefore
       # the path must be added
@@ -149,8 +151,16 @@ if (LOCAL_QT_ADVANCED_DOCK_DOWNLOAD)
         qt_advanced_dock
         GIT_REPOSITORY https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System.git
         GIT_TAG a940fc29c6d1fbcb5ee1e2fecf86f20bb86a7fb6
-      )
-      FetchContent_MakeAvailable(qt_advanced_dock)
+    )
+    set(CMAKE_PROJECT_QtADS_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/QtADS_config.cmake")
+    # don't install qt_advanced_dock
+    # see https://stackoverflow.com/questions/65527126/disable-install-for-fetchcontent
+    # FetchContent_MakeAvailable(qt_advanced_dock)
+    FetchContent_GetProperties(qt_advanced_dock)
+    if(NOT qt_advanced_dock_POPULATED)
+        FetchContent_Populate(qt_advanced_dock)
+        add_subdirectory(${qt_advanced_dock_SOURCE_DIR} ${qt_advanced_dock_BINARY_DIR} EXCLUDE_FROM_ALL)
+    endif()
 elseif(LOCAL_QT_ADVANCED_DOCK_COPY)
     # https://cmake.org/cmake/help/latest/variable/CMAKE_PROJECT_INCLUDE.html
     set(CMAKE_PROJECT_QtADS_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/QtADS_config.cmake")
