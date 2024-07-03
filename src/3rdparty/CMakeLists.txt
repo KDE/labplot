@@ -88,7 +88,13 @@ if (ENABLE_VECTOR_BLF)
       # dbc is the root project name
       # https://gitlab.kitware.com/cmake/cmake/-/issues/19854
       set(CMAKE_PROJECT_dbc_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/dbc_database_parser_disableTests.cmake")
-      FetchContent_MakeAvailable(dbc_parser_cpp)
+      # see https://stackoverflow.com/questions/65527126/disable-install-for-fetchcontent
+      # FetchContent_MakeAvailable(dbc_parser_cpp)
+      FetchContent_GetProperties(dbc_parser_cpp)
+      if(NOT dbc_parser_cpp_POPULATED)
+          FetchContent_Populate(dbc_parser_cpp)
+          add_subdirectory(${dbc_parser_cpp_SOURCE_DIR} ${dbc_parser_cpp_BINARY_DIR} EXCLUDE_FROM_ALL)
+      endif()
       # headerfiles of the projects are referring to <libdbc/someheader.h> and therefore
       # the path must be added
       target_include_directories(labplot2backendlib PUBLIC ${dbc_parser_cpp_SOURCE_DIR}/include)
