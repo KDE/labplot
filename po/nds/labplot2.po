@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-01 01:43+0000\n"
+"POT-Creation-Date: 2024-07-03 01:44+0000\n"
 "PO-Revision-Date: 2014-03-19 20:12+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -11884,16 +11884,40 @@ msgstr ""
 msgid "Prepend"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
+#: src/kdefrontend/datasources/ImportDialog.cpp:145
 #, kde-format
-msgid "Add %1"
+msgid "Add a new Workbook"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
+#: src/kdefrontend/datasources/ImportDialog.cpp:146
 #, fuzzy, kde-format
 #| msgctxt "NAME OF TRANSLATORS"
 #| msgid "Your names"
-msgid "%1 name:"
+msgid "Workbook name:"
+msgstr "Manfred Wiese"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:148
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Add a new Spreadsheet"
+msgstr "Statistik"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:149
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Spreadsheet name:"
+msgstr "Statistik"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:151
+#, kde-format
+msgid "Add a new Matrix"
+msgstr ""
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:152
+#, fuzzy, kde-format
+#| msgctxt "NAME OF TRANSLATORS"
+#| msgid "Your names"
+msgid "Matrix name:"
 msgstr "Manfred Wiese"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:73
@@ -23449,6 +23473,12 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr ""
+
+#, fuzzy
+#~| msgctxt "NAME OF TRANSLATORS"
+#~| msgid "Your names"
+#~ msgid "%1 name:"
+#~ msgstr "Manfred Wiese"
 
 #, fuzzy
 #~| msgid "Statistics"

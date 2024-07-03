@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-01 01:43+0000\n"
+"POT-Creation-Date: 2024-07-03 01:44+0000\n"
 "PO-Revision-Date: 2015-02-25 20:16+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -12872,17 +12872,40 @@ msgstr "Dodavanje"
 msgid "Prepend"
 msgstr "Dodaj na početak"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
+#: src/kdefrontend/datasources/ImportDialog.cpp:145
 #, fuzzy, kde-format
 #| msgid "Add new"
-msgid "Add %1"
+msgid "Add a new Workbook"
 msgstr "Dodaj novo"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
+#: src/kdefrontend/datasources/ImportDialog.cpp:146
 #, fuzzy, kde-format
-#| msgid "Name:"
-msgid "%1 name:"
-msgstr "Ime:"
+#| msgid "Filter name:"
+msgid "Workbook name:"
+msgstr "Ime filtera:"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:148
+#, fuzzy, kde-format
+#| msgid "Add new Spreadsheet"
+msgid "Add a new Spreadsheet"
+msgstr "Dodaj novi Tabelarni prikaz"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:149
+#, kde-format
+msgid "Spreadsheet name:"
+msgstr "Ime Tabelarnog prikaza:"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:151
+#, fuzzy, kde-format
+#| msgid "Add new"
+msgid "Add a new Matrix"
+msgstr "Dodaj novo"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:152
+#, fuzzy, kde-format
+#| msgid "Matrix %1"
+msgid "Matrix name:"
+msgstr "Matrica %1"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
@@ -25402,6 +25425,16 @@ msgstr ""
 msgid "Unable to open file:"
 msgstr "Otvaranje neuspješno"
 
+#, fuzzy
+#~| msgid "Add new"
+#~ msgid "Add %1"
+#~ msgstr "Dodaj novo"
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgid "%1 name:"
+#~ msgstr "Ime:"
+
 #~ msgid "CartesianPlot"
 #~ msgstr "CartesianPlot"
 
@@ -26727,14 +26760,6 @@ msgstr "Otvaranje neuspješno"
 #~| msgid "Not yet implemented."
 #~ msgid "rank 2 not implemented yet for type %1, size = %2"
 #~ msgstr "Još nije implementirano."
-
-#~ msgid "Add new Spreadsheet"
-#~ msgstr "Dodaj novi Tabelarni prikaz"
-
-#, fuzzy
-#~| msgid "Add new"
-#~ msgid "Add new Matrix"
-#~ msgstr "Dodaj novo"
 
 #, fuzzy
 #~| msgid "%1: set line style"
@@ -28471,9 +28496,6 @@ msgstr "Otvaranje neuspješno"
 #~| msgid "Spreadsheet"
 #~ msgid "Spreadsheet/Matrix"
 #~ msgstr "Tablica"
-
-#~ msgid "Spreadsheet name:"
-#~ msgstr "Ime Tabelarnog prikaza:"
 
 #~ msgid "Add new spreadsheet"
 #~ msgstr "Dodaj novu tabelu"

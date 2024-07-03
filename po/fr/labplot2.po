@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-01 01:43+0000\n"
+"POT-Creation-Date: 2024-07-03 01:44+0000\n"
 "PO-Revision-Date: 2024-06-26 21:41+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -12103,15 +12103,40 @@ msgstr "Ajouter après"
 msgid "Prepend"
 msgstr "Ajouter avant"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
-#, kde-format
-msgid "Add %1"
-msgstr "Ajouter %1"
+#: src/kdefrontend/datasources/ImportDialog.cpp:145
+#, fuzzy, kde-format
+#| msgid "New Workbook"
+msgid "Add a new Workbook"
+msgstr "Nouveau classeur"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
+#: src/kdefrontend/datasources/ImportDialog.cpp:146
+#, fuzzy, kde-format
+#| msgid "Workbook"
+msgid "Workbook name:"
+msgstr "Classeur"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:148
+#, fuzzy, kde-format
+#| msgid "Add new Spreadsheet"
+msgid "Add a new Spreadsheet"
+msgstr "Ajouter une nouvelle feuille de calcul"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:149
 #, kde-format
-msgid "%1 name:"
-msgstr "Nom de %1 :"
+msgid "Spreadsheet name:"
+msgstr "Nom de la feuille de calcul :"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:151
+#, fuzzy, kde-format
+#| msgid "Add new Matrix"
+msgid "Add a new Matrix"
+msgstr "Ajouter une nouvelle matrice"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:152
+#, fuzzy, kde-format
+#| msgid "Matrix not square"
+msgid "Matrix name:"
+msgstr "Matrice non carrée"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
@@ -23964,6 +23989,12 @@ msgstr "Le processus « conversion » a échoué avec le code de sortie ="
 msgid "Unable to open file:"
 msgstr "Impossible d'ouvrir un fichier :"
 
+#~ msgid "Add %1"
+#~ msgstr "Ajouter %1"
+
+#~ msgid "%1 name:"
+#~ msgstr "Nom de %1 :"
+
 #, fuzzy
 #~| msgid "LaTeX typesetting not possible. Please check the settings."
 #~ msgid "Fit not possible. Please check if data is given."
@@ -25012,12 +25043,6 @@ msgstr "Impossible d'ouvrir un fichier :"
 
 #~ msgid "rank 2 not implemented yet for type %1, size = %2"
 #~ msgstr "Rangée 2 non encore prise en charge pour le type %1, taille = %2"
-
-#~ msgid "Add new Spreadsheet"
-#~ msgstr "Ajouter une nouvelle feuille de calcul"
-
-#~ msgid "Add new Matrix"
-#~ msgstr "Ajouter une nouvelle matrice"
 
 #~ msgid "%1: set point's style"
 #~ msgstr "%1 : définir le style de point"
@@ -26745,9 +26770,6 @@ msgstr "Impossible d'ouvrir un fichier :"
 
 #~ msgid "Spreadsheet/Matrix"
 #~ msgstr "Feuille de calcul/Matrice"
-
-#~ msgid "Spreadsheet name:"
-#~ msgstr "Nom de la feuille de calcul :"
 
 #~ msgid "y-Min"
 #~ msgstr "y-min"

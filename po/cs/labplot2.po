@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-01 01:43+0000\n"
+"POT-Creation-Date: 2024-07-03 01:44+0000\n"
 "PO-Revision-Date: 2024-06-27 15:26+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -11841,15 +11841,41 @@ msgstr "Přidat"
 msgid "Prepend"
 msgstr "Připojit dopředu"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
-#, kde-format
-msgid "Add %1"
-msgstr "Přidat %1"
+#: src/kdefrontend/datasources/ImportDialog.cpp:145
+#, fuzzy, kde-format
+#| msgid "Add new folder"
+msgid "Add a new Workbook"
+msgstr "Přidat novou složku"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
-#, kde-format
-msgid "%1 name:"
-msgstr "%1 název:"
+#: src/kdefrontend/datasources/ImportDialog.cpp:146
+#, fuzzy, kde-format
+#| msgid "Folder name:"
+msgid "Workbook name:"
+msgstr "Název složky:"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:148
+#, fuzzy, kde-format
+#| msgid "New Spreadsheet"
+msgid "Add a new Spreadsheet"
+msgstr "Nový sešit"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:149
+#, fuzzy, kde-format
+#| msgid "Spreadsheet"
+msgid "Spreadsheet name:"
+msgstr "Sešit"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:151
+#, fuzzy, kde-format
+#| msgid "New Matrix"
+msgid "Add a new Matrix"
+msgstr "Nová matice"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:152
+#, fuzzy, kde-format
+#| msgid "Matrix"
+msgid "Matrix name:"
+msgstr "Matice"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
@@ -23331,3 +23357,9 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Nelze otevřít soubor:"
+
+#~ msgid "Add %1"
+#~ msgstr "Přidat %1"
+
+#~ msgid "%1 name:"
+#~ msgstr "%1 název:"

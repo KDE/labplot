@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-01 01:43+0000\n"
+"POT-Creation-Date: 2024-07-03 01:44+0000\n"
 "PO-Revision-Date: 2024-06-28 07:44+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian\n"
@@ -12031,15 +12031,41 @@ msgstr "Дописати в кінець"
 msgid "Prepend"
 msgstr "Дописати на початок"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
-#, kde-format
-msgid "Add %1"
-msgstr "Додавання %1"
+#: src/kdefrontend/datasources/ImportDialog.cpp:145
+#, fuzzy, kde-format
+#| msgid "New Workbook"
+msgid "Add a new Workbook"
+msgstr "Нова робоча книга"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
-#, kde-format
-msgid "%1 name:"
-msgstr "Назва %1:"
+#: src/kdefrontend/datasources/ImportDialog.cpp:146
+#, fuzzy, kde-format
+#| msgid "Workbook"
+msgid "Workbook name:"
+msgstr "Робоча книга"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:148
+#, fuzzy, kde-format
+#| msgid "Add new Spreadsheet"
+msgid "Add a new Spreadsheet"
+msgstr "Додати нову електронну таблицю"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:149
+#, fuzzy, kde-format
+#| msgid "Spreadsheet"
+msgid "Spreadsheet name:"
+msgstr "Електронна таблиця"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:151
+#, fuzzy, kde-format
+#| msgid "Add new Matrix"
+msgid "Add a new Matrix"
+msgstr "Додати матрицю"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:152
+#, fuzzy, kde-format
+#| msgid "Matrix not square"
+msgid "Matrix name:"
+msgstr "Матриця не є квадратною"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
@@ -23809,6 +23835,12 @@ msgstr "Не вдалося обробити convert, код виходу ="
 msgid "Unable to open file:"
 msgstr "Не вдалося відкрити файл:"
 
+#~ msgid "Add %1"
+#~ msgstr "Додавання %1"
+
+#~ msgid "%1 name:"
+#~ msgstr "Назва %1:"
+
 #~ msgid "Fit not possible. Please check if data is given."
 #~ msgstr "Апроксимація неможлива. Будь ласка, перевірте, чи надано дані."
 
@@ -24843,12 +24875,6 @@ msgstr "Не вдалося відкрити файл:"
 
 #~ msgid "rank 2 not implemented yet for type %1, size = %2"
 #~ msgstr "ранг = 2 для типу %1, розмір = %2 ще не реалізовано"
-
-#~ msgid "Add new Spreadsheet"
-#~ msgstr "Додати нову електронну таблицю"
-
-#~ msgid "Add new Matrix"
-#~ msgstr "Додати матрицю"
 
 #~ msgid "%1: set point's style"
 #~ msgstr "%1: встановити стиль точки"

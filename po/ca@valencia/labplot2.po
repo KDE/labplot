@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-01 01:43+0000\n"
+"POT-Creation-Date: 2024-07-03 01:44+0000\n"
 "PO-Revision-Date: 2024-06-28 13:06+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -12053,15 +12053,41 @@ msgstr "Annexa"
 msgid "Prepend"
 msgstr "Preposa"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
-#, kde-format
-msgid "Add %1"
-msgstr "Afig %1"
+#: src/kdefrontend/datasources/ImportDialog.cpp:145
+#, fuzzy, kde-format
+#| msgid "New Workbook"
+msgid "Add a new Workbook"
+msgstr "Llibre de treball nou"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
-#, kde-format
-msgid "%1 name:"
-msgstr "Nom %1:"
+#: src/kdefrontend/datasources/ImportDialog.cpp:146
+#, fuzzy, kde-format
+#| msgid "Workbook"
+msgid "Workbook name:"
+msgstr "Llibre de treball"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:148
+#, fuzzy, kde-format
+#| msgid "New Spreadsheet"
+msgid "Add a new Spreadsheet"
+msgstr "Full de càlcul nou"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:149
+#, fuzzy, kde-format
+#| msgid "Spreadsheet"
+msgid "Spreadsheet name:"
+msgstr "Full de càlcul"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:151
+#, fuzzy, kde-format
+#| msgid "New Matrix"
+msgid "Add a new Matrix"
+msgstr "Matriu nova"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:152
+#, fuzzy, kde-format
+#| msgid "Matrix not square"
+msgid "Matrix name:"
+msgstr "Matriu no quadrada"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
@@ -23882,3 +23908,9 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
+
+#~ msgid "Add %1"
+#~ msgstr "Afig %1"
+
+#~ msgid "%1 name:"
+#~ msgstr "Nom %1:"

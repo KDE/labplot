@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-01 01:43+0000\n"
+"POT-Creation-Date: 2024-07-03 01:44+0000\n"
 "PO-Revision-Date: 2024-06-28 14:06+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -11929,15 +11929,41 @@ msgstr "İliştir"
 msgid "Prepend"
 msgstr "Öne İliştir"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
-#, kde-format
-msgid "Add %1"
-msgstr "%1 Ekle"
+#: src/kdefrontend/datasources/ImportDialog.cpp:145
+#, fuzzy, kde-format
+#| msgid "New Workbook"
+msgid "Add a new Workbook"
+msgstr "Yeni Çalışma Kitabı"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
-#, kde-format
-msgid "%1 name:"
-msgstr "%1 adı:"
+#: src/kdefrontend/datasources/ImportDialog.cpp:146
+#, fuzzy, kde-format
+#| msgid "Workbook"
+msgid "Workbook name:"
+msgstr "Çalışma Kitabı"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:148
+#, fuzzy, kde-format
+#| msgid "New Spreadsheet"
+msgid "Add a new Spreadsheet"
+msgstr "Yeni Hesap Tablosu"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:149
+#, fuzzy, kde-format
+#| msgid "Spreadsheet"
+msgid "Spreadsheet name:"
+msgstr "Hesap Tablosu"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:151
+#, fuzzy, kde-format
+#| msgid "New Matrix"
+msgid "Add a new Matrix"
+msgstr "Yeni Matris"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:152
+#, fuzzy, kde-format
+#| msgid "Matrix not square"
+msgid "Matrix name:"
+msgstr "Matris kare değil"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
@@ -23655,6 +23681,12 @@ msgstr "dönüştürme süreci başarısız, çıkış kodu ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Dosya açılamadı:"
+
+#~ msgid "Add %1"
+#~ msgstr "%1 Ekle"
+
+#~ msgid "%1 name:"
+#~ msgstr "%1 adı:"
 
 #~ msgid "Fit not possible. Please check if data is given."
 #~ msgstr "Uyum olanaklı değil. Verinin verilip verilmediğini denetleyin."

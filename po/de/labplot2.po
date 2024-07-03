@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-01 01:43+0000\n"
+"POT-Creation-Date: 2024-07-03 01:44+0000\n"
 "PO-Revision-Date: 2024-06-30 17:41+0200\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni.kn>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -11942,15 +11942,40 @@ msgstr "Anhängen"
 msgid "Prepend"
 msgstr "Voranstellen"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
-#, kde-format
-msgid "Add %1"
-msgstr "%1 hinzufügen"
+#: src/kdefrontend/datasources/ImportDialog.cpp:145
+#, fuzzy, kde-format
+#| msgid "New Workbook"
+msgid "Add a new Workbook"
+msgstr "Neues Arbeitsbuch"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
+#: src/kdefrontend/datasources/ImportDialog.cpp:146
+#, fuzzy, kde-format
+#| msgid "Workbook"
+msgid "Workbook name:"
+msgstr "Arbeitsbuch"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:148
+#, fuzzy, kde-format
+#| msgid "Add new Spreadsheet"
+msgid "Add a new Spreadsheet"
+msgstr "Neue Tabelle hinzufügen"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:149
 #, kde-format
-msgid "%1 name:"
-msgstr "Name %1:"
+msgid "Spreadsheet name:"
+msgstr "Name der Tabelle:"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:151
+#, fuzzy, kde-format
+#| msgid "Add new Matrix"
+msgid "Add a new Matrix"
+msgstr "Neue Matrix hinzufügen"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:152
+#, fuzzy, kde-format
+#| msgid "Matrix not square"
+msgid "Matrix name:"
+msgstr "Matrix nicht quadratisch"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
@@ -23672,6 +23697,12 @@ msgstr "convert-Prozess fehlgeschlagen, Fehlercode ="
 msgid "Unable to open file:"
 msgstr "Fehler beim Öffnen der Datei:"
 
+#~ msgid "Add %1"
+#~ msgstr "%1 hinzufügen"
+
+#~ msgid "%1 name:"
+#~ msgstr "Name %1:"
+
 #, fuzzy
 #~| msgid "LaTeX typesetting not possible. Please check the settings."
 #~ msgid "Fit not possible. Please check if data is given."
@@ -24739,12 +24770,6 @@ msgstr "Fehler beim Öffnen der Datei:"
 
 #~ msgid "rank 2 not implemented yet for type %1, size = %2"
 #~ msgstr "Rang 2 noch nicht implementiert für Typ %1, Größe = %2"
-
-#~ msgid "Add new Spreadsheet"
-#~ msgstr "Neue Tabelle hinzufügen"
-
-#~ msgid "Add new Matrix"
-#~ msgstr "Neue Matrix hinzufügen"
 
 #~ msgid "%1: set point's style"
 #~ msgstr "%1: Punktstil festlegen"
@@ -26337,9 +26362,6 @@ msgstr "Fehler beim Öffnen der Datei:"
 
 #~ msgid "Spreadsheet/Matrix"
 #~ msgstr "Tabelle/Matrix"
-
-#~ msgid "Spreadsheet name:"
-#~ msgstr "Name der Tabelle:"
 
 #~ msgid "Add new spreadsheet"
 #~ msgstr "Neue Tabelle hinzufügen"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-01 01:43+0000\n"
+"POT-Creation-Date: 2024-07-03 01:44+0000\n"
 "PO-Revision-Date: 2023-09-19 23:30+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -12076,15 +12076,39 @@ msgstr "Erantsi"
 msgid "Prepend"
 msgstr "Aurretik erantsi:"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
+#: src/kdefrontend/datasources/ImportDialog.cpp:145
 #, fuzzy, kde-format
-msgid "Add %1"
-msgstr "Erantsi %1"
+#| msgid "Add a new y range"
+msgid "Add a new Workbook"
+msgstr "Gehitu y barruti berri bat"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
+#: src/kdefrontend/datasources/ImportDialog.cpp:146
 #, fuzzy, kde-format
-msgid "%1 name:"
-msgstr "Izena"
+#| msgid "Workbook"
+msgid "Workbook name:"
+msgstr "Laneko liburua"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:148
+#, fuzzy, kde-format
+msgid "Add a new Spreadsheet"
+msgstr "Kalkulu-orria"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:149
+#, fuzzy, kde-format
+msgid "Spreadsheet name:"
+msgstr "Kalkulu-orria"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:151
+#, fuzzy, kde-format
+#| msgid "Add new variable"
+msgid "Add a new Matrix"
+msgstr "Gehitu aldagai berria"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:152
+#, fuzzy, kde-format
+#| msgid "Matrix not square"
+msgid "Matrix name:"
+msgstr "Matrizea ez da karratua"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
@@ -23760,6 +23784,14 @@ msgstr "«convert» prozesuak huts egin du, irteera kodea ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ez da fitxategia irekitzeko gai:"
+
+#, fuzzy
+#~ msgid "Add %1"
+#~ msgstr "Erantsi %1"
+
+#, fuzzy
+#~ msgid "%1 name:"
+#~ msgstr "Izena"
 
 #~ msgid "CartesianPlot"
 #~ msgstr "Diagrama kartesiarra"

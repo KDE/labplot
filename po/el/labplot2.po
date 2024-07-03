@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-01 01:43+0000\n"
+"POT-Creation-Date: 2024-07-03 01:44+0000\n"
 "PO-Revision-Date: 2017-04-20 14:04+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -12375,15 +12375,41 @@ msgstr ""
 msgid "Prepend"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
-#, kde-format
-msgid "Add %1"
-msgstr ""
+#: src/kdefrontend/datasources/ImportDialog.cpp:145
+#, fuzzy, kde-format
+#| msgid "Workbook"
+msgid "Add a new Workbook"
+msgstr "Βιβλίο εργασίας"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
-#, kde-format
-msgid "%1 name:"
-msgstr ""
+#: src/kdefrontend/datasources/ImportDialog.cpp:146
+#, fuzzy, kde-format
+#| msgid "Workbook"
+msgid "Workbook name:"
+msgstr "Βιβλίο εργασίας"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:148
+#, fuzzy, kde-format
+#| msgid "&Spreadsheet"
+msgid "Add a new Spreadsheet"
+msgstr "Λογι&στικό φύλλο"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:149
+#, fuzzy, kde-format
+#| msgid "&Spreadsheet"
+msgid "Spreadsheet name:"
+msgstr "Λογι&στικό φύλλο"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:151
+#, fuzzy, kde-format
+#| msgid "&Matrix"
+msgid "Add a new Matrix"
+msgstr "&Μήτρα"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:152
+#, fuzzy, kde-format
+#| msgid "&Matrix"
+msgid "Matrix name:"
+msgstr "&Μήτρα"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
@@ -24847,12 +24873,6 @@ msgstr "Σύνδεση:"
 #~ msgctxt "@title:window"
 #~ msgid "Column"
 #~ msgstr "Στήλη έναρξης:"
-
-#, fuzzy
-#~| msgid "&Matrix"
-#~ msgctxt "@title:window"
-#~ msgid "Matrix"
-#~ msgstr "&Μήτρα"
 
 #, fuzzy
 #~| msgid "Plot Area"

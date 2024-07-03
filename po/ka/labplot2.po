@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-01 01:43+0000\n"
+"POT-Creation-Date: 2024-07-03 01:44+0000\n"
 "PO-Revision-Date: 2024-02-29 03:22+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -11910,15 +11910,41 @@ msgstr "მიმატება"
 msgid "Prepend"
 msgstr "თავში მიწერა"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
-#, kde-format
-msgid "Add %1"
-msgstr "%1-ის დამატება"
+#: src/kdefrontend/datasources/ImportDialog.cpp:145
+#, fuzzy, kde-format
+#| msgid "Add new folder"
+msgid "Add a new Workbook"
+msgstr "ახალი საქაღალდის დამატება"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
-#, kde-format
-msgid "%1 name:"
-msgstr ""
+#: src/kdefrontend/datasources/ImportDialog.cpp:146
+#, fuzzy, kde-format
+#| msgid "Folder name:"
+msgid "Workbook name:"
+msgstr "საქაღალდის სახელი:"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:148
+#, fuzzy, kde-format
+#| msgid "New Spreadsheet"
+msgid "Add a new Spreadsheet"
+msgstr "ახალი ელცხრილი"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:149
+#, fuzzy, kde-format
+#| msgid "Spreadsheet"
+msgid "Spreadsheet name:"
+msgstr "ელექტრონული ცხრილი"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:151
+#, fuzzy, kde-format
+#| msgid "New Matrix"
+msgid "Add a new Matrix"
+msgstr "ახალი მატრიცა"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:152
+#, fuzzy, kde-format
+#| msgid "Matrix not square"
+msgid "Matrix name:"
+msgstr "მატრიცა კვადრატული არაა"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
@@ -23405,6 +23431,9 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr "ფაილის გახსნა შეუძლებელია:"
+
+#~ msgid "Add %1"
+#~ msgstr "%1-ის დამატება"
 
 #~ msgid "CartesianPlot"
 #~ msgstr "გრაფიკი დეკარტის კოორდინატებში"

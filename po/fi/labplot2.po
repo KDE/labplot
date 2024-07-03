@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-01 01:43+0000\n"
+"POT-Creation-Date: 2024-07-03 01:44+0000\n"
 "PO-Revision-Date: 2023-10-30 14:32+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -12694,16 +12694,40 @@ msgstr "Lisää loppuun"
 msgid "Prepend"
 msgstr "Lisää alkuun"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
-#, kde-format
-msgid "Add %1"
-msgstr "Lisää %1"
-
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
+#: src/kdefrontend/datasources/ImportDialog.cpp:145
 #, fuzzy, kde-format
-#| msgid "Name:"
-msgid "%1 name:"
-msgstr "Nimi:"
+#| msgid "New Workbook"
+msgid "Add a new Workbook"
+msgstr "Uusi työvihko"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:146
+#, fuzzy, kde-format
+#| msgid "Workbook"
+msgid "Workbook name:"
+msgstr "Työvihko"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:148
+#, fuzzy, kde-format
+#| msgid "Add new Spreadsheet"
+msgid "Add a new Spreadsheet"
+msgstr "Lisää uusi laskentataulukko"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:149
+#, kde-format
+msgid "Spreadsheet name:"
+msgstr "Laskentataulukon nimi:"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:151
+#, fuzzy, kde-format
+#| msgid "Add new Matrix"
+msgid "Add a new Matrix"
+msgstr "Lisää uusi matriisi"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:152
+#, fuzzy, kde-format
+#| msgid "Filter name:"
+msgid "Matrix name:"
+msgstr "Suodattimen nimi:"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
@@ -24673,6 +24697,14 @@ msgstr ""
 msgid "Unable to open file:"
 msgstr "Tiedostoa ei voi avata:"
 
+#~ msgid "Add %1"
+#~ msgstr "Lisää %1"
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgid "%1 name:"
+#~ msgstr "Nimi:"
+
 #, fuzzy
 #~| msgid "Drawing &order"
 #~ msgid "p-th quantile"
@@ -25803,12 +25835,6 @@ msgstr "Tiedostoa ei voi avata:"
 #~| msgid "Not yet implemented."
 #~ msgid "rank 2 not implemented yet for type %1, size = %2"
 #~ msgstr "Ei vielä toteutettu."
-
-#~ msgid "Add new Spreadsheet"
-#~ msgstr "Lisää uusi laskentataulukko"
-
-#~ msgid "Add new Matrix"
-#~ msgstr "Lisää uusi matriisi"
 
 #, fuzzy
 #~| msgid "%1: set border style"
@@ -27347,9 +27373,6 @@ msgstr "Tiedostoa ei voi avata:"
 #~| msgid "Spreadsheet"
 #~ msgid "Spreadsheet/Matrix"
 #~ msgstr "Laskentataulukko"
-
-#~ msgid "Spreadsheet name:"
-#~ msgstr "Laskentataulukon nimi:"
 
 #, fuzzy
 #~| msgid "Add new spreadsheet"

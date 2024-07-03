@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-01 01:43+0000\n"
+"POT-Creation-Date: 2024-07-03 01:44+0000\n"
 "PO-Revision-Date: 2024-04-17 05:07+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -12245,16 +12245,40 @@ msgstr "附加"
 msgid "Prepend"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
+#: src/kdefrontend/datasources/ImportDialog.cpp:145
 #, fuzzy, kde-format
 #| msgid "Add new"
-msgid "Add %1"
+msgid "Add a new Workbook"
 msgstr "新增"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
-#, kde-format
-msgid "%1 name:"
-msgstr "%1 名稱："
+#: src/kdefrontend/datasources/ImportDialog.cpp:146
+#, fuzzy, kde-format
+#| msgid "Folder name:"
+msgid "Workbook name:"
+msgstr "資料夾名稱："
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:148
+#, fuzzy, kde-format
+#| msgid "New Spreadsheet"
+msgid "Add a new Spreadsheet"
+msgstr "新增試算表"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:149
+#, fuzzy, kde-format
+#| msgid "Spreadsheet"
+msgid "Spreadsheet name:"
+msgstr "試算表"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:151
+#, fuzzy, kde-format
+#| msgid "Add new"
+msgid "Add a new Matrix"
+msgstr "新增"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:152
+#, fuzzy, kde-format
+msgid "Matrix name:"
+msgstr "矩陣"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
@@ -24044,6 +24068,14 @@ msgid "Unable to open file:"
 msgstr "開啟失敗"
 
 #, fuzzy
+#~| msgid "Add new"
+#~ msgid "Add %1"
+#~ msgstr "新增"
+
+#~ msgid "%1 name:"
+#~ msgstr "%1 名稱："
+
+#, fuzzy
 #~| msgid "Orientation"
 #~ msgid "p-th quantile"
 #~ msgstr "方向"
@@ -24920,11 +24952,6 @@ msgstr "開啟失敗"
 #, fuzzy
 #~ msgid "rank 2 not implemented yet for type %1, size = %2"
 #~ msgstr "<b>尚未實作。</b>"
-
-#, fuzzy
-#~| msgid "Add new"
-#~ msgid "Add new Matrix"
-#~ msgstr "新增"
 
 #, fuzzy
 #~ msgid "%1: set point's style"

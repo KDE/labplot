@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-01 01:43+0000\n"
+"POT-Creation-Date: 2024-07-03 01:44+0000\n"
 "PO-Revision-Date: 2024-06-29 07:12+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -11959,15 +11959,41 @@ msgstr "Engadir"
 msgid "Prepend"
 msgstr "Engadir ao comezo"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
-#, kde-format
-msgid "Add %1"
-msgstr "Engadir %1"
+#: src/kdefrontend/datasources/ImportDialog.cpp:145
+#, fuzzy, kde-format
+#| msgid "New Workbook"
+msgid "Add a new Workbook"
+msgstr "Novo caderno de traballo"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
-#, kde-format
-msgid "%1 name:"
-msgstr "Nome de %1:"
+#: src/kdefrontend/datasources/ImportDialog.cpp:146
+#, fuzzy, kde-format
+#| msgid "Workbook"
+msgid "Workbook name:"
+msgstr "Caderno de traballo"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:148
+#, fuzzy, kde-format
+#| msgid "Add new Spreadsheet"
+msgid "Add a new Spreadsheet"
+msgstr "Engadir unha nova folla de cálculo"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:149
+#, fuzzy, kde-format
+#| msgid "Spreadsheet"
+msgid "Spreadsheet name:"
+msgstr "Folla de cálculo"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:151
+#, fuzzy, kde-format
+#| msgid "Add new Matrix"
+msgid "Add a new Matrix"
+msgstr "Engadir unha nova matriz"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:152
+#, fuzzy, kde-format
+#| msgid "Matrix not square"
+msgid "Matrix name:"
+msgstr "A matriz non é cadrada"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
@@ -23715,6 +23741,12 @@ msgstr "o proceso convert fallou, código de saída ="
 msgid "Unable to open file:"
 msgstr "Non é posíbel abrir o ficheiro:"
 
+#~ msgid "Add %1"
+#~ msgstr "Engadir %1"
+
+#~ msgid "%1 name:"
+#~ msgstr "Nome de %1:"
+
 #, fuzzy
 #~| msgid "LaTeX typesetting not possible. Please check the settings."
 #~ msgid "Fit not possible. Please check if data is given."
@@ -24896,12 +24928,6 @@ msgstr "Non é posíbel abrir o ficheiro:"
 #~ msgid "rank 2 not implemented yet for type %1, size = %2"
 #~ msgstr ""
 #~ "a clasificación 2 aínda non está dispoñíbel para o tipo %1, tamaño = %2"
-
-#~ msgid "Add new Spreadsheet"
-#~ msgstr "Engadir unha nova folla de cálculo"
-
-#~ msgid "Add new Matrix"
-#~ msgstr "Engadir unha nova matriz"
 
 #~ msgid "%1: set point's style"
 #~ msgstr "%1: definir o estilo do punto"

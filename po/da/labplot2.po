@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-01 01:43+0000\n"
+"POT-Creation-Date: 2024-07-03 01:44+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -12693,17 +12693,41 @@ msgstr ""
 msgid "Prepend"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
+#: src/kdefrontend/datasources/ImportDialog.cpp:145
 #, fuzzy, kde-format
-#| msgid "&Add Rows"
-msgid "Add %1"
-msgstr "&Tilføj rækker"
+#| msgid "Clear Matrix"
+msgid "Add a new Workbook"
+msgstr "Ryd matrice"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
+#: src/kdefrontend/datasources/ImportDialog.cpp:146
 #, fuzzy, kde-format
-#| msgid "Name:"
-msgid "%1 name:"
-msgstr "Navn:"
+#| msgid "File name"
+msgid "Workbook name:"
+msgstr "Filnavn"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:148
+#, fuzzy, kde-format
+#| msgid "&Spreadsheet"
+msgid "Add a new Spreadsheet"
+msgstr "&Regneark"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:149
+#, fuzzy, kde-format
+#| msgid "Spreadsheet printed"
+msgid "Spreadsheet name:"
+msgstr "Regneark udskrevet"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:151
+#, fuzzy, kde-format
+#| msgid "Clear Matrix"
+msgid "Add a new Matrix"
+msgstr "Ryd matrice"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:152
+#, fuzzy, kde-format
+#| msgid "File name"
+msgid "Matrix name:"
+msgstr "Filnavn"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
@@ -24982,6 +25006,16 @@ msgid "Unable to open file:"
 msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 
 #, fuzzy
+#~| msgid "&Add Rows"
+#~ msgid "Add %1"
+#~ msgstr "&Tilføj rækker"
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgid "%1 name:"
+#~ msgstr "Navn:"
+
+#, fuzzy
 #~| msgid "Direction"
 #~ msgid "p-th quantile"
 #~ msgstr "Retning"
@@ -25880,16 +25914,6 @@ msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 #~ msgstr "Endnu ikke implementeret."
 
 #, fuzzy
-#~| msgid "&Spreadsheet"
-#~ msgid "Add new Spreadsheet"
-#~ msgstr "&Regneark"
-
-#, fuzzy
-#~| msgid "Clear Matrix"
-#~ msgid "Add new Matrix"
-#~ msgstr "Ryd matrice"
-
-#, fuzzy
 #~| msgid "&Insert Empty Rows"
 #~ msgid "%1: set point's style"
 #~ msgstr "&Indsæt tomme rækker"
@@ -26634,11 +26658,6 @@ msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 #~| msgid "&Spreadsheet"
 #~ msgid "Spreadsheet/Matrix"
 #~ msgstr "&Regneark"
-
-#, fuzzy
-#~| msgid "Spreadsheet printed"
-#~ msgid "Spreadsheet name:"
-#~ msgstr "Regneark udskrevet"
 
 #, fuzzy
 #~| msgid "&Spreadsheet"

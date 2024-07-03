@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-01 01:43+0000\n"
+"POT-Creation-Date: 2024-07-03 01:44+0000\n"
 "PO-Revision-Date: 2024-05-07 18:20+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -12095,15 +12095,41 @@ msgstr "Aggiungi"
 msgid "Prepend"
 msgstr "Anteponi"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
-#, kde-format
-msgid "Add %1"
-msgstr "Aggiungi %1"
+#: src/kdefrontend/datasources/ImportDialog.cpp:145
+#, fuzzy, kde-format
+#| msgid "New Workbook"
+msgid "Add a new Workbook"
+msgstr "Nuova cartella di lavoro"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
-#, kde-format
-msgid "%1 name:"
-msgstr "nome per %1:"
+#: src/kdefrontend/datasources/ImportDialog.cpp:146
+#, fuzzy, kde-format
+#| msgid "Workbook"
+msgid "Workbook name:"
+msgstr "Cartella di lavoro"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:148
+#, fuzzy, kde-format
+#| msgid "Add new Spreadsheet"
+msgid "Add a new Spreadsheet"
+msgstr "Aggiungi un nuovo foglio elettronico"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:149
+#, fuzzy, kde-format
+#| msgid "Spreadsheet"
+msgid "Spreadsheet name:"
+msgstr "Foglio elettronico"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:151
+#, fuzzy, kde-format
+#| msgid "Add new Matrix"
+msgid "Add a new Matrix"
+msgstr "Aggiungi una nuova matrice"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:152
+#, fuzzy, kde-format
+#| msgid "Matrix not square"
+msgid "Matrix name:"
+msgstr "Matrice non quadrata"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
@@ -23887,6 +23913,12 @@ msgstr "processo convert non riuscito, codice di uscita ="
 msgid "Unable to open file:"
 msgstr "Impossibile aprire il file:"
 
+#~ msgid "Add %1"
+#~ msgstr "Aggiungi %1"
+
+#~ msgid "%1 name:"
+#~ msgstr "nome per %1:"
+
 #, fuzzy
 #~| msgid "LaTeX typesetting not possible. Please check the settings."
 #~ msgid "Fit not possible. Please check if data is given."
@@ -24951,12 +24983,6 @@ msgstr "Impossibile aprire il file:"
 
 #~ msgid "rank 2 not implemented yet for type %1, size = %2"
 #~ msgstr "rank 2 non ancora implementato per il tipo %1, dimensione = %2"
-
-#~ msgid "Add new Spreadsheet"
-#~ msgstr "Aggiungi un nuovo foglio elettronico"
-
-#~ msgid "Add new Matrix"
-#~ msgstr "Aggiungi una nuova matrice"
 
 #~ msgid "%1: set point's style"
 #~ msgstr "%1: imposta lo stile del punto"

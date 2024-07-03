@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-01 01:43+0000\n"
+"POT-Creation-Date: 2024-07-03 01:44+0000\n"
 "PO-Revision-Date: 2024-06-28 11:23+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -11935,15 +11935,39 @@ msgstr "Achteraan toevoegen"
 msgid "Prepend"
 msgstr "Vooraan toevoegen"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
-#, kde-format
-msgid "Add %1"
-msgstr "Toevoegen %1"
+#: src/kdefrontend/datasources/ImportDialog.cpp:145
+#, fuzzy, kde-format
+#| msgid "Add new Workbook"
+msgid "Add a new Workbook"
+msgstr "Nieuw werkboek toevoegen"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
+#: src/kdefrontend/datasources/ImportDialog.cpp:146
 #, kde-format
-msgid "%1 name:"
-msgstr "naam %1:"
+msgid "Workbook name:"
+msgstr "Naam werkboek:"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:148
+#, fuzzy, kde-format
+#| msgid "Add new Spreadsheet"
+msgid "Add a new Spreadsheet"
+msgstr "nieuw rekenblad toevoegen"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:149
+#, kde-format
+msgid "Spreadsheet name:"
+msgstr "Naam van rekenblad:"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:151
+#, fuzzy, kde-format
+#| msgid "Add new Matrix"
+msgid "Add a new Matrix"
+msgstr "Nieuwe matrix toevoegen"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:152
+#, fuzzy, kde-format
+#| msgid "Matrix not square"
+msgid "Matrix name:"
+msgstr "Niet-vierkante matrix"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
@@ -23692,6 +23716,12 @@ msgstr "conversie is mislukt, exitcode ="
 msgid "Unable to open file:"
 msgstr "Kon bestand niet openen:"
 
+#~ msgid "Add %1"
+#~ msgstr "Toevoegen %1"
+
+#~ msgid "%1 name:"
+#~ msgstr "naam %1:"
+
 #~ msgid "Fit not possible. Please check if data is given."
 #~ msgstr "Passend is niet mogelijk. Controleer of gegevens zijn ingegeven."
 
@@ -24728,12 +24758,6 @@ msgstr "Kon bestand niet openen:"
 
 #~ msgid "rank 2 not implemented yet for type %1, size = %2"
 #~ msgstr "rank 2nog niet geïmplementeerd voor type %1, grootte = %2"
-
-#~ msgid "Add new Spreadsheet"
-#~ msgstr "nieuw rekenblad toevoegen"
-
-#~ msgid "Add new Matrix"
-#~ msgstr "Nieuwe matrix toevoegen"
 
 #~ msgid "%1: set point's style"
 #~ msgstr "%1: puntstijl instellen"
@@ -26422,15 +26446,6 @@ msgstr "Kon bestand niet openen:"
 
 #~ msgid "Spreadsheet/Matrix"
 #~ msgstr "Rekenblad/Matrix"
-
-#~ msgid "Add new Workbook"
-#~ msgstr "Nieuw werkboek toevoegen"
-
-#~ msgid "Workbook name:"
-#~ msgstr "Naam werkboek:"
-
-#~ msgid "Spreadsheet name:"
-#~ msgstr "Naam van rekenblad:"
 
 #~ msgid "y-Min"
 #~ msgstr "y-Min"

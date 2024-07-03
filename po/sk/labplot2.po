@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-01 01:43+0000\n"
+"POT-Creation-Date: 2024-07-03 01:44+0000\n"
 "PO-Revision-Date: 2019-07-11 18:46+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -12715,16 +12715,41 @@ msgstr "Pripojiť"
 msgid "Prepend"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
-#, kde-format
-msgid "Add %1"
-msgstr "Pridať %1"
-
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
+#: src/kdefrontend/datasources/ImportDialog.cpp:145
 #, fuzzy, kde-format
-#| msgid "Name:"
-msgid "%1 name:"
-msgstr "Názov"
+#| msgid "Add new variable"
+msgid "Add a new Workbook"
+msgstr "Pridať novú premennú"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:146
+#, fuzzy, kde-format
+#| msgid "Filter name:"
+msgid "Workbook name:"
+msgstr "Názov priečinku:"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:148
+#, fuzzy, kde-format
+#| msgid "new Spreadsheet"
+msgid "Add a new Spreadsheet"
+msgstr "nový zošit"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:149
+#, fuzzy, kde-format
+#| msgid "Spreadsheet"
+msgid "Spreadsheet name:"
+msgstr "Zošit"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:151
+#, fuzzy, kde-format
+#| msgid "Add new"
+msgid "Add a new Matrix"
+msgstr "Pridať nový"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:152
+#, fuzzy, kde-format
+#| msgid "Matrix %1"
+msgid "Matrix name:"
+msgstr "Matica %1"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
@@ -24971,6 +24996,14 @@ msgstr ""
 msgid "Unable to open file:"
 msgstr "Nepodarilo sa otvoriť"
 
+#~ msgid "Add %1"
+#~ msgstr "Pridať %1"
+
+#, fuzzy
+#~| msgid "Name:"
+#~ msgid "%1 name:"
+#~ msgstr "Názov"
+
 #, fuzzy
 #~| msgid "Orientation"
 #~ msgid "p-th quantile"
@@ -25982,16 +26015,6 @@ msgstr "Nepodarilo sa otvoriť"
 #, fuzzy
 #~ msgid "rank 2 not implemented yet for type %1, size = %2"
 #~ msgstr "Ešte neimplemetované"
-
-#, fuzzy
-#~| msgid "new Spreadsheet"
-#~ msgid "Add new Spreadsheet"
-#~ msgstr "nový zošit"
-
-#, fuzzy
-#~| msgid "Add new"
-#~ msgid "Add new Matrix"
-#~ msgstr "Pridať nový"
 
 #, fuzzy
 #~| msgid "%1: set layout"
@@ -27215,11 +27238,6 @@ msgstr "Nepodarilo sa otvoriť"
 #, fuzzy
 #~| msgid "Spreadsheet"
 #~ msgid "Spreadsheet/Matrix"
-#~ msgstr "Zošit"
-
-#, fuzzy
-#~| msgid "Spreadsheet"
-#~ msgid "Spreadsheet name:"
 #~ msgstr "Zošit"
 
 #, fuzzy

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-01 01:43+0000\n"
+"POT-Creation-Date: 2024-07-03 01:44+0000\n"
 "PO-Revision-Date: 2024-04-30 12:35+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -11848,15 +11848,41 @@ msgstr "Adjunge"
 msgid "Prepend"
 msgstr "Antepone"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
-#, kde-format
-msgid "Add %1"
-msgstr "Adde %1"
+#: src/kdefrontend/datasources/ImportDialog.cpp:145
+#, fuzzy, kde-format
+#| msgid "Add new folder"
+msgid "Add a new Workbook"
+msgstr "Adde nove dossier"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:147
-#, kde-format
-msgid "%1 name:"
-msgstr "%1 Nomine:"
+#: src/kdefrontend/datasources/ImportDialog.cpp:146
+#, fuzzy, kde-format
+#| msgid "Folder name:"
+msgid "Workbook name:"
+msgstr "Nomine de dossier:"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:148
+#, fuzzy, kde-format
+#| msgid "Spreadsheet"
+msgid "Add a new Spreadsheet"
+msgstr "Folio de calculo electronic"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:149
+#, fuzzy, kde-format
+#| msgid "Spreadsheet"
+msgid "Spreadsheet name:"
+msgstr "Folio de calculo electronic"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:151
+#, fuzzy, kde-format
+#| msgid "Add new variable"
+msgid "Add a new Matrix"
+msgstr "Adde nove variabile"
+
+#: src/kdefrontend/datasources/ImportDialog.cpp:152
+#, fuzzy, kde-format
+#| msgid "Matrix"
+msgid "Matrix name:"
+msgstr "Matrix"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
@@ -23333,6 +23359,12 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Incapace a aperir file:"
+
+#~ msgid "Add %1"
+#~ msgstr "Adde %1"
+
+#~ msgid "%1 name:"
+#~ msgstr "%1 Nomine:"
 
 #~ msgid "%1: copy %2"
 #~ msgstr "%1: Copia %2"
