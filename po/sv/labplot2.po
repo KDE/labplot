@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-03 01:44+0000\n"
-"PO-Revision-Date: 2024-06-30 19:49+0200\n"
+"PO-Revision-Date: 2024-07-03 22:07+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -11933,10 +11933,9 @@ msgid "Prepend"
 msgstr "Lägg till i början"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:145
-#, fuzzy, kde-format
-#| msgid "New Workbook"
+#, kde-format
 msgid "Add a new Workbook"
-msgstr "Ny arbetsbok"
+msgstr "Lägg till en ny arbetsbok"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:146
 #, kde-format
@@ -11944,10 +11943,9 @@ msgid "Workbook name:"
 msgstr "Arbetsbokens namn:"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:148
-#, fuzzy, kde-format
-#| msgid "Add new Spreadsheet"
+#, kde-format
 msgid "Add a new Spreadsheet"
-msgstr "Lägg till nytt kalkylark"
+msgstr "Lägg till ett nytt kalkylark"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:149
 #, kde-format
@@ -11955,16 +11953,14 @@ msgid "Spreadsheet name:"
 msgstr "Kalkylarksnamn:"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:151
-#, fuzzy, kde-format
-#| msgid "Add new Matrix"
+#, kde-format
 msgid "Add a new Matrix"
-msgstr "Lägg till ny matris"
+msgstr "Lägg till en ny matris"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:152
-#, fuzzy, kde-format
-#| msgid "Matrix not square"
+#, kde-format
 msgid "Matrix name:"
-msgstr "Matrisen är inte kvadratisk"
+msgstr "Matrisnamn:"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42

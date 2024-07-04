@@ -11787,34 +11787,29 @@ msgid "Add a new Workbook"
 msgstr ""
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:146
-#, fuzzy, kde-format
-#| msgid "Folder name:"
+#, kde-format
 msgid "Workbook name:"
-msgstr "文件夹名称："
+msgstr ""
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:148
-#, fuzzy, kde-format
-#| msgid "New Spreadsheet"
+#, kde-format
 msgid "Add a new Spreadsheet"
-msgstr "新建数据表"
+msgstr ""
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:149
-#, fuzzy, kde-format
-#| msgid "Spreadsheet"
+#, kde-format
 msgid "Spreadsheet name:"
-msgstr "数据表"
+msgstr ""
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:151
-#, fuzzy, kde-format
-#| msgid "Add new variable"
+#, kde-format
 msgid "Add a new Matrix"
-msgstr "添加新变量"
+msgstr ""
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:152
-#, fuzzy, kde-format
-#| msgid "Matrix"
+#, kde-format
 msgid "Matrix name:"
-msgstr "矩阵"
+msgstr ""
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
@@ -23263,9 +23258,3 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr ""
-
-#~ msgid "Add %1"
-#~ msgstr "添加 %1"
-
-#~ msgid "%1 name:"
-#~ msgstr "%1 名称："

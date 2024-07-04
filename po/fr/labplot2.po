@@ -12122,7 +12122,8 @@ msgid "Add a new Spreadsheet"
 msgstr "Ajouter une nouvelle feuille de calcul"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:149
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Spreadsheet name:"
 msgid "Spreadsheet name:"
 msgstr "Nom de la feuille de calcul :"
 

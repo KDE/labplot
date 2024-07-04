@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-03 01:44+0000\n"
-"PO-Revision-Date: 2024-06-28 11:23+0200\n"
+"PO-Revision-Date: 2024-07-03 11:05+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -11936,10 +11936,9 @@ msgid "Prepend"
 msgstr "Vooraan toevoegen"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:145
-#, fuzzy, kde-format
-#| msgid "Add new Workbook"
+#, kde-format
 msgid "Add a new Workbook"
-msgstr "Nieuw werkboek toevoegen"
+msgstr "Een nieuw werkboek toevoegen"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:146
 #, kde-format
@@ -11947,10 +11946,9 @@ msgid "Workbook name:"
 msgstr "Naam werkboek:"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:148
-#, fuzzy, kde-format
-#| msgid "Add new Spreadsheet"
+#, kde-format
 msgid "Add a new Spreadsheet"
-msgstr "nieuw rekenblad toevoegen"
+msgstr "Een nieuw rekenblad toevoegen"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:149
 #, kde-format
@@ -11958,16 +11956,14 @@ msgid "Spreadsheet name:"
 msgstr "Naam van rekenblad:"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:151
-#, fuzzy, kde-format
-#| msgid "Add new Matrix"
+#, kde-format
 msgid "Add a new Matrix"
-msgstr "Nieuwe matrix toevoegen"
+msgstr "Een nieuwe matrix toevoegen"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:152
-#, fuzzy, kde-format
-#| msgid "Matrix not square"
+#, kde-format
 msgid "Matrix name:"
-msgstr "Niet-vierkante matrix"
+msgstr "Matrixnaam:"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
