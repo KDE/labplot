@@ -4,7 +4,7 @@
 	Description          : file I/O-filter related interface
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009-2017 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -16,6 +16,7 @@
 #include "backend/lib/macros.h"
 
 #include <KLocalizedString>
+
 #include <QDateTime>
 #include <QImageReader>
 #include <QLocale>
@@ -237,12 +238,12 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 /*!
   returns the list of all supported data file formats
 */
-QStringList AbstractFileFilter::fileTypes() {
-	// TODO: Used by what? #ifdef HAVE_QXLSX?
+/*QStringList AbstractFileFilter::fileTypes() {
+	// TODO: #ifdef HAVE_QXLSX?
 	return (QStringList() << i18n("ASCII Data") << i18n("Binary Data") << i18n("Image") << i18n("Excel") << i18n("Hierarchical Data Format 5 (HDF5)")
 						  << i18n("Network Common Data Format (NetCDF)") << i18n("Flexible Image Transport System Data Format (FITS)") << i18n("JSON Data")
 						  << i18n("ROOT (CERN) Histograms") << i18n("Spice") << i18n("SAS, Stata or SPSS"));
-}
+}*/
 
 QString AbstractFileFilter::convertFromNumberToColumn(int n) {
 	// main code from https://www.geeksforgeeks.org/find-excel-column-name-given-number/
