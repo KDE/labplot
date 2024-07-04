@@ -55,7 +55,7 @@ ENDIF ()
 
 IF (BUILD_QXLSX)
 	set(BUILD_SHARED_LIBS OFF)
-	add_subdirectory(QXlsx)
+	add_subdirectory(QXlsx EXCLUDE_FROM_ALL)
 ENDIF ()
 
 # preview.sty
@@ -165,6 +165,6 @@ elseif(LOCAL_QT_ADVANCED_DOCK_COPY)
     # https://cmake.org/cmake/help/latest/variable/CMAKE_PROJECT_INCLUDE.html
     set(CMAKE_PROJECT_QtADS_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/QtADS_config.cmake")
     set(ADS_VERSION ${labplot2_VERSION})
-    add_subdirectory(Qt-Advanced-Docking-System)
+    add_subdirectory(Qt-Advanced-Docking-System EXCLUDE_FROM_ALL)
 endif()
 
