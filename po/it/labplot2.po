@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-03 01:44+0000\n"
+"POT-Creation-Date: 2024-07-05 01:40+0000\n"
 "PO-Revision-Date: 2024-05-07 18:20+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -1066,78 +1066,6 @@ msgstr ""
 "Impossibile aprire il file %1 in scrittura.\n"
 "%2"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:242
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:461
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2015
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:108
-#: src/commonfrontend/matrix/MatrixView.cpp:133
-#: src/commonfrontend/worksheet/WorksheetView.cpp:221
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1367
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:99
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:132
-#, kde-format
-msgid "Image"
-msgstr "Immagine"
-
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:242
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:107
-#, kde-format
-msgid "Hierarchical Data Format 5 (HDF5)"
-msgstr "Hierarchical Data Format 5 (HDF5)"
-
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:242
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:137
-#, kde-format
-msgid "ASCII Data"
-msgstr "Dati ASCII"
-
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:242
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:138
-#, kde-format
-msgid "Binary Data"
-msgstr "Dati binari"
-
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:242
-#, kde-format
-msgid "Excel"
-msgstr "Excel"
-
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:243
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:110
-#, kde-format
-msgid "Network Common Data Format (NetCDF)"
-msgstr "Network Common Data Format (NetCDF)"
-
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:243
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:116
-#, kde-format
-msgid "Flexible Image Transport System Data Format (FITS)"
-msgstr "Flexible Image Transport System Data Format (FITS)"
-
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:243
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:118
-#, kde-format
-msgid "JSON Data"
-msgstr "Dati JSON"
-
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:244
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:122
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:142
-#, kde-format
-msgid "Spice"
-msgstr "Spice"
-
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:244
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:124
-#, kde-format
-msgid "SAS, Stata or SPSS"
-msgstr "SAS, Stata o SPSS"
-
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:244
-#, kde-format
-msgid "ROOT (CERN) Histograms"
-msgstr "Istogrammi ROOT (CERN)"
-
 #: src/backend/datasources/filters/AsciiFilter.cpp:167
 #, kde-format
 msgid "Number of columns: %1"
@@ -1206,7 +1134,7 @@ msgstr "Valore %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:1269
 #: src/backend/datasources/filters/BinaryFilter.cpp:444
-#: src/backend/datasources/filters/CANFilter.cpp:299
+#: src/backend/datasources/filters/CANFilter.cpp:301
 #: src/backend/datasources/filters/FITSFilter.cpp:329
 #: src/backend/datasources/filters/FITSFilter.cpp:339
 #: src/backend/datasources/filters/FITSFilter.cpp:534
@@ -1244,7 +1172,7 @@ msgstr "Impossibile aprire il dispositivo o il file."
 msgid "Data selection empty."
 msgstr "Selezione dei dati vuota."
 
-#: src/backend/datasources/filters/CANFilter.cpp:218
+#: src/backend/datasources/filters/CANFilter.cpp:220
 #: src/backend/datasources/filters/SpiceFilter.cpp:131
 #: src/backend/datasources/filters/SpiceFilter.cpp:187
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:261
@@ -1252,7 +1180,7 @@ msgstr "Selezione dei dati vuota."
 msgid "Invalid file."
 msgstr "File non valido."
 
-#: src/backend/datasources/filters/CANFilter.cpp:224
+#: src/backend/datasources/filters/CANFilter.cpp:226
 #, kde-format
 msgid "No messages read."
 msgstr "Nessun messaggio letto."
@@ -8272,6 +8200,18 @@ msgstr "Asse orizzontale"
 msgid "Vertical Axis"
 msgstr "Asse verticale"
 
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:461
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2015
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:108
+#: src/commonfrontend/matrix/MatrixView.cpp:133
+#: src/commonfrontend/worksheet/WorksheetView.cpp:221
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1367
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:99
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:132
+#, kde-format
+msgid "Image"
+msgstr "Immagine"
+
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:462
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1991
 #, kde-format
@@ -12277,11 +12217,31 @@ msgstr "Excel 2007+ (XSLX)"
 msgid "OpenDocument Spreadsheet (ODS)"
 msgstr "OpenDocument Spreadsheet (ODS)"
 
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:107
+#, kde-format
+msgid "Hierarchical Data Format 5 (HDF5)"
+msgstr "Hierarchical Data Format 5 (HDF5)"
+
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:110
+#, kde-format
+msgid "Network Common Data Format (NetCDF)"
+msgstr "Network Common Data Format (NetCDF)"
+
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:113
 #, fuzzy, kde-format
 #| msgid "Binary files (*.*)"
 msgid "Vector Binary Logfile (BLF)"
 msgstr "File binari (*.*)"
+
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:116
+#, kde-format
+msgid "Flexible Image Transport System Data Format (FITS)"
+msgstr "Flexible Image Transport System Data Format (FITS)"
+
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:118
+#, kde-format
+msgid "JSON Data"
+msgstr "Dati JSON"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:120
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:140
@@ -12289,10 +12249,31 @@ msgstr "File binari (*.*)"
 msgid "ROOT (CERN)"
 msgstr "ROOT (CERN)"
 
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:122
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:142
+#, kde-format
+msgid "Spice"
+msgstr "Spice"
+
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:124
+#, kde-format
+msgid "SAS, Stata or SPSS"
+msgstr "SAS, Stata o SPSS"
+
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:127
 #, kde-format
 msgid "MATLAB MAT file"
 msgstr "File MAT di MATLAB"
+
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:137
+#, kde-format
+msgid "ASCII Data"
+msgstr "Dati ASCII"
+
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:138
+#, kde-format
+msgid "Binary Data"
+msgstr "Dati binari"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:150
 #, kde-format
@@ -23912,6 +23893,12 @@ msgstr "processo convert non riuscito, codice di uscita ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Impossibile aprire il file:"
+
+#~ msgid "Excel"
+#~ msgstr "Excel"
+
+#~ msgid "ROOT (CERN) Histograms"
+#~ msgstr "Istogrammi ROOT (CERN)"
 
 #~ msgid "Add %1"
 #~ msgstr "Aggiungi %1"

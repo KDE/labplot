@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-03 01:44+0000\n"
+"POT-Creation-Date: 2024-07-05 01:40+0000\n"
 "PO-Revision-Date: 2024-06-30 17:15+0200\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -1058,78 +1058,6 @@ msgstr ""
 "Ne eblis malfermi la dosieron %1 por skribado.\n"
 "%2"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:242
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:461
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2015
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:108
-#: src/commonfrontend/matrix/MatrixView.cpp:133
-#: src/commonfrontend/worksheet/WorksheetView.cpp:221
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1367
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:99
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:132
-#, kde-format
-msgid "Image"
-msgstr "Bildo"
-
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:242
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:107
-#, kde-format
-msgid "Hierarchical Data Format 5 (HDF5)"
-msgstr "Hierarkia Datuma Formato 5 (HDF5)"
-
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:242
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:137
-#, kde-format
-msgid "ASCII Data"
-msgstr "ASCII-datumoj"
-
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:242
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:138
-#, kde-format
-msgid "Binary Data"
-msgstr "Binaraj Datumoj"
-
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:242
-#, kde-format
-msgid "Excel"
-msgstr "Excel"
-
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:243
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:110
-#, kde-format
-msgid "Network Common Data Format (NetCDF)"
-msgstr "Reta Komuna Datuma Formato (NetCDF)"
-
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:243
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:116
-#, kde-format
-msgid "Flexible Image Transport System Data Format (FITS)"
-msgstr "Fleksebla Bilda Transporta Sistemo-Datumformato (FITS)"
-
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:243
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:118
-#, kde-format
-msgid "JSON Data"
-msgstr "JSON-datumoj"
-
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:244
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:122
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:142
-#, kde-format
-msgid "Spice"
-msgstr "Spico"
-
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:244
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:124
-#, kde-format
-msgid "SAS, Stata or SPSS"
-msgstr "SAS, Stata aŭ SPSS"
-
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:244
-#, kde-format
-msgid "ROOT (CERN) Histograms"
-msgstr "ROOT (CERN) Histogramoj"
-
 #: src/backend/datasources/filters/AsciiFilter.cpp:167
 #, kde-format
 msgid "Number of columns: %1"
@@ -1198,7 +1126,7 @@ msgstr "Valoro %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:1269
 #: src/backend/datasources/filters/BinaryFilter.cpp:444
-#: src/backend/datasources/filters/CANFilter.cpp:299
+#: src/backend/datasources/filters/CANFilter.cpp:301
 #: src/backend/datasources/filters/FITSFilter.cpp:329
 #: src/backend/datasources/filters/FITSFilter.cpp:339
 #: src/backend/datasources/filters/FITSFilter.cpp:534
@@ -1236,7 +1164,7 @@ msgstr "Malsukcesis malfermi la aparaton/dosieron."
 msgid "Data selection empty."
 msgstr "Elekto de datumoj malplena."
 
-#: src/backend/datasources/filters/CANFilter.cpp:218
+#: src/backend/datasources/filters/CANFilter.cpp:220
 #: src/backend/datasources/filters/SpiceFilter.cpp:131
 #: src/backend/datasources/filters/SpiceFilter.cpp:187
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:261
@@ -1244,7 +1172,7 @@ msgstr "Elekto de datumoj malplena."
 msgid "Invalid file."
 msgstr "Nevalida dosiero."
 
-#: src/backend/datasources/filters/CANFilter.cpp:224
+#: src/backend/datasources/filters/CANFilter.cpp:226
 #, kde-format
 msgid "No messages read."
 msgstr "Legis neniujn mesaĝojn."
@@ -8137,6 +8065,18 @@ msgstr "Horizontala Akso"
 msgid "Vertical Axis"
 msgstr "Vertikala Akso"
 
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:461
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2015
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:108
+#: src/commonfrontend/matrix/MatrixView.cpp:133
+#: src/commonfrontend/worksheet/WorksheetView.cpp:221
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1367
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:99
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:132
+#, kde-format
+msgid "Image"
+msgstr "Bildo"
+
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:462
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1991
 #, kde-format
@@ -12097,10 +12037,30 @@ msgstr "Excel 2007+ (XLSX)"
 msgid "OpenDocument Spreadsheet (ODS)"
 msgstr "OpenDocument-Tabelfolio (ODS)"
 
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:107
+#, kde-format
+msgid "Hierarchical Data Format 5 (HDF5)"
+msgstr "Hierarkia Datuma Formato 5 (HDF5)"
+
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:110
+#, kde-format
+msgid "Network Common Data Format (NetCDF)"
+msgstr "Reta Komuna Datuma Formato (NetCDF)"
+
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:113
 #, kde-format
 msgid "Vector Binary Logfile (BLF)"
 msgstr "Vektora Binara Protokoldosiero (BLF)"
+
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:116
+#, kde-format
+msgid "Flexible Image Transport System Data Format (FITS)"
+msgstr "Fleksebla Bilda Transporta Sistemo-Datumformato (FITS)"
+
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:118
+#, kde-format
+msgid "JSON Data"
+msgstr "JSON-datumoj"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:120
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:140
@@ -12108,10 +12068,31 @@ msgstr "Vektora Binara Protokoldosiero (BLF)"
 msgid "ROOT (CERN)"
 msgstr "ROOT (CERN)"
 
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:122
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:142
+#, kde-format
+msgid "Spice"
+msgstr "Spico"
+
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:124
+#, kde-format
+msgid "SAS, Stata or SPSS"
+msgstr "SAS, Stata aŭ SPSS"
+
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:127
 #, kde-format
 msgid "MATLAB MAT file"
 msgstr "MATLAB MAT-dosiero"
+
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:137
+#, kde-format
+msgid "ASCII Data"
+msgstr "ASCII-datumoj"
+
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:138
+#, kde-format
+msgid "Binary Data"
+msgstr "Binaraj Datumoj"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:150
 #, kde-format
@@ -23671,6 +23652,12 @@ msgstr "konvertprocezo malsukcesis, elirkodo ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ne eblas malfermi dosieron:"
+
+#~ msgid "Excel"
+#~ msgstr "Excel"
+
+#~ msgid "ROOT (CERN) Histograms"
+#~ msgstr "ROOT (CERN) Histogramoj"
 
 #~ msgid "Add %1"
 #~ msgstr "Aldoni %1"

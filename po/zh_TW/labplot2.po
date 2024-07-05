@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-03 01:44+0000\n"
+"POT-Creation-Date: 2024-07-05 01:40+0000\n"
 "PO-Revision-Date: 2024-04-17 05:07+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -1081,79 +1081,6 @@ msgid ""
 "%2"
 msgstr "無法開啟檔案 %1 以讀取"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:242
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:461
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2015
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:108
-#: src/commonfrontend/matrix/MatrixView.cpp:133
-#: src/commonfrontend/worksheet/WorksheetView.cpp:221
-#: src/commonfrontend/worksheet/WorksheetView.cpp:1367
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:99
-#: src/kdefrontend/widgets/BackgroundWidget.cpp:132
-#, fuzzy, kde-format
-#| msgid "Images"
-msgid "Image"
-msgstr "影像"
-
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:242
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:107
-#, kde-format
-msgid "Hierarchical Data Format 5 (HDF5)"
-msgstr ""
-
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:242
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:137
-#, fuzzy, kde-format
-msgid "ASCII Data"
-msgstr "資料"
-
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:242
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:138
-#, fuzzy, kde-format
-msgid "Binary Data"
-msgstr "資料"
-
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:242
-#, kde-format
-msgid "Excel"
-msgstr ""
-
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:243
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:110
-#, kde-format
-msgid "Network Common Data Format (NetCDF)"
-msgstr ""
-
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:243
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:116
-#, kde-format
-msgid "Flexible Image Transport System Data Format (FITS)"
-msgstr ""
-
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:243
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:118
-#, fuzzy, kde-format
-msgid "JSON Data"
-msgstr "資料"
-
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:244
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:122
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:142
-#, kde-format
-msgid "Spice"
-msgstr ""
-
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:244
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:124
-#, kde-format
-msgid "SAS, Stata or SPSS"
-msgstr ""
-
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:244
-#, kde-format
-msgid "ROOT (CERN) Histograms"
-msgstr ""
-
 #: src/backend/datasources/filters/AsciiFilter.cpp:167
 #, fuzzy, kde-format
 msgid "Number of columns: %1"
@@ -1223,7 +1150,7 @@ msgstr "數值"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:1269
 #: src/backend/datasources/filters/BinaryFilter.cpp:444
-#: src/backend/datasources/filters/CANFilter.cpp:299
+#: src/backend/datasources/filters/CANFilter.cpp:301
 #: src/backend/datasources/filters/FITSFilter.cpp:329
 #: src/backend/datasources/filters/FITSFilter.cpp:339
 #: src/backend/datasources/filters/FITSFilter.cpp:534
@@ -1262,7 +1189,7 @@ msgstr "開啟失敗"
 msgid "Data selection empty."
 msgstr "符合選擇區域"
 
-#: src/backend/datasources/filters/CANFilter.cpp:218
+#: src/backend/datasources/filters/CANFilter.cpp:220
 #: src/backend/datasources/filters/SpiceFilter.cpp:131
 #: src/backend/datasources/filters/SpiceFilter.cpp:187
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:261
@@ -1271,7 +1198,7 @@ msgstr "符合選擇區域"
 msgid "Invalid file."
 msgstr "匯出到檔案"
 
-#: src/backend/datasources/filters/CANFilter.cpp:224
+#: src/backend/datasources/filters/CANFilter.cpp:226
 #, kde-format
 msgid "No messages read."
 msgstr ""
@@ -8377,6 +8304,19 @@ msgstr "水平軸："
 msgid "Vertical Axis"
 msgstr "垂直軸："
 
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:461
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2015
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:108
+#: src/commonfrontend/matrix/MatrixView.cpp:133
+#: src/commonfrontend/worksheet/WorksheetView.cpp:221
+#: src/commonfrontend/worksheet/WorksheetView.cpp:1367
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:99
+#: src/kdefrontend/widgets/BackgroundWidget.cpp:132
+#, fuzzy, kde-format
+#| msgid "Images"
+msgid "Image"
+msgstr "影像"
+
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:462
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1991
 #, fuzzy, kde-format
@@ -12423,10 +12363,30 @@ msgstr ""
 msgid "OpenDocument Spreadsheet (ODS)"
 msgstr "OpenDocument 試算表 (ODS)"
 
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:107
+#, kde-format
+msgid "Hierarchical Data Format 5 (HDF5)"
+msgstr ""
+
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:110
+#, kde-format
+msgid "Network Common Data Format (NetCDF)"
+msgstr ""
+
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:113
 #, kde-format
 msgid "Vector Binary Logfile (BLF)"
 msgstr ""
+
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:116
+#, kde-format
+msgid "Flexible Image Transport System Data Format (FITS)"
+msgstr ""
+
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:118
+#, fuzzy, kde-format
+msgid "JSON Data"
+msgstr "資料"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:120
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:140
@@ -12434,10 +12394,31 @@ msgstr ""
 msgid "ROOT (CERN)"
 msgstr ""
 
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:122
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:142
+#, kde-format
+msgid "Spice"
+msgstr ""
+
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:124
+#, kde-format
+msgid "SAS, Stata or SPSS"
+msgstr ""
+
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:127
 #, kde-format
 msgid "MATLAB MAT file"
 msgstr ""
+
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:137
+#, fuzzy, kde-format
+msgid "ASCII Data"
+msgstr "資料"
+
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:138
+#, fuzzy, kde-format
+msgid "Binary Data"
+msgstr "資料"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:150
 #, kde-format
