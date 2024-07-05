@@ -658,9 +658,10 @@ double HistogramPrivate::xMinimum() const {
 	case Histogram::Orientation::Vertical:
 		return autoBinRanges ? dataColumn->minimum() : binRangesMin;
 	case Histogram::Orientation::Horizontal:
-		return 0;
+		return 0.;
+	case Histogram::Orientation::Both:
+		return INFINITY;
 	}
-	return INFINITY;
 }
 
 double HistogramPrivate::xMaximum() const {
@@ -669,18 +670,20 @@ double HistogramPrivate::xMaximum() const {
 		return autoBinRanges ? dataColumn->maximum() : binRangesMax;
 	case Histogram::Orientation::Horizontal:
 		return getMaximumOccuranceofHistogram();
+	case Histogram::Orientation::Both:
+		return -INFINITY;
 	}
-	return -INFINITY;
 }
 
 double HistogramPrivate::yMinimum() const {
 	switch (orientation) {
 	case Histogram::Orientation::Vertical:
-		return 0;
+		return 0.;
 	case Histogram::Orientation::Horizontal:
 		return autoBinRanges ? dataColumn->minimum() : binRangesMin;
+	case Histogram::Orientation::Both:
+		return INFINITY;
 	}
-	return INFINITY;
 }
 
 double HistogramPrivate::yMaximum() const {
@@ -689,8 +692,9 @@ double HistogramPrivate::yMaximum() const {
 		return getMaximumOccuranceofHistogram();
 	case Histogram::Orientation::Horizontal:
 		return autoBinRanges ? dataColumn->maximum() : binRangesMax;
+	case Histogram::Orientation::Both:
+		return -INFINITY;
 	}
-	return -INFINITY;
 }
 
 const AbstractColumn* HistogramPrivate::bins() {
