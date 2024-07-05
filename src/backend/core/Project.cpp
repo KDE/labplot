@@ -993,7 +993,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		for (int i = 0; i < count; ++i) {
 			// data columns
 			dataColumns[i] = nullptr;
-			const auto& path = barPlot->dataColumnPaths().at(i);
+			const auto path = barPlot->dataColumnPaths().at(i);
 			for (Column* column : columns) {
 				if (!column)
 					continue;
