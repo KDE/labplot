@@ -12,6 +12,8 @@
 
 #include <QObject>
 
+#include <kdefrontend/dockwidgets/Surface3DPlotAreaDock.h>
+
 class MainWin;
 class AbstractAspect;
 
@@ -109,7 +111,10 @@ private:
 	BoxPlotDock* m_boxPlotDock{nullptr};
 	HistogramDock* m_histogramDock{nullptr};
 	KDEPlotDock* m_kdePlotDock{nullptr};
-	QQPlotDock* m_qqPlotDock{nullptr};
+    QQPlotDock* m_qqPlotDock{nullptr};
+
+    // surface plot dock
+    Surface3DPlotAreaDock* m_surfacePlotDock{nullptr};
 
 	// analysis plots
 	XYDataReductionCurveDock* m_xyDataReductionCurveDock{nullptr};

@@ -138,6 +138,7 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYConvolutionCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYCorrelationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/Value.cpp
+        ${BACKEND_DIR}/worksheet/plots/3d/Surface3DPlotArea.cpp
 )
 
 if(ENABLE_LIBORIGIN)
@@ -239,6 +240,7 @@ target_link_libraries(liblabplot
     Qt${QT_MAJOR_VERSION}::Widgets
     Qt${QT_MAJOR_VERSION}::PrintSupport
     Qt${QT_MAJOR_VERSION}::Sql
+        Qt${QT_MAJOR_VERSION}::Graphs
     ${GSL_LIBRARIES}
     ${GSL_CBLAS_LIBRARIES}
     ${FFTW3_LIBRARIES}
