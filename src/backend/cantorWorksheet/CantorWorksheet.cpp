@@ -16,7 +16,9 @@
 #include "backend/core/column/Column.h"
 #include "backend/core/column/ColumnPrivate.h"
 #include "backend/lib/XmlStreamReader.h"
+#ifndef SDK
 #include "commonfrontend/cantorWorksheet/CantorWorksheetView.h"
+#endif
 
 #include "3rdparty/cantor/cantor_part.h"
 #include <cantor/cantorlibs_version.h>

@@ -11,7 +11,6 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "backend/core/Project.h"
-#include "backend/cantorWorksheet/CantorWorksheet.h"
 #include "backend/core/Settings.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
@@ -63,6 +62,7 @@
 
 // required to parse Cantor and Jupyter files
 #ifdef HAVE_CANTOR_LIBS
+#include "backend/cantorWorksheet/CantorWorksheet.h"
 #include <cantor/backend.h>
 #endif
 
@@ -730,6 +730,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 
 bool Project::loadNotebook(const QString& filename) {
 	bool rc = false;
+#ifdef HAVE_CANTOR_LIBS
 	QString errorMessage;
 	QFile file(filename);
 	if (QFileInfo(filename).completeSuffix() == QLatin1String("cws")) {
@@ -830,6 +831,7 @@ bool Project::loadNotebook(const QString& filename) {
 		RESET_CURSOR;
 		KMessageBox::error(nullptr, errorMessage, i18n("Failed to open project"));
 	}
+#endif
 
 	return rc;
 }
