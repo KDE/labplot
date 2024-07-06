@@ -10,7 +10,7 @@
 #include <qabstract3dgraph.h>
 
 Surface3DPlotArea::Surface3DPlotArea(const QString& name)
-	: WorksheetElement(name, new Surface3DPlotAreaPrivate(this), AspectType::SurfacePlot)
+    : WorksheetElement(name, new Surface3DPlotAreaPrivate(this), AspectType::SurfacePlot)
 	, m_surface{new Q3DSurface()} {
 }
 
@@ -263,24 +263,24 @@ void Surface3DPlotAreaPrivate::generateData() const {
 }
 
 void Surface3DPlotAreaPrivate::generateDemoData() const {
-	qDebug() << Q_FUNC_INFO << q->name();
+    qDebug() << Q_FUNC_INFO << q->name();
 
-	QSurfaceDataArray* dataArray = new QSurfaceDataArray;
-	dataArray->reserve(50);
+    QSurfaceDataArray* dataArray = new QSurfaceDataArray;
+    dataArray->reserve(50);
 
-	// Parameters for sphere
-	int n = 50; // Number of points
-	float radius = 10.0f; // Radius of the sphere
+    // Parameters for sphere
+    int n = 50; // Number of points
+    float radius = 10.0f; // Radius of the sphere
 
-	for (int i = 0; i < n; ++i) {
-		QSurfaceDataRow* newRow = new QSurfaceDataRow(n);
-		float theta = i * M_PI / n; // Angle theta
-		for (int j = 0; j < n; ++j) {
-			float phi = j * 2 * M_PI / n; // Angle phi
-			float x = radius * sin(theta) * cos(phi);
-			float y = radius * sin(theta) * sin(phi);
-			float z = radius * cos(theta);
-			(*newRow)[j].setPosition(QVector3D(x, y, z));
+    for (int i = 0; i < n; ++i) {
+        QSurfaceDataRow* newRow = new QSurfaceDataRow(n);
+        float theta = i * M_PI / n; // Angle theta
+        for (int j = 0; j < n; ++j) {
+            float phi = j * 2 * M_PI / n; // Angle phi
+            float x = radius * sin(theta) * cos(phi);
+            float y = radius * sin(theta) * sin(phi);
+            float z = radius * cos(theta);
+            (*newRow)[j].setPosition(QVector3D(x, y, z));
         }
         *dataArray << *newRow;
     }
@@ -304,8 +304,6 @@ void Surface3DPlotAreaPrivate::generateDemoData() const {
     q->m_surface->setMaxCameraZoomLevel(200);
     q->m_surface->setCameraXRotation(45);
     q->m_surface->setCameraYRotation(20);
-
-    q->m_surface->setShadowQuality(QAbstract3DGraph::ShadowQuality::Low);
 }
 
 void Surface3DPlotAreaPrivate::generateMatrixData() const {
@@ -347,7 +345,8 @@ void Surface3DPlotAreaPrivate::generateMatrixData() const {
 }
 
 void Surface3DPlotAreaPrivate::generateSpreadsheetData() const {
-    if (xColumn == nullptr || yColumn == nullptr || zColumn == nullptr || firstNode == nullptr || secondNode == nullptr || thirdNode == nullptr) {
+    qDebug() << Q_FUNC_INFO;
+    if (xColumn == nullptr || yColumn == nullptr || zColumn == nullptr) {
         return;
     }
     if (!xColumn->rowCount() || !yColumn->rowCount() || !zColumn->rowCount())
@@ -355,93 +354,120 @@ void Surface3DPlotAreaPrivate::generateSpreadsheetData() const {
 
     // Create a QSurfaceDataArray to hold the data
     QSurfaceDataArray* dataArray = new QSurfaceDataArray;
-	dataArray->reserve(50); // Reserve space for rows
 
-	const int numPoints = std::min(xColumn->rowCount(), std::min(yColumn->rowCount(), zColumn->rowCount()));
+    // Assuming xColumn, yColumn, and zColumn are vectors
+    const int numPoints = std::min({xColumn->rowCount(), yColumn->rowCount(), zColumn->rowCount()});
+    const int numRows = static_cast<int>(sqrt(numPoints)); // Assuming data forms a square grid
+    const int numCols = numRows; // Same as numRows for square grid
 
-	// Populate the dataArray with points
-	for (int i = 0; i < numPoints; ++i) {
-		QSurfaceDataRow* newRow = new QSurfaceDataRow(numPoints);
-		const int x = static_cast<int>(xColumn->valueAt(i));
-		const int y = static_cast<int>(yColumn->valueAt(i));
-		const int z = static_cast<int>(zColumn->valueAt(i));
+    // Setup range
+    QPair<float, float> xRange(INT_MAX, INT_MIN);
+    QPair<float, float> yRange(INT_MAX, INT_MIN);
+    QPair<float, float> zRange(INT_MAX, INT_MIN);
 
-		// Insert points into the row
-		(*newRow)[0].setPosition(QVector3D(x, y, z));
-		*dataArray << *newRow;
-	}
+    // Populate the dataArray with points
+    for (int i = 0; i < numRows; ++i) {
+        QSurfaceDataRow* newRow = new QSurfaceDataRow(numCols);
+        for (int j = 0; j < numCols; ++j) {
+            int index = i * numCols + j;
+            if (index >= numPoints)
+                break; // Ensure we don't go out of bounds
 
-	// Create a QSurfaceDataProxy and set the data array
-	QSurfaceDataProxy* proxy = new QSurfaceDataProxy();
-	proxy->resetArray(*dataArray);
+            const float x = static_cast<float>(xColumn->valueAt(index));
+            const float y = static_cast<float>(yColumn->valueAt(index));
+            const float z = static_cast<float>(zColumn->valueAt(index));
 
-	// Create a QSurface3DSeries and set the proxy
-	QSurface3DSeries* series = new QSurface3DSeries(proxy);
-	series->setDrawMode(QSurface3DSeries::DrawSurfaceAndWireframe);
-	series->setFlatShadingEnabled(true);
+            xRange.first = std::min(xRange.first, x);
+            xRange.second = std::max(xRange.second, x);
+            yRange.first = std::min(yRange.first, y);
+            yRange.second = std::max(yRange.second, y);
+            zRange.first = std::min(zRange.first, z);
+            zRange.second = std::max(zRange.second, z);
 
-	// Add the series to the Q3DSurface
-	q->m_surface->addSeries(series);
+            (*newRow)[j].setPosition(QVector3D(x, y, z));
+        }
+        *dataArray << *newRow;
+    }
+
+    // Create a QSurfaceDataProxy and set the data array
+    QSurfaceDataProxy* proxy = new QSurfaceDataProxy();
+    proxy->resetArray(*dataArray);
+
+    // Create a QSurface3DSeries and set the proxy
+    QSurface3DSeries* series = new QSurface3DSeries(proxy);
+    q->m_surface->addSeries(series);
+
+    // Additional steps to ensure the surface is displayed
+    q->m_surface->axisX()->setRange(xRange.first, xRange.second);
+    q->m_surface->axisY()->setRange(yRange.first, yRange.second);
+    q->m_surface->axisZ()->setRange(zRange.first, zRange.second);
+
+    // Adjust camera settings for better view
+    q->m_surface->setCameraZoomLevel(100);
+    q->m_surface->setMinCameraZoomLevel(50);
+    q->m_surface->setMaxCameraZoomLevel(200);
+    q->m_surface->setCameraXRotation(45);
+    q->m_surface->setCameraYRotation(20);
 } ////////////////////////////////////////////////////////////////////////////////
 
 void Surface3DPlotAreaPrivate::saveSpreadsheetConfig(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("spreadsheet");
-	WRITE_COLUMN(xColumn, xColumn);
-	WRITE_COLUMN(yColumn, yColumn);
-	WRITE_COLUMN(zColumn, zColumn);
+    writer->writeStartElement("spreadsheet");
+    WRITE_COLUMN(xColumn, xColumn);
+    WRITE_COLUMN(yColumn, yColumn);
+    WRITE_COLUMN(zColumn, zColumn);
 
-	WRITE_COLUMN(firstNode, firstNode);
-	WRITE_COLUMN(secondNode, secondNode);
-	WRITE_COLUMN(thirdNode, thirdNode);
-	writer->writeEndElement();
+    WRITE_COLUMN(firstNode, firstNode);
+    WRITE_COLUMN(secondNode, secondNode);
+    WRITE_COLUMN(thirdNode, thirdNode);
+    writer->writeEndElement();
 }
 
 void Surface3DPlotAreaPrivate::saveMatrixConfig(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("matrix");
-	writer->writeAttribute("matrixPath", matrix ? matrix->path() : QLatin1String(""));
-	writer->writeEndElement();
+    writer->writeStartElement("matrix");
+    writer->writeAttribute("matrixPath", matrix ? matrix->path() : QLatin1String(""));
+    writer->writeEndElement();
 }
 
 bool Surface3DPlotAreaPrivate::loadSpreadsheetConfig(XmlStreamReader* reader) {
-	const QXmlStreamAttributes& attribs = reader->attributes();
-	QString str;
-	Surface3DPlotAreaPrivate* d = this;
-	READ_COLUMN(xColumn);
-	READ_COLUMN(yColumn);
-	READ_COLUMN(zColumn);
+    const QXmlStreamAttributes& attribs = reader->attributes();
+    QString str;
+    Surface3DPlotAreaPrivate* d = this;
+    READ_COLUMN(xColumn);
+    READ_COLUMN(yColumn);
+    READ_COLUMN(zColumn);
 
-	READ_COLUMN(firstNode);
-	READ_COLUMN(secondNode);
-	READ_COLUMN(thirdNode);
-	return true;
+    READ_COLUMN(firstNode);
+    READ_COLUMN(secondNode);
+    READ_COLUMN(thirdNode);
+    return true;
 }
 
 bool Surface3DPlotAreaPrivate::loadMatrixConfig(XmlStreamReader* reader) {
-	const QXmlStreamAttributes& attribs = reader->attributes();
-	matrixPath = attribs.value("matrixPath").toString();
-	return true;
+    const QXmlStreamAttributes& attribs = reader->attributes();
+    matrixPath = attribs.value("matrixPath").toString();
+    return true;
 }
 void Surface3DPlotAreaPrivate::recalc() {
     qDebug() << Q_FUNC_INFO;
-	if (!q->m_surface->seriesList().isEmpty()) {
-		QSurface3DSeries* series = q->m_surface->seriesList().first();
+    if (!q->m_surface->seriesList().isEmpty()) {
+        QSurface3DSeries* series = q->m_surface->seriesList().first();
 
-		series->setDrawMode(static_cast<QSurface3DSeries::DrawFlags>(drawMode));
+        series->setDrawMode(static_cast<QSurface3DSeries::DrawFlags>(drawMode));
 
-		// Update the mesh type
-		series->setMesh(static_cast<QAbstract3DSeries::Mesh>(meshType));
+        // Update the mesh type
+        series->setMesh(static_cast<QAbstract3DSeries::Mesh>(meshType));
 
-		// Update the color
-		series->setBaseColor(color);
+        // Update the color
+        series->setBaseColor(color);
 
-		// Update the opacity
-		series->setBaseColor(QColor(color.red(), color.green(), color.blue(), static_cast<int>(opacity * 255)));
+        // Update the opacity
+        series->setBaseColor(QColor(color.red(), color.green(), color.blue(), static_cast<int>(opacity * 255)));
 
-		// Update flat shading
+        // Update flat shading
         series->setFlatShadingEnabled(flatShading);
 
         // Update smoothness
-		series->setMeshSmooth(smooth);
+        series->setMeshSmooth(smooth);
     }
     // Update grid visibility
     q->gridVisibilityChanged(gridVisibility);
