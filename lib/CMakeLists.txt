@@ -142,6 +142,9 @@ set(BACKEND_SOURCES
 IF (ENABLE_LIBORIGIN)
         list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/projects/OriginProjectParser.cpp)
 ENDIF ()
+IF (RECENT_CANTOR)
+        list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/cantorWorksheet/CantorWorksheet.cpp ${BACKEND_DIR}/cantorWorksheet/VariableParser.cpp)
+ENDIF ()
 
 set(NSL_SOURCES
 	${BACKEND_DIR}/nsl/nsl_baseline.cpp

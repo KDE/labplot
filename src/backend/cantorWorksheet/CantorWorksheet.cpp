@@ -309,6 +309,7 @@ QIcon CantorWorksheet::icon() const {
 }
 
 QWidget* CantorWorksheet::view() const {
+#ifndef SDK
 	if (!m_partView) {
 		m_view = new CantorWorksheetView(const_cast<CantorWorksheet*>(this));
 		m_view->setBaseSize(1500, 1500);
@@ -330,6 +331,7 @@ QWidget* CantorWorksheet::view() const {
 		}
 #endif
 	}
+#endif
 	return m_partView;
 }
 
@@ -345,8 +347,10 @@ QMenu* CantorWorksheet::createContextMenu() {
 }
 
 void CantorWorksheet::fillColumnContextMenu(QMenu* menu, Column* column) {
+#ifndef SDK
 	if (m_view)
 		m_view->fillColumnContextMenu(menu, column);
+#endif
 }
 
 QString CantorWorksheet::backendName() {
