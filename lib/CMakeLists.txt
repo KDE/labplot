@@ -251,6 +251,11 @@ IF (ENABLE_LIBORIGIN)
 	ENDIF ()
 ENDIF ()
 
+IF (RECENT_CANTOR)
+        # KFX::Service, KFX::Parts is optional but probably required by Cantor
+        target_link_libraries( labplot Cantor::cantorlibs KF${KF_MAJOR_VERSION}::Service KF${KF_MAJOR_VERSION}::Parts )
+ENDIF ()
+
 IF (WIN32)
 	target_link_libraries( labplot ${PSAPI} )
 ENDIF ()
