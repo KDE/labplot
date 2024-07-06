@@ -260,6 +260,8 @@ public:
 			return QStringLiteral("MQTTClient");
 		case AspectType::MQTTSubscription:
 			return QStringLiteral("MQTTSubscription");
+        case AspectType::SurfacePlot:
+            return QStringLiteral("SurfacePlot");
 		}
 
 		return {};

@@ -42,6 +42,7 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
+#include <QGraphicsProxyWidget>
 
 /**
  * \class Worksheet
@@ -70,8 +71,6 @@ Worksheet::Worksheet(const QString& name, bool loading)
 
 	if (!loading)
 		init();
-    auto surface = new Surface3DPlotArea(i18n("3d-plot"));
-    addChild(surface);
 }
 
 Worksheet::~Worksheet() {
@@ -290,16 +289,28 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 		return;
 
 	// add the GraphicsItem of the added child to the scene
-	DEBUG(Q_FUNC_INFO << ", ADDING child to SCENE")
+	// DEBUG(Q_FUNC_INFO << ", ADDING child to SCENE")
 
-    if (aspect->type() == AspectType::SurfacePlot) {
-        const auto* addedElement = static_cast<const Surface3DPlotArea*>(aspect);
-        const Q3DSurface* graph = addedElement->m_surface;
+	if (aspect->type() == AspectType::SurfacePlot) {
+		const auto* addedElement = static_cast<const Surface3DPlotArea*>(aspect);
+		Q3DSurface* graph = addedElement->m_surface;
+		graph->setFocusPolicy(Qt::StrongFocus);
 		if (graph) {
 			QWidget* window = graph->window();
-            if (window)
-                QGraphicsProxyWidget* proxy = d->m_scene->addWidget(window);
-        }
+			if (window) {
+				window->setFocusPolicy(Qt::StrongFocus);
+				QGraphicsProxyWidget* proxy = d->m_scene->addWidget(window);
+				proxy->setFocusPolicy(Qt::StrongFocus); // Ensure the proxy can gain focus
+				proxy->setAcceptHoverEvents(true);
+				proxy->setAcceptedMouseButtons(Qt::AllButtons);
+				// Set the proxy size dynamically
+				QRectF sceneRect = d->m_scene->sceneRect();
+				double width = sceneRect.width() - d->layoutLeftMargin - d->layoutRightMargin;
+				double height = sceneRect.height() - d->layoutTopMargin - d->layoutBottomMargin;
+				proxy->resize(width, height);
+			}
+			graph->show();
+		}
 	} else {
 		auto* item = addedElement->graphicsItem();
 		d->m_scene->addItem(item);

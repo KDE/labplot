@@ -183,7 +183,7 @@ private:
 	QAction* addImageAction{nullptr};
 	QAction* addGlobalInfoElementAction{nullptr};
 
-    QAction* add3DPlotAction{nullptr};
+	QAction* add3DPlotAction{nullptr};
 
 	QAction* verticalLayoutAction{nullptr};
 	QAction* horizontalLayoutAction{nullptr};

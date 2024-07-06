@@ -110,6 +110,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/XYConvolutionCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYCorrelationCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
+        ${KDEFRONTEND_DIR}/dockwidgets/Surface3DPlotAreaDock.cpp
 	${KDEFRONTEND_DIR}/matrix/MatrixFunctionDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/PlotDataDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/EquidistantValuesDialog.cpp
@@ -253,6 +254,7 @@ set(UI_SOURCES
     ${KDEFRONTEND_DIR}/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/valuewidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/worksheetdock.ui
+        ${KDEFRONTEND_DIR}/ui/dockwidgets/surface3dplotareadock.ui
 	${KDEFRONTEND_DIR}/ui/matrix/matrixfunctionwidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/plotdatawidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/equidistantvalueswidget.ui
@@ -772,6 +774,7 @@ endif()
 
 add_executable(labplot ${LABPLOT_SOURCE} ${GUI_QRC} ${qml_QRC})
 target_link_libraries(labplot labplotlib labplotbackendlib labplotnsllib)
+
 
 #if(KUserFeedbackQt6_FOUND)
 #    target_link_libraries(labplot KUserFeedbackCoreQt6 KUserFeedbackWidgetsQt6)
