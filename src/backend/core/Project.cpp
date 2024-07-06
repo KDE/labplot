@@ -11,6 +11,7 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "backend/core/Project.h"
+#include "backend/cantorWorksheet/CantorWorksheet.h"
 #include "backend/core/Settings.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
@@ -62,7 +63,6 @@
 
 // required to parse Cantor and Jupyter files
 #ifdef HAVE_CANTOR_LIBS
-#include "backend/cantorWorksheet/CantorWorksheet.h"
 #include <cantor/backend.h>
 #endif
 
