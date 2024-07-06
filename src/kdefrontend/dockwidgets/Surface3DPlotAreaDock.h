@@ -1,10 +1,19 @@
+/*
+	File                 : Surface3DPlotAreaDock.cpp
+	Project              : LabPlot
+	Description          : widget for Surface3DPlotArea properties
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2024 Alexander Semke <alexander.semke@web.de>
+
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
+
 #ifndef SURFACE3DPLOTAREADOCK_H
 #define SURFACE3DPLOTAREADOCK_H
-#include "backend/worksheet/plots/3d/Surface3DPlotArea.h"
-#include <QWidget>
-#include <TreeViewComboBox.h>
 
 #include "BaseDock.h"
+#include "backend/worksheet/plots/3d/Surface3DPlotArea.h"
+
 #include "ui_surface3dplotareadock.h"
 
 class Surface3DPlotArea;
@@ -12,7 +21,7 @@ class Matrix;
 class AbstractColumn;
 class AspectTreeModel;
 class ColorMapSelector;
-class BaseDock;
+class TreeViewComboBox;
 
 class Surface3DPlotAreaDock : public BaseDock {
 	Q_OBJECT
@@ -33,24 +42,21 @@ private:
 private Q_SLOTS:
 	void retranslateUi();
 
-	// SLOTs for changes triggered in Surface3DDock
-	void onNameChanged();
-	void onCommentChanged();
-
+	// SLOTs for changes triggered in Surface3DPlotAreaDock
+	void dataSourceTypeChanged(int);
+	void xColumnChanged(const QModelIndex&);
+	void yColumnChanged(const QModelIndex&);
+	void zColumnChanged(const QModelIndex&);
+	void matrixChanged(const QModelIndex&);
 	void onTreeViewIndexChanged(const QModelIndex&);
-	void onDataSourceChanged(int);
-	void onVisibilityChanged(bool);
 
-	// Surface 3D
+	// SLOTs for changes triggered in Surface3DPlotArea
 	void sourceTypeChanged(Surface3DPlotArea::DataSource);
+	void surfaceXColumnChanged(const AbstractColumn*);
+	void surfaceYColumnChanged(const AbstractColumn*);
+	void surfaceZColumnChanged(const AbstractColumn*);
+	void surfaceMatrixChanged(const Matrix*);
 
-	// Matrix handling
-	void matrixChanged(const Matrix*);
-
-	// Spreadsheet handling
-	void xColumnChanged(const AbstractColumn*);
-	void yColumnChanged(const AbstractColumn*);
-	void zColumnChanged(const AbstractColumn*);
 	void firstNodeChanged(const AbstractColumn*);
 	void secondNodeChanged(const AbstractColumn*);
 	void thirdNodeChanged(const AbstractColumn*);
@@ -73,13 +79,12 @@ private Q_SLOTS:
 
 private:
 	Ui::Surface3DPlotAreaDock ui;
-    QList<Surface3DPlotArea*> surfaces;
-	AspectTreeModel* aspectTreeModel;
-    bool m_initializing;
+	QList<Surface3DPlotArea*> m_surfaces;
+	Surface3DPlotArea* m_surface{nullptr};
 
 	void load();
-    void loadConfig(KConfig&);
-    QModelIndex modelIndexOfAspect(AspectTreeModel* model, const AbstractAspect* aspect) const;
+	void loadConfig(KConfig&);
+	QModelIndex modelIndexOfAspect(AspectTreeModel* model, const AbstractAspect* aspect) const;
 
 Q_SIGNALS:
     void info(const QString&);

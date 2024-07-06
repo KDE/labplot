@@ -1,18 +1,17 @@
 #ifndef SURFACE3DPLOTAREAPRIVATE_H
 #define SURFACE3DPLOTAREAPRIVATE_H
 
+#include <backend/worksheet/WorksheetElementPrivate.h>
+#include <backend/matrix/Matrix.h>
 #include "Surface3DPlotArea.h"
 
-#include <backend/worksheet/WorksheetElementPrivate.h>
-
-#include <backend/matrix/Matrix.h>
 class Surface3DPlotArea;
-class WorksheetElementPrivate;
+
 class Surface3DPlotAreaPrivate : public WorksheetElementPrivate {
 public:
 	explicit Surface3DPlotAreaPrivate(Surface3DPlotArea* owner);
 	Surface3DPlotArea* const q{nullptr};
-	Surface3DPlotArea::DataSource sourceType;
+	Surface3DPlotArea::DataSource sourceType{Surface3DPlotArea::DataSource::DataSource_Spreadsheet};
 	Surface3DPlotArea::MeshType meshType;
 	Surface3DPlotArea::DrawMode drawMode;
 	bool flatShading;

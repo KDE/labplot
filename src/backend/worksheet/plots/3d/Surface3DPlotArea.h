@@ -51,7 +51,7 @@ public:
 	POINTER_D_ACCESSOR_DECL(const Matrix, matrix, Matrix)
 	const QString& matrixPath() const;
 
-	// Spreadsheet parameters
+    // Spreadsheet parameters
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, zColumn, ZColumn)
