@@ -60,7 +60,6 @@
 #include <cantor/backend.h>
 #include "backend/cantorWorksheet/CantorWorksheet.h"
 #include <KZip>
-#include <QBuffer>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonParseError>
@@ -165,9 +164,10 @@ public:
 	QDateTime modificationTime;
 	Project* const q;
 	QString fileName;
-	QString windowState;
 	QString author;
-	bool saveDockStates{false};
+	QString dockWidgetState;
+	bool saveDefaultDockWidgetState{false};
+	QString defaultDockWidgetState;
 	bool saveCalculations{true};
 	QUndoStack undo_stack;
 };
@@ -192,7 +192,7 @@ Project::Project()
 	setIsLoading(true);
 
 	const auto& group = Settings::group(QStringLiteral("Settings_General"));
-	setSaveDockStates(group.readEntry(QStringLiteral("SaveDockStates"), false));
+	setSaveDefaultDockWidgetState(group.readEntry(QStringLiteral("SaveDefaultDockWidgetState"), false));
 	setSaveCalculations(group.readEntry(QStringLiteral("SaveCalculations"), true));
 
 	setUndoAware(true);
@@ -284,10 +284,11 @@ Project::DockVisibility Project::dockVisibility() const {
 }
 
 CLASS_D_ACCESSOR_IMPL(Project, QString, fileName, FileName, fileName)
-CLASS_D_ACCESSOR_IMPL(Project, QString, windowState, WindowState, windowState)
 BASIC_D_READER_IMPL(Project, QString, author, author)
 CLASS_D_ACCESSOR_IMPL(Project, QDateTime, modificationTime, ModificationTime, modificationTime)
-BASIC_D_READER_IMPL(Project, bool, saveDockStates, saveDockStates)
+CLASS_D_ACCESSOR_IMPL(Project, QString, dockWidgetState, DockWidgetState, dockWidgetState)
+BASIC_D_READER_IMPL(Project, bool, saveDefaultDockWidgetState, saveDefaultDockWidgetState)
+CLASS_D_ACCESSOR_IMPL(Project, QString, defaultDockWidgetState, DefaultDockWidgetState, defaultDockWidgetState)
 BASIC_D_READER_IMPL(Project, bool, saveCalculations, saveCalculations)
 
 STD_SETTER_CMD_IMPL_S(Project, SetAuthor, QString, author)
@@ -297,11 +298,11 @@ void Project::setAuthor(const QString& author) {
 		exec(new ProjectSetAuthorCmd(d, author, ki18n("%1: set author")));
 }
 
-STD_SETTER_CMD_IMPL_S(Project, SetSaveDockStates, bool, saveDockStates)
-void Project::setSaveDockStates(bool save) {
+STD_SETTER_CMD_IMPL_S(Project, SetSaveDefaultDockWidgetState, bool, saveDefaultDockWidgetState)
+void Project::setSaveDefaultDockWidgetState(bool save) {
 	Q_D(Project);
-	if (save != d->saveDockStates)
-		exec(new ProjectSetSaveDockStatesCmd(d, save, ki18n("%1: save dock states changed")));
+	if (save != d->saveDefaultDockWidgetState)
+		exec(new ProjectSetSaveDefaultDockWidgetStateCmd(d, save, ki18n("%1: save dock state changed")));
 }
 
 STD_SETTER_CMD_IMPL_S(Project, SetSaveCalculations, bool, saveCalculations)
@@ -487,8 +488,13 @@ void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) {
 	writer->writeAttribute(QStringLiteral("modificationTime"), modificationTime().toString(QStringLiteral("yyyy-dd-MM hh:mm:ss:zzz")));
 	writer->writeAttribute(QStringLiteral("author"), author());
 
-	writer->writeAttribute(QStringLiteral("saveDockStates"), QString::number(d->saveDockStates));
-	writer->writeAttribute(QStringLiteral("windowState"), d->windowState);
+	// save the state of the content dock widgets
+	writer->writeAttribute(QStringLiteral("dockWidgetState"), d->dockWidgetState);
+
+	// save the state of the default dock widgets, if activated
+	writer->writeAttribute(QStringLiteral("saveDefaultDockWidgetState"), QString::number(d->saveDefaultDockWidgetState));
+	if (d->saveDefaultDockWidgetState)
+		writer->writeAttribute(QStringLiteral("defaultDockWidgetState"), d->defaultDockWidgetState);
 
 	if (d->saveCalculations)
 		writer->writeAttribute(QStringLiteral("saveCalculations"), QString::number(d->saveCalculations));
@@ -1250,10 +1256,17 @@ bool Project::readProjectAttributes(XmlStreamReader* reader) {
 
 	d->author = attribs.value(QStringLiteral("author")).toString();
 
-	str = attribs.value(QStringLiteral("saveDockStates")).toString();
-	if (!str.isEmpty())
-		d->saveDockStates = str.toInt();
-	d->windowState = attribs.value(QStringLiteral("windowState")).toString();
+	// state of the content dock widgets
+	d->dockWidgetState = attribs.value(QStringLiteral("dockWidgetState")).toString();
+
+	// state of the default dock widgets
+	str = attribs.value(QStringLiteral("saveDefaultDockWidgetState")).toString();
+	if (!str.isEmpty()) {
+		d->saveDefaultDockWidgetState = str.toInt();
+
+		if (d->saveDefaultDockWidgetState)
+			d->defaultDockWidgetState = attribs.value(QStringLiteral("defaultDockWidgetState")).toString();
+	}
 
 	str = attribs.value(QStringLiteral("saveCalculations")).toString();
 	if (!str.isEmpty())

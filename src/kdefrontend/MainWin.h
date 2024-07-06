@@ -92,7 +92,8 @@ public:
 #endif
 
 private:
-	ads::CDockManager* m_DockManager{nullptr};
+	ads::CDockManager* m_dockManagerContent{nullptr};
+	ads::CDockManager* m_dockManagerMain{nullptr};
 	KColorSchemeManager* m_schemeManager{nullptr};
 	ContentDockWidget* m_currentDock{nullptr}; // Currently selected dock
 	Project* m_project{nullptr};

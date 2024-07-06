@@ -52,7 +52,7 @@ void ProjectDock::setProject(Project* project) {
 	ui.lVersion->setText(project->version());
 	ui.lCreated->setText(project->creationTime().toString());
 	ui.lModified->setText(project->modificationTime().toString());
-	ui.chkSaveDockStates->setChecked(project->saveDockStates());
+	ui.chkSaveDockStates->setChecked(project->saveDefaultDockWidgetState());
 
 	bool visible = !project->children<XYAnalysisCurve>(AbstractAspect::ChildIndexFlag::Recursive).isEmpty();
 	ui.lSaveCalculations->setVisible(visible);
@@ -69,7 +69,7 @@ void ProjectDock::setProject(Project* project) {
 	ui.teComment->setMaximumHeight(16777215);
 
 	connect(m_project, &Project::authorChanged, this, &ProjectDock::projectAuthorChanged);
-	connect(m_project, &Project::saveDockStatesChanged, this, &ProjectDock::projectSaveDockStatesChanged);
+	connect(m_project, &Project::saveDefaultDockWidgetStateChanged, this, &ProjectDock::projectSaveDockStatesChanged);
 	connect(m_project, &Project::saveCalculationsChanged, this, &ProjectDock::projectSaveCalculationsChanged);
 }
 
@@ -83,7 +83,7 @@ void ProjectDock::authorChanged() {
 
 void ProjectDock::saveDockStatesChanged(bool state) {
 	CONDITIONAL_LOCK_RETURN;
-	m_project->setSaveDockStates(state);
+	m_project->setSaveDefaultDockWidgetState(state);
 }
 
 void ProjectDock::saveCalculationsChanged(bool state) {
