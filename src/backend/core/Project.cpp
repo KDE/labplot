@@ -57,13 +57,13 @@
 
 // required to parse Cantor and Jupyter files
 #ifdef HAVE_CANTOR_LIBS
-#include <cantor/backend.h>
 #include "backend/cantorWorksheet/CantorWorksheet.h"
 #include <KZip>
 #include <QBuffer>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonParseError>
+#include <cantor/backend.h>
 #endif
 
 namespace {
