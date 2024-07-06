@@ -44,12 +44,16 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KZip>
 #include <kwidgetsaddons_version.h>
 
 #include <QBuffer>
 #include <QDateTime>
 #include <QFile>
 #include <QFileInfo>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonParseError>
 #include <QMenu>
 #include <QMimeData>
 #include <QThreadPool>
@@ -58,11 +62,6 @@
 // required to parse Cantor and Jupyter files
 #ifdef HAVE_CANTOR_LIBS
 #include "backend/cantorWorksheet/CantorWorksheet.h"
-#include <KZip>
-#include <QBuffer>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonParseError>
 #include <cantor/backend.h>
 #endif
 
