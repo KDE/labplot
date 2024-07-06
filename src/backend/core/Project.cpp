@@ -49,6 +49,7 @@
 
 #include <QBuffer>
 #include <QDateTime>
+#include <QDomDocument>
 #include <QFile>
 #include <QFileInfo>
 #include <QJsonDocument>
