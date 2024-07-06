@@ -4,7 +4,7 @@
 	Description          : Main window of the application
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2008-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2009-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -23,9 +23,6 @@
 #ifdef HAVE_LIBORIGIN
 #include "backend/datasources/projects/OriginProjectParser.h"
 #endif
-#ifdef HAVE_CANTOR_LIBS
-#include "backend/cantorWorksheet/CantorWorksheet.h"
-#endif
 #include "backend/datapicker/Datapicker.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
@@ -41,9 +38,6 @@
 #include "commonfrontend/matrix/MatrixView.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
-#ifdef HAVE_CANTOR_LIBS
-#include "commonfrontend/cantorWorksheet/CantorWorksheetView.h"
-#endif
 #include "commonfrontend/datapicker/DatapickerImageView.h"
 #include "commonfrontend/datapicker/DatapickerView.h"
 #include "commonfrontend/note/NoteView.h"
@@ -142,12 +136,8 @@
 
 #ifdef HAVE_CANTOR_LIBS
 #include <cantor/backend.h>
-
-// required to parse Cantor and Jupyter files
-#include <KZip>
-#include <QBuffer>
-#include <QJsonDocument>
-#include <QJsonParseError>
+#include "backend/cantorWorksheet/CantorWorksheet.h"
+#include "commonfrontend/cantorWorksheet/CantorWorksheetView.h"
 #endif
 
 /*!
@@ -478,7 +468,7 @@ void MainWin::resetWelcomeScreen() {
 */
 
 void MainWin::createADS() {
-	KToolBar* toolbar = toolBar();
+	auto* toolbar = toolBar();
 	if (toolbar)
 		toolbar->setVisible(true);
 
@@ -976,8 +966,6 @@ void MainWin::initMenus() {
 	m_visibilityMenu->addAction(m_visibilitySubfolderAction);
 	m_visibilityMenu->addAction(m_visibilityAllAction);
 
-// 	//menu for editing files
-// 	m_editMenu = new QMenu(i18n("Edit"), this);
 #ifdef HAVE_FITS
 //	m_editMenu->addAction(m_editFitsFileAction);
 #endif
@@ -1047,16 +1035,9 @@ void MainWin::initMenus() {
 }
 
 void MainWin::colorSchemeChanged(QAction* action) {
-	QString schemeName = KLocalizedString::removeAcceleratorMarker(action->text());
-
-	// background of the mdi area is not updated on theme changes, do it here.
-	// QModelIndex index = m_schemeManager->indexForScheme(schemeName);
-	// const QPalette& palette = KColorScheme::createApplicationPalette(KSharedConfig::openConfig(index.data(Qt::UserRole).toString()));
-	// const QBrush& brush = palette.brush(QPalette::Dark);
-	// m_DockManager->setBackground(brush);
-
 	// save the selected color scheme
-	KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
+	auto group = Settings::group(QStringLiteral("Settings_General"));
+	const auto& schemeName = KLocalizedString::removeAcceleratorMarker(action->text());
 	group.writeEntry(QStringLiteral("ColorScheme"), schemeName);
 	group.sync();
 }
@@ -1598,120 +1579,9 @@ void MainWin::openProject(const QString& filename) {
 #endif
 
 #ifdef HAVE_CANTOR_LIBS
-	else if (QFileInfo(filename).completeSuffix() == QLatin1String("cws")) {
-		QFile file(filename);
-		KZip archive(&file);
-		rc = archive.open(QIODevice::ReadOnly);
-		if (rc) {
-			const auto* contentEntry = archive.directory()->entry(QLatin1String("content.xml"));
-			if (contentEntry && contentEntry->isFile()) {
-				const auto* contentFile = static_cast<const KArchiveFile*>(contentEntry);
-				QByteArray data = contentFile->data();
-				archive.close();
-
-				// determine the name of the backend
-				QDomDocument doc;
-				doc.setContent(data);
-				QString backendName = doc.documentElement().attribute(QLatin1String("backend"));
-
-				if (!backendName.isEmpty()) {
-					// create new Cantor worksheet and load the data
-					auto* worksheet = new CantorWorksheet(backendName);
-					worksheet->setName(QFileInfo(filename).fileName());
-					worksheet->setComment(filename);
-
-					rc = file.open(QIODevice::ReadOnly);
-					if (rc) {
-						QByteArray content = file.readAll();
-						rc = worksheet->init(&content);
-						if (rc)
-							m_project->addChild(worksheet);
-						else {
-							delete worksheet;
-							RESET_CURSOR;
-							QMessageBox::critical(this, i18n("Failed to open project"), i18n("Failed to process the content of the file '%1'.", filename));
-						}
-					} else {
-						RESET_CURSOR;
-						QMessageBox::critical(this, i18n("Failed to open project"), i18n("Failed to open the file '%1'.", filename));
-					}
-				} else {
-					RESET_CURSOR;
-					rc = false;
-					QMessageBox::critical(this, i18n("Failed to open project"), i18n("Failed to process the content of the file '%1'.", filename));
-				}
-			} else {
-				RESET_CURSOR;
-				rc = false;
-				QMessageBox::critical(this, i18n("Failed to open project"), i18n("Failed to process the content of the file '%1'.", filename));
-			}
-		} else {
-			RESET_CURSOR;
-			QMessageBox::critical(this, i18n("Failed to open project"), i18n("Failed to open the file '%1'.", filename));
-		}
-	} else if (QFileInfo(filename).completeSuffix() == QLatin1String("ipynb")) {
-		QFile file(filename);
-		rc = file.open(QIODevice::ReadOnly);
-		if (rc) {
-			QByteArray content = file.readAll();
-			QJsonParseError error;
-			// TODO: use QJsonDocument& doc = QJsonDocument::fromJson(content, &error); if minimum Qt version is at least 5.10
-			const QJsonDocument& jsonDoc = QJsonDocument::fromJson(content, &error);
-			const QJsonObject& doc = jsonDoc.object();
-			if (error.error == QJsonParseError::NoError) {
-				// determine the backend name
-				QString backendName;
-				// TODO: use doc["metadata"]["kernelspec"], etc. if minimum Qt version is at least 5.10
-				if ((doc[QLatin1String("metadata")] != QJsonValue::Undefined && doc[QLatin1String("metadata")].isObject())
-					&& (doc[QLatin1String("metadata")].toObject()[QLatin1String("kernelspec")] != QJsonValue::Undefined
-						&& doc[QLatin1String("metadata")].toObject()[QLatin1String("kernelspec")].isObject())) {
-					QString kernel;
-					if (doc[QLatin1String("metadata")].toObject()[QLatin1String("kernelspec")].toObject()[QLatin1String("name")] != QJsonValue::Undefined)
-						kernel = doc[QLatin1String("metadata")].toObject()[QLatin1String("kernelspec")].toObject()[QLatin1String("name")].toString();
-
-					if (!kernel.isEmpty()) {
-						if (kernel.startsWith(QLatin1String("julia")))
-							backendName = QLatin1String("julia");
-						else if (kernel == QLatin1String("sagemath"))
-							backendName = QLatin1String("sage");
-						else if (kernel == QLatin1String("ir"))
-							backendName = QLatin1String("r");
-						else if (kernel == QLatin1String("python3") || kernel == QLatin1String("python2"))
-							backendName = QLatin1String("python");
-						else
-							backendName = std::move(kernel);
-					} else
-						backendName = doc[QLatin1String("metadata")].toObject()[QLatin1String("kernelspec")].toObject()[QLatin1String("language")].toString();
-
-					if (!backendName.isEmpty()) {
-						// create new Cantor worksheet and load the data
-						auto* worksheet = new CantorWorksheet(backendName);
-						worksheet->setName(QFileInfo(filename).fileName());
-						worksheet->setComment(filename);
-						rc = worksheet->init(&content);
-						if (rc)
-							m_project->addChild(worksheet);
-						else {
-							delete worksheet;
-							RESET_CURSOR;
-							QMessageBox::critical(this, i18n("Failed to open project"), i18n("Failed to process the content of the file '%1'.", filename));
-						}
-					} else {
-						RESET_CURSOR;
-						rc = false;
-						QMessageBox::critical(this, i18n("Failed to open project"), i18n("Failed to process the content of the file '%1'.", filename));
-					}
-				} else {
-					RESET_CURSOR;
-					rc = false;
-					QMessageBox::critical(this, i18n("Failed to open project"), i18n("Failed to process the content of the file '%1'.", filename));
-				}
-			}
-		} else {
-			RESET_CURSOR;
-			rc = false;
-			QMessageBox::critical(this, i18n("Failed to open project"), i18n("Failed to open the file '%1'.", filename));
-		}
+	else if (filename.endsWith(QLatin1String(".cws"), Qt::CaseInsensitive)
+		|| filename.endsWith(QLatin1String(".ipynb"), Qt::CaseInsensitive)) {
+		rc = m_project->loadNotebook(filename);
 	}
 #endif
 
@@ -2673,7 +2543,7 @@ void MainWin::updateLocale() {
 }
 
 void MainWin::handleSettingsChanges() {
-	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
+	const auto group = Settings::group(QStringLiteral("Settings_General"));
 
 	// title bar
 	MainWin::TitleBarMode titleBarMode = static_cast<MainWin::TitleBarMode>(group.readEntry("TitleBar", 0));
@@ -2681,17 +2551,6 @@ void MainWin::handleSettingsChanges() {
 		m_titleBarMode = titleBarMode;
 		updateTitleBar();
 	}
-
-	// view mode
-	// 	if (dynamic_cast<QQuickWidget*>(centralWidget()) == nullptr) {
-	//	QMdiArea::ViewMode viewMode = QMdiArea::ViewMode(group.readEntry("ViewMode", 0));
-	//	if (m_mdiArea->viewMode() != viewMode) {
-	//		m_mdiArea->setViewMode(viewMode);
-	//		if (viewMode == QMdiArea::SubWindowView)
-	//			this->updateMdiWindowVisibility();
-	//	}
-
-	// 	}
 
 	// window visibility
 	auto vis = Project::DockVisibility(group.readEntry("DockVisibility", 0));

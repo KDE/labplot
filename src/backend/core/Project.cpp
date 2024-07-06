@@ -55,6 +55,17 @@
 #include <QThreadPool>
 #include <QUndoStack>
 
+// required to parse Cantor and Jupyter files
+#ifdef HAVE_CANTOR_LIBS
+#include <cantor/backend.h>
+#include "backend/cantorWorksheet/CantorWorksheet.h"
+#include <KZip>
+#include <QBuffer>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonParseError>
+#endif
+
 namespace {
 // xmlVersion of this labplot version
 // the project version will compared with this.
@@ -715,6 +726,112 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 	Q_EMIT loaded();
 
 	return !reader->hasError();
+}
+
+bool Project::loadNotebook(const QString& filename) {
+	bool rc = false;
+	QString errorMessage;
+	QFile file(filename);
+	if (QFileInfo(filename).completeSuffix() == QLatin1String("cws")) {
+		KZip archive(&file);
+		rc = archive.open(QIODevice::ReadOnly);
+		if (rc) {
+			const auto* contentEntry = archive.directory()->entry(QLatin1String("content.xml"));
+			if (contentEntry && contentEntry->isFile()) {
+				const auto* contentFile = static_cast<const KArchiveFile*>(contentEntry);
+				QByteArray data = contentFile->data();
+				archive.close();
+
+				// determine the name of the backend
+				QDomDocument doc;
+				doc.setContent(data);
+				QString backendName = doc.documentElement().attribute(QLatin1String("backend"));
+
+				if (!backendName.isEmpty()) {
+					// create new Cantor worksheet and load the data
+					auto* worksheet = new CantorWorksheet(backendName);
+					worksheet->setName(QFileInfo(filename).fileName());
+					worksheet->setComment(filename);
+
+					rc = file.open(QIODevice::ReadOnly);
+					if (rc) {
+						QByteArray content = file.readAll();
+						rc = worksheet->init(&content);
+						if (rc)
+							addChild(worksheet);
+						else
+							delete worksheet;
+					} else
+						errorMessage = i18n("Failed to open the file '%1'.", filename);
+				} else
+					rc = false;
+			} else
+				rc = false;
+		} else
+			errorMessage = i18n("Failed to open the file '%1'.", filename);
+	} else if (QFileInfo(filename).completeSuffix() == QLatin1String("ipynb")) {
+		rc = file.open(QIODevice::ReadOnly);
+		if (rc) {
+			QByteArray content = file.readAll();
+			QJsonParseError error;
+			// TODO: use QJsonDocument& doc = QJsonDocument::fromJson(content, &error); if minimum Qt version is at least 5.10
+			const QJsonDocument& jsonDoc = QJsonDocument::fromJson(content, &error);
+			const QJsonObject& doc = jsonDoc.object();
+			if (error.error == QJsonParseError::NoError) {
+				// determine the backend name
+				QString backendName;
+				// TODO: use doc["metadata"]["kernelspec"], etc. if minimum Qt version is at least 5.10
+				if ((doc[QLatin1String("metadata")] != QJsonValue::Undefined && doc[QLatin1String("metadata")].isObject())
+					&& (doc[QLatin1String("metadata")].toObject()[QLatin1String("kernelspec")] != QJsonValue::Undefined
+						&& doc[QLatin1String("metadata")].toObject()[QLatin1String("kernelspec")].isObject())) {
+					QString kernel;
+					if (doc[QLatin1String("metadata")].toObject()[QLatin1String("kernelspec")].toObject()[QLatin1String("name")] != QJsonValue::Undefined)
+						kernel = doc[QLatin1String("metadata")].toObject()[QLatin1String("kernelspec")].toObject()[QLatin1String("name")].toString();
+
+					if (!kernel.isEmpty()) {
+						if (kernel.startsWith(QLatin1String("julia")))
+							backendName = QLatin1String("julia");
+						else if (kernel == QLatin1String("sagemath"))
+							backendName = QLatin1String("sage");
+						else if (kernel == QLatin1String("ir"))
+							backendName = QLatin1String("r");
+						else if (kernel == QLatin1String("python3") || kernel == QLatin1String("python2"))
+							backendName = QLatin1String("python");
+						else
+							backendName = std::move(kernel);
+					} else
+						backendName = doc[QLatin1String("metadata")].toObject()[QLatin1String("kernelspec")].toObject()[QLatin1String("language")].toString();
+
+					if (!backendName.isEmpty()) {
+						// create new Cantor worksheet and load the data
+						auto* worksheet = new CantorWorksheet(backendName);
+						worksheet->setName(QFileInfo(filename).fileName());
+						worksheet->setComment(filename);
+						rc = worksheet->init(&content);
+						if (rc)
+							addChild(worksheet);
+						else
+							delete worksheet;
+					} else
+						rc = false;
+				} else
+					rc = false;
+			}
+		} else {
+			rc = false;
+			errorMessage = i18n("Failed to open the file '%1'.", filename);
+		}
+	}
+
+	if (!rc) {
+		if (errorMessage.isEmpty())
+			errorMessage = i18n("Failed to process the content of the file '%1'.", filename);
+
+		RESET_CURSOR;
+		KMessageBox::error(nullptr, errorMessage, i18n("Failed to open project"));
+	}
+
+	return rc;
 }
 
 void Project::retransformElements(AbstractAspect* aspect) {
