@@ -141,6 +141,7 @@ public:
 	void* data() const;
 	void setData(void*);
 	bool hasValues() const;
+	bool hasValueAt(int row) const;
 	bool valueLabelsInitialized() const;
 	double valueLabelsMinimum() const;
 	double valueLabelsMaximum() const;

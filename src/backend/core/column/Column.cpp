@@ -809,7 +809,7 @@ void* Column::data() const {
 }
 
 /*!
- * return \c true if the column has numeric values, \c false otherwise.
+ * return \c true if the column has at least one valid (not empty) value, \c false otherwise.
  */
 bool Column::hasValues() const {
 	if (d->available.hasValues)
@@ -856,6 +856,36 @@ bool Column::hasValues() const {
 	d->hasValues = foundValues;
 	d->available.hasValues = true;
 	return d->hasValues;
+}
+
+/*!
+ * return \c true if the column has a valid value in the row \row.
+ */
+bool Column::hasValueAt(int row) const {
+	bool foundValue = false;
+	switch (columnMode()) {
+	case ColumnMode::Double: {
+		foundValue = !std::isnan(doubleAt(row));
+		break;
+	}
+	case ColumnMode::Text: {
+		foundValue = !textAt(row).isEmpty();
+		break;
+	}
+	case ColumnMode::Integer:
+	case ColumnMode::BigInt:
+		// integer values are always valid
+		foundValue = true;
+		break;
+	case ColumnMode::DateTime:
+	case ColumnMode::Month:
+	case ColumnMode::Day: {
+		foundValue = dateTimeAt(row).isValid();
+		break;
+	}
+	}
+
+	return foundValue;
 }
 
 /*
