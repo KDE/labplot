@@ -92,7 +92,8 @@ public:
 #endif
 
 private:
-	ads::CDockManager* m_DockManager{nullptr};
+	ads::CDockManager* m_dockManagerContent{nullptr};
+	ads::CDockManager* m_dockManagerMain{nullptr};
 	KColorSchemeManager* m_schemeManager{nullptr};
 	ContentDockWidget* m_currentDock{nullptr}; // Currently selected dock
 	Project* m_project{nullptr};
@@ -208,8 +209,7 @@ private:
 	// 	void toggleHideWidget(QWidget* widget, bool hideToLeft);
 	// 	QQuickWidget* createWelcomeScreen();
 	// 	void resetWelcomeScreen();
-	void createADS();
-	void initDefaultDocks();
+	void initDocks();
 	void restoreDefaultDockState() const;
 
 	Spreadsheet* activeSpreadsheet() const;
@@ -224,7 +224,6 @@ protected:
 
 private Q_SLOTS:
 	void initGUI(const QString&);
-	bool specialDock(ads::CDockWidget* dock);
 	void changeVisibleAllDocks(bool);
 	void activateNextDock();
 	void activatePreviousDock();

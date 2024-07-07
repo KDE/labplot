@@ -89,6 +89,7 @@
 #include <QMimeType>
 #endif
 
+#include <DockAreaWidget.h>
 #include <DockManager.h>
 
 #ifdef HAVE_TOUCHBAR
@@ -97,7 +98,6 @@
 
 #include <QActionGroup>
 #include <QCloseEvent>
-#include <QDockWidget>
 #include <QElapsedTimer>
 #include <QFileDialog>
 #include <QMenu>
@@ -106,7 +106,6 @@
 #include <QStackedWidget>
 #include <QStatusBar>
 #include <QTemporaryFile>
-#include <QTimeLine>
 #include <QUndoStack>
 // #include <QtWidgets>
 // #include <QtQuickWidgets/QQuickWidget>
@@ -179,7 +178,7 @@ MainWin::~MainWin() {
 
 	auto group = Settings::group(QStringLiteral("MainWin"));
 	group.writeEntry(QLatin1String("geometry"), saveGeometry()); // current geometry of the main window
-	group.writeEntry(QLatin1String("WindowState"), saveState()); // current state of QMainWindow's toolbars and dockwidgets
+	group.writeEntry(QLatin1String("WindowState"), saveState()); // current state of QMainWindow's toolbars
 	group.writeEntry(QLatin1String("lastOpenFileFilter"), m_lastOpenFileFilter);
 	group.writeEntry(QLatin1String("ShowMemoryInfo"), (m_memoryInfoWidget != nullptr));
 	Settings::sync();
@@ -325,7 +324,7 @@ void MainWin::initGUI(const QString& fileName) {
 	connect(&m_autoSaveTimer, &QTimer::timeout, this, &MainWin::autoSaveProject);
 
 	if (!fileName.isEmpty()) {
-		createADS();
+		initDocks();
 		if (Project::isSupportedProject(fileName)) {
 			QTimer::singleShot(0, this, [=]() {
 				openProject(fileName);
@@ -371,11 +370,11 @@ void MainWin::initGUI(const QString& fileName) {
 
 		switch (load) {
 		case LoadOnStart::NewProject:
-			createADS();
+			initDocks();
 			newProject();
 			break;
 		case LoadOnStart::LastProject: {
-			createADS();
+			initDocks();
 			const QString& path = Settings::group(QStringLiteral("MainWin")).readEntry("LastOpenProject", "");
 			if (!path.isEmpty())
 				openProject(path);
@@ -467,68 +466,23 @@ void MainWin::resetWelcomeScreen() {
 }
 */
 
-void MainWin::createADS() {
-	auto* toolbar = toolBar();
-	if (toolbar)
-		toolbar->setVisible(true);
-
-	// Save welcome screen's dimensions.
-	// 	if (m_showWelcomeScreen)
-	// 		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
-
-	// As per documentation the configuration Flags must be set prior a DockManager will be created!
-	// https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System/blob/master/doc/user-guide.md#configuration-flags
-	ads::CDockManager::setConfigFlag(ads::CDockManager::XmlCompressionEnabled, false);
-	ads::CDockManager::setConfigFlag(ads::CDockManager::FocusHighlighting, true);
-	ads::CDockManager::setConfigFlag(ads::CDockManager::MiddleMouseButtonClosesTab, true);
-	ads::CDockManager::setConfigFlag(ads::CDockManager::AllTabsHaveCloseButton, true);
-	ads::CDockManager::setConfigFlag(ads::CDockManager::RetainTabSizeWhenCloseButtonHidden, true);
-	// must be after the config flags!
-	ads::CDockManager::setAutoHideConfigFlags(ads::CDockManager::DefaultAutoHideConfig);
-	ads::CDockManager::setAutoHideConfigFlag(ads::CDockManager::AutoHideShowOnMouseOver, true);
-
-	m_DockManager = new ads::CDockManager(this);
-	connect(m_DockManager, &ads::CDockManager::focusedDockWidgetChanged, this, &MainWin::dockFocusChanged); // TODO: seems not to work
-	connect(m_DockManager, &ads::CDockManager::dockWidgetRemoved, this, &MainWin::dockWidgetRemoved);
-
-	connect(m_closeWindowAction, &QAction::triggered, [this] {
-		m_DockManager->removeDockWidget(m_currentDock);
-	});
-	connect(m_closeAllWindowsAction, &QAction::triggered, [this]() {
-		for (auto dock : m_DockManager->dockWidgetsMap()) {
-			// Do not remove the default/special docks, remove content docks only
-			if (!specialDock(dock))
-				m_DockManager->removeDockWidget(dock);
-		}
-	});
-
-	connect(m_nextWindowAction, &QAction::triggered, this, &MainWin::activateNextDock);
-	connect(m_prevWindowAction, &QAction::triggered, this, &MainWin::activatePreviousDock);
-}
-
-bool MainWin::specialDock(ads::CDockWidget* dock) {
-	return dock == m_projectExplorerDock || dock == m_propertiesDock || dock == m_worksheetPreviewDock;
-}
-
 void MainWin::changeVisibleAllDocks(bool visible) {
-	for (auto dock : m_DockManager->dockWidgetsMap())
+	for (auto dock : m_dockManagerContent->dockWidgetsMap())
 		dock->toggleView(visible);
 }
 
 void MainWin::activateNextDock() {
-	const auto* focusedDock = m_DockManager->focusedDockWidget();
+	const auto* focusedDock = m_dockManagerContent->focusedDockWidget();
 
-	auto itrForward = m_DockManager->dockWidgetsMap().constBegin();
+	auto itrForward = m_dockManagerContent->dockWidgetsMap().constBegin();
 
 	bool focusedFound = false;
-	while (itrForward != m_DockManager->dockWidgetsMap().constEnd()) {
+	while (itrForward != m_dockManagerContent->dockWidgetsMap().constEnd()) {
 		auto* dock = itrForward.value();
 		if (focusedFound) {
-			if (!specialDock(dock)) {
-				dock->toggleView(true);
-				m_DockManager->setDockWidgetFocused(dock);
-				return;
-			}
+			dock->toggleView(true);
+			m_dockManagerContent->setDockWidgetFocused(dock);
+			return;
 		}
 
 		if (dock == focusedDock)
@@ -537,31 +491,26 @@ void MainWin::activateNextDock() {
 	}
 
 	if (!focusedFound) {
-		if (!m_DockManager->dockWidgetsMap().count())
+		if (!m_dockManagerContent->dockWidgetsMap().count())
 			return;
-		auto* dock = m_DockManager->dockWidgetsMap().first();
+		auto* dock = m_dockManagerContent->dockWidgetsMap().first();
 		dock->toggleView(true);
-		m_DockManager->setDockWidgetFocused(dock);
+		m_dockManagerContent->setDockWidgetFocused(dock);
 		return;
 	}
 
-	// wrap around
-	auto itrWrap = m_DockManager->dockWidgetsMap().constBegin();
-	while (itrWrap != m_DockManager->dockWidgetsMap().constEnd()) {
-		auto* dock = itrWrap.value();
-		if (!specialDock(dock)) {
-			dock->toggleView(true);
-			m_DockManager->setDockWidgetFocused(dock);
-			return;
-		}
-		itrWrap++;
+	// select the first dock otherwise
+	auto* dock = m_dockManagerContent->dockWidgetsMap().first();
+	if (dock) {
+		dock->toggleView(true);
+		m_dockManagerContent->setDockWidgetFocused(dock);
 	}
 }
 
 void MainWin::activatePreviousDock() {
-	const auto* focusedDock = m_DockManager->focusedDockWidget();
+	const auto* focusedDock = m_dockManagerContent->focusedDockWidget();
 
-	auto itrForward = QMapIterator<QString, ads::CDockWidget*>(m_DockManager->dockWidgetsMap());
+	auto itrForward = QMapIterator<QString, ads::CDockWidget*>(m_dockManagerContent->dockWidgetsMap());
 	itrForward.toBack();
 
 	bool focusedFound = false;
@@ -569,11 +518,9 @@ void MainWin::activatePreviousDock() {
 		itrForward.previous();
 		auto* dock = itrForward.value();
 		if (focusedFound) {
-			if (!specialDock(dock)) {
-				dock->toggleView(true);
-				m_DockManager->setDockWidgetFocused(dock);
-				return;
-			}
+			dock->toggleView(true);
+			m_dockManagerContent->setDockWidgetFocused(dock);
+			return;
 		}
 
 		if (dock == focusedDock) {
@@ -582,25 +529,19 @@ void MainWin::activatePreviousDock() {
 	}
 
 	if (!focusedFound) {
-		if (!m_DockManager->dockWidgetsMap().count())
+		if (!m_dockManagerContent->dockWidgetsMap().count())
 			return;
-		auto* dock = m_DockManager->dockWidgetsMap().first();
+		auto* dock = m_dockManagerContent->dockWidgetsMap().first();
 		dock->toggleView(true);
-		m_DockManager->setDockWidgetFocused(dock);
+		m_dockManagerContent->setDockWidgetFocused(dock);
 		return;
 	}
 
-	// wrap around
-	auto itrWrap = QMapIterator<QString, ads::CDockWidget*>(m_DockManager->dockWidgetsMap());
-	itrWrap.toBack();
-	while (itrWrap.hasPrevious()) {
-		itrWrap.previous();
-		auto* dock = itrWrap.value();
-		if (!specialDock(dock)) {
-			dock->toggleView(true);
-			m_DockManager->setDockWidgetFocused(dock);
-			return;
-		}
+	// select the last dock otherwise
+	auto* dock = m_dockManagerContent->dockWidgetsMap().last();
+	if (dock) {
+		dock->toggleView(true);
+		m_dockManagerContent->setDockWidgetFocused(dock);
 	}
 }
 
@@ -1090,7 +1031,7 @@ void MainWin::updateGUIOnProjectChanges() {
 		return;
 
 	auto* factory = this->guiFactory();
-	if (!m_DockManager || !m_DockManager->focusedDockWidget()) {
+	if (!m_dockManagerContent || !m_dockManagerContent->focusedDockWidget()) {
 		factory->container(QLatin1String("spreadsheet"), this)->setEnabled(false);
 		factory->container(QLatin1String("matrix"), this)->setEnabled(false);
 		factory->container(QLatin1String("worksheet"), this)->setEnabled(false);
@@ -1132,7 +1073,7 @@ void MainWin::updateGUI() {
 #endif
 
 	auto* factory = this->guiFactory();
-	if (!m_DockManager || !m_DockManager->focusedDockWidget()) {
+	if (!m_dockManagerContent || !m_dockManagerContent->focusedDockWidget()) {
 		factory->container(QLatin1String("spreadsheet"), this)->setEnabled(false);
 		factory->container(QLatin1String("matrix"), this)->setEnabled(false);
 		factory->container(QLatin1String("worksheet"), this)->setEnabled(false);
@@ -1360,8 +1301,6 @@ bool MainWin::newProject(bool createInitialContent) {
 	m_shareAction->setEnabled(false); // sharing is only possible after the project was saved to a file
 #endif
 
-	// initialize the default dock widgets and the GUI-observer
-	initDefaultDocks();
 	m_projectExplorer->setModel(m_aspectTreeModel);
 	m_projectExplorer->setProject(m_project);
 	m_projectExplorer->setCurrentAspect(m_project);
@@ -1408,16 +1347,27 @@ bool MainWin::newProject(bool createInitialContent) {
 		m_undoViewEmptyLabel = i18n("%1: created", m_project->name());
 	}
 
-	restoreDefaultDockState();
-
 	return true;
 }
 
-void MainWin::initDefaultDocks() {
-	if (m_projectExplorer)
-		return;
+void MainWin::initDocks() {
+	auto* toolbar = toolBar();
+	if (toolbar)
+		toolbar->setVisible(true);
 
-	const auto groupMainWin = Settings::group(QStringLiteral("MainWin"));
+	// As per documentation the configuration Flags must be set prior a DockManager will be created!
+	// https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System/blob/master/doc/user-guide.md#configuration-flags
+	ads::CDockManager::setConfigFlag(ads::CDockManager::XmlCompressionEnabled, false);
+	ads::CDockManager::setConfigFlag(ads::CDockManager::FocusHighlighting, true);
+	ads::CDockManager::setConfigFlag(ads::CDockManager::MiddleMouseButtonClosesTab, true);
+	ads::CDockManager::setConfigFlag(ads::CDockManager::AllTabsHaveCloseButton, true);
+	ads::CDockManager::setConfigFlag(ads::CDockManager::RetainTabSizeWhenCloseButtonHidden, true);
+	// must be after the config flags!
+	ads::CDockManager::setAutoHideConfigFlags(ads::CDockManager::DefaultAutoHideConfig);
+	ads::CDockManager::setAutoHideConfigFlag(ads::CDockManager::AutoHideShowOnMouseOver, true);
+
+	// main dock manager for the default docks of the application (project explorer, etc)
+	m_dockManagerMain = new ads::CDockManager(this);
 
 	// project explorer
 	m_projectExplorerDock = new ads::CDockWidget(i18nc("@title:window", "Project Explorer"));
@@ -1454,7 +1404,53 @@ void MainWin::initDefaultDocks() {
 	m_worksheetPreviewDock->setWidget(m_worksheetPreviewWidget);
 	connect(m_worksheetPreviewDock, &ads::CDockWidget::viewToggled, this, &MainWin::worksheetPreviewDockVisibilityChanged);
 
-	// restore the position of the dock widgets:
+	auto contentDock = new ads::CDockWidget(i18nc("@title:window", "Content"));
+	contentDock->setObjectName(QLatin1String("content-dock"));
+	m_dockManagerContent = new ads::CDockManager(contentDock);
+	contentDock->setWidget(m_dockManagerContent);
+
+	// resize to the minimal sizes
+	// TODO: doesn't work, the default docks are smaller than they should be
+	m_projectExplorerDock->resize(m_projectExplorerDock->minimumSize());
+	m_propertiesDock->resize(m_propertiesDock->minimumSize());
+	m_worksheetPreviewDock->resize(m_worksheetPreviewDock->minimumSize());
+
+	auto* area = m_dockManagerMain->setCentralWidget(contentDock);
+	Q_ASSERT(area); // Check if success
+
+	// add the default docks to the main dock manager and don't allow to stretch them horizontally,
+	// the available space should go to the content dock widgets
+	auto* areaWidget = m_dockManagerMain->addDockWidget(ads::LeftDockWidgetArea, m_projectExplorerDock);
+	auto policy = areaWidget->sizePolicy();
+	policy.setHorizontalStretch(0);
+	areaWidget->setSizePolicy(policy);
+
+	areaWidget = m_dockManagerMain->addDockWidget(ads::RightDockWidgetArea, m_worksheetPreviewDock);
+	policy = areaWidget->sizePolicy();
+	policy.setHorizontalStretch(0);
+	areaWidget->setSizePolicy(policy);
+
+	areaWidget = m_dockManagerMain->addDockWidget(ads::RightDockWidgetArea, m_propertiesDock, m_worksheetPreviewDock->dockAreaWidget());
+	policy = areaWidget->sizePolicy();
+	policy.setHorizontalStretch(0);
+	areaWidget->setSizePolicy(policy);
+
+	// signal-slot connections for the window handling for the content docks
+	connect(m_dockManagerContent, &ads::CDockManager::focusedDockWidgetChanged, this, &MainWin::dockFocusChanged); // TODO: seems not to work
+	connect(m_dockManagerContent, &ads::CDockManager::dockWidgetRemoved, this, &MainWin::dockWidgetRemoved);
+
+	connect(m_closeWindowAction, &QAction::triggered, [this] {
+		m_dockManagerContent->removeDockWidget(m_currentDock);
+	});
+	connect(m_closeAllWindowsAction, &QAction::triggered, [this]() {
+		for (auto dock : m_dockManagerContent->dockWidgetsMap())
+			m_dockManagerContent->removeDockWidget(dock);
+	});
+
+	connect(m_nextWindowAction, &QAction::triggered, this, &MainWin::activateNextDock);
+	connect(m_prevWindowAction, &QAction::triggered, this, &MainWin::activatePreviousDock);
+
+	// restore the last used dock state
 	restoreDefaultDockState();
 }
 
@@ -1462,37 +1458,19 @@ void MainWin::initDefaultDocks() {
  * restores the default state of the default application dock widgets (Project Explorer, etc.)
  */
 void MainWin::restoreDefaultDockState() const {
-	// we add the standard dock widgets to our initial default and hard-coded positions first.
-	// if the user has changed the position of these docks or saved and restored them from the project file,
-	// we put the default docks to our initial/default position when a new project is created or a project
-	// is opened where the state of the default docks was not saved.
-	// So, we always work with the same initial position of the docks and are not able to save the user-defined
-	// settings - this will be implemented later.
-
-	// remove the docks from their current and potentially non-default positions
-	const auto& docks = m_DockManager->dockWidgetsMap().values();
-	if (docks.indexOf(m_projectExplorerDock) != -1)
-		m_DockManager->removeDockWidget(m_projectExplorerDock);
-	if (docks.indexOf(m_propertiesDock) != -1)
-		m_DockManager->removeDockWidget(m_propertiesDock);
-	if (docks.indexOf(m_worksheetPreviewDock) != -1)
-		m_DockManager->removeDockWidget(m_worksheetPreviewDock);
-
-	// add the docks at the default positions
-	m_DockManager->addDockWidget(ads::LeftDockWidgetArea, m_projectExplorerDock);
-	m_DockManager->addDockWidget(ads::RightDockWidgetArea, m_propertiesDock);
-	m_DockManager->addDockWidget(ads::RightDockWidgetArea, m_worksheetPreviewDock, m_projectExplorerDock->dockAreaWidget());
-
-	// resize to the minimal sizes
-	m_projectExplorerDock->resize(m_projectExplorerDock->minimumSizeHint());
-	m_propertiesDock->resize(m_propertiesDock->minimumSizeHint());
-	m_worksheetPreviewDock->resize(m_worksheetPreviewDock->minimumSizeHint());
-
-	// check the actions for the project and properties explorer, uncheck for worksheet preview and hide it
-	m_projectExplorerDockAction->setChecked(true);
-	m_propertiesDockAction->setChecked(true);
-	m_worksheetPreviewAction->setChecked(false);
-	m_worksheetPreviewDock->toggleView(false);
+	auto group = Settings::group(QStringLiteral("MainWin"));
+	if (group.hasKey(QStringLiteral("DockWidgetState"))) {
+		auto state = group.readEntry(QStringLiteral("DockWidgetState"), QByteArray());
+		m_dockManagerMain->restoreState(state); // restore the state of of the default docks
+	} else {
+		// the state of the dock widgets not available yet, starting for the first time:
+		// show the project and properties explorers, hide the worksheet preview.
+		// for this, check the actions for the project and properties explorer, uncheck for worksheet preview
+		m_projectExplorerDockAction->setChecked(true);
+		m_propertiesDockAction->setChecked(true);
+		m_worksheetPreviewAction->setChecked(false);
+		m_worksheetPreviewDock->toggleView(false);
+	}
 }
 
 void MainWin::openProject() {
@@ -1599,23 +1577,26 @@ void MainWin::openProject(const QString& filename) {
 	updateGUIOnProjectChanges();
 	updateGUI(); // there are most probably worksheets or spreadsheets in the open project -> update the GUI
 
-	const auto& dockWidgetsState = m_project->windowState().toUtf8();
+	const auto& dockWidgetsState = m_project->dockWidgetState().toUtf8();
 	if (!dockWidgetsState.isEmpty()) {
-		for (auto dock : m_DockManager->dockWidgetsMap()) {
+		for (auto dock : m_dockManagerContent->dockWidgetsMap()) {
 			auto* d = dynamic_cast<ContentDockWidget*>(dock);
 			if (d)
 				d->part()->suppressDeletion(true);
 		}
 		changeVisibleAllDocks(false);
-		for (auto dock : m_DockManager->dockWidgetsMap()) {
+		for (auto dock : m_dockManagerContent->dockWidgetsMap()) {
 			auto* d = dynamic_cast<ContentDockWidget*>(dock);
 			if (d)
 				d->part()->suppressDeletion(false);
 		}
 
-		m_DockManager->restoreState(dockWidgetsState); // restore the state of all docks (default and user content)
-		if (!m_project->saveDockStates())
-			restoreDefaultDockState(); // the state of the default dock was not saved, restore the default state for them
+		// restore the state of the content docks
+		m_dockManagerContent->restoreState(dockWidgetsState);
+
+		// restore the state of the default docks if it was saved in the project file
+		if (!m_project->saveDefaultDockWidgetState())
+			m_dockManagerMain->restoreState(m_project->defaultDockWidgetState().toUtf8());
 	} else
 		updateDockWindowVisibility();
 
@@ -1637,11 +1618,6 @@ void MainWin::openProject(const QString& filename) {
 }
 
 void MainWin::openRecentProject(const QUrl& url) {
-	// 	if (dynamic_cast<QQuickWidget*>(centralWidget())) {
-	// 		createMdiArea();
-	// 		setCentralWidget(m_mdiArea);
-	// 	}
-
 	if (url.isLocalFile()) // fix for Windows
 		this->openProject(url.toLocalFile());
 	else
@@ -1670,12 +1646,8 @@ bool MainWin::closeProject() {
 		// 		}
 	}
 
-	for (auto dock : m_DockManager->dockWidgetsMap()) {
-		// No need to delete them, because they are used everywhere and can be reused
-		if (specialDock(dock))
-			continue;
-		m_DockManager->removeDockWidget(dock);
-	}
+	for (auto dock : m_dockManagerContent->dockWidgetsMap())
+		m_dockManagerContent->removeDockWidget(dock);
 
 	m_projectClosing = true;
 	statusBar()->clearMessage();
@@ -1690,9 +1662,6 @@ bool MainWin::closeProject() {
 	// update the UI if we're just closing a project
 	// and not closing(quitting) the application
 	if (!m_closing) {
-		m_projectExplorerDock->toggleView(false);
-		m_propertiesDock->toggleView(false);
-		m_worksheetPreviewDock->toggleView(false);
 		m_currentAspect = nullptr;
 		m_currentFolder = nullptr;
 		updateGUIOnProjectChanges();
@@ -1796,11 +1765,9 @@ bool MainWin::save(const QString& fileName) {
 			thumbnail = centralWidget()->grab(centralWidget()->childrenRect());
 		else {
 			// determine the bounding rectangle of the content (area without the special docks like project explorer, etc.)
-			const auto& docks = m_DockManager->dockWidgetsMap();
+			const auto& docks = m_dockManagerContent->dockWidgetsMap();
 			QRect rect;
 			for (auto* dock : docks) {
-				if (specialDock(dock))
-					continue;
 				auto dockRect = QRect(dock->mapToGlobal(dock->geometry().topLeft()), dock->geometry().size());
 				rect = rect.united(dockRect);
 			}
@@ -1811,9 +1778,9 @@ bool MainWin::save(const QString& fileName) {
 		*/
 
 		QXmlStreamWriter writer(file);
-		auto windowState = m_DockManager->saveState();
+		auto windowState = m_dockManagerContent->saveState();
 		// This conversion is fine, because in the dockmanager xml compression is turned off
-		m_project->setWindowState(QString::fromStdString(windowState.data()));
+		m_project->setDockWidgetState(QString::fromStdString(windowState.data()));
 		m_project->setFileName(fileName);
 		m_project->save(thumbnail, &writer);
 		m_project->setChanged(false);
@@ -2112,7 +2079,7 @@ void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	if (!workbook && !datapicker && part->dockWidgetExists()) {
 		ContentDockWidget* win = part->dockWidget();
 		if (win)
-			m_DockManager->removeDockWidget(win);
+			m_dockManagerContent->removeDockWidget(win);
 	}
 }
 
@@ -2142,7 +2109,7 @@ void MainWin::handleCurrentAspectChanged(AbstractAspect* aspect) {
 
 void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) {
 	Q_ASSERT(aspect);
-	Q_ASSERT(m_DockManager);
+	Q_ASSERT(m_dockManagerContent);
 	const auto* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (part) {
 		ContentDockWidget* win{nullptr};
@@ -2160,18 +2127,23 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) {
 		else
 			win = part->dockWidget();
 
-		auto* dock = m_DockManager->findDockWidget(win->objectName());
+		auto* dock = m_dockManagerContent->findDockWidget(win->objectName());
 		if (dock == nullptr) {
 			// Add new dock if not found
-			if (m_DockManager->dockWidgetsMap().count() == 2 || !m_currentAspectDock) {
+			ads::CDockAreaWidget* areaWidget{nullptr};
+			if (m_dockManagerContent->dockWidgetsMap().count() > 0 || !m_currentAspectDock) {
 				// If only project explorer and properties dock exist place it right to the project explorer
-				m_DockManager->addDockWidget(ads::RightDockWidgetArea,
-											 win,
-											 m_projectExplorerDock->dockAreaWidget()); // Right of the project explorer by default
+				areaWidget = m_dockManagerContent->addDockWidget(ads::CenterDockWidgetArea, win);
 			} else {
 				// Add dock on top of the current aspect, so it is directly visible
-				m_DockManager->addDockWidget(ads::CenterDockWidgetArea, win, m_currentAspectDock->dockAreaWidget());
+				areaWidget = m_dockManagerContent->addDockWidget(ads::CenterDockWidgetArea, win, m_currentAspectDock->dockAreaWidget());
 			}
+
+			// the dock area for the content widgets should be stretched to take the whole free space
+			auto policy = areaWidget->sizePolicy();
+			policy.setHorizontalStretch(1);
+			areaWidget->setSizePolicy(policy);
+
 			win->show();
 
 			// Qt provides its own "system menu" for every sub-window. The shortcut for the close-action
@@ -2183,7 +2155,7 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) {
 			dock->toggleView(true);
 
 		m_currentAspectDock = win;
-		m_DockManager->setDockWidgetFocused(win);
+		m_dockManagerContent->setDockWidgetFocused(win);
 	} else {
 		// activate the mdiView of the parent, if a child was selected
 		const AbstractAspect* parent = aspect->parentAspect();
@@ -2285,7 +2257,7 @@ void MainWin::redo() {
 	Shows/hides docks depending on the current visibility policy.
 */
 void MainWin::updateDockWindowVisibility() const {
-	auto windows = m_DockManager->dockWidgetsMap();
+	auto windows = m_dockManagerContent->dockWidgetsMap();
 	switch (m_project->dockVisibility()) {
 	case Project::DockVisibility::allDocks:
 		for (auto* window : windows)
@@ -2447,7 +2419,7 @@ void MainWin::cartesianPlotMouseModeChanged(CartesianPlot::MouseMode mode) {
 			cursorWidget = new CursorDock(cursorDock);
 			cursorDock->setWidget(cursorWidget);
 			connect(cursorDock, &ads::CDockWidget::viewToggled, this, &MainWin::cursorDockVisibilityChanged);
-			m_DockManager->addDockWidget(ads::CenterDockWidgetArea, cursorDock, m_propertiesDock->dockAreaWidget());
+			m_dockManagerMain->addDockWidget(ads::CenterDockWidgetArea, cursorDock, m_propertiesDock->dockAreaWidget());
 		} else
 			focusCursorDock();
 
@@ -2461,7 +2433,7 @@ void MainWin::cartesianPlotMouseModeChanged(CartesianPlot::MouseMode mode) {
 void MainWin::focusCursorDock() {
 	if (cursorDock) {
 		cursorDock->toggleView(true);
-		m_DockManager->setDockWidgetFocused(cursorDock);
+		m_dockManagerMain->setDockWidgetFocused(cursorDock);
 	}
 }
 
@@ -2500,6 +2472,11 @@ void MainWin::toggleFullScreen(bool t) {
 
 void MainWin::closeEvent(QCloseEvent* event) {
 	m_closing = true;
+
+	// save the current state of the default dock widgets (project explorer, etc) _before_ all other content docks are closed
+	auto group = Settings::group(QStringLiteral("MainWin"));
+	group.writeEntry(QLatin1String("DockWidgetState"), m_dockManagerMain->saveState());
+
 	if (!this->closeProject()) {
 		m_closing = false;
 		event->ignore();
