@@ -324,7 +324,7 @@ void MainWin::initGUI(const QString& fileName) {
 	connect(&m_autoSaveTimer, &QTimer::timeout, this, &MainWin::autoSaveProject);
 
 	if (!fileName.isEmpty()) {
-		createADS();
+		initDocks();
 		if (Project::isSupportedProject(fileName)) {
 			QTimer::singleShot(0, this, [=]() {
 				openProject(fileName);
@@ -370,11 +370,11 @@ void MainWin::initGUI(const QString& fileName) {
 
 		switch (load) {
 		case LoadOnStart::NewProject:
-			createADS();
+			initDocks();
 			newProject();
 			break;
 		case LoadOnStart::LastProject: {
-			createADS();
+			initDocks();
 			const QString& path = Settings::group(QStringLiteral("MainWin")).readEntry("LastOpenProject", "");
 			if (!path.isEmpty())
 				openProject(path);
@@ -465,46 +465,6 @@ void MainWin::resetWelcomeScreen() {
 		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "restoreOriginalLayout");
 }
 */
-
-void MainWin::createADS() {
-	auto* toolbar = toolBar();
-	if (toolbar)
-		toolbar->setVisible(true);
-
-	// Save welcome screen's dimensions.
-	// 	if (m_showWelcomeScreen)
-	// 		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
-
-	// As per documentation the configuration Flags must be set prior a DockManager will be created!
-	// https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System/blob/master/doc/user-guide.md#configuration-flags
-	ads::CDockManager::setConfigFlag(ads::CDockManager::XmlCompressionEnabled, false);
-	ads::CDockManager::setConfigFlag(ads::CDockManager::FocusHighlighting, true);
-	ads::CDockManager::setConfigFlag(ads::CDockManager::MiddleMouseButtonClosesTab, true);
-	ads::CDockManager::setConfigFlag(ads::CDockManager::AllTabsHaveCloseButton, true);
-	ads::CDockManager::setConfigFlag(ads::CDockManager::RetainTabSizeWhenCloseButtonHidden, true);
-	// must be after the config flags!
-	ads::CDockManager::setAutoHideConfigFlags(ads::CDockManager::DefaultAutoHideConfig);
-	ads::CDockManager::setAutoHideConfigFlag(ads::CDockManager::AutoHideShowOnMouseOver, true);
-
-	// main dock manager for the default docks of the application (project explorer, etc)
-	m_dockManagerMain = new ads::CDockManager(this);
-
-	initDefaultDocks();
-
-	connect(m_dockManagerContent, &ads::CDockManager::focusedDockWidgetChanged, this, &MainWin::dockFocusChanged); // TODO: seems not to work
-	connect(m_dockManagerContent, &ads::CDockManager::dockWidgetRemoved, this, &MainWin::dockWidgetRemoved);
-
-	connect(m_closeWindowAction, &QAction::triggered, [this] {
-		m_dockManagerContent->removeDockWidget(m_currentDock);
-	});
-	connect(m_closeAllWindowsAction, &QAction::triggered, [this]() {
-		for (auto dock : m_dockManagerContent->dockWidgetsMap())
-			m_dockManagerContent->removeDockWidget(dock);
-	});
-
-	connect(m_nextWindowAction, &QAction::triggered, this, &MainWin::activateNextDock);
-	connect(m_prevWindowAction, &QAction::triggered, this, &MainWin::activatePreviousDock);
-}
 
 void MainWin::changeVisibleAllDocks(bool visible) {
 	for (auto dock : m_dockManagerContent->dockWidgetsMap())
@@ -1390,9 +1350,24 @@ bool MainWin::newProject(bool createInitialContent) {
 	return true;
 }
 
-void MainWin::initDefaultDocks() {
-	if (m_projectExplorer)
-		return;
+void MainWin::initDocks() {
+	auto* toolbar = toolBar();
+	if (toolbar)
+		toolbar->setVisible(true);
+
+	// As per documentation the configuration Flags must be set prior a DockManager will be created!
+	// https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System/blob/master/doc/user-guide.md#configuration-flags
+	ads::CDockManager::setConfigFlag(ads::CDockManager::XmlCompressionEnabled, false);
+	ads::CDockManager::setConfigFlag(ads::CDockManager::FocusHighlighting, true);
+	ads::CDockManager::setConfigFlag(ads::CDockManager::MiddleMouseButtonClosesTab, true);
+	ads::CDockManager::setConfigFlag(ads::CDockManager::AllTabsHaveCloseButton, true);
+	ads::CDockManager::setConfigFlag(ads::CDockManager::RetainTabSizeWhenCloseButtonHidden, true);
+	// must be after the config flags!
+	ads::CDockManager::setAutoHideConfigFlags(ads::CDockManager::DefaultAutoHideConfig);
+	ads::CDockManager::setAutoHideConfigFlag(ads::CDockManager::AutoHideShowOnMouseOver, true);
+
+	// main dock manager for the default docks of the application (project explorer, etc)
+	m_dockManagerMain = new ads::CDockManager(this);
 
 	// project explorer
 	m_projectExplorerDock = new ads::CDockWidget(i18nc("@title:window", "Project Explorer"));
@@ -1460,6 +1435,22 @@ void MainWin::initDefaultDocks() {
 	policy.setHorizontalStretch(0);
 	areaWidget->setSizePolicy(policy);
 
+	// signal-slot connections for the window handling for the content docks
+	connect(m_dockManagerContent, &ads::CDockManager::focusedDockWidgetChanged, this, &MainWin::dockFocusChanged); // TODO: seems not to work
+	connect(m_dockManagerContent, &ads::CDockManager::dockWidgetRemoved, this, &MainWin::dockWidgetRemoved);
+
+	connect(m_closeWindowAction, &QAction::triggered, [this] {
+		m_dockManagerContent->removeDockWidget(m_currentDock);
+	});
+	connect(m_closeAllWindowsAction, &QAction::triggered, [this]() {
+		for (auto dock : m_dockManagerContent->dockWidgetsMap())
+			m_dockManagerContent->removeDockWidget(dock);
+	});
+
+	connect(m_nextWindowAction, &QAction::triggered, this, &MainWin::activateNextDock);
+	connect(m_prevWindowAction, &QAction::triggered, this, &MainWin::activatePreviousDock);
+
+	// restore the last used dock state
 	restoreDefaultDockState();
 }
 

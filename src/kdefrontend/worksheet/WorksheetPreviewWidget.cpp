@@ -36,6 +36,8 @@ WorksheetPreviewWidget::WorksheetPreviewWidget(QWidget* parent)
 	ui.setupUi(widget);
 	layout->addWidget(widget);
 
+	setMinimumSize(150, 150);
+
 	connect(ui.lwPreview, &QListWidget::currentRowChanged, this, &WorksheetPreviewWidget::currentChanged);
 
 	// make the icon 5x5cm big

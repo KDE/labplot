@@ -209,8 +209,7 @@ private:
 	// 	void toggleHideWidget(QWidget* widget, bool hideToLeft);
 	// 	QQuickWidget* createWelcomeScreen();
 	// 	void resetWelcomeScreen();
-	void createADS();
-	void initDefaultDocks();
+	void initDocks();
 	void restoreDefaultDockState() const;
 
 	Spreadsheet* activeSpreadsheet() const;
