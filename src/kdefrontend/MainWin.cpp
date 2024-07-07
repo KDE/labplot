@@ -2445,7 +2445,7 @@ void MainWin::cartesianPlotMouseModeChanged(CartesianPlot::MouseMode mode) {
 			cursorWidget = new CursorDock(cursorDock);
 			cursorDock->setWidget(cursorWidget);
 			connect(cursorDock, &ads::CDockWidget::viewToggled, this, &MainWin::cursorDockVisibilityChanged);
-			m_dockManagerContent->addDockWidget(ads::CenterDockWidgetArea, cursorDock, m_propertiesDock->dockAreaWidget());
+			m_dockManagerMain->addDockWidget(ads::CenterDockWidgetArea, cursorDock, m_propertiesDock->dockAreaWidget());
 		} else
 			focusCursorDock();
 
@@ -2459,7 +2459,7 @@ void MainWin::cartesianPlotMouseModeChanged(CartesianPlot::MouseMode mode) {
 void MainWin::focusCursorDock() {
 	if (cursorDock) {
 		cursorDock->toggleView(true);
-		m_dockManagerContent->setDockWidgetFocused(cursorDock);
+		m_dockManagerMain->setDockWidgetFocused(cursorDock);
 	}
 }
 
