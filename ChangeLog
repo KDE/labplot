@@ -79,6 +79,7 @@ Bug fixes:
 	* Don't allow to move axes with the arrow keys (BUG 480593)
 	* Don't draw the border line that for the worksheet canvas (BUG 470625)
 	* Fix crash during the data import into spreadsheet with column names changes (BUG 487748)
+	* Use the vectorized version of the plot during the export for all plot types and not for XYCurve only (BUG 489861)
 
 Internal:
 	* Switch from C++11 to C++17
@@ -87,6 +88,7 @@ Internal:
 	* Update included QXlsx to 1.4.6
 	* Build separate libraries for backend, nsl and everything and link only when needed in tests
 	* Log skipped tests
+
 
 -----2.10.1 (12.07.2023) -----
 Bug fixes:
@@ -112,6 +114,7 @@ Bug fixes:
 	* Update the plot legend on column name changes used in box and bar plots (Issue #597)
 	* Fixed the positioning of values labels for horizontal bar plots (Issue #599)
 	* Initialize the parameters for the baseline subtraction with reasonable values on first startup and better apperance of the preview plot (Issues #594)
+
 
 -----2.10.0 (21.03.2023) -----
 New features:
