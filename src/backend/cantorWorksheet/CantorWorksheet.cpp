@@ -16,7 +16,9 @@
 #include "backend/core/column/Column.h"
 #include "backend/core/column/ColumnPrivate.h"
 #include "backend/lib/XmlStreamReader.h"
+#ifndef SDK
 #include "commonfrontend/cantorWorksheet/CantorWorksheetView.h"
+#endif
 
 #include "3rdparty/cantor/cantor_part.h"
 #include <cantor/cantorlibs_version.h>
@@ -309,6 +311,7 @@ QIcon CantorWorksheet::icon() const {
 }
 
 QWidget* CantorWorksheet::view() const {
+#ifndef SDK
 	if (!m_partView) {
 		m_view = new CantorWorksheetView(const_cast<CantorWorksheet*>(this));
 		m_view->setBaseSize(1500, 1500);
@@ -330,6 +333,7 @@ QWidget* CantorWorksheet::view() const {
 		}
 #endif
 	}
+#endif
 	return m_partView;
 }
 
@@ -345,8 +349,10 @@ QMenu* CantorWorksheet::createContextMenu() {
 }
 
 void CantorWorksheet::fillColumnContextMenu(QMenu* menu, Column* column) {
+#ifndef SDK
 	if (m_view)
 		m_view->fillColumnContextMenu(menu, column);
+#endif
 }
 
 QString CantorWorksheet::backendName() {

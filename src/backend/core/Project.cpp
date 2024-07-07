@@ -44,12 +44,17 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KZip>
 #include <kwidgetsaddons_version.h>
 
 #include <QBuffer>
 #include <QDateTime>
+#include <QDomDocument>
 #include <QFile>
 #include <QFileInfo>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonParseError>
 #include <QMenu>
 #include <QMimeData>
 #include <QThreadPool>
@@ -57,12 +62,8 @@
 
 // required to parse Cantor and Jupyter files
 #ifdef HAVE_CANTOR_LIBS
-#include <cantor/backend.h>
 #include "backend/cantorWorksheet/CantorWorksheet.h"
-#include <KZip>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonParseError>
+#include <cantor/backend.h>
 #endif
 
 namespace {
@@ -736,6 +737,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 
 bool Project::loadNotebook(const QString& filename) {
 	bool rc = false;
+#ifdef HAVE_CANTOR_LIBS
 	QString errorMessage;
 	QFile file(filename);
 	if (QFileInfo(filename).completeSuffix() == QLatin1String("cws")) {
@@ -836,6 +838,7 @@ bool Project::loadNotebook(const QString& filename) {
 		RESET_CURSOR;
 		KMessageBox::error(nullptr, errorMessage, i18n("Failed to open project"));
 	}
+#endif
 
 	return rc;
 }

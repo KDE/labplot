@@ -35,13 +35,13 @@
 
 #include "commonfrontend/ProjectExplorer.h"
 #include "commonfrontend/core/ContentDockWidget.h"
-#include "commonfrontend/matrix/MatrixView.h"
-#include "commonfrontend/spreadsheet/SpreadsheetView.h"
-#include "commonfrontend/worksheet/WorksheetView.h"
 #include "commonfrontend/datapicker/DatapickerImageView.h"
 #include "commonfrontend/datapicker/DatapickerView.h"
+#include "commonfrontend/matrix/MatrixView.h"
 #include "commonfrontend/note/NoteView.h"
+#include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "commonfrontend/widgets/MemoryWidget.h"
+#include "commonfrontend/worksheet/WorksheetView.h"
 
 #include "kdefrontend/CASSettingsDialog.h"
 #include "kdefrontend/GuiObserver.h"
@@ -136,9 +136,9 @@
 #include <kxmlguifactory.h>
 
 #ifdef HAVE_CANTOR_LIBS
-#include <cantor/backend.h>
 #include "backend/cantorWorksheet/CantorWorksheet.h"
 #include "commonfrontend/cantorWorksheet/CantorWorksheetView.h"
+#include <cantor/backend.h>
 #endif
 
 /*!
@@ -1584,8 +1584,7 @@ void MainWin::openProject(const QString& filename) {
 #endif
 
 #ifdef HAVE_CANTOR_LIBS
-	else if (filename.endsWith(QLatin1String(".cws"), Qt::CaseInsensitive)
-		|| filename.endsWith(QLatin1String(".ipynb"), Qt::CaseInsensitive)) {
+	else if (filename.endsWith(QLatin1String(".cws"), Qt::CaseInsensitive) || filename.endsWith(QLatin1String(".ipynb"), Qt::CaseInsensitive)) {
 		rc = m_project->loadNotebook(filename);
 	}
 #endif

@@ -99,7 +99,7 @@ void VariableParser::parsePythonValues() {
 		if (match.isValid() && match.captured() != QString())
 			type = match.captured().remove(QLatin1Char('\'')).remove(QRegularExpression(QStringLiteral(",\\s*dtype=")));
 		m_string = m_string.replace(QStringLiteral("array(["), QString());
-		m_string = m_string.replace(QRegExp(numpyDatatypeRegex), QString());
+		m_string = m_string.replace(QRegularExpression(numpyDatatypeRegex), QString());
 		m_string = m_string.replace(QStringLiteral("])"), QString());
 	} else if (m_string.startsWith(QStringLiteral("["))) {
 		// parse python's lists

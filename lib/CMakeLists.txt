@@ -142,6 +142,9 @@ set(BACKEND_SOURCES
 IF (ENABLE_LIBORIGIN)
         list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/projects/OriginProjectParser.cpp)
 ENDIF ()
+IF (RECENT_CANTOR)
+        list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/cantorWorksheet/CantorWorksheet.cpp ${BACKEND_DIR}/cantorWorksheet/VariableParser.cpp)
+ENDIF ()
 
 set(NSL_SOURCES
 	${BACKEND_DIR}/nsl/nsl_baseline.cpp
@@ -225,6 +228,7 @@ target_link_libraries( labplot
 	KF${KF_MAJOR_VERSION}::ConfigWidgets
 	KF${KF_MAJOR_VERSION}::I18n
 	KF${KF_MAJOR_VERSION}::KIOCore
+	KF${KF_MAJOR_VERSION}::XmlGui
 	Qt${QT_MAJOR_VERSION}::Svg
 	Qt${QT_MAJOR_VERSION}::Core
 	Qt${QT_MAJOR_VERSION}::Gui
@@ -248,6 +252,11 @@ IF (ENABLE_LIBORIGIN)
 	ELSE ()
 		target_link_libraries( labplot liborigin-static )
 	ENDIF ()
+ENDIF ()
+
+IF (RECENT_CANTOR)
+        # KFX::Service, KFX::Parts is optional but probably required by Cantor
+        target_link_libraries( labplot Cantor::cantorlibs KF${KF_MAJOR_VERSION}::Service KF${KF_MAJOR_VERSION}::Parts )
 ENDIF ()
 
 IF (WIN32)
