@@ -43,30 +43,34 @@ private Q_SLOTS:
 	void retranslateUi();
 
 	// SLOTs for changes triggered in Surface3DPlotAreaDock
-	void dataSourceTypeChanged(int);
-	void xColumnChanged(const QModelIndex&);
-	void yColumnChanged(const QModelIndex&);
-	void zColumnChanged(const QModelIndex&);
-	void matrixChanged(const QModelIndex&);
+    void dataSourceTypeChanged(int);
+    void xColumnChanged(const QModelIndex&);
+    void yColumnChanged(const QModelIndex&);
+    void zColumnChanged(const QModelIndex&);
+
+    void xRotationChanged(int);
+    void yRotationChanged(int);
+    void zoomChanged(int);
+
+    void matrixChanged(const QModelIndex&);
 	void onTreeViewIndexChanged(const QModelIndex&);
 
 	// SLOTs for changes triggered in Surface3DPlotArea
 	void sourceTypeChanged(Surface3DPlotArea::DataSource);
-	void surfaceXColumnChanged(const AbstractColumn*);
-	void surfaceYColumnChanged(const AbstractColumn*);
-	void surfaceZColumnChanged(const AbstractColumn*);
-	void surfaceMatrixChanged(const Matrix*);
+    void surfaceXColumnChanged(const AbstractColumn*);
+    void surfaceYColumnChanged(const AbstractColumn*);
+    void surfaceZColumnChanged(const AbstractColumn*);
+    void surfaceMatrixChanged(const Matrix*);
 
-	void firstNodeChanged(const AbstractColumn*);
-	void secondNodeChanged(const AbstractColumn*);
-	void thirdNodeChanged(const AbstractColumn*);
-
-	// Appearance properties
+    // Appearance properties
 	void onMeshTypeChanged(int);
 	void onDrawModeChanged(int);
 	void onShadowQualityChanged(int);
-	void onFlatShadingChanged(bool);
-	void onGridVisibleChanged(bool);
+    void onFlatShadingChanged(bool);
+    void onGridVisibleChanged(bool);
+    void onZoomLevelChanged(int);
+    void onXRotationChanged(int);
+    void onYRotationChanged(int);
 
 	// Rendering properties
 	void onSmoothChanged(bool);

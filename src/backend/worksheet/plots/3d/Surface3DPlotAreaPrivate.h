@@ -1,9 +1,9 @@
 #ifndef SURFACE3DPLOTAREAPRIVATE_H
 #define SURFACE3DPLOTAREAPRIVATE_H
 
-#include <backend/worksheet/WorksheetElementPrivate.h>
-#include <backend/matrix/Matrix.h>
 #include "Surface3DPlotArea.h"
+#include <backend/matrix/Matrix.h>
+#include <backend/worksheet/WorksheetElementPrivate.h>
 
 class Surface3DPlotArea;
 
@@ -18,6 +18,9 @@ public:
 	bool gridVisibility;
 	Surface3DPlotArea::ShadowQuality shadowQuality;
 	bool smooth;
+    int xRotation;
+    int yRotation;
+    int zoomLevel;
 
 	QColor color;
 	double opacity;
@@ -29,20 +32,13 @@ public:
 
 	// Matrix properties
 	const Matrix* matrix;
-	QString matrixPath;
+    QString matrixPath;
 
-	const AbstractColumn* firstNode;
-	const AbstractColumn* secondNode;
-	const AbstractColumn* thirdNode;
-
-	QString xColumnPath;
+    QString xColumnPath;
 	QString yColumnPath;
-	QString zColumnPath;
-	QString firstNodePath;
-	QString secondNodePath;
-	QString thirdNodePath;
+    QString zColumnPath;
 
-	void retransform() override;
+    void retransform() override;
 	void recalcShapeAndBoundingRect() override;
 
 	void generateData() const;
