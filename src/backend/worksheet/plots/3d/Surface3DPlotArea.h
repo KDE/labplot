@@ -44,30 +44,26 @@ public:
 	BASIC_D_ACCESSOR_DECL(double, opacity, Opacity)
 	BASIC_D_ACCESSOR_DECL(bool, flatShading, FlatShading)
 	BASIC_D_ACCESSOR_DECL(bool, gridVisibility, GridVisibility)
-	BASIC_D_ACCESSOR_DECL(ShadowQuality, shadowQuality, ShadowQuality)
-	BASIC_D_ACCESSOR_DECL(bool, smooth, Smooth)
+    BASIC_D_ACCESSOR_DECL(ShadowQuality, shadowQuality, ShadowQuality)
+    BASIC_D_ACCESSOR_DECL(bool, smooth, Smooth)
+    BASIC_D_ACCESSOR_DECL(int, zoomLevel, ZoomLevel)
+    BASIC_D_ACCESSOR_DECL(int, xRotation, XRotation)
+    BASIC_D_ACCESSOR_DECL(int, yRotation, YRotation)
 
-	// Matrix parameters
-	POINTER_D_ACCESSOR_DECL(const Matrix, matrix, Matrix)
-	const QString& matrixPath() const;
+    // Matrix parameters
+    POINTER_D_ACCESSOR_DECL(const Matrix, matrix, Matrix)
+    const QString& matrixPath() const;
 
     // Spreadsheet parameters
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, zColumn, ZColumn)
 
-	POINTER_D_ACCESSOR_DECL(const AbstractColumn, firstNode, FirstNode)
-	POINTER_D_ACCESSOR_DECL(const AbstractColumn, secondNode, SecondNode)
-	POINTER_D_ACCESSOR_DECL(const AbstractColumn, thirdNode, ThirdNode)
-	const QString& xColumnPath() const;
-	const QString& yColumnPath() const;
-	const QString& zColumnPath() const;
+    const QString& xColumnPath() const;
+    const QString& yColumnPath() const;
+    const QString& zColumnPath() const;
 
-	const QString& firstNodePath() const;
-	const QString& secondNodePath() const;
-	const QString& thirdNodePath() const;
-
-	void show(bool visible);
+    void show(bool visible);
 
 	Q3DSurface* m_surface;
 	QSurfaceDataProxy* m_proxy;
@@ -80,19 +76,16 @@ private Q_SLOTS:
 	// Spreadsheet slots
 	void xColumnAboutToBeRemoved(const AbstractAspect*);
 	void yColumnAboutToBeRemoved(const AbstractAspect*);
-	void zColumnAboutToBeRemoved(const AbstractAspect*);
+    void zColumnAboutToBeRemoved(const AbstractAspect*);
 
-	void firstNodeAboutToBeRemoved(const AbstractAspect*);
-	void secondNodeAboutToBeRemoved(const AbstractAspect*);
-	void thirdNodeAboutToBeRemoved(const AbstractAspect*);
+    // Matrix slots
+    void matrixAboutToBeRemoved(const AbstractAspect*);
 
-	// Matrix slots
-	void matrixAboutToBeRemoved(const AbstractAspect*);
 Q_SIGNALS:
 	void sourceTypeChanged(Surface3DPlotArea::DataSource);
-	void drawModeChanged(Surface3DPlotArea::DrawMode);
-	void meshTypeChanged(Surface3DPlotArea::MeshType);
-	void colorChanged(QColor);
+    void drawModeChanged(Surface3DPlotArea::DrawMode);
+    void meshTypeChanged(Surface3DPlotArea::MeshType);
+    void colorChanged(QColor);
     void opacityChanged(double);
     void flatShadingChanged(bool);
     void gridVisibilityChanged(bool);
@@ -103,8 +96,8 @@ Q_SIGNALS:
     void xColumnChanged(const AbstractColumn*);
     void yColumnChanged(const AbstractColumn*);
     void zColumnChanged(const AbstractColumn*);
-    void firstNodeChanged(const AbstractColumn*);
-    void secondNodeChanged(const AbstractColumn*);
-    void thirdNodeChanged(const AbstractColumn*);
+    void zoomChanged(int);
+    void xRotationChanged(int);
+    void yRotationChanged(int);
 };
 #endif // SURFACE3DPLOTAREA_H

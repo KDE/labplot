@@ -14,92 +14,93 @@
 // #include <kdefrontend/TemplateHandler.h>
 
 Surface3DPlotAreaDock::Surface3DPlotAreaDock(QWidget* parent)
-	: BaseDock(parent) {
-	ui.setupUi(this);
-	setBaseWidgets(ui.leName, ui.teComment);
-	setVisibilityWidgets(ui.chkVisible);
-	this->retranslateUi();
+    : BaseDock(parent) {
+    ui.setupUi(this);
+    setBaseWidgets(ui.leName, ui.teComment);
+    setVisibilityWidgets(ui.chkVisible);
+    this->retranslateUi();
 
-	const QVector<TreeViewComboBox*> treeViews(QVector<TreeViewComboBox*>()
-												<< ui.cbXColumn << ui.cbYColumn << ui.cbZColumn << ui.cbNode1 << ui.cbNode2 << ui.cbNode3);
+    const QVector<TreeViewComboBox*> treeViews(QVector<TreeViewComboBox*>() << ui.cbXColumn << ui.cbYColumn << ui.cbZColumn);
 
-	for (auto* view : treeViews)
-		view->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
+    for (auto* view : treeViews)
+        view->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
 
-	// Matrix data source
-	ui.cbMatrix->setTopLevelClasses({AspectType::Folder, AspectType::Workbook, AspectType::Matrix});
-	//TODO  ui.cbMatrix->setSelectableAspects({AspectType::Matrix});
+    // Matrix data source
+    ui.cbMatrix->setTopLevelClasses({AspectType::Folder, AspectType::Workbook, AspectType::Matrix});
+    // TODO  ui.cbMatrix->setSelectableAspects({AspectType::Matrix});
 
-	// SIGNALs/SLOTs
-	// General
-	connect(ui.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &Surface3DPlotAreaDock::dataSourceTypeChanged);
-	connect(ui.cbXColumn, &TreeViewComboBox::currentModelIndexChanged, this, &Surface3DPlotAreaDock::xColumnChanged);
-	connect(ui.cbYColumn, &TreeViewComboBox::currentModelIndexChanged, this, &Surface3DPlotAreaDock::yColumnChanged);
-	connect(ui.cbZColumn, &TreeViewComboBox::currentModelIndexChanged, this, &Surface3DPlotAreaDock::zColumnChanged);
-	connect(ui.cbMatrix, &TreeViewComboBox::currentModelIndexChanged, this, &Surface3DPlotAreaDock::matrixChanged);
+    // SIGNALs/SLOTs
+    // General
+    connect(ui.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &Surface3DPlotAreaDock::dataSourceTypeChanged);
+    connect(ui.cbXColumn, &TreeViewComboBox::currentModelIndexChanged, this, &Surface3DPlotAreaDock::xColumnChanged);
+    connect(ui.cbYColumn, &TreeViewComboBox::currentModelIndexChanged, this, &Surface3DPlotAreaDock::yColumnChanged);
+    connect(ui.cbZColumn, &TreeViewComboBox::currentModelIndexChanged, this, &Surface3DPlotAreaDock::zColumnChanged);
+    connect(ui.cbMatrix, &TreeViewComboBox::currentModelIndexChanged, this, &Surface3DPlotAreaDock::matrixChanged);
 
-	// Mesh
-	connect(ui.cbMeshType, SIGNAL(currentIndexChanged(int)), SLOT(onMeshTypeChanged(int)));
-	connect(ui.cbDrawType, SIGNAL(currentIndexChanged(int)), SLOT(onDrawModeChanged(int)));
-	connect(ui.chkFlatShading, SIGNAL(toggled(bool)), SLOT(onFlatShadingChanged(bool)));
-	connect(ui.chkGridVisible, SIGNAL(toggled(bool)), SLOT(onGridVisibleChanged(bool)));
-	connect(ui.cbShadowQuality, SIGNAL(currentIndexChanged(int)), SLOT(onShadowQualityChanged(int)));
+    // Mesh
+    connect(ui.cbMeshType, SIGNAL(currentIndexChanged(int)), SLOT(onMeshTypeChanged(int)));
+    connect(ui.cbDrawType, SIGNAL(currentIndexChanged(int)), SLOT(onDrawModeChanged(int)));
+    connect(ui.chkFlatShading, SIGNAL(toggled(bool)), SLOT(onFlatShadingChanged(bool)));
+    connect(ui.chkGridVisible, SIGNAL(toggled(bool)), SLOT(onGridVisibleChanged(bool)));
+    connect(ui.cbShadowQuality, SIGNAL(currentIndexChanged(int)), SLOT(onShadowQualityChanged(int)));
+    connect(ui.slXRot, &QSlider::valueChanged, this, &Surface3DPlotAreaDock::onXRotationChanged);
+    connect(ui.slYRot, &QSlider::valueChanged, this, &Surface3DPlotAreaDock::onYRotationChanged);
+    connect(ui.slZoom, &QSlider::valueChanged, this, &Surface3DPlotAreaDock::onZoomLevelChanged);
 }
 
 void Surface3DPlotAreaDock::setSurfaces(const QList<Surface3DPlotArea*>& surfaces) {
-	m_surfaces = surfaces;
-	m_surface = m_surfaces.first();
-	setAspects(surfaces);
-	auto* model = aspectModel();
+    m_surfaces = surfaces;
+    m_surface = m_surfaces.first();
+    setAspects(surfaces);
+    auto* model = aspectModel();
 
-	model->enablePlottableColumnsOnly(true);
-	model->enableShowPlotDesignation(true);
-	model->setSelectableAspects({AspectType::Column});
+    model->enablePlottableColumnsOnly(true);
+    model->enableShowPlotDesignation(true);
+    model->setSelectableAspects({AspectType::Column});
 
-	ui.cbXColumn->setModel(model);
-	ui.cbYColumn->setModel(model);
-	ui.cbZColumn->setModel(model);
-	ui.cbMatrix->setModel(model);
+    ui.cbXColumn->setModel(model);
+    ui.cbYColumn->setModel(model);
+    ui.cbZColumn->setModel(model);
+    // ui.cbMatrix->setModel(model);
 
-	ui.cbNode1->setModel(model);
-	ui.cbNode2->setModel(model);
-	ui.cbNode3->setModel(model);
+    // show the properties of the first surface
+    // tab "General"
+    ui.cbDataSourceType->setCurrentIndex(static_cast<int>(m_surface->dataSource()));
+    dataSourceTypeChanged(ui.cbDataSourceType->currentIndex());
+    ui.cbXColumn->setColumn(m_surface->xColumn(), m_surface->xColumnPath());
+    ui.cbYColumn->setColumn(m_surface->yColumn(), m_surface->yColumnPath());
+    ui.cbZColumn->setColumn(m_surface->zColumn(), m_surface->zColumnPath());
+    // TODO: matrix
 
-	// show the properties of the first surface
-	// tab "General"
-	ui.cbDataSourceType->setCurrentIndex(static_cast<int>(m_surface->dataSource()));
-	dataSourceTypeChanged(ui.cbDataSourceType->currentIndex());
-	ui.cbXColumn->setColumn(m_surface->xColumn(), m_surface->xColumnPath());
-	ui.cbYColumn->setColumn(m_surface->yColumn(), m_surface->yColumnPath());
-	ui.cbYColumn->setColumn(m_surface->zColumn(), m_surface->zColumnPath());
-	// TODO: matrix
+    // tab "Mesh"
+    meshTypeChanged(m_surface->meshType());
+    drawModeChanged(m_surface->drawMode());
+    sourceTypeChanged(m_surface->dataSource());
 
-	// tab "Mesh"
-	meshTypeChanged(m_surface->meshType());
-	drawModeChanged(m_surface->drawMode());
-	sourceTypeChanged(m_surface->dataSource());
+    ui.slXRot->setRange(0, 360);
+    ui.slXRot->setValue(m_surface->xRotation());
+    ui.slYRot->setRange(0, 360);
+    ui.slYRot->setValue(m_surface->yRotation());
+    ui.slZoom->setRange(0, 5);
+    ui.slZoom->setValue(m_surface->zoomLevel());
 
-	firstNodeChanged(m_surface->firstNode());
-	secondNodeChanged(m_surface->secondNode());
-	thirdNodeChanged(m_surface->thirdNode());
+    connect(m_surface, &Surface3DPlotArea::drawModeChanged, this, &Surface3DPlotAreaDock::drawModeChanged);
+    connect(m_surface, &Surface3DPlotArea::sourceTypeChanged, this, &Surface3DPlotAreaDock::sourceTypeChanged);
+    connect(m_surface, &Surface3DPlotArea::meshTypeChanged, this, &Surface3DPlotAreaDock::meshTypeChanged);
+    connect(m_surface, &Surface3DPlotArea::flatShadingChanged, this, &Surface3DPlotAreaDock::flatShadingChanged);
+    connect(m_surface, &Surface3DPlotArea::gridVisibilityChanged, this, &Surface3DPlotAreaDock::gridVisibleChanged);
+    connect(m_surface, &Surface3DPlotArea::shadowQualityChanged, this, &Surface3DPlotAreaDock::shadowsQualityChanged);
+    connect(m_surface, &Surface3DPlotArea::smoothChanged, this, &Surface3DPlotAreaDock::onSmoothChanged);
+    connect(m_surface, &Surface3DPlotArea::zoomChanged, this, &Surface3DPlotAreaDock::zoomChanged);
+    connect(m_surface, &Surface3DPlotArea::xRotationChanged, this, &Surface3DPlotAreaDock::xRotationChanged);
+    connect(m_surface, &Surface3DPlotArea::yRotationChanged, this, &Surface3DPlotAreaDock::yRotationChanged);
 
-	connect(m_surface, &Surface3DPlotArea::drawModeChanged, this, &Surface3DPlotAreaDock::drawModeChanged);
-	connect(m_surface, &Surface3DPlotArea::sourceTypeChanged, this, &Surface3DPlotAreaDock::sourceTypeChanged);
-	connect(m_surface, &Surface3DPlotArea::meshTypeChanged, this, &Surface3DPlotAreaDock::meshTypeChanged);
-	connect(m_surface, &Surface3DPlotArea::flatShadingChanged, this, &Surface3DPlotAreaDock::flatShadingChanged);
-	connect(m_surface, &Surface3DPlotArea::gridVisibilityChanged, this, &Surface3DPlotAreaDock::gridVisibleChanged);
-	connect(m_surface, &Surface3DPlotArea::shadowQualityChanged, this, &Surface3DPlotAreaDock::shadowsQualityChanged);
-	connect(m_surface, &Surface3DPlotArea::smoothChanged, this, &Surface3DPlotAreaDock::onSmoothChanged);
+    connect(m_surface, &Surface3DPlotArea::matrixChanged, this, &Surface3DPlotAreaDock::surfaceMatrixChanged);
+    connect(m_surface, &Surface3DPlotArea::xColumnChanged, this, &Surface3DPlotAreaDock::surfaceXColumnChanged);
+    connect(m_surface, &Surface3DPlotArea::yColumnChanged, this, &Surface3DPlotAreaDock::surfaceYColumnChanged);
+    connect(m_surface, &Surface3DPlotArea::zColumnChanged, this, &Surface3DPlotAreaDock::surfaceZColumnChanged);
 
-	connect(m_surface, &Surface3DPlotArea::matrixChanged, this, &Surface3DPlotAreaDock::surfaceMatrixChanged);
-	connect(m_surface, &Surface3DPlotArea::xColumnChanged, this, &Surface3DPlotAreaDock::surfaceXColumnChanged);
-	connect(m_surface, &Surface3DPlotArea::yColumnChanged, this, &Surface3DPlotAreaDock::surfaceYColumnChanged);
-	connect(m_surface, &Surface3DPlotArea::zColumnChanged, this, &Surface3DPlotAreaDock::surfaceZColumnChanged);
-	connect(m_surface, &Surface3DPlotArea::firstNodeChanged, this, &Surface3DPlotAreaDock::firstNodeChanged);
-	connect(m_surface, &Surface3DPlotArea::secondNodeChanged, this, &Surface3DPlotAreaDock::secondNodeChanged);
-	connect(m_surface, &Surface3DPlotArea::thirdNodeChanged, this, &Surface3DPlotAreaDock::thirdNodeChanged);
-
-	updateUiVisibility();
+    updateUiVisibility();
 }
 
 void Surface3DPlotAreaDock::showItem(QWidget* label, QWidget* comboBox, bool pred) {
@@ -114,10 +115,6 @@ void Surface3DPlotAreaDock::showTriangleInfo(bool pred) {
 	showItem(ui.lXColumn, ui.cbXColumn, pred);
 	showItem(ui.lYColumn, ui.cbYColumn, pred);
 	showItem(ui.lZColumn, ui.cbZColumn, pred);
-	showItem(ui.labelNode1, ui.cbNode1, pred);
-	showItem(ui.labelNode2, ui.cbNode2, pred);
-	showItem(ui.labelNode3, ui.cbNode3, pred);
-	ui.labelNodeHeader->setVisible(pred);
 
 	Q_EMIT elementVisibilityChanged();
 }
@@ -187,12 +184,6 @@ void Surface3DPlotAreaDock::onTreeViewIndexChanged(const QModelIndex& index) {
 			surface->setYColumn(column);
 		else if (senderW == ui.cbZColumn)
 			surface->setZColumn(column);
-		else if (senderW == ui.cbNode1)
-			surface->setFirstNode(column);
-		else if (senderW == ui.cbNode2)
-			surface->setSecondNode(column);
-		else if (senderW == ui.cbNode3)
-			surface->setThirdNode(column);
 		else if (senderW == ui.cbMatrix)
 			surface->setMatrix(getMatrix(index));
 	}
@@ -232,7 +223,6 @@ void Surface3DPlotAreaDock::xColumnChanged(const QModelIndex& index) {
 
     for (auto* curve : m_surfaces)
         curve->setXColumn(column);
-
 }
 
 void Surface3DPlotAreaDock::yColumnChanged(const QModelIndex& index) {
@@ -247,7 +237,6 @@ void Surface3DPlotAreaDock::yColumnChanged(const QModelIndex& index) {
 
     for (auto* curve : m_surfaces)
         curve->setYColumn(column);
-
 }
 
 void Surface3DPlotAreaDock::zColumnChanged(const QModelIndex& index) {
@@ -262,11 +251,24 @@ void Surface3DPlotAreaDock::zColumnChanged(const QModelIndex& index) {
 
     for (auto* curve : m_surfaces)
         curve->setZColumn(column);
+}
 
+void Surface3DPlotAreaDock::onXRotationChanged(int value) {
+    CONDITIONAL_LOCK_RETURN;
+    m_surface->setXRotation(value);
+}
+
+void Surface3DPlotAreaDock::onYRotationChanged(int value) {
+    CONDITIONAL_LOCK_RETURN;
+    m_surface->setYRotation(value);
+}
+
+void Surface3DPlotAreaDock::onZoomLevelChanged(int value) {
+    CONDITIONAL_LOCK_RETURN;
+    m_surface->setZoomLevel(value);
 }
 
 void Surface3DPlotAreaDock::matrixChanged(const QModelIndex& index) {
-
 }
 
 void Surface3DPlotAreaDock::updateUiVisibility() {
@@ -275,7 +277,7 @@ void Surface3DPlotAreaDock::updateUiVisibility() {
     if (type == Surface3DPlotArea::DrawMode::DrawSurface || type == Surface3DPlotArea::DrawMode::DrawWireframe) {
         showItem(ui.lDataSourceType, ui.cbDataSourceType, true);
         showItem(ui.lMatrix, ui.cbMatrix, false);
-		showTriangleInfo(dataType == Surface3DPlotArea::DataSource_Spreadsheet);
+        showTriangleInfo(dataType == Surface3DPlotArea::DataSource_Spreadsheet);
     } else {
         showItem(ui.lDataSourceType, ui.cbDataSourceType, false);
 		showTriangleInfo(false);
@@ -286,11 +288,11 @@ void Surface3DPlotAreaDock::updateUiVisibility() {
 
 // Tab "Mesh"
 void Surface3DPlotAreaDock::onDrawModeChanged(int index) {
-	{
-		const Lock lock(m_initializing);
-		for (Surface3DPlotArea* surface : m_surfaces)
-			surface->setDrawMode(static_cast<Surface3DPlotArea::DrawMode>(index));
-	}
+    {
+        const Lock lock(m_initializing);
+        for (Surface3DPlotArea* surface : m_surfaces)
+            surface->setDrawMode(static_cast<Surface3DPlotArea::DrawMode>(index));
+    }
 
     updateUiVisibility();
 }
@@ -310,6 +312,20 @@ void Surface3DPlotAreaDock::onGridVisibleChanged(bool vis) {
 		for (Surface3DPlotArea* surface : m_surfaces)
 			surface->setGridVisibility(vis);
 	}
+}
+
+void Surface3DPlotAreaDock::zoomChanged(int val) {
+    CONDITIONAL_LOCK_RETURN;
+    ui.slZoom->setValue(val);
+}
+
+void Surface3DPlotAreaDock::xRotationChanged(int val) {
+    CONDITIONAL_LOCK_RETURN;
+    ui.slXRot->setValue(val);
+}
+void Surface3DPlotAreaDock::yRotationChanged(int val) {
+    CONDITIONAL_LOCK_RETURN;
+    ui.slYRot->setValue(val);
 }
 
 void Surface3DPlotAreaDock::onShadowQualityChanged(int index) {
@@ -353,9 +369,9 @@ void Surface3DPlotAreaDock::surfaceZColumnChanged(const AbstractColumn* column) 
 
 // Tab "Mesh"
 void Surface3DPlotAreaDock::drawModeChanged(Surface3DPlotArea::DrawMode mode) {
-	if (m_initializing)
-		return;
-	ui.cbDrawType->setCurrentIndex(mode);
+    if (m_initializing)
+        return;
+    ui.cbDrawType->setCurrentIndex(mode);
     updateUiVisibility();
 }
 
@@ -366,8 +382,8 @@ void Surface3DPlotAreaDock::meshTypeChanged(Surface3DPlotArea::MeshType type) {
 }
 
 void Surface3DPlotAreaDock::flatShadingChanged(bool vis) {
-	if (m_initializing)
-		return;
+    if (m_initializing)
+        return;
     ui.chkFlatShading->setEnabled(vis);
 }
 
@@ -403,18 +419,6 @@ void Surface3DPlotAreaDock::setModelFromAspect(TreeViewComboBox* cb, const Abstr
 	if (m_initializing)
 		return;
 	// cb->setCurrentModelIndex(modelIndexOfAspect(aspectTreeModel, aspect));
-}
-
-void Surface3DPlotAreaDock::firstNodeChanged(const AbstractColumn* column) {
-	setModelFromAspect(ui.cbNode1, column);
-}
-
-void Surface3DPlotAreaDock::secondNodeChanged(const AbstractColumn* column) {
-	setModelFromAspect(ui.cbNode2, column);
-}
-
-void Surface3DPlotAreaDock::thirdNodeChanged(const AbstractColumn* column) {
-	setModelFromAspect(ui.cbNode3, column);
 }
 
 void Surface3DPlotAreaDock::onMeshTypeChanged(int index) {

@@ -33,21 +33,6 @@ void Surface3DPlotArea::zColumnAboutToBeRemoved(const AbstractAspect*) {
 	d->zColumn = nullptr;
 }
 
-void Surface3DPlotArea::firstNodeAboutToBeRemoved(const AbstractAspect*) {
-	Q_D(Surface3DPlotArea);
-	d->firstNode = nullptr;
-}
-
-void Surface3DPlotArea::secondNodeAboutToBeRemoved(const AbstractAspect*) {
-	Q_D(Surface3DPlotArea);
-	d->secondNode = nullptr;
-}
-
-void Surface3DPlotArea::thirdNodeAboutToBeRemoved(const AbstractAspect*) {
-	Q_D(Surface3DPlotArea);
-	d->thirdNode = nullptr;
-}
-
 // Matrix slots
 void Surface3DPlotArea::matrixAboutToBeRemoved(const AbstractAspect*) {
 	Q_D(Surface3DPlotArea);
@@ -70,6 +55,9 @@ BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, bool, flatShading, flatShading)
 BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, bool, gridVisibility, gridVisibility)
 BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, Surface3DPlotArea::ShadowQuality, shadowQuality, shadowQuality)
 BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, bool, smooth, smooth)
+BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, int, zoomLevel, zoomLevel)
+BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, int, xRotation, xRotation)
+BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, int, yRotation, yRotation)
 
 // Matrix parameters
 BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, const Matrix*, matrix, matrix)
@@ -83,10 +71,6 @@ BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, const AbstractColumn*, xColumn, xC
 BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, const AbstractColumn*, yColumn, yColumn)
 BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, const AbstractColumn*, zColumn, zColumn)
 
-BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, const AbstractColumn*, firstNode, firstNode)
-BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, const AbstractColumn*, secondNode, secondNode)
-BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, const AbstractColumn*, thirdNode, thirdNode)
-
 const QString& Surface3DPlotArea::xColumnPath() const {
 	Q_D(const Surface3DPlotArea);
 	return d->xColumnPath;
@@ -98,19 +82,6 @@ const QString& Surface3DPlotArea::yColumnPath() const {
 const QString& Surface3DPlotArea::zColumnPath() const {
 	Q_D(const Surface3DPlotArea);
 	return d->zColumnPath;
-}
-
-const QString& Surface3DPlotArea::firstNodePath() const {
-	Q_D(const Surface3DPlotArea);
-	return d->firstNodePath;
-}
-const QString& Surface3DPlotArea::secondNodePath() const {
-	Q_D(const Surface3DPlotArea);
-	return d->secondNodePath;
-}
-const QString& Surface3DPlotArea::thirdNodePath() const {
-	Q_D(const Surface3DPlotArea);
-	return d->thirdNodePath;
 }
 
 void Surface3DPlotArea::show(bool visible) {
@@ -214,31 +185,31 @@ void Surface3DPlotArea::setZColumn(const AbstractColumn* zCol) {
         exec(new Surface3DPlotAreaSetZColumnCmd(d, zCol, ki18n("%1: Z Column changed")));
     }
 }
-STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetFirstNode, const AbstractColumn*, firstNode, generateData)
-void Surface3DPlotArea::setFirstNode(const AbstractColumn* firstNode) {
+
+void Surface3DPlotArea::setZoomLevel(int zoomLevel) {
     Q_D(Surface3DPlotArea);
-    if (firstNode != d->firstNode) {
-        exec(new Surface3DPlotAreaSetFirstNodeCmd(d, firstNode, ki18n("%1: first node changed")));
-    }
+    m_surface->setCameraZoomLevel(zoomLevel);
+    d->zoomLevel = zoomLevel;
+    Q_EMIT zoomChanged(zoomLevel);
 }
-STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetSecondNode, const AbstractColumn*, secondNode, generateData)
-void Surface3DPlotArea::setSecondNode(const AbstractColumn* secondNode) {
+void Surface3DPlotArea::setXRotation(int value) {
     Q_D(Surface3DPlotArea);
-    if (secondNode != d->secondNode) {
-        exec(new Surface3DPlotAreaSetYColumnCmd(d, secondNode, ki18n("%1: second node changed")));
-    }
+    m_surface->setCameraXRotation(value);
+    d->xRotation = value;
+    Q_EMIT xRotationChanged(value);
 }
-STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetThirdNode, const AbstractColumn*, thirdNode, generateData)
-void Surface3DPlotArea::setThirdNode(const AbstractColumn* thirdNode) {
+void Surface3DPlotArea::setYRotation(int value) {
     Q_D(Surface3DPlotArea);
-    if (thirdNode != d->thirdNode) {
-        exec(new Surface3DPlotAreaSetZColumnCmd(d, thirdNode, ki18n("%1: third node changed")));
-    }
+    m_surface->setCameraYRotation(value);
+    d->yRotation = value;
+
+    Q_EMIT yRotationChanged(value);
 }
 
 void Surface3DPlotArea::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
 }
-void Surface3DPlotArea::retransform(){};
+void Surface3DPlotArea::retransform() {
+}
 
 // #####################################################################
 // ################### Private implementation ##########################
@@ -298,12 +269,6 @@ void Surface3DPlotAreaPrivate::generateDemoData() const {
     q->m_surface->axisY()->setRange(-radius, radius);
     q->m_surface->axisZ()->setRange(-radius, radius);
     // Adjust camera settings for better view
-
-    q->m_surface->setCameraZoomLevel(100);
-    q->m_surface->setMinCameraZoomLevel(50);
-    q->m_surface->setMaxCameraZoomLevel(200);
-    q->m_surface->setCameraXRotation(45);
-    q->m_surface->setCameraYRotation(20);
 }
 
 void Surface3DPlotAreaPrivate::generateMatrixData() const {
@@ -346,68 +311,39 @@ void Surface3DPlotAreaPrivate::generateMatrixData() const {
 
 void Surface3DPlotAreaPrivate::generateSpreadsheetData() const {
     qDebug() << Q_FUNC_INFO;
-    if (xColumn == nullptr || yColumn == nullptr || zColumn == nullptr) {
+    if (!xColumn || !yColumn || !zColumn)
         return;
-    }
     if (!xColumn->rowCount() || !yColumn->rowCount() || !zColumn->rowCount())
         return;
+    auto dataArray = std::make_unique<QSurfaceDataArray>();
+    qDebug() << "Start generating points";
 
-    // Create a QSurfaceDataArray to hold the data
-    QSurfaceDataArray* dataArray = new QSurfaceDataArray;
+    int numPoints = std::min({xColumn->availableRowCount(), yColumn->availableRowCount(), zColumn->availableRowCount()});
+    qDebug() << numPoints;
 
-    // Assuming xColumn, yColumn, and zColumn are vectors
-    const int numPoints = std::min({xColumn->rowCount(), yColumn->rowCount(), zColumn->rowCount()});
-    const int numRows = static_cast<int>(sqrt(numPoints)); // Assuming data forms a square grid
-    const int numCols = numRows; // Same as numRows for square grid
+    for (int i = 0; i < numPoints - 1; i += 2) {
+        auto dataRow = std::make_unique<QSurfaceDataRow>();
 
-    // Setup range
-    QPair<float, float> xRange(INT_MAX, INT_MIN);
-    QPair<float, float> yRange(INT_MAX, INT_MIN);
-    QPair<float, float> zRange(INT_MAX, INT_MIN);
+        int xVal1 = xColumn->valueAt(i);
+        int yVal1 = yColumn->valueAt(i);
+        int zVal1 = zColumn->valueAt(i);
+        dataRow->append(QSurfaceDataItem(xVal1, yVal1, zVal1));
 
-    // Populate the dataArray with points
-    for (int i = 0; i < numRows; ++i) {
-        QSurfaceDataRow* newRow = new QSurfaceDataRow(numCols);
-        for (int j = 0; j < numCols; ++j) {
-            int index = i * numCols + j;
-            if (index >= numPoints)
-                break; // Ensure we don't go out of bounds
+        int xVal2 = xColumn->valueAt(i + 1);
+        int yVal2 = yColumn->valueAt(i + 1);
+        int zVal2 = zColumn->valueAt(i + 1);
+        dataRow->append(QSurfaceDataItem(xVal2, yVal2, zVal2));
 
-            const float x = static_cast<float>(xColumn->valueAt(index));
-            const float y = static_cast<float>(yColumn->valueAt(index));
-            const float z = static_cast<float>(zColumn->valueAt(index));
-
-            xRange.first = std::min(xRange.first, x);
-            xRange.second = std::max(xRange.second, x);
-            yRange.first = std::min(yRange.first, y);
-            yRange.second = std::max(yRange.second, y);
-            zRange.first = std::min(zRange.first, z);
-            zRange.second = std::max(zRange.second, z);
-
-            (*newRow)[j].setPosition(QVector3D(x, y, z));
-        }
-        *dataArray << *newRow;
+        dataArray->append(*dataRow.release());
     }
 
-    // Create a QSurfaceDataProxy and set the data array
-    QSurfaceDataProxy* proxy = new QSurfaceDataProxy();
-    proxy->resetArray(*dataArray);
+    QSurfaceDataProxy* dataProxy = new QSurfaceDataProxy();
+    dataProxy->resetArray(*dataArray.release());
 
-    // Create a QSurface3DSeries and set the proxy
-    QSurface3DSeries* series = new QSurface3DSeries(proxy);
+    QSurface3DSeries* series = new QSurface3DSeries(dataProxy);
     q->m_surface->addSeries(series);
 
-    // Additional steps to ensure the surface is displayed
-    q->m_surface->axisX()->setRange(xRange.first, xRange.second);
-    q->m_surface->axisY()->setRange(yRange.first, yRange.second);
-    q->m_surface->axisZ()->setRange(zRange.first, zRange.second);
-
-    // Adjust camera settings for better view
-    q->m_surface->setCameraZoomLevel(100);
-    q->m_surface->setMinCameraZoomLevel(50);
-    q->m_surface->setMaxCameraZoomLevel(200);
-    q->m_surface->setCameraXRotation(45);
-    q->m_surface->setCameraYRotation(20);
+    qDebug() << "Data generation complete";
 } ////////////////////////////////////////////////////////////////////////////////
 
 void Surface3DPlotAreaPrivate::saveSpreadsheetConfig(QXmlStreamWriter* writer) const {
@@ -416,9 +352,6 @@ void Surface3DPlotAreaPrivate::saveSpreadsheetConfig(QXmlStreamWriter* writer) c
     WRITE_COLUMN(yColumn, yColumn);
     WRITE_COLUMN(zColumn, zColumn);
 
-    WRITE_COLUMN(firstNode, firstNode);
-    WRITE_COLUMN(secondNode, secondNode);
-    WRITE_COLUMN(thirdNode, thirdNode);
     writer->writeEndElement();
 }
 
@@ -436,9 +369,6 @@ bool Surface3DPlotAreaPrivate::loadSpreadsheetConfig(XmlStreamReader* reader) {
     READ_COLUMN(yColumn);
     READ_COLUMN(zColumn);
 
-    READ_COLUMN(firstNode);
-    READ_COLUMN(secondNode);
-    READ_COLUMN(thirdNode);
     return true;
 }
 
