@@ -506,10 +506,6 @@ void MainWin::createADS() {
 	connect(m_prevWindowAction, &QAction::triggered, this, &MainWin::activatePreviousDock);
 }
 
-bool MainWin::specialDock(ads::CDockWidget* dock) {
-	return dock == m_projectExplorerDock || dock == m_propertiesDock || dock == m_worksheetPreviewDock;
-}
-
 void MainWin::changeVisibleAllDocks(bool visible) {
 	for (auto dock : m_dockManagerContent->dockWidgetsMap())
 		dock->toggleView(visible);
@@ -543,16 +539,11 @@ void MainWin::activateNextDock() {
 		return;
 	}
 
-	// wrap around
-	auto itrWrap = m_dockManagerContent->dockWidgetsMap().constBegin();
-	while (itrWrap != m_dockManagerContent->dockWidgetsMap().constEnd()) {
-		auto* dock = itrWrap.value();
-		if (!specialDock(dock)) {
-			dock->toggleView(true);
-			m_dockManagerContent->setDockWidgetFocused(dock);
-			return;
-		}
-		itrWrap++;
+	// select the first dock otherwise
+	auto* dock = m_dockManagerContent->dockWidgetsMap().first();
+	if (dock) {
+		dock->toggleView(true);
+		m_dockManagerContent->setDockWidgetFocused(dock);
 	}
 }
 
@@ -586,17 +577,11 @@ void MainWin::activatePreviousDock() {
 		return;
 	}
 
-	// wrap around
-	auto itrWrap = QMapIterator<QString, ads::CDockWidget*>(m_dockManagerContent->dockWidgetsMap());
-	itrWrap.toBack();
-	while (itrWrap.hasPrevious()) {
-		itrWrap.previous();
-		auto* dock = itrWrap.value();
-		if (!specialDock(dock)) {
-			dock->toggleView(true);
-			m_dockManagerContent->setDockWidgetFocused(dock);
-			return;
-		}
+	// select the last dock otherwise
+	auto* dock = m_dockManagerContent->dockWidgetsMap().last();
+	if (dock) {
+		dock->toggleView(true);
+		m_dockManagerContent->setDockWidgetFocused(dock);
 	}
 }
 
@@ -1792,8 +1777,6 @@ bool MainWin::save(const QString& fileName) {
 			const auto& docks = m_dockManagerContent->dockWidgetsMap();
 			QRect rect;
 			for (auto* dock : docks) {
-				if (specialDock(dock))
-					continue;
 				auto dockRect = QRect(dock->mapToGlobal(dock->geometry().topLeft()), dock->geometry().size());
 				rect = rect.united(dockRect);
 			}

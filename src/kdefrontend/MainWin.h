@@ -225,7 +225,6 @@ protected:
 
 private Q_SLOTS:
 	void initGUI(const QString&);
-	bool specialDock(ads::CDockWidget* dock);
 	void changeVisibleAllDocks(bool);
 	void activateNextDock();
 	void activatePreviousDock();

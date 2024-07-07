@@ -25,7 +25,7 @@ ProjectDock::ProjectDock(QWidget* parent)
 	ui.setupUi(this);
 	setBaseWidgets(ui.leName, ui.teComment);
 
-	QString msg = i18n("If checked, the state (position and geometry) of the docks is saved in the project file and restored on project load.");
+	QString msg = i18n("If checked, the state of the default application docks is saved in the project file and restored on project load.");
 	ui.lSaveDockStates->setToolTip(msg);
 	ui.chkSaveDockStates->setToolTip(msg);
 
