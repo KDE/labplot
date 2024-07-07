@@ -1381,25 +1381,24 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 				}
 			}
 
-			int hasValues = 0;
-			if (numeric) {
-				const auto& rows = m_tableView->selectionModel()->selectedRows();
-				for (int i = 0; i < rows.count(); ++i) {
-					int row = rows.at(i).row();
+			bool hasValues = false;
+			const auto& rows = m_tableView->selectionModel()->selectedRows();
+			for (int i = 0; i < rows.count(); ++i) {
+				int row = rows.at(i).row();
 
-					for (int j = 0; j < m_spreadsheet->columnCount(); ++j) {
-						hasValues += !std::isnan(m_spreadsheet->column(j)->valueAt(row));
-						if (hasValues > 1)
-							break;
-					}
-
-					if (hasValues > 1)
+				for (int j = 0; j < m_spreadsheet->columnCount(); ++j) {
+					if (m_spreadsheet->column(j)->hasValueAt(row)) {
+						hasValues = true;
 						break;
+					}
 				}
+
+				if (hasValues)
+					break;
 			}
 
-			m_selectionMenu->setEnabled(hasValues > 1);
-			action_statistics_rows->setEnabled(hasValues > 1);
+			m_selectionMenu->setEnabled(hasValues);
+			action_statistics_rows->setEnabled(hasValues);
 			m_rowMenu->exec(global_pos);
 		} else if ((watched == m_horizontalHeader) || (m_frozenTableView && watched == m_frozenTableView->horizontalHeader()) || !selectedColumns().isEmpty()) {
 			// if the horizontal header was clicked, select the column under the cursor if not selected yet
@@ -1418,6 +1417,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 		} else if (watched == this) {
 			// the cursor position is in one of the cells and no full columns are selected,
 			// show the global spreadsheet context menu in this case
+			// TODO: deactivate the "selection" menu if there are no values in the selected cells
 			checkSpreadsheetMenu();
 			m_spreadsheetMenu->exec(global_pos);
 		}
