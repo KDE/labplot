@@ -89,8 +89,8 @@
 #include <QMimeType>
 #endif
 
-#include <DockManager.h>
 #include <DockAreaWidget.h>
+#include <DockManager.h>
 
 #ifdef HAVE_TOUCHBAR
 #include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
@@ -98,7 +98,6 @@
 
 #include <QActionGroup>
 #include <QCloseEvent>
-#include <QDockWidget>
 #include <QElapsedTimer>
 #include <QFileDialog>
 #include <QMenu>
@@ -107,7 +106,6 @@
 #include <QStackedWidget>
 #include <QStatusBar>
 #include <QTemporaryFile>
-#include <QTimeLine>
 #include <QUndoStack>
 // #include <QtWidgets>
 // #include <QtQuickWidgets/QQuickWidget>
@@ -181,7 +179,6 @@ MainWin::~MainWin() {
 	auto group = Settings::group(QStringLiteral("MainWin"));
 	group.writeEntry(QLatin1String("geometry"), saveGeometry()); // current geometry of the main window
 	group.writeEntry(QLatin1String("WindowState"), saveState()); // current state of QMainWindow's toolbars
-	group.writeEntry(QLatin1String("DockWidgetState"), m_dockManagerMain->saveState()); // current state of the default dock widgets(project explorer, etc)
 	group.writeEntry(QLatin1String("lastOpenFileFilter"), m_lastOpenFileFilter);
 	group.writeEntry(QLatin1String("ShowMemoryInfo"), (m_memoryInfoWidget != nullptr));
 	Settings::sync();
@@ -508,7 +505,7 @@ void MainWin::createADS() {
 	});
 	connect(m_closeAllWindowsAction, &QAction::triggered, [this]() {
 		for (auto dock : m_dockManagerContent->dockWidgetsMap())
-				m_dockManagerContent->removeDockWidget(dock);
+			m_dockManagerContent->removeDockWidget(dock);
 	});
 
 	connect(m_nextWindowAction, &QAction::triggered, this, &MainWin::activateNextDock);
@@ -1476,9 +1473,7 @@ void MainWin::initDefaultDocks() {
 	policy.setHorizontalStretch(0);
 	areaWidget->setSizePolicy(policy);
 
-	QTimer::singleShot(0, this, [=]() {
-		restoreDefaultDockState();
-	});
+	restoreDefaultDockState();
 }
 
 /*!
@@ -1621,7 +1616,7 @@ void MainWin::openProject(const QString& filename) {
 		// restore the state of the content docks
 		m_dockManagerContent->restoreState(dockWidgetsState);
 
-		 // restore the state of the default docks if it was saved in the project file
+		// restore the state of the default docks if it was saved in the project file
 		if (!m_project->saveDefaultDockWidgetState())
 			m_dockManagerMain->restoreState(m_project->defaultDockWidgetState().toUtf8());
 	} else
@@ -2163,8 +2158,8 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) {
 			if (m_dockManagerContent->dockWidgetsMap().count() == 2 || !m_currentAspectDock) {
 				// If only project explorer and properties dock exist place it right to the project explorer
 				areaWidget = m_dockManagerContent->addDockWidget(ads::RightDockWidgetArea,
-											 win,
-											 m_projectExplorerDock->dockAreaWidget()); // Right of the project explorer by default
+																 win,
+																 m_projectExplorerDock->dockAreaWidget()); // Right of the project explorer by default
 			} else {
 				// Add dock on top of the current aspect, so it is directly visible
 				areaWidget = m_dockManagerContent->addDockWidget(ads::CenterDockWidgetArea, win, m_currentAspectDock->dockAreaWidget());
@@ -2503,6 +2498,11 @@ void MainWin::toggleFullScreen(bool t) {
 
 void MainWin::closeEvent(QCloseEvent* event) {
 	m_closing = true;
+
+	// save the current state of the default dock widgets (project explorer, etc) _before_ all other content docks are closed
+	auto group = Settings::group(QStringLiteral("MainWin"));
+	group.writeEntry(QLatin1String("DockWidgetState"), m_dockManagerMain->saveState());
+
 	if (!this->closeProject()) {
 		m_closing = false;
 		event->ignore();
