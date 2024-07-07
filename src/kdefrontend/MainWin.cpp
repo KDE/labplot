@@ -488,14 +488,8 @@ void MainWin::createADS() {
 
 	// main dock manager for the default docks of the application (project explorer, etc)
 	m_dockManagerMain = new ads::CDockManager(this);
-	initDefaultDocks();
 
-	// dock manager for content widgets created by the user (spreadsheets, etc.)
-	auto* contentWidget = new QWidget();
-	auto* contentLayout = new QVBoxLayout();
-	contentLayout->setContentsMargins(0, 0, 0, 0);
-	m_dockManagerContent = new ads::CDockManager(contentWidget);
-	contentLayout->addWidget(m_dockManagerContent);
+	initDefaultDocks();
 
 	connect(m_dockManagerContent, &ads::CDockManager::focusedDockWidgetChanged, this, &MainWin::dockFocusChanged); // TODO: seems not to work
 	connect(m_dockManagerContent, &ads::CDockManager::dockWidgetRemoved, this, &MainWin::dockWidgetRemoved);
@@ -1450,11 +1444,19 @@ void MainWin::initDefaultDocks() {
 	m_worksheetPreviewDock->setWidget(m_worksheetPreviewWidget);
 	connect(m_worksheetPreviewDock, &ads::CDockWidget::viewToggled, this, &MainWin::worksheetPreviewDockVisibilityChanged);
 
+	auto contentDock = new ads::CDockWidget(i18nc("@title:window", "Content"));
+	contentDock->setObjectName(QLatin1String("content-dock"));
+	m_dockManagerContent = new ads::CDockManager(contentDock);
+	contentDock->setWidget(m_dockManagerContent);
+
 	// resize to the minimal sizes
 	// TODO: doesn't work, the default docks are smaller than they should be
 	m_projectExplorerDock->resize(m_projectExplorerDock->minimumSize());
 	m_propertiesDock->resize(m_propertiesDock->minimumSize());
 	m_worksheetPreviewDock->resize(m_worksheetPreviewDock->minimumSize());
+
+	auto* area = m_dockManagerMain->setCentralWidget(contentDock);
+	Q_ASSERT(area); // Check if success
 
 	// add the default docks to the main dock manager and don't allow to stretch them horizontally,
 	// the available space should go to the content dock widgets
@@ -2155,11 +2157,9 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) {
 		if (dock == nullptr) {
 			// Add new dock if not found
 			ads::CDockAreaWidget* areaWidget{nullptr};
-			if (m_dockManagerContent->dockWidgetsMap().count() == 2 || !m_currentAspectDock) {
+			if (m_dockManagerContent->dockWidgetsMap().count() > 0 || !m_currentAspectDock) {
 				// If only project explorer and properties dock exist place it right to the project explorer
-				areaWidget = m_dockManagerContent->addDockWidget(ads::RightDockWidgetArea,
-																 win,
-																 m_projectExplorerDock->dockAreaWidget()); // Right of the project explorer by default
+				areaWidget = m_dockManagerContent->addDockWidget(ads::CenterDockWidgetArea, win);
 			} else {
 				// Add dock on top of the current aspect, so it is directly visible
 				areaWidget = m_dockManagerContent->addDockWidget(ads::CenterDockWidgetArea, win, m_currentAspectDock->dockAreaWidget());
