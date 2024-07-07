@@ -1465,12 +1465,12 @@ void MainWin::initDefaultDocks() {
 	policy.setHorizontalStretch(0);
 	areaWidget->setSizePolicy(policy);
 
-	areaWidget = m_dockManagerMain->addDockWidget(ads::RightDockWidgetArea, m_propertiesDock);
+	areaWidget = m_dockManagerMain->addDockWidget(ads::RightDockWidgetArea, m_worksheetPreviewDock);
 	policy = areaWidget->sizePolicy();
 	policy.setHorizontalStretch(0);
 	areaWidget->setSizePolicy(policy);
 
-	areaWidget = m_dockManagerMain->addDockWidget(ads::RightDockWidgetArea, m_worksheetPreviewDock, m_projectExplorerDock->dockAreaWidget());
+	areaWidget = m_dockManagerMain->addDockWidget(ads::RightDockWidgetArea, m_propertiesDock, m_worksheetPreviewDock->dockAreaWidget());
 	policy = areaWidget->sizePolicy();
 	policy.setHorizontalStretch(0);
 	areaWidget->setSizePolicy(policy);
