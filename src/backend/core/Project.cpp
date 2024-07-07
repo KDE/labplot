@@ -44,17 +44,12 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KZip>
 #include <kwidgetsaddons_version.h>
 
 #include <QBuffer>
 #include <QDateTime>
-#include <QDomDocument>
 #include <QFile>
 #include <QFileInfo>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonParseError>
 #include <QMenu>
 #include <QMimeData>
 #include <QThreadPool>
@@ -63,14 +58,19 @@
 // required to parse Cantor and Jupyter files
 #ifdef HAVE_CANTOR_LIBS
 #include "backend/cantorWorksheet/CantorWorksheet.h"
+#include <KZip>
+#include <QDomDocument>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonParseError>
 #include <cantor/backend.h>
 #endif
 
 namespace {
 // xmlVersion of this labplot version
-// the project version will compared with this.
-// if you make any compatibilty changes to the xmlfile
-// or the function in labplot, increase this number
+// the project version will be compared with this.
+// if you make any imcompatible changes to the xmlfile
+// or the function in labplot, increase this number.
 int buildXmlVersion = 12;
 }
 
@@ -831,6 +831,8 @@ bool Project::loadNotebook(const QString& filename) {
 		RESET_CURSOR;
 		KMessageBox::error(nullptr, errorMessage, i18n("Failed to open project"));
 	}
+#else
+	Q_UNUSED(filename)
 #endif
 
 	return rc;
