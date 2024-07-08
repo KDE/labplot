@@ -18,6 +18,7 @@ class AspectTreeModel;
 class QGroupBox;
 class QLineEdit;
 class QTreeView;
+class Matrix;
 
 enum class AspectType : quint64;
 
@@ -32,7 +33,8 @@ public:
 	void setCurrentModelIndex(const QModelIndex&);
 	void setAspect(const AbstractAspect*);
 	AbstractAspect* currentAspect() const;
-	void setColumn(const AbstractColumn*, const QString&);
+    void setColumn(const AbstractColumn*, const QString&);
+    void setMatrix(const Matrix*, const QString&);
 	QModelIndex currentModelIndex() const;
 
 	void setTopLevelClasses(const QList<AspectType>&);

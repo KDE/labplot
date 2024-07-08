@@ -10,7 +10,7 @@
 #include <qabstract3dgraph.h>
 
 Surface3DPlotArea::Surface3DPlotArea(const QString& name)
-    : WorksheetElement(name, new Surface3DPlotAreaPrivate(this), AspectType::SurfacePlot)
+    : WorksheetElementContainer(name, new Surface3DPlotAreaPrivate(this), AspectType::SurfacePlot)
 	, m_surface{new Q3DSurface()} {
 }
 
@@ -202,8 +202,74 @@ void Surface3DPlotArea::setYRotation(int value) {
     Q_D(Surface3DPlotArea);
     m_surface->setCameraYRotation(value);
     d->yRotation = value;
-
     Q_EMIT yRotationChanged(value);
+}
+class Surface3DPlotAreaSetRectCmd : public QUndoCommand {
+public:
+    Surface3DPlotAreaSetRectCmd(Surface3DPlotAreaPrivate* private_obj, const QRectF& rect)
+        : m_private(private_obj)
+        , m_rect(rect) {
+        setText(i18n("%1: change geometry rect", m_private->name()));
+    }
+
+    void redo() override {
+        // 		const double horizontalRatio = m_rect.width() / m_private->rect.width();
+        // 		const double verticalRatio = m_rect.height() / m_private->rect.height();
+
+        qSwap(m_private->rect, m_rect);
+
+        // 		m_private->q->handleResize(horizontalRatio, verticalRatio, false);
+        m_private->retransform();
+        Q_EMIT m_private->q->rectChanged(m_private->rect);
+    }
+
+    void undo() override {
+        redo();
+    }
+
+private:
+    Surface3DPlotAreaPrivate* m_private;
+    QRectF m_rect;
+};
+void Surface3DPlotArea::setRect(const QRectF& rect) {
+    Q_D(Surface3DPlotArea);
+    if (rect != d->rect)
+        exec(new Surface3DPlotAreaSetRectCmd(d, rect));
+}
+class Surface3DPlotAreaSetPrevRectCmd : public QUndoCommand {
+public:
+    Surface3DPlotAreaSetPrevRectCmd(Surface3DPlotAreaPrivate* private_obj, const QRectF& rect)
+        : m_private(private_obj)
+        , m_rect(rect) {
+        setText(i18n("%1: change geometry rect", m_private->name()));
+    }
+
+    void redo() override {
+        if (m_initilized) {
+            qSwap(m_private->rect, m_rect);
+            m_private->retransform();
+            Q_EMIT m_private->q->rectChanged(m_private->rect);
+        } else {
+            // this function is called for the first time,
+            // nothing to do, we just need to remember what the previous rect was
+            // which has happened already in the constructor.
+            m_initilized = true;
+        }
+    }
+
+    void undo() override {
+        redo();
+    }
+
+private:
+    Surface3DPlotAreaPrivate* m_private;
+    QRectF m_rect;
+    bool m_initilized{false};
+};
+
+void Surface3DPlotArea::setPrevRect(const QRectF& prevRect) {
+    Q_D(Surface3DPlotArea);
+    exec(new Surface3DPlotAreaSetPrevRectCmd(d, prevRect));
 }
 
 void Surface3DPlotArea::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
@@ -215,11 +281,25 @@ void Surface3DPlotArea::retransform() {
 // ################### Private implementation ##########################
 // #####################################################################
 Surface3DPlotAreaPrivate::Surface3DPlotAreaPrivate(Surface3DPlotArea* owner)
-	: WorksheetElementPrivate(owner)
+    : WorksheetElementContainerPrivate(owner)
 	, q(owner) {
 }
 
 void Surface3DPlotAreaPrivate::retransform() {
+    const bool suppress = suppressRetransform || q->isLoading();
+    trackRetransformCalled(suppress);
+
+    if (suppress)
+        return;
+
+    prepareGeometryChange();
+    setPos(rect.x() + rect.width() / 2, rect.y() + rect.height() / 2);
+
+    q->setRect(rect);
+
+    WorksheetElementContainerPrivate::recalcShapeAndBoundingRect();
+
+    q->WorksheetElementContainer::retransform();
 }
 void Surface3DPlotAreaPrivate::recalcShapeAndBoundingRect() {
 }

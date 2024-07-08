@@ -3,7 +3,7 @@
 
 #include <QtGraphs/Q3DSurface>
 
-#include <backend/worksheet/WorksheetElement.h>
+#include <backend/worksheet/WorksheetElementContainer.h>
 
 #include <backend/core/AbstractColumn.h>
 
@@ -11,8 +11,8 @@
 
 class AbstractColumn;
 class Surface3DPlotAreaPrivate;
-class WorksheetElemet;
-class Surface3DPlotArea : public WorksheetElement {
+class WorksheetElemetContainer;
+class Surface3DPlotArea : public WorksheetElementContainer {
 	Q_OBJECT
 public:
     Surface3DPlotArea(const QString& name);
@@ -37,13 +37,16 @@ public:
     };
     enum ShadowQuality { None = 0, Low = 1, Medium = 2, High = 3, SoftLow = 4, SoftMedium = 5, SoftHigh = 6 };
 
-	BASIC_D_ACCESSOR_DECL(DataSource, dataSource, DataSource)
+    void setRect(const QRectF&) override;
+    void setPrevRect(const QRectF&) override;
+
+    BASIC_D_ACCESSOR_DECL(DataSource, dataSource, DataSource)
 	BASIC_D_ACCESSOR_DECL(DrawMode, drawMode, DrawMode)
 	BASIC_D_ACCESSOR_DECL(MeshType, meshType, MeshType)
 	BASIC_D_ACCESSOR_DECL(QColor, color, Color)
-	BASIC_D_ACCESSOR_DECL(double, opacity, Opacity)
-	BASIC_D_ACCESSOR_DECL(bool, flatShading, FlatShading)
-	BASIC_D_ACCESSOR_DECL(bool, gridVisibility, GridVisibility)
+    BASIC_D_ACCESSOR_DECL(double, opacity, Opacity)
+    BASIC_D_ACCESSOR_DECL(bool, flatShading, FlatShading)
+    BASIC_D_ACCESSOR_DECL(bool, gridVisibility, GridVisibility)
     BASIC_D_ACCESSOR_DECL(ShadowQuality, shadowQuality, ShadowQuality)
     BASIC_D_ACCESSOR_DECL(bool, smooth, Smooth)
     BASIC_D_ACCESSOR_DECL(int, zoomLevel, ZoomLevel)
@@ -55,9 +58,9 @@ public:
     const QString& matrixPath() const;
 
     // Spreadsheet parameters
-	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
-	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn)
-	POINTER_D_ACCESSOR_DECL(const AbstractColumn, zColumn, ZColumn)
+    POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
+    POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn)
+    POINTER_D_ACCESSOR_DECL(const AbstractColumn, zColumn, ZColumn)
 
     const QString& xColumnPath() const;
     const QString& yColumnPath() const;
@@ -73,16 +76,16 @@ public:
 private:
 	Q_DECLARE_PRIVATE(Surface3DPlotArea)
 private Q_SLOTS:
-	// Spreadsheet slots
-	void xColumnAboutToBeRemoved(const AbstractAspect*);
-	void yColumnAboutToBeRemoved(const AbstractAspect*);
+    // Spreadsheet slots
+    void xColumnAboutToBeRemoved(const AbstractAspect*);
+    void yColumnAboutToBeRemoved(const AbstractAspect*);
     void zColumnAboutToBeRemoved(const AbstractAspect*);
 
     // Matrix slots
     void matrixAboutToBeRemoved(const AbstractAspect*);
 
 Q_SIGNALS:
-	void sourceTypeChanged(Surface3DPlotArea::DataSource);
+    void sourceTypeChanged(Surface3DPlotArea::DataSource);
     void drawModeChanged(Surface3DPlotArea::DrawMode);
     void meshTypeChanged(Surface3DPlotArea::MeshType);
     void colorChanged(QColor);
@@ -99,5 +102,6 @@ Q_SIGNALS:
     void zoomChanged(int);
     void xRotationChanged(int);
     void yRotationChanged(int);
+    void rectChanged(QRectF&);
 };
 #endif // SURFACE3DPLOTAREA_H

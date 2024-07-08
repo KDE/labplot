@@ -34,15 +34,12 @@ private:
 	void showTriangleInfo(bool pred);
 	void showItem(QWidget* label, QWidget* comboBox, bool pred);
 
-	void setModelFromAspect(TreeViewComboBox* cb, const AbstractAspect* aspect);
-	void updateUiVisibility();
-	const AbstractColumn* getColumn(const QModelIndex& index) const;
-	const Matrix* getMatrix(const QModelIndex& index) const;
+    void updateUiVisibility();
 
 private Q_SLOTS:
 	void retranslateUi();
 
-	// SLOTs for changes triggered in Surface3DPlotAreaDock
+    // SLOTs for changes triggered in Surface3DPlotAreaDock
     void dataSourceTypeChanged(int);
     void xColumnChanged(const QModelIndex&);
     void yColumnChanged(const QModelIndex&);
@@ -53,10 +50,9 @@ private Q_SLOTS:
     void zoomChanged(int);
 
     void matrixChanged(const QModelIndex&);
-	void onTreeViewIndexChanged(const QModelIndex&);
 
 	// SLOTs for changes triggered in Surface3DPlotArea
-	void sourceTypeChanged(Surface3DPlotArea::DataSource);
+    void sourceTypeChanged(Surface3DPlotArea::DataSource);
     void surfaceXColumnChanged(const AbstractColumn*);
     void surfaceYColumnChanged(const AbstractColumn*);
     void surfaceZColumnChanged(const AbstractColumn*);
@@ -65,7 +61,7 @@ private Q_SLOTS:
     // Appearance properties
 	void onMeshTypeChanged(int);
 	void onDrawModeChanged(int);
-	void onShadowQualityChanged(int);
+    void onShadowQualityChanged(int);
     void onFlatShadingChanged(bool);
     void onGridVisibleChanged(bool);
     void onZoomLevelChanged(int);
@@ -88,7 +84,6 @@ private:
 
 	void load();
 	void loadConfig(KConfig&);
-	QModelIndex modelIndexOfAspect(AspectTreeModel* model, const AbstractAspect* aspect) const;
 
 Q_SIGNALS:
     void info(const QString&);
