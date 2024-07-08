@@ -446,6 +446,7 @@
   </provides>
   <content_rating type="oars-1.1"/>
   <releases>
+    <release version="2.11.0" date="2024-07-09"/>
     <release version="2.10.1" date="2023-07-11"/>
     <release version="2.10.0" date="2023-03-21"/>
     <release version="2.9.0" date="2022-05-03"/>
