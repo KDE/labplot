@@ -3,11 +3,13 @@
 
 #include "Surface3DPlotArea.h"
 #include <backend/matrix/Matrix.h>
+#include <backend/worksheet/WorksheetElementContainerPrivate.h>
 #include <backend/worksheet/WorksheetElementPrivate.h>
 
 class Surface3DPlotArea;
+class WorksheetElementContainerPrivate;
 
-class Surface3DPlotAreaPrivate : public WorksheetElementPrivate {
+class Surface3DPlotAreaPrivate : public WorksheetElementContainerPrivate {
 public:
 	explicit Surface3DPlotAreaPrivate(Surface3DPlotArea* owner);
 	Surface3DPlotArea* const q{nullptr};
@@ -17,7 +19,7 @@ public:
 	bool flatShading;
 	bool gridVisibility;
 	Surface3DPlotArea::ShadowQuality shadowQuality;
-	bool smooth;
+    bool smooth;
     int xRotation;
     int yRotation;
     int zoomLevel;
@@ -31,11 +33,11 @@ public:
 	const AbstractColumn* zColumn;
 
 	// Matrix properties
-	const Matrix* matrix;
+    const Matrix* matrix;
     QString matrixPath;
 
     QString xColumnPath;
-	QString yColumnPath;
+    QString yColumnPath;
     QString zColumnPath;
 
     void retransform() override;

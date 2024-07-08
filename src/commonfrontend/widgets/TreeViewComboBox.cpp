@@ -13,6 +13,7 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/lib/macros.h"
+#include "backend/matrix/Matrix.h"
 
 #include <QEvent>
 #include <QGroupBox>
@@ -200,19 +201,20 @@ void TreeViewComboBox::setInvalid(bool invalid, const QString& tooltip) {
  * for the data source those top level aspects only that can have Column as a child.
  */
 QList<AspectType> TreeViewComboBox::plotColumnTopLevelClasses() {
-	return {AspectType::Folder,
-			AspectType::Workbook,
-			AspectType::Datapicker,
-			AspectType::DatapickerCurve,
-			AspectType::Spreadsheet,
-			AspectType::StatisticsSpreadsheet,
-			AspectType::LiveDataSource,
-			AspectType::Column,
-			AspectType::Worksheet,
-			AspectType::CartesianPlot,
-			AspectType::XYFitCurve,
-			AspectType::XYSmoothCurve,
-            AspectType::CantorWorksheet,
+    return {
+        AspectType::Folder,
+                AspectType::Workbook,
+                AspectType::Datapicker,
+                AspectType::DatapickerCurve,
+                AspectType::Spreadsheet,
+                AspectType::StatisticsSpreadsheet,
+                AspectType::LiveDataSource,
+                AspectType::Column,
+                AspectType::Worksheet,
+                AspectType::CartesianPlot,
+                AspectType::XYFitCurve,
+                AspectType::XYSmoothCurve,
+                AspectType::CantorWorksheet,
     };
 }
 
@@ -364,4 +366,24 @@ void TreeViewComboBox::setColumn(const AbstractColumn* column, const QString& pa
 		setInvalid(true, i18n("The column \"%1\"\nis not available anymore. It will be automatically used once it is created again.", path));
 	}
 	setText(path.split(QLatin1Char('/')).last());
+}
+void TreeViewComboBox::setMatrix(const Matrix* matrix, const QString& path) {
+    DEBUG(Q_FUNC_INFO)
+    setAspect(matrix);
+
+    // don't make the combobox red for initially created curves
+    if (!matrix && path.isEmpty()) {
+        setText(QString());
+        setInvalid(false);
+        return;
+    }
+
+    if (matrix) {
+        useCurrentIndexText(true);
+        setInvalid(false);
+    } else {
+        useCurrentIndexText(false);
+        setInvalid(true, i18n("The matrix \"%1\"\nis not available anymore. It will be automatically used once it is created again.", path));
+    }
+    setText(path.split(QLatin1Char('/')).last());
 }
