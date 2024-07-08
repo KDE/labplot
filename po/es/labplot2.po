@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-07 01:43+0000\n"
+"POT-Creation-Date: 2024-07-08 01:42+0000\n"
 "PO-Revision-Date: 2024-07-03 17:03+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -388,13 +388,13 @@ msgstr "En%1"
 msgid "Import Data"
 msgstr "Importar datos"
 
-#: src/backend/core/AbstractPart.cpp:116 src/kdefrontend/MainWin.cpp:719
-#: src/kdefrontend/MainWin.cpp:728
+#: src/backend/core/AbstractPart.cpp:116 src/kdefrontend/MainWin.cpp:660
+#: src/kdefrontend/MainWin.cpp:669
 #, kde-format
 msgid "From File..."
 msgstr "Desde archivo..."
 
-#: src/backend/core/AbstractPart.cpp:118 src/kdefrontend/MainWin.cpp:735
+#: src/backend/core/AbstractPart.cpp:118 src/kdefrontend/MainWin.cpp:676
 #, kde-format
 msgid "From SQL Database..."
 msgstr "Desde base de datos SQL..."
@@ -421,7 +421,7 @@ msgstr "Imprimir"
 msgid "Print Preview"
 msgstr "Vista previa de la impresión"
 
-#: src/backend/core/AbstractPart.cpp:137 src/kdefrontend/MainWin.cpp:807
+#: src/backend/core/AbstractPart.cpp:137 src/kdefrontend/MainWin.cpp:748
 #, kde-format
 msgid "&Close"
 msgstr "&Cerrar"
@@ -437,7 +437,7 @@ msgid "incompatible filter type"
 msgstr "tipo de filtro incompatible"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:708
+#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:715
 #: src/backend/datasources/MQTTClient.cpp:1376
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:313
@@ -597,14 +597,14 @@ msgstr "%1: cambiar tipo de columna"
 msgid "%1: clear column"
 msgstr "%1: borrar columna"
 
-#: src/backend/core/column/Column.cpp:1563
+#: src/backend/core/column/Column.cpp:1593
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "falta el índice de la fila, o no es válido"
 
-#: src/backend/core/column/Column.cpp:1572
-#: src/backend/core/column/Column.cpp:1581
-#: src/backend/core/column/Column.cpp:1590
+#: src/backend/core/column/Column.cpp:1602
+#: src/backend/core/column/Column.cpp:1611
+#: src/backend/core/column/Column.cpp:1620
 #, kde-format
 msgid "invalid row value"
 msgstr "valor de fila no válido"
@@ -698,58 +698,59 @@ msgid "Not yet loaded."
 msgstr "Todavía no se ha cargado."
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbProject)
-#: src/backend/core/Project.cpp:180
+#: src/backend/core/Project.cpp:181
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:17
 #, kde-format
 msgid "Project"
 msgstr "Proyecto"
 
-#: src/backend/core/Project.cpp:261
+#: src/backend/core/Project.cpp:262
 #, kde-format
 msgid "Close"
 msgstr "Cerrar"
 
-#: src/backend/core/Project.cpp:297
+#: src/backend/core/Project.cpp:299
 #, kde-format
 msgid "%1: set author"
 msgstr "%1: definir autor"
 
-#: src/backend/core/Project.cpp:304
-#, kde-format
-msgid "%1: save dock states changed"
+#: src/backend/core/Project.cpp:306
+#, fuzzy, kde-format
+#| msgid "%1: save dock states changed"
+msgid "%1: save dock state changed"
 msgstr "%1: guardar estados paneles cambiados"
 
-#: src/backend/core/Project.cpp:311
+#: src/backend/core/Project.cpp:313
 #, kde-format
 msgid "%1: save calculation changed"
 msgstr "%1: guardar cálculos cambiado"
 
-#: src/backend/core/Project.cpp:543 src/backend/core/Project.cpp:577
+#: src/backend/core/Project.cpp:550 src/backend/core/Project.cpp:584
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "Disculpe. No se ha podido abrir el archivo para lectura."
 
-#: src/backend/core/Project.cpp:554 src/backend/core/Project.cpp:584
+#: src/backend/core/Project.cpp:561 src/backend/core/Project.cpp:591
 #, kde-format
 msgid "The project file is empty."
 msgstr "El archivo de proyecto está vacío."
 
-#: src/backend/core/Project.cpp:554 src/backend/core/Project.cpp:584
+#: src/backend/core/Project.cpp:561 src/backend/core/Project.cpp:591
 #, kde-format
 msgid "Error opening project"
 msgstr "Error al abrir el proyecto"
 
-#: src/backend/core/Project.cpp:603
+#: src/backend/core/Project.cpp:610
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr "Error desconocido al abrir el proyecto %1."
 
-#: src/backend/core/Project.cpp:604
+#: src/backend/core/Project.cpp:611
 #, kde-format
 msgid "Error when opening the project"
 msgstr "Ha ocurrido un error al abrir el proyecto"
 
-#: src/backend/core/Project.cpp:624
+#: src/backend/core/Project.cpp:631
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -768,43 +769,43 @@ msgstr ""
 "\n"
 "¿Desea continuar?"
 
-#: src/backend/core/Project.cpp:631 src/backend/core/Project.cpp:634
+#: src/backend/core/Project.cpp:638 src/backend/core/Project.cpp:641
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr "Falta el soporte para CAS"
 
-#: src/backend/core/Project.cpp:665
+#: src/backend/core/Project.cpp:672
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr "Falta el atributo «version»."
 
-#: src/backend/core/Project.cpp:715
+#: src/backend/core/Project.cpp:722
 #, kde-format
 msgid "no project element found"
 msgstr "no se ha encontrado ningún elemento de proyecto"
 
-#: src/backend/core/Project.cpp:717
+#: src/backend/core/Project.cpp:724
 #, kde-format
 msgid "no valid XML document found"
 msgstr "no se ha encontrado ningún documento XML válido"
 
-#: src/backend/core/Project.cpp:766 src/backend/core/Project.cpp:772
-#: src/backend/core/Project.cpp:823
+#: src/backend/core/Project.cpp:773 src/backend/core/Project.cpp:779
+#: src/backend/core/Project.cpp:830
 #, kde-format
 msgid "Failed to open the file '%1'."
 msgstr "No se ha podido abrir el archivo «%1»."
 
-#: src/backend/core/Project.cpp:829
+#: src/backend/core/Project.cpp:836
 #, kde-format
 msgid "Failed to process the content of the file '%1'."
 msgstr "No se ha podido procesar el contenido del archivo «%1»."
 
-#: src/backend/core/Project.cpp:832
+#: src/backend/core/Project.cpp:839
 #, kde-format
 msgid "Failed to open project"
 msgstr "No se ha podido abrir el proyecto"
 
-#: src/backend/core/Project.cpp:1248
+#: src/backend/core/Project.cpp:1255
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Hora de modificación del proyecto no válida. Se usa la hora actual."
@@ -1820,7 +1821,7 @@ msgstr "Desconocido"
 #: src/backend/datasources/filters/MatioFilter.cpp:434
 #: src/commonfrontend/workbook/WorkbookView.cpp:53
 #: src/commonfrontend/workbook/WorkbookView.cpp:160
-#: src/kdefrontend/MainWin.cpp:690 src/kdefrontend/MainWin.cpp:1984
+#: src/kdefrontend/MainWin.cpp:631 src/kdefrontend/MainWin.cpp:1951
 #, kde-format
 msgid "Matrix"
 msgstr "Matriz"
@@ -8205,7 +8206,7 @@ msgstr "Función de error"
 #: src/commonfrontend/workbook/WorkbookView.cpp:135
 #: src/commonfrontend/worksheet/WorksheetView.cpp:291
 #: src/commonfrontend/worksheet/WorksheetView.cpp:430
-#: src/kdefrontend/MainWin.cpp:934
+#: src/kdefrontend/MainWin.cpp:875
 #, kde-format
 msgid "Add New"
 msgstr "Añadir nuevo"
@@ -11110,7 +11111,7 @@ msgstr ""
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:116
 #: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:57
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:75
-#: src/kdefrontend/MainWin.cpp:684 src/kdefrontend/MainWin.cpp:1966
+#: src/kdefrontend/MainWin.cpp:625 src/kdefrontend/MainWin.cpp:1933
 #: src/kdefrontend/SettingsDialog.cpp:72
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:122
 #, kde-format
@@ -11222,7 +11223,7 @@ msgstr "Ajustar a la cuadrícula"
 
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:265
-#: src/kdefrontend/MainWin.cpp:214
+#: src/kdefrontend/MainWin.cpp:213
 #: src/kdefrontend/ui/settingsworksheetpage.ui:75
 #, kde-format
 msgid "Presenter Mode"
@@ -11286,7 +11287,7 @@ msgstr "Seleccionar región de Y y ampliar"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:359
-#: src/kdefrontend/MainWin.cpp:2446
+#: src/kdefrontend/MainWin.cpp:2418
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1426
 #, kde-format
 msgid "Cursor"
@@ -12616,7 +12617,7 @@ msgid "Open LabPlot Project"
 msgstr "Abrir proyecto de LabPlot"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:444
-#: src/kdefrontend/MainWin.cpp:1501
+#: src/kdefrontend/MainWin.cpp:1479
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "Proyectos de LabPlot (%1)"
@@ -12920,7 +12921,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
-#: src/kdefrontend/MainWin.cpp:2750
+#: src/kdefrontend/MainWin.cpp:2727
 #, kde-format
 msgid "Warning"
 msgstr "Aviso"
@@ -13970,9 +13971,12 @@ msgid "%1 matrices: template \"%2\" loaded"
 msgstr "%1 matrices: plantilla «%2» cargada"
 
 #: src/kdefrontend/dockwidgets/ProjectDock.cpp:28
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "If checked, the state (position and geometry) of the docks is saved in "
+#| "the project file and restored on project load."
 msgid ""
-"If checked, the state (position and geometry) of the docks is saved in the "
+"If checked, the state of the default application docks is saved in the "
 "project file and restored on project load."
 msgstr ""
 "Si esta opción está marcada, el estado (la posición y la geometría) de los "
@@ -14491,7 +14495,7 @@ msgstr ""
 "No se ha podido abrir el archivo de colecciones de ejemplo %1. Compruebe su "
 "instalación."
 
-#: src/kdefrontend/GuiObserver.cpp:190 src/kdefrontend/MainWin.cpp:1436
+#: src/kdefrontend/GuiObserver.cpp:190 src/kdefrontend/MainWin.cpp:1386
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -15366,7 +15370,7 @@ msgstr "Herramien&tas"
 msgid "&Windows"
 msgstr "&Ventanas"
 
-#: src/kdefrontend/MainWin.cpp:214
+#: src/kdefrontend/MainWin.cpp:213
 #, kde-format
 msgid ""
 "No worksheets are available in the project. The presenter mode will not be "
@@ -15375,250 +15379,250 @@ msgstr ""
 "Ninguna hoja de trabajo está disponible en el proyecto. El modo presentación "
 "no se iniciará."
 
-#: src/kdefrontend/MainWin.cpp:228
+#: src/kdefrontend/MainWin.cpp:227
 #, kde-format
 msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr "Bienvenido a LabPlot %1"
 
-#: src/kdefrontend/MainWin.cpp:653
+#: src/kdefrontend/MainWin.cpp:594
 #, kde-format
 msgid "&Open Example"
 msgstr "&Abrir ejemplo"
 
-#: src/kdefrontend/MainWin.cpp:674 src/kdefrontend/MainWin.cpp:1950
+#: src/kdefrontend/MainWin.cpp:615 src/kdefrontend/MainWin.cpp:1917
 #, kde-format
 msgid "Workbook"
 msgstr "Libro de trabajo"
 
-#: src/kdefrontend/MainWin.cpp:676
+#: src/kdefrontend/MainWin.cpp:617
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 "Crea un nuevo libro de trabajo para colecciones de hojas de cálculo, "
 "matrices y gráficos"
 
-#: src/kdefrontend/MainWin.cpp:679 src/kdefrontend/MainWin.cpp:1958
+#: src/kdefrontend/MainWin.cpp:620 src/kdefrontend/MainWin.cpp:1925
 #, kde-format
 msgid "Data Extractor"
 msgstr "Extractor de datos"
 
-#: src/kdefrontend/MainWin.cpp:680
+#: src/kdefrontend/MainWin.cpp:621
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr "Crea un extractor de datos para obtener datos desde una imagen"
 
-#: src/kdefrontend/MainWin.cpp:686
+#: src/kdefrontend/MainWin.cpp:627
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr "Crea una nueva hoja de cálculo para edición de datos"
 
-#: src/kdefrontend/MainWin.cpp:692
+#: src/kdefrontend/MainWin.cpp:633
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr "Crea una nueva matriz para edición de datos"
 
-#: src/kdefrontend/MainWin.cpp:696 src/kdefrontend/MainWin.cpp:2002
+#: src/kdefrontend/MainWin.cpp:637 src/kdefrontend/MainWin.cpp:1969
 #: src/kdefrontend/SettingsDialog.cpp:67
 #, kde-format
 msgid "Worksheet"
 msgstr "Hoja de trabajo"
 
-#: src/kdefrontend/MainWin.cpp:698
+#: src/kdefrontend/MainWin.cpp:639
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr "Crea una nueva hoja de trabajo para trazado de datos"
 
-#: src/kdefrontend/MainWin.cpp:702 src/kdefrontend/MainWin.cpp:2010
+#: src/kdefrontend/MainWin.cpp:643 src/kdefrontend/MainWin.cpp:1977
 #, kde-format
 msgid "Note"
 msgstr "Nota"
 
-#: src/kdefrontend/MainWin.cpp:703
+#: src/kdefrontend/MainWin.cpp:644
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr "Crea una nueva nota para texto arbitrario"
 
-#: src/kdefrontend/MainWin.cpp:707 src/kdefrontend/MainWin.cpp:1942
+#: src/kdefrontend/MainWin.cpp:648 src/kdefrontend/MainWin.cpp:1909
 #, kde-format
 msgid "Folder"
 msgstr "Carpeta"
 
-#: src/kdefrontend/MainWin.cpp:708
+#: src/kdefrontend/MainWin.cpp:649
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr "Crea una nueva carpeta para coleccionar hojas y otros elementos"
 
-#: src/kdefrontend/MainWin.cpp:713
+#: src/kdefrontend/MainWin.cpp:654
 #, kde-format
 msgid "Live Data Source..."
 msgstr "Fuente de datos en vivo..."
 
-#: src/kdefrontend/MainWin.cpp:714
+#: src/kdefrontend/MainWin.cpp:655
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr ""
 "Crea una fuente de datos en vivo para leer datos desde un dispositivo de "
 "tiempo real"
 
-#: src/kdefrontend/MainWin.cpp:721 src/kdefrontend/MainWin.cpp:730
+#: src/kdefrontend/MainWin.cpp:662 src/kdefrontend/MainWin.cpp:671
 #, kde-format
 msgid "Import data from a regular file"
 msgstr "Importar datos de un archivo normal"
 
-#: src/kdefrontend/MainWin.cpp:736
+#: src/kdefrontend/MainWin.cpp:677
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr "Importar datos desde base de datos SQL"
 
-#: src/kdefrontend/MainWin.cpp:740
+#: src/kdefrontend/MainWin.cpp:681
 #, kde-format
 msgid "From Dataset Collection..."
 msgstr "De la colección de conjuntos de datos..."
 
-#: src/kdefrontend/MainWin.cpp:741
+#: src/kdefrontend/MainWin.cpp:682
 #, kde-format
 msgid "Imports data from an online dataset"
 msgstr "Importa datos de un conjunto de datos en línea"
 
-#: src/kdefrontend/MainWin.cpp:745
+#: src/kdefrontend/MainWin.cpp:686
 #, kde-format
 msgid "LabPlot Project..."
 msgstr "Proyecto de LabPlot..."
 
-#: src/kdefrontend/MainWin.cpp:746
+#: src/kdefrontend/MainWin.cpp:687
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr "Importar un royecto desde un archivo de proyecto de LabPlot (.lml)"
 
-#: src/kdefrontend/MainWin.cpp:751
+#: src/kdefrontend/MainWin.cpp:692
 #, kde-format
 msgid "Origin Project (OPJ)..."
 msgstr "Proyecto de Origin (OPJ)..."
 
-#: src/kdefrontend/MainWin.cpp:752
+#: src/kdefrontend/MainWin.cpp:693
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr ""
 "Importar un proyecto desde un archivo de proyecto Origin de OriginLab (.opj)"
 
-#: src/kdefrontend/MainWin.cpp:757
+#: src/kdefrontend/MainWin.cpp:698
 #, kde-format
 msgid "Export..."
 msgstr "Exportar..."
 
-#: src/kdefrontend/MainWin.cpp:758
+#: src/kdefrontend/MainWin.cpp:699
 #, kde-format
 msgid "Export selected element"
 msgstr "Importar el elemento seleccionado"
 
-#: src/kdefrontend/MainWin.cpp:764 src/kdefrontend/MainWin.cpp:2482
-#: src/kdefrontend/MainWin.cpp:2490
+#: src/kdefrontend/MainWin.cpp:705 src/kdefrontend/MainWin.cpp:2454
+#: src/kdefrontend/MainWin.cpp:2462
 #, kde-format
 msgid "Share"
 msgstr "Compartir"
 
-#: src/kdefrontend/MainWin.cpp:769
+#: src/kdefrontend/MainWin.cpp:710
 #, kde-format
 msgid "Color Maps Browser"
 msgstr "Explorador de mapas de color"
 
-#: src/kdefrontend/MainWin.cpp:770
+#: src/kdefrontend/MainWin.cpp:711
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr "Abrir el diálogo para explorar los mapas de color disponibles."
 
-#: src/kdefrontend/MainWin.cpp:779
+#: src/kdefrontend/MainWin.cpp:720
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "Editor de metadatos FITS..."
 
-#: src/kdefrontend/MainWin.cpp:780
+#: src/kdefrontend/MainWin.cpp:721
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr "Abrir un editor para editar metadatos FITS"
 
-#: src/kdefrontend/MainWin.cpp:789
+#: src/kdefrontend/MainWin.cpp:730
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr "Historial de deshacer/rehacer..."
 
-#: src/kdefrontend/MainWin.cpp:809
+#: src/kdefrontend/MainWin.cpp:750
 #, kde-format
 msgid "Close the active window"
 msgstr "Cerrar la ventana activa"
 
-#: src/kdefrontend/MainWin.cpp:812
+#: src/kdefrontend/MainWin.cpp:753
 #, kde-format
 msgid "Close &All"
 msgstr "Cerr&ar todo"
 
-#: src/kdefrontend/MainWin.cpp:813
+#: src/kdefrontend/MainWin.cpp:754
 #, kde-format
 msgid "Close all the windows"
 msgstr "Cerrar todas las ventanas"
 
-#: src/kdefrontend/MainWin.cpp:816
+#: src/kdefrontend/MainWin.cpp:757
 #, kde-format
 msgid "Ne&xt"
 msgstr "&Siguiente"
 
-#: src/kdefrontend/MainWin.cpp:818
+#: src/kdefrontend/MainWin.cpp:759
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "Mover el foco a la ventana siguiente"
 
-#: src/kdefrontend/MainWin.cpp:821
+#: src/kdefrontend/MainWin.cpp:762
 #, kde-format
 msgid "Pre&vious"
 msgstr "&Anterior"
 
-#: src/kdefrontend/MainWin.cpp:823
+#: src/kdefrontend/MainWin.cpp:764
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "Mover el foco a la ventana anterior"
 
-#: src/kdefrontend/MainWin.cpp:830
+#: src/kdefrontend/MainWin.cpp:771
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "S&olo la carpeta actual"
 
-#: src/kdefrontend/MainWin.cpp:835
+#: src/kdefrontend/MainWin.cpp:776
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "Carpeta actual y &subcarpetas"
 
-#: src/kdefrontend/MainWin.cpp:839
+#: src/kdefrontend/MainWin.cpp:780
 #, kde-format
 msgid "&All"
 msgstr "&Todo"
 
-#: src/kdefrontend/MainWin.cpp:861
+#: src/kdefrontend/MainWin.cpp:802
 #, kde-format
 msgid "Show Memory Usage"
 msgstr "Mostrar uso de memoria"
 
-#: src/kdefrontend/MainWin.cpp:869
+#: src/kdefrontend/MainWin.cpp:810
 #, kde-format
 msgid "Project Explorer"
 msgstr "Explorador de proyectos"
 
-#: src/kdefrontend/MainWin.cpp:874
+#: src/kdefrontend/MainWin.cpp:815
 #, kde-format
 msgid "Properties Explorer"
 msgstr "Explorador de propiedades"
 
-#: src/kdefrontend/MainWin.cpp:879
+#: src/kdefrontend/MainWin.cpp:820
 #, kde-format
 msgid "Worksheet Preview"
 msgstr "Vista previa de la hoja de trabajo"
 
-#: src/kdefrontend/MainWin.cpp:902
+#: src/kdefrontend/MainWin.cpp:843
 #, kde-format
 msgid "Configure CAS..."
 msgstr "Configurar CAS..."
 
-#: src/kdefrontend/MainWin.cpp:903
+#: src/kdefrontend/MainWin.cpp:844
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
@@ -15627,112 +15631,119 @@ msgstr ""
 "Abre las preferencias de los sistemas algebraicos computacionales para "
 "modificar los sistemas disponibles o para activar otros nuevos"
 
-#: src/kdefrontend/MainWin.cpp:963
+#: src/kdefrontend/MainWin.cpp:904
 #, kde-format
 msgid "Window Visibility"
 msgstr "Visibilidad de las ventanas"
 
-#: src/kdefrontend/MainWin.cpp:987 src/kdefrontend/MainWin.cpp:989
+#: src/kdefrontend/MainWin.cpp:928 src/kdefrontend/MainWin.cpp:930
 #, kde-format
 msgid "Color Scheme"
 msgstr "Esquema de color"
 
-#: src/kdefrontend/MainWin.cpp:1053 src/kdefrontend/MainWin.cpp:1067
+#: src/kdefrontend/MainWin.cpp:994 src/kdefrontend/MainWin.cpp:1008
 #, kde-format
 msgid "The current project %1 has been modified. Do you want to save it?"
 msgstr "El proyecto actual %1 ha sido modificado. ¿Desea guardarlo?"
 
-#: src/kdefrontend/MainWin.cpp:1054 src/kdefrontend/MainWin.cpp:1068
+#: src/kdefrontend/MainWin.cpp:995 src/kdefrontend/MainWin.cpp:1009
 #, kde-format
 msgid "Save Project"
 msgstr "Guardar proyecto"
 
-#: src/kdefrontend/MainWin.cpp:1408
+#: src/kdefrontend/MainWin.cpp:1347
 #, kde-format
 msgid "%1: created"
 msgstr "%1: creado"
 
-#: src/kdefrontend/MainWin.cpp:1423
+#: src/kdefrontend/MainWin.cpp:1373
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Explorador de proyectos"
 
-#: src/kdefrontend/MainWin.cpp:1448
+#: src/kdefrontend/MainWin.cpp:1398
 #, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "Vista previa de la hoja de trabajo"
 
-#: src/kdefrontend/MainWin.cpp:1506
+#: src/kdefrontend/MainWin.cpp:1407
+#, fuzzy, kde-format
+#| msgid "Content"
+msgctxt "@title:window"
+msgid "Content"
+msgstr "Contenido"
+
+#: src/kdefrontend/MainWin.cpp:1484
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr "Proyectos de Origin (%1)"
 
-#: src/kdefrontend/MainWin.cpp:1512
+#: src/kdefrontend/MainWin.cpp:1490
 #, kde-format
 msgid "Cantor Projects (*.cws)"
 msgstr "Proyectos de Cantor (*.cws)"
 
-#: src/kdefrontend/MainWin.cpp:1513
+#: src/kdefrontend/MainWin.cpp:1491
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "Cuadernos de Jupyter (*.ipynb)"
 
-#: src/kdefrontend/MainWin.cpp:1520
+#: src/kdefrontend/MainWin.cpp:1498
 #, kde-format
 msgid "All supported files (%1)"
 msgstr "Todos los archivos permitidos (%1)"
 
-#: src/kdefrontend/MainWin.cpp:1524
+#: src/kdefrontend/MainWin.cpp:1502
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Abrir proyecto"
 
-#: src/kdefrontend/MainWin.cpp:1541
+#: src/kdefrontend/MainWin.cpp:1519
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "El archivo de proyecto %1 ya está abierto."
 
-#: src/kdefrontend/MainWin.cpp:1541 src/kdefrontend/MainWin.cpp:1549
-#: src/kdefrontend/MainWin.cpp:1554
+#: src/kdefrontend/MainWin.cpp:1519 src/kdefrontend/MainWin.cpp:1527
+#: src/kdefrontend/MainWin.cpp:1532
 #, kde-format
 msgid "Open Project"
 msgstr "Abrir proyecto"
 
-#: src/kdefrontend/MainWin.cpp:1549
+#: src/kdefrontend/MainWin.cpp:1527
 #, kde-format
 msgid "The project file %1 doesn't exist."
 msgstr "El archivo de proyecto %1 no existe."
 
-#: src/kdefrontend/MainWin.cpp:1554
+#: src/kdefrontend/MainWin.cpp:1532
 #, kde-format
 msgid "Couldn't read the project file %1."
 msgstr "No se ha podido leer el archivo de proyecto %1."
 
-#: src/kdefrontend/MainWin.cpp:1563
+#: src/kdefrontend/MainWin.cpp:1541
 #, kde-format
 msgid "Loading %1..."
 msgstr "Cargando %1..."
 
-#: src/kdefrontend/MainWin.cpp:1596
+#: src/kdefrontend/MainWin.cpp:1574
 #, kde-format
 msgid "%1: opened"
 msgstr "%1: abierto"
 
-#: src/kdefrontend/MainWin.cpp:1628
+#: src/kdefrontend/MainWin.cpp:1609
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Proyecto abierto con éxito (en %1 segundos)."
 
-#: src/kdefrontend/MainWin.cpp:1730
+#: src/kdefrontend/MainWin.cpp:1699
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Guardar proyecto como"
 
-#: src/kdefrontend/MainWin.cpp:1732
+#: src/kdefrontend/MainWin.cpp:1701
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -15741,87 +15752,87 @@ msgstr ""
 "Proyectos de LabPlot (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML."
 "BZ2 *.LML.XZ)"
 
-#: src/kdefrontend/MainWin.cpp:1758
+#: src/kdefrontend/MainWin.cpp:1727
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "No se ha podido abrir el archivo temporal para escritura."
 
-#: src/kdefrontend/MainWin.cpp:1831
+#: src/kdefrontend/MainWin.cpp:1798
 #, kde-format
 msgid "Project saved"
 msgstr "Proyecto guardado"
 
-#: src/kdefrontend/MainWin.cpp:1847
+#: src/kdefrontend/MainWin.cpp:1814
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "No se ha podido guardar el archivo «%1»."
 
-#: src/kdefrontend/MainWin.cpp:1852
+#: src/kdefrontend/MainWin.cpp:1819
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "No se ha podido abrir el archivo «%1» para escritura."
 
-#: src/kdefrontend/MainWin.cpp:1902
+#: src/kdefrontend/MainWin.cpp:1869
 #, kde-format
 msgid "Changed"
 msgstr "Modificado"
 
-#: src/kdefrontend/MainWin.cpp:1917 src/kdefrontend/MainWin.cpp:1929
+#: src/kdefrontend/MainWin.cpp:1884 src/kdefrontend/MainWin.cpp:1896
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Preparando impresión de %1"
 
-#: src/kdefrontend/MainWin.cpp:1919 src/kdefrontend/MainWin.cpp:1931
+#: src/kdefrontend/MainWin.cpp:1886 src/kdefrontend/MainWin.cpp:1898
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 imprimida"
 
-#: src/kdefrontend/MainWin.cpp:2482
+#: src/kdefrontend/MainWin.cpp:2454
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "Ha ocurrido un problema al compartir el proyecto: %1"
 
-#: src/kdefrontend/MainWin.cpp:2486
+#: src/kdefrontend/MainWin.cpp:2458
 #, kde-format
 msgid "Project shared successfully"
 msgstr "Proyecto compartido correctamente"
 
-#: src/kdefrontend/MainWin.cpp:2489
+#: src/kdefrontend/MainWin.cpp:2461
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "Puede encontrar el proyecto compartido en: <a href=\"%1\">%1</a>"
 
-#: src/kdefrontend/MainWin.cpp:2713
+#: src/kdefrontend/MainWin.cpp:2690
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 exportada"
 
-#: src/kdefrontend/MainWin.cpp:2720
+#: src/kdefrontend/MainWin.cpp:2697
 #, kde-format
 msgid "FITS files saved"
 msgstr "Archivos FITS guardados"
 
-#: src/kdefrontend/MainWin.cpp:2732
+#: src/kdefrontend/MainWin.cpp:2709
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "Cliente MQTT %1"
 
-#: src/kdefrontend/MainWin.cpp:2750
+#: src/kdefrontend/MainWin.cpp:2727
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "Ya existe un MQTTClient con este servidor."
 
-#: src/kdefrontend/MainWin.cpp:2754
+#: src/kdefrontend/MainWin.cpp:2731
 #, kde-format
 msgid "Live data source%1"
 msgstr "Fuente de datos en vivo%1"
 
-#: src/kdefrontend/MainWin.cpp:2795
+#: src/kdefrontend/MainWin.cpp:2772
 #, kde-format
 msgid "No Cantor backends found. Please install the ones you want to use."
 msgstr "No se han encontrado motores de Cantor. Instale los que vaya a usar."
 
-#: src/kdefrontend/MainWin.cpp:2809
+#: src/kdefrontend/MainWin.cpp:2786
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Crea un nuevo bloc de notas de %1"
