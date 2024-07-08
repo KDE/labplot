@@ -1372,15 +1372,6 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 		const QPoint global_pos = cm_event->globalPos();
 
 		if (watched == m_tableView->verticalHeader()) {
-			bool numeric = true;
-			const auto& columns = m_spreadsheet->children<Column>();
-			for (const auto* col : columns) {
-				if (!col->isNumeric()) {
-					numeric = false;
-					break;
-				}
-			}
-
 			bool hasValues = false;
 			const auto& rows = m_tableView->selectionModel()->selectedRows();
 			for (int i = 0; i < rows.count(); ++i) {
