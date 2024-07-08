@@ -1595,7 +1595,7 @@ void MainWin::openProject(const QString& filename) {
 		m_dockManagerContent->restoreState(dockWidgetsState);
 
 		// restore the state of the default docks if it was saved in the project file
-		if (!m_project->saveDefaultDockWidgetState())
+		if (m_project->saveDefaultDockWidgetState())
 			m_dockManagerMain->restoreState(m_project->defaultDockWidgetState().toUtf8());
 	} else
 		updateDockWindowVisibility();
@@ -1777,11 +1777,20 @@ bool MainWin::save(const QString& fileName) {
 		}
 		*/
 
-		QXmlStreamWriter writer(file);
-		auto windowState = m_dockManagerContent->saveState();
+		// set the state of the content dock widgets
+		auto state = m_dockManagerContent->saveState();
 		// This conversion is fine, because in the dockmanager xml compression is turned off
-		m_project->setDockWidgetState(QString::fromStdString(windowState.data()));
+		m_project->setDockWidgetState(QString::fromStdString(state.data()));
+
+		// set the state of the default dock widgets, if needed
+		if (m_project->saveDefaultDockWidgetState()) {
+			state = m_dockManagerMain->saveState();
+			m_project->setDefaultDockWidgetState(QString::fromStdString(state.data()));
+		}
+
 		m_project->setFileName(fileName);
+
+		QXmlStreamWriter writer(file);
 		m_project->save(thumbnail, &writer);
 		m_project->setChanged(false);
 		undoStackIndexLastSave = m_project->undoStack()->index();
