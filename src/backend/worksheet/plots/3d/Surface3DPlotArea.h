@@ -21,29 +21,26 @@ public:
     void retransform() override;
     enum DataSource { DataSource_Spreadsheet = 0, DataSource_Matrix = 1, DataSource_Empty = 2 };
     enum DrawMode { DrawSurface = 0, DrawWireframe = 1 };
-    enum MeshType {
-        UserDefined = 0,
-        Bar = 1,
-        Cube = 2,
-        Pyramid = 3,
-        Cone = 4,
-        Cylinder = 5,
-        BevelBar = 6,
-        BevelCube = 7,
-        Sphere = 8,
-        Minimal = 9,
-        Arrow = 10,
-        Point = 11
+    enum MeshType { Bar = 1, Cube = 2, Pyramid = 3, Cone = 4, Cylinder = 5, BevelBar = 6, BevelCube = 7, Sphere = 8, Minimal = 9, Arrow = 10, Point = 11 };
+    enum Theme {
+        Qt = 0,
+        PrimaryColors = 1,
+        StoneMoss = 2,
+        ArmyBlue = 3,
+        Retro = 4,
+        Ebony = 5,
+        Isabelle = 6,
     };
+
     enum ShadowQuality { None = 0, Low = 1, Medium = 2, High = 3, SoftLow = 4, SoftMedium = 5, SoftHigh = 6 };
 
     void setRect(const QRectF&) override;
     void setPrevRect(const QRectF&) override;
 
     BASIC_D_ACCESSOR_DECL(DataSource, dataSource, DataSource)
-	BASIC_D_ACCESSOR_DECL(DrawMode, drawMode, DrawMode)
-	BASIC_D_ACCESSOR_DECL(MeshType, meshType, MeshType)
-	BASIC_D_ACCESSOR_DECL(QColor, color, Color)
+    BASIC_D_ACCESSOR_DECL(DrawMode, drawMode, DrawMode)
+    BASIC_D_ACCESSOR_DECL(MeshType, meshType, MeshType)
+    BASIC_D_ACCESSOR_DECL(QColor, color, Color)
     BASIC_D_ACCESSOR_DECL(double, opacity, Opacity)
     BASIC_D_ACCESSOR_DECL(bool, flatShading, FlatShading)
     BASIC_D_ACCESSOR_DECL(bool, gridVisibility, GridVisibility)
@@ -52,6 +49,7 @@ public:
     BASIC_D_ACCESSOR_DECL(int, zoomLevel, ZoomLevel)
     BASIC_D_ACCESSOR_DECL(int, xRotation, XRotation)
     BASIC_D_ACCESSOR_DECL(int, yRotation, YRotation)
+    BASIC_D_ACCESSOR_DECL(Theme, theme, Theme)
 
     // Matrix parameters
     POINTER_D_ACCESSOR_DECL(const Matrix, matrix, Matrix)
@@ -103,5 +101,6 @@ Q_SIGNALS:
     void xRotationChanged(int);
     void yRotationChanged(int);
     void rectChanged(QRectF&);
+    void themeChanged(Surface3DPlotArea::Theme);
 };
 #endif // SURFACE3DPLOTAREA_H

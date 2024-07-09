@@ -58,6 +58,8 @@ BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, bool, smooth, smooth)
 BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, int, zoomLevel, zoomLevel)
 BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, int, xRotation, xRotation)
 BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, int, yRotation, yRotation)
+BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, Surface3DPlotArea::Theme, theme, theme)
+
 
 // Matrix parameters
 BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, const Matrix*, matrix, matrix)
@@ -203,6 +205,12 @@ void Surface3DPlotArea::setYRotation(int value) {
     m_surface->setCameraYRotation(value);
     d->yRotation = value;
     Q_EMIT yRotationChanged(value);
+}
+void Surface3DPlotArea::setTheme(Surface3DPlotArea::Theme theme) {
+    Q_D(Surface3DPlotArea);
+    m_surface->activeTheme()->setType(static_cast<Q3DTheme::Theme>(theme));
+    d->theme = theme;
+    Q_EMIT themeChanged(theme);
 }
 class Surface3DPlotAreaSetRectCmd : public QUndoCommand {
 public:
