@@ -1,3 +1,8 @@
+-----2.11.1 (2024) -----
+Bug fixes:
+	* Fix ODS support
+
+
 -----2.11.0 (09.07.2024) -----
 New features:
 	* [general]
