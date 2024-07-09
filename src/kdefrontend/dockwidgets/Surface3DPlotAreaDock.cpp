@@ -73,12 +73,13 @@ void Surface3DPlotAreaDock::setSurfaces(const QList<Surface3DPlotArea*>& surface
     // tab "General"
     ui.cbDataSourceType->setCurrentIndex(static_cast<int>(m_surface->dataSource()));
     dataSourceTypeChanged(ui.cbDataSourceType->currentIndex());
-    ui.cbXColumn->setColumn(m_surface->xColumn(), m_surface->xColumnPath());
-    ui.cbYColumn->setColumn(m_surface->yColumn(), m_surface->yColumnPath());
-    ui.cbZColumn->setColumn(m_surface->zColumn(), m_surface->zColumnPath());
+    surfaceXColumnChanged(m_surface->xColumn());
+    surfaceXColumnChanged(m_surface->yColumn());
+    surfaceXColumnChanged(m_surface->zColumn());
+
     // // TODO: matri;x
     // ui.cbMatrix->setMatrix(m_surface->matrix(), m_surface->matrixPath());
-
+    surfaceMatrixChanged(m_surface->matrix());
     // tab "Mesh"
     meshTypeChanged(m_surface->meshType());
     drawModeChanged(m_surface->drawMode());
@@ -143,8 +144,8 @@ void Surface3DPlotAreaDock::retranslateUi() {
 	ui.cbMeshType->insertItem(Surface3DPlotArea::Pyramid, i18n("Pyramid"));
 	ui.cbMeshType->insertItem(Surface3DPlotArea::Cone, i18n("Cone"));
 	ui.cbMeshType->insertItem(Surface3DPlotArea::Cylinder, i18n("Cylinder"));
-	ui.cbMeshType->insertItem(Surface3DPlotArea::BevelBar, i18n("Bevel Bar"));
-	ui.cbMeshType->insertItem(Surface3DPlotArea::BevelCube, i18n("Bevel Cube"));
+    ui.cbMeshType->insertItem(Surface3DPlotArea::BevelBar, i18n("Bevel Bar"));
+    ui.cbMeshType->insertItem(Surface3DPlotArea::BevelCube, i18n("Bevel Cube"));
     ui.cbMeshType->insertItem(Surface3DPlotArea::Sphere, i18n("Sphere"));
     ui.cbMeshType->insertItem(Surface3DPlotArea::Minimal, i18n("Minimal"));
     ui.cbMeshType->insertItem(Surface3DPlotArea::Arrow, i18n("Arrow"));

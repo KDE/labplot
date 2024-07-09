@@ -34,7 +34,7 @@ public:
 	const AbstractColumn* zColumn;
 
     // Matrix properties
-    const Matrix* matrix;
+    const Matrix* matrix{nullptr};
     QString matrixPath;
 
     QString xColumnPath;

@@ -60,7 +60,6 @@ BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, int, xRotation, xRotation)
 BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, int, yRotation, yRotation)
 BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, Surface3DPlotArea::Theme, theme, theme)
 
-
 // Matrix parameters
 BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, const Matrix*, matrix, matrix)
 const QString& Surface3DPlotArea::matrixPath() const {
@@ -390,8 +389,6 @@ void Surface3DPlotAreaPrivate::generateMatrixData() const {
 
 	QSurface3DSeries* series = new QSurface3DSeries;
 	series->dataProxy()->resetArray(*dataArray);
-	series->setDrawMode(QSurface3DSeries::DrawSurfaceAndWireframe);
-	series->setFlatShadingEnabled(true);
 
 	// Add the series to the Q3DSurface
 	q->m_surface->addSeries(series);
