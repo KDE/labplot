@@ -115,8 +115,10 @@ QWidget* Spreadsheet::view() const {
 
 		// navigate to the first cell and set the focus so the user can start directly entering new data
 		QTimer::singleShot(0, this, [=]() {
-			m_view->goToCell(0, 0);
-			m_view->setFocus();
+			if (m_view) { // we're accessing m_view outside of the event loop, it can be already deleted, check for nulltpr
+				m_view->goToCell(0, 0);
+				m_view->setFocus();
+			}
 		});
 	}
 	return m_partView;
