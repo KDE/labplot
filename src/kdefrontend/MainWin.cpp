@@ -403,7 +403,8 @@ void MainWin::initGUI(const QString& fileName) {
 		toggleMemoryInfo();
 
 	// restore the geometry
-	restoreGeometry(groupMainWin.readEntry("geometry", QByteArray()));
+	if (groupMainWin.hasKey(QStringLiteral("geometry")))
+		restoreGeometry(groupMainWin.readEntry("geometry", QByteArray()));
 
 	m_lastOpenFileFilter = groupMainWin.readEntry(QLatin1String("lastOpenFileFilter"), QString());
 }
@@ -2140,7 +2141,7 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) {
 		if (dock == nullptr) {
 			// Add new dock if not found
 			ads::CDockAreaWidget* areaWidget{nullptr};
-			if (m_dockManagerContent->dockWidgetsMap().count() == 0 || !m_currentAspectDock) {
+			if (m_dockManagerContent->dockWidgetsMap().isEmpty() || !m_currentAspectDock) {
 				// If only project explorer and properties dock exist place it right to the project explorer
 				areaWidget = m_dockManagerContent->addDockWidget(ads::CenterDockWidgetArea, win);
 			} else {
