@@ -2140,7 +2140,7 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) {
 		if (dock == nullptr) {
 			// Add new dock if not found
 			ads::CDockAreaWidget* areaWidget{nullptr};
-			if (m_dockManagerContent->dockWidgetsMap().count() > 0 || !m_currentAspectDock) {
+			if (m_dockManagerContent->dockWidgetsMap().count() == 0 || !m_currentAspectDock) {
 				// If only project explorer and properties dock exist place it right to the project explorer
 				areaWidget = m_dockManagerContent->addDockWidget(ads::CenterDockWidgetArea, win);
 			} else {
