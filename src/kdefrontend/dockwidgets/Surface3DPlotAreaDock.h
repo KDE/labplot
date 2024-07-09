@@ -67,11 +67,14 @@ private Q_SLOTS:
     void onZoomLevelChanged(int);
     void onXRotationChanged(int);
     void onYRotationChanged(int);
+    void onThemeChanged(int);
+
 
 	// Rendering properties
 	void onSmoothChanged(bool);
 
 	void drawModeChanged(Surface3DPlotArea::DrawMode mode);
+    void themeChanged(Surface3DPlotArea::Theme theme);
 	void meshTypeChanged(Surface3DPlotArea::MeshType type);
 	void flatShadingChanged(bool);
 	void gridVisibleChanged(bool);

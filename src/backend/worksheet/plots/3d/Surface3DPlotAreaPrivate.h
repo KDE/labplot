@@ -18,11 +18,12 @@ public:
 	Surface3DPlotArea::DrawMode drawMode;
 	bool flatShading;
 	bool gridVisibility;
-	Surface3DPlotArea::ShadowQuality shadowQuality;
+    Surface3DPlotArea::ShadowQuality shadowQuality;
     bool smooth;
     int xRotation;
     int yRotation;
     int zoomLevel;
+    Surface3DPlotArea::Theme theme;
 
 	QColor color;
 	double opacity;
@@ -32,7 +33,7 @@ public:
 	const AbstractColumn* yColumn;
 	const AbstractColumn* zColumn;
 
-	// Matrix properties
+    // Matrix properties
     const Matrix* matrix;
     QString matrixPath;
 
