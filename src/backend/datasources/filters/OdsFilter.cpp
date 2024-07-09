@@ -383,7 +383,7 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 
 	// prepare import
 	bool ok = false;
-	int columnOffset = dataSource->prepareImport(dataContainer, importMode, actualRows, actualCols, vectorNames, columnModes);
+	int columnOffset = dataSource->prepareImport(dataContainer, importMode, actualRows, actualCols, vectorNames, columnModes, ok);
 	if (!ok) {
 		q->setLastError(i18n("Not enough memory."));
 		return;

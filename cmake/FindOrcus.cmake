@@ -14,28 +14,28 @@ if (Orcus_INCLUDE_DIR AND Orcus_LIBRARIES)
     set (Orcus_FOUND TRUE)
 else ()
     find_package(PkgConfig QUIET)
-    pkg_check_modules(PC_ORCUS liborcus-0.17 QUIET)
-    pkg_check_modules(PC_IXION libixion-0.17 QUIET)
+    pkg_search_module(PC_ORCUS liborcus liborcus-0.19 liborcus-0.18 liborcus-0.17 liborcus-0.16 QUIET)
+    pkg_search_module(PC_IXION libixion libixion-0.19 libixion-0.18 libixion-0.17 libixion-0.16 QUIET)
 
     find_library (Orcus_LIBRARY
-        NAMES orcus orcus-0.17
+        NAMES orcus orcus-0.19 orcus-0.18 orcus-0.17 orcus-0.16
         HINTS ${PC_ORCUS_LIBRARY_DIRS}
         PATH_SUFFIXES orcus
     )
     find_library (Orcus_parser_LIBRARY
-        NAMES orcus-parser orcus-parser-0.17
+        NAMES orcus-parser orcus-parser-0.19 orcus-parser-0.18 orcus-parser-0.17 orcus-parser-0.16
         HINTS ${PC_ORCUS_LIBRARY_DIRS}
         PATH_SUFFIXES orcus
     )
     find_library (Orcus_spreadsheet_LIBRARY
-        NAMES orcus-spreadsheet-model orcus-spreadsheet-model-0.17
+        NAMES orcus-spreadsheet-model orcus-spreadsheet-model-0.19 orcus-spreadsheet-model-0.18 orcus-spreadsheet-model-0.17 orcus-spreadsheet-model-0.16
         HINTS ${PC_ORCUS_LIBRARY_DIRS}
         PATH_SUFFIXES orcus
     )
     set(Orcus_LIBRARIES ${Orcus_LIBRARY} ${Orcus_parser_LIBRARY} ${Orcus_spreadsheet_LIBRARY})
 
     find_library (Ixion_LIBRARY
-        NAMES ixion ixion-0.17
+        NAMES ixion ixion-0.19 ixion-0.18 ixion-0.17 ixion-0.16
 	HINTS ${PC_IXION_LIBRARY_DIRS}
         PATH_SUFFIXES orcus
     )
