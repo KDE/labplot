@@ -4,11 +4,12 @@
 * add release in org.kde.labplot2.appdata.xml
 
 
-1. Create release/2.8 branch:
+1. Create new stable branch:	(or use branchme from releaseme?)
 git checkout -b release/2.8
 git push kde:labplot release/2.8
 git remote update
 git branch --set-upstream-to=origin/release/2.8
+* Update https://invent.kde.org/sysadmin/repo-metadata/-/blob/master/dependencies/logical-module-structure.json
 
 
 2. Source tarball:
@@ -24,7 +25,7 @@ tarme.rb will also calculate the checksums and give a link to the ssysadmin tick
 3. Upload tarball to ftp://upload.kde.org/incoming (Read readme: ftp://upload.kde.org/README)
 
 
-4. Tag the release (use tagme from releaseme?)
+4. Tag the release (use tagme from releaseme? see https://community.kde.org/ReleasingSoftware)
 * git tag "2.8.0" -a -m "Tagging 2.8.0"
 * git push --tags
 
@@ -55,7 +56,7 @@ e8afdecbd79247da28278312d07a31b2bc111b15  labplot-2.8.0.tar.xz.sig
 
 6. Windows and macOS Installer (when tarball is available)
 * update blueprint @ https://invent.kde.org/packaging/craft-blueprints-kde/-/tree/master/kde/applications/labplot/labplot.py
-+ Update https://invent.kde.org/sysadmin/ci-utilities/signing/macappnotarizer-projects.yaml & macappsigner-projects.yaml wia MR of fork
++ Update https://invent.kde.org/sysadmin/ci-utilities/signing/macappnotarizer-projects.yaml & macappsigner-projects.yaml via MR of fork
 * rebuild package on gitlab (release/2.8 branch)
 * calculate SHA-256 and SHA-1 checksums
 * create another sysadmin ticket for both packages
