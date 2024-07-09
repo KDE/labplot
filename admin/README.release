@@ -4,27 +4,29 @@
 * add release in org.kde.labplot2.appdata.xml
 
 
-1. Tag the release
-* git tag "2.8.0" -a -m "Tagging 2.8.0"
-* git push --tags
-
-
-2. Create release/2.8 branch:
+1. Create release/2.8 branch:
 git checkout -b release/2.8
 git push kde:labplot release/2.8
 git remote update
 git branch --set-upstream-to=origin/release/2.8
 
 
-3. Source tarball:
+2. Source tarball:
+* Update https://invent.kde.org/sysadmin/repo-metadata/-/blob/master/projects-invent/education/labplot/i18n.json
 * Install https://invent.kde.org/sdk/releaseme
-* create the tarball, from the releasme folder execute tarme.rb for this:
+* create the tarball, from the releaseme folder execute tarme.rb for this:
 ./tarme.rb --version 2.8.0 --origin trunk labplot
 
+origin can be trunk (== master) or stable (see i18n.json).
 tarme.rb will also calculate the checksums and give a link to the ssysadmin ticket.
 
 
-4. Upload tarball to ftp://upload.kde.org/incoming (Read readme: ftp://upload.kde.org/README)
+3. Upload tarball to ftp://upload.kde.org/incoming (Read readme: ftp://upload.kde.org/README)
+
+
+4. Tag the release (use tagme from releaseme?)
+* git tag "2.8.0" -a -m "Tagging 2.8.0"
+* git push --tags
 
 
 5. Sysadmin ticket
