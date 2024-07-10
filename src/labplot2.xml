@@ -26,9 +26,9 @@
     <comment xml:lang="pt">Ficheiro de Projecto do LabPlot2</comment>
     <comment xml:lang="pt_BR">Arquivo de projeto do LabPlot2</comment>
     <comment xml:lang="ru">Файл проекта LabPlot2</comment>
+    <comment xml:lang="sk">Súbor projektu LabPlot2</comment>
     <comment xml:lang="sl">Projektna datoteka LabPlot2</comment>
     <comment xml:lang="sv">Labplot2 projektfil</comment>
-    <comment xml:lang="tr">LabPlot2 Proje Dosyası</comment>
     <comment xml:lang="uk">файл проєкту LabPlot2</comment>
     <comment xml:lang="zh_CN">LabPlot2 工程文件</comment>
     <glob pattern="*.lml"/>
