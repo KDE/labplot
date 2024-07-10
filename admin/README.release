@@ -1,7 +1,7 @@
-0. Prepare release
+0. Prepare release (im master for .0 release or in release/2.8 else)
+* string freeze (14 days before recommended)
 * Update splash screen src/kdefrontend/splash.png
 * CMakeLists.txt: project(labplot2 VERSION 2.8.0 LANGUAGES CXX C)
-* string freeze (14 days recommended)
 * add release with date in org.kde.labplot2.appdata.xml
 
 ------------------------------------------------------------
@@ -18,12 +18,13 @@ tarme.rb will also calculate the checksums and give a link to create a ssysadmin
 2. Upload tarball to ftp://upload.kde.org/incoming (Read readme: ftp://upload.kde.org/README)
 
 
-3. Tag the release (use tagme from releaseme? see https://community.kde.org/ReleasingSoftware)
+3. Tag the release (in master for .0, release/2.8 else. Use tagme from releaseme? see https://community.kde.org/ReleasingSoftware)
 * git tag "2.8.0" -a -m "Tagging 2.8.0"
 * git push --tags
+* for .0 update release in master to 2.8.80: CMakeLists.txt: project(labplot2 VERSION 2.8.80 LANGUAGES CXX C)
 
 
-4. Create new stable branch:	(or use branchme from releaseme?)
+4. Create new stable branch:	(Only for .0 release, or use branchme from releaseme?)
 git checkout -b release/2.8
 git push kde:labplot release/2.8
 git remote update
