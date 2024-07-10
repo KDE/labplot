@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:42+0000\n"
+"POT-Creation-Date: 2024-07-10 03:09+0000\n"
 "PO-Revision-Date: 2023-10-30 14:32+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -185,9 +185,10 @@ msgstr "”%1”: virheellinen luomisaika. Käytetään nykyistä aikaa."
 
 #: src/backend/core/AbstractColumn.cpp:135
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:68
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "second"
 msgid "Milliseconds"
-msgstr ""
+msgstr "toinen"
 
 #: src/backend/core/AbstractColumn.cpp:137
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:67
@@ -395,14 +396,14 @@ msgid "%1: unmask cells"
 msgstr ""
 
 #: src/backend/core/abstractcolumncommands.cpp:253
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2592
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2583
 #, fuzzy, kde-format
 #| msgid "%1: set date-time format to %2"
 msgid "%1: set heatmap format"
 msgstr "%1: aseta päiväyksen ja ajan muodoksi %2"
 
 #: src/backend/core/abstractcolumncommands.cpp:280
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2610
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2601
 #, fuzzy, kde-format
 #| msgid "%1: set date-time format to %2"
 msgid "%1: remove heatmap format"
@@ -608,16 +609,15 @@ msgid "Plots"
 msgstr "LabPlot2"
 
 #: src/backend/core/column/Column.cpp:195
-#, fuzzy, kde-format
-#| msgid "two axes, centered"
+#, kde-format
 msgid "Axes"
-msgstr "kaksi akselia, keskitetty"
+msgstr ""
 
 #: src/backend/core/column/Column.cpp:221
 #, fuzzy, kde-format
-#| msgid "Tree options"
+#| msgid "Calculation time"
 msgid "Calculations"
-msgstr "Puun asetukset"
+msgstr "Laskenta-aika"
 
 #. i18n("DateTime Filter"), i18n("Unit:"), items, 0, false, &ok);
 #. if (ok) {
@@ -663,7 +663,7 @@ msgid "%1: change cell values"
 msgstr "%1: muuta solujen arvoja"
 
 #: src/backend/core/column/columncommands.cpp:531
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2817
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2808
 #, kde-format
 msgid "%1: set plot designation"
 msgstr ""
@@ -862,7 +862,7 @@ msgstr "Avaaminen epäonnistui"
 msgid "Failed to open project"
 msgstr "Avaaminen epäonnistui"
 
-#: src/backend/core/Project.cpp:1255
+#: src/backend/core/Project.cpp:1257
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Projektin muutosaika on virheellinen. Käytetään nykyistä aikaa."
@@ -1212,10 +1212,10 @@ msgstr "Avaaminen epäonnistui"
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
 #: src/commonfrontend/matrix/MatrixView.cpp:619
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2494
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2515
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2533
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2550
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2485
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2506
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2524
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2541
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:188
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:182
@@ -1255,10 +1255,9 @@ msgstr "Arvo:"
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:332
 #: src/backend/datasources/filters/XLSXFilter.cpp:515
-#, fuzzy, kde-format
-#| msgid "Number"
+#, kde-format
 msgid "Not enough memory."
-msgstr "Numero"
+msgstr ""
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:273
 #: src/backend/datasources/filters/JsonFilter.cpp:386
@@ -1954,7 +1953,7 @@ msgstr "tuntematon"
 #: src/backend/datasources/filters/MatioFilter.cpp:434
 #: src/commonfrontend/workbook/WorkbookView.cpp:53
 #: src/commonfrontend/workbook/WorkbookView.cpp:160
-#: src/kdefrontend/MainWin.cpp:631 src/kdefrontend/MainWin.cpp:1951
+#: src/kdefrontend/MainWin.cpp:631 src/kdefrontend/MainWin.cpp:1960
 #, kde-format
 msgid "Matrix"
 msgstr "Matriisi"
@@ -2004,10 +2003,9 @@ msgid "Selected variable not found."
 msgstr "Tiedoston tiedot"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:799
-#, fuzzy, kde-format
-#| msgid "File info"
+#, kde-format
 msgid "Struct contains no fields"
-msgstr "Tiedoston tiedot"
+msgstr ""
 
 #: src/backend/datasources/filters/MatioFilter.cpp:881
 #, kde-format
@@ -2155,15 +2153,15 @@ msgstr "N&ormalisoi valinta"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:250
 #, fuzzy, kde-format
-#| msgid "File info"
+#| msgid "no column element found"
 msgid "Selected sheet not found."
-msgstr "Tiedoston tiedot"
+msgstr "sarake-elementtiä ei löytynyt"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:257
 #, fuzzy, kde-format
-#| msgid "Invalid image"
+#| msgid "Invalid pointer"
 msgid "Invalid sheet."
-msgstr "Virheellinen kuva"
+msgstr "Virheellinen osoitin"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:318
 #, fuzzy, kde-format
@@ -2349,10 +2347,9 @@ msgid "Application: %1"
 msgstr "Kierto:"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:105
-#, fuzzy, kde-format
-#| msgid "Show Options"
+#, kde-format
 msgid "Application version: %1.%2.%3"
-msgstr "Näytä asetukset"
+msgstr ""
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:107
 #, fuzzy, kde-format
@@ -3699,10 +3696,9 @@ msgid "Cell (index, variable)"
 msgstr "Poista muuttuja"
 
 #: src/backend/gsl/functions.cpp:235
-#, fuzzy, kde-format
-#| msgid "center"
+#, kde-format
 msgid "Moving Average"
-msgstr "keskitys"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:236
 #, fuzzy, kde-format
@@ -3727,9 +3723,9 @@ msgstr ""
 
 #: src/backend/gsl/functions.cpp:240
 #, fuzzy, kde-format
-#| msgid "center"
+#| msgid "simple, big"
 msgid "Simple Moving Range"
-msgstr "keskitys"
+msgstr "yksinkertainen, suuri"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:244
@@ -5118,14 +5114,16 @@ msgid "Logarithm of the magnitude"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:572
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Functions"
 msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q, x)"
-msgstr ""
+msgstr "Funktiot"
 
 #: src/backend/gsl/functions.cpp:573
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Functions"
 msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q, x)"
-msgstr ""
+msgstr "Funktiot"
 
 #: src/backend/gsl/functions.cpp:574
 #, fuzzy, kde-format
@@ -5140,14 +5138,16 @@ msgid "Angular Mathieu functions se_n(q, x)"
 msgstr "Funktiot"
 
 #: src/backend/gsl/functions.cpp:576
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Functions"
 msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q, x)"
-msgstr ""
+msgstr "Funktiot"
 
 #: src/backend/gsl/functions.cpp:577
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Functions"
 msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q, x)"
-msgstr ""
+msgstr "Funktiot"
 
 #: src/backend/gsl/functions.cpp:581
 #, kde-format
@@ -6152,22 +6152,19 @@ msgid "Probability density for a triangular distribution"
 msgstr "Bernoullin jakauma"
 
 #: src/backend/gsl/functions.cpp:840
-#, fuzzy, kde-format
-#| msgid "Landau Distribution"
+#, kde-format
 msgid "Cumulative triangular distribution function P"
-msgstr "Landaun jakauma"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:841
-#, fuzzy, kde-format
-#| msgid "Landau Distribution"
+#, kde-format
 msgid "Cumulative triangular distribution function Q"
-msgstr "Landaun jakauma"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:842
-#, fuzzy, kde-format
-#| msgid "Bernoulli Distribution"
+#, kde-format
 msgid "p-th quantile for triangular distribution"
-msgstr "Bernoullin jakauma"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:948 src/backend/gsl/functions.cpp:960
 #: src/backend/gsl/functions.cpp:974 src/backend/gsl/functions.cpp:986
@@ -6179,9 +6176,9 @@ msgstr "Virheellinen osoitin"
 
 #: src/backend/gsl/functions.cpp:954
 #, fuzzy, kde-format
-#| msgid "Connection:"
+#| msgid "Condition:"
 msgid "condition"
-msgstr "Yhteys:"
+msgstr "Ehto:"
 
 #: src/backend/gsl/functions.cpp:956
 #, fuzzy, kde-format
@@ -6212,9 +6209,10 @@ msgid "q"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:972 src/backend/gsl/functions.cpp:980
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "x="
 msgid "x"
-msgstr "x"
+msgstr "x="
 
 #: src/backend/gsl/functions.cpp:982
 #, fuzzy, kde-format
@@ -6301,14 +6299,14 @@ msgid "unexpected end of document"
 msgstr "odottamaton tiedoston loppu"
 
 #: src/backend/matrix/Matrix.cpp:129
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3797
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3788
 #, fuzzy, kde-format
 #| msgid "image"
 msgid "FITS image"
 msgstr "kuva"
 
 #: src/backend/matrix/Matrix.cpp:129
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3797
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3788
 #, kde-format
 msgid "FITS table"
 msgstr ""
@@ -6578,16 +6576,15 @@ msgid "Center (Acausal)"
 msgstr ""
 
 #: src/backend/nsl/nsl_conv.c:24
-#, fuzzy, kde-format
-#| msgid "center"
+#, kde-format
 msgid "Sliding Average"
-msgstr "keskitys"
+msgstr ""
 
 #: src/backend/nsl/nsl_conv.c:25
 #, fuzzy, kde-format
-#| msgid "circle"
+#| msgid "right triangle"
 msgid "Triangular Smooth"
-msgstr "ympyrä"
+msgstr "suorakulmainen kolmio"
 
 #: src/backend/nsl/nsl_conv.c:26
 #, kde-format
@@ -7376,16 +7373,14 @@ msgid "Lanczos"
 msgstr "Lanczos"
 
 #: src/backend/nsl/nsl_smooth.c:21
-#, fuzzy, kde-format
-#| msgid "center"
+#, kde-format
 msgid "Moving Average (Central)"
-msgstr "keskitys"
+msgstr ""
 
 #: src/backend/nsl/nsl_smooth.c:21
-#, fuzzy, kde-format
-#| msgid "center"
+#, kde-format
 msgid "Moving Average (Lagged)"
-msgstr "keskitys"
+msgstr ""
 
 #: src/backend/nsl/nsl_smooth.c:21
 #, kde-format
@@ -7855,10 +7850,9 @@ msgid "%1: drop line type changed"
 msgstr ""
 
 #: src/backend/worksheet/Line.cpp:114
-#, fuzzy, kde-format
-#| msgid "%1: set border style"
+#, kde-format
 msgid "%1: set line style"
-msgstr "%1: aseta reunan tyyli"
+msgstr ""
 
 #: src/backend/worksheet/Line.cpp:121
 #, fuzzy, kde-format
@@ -7991,9 +7985,9 @@ msgstr "Väri"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:547
 #, fuzzy, kde-format
-#| msgid "%1: set rotation angle"
+#| msgid "%1: set page size"
 msgid "%1: set axis range type"
-msgstr "%1: aseta kiertokulma"
+msgstr "%1: aseta sivukoko"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:572
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:621
@@ -8025,9 +8019,9 @@ msgstr "%1: aseta kiertokulma"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:648
 #, fuzzy, kde-format
-#| msgid "%1: set visible"
+#| msgid "%1: set rotation angle"
 msgid "%1: set scale"
-msgstr "%1: aseta näkyväksi"
+msgstr "%1: aseta kiertokulma"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:655
 #, fuzzy, kde-format
@@ -8798,9 +8792,9 @@ msgstr "%1: aseta sivukoko"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1140
 #, fuzzy, kde-format
-#| msgid "%1: set page size"
+#| msgid "%1: set rotation angle"
 msgid "%1: set nice extend"
-msgstr "%1: aseta sivukoko"
+msgstr "%1: aseta kiertokulma"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1147
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1154
@@ -8811,9 +8805,9 @@ msgstr "%1: aseta kiertokulma"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1165
 #, fuzzy, kde-format
-#| msgid "%1: set page size"
+#| msgid "%1: change column order"
 msgid "%1: change %2-range %3 format"
-msgstr "%1: aseta sivukoko"
+msgstr "%1: aseta sarakejärjestys"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1255
 #, fuzzy, kde-format
@@ -9149,15 +9143,14 @@ msgstr "%1: viivan tyyppi muuttunut"
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:195
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:207
 #, fuzzy, kde-format
-#| msgid "%1: insert empty columns"
+#| msgid "%1: set values column"
 msgid "%1: set error column"
-msgstr "%1: lisää tyhjiä sarakkeita"
+msgstr "%1: aseta arvojen sarake"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:235
-#, fuzzy, kde-format
-#| msgid "%1: border type changed"
+#, kde-format
 msgid "%1: error bar type changed"
-msgstr "%1: viivan tyyppi muuttunut"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:242
 #, kde-format
@@ -9585,9 +9578,9 @@ msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:374
 #, fuzzy, kde-format
-#| msgid "circle"
+#| msgid "right triangle"
 msgid "triangle dot"
-msgstr "ympyrä"
+msgstr "suorakulmainen kolmio"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:376
 #, kde-format
@@ -10276,10 +10269,9 @@ msgid "Visible"
 msgstr "Näkyvä"
 
 #: src/backend/worksheet/WorksheetElement.cpp:228
-#, fuzzy, kde-format
-#| msgid "Link"
+#, kde-format
 msgid "Lock"
-msgstr "Linkki"
+msgstr ""
 
 #: src/backend/worksheet/WorksheetElement.cpp:237
 #, kde-format
@@ -10645,16 +10637,16 @@ msgid "Curve"
 msgstr "Kaari"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4037
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4091
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4028
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4082
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2217
 #, kde-format
 msgid "Failed to export"
 msgstr "Vienti epäonnistui"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4037
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4091
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4028
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4082
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2217
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -10885,7 +10877,7 @@ msgid "%1: cut selected cell(s)"
 msgstr "%1: leikkaa valitut solut"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:689
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1793
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1784
 #, kde-format
 msgid "%1: paste from clipboard"
 msgstr "%1: liitä leikepöydältä"
@@ -11104,7 +11096,7 @@ msgstr "&Valitut sarakkeet"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:326
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1149
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1535
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1526
 #, kde-format
 msgid "Show Comments"
 msgstr "Näytä kommentit"
@@ -11179,12 +11171,12 @@ msgstr "&Lisää tyhjiä sarakkeita"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:346
 #, fuzzy, kde-format
-#| msgid "%1: remove selected column(s)"
+#| msgid "&Selected Columns"
 msgid "Delete Selected Column(s)"
-msgstr "%1: poista valitut sarakkeet"
+msgstr "&Valitut sarakkeet"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:348
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1625
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1616
 #, fuzzy, kde-format
 #| msgid "&Selected Columns"
 msgid "Freeze Column"
@@ -11394,10 +11386,9 @@ msgid "Remo&ve Selected Row(s)"
 msgstr "%1: poista valitut rivit"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:494
-#, fuzzy, kde-format
-#| msgid "%1: fill cells with const values"
+#, kde-format
 msgid "Delete Rows With Missing Values"
-msgstr "%1: täytä solut vakioarvoin"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:495
 #, kde-format
@@ -11442,57 +11433,57 @@ msgid "Ladder of Powers"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1147
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1533
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1524
 #, kde-format
 msgid "Hide Comments"
 msgstr "Piilota kommentit"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1158
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1538
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1529
 #, fuzzy, kde-format
 #| msgid "Hide Options"
 msgid "Hide Sparklines"
 msgstr "Piilota asetukset"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1160
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1540
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1531
 #, fuzzy, kde-format
 #| msgid "Show Options"
 msgid "Show Sparklines"
 msgstr "Näytä asetukset"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1629
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1620
 #, fuzzy, kde-format
 #| msgid "&Selected Columns"
 msgid "Unfreeze Column"
 msgstr "&Valitut sarakkeet"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1712
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1703
 #, kde-format
 msgid "%1: cut selected cells"
 msgstr "%1: leikkaa valitut solut"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2036
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2027
 #, kde-format
 msgid "Not enough memory to finalize this operation."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2050
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2041
 #, kde-format
 msgid "%1: mask selected cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2092
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2083
 #, kde-format
 msgid "%1: unmask selected cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2248
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2239
 #, kde-format
 msgid "%1: fill cells with row numbers"
 msgstr "%1: täytä solut rivinumeroin"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2313
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2304
 #, fuzzy, kde-format
 #| msgid "%1: fill cells with row numbers"
 msgid "%1: fill column with row numbers"
@@ -11500,39 +11491,39 @@ msgid_plural "%1: fill columns with row numbers"
 msgstr[0] "%1: täytä solut rivinumeroin"
 msgstr[1] "%1: täytä solut rivinumeroin"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2357
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2348
 #, kde-format
 msgid "%1: fill cells with random values"
 msgstr "%1: täytä solut satunnaisarvoin"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2483
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2474
 #, kde-format
 msgid "%1: fill cells with const values"
 msgstr "%1: täytä solut vakioarvoin"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2493
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2515
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2533
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2550
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2484
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2506
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2524
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2541
 #, kde-format
 msgid "Fill the selection with constant value"
 msgstr "Täytä valinta vakioarvolla"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2630
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2664
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2621
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2655
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "Insert empty columns"
 msgstr "&Lisää tyhjiä sarakkeita"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2631
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2665
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2622
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2656
 #, fuzzy, kde-format
 #| msgid "Specify the name of the file to import."
 msgid "Enter the number of columns to insert"
 msgstr "Valitse tuotavan tiedoston nimi."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2683
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2674
 #, fuzzy, kde-format
 #| msgid "%1: insert empty columns"
 msgid "%1: insert empty column"
@@ -11540,12 +11531,12 @@ msgid_plural "%1: insert empty columns"
 msgstr[0] "%1: lisää tyhjiä sarakkeita"
 msgstr[1] "%1: lisää tyhjiä sarakkeita"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2753
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2744
 #, kde-format
 msgid "%1: remove selected columns"
 msgstr "%1: poista valitut sarakkeet"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2850
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2841
 #, fuzzy, kde-format
 #| msgid "%1: remove %2 column"
 #| msgid_plural "%1: remove %2 columns"
@@ -11554,141 +11545,141 @@ msgid_plural "%1: reverse columns"
 msgstr[0] "%1: poista %2 sarake"
 msgstr[1] "%1: poista %2 saraketta"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2923
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2914
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
 "because of this. "
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2961
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2952
 #, kde-format
 msgid "%1: normalize columns"
 msgstr "%1: normalisoi sarakkeet"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2981
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2972
 #, kde-format
 msgid "Sum = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2992
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2983
 #, kde-format
 msgid "Min = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3003
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2994
 #, kde-format
 msgid "Max = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3014
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3005
 #, fuzzy, kde-format
 #| msgid "center"
 msgid "Count = 0"
 msgstr "keskitys"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3025
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3016
 #, fuzzy, kde-format
 #| msgid "Mean:"
 msgid "Mean = 0"
 msgstr "Keskiarvo:"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3036
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3027
 #, fuzzy, kde-format
 #| msgid "Median"
 msgid "Median = 0"
 msgstr "Mediaani"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3048
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3039
 #, fuzzy, kde-format
 #| msgid "Model"
 msgid "Mode = 0"
 msgstr "Malli"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3050
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3041
 #, kde-format
 msgid "'Mode not defined'"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3061
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3052
 #, fuzzy, kde-format
 #| msgid "Range:"
 msgid "Range = 0"
 msgstr "Alue:"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3072
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3106
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3063
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3097
 #, kde-format
 msgid "SD = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3083
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3118
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3074
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3109
 #, kde-format
 msgid "MAD = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3094
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3130
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3085
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3121
 #, kde-format
 msgid "IQR = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3142
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3133
 #, kde-format
 msgid "Max - Min = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3161
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3152
 #, kde-format
 msgid "Normalization not possible"
 msgstr "Normalisointi ei mahdollista"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3173
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3164
 #, fuzzy, kde-format
 #| msgid "%1: normalize columns"
 msgid "%1: power transform columns"
 msgstr "%1: normalisoi sarakkeet"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3291
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3282
 #, fuzzy, kde-format
 #| msgid "Column Statisti&cs"
 msgid "%1: column statistics"
 msgstr "&Sarakkeen tilastot"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3322
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3313
 #, fuzzy, kde-format
 #| msgid "Selection"
 msgid "Selection in %1"
 msgstr "Valinta"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3365
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3356
 #, fuzzy, kde-format
 #| msgid "Row Statisti&cs"
 msgid "%1: row statistics"
 msgstr "&Rivin tilastot"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3375
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3366
 #, kde-format
 msgid "Row %1"
 msgstr "Rivi %1"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3400
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3439
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3391
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3430
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "Insert multiple rows"
 msgstr "&Lisää tyhjiä rivejä"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3401
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3440
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3392
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3431
 #, fuzzy, kde-format
 #| msgid "Specify the name of the file to import."
 msgid "Enter the number of rows to insert"
 msgstr "Valitse tuotavan tiedoston nimi."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3420
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3459
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3411
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3450
 #, fuzzy, kde-format
 #| msgid "%1: insert empty rows"
 msgid "%1: insert empty row"
@@ -11696,17 +11687,17 @@ msgid_plural "%1: insert empty rows"
 msgstr[0] "%1: lisää tyhjiä rivejä"
 msgstr[1] "%1: lisää tyhjiä rivejä"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3475
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3466
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr "%1: poista valitut rivit"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3500
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3491
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: tyhjennä valitut solut"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3762
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3753
 #, fuzzy, kde-format
 #| msgid "Arrow"
 msgid "row"
@@ -11714,7 +11705,7 @@ msgid_plural "rows"
 msgstr[0] "Nuoli"
 msgstr[1] "Nuoli"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3763
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3754
 #, fuzzy, kde-format
 #| msgid "Column"
 msgid "column"
@@ -11722,81 +11713,81 @@ msgid_plural "columns"
 msgstr[0] "Sarake"
 msgstr[1] "Sarake"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3764
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3755
 #, kde-format
 msgid "cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3765
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3756
 #, fuzzy, kde-format
 msgid "masked value"
 msgstr "arvo"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3765
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3756
 #, fuzzy, kde-format
 msgid "masked values"
 msgstr "arvo"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3766
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3757
 #, fuzzy, kde-format
 #| msgid "no values"
 msgid "missing value"
 msgstr "ei arvoja"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3766
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3757
 #, fuzzy, kde-format
 #| msgid "no values"
 msgid "missing values"
 msgstr "ei arvoja"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3767
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3758
 #, kde-format
 msgid " , "
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3767
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3768
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3758
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3759
 #, fuzzy, kde-format
 #| msgid "1"
 msgid "%1"
 msgstr "1"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3768
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3759
 #, fuzzy, kde-format
 #| msgctxt "postfix for XML warning messages"
 #| msgid " "
 msgid ", "
 msgstr " "
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3771
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3762
 #, kde-format
 msgid "Selected: %1 %2 , %3 %4%5 %6 %7 %8"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3781
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3772
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3854
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3845
 #, fuzzy, kde-format
 #| msgid "Print spreadsheet"
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Tulosta laskentataulukko"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4459
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4450
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr "SQLite-tietokantaa %1 ei voitu luoda."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4491
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4482
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to create table in the SQLite database %1."
 msgstr "Avaaminen epäonnistui"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4544
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4535
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to insert values into the table."
@@ -11836,10 +11827,9 @@ msgid "Unhandled error"
 msgstr ""
 
 #: src/commonfrontend/widgets/NumberSpinBox.cpp:440
-#, fuzzy, kde-format
-#| msgid "invalid row value"
+#, kde-format
 msgid "Invalid value entered. Valid value: %1"
-msgstr "virheellinen rivin arvo"
+msgstr ""
 
 #: src/commonfrontend/widgets/TreeViewComboBox.cpp:56
 #, kde-format
@@ -11864,7 +11854,7 @@ msgstr ""
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:116
 #: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:57
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:75
-#: src/kdefrontend/MainWin.cpp:625 src/kdefrontend/MainWin.cpp:1933
+#: src/kdefrontend/MainWin.cpp:625 src/kdefrontend/MainWin.cpp:1942
 #: src/kdefrontend/SettingsDialog.cpp:72
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:122
 #, kde-format
@@ -12046,7 +12036,7 @@ msgstr "Valitse x-alue ja lähennä"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:359
-#: src/kdefrontend/MainWin.cpp:2418
+#: src/kdefrontend/MainWin.cpp:2427
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1426
 #, kde-format
 msgid "Cursor"
@@ -12598,9 +12588,9 @@ msgstr "Tuo kohteeseen"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:76
 #, fuzzy, kde-format
-#| msgid "Data range"
+#| msgid "Data type:"
 msgid "Data container:"
-msgstr "Tietoalue"
+msgstr "Tietotyyppi:"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:77
 #: src/kdefrontend/datasources/ImportDialog.cpp:83
@@ -13624,7 +13614,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
-#: src/kdefrontend/MainWin.cpp:2727
+#: src/kdefrontend/MainWin.cpp:2736
 #, kde-format
 msgid "Warning"
 msgstr "Varoitus"
@@ -14413,10 +14403,9 @@ msgstr "Sarake"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:247
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:247
-#, fuzzy, kde-format
-#| msgid "Column"
+#, kde-format
 msgid "Row Major"
-msgstr "Sarake"
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:251
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:256
@@ -14494,9 +14483,9 @@ msgstr "Automaattinen (E)"
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:319
 #, fuzzy, kde-format
-#| msgid "Value"
+#| msgid "Add new variable"
 msgid "Add a new value label"
-msgstr "Arvo"
+msgstr "Lisää uusi muuttuja"
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:320
 #, fuzzy, kde-format
@@ -14615,9 +14604,11 @@ msgid "%1 histograms: template \"%2\" loaded"
 msgstr "%1 akselia: ladattiin mallipohja ”%2”"
 
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:218
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1: remove %2 row"
+#| msgid_plural "%1: remove %2 rows"
 msgid "%1 info elements: curve \"%2\" removed"
-msgstr ""
+msgstr "%1: poista %2 rivi"
 
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:220
 #, fuzzy, kde-format
@@ -15065,22 +15056,19 @@ msgid "t statistic"
 msgstr "Tilastot"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:368
-#, fuzzy, kde-format
-#| msgid "Selected variable name"
+#, kde-format
 msgid "No X and Y column specified!"
-msgstr "Valittu muuttujan nimi"
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:370
-#, fuzzy, kde-format
-#| msgid "Selected variable name"
+#, kde-format
 msgid "No X column specified!"
-msgstr "Valittu muuttujan nimi"
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:372
-#, fuzzy, kde-format
-#| msgid "Selected variable name"
+#, kde-format
 msgid "No Y column specified!"
-msgstr "Valittu muuttujan nimi"
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:376
 #, fuzzy, kde-format
@@ -15268,10 +15256,10 @@ msgstr "La&jittele laskentataulukko"
 
 #: src/kdefrontend/GuiObserver.cpp:231
 #, fuzzy, kde-format
-#| msgid "Properties"
+#| msgid "Column Statisti&cs"
 msgctxt "@title:window"
 msgid "Properties: Column Statistics"
-msgstr "Ominaisuudet"
+msgstr "&Sarakkeen tilastot"
 
 #: src/kdefrontend/GuiObserver.cpp:241
 #, kde-format
@@ -16116,9 +16104,9 @@ msgstr "Huomautus"
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
 #: src/kdefrontend/labplot2ui.rc:40
 #, fuzzy, kde-format
-#| msgid "Load From"
+#| msgid "Plot Area"
 msgid "Plot Area Toolbar"
-msgstr "Lataa tiedostosta"
+msgstr "Kaavion alue"
 
 #. i18n: ectx: Menu (file)
 #: src/kdefrontend/labplot2ui.rc:44
@@ -16221,7 +16209,7 @@ msgstr "Tervetuloa Labplotin versioon %1"
 msgid "&Open Example"
 msgstr "Avaa tiedosto"
 
-#: src/kdefrontend/MainWin.cpp:615 src/kdefrontend/MainWin.cpp:1917
+#: src/kdefrontend/MainWin.cpp:615 src/kdefrontend/MainWin.cpp:1926
 #, kde-format
 msgid "Workbook"
 msgstr "Työvihko"
@@ -16231,7 +16219,7 @@ msgstr "Työvihko"
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr "Luo laskentataulukoille, matriiseille ja kaavioille uuden työvihkon"
 
-#: src/kdefrontend/MainWin.cpp:620 src/kdefrontend/MainWin.cpp:1925
+#: src/kdefrontend/MainWin.cpp:620 src/kdefrontend/MainWin.cpp:1934
 #, fuzzy, kde-format
 #| msgid "Data format"
 msgid "Data Extractor"
@@ -16252,7 +16240,7 @@ msgstr ""
 msgid "Creates a new matrix for data editing"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:637 src/kdefrontend/MainWin.cpp:1969
+#: src/kdefrontend/MainWin.cpp:637 src/kdefrontend/MainWin.cpp:1978
 #: src/kdefrontend/SettingsDialog.cpp:67
 #, kde-format
 msgid "Worksheet"
@@ -16263,7 +16251,7 @@ msgstr "Työvihko"
 msgid "Creates a new worksheet for data plotting"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:643 src/kdefrontend/MainWin.cpp:1977
+#: src/kdefrontend/MainWin.cpp:643 src/kdefrontend/MainWin.cpp:1986
 #, kde-format
 msgid "Note"
 msgstr "Huomautus"
@@ -16273,7 +16261,7 @@ msgstr "Huomautus"
 msgid "Creates a new note for arbitrary text"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:648 src/kdefrontend/MainWin.cpp:1909
+#: src/kdefrontend/MainWin.cpp:648 src/kdefrontend/MainWin.cpp:1918
 #, kde-format
 msgid "Folder"
 msgstr "Kansio"
@@ -16348,8 +16336,8 @@ msgstr "Vie…"
 msgid "Export selected element"
 msgstr "Vie valittu alkio"
 
-#: src/kdefrontend/MainWin.cpp:705 src/kdefrontend/MainWin.cpp:2454
-#: src/kdefrontend/MainWin.cpp:2462
+#: src/kdefrontend/MainWin.cpp:705 src/kdefrontend/MainWin.cpp:2463
+#: src/kdefrontend/MainWin.cpp:2471
 #, kde-format
 msgid "Share"
 msgstr ""
@@ -16598,85 +16586,85 @@ msgstr ""
 msgid "Couldn't open the temporary file for writing."
 msgstr "Tiedostoa ei valitettavasti voitu avata kirjoitettavaksi."
 
-#: src/kdefrontend/MainWin.cpp:1798
+#: src/kdefrontend/MainWin.cpp:1807
 #, kde-format
 msgid "Project saved"
 msgstr "Projekti tallennettu"
 
-#: src/kdefrontend/MainWin.cpp:1814
+#: src/kdefrontend/MainWin.cpp:1823
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "Ei voitu tallentaa tiedostoa ”%1”."
 
-#: src/kdefrontend/MainWin.cpp:1819
+#: src/kdefrontend/MainWin.cpp:1828
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Ei voitu avata tiedostoa %1 luettavaksi."
 
-#: src/kdefrontend/MainWin.cpp:1869
+#: src/kdefrontend/MainWin.cpp:1878
 #, kde-format
 msgid "Changed"
 msgstr "Muutettu"
 
-#: src/kdefrontend/MainWin.cpp:1884 src/kdefrontend/MainWin.cpp:1896
+#: src/kdefrontend/MainWin.cpp:1893 src/kdefrontend/MainWin.cpp:1905
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Valmistellaan tulostusta: %1"
 
-#: src/kdefrontend/MainWin.cpp:1886 src/kdefrontend/MainWin.cpp:1898
+#: src/kdefrontend/MainWin.cpp:1895 src/kdefrontend/MainWin.cpp:1907
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 tulostettu"
 
-#: src/kdefrontend/MainWin.cpp:2454
+#: src/kdefrontend/MainWin.cpp:2463
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2458
+#: src/kdefrontend/MainWin.cpp:2467
 #, fuzzy, kde-format
 #| msgid "Project saved"
 msgid "Project shared successfully"
 msgstr "Projekti tallennettu"
 
-#: src/kdefrontend/MainWin.cpp:2461
+#: src/kdefrontend/MainWin.cpp:2470
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2690
+#: src/kdefrontend/MainWin.cpp:2699
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 viety"
 
-#: src/kdefrontend/MainWin.cpp:2697
+#: src/kdefrontend/MainWin.cpp:2706
 #, kde-format
 msgid "FITS files saved"
 msgstr "FITS-tiedostot tallennettu"
 
-#: src/kdefrontend/MainWin.cpp:2709
+#: src/kdefrontend/MainWin.cpp:2718
 #, kde-format
 msgid "MQTT Client%1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2727
+#: src/kdefrontend/MainWin.cpp:2736
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2731
+#: src/kdefrontend/MainWin.cpp:2740
 #, fuzzy, kde-format
 #| msgid "File data source"
 msgid "Live data source%1"
 msgstr "Tiedostodatalähde"
 
-#: src/kdefrontend/MainWin.cpp:2772
+#: src/kdefrontend/MainWin.cpp:2781
 #, kde-format
 msgid "No Cantor backends found. Please install the ones you want to use."
 msgstr "Cantor-taustajärjestelmiä ei löytynyt. Asenna haluamasi."
 
-#: src/kdefrontend/MainWin.cpp:2786
+#: src/kdefrontend/MainWin.cpp:2795
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr ""
@@ -16943,9 +16931,9 @@ msgstr "Tulosta työvihko"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:224
 #, fuzzy, kde-format
-#| msgid "%1: set vertical alignment"
+#| msgid "Export spreadsheet"
 msgid "With Spreadsheet and Worksheet"
-msgstr "%1: aseta pystytasaus"
+msgstr "Vie laskentataulukko"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:226
 #, fuzzy, kde-format
@@ -17276,10 +17264,9 @@ msgstr "Kierto:"
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:943
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:987
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1031
-#, fuzzy, kde-format
-#| msgid "invalid row value"
+#, kde-format
 msgid "Wrong numeric value provided."
-msgstr "virheellinen rivin arvo"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1218
 #, fuzzy, kde-format
@@ -17338,16 +17325,16 @@ msgstr "Selitteet"
 
 #: src/kdefrontend/spreadsheet/BatchEditValueLabelsDialog.cpp:36
 #, fuzzy, kde-format
-#| msgid "Value"
+#| msgid "Equidistant Values"
 msgctxt "@title:window"
 msgid "Edit Value Labels"
-msgstr "Arvo"
+msgstr "Tasaväliset arvot"
 
 #: src/kdefrontend/spreadsheet/BatchEditValueLabelsDialog.cpp:40
 #, fuzzy, kde-format
-#| msgid "Value"
+#| msgid "Labels"
 msgid "Value Labels:"
-msgstr "Arvo"
+msgstr "Selitteet"
 
 #: src/kdefrontend/spreadsheet/BatchEditValueLabelsDialog.cpp:154
 #, kde-format
@@ -17817,9 +17804,9 @@ msgstr ""
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:214
 #, fuzzy, kde-format
-#| msgid "Select and Zoom"
+#| msgid "&Selected Columns"
 msgid "Select a valid column"
-msgstr "Valitse ja lähennä"
+msgstr "&Valitut sarakkeet"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:221
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:275
@@ -18101,18 +18088,20 @@ msgid "Regular Expression"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1089
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1 not found"
 msgid "%1 match found"
 msgid_plural "%1 matches found"
-msgstr[0] "Löytyi %1 osuma"
-msgstr[1] "Löytyi %1 osumaa"
+msgstr[0] "%1 – ei löydy"
+msgstr[1] "%1 – ei löydy"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1168
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Values"
 msgid "%1 replacement made"
 msgid_plural "%1 replacements made"
-msgstr[0] "Tehty %1 korvaus"
-msgstr[1] "Tehty %1 korvausta"
+msgstr[0] "Arvot"
+msgstr[1] "Arvot"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1460
 #, kde-format
@@ -18142,9 +18131,10 @@ msgid "One or more occurrences"
 msgstr "Sattui virhe."
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1543
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "An error occurred."
 msgid "Zero or more occurrences"
-msgstr "Nolla tai useampia esiintymiä"
+msgstr "Sattui virhe."
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1544
 #, kde-format
@@ -18167,14 +18157,15 @@ msgid "Or"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1549
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Comment character:"
 msgid "Set of characters"
-msgstr "Merkkijoukko"
+msgstr "Kommenttimerkki:"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1550
 #, kde-format
 msgid "Negative set of characters"
-msgstr "Käänteinen merkkijoukko"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1553
 #, kde-format
@@ -18182,19 +18173,22 @@ msgid "Whole match reference"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1563
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Preferences"
 msgid "Reference"
-msgstr "Viite"
+msgstr "Asetukset"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1569
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Linear Algebra"
 msgid "Line break"
-msgstr "Rivinvaihto"
+msgstr "Lineaarialgebra"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1570
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Variable:"
 msgid "Tab"
-msgstr "Sarkain"
+msgstr "Muuttuja:"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1573
 #, kde-format
@@ -18232,9 +18226,10 @@ msgid "Word character (alphanumerics plus '_')"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1580
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Comment character:"
 msgid "Non-word character"
-msgstr "Ei-sanamerkki"
+msgstr "Kommenttimerkki:"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1583
 #, kde-format
@@ -18278,16 +18273,19 @@ msgid "Fixed-length negative lookbehind"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:33
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Sort Columns"
 msgctxt "@title:window"
 msgid "Sort All Columns"
-msgstr "Lajittele kaikki sarakkeet"
+msgstr "Lajittele sarakkeet"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:35
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Selected Columns"
 msgctxt "@title:window"
 msgid "Sort Selected Columns"
-msgstr "Lajittele valitut sarakkeet"
+msgstr "&Valitut sarakkeet"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:39
 #, kde-format
@@ -18354,9 +18352,9 @@ msgstr ""
 
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:150
 #, fuzzy, kde-format
-#| msgid "Bar Plot"
+#| msgid "Pareto"
 msgid "Pareto Plot"
-msgstr "Pylväskuvio"
+msgstr "Pareto"
 
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:226
 #, fuzzy, kde-format
@@ -18978,9 +18976,10 @@ msgstr "Valitse kuvatiedosto"
 #. i18n: ectx: property (toolTip), widget (QLabel, lPointSeparation)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:137
 #: src/kdefrontend/ui/datapickerimagewidget.ui:779
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Number of digits after the decimal point"
 msgid "Number of pixels between two neighbor data points"
-msgstr "Kuvapisteiden määrä vierekkäisten datapisteiden välillä"
+msgstr "Numeroita desimaalipisteen jälkeen"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbPointSeparation)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbMinSegmentLength)
@@ -18992,9 +18991,10 @@ msgstr " px"
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:155
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Preferences"
 msgid "References"
-msgstr "Viitteet"
+msgstr "Asetukset"
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint2)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:171
@@ -19054,9 +19054,10 @@ msgstr "%1: aseta apuruudukon tyyli"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinSegmentLength)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:248
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Length:"
 msgid "Min. Length:"
-msgstr "Väh.pituus:"
+msgstr "Pituus:"
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint1)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:280
@@ -19177,9 +19178,10 @@ msgstr "Tyyppi:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPointSeparation)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:782
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Saturation:"
 msgid "Separation:"
-msgstr "Erottelu:"
+msgstr "Kylläisyys:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:812
@@ -20957,9 +20959,10 @@ msgstr "Lisää uusi kaavioalue"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbRemovePlotRange)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:421
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Save the current filter settings"
 msgid "Remove current plot range"
-msgstr ""
+msgstr "Tallentaa nykyiset suodatinasetukset"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbAddYRange)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:488
@@ -20976,9 +20979,10 @@ msgstr "poista valittu y-alue"
 #. i18n: ectx: property (text), widget (QLabel, lNiceExtend)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:512
 #, fuzzy, kde-format
-#| msgid "Data:"
+#| msgctxt "matrix size"
+#| msgid "&Dimensions"
 msgid "Extend:"
-msgstr "Data:"
+msgstr "&Ulottuvuudet"
 
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbTop)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbPaddingHorizontal)
@@ -21149,9 +21153,9 @@ msgstr "kuva"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1121
 #, fuzzy, kde-format
-#| msgid "y-Range"
+#| msgid "x-Range:"
 msgid "X-Range"
-msgstr "y-alue:"
+msgstr "x-alue:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPlotArea)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1202
@@ -21199,9 +21203,10 @@ msgstr "Viivan ja merkin paksuus:"
 #. i18n: ectx: property (text), widget (QLabel, lBindLogicalPos)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:412
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:27
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1: set position"
 msgid "Logical coordinates"
-msgstr ""
+msgstr "%1: aseta sijainti"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbLock)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:458
@@ -21523,15 +21528,17 @@ msgstr "Kytkösviiva"
 
 #. i18n: ectx: property (text), widget (QLabel, lKernelType)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:91
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Kernel: "
 msgid "Kernel:"
 msgstr "Ydin: "
 
 #. i18n: ectx: property (text), widget (QLabel, lBandwidthType)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:111
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Line width"
 msgid "Bandwidth:"
-msgstr "Kaistanleveys:"
+msgstr "Viivan leveys"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:160
@@ -21753,9 +21760,9 @@ msgstr "Käytössä"
 #. i18n: ectx: property (text), widget (QLabel, lShowSparklines)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:175
 #, fuzzy, kde-format
-#| msgid "Column Separator:"
+#| msgid "Grid lines:"
 msgid "Sparklines:"
-msgstr "Sarake-erotin:"
+msgstr "Ruudukkoviivat:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:198
@@ -23063,9 +23070,10 @@ msgstr "Huomautus"
 # pmap: =/elat=LabPlot2:sta/
 #. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:86
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "LabPlot2"
 msgid "Dock widget placement:"
-msgstr "Telakkasovelman sijoittelu:"
+msgstr "LabPlot2"
 
 #. i18n: ectx: property (text), widget (QLabel, lTitleBar)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:96
@@ -23318,10 +23326,9 @@ msgstr "Loppuarvo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter1)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:136
-#, fuzzy, kde-format
-#| msgid "Smooth"
+#, kde-format
 msgid "Smoothness (Power of 10):"
-msgstr "Tasoita"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter2)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:162
@@ -23978,9 +23985,10 @@ msgid "Save project before using this option"
 msgstr ""
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:381
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Invalid pointer"
 msgid "Invalid image"
-msgstr "Virheellinen kuva"
+msgstr "Virheellinen osoitin"
 
 #: src/kdefrontend/widgets/ErrorBarWidget.cpp:46
 #, fuzzy, kde-format
@@ -24679,60 +24687,33 @@ msgstr ""
 msgid "Unable to open file:"
 msgstr "Tiedostoa ei voi avata:"
 
-#~ msgid "ROOT (CERN) Histograms"
-#~ msgstr "ROOT-histogrammit (CERN)"
-
-#~ msgid "Add %1"
-#~ msgstr "Lisää %1"
-
-#, fuzzy
-#~| msgid "Name:"
-#~ msgid "%1 name:"
-#~ msgstr "Nimi:"
-
-#, fuzzy
-#~| msgid "Drawing &order"
-#~ msgid "p-th quantile"
-#~ msgstr "Piirto&järjestys"
-
-#, fuzzy
-#~| msgid "Column"
-#~ msgid "Column Format"
-#~ msgstr "Sarake"
-
-#, fuzzy
-#~| msgid "Output:"
-#~ msgid "Debug Output:"
-#~ msgstr "Tulos:"
-
-#~ msgid "Specify the name of the file to import."
-#~ msgstr "Valitse tuotavan tiedoston nimi."
-
 #, fuzzy
 #~| msgid "%1: remove 1 row"
 #~| msgid_plural "%1: remove %2 rows"
 #~ msgid "%1: move down"
 #~ msgstr "%1: poista %2 rivi"
 
-#, fuzzy
-#~| msgid "Failed to read image data"
-#~ msgid "Failed to download the dataset"
-#~ msgstr "Kuvatietoa ei voi lukea"
+#~ msgid "&Restore"
+#~ msgstr "&Palauta"
+
+#~ msgid "Mi&nimize"
+#~ msgstr "P&ienennä"
+
+#~ msgid "Ma&ximize"
+#~ msgstr "S&uurenna"
 
 #, fuzzy
-#~| msgid "Failed to read image data"
-#~ msgid "Failed to save the dataset"
-#~ msgstr "Kuvatietoa ei voi lukea"
+#~| msgid "xy-curve"
+#~ msgid "XY-Curves"
+#~ msgstr "xy-käyrä"
+
+#~ msgid "ROOT (CERN) Histograms"
+#~ msgstr "ROOT-histogrammit (CERN)"
 
 #, fuzzy
 #~| msgid "Could not open file %1 for reading."
 #~ msgid "could not open device"
 #~ msgstr "Ei voitu avata tiedostoa %1 luettavaksi."
-
-#, fuzzy
-#~| msgid "File info"
-#~ msgid "Variable contains no data"
-#~ msgstr "Tiedoston tiedot"
 
 #, fuzzy
 #~| msgid "Not yet implemented."
@@ -24744,65 +24725,10 @@ msgstr "Tiedostoa ei voi avata:"
 #~ msgid "Invalid dbc file"
 #~ msgstr "Virheellinen osoitin"
 
-#~ msgid "No data to import."
-#~ msgstr "Ei tuotavaa tietoa."
-
-#~ msgid "Parse Errors"
-#~ msgstr "Jäsennysvirheet"
-
 #, fuzzy
-#~| msgid "Somewhat Sparse"
-#~ msgid "Show SparkLine"
-#~ msgstr "Harvahko"
-
-#~ msgid "Column Comments:"
-#~ msgstr "Sarakekommentit:"
-
-#, fuzzy
-#~| msgid "%1: border type changed"
-#~ msgid "%1: error bar style type changed"
-#~ msgstr "%1: viivan tyyppi muuttunut"
-
-#, fuzzy
-#~| msgid "%1: background type changed"
-#~ msgid "%1 CustomPoints: visibility changed"
-#~ msgstr "%1: taustan tyyppi muuttunut"
-
-#, fuzzy
-#~| msgid "xy-curve"
-#~ msgid "XY-Curves"
-#~ msgstr "xy-käyrä"
-
-#~ msgid "Do Nothing"
-#~ msgstr "Älä tee mitään"
-
-#~ msgid "Create New Project with Worksheet"
-#~ msgstr "Luo uusi projekti työvihkolla"
-
-#, fuzzy
-#~| msgid "Create new project with worksheet"
-#~ msgid "Create New Project with Spreadsheet"
-#~ msgstr "Luo uusi projekti laskentataulukolla"
-
-#, fuzzy
-#~| msgid "Create New Project with Worksheet"
-#~ msgid "Create New Project with Notebook"
-#~ msgstr "Luo uusi projekti työvihkolla"
-
-#~ msgid "auto update"
-#~ msgstr "automaattipäivitys"
-
-#~ msgid "%1: clear selected rows"
-#~ msgstr "%1: tyhjennä valitut rivit"
-
-#~ msgctxt "@title:window"
-#~ msgid "Equidistant Values"
-#~ msgstr "Tasaväliset arvot"
-
-#, fuzzy
-#~| msgid "Date and Time"
-#~ msgid "DateTime"
-#~ msgstr "Aika ja päiväys"
+#~| msgid "Remo&ve Columns"
+#~ msgid "Remove Columns"
+#~ msgstr "P&oista sarakkeita"
 
 #~ msgid "Remove"
 #~ msgstr "Poista"
@@ -24810,135 +24736,8 @@ msgstr "Tiedostoa ei voi avata:"
 #~ msgid "xy-Curve"
 #~ msgstr "xy-käyrä"
 
-#, fuzzy
-#~| msgid "Data type:"
-#~ msgid "Add Histogram to"
-#~ msgstr "Tietotyyppi:"
-
-# pmap: =/gen=LabPlot2:n/
-# pmap: =/elat=LabPlot2:sta/
-#, fuzzy
-#~| msgid "LabPlot2"
-#~ msgid "Add Box Plot to"
-#~ msgstr "LabPlot2"
-
-# pmap: =/gen=LabPlot2:n/
-# pmap: =/elat=LabPlot2:sta/
-#, fuzzy
-#~| msgid "LabPlot2"
-#~ msgid "Add Bar Plot to"
-#~ msgstr "LabPlot2"
-
-#, fuzzy
-#~| msgid "&All curves in one plot"
-#~ msgid "All histograms in one plot area"
-#~ msgstr "K&aikki käyrät yhdessä kaaviossa"
-
-#, fuzzy
-#~| msgid "One p&lot per curve"
-#~ msgid "One plot area per histogram"
-#~ msgstr "&Yksi kaavio/käyrä"
-
-#, fuzzy
-#~| msgid "Data type:"
-#~ msgid "Add Histograms to"
-#~ msgstr "Tietotyyppi:"
-
-#, fuzzy
-#~| msgid "&All curves in one plot"
-#~ msgid "All box plots in one plot area"
-#~ msgstr "K&aikki käyrät yhdessä kaaviossa"
-
-# pmap: =/gen=LabPlot2:n/
-# pmap: =/elat=LabPlot2:sta/
-#, fuzzy
-#~| msgid "LabPlot2"
-#~ msgid "Add Box Plots to"
-#~ msgstr "LabPlot2"
-
-#, fuzzy
-#~| msgid "&All curves in one plot"
-#~ msgid "All bar plots in one plot area"
-#~ msgstr "K&aikki käyrät yhdessä kaaviossa"
-
-#, fuzzy
-#~| msgid "One p&lot per curve"
-#~ msgid "One plot area per bar plot"
-#~ msgstr "&Yksi kaavio/käyrä"
-
-# pmap: =/gen=LabPlot2:n/
-# pmap: =/elat=LabPlot2:sta/
-#, fuzzy
-#~| msgid "LabPlot2"
-#~ msgid "Add Bar Plots to"
-#~ msgstr "LabPlot2"
-
-#, fuzzy
-#~| msgid "Create new project with worksheet"
-#~ msgid "new plot in an existing worksheet"
-#~ msgstr "Luo uusi projekti laskentataulukolla"
-
-#, fuzzy
-#~| msgid "Create new project with worksheet"
-#~ msgid "new plot in a new worksheet"
-#~ msgstr "Luo uusi projekti laskentataulukolla"
-
-#, fuzzy
-#~| msgid "Create new project with worksheet"
-#~ msgid "new plots in an existing worksheet"
-#~ msgstr "Luo uusi projekti laskentataulukolla"
-
-#, fuzzy
-#~| msgid "Create new project with worksheet"
-#~ msgid "new plots in a new worksheet"
-#~ msgstr "Luo uusi projekti laskentataulukolla"
-
-#, fuzzy
-#~| msgid "no fileDataSource element found"
-#~ msgid "GUI configuration file not found"
-#~ msgstr "fileDataSource-elementtiä ei löytynyt"
-
-#, fuzzy
-#~| msgid "Connection:"
-#~ msgid "Conditions"
-#~ msgstr "Yhteys:"
-
-#~ msgid "&Sort Spreadsheet"
-#~ msgstr "La&jittele laskentataulukko"
-
-#~ msgid "Sort columns:"
-#~ msgstr "Lajittelusarakkeet:"
-
-#~ msgid "Separately"
-#~ msgstr "Erillään"
-
-#~ msgid "Together"
-#~ msgstr "Yhdessä"
-
-#, fuzzy
-#~| msgid "End column:"
-#~ msgid "Leading column:"
-#~ msgstr "Lopettava sarake:"
-
-#~ msgid "Save Filter Settings as"
-#~ msgstr "Tallenna suodatusasetukset nimellä"
-
-#~ msgid "Filter name:"
-#~ msgstr "Suodattimen nimi:"
-
-#~ msgid "new filter"
-#~ msgstr "uusi suodatin"
-
-#~ msgid "Save the current filter settings"
-#~ msgstr "Tallentaa nykyiset suodatinasetukset"
-
-#~ msgid "Manage filters"
-#~ msgstr "Suodatinten hallinta"
-
-#, fuzzy
-#~| msgid "Remo&ve Columns"
-#~ msgid "Remove Columns"
-#~ msgstr "P&oista sarakkeita"
+#~ msgid "%1: clear selected rows"
+#~ msgstr "%1: tyhjennä valitut rivit"
 
 #, fuzzy
 #~| msgid "xy-curve from a fit to data"
@@ -24953,50 +24752,38 @@ msgstr "Tiedostoa ei voi avata:"
 #~ msgid "Auto/Cross Correlation"
 #~ msgstr "Yhteys:"
 
-#, fuzzy
-#~| msgid "Connection:"
-#~ msgid "Convolution/Deconvolution"
-#~ msgstr "Yhteys:"
-
 #~ msgid "Data Manipulation"
 #~ msgstr "Datan käsittely"
 
-#~ msgid "&Analysis"
-#~ msgstr "&Analyysi"
+#~ msgid "Add %1"
+#~ msgstr "Lisää %1"
 
 #, fuzzy
-#~| msgid "%1: set vertical alignment"
-#~ msgid "%1: set line pen"
-#~ msgstr "%1: aseta pystytasaus"
+#~| msgid "Name:"
+#~ msgid "%1 name:"
+#~ msgstr "Nimi:"
 
-#, fuzzy
-#~| msgid "Search/Filter:"
-#~ msgid "End Search"
-#~ msgstr "Hae/suodata:"
-
-#, fuzzy
-#~| msgid "Max. iterations"
-#~ msgid "Point Separation:"
-#~ msgstr "Iteraatioita enintään"
-
-#, fuzzy
-#~| msgid "Fitted Points"
-#~ msgid "Reference Points"
-#~ msgstr "Sovitetut pisteet"
+#~ msgid "No data to import."
+#~ msgstr "Ei tuotavaa tietoa."
 
 #, fuzzy
 #~| msgid "Data:"
 #~ msgid "No Data"
 #~ msgstr "Data:"
 
-#~ msgid "&Restore"
-#~ msgstr "&Palauta"
+#~ msgid "Save Filter Settings as"
+#~ msgstr "Tallenna suodatusasetukset nimellä"
 
-#~ msgid "Mi&nimize"
-#~ msgstr "P&ienennä"
+#~ msgid "Filter name:"
+#~ msgstr "Suodattimen nimi:"
 
-#~ msgid "Ma&ximize"
-#~ msgstr "S&uurenna"
+#~ msgid "new filter"
+#~ msgstr "uusi suodatin"
+
+#, fuzzy
+#~| msgid "%1: background type changed"
+#~ msgid "%1 CustomPoints: visibility changed"
+#~ msgstr "%1: taustan tyyppi muuttunut"
 
 #, fuzzy
 #~| msgid "Spreadsheet"
@@ -25100,13 +24887,11 @@ msgstr "Tiedostoa ei voi avata:"
 #~ msgid "Histogram"
 #~ msgstr "Histogrammi"
 
-# pmap: =/gen=LabPlot2:n/
-# pmap: =/elat=LabPlot2:sta/
 #, fuzzy
-#~| msgid "LabPlot2"
+#~| msgid "Box Plot"
 #~ msgctxt "@title:window"
 #~ msgid "Bar Plot"
-#~ msgstr "LabPlot2"
+#~ msgstr "Laatikko-janakuvio"
 
 # pmap: =/gen=LabPlot2:n/
 # pmap: =/elat=LabPlot2:sta/
@@ -25164,6 +24949,14 @@ msgstr "Tiedostoa ei voi avata:"
 #~ msgid "Workbook"
 #~ msgstr "Työvihko"
 
+#~ msgid "&Analysis"
+#~ msgstr "&Analyysi"
+
+#, fuzzy
+#~| msgid "no fileDataSource element found"
+#~ msgid "GUI configuration file not found"
+#~ msgstr "fileDataSource-elementtiä ei löytynyt"
+
 #~ msgid "&Tile"
 #~ msgstr "&Vierekkäistys"
 
@@ -25172,6 +24965,17 @@ msgstr "Tiedostoa ei voi avata:"
 
 #~ msgid "Cascade the windows"
 #~ msgstr "Porrasta ikkunat"
+
+#~ msgid "Do Nothing"
+#~ msgstr "Älä tee mitään"
+
+#~ msgid "Create New Project with Worksheet"
+#~ msgstr "Luo uusi projekti työvihkolla"
+
+#, fuzzy
+#~| msgid "Create new project with worksheet"
+#~ msgid "Create New Project with Spreadsheet"
+#~ msgstr "Luo uusi projekti laskentataulukolla"
 
 #, fuzzy
 #~| msgid "Sub-window view"
@@ -25198,6 +25002,113 @@ msgstr "Tiedostoa ei voi avata:"
 #~ msgid "Show all Windows"
 #~ msgstr "Näytä kaikki ikkunat"
 
+#~ msgctxt "@title:window"
+#~ msgid "Equidistant Values"
+#~ msgstr "Tasaväliset arvot"
+
+#, fuzzy
+#~| msgid "Data type:"
+#~ msgid "Add Histogram to"
+#~ msgstr "Tietotyyppi:"
+
+# pmap: =/gen=LabPlot2:n/
+# pmap: =/elat=LabPlot2:sta/
+#, fuzzy
+#~| msgid "LabPlot2"
+#~ msgid "Add Box Plot to"
+#~ msgstr "LabPlot2"
+
+# pmap: =/gen=LabPlot2:n/
+# pmap: =/elat=LabPlot2:sta/
+#, fuzzy
+#~| msgid "LabPlot2"
+#~ msgid "Add Bar Plot to"
+#~ msgstr "LabPlot2"
+
+#, fuzzy
+#~| msgid "&All curves in one plot"
+#~ msgid "All histograms in one plot area"
+#~ msgstr "K&aikki käyrät yhdessä kaaviossa"
+
+#, fuzzy
+#~| msgid "One p&lot per curve"
+#~ msgid "One plot area per histogram"
+#~ msgstr "&Yksi kaavio/käyrä"
+
+#, fuzzy
+#~| msgid "Data type:"
+#~ msgid "Add Histograms to"
+#~ msgstr "Tietotyyppi:"
+
+#, fuzzy
+#~| msgid "&All curves in one plot"
+#~ msgid "All box plots in one plot area"
+#~ msgstr "K&aikki käyrät yhdessä kaaviossa"
+
+# pmap: =/gen=LabPlot2:n/
+# pmap: =/elat=LabPlot2:sta/
+#, fuzzy
+#~| msgid "LabPlot2"
+#~ msgid "Add Box Plots to"
+#~ msgstr "LabPlot2"
+
+#, fuzzy
+#~| msgid "&All curves in one plot"
+#~ msgid "All bar plots in one plot area"
+#~ msgstr "K&aikki käyrät yhdessä kaaviossa"
+
+#, fuzzy
+#~| msgid "One p&lot per curve"
+#~ msgid "One plot area per bar plot"
+#~ msgstr "&Yksi kaavio/käyrä"
+
+# pmap: =/gen=LabPlot2:n/
+# pmap: =/elat=LabPlot2:sta/
+#, fuzzy
+#~| msgid "LabPlot2"
+#~ msgid "Add Bar Plots to"
+#~ msgstr "LabPlot2"
+
+#, fuzzy
+#~| msgid "Create new project with worksheet"
+#~ msgid "new plot in an existing worksheet"
+#~ msgstr "Luo uusi projekti laskentataulukolla"
+
+#, fuzzy
+#~| msgid "Create new project with worksheet"
+#~ msgid "new plot in a new worksheet"
+#~ msgstr "Luo uusi projekti laskentataulukolla"
+
+#, fuzzy
+#~| msgid "Create new project with worksheet"
+#~ msgid "new plots in an existing worksheet"
+#~ msgstr "Luo uusi projekti laskentataulukolla"
+
+#, fuzzy
+#~| msgid "Create new project with worksheet"
+#~ msgid "new plots in a new worksheet"
+#~ msgstr "Luo uusi projekti laskentataulukolla"
+
+#, fuzzy
+#~| msgid "Max. iterations"
+#~ msgid "Point Separation:"
+#~ msgstr "Iteraatioita enintään"
+
+#~ msgid "Reference Points"
+#~ msgstr "Viitepisteet"
+
+#~ msgid "Parse Errors"
+#~ msgstr "Jäsennysvirheet"
+
+#~ msgid "Save the current filter settings"
+#~ msgstr "Tallentaa nykyiset suodatinasetukset"
+
+#~ msgid "Manage filters"
+#~ msgstr "Suodatinten hallinta"
+
+#~ msgid "Column Comments:"
+#~ msgstr "Sarakekommentit:"
+
 #~ msgid "Tab position:"
 #~ msgstr "Välilehden sijainti:"
 
@@ -25207,64 +25118,25 @@ msgstr "Tiedostoa ei voi avata:"
 #~ msgid "Sub-window visibility:"
 #~ msgstr "Ali-ikkunan näkyvyys:"
 
-#, fuzzy
-#~| msgid "Dash line"
-#~ msgid "Baseline"
-#~ msgstr "Katkoviiva"
+#~ msgid "auto update"
+#~ msgstr "automaattipäivitys"
+
+#~ msgid "Sort columns:"
+#~ msgstr "Lajittelusarakkeet:"
+
+#~ msgid "Separately"
+#~ msgstr "Erillään"
+
+#~ msgid "Together"
+#~ msgstr "Yhdessä"
 
 #, fuzzy
-#~| msgid "Weight:"
-#~ msgid "Weighting:"
-#~ msgstr "Paino:"
+#~| msgid "End column:"
+#~ msgid "Leading column:"
+#~ msgstr "Lopettava sarake:"
 
-#~ msgid "Add the specified value to column values"
-#~ msgstr "Lisää annettu arvo sarakkeen arvoihin"
-
-#, fuzzy
-#~| msgid "%1: insert empty columns"
-#~ msgid "Subtract the specified value from column values"
-#~ msgstr "%1: lisää tyhjiä sarakkeita"
-
-#~ msgid "Multiply column values by the specified value"
-#~ msgstr "Kerro sarakkeen arvot annetulla arvolla"
-
-#~ msgid "Divide column values by the specified value"
-#~ msgstr "Jaa sarakkeen arvot annetulla arvolla"
-
-#, fuzzy
-#~| msgid "%1: insert empty columns"
-#~ msgid "Add the specified value to matrix values"
-#~ msgstr "%1: lisää tyhjiä sarakkeita"
-
-#, fuzzy
-#~| msgid "%1: insert empty columns"
-#~ msgid "Subtract the specified value from matrix values"
-#~ msgstr "%1: lisää tyhjiä sarakkeita"
-
-#~ msgid "Multiply matrix values by the specified value"
-#~ msgstr "Kerro matriisin arvot annetulla arvolla"
-
-#~ msgid "Divide matrix values by the specified value"
-#~ msgstr "Jaa matriisin arvot annetulla arvolla"
-
-#~ msgid "Column Statisti&cs"
-#~ msgstr "&Sarakkeen tilastot"
-
-#~ msgid "Created: %1"
-#~ msgstr "Luotu: %1"
-
-#~ msgid "X-data:"
-#~ msgstr "X-data:"
-
-#~ msgid "Y-data:"
-#~ msgstr "Y-data:"
-
-# pmap: =/gen=LabPlot2:n/
-# pmap: =/elat=LabPlot2:sta/
-#, fuzzy
-#~| msgid "LabPlot2"
-#~ msgid "Add plots to"
-#~ msgstr "LabPlot2"
+#~ msgid "Specify the name of the file to import."
+#~ msgstr "Valitse tuotavan tiedoston nimi."
 
 #~ msgid "X-error"
 #~ msgstr "X-virhe"
@@ -25307,11 +25179,6 @@ msgstr "Tiedostoa ei voi avata:"
 #~ msgstr "Piirto&järjestys"
 
 #, fuzzy
-#~| msgid "center tiled"
-#~ msgid "percentile"
-#~ msgstr "keskittäen monistettu"
-
-#, fuzzy
 #~| msgid "Constants"
 #~ msgid "constant"
 #~ msgstr "Vakiot"
@@ -25320,79 +25187,6 @@ msgstr "Tiedostoa ei voi avata:"
 #~| msgid "Polynomial"
 #~ msgid "binomial"
 #~ msgstr "Polynomi"
-
-#~ msgid "y-Start:"
-#~ msgstr "Aloitus-y:"
-
-#~ msgid "x-Range:"
-#~ msgstr "x-alue:"
-
-#, fuzzy
-#~| msgid "orange"
-#~ msgid "Plot ranges:"
-#~ msgstr "oranssi"
-
-#~ msgid "x-data:"
-#~ msgstr "x-data:"
-
-#~ msgid "y-data:"
-#~ msgstr "y-data:"
-
-#, fuzzy
-#~| msgid "Data:"
-#~ msgid "y-Data:"
-#~ msgstr "Data:"
-
-#, fuzzy
-#~| msgid "Height"
-#~ msgid "y-Weight:"
-#~ msgstr "Korkeus"
-
-#, fuzzy
-#~| msgid "Data type:"
-#~ msgid "%1: set whiskers cap pen"
-#~ msgstr "Tietotyyppi:"
-
-#, fuzzy
-#~| msgid "%1: set border opacity"
-#~ msgid "%1: set whiskers cap opacity"
-#~ msgstr "%1: aseta reunan peittävyys"
-
-#~ msgid "Select y-Region and Zoom In"
-#~ msgstr "Valitse y-alue ja lähennä"
-
-#~ msgid "Hilbert-Transform"
-#~ msgstr "Hilbert-muunnos"
-
-#, fuzzy
-#~| msgid "xy-curve"
-#~ msgctxt "@title:window"
-#~ msgid "xy-Curve"
-#~ msgstr "xy-käyrä"
-
-#, fuzzy
-#~| msgid "Equation type"
-#~ msgctxt "@title:window"
-#~ msgid "xy-Equation"
-#~ msgstr "Yhtälötyyppi"
-
-#, fuzzy
-#~| msgid "Axis properties"
-#~ msgctxt "@title:window"
-#~ msgid "Histogram Properties"
-#~ msgstr "Akselin ominaisuudet"
-
-#~ msgid "Font"
-#~ msgstr "Fontti"
-
-#~ msgid "x-Range"
-#~ msgstr "x-alue"
-
-#~ msgid "Font color:"
-#~ msgstr "Väri:"
-
-#~ msgid "%1: set border style"
-#~ msgstr "%1: aseta reunan tyyli"
 
 #, fuzzy
 #~| msgid "%1: set vertical alignment"
@@ -25414,17 +25208,86 @@ msgstr "Tiedostoa ei voi avata:"
 #~ msgid "%1: set connection line opacity"
 #~ msgstr "%1: aseta fontti"
 
-#~ msgid "Error bars"
-#~ msgstr "Virhepalkit"
+#~ msgid "%1: set major grid style"
+#~ msgstr "%1: aseta pääruudukon tyyli"
 
-#~ msgid "Error type:"
-#~ msgstr "Virhetyyppi:"
+#~ msgid "%1: set major grid opacity"
+#~ msgstr "%1: aseta pääruudukon peittävyys"
 
-#~ msgid "y-error"
-#~ msgstr "y-virhe"
+#~ msgid "%1: set minor grid style"
+#~ msgstr "%1: aseta apuruudukon tyyli"
 
-#~ msgid "x-error"
-#~ msgstr "x-virhe"
+#~ msgid "%1: set minor grid opacity"
+#~ msgstr "%1: aseta apuruudukon peittävyys"
+
+#, fuzzy
+#~| msgid "%1: set creation time"
+#~ msgid "%1: set filling image"
+#~ msgstr "%1: aseta luontiaika"
+
+#, fuzzy
+#~| msgid "%1: set border style"
+#~ msgid "%1: set border pen"
+#~ msgstr "%1: aseta reunan tyyli"
+
+#, fuzzy
+#~| msgid "%1: set vertical alignment"
+#~ msgid "%1: set median line opacity"
+#~ msgstr "%1: aseta pystytasaus"
+
+#, fuzzy
+#~| msgid "Data type:"
+#~ msgid "%1: set whiskers pen"
+#~ msgstr "Tietotyyppi:"
+
+#, fuzzy
+#~| msgid "%1: set border opacity"
+#~ msgid "%1: set whiskers opacity"
+#~ msgstr "%1: aseta reunan peittävyys"
+
+#, fuzzy
+#~| msgid "Data type:"
+#~ msgid "%1: set whiskers cap pen"
+#~ msgstr "Tietotyyppi:"
+
+#, fuzzy
+#~| msgid "%1: set border opacity"
+#~ msgid "%1: set whiskers cap opacity"
+#~ msgstr "%1: aseta reunan peittävyys"
+
+#, fuzzy
+#~| msgid "%1: change column order"
+#~ msgid "%1: change y-range %2 format"
+#~ msgstr "%1: aseta sarakejärjestys"
+
+#, fuzzy
+#~| msgid "%1: change column order"
+#~ msgid "%1: change y-range %2 auto scaling"
+#~ msgstr "%1: aseta sarakejärjestys"
+
+#~ msgid "%1: set opacity"
+#~ msgstr "%1: aseta peittävyys"
+
+#~ msgid "%1: set border style"
+#~ msgstr "%1: aseta reunan tyyli"
+
+#~ msgid "Clear Matrix"
+#~ msgstr "Tyhjennä matriisi"
+
+#~ msgid "Select y-Region and Zoom In"
+#~ msgstr "Valitse y-alue ja lähennä"
+
+#~ msgid "Hilbert-Transform"
+#~ msgstr "Hilbert-muunnos"
+
+#~ msgid "xy-plot"
+#~ msgstr "xy-kuvaaja"
+
+#~ msgid "Cartesian Plot"
+#~ msgstr "Karteesinen kuvaaja"
+
+#~ msgid "Created: %1"
+#~ msgstr "Luotu: %1"
 
 #~ msgid ""
 #~ "The axes lower limit has a non-positive value. Default minimal value will "
@@ -25440,29 +25303,6 @@ msgstr "Tiedostoa ei voi avata:"
 #~ "used."
 #~ msgstr ""
 #~ "Akselien alarajan arvo on negatiivinen. Käytetään oletusvähimmäisarvoa."
-
-#~ msgid "cm"
-#~ msgstr " cm"
-
-#, fuzzy
-#~| msgid "Statistics"
-#~ msgid "Statistical Methods (of column)"
-#~ msgstr "Tilastot"
-
-#~ msgid "Clear Matrix"
-#~ msgstr "Tyhjennä matriisi"
-
-#~ msgid "%1: set major grid style"
-#~ msgstr "%1: aseta pääruudukon tyyli"
-
-#~ msgid "%1: set major grid opacity"
-#~ msgstr "%1: aseta pääruudukon peittävyys"
-
-#~ msgid "%1: set minor grid style"
-#~ msgstr "%1: aseta apuruudukon tyyli"
-
-#~ msgid "%1: set minor grid opacity"
-#~ msgstr "%1: aseta apuruudukon peittävyys"
 
 #, fuzzy
 #~| msgid "Solid Line"
@@ -25490,163 +25330,9 @@ msgstr "Tiedostoa ei voi avata:"
 #~ msgstr "Viiva-piste-pisteviiva"
 
 #, fuzzy
-#~| msgid "Values"
-#~ msgid "Drop Numeric Values"
-#~ msgstr "Arvot"
-
-#, fuzzy
-#~| msgid "Values"
-#~ msgid "Drop Text Values"
-#~ msgstr "Arvot"
-
-#, fuzzy
-#~| msgid "%1: set border style"
-#~ msgid "%1: set border pen"
-#~ msgstr "%1: aseta reunan tyyli"
-
-#, fuzzy
-#~| msgid "%1: set vertical alignment"
-#~ msgid "%1: set median line pen"
-#~ msgstr "%1: aseta pystytasaus"
-
-#, fuzzy
-#~| msgid "%1: set vertical alignment"
-#~ msgid "%1: set median line opacity"
-#~ msgstr "%1: aseta pystytasaus"
-
-#, fuzzy
-#~| msgid "Data type:"
-#~ msgid "%1: set whiskers pen"
-#~ msgstr "Tietotyyppi:"
-
-#, fuzzy
-#~| msgid "%1: set border opacity"
-#~ msgid "%1: set whiskers opacity"
-#~ msgstr "%1: aseta reunan peittävyys"
-
-#, fuzzy
-#~| msgid "Bars"
-#~ msgid "Bar"
-#~ msgstr "Baarit"
-
-#, fuzzy
-#~| msgid "Simple"
-#~ msgid "Sample"
-#~ msgstr "Yksinkertainen"
-
-#~ msgid "Top margin:"
-#~ msgstr "Yläreunus:"
-
-#~ msgid "Bottom margin:"
-#~ msgstr "Alareunus:"
-
-#~ msgid "Hor. spacing:"
-#~ msgstr "Vaakavälistys:"
-
-#~ msgid "Ver. spacing:"
-#~ msgstr "Pystyvälistys:"
-
-#~ msgid "Margin"
-#~ msgstr "Reunus"
-
-# pmap: =/gen=LabPlot2:n/
-# pmap: =/elat=LabPlot2:sta/
-#, fuzzy
-#~| msgid "LabPlot2"
-#~ msgid "Plot - %1"
-#~ msgstr "LabPlot2"
-
-# pmap: =/gen=LabPlot2:n/
-# pmap: =/elat=LabPlot2:sta/
-#, fuzzy
-#~| msgid "LabPlot2"
-#~ msgid "Plot %1"
-#~ msgstr "LabPlot2"
-
-#~ msgid "xy-plot"
-#~ msgstr "xy-kuvaaja"
-
-#~ msgid "Cartesian Plot"
-#~ msgstr "Karteesinen kuvaaja"
-
-#, fuzzy
-#~| msgid "Cartesian Plot"
-#~ msgctxt "@title:window"
-#~ msgid "Cartesian Plot"
-#~ msgstr "Karteesinen kuvaaja"
-
-#, fuzzy
-#~| msgid "Add new"
-#~ msgid "Add Curve to"
-#~ msgstr "Lisää uusi"
-
-#, fuzzy
-#~| msgid "Add new"
-#~ msgid "Add Curves to"
-#~ msgstr "Lisää uusi"
-
-#, fuzzy
-#~| msgid "Values"
-#~ msgid "Drop values:"
-#~ msgstr "Arvot"
-
-#~ msgid "Data, +-"
-#~ msgstr "Data, +-"
-
-#~ msgid "Data, +"
-#~ msgstr "Data, +"
-
-#, fuzzy
-#~| msgid "Type:"
-#~ msgid "Tick Type:"
-#~ msgstr "Tyyppi:"
-
-#, fuzzy
-#~| msgid "Automatic"
-#~ msgid "Automatic:"
-#~ msgstr "Automaattinen"
-
-#, fuzzy
-#~| msgid "Column:"
-#~ msgid "Tick Column:"
-#~ msgstr "Sarake:"
-
-#, fuzzy
-#~ msgid "Error:"
-#~ msgstr "virhe"
-
-#, fuzzy
-#~| msgid "%1: set page size"
-#~ msgid "%1: change y-range %2 format"
-#~ msgstr "%1: aseta sivukoko"
-
-#, fuzzy
-#~| msgid "%1: change column order"
-#~ msgid "%1: change y-range %2 auto scaling"
-#~ msgstr "%1: aseta sarakejärjestys"
-
-#, fuzzy
 #~| msgid "x-Range:"
 #~ msgid "Y-Ranges:"
 #~ msgstr "x-alue:"
-
-#, fuzzy
-#~| msgid "Plot Area"
-#~ msgid "Box Plot Data"
-#~ msgstr "Kaavion alue"
-
-#, fuzzy
-#~| msgid "no axis element found"
-#~ msgid "Histogram Placement"
-#~ msgstr "akselialkioita ei löytynyt"
-
-#, fuzzy
-#~| msgid "%1: set creation time"
-#~ msgid "%1: set filling image"
-#~ msgstr "%1: aseta luontiaika"
-
-#~ msgid "%1: set opacity"
-#~ msgstr "%1: aseta peittävyys"
 
 #, fuzzy
 #~ msgid "Horizontal Linear Gradient"
@@ -25664,162 +25350,191 @@ msgstr "Tiedostoa ei voi avata:"
 #~ msgid "Diagonal Linear Gradient (Start From Bottom Left)"
 #~ msgstr "vino lineaarinen liuku (alkaen alavasemmalta)"
 
+#~ msgid "Data, +"
+#~ msgstr "Data, +"
+
+#, fuzzy
+#~| msgid "Cartesian Plot"
+#~ msgctxt "@title:window"
+#~ msgid "Cartesian Plot"
+#~ msgstr "Karteesinen kuvaaja"
+
+#, fuzzy
+#~| msgid "xy-curve"
+#~ msgctxt "@title:window"
+#~ msgid "xy-Curve"
+#~ msgstr "xy-käyrä"
+
+#, fuzzy
+#~| msgid "Equation type"
+#~ msgctxt "@title:window"
+#~ msgid "xy-Equation"
+#~ msgstr "Yhtälötyyppi"
+
+#, fuzzy
+#~| msgid "Axis properties"
+#~ msgctxt "@title:window"
+#~ msgid "Histogram Properties"
+#~ msgstr "Akselin ominaisuudet"
+
+#~ msgid "Add the specified value to column values"
+#~ msgstr "Lisää annettu arvo sarakkeen arvoihin"
+
+#, fuzzy
+#~| msgid "%1: insert empty columns"
+#~ msgid "Subtract the specified value from column values"
+#~ msgstr "%1: lisää tyhjiä sarakkeita"
+
+#~ msgid "Multiply column values by the specified value"
+#~ msgstr "Kerro sarakkeen arvot annetulla arvolla"
+
+#~ msgid "Divide column values by the specified value"
+#~ msgstr "Jaa sarakkeen arvot annetulla arvolla"
+
+#, fuzzy
+#~| msgid "%1: insert empty columns"
+#~ msgid "Add the specified value to matrix values"
+#~ msgstr "%1: lisää tyhjiä sarakkeita"
+
+#, fuzzy
+#~| msgid "%1: insert empty columns"
+#~ msgid "Subtract the specified value from matrix values"
+#~ msgstr "%1: lisää tyhjiä sarakkeita"
+
+#~ msgid "Multiply matrix values by the specified value"
+#~ msgstr "Kerro matriisin arvot annetulla arvolla"
+
+#~ msgid "Divide matrix values by the specified value"
+#~ msgstr "Jaa matriisin arvot annetulla arvolla"
+
+#, fuzzy
+#~| msgid "Add new"
+#~ msgid "Add Curve to"
+#~ msgstr "Lisää uusi"
+
+#, fuzzy
+#~| msgid "Plot Area"
+#~ msgid "Box Plot Data"
+#~ msgstr "Kaavion alue"
+
+#, fuzzy
+#~| msgid "no axis element found"
+#~ msgid "Histogram Placement"
+#~ msgstr "akselialkioita ei löytynyt"
+
+# pmap: =/gen=LabPlot2:n/
+# pmap: =/elat=LabPlot2:sta/
+#, fuzzy
+#~| msgid "LabPlot2"
+#~ msgid "Plot - %1"
+#~ msgstr "LabPlot2"
+
+# pmap: =/gen=LabPlot2:n/
+# pmap: =/elat=LabPlot2:sta/
+#, fuzzy
+#~| msgid "LabPlot2"
+#~ msgid "Plot %1"
+#~ msgstr "LabPlot2"
+
+#~ msgid "Error bars"
+#~ msgstr "Virhepalkit"
+
+#, fuzzy
+#~| msgid "Column:"
+#~ msgid "Tick Column:"
+#~ msgstr "Sarake:"
+
+#, fuzzy
+#~| msgid "Type:"
+#~ msgid "Tick Type:"
+#~ msgstr "Tyyppi:"
+
+#~ msgid "Font"
+#~ msgstr "Fontti"
+
+#~ msgid "y-Range"
+#~ msgstr "y-alue:"
+
+#~ msgid "x-Range"
+#~ msgstr "x-alue"
+
+#~ msgid "Top margin:"
+#~ msgstr "Yläreunus:"
+
+#~ msgid "Bottom margin:"
+#~ msgstr "Alareunus:"
+
+#~ msgid "Hor. spacing:"
+#~ msgstr "Vaakavälistys:"
+
+#~ msgid "Ver. spacing:"
+#~ msgstr "Pystyvälistys:"
+
+#~ msgid "Margin"
+#~ msgstr "Reunus"
+
+#~ msgid "cm"
+#~ msgstr " cm"
+
+#~ msgid "x-Start:"
+#~ msgstr "Aloitus-x:"
+
+#~ msgid "x-Range:"
+#~ msgstr "x-alue:"
+
+#, fuzzy
+#~| msgid "orange"
+#~ msgid "Plot ranges:"
+#~ msgstr "oranssi"
+
+#~ msgid "x-error"
+#~ msgstr "x-virhe"
+
+#~ msgid "Error type:"
+#~ msgstr "Virhetyyppi:"
+
+#~ msgid "y-error"
+#~ msgstr "y-virhe"
+
+#~ msgid "x-data:"
+#~ msgstr "x-data:"
+
+#~ msgid "y-data:"
+#~ msgstr "y-data:"
+
+#, fuzzy
+#~| msgid "Data:"
+#~ msgid "y-Data:"
+#~ msgstr "Data:"
+
+#, fuzzy
+#~| msgid "Height"
+#~ msgid "y-Weight:"
+#~ msgstr "Korkeus"
+
+#~ msgid "Font color:"
+#~ msgstr "Väri:"
+
+#, fuzzy
+#~| msgid "Values"
+#~ msgid "Drop values:"
+#~ msgstr "Arvot"
+
+#~ msgid "X-data:"
+#~ msgstr "X-data:"
+
+#~ msgid "Y-data:"
+#~ msgstr "Y-data:"
+
+#, fuzzy
+#~| msgid "Add new"
+#~ msgid "Add Curves to"
+#~ msgstr "Lisää uusi"
+
 #, fuzzy
 #~| msgid "cm"
 #~ msgid "c"
 #~ msgstr " cm"
-
-#, fuzzy
-#~| msgid "Data Type"
-#~ msgid "Datapicker"
-#~ msgstr "Tietotyyppi"
-
-#~ msgid "TeX mode"
-#~ msgstr "TeX-tila"
-
-#~ msgid "Foreground color:"
-#~ msgstr "Edustaväri:"
-
-#~ msgid "Vector names:"
-#~ msgstr "Vektorien nimet:"
-
-#, fuzzy
-#~| msgid "X-error"
-#~ msgid "X-error minus"
-#~ msgstr "X-virhe"
-
-#, fuzzy
-#~| msgid "X-error"
-#~ msgid "X-error plus"
-#~ msgstr "X-virhe"
-
-#, fuzzy
-#~| msgid "Y-error"
-#~ msgid "Y-error minus"
-#~ msgstr "Y-virhe"
-
-#, fuzzy
-#~| msgid "Y-error"
-#~ msgid "Y-error plus"
-#~ msgstr "Y-virhe"
-
-#~ msgid "Z"
-#~ msgstr "Z"
-
-#, fuzzy
-#~| msgid "Data Type"
-#~ msgctxt "@title:window"
-#~ msgid "Datapicker"
-#~ msgstr "Tietotyyppi"
-
-#, fuzzy
-#~| msgid "Data Type"
-#~ msgid "&Datapicker"
-#~ msgstr "Tietotyyppi"
-
-#, fuzzy
-#~| msgid "Print worksheet"
-#~ msgid "Animate Worksheet"
-#~ msgstr "Tulosta työkirja"
-
-#, fuzzy
-#~| msgid "Data format"
-#~ msgid "Show Completion"
-#~ msgstr "Datan muoto"
-
-#~ msgctxt "@title:window"
-#~ msgid "CAS Properties"
-#~ msgstr "CAS-ominaisuudet"
-
-#~ msgid "CAS Worksheet"
-#~ msgstr "CAS-työkirja"
-
-#~ msgid "&CAS Worksheet"
-#~ msgstr "&CAS-työkirja"
-
-#~ msgid ""
-#~ "LabPlot2 is a KDE-application for interactive graphing and analysis of "
-#~ "scientific data."
-#~ msgstr ""
-#~ "LabPlot on KDE-sovellus tieteellisen datan vuorovaikutteiseen kuvaamiseen "
-#~ "ja analysointiin"
-
-#, fuzzy
-#~| msgid "Offset X:"
-#~ msgid "Offset x:"
-#~ msgstr "X-siirtymä:"
-
-#, fuzzy
-#~| msgid "Offset X:"
-#~ msgid "Offset y:"
-#~ msgstr "X-siirtymä:"
-
-#, fuzzy
-#~| msgid "xy-curve from a mathematical equation"
-#~ msgid "xy-curve from a mathematical Equation"
-#~ msgstr "xy-käyrä matemaattisesta yhtälöstä"
-
-#, fuzzy
-#~| msgid "Error type"
-#~ msgid "Error, %"
-#~ msgstr "Virhetyyppi"
-
-#~ msgid "LabPlot version"
-#~ msgstr "Labplotin versio"
-
-#, fuzzy
-#~| msgid "Apply"
-#~ msgid "Apply Theme"
-#~ msgstr "Käytä"
-
-#~ msgid "Apply theme [active '%1']"
-#~ msgstr "Käytä teemaa [aktiivinen ”%1”]"
-
-#, fuzzy
-#~| msgid "Beta Distribution"
-#~ msgid "Fit Distribution"
-#~ msgstr "Beetajakauma"
-
-#, fuzzy
-#~| msgid "Import To"
-#~ msgid "Import from File"
-#~ msgstr "Tuo kohteeseen"
-
-#, fuzzy
-#~| msgid "Date and Time"
-#~ msgid "Date/Time"
-#~ msgstr "Aika ja päiväys"
-
-#, fuzzy
-#~| msgid "%1: set rotation angle"
-#~ msgid "%1: set x range"
-#~ msgstr "%1: aseta kiertokulma"
-
-#, fuzzy
-#~| msgid "%1: set rotation angle"
-#~ msgid "%1: set y range"
-#~ msgstr "%1: aseta kiertokulma"
-
-#, fuzzy
-#~| msgid "Show"
-#~ msgid "Show &last"
-#~ msgstr "Näytä"
-
-#~ msgid "points"
-#~ msgstr "pistettä"
-
-#~ msgid "Show f&irst"
-#~ msgstr "Näytä &ensiksi"
-
-#, fuzzy
-#~| msgid "TeX mode"
-#~ msgid "Switch to TeX mode"
-#~ msgstr "TeX-tila"
-
-#, fuzzy
-#~| msgid "Not yet implemented."
-#~ msgid "rank 2 not implemented yet for type %1, size = %2"
-#~ msgstr "Ei vielä toteutettu."
 
 #, fuzzy
 #~| msgid "%1: set border style"
@@ -25842,35 +25557,176 @@ msgstr "Tiedostoa ei voi avata:"
 #~ msgstr "%1: aseta sijainti"
 
 #, fuzzy
+#~| msgid "%1: set border style"
+#~ msgid "%1: set outline style"
+#~ msgstr "%1: aseta reunan tyyli"
+
+#, fuzzy
 #~| msgid "%1: set opacity"
 #~ msgid "%1: set point's opacity"
 #~ msgstr "%1: aseta peittävyys"
 
-#~ msgid "Error Bar"
-#~ msgstr "Virhepalkki"
-
-#~ msgid "Notes:"
-#~ msgstr "Huomautukset:"
+#, fuzzy
+#~| msgid "Not yet implemented."
+#~ msgid "rank 2 not implemented yet for type %1, size = %2"
+#~ msgstr "Ei vielä toteutettu."
 
 #, fuzzy
-#~| msgid "Variables:"
-#~ msgid "Variables: "
-#~ msgstr "Muuttujat:"
+#~| msgid "%1: set rotation angle"
+#~ msgid "%1: set axis start"
+#~ msgstr "%1: aseta kiertokulma"
 
 #, fuzzy
-#~| msgid "%1: set border style"
-#~ msgid "%1: set outliers symbol style"
-#~ msgstr "%1: aseta reunan tyyli"
+#~| msgid "xy-curve from a mathematical equation"
+#~ msgid "xy-curve from a mathematical Equation"
+#~ msgstr "xy-käyrä matemaattisesta yhtälöstä"
 
 #, fuzzy
-#~| msgid "%1: set border opacity"
-#~ msgid "%1: set mean symbol style"
-#~ msgstr "%1: aseta reunan peittävyys"
+#~| msgid "Apply"
+#~ msgid "Apply Theme"
+#~ msgstr "Käytä"
+
+#, fuzzy
+#~| msgid "%1: set page size"
+#~ msgid "%1: set x-range format"
+#~ msgstr "%1: aseta sivukoko"
+
+#, fuzzy
+#~| msgid "%1: set page size"
+#~ msgid "%1: set y-range format"
+#~ msgstr "%1: aseta sivukoko"
+
+#, fuzzy
+#~| msgid "%1: set font"
+#~ msgid "%1: set min x"
+#~ msgstr "%1: aseta fontti"
+
+#, fuzzy
+#~| msgid "%1: set rotation angle"
+#~ msgid "%1: set max x"
+#~ msgstr "%1: aseta kiertokulma"
+
+#, fuzzy
+#~| msgid "%1: set font"
+#~ msgid "%1: set min y"
+#~ msgstr "%1: aseta fontti"
+
+#, fuzzy
+#~| msgid "%1: set rotation angle"
+#~ msgid "%1: set max y"
+#~ msgstr "%1: aseta kiertokulma"
+
+#, fuzzy
+#~| msgid "%1: set rotation angle"
+#~ msgid "%1: set y scale"
+#~ msgstr "%1: aseta kiertokulma"
 
 #, fuzzy
 #~| msgid "%1: set border opacity"
 #~ msgid "%1: set symbol opacity"
 #~ msgstr "%1: aseta reunan peittävyys"
+
+#, fuzzy
+#~| msgid "Print worksheet"
+#~ msgid "Animate Worksheet"
+#~ msgstr "Tulosta työkirja"
+
+#, fuzzy
+#~| msgid "show/hide columns"
+#~ msgid "Show/Hide columns"
+#~ msgstr "näytä tai piilota sarakkeita"
+
+#, fuzzy
+#~| msgid "show search/filter options"
+#~ msgid "Show Search/Filter Options"
+#~ msgstr "näytä haku- ja suodatusasetukset"
+
+#, fuzzy
+#~| msgid "X-error"
+#~ msgid "X-error minus"
+#~ msgstr "X-virhe"
+
+#, fuzzy
+#~| msgid "X-error"
+#~ msgid "X-error plus"
+#~ msgstr "X-virhe"
+
+#, fuzzy
+#~| msgid "Y-error"
+#~ msgid "Y-error minus"
+#~ msgstr "Y-virhe"
+
+#, fuzzy
+#~| msgid "Y-error"
+#~ msgid "Y-error plus"
+#~ msgstr "Y-virhe"
+
+#, fuzzy
+#~| msgid "invalid row value"
+#~ msgid "Divide by Value"
+#~ msgstr "virheellinen rivin arvo"
+
+#, fuzzy
+#~| msgid "Clea&r Selection"
+#~ msgid "Clea&r Selected Rows"
+#~ msgstr "T&yhjennä valinta"
+
+#, fuzzy
+#~| msgid "File info"
+#~ msgctxt "@title:window"
+#~ msgid "File Information"
+#~ msgstr "Tiedoston tiedot"
+
+#~ msgid "log(x)"
+#~ msgstr "log(x)"
+
+#~ msgid "log2(x)"
+#~ msgstr "log2(x)"
+
+#~ msgid "ln(x)"
+#~ msgstr "ln(x)"
+
+#, fuzzy
+#~| msgid "log(x)"
+#~ msgid "log(abs(x))"
+#~ msgstr "log(x)"
+
+#, fuzzy
+#~| msgid "log(x)"
+#~ msgid "log2(abs(x))"
+#~ msgstr "log(x)"
+
+#, fuzzy
+#~| msgid "log(x)"
+#~ msgid "ln(abs(x))"
+#~ msgstr "log(x)"
+
+#~ msgid "log(y)"
+#~ msgstr "log(y)"
+
+#~ msgid "log2(y)"
+#~ msgstr "log2(y)"
+
+#~ msgid "ln(y)"
+#~ msgstr "ln(y)"
+
+#, fuzzy
+#~| msgid "log(y)"
+#~ msgid "log(abs(y))"
+#~ msgstr "log(y)"
+
+#, fuzzy
+#~| msgid "log2(y)"
+#~ msgid "log2(abs(y))"
+#~ msgstr "log2(y)"
+
+#, fuzzy
+#~| msgid "log(x)"
+#~ msgid "ln(abs(y))"
+#~ msgstr "log(x)"
+
+#~ msgid "Z"
+#~ msgstr "Z"
 
 #, fuzzy
 #~| msgid "%1: background brush style changed"
@@ -25918,52 +25774,117 @@ msgstr "Tiedostoa ei voi avata:"
 #~ msgstr "%1: taustan värityyli muuttunut"
 
 #, fuzzy
-#~| msgid "show/hide columns"
-#~ msgid "Show/Hide columns"
-#~ msgstr "näytä tai piilota sarakkeita"
+#~| msgid "Error type"
+#~ msgid "Error, %"
+#~ msgstr "Virhetyyppi"
 
 #, fuzzy
-#~| msgid "show search/filter options"
-#~ msgid "Show Search/Filter Options"
-#~ msgstr "näytä haku- ja suodatusasetukset"
-
-#, fuzzy
-#~| msgid "Levels"
-#~ msgid "Levels:"
-#~ msgstr "Tasot"
-
-#, fuzzy
-#~| msgid "File info"
+#~| msgid "Data Type"
 #~ msgctxt "@title:window"
-#~ msgid "File Information"
-#~ msgstr "Tiedoston tiedot"
+#~ msgid "Datapicker"
+#~ msgstr "Tietotyyppi"
+
+#~ msgctxt "@title:window %1 is a Cantor backend"
+#~ msgid "%1 Properties"
+#~ msgstr "Ominaisuudet – %1"
+
+#~ msgctxt "@title:window"
+#~ msgid "CAS Properties"
+#~ msgstr "CAS-ominaisuudet"
+
+#~ msgid ""
+#~ "LabPlot2 is a KDE-application for interactive graphing and analysis of "
+#~ "scientific data."
+#~ msgstr ""
+#~ "LabPlot on KDE-sovellus tieteellisen datan vuorovaikutteiseen kuvaamiseen "
+#~ "ja analysointiin"
 
 #, fuzzy
-#~| msgid "invalid row value"
-#~ msgid "Divide by Value"
-#~ msgstr "virheellinen rivin arvo"
+#~| msgid "Data Type"
+#~ msgid "Datapicker"
+#~ msgstr "Tietotyyppi"
+
+#~ msgid "CAS Worksheet"
+#~ msgstr "CAS-työkirja"
+
+#~ msgid "&CAS Worksheet"
+#~ msgstr "&CAS-työkirja"
+
+#, fuzzy
+#~| msgid "Data Type"
+#~ msgid "&Datapicker"
+#~ msgstr "Tietotyyppi"
+
+#, fuzzy
+#~| msgid "Import To"
+#~ msgid "Import from File"
+#~ msgstr "Tuo kohteeseen"
 
 #~ msgid "Edit"
 #~ msgstr "Muokkaa"
 
+#~ msgid "Apply theme [active '%1']"
+#~ msgstr "Käytä teemaa [aktiivinen ”%1”]"
+
+#~ msgid "Error Bar"
+#~ msgstr "Virhepalkki"
+
+#~ msgid "Vector names:"
+#~ msgstr "Vektorien nimet:"
+
+#~ msgid "points"
+#~ msgstr "pistettä"
+
+#~ msgid "Scaling:"
+#~ msgstr "Skaalaus:"
+
 #, fuzzy
-#~| msgid "Clea&r Selection"
-#~ msgid "Clea&r Selected Rows"
-#~ msgstr "T&yhjennä valinta"
+#~| msgid "Show"
+#~ msgid "Show &last"
+#~ msgstr "Näytä"
+
+#~ msgid "Show f&irst"
+#~ msgstr "Näytä &ensiksi"
+
+#~ msgid "y-Range:"
+#~ msgstr "y-alue:"
+
+#~ msgid "LabPlot version"
+#~ msgstr "Labplotin versio"
+
+#~ msgid "Notes:"
+#~ msgstr "Huomautukset:"
+
+#~ msgid "TeX mode"
+#~ msgstr "TeX-tila"
+
+#, fuzzy
+#~| msgid "TeX mode"
+#~ msgid "Switch to TeX mode"
+#~ msgstr "TeX-tila"
+
+#~ msgid "Foreground color:"
+#~ msgstr "Edustaväri:"
+
+#, fuzzy
+#~| msgid "%1: set border style"
+#~ msgid "%1: set outliers symbol style"
+#~ msgstr "%1: aseta reunan tyyli"
+
+#, fuzzy
+#~| msgid "%1: set border opacity"
+#~ msgid "%1: set mean symbol style"
+#~ msgstr "%1: aseta reunan peittävyys"
+
+#, fuzzy
+#~| msgid "Date and Time"
+#~ msgid "Date/Time"
+#~ msgstr "Aika ja päiväys"
 
 #, fuzzy
 #~| msgid "center tiled"
 #~ msgid "2/98 percentiles"
 #~ msgstr "keskittäen monistettu"
-
-#~ msgid "log(x)"
-#~ msgstr "log(x)"
-
-#~ msgid "log2(x)"
-#~ msgstr "log2(x)"
-
-#~ msgid "ln(x)"
-#~ msgstr "ln(x)"
 
 #~ msgid "sqrt(x)"
 #~ msgstr "sqrt(x)"
@@ -25980,50 +25901,6 @@ msgstr "Tiedostoa ei voi avata:"
 #~| msgid "log2(x)"
 #~ msgid "log2(|x|)"
 #~ msgstr "log2(x)"
-
-#, fuzzy
-#~| msgid "log(x)"
-#~ msgid "log(abs(x))"
-#~ msgstr "log(x)"
-
-#, fuzzy
-#~| msgid "log(x)"
-#~ msgid "log2(abs(x))"
-#~ msgstr "log(x)"
-
-#, fuzzy
-#~| msgid "log(x)"
-#~ msgid "ln(abs(x))"
-#~ msgstr "log(x)"
-
-#~ msgid "log(y)"
-#~ msgstr "log(y)"
-
-#~ msgid "log2(y)"
-#~ msgstr "log2(y)"
-
-#~ msgid "ln(y)"
-#~ msgstr "ln(y)"
-
-#, fuzzy
-#~| msgid "log(y)"
-#~ msgid "log(abs(y))"
-#~ msgstr "log(y)"
-
-#, fuzzy
-#~| msgid "log2(y)"
-#~ msgid "log2(abs(y))"
-#~ msgstr "log2(y)"
-
-#~ msgid "Scaling:"
-#~ msgstr "Skaalaus:"
-
-#~ msgid "y-Range:"
-#~ msgstr "y-alue:"
-
-#~ msgctxt "@title:window %1 is a Cantor backend"
-#~ msgid "%1 Properties"
-#~ msgstr "Ominaisuudet – %1"
 
 #, fuzzy
 #~| msgid "variable"
@@ -26096,9 +25973,6 @@ msgstr "Tiedostoa ei voi avata:"
 
 #~ msgid "Number format"
 #~ msgstr "Lukumuoto"
-
-#~ msgid "DateTime format"
-#~ msgstr "Päiväysmuoto"
 
 #, fuzzy
 #~| msgid "LabPlot version"
@@ -26809,6 +26683,10 @@ msgstr "Tiedostoa ei voi avata:"
 #~ msgid "no liveDataSource element found"
 #~ msgstr "fileDataSource-elementtiä ei löytynyt"
 
+#, fuzzy
+#~ msgid "Errors:"
+#~ msgstr "virhe"
+
 #~ msgid "Tree options"
 #~ msgstr "Puun asetukset"
 
@@ -27091,12 +26969,6 @@ msgstr "Tiedostoa ei voi avata:"
 
 #~ msgid "Cl&ose"
 #~ msgstr "S&ulje"
-
-#, fuzzy
-#~| msgctxt "matrix size"
-#~| msgid "&Dimensions"
-#~ msgid "Extensions"
-#~ msgstr "&Ulottuvuudet"
 
 #, fuzzy
 #~| msgid "Header"

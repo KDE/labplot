@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# SPDX-FileCopyrightText: 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Stefan Asserhäll <stefan.asserhall@gmail.com>
+# Stefan Asserhäll <stefan.asserhall@gmail.com>, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:42+0000\n"
-"PO-Revision-Date: 2024-07-03 22:07+0200\n"
+"POT-Creation-Date: 2024-07-10 03:09+0000\n"
+"PO-Revision-Date: 2023-07-28 12:08+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 20.08.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -43,9 +43,11 @@ msgstr ""
 "Kunde inte hitta insticksprogrammet för %1. Kontrollera installationen."
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:111
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Couldn't find the plugin for %1. Please check your installation."
 msgid "Couldn't create the sessions for %1. Please check your installation."
-msgstr "Kunde inte skapa sessionerna för %1. Kontrollera installationen."
+msgstr ""
+"Kunde inte hitta insticksprogrammet för %1. Kontrollera installationen."
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:289
 #, kde-format
@@ -363,13 +365,13 @@ msgid "%1: unmask cells"
 msgstr "%1: avmaskera celler"
 
 #: src/backend/core/abstractcolumncommands.cpp:253
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2592
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2583
 #, kde-format
 msgid "%1: set heatmap format"
 msgstr "%1: ställ in värmeavbildningsformat"
 
 #: src/backend/core/abstractcolumncommands.cpp:280
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2610
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2601
 #, kde-format
 msgid "%1: remove heatmap format"
 msgstr "%1: ta bort värmeavbildningsformat"
@@ -555,7 +557,8 @@ msgid "Used in"
 msgstr "Använd i"
 
 #: src/backend/core/column/Column.cpp:177
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Plot"
 msgid "Plots"
 msgstr "Diagram"
 
@@ -613,7 +616,7 @@ msgid "%1: change cell values"
 msgstr "%1: ändra cellvärden"
 
 #: src/backend/core/column/columncommands.cpp:531
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2817
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2808
 #, kde-format
 msgid "%1: set plot designation"
 msgstr "%1: ställ in diagrambenämning"
@@ -713,9 +716,9 @@ msgstr "%1: ställ in upphovsman"
 
 #: src/backend/core/Project.cpp:306
 #, fuzzy, kde-format
-#| msgid "%1: save dock states changed"
+#| msgid "%1: save calculation changed"
 msgid "%1: save dock state changed"
-msgstr "%1: spara paneltillstånd ändrat"
+msgstr "%1: spara beräkning ändrad"
 
 #: src/backend/core/Project.cpp:313
 #, kde-format
@@ -802,7 +805,7 @@ msgstr "Misslyckades behandla innehållet i filen '%1'."
 msgid "Failed to open project"
 msgstr "Misslyckades öppna projekt"
 
-#: src/backend/core/Project.cpp:1255
+#: src/backend/core/Project.cpp:1257
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Ogiltig ändringstid för projektet. Använder aktuell tid."
@@ -1051,27 +1054,26 @@ msgid "There is no download URL present in the metadata file!"
 msgstr "Det finns ingen nerladdad webbadress tillgänglig i metadatafilen."
 
 #: src/backend/datasources/DatasetHandler.cpp:191
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Failed to connect to the database '%1'."
 msgid ""
 "Failed to download the dataset from %1.\n"
 "%2."
-msgstr ""
-"Misslyckades ladda ner datamängden från %1.\n"
-"%2."
+msgstr "Misslyckades ansluta till databasen '%1'."
 
 #: src/backend/datasources/DatasetHandler.cpp:225
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Failed to create table in the SQLite database %1."
 msgid "Failed to create the directory %1 to save the dataset."
-msgstr "Misslyckades skapa katalogen %1 för att spara datamängden."
+msgstr "Misslyckades skapa tabell i SQLite-databasen %1."
 
 #: src/backend/datasources/DatasetHandler.cpp:248
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Couldn't open the file '%1' for writing."
 msgid ""
 "Couldn't open the file %1 for writing.\n"
 "%2"
-msgstr ""
-"Kunde inte öppna filen '%1' för skrivning.\n"
-"%2"
+msgstr "Kunde inte öppna filen '%1' för skrivning."
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:167
 #, kde-format
@@ -1108,9 +1110,10 @@ msgstr "Index"
 #: src/backend/datasources/filters/AsciiFilter.cpp:1250
 #: src/backend/datasources/filters/AsciiFilter.cpp:1586
 #: src/backend/datasources/filters/BinaryFilter.cpp:404
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Failed to open the device."
 msgid "Failed to open the device/file or it's empty."
-msgstr "Misslyckades öppna enheten/filen eller så är den tom."
+msgstr "Misslyckades öppna enheten."
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/datasources/filters/AsciiFilter.cpp:760
@@ -1120,10 +1123,10 @@ msgstr "Misslyckades öppna enheten/filen eller så är den tom."
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
 #: src/commonfrontend/matrix/MatrixView.cpp:619
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2494
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2515
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2533
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2550
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2485
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2506
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2524
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2541
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:188
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:182
@@ -1164,33 +1167,37 @@ msgstr "Värde %1"
 #: src/backend/datasources/filters/XLSXFilter.cpp:515
 #, kde-format
 msgid "Not enough memory."
-msgstr "Inte tillräckligt med minne."
+msgstr ""
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:273
 #: src/backend/datasources/filters/JsonFilter.cpp:386
 #: src/backend/datasources/filters/SpiceFilter.cpp:127
 #: src/backend/datasources/filters/SpiceFilter.cpp:183
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Failed to open the device."
 msgid "Failed to open the device/file."
-msgstr "Misslyckades öppna enheten/filen."
+msgstr "Misslyckades öppna enheten."
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:283
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "data selection empty"
 msgid "Data selection empty."
-msgstr "Datamarkering tom."
+msgstr "datamarkering tom"
 
 #: src/backend/datasources/filters/CANFilter.cpp:220
 #: src/backend/datasources/filters/SpiceFilter.cpp:131
 #: src/backend/datasources/filters/SpiceFilter.cpp:187
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:261
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Invalid blf file"
 msgid "Invalid file."
-msgstr "Ogiltig fil."
+msgstr "Ogiltig blf-fil"
 
 #: src/backend/datasources/filters/CANFilter.cpp:226
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Log Messages"
 msgid "No messages read."
-msgstr "Inga meddelanden lästa."
+msgstr "Loggmeddelanden"
 
 #: src/backend/datasources/filters/FITSFilter.cpp:224
 #, kde-format
@@ -1204,20 +1211,23 @@ msgstr "Tabeller: %1"
 
 #: src/backend/datasources/filters/FITSFilter.cpp:259
 #: src/backend/datasources/filters/MatioFilter.cpp:647
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Failed to open the file '%1'."
 msgid "Failed to open the file."
-msgstr "Misslyckades öppna filen."
+msgstr "Misslyckades öppna filen '%1'."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:267
 #: src/backend/datasources/filters/FITSFilter.cpp:346
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Unable to read the file"
 msgid "Failed to read the file."
-msgstr "Misslyckades läsa filen."
+msgstr "Kan inte läsa filen"
 
 #: src/backend/datasources/filters/FITSFilter.cpp:288
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "zero dimensions"
 msgid "Zero dimensions."
-msgstr "Noll dimensioner."
+msgstr "noll dimensioner"
 
 #: src/backend/datasources/filters/FITSFilter.cpp:1026
 #: src/backend/datasources/filters/FITSFilter.cpp:1546
@@ -1521,9 +1531,10 @@ msgstr "okänd"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1513
 #: src/backend/datasources/filters/HDF5Filter.cpp:2140
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "No data set selected"
 msgid "No data set selected."
-msgstr "Ingen datamängd vald."
+msgstr "Ingen datamängd vald"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1582
 #, kde-format
@@ -1584,7 +1595,7 @@ msgstr "XYRGB"
 #: src/backend/datasources/filters/ImageFilter.cpp:118
 #, kde-format
 msgid "Empty file or invalid or non-supported format."
-msgstr "Tom fil, ogiltigt format eller format som inte stöds."
+msgstr ""
 
 #: src/backend/datasources/filters/ImageFilter.cpp:219
 #, kde-format
@@ -1645,19 +1656,21 @@ msgid "Column %1"
 msgstr "Kolumn %1"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:391
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "The project file is empty."
 msgid "Device/file is empty."
-msgstr "Enheten/filen är tom."
+msgstr "Projektfilen är tom."
 
 #: src/backend/datasources/filters/JsonFilter.cpp:399
 #, kde-format
 msgid "JSON format error or document empty."
-msgstr "JSON-formatfel eller tomt dokument"
+msgstr ""
 
 #: src/backend/datasources/filters/JsonFilter.cpp:522
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Failed to load JSON document"
 msgid "Empty file or invalid JSON document."
-msgstr "Tom fil eller ogiltigt JSON-dokument."
+msgstr "Misslyckades läsa in JSON-dokument"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:308
 #: src/backend/datasources/filters/NetCDFFilter.cpp:237
@@ -1812,7 +1825,7 @@ msgstr "Okänd"
 #: src/backend/datasources/filters/MatioFilter.cpp:434
 #: src/commonfrontend/workbook/WorkbookView.cpp:53
 #: src/commonfrontend/workbook/WorkbookView.cpp:160
-#: src/kdefrontend/MainWin.cpp:631 src/kdefrontend/MainWin.cpp:1951
+#: src/kdefrontend/MainWin.cpp:631 src/kdefrontend/MainWin.cpp:1960
 #, kde-format
 msgid "Matrix"
 msgstr "Matris"
@@ -1850,14 +1863,16 @@ msgstr "Fält"
 #: src/backend/datasources/filters/MatioFilter.cpp:602
 #: src/backend/datasources/filters/MatioFilter.cpp:634
 #: src/backend/datasources/filters/MatioFilter.cpp:663
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "No variable selected"
 msgid "No valid variable selected."
-msgstr "Ingen giltig variabel vald."
+msgstr "Ingen variabel vald"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:658
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Variable not found"
 msgid "Selected variable not found."
-msgstr "Vald variabel hittades inte."
+msgstr "Variabel hittades inte"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:799
 #, kde-format
@@ -1867,12 +1882,12 @@ msgstr "Struct innehåller inga fält"
 #: src/backend/datasources/filters/MatioFilter.cpp:881
 #, kde-format
 msgid "Support for this variable type not implemented yet."
-msgstr "Stöd för variabeltypen är inte ännu implementerat."
+msgstr ""
 
 #: src/backend/datasources/filters/MatioFilter.cpp:1228
 #, kde-format
 msgid "Variables with rank greater than 2 not supported yet."
-msgstr "Variabler med rank större än 2 stöds inte ännu."
+msgstr ""
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:213
 #, kde-format
@@ -1962,20 +1977,23 @@ msgstr "Variabler"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:689
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1114
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "No variable selected"
 msgid "No variable selected."
-msgstr "Ingen variabel vald."
+msgstr "Ingen variabel vald"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:700
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Failed to open the file '%1'."
 msgid "Failed to open the file or it's empty."
-msgstr "Misslyckades öppna filen eller så är den tom."
+msgstr "Misslyckades öppna filen '%1'."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:938
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1078
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "rank %1 not supported yet"
 msgid "Data type not supported yet."
-msgstr "Datatyp stöds inte ännu."
+msgstr "rang %1 stöds inte ännu"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1083
 #, kde-format
@@ -1990,34 +2008,40 @@ msgstr "Antal blad: %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:215
 #: src/backend/datasources/filters/XLSXFilter.cpp:632
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "No data set selected"
 msgid "No sheet selected."
-msgstr "Inget blad valt."
+msgstr "Ingen datamängd vald"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:250
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "ncdump not found."
 msgid "Selected sheet not found."
-msgstr "Valt blad hittades inte."
+msgstr "ncdump hittades inte."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:257
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Invalid pointer"
 msgid "Invalid sheet."
-msgstr "Ogiltigt blad."
+msgstr "Ogiltig pekare"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:318
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "rank %1 not supported yet"
 msgid "Formulas not supported yet."
-msgstr "Formler stöds inte ännu."
+msgstr "rang %1 stöds inte ännu"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:473
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "File not found"
 msgid "Sheet not found."
-msgstr "Blad hittades inte."
+msgstr "Filen hittades inte"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:480
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Invalid metadata file"
 msgid "Invalid sheet index."
-msgstr "Ogiltigt bladindex."
+msgstr "Ogiltig metadatafil"
 
 #: src/backend/datasources/filters/QJsonModel.cpp:132
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:64
@@ -2031,9 +2055,10 @@ msgid "Size in Bytes"
 msgstr "Storlek i byte"
 
 #: src/backend/datasources/filters/QJsonModel.cpp:200
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Failed to load JSON document"
 msgid "Failed to load the JSON file. Empty JSON document."
-msgstr "Misslyckades läsa in JSON-filen. Tomt JSON-dokument."
+msgstr "Misslyckades läsa in JSON-dokument"
 
 #: src/backend/datasources/filters/QJsonModel.cpp:206
 #, kde-format
@@ -2091,15 +2116,17 @@ msgid "64bit: %1"
 msgstr "64-bitar: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:482
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Error opening file"
 msgid "Error reading file."
-msgstr "Fel vid läsning av fil."
+msgstr "Fel vid försök att öppna fil"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:512
 #: src/backend/datasources/filters/ReadStatFilter.cpp:535
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Failed to open the file '%1'."
 msgid "Failed to parse the file."
-msgstr "Misslyckades tolka filen."
+msgstr "Misslyckades öppna filen '%1'."
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:113
 #: src/backend/datasources/MQTTClient.cpp:1200
@@ -2116,9 +2143,10 @@ msgid "No column available"
 msgstr "Ingen kolumn tillgänglig"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:163
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "unsupported float type for rank 1"
 msgid "Unsupported file type, neither histogram no tree."
-msgstr "Filtyp som inte stöds, varken histogram eller träd."
+msgstr "flyttalstyp som inte stöds för rang 1"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:1502
 #, kde-format
@@ -2161,79 +2189,93 @@ msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr "Storlek på TStreamerinfo-post: %1 byte"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:103
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Ratio: %1"
 msgid "Application: %1"
-msgstr "Program: %1"
+msgstr "Förhållande: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:105
 #, kde-format
 msgid "Application version: %1.%2.%3"
-msgstr "Programversion: %1 %2.%3"
+msgstr ""
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:107
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Number of all objects: %1"
 msgid "Number of Objects: %1"
-msgstr "Antal objekt: %1"
+msgstr "Totalt antal objekt: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:115
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Start Time:"
 msgid "Start Time: %1"
-msgstr "Starttid: %1"
+msgstr "Starttid:"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:123
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "End Time:"
 msgid "End Time: %1"
-msgstr "Sluttid: %1"
+msgstr "Sluttid:"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:127
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Compression: %1"
 msgid "Compression Level: %1"
-msgstr "Komprimeringsnivå: %1"
+msgstr "Komprimering: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:129
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "File size: %1 bytes"
 msgid "Uncompressed File Size: %1 Bytes"
-msgstr "Okomprimerad filstorlek: %1 byte"
+msgstr "Filstorlek: %1 byte"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:180
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Big Endian not supported. CAN id: %1"
 msgid "Big Endian not supported. CAN id: %1."
-msgstr "Big-endian stöds inte. CAN-id: %1."
+msgstr "Big-endian stöds inte. CAN-id: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:183
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Message too long. CAN id: %1"
 msgid "Message too long. CAN id: %1."
-msgstr "Meddelande för långt. CAN-id: %1."
+msgstr "Meddelande för långt. CAN-id: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:186
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Unknown id: %1"
 msgid "Unknown id: %1."
-msgstr "Okänd id: %1."
+msgstr "Okänd identifierare: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:189
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Invalid blf file"
 msgid "Invalid BLF file"
-msgstr "Ogiltig BLF-fil"
+msgstr "Ogiltig blf-fil"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:192
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Unable to calculate conversion: %1"
 msgid "Unable to calculate conversion: %1."
-msgstr "Kan inte beräkna konvertering: %1."
+msgstr "Kan inte beräkna konvertering: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:195
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "No dbc parser installed"
 msgid "No DBC parser installed."
-msgstr "Ingen DBC-tolk installerad."
+msgstr "Ingen dbc-tolk installerad"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:198
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Invalid blf file"
 msgid "Invalid DBC file."
-msgstr "Ogiltig DBC-fil."
+msgstr "Ogiltig blf-fil"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:201
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Unknown error"
 msgid "Unknown error,"
-msgstr "Okänt fel,"
+msgstr "Okänt fel"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:443
 #, kde-format
@@ -2256,9 +2298,10 @@ msgid "Sheets: "
 msgstr "Blad: "
 
 #: src/backend/datasources/filters/XLSXFilter.cpp:636
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Invalid tolerance specified"
 msgid "Invalid region specified."
-msgstr "Ogiltigt område angivet."
+msgstr "Ogiltig tolerans angiven"
 
 #: src/backend/datasources/LiveDataSource.cpp:726
 #: src/backend/datasources/LiveDataSource.cpp:729
@@ -2414,9 +2457,10 @@ msgid "Force and Energy"
 msgstr "Kraft och energi"
 
 #: src/backend/gsl/constants.cpp:46
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Constant"
 msgid "Unknown Constant"
-msgstr "Okänd konstant"
+msgstr "Konstant"
 
 #. i18n("Mathematical constants"));
 #: src/backend/gsl/constants.cpp:57
@@ -2435,9 +2479,10 @@ msgid "Euler's constant"
 msgstr "Eulers konstant"
 
 #: src/backend/gsl/constants.cpp:60
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Number"
 msgid "Not a number"
-msgstr "Inte ett tal"
+msgstr "Nummer"
 
 #. i18n("Fundamental constants"));
 #: src/backend/gsl/constants.cpp:63
@@ -3135,14 +3180,16 @@ msgid "Standard Mathematical Functions"
 msgstr "Matematiska standardfunktioner"
 
 #: src/backend/gsl/functions.cpp:59
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Clausen Functions"
 msgid "Comparison Functions"
-msgstr "Jämförelsefunktioner"
+msgstr "Clausen-funktioner"
 
 #: src/backend/gsl/functions.cpp:61
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Logistic Function"
 msgid "Logical Functions"
-msgstr "Logikfunktioner"
+msgstr "Logistikfunktion"
 
 #: src/backend/gsl/functions.cpp:63
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:28
@@ -3426,19 +3473,22 @@ msgid "Logarithmic Distribution"
 msgstr "Logaritmisk fördelning"
 
 #: src/backend/gsl/functions.cpp:183
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Landau Distribution"
 msgid "Triangular Distribution"
-msgstr "Triangulär fördelning"
+msgstr "Landau-fördelning"
 
 #: src/backend/gsl/functions.cpp:187
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Power Function"
 msgid "Unknown Function"
-msgstr "Okänd funktion"
+msgstr "Potensfunktioner"
 
 #: src/backend/gsl/functions.cpp:234
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Delete variable"
 msgid "Cell (index, variable)"
-msgstr "Cell (index, variabel)"
+msgstr "Ta bort variabel"
 
 #: src/backend/gsl/functions.cpp:235
 #, kde-format
@@ -3712,19 +3762,22 @@ msgid "Percentile"
 msgstr "Percentil"
 
 #: src/backend/gsl/functions.cpp:279
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "pseudo-random integer [0,RAND_MAX]"
 msgid "pseudo-random integer [0, RAND_MAX]"
-msgstr "pseudo-slumpmässigt heltal [0, RAND_MAX]"
+msgstr "pseudo-slumpmässigt heltal [0,RAND_MAX]"
 
 #: src/backend/gsl/functions.cpp:280
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "nonlinear additive feedback rng [0,RAND_MAX]"
 msgid "nonlinear additive feedback rng [0, RAND_MAX]"
-msgstr "ickelinjär additivt återkopplad slumptalsgenerator [0, RAND_MAX]"
+msgstr "ickelinjär additivt återkopplad slumptalsgenerator [0,RAND_MAX]"
 
 #: src/backend/gsl/functions.cpp:281
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "nonlinear additive feedback rng [0,1]"
 msgid "nonlinear additive feedback rng [0, 1]"
-msgstr "ickelinjär additivt återkopplad slumptalsgenerator [0, 1]"
+msgstr "ickelinjär additivt återkopplad slumptalsgenerator [0,1]"
 
 #: src/backend/gsl/functions.cpp:282
 #, kde-format
@@ -3789,62 +3842,66 @@ msgstr "Avrunda till närmaste heltal"
 #: src/backend/gsl/functions.cpp:297
 #, kde-format
 msgid "Round to y decimal places"
-msgstr "Avrunda till y decimaler"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:311
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Greater than"
 msgid "greaterThan"
-msgstr "större än"
+msgstr "Större än"
 
 #: src/backend/gsl/functions.cpp:312
 #, kde-format
 msgid "lessThan"
-msgstr "mindre än"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:313
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Greater than"
 msgid "greaterEqualThan"
-msgstr "större än eller lika med"
+msgstr "Större än"
 
 #: src/backend/gsl/functions.cpp:314
 #, kde-format
 msgid "lessEqualThan"
-msgstr "mindre än eller lika med"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:315
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Equal to"
 msgid "equal"
-msgstr "lika med"
+msgstr "Lika med"
 
 #: src/backend/gsl/functions.cpp:316
 #, kde-format
 msgid "equal with epsilon"
-msgstr "lika med epsilon"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:317
 #, kde-format
 msgid "between with boundaries included"
-msgstr "mellan med ingående gränser"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:318
 #, kde-format
 msgid "outside with boundaries included"
-msgstr "utanför med ingående gränser"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:319
 #, kde-format
 msgid "between with boundaries excluded"
-msgstr "mellan med uteslutna gränser"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:320
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Not inside of the bounding rect"
 msgid "outside with boundaries excluded"
-msgstr "utanför med uteslutna gränser"
+msgstr "Inte inne i omgivande rektangel"
 
 #: src/backend/gsl/functions.cpp:323
 #, kde-format
 msgid "if(condition; ifTrue; ifFalse)"
-msgstr "om(villkor, om sant, om falskt)"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lAnd)
 #. i18n: ectx: property (text), widget (QLabel, lAndDateTime)
@@ -3866,14 +3923,16 @@ msgid "or"
 msgstr "eller"
 
 #: src/backend/gsl/functions.cpp:326
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "or"
 msgid "xor"
-msgstr "exklusiv eller"
+msgstr "eller"
 
 #: src/backend/gsl/functions.cpp:327
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "no"
 msgid "not"
-msgstr "icke"
+msgstr "nej"
 
 #: src/backend/gsl/functions.cpp:331
 #, kde-format
@@ -4501,9 +4560,10 @@ msgid "Logarithm of the gamma function"
 msgstr "Logaritm av gammafunktionen"
 
 #: src/backend/gsl/functions.cpp:479
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Logarithm of the gamma function"
 msgid "Logarithm naturalis of the gamma function"
-msgstr "Naturlig logaritm av gammafunktionen"
+msgstr "Logaritm av gammafunktionen"
 
 #: src/backend/gsl/functions.cpp:480
 #, kde-format
@@ -4839,9 +4899,10 @@ msgid "Logarithm"
 msgstr "Logaritm"
 
 #: src/backend/gsl/functions.cpp:565
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Base 10 logarithm"
 msgid "Base 2 logarithm"
-msgstr "Bas-2 logaritm"
+msgstr "Bas 10-logaritm"
 
 #: src/backend/gsl/functions.cpp:566
 #, kde-format
@@ -4849,34 +4910,40 @@ msgid "Logarithm of the magnitude"
 msgstr "Logaritm av magnituden"
 
 #: src/backend/gsl/functions.cpp:572
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q,x)"
 msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q, x)"
-msgstr "Karakteristiska värden a_n(q) för Mathieu-funktionerna ce_n(q, x)"
+msgstr "Karakteristiska värden a_n(q) för Mathieu-funktionerna ce_n(q,x)"
 
 #: src/backend/gsl/functions.cpp:573
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q,x)"
 msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q, x)"
-msgstr "Karakteristiska värden b_n(q) för Mathieu-funktionerna se_n(q, x)"
+msgstr "Karakteristiska värden b_n(q) för Mathieu-funktionerna se_n(q,x)"
 
 #: src/backend/gsl/functions.cpp:574
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Angular Mathieu functions ce_n(q,x)"
 msgid "Angular Mathieu functions ce_n(q, x)"
-msgstr "Mathieu-vinkelfunktioner ce_n(q, x)"
+msgstr "Mathieu-vinkelfunktioner ce_n(q,x)"
 
 #: src/backend/gsl/functions.cpp:575
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Angular Mathieu functions se_n(q,x)"
 msgid "Angular Mathieu functions se_n(q, x)"
-msgstr "Mathieu-vinkelfunktioner se_n(q, x)"
+msgstr "Mathieu-vinkelfunktioner se_n(q,x)"
 
 #: src/backend/gsl/functions.cpp:576
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q,x)"
 msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q, x)"
-msgstr "Radiell j:te typ av Mathieu-funktioner Mc_n^{(j)}(q, x)"
+msgstr "Radiell j:te typ av Mathieu-funktioner Mc_n^{(j)}(q,x)"
 
 #: src/backend/gsl/functions.cpp:577
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q,x)"
 msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q, x)"
-msgstr "Radiell j:te typ av Mathieu-funktioner Ms_n^{(j)}(q, x)"
+msgstr "Radiell j:te typ av Mathieu-funktioner Ms_n^{(j)}(q,x)"
 
 #: src/backend/gsl/functions.cpp:581
 #, kde-format
@@ -4924,24 +4991,28 @@ msgid "Second synchrotron function"
 msgstr "Andra synkrotronfunktionen"
 
 #: src/backend/gsl/functions.cpp:596
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Transport function"
 msgid "Transport function J2"
-msgstr "Transportfunktionen J2"
+msgstr "Transportfunktionen"
 
 #: src/backend/gsl/functions.cpp:597
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Transport function"
 msgid "Transport function J3"
-msgstr "Transportfunktionen J3"
+msgstr "Transportfunktionen"
 
 #: src/backend/gsl/functions.cpp:598
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Transport function"
 msgid "Transport function J4"
-msgstr "Transportfunktionen J4"
+msgstr "Transportfunktionen"
 
 #: src/backend/gsl/functions.cpp:599
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Transport function"
 msgid "Transport function J5"
-msgstr "Transportfunktionen j5"
+msgstr "Transportfunktionen"
 
 #: src/backend/gsl/functions.cpp:602
 #, kde-format
@@ -5086,14 +5157,16 @@ msgid "Three component hypotenuse function"
 msgstr "Hypotenusa-funktion med tre komponenter"
 
 #: src/backend/gsl/functions.cpp:632
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "restrict to [-pi,pi]"
 msgid "restrict to [-pi, pi]"
-msgstr "begränsa till [-pi, pi]"
+msgstr "Begränsa till [-pi,pi]"
 
 #: src/backend/gsl/functions.cpp:633
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "restrict to [0,2 pi]"
 msgid "restrict to [0, 2 pi]"
-msgstr "begränsa till [0, 2 pi]"
+msgstr "Begränsa till [0,2 pi]"
 
 #: src/backend/gsl/functions.cpp:636
 #, kde-format
@@ -5211,9 +5284,10 @@ msgid "Binomial random numbers"
 msgstr "Binomial-slumptal"
 
 #: src/backend/gsl/functions.cpp:665
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Landau random numbers"
 msgid "Triangular random numbers"
-msgstr "Triangulära slumptal"
+msgstr "Landau-slumptal"
 
 #: src/backend/gsl/functions.cpp:669
 #, kde-format
@@ -5286,24 +5360,28 @@ msgid "Probability density for an exponential distribution"
 msgstr "Täthetsfunktion för en exponentialfördelning"
 
 #: src/backend/gsl/functions.cpp:686
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative unit distribution function P"
 msgid "Cumulative exponential distribution function P"
-msgstr "Kumulativ exponentiell fördelningsfunktion P"
+msgstr "Kumulativ enhetsfördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:687
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative unit distribution function Q"
 msgid "Cumulative exponential distribution function Q"
-msgstr "Kumulativ exponentiell fördelningsfunktion Q"
+msgstr "Kumulativ enhetsfördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:688
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative unit distribution function P"
 msgid "Inverse cumulative exponential distribution function P"
-msgstr "Invers kumulativ exponentiell fördelningsfunktion P"
+msgstr "Invers kumulativ enhetsfördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:689
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative unit distribution function Q"
 msgid "Inverse cumulative exponential distribution function Q"
-msgstr "Invers kumulativ exponentiell fördelningsfunktion Q"
+msgstr "Invers kumulativ enhetsfördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:692
 #, kde-format
@@ -5311,24 +5389,28 @@ msgid "Probability density for a Laplace distribution"
 msgstr "Täthetsfunktion för en Laplacefördelning"
 
 #: src/backend/gsl/functions.cpp:693
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function P"
 msgid "Cumulative Laplace distribution function P"
-msgstr "Kumulativ Laplace fördelningsfunktion P"
+msgstr "Kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:694
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function Q"
 msgid "Cumulative Laplace distribution function Q"
-msgstr "Kumulativ Laplace fördelningsfunktion Q"
+msgstr "Kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:695
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative distribution function P"
 msgid "Inverse cumulative Laplace distribution function P"
-msgstr "Invers kumulativ Laplace fördelningsfunktion P"
+msgstr "Invers kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:696
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative distribution function Q"
 msgid "Inverse cumulative Laplace distribution function Q"
-msgstr "Invers kumulativ Laplace fördelningsfunktion Q"
+msgstr "Invers kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:699
 #, kde-format
@@ -5336,39 +5418,45 @@ msgid "Probability density for an exponential power distribution"
 msgstr "Täthetsfunktion för en exponentiell effektfördelning"
 
 #: src/backend/gsl/functions.cpp:700
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative unit distribution function P"
 msgid "cumulative exponential power distribution function P"
-msgstr "Kumulativ exponentiell effektfördelningsfunktion P"
+msgstr "Kumulativ enhetsfördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:701
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative unit distribution function Q"
 msgid "Cumulative exponential power distribution function Q"
-msgstr "Kumulativ exponentiell effektfördelningsfunktion Q"
+msgstr "Kumulativ enhetsfördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:704
 #, kde-format
 msgid "Probability density for a Cauchy distribution"
-msgstr "Täthetsfunktion för en Cauchyfördelning"
+msgstr "Täthetsfunktion för en Cachyfördelning"
 
 #: src/backend/gsl/functions.cpp:705
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function P"
 msgid "Cumulative Cauchy distribution function P"
-msgstr "Kumulativ Cauchy fördelningsfunktion P"
+msgstr "Kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:706
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function Q"
 msgid "Cumulative Cauchy distribution function Q"
-msgstr "Kumulativ Cauchy fördelningsfunktion Q"
+msgstr "Kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:707
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative distribution function P"
 msgid "Inverse cumulative Cauchy distribution function P"
-msgstr "Invers kumulativ Cauchy fördelningsfunktion P"
+msgstr "Invers kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:708
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative distribution function Q"
 msgid "Inverse cumulative Cauchy distribution function Q"
-msgstr "Invers kumulativ Cauchy fördelningsfunktion Q"
+msgstr "Invers kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:711
 #, kde-format
@@ -5376,24 +5464,28 @@ msgid "Probability density for a Rayleigh distribution"
 msgstr "Täthetsfunktion för en Rayleigh-fördelning"
 
 #: src/backend/gsl/functions.cpp:712
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function P"
 msgid "Cumulative Rayleigh distribution function P"
-msgstr "Kumulativ Rayleigh fördelningsfunktion P"
+msgstr "Kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:713
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function Q"
 msgid "Cumulative Rayleigh distribution function Q"
-msgstr "Kumulativ Rayleigh fördelningsfunktion Q"
+msgstr "Kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:714
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative distribution function P"
 msgid "Inverse cumulative Rayleigh distribution function P"
-msgstr "Invers kumulativ Rayleigh fördelningsfunktion P"
+msgstr "Invers kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:715
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative distribution function Q"
 msgid "Inverse cumulative Rayleigh distribution function Q"
-msgstr "Invers kumulativ Rayleigh fördelningsfunktion Q"
+msgstr "Invers kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:716
 #, kde-format
@@ -5411,24 +5503,28 @@ msgid "Probability density for a gamma distribution"
 msgstr "Täthetsfunktion för en gammafördelning"
 
 #: src/backend/gsl/functions.cpp:723
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function P"
 msgid "Cumulative gamma distribution function P"
-msgstr "Kumulativ gammafördelningsfunktion P"
+msgstr "Kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:724
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function Q"
 msgid "Cumulative gamma distribution function Q"
-msgstr "Kumulativ gammafördelningsfunktion Q"
+msgstr "Kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:725
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative distribution function P"
 msgid "Inverse cumulative gamma distribution function P"
-msgstr "Invers kumulativ gammafördelningsfunktion P"
+msgstr "Invers kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:726
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative distribution function Q"
 msgid "Inverse cumulative gamma distribution function Q"
-msgstr "Invers kumulativ gammafördelningsfunktion Q"
+msgstr "Invers kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:729
 #, kde-format
@@ -5436,24 +5532,28 @@ msgid "Probability density for a uniform distribution"
 msgstr "Täthetsfunktion för en likformig fördelning"
 
 #: src/backend/gsl/functions.cpp:730
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative unit distribution function P"
 msgid "Cumulative uniform distribution function P"
-msgstr "Kumulativ likformig fördelningsfunktion P"
+msgstr "Kumulativ enhetsfördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:731
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative unit distribution function Q"
 msgid "Cumulative uniform distribution function Q"
-msgstr "Kumulativ likformig fördelningsfunktion Q"
+msgstr "Kumulativ enhetsfördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:732
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative unit distribution function P"
 msgid "Inverse cumulative uniform distribution function P"
-msgstr "Invers kumulativ likformig fördelningsfunktion P"
+msgstr "Invers kumulativ enhetsfördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:733
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative unit distribution function Q"
 msgid "Inverse cumulative uniform distribution function Q"
-msgstr "Invers kumulativ likformig fördelningsfunktion Q"
+msgstr "Invers kumulativ enhetsfördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:736
 #, kde-format
@@ -5461,24 +5561,28 @@ msgid "Probability density for a lognormal distribution"
 msgstr "Täthetsfunktion för en lognormalfördelning"
 
 #: src/backend/gsl/functions.cpp:737
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function P"
 msgid "Cumulative lognormal distribution function P"
-msgstr "Kumulativ loggnormal fördelningsfunktion P"
+msgstr "Kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:738
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function Q"
 msgid "Cumulative lognormal distribution function Q"
-msgstr "Kumulativ loggnormal fördelningsfunktion Q"
+msgstr "Kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:739
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative distribution function P"
 msgid "Inverse cumulative lognormal distribution function P"
-msgstr "Invers kumulativ loggnormal fördelningsfunktion P"
+msgstr "Invers kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:740
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative distribution function Q"
 msgid "Inverse cumulative lognormal distribution function Q"
-msgstr "Invers kumulativ loggnormal fördelningsfunktion Q"
+msgstr "Invers kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:743
 #, kde-format
@@ -5486,24 +5590,28 @@ msgid "Probability density for a chi squared distribution"
 msgstr "Täthetsfunktion för en chitvåfördelning"
 
 #: src/backend/gsl/functions.cpp:744
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function P"
 msgid "Cumulative chi squared distribution function P"
-msgstr "Kumulativ chitvå fördelningsfunktion P"
+msgstr "Kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:745
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function Q"
 msgid "Cumulative chi squared distribution function Q"
-msgstr "Kumulativ chitvå fördelningsfunktion Q"
+msgstr "Kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:746
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative distribution function P"
 msgid "Inverse cumulative chi squared distribution function P"
-msgstr "Invers kumulativ chitvå fördelningsfunktion P"
+msgstr "Invers kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:747
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative distribution function Q"
 msgid "Inverse cumulative chi squared distribution function Q"
-msgstr "Invers kumulativ chitvå fördelningsfunktion Q"
+msgstr "Invers kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:750
 #, kde-format
@@ -5511,24 +5619,28 @@ msgid "Probability density for a F-distribution"
 msgstr "Täthetsfunktion för en F-fördelning"
 
 #: src/backend/gsl/functions.cpp:751
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function P"
 msgid "Cumulative F-distribution function P"
-msgstr "Kumulativ F-fördelningsfunktion P"
+msgstr "Kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:752
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function Q"
 msgid "Cumulative F-distribution function Q"
-msgstr "Kumulativ F-fördelningsfunktion Q"
+msgstr "Kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:753
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative distribution function P"
 msgid "Inverse cumulative F-distribution function P"
-msgstr "Invers kumulativ F-fördelningsfunktion P"
+msgstr "Invers kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:754
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative distribution function Q"
 msgid "Inverse cumulative F-distribution function Q"
-msgstr "Invers kumulativ F-fördelningsfunktion Q"
+msgstr "Invers kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:757
 #, kde-format
@@ -5536,24 +5648,28 @@ msgid "Probability density for a t-distribution"
 msgstr "Täthetsfunktion för en t-fördelning"
 
 #: src/backend/gsl/functions.cpp:758
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function P"
 msgid "Cumulative t-distribution function P"
-msgstr "Kumulativ t-fördelningsfunktion P"
+msgstr "Kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:759
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function Q"
 msgid "Cumulative t-distribution function Q"
-msgstr "Kumulativ t-fördelningsfunktion Q"
+msgstr "Kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:760
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative distribution function P"
 msgid "Inverse cumulative t-distribution function P"
-msgstr "Invers kumulativ t-fördelningsfunktion P"
+msgstr "Invers kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:761
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative distribution function Q"
 msgid "Inverse cumulative t-distribution function Q"
-msgstr "Invers kumulativ t-fördelningsfunktion Q"
+msgstr "Invers kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:764
 #, kde-format
@@ -5561,24 +5677,28 @@ msgid "Probability density for a beta distribution"
 msgstr "Täthetsfunktion för en betafördelning"
 
 #: src/backend/gsl/functions.cpp:765
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function P"
 msgid "Cumulative beta distribution function P"
-msgstr "Kumulativ beta-fördelningsfunktion P"
+msgstr "Kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:766
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function Q"
 msgid "Cumulative beta distribution function Q"
-msgstr "Kumulativ beta-fördelningsfunktion Q"
+msgstr "Kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:767
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative distribution function P"
 msgid "Inverse cumulative beta distribution function P"
-msgstr "Invers kumulativ beta-fördelningsfunktion P"
+msgstr "Invers kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:768
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative distribution function Q"
 msgid "Inverse cumulative beta distribution function Q"
-msgstr "Invers kumulativ beta-fördelningsfunktion Q"
+msgstr "Invers kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:771
 #, kde-format
@@ -5586,24 +5706,28 @@ msgid "Probability density for a logistic distribution"
 msgstr "Täthetsfunktion för en logistikfördelning"
 
 #: src/backend/gsl/functions.cpp:772
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative unit distribution function P"
 msgid "Cumulative logistic distribution function P"
-msgstr "Kumulativ logistisk fördelningsfunktion P"
+msgstr "Kumulativ enhetsfördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:773
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative unit distribution function Q"
 msgid "Cumulative logistic distribution function Q"
-msgstr "Kumulativ logistisk fördelningsfunktion Q"
+msgstr "Kumulativ enhetsfördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:774
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative unit distribution function P"
 msgid "Inverse cumulative logistic distribution function P"
-msgstr "Invers kumulativ logistisk fördelningsfunktion P"
+msgstr "Invers kumulativ enhetsfördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:775
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative unit distribution function Q"
 msgid "Inverse cumulative logistic distribution function Q"
-msgstr "Invers kumulativ logistisk fördelningsfunktion Q"
+msgstr "Invers kumulativ enhetsfördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:778
 #, kde-format
@@ -5611,24 +5735,28 @@ msgid "Probability density for a Pareto distribution"
 msgstr "Täthetsfunktion för en Paretofördelning"
 
 #: src/backend/gsl/functions.cpp:779
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function P"
 msgid "Cumulative Pareto distribution function P"
-msgstr "Kumulativ Pareto fördelningsfunktion P"
+msgstr "Kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:780
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function Q"
 msgid "Cumulative Pareto distribution function Q"
-msgstr "Kumulativ Pareto fördelningsfunktion Q"
+msgstr "Kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:781
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative distribution function P"
 msgid "Inverse cumulative Pareto distribution function P"
-msgstr "Invers kumulativ Pareto fördelningsfunktion P"
+msgstr "Invers kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:782
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative distribution function Q"
 msgid "Inverse cumulative Pareto distribution function Q"
-msgstr "Invers kumulativ Pareto fördelningsfunktion Q"
+msgstr "Invers kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:785
 #, kde-format
@@ -5636,24 +5764,28 @@ msgid "Probability density for a Weibull distribution"
 msgstr "Täthetsfunktion för en Weibullfördelning"
 
 #: src/backend/gsl/functions.cpp:786
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function P"
 msgid "Cumulative Weibull distribution function P"
-msgstr "Kumulativ Weibull fördelningsfunktion P"
+msgstr "Kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:787
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function Q"
 msgid "Cumulative Weibull distribution function Q"
-msgstr "Kumulativ Weibull fördelningsfunktion Q"
+msgstr "Kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:788
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative distribution function P"
 msgid "Inverse cumulative Weibull distribution function P"
-msgstr "Invers kumulativ Weibull fördelningsfunktion P"
+msgstr "Invers kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:789
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative distribution function Q"
 msgid "Inverse cumulative Weibull distribution function Q"
-msgstr "Invers kumulativ Weibull fördelningsfunktion Q"
+msgstr "Invers kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:792
 #, kde-format
@@ -5661,24 +5793,28 @@ msgid "Probability density for a Type-1 Gumbel distribution"
 msgstr "Täthetsfunktion för en typ 1 Gumbel-fördelning"
 
 #: src/backend/gsl/functions.cpp:793
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function P"
 msgid "Cumulative Type-1 Gumbel distribution function P"
-msgstr "Kumulativ typ 1 Gumbel fördelningsfunktion P"
+msgstr "Kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:794
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function Q"
 msgid "Cumulative Type-1 Gumbel distribution function Q"
-msgstr "Kumulativ typ 1 Gumbel fördelningsfunktion Q"
+msgstr "Kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:795
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative distribution function P"
 msgid "Inverse cumulative Type-1 Gumbel distribution function P"
-msgstr "Invers kumulativ typ 1 Gumbel fördelningsfunktion P"
+msgstr "Invers kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:796
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative distribution function Q"
 msgid "Inverse cumulative Type-1 Gumbel distribution function Q"
-msgstr "Invers kumulativ typ 1 Gumbel fördelningsfunktion Q"
+msgstr "Invers kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:797
 #, kde-format
@@ -5686,24 +5822,28 @@ msgid "Probability density for a Type-2 Gumbel distribution"
 msgstr "Täthetsfunktion för en typ 2 Gumbel-fördelning"
 
 #: src/backend/gsl/functions.cpp:798
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function P"
 msgid "Cumulative Type-2 Gumbel distribution function P"
-msgstr "Kumulativ typ 2 Gumbel fördelningsfunktion P"
+msgstr "Kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:799
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function Q"
 msgid "Cumulative Type-2 Gumbel distribution function Q"
-msgstr "Kumulativ typ 2 Gumbel fördelningsfunktion Q"
+msgstr "Kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:800
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative distribution function P"
 msgid "Inverse cumulative Type-2 Gumbel distribution function P"
-msgstr "Invers kumulativ typ 2 Gumbel fördelningsfunktion P"
+msgstr "Invers kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:801
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Inverse cumulative distribution function Q"
 msgid "Inverse cumulative Type-2 Gumbel distribution function Q"
-msgstr "Invers kumulativ typ 2 Gumbel fördelningsfunktion Q"
+msgstr "Invers kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:804
 #, kde-format
@@ -5711,14 +5851,16 @@ msgid "Probability density for a Poisson distribution"
 msgstr "Täthetsfunktion för en Poissonfördelning"
 
 #: src/backend/gsl/functions.cpp:805
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function P"
 msgid "Cumulative Poisson distribution function P"
-msgstr "Kumulativ Poisson fördelningsfunktion P"
+msgstr "Kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:806
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function Q"
 msgid "Cumulative Poisson distribution function Q"
-msgstr "Kumulativ Poisson fördelningsfunktion Q"
+msgstr "Kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:809
 #, kde-format
@@ -5731,14 +5873,16 @@ msgid "Probability density for a binomial distribution"
 msgstr "Täthetsfunktion för en binomialfördelning"
 
 #: src/backend/gsl/functions.cpp:813
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative unit distribution function P"
 msgid "Cumulative binomial distribution function P"
-msgstr "Kumulativ binomialfördelningsfunktion P"
+msgstr "Kumulativ enhetsfördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:814
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative unit distribution function Q"
 msgid "Cumulative binomial distribution function Q"
-msgstr "Kumulativ binomialfördelningsfunktion Q"
+msgstr "Kumulativ enhetsfördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:815
 #, kde-format
@@ -5746,14 +5890,16 @@ msgid "Probability density for a negative binomial distribution"
 msgstr "Täthetsfunktion för en negativ binomialfördelning"
 
 #: src/backend/gsl/functions.cpp:816
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative unit distribution function P"
 msgid "Cumulative negative binomial distribution function P"
-msgstr "Kumulativ negativ binomialfördelningsfunktion P"
+msgstr "Kumulativ enhetsfördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:817
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative unit distribution function Q"
 msgid "Cumulative negative binomial distribution function Q"
-msgstr "Kumulativ negativ binomialfördelningsfunktion Q"
+msgstr "Kumulativ enhetsfördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:820
 #, kde-format
@@ -5761,14 +5907,16 @@ msgid "Probability density for a Pascal distribution"
 msgstr "Täthetsfunktion för en Pascalfördelning"
 
 #: src/backend/gsl/functions.cpp:821
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function P"
 msgid "Cumulative Pascal distribution function P"
-msgstr "Kumulativ Pascal fördelningsfunktion P"
+msgstr "Kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:822
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function Q"
 msgid "Cumulative Pascal distribution function Q"
-msgstr "Kumulativ Pascal fördelningsfunktion Q"
+msgstr "Kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:825
 #, kde-format
@@ -5776,14 +5924,16 @@ msgid "Probability density for a geometric distribution"
 msgstr "Täthetsfunktion för en geometrisk fördelning"
 
 #: src/backend/gsl/functions.cpp:826
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function P"
 msgid "Cumulative geometric distribution function P"
-msgstr "Kumulativ geometrisk fördelningsfunktion P"
+msgstr "Kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:827
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function Q"
 msgid "Cumulative geometric distribution function Q"
-msgstr "Kumulativ geometrisk fördelningsfunktion Q"
+msgstr "Kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:830
 #, kde-format
@@ -5791,14 +5941,16 @@ msgid "Probability density for a hypergeometric distribution"
 msgstr "Täthetsfunktion för en hypergeometrisk fördelning"
 
 #: src/backend/gsl/functions.cpp:831
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function P"
 msgid "Cumulative hypergeometric distribution function P"
-msgstr "Kumulativ hypergeometrisk fördelningsfunktion P"
+msgstr "Kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:832
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function Q"
 msgid "Cumulative hypergeometric distribution function Q"
-msgstr "Kumulativ hypergeometrisk fördelningsfunktion Q"
+msgstr "Kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:835
 #, kde-format
@@ -5806,91 +5958,105 @@ msgid "Probability density for a logarithmic distribution"
 msgstr "Täthetsfunktion för en logaritmisk fördelning"
 
 #: src/backend/gsl/functions.cpp:839
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Probability density for a Landau distribution"
 msgid "Probability density for a triangular distribution"
-msgstr "Täthetsfunktion för en triangulär fördelning"
+msgstr "Täthetsfunktion för en Landaufördelning"
 
 #: src/backend/gsl/functions.cpp:840
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function P"
 msgid "Cumulative triangular distribution function P"
-msgstr "Kumulativ triangulär fördelningsfunktion P"
+msgstr "Kumulativ fördelningsfunktion P"
 
 #: src/backend/gsl/functions.cpp:841
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Cumulative distribution function Q"
 msgid "Cumulative triangular distribution function Q"
-msgstr "Kumulativ triangulär fördelningsfunktion Q"
+msgstr "Kumulativ fördelningsfunktion Q"
 
 #: src/backend/gsl/functions.cpp:842
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Hazard function for the normal distribution Z/Q"
 msgid "p-th quantile for triangular distribution"
-msgstr "p:te kvantil för triangulär fördelning"
+msgstr "Hasardfunktion för normalfördelningen Z/Q"
 
 #: src/backend/gsl/functions.cpp:948 src/backend/gsl/functions.cpp:960
 #: src/backend/gsl/functions.cpp:974 src/backend/gsl/functions.cpp:986
 #: src/backend/gsl/functions.cpp:998
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Invalid pointer"
 msgid "Invalid"
-msgstr "Ogiltig"
+msgstr "Ogiltig pekare"
 
 #: src/backend/gsl/functions.cpp:954
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Condition:"
 msgid "condition"
-msgstr "villkor"
+msgstr "Villkor:"
 
 #: src/backend/gsl/functions.cpp:956
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Value"
 msgid "trueValue"
-msgstr "sant värde"
+msgstr "Värde"
 
 #: src/backend/gsl/functions.cpp:958
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Sample Values"
 msgid "falseValue"
-msgstr "falskt värde"
+msgstr "Samplade värden"
 
 #: src/backend/gsl/functions.cpp:966
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Ln"
 msgid "n"
-msgstr "n"
+msgstr "Ln"
 
 #: src/backend/gsl/functions.cpp:968
 #, kde-format
 msgid "j"
-msgstr "j"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:970
 #, kde-format
 msgid "q"
-msgstr "q"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:972 src/backend/gsl/functions.cpp:980
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "x="
 msgid "x"
-msgstr "x"
+msgstr "x="
 
 #: src/backend/gsl/functions.cpp:982
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "min."
 msgid "min"
-msgstr "min"
+msgstr "min."
 
 #: src/backend/gsl/functions.cpp:984
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "max."
 msgid "max"
-msgstr "max"
+msgstr "max."
 
 #: src/backend/gsl/functions.cpp:992
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "1"
 msgid "v1"
-msgstr "v1"
+msgstr "1"
 
 #: src/backend/gsl/functions.cpp:994
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "2"
 msgid "v2"
-msgstr "v2"
+msgstr "2"
 
 #: src/backend/gsl/functions.cpp:996
 #, kde-format
 msgid "ep"
-msgstr "ep"
+msgstr ""
 
 #: src/backend/lib/Range.h:48 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:537
@@ -5946,13 +6112,13 @@ msgid "unexpected end of document"
 msgstr "oväntat dokumentslut"
 
 #: src/backend/matrix/Matrix.cpp:129
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3797
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3788
 #, kde-format
 msgid "FITS image"
 msgstr "FITS-bild"
 
 #: src/backend/matrix/Matrix.cpp:129
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3797
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3788
 #, kde-format
 msgid "FITS table"
 msgstr "FITS-tabell"
@@ -5999,7 +6165,9 @@ msgid "%1: set matrix size to %2x%3"
 msgstr "%1: ställ in matrisstorlek till %2 x %3"
 
 #: src/backend/matrix/Matrix.cpp:527
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1: add %2 rows"
+#| msgid_plural "%1: add %2 rows"
 msgid "%1: add %2 row"
 msgid_plural "%1: add %2 rows"
 msgstr[0] "%1: lägg till %2 rad"
@@ -6083,15 +6251,17 @@ msgid "%1: mirror vertically"
 msgstr "%1: spegla vertikalt"
 
 #: src/backend/note/Note.cpp:47
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Print"
 msgctxt "@title:window"
 msgid "Print Note"
-msgstr "Skriv ut anteckning"
+msgstr "Skriv ut"
 
 #: src/backend/note/Note.cpp:65
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "LaTeX files (*.tex)"
 msgid "Text file (*.txt)"
-msgstr "Textfil (*.txt)"
+msgstr "Latex-filer (*.tex)"
 
 #: src/backend/note/Note.cpp:67
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:384
@@ -6102,14 +6272,17 @@ msgid "Export to File"
 msgstr "Exportera till fil"
 
 #: src/backend/note/Note.cpp:81
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Export to File"
 msgid "Export failed"
-msgstr "Export misslyckades"
+msgstr "Exportera till fil"
 
 #: src/backend/note/Note.cpp:81
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Couldn't open the file '%1' for writing."
 msgid "Failed to open '%1' for writing."
-msgstr "Misslyckades öppna '%1' för skrivning."
+msgstr "Kunde inte öppna filen '%1' för skrivning."
 
 #: src/backend/note/Note.cpp:161
 #, kde-format
@@ -7013,22 +7186,25 @@ msgstr "Trikubisk"
 #: src/backend/spreadsheet/Spreadsheet.cpp:295
 #, kde-format
 msgid "%1: remove rows with missing values"
-msgstr "%1: ta bort rader med saknade värden"
+msgstr ""
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:313
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1: fill matrix with function values"
 msgid "%1: mask rows with missing values"
-msgstr "%1: maska rader med saknade värden"
+msgstr "%1: fyll matris med funktionsvärden"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:425
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1: set line pen"
 msgid "%1: set linking"
-msgstr "%1: ställ in länkning"
+msgstr "%1: ställ in linjepenna"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:445
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1: set line pen"
 msgid "%1: set linked spreadsheet"
-msgstr "%1: ställ in länkat kalkylark"
+msgstr "%1: ställ in linjepenna"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:500
 #, kde-format
@@ -7065,9 +7241,10 @@ msgid "%1: sort columns"
 msgstr "%1: sortera kolumner"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1140
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "no spreadsheet element found"
 msgid "%1: linked spreadsheet removed"
-msgstr "%1: länkat kalkylark borttaget"
+msgstr "inget kalkylarkselement hittades"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1529
 #, kde-format
@@ -7145,32 +7322,38 @@ msgid "Count"
 msgstr "Antal"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:64
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Arithmetic mean"
 msgid "ArithmeticMean"
 msgstr "Aritmetiskt medelvärde"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:65
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Geometric mean"
 msgid "GeometricMean"
 msgstr "Geometriskt medelvärde"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:66
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Harmonic mean"
 msgid "HarmonicMean"
 msgstr "Harmoniskt medelvärde"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:67
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Contraharmonic mean"
 msgid "ContraharmonicMean"
 msgstr "Kontraharmoniskt medelvärde"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:69
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "First Quartile"
 msgid "FirstQuartile"
 msgstr "Första kvartil"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:71
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Third Quartile"
 msgid "ThirdQuartile"
 msgstr "Tredje kvartil"
 
@@ -7181,60 +7364,71 @@ msgid "Interquartile Range"
 msgstr "Interkvartilt intervall"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:73
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Percentile"
 msgid "Percentile1"
-msgstr "Percentil 1"
+msgstr "Percentil"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:74
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Percentile"
 msgid "Percentile5"
-msgstr "Percentil 5"
+msgstr "Percentil"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:75
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Percentile"
 msgid "Percentile10"
-msgstr "Percentil 10"
+msgstr "Percentil"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:76
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Percentile"
 msgid "Percentile90"
-msgstr "Percentil 90"
+msgstr "Percentil"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:77
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Percentile"
 msgid "Percentile95"
-msgstr "Percentil 95"
+msgstr "Percentil"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:78
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Percentile"
 msgid "Percentile99"
-msgstr "Percentil 99"
+msgstr "Percentil"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbRange)
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:80
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:79
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:158
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Range:"
 msgid "Range"
-msgstr "Intervall"
+msgstr "Intervall:"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:82
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Standard deviation"
 msgid "StandardDeviation"
 msgstr "Standardavvikelse"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:83
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Mean deviation"
 msgid "MeanDeviation"
-msgstr "Medelavvikelse"
+msgstr "Standardavvikelse"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:84
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Mean deviation around median"
 msgid "MeanDeviationAroundMedian"
 msgstr "Medelvärdets avvikelse omkring medianen"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:85
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Median deviation"
 msgid "MedianDeviation"
 msgstr "Medianavvikelse"
 
@@ -7384,9 +7578,10 @@ msgid "%1: set line width"
 msgstr "%1: ställ in linjebredd"
 
 #: src/backend/worksheet/Line.cpp:128
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1: set label color"
 msgid "%1: set line color"
-msgstr "%1: ställ in linjefärg"
+msgstr "%1: ställ in beteckningsfärg"
 
 #: src/backend/worksheet/Line.cpp:135
 #, kde-format
@@ -7530,14 +7725,16 @@ msgid "%1: set axis range"
 msgstr "%1: ställ in axelintervall"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:641
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1: set x scale"
 msgid "%1: set range scale"
-msgstr "%1: ange intervallskala"
+msgstr "%1: ange x-skala"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:648
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1: set x scale"
 msgid "%1: set scale"
-msgstr "%1: ange skala"
+msgstr "%1: ange x-skala"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:655
 #, kde-format
@@ -7954,9 +8151,10 @@ msgstr "KDE-diagram"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:435
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:490
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:251
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Normal Q-Q Plot"
 msgid "Q-Q Plot"
-msgstr "Q-Q-diagram"
+msgstr "Normalt Q-Q-diagram"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:438
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:476
@@ -7971,9 +8169,10 @@ msgstr "Stapeldiagram"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:439
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:479
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:261
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "All Plots"
 msgid "Lollipop Plot"
-msgstr "Klubbdiagram"
+msgstr "Alla diagram"
 
 #. i18n("Data Operation"), this);
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:442
@@ -8205,13 +8404,15 @@ msgstr "Lägg till ny"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:615
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:238
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Statistics"
 msgid "Statistical Plots"
-msgstr "Statistiska diagram"
+msgstr "Statistik"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:622
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:256
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Bar Plot"
 msgid "Bar Plots"
 msgstr "Stapeldiagram"
 
@@ -8556,9 +8757,10 @@ msgstr "%1: ställ in layoutens antal kolumner"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:140
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:188
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1: x-error type changed"
 msgid "%1: error type changed"
-msgstr "%1: feltyp ändrad"
+msgstr "%1: x-feltyp ändrad"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:147
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:159
@@ -8571,7 +8773,7 @@ msgstr "%1: ställ in x-felkolumn"
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:235
 #, kde-format
 msgid "%1: error bar type changed"
-msgstr "%1: felstapeltyp ändrad"
+msgstr "%1: felstapelns typ ändrad"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:242
 #, kde-format
@@ -8658,7 +8860,7 @@ msgstr "%1: ställ in delantal"
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:451
 #, kde-format
 msgid "%1: set bin width"
-msgstr "%1: ställ in delbredd"
+msgstr "%1: ställ delbredd"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:459
 #, kde-format
@@ -8685,19 +8887,22 @@ msgstr ""
 "större än det minimala värdet."
 
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:239
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1: set range type"
 msgid "%1: set kernel type"
-msgstr "%1: ställ in kärntyp"
+msgstr "%1: ställ in intervalltyp"
 
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:246
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1: set bin width"
 msgid "%1: set bandwidth type"
-msgstr "%1: ställ bandbreddstyp"
+msgstr "%1: ställ delbredd"
 
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:253
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1: set bin width"
 msgid "%1: set bandwidth"
-msgstr "%1: ställ in bandbredd"
+msgstr "%1: ställ delbredd"
 
 #: src/backend/worksheet/plots/cartesian/Plot.cpp:58
 #, kde-format
@@ -8705,9 +8910,10 @@ msgid "%1: legend visibility changed"
 msgstr "%1: förklaringens synlighet ändrad"
 
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:265
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1: set position"
 msgid "%1: set distribution"
-msgstr "%1: ställ in distribution"
+msgstr "%1: ställ in position"
 
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:146
 #, kde-format
@@ -8735,9 +8941,10 @@ msgid "%1: set symbol size"
 msgstr "%1: ställ in symbolstorlek"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:164
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1: set label color"
 msgid "%1: set symbol color"
-msgstr "%1: ställ in symbolfärg"
+msgstr "%1: ställ in beteckningsfärg"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:171
 #, kde-format
@@ -9280,19 +9487,20 @@ msgstr "%1: ställ in anpassningsalternativ och utför anpassningen"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1823
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3092
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Fit results"
 msgid "Fit Results"
-msgstr "Anpassa resultat"
+msgstr "Anpassningsresultat"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1847
 #, kde-format
 msgid "Nonlinear Fit to X/Y data"
-msgstr "Icke-linjär anpassning av X/Y-data"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1853
 #, kde-format
 msgid "MODEL"
-msgstr "MODELL"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1857
 #, kde-format
@@ -9302,12 +9510,12 @@ msgstr "Grad"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1862
 #, kde-format
 msgid "Peaks"
-msgstr "Toppar"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1881
 #, kde-format
 msgid "PARAMETERS"
-msgstr "PARAMETRAR"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
@@ -9316,12 +9524,14 @@ msgid "Uncertainty"
 msgstr "Osäkerhet"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Uncertainty, %"
 msgid "Uncertainty,%"
 msgstr "Osäkerhet, %"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "t statistic"
 msgid "t Statistic"
 msgstr "t-statistik"
 
@@ -9340,24 +9550,26 @@ msgstr "Övre"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1902
 #, kde-format
 msgid "GOODNESS OF FIT"
-msgstr "ANPASSNINGSGODHET"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1904
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:968
 #, kde-format
 msgid "Sum of squared residuals"
-msgstr "Summan av kvadraten av felen"
+msgstr "Summan av kvadraten av fel"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1905
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Residual mean square"
 msgid "Residuals mean square"
-msgstr "Kvadratiskt medelvärde av felen"
+msgstr "Kvadratiskt felmedelvärde"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1906
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Root mean square deviation (RMSD, SD)"
 msgid "Root mean square deviation"
-msgstr "Roten ur kvadratiskt medelvärde avvikelse"
+msgstr "Roten ur kvadratiskt medelvärde avvikelse (RMSD, SD)"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1907
@@ -9384,43 +9596,53 @@ msgid "Test"
 msgstr "Prova"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1910
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Test"
 msgid "F-Test"
-msgstr "F-test"
+msgstr "Prova"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1912
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "mean absolute error:"
 msgid "Mean absolute error"
-msgstr "Medelvärde av felens absolutvärde"
+msgstr "medelvärde av felens absolutvärde:"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1913
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Akaike information criterion:"
 msgid "Akaike information criterion"
-msgstr "Akaike informationskriterium"
+msgstr "Akaike informationskriterium:"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1914
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Bayesian information criterion:"
 msgid "Bayesian information criterion"
-msgstr "Bayesiskt informationskriterium"
+msgstr "Bayesiskt informationskriterium:"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2251
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Model has no parameters."
 msgid "Model has no parameters!"
 msgstr "Modellen har inga parametrar."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2258
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Not sufficient weight data points provided."
 msgid "Not sufficient weight data points provided!"
 msgstr "Otillräckligt antal viktade datapunkter angivna."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2335
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:374
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "No data points available."
 msgid "No X data available!"
-msgstr "Ingen x-data tillgänglig."
+msgstr "Inga datapunkter tillgängliga."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2342
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "The number of data points (%1) must be greater than or equal to the "
+#| "number of parameters (%2)."
 msgid ""
 "The number of data points (%1) must be greater than or equal to the number "
 "of parameters (%2)!"
@@ -9429,7 +9651,8 @@ msgstr ""
 "parametrar (%2)."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2349
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Fit model not specified."
 msgid "Fit model not specified!"
 msgstr "Anpassningsmodell ej angiven."
 
@@ -9575,12 +9798,12 @@ msgstr "Kurvor"
 #: src/backend/worksheet/WorksheetElement.cpp:155
 #, kde-format
 msgid "%1: lock"
-msgstr "%1: lås"
+msgstr ""
 
 #: src/backend/worksheet/WorksheetElement.cpp:155
 #, kde-format
 msgid "%1: unlock"
-msgstr "%1: lås upp"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbVisible)
 #. i18n: ectx: property (text), widget (QCheckBox, chkVisible)
@@ -9620,7 +9843,7 @@ msgstr "Synlig"
 #: src/backend/worksheet/WorksheetElement.cpp:228
 #, kde-format
 msgid "Lock"
-msgstr "Lås"
+msgstr ""
 
 #: src/backend/worksheet/WorksheetElement.cpp:237
 #, kde-format
@@ -9794,9 +10017,10 @@ msgid "Plot Data"
 msgstr "Diagramdata"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:291
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Statisti&cs..."
 msgid "Variable Statistics..."
-msgstr "Variabelstatistik..."
+msgstr "Statisti&k..."
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:338
 #, kde-format
@@ -9814,9 +10038,10 @@ msgid "Ready"
 msgstr "Klar"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:362
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1: row statistics"
 msgid "%1: variable statistics"
-msgstr "%1: variabelstatistik"
+msgstr "%1: radstatistik"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:126
 #: src/commonfrontend/matrix/MatrixView.cpp:194
@@ -9975,16 +10200,16 @@ msgid "Curve"
 msgstr "Kurva"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4037
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4091
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4028
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4082
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2217
 #, kde-format
 msgid "Failed to export"
 msgstr "Misslyckades exportera"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4037
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4091
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4028
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4082
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2217
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -10206,7 +10431,7 @@ msgid "%1: cut selected cell(s)"
 msgstr "%1: klipp ut markerad(e) cell(er)"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:689
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1793
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1784
 #, kde-format
 msgid "%1: paste from clipboard"
 msgstr "%1: klistra in från klippbordet"
@@ -10365,9 +10590,10 @@ msgid "&Unmask"
 msgstr "Ta &bort maskering"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:308
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Reverse"
 msgid "&Reverse"
-msgstr "&Vänd"
+msgstr "Omvänt"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:309
 #, kde-format
@@ -10409,15 +10635,16 @@ msgstr "Platta ut kolumner"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:326
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1149
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1535
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1526
 #, kde-format
 msgid "Show Comments"
 msgstr "Visa kommentarer"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:327
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Show Options"
 msgid "Show SparkLines"
-msgstr "Visa små linjediagram"
+msgstr "Visa alternativ"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:329
 #, kde-format
@@ -10437,9 +10664,10 @@ msgstr "&Sök"
 #. i18n: ectx: property (text), widget (QPushButton, bReplaceNext)
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:334
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:225
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Replace"
 msgid "&Replace"
-msgstr "E&rsätt"
+msgstr "Ersätt"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:336
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:482
@@ -10448,9 +10676,10 @@ msgid "Column Statistics..."
 msgstr "Kolumnstatistik..."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:338
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Column Statistics"
 msgid "Column Statistics Spreadsheet"
-msgstr "Kolumnstatistik kalkylark"
+msgstr "Kolumnstatistik"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:342
 #, kde-format
@@ -10473,12 +10702,14 @@ msgid "Insert Multiple Columns Right"
 msgstr "Infoga flera kolumner till höger"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:346
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Flatten Selected Columns"
 msgid "Delete Selected Column(s)"
-msgstr "Ta bort markerad(e) kolumn(er)"
+msgstr "Platta ut markerade kolumner"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:348
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1625
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1616
 #, kde-format
 msgid "Freeze Column"
 msgstr "Frys kolumn"
@@ -10509,7 +10740,9 @@ msgid "Drop Values"
 msgstr "Utelämna värden"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:392
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Mask Values"
 msgid "Mask Values"
 msgstr "Maskera värden"
 
@@ -10601,34 +10834,40 @@ msgid "Rescale to [a, b]"
 msgstr "Skala om till [a, b]"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:476
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Sort"
 msgid "&Sort..."
-msgstr "&Sortera..."
+msgstr "&Sortera"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:477
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Insert Multiple Columns Left"
 msgid "Sort multiple columns together"
-msgstr "Sortera ihop flera kolumner"
+msgstr "Infoga flera kolumner till vänster"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:478
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Ascending"
 msgid "Sort &Ascending"
-msgstr "Sortera stig&ande"
+msgstr "Stig&ande"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:479
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Flatten selected columns relative to:"
 msgid "Sort the selected columns separately in ascending order"
-msgstr "Sortera markerade kolumner separat i stigande ordning"
+msgstr "Platta ut markerade kolumner i förhållande till:"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:480
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Descending"
 msgid "Sort &Descending"
-msgstr "Sortera &fallande"
+msgstr "&Fallande"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:481
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Flatten selected columns relative to:"
 msgid "Sort the selected columns separately in descending order"
-msgstr "Sortera markerade kolumner separat i fallande ordning"
+msgstr "Platta ut markerade kolumner i förhållande till:"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:485
 #, kde-format
@@ -10656,19 +10895,20 @@ msgid "Insert Multiple Rows Below"
 msgstr "Infoga flera rader nedanför"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:493
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Remo&ve Selected Rows"
 msgid "Remo&ve Selected Row(s)"
-msgstr "Ta bort &markerad(e) rad(er)"
+msgstr "Ta bort &markerade rader"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:494
 #, kde-format
 msgid "Delete Rows With Missing Values"
-msgstr "Ta bort rader med saknade värden"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:495
 #, kde-format
 msgid "Mask Rows With Missing Values"
-msgstr "Maskera rader med saknade värden"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:496
 #, kde-format
@@ -10706,110 +10946,112 @@ msgid "Ladder of Powers"
 msgstr "Potensstege"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1147
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1533
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1524
 #, kde-format
 msgid "Hide Comments"
 msgstr "Dölj kommentarer"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1158
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1538
-#, kde-format
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1529
+#, fuzzy, kde-format
+#| msgid "Hide Options"
 msgid "Hide Sparklines"
-msgstr "Dölj små linjediagram"
+msgstr "Dölj alternativ"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1160
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1540
-#, kde-format
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1531
+#, fuzzy, kde-format
+#| msgid "Show Options"
 msgid "Show Sparklines"
-msgstr "Visa små linjediagram"
+msgstr "Visa alternativ"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1629
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1620
 #, kde-format
 msgid "Unfreeze Column"
 msgstr "Ta bort frysning av kolumn"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1712
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1703
 #, kde-format
 msgid "%1: cut selected cells"
 msgstr "%1: klipp ut markerade celler"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2036
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2027
 #, kde-format
 msgid "Not enough memory to finalize this operation."
 msgstr "Inte tillräckligt med minne för att slutföra operationen."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2050
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2041
 #, kde-format
 msgid "%1: mask selected cells"
 msgstr "%1: maskera markerade celler"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2092
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2083
 #, kde-format
 msgid "%1: unmask selected cells"
 msgstr "%1: avmaskera markerade celler"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2248
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2239
 #, kde-format
 msgid "%1: fill cells with row numbers"
 msgstr "%1: fyll celler med radnummer"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2313
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2304
 #, kde-format
 msgid "%1: fill column with row numbers"
 msgid_plural "%1: fill columns with row numbers"
 msgstr[0] "%1: fyll kolumn med radnummer"
 msgstr[1] "%1: fyll kolumner med radnummer"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2357
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2348
 #, kde-format
 msgid "%1: fill cells with random values"
 msgstr "%1: fyll celler med slumpvärden"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2483
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2474
 #, kde-format
 msgid "%1: fill cells with const values"
 msgstr "%1: fyll celler med konstantvärden"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2493
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2515
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2533
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2550
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2484
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2506
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2524
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2541
 #, kde-format
 msgid "Fill the selection with constant value"
 msgstr "Fyll markering med konstant värde"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2630
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2664
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2621
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2655
 #, kde-format
 msgid "Insert empty columns"
 msgstr "Infoga tomma kolumner"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2631
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2665
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2622
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2656
 #, kde-format
 msgid "Enter the number of columns to insert"
 msgstr "Ange antal kolumner att infoga"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2683
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2674
 #, kde-format
 msgid "%1: insert empty column"
 msgid_plural "%1: insert empty columns"
 msgstr[0] "%1: infoga tom kolumn"
 msgstr[1] "%1: infoga tomma kolumner"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2753
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2744
 #, kde-format
 msgid "%1: remove selected columns"
 msgstr "%1: ta bort markerade kolumner"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2850
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2841
 #, kde-format
 msgid "%1: reverse column"
 msgid_plural "%1: reverse columns"
 msgstr[0] "%1: vänd kolumn"
 msgstr[1] "%1: vänd kolumner"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2923
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2914
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
@@ -10817,221 +11059,231 @@ msgid ""
 msgstr ""
 "De markerade kolumnerna har olika datatyper och kan därför inte plattas ut."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2961
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2952
 #, kde-format
 msgid "%1: normalize columns"
 msgstr "%1: normalisera kolumner"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2981
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2972
 #, kde-format
 msgid "Sum = 0"
 msgstr "Summa = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2992
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2983
 #, kde-format
 msgid "Min = 0"
 msgstr "Min = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3003
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2994
 #, kde-format
 msgid "Max = 0"
 msgstr "Max = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3014
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3005
 #, kde-format
 msgid "Count = 0"
 msgstr "Antal = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3025
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3016
 #, kde-format
 msgid "Mean = 0"
 msgstr "Medelvärde = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3036
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3027
 #, kde-format
 msgid "Median = 0"
 msgstr "Median = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3048
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3039
 #, kde-format
 msgid "Mode = 0"
 msgstr "Läge = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3050
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3041
 #, kde-format
 msgid "'Mode not defined'"
 msgstr "'Läge ej angivet'"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3061
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3052
 #, kde-format
 msgid "Range = 0"
 msgstr "Intervall = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3072
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3106
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3063
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3097
 #, kde-format
 msgid "SD = 0"
 msgstr "SA = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3083
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3118
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3074
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3109
 #, kde-format
 msgid "MAD = 0"
 msgstr "MAD = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3094
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3130
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3085
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3121
 #, kde-format
 msgid "IQR = 0"
 msgstr "IQR = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3142
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3133
 #, kde-format
 msgid "Max - Min = 0"
 msgstr "Max - Min = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3161
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3152
 #, kde-format
 msgid "Normalization not possible"
 msgstr "Normalisering ej möjlig"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3173
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3164
 #, kde-format
 msgid "%1: power transform columns"
 msgstr "%1: potenstransformera kolumner"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3291
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3282
 #, kde-format
 msgid "%1: column statistics"
 msgstr "%1: kolumnstatistik"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3322
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3313
 #, kde-format
 msgid "Selection in %1"
 msgstr "Markering i %1"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3365
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3356
 #, kde-format
 msgid "%1: row statistics"
 msgstr "%1: radstatistik"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3375
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3366
 #, kde-format
 msgid "Row %1"
 msgstr "Rad %1"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3400
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3439
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3391
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3430
 #, kde-format
 msgid "Insert multiple rows"
 msgstr "Infoga flera rader"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3401
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3440
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3392
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3431
 #, kde-format
 msgid "Enter the number of rows to insert"
 msgstr "Ange antal rader att infoga"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3420
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3459
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3411
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3450
 #, kde-format
 msgid "%1: insert empty row"
 msgid_plural "%1: insert empty rows"
 msgstr[0] "%1: infoga tom rad"
 msgstr[1] "%1: infoga tomma rader"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3475
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3466
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr "%1: ta bort markerade rader"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3500
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3491
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: rensa markerade celler"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3762
-#, kde-format
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3753
+#, fuzzy, kde-format
+#| msgid "Arrow"
 msgid "row"
 msgid_plural "rows"
-msgstr[0] "rad"
-msgstr[1] "rader"
+msgstr[0] "Pil"
+msgstr[1] "Pil"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3763
-#, kde-format
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3754
+#, fuzzy, kde-format
+#| msgid "Column"
 msgid "column"
 msgid_plural "columns"
-msgstr[0] "kolumn"
-msgstr[1] "kolumner"
+msgstr[0] "Kolumn"
+msgstr[1] "Kolumn"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3764
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3755
 #, kde-format
 msgid "cells"
-msgstr "celler"
+msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3765
-#, kde-format
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3756
+#, fuzzy, kde-format
+#| msgid "Mask values"
 msgid "masked value"
-msgstr "maskerat värde"
+msgstr "Maskera värden"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3765
-#, kde-format
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3756
+#, fuzzy, kde-format
+#| msgid "Mask values"
 msgid "masked values"
-msgstr "maskerade värden"
+msgstr "Maskera värden"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3766
-#, kde-format
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3757
+#, fuzzy, kde-format
+#| msgid "bin values"
 msgid "missing value"
-msgstr "saknat värde"
+msgstr "delvärden"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3766
-#, kde-format
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3757
+#, fuzzy, kde-format
+#| msgid "bin values"
 msgid "missing values"
-msgstr "saknade värden"
+msgstr "delvärden"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3767
-#, kde-format
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3758
+#, fuzzy, kde-format
+#| msgid " ( "
 msgid " , "
-msgstr " , "
+msgstr " ( "
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3767
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3768
-#, kde-format
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3758
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3759
+#, fuzzy, kde-format
+#| msgid "1"
 msgid "%1"
-msgstr "%1"
+msgstr "1"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3768
-#, kde-format
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3759
+#, fuzzy, kde-format
+#| msgctxt "postfix for XML warning messages"
+#| msgid " "
 msgid ", "
-msgstr ", "
+msgstr " "
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3771
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3762
 #, kde-format
 msgid "Selected: %1 %2 , %3 %4%5 %6 %7 %8"
-msgstr "Valda: %1 %2 , %3 %4%5 %6 %7 %8"
+msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3781
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3772
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
-msgstr "Valda: %1 %2%3 %4 %5 %6"
+msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3854
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3845
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Skriv ut kalkylark"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4459
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4450
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr "Kunde inte skapa SQLite-databasen %1."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4491
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4482
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr "Misslyckades skapa tabell i SQLite-databasen %1."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4544
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4535
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr "Misslyckades infoga värde i tabellen."
@@ -11094,7 +11346,7 @@ msgstr ""
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:116
 #: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:57
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:75
-#: src/kdefrontend/MainWin.cpp:625 src/kdefrontend/MainWin.cpp:1933
+#: src/kdefrontend/MainWin.cpp:625 src/kdefrontend/MainWin.cpp:1942
 #: src/kdefrontend/SettingsDialog.cpp:72
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:122
 #, kde-format
@@ -11213,17 +11465,21 @@ msgid "Presenter Mode"
 msgstr "Presentationsläge"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:282
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Non-interactive Plots"
 msgid "Interactive Plots"
-msgstr "Interaktiva diagram"
+msgstr "Icke-interaktiva diagram"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:283
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "If activated, plots on the worksheet don't react on drag and mouse wheel "
+#| "events."
 msgid ""
 "If not activated, plots on the worksheet don't react on drag and mouse wheel "
 "events."
 msgstr ""
-"Om inte aktiverat, reagerar inte diagram på arbetsbladet till drag- och "
+"Om aktiverat, reagerar inte diagram på arbetsbladet till drag- och "
 "mushjulshändelser."
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:300
@@ -11270,7 +11526,7 @@ msgstr "Markera y-område och zooma in"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:359
-#: src/kdefrontend/MainWin.cpp:2418
+#: src/kdefrontend/MainWin.cpp:2427
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1426
 #, kde-format
 msgid "Cursor"
@@ -11389,10 +11645,12 @@ msgid "%1: Remove selected worksheet elements."
 msgstr "%1: Ta bort markerade arbetsbladselement."
 
 #: src/kdefrontend/CASSettingsDialog.cpp:34
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Preferences"
 msgctxt "@title:window"
 msgid "CAS Preferences"
-msgstr "CAS-inställningar"
+msgstr "Inställningar"
 
 #: src/kdefrontend/colormaps/ColorMapsDialog.cpp:42
 #, kde-format
@@ -11770,9 +12028,10 @@ msgid "Dataset%1"
 msgstr "Datamängd%1"
 
 #: src/kdefrontend/datasources/ImportDatasetDialog.cpp:103
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "File %1 imported in %2 seconds."
 msgid "Failed to connect within %1 seconds"
-msgstr "Misslyckades ansluta inom %1 sekunder"
+msgstr "Filen %1 importerad på %2 sekunder."
 
 #: src/kdefrontend/datasources/ImportDatasetDialog.cpp:128
 #, kde-format
@@ -11890,9 +12149,10 @@ msgid "Prepend"
 msgstr "Lägg till i början"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:145
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "New Workbook"
 msgid "Add a new Workbook"
-msgstr "Lägg till en ny arbetsbok"
+msgstr "Ny arbetsbok"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:146
 #, kde-format
@@ -11900,9 +12160,10 @@ msgid "Workbook name:"
 msgstr "Arbetsbokens namn:"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:148
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Add new Spreadsheet"
 msgid "Add a new Spreadsheet"
-msgstr "Lägg till ett nytt kalkylark"
+msgstr "Lägg till nytt kalkylark"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:149
 #, kde-format
@@ -11910,14 +12171,16 @@ msgid "Spreadsheet name:"
 msgstr "Kalkylarksnamn:"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:151
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Add new Matrix"
 msgid "Add a new Matrix"
-msgstr "Lägg till en ny matris"
+msgstr "Lägg till ny matris"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:152
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Matrix not square"
 msgid "Matrix name:"
-msgstr "Matrisnamn:"
+msgstr "Matrisen är inte kvadratisk"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
@@ -11958,9 +12221,10 @@ msgid "Live data source created in %1 seconds."
 msgstr "Direktdatakälla skapad på %1 sekunder."
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:176
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "No data set selected"
 msgid "No target data container selected"
-msgstr "Ingen måldatabehållare vald"
+msgstr "Ingen datamängd vald"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:321
 #, kde-format
@@ -12060,9 +12324,11 @@ msgid "Excel 2007+ (XSLX)"
 msgstr "Excel 2007+ (XSLX)"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:104
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Plot Spreadsheet Data"
 msgid "OpenDocument Spreadsheet (ODS)"
-msgstr "OpenDocument kalkylark (ODS)"
+msgstr "Rita kalkylarkets data"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:107
 #, kde-format
@@ -12154,7 +12420,8 @@ msgid "From End"
 msgstr "Från slutet"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:161
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Till the End"
 msgid "Till End"
 msgstr "Till slutet"
 
@@ -12503,19 +12770,21 @@ msgstr ""
 "importeras till."
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:159
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Plot Area"
 msgid "As Plot Area"
-msgstr "Som diagramområde"
+msgstr "Diagramområde"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:160
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Logical Coordinates"
 msgid "As Coordinate System"
-msgstr "Som koordinatsystem"
+msgstr "Logiska koordinater"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:164
 #, kde-format
 msgid "Specify how to import multi-layered graphs."
-msgstr "Ange hur diagram med flera lager ska importeras"
+msgstr ""
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:169
 #, kde-format
@@ -12529,14 +12798,6 @@ msgid ""
 "new coordinate system (data range) on the same plot area is created for "
 "every layer</li></ul>"
 msgstr ""
-"Flera lager används i Origin för att antingen implementera flera diagram "
-"eller flera axlar på samma diagram (se <a href=\"https://www.originlab.com/"
-"doc/Origin-Help/MultiLayer-Graph\">Origins dokumentation</a> för mer "
-"information). Labplot kan endast bearbeta en typ samtidigt.<br><br>Ange hur "
-"diagram med flera lager ska importeras i det valda projektet:<ul><li>Som "
-"diagramområde - ett nytt diagramområde skapas för varje lager.</li><li>Som "
-"koordinatsystem - ett nytt koordinatsystem (dataintervall) på samma "
-"diagramområde skapas för varje lager</li></ul>"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:271
 #, kde-format
@@ -12592,15 +12853,18 @@ msgid "LabPlot Projects (%1)"
 msgstr "LabPlot-projekt (%1)"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:448
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Open Origin Project"
 msgctxt "@title:window"
 msgid "Open Origin OPJ Project"
-msgstr "Öppna Origin OPJ-projekt"
+msgstr "Öppna Origin-projekt"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:450
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Origin Projects (%1)"
 msgid "Origin OPJ Projects (%1)"
-msgstr "Origin OPJ-projekt (%1)"
+msgstr "Origin-projekt (%1)"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:518
 #, kde-format
@@ -12653,9 +12917,10 @@ msgstr ""
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:330
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:332
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Execute the query and preview its result"
 msgid "Failed to execute the query for the preview"
-msgstr "Misslyckades utföra förfrågan för förhandsgranskning"
+msgstr "Utför förfrågan och förhandsgranska dess resultat"
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:406
 #, kde-format
@@ -12669,9 +12934,10 @@ msgstr "Utför förfrågan och förhandsgranska dess resultat"
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:533
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:535
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Unable to Execute Query"
 msgid "Failed to execute the query"
-msgstr "Misslyckades utföra förfrågan"
+msgstr "Kan inte utföra förfrågan"
 
 #: src/kdefrontend/datasources/JsonOptionsWidget.cpp:120
 #, kde-format
@@ -12884,7 +13150,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
-#: src/kdefrontend/MainWin.cpp:2727
+#: src/kdefrontend/MainWin.cpp:2736
 #, kde-format
 msgid "Warning"
 msgstr "Varning"
@@ -12917,9 +13183,10 @@ msgid "Values"
 msgstr "Värden"
 
 #: src/kdefrontend/datasources/OdsOptionsWidget.cpp:19
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Datasets"
 msgid "Data sheets"
-msgstr "Datablad"
+msgstr "Datamängder"
 
 #: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:22
 #, kde-format
@@ -13151,9 +13418,10 @@ msgid "Custom column"
 msgstr "Egen kolumn"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:283
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "No labels"
 msgid "Column labels"
-msgstr "Kolumnbeteckningar"
+msgstr "Inga beteckningar"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:285
 #, kde-format
@@ -13230,12 +13498,12 @@ msgstr "%1: ställ in teckensnittsfärg"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:1585
 #, kde-format
 msgid "Scale is in sync with the plot scale"
-msgstr "Skalan är synkroniserad med diagramskalan"
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:1588
 #, kde-format
 msgid "Scale is async with the plot"
-msgstr "Skalan är asynkron med diagrammet"
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2045
 #, kde-format
@@ -13334,9 +13602,10 @@ msgid "Column:"
 msgstr "Kolumn:"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:521
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1 cartesian plots: template \"%2\" loaded"
 msgid "%1 bar plots: template \"%2\" loaded"
-msgstr "%1 stapeldiagram: mall \"%2\" inläst"
+msgstr "%1 kartesiska diagram: mall \"%2\" inläst"
 
 #: src/kdefrontend/dockwidgets/BaseDock.cpp:212
 #, kde-format
@@ -13415,24 +13684,23 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:99
 #, kde-format
 msgid "Select to modify the properties of the symbol for the mean value."
-msgstr "Markera för att ändra egenskaperna för symbolen för medelvärdet."
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:102
 #, kde-format
 msgid "Select to modify the properties of the symbol for the median value."
-msgstr "Markera för att ändra egenskaperna för symbolen för medianvärdet."
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:105
 #, kde-format
 msgid "Select to modify the properties of the symbol for the outlier values."
 msgstr ""
-"Markera för att ändra egenskaperna för symbolen för ytterlighetsvärden."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:108
 #, kde-format
 msgid ""
 "Select to modify the properties of the symbol for the \"far out\" values."
-msgstr "Markera för att ändra egenskaperna för symbolen för extremvärden."
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:111
 #, kde-format
@@ -13440,14 +13708,12 @@ msgid ""
 "Select to modify the properties of the symbol for all data values excluding "
 "the outlier and \"far out\" values."
 msgstr ""
-"Markera för att ändra egenskaperna för symbolen för alla datavärden utom "
-"ytterlighets- och extremvärden."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:114
 #, kde-format
 msgid ""
 "Select to modify the properties of the symbol for the ends of the whiskers."
-msgstr "Markera för att ändra egenskaperna för symbolen för streckslut."
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:117
 #, kde-format
@@ -13455,13 +13721,12 @@ msgid ""
 "Activate to randomize the positions of the symbols (\"jittering\"), helpful "
 "for dense and overlapping data points."
 msgstr ""
-"Aktivera för att randomisera symbolernas positioner (\"jitter\"), vilket är "
-"användbart för täta och överlappande datapunkter."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:726
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1 Notes: template \"%2\" loaded"
 msgid "%1 box plots: template \"%2\" loaded"
-msgstr "%1 låddiagram: mall \"%2\" inläst"
+msgstr "%1 anteckningar: mall \"%2\" inläst"
 
 #: src/kdefrontend/dockwidgets/CantorWorksheetDock.cpp:61
 #, kde-format
@@ -13469,9 +13734,10 @@ msgid "File Browser"
 msgstr "Filbläddrare"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:228
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Save current plot definition as template"
 msgid "Save current plot area definition as template"
-msgstr "Spara definition av aktuell diagramområde som mall"
+msgstr "Spara aktuell diagramdefinition som mall"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:605
 #, kde-format
@@ -13680,9 +13946,10 @@ msgstr "Centrera"
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:258
 #: src/kdefrontend/widgets/LabelWidget.cpp:156
 #: src/kdefrontend/widgets/LabelWidget.cpp:161
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Relative Path"
 msgid "Relative to plot"
-msgstr "Relativt till diagram"
+msgstr "Relativ sökväg"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:779
 #, kde-format
@@ -13835,9 +14102,10 @@ msgid "Probability Density"
 msgstr "Sannolikhetstäthet"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:560
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1 axes: template \"%2\" loaded"
 msgid "%1 histograms: template \"%2\" loaded"
-msgstr "%1 histogram: mall \"%2\" inläst"
+msgstr "%1 axlar: mall \"%2\" inläst"
 
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:218
 #, kde-format
@@ -13852,7 +14120,7 @@ msgstr "%1: kurvan \"%2\" borttagen"
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:169
 #, kde-format
 msgid "Silverman"
-msgstr "Silverman"
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:351
 #: src/kdefrontend/dockwidgets/QQPlotDock.cpp:277
@@ -13901,9 +14169,10 @@ msgid "Couldn't subscribe to all available topics. Something went wrong"
 msgstr "Kunde inte prenumerera på alla tillgängliga ämnen. Någonting gick fel."
 
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:444
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1 Notes: template \"%2\" loaded"
 msgid "%1 lollipop plots: template \"%2\" loaded"
-msgstr "%1 klubbdiagram: mall \"%2\" inläst"
+msgstr "%1 anteckningar: mall \"%2\" inläst"
 
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:34
 #, kde-format
@@ -13921,16 +14190,11 @@ msgid "%1 matrices: template \"%2\" loaded"
 msgstr "%1 matriser: mall \"%2\" inläst"
 
 #: src/kdefrontend/dockwidgets/ProjectDock.cpp:28
-#, fuzzy, kde-format
-#| msgid ""
-#| "If checked, the state (position and geometry) of the docks is saved in "
-#| "the project file and restored on project load."
+#, kde-format
 msgid ""
 "If checked, the state of the default application docks is saved in the "
 "project file and restored on project load."
 msgstr ""
-"Om markerat, sparas panelernas tillstånd (position och geometri) i "
-"projektfilen och återställs när projektet läses in."
 
 #: src/kdefrontend/dockwidgets/ProjectDock.cpp:33
 #, kde-format
@@ -13955,12 +14219,11 @@ msgstr "%1 referenslinjer: mall \"%2\" inläst"
 msgid ""
 "Enable linking to synchronize the number of rows with another spreadsheet"
 msgstr ""
-"Aktivera länkning för att synkronisera antal rader med ett annat kalkylark"
 
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:57
 #, kde-format
 msgid "Spreadsheet to synchronize the number of rows with"
-msgstr "Kalkylark att synkronisera antal rader med"
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:231
 #, kde-format
@@ -14272,22 +14535,25 @@ msgstr "t-statistik"
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:368
 #, kde-format
 msgid "No X and Y column specified!"
-msgstr "Inga x- och y-kolumner angivna."
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:370
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Fit model not specified."
 msgid "No X column specified!"
-msgstr "Ingen x-kolumn angiven."
+msgstr "Anpassningsmodell ej angiven."
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:372
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Fit model not specified."
 msgid "No Y column specified!"
-msgstr "Ingen y-kolumn angiven."
+msgstr "Anpassningsmodell ej angiven."
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:376
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "No data points available."
 msgid "No Y data available!"
-msgstr "Ingen y-data tillgänglig."
+msgstr "Inga datapunkter tillgängliga."
 
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceCurve)
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:431
@@ -14327,9 +14593,10 @@ msgid "Fit status: %1"
 msgstr "Anpassningsstatus: %1"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1235
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "No data points available."
 msgid "No data source available!"
-msgstr "Inga datakällor tillgängliga."
+msgstr "Inga datapunkter tillgängliga."
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1410
 #, kde-format
@@ -14413,8 +14680,6 @@ msgid ""
 "The number of the interpolation points should be bigger than the total "
 "number of points in the data source."
 msgstr ""
-"Antalet interpolationspunkter bör vara större än det totala antalet punkter "
-"i datakällan."
 
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:540
 #, kde-format
@@ -14446,16 +14711,18 @@ msgid "Properties"
 msgstr "Egenskaper"
 
 #: src/kdefrontend/GuiObserver.cpp:226
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Sort Spreadsheet"
 msgctxt "@title:window"
 msgid "Properties: Spreadsheet"
-msgstr "Egenskaper: Kalkylark"
+msgstr "&Sortera kalkylark"
 
 #: src/kdefrontend/GuiObserver.cpp:231
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Column Statistics"
 msgctxt "@title:window"
 msgid "Properties: Column Statistics"
-msgstr "Egenskaper: Kolumnstatistik"
+msgstr "Kolumnstatistik"
 
 #: src/kdefrontend/GuiObserver.cpp:241
 #, kde-format
@@ -14464,178 +14731,208 @@ msgid "%1 Worksheet"
 msgstr "%1 arbetsblad"
 
 #: src/kdefrontend/GuiObserver.cpp:246
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties"
 msgctxt "@title:window"
 msgid "Properties: Column"
-msgstr "Egenskaper: Kolumn"
+msgstr "Egenskaper"
 
 #: src/kdefrontend/GuiObserver.cpp:253
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties"
 msgctxt "@title:window"
 msgid "Properties: Matrix"
-msgstr "Egenskaper: Matris"
+msgstr "Egenskaper"
 
 #: src/kdefrontend/GuiObserver.cpp:258
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Complete Worksheet"
 msgctxt "@title:window"
 msgid "Properties: Worksheet"
-msgstr "Egenskaper: Arbetsblad"
+msgstr "Hela arbetsbladet"
 
 #: src/kdefrontend/GuiObserver.cpp:264
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties Explorer"
 msgctxt "@title:window"
 msgid "Properties: Plot Area"
-msgstr "Egenskaper: Diagramområde"
+msgstr "Egenskapsutforskare"
 
 #: src/kdefrontend/GuiObserver.cpp:270
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties"
 msgctxt "@title:window"
 msgid "Properties: Legend"
-msgstr "Egenskaper: Förklaring"
+msgstr "Egenskaper"
 
 #: src/kdefrontend/GuiObserver.cpp:275
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties"
 msgctxt "@title:window"
 msgid "Properties: Axis"
-msgstr "Egenskaper: Axel"
+msgstr "Egenskaper"
 
 #: src/kdefrontend/GuiObserver.cpp:280
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties"
 msgctxt "@title:window"
 msgid "Properties: XY-Curve"
-msgstr "Egenskaper: XY-kurva"
+msgstr "Egenskaper"
 
 #: src/kdefrontend/GuiObserver.cpp:285
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "XY-Equation"
 msgctxt "@title:window"
 msgid "Properties: XY-Equation"
-msgstr "Egenskaper: XY-ekvation"
+msgstr "XY-ekvation"
 
 #: src/kdefrontend/GuiObserver.cpp:290
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Data Reduction"
 msgctxt "@title:window"
 msgid "Properties: Data Reduction"
-msgstr "Egenskaper: Datareduktion"
+msgstr "Datareducering"
 
 #: src/kdefrontend/GuiObserver.cpp:306
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Differentiation"
 msgctxt "@title:window"
 msgid "Properties: Differentiation"
-msgstr "Egenskaper: Derivering"
+msgstr "Derivering"
 
 #: src/kdefrontend/GuiObserver.cpp:311
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Integration"
 msgctxt "@title:window"
 msgid "Properties: Integration"
-msgstr "Egenskaper: Integrering"
+msgstr "Integrering"
 
 #: src/kdefrontend/GuiObserver.cpp:316
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Interpolation"
 msgctxt "@title:window"
 msgid "Properties: Interpolation"
-msgstr "Egenskaper: Interpolation"
+msgstr "Interpolation"
 
 #: src/kdefrontend/GuiObserver.cpp:321
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties"
 msgctxt "@title:window"
 msgid "Properties: Smoothing"
-msgstr "Egenskaper: Utjämning"
+msgstr "Egenskaper"
 
 #: src/kdefrontend/GuiObserver.cpp:326
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties"
 msgctxt "@title:window"
 msgid "Properties: Fit"
-msgstr "Egenskaper: Anpassa"
+msgstr "Egenskaper"
 
 #: src/kdefrontend/GuiObserver.cpp:331
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Fourier Transform"
 msgctxt "@title:window"
 msgid "Properties: Fourier Transform"
-msgstr "Egenskaper: Fouriertransform"
+msgstr "Fouriertransform"
 
 #: src/kdefrontend/GuiObserver.cpp:336
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Hilbert Transform"
 msgctxt "@title:window"
 msgid "Properties: Hilbert Transform"
-msgstr "Egenskaper: Hilberttransform"
+msgstr "Hilberttransform"
 
 #: src/kdefrontend/GuiObserver.cpp:341
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Fourier Filter"
 msgctxt "@title:window"
 msgid "Properties: Fourier Filter"
-msgstr "Egenskaper: Fourierfilter"
+msgstr "Fourierfilter"
 
 #: src/kdefrontend/GuiObserver.cpp:346
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Convolution/Deconvolution"
 msgctxt "@title:window"
 msgid "Properties: Convolution/Deconvolution"
-msgstr "Egenskaper: Faltning eller dekonvolution"
+msgstr "Faltning eller dekonvolution"
 
 #: src/kdefrontend/GuiObserver.cpp:351
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Auto-/Cross-Correlation"
 msgctxt "@title:window"
 msgid "Properties: Auto-/Cross-Correlation"
-msgstr "Egenskaper: Automatisk korrelation eller korskorrelation"
+msgstr "Automatisk korrelation eller korskorrelation"
 
 #: src/kdefrontend/GuiObserver.cpp:356
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties Explorer"
 msgctxt "@title:window"
 msgid "Properties: Histogram"
-msgstr "Egenskaper: Histogram"
+msgstr "Egenskapsutforskare"
 
 #: src/kdefrontend/GuiObserver.cpp:361
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties"
 msgctxt "@title:window"
 msgid "Properties: Bar Plot"
-msgstr "Egenskaper: Stapeldiagram"
+msgstr "Egenskaper"
 
 #: src/kdefrontend/GuiObserver.cpp:366
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties Explorer"
 msgctxt "@title:window"
 msgid "Properties: Lollipop Plot"
-msgstr "Egenskaper: Klubbdiagram"
+msgstr "Egenskapsutforskare"
 
 #: src/kdefrontend/GuiObserver.cpp:371
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties Explorer"
 msgctxt "@title:window"
 msgid "Properties: Box Plot"
-msgstr "Egenskaper: Låddiagram"
+msgstr "Egenskapsutforskare"
 
 #: src/kdefrontend/GuiObserver.cpp:376
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "KDE Plot"
 msgctxt "@title:window"
 msgid "KDE Plot"
 msgstr "KDE-diagram"
 
 #: src/kdefrontend/GuiObserver.cpp:381
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Normal Q-Q Plot"
 msgctxt "@title:window"
 msgid "Q-Q Plot"
-msgstr "Q-Q-diagram"
+msgstr "Normalt Q-Q-diagram"
 
 #: src/kdefrontend/GuiObserver.cpp:386
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties Explorer"
 msgctxt "@title:window"
 msgid "Properties: Text Label"
-msgstr "Egenskaper: Textbeteckning"
+msgstr "Egenskapsutforskare"
 
 #: src/kdefrontend/GuiObserver.cpp:391
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties"
 msgctxt "@title:window"
 msgid "Properties: Image"
-msgstr "Egenskaper: Bild"
+msgstr "Egenskaper"
 
 #: src/kdefrontend/GuiObserver.cpp:396
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Custom Point"
 msgctxt "@title:window"
 msgid "Properties: Custom Point"
-msgstr "Egenskaper: Egen punkt"
+msgstr "Egen punkt"
 
 #: src/kdefrontend/GuiObserver.cpp:401
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Reference Line"
 msgctxt "@title:window"
 msgid "Properties: Reference Line"
-msgstr "Egenskaper: Referenslinje"
+msgstr "Referenslinje"
 
 #: src/kdefrontend/GuiObserver.cpp:406
 #, kde-format
@@ -14644,22 +14941,27 @@ msgid "Reference Range"
 msgstr "Referensintervall"
 
 #: src/kdefrontend/GuiObserver.cpp:411
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Datapicker Curve"
 msgctxt "@title:window"
 msgid "Properties: Datapicker Curve"
-msgstr "Egenskaper: Dataväljarkurva"
+msgstr "Dataväljarkurva"
 
 #: src/kdefrontend/GuiObserver.cpp:416
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Data Extractor"
 msgctxt "@title:window"
 msgid "Properties: Data Extractor"
-msgstr "Egenskaper: Dataextrahering"
+msgstr "Dataextrahering"
 
 #: src/kdefrontend/GuiObserver.cpp:426
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties"
 msgctxt "@title:window"
 msgid "Properties: Project"
-msgstr "Egenskaper: Projekt"
+msgstr "Egenskaper"
 
 #: src/kdefrontend/GuiObserver.cpp:436
 #, kde-format
@@ -14668,47 +14970,56 @@ msgid "%1 Notebook"
 msgstr "%1 anteckningsblock"
 
 #: src/kdefrontend/GuiObserver.cpp:438
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties"
 msgctxt "@title:window"
 msgid "Properties: Notebook"
-msgstr "Egenskaper: Anteckningsblock"
+msgstr "Egenskaper"
 
 #: src/kdefrontend/GuiObserver.cpp:444
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties"
 msgctxt "@title:window"
 msgid "Properties: Notes"
-msgstr "Egenskaper: Anteckningar"
+msgstr "Egenskaper"
 
 #: src/kdefrontend/GuiObserver.cpp:449
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Info Element"
 msgctxt "@title:window"
 msgid "Properties: Info Element"
-msgstr "Egenskaper: Informationselement"
+msgstr "Informationselement"
 
 #: src/kdefrontend/GuiObserver.cpp:456 src/kdefrontend/GuiObserver.cpp:463
 #: src/kdefrontend/GuiObserver.cpp:470
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "MQTT Data Source"
 msgctxt "@title:window"
 msgid "Properties: MQTT Data Source"
-msgstr "Egenskaper: MQTT-datakälla"
+msgstr "MQTT-datakälla"
 
 #: src/kdefrontend/GuiObserver.cpp:476
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Live Data Source"
 msgctxt "@title:window"
 msgid "Properties: Live Data Source"
-msgstr "Egenskaper: Direktdatakälla"
+msgstr "Direktdatakälla"
 
 #: src/kdefrontend/GuiObserver.cpp:490
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties Explorer"
 msgctxt "@title:window"
 msgid "Properties: Folder"
-msgstr "Egenskaper: Katalog"
+msgstr "Egenskapsutforskare"
 
 #: src/kdefrontend/GuiObserver.cpp:497
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Properties"
 msgctxt "@title:window"
 msgid "Properties: Workbook"
-msgstr "Egenskaper: Arbetsbok"
+msgstr "Egenskaper"
 
 #: src/kdefrontend/GuiTools.cpp:72 src/kdefrontend/GuiTools.cpp:98
 #, kde-format
@@ -15080,9 +15391,10 @@ msgstr ""
 "för flera plattformar tillgänglig för vem som helst."
 
 #: src/kdefrontend/LabPlot.cpp:98
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "(c) 2007-2023"
 msgid "(c) 2007-2024"
-msgstr "© 2007-2024"
+msgstr "© 2007-2023"
 
 #: src/kdefrontend/LabPlot.cpp:101
 #, kde-format
@@ -15201,39 +15513,45 @@ msgstr "Misslyckades öppna"
 
 #. i18n: ectx: ToolBar (main_toolbar)
 #: src/kdefrontend/labplot2ui.rc:6
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Project Explorer"
 msgid "Project Toolbar"
-msgstr "Verktygsrad för projekt"
+msgstr "Projektutforskare"
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:24
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Worksheet"
 msgid "Worksheet Toolbar"
-msgstr "Verktygsrad för arbetsblad"
+msgstr "Arbetsblad"
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
 #: src/kdefrontend/labplot2ui.rc:28
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Data Extractor"
 msgid "Data Extractor Toolbar"
-msgstr "Verktygsrad för dataextrahering"
+msgstr "Dataextrahering"
 
 #. i18n: ectx: ToolBar (spreadsheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:32
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Spreadsheet"
 msgid "Spreadsheet Toolbar"
-msgstr "Verktygsrad för kalkylark"
+msgstr "Kalkylark"
 
 #. i18n: ectx: ToolBar (notebook_toolbar)
 #: src/kdefrontend/labplot2ui.rc:36
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Notebook"
 msgid "Notebook Toolbar"
-msgstr "Verktygsrad för anteckningsblock"
+msgstr "Anteckningsblock"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
 #: src/kdefrontend/labplot2ui.rc:40
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Plot Area"
 msgid "Plot Area Toolbar"
-msgstr "Verktygsrad för diagramområde"
+msgstr "Diagramområde"
 
 #. i18n: ectx: Menu (file)
 #: src/kdefrontend/labplot2ui.rc:44
@@ -15334,7 +15652,7 @@ msgstr "Välkommen till Labplot %1"
 msgid "&Open Example"
 msgstr "Ö&ppna exempel"
 
-#: src/kdefrontend/MainWin.cpp:615 src/kdefrontend/MainWin.cpp:1917
+#: src/kdefrontend/MainWin.cpp:615 src/kdefrontend/MainWin.cpp:1926
 #, kde-format
 msgid "Workbook"
 msgstr "Arbetsbok"
@@ -15344,7 +15662,7 @@ msgstr "Arbetsbok"
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr "Skapar en ny arbetsbok för samling av kalkylark, matriser och diagram"
 
-#: src/kdefrontend/MainWin.cpp:620 src/kdefrontend/MainWin.cpp:1925
+#: src/kdefrontend/MainWin.cpp:620 src/kdefrontend/MainWin.cpp:1934
 #, kde-format
 msgid "Data Extractor"
 msgstr "Dataextrahering"
@@ -15364,7 +15682,7 @@ msgstr "Skapar ett nytt kalkylark för dataredigering"
 msgid "Creates a new matrix for data editing"
 msgstr "Skapar en ny matris för dataredigering"
 
-#: src/kdefrontend/MainWin.cpp:637 src/kdefrontend/MainWin.cpp:1969
+#: src/kdefrontend/MainWin.cpp:637 src/kdefrontend/MainWin.cpp:1978
 #: src/kdefrontend/SettingsDialog.cpp:67
 #, kde-format
 msgid "Worksheet"
@@ -15375,7 +15693,7 @@ msgstr "Arbetsblad"
 msgid "Creates a new worksheet for data plotting"
 msgstr "Skapar ett nytt kalkylark för datauppritning"
 
-#: src/kdefrontend/MainWin.cpp:643 src/kdefrontend/MainWin.cpp:1977
+#: src/kdefrontend/MainWin.cpp:643 src/kdefrontend/MainWin.cpp:1986
 #, kde-format
 msgid "Note"
 msgstr "Anmärkning"
@@ -15385,7 +15703,7 @@ msgstr "Anmärkning"
 msgid "Creates a new note for arbitrary text"
 msgstr "Skapar en ny anteckning för godtycklig text"
 
-#: src/kdefrontend/MainWin.cpp:648 src/kdefrontend/MainWin.cpp:1909
+#: src/kdefrontend/MainWin.cpp:648 src/kdefrontend/MainWin.cpp:1918
 #, kde-format
 msgid "Folder"
 msgstr "Katalog"
@@ -15455,11 +15773,11 @@ msgstr "Exportera..."
 msgid "Export selected element"
 msgstr "Exportera markerat element"
 
-#: src/kdefrontend/MainWin.cpp:705 src/kdefrontend/MainWin.cpp:2454
-#: src/kdefrontend/MainWin.cpp:2462
+#: src/kdefrontend/MainWin.cpp:705 src/kdefrontend/MainWin.cpp:2463
+#: src/kdefrontend/MainWin.cpp:2471
 #, kde-format
 msgid "Share"
-msgstr "Dela"
+msgstr ""
 
 #: src/kdefrontend/MainWin.cpp:710
 #, kde-format
@@ -15552,9 +15870,10 @@ msgid "Properties Explorer"
 msgstr "Egenskapsutforskare"
 
 #: src/kdefrontend/MainWin.cpp:820
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Worksheet printed"
 msgid "Worksheet Preview"
-msgstr "Förhandsgranskning av arbetsblad"
+msgstr "Arbetsblad utskrivet"
 
 #: src/kdefrontend/MainWin.cpp:843
 #, kde-format
@@ -15567,8 +15886,6 @@ msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
 "systems or to enable new ones"
 msgstr ""
-"Öppnar inställningarna för datoralgebrasystem för att ändra de tillgängliga "
-"systemen eller aktivera nya"
 
 #: src/kdefrontend/MainWin.cpp:904
 #, kde-format
@@ -15602,10 +15919,11 @@ msgid "Project Explorer"
 msgstr "Projektutforskare"
 
 #: src/kdefrontend/MainWin.cpp:1398
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Worksheet printed"
 msgctxt "@title:window"
 msgid "Worksheet Preview"
-msgstr "Förhandsgranskning av arbetsblad"
+msgstr "Arbetsblad utskrivet"
 
 #: src/kdefrontend/MainWin.cpp:1407
 #, fuzzy, kde-format
@@ -15652,14 +15970,16 @@ msgid "Open Project"
 msgstr "Öppna projekt"
 
 #: src/kdefrontend/MainWin.cpp:1527
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "The provided file doesn't exist."
 msgid "The project file %1 doesn't exist."
-msgstr "Projektfilen %1 finns inte."
+msgstr "Den angivna filen finns inte."
 
 #: src/kdefrontend/MainWin.cpp:1532
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Couldn't save the file '%1'."
 msgid "Couldn't read the project file %1."
-msgstr "Kunde inte läsa projektfilen %1."
+msgstr "Kunde inte spara filen '%1'."
 
 #: src/kdefrontend/MainWin.cpp:1541
 #, kde-format
@@ -15696,85 +16016,88 @@ msgstr ""
 msgid "Couldn't open the temporary file for writing."
 msgstr "Kunde inte öppna den tillfälliga filen för skrivning."
 
-#: src/kdefrontend/MainWin.cpp:1798
+#: src/kdefrontend/MainWin.cpp:1807
 #, kde-format
 msgid "Project saved"
 msgstr "Projektet sparat"
 
-#: src/kdefrontend/MainWin.cpp:1814
+#: src/kdefrontend/MainWin.cpp:1823
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "Kunde inte spara filen '%1'."
 
-#: src/kdefrontend/MainWin.cpp:1819
+#: src/kdefrontend/MainWin.cpp:1828
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Kunde inte öppna filen '%1' för skrivning."
 
-#: src/kdefrontend/MainWin.cpp:1869
+#: src/kdefrontend/MainWin.cpp:1878
 #, kde-format
 msgid "Changed"
 msgstr "Ändrad"
 
-#: src/kdefrontend/MainWin.cpp:1884 src/kdefrontend/MainWin.cpp:1896
+#: src/kdefrontend/MainWin.cpp:1893 src/kdefrontend/MainWin.cpp:1905
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Förbereder utskrift av %1"
 
-#: src/kdefrontend/MainWin.cpp:1886 src/kdefrontend/MainWin.cpp:1898
+#: src/kdefrontend/MainWin.cpp:1895 src/kdefrontend/MainWin.cpp:1907
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 utskriven"
 
-#: src/kdefrontend/MainWin.cpp:2454
-#, kde-format
+#: src/kdefrontend/MainWin.cpp:2463
+#, fuzzy, kde-format
+#| msgid "The following problems occurred when loading the project file:\n"
 msgid "There was a problem sharing the project: %1"
-msgstr "Ett problem uppstod när projektet skulle delas: %1"
+msgstr "Följande problem uppstod vid inläsning av projektfilen:\n"
 
-#: src/kdefrontend/MainWin.cpp:2458
-#, kde-format
+#: src/kdefrontend/MainWin.cpp:2467
+#, fuzzy, kde-format
+#| msgid "Project saved"
 msgid "Project shared successfully"
-msgstr "Projektet delat med lyckat resultat"
+msgstr "Projektet sparat"
 
-#: src/kdefrontend/MainWin.cpp:2461
+#: src/kdefrontend/MainWin.cpp:2470
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
-msgstr "Det delade projektet finns på: <a href=\"%1\">%1</a>"
+msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2690
+#: src/kdefrontend/MainWin.cpp:2699
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 exporterad"
 
-#: src/kdefrontend/MainWin.cpp:2697
+#: src/kdefrontend/MainWin.cpp:2706
 #, kde-format
 msgid "FITS files saved"
 msgstr "FITS-filer sparade"
 
-#: src/kdefrontend/MainWin.cpp:2709
+#: src/kdefrontend/MainWin.cpp:2718
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "MQTT-klient%1"
 
-#: src/kdefrontend/MainWin.cpp:2727
+#: src/kdefrontend/MainWin.cpp:2736
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "Det finns redan en MQTT-klient med värddatorn."
 
-#: src/kdefrontend/MainWin.cpp:2731
+#: src/kdefrontend/MainWin.cpp:2740
 #, kde-format
 msgid "Live data source%1"
 msgstr "Direktdatakälla %1"
 
-#: src/kdefrontend/MainWin.cpp:2772
+#: src/kdefrontend/MainWin.cpp:2781
 #, kde-format
 msgid "No Cantor backends found. Please install the ones you want to use."
 msgstr "Inga Cantor bakgrundsprogram hittades. Installera de du vill använda."
 
-#: src/kdefrontend/MainWin.cpp:2786
-#, kde-format
+#: src/kdefrontend/MainWin.cpp:2795
+#, fuzzy, kde-format
+#| msgid "Creates a new note for arbitrary text"
 msgid "Creates a new %1 notebook"
-msgstr "Skapar ett nytt %1 anteckningsblock"
+msgstr "Skapar en ny anteckning för godtycklig text"
 
 #: src/kdefrontend/matrix/MatrixFunctionDialog.cpp:45
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:43
@@ -15811,10 +16134,12 @@ msgid "%1: fill matrix with function values"
 msgstr "%1: fyll matris med funktionsvärden"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:41
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Plot Templates"
 msgctxt "@title:window"
 msgid "Plot Area Templates"
-msgstr "Diagramområdesmallar"
+msgstr "Diagrammallar"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
 #: src/kdefrontend/PlotTemplateDialog.cpp:44
@@ -15833,17 +16158,20 @@ msgid "Custom Folder"
 msgstr "Egen katalog"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:48
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Location of plot templates"
 msgid "Location of plot area templates"
-msgstr "Plats för diagramområdesmallar"
+msgstr "Plats för diagrammallar"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:52
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Custom folder for the location of plot templates"
 msgid "Custom folder for the location of plot area templates"
-msgstr "Egen katalog för diagramområdesmallarnas plats"
+msgstr "Egen katalog för diagrammallarnas plats"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:56
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Open the folder for the location of plot templates"
 msgid "Open the folder for the location of plot area templates"
 msgstr "Öppna katalogen för diagrammallarnas plats"
 
@@ -15999,9 +16327,10 @@ msgid "min."
 msgstr "min."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:217
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Create New Empty Project"
 msgid "Create New Project"
-msgstr "Skapa nytt projekt"
+msgstr "Skapa nytt tomt projekt"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:218
 #, kde-format
@@ -16009,29 +16338,36 @@ msgid "Load Last Used Project"
 msgstr "Läs in senast använda projekt"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:222
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Print Spreadsheet"
 msgid "With Spreadsheet"
-msgstr "Med kalkylark"
+msgstr "Skriv ut kalkylark"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:223
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Print Worksheet"
 msgid "With Worksheet"
-msgstr "Med arbetsblad"
+msgstr "Skriv ut arbetsblad"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:224
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Plot Spreadsheet Data"
 msgid "With Spreadsheet and Worksheet"
-msgstr "Med arbetsblad och kalkylark"
+msgstr "Rita kalkylarkets data"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:226
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Notebook"
 msgid "With Notebook"
-msgstr "Med anteckningsblock"
+msgstr "Anteckningsblock"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:229
 #, kde-format
 msgid "Notebook type to create automatically on startup"
-msgstr "Typ av anteckningsblock att skapa automatiskt vid start"
+msgstr ""
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:233
 #, kde-format
@@ -16039,18 +16375,17 @@ msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
 "opened"
 msgstr ""
-"Styr beteendet när det gäller var dockningskomponenter placeras efter de har "
-"öppnats igen"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:237
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Original Size"
 msgid "Original Position"
-msgstr "Ursprunglig position"
+msgstr "Ursprunglig storlek"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:238
 #, kde-format
 msgid "On top of the last active Dock Widget"
-msgstr "Ovanpå den senast aktiva dockningskomponenten"
+msgstr ""
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:241
 #, kde-format
@@ -16093,15 +16428,21 @@ msgid "Arabic (٫)"
 msgstr "Arabiska (٫)"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:254
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>Use terms compliant with the <a href=\"http://www."
+#| "bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf\"><span style=\" "
+#| "text-decoration: underline; color:#2980b9;\">Guide to the Expression of "
+#| "Uncertainty in Measurement (GUM)</span></a></p></body></html>"
 msgid ""
 "Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/"
 "documents/jcgm/JCGM_100_2008_E.pdf\">Guide to the Expression of Uncertainty "
 "in Measurement (GUM)</a>"
 msgstr ""
-"Använd villkor som överensstämmer med <a href=\"http://www.bipm.org/utils/"
-"common/documents/jcgm/JCGM_100_2008_E.pdf\">Guide to the Expression of "
-"Uncertainty in Measurement (GUM)</a>"
+"<html><head/><body><p>Använd villkor som överensstämmer med <a href=\"http://"
+"www.bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf\"><span style="
+"\" text-decoration: underline; color:#2980b9;\">Guide to the Expression of "
+"Uncertainty in Measurement (GUM)</span></a></p></body></html>"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:259
 #, kde-format
@@ -16111,12 +16452,14 @@ msgid ""
 "The setting can be changed for every project separately in the project "
 "properties."
 msgstr ""
-"Spara panelernas tillstånd (position och geometri) i projektfilen.\n"
-"Bestämmer det förvalda beteendet för nya projekt.\n"
-"Inställningen kan ändras separat för varje projekt i projektegenskaperna."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:266
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "If checked, the results of the calculations in the analysis curves will "
+#| "be saved in the project file.\n"
+#| "Uncheck this option to reduce the size of the project file at costs of "
+#| "the longer project load times."
 msgid ""
 "Save the results of the calculations in the analysis curves in the project "
 "file. \n"
@@ -16126,16 +16469,15 @@ msgid ""
 "The setting can be changed for every project separately in the project "
 "properties."
 msgstr ""
-"Spara resultatet av beräkningarna i analyskurvorna i projektfilen.\n"
+"Om markerad, sparas resultatet av beräkningarna i analyskurvorna i "
+"projektfilen.\n"
 "Avmarkera alternativet för att reducera projektfilens storlek på bekostnad "
-"av längre inläsningstider för projekt.\n"
-"Bestämmer det förvalda beteendet för nya projekt.\n"
-"Inställningen kan ändras separat för varje projekt i projektegenskaperna."
+"av längre inläsningstider för projekt."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:273
 #, kde-format
 msgid "Activates additional tracing output in the terminal."
-msgstr "Aktiverar ytterligare spårningsutmatning på terminalen."
+msgstr ""
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:274
 #, kde-format
@@ -16143,8 +16485,6 @@ msgid ""
 "Debug trace - helpful to diagnose the application, can have a negative "
 "impact on the performance."
 msgstr ""
-"Felsökningsspårning: användbar för att diagnostisera programmet, kan ha en "
-"negativ inverkan på prestanda."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:275
 #, kde-format
@@ -16152,8 +16492,6 @@ msgid ""
 "Performance trace - helpful to analyze performance relevant aspects and "
 "bottlenecks."
 msgstr ""
-"Prestandaspårning: användbar för att analysera prestandarelevanta aspekter "
-"och flaskhalsar."
 
 #: src/kdefrontend/SettingsNotebookPage.cpp:23
 #, kde-format
@@ -16572,62 +16910,68 @@ msgid "Increment"
 msgstr "Öka"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:60
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Increment"
 msgid "Number and Increment"
-msgstr "Antal och ökning"
+msgstr "Öka"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:62
 #, kde-format
 msgid "Years"
-msgstr "År"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:63
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "month"
 msgid "Months"
-msgstr "Månader"
+msgstr "månad"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:192
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Equidistant Values"
 msgctxt "@title:window"
 msgid "Equidistant Numeric and Date&Time Values"
-msgstr "Ekvidistanta numeriska och datum- och tidsvärden"
+msgstr "Ekvidistanta värden"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:197
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Equidistant Values"
 msgctxt "@title:window"
 msgid "Equidistant Numeric Values"
-msgstr "Ekvidistanta numeriska värden"
+msgstr "Ekvidistanta värden"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:199
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Equidistant Values"
 msgctxt "@title:window"
 msgid "Equidistant Date&Time Values"
-msgstr "Ekvidistanta datum- och tidsvärden"
+msgstr "Ekvidistanta värden"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:250
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "invalid y start value"
 msgid "Invalid start value"
-msgstr "Ogiltigt startvärde"
+msgstr "ogiltigt y-startvärde"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:257
 #, kde-format
 msgid "Invalid end value, must be bigger than the start value"
-msgstr "Ogiltigt slutvärde, det måste vara större än startvärdet"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:300
 #, kde-format
 msgid "The number of values to be generated must be bigger than one"
-msgstr "Antal värden som ska genereras måste vara större än ett"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:317
 #, kde-format
 msgid "Invalid numeric increment value, must be bigger than zero"
-msgstr "Ogiltigt numeriskt ökningsvärde, det måste vara större än noll"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:326
 #, kde-format
 msgid "Invalid Date&Time increment value, must be bigger than zero"
-msgstr "Ogiltigt datum- och tidsökningsvärde, det måste vara större än noll"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:487
 #, kde-format
@@ -16656,7 +17000,8 @@ msgid "Export Selection"
 msgstr "Exportera markering"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:94
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "This option determines how the convert numbers to strings."
 msgid "This option determines how to convert numbers to strings."
 msgstr "Alternativet bestämmer hur tal konverteras till strängar."
 
@@ -16806,21 +17151,26 @@ msgid "Add new variable"
 msgstr "Lägg till ny variabel"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:65
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Automatically update the calculated values on changes in the variable "
+#| "columns"
 msgid ""
 "Automatically update the calculated values in the target column on changes "
 "in the variable columns"
 msgstr ""
-"Uppdatera automatiskt de beräknade värdena i målkolumnen vid ändringar i "
-"variabelkolumnerna"
+"Uppdatera automatiskt de beräknade värdena vid ändringar i variabelkolumnerna"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:66
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Automatically update the calculated values on changes in the variable "
+#| "columns"
 msgid ""
 "Automatically resize the target column to fit the size of the variable "
 "columns"
 msgstr ""
-"Uppdatera automatiskt målkolumnen för att passa variabelkolumnernas storlek"
+"Uppdatera automatiskt de beräknade värdena vid ändringar i variabelkolumnerna"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:158
 #, kde-format
@@ -16828,8 +17178,6 @@ msgid ""
 "Spreadsheet linking is active. The size of the target spreadsheet is "
 "controlled by the linked spreadsheet."
 msgstr ""
-"Länkning till kalkylark är aktiv. Målkalkylarkets storlek styrs av det "
-"länkade kalkylarket."
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:168
 #, kde-format
@@ -16852,29 +17200,34 @@ msgstr ""
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:174
 #, kde-format
 msgid "The variable name 'i' is reserved for the index of the column row."
-msgstr "Variabelnamnet 'i' är reserverat för kolumnradens index."
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:177
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Provided variable name is already reserved for a name of a constant. "
+#| "Please use another name."
 msgid ""
 "Provided variable name starts with a digit or contains special character."
 msgstr ""
-"Angivet variabelnamn börjar med en siffra eller innehåller ett specialtecken."
+"Angivet variabelnamn är redan reserverat som namn på en konstant. Använd ett "
+"annat namn."
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:188
 #, kde-format
 msgid "Empty formula expression"
-msgstr "Tomt formeluttryck"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:195
 #, kde-format
 msgid "Incorrect formula syntax: "
-msgstr "Felaktig formelsyntax: "
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:214
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Selected Columns"
 msgid "Select a valid column"
-msgstr "Markera en giltig kolumn"
+msgstr "&Markerade kolumner"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:221
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:275
@@ -16883,8 +17236,6 @@ msgid ""
 "Variable name can contain letters, digits and '_' only and should start with "
 "a letter"
 msgstr ""
-"Variabelnamn kan bara innehålla bokstäver, siffror och '_' och ska börja med "
-"en bokstav"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:319
 #, kde-format
@@ -17006,9 +17357,10 @@ msgid "No data selected to plot."
 msgstr "Ingen datamängd vald att rita upp."
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1078
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "An already existing plot has to be selected."
 msgid "An already existing plot area has to be selected."
-msgstr "Ett befintligt diagramområde måste markeras."
+msgstr "Ett befintligt diagram måste markeras."
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1083
 #, kde-format
@@ -17047,13 +17399,20 @@ msgstr ""
 "generatorn."
 
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:91
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>Random number distributions as defined in <a href="
+#| "\"https://www.gnu.org/software/gsl/doc/html/randist.html\"><span style=\" "
+#| "text-decoration: underline; color:#2980b9;\">GSL documentation</span></"
+#| "a></p></body></html>"
 msgid ""
 "Random number distributions as defined in <a href=\"https://www.gnu.org/"
 "software/gsl/doc/html/randist.html\">GSL documentation</a>"
 msgstr ""
-"Distributioner av slumptal är i den ordning de finns i <a href=\"https://www."
-"gnu.org/software/gsl/doc/html/randist.html\">GSL-dokumentationen</a>"
+"<html><head/><body><p>Distributioner av slumptal är i den ordning de finns i "
+"<a href=\"https://www.gnu.org/software/gsl/doc/html/randist.html\"><span "
+"style=\" text-decoration: underline; color:#2980b9;\">GSL-dokumentationen</"
+"span></a></p></body></html>"
 
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:470
 #, kde-format
@@ -17143,86 +17502,92 @@ msgstr "Sampling av %1"
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:219
 #, kde-format
 msgid "Regular Expression"
-msgstr "Reguljärt uttryck"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1089
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1 not found"
 msgid "%1 match found"
 msgid_plural "%1 matches found"
-msgstr[0] "%1 träff"
-msgstr[1] "%1 träffar hittades"
+msgstr[0] "%1 inte hittade"
+msgstr[1] "%1 inte hittade"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1168
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1: replace values"
 msgid "%1 replacement made"
 msgid_plural "%1 replacements made"
-msgstr[0] "%1 ersättning gjordes"
-msgstr[1] "%1 ersättningar gjorda"
+msgstr[0] "%1: ersätt värden"
+msgstr[1] "%1: ersätt värden"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1460
 #, kde-format
 msgid "Add..."
-msgstr "Lägg till..."
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1538
 #, kde-format
 msgid "Beginning of line"
-msgstr "Radens början"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1539
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "End of file"
 msgid "End of line"
-msgstr "Radens slut"
+msgstr "Filslut nått"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1541
 #, kde-format
 msgid "Match any character excluding new line (by default)"
-msgstr "Matcha vilket tecken som helst (normalt) med undantag av nyrad"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1542
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "An error occurred."
 msgid "One or more occurrences"
-msgstr "En eller flera förekomster"
+msgstr "Ett fel uppstod."
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1543
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "An error occurred."
 msgid "Zero or more occurrences"
-msgstr "Noll eller flera förekomster"
+msgstr "Ett fel uppstod."
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1544
 #, kde-format
 msgid "Zero or one occurrences"
-msgstr "Noll eller en förekomst"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1545
 #, kde-format
 msgid "<a> through <b> occurrences"
-msgstr "<a> till <b> förekomster"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1547
 #, kde-format
 msgid "Group, capturing"
-msgstr "Grupp, sparas"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1548
 #, kde-format
 msgid "Or"
-msgstr "Eller"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1549
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Comment character:"
 msgid "Set of characters"
-msgstr "Uppsättning tecken"
+msgstr "Kommentartecken:"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1550
 #, kde-format
 msgid "Negative set of characters"
-msgstr "Negativ uppsättning tecken"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1553
 #, kde-format
 msgid "Whole match reference"
-msgstr "Referens till hela sökträffen"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1563
 #, kde-format
@@ -17230,106 +17595,114 @@ msgid "Reference"
 msgstr "Referens"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1569
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Linear Algebra"
 msgid "Line break"
-msgstr "Radbrytning"
+msgstr "Linjär algebra"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1570
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Table"
 msgid "Tab"
-msgstr "Tabulator"
+msgstr "Tabell"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1573
 #, kde-format
 msgid "Word boundary"
-msgstr "Ordgräns"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1574
 #, kde-format
 msgid "Not word boundary"
-msgstr "Inte ordgräns"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1575
 #, kde-format
 msgid "Digit"
-msgstr "Siffra"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1576
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Zero digit "
 msgid "Non-digit"
-msgstr "Inte siffra"
+msgstr "Nollsiffra"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1577
 #, kde-format
 msgid "Whitespace (excluding line breaks)"
-msgstr "Blanktecken (med undantag för radbrytningar)"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1578
 #, kde-format
 msgid "Non-whitespace"
-msgstr "Icke-blanktecken"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1579
 #, kde-format
 msgid "Word character (alphanumerics plus '_')"
-msgstr "Ordtecken (alfanumeriska tecken samt '_')"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1580
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Comment character:"
 msgid "Non-word character"
-msgstr "Inte ordtecken"
+msgstr "Kommentartecken:"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1583
 #, kde-format
 msgid "Octal character 000 to 377 (2^8-1)"
-msgstr "Oktalt tecken 000 till 377 (2^8-1)"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1584
 #, kde-format
 msgid "Hex character 0000 to FFFF (2^16-1)"
-msgstr "Hexadecimalt tecken 0000 till FFFF (2^16-1)"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1585
 #, kde-format
 msgid "Backslash"
-msgstr "Bakstreck"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1589
 #, kde-format
 msgid "Group, non-capturing"
-msgstr "Grupp, sparas inte"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1590
 #, kde-format
 msgid "Positive Lookahead"
-msgstr "Positiv framåtreferens"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1591
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Negative Binomial"
 msgid "Negative lookahead"
-msgstr "Negativ framåtreferens"
+msgstr "Negativ binomial"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1595
 #, kde-format
 msgid "Fixed-length positive lookbehind"
-msgstr "Positiv bakåtreferens med fast längd"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1596
 #, kde-format
 msgid "Fixed-length negative lookbehind"
-msgstr "Negativ bakåtreferens med fast längd"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:33
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Sort Columns"
 msgctxt "@title:window"
 msgid "Sort All Columns"
-msgstr "Sortera alla kolumner"
+msgstr "Sortera kolumner"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:35
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "&Selected Columns"
 msgctxt "@title:window"
 msgid "Sort Selected Columns"
-msgstr "Sortera markerade kolumner"
+msgstr "&Markerade kolumner"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:39
 #, kde-format
@@ -18010,9 +18383,10 @@ msgstr " Välj bildfilen"
 #. i18n: ectx: property (toolTip), widget (QLabel, lPointSeparation)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:137
 #: src/kdefrontend/ui/datapickerimagewidget.ui:779
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Number of digits after the decimal point"
 msgid "Number of pixels between two neighbor data points"
-msgstr "Antal bildpunkter mellan två intilliggande datapunkter"
+msgstr "Antal siffror efter decimaltecknet"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbPointSeparation)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbMinSegmentLength)
@@ -18024,9 +18398,10 @@ msgstr " bildpunkter"
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:155
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Reference"
 msgid "References"
-msgstr "Referenser"
+msgstr "Referens"
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint2)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:171
@@ -18079,15 +18454,17 @@ msgstr "°"
 #. i18n: ectx: property (toolTip), widget (QLabel, lMinSegmentLength)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:235
 #: src/kdefrontend/ui/datapickerimagewidget.ui:245
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1: set minimum segment length"
 msgid "Minimum segment length detection"
-msgstr "Detektering av minimal segmentlängd"
+msgstr "%1: ställ in minimal segmentlängd"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinSegmentLength)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:248
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Min. length"
 msgid "Min. Length:"
-msgstr "Min. längd:"
+msgstr "Minimal längd"
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint1)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:280
@@ -18103,7 +18480,7 @@ msgstr "1."
 #: src/kdefrontend/ui/datapickerimagewidget.ui:449
 #, kde-format
 msgid "dd.MM.yyyy HH:mm"
-msgstr "yyyy-MM-dd HH:mm"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionX3)
 #. i18n: ectx: property (text), widget (QLabel, lPositionX1)
@@ -18208,9 +18585,10 @@ msgstr "Typ:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPointSeparation)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:782
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Saturation:"
 msgid "Separation:"
-msgstr "Separation:"
+msgstr "Färgmättnad:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:812
@@ -18963,13 +19341,14 @@ msgstr "Objekt att importera"
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:58
 #, kde-format
 msgid "Graph Layers:"
-msgstr "Diagramlager:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lUnusedObjects)
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:82
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Import unused object"
 msgid "Unused Objects:"
-msgstr "Oanvända objekt:"
+msgstr "importera oanvända objekt"
 
 #. i18n: ectx: property (text), widget (QLabel, lCustomFolder)
 #. i18n: ectx: property (text), widget (QLabel, lFolder)
@@ -19002,9 +19381,10 @@ msgstr "Fråga"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ImportWarningsDialog)
 #: src/kdefrontend/ui/datasources/importwarningsdialog.ui:14
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Import as:"
 msgid "Import Warnings"
-msgstr "Importera varningar"
+msgstr "Importera som:"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbOk)
 #: src/kdefrontend/ui/datasources/importwarningsdialog.ui:38
@@ -19779,7 +20159,7 @@ msgstr "Markörer"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:543
 #, kde-format
 msgid "Outlier"
-msgstr "Ytterlighetsvärde"
+msgstr "Uteliggare"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbFarOut)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:550
@@ -19791,7 +20171,7 @@ msgstr "Extremvärde"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:557
 #, kde-format
 msgid "Data (excl. Outlier and Far Out)"
-msgstr "Data (utom ytterlighets- och extremvärden)"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbWhiskerEnd)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:564
@@ -20227,9 +20607,10 @@ msgstr "Logiska koordinater"
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:240
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:333
 #: src/kdefrontend/ui/labelwidget.ui:293
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Stacked"
 msgid "Locked"
-msgstr "Låst"
+msgstr "Överlappande"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderCornerRadius)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:541
@@ -20536,15 +20917,17 @@ msgstr "Sammanbindningslinje"
 
 #. i18n: ectx: property (text), widget (QLabel, lKernelType)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:91
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Kernel: "
 msgid "Kernel:"
-msgstr "Kärna:"
+msgstr "Kärna: "
 
 #. i18n: ectx: property (text), widget (QLabel, lBandwidthType)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:111
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Bin Width:"
 msgid "Bandwidth:"
-msgstr "Bandbredd:"
+msgstr "Delbredd:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:160
@@ -20556,9 +20939,10 @@ msgstr "Diagramintervall:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabKDE)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:211
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Animations"
 msgid "Estimation"
-msgstr "Uppskattning"
+msgstr "Animeringar"
 
 #. i18n: ectx: property (text), widget (QPushButton, bUpdateNow)
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:67
@@ -20675,9 +21059,10 @@ msgstr "Skapad:"
 #. i18n: ectx: property (text), widget (QLabel, lSaveDockStates)
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:80
 #: src/kdefrontend/ui/settingsgeneralpage.ui:284
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Save project as"
 msgid "Save Dock States:"
-msgstr "Spara paneltillstånd:"
+msgstr "Spara projekt som"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:100
@@ -20720,15 +21105,17 @@ msgstr "Fördelning:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunc)
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:123
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "f(x) ="
 msgid "p(x) ="
-msgstr "p(x) ="
+msgstr "f(x) ="
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPercentiles)
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:196
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Percentile"
 msgid "Percentiles"
-msgstr "Percentiler"
+msgstr "Percentil"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionDateTimeEnd)
 #. i18n: ectx: property (text), widget (QLabel, lPositionEnd)
@@ -20760,33 +21147,38 @@ msgstr "Aktiverade"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowSparklines)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:175
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Grid lines:"
 msgid "Sparklines:"
-msgstr "Små linjediagram:"
+msgstr "Rutnätslinjer:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:198
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Column Major"
 msgid "Column Header"
-msgstr "Kolumnrubrik"
+msgstr "Huvudkolumn"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:222
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Comment:"
 msgid "Comments:"
-msgstr "Kommentarer:"
+msgstr "Kommentar:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLinking)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:235
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Link"
 msgid "Linking"
-msgstr "Länkning"
+msgstr "Länk"
 
 #. i18n: ectx: property (text), widget (QPushButton, bSelectNone)
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:295
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Selection"
 msgid "Select None"
-msgstr "Välj ingen"
+msgstr "Markering"
 
 #. i18n: ectx: property (text), widget (QLabel, lDistance)
 #. i18n: ectx: property (text), widget (QLabel, lValuesDistance)
@@ -21706,16 +22098,6 @@ msgid ""
 "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
 "\"><br /></p></body></html>"
 msgstr ""
-"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-"REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
-"\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; font-"
-"weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
-"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
-"\"><br /></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lBackgroundColor)
 #: src/kdefrontend/ui/labelwidget.ui:231
@@ -21738,9 +22120,10 @@ msgstr "X-avstånd:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/labelwidget.ui:494
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Model:"
 msgid "Mode:"
-msgstr "Läge:"
+msgstr "Modell:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderShape)
 #: src/kdefrontend/ui/labelwidget.ui:586
@@ -22040,21 +22423,24 @@ msgstr "Start:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNewProject)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:50
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Save Project"
 msgid "New Project:"
-msgstr "Nytt projekt:"
+msgstr "Spara projekt"
 
 #. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:60
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Notebook"
 msgid "Notebook:"
-msgstr "Anteckningsblock:"
+msgstr "Anteckningsblock"
 
 #. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:86
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Box Plot Placement"
 msgid "Dock widget placement:"
-msgstr "Placering av dockningskomponenter"
+msgstr "Placering av låddiagram"
 
 #. i18n: ectx: property (text), widget (QLabel, lTitleBar)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:96
@@ -22126,15 +22512,17 @@ msgstr "Spara automatiskt:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:298
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Save Calculations:"
 msgid "Save  Calculations:"
 msgstr "Spara beräkningar:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:312
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Probability"
 msgid "Compatibility:"
-msgstr "Kompatibilitet:"
+msgstr "Sannolikhet"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:319
@@ -22154,9 +22542,10 @@ msgstr "Spara med kompatibelt format"
 
 #. i18n: ectx: property (text), widget (QLabel, lTracing)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:329
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Spacing:"
 msgid "Tracing:"
-msgstr "Spårning:"
+msgstr "Mellanrum:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPerfTrace)
 #. i18n: ectx: property (text), widget (QLabel, lPerformance)
@@ -22170,7 +22559,7 @@ msgstr "Prestanda"
 #: src/kdefrontend/ui/settingsgeneralpage.ui:383
 #, kde-format
 msgid "Debug"
-msgstr "Felsökning"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -22485,15 +22874,17 @@ msgstr "f(x) = "
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoUpdate)
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:155
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "auto update: true"
 msgid "auto update the values"
-msgstr "uppdatera värdena automatiskt"
+msgstr "automatisk uppdatering: sann"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoResize)
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:162
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Flatten selected columns"
 msgid "auto resize the column"
-msgstr "ändra automatiskt storlek på kolumnen"
+msgstr "Platta ut markerade kolumner"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbCurvePlacement)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:154
@@ -22599,78 +22990,85 @@ msgstr "b:"
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:80
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:87
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:561
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Replace"
 msgid "Replace:"
-msgstr "Ersätt:"
+msgstr "Ersätt"
 
 #. i18n: ectx: property (text), widget (QLabel, lFind)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:97
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Find"
 msgid "Find:"
-msgstr "Sök:"
+msgstr "Sök"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbOrder)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:134
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Search region:"
 msgid "Search order"
-msgstr "Sökordning"
+msgstr "Sökområde:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbMatchCase)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:147
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:119
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Case Sensitive"
 msgid "Match case sensitive"
-msgstr "Matcha skiftlägeskänsligt"
+msgstr "Skiftlägeskänslig"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbSelectionOnly)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:164
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Charge of the electron"
 msgid "Search in the selection only"
-msgstr "Sök bara i markeringen"
+msgstr "Elektronens laddning"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFindNext)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:194
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:91
 #, kde-format
 msgid "Jump to next match"
-msgstr "Gå till nästa träff"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFindPrev)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:208
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:105
 #, kde-format
 msgid "Jump to previous match"
-msgstr "Gå till föregående träff"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bReplaceNext)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:222
 #, kde-format
 msgid "Replace next match"
-msgstr "Ersätt nästa träff"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bReplaceAll)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:232
 #, kde-format
 msgid "Replace all matches"
-msgstr "Ersätt alla träffar"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bReplaceAll)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:235
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Replace"
 msgid "Replace &All"
-msgstr "Ersätt &alla"
+msgstr "Ersätt"
 
 #. i18n: ectx: property (text), widget (QPushButton, bFindAll)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:242
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Expand All"
 msgid "&Find All"
-msgstr "&Sök alla"
+msgstr "Expandera alla"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbSwitchFindReplace)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:249
 #, kde-format
 msgid "Switch to incremental search bar"
-msgstr "Byt till inkrementell sökrad"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbReplace)
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbReplaceText)
@@ -22678,31 +23076,32 @@ msgstr "Byt till inkrementell sökrad"
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:574
 #, kde-format
 msgid "Text to replace with"
-msgstr "Text att ersätta med"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lFind)
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:50
 #, kde-format
 msgid "F&ind:"
-msgstr "&Sök:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbFind)
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:78
 #, kde-format
 msgid "Text to search for"
-msgstr "Text att söka efter"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbSwitchFindReplace)
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:158
 #, kde-format
 msgid "Switch to power search and replace bar"
-msgstr "Byt till avancerad sök- och ersättningsrad"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lColumns)
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:17
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Sort"
 msgid "Sort by"
-msgstr "Sortera enligt"
+msgstr "Sortera"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbOrdering)
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:64
@@ -22967,9 +23366,10 @@ msgid "Save project before using this option"
 msgstr "Spara projekt innan alternativet används"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:381
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Invalid pointer"
 msgid "Invalid image"
-msgstr "Ogiltig bild"
+msgstr "Ogiltig pekare"
 
 #: src/kdefrontend/widgets/ErrorBarWidget.cpp:46
 #, kde-format
@@ -23254,19 +23654,21 @@ msgid "Sub-Script"
 msgstr "Nedsänkt"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:145
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Left margin:"
 msgid "Left Align"
-msgstr "Vänsterjustera"
+msgstr "Vänstermarginal:"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:147
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Right margin:"
 msgid "Right Align"
-msgstr "Högerjustera"
+msgstr "Högermarginal:"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:148
 #, kde-format
 msgid "Justify"
-msgstr "Anpassa"
+msgstr ""
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:149
 #, kde-format
@@ -23381,15 +23783,20 @@ msgstr ""
 "markörspråket Markdown</li></ul>"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:224
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
+#| "li><li>LaTeX - text setting using LaTeX, installation of LaTeX required</"
+#| "li><li>Markdown - text setting using Markdown markup language</li></ul>"
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
 "li><li>LaTeX - text setting using LaTeX, installation of LaTeX required</"
 "li></ul>"
 msgstr ""
 "Textinställningsläge:<ul><li>Text - textinställning som använder rich-text "
-"formatering</li><li>Latex - textinställning som använder Latex, installation "
-"av Latex krävs</li></ul>"
+"formatering</li><li>Latex - textinställnings som använder Latex, "
+"installation av Latex krävs</li><li>Markdown - textinställning som använder "
+"markörspråket Markdown</li></ul>"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:922
 #: src/kdefrontend/widgets/LabelWidget.cpp:948
@@ -23609,7 +24016,7 @@ msgstr "Avsluta presentation"
 #: src/kdefrontend/worksheet/SlidingPanel.cpp:131
 #, kde-format
 msgid "Pin the navigation panel"
-msgstr "Fäst navigeringspanelen"
+msgstr ""
 
 #: src/tools/ColorMapsManager.cpp:153
 #, kde-format
@@ -23668,64 +24075,26 @@ msgstr "convert-processen misslyckades, slutkod ="
 msgid "Unable to open file:"
 msgstr "Kan inte öppna fil:"
 
+#~ msgid "%1: move down"
+#~ msgstr "%1: flytta ner"
+
+#~ msgid "&Restore"
+#~ msgstr "Åte&rställ"
+
+#~ msgid "Mi&nimize"
+#~ msgstr "Mi&nimera"
+
+#~ msgid "Ma&ximize"
+#~ msgstr "Ma&ximera"
+
+#~ msgid "XY-Curves"
+#~ msgstr "XY-kurvor"
+
 #~ msgid "Excel"
 #~ msgstr "Excel"
 
 #~ msgid "ROOT (CERN) Histograms"
 #~ msgstr "ROOT (CERN)-histogram"
-
-#~ msgid "Add %1"
-#~ msgstr "Lägg till %1"
-
-#~ msgid "%1 name:"
-#~ msgstr "Namn på %1:"
-
-#~ msgid "Fit not possible. Please check if data is given."
-#~ msgstr "Anpassning inte möjlig. Kontrollera om data har angivits."
-
-#~ msgid "CartesianPlot"
-#~ msgstr "Kartesiskt diagram"
-
-#~ msgid "cumulative distribution function P"
-#~ msgstr "Kumulativ fördelningsfunktion P"
-
-#, fuzzy
-#~| msgid "1st quartile"
-#~ msgid "p-th quantile"
-#~ msgstr "1:a kvartil"
-
-#~ msgid "%1: copy %2"
-#~ msgstr "%1: kopiera %2"
-
-#~ msgid "Column Format"
-#~ msgstr "Kolumnformat"
-
-#~ msgid "test"
-#~ msgstr "test"
-
-#~ msgid "Debug Output:"
-#~ msgstr "Felsökningsutmatning:"
-
-#~ msgid "Specify the name of the file to import."
-#~ msgstr "Ange namnet på filen att importera."
-
-#~ msgid "%1: move down"
-#~ msgstr "%1: flytta ner"
-
-#~ msgid "%1: move behind %2."
-#~ msgstr "%1: flytta bakom %2."
-
-#~ msgid "%1: move in front of %2."
-#~ msgstr "%1: flytta framför %2."
-
-#~ msgid "Invalid metadata file"
-#~ msgstr "Ogiltig metadatafil"
-
-#~ msgid "Failed to download the dataset"
-#~ msgstr "Misslyckades ladda ner datamängden"
-
-#~ msgid "Failed to save the dataset"
-#~ msgstr "Misslyckades spara datamängden"
 
 #~ msgid "could not open device"
 #~ msgstr "kunde inte öppna enhet"
@@ -23739,27 +24108,17 @@ msgstr "Kan inte öppna fil:"
 #~ msgid "Invalid dbc file"
 #~ msgstr "Ogiltig dbc-fil"
 
-#~ msgid "No data to import."
-#~ msgstr "Ingen data att importera."
+#~ msgid "Dawson integral"
+#~ msgstr "Dawsons integral"
 
-#~ msgid "Parse Errors"
-#~ msgstr "Tolkningsfel"
+#~ msgid "cumulative distribution function P"
+#~ msgstr "Kumulativ fördelningsfunktion P"
 
-#, fuzzy
-#~| msgid "Somewhat Sparse"
-#~ msgid "Show SparkLine"
-#~ msgstr "Något gles"
+#~ msgid "%1: copy %2"
+#~ msgstr "%1: kopiera %2"
 
-#~ msgid "Column Comments:"
-#~ msgstr "Kolumnkommentarer:"
-
-#, fuzzy
-#~| msgid "%1: error bar type changed"
-#~ msgid "%1: error bar style type changed"
-#~ msgstr "%1: felstapelns typ ändrad"
-
-#~ msgid "%1 CustomPoints: visibility changed"
-#~ msgstr "%1 egna punkter: synlighet ändrad"
+#~ msgid "unknown cartesianPlot element '%1'"
+#~ msgstr "okänt cartesianPlot-element '%1'"
 
 #~ msgid "%1: set x-error column"
 #~ msgstr "%1: ställ in x-felkolumn"
@@ -23770,138 +24129,11 @@ msgstr "Kan inte öppna fil:"
 #~ msgid "%1: set y-error column"
 #~ msgstr "%1: ställ in y-felkolumn"
 
-#~ msgid "XY-Curves"
-#~ msgstr "XY-kurvor"
+#~ msgid "%1: move behind %2."
+#~ msgstr "%1: flytta bakom %2."
 
-#~ msgid "Do Nothing"
-#~ msgstr "Gör ingenting"
-
-#~ msgid "Create New Project with Worksheet"
-#~ msgstr "Skapa nytt projekt med arbetsblad"
-
-#~ msgid "Create New Project with Spreadsheet"
-#~ msgstr "Skapa nytt projekt med arbetsblad"
-
-#~ msgid "Create New Project with Notebook"
-#~ msgstr "Skapa nytt projekt med anteckningsblock"
-
-#~ msgid "Locking"
-#~ msgstr "Låsning"
-
-#~ msgid "number should be bigger than number of data points"
-#~ msgstr "talet måste vara större än antal datapunkter"
-
-#~ msgid "auto update"
-#~ msgstr "automatisk uppdatering"
-
-#~ msgid "%1: clear selected rows"
-#~ msgstr "%1: rensa markerade rader"
-
-#~ msgctxt "@title:window"
-#~ msgid "Equidistant Values"
-#~ msgstr "Ekvidistanta värden"
-
-#~ msgid "DateTime"
-#~ msgstr "Datumtid"
-
-#~ msgid "Remove"
-#~ msgstr "Ta bort"
-
-#~ msgid "xy-Curve"
-#~ msgstr "xy-kurva"
-
-#~ msgid "Add Histogram to"
-#~ msgstr "Lägg till histogram i"
-
-#~ msgid "Add Box Plot to"
-#~ msgstr "Lägg till låddiagram i"
-
-#~ msgid "Add Bar Plot to"
-#~ msgstr "Lägg till stapeldiagram i"
-
-#~ msgid "All histograms in one plot area"
-#~ msgstr "Alla histogram i ett diagramområde"
-
-#~ msgid "One plot area per histogram"
-#~ msgstr "Ett diagramområde per histogram"
-
-#~ msgid "Add Histograms to"
-#~ msgstr "Lägg till histogram i"
-
-#~ msgid "All box plots in one plot area"
-#~ msgstr "Alla låddiagram i ett diagramområde"
-
-#~ msgid "One plot area per box plot"
-#~ msgstr "Ett diagramområde per låddiagram"
-
-#~ msgid "Add Box Plots to"
-#~ msgstr "Lägg till låddiagram i"
-
-#~ msgid "All bar plots in one plot area"
-#~ msgstr "Alla stapeldiagram i ett diagramområde"
-
-#~ msgid "One plot area per bar plot"
-#~ msgstr "Ett diagramområde per stapeldiagram"
-
-#~ msgid "Add Bar Plots to"
-#~ msgstr "Lägg till stapeldiagram i"
-
-#~ msgid "new plot in an existing worksheet"
-#~ msgstr "nytt diagram på ett befintligt arbetsblad"
-
-#~ msgid "new plot in a new worksheet"
-#~ msgstr "nytt diagram på ett nytt arbetsblad"
-
-#~ msgid "new plots in an existing worksheet"
-#~ msgstr "nya diagram på ett befintligt arbetsblad"
-
-#~ msgid "new plots in a new worksheet"
-#~ msgstr "nya diagram på ett nytt arbetsblad"
-
-#~ msgid "GUI configuration file not found"
-#~ msgstr "Inställningsfil för grafiskt användargränssnitt hittades inte"
-
-#~ msgid "%1 file was not found. Please check your installation."
-#~ msgstr "Filen %1 hittades inte. Kontrollera installationen."
-
-#~ msgid "Conditions"
-#~ msgstr "Villkor"
-
-#~ msgid "Dawson integral"
-#~ msgstr "Dawsons integral"
-
-#~ msgid "&Sort Spreadsheet"
-#~ msgstr "&Sortera kalkylark"
-
-#~ msgid "Sort columns:"
-#~ msgstr "Sortera kolumner:"
-
-#~ msgid "Separately"
-#~ msgstr "Åtskilda"
-
-#~ msgid "Together"
-#~ msgstr "Tillsammans"
-
-#~ msgid "Leading column:"
-#~ msgstr "Inledande kolumn:"
-
-#~ msgid "Save Filter Settings as"
-#~ msgstr "Spara filterinställningar som"
-
-#~ msgid "Filter name:"
-#~ msgstr "Filternamn:"
-
-#~ msgid "new filter"
-#~ msgstr "nytt filter"
-
-#~ msgid "Save the current filter settings"
-#~ msgstr "Spara aktuella filterinställningar"
-
-#~ msgid "Manage filters"
-#~ msgstr "Hantera filter"
-
-#~ msgid "unknown cartesianPlot element '%1'"
-#~ msgstr "okänt cartesianPlot-element '%1'"
+#~ msgid "%1: move in front of %2."
+#~ msgstr "%1: flytta framför %2."
 
 #~ msgid "Remove Columns"
 #~ msgstr "Ta bort kolumner"
@@ -23912,14 +24144,14 @@ msgstr "Kan inte öppna fil:"
 #~ msgid "Mask"
 #~ msgstr "Maskera"
 
-#~ msgid "&Restore"
-#~ msgstr "Åte&rställ"
+#~ msgid "Remove"
+#~ msgstr "Ta bort"
 
-#~ msgid "Mi&nimize"
-#~ msgstr "Mi&nimera"
+#~ msgid "xy-Curve"
+#~ msgstr "xy-kurva"
 
-#~ msgid "Ma&ximize"
-#~ msgstr "Ma&ximera"
+#~ msgid "%1: clear selected rows"
+#~ msgstr "%1: rensa markerade rader"
 
 #~ msgid "End Search"
 #~ msgstr "Avsluta sökning"
@@ -23939,8 +24171,32 @@ msgstr "Kan inte öppna fil:"
 #~ msgid "%1: Add curve to %2 plots"
 #~ msgstr "%1: lägg till kurva i %2 diagram"
 
+#~ msgid "Add %1"
+#~ msgstr "Lägg till %1"
+
+#~ msgid "%1 name:"
+#~ msgstr "Namn på %1:"
+
+#~ msgid "No data to import."
+#~ msgstr "Ingen data att importera."
+
 #~ msgid "No Data"
 #~ msgstr "Ingen data"
+
+#~ msgid "Save Filter Settings as"
+#~ msgstr "Spara filterinställningar som"
+
+#~ msgid "Filter name:"
+#~ msgstr "Filternamn:"
+
+#~ msgid "new filter"
+#~ msgstr "nytt filter"
+
+#~ msgid "%1 CustomPoints: visibility changed"
+#~ msgstr "%1 egna punkter: synlighet ändrad"
+
+#~ msgid "test"
+#~ msgstr "test"
 
 #~ msgctxt "@title:window"
 #~ msgid "Spreadsheet"
@@ -24070,8 +24326,17 @@ msgstr "Kan inte öppna fil:"
 #~ msgid "Workbook"
 #~ msgstr "Arbetsbok"
 
+#~ msgid "CartesianPlot"
+#~ msgstr "Kartesiskt diagram"
+
 #~ msgid "&Analysis"
 #~ msgstr "&Analys"
+
+#~ msgid "GUI configuration file not found"
+#~ msgstr "Inställningsfil för grafiskt användargränssnitt hittades inte"
+
+#~ msgid "%1 file was not found. Please check your installation."
+#~ msgstr "Filen %1 hittades inte. Kontrollera installationen."
 
 #~ msgid "&Tile"
 #~ msgstr "&Sida vid sida"
@@ -24084,6 +24349,15 @@ msgstr "Kan inte öppna fil:"
 
 #~ msgid "Cascade the windows"
 #~ msgstr "Lägg fönstren i rad"
+
+#~ msgid "Do Nothing"
+#~ msgstr "Gör ingenting"
+
+#~ msgid "Create New Project with Worksheet"
+#~ msgstr "Skapa nytt projekt med arbetsblad"
+
+#~ msgid "Create New Project with Spreadsheet"
+#~ msgstr "Skapa nytt projekt med arbetsblad"
 
 #~ msgid "Sub-window View"
 #~ msgstr "Delfönstervy"
@@ -24100,11 +24374,78 @@ msgstr "Kan inte öppna fil:"
 #~ msgid "Show all Windows"
 #~ msgstr "Visa alla fönster"
 
+#~ msgctxt "@title:window"
+#~ msgid "Equidistant Values"
+#~ msgstr "Ekvidistanta värden"
+
+#~ msgid "Add Histogram to"
+#~ msgstr "Lägg till histogram i"
+
+#~ msgid "Add Box Plot to"
+#~ msgstr "Lägg till låddiagram i"
+
+#~ msgid "Add Bar Plot to"
+#~ msgstr "Lägg till stapeldiagram i"
+
+#~ msgid "All histograms in one plot area"
+#~ msgstr "Alla histogram i ett diagramområde"
+
+#~ msgid "One plot area per histogram"
+#~ msgstr "Ett diagramområde per histogram"
+
+#~ msgid "Add Histograms to"
+#~ msgstr "Lägg till histogram i"
+
+#~ msgid "All box plots in one plot area"
+#~ msgstr "Alla låddiagram i ett diagramområde"
+
+#~ msgid "One plot area per box plot"
+#~ msgstr "Ett diagramområde per låddiagram"
+
+#~ msgid "Add Box Plots to"
+#~ msgstr "Lägg till låddiagram i"
+
+#~ msgid "All bar plots in one plot area"
+#~ msgstr "Alla stapeldiagram i ett diagramområde"
+
+#~ msgid "One plot area per bar plot"
+#~ msgstr "Ett diagramområde per stapeldiagram"
+
+#~ msgid "Add Bar Plots to"
+#~ msgstr "Lägg till stapeldiagram i"
+
+#~ msgid "new plot in an existing worksheet"
+#~ msgstr "nytt diagram på ett befintligt arbetsblad"
+
+#~ msgid "new plot in a new worksheet"
+#~ msgstr "nytt diagram på ett nytt arbetsblad"
+
+#~ msgid "new plots in an existing worksheet"
+#~ msgstr "nya diagram på ett befintligt arbetsblad"
+
+#~ msgid "new plots in a new worksheet"
+#~ msgstr "nya diagram på ett nytt arbetsblad"
+
 #~ msgid "Point Separation:"
 #~ msgstr "Punktseparation:"
 
 #~ msgid "Reference Points"
 #~ msgstr "Referenspunkter"
+
+#~ msgid "Parse Errors"
+#~ msgstr "Tolkningsfel"
+
+#~ msgid "Save the current filter settings"
+#~ msgstr "Spara aktuella filterinställningar"
+
+#~ msgid "Manage filters"
+#~ msgstr "Hantera filter"
+
+#~ msgid "Column Comments:"
+#~ msgstr "Kolumnkommentarer:"
+
+#~ msgid "number should be bigger than number of data points"
+#~ msgstr "talet måste vara större än antal datapunkter"
 
 #~ msgid "Tab position:"
 #~ msgstr "Flikposition:"
@@ -24114,6 +24455,24 @@ msgstr "Kan inte öppna fil:"
 
 #~ msgid "Sub-window visibility:"
 #~ msgstr "Delfönsters synlighet:"
+
+#~ msgid "auto update"
+#~ msgstr "automatisk uppdatering"
+
+#~ msgid "Sort columns:"
+#~ msgstr "Sortera kolumner:"
+
+#~ msgid "Separately"
+#~ msgstr "Åtskilda"
+
+#~ msgid "Together"
+#~ msgstr "Tillsammans"
+
+#~ msgid "Leading column:"
+#~ msgstr "Inledande kolumn:"
+
+#~ msgid "Specify the name of the file to import."
+#~ msgstr "Ange namnet på filen att importera."
 
 #~ msgid "X-error"
 #~ msgstr "X-fel"
@@ -24643,6 +25002,11 @@ msgstr "Kan inte öppna fil:"
 #~ msgid "Fit Distribution"
 #~ msgstr "Anpassa fördelning"
 
+#, fuzzy
+#~| msgid "Hide Options"
+#~ msgid "Hide Search Options"
+#~ msgstr "Dölj alternativ"
+
 #~ msgid "Import from File"
 #~ msgstr "Importera från fil"
 
@@ -24672,6 +25036,10 @@ msgstr "Kan inte öppna fil:"
 
 #~ msgid "Switch to text mode"
 #~ msgstr "Byt till textläge"
+
+#~ msgid "LaTeX typesetting not possible. Please check the settings."
+#~ msgstr ""
+#~ "Typsättning med Latex är inte tillgänglig. Kontrollera inställningarna."
 
 #~ msgid "rank 2 not implemented yet for type %1, size = %2"
 #~ msgstr "rang 2 ännu inte implementerad för typ %1, storlek = %2"

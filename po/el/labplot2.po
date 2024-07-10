@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:42+0000\n"
+"POT-Creation-Date: 2024-07-10 03:09+0000\n"
 "PO-Revision-Date: 2017-04-20 14:04+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -67,9 +67,10 @@ msgid "Duplicate Here"
 msgstr ""
 
 #: src/backend/core/AbstractAspect.cpp:347
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1: add %2"
 msgid "Paste '%1'"
-msgstr ""
+msgstr "%1: προσθήκη του %2"
 
 #: src/backend/core/AbstractAspect.cpp:357
 #, fuzzy, kde-format
@@ -382,14 +383,14 @@ msgid "%1: unmask cells"
 msgstr "%1: εμφάνιση κελιών"
 
 #: src/backend/core/abstractcolumncommands.cpp:253
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2592
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2583
 #, fuzzy, kde-format
 #| msgid "%1: set date-time format to %2"
 msgid "%1: set heatmap format"
 msgstr "%1: ορισμός μορφής ημερομηνίας-ώρας σε %2"
 
 #: src/backend/core/abstractcolumncommands.cpp:280
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2610
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2601
 #, fuzzy, kde-format
 #| msgid "%1: set date-time format to %2"
 msgid "%1: remove heatmap format"
@@ -592,17 +593,15 @@ msgid "Plots"
 msgstr "LabPlot2"
 
 #: src/backend/core/column/Column.cpp:195
-#, fuzzy, kde-format
-#| msgctxt "NAME OF TRANSLATORS"
-#| msgid "Your names"
+#, kde-format
 msgid "Axes"
-msgstr "Stelios"
+msgstr ""
 
 #: src/backend/core/column/Column.cpp:221
 #, fuzzy, kde-format
-#| msgid "Tab position"
+#| msgid "Recalculate"
 msgid "Calculations"
-msgstr "Θέση καρτέλας"
+msgstr "Επανυπολογισμός"
 
 #. i18n("DateTime Filter"), i18n("Unit:"), items, 0, false, &ok);
 #. if (ok) {
@@ -648,7 +647,7 @@ msgid "%1: change cell values"
 msgstr "%1: αλλαγή τιμών σε κελιά"
 
 #: src/backend/core/column/columncommands.cpp:531
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2817
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2808
 #, kde-format
 msgid "%1: set plot designation"
 msgstr "%1: ορισμός τίτλου γραφικής παράστασης"
@@ -750,15 +749,15 @@ msgstr "%1: ορισμός τύπου"
 
 #: src/backend/core/Project.cpp:306
 #, fuzzy, kde-format
-#| msgid "%1: set formula"
+#| msgid "%1: change hidden status"
 msgid "%1: save dock state changed"
-msgstr "%1: ορισμός τύπου"
+msgstr "%1: αλλαγή κρυφής κατάστασης"
 
 #: src/backend/core/Project.cpp:313
 #, fuzzy, kde-format
-#| msgid "%1: set formula"
+#| msgid "%1: change hidden status"
 msgid "%1: save calculation changed"
-msgstr "%1: ορισμός τύπου"
+msgstr "%1: αλλαγή κρυφής κατάστασης"
 
 #: src/backend/core/Project.cpp:550 src/backend/core/Project.cpp:584
 #, kde-format
@@ -839,7 +838,7 @@ msgstr "Σύνδεση:"
 msgid "Failed to open project"
 msgstr "Σφάλμα κατά το άνοιγμα του έργου"
 
-#: src/backend/core/Project.cpp:1255
+#: src/backend/core/Project.cpp:1257
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr ""
@@ -1157,10 +1156,10 @@ msgstr "Σύνδεση:"
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
 #: src/commonfrontend/matrix/MatrixView.cpp:619
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2494
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2515
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2533
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2550
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2485
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2506
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2524
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2541
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:188
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:182
@@ -1201,10 +1200,9 @@ msgstr "%1 τιμή"
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:332
 #: src/backend/datasources/filters/XLSXFilter.cpp:515
-#, fuzzy, kde-format
-#| msgid "Number of levels"
+#, kde-format
 msgid "Not enough memory."
-msgstr "Πλήθος επιπέδων"
+msgstr ""
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:273
 #: src/backend/datasources/filters/JsonFilter.cpp:386
@@ -1879,16 +1877,15 @@ msgstr ""
 #: src/backend/datasources/filters/MatioFilter.cpp:434
 #: src/commonfrontend/workbook/WorkbookView.cpp:53
 #: src/commonfrontend/workbook/WorkbookView.cpp:160
-#: src/kdefrontend/MainWin.cpp:631 src/kdefrontend/MainWin.cpp:1951
+#: src/kdefrontend/MainWin.cpp:631 src/kdefrontend/MainWin.cpp:1960
 #, kde-format
 msgid "Matrix"
 msgstr ""
 
 #: src/backend/datasources/filters/MatioFilter.cpp:436
-#, fuzzy, kde-format
-#| msgid "Format Type"
+#, kde-format
 msgid "Compressed"
-msgstr "Τύπος αποθήκευσης"
+msgstr ""
 
 #: src/backend/datasources/filters/MatioFilter.cpp:438
 #, kde-format
@@ -1929,10 +1926,9 @@ msgid "Selected variable not found."
 msgstr "Τύπος αποθήκευσης"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:799
-#, fuzzy, kde-format
-#| msgid "Format Type"
+#, kde-format
 msgid "Struct contains no fields"
-msgstr "Τύπος αποθήκευσης"
+msgstr ""
 
 #: src/backend/datasources/filters/MatioFilter.cpp:881
 #, kde-format
@@ -2074,9 +2070,9 @@ msgstr "Σύνδεση:"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:250
 #, fuzzy, kde-format
-#| msgid "Format Type"
+#| msgid "no column element found"
 msgid "Selected sheet not found."
-msgstr "Τύπος αποθήκευσης"
+msgstr "αδυναμία εύρεσης αντικειμένου στήλης"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:257
 #, fuzzy, kde-format
@@ -2261,10 +2257,9 @@ msgid "Application: %1"
 msgstr "Max. επαναλήψεις"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:105
-#, fuzzy, kde-format
-#| msgid "Format Type"
+#, kde-format
 msgid "Application version: %1.%2.%3"
-msgstr "Τύπος αποθήκευσης"
+msgstr ""
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:107
 #, fuzzy, kde-format
@@ -2334,10 +2329,9 @@ msgid "Invalid DBC file."
 msgstr "μη έγκυρη τιμή γραμμής"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:201
-#, fuzzy, kde-format
-#| msgid "Constants"
+#, kde-format
 msgid "Unknown error,"
-msgstr "Σταθερές"
+msgstr ""
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:443
 #, kde-format
@@ -3562,10 +3556,9 @@ msgid "Cell (index, variable)"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:235
-#, fuzzy, kde-format
-#| msgid "x-Range"
+#, kde-format
 msgid "Moving Average"
-msgstr "x-Range"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:236
 #, fuzzy, kde-format
@@ -3589,10 +3582,9 @@ msgid "Simple Moving Average"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:240
-#, fuzzy, kde-format
-#| msgid "x-Range"
+#, kde-format
 msgid "Simple Moving Range"
-msgstr "x-Range"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:244
@@ -4953,14 +4945,16 @@ msgid "Logarithm of the magnitude"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:572
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Functions"
 msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q, x)"
-msgstr ""
+msgstr "Συναρτήσεις"
 
 #: src/backend/gsl/functions.cpp:573
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Functions"
 msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q, x)"
-msgstr ""
+msgstr "Συναρτήσεις"
 
 #: src/backend/gsl/functions.cpp:574
 #, fuzzy, kde-format
@@ -4975,14 +4969,16 @@ msgid "Angular Mathieu functions se_n(q, x)"
 msgstr "Συναρτήσεις"
 
 #: src/backend/gsl/functions.cpp:576
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Functions"
 msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q, x)"
-msgstr ""
+msgstr "Συναρτήσεις"
 
 #: src/backend/gsl/functions.cpp:577
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Functions"
 msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q, x)"
-msgstr ""
+msgstr "Συναρτήσεις"
 
 #: src/backend/gsl/functions.cpp:581
 #, kde-format
@@ -5396,16 +5392,14 @@ msgid "Probability density for an exponential distribution"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:686
-#, fuzzy, kde-format
-#| msgid "Distribution"
+#, kde-format
 msgid "Cumulative exponential distribution function P"
-msgstr "Κατανομή"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:687
-#, fuzzy, kde-format
-#| msgid "Distribution"
+#, kde-format
 msgid "Cumulative exponential distribution function Q"
-msgstr "Κατανομή"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:688
 #, kde-format
@@ -5450,16 +5444,14 @@ msgid "Probability density for an exponential power distribution"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:700
-#, fuzzy, kde-format
-#| msgid "Distribution"
+#, kde-format
 msgid "cumulative exponential power distribution function P"
-msgstr "Κατανομή"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:701
-#, fuzzy, kde-format
-#| msgid "Distribution"
+#, kde-format
 msgid "Cumulative exponential power distribution function Q"
-msgstr "Κατανομή"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:704
 #, kde-format
@@ -5933,22 +5925,19 @@ msgid "Probability density for a triangular distribution"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:840
-#, fuzzy, kde-format
-#| msgid "Distribution"
+#, kde-format
 msgid "Cumulative triangular distribution function P"
-msgstr "Κατανομή"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:841
-#, fuzzy, kde-format
-#| msgid "Distribution"
+#, kde-format
 msgid "Cumulative triangular distribution function Q"
-msgstr "Κατανομή"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:842
-#, fuzzy, kde-format
-#| msgid "Distribution"
+#, kde-format
 msgid "p-th quantile for triangular distribution"
-msgstr "Κατανομή"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:948 src/backend/gsl/functions.cpp:960
 #: src/backend/gsl/functions.cpp:974 src/backend/gsl/functions.cpp:986
@@ -5972,10 +5961,9 @@ msgstr "Τιμές συνάρτησης"
 
 #: src/backend/gsl/functions.cpp:958
 #, fuzzy, kde-format
-#| msgid "%1 value"
-#| msgid_plural "%1 values"
+#| msgid "Derivative"
 msgid "falseValue"
-msgstr "%1 τιμή"
+msgstr "Παράγωγος"
 
 #: src/backend/gsl/functions.cpp:966
 #, fuzzy, kde-format
@@ -6084,13 +6072,13 @@ msgid "unexpected end of document"
 msgstr ""
 
 #: src/backend/matrix/Matrix.cpp:129
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3797
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3788
 #, kde-format
 msgid "FITS image"
 msgstr ""
 
 #: src/backend/matrix/Matrix.cpp:129
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3797
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3788
 #, kde-format
 msgid "FITS table"
 msgstr ""
@@ -6352,10 +6340,9 @@ msgid "Center (Acausal)"
 msgstr ""
 
 #: src/backend/nsl/nsl_conv.c:24
-#, fuzzy, kde-format
-#| msgid "x-Range"
+#, kde-format
 msgid "Sliding Average"
-msgstr "x-Range"
+msgstr ""
 
 #: src/backend/nsl/nsl_conv.c:25
 #, kde-format
@@ -7111,16 +7098,14 @@ msgid "Lanczos"
 msgstr ""
 
 #: src/backend/nsl/nsl_smooth.c:21
-#, fuzzy, kde-format
-#| msgid "x-Range"
+#, kde-format
 msgid "Moving Average (Central)"
-msgstr "x-Range"
+msgstr ""
 
 #: src/backend/nsl/nsl_smooth.c:21
-#, fuzzy, kde-format
-#| msgid "x-Range"
+#, kde-format
 msgid "Moving Average (Lagged)"
-msgstr "x-Range"
+msgstr ""
 
 #: src/backend/nsl/nsl_smooth.c:21
 #, kde-format
@@ -7580,10 +7565,9 @@ msgid "%1: drop line type changed"
 msgstr ""
 
 #: src/backend/worksheet/Line.cpp:114
-#, fuzzy, kde-format
-#| msgid "%1: set value for row %2"
+#, kde-format
 msgid "%1: set line style"
-msgstr "%1: ορισμός τιμής για τη γραμμή %2"
+msgstr ""
 
 #: src/backend/worksheet/Line.cpp:121
 #, fuzzy, kde-format
@@ -7716,9 +7700,9 @@ msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:547
 #, fuzzy, kde-format
-#| msgid "%1: set formula"
+#| msgid "%1: change column type"
 msgid "%1: set axis range type"
-msgstr "%1: ορισμός τύπου"
+msgstr "%1: αλλαγή τύπου στήλης"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:572
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:621
@@ -7756,21 +7740,21 @@ msgstr "%1: ορισμός τύπου"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:655
 #, fuzzy, kde-format
-#| msgid "%1: set plot designation"
+#| msgid "%1: set formula"
 msgid "%1: set major tick start type"
-msgstr "%1: ορισμός τίτλου γραφικής παράστασης"
+msgstr "%1: ορισμός τύπου"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:662
 #, fuzzy, kde-format
-#| msgid "%1: set plot designation"
+#| msgid "%1: set formula"
 msgid "%1: set major tick start offset"
-msgstr "%1: ορισμός τίτλου γραφικής παράστασης"
+msgstr "%1: ορισμός τύπου"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:670
 #, fuzzy, kde-format
-#| msgid "%1: set plot designation"
+#| msgid "%1: set formula"
 msgid "%1: set major tick start value"
-msgstr "%1: ορισμός τίτλου γραφικής παράστασης"
+msgstr "%1: ορισμός τύπου"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:682
 #, kde-format
@@ -8042,10 +8026,9 @@ msgid "3rd quartile"
 msgstr "Παράγωγος"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:307
-#, fuzzy, kde-format
-#| msgid "Vertical"
+#, kde-format
 msgid "median"
-msgstr "Κατακόρυφα"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:308
 #, fuzzy, kde-format
@@ -8110,10 +8093,9 @@ msgid "%1: set whiskers cap size"
 msgstr "%1: αλλαγή τύπου στήλης"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:571
-#, fuzzy, kde-format
-#| msgid "%1: set formula"
+#, kde-format
 msgid "%1: jitterring changed"
-msgstr "%1: ορισμός τύπου"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:579
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:522
@@ -8525,9 +8507,9 @@ msgstr "%1: αλλαγή τύπου στήλης"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1140
 #, fuzzy, kde-format
-#| msgid "%1: change column type"
+#| msgid "%1: set formula"
 msgid "%1: set nice extend"
-msgstr "%1: αλλαγή τύπου στήλης"
+msgstr "%1: ορισμός τύπου"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1147
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1154
@@ -8538,9 +8520,9 @@ msgstr "%1: ορισμός τύπου"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1165
 #, fuzzy, kde-format
-#| msgid "%1: change column type"
+#| msgid "%1: change cell values"
 msgid "%1: change %2-range %3 format"
-msgstr "%1: αλλαγή τύπου στήλης"
+msgstr "%1: αλλαγή τιμών σε κελιά"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1255
 #, fuzzy, kde-format
@@ -8878,10 +8860,9 @@ msgid "%1: set error column"
 msgstr "%1: εισαγωγή 1 γραμμής"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:235
-#, fuzzy, kde-format
-#| msgid "%1: change column type"
+#, kde-format
 msgid "%1: error bar type changed"
-msgstr "%1: αλλαγή τύπου στήλης"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:242
 #, kde-format
@@ -8902,16 +8883,14 @@ msgid "bin values"
 msgstr "%1 τιμή"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:199
-#, fuzzy, kde-format
-#| msgid "Distribution"
+#, kde-format
 msgid "Fit Gaussian (Normal) Distribution"
-msgstr "Κατανομή"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:205
-#, fuzzy, kde-format
-#| msgid "Distribution"
+#, kde-format
 msgid "Fit Exponential Distribution"
-msgstr "Κατανομή"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:211
 #, fuzzy, kde-format
@@ -8920,10 +8899,9 @@ msgid "Fit Laplace Distribution"
 msgstr "Κατανομή"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:217
-#, fuzzy, kde-format
-#| msgid "Distribution"
+#, kde-format
 msgid "Fit Cauchy-Lorentz Distribution"
-msgstr "Κατανομή"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:223
 #, fuzzy, kde-format
@@ -9033,10 +9011,9 @@ msgid "%1: set bandwidth"
 msgstr "%1: ορισμός τύπου"
 
 #: src/backend/worksheet/plots/cartesian/Plot.cpp:58
-#, fuzzy, kde-format
-#| msgid "%1: set formula"
+#, kde-format
 msgid "%1: legend visibility changed"
-msgstr "%1: ορισμός τύπου"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:265
 #, fuzzy, kde-format
@@ -9612,9 +9589,9 @@ msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:934
 #, fuzzy, kde-format
-#| msgid "%1: set formula"
+#| msgid "%1: change column type"
 msgid "%1: data source histogram changed"
-msgstr "%1: ορισμός τύπου"
+msgstr "%1: αλλαγή τύπου στήλης"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:946
 #, kde-format
@@ -10357,8 +10334,8 @@ msgid "Curve"
 msgstr ""
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4037
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4091
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4028
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4082
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2217
 #, fuzzy, kde-format
 #| msgid "Error when opening the project"
@@ -10366,8 +10343,8 @@ msgid "Failed to export"
 msgstr "Σφάλμα κατά το άνοιγμα του έργου"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4037
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4091
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4028
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4082
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2217
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -10594,7 +10571,7 @@ msgid "%1: cut selected cell(s)"
 msgstr ""
 
 #: src/commonfrontend/matrix/MatrixView.cpp:689
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1793
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1784
 #, kde-format
 msgid "%1: paste from clipboard"
 msgstr ""
@@ -10791,10 +10768,9 @@ msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:322
 #, fuzzy, kde-format
-#| msgid "%1 value"
-#| msgid_plural "%1 values"
+#| msgid "Derivative"
 msgid "Sample Values"
-msgstr "%1 τιμή"
+msgstr "Παράγωγος"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:323
 #, fuzzy, kde-format
@@ -10804,16 +10780,15 @@ msgstr "Στήλη έναρξης:"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:326
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1149
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1535
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1526
 #, kde-format
 msgid "Show Comments"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:327
-#, fuzzy, kde-format
-#| msgid "Show all windows"
+#, kde-format
 msgid "Show SparkLines"
-msgstr "Εμφάνιση όλων των παραθύρων"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:329
 #, kde-format
@@ -10882,7 +10857,7 @@ msgid "Delete Selected Column(s)"
 msgstr "Στήλη έναρξης:"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:348
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1625
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1616
 #, fuzzy, kde-format
 #| msgid "Start column:"
 msgid "Freeze Column"
@@ -10920,10 +10895,9 @@ msgstr "%1 τιμή"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:392
 #, fuzzy, kde-format
-#| msgid "%1 value"
-#| msgid_plural "%1 values"
+#| msgid "Derivative"
 msgid "Mask Values"
-msgstr "%1 τιμή"
+msgstr "Παράγωγος"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:394
 #, kde-format
@@ -11083,15 +11057,15 @@ msgid "Insert Multiple Rows Below"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:493
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Start column:"
 msgid "Remo&ve Selected Row(s)"
-msgstr ""
+msgstr "Στήλη έναρξης:"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:494
-#, fuzzy, kde-format
-#| msgid "%1: fill matrix with function values"
+#, kde-format
 msgid "Delete Rows With Missing Values"
-msgstr "%1: να γεμίσει η μήτρα με τιμές συνάρτησης"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:495
 #, kde-format
@@ -11136,96 +11110,96 @@ msgid "Ladder of Powers"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1147
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1533
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1524
 #, kde-format
 msgid "Hide Comments"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1158
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1538
-#, fuzzy, kde-format
-#| msgid "Options:"
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1529
+#, kde-format
 msgid "Hide Sparklines"
-msgstr "Επιλογές:"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1160
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1540
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1531
 #, fuzzy, kde-format
 #| msgid "Show all windows"
 msgid "Show Sparklines"
 msgstr "Εμφάνιση όλων των παραθύρων"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1629
-#, kde-format
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1620
+#, fuzzy, kde-format
+#| msgid "Start column:"
 msgid "Unfreeze Column"
-msgstr ""
+msgstr "Στήλη έναρξης:"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1712
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1703
 #, kde-format
 msgid "%1: cut selected cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2036
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2027
 #, kde-format
 msgid "Not enough memory to finalize this operation."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2050
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2041
 #, kde-format
 msgid "%1: mask selected cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2092
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2083
 #, kde-format
 msgid "%1: unmask selected cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2248
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2239
 #, kde-format
 msgid "%1: fill cells with row numbers"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2313
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2304
 #, kde-format
 msgid "%1: fill column with row numbers"
 msgid_plural "%1: fill columns with row numbers"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2357
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2348
 #, kde-format
 msgid "%1: fill cells with random values"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2483
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2474
 #, kde-format
 msgid "%1: fill cells with const values"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2493
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2515
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2533
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2550
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2484
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2506
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2524
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2541
 #, kde-format
 msgid "Fill the selection with constant value"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2630
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2664
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2621
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2655
 #, fuzzy, kde-format
 #| msgid "%1: insert 1 row"
 #| msgid_plural "%1: insert %2 rows"
 msgid "Insert empty columns"
 msgstr "%1: εισαγωγή 1 γραμμής"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2631
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2665
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2622
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2656
 #, fuzzy, kde-format
 #| msgid "Specify the name of the file to import."
 msgid "Enter the number of columns to insert"
 msgstr "Ορίζει το όνομα του αρχείου προς εισαγωγή."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2683
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2674
 #, fuzzy, kde-format
 #| msgid "%1: insert 1 row"
 #| msgid_plural "%1: insert %2 rows"
@@ -11234,153 +11208,153 @@ msgid_plural "%1: insert empty columns"
 msgstr[0] "%1: εισαγωγή 1 γραμμής"
 msgstr[1] "%1: εισαγωγή 1 γραμμής"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2753
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2744
 #, kde-format
 msgid "%1: remove selected columns"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2850
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2841
 #, kde-format
 msgid "%1: reverse column"
 msgid_plural "%1: reverse columns"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2923
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2914
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
 "because of this. "
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2961
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2952
 #, kde-format
 msgid "%1: normalize columns"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2981
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2972
 #, kde-format
 msgid "Sum = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2992
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2983
 #, kde-format
 msgid "Min = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3003
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2994
 #, fuzzy, kde-format
 #| msgid "x = "
 msgid "Max = 0"
 msgstr "x = "
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3014
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3005
 #, kde-format
 msgid "Count = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3025
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3016
 #, fuzzy, kde-format
 #| msgid "Mean"
 msgid "Mean = 0"
 msgstr "Μέσος"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3036
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3027
 #, fuzzy, kde-format
 #| msgid "Vertical"
 msgid "Median = 0"
 msgstr "Κατακόρυφα"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3048
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3039
 #, fuzzy, kde-format
 #| msgid "Model"
 msgid "Mode = 0"
 msgstr "Μοντέλο"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3050
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3041
 #, kde-format
 msgid "'Mode not defined'"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3061
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3052
 #, fuzzy, kde-format
 #| msgid "x-Range:"
 msgid "Range = 0"
 msgstr "x-Range"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3072
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3106
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3063
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3097
 #, kde-format
 msgid "SD = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3083
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3118
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3074
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3109
 #, kde-format
 msgid "MAD = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3094
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3130
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3085
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3121
 #, kde-format
 msgid "IQR = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3142
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3133
 #, kde-format
 msgid "Max - Min = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3161
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3152
 #, kde-format
 msgid "Normalization not possible"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3173
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3164
 #, fuzzy, kde-format
 #| msgid "%1: insert 1 row"
 #| msgid_plural "%1: insert %2 rows"
 msgid "%1: power transform columns"
 msgstr "%1: εισαγωγή 1 γραμμής"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3291
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3282
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "%1: column statistics"
 msgstr "Στατιστική"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3322
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3313
 #, fuzzy, kde-format
 #| msgid "Derivative"
 msgid "Selection in %1"
 msgstr "Παράγωγος"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3365
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3356
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "%1: row statistics"
 msgstr "Στατιστική"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3375
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3366
 #, kde-format
 msgid "Row %1"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3400
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3439
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3391
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3430
 #, kde-format
 msgid "Insert multiple rows"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3401
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3440
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3392
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3431
 #, fuzzy, kde-format
 #| msgid "Specify the name of the file to import."
 msgid "Enter the number of rows to insert"
 msgstr "Ορίζει το όνομα του αρχείου προς εισαγωγή."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3420
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3459
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3411
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3450
 #, fuzzy, kde-format
 #| msgid "%1: insert 1 row"
 #| msgid_plural "%1: insert %2 rows"
@@ -11389,17 +11363,17 @@ msgid_plural "%1: insert empty rows"
 msgstr[0] "%1: εισαγωγή 1 γραμμής"
 msgstr[1] "%1: εισαγωγή 1 γραμμής"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3475
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3466
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3500
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3491
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3762
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3753
 #, fuzzy, kde-format
 #| msgid "Arrow:"
 msgid "row"
@@ -11407,7 +11381,7 @@ msgid_plural "rows"
 msgstr[0] "Βέλος:"
 msgstr[1] "Βέλος:"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3763
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3754
 #, fuzzy, kde-format
 #| msgid "Start column:"
 msgid "column"
@@ -11415,84 +11389,82 @@ msgid_plural "columns"
 msgstr[0] "Στήλη έναρξης:"
 msgstr[1] "Στήλη έναρξης:"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3764
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3755
 #, kde-format
 msgid "cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3765
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3756
 #, fuzzy, kde-format
-#| msgid "%1 value"
-#| msgid_plural "%1 values"
+#| msgid "Left value"
 msgid "masked value"
-msgstr "%1 τιμή"
+msgstr "Αριστερή τιμή"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3765
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3756
 #, fuzzy, kde-format
-#| msgid "%1 value"
-#| msgid_plural "%1 values"
+#| msgid "Derivative"
 msgid "masked values"
-msgstr "%1 τιμή"
+msgstr "Παράγωγος"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3766
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3757
 #, fuzzy, kde-format
 #| msgid "%1 value"
 #| msgid_plural "%1 values"
 msgid "missing value"
 msgstr "%1 τιμή"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3766
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3757
 #, fuzzy, kde-format
 #| msgid "%1 value"
 #| msgid_plural "%1 values"
 msgid "missing values"
 msgstr "%1 τιμή"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3767
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3758
 #, kde-format
 msgid " , "
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3767
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3768
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3758
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3759
 #, fuzzy, kde-format
 #| msgid "10"
 msgid "%1"
 msgstr "10"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3768
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3759
 #, kde-format
 msgid ", "
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3771
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3762
 #, kde-format
 msgid "Selected: %1 %2 , %3 %4%5 %6 %7 %8"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3781
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3772
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3854
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3845
 #, fuzzy, kde-format
 #| msgid "&Spreadsheet"
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Λογι&στικό φύλλο"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4459
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4450
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4491
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4482
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4544
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4535
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr ""
@@ -11531,10 +11503,9 @@ msgid "Unhandled error"
 msgstr ""
 
 #: src/commonfrontend/widgets/NumberSpinBox.cpp:440
-#, fuzzy, kde-format
-#| msgid "invalid row value"
+#, kde-format
 msgid "Invalid value entered. Valid value: %1"
-msgstr "μη έγκυρη τιμή γραμμής"
+msgstr ""
 
 #: src/commonfrontend/widgets/TreeViewComboBox.cpp:56
 #, kde-format
@@ -11556,7 +11527,7 @@ msgstr ""
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:116
 #: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:57
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:75
-#: src/kdefrontend/MainWin.cpp:625 src/kdefrontend/MainWin.cpp:1933
+#: src/kdefrontend/MainWin.cpp:625 src/kdefrontend/MainWin.cpp:1942
 #: src/kdefrontend/SettingsDialog.cpp:72
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:122
 #, kde-format
@@ -11742,7 +11713,7 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:359
-#: src/kdefrontend/MainWin.cpp:2418
+#: src/kdefrontend/MainWin.cpp:2427
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1426
 #, kde-format
 msgid "Cursor"
@@ -12279,9 +12250,9 @@ msgstr "Εισαγωγή"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:76
 #, fuzzy, kde-format
-#| msgid "x-Range"
+#| msgid "Data portion to read"
 msgid "Data container:"
-msgstr "x-Range"
+msgstr "Τμήμα δεδομένων για ανάγνωση"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:77
 #: src/kdefrontend/datasources/ImportDialog.cpp:83
@@ -13296,7 +13267,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
-#: src/kdefrontend/MainWin.cpp:2727
+#: src/kdefrontend/MainWin.cpp:2736
 #, kde-format
 msgid "Warning"
 msgstr ""
@@ -13649,10 +13620,9 @@ msgstr "%1: ορισμός τύπου"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:578
 #, fuzzy, kde-format
-#| msgid "%1: insert 1 row"
-#| msgid_plural "%1: insert %2 rows"
+#| msgid "%1: set cell formula"
 msgid "%1 axes: set color"
-msgstr "%1: εισαγωγή 1 γραμμής"
+msgstr "%1: ορισμός τύπου σε κελί"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:1585
 #, kde-format
@@ -14068,10 +14038,9 @@ msgstr ""
 
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:246
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:246
-#, fuzzy, kde-format
-#| msgid "Connection:"
+#, kde-format
 msgid "Column Major"
-msgstr "Σύνδεση:"
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:247
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:247
@@ -14153,11 +14122,9 @@ msgid "Automatic (E)"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:319
-#, fuzzy, kde-format
-#| msgid "%1 value"
-#| msgid_plural "%1 values"
+#, kde-format
 msgid "Add a new value label"
-msgstr "%1 τιμή"
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:320
 #, fuzzy, kde-format
@@ -14715,22 +14682,19 @@ msgid "t statistic"
 msgstr "Στατιστική"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:368
-#, fuzzy, kde-format
-#| msgid "Variance"
+#, kde-format
 msgid "No X and Y column specified!"
-msgstr "Διακύμανση"
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:370
-#, fuzzy, kde-format
-#| msgid "Variance"
+#, kde-format
 msgid "No X column specified!"
-msgstr "Διακύμανση"
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:372
-#, fuzzy, kde-format
-#| msgid "Variance"
+#, kde-format
 msgid "No Y column specified!"
-msgstr "Διακύμανση"
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:376
 #, fuzzy, kde-format
@@ -14914,10 +14878,10 @@ msgstr "Λογι&στικό φύλλο"
 
 #: src/kdefrontend/GuiObserver.cpp:231
 #, fuzzy, kde-format
-#| msgid "Properties explorer"
+#| msgid "Statistics"
 msgctxt "@title:window"
 msgid "Properties: Column Statistics"
-msgstr "Εξερευνητής ιδιοτήτων"
+msgstr "Στατιστική"
 
 #: src/kdefrontend/GuiObserver.cpp:241
 #, fuzzy, kde-format
@@ -15758,9 +15722,9 @@ msgstr "Βιβλίο εργασίας"
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
 #: src/kdefrontend/labplot2ui.rc:40
 #, fuzzy, kde-format
-#| msgid "From"
+#| msgid "Plot Area"
 msgid "Plot Area Toolbar"
-msgstr "Από"
+msgstr "Περιοχή σχεδίασης"
 
 #. i18n: ectx: Menu (file)
 #: src/kdefrontend/labplot2ui.rc:44
@@ -15861,7 +15825,7 @@ msgstr "Καλώς ορίσατε στο Labplot %1"
 msgid "&Open Example"
 msgstr "Άνοιγμα αρχείου"
 
-#: src/kdefrontend/MainWin.cpp:615 src/kdefrontend/MainWin.cpp:1917
+#: src/kdefrontend/MainWin.cpp:615 src/kdefrontend/MainWin.cpp:1926
 #, kde-format
 msgid "Workbook"
 msgstr "Βιβλίο εργασίας"
@@ -15871,7 +15835,7 @@ msgstr "Βιβλίο εργασίας"
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:620 src/kdefrontend/MainWin.cpp:1925
+#: src/kdefrontend/MainWin.cpp:620 src/kdefrontend/MainWin.cpp:1934
 #, fuzzy, kde-format
 #| msgid "Max. iterations"
 msgid "Data Extractor"
@@ -15892,7 +15856,7 @@ msgstr ""
 msgid "Creates a new matrix for data editing"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:637 src/kdefrontend/MainWin.cpp:1969
+#: src/kdefrontend/MainWin.cpp:637 src/kdefrontend/MainWin.cpp:1978
 #: src/kdefrontend/SettingsDialog.cpp:67
 #, kde-format
 msgid "Worksheet"
@@ -15903,7 +15867,7 @@ msgstr ""
 msgid "Creates a new worksheet for data plotting"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:643 src/kdefrontend/MainWin.cpp:1977
+#: src/kdefrontend/MainWin.cpp:643 src/kdefrontend/MainWin.cpp:1986
 #, kde-format
 msgid "Note"
 msgstr ""
@@ -15913,7 +15877,7 @@ msgstr ""
 msgid "Creates a new note for arbitrary text"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:648 src/kdefrontend/MainWin.cpp:1909
+#: src/kdefrontend/MainWin.cpp:648 src/kdefrontend/MainWin.cpp:1918
 #, kde-format
 msgid "Folder"
 msgstr "Φάκελος"
@@ -15990,8 +15954,8 @@ msgstr "Εξαγωγή"
 msgid "Export selected element"
 msgstr "Εξαγωγή σε"
 
-#: src/kdefrontend/MainWin.cpp:705 src/kdefrontend/MainWin.cpp:2454
-#: src/kdefrontend/MainWin.cpp:2462
+#: src/kdefrontend/MainWin.cpp:705 src/kdefrontend/MainWin.cpp:2463
+#: src/kdefrontend/MainWin.cpp:2471
 #, kde-format
 msgid "Share"
 msgstr ""
@@ -16248,87 +16212,87 @@ msgstr ""
 msgid "Couldn't open the temporary file for writing."
 msgstr "Αδυναμία ανοίγματος αρχείου για εγγραφή."
 
-#: src/kdefrontend/MainWin.cpp:1798
+#: src/kdefrontend/MainWin.cpp:1807
 #, kde-format
 msgid "Project saved"
 msgstr "Το έργο αποθηκεύτηκε"
 
-#: src/kdefrontend/MainWin.cpp:1814
+#: src/kdefrontend/MainWin.cpp:1823
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1819
+#: src/kdefrontend/MainWin.cpp:1828
 #, fuzzy, kde-format
 #| msgid "Sorry. Could not open file for writing."
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Αδυναμία ανοίγματος αρχείου για εγγραφή."
 
-#: src/kdefrontend/MainWin.cpp:1869
+#: src/kdefrontend/MainWin.cpp:1878
 #, fuzzy, kde-format
 #| msgid "%1    [Changed]"
 msgid "Changed"
 msgstr "Το %1    [άλλαξε]"
 
-#: src/kdefrontend/MainWin.cpp:1884 src/kdefrontend/MainWin.cpp:1896
+#: src/kdefrontend/MainWin.cpp:1893 src/kdefrontend/MainWin.cpp:1905
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Προετοιμασία εκτύπωσης του %1"
 
-#: src/kdefrontend/MainWin.cpp:1886 src/kdefrontend/MainWin.cpp:1898
+#: src/kdefrontend/MainWin.cpp:1895 src/kdefrontend/MainWin.cpp:1907
 #, kde-format
 msgid "%1 printed"
 msgstr "Το %1 εκτυπώθηκε"
 
-#: src/kdefrontend/MainWin.cpp:2454
+#: src/kdefrontend/MainWin.cpp:2463
 #, fuzzy, kde-format
 #| msgid "The following problems occurred when loading the project file:\n"
 msgid "There was a problem sharing the project: %1"
 msgstr "Προβλήματα που εμφανίστηκαν με τη φόρτωση του αρχείου έργου:\n"
 
-#: src/kdefrontend/MainWin.cpp:2458
+#: src/kdefrontend/MainWin.cpp:2467
 #, fuzzy, kde-format
 #| msgid "Project saved"
 msgid "Project shared successfully"
 msgstr "Το έργο αποθηκεύτηκε"
 
-#: src/kdefrontend/MainWin.cpp:2461
+#: src/kdefrontend/MainWin.cpp:2470
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2690
+#: src/kdefrontend/MainWin.cpp:2699
 #, kde-format
 msgid "%1 exported"
 msgstr "Το %1 εξήχθη"
 
-#: src/kdefrontend/MainWin.cpp:2697
+#: src/kdefrontend/MainWin.cpp:2706
 #, kde-format
 msgid "FITS files saved"
 msgstr "Τα αρχεία FITS αποθηκεύτηκαν"
 
-#: src/kdefrontend/MainWin.cpp:2709
+#: src/kdefrontend/MainWin.cpp:2718
 #, kde-format
 msgid "MQTT Client%1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2727
+#: src/kdefrontend/MainWin.cpp:2736
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2731
+#: src/kdefrontend/MainWin.cpp:2740
 #, fuzzy, kde-format
 #| msgid "x-Range"
 msgid "Live data source%1"
 msgstr "x-Range"
 
-#: src/kdefrontend/MainWin.cpp:2772
+#: src/kdefrontend/MainWin.cpp:2781
 #, kde-format
 msgid "No Cantor backends found. Please install the ones you want to use."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2786
+#: src/kdefrontend/MainWin.cpp:2795
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr ""
@@ -16593,9 +16557,9 @@ msgstr "&Φύλλο εργασίας"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:224
 #, fuzzy, kde-format
-#| msgid "%1: set value for row %2"
+#| msgid "&Spreadsheet"
 msgid "With Spreadsheet and Worksheet"
-msgstr "%1: ορισμός τιμής για τη γραμμή %2"
+msgstr "Λογι&στικό φύλλο"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:226
 #, fuzzy, kde-format
@@ -16719,10 +16683,9 @@ msgid ""
 msgstr ""
 
 #: src/kdefrontend/SettingsNotebookPage.cpp:23
-#, fuzzy, kde-format
-#| msgid "Height"
+#, kde-format
 msgid "Enable syntax highlighting"
-msgstr "Ύψος"
+msgstr ""
 
 #: src/kdefrontend/SettingsNotebookPage.cpp:24
 #, fuzzy, kde-format
@@ -16925,10 +16888,9 @@ msgstr "Max. επαναλήψεις"
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:943
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:987
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1031
-#, fuzzy, kde-format
-#| msgid "invalid row value"
+#, kde-format
 msgid "Wrong numeric value provided."
-msgstr "μη έγκυρη τιμή γραμμής"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1218
 #, fuzzy, kde-format
@@ -16989,19 +16951,16 @@ msgid "Label:"
 msgstr "Ετικέτες"
 
 #: src/kdefrontend/spreadsheet/BatchEditValueLabelsDialog.cpp:36
-#, fuzzy, kde-format
-#| msgid "%1 value"
-#| msgid_plural "%1 values"
+#, kde-format
 msgctxt "@title:window"
 msgid "Edit Value Labels"
-msgstr "%1 τιμή"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/BatchEditValueLabelsDialog.cpp:40
 #, fuzzy, kde-format
-#| msgid "%1 value"
-#| msgid_plural "%1 values"
+#| msgid "Labels"
 msgid "Value Labels:"
-msgstr "%1 τιμή"
+msgstr "Ετικέτες"
 
 #: src/kdefrontend/spreadsheet/BatchEditValueLabelsDialog.cpp:154
 #, kde-format
@@ -17189,19 +17148,17 @@ msgstr ""
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:197
 #, fuzzy, kde-format
-#| msgid "%1 value"
-#| msgid_plural "%1 values"
+#| msgid "Function values"
 msgctxt "@title:window"
 msgid "Equidistant Numeric Values"
-msgstr "%1 τιμή"
+msgstr "Τιμές συνάρτησης"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:199
 #, fuzzy, kde-format
-#| msgid "%1 value"
-#| msgid_plural "%1 values"
+#| msgid "set date-time format to %1"
 msgctxt "@title:window"
 msgid "Equidistant Date&Time Values"
-msgstr "%1 τιμή"
+msgstr "ορισμός μορφής ημερομηνίας-ώρας σε %1"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:250
 #, fuzzy, kde-format
@@ -17343,9 +17300,9 @@ msgstr ""
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:119
 #, fuzzy, kde-format
-#| msgid "Preferences"
+#| msgid "Start column:"
 msgid "Remove reference column"
-msgstr "Προτιμήσεις"
+msgstr "Στήλη έναρξης:"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:150
 #, fuzzy, kde-format
@@ -17473,9 +17430,10 @@ msgstr ""
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:214
 #, fuzzy, kde-format
-#| msgid "Start column:"
+#| msgid "%1: insert 1 row"
+#| msgid_plural "%1: insert %2 rows"
 msgid "Select a valid column"
-msgstr "Στήλη έναρξης:"
+msgstr "%1: εισαγωγή 1 γραμμής"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:221
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:275
@@ -17607,9 +17565,10 @@ msgstr "Παράγωγος"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:959
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:383
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Derivative"
 msgid "Sample Quantiles"
-msgstr ""
+msgstr "Παράγωγος"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1073
 #, kde-format
@@ -17718,11 +17677,10 @@ msgstr ""
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:64
 #, fuzzy, kde-format
-#| msgid "%1 value"
-#| msgid_plural "%1 values"
+#| msgid "Derivative"
 msgctxt "@title:window"
 msgid "Sample Values"
-msgstr "%1 τιμή"
+msgstr "Παράγωγος"
 
 #. i18n: ectx: property (text), widget (QLabel, lValue)
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:103
@@ -17733,9 +17691,10 @@ msgid "Period:"
 msgstr "Κατακόρυφα"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:105
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Derivative"
 msgid "Sample Size:"
-msgstr ""
+msgstr "Παράγωγος"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:205
 #, fuzzy, kde-format
@@ -19108,10 +19067,9 @@ msgstr "Εισαγωγή"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbConvertSeconds)
 #: src/kdefrontend/ui/datasources/CANOptionsWidget.ui:32
-#, fuzzy, kde-format
-#| msgid "Format Type"
+#, kde-format
 msgid "Convert time to seconds"
-msgstr "Τύπος αποθήκευσης"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:33
@@ -20022,10 +19980,9 @@ msgstr "Πλήθος επιπέδων"
 #. i18n: ectx: property (text), widget (QLabel, lMajorTickStartDateTime)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:725
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1148
-#, fuzzy, kde-format
-#| msgid "Text Color"
+#, kde-format
 msgid "1st Tick Value:"
-msgstr "Χρώμα κειμένου"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksSpacingNumeric)
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksSpacingNumeric)
@@ -20057,9 +20014,9 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lLabelsTextType)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:774
 #, fuzzy, kde-format
-#| msgid "Labels"
+#| msgid "Type"
 msgid "Label Type:"
-msgstr "Ετικέτες"
+msgstr "Τύπος"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsTextColumn)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:781
@@ -20135,10 +20092,9 @@ msgstr "Μετατόπιση"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksStartType)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1105
-#, fuzzy, kde-format
-#| msgid "Points"
+#, kde-format
 msgid "1st Tick at:"
-msgstr "Σημεία"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLabels)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1159
@@ -20521,10 +20477,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbWhiskerEnd)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:564
-#, fuzzy, kde-format
-#| msgid "%1: change column type"
+#, kde-format
 msgid "Whisker End"
-msgstr "%1: αλλαγή τύπου στήλης"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkJitteringEnabled)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:587
@@ -20716,15 +20671,17 @@ msgstr "x-Range"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbAddPlotRange)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:407
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "x-Range"
 msgid "Add new plot range"
-msgstr ""
+msgstr "x-Range"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbRemovePlotRange)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:421
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Save the current filter settings"
 msgid "Remove current plot range"
-msgstr ""
+msgstr "Αποθήκευση ρυθμίσεων τρέχοντος φίλτρου"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbAddYRange)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:488
@@ -20741,10 +20698,9 @@ msgstr "Αποθήκευση ρυθμίσεων τρέχοντος φίλτρο�
 
 #. i18n: ectx: property (text), widget (QLabel, lNiceExtend)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:512
-#, fuzzy, kde-format
-#| msgid "Data:"
+#, kde-format
 msgid "Extend:"
-msgstr "Δεδομένα:"
+msgstr ""
 
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbTop)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbPaddingHorizontal)
@@ -20920,9 +20876,9 @@ msgstr "Από"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1121
 #, fuzzy, kde-format
-#| msgid "y-Range:"
+#| msgid "x-Range:"
 msgid "X-Range"
-msgstr "y-Range"
+msgstr "x-Range"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPlotArea)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1202
@@ -20973,9 +20929,10 @@ msgstr "Πλάτος γραμμής"
 #. i18n: ectx: property (text), widget (QLabel, lBindLogicalPos)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:412
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:27
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1: set plot designation"
 msgid "Logical coordinates"
-msgstr ""
+msgstr "%1: ορισμός τίτλου γραφικής παράστασης"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbLock)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:458
@@ -21408,30 +21365,30 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lXStart)
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:167
 #, fuzzy, kde-format
-#| msgid "x-Start"
+#| msgid "y-Start"
 msgid "X-Start:"
-msgstr "x-Start"
+msgstr "y-Start"
 
 #. i18n: ectx: property (text), widget (QLabel, lXMax)
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:181
 #, fuzzy, kde-format
-#| msgid "x-End"
+#| msgid "y-End"
 msgid "X-End:"
-msgstr "x-End"
+msgstr "y-End"
 
 #. i18n: ectx: property (text), widget (QLabel, lYStart)
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:211
 #, fuzzy, kde-format
-#| msgid "x-Start"
+#| msgid "y-Start"
 msgid "Y-Start:"
-msgstr "x-Start"
+msgstr "y-Start"
 
 #. i18n: ectx: property (text), widget (QLabel, lYEnd)
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:225
 #, fuzzy, kde-format
-#| msgid "x-End"
+#| msgid "y-End"
 msgid "Y-End:"
-msgstr "x-End"
+msgstr "y-End"
 
 #. i18n: ectx: property (text), widget (QLabel, lHeader)
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:305
@@ -21567,10 +21524,9 @@ msgstr "Ενεργό"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowSparklines)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:175
-#, fuzzy, kde-format
-#| msgid "Connection:"
+#, kde-format
 msgid "Sparklines:"
-msgstr "Σύνδεση:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:198
@@ -21666,9 +21622,9 @@ msgstr "x-Data"
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:410
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:463
 #, fuzzy, kde-format
-#| msgid "y-Range:"
+#| msgid "x-Range:"
 msgid "X-Range:"
-msgstr "y-Range"
+msgstr "x-Range"
 
 #. i18n: ectx: property (text), widget (QLabel, lY2Column)
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:145
@@ -23075,24 +23031,21 @@ msgstr "Διακύμανση"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSyntaxHighlighting)
 #: src/kdefrontend/ui/settingsnotebookpage.ui:33
-#, fuzzy, kde-format
-#| msgid "Height"
+#, kde-format
 msgid "Syntax Highlighting"
-msgstr "Ύψος"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSyntaxCompletion)
 #: src/kdefrontend/ui/settingsnotebookpage.ui:40
-#, fuzzy, kde-format
-#| msgid "%1: set plot designation"
+#, kde-format
 msgid "Syntax Completion"
-msgstr "%1: ορισμός τίτλου γραφικής παράστασης"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLineNumbers)
 #: src/kdefrontend/ui/settingsnotebookpage.ui:47
-#, fuzzy, kde-format
-#| msgid "Number of levels"
+#, kde-format
 msgid "Line Numbers"
-msgstr "Πλήθος επιπέδων"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLatexTypesetting)
 #: src/kdefrontend/ui/settingsnotebookpage.ui:54
@@ -23216,10 +23169,9 @@ msgstr "%1 τιμή"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter1)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:136
-#, fuzzy, kde-format
-#| msgid "Derivative"
+#, kde-format
 msgid "Smoothness (Power of 10):"
-msgstr "Παράγωγος"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter2)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:162
@@ -23252,10 +23204,9 @@ msgstr "Στήλη τέλους:"
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:47
 #, fuzzy, kde-format
-#| msgid "%1 value"
-#| msgid_plural "%1 values"
+#| msgid "Function values"
 msgid "Numeric Values"
-msgstr "%1 τιμή"
+msgstr "Τιμές συνάρτησης"
 
 #. i18n: ectx: property (text), widget (QLabel, lMode)
 #. i18n: ectx: property (text), widget (QLabel, lConditionText)
@@ -23281,18 +23232,16 @@ msgstr "max."
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:144
 #, fuzzy, kde-format
-#| msgid "%1 value"
-#| msgid_plural "%1 values"
+#| msgid "Labels"
 msgid "Text Values"
-msgstr "%1 τιμή"
+msgstr "Ετικέτες"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:203
 #, fuzzy, kde-format
-#| msgid "%1 value"
-#| msgid_plural "%1 values"
+#| msgid "set date-time format to %1"
 msgid "DateTime Values"
-msgstr "%1 τιμή"
+msgstr "ορισμός μορφής ημερομηνίας-ώρας σε %1"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:97
@@ -23439,17 +23388,15 @@ msgstr "LabPlot2"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbCurvePlacementAllInOnePlotArea)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:160
-#, fuzzy, kde-format
-#| msgid "Plot Area"
+#, kde-format
 msgid "All Plots in one Plot Area"
-msgstr "Περιοχή σχεδίασης"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbCurvePlacementAllInOwnPlotArea)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:170
-#, fuzzy, kde-format
-#| msgid "Plot Area"
+#, kde-format
 msgid "One Plot Area per Plot"
-msgstr "Περιοχή σχεδίασης"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementExistingPlotArea)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:186
@@ -24597,10 +24544,9 @@ msgid "%1 not found"
 msgstr "Τύπος αποθήκευσης"
 
 #: src/tools/TeXRenderer.cpp:193
-#, fuzzy, kde-format
-#| msgid "Connection:"
+#, kde-format
 msgid "Timeout: Unable to generate latex file"
-msgstr "Σύνδεση:"
+msgstr ""
 
 #: src/tools/TeXRenderer.cpp:196
 #, kde-format
@@ -24636,58 +24582,19 @@ msgid "Unable to open file:"
 msgstr "Σύνδεση:"
 
 #, fuzzy
-#~| msgid "Derivative"
-#~ msgid "p-th quantile"
-#~ msgstr "Παράγωγος"
-
-#, fuzzy
-#~| msgid "Connection:"
-#~ msgid "Column Format"
-#~ msgstr "Σύνδεση:"
-
-#~ msgid "Specify the name of the file to import."
-#~ msgstr "Ορίζει το όνομα του αρχείου προς εισαγωγή."
-
-#, fuzzy
 #~| msgid "%1: remove 1 row"
 #~| msgid_plural "%1: remove %2 rows"
 #~ msgid "%1: move down"
 #~ msgstr "%1: αφαίρεση 1 γραμμής"
 
-#, fuzzy
-#~| msgid "Connection:"
-#~ msgid "Failed to download the dataset"
-#~ msgstr "Σύνδεση:"
+#~ msgid "&Restore"
+#~ msgstr "Επαναφο&ρά"
 
-#, fuzzy
-#~| msgid "Connection:"
-#~ msgid "Failed to save the dataset"
-#~ msgstr "Σύνδεση:"
+#~ msgid "Mi&nimize"
+#~ msgstr "Ελα&χιστοποίηση"
 
-#, fuzzy
-#~| msgid "Format Type"
-#~ msgid "Variable contains no data"
-#~ msgstr "Τύπος αποθήκευσης"
-
-#, fuzzy
-#~| msgid "invalid row value"
-#~ msgid "Invalid dbc file"
-#~ msgstr "μη έγκυρη τιμή γραμμής"
-
-#, fuzzy
-#~| msgid "y-Data"
-#~ msgid "Parse Errors"
-#~ msgstr "y-Data"
-
-#, fuzzy
-#~| msgid "Column comments"
-#~ msgid "Column Comments:"
-#~ msgstr "Σχόλια στήλης"
-
-#, fuzzy
-#~| msgid "%1: change column type"
-#~ msgid "%1: error bar style type changed"
-#~ msgstr "%1: αλλαγή τύπου στήλης"
+#~ msgid "Ma&ximize"
+#~ msgstr "Με&γιστοποίηση"
 
 #, fuzzy
 #~| msgid "Plot Area"
@@ -24695,102 +24602,18 @@ msgstr "Σύνδεση:"
 #~ msgstr "Περιοχή σχεδίασης"
 
 #, fuzzy
-#~| msgid "Derivative"
-#~ msgid "Do Nothing"
-#~ msgstr "Παράγωγος"
-
-#, fuzzy
-#~| msgid "Create new project with worksheet"
-#~ msgid "Create New Project with Worksheet"
-#~ msgstr "Δημιοθργία νέου έργου με φύλλο εργασίας"
-
-#, fuzzy
-#~| msgid "Create new project with worksheet"
-#~ msgid "Create New Project with Spreadsheet"
-#~ msgstr "Δημιοθργία νέου έργου με φύλλο εργασίας"
-
-#, fuzzy
-#~| msgid "Create new project with worksheet"
-#~ msgid "Create New Project with Notebook"
-#~ msgstr "Δημιοθργία νέου έργου με φύλλο εργασίας"
-
-#~ msgid "number should be bigger than number of data points"
-#~ msgstr "ο αριθμός πρέπει να είναι μεγαλύτερος από το πλήθος των σημείων"
-
-#, fuzzy
-#~| msgid "set date-time format to %1"
-#~ msgid "DateTime"
-#~ msgstr "ορισμός μορφής ημερομηνίας-ώρας σε %1"
-
-#, fuzzy
-#~| msgid "Start column:"
-#~ msgid "Remove"
-#~ msgstr "Στήλη έναρξης:"
-
-#, fuzzy
-#~| msgid "LabPlot2"
-#~ msgid "Add Box Plot to"
-#~ msgstr "LabPlot2"
-
-#, fuzzy
-#~| msgid "LabPlot2"
-#~ msgid "Add Bar Plot to"
-#~ msgstr "LabPlot2"
-
-#, fuzzy
-#~| msgid "LabPlot2"
-#~ msgid "Add Box Plots to"
-#~ msgstr "LabPlot2"
-
-#, fuzzy
-#~| msgid "LabPlot2"
-#~ msgid "Add Bar Plots to"
-#~ msgstr "LabPlot2"
-
-#, fuzzy
-#~| msgid "Create new project with worksheet"
-#~ msgid "new plot in an existing worksheet"
-#~ msgstr "Δημιοθργία νέου έργου με φύλλο εργασίας"
-
-#, fuzzy
-#~| msgid "Create new project with worksheet"
-#~ msgid "new plot in a new worksheet"
-#~ msgstr "Δημιοθργία νέου έργου με φύλλο εργασίας"
-
-#, fuzzy
-#~| msgid "Create new project with worksheet"
-#~ msgid "new plots in an existing worksheet"
-#~ msgstr "Δημιοθργία νέου έργου με φύλλο εργασίας"
-
-#, fuzzy
-#~| msgid "Create new project with worksheet"
-#~ msgid "new plots in a new worksheet"
-#~ msgstr "Δημιοθργία νέου έργου με φύλλο εργασίας"
-
-#, fuzzy
-#~| msgid "Connection:"
-#~ msgid "Conditions"
-#~ msgstr "Σύνδεση:"
-
-#, fuzzy
-#~| msgid "Start column:"
-#~ msgid "Sort columns:"
-#~ msgstr "Στήλη έναρξης:"
-
-#, fuzzy
-#~| msgid "End column:"
-#~ msgid "Leading column:"
-#~ msgstr "Στήλη τέλους:"
-
-#~ msgid "Save the current filter settings"
-#~ msgstr "Αποθήκευση ρυθμίσεων τρέχοντος φίλτρου"
-
-#~ msgid "Manage filters"
-#~ msgstr "Διαχείριση φίλτρων"
+#~| msgid "invalid row value"
+#~ msgid "Invalid dbc file"
+#~ msgstr "μη έγκυρη τιμή γραμμής"
 
 #, fuzzy
 #~| msgid "Start column:"
 #~ msgid "Remove Columns"
+#~ msgstr "Στήλη έναρξης:"
+
+#, fuzzy
+#~| msgid "Start column:"
+#~ msgid "Remove"
 #~ msgstr "Στήλη έναρξης:"
 
 #, fuzzy
@@ -24809,46 +24632,9 @@ msgstr "Σύνδεση:"
 #~ msgstr "Σύνδεση:"
 
 #, fuzzy
-#~| msgid "Connection:"
-#~ msgid "Convolution/Deconvolution"
-#~ msgstr "Σύνδεση:"
-
-#~ msgid "&Analysis"
-#~ msgstr "&Ανάλυση"
-
-#, fuzzy
-#~| msgid "%1: set value for row %2"
-#~ msgid "%1: set line pen"
-#~ msgstr "%1: ορισμός τιμής για τη γραμμή %2"
-
-#, fuzzy
-#~| msgid "Options:"
-#~ msgid "End Search"
-#~ msgstr "Επιλογές:"
-
-#, fuzzy
-#~| msgid "Max. iterations"
-#~ msgid "Point Separation:"
-#~ msgstr "Max. επαναλήψεις"
-
-#, fuzzy
-#~| msgid "Preferences"
-#~ msgid "Reference Points"
-#~ msgstr "Προτιμήσεις"
-
-#, fuzzy
 #~| msgid "Data:"
 #~ msgid "No Data"
 #~ msgstr "Δεδομένα:"
-
-#~ msgid "&Restore"
-#~ msgstr "Επαναφο&ρά"
-
-#~ msgid "Mi&nimize"
-#~ msgstr "Ελα&χιστοποίηση"
-
-#~ msgid "Ma&ximize"
-#~ msgstr "Με&γιστοποίηση"
 
 #, fuzzy
 #~| msgid "Start column:"
@@ -24958,6 +24744,9 @@ msgstr "Σύνδεση:"
 #~ msgid "Workbook"
 #~ msgstr "Βιβλίο εργασίας"
 
+#~ msgid "&Analysis"
+#~ msgstr "&Ανάλυση"
+
 #~ msgid "&Tile"
 #~ msgstr "&Παράθεση"
 
@@ -24969,6 +24758,21 @@ msgstr "Σύνδεση:"
 
 #~ msgid "Cascade the windows"
 #~ msgstr "Παράθυρα σε επικάλυψη"
+
+#, fuzzy
+#~| msgid "Derivative"
+#~ msgid "Do Nothing"
+#~ msgstr "Παράγωγος"
+
+#, fuzzy
+#~| msgid "Create new project with worksheet"
+#~ msgid "Create New Project with Worksheet"
+#~ msgstr "Δημιοθργία νέου έργου με φύλλο εργασίας"
+
+#, fuzzy
+#~| msgid "Create new project with worksheet"
+#~ msgid "Create New Project with Spreadsheet"
+#~ msgstr "Δημιοθργία νέου έργου με φύλλο εργασίας"
 
 #, fuzzy
 #~| msgid "Window visibility policy"
@@ -24992,6 +24796,75 @@ msgstr "Σύνδεση:"
 #~ "Να εμφανίζονται τα παράθυρα του τρέχοντος φακέλου και υποφακέλων μόνο"
 
 #, fuzzy
+#~| msgid "LabPlot2"
+#~ msgid "Add Box Plot to"
+#~ msgstr "LabPlot2"
+
+#, fuzzy
+#~| msgid "LabPlot2"
+#~ msgid "Add Bar Plot to"
+#~ msgstr "LabPlot2"
+
+#, fuzzy
+#~| msgid "LabPlot2"
+#~ msgid "Add Box Plots to"
+#~ msgstr "LabPlot2"
+
+#, fuzzy
+#~| msgid "LabPlot2"
+#~ msgid "Add Bar Plots to"
+#~ msgstr "LabPlot2"
+
+#, fuzzy
+#~| msgid "Create new project with worksheet"
+#~ msgid "new plot in an existing worksheet"
+#~ msgstr "Δημιοθργία νέου έργου με φύλλο εργασίας"
+
+#, fuzzy
+#~| msgid "Create new project with worksheet"
+#~ msgid "new plot in a new worksheet"
+#~ msgstr "Δημιοθργία νέου έργου με φύλλο εργασίας"
+
+#, fuzzy
+#~| msgid "Create new project with worksheet"
+#~ msgid "new plots in an existing worksheet"
+#~ msgstr "Δημιοθργία νέου έργου με φύλλο εργασίας"
+
+#, fuzzy
+#~| msgid "Create new project with worksheet"
+#~ msgid "new plots in a new worksheet"
+#~ msgstr "Δημιοθργία νέου έργου με φύλλο εργασίας"
+
+#, fuzzy
+#~| msgid "Max. iterations"
+#~ msgid "Point Separation:"
+#~ msgstr "Max. επαναλήψεις"
+
+#, fuzzy
+#~| msgid "Preferences"
+#~ msgid "Reference Points"
+#~ msgstr "Προτιμήσεις"
+
+#, fuzzy
+#~| msgid "y-Data"
+#~ msgid "Parse Errors"
+#~ msgstr "y-Data"
+
+#~ msgid "Save the current filter settings"
+#~ msgstr "Αποθήκευση ρυθμίσεων τρέχοντος φίλτρου"
+
+#~ msgid "Manage filters"
+#~ msgstr "Διαχείριση φίλτρων"
+
+#, fuzzy
+#~| msgid "Column comments"
+#~ msgid "Column Comments:"
+#~ msgstr "Σχόλια στήλης"
+
+#~ msgid "number should be bigger than number of data points"
+#~ msgstr "ο αριθμός πρέπει να είναι μεγαλύτερος από το πλήθος των σημείων"
+
+#, fuzzy
 #~| msgid "Tab position"
 #~ msgid "Tab position:"
 #~ msgstr "Θέση καρτέλας"
@@ -25007,115 +24880,17 @@ msgstr "Σύνδεση:"
 #~ msgstr "Πολιτική ορατότητας παραθύρων"
 
 #, fuzzy
-#~| msgid "%1 value"
-#~| msgid_plural "%1 values"
-#~ msgid "Baseline"
-#~ msgstr "%1 τιμή"
+#~| msgid "Start column:"
+#~ msgid "Sort columns:"
+#~ msgstr "Στήλη έναρξης:"
 
 #, fuzzy
-#~| msgid "Weights"
-#~ msgid "Weighting:"
-#~ msgstr "Βάρη:"
+#~| msgid "End column:"
+#~ msgid "Leading column:"
+#~ msgstr "Στήλη τέλους:"
 
-#, fuzzy
-#~| msgid "%1: insert 1 row"
-#~| msgid_plural "%1: insert %2 rows"
-#~ msgid "Subtract the specified value from column values"
-#~ msgstr "%1: εισαγωγή 1 γραμμής"
-
-#, fuzzy
-#~| msgid "%1: insert 1 row"
-#~| msgid_plural "%1: insert %2 rows"
-#~ msgid "Add the specified value to matrix values"
-#~ msgstr "%1: εισαγωγή 1 γραμμής"
-
-#, fuzzy
-#~| msgid "%1: insert 1 row"
-#~| msgid_plural "%1: insert %2 rows"
-#~ msgid "Subtract the specified value from matrix values"
-#~ msgstr "%1: εισαγωγή 1 γραμμής"
-
-#, fuzzy
-#~| msgid "x-data"
-#~ msgid "X-data:"
-#~ msgstr "x-data"
-
-#, fuzzy
-#~| msgid "x-data"
-#~ msgid "Y-data:"
-#~ msgstr "x-data"
-
-#, fuzzy
-#~| msgid "LabPlot2"
-#~ msgid "Add plots to"
-#~ msgstr "LabPlot2"
-
-#, fuzzy
-#~| msgid "y-Start"
-#~ msgid "y-Start:"
-#~ msgstr "y-Start"
-
-#, fuzzy
-#~| msgid "y-End"
-#~ msgid "y-End:"
-#~ msgstr "y-End"
-
-#~ msgid "x-Range:"
-#~ msgstr "x-Range"
-
-#, fuzzy
-#~| msgid "x-Range"
-#~ msgid "Plot ranges:"
-#~ msgstr "x-Range"
-
-#, fuzzy
-#~| msgid "x-data"
-#~ msgid "x-data:"
-#~ msgstr "x-data"
-
-#, fuzzy
-#~| msgid "y-data"
-#~ msgid "y-data:"
-#~ msgstr "y-data"
-
-#, fuzzy
-#~| msgid "y-Data"
-#~ msgid "y-Data:"
-#~ msgstr "y-Data"
-
-#, fuzzy
-#~| msgid "Height"
-#~ msgid "y-Weight:"
-#~ msgstr "Ύψος"
-
-#, fuzzy
-#~| msgid "%1: change column type"
-#~ msgid "%1: set whiskers cap pen"
-#~ msgstr "%1: αλλαγή τύπου στήλης"
-
-#, fuzzy
-#~| msgid "%1: set formula"
-#~ msgid "%1: set whiskers cap opacity"
-#~ msgstr "%1: ορισμός τύπου"
-
-#, fuzzy
-#~| msgid "Equation type"
-#~ msgctxt "@title:window"
-#~ msgid "xy-Equation"
-#~ msgstr "τύπος εξίσωσης"
-
-#, fuzzy
-#~| msgid "Font"
-#~ msgid "Font"
-#~ msgstr "Γραμματοσειρά"
-
-#~ msgid "x-Range"
-#~ msgstr "x-Range"
-
-#, fuzzy
-#~| msgid "Text Color"
-#~ msgid "Font color:"
-#~ msgstr "Χρώμα κειμένου"
+#~ msgid "Specify the name of the file to import."
+#~ msgstr "Ορίζει το όνομα του αρχείου προς εισαγωγή."
 
 #, fuzzy
 #~| msgid "%1: set value for row %2"
@@ -25138,27 +24913,39 @@ msgstr "Σύνδεση:"
 #~ msgstr "%1: ορισμός τύπου"
 
 #, fuzzy
-#~| msgid "Error type"
-#~ msgid "Error type:"
-#~ msgstr "Τύπος σφάλματος"
+#~| msgid "%1: change column type"
+#~ msgid "%1: set border pen"
+#~ msgstr "%1: αλλαγή τύπου στήλης"
 
 #, fuzzy
-#~| msgid "y-error:"
-#~ msgid "y-error"
-#~ msgstr "y-error"
+#~| msgid "%1: set formula"
+#~ msgid "%1: set median line opacity"
+#~ msgstr "%1: ορισμός τύπου"
 
 #, fuzzy
-#~| msgid "x-error:"
-#~ msgid "x-error"
-#~ msgstr "x-error"
-
-#~ msgid "cm"
-#~ msgstr "cm"
+#~| msgid "%1: set formula"
+#~ msgid "%1: set whiskers opacity"
+#~ msgstr "%1: ορισμός τύπου"
 
 #, fuzzy
-#~| msgid "Statistics"
-#~ msgid "Statistical Methods (of column)"
-#~ msgstr "Στατιστική"
+#~| msgid "%1: change column type"
+#~ msgid "%1: set whiskers cap pen"
+#~ msgstr "%1: αλλαγή τύπου στήλης"
+
+#, fuzzy
+#~| msgid "%1: set formula"
+#~ msgid "%1: set whiskers cap opacity"
+#~ msgstr "%1: ορισμός τύπου"
+
+#, fuzzy
+#~| msgid "%1: change cell values"
+#~ msgid "%1: change y-range %2 format"
+#~ msgstr "%1: αλλαγή τιμών σε κελιά"
+
+#, fuzzy
+#~| msgid "%1: change hidden status"
+#~ msgid "%1: change y-range %2 auto scaling"
+#~ msgstr "%1: αλλαγή κρυφής κατάστασης"
 
 #, fuzzy
 #~| msgid "%1 value"
@@ -25190,29 +24977,86 @@ msgstr "Σύνδεση:"
 #~ msgstr "%1 τιμή"
 
 #, fuzzy
-#~| msgid "%1: change column type"
-#~ msgid "%1: set border pen"
-#~ msgstr "%1: αλλαγή τύπου στήλης"
+#~| msgid "x-Range:"
+#~ msgid "Y-Ranges:"
+#~ msgstr "x-Range"
 
 #, fuzzy
-#~| msgid "%1: set value for row %2"
-#~ msgid "%1: set median line pen"
-#~ msgstr "%1: ορισμός τιμής για τη γραμμή %2"
+#~| msgid "Export horizontal header"
+#~ msgid "Horizontal Linear Gradient"
+#~ msgstr "Εξαγωγή οριζόντιας επικεφαλίδας"
 
 #, fuzzy
-#~| msgid "%1: set formula"
-#~ msgid "%1: set median line opacity"
-#~ msgstr "%1: ορισμός τύπου"
+#~| msgid "Export horizontal header"
+#~ msgid "Vertical Linear Gradient"
+#~ msgstr "Εξαγωγή οριζόντιας επικεφαλίδας"
 
 #, fuzzy
-#~| msgid "%1: change column type"
-#~ msgid "%1: set whiskers pen"
-#~ msgstr "%1: αλλαγή τύπου στήλης"
+#~| msgid "Equation type"
+#~ msgctxt "@title:window"
+#~ msgid "xy-Equation"
+#~ msgstr "τύπος εξίσωσης"
 
 #, fuzzy
-#~| msgid "%1: set formula"
-#~ msgid "%1: set whiskers opacity"
-#~ msgstr "%1: ορισμός τύπου"
+#~| msgid "%1: insert 1 row"
+#~| msgid_plural "%1: insert %2 rows"
+#~ msgid "Subtract the specified value from column values"
+#~ msgstr "%1: εισαγωγή 1 γραμμής"
+
+#, fuzzy
+#~| msgid "%1: insert 1 row"
+#~| msgid_plural "%1: insert %2 rows"
+#~ msgid "Add the specified value to matrix values"
+#~ msgstr "%1: εισαγωγή 1 γραμμής"
+
+#, fuzzy
+#~| msgid "%1: insert 1 row"
+#~| msgid_plural "%1: insert %2 rows"
+#~ msgid "Subtract the specified value from matrix values"
+#~ msgstr "%1: εισαγωγή 1 γραμμής"
+
+#, fuzzy
+#~| msgid "Plot Area"
+#~ msgid "Box Plot Data"
+#~ msgstr "Περιοχή σχεδίασης"
+
+#, fuzzy
+#~| msgid "no column element found"
+#~ msgid "Histogram Placement"
+#~ msgstr "αδυναμία εύρεσης αντικειμένου στήλης"
+
+#, fuzzy
+#~| msgid "LabPlot2"
+#~ msgid "Plot - %1"
+#~ msgstr "LabPlot2"
+
+#, fuzzy
+#~| msgid "LabPlot2"
+#~ msgid "Plot %1"
+#~ msgstr "LabPlot2"
+
+#, fuzzy
+#~| msgid "Start column:"
+#~ msgid "Tick Column:"
+#~ msgstr "Στήλη έναρξης:"
+
+#, fuzzy
+#~| msgid "Type"
+#~ msgid "Tick Type:"
+#~ msgstr "Τύπος"
+
+#, fuzzy
+#~| msgid "Font"
+#~ msgid "Font"
+#~ msgstr "Γραμματοσειρά"
+
+#, fuzzy
+#~| msgid "y-Range:"
+#~ msgid "y-Range"
+#~ msgstr "y-Range"
+
+#~ msgid "x-Range"
+#~ msgstr "x-Range"
 
 #, fuzzy
 #~| msgid "Top margin"
@@ -25239,15 +25083,66 @@ msgstr "Σύνδεση:"
 #~ msgid "Margin"
 #~ msgstr "Περιθώριο:"
 
-#, fuzzy
-#~| msgid "LabPlot2"
-#~ msgid "Plot - %1"
-#~ msgstr "LabPlot2"
+#~ msgid "cm"
+#~ msgstr "cm"
 
 #, fuzzy
-#~| msgid "LabPlot2"
-#~ msgid "Plot %1"
-#~ msgstr "LabPlot2"
+#~| msgid "x-Start"
+#~ msgid "x-Start:"
+#~ msgstr "x-Start"
+
+#, fuzzy
+#~| msgid "x-End"
+#~ msgid "x-End:"
+#~ msgstr "x-End"
+
+#~ msgid "x-Range:"
+#~ msgstr "x-Range"
+
+#, fuzzy
+#~| msgid "x-Range"
+#~ msgid "Plot ranges:"
+#~ msgstr "x-Range"
+
+#, fuzzy
+#~| msgid "x-error:"
+#~ msgid "x-error"
+#~ msgstr "x-error"
+
+#, fuzzy
+#~| msgid "Error type"
+#~ msgid "Error type:"
+#~ msgstr "Τύπος σφάλματος"
+
+#, fuzzy
+#~| msgid "y-error:"
+#~ msgid "y-error"
+#~ msgstr "y-error"
+
+#, fuzzy
+#~| msgid "x-data"
+#~ msgid "x-data:"
+#~ msgstr "x-data"
+
+#, fuzzy
+#~| msgid "y-data"
+#~ msgid "y-data:"
+#~ msgstr "y-data"
+
+#, fuzzy
+#~| msgid "y-Data"
+#~ msgid "y-Data:"
+#~ msgstr "y-Data"
+
+#, fuzzy
+#~| msgid "Height"
+#~ msgid "y-Weight:"
+#~ msgstr "Ύψος"
+
+#, fuzzy
+#~| msgid "Text Color"
+#~ msgid "Font color:"
+#~ msgstr "Χρώμα κειμένου"
 
 #, fuzzy
 #~| msgid "%1 value"
@@ -25256,64 +25151,14 @@ msgstr "Σύνδεση:"
 #~ msgstr "%1 τιμή"
 
 #, fuzzy
-#~| msgid "Type"
-#~ msgid "Tick Type:"
-#~ msgstr "Τύπος"
+#~| msgid "x-data"
+#~ msgid "X-data:"
+#~ msgstr "x-data"
 
 #, fuzzy
-#~| msgid "Data:"
-#~ msgid "Automatic:"
-#~ msgstr "Δεδομένα:"
-
-#, fuzzy
-#~| msgid "Start column:"
-#~ msgid "Tick Column:"
-#~ msgstr "Στήλη έναρξης:"
-
-#, fuzzy
-#~| msgid "No Error"
-#~ msgid "Error:"
-#~ msgstr "Χωρίς σφάλμα"
-
-#, fuzzy
-#~| msgid "%1: change column type"
-#~ msgid "%1: change y-range %2 format"
-#~ msgstr "%1: αλλαγή τύπου στήλης"
-
-#, fuzzy
-#~| msgid "%1: change hidden status"
-#~ msgid "%1: change y-range %2 auto scaling"
-#~ msgstr "%1: αλλαγή κρυφής κατάστασης"
-
-#, fuzzy
-#~| msgid "x-Range:"
-#~ msgid "Y-Ranges:"
-#~ msgstr "x-Range"
-
-#, fuzzy
-#~| msgid "Plot Area"
-#~ msgid "Box Plot Data"
-#~ msgstr "Περιοχή σχεδίασης"
-
-#, fuzzy
-#~| msgid "no column element found"
-#~ msgid "Histogram Placement"
-#~ msgstr "αδυναμία εύρεσης αντικειμένου στήλης"
-
-#, fuzzy
-#~| msgid "Export horizontal header"
-#~ msgid "Horizontal Linear Gradient"
-#~ msgstr "Εξαγωγή οριζόντιας επικεφαλίδας"
-
-#, fuzzy
-#~| msgid "Export horizontal header"
-#~ msgid "Vertical Linear Gradient"
-#~ msgstr "Εξαγωγή οριζόντιας επικεφαλίδας"
-
-#, fuzzy
-#~| msgid "Second color"
-#~ msgid "Foreground color:"
-#~ msgstr "Δεύτερο χρώμα"
+#~| msgid "x-data"
+#~ msgid "Y-data:"
+#~ msgstr "x-data"
 
 #~ msgid "%1: set text for row %2"
 #~ msgstr "%1: ορισμός κειμένου για τη γραμμή %2"
@@ -25322,14 +25167,77 @@ msgstr "Σύνδεση:"
 #~ msgstr "%1: αντικατάσταση κειμένου στις γραμμές %2 έως %3"
 
 #, fuzzy
-#~| msgid "x-error:"
-#~ msgid "X-error plus"
-#~ msgstr "x-error"
+#~| msgid "Differentiation:"
+#~ msgid "xy-curve from a mathematical Equation"
+#~ msgstr "Διαφορισμός:"
+
+#, fuzzy
+#~| msgid "%1: change column type"
+#~ msgid "%1: set x-range format"
+#~ msgstr "%1: αλλαγή τύπου στήλης"
+
+#, fuzzy
+#~| msgid "%1: change column type"
+#~ msgid "%1: set y-range format"
+#~ msgstr "%1: αλλαγή τύπου στήλης"
+
+#, fuzzy
+#~| msgid "%1: insert 1 row"
+#~| msgid_plural "%1: insert %2 rows"
+#~ msgid "%1: set min x"
+#~ msgstr "%1: εισαγωγή 1 γραμμής"
+
+#, fuzzy
+#~| msgid "%1: set formula"
+#~ msgid "%1: set max x"
+#~ msgstr "%1: ορισμός τύπου"
+
+#, fuzzy
+#~| msgid "%1: insert 1 row"
+#~| msgid_plural "%1: insert %2 rows"
+#~ msgid "%1: set min y"
+#~ msgstr "%1: εισαγωγή 1 γραμμής"
+
+#, fuzzy
+#~| msgid "%1: set formula"
+#~ msgid "%1: set max y"
+#~ msgstr "%1: ορισμός τύπου"
+
+#, fuzzy
+#~| msgid "%1: set formula"
+#~ msgid "%1: set y scale"
+#~ msgstr "%1: ορισμός τύπου"
+
+#, fuzzy
+#~| msgid "Start column:"
+#~ msgid "Show/Hide columns"
+#~ msgstr "Στήλη έναρξης:"
 
 #, fuzzy
 #~| msgid "x-error:"
 #~ msgid "Y-error plus"
 #~ msgstr "x-error"
+
+#, fuzzy
+#~| msgid "invalid row value"
+#~ msgid "Divide by Value"
+#~ msgstr "μη έγκυρη τιμή γραμμής"
+
+#, fuzzy
+#~| msgid "Start column:"
+#~ msgid "Clea&r Selected Rows"
+#~ msgstr "Στήλη έναρξης:"
+
+#, fuzzy
+#~| msgid "Format Type"
+#~ msgctxt "@title:window"
+#~ msgid "File Information"
+#~ msgstr "Τύπος αποθήκευσης"
+
+#, fuzzy
+#~| msgid "Error type"
+#~ msgid "Error, %"
+#~ msgstr "Τύπος σφάλματος"
 
 #, fuzzy
 #~| msgid "Data Type"
@@ -25338,15 +25246,23 @@ msgstr "Σύνδεση:"
 #~ msgstr "τύπος δεδομένων"
 
 #, fuzzy
-#~| msgid "&Worksheet"
-#~ msgid "Animate Worksheet"
-#~ msgstr "&Φύλλο εργασίας"
+#~| msgid "Properties explorer"
+#~ msgctxt "@title:window %1 is a Cantor backend"
+#~ msgid "%1 Properties"
+#~ msgstr "Εξερευνητής ιδιοτήτων"
 
 #, fuzzy
 #~| msgid "Properties explorer"
 #~ msgctxt "@title:window"
 #~ msgid "CAS Properties"
 #~ msgstr "Εξερευνητής ιδιοτήτων"
+
+#~ msgid ""
+#~ "LabPlot2 is a KDE-application for interactive graphing and analysis of "
+#~ "scientific data."
+#~ msgstr ""
+#~ "Το LabPlot είναι μια KDE-εφαρμογή για διαδραστική αναπαράσταση και "
+#~ "ανάλυση επιστημονικών δεδομένων."
 
 #, fuzzy
 #~| msgid "&Worksheet"
@@ -25358,62 +25274,13 @@ msgstr "Σύνδεση:"
 #~ msgid "&CAS Worksheet"
 #~ msgstr "&Φύλλο εργασίας"
 
-#~ msgid ""
-#~ "LabPlot2 is a KDE-application for interactive graphing and analysis of "
-#~ "scientific data."
-#~ msgstr ""
-#~ "Το LabPlot είναι μια KDE-εφαρμογή για διαδραστική αναπαράσταση και "
-#~ "ανάλυση επιστημονικών δεδομένων."
-
-#, fuzzy
-#~| msgid "Offset X"
-#~ msgid "Offset x:"
-#~ msgstr "Μετατόπιση X"
-
-#, fuzzy
-#~| msgid "Offset X"
-#~ msgid "Offset y:"
-#~ msgstr "Μετατόπιση X"
-
-#, fuzzy
-#~| msgid "Differentiation:"
-#~ msgid "xy-curve from a mathematical Equation"
-#~ msgstr "Διαφορισμός:"
-
-#, fuzzy
-#~| msgid "Error type"
-#~ msgid "Error, %"
-#~ msgstr "Τύπος σφάλματος"
-
-#, fuzzy
-#~| msgid "Labplot version"
-#~ msgid "LabPlot version"
-#~ msgstr "Labplot έκδοση"
-
 #, fuzzy
 #~| msgid "Import"
 #~ msgid "Import from File"
 #~ msgstr "Εισαγωγή"
 
-#, fuzzy
-#~| msgid "%1: set formula"
-#~ msgid "%1: set x range"
-#~ msgstr "%1: ορισμός τύπου"
-
-#, fuzzy
-#~| msgid "%1: set formula"
-#~ msgid "%1: set y range"
-#~ msgstr "%1: ορισμός τύπου"
-
-#, fuzzy
-#~| msgid "Show"
-#~ msgid "Show &last"
-#~ msgstr "Εμφάνιση"
-
-#, fuzzy
-#~| msgid "Points"
-#~ msgid "points"
-#~ msgstr "Σημεία"
+#~ msgid "Edit"
+#~ msgstr "Επεξεργασία"
 
 #, fuzzy
 #~| msgid "No Error"
@@ -25427,14 +25294,37 @@ msgstr "Σύνδεση:"
 #~ "Θέση του άξονα στην κατεύθυνση κάθετα προς τον άξονα των λογικών τιμών."
 
 #, fuzzy
+#~| msgid "Points"
+#~ msgid "points"
+#~ msgstr "Σημεία"
+
+#, fuzzy
+#~| msgid "Scaling"
+#~ msgid "Scaling:"
+#~ msgstr "Κλιμάκωση"
+
+#, fuzzy
+#~| msgid "Show"
+#~ msgid "Show &last"
+#~ msgstr "Εμφάνιση"
+
+#~ msgid "y-Range:"
+#~ msgstr "y-Range"
+
+#, fuzzy
+#~| msgid "Labplot version"
+#~ msgid "LabPlot version"
+#~ msgstr "Labplot έκδοση"
+
+#, fuzzy
 #~| msgid "Notes"
 #~ msgid "Notes:"
 #~ msgstr "Σημειώσεις"
 
 #, fuzzy
-#~| msgid "Variance"
-#~ msgid "Variables: "
-#~ msgstr "Διακύμανση"
+#~| msgid "Second color"
+#~ msgid "Foreground color:"
+#~ msgstr "Δεύτερο χρώμα"
 
 #, fuzzy
 #~| msgid "%1: set formula"
@@ -25447,47 +25337,14 @@ msgstr "Σύνδεση:"
 #~ msgstr "%1: ορισμός τιμής για τη γραμμή %2"
 
 #, fuzzy
-#~| msgid "Start column:"
-#~ msgid "Show/Hide columns"
-#~ msgstr "Στήλη έναρξης:"
-
-#, fuzzy
-#~| msgid "Levels"
-#~ msgid "Levels:"
-#~ msgstr "Επίπεδα"
-
-#, fuzzy
-#~| msgid "Format Type"
-#~ msgctxt "@title:window"
-#~ msgid "File Information"
-#~ msgstr "Τύπος αποθήκευσης"
-
-#, fuzzy
-#~| msgid "invalid row value"
-#~ msgid "Divide by Value"
-#~ msgstr "μη έγκυρη τιμή γραμμής"
-
-#~ msgid "Edit"
-#~ msgstr "Επεξεργασία"
+#~| msgid "set date-time format to %1"
+#~ msgid "Date/Time"
+#~ msgstr "ορισμός μορφής ημερομηνίας-ώρας σε %1"
 
 #, fuzzy
 #~| msgid "Percentile"
 #~ msgid "2/98 percentiles"
 #~ msgstr "Εκατοστημόριο"
-
-#, fuzzy
-#~| msgid "Scaling"
-#~ msgid "Scaling:"
-#~ msgstr "Κλιμάκωση"
-
-#~ msgid "y-Range:"
-#~ msgstr "y-Range"
-
-#, fuzzy
-#~| msgid "Properties explorer"
-#~ msgctxt "@title:window %1 is a Cantor backend"
-#~ msgid "%1 Properties"
-#~ msgstr "Εξερευνητής ιδιοτήτων"
 
 #, fuzzy
 #~| msgid "Variance"
@@ -25544,11 +25401,6 @@ msgstr "Σύνδεση:"
 #~| msgid "Show file info"
 #~ msgid "Show memory info:"
 #~ msgstr "Εμφάνιση πληροφοριών αρχείου"
-
-#, fuzzy
-#~| msgid "set date-time format to %1"
-#~ msgid "DateTime format"
-#~ msgstr "ορισμός μορφής ημερομηνίας-ώρας σε %1"
 
 #, fuzzy
 #~| msgid "Labplot version"
@@ -25800,6 +25652,11 @@ msgstr "Σύνδεση:"
 #~| msgid "no folder element found"
 #~ msgid "no liveDataSource element found"
 #~ msgstr "αδυναμία εύρεσης φακέλου"
+
+#, fuzzy
+#~| msgid "No Error"
+#~ msgid "Errors:"
+#~ msgstr "Χωρίς σφάλμα"
 
 #, fuzzy
 #~| msgid "y-Data"

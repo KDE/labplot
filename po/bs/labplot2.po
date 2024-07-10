@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:42+0000\n"
+"POT-Creation-Date: 2024-07-10 03:09+0000\n"
 "PO-Revision-Date: 2015-02-25 20:16+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -391,14 +391,14 @@ msgid "%1: unmask cells"
 msgstr "%1: demaskiraj ćelije"
 
 #: src/backend/core/abstractcolumncommands.cpp:253
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2592
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2583
 #, fuzzy, kde-format
 #| msgid "%1: set labels format"
 msgid "%1: set heatmap format"
 msgstr "%1: postavi format oznake"
 
 #: src/backend/core/abstractcolumncommands.cpp:280
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2610
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2601
 #, fuzzy, kde-format
 #| msgid "%1: set labels format"
 msgid "%1: remove heatmap format"
@@ -603,16 +603,15 @@ msgid "Plots"
 msgstr "LabPlot2"
 
 #: src/backend/core/column/Column.cpp:195
-#, fuzzy, kde-format
-#| msgid "box plot, two axes"
+#, kde-format
 msgid "Axes"
-msgstr "crtež, dvije ose"
+msgstr ""
 
 #: src/backend/core/column/Column.cpp:221
 #, fuzzy, kde-format
-#| msgid "Tree options"
+#| msgid "calculation time: %1 s"
 msgid "Calculations"
-msgstr "Opcije stabla"
+msgstr "vrijeme računanja: %1 s"
 
 #. i18n("DateTime Filter"), i18n("Unit:"), items, 0, false, &ok);
 #. if (ok) {
@@ -658,7 +657,7 @@ msgid "%1: change cell values"
 msgstr "%1: promijeni vrijednost ćelije"
 
 #: src/backend/core/column/columncommands.cpp:531
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2817
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2808
 #, kde-format
 msgid "%1: set plot designation"
 msgstr "%1: postavi oznake"
@@ -851,7 +850,7 @@ msgstr "Otvaranje neuspješno"
 msgid "Failed to open project"
 msgstr "Otvaranje neuspješno"
 
-#: src/backend/core/Project.cpp:1255
+#: src/backend/core/Project.cpp:1257
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Pogrešno vrijeme modificiranja projekta. Koristiti trenutno vrijeme."
@@ -1199,10 +1198,10 @@ msgstr "Otvaranje neuspješno"
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
 #: src/commonfrontend/matrix/MatrixView.cpp:619
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2494
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2515
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2533
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2550
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2485
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2506
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2524
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2541
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:188
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:182
@@ -1242,10 +1241,9 @@ msgstr "Vrijednost:"
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:332
 #: src/backend/datasources/filters/XLSXFilter.cpp:515
-#, fuzzy, kde-format
-#| msgid "Number"
+#, kde-format
 msgid "Not enough memory."
-msgstr "Broj"
+msgstr ""
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:273
 #: src/backend/datasources/filters/JsonFilter.cpp:386
@@ -1951,16 +1949,15 @@ msgstr "nepoznato"
 #: src/backend/datasources/filters/MatioFilter.cpp:434
 #: src/commonfrontend/workbook/WorkbookView.cpp:53
 #: src/commonfrontend/workbook/WorkbookView.cpp:160
-#: src/kdefrontend/MainWin.cpp:631 src/kdefrontend/MainWin.cpp:1951
+#: src/kdefrontend/MainWin.cpp:631 src/kdefrontend/MainWin.cpp:1960
 #, kde-format
 msgid "Matrix"
 msgstr "Matrica"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:436
-#, fuzzy, kde-format
-#| msgid "Show Options"
+#, kde-format
 msgid "Compressed"
-msgstr "Prikaži opcije"
+msgstr ""
 
 #: src/backend/datasources/filters/MatioFilter.cpp:438
 #, kde-format
@@ -2003,10 +2000,9 @@ msgid "Selected variable not found."
 msgstr "Info podatka"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:799
-#, fuzzy, kde-format
-#| msgid "File info"
+#, kde-format
 msgid "Struct contains no fields"
-msgstr "Info podatka"
+msgstr ""
 
 #: src/backend/datasources/filters/MatioFilter.cpp:881
 #, kde-format
@@ -2159,9 +2155,9 @@ msgstr "&Normalizuj Selektovano"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:250
 #, fuzzy, kde-format
-#| msgid "File info"
+#| msgid "no column element found"
 msgid "Selected sheet not found."
-msgstr "Info podatka"
+msgstr "nema elemenata u koloni"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:257
 #, fuzzy, kde-format
@@ -2356,10 +2352,9 @@ msgid "Application: %1"
 msgstr "Rotacija"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:105
-#, fuzzy, kde-format
-#| msgid "Show Options"
+#, kde-format
 msgid "Application version: %1.%2.%3"
-msgstr "Prikaži opcije"
+msgstr ""
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:107
 #, fuzzy, kde-format
@@ -3708,10 +3703,9 @@ msgid "Cell (index, variable)"
 msgstr "Označi i uredi"
 
 #: src/backend/gsl/functions.cpp:235
-#, fuzzy, kde-format
-#| msgid "center"
+#, kde-format
 msgid "Moving Average"
-msgstr "centar"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:236
 #, fuzzy, kde-format
@@ -3736,9 +3730,9 @@ msgstr ""
 
 #: src/backend/gsl/functions.cpp:240
 #, fuzzy, kde-format
-#| msgid "center"
+#| msgid "simple, big"
 msgid "Simple Moving Range"
-msgstr "centar"
+msgstr "jednostavan, veliki"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:244
@@ -5133,14 +5127,16 @@ msgid "Logarithm of the magnitude"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:572
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Functions"
 msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q, x)"
-msgstr ""
+msgstr "Funkcije"
 
 #: src/backend/gsl/functions.cpp:573
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Functions"
 msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q, x)"
-msgstr ""
+msgstr "Funkcije"
 
 #: src/backend/gsl/functions.cpp:574
 #, fuzzy, kde-format
@@ -5155,14 +5151,16 @@ msgid "Angular Mathieu functions se_n(q, x)"
 msgstr "Funkcije"
 
 #: src/backend/gsl/functions.cpp:576
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Functions"
 msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q, x)"
-msgstr ""
+msgstr "Funkcije"
 
 #: src/backend/gsl/functions.cpp:577
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Functions"
 msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q, x)"
-msgstr ""
+msgstr "Funkcije"
 
 #: src/backend/gsl/functions.cpp:581
 #, kde-format
@@ -6185,22 +6183,19 @@ msgid "Probability density for a triangular distribution"
 msgstr "Bernulijeva Distribucija"
 
 #: src/backend/gsl/functions.cpp:840
-#, fuzzy, kde-format
-#| msgid "Landau Distribution"
+#, kde-format
 msgid "Cumulative triangular distribution function P"
-msgstr "Landoova Distribucija"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:841
-#, fuzzy, kde-format
-#| msgid "Landau Distribution"
+#, kde-format
 msgid "Cumulative triangular distribution function Q"
-msgstr "Landoova Distribucija"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:842
-#, fuzzy, kde-format
-#| msgid "Bernoulli Distribution"
+#, kde-format
 msgid "p-th quantile for triangular distribution"
-msgstr "Bernulijeva Distribucija"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:948 src/backend/gsl/functions.cpp:960
 #: src/backend/gsl/functions.cpp:974 src/backend/gsl/functions.cpp:986
@@ -6337,14 +6332,14 @@ msgid "unexpected end of document"
 msgstr "neočekivan kraj dokumenta"
 
 #: src/backend/matrix/Matrix.cpp:129
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3797
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3788
 #, fuzzy, kde-format
 #| msgid "image"
 msgid "FITS image"
 msgstr "slika"
 
 #: src/backend/matrix/Matrix.cpp:129
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3797
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3788
 #, kde-format
 msgid "FITS table"
 msgstr ""
@@ -6620,10 +6615,9 @@ msgid "Center (Acausal)"
 msgstr ""
 
 #: src/backend/nsl/nsl_conv.c:24
-#, fuzzy, kde-format
-#| msgid "center"
+#, kde-format
 msgid "Sliding Average"
-msgstr "centar"
+msgstr ""
 
 #: src/backend/nsl/nsl_conv.c:25
 #, fuzzy, kde-format
@@ -7416,16 +7410,14 @@ msgid "Lanczos"
 msgstr ""
 
 #: src/backend/nsl/nsl_smooth.c:21
-#, fuzzy, kde-format
-#| msgid "center"
+#, kde-format
 msgid "Moving Average (Central)"
-msgstr "centar"
+msgstr ""
 
 #: src/backend/nsl/nsl_smooth.c:21
-#, fuzzy, kde-format
-#| msgid "center"
+#, kde-format
 msgid "Moving Average (Lagged)"
-msgstr "centar"
+msgstr ""
 
 #: src/backend/nsl/nsl_smooth.c:21
 #, kde-format
@@ -8376,10 +8368,9 @@ msgid "3rd quartile"
 msgstr "&Redoslijed crtanja"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:307
-#, fuzzy, kde-format
-#| msgid "mean absolute error"
+#, kde-format
 msgid "median"
-msgstr "srednja apsolutna greška"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:308
 #, fuzzy, kde-format
@@ -8878,9 +8869,9 @@ msgstr "%1: postavi tip vrijednosti"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1140
 #, fuzzy, kde-format
-#| msgid "%1: set line style"
+#| msgid "%1: set axis scale"
 msgid "%1: set nice extend"
-msgstr "%1: postavi stil linije"
+msgstr "%1: postavi osnu skalu"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1147
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1154
@@ -8891,9 +8882,9 @@ msgstr "%1: postavi ugao rotacije"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1165
 #, fuzzy, kde-format
-#| msgid "%1: set labels format"
+#| msgid "%1: set axis auto scaling"
 msgid "%1: change %2-range %3 format"
-msgstr "%1: postavi format oznake"
+msgstr "%1: postavi osu na  automatsko skaliranje"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1255
 #, fuzzy, kde-format
@@ -9240,10 +9231,9 @@ msgid "%1: set error column"
 msgstr "%1: postavi x-greška kolonu"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:235
-#, fuzzy, kde-format
-#| msgid "%1: x-error type changed"
+#, kde-format
 msgid "%1: error bar type changed"
-msgstr "%1: x-greška tip promijenjen"
+msgstr "%1: greška bar tip promijenjen"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:242
 #, kde-format
@@ -10783,8 +10773,8 @@ msgid "Curve"
 msgstr "xy-kriva"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4037
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4091
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4028
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4082
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2217
 #, fuzzy, kde-format
 #| msgid "Failed to open"
@@ -10792,8 +10782,8 @@ msgid "Failed to export"
 msgstr "Otvaranje neuspješno"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4037
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4091
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4028
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4082
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2217
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -11027,7 +11017,7 @@ msgid "%1: cut selected cell(s)"
 msgstr "%1: izreži selektovanu(e) ćeliju(e)"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:689
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1793
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1784
 #, kde-format
 msgid "%1: paste from clipboard"
 msgstr "%1: zalijepi iz clipboard-a"
@@ -11251,7 +11241,7 @@ msgstr "&Selektovane Kolone"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:326
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1149
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1535
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1526
 #, kde-format
 msgid "Show Comments"
 msgstr "Prikaži komentare"
@@ -11325,12 +11315,12 @@ msgstr "&Umetni prazne kolone"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:346
 #, fuzzy, kde-format
-#| msgid "%1: remove selected column(s)"
+#| msgid "&Selected Columns"
 msgid "Delete Selected Column(s)"
-msgstr "%1: ukloni selektovanu kolonu(e)"
+msgstr "&Selektovane Kolone"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:348
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1625
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1616
 #, fuzzy, kde-format
 #| msgid "&Selected Columns"
 msgid "Freeze Column"
@@ -11542,11 +11532,9 @@ msgid "Remo&ve Selected Row(s)"
 msgstr "%1: ukloni selektovane redove"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:494
-#, fuzzy, kde-format
-#| msgid "%1: fill column function values"
-#| msgid_plural "%1: fill columns with function values"
+#, kde-format
 msgid "Delete Rows With Missing Values"
-msgstr "%1: ispuni kolonu funkcijskim vrijednostima"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:495
 #, kde-format
@@ -11592,57 +11580,57 @@ msgid "Ladder of Powers"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1147
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1533
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1524
 #, kde-format
 msgid "Hide Comments"
 msgstr "Sakrij komentare"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1158
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1538
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1529
 #, fuzzy, kde-format
 #| msgid "Hide Options"
 msgid "Hide Sparklines"
 msgstr "Sakrij Opcije"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1160
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1540
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1531
 #, fuzzy, kde-format
 #| msgid "Show Options"
 msgid "Show Sparklines"
 msgstr "Prikaži opcije"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1629
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1620
 #, fuzzy, kde-format
 #| msgid "&Selected Columns"
 msgid "Unfreeze Column"
 msgstr "&Selektovane Kolone"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1712
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1703
 #, kde-format
 msgid "%1: cut selected cells"
 msgstr "%1: isijeci selektovane ćelije"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2036
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2027
 #, kde-format
 msgid "Not enough memory to finalize this operation."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2050
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2041
 #, kde-format
 msgid "%1: mask selected cells"
 msgstr "%1: maskiraj selektovane ćelije"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2092
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2083
 #, kde-format
 msgid "%1: unmask selected cells"
 msgstr "%1: demaskiraj selektovane ćelije"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2248
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2239
 #, kde-format
 msgid "%1: fill cells with row numbers"
 msgstr "%1: ispuni ćelije brojevima redova"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2313
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2304
 #, fuzzy, kde-format
 #| msgid "%1: fill cells with row numbers"
 msgid "%1: fill column with row numbers"
@@ -11651,39 +11639,39 @@ msgstr[0] "%1: ispuni ćelije brojevima redova"
 msgstr[1] "%1: ispuni ćelije brojevima redova"
 msgstr[2] "%1: ispuni ćelije brojevima redova"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2357
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2348
 #, kde-format
 msgid "%1: fill cells with random values"
 msgstr "%1: ispuni ćelije slučajnim vrijednostima"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2483
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2474
 #, kde-format
 msgid "%1: fill cells with const values"
 msgstr "%1: ispuni ćelije konstantnim vrijednostima"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2493
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2515
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2533
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2550
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2484
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2506
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2524
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2541
 #, kde-format
 msgid "Fill the selection with constant value"
 msgstr "Ispuni selektovano konstantnim vrijednostima"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2630
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2664
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2621
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2655
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "Insert empty columns"
 msgstr "&Umetni prazne kolone"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2631
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2665
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2622
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2656
 #, fuzzy, kde-format
 #| msgid "Enter number of columns"
 msgid "Enter the number of columns to insert"
 msgstr "Unesi broj kolona"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2683
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2674
 #, fuzzy, kde-format
 #| msgid "%1: insert empty columns"
 msgid "%1: insert empty column"
@@ -11692,12 +11680,12 @@ msgstr[0] "%1: umetni prazne kolone"
 msgstr[1] "%1: umetni prazne kolone"
 msgstr[2] "%1: umetni prazne kolone"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2753
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2744
 #, kde-format
 msgid "%1: remove selected columns"
 msgstr "%1: ukloni selektovane kolone"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2850
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2841
 #, fuzzy, kde-format
 #| msgid "%1: remove 1 column"
 #| msgid_plural "%1: remove %2 columns"
@@ -11707,141 +11695,141 @@ msgstr[0] "%1: ukloni %2 kolonu"
 msgstr[1] "%1: ukloni %2 kolone"
 msgstr[2] "%1: ukloni %2 kolona"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2923
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2914
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
 "because of this. "
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2961
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2952
 #, kde-format
 msgid "%1: normalize columns"
 msgstr "%1: normalizuj kolone"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2981
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2972
 #, kde-format
 msgid "Sum = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2992
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2983
 #, kde-format
 msgid "Min = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3003
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2994
 #, kde-format
 msgid "Max = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3014
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3005
 #, fuzzy, kde-format
 #| msgid "center"
 msgid "Count = 0"
 msgstr "centar"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3025
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3016
 #, fuzzy, kde-format
 #| msgid "Mean"
 msgid "Mean = 0"
 msgstr "Srednje"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3036
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3027
 #, fuzzy, kde-format
 #| msgid "mean absolute error"
 msgid "Median = 0"
 msgstr "srednja apsolutna greška"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3048
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3039
 #, fuzzy, kde-format
 #| msgid "Model"
 msgid "Mode = 0"
 msgstr "Model"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3050
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3041
 #, kde-format
 msgid "'Mode not defined'"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3061
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3052
 #, fuzzy, kde-format
 #| msgid "x-Range:"
 msgid "Range = 0"
 msgstr "x-Domet:"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3072
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3106
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3063
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3097
 #, kde-format
 msgid "SD = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3083
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3118
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3074
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3109
 #, kde-format
 msgid "MAD = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3094
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3130
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3085
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3121
 #, kde-format
 msgid "IQR = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3142
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3133
 #, kde-format
 msgid "Max - Min = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3161
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3152
 #, kde-format
 msgid "Normalization not possible"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3173
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3164
 #, fuzzy, kde-format
 #| msgid "%1: sort columns"
 msgid "%1: power transform columns"
 msgstr "%1: sortiraj kolone"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3291
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3282
 #, fuzzy, kde-format
 #| msgid "Column Statisti&cs"
 msgid "%1: column statistics"
 msgstr "Statisti&ka Kolone"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3322
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3313
 #, fuzzy, kde-format
 #| msgid "Selection"
 msgid "Selection in %1"
 msgstr "Odabiranje"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3365
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3356
 #, fuzzy, kde-format
 #| msgid "Row Statisti&cs"
 msgid "%1: row statistics"
 msgstr "Statisti&ka Reda"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3375
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3366
 #, kde-format
 msgid "Row %1"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3400
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3439
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3391
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3430
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "Insert multiple rows"
 msgstr "&Umetni prazne redove"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3401
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3440
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3392
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3431
 #, fuzzy, kde-format
 #| msgid "Enter number of rows"
 msgid "Enter the number of rows to insert"
 msgstr "Unesi broj redova"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3420
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3459
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3411
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3450
 #, fuzzy, kde-format
 #| msgid "%1: insert empty rows"
 msgid "%1: insert empty row"
@@ -11850,17 +11838,17 @@ msgstr[0] "%1: umetni prazne redov"
 msgstr[1] "%1: umetni prazne redov"
 msgstr[2] "%1: umetni prazne redov"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3475
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3466
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr "%1: ukloni selektovane redove"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3500
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3491
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: očisti selektovane ćelije"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3762
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3753
 #, fuzzy, kde-format
 #| msgid "Arrow:"
 msgid "row"
@@ -11869,7 +11857,7 @@ msgstr[0] "Strelica:"
 msgstr[1] "Strelica:"
 msgstr[2] "Strelica:"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3763
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3754
 #, fuzzy, kde-format
 #| msgid "Column"
 msgid "column"
@@ -11878,83 +11866,83 @@ msgstr[0] "Kolona"
 msgstr[1] "Kolona"
 msgstr[2] "Kolona"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3764
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3755
 #, kde-format
 msgid "cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3765
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3756
 #, fuzzy, kde-format
 #| msgid "value"
 msgid "masked value"
 msgstr "vrijednost"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3765
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3756
 #, fuzzy, kde-format
 #| msgid "value"
 msgid "masked values"
 msgstr "vrijednost"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3766
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3757
 #, fuzzy, kde-format
 #| msgid "no values"
 msgid "missing value"
 msgstr "nema vrijednosti"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3766
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3757
 #, fuzzy, kde-format
 #| msgid "no values"
 msgid "missing values"
 msgstr "nema vrijednosti"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3767
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3758
 #, kde-format
 msgid " , "
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3767
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3768
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3758
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3759
 #, fuzzy, kde-format
 #| msgid "1"
 msgid "%1"
 msgstr "1"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3768
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3759
 #, fuzzy, kde-format
 #| msgctxt "postfix for XML warning messages"
 #| msgid " "
 msgid ", "
 msgstr " "
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3771
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3762
 #, kde-format
 msgid "Selected: %1 %2 , %3 %4%5 %6 %7 %8"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3781
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3772
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3854
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3845
 #, fuzzy, kde-format
 #| msgid "Print spreadsheet"
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Ispiši tabelarni prikaz"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4459
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4450
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4491
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4482
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to create table in the SQLite database %1."
 msgstr "Otvaranje neuspješno"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4544
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4535
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to insert values into the table."
@@ -11994,10 +11982,9 @@ msgid "Unhandled error"
 msgstr ""
 
 #: src/commonfrontend/widgets/NumberSpinBox.cpp:440
-#, fuzzy, kde-format
-#| msgid "invalid row value"
+#, kde-format
 msgid "Invalid value entered. Valid value: %1"
-msgstr "pogrešna vrijednost reda"
+msgstr ""
 
 #: src/commonfrontend/widgets/TreeViewComboBox.cpp:56
 #, kde-format
@@ -12019,7 +12006,7 @@ msgstr ""
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:116
 #: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:57
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:75
-#: src/kdefrontend/MainWin.cpp:625 src/kdefrontend/MainWin.cpp:1933
+#: src/kdefrontend/MainWin.cpp:625 src/kdefrontend/MainWin.cpp:1942
 #: src/kdefrontend/SettingsDialog.cpp:72
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:122
 #, kde-format
@@ -12219,7 +12206,7 @@ msgstr "Označi x-područje i uvećaj"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:359
-#: src/kdefrontend/MainWin.cpp:2418
+#: src/kdefrontend/MainWin.cpp:2427
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1426
 #, kde-format
 msgid "Cursor"
@@ -12775,9 +12762,9 @@ msgstr "Uvezi u"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:76
 #, fuzzy, kde-format
-#| msgid "orange"
+#| msgid "Data:"
 msgid "Data container:"
-msgstr "narandžasta"
+msgstr "Podaci:"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:77
 #: src/kdefrontend/datasources/ImportDialog.cpp:83
@@ -13805,7 +13792,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
-#: src/kdefrontend/MainWin.cpp:2727
+#: src/kdefrontend/MainWin.cpp:2736
 #, kde-format
 msgid "Warning"
 msgstr ""
@@ -14688,9 +14675,9 @@ msgstr "Automatska (E)"
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:319
 #, fuzzy, kde-format
-#| msgid "Value"
+#| msgid "Add new"
 msgid "Add a new value label"
-msgstr "Vrijednost"
+msgstr "Dodaj novo"
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:320
 #, fuzzy, kde-format
@@ -14810,9 +14797,11 @@ msgid "%1 histograms: template \"%2\" loaded"
 msgstr "%1: ose: predložak \"%2\" učitan"
 
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:218
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1: remove %2 row"
+#| msgid_plural "%1: remove %2 rows"
 msgid "%1 info elements: curve \"%2\" removed"
-msgstr ""
+msgstr "%1: ukloni %2 red"
 
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:220
 #, fuzzy, kde-format
@@ -15276,22 +15265,19 @@ msgid "t statistic"
 msgstr "Statistike"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:368
-#, fuzzy, kde-format
-#| msgid "No data points available."
+#, kde-format
 msgid "No X and Y column specified!"
-msgstr "Nisu dostupne tačke podataka."
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:370
-#, fuzzy, kde-format
-#| msgid "No data points available."
+#, kde-format
 msgid "No X column specified!"
-msgstr "Nisu dostupne tačke podataka."
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:372
-#, fuzzy, kde-format
-#| msgid "No data points available."
+#, kde-format
 msgid "No Y column specified!"
-msgstr "Nisu dostupne tačke podataka."
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:376
 #, fuzzy, kde-format
@@ -15480,10 +15466,10 @@ msgstr "&Sortiraj Tabelarni prikaz"
 
 #: src/kdefrontend/GuiObserver.cpp:231
 #, fuzzy, kde-format
-#| msgid "Properties"
+#| msgid "Column Statisti&cs"
 msgctxt "@title:window"
 msgid "Properties: Column Statistics"
-msgstr "Podešavanja"
+msgstr "Statisti&ka Kolone"
 
 #: src/kdefrontend/GuiObserver.cpp:241
 #, fuzzy, kde-format
@@ -16365,9 +16351,9 @@ msgstr "Bilješke"
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
 #: src/kdefrontend/labplot2ui.rc:40
 #, fuzzy, kde-format
-#| msgid "Load from"
+#| msgid "Plot Area"
 msgid "Plot Area Toolbar"
-msgstr "Učitaj iz"
+msgstr "Prostor za Crtanje"
 
 #. i18n: ectx: Menu (file)
 #: src/kdefrontend/labplot2ui.rc:44
@@ -16470,7 +16456,7 @@ msgstr "Dobro došli u LabPlot %1"
 msgid "&Open Example"
 msgstr "novi filter"
 
-#: src/kdefrontend/MainWin.cpp:615 src/kdefrontend/MainWin.cpp:1917
+#: src/kdefrontend/MainWin.cpp:615 src/kdefrontend/MainWin.cpp:1926
 #, kde-format
 msgid "Workbook"
 msgstr ""
@@ -16480,7 +16466,7 @@ msgstr ""
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:620 src/kdefrontend/MainWin.cpp:1925
+#: src/kdefrontend/MainWin.cpp:620 src/kdefrontend/MainWin.cpp:1934
 #, fuzzy, kde-format
 #| msgid "Data format"
 msgid "Data Extractor"
@@ -16501,7 +16487,7 @@ msgstr ""
 msgid "Creates a new matrix for data editing"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:637 src/kdefrontend/MainWin.cpp:1969
+#: src/kdefrontend/MainWin.cpp:637 src/kdefrontend/MainWin.cpp:1978
 #: src/kdefrontend/SettingsDialog.cpp:67
 #, kde-format
 msgid "Worksheet"
@@ -16512,7 +16498,7 @@ msgstr "Radni list"
 msgid "Creates a new worksheet for data plotting"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:643 src/kdefrontend/MainWin.cpp:1977
+#: src/kdefrontend/MainWin.cpp:643 src/kdefrontend/MainWin.cpp:1986
 #, fuzzy, kde-format
 #| msgid "Notes"
 msgid "Note"
@@ -16523,7 +16509,7 @@ msgstr "Bilješke"
 msgid "Creates a new note for arbitrary text"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:648 src/kdefrontend/MainWin.cpp:1909
+#: src/kdefrontend/MainWin.cpp:648 src/kdefrontend/MainWin.cpp:1918
 #, kde-format
 msgid "Folder"
 msgstr "Direktorij"
@@ -16600,8 +16586,8 @@ msgstr "Izvoz"
 msgid "Export selected element"
 msgstr "Uklopi u selektovano"
 
-#: src/kdefrontend/MainWin.cpp:705 src/kdefrontend/MainWin.cpp:2454
-#: src/kdefrontend/MainWin.cpp:2462
+#: src/kdefrontend/MainWin.cpp:705 src/kdefrontend/MainWin.cpp:2463
+#: src/kdefrontend/MainWin.cpp:2471
 #, kde-format
 msgid "Share"
 msgstr ""
@@ -16856,86 +16842,86 @@ msgstr "LabPlot Projekti (*.lml *.lml.gz *.lml.bz2 *.LML *.LML.GZ *.LML.BZ2)"
 msgid "Couldn't open the temporary file for writing."
 msgstr "Žao nam je. Datoteka ne može biti otvorena za pisanje."
 
-#: src/kdefrontend/MainWin.cpp:1798
+#: src/kdefrontend/MainWin.cpp:1807
 #, kde-format
 msgid "Project saved"
 msgstr "Projekat spašen"
 
-#: src/kdefrontend/MainWin.cpp:1814
+#: src/kdefrontend/MainWin.cpp:1823
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1819
+#: src/kdefrontend/MainWin.cpp:1828
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Ne može se otvoriti fajl %1 za čitanje."
 
-#: src/kdefrontend/MainWin.cpp:1869
+#: src/kdefrontend/MainWin.cpp:1878
 #, fuzzy, kde-format
 #| msgid "%1    [Changed]"
 msgid "Changed"
 msgstr "%1 [Promijenjen]"
 
-#: src/kdefrontend/MainWin.cpp:1884 src/kdefrontend/MainWin.cpp:1896
+#: src/kdefrontend/MainWin.cpp:1893 src/kdefrontend/MainWin.cpp:1905
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1886 src/kdefrontend/MainWin.cpp:1898
+#: src/kdefrontend/MainWin.cpp:1895 src/kdefrontend/MainWin.cpp:1907
 #, kde-format
 msgid "%1 printed"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2454
+#: src/kdefrontend/MainWin.cpp:2463
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2458
+#: src/kdefrontend/MainWin.cpp:2467
 #, fuzzy, kde-format
 #| msgid "Project saved"
 msgid "Project shared successfully"
 msgstr "Projekat spašen"
 
-#: src/kdefrontend/MainWin.cpp:2461
+#: src/kdefrontend/MainWin.cpp:2470
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2690
+#: src/kdefrontend/MainWin.cpp:2699
 #, kde-format
 msgid "%1 exported"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2697
+#: src/kdefrontend/MainWin.cpp:2706
 #, kde-format
 msgid "FITS files saved"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2709
+#: src/kdefrontend/MainWin.cpp:2718
 #, kde-format
 msgid "MQTT Client%1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2727
+#: src/kdefrontend/MainWin.cpp:2736
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2731
+#: src/kdefrontend/MainWin.cpp:2740
 #, fuzzy, kde-format
 #| msgid "File data source"
 msgid "Live data source%1"
 msgstr "Datoteka podatak izvor"
 
-#: src/kdefrontend/MainWin.cpp:2772
+#: src/kdefrontend/MainWin.cpp:2781
 #, kde-format
 msgid "No Cantor backends found. Please install the ones you want to use."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2786
+#: src/kdefrontend/MainWin.cpp:2795
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr ""
@@ -17209,9 +17195,9 @@ msgstr "Ispiši radni list"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:224
 #, fuzzy, kde-format
-#| msgid "%1: set line style"
+#| msgid "Export spreadsheet"
 msgid "With Spreadsheet and Worksheet"
-msgstr "%1: postavi stil linije"
+msgstr "Izvezi tabelarni prikaz"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:226
 #, fuzzy, kde-format
@@ -17335,10 +17321,9 @@ msgid ""
 msgstr ""
 
 #: src/kdefrontend/SettingsNotebookPage.cpp:23
-#, fuzzy, kde-format
-#| msgid "Height"
+#, kde-format
 msgid "Enable syntax highlighting"
-msgstr "Visina"
+msgstr ""
 
 #: src/kdefrontend/SettingsNotebookPage.cpp:24
 #, fuzzy, kde-format
@@ -17541,10 +17526,9 @@ msgstr "Rotacija"
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:943
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:987
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1031
-#, fuzzy, kde-format
-#| msgid "invalid row value"
+#, kde-format
 msgid "Wrong numeric value provided."
-msgstr "pogrešna vrijednost reda"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1218
 #, fuzzy, kde-format
@@ -17605,16 +17589,16 @@ msgstr "Oznake"
 
 #: src/kdefrontend/spreadsheet/BatchEditValueLabelsDialog.cpp:36
 #, fuzzy, kde-format
-#| msgid "Value"
+#| msgid "Equidistant Values"
 msgctxt "@title:window"
 msgid "Edit Value Labels"
-msgstr "Vrijednost"
+msgstr "Ekvidistantne vrijednosti"
 
 #: src/kdefrontend/spreadsheet/BatchEditValueLabelsDialog.cpp:40
 #, fuzzy, kde-format
-#| msgid "Value"
+#| msgid "Labels"
 msgid "Value Labels:"
-msgstr "Vrijednost"
+msgstr "Oznake"
 
 #: src/kdefrontend/spreadsheet/BatchEditValueLabelsDialog.cpp:154
 #, kde-format
@@ -18090,9 +18074,9 @@ msgstr ""
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:214
 #, fuzzy, kde-format
-#| msgid "Select and Zoom"
+#| msgid "&Selected Columns"
 msgid "Select a valid column"
-msgstr "Odaberi i uvećaj"
+msgstr "&Selektovane Kolone"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:221
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:275
@@ -18646,9 +18630,9 @@ msgstr ""
 
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:150
 #, fuzzy, kde-format
-#| msgid "LabPlot2"
+#| msgid "Cartesian Plot"
 msgid "Pareto Plot"
-msgstr "LabPlot2"
+msgstr "Kartezijevo crtanje"
 
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:226
 #, kde-format
@@ -19771,10 +19755,9 @@ msgstr "Uvezi u"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbConvertSeconds)
 #: src/kdefrontend/ui/datasources/CANOptionsWidget.ui:32
-#, fuzzy, kde-format
-#| msgid "File info"
+#, kde-format
 msgid "Convert time to seconds"
-msgstr "Info podatka"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:33
@@ -20700,9 +20683,9 @@ msgstr "Broj"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:725
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1148
 #, fuzzy, kde-format
-#| msgid "First color"
+#| msgid "Values"
 msgid "1st Tick Value:"
-msgstr "Prva Boja"
+msgstr "Vrijednosti"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksSpacingNumeric)
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksSpacingNumeric)
@@ -20810,16 +20793,15 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lMajorTickStartOffset)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1036
 #, fuzzy, kde-format
-#| msgid "Offset"
+#| msgid "%1: set axis offset"
 msgid "1st Tick Offset:"
-msgstr "Pomak"
+msgstr "%1: postavi pomjeraj ose"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksStartType)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1105
-#, fuzzy, kde-format
-#| msgid "custom column"
+#, kde-format
 msgid "1st Tick at:"
-msgstr "prilagodi vrijednosti"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLabels)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1159
@@ -21205,10 +21187,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbWhiskerEnd)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:564
-#, fuzzy, kde-format
-#| msgid "%1: set axis end"
+#, kde-format
 msgid "Whisker End"
-msgstr "%1: postavi osni kraj"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkJitteringEnabled)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:587
@@ -21430,9 +21411,10 @@ msgstr "Sačuvaj trenutna podešavanja filtriranja"
 #. i18n: ectx: property (text), widget (QLabel, lNiceExtend)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:512
 #, fuzzy, kde-format
-#| msgid "Data:"
+#| msgctxt "matrix size"
+#| msgid "&Dimensions"
 msgid "Extend:"
-msgstr "Podaci:"
+msgstr "&Dimenzije"
 
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbTop)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbPaddingHorizontal)
@@ -21609,9 +21591,9 @@ msgstr "Od:"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1121
 #, fuzzy, kde-format
-#| msgid "y-Range:"
+#| msgid "x-Range:"
 msgid "X-Range"
-msgstr "y-Domet:"
+msgstr "x-Domet:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPlotArea)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1202
@@ -21664,9 +21646,10 @@ msgstr "Linija+širina simbola"
 #. i18n: ectx: property (text), widget (QLabel, lBindLogicalPos)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:412
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:27
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1: set matrix coordinates"
 msgid "Logical coordinates"
-msgstr ""
+msgstr "%1: postavi koordinate matrice"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbLock)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:458
@@ -22268,9 +22251,9 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lShowSparklines)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:175
 #, fuzzy, kde-format
-#| msgid "column major"
+#| msgid "horiz. lines"
 msgid "Sparklines:"
-msgstr "najveći u koloni"
+msgstr "horiz. linije"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:198
@@ -22368,9 +22351,9 @@ msgstr "Podaci:"
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:410
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:463
 #, fuzzy, kde-format
-#| msgid "y-Range:"
+#| msgid "x-Range:"
 msgid "X-Range:"
-msgstr "y-Domet:"
+msgstr "x-Domet:"
 
 #. i18n: ectx: property (text), widget (QLabel, lY2Column)
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:145
@@ -23798,9 +23781,9 @@ msgstr "Varijanca"
 #. i18n: ectx: property (text), widget (QCheckBox, chkSyntaxHighlighting)
 #: src/kdefrontend/ui/settingsnotebookpage.ui:33
 #, fuzzy, kde-format
-#| msgid "Height"
+#| msgid "Data format"
 msgid "Syntax Highlighting"
-msgstr "Visina"
+msgstr "Format podataka"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSyntaxCompletion)
 #: src/kdefrontend/ui/settingsnotebookpage.ui:40
@@ -23938,10 +23921,9 @@ msgstr "Vrijednost:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter1)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:136
-#, fuzzy, kde-format
-#| msgid "Do nothing"
+#, kde-format
 msgid "Smoothness (Power of 10):"
-msgstr "Ne radi ništa"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter2)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:162
@@ -23974,9 +23956,9 @@ msgstr "Datum i vrijeme"
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:47
 #, fuzzy, kde-format
-#| msgid "Values"
+#| msgid "Drop lines:"
 msgid "Numeric Values"
-msgstr "Vrijednosti"
+msgstr "Padajuće linije:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMode)
 #. i18n: ectx: property (text), widget (QLabel, lConditionText)
@@ -24009,9 +23991,9 @@ msgstr "Vrijednosti"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:203
 #, fuzzy, kde-format
-#| msgid "Cap size"
+#| msgid "Data format"
 msgid "DateTime Values"
-msgstr "Veličina kape"
+msgstr "Format podataka"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:97
@@ -24161,17 +24143,15 @@ msgstr "&Selektovane Kolone"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbCurvePlacementAllInOnePlotArea)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:160
-#, fuzzy, kde-format
-#| msgid "Plot Area"
+#, kde-format
 msgid "All Plots in one Plot Area"
-msgstr "Prostor za Crtanje"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbCurvePlacementAllInOwnPlotArea)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:170
-#, fuzzy, kde-format
-#| msgid "%1: set plot area border opacity"
+#, kde-format
 msgid "One Plot Area per Plot"
-msgstr "%1: postavi linijsku providnost za područje u kojem se crta"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementExistingPlotArea)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:186
@@ -25369,10 +25349,9 @@ msgid "%1 not found"
 msgstr "Info podatka"
 
 #: src/tools/TeXRenderer.cpp:193
-#, fuzzy, kde-format
-#| msgid "Failed to open"
+#, kde-format
 msgid "Timeout: Unable to generate latex file"
-msgstr "Otvaranje neuspješno"
+msgstr ""
 
 #: src/tools/TeXRenderer.cpp:196
 #, kde-format
@@ -25408,70 +25387,29 @@ msgid "Unable to open file:"
 msgstr "Otvaranje neuspješno"
 
 #, fuzzy
-#~| msgid "Add new"
-#~ msgid "Add %1"
-#~ msgstr "Dodaj novo"
-
-#, fuzzy
-#~| msgid "Name:"
-#~ msgid "%1 name:"
-#~ msgstr "Ime:"
-
-#~ msgid "CartesianPlot"
-#~ msgstr "CartesianPlot"
-
-#, fuzzy
-#~| msgid "Drawing &order"
-#~ msgid "p-th quantile"
-#~ msgstr "&Redoslijed crtanja"
-
-#~ msgid "%1: copy %2"
-#~ msgstr "%1: kopiraj %2"
-
-#, fuzzy
-#~| msgid "column major"
-#~ msgid "Column Format"
-#~ msgstr "najveći u koloni"
-
-#~ msgid "Specify the name of the file to import."
-#~ msgstr "Specificiraj ime datoteke za uvoz."
-
-#, fuzzy
 #~| msgid "%1: remove 1 row"
 #~| msgid_plural "%1: remove %2 rows"
 #~ msgid "%1: move down"
 #~ msgstr "%1: ukloni %2 red"
 
-#~ msgid "%1: move behind %2."
-#~ msgstr "%1: pomjeri iza %2."
+#~ msgid "&Restore"
+#~ msgstr "&Obnovi"
 
-#~ msgid "%1: move in front of %2."
-#~ msgstr "%1: pomjeri ispred %2."
+#~ msgid "Mi&nimize"
+#~ msgstr "M&inimizuj"
 
-#, fuzzy
-#~| msgid "invalid x start value"
-#~ msgid "Invalid metadata file"
-#~ msgstr "pogrešna x početna vrijednost"
+#~ msgid "Ma&ximize"
+#~ msgstr "M&aksimizuj"
 
 #, fuzzy
-#~| msgid "Failed to open"
-#~ msgid "Failed to download the dataset"
-#~ msgstr "Otvaranje neuspješno"
-
-#, fuzzy
-#~| msgid "Failed to open"
-#~ msgid "Failed to save the dataset"
-#~ msgstr "Otvaranje neuspješno"
+#~| msgid "xy-curve"
+#~ msgid "XY-Curves"
+#~ msgstr "xy-kriva"
 
 #, fuzzy
 #~| msgid "Could not open file %1 for reading."
 #~ msgid "could not open device"
 #~ msgstr "Ne može se otvoriti fajl %1 za čitanje."
-
-#, fuzzy
-#~| msgid "File info"
-#~ msgid "Variable contains no data"
-#~ msgstr "Info podatka"
 
 #, fuzzy
 #~| msgid "Not yet implemented."
@@ -25483,30 +25421,11 @@ msgstr "Otvaranje neuspješno"
 #~ msgid "Invalid dbc file"
 #~ msgstr "pogrešna x početna vrijednost"
 
-#, fuzzy
-#~| msgid "Data:"
-#~ msgid "Parse Errors"
-#~ msgstr "Podaci:"
+#~ msgid "%1: copy %2"
+#~ msgstr "%1: kopiraj %2"
 
-#, fuzzy
-#~| msgid "somewhat sparse"
-#~ msgid "Show SparkLine"
-#~ msgstr "donekle rijetko"
-
-#, fuzzy
-#~| msgid "Show column comments"
-#~ msgid "Column Comments:"
-#~ msgstr "Prikaži komentare kolona"
-
-#, fuzzy
-#~| msgid "%1: error bar type changed"
-#~ msgid "%1: error bar style type changed"
-#~ msgstr "%1: greška bar tip promijenjen"
-
-#, fuzzy
-#~| msgid "%1: background type changed"
-#~ msgid "%1 CustomPoints: visibility changed"
-#~ msgstr "%1: pozadinski tip promijenjen"
+#~ msgid "unknown cartesianPlot element '%1'"
+#~ msgstr "nepoznat kartezijskiPlot element '%1'"
 
 #~ msgid "%1: set x-error column"
 #~ msgstr "%1: postavi x-greška kolonu"
@@ -25517,49 +25436,16 @@ msgstr "Otvaranje neuspješno"
 #~ msgid "%1: set y-error column"
 #~ msgstr "%1: postavi y-greška kolonu"
 
-#, fuzzy
-#~| msgid "xy-curve"
-#~ msgid "XY-Curves"
-#~ msgstr "xy-kriva"
+#~ msgid "%1: move behind %2."
+#~ msgstr "%1: pomjeri iza %2."
+
+#~ msgid "%1: move in front of %2."
+#~ msgstr "%1: pomjeri ispred %2."
 
 #, fuzzy
-#~| msgid "Do nothing"
-#~ msgid "Do Nothing"
-#~ msgstr "Ne radi ništa"
-
-#, fuzzy
-#~| msgid "Create new project with worksheet"
-#~ msgid "Create New Project with Worksheet"
-#~ msgstr "Kreiraj novi projekat sa radnim listom"
-
-#, fuzzy
-#~| msgid "Create new project with worksheet"
-#~ msgid "Create New Project with Spreadsheet"
-#~ msgstr "Kreiraj novi projekat sa radnim listom"
-
-#, fuzzy
-#~| msgid "Create new project with worksheet"
-#~ msgid "Create New Project with Notebook"
-#~ msgstr "Kreiraj novi projekat sa radnim listom"
-
-#, fuzzy
-#~| msgid "auto-save"
-#~ msgid "auto update"
-#~ msgstr "auto-sačuvaj"
-
-#~ msgid "%1: clear selected rows"
-#~ msgstr "%1: očisti selektovane redove"
-
-#, fuzzy
-#~| msgid "Equidistant Values"
-#~ msgctxt "@title:window"
-#~ msgid "Equidistant Values"
-#~ msgstr "Ekvidistantne vrijednosti"
-
-#, fuzzy
-#~| msgid "Date and Time"
-#~ msgid "DateTime"
-#~ msgstr "Datum i vrijeme"
+#~| msgid "Remo&ve Columns"
+#~ msgid "Remove Columns"
+#~ msgstr "&Ukloni kolone"
 
 #, fuzzy
 #~| msgid "&Remove"
@@ -25571,112 +25457,8 @@ msgstr "Otvaranje neuspješno"
 #~ msgid "xy-Curve"
 #~ msgstr "xy-kriva"
 
-#, fuzzy
-#~| msgid "Data:"
-#~ msgid "Add Histogram to"
-#~ msgstr "Podaci:"
-
-#, fuzzy
-#~| msgid "LabPlot2"
-#~ msgid "Add Box Plot to"
-#~ msgstr "LabPlot2"
-
-#, fuzzy
-#~| msgid "LabPlot2"
-#~ msgid "Add Bar Plot to"
-#~ msgstr "LabPlot2"
-
-#, fuzzy
-#~| msgid "Data:"
-#~ msgid "Add Histograms to"
-#~ msgstr "Podaci:"
-
-#, fuzzy
-#~| msgid "%1: set plot area border opacity"
-#~ msgid "One plot area per box plot"
-#~ msgstr "%1: postavi linijsku providnost za područje u kojem se crta"
-
-#, fuzzy
-#~| msgid "LabPlot2"
-#~ msgid "Add Box Plots to"
-#~ msgstr "LabPlot2"
-
-#, fuzzy
-#~| msgid "LabPlot2"
-#~ msgid "Add Bar Plots to"
-#~ msgstr "LabPlot2"
-
-#, fuzzy
-#~| msgid "Create new project with worksheet"
-#~ msgid "new plot in an existing worksheet"
-#~ msgstr "Kreiraj novi projekat sa radnim listom"
-
-#, fuzzy
-#~| msgid "Create new project with worksheet"
-#~ msgid "new plot in a new worksheet"
-#~ msgstr "Kreiraj novi projekat sa radnim listom"
-
-#, fuzzy
-#~| msgid "Create new project with worksheet"
-#~ msgid "new plots in an existing worksheet"
-#~ msgstr "Kreiraj novi projekat sa radnim listom"
-
-#, fuzzy
-#~| msgid "Create new project with worksheet"
-#~ msgid "new plots in a new worksheet"
-#~ msgstr "Kreiraj novi projekat sa radnim listom"
-
-#, fuzzy
-#~| msgid "no xy fit curve element found"
-#~ msgid "GUI configuration file not found"
-#~ msgstr "nije pronađen xy element koji pristaje krivoj"
-
-#, fuzzy
-#~| msgid "Connection:"
-#~ msgid "Conditions"
-#~ msgstr "Veza:"
-
-#~ msgid "&Sort Spreadsheet"
-#~ msgstr "&Sortiraj Tabelarni prikaz"
-
-#, fuzzy
-#~| msgid "Sort columns"
-#~ msgid "Sort columns:"
-#~ msgstr "Sortiraj kolone"
-
-#~ msgid "Separately"
-#~ msgstr "Odvojeno"
-
-#~ msgid "Together"
-#~ msgstr "Zajedno"
-
-#, fuzzy
-#~| msgid "Leading column"
-#~ msgid "Leading column:"
-#~ msgstr "Vodeća kolona"
-
-#~ msgid "Save Filter Settings as"
-#~ msgstr "Sačuvaj podešavanja filtriranja kao"
-
-#~ msgid "Filter name:"
-#~ msgstr "Ime filtera:"
-
-#~ msgid "new filter"
-#~ msgstr "novi filter"
-
-#~ msgid "Save the current filter settings"
-#~ msgstr "Sačuvaj trenutna podešavanja filtriranja"
-
-#~ msgid "Manage filters"
-#~ msgstr "Upravljanje filterima"
-
-#~ msgid "unknown cartesianPlot element '%1'"
-#~ msgstr "nepoznat kartezijskiPlot element '%1'"
-
-#, fuzzy
-#~| msgid "Remo&ve Columns"
-#~ msgid "Remove Columns"
-#~ msgstr "&Ukloni kolone"
+#~ msgid "%1: clear selected rows"
+#~ msgstr "%1: očisti selektovane redove"
 
 #, fuzzy
 #~| msgid "xy-curve from a fit to data"
@@ -25694,11 +25476,6 @@ msgstr "Otvaranje neuspješno"
 #~ msgstr "Veza:"
 
 #, fuzzy
-#~| msgid "Connection:"
-#~ msgid "Convolution/Deconvolution"
-#~ msgstr "Veza:"
-
-#, fuzzy
 #~| msgid "Data format"
 #~ msgid "Data Manipulation"
 #~ msgstr "Format podataka"
@@ -25709,45 +25486,34 @@ msgstr "Otvaranje neuspješno"
 #~ msgid "%1: Add curve to %2 plots"
 #~ msgstr "%1: dodaj %2 red"
 
-#~ msgid "&Analysis"
-#~ msgstr "&Analiza"
+#, fuzzy
+#~| msgid "Add new"
+#~ msgid "Add %1"
+#~ msgstr "Dodaj novo"
 
 #, fuzzy
-#~| msgid "%1: set line style"
-#~ msgid "%1: set line pen"
-#~ msgstr "%1: postavi stil linije"
-
-#, fuzzy
-#~| msgid "Search/Filter:"
-#~ msgid "End Search"
-#~ msgstr "Traži/Filtriraj:"
-
-#, fuzzy
-#~| msgid "Max. iterations"
-#~ msgid "Point Separation:"
-#~ msgstr "Max. iteracije"
-
-#, fuzzy
-#~| msgid "Fitted Points"
-#~ msgid "Reference Points"
-#~ msgstr "Tačke podešavanja"
-
-#~ msgid "%1: set axis scale"
-#~ msgstr "%1: postavi osnu skalu"
+#~| msgid "Name:"
+#~ msgid "%1 name:"
+#~ msgstr "Ime:"
 
 #, fuzzy
 #~| msgid "Data:"
 #~ msgid "No Data"
 #~ msgstr "Podaci:"
 
-#~ msgid "&Restore"
-#~ msgstr "&Obnovi"
+#~ msgid "Save Filter Settings as"
+#~ msgstr "Sačuvaj podešavanja filtriranja kao"
 
-#~ msgid "Mi&nimize"
-#~ msgstr "M&inimizuj"
+#~ msgid "Filter name:"
+#~ msgstr "Ime filtera:"
 
-#~ msgid "Ma&ximize"
-#~ msgstr "M&aksimizuj"
+#~ msgid "new filter"
+#~ msgstr "novi filter"
+
+#, fuzzy
+#~| msgid "%1: background type changed"
+#~ msgid "%1 CustomPoints: visibility changed"
+#~ msgstr "%1: pozadinski tip promijenjen"
 
 #, fuzzy
 #~| msgid "Spreadsheet"
@@ -25935,6 +25701,17 @@ msgstr "Otvaranje neuspješno"
 #~ msgid "Folder"
 #~ msgstr "Direktorij"
 
+#~ msgid "CartesianPlot"
+#~ msgstr "CartesianPlot"
+
+#~ msgid "&Analysis"
+#~ msgstr "&Analiza"
+
+#, fuzzy
+#~| msgid "no xy fit curve element found"
+#~ msgid "GUI configuration file not found"
+#~ msgstr "nije pronađen xy element koji pristaje krivoj"
+
 #~ msgid "&Tile"
 #~ msgstr "&Popločaj"
 
@@ -25946,6 +25723,21 @@ msgstr "Otvaranje neuspješno"
 
 #~ msgid "Cascade the windows"
 #~ msgstr "Poveži prozore"
+
+#, fuzzy
+#~| msgid "Do nothing"
+#~ msgid "Do Nothing"
+#~ msgstr "Ne radi ništa"
+
+#, fuzzy
+#~| msgid "Create new project with worksheet"
+#~ msgid "Create New Project with Worksheet"
+#~ msgstr "Kreiraj novi projekat sa radnim listom"
+
+#, fuzzy
+#~| msgid "Create new project with worksheet"
+#~ msgid "Create New Project with Spreadsheet"
+#~ msgstr "Kreiraj novi projekat sa radnim listom"
 
 #, fuzzy
 #~| msgid "Sub-window view"
@@ -25974,6 +25766,93 @@ msgstr "Otvaranje neuspješno"
 #~ msgstr "Prikaži sve prozore"
 
 #, fuzzy
+#~| msgid "Equidistant Values"
+#~ msgctxt "@title:window"
+#~ msgid "Equidistant Values"
+#~ msgstr "Ekvidistantne vrijednosti"
+
+#, fuzzy
+#~| msgid "Data:"
+#~ msgid "Add Histogram to"
+#~ msgstr "Podaci:"
+
+#, fuzzy
+#~| msgid "LabPlot2"
+#~ msgid "Add Box Plot to"
+#~ msgstr "LabPlot2"
+
+#, fuzzy
+#~| msgid "LabPlot2"
+#~ msgid "Add Bar Plot to"
+#~ msgstr "LabPlot2"
+
+#, fuzzy
+#~| msgid "Data:"
+#~ msgid "Add Histograms to"
+#~ msgstr "Podaci:"
+
+#, fuzzy
+#~| msgid "%1: set plot area border opacity"
+#~ msgid "One plot area per box plot"
+#~ msgstr "%1: postavi linijsku providnost za područje u kojem se crta"
+
+#, fuzzy
+#~| msgid "LabPlot2"
+#~ msgid "Add Box Plots to"
+#~ msgstr "LabPlot2"
+
+#, fuzzy
+#~| msgid "LabPlot2"
+#~ msgid "Add Bar Plots to"
+#~ msgstr "LabPlot2"
+
+#, fuzzy
+#~| msgid "Create new project with worksheet"
+#~ msgid "new plot in an existing worksheet"
+#~ msgstr "Kreiraj novi projekat sa radnim listom"
+
+#, fuzzy
+#~| msgid "Create new project with worksheet"
+#~ msgid "new plot in a new worksheet"
+#~ msgstr "Kreiraj novi projekat sa radnim listom"
+
+#, fuzzy
+#~| msgid "Create new project with worksheet"
+#~ msgid "new plots in an existing worksheet"
+#~ msgstr "Kreiraj novi projekat sa radnim listom"
+
+#, fuzzy
+#~| msgid "Create new project with worksheet"
+#~ msgid "new plots in a new worksheet"
+#~ msgstr "Kreiraj novi projekat sa radnim listom"
+
+#, fuzzy
+#~| msgid "Max. iterations"
+#~ msgid "Point Separation:"
+#~ msgstr "Max. iteracije"
+
+#, fuzzy
+#~| msgid "Fitted Points"
+#~ msgid "Reference Points"
+#~ msgstr "Tačke podešavanja"
+
+#, fuzzy
+#~| msgid "Data:"
+#~ msgid "Parse Errors"
+#~ msgstr "Podaci:"
+
+#~ msgid "Save the current filter settings"
+#~ msgstr "Sačuvaj trenutna podešavanja filtriranja"
+
+#~ msgid "Manage filters"
+#~ msgstr "Upravljanje filterima"
+
+#, fuzzy
+#~| msgid "Show column comments"
+#~ msgid "Column Comments:"
+#~ msgstr "Prikaži komentare kolona"
+
+#, fuzzy
 #~| msgid "Tab position"
 #~ msgid "Tab position:"
 #~ msgstr "Pozicija tabulatora"
@@ -25989,50 +25868,28 @@ msgstr "Otvaranje neuspješno"
 #~ msgstr "Vidljivost podprozora"
 
 #, fuzzy
-#~| msgid "dash line"
-#~ msgid "Baseline"
-#~ msgstr "crtkasta linija"
+#~| msgid "auto-save"
+#~ msgid "auto update"
+#~ msgstr "auto-sačuvaj"
 
 #, fuzzy
-#~| msgid "Height"
-#~ msgid "Weighting:"
-#~ msgstr "Visina"
+#~| msgid "Sort columns"
+#~ msgid "Sort columns:"
+#~ msgstr "Sortiraj kolone"
+
+#~ msgid "Separately"
+#~ msgstr "Odvojeno"
+
+#~ msgid "Together"
+#~ msgstr "Zajedno"
 
 #, fuzzy
-#~| msgid "%1: set values column"
-#~ msgid "Subtract the specified value from column values"
-#~ msgstr "%1: postavi kolonu vrijednosti"
+#~| msgid "Leading column"
+#~ msgid "Leading column:"
+#~ msgstr "Vodeća kolona"
 
-#, fuzzy
-#~| msgid "%1: set values column"
-#~ msgid "Add the specified value to matrix values"
-#~ msgstr "%1: postavi kolonu vrijednosti"
-
-#, fuzzy
-#~| msgid "%1: set values column"
-#~ msgid "Subtract the specified value from matrix values"
-#~ msgstr "%1: postavi kolonu vrijednosti"
-
-#~ msgid "Column Statisti&cs"
-#~ msgstr "Statisti&ka Kolone"
-
-#~ msgid "Created: %1"
-#~ msgstr "Kreiran: %1"
-
-#, fuzzy
-#~| msgid "x-data"
-#~ msgid "X-data:"
-#~ msgstr "x-podatak"
-
-#, fuzzy
-#~| msgid "x-data"
-#~ msgid "Y-data:"
-#~ msgstr "x-podatak"
-
-#, fuzzy
-#~| msgid "LabPlot2"
-#~ msgid "Add plots to"
-#~ msgstr "LabPlot2"
+#~ msgid "Specify the name of the file to import."
+#~ msgstr "Specificiraj ime datoteke za uvoz."
 
 #~ msgid "X-error"
 #~ msgstr "X-greška"
@@ -26084,11 +25941,6 @@ msgstr "Otvaranje neuspješno"
 #~ msgstr "&Redoslijed crtanja"
 
 #, fuzzy
-#~| msgid "center tiled"
-#~ msgid "percentile"
-#~ msgstr "centrirano popločan"
-
-#, fuzzy
 #~| msgid "Constants"
 #~ msgid "constant"
 #~ msgstr "Konstante"
@@ -26097,95 +25949,6 @@ msgstr "Otvaranje neuspješno"
 #~| msgid "Polynomial"
 #~ msgid "binomial"
 #~ msgstr "Polinomski"
-
-#, fuzzy
-#~| msgid "Start"
-#~ msgid "y-Start:"
-#~ msgstr "Početak"
-
-#~ msgid "x-Range:"
-#~ msgstr "x-Domet:"
-
-#, fuzzy
-#~| msgid "orange"
-#~ msgid "Plot ranges:"
-#~ msgstr "narandžasta"
-
-#, fuzzy
-#~| msgid "x-data"
-#~ msgid "x-data:"
-#~ msgstr "x-podatak"
-
-#, fuzzy
-#~| msgid "y-data"
-#~ msgid "y-data:"
-#~ msgstr "y-podatak"
-
-#, fuzzy
-#~| msgid "Data:"
-#~ msgid "y-Data:"
-#~ msgstr "Podaci:"
-
-#, fuzzy
-#~| msgid "Height"
-#~ msgid "y-Weight:"
-#~ msgstr "Visina"
-
-#, fuzzy
-#~| msgid "%1: set axis end"
-#~ msgid "%1: set whiskers cap pen"
-#~ msgstr "%1: postavi osni kraj"
-
-#, fuzzy
-#~| msgid "%1: set line opacity"
-#~ msgid "%1: set whiskers cap opacity"
-#~ msgstr "%1: postavi prozirnost linije"
-
-#, fuzzy
-#~| msgid "Select y-region and zoom in"
-#~ msgid "Select y-Region and Zoom In"
-#~ msgstr "Označi y-područje i uvećaj"
-
-#, fuzzy
-#~| msgid "new filter"
-#~ msgid "Hilbert-Transform"
-#~ msgstr "novi filter"
-
-#, fuzzy
-#~| msgid "xy-curve"
-#~ msgctxt "@title:window"
-#~ msgid "xy-Curve"
-#~ msgstr "xy-kriva"
-
-#, fuzzy
-#~| msgid "Equation type"
-#~ msgctxt "@title:window"
-#~ msgid "xy-Equation"
-#~ msgstr "Tip jednačine"
-
-#, fuzzy
-#~| msgid "Axis properties"
-#~ msgctxt "@title:window"
-#~ msgid "Histogram Properties"
-#~ msgstr "Podešavanja osa"
-
-#, fuzzy
-#~| msgid "Font"
-#~ msgid "Font"
-#~ msgstr "Font"
-
-#, fuzzy
-#~| msgid "x-Range:"
-#~ msgid "x-Range"
-#~ msgstr "x-Domet:"
-
-#, fuzzy
-#~| msgid "First color"
-#~ msgid "Font color:"
-#~ msgstr "Prva Boja"
-
-#~ msgid "%1: set border style"
-#~ msgstr "%1: postavi stil inije"
 
 #, fuzzy
 #~| msgid "%1: set vertical alignment"
@@ -26207,23 +25970,8 @@ msgstr "Otvaranje neuspješno"
 #~ msgid "%1: set connection line opacity"
 #~ msgstr "%1: postavi širinu"
 
-#~ msgid "Error bars"
-#~ msgstr "Trake grešaka"
-
-#, fuzzy
-#~| msgid "Error type"
-#~ msgid "Error type:"
-#~ msgstr "Tip greške"
-
-#, fuzzy
-#~| msgid "y-error:"
-#~ msgid "y-error"
-#~ msgstr "y-greška:"
-
-#, fuzzy
-#~| msgid "x-error:"
-#~ msgid "x-error"
-#~ msgstr "x-greška:"
+#~ msgid "%1: set axis scale"
+#~ msgstr "%1: postavi osnu skalu"
 
 #~ msgid "%1: set major ticks style"
 #~ msgstr "%1: postavi stil glavnih podioka"
@@ -26237,40 +25985,6 @@ msgstr "Otvaranje neuspješno"
 #~ msgid "%1: set minor ticks opacity"
 #~ msgstr "%1: postavi prozirnost sporednih podioka"
 
-#~ msgid "%1: set plot area border"
-#~ msgstr "%1: postavi granične linije za područje u kojem se crta"
-
-#~ msgid "%1: set plot area border opacity"
-#~ msgstr "%1: postavi linijsku providnost za područje u kojem se crta"
-
-#~ msgid ""
-#~ "The axes lower limit has a non-positive value. Default minimal value will "
-#~ "be used."
-#~ msgstr ""
-#~ "Donji limit ose ima ne - pozitivnu vrijednost. Podrazumijevana minimalna "
-#~ "vrijednost će biti iskorištena."
-
-#~ msgid "Wrong lower limit value"
-#~ msgstr "Pogrešna donja granična vrijednost"
-
-#~ msgid ""
-#~ "The axes lower limit has a negative value. Default minimal value will be "
-#~ "used."
-#~ msgstr ""
-#~ "Donji limit ose ima negaitvnu vrijednost. Podrazumijevana minimalna "
-#~ "vrijednost će biti iskorištena."
-
-#~ msgid "cm"
-#~ msgstr "cm"
-
-#, fuzzy
-#~| msgid "Statistics"
-#~ msgid "Statistical Methods (of column)"
-#~ msgstr "Statistike"
-
-#~ msgid "Clear Matrix"
-#~ msgstr "Očisti matricu"
-
 #~ msgid "%1: set major grid style"
 #~ msgstr "%1: postavi stil glavne mreže"
 
@@ -26282,203 +25996,6 @@ msgstr "Otvaranje neuspješno"
 
 #~ msgid "%1: set minor grid opacity"
 #~ msgstr "%1: postavi providnost sporedne mreže"
-
-#~ msgid "%1: set drop line style"
-#~ msgstr "%1: postavi stil ispuštene linije"
-
-#~ msgid "%1: set drop line opacity"
-#~ msgstr "%1: postavi providnost ispuštene linije"
-
-#, fuzzy
-#~| msgid "solid line"
-#~ msgid "SolidLine"
-#~ msgstr "puna linija"
-
-#, fuzzy
-#~| msgid "dash line"
-#~ msgid "DashLine"
-#~ msgstr "crtkasta linija"
-
-#, fuzzy
-#~| msgid "Line"
-#~ msgid "DotLine"
-#~ msgstr "Linija"
-
-#, fuzzy
-#~| msgid "dash-dot line"
-#~ msgid "DashDotLine"
-#~ msgstr "crta-tačka lnija"
-
-#, fuzzy
-#~| msgid "dash-dot-dot line"
-#~ msgid "DashDotDotLine"
-#~ msgstr "crta-tačka-tačka linija"
-
-#, fuzzy
-#~| msgid "Drop lines:"
-#~ msgid "Drop Numeric Values"
-#~ msgstr "Padajuće linije:"
-
-#, fuzzy
-#~| msgid "Drop lines:"
-#~ msgid "Drop Text Values"
-#~ msgstr "Padajuće linije:"
-
-#, fuzzy
-#~| msgid "%1: set border style"
-#~ msgid "%1: set border pen"
-#~ msgstr "%1: postavi stil inije"
-
-#, fuzzy
-#~| msgid "%1: set vertical alignment"
-#~ msgid "%1: set median line pen"
-#~ msgstr "%1: postavi vertikalno poravnanje"
-
-#, fuzzy
-#~| msgid "%1: set vertical alignment"
-#~ msgid "%1: set median line opacity"
-#~ msgstr "%1: postavi vertikalno poravnanje"
-
-#, fuzzy
-#~| msgid "%1: set axis end"
-#~ msgid "%1: set whiskers pen"
-#~ msgstr "%1: postavi osni kraj"
-
-#, fuzzy
-#~| msgid "%1: set line opacity"
-#~ msgid "%1: set whiskers opacity"
-#~ msgstr "%1: postavi prozirnost linije"
-
-#~ msgid "%1: set error bar style"
-#~ msgstr "%1: postavi grešku bar stila"
-
-#~ msgid "%1: set error bar opacity"
-#~ msgstr "%1: postavi grešku bar prozirnosti"
-
-#, fuzzy
-#~| msgid "bars"
-#~ msgid "Bar"
-#~ msgstr "bara"
-
-#, fuzzy
-#~| msgid "simple"
-#~ msgid "Sample"
-#~ msgstr "jednostavan"
-
-#, fuzzy
-#~| msgid "Top margin"
-#~ msgid "Top margin:"
-#~ msgstr "Gornja margina"
-
-#, fuzzy
-#~| msgid "Bottom margin"
-#~ msgid "Bottom margin:"
-#~ msgstr "Donja margina"
-
-#, fuzzy
-#~| msgid "Hor. spacing"
-#~ msgid "Hor. spacing:"
-#~ msgstr "Hor. proređivanje"
-
-#, fuzzy
-#~| msgid "Ver. spacing"
-#~ msgid "Ver. spacing:"
-#~ msgstr "Ver. proređivanje"
-
-#, fuzzy
-#~| msgid "Margin:"
-#~ msgid "Margin"
-#~ msgstr "Margina:"
-
-#, fuzzy
-#~| msgid "LabPlot2"
-#~ msgid "Plot - %1"
-#~ msgstr "LabPlot2"
-
-#, fuzzy
-#~| msgid "LabPlot2"
-#~ msgid "Plot %1"
-#~ msgstr "LabPlot2"
-
-#~ msgid "xy-plot"
-#~ msgstr "xy-graf"
-
-#~ msgid "Cartesian Plot"
-#~ msgstr "Kartezijevo crtanje"
-
-#, fuzzy
-#~| msgid "Cartesian Plot"
-#~ msgctxt "@title:window"
-#~ msgid "Cartesian Plot"
-#~ msgstr "Kartezijevo crtanje"
-
-#, fuzzy
-#~| msgid "%1: add %2 rows"
-#~| msgid_plural "%1: add %2 rows"
-#~ msgid "Add Curve to"
-#~ msgstr "%1: dodaj %2 red"
-
-#, fuzzy
-#~| msgid "%1: add %2 rows"
-#~| msgid_plural "%1: add %2 rows"
-#~ msgid "Add Curves to"
-#~ msgstr "%1: dodaj %2 red"
-
-#, fuzzy
-#~| msgid "Drop lines:"
-#~ msgid "Drop values:"
-#~ msgstr "Padajuće linije:"
-
-#~ msgid "Data, +-"
-#~ msgstr "Podaci, +-"
-
-#~ msgid "Data, +"
-#~ msgstr "Podaci, +"
-
-#, fuzzy
-#~| msgid "Type"
-#~ msgid "Tick Type:"
-#~ msgstr "Vrsta"
-
-#, fuzzy
-#~| msgid "Automatic"
-#~ msgid "Automatic:"
-#~ msgstr "Automatski"
-
-#, fuzzy
-#~| msgid "Column"
-#~ msgid "Tick Column:"
-#~ msgstr "Kolona"
-
-#, fuzzy
-#~| msgid "error"
-#~ msgid "Error:"
-#~ msgstr "greška"
-
-#, fuzzy
-#~| msgid "%1: set labels format"
-#~ msgid "%1: change y-range %2 format"
-#~ msgstr "%1: postavi format oznake"
-
-#, fuzzy
-#~| msgid "%1: set axis auto scaling"
-#~ msgid "%1: change y-range %2 auto scaling"
-#~ msgstr "%1: postavi osu na  automatsko skaliranje"
-
-#, fuzzy
-#~| msgid "x-Range:"
-#~ msgid "Y-Ranges:"
-#~ msgstr "x-Domet:"
-
-#, fuzzy
-#~| msgid "Plot Area"
-#~ msgid "Box Plot Data"
-#~ msgstr "Prostor za Crtanje"
-
-#, fuzzy
-#~| msgid "no axis element found"
-#~ msgid "Histogram Placement"
-#~ msgstr "nije pronađen element na osi"
 
 #, fuzzy
 #~| msgid "%1: line type changed"
@@ -26520,11 +26037,135 @@ msgstr "Otvaranje neuspješno"
 #~ msgid "%1: set filling opacity"
 #~ msgstr "%1: postavi prozirnost linije"
 
+#, fuzzy
+#~| msgid "%1: set border style"
+#~ msgid "%1: set border pen"
+#~ msgstr "%1: postavi stil inije"
+
+#, fuzzy
+#~| msgid "%1: set vertical alignment"
+#~ msgid "%1: set median line pen"
+#~ msgstr "%1: postavi vertikalno poravnanje"
+
+#, fuzzy
+#~| msgid "%1: set vertical alignment"
+#~ msgid "%1: set median line opacity"
+#~ msgstr "%1: postavi vertikalno poravnanje"
+
+#, fuzzy
+#~| msgid "%1: set line opacity"
+#~ msgid "%1: set whiskers opacity"
+#~ msgstr "%1: postavi prozirnost linije"
+
+#, fuzzy
+#~| msgid "%1: set axis end"
+#~ msgid "%1: set whiskers cap pen"
+#~ msgstr "%1: postavi osni kraj"
+
+#, fuzzy
+#~| msgid "%1: set line opacity"
+#~ msgid "%1: set whiskers cap opacity"
+#~ msgstr "%1: postavi prozirnost linije"
+
+#, fuzzy
+#~| msgid "%1: set axis auto scaling"
+#~ msgid "%1: change y-range %2 format"
+#~ msgstr "%1: postavi osu na  automatsko skaliranje"
+
+#, fuzzy
+#~| msgid "%1: set axis auto scaling"
+#~ msgid "%1: change y-range %2 auto scaling"
+#~ msgstr "%1: postavi osu na  automatsko skaliranje"
+
 #~ msgid "%1: set opacity"
 #~ msgstr "%1: postavi prozirnost"
 
+#~ msgid "%1: set border style"
+#~ msgstr "%1: postavi stil inije"
+
+#~ msgid "%1: set error bar style"
+#~ msgstr "%1: postavi grešku bar stila"
+
+#~ msgid "%1: set error bar opacity"
+#~ msgstr "%1: postavi grešku bar prozirnosti"
+
+#~ msgid "%1: set drop line style"
+#~ msgstr "%1: postavi stil ispuštene linije"
+
+#~ msgid "%1: set drop line opacity"
+#~ msgstr "%1: postavi providnost ispuštene linije"
+
 #~ msgid "%1: set plot area opacity"
 #~ msgstr "%1: postavi prozirnost za područje u kojem se crta"
+
+#~ msgid "%1: set plot area border"
+#~ msgstr "%1: postavi granične linije za područje u kojem se crta"
+
+#~ msgid "Clear Matrix"
+#~ msgstr "Očisti matricu"
+
+#, fuzzy
+#~| msgid "Select y-region and zoom in"
+#~ msgid "Select y-Region and Zoom In"
+#~ msgstr "Označi y-područje i uvećaj"
+
+#, fuzzy
+#~| msgid "new filter"
+#~ msgid "Hilbert-Transform"
+#~ msgstr "novi filter"
+
+#~ msgid "xy-plot"
+#~ msgstr "xy-graf"
+
+#~ msgid "Created: %1"
+#~ msgstr "Kreiran: %1"
+
+#~ msgid ""
+#~ "The axes lower limit has a non-positive value. Default minimal value will "
+#~ "be used."
+#~ msgstr ""
+#~ "Donji limit ose ima ne - pozitivnu vrijednost. Podrazumijevana minimalna "
+#~ "vrijednost će biti iskorištena."
+
+#~ msgid "Wrong lower limit value"
+#~ msgstr "Pogrešna donja granična vrijednost"
+
+#~ msgid ""
+#~ "The axes lower limit has a negative value. Default minimal value will be "
+#~ "used."
+#~ msgstr ""
+#~ "Donji limit ose ima negaitvnu vrijednost. Podrazumijevana minimalna "
+#~ "vrijednost će biti iskorištena."
+
+#, fuzzy
+#~| msgid "solid line"
+#~ msgid "SolidLine"
+#~ msgstr "puna linija"
+
+#, fuzzy
+#~| msgid "dash line"
+#~ msgid "DashLine"
+#~ msgstr "crtkasta linija"
+
+#, fuzzy
+#~| msgid "Line"
+#~ msgid "DotLine"
+#~ msgstr "Linija"
+
+#, fuzzy
+#~| msgid "dash-dot line"
+#~ msgid "DashDotLine"
+#~ msgstr "crta-tačka lnija"
+
+#, fuzzy
+#~| msgid "dash-dot-dot line"
+#~ msgid "DashDotDotLine"
+#~ msgstr "crta-tačka-tačka linija"
+
+#, fuzzy
+#~| msgid "x-Range:"
+#~ msgid "Y-Ranges:"
+#~ msgstr "x-Domet:"
 
 #, fuzzy
 #~| msgid "horizontal linear gradient"
@@ -26546,26 +26187,203 @@ msgstr "Otvaranje neuspješno"
 #~ msgid "Diagonal Linear Gradient (Start From Bottom Left)"
 #~ msgstr "dijagonalni linearni gradijent (počinje sa lijevog donjeg ugla)"
 
+#~ msgid "Data, +"
+#~ msgstr "Podaci, +"
+
 #, fuzzy
-#~| msgid "cm"
-#~ msgid "c"
+#~| msgid "Cartesian Plot"
+#~ msgctxt "@title:window"
+#~ msgid "Cartesian Plot"
+#~ msgstr "Kartezijevo crtanje"
+
+#, fuzzy
+#~| msgid "xy-curve"
+#~ msgctxt "@title:window"
+#~ msgid "xy-Curve"
+#~ msgstr "xy-kriva"
+
+#, fuzzy
+#~| msgid "Equation type"
+#~ msgctxt "@title:window"
+#~ msgid "xy-Equation"
+#~ msgstr "Tip jednačine"
+
+#, fuzzy
+#~| msgid "Axis properties"
+#~ msgctxt "@title:window"
+#~ msgid "Histogram Properties"
+#~ msgstr "Podešavanja osa"
+
+#, fuzzy
+#~| msgid "%1: set values column"
+#~ msgid "Subtract the specified value from column values"
+#~ msgstr "%1: postavi kolonu vrijednosti"
+
+#, fuzzy
+#~| msgid "%1: set values column"
+#~ msgid "Add the specified value to matrix values"
+#~ msgstr "%1: postavi kolonu vrijednosti"
+
+#, fuzzy
+#~| msgid "%1: set values column"
+#~ msgid "Subtract the specified value from matrix values"
+#~ msgstr "%1: postavi kolonu vrijednosti"
+
+#, fuzzy
+#~| msgid "%1: add %2 rows"
+#~| msgid_plural "%1: add %2 rows"
+#~ msgid "Add Curve to"
+#~ msgstr "%1: dodaj %2 red"
+
+#, fuzzy
+#~| msgid "Plot Area"
+#~ msgid "Box Plot Data"
+#~ msgstr "Prostor za Crtanje"
+
+#, fuzzy
+#~| msgid "no axis element found"
+#~ msgid "Histogram Placement"
+#~ msgstr "nije pronađen element na osi"
+
+#, fuzzy
+#~| msgid "LabPlot2"
+#~ msgid "Plot - %1"
+#~ msgstr "LabPlot2"
+
+#, fuzzy
+#~| msgid "LabPlot2"
+#~ msgid "Plot %1"
+#~ msgstr "LabPlot2"
+
+#~ msgid "Error bars"
+#~ msgstr "Trake grešaka"
+
+#, fuzzy
+#~| msgid "Column"
+#~ msgid "Tick Column:"
+#~ msgstr "Kolona"
+
+#, fuzzy
+#~| msgid "Type"
+#~ msgid "Tick Type:"
+#~ msgstr "Vrsta"
+
+#, fuzzy
+#~| msgid "Font"
+#~ msgid "Font"
+#~ msgstr "Font"
+
+#, fuzzy
+#~| msgid "y-Range:"
+#~ msgid "y-Range"
+#~ msgstr "y-Domet:"
+
+#, fuzzy
+#~| msgid "x-Range:"
+#~ msgid "x-Range"
+#~ msgstr "x-Domet:"
+
+#, fuzzy
+#~| msgid "Top margin"
+#~ msgid "Top margin:"
+#~ msgstr "Gornja margina"
+
+#, fuzzy
+#~| msgid "Bottom margin"
+#~ msgid "Bottom margin:"
+#~ msgstr "Donja margina"
+
+#, fuzzy
+#~| msgid "Hor. spacing"
+#~ msgid "Hor. spacing:"
+#~ msgstr "Hor. proređivanje"
+
+#, fuzzy
+#~| msgid "Ver. spacing"
+#~ msgid "Ver. spacing:"
+#~ msgstr "Ver. proređivanje"
+
+#, fuzzy
+#~| msgid "Margin:"
+#~ msgid "Margin"
+#~ msgstr "Margina:"
+
+#~ msgid "cm"
 #~ msgstr "cm"
 
 #, fuzzy
-#~| msgid "Data:"
-#~ msgid "Datapicker"
-#~ msgstr "Podaci:"
+#~| msgid "Start"
+#~ msgid "x-Start:"
+#~ msgstr "Početak"
 
-#~ msgid "TeX mode"
-#~ msgstr "TeX način"
+#~ msgid "x-Range:"
+#~ msgstr "x-Domet:"
 
 #, fuzzy
-#~| msgid "Background"
-#~ msgid "Foreground color:"
-#~ msgstr "Pozadina"
+#~| msgid "orange"
+#~ msgid "Plot ranges:"
+#~ msgstr "narandžasta"
 
-#~ msgid "Vector names:"
-#~ msgstr "Imena vektora:"
+#, fuzzy
+#~| msgid "x-error:"
+#~ msgid "x-error"
+#~ msgstr "x-greška:"
+
+#, fuzzy
+#~| msgid "Error type"
+#~ msgid "Error type:"
+#~ msgstr "Tip greške"
+
+#, fuzzy
+#~| msgid "y-error:"
+#~ msgid "y-error"
+#~ msgstr "y-greška:"
+
+#, fuzzy
+#~| msgid "x-data"
+#~ msgid "x-data:"
+#~ msgstr "x-podatak"
+
+#, fuzzy
+#~| msgid "y-data"
+#~ msgid "y-data:"
+#~ msgstr "y-podatak"
+
+#, fuzzy
+#~| msgid "Data:"
+#~ msgid "y-Data:"
+#~ msgstr "Podaci:"
+
+#, fuzzy
+#~| msgid "Height"
+#~ msgid "y-Weight:"
+#~ msgstr "Visina"
+
+#, fuzzy
+#~| msgid "First color"
+#~ msgid "Font color:"
+#~ msgstr "Prva Boja"
+
+#, fuzzy
+#~| msgid "Drop lines:"
+#~ msgid "Drop values:"
+#~ msgstr "Padajuće linije:"
+
+#, fuzzy
+#~| msgid "x-data"
+#~ msgid "X-data:"
+#~ msgstr "x-podatak"
+
+#, fuzzy
+#~| msgid "x-data"
+#~ msgid "Y-data:"
+#~ msgstr "x-podatak"
+
+#, fuzzy
+#~| msgid "%1: add %2 rows"
+#~| msgid_plural "%1: add %2 rows"
+#~ msgid "Add Curves to"
+#~ msgstr "%1: dodaj %2 red"
 
 #~ msgid "%1: set text for row %2"
 #~ msgstr "%1: postavi tekst za red %2"
@@ -26574,174 +26392,9 @@ msgstr "Otvaranje neuspješno"
 #~ msgstr "%1: zamijeni tekstove za redove %2 i %3"
 
 #, fuzzy
-#~| msgid "X-error"
-#~ msgid "X-error minus"
-#~ msgstr "X-greška"
-
-#, fuzzy
-#~| msgid "X-error"
-#~ msgid "X-error plus"
-#~ msgstr "X-greška"
-
-#, fuzzy
-#~| msgid "Y-error"
-#~ msgid "Y-error minus"
-#~ msgstr "Y-greška"
-
-#, fuzzy
-#~| msgid "Y-error"
-#~ msgid "Y-error plus"
-#~ msgstr "Y-greška"
-
-#~ msgid "Z"
-#~ msgstr "Z"
-
-#, fuzzy
-#~| msgid "Data:"
-#~ msgctxt "@title:window"
-#~ msgid "Datapicker"
-#~ msgstr "Podaci:"
-
-#, fuzzy
-#~| msgid "Data:"
-#~ msgid "&Datapicker"
-#~ msgstr "Podaci:"
-
-#, fuzzy
-#~| msgid "Print worksheet"
-#~ msgid "Animate Worksheet"
-#~ msgstr "Ispiši radni list"
-
-#, fuzzy
-#~| msgid "Data format"
-#~ msgid "Show Completion"
-#~ msgstr "Format podataka"
-
-#, fuzzy
-#~| msgid "Scale Breakings"
-#~ msgid "Insert Markdown Entry"
-#~ msgstr "Probijanja granica skale"
-
-#, fuzzy
-#~| msgid "Scale Breakings"
-#~ msgid "Insert LaTeX Entry"
-#~ msgstr "Probijanja granica skale"
-
-#, fuzzy
-#~| msgid "Scale Breakings"
-#~ msgid "Insert Page Break"
-#~ msgstr "Probijanja granica skale"
-
-#, fuzzy
-#~| msgid "Properties"
-#~ msgctxt "@title:window"
-#~ msgid "CAS Properties"
-#~ msgstr "Podešavanja"
-
-#, fuzzy
-#~| msgid "Worksheet"
-#~ msgid "CAS Worksheet"
-#~ msgstr "Radni list"
-
-#, fuzzy
-#~| msgid "&Worksheet"
-#~ msgid "&CAS Worksheet"
-#~ msgstr "&Radni list"
-
-#~ msgid ""
-#~ "LabPlot2 is a KDE-application for interactive graphing and analysis of "
-#~ "scientific data."
-#~ msgstr ""
-#~ "LabPlot2 je KDE-aplikacija za interaktivne grafove i analizu naučnih "
-#~ "podataka."
-
-#, fuzzy
-#~| msgid "Offset"
-#~ msgid "Offset x:"
-#~ msgstr "Pomak"
-
-#, fuzzy
-#~| msgid "Offset"
-#~ msgid "Offset y:"
-#~ msgstr "Pomak"
-
-#, fuzzy
-#~| msgid "xy-curve from a mathematical equation"
-#~ msgid "xy-curve from a mathematical Equation"
-#~ msgstr "xy-kriva iz matematiče jednačine"
-
-#, fuzzy
-#~| msgid "Error type"
-#~ msgid "Error, %"
-#~ msgstr "Tip greške"
-
-#, fuzzy
-#~| msgid "Labplot version"
-#~ msgid "LabPlot version"
-#~ msgstr "Labplot verzija"
-
-#, fuzzy
-#~| msgid "Apply"
-#~ msgid "Apply Theme"
-#~ msgstr "Primijeni"
-
-#, fuzzy
-#~| msgid "Apply"
-#~ msgid "Apply theme [active '%1']"
-#~ msgstr "Primijeni"
-
-#, fuzzy
-#~| msgid "Beta Distribution"
-#~ msgid "Fit Distribution"
-#~ msgstr "Beta Distribucija"
-
-#, fuzzy
-#~| msgid "Import To"
-#~ msgid "Import from File"
-#~ msgstr "Uvezi u"
-
-#, fuzzy
-#~| msgid "Date and Time"
-#~ msgid "Date/Time"
-#~ msgstr "Datum i vrijeme"
-
-#, fuzzy
-#~| msgid "%1: set rotation angle"
-#~ msgid "%1: set x range"
-#~ msgstr "%1: postavi ugao rotacije"
-
-#, fuzzy
-#~| msgid "%1: set rotation angle"
-#~ msgid "%1: set y range"
-#~ msgstr "%1: postavi ugao rotacije"
-
-#, fuzzy
-#~| msgid "Show Controls"
-#~ msgid "Show &last"
-#~ msgstr "Prikaži kontrole"
-
-#, fuzzy
-#~| msgid "Fitted Points"
-#~ msgid "points"
-#~ msgstr "Tačke podešavanja"
-
-#, fuzzy
-#~| msgid "Show Options"
-#~ msgid "Show f&irst"
-#~ msgstr "Prikaži opcije"
-
-#~ msgid "%1: set axis auto scaling"
-#~ msgstr "%1: postavi osu na  automatsko skaliranje"
-
-#, fuzzy
-#~| msgid "TeX mode"
-#~ msgid "Switch to TeX mode"
-#~ msgstr "TeX način"
-
-#, fuzzy
-#~| msgid "Not yet implemented."
-#~ msgid "rank 2 not implemented yet for type %1, size = %2"
-#~ msgstr "Još nije implementirano."
+#~| msgid "cm"
+#~ msgid "c"
+#~ msgstr "cm"
 
 #, fuzzy
 #~| msgid "%1: set line style"
@@ -26774,39 +26427,167 @@ msgstr "Otvaranje neuspješno"
 #~ msgstr "%1: postavi prozirnost linije"
 
 #, fuzzy
-#~| msgid "Error bars"
-#~ msgid "Error Bar"
-#~ msgstr "Trake grešaka"
+#~| msgid "Not yet implemented."
+#~ msgid "rank 2 not implemented yet for type %1, size = %2"
+#~ msgstr "Još nije implementirano."
 
-#~ msgid ""
-#~ "Position of the axis in the direction perpendicular to the axis in "
-#~ "logical units."
-#~ msgstr "Pozicije ose je okomit na osu logičkih jedinica."
+#~ msgid "%1: set axis auto scaling"
+#~ msgstr "%1: postavi osu na  automatsko skaliranje"
 
-#, fuzzy
-#~| msgid "Notes"
-#~ msgid "Notes:"
-#~ msgstr "Bilješke"
+#~ msgid "%1: set axis start"
+#~ msgstr "%1: postavi osni start"
 
 #, fuzzy
-#~| msgid "Variance"
-#~ msgid "Variables: "
-#~ msgstr "Varijanca"
+#~| msgid "xy-curve from a mathematical equation"
+#~ msgid "xy-curve from a mathematical Equation"
+#~ msgstr "xy-kriva iz matematiče jednačine"
 
 #, fuzzy
-#~| msgid "%1: set symbol type"
-#~ msgid "%1: set outliers symbol style"
-#~ msgstr "%1: postavi tip simbola"
+#~| msgid "Apply"
+#~ msgid "Apply Theme"
+#~ msgstr "Primijeni"
 
 #, fuzzy
-#~| msgid "%1: set symbol type"
-#~ msgid "%1: set mean symbol style"
-#~ msgstr "%1: postavi tip simbola"
+#~| msgid "%1: set labels format"
+#~ msgid "%1: set x-range format"
+#~ msgstr "%1: postavi format oznake"
+
+#, fuzzy
+#~| msgid "%1: set labels format"
+#~ msgid "%1: set y-range format"
+#~ msgstr "%1: postavi format oznake"
+
+#~ msgid "%1: set min x"
+#~ msgstr "%1: postavi minimalni x"
+
+#~ msgid "%1: set max x"
+#~ msgstr "%1: postavi maksimalni x"
+
+#~ msgid "%1: set min y"
+#~ msgstr "%1: postavi minimalni y"
+
+#~ msgid "%1: set max y"
+#~ msgstr "%1: postavi maksimalni y"
+
+#~ msgid "%1: set y scale"
+#~ msgstr "%1: postavi y skalu"
 
 #, fuzzy
 #~| msgid "%1: set symbols opacity"
 #~ msgid "%1: set symbol opacity"
 #~ msgstr "%1: postavi prozirnost simbola"
+
+#, fuzzy
+#~| msgid "Scale Breakings"
+#~ msgid "Insert Markdown Entry"
+#~ msgstr "Probijanja granica skale"
+
+#, fuzzy
+#~| msgid "Scale Breakings"
+#~ msgid "Insert LaTeX Entry"
+#~ msgstr "Probijanja granica skale"
+
+#, fuzzy
+#~| msgid "Scale Breakings"
+#~ msgid "Insert Page Break"
+#~ msgstr "Probijanja granica skale"
+
+#, fuzzy
+#~| msgid "Print worksheet"
+#~ msgid "Animate Worksheet"
+#~ msgstr "Ispiši radni list"
+
+#, fuzzy
+#~| msgid "show/hide columns"
+#~ msgid "Show/Hide columns"
+#~ msgstr "prikaži/sakrij kolone"
+
+#, fuzzy
+#~| msgid "show search/filter options"
+#~ msgid "Show Search/Filter Options"
+#~ msgstr "prikaži traži/filtriraj opcije"
+
+#, fuzzy
+#~| msgid "X-error"
+#~ msgid "X-error minus"
+#~ msgstr "X-greška"
+
+#, fuzzy
+#~| msgid "Y-error"
+#~ msgid "Y-error minus"
+#~ msgstr "Y-greška"
+
+#, fuzzy
+#~| msgid "Y-error"
+#~ msgid "Y-error plus"
+#~ msgstr "Y-greška"
+
+#, fuzzy
+#~| msgid "invalid y end value"
+#~ msgid "Divide by Value"
+#~ msgstr "pogrešna y krajnja vrijednost"
+
+#, fuzzy
+#~| msgid "Clea&r Selection"
+#~ msgid "Clea&r Selected Rows"
+#~ msgstr "Uklon&i Selektovano"
+
+#, fuzzy
+#~| msgid "File info"
+#~ msgctxt "@title:window"
+#~ msgid "File Information"
+#~ msgstr "Info podatka"
+
+#~ msgid "log(x)"
+#~ msgstr "log"
+
+#~ msgid "log2(x)"
+#~ msgstr "lOG2(x)"
+
+#~ msgid "ln(x)"
+#~ msgstr "ln(x)"
+
+#, fuzzy
+#~| msgid "log(x)"
+#~ msgid "log(abs(x))"
+#~ msgstr "log"
+
+#, fuzzy
+#~| msgid "log(x)"
+#~ msgid "log2(abs(x))"
+#~ msgstr "log"
+
+#, fuzzy
+#~| msgid "log(x)"
+#~ msgid "ln(abs(x))"
+#~ msgstr "log"
+
+#~ msgid "log(y)"
+#~ msgstr "log(y)"
+
+#~ msgid "log2(y)"
+#~ msgstr "log2(y)"
+
+#~ msgid "ln(y)"
+#~ msgstr "ln(y)"
+
+#, fuzzy
+#~| msgid "log(y)"
+#~ msgid "log(abs(y))"
+#~ msgstr "log(y)"
+
+#, fuzzy
+#~| msgid "log2(y)"
+#~ msgid "log2(abs(y))"
+#~ msgstr "log2(y)"
+
+#, fuzzy
+#~| msgid "log(x)"
+#~ msgid "ln(abs(y))"
+#~ msgstr "log"
+
+#~ msgid "Z"
+#~ msgstr "Z"
 
 #, fuzzy
 #~| msgid "%1: background brush style changed"
@@ -26854,30 +26635,59 @@ msgstr "Otvaranje neuspješno"
 #~ msgstr "%1: pozadinska boja promijenjena"
 
 #, fuzzy
-#~| msgid "show/hide columns"
-#~ msgid "Show/Hide columns"
-#~ msgstr "prikaži/sakrij kolone"
+#~| msgid "Error type"
+#~ msgid "Error, %"
+#~ msgstr "Tip greške"
 
 #, fuzzy
-#~| msgid "show search/filter options"
-#~ msgid "Show Search/Filter Options"
-#~ msgstr "prikaži traži/filtriraj opcije"
-
-#, fuzzy
-#~| msgid "Levels"
-#~ msgid "Levels:"
-#~ msgstr "Nivoi"
-
-#, fuzzy
-#~| msgid "File info"
+#~| msgid "Data:"
 #~ msgctxt "@title:window"
-#~ msgid "File Information"
-#~ msgstr "Info podatka"
+#~ msgid "Datapicker"
+#~ msgstr "Podaci:"
 
 #, fuzzy
-#~| msgid "invalid y end value"
-#~ msgid "Divide by Value"
-#~ msgstr "pogrešna y krajnja vrijednost"
+#~| msgid "Properties"
+#~ msgctxt "@title:window %1 is a Cantor backend"
+#~ msgid "%1 Properties"
+#~ msgstr "Podešavanja"
+
+#, fuzzy
+#~| msgid "Properties"
+#~ msgctxt "@title:window"
+#~ msgid "CAS Properties"
+#~ msgstr "Podešavanja"
+
+#~ msgid ""
+#~ "LabPlot2 is a KDE-application for interactive graphing and analysis of "
+#~ "scientific data."
+#~ msgstr ""
+#~ "LabPlot2 je KDE-aplikacija za interaktivne grafove i analizu naučnih "
+#~ "podataka."
+
+#, fuzzy
+#~| msgid "Data:"
+#~ msgid "Datapicker"
+#~ msgstr "Podaci:"
+
+#, fuzzy
+#~| msgid "Worksheet"
+#~ msgid "CAS Worksheet"
+#~ msgstr "Radni list"
+
+#, fuzzy
+#~| msgid "&Worksheet"
+#~ msgid "&CAS Worksheet"
+#~ msgstr "&Radni list"
+
+#, fuzzy
+#~| msgid "Data:"
+#~ msgid "&Datapicker"
+#~ msgstr "Podaci:"
+
+#, fuzzy
+#~| msgid "Import To"
+#~ msgid "Import from File"
+#~ msgstr "Uvezi u"
 
 #, fuzzy
 #~| msgid "&Edit"
@@ -26885,23 +26695,98 @@ msgstr "Otvaranje neuspješno"
 #~ msgstr "&Izmijeni"
 
 #, fuzzy
-#~| msgid "Clea&r Selection"
-#~ msgid "Clea&r Selected Rows"
-#~ msgstr "Uklon&i Selektovano"
+#~| msgid "Apply"
+#~ msgid "Apply theme [active '%1']"
+#~ msgstr "Primijeni"
+
+#, fuzzy
+#~| msgid "Error bars"
+#~ msgid "Error Bar"
+#~ msgstr "Trake grešaka"
+
+#~ msgid "Vector names:"
+#~ msgstr "Imena vektora:"
+
+#~ msgid ""
+#~ "Position of the axis in the direction perpendicular to the axis in "
+#~ "logical units."
+#~ msgstr "Pozicije ose je okomit na osu logičkih jedinica."
+
+#, fuzzy
+#~| msgid "Fitted Points"
+#~ msgid "points"
+#~ msgstr "Tačke podešavanja"
+
+#, fuzzy
+#~| msgid "Scaling"
+#~ msgid "Scaling:"
+#~ msgstr "Skaliranje"
+
+#, fuzzy
+#~| msgid "Show Controls"
+#~ msgid "Show &last"
+#~ msgstr "Prikaži kontrole"
+
+#, fuzzy
+#~| msgid "Show Options"
+#~ msgid "Show f&irst"
+#~ msgstr "Prikaži opcije"
+
+#~ msgid "y-Range:"
+#~ msgstr "y-Domet:"
+
+#, fuzzy
+#~| msgid "Labplot version"
+#~ msgid "LabPlot version"
+#~ msgstr "Labplot verzija"
+
+#, fuzzy
+#~| msgid "Notes"
+#~ msgid "Notes:"
+#~ msgstr "Bilješke"
+
+#~ msgid "TeX mode"
+#~ msgstr "TeX način"
+
+#, fuzzy
+#~| msgid "TeX mode"
+#~ msgid "Switch to TeX mode"
+#~ msgstr "TeX način"
+
+#, fuzzy
+#~| msgid "Background"
+#~ msgid "Foreground color:"
+#~ msgstr "Pozadina"
+
+#, fuzzy
+#~| msgid "%1: set symbol type"
+#~ msgid "%1: set outliers symbol style"
+#~ msgstr "%1: postavi tip simbola"
+
+#, fuzzy
+#~| msgid "%1: set symbol type"
+#~ msgid "%1: set mean symbol style"
+#~ msgstr "%1: postavi tip simbola"
+
+#, fuzzy
+#~| msgid "%1: set rotation angle"
+#~ msgid "%1: set x range"
+#~ msgstr "%1: postavi ugao rotacije"
+
+#, fuzzy
+#~| msgid "%1: set rotation angle"
+#~ msgid "%1: set y range"
+#~ msgstr "%1: postavi ugao rotacije"
+
+#, fuzzy
+#~| msgid "Date and Time"
+#~ msgid "Date/Time"
+#~ msgstr "Datum i vrijeme"
 
 #, fuzzy
 #~| msgid "center tiled"
 #~ msgid "2/98 percentiles"
 #~ msgstr "centrirano popločan"
-
-#~ msgid "log(x)"
-#~ msgstr "log"
-
-#~ msgid "log2(x)"
-#~ msgstr "lOG2(x)"
-
-#~ msgid "ln(x)"
-#~ msgstr "ln(x)"
 
 #~ msgid "sqrt(x)"
 #~ msgstr "sqrt(x)"
@@ -26918,69 +26803,6 @@ msgstr "Otvaranje neuspješno"
 #~| msgid "log2(x)"
 #~ msgid "log2(|x|)"
 #~ msgstr "lOG2(x)"
-
-#~ msgid "%1: set min x"
-#~ msgstr "%1: postavi minimalni x"
-
-#~ msgid "%1: set max x"
-#~ msgstr "%1: postavi maksimalni x"
-
-#~ msgid "%1: set min y"
-#~ msgstr "%1: postavi minimalni y"
-
-#~ msgid "%1: set max y"
-#~ msgstr "%1: postavi maksimalni y"
-
-#~ msgid "%1: set y scale"
-#~ msgstr "%1: postavi y skalu"
-
-#, fuzzy
-#~| msgid "log(x)"
-#~ msgid "log(abs(x))"
-#~ msgstr "log"
-
-#, fuzzy
-#~| msgid "log(x)"
-#~ msgid "log2(abs(x))"
-#~ msgstr "log"
-
-#, fuzzy
-#~| msgid "log(x)"
-#~ msgid "ln(abs(x))"
-#~ msgstr "log"
-
-#~ msgid "log(y)"
-#~ msgstr "log(y)"
-
-#~ msgid "log2(y)"
-#~ msgstr "log2(y)"
-
-#~ msgid "ln(y)"
-#~ msgstr "ln(y)"
-
-#, fuzzy
-#~| msgid "log(y)"
-#~ msgid "log(abs(y))"
-#~ msgstr "log(y)"
-
-#, fuzzy
-#~| msgid "log2(y)"
-#~ msgid "log2(abs(y))"
-#~ msgstr "log2(y)"
-
-#, fuzzy
-#~| msgid "Scaling"
-#~ msgid "Scaling:"
-#~ msgstr "Skaliranje"
-
-#~ msgid "y-Range:"
-#~ msgstr "y-Domet:"
-
-#, fuzzy
-#~| msgid "Properties"
-#~ msgctxt "@title:window %1 is a Cantor backend"
-#~ msgid "%1 Properties"
-#~ msgstr "Podešavanja"
 
 #, fuzzy
 #~| msgid "Variance"
@@ -27006,9 +26828,6 @@ msgstr "Otvaranje neuspješno"
 #~| msgid "%1: set font color"
 #~ msgid "%1: set connection line color"
 #~ msgstr "%1: postavi boju fonta"
-
-#~ msgid "%1: set axis start"
-#~ msgstr "%1: postavi osni start"
 
 #, fuzzy
 #~| msgid "%1: set vertical alignment"
@@ -27059,11 +26878,6 @@ msgstr "Otvaranje neuspješno"
 #, fuzzy
 #~| msgid "Data format"
 #~ msgid "Number format"
-#~ msgstr "Format podataka"
-
-#, fuzzy
-#~| msgid "Data format"
-#~ msgid "DateTime format"
 #~ msgstr "Format podataka"
 
 #, fuzzy
@@ -27852,6 +27666,11 @@ msgstr "Otvaranje neuspješno"
 #~ msgid "no liveDataSource element found"
 #~ msgstr "nije pronađen fileDataSource element"
 
+#, fuzzy
+#~| msgid "error"
+#~ msgid "Errors:"
+#~ msgstr "greška"
+
 #~ msgid "no cartesian plot legend element found"
 #~ msgstr "nije pronađena legenda za cartesian element"
 
@@ -28150,12 +27969,6 @@ msgstr "Otvaranje neuspješno"
 
 #~ msgid "Cl&ose"
 #~ msgstr "Za&tvori"
-
-#, fuzzy
-#~| msgctxt "matrix size"
-#~| msgid "&Dimensions"
-#~ msgid "Extensions"
-#~ msgstr "&Dimenzije"
 
 #, fuzzy
 #~| msgid "Data format"

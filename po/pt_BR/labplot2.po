@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:42+0000\n"
+"POT-Creation-Date: 2024-07-10 03:09+0000\n"
 "PO-Revision-Date: 2022-07-14 10:06-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -171,9 +171,10 @@ msgstr "A hora de criação de '%1' é inválida. Usando a hora atual."
 
 #: src/backend/core/AbstractColumn.cpp:135
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:68
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "second"
 msgid "Milliseconds"
-msgstr ""
+msgstr "segundo"
 
 #: src/backend/core/AbstractColumn.cpp:137
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:67
@@ -374,14 +375,14 @@ msgid "%1: unmask cells"
 msgstr "%1: remover as máscaras das células"
 
 #: src/backend/core/abstractcolumncommands.cpp:253
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2592
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2583
 #, fuzzy, kde-format
 #| msgid "%1: set labels format"
 msgid "%1: set heatmap format"
 msgstr "%1: definir o formato das legendas"
 
 #: src/backend/core/abstractcolumncommands.cpp:280
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2610
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2601
 #, fuzzy, kde-format
 #| msgid "%1: set labels format"
 msgid "%1: remove heatmap format"
@@ -577,16 +578,14 @@ msgid "Plots"
 msgstr "Gráfico"
 
 #: src/backend/core/column/Column.cpp:195
-#, fuzzy, kde-format
-#| msgid "box plot, two axes"
+#, kde-format
 msgid "Axes"
-msgstr "gráfico em caixa, dois eixos"
+msgstr ""
 
 #: src/backend/core/column/Column.cpp:221
-#, fuzzy, kde-format
-#| msgid "Table captions"
+#, kde-format
 msgid "Calculations"
-msgstr "Títulos da tabela"
+msgstr "Cálculos"
 
 #. i18n("DateTime Filter"), i18n("Unit:"), items, 0, false, &ok);
 #. if (ok) {
@@ -632,7 +631,7 @@ msgid "%1: change cell values"
 msgstr "%1: alterar os valores da célula"
 
 #: src/backend/core/column/columncommands.cpp:531
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2817
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2808
 #, kde-format
 msgid "%1: set plot designation"
 msgstr "%1: definir a designação do gráfico"
@@ -818,7 +817,7 @@ msgstr "Falha ao abrir"
 msgid "Failed to open project"
 msgstr "Falha ao abrir"
 
-#: src/backend/core/Project.cpp:1255
+#: src/backend/core/Project.cpp:1257
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "A hora de modificação do projeto é inválida. Usando a hora atual."
@@ -1137,10 +1136,10 @@ msgstr "Falha ao abrir"
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
 #: src/commonfrontend/matrix/MatrixView.cpp:619
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2494
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2515
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2533
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2550
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2485
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2506
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2524
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2541
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:188
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:182
@@ -1179,10 +1178,9 @@ msgstr "Valor %1"
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:332
 #: src/backend/datasources/filters/XLSXFilter.cpp:515
-#, fuzzy, kde-format
-#| msgid "Number"
+#, kde-format
 msgid "Not enough memory."
-msgstr "Número"
+msgstr ""
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:273
 #: src/backend/datasources/filters/JsonFilter.cpp:386
@@ -1861,16 +1859,15 @@ msgstr ""
 #: src/backend/datasources/filters/MatioFilter.cpp:434
 #: src/commonfrontend/workbook/WorkbookView.cpp:53
 #: src/commonfrontend/workbook/WorkbookView.cpp:160
-#: src/kdefrontend/MainWin.cpp:631 src/kdefrontend/MainWin.cpp:1951
+#: src/kdefrontend/MainWin.cpp:631 src/kdefrontend/MainWin.cpp:1960
 #, kde-format
 msgid "Matrix"
 msgstr "Matriz"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:436
-#, fuzzy, kde-format
-#| msgid "Show Options"
+#, kde-format
 msgid "Compressed"
-msgstr "Mostrar opções"
+msgstr ""
 
 #: src/backend/datasources/filters/MatioFilter.cpp:438
 #, kde-format
@@ -1913,10 +1910,9 @@ msgid "Selected variable not found."
 msgstr "Informações do arquivo"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:799
-#, fuzzy, kde-format
-#| msgid "File info"
+#, kde-format
 msgid "Struct contains no fields"
-msgstr "Informações do arquivo"
+msgstr ""
 
 #: src/backend/datasources/filters/MatioFilter.cpp:881
 #, kde-format
@@ -2058,15 +2054,15 @@ msgstr "&Normalizar a seleção"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:250
 #, fuzzy, kde-format
-#| msgid "File info"
+#| msgid "no column element found"
 msgid "Selected sheet not found."
-msgstr "Informações do arquivo"
+msgstr "não foi encontrado o elemento da coluna"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:257
 #, fuzzy, kde-format
-#| msgid "Export to file"
+#| msgid "invalid row value"
 msgid "Invalid sheet."
-msgstr "Exportar para arquivo"
+msgstr "valor da linha inválido"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:318
 #, kde-format
@@ -2081,9 +2077,9 @@ msgstr "Informações do arquivo"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:480
 #, fuzzy, kde-format
-#| msgid "invalid row value"
+#| msgid "Export to file"
 msgid "Invalid sheet index."
-msgstr "valor da linha inválido"
+msgstr "Exportar para arquivo"
 
 #: src/backend/datasources/filters/QJsonModel.cpp:132
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:64
@@ -2252,10 +2248,9 @@ msgid "Application: %1"
 msgstr "Rotação:"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:105
-#, fuzzy, kde-format
-#| msgid "Show Options"
+#, kde-format
 msgid "Application version: %1.%2.%3"
-msgstr "Mostrar opções"
+msgstr ""
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:107
 #, fuzzy, kde-format
@@ -2326,10 +2321,9 @@ msgid "Invalid DBC file."
 msgstr "Exportar para arquivo"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:201
-#, fuzzy, kde-format
-#| msgid "Constants"
+#, kde-format
 msgid "Unknown error,"
-msgstr "Constantes"
+msgstr ""
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:443
 #, kde-format
@@ -3564,9 +3558,9 @@ msgstr "Excluir variável"
 
 #: src/backend/gsl/functions.cpp:235
 #, fuzzy, kde-format
-#| msgid "center"
+#| msgid "moving average (lagged)"
 msgid "Moving Average"
-msgstr "centro"
+msgstr "média da movimentação (defasada)"
 
 #: src/backend/gsl/functions.cpp:236
 #, fuzzy, kde-format
@@ -3591,9 +3585,9 @@ msgstr ""
 
 #: src/backend/gsl/functions.cpp:240
 #, fuzzy, kde-format
-#| msgid "center"
+#| msgid "simple, big"
 msgid "Simple Moving Range"
-msgstr "centro"
+msgstr "simples, grande"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:244
@@ -5013,14 +5007,16 @@ msgid "Logarithm of the magnitude"
 msgstr "Logaritmo da magnitude"
 
 #: src/backend/gsl/functions.cpp:572
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Zeta Functions"
 msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q, x)"
-msgstr ""
+msgstr "Funções Zeta"
 
 #: src/backend/gsl/functions.cpp:573
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Zeta Functions"
 msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q, x)"
-msgstr ""
+msgstr "Funções Zeta"
 
 #: src/backend/gsl/functions.cpp:574
 #, fuzzy, kde-format
@@ -5035,14 +5031,16 @@ msgid "Angular Mathieu functions se_n(q, x)"
 msgstr "Funções Zeta"
 
 #: src/backend/gsl/functions.cpp:576
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Zeta Functions"
 msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q, x)"
-msgstr ""
+msgstr "Funções Zeta"
 
 #: src/backend/gsl/functions.cpp:577
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Zeta Functions"
 msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q, x)"
-msgstr ""
+msgstr "Funções Zeta"
 
 #: src/backend/gsl/functions.cpp:581
 #, kde-format
@@ -6086,9 +6084,9 @@ msgstr "Função de distribuição acumulada Q"
 
 #: src/backend/gsl/functions.cpp:842
 #, fuzzy, kde-format
-#| msgid "Probability density for a Landau distribution"
+#| msgid "Hazard function for the normal distribution Z/Q"
 msgid "p-th quantile for triangular distribution"
-msgstr "Densidade da probabilidade para uma distribuição de Landau"
+msgstr "Função de Hazard da distribuição normal Z/Q"
 
 #: src/backend/gsl/functions.cpp:948 src/backend/gsl/functions.cpp:960
 #: src/backend/gsl/functions.cpp:974 src/backend/gsl/functions.cpp:986
@@ -6202,9 +6200,9 @@ msgstr "quadrado"
 
 #: src/backend/lib/Range.h:48
 #, fuzzy, kde-format
-#| msgid "Inverse hyperbolic sine"
+#| msgid "Inverse sine"
 msgid "Inverse"
-msgstr "Seno hiperbólico inverso"
+msgstr "Seno inverso"
 
 #: src/backend/lib/XmlStreamReader.cpp:91
 #: src/backend/lib/XmlStreamReader.cpp:95
@@ -6223,13 +6221,13 @@ msgid "unexpected end of document"
 msgstr "fim de documento inesperado"
 
 #: src/backend/matrix/Matrix.cpp:129
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3797
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3788
 #, kde-format
 msgid "FITS image"
 msgstr "Imagem FITS"
 
 #: src/backend/matrix/Matrix.cpp:129
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3797
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3788
 #, kde-format
 msgid "FITS table"
 msgstr "Tabela FITS"
@@ -6492,10 +6490,9 @@ msgid "Center (Acausal)"
 msgstr ""
 
 #: src/backend/nsl/nsl_conv.c:24
-#, fuzzy, kde-format
-#| msgid "center"
+#, kde-format
 msgid "Sliding Average"
-msgstr "centro"
+msgstr ""
 
 #: src/backend/nsl/nsl_conv.c:25
 #, fuzzy, kde-format
@@ -8748,9 +8745,9 @@ msgstr "%1: definir o tipo dos valores"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1140
 #, fuzzy, kde-format
-#| msgid "%1: set line style"
+#| msgid "%1: set axis scale"
 msgid "%1: set nice extend"
-msgstr "%1: definir o estilo da linha"
+msgstr "%1: definir a escala do eixo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1147
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1154
@@ -8761,9 +8758,9 @@ msgstr "%1: definir o ângulo da rotação"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1165
 #, fuzzy, kde-format
-#| msgid "%1: set labels format"
+#| msgid "%1: change x-range auto scaling"
 msgid "%1: change %2-range %3 format"
-msgstr "%1: definir o formato das legendas"
+msgstr "%1: alterar a escala automática do intervalo em X"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1255
 #, fuzzy, kde-format
@@ -9102,10 +9099,9 @@ msgid "%1: set error column"
 msgstr "%1: definir a coluna do erro em X"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:235
-#, fuzzy, kde-format
-#| msgid "%1: x-error type changed"
+#, kde-format
 msgid "%1: error bar type changed"
-msgstr "%1: o tipo de erro em X foi alterado"
+msgstr "%1: o tipo da barra de erros foi alterado"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:242
 #, kde-format
@@ -10254,10 +10250,9 @@ msgid "Visible"
 msgstr "Visível"
 
 #: src/backend/worksheet/WorksheetElement.cpp:228
-#, fuzzy, kde-format
-#| msgid "Link"
+#, kde-format
 msgid "Lock"
-msgstr "Link"
+msgstr ""
 
 #: src/backend/worksheet/WorksheetElement.cpp:237
 #, kde-format
@@ -10638,8 +10633,8 @@ msgid "Curve"
 msgstr "Curva"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4037
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4091
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4028
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4082
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2217
 #, fuzzy, kde-format
 #| msgid "Failed to open"
@@ -10647,8 +10642,8 @@ msgid "Failed to export"
 msgstr "Falha ao abrir"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4037
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4091
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4028
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4082
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2217
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -10878,7 +10873,7 @@ msgid "%1: cut selected cell(s)"
 msgstr "%1: recortar a(s) célula(s) selecionada(s)"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:689
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1793
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1784
 #, kde-format
 msgid "%1: paste from clipboard"
 msgstr "%1: colar da área de transferência"
@@ -11100,7 +11095,7 @@ msgstr "Colunas calculadas"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:326
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1149
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1535
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1526
 #, kde-format
 msgid "Show Comments"
 msgstr "Mostrar comentários"
@@ -11174,12 +11169,12 @@ msgstr "&Inserir colunas vazias"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:346
 #, fuzzy, kde-format
-#| msgid "%1: remove selected column(s)"
+#| msgid "&Selected Columns"
 msgid "Delete Selected Column(s)"
-msgstr "%1: remover a(s) coluna(s) selecionada(s)"
+msgstr "Colunas &selecionadas"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:348
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1625
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1616
 #, fuzzy, kde-format
 #| msgid "&Selected Columns"
 msgid "Freeze Column"
@@ -11210,8 +11205,7 @@ msgid "Divide"
 msgstr "valor da linha inválido"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:391
-#, fuzzy, kde-format
-#| msgid "Drop Values"
+#, kde-format
 msgid "Drop Values"
 msgstr "Soltar os valores"
 
@@ -11393,10 +11387,9 @@ msgid "Remo&ve Selected Row(s)"
 msgstr "%1: remover as linhas selecionadas"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:494
-#, fuzzy, kde-format
-#| msgid "%1: fill matrix with function values"
+#, kde-format
 msgid "Delete Rows With Missing Values"
-msgstr "%1: preencher a matriz com os valores da função"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:495
 #, kde-format
@@ -11442,96 +11435,96 @@ msgid "Ladder of Powers"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1147
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1533
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1524
 #, kde-format
 msgid "Hide Comments"
 msgstr "Ocultar comentários"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1158
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1538
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1529
 #, fuzzy, kde-format
 #| msgid "Hide Options"
 msgid "Hide Sparklines"
 msgstr "Ocultar opções"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1160
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1540
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1531
 #, fuzzy, kde-format
 #| msgid "Show Options"
 msgid "Show Sparklines"
 msgstr "Mostrar opções"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1629
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1620
 #, fuzzy, kde-format
 #| msgid "&Selected Columns"
 msgid "Unfreeze Column"
 msgstr "Colunas &selecionadas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1712
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1703
 #, kde-format
 msgid "%1: cut selected cells"
 msgstr "%1: recortar as células selecionadas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2036
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2027
 #, kde-format
 msgid "Not enough memory to finalize this operation."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2050
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2041
 #, kde-format
 msgid "%1: mask selected cells"
 msgstr "%1: mascarar as células selecionadas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2092
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2083
 #, kde-format
 msgid "%1: unmask selected cells"
 msgstr "%1: retirar a máscara das células selecionadas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2248
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2239
 #, kde-format
 msgid "%1: fill cells with row numbers"
 msgstr "%1: preencher as células com os números de linha"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2313
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2304
 #, kde-format
 msgid "%1: fill column with row numbers"
 msgid_plural "%1: fill columns with row numbers"
 msgstr[0] "%1: preencher a coluna com os números de linha"
 msgstr[1] "%1: preencher as colunas com os números de linha"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2357
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2348
 #, kde-format
 msgid "%1: fill cells with random values"
 msgstr "%1: preencher as células com valores aleatórios"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2483
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2474
 #, kde-format
 msgid "%1: fill cells with const values"
 msgstr "%1: preencher as células com valores constantes"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2493
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2515
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2533
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2550
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2484
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2506
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2524
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2541
 #, kde-format
 msgid "Fill the selection with constant value"
 msgstr "Preenche a seleção com o valor constante"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2630
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2664
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2621
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2655
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "Insert empty columns"
 msgstr "&Inserir colunas vazias"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2631
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2665
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2622
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2656
 #, fuzzy, kde-format
 #| msgid "Specify the name of the file to import."
 msgid "Enter the number of columns to insert"
 msgstr "Indique o nome do arquivo a importar."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2683
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2674
 #, fuzzy, kde-format
 #| msgid "%1: insert empty columns"
 msgid "%1: insert empty column"
@@ -11539,154 +11532,154 @@ msgid_plural "%1: insert empty columns"
 msgstr[0] "%1: inserir colunas vazias"
 msgstr[1] "%1: inserir colunas vazias"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2753
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2744
 #, kde-format
 msgid "%1: remove selected columns"
 msgstr "%1: remover as colunas selecionadas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2850
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2841
 #, kde-format
 msgid "%1: reverse column"
 msgid_plural "%1: reverse columns"
 msgstr[0] "%1: inverter coluna"
 msgstr[1] "%1: inverter colunas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2923
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2914
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
 "because of this. "
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2961
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2952
 #, kde-format
 msgid "%1: normalize columns"
 msgstr "%1: normalizar as colunas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2981
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2972
 #, kde-format
 msgid "Sum = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2992
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2983
 #, kde-format
 msgid "Min = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3003
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2994
 #, fuzzy, kde-format
 #| msgid "x = "
 msgid "Max = 0"
 msgstr "x = "
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3014
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3005
 #, fuzzy, kde-format
 #| msgid "center"
 msgid "Count = 0"
 msgstr "centro"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3025
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3016
 #, fuzzy, kde-format
 #| msgid "Mean"
 msgid "Mean = 0"
 msgstr "Média"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3036
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3027
 #, fuzzy, kde-format
 #| msgid "Median"
 msgid "Median = 0"
 msgstr "Mediana"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3048
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3039
 #, fuzzy, kde-format
 #| msgid "Model"
 msgid "Mode = 0"
 msgstr "Modelo"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3050
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3041
 #, kde-format
 msgid "'Mode not defined'"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3061
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3052
 #, fuzzy, kde-format
 #| msgid "x-Range:"
 msgid "Range = 0"
 msgstr "Intervalo em X:"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3072
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3106
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3063
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3097
 #, kde-format
 msgid "SD = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3083
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3118
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3074
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3109
 #, kde-format
 msgid "MAD = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3094
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3130
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3085
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3121
 #, kde-format
 msgid "IQR = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3142
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3133
 #, kde-format
 msgid "Max - Min = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3161
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3152
 #, kde-format
 msgid "Normalization not possible"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3173
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3164
 #, fuzzy, kde-format
 #| msgid "%1: sort columns"
 msgid "%1: power transform columns"
 msgstr "%1: ordenar as colunas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3291
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3282
 #, fuzzy, kde-format
 #| msgid "Column Statisti&cs"
 msgid "%1: column statistics"
 msgstr "Estatísti&cas das colunas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3322
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3313
 #, fuzzy, kde-format
 #| msgid "Selection"
 msgid "Selection in %1"
 msgstr "Seleção"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3365
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3356
 #, fuzzy, kde-format
 #| msgid "Row Statisti&cs"
 msgid "%1: row statistics"
 msgstr "Estatísti&cas das linhas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3375
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3366
 #, kde-format
 msgid "Row %1"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3400
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3439
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3391
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3430
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "Insert multiple rows"
 msgstr "&Inserir linhas vazias"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3401
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3440
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3392
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3431
 #, fuzzy, kde-format
 #| msgid "Specify the name of the file to import."
 msgid "Enter the number of rows to insert"
 msgstr "Indique o nome do arquivo a importar."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3420
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3459
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3411
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3450
 #, fuzzy, kde-format
 #| msgid "%1: insert empty rows"
 msgid "%1: insert empty row"
@@ -11694,17 +11687,17 @@ msgid_plural "%1: insert empty rows"
 msgstr[0] "%1: inserir linhas vazias"
 msgstr[1] "%1: inserir linhas vazias"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3475
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3466
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr "%1: remover as linhas selecionadas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3500
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3491
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: limpar as células selecionadas"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3762
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3753
 #, fuzzy, kde-format
 #| msgid "Arrow:"
 msgid "row"
@@ -11712,7 +11705,7 @@ msgid_plural "rows"
 msgstr[0] "Seta:"
 msgstr[1] "Seta:"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3763
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3754
 #, fuzzy, kde-format
 #| msgid "Column"
 msgid "column"
@@ -11720,83 +11713,83 @@ msgid_plural "columns"
 msgstr[0] "Coluna"
 msgstr[1] "Coluna"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3764
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3755
 #, kde-format
 msgid "cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3765
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3756
 #, fuzzy, kde-format
 #| msgid "Mask values"
 msgid "masked value"
 msgstr "Mascarar os valores"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3765
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3756
 #, fuzzy, kde-format
 #| msgid "Mask values"
 msgid "masked values"
 msgstr "Mascarar os valores"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3766
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3757
 #, fuzzy, kde-format
 #| msgid "no values"
 msgid "missing value"
 msgstr "sem valores"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3766
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3757
 #, fuzzy, kde-format
 #| msgid "no values"
 msgid "missing values"
 msgstr "sem valores"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3767
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3758
 #, kde-format
 msgid " , "
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3767
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3768
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3758
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3759
 #, fuzzy, kde-format
 #| msgid "1."
 msgid "%1"
 msgstr "1."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3768
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3759
 #, fuzzy, kde-format
 #| msgctxt "postfix for XML warning messages"
 #| msgid " "
 msgid ", "
 msgstr " "
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3771
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3762
 #, kde-format
 msgid "Selected: %1 %2 , %3 %4%5 %6 %7 %8"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3781
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3772
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3854
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3845
 #, fuzzy, kde-format
 #| msgid "Print Spreadsheet"
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Imprimir planilha"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4459
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4450
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4491
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4482
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to create table in the SQLite database %1."
 msgstr "Falha ao abrir"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4544
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4535
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to insert values into the table."
@@ -11836,10 +11829,9 @@ msgid "Unhandled error"
 msgstr ""
 
 #: src/commonfrontend/widgets/NumberSpinBox.cpp:440
-#, fuzzy, kde-format
-#| msgid "invalid row value"
+#, kde-format
 msgid "Invalid value entered. Valid value: %1"
-msgstr "valor da linha inválido"
+msgstr ""
 
 #: src/commonfrontend/widgets/TreeViewComboBox.cpp:56
 #, kde-format
@@ -11861,7 +11853,7 @@ msgstr ""
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:116
 #: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:57
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:75
-#: src/kdefrontend/MainWin.cpp:625 src/kdefrontend/MainWin.cpp:1933
+#: src/kdefrontend/MainWin.cpp:625 src/kdefrontend/MainWin.cpp:1942
 #: src/kdefrontend/SettingsDialog.cpp:72
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:122
 #, kde-format
@@ -12061,7 +12053,7 @@ msgstr "Selecionar a região em X e ampliar"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:359
-#: src/kdefrontend/MainWin.cpp:2418
+#: src/kdefrontend/MainWin.cpp:2427
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1426
 #, kde-format
 msgid "Cursor"
@@ -13643,7 +13635,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
-#: src/kdefrontend/MainWin.cpp:2727
+#: src/kdefrontend/MainWin.cpp:2736
 #, kde-format
 msgid "Warning"
 msgstr ""
@@ -14525,9 +14517,9 @@ msgstr "Automático (E)"
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:319
 #, fuzzy, kde-format
-#| msgid "Value"
+#| msgid "Add new variable"
 msgid "Add a new value label"
-msgstr "Valor"
+msgstr "Adicionar nova variável"
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:320
 #, fuzzy, kde-format
@@ -14648,9 +14640,11 @@ msgid "%1 histograms: template \"%2\" loaded"
 msgstr "%1 eixos: foi carregado o modelo \"%2\""
 
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:218
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1: remove %2 row"
+#| msgid_plural "%1: remove %2 rows"
 msgid "%1 info elements: curve \"%2\" removed"
-msgstr ""
+msgstr "%1: remover %2 linha"
 
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:220
 #, fuzzy, kde-format
@@ -15110,22 +15104,19 @@ msgid "t statistic"
 msgstr "Estatísticas"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:368
-#, fuzzy, kde-format
-#| msgid "No data points available."
+#, kde-format
 msgid "No X and Y column specified!"
-msgstr "Não há pontos de dados disponíveis."
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:370
-#, fuzzy, kde-format
-#| msgid "No data points available."
+#, kde-format
 msgid "No X column specified!"
-msgstr "Não há pontos de dados disponíveis."
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:372
-#, fuzzy, kde-format
-#| msgid "No data points available."
+#, kde-format
 msgid "No Y column specified!"
-msgstr "Não há pontos de dados disponíveis."
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:376
 #, fuzzy, kde-format
@@ -15314,10 +15305,10 @@ msgstr "&Ordenar planilha"
 
 #: src/kdefrontend/GuiObserver.cpp:231
 #, fuzzy, kde-format
-#| msgid "Properties"
+#| msgid "Column Statisti&cs"
 msgctxt "@title:window"
 msgid "Properties: Column Statistics"
-msgstr "Propriedades"
+msgstr "Estatísti&cas das colunas"
 
 #: src/kdefrontend/GuiObserver.cpp:241
 #, fuzzy, kde-format
@@ -16203,9 +16194,9 @@ msgstr "Notas"
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
 #: src/kdefrontend/labplot2ui.rc:40
 #, fuzzy, kde-format
-#| msgid "Load from"
+#| msgid "Plot Area"
 msgid "Plot Area Toolbar"
-msgstr "Carregar de"
+msgstr "Área do gráfico"
 
 #. i18n: ectx: Menu (file)
 #: src/kdefrontend/labplot2ui.rc:44
@@ -16308,7 +16299,7 @@ msgstr "Bem-vindo ao LabPlot %1"
 msgid "&Open Example"
 msgstr "novo filtro"
 
-#: src/kdefrontend/MainWin.cpp:615 src/kdefrontend/MainWin.cpp:1917
+#: src/kdefrontend/MainWin.cpp:615 src/kdefrontend/MainWin.cpp:1926
 #, kde-format
 msgid "Workbook"
 msgstr "Folha de trabalho"
@@ -16318,7 +16309,7 @@ msgstr "Folha de trabalho"
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:620 src/kdefrontend/MainWin.cpp:1925
+#: src/kdefrontend/MainWin.cpp:620 src/kdefrontend/MainWin.cpp:1934
 #, fuzzy, kde-format
 #| msgid "Data format"
 msgid "Data Extractor"
@@ -16339,7 +16330,7 @@ msgstr ""
 msgid "Creates a new matrix for data editing"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:637 src/kdefrontend/MainWin.cpp:1969
+#: src/kdefrontend/MainWin.cpp:637 src/kdefrontend/MainWin.cpp:1978
 #: src/kdefrontend/SettingsDialog.cpp:67
 #, kde-format
 msgid "Worksheet"
@@ -16350,7 +16341,7 @@ msgstr "Folha de trabalho"
 msgid "Creates a new worksheet for data plotting"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:643 src/kdefrontend/MainWin.cpp:1977
+#: src/kdefrontend/MainWin.cpp:643 src/kdefrontend/MainWin.cpp:1986
 #, fuzzy, kde-format
 #| msgid "Notes"
 msgid "Note"
@@ -16361,7 +16352,7 @@ msgstr "Notas"
 msgid "Creates a new note for arbitrary text"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:648 src/kdefrontend/MainWin.cpp:1909
+#: src/kdefrontend/MainWin.cpp:648 src/kdefrontend/MainWin.cpp:1918
 #, kde-format
 msgid "Folder"
 msgstr "Pasta"
@@ -16438,8 +16429,8 @@ msgstr "Exportar"
 msgid "Export selected element"
 msgstr "Exportar a seleção"
 
-#: src/kdefrontend/MainWin.cpp:705 src/kdefrontend/MainWin.cpp:2454
-#: src/kdefrontend/MainWin.cpp:2462
+#: src/kdefrontend/MainWin.cpp:705 src/kdefrontend/MainWin.cpp:2463
+#: src/kdefrontend/MainWin.cpp:2471
 #, kde-format
 msgid "Share"
 msgstr ""
@@ -16695,86 +16686,86 @@ msgstr ""
 msgid "Couldn't open the temporary file for writing."
 msgstr "Infelizmente, não foi possível abrir o arquivo para gravação."
 
-#: src/kdefrontend/MainWin.cpp:1798
+#: src/kdefrontend/MainWin.cpp:1807
 #, kde-format
 msgid "Project saved"
 msgstr "Projeto salvo"
 
-#: src/kdefrontend/MainWin.cpp:1814
+#: src/kdefrontend/MainWin.cpp:1823
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1819
+#: src/kdefrontend/MainWin.cpp:1828
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Não foi possível abrir o arquivo %1 para leitura."
 
-#: src/kdefrontend/MainWin.cpp:1869
+#: src/kdefrontend/MainWin.cpp:1878
 #, fuzzy, kde-format
 #| msgid "%1    [Changed]"
 msgid "Changed"
 msgstr "%1    [Alterado]"
 
-#: src/kdefrontend/MainWin.cpp:1884 src/kdefrontend/MainWin.cpp:1896
+#: src/kdefrontend/MainWin.cpp:1893 src/kdefrontend/MainWin.cpp:1905
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1886 src/kdefrontend/MainWin.cpp:1898
+#: src/kdefrontend/MainWin.cpp:1895 src/kdefrontend/MainWin.cpp:1907
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 impresso(s)"
 
-#: src/kdefrontend/MainWin.cpp:2454
+#: src/kdefrontend/MainWin.cpp:2463
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2458
+#: src/kdefrontend/MainWin.cpp:2467
 #, fuzzy, kde-format
 #| msgid "Project saved"
 msgid "Project shared successfully"
 msgstr "Projeto salvo"
 
-#: src/kdefrontend/MainWin.cpp:2461
+#: src/kdefrontend/MainWin.cpp:2470
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2690
+#: src/kdefrontend/MainWin.cpp:2699
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 exportado(s)"
 
-#: src/kdefrontend/MainWin.cpp:2697
+#: src/kdefrontend/MainWin.cpp:2706
 #, kde-format
 msgid "FITS files saved"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2709
+#: src/kdefrontend/MainWin.cpp:2718
 #, kde-format
 msgid "MQTT Client%1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2727
+#: src/kdefrontend/MainWin.cpp:2736
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2731
+#: src/kdefrontend/MainWin.cpp:2740
 #, fuzzy, kde-format
 #| msgid "File data source"
 msgid "Live data source%1"
 msgstr "Fonte de dados em arquivo"
 
-#: src/kdefrontend/MainWin.cpp:2772
+#: src/kdefrontend/MainWin.cpp:2781
 #, kde-format
 msgid "No Cantor backends found. Please install the ones you want to use."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2786
+#: src/kdefrontend/MainWin.cpp:2795
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr ""
@@ -17045,9 +17036,9 @@ msgstr "Imprimir folha de trabalho"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:224
 #, fuzzy, kde-format
-#| msgid "%1: set line style"
+#| msgid "Export spreadsheet"
 msgid "With Spreadsheet and Worksheet"
-msgstr "%1: definir o estilo da linha"
+msgstr "Exportar planilha"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:226
 #, fuzzy, kde-format
@@ -17172,10 +17163,9 @@ msgid ""
 msgstr ""
 
 #: src/kdefrontend/SettingsNotebookPage.cpp:23
-#, fuzzy, kde-format
-#| msgid "Height"
+#, kde-format
 msgid "Enable syntax highlighting"
-msgstr "Altura"
+msgstr ""
 
 #: src/kdefrontend/SettingsNotebookPage.cpp:24
 #, fuzzy, kde-format
@@ -17379,10 +17369,9 @@ msgstr "Rotação:"
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:943
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:987
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1031
-#, fuzzy, kde-format
-#| msgid "invalid row value"
+#, kde-format
 msgid "Wrong numeric value provided."
-msgstr "valor da linha inválido"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1218
 #, fuzzy, kde-format
@@ -17443,16 +17432,16 @@ msgstr "Legendas"
 
 #: src/kdefrontend/spreadsheet/BatchEditValueLabelsDialog.cpp:36
 #, fuzzy, kde-format
-#| msgid "Value"
+#| msgid "Equidistant Values"
 msgctxt "@title:window"
 msgid "Edit Value Labels"
-msgstr "Valor"
+msgstr "Valores equidistantes"
 
 #: src/kdefrontend/spreadsheet/BatchEditValueLabelsDialog.cpp:40
 #, fuzzy, kde-format
-#| msgid "Value"
+#| msgid "Labels"
 msgid "Value Labels:"
-msgstr "Valor"
+msgstr "Legendas"
 
 #: src/kdefrontend/spreadsheet/BatchEditValueLabelsDialog.cpp:154
 #, kde-format
@@ -17929,9 +17918,9 @@ msgstr ""
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:214
 #, fuzzy, kde-format
-#| msgid "Select and Zoom"
+#| msgid "&Selected Columns"
 msgid "Select a valid column"
-msgstr "Selecionar e ampliar/reduzir"
+msgstr "Colunas &selecionadas"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:221
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:275
@@ -18480,9 +18469,9 @@ msgstr ""
 
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:150
 #, fuzzy, kde-format
-#| msgid "Plot"
+#| msgid "Cartesian Plot"
 msgid "Pareto Plot"
-msgstr "Gráfico"
+msgstr "Gráfico cartesiano"
 
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:226
 #, fuzzy, kde-format
@@ -19589,10 +19578,9 @@ msgstr "Importar para"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbConvertSeconds)
 #: src/kdefrontend/ui/datasources/CANOptionsWidget.ui:32
-#, fuzzy, kde-format
-#| msgid "File info"
+#, kde-format
 msgid "Convert time to seconds"
-msgstr "Informações do arquivo"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:33
@@ -20510,9 +20498,9 @@ msgstr "Número"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:725
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1148
 #, fuzzy, kde-format
-#| msgid "First color"
+#| msgid "Mask Values"
 msgid "1st Tick Value:"
-msgstr "Primeira cor"
+msgstr "Mascarar os valores"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksSpacingNumeric)
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksSpacingNumeric)
@@ -20620,16 +20608,15 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lMajorTickStartOffset)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1036
 #, fuzzy, kde-format
-#| msgid "Offset"
+#| msgid "%1: set axis offset"
 msgid "1st Tick Offset:"
-msgstr "Posição"
+msgstr "%1: definir a posição do eixo"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksStartType)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1105
-#, fuzzy, kde-format
-#| msgid "Set Axis Points"
+#, kde-format
 msgid "1st Tick at:"
-msgstr "Definir os pontos do eixo"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLabels)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1159
@@ -21011,10 +20998,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbWhiskerEnd)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:564
-#, fuzzy, kde-format
-#| msgid "%1: set axis end"
+#, kde-format
 msgid "Whisker End"
-msgstr "%1: definir o fim do eixo"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkJitteringEnabled)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:587
@@ -21234,9 +21220,9 @@ msgstr "Salva as definições atuais do filtro"
 #. i18n: ectx: property (text), widget (QLabel, lNiceExtend)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:512
 #, fuzzy, kde-format
-#| msgid "Data"
+#| msgid "Tension"
 msgid "Extend:"
-msgstr "Dados"
+msgstr "Tensão"
 
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbTop)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbPaddingHorizontal)
@@ -21411,9 +21397,9 @@ msgstr "De"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1121
 #, fuzzy, kde-format
-#| msgid "y-Range:"
+#| msgid "x-Range:"
 msgid "X-Range"
-msgstr "Intervalo-Y:"
+msgstr "Intervalo em X:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPlotArea)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1202
@@ -21465,9 +21451,10 @@ msgstr "Largura da linha+símbolo"
 #. i18n: ectx: property (text), widget (QLabel, lBindLogicalPos)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:412
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:27
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1: set matrix coordinates"
 msgid "Logical coordinates"
-msgstr ""
+msgstr "%1: definir as coordenadas da matriz"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbLock)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:458
@@ -21911,30 +21898,30 @@ msgstr "Mapeamento:"
 #. i18n: ectx: property (text), widget (QLabel, lXStart)
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:167
 #, fuzzy, kde-format
-#| msgid "x-Start"
+#| msgid "y-Start"
 msgid "X-Start:"
-msgstr "x-Inicial"
+msgstr "y-Inicial"
 
 #. i18n: ectx: property (text), widget (QLabel, lXMax)
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:181
 #, fuzzy, kde-format
-#| msgid "x-End"
+#| msgid "y-End"
 msgid "X-End:"
-msgstr "x-Final"
+msgstr "y-Final"
 
 #. i18n: ectx: property (text), widget (QLabel, lYStart)
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:211
 #, fuzzy, kde-format
-#| msgid "x-Start"
+#| msgid "y-Start"
 msgid "Y-Start:"
-msgstr "x-Inicial"
+msgstr "y-Inicial"
 
 #. i18n: ectx: property (text), widget (QLabel, lYEnd)
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:225
 #, fuzzy, kde-format
-#| msgid "x-End"
+#| msgid "y-End"
 msgid "Y-End:"
-msgstr "x-Final"
+msgstr "y-Final"
 
 #. i18n: ectx: property (text), widget (QLabel, lHeader)
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:305
@@ -22070,9 +22057,9 @@ msgstr "Ativa"
 #. i18n: ectx: property (text), widget (QLabel, lShowSparklines)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:175
 #, fuzzy, kde-format
-#| msgid "column major"
+#| msgid "Grid lines"
 msgid "Sparklines:"
-msgstr "coluna maior"
+msgstr "Linhas de grade"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:198
@@ -22171,9 +22158,9 @@ msgstr "Dados"
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:410
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:463
 #, fuzzy, kde-format
-#| msgid "y-Range:"
+#| msgid "x-Range:"
 msgid "X-Range:"
-msgstr "Intervalo-Y:"
+msgstr "Intervalo em X:"
 
 #. i18n: ectx: property (text), widget (QLabel, lY2Column)
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:145
@@ -23600,9 +23587,9 @@ msgstr "Variância"
 #. i18n: ectx: property (text), widget (QCheckBox, chkSyntaxHighlighting)
 #: src/kdefrontend/ui/settingsnotebookpage.ui:33
 #, fuzzy, kde-format
-#| msgid "Height"
+#| msgid "Data format"
 msgid "Syntax Highlighting"
-msgstr "Altura"
+msgstr "Formato dos dados"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSyntaxCompletion)
 #: src/kdefrontend/ui/settingsnotebookpage.ui:40
@@ -23738,10 +23725,9 @@ msgstr "Valor:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter1)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:136
-#, fuzzy, kde-format
-#| msgid "Smooth:"
+#, kde-format
 msgid "Smoothness (Power of 10):"
-msgstr "Suavizar:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter2)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:162
@@ -23774,9 +23760,9 @@ msgstr "Data e Hora"
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:47
 #, fuzzy, kde-format
-#| msgid "Mask Values"
+#| msgid "Drop Values"
 msgid "Numeric Values"
-msgstr "Mascarar os valores"
+msgstr "Soltar os valores"
 
 #. i18n: ectx: property (text), widget (QLabel, lMode)
 #. i18n: ectx: property (text), widget (QLabel, lConditionText)
@@ -23802,16 +23788,16 @@ msgstr "máx."
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:144
 #, fuzzy, kde-format
-#| msgid "Mask Values"
+#| msgid "Values"
 msgid "Text Values"
-msgstr "Mascarar os valores"
+msgstr "Valores"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:203
 #, fuzzy, kde-format
-#| msgid "Cap size"
+#| msgid "Data format"
 msgid "DateTime Values"
-msgstr "Tamanho do extremo"
+msgstr "Formato dos dados"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:97
@@ -23961,17 +23947,15 @@ msgstr "Selecionar os segmentos da curva"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbCurvePlacementAllInOnePlotArea)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:160
-#, fuzzy, kde-format
-#| msgid "Plot Area"
+#, kde-format
 msgid "All Plots in one Plot Area"
-msgstr "Área do gráfico"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbCurvePlacementAllInOwnPlotArea)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:170
-#, fuzzy, kde-format
-#| msgid "%1: set plot area border opacity"
+#, kde-format
 msgid "One Plot Area per Plot"
-msgstr "%1: definir a opacidade do contorno da área do gráfico"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementExistingPlotArea)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:186
@@ -25183,10 +25167,9 @@ msgid "%1 not found"
 msgstr "Informações do arquivo"
 
 #: src/tools/TeXRenderer.cpp:193
-#, fuzzy, kde-format
-#| msgid "Failed to open"
+#, kde-format
 msgid "Timeout: Unable to generate latex file"
-msgstr "Falha ao abrir"
+msgstr ""
 
 #: src/tools/TeXRenderer.cpp:196
 #, kde-format
@@ -25221,91 +25204,43 @@ msgstr ""
 msgid "Unable to open file:"
 msgstr "Falha ao abrir"
 
-#~ msgid "Add %1"
-#~ msgstr "Adicionar %1"
-
-#~ msgid "%1 name:"
-#~ msgstr "Nome %1:"
-
-#~ msgid "CartesianPlot"
-#~ msgstr "Gráfico cartesiano"
-
-#~ msgid "cumulative distribution function P"
-#~ msgstr "Função da distribuição acumulada P"
-
-#, fuzzy
-#~| msgid "derivative"
-#~ msgid "p-th quantile"
-#~ msgstr "derivada"
-
-#~ msgid "%1: copy %2"
-#~ msgstr "%1: copiar o %2"
-
-#, fuzzy
-#~| msgid "column major"
-#~ msgid "Column Format"
-#~ msgstr "coluna maior"
-
-#~ msgid "Specify the name of the file to import."
-#~ msgstr "Indique o nome do arquivo a importar."
-
 #, fuzzy
 #~| msgid "%1: remove 1 row"
 #~| msgid_plural "%1: remove %2 rows"
 #~ msgid "%1: move down"
 #~ msgstr "%1: remover 1 linha"
 
-#~ msgid "%1: move behind %2."
-#~ msgstr "%1: mover para trás de %2."
+#~ msgid "&Restore"
+#~ msgstr "&Restaurar"
 
-#~ msgid "%1: move in front of %2."
-#~ msgstr "%1: mover para a frente de %2."
+#~ msgid "Mi&nimize"
+#~ msgstr "Mi&nimizar"
 
-#, fuzzy
-#~| msgid "Failed to open"
-#~ msgid "Failed to download the dataset"
-#~ msgstr "Falha ao abrir"
+#~ msgid "Ma&ximize"
+#~ msgstr "Ma&ximizar"
 
-#, fuzzy
-#~| msgid "Failed to open"
-#~ msgid "Failed to save the dataset"
-#~ msgstr "Falha ao abrir"
+#~ msgid "XY-Curves"
+#~ msgstr "Curvas XY"
 
 #~ msgid "could not open device"
 #~ msgstr "não foi possível abrir o dispositivo"
-
-#, fuzzy
-#~| msgid "File info"
-#~ msgid "Variable contains no data"
-#~ msgstr "Informações do arquivo"
 
 #, fuzzy
 #~| msgid "invalid row value"
 #~ msgid "Invalid dbc file"
 #~ msgstr "valor da linha inválido"
 
-#, fuzzy
-#~| msgid "Data"
-#~ msgid "Parse Errors"
-#~ msgstr "Dados"
+#~ msgid "Dawson integral"
+#~ msgstr "Integral de Dawson"
 
-#, fuzzy
-#~| msgid "somewhat sparse"
-#~ msgid "Show SparkLine"
-#~ msgstr "ligeiramente esparso"
+#~ msgid "cumulative distribution function P"
+#~ msgstr "Função da distribuição acumulada P"
 
-#, fuzzy
-#~| msgid "Column comments"
-#~ msgid "Column Comments:"
-#~ msgstr "Comentários da coluna"
+#~ msgid "%1: copy %2"
+#~ msgstr "%1: copiar o %2"
 
-#, fuzzy
-#~| msgid "%1: error bar type changed"
-#~ msgid "%1: error bar style type changed"
-#~ msgstr "%1: o tipo da barra de erros foi alterado"
-
-#~ msgid "%1 CustomPoints: visibility changed"
-#~ msgstr "Pontos personalizados do %1: visibilidade alterada"
+#~ msgid "unknown cartesianPlot element '%1'"
+#~ msgstr "o elemento de gráfico cartesiano '%1' é desconhecido"
 
 #~ msgid "%1: set x-error column"
 #~ msgstr "%1: definir a coluna do erro em X"
@@ -25316,159 +25251,11 @@ msgstr "Falha ao abrir"
 #~ msgid "%1: set y-error column"
 #~ msgstr "%1: definir a coluna do erro em Y"
 
-#~ msgid "XY-Curves"
-#~ msgstr "Curvas XY"
+#~ msgid "%1: move behind %2."
+#~ msgstr "%1: mover para trás de %2."
 
-#, fuzzy
-#~| msgid "Do nothing"
-#~ msgid "Do Nothing"
-#~ msgstr "Não fazer nada"
-
-#, fuzzy
-#~| msgid "Create new project with worksheet"
-#~ msgid "Create New Project with Worksheet"
-#~ msgstr "Criar um novo projeto com folha de trabalho"
-
-#, fuzzy
-#~| msgid "Create new project with worksheet"
-#~ msgid "Create New Project with Spreadsheet"
-#~ msgstr "Criar um novo projeto com folha de trabalho"
-
-#, fuzzy
-#~| msgid "Create new project with worksheet"
-#~ msgid "Create New Project with Notebook"
-#~ msgstr "Criar um novo projeto com folha de trabalho"
-
-#~ msgid "%1: clear selected rows"
-#~ msgstr "%1: limpar as linhas selecionadas"
-
-#, fuzzy
-#~| msgid "Equidistant Values"
-#~ msgctxt "@title:window"
-#~ msgid "Equidistant Values"
-#~ msgstr "Valores equidistantes"
-
-#, fuzzy
-#~| msgid "Date and Time"
-#~ msgid "DateTime"
-#~ msgstr "Data e Hora"
-
-#, fuzzy
-#~| msgid "Remo&ve Rows"
-#~ msgid "Remove"
-#~ msgstr "Remo&ver linhas"
-
-#, fuzzy
-#~| msgid "xy-curve"
-#~ msgid "xy-Curve"
-#~ msgstr "curva em XY"
-
-#, fuzzy
-#~| msgid "Data type:"
-#~ msgid "Add Histogram to"
-#~ msgstr "Tipo de dados:"
-
-#, fuzzy
-#~| msgid "Plot"
-#~ msgid "Add Box Plot to"
-#~ msgstr "Gráfico"
-
-#, fuzzy
-#~| msgid "Plot"
-#~ msgid "Add Bar Plot to"
-#~ msgstr "Gráfico"
-
-#, fuzzy
-#~| msgid "Data type:"
-#~ msgid "Add Histograms to"
-#~ msgstr "Tipo de dados:"
-
-#, fuzzy
-#~| msgid "%1: set plot area border opacity"
-#~ msgid "One plot area per box plot"
-#~ msgstr "%1: definir a opacidade do contorno da área do gráfico"
-
-#, fuzzy
-#~| msgid "Plot"
-#~ msgid "Add Box Plots to"
-#~ msgstr "Gráfico"
-
-#, fuzzy
-#~| msgid "Plot"
-#~ msgid "Add Bar Plots to"
-#~ msgstr "Gráfico"
-
-#, fuzzy
-#~| msgid "Create new project with worksheet"
-#~ msgid "new plot in an existing worksheet"
-#~ msgstr "Criar um novo projeto com folha de trabalho"
-
-#, fuzzy
-#~| msgid "Create new project with worksheet"
-#~ msgid "new plot in a new worksheet"
-#~ msgstr "Criar um novo projeto com folha de trabalho"
-
-#, fuzzy
-#~| msgid "Create new project with worksheet"
-#~ msgid "new plots in an existing worksheet"
-#~ msgstr "Criar um novo projeto com folha de trabalho"
-
-#, fuzzy
-#~| msgid "Create new project with worksheet"
-#~ msgid "new plots in a new worksheet"
-#~ msgstr "Criar um novo projeto com folha de trabalho"
-
-#, fuzzy
-#~| msgid "no xy Fourier interpolation curve element found"
-#~ msgid "GUI configuration file not found"
-#~ msgstr ""
-#~ "não foi encontrado nenhum elemento de curva de interpolação de Fourier em "
-#~ "XY"
-
-#, fuzzy
-#~| msgid "Connection:"
-#~ msgid "Conditions"
-#~ msgstr "Conexão:"
-
-#~ msgid "Dawson integral"
-#~ msgstr "Integral de Dawson"
-
-#~ msgid "&Sort Spreadsheet"
-#~ msgstr "&Ordenar planilha"
-
-#, fuzzy
-#~| msgid "Sort columns"
-#~ msgid "Sort columns:"
-#~ msgstr "Ordenar as colunas"
-
-#~ msgid "Separately"
-#~ msgstr "Em separado"
-
-#~ msgid "Together"
-#~ msgstr "Em conjunto"
-
-#, fuzzy
-#~| msgid "Leading column"
-#~ msgid "Leading column:"
-#~ msgstr "Coluna inicial"
-
-#~ msgid "Save Filter Settings as"
-#~ msgstr "Salvar a configuração do filtro como"
-
-#~ msgid "Filter name:"
-#~ msgstr "Nome do filtro:"
-
-#~ msgid "new filter"
-#~ msgstr "novo filtro"
-
-#~ msgid "Save the current filter settings"
-#~ msgstr "Salva as definições atuais do filtro"
-
-#~ msgid "Manage filters"
-#~ msgstr "Gerenciar filtros"
-
-#~ msgid "unknown cartesianPlot element '%1'"
-#~ msgstr "o elemento de gráfico cartesiano '%1' é desconhecido"
+#~ msgid "%1: move in front of %2."
+#~ msgstr "%1: mover para a frente de %2."
 
 #, fuzzy
 #~| msgid "Remo&ve Columns"
@@ -25486,6 +25273,19 @@ msgstr "Falha ao abrir"
 #~ msgstr "&Máscara"
 
 #, fuzzy
+#~| msgid "Remo&ve Rows"
+#~ msgid "Remove"
+#~ msgstr "Remo&ver linhas"
+
+#, fuzzy
+#~| msgid "xy-curve"
+#~ msgid "xy-Curve"
+#~ msgstr "curva em XY"
+
+#~ msgid "%1: clear selected rows"
+#~ msgstr "%1: limpar as linhas selecionadas"
+
+#, fuzzy
 #~| msgid "xy-curve from a fit to data"
 #~ msgid "xy-Curve from a Formula"
 #~ msgstr "curva em XY de um ajuste de dados"
@@ -25501,11 +25301,6 @@ msgstr "Falha ao abrir"
 #~ msgstr "Conexão:"
 
 #, fuzzy
-#~| msgid "Connection:"
-#~ msgid "Convolution/Deconvolution"
-#~ msgstr "Conexão:"
-
-#, fuzzy
 #~| msgid "Data fitting"
 #~ msgid "Data Manipulation"
 #~ msgstr "Ajuste de dados"
@@ -25516,45 +25311,28 @@ msgstr "Falha ao abrir"
 #~ msgid "%1: Add curve to %2 plots"
 #~ msgstr "%1: adicionar %2 linha"
 
-#~ msgid "&Analysis"
-#~ msgstr "&Análise"
+#~ msgid "Add %1"
+#~ msgstr "Adicionar %1"
 
-#, fuzzy
-#~| msgid "%1: set line style"
-#~ msgid "%1: set line pen"
-#~ msgstr "%1: definir o estilo da linha"
-
-#, fuzzy
-#~| msgid "Search/Filter:"
-#~ msgid "End Search"
-#~ msgstr "Pesquisar/Filtrar:"
-
-#, fuzzy
-#~| msgid "Point separation"
-#~ msgid "Point Separation:"
-#~ msgstr "Separação do ponto"
-
-#, fuzzy
-#~| msgid "Ref. Points:"
-#~ msgid "Reference Points"
-#~ msgstr "Pontos de referência:"
-
-#~ msgid "%1: set axis scale"
-#~ msgstr "%1: definir a escala do eixo"
+#~ msgid "%1 name:"
+#~ msgstr "Nome %1:"
 
 #, fuzzy
 #~| msgid "Data"
 #~ msgid "No Data"
 #~ msgstr "Dados"
 
-#~ msgid "&Restore"
-#~ msgstr "&Restaurar"
+#~ msgid "Save Filter Settings as"
+#~ msgstr "Salvar a configuração do filtro como"
 
-#~ msgid "Mi&nimize"
-#~ msgstr "Mi&nimizar"
+#~ msgid "Filter name:"
+#~ msgstr "Nome do filtro:"
 
-#~ msgid "Ma&ximize"
-#~ msgstr "Ma&ximizar"
+#~ msgid "new filter"
+#~ msgstr "novo filtro"
+
+#~ msgid "%1 CustomPoints: visibility changed"
+#~ msgstr "Pontos personalizados do %1: visibilidade alterada"
 
 #, fuzzy
 #~| msgid "Spreadsheet"
@@ -25740,6 +25518,19 @@ msgstr "Falha ao abrir"
 #~ msgid "Workbook"
 #~ msgstr "Folha de trabalho"
 
+#~ msgid "CartesianPlot"
+#~ msgstr "Gráfico cartesiano"
+
+#~ msgid "&Analysis"
+#~ msgstr "&Análise"
+
+#, fuzzy
+#~| msgid "no xy Fourier interpolation curve element found"
+#~ msgid "GUI configuration file not found"
+#~ msgstr ""
+#~ "não foi encontrado nenhum elemento de curva de interpolação de Fourier em "
+#~ "XY"
+
 #~ msgid "&Tile"
 #~ msgstr "&Lado a lado"
 
@@ -25751,6 +25542,21 @@ msgstr "Falha ao abrir"
 
 #~ msgid "Cascade the windows"
 #~ msgstr "Coloca as janelas em cascata"
+
+#, fuzzy
+#~| msgid "Do nothing"
+#~ msgid "Do Nothing"
+#~ msgstr "Não fazer nada"
+
+#, fuzzy
+#~| msgid "Create new project with worksheet"
+#~ msgid "Create New Project with Worksheet"
+#~ msgstr "Criar um novo projeto com folha de trabalho"
+
+#, fuzzy
+#~| msgid "Create new project with worksheet"
+#~ msgid "Create New Project with Spreadsheet"
+#~ msgstr "Criar um novo projeto com folha de trabalho"
 
 #, fuzzy
 #~| msgid "Sub-window view"
@@ -25778,6 +25584,93 @@ msgstr "Falha ao abrir"
 #~ msgstr "Mostrar todas as janelas"
 
 #, fuzzy
+#~| msgid "Equidistant Values"
+#~ msgctxt "@title:window"
+#~ msgid "Equidistant Values"
+#~ msgstr "Valores equidistantes"
+
+#, fuzzy
+#~| msgid "Data type:"
+#~ msgid "Add Histogram to"
+#~ msgstr "Tipo de dados:"
+
+#, fuzzy
+#~| msgid "Plot"
+#~ msgid "Add Box Plot to"
+#~ msgstr "Gráfico"
+
+#, fuzzy
+#~| msgid "Plot"
+#~ msgid "Add Bar Plot to"
+#~ msgstr "Gráfico"
+
+#, fuzzy
+#~| msgid "Data type:"
+#~ msgid "Add Histograms to"
+#~ msgstr "Tipo de dados:"
+
+#, fuzzy
+#~| msgid "%1: set plot area border opacity"
+#~ msgid "One plot area per box plot"
+#~ msgstr "%1: definir a opacidade do contorno da área do gráfico"
+
+#, fuzzy
+#~| msgid "Plot"
+#~ msgid "Add Box Plots to"
+#~ msgstr "Gráfico"
+
+#, fuzzy
+#~| msgid "Plot"
+#~ msgid "Add Bar Plots to"
+#~ msgstr "Gráfico"
+
+#, fuzzy
+#~| msgid "Create new project with worksheet"
+#~ msgid "new plot in an existing worksheet"
+#~ msgstr "Criar um novo projeto com folha de trabalho"
+
+#, fuzzy
+#~| msgid "Create new project with worksheet"
+#~ msgid "new plot in a new worksheet"
+#~ msgstr "Criar um novo projeto com folha de trabalho"
+
+#, fuzzy
+#~| msgid "Create new project with worksheet"
+#~ msgid "new plots in an existing worksheet"
+#~ msgstr "Criar um novo projeto com folha de trabalho"
+
+#, fuzzy
+#~| msgid "Create new project with worksheet"
+#~ msgid "new plots in a new worksheet"
+#~ msgstr "Criar um novo projeto com folha de trabalho"
+
+#, fuzzy
+#~| msgid "Point separation"
+#~ msgid "Point Separation:"
+#~ msgstr "Separação do ponto"
+
+#, fuzzy
+#~| msgid "Ref. Points:"
+#~ msgid "Reference Points"
+#~ msgstr "Pontos de referência:"
+
+#, fuzzy
+#~| msgid "Data"
+#~ msgid "Parse Errors"
+#~ msgstr "Dados"
+
+#~ msgid "Save the current filter settings"
+#~ msgstr "Salva as definições atuais do filtro"
+
+#~ msgid "Manage filters"
+#~ msgstr "Gerenciar filtros"
+
+#, fuzzy
+#~| msgid "Column comments"
+#~ msgid "Column Comments:"
+#~ msgstr "Comentários da coluna"
+
+#, fuzzy
 #~| msgid "Tab position"
 #~ msgid "Tab position:"
 #~ msgstr "Posição das abas"
@@ -25793,14 +25686,328 @@ msgstr "Falha ao abrir"
 #~ msgstr "Visibilidade da subjanela"
 
 #, fuzzy
+#~| msgid "Sort columns"
+#~ msgid "Sort columns:"
+#~ msgstr "Ordenar as colunas"
+
+#~ msgid "Separately"
+#~ msgstr "Em separado"
+
+#~ msgid "Together"
+#~ msgstr "Em conjunto"
+
+#, fuzzy
+#~| msgid "Leading column"
+#~ msgid "Leading column:"
+#~ msgstr "Coluna inicial"
+
+#~ msgid "Specify the name of the file to import."
+#~ msgstr "Indique o nome do arquivo a importar."
+
+#~ msgid "X-error"
+#~ msgstr "Erro em X"
+
+#~ msgid "Y-error"
+#~ msgstr "Erro em Y"
+
+#~ msgid "auto"
+#~ msgstr "automático"
+
+#~ msgid "maximum"
+#~ msgstr "máximo"
+
+#, fuzzy
+#~| msgid "Binary data"
+#~ msgid "imaginary part"
+#~ msgstr "Dados binários"
+
+#~ msgid "linear"
+#~ msgstr "linear"
+
+#~ msgid "polynomial"
+#~ msgstr "polinomial"
+
+#~ msgid "cubic spline (natural)"
+#~ msgstr "curva cúbica (natural)"
+
+#~ msgid "cubic spline (periodic)"
+#~ msgstr "curva cúbica (periódica)"
+
+#~ msgid "cosine"
+#~ msgstr "cosseno"
+
+#~ msgid "Akima-spline (natural)"
+#~ msgstr "curva Akima (natural)"
+
+#~ msgid "Akima-spline (periodic)"
+#~ msgstr "curva Akima (periódica)"
+
+#~ msgid "exponential"
+#~ msgstr "exponential"
+
+#~ msgid "function"
+#~ msgstr "função"
+
+#, fuzzy
+#~| msgid "derivative"
+#~ msgid "derivative"
+#~ msgstr "derivada"
+
+#, fuzzy
+#~| msgid "Constants"
+#~ msgid "constant"
+#~ msgstr "Constantes"
+
+#~ msgid "binomial"
+#~ msgstr "binomial"
+
+#, fuzzy
+#~| msgid "%1: set vertical alignment"
+#~ msgid "%1: set vertical line style"
+#~ msgstr "%1: definir o alinhamento vertical"
+
+#, fuzzy
+#~| msgid "%1: set vertical alignment"
+#~ msgid "%1: set vertical line opacity"
+#~ msgstr "%1: definir o alinhamento vertical"
+
+#, fuzzy
+#~| msgid "%1: set invisible"
+#~ msgid "%1: set connection line style"
+#~ msgstr "%1: definir como invisível"
+
+#, fuzzy
+#~| msgid "%1: set width"
+#~ msgid "%1: set connection line opacity"
+#~ msgstr "%1: definir a largura"
+
+#~ msgid "%1: set axis scale"
+#~ msgstr "%1: definir a escala do eixo"
+
+#~ msgid "%1: set major ticks style"
+#~ msgstr "%1: definir o estilo dos traços maiores"
+
+#~ msgid "%1: set major ticks opacity"
+#~ msgstr "%1: definir a opacidade dos traços maiores"
+
+#~ msgid "%1: set minor ticks style"
+#~ msgstr "%1: definir o estilo dos traços menores"
+
+#~ msgid "%1: set minor ticks opacity"
+#~ msgstr "%1: definir a opacidade dos traços menores"
+
+#~ msgid "%1: set major grid style"
+#~ msgstr "%1: definir o estilo das grades maiores"
+
+#~ msgid "%1: set major grid opacity"
+#~ msgstr "%1: definir a opacidade das grades maiores"
+
+#~ msgid "%1: set minor grid style"
+#~ msgstr "%1: definir o estilo das grades menores"
+
+#~ msgid "%1: set minor grid opacity"
+#~ msgstr "%1: definir a opacidade das grades menores"
+
+#~ msgid "%1: filling type changed"
+#~ msgstr "%1: o preenchimento do tipo foi alterado"
+
+#~ msgid "%1: filling color style changed"
+#~ msgstr "%1: o preenchimento do estilo da cor foi alterado"
+
+#~ msgid "%1: filling image style changed"
+#~ msgstr "%1: o preenchimento da imagem foi alterado"
+
+#~ msgid "%1: filling brush style changed"
+#~ msgstr "%1: o preenchimento do estilo do pincel foi alterado"
+
+#~ msgid "%1: set filling first color"
+#~ msgstr "%1: definir o preenchimento da primeira cor"
+
+#~ msgid "%1: set filling second color"
+#~ msgstr "%1: definir o preenchimento da segunda cor"
+
+#~ msgid "%1: set filling image"
+#~ msgstr "%1: definir o preenchimento da imagem"
+
+#~ msgid "%1: set filling opacity"
+#~ msgstr "%1: definir o preenchimento da opacidade"
+
+#, fuzzy
+#~| msgid "%1: set border style"
+#~ msgid "%1: set border pen"
+#~ msgstr "%1: definir o estilo da borda"
+
+#, fuzzy
+#~| msgid "%1: set vertical alignment"
+#~ msgid "%1: set median line pen"
+#~ msgstr "%1: definir o alinhamento vertical"
+
+#, fuzzy
+#~| msgid "%1: set vertical alignment"
+#~ msgid "%1: set median line opacity"
+#~ msgstr "%1: definir o alinhamento vertical"
+
+#, fuzzy
+#~| msgid "%1: set line opacity"
+#~ msgid "%1: set whiskers opacity"
+#~ msgstr "%1: definir a opacidade da linha"
+
+#, fuzzy
+#~| msgid "%1: set axis end"
+#~ msgid "%1: set whiskers cap pen"
+#~ msgstr "%1: definir o fim do eixo"
+
+#, fuzzy
+#~| msgid "%1: set line opacity"
+#~ msgid "%1: set whiskers cap opacity"
+#~ msgstr "%1: definir a opacidade da linha"
+
+#, fuzzy
+#~| msgid "%1: change x-range auto scaling"
+#~ msgid "%1: change y-range %2 format"
+#~ msgstr "%1: alterar a escala automática do intervalo em X"
+
+#, fuzzy
+#~| msgid "%1: change y-range auto scaling"
+#~ msgid "%1: change y-range %2 auto scaling"
+#~ msgstr "%1: alterar a escala automática do intervalo em Y"
+
+#~ msgid "%1: set opacity"
+#~ msgstr "%1: definir a opacidade"
+
+#~ msgid "%1: set border style"
+#~ msgstr "%1: definir o estilo da borda"
+
+#~ msgid "%1: set error bar style"
+#~ msgstr "%1: definir o estilo da barra de erros"
+
+#~ msgid "%1: set error bar opacity"
+#~ msgstr "%1: definir a opacidade da barra de erros"
+
+#~ msgid "%1: set drop line style"
+#~ msgstr "%1: definir o estilo da linha"
+
+#~ msgid "%1: set drop line opacity"
+#~ msgstr "%1: definir a opacidade da linha"
+
+#~ msgid "%1: set plot area opacity"
+#~ msgstr "%1: definir a opacidade da área do gráfico"
+
+#~ msgid "%1: set plot area border"
+#~ msgstr "%1: definir o contorno da área do gráfico"
+
+#~ msgid "Clear Matrix"
+#~ msgstr "Limpar a matriz"
+
+#, fuzzy
+#~| msgid "Select y-region and zoom in"
+#~ msgid "Select y-Region and Zoom In"
+#~ msgstr "Selecionar a região em Y e ampliar"
+
+#, fuzzy
+#~| msgid "Fourier filter"
+#~ msgid "Hilbert-Transform"
+#~ msgstr "Filtro de Fourier"
+
+#~ msgid "xy-plot"
+#~ msgstr "gráfico em XY"
+
+#~ msgid "Created: %1"
+#~ msgstr "Criado em: %1"
+
+#~ msgid ""
+#~ "The axes lower limit has a non-positive value. Default minimal value will "
+#~ "be used."
+#~ msgstr ""
+#~ "O limite inferior dos eixos tem um valor não-positivo. Será usado o valor "
+#~ "mínimo por padrão."
+
+#~ msgid "Wrong lower limit value"
+#~ msgstr "Valor limite inferior inválido"
+
+#~ msgid ""
+#~ "The axes lower limit has a negative value. Default minimal value will be "
+#~ "used."
+#~ msgstr ""
+#~ "O limite inferior dos eixos tem um valor negativo. Será usado o valor "
+#~ "mínimo por padrão."
+
+#, fuzzy
+#~| msgid "solid line"
+#~ msgid "SolidLine"
+#~ msgstr "linha sólida"
+
+#, fuzzy
 #~| msgid "dash line"
-#~ msgid "Baseline"
+#~ msgid "DashLine"
 #~ msgstr "linha tracejada"
 
 #, fuzzy
-#~| msgid "Weight"
-#~ msgid "Weighting:"
-#~ msgstr "Peso"
+#~| msgid "Line"
+#~ msgid "DotLine"
+#~ msgstr "Linha"
+
+#, fuzzy
+#~| msgid "dash-dot line"
+#~ msgid "DashDotLine"
+#~ msgstr "linha com traço e ponto"
+
+#, fuzzy
+#~| msgid "dash-dot-dot line"
+#~ msgid "DashDotDotLine"
+#~ msgstr "linha com traço, ponto e ponto"
+
+#, fuzzy
+#~| msgid "x-Range:"
+#~ msgid "Y-Ranges:"
+#~ msgstr "Intervalo em X:"
+
+#, fuzzy
+#~| msgid "horizontal linear gradient"
+#~ msgid "Horizontal Linear Gradient"
+#~ msgstr "gradiente linear horizontal"
+
+#, fuzzy
+#~| msgid "vertical linear gradient"
+#~ msgid "Vertical Linear Gradient"
+#~ msgstr "gradiente linear vertical"
+
+#, fuzzy
+#~| msgid "diagonal linear gradient (start from top left)"
+#~ msgid "Diagonal Linear Gradient (Start From Top Left)"
+#~ msgstr "gradiente linear diagonal (do superior-esquerda)"
+
+#, fuzzy
+#~| msgid "diagonal linear gradient (start from bottom left)"
+#~ msgid "Diagonal Linear Gradient (Start From Bottom Left)"
+#~ msgstr "gradiente linear diagonal (do inferior-esquerda)"
+
+#~ msgid "Data, +"
+#~ msgstr "Dados, +"
+
+#, fuzzy
+#~| msgid "Cartesian Plot"
+#~ msgctxt "@title:window"
+#~ msgid "Cartesian Plot"
+#~ msgstr "Gráfico cartesiano"
+
+#, fuzzy
+#~| msgid "xy-curve"
+#~ msgctxt "@title:window"
+#~ msgid "xy-Curve"
+#~ msgstr "curva em XY"
+
+#, fuzzy
+#~| msgid "Equation type"
+#~ msgctxt "@title:window"
+#~ msgid "xy-Equation"
+#~ msgstr "Tipo de equação"
+
+#, fuzzy
+#~| msgid "Axis properties"
+#~ msgctxt "@title:window"
+#~ msgid "Histogram Properties"
+#~ msgstr "Propriedades do eixo"
 
 #, fuzzy
 #~| msgid "%1: set values column"
@@ -25837,164 +26044,44 @@ msgstr "Falha ao abrir"
 #~ msgid "Divide matrix values by the specified value"
 #~ msgstr "Soltar os valores na região indicada"
 
-#~ msgid "Column Statisti&cs"
-#~ msgstr "Estatísti&cas das colunas"
-
-#~ msgid "Created: %1"
-#~ msgstr "Criado em: %1"
+#, fuzzy
+#~| msgid "%1: add %2 rows"
+#~| msgid_plural "%1: add %2 rows"
+#~ msgid "Add Curve to"
+#~ msgstr "%1: adicionar %2 linha"
 
 #, fuzzy
-#~| msgid "x-data"
-#~ msgid "X-data:"
-#~ msgstr "dados-x"
+#~| msgid "Plot Area"
+#~ msgid "Box Plot Data"
+#~ msgstr "Área do gráfico"
 
 #, fuzzy
-#~| msgid "x-data"
-#~ msgid "Y-data:"
-#~ msgstr "dados-x"
+#~| msgid "no axis element found"
+#~ msgid "Histogram Placement"
+#~ msgstr "não foi encontrado nenhum elemento de eixo"
 
 #, fuzzy
 #~| msgid "Plot"
-#~ msgid "Add plots to"
+#~ msgid "Plot - %1"
 #~ msgstr "Gráfico"
 
-#~ msgid "X-error"
-#~ msgstr "Erro em X"
+#, fuzzy
+#~| msgid "Plot"
+#~ msgid "Plot %1"
+#~ msgstr "Gráfico"
 
-#~ msgid "Y-error"
-#~ msgstr "Erro em Y"
-
-#~ msgid "auto"
-#~ msgstr "automático"
-
-#~ msgid "maximum"
-#~ msgstr "máximo"
+#~ msgid "Error bars"
+#~ msgstr "Barras de erro"
 
 #, fuzzy
-#~| msgid "Binary data"
-#~ msgid "imaginary part"
-#~ msgstr "Dados binários"
-
-#~ msgid "linear"
-#~ msgstr "linear"
-
-#~ msgid "polynomial"
-#~ msgstr "polinomial"
-
-#~ msgid "cubic spline (natural)"
-#~ msgstr "curva cúbica (natural)"
-
-#~ msgid "cubic spline (periodic)"
-#~ msgstr "curva cúbica (periódica)"
-
-#~ msgid "Akima-spline (natural)"
-#~ msgstr "curva Akima (natural)"
-
-#~ msgid "Akima-spline (periodic)"
-#~ msgstr "curva Akima (periódica)"
-
-#~ msgid "cosine"
-#~ msgstr "cosseno"
-
-#~ msgid "exponential"
-#~ msgstr "exponential"
-
-#~ msgid "function"
-#~ msgstr "função"
+#~| msgid "Column"
+#~ msgid "Tick Column:"
+#~ msgstr "Coluna"
 
 #, fuzzy
-#~| msgid "derivative"
-#~ msgid "derivative"
-#~ msgstr "derivada"
-
-#, fuzzy
-#~| msgid "center tiled"
-#~ msgid "percentile"
-#~ msgstr "ladrilhado centralizado"
-
-#, fuzzy
-#~| msgid "Constants"
-#~ msgid "constant"
-#~ msgstr "Constantes"
-
-#~ msgid "binomial"
-#~ msgstr "binomial"
-
-#, fuzzy
-#~| msgid "y-Start"
-#~ msgid "y-Start:"
-#~ msgstr "y-Inicial"
-
-#, fuzzy
-#~| msgid "y-End"
-#~ msgid "y-End:"
-#~ msgstr "y-Final"
-
-#~ msgid "x-Range:"
-#~ msgstr "Intervalo em X:"
-
-#, fuzzy
-#~| msgid "orange"
-#~ msgid "Plot ranges:"
-#~ msgstr "laranja"
-
-#, fuzzy
-#~| msgid "x-data"
-#~ msgid "x-data:"
-#~ msgstr "dados-x"
-
-#, fuzzy
-#~| msgid "y-data"
-#~ msgid "y-data:"
-#~ msgstr "dados-y"
-
-#, fuzzy
-#~| msgid "Data"
-#~ msgid "y-Data:"
-#~ msgstr "Dados"
-
-#, fuzzy
-#~| msgid "Weight"
-#~ msgid "y-Weight:"
-#~ msgstr "Peso"
-
-#, fuzzy
-#~| msgid "%1: set axis end"
-#~ msgid "%1: set whiskers cap pen"
-#~ msgstr "%1: definir o fim do eixo"
-
-#, fuzzy
-#~| msgid "%1: set line opacity"
-#~ msgid "%1: set whiskers cap opacity"
-#~ msgstr "%1: definir a opacidade da linha"
-
-#, fuzzy
-#~| msgid "Select y-region and zoom in"
-#~ msgid "Select y-Region and Zoom In"
-#~ msgstr "Selecionar a região em Y e ampliar"
-
-#, fuzzy
-#~| msgid "Fourier filter"
-#~ msgid "Hilbert-Transform"
-#~ msgstr "Filtro de Fourier"
-
-#, fuzzy
-#~| msgid "xy-curve"
-#~ msgctxt "@title:window"
-#~ msgid "xy-Curve"
-#~ msgstr "curva em XY"
-
-#, fuzzy
-#~| msgid "Equation type"
-#~ msgctxt "@title:window"
-#~ msgid "xy-Equation"
-#~ msgstr "Tipo de equação"
-
-#, fuzzy
-#~| msgid "Axis properties"
-#~ msgctxt "@title:window"
-#~ msgid "Histogram Properties"
-#~ msgstr "Propriedades do eixo"
+#~| msgid "Type"
+#~ msgid "Tick Type:"
+#~ msgstr "Tipo"
 
 #, fuzzy
 #~| msgid "Font"
@@ -26002,195 +26089,14 @@ msgstr "Falha ao abrir"
 #~ msgstr "Fonte"
 
 #, fuzzy
+#~| msgid "y-Range:"
+#~ msgid "y-Range"
+#~ msgstr "Intervalo-Y:"
+
+#, fuzzy
 #~| msgid "x-Range:"
 #~ msgid "x-Range"
 #~ msgstr "Intervalo em X:"
-
-#, fuzzy
-#~| msgid "First color"
-#~ msgid "Font color:"
-#~ msgstr "Primeira cor"
-
-#~ msgid "%1: set border style"
-#~ msgstr "%1: definir o estilo da borda"
-
-#, fuzzy
-#~| msgid "%1: set vertical alignment"
-#~ msgid "%1: set vertical line style"
-#~ msgstr "%1: definir o alinhamento vertical"
-
-#, fuzzy
-#~| msgid "%1: set vertical alignment"
-#~ msgid "%1: set vertical line opacity"
-#~ msgstr "%1: definir o alinhamento vertical"
-
-#, fuzzy
-#~| msgid "%1: set invisible"
-#~ msgid "%1: set connection line style"
-#~ msgstr "%1: definir como invisível"
-
-#, fuzzy
-#~| msgid "%1: set width"
-#~ msgid "%1: set connection line opacity"
-#~ msgstr "%1: definir a largura"
-
-#~ msgid "Error bars"
-#~ msgstr "Barras de erro"
-
-#, fuzzy
-#~| msgid "Error type"
-#~ msgid "Error type:"
-#~ msgstr "Tipo de erro"
-
-#, fuzzy
-#~| msgid "y-error:"
-#~ msgid "y-error"
-#~ msgstr "Erro em Y:"
-
-#, fuzzy
-#~| msgid "x-error:"
-#~ msgid "x-error"
-#~ msgstr "Erro em X:"
-
-#~ msgid "%1: set major ticks style"
-#~ msgstr "%1: definir o estilo dos traços maiores"
-
-#~ msgid "%1: set major ticks opacity"
-#~ msgstr "%1: definir a opacidade dos traços maiores"
-
-#~ msgid "%1: set minor ticks style"
-#~ msgstr "%1: definir o estilo dos traços menores"
-
-#~ msgid "%1: set minor ticks opacity"
-#~ msgstr "%1: definir a opacidade dos traços menores"
-
-#~ msgid "%1: set plot area border"
-#~ msgstr "%1: definir o contorno da área do gráfico"
-
-#~ msgid "%1: set plot area border opacity"
-#~ msgstr "%1: definir a opacidade do contorno da área do gráfico"
-
-#~ msgid ""
-#~ "The axes lower limit has a non-positive value. Default minimal value will "
-#~ "be used."
-#~ msgstr ""
-#~ "O limite inferior dos eixos tem um valor não-positivo. Será usado o valor "
-#~ "mínimo por padrão."
-
-#~ msgid "Wrong lower limit value"
-#~ msgstr "Valor limite inferior inválido"
-
-#~ msgid ""
-#~ "The axes lower limit has a negative value. Default minimal value will be "
-#~ "used."
-#~ msgstr ""
-#~ "O limite inferior dos eixos tem um valor negativo. Será usado o valor "
-#~ "mínimo por padrão."
-
-#~ msgid "cm"
-#~ msgstr "cm"
-
-#, fuzzy
-#~| msgid "Statistics"
-#~ msgid "Statistical Methods (of column)"
-#~ msgstr "Estatísticas"
-
-#~ msgid "Clear Matrix"
-#~ msgstr "Limpar a matriz"
-
-#~ msgid "%1: set major grid style"
-#~ msgstr "%1: definir o estilo das grades maiores"
-
-#~ msgid "%1: set major grid opacity"
-#~ msgstr "%1: definir a opacidade das grades maiores"
-
-#~ msgid "%1: set minor grid style"
-#~ msgstr "%1: definir o estilo das grades menores"
-
-#~ msgid "%1: set minor grid opacity"
-#~ msgstr "%1: definir a opacidade das grades menores"
-
-#~ msgid "%1: set drop line style"
-#~ msgstr "%1: definir o estilo da linha"
-
-#~ msgid "%1: set drop line opacity"
-#~ msgstr "%1: definir a opacidade da linha"
-
-#, fuzzy
-#~| msgid "solid line"
-#~ msgid "SolidLine"
-#~ msgstr "linha sólida"
-
-#, fuzzy
-#~| msgid "dash line"
-#~ msgid "DashLine"
-#~ msgstr "linha tracejada"
-
-#, fuzzy
-#~| msgid "Line"
-#~ msgid "DotLine"
-#~ msgstr "Linha"
-
-#, fuzzy
-#~| msgid "dash-dot line"
-#~ msgid "DashDotLine"
-#~ msgstr "linha com traço e ponto"
-
-#, fuzzy
-#~| msgid "dash-dot-dot line"
-#~ msgid "DashDotDotLine"
-#~ msgstr "linha com traço, ponto e ponto"
-
-#, fuzzy
-#~| msgid "Drop Values"
-#~ msgid "Drop Numeric Values"
-#~ msgstr "Soltar os valores"
-
-#, fuzzy
-#~| msgid "Drop Values"
-#~ msgid "Drop Text Values"
-#~ msgstr "Soltar os valores"
-
-#, fuzzy
-#~| msgid "%1: set border style"
-#~ msgid "%1: set border pen"
-#~ msgstr "%1: definir o estilo da borda"
-
-#, fuzzy
-#~| msgid "%1: set vertical alignment"
-#~ msgid "%1: set median line pen"
-#~ msgstr "%1: definir o alinhamento vertical"
-
-#, fuzzy
-#~| msgid "%1: set vertical alignment"
-#~ msgid "%1: set median line opacity"
-#~ msgstr "%1: definir o alinhamento vertical"
-
-#, fuzzy
-#~| msgid "%1: set axis end"
-#~ msgid "%1: set whiskers pen"
-#~ msgstr "%1: definir o fim do eixo"
-
-#, fuzzy
-#~| msgid "%1: set line opacity"
-#~ msgid "%1: set whiskers opacity"
-#~ msgstr "%1: definir a opacidade da linha"
-
-#~ msgid "%1: set error bar style"
-#~ msgstr "%1: definir o estilo da barra de erros"
-
-#~ msgid "%1: set error bar opacity"
-#~ msgstr "%1: definir a opacidade da barra de erros"
-
-#, fuzzy
-#~| msgid "bar"
-#~ msgid "Bar"
-#~ msgstr "barra"
-
-#, fuzzy
-#~| msgid "simple"
-#~ msgid "Sample"
-#~ msgstr "simples"
 
 #, fuzzy
 #~| msgid "Top margin"
@@ -26217,33 +26123,81 @@ msgstr "Falha ao abrir"
 #~ msgid "Margin"
 #~ msgstr "Margem:"
 
-#, fuzzy
-#~| msgid "Plot"
-#~ msgid "Plot - %1"
-#~ msgstr "Gráfico"
+#~ msgid "cm"
+#~ msgstr "cm"
 
 #, fuzzy
-#~| msgid "Plot"
-#~ msgid "Plot %1"
-#~ msgstr "Gráfico"
-
-#~ msgid "xy-plot"
-#~ msgstr "gráfico em XY"
-
-#~ msgid "Cartesian Plot"
-#~ msgstr "Gráfico cartesiano"
+#~| msgid "x-Start"
+#~ msgid "x-Start:"
+#~ msgstr "x-Inicial"
 
 #, fuzzy
-#~| msgid "Cartesian Plot"
-#~ msgctxt "@title:window"
-#~ msgid "Cartesian Plot"
-#~ msgstr "Gráfico cartesiano"
+#~| msgid "x-End"
+#~ msgid "x-End:"
+#~ msgstr "x-Final"
+
+#~ msgid "x-Range:"
+#~ msgstr "Intervalo em X:"
 
 #, fuzzy
-#~| msgid "%1: add %2 rows"
-#~| msgid_plural "%1: add %2 rows"
-#~ msgid "Add Curve to"
-#~ msgstr "%1: adicionar %2 linha"
+#~| msgid "orange"
+#~ msgid "Plot ranges:"
+#~ msgstr "laranja"
+
+#, fuzzy
+#~| msgid "x-error:"
+#~ msgid "x-error"
+#~ msgstr "Erro em X:"
+
+#, fuzzy
+#~| msgid "Error type"
+#~ msgid "Error type:"
+#~ msgstr "Tipo de erro"
+
+#, fuzzy
+#~| msgid "y-error:"
+#~ msgid "y-error"
+#~ msgstr "Erro em Y:"
+
+#, fuzzy
+#~| msgid "x-data"
+#~ msgid "x-data:"
+#~ msgstr "dados-x"
+
+#, fuzzy
+#~| msgid "y-data"
+#~ msgid "y-data:"
+#~ msgstr "dados-y"
+
+#, fuzzy
+#~| msgid "Data"
+#~ msgid "y-Data:"
+#~ msgstr "Dados"
+
+#, fuzzy
+#~| msgid "Weight"
+#~ msgid "y-Weight:"
+#~ msgstr "Peso"
+
+#, fuzzy
+#~| msgid "First color"
+#~ msgid "Font color:"
+#~ msgstr "Primeira cor"
+
+#, fuzzy
+#~| msgid "Drop values"
+#~ msgid "Drop values:"
+#~ msgstr "Soltar os valores"
+
+#, fuzzy
+#~| msgid "x-data"
+#~ msgid "X-data:"
+#~ msgstr "dados-x"
+
+#, fuzzy
+#~| msgid "x-data"
+#~ msgid "Y-data:"
+#~ msgstr "dados-x"
 
 #, fuzzy
 #~| msgid "%1: add %2 rows"
@@ -26251,132 +26205,104 @@ msgstr "Falha ao abrir"
 #~ msgid "Add Curves to"
 #~ msgstr "%1: adicionar %2 linha"
 
-#, fuzzy
-#~| msgid "Drop values"
-#~ msgid "Drop values:"
-#~ msgstr "Soltar os valores"
-
-#~ msgid "Data, +-"
-#~ msgstr "Dados, +-"
-
-#~ msgid "Data, +"
-#~ msgstr "Dados, +"
-
-#, fuzzy
-#~| msgid "Type"
-#~ msgid "Tick Type:"
-#~ msgstr "Tipo"
-
-#, fuzzy
-#~| msgid "Automatic"
-#~ msgid "Automatic:"
-#~ msgstr "Automático"
-
-#, fuzzy
-#~| msgid "Column"
-#~ msgid "Tick Column:"
-#~ msgstr "Coluna"
-
-#, fuzzy
-#~| msgid "No Error"
-#~ msgid "Error:"
-#~ msgstr "Nenhum erro"
-
-#, fuzzy
-#~| msgid "%1: set labels format"
-#~ msgid "%1: change y-range %2 format"
-#~ msgstr "%1: definir o formato das legendas"
-
-#, fuzzy
-#~| msgid "%1: change y-range auto scaling"
-#~ msgid "%1: change y-range %2 auto scaling"
-#~ msgstr "%1: alterar a escala automática do intervalo em Y"
-
-#, fuzzy
-#~| msgid "x-Range:"
-#~ msgid "Y-Ranges:"
-#~ msgstr "Intervalo em X:"
-
-#, fuzzy
-#~| msgid "Plot Area"
-#~ msgid "Box Plot Data"
-#~ msgstr "Área do gráfico"
-
-#, fuzzy
-#~| msgid "no axis element found"
-#~ msgid "Histogram Placement"
-#~ msgstr "não foi encontrado nenhum elemento de eixo"
-
-#~ msgid "%1: filling type changed"
-#~ msgstr "%1: o preenchimento do tipo foi alterado"
-
-#~ msgid "%1: filling color style changed"
-#~ msgstr "%1: o preenchimento do estilo da cor foi alterado"
-
-#~ msgid "%1: filling image style changed"
-#~ msgstr "%1: o preenchimento da imagem foi alterado"
-
-#~ msgid "%1: filling brush style changed"
-#~ msgstr "%1: o preenchimento do estilo do pincel foi alterado"
-
-#~ msgid "%1: set filling first color"
-#~ msgstr "%1: definir o preenchimento da primeira cor"
-
-#~ msgid "%1: set filling second color"
-#~ msgstr "%1: definir o preenchimento da segunda cor"
-
-#~ msgid "%1: set filling image"
-#~ msgstr "%1: definir o preenchimento da imagem"
-
-#~ msgid "%1: set filling opacity"
-#~ msgstr "%1: definir o preenchimento da opacidade"
-
-#~ msgid "%1: set opacity"
-#~ msgstr "%1: definir a opacidade"
-
-#~ msgid "%1: set plot area opacity"
-#~ msgstr "%1: definir a opacidade da área do gráfico"
-
-#, fuzzy
-#~| msgid "horizontal linear gradient"
-#~ msgid "Horizontal Linear Gradient"
-#~ msgstr "gradiente linear horizontal"
-
-#, fuzzy
-#~| msgid "vertical linear gradient"
-#~ msgid "Vertical Linear Gradient"
-#~ msgstr "gradiente linear vertical"
-
-#, fuzzy
-#~| msgid "diagonal linear gradient (start from top left)"
-#~ msgid "Diagonal Linear Gradient (Start From Top Left)"
-#~ msgstr "gradiente linear diagonal (do superior-esquerda)"
-
-#, fuzzy
-#~| msgid "diagonal linear gradient (start from bottom left)"
-#~ msgid "Diagonal Linear Gradient (Start From Bottom Left)"
-#~ msgstr "gradiente linear diagonal (do inferior-esquerda)"
-
-#~ msgid "c"
-#~ msgstr "c"
-
-#~ msgid "Datapicker"
-#~ msgstr "Seletor de dados"
-
-#~ msgid "TeX mode"
-#~ msgstr "Modo do TeX"
-
-#~ msgid "Foreground color:"
-#~ msgstr "Cor de frente:"
-
-#~ msgid "Vector names:"
-#~ msgstr "Nomes dos vetores:"
-
 #~ msgid "%1: set text for row %2"
 #~ msgstr "%1: definir o texto da linha %2"
 
 #~ msgid "%1: replace the texts for rows %2 to %3"
 #~ msgstr "%1: substituir os textos das linhas %2 a %3"
+
+#~ msgid "c"
+#~ msgstr "c"
+
+#~ msgid "%1: set point's style"
+#~ msgstr "%1: definir o estilo do ponto"
+
+#~ msgid "%1: set point's size"
+#~ msgstr "%1: definir o tamanho do ponto"
+
+#~ msgid "%1: rotate point"
+#~ msgstr "%1: girar o ponto"
+
+#~ msgid "%1: set point's filling"
+#~ msgstr "%1: definir o preenchimento do ponto"
+
+#~ msgid "%1: set outline style"
+#~ msgstr "%1: definir o estilo do contorno"
+
+#~ msgid "%1: set point's opacity"
+#~ msgstr "%1: definir a opacidade do ponto"
+
+#~ msgid "%1: set axis auto scaling"
+#~ msgstr "%1: definir a escala automática do eixo"
+
+#~ msgid "%1: set axis start"
+#~ msgstr "%1: definir o início do eixo"
+
+#, fuzzy
+#~| msgid "xy-curve from a mathematical equation"
+#~ msgid "xy-curve from a mathematical Equation"
+#~ msgstr "curva em XY de uma equação matemática"
+
+#, fuzzy
+#~| msgid "Apply"
+#~ msgid "Apply Theme"
+#~ msgstr "Aplicar"
+
+#, fuzzy
+#~| msgid "%1: set labels format"
+#~ msgid "%1: set x-range format"
+#~ msgstr "%1: definir o formato das legendas"
+
+#, fuzzy
+#~| msgid "%1: set labels format"
+#~ msgid "%1: set y-range format"
+#~ msgstr "%1: definir o formato das legendas"
+
+#~ msgid "%1: set min x"
+#~ msgstr "%1: definir o X mínimo"
+
+#~ msgid "%1: set max x"
+#~ msgstr "%1: definir o X máximo"
+
+#~ msgid "%1: set min y"
+#~ msgstr "%1: definir o Y mínimo"
+
+#~ msgid "%1: set max y"
+#~ msgstr "%1: definir o Y máximo"
+
+#~ msgid "%1: set y scale"
+#~ msgstr "%1: definir a escala em Y"
+
+#~ msgid "%1: set symbol opacity"
+#~ msgstr "%1: definir a opacidade do símbolo"
+
+#, fuzzy
+#~| msgid "Range Breaks"
+#~ msgid "Insert Markdown Entry"
+#~ msgstr "Quebras de intervalo"
+
+#, fuzzy
+#~| msgid "Range Breaks"
+#~ msgid "Insert LaTeX Entry"
+#~ msgstr "Quebras de intervalo"
+
+#, fuzzy
+#~| msgid "Range Breaks"
+#~ msgid "Insert Page Break"
+#~ msgstr "Quebras de intervalo"
+
+#~ msgid "Animate Worksheet"
+#~ msgstr "Animar folha de trabalho"
+
+#, fuzzy
+#~| msgid "show/hide columns"
+#~ msgid "Show/Hide columns"
+#~ msgstr "mostrar/ocultar as colunas"
+
+#, fuzzy
+#~| msgid "show search/filter options"
+#~ msgid "Show Search/Filter Options"
+#~ msgstr "mostrar as opções de pesquisa/filtro"
 
 #, fuzzy
 #~| msgid "X-error"
@@ -26398,252 +26324,10 @@ msgstr "Falha ao abrir"
 #~ msgid "Y-error plus"
 #~ msgstr "Erro em Y"
 
-#~ msgid "Z"
-#~ msgstr "Z"
-
-#, fuzzy
-#~| msgid "Datapicker"
-#~ msgctxt "@title:window"
-#~ msgid "Datapicker"
-#~ msgstr "Seletor de dados"
-
-#~ msgid "&Datapicker"
-#~ msgstr "Seletor de &dados"
-
-#~ msgid "Animate Worksheet"
-#~ msgstr "Animar folha de trabalho"
-
-#, fuzzy
-#~| msgid "Data format"
-#~ msgid "Show Completion"
-#~ msgstr "Formato dos dados"
-
-#, fuzzy
-#~| msgid "Range Breaks"
-#~ msgid "Insert Markdown Entry"
-#~ msgstr "Quebras de intervalo"
-
-#, fuzzy
-#~| msgid "Range Breaks"
-#~ msgid "Insert LaTeX Entry"
-#~ msgstr "Quebras de intervalo"
-
-#, fuzzy
-#~| msgid "Range Breaks"
-#~ msgid "Insert Page Break"
-#~ msgstr "Quebras de intervalo"
-
-#, fuzzy
-#~| msgid "Properties"
-#~ msgctxt "@title:window"
-#~ msgid "CAS Properties"
-#~ msgstr "Propriedades"
-
-#~ msgid "CAS Worksheet"
-#~ msgstr "Folha de trabalho CAS"
-
-#~ msgid "&CAS Worksheet"
-#~ msgstr "Folha de trabalho &CAS"
-
-#~ msgid ""
-#~ "LabPlot2 is a KDE-application for interactive graphing and analysis of "
-#~ "scientific data."
-#~ msgstr ""
-#~ "LabPlot2 é um aplicativo do KDE para criação de gráficos interativos e "
-#~ "análise de dados científicos."
-
-#, fuzzy
-#~| msgid "Offset X:"
-#~ msgid "Offset x:"
-#~ msgstr "Deslocamento em X:"
-
-#, fuzzy
-#~| msgid "Offset X:"
-#~ msgid "Offset y:"
-#~ msgstr "Deslocamento em X:"
-
-#, fuzzy
-#~| msgid "xy-curve from a mathematical equation"
-#~ msgid "xy-curve from a mathematical Equation"
-#~ msgstr "curva em XY de uma equação matemática"
-
-#, fuzzy
-#~| msgid "Error Type"
-#~ msgid "Error, %"
-#~ msgstr "Tipo de erro"
-
-#, fuzzy
-#~| msgid "Labplot version"
-#~ msgid "LabPlot version"
-#~ msgstr "Versão do LabPlot"
-
-#, fuzzy
-#~| msgid "Apply"
-#~ msgid "Apply Theme"
-#~ msgstr "Aplicar"
-
-#, fuzzy
-#~| msgid "Apply"
-#~ msgid "Apply theme [active '%1']"
-#~ msgstr "Aplicar"
-
-#, fuzzy
-#~| msgid "Beta Distribution"
-#~ msgid "Fit Distribution"
-#~ msgstr "Distribuição Beta"
-
-#, fuzzy
-#~| msgid "Import To"
-#~ msgid "Import from File"
-#~ msgstr "Importar para"
-
-#, fuzzy
-#~| msgid "Date and Time"
-#~ msgid "Date/Time"
-#~ msgstr "Data e Hora"
-
-#, fuzzy
-#~| msgid "%1: set rotation angle"
-#~ msgid "%1: set x range"
-#~ msgstr "%1: definir o ângulo da rotação"
-
-#, fuzzy
-#~| msgid "%1: set rotation angle"
-#~ msgid "%1: set y range"
-#~ msgstr "%1: definir o ângulo da rotação"
-
-#, fuzzy
-#~| msgid "Show"
-#~ msgid "Show &last"
-#~ msgstr "Mostrar"
-
-#, fuzzy
-#~| msgid "Points"
-#~ msgid "points"
-#~ msgstr "Pontos"
-
-#, fuzzy
-#~| msgid "Show Options"
-#~ msgid "Show f&irst"
-#~ msgstr "Mostrar opções"
-
-#~ msgid "%1: set axis auto scaling"
-#~ msgstr "%1: definir a escala automática do eixo"
-
-#, fuzzy
-#~| msgid "TeX mode"
-#~ msgid "Switch to TeX mode"
-#~ msgstr "Modo do TeX"
-
-#~ msgid "%1: set point's style"
-#~ msgstr "%1: definir o estilo do ponto"
-
-#~ msgid "%1: set point's size"
-#~ msgstr "%1: definir o tamanho do ponto"
-
-#~ msgid "%1: rotate point"
-#~ msgstr "%1: girar o ponto"
-
-#~ msgid "%1: set point's filling"
-#~ msgstr "%1: definir o preenchimento do ponto"
-
-#~ msgid "%1: set outline style"
-#~ msgstr "%1: definir o estilo do contorno"
-
-#~ msgid "%1: set point's opacity"
-#~ msgstr "%1: definir a opacidade do ponto"
-
-#, fuzzy
-#~| msgid "Error Bar:"
-#~ msgid "Error Bar"
-#~ msgstr "Barras de erros:"
-
-#~ msgid ""
-#~ "Position of the axis in the direction perpendicular to the axis in "
-#~ "logical units."
-#~ msgstr ""
-#~ "Posição do eixo na direção perpendicular ao eixo, em unidades lógicas."
-
-#, fuzzy
-#~| msgid "Notes"
-#~ msgid "Notes:"
-#~ msgstr "Notas"
-
-#, fuzzy
-#~| msgid "Variables"
-#~ msgid "Variables: "
-#~ msgstr "Variáveis"
-
-#, fuzzy
-#~| msgid "%1: set symbol style"
-#~ msgid "%1: set outliers symbol style"
-#~ msgstr "%1: definir o estilo de símbolo"
-
-#, fuzzy
-#~| msgid "%1: set symbol style"
-#~ msgid "%1: set mean symbol style"
-#~ msgstr "%1: definir o estilo de símbolo"
-
-#~ msgid "%1: set symbol opacity"
-#~ msgstr "%1: definir a opacidade do símbolo"
-
-#~ msgid "%1 CustomPoints: style changed"
-#~ msgstr "Pontos personalizados do %1: estilo alterado"
-
-#~ msgid "%1 CustomPoints: size changed"
-#~ msgstr "Pontos personalizados do %1: tamanho alterado"
-
-#~ msgid "%1 CustomPoints: rotation changed"
-#~ msgstr "Pontos personalizados do %1: rotação alterada"
-
-#~ msgid "%1 CustomPoints: opacity changed"
-#~ msgstr "Pontos personalizados do %1: opacidade alterada"
-
-#~ msgid "%1 CustomPoints: filling style changed"
-#~ msgstr "Pontos personalizados do %1: estilo de preenchimento alterado"
-
-#~ msgid "%1 CustomPoints: filling color changed"
-#~ msgstr "Pontos personalizados do %1: cor de preenchimento alterada"
-
-#~ msgid "%1 CustomPoints: border style changed"
-#~ msgstr "Pontos personalizados do %1: estilo da borda alterado"
-
-#~ msgid "%1 CustomPoints: border color changed"
-#~ msgstr "Pontos personalizados do %1: estilo da cor alterado"
-
-#~ msgid "%1 CustomPoints: border width changed"
-#~ msgstr "Pontos personalizados do %1: estilo do contorno alterado"
-
-#, fuzzy
-#~| msgid "show/hide columns"
-#~ msgid "Show/Hide columns"
-#~ msgstr "mostrar/ocultar as colunas"
-
-#, fuzzy
-#~| msgid "show search/filter options"
-#~ msgid "Show Search/Filter Options"
-#~ msgstr "mostrar as opções de pesquisa/filtro"
-
-#, fuzzy
-#~| msgid "Levels"
-#~ msgid "Levels:"
-#~ msgstr "Níveis"
-
-#, fuzzy
-#~| msgid "File info"
-#~ msgctxt "@title:window"
-#~ msgid "File Information"
-#~ msgstr "Informações do arquivo"
-
 #, fuzzy
 #~| msgid "invalid row value"
 #~ msgid "Divide by Value"
 #~ msgstr "valor da linha inválido"
-
-#, fuzzy
-#~| msgid "&Edit"
-#~ msgid "Edit"
-#~ msgstr "&Editar"
 
 #, fuzzy
 #~| msgid "Clea&r Selection"
@@ -26651,9 +26335,10 @@ msgstr "Falha ao abrir"
 #~ msgstr "Limpa&r seleção"
 
 #, fuzzy
-#~| msgid "center tiled"
-#~ msgid "2/98 percentiles"
-#~ msgstr "ladrilhado centralizado"
+#~| msgid "File info"
+#~ msgctxt "@title:window"
+#~ msgid "File Information"
+#~ msgstr "Informações do arquivo"
 
 #~ msgid "log(x)"
 #~ msgstr "log(x)"
@@ -26663,37 +26348,6 @@ msgstr "Falha ao abrir"
 
 #~ msgid "ln(x)"
 #~ msgstr "ln(x)"
-
-#~ msgid "sqrt(x)"
-#~ msgstr "sqrt(x)"
-
-#~ msgid "x^2"
-#~ msgstr "X^2"
-
-#, fuzzy
-#~| msgid "log(x)"
-#~ msgid "log(|x|)"
-#~ msgstr "log(x)"
-
-#, fuzzy
-#~| msgid "log2(x)"
-#~ msgid "log2(|x|)"
-#~ msgstr "log(x)"
-
-#~ msgid "%1: set min x"
-#~ msgstr "%1: definir o X mínimo"
-
-#~ msgid "%1: set max x"
-#~ msgstr "%1: definir o X máximo"
-
-#~ msgid "%1: set min y"
-#~ msgstr "%1: definir o Y mínimo"
-
-#~ msgid "%1: set max y"
-#~ msgstr "%1: definir o Y máximo"
-
-#~ msgid "%1: set y scale"
-#~ msgstr "%1: definir a escala em Y"
 
 #, fuzzy
 #~| msgid "log(sinh(x))"
@@ -26730,18 +26384,200 @@ msgstr "Falha ao abrir"
 #~ msgstr "log2(y)"
 
 #, fuzzy
-#~| msgid "Scaling"
-#~ msgid "Scaling:"
-#~ msgstr "Escalonamento"
+#~| msgid "log(sinh(x))"
+#~ msgid "ln(abs(y))"
+#~ msgstr "log(sinh(x))"
 
-#~ msgid "y-Range:"
-#~ msgstr "Intervalo-Y:"
+#~ msgid "Z"
+#~ msgstr "Z"
+
+#~ msgid "%1 CustomPoints: style changed"
+#~ msgstr "Pontos personalizados do %1: estilo alterado"
+
+#~ msgid "%1 CustomPoints: size changed"
+#~ msgstr "Pontos personalizados do %1: tamanho alterado"
+
+#~ msgid "%1 CustomPoints: rotation changed"
+#~ msgstr "Pontos personalizados do %1: rotação alterada"
+
+#~ msgid "%1 CustomPoints: opacity changed"
+#~ msgstr "Pontos personalizados do %1: opacidade alterada"
+
+#~ msgid "%1 CustomPoints: filling style changed"
+#~ msgstr "Pontos personalizados do %1: estilo de preenchimento alterado"
+
+#~ msgid "%1 CustomPoints: filling color changed"
+#~ msgstr "Pontos personalizados do %1: cor de preenchimento alterada"
+
+#~ msgid "%1 CustomPoints: border style changed"
+#~ msgstr "Pontos personalizados do %1: estilo da borda alterado"
+
+#~ msgid "%1 CustomPoints: border color changed"
+#~ msgstr "Pontos personalizados do %1: estilo da cor alterado"
+
+#~ msgid "%1 CustomPoints: border width changed"
+#~ msgstr "Pontos personalizados do %1: estilo do contorno alterado"
+
+#, fuzzy
+#~| msgid "Error Type"
+#~ msgid "Error, %"
+#~ msgstr "Tipo de erro"
+
+#, fuzzy
+#~| msgid "Datapicker"
+#~ msgctxt "@title:window"
+#~ msgid "Datapicker"
+#~ msgstr "Seletor de dados"
 
 #, fuzzy
 #~| msgid "Properties"
 #~ msgctxt "@title:window %1 is a Cantor backend"
 #~ msgid "%1 Properties"
 #~ msgstr "Propriedades"
+
+#, fuzzy
+#~| msgid "Properties"
+#~ msgctxt "@title:window"
+#~ msgid "CAS Properties"
+#~ msgstr "Propriedades"
+
+#~ msgid ""
+#~ "LabPlot2 is a KDE-application for interactive graphing and analysis of "
+#~ "scientific data."
+#~ msgstr ""
+#~ "LabPlot2 é um aplicativo do KDE para criação de gráficos interativos e "
+#~ "análise de dados científicos."
+
+#~ msgid "Datapicker"
+#~ msgstr "Seletor de dados"
+
+#~ msgid "CAS Worksheet"
+#~ msgstr "Folha de trabalho CAS"
+
+#~ msgid "&CAS Worksheet"
+#~ msgstr "Folha de trabalho &CAS"
+
+#~ msgid "&Datapicker"
+#~ msgstr "Seletor de &dados"
+
+#, fuzzy
+#~| msgid "Import To"
+#~ msgid "Import from File"
+#~ msgstr "Importar para"
+
+#, fuzzy
+#~| msgid "&Edit"
+#~ msgid "Edit"
+#~ msgstr "&Editar"
+
+#, fuzzy
+#~| msgid "Apply"
+#~ msgid "Apply theme [active '%1']"
+#~ msgstr "Aplicar"
+
+#, fuzzy
+#~| msgid "Error Bar:"
+#~ msgid "Error Bar"
+#~ msgstr "Barras de erros:"
+
+#~ msgid "Vector names:"
+#~ msgstr "Nomes dos vetores:"
+
+#~ msgid ""
+#~ "Position of the axis in the direction perpendicular to the axis in "
+#~ "logical units."
+#~ msgstr ""
+#~ "Posição do eixo na direção perpendicular ao eixo, em unidades lógicas."
+
+#, fuzzy
+#~| msgid "Points"
+#~ msgid "points"
+#~ msgstr "Pontos"
+
+#, fuzzy
+#~| msgid "Scaling"
+#~ msgid "Scaling:"
+#~ msgstr "Escalonamento"
+
+#, fuzzy
+#~| msgid "Show"
+#~ msgid "Show &last"
+#~ msgstr "Mostrar"
+
+#, fuzzy
+#~| msgid "Show Options"
+#~ msgid "Show f&irst"
+#~ msgstr "Mostrar opções"
+
+#~ msgid "y-Range:"
+#~ msgstr "Intervalo-Y:"
+
+#, fuzzy
+#~| msgid "Labplot version"
+#~ msgid "LabPlot version"
+#~ msgstr "Versão do LabPlot"
+
+#, fuzzy
+#~| msgid "Notes"
+#~ msgid "Notes:"
+#~ msgstr "Notas"
+
+#~ msgid "TeX mode"
+#~ msgstr "Modo do TeX"
+
+#, fuzzy
+#~| msgid "TeX mode"
+#~ msgid "Switch to TeX mode"
+#~ msgstr "Modo do TeX"
+
+#~ msgid "Foreground color:"
+#~ msgstr "Cor de frente:"
+
+#, fuzzy
+#~| msgid "%1: set symbol style"
+#~ msgid "%1: set outliers symbol style"
+#~ msgstr "%1: definir o estilo de símbolo"
+
+#, fuzzy
+#~| msgid "%1: set symbol style"
+#~ msgid "%1: set mean symbol style"
+#~ msgstr "%1: definir o estilo de símbolo"
+
+#, fuzzy
+#~| msgid "%1: set rotation angle"
+#~ msgid "%1: set x range"
+#~ msgstr "%1: definir o ângulo da rotação"
+
+#, fuzzy
+#~| msgid "%1: set rotation angle"
+#~ msgid "%1: set y range"
+#~ msgstr "%1: definir o ângulo da rotação"
+
+#, fuzzy
+#~| msgid "Date and Time"
+#~ msgid "Date/Time"
+#~ msgstr "Data e Hora"
+
+#, fuzzy
+#~| msgid "center tiled"
+#~ msgid "2/98 percentiles"
+#~ msgstr "ladrilhado centralizado"
+
+#~ msgid "sqrt(x)"
+#~ msgstr "sqrt(x)"
+
+#~ msgid "x^2"
+#~ msgstr "X^2"
+
+#, fuzzy
+#~| msgid "log(x)"
+#~ msgid "log(|x|)"
+#~ msgstr "log(x)"
+
+#, fuzzy
+#~| msgid "log2(x)"
+#~ msgid "log2(|x|)"
+#~ msgstr "log(x)"
 
 #, fuzzy
 #~| msgid "Variables"
@@ -26772,9 +26608,6 @@ msgstr "Falha ao abrir"
 #~| msgid "Points"
 #~ msgid "Points"
 #~ msgstr "Pontos"
-
-#~ msgid "%1: set axis start"
-#~ msgstr "%1: definir o início do eixo"
 
 #, fuzzy
 #~| msgid "%1: set vertical alignment"
@@ -26826,11 +26659,6 @@ msgstr "Falha ao abrir"
 #~| msgid "Header format"
 #~ msgid "Number format"
 #~ msgstr "Formato do cabeçalho"
-
-#, fuzzy
-#~| msgid "Data format"
-#~ msgid "DateTime format"
-#~ msgstr "Formato dos dados"
 
 #, fuzzy
 #~| msgid "Labplot version"
@@ -27419,6 +27247,9 @@ msgstr "Falha ao abrir"
 #~ msgid "Parameter"
 #~ msgstr "Parâmetro"
 
+#~ msgid "Smooth:"
+#~ msgstr "Suavizar:"
+
 #~ msgid "Weight"
 #~ msgstr "Peso"
 
@@ -27574,6 +27405,11 @@ msgstr "Falha ao abrir"
 #~| msgid "no fileDataSource element found"
 #~ msgid "no liveDataSource element found"
 #~ msgstr "não foi encontrado o elemento fileDataSource"
+
+#, fuzzy
+#~| msgid "No Error"
+#~ msgid "Errors:"
+#~ msgstr "Nenhum erro"
 
 #~ msgid "no cartesian plot legend element found"
 #~ msgstr "não foi encontrado nenhum elemento de legenda do gráfico cartesiano"
@@ -27884,11 +27720,6 @@ msgstr "Falha ao abrir"
 
 #~ msgid "Cl&ose"
 #~ msgstr "&Fechar"
-
-#, fuzzy
-#~| msgid "Tension"
-#~ msgid "Extensions"
-#~ msgstr "Tensão"
 
 #, fuzzy
 #~| msgid "Headers"

@@ -338,7 +338,7 @@
 ><guimenu
 >Utelämna värden</guimenu
 ></menuchoice
-> från den sammanhangsberoende menyn i kolumner) genom att ange ett intervall. När vilka värden som ska maskeras eller utelämnas, är flera operatorer tillgängliga ("lika med", "större än", "mindre än", etc.). Dessa operatorer kan hjälpa till att dölja eller ta bort vissa uteliggare i datamängden innan exempelvis en anpassning till datamängden görs. </para>
+> från den sammanhangsberoende menyn i kolumner) genom att ange ett intervall. När vilka värden som ska maskeras eller utelämnas, är flera operatorer tillgängliga ("lika med", "större än", "mindre än", etc.). Dessa operatorer kan hjälpa till att dölja eller ta bort vissa extremvärden i datamängden innan exempelvis en anpassning till datamängden görs. </para>
 <para
 >Alla kalkylarkets funktioner kan nås via den sammanhangsberoende menyn (högerklick). Det går att klippa ut, kopiera och klistra in mellan kalkylark, skapa, normalisera och sortera data, och slutligen skapa diagram av data. </para>
 

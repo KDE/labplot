@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:42+0000\n"
+"POT-Creation-Date: 2024-07-10 03:09+0000\n"
 "PO-Revision-Date: 2024-04-17 05:07+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -75,7 +75,6 @@ msgstr "在此建立複本"
 msgid "Paste '%1'"
 msgstr "貼上「%1」"
 
-# LabPlot 同時有 worksheet 和 spreadsheet，所以試算表跟工作表應該要分清楚
 #: src/backend/core/AbstractAspect.cpp:357
 #, kde-format
 msgid "Create Data Spreadsheet"
@@ -370,13 +369,13 @@ msgid "%1: unmask cells"
 msgstr ""
 
 #: src/backend/core/abstractcolumncommands.cpp:253
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2592
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2583
 #, fuzzy, kde-format
 msgid "%1: set heatmap format"
 msgstr "設定佈局"
 
 #: src/backend/core/abstractcolumncommands.cpp:280
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2610
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2601
 #, fuzzy, kde-format
 msgid "%1: remove heatmap format"
 msgstr "設定佈局"
@@ -569,16 +568,15 @@ msgid "Plots"
 msgstr "LabPlot2"
 
 #: src/backend/core/column/Column.cpp:195
-#, fuzzy, kde-format
-#| msgctxt "NAME OF TRANSLATORS"
-#| msgid "Your names"
+#, kde-format
 msgid "Axes"
-msgstr "Franklin Weng"
+msgstr ""
 
 #: src/backend/core/column/Column.cpp:221
 #, fuzzy, kde-format
+#| msgid "Recalculate"
 msgid "Calculations"
-msgstr "分頁列位置："
+msgstr "重新計算"
 
 #. i18n("DateTime Filter"), i18n("Unit:"), items, 0, false, &ok);
 #. if (ok) {
@@ -624,7 +622,7 @@ msgid "%1: change cell values"
 msgstr ""
 
 #: src/backend/core/column/columncommands.cpp:531
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2817
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2808
 #, kde-format
 msgid "%1: set plot designation"
 msgstr ""
@@ -810,7 +808,7 @@ msgstr "開啟失敗"
 msgid "Failed to open project"
 msgstr "開啟失敗"
 
-#: src/backend/core/Project.cpp:1255
+#: src/backend/core/Project.cpp:1257
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr ""
@@ -1148,10 +1146,10 @@ msgstr "開啟失敗"
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
 #: src/commonfrontend/matrix/MatrixView.cpp:619
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2494
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2515
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2533
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2550
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2485
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2506
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2524
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2541
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:188
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:182
@@ -1190,9 +1188,9 @@ msgstr "數值"
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:332
 #: src/backend/datasources/filters/XLSXFilter.cpp:515
-#, fuzzy, kde-format
+#, kde-format
 msgid "Not enough memory."
-msgstr "數字"
+msgstr ""
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:273
 #: src/backend/datasources/filters/JsonFilter.cpp:386
@@ -1556,9 +1554,9 @@ msgstr "未知"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1513
 #: src/backend/datasources/filters/HDF5Filter.cpp:2140
-#, kde-format
+#, fuzzy, kde-format
 msgid "No data set selected."
-msgstr "未選取資料集。"
+msgstr "清除選擇"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1582
 #, fuzzy, kde-format
@@ -1855,15 +1853,15 @@ msgstr "未知"
 #: src/backend/datasources/filters/MatioFilter.cpp:434
 #: src/commonfrontend/workbook/WorkbookView.cpp:53
 #: src/commonfrontend/workbook/WorkbookView.cpp:160
-#: src/kdefrontend/MainWin.cpp:631 src/kdefrontend/MainWin.cpp:1951
+#: src/kdefrontend/MainWin.cpp:631 src/kdefrontend/MainWin.cpp:1960
 #, kde-format
 msgid "Matrix"
 msgstr "矩陣"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:436
-#, fuzzy, kde-format
+#, kde-format
 msgid "Compressed"
-msgstr "顯示選項(&H)"
+msgstr ""
 
 #: src/backend/datasources/filters/MatioFilter.cpp:438
 #, kde-format
@@ -1904,9 +1902,9 @@ msgid "Selected variable not found."
 msgstr "檔案資訊"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:799
-#, fuzzy, kde-format
+#, kde-format
 msgid "Struct contains no fields"
-msgstr "檔案資訊"
+msgstr ""
 
 #: src/backend/datasources/filters/MatioFilter.cpp:881
 #, kde-format
@@ -2063,13 +2061,15 @@ msgstr "<b>尚未實作。</b>"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:473
 #, fuzzy, kde-format
+#| msgid "File not found"
 msgid "Sheet not found."
-msgstr "檔案資訊"
+msgstr "找不到檔案"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:480
 #, fuzzy, kde-format
+#| msgid "Export to file"
 msgid "Invalid sheet index."
-msgstr "數值"
+msgstr "匯出到檔案"
 
 #: src/backend/datasources/filters/QJsonModel.cpp:132
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:64
@@ -2225,9 +2225,9 @@ msgid "Application: %1"
 msgstr "旋轉"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:105
-#, fuzzy, kde-format
+#, kde-format
 msgid "Application version: %1.%2.%3"
-msgstr "顯示選項(&H)"
+msgstr ""
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:107
 #, fuzzy, kde-format
@@ -2236,14 +2236,15 @@ msgstr "行數："
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:115
 #, fuzzy, kde-format
+#| msgid "Start Time:"
 msgid "Start Time: %1"
-msgstr "開始"
+msgstr "開始時間："
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:123
 #, fuzzy, kde-format
-#| msgid "Date and time"
+#| msgid "End Time:"
 msgid "End Time: %1"
-msgstr "日期和時間"
+msgstr "結束時間："
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:127
 #, fuzzy, kde-format
@@ -3554,9 +3555,9 @@ msgid "Cell (index, variable)"
 msgstr "全部選取"
 
 #: src/backend/gsl/functions.cpp:235
-#, fuzzy, kde-format
+#, kde-format
 msgid "Moving Average"
-msgstr "圓心"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:236
 #, fuzzy, kde-format
@@ -3579,9 +3580,9 @@ msgid "Simple Moving Average"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:240
-#, fuzzy, kde-format
+#, kde-format
 msgid "Simple Moving Range"
-msgstr "圓心"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:244
@@ -4943,14 +4944,14 @@ msgid "Logarithm of the magnitude"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:572
-#, kde-format
+#, fuzzy, kde-format
 msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q, x)"
-msgstr ""
+msgstr "函式"
 
 #: src/backend/gsl/functions.cpp:573
-#, kde-format
+#, fuzzy, kde-format
 msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q, x)"
-msgstr ""
+msgstr "函式"
 
 #: src/backend/gsl/functions.cpp:574
 #, fuzzy, kde-format
@@ -4963,14 +4964,14 @@ msgid "Angular Mathieu functions se_n(q, x)"
 msgstr "函式"
 
 #: src/backend/gsl/functions.cpp:576
-#, kde-format
+#, fuzzy, kde-format
 msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q, x)"
-msgstr ""
+msgstr "函式"
 
 #: src/backend/gsl/functions.cpp:577
-#, kde-format
+#, fuzzy, kde-format
 msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q, x)"
-msgstr ""
+msgstr "函式"
 
 #: src/backend/gsl/functions.cpp:581
 #, kde-format
@@ -5963,22 +5964,19 @@ msgid "Probability density for a triangular distribution"
 msgstr "方向"
 
 #: src/backend/gsl/functions.cpp:840
-#, fuzzy, kde-format
-#| msgid "Direction"
+#, kde-format
 msgid "Cumulative triangular distribution function P"
-msgstr "方向"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:841
-#, fuzzy, kde-format
-#| msgid "Direction"
+#, kde-format
 msgid "Cumulative triangular distribution function Q"
-msgstr "方向"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:842
-#, fuzzy, kde-format
-#| msgid "Direction"
+#, kde-format
 msgid "p-th quantile for triangular distribution"
-msgstr "方向"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:948 src/backend/gsl/functions.cpp:960
 #: src/backend/gsl/functions.cpp:974 src/backend/gsl/functions.cpp:986
@@ -5990,8 +5988,9 @@ msgstr "匯出到檔案"
 
 #: src/backend/gsl/functions.cpp:954
 #, fuzzy, kde-format
+#| msgid "Condition:"
 msgid "condition"
-msgstr "連線"
+msgstr "條件："
 
 #: src/backend/gsl/functions.cpp:956
 #, fuzzy, kde-format
@@ -6000,8 +5999,9 @@ msgstr "數值"
 
 #: src/backend/gsl/functions.cpp:958
 #, fuzzy, kde-format
+#| msgid "Orientation"
 msgid "falseValue"
-msgstr "數值"
+msgstr "方向"
 
 #: src/backend/gsl/functions.cpp:966
 #, fuzzy, kde-format
@@ -6032,9 +6032,9 @@ msgstr "分"
 
 #: src/backend/gsl/functions.cpp:984
 #, fuzzy, kde-format
-#| msgid "Matrix"
+#| msgid "max."
 msgid "max"
-msgstr "矩陣"
+msgstr "最大"
 
 #: src/backend/gsl/functions.cpp:992
 #, fuzzy, kde-format
@@ -6109,13 +6109,13 @@ msgid "unexpected end of document"
 msgstr ""
 
 #: src/backend/matrix/Matrix.cpp:129
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3797
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3788
 #, fuzzy, kde-format
 msgid "FITS image"
 msgstr "image"
 
 #: src/backend/matrix/Matrix.cpp:129
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3797
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3788
 #, kde-format
 msgid "FITS table"
 msgstr ""
@@ -6367,9 +6367,9 @@ msgid "Center (Acausal)"
 msgstr ""
 
 #: src/backend/nsl/nsl_conv.c:24
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sliding Average"
-msgstr "圓心"
+msgstr ""
 
 #: src/backend/nsl/nsl_conv.c:25
 #, fuzzy, kde-format
@@ -7130,14 +7130,14 @@ msgid "Lanczos"
 msgstr ""
 
 #: src/backend/nsl/nsl_smooth.c:21
-#, fuzzy, kde-format
+#, kde-format
 msgid "Moving Average (Central)"
-msgstr "圓心"
+msgstr ""
 
 #: src/backend/nsl/nsl_smooth.c:21
-#, fuzzy, kde-format
+#, kde-format
 msgid "Moving Average (Lagged)"
-msgstr "圓心"
+msgstr ""
 
 #: src/backend/nsl/nsl_smooth.c:21
 #, kde-format
@@ -7223,9 +7223,9 @@ msgid "%1: set linking"
 msgstr "設定垂直對齊"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:445
-#, kde-format
+#, fuzzy, kde-format
 msgid "%1: set linked spreadsheet"
-msgstr ""
+msgstr "設定垂直對齊"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:500
 #, kde-format
@@ -7573,9 +7573,9 @@ msgid "%1: drop line type changed"
 msgstr ""
 
 #: src/backend/worksheet/Line.cpp:114
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: set line style"
-msgstr "設定佈局"
+msgstr ""
 
 #: src/backend/worksheet/Line.cpp:121
 #, fuzzy, kde-format
@@ -7705,7 +7705,7 @@ msgstr "色彩"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:547
 #, fuzzy, kde-format
 msgid "%1: set axis range type"
-msgstr "設定字型"
+msgstr "設定佈局"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:572
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:621
@@ -7740,21 +7740,18 @@ msgstr "設定字型"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:655
 #, fuzzy, kde-format
-#| msgid "%1: set creation time"
 msgid "%1: set major tick start type"
-msgstr "%1：設定建立時間"
+msgstr "設定字型"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:662
 #, fuzzy, kde-format
-#| msgid "%1: set creation time"
 msgid "%1: set major tick start offset"
-msgstr "%1：設定建立時間"
+msgstr "設定字型"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:670
 #, fuzzy, kde-format
-#| msgid "%1: set creation time"
 msgid "%1: set major tick start value"
-msgstr "%1：設定建立時間"
+msgstr "設定字型"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:682
 #, kde-format
@@ -8018,10 +8015,9 @@ msgid "3rd quartile"
 msgstr "方向"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:307
-#, fuzzy, kde-format
-#| msgid "StandardDev"
+#, kde-format
 msgid "median"
-msgstr "標準差"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:308
 #, fuzzy, kde-format
@@ -8097,9 +8093,8 @@ msgstr "%1：設定建立時間"
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:529
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:585
 #, fuzzy, kde-format
-#| msgid "%1: change comment"
 msgid "%1: change rug width"
-msgstr "%1：變更註解"
+msgstr "設定字型"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:593
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:536
@@ -8493,7 +8488,7 @@ msgstr "設定佈局"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1140
 #, fuzzy, kde-format
 msgid "%1: set nice extend"
-msgstr "設定佈局"
+msgstr "設定字型"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1147
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1154
@@ -8503,8 +8498,9 @@ msgstr "設定字型"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1165
 #, fuzzy, kde-format
+#| msgid "%1: change hidden status"
 msgid "%1: change %2-range %3 format"
-msgstr "設定佈局"
+msgstr "%1：變更隱藏狀態"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1255
 #, fuzzy, kde-format
@@ -8834,9 +8830,9 @@ msgid "%1: set error column"
 msgstr "%1：插入 %2 欄"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:235
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: error bar type changed"
-msgstr "（已改變）"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:242
 #, kde-format
@@ -8977,7 +8973,7 @@ msgstr "設定字型"
 #: src/backend/worksheet/plots/cartesian/Plot.cpp:58
 #, fuzzy, kde-format
 msgid "%1: legend visibility changed"
-msgstr "設定背景影像..."
+msgstr "（已改變）"
 
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:265
 #, fuzzy, kde-format
@@ -10286,8 +10282,8 @@ msgid "Curve"
 msgstr ""
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4037
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4091
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4028
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4082
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2217
 #, fuzzy, kde-format
 #| msgid "Failed to open"
@@ -10295,8 +10291,8 @@ msgid "Failed to export"
 msgstr "開啟失敗"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4037
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4091
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4028
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4082
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2217
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -10520,7 +10516,7 @@ msgid "%1: cut selected cell(s)"
 msgstr ""
 
 #: src/commonfrontend/matrix/MatrixView.cpp:689
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1793
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1784
 #, kde-format
 msgid "%1: paste from clipboard"
 msgstr "%1：從剪貼簿貼上"
@@ -10716,8 +10712,9 @@ msgstr "數值"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:322
 #, fuzzy, kde-format
+#| msgid "Orientation"
 msgid "Sample Values"
-msgstr "數值"
+msgstr "方向"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:323
 #, fuzzy, kde-format
@@ -10727,7 +10724,7 @@ msgstr "刪除選取的物件"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:326
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1149
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1535
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1526
 #, fuzzy, kde-format
 msgid "Show Comments"
 msgstr "顯示註解"
@@ -10769,9 +10766,10 @@ msgid "Column Statistics..."
 msgstr "統計"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:338
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Statistics"
 msgid "Column Statistics Spreadsheet"
-msgstr "欄位統計試算表"
+msgstr "統計"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:342
 #, fuzzy, kde-format
@@ -10799,11 +10797,12 @@ msgstr "刪除選取的物件"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:346
 #, fuzzy, kde-format
+#| msgid "Delete selected objects"
 msgid "Delete Selected Column(s)"
-msgstr "移除列"
+msgstr "刪除選取的物件"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:348
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1625
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1616
 #, fuzzy, kde-format
 #| msgid "Delete selected objects"
 msgid "Freeze Column"
@@ -10993,10 +10992,9 @@ msgid "Remo&ve Selected Row(s)"
 msgstr "移除列"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:494
-#, fuzzy, kde-format
-#| msgid "%1: clear masks"
+#, kde-format
 msgid "Delete Rows With Missing Values"
-msgstr "%1：清除遮罩"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:495
 #, kde-format
@@ -11041,94 +11039,94 @@ msgid "Ladder of Powers"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1147
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1533
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1524
 #, kde-format
 msgid "Hide Comments"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1158
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1538
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1529
 #, fuzzy, kde-format
 msgid "Hide Sparklines"
 msgstr "隱藏選項 <<"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1160
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1540
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1531
 #, fuzzy, kde-format
 msgid "Show Sparklines"
 msgstr "顯示選項(&H)"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1629
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1620
 #, fuzzy, kde-format
 #| msgid "Delete selected objects"
 msgid "Unfreeze Column"
 msgstr "刪除選取的物件"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1712
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1703
 #, kde-format
 msgid "%1: cut selected cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2036
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2027
 #, kde-format
 msgid "Not enough memory to finalize this operation."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2050
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2041
 #, kde-format
 msgid "%1: mask selected cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2092
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2083
 #, kde-format
 msgid "%1: unmask selected cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2248
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2239
 #, kde-format
 msgid "%1: fill cells with row numbers"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2313
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2304
 #, kde-format
 msgid "%1: fill column with row numbers"
 msgid_plural "%1: fill columns with row numbers"
 msgstr[0] ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2357
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2348
 #, kde-format
 msgid "%1: fill cells with random values"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2483
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2474
 #, kde-format
 msgid "%1: fill cells with const values"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2493
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2515
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2533
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2550
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2484
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2506
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2524
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2541
 #, kde-format
 msgid "Fill the selection with constant value"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2630
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2664
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2621
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2655
 #, fuzzy, kde-format
 #| msgid "%1: insert 1 column"
 #| msgid_plural "%1: insert %2 columns"
 msgid "Insert empty columns"
 msgstr "%1：插入 %2 欄"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2631
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2665
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2622
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2656
 #, fuzzy, kde-format
 #| msgid "Filter name:"
 msgid "Enter the number of columns to insert"
 msgstr "過濾器名稱："
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2683
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2674
 #, fuzzy, kde-format
 #| msgid "%1: insert 1 column"
 #| msgid_plural "%1: insert %2 columns"
@@ -11136,12 +11134,12 @@ msgid "%1: insert empty column"
 msgid_plural "%1: insert empty columns"
 msgstr[0] "%1：插入 %2 欄"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2753
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2744
 #, kde-format
 msgid "%1: remove selected columns"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2850
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2841
 #, fuzzy, kde-format
 #| msgid "%1: remove 1 column"
 #| msgid_plural "%1: remove %2 columns"
@@ -11149,136 +11147,136 @@ msgid "%1: reverse column"
 msgid_plural "%1: reverse columns"
 msgstr[0] "%1：移除 %2 欄"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2923
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2914
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
 "because of this. "
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2961
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2952
 #, kde-format
 msgid "%1: normalize columns"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2981
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2972
 #, kde-format
 msgid "Sum = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2992
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2983
 #, kde-format
 msgid "Min = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3003
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2994
 #, kde-format
 msgid "Max = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3014
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3005
 #, fuzzy, kde-format
 msgid "Count = 0"
 msgstr "圓心"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3025
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3016
 #, kde-format
 msgid "Mean = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3036
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3027
 #, fuzzy, kde-format
 #| msgid "StandardDev"
 msgid "Median = 0"
 msgstr "標準差"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3048
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3039
 #, kde-format
 msgid "Mode = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3050
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3041
 #, kde-format
 msgid "'Mode not defined'"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3061
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3052
 #, fuzzy, kde-format
 msgid "Range = 0"
 msgstr "X 範圍"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3072
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3106
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3063
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3097
 #, kde-format
 msgid "SD = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3083
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3118
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3074
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3109
 #, kde-format
 msgid "MAD = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3094
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3130
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3085
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3121
 #, kde-format
 msgid "IQR = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3142
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3133
 #, kde-format
 msgid "Max - Min = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3161
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3152
 #, kde-format
 msgid "Normalization not possible"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3173
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3164
 #, fuzzy, kde-format
 #| msgid "%1: insert 1 column"
 #| msgid_plural "%1: insert %2 columns"
 msgid "%1: power transform columns"
 msgstr "%1：插入 %2 欄"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3291
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3282
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "%1: column statistics"
 msgstr "統計"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3322
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3313
 #, fuzzy, kde-format
 msgid "Selection in %1"
 msgstr "選擇"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3365
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3356
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "%1: row statistics"
 msgstr "統計"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3375
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3366
 #, kde-format
 msgid "Row %1"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3400
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3439
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3391
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3430
 #, kde-format
 msgid "Insert multiple rows"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3401
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3440
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3392
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3431
 #, fuzzy, kde-format
 #| msgid "Filter name:"
 msgid "Enter the number of rows to insert"
 msgstr "過濾器名稱："
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3420
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3459
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3411
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3450
 #, fuzzy, kde-format
 #| msgid "%1: insert 1 column"
 #| msgid_plural "%1: insert %2 columns"
@@ -11286,100 +11284,100 @@ msgid "%1: insert empty row"
 msgid_plural "%1: insert empty rows"
 msgstr[0] "%1：插入 %2 欄"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3475
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3466
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3500
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3491
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3762
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3753
 #, fuzzy, kde-format
 #| msgid "Start row:"
 msgid "row"
 msgid_plural "rows"
 msgstr[0] "開始列："
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3763
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3754
 #, fuzzy, kde-format
 #| msgid "Column"
 msgid "column"
 msgid_plural "columns"
 msgstr[0] "欄"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3764
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3755
 #, kde-format
 msgid "cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3765
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3756
 #, fuzzy, kde-format
 msgid "masked value"
 msgstr "值"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3765
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3756
 #, fuzzy, kde-format
 msgid "masked values"
 msgstr "值"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3766
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3757
 #, fuzzy, kde-format
 msgid "missing value"
 msgstr "位置"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3766
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3757
 #, fuzzy, kde-format
 msgid "missing values"
 msgstr "位置"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3767
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3758
 #, kde-format
 msgid " , "
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3767
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3768
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3758
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3759
 #, fuzzy, kde-format
 #| msgid "A1"
 msgid "%1"
 msgstr "A1"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3768
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3759
 #, kde-format
 msgid ", "
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3771
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3762
 #, kde-format
 msgid "Selected: %1 %2 , %3 %4%5 %6 %7 %8"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3781
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3772
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3854
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3845
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "列印試算表"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4459
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4450
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4491
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4482
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to create table in the SQLite database %1."
 msgstr "開啟失敗"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4544
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4535
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to insert values into the table."
@@ -11418,9 +11416,9 @@ msgid "Unhandled error"
 msgstr ""
 
 #: src/commonfrontend/widgets/NumberSpinBox.cpp:440
-#, fuzzy, kde-format
+#, kde-format
 msgid "Invalid value entered. Valid value: %1"
-msgstr "數值"
+msgstr ""
 
 #: src/commonfrontend/widgets/TreeViewComboBox.cpp:56
 #, kde-format
@@ -11442,7 +11440,7 @@ msgstr ""
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:116
 #: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:57
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:75
-#: src/kdefrontend/MainWin.cpp:625 src/kdefrontend/MainWin.cpp:1933
+#: src/kdefrontend/MainWin.cpp:625 src/kdefrontend/MainWin.cpp:1942
 #: src/kdefrontend/SettingsDialog.cpp:72
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:122
 #, kde-format
@@ -11624,7 +11622,7 @@ msgstr "全部選取"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:359
-#: src/kdefrontend/MainWin.cpp:2418
+#: src/kdefrontend/MainWin.cpp:2427
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1426
 #, kde-format
 msgid "Cursor"
@@ -12079,9 +12077,9 @@ msgstr "dataSet：資料集"
 
 #: src/kdefrontend/datasources/ImportDatasetDialog.cpp:103
 #, fuzzy, kde-format
-#| msgid "Add new"
+#| msgid "Live data source created in %1 seconds."
 msgid "Failed to connect within %1 seconds"
-msgstr "新增"
+msgstr "即時資料來源於 %1 內建立。"
 
 #: src/kdefrontend/datasources/ImportDatasetDialog.cpp:128
 #, fuzzy, kde-format
@@ -12151,9 +12149,8 @@ msgstr "匯入"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:76
 #, fuzzy, kde-format
-#| msgid "orange"
 msgid "Data container:"
-msgstr "橘"
+msgstr "資料"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:77
 #: src/kdefrontend/datasources/ImportDialog.cpp:83
@@ -12378,9 +12375,10 @@ msgid "Excel 2007+ (XSLX)"
 msgstr ""
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:104
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Export Spreadsheet"
 msgid "OpenDocument Spreadsheet (ODS)"
-msgstr "OpenDocument 試算表 (ODS)"
+msgstr "匯出試算表"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:107
 #, kde-format
@@ -12874,10 +12872,11 @@ msgid "LabPlot Projects (%1)"
 msgstr "關閉專案"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:448
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Open project"
 msgctxt "@title:window"
 msgid "Open Origin OPJ Project"
-msgstr "開啟來源 OPJ 專案"
+msgstr "開啟專案"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:450
 #, fuzzy, kde-format
@@ -13124,7 +13123,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
-#: src/kdefrontend/MainWin.cpp:2727
+#: src/kdefrontend/MainWin.cpp:2736
 #, kde-format
 msgid "Warning"
 msgstr ""
@@ -13469,10 +13468,8 @@ msgstr "設定字型"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:578
 #, fuzzy, kde-format
-#| msgid "%1: insert 1 column"
-#| msgid_plural "%1: insert %2 columns"
 msgid "%1 axes: set color"
-msgstr "%1：插入 %2 欄"
+msgstr "設定佈局"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:1585
 #, kde-format
@@ -13890,10 +13887,9 @@ msgstr "欄"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:247
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:247
-#, fuzzy, kde-format
-#| msgid "Column"
+#, kde-format
 msgid "Row Major"
-msgstr "欄"
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:251
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:256
@@ -13970,8 +13966,9 @@ msgstr ""
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:319
 #, fuzzy, kde-format
+#| msgid "Add new"
 msgid "Add a new value label"
-msgstr "數值"
+msgstr "新增"
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:320
 #, fuzzy, kde-format
@@ -14083,9 +14080,11 @@ msgid "%1 histograms: template \"%2\" loaded"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:218
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1: remove %2 row"
+#| msgid_plural "%1: remove %2 rows"
 msgid "%1 info elements: curve \"%2\" removed"
-msgstr ""
+msgstr "%1：移除 %2 列"
 
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:220
 #, fuzzy, kde-format
@@ -14525,19 +14524,19 @@ msgid "t statistic"
 msgstr "統計"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:368
-#, fuzzy, kde-format
+#, kde-format
 msgid "No X and Y column specified!"
-msgstr "全部選取"
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:370
-#, fuzzy, kde-format
+#, kde-format
 msgid "No X column specified!"
-msgstr "全部選取"
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:372
-#, fuzzy, kde-format
+#, kde-format
 msgid "No Y column specified!"
-msgstr "全部選取"
+msgstr ""
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:376
 #, fuzzy, kde-format
@@ -14705,16 +14704,17 @@ msgid "Properties"
 msgstr "屬性"
 
 #: src/kdefrontend/GuiObserver.cpp:226
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Spreadsheet"
-msgstr "屬性：試算表"
+msgstr "工作表"
 
 #: src/kdefrontend/GuiObserver.cpp:231
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Statistics"
 msgctxt "@title:window"
 msgid "Properties: Column Statistics"
-msgstr "屬性：欄位統計"
+msgstr "統計"
 
 #: src/kdefrontend/GuiObserver.cpp:241
 #, kde-format
@@ -14723,22 +14723,23 @@ msgid "%1 Worksheet"
 msgstr "%1 工作表"
 
 #: src/kdefrontend/GuiObserver.cpp:246
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column"
-msgstr "屬性：欄位"
+msgstr "屬性"
 
 #: src/kdefrontend/GuiObserver.cpp:253
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Matrix"
-msgstr "屬性：矩陣"
+msgstr "屬性"
 
 #: src/kdefrontend/GuiObserver.cpp:258
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Complete Worksheet"
 msgctxt "@title:window"
 msgid "Properties: Worksheet"
-msgstr "屬性：工作表"
+msgstr "完成工作表"
 
 #: src/kdefrontend/GuiObserver.cpp:264
 #, fuzzy, kde-format
@@ -14747,10 +14748,10 @@ msgid "Properties: Plot Area"
 msgstr "屬性"
 
 #: src/kdefrontend/GuiObserver.cpp:270
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Legend"
-msgstr "屬性：圖例"
+msgstr "屬性"
 
 #: src/kdefrontend/GuiObserver.cpp:275
 #, fuzzy, kde-format
@@ -14953,22 +14954,23 @@ msgstr "遞增"
 
 #: src/kdefrontend/GuiObserver.cpp:456 src/kdefrontend/GuiObserver.cpp:463
 #: src/kdefrontend/GuiObserver.cpp:470
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: MQTT Data Source"
-msgstr "屬性：MQTT 資料來源"
+msgstr "dataSet：資料集"
 
 #: src/kdefrontend/GuiObserver.cpp:476
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Add new"
 msgctxt "@title:window"
 msgid "Properties: Live Data Source"
-msgstr "屬性：即時資料來源"
+msgstr "新增"
 
 #: src/kdefrontend/GuiObserver.cpp:490
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties: Folder"
-msgstr "屬性：資料夾"
+msgstr "屬性"
 
 #: src/kdefrontend/GuiObserver.cpp:497
 #, fuzzy, kde-format
@@ -15507,8 +15509,9 @@ msgstr "備忘"
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
 #: src/kdefrontend/labplot2ui.rc:40
 #, fuzzy, kde-format
+#| msgid "Plot Area"
 msgid "Plot Area Toolbar"
-msgstr "從"
+msgstr "繪製區域"
 
 #. i18n: ectx: Menu (file)
 #: src/kdefrontend/labplot2ui.rc:44
@@ -15608,7 +15611,7 @@ msgstr ""
 msgid "&Open Example"
 msgstr "開啟範例(&O)"
 
-#: src/kdefrontend/MainWin.cpp:615 src/kdefrontend/MainWin.cpp:1917
+#: src/kdefrontend/MainWin.cpp:615 src/kdefrontend/MainWin.cpp:1926
 #, kde-format
 msgid "Workbook"
 msgstr ""
@@ -15618,7 +15621,7 @@ msgstr ""
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:620 src/kdefrontend/MainWin.cpp:1925
+#: src/kdefrontend/MainWin.cpp:620 src/kdefrontend/MainWin.cpp:1934
 #, fuzzy, kde-format
 msgid "Data Extractor"
 msgstr "資料格式"
@@ -15638,7 +15641,7 @@ msgstr ""
 msgid "Creates a new matrix for data editing"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:637 src/kdefrontend/MainWin.cpp:1969
+#: src/kdefrontend/MainWin.cpp:637 src/kdefrontend/MainWin.cpp:1978
 #: src/kdefrontend/SettingsDialog.cpp:67
 #, kde-format
 msgid "Worksheet"
@@ -15649,7 +15652,7 @@ msgstr "工作表"
 msgid "Creates a new worksheet for data plotting"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:643 src/kdefrontend/MainWin.cpp:1977
+#: src/kdefrontend/MainWin.cpp:643 src/kdefrontend/MainWin.cpp:1986
 #, fuzzy, kde-format
 msgid "Note"
 msgstr "備忘"
@@ -15659,7 +15662,7 @@ msgstr "備忘"
 msgid "Creates a new note for arbitrary text"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:648 src/kdefrontend/MainWin.cpp:1909
+#: src/kdefrontend/MainWin.cpp:648 src/kdefrontend/MainWin.cpp:1918
 #, kde-format
 msgid "Folder"
 msgstr "資料夾"
@@ -15732,8 +15735,8 @@ msgstr "匯出"
 msgid "Export selected element"
 msgstr "符合選擇區域"
 
-#: src/kdefrontend/MainWin.cpp:705 src/kdefrontend/MainWin.cpp:2454
-#: src/kdefrontend/MainWin.cpp:2462
+#: src/kdefrontend/MainWin.cpp:705 src/kdefrontend/MainWin.cpp:2463
+#: src/kdefrontend/MainWin.cpp:2471
 #, kde-format
 msgid "Share"
 msgstr ""
@@ -15829,9 +15832,10 @@ msgid "Properties Explorer"
 msgstr "屬性"
 
 #: src/kdefrontend/MainWin.cpp:820
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Worksheet"
 msgid "Worksheet Preview"
-msgstr "工作表預覽"
+msgstr "工作表"
 
 #: src/kdefrontend/MainWin.cpp:843
 #, kde-format
@@ -15878,10 +15882,10 @@ msgid "Project Explorer"
 msgstr "專案屬性"
 
 #: src/kdefrontend/MainWin.cpp:1398
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
-msgstr "工作表預覽"
+msgstr "工作表(&W)"
 
 #: src/kdefrontend/MainWin.cpp:1407
 #, fuzzy, kde-format
@@ -15935,8 +15939,9 @@ msgstr ""
 
 #: src/kdefrontend/MainWin.cpp:1532
 #, fuzzy, kde-format
+#| msgid "Couldn't open the file"
 msgid "Couldn't read the project file %1."
-msgstr "無法開啟檔案 %1 以讀取"
+msgstr "無法開啟檔案"
 
 #: src/kdefrontend/MainWin.cpp:1541
 #, kde-format
@@ -15972,82 +15977,82 @@ msgstr ""
 msgid "Couldn't open the temporary file for writing."
 msgstr "無法開啟檔案 %1 以讀取"
 
-#: src/kdefrontend/MainWin.cpp:1798
+#: src/kdefrontend/MainWin.cpp:1807
 #, kde-format
 msgid "Project saved"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1814
+#: src/kdefrontend/MainWin.cpp:1823
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1819
+#: src/kdefrontend/MainWin.cpp:1828
 #, fuzzy, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "無法開啟檔案 %1 以讀取"
 
-#: src/kdefrontend/MainWin.cpp:1869
+#: src/kdefrontend/MainWin.cpp:1878
 #, fuzzy, kde-format
 msgid "Changed"
 msgstr "（已改變）"
 
-#: src/kdefrontend/MainWin.cpp:1884 src/kdefrontend/MainWin.cpp:1896
+#: src/kdefrontend/MainWin.cpp:1893 src/kdefrontend/MainWin.cpp:1905
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1886 src/kdefrontend/MainWin.cpp:1898
+#: src/kdefrontend/MainWin.cpp:1895 src/kdefrontend/MainWin.cpp:1907
 #, kde-format
 msgid "%1 printed"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2454
+#: src/kdefrontend/MainWin.cpp:2463
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2458
+#: src/kdefrontend/MainWin.cpp:2467
 #, kde-format
 msgid "Project shared successfully"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2461
+#: src/kdefrontend/MainWin.cpp:2470
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2690
+#: src/kdefrontend/MainWin.cpp:2699
 #, kde-format
 msgid "%1 exported"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2697
+#: src/kdefrontend/MainWin.cpp:2706
 #, kde-format
 msgid "FITS files saved"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2709
+#: src/kdefrontend/MainWin.cpp:2718
 #, kde-format
 msgid "MQTT Client%1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2727
+#: src/kdefrontend/MainWin.cpp:2736
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2731
+#: src/kdefrontend/MainWin.cpp:2740
 #, kde-format
 msgid "Live data source%1"
 msgstr "即時資料來源%1"
 
-#: src/kdefrontend/MainWin.cpp:2772
+#: src/kdefrontend/MainWin.cpp:2781
 #, kde-format
 msgid "No Cantor backends found. Please install the ones you want to use."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2786
+#: src/kdefrontend/MainWin.cpp:2795
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr ""
@@ -16284,14 +16289,18 @@ msgid "Load Last Used Project"
 msgstr ""
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:222
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Print Spreadsheet"
 msgid "With Spreadsheet"
-msgstr ""
+msgstr "列印試算表"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:223
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Print Worksheet"
 msgid "With Worksheet"
-msgstr ""
+msgstr "列印工作表"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:224
 #, kde-format
@@ -16417,10 +16426,9 @@ msgid ""
 msgstr ""
 
 #: src/kdefrontend/SettingsNotebookPage.cpp:23
-#, fuzzy, kde-format
-#| msgid "Height"
+#, kde-format
 msgid "Enable syntax highlighting"
-msgstr "高度"
+msgstr ""
 
 #: src/kdefrontend/SettingsNotebookPage.cpp:24
 #, fuzzy, kde-format
@@ -16614,9 +16622,9 @@ msgstr "旋轉"
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:943
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:987
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1031
-#, fuzzy, kde-format
+#, kde-format
 msgid "Wrong numeric value provided."
-msgstr "數值"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1218
 #, fuzzy, kde-format
@@ -16683,7 +16691,7 @@ msgstr "數值"
 #: src/kdefrontend/spreadsheet/BatchEditValueLabelsDialog.cpp:40
 #, fuzzy, kde-format
 msgid "Value Labels:"
-msgstr "數值"
+msgstr "標籤"
 
 #: src/kdefrontend/spreadsheet/BatchEditValueLabelsDialog.cpp:154
 #, kde-format
@@ -16813,9 +16821,9 @@ msgstr "數值"
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:953
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:1003
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:1009
-#, fuzzy, kde-format
+#, kde-format
 msgid "Invalid numeric value."
-msgstr "數值"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:968
 #, fuzzy, kde-format
@@ -16874,8 +16882,9 @@ msgstr "數值"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:250
 #, fuzzy, kde-format
+#| msgid "Start column:"
 msgid "Invalid start value"
-msgstr "數值"
+msgstr "開始欄："
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:257
 #, kde-format
@@ -17134,8 +17143,9 @@ msgstr ""
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:214
 #, fuzzy, kde-format
+#| msgid "Delete selected objects"
 msgid "Select a valid column"
-msgstr "全部選取"
+msgstr "刪除選取的物件"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:221
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:275
@@ -17263,9 +17273,10 @@ msgstr "方向"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:959
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:383
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Orientation"
 msgid "Sample Quantiles"
-msgstr ""
+msgstr "方向"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1073
 #, fuzzy, kde-format
@@ -17369,9 +17380,10 @@ msgstr ""
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:64
 #, fuzzy, kde-format
+#| msgid "Orientation"
 msgctxt "@title:window"
 msgid "Sample Values"
-msgstr "數值"
+msgstr "方向"
 
 #. i18n: ectx: property (text), widget (QLabel, lValue)
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:103
@@ -17382,9 +17394,10 @@ msgid "Period:"
 msgstr "垂直"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:105
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Orientation"
 msgid "Sample Size:"
-msgstr ""
+msgstr "方向"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:205
 #, fuzzy, kde-format
@@ -17654,9 +17667,9 @@ msgstr ""
 
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:150
 #, fuzzy, kde-format
-#| msgid "LabPlot2"
+#| msgid "cartesian"
 msgid "Pareto Plot"
-msgstr "LabPlot2"
+msgstr "直角座標"
 
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:226
 #, kde-format
@@ -18742,9 +18755,9 @@ msgstr "匯入"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbConvertSeconds)
 #: src/kdefrontend/ui/datasources/CANOptionsWidget.ui:32
-#, fuzzy, kde-format
+#, kde-format
 msgid "Convert time to seconds"
-msgstr "檔案資訊"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:33
@@ -19616,7 +19629,7 @@ msgstr "數字"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1148
 #, fuzzy, kde-format
 msgid "1st Tick Value:"
-msgstr "第一色彩"
+msgstr "數值"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksSpacingNumeric)
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksSpacingNumeric)
@@ -19729,9 +19742,9 @@ msgstr "位移"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksStartType)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1105
-#, fuzzy, kde-format
+#, kde-format
 msgid "1st Tick at:"
-msgstr "自訂"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLabels)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1159
@@ -20107,9 +20120,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbWhiskerEnd)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:564
-#, fuzzy, kde-format
+#, kde-format
 msgid "Whisker End"
-msgstr "資料"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkJitteringEnabled)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:587
@@ -20301,9 +20314,10 @@ msgstr "新增"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbRemovePlotRange)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:421
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Add new"
 msgid "Remove current plot range"
-msgstr ""
+msgstr "新增"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbAddYRange)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:488
@@ -20320,9 +20334,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lNiceExtend)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:512
-#, fuzzy, kde-format
+#, kde-format
 msgid "Extend:"
-msgstr "資料"
+msgstr ""
 
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbTop)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbPaddingHorizontal)
@@ -20543,9 +20557,9 @@ msgstr "線寬："
 #. i18n: ectx: property (text), widget (QLabel, lBindLogicalPos)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:412
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:27
-#, kde-format
+#, fuzzy, kde-format
 msgid "Logical coordinates"
-msgstr ""
+msgstr "設定不透明度"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbLock)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:458
@@ -20899,9 +20913,9 @@ msgstr "橘"
 #. i18n: ectx: attribute (title), widget (QWidget, tabKDE)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:211
 #, fuzzy, kde-format
-#| msgid "Orientation"
+#| msgid "Animations"
 msgid "Estimation"
-msgstr "方向"
+msgstr "動畫"
 
 #. i18n: ectx: property (text), widget (QPushButton, bUpdateNow)
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:67
@@ -21068,9 +21082,10 @@ msgstr "方向"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunc)
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:123
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "f(x) = "
 msgid "p(x) ="
-msgstr ""
+msgstr "f(x) = "
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPercentiles)
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:196
@@ -21110,9 +21125,9 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lShowSparklines)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:175
 #, fuzzy, kde-format
-#| msgid "Column"
+#| msgid "Grid lines:"
 msgid "Sparklines:"
-msgstr "欄"
+msgstr "格線："
 
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:198
@@ -22417,15 +22432,16 @@ msgstr "啟動："
 
 #. i18n: ectx: property (text), widget (QLabel, lNewProject)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:50
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Save Project"
 msgid "New Project:"
-msgstr "新專案："
+msgstr "儲存專案"
 
 #. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:60
-#, kde-format
+#, fuzzy, kde-format
 msgid "Notebook:"
-msgstr "筆記本："
+msgstr "備忘"
 
 #. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:86
@@ -22501,15 +22517,15 @@ msgstr "自動儲存："
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:298
-#, kde-format
+#, fuzzy, kde-format
 msgid "Save  Calculations:"
-msgstr "儲存計算結果："
+msgstr "分頁列位置："
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:312
-#, kde-format
+#, fuzzy, kde-format
 msgid "Compatibility:"
-msgstr "相容性："
+msgstr "密度"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:319
@@ -22556,9 +22572,9 @@ msgstr "外觀"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSyntaxHighlighting)
 #: src/kdefrontend/ui/settingsnotebookpage.ui:33
-#, kde-format
+#, fuzzy, kde-format
 msgid "Syntax Highlighting"
-msgstr "語法突顯"
+msgstr "資料格式"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSyntaxCompletion)
 #: src/kdefrontend/ui/settingsnotebookpage.ui:40
@@ -22745,9 +22761,10 @@ msgstr "文字數值"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:203
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Date and time"
 msgid "DateTime Values"
-msgstr "日期時間數值"
+msgstr "日期和時間"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:97
@@ -22860,15 +22877,17 @@ msgstr "f(x) = "
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoUpdate)
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:155
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Start column:"
 msgid "auto update the values"
-msgstr "自動更新數值"
+msgstr "開始欄："
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoResize)
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:162
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Delete selected objects"
 msgid "auto resize the column"
-msgstr "自動調整欄位大小"
+msgstr "刪除選取的物件"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbCurvePlacement)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:154
@@ -22878,17 +22897,15 @@ msgstr "放置方式"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbCurvePlacementAllInOnePlotArea)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:160
-#, fuzzy, kde-format
-#| msgid "Plot Area"
+#, kde-format
 msgid "All Plots in one Plot Area"
-msgstr "繪製區域"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbCurvePlacementAllInOwnPlotArea)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:170
-#, fuzzy, kde-format
-#| msgid "Plot Area"
+#, kde-format
 msgid "One Plot Area per Plot"
-msgstr "繪製區域"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementExistingPlotArea)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:186
@@ -22976,78 +22993,80 @@ msgstr ""
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:80
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:87
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:561
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Replace"
 msgid "Replace:"
-msgstr "取代："
+msgstr "取代"
 
 #. i18n: ectx: property (text), widget (QLabel, lFind)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:97
 #, kde-format
 msgid "Find:"
-msgstr "尋找："
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbOrder)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:134
-#, kde-format
+#, fuzzy, kde-format
 msgid "Search order"
-msgstr "搜尋順序"
+msgstr "搜尋過濾器"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbMatchCase)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:147
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:119
-#, kde-format
+#, fuzzy, kde-format
 msgid "Match case sensitive"
 msgstr "區分大小寫"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbSelectionOnly)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:164
-#, kde-format
+#, fuzzy, kde-format
 msgid "Search in the selection only"
-msgstr "只在選擇區內搜尋"
+msgstr "符合選擇區域"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFindNext)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:194
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:91
 #, kde-format
 msgid "Jump to next match"
-msgstr "跳至下一個符合"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFindPrev)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:208
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:105
 #, kde-format
 msgid "Jump to previous match"
-msgstr "跳至上一個符合"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bReplaceNext)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:222
 #, kde-format
 msgid "Replace next match"
-msgstr "取代下一個符合處"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bReplaceAll)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:232
 #, kde-format
 msgid "Replace all matches"
-msgstr "將符合處全部取代"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bReplaceAll)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:235
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Replace"
 msgid "Replace &All"
-msgstr "全部取代(&A)"
+msgstr "取代"
 
 #. i18n: ectx: property (text), widget (QPushButton, bFindAll)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:242
-#, kde-format
+#, fuzzy, kde-format
 msgid "&Find All"
-msgstr "全部尋找(&F)"
+msgstr "全部展開"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbSwitchFindReplace)
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:249
 #, kde-format
 msgid "Switch to incremental search bar"
-msgstr "切換到漸進搜尋列"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbReplace)
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbReplaceText)
@@ -23055,19 +23074,19 @@ msgstr "切換到漸進搜尋列"
 #: src/kdefrontend/ui/spreadsheet/searchreplacewidget.ui:574
 #, kde-format
 msgid "Text to replace with"
-msgstr "要取代的文字"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lFind)
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:50
 #, kde-format
 msgid "F&ind:"
-msgstr "尋找(&I)："
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbFind)
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:78
 #, kde-format
 msgid "Text to search for"
-msgstr "要搜尋的文字"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbSwitchFindReplace)
 #: src/kdefrontend/ui/spreadsheet/searchwidget.ui:158
@@ -23334,9 +23353,10 @@ msgid "Save project before using this option"
 msgstr ""
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:381
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Export to file"
 msgid "Invalid image"
-msgstr "無效的影像"
+msgstr "匯出到檔案"
 
 #: src/kdefrontend/widgets/ErrorBarWidget.cpp:46
 #, kde-format
@@ -23644,7 +23664,7 @@ msgstr "右邊界"
 #: src/kdefrontend/widgets/LabelWidget.cpp:148
 #, kde-format
 msgid "Justify"
-msgstr "兩邊對齊"
+msgstr ""
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:149
 #, fuzzy, kde-format
@@ -24012,10 +24032,9 @@ msgid "%1 not found"
 msgstr "檔案資訊"
 
 #: src/tools/TeXRenderer.cpp:193
-#, fuzzy, kde-format
-#| msgid "Failed to open"
+#, kde-format
 msgid "Timeout: Unable to generate latex file"
-msgstr "開啟失敗"
+msgstr ""
 
 #: src/tools/TeXRenderer.cpp:196
 #, kde-format
@@ -24049,220 +24068,10 @@ msgid "Unable to open file:"
 msgstr "開啟失敗"
 
 #, fuzzy
-#~| msgid "Add new"
-#~ msgid "Add %1"
-#~ msgstr "新增"
-
-#~ msgid "%1 name:"
-#~ msgstr "%1 名稱："
-
-#, fuzzy
-#~| msgid "Orientation"
-#~ msgid "p-th quantile"
-#~ msgstr "方向"
-
-#, fuzzy
-#~ msgid "%1: copy %2"
-#~ msgstr "複製"
-
-#, fuzzy
-#~| msgid "Column"
-#~ msgid "Column Format"
-#~ msgstr "欄"
-
-#~ msgid "Specify the name of the file to import."
-#~ msgstr "指定要匯入的檔案名稱。"
-
-#, fuzzy
 #~| msgid "%1: remove 1 row"
 #~| msgid_plural "%1: remove %2 rows"
 #~ msgid "%1: move down"
 #~ msgstr "%1：移除 %2 列"
-
-#, fuzzy
-#~| msgid "Failed to open"
-#~ msgid "Failed to download the dataset"
-#~ msgstr "開啟失敗"
-
-#, fuzzy
-#~| msgid "Failed to open"
-#~ msgid "Failed to save the dataset"
-#~ msgstr "開啟失敗"
-
-#, fuzzy
-#~ msgid "Variable contains no data"
-#~ msgstr "檔案資訊"
-
-#, fuzzy
-#~ msgid "Not implemented yet"
-#~ msgstr "<b>尚未實作。</b>"
-
-#, fuzzy
-#~ msgid "Invalid dbc file"
-#~ msgstr "數值"
-
-#, fuzzy
-#~| msgid "error"
-#~ msgid "Parse Errors"
-#~ msgstr "錯誤"
-
-#, fuzzy
-#~ msgid "Show SparkLine"
-#~ msgstr "顯示選項(&H)"
-
-#, fuzzy
-#~ msgid "Column Comments:"
-#~ msgstr "欄位屬性"
-
-#, fuzzy
-#~ msgid "%1: error bar style type changed"
-#~ msgstr "（已改變）"
-
-#, fuzzy
-#~| msgid "%1: add %2 rows"
-#~| msgid_plural "%1: add %2 rows"
-#~ msgid "XY-Curves"
-#~ msgstr "%1：新增 %2 列"
-
-#, fuzzy
-#~ msgid "Do Nothing"
-#~ msgstr "不做任何事"
-
-#, fuzzy
-#~ msgid "Create New Project with Spreadsheet"
-#~ msgstr "工作表"
-
-#, fuzzy
-#~ msgctxt "@title:window"
-#~ msgid "Equidistant Values"
-#~ msgstr "數值"
-
-#, fuzzy
-#~| msgid "Date and time"
-#~ msgid "DateTime"
-#~ msgstr "日期和時間"
-
-#, fuzzy
-#~ msgid "Remove"
-#~ msgstr "移除列"
-
-#, fuzzy
-#~ msgid "Add Histogram to"
-#~ msgstr "欄位屬性"
-
-#, fuzzy
-#~| msgid "LabPlot2"
-#~ msgid "Add Box Plot to"
-#~ msgstr "LabPlot2"
-
-#, fuzzy
-#~| msgid "LabPlot2"
-#~ msgid "Add Bar Plot to"
-#~ msgstr "LabPlot2"
-
-#, fuzzy
-#~| msgid "%1: add %2 rows"
-#~| msgid_plural "%1: add %2 rows"
-#~ msgid "Add Histograms to"
-#~ msgstr "%1：新增 %2 列"
-
-#, fuzzy
-#~| msgid "LabPlot2"
-#~ msgid "Add Box Plots to"
-#~ msgstr "LabPlot2"
-
-#, fuzzy
-#~| msgid "LabPlot2"
-#~ msgid "Add Bar Plots to"
-#~ msgstr "LabPlot2"
-
-#, fuzzy
-#~ msgid "GUI configuration file not found"
-#~ msgstr "專案屬性"
-
-#, fuzzy
-#~ msgid "Conditions"
-#~ msgstr "連線"
-
-#, fuzzy
-#~ msgid "&Sort Spreadsheet"
-#~ msgstr "工作表"
-
-#, fuzzy
-#~| msgid "Delete selected objects"
-#~ msgid "Sort columns:"
-#~ msgstr "刪除選取的物件"
-
-#, fuzzy
-#~| msgid "End column:"
-#~ msgid "Leading column:"
-#~ msgstr "結束欄："
-
-#~ msgid "Filter name:"
-#~ msgstr "過濾器名稱："
-
-#, fuzzy
-#~ msgid "new filter"
-#~ msgstr "新增過濾器"
-
-#, fuzzy
-#~ msgid "Manage filters"
-#~ msgstr "管理過濾器"
-
-#, fuzzy
-#~ msgid "Remove Columns"
-#~ msgstr "移除欄"
-
-#, fuzzy
-#~ msgid "xy-Curve from a Formula"
-#~ msgstr "專案屬性"
-
-#, fuzzy
-#~ msgid "Data Operation"
-#~ msgstr "資料格式"
-
-#, fuzzy
-#~ msgid "Auto/Cross Correlation"
-#~ msgstr "連線"
-
-#, fuzzy
-#~ msgid "Convolution/Deconvolution"
-#~ msgstr "連線"
-
-#, fuzzy
-#~ msgid "Data Manipulation"
-#~ msgstr "資料格式"
-
-#, fuzzy
-#~| msgid "%1: add %2 rows"
-#~| msgid_plural "%1: add %2 rows"
-#~ msgid "%1: Add curve to %2 plots"
-#~ msgstr "%1：新增 %2 列"
-
-#, fuzzy
-#~ msgid "&Analysis"
-#~ msgstr "分析"
-
-#, fuzzy
-#~ msgid "%1: set line pen"
-#~ msgstr "設定垂直對齊"
-
-#, fuzzy
-#~ msgid "End Search"
-#~ msgstr "搜尋過濾器"
-
-#, fuzzy
-#~| msgid "Orientation"
-#~ msgid "Point Separation:"
-#~ msgstr "方向"
-
-#, fuzzy
-#~ msgid "Reference Points"
-#~ msgstr "喜好設定"
-
-#, fuzzy
-#~ msgid "No Data"
-#~ msgstr "資料"
 
 #, fuzzy
 #~ msgid "&Restore"
@@ -24277,6 +24086,69 @@ msgstr "開啟失敗"
 #~ msgstr "最大化(&X)"
 
 #, fuzzy
+#~| msgid "%1: add %2 rows"
+#~| msgid_plural "%1: add %2 rows"
+#~ msgid "XY-Curves"
+#~ msgstr "%1：新增 %2 列"
+
+#, fuzzy
+#~ msgid "Not implemented yet"
+#~ msgstr "<b>尚未實作。</b>"
+
+#, fuzzy
+#~ msgid "%1: copy %2"
+#~ msgstr "複製"
+
+#, fuzzy
+#~ msgid "Remove Columns"
+#~ msgstr "移除欄"
+
+#, fuzzy
+#~ msgid "Remove"
+#~ msgstr "移除列"
+
+#, fuzzy
+#~ msgid "xy-Curve from a Formula"
+#~ msgstr "專案屬性"
+
+#, fuzzy
+#~ msgid "Data Operation"
+#~ msgstr "資料格式"
+
+#, fuzzy
+#~ msgid "Auto/Cross Correlation"
+#~ msgstr "連線"
+
+#, fuzzy
+#~ msgid "Data Manipulation"
+#~ msgstr "資料格式"
+
+#, fuzzy
+#~| msgid "%1: add %2 rows"
+#~| msgid_plural "%1: add %2 rows"
+#~ msgid "%1: Add curve to %2 plots"
+#~ msgstr "%1：新增 %2 列"
+
+#, fuzzy
+#~| msgid "Add new"
+#~ msgid "Add %1"
+#~ msgstr "新增"
+
+#~ msgid "%1 name:"
+#~ msgstr "%1 名稱："
+
+#, fuzzy
+#~ msgid "No Data"
+#~ msgstr "資料"
+
+#~ msgid "Filter name:"
+#~ msgstr "過濾器名稱："
+
+#, fuzzy
+#~ msgid "new filter"
+#~ msgstr "新增過濾器"
+
+#, fuzzy
 #~ msgctxt "@title:window"
 #~ msgid "Spreadsheet"
 #~ msgstr "工作表"
@@ -24288,11 +24160,6 @@ msgstr "開啟失敗"
 #~ msgctxt "@title:window"
 #~ msgid "Matrix"
 #~ msgstr "矩陣"
-
-#, fuzzy
-#~ msgctxt "@title:window"
-#~ msgid "Worksheet"
-#~ msgstr "工作表(&W)"
 
 #, fuzzy
 #~| msgid "Plot Area"
@@ -24441,6 +24308,14 @@ msgstr "開啟失敗"
 #~ msgstr "資料夾"
 
 #, fuzzy
+#~ msgid "&Analysis"
+#~ msgstr "分析"
+
+#, fuzzy
+#~ msgid "GUI configuration file not found"
+#~ msgstr "專案屬性"
+
+#, fuzzy
 #~ msgid "&Tile"
 #~ msgstr "鋪排"
 
@@ -24449,8 +24324,65 @@ msgstr "開啟失敗"
 #~ msgstr "層疊"
 
 #, fuzzy
-#~ msgid "Show all Windows"
-#~ msgstr "全部選取"
+#~ msgid "Do Nothing"
+#~ msgstr "不做任何事"
+
+#, fuzzy
+#~ msgctxt "@title:window"
+#~ msgid "Equidistant Values"
+#~ msgstr "數值"
+
+#, fuzzy
+#~ msgid "Add Histogram to"
+#~ msgstr "欄位屬性"
+
+#, fuzzy
+#~| msgid "LabPlot2"
+#~ msgid "Add Box Plot to"
+#~ msgstr "LabPlot2"
+
+#, fuzzy
+#~| msgid "LabPlot2"
+#~ msgid "Add Bar Plot to"
+#~ msgstr "LabPlot2"
+
+#, fuzzy
+#~| msgid "%1: add %2 rows"
+#~| msgid_plural "%1: add %2 rows"
+#~ msgid "Add Histograms to"
+#~ msgstr "%1：新增 %2 列"
+
+#, fuzzy
+#~| msgid "LabPlot2"
+#~ msgid "Add Box Plots to"
+#~ msgstr "LabPlot2"
+
+#, fuzzy
+#~| msgid "LabPlot2"
+#~ msgid "Add Bar Plots to"
+#~ msgstr "LabPlot2"
+
+#, fuzzy
+#~| msgid "Orientation"
+#~ msgid "Point Separation:"
+#~ msgstr "方向"
+
+#, fuzzy
+#~ msgid "Reference Points"
+#~ msgstr "喜好設定"
+
+#, fuzzy
+#~| msgid "error"
+#~ msgid "Parse Errors"
+#~ msgstr "錯誤"
+
+#, fuzzy
+#~ msgid "Manage filters"
+#~ msgstr "管理過濾器"
+
+#, fuzzy
+#~ msgid "Column Comments:"
+#~ msgstr "欄位屬性"
 
 #, fuzzy
 #~ msgid "Tab position:"
@@ -24461,53 +24393,17 @@ msgstr "開啟失敗"
 #~ msgstr "介面"
 
 #, fuzzy
-#~| msgid "dash line"
-#~ msgid "Baseline"
-#~ msgstr "虛線"
+#~| msgid "Delete selected objects"
+#~ msgid "Sort columns:"
+#~ msgstr "刪除選取的物件"
 
 #, fuzzy
-#~| msgid "Height"
-#~ msgid "Weighting:"
-#~ msgstr "高度"
+#~| msgid "End column:"
+#~ msgid "Leading column:"
+#~ msgstr "結束欄："
 
-#, fuzzy
-#~| msgid "%1: insert 1 column"
-#~| msgid_plural "%1: insert %2 columns"
-#~ msgid "Subtract the specified value from column values"
-#~ msgstr "%1：插入 %2 欄"
-
-#, fuzzy
-#~| msgid "%1: insert 1 column"
-#~| msgid_plural "%1: insert %2 columns"
-#~ msgid "Add the specified value to matrix values"
-#~ msgstr "%1：插入 %2 欄"
-
-#, fuzzy
-#~| msgid "%1: insert 1 column"
-#~| msgid_plural "%1: insert %2 columns"
-#~ msgid "Subtract the specified value from matrix values"
-#~ msgstr "%1：插入 %2 欄"
-
-#, fuzzy
-#~| msgid "Statistics"
-#~ msgid "Column Statisti&cs"
-#~ msgstr "統計"
-
-#~ msgid "Created: %1"
-#~ msgstr "建立時間：%1"
-
-#, fuzzy
-#~ msgid "X-data:"
-#~ msgstr "資料"
-
-#, fuzzy
-#~ msgid "Y-data:"
-#~ msgstr "資料"
-
-#, fuzzy
-#~| msgid "LabPlot2"
-#~ msgid "Add plots to"
-#~ msgstr "LabPlot2"
+#~ msgid "Specify the name of the file to import."
+#~ msgstr "指定要匯入的檔案名稱。"
 
 #~ msgid "linear"
 #~ msgstr "線性"
@@ -24522,81 +24418,9 @@ msgstr "開啟失敗"
 #~ msgstr "函式"
 
 #, fuzzy
-#~ msgid "percentile"
-#~ msgstr "置中鋪排"
-
-#, fuzzy
 #~| msgid "Constants"
 #~ msgid "constant"
 #~ msgstr "常數"
-
-#, fuzzy
-#~ msgid "y-Start:"
-#~ msgstr "開始"
-
-#, fuzzy
-#~ msgid "x-Range:"
-#~ msgstr "X 範圍"
-
-#, fuzzy
-#~| msgid "orange"
-#~ msgid "Plot ranges:"
-#~ msgstr "橘"
-
-#, fuzzy
-#~ msgid "x-data:"
-#~ msgstr "資料"
-
-#, fuzzy
-#~ msgid "y-data:"
-#~ msgstr "資料"
-
-#, fuzzy
-#~ msgid "y-Data:"
-#~ msgstr "資料"
-
-#, fuzzy
-#~| msgid "Height"
-#~ msgid "y-Weight:"
-#~ msgstr "高度"
-
-#, fuzzy
-#~ msgid "%1: set whiskers cap pen"
-#~ msgstr "資料"
-
-#, fuzzy
-#~ msgid "%1: set whiskers cap opacity"
-#~ msgstr "設定不透明度"
-
-#, fuzzy
-#~ msgid "Select y-Region and Zoom In"
-#~ msgstr "全部選取"
-
-#, fuzzy
-#~ msgid "Hilbert-Transform"
-#~ msgstr "新增過濾器"
-
-#, fuzzy
-#~ msgctxt "@title:window"
-#~ msgid "xy-Equation"
-#~ msgstr "分頁列位置："
-
-#, fuzzy
-#~ msgctxt "@title:window"
-#~ msgid "Histogram Properties"
-#~ msgstr "欄位屬性"
-
-#, fuzzy
-#~ msgid "Font"
-#~ msgstr "字型"
-
-#, fuzzy
-#~ msgid "x-Range"
-#~ msgstr "X 範圍"
-
-#, fuzzy
-#~ msgid "Font color:"
-#~ msgstr "第一色彩"
 
 #, fuzzy
 #~ msgid "%1: set vertical line style"
@@ -24615,25 +24439,57 @@ msgstr "開啟失敗"
 #~ msgstr "設定字型"
 
 #, fuzzy
-#~ msgid "Error type:"
-#~ msgstr "格式"
+#~ msgid "%1: set filling image"
+#~ msgstr "設定背景影像..."
 
 #, fuzzy
-#~ msgid "y-error"
-#~ msgstr "格式"
+#~ msgid "%1: set filling opacity"
+#~ msgstr "設定不透明度"
 
 #, fuzzy
-#~| msgid "error"
-#~ msgid "x-error"
-#~ msgstr "錯誤"
-
-#~ msgid "cm"
-#~ msgstr "公分"
+#~ msgid "%1: set border pen"
+#~ msgstr "設定佈局"
 
 #, fuzzy
-#~| msgid "Statistics"
-#~ msgid "Statistical Methods (of column)"
-#~ msgstr "統計"
+#~ msgid "%1: set median line opacity"
+#~ msgstr "設定垂直對齊"
+
+#, fuzzy
+#~ msgid "%1: set whiskers opacity"
+#~ msgstr "設定不透明度"
+
+#, fuzzy
+#~ msgid "%1: set whiskers cap pen"
+#~ msgstr "資料"
+
+#, fuzzy
+#~ msgid "%1: set whiskers cap opacity"
+#~ msgstr "設定不透明度"
+
+#, fuzzy
+#~| msgid "%1: change hidden status"
+#~ msgid "%1: change y-range %2 format"
+#~ msgstr "%1：變更隱藏狀態"
+
+#, fuzzy
+#~| msgid "%1: change hidden status"
+#~ msgid "%1: change y-range %2 auto scaling"
+#~ msgstr "%1：變更隱藏狀態"
+
+#, fuzzy
+#~ msgid "%1: set opacity"
+#~ msgstr "設定不透明度"
+
+#, fuzzy
+#~ msgid "Select y-Region and Zoom In"
+#~ msgstr "全部選取"
+
+#, fuzzy
+#~ msgid "Hilbert-Transform"
+#~ msgstr "新增過濾器"
+
+#~ msgid "Created: %1"
+#~ msgstr "建立時間：%1"
 
 #, fuzzy
 #~| msgid "solid line"
@@ -24658,36 +24514,100 @@ msgstr "開啟失敗"
 #~ msgstr "線點交錯"
 
 #, fuzzy
-#~ msgid "Drop Numeric Values"
-#~ msgstr "數值"
+#~ msgid "Y-Ranges:"
+#~ msgstr "X 範圍"
 
 #, fuzzy
-#~ msgid "Drop Text Values"
-#~ msgstr "數值"
+#~ msgid "Horizontal Linear Gradient"
+#~ msgstr "水平軸："
 
 #, fuzzy
-#~ msgid "%1: set border pen"
-#~ msgstr "設定佈局"
+#~ msgid "Vertical Linear Gradient"
+#~ msgstr "輻射狀漸層"
 
 #, fuzzy
-#~ msgid "%1: set median line pen"
-#~ msgstr "設定垂直對齊"
-
-#, fuzzy
-#~ msgid "%1: set median line opacity"
-#~ msgstr "設定垂直對齊"
-
-#, fuzzy
-#~ msgid "%1: set whiskers pen"
+#~ msgid "Data, +"
 #~ msgstr "資料"
 
 #, fuzzy
-#~ msgid "%1: set whiskers opacity"
-#~ msgstr "設定不透明度"
+#~| msgid "cartesian"
+#~ msgctxt "@title:window"
+#~ msgid "Cartesian Plot"
+#~ msgstr "直角座標"
 
 #, fuzzy
-#~ msgid "Bar"
-#~ msgstr "巴（bars）"
+#~ msgctxt "@title:window"
+#~ msgid "xy-Equation"
+#~ msgstr "分頁列位置："
+
+#, fuzzy
+#~ msgctxt "@title:window"
+#~ msgid "Histogram Properties"
+#~ msgstr "欄位屬性"
+
+#, fuzzy
+#~| msgid "%1: insert 1 column"
+#~| msgid_plural "%1: insert %2 columns"
+#~ msgid "Subtract the specified value from column values"
+#~ msgstr "%1：插入 %2 欄"
+
+#, fuzzy
+#~| msgid "%1: insert 1 column"
+#~| msgid_plural "%1: insert %2 columns"
+#~ msgid "Add the specified value to matrix values"
+#~ msgstr "%1：插入 %2 欄"
+
+#, fuzzy
+#~| msgid "%1: insert 1 column"
+#~| msgid_plural "%1: insert %2 columns"
+#~ msgid "Subtract the specified value from matrix values"
+#~ msgstr "%1：插入 %2 欄"
+
+#, fuzzy
+#~| msgid "%1: add %2 rows"
+#~| msgid_plural "%1: add %2 rows"
+#~ msgid "Add Curve to"
+#~ msgstr "%1：新增 %2 列"
+
+#, fuzzy
+#~| msgid "Plot Area"
+#~ msgid "Box Plot Data"
+#~ msgstr "繪製區域"
+
+#, fuzzy
+#~ msgid "Histogram Placement"
+#~ msgstr "欄位屬性"
+
+#, fuzzy
+#~| msgid "LabPlot2"
+#~ msgid "Plot - %1"
+#~ msgstr "LabPlot2"
+
+#, fuzzy
+#~| msgid "LabPlot2"
+#~ msgid "Plot %1"
+#~ msgstr "LabPlot2"
+
+#, fuzzy
+#~| msgid "Column"
+#~ msgid "Tick Column:"
+#~ msgstr "欄"
+
+#, fuzzy
+#~ msgid "Tick Type:"
+#~ msgstr "類型"
+
+#, fuzzy
+#~ msgid "Font"
+#~ msgstr "字型"
+
+#, fuzzy
+#~ msgid "y-Range"
+#~ msgstr "X 範圍"
+
+#, fuzzy
+#~ msgid "x-Range"
+#~ msgstr "X 範圍"
 
 #, fuzzy
 #~ msgid "Top margin:"
@@ -24710,32 +24630,67 @@ msgstr "開啟失敗"
 #~ msgid "Margin"
 #~ msgstr "邊界："
 
-#, fuzzy
-#~| msgid "LabPlot2"
-#~ msgid "Plot - %1"
-#~ msgstr "LabPlot2"
+#~ msgid "cm"
+#~ msgstr "公分"
 
 #, fuzzy
-#~| msgid "LabPlot2"
-#~ msgid "Plot %1"
-#~ msgstr "LabPlot2"
+#~ msgid "x-Start:"
+#~ msgstr "開始"
 
 #, fuzzy
-#~| msgid "cartesian"
-#~ msgid "Cartesian Plot"
-#~ msgstr "直角座標"
+#~ msgid "x-Range:"
+#~ msgstr "X 範圍"
 
 #, fuzzy
-#~| msgid "cartesian"
-#~ msgctxt "@title:window"
-#~ msgid "Cartesian Plot"
-#~ msgstr "直角座標"
+#~| msgid "orange"
+#~ msgid "Plot ranges:"
+#~ msgstr "橘"
 
 #, fuzzy
-#~| msgid "%1: add %2 rows"
-#~| msgid_plural "%1: add %2 rows"
-#~ msgid "Add Curve to"
-#~ msgstr "%1：新增 %2 列"
+#~| msgid "error"
+#~ msgid "x-error"
+#~ msgstr "錯誤"
+
+#, fuzzy
+#~ msgid "Error type:"
+#~ msgstr "格式"
+
+#, fuzzy
+#~ msgid "y-error"
+#~ msgstr "格式"
+
+#, fuzzy
+#~ msgid "x-data:"
+#~ msgstr "資料"
+
+#, fuzzy
+#~ msgid "y-data:"
+#~ msgstr "資料"
+
+#, fuzzy
+#~ msgid "y-Data:"
+#~ msgstr "資料"
+
+#, fuzzy
+#~| msgid "Height"
+#~ msgid "y-Weight:"
+#~ msgstr "高度"
+
+#, fuzzy
+#~ msgid "Font color:"
+#~ msgstr "第一色彩"
+
+#, fuzzy
+#~ msgid "Drop values:"
+#~ msgstr "數值"
+
+#, fuzzy
+#~ msgid "X-data:"
+#~ msgstr "資料"
+
+#, fuzzy
+#~ msgid "Y-data:"
+#~ msgstr "資料"
 
 #, fuzzy
 #~| msgid "%1: add %2 rows"
@@ -24744,195 +24699,9 @@ msgstr "開啟失敗"
 #~ msgstr "%1：新增 %2 列"
 
 #, fuzzy
-#~ msgid "Drop values:"
-#~ msgstr "數值"
-
-#, fuzzy
-#~ msgid "Data, +-"
-#~ msgstr "資料"
-
-#, fuzzy
-#~ msgid "Data, +"
-#~ msgstr "資料"
-
-#, fuzzy
-#~ msgid "Tick Type:"
-#~ msgstr "類型"
-
-#, fuzzy
-#~| msgid "Automatic"
-#~ msgid "Automatic:"
-#~ msgstr "自動"
-
-#, fuzzy
-#~| msgid "Column"
-#~ msgid "Tick Column:"
-#~ msgstr "欄"
-
-#, fuzzy
-#~| msgid "error"
-#~ msgid "Error:"
-#~ msgstr "錯誤"
-
-#, fuzzy
-#~ msgid "%1: change y-range %2 format"
-#~ msgstr "設定佈局"
-
-#, fuzzy
-#~| msgid "%1: change hidden status"
-#~ msgid "%1: change y-range %2 auto scaling"
-#~ msgstr "%1：變更隱藏狀態"
-
-#, fuzzy
-#~ msgid "Y-Ranges:"
-#~ msgstr "X 範圍"
-
-#, fuzzy
-#~| msgid "Plot Area"
-#~ msgid "Box Plot Data"
-#~ msgstr "繪製區域"
-
-#, fuzzy
-#~ msgid "Histogram Placement"
-#~ msgstr "欄位屬性"
-
-#, fuzzy
-#~ msgid "%1: set filling image"
-#~ msgstr "設定背景影像..."
-
-#, fuzzy
-#~ msgid "%1: set filling opacity"
-#~ msgstr "設定不透明度"
-
-#, fuzzy
-#~ msgid "%1: set opacity"
-#~ msgstr "設定不透明度"
-
-#, fuzzy
-#~ msgid "Horizontal Linear Gradient"
-#~ msgstr "水平軸："
-
-#, fuzzy
-#~ msgid "Vertical Linear Gradient"
-#~ msgstr "輻射狀漸層"
-
-#, fuzzy
 #~| msgid "cm"
 #~ msgid "c"
 #~ msgstr "公分"
-
-#, fuzzy
-#~ msgid "Datapicker"
-#~ msgstr "資料"
-
-#, fuzzy
-#~ msgid "Foreground color:"
-#~ msgstr "背景"
-
-#, fuzzy
-#~ msgid "X-error plus"
-#~ msgstr "格式"
-
-#, fuzzy
-#~ msgid "Y-error plus"
-#~ msgstr "格式"
-
-#~ msgid "Z"
-#~ msgstr "Z"
-
-#, fuzzy
-#~ msgctxt "@title:window"
-#~ msgid "Datapicker"
-#~ msgstr "資料"
-
-#, fuzzy
-#~ msgid "&Datapicker"
-#~ msgstr "資料"
-
-#, fuzzy
-#~ msgid "Animate Worksheet"
-#~ msgstr "工作表(&W)"
-
-#, fuzzy
-#~ msgid "Show Completion"
-#~ msgstr "資料格式"
-
-#, fuzzy
-#~ msgctxt "@title:window"
-#~ msgid "CAS Properties"
-#~ msgstr "屬性"
-
-#, fuzzy
-#~ msgid "CAS Worksheet"
-#~ msgstr "工作表(&W)"
-
-#, fuzzy
-#~| msgid "&Worksheet"
-#~ msgid "&CAS Worksheet"
-#~ msgstr "工作表(&W)"
-
-#, fuzzy
-#~ msgid ""
-#~ "LabPlot2 is a KDE-application for interactive graphing and analysis of "
-#~ "scientific data."
-#~ msgstr "LabPlot 是一套互動式圖形與分析科學資料的應用程式。"
-
-#, fuzzy
-#~| msgid "Offset"
-#~ msgid "Offset x:"
-#~ msgstr "位移"
-
-#, fuzzy
-#~| msgid "Offset"
-#~ msgid "Offset y:"
-#~ msgstr "位移"
-
-#, fuzzy
-#~ msgid "xy-curve from a mathematical Equation"
-#~ msgstr "專案屬性"
-
-#, fuzzy
-#~ msgid "Error, %"
-#~ msgstr "格式"
-
-#, fuzzy
-#~| msgid "Close Project"
-#~ msgid "LabPlot version"
-#~ msgstr "關閉專案"
-
-#, fuzzy
-#~| msgid "Direction"
-#~ msgid "Fit Distribution"
-#~ msgstr "方向"
-
-#, fuzzy
-#~ msgid "Import from File"
-#~ msgstr "匯入"
-
-#, fuzzy
-#~| msgid "Date and time"
-#~ msgid "Date/Time"
-#~ msgstr "日期和時間"
-
-#, fuzzy
-#~ msgid "%1: set x range"
-#~ msgstr "設定字型"
-
-#, fuzzy
-#~ msgid "%1: set y range"
-#~ msgstr "設定字型"
-
-#, fuzzy
-#~ msgid "Show &last"
-#~ msgstr "顯示控制面板(&C)"
-
-#, fuzzy
-#~ msgid "Show f&irst"
-#~ msgstr "顯示選項(&H)"
-
-#, fuzzy
-#~ msgid "rank 2 not implemented yet for type %1, size = %2"
-#~ msgstr "<b>尚未實作。</b>"
 
 #, fuzzy
 #~ msgid "%1: set point's style"
@@ -24952,34 +24721,120 @@ msgstr "開啟失敗"
 #~ msgstr "設定背景影像..."
 
 #, fuzzy
+#~ msgid "%1: set outline style"
+#~ msgstr "設定佈局"
+
+#, fuzzy
 #~ msgid "%1: set point's opacity"
 #~ msgstr "設定不透明度"
 
 #, fuzzy
-#~| msgid "error"
-#~ msgid "Error Bar"
-#~ msgstr "錯誤"
+#~ msgid "rank 2 not implemented yet for type %1, size = %2"
+#~ msgstr "<b>尚未實作。</b>"
 
 #, fuzzy
-#~ msgid "Notes:"
-#~ msgstr "備忘"
+#~ msgid "xy-curve from a mathematical Equation"
+#~ msgstr "專案屬性"
 
 #, fuzzy
-#~| msgid "Variance"
-#~ msgid "Variables: "
-#~ msgstr "變異數"
-
-#, fuzzy
-#~ msgid "%1: set outliers symbol style"
+#~ msgid "%1: set x-range format"
 #~ msgstr "設定佈局"
 
 #, fuzzy
-#~ msgid "%1: set mean symbol style"
+#~ msgid "%1: set y-range format"
 #~ msgstr "設定佈局"
+
+#, fuzzy
+#~ msgid "%1: set min x"
+#~ msgstr "設定字型"
+
+#, fuzzy
+#~ msgid "%1: set max x"
+#~ msgstr "設定字型"
+
+#, fuzzy
+#~ msgid "%1: set min y"
+#~ msgstr "設定字型"
+
+#, fuzzy
+#~ msgid "%1: set max y"
+#~ msgstr "設定字型"
+
+#, fuzzy
+#~ msgid "%1: set y scale"
+#~ msgstr "設定字型"
 
 #, fuzzy
 #~ msgid "%1: set symbol opacity"
 #~ msgstr "設定不透明度"
+
+#, fuzzy
+#~ msgid "Show/Hide columns"
+#~ msgstr "移除欄"
+
+#, fuzzy
+#~ msgid "Show Search/Filter Options"
+#~ msgstr "搜尋過濾器"
+
+#, fuzzy
+#~ msgid "Y-error plus"
+#~ msgstr "格式"
+
+#, fuzzy
+#~ msgid "Clea&r Selected Rows"
+#~ msgstr "清除選擇"
+
+#, fuzzy
+#~ msgctxt "@title:window"
+#~ msgid "File Information"
+#~ msgstr "檔案資訊"
+
+#, fuzzy
+#~ msgid "log(x)"
+#~ msgstr "LOG(x)"
+
+#, fuzzy
+#~ msgid "log2(x)"
+#~ msgstr "LOG(x)"
+
+#, fuzzy
+#~ msgid "ln(x)"
+#~ msgstr "LN(x)"
+
+#, fuzzy
+#~ msgid "log(abs(x))"
+#~ msgstr "LOG(x)"
+
+#, fuzzy
+#~ msgid "log2(abs(x))"
+#~ msgstr "LOG(x)"
+
+#, fuzzy
+#~ msgid "ln(abs(x))"
+#~ msgstr "LOG(x)"
+
+#, fuzzy
+#~ msgid "log(y)"
+#~ msgstr "LOG(x)"
+
+#, fuzzy
+#~ msgid "log2(y)"
+#~ msgstr "LOG(x)"
+
+#, fuzzy
+#~ msgid "log(abs(y))"
+#~ msgstr "LOG(x)"
+
+#, fuzzy
+#~ msgid "log2(abs(y))"
+#~ msgstr "LOG(x)"
+
+#, fuzzy
+#~ msgid "ln(abs(y))"
+#~ msgstr "LOG(x)"
+
+#~ msgid "Z"
+#~ msgstr "Z"
 
 #, fuzzy
 #~ msgid "%1 CustomPoints: style changed"
@@ -24995,21 +24850,50 @@ msgstr "開啟失敗"
 #~ msgstr "設定不透明度"
 
 #, fuzzy
-#~ msgid "Show/Hide columns"
-#~ msgstr "移除欄"
-
-#, fuzzy
-#~ msgid "Show Search/Filter Options"
-#~ msgstr "搜尋過濾器"
-
-#, fuzzy
-#~ msgid "Levels:"
-#~ msgstr "色階"
+#~ msgid "Error, %"
+#~ msgstr "格式"
 
 #, fuzzy
 #~ msgctxt "@title:window"
-#~ msgid "File Information"
-#~ msgstr "檔案資訊"
+#~ msgid "Datapicker"
+#~ msgstr "資料"
+
+#, fuzzy
+#~ msgctxt "@title:window %1 is a Cantor backend"
+#~ msgid "%1 Properties"
+#~ msgstr "屬性"
+
+#, fuzzy
+#~ msgctxt "@title:window"
+#~ msgid "CAS Properties"
+#~ msgstr "屬性"
+
+#, fuzzy
+#~ msgid ""
+#~ "LabPlot2 is a KDE-application for interactive graphing and analysis of "
+#~ "scientific data."
+#~ msgstr "LabPlot 是一套互動式圖形與分析科學資料的應用程式。"
+
+#, fuzzy
+#~ msgid "Datapicker"
+#~ msgstr "資料"
+
+#, fuzzy
+#~ msgid "CAS Worksheet"
+#~ msgstr "工作表(&W)"
+
+#, fuzzy
+#~| msgid "&Worksheet"
+#~ msgid "&CAS Worksheet"
+#~ msgstr "工作表(&W)"
+
+#, fuzzy
+#~ msgid "&Datapicker"
+#~ msgstr "資料"
+
+#, fuzzy
+#~ msgid "Import from File"
+#~ msgstr "匯入"
 
 #, fuzzy
 #~| msgid "&Edit"
@@ -25017,24 +24901,55 @@ msgstr "開啟失敗"
 #~ msgstr "編輯(&E)"
 
 #, fuzzy
-#~ msgid "Clea&r Selected Rows"
-#~ msgstr "清除選擇"
+#~| msgid "error"
+#~ msgid "Error Bar"
+#~ msgstr "錯誤"
+
+#, fuzzy
+#~ msgid "Scaling:"
+#~ msgstr "調整大小"
+
+#, fuzzy
+#~ msgid "Show &last"
+#~ msgstr "顯示控制面板(&C)"
+
+#, fuzzy
+#~ msgid "Show f&irst"
+#~ msgstr "顯示選項(&H)"
+
+#, fuzzy
+#~ msgid "y-Range:"
+#~ msgstr "X 範圍"
+
+#, fuzzy
+#~| msgid "Close Project"
+#~ msgid "LabPlot version"
+#~ msgstr "關閉專案"
+
+#, fuzzy
+#~ msgid "Notes:"
+#~ msgstr "備忘"
+
+#, fuzzy
+#~ msgid "Foreground color:"
+#~ msgstr "背景"
+
+#, fuzzy
+#~ msgid "%1: set outliers symbol style"
+#~ msgstr "設定佈局"
+
+#, fuzzy
+#~ msgid "%1: set mean symbol style"
+#~ msgstr "設定佈局"
+
+#, fuzzy
+#~| msgid "Date and time"
+#~ msgid "Date/Time"
+#~ msgstr "日期和時間"
 
 #, fuzzy
 #~ msgid "2/98 percentiles"
 #~ msgstr "置中鋪排"
-
-#, fuzzy
-#~ msgid "log(x)"
-#~ msgstr "LOG(x)"
-
-#, fuzzy
-#~ msgid "log2(x)"
-#~ msgstr "LOG(x)"
-
-#, fuzzy
-#~ msgid "ln(x)"
-#~ msgstr "LN(x)"
 
 #, fuzzy
 #~ msgid "log(|x|)"
@@ -25043,27 +24958,6 @@ msgstr "開啟失敗"
 #, fuzzy
 #~ msgid "log2(|x|)"
 #~ msgstr "LOG(x)"
-
-#, fuzzy
-#~ msgid "log(abs(x))"
-#~ msgstr "LOG(x)"
-
-#, fuzzy
-#~ msgid "log2(abs(x))"
-#~ msgstr "LOG(x)"
-
-#, fuzzy
-#~ msgid "log2(abs(y))"
-#~ msgstr "LOG(x)"
-
-#, fuzzy
-#~ msgid "Scaling:"
-#~ msgstr "調整大小"
-
-#, fuzzy
-#~ msgctxt "@title:window %1 is a Cantor backend"
-#~ msgid "%1 Properties"
-#~ msgstr "屬性"
 
 #, fuzzy
 #~| msgid "Variance"
