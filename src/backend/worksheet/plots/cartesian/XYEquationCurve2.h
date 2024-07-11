@@ -24,7 +24,7 @@ class XYEquationCurve2Private;
 
 #ifdef SDK
 #include "labplot_export.h"
-class LABPLOT_EXPORT XYEquationCurve2 : public XYCurve {
+class LABPLOT_EXPORT XYEquationCurve2 : public XYAnalysisCurve {
 #else
 class XYEquationCurve2 : public XYAnalysisCurve {
 #endif
