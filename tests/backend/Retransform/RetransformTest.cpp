@@ -2026,7 +2026,7 @@ void RetransformTest::xyEquationCurve2() {
 		QCOMPARE(yColumn->rowCount(), data.count);
 		for (int i = 0; i < xColumn->rowCount(); i++) {
 			VALUES_EQUAL(xColumn->valueAt(i), i + 1);
-			VALUES_EQUAL(yColumn->valueAt(i), (i + 1) * 2);
+			VALUES_EQUAL(yColumn->valueAt(i), (i + 1) * 2.0);
 		}
 	}
 
