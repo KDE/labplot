@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-10 01:43+0000\n"
-"PO-Revision-Date: 2024-07-08 14:44+0300\n"
+"PO-Revision-Date: 2024-07-11 01:11+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -9894,25 +9894,25 @@ msgstr "Büyütme yok"
 #: src/commonfrontend/worksheet/WorksheetView.cpp:197
 #, kde-format
 msgid "2x Magnification"
-msgstr "2x Büyütme"
+msgstr "2× Büyütme"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:174
 #: src/commonfrontend/worksheet/WorksheetView.cpp:200
 #, kde-format
 msgid "3x Magnification"
-msgstr "3x Büyütme"
+msgstr "3× Büyütme"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:177
 #: src/commonfrontend/worksheet/WorksheetView.cpp:203
 #, kde-format
 msgid "4x Magnification"
-msgstr "4x Büyütme"
+msgstr "4× Büyütme"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:180
 #: src/commonfrontend/worksheet/WorksheetView.cpp:206
 #, kde-format
 msgid "5x Magnification"
-msgstr "5x Büyütme"
+msgstr "5× Büyütme"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:213
 #: src/commonfrontend/worksheet/WorksheetView.cpp:438
@@ -14385,7 +14385,7 @@ msgstr "değer: %1"
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:79
 #, kde-format
 msgid "Auto (5x data points)"
-msgstr "Otomatik (5x veri noktası)"
+msgstr "Otomatik (5× veri noktası)"
 
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:80
 #, kde-format

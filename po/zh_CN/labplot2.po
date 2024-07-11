@@ -15303,11 +15303,10 @@ msgid "Worksheet Preview"
 msgstr ""
 
 #: src/kdefrontend/MainWin.cpp:1408
-#, fuzzy, kde-format
-#| msgid "Content"
+#, kde-format
 msgctxt "@title:window"
 msgid "Content"
-msgstr "内容"
+msgstr ""
 
 #: src/kdefrontend/MainWin.cpp:1485
 #, kde-format
