@@ -107,11 +107,11 @@ protected:
 private Q_SLOTS:
 	void equationVariableCurveRemoved(const AbstractAspect* aspect);
 	void equationVariableCurveAdded(const AbstractAspect* aspect);
-	void setEquationVariableCurve(const XYCurve*);
 
 private:
 	Q_DECLARE_PRIVATE(XYEquationCurve2)
 	void init();
+	void setEquationVariableCurve(const XYCurve*);
 	bool XmlReadEquation(XmlStreamReader* reader, bool preview);
 
 public Q_SLOTS:
