@@ -315,6 +315,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 		auto* item = addedElement->graphicsItem();
 		d->m_scene->addItem(item);
 	}
+
 	connect(aspect, &AbstractAspect::contextMenuRequested, this, &Worksheet::childContextMenuRequested);
 	connect(addedElement, &WorksheetElement::changed, this, &Worksheet::changed);
 

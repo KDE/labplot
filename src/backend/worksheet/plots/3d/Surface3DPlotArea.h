@@ -1,17 +1,27 @@
+/*
+	File                 : Surface3DPlotArea.h
+	Project              : LabPlot
+	Description          : Surface3DPlotArea
+	--------------------------------------------------------------------
+    SPDX-FileCopyrightText: 2024 Kuntal Bar <barkuntal6@gmail.com>
+
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
+
 #ifndef SURFACE3DPLOTAREA_H
 #define SURFACE3DPLOTAREA_H
 
-#include <QtGraphs/Q3DSurface>
-
+#include <Q3DSurface> // TODO: get rid of this include, use forward declaration only
 #include <backend/worksheet/WorksheetElementContainer.h>
 
-#include <backend/core/AbstractColumn.h>
-
-#include <backend/matrix/Matrix.h>
-
 class AbstractColumn;
+class Matrix;
 class Surface3DPlotAreaPrivate;
-class WorksheetElemetContainer;
+
+class Q3DSurface;
+class QSurface3DSeries;
+class QSurfaceDataProxy;
+
 class Surface3DPlotArea : public WorksheetElementContainer {
 	Q_OBJECT
 public:
@@ -20,8 +30,7 @@ public:
     void handleResize(double horizontalRatio, double verticalRatio, bool pageResize = false) override;
     void retransform() override;
     enum DataSource { DataSource_Spreadsheet = 0, DataSource_Matrix = 1, DataSource_Empty = 2 };
-    enum DrawMode { DrawSurface = 0, DrawWireframe = 1 };
-    enum MeshType { Bar = 1, Cube = 2, Pyramid = 3, Cone = 4, Cylinder = 5, BevelBar = 6, BevelCube = 7, Sphere = 8, Minimal = 9, Arrow = 10, Point = 11 };
+    enum DrawMode { DrawWireframe = 1, DrawSurface = 2, DrawWireframeSurface = 3 };
     enum Theme {
         Qt = 0,
         PrimaryColors = 1,
@@ -39,11 +48,9 @@ public:
 
     BASIC_D_ACCESSOR_DECL(DataSource, dataSource, DataSource)
     BASIC_D_ACCESSOR_DECL(DrawMode, drawMode, DrawMode)
-    BASIC_D_ACCESSOR_DECL(MeshType, meshType, MeshType)
     BASIC_D_ACCESSOR_DECL(QColor, color, Color)
     BASIC_D_ACCESSOR_DECL(double, opacity, Opacity)
     BASIC_D_ACCESSOR_DECL(bool, flatShading, FlatShading)
-    BASIC_D_ACCESSOR_DECL(bool, gridVisibility, GridVisibility)
     BASIC_D_ACCESSOR_DECL(ShadowQuality, shadowQuality, ShadowQuality)
     BASIC_D_ACCESSOR_DECL(bool, smooth, Smooth)
     BASIC_D_ACCESSOR_DECL(int, zoomLevel, ZoomLevel)
@@ -67,8 +74,6 @@ public:
     void show(bool visible);
 
 	Q3DSurface* m_surface;
-	QSurfaceDataProxy* m_proxy;
-	QSurface3DSeries* m_series;
 	typedef Surface3DPlotAreaPrivate Private;
 
 private:
@@ -85,11 +90,9 @@ private Q_SLOTS:
 Q_SIGNALS:
     void sourceTypeChanged(Surface3DPlotArea::DataSource);
     void drawModeChanged(Surface3DPlotArea::DrawMode);
-    void meshTypeChanged(Surface3DPlotArea::MeshType);
     void colorChanged(QColor);
     void opacityChanged(double);
     void flatShadingChanged(bool);
-    void gridVisibilityChanged(bool);
     void lightningChanged(bool);
     void shadowQualityChanged(Surface3DPlotArea::ShadowQuality);
     void smoothChanged(bool);
