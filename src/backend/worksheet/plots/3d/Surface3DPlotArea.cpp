@@ -1,13 +1,22 @@
+/*
+	File                 : Surface3DPlotArea.cpp
+	Project              : LabPlot
+	Description          : Surface3DPlotArea
+	--------------------------------------------------------------------
+    SPDX-FileCopyrightText: 2024 Kuntal Bar <barkuntal6@gmail.com>
+
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
+
 #include "Surface3DPlotArea.h"
 #include "Surface3DPlotAreaPrivate.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
+
 #include <Q3DSurface>
 #include <QAbstract3DSeries>
 #include <QXmlStreamAttributes>
-#include <QtGraphs/Q3DSurface>
-#include <qabstract3dgraph.h>
 
 Surface3DPlotArea::Surface3DPlotArea(const QString& name)
     : WorksheetElementContainer(name, new Surface3DPlotAreaPrivate(this), AspectType::SurfacePlot)
@@ -45,14 +54,12 @@ void Surface3DPlotArea::matrixAboutToBeRemoved(const AbstractAspect*) {
 
 // General parameters
 BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, Surface3DPlotArea::DataSource, dataSource, sourceType)
-BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, Surface3DPlotArea::MeshType, meshType, meshType)
 BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, Surface3DPlotArea::DrawMode, drawMode, drawMode)
 
 BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, QColor, color, color)
 BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, double, opacity, opacity)
 
 BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, bool, flatShading, flatShading)
-BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, bool, gridVisibility, gridVisibility)
 BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, Surface3DPlotArea::ShadowQuality, shadowQuality, shadowQuality)
 BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, bool, smooth, smooth)
 BASIC_SHARED_D_READER_IMPL(Surface3DPlotArea, int, zoomLevel, zoomLevel)
@@ -96,95 +103,73 @@ void Surface3DPlotArea::show(bool visible) {
 // ##############################################################################
 
 // General
-STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetDataSource, Surface3DPlotArea::DataSource, sourceType, generateData)
+STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetDataSource, Surface3DPlotArea::DataSource, sourceType, recalc)
 void Surface3DPlotArea::setDataSource(Surface3DPlotArea::DataSource sourceType) {
 	Q_D(Surface3DPlotArea);
 	if (sourceType != d->sourceType)
 		exec(new Surface3DPlotAreaSetDataSourceCmd(d, sourceType, ki18n("%1: data source changed")));
 }
-STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetDrawMode, Surface3DPlotArea::DrawMode, drawMode, recalc)
+STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetDrawMode, Surface3DPlotArea::DrawMode, drawMode, updateDrawMode)
 void Surface3DPlotArea::setDrawMode(Surface3DPlotArea::DrawMode drawMode) {
 	Q_D(Surface3DPlotArea);
 	if (drawMode != d->drawMode)
 		exec(new Surface3DPlotAreaSetDrawModeCmd(d, drawMode, ki18n("%1: draw mode changed")));
 }
-STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetMeshType, Surface3DPlotArea::MeshType, meshType, recalc)
-void Surface3DPlotArea::setMeshType(Surface3DPlotArea::MeshType meshType) {
-	Q_D(Surface3DPlotArea);
-	if (meshType != d->meshType) {
-		exec(new Surface3DPlotAreaSetMeshTypeCmd(d, meshType, ki18n("%1: draw mode changed")));
-	}
-}
-STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetColor, QColor, color, recalc)
+
+STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetColor, QColor, color, updateColor)
 void Surface3DPlotArea::setColor(QColor color) {
-	Q_D(Surface3DPlotArea);
-	if (color != d->color) {
-		exec(new Surface3DPlotAreaSetColorCmd(d, color, ki18n("%1: color changed")));
-	}
+    Q_D(Surface3DPlotArea);
+    if (color != d->color)
+        exec(new Surface3DPlotAreaSetColorCmd(d, color, ki18n("%1: color changed")));
 }
-STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetOpacity, double, opacity, recalc)
+STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetOpacity, double, opacity, updateOpacity)
 void Surface3DPlotArea::setOpacity(double opacity) {
-	Q_D(Surface3DPlotArea);
-	if (opacity != d->opacity) {
-		exec(new Surface3DPlotAreaSetOpacityCmd(d, opacity, ki18n("%1: opacity changed")));
-	}
+    Q_D(Surface3DPlotArea);
+    if (opacity != d->opacity)
+        exec(new Surface3DPlotAreaSetOpacityCmd(d, opacity, ki18n("%1: opacity changed")));
 }
-STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetFlatShading, bool, flatShading, recalc)
+STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetFlatShading, bool, flatShading, updateFlatShading)
 void Surface3DPlotArea::setFlatShading(bool flatShading) {
-	Q_D(Surface3DPlotArea);
-	if (flatShading != d->flatShading) {
-		exec(new Surface3DPlotAreaSetFlatShadingCmd(d, flatShading, ki18n("%1: flat shading changed")));
-	}
-}
-STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetGridVisibility, bool, gridVisibility, recalc)
-void Surface3DPlotArea::setGridVisibility(bool gridVisibility) {
-	Q_D(Surface3DPlotArea);
-	if (gridVisibility != d->gridVisibility) {
-		exec(new Surface3DPlotAreaSetGridVisibilityCmd(d, gridVisibility, ki18n("%1: grid visibility changed")));
-	}
+    Q_D(Surface3DPlotArea);
+    if (flatShading != d->flatShading)
+        exec(new Surface3DPlotAreaSetFlatShadingCmd(d, flatShading, ki18n("%1: flat shading changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetShadowQuality, Surface3DPlotArea::ShadowQuality, shadowQuality, recalc)
+STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetShadowQuality, Surface3DPlotArea::ShadowQuality, shadowQuality, updateShadowQuality)
 void Surface3DPlotArea::setShadowQuality(Surface3DPlotArea::ShadowQuality shadowQuality) {
-	Q_D(Surface3DPlotArea);
-	if (shadowQuality != d->shadowQuality) {
-		exec(new Surface3DPlotAreaSetShadowQualityCmd(d, shadowQuality, ki18n("%1: shadow quality changed")));
-	}
+    Q_D(Surface3DPlotArea);
+    if (shadowQuality != d->shadowQuality)
+        exec(new Surface3DPlotAreaSetShadowQualityCmd(d, shadowQuality, ki18n("%1: shadow quality changed")));
 }
-STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetSmooth, bool, smooth, recalc)
+STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetSmooth, bool, smooth, updateSmoothMesh)
 void Surface3DPlotArea::setSmooth(bool smooth) {
-	Q_D(Surface3DPlotArea);
-	if (smooth != d->smooth) {
-		exec(new Surface3DPlotAreaSetSmoothCmd(d, smooth, ki18n("%1: smooth changed")));
-	}
+    Q_D(Surface3DPlotArea);
+    if (smooth != d->smooth)
+        exec(new Surface3DPlotAreaSetSmoothCmd(d, smooth, ki18n("%1: smooth changed")));
 }
-STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetMatrix, const Matrix*, matrix, generateData)
+STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetMatrix, const Matrix*, matrix, recalc)
 void Surface3DPlotArea::setMatrix(const Matrix* matrix) {
     Q_D(Surface3DPlotArea);
-    if (matrix != d->matrix) {
+    if (matrix != d->matrix)
         exec(new Surface3DPlotAreaSetMatrixCmd(d, matrix, ki18n("%1: matrix changed")));
-    }
 }
-STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetXColumn, const AbstractColumn*, xColumn, generateData)
+STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetXColumn, const AbstractColumn*, xColumn, recalc)
 void Surface3DPlotArea::setXColumn(const AbstractColumn* xCol) {
     Q_D(Surface3DPlotArea);
-    if (xCol != d->xColumn) {
+    if (xCol != d->xColumn)
         exec(new Surface3DPlotAreaSetXColumnCmd(d, xCol, ki18n("%1: X Column changed")));
-    }
 }
-STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetYColumn, const AbstractColumn*, yColumn, generateData)
+STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetYColumn, const AbstractColumn*, yColumn, recalc)
 void Surface3DPlotArea::setYColumn(const AbstractColumn* yCol) {
     Q_D(Surface3DPlotArea);
-    if (yCol != d->yColumn) {
+    if (yCol != d->yColumn)
         exec(new Surface3DPlotAreaSetYColumnCmd(d, yCol, ki18n("%1: Y Column changed")));
-    }
 }
-STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetZColumn, const AbstractColumn*, zColumn, generateData)
+STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetZColumn, const AbstractColumn*, zColumn, recalc)
 void Surface3DPlotArea::setZColumn(const AbstractColumn* zCol) {
     Q_D(Surface3DPlotArea);
-    if (zCol != d->zColumn) {
+    if (zCol != d->zColumn)
         exec(new Surface3DPlotAreaSetZColumnCmd(d, zCol, ki18n("%1: Z Column changed")));
-    }
 }
 
 void Surface3DPlotArea::setZoomLevel(int zoomLevel) {
@@ -210,6 +195,7 @@ void Surface3DPlotArea::setTheme(Surface3DPlotArea::Theme theme) {
     m_surface->activeTheme()->setType(static_cast<Q3DTheme::Theme>(theme));
     d->theme = theme;
     Q_EMIT themeChanged(theme);
+    Q_EMIT changed();
 }
 class Surface3DPlotAreaSetRectCmd : public QUndoCommand {
 public:
@@ -281,7 +267,10 @@ void Surface3DPlotArea::setPrevRect(const QRectF& prevRect) {
 
 void Surface3DPlotArea::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
 }
+
 void Surface3DPlotArea::retransform() {
+    Q_D(Surface3DPlotArea);
+	d->retransform();
 }
 
 // #####################################################################
@@ -311,13 +300,65 @@ void Surface3DPlotAreaPrivate::retransform() {
 void Surface3DPlotAreaPrivate::recalcShapeAndBoundingRect() {
 }
 
-void Surface3DPlotAreaPrivate::generateData() const {
+void Surface3DPlotAreaPrivate::recalc() {
     if (sourceType == Surface3DPlotArea::DataSource_Empty)
         generateDemoData();
     else if (sourceType == Surface3DPlotArea::DataSource_Spreadsheet)
         generateSpreadsheetData();
     else if (sourceType == Surface3DPlotArea::DataSource_Matrix)
         generateMatrixData();
+
+    Q_EMIT q->changed();
+}
+
+void Surface3DPlotAreaPrivate::updateDrawMode() {
+    qDebug() << Q_FUNC_INFO;
+    QSurface3DSeries* series = q->m_surface->seriesList().first();
+    // Debug the current draw mode and the new one
+    qDebug() << "Current draw mode:" << series->drawMode();
+    qDebug() << "New draw mode:" << drawMode;
+    series->setDrawMode(static_cast<QSurface3DSeries::DrawFlags>(drawMode));
+    // Debug the new draw mode to confirm it was set
+    qDebug() << "Updated draw mode:" << series->drawMode();
+    // Force a refresh/redraw if necessary
+    q->m_surface->update(); // or q->m_surface->repaint();
+    Q_EMIT q->changed();
+}
+
+void Surface3DPlotAreaPrivate::updateColor() {
+}
+
+void Surface3DPlotAreaPrivate::updateOpacity() {
+}
+
+void Surface3DPlotAreaPrivate::updateFlatShading() {
+    qDebug() << Q_FUNC_INFO;
+    QSurface3DSeries* series = q->m_surface->seriesList().first();
+    // Debug the current draw mode and the new one
+    qDebug() << "Supported draw mode:" << series->isFlatShadingSupported();
+    qDebug() << "Current draw mode:" << series->isFlatShadingEnabled();
+    qDebug() << "New draw mode:" << drawMode;
+    series->setFlatShadingEnabled(flatShading);
+    // Debug the new draw mode to confirm it was set
+    qDebug() << "Updated draw mode:" << series->isFlatShadingEnabled();
+    // Force a refresh/redraw if necessary
+    q->m_surface->update(); // or q->m_surface->repaint();
+    Q_EMIT q->changed();
+}
+
+void Surface3DPlotAreaPrivate::updateShadowQuality() {
+    qDebug() << Q_FUNC_INFO;
+    q->m_surface->setShadowQuality(static_cast<Q3DSurface::ShadowQuality>(shadowQuality));
+    q->m_surface->update(); // or q->m_surface->repaint();
+    Q_EMIT q->changed();
+}
+
+void Surface3DPlotAreaPrivate::updateSmoothMesh() {
+    qDebug() << Q_FUNC_INFO;
+    QSurface3DSeries* series = q->m_surface->seriesList().first();
+    series->setMeshSmooth(smooth);
+    q->m_surface->update(); // or q->m_surface->repaint();
+    Q_EMIT q->changed();
 }
 
 void Surface3DPlotAreaPrivate::generateDemoData() const {
@@ -355,7 +396,6 @@ void Surface3DPlotAreaPrivate::generateDemoData() const {
     q->m_surface->axisX()->setRange(-radius, radius);
     q->m_surface->axisY()->setRange(-radius, radius);
     q->m_surface->axisZ()->setRange(-radius, radius);
-    // Adjust camera settings for better view
 }
 
 void Surface3DPlotAreaPrivate::generateMatrixData() const {
@@ -368,15 +408,15 @@ void Surface3DPlotAreaPrivate::generateMatrixData() const {
 
     qDebug() << Q_FUNC_INFO << q->name() << "Matrix has been set!";
     QSurfaceDataArray* dataArray = new QSurfaceDataArray;
-	dataArray->reserve(matrix->columnCount());
+    dataArray->reserve(matrix->rowCount());
 
-	const double deltaX = (matrix->xEnd() - matrix->xStart()) / matrix->columnCount();
-	const double deltaY = (matrix->yEnd() - matrix->yStart()) / matrix->rowCount();
+    const double deltaX = (matrix->xEnd() - matrix->xStart()) / matrix->rowCount();
+    const double deltaY = (matrix->yEnd() - matrix->yStart()) / matrix->columnCount();
 
-	for (int x = 0; x < matrix->columnCount(); ++x) {
-		QSurfaceDataRow* newRow = new QSurfaceDataRow(matrix->rowCount());
+    for (int x = 0; x < matrix->rowCount(); ++x) {
+        QSurfaceDataRow* newRow = new QSurfaceDataRow(matrix->columnCount());
 
-		for (int y = 0; y < matrix->rowCount(); ++y) {
+        for (int y = 0; y < matrix->columnCount(); ++y) {
 			const double x_val = matrix->xStart() + deltaX * x;
 			const double y_val = matrix->yStart() + deltaY * y;
 			const double z_val = matrix->cell<double>(x, y);
@@ -461,32 +501,4 @@ bool Surface3DPlotAreaPrivate::loadMatrixConfig(XmlStreamReader* reader) {
     const QXmlStreamAttributes& attribs = reader->attributes();
     matrixPath = attribs.value("matrixPath").toString();
     return true;
-}
-void Surface3DPlotAreaPrivate::recalc() {
-    qDebug() << Q_FUNC_INFO;
-    if (!q->m_surface->seriesList().isEmpty()) {
-        QSurface3DSeries* series = q->m_surface->seriesList().first();
-
-        series->setDrawMode(static_cast<QSurface3DSeries::DrawFlags>(drawMode));
-
-        // Update the mesh type
-        series->setMesh(static_cast<QAbstract3DSeries::Mesh>(meshType));
-
-        // Update the color
-        series->setBaseColor(color);
-
-        // Update the opacity
-        series->setBaseColor(QColor(color.red(), color.green(), color.blue(), static_cast<int>(opacity * 255)));
-
-        // Update flat shading
-        series->setFlatShadingEnabled(flatShading);
-
-        // Update smoothness
-        series->setMeshSmooth(smooth);
-    }
-    // Update grid visibility
-    q->gridVisibilityChanged(gridVisibility);
-
-    // Update shadow
-    q->m_surface->setShadowQuality(static_cast<Q3DSurface::ShadowQuality>(shadowQuality));
 }

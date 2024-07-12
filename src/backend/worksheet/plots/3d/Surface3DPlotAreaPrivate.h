@@ -1,3 +1,12 @@
+/*
+    File                 : Surface3DPlotAreaPrivate.h
+    Project              : LabPlot
+    Description          : Surface3DPlotAreaPrivate
+    --------------------------------------------------------------------
+    SPDX-FileCopyrightText: 2024 Kuntal Bar <barkuntal6@gmail.com>
+
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #ifndef SURFACE3DPLOTAREAPRIVATE_H
 #define SURFACE3DPLOTAREAPRIVATE_H
 
@@ -14,10 +23,8 @@ public:
 	explicit Surface3DPlotAreaPrivate(Surface3DPlotArea* owner);
 	Surface3DPlotArea* const q{nullptr};
 	Surface3DPlotArea::DataSource sourceType{Surface3DPlotArea::DataSource::DataSource_Spreadsheet};
-	Surface3DPlotArea::MeshType meshType;
-	Surface3DPlotArea::DrawMode drawMode;
+    Surface3DPlotArea::DrawMode drawMode{Surface3DPlotArea::DrawMode::DrawWireframeSurface};
 	bool flatShading;
-	bool gridVisibility;
     Surface3DPlotArea::ShadowQuality shadowQuality;
     bool smooth;
     int xRotation;
@@ -28,10 +35,10 @@ public:
 	QColor color;
 	double opacity;
 
-	// Spreadsheet properties
-	const AbstractColumn* xColumn;
-	const AbstractColumn* yColumn;
-	const AbstractColumn* zColumn;
+    // Spreadsheet properties
+    const AbstractColumn* xColumn{nullptr};
+    const AbstractColumn* yColumn{nullptr};
+    const AbstractColumn* zColumn{nullptr};
 
     // Matrix properties
     const Matrix* matrix{nullptr};
@@ -58,5 +65,11 @@ public:
 	bool loadSpreadsheetConfig(XmlStreamReader*);
 	bool loadMatrixConfig(XmlStreamReader*);
 	void recalc();
+    void updateDrawMode();
+    void updateColor();
+    void updateOpacity();
+    void updateFlatShading();
+    void updateShadowQuality();
+    void updateSmoothMesh();
 };
 #endif // SURFACE3DPLOTAREAPRIVATE_H

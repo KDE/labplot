@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for Surface3DPlotArea properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2024 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2024 Kuntal Bar <barkuntal6@gmail.com>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -59,11 +59,9 @@ private Q_SLOTS:
     void surfaceMatrixChanged(const Matrix*);
 
     // Appearance properties
-	void onMeshTypeChanged(int);
 	void onDrawModeChanged(int);
     void onShadowQualityChanged(int);
     void onFlatShadingChanged(bool);
-    void onGridVisibleChanged(bool);
     void onZoomLevelChanged(int);
     void onXRotationChanged(int);
     void onYRotationChanged(int);
@@ -75,9 +73,7 @@ private Q_SLOTS:
 
 	void drawModeChanged(Surface3DPlotArea::DrawMode mode);
     void themeChanged(Surface3DPlotArea::Theme theme);
-	void meshTypeChanged(Surface3DPlotArea::MeshType type);
 	void flatShadingChanged(bool);
-	void gridVisibleChanged(bool);
 	void shadowsQualityChanged(Surface3DPlotArea::ShadowQuality quality);
 
 private:
