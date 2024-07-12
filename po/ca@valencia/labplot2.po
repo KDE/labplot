@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-10 01:43+0000\n"
-"PO-Revision-Date: 2024-07-03 09:56+0200\n"
+"PO-Revision-Date: 2024-07-08 09:22+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -724,10 +724,9 @@ msgid "%1: set author"
 msgstr "%1: establix l'autor"
 
 #: src/backend/core/Project.cpp:306
-#, fuzzy, kde-format
-#| msgid "%1: save dock states changed"
+#, kde-format
 msgid "%1: save dock state changed"
-msgstr "%1: han canviat els estats guardats de l'acoblador"
+msgstr "%1: ha canviat l'estat guardat de l'acoblador"
 
 #: src/backend/core/Project.cpp:313
 #, kde-format
@@ -14077,16 +14076,13 @@ msgid "%1 matrices: template \"%2\" loaded"
 msgstr "%1 matrius: s'ha carregat la plantilla «%2»"
 
 #: src/kdefrontend/dockwidgets/ProjectDock.cpp:28
-#, fuzzy, kde-format
-#| msgid ""
-#| "If checked, the state (position and geometry) of the docks is saved in "
-#| "the project file and restored on project load."
+#, kde-format
 msgid ""
 "If checked, the state of the default application docks is saved in the "
 "project file and restored on project load."
 msgstr ""
-"Si està marcada, l'estat (posició i geometria) dels acobladors es guardarà "
-"en el fitxer del projecte i es restaurarà en carregar el projecte."
+"Si està marcada, l'estat dels acobladors predeterminats de l'aplicació es "
+"guardarà en el fitxer del projecte i es restaurarà en carregar el projecte."
 
 #: src/kdefrontend/dockwidgets/ProjectDock.cpp:33
 #, kde-format
@@ -15776,8 +15772,7 @@ msgid "Worksheet Preview"
 msgstr "Vista prèvia del full de treball"
 
 #: src/kdefrontend/MainWin.cpp:1408
-#, fuzzy, kde-format
-#| msgid "Content"
+#, kde-format
 msgctxt "@title:window"
 msgid "Content"
 msgstr "Contingut"
@@ -23888,9 +23883,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "Excel"
-#~ msgstr "Excel"
-
-#~ msgid "ROOT (CERN) Histograms"
-#~ msgstr "Histogrames ROOT (CERN)"
