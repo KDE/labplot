@@ -50,6 +50,7 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type)
 	// main widget
 	auto* mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
+	ui.lUnusedObjects->hide();
 	ui.chbUnusedObjects->hide();
 
 	m_cbFileName = new KUrlComboBox(KUrlComboBox::Mode::Files, this);
