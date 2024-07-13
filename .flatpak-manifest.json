@@ -331,6 +331,22 @@
             ]
         },
         {
+            "name": "liborcus",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://gitlab.com/api/v4/projects/orcus%2Forcus/packages/generic/source/0.19.2/liborcus-0.19.2.tar.xz",
+                    "sha256": "69ed26a00d4aaa7688e62a6e003cbc81928521a45e96605e53365aa499719e39",
+                    "x-checker-data": {
+                        "type": "anitya",
+                        "project-id": 1696,
+                        "stable-only": true,
+                        "url-template": "https://gitlab.com/api/v4/projects/orcus%2Forcus/packages/generic/source/$version/liborcus-$version.tar.xz"
+                    }
+                }
+            ]
+        },
+        {
             "name": "cantor",
             "buildsystem": "cmake-ninja",
             "sources": [
