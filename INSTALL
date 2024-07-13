@@ -44,23 +44,24 @@ or build a debug build via
 
 LabPlot's cmake configuration script searches for the optional packages and uses them if they are found.
 To compile LabPlot without optional dependencies even if they are present on the system, use the following parameters (default is "ON"):
+-DENABLE_CANTOR=OFF
 -DENABLE_FFTW=OFF
 -DENABLE_HDF5=OFF
 -DENABLE_NETCDF=OFF
 -DENABLE_FITS=OFF
 -DENABLE_LIBCERF=OFF
--DENABLE_CANTOR=OFF
+-DENABLE_LIBORIGIN=OFF
 -DENABLE_ROOT=OFF
 -DENABLE_READSTAT=OFF
 -DENABLE_MATIO=OFF
 -DENABLE_MQTT=OFF
--DENABLE_ORCUS=OFF
 -DENABLE_QTSERIALPORT=OFF
--DENABLE_LIBORIGIN=OFF
--DENABLE_TOUCHBAR=OFF
+-DENABLE_DISCOUNT=OFF
 -DENABLE_XLSX=OFF
+-DENABLE_ORCUS=OFF
 -DENABLE_VECTOR_BLF=OFF
 -DENABLE_EIGEN3=OFF
+-DENABLE_TOUCHBAR=OFF
 
 Note, by switching off these libraries the feature set of LabPlot will be reduced.
 
