@@ -11,11 +11,10 @@
 #include "backend/core/Settings.h"
 #include "kdefrontend/datasources/ImportFileWidget.h"
 
-#include <QCompleter>
 #include <QDirIterator>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QNetworkAccessManager>
+#include <QProcess>
 #include <QTableWidget>
 
 #include <KConfigGroup>
@@ -38,6 +37,10 @@ ImportKaggleDatasetWidget::ImportKaggleDatasetWidget(QWidget* parent)
 
 	const auto group = Settings::group(QStringLiteral("Settings_Datasets"));
 	m_kaggleCli->setProgram(group.readEntry(QLatin1String("KaggleCLIPath"), QString()));
+
+	ui.bPrev->setToolTip(i18n("Show previous datasets"));
+	ui.bNext->setToolTip(i18n("Show next datasets"));
+	ui.bDownload->setToolTip(i18n("Download the current dataset for preview and import"));
 
 	connect(ui.leSearch, &TimedLineEdit::textChanged, [&] {
 		Q_EMIT clearError();
@@ -76,15 +79,18 @@ ImportKaggleDatasetWidget::ImportKaggleDatasetWidget(QWidget* parent)
 	connect(m_kaggleCli, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), [&](int exitCode, QProcess::ExitStatus exitStatus) {
 		RESET_CURSOR;
 		if (exitStatus == QProcess::NormalExit && exitCode == 0) {
-			if (m_kaggleCli->arguments().at(1) == QLatin1String("list"))
+			const auto command = m_kaggleCli->arguments().at(1);
+			if (command == QLatin1String("list"))
 				listKaggleDatasets();
-			else if (m_kaggleCli->arguments().at(1) == QLatin1String("metadata"))
+			else if (command == QLatin1String("metadata"))
 				displayKaggleDatasetMetadata();
-			else if (m_kaggleCli->arguments().at(1) == QLatin1String("download"))
+			else if (command == QLatin1String("download"))
 				listDownloadedKaggleDatasetFiles(m_kaggleCli->arguments().at(4));
-		}
+		} else
+			Q_EMIT showError(m_kaggleCli->errorString());
 	});
 	connect(m_kaggleCli, &QProcess::errorOccurred, [&] {
+		Q_EMIT showError(m_kaggleCli->errorString());
 		RESET_CURSOR;
 	});
 	connect(m_cbDatasetFiles, QOverload<int>::of(&QComboBox::currentIndexChanged), [&](int index) {
@@ -128,6 +134,7 @@ void ImportKaggleDatasetWidget::prepareImportKaggleDatasetWidget() {
 }
 
 void ImportKaggleDatasetWidget::searchKaggleDatasets() {
+	DEBUG(Q_FUNC_INFO);
 	QString filter = ui.leSearch->text();
 
 	QStringList arguments{QLatin1String("datasets"),
@@ -151,7 +158,7 @@ void ImportKaggleDatasetWidget::searchKaggleDatasets() {
 	m_kaggleCli->setArguments(arguments);
 	m_kaggleCli->start();
 	WAIT_CURSOR;
-	DEBUG(Q_FUNC_INFO);
+
 	DEBUG(m_kaggleCli->program().toStdString() + " " + arguments.join(QStringLiteral(" ")).toStdString());
 }
 
@@ -199,21 +206,22 @@ void ImportKaggleDatasetWidget::listKaggleDatasets() {
 }
 
 void ImportKaggleDatasetWidget::fetchKaggleDatasetMetadata(int index) {
+	DEBUG(Q_FUNC_INFO);
 	QString refName = ui.lwDatasets->item(index)->data(Qt::ItemDataRole::UserRole).toString();
-
 	QStringList arguments{QLatin1String("datasets"),
 						  QLatin1String("metadata"),
 						  QLatin1String("--path"),
 						  QStandardPaths::writableLocation(QStandardPaths::TempLocation),
 						  refName};
+
 	if (m_kaggleCli->state() != QProcess::NotRunning) {
 		RESET_CURSOR;
 		m_kaggleCli->kill();
 	}
+
 	m_kaggleCli->setArguments(arguments);
 	m_kaggleCli->start();
 	WAIT_CURSOR;
-	DEBUG(Q_FUNC_INFO);
 	DEBUG(m_kaggleCli->program().toStdString() + " " + arguments.join(QStringLiteral(" ")).toStdString());
 }
 
@@ -244,8 +252,8 @@ void ImportKaggleDatasetWidget::displayKaggleDatasetMetadata() {
 }
 
 void ImportKaggleDatasetWidget::downloadKaggleDataset() {
+	DEBUG(Q_FUNC_INFO);
 	QString refName = ui.lwDatasets->selectedItems().at(0)->data(Qt::ItemDataRole::UserRole).toString();
-
 	QDir datasetDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QStringLiteral("/datasets_local/")
 					+ QString(refName).replace(QLatin1String("/"), QLatin1String("_")));
 
@@ -267,7 +275,6 @@ void ImportKaggleDatasetWidget::downloadKaggleDataset() {
 	m_kaggleCli->setArguments(arguments);
 	m_kaggleCli->start();
 	WAIT_CURSOR;
-	DEBUG(Q_FUNC_INFO);
 	DEBUG(m_kaggleCli->program().toStdString() + " " + arguments.join(QStringLiteral(" ")).toStdString());
 }
 

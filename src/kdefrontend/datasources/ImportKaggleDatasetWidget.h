@@ -12,10 +12,10 @@
 
 #include "kdefrontend/datasources/ImportFileWidget.h"
 #include "ui_importkaggledatasetwidget.h"
-#include <QProcess>
-#include <QToolButton>
-#include <QVBoxLayout>
+
 #include <QWidget>
+
+class QProcess;
 
 class ImportKaggleDatasetWidget : public QWidget {
 	Q_OBJECT

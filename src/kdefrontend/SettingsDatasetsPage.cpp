@@ -31,6 +31,11 @@ SettingsDatasetsPage::SettingsDatasetsPage(QWidget* parent)
 	ui.bClearCache->setToolTip(i18n("Clear downloaded files"));
 	ui.bClearCache->setEnabled(false);
 
+	ui.lKaggleUrl->setText(QStringLiteral("(<a href=\"https://www.kaggle.com/docs/api\">") + i18n("How to Use Kaggle") + QStringLiteral("</a>)"));
+	ui.lKaggleUrl->setTextFormat(Qt::RichText);
+	ui.lKaggleUrl->setTextInteractionFlags(Qt::TextBrowserInteraction);
+	ui.lKaggleUrl->setOpenExternalLinks(true);
+
 	loadSettings();
 
 	connect(ui.bClearCache, &QPushButton::clicked, this, &SettingsDatasetsPage::clearCache);

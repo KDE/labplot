@@ -676,7 +676,7 @@ void MainWin::initActions() {
 		importFileDialog();
 	});
 
-	m_importKaggleDatasetAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-kaggle")), i18n("From Kaggle..."), this);
+	m_importKaggleDatasetAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-kaggle")), i18n("From kaggle.com..."), this);
 	m_importKaggleDatasetAction->setWhatsThis(i18n("Import data from kaggle.com"));
 	actionCollection()->addAction(QLatin1String("import_dataset_kaggle"), m_importKaggleDatasetAction);
 	connect(m_importKaggleDatasetAction, &QAction::triggered, this, &MainWin::importKaggleDatasetDialog);
@@ -896,9 +896,9 @@ void MainWin::initMenus() {
 	m_importMenu = new QMenu(this);
 	m_importMenu->setIcon(QIcon::fromTheme(QLatin1String("document-import")));
 	m_importMenu->addAction(m_importFileAction_2);
-	m_importMenu->addAction(m_importKaggleDatasetAction);
 	m_importMenu->addAction(m_importSqlAction);
 	m_importMenu->addAction(m_importDatasetAction);
+	m_importMenu->addAction(m_importKaggleDatasetAction);
 	m_importMenu->addSeparator();
 	m_importMenu->addAction(m_importLabPlotAction);
 #ifdef HAVE_LIBORIGIN
@@ -2660,10 +2660,10 @@ void MainWin::importKaggleDatasetDialog() {
 	} else
 		QMessageBox::critical(
 			this,
-			i18n("Running kaggle failed"),
-			i18n("Couldn't run kaggle. Please follow the instructions here "
-				 "https://www.kaggle.com/docs/api#getting-started-installation-&-authentication to "
-				 "install and setup the kaggle cli tool. Then save the path to the kaggle cli tool under Settings > Configure LabPlot > Datasets."));
+			i18n("Running Kaggle CLI tool failed"),
+			i18n("Please follow the instructions on "
+				 "<a href=\"https://www.kaggle.com/docs/api\">\"How to Use Kaggle\"</a> "
+				 "to setup the Kaggle CLI tool."));
 
 	DEBUG(Q_FUNC_INFO << " DONE");
 }

@@ -1,3 +1,7 @@
+-----2.12 -----
+	* [import]
+		* Download datasets from kaggle.com
+
 -----2.11.1 (2024) -----
 Bug fixes:
 	* Fix ODS support

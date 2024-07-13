@@ -11,14 +11,14 @@
 #include "backend/core/Settings.h"
 #include "backend/lib/macros.h"
 
-#include <KConfigGroup>
-#include <KWindowConfig>
 #include <QDialogButtonBox>
-#include <QElapsedTimer>
-#include <QProgressBar>
+#include <QProcess>
 #include <QPushButton>
 #include <QStatusBar>
 #include <QWindow>
+
+#include <KConfigGroup>
+#include <KWindowConfig>
 
 /*!
 	\class ImportKaggleDatasetDialog
@@ -59,7 +59,7 @@ ImportKaggleDatasetDialog::ImportKaggleDatasetDialog(MainWin* parent)
 
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 
-	KConfigGroup conf = Settings::group(QStringLiteral("ImportKaggleDatasetDialog"));
+	auto conf = Settings::group(QStringLiteral("ImportKaggleDatasetDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size());
@@ -71,7 +71,7 @@ ImportKaggleDatasetDialog::ImportKaggleDatasetDialog(MainWin* parent)
 }
 
 ImportKaggleDatasetDialog::~ImportKaggleDatasetDialog() {
-	KConfigGroup conf = Settings::group(QStringLiteral("ImportKaggleDatasetDialog"));
+	auto conf = Settings::group(QStringLiteral("ImportKaggleDatasetDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
@@ -113,7 +113,7 @@ bool ImportKaggleDatasetDialog::checkKaggle() {
 
 	while (kaggleCli.canReadLine()) {
 		QString text = QLatin1String(kaggleCli.readLine()).trimmed();
-		QRegularExpressionMatch match = re.match(text);
+		auto match = re.match(text);
 		if (match.hasMatch())
 			return true;
 	}
