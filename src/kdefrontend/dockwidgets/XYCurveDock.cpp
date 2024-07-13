@@ -455,10 +455,8 @@ void XYCurveDock::initGeneralTab() {
 	updatePlotRangeList();
 
 	// Slots
-	connect(m_curve, &XYCurve::aspectDescriptionChanged, this, &XYCurveDock::curveDescriptionChanged);
 	connect(m_curve, &XYCurve::xColumnChanged, this, &XYCurveDock::curveXColumnChanged);
 	connect(m_curve, &XYCurve::yColumnChanged, this, &XYCurveDock::curveYColumnChanged);
-	connect(m_curve, &WorksheetElement::plotRangeListChanged, this, &XYCurveDock::updatePlotRangeList);
 }
 
 void XYCurveDock::initTabs() {
