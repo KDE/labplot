@@ -2658,12 +2658,11 @@ void MainWin::importKaggleDatasetDialog() {
 		auto* dlg = new ImportKaggleDatasetDialog(this);
 		dlg->exec();
 	} else
-		QMessageBox::critical(
-			this,
-			i18n("Running Kaggle CLI tool failed"),
-			i18n("Please follow the instructions on "
-				 "<a href=\"https://www.kaggle.com/docs/api\">\"How to Use Kaggle\"</a> "
-				 "to setup the Kaggle CLI tool."));
+		QMessageBox::critical(this,
+							  i18n("Running Kaggle CLI tool failed"),
+							  i18n("Please follow the instructions on "
+								   "<a href=\"https://www.kaggle.com/docs/api\">\"How to Use Kaggle\"</a> "
+								   "to setup the Kaggle CLI tool."));
 
 	DEBUG(Q_FUNC_INFO << " DONE");
 }
