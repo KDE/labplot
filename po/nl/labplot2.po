@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-11 03:08+0000\n"
+"POT-Creation-Date: 2024-07-14 03:06+0000\n"
 "PO-Revision-Date: 2023-06-23 10:32+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
@@ -12729,30 +12729,30 @@ msgstr "Er is een fout."
 msgid "Connecting to '%1:%2' timed out."
 msgstr "Verbinden met '%1:%2' kon niet binnen de tijdslimiet."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:83
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:518
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:84
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:519
 #, kde-format
 msgid "Add new folder"
 msgstr "Nieuwe map toevoegen"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:106
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:107
 #, kde-format
 msgctxt "@title:window"
 msgid "Import LabPlot Project"
 msgstr "LabPlot-project importeren"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:111
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:112
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Origin Project"
 msgstr "Origin Project importeren"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:121
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:122
 #, kde-format
 msgid "Specify the file where the project content has to be imported from."
 msgstr "Geef het bestand op waaruit projectinhoud moeten worden geïmporteerd."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:125
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:126
 #, kde-format
 msgid ""
 "Select one or several objects to be imported into the current project.\n"
@@ -12765,7 +12765,7 @@ msgstr ""
 "afhankelijke objecten worden automatisch ook geselecteerd.\n"
 "U kunt dus het hele project importeren door de bovenste object te selecteren."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:130
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:131
 #, kde-format
 msgid ""
 "Specify the target folder in the current project where the selected objects "
@@ -12774,24 +12774,24 @@ msgstr ""
 "Geef de doelmap op in het huidige project waarin de geselecteerde objecten "
 "moeten worden geïmporteerd."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:159
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:160
 #, fuzzy, kde-format
 #| msgid "Plot Area"
 msgid "As Plot Area"
 msgstr "Plotgebied"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:160
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:161
 #, fuzzy, kde-format
 #| msgid "Logical Coordinates"
 msgid "As Coordinate System"
 msgstr "Logische coördinaten"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:164
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:165
 #, kde-format
 msgid "Specify how to import multi-layered graphs."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:169
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:170
 #, kde-format
 msgid ""
 "Multiple layers are used in Origin to either implement multiple plots or "
@@ -12804,7 +12804,7 @@ msgid ""
 "every layer</li></ul>"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:271
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:272
 #, kde-format
 msgid ""
 "The object listed below already exists in target folder and will be "
@@ -12819,45 +12819,45 @@ msgstr[1] ""
 "De hieronder genoemde objecten bestaan reeds in de doelmap en worden "
 "overschreven:"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:277
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:278
 #, kde-format
 msgid "Do you want to proceed?"
 msgstr "Wilt u verdergaan?"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:281
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:285
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:282
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:286
 #, kde-format
 msgid "Override existing objects?"
 msgstr "Bestaande objecten teniet doen?"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:318
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:319
 #, kde-format
 msgid "Project data imported in %1 seconds."
 msgstr "Projectgegevens geïmporteerd in %1 seconden."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:412
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:413
 #, kde-format
 msgid "Close the dialog and import the selected objects."
 msgstr "Dialoog afsluiten en de geselecteerde objecten importeren."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:414
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:415
 #, kde-format
 msgid "Select object(s) to be imported."
 msgstr "Selecteer te importeren object(en)."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:442
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:443
 #, kde-format
 msgctxt "@title:window"
 msgid "Open LabPlot Project"
 msgstr "Labplot Project openen"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:444
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:445
 #: src/kdefrontend/MainWin.cpp:1480
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "LabPlot-projecten (%1)"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:448
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:449
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Open Origin Project"
@@ -12865,13 +12865,13 @@ msgctxt "@title:window"
 msgid "Open Origin OPJ Project"
 msgstr "Origin Project openen"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:450
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:451
 #, fuzzy, kde-format
 #| msgid "Origin Projects (%1)"
 msgid "Origin OPJ Projects (%1)"
 msgstr "Origin-projecten (%1)"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:518
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:519
 #, kde-format
 msgid "Folder name:"
 msgstr "Naam map:"
