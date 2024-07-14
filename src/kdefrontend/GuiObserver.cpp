@@ -382,18 +382,23 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "KDE Plot"));
 		raiseDock(m_kdePlotDock, m_mainWindow->stackedWidget);
 		m_kdePlotDock->setPlots(castList<KDEPlot>(selectedAspects));
-        break;
-    case AspectType::QQPlot:
-        m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Q-Q Plot"));
-        raiseDock(m_qqPlotDock, m_mainWindow->stackedWidget);
-        m_qqPlotDock->setPlots(castList<QQPlot>(selectedAspects));
-        break;
-    case AspectType::SurfacePlot:
-        m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Surface Plot"));
-        raiseDock(m_surfacePlotDock, m_mainWindow->stackedWidget);
-        m_surfacePlotDock->setSurfaces(castList<Surface3DPlotArea>(selectedAspects));
-        break;
-    case AspectType::TextLabel:
+		break;
+	case AspectType::QQPlot:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Q-Q Plot"));
+		raiseDock(m_qqPlotDock, m_mainWindow->stackedWidget);
+		m_qqPlotDock->setPlots(castList<QQPlot>(selectedAspects));
+		break;
+	case AspectType::SurfacePlot:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Surface Plot"));
+		raiseDock(m_surfacePlotDock, m_mainWindow->stackedWidget);
+		m_surfacePlotDock->setSurfaces(castList<Surface3DPlotArea>(selectedAspects));
+		break;
+	case AspectType::Axis3D:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Axis 3D"));
+		raiseDock(m_axis3dDock, m_mainWindow->stackedWidget);
+		m_axis3dDock->setAxes(castList<Axis3D>(selectedAspects));
+		break;
+	case AspectType::TextLabel:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Text Label"));
 		raiseDock(m_textLabelDock, m_mainWindow->stackedWidget);
 		m_textLabelDock->setLabels(castList<TextLabel>(selectedAspects));

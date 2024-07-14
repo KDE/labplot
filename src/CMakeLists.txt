@@ -112,6 +112,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/XYCorrelationCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
         ${KDEFRONTEND_DIR}/dockwidgets/Surface3DPlotAreaDock.cpp
+        ${KDEFRONTEND_DIR}/dockwidgets/Axis3DDock.cpp
 	${KDEFRONTEND_DIR}/matrix/MatrixFunctionDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/PlotDataDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/EquidistantValuesDialog.cpp
@@ -256,6 +257,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/valuewidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/worksheetdock.ui
         ${KDEFRONTEND_DIR}/ui/dockwidgets/surface3dplotareadock.ui
+        ${KDEFRONTEND_DIR}/ui/dockwidgets/axis3ddock.ui
 	${KDEFRONTEND_DIR}/ui/matrix/matrixfunctionwidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/plotdatawidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/equidistantvalueswidget.ui
@@ -438,6 +440,8 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYCorrelationCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/Value.cpp
         ${BACKEND_DIR}/worksheet/plots/3d/Surface3DPlotArea.cpp
+        ${BACKEND_DIR}/worksheet/plots/3d/Axis3D.cpp
+
 
 )
 

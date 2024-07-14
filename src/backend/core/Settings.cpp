@@ -22,7 +22,9 @@
 		return static_cast<datatype>(setting_group.readEntry(config_name##ConfigName, static_cast<settings_datatype>(default_value)));                         \
 	}                                                                                                                                                          \
 	/* write config */                                                                                                                                         \
-	void write##setting_name(const datatype& value) { setting_group.writeEntry(config_name##ConfigName, static_cast<settings_datatype>(value)); }
+	void write##setting_name(const datatype& value) {                                                                                                          \
+		setting_group.writeEntry(config_name##ConfigName, static_cast<settings_datatype>(value));                                                              \
+	}
 
 namespace Settings {
 

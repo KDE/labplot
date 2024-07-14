@@ -38,8 +38,8 @@ public:
 	QVector<AspectType> dropableOn() const override;
 
 	// TODO: move these functions to a new class AbstractPartView
-	virtual void registerShortcuts(){};
-	virtual void unregisterShortcuts(){};
+	virtual void registerShortcuts() {};
+	virtual void unregisterShortcuts() {};
 
 	void suppressDeletion(bool suppress);
 

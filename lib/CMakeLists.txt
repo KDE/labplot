@@ -139,6 +139,8 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYCorrelationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/Value.cpp
         ${BACKEND_DIR}/worksheet/plots/3d/Surface3DPlotArea.cpp
+        ${BACKEND_DIR}/worksheet/plots/3d/Axis3D.cpp
+
 )
 
 if(ENABLE_LIBORIGIN)

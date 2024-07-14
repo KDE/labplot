@@ -74,11 +74,7 @@ QColor getColorFromHTMLText(const QString& text, const QString& colortype) {
 	QCOMPARE(actual.weigth, expected.weigth);                                                                                                                  \
 	/* QCOMPARE(actual.text, expected.text); Cannot be used, because then also in the expected html text the color must be replaced*/
 
-#define COMPARETEXTPROPERTIESLABEL(label, expected)                                                                                                            \
-	{                                                                                                                                                          \
-		STORETEXTPROPERTIES(label, propertyVariable)                                                                                                           \
-		COMPARETEXTPROPERTIES(propertyVariable, expected)                                                                                                      \
-	}
+#define COMPARETEXTPROPERTIESLABEL(label, expected) {STORETEXTPROPERTIES(label, propertyVariable) COMPARETEXTPROPERTIES(propertyVariable, expected)}
 
 #define VERIFYLABELCOLORS(label, fontcolor_, backgroundColor_)                                                                                                 \
 	{                                                                                                                                                          \

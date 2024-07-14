@@ -1302,7 +1302,7 @@ class DecodeColumnTask : public QRunnable {
 public:
 	DecodeColumnTask(ColumnPrivate* priv, const QString& content)
 		: m_private(priv)
-		, m_content(content){};
+		, m_content(content) {};
 	void run() override {
 		QByteArray bytes = QByteArray::fromBase64(m_content.toLatin1());
 		if (m_private->columnMode() == AbstractColumn::ColumnMode::Double) {

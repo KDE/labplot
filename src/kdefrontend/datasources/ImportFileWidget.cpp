@@ -1721,8 +1721,7 @@ void ImportFileWidget::refreshPreview() {
 
 				tcpSocket.disconnectFromHost();
 			} else
-				DEBUG("failed to connect to TCP socket "
-					  << " - " << STDSTRING(tcpSocket.errorString()));
+				DEBUG("failed to connect to TCP socket " << " - " << STDSTRING(tcpSocket.errorString()));
 
 			break;
 		}
@@ -1745,8 +1744,7 @@ void ImportFileWidget::refreshPreview() {
 				DEBUG("UDP Socket: DISCONNECT PREVIEW, state = " << udpSocket.state());
 				udpSocket.disconnectFromHost();
 			} else
-				DEBUG("failed to connect to UDP socket "
-					  << " - " << STDSTRING(udpSocket.errorString()));
+				DEBUG("failed to connect to UDP socket " << " - " << STDSTRING(udpSocket.errorString()));
 
 			break;
 		}

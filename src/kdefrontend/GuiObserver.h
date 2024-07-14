@@ -12,6 +12,7 @@
 
 #include <QObject>
 
+#include <kdefrontend/dockwidgets/Axis3DDock.h>
 #include <kdefrontend/dockwidgets/Surface3DPlotAreaDock.h>
 
 class MainWin;
@@ -111,10 +112,13 @@ private:
 	BoxPlotDock* m_boxPlotDock{nullptr};
 	HistogramDock* m_histogramDock{nullptr};
 	KDEPlotDock* m_kdePlotDock{nullptr};
-    QQPlotDock* m_qqPlotDock{nullptr};
+	QQPlotDock* m_qqPlotDock{nullptr};
 
-    // surface plot dock
-    Surface3DPlotAreaDock* m_surfacePlotDock{nullptr};
+	// surface plot dock
+	Surface3DPlotAreaDock* m_surfacePlotDock{nullptr};
+
+	// 3d axis
+	Axis3DDock* m_axis3dDock{nullptr};
 
 	// analysis plots
 	XYDataReductionCurveDock* m_xyDataReductionCurveDock{nullptr};
