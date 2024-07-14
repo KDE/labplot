@@ -78,7 +78,7 @@
                     "name": "boost",
                     "buildsystem": "simple",
                     "build-commands": [
-                        "./bootstrap.sh --prefix=/app --with-libraries=system,iostreams",
+                        "./bootstrap.sh --prefix=/app --with-libraries=system,iostreams,program_options",
                         "./b2 -j $FLATPAK_BUILDER_N_JOBS install"
                     ],
                     "sources": [
