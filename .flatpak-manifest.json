@@ -347,6 +347,22 @@
             ]
         },
         {
+            "name": "libixion",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://gitlab.com/api/v4/projects/ixion%2Fixion/packages/generic/source/0.19.0/libixion-0.19.0.tar.xz",
+                    "sha256": "b4864d7a55351a09adbe9be44e5c65b1d417e80e946c947951d0e8428b9dcd15",
+                    "x-checker-data": {
+                        "type": "anitya",
+                        "project-id": 6208,
+                        "stable-only": true,
+                        "url-template": "https://gitlab.com/api/v4/projects/ixion%2Fixion/packages/generic/source/$version/libixion-$version.tar.xz"
+                    }
+                }
+            ]
+        },
+        {
             "name": "liborcus",
             "sources": [
                 {
