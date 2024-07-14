@@ -19,7 +19,7 @@ class SettingsPage : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit SettingsPage(QWidget*){};
+	explicit SettingsPage(QWidget*) {};
 	~SettingsPage() override = default;
 
 	virtual bool applySettings() = 0;

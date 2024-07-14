@@ -22,7 +22,7 @@ class XYHilbertTransformCurve : public XYAnalysisCurve {
 
 public:
 	struct TransformData {
-		TransformData(){};
+		TransformData() {};
 
 		nsl_hilbert_result_type type{nsl_hilbert_result_imag};
 		bool autoRange{true}; // use all data?

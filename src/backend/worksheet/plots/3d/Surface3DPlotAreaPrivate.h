@@ -1,11 +1,11 @@
 /*
-    File                 : Surface3DPlotAreaPrivate.h
-    Project              : LabPlot
-    Description          : Surface3DPlotAreaPrivate
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2024 Kuntal Bar <barkuntal6@gmail.com>
+	File                 : Surface3DPlotAreaPrivate.h
+	Project              : LabPlot
+	Description          : Surface3DPlotAreaPrivate
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2024 Kuntal Bar <barkuntal6@gmail.com>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef SURFACE3DPLOTAREAPRIVATE_H
 #define SURFACE3DPLOTAREAPRIVATE_H
@@ -23,32 +23,32 @@ public:
 	explicit Surface3DPlotAreaPrivate(Surface3DPlotArea* owner);
 	Surface3DPlotArea* const q{nullptr};
 	Surface3DPlotArea::DataSource sourceType{Surface3DPlotArea::DataSource::DataSource_Spreadsheet};
-    Surface3DPlotArea::DrawMode drawMode{Surface3DPlotArea::DrawMode::DrawWireframeSurface};
+	Surface3DPlotArea::DrawMode drawMode{Surface3DPlotArea::DrawMode::DrawWireframeSurface};
 	bool flatShading;
-    Surface3DPlotArea::ShadowQuality shadowQuality;
-    bool smooth;
-    int xRotation;
-    int yRotation;
-    int zoomLevel;
-    Surface3DPlotArea::Theme theme;
+	Surface3DPlotArea::ShadowQuality shadowQuality;
+	bool smooth;
+	int xRotation;
+	int yRotation;
+	int zoomLevel;
+	Surface3DPlotArea::Theme theme;
 
 	QColor color;
 	double opacity;
 
-    // Spreadsheet properties
-    const AbstractColumn* xColumn{nullptr};
-    const AbstractColumn* yColumn{nullptr};
-    const AbstractColumn* zColumn{nullptr};
+	// Spreadsheet properties
+	const AbstractColumn* xColumn{nullptr};
+	const AbstractColumn* yColumn{nullptr};
+	const AbstractColumn* zColumn{nullptr};
 
-    // Matrix properties
-    const Matrix* matrix{nullptr};
-    QString matrixPath;
+	// Matrix properties
+	const Matrix* matrix{nullptr};
+	QString matrixPath;
 
-    QString xColumnPath;
-    QString yColumnPath;
-    QString zColumnPath;
+	QString xColumnPath;
+	QString yColumnPath;
+	QString zColumnPath;
 
-    void retransform() override;
+	void retransform() override;
 	void recalcShapeAndBoundingRect() override;
 
 	void generateData() const;
@@ -65,11 +65,11 @@ public:
 	bool loadSpreadsheetConfig(XmlStreamReader*);
 	bool loadMatrixConfig(XmlStreamReader*);
 	void recalc();
-    void updateDrawMode();
-    void updateColor();
-    void updateOpacity();
-    void updateFlatShading();
-    void updateShadowQuality();
-    void updateSmoothMesh();
+	void updateDrawMode();
+	void updateColor();
+	void updateOpacity();
+	void updateFlatShading();
+	void updateShadowQuality();
+	void updateSmoothMesh();
 };
 #endif // SURFACE3DPLOTAREAPRIVATE_H

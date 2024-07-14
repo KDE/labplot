@@ -23,7 +23,7 @@ class XYFourierFilterCurve : public XYAnalysisCurve {
 
 public:
 	struct FilterData {
-		FilterData(){};
+		FilterData() {};
 
 		nsl_filter_type type{nsl_filter_type_low_pass};
 		nsl_filter_form form{nsl_filter_form_ideal};
@@ -37,7 +37,7 @@ public:
 		QVector<double> xRange{0., 0.}; // x range for integration
 	};
 	struct FilterResult : XYAnalysisCurve::Result {
-		FilterResult(){};
+		FilterResult() {};
 	};
 
 	explicit XYFourierFilterCurve(const QString& name);

@@ -36,8 +36,8 @@ public:
 
 	enum class Units { Metric, Imperial };
 
-	virtual void updateLocale(){};
-	virtual void updateUnits(){};
+	virtual void updateLocale() {};
+	virtual void updateUnits() {};
 	static void spinBoxCalculateMinMax(QDoubleSpinBox* spinbox, Range<double> range, double newValue = NAN);
 
 	template<typename T>
