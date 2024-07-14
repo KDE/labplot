@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-10 01:43+0000\n"
+"POT-Creation-Date: 2024-07-14 01:40+0000\n"
 "PO-Revision-Date: 2023-11-13 14:41+0300\n"
 "Last-Translator: Sergey Kazorin <translation-team@basealt.ru>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -401,13 +401,13 @@ msgstr "In%1"
 msgid "Import Data"
 msgstr "Импорт данных"
 
-#: src/backend/core/AbstractPart.cpp:116 src/kdefrontend/MainWin.cpp:661
-#: src/kdefrontend/MainWin.cpp:670
+#: src/backend/core/AbstractPart.cpp:116 src/kdefrontend/MainWin.cpp:663
+#: src/kdefrontend/MainWin.cpp:672
 #, kde-format
 msgid "From File..."
 msgstr "Из файла…"
 
-#: src/backend/core/AbstractPart.cpp:118 src/kdefrontend/MainWin.cpp:677
+#: src/backend/core/AbstractPart.cpp:118 src/kdefrontend/MainWin.cpp:684
 #, kde-format
 msgid "From SQL Database..."
 msgstr "Из базы данных SQL…"
@@ -435,7 +435,7 @@ msgstr "Печать"
 msgid "Print Preview"
 msgstr "Предварительный просмотр"
 
-#: src/backend/core/AbstractPart.cpp:137 src/kdefrontend/MainWin.cpp:749
+#: src/backend/core/AbstractPart.cpp:137 src/kdefrontend/MainWin.cpp:756
 #, kde-format
 msgid "&Close"
 msgstr "&Закрыть"
@@ -522,7 +522,7 @@ msgid "%1   (no values)"
 msgstr "%1   (отсутствуют значения)"
 
 #: src/backend/core/AspectTreeModel.cpp:228
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1499
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1506
 #, kde-format
 msgid "Size: %1"
 msgstr "Размер: %1"
@@ -1512,7 +1512,7 @@ msgstr "Не удалось найти h5dump."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:358
 #: src/backend/datasources/filters/NetCDFFilter.cpp:268
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1474
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1481
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr "Не удалось прочитать файл %1."
@@ -1856,7 +1856,7 @@ msgstr "Неизвестен"
 #: src/backend/datasources/filters/MatioFilter.cpp:434
 #: src/commonfrontend/workbook/WorkbookView.cpp:53
 #: src/commonfrontend/workbook/WorkbookView.cpp:160
-#: src/kdefrontend/MainWin.cpp:632 src/kdefrontend/MainWin.cpp:1961
+#: src/kdefrontend/MainWin.cpp:634 src/kdefrontend/MainWin.cpp:1969
 #, kde-format
 msgid "Matrix"
 msgstr "Матрица"
@@ -6696,7 +6696,7 @@ msgstr "Статистика (распределение)"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:577
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1871
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:553
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1226
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1233
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:242
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:171
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:277
@@ -8390,7 +8390,7 @@ msgstr "Вертикальная ось"
 #: src/commonfrontend/matrix/MatrixView.cpp:133
 #: src/commonfrontend/worksheet/WorksheetView.cpp:221
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1367
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:99
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:100
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:132
 #, kde-format
 msgid "Image"
@@ -8492,7 +8492,7 @@ msgstr "Функция ошибок"
 #: src/commonfrontend/workbook/WorkbookView.cpp:135
 #: src/commonfrontend/worksheet/WorksheetView.cpp:291
 #: src/commonfrontend/worksheet/WorksheetView.cpp:430
-#: src/kdefrontend/MainWin.cpp:876
+#: src/kdefrontend/MainWin.cpp:883
 #, kde-format
 msgid "Add New"
 msgstr "Добавить элемент"
@@ -11482,7 +11482,7 @@ msgstr ""
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:116
 #: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:57
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:75
-#: src/kdefrontend/MainWin.cpp:626 src/kdefrontend/MainWin.cpp:1943
+#: src/kdefrontend/MainWin.cpp:628 src/kdefrontend/MainWin.cpp:1951
 #: src/kdefrontend/SettingsDialog.cpp:72
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:122
 #, kde-format
@@ -11594,7 +11594,7 @@ msgstr "Привязка к сетке"
 
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:265
-#: src/kdefrontend/MainWin.cpp:213
+#: src/kdefrontend/MainWin.cpp:215
 #: src/kdefrontend/ui/settingsworksheetpage.ui:75
 #, kde-format
 msgid "Presenter Mode"
@@ -11658,7 +11658,7 @@ msgstr "Выделение и увеличение по Y"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:359
-#: src/kdefrontend/MainWin.cpp:2428
+#: src/kdefrontend/MainWin.cpp:2436
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1426
 #, kde-format
 msgid "Cursor"
@@ -11801,6 +11801,7 @@ msgstr "Переключение между преставлением в вид
 
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:49
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:53
+#: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:124
 #: src/kdefrontend/examples/ExamplesWidget.cpp:51
 #, kde-format
 msgid "Enter the keyword you want to search for"
@@ -11808,6 +11809,7 @@ msgstr "Введите ключевое слово для поиска"
 
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:52
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:56
+#: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:127
 #: src/kdefrontend/examples/ExamplesWidget.cpp:54
 #, kde-format
 msgid "Search..."
@@ -12167,6 +12169,7 @@ msgstr "Импорт из коллекции набора данных"
 
 # BUGME: please add ctxt --aspotashev
 #: src/kdefrontend/datasources/ImportDatasetDialog.cpp:93
+#: src/kdefrontend/datasources/ImportKaggleDatasetDialog.cpp:86
 #: src/kdefrontend/welcomescreen/WelcomeScreenHelper.cpp:115
 #, kde-format
 msgid "Dataset%1"
@@ -12464,87 +12467,87 @@ msgstr ""
 "Либо отсутствует соединение, либо не была оформлена подписка, либо фильтр "
 "файлов не в ASCII-формате."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:97
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:98
 #, kde-format
 msgid "ASCII data"
 msgstr "ASCII-данные"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:98
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:99
 #, kde-format
 msgid "Binary data"
 msgstr "Двоичные данные"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:101
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:102
 #, kde-format
 msgid "Excel 2007+ (XSLX)"
 msgstr "Excel 2007+ (XSLX)"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:104
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:105
 #, fuzzy, kde-format
 msgid "OpenDocument Spreadsheet (ODS)"
 msgstr "Построение графика по данным из таблицы"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:107
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:108
 #, kde-format
 msgid "Hierarchical Data Format 5 (HDF5)"
 msgstr "Hierarchical Data Format 5 (HDF5)"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:110
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:111
 #, kde-format
 msgid "Network Common Data Format (NetCDF)"
 msgstr "Network Common Data Format (NetCDF)"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:113
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:114
 #, kde-format
 msgid "Vector Binary Logfile (BLF)"
 msgstr "Vector Binary Logfile (BLF)"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:116
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:117
 #, kde-format
 msgid "Flexible Image Transport System Data Format (FITS)"
 msgstr "Flexible Image Transport System Data Format (FITS)"
 
 # BUGME: please add ctxt --aspotashev
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:118
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:119
 #, kde-format
 msgid "JSON Data"
 msgstr "Данные JSON"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:120
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:140
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:121
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:141
 #, kde-format
 msgid "ROOT (CERN)"
 msgstr "ROOT (CERN)"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:122
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:142
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:123
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:143
 #, kde-format
 msgid "Spice"
 msgstr "Spice"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:124
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:125
 #, kde-format
 msgid "SAS, Stata or SPSS"
 msgstr "SAS, Stata или SPSS"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:127
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:128
 #, kde-format
 msgid "MATLAB MAT file"
 msgstr "MAT-файл (MATLAB)"
 
 # BUGME: please add ctxt --aspotashev
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:137
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:138
 #, kde-format
 msgid "ASCII Data"
 msgstr "Данные ASCII"
 
 # BUGME: please add ctxt --aspotashev
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:138
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:139
 #, kde-format
 msgid "Binary Data"
 msgstr "Двоичные данные"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:150
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:151
 #, kde-format
 msgid ""
 "If this option is checked, only the link to the file is stored in the "
@@ -12553,7 +12556,7 @@ msgstr ""
 "При включении этого параметра в проекте сохраняется только ссылка на файл, "
 "но не сохраняется содержимое."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:151
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:152
 #, kde-format
 msgid ""
 "If this option is checked, the relative path of the file (relative to "
@@ -12563,31 +12566,31 @@ msgstr ""
 "(относительно папки проекта)."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:159
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:160
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:348
 #, kde-format
 msgid "Continuously Fixed"
 msgstr "Непрерывно фиксированное число"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:160
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:161
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:353
 #, kde-format
 msgid "From End"
 msgstr "С конца"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:161
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:162
 #, fuzzy, kde-format
 #| msgid "Till the End"
 msgid "Till End"
 msgstr "До конца"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:162
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:163
 #, kde-format
 msgid "Whole File"
 msgstr "Весь файл"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:197
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:198
 #, kde-format
 msgid ""
 "Specify how the data source has to be processed on every read:"
@@ -12607,7 +12610,7 @@ msgstr ""
 "обрабатывается целый файл. Доступно только для источников данных «Файл или "
 "именованный канал».</li></ul>"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:208
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:209
 #, kde-format
 msgid ""
 "Number of samples (lines) to be processed on every read.\n"
@@ -12618,7 +12621,7 @@ msgstr ""
 "Указывается только в режимах чтения «Фиксированная непрерывная обработка» и "
 "«С конца»."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:214
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:215
 #, kde-format
 msgid ""
 "Specify when and how frequently the data source needs to be read:"
@@ -12632,12 +12635,12 @@ msgstr ""
 "поступлении новых данных — чтение источника данных выполняется при "
 "поступлении новых данных.</li></ul>"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:222
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:223
 #, kde-format
 msgid "Specify how frequently the data source has to be read."
 msgstr "Укажите как часто необходимо выполнять чтение источника данных."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:227
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:228
 #, kde-format
 msgid ""
 "Specify how many samples need to be kept in memory after reading.\n"
@@ -12646,7 +12649,7 @@ msgstr ""
 "Укажите количество выборок, которые должны храниться в памяти после чтения.\n"
 "Используйте параметр «Все» при необходимости сохранять все данные."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:232
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:233
 #, kde-format
 msgid ""
 "Enable to use the first row of the selected data region for the column names "
@@ -12656,12 +12659,12 @@ msgstr ""
 "столбцов таблицы"
 
 # BUGME: please add context --aspotashev
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:247
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:248
 #, kde-format
 msgid "Manage MQTT connections"
 msgstr "Управление соединениями MQTT"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:249
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:250
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:63
 #, kde-format
 msgid ""
@@ -12671,33 +12674,33 @@ msgstr ""
 "Укажите сообщение LWT (Last Will and Testament). Необходимо подписаться хотя "
 "бы на одну тему."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:904
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:911
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr "Выбор файла источника данных"
 
 # BUGME: please add semantic ctxt --aspotashev
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:934
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:941
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr "Выбор файла DBC"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:934
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:941
 #, kde-format
 msgid "DBC file (*.dbc)"
 msgstr "Файл DBC (*.dbc)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1139
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1146
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:402
 #, kde-format
 msgid "Data Format"
 msgstr "Формат данных"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1140
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1147
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:456
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:158
 #, kde-format
@@ -12705,105 +12708,105 @@ msgid "Preview"
 msgstr "Предпросмотр"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1142
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1149
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:535
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
 msgstr "Фрагмент считываемых данных"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1182
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1189
 #, kde-format
 msgid "Data format && preview"
 msgstr "Формат и предпросмотр данных"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1225
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1232
 #: src/kdefrontend/SettingsGeneralPage.cpp:251
 #, kde-format
 msgid "Automatic"
 msgstr "Автоматически"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1466
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1473
 #, kde-format
 msgid "file command not found"
 msgstr "Команда «file» не найдена"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1477
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1484
 #, kde-format
 msgid "cannot open"
 msgstr "cannot open"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1482
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1489
 #, kde-format
 msgid "<b>File type:</b> %1"
 msgstr "<b>Тип файла:</b> %1"
 
 # BUGME: please add @title:tab --aspotashev
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1487
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1494
 #, kde-format
 msgid "General:"
 msgstr "Общие сведения:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1489
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1490
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1491
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1496
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1497
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1498
 #, kde-format
 msgid "yes"
 msgstr "да"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1489
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1490
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1491
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1496
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1497
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1498
 #, kde-format
 msgid "no"
 msgstr "нет"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1489
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1496
 #, kde-format
 msgid "Readable: %1"
 msgstr "Доступен для чтения: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1490
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1497
 #, kde-format
 msgid "Writable: %1"
 msgstr "Доступен для записи: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1491
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1498
 #, kde-format
 msgid "Executable: %1"
 msgstr "Исполняемый: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1493
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1500
 #, kde-format
 msgid "Birth time: %1"
 msgstr "Время создания: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1494
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1501
 #, kde-format
 msgid "Last metadata changed: %1"
 msgstr "Время последнего изменения метаданных: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1495
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1502
 #, kde-format
 msgid "Last modified: %1"
 msgstr "Время последнего изменения: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1496
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1503
 #, kde-format
 msgid "Last read: %1"
 msgstr "Время последнего чтения: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1497
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1504
 #, kde-format
 msgid "Owner: %1"
 msgstr "Владелец: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1498
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1505
 #, kde-format
 msgid "Group: %1"
 msgstr "Группа: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1499
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1506
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
@@ -12812,111 +12815,172 @@ msgstr[1] "%1 байта"
 msgstr[2] "%1 байт"
 msgstr[3] "%1 байт"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1502
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1509
 #, kde-format
 msgid "Summary:"
 msgstr "Описание:"
 
 # BUGME: please add context --aspotashev
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1525
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1530
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1532
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1537
 #, kde-format
 msgid "Content:"
 msgstr "Содержимое:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1558
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1565
 #, kde-format
 msgid "Could not open file %1 for reading."
 msgstr "Не удалось открыть файл %1 для чтения."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1724
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1731
 #, kde-format
 msgid "No data arrived yet for the selected topic"
 msgstr "Данные по выбранной теме пока не поступили"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1961
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1970
 #, kde-format
 msgid "Not a HDF5 file: %1"
 msgstr "Файл не соответствует формату HDF5: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2394
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2403
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
 msgstr "Не удалось подписаться на все доступные темы."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2424
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2433
 #, kde-format
 msgid "Disconnected from '%1'."
 msgstr "Разорвано соединение с «%1»."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2493
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2502
 #, kde-format
 msgid "Available (%1)"
 msgstr "Доступно (%1)"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2605
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2614
 #, kde-format
 msgid "Wrong username or password"
 msgstr "Неправильное имя пользователя или пароль"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2608
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2617
 #, kde-format
 msgid "The client ID wasn't accepted"
 msgstr "Идентификатор клиента не был принят"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2612
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2621
 #, kde-format
 msgid "The broker %1 couldn't be reached."
 msgstr "Брокер %1 недоступен."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2615
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2624
 #, kde-format
 msgid "The client is not authorized to connect."
 msgstr "У клиента отсутствуют полномочия на подключение."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2618
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2627
 #, kde-format
 msgid "An unknown error occurred."
 msgstr "Произошла неизвестная ошибка."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2624
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2627
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2633
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2636
 #, kde-format
 msgid "An error occurred."
 msgstr "Произошла ошибка."
 
 # BUGME: please add semantic ctxt --aspotashev
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2641
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2650
 #, kde-format
 msgid "Connecting to '%1:%2' timed out."
 msgstr "Истекло время ожидания подключения к «%1:%2»."
 
+#: src/kdefrontend/datasources/ImportKaggleDatasetDialog.cpp:37
+#, fuzzy, kde-format
+#| msgid "Filter Options"
+msgid "Toggle Options"
+msgstr "Параметры фильтра"
+
+# BUGME: please add semantic ctxt --aspotashev
+#: src/kdefrontend/datasources/ImportKaggleDatasetDialog.cpp:57
+#, fuzzy, kde-format
+msgctxt "@title:window"
+msgid "Import from kaggle.com"
+msgstr "Импорт..."
+
+#: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:41
+#, fuzzy, kde-format
+#| msgid "Use previous value"
+msgid "Show previous datasets"
+msgstr "Использовать предыдущее значение"
+
+#: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:42
+#, kde-format
+msgid "Show next datasets"
+msgstr ""
+
+#: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:43
+#, kde-format
+msgid "Download the current dataset for preview and import"
+msgstr ""
+
 # BUGME: please add ctxt --aspotashev
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:83
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:518
+#. i18n: ectx: property (text), widget (QLabel, lCategories)
+#: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:130
+#: src/kdefrontend/ui/datasources/importdatasetwidget.ui:86
+#, kde-format
+msgid "Dataset:"
+msgstr "Набор данных:"
+
+#: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:241
+#, fuzzy, kde-format
+#| msgid "Last read: %1"
+msgid "Could not read %1"
+msgstr "Время последнего чтения: %1"
+
+#: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:249
+#, fuzzy, kde-format
+#| msgid "could not open device"
+msgid "Could not open %1"
+msgstr "не удалось открыть устройство"
+
+# BUGME: please add context --aspotashev
+#: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:266
+#, fuzzy, kde-format
+msgid "Could not create %1"
+msgstr "Функции"
+
+#: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:295
+#, fuzzy, kde-format
+#| msgid "Couldn't save the file '%1'."
+msgid "Could not find .csv files in %1"
+msgstr "Не удалось сохранить файл «%1»."
+
+# BUGME: please add ctxt --aspotashev
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:84
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:519
 #, kde-format
 msgid "Add new folder"
 msgstr "Создание новой папки"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:106
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:107
 #, kde-format
 msgctxt "@title:window"
 msgid "Import LabPlot Project"
 msgstr "Импорт проекта LabPlot"
 
 # BUGME: please add @title:window --aspotashev
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:111
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:112
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Origin Project"
 msgstr "Импорт проекта Origin"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:121
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:122
 #, kde-format
 msgid "Specify the file where the project content has to be imported from."
 msgstr "Укажите файл, из которого будет импортироваться содержимое проекта."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:125
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:126
 #, kde-format
 msgid ""
 "Select one or several objects to be imported into the current project.\n"
@@ -12929,7 +12993,7 @@ msgstr ""
 "будут выбраны автоматически.\n"
 "Для импорта всего проекта целиком необходимо выбрать узел верхнего уровня."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:130
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:131
 #, kde-format
 msgid ""
 "Specify the target folder in the current project where the selected objects "
@@ -12938,24 +13002,24 @@ msgstr ""
 "Укажите целевую папку в текущем проекте, в которую будут "
 "импортированывыбранные объекты."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:159
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:160
 #, fuzzy, kde-format
 #| msgid "Plot Area"
 msgid "As Plot Area"
 msgstr "Область построения"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:160
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:161
 #, fuzzy, kde-format
 #| msgid "Logical Coordinates"
 msgid "As Coordinate System"
 msgstr "Логические координаты"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:164
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:165
 #, kde-format
 msgid "Specify how to import multi-layered graphs."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:169
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:170
 #, kde-format
 msgid ""
 "Multiple layers are used in Origin to either implement multiple plots or "
@@ -12968,7 +13032,7 @@ msgid ""
 "every layer</li></ul>"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:271
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:272
 #, kde-format
 msgid ""
 "The object listed below already exists in target folder and will be "
@@ -12985,47 +13049,47 @@ msgstr[2] ""
 msgstr[3] ""
 "Указанный ниже объект уже находится в целевом каталоге и будет перезаписан:"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:277
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:278
 #, kde-format
 msgid "Do you want to proceed?"
 msgstr "Продолжить?"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:281
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:285
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:282
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:286
 #, kde-format
 msgid "Override existing objects?"
 msgstr "Перезаписать существующие объекты?"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:318
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:319
 #, kde-format
 msgid "Project data imported in %1 seconds."
 msgstr "Данные проекта были импортированы за %1 сек."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:412
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:413
 #, kde-format
 msgid "Close the dialog and import the selected objects."
 msgstr "Закрыть диалоговое окно и импортировать выбранные объекты."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:414
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:415
 #, kde-format
 msgid "Select object(s) to be imported."
 msgstr "Выбрать импортируемый объект (объекты)."
 
 # BUGME: please add @title:window --aspotashev
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:442
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:443
 #, kde-format
 msgctxt "@title:window"
 msgid "Open LabPlot Project"
 msgstr "Открытие проекта LabPlot"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:444
-#: src/kdefrontend/MainWin.cpp:1480
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:445
+#: src/kdefrontend/MainWin.cpp:1488
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "Проекты LabPlot (%1)"
 
 # BUGME: please add @title:window --aspotashev
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:448
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:449
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Open Origin Project"
@@ -13034,14 +13098,14 @@ msgid "Open Origin OPJ Project"
 msgstr "Открытие проекта Origin"
 
 # BUGME: please add @title:window --aspotashev
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:450
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:451
 #, fuzzy, kde-format
 #| msgid "Origin Projects (%1)"
 msgid "Origin OPJ Projects (%1)"
 msgstr "Проекты Origin (%1)"
 
 # BUGME: please add colon (:) to the label in front of text edit --aspotashev
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:518
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:519
 #, kde-format
 msgid "Folder name:"
 msgstr "Имя папки:"
@@ -13333,7 +13397,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
-#: src/kdefrontend/MainWin.cpp:2737
+#: src/kdefrontend/MainWin.cpp:2763
 #, kde-format
 msgid "Warning"
 msgstr "Предупреждение"
@@ -13710,7 +13774,7 @@ msgstr "Оси (%1): загрузка шаблона «%2»"
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:229
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:233
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:606
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1038
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1036
 #, kde-format
 msgid "%1: template \"%2\" loaded"
 msgstr "%1: загрузка шаблона «%2»"
@@ -14312,7 +14376,7 @@ msgstr ""
 
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:351
 #: src/kdefrontend/dockwidgets/QQPlotDock.cpp:277
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1036
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1034
 #, kde-format
 msgid "%1 xy-curves: template \"%2\" loaded"
 msgstr "Кривые XY (%1): загрузка шаблона «%2»"
@@ -14576,8 +14640,8 @@ msgstr "Сверху"
 msgid "Below"
 msgstr "Снизу"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:517
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:518
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:515
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:516
 #, kde-format
 msgid ""
 "If checked, connect neighbour points with lines even if there are gaps "
@@ -14586,8 +14650,8 @@ msgstr ""
 "При включении параметра соседние точки соединяются линиями даже при наличии "
 "разрывов (недопустимых или маскированных значений) между ними"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:519
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:520
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:517
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:518
 #, kde-format
 msgid ""
 "If checked, connect data points only for strictly increasing values of X"
@@ -14907,7 +14971,7 @@ msgstr ""
 "Не удалось открыть файл коллекций примеров %1. Проверьте правильность "
 "установки."
 
-#: src/kdefrontend/GuiObserver.cpp:190 src/kdefrontend/MainWin.cpp:1387
+#: src/kdefrontend/GuiObserver.cpp:190 src/kdefrontend/MainWin.cpp:1395
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -15738,7 +15802,7 @@ msgstr "&Добавить элемент"
 # BUGME: please add colon (:) --aspotashev
 #. i18n: ectx: Menu (new_notebook)
 #. i18n: ectx: Menu (notebook)
-#: src/kdefrontend/labplot2ui.rc:56 src/kdefrontend/labplot2ui.rc:83
+#: src/kdefrontend/labplot2ui.rc:56 src/kdefrontend/labplot2ui.rc:84
 #, kde-format
 msgid "&Notebook"
 msgstr "&Блокнот"
@@ -15751,362 +15815,375 @@ msgid "Import"
 msgstr "Импорт..."
 
 #. i18n: ectx: Menu (edit)
-#: src/kdefrontend/labplot2ui.rc:75
+#: src/kdefrontend/labplot2ui.rc:76
 #, kde-format
 msgid "&Edit"
 msgstr "&Правка"
 
 #. i18n: ectx: Menu (spreadsheet)
-#: src/kdefrontend/labplot2ui.rc:80
+#: src/kdefrontend/labplot2ui.rc:81
 #, kde-format
 msgid "&Spreadsheet"
 msgstr "&Таблица"
 
 #. i18n: ectx: Menu (matrix)
-#: src/kdefrontend/labplot2ui.rc:81
+#: src/kdefrontend/labplot2ui.rc:82
 #, kde-format
 msgid "&Matrix"
 msgstr "&Матрица"
 
 #. i18n: ectx: Menu (worksheet)
-#: src/kdefrontend/labplot2ui.rc:82
+#: src/kdefrontend/labplot2ui.rc:83
 #, kde-format
 msgid "&Worksheet"
 msgstr "&Лист"
 
 #. i18n: ectx: Menu (datapicker)
-#: src/kdefrontend/labplot2ui.rc:84
+#: src/kdefrontend/labplot2ui.rc:85
 #, kde-format
 msgid "&Data Extractor"
 msgstr "&Средство извлечения данных"
 
 #. i18n: ectx: Menu (drawing)
-#: src/kdefrontend/labplot2ui.rc:85
+#: src/kdefrontend/labplot2ui.rc:86
 #, kde-format
 msgid "&Drawing"
 msgstr "&Drawing"
 
 #. i18n: ectx: Menu (script)
-#: src/kdefrontend/labplot2ui.rc:86
+#: src/kdefrontend/labplot2ui.rc:87
 #, kde-format
 msgid "&Script"
 msgstr "&Сценарий"
 
 #. i18n: ectx: Menu (tools)
-#: src/kdefrontend/labplot2ui.rc:87
+#: src/kdefrontend/labplot2ui.rc:88
 #, kde-format
 msgid "&Tools"
 msgstr "С&ервис"
 
 #. i18n: ectx: Menu (windows)
-#: src/kdefrontend/labplot2ui.rc:91
+#: src/kdefrontend/labplot2ui.rc:92
 #, kde-format
 msgid "&Windows"
 msgstr "&Окно"
 
-#: src/kdefrontend/MainWin.cpp:213
+#: src/kdefrontend/MainWin.cpp:215
 #, kde-format
 msgid ""
 "No worksheets are available in the project. The presenter mode will not be "
 "started."
 msgstr "В проекте отсутствуют листы. Режим презентации не будет запущен."
 
-#: src/kdefrontend/MainWin.cpp:227
+#: src/kdefrontend/MainWin.cpp:229
 #, kde-format
 msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr "Добро пожаловать в LabPlot %1"
 
-#: src/kdefrontend/MainWin.cpp:595
+#: src/kdefrontend/MainWin.cpp:597
 #, kde-format
 msgid "&Open Example"
 msgstr "&Открыть пример"
 
 # BUGME: please add to Russian glossary --aspotashev
 # BUGME: please split --aspotashev
-#: src/kdefrontend/MainWin.cpp:616 src/kdefrontend/MainWin.cpp:1927
+#: src/kdefrontend/MainWin.cpp:618 src/kdefrontend/MainWin.cpp:1935
 #, kde-format
 msgid "Workbook"
 msgstr "Книга"
 
-#: src/kdefrontend/MainWin.cpp:618
+#: src/kdefrontend/MainWin.cpp:620
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 "Создание новой книги для формирования коллекций таблиц, матриц и графиков"
 
-#: src/kdefrontend/MainWin.cpp:621 src/kdefrontend/MainWin.cpp:1935
+#: src/kdefrontend/MainWin.cpp:623 src/kdefrontend/MainWin.cpp:1943
 #, kde-format
 msgid "Data Extractor"
 msgstr "Средство извлечения данных"
 
-#: src/kdefrontend/MainWin.cpp:622
+#: src/kdefrontend/MainWin.cpp:624
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr "Создание средства извлечения данных с изображения"
 
-#: src/kdefrontend/MainWin.cpp:628
+#: src/kdefrontend/MainWin.cpp:630
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr "Создание новой таблицы для редактирования данных"
 
-#: src/kdefrontend/MainWin.cpp:634
+#: src/kdefrontend/MainWin.cpp:636
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr "Создание новой матрицы для редактирования данных"
 
 # BUGME: split strings (e.g. toolbar name) --aspotashev
-#: src/kdefrontend/MainWin.cpp:638 src/kdefrontend/MainWin.cpp:1979
+#: src/kdefrontend/MainWin.cpp:640 src/kdefrontend/MainWin.cpp:1987
 #: src/kdefrontend/SettingsDialog.cpp:67
 #, kde-format
 msgid "Worksheet"
 msgstr "Лист"
 
-#: src/kdefrontend/MainWin.cpp:640
+#: src/kdefrontend/MainWin.cpp:642
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr "Создание нового листа для построения данных"
 
 # BUGME: please add colon (:) --aspotashev
-#: src/kdefrontend/MainWin.cpp:644 src/kdefrontend/MainWin.cpp:1987
+#: src/kdefrontend/MainWin.cpp:646 src/kdefrontend/MainWin.cpp:1995
 #, kde-format
 msgid "Note"
 msgstr "Заметка"
 
-#: src/kdefrontend/MainWin.cpp:645
+#: src/kdefrontend/MainWin.cpp:647
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr "Создание новой заметки для ввода произвольного текста"
 
 # "Создать [...]" --aspotashev
-#: src/kdefrontend/MainWin.cpp:649 src/kdefrontend/MainWin.cpp:1919
+#: src/kdefrontend/MainWin.cpp:651 src/kdefrontend/MainWin.cpp:1927
 #, kde-format
 msgid "Folder"
 msgstr "Папка"
 
-#: src/kdefrontend/MainWin.cpp:650
+#: src/kdefrontend/MainWin.cpp:652
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr ""
 "Создание новой папки для формирования коллекции листов и других элементов"
 
-#: src/kdefrontend/MainWin.cpp:655
+#: src/kdefrontend/MainWin.cpp:657
 #, kde-format
 msgid "Live Data Source..."
 msgstr "Источник передачи данных…"
 
-#: src/kdefrontend/MainWin.cpp:656
+#: src/kdefrontend/MainWin.cpp:658
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr ""
 "Создание источника передачи данных для чтения данных с устройства реального "
 "времени"
 
-#: src/kdefrontend/MainWin.cpp:663 src/kdefrontend/MainWin.cpp:672
+#: src/kdefrontend/MainWin.cpp:665 src/kdefrontend/MainWin.cpp:674
 #, kde-format
 msgid "Import data from a regular file"
 msgstr "Импорт данных из обычного файла"
 
-#: src/kdefrontend/MainWin.cpp:678
+#: src/kdefrontend/MainWin.cpp:679
+#, fuzzy, kde-format
+#| msgid "From File..."
+msgid "From kaggle.com..."
+msgstr "Из файла…"
+
+#: src/kdefrontend/MainWin.cpp:680
+#, fuzzy, kde-format
+#| msgid "Import data from a regular file"
+msgid "Import data from kaggle.com"
+msgstr "Импорт данных из обычного файла"
+
+#: src/kdefrontend/MainWin.cpp:685
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr "Импорт данных из базы данных SQL"
 
 # BUGME: please add context --aspotashev
-#: src/kdefrontend/MainWin.cpp:682
+#: src/kdefrontend/MainWin.cpp:689
 #, kde-format
 msgid "From Dataset Collection..."
 msgstr "Из коллекции набора данных…"
 
 # BUGME: please add semantic ctxt --aspotashev
-#: src/kdefrontend/MainWin.cpp:683
-#, kde-format
-msgid "Imports data from an online dataset"
+#: src/kdefrontend/MainWin.cpp:690
+#, fuzzy, kde-format
+#| msgid "Imports data from an online dataset"
+msgid "Import data from an online dataset"
 msgstr "Импорт данных из набора данных в Интернете"
 
-#: src/kdefrontend/MainWin.cpp:687
+#: src/kdefrontend/MainWin.cpp:694
 #, kde-format
 msgid "LabPlot Project..."
 msgstr "Проект LabPlot…"
 
-#: src/kdefrontend/MainWin.cpp:688
+#: src/kdefrontend/MainWin.cpp:695
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr "Импорт проекта из файла проекта LabPlot (.lml)"
 
 # BUGME: please add @title:window --aspotashev
-#: src/kdefrontend/MainWin.cpp:693
+#: src/kdefrontend/MainWin.cpp:700
 #, kde-format
 msgid "Origin Project (OPJ)..."
 msgstr "Проект Origin (OPJ)…"
 
-#: src/kdefrontend/MainWin.cpp:694
+#: src/kdefrontend/MainWin.cpp:701
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr "Импорт проекта из файла проекта Origin приложения OriginLab (.opj)"
 
 # BUGME: please split strings --aspotashev
-#: src/kdefrontend/MainWin.cpp:699
+#: src/kdefrontend/MainWin.cpp:706
 #, kde-format
 msgid "Export..."
 msgstr "Экспорт…"
 
-#: src/kdefrontend/MainWin.cpp:700
+#: src/kdefrontend/MainWin.cpp:707
 #, kde-format
 msgid "Export selected element"
 msgstr "Экспорт выделенного сегмента"
 
-#: src/kdefrontend/MainWin.cpp:706 src/kdefrontend/MainWin.cpp:2464
-#: src/kdefrontend/MainWin.cpp:2472
+#: src/kdefrontend/MainWin.cpp:713 src/kdefrontend/MainWin.cpp:2472
+#: src/kdefrontend/MainWin.cpp:2480
 #, kde-format
 msgid "Share"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:711
+#: src/kdefrontend/MainWin.cpp:718
 #, kde-format
 msgid "Color Maps Browser"
 msgstr "Обозреватель карты цветов"
 
-#: src/kdefrontend/MainWin.cpp:712
+#: src/kdefrontend/MainWin.cpp:719
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr "Открытие диалогового окна для просмотра доступных карт цветов"
 
-#: src/kdefrontend/MainWin.cpp:721
+#: src/kdefrontend/MainWin.cpp:728
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "Редактор метаданных FITS…"
 
-#: src/kdefrontend/MainWin.cpp:722
+#: src/kdefrontend/MainWin.cpp:729
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr "Запуск редактора для редактирования метаданных FITS"
 
-#: src/kdefrontend/MainWin.cpp:731
+#: src/kdefrontend/MainWin.cpp:738
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr "Журнал действий…"
 
-#: src/kdefrontend/MainWin.cpp:751
+#: src/kdefrontend/MainWin.cpp:758
 #, kde-format
 msgid "Close the active window"
 msgstr "Закрыть текущее окно"
 
-#: src/kdefrontend/MainWin.cpp:754
+#: src/kdefrontend/MainWin.cpp:761
 #, kde-format
 msgid "Close &All"
 msgstr "Закрыть &все"
 
-#: src/kdefrontend/MainWin.cpp:755
+#: src/kdefrontend/MainWin.cpp:762
 #, kde-format
 msgid "Close all the windows"
 msgstr "Закрыть все окна"
 
-#: src/kdefrontend/MainWin.cpp:758
+#: src/kdefrontend/MainWin.cpp:765
 #, kde-format
 msgid "Ne&xt"
 msgstr "&Следующее"
 
-#: src/kdefrontend/MainWin.cpp:760
+#: src/kdefrontend/MainWin.cpp:767
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "Переместить фокус на следующее окно"
 
-#: src/kdefrontend/MainWin.cpp:763
+#: src/kdefrontend/MainWin.cpp:770
 #, kde-format
 msgid "Pre&vious"
 msgstr "&Предыдущее"
 
-#: src/kdefrontend/MainWin.cpp:765
+#: src/kdefrontend/MainWin.cpp:772
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "Переместить фокус на предыдущее окно"
 
-#: src/kdefrontend/MainWin.cpp:772
+#: src/kdefrontend/MainWin.cpp:779
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "Только текущая &папка"
 
-#: src/kdefrontend/MainWin.cpp:777
+#: src/kdefrontend/MainWin.cpp:784
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "Текущая папка и &подпапка"
 
-#: src/kdefrontend/MainWin.cpp:781
+#: src/kdefrontend/MainWin.cpp:788
 #, kde-format
 msgid "&All"
 msgstr "&Все"
 
-#: src/kdefrontend/MainWin.cpp:803
+#: src/kdefrontend/MainWin.cpp:810
 #, kde-format
 msgid "Show Memory Usage"
 msgstr "Показать использование памяти"
 
-#: src/kdefrontend/MainWin.cpp:811
+#: src/kdefrontend/MainWin.cpp:818
 #, kde-format
 msgid "Project Explorer"
 msgstr "Проект"
 
-#: src/kdefrontend/MainWin.cpp:816
+#: src/kdefrontend/MainWin.cpp:823
 #, kde-format
 msgid "Properties Explorer"
 msgstr "Панель свойств"
 
-#: src/kdefrontend/MainWin.cpp:821
+#: src/kdefrontend/MainWin.cpp:828
 #, fuzzy, kde-format
 msgid "Worksheet Preview"
 msgstr "Свойства документа"
 
-#: src/kdefrontend/MainWin.cpp:844
+#: src/kdefrontend/MainWin.cpp:851
 #, kde-format
 msgid "Configure CAS..."
 msgstr "Настройка СКА..."
 
-#: src/kdefrontend/MainWin.cpp:845
+#: src/kdefrontend/MainWin.cpp:852
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
 "systems or to enable new ones"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:905
+#: src/kdefrontend/MainWin.cpp:913
 #, kde-format
 msgid "Window Visibility"
 msgstr "Видимость окон"
 
-#: src/kdefrontend/MainWin.cpp:929 src/kdefrontend/MainWin.cpp:931
+#: src/kdefrontend/MainWin.cpp:937 src/kdefrontend/MainWin.cpp:939
 #, kde-format
 msgid "Color Scheme"
 msgstr "Цветовая схема"
 
-#: src/kdefrontend/MainWin.cpp:995 src/kdefrontend/MainWin.cpp:1009
+#: src/kdefrontend/MainWin.cpp:1003 src/kdefrontend/MainWin.cpp:1017
 #, kde-format
 msgid "The current project %1 has been modified. Do you want to save it?"
 msgstr "Текущий проект %1 был изменён. Сохранить изменения?"
 
-#: src/kdefrontend/MainWin.cpp:996 src/kdefrontend/MainWin.cpp:1010
+#: src/kdefrontend/MainWin.cpp:1004 src/kdefrontend/MainWin.cpp:1018
 #, kde-format
 msgid "Save Project"
 msgstr "Сохранение проекта"
 
-#: src/kdefrontend/MainWin.cpp:1348
+#: src/kdefrontend/MainWin.cpp:1356
 #, kde-format
 msgid "%1: created"
 msgstr "%1: создание"
 
-#: src/kdefrontend/MainWin.cpp:1374
+#: src/kdefrontend/MainWin.cpp:1382
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Проект"
 
-#: src/kdefrontend/MainWin.cpp:1399
+#: src/kdefrontend/MainWin.cpp:1407
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "Свойства документа"
 
-#: src/kdefrontend/MainWin.cpp:1408
+#: src/kdefrontend/MainWin.cpp:1416
 #, fuzzy, kde-format
 #| msgid "Content"
 msgctxt "@title:window"
@@ -16114,77 +16191,77 @@ msgid "Content"
 msgstr "Содержимое"
 
 # BUGME: please add @title:window --aspotashev
-#: src/kdefrontend/MainWin.cpp:1485
+#: src/kdefrontend/MainWin.cpp:1493
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr "Проекты Origin (%1)"
 
-#: src/kdefrontend/MainWin.cpp:1491
+#: src/kdefrontend/MainWin.cpp:1499
 #, kde-format
 msgid "Cantor Projects (*.cws)"
 msgstr "Проект Cantor (*.cws)"
 
-#: src/kdefrontend/MainWin.cpp:1492
+#: src/kdefrontend/MainWin.cpp:1500
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "Блокноты Jupyter (*.ipynb)"
 
-#: src/kdefrontend/MainWin.cpp:1499
+#: src/kdefrontend/MainWin.cpp:1507
 #, kde-format
 msgid "All supported files (%1)"
 msgstr "Все поддерживаемые файлы (%1)"
 
 # BUGME: please add @title:window --aspotashev
-#: src/kdefrontend/MainWin.cpp:1503
+#: src/kdefrontend/MainWin.cpp:1511
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Открытие проекта"
 
-#: src/kdefrontend/MainWin.cpp:1520
+#: src/kdefrontend/MainWin.cpp:1528
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "Файл проекта %1 уже открыт."
 
 # BUGME: please add @title:window --aspotashev
-#: src/kdefrontend/MainWin.cpp:1520 src/kdefrontend/MainWin.cpp:1528
-#: src/kdefrontend/MainWin.cpp:1533
+#: src/kdefrontend/MainWin.cpp:1528 src/kdefrontend/MainWin.cpp:1536
+#: src/kdefrontend/MainWin.cpp:1541
 #, kde-format
 msgid "Open Project"
 msgstr "Открытие проекта"
 
-#: src/kdefrontend/MainWin.cpp:1528
+#: src/kdefrontend/MainWin.cpp:1536
 #, fuzzy, kde-format
 msgid "The project file %1 doesn't exist."
 msgstr "Указанного файла не существует."
 
-#: src/kdefrontend/MainWin.cpp:1533
+#: src/kdefrontend/MainWin.cpp:1541
 #, fuzzy, kde-format
 msgid "Couldn't read the project file %1."
 msgstr "Не удалось сохранить файл «%1»."
 
-#: src/kdefrontend/MainWin.cpp:1542
+#: src/kdefrontend/MainWin.cpp:1550
 #, kde-format
 msgid "Loading %1..."
 msgstr "Загрузка %1…"
 
-#: src/kdefrontend/MainWin.cpp:1575
+#: src/kdefrontend/MainWin.cpp:1583
 #, kde-format
 msgid "%1: opened"
 msgstr "%1: открытие"
 
-#: src/kdefrontend/MainWin.cpp:1610
+#: src/kdefrontend/MainWin.cpp:1618
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Проект успешно открыт (затрачено %1 секунд)."
 
-#: src/kdefrontend/MainWin.cpp:1700
+#: src/kdefrontend/MainWin.cpp:1708
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Сохранение проекта"
 
-#: src/kdefrontend/MainWin.cpp:1702
+#: src/kdefrontend/MainWin.cpp:1710
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -16193,87 +16270,99 @@ msgstr ""
 "Проекты LabPlot (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 
-#: src/kdefrontend/MainWin.cpp:1728
+#: src/kdefrontend/MainWin.cpp:1736
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "Не удалось открыть временный файл для записи."
 
-#: src/kdefrontend/MainWin.cpp:1808
+#: src/kdefrontend/MainWin.cpp:1816
 #, kde-format
 msgid "Project saved"
 msgstr "Проект сохранён"
 
-#: src/kdefrontend/MainWin.cpp:1824
+#: src/kdefrontend/MainWin.cpp:1832
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "Не удалось сохранить файл «%1»."
 
-#: src/kdefrontend/MainWin.cpp:1829
+#: src/kdefrontend/MainWin.cpp:1837
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Не удалось открыть файл «%1» для записи."
 
-#: src/kdefrontend/MainWin.cpp:1879
+#: src/kdefrontend/MainWin.cpp:1887
 #, kde-format
 msgid "Changed"
 msgstr "Изменён"
 
-#: src/kdefrontend/MainWin.cpp:1894 src/kdefrontend/MainWin.cpp:1906
+#: src/kdefrontend/MainWin.cpp:1902 src/kdefrontend/MainWin.cpp:1914
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Подготовка печати %1"
 
-#: src/kdefrontend/MainWin.cpp:1896 src/kdefrontend/MainWin.cpp:1908
+#: src/kdefrontend/MainWin.cpp:1904 src/kdefrontend/MainWin.cpp:1916
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 напечатан"
 
-#: src/kdefrontend/MainWin.cpp:2464
+#: src/kdefrontend/MainWin.cpp:2472
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2468
+#: src/kdefrontend/MainWin.cpp:2476
 #, fuzzy, kde-format
 msgid "Project shared successfully"
 msgstr "Проект сохранён"
 
-#: src/kdefrontend/MainWin.cpp:2471
+#: src/kdefrontend/MainWin.cpp:2479
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2700
+#: src/kdefrontend/MainWin.cpp:2662
+#, kde-format
+msgid "Running Kaggle CLI tool failed"
+msgstr ""
+
+#: src/kdefrontend/MainWin.cpp:2663
+#, kde-format
+msgid ""
+"Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
+"\">\"How to Use Kaggle\"</a> to setup the Kaggle CLI tool."
+msgstr ""
+
+#: src/kdefrontend/MainWin.cpp:2726
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 экспортирован"
 
-#: src/kdefrontend/MainWin.cpp:2707
+#: src/kdefrontend/MainWin.cpp:2733
 #, kde-format
 msgid "FITS files saved"
 msgstr "Сохранены файлы FITS"
 
-#: src/kdefrontend/MainWin.cpp:2719
+#: src/kdefrontend/MainWin.cpp:2745
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "Клиент MQTT %1"
 
-#: src/kdefrontend/MainWin.cpp:2737
+#: src/kdefrontend/MainWin.cpp:2763
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "Клиент MQTT на этом хосте уже существует!"
 
-#: src/kdefrontend/MainWin.cpp:2741
+#: src/kdefrontend/MainWin.cpp:2767
 #, kde-format
 msgid "Live data source%1"
 msgstr "Источник передачи данных %1"
 
-#: src/kdefrontend/MainWin.cpp:2782
+#: src/kdefrontend/MainWin.cpp:2808
 #, kde-format
 msgid "No Cantor backends found. Please install the ones you want to use."
 msgstr "Базовые системы Cantor не обнаружены. Установите необходимые СКА."
 
-#: src/kdefrontend/MainWin.cpp:2796
+#: src/kdefrontend/MainWin.cpp:2822
 #, fuzzy, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Создание новой заметки для ввода произвольного текста"
@@ -16390,45 +16479,49 @@ msgstr "Не удалось загрузить выбранный шаблон �
 msgid "XML error: No cartesianPlot found"
 msgstr "Ошибка XML: Не найден элемент «cartesianPlot»"
 
-#: src/kdefrontend/SettingsDatasetsPage.cpp:27
+#: src/kdefrontend/SettingsDatasetsPage.cpp:31
 #, kde-format
 msgid "Clear downloaded files"
 msgstr "Удалить скачанные файлы"
 
-#: src/kdefrontend/SettingsDatasetsPage.cpp:45
+#: src/kdefrontend/SettingsDatasetsPage.cpp:34
+#, kde-format
+msgid "How to Use Kaggle"
+msgstr ""
+
+#: src/kdefrontend/SettingsDatasetsPage.cpp:86
 #, kde-format
 msgid "Files - %1"
 msgstr "Файлов — %1"
 
-#: src/kdefrontend/SettingsDatasetsPage.cpp:68
+#: src/kdefrontend/SettingsDatasetsPage.cpp:101
 #, kde-format
 msgid "Total size - %1"
 msgstr "Общий размер — %1"
 
-#: src/kdefrontend/SettingsDatasetsPage.cpp:70
-#: src/kdefrontend/SettingsDatasetsPage.cpp:86
-#, kde-format
-msgid "Total size - 0B"
-msgstr "Общий размер — 0Б"
-
-#: src/kdefrontend/SettingsDatasetsPage.cpp:85
+#: src/kdefrontend/SettingsDatasetsPage.cpp:111
 #, kde-format
 msgid "Files - 0"
 msgstr "Файлов — 0"
 
+#: src/kdefrontend/SettingsDatasetsPage.cpp:112
+#, kde-format
+msgid "Total size - 0B"
+msgstr "Общий размер — 0Б"
+
 # BUGME: please add ctxt --aspotashev
-#: src/kdefrontend/SettingsDatasetsPage.cpp:88
+#: src/kdefrontend/SettingsDatasetsPage.cpp:114
 #, kde-format
 msgid "Datasets cache"
 msgstr "Кэш наборов данных"
 
-#: src/kdefrontend/SettingsDatasetsPage.cpp:88
+#: src/kdefrontend/SettingsDatasetsPage.cpp:114
 #, kde-format
 msgid "Downloaded files successfully deleted."
 msgstr "Скачанные файлы удалены успешно."
 
-#: src/kdefrontend/SettingsDialog.cpp:53 src/kdefrontend/SettingsDialog.cpp:121
-#: src/kdefrontend/SettingsDialog.cpp:132
+#: src/kdefrontend/SettingsDialog.cpp:53 src/kdefrontend/SettingsDialog.cpp:122
+#: src/kdefrontend/SettingsDialog.cpp:133
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences"
@@ -16480,17 +16573,17 @@ msgstr "Блокнот"
 msgid "Datasets"
 msgstr "Наборы данных"
 
-#: src/kdefrontend/SettingsDialog.cpp:98
+#: src/kdefrontend/SettingsDialog.cpp:99
 #, kde-format
 msgid "User Feedback"
 msgstr "Обратная связь"
 
-#: src/kdefrontend/SettingsDialog.cpp:125
+#: src/kdefrontend/SettingsDialog.cpp:126
 #, kde-format
 msgid "All settings will be reset to default values. Do you want to continue?"
 msgstr "Все параметры будут сброшены к значениям по умолчанию. Продолжить?"
 
-#: src/kdefrontend/SettingsDialog.cpp:140
+#: src/kdefrontend/SettingsDialog.cpp:141
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences    [Changed]"
@@ -19270,13 +19363,6 @@ msgstr "Импортировать как:"
 #, kde-format
 msgid "Choose how to import the image"
 msgstr "Выберите в каком виде импортировать изображение"
-
-# BUGME: please add ctxt --aspotashev
-#. i18n: ectx: property (text), widget (QLabel, lCategories)
-#: src/kdefrontend/ui/datasources/importdatasetwidget.ui:86
-#, kde-format
-msgid "Dataset:"
-msgstr "Набор данных:"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, twCategories)
 #: src/kdefrontend/ui/datasources/importdatasetwidget.ui:103
@@ -22698,25 +22784,37 @@ msgid "Location:"
 msgstr "Расположение:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCache)
-#: src/kdefrontend/ui/settingsdatasetspage.ui:23
+#: src/kdefrontend/ui/settingsdatasetspage.ui:26
 #, kde-format
 msgid "Cache:"
 msgstr "Кэш:"
 
-#. i18n: ectx: property (text), widget (QLabel, lFiles)
-#: src/kdefrontend/ui/settingsdatasetspage.ui:30
+#. i18n: ectx: property (text), widget (QLabel, lKaggle)
+#: src/kdefrontend/ui/settingsdatasetspage.ui:39
 #, kde-format
-msgid "Files - "
-msgstr "Файлы — "
+msgid "Kaggle"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lKagglePath)
+#: src/kdefrontend/ui/settingsdatasetspage.ui:46
+#, kde-format
+msgid "CLI Path:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
-#: src/kdefrontend/ui/settingsdatasetspage.ui:37
+#: src/kdefrontend/ui/settingsdatasetspage.ui:66
 #, kde-format
 msgid "Total size - "
 msgstr "Общий размер — "
 
+#. i18n: ectx: property (text), widget (QLabel, lFiles)
+#: src/kdefrontend/ui/settingsdatasetspage.ui:73
+#, kde-format
+msgid "Files - "
+msgstr "Файлы — "
+
 #. i18n: ectx: property (text), widget (QPushButton, bClearCache)
-#: src/kdefrontend/ui/settingsdatasetspage.ui:57
+#: src/kdefrontend/ui/settingsdatasetspage.ui:93
 #, kde-format
 msgid "Clear"
 msgstr "Очистить"
@@ -24465,9 +24563,6 @@ msgstr "Не удалось открыть файл:"
 #~ msgid "Failed to save the dataset"
 #~ msgstr "Ошибка чтения данных изображения"
 
-#~ msgid "could not open device"
-#~ msgstr "не удалось открыть устройство"
-
 #~ msgid "Variable contains no data"
 #~ msgstr "Переменная не содержит данных"
 
@@ -25396,11 +25491,6 @@ msgstr "Не удалось открыть файл:"
 #~ msgid "Fit Distribution"
 #~ msgstr "Бета-распределение"
 
-# BUGME: please add semantic ctxt --aspotashev
-#, fuzzy
-#~ msgid "Import from File"
-#~ msgstr "Импорт..."
-
 #, fuzzy
 #~ msgid "%1: set x range"
 #~ msgstr "%1: задание интервала"
@@ -25594,11 +25684,6 @@ msgstr "Не удалось открыть файл:"
 # BUGME: please add context --aspotashev
 #, fuzzy
 #~ msgid "Connect line to curve"
-#~ msgstr "Функции"
-
-# BUGME: please add context --aspotashev
-#, fuzzy
-#~ msgid "Couldn't connect"
 #~ msgstr "Функции"
 
 #, fuzzy
