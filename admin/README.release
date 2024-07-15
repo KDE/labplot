@@ -1,6 +1,6 @@
 0. Prepare release (im master for .0 release or in release/2.8 else)
 * string freeze (14 days before recommended)
-* Update splash screen src/kdefrontend/splash.png
+* (only .0) Update splash screen src/kdefrontend/splash.png
 * CMakeLists.txt: project(labplot2 VERSION 2.8.0 LANGUAGES CXX C)
 * add release with date in org.kde.labplot2.appdata.xml
 * Set release date in Changelog
@@ -13,18 +13,15 @@
 ./tarme.rb --version 2.8.0 --origin trunk labplot
 
 origin can be trunk (== master, .0) or stable (see i18n.json, else).
-tarme.rb will also calculate the checksums and give a link to create a ssysadmin ticket.
+tarme.rb will also calculate the checksums and give a link to create a sysadmin ticket.
 
 
-2. Upload tarball to ftp://upload.kde.org/incoming (Read readme: ftp://upload.kde.org/README)
-
-
-3. Tag the release (in master for .0, release/2.8 else. Use tagme from releaseme? see https://community.kde.org/ReleasingSoftware)
+2. Tag the release (in master for .0, release/2.8 else. Use tagme from releaseme? see https://community.kde.org/ReleasingSoftware)
 * git tag "2.8.0" -a -m "2.8.0 Release"
 * git push --tags
 
 
-4. Create new stable branch:	(Only for .0 release, use branchme from releaseme?)
+3. Create new stable branch:	(Only for .0 release, use branchme from releaseme?)
 git checkout -b release/2.8
 git push kde:labplot release/2.8
 git remote update
@@ -35,8 +32,11 @@ git branch --set-upstream-to=origin/release/2.8
 * Update https://invent.kde.org/sysadmin/ci-utilities/-/blob/master/signing/macappnotarizer-projects.yaml & macappsigner-projects.yaml via MR of fork
 
 
-5. Create Installer (when macOS MR is done)
+4. Create Installer (when macOS MR is done)
 * rebuild packages (AppImage, Win, macos-arm64+x86_64) on gitlab (release/2.8 branch)
+
+
+5. Upload tarball and packages to ftp://upload.kde.org/incoming (Read readme: ftp://upload.kde.org/README)
 
 
 6. Sysadmin ticket
