@@ -1,9 +1,10 @@
 0. Prepare release (im master for .0 release or in release/2.8 else)
 * string freeze (14 days before recommended)
-* (only .0) Update splash screen src/kdefrontend/splash.png
-* CMakeLists.txt: project(labplot2 VERSION 2.8.0 LANGUAGES CXX C)
-* add release with date in org.kde.labplot2.appdata.xml
-* Set release date in Changelog
+* only .0: Update splash screen src/kdefrontend/splash.png
+* in master (+ cherry-pick)
+	* add release with date in org.kde.labplot2.appdata.xml
+	* Set release date in Changelog
+* (master|release/2.8) CMakeLists.txt: project(labplot2 VERSION 2.8.0 LANGUAGES CXX C)
 
 ------------------------------------------------------------
 

@@ -2,9 +2,9 @@
 	* [import]
 		* Download datasets from kaggle.com
 
------2.11.1 (2024) -----
+-----2.11.1 (16.07.2024) -----
 Bug fixes:
-	* Fix ODS support
+	* Improve ODS support (selected platforms only)
 	* Fixed the initial positioninig of the docks, should be put besides each other and not below
 	* Don't try to restore the window size when starting for the first time, let the window manager do the initial size
 	* Don't crash when opening a project which a hidden spreadsheet view
