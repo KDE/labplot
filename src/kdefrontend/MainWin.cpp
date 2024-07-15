@@ -238,6 +238,10 @@ void MainWin::initGUI(const QString& fileName) {
 #endif
 	setupGUI();
 
+	// Workaround to get a resonable size at first start
+	// TODO: need a better fix
+	resize(800, 600);
+
 	// all toolbars created via the KXMLGUI framework are locked on default:
 	//  * on the very first program start, unlock all toolbars
 	//  * on later program starts, set stored lock status
