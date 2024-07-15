@@ -20,6 +20,9 @@ Axis3DDock::Axis3DDock(QWidget* parent)
 	setVisibilityWidgets(ui.chkVisible);
 	this->retranslateUi();
 
+	ui.dsbMinRange->setMinimum(-std::numeric_limits<double>::max());
+	ui.dsbMinRange->setMinimum(-std::numeric_limits<double>::max());
+
 	// SIGNALs/SLOTs
 	connect(ui.leXLabel, &QLineEdit::textChanged, this, &Axis3DDock::titleChanged);
 	connect(ui.dsbMinRange, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &Axis3DDock::minRangeChanged);
@@ -33,8 +36,6 @@ void Axis3DDock::setAxes(const QList<Axis3D*>& axes) {
 	CONDITIONAL_LOCK_RETURN;
 	m_axes = axes;
 	m_axis = m_axes.first();
-	setAspects(axes);
-
 	// Load properties of the first axis
 	load();
 
@@ -147,11 +148,13 @@ void Axis3DDock::formatChanged(int index) {
 void Axis3DDock::axisMinRangeChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.dsbMinRange->setValue(value);
+	ui.dsbMaxRange->setMinimum(value);
 }
 
 void Axis3DDock::axisMaxRangeChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.dsbMaxRange->setValue(value);
+	ui.dsbMinRange->setMaximum(value);
 }
 
 void Axis3DDock::axisSegmentCountChanged(int count) {

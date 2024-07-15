@@ -19,11 +19,11 @@
 #include <QXmlStreamAttributes>
 
 Surface3DPlotArea::Surface3DPlotArea(const QString& name)
-    : WorksheetElementContainer(name, new Surface3DPlotAreaPrivate(this), AspectType::SurfacePlot)
-    , m_surface{new Q3DSurface()} {
-    Axis3D* xAxis = new Axis3D(QStringLiteral("x-axis"), Axis3D::X);
-    Axis3D* yAxis = new Axis3D(QStringLiteral("y-axis"), Axis3D::Y);
-    Axis3D* zAxis = new Axis3D(QStringLiteral("z-axis"), Axis3D::Z);
+	: WorksheetElementContainer(name, new Surface3DPlotAreaPrivate(this), AspectType::SurfacePlot)
+	, m_surface{new Q3DSurface()} {
+	Axis3D* xAxis = new Axis3D(QStringLiteral("x-axis"), Axis3D::X);
+	Axis3D* yAxis = new Axis3D(QStringLiteral("y-axis"), Axis3D::Y);
+	Axis3D* zAxis = new Axis3D(QStringLiteral("z-axis"), Axis3D::Z);
 	addChild(xAxis);
 	addChild(yAxis);
 	addChild(zAxis);
@@ -33,7 +33,6 @@ Surface3DPlotArea::Surface3DPlotArea(const QString& name)
 }
 
 Surface3DPlotArea::~Surface3DPlotArea() {
-	delete m_surface;
 }
 // Spreadsheet slots
 void Surface3DPlotArea::xColumnAboutToBeRemoved(const AbstractAspect*) {
@@ -397,7 +396,10 @@ void Surface3DPlotAreaPrivate::generateDemoData() const {
 	proxy->resetArray(*dataArray);
 
 	QSurface3DSeries* series = new QSurface3DSeries(proxy);
-    q->m_surface->addSeries(series);
+	q->m_surface->addSeries(series);
+	q->m_surface->axisX()->setRange(-radius, radius);
+	q->m_surface->axisY()->setRange(-radius, radius);
+	q->m_surface->axisZ()->setRange(-radius, radius);
 }
 
 void Surface3DPlotAreaPrivate::generateMatrixData() const {

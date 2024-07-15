@@ -31,22 +31,22 @@ private:
 	void updateUiVisibility();
 	void load();
 	void loadConfig(KConfig&);
-    void changeParentPlot(Axis3D*);
+	void changeParentPlot(Axis3D*);
 
 private Q_SLOTS:
 	void retranslateUi();
 
 	// SLOTs for changes triggered in Axis3DDock
-    void minRangeChanged(double);
-    void maxRangeChanged(double);
+	void minRangeChanged(double);
+	void maxRangeChanged(double);
 	void segmentCountChanged(int);
 	void subSegmentCountChanged(int);
 	void titleChanged(const QString&);
 	void formatChanged(int);
 
 	// SLOTs for changes triggered in Axis3D
-    void axisMinRangeChanged(double);
-    void axisMaxRangeChanged(double);
+	void axisMinRangeChanged(double);
+	void axisMaxRangeChanged(double);
 	void axisSegmentCountChanged(int);
 	void axisSubSegmentCountChanged(int);
 	void axisTitleChanged(const QString&);
@@ -56,9 +56,6 @@ private:
 	Ui::Axis3DDock ui;
 	QList<Axis3D*> m_axes;
 	Axis3D* m_axis{nullptr};
-
-Q_SIGNALS:
-	void info(const QString&);
 };
 
 #endif // AXIS3DDOCK_H
