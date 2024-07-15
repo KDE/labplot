@@ -10,6 +10,7 @@
 
 1. Create source tarball (see https://invent.kde.org/sdk/releaseme):
 * Install https://invent.kde.org/sdk/releaseme
+* Wait for pipelines to finish
 * create the tarball, from the releaseme folder execute tarme.rb for this:
 ./tarme.rb --version 2.8.0 --origin trunk labplot
 
