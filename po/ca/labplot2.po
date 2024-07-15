@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-14 01:40+0000\n"
-"PO-Revision-Date: 2024-07-08 09:22+0200\n"
+"PO-Revision-Date: 2024-07-14 09:44+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 24.05.2\n"
 "X-Accelerator-Marker: &\n"
 
 #, kde-format
@@ -12586,34 +12586,30 @@ msgid "Connecting to '%1:%2' timed out."
 msgstr "La connexió a «%1:%2» ha vençut."
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetDialog.cpp:37
-#, fuzzy, kde-format
-#| msgid "Filter Options"
+#, kde-format
 msgid "Toggle Options"
-msgstr "Opcions de filtratge"
+msgstr "Commuta les opcions"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetDialog.cpp:57
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Import from Dataset Collection"
+#, kde-format
 msgctxt "@title:window"
 msgid "Import from kaggle.com"
-msgstr "Importa des d'una col·lecció de conjunt de dades"
+msgstr "Importa des de kaggle.com"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:41
-#, fuzzy, kde-format
-#| msgid "Use previous value"
+#, kde-format
 msgid "Show previous datasets"
-msgstr "Usa el valor anterior"
+msgstr "Mostra els conjunts de dades anteriors"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:42
 #, kde-format
 msgid "Show next datasets"
-msgstr ""
+msgstr "Mostra els conjunts de dades següents"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:43
 #, kde-format
 msgid "Download the current dataset for preview and import"
-msgstr ""
+msgstr "Baixa el conjunt de dades actual per a una vista prèvia i importar"
 
 #. i18n: ectx: property (text), widget (QLabel, lCategories)
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:130
@@ -12623,28 +12619,24 @@ msgid "Dataset:"
 msgstr "Conjunt de dades:"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:241
-#, fuzzy, kde-format
-#| msgid "Last read: %1"
+#, kde-format
 msgid "Could not read %1"
-msgstr "Última lectura: %1"
+msgstr "No s'ha pogut llegir %1"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:249
-#, fuzzy, kde-format
-#| msgid "could not open device"
+#, kde-format
 msgid "Could not open %1"
-msgstr "no s'ha pogut obrir el dispositiu"
+msgstr "No s'ha pogut obrir %1"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:266
-#, fuzzy, kde-format
-#| msgid "Couldn't read the project file %1."
+#, kde-format
 msgid "Could not create %1"
-msgstr "No s'ha pogut llegir el fitxer de projecte %1."
+msgstr "No s'ha pogut crear %1"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:295
-#, fuzzy, kde-format
-#| msgid "Couldn't save the file '%1'."
+#, kde-format
 msgid "Could not find .csv files in %1"
-msgstr "No s'ha pogut desar el fitxer «%1»."
+msgstr "No s'ha pogut trobar cap fitxer «.csv» a %1"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:84
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:519
@@ -15637,16 +15629,14 @@ msgid "Import data from a regular file"
 msgstr "Importa les dades des d'un fitxer normal"
 
 #: src/kdefrontend/MainWin.cpp:679
-#, fuzzy, kde-format
-#| msgid "From File..."
+#, kde-format
 msgid "From kaggle.com..."
-msgstr "Des del fitxer..."
+msgstr "Des de kaggle.com..."
 
 #: src/kdefrontend/MainWin.cpp:680
-#, fuzzy, kde-format
-#| msgid "Import data from a regular file"
+#, kde-format
 msgid "Import data from kaggle.com"
-msgstr "Importa les dades des d'un fitxer normal"
+msgstr "Importa les dades des de kaggle.com"
 
 #: src/kdefrontend/MainWin.cpp:685
 #, kde-format
@@ -15659,8 +15649,7 @@ msgid "From Dataset Collection..."
 msgstr "Des d'una col·lecció de conjunt de dades..."
 
 #: src/kdefrontend/MainWin.cpp:690
-#, fuzzy, kde-format
-#| msgid "Imports data from an online dataset"
+#, kde-format
 msgid "Import data from an online dataset"
 msgstr "Importa les dades des d'un conjunt de dades en línia"
 
@@ -15983,7 +15972,7 @@ msgstr "El projecte compartit es pot trobar a: <a href=\"%1\">%1</a>"
 #: src/kdefrontend/MainWin.cpp:2662
 #, kde-format
 msgid "Running Kaggle CLI tool failed"
-msgstr ""
+msgstr "Ha fallat en executar l'eina CLI de Kaggle"
 
 #: src/kdefrontend/MainWin.cpp:2663
 #, kde-format
@@ -15991,6 +15980,9 @@ msgid ""
 "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
 "\">\"How to Use Kaggle\"</a> to setup the Kaggle CLI tool."
 msgstr ""
+"Seguiu les instruccions de <a href=\"https://www.kaggle.com/docs/api\">«How "
+"to Use Kaggle»</a> (Com utilitzar Kaggle) per a configurar l'eina CLI de "
+"Kaggle."
 
 #: src/kdefrontend/MainWin.cpp:2726
 #, kde-format
@@ -16146,7 +16138,7 @@ msgstr "Neteja els fitxers baixats"
 #: src/kdefrontend/SettingsDatasetsPage.cpp:34
 #, kde-format
 msgid "How to Use Kaggle"
-msgstr ""
+msgstr "Com utilitzar el Kaggle"
 
 #: src/kdefrontend/SettingsDatasetsPage.cpp:86
 #, kde-format
@@ -22307,13 +22299,13 @@ msgstr "Memòria cau:"
 #: src/kdefrontend/ui/settingsdatasetspage.ui:39
 #, kde-format
 msgid "Kaggle"
-msgstr ""
+msgstr "Kaggle"
 
 #. i18n: ectx: property (text), widget (QLabel, lKagglePath)
 #: src/kdefrontend/ui/settingsdatasetspage.ui:46
 #, kde-format
 msgid "CLI Path:"
-msgstr ""
+msgstr "Camí del CLI:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/kdefrontend/ui/settingsdatasetspage.ui:66

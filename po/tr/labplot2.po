@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-14 01:40+0000\n"
-"PO-Revision-Date: 2024-07-11 01:11+0300\n"
+"PO-Revision-Date: 2024-07-14 19:24+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -12456,34 +12456,30 @@ msgid "Connecting to '%1:%2' timed out."
 msgstr "“%1:%2” konumuna bağlantı zaman aşımına uğradı."
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetDialog.cpp:37
-#, fuzzy, kde-format
-#| msgid "Filter Options"
+#, kde-format
 msgid "Toggle Options"
-msgstr "Süzgeç Seçenekleri"
+msgstr "Açma/Kapatma Seçenekleri"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetDialog.cpp:57
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Import from Dataset Collection"
+#, kde-format
 msgctxt "@title:window"
 msgid "Import from kaggle.com"
-msgstr "Veri Kümesi Koleksiyonundan İçe Aktar"
+msgstr "kaggle.com’dan İçe Aktar"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:41
-#, fuzzy, kde-format
-#| msgid "Use previous value"
+#, kde-format
 msgid "Show previous datasets"
-msgstr "Önceki değeri kullan"
+msgstr "Önceki veri kümelerini göster"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:42
 #, kde-format
 msgid "Show next datasets"
-msgstr ""
+msgstr "Sonraki veri kümelerini göster"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:43
 #, kde-format
 msgid "Download the current dataset for preview and import"
-msgstr ""
+msgstr "Önizleme için geçerli veri kümesini indir ve içe aktar"
 
 #. i18n: ectx: property (text), widget (QLabel, lCategories)
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:130
@@ -12493,28 +12489,24 @@ msgid "Dataset:"
 msgstr "Veri kümesi:"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:241
-#, fuzzy, kde-format
-#| msgid "Last read: %1"
+#, kde-format
 msgid "Could not read %1"
-msgstr "Son okuma: %1"
+msgstr "%1 okunamadı"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:249
-#, fuzzy, kde-format
-#| msgid "could not open device"
+#, kde-format
 msgid "Could not open %1"
-msgstr "aygıt açılamadı"
+msgstr "%1 açılamadı"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:266
-#, fuzzy, kde-format
-#| msgid "Couldn't read the project file %1."
+#, kde-format
 msgid "Could not create %1"
-msgstr "Proje dosyası %1 okunamadı."
+msgstr "%1 oluşturulamadı"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:295
-#, fuzzy, kde-format
-#| msgid "Couldn't save the file '%1'."
+#, kde-format
 msgid "Could not find .csv files in %1"
-msgstr "“%1” dosyası kaydedilemedi."
+msgstr "%1 içinde .csv dosyaları bulunamadı"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:84
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:519
@@ -15461,16 +15453,14 @@ msgid "Import data from a regular file"
 msgstr "Normal bir dosyadan veri içe aktar"
 
 #: src/kdefrontend/MainWin.cpp:679
-#, fuzzy, kde-format
-#| msgid "From File..."
+#, kde-format
 msgid "From kaggle.com..."
-msgstr "Dosyadan…"
+msgstr "kaggle.com’dan…"
 
 #: src/kdefrontend/MainWin.cpp:680
-#, fuzzy, kde-format
-#| msgid "Import data from a regular file"
+#, kde-format
 msgid "Import data from kaggle.com"
-msgstr "Normal bir dosyadan veri içe aktar"
+msgstr "kaggle.com’dan Veri İçe Aktar"
 
 #: src/kdefrontend/MainWin.cpp:685
 #, kde-format
@@ -15483,10 +15473,9 @@ msgid "From Dataset Collection..."
 msgstr "Veri Kümesi Koleksiyonundan…"
 
 #: src/kdefrontend/MainWin.cpp:690
-#, fuzzy, kde-format
-#| msgid "Imports data from an online dataset"
+#, kde-format
 msgid "Import data from an online dataset"
-msgstr "Çevrimiçi bir veri kümesinden veri içe aktarır"
+msgstr "Çevrimiçi Veri Kümesinden Veri İçe Akta"
 
 #: src/kdefrontend/MainWin.cpp:694
 #, kde-format
@@ -15806,7 +15795,7 @@ msgstr "Paylaşılan projeyi şurada bulabilirsiniz: <a href=\"%1\">%1</a>"
 #: src/kdefrontend/MainWin.cpp:2662
 #, kde-format
 msgid "Running Kaggle CLI tool failed"
-msgstr ""
+msgstr "Kaggle komut satırı aracı çalıştırılamadı"
 
 #: src/kdefrontend/MainWin.cpp:2663
 #, kde-format
@@ -15814,6 +15803,9 @@ msgid ""
 "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
 "\">\"How to Use Kaggle\"</a> to setup the Kaggle CLI tool."
 msgstr ""
+"Kaggle komut satırı aracı kurulumunu yapmak için <a href=\"https://www."
+"kaggle.com/docs/api\">“How to Use Kaggle”</a> adresindeki yönergeleri "
+"izleyin."
 
 #: src/kdefrontend/MainWin.cpp:2726
 #, kde-format
@@ -15966,7 +15958,7 @@ msgstr "İndirilen dosyaları temizle"
 #: src/kdefrontend/SettingsDatasetsPage.cpp:34
 #, kde-format
 msgid "How to Use Kaggle"
-msgstr ""
+msgstr "Kaggle Kullanımı"
 
 #: src/kdefrontend/SettingsDatasetsPage.cpp:86
 #, kde-format
@@ -22087,13 +22079,13 @@ msgstr "Önbellek:"
 #: src/kdefrontend/ui/settingsdatasetspage.ui:39
 #, kde-format
 msgid "Kaggle"
-msgstr ""
+msgstr "Kaggle"
 
 #. i18n: ectx: property (text), widget (QLabel, lKagglePath)
 #: src/kdefrontend/ui/settingsdatasetspage.ui:46
 #, kde-format
 msgid "CLI Path:"
-msgstr ""
+msgstr "Komut satırı yolu:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/kdefrontend/ui/settingsdatasetspage.ui:66
