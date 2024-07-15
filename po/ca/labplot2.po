@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-11 03:08+0000\n"
+"POT-Creation-Date: 2024-07-14 03:06+0000\n"
 "PO-Revision-Date: 2024-07-10 09:01+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -12583,30 +12583,30 @@ msgstr "S'ha produït un error."
 msgid "Connecting to '%1:%2' timed out."
 msgstr "La connexió a «%1:%2» ha vençut."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:83
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:518
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:84
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:519
 #, kde-format
 msgid "Add new folder"
 msgstr "Afegeix una carpeta nova"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:106
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:107
 #, kde-format
 msgctxt "@title:window"
 msgid "Import LabPlot Project"
 msgstr "Importació d'un projecte del LabPlot"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:111
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:112
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Origin Project"
 msgstr "Importació d'un projecte de l'Origin"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:121
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:122
 #, kde-format
 msgid "Specify the file where the project content has to be imported from."
 msgstr "Especifiqueu el fitxer d'on s'importarà el contingut del projecte."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:125
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:126
 #, kde-format
 msgid ""
 "Select one or several objects to be imported into the current project.\n"
@@ -12619,7 +12619,7 @@ msgstr ""
 "així com tots els objectes dependents.\n"
 "Per a importar tot el projecte, seleccioneu el node del nivell superior."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:130
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:131
 #, kde-format
 msgid ""
 "Specify the target folder in the current project where the selected objects "
@@ -12628,22 +12628,22 @@ msgstr ""
 "Especifiqueu la carpeta de destinació del projecte actual a on s'han "
 "d'importar els objectes seleccionats."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:159
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:160
 #, kde-format
 msgid "As Plot Area"
 msgstr "Com a àrea del diagrama"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:160
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:161
 #, kde-format
 msgid "As Coordinate System"
 msgstr "Com a sistema de coordenades"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:164
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:165
 #, kde-format
 msgid "Specify how to import multi-layered graphs."
 msgstr "Especifiqueu com importar gràfiques de capes múltiples."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:169
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:170
 #, kde-format
 msgid ""
 "Multiple layers are used in Origin to either implement multiple plots or "
@@ -12665,7 +12665,7 @@ msgstr ""
 "un sistema nou de coordenades (interval de dades) en la mateixa àrea del "
 "diagrama per a cada capa</li></ul>"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:271
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:272
 #, kde-format
 msgid ""
 "The object listed below already exists in target folder and will be "
@@ -12680,56 +12680,56 @@ msgstr[1] ""
 "Els objectes llistats a sota ja existeixen a la carpeta de destinació i se "
 "sobreescriuran:"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:277
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:278
 #, kde-format
 msgid "Do you want to proceed?"
 msgstr "Voleu continuar?"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:281
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:285
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:282
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:286
 #, kde-format
 msgid "Override existing objects?"
 msgstr "Cal sobreescriure els objectes existents?"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:318
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:319
 #, kde-format
 msgid "Project data imported in %1 seconds."
 msgstr "S'han importat les dades del projecte en %1 segons."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:412
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:413
 #, kde-format
 msgid "Close the dialog and import the selected objects."
 msgstr "Tanca el diàleg i importa els objectes seleccionats."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:414
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:415
 #, kde-format
 msgid "Select object(s) to be imported."
 msgstr "Objecte/s seleccionat/s a importar."
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:442
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:443
 #, kde-format
 msgctxt "@title:window"
 msgid "Open LabPlot Project"
 msgstr "Obre un projecte del LabPlot"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:444
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:445
 #: src/kdefrontend/MainWin.cpp:1480
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "Projectes del LabPlot (%1)"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:448
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:449
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Origin OPJ Project"
 msgstr "Obre un projecte OPJ de l'Origin"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:450
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:451
 #, kde-format
 msgid "Origin OPJ Projects (%1)"
 msgstr "Projectes OPJ de l'Origin (%1)"
 
-#: src/kdefrontend/datasources/ImportProjectDialog.cpp:518
+#: src/kdefrontend/datasources/ImportProjectDialog.cpp:519
 #, kde-format
 msgid "Folder name:"
 msgstr "Nom de la carpeta:"
