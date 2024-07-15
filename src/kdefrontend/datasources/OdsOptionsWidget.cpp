@@ -67,9 +67,9 @@ void OdsOptionsWidget::sheetSelectionChanged() {
 	}
 
 	if (selectedItems.size() > 1)
-		emit enableDataPortionSelection(false);
+		Q_EMIT enableDataPortionSelection(false);
 	else // one selected item
-		emit enableDataPortionSelection(true);
+		Q_EMIT enableDataPortionSelection(true);
 
 	auto* item = selectedItems.last();
 	auto* const filter = static_cast<OdsFilter*>(m_fileWidget->currentFileFilter());
@@ -98,7 +98,8 @@ void OdsOptionsWidget::sheetSelectionChanged() {
 		const int maxColumns = 100;
 		for (int row = 0; row < rowCount; ++row) {
 			auto lineString = importedStrings.at(row);
-			colCount = std::min(maxColumns, lineString.size());
+			const int size = lineString.size();
+			colCount = std::min(maxColumns, size);
 			if (row == 0) {
 				ui.twPreview->setColumnCount(colCount);
 
