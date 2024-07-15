@@ -9,6 +9,7 @@ Bug fixes:
 	* Don't try to restore the window size when starting for the first time, let the window manager do the initial size
 	* Don't crash when opening a project which a hidden spreadsheet view
 	* Fixed the background color of the sparklines in the spreadsheet
+	* Fixed copy&paste and duplication of the matrix
 
 -----2.11.0 (09.07.2024) -----
 New features:

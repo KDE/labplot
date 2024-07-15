@@ -128,7 +128,7 @@ public:
 
 #ifndef SDK
 		else if (type == AspectType::Matrix)
-			return new Matrix(QString());
+			return new Matrix(QString(), true /*loading*/);
 		else if (type == AspectType::Datapicker)
 			return new Datapicker(QString());
 		else if (type == AspectType::Note)
