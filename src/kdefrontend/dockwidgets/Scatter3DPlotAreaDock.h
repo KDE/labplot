@@ -1,0 +1,47 @@
+#ifndef SCATTER3DPLOTAREADOCK_H
+#define SCATTER3DPLOTAREADOCK_H
+#include "BaseDock.h"
+#include "backend/worksheet/plots/3d/Scatter3DPlotArea.h"
+
+#include "ui_scatter3dplotareadock.h"
+
+class Scatter3DPlotArea;
+class AbstractColumn;
+class TreeViewComboBox;
+
+class Scatter3DPlotAreaDock : public BaseDock {
+	Q_OBJECT
+
+public:
+	explicit Scatter3DPlotAreaDock(QWidget* parent);
+	void setScatters(const QList<Scatter3DPlotArea*>& scatters);
+
+private:
+	void updateUiVisibility();
+
+private Q_SLOTS:
+	void retranslateUi();
+
+	// SLOTs for changes triggered in Scatter3DPlotAreaDock
+	void xColumnChanged(const QModelIndex&);
+	void yColumnChanged(const QModelIndex&);
+	void zColumnChanged(const QModelIndex&);
+
+	// SLOTs for changes triggered in Scatter3DPlotArea
+	void scatterXColumnChanged(const AbstractColumn*);
+	void scatterYColumnChanged(const AbstractColumn*);
+	void scatterZColumnChanged(const AbstractColumn*);
+
+private:
+	Ui::Scatter3DPlotAreaDock ui;
+	QList<Scatter3DPlotArea*> m_scatters;
+	Scatter3DPlotArea* m_scatter{nullptr};
+
+	void load();
+	void loadConfig(KConfig&);
+
+Q_SIGNALS:
+	void info(const QString&);
+	void elementVisibilityChanged();
+};
+#endif // SCATTER3DPLOTAREADOCK_H

@@ -51,7 +51,6 @@ public:
 	void retransform() override;
 	void recalcShapeAndBoundingRect() override;
 
-	void generateData() const;
 	// Data generation
 	void generateDemoData() const;
 	void generateMatrixData() const;

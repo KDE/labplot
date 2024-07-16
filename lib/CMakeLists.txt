@@ -140,7 +140,7 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/Value.cpp
         ${BACKEND_DIR}/worksheet/plots/3d/Surface3DPlotArea.cpp
         ${BACKEND_DIR}/worksheet/plots/3d/Axis3D.cpp
-
+        ${BACKEND_DIR}/worksheet/plots/3d/Scatter3DPlotArea.cpp
 )
 
 if(ENABLE_LIBORIGIN)
