@@ -5,9 +5,9 @@
 
 class Axis3DPrivate;
 Axis3D::Axis3D(QString name, Type type)
-    : AbstractAspect(name, AspectType::Axis3D)
-    , m_axis(new QValue3DAxis()) {
-    setType(type);
+	: AbstractAspect(name, AspectType::Axis3D)
+	, m_axis(new QValue3DAxis()) {
+	setType(type);
 }
 
 QString Axis3D::formatToString(Format format) {
@@ -56,9 +56,9 @@ BASIC_SHARED_D_READER_IMPL(Axis3D, Axis3D::Type, type, type);
 // #################  setter methods and undo commands ##########################
 // ##############################################################################
 void Axis3D::setType(Axis3D::Type type) {
-    Q_D(Axis3D);
-    if (d->type != type)
-        d->type = type;
+	Q_D(Axis3D);
+	if (d->type != type)
+		d->type = type;
 }
 void Axis3D::setTitle(QString title) {
 	Q_D(Axis3D);

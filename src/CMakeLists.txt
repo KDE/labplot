@@ -112,6 +112,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
         ${KDEFRONTEND_DIR}/dockwidgets/Surface3DPlotAreaDock.cpp
         ${KDEFRONTEND_DIR}/dockwidgets/Axis3DDock.cpp
+        ${KDEFRONTEND_DIR}/dockwidgets/Scatter3DPlotAreaDock.cpp
 	${KDEFRONTEND_DIR}/matrix/MatrixFunctionDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/PlotDataDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/EquidistantValuesDialog.cpp
@@ -257,6 +258,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/worksheetdock.ui
         ${KDEFRONTEND_DIR}/ui/dockwidgets/surface3dplotareadock.ui
         ${KDEFRONTEND_DIR}/ui/dockwidgets/axis3ddock.ui
+        ${KDEFRONTEND_DIR}/ui/dockwidgets/scatter3dplotareadock.ui
 	${KDEFRONTEND_DIR}/ui/matrix/matrixfunctionwidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/plotdatawidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/equidistantvalueswidget.ui
@@ -440,7 +442,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/Value.cpp
         ${BACKEND_DIR}/worksheet/plots/3d/Surface3DPlotArea.cpp
         ${BACKEND_DIR}/worksheet/plots/3d/Axis3D.cpp
-
+        ${BACKEND_DIR}/worksheet/plots/3d/Scatter3DPlotArea.cpp
 
 )
 
@@ -775,7 +777,6 @@ endif()
 if(APPLE AND ${ECM_VERSION} VERSION_GREATER "5.48.0")
 	ecm_add_app_icon(LABPLOT_SOURCE ICONS ${LML_ICONS} OUTFILE_BASENAME LML_ICONS)
 endif()
-
 add_executable(labplot ${LABPLOT_SOURCE} ${GUI_QRC} ${qml_QRC})
 target_link_libraries(labplot labplotlib labplotbackendlib labplotnsllib)
 

@@ -12,7 +12,7 @@ public:
 	explicit Axis3DPrivate(Axis3D* owner, const QString& name);
 	Axis3D* const q{nullptr};
 	Axis3D::Format axisFormat;
-    Axis3D::Type type;
+	Axis3D::Type type;
 
 	float minRange;
 	float maxRange;
