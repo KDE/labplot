@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-16 01:39+0000\n"
-"PO-Revision-Date: 2024-07-09 16:19+0200\n"
+"PO-Revision-Date: 2024-07-15 15:31+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -12342,28 +12342,25 @@ msgid "Connecting to '%1:%2' timed out."
 msgstr ""
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetDialog.cpp:37
-#, fuzzy, kde-format
-#| msgid "Filter Options"
+#, kde-format
 msgid "Toggle Options"
-msgstr "Volby filtru"
+msgstr "Povolit možnosti"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetDialog.cpp:57
-#, fuzzy, kde-format
-#| msgid "Import from:"
+#, kde-format
 msgctxt "@title:window"
 msgid "Import from kaggle.com"
-msgstr "Importovat z:"
+msgstr "Importovat z kaggle.com"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:41
-#, fuzzy, kde-format
-#| msgid "Use previous value"
+#, kde-format
 msgid "Show previous datasets"
-msgstr "Použít předchozí hodnotu"
+msgstr "Zobrazit předchozí sady dat"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:42
 #, kde-format
 msgid "Show next datasets"
-msgstr ""
+msgstr "Zobrazit následující sady dat"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:43
 #, kde-format
@@ -12378,26 +12375,24 @@ msgid "Dataset:"
 msgstr "Soubor dat:"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:241
-#, fuzzy, kde-format
-#| msgid "Last read: %1"
+#, kde-format
 msgid "Could not read %1"
-msgstr "Poslední přístup ke čtení: %1"
+msgstr "Není možné číst %1"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:249
-#, fuzzy, kde-format
-#| msgid "Couldn't open the file"
+#, kde-format
 msgid "Could not open %1"
-msgstr "Soubor nelze otevřít"
+msgstr "Nelze otevřít %1"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:266
 #, kde-format
 msgid "Could not create %1"
-msgstr ""
+msgstr "Nelze vytvořit %1"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:295
 #, kde-format
 msgid "Could not find .csv files in %1"
-msgstr ""
+msgstr "Nelze nalézt soubory .csv v %1"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:84
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:519
@@ -15233,15 +15228,14 @@ msgid "Import data from a regular file"
 msgstr ""
 
 #: src/kdefrontend/MainWin.cpp:683
-#, fuzzy, kde-format
-#| msgid "From File..."
+#, kde-format
 msgid "From kaggle.com..."
-msgstr "Ze souboru..."
+msgstr "Z kaggle.com..."
 
 #: src/kdefrontend/MainWin.cpp:684
 #, kde-format
 msgid "Import data from kaggle.com"
-msgstr ""
+msgstr "Importovat data z kaggle.com"
 
 #: src/kdefrontend/MainWin.cpp:689
 #, kde-format
@@ -15732,7 +15726,7 @@ msgstr ""
 #: src/kdefrontend/SettingsDatasetsPage.cpp:34
 #, kde-format
 msgid "How to Use Kaggle"
-msgstr ""
+msgstr "Jak použít Kaggle"
 
 #: src/kdefrontend/SettingsDatasetsPage.cpp:86
 #, kde-format
@@ -21792,7 +21786,7 @@ msgstr "Mezipaměť:"
 #: src/kdefrontend/ui/settingsdatasetspage.ui:39
 #, kde-format
 msgid "Kaggle"
-msgstr ""
+msgstr "Kaggle"
 
 #. i18n: ectx: property (text), widget (QLabel, lKagglePath)
 #: src/kdefrontend/ui/settingsdatasetspage.ui:46

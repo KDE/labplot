@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-16 01:39+0000\n"
-"PO-Revision-Date: 2024-07-06 16:50+0200\n"
+"PO-Revision-Date: 2024-07-16 21:47+0200\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -714,10 +714,9 @@ msgid "%1: set author"
 msgstr "%1: agordi aŭtoron"
 
 #: src/backend/core/Project.cpp:306
-#, fuzzy, kde-format
-#| msgid "%1: save dock states changed"
+#, kde-format
 msgid "%1: save dock state changed"
-msgstr "%1: konservi dokstatojn ŝanĝitajn"
+msgstr "%1: konserva dokstato ŝanĝitĝis"
 
 #: src/backend/core/Project.cpp:313
 #, kde-format
@@ -12446,34 +12445,30 @@ msgid "Connecting to '%1:%2' timed out."
 msgstr "Konektado al '%1:%2' elĉerpita."
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetDialog.cpp:37
-#, fuzzy, kde-format
-#| msgid "Filter Options"
+#, kde-format
 msgid "Toggle Options"
-msgstr "Filtrilaj Opcioj"
+msgstr "Baskuligi Elekteblojn"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetDialog.cpp:57
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Import from Dataset Collection"
+#, kde-format
 msgctxt "@title:window"
 msgid "Import from kaggle.com"
-msgstr "Importi el Datumarkolekto"
+msgstr "Importi el kaggle.com"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:41
-#, fuzzy, kde-format
-#| msgid "Use previous value"
+#, kde-format
 msgid "Show previous datasets"
-msgstr "Uzi antaŭan valoron"
+msgstr "Montri antaŭajn datenarojn"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:42
 #, kde-format
 msgid "Show next datasets"
-msgstr ""
+msgstr "Montri sekvontajn datenarojn"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:43
 #, kde-format
 msgid "Download the current dataset for preview and import"
-msgstr ""
+msgstr "Elŝuti la aktualan datenaron por antaŭrigardo kaj enporto"
 
 #. i18n: ectx: property (text), widget (QLabel, lCategories)
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:130
@@ -12483,28 +12478,24 @@ msgid "Dataset:"
 msgstr "Datenaro:"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:241
-#, fuzzy, kde-format
-#| msgid "Last read: %1"
+#, kde-format
 msgid "Could not read %1"
-msgstr "Lasta legado: %1"
+msgstr "Ne eblis legi %1"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:249
-#, fuzzy, kde-format
-#| msgid "Couldn't open the file"
+#, kde-format
 msgid "Could not open %1"
-msgstr "Ne eblis malfermi la dosieron"
+msgstr "Ne eblis malfermi %1"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:266
-#, fuzzy, kde-format
-#| msgid "Couldn't read the project file %1."
+#, kde-format
 msgid "Could not create %1"
-msgstr "Ne eblis legi la projektdosieron %1."
+msgstr "Ne eblis krei %1"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:295
-#, fuzzy, kde-format
-#| msgid "Couldn't save the file '%1'."
+#, kde-format
 msgid "Could not find .csv files in %1"
-msgstr "Ne eblis konservi la dosieron '%1'."
+msgstr "Ne eblis trovi .csv-dosierojn en %1"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:84
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:519
@@ -13967,16 +13958,13 @@ msgid "%1 matrices: template \"%2\" loaded"
 msgstr "%1 matricoj: ŝablono \"%2\" ŝargita"
 
 #: src/kdefrontend/dockwidgets/ProjectDock.cpp:28
-#, fuzzy, kde-format
-#| msgid ""
-#| "If checked, the state (position and geometry) of the docks is saved in "
-#| "the project file and restored on project load."
+#, kde-format
 msgid ""
 "If checked, the state of the default application docks is saved in the "
 "project file and restored on project load."
 msgstr ""
-"Se markite, la stato (pozicio kaj geometrio) de la dokoj estas konservita en "
-"la projektdosiero kaj restarigita je projektŝargo."
+"Se markite, la stato de la defaŭltaj aplik-dokoj estas konservita en la "
+"projektdosiero kaj restaŭrita je projektŝargo."
 
 #: src/kdefrontend/dockwidgets/ProjectDock.cpp:33
 #, kde-format
@@ -15459,16 +15447,14 @@ msgid "Import data from a regular file"
 msgstr "Importi datumojn de regula dosiero"
 
 #: src/kdefrontend/MainWin.cpp:683
-#, fuzzy, kde-format
-#| msgid "From File..."
+#, kde-format
 msgid "From kaggle.com..."
-msgstr "El Dosiero..."
+msgstr "El kaggle.com..."
 
 #: src/kdefrontend/MainWin.cpp:684
-#, fuzzy, kde-format
-#| msgid "Import data from a regular file"
+#, kde-format
 msgid "Import data from kaggle.com"
-msgstr "Importi datumojn de regula dosiero"
+msgstr "Enporti datumojn el kaggle.com"
 
 #: src/kdefrontend/MainWin.cpp:689
 #, kde-format
@@ -15481,10 +15467,9 @@ msgid "From Dataset Collection..."
 msgstr "El Datumarkolekto..."
 
 #: src/kdefrontend/MainWin.cpp:694
-#, fuzzy, kde-format
-#| msgid "Imports data from an online dataset"
+#, kde-format
 msgid "Import data from an online dataset"
-msgstr "Importas datumojn de interreta datumaro"
+msgstr "Enporti datumojn de interreta datenaro"
 
 #: src/kdefrontend/MainWin.cpp:698
 #, kde-format
@@ -15669,8 +15654,7 @@ msgid "Worksheet Preview"
 msgstr "Antaŭrigardo de Laborfolio"
 
 #: src/kdefrontend/MainWin.cpp:1420
-#, fuzzy, kde-format
-#| msgid "Content"
+#, kde-format
 msgctxt "@title:window"
 msgid "Content"
 msgstr "Enhavo"
@@ -23750,15 +23734,3 @@ msgstr "konvertprocezo malsukcesis, elirkodo ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ne eblas malfermi dosieron:"
-
-#~ msgid "Excel"
-#~ msgstr "Excel"
-
-#~ msgid "ROOT (CERN) Histograms"
-#~ msgstr "ROOT (CERN) Histogramoj"
-
-#~ msgid "Add %1"
-#~ msgstr "Aldoni %1"
-
-#~ msgid "%1 name:"
-#~ msgstr "%1 nomo:"
