@@ -8,7 +8,7 @@
 class Scatter3DPlotArea;
 class Scatter3DPlotAreaPrivate;
 Scatter3DPlotArea::Scatter3DPlotArea(const QString& name)
-	: WorksheetElementContainer(name, new Scatter3DPlotAreaPrivate(this), AspectType::SurfacePlot)
+	: WorksheetElementContainer(name, new Scatter3DPlotAreaPrivate(this), AspectType::Scatter3DPlot)
 	, m_scatter{new Q3DScatter()} {
 	Axis3D* xAxis = new Axis3D(QStringLiteral("x-axis"), Axis3D::X);
 	Axis3D* yAxis = new Axis3D(QStringLiteral("y-axis"), Axis3D::Y);
@@ -42,6 +42,14 @@ BASIC_SHARED_D_READER_IMPL(Scatter3DPlotArea, const AbstractColumn*, zColumn, zC
 BASIC_SHARED_D_READER_IMPL(Scatter3DPlotArea, QString, xColumnPath, xColumnPath)
 BASIC_SHARED_D_READER_IMPL(Scatter3DPlotArea, QString, yColumnPath, yColumnPath)
 BASIC_SHARED_D_READER_IMPL(Scatter3DPlotArea, QString, zColumnPath, zColumnPath)
+BASIC_SHARED_D_READER_IMPL(Scatter3DPlotArea, Scatter3DPlotArea::Theme, theme, theme)
+BASIC_SHARED_D_READER_IMPL(Scatter3DPlotArea, Scatter3DPlotArea::PointStyle, pointStyle, pointStyle)
+BASIC_SHARED_D_READER_IMPL(Scatter3DPlotArea, QColor, color, color)
+BASIC_SHARED_D_READER_IMPL(Scatter3DPlotArea, Scatter3DPlotArea::ShadowQuality, shadowQuality, shadowQuality)
+BASIC_SHARED_D_READER_IMPL(Scatter3DPlotArea, double, opacity, opacity)
+BASIC_SHARED_D_READER_IMPL(Scatter3DPlotArea, int, xRotation, xRotation)
+BASIC_SHARED_D_READER_IMPL(Scatter3DPlotArea, int, yRotation, yRotation)
+BASIC_SHARED_D_READER_IMPL(Scatter3DPlotArea, int, zoomLevel, zoomLevel)
 
 // ##############################################################################
 // #################  setter methods and undo commands ##########################
@@ -63,6 +71,36 @@ void Scatter3DPlotArea::setZColumn(const AbstractColumn* zCol) {
 	Q_D(Scatter3DPlotArea);
 	if (zCol != d->zColumn)
 		exec(new Scatter3DPlotAreaSetZColumnCmd(d, zCol, ki18n("%1: Z Column changed")));
+}
+STD_SETTER_CMD_IMPL_F_S(Scatter3DPlotArea, SetTheme, Scatter3DPlotArea::Theme, theme, updateTheme)
+void Scatter3DPlotArea::setTheme(Scatter3DPlotArea::Theme theme) {
+	Q_D(Scatter3DPlotArea);
+	if (theme != d->theme)
+		exec(new Scatter3DPlotAreaSetThemeCmd(d, theme, ki18n("%1: theme changed")));
+}
+STD_SETTER_CMD_IMPL_F_S(Scatter3DPlotArea, SetPointStyle, Scatter3DPlotArea::PointStyle, pointStyle, updatePointStyle)
+void Scatter3DPlotArea::setPointStyle(Scatter3DPlotArea::PointStyle pointStyle) {
+	Q_D(Scatter3DPlotArea);
+	if (pointStyle != d->pointStyle)
+		exec(new Scatter3DPlotAreaSetPointStyleCmd(d, pointStyle, ki18n("%1: point style changed")));
+}
+STD_SETTER_CMD_IMPL_F_S(Scatter3DPlotArea, SetShadowQuality, Scatter3DPlotArea::ShadowQuality, shadowQuality, updateShadowQuality)
+void Scatter3DPlotArea::setShadowQuality(Scatter3DPlotArea::ShadowQuality shadowQuality) {
+	Q_D(Scatter3DPlotArea);
+	if (shadowQuality != d->shadowQuality)
+		exec(new Scatter3DPlotAreaSetShadowQualityCmd(d, shadowQuality, ki18n("%1: shadow quality changed")));
+}
+STD_SETTER_CMD_IMPL_F_S(Scatter3DPlotArea, SetColor, QColor, color, updateColor)
+void Scatter3DPlotArea::setColor(QColor color) {
+	Q_D(Scatter3DPlotArea);
+	if (color != d->color)
+		exec(new Scatter3DPlotAreaSetColorCmd(d, color, ki18n("%1: color changed")));
+}
+STD_SETTER_CMD_IMPL_F_S(Scatter3DPlotArea, SetOpacity, double, opacity, updateOpacity)
+void Scatter3DPlotArea::setOpacity(double opacity) {
+	Q_D(Scatter3DPlotArea);
+	if (opacity != d->opacity)
+		exec(new Scatter3DPlotAreaSetOpacityCmd(d, opacity, ki18n("%1: opacity changed")));
 }
 class Scatter3DPlotAreaSetRectCmd : public QUndoCommand {
 public:
@@ -205,4 +243,80 @@ void Scatter3DPlotAreaPrivate::generateData() {
 	QScatter3DSeries* series = new QScatter3DSeries;
 	series->dataProxy()->resetArray(*data);
 	q->m_scatter->addSeries(series);
+}
+void Scatter3DPlotArea::setZoomLevel(int zoomLevel) {
+	Q_D(Scatter3DPlotArea);
+	m_scatter->setCameraZoomLevel(zoomLevel);
+	d->zoomLevel = zoomLevel;
+	Q_EMIT zoomLevelChanged(zoomLevel);
+}
+void Scatter3DPlotArea::setXRotation(int value) {
+	Q_D(Scatter3DPlotArea);
+	m_scatter->setCameraXRotation(value);
+	d->xRotation = value;
+	Q_EMIT xRotationChanged(value);
+}
+void Scatter3DPlotArea::setYRotation(int value) {
+	Q_D(Scatter3DPlotArea);
+	m_scatter->setCameraYRotation(value);
+	d->yRotation = value;
+	Q_EMIT yRotationChanged(value);
+}
+void Scatter3DPlotAreaPrivate::updateTheme() {
+	q->m_scatter->activeTheme()->setType(static_cast<Q3DTheme::Theme>(theme));
+	q->m_scatter->update();
+	Q_EMIT q->changed();
+}
+
+void Scatter3DPlotAreaPrivate::updatePointStyle() {
+	QScatter3DSeries* series = q->m_scatter->seriesList().at(0); // Assuming there is at least one series
+	if (!series)
+		return;
+
+	switch (pointStyle) {
+	case Scatter3DPlotArea::Sphere:
+		series->setMesh(QAbstract3DSeries::Mesh::Sphere);
+		break;
+	case Scatter3DPlotArea::Cube:
+		series->setMesh(QAbstract3DSeries::Mesh::Cube);
+		break;
+	case Scatter3DPlotArea::Cone:
+		series->setMesh(QAbstract3DSeries::Mesh::Cone);
+		break;
+	case Scatter3DPlotArea::Pyramid:
+		series->setMesh(QAbstract3DSeries::Mesh::Pyramid);
+		break;
+	default:
+		series->setMesh(QAbstract3DSeries::Mesh::Sphere);
+		break;
+	}
+	q->m_scatter->update();
+	Q_EMIT q->changed();
+}
+
+void Scatter3DPlotAreaPrivate::updateShadowQuality() {
+	q->m_scatter->setShadowQuality(static_cast<QAbstract3DGraph::ShadowQuality>(shadowQuality));
+	q->m_scatter->update();
+	Q_EMIT q->changed();
+}
+
+void Scatter3DPlotAreaPrivate::updateColor() {
+	QScatter3DSeries* series = q->m_scatter->seriesList().at(0); // Assuming there is at least one series
+	if (!series)
+		return;
+
+	series->setBaseColor(color);
+	q->m_scatter->update();
+	Q_EMIT q->changed();
+}
+void Scatter3DPlotAreaPrivate::updateOpacity() {
+	QScatter3DSeries* series = q->m_scatter->seriesList().at(0); // Assuming there is at least one series
+	if (!series)
+		return;
+
+	QColor baseColor = series->baseColor();
+	baseColor.setAlphaF(opacity);
+	series->setBaseColor(baseColor);
+	q->m_scatter->update();
+	Q_EMIT q->changed();
 }

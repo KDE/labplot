@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -340,9 +340,9 @@
    <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
-   <class>TreeViewComboBox</class>
-   <extends>QComboBox</extends>
-   <header>commonfrontend/widgets/TreeViewComboBox.h</header>
+   <class>TimedLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>src/kdefrontend/widgets/TimedLineEdit.h</header>
   </customwidget>
   <customwidget>
    <class>ResizableTextEdit</class>
@@ -350,9 +350,9 @@
    <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
   </customwidget>
   <customwidget>
-   <class>TimedLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>src/kdefrontend/widgets/TimedLineEdit.h</header>
+   <class>TreeViewComboBox</class>
+   <extends>QComboBox</extends>
+   <header>commonfrontend/widgets/TreeViewComboBox.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

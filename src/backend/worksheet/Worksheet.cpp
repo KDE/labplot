@@ -44,6 +44,8 @@
 #include <KLocalizedString>
 #include <QGraphicsProxyWidget>
 
+#include <backend/worksheet/plots/3d/Scatter3DPlotArea.h>
+
 /**
  * \class Worksheet
  * \brief Top-level container for worksheet elements like plot, labels, etc.
@@ -294,6 +296,26 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	if (aspect->type() == AspectType::SurfacePlot) {
 		const auto* addedElement = static_cast<const Surface3DPlotArea*>(aspect);
 		Q3DSurface* graph = addedElement->m_surface;
+		graph->setFocusPolicy(Qt::StrongFocus);
+		if (graph) {
+			QWidget* window = graph->window();
+			if (window) {
+				window->setFocusPolicy(Qt::StrongFocus);
+				QGraphicsProxyWidget* proxy = d->m_scene->addWidget(window);
+				proxy->setFocusPolicy(Qt::StrongFocus); // Ensure the proxy can gain focus
+				proxy->setAcceptHoverEvents(true);
+				proxy->setAcceptedMouseButtons(Qt::AllButtons);
+				// Set the proxy size dynamically
+				QRectF sceneRect = d->m_scene->sceneRect();
+				double width = sceneRect.width() - d->layoutLeftMargin - d->layoutRightMargin;
+				double height = sceneRect.height() - d->layoutTopMargin - d->layoutBottomMargin;
+				proxy->resize(width, height);
+			}
+			graph->show();
+		}
+	} else if (aspect->type() == AspectType::Scatter3DPlot) {
+		const auto* addedElement = static_cast<const Scatter3DPlotArea*>(aspect);
+		Q3DScatter* graph = addedElement->m_scatter;
 		graph->setFocusPolicy(Qt::StrongFocus);
 		if (graph) {
 			QWidget* window = graph->window();
