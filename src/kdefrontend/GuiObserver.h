@@ -13,6 +13,7 @@
 #include <QObject>
 
 #include <kdefrontend/dockwidgets/Axis3DDock.h>
+#include <kdefrontend/dockwidgets/Scatter3DPlotAreaDock.h>
 #include <kdefrontend/dockwidgets/Surface3DPlotAreaDock.h>
 
 class MainWin;
@@ -119,6 +120,9 @@ private:
 
 	// 3d axis
 	Axis3DDock* m_axis3dDock{nullptr};
+
+	// scatter 3d dock
+	Scatter3DPlotAreaDock* m_scatter3DPlotDock{nullptr};
 
 	// analysis plots
 	XYDataReductionCurveDock* m_xyDataReductionCurveDock{nullptr};

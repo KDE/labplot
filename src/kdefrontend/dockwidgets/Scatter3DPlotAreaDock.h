@@ -26,11 +26,25 @@ private Q_SLOTS:
 	void xColumnChanged(const QModelIndex&);
 	void yColumnChanged(const QModelIndex&);
 	void zColumnChanged(const QModelIndex&);
+	void xRotationChanged(int);
+	void yRotationChanged(int);
+	void zoomLevelChanged(int);
+	void shadowQualityChanged(int);
+	void pointStyleChanged(int);
+	void opacityChanged(double);
+	void themeChanged(int);
 
 	// SLOTs for changes triggered in Scatter3DPlotArea
 	void scatterXColumnChanged(const AbstractColumn*);
 	void scatterYColumnChanged(const AbstractColumn*);
 	void scatterZColumnChanged(const AbstractColumn*);
+	void scatterXRotationChanged(int);
+	void scatterYRotationChanged(int);
+	void scatterZoomLevelChanged(int);
+	void scatterShadowQualityChanged(Scatter3DPlotArea::ShadowQuality);
+	void scatterPointStyleChanged(Scatter3DPlotArea::PointStyle);
+	void scatterOpacityChanged(double);
+	void scatterThemeChanged(Scatter3DPlotArea::Theme);
 
 private:
 	Ui::Scatter3DPlotAreaDock ui;

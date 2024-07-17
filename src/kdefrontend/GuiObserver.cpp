@@ -393,6 +393,11 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		raiseDock(m_surfacePlotDock, m_mainWindow->stackedWidget);
 		m_surfacePlotDock->setSurfaces(castList<Surface3DPlotArea>(selectedAspects));
 		break;
+	case AspectType::Scatter3DPlot:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Scatter 3D Plot"));
+		raiseDock(m_scatter3DPlotDock, m_mainWindow->stackedWidget);
+		m_scatter3DPlotDock->setScatters(castList<Scatter3DPlotArea>(selectedAspects));
+		break;
 	case AspectType::Axis3D:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Axis 3D"));
 		raiseDock(m_axis3dDock, m_mainWindow->stackedWidget);
