@@ -197,21 +197,21 @@ QString McapFilter::fileInfoString(const QString& fileName) {
 	info += QLatin1String("<br>");
 
 	auto stats = reader.statistics();
-	if(stats.has_value()){
-	info+= i18n("Message count: ") + QString::number(stats.value().messageCount);
-	info += QLatin1String("<br>");
-	info+= i18n("Schema count: ") + QString::number(stats.value().schemaCount);
-	info += QLatin1String("<br>");
-	info+= i18n("Channel count: ") + QString::number(stats.value().channelCount);
-	info += QLatin1String("<br>");	
-	info+= i18n("Attachement count: ") + QString::number(stats.value().attachmentCount);
-	info += QLatin1String("<br>");
-	info+= i18n("Metadata count: ") + QString::number(stats.value().metadataCount);
-	info += QLatin1String("<br>");
-	info+= i18n("Message Start Time: ") + QDateTime::fromMSecsSinceEpoch(static_cast<long>(stats.value().messageStartTime) / 1000000).toString();
-	info += QLatin1String("<br>");
-	info+= i18n("Message End Time: ") + QDateTime::fromMSecsSinceEpoch(static_cast<long>(stats.value().messageEndTime / 1000000)).toString();
-	}else{
+	if (stats.has_value()) {
+		info += i18n("Message count: ") + QString::number(stats.value().messageCount);
+		info += QLatin1String("<br>");
+		info += i18n("Schema count: ") + QString::number(stats.value().schemaCount);
+		info += QLatin1String("<br>");
+		info += i18n("Channel count: ") + QString::number(stats.value().channelCount);
+		info += QLatin1String("<br>");
+		info += i18n("Attachement count: ") + QString::number(stats.value().attachmentCount);
+		info += QLatin1String("<br>");
+		info += i18n("Metadata count: ") + QString::number(stats.value().metadataCount);
+		info += QLatin1String("<br>");
+		info += i18n("Message Start Time: ") + QDateTime::fromMSecsSinceEpoch(static_cast<long>(stats.value().messageStartTime) / 1000000).toString();
+		info += QLatin1String("<br>");
+		info += i18n("Message End Time: ") + QDateTime::fromMSecsSinceEpoch(static_cast<long>(stats.value().messageEndTime / 1000000)).toString();
+	} else {
 		info += i18n("No Statistics found.");
 	}
 
@@ -224,13 +224,13 @@ QString McapFilter::fileInfoString(const QString& fileName) {
 	std::unordered_map<mcap::ChannelId, mcap::ChannelPtr> channel_map = reader.channels();
 	std::for_each(channel_map.begin(), channel_map.end(), [&](std::pair<mcap::ChannelId, mcap::ChannelPtr> entry) {
 		if (entry.second->messageEncoding == "json") {
-				info += QString::fromStdString((entry.second->topic));
+			info += QString::fromStdString((entry.second->topic));
+			info += QLatin1String("<br>");
+			topicCount += 1;
+			if (topicCount == maxNoOfTopics) {
+				info += QLatin1String("...");
 				info += QLatin1String("<br>");
-				topicCount +=1;
-				if(topicCount == maxNoOfTopics){
-					info += QLatin1String("...");
-					info += QLatin1String("<br>");					
-				}
+			}
 		}
 	});
 
@@ -547,9 +547,7 @@ int McapFilterPrivate::mcapToJson(const QString& fileName, int lines) {
 				break;
 			}
 		}
-	} catch (const std::exception& e) {
-		std::cerr << "Error parsing MCAP file: " << e.what() << std::endl;
-	}
+	} catch (const std::exception& e) { std::cerr << "Error parsing MCAP file: " << e.what() << std::endl; }
 
 	QJsonDocument finalJsonDocument(jsonArray);
 
@@ -636,7 +634,6 @@ void McapFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 			if (createIndexEnabled)
 				spreadsheet->column(m_columnOffset)->setPlotDesignation(AbstractColumn::PlotDesignation::X);
 		}
-
 	}
 	dataSource->finalizeImport(m_columnOffset, startColumn, startColumn + m_actualCols - 1, dateTimeFormat, importMode);
 }

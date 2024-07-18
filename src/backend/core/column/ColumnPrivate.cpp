@@ -780,9 +780,7 @@ bool ColumnPrivate::initDataContainer(bool resize) {
 		try {
 			if (resize)
 				vec->resize(m_rowCount);
-		} catch (std::bad_alloc&) {
-			return false;
-		}
+		} catch (std::bad_alloc&) { return false; }
 		vec->fill(std::numeric_limits<double>::quiet_NaN());
 		m_data = vec;
 		break;
@@ -792,9 +790,7 @@ bool ColumnPrivate::initDataContainer(bool resize) {
 		try {
 			if (resize)
 				vec->resize(m_rowCount);
-		} catch (std::bad_alloc&) {
-			return false;
-		}
+		} catch (std::bad_alloc&) { return false; }
 		m_data = vec;
 		break;
 	}
@@ -803,9 +799,7 @@ bool ColumnPrivate::initDataContainer(bool resize) {
 		try {
 			if (resize)
 				vec->resize(m_rowCount);
-		} catch (std::bad_alloc&) {
-			return false;
-		}
+		} catch (std::bad_alloc&) { return false; }
 		m_data = vec;
 		break;
 	}
@@ -814,9 +808,7 @@ bool ColumnPrivate::initDataContainer(bool resize) {
 		try {
 			if (resize)
 				vec->resize(m_rowCount);
-		} catch (std::bad_alloc&) {
-			return false;
-		}
+		} catch (std::bad_alloc&) { return false; }
 		m_data = vec;
 		break;
 	}
@@ -827,9 +819,7 @@ bool ColumnPrivate::initDataContainer(bool resize) {
 		try {
 			if (resize)
 				vec->resize(m_rowCount);
-		} catch (std::bad_alloc&) {
-			return false;
-		}
+		} catch (std::bad_alloc&) { return false; }
 		m_data = vec;
 		break;
 	}
