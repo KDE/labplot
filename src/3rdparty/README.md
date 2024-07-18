@@ -30,6 +30,12 @@ Qt Advanced Docking System lets you create customizable layouts using a full fea
 
 QStringTokenizer is a universal, safe, zero-allocation string splitter and is part of KDToolBox ([link](https://github.com/KDABLabs/KDToolBox/tree/master)).
 
+## MCAP
+
+MCAP provides classes for reading and writing the MCAP file format.
+
+https://github.com/foxglove/mcap
+
 ## ReadStat (not included)
 
 ReadStat is a command-line tool and MIT-licensed C library for reading files from popular stats packages ([link](https://github.com/WizardMac/ReadStat))
