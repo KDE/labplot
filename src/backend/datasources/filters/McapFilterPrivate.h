@@ -17,7 +17,7 @@ class QJsonDocument;
 class AbstractDataSource;
 class AbstractColumn;
 namespace mcap {
-class McapWriterOptions;
+struct McapWriterOptions;
 }
 class McapFilterPrivate {
 public:

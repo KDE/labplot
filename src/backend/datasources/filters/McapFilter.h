@@ -19,7 +19,7 @@ class QJsonDocument;
 class QJsonModel;
 class McapFilterPrivate;
 namespace mcap {
-class McapWriterOptions;
+struct McapWriterOptions;
 }
 class McapFilter : public AbstractFileFilter {
 	Q_OBJECT

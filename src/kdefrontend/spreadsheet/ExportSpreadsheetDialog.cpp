@@ -661,7 +661,6 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 	setFormat(static_cast<Format>(index));
 
 	// add/replace the file extension for the current file format
-	const auto& path = ui->leFileName->text();
 	if (!path.isEmpty())
 		ui->leFileName->setText(GuiTools::replaceExtension(path, extension));
 }

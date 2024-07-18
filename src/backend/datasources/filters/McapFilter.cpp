@@ -189,7 +189,8 @@ QString McapFilter::fileInfoString(const QString& fileName) {
 		}
 	}
 
-	reader.readSummary(mcap::ReadSummaryMethod::NoFallbackScan);
+	auto status = reader.readSummary(mcap::ReadSummaryMethod::NoFallbackScan);
+	// TODO: check status
 
 	QString info;
 	info += i18n("Valid MCAP file");
@@ -276,7 +277,7 @@ int McapFilterPrivate::checkRow(QJsonValueRef value, int& countCols) {
 /*!
 returns -1 if a parse error has occurred, 1 if the current row type not supported and 0 otherwise.
 */
-int McapFilterPrivate::parseColumnModes(const QJsonValue& row, const QString& rowName) {
+int McapFilterPrivate::parseColumnModes(const QJsonValue& row, const QString& /*rowName*/) {
 	columnModes.clear();
 	vectorNames.clear();
 
@@ -648,6 +649,8 @@ QVector<QStringList> McapFilterPrivate::preview(const QString& fileName, int lin
 
 	mcapToJson(fileName, lines);
 	bool success = prepareDocumentToRead();
+	// TODO: check success
+	Q_UNUSED(success)
 	return preview(lines);
 }
 
@@ -782,6 +785,8 @@ void McapFilterPrivate::writeWithOptions(const QString& fileName, AbstractDataSo
 		channelId = channel.id;
 	}
 	mcap::Timestamp startTime = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+	// TODO: use startTime
+	Q_UNUSED(startTime)
 	QJsonArray jsonArray = m_preparedDoc.array();
 
 	int numRows = spreadsheet->rowCount();
@@ -891,6 +896,8 @@ QJsonDocument McapFilterPrivate::getJsonDocument(const QString& fileName) {
 	DEBUG(Q_FUNC_INFO);
 	mcapToJson(fileName);
 	bool success = prepareDocumentToRead();
+	// TODO: check success
+	Q_UNUSED(success)
 	return m_preparedDoc;
 }
 
@@ -934,7 +941,7 @@ QJsonObject McapFilterPrivate::flattenJson(QJsonValue jsonVal, QString aggregate
 }
 
 // TODO: implement unflatten method
-QJsonObject McapFilterPrivate::unflattenJson(const QJsonObject& obj, QString seperator) {
+QJsonObject McapFilterPrivate::unflattenJson(const QJsonObject& obj, QString /*separator*/) {
 	return obj;
 }
 
@@ -960,7 +967,9 @@ QVector<QString> McapFilterPrivate::getValidTopics(const QString& fileName) {
 		}
 	}
 
-	reader.readSummary(mcap::ReadSummaryMethod::NoFallbackScan);
+	auto status = reader.readSummary(mcap::ReadSummaryMethod::NoFallbackScan);
+	// TODO: check status
+	Q_UNUSED(status)
 	std::unordered_map<mcap::ChannelId, mcap::ChannelPtr> channel_map = reader.channels();
 	std::for_each(channel_map.begin(), channel_map.end(), [&](std::pair<mcap::ChannelId, mcap::ChannelPtr> entry) {
 		if (entry.second->messageEncoding == "json") {
