@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Horizontal header for SpreadsheetView displaying comments in a second header
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -101,17 +101,12 @@ which displays the column sparkline and third header showing column comments.
 */
 
 SpreadsheetHeaderView::SpreadsheetHeaderView(QWidget* parent)
-	: QHeaderView(Qt::Horizontal, parent) {
+	: QHeaderView(Qt::Horizontal, parent)
+	, m_commentSlave(new SpreadsheetCommentsHeaderView())
+	, m_sparkLineSlave(new SpreadsheetSparkLineHeaderView()) {
 	setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-
-	m_commentSlave = new SpreadsheetCommentsHeaderView();
-	m_sparkLineSlave = new SpreadsheetSparkLineHeaderView();
-
 	m_commentSlave->setDefaultAlignment(Qt::AlignCenter | Qt::AlignVCenter);
 	m_sparkLineSlave->setDefaultAlignment(Qt::AlignCenter | Qt::AlignVCenter);
-
-	m_showComments = true;
-	m_showSparkLines = true;
 }
 
 SpreadsheetHeaderView::~SpreadsheetHeaderView() {
@@ -199,12 +194,14 @@ void SpreadsheetHeaderView::showComments(bool on) {
 	m_showComments = on;
 	refresh();
 }
+
 /*!
   Show or hide (if \c on = \c false) the column spark lines.
 */
 bool SpreadsheetHeaderView::areSparkLinesShown() const {
 	return m_showSparkLines;
 }
+
 /*!
   Returns whether spark lines are shown currently or not.
 */

@@ -11,7 +11,6 @@
 #define IMPORTSQLDATABASETEST_H
 
 #include "../../CommonTest.h"
-#include <QtTest>
 
 class ImportSqlDatabaseTest : public CommonTest {
 	Q_OBJECT

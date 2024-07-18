@@ -4,7 +4,7 @@
 	Description          : A xy-curve defined by a fit model
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2016-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2016-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -16,20 +16,23 @@
   \ingroup worksheet
 */
 
-#include "XYFitCurve.h"
 #include "XYFitCurvePrivate.h"
-#include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
 #include "backend/gsl/ExpressionParser.h"
 #include "backend/gsl/errors.h"
+#include "backend/gsl/parser.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
-#include "backend/worksheet/plots/cartesian/Histogram.h"
-
-#include "backend/gsl/parser.h"
 #include "backend/nsl/nsl_sf_stats.h"
 #include "backend/nsl/nsl_stats.h"
+#include "backend/worksheet/plots/cartesian/Histogram.h"
+
+#include <QDateTime>
+#include <QElapsedTimer>
+#include <QIcon>
+#include <QThreadPool>
+
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_matrix.h>
@@ -39,11 +42,6 @@
 #include <gsl/gsl_statistics.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_version.h>
-
-#include <QDateTime>
-#include <QElapsedTimer>
-#include <QIcon>
-#include <QThreadPool>
 
 XYFitCurve::XYFitCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYFitCurvePrivate(this), AspectType::XYFitCurve) {
@@ -243,9 +241,14 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 			gsl_multifit_linear_free(work);
 			gsl_vector_free(w);
 
+			if (paramStartValues.size() < np) {
+				DEBUG(Q_FUNC_INFO << ", WARNING: start value vector is smaller than np! (" << paramStartValues.size() << " < " << np << ")")
+				paramStartValues.resize(np);
+			}
 			for (int i = 0; i < np; i++) {
-				if (!std::isnan(gsl_vector_get(c, i)))
-					paramStartValues[i] = gsl_vector_get(c, i);
+				const auto value = gsl_vector_get(c, i);
+				if (!std::isnan(value))
+					paramStartValues[i] = value;
 			}
 
 			// results
@@ -464,11 +467,11 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 	QVector<bool>& paramFixed = fitData.paramFixed;
 
 	if (modelCategory != nsl_fit_model_custom) {
-		DEBUG(Q_FUNC_INFO << ", XYFitCurve::initFitData() for model category = " << nsl_fit_model_category_name[modelCategory] << ", model type = " << modelType
+		DEBUG(Q_FUNC_INFO << ", for model category = " << nsl_fit_model_category_name[modelCategory] << ", model type = " << modelType
 						  << ", degree = " << degree);
 		paramNames.clear();
 	} else {
-		DEBUG(Q_FUNC_INFO << ", XYFitCurve::initFitData() for model category = nsl_fit_model_custom, model type = " << modelType << ", degree = " << degree);
+		DEBUG(Q_FUNC_INFO << ", for model category = nsl_fit_model_custom, model type = " << modelType << ", degree = " << degree);
 	}
 	paramNamesUtf8.clear();
 
@@ -843,6 +846,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 }
 
 void XYFitCurve::clearFitResult() {
+	DEBUG(Q_FUNC_INFO)
 	Q_D(XYFitCurve);
 	d->fitResult = XYFitCurve::FitResult();
 }
@@ -994,11 +998,11 @@ struct data {
 	nsl_fit_model_category modelCategory;
 	int modelType;
 	int degree;
-	QString* func; // string containing the definition of the model/function
-	QStringList* paramNames;
+	QString* func; // string containing the formula of the model/function
+	QStringList* paramNames; // names of parameter
 	double* paramMin; // lower parameter limits
 	double* paramMax; // upper parameter limits
-	bool* paramFixed; // parameter fixed?
+	bool* paramFixed; // are the parameter fixed?
 };
 
 /*!
@@ -1023,8 +1027,8 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 		double v = gsl_vector_get(paramValues, (size_t)i);
 		// bound values if limits are set
 		assign_symbol(qPrintable(paramNames->at(i)), nsl_fit_map_bound(v, min[i], max[i]));
-		QDEBUG("Parameter" << i << " (' " << paramNames->at(i) << "')" << '[' << min[i] << ',' << max[i] << "] free/bound:" << QString::number(v, 'g', 15)
-						   << ' ' << QString::number(nsl_fit_map_bound(v, min[i], max[i]), 'g', 15));
+		QDEBUG(Q_FUNC_INFO << ", Parameter" << i << " (' " << paramNames->at(i) << "')" << '[' << min[i] << ',' << max[i]
+						   << "] free/bound:" << QString::number(v, 'g', 15) << ' ' << QString::number(nsl_fit_map_bound(v, min[i], max[i]), 'g', 15));
 	}
 
 	QString func{*(((struct data*)params)->func)};
@@ -1777,15 +1781,17 @@ int func_fdf(const gsl_vector* x, void* params, gsl_vector* f, gsl_matrix* J) {
 	return GSL_SUCCESS;
 }
 
-/* prepare the fit result columns */
+//////////////////////////////////////////////////////////////////
+
+/* prepare the fit result columns and note */
 void XYFitCurvePrivate::prepareResultColumns() {
 	// DEBUG(Q_FUNC_INFO)
 	// create fit result columns if not available yet, clear them otherwise
 
 	// Done also in XYAnalysisCurve, but this function will be also called directly() from evaluate()
-	// and not over recalculate(). So this is also needed here!
+	// and not via recalculate(). So this is also needed here!
 	if (!xColumn) { // all columns are treated together
-		DEBUG("	Creating columns")
+		DEBUG(Q_FUNC_INFO << ", Creating columns")
 		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
 		yColumn = new Column(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 
@@ -1806,13 +1812,20 @@ void XYFitCurvePrivate::prepareResultColumns() {
 		DEBUG(Q_FUNC_INFO << ", Clear columns")
 		xColumn->invalidateProperties();
 		yColumn->invalidateProperties();
-		xVector->clear();
-		yVector->clear();
+		if (xVector)
+			xVector->clear();
+		if (yVector)
+			yVector->clear();
 		// TODO: residualsVector->clear();
 	}
 
+	if (!resultsNote) {
+		resultsNote = new Note(i18n("Fit Results"));
+		resultsNote->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
+		q->addChild(resultsNote);
+	}
 	if (!residualsColumn) {
-		residualsColumn = new Column(QStringLiteral("residuals"), AbstractColumn::ColumnMode::Double);
+		residualsColumn = new Column(QStringLiteral("Residuals"), AbstractColumn::ColumnMode::Double);
 		residualsVector = static_cast<QVector<double>*>(residualsColumn->data());
 		residualsColumn->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
 		q->addChild(residualsColumn);
@@ -1821,6 +1834,88 @@ void XYFitCurvePrivate::prepareResultColumns() {
 
 void XYFitCurvePrivate::resetResults() {
 	fitResult = XYFitCurve::FitResult();
+}
+
+void XYFitCurvePrivate::updateResultsNote() {
+	DEBUG(Q_FUNC_INFO)
+	if (!resultsNote)
+		return;
+
+	QString text;
+	const auto numberLocale = QLocale();
+
+	text += i18n("Nonlinear Fit to X/Y data");
+	if (xDataColumn && yDataColumn)
+		text += QStringLiteral(": ") + xDataColumn->name() + QStringLiteral(" / ") + yDataColumn->name();
+	text += NEWLINE + NEWLINE;
+
+	// model
+	text += i18n("MODEL") + NEWLINE + NEWLINE;
+	switch (fitData.modelCategory) {
+	case nsl_fit_model_basic:
+		text += QLatin1String(nsl_fit_model_basic_name[fitData.modelType]);
+		text += QStringLiteral(", ") + i18n("Degree") + QStringLiteral(" ") + numberLocale.toString(fitData.degree);
+		break;
+	case nsl_fit_model_peak:
+		text += QLatin1String(nsl_fit_model_peak_name[fitData.modelType]);
+		if (fitData.degree > 1)
+			text += QStringLiteral(", ") + numberLocale.toString(fitData.degree) + QStringLiteral(" ") + i18n("Peaks");
+		break;
+	case nsl_fit_model_growth:
+		text += QLatin1String(nsl_fit_model_growth_name[fitData.modelType]);
+		break;
+	case nsl_fit_model_distribution:
+		text += QLatin1String(nsl_sf_stats_distribution_name[fitData.modelType]);
+		break;
+	case nsl_fit_model_custom:
+		text += i18n("Custom");
+	}
+
+	text += QStringLiteral(": ") + fitData.model + NEWLINE + NEWLINE;
+	DEBUG(Q_FUNC_INFO << ", model: " << fitData.model.toStdString())
+
+	// TODO: errors? (see Origin)
+	// TODO: weighting? (see Origin)
+
+	// parameter
+	text += i18n("PARAMETERS") + NEWLINE + NEWLINE;
+
+	int np = fitResult.paramValues.size();
+
+	text += TAB + i18n("Value") + TAB + i18n("Uncertainty") + TAB + i18n("Uncertainty,%") + TAB + i18n("t Statistic") + TAB + QStringLiteral("P > |t|") + TAB
+		+ i18n("Lower") + TAB + i18n("Upper") + NEWLINE;
+	for (int i = 0; i < np; i++) {
+		text += fitData.paramNames.at(i) + TAB + numberLocale.toString(fitResult.paramValues.at(i)) + TAB + numberLocale.toString(fitResult.errorValues.at(i))
+			+ TAB + TAB + numberLocale.toString(fitResult.errorValues.at(i) / fitResult.paramValues.at(i) * 100.) + TAB + TAB
+			+ numberLocale.toString(fitResult.tdist_tValues.at(i)) + TAB
+			+ numberLocale.toString(fitResult.tdist_pValues.at(i))
+			// TODO: margin2Values?
+			+ TAB + numberLocale.toString(fitResult.paramValues.at(i) - fitResult.marginValues.at(i)) + TAB
+			+ numberLocale.toString(fitResult.paramValues.at(i) + fitResult.marginValues.at(i)) + NEWLINE;
+
+		// for (unsigned int j = 0; j <= i; j++)
+		//	d->fitResult.correlationMatrix << gsl_matrix_get(cov, i, j) / sqrt(gsl_matrix_get(cov, i, i)) / sqrt(gsl_matrix_get(cov, j, j));
+	}
+	text += NEWLINE;
+
+	// goodness of fit
+	text += i18n("GOODNESS OF FIT") + NEWLINE + NEWLINE;
+
+	text += i18n("Sum of squared residuals") + UTF8_QSTRING(" (χ²)") + TAB + TAB + numberLocale.toString(fitResult.sse) + NEWLINE;
+	text += i18n("Residuals mean square") + UTF8_QSTRING(" (χ²/dof)") + TAB + TAB + numberLocale.toString(fitResult.rms) + NEWLINE;
+	text += i18n("Root mean square deviation") + QStringLiteral(" (RMSD/SD)") + TAB + numberLocale.toString(fitResult.rsd) + NEWLINE;
+	text += i18n("Coefficient of determination") + QStringLiteral(" (R²)") + TAB + numberLocale.toString(fitResult.rsquare) + NEWLINE;
+	text += i18n("Adj. coefficient of determination") + QStringLiteral(" (R̄²)") + TAB + numberLocale.toString(fitResult.rsquareAdj) + NEWLINE;
+	text += UTF8_QSTRING("χ²-") + i18n("Test") + UTF8_QSTRING(" (P > χ²)") + TAB + TAB + TAB + numberLocale.toString(fitResult.chisq_p, 'g', 3) + NEWLINE;
+	text += i18n("F-Test") + TAB + TAB + TAB + TAB + numberLocale.toString(fitResult.fdist_F, 'g', 3) + NEWLINE;
+	text += QStringLiteral("P > F") + TAB + TAB + TAB + TAB + numberLocale.toString(fitResult.fdist_p, 'g', 3) + NEWLINE;
+	text += i18n("Mean absolute error") + QStringLiteral(" (MAE)") + TAB + TAB + numberLocale.toString(fitResult.mae) + NEWLINE;
+	text += i18n("Akaike information criterion") + QStringLiteral(" (AIC)") + TAB + numberLocale.toString(fitResult.aic, 'g', 3) + NEWLINE;
+	text += i18n("Bayesian information criterion") + QStringLiteral(" (BIC)") + TAB + numberLocale.toString(fitResult.bic, 'g', 3) + NEWLINE;
+
+	resultsNote->setText(text);
+
+	DEBUG("NOTE TEXT: " << resultsNote->text().toStdString())
 }
 
 void XYFitCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) {
@@ -1885,13 +1980,13 @@ bool XYFitCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn
 	residualsVector->resize(rowCount);
 	// DEBUG("	Residual vector size: " << residualsVector->size())
 
-	DEBUG("#######################################\nALGORITHM: " << nsl_fit_algorithm_name[fitData.algorithm])
+	DEBUG(Q_FUNC_INFO << ", ALGORITHM: " << nsl_fit_algorithm_name[fitData.algorithm])
 	switch (fitData.algorithm) {
 	case nsl_fit_algorithm_lm:
 		runLevenbergMarquardt(tmpXDataColumn, tmpYDataColumn, xRange);
 		break;
 	case nsl_fit_algorithm_ml: {
-		double width = xRange.size() / tmpYDataColumn->rowCount();
+		const double width = xRange.size() / tmpYDataColumn->rowCount();
 		double norm = 1.;
 		if (dataSourceHistogram) {
 			switch (dataSourceHistogram->normalization()) {
@@ -1978,7 +2073,7 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 	fitResult.marginValues.resize(np);
 	fitResult.correlationMatrix.resize(np * (np + 1) / 2);
 
-	DEBUG("DISTRIBUTION: " << fitData.modelType)
+	DEBUG(Q_FUNC_INFO << ", DISTRIBUTION: " << fitData.modelType)
 	fitResult.paramValues[0] = norm; // A - normalization
 	// TODO: parameter values (error, etc.)
 	// TODO: currently all values are used (data range not changeable)
@@ -1995,7 +2090,7 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		const double mu = mean;
 		fitResult.paramValues[1] = sigma;
 		fitResult.paramValues[2] = mu;
-		DEBUG("mu = " << mu << ", sigma = " << sigma)
+		DEBUG(Q_FUNC_INFO << ", mu = " << mu << ", sigma = " << sigma)
 
 		fitResult.errorValues[2] = sigma / std::sqrt(n);
 		double margin = nsl_stats_tdist_margin(alpha, fitResult.dof, fitResult.errorValues.at(2));
@@ -2153,14 +2248,14 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 		DEBUG(Q_FUNC_INFO << ", WARNING: no parameter found.")
 		fitResult.available = true;
 		fitResult.valid = false;
-		fitResult.status = i18n("Model has no parameters.");
+		fitResult.status = i18n("Model has no parameters!");
 		return;
 	}
 
 	if (yErrorColumn && yErrorColumn->rowCount() < tmpXDataColumn->rowCount()) {
 		fitResult.available = true;
 		fitResult.valid = false;
-		fitResult.status = i18n("Not sufficient weight data points provided.");
+		fitResult.status = i18n("Not sufficient weight data points provided!");
 		return;
 	}
 
@@ -2237,21 +2332,21 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 	if (n == 0) {
 		fitResult.available = true;
 		fitResult.valid = false;
-		fitResult.status = i18n("No data points available.");
+		fitResult.status = i18n("No X data available!");
 		return;
 	}
 
 	if (n < np) {
 		fitResult.available = true;
 		fitResult.valid = false;
-		fitResult.status = i18n("The number of data points (%1) must be greater than or equal to the number of parameters (%2).", n, np);
+		fitResult.status = i18n("The number of data points (%1) must be greater than or equal to the number of parameters (%2)!", n, np);
 		return;
 	}
 
 	if (fitData.model.simplified().isEmpty()) {
 		fitResult.available = true;
 		fitResult.valid = false;
-		fitResult.status = i18n("Fit model not specified.");
+		fitResult.status = i18n("Fit model not specified!");
 		return;
 	}
 
@@ -2634,21 +2729,35 @@ bool XYFitCurvePrivate::evaluate(bool preview) {
 	}
 	DEBUG(Q_FUNC_INFO << ", eval range = " << xRange.toStdString());
 
-	xVector->resize((int)fitData.evaluatedPoints);
-	yVector->resize((int)fitData.evaluatedPoints);
+	int nrPoints = (int)fitData.evaluatedPoints;
+	xVector->resize(nrPoints);
+	yVector->resize(nrPoints);
 	DEBUG(Q_FUNC_INFO << ", vector size = " << xVector->size());
+
+	if (fitResult.paramValues.size() == 0) { // fit result not initialized yet
+		fitResult.paramValues = fitData.paramStartValues;
+		const int np = fitData.paramStartValues.size();
+		fitResult.errorValues.resize(np);
+		fitResult.tdist_tValues.resize(np);
+		fitResult.tdist_pValues.resize(np);
+		fitResult.marginValues.resize(np);
+	}
 
 	auto paramValues = fitResult.paramValues;
 	if (preview) // results not available yet
 		paramValues = fitData.paramStartValues;
 
-	bool rc = parser->evaluateCartesian(fitData.model, xRange, (int)fitData.evaluatedPoints, xVector, yVector, fitData.paramNames, paramValues);
+	bool rc = parser->evaluateCartesian(fitData.model, xRange, nrPoints, xVector, yVector, fitData.paramNames, paramValues);
+
 	if (!rc) {
 		DEBUG(Q_FUNC_INFO << ", ERROR: Parsing fit function failed")
 		xVector->clear();
 		yVector->clear();
 		residualsVector->clear();
 	}
+
+	if (!preview)
+		updateResultsNote();
 
 	return true;
 }
@@ -2873,17 +2982,16 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("previewEnabled", fitData.previewEnabled, bool);
 			READ_DOUBLE_VALUE("confidenceInterval", fitData.confidenceInterval);
 
-			// set the model expression and the parameter names (can be derived from the saved values for category, type and degree)
-			XYFitCurve::initFitData(d->fitData);
-			// remove default names and start values (will be read from project later)
-			d->fitData.paramStartValues.clear();
-
-		} else if (!preview && reader->name() == QLatin1String("name")) { // needed for custom model
+		} else if (!preview && reader->name() == QLatin1String("paramNames")) { // needed for custom model
+			d->fitData.paramNames.clear();
+		} else if (!preview && reader->name() == QLatin1String("name")) {
 			d->fitData.paramNames << reader->readElementText();
+		} else if (!preview && reader->name() == QLatin1String("paramStartValues")) {
+			d->fitData.paramStartValues.clear();
 		} else if (!preview && reader->name() == QLatin1String("startValue")) {
 			d->fitData.paramStartValues << reader->readElementText().toDouble();
-		} else if (!preview && reader->name() == QLatin1String("fixed")) {
-			d->fitData.paramFixed << (bool)reader->readElementText().toInt();
+		} else if (!preview && reader->name() == QLatin1String("paramLowerLimits")) {
+			d->fitData.paramLowerLimits.clear();
 		} else if (!preview && reader->name() == QLatin1String("lowerLimit")) {
 			bool ok;
 			double x = reader->readElementText().toDouble(&ok);
@@ -2891,6 +2999,8 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 				d->fitData.paramLowerLimits << x;
 			else
 				d->fitData.paramLowerLimits << -std::numeric_limits<double>::max();
+		} else if (!preview && reader->name() == QLatin1String("paramUpperLimits")) {
+			d->fitData.paramUpperLimits.clear();
 		} else if (!preview && reader->name() == QLatin1String("upperLimit")) {
 			bool ok;
 			double x = reader->readElementText().toDouble(&ok);
@@ -2898,18 +3008,37 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 				d->fitData.paramUpperLimits << x;
 			else
 				d->fitData.paramUpperLimits << std::numeric_limits<double>::max();
+		} else if (!preview && reader->name() == QLatin1String("paramFixed")) {
+			d->fitData.paramFixed.clear();
+		} else if (!preview && reader->name() == QLatin1String("fixed")) {
+			d->fitData.paramFixed << (bool)reader->readElementText().toInt();
+			// end fitData
+		} else if (!preview && reader->name() == QLatin1String("paramValues")) {
+			d->fitResult.paramValues.clear();
 		} else if (!preview && reader->name() == QLatin1String("value")) {
 			d->fitResult.paramValues << reader->readElementText().toDouble();
+		} else if (!preview && reader->name() == QLatin1String("errorValues")) {
+			d->fitResult.errorValues.clear();
 		} else if (!preview && reader->name() == QLatin1String("error")) {
 			d->fitResult.errorValues << reader->readElementText().toDouble();
+		} else if (!preview && reader->name() == QLatin1String("tdist_tValues")) {
+			d->fitResult.tdist_tValues.clear();
 		} else if (!preview && reader->name() == QLatin1String("tdist_t")) {
 			d->fitResult.tdist_tValues << reader->readElementText().toDouble();
+		} else if (!preview && reader->name() == QLatin1String("tdist_pValues")) {
+			d->fitResult.tdist_pValues.clear();
 		} else if (!preview && reader->name() == QLatin1String("tdist_p")) {
 			d->fitResult.tdist_pValues << reader->readElementText().toDouble();
+		} else if (!preview && reader->name() == QLatin1String("tdist_marginValues")) {
+			d->fitResult.marginValues.clear();
 		} else if (!preview && reader->name() == QLatin1String("tdist_margin")) {
 			d->fitResult.marginValues << reader->readElementText().toDouble();
+		} else if (!preview && reader->name() == QLatin1String("tdist_margin2Values")) {
+			d->fitResult.margin2Values.clear();
 		} else if (!preview && reader->name() == QLatin1String("tdist_margin2")) {
 			d->fitResult.margin2Values << reader->readElementText().toDouble();
+		} else if (!preview && reader->name() == QLatin1String("correlationMatrix")) {
+			d->fitResult.correlationMatrix.clear();
 		} else if (!preview && reader->name() == QLatin1String("correlation")) {
 			d->fitResult.correlationMatrix << reader->readElementText().toDouble();
 		} else if (!preview && reader->name() == QLatin1String("fitResult")) {
@@ -2942,12 +3071,12 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 				delete column;
 				return false;
 			}
-			DEBUG("############################   reading column " << STDSTRING(column->name()))
+			DEBUG(Q_FUNC_INFO << ", reading column " << STDSTRING(column->name()))
 			if (column->name() == QLatin1String("x"))
 				d->xColumn = column;
 			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
-			else if (column->name() == QLatin1String("residuals"))
+			else if (column->name() == QLatin1String("Residuals") || column->name() == QLatin1String("residuals"))
 				d->residualsColumn = column;
 		} else { // unknown element
 			reader->raiseUnknownElementWarning();
@@ -2955,6 +3084,14 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 				return false;
 		}
 	}
+
+	// set the model expression and the parameter names (can be derived from the saved values for category, type and degree)
+	XYFitCurve::initFitData(d->fitData);
+
+	// add result note (not saved in projects)
+	d->resultsNote = new Note(i18n("Fit Results"));
+	d->resultsNote->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
+	addChild(d->resultsNote);
 
 	////////////////////////////// fix old projects /////////////////////////
 
@@ -2987,7 +3124,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 	// if we have more paramNames than the saved model type, we have a custom model
 	if (d->fitData.paramNamesUtf8.size() < d->fitData.paramNames.size()) {
 		d->fitData.modelCategory = nsl_fit_model_custom;
-		d->fitData.model = model;
+		d->fitData.model = std::move(model);
 		d->fitData.paramNamesUtf8 = d->fitData.paramNames;
 	}
 
@@ -3004,13 +3141,18 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 	if (d->fitResult.correlationMatrix.size() == 0)
 		d->fitResult.correlationMatrix.resize(np * (np + 1) / 2);
 
+	///////////////////////////////////////////////////////////////////////////
+
 	// Loading done. Check some parameter
 	DEBUG(Q_FUNC_INFO << ", model category = " << d->fitData.modelCategory);
 	DEBUG(Q_FUNC_INFO << ", model type = " << d->fitData.modelType);
 	DEBUG(Q_FUNC_INFO << ", # params = " << d->fitData.paramNames.size());
 	DEBUG(Q_FUNC_INFO << ", # start values = " << d->fitData.paramStartValues.size());
 	// for (const auto& value : d->fitData.paramStartValues)
-	//	DEBUG("XYFitCurve::load() # start value = " << value);
+	//	DEBUG(Q_FUNC_INFO << ", start value = " << value);
+
+	// fill results note now all values are loaded
+	d->updateResultsNote();
 
 	if (preview)
 		return true;

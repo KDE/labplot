@@ -1,4 +1,17 @@
------2.11.0 () -----
+-----2.12 -----
+	* [import]
+		* Download datasets from kaggle.com
+
+-----2.11.1 (16.07.2024) -----
+Bug fixes:
+	* Improve ODS support (selected platforms only)
+	* Fixed the initial positioninig of the docks, should be put besides each other and not below
+	* Don't try to restore the window size when starting for the first time, let the window manager do the initial size
+	* Don't crash when opening a project which a hidden spreadsheet view
+	* Fixed the background color of the sparklines in the spreadsheet
+	* Fixed copy&paste and duplication of the matrix
+
+-----2.11.0 (09.07.2024) -----
 New features:
 	* [general]
 		* New application theme "Dracula"
@@ -6,6 +19,7 @@ New features:
 		* New option in the application settings to run a selected CAS engine at startup
 		* New option in the application settings to control if the state of the dock widgets should be saved in the project file
 		* Share the project via email, Nextcloud, etc. directly from the main menu
+		* Allow to activate and deactivate the debug and performance tracing output in the terminal in the application settings
 	* [worksheet]
 		* Preview panel for all available worksheets in the project
 		* Add possibility to use column labels as axis ticks
@@ -32,7 +46,9 @@ New features:
 		* Generation of equidistant values: support for date&time and integer columns
 		* Generation of equidistant values: allow to fix the number of values and the increment at the same time
 		* Support parsing more functions and operators for formulas and expressions
-		* Added support to show the Sparkline of each respective column
+		* Add support to show the Sparkline of each respective column
+		* Add triangular distributions (PDF, CDF) to parser and random number generation
+		* Allow to reverse the current selection of cells
 	* [notebook]
 		* Export to PDF
 		* "Configure CAS" in the menu to create a new notebook to directly allow the user to enable new backends in case not done yet
@@ -42,7 +58,7 @@ New features:
 		* Templates for ASCII and Binary import filters - allow to save and load current filter settings
 		* Support data import from ODS (Open Document Spreadsheet) files
 		* When importing tables from SQL databases, allow to specify which data region to read (start/end values for columns and records)
-		* Addeded seaborn's datasets to the collection of datasets
+		* Add seaborn's datasets to the collection of datasets
 		* Properly handle out-of-memory situations when importing large amount of data
 		* Better reporting of error messages in the import dialog
 		* BLF
@@ -52,6 +68,8 @@ New features:
 			* correctly import font sizes and legend fixes (#839)
 			* improved text and legend label and positioning
 			* import histogram and error bars
+	* [analysis]
+		* Add note for fit results
 
 Performance improvements:
 	* Make baseline removal much faster by using Eigen3 library (optional dependency)
@@ -59,6 +77,7 @@ Performance improvements:
 	* Reduced the memory consumption during the import of BLF files.
 
 Bug fixes:
+	* Support host processes (latex, octave, etc.) in sandboxed builds (like Flatpak)
 	* Set mousemode to selection when leaving the plot (Issue #614)
 	* Fix plot range field not being updated (Issue #603)
 	* Fix wrong axis tick type used (Issue #571)
@@ -68,15 +87,21 @@ Bug fixes:
 	* Support start/end row/column in XLSX import preview
 	* Fixed wrong string to load CANSettings
 	* Don't draw any border line for the worksheet canvas (BUG 470625)
+	* Fix ascii import (Issues #898, #901)
+	* Use "export" instead of "import" in the tooltip texts in Export Worksheet Dialog (BUG 485706)
+	* Don't allow to move axes with the arrow keys (BUG 480593)
+	* Don't draw the border line that for the worksheet canvas (BUG 470625)
+	* Fix crash during the data import into spreadsheet with column names changes (BUG 487748)
+	* Use the vectorized version of the plot during the export for all plot types and not for XYCurve only (BUG 489861)
 
 Internal:
 	* Switch from C++11 to C++17
 	* Support Qt6
 	* Reduce code duplication caused by multiple plot types (Issue #540)
 	* Update included QXlsx to 1.4.6
-	* Build separate libraries for backend, nsl and everything and link
-	only when needed in tests
+	* Build separate libraries for backend, nsl and everything and link only when needed in tests
 	* Log skipped tests
+
 
 -----2.10.1 (12.07.2023) -----
 Bug fixes:
@@ -102,6 +127,7 @@ Bug fixes:
 	* Update the plot legend on column name changes used in box and bar plots (Issue #597)
 	* Fixed the positioning of values labels for horizontal bar plots (Issue #599)
 	* Initialize the parameters for the baseline subtraction with reasonable values on first startup and better apperance of the preview plot (Issues #594)
+
 
 -----2.10.0 (21.03.2023) -----
 New features:

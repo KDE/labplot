@@ -610,6 +610,8 @@ void BoxPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 		if (aspect == d->dataColumns.at(i)) {
 			d->dataColumns[i] = nullptr;
 			d->retransform();
+			Q_EMIT dataChanged();
+			Q_EMIT changed();
 			break;
 		}
 	}
@@ -636,7 +638,7 @@ BoxPlotPrivate::BoxPlotPrivate(BoxPlot* owner)
 }
 
 Background* BoxPlotPrivate::addBackground(const KConfigGroup& group) {
-	auto* background = new Background(QString());
+	auto* background = new Background(QStringLiteral("background"));
 	background->setPrefix(QLatin1String("Filling"));
 	background->setEnabledAvailable(true);
 	background->setHidden(true);
@@ -656,7 +658,7 @@ Background* BoxPlotPrivate::addBackground(const KConfigGroup& group) {
 }
 
 Line* BoxPlotPrivate::addBorderLine(const KConfigGroup& group) {
-	auto* line = new Line(QString());
+	auto* line = new Line(QStringLiteral("line"));
 	line->setPrefix(QLatin1String("Border"));
 	line->setHidden(true);
 	q->addChild(line);
@@ -679,7 +681,7 @@ Line* BoxPlotPrivate::addBorderLine(const KConfigGroup& group) {
 }
 
 Line* BoxPlotPrivate::addMedianLine(const KConfigGroup& group) {
-	auto* line = new Line(QString());
+	auto* line = new Line(QStringLiteral("medianLine"));
 	line->setPrefix(QLatin1String("MedianLine"));
 	line->setHidden(true);
 	q->addChild(line);
@@ -1384,7 +1386,7 @@ void BoxPlotPrivate::updateFillingRect(int index, const QVector<QLineF>& lines) 
 		++i;
 	}
 
-	m_fillPolygon[index] = polygon;
+	m_fillPolygon[index] = std::move(polygon);
 }
 
 /*!
@@ -1475,7 +1477,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 
 		// outlier values
 		if (symbolOutlier->style() != Symbol::Style::NoSymbols && !m_outlierPoints.at(i).isEmpty()) {
-			QPainterPath path = Symbol::stylePath(symbolOutlier->style());
+			auto path = WorksheetElement::shapeFromPath(Symbol::stylePath(symbolOutlier->style()), symbolOutlier->pen());
 			QTransform trafo;
 			trafo.scale(symbolOutlier->size(), symbolOutlier->size());
 			path = trafo.map(path);
@@ -1495,7 +1497,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 
 		// jitter values
 		if (symbolData->style() != Symbol::Style::NoSymbols && !m_dataPoints.at(i).isEmpty()) {
-			QPainterPath path = Symbol::stylePath(symbolData->style());
+			auto path = WorksheetElement::shapeFromPath(Symbol::stylePath(symbolData->style()), symbolData->pen());
 			QTransform trafo;
 			trafo.scale(symbolData->size(), symbolData->size());
 			path = trafo.map(path);
@@ -1515,7 +1517,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 
 		// far out values
 		if (symbolFarOut->style() != Symbol::Style::NoSymbols && !m_farOutPoints.at(i).isEmpty()) {
-			QPainterPath path = Symbol::stylePath(symbolFarOut->style());
+			auto path = WorksheetElement::shapeFromPath(Symbol::stylePath(symbolFarOut->style()), symbolFarOut->pen());
 			QTransform trafo;
 			trafo.scale(symbolFarOut->size(), symbolFarOut->size());
 			path = trafo.map(path);
@@ -1535,7 +1537,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 
 		// whisker ends
 		if (symbolWhiskerEnd->style() != Symbol::Style::NoSymbols && !m_whiskerEndPoints.at(i).isEmpty()) {
-			QPainterPath path = Symbol::stylePath(symbolWhiskerEnd->style());
+			auto path = WorksheetElement::shapeFromPath(Symbol::stylePath(symbolWhiskerEnd->style()), symbolWhiskerEnd->pen());
 			QTransform trafo;
 			trafo.scale(symbolWhiskerEnd->size(), symbolWhiskerEnd->size());
 			path = trafo.map(path);
@@ -1562,22 +1564,20 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 
 void BoxPlotPrivate::updatePixmap() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
-	QPixmap pixmap(m_boundingRectangle.width(), m_boundingRectangle.height());
+	m_pixmap = QPixmap(m_boundingRectangle.width(), m_boundingRectangle.height());
 	if (m_boundingRectangle.width() == 0. || m_boundingRectangle.height() == 0.) {
-		m_pixmap = pixmap;
 		m_hoverEffectImageIsDirty = true;
 		m_selectionEffectImageIsDirty = true;
 		return;
 	}
-	pixmap.fill(Qt::transparent);
-	QPainter painter(&pixmap);
+	m_pixmap.fill(Qt::transparent);
+	QPainter painter(&m_pixmap);
 	painter.setRenderHint(QPainter::Antialiasing, true);
 	painter.translate(-m_boundingRectangle.topLeft());
 
 	draw(&painter);
 	painter.end();
 
-	m_pixmap = pixmap;
 	m_hoverEffectImageIsDirty = true;
 	m_selectionEffectImageIsDirty = true;
 	Q_EMIT q->changed();
@@ -1682,7 +1682,7 @@ void BoxPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 	painter->setBrush(Qt::NoBrush);
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
-	if (Settings::group(QStringLiteral("Settings_Worksheet")).readEntry<bool>("DoubleBuffering", true))
+	if (!q->isPrinting() && Settings::group(QStringLiteral("Settings_Worksheet")).readEntry<bool>("DoubleBuffering", true))
 		painter->drawPixmap(m_boundingRectangle.topLeft(), m_pixmap); // draw the cached pixmap (fast)
 	else
 		draw(painter); // draw directly again (slow)

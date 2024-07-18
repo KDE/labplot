@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : import project dialog
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2017-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -21,7 +21,6 @@
 
 #include <KLocalizedString>
 #include <KMessageBox>
-
 #include <KUrlComboBox>
 #include <KWindowConfig>
 #include <kcoreaddons_version.h>
@@ -48,11 +47,10 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type)
 	, m_mainWin(parent)
 	, m_projectType(type)
 	, m_aspectTreeModel(new AspectTreeModel(parent->project())) {
-	auto* vLayout = new QVBoxLayout(this);
-
 	// main widget
 	auto* mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
+	ui.lUnusedObjects->hide();
 	ui.chbUnusedObjects->hide();
 
 	m_cbFileName = new KUrlComboBox(KUrlComboBox::Mode::Files, this);
@@ -61,6 +59,7 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type)
 	if (l)
 		l->insertWidget(1, m_cbFileName);
 
+	auto* vLayout = new QVBoxLayout(this);
 	vLayout->addWidget(mainWidget);
 
 	ui.tvPreview->setAnimated(true);
@@ -225,11 +224,18 @@ void ImportProjectDialog::setCurrentFolder(const Folder* folder) {
 void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 	DEBUG(Q_FUNC_INFO)
 
-	// determine the selected objects, convert the model indexes to string pathes
-	const QModelIndexList& indexes = ui.tvPreview->selectionModel()->selectedIndexes();
+	// determine the selected objects.
+	// in case only the root index (first row corresponding to the project node) was selected, select all children to import everything.
+	const auto& selectedRows = ui.tvPreview->selectionModel()->selectedRows();
+	if (selectedRows.count() == 1 && selectedRows.constFirst().row() == 0)
+		ui.tvPreview->selectAll();
+
+	const auto& indexes = ui.tvPreview->selectionModel()->selectedIndexes();
+
+	// convert the model indexes to string pathes:
 	QStringList selectedPathes;
 	for (int i = 0; i < indexes.size() / 4; ++i) {
-		QModelIndex index = indexes.at(i * 4);
+		const auto& index = indexes.at(i * 4);
 		const auto* aspect = static_cast<const AbstractAspect*>(index.internalPointer());
 
 		// path of the current aspect and the pathes of all aspects it depends on
@@ -240,11 +246,11 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 	}
 	selectedPathes.removeDuplicates();
 
-	Folder* targetFolder = static_cast<Folder*>(m_cbAddTo->currentModelIndex().internalPointer());
+	auto* targetFolder = static_cast<Folder*>(m_cbAddTo->currentModelIndex().internalPointer());
 
-	// check whether the selected pathes already exist in the target folder and warn the user
-	const QString& targetFolderPath = targetFolder->path();
-	const Project* targetProject = targetFolder->project();
+	// check whether the selected paths already exist in the target folder and warn the user
+	const auto& targetFolderPath = targetFolder->path();
+	const auto* targetProject = targetFolder->project();
 	QStringList targetAllPathes;
 	for (const auto* aspect : targetProject->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::Recursive)) {
 		if (aspect && !dynamic_cast<const Folder*>(aspect))
@@ -415,8 +421,8 @@ protected:
 };
 
 bool OPJFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const {
-	QModelIndex index0 = sourceModel()->index(sourceRow, 0, sourceParent);
-	QFileSystemModel* fileModel = qobject_cast<QFileSystemModel*>(sourceModel());
+	const auto& index0 = sourceModel()->index(sourceRow, 0, sourceParent);
+	const auto* fileModel = qobject_cast<QFileSystemModel*>(sourceModel());
 	return fileModel->fileName(index0).indexOf(QStringLiteral(".opju")) < 0;
 	// uncomment to call the default implementation
 	// return QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
@@ -458,9 +464,8 @@ void ImportProjectDialog::selectFile() {
 		dialog.setFileMode(QFileDialog::ExistingFile);
 		if (dialog.exec())
 			path = dialog.selectedFiles().first();
-	} else {
-		QString path = QFileDialog::getOpenFileName(this, title, lastDir, supportedFormats);
-	}
+	} else
+		path = QFileDialog::getOpenFileName(this, title, lastDir, supportedFormats);
 
 	if (path.isEmpty())
 		return; // cancel was clicked in the file dialog

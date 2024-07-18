@@ -159,13 +159,6 @@ void XYSmoothCurveDock::initGeneralTab() {
 	connect(m_smoothCurve, &XYSmoothCurve::sourceDataChanged, this, &XYSmoothCurveDock::enableRecalculate);
 }
 
-void XYSmoothCurveDock::setModel() {
-	auto list = defaultColumnTopLevelClasses();
-	list.append(AspectType::XYFitCurve);
-
-	XYAnalysisCurveDock::setModel(list);
-}
-
 /*!
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
@@ -176,7 +169,6 @@ void XYSmoothCurveDock::setCurves(QList<XYCurve*> list) {
 	setAspects(list);
 	setAnalysisCurves(list);
 	m_smoothCurve = static_cast<XYSmoothCurve*>(m_curve);
-	this->setModel();
 	m_smoothData = m_smoothCurve->smoothData();
 
 	const auto numberLocale = QLocale();

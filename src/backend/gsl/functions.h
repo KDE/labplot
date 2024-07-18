@@ -4,7 +4,7 @@
 	Description          : definition of functions
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2014-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2014-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -121,6 +121,7 @@ enum class FunctionGroups : int {
 	GeometricDistribution,
 	HypergeometricDistribution,
 	LogarithmicDistribution,
+	TriangularDistribution,
 	// Not implemented
 	// i18n("Coupling Coefficients")
 	// i18n("Elementary Operations")

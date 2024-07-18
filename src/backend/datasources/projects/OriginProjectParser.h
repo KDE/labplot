@@ -72,7 +72,7 @@ private:
 	void restorePointers(Project*);
 
 	unsigned int findSpreadsheetByName(const QString&);
-	unsigned int findColumnByName(Origin::SpreadSheet&, const QString&);
+	unsigned int findColumnByName(const Origin::SpreadSheet&, const QString&);
 	unsigned int findMatrixByName(const QString&);
 	unsigned int findWorkbookByName(const QString&);
 	unsigned int findWorksheetByName(const QString&);

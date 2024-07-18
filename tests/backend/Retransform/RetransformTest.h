@@ -18,8 +18,6 @@ class RetransformTest : public CommonTest {
 
 	// Tests
 private Q_SLOTS:
-	void initTestCase();
-
 	void TestLoadProject();
 	void TestLoadProject2();
 	void TestResizeWindows();
@@ -27,6 +25,7 @@ private Q_SLOTS:
 	void TestCopyPastePlot();
 	void TestAddCurve();
 	void TestImportCSV();
+	void TestImportCSVInvalidateCurve();
 	void TestSetScale();
 
 	void TestZoomSelectionAutoscale();

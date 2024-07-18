@@ -1,7 +1,7 @@
 /*
 	File                 : TimedLineEdit.cpp
 	Project              : LabPlot
-	Description          : Extended LineEdit to emit TextChanged event after some time has passed between edits
+	Description          : Extended LineEdit to emit TextChanged/TextEdited event after some time has passed between edits
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2024 Israel Galadima <izzygaladima@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -11,24 +11,38 @@
 
 TimedLineEdit::TimedLineEdit(QWidget* parent)
 	: QLineEdit(parent) {
-	m_timer.setSingleShot(true);
-	connect(this, &QLineEdit::textChanged, [=]() {
-		m_timer.start(m_time);
-	});
-	connect(&m_timer, &QTimer::timeout, [=]() {
-		Q_EMIT textChanged();
-	});
+	initTimers();
 }
 
 TimedLineEdit::TimedLineEdit(const QString& contents, QWidget* parent)
 	: QLineEdit(contents, parent) {
-	m_timer.setSingleShot(true);
-	connect(this, &QLineEdit::textChanged, [=]() {
-		m_timer.start(m_time);
+	initTimers();
+}
+
+void TimedLineEdit::initTimers() {
+	connect(this, &QLineEdit::textChanged, [&]() {
+		if (m_textChangedTimerId != -1)
+			killTimer(m_textChangedTimerId);
+		m_textChangedTimerId = startTimer(m_time);
 	});
-	connect(&m_timer, &QTimer::timeout, [=]() {
+
+	connect(this, &QLineEdit::textEdited, [&]() {
+		if (m_textEditedTimerId != -1)
+			killTimer(m_textEditedTimerId);
+		m_textEditedTimerId = startTimer(m_time);
+	});
+}
+
+void TimedLineEdit::timerEvent(QTimerEvent* event) {
+	if (event->timerId() == m_textChangedTimerId) {
+		killTimer(m_textChangedTimerId);
+		m_textChangedTimerId = -1;
 		Q_EMIT textChanged();
-	});
+	} else if (event->timerId() == m_textEditedTimerId) {
+		killTimer(m_textEditedTimerId);
+		m_textEditedTimerId = -1;
+		Q_EMIT textEdited();
+	}
 }
 
 int TimedLineEdit::getTime() {
@@ -37,5 +51,4 @@ int TimedLineEdit::getTime() {
 
 void TimedLineEdit::setTime(int time) {
 	m_time = time;
-	m_timer.start(m_time);
 }

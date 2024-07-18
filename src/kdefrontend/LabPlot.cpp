@@ -123,6 +123,10 @@ int main(int argc, char* argv[]) {
 	aboutData.setDesktopFileName(QStringLiteral("org.kde.labplot2"));
 	KAboutData::setApplicationData(aboutData);
 
+	const auto& group = Settings::settingsGeneral();
+	enableDebugTrace(group.readEntry<bool>(QLatin1String("DebugTrace"), false));
+	enablePerfTrace(group.readEntry<bool>(QLatin1String("PerfTrace"), false));
+
 	// TODO: add library information (GSL version, etc.) in about dialog
 
 	QCommandLineParser parser;
@@ -211,7 +215,6 @@ int main(int argc, char* argv[]) {
 		WARN("	" << STDSTRING(path))
 #endif
 
-	const auto& group = Settings::group(QStringLiteral("Settings_General"));
 #if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 67, 0) // KColorSchemeManager has a system default option
 	QString schemeName = group.readEntry("ColorScheme");
 #else

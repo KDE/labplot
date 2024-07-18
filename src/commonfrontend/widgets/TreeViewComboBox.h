@@ -47,6 +47,8 @@ public:
 	QString currentText() const;
 	void setText(const QString& text);
 
+	static QList<AspectType> plotColumnTopLevelClasses();
+
 private:
 	AspectTreeModel* m_model{nullptr};
 	QTreeView* m_treeView;

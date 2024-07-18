@@ -11,7 +11,6 @@
 #define ODSFILTERTEST_H
 
 #include "../../CommonTest.h"
-#include <QtTest>
 
 class OdsFilterTest : public CommonTest {
 	Q_OBJECT

@@ -80,16 +80,17 @@ using Dimension = CartesianCoordinateSystem::Dimension;
 				if (obj)                                                                                                                                       \
 					obj->function;                                                                                                                             \
 				else                                                                                                                                           \
-					qDebug() << "ERROR: qobject_cast <castObject*> failed: " << __FILE__ << ":" << __LINE__ << " ( rangeIndex:" << rangeIndex                  \
-							 << ", Column: " << Column << "). Wether the object does not exist or the cellWidget has differnt type";                           \
+					DEBUG("ERROR: qobject_cast <castObject*> failed: " << __FILE__ << ":" << __LINE__ << " ( rangeIndex:" << rangeIndex                        \
+																	   << ", Column: " << Column                                                               \
+																	   << "). Wether the object does not exist or the cellWidget has differnt type");          \
 			}                                                                                                                                                  \
 		} else {                                                                                                                                               \
 			auto obj = qobject_cast<castObject*>(treewidget->cellWidget(rangeIndex, Column));                                                                  \
 			if (obj)                                                                                                                                           \
 				obj->function;                                                                                                                                 \
 			else                                                                                                                                               \
-				qDebug() << "ERROR: qobject_cast <castObject*> failed: " << __FILE__ << ":" << __LINE__ << " (rangeIndex:" << rangeIndex                       \
-						 << ", Column: " << Column << "). Wether the object does not exist or the cellWidget has differnt type";                               \
+				DEBUG("ERROR: qobject_cast <castObject*> failed: " << __FILE__ << ":" << __LINE__ << " (rangeIndex:" << rangeIndex << ", Column: " << Column   \
+																   << "). Wether the object does not exist or the cellWidget has differnt type");              \
 		}                                                                                                                                                      \
 	}
 
@@ -686,7 +687,7 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 		cb->setFrame(false);
 		// TODO: -> updateLocale()
 		for (const auto& name : RangeT::scaleNames)
-			cb->addItem(name);
+			cb->addItem(name.toString());
 
 		cb->setCurrentIndex(static_cast<int>(scale));
 		cb->setProperty("row", i);
@@ -722,7 +723,50 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 	}
 }
 
-// update plot ranges in list
+QString generatePlotRangeString(int rangeCount, int rangeIndex, const Range<double>& range) {
+	if (rangeCount > 1)
+		return QString::number(rangeIndex + 1) + QStringLiteral(" : ") + range.toLocaleString();
+	return range.toLocaleString();
+}
+
+/*!
+ * \brief CartesianPlotDock::updatePlotRangeListValues
+ * Updates the plot range values. This is much faster than updatePlotRangeList()
+ * \param dim
+ * \param rangeIndex
+ */
+void CartesianPlotDock::updatePlotRangeListValues(const Dimension dim, int rangeIndex) {
+	auto column = TwPlotRangesColumn::XRange;
+	switch (dim) {
+	case Dimension::X:
+		break;
+	case Dimension::Y:
+		column = TwPlotRangesColumn::YRange;
+		break;
+	}
+
+	for (auto cSystemIndex = 0; cSystemIndex < ui.twPlotRanges->rowCount(); cSystemIndex++) {
+		auto* cb = dynamic_cast<QComboBox*>(ui.twPlotRanges->cellWidget(cSystemIndex, column));
+		if (cb) {
+			for (auto itemIndex = 0; itemIndex < cb->count(); itemIndex++) {
+				const auto data = cb->itemData(itemIndex);
+				if (data.isValid()) {
+					bool ok = true;
+					const auto rangeIndexComboBox = data.toInt(&ok);
+					Q_ASSERT(ok);
+					if (rangeIndexComboBox == rangeIndex)
+						cb->setItemText(itemIndex, generatePlotRangeString(m_plot->rangeCount(dim), rangeIndex, m_plot->range(dim, rangeIndex)));
+				}
+			}
+		}
+	}
+}
+
+/*!
+ * \brief CartesianPlotDock::updatePlotRangeList
+ * update plot ranges in list by recreating all widgets. This function is really slow, use it only for non-critical workflows which are called not that often.
+ * Prefer updatePlotRangeListValues()
+ */
 void CartesianPlotDock::updatePlotRangeList() {
 	if (!m_plot)
 		return;
@@ -753,14 +797,15 @@ void CartesianPlotDock::updatePlotRangeList() {
 		cb->setEditable(true); // to have a line edit
 		cb->lineEdit()->setReadOnly(true);
 		cb->lineEdit()->setAlignment(Qt::AlignHCenter);
-		if (m_plot->rangeCount(Dimension::X) > 1) {
-			for (int index = 0; index < m_plot->rangeCount(Dimension::X); index++)
-				cb->addItem(QString::number(index + 1) + QStringLiteral(" : ") + m_plot->range(Dimension::X, index).toLocaleString());
+		const auto xRangeCount = m_plot->rangeCount(Dimension::X);
+		if (xRangeCount > 1) {
+			for (int index = 0; index < xRangeCount; index++)
+				cb->addItem(generatePlotRangeString(xRangeCount, index, m_plot->range(Dimension::X, index)), QVariant::fromValue(index));
 			cb->setCurrentIndex(xIndex);
 			cb->setProperty("row", i);
 			connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::PlotRangeXChanged);
 		} else {
-			cb->addItem(xRange.toLocaleString());
+			cb->addItem(generatePlotRangeString(xRangeCount, 0, xRange), QVariant::fromValue(0));
 			cb->setStyleSheet(QStringLiteral("QComboBox::drop-down {border-width: 0px;}")); // hide arrow if there is only one range
 		}
 		ui.twPlotRanges->setCellWidget(i, TwPlotRangesColumn::XRange, cb);
@@ -770,14 +815,15 @@ void CartesianPlotDock::updatePlotRangeList() {
 		cb->setEditable(true); // to have a line edit
 		cb->lineEdit()->setReadOnly(true);
 		cb->lineEdit()->setAlignment(Qt::AlignHCenter);
-		if (m_plot->rangeCount(Dimension::Y) > 1) {
-			for (int index = 0; index < m_plot->rangeCount(Dimension::Y); index++)
-				cb->addItem(QString::number(index + 1) + QStringLiteral(" : ") + m_plot->range(Dimension::Y, index).toLocaleString());
+		const auto yRangeCount = m_plot->rangeCount(Dimension::Y);
+		if (yRangeCount > 1) {
+			for (int index = 0; index < yRangeCount; index++)
+				cb->addItem(generatePlotRangeString(yRangeCount, index, m_plot->range(Dimension::Y, index)));
 			cb->setCurrentIndex(yIndex);
 			cb->setProperty("row", i);
 			connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::PlotRangeYChanged);
 		} else {
-			cb->addItem(yRange.toLocaleString());
+			cb->addItem(generatePlotRangeString(yRangeCount, 0, yRange));
 			cb->setStyleSheet(QStringLiteral("QComboBox::drop-down {border-width: 0px;}")); // hide arrow if there is only one range
 		}
 		ui.twPlotRanges->setCellWidget(i, TwPlotRangesColumn::YRange, cb);
@@ -1648,27 +1694,27 @@ void CartesianPlotDock::plotAutoScaleChanged(const Dimension dim, int index, boo
 	CELLWIDGET(dim, index, TwRangesColumn::Scale, QComboBox, setEnabled(!checked));
 }
 
-void CartesianPlotDock::plotMinChanged(const Dimension dim, int xRangeIndex, double value) {
+void CartesianPlotDock::plotMinChanged(const Dimension dim, int rangeIndex, double value) {
 	DEBUG(Q_FUNC_INFO << ", value = " << value)
 	CONDITIONAL_LOCK_RETURN;
 
-	CELLWIDGET(dim, xRangeIndex, TwRangesColumn::Min, NumberSpinBox, setValue(value));
-	CELLWIDGET(dim, xRangeIndex, TwRangesColumn::Min, UTCDateTimeEdit, setMSecsSinceEpochUTC(value));
+	CELLWIDGET(dim, rangeIndex, TwRangesColumn::Min, NumberSpinBox, setValue(value));
+	CELLWIDGET(dim, rangeIndex, TwRangesColumn::Min, UTCDateTimeEdit, setMSecsSinceEpochUTC(value));
 
-	updatePlotRangeList();
+	updatePlotRangeListValues(dim, rangeIndex);
 }
 
-void CartesianPlotDock::plotMaxChanged(const Dimension dim, int xRangeIndex, double value) {
+void CartesianPlotDock::plotMaxChanged(const Dimension dim, int rangeIndex, double value) {
 	DEBUG(Q_FUNC_INFO << ", value = " << value)
 	CONDITIONAL_LOCK_RETURN;
 
-	CELLWIDGET(dim, xRangeIndex, TwRangesColumn::Max, NumberSpinBox, setValue(value));
-	CELLWIDGET(dim, xRangeIndex, TwRangesColumn::Max, UTCDateTimeEdit, setMSecsSinceEpochUTC(value));
+	CELLWIDGET(dim, rangeIndex, TwRangesColumn::Max, NumberSpinBox, setValue(value));
+	CELLWIDGET(dim, rangeIndex, TwRangesColumn::Max, UTCDateTimeEdit, setMSecsSinceEpochUTC(value));
 
-	updatePlotRangeList();
+	updatePlotRangeListValues(dim, rangeIndex);
 }
 
-void CartesianPlotDock::plotRangeChanged(const Dimension dim, int index, Range<double> range) {
+void CartesianPlotDock::plotRangeChanged(const Dimension dim, int rangeIndex, Range<double> range) {
 	DEBUG(Q_FUNC_INFO << ", " << CartesianCoordinateSystem::dimensionToString(dim).toStdString() << " range = " << range.toStdString())
 
 	// The ranges can change on multiple ways
@@ -1678,19 +1724,19 @@ void CartesianPlotDock::plotRangeChanged(const Dimension dim, int index, Range<d
 	// If the datarange type/points changes, CONDITIONAL_LOCK_RETURN locks already and then the ranges would not update.
 	// To update also in those cases the cells will be updated all the time regardless of the m_initializing member state
 	if (m_initializing) {
-		CELLWIDGET(dim, index, TwRangesColumn::Min, NumberSpinBox, setValue(range.start()));
-		CELLWIDGET(dim, index, TwRangesColumn::Min, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.start()));
-		CELLWIDGET(dim, index, TwRangesColumn::Max, NumberSpinBox, setValue(range.end()));
-		CELLWIDGET(dim, index, TwRangesColumn::Max, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.end()));
+		CELLWIDGET(dim, rangeIndex, TwRangesColumn::Min, NumberSpinBox, setValue(range.start()));
+		CELLWIDGET(dim, rangeIndex, TwRangesColumn::Min, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.start()));
+		CELLWIDGET(dim, rangeIndex, TwRangesColumn::Max, NumberSpinBox, setValue(range.end()));
+		CELLWIDGET(dim, rangeIndex, TwRangesColumn::Max, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.end()));
 	} else {
 		// Must be copied, because the Lock would otherwise be in it's own space and therefore it would not make any sense
 		CONDITIONAL_LOCK_RETURN;
-		CELLWIDGET(dim, index, TwRangesColumn::Min, NumberSpinBox, setValue(range.start()));
-		CELLWIDGET(dim, index, TwRangesColumn::Min, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.start()));
-		CELLWIDGET(dim, index, TwRangesColumn::Max, NumberSpinBox, setValue(range.end()));
-		CELLWIDGET(dim, index, TwRangesColumn::Max, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.end()));
+		CELLWIDGET(dim, rangeIndex, TwRangesColumn::Min, NumberSpinBox, setValue(range.start()));
+		CELLWIDGET(dim, rangeIndex, TwRangesColumn::Min, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.start()));
+		CELLWIDGET(dim, rangeIndex, TwRangesColumn::Max, NumberSpinBox, setValue(range.end()));
+		CELLWIDGET(dim, rangeIndex, TwRangesColumn::Max, UTCDateTimeEdit, setMSecsSinceEpochUTC(range.end()));
 	}
-	updatePlotRangeList();
+	updatePlotRangeListValues(dim, rangeIndex);
 }
 
 void CartesianPlotDock::plotScaleChanged(const Dimension dim, int rangeIndex, RangeT::Scale scale) {

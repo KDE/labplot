@@ -195,7 +195,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Column Format</string>
+      <string>Column Header</string>
      </property>
     </widget>
    </item>

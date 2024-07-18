@@ -83,19 +83,20 @@ bool Note::exportView() const {
 	}
 
 	QTextStream out(&file);
-	out << m_note;
+	out << m_text;
 	file.close();
 
 	return true;
 }
 
-void Note::setNote(const QString& note) {
-	m_note = note;
-	project()->setChanged(true);
+void Note::setText(const QString& text) {
+	m_text = text;
+	setProjectChanged(true);
+	Q_EMIT textChanged(text);
 }
 
-const QString& Note::note() const {
-	return m_note;
+const QString& Note::text() const {
+	return m_text;
 }
 
 void Note::setBackgroundColor(const QColor& color) {
@@ -149,7 +150,7 @@ void Note::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement(QStringLiteral("text"));
 	WRITE_QCOLOR(m_textColor);
 	WRITE_QFONT(m_textFont);
-	writer->writeAttribute(QStringLiteral("text"), m_note);
+	writer->writeAttribute(QStringLiteral("text"), m_text);
 	writer->writeEndElement();
 
 	writer->writeEndElement(); // close "note" section
@@ -185,7 +186,7 @@ bool Note::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 			READ_QCOLOR(m_textColor);
 			READ_QFONT(m_textFont);
-			m_note = attribs.value(QStringLiteral("text")).toString();
+			m_text = attribs.value(QStringLiteral("text")).toString();
 		} else { // unknown element
 			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())

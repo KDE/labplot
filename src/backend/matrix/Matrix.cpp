@@ -4,7 +4,7 @@
 	Description          : Spreadsheet with a MxN matrix data model
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2008-2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2015-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -28,6 +28,7 @@
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include <QPrinter>
+#include <QTimer>
 
 /*!
 	This class manages matrix based data (i.e., mathematically
@@ -108,11 +109,18 @@ QWidget* Matrix::view() const {
 		connect(this, &Matrix::viewAboutToBeDeleted, [this]() {
 			m_view = nullptr;
 		});
+
+		// navigate to the first cell and set the focus so the user can start directly entering new data
+		QTimer::singleShot(0, this, [=]() {
+			m_view->goToCell(0, 0);
+			m_view->setFocus();
+		});
 	}
 	return m_partView;
 }
 
 bool Matrix::exportView() const {
+#ifndef SDK
 	auto* dlg = new ExportSpreadsheetDialog(m_view);
 	dlg->setFileName(name());
 	dlg->setMatrixMode(true);
@@ -148,6 +156,9 @@ bool Matrix::exportView() const {
 	delete dlg;
 
 	return ret;
+#else
+	return 0;
+#endif
 }
 
 bool Matrix::printView() {
@@ -505,68 +516,6 @@ void Matrix::setDimensions(int rows, int cols) {
 
 	endMacro();
 	RESET_CURSOR;
-}
-
-void Matrix::copy(Matrix* other) {
-	WAIT_CURSOR;
-	Q_D(Matrix);
-	beginMacro(i18n("%1: copy %2", name(), other->name()));
-
-	int rows = other->rowCount();
-	int columns = other->columnCount();
-	setDimensions(rows, columns);
-
-	for (int i = 0; i < rows; i++)
-		setRowHeight(i, other->rowHeight(i));
-
-	for (int i = 0; i < columns; i++)
-		setColumnWidth(i, other->columnWidth(i));
-
-	d->suppressDataChange = true;
-	switch (d->mode) {
-	case AbstractColumn::ColumnMode::Double:
-		for (int i = 0; i < columns; i++)
-			setColumnCells(i, 0, rows - 1, other->columnCells<double>(i, 0, rows - 1));
-		break;
-	case AbstractColumn::ColumnMode::Text:
-		for (int i = 0; i < columns; i++)
-			setColumnCells(i, 0, rows - 1, other->columnCells<QString>(i, 0, rows - 1));
-		break;
-	case AbstractColumn::ColumnMode::Integer:
-		for (int i = 0; i < columns; i++)
-			setColumnCells(i, 0, rows - 1, other->columnCells<int>(i, 0, rows - 1));
-		break;
-	case AbstractColumn::ColumnMode::BigInt:
-		for (int i = 0; i < columns; i++)
-			setColumnCells(i, 0, rows - 1, other->columnCells<qint64>(i, 0, rows - 1));
-		break;
-	case AbstractColumn::ColumnMode::Day:
-	case AbstractColumn::ColumnMode::Month:
-	case AbstractColumn::ColumnMode::DateTime:
-		for (int i = 0; i < columns; i++)
-			setColumnCells(i, 0, rows - 1, other->columnCells<QDateTime>(i, 0, rows - 1));
-		break;
-	}
-
-	setCoordinates(other->xStart(), other->xEnd(), other->yStart(), other->yEnd());
-	setNumericFormat(other->numericFormat());
-	setPrecision(other->precision());
-	d->formula = other->formula();
-	d->suppressDataChange = false;
-	Q_EMIT dataChanged(0, 0, rows - 1, columns - 1);
-	if (m_view)
-		m_view->adjustHeaders();
-
-	endMacro();
-	RESET_CURSOR;
-}
-
-//! Duplicate the matrix inside its folder
-void Matrix::duplicate() {
-	Matrix* matrix = new Matrix(rowCount(), columnCount(), name());
-	matrix->copy(this);
-	if (folder())
-		folder()->addChild(matrix);
 }
 
 void Matrix::addRows() {

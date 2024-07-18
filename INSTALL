@@ -23,7 +23,7 @@ optional packages
 	* liborigin version 3 or higher for importing Origin project files (will be build if not available)
 	* Matio for importing binary MATLAB MAT files (including the devel-package, libmatio-devel or similar)
 	* QXlsx for importing Excel xlsx files (will be build if not available)
-	* Orcus for importing ODS (Open Document Spreadsheet) files (including the devel-package, liborcus-devel or similar)
+	* Orcus for importing ODS (Open Document Spreadsheet) files (including the devel-packages, liborcus-devel and libixion-devel or similar)
 	* Qt SerialPort to support serial port functionality
 	* Qt MQTT module (https://github.com/qt/qtmqtt) to support reading and plotting of data from MQTT brokers
 	* KUserFeedback to support collecting feedback from users
@@ -42,31 +42,37 @@ E.g. specify a custom installation path via
 or build a debug build via
 -DCMAKE_BUILD_TYPE=debug
 
-
 LabPlot's cmake configuration script searches for the optional packages and uses them if they are found.
 To compile LabPlot without optional dependencies even if they are present on the system, use the following parameters (default is "ON"):
+-DENABLE_CANTOR=OFF
 -DENABLE_FFTW=OFF
 -DENABLE_HDF5=OFF
 -DENABLE_NETCDF=OFF
 -DENABLE_FITS=OFF
 -DENABLE_LIBCERF=OFF
--DENABLE_CANTOR=OFF
+-DENABLE_LIBORIGIN=OFF
 -DENABLE_ROOT=OFF
 -DENABLE_READSTAT=OFF
 -DENABLE_MATIO=OFF
 -DENABLE_MQTT=OFF
--DENABLE_ORCUS=OFF
 -DENABLE_QTSERIALPORT=OFF
--DENABLE_LIBORIGIN=OFF
--DENABLE_TOUCHBAR=OFF
--DENABLE_EXCEL=OFF
+-DENABLE_DISCOUNT=OFF
+-DENABLE_XLSX=OFF
+-DENABLE_ORCUS=OFF
 -DENABLE_VECTOR_BLF=OFF
 -DENABLE_EIGEN3=OFF
+-DENABLE_TOUCHBAR=OFF
 
 Note, by switching off these libraries the feature set of LabPlot will be reduced.
 
 To enable reproducable builds, use
 -DENABLE_REPRODUCIBLE=ON
+
+To disable building tests, use
+-DENABLE_TESTS=OFF
+
+To disable building the SDK, use
+-DENABLE_SDK=OFF
 
 ================================================================================
 To run the tests execute

@@ -31,9 +31,6 @@ private:
 	XYHilbertTransformCurve* m_transformCurve{nullptr};
 	XYHilbertTransformCurve::TransformData m_transformData;
 
-protected:
-	void setModel();
-
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYHilbertTransformCurveDock
 	// general tab

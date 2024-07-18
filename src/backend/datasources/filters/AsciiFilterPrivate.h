@@ -89,7 +89,8 @@ private:
 	int m_actualStartRow{1};
 	int m_actualRows{0};
 	int m_actualCols{0};
-	int m_prepared{false};
+	bool m_prepared{false};
+	bool m_firstRead{true};
 	int m_columnOffset{0}; // indexes the "start column" in the datasource. Data will be imported starting from this column.
 	std::vector<void*> m_dataContainer; // pointers to the actual data containers
 

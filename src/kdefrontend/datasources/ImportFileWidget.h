@@ -39,6 +39,7 @@ class NetCDFOptionsWidget;
 class OdsOptionsWidget;
 class ROOTOptionsWidget;
 class TemplateHandler;
+class ImportKaggleDatasetWidget;
 
 class QTableWidget;
 class QCompleter;
@@ -54,7 +55,7 @@ class ImportFileWidget : public QWidget {
 public:
 	static QString absolutePath(const QString& fileName);
 
-	explicit ImportFileWidget(QWidget*, bool liveDataSource, const QString& fileName = QString());
+	explicit ImportFileWidget(QWidget*, bool liveDataSource, const QString& fileName = QString(), bool embedded = false);
 	~ImportFileWidget() override;
 
 	void showOptions(bool);
@@ -82,6 +83,8 @@ public:
 	QString port() const;
 	QString serialPort() const;
 	int baudRate() const;
+
+	friend class ImportKaggleDatasetWidget;
 
 public Q_SLOTS:
 	void dataContainerChanged(AbstractAspect*);
@@ -122,6 +125,7 @@ private:
 	const QString m_dbcFileName;
 	bool m_liveDataSource;
 	bool m_suppressRefresh{false};
+	bool m_embedded{false};
 	TemplateHandler* m_templateHandler{nullptr};
 	bool mcapTopicsInitialized{false};
 
@@ -132,6 +136,7 @@ Q_SIGNALS:
 	void hostChanged();
 	void portChanged();
 	void error(const QString&);
+	void previewReady();
 
 private Q_SLOTS:
 	void fileNameChanged(const QString&);

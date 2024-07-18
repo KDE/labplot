@@ -96,6 +96,27 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	symbolWidget = new SymbolWidget(ui.tabSymbol);
 	gridLayout->addWidget(symbolWidget, 2, 0, 1, 3);
 
+	msg = i18n("Select to modify the properties of the symbol for the mean value.");
+	ui.rbMean->setToolTip(msg);
+
+	msg = i18n("Select to modify the properties of the symbol for the median value.");
+	ui.rbMedian->setToolTip(msg);
+
+	msg = i18n("Select to modify the properties of the symbol for the outlier values.");
+	ui.rbOutlier->setToolTip(msg);
+
+	msg = i18n("Select to modify the properties of the symbol for the \"far out\" values.");
+	ui.rbFarOut->setToolTip(msg);
+
+	msg = i18n("Select to modify the properties of the symbol for all data values excluding the outlier and \"far out\" values.");
+	ui.rbData->setToolTip(msg);
+
+	msg = i18n("Select to modify the properties of the symbol for the ends of the whiskers.");
+	ui.rbWhiskerEnd->setToolTip(msg);
+
+	msg = i18n("Activate to randomize the positions of the symbols (\"jittering\"), helpful for dense and overlapping data points.");
+	ui.chkJitteringEnabled->setToolTip(msg);
+
 	// Tab "Whiskers"
 	gridLayout = static_cast<QGridLayout*>(ui.tabWhiskers->layout());
 	whiskersLineWidget = new LineWidget(ui.tabBox);
@@ -134,7 +155,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	connect(ui.rbMedian, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
 	connect(ui.rbOutlier, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
 	connect(ui.rbFarOut, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
-	connect(ui.rbJitter, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
+	connect(ui.rbData, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
 	connect(ui.rbWhiskerEnd, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
 	connect(ui.chkJitteringEnabled, &QCheckBox::toggled, this, &BoxPlotDock::jitteringEnabledChanged);
 
@@ -251,6 +272,7 @@ void BoxPlotDock::loadDataColumns() {
 	int count = m_boxPlot->dataColumns().count();
 	ui.cbNumber->clear();
 
+	auto* model = aspectModel();
 	if (count != 0) {
 		// box plot has already data columns, make sure we have the proper number of comboboxes
 		int diff = count - m_dataComboBoxes.count();
@@ -263,7 +285,6 @@ void BoxPlotDock::loadDataColumns() {
 		}
 
 		// show the columns in the comboboxes
-		auto* model = aspectModel();
 		for (int i = 0; i < count; ++i) {
 			m_dataComboBoxes.at(i)->setModel(model); // the model might have changed in-between, reset the current model
 			m_dataComboBoxes.at(i)->setAspect(m_boxPlot->dataColumns().at(i));
@@ -274,7 +295,8 @@ void BoxPlotDock::loadDataColumns() {
 			if (m_boxPlot->dataColumns().at(i))
 				ui.cbNumber->addItem(m_boxPlot->dataColumns().at(i)->name());
 	} else {
-		// no data columns set in the box plot yet, we show the first combo box only
+		// no data columns set in the box plot yet, we show the first combo box only and reset its model
+		m_dataComboBoxes.first()->setModel(model);
 		m_dataComboBoxes.first()->setAspect(nullptr);
 		for (int i = 1; i < m_dataComboBoxes.count(); ++i)
 			removeDataColumn();
@@ -309,20 +331,7 @@ void BoxPlotDock::setDataColumns() const {
 //**********************************************************
 void BoxPlotDock::addDataColumn() {
 	auto* cb = new TreeViewComboBox(this);
-
-	static const QList<AspectType> list{AspectType::Folder,
-										AspectType::Workbook,
-										AspectType::Datapicker,
-										AspectType::DatapickerCurve,
-										AspectType::Spreadsheet,
-										AspectType::LiveDataSource,
-										AspectType::Column,
-										AspectType::Worksheet,
-										AspectType::CartesianPlot,
-										AspectType::XYFitCurve,
-										AspectType::XYSmoothCurve,
-										AspectType::CantorWorksheet};
-	cb->setTopLevelClasses(list);
+	cb->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
 	cb->setModel(aspectModel());
 	connect(cb, &TreeViewComboBox::currentModelIndexChanged, this, &BoxPlotDock::dataColumnChanged);
 
@@ -476,7 +485,7 @@ void BoxPlotDock::symbolCategoryChanged() {
 			symbols << plot->symbolOutlier();
 		else if (ui.rbFarOut->isChecked())
 			symbols << plot->symbolFarOut();
-		else if (ui.rbJitter->isChecked())
+		else if (ui.rbData->isChecked())
 			symbols << plot->symbolData();
 		else if (ui.rbWhiskerEnd->isChecked())
 			symbols << plot->symbolWhiskerEnd();

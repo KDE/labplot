@@ -19,7 +19,9 @@
 
 class AbstractAspect;
 class Column;
+#ifndef SDK
 class SearchReplaceWidget;
+#endif
 class Spreadsheet;
 class SpreadsheetHeaderView;
 class SpreadsheetModel;
@@ -113,7 +115,9 @@ private:
 	Spreadsheet* m_spreadsheet;
 	SpreadsheetModel* m_model;
 	SpreadsheetHeaderView* m_horizontalHeader;
+#ifndef SDK
 	SearchReplaceWidget* m_searchReplaceWidget{nullptr};
+#endif
 	bool m_suppressSelectionChangedEvent{false};
 	bool m_readOnly;
 	bool eventFilter(QObject*, QEvent*) override;
@@ -129,8 +133,7 @@ private:
 	QAction* action_mask_selection{nullptr};
 	QAction* action_unmask_selection{nullptr};
 	QAction* action_clear_selection{nullptr};
-	// 		QAction* action_set_formula;
-	// 		QAction* action_recalculate;
+	QAction* action_reverse_selection{nullptr};
 	QAction* action_fill_row_numbers{nullptr};
 	QAction* action_fill_random{nullptr};
 	QAction* action_fill_equidistant{nullptr};
@@ -240,6 +243,7 @@ public Q_SLOTS:
 	void pasteIntoSelection();
 
 	void fillWithRowNumbers();
+	void selectAll();
 	void selectColumn(int);
 	void deselectColumn(int);
 	void goToCell(int row, int col);
@@ -260,7 +264,7 @@ private Q_SLOTS:
 	void clearSelectedCells();
 	void maskSelection();
 	void unmaskSelection();
-	// 		void recalculateSelectedCells();
+	void reverseSelection();
 
 	void plotData(QAction*);
 	void plotAnalysisData();

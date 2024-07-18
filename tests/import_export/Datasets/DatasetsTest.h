@@ -10,9 +10,9 @@
 #ifndef DATASETSTEST_H
 #define DATASETSTEST_H
 
-#include <QtTest>
+#include "../../CommonTest.h"
 
-class DatasetsTest : public QObject {
+class DatasetsTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:

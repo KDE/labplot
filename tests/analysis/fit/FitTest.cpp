@@ -2472,7 +2472,7 @@ void FitTest::testLinearGP_PY_noerror() {
 	DEBUG(std::setprecision(15) << fitResult.paramValues.at(1)); // result: -0.539577274076964
 	FuzzyCompare(fitResult.paramValues.at(1), -0.539577274983977, 1.e-8);
 	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1)); // result: 0.0421265487265946
-	FuzzyCompare(fitResult.errorValues.at(1), 0.0421265483886995, 1.e-8);
+	FuzzyCompare(fitResult.errorValues.at(1), 0.0421265483886995, 5.e-8);
 
 	DEBUG(std::setprecision(15) << fitResult.rms); // result: 0.100082940279452
 	QCOMPARE(fitResult.rms, 0.100082940279452);

@@ -10,6 +10,7 @@
 
 #include "NoteView.h"
 #include "backend/note/Note.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
 
 #include <QHBoxLayout>
 #include <QPrinter>
@@ -27,13 +28,15 @@ NoteView::NoteView(Note* note)
 
 	m_textEdit->setPalette(palette);
 	m_textEdit->setFont(m_note->textFont());
-	m_textEdit->setText(m_note->note());
+	m_textEdit->setText(m_note->text());
 
 	layout->addWidget(m_textEdit);
 
-	connect(m_note, &Note::backgroundColorChanged, this, &NoteView::backgroundColorChanged);
-	connect(m_note, &Note::textColorChanged, this, &NoteView::textColorChanged);
-	connect(m_note, &Note::textFontChanged, this, &NoteView::textFontChanged);
+	connect(m_note, &Note::textChanged, this, &NoteView::noteTextChanged);
+	connect(m_note, &Note::backgroundColorChanged, this, &NoteView::noteBackgroundColorChanged);
+	connect(m_note, &Note::textColorChanged, this, &NoteView::noteTextColorChanged);
+	connect(m_note, &Note::textFontChanged, this, &NoteView::noteTextFontChanged);
+
 	connect(m_textEdit, &QTextEdit::textChanged, this, &NoteView::textChanged);
 }
 
@@ -42,20 +45,26 @@ void NoteView::print(QPrinter* printer) const {
 }
 
 void NoteView::textChanged() {
-	m_note->setNote(m_textEdit->toPlainText());
+	CONDITIONAL_LOCK_RETURN;
+	m_note->setText(m_textEdit->toPlainText());
 }
 
-void NoteView::backgroundColorChanged(QColor color) {
+void NoteView::noteTextChanged(const QString& text) {
+	m_textEdit->setText(text);
+}
+
+void NoteView::noteBackgroundColorChanged(const QColor& color) {
 	QString red = QString::number(color.red());
 	QString green = QString::number(color.green());
 	QString blue = QString::number(color.blue());
 	m_textEdit->setStyleSheet(QStringLiteral("QTextEdit{background-color: rgb(%1, %2, %3);}").arg(red, green, blue));
 }
 
-void NoteView::textFontChanged(const QFont& font) {
+void NoteView::noteTextFontChanged(const QFont& font) {
 	m_textEdit->setFont(font);
 }
 
-void NoteView::textColorChanged(QColor color) {
+void NoteView::noteTextColorChanged(const QColor& color) {
+	CONDITIONAL_LOCK_RETURN;
 	m_textEdit->setTextColor(color);
 }

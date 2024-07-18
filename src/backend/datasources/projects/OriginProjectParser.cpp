@@ -147,7 +147,7 @@ unsigned int OriginProjectParser::findSpreadsheetByName(const QString& name) {
 	}
 	return 0;
 }
-unsigned int OriginProjectParser::findColumnByName(Origin::SpreadSheet& spread, const QString& name) {
+unsigned int OriginProjectParser::findColumnByName(const Origin::SpreadSheet& spread, const QString& name) {
 	for (unsigned int i = 0; i < spread.columns.size(); i++) {
 		const auto& column = spread.columns[i];
 		if (column.name == name.toStdString())
@@ -250,7 +250,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	}
 
 	DEBUG(Q_FUNC_INFO << ", project file name: " << m_projectFileName.toStdString());
-	DEBUG(Q_FUNC_INFO << ", Origin version: " << m_originFile->version());
+	DEBUG(Q_FUNC_INFO << ", Origin version: " << std::setprecision(4) << m_originFile->version());
 
 	// Origin project tree and the iterator pointing to the root node
 	const auto* projectTree = m_originFile->project();
@@ -408,9 +408,10 @@ void OriginProjectParser::restorePointers(Project* project) {
 		if (!hist)
 			continue;
 		hist->setSuppressRetransform(true);
+
+		// data column
 		auto spreadsheetName = hist->dataColumnPath();
 		spreadsheetName.truncate(hist->dataColumnPath().lastIndexOf(QLatin1Char('/')));
-
 		for (const auto* spreadsheet : spreadsheets) {
 			QString container, containerPath = spreadsheet->parentAspect()->path();
 			if (spreadsheetName.contains(QLatin1Char('/'))) { // part of a workbook
@@ -431,6 +432,76 @@ void OriginProjectParser::restorePointers(Project* project) {
 		RESTORE_COLUMN_POINTER(hist->errorBar(), xPlusColumn, XPlusColumn);
 		RESTORE_COLUMN_POINTER(hist->errorBar(), xMinusColumn, XMinusColumn);
 		hist->setSuppressRetransform(false);
+	}
+
+	// bar plots
+	const auto& barPlots = project->children<BarPlot>(AbstractAspect::ChildIndexFlag::Recursive);
+	for (auto* barPlot : barPlots) {
+		if (!barPlot)
+			continue;
+		barPlot->setSuppressRetransform(true);
+
+		// x-column
+		auto spreadsheetName = barPlot->xColumnPath();
+		spreadsheetName.truncate(barPlot->xColumnPath().lastIndexOf(QLatin1Char('/')));
+		for (const auto* spreadsheet : spreadsheets) {
+			QString container, containerPath = spreadsheet->parentAspect()->path();
+			if (spreadsheetName.contains(QLatin1Char('/'))) { // part of a workbook
+				container = containerPath.mid(containerPath.lastIndexOf(QLatin1Char('/')) + 1) + QLatin1Char('/');
+				containerPath = containerPath.left(containerPath.lastIndexOf(QLatin1Char('/')));
+			}
+			if (container + spreadsheet->name() == spreadsheetName) {
+				const QString& newPath = containerPath + QLatin1Char('/') + barPlot->xColumnPath();
+				barPlot->xColumnPath() = newPath;
+
+				RESTORE_COLUMN_POINTER(barPlot, xColumn, XColumn);
+				break;
+			}
+		}
+
+		// data column
+		for (auto path : barPlot->dataColumnPaths()) {
+			spreadsheetName = path;
+			spreadsheetName.truncate(spreadsheetName.lastIndexOf(QLatin1Char('/')));
+			for (const auto* spreadsheet : spreadsheets) {
+				QString container, containerPath = spreadsheet->parentAspect()->path();
+				if (spreadsheetName.contains(QLatin1Char('/'))) { // part of a workbook
+					container = containerPath.mid(containerPath.lastIndexOf(QLatin1Char('/')) + 1) + QLatin1Char('/');
+					containerPath = containerPath.left(containerPath.lastIndexOf(QLatin1Char('/')));
+				}
+				if (container + spreadsheet->name() == spreadsheetName) {
+					auto paths = barPlot->dataColumnPaths();
+					const QString& newPath = containerPath + QLatin1Char('/') + path;
+
+					// replace path
+					const auto index = paths.indexOf(path);
+					if (index != -1)
+						paths[index] = newPath;
+					else
+						continue;
+
+					barPlot->setDataColumnPaths(paths);
+
+					// RESTORE_COLUMN_POINTER
+					if (!path.isEmpty()) {
+						for (auto* column : columns) {
+							if (!column)
+								continue;
+							if (column->path() == newPath) {
+								auto dataColumns = barPlot->dataColumns();
+								if (!dataColumns.contains(column)) {
+									dataColumns.append(column);
+									barPlot->setDataColumns(std::move(dataColumns));
+								}
+								break;
+							}
+						}
+					}
+					break;
+				}
+			}
+		}
+		barPlot->setSuppressRetransform(false);
 	}
 
 	// TODO: others
@@ -1235,7 +1306,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 		DEBUG(Q_FUNC_INFO << ", Graph Layer " << layerIndex + 1)
 		if (layer.is3D()) {
 			// TODO: add an "UnsupportedAspect" here since we don't support 3D yet
-			break;
+			return false;
 		}
 
 		layerRect = layer.clientRect;
@@ -1258,29 +1329,31 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	}
 
 	// padding
-	plot->setSymmetricPadding(false);
-	int numberOfLayer = layerIndex + 1;
-	DEBUG(Q_FUNC_INFO << ", number of layer = " << numberOfLayer)
-	if (numberOfLayer == 1 || !m_graphLayerAsPlotArea) { // use layer clientRect for padding
-		DEBUG(Q_FUNC_INFO << ", using layer rect for padding")
-		double aspectRatio = (double)graphSize.width() / graphSize.height();
+	if (plot) {
+		plot->setSymmetricPadding(false);
+		int numberOfLayer = layerIndex + 1;
+		DEBUG(Q_FUNC_INFO << ", number of layer = " << numberOfLayer)
+		if (numberOfLayer == 1 || !m_graphLayerAsPlotArea) { // use layer clientRect for padding
+			DEBUG(Q_FUNC_INFO << ", using layer rect for padding")
+			double aspectRatio = (double)graphSize.width() / graphSize.height();
 
-		const double leftPadding = layerRect.left / (double)graphSize.width() * aspectRatio * fixedHeight;
-		const double topPadding = layerRect.top / (double)graphSize.height() * fixedHeight;
-		const double rightPadding = (graphSize.width() - layerRect.right) / (double)graphSize.width() * aspectRatio * fixedHeight;
-		const double bottomPadding = (graphSize.height() - layerRect.bottom) / (double)graphSize.height() * fixedHeight;
-		plot->setHorizontalPadding(Worksheet::convertToSceneUnits(leftPadding, Worksheet::Unit::Centimeter));
-		plot->setVerticalPadding(Worksheet::convertToSceneUnits(topPadding, Worksheet::Unit::Centimeter));
-		plot->setRightPadding(Worksheet::convertToSceneUnits(rightPadding, Worksheet::Unit::Centimeter));
-		plot->setBottomPadding(Worksheet::convertToSceneUnits(bottomPadding, Worksheet::Unit::Centimeter));
-	} else {
-		plot->setHorizontalPadding(plot->horizontalPadding() * elementScalingFactor);
-		plot->setVerticalPadding(plot->verticalPadding() * elementScalingFactor);
-		plot->setRightPadding(plot->rightPadding() * elementScalingFactor);
-		plot->setBottomPadding(plot->bottomPadding() * elementScalingFactor);
+			const double leftPadding = layerRect.left / (double)graphSize.width() * aspectRatio * fixedHeight;
+			const double topPadding = layerRect.top / (double)graphSize.height() * fixedHeight;
+			const double rightPadding = (graphSize.width() - layerRect.right) / (double)graphSize.width() * aspectRatio * fixedHeight;
+			const double bottomPadding = (graphSize.height() - layerRect.bottom) / (double)graphSize.height() * fixedHeight;
+			plot->setHorizontalPadding(Worksheet::convertToSceneUnits(leftPadding, Worksheet::Unit::Centimeter));
+			plot->setVerticalPadding(Worksheet::convertToSceneUnits(topPadding, Worksheet::Unit::Centimeter));
+			plot->setRightPadding(Worksheet::convertToSceneUnits(rightPadding, Worksheet::Unit::Centimeter));
+			plot->setBottomPadding(Worksheet::convertToSceneUnits(bottomPadding, Worksheet::Unit::Centimeter));
+		} else {
+			plot->setHorizontalPadding(plot->horizontalPadding() * elementScalingFactor);
+			plot->setVerticalPadding(plot->verticalPadding() * elementScalingFactor);
+			plot->setRightPadding(plot->rightPadding() * elementScalingFactor);
+			plot->setBottomPadding(plot->bottomPadding() * elementScalingFactor);
+		}
+		DEBUG(Q_FUNC_INFO << ", PADDING (H/V) = " << plot->horizontalPadding() << ", " << plot->verticalPadding())
+		DEBUG(Q_FUNC_INFO << ", PADDING (R/B) = " << plot->rightPadding() << ", " << plot->bottomPadding())
 	}
-	DEBUG(Q_FUNC_INFO << ", PADDING (H/V) = " << plot->horizontalPadding() << ", " << plot->verticalPadding())
-	DEBUG(Q_FUNC_INFO << ", PADDING (R/B) = " << plot->rightPadding() << ", " << plot->bottomPadding())
 
 	if (!preview) {
 		worksheet->updateLayout();
@@ -1342,9 +1415,9 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 	else
 		plot->plotArea()->borderLine()->setStyle(Qt::SolidLine);
 
-	// ranges
-	const auto& originXAxis = layer.xAxis;
-	const auto& originYAxis = layer.yAxis;
+	// ranges: swap axes when exchanged
+	const auto& originXAxis = layer.exchangedAxes ? layer.yAxis : layer.xAxis;
+	const auto& originYAxis = layer.exchangedAxes ? layer.xAxis : layer.yAxis;
 
 	Range<double> xRange(originXAxis.min, originXAxis.max);
 	Range<double> yRange(originYAxis.min, originYAxis.max);
@@ -1505,7 +1578,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 			legend->background()->setFirstColor(Qt::white);
 
 		// save current legend text
-		m_legendText = legendText;
+		m_legendText = std::move(legendText);
 	}
 
 	// curves
@@ -1610,15 +1683,19 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		DEBUG(Q_FUNC_INFO << ", y column name = " << STDSTRING(yColumnName));
 		DEBUG(Q_FUNC_INFO << ", y column info = " << STDSTRING(yColumnInfo));
 
+		// type specific settings
+		const auto type = originCurve.type;
 		// for histogram use y column info for x column
-		if (originCurve.type == Origin::GraphCurve::Histogram && xColumnInfo.isEmpty())
+		if (type == Origin::GraphCurve::Histogram && xColumnInfo.isEmpty())
 			xColumnInfo = yColumnInfo;
+		// for bar plot reverse x and y column info
+		if (type == Origin::GraphCurve::Bar || type == Origin::GraphCurve::BarStack)
+			xColumnInfo.swap(yColumnInfo);
 
 		loadAxes(layer, plot, layerIndex, xColumnInfo, yColumnInfo);
 	}
 
-	// range breaks
-	// TODO
+	// TODO: range breaks
 }
 
 void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianPlot* plot, int layerIndex, bool preview) {
@@ -1643,7 +1720,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 		case 'E': { // Workbook
 			// determine the used columns first
 			QString containerName = dataName.right(dataName.length() - 2); // strip "E_" or "T_"
-			auto sheet = getSpreadsheetByName(containerName);
+			const auto& sheet = getSpreadsheetByName(containerName);
 			QString tableName = containerName;
 			if (dataName.startsWith(QStringLiteral("E_"))) // container is a workbook
 				tableName += QLatin1Char('/') + QString::fromStdString(sheet.name);
@@ -1785,7 +1862,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 					if (!preview) { // curves not available in preview
 						auto childIndex = plot->childCount<XYCurve>() - 1; // last curve
 						auto curve = plot->children<XYCurve>().at(childIndex);
-						if (xColumnPath == curve->yColumnPath()) {
+						if (xColumnPath == curve->yColumnPath()) { // TODO: only for reversed plots?
 							if (type == Origin::GraphCurve::ErrorBar) {
 								curve->errorBar()->setYErrorType(ErrorBar::ErrorType::Symmetric);
 								curve->errorBar()->setYPlusColumnPath(yColumnPath);
@@ -1793,7 +1870,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 								curve->errorBar()->setXErrorType(ErrorBar::ErrorType::Symmetric);
 								curve->errorBar()->setXPlusColumnPath(yColumnPath);
 							}
-							// TODO: YErrorBar, XYErrorBar
+							// YErrorBar, XYErrorBar not available
 						}
 					}
 				}
@@ -1802,29 +1879,69 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 			case Origin::GraphCurve::ColumnStack:
 			case Origin::GraphCurve::Bar:
 			case Origin::GraphCurve::BarStack: {
-				auto* barPlot = new BarPlot(yColumnName);
-				childPlot = barPlot;
+				DEBUG(Q_FUNC_INFO << ", BAR/COLUMN PLOT")
+				BarPlot* lastPlot = nullptr;
+				auto childIndex = plot->childCount<BarPlot>() - 1; // last bar plot
+				if (childIndex >= 0)
+					lastPlot = plot->children<BarPlot>().at(childIndex);
+				if (!lastPlot || xColumnPath != lastPlot->xColumnPath()) { // new bar plot. TODO: column plot: compare yColumnPath?
+					auto* barPlot = new BarPlot(yColumnName);
+					childPlot = barPlot;
 
-				// TODO: this leads to a crash at the moment since the pointers are not properly restored yet in OriginProjectParser::restorePointers() and in
-				// Project::restorePointers() and we have nullptr's in BarPlot barPlot->setDataColumnPaths({yColumnPath});
+					DEBUG(Q_FUNC_INFO << ", x/y column path = " << xColumnPath.toStdString() << ", " << yColumnPath.toStdString())
+					barPlot->xColumnPath() = std::move(xColumnPath);
+					barPlot->setDataColumnPaths({yColumnPath});
 
-				if (!preview) {
-					// orientation
-					if (type == Origin::GraphCurve::Column || type == Origin::GraphCurve::ColumnStack)
-						barPlot->setOrientation(BarPlot::Orientation::Vertical);
-					else
-						barPlot->setOrientation(BarPlot::Orientation::Horizontal);
+					// calculate bar width
+					const auto& xColumn = sheet.columns[findColumnByName(sheet, xColumnName)];
+					const auto& xData = xColumn.data;
+					// this fails due to NaNs
+					// const auto [xMin, xMax] = minmax_element(xData.begin(), xData.end());
+					double xMin = qInf(), xMax = -qInf();
+					int numDataRows = 0;
+					for (const auto& v : xData) {
+						const double value = v.as_double();
+						if (v.type() == Origin::Variant::V_DOUBLE && !std::isnan(value)) {
+							if (value < xMin)
+								xMin = value;
+							if (value > xMax)
+								xMax = value;
+							numDataRows++;
+						}
+					}
+					DEBUG(Q_FUNC_INFO << ", x column data rows: " << numDataRows << ", min/max = " << xMin << "/" << xMax)
+					if (numDataRows != 0)
+						barPlot->setWidthFactor((xMax - xMin) / numDataRows);
 
-					// type - grouped vs. stacked
-					if (type == Origin::GraphCurve::ColumnStack || type == Origin::GraphCurve::BarStack)
-						barPlot->setType(BarPlot::Type::Stacked);
-					else
-						barPlot->setType(BarPlot::Type::Grouped);
+					// TODO: BarPlot::Type::Stacked_100_Percent
+
+					if (!preview) {
+						// orientation
+						if (type == Origin::GraphCurve::Column || type == Origin::GraphCurve::ColumnStack)
+							barPlot->setOrientation(BarPlot::Orientation::Vertical);
+						else
+							barPlot->setOrientation(BarPlot::Orientation::Horizontal);
+
+						// type - grouped vs. stacked
+						if (type == Origin::GraphCurve::ColumnStack || type == Origin::GraphCurve::BarStack)
+							barPlot->setType(BarPlot::Type::Stacked);
+						else
+							barPlot->setType(BarPlot::Type::Grouped);
+
+						loadBackground(originCurve, barPlot->backgroundAt(0));
+
+						// TODO: set error bar (see error plots?)
+					}
+				} else { // additional columns
+					auto dataColumnPaths = lastPlot->dataColumnPaths();
+					dataColumnPaths.append(yColumnPath);
+					lastPlot->setDataColumnPaths(dataColumnPaths);
 				}
 
 				break;
 			}
 			case Origin::GraphCurve::Box: { // box plot
+				DEBUG(Q_FUNC_INFO << ", BOX PLOT")
 				auto* boxPlot = new BoxPlot(yColumnName);
 				childPlot = boxPlot;
 
@@ -1847,15 +1964,11 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 					hist->setBinRangesMin(layer.histogramBegin);
 					hist->setBinRangesMax(layer.histogramEnd);
 
-					// TODO: the orientation of the histogram is indirectly determined by the "swapped axes" parameter.
-					// while we can handle the orientation of the histogram here, we also need to handle this parameter
-					// for axes and ranges correctly further above.
 					if (layer.exchangedAxes)
 						hist->setOrientation(Histogram::Orientation::Horizontal);
 					else
 						hist->setOrientation(Histogram::Orientation::Vertical);
 
-					// TODO: doesn't work
 					loadBackground(originCurve, hist->background());
 				}
 				break;
@@ -1953,7 +2066,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 				childPlot->setCoordinateSystemIndex(layerIndex);
 
 			plot->addChildFast(childPlot);
-			DEBUG("ADDED CURVE. child count = " << plot->childCount<XYCurve>())
+			// DEBUG("ADDED CURVE. child count = " << plot->childCount<XYCurve>())
 			childPlot->setSuppressRetransform(false);
 		}
 
@@ -1966,8 +2079,10 @@ void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,
 								   int layerIndex,
 								   const QString& xColumnInfo,
 								   const QString& yColumnInfo) {
-	const auto& originXAxis = layer.xAxis;
-	const auto& originYAxis = layer.yAxis;
+	// swap axes when exchanged
+	DEBUG(Q_FUNC_INFO << ", exchanged axes? = " << layer.exchangedAxes)
+	const auto& originXAxis = layer.exchangedAxes ? layer.yAxis : layer.xAxis;
+	const auto& originYAxis = layer.exchangedAxes ? layer.xAxis : layer.yAxis;
 
 	// x bottom
 	if (!originXAxis.formatAxis[0].hidden || originXAxis.tickAxis[0].showMajorLabels) {
@@ -2337,8 +2452,10 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 
 void OriginProjectParser::loadBackground(const Origin::GraphCurve& originCurve, Background* background) const {
 	DEBUG(Q_FUNC_INFO << ", fill area? " << originCurve.fillArea)
-	// fillArea option not used in histogram
-	if (!originCurve.fillArea && originCurve.type != Origin::GraphCurve::Histogram) {
+	// fillArea option not used in histogram and bar/column plot
+	auto type = originCurve.type;
+	if (!originCurve.fillArea && type != Origin::GraphCurve::Histogram && type != Origin::GraphCurve::Bar && type != Origin::GraphCurve::Column
+		&& type != Origin::GraphCurve::BarStack && type != Origin::GraphCurve::ColumnStack) {
 		background->setPosition(Background::Position::No);
 		return;
 	}
@@ -2791,7 +2908,7 @@ bool OriginProjectParser::loadNote(Note* note, bool preview) {
 		return true;
 
 	note->setComment(QString::fromStdString(originNote.label));
-	note->setNote(QString::fromStdString(originNote.text));
+	note->setText(QString::fromStdString(originNote.text));
 
 	return true;
 }

@@ -70,7 +70,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(HorizontalAlignment, horizontalAlignment, HorizontalAlignment)
 	BASIC_D_ACCESSOR_DECL(VerticalAlignment, verticalAlignment, VerticalAlignment)
 	BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle)
-	BASIC_D_ACCESSOR_DECL(qreal, scale, Scale)
+	qreal scale() const;
 	BASIC_D_ACCESSOR_DECL(bool, isLocked, Lock)
 	BASIC_D_ACCESSOR_DECL(bool, isHovered, Hover)
 
@@ -105,9 +105,7 @@ public:
 	static QPainterPath shapeFromPath(const QPainterPath&, const QPen&);
 	virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize = false) = 0;
 
-	CartesianPlot* plot() const {
-		return m_plot;
-	} // used in the element docks
+	CartesianPlot* plot() const; // used in the element docks
 	int coordinateSystemIndex() const {
 		return m_cSystemIndex;
 	}
@@ -123,10 +121,6 @@ private:
 protected:
 	WorksheetElement(const QString&, WorksheetElementPrivate* dd, AspectType);
 	int m_cSystemIndex{0}; // index of coordinate system used from plot
-	// parent plot if available
-	// not const because of prepareGeometryChange()
-	// normally set in finalizeAdd()
-	CartesianPlot* m_plot{nullptr};
 	const CartesianCoordinateSystem* cSystem{nullptr}; // current cSystem
 
 	virtual void handleAspectUpdated(const QString& path, const AbstractAspect*);

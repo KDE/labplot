@@ -59,7 +59,7 @@ void QQPlot::init() {
 	KConfig config;
 	KConfigGroup group = config.group(QStringLiteral("QQPlot"));
 	// reference curve - line conneting two central quantiles Q1 and Q3
-	d->referenceCurve = new XYCurve(QString());
+	d->referenceCurve = new XYCurve(QStringLiteral("reference"));
 	d->referenceCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->referenceCurve->setHidden(true);
 	d->referenceCurve->graphicsItem()->setParentItem(d);
@@ -82,7 +82,7 @@ void QQPlot::init() {
 	d->referenceCurve->setYColumn(d->yReferenceColumn);
 
 	// percentiles curve
-	d->percentilesCurve = new XYCurve(QString());
+	d->percentilesCurve = new XYCurve(QStringLiteral("percentiles"));
 	d->percentilesCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->percentilesCurve->setHidden(true);
 	d->percentilesCurve->graphicsItem()->setParentItem(d);
@@ -283,6 +283,8 @@ void QQPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	if (aspect == d->dataColumn) {
 		d->dataColumn = nullptr;
 		d->retransform();
+		Q_EMIT dataChanged();
+		Q_EMIT changed();
 	}
 }
 
@@ -484,6 +486,7 @@ void QQPlotPrivate::updateDistribution() {
 			xData << gsl_cdf_gumbel2_Pinv(double(i) / 100., 1.0, 1.0);
 		break;
 	}
+	// distributions not supporting CDF
 	case nsl_sf_stats_gaussian_tail:
 	case nsl_sf_stats_exponential_power:
 	case nsl_sf_stats_rayleigh_tail:
@@ -502,6 +505,7 @@ void QQPlotPrivate::updateDistribution() {
 	case nsl_sf_stats_sech:
 	case nsl_sf_stats_levy:
 	case nsl_sf_stats_frechet:
+	case nsl_sf_stats_triangular:
 		break;
 	}
 

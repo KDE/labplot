@@ -4,7 +4,7 @@
 	Description          : Tests for the ascii filter
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2017-2023 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2022-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -12,14 +12,11 @@
 #define ASCIIFILTERTEST_H
 
 #include "../../CommonTest.h"
-#include <QtTest>
 
 class AsciiFilterTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void initTestCase();
-
 	// empty and sparse files
 	void testEmptyFileAppend();
 	void testEmptyFilePrepend();
@@ -30,6 +27,8 @@ private Q_SLOTS:
 	void testSparseFile01();
 	void testSparseFile02();
 	void testSparseFile03();
+
+	void testFileEndingWithoutLinebreak();
 
 	// header handling
 	void testHeader01();
@@ -45,6 +44,7 @@ private Q_SLOTS:
 	void testHeader10();
 	void testHeader11();
 	void testHeader11a();
+	void testHeader12();
 
 	// read ranges
 	void testColumnRange00();

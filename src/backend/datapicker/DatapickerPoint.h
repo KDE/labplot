@@ -58,6 +58,7 @@ public:
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
+	void finalizeAdd() override;
 
 	BASIC_D_ACCESSOR_DECL(QPointF, position, Position)
 	BASIC_D_ACCESSOR_DECL(QPointF, plusDeltaXPos, PlusDeltaXPos)

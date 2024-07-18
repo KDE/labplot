@@ -253,7 +253,7 @@ void AxisDock::init() {
 
 	// scales
 	for (const auto& name : RangeT::scaleNames)
-		ui.cbScale->addItem(name);
+		ui.cbScale->addItem(name.toString());
 
 	ui.cbOrientation->addItem(i18n("Horizontal"));
 	ui.cbOrientation->addItem(i18n("Vertical"));
@@ -465,7 +465,7 @@ void AxisDock::updateLocale() {
 	// scales
 	ui.cbScale->clear();
 	for (const auto& name : RangeT::scaleNames)
-		ui.cbScale->addItem(name);
+		ui.cbScale->addItem(name.toString());
 
 	labelWidget->updateLocale();
 	lineWidget->updateLocale();
@@ -713,14 +713,14 @@ void AxisDock::rangeScaleChanged(bool set) {
 }
 
 void AxisDock::rangeTypeChanged(int index) {
-	CONDITIONAL_LOCK_RETURN;
-
 	auto rangeType = static_cast<Axis::RangeType>(index);
 	bool autoScale = (rangeType != Axis::RangeType::Custom);
 	ui.sbStart->setEnabled(!autoScale);
 	ui.sbEnd->setEnabled(!autoScale);
 	ui.dateTimeEditStart->setEnabled(!autoScale);
 	ui.dateTimeEditEnd->setEnabled(!autoScale);
+
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
 		axis->setRangeType(rangeType);
@@ -1900,7 +1900,9 @@ void AxisDock::load() {
 	ui.cbScale->setVisible(!rangeScale);
 	ui.lScale->setVisible(!rangeScale);
 
-	ui.cbRangeType->setCurrentIndex(static_cast<int>(m_axis->rangeType()));
+	index = static_cast<int>(m_axis->rangeType());
+	ui.cbRangeType->setCurrentIndex(index);
+	rangeTypeChanged(index);
 	ui.sbStart->setValue(m_axis->range().start());
 	ui.sbEnd->setValue(m_axis->range().end());
 
@@ -2064,7 +2066,9 @@ void AxisDock::loadConfig(KConfig& config) {
 	ui.sbPositionLogical->setValue(group.readEntry(QStringLiteral("LogicalPosition"), m_axis->logicalPosition()));
 	ui.sbPosition->setValue(Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("PositionOffset"), m_axis->offset()), m_worksheetUnit));
 	ui.cbScale->setCurrentIndex(group.readEntry(QStringLiteral("Scale"), static_cast<int>(m_axis->scale())));
-	ui.cbRangeType->setCurrentIndex(group.readEntry(QStringLiteral("RangeType"), static_cast<int>(m_axis->rangeType())));
+	index = static_cast<int>(m_axis->rangeType());
+	ui.cbRangeType->setCurrentIndex(group.readEntry(QStringLiteral("RangeType"), index));
+	rangeTypeChanged(index);
 	ui.sbStart->setValue(group.readEntry(QStringLiteral("Start"), m_axis->range().start()));
 	ui.sbEnd->setValue(group.readEntry(QStringLiteral("End"), m_axis->range().end()));
 	ui.sbZeroOffset->setValue(group.readEntry(QStringLiteral("ZeroOffset"), m_axis->zeroOffset()));

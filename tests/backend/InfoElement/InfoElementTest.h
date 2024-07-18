@@ -65,6 +65,8 @@ private Q_SLOTS:
 	 */
 	void moveCurve();
 	void saveLoad();
+
+	void saveLoadInvisiblePoint();
 };
 
 #endif // INFOELEMENTTEST_H

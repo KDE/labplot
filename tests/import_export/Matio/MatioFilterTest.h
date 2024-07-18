@@ -11,7 +11,6 @@
 #define MATIOFILTERTEST_H
 
 #include "../../CommonTest.h"
-#include <QtTest>
 
 class MatioFilterTest : public CommonTest {
 	Q_OBJECT

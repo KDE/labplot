@@ -4,7 +4,7 @@
 	Description          : definition of functions
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2014-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2014-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -179,6 +179,8 @@ QString FunctionGroupsToString(FunctionGroups group) {
 		return i18n("Hypergeometric Distribution");
 	case FunctionGroups::LogarithmicDistribution:
 		return i18n("Logarithmic Distribution");
+	case FunctionGroups::TriangularDistribution:
+		return i18n("Triangular Distribution");
 	case FunctionGroups::END:
 		break;
 	}
@@ -237,7 +239,7 @@ struct funs _special_functions[] = {
 	{[]() { return i18n("Simple Moving Average"); }, specialfun_sma, func_t2Payload(), 2, nullptr, FunctionGroups::MovingStatistics},
 	{[]() { return i18n("Simple Moving Range"); }, specialfun_smr, func_t2Payload(), 2, nullptr, FunctionGroups::MovingStatistics},
 
-	// Values independend of the row index!!!
+	// Values independent of the row index!!!
 	// Important: When adding function here, implement it somewhere. For example column functions are implemented in ColumnPrivate!
 	{[]() { return i18n("Size"); }, colfun_size, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
 	{[]() { return i18n("Minimum"); }, colfun_min, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
@@ -271,7 +273,7 @@ struct funs _special_functions[] = {
 };
 const int _number_specialfunctions = sizeof(_special_functions) / sizeof(funs);
 
-/* list of functions (sync with ExpressionParser.cpp!) */
+/* list of functions (description must be unique!) */
 struct funs _functions[] = {
 	// Standard Mathematical Functions
 	{[]() { return i18n("pseudo-random integer [0, RAND_MAX]"); }, "rand", nsl_sf_rand, 0, nullptr, FunctionGroups::StandardMathematicalFunctions},
@@ -591,10 +593,10 @@ struct funs _functions[] = {
 	{[]() { return i18n("Second synchrotron function"); }, "synchrotron2", gsl_sf_synchrotron_2, 1, nullptr, FunctionGroups::SynchrotronFunctions},
 
 	// Transport Functions
-	{[]() { return i18n("Transport function"); }, "J2", gsl_sf_transport_2, 1, nullptr, FunctionGroups::TransportFunctions},
-	{[]() { return i18n("Transport function"); }, "J3", gsl_sf_transport_3, 1, nullptr, FunctionGroups::TransportFunctions},
-	{[]() { return i18n("Transport function"); }, "J4", gsl_sf_transport_4, 1, nullptr, FunctionGroups::TransportFunctions},
-	{[]() { return i18n("Transport function"); }, "J5", gsl_sf_transport_5, 1, nullptr, FunctionGroups::TransportFunctions},
+	{[]() { return i18n("Transport function J2"); }, "J2", gsl_sf_transport_2, 1, nullptr, FunctionGroups::TransportFunctions},
+	{[]() { return i18n("Transport function J3"); }, "J3", gsl_sf_transport_3, 1, nullptr, FunctionGroups::TransportFunctions},
+	{[]() { return i18n("Transport function J4"); }, "J4", gsl_sf_transport_4, 1, nullptr, FunctionGroups::TransportFunctions},
+	{[]() { return i18n("Transport function J5"); }, "J5", gsl_sf_transport_5, 1, nullptr, FunctionGroups::TransportFunctions},
 
 	// Trigonometric Functions
 	{[]() { return i18n("Sine"); }, "sin", gsl_sf_sin, 1, nullptr, FunctionGroups::TrigonometricFunctions},
@@ -639,8 +641,8 @@ struct funs _functions[] = {
 	{[]() { return i18n("Eta function for integer n"); }, "etaint", nsl_sf_etaint, 1, nullptr, FunctionGroups::ZetaFunctions},
 	{[]() { return i18n("Eta function"); }, "eta", gsl_sf_eta, 1, nullptr, FunctionGroups::ZetaFunctions},
 
-	// GSL Random Number Generators: see https://www.gnu.org/software/gsl/doc/html/randist.html
 	// Random number generator
+	// GSL Random Number Generators: see https://www.gnu.org/software/gsl/doc/html/randist.html
 	{[]() { return i18n("Gaussian random numbers"); }, "randgaussian", nsl_sf_ran_gaussian, 1, nullptr, FunctionGroups::RandomNumberGenerator},
 	{[]() { return i18n("Exponential random numbers"); }, "randexponential", nsl_sf_ran_exponential, 1, nullptr, FunctionGroups::RandomNumberGenerator},
 	{[]() { return i18n("Laplacian random numbers"); }, "randlaplace", nsl_sf_ran_laplace, 1, nullptr, FunctionGroups::RandomNumberGenerator},
@@ -658,6 +660,9 @@ struct funs _functions[] = {
 	{[]() { return i18n("Poisson random numbers"); }, "randpoisson", nsl_sf_ran_poisson, 1, nullptr, FunctionGroups::RandomNumberGenerator},
 	{[]() { return i18n("Bernoulli random numbers"); }, "randbernoulli", nsl_sf_ran_bernoulli, 1, nullptr, FunctionGroups::RandomNumberGenerator},
 	{[]() { return i18n("Binomial random numbers"); }, "randbinomial", nsl_sf_ran_binomial, 2, nullptr, FunctionGroups::RandomNumberGenerator},
+
+	// NSL Random Number Generators
+	{[]() { return i18n("Triangular random numbers"); }, "randtriangular", nsl_sf_ran_triangular, 3, nullptr, FunctionGroups::RandomNumberGenerator},
 
 	// GSL Random Number Distributions: see https://www.gnu.org/software/gsl/doc/html/randist.html
 	// Gaussian Distribution
@@ -678,36 +683,36 @@ struct funs _functions[] = {
 
 	// Exponential Distribution
 	{[]() { return i18n("Probability density for an exponential distribution"); }, "exponential", gsl_ran_exponential_pdf, 2, nullptr, FunctionGroups::ExponentialDistribution},
-	{[]() { return i18n("Cumulative distribution function P"); }, "exponentialP", gsl_cdf_exponential_P, 2, nullptr, FunctionGroups::ExponentialDistribution},
-	{[]() { return i18n("Cumulative distribution function Q"); }, "exponentialQ", gsl_cdf_exponential_Q, 2, nullptr, FunctionGroups::ExponentialDistribution},
-	{[]() { return i18n("Inverse cumulative distribution function P"); }, "exponentialPinv", gsl_cdf_exponential_Pinv, 2, nullptr, FunctionGroups::ExponentialDistribution},
-	{[]() { return i18n("Inverse cumulative distribution function Q"); }, "exponentialQinv", gsl_cdf_exponential_Qinv, 2, nullptr, FunctionGroups::ExponentialDistribution},
+	{[]() { return i18n("Cumulative exponential distribution function P"); }, "exponentialP", gsl_cdf_exponential_P, 2, nullptr, FunctionGroups::ExponentialDistribution},
+	{[]() { return i18n("Cumulative exponential distribution function Q"); }, "exponentialQ", gsl_cdf_exponential_Q, 2, nullptr, FunctionGroups::ExponentialDistribution},
+	{[]() { return i18n("Inverse cumulative exponential distribution function P"); }, "exponentialPinv", gsl_cdf_exponential_Pinv, 2, nullptr, FunctionGroups::ExponentialDistribution},
+	{[]() { return i18n("Inverse cumulative exponential distribution function Q"); }, "exponentialQinv", gsl_cdf_exponential_Qinv, 2, nullptr, FunctionGroups::ExponentialDistribution},
 
 	// Laplace Distribution
 	{[]() { return i18n("Probability density for a Laplace distribution"); }, "laplace", gsl_ran_laplace_pdf, 2, nullptr, FunctionGroups::LaplaceDistribution},
-	{[]() { return i18n("Cumulative distribution function P"); }, "laplaceP", gsl_cdf_laplace_P, 2, nullptr, FunctionGroups::LaplaceDistribution},
-	{[]() { return i18n("Cumulative distribution function Q"); }, "laplaceQ", gsl_cdf_laplace_Q, 2, nullptr, FunctionGroups::LaplaceDistribution},
-	{[]() { return i18n("Inverse cumulative distribution function P"); }, "laplacePinv", gsl_cdf_laplace_Pinv, 2, nullptr, FunctionGroups::LaplaceDistribution},
-	{[]() { return i18n("Inverse cumulative distribution function Q"); }, "laplaceQinv", gsl_cdf_laplace_Qinv, 2, nullptr, FunctionGroups::LaplaceDistribution},
+	{[]() { return i18n("Cumulative Laplace distribution function P"); }, "laplaceP", gsl_cdf_laplace_P, 2, nullptr, FunctionGroups::LaplaceDistribution},
+	{[]() { return i18n("Cumulative Laplace distribution function Q"); }, "laplaceQ", gsl_cdf_laplace_Q, 2, nullptr, FunctionGroups::LaplaceDistribution},
+	{[]() { return i18n("Inverse cumulative Laplace distribution function P"); }, "laplacePinv", gsl_cdf_laplace_Pinv, 2, nullptr, FunctionGroups::LaplaceDistribution},
+	{[]() { return i18n("Inverse cumulative Laplace distribution function Q"); }, "laplaceQinv", gsl_cdf_laplace_Qinv, 2, nullptr, FunctionGroups::LaplaceDistribution},
 
 	// Exponential Power Distribution
 	{[]() { return i18n("Probability density for an exponential power distribution"); }, "exppow", gsl_ran_exppow_pdf, 3, nullptr, FunctionGroups::ExponentialPowerDistribution},
-	{[]() { return i18n("cumulative distribution function P"); }, "exppowP", gsl_cdf_exppow_P, 3, nullptr, FunctionGroups::ExponentialPowerDistribution},
-	{[]() { return i18n("Cumulative distribution function Q"); }, "exppowQ", gsl_cdf_exppow_Q, 3, nullptr, FunctionGroups::ExponentialPowerDistribution},
+	{[]() { return i18n("cumulative exponential power distribution function P"); }, "exppowP", gsl_cdf_exppow_P, 3, nullptr, FunctionGroups::ExponentialPowerDistribution},
+	{[]() { return i18n("Cumulative exponential power distribution function Q"); }, "exppowQ", gsl_cdf_exppow_Q, 3, nullptr, FunctionGroups::ExponentialPowerDistribution},
 
 	// Cauchy Distribution
 	{[]() { return i18n("Probability density for a Cauchy distribution"); }, "cauchy", gsl_ran_cauchy_pdf, 2, nullptr, FunctionGroups::CauchyDistribution},
-	{[]() { return i18n("Cumulative distribution function P"); }, "cauchyP", gsl_cdf_cauchy_P, 2, nullptr, FunctionGroups::CauchyDistribution},
-	{[]() { return i18n("Cumulative distribution function Q"); }, "cauchyQ", gsl_cdf_cauchy_Q, 2, nullptr, FunctionGroups::CauchyDistribution},
-	{[]() { return i18n("Inverse cumulative distribution function P"); }, "cauchyPinv", gsl_cdf_cauchy_Pinv, 2, nullptr, FunctionGroups::CauchyDistribution},
-	{[]() { return i18n("Inverse cumulative distribution function Q"); }, "cauchyQinv", gsl_cdf_cauchy_Qinv, 2, nullptr, FunctionGroups::CauchyDistribution},
+	{[]() { return i18n("Cumulative Cauchy distribution function P"); }, "cauchyP", gsl_cdf_cauchy_P, 2, nullptr, FunctionGroups::CauchyDistribution},
+	{[]() { return i18n("Cumulative Cauchy distribution function Q"); }, "cauchyQ", gsl_cdf_cauchy_Q, 2, nullptr, FunctionGroups::CauchyDistribution},
+	{[]() { return i18n("Inverse cumulative Cauchy distribution function P"); }, "cauchyPinv", gsl_cdf_cauchy_Pinv, 2, nullptr, FunctionGroups::CauchyDistribution},
+	{[]() { return i18n("Inverse cumulative Cauchy distribution function Q"); }, "cauchyQinv", gsl_cdf_cauchy_Qinv, 2, nullptr, FunctionGroups::CauchyDistribution},
 
 	// Rayleigh Distribution
 	{[]() { return i18n("Probability density for a Rayleigh distribution"); }, "rayleigh", gsl_ran_rayleigh_pdf, 2, nullptr, FunctionGroups::RayleighDistribution},
-	{[]() { return i18n("Cumulative distribution function P"); }, "rayleighP", gsl_cdf_rayleigh_P, 2, nullptr, FunctionGroups::RayleighDistribution},
-	{[]() { return i18n("Cumulative distribution function Q"); }, "rayleighQ", gsl_cdf_rayleigh_Q, 2, nullptr, FunctionGroups::RayleighDistribution},
-	{[]() { return i18n("Inverse cumulative distribution function P"); }, "rayleighPinv", gsl_cdf_rayleigh_Pinv, 2, nullptr, FunctionGroups::RayleighDistribution},
-	{[]() { return i18n("Inverse cumulative distribution function Q"); }, "rayleighQinv", gsl_cdf_rayleigh_Qinv, 2, nullptr, FunctionGroups::RayleighDistribution},
+	{[]() { return i18n("Cumulative Rayleigh distribution function P"); }, "rayleighP", gsl_cdf_rayleigh_P, 2, nullptr, FunctionGroups::RayleighDistribution},
+	{[]() { return i18n("Cumulative Rayleigh distribution function Q"); }, "rayleighQ", gsl_cdf_rayleigh_Q, 2, nullptr, FunctionGroups::RayleighDistribution},
+	{[]() { return i18n("Inverse cumulative Rayleigh distribution function P"); }, "rayleighPinv", gsl_cdf_rayleigh_Pinv, 2, nullptr, FunctionGroups::RayleighDistribution},
+	{[]() { return i18n("Inverse cumulative Rayleigh distribution function Q"); }, "rayleighQinv", gsl_cdf_rayleigh_Qinv, 2, nullptr, FunctionGroups::RayleighDistribution},
 	{[]() { return i18n("Probability density for a Rayleigh tail distribution"); }, "rayleigh_tail", gsl_ran_rayleigh_tail_pdf, 3, nullptr, FunctionGroups::RayleighDistribution},
 
 	// Landau Distribution
@@ -715,119 +720,126 @@ struct funs _functions[] = {
 
 	// Gamma Distribution
 	{[]() { return i18n("Probability density for a gamma distribution"); }, "gammapdf", gsl_ran_gamma_pdf, 3, nullptr, FunctionGroups::GammaDistribution},
-	{[]() { return i18n("Cumulative distribution function P"); }, "gammaP", gsl_cdf_gamma_P, 3, nullptr, FunctionGroups::GammaDistribution},
-	{[]() { return i18n("Cumulative distribution function Q"); }, "gammaQ", gsl_cdf_gamma_Q, 3, nullptr, FunctionGroups::GammaDistribution},
-	{[]() { return i18n("Inverse cumulative distribution function P"); }, "gammaPinv", gsl_cdf_gamma_Pinv, 3, nullptr, FunctionGroups::GammaDistribution},
-	{[]() { return i18n("Inverse cumulative distribution function Q"); }, "gammaQinv", gsl_cdf_gamma_Qinv, 3, nullptr, FunctionGroups::GammaDistribution},
+	{[]() { return i18n("Cumulative gamma distribution function P"); }, "gammaP", gsl_cdf_gamma_P, 3, nullptr, FunctionGroups::GammaDistribution},
+	{[]() { return i18n("Cumulative gamma distribution function Q"); }, "gammaQ", gsl_cdf_gamma_Q, 3, nullptr, FunctionGroups::GammaDistribution},
+	{[]() { return i18n("Inverse cumulative gamma distribution function P"); }, "gammaPinv", gsl_cdf_gamma_Pinv, 3, nullptr, FunctionGroups::GammaDistribution},
+	{[]() { return i18n("Inverse cumulative gamma distribution function Q"); }, "gammaQinv", gsl_cdf_gamma_Qinv, 3, nullptr, FunctionGroups::GammaDistribution},
 
 	// Flat (Uniform) Distribution
 	{[]() { return i18n("Probability density for a uniform distribution"); }, "flat", gsl_ran_flat_pdf, 3, nullptr, FunctionGroups::FlatUniformDistribution},
-	{[]() { return i18n("Cumulative distribution function P"); }, "flatP", gsl_cdf_flat_P, 3, nullptr, FunctionGroups::FlatUniformDistribution},
-	{[]() { return i18n("Cumulative distribution function Q"); }, "flatQ", gsl_cdf_flat_Q, 3, nullptr, FunctionGroups::FlatUniformDistribution},
-	{[]() { return i18n("Inverse cumulative distribution function P"); }, "flatPinv", gsl_cdf_flat_Pinv, 3, nullptr, FunctionGroups::FlatUniformDistribution},
-	{[]() { return i18n("Inverse cumulative distribution function Q"); }, "flatQinv", gsl_cdf_flat_Qinv, 3, nullptr, FunctionGroups::FlatUniformDistribution},
+	{[]() { return i18n("Cumulative uniform distribution function P"); }, "flatP", gsl_cdf_flat_P, 3, nullptr, FunctionGroups::FlatUniformDistribution},
+	{[]() { return i18n("Cumulative uniform distribution function Q"); }, "flatQ", gsl_cdf_flat_Q, 3, nullptr, FunctionGroups::FlatUniformDistribution},
+	{[]() { return i18n("Inverse cumulative uniform distribution function P"); }, "flatPinv", gsl_cdf_flat_Pinv, 3, nullptr, FunctionGroups::FlatUniformDistribution},
+	{[]() { return i18n("Inverse cumulative uniform distribution function Q"); }, "flatQinv", gsl_cdf_flat_Qinv, 3, nullptr, FunctionGroups::FlatUniformDistribution},
 
 	// Lognormal Distribution
 	{[]() { return i18n("Probability density for a lognormal distribution"); }, "lognormal", gsl_ran_lognormal_pdf, 3, nullptr, FunctionGroups::LognormalDistribution},
-	{[]() { return i18n("Cumulative distribution function P"); }, "lognormalP", gsl_cdf_lognormal_P, 3, nullptr, FunctionGroups::LognormalDistribution},
-	{[]() { return i18n("Cumulative distribution function Q"); }, "lognormalQ", gsl_cdf_lognormal_Q, 3, nullptr, FunctionGroups::LognormalDistribution},
-	{[]() { return i18n("Inverse cumulative distribution function P"); }, "lognormalPinv", gsl_cdf_lognormal_Pinv, 3, nullptr, FunctionGroups::LognormalDistribution},
-	{[]() { return i18n("Inverse cumulative distribution function Q"); }, "lognormalQinv", gsl_cdf_lognormal_Qinv, 3, nullptr, FunctionGroups::LognormalDistribution},
+	{[]() { return i18n("Cumulative lognormal distribution function P"); }, "lognormalP", gsl_cdf_lognormal_P, 3, nullptr, FunctionGroups::LognormalDistribution},
+	{[]() { return i18n("Cumulative lognormal distribution function Q"); }, "lognormalQ", gsl_cdf_lognormal_Q, 3, nullptr, FunctionGroups::LognormalDistribution},
+	{[]() { return i18n("Inverse cumulative lognormal distribution function P"); }, "lognormalPinv", gsl_cdf_lognormal_Pinv, 3, nullptr, FunctionGroups::LognormalDistribution},
+	{[]() { return i18n("Inverse cumulative lognormal distribution function Q"); }, "lognormalQinv", gsl_cdf_lognormal_Qinv, 3, nullptr, FunctionGroups::LognormalDistribution},
 
 	// Chi-squared Distribution
 	{[]() { return i18n("Probability density for a chi squared distribution"); }, "chisq", gsl_ran_chisq_pdf, 2, nullptr, FunctionGroups::ChisquaredDistribution},
-	{[]() { return i18n("Cumulative distribution function P"); }, "chisqP", gsl_cdf_chisq_P, 2, nullptr, FunctionGroups::ChisquaredDistribution},
-	{[]() { return i18n("Cumulative distribution function Q"); }, "chisqQ", gsl_cdf_chisq_Q, 2, nullptr, FunctionGroups::ChisquaredDistribution},
-	{[]() { return i18n("Inverse cumulative distribution function P"); }, "chisqPinv", gsl_cdf_chisq_Pinv, 2, nullptr, FunctionGroups::ChisquaredDistribution},
-	{[]() { return i18n("Inverse cumulative distribution function Q"); }, "chisqQinv", gsl_cdf_chisq_Qinv, 2, nullptr, FunctionGroups::ChisquaredDistribution},
+	{[]() { return i18n("Cumulative chi squared distribution function P"); }, "chisqP", gsl_cdf_chisq_P, 2, nullptr, FunctionGroups::ChisquaredDistribution},
+	{[]() { return i18n("Cumulative chi squared distribution function Q"); }, "chisqQ", gsl_cdf_chisq_Q, 2, nullptr, FunctionGroups::ChisquaredDistribution},
+	{[]() { return i18n("Inverse cumulative chi squared distribution function P"); }, "chisqPinv", gsl_cdf_chisq_Pinv, 2, nullptr, FunctionGroups::ChisquaredDistribution},
+	{[]() { return i18n("Inverse cumulative chi squared distribution function Q"); }, "chisqQinv", gsl_cdf_chisq_Qinv, 2, nullptr, FunctionGroups::ChisquaredDistribution},
 
 	// F-distribution
 	{[]() { return i18n("Probability density for a F-distribution"); }, "fdist", gsl_ran_fdist_pdf, 3, nullptr, FunctionGroups::Fdistribution},
-	{[]() { return i18n("Cumulative distribution function P"); }, "fdistP", gsl_cdf_fdist_P, 3, nullptr, FunctionGroups::Fdistribution},
-	{[]() { return i18n("Cumulative distribution function Q"); }, "fdistQ", gsl_cdf_fdist_Q, 3, nullptr, FunctionGroups::Fdistribution},
-	{[]() { return i18n("Inverse cumulative distribution function P"); }, "fdistPinv", gsl_cdf_fdist_Pinv, 3, nullptr, FunctionGroups::Fdistribution},
-	{[]() { return i18n("Inverse cumulative distribution function Q"); }, "fdistQinv", gsl_cdf_fdist_Qinv, 3, nullptr, FunctionGroups::Fdistribution},
+	{[]() { return i18n("Cumulative F-distribution function P"); }, "fdistP", gsl_cdf_fdist_P, 3, nullptr, FunctionGroups::Fdistribution},
+	{[]() { return i18n("Cumulative F-distribution function Q"); }, "fdistQ", gsl_cdf_fdist_Q, 3, nullptr, FunctionGroups::Fdistribution},
+	{[]() { return i18n("Inverse cumulative F-distribution function P"); }, "fdistPinv", gsl_cdf_fdist_Pinv, 3, nullptr, FunctionGroups::Fdistribution},
+	{[]() { return i18n("Inverse cumulative F-distribution function Q"); }, "fdistQinv", gsl_cdf_fdist_Qinv, 3, nullptr, FunctionGroups::Fdistribution},
 
 	// t-distribution
 	{[]() { return i18n("Probability density for a t-distribution"); }, "tdist", gsl_ran_tdist_pdf, 2, nullptr, FunctionGroups::Tdistribution},
-	{[]() { return i18n("Cumulative distribution function P"); }, "tdistP", gsl_cdf_tdist_P, 2, nullptr, FunctionGroups::Tdistribution},
-	{[]() { return i18n("Cumulative distribution function Q"); }, "tdistQ", gsl_cdf_tdist_Q, 2, nullptr, FunctionGroups::Tdistribution},
-	{[]() { return i18n("Inverse cumulative distribution function P"); }, "tdistPinv", gsl_cdf_tdist_Pinv, 2, nullptr, FunctionGroups::Tdistribution},
-	{[]() { return i18n("Inverse cumulative distribution function Q"); }, "tdistQinv", gsl_cdf_tdist_Qinv, 2, nullptr, FunctionGroups::Tdistribution},
+	{[]() { return i18n("Cumulative t-distribution function P"); }, "tdistP", gsl_cdf_tdist_P, 2, nullptr, FunctionGroups::Tdistribution},
+	{[]() { return i18n("Cumulative t-distribution function Q"); }, "tdistQ", gsl_cdf_tdist_Q, 2, nullptr, FunctionGroups::Tdistribution},
+	{[]() { return i18n("Inverse cumulative t-distribution function P"); }, "tdistPinv", gsl_cdf_tdist_Pinv, 2, nullptr, FunctionGroups::Tdistribution},
+	{[]() { return i18n("Inverse cumulative t-distribution function Q"); }, "tdistQinv", gsl_cdf_tdist_Qinv, 2, nullptr, FunctionGroups::Tdistribution},
 
 	// Beta Distribution
 	{[]() { return i18n("Probability density for a beta distribution"); }, "betapdf", gsl_ran_beta_pdf, 3, nullptr, FunctionGroups::BetaDistribution},
-	{[]() { return i18n("Cumulative distribution function P"); }, "betaP", gsl_cdf_beta_P, 3, nullptr, FunctionGroups::BetaDistribution},
-	{[]() { return i18n("Cumulative distribution function Q"); }, "betaQ", gsl_cdf_beta_Q, 3, nullptr, FunctionGroups::BetaDistribution},
-	{[]() { return i18n("Inverse cumulative distribution function P"); }, "betaPinv", gsl_cdf_beta_Pinv, 3, nullptr, FunctionGroups::BetaDistribution},
-	{[]() { return i18n("Inverse cumulative distribution function Q"); }, "betaQinv", gsl_cdf_beta_Qinv, 3, nullptr, FunctionGroups::BetaDistribution},
+	{[]() { return i18n("Cumulative beta distribution function P"); }, "betaP", gsl_cdf_beta_P, 3, nullptr, FunctionGroups::BetaDistribution},
+	{[]() { return i18n("Cumulative beta distribution function Q"); }, "betaQ", gsl_cdf_beta_Q, 3, nullptr, FunctionGroups::BetaDistribution},
+	{[]() { return i18n("Inverse cumulative beta distribution function P"); }, "betaPinv", gsl_cdf_beta_Pinv, 3, nullptr, FunctionGroups::BetaDistribution},
+	{[]() { return i18n("Inverse cumulative beta distribution function Q"); }, "betaQinv", gsl_cdf_beta_Qinv, 3, nullptr, FunctionGroups::BetaDistribution},
 
 	// Logistic Distribution
 	{[]() { return i18n("Probability density for a logistic distribution"); }, "logistic", gsl_ran_logistic_pdf, 2, nullptr, FunctionGroups::LogisticDistribution},
-	{[]() { return i18n("Cumulative distribution function P"); }, "logisticP", gsl_cdf_logistic_P, 2, nullptr, FunctionGroups::LogisticDistribution},
-	{[]() { return i18n("Cumulative distribution function Q"); }, "logisticQ", gsl_cdf_logistic_Q, 2, nullptr, FunctionGroups::LogisticDistribution},
-	{[]() { return i18n("Inverse cumulative distribution function P"); }, "logisticPinv", gsl_cdf_logistic_Pinv, 2, nullptr, FunctionGroups::LogisticDistribution},
-	{[]() { return i18n("Inverse cumulative distribution function Q"); }, "logisticQinv", gsl_cdf_logistic_Qinv, 2, nullptr, FunctionGroups::LogisticDistribution},
+	{[]() { return i18n("Cumulative logistic distribution function P"); }, "logisticP", gsl_cdf_logistic_P, 2, nullptr, FunctionGroups::LogisticDistribution},
+	{[]() { return i18n("Cumulative logistic distribution function Q"); }, "logisticQ", gsl_cdf_logistic_Q, 2, nullptr, FunctionGroups::LogisticDistribution},
+	{[]() { return i18n("Inverse cumulative logistic distribution function P"); }, "logisticPinv", gsl_cdf_logistic_Pinv, 2, nullptr, FunctionGroups::LogisticDistribution},
+	{[]() { return i18n("Inverse cumulative logistic distribution function Q"); }, "logisticQinv", gsl_cdf_logistic_Qinv, 2, nullptr, FunctionGroups::LogisticDistribution},
 
 	// Pareto Distribution
 	{[]() { return i18n("Probability density for a Pareto distribution"); }, "pareto", gsl_ran_pareto_pdf, 3, nullptr, FunctionGroups::ParetoDistribution},
-	{[]() { return i18n("Cumulative distribution function P"); }, "paretoP", gsl_cdf_pareto_P, 3, nullptr, FunctionGroups::ParetoDistribution},
-	{[]() { return i18n("Cumulative distribution function Q"); }, "paretoQ", gsl_cdf_pareto_Q, 3, nullptr, FunctionGroups::ParetoDistribution},
-	{[]() { return i18n("Inverse cumulative distribution function P"); }, "paretoPinv", gsl_cdf_pareto_Pinv, 3, nullptr, FunctionGroups::ParetoDistribution},
-	{[]() { return i18n("Inverse cumulative distribution function Q"); }, "paretoQinv", gsl_cdf_pareto_Qinv, 3, nullptr, FunctionGroups::ParetoDistribution},
+	{[]() { return i18n("Cumulative Pareto distribution function P"); }, "paretoP", gsl_cdf_pareto_P, 3, nullptr, FunctionGroups::ParetoDistribution},
+	{[]() { return i18n("Cumulative Pareto distribution function Q"); }, "paretoQ", gsl_cdf_pareto_Q, 3, nullptr, FunctionGroups::ParetoDistribution},
+	{[]() { return i18n("Inverse cumulative Pareto distribution function P"); }, "paretoPinv", gsl_cdf_pareto_Pinv, 3, nullptr, FunctionGroups::ParetoDistribution},
+	{[]() { return i18n("Inverse cumulative Pareto distribution function Q"); }, "paretoQinv", gsl_cdf_pareto_Qinv, 3, nullptr, FunctionGroups::ParetoDistribution},
 
 	// Weibull Distribution
 	{[]() { return i18n("Probability density for a Weibull distribution"); }, "weibull", gsl_ran_weibull_pdf, 3, nullptr, FunctionGroups::WeibullDistribution},
-	{[]() { return i18n("Cumulative distribution function P"); }, "weibullP", gsl_cdf_weibull_P, 3, nullptr, FunctionGroups::WeibullDistribution},
-	{[]() { return i18n("Cumulative distribution function Q"); }, "weibullQ", gsl_cdf_weibull_Q, 3, nullptr, FunctionGroups::WeibullDistribution},
-	{[]() { return i18n("Inverse cumulative distribution function P"); }, "weibullPinv", gsl_cdf_weibull_Pinv, 3, nullptr, FunctionGroups::WeibullDistribution},
-	{[]() { return i18n("Inverse cumulative distribution function Q"); }, "weibullQinv", gsl_cdf_weibull_Qinv, 3, nullptr, FunctionGroups::WeibullDistribution},
+	{[]() { return i18n("Cumulative Weibull distribution function P"); }, "weibullP", gsl_cdf_weibull_P, 3, nullptr, FunctionGroups::WeibullDistribution},
+	{[]() { return i18n("Cumulative Weibull distribution function Q"); }, "weibullQ", gsl_cdf_weibull_Q, 3, nullptr, FunctionGroups::WeibullDistribution},
+	{[]() { return i18n("Inverse cumulative Weibull distribution function P"); }, "weibullPinv", gsl_cdf_weibull_Pinv, 3, nullptr, FunctionGroups::WeibullDistribution},
+	{[]() { return i18n("Inverse cumulative Weibull distribution function Q"); }, "weibullQinv", gsl_cdf_weibull_Qinv, 3, nullptr, FunctionGroups::WeibullDistribution},
 
 	// Gumbel Distribution
 	{[]() { return i18n("Probability density for a Type-1 Gumbel distribution"); }, "gumbel1", gsl_ran_gumbel1_pdf, 3, nullptr, FunctionGroups::GumbelDistribution},
-	{[]() { return i18n("Cumulative distribution function P"); }, "gumbel1P", gsl_cdf_gumbel1_P, 3, nullptr, FunctionGroups::GumbelDistribution},
-	{[]() { return i18n("Cumulative distribution function Q"); }, "gumbel1Q", gsl_cdf_gumbel1_Q, 3, nullptr, FunctionGroups::GumbelDistribution},
-	{[]() { return i18n("Inverse cumulative distribution function P"); }, "gumbel1Pinv", gsl_cdf_gumbel1_Pinv, 3, nullptr, FunctionGroups::GumbelDistribution},
-	{[]() { return i18n("Inverse cumulative distribution function Q"); }, "gumbel1Qinv", gsl_cdf_gumbel1_Qinv, 3, nullptr, FunctionGroups::GumbelDistribution},
+	{[]() { return i18n("Cumulative Type-1 Gumbel distribution function P"); }, "gumbel1P", gsl_cdf_gumbel1_P, 3, nullptr, FunctionGroups::GumbelDistribution},
+	{[]() { return i18n("Cumulative Type-1 Gumbel distribution function Q"); }, "gumbel1Q", gsl_cdf_gumbel1_Q, 3, nullptr, FunctionGroups::GumbelDistribution},
+	{[]() { return i18n("Inverse cumulative Type-1 Gumbel distribution function P"); }, "gumbel1Pinv", gsl_cdf_gumbel1_Pinv, 3, nullptr, FunctionGroups::GumbelDistribution},
+	{[]() { return i18n("Inverse cumulative Type-1 Gumbel distribution function Q"); }, "gumbel1Qinv", gsl_cdf_gumbel1_Qinv, 3, nullptr, FunctionGroups::GumbelDistribution},
 	{[]() { return i18n("Probability density for a Type-2 Gumbel distribution"); }, "gumbel2", gsl_ran_gumbel2_pdf, 3, nullptr, FunctionGroups::GumbelDistribution},
-	{[]() { return i18n("Cumulative distribution function P"); }, "gumbel2P", gsl_cdf_gumbel2_P, 3, nullptr, FunctionGroups::GumbelDistribution},
-	{[]() { return i18n("Cumulative distribution function Q"); }, "gumbel2Q", gsl_cdf_gumbel2_Q, 3, nullptr, FunctionGroups::GumbelDistribution},
-	{[]() { return i18n("Inverse cumulative distribution function P"); }, "gumbel2Pinv", gsl_cdf_gumbel2_Pinv, 3, nullptr, FunctionGroups::GumbelDistribution},
-	{[]() { return i18n("Inverse cumulative distribution function Q"); }, "gumbel2Qinv", gsl_cdf_gumbel2_Qinv, 3, nullptr, FunctionGroups::GumbelDistribution},
+	{[]() { return i18n("Cumulative Type-2 Gumbel distribution function P"); }, "gumbel2P", gsl_cdf_gumbel2_P, 3, nullptr, FunctionGroups::GumbelDistribution},
+	{[]() { return i18n("Cumulative Type-2 Gumbel distribution function Q"); }, "gumbel2Q", gsl_cdf_gumbel2_Q, 3, nullptr, FunctionGroups::GumbelDistribution},
+	{[]() { return i18n("Inverse cumulative Type-2 Gumbel distribution function P"); }, "gumbel2Pinv", gsl_cdf_gumbel2_Pinv, 3, nullptr, FunctionGroups::GumbelDistribution},
+	{[]() { return i18n("Inverse cumulative Type-2 Gumbel distribution function Q"); }, "gumbel2Qinv", gsl_cdf_gumbel2_Qinv, 3, nullptr, FunctionGroups::GumbelDistribution},
 
 	// Poisson Distribution
 	{[]() { return i18n("Probability density for a Poisson distribution"); }, "poisson", nsl_sf_poisson, 2, nullptr, FunctionGroups::PoissonDistribution},
-	{[]() { return i18n("Cumulative distribution function P"); }, "poissonP", [](double v1, double v2) { return gsl_cdf_poisson_P(v1, v2); },  2, nullptr, FunctionGroups::PoissonDistribution},
-	{[]() { return i18n("Cumulative distribution function Q"); }, "poissonQ", [](double v1, double v2) { return gsl_cdf_poisson_Q(v1, v2); },  2, nullptr, FunctionGroups::PoissonDistribution},
+	{[]() { return i18n("Cumulative Poisson distribution function P"); }, "poissonP", [](double v1, double v2) { return gsl_cdf_poisson_P(v1, v2); },  2, nullptr, FunctionGroups::PoissonDistribution},
+	{[]() { return i18n("Cumulative Poisson distribution function Q"); }, "poissonQ", [](double v1, double v2) { return gsl_cdf_poisson_Q(v1, v2); },  2, nullptr, FunctionGroups::PoissonDistribution},
 
 	// Bernoulli Distribution
 	{[]() { return i18n("Probability density for a Bernoulli distribution"); }, "bernoulli", nsl_sf_bernoulli, 2, nullptr, FunctionGroups::BernoulliDistribution},
 
 	// Binomial Distribution
 	{[]() { return i18n("Probability density for a binomial distribution"); }, "binomial", nsl_sf_binomial, 3, nullptr, FunctionGroups::BinomialDistribution},
-	{[]() { return i18n("Cumulative distribution function P"); }, "binomialP", gsl_cdf_binomial_P, 3, nullptr, FunctionGroups::BinomialDistribution},
-	{[]() { return i18n("Cumulative distribution function Q"); }, "binomialQ", gsl_cdf_binomial_Q, 3, nullptr, FunctionGroups::BinomialDistribution},
+	{[]() { return i18n("Cumulative binomial distribution function P"); }, "binomialP", gsl_cdf_binomial_P, 3, nullptr, FunctionGroups::BinomialDistribution},
+	{[]() { return i18n("Cumulative binomial distribution function Q"); }, "binomialQ", gsl_cdf_binomial_Q, 3, nullptr, FunctionGroups::BinomialDistribution},
 	{[]() { return i18n("Probability density for a negative binomial distribution"); }, "negative_binomial", nsl_sf_negative_binomial, 3, nullptr, FunctionGroups::BinomialDistribution},
-	{[]() { return i18n("Cumulative distribution function P"); }, "negative_binomialP", gsl_cdf_negative_binomial_P, 3, nullptr, FunctionGroups::BinomialDistribution},
-	{[]() { return i18n("Cumulative distribution function Q"); }, "negative_binomialQ", gsl_cdf_negative_binomial_Q, 3, nullptr, FunctionGroups::BinomialDistribution},
+	{[]() { return i18n("Cumulative negative binomial distribution function P"); }, "negative_binomialP", gsl_cdf_negative_binomial_P, 3, nullptr, FunctionGroups::BinomialDistribution},
+	{[]() { return i18n("Cumulative negative binomial distribution function Q"); }, "negative_binomialQ", gsl_cdf_negative_binomial_Q, 3, nullptr, FunctionGroups::BinomialDistribution},
 
 	// Pascal Distribution
 	{[]() { return i18n("Probability density for a Pascal distribution"); }, "pascal", nsl_sf_pascal, 3, nullptr, FunctionGroups::PascalDistribution},
-	{[]() { return i18n("Cumulative distribution function P"); }, "pascalP", gsl_cdf_pascal_P, 3, nullptr, FunctionGroups::PascalDistribution},
-	{[]() { return i18n("Cumulative distribution function Q"); }, "pascalQ", gsl_cdf_pascal_Q, 3, nullptr, FunctionGroups::PascalDistribution},
+	{[]() { return i18n("Cumulative Pascal distribution function P"); }, "pascalP", gsl_cdf_pascal_P, 3, nullptr, FunctionGroups::PascalDistribution},
+	{[]() { return i18n("Cumulative Pascal distribution function Q"); }, "pascalQ", gsl_cdf_pascal_Q, 3, nullptr, FunctionGroups::PascalDistribution},
 
 	// Geometric Distribution
 	{[]() { return i18n("Probability density for a geometric distribution"); }, "geometric", nsl_sf_geometric, 2, nullptr, FunctionGroups::GeometricDistribution},
-	{[]() { return i18n("Cumulative distribution function P"); }, "geometricP", gsl_cdf_geometric_P, 2, nullptr, FunctionGroups::GeometricDistribution},
-	{[]() { return i18n("Cumulative distribution function Q"); }, "geometricQ", gsl_cdf_geometric_Q, 2, nullptr, FunctionGroups::GeometricDistribution},
+	{[]() { return i18n("Cumulative geometric distribution function P"); }, "geometricP", gsl_cdf_geometric_P, 2, nullptr, FunctionGroups::GeometricDistribution},
+	{[]() { return i18n("Cumulative geometric distribution function Q"); }, "geometricQ", gsl_cdf_geometric_Q, 2, nullptr, FunctionGroups::GeometricDistribution},
 
 	// Hypergeometric Distribution
 	{[]() { return i18n("Probability density for a hypergeometric distribution"); }, "hypergeometric", nsl_sf_hypergeometric, 4, nullptr, FunctionGroups::HypergeometricDistribution},
-	{[]() { return i18n("Cumulative distribution function P"); }, "hypergeometricP", gsl_cdf_hypergeometric_P, 4, nullptr, FunctionGroups::HypergeometricDistribution},
-	{[]() { return i18n("Cumulative distribution function Q"); }, "hypergeometricQ", gsl_cdf_hypergeometric_Q, 4, nullptr, FunctionGroups::HypergeometricDistribution},
+	{[]() { return i18n("Cumulative hypergeometric distribution function P"); }, "hypergeometricP", gsl_cdf_hypergeometric_P, 4, nullptr, FunctionGroups::HypergeometricDistribution},
+	{[]() { return i18n("Cumulative hypergeometric distribution function Q"); }, "hypergeometricQ", gsl_cdf_hypergeometric_Q, 4, nullptr, FunctionGroups::HypergeometricDistribution},
 
 	// Logarithmic Distribution
 	{[]() { return i18n("Probability density for a logarithmic distribution"); }, "logarithmic", nsl_sf_logarithmic, 2, nullptr, FunctionGroups::LogarithmicDistribution},
+
+	// Non-GSL Distributions
+	// Triangular Distributions
+	{[]() { return i18n("Probability density for a triangular distribution"); }, "triangular", nsl_sf_triangular, 4, nullptr, FunctionGroups::TriangularDistribution},
+	{[]() { return i18n("Cumulative triangular distribution function P"); }, "triangularP", nsl_sf_triangular_P, 4, nullptr, FunctionGroups::TriangularDistribution},
+	{[]() { return i18n("Cumulative triangular distribution function Q"); }, "triangularQ", nsl_sf_triangular_Q, 4, nullptr, FunctionGroups::TriangularDistribution},
+	{[]() { return i18n("p-th quantile for triangular distribution"); }, "triangularQuantile", nsl_sf_triangular_Quantile, 4, nullptr, FunctionGroups::TriangularDistribution},
 };
 
 // clang-format on

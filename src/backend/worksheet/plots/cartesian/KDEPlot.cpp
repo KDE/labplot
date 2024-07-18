@@ -63,7 +63,7 @@ void KDEPlot::init() {
 	d->bandwidth = group.readEntry(QStringLiteral("bandwidth"), 0.1);
 
 	// estimation curve
-	d->estimationCurve = new XYCurve(QString());
+	d->estimationCurve = new XYCurve(QStringLiteral("estimation"));
 	d->estimationCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->estimationCurve->setHidden(true);
 	d->estimationCurve->graphicsItem()->setParentItem(d);
@@ -86,7 +86,7 @@ void KDEPlot::init() {
 	d->estimationCurve->setYColumn(d->yEstimationColumn);
 
 	// xy-curve for the rug plot
-	d->rugCurve = new XYCurve(QString());
+	d->rugCurve = new XYCurve(QStringLiteral("rug"));
 	d->rugCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->rugCurve->setHidden(true);
 	d->rugCurve->graphicsItem()->setParentItem(d);
@@ -270,6 +270,8 @@ void KDEPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	if (aspect == d->dataColumn) {
 		d->dataColumn = nullptr;
 		d->retransform();
+		Q_EMIT dataChanged();
+		Q_EMIT changed();
 	}
 }
 

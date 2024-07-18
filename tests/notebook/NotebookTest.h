@@ -11,9 +11,9 @@
 #ifndef NOTEBOOKTEST_H
 #define NOTEBOOKTEST_H
 
-#include <QtTest>
+#include "../CommonTest.h"
 
-class NotebookTest : public QObject {
+class NotebookTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
@@ -34,6 +34,7 @@ private Q_SLOTS:
 	void testParserPython08();
 	void testParserPython09();
 	void testParserPython10();
+	void testParserDateTime64ns();
 
 	// Octave
 	void testParserOctaveColumnVector();

@@ -33,9 +33,6 @@ private:
 	XYConvolutionCurve* m_convolutionCurve{nullptr};
 	XYConvolutionCurve::ConvolutionData m_convolutionData;
 
-protected:
-	void setModel();
-
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYConvolutionCurveDock
 	// general tab

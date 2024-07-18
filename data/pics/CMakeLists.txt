@@ -20,6 +20,7 @@ sc-apps-labplot-format-text-symbol.svg
 sc-apps-labplot-forward.svg
 sc-apps-labplot-json-array.svg
 sc-apps-labplot-json-object.svg
+sc-apps-labplot-kaggle.svg
 sc-apps-labplot-matrix-new.svg
 sc-apps-labplot-matrix.svg
 sc-apps-labplot-maximize.svg

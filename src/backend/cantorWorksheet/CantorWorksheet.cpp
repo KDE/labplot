@@ -16,7 +16,9 @@
 #include "backend/core/column/Column.h"
 #include "backend/core/column/ColumnPrivate.h"
 #include "backend/lib/XmlStreamReader.h"
+#ifndef SDK
 #include "commonfrontend/cantorWorksheet/CantorWorksheetView.h"
+#endif
 
 #include "3rdparty/cantor/cantor_part.h"
 #include <cantor/cantorlibs_version.h>
@@ -104,17 +106,20 @@ bool CantorWorksheet::init(QByteArray* content) {
 		// Cantor's session
 #ifdef HAVE_CANTOR_LIBS
 		m_session = m_worksheetAccess->session();
-		if (m_session) {
-			connect(m_session, &Cantor::Session::statusChanged, this, &CantorWorksheet::statusChanged);
-
-			// variable model
-			m_variableModel = m_session->variableDataModel();
-			connect(m_variableModel, &QAbstractItemModel::dataChanged, this, &CantorWorksheet::dataChanged);
-			connect(m_variableModel, &QAbstractItemModel::rowsInserted, this, &CantorWorksheet::rowsInserted);
-			connect(m_variableModel, &QAbstractItemModel::rowsAboutToBeRemoved, this, &CantorWorksheet::rowsAboutToBeRemoved);
-			connect(m_variableModel, &QAbstractItemModel::modelReset, this, &CantorWorksheet::modelReset);
+		if (!m_session) {
+			WARN("Could not create the session for backend " << STDSTRING(m_backendName))
+			m_error = i18n("Couldn't create the sessions for %1. Please check your installation.", m_backendName);
+			return false;
 		}
-#endif
+
+		connect(m_session, &Cantor::Session::statusChanged, this, &CantorWorksheet::statusChanged);
+
+		// variable model
+		m_variableModel = m_session->variableDataModel();
+		connect(m_variableModel, &QAbstractItemModel::dataChanged, this, &CantorWorksheet::dataChanged);
+		connect(m_variableModel, &QAbstractItemModel::rowsInserted, this, &CantorWorksheet::rowsInserted);
+		connect(m_variableModel, &QAbstractItemModel::rowsAboutToBeRemoved, this, &CantorWorksheet::rowsAboutToBeRemoved);
+		connect(m_variableModel, &QAbstractItemModel::modelReset, this, &CantorWorksheet::modelReset);
 
 		// default settings
 		const KConfigGroup group = Settings::group(QStringLiteral("Settings_Notebook"));
@@ -154,6 +159,7 @@ bool CantorWorksheet::init(QByteArray* content) {
 
 		// bool value = group.readEntry(QLatin1String("ReevaluateEntries"), false);
 		// value = group.readEntry(QLatin1String("AskConfirmation"), true);
+#endif
 	}
 
 	return true;
@@ -172,7 +178,7 @@ void CantorWorksheet::rowsInserted(const QModelIndex& /*parent*/, int first, int
 	for (int i = first; i <= last; ++i)
 		parseData(i);
 
-	project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void CantorWorksheet::parseData(int row) {
@@ -252,7 +258,7 @@ void CantorWorksheet::parseData(int row) {
 }
 
 void CantorWorksheet::modified() {
-	project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void CantorWorksheet::modelReset() {
@@ -305,6 +311,7 @@ QIcon CantorWorksheet::icon() const {
 }
 
 QWidget* CantorWorksheet::view() const {
+#ifndef SDK
 	if (!m_partView) {
 		m_view = new CantorWorksheetView(const_cast<CantorWorksheet*>(this));
 		m_view->setBaseSize(1500, 1500);
@@ -326,6 +333,7 @@ QWidget* CantorWorksheet::view() const {
 		}
 #endif
 	}
+#endif
 	return m_partView;
 }
 
@@ -341,8 +349,10 @@ QMenu* CantorWorksheet::createContextMenu() {
 }
 
 void CantorWorksheet::fillColumnContextMenu(QMenu* menu, Column* column) {
+#ifndef SDK
 	if (m_view)
 		m_view->fillColumnContextMenu(menu, column);
+#endif
 }
 
 QString CantorWorksheet::backendName() {

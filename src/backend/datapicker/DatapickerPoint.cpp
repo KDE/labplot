@@ -4,7 +4,7 @@
 	Description          : Graphic Item for coordinate points of Datapicker
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-	SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -125,12 +125,17 @@ DatapickerPoint::DatapickerPoint(const QString& name, DatapickerPointPrivate* dd
 // and is deleted during the cleanup in QGraphicsScene
 DatapickerPoint::~DatapickerPoint() = default;
 
+void DatapickerPoint::finalizeAdd() {
+	// after the parent (image or curve) was set, update the properties (symbol, etc.) from the parent
+	Q_D(DatapickerPoint);
+	d->updateProperties();
+}
+
 void DatapickerPoint::init() {
 	Q_D(DatapickerPoint);
 
 	KConfig config;
-	KConfigGroup group;
-	group = config.group(QStringLiteral("DatapickerPoint"));
+	KConfigGroup group = config.group(QStringLiteral("DatapickerPoint"));
 	d->position.setX(group.readEntry(QStringLiteral("PositionXValue"), Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)));
 	d->position.setY(group.readEntry(QStringLiteral("PositionYValue"), Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)));
 	d->plusDeltaXPos = group.readEntry(QStringLiteral("PlusDeltaXPos"), QPointF(30, 0));
@@ -324,11 +329,7 @@ void DatapickerPointPrivate::retransform() {
 
 	setPos(position);
 	updatePoint();
-
-	updatePropeties();
-
-	QPainterPath path = Symbol::stylePath(pointStyle);
-	boundingRectangle = path.boundingRect();
+	updateProperties();
 	recalcShapeAndBoundingRect();
 	retransformErrorBar();
 }
@@ -355,24 +356,14 @@ void DatapickerPointPrivate::updatePoint() {
 		curve->updatePoint(q);
 }
 
-void DatapickerPointPrivate::updatePropeties() {
+void DatapickerPointPrivate::updateProperties() {
 	auto* curve = dynamic_cast<DatapickerCurve*>(q->parentAspect());
 	auto* image = dynamic_cast<DatapickerImage*>(q->parentAspect());
 	if (image) {
-		rotationAngle = image->symbol()->rotationAngle();
-		pointStyle = image->symbol()->style();
-		brush = image->symbol()->brush();
-		pen = image->symbol()->pen();
-		opacity = image->symbol()->opacity();
-		size = image->symbol()->size();
+		symbol = image->symbol();
 		setVisible(image->pointVisibility());
 	} else if (curve) {
-		rotationAngle = curve->symbol()->rotationAngle();
-		pointStyle = curve->symbol()->style();
-		brush = curve->symbol()->brush();
-		pen = curve->symbol()->pen();
-		opacity = curve->symbol()->opacity();
-		size = curve->symbol()->size();
+		symbol = curve->symbol();
 		errorBarBrush = curve->pointErrorBarBrush();
 		errorBarPen = curve->pointErrorBarPen();
 		errorBarSize = curve->pointErrorBarSize();
@@ -384,14 +375,14 @@ void DatapickerPointPrivate::updatePropeties() {
 	Returns the outer bounds of the item as a rectangle.
  */
 QRectF DatapickerPointPrivate::boundingRect() const {
-	return transformedBoundingRectangle;
+	return m_boundingRectangle;
 }
 
 /*!
 	Returns the shape of this item as a QPainterPath in local coordinates.
 */
 QPainterPath DatapickerPointPrivate::shape() const {
-	return itemShape;
+	return m_shape;
 }
 
 /*!
@@ -400,13 +391,19 @@ QPainterPath DatapickerPointPrivate::shape() const {
 void DatapickerPointPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
-	QTransform matrix;
-	matrix.scale(size, size);
-	matrix.rotate(-rotationAngle);
-	transformedBoundingRectangle = matrix.mapRect(boundingRectangle);
-	itemShape = QPainterPath();
-	itemShape.addRect(transformedBoundingRectangle);
-	itemShape = WorksheetElement::shapeFromPath(itemShape, pen);
+	QPainterPath path = Symbol::stylePath(symbol->style());
+	QTransform trafo;
+	trafo.scale(symbol->size(), symbol->size());
+	path = trafo.map(path);
+	trafo.reset();
+
+	if (symbol->rotationAngle() != 0.) {
+		trafo.rotate(symbol->rotationAngle());
+		path = trafo.map(path);
+	}
+
+	m_shape.addPath(WorksheetElement::shapeFromPath(trafo.map(path), symbol->pen()));
+	m_boundingRectangle = m_shape.boundingRect();
 }
 
 void DatapickerPointPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
@@ -431,27 +428,13 @@ QVariant DatapickerPointPrivate::itemChange(QGraphicsItem::GraphicsItemChange ch
 }
 
 void DatapickerPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
-	QPainterPath path = Symbol::stylePath(pointStyle);
-	QTransform trafo;
-	trafo.scale(size, size);
-	path = trafo.map(path);
-	trafo.reset();
-	if (rotationAngle != 0) {
-		trafo.rotate(-rotationAngle);
-		path = trafo.map(path);
-	}
-	painter->save();
-	painter->setPen(pen);
-	painter->setBrush(brush);
-	painter->setOpacity(opacity);
-	painter->drawPath(path);
-	painter->restore();
+	symbol->draw(painter, QPointF(0., 0.));
 
 	if (isSelected() && !m_printing) {
 		// TODO: move the initialization of QPen to a parent class later so we don't
 		// need to create it in every paint() call.
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 1, Qt::SolidLine));
-		painter->drawPath(itemShape);
+		painter->drawPath(m_shape);
 	}
 }
 
@@ -581,6 +564,5 @@ bool DatapickerPoint::load(XmlStreamReader* reader, bool preview) {
 		}
 	}
 
-	retransform();
 	return true;
 }

@@ -50,6 +50,9 @@ class ScaledTextItem : public QGraphicsTextItem {
 public:
 	explicit ScaledTextItem(QGraphicsItem* parent = nullptr)
 		: QGraphicsTextItem(parent) {
+		auto textOptions = document()->defaultTextOption();
+		textOptions.setWrapMode(QTextOption::NoWrap);
+		document()->setDefaultTextOption(textOptions);
 	}
 
 	QRectF scaledBoundingRect() const {
@@ -105,8 +108,9 @@ TextLabel::TextLabel(const QString& name, TextLabelPrivate* dd, Type type)
 TextLabel::TextLabel(const QString& name, CartesianPlot* plot, Type type)
 	: WorksheetElement(name, new TextLabelPrivate(this), AspectType::TextLabel)
 	, m_type(type) {
-	m_plot = plot;
-	cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem(m_cSystemIndex));
+	Q_D(TextLabel);
+	d->m_plot = plot;
+	cSystem = dynamic_cast<const CartesianCoordinateSystem*>(d->m_plot->coordinateSystem(m_cSystemIndex));
 	init();
 }
 

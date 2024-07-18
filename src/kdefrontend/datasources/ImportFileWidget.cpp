@@ -26,6 +26,7 @@
 #include "XLSXOptionsWidget.h"
 #include "backend/core/Settings.h"
 #include "backend/datasources/filters/filters.h"
+#include "backend/lib/hostprocess.h"
 #include "backend/lib/macros.h"
 #include "kdefrontend/TemplateHandler.h"
 
@@ -86,10 +87,11 @@ QString ImportFileWidget::absolutePath(const QString& fileName) {
 
    \ingroup kdefrontend
 */
-ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const QString& fileName)
+ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const QString& fileName, bool embedded)
 	: QWidget(parent)
 	, m_fileName(fileName)
 	, m_liveDataSource(liveDataSource)
+	, m_embedded(embedded)
 #ifdef HAVE_MQTT
 	, m_subscriptionWidget(new MQTTSubscriptionWidget(this))
 #endif
@@ -162,6 +164,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	ui.gbUpdateOptions->hide();
 	setMQTTVisible(false);
 
+	ui.cbReadingType->addItem(i18n("Continuously Fixed"), static_cast<int>(LiveDataSource::ReadingType::ContinuousFixed));
+	ui.cbReadingType->addItem(i18n("From End"), static_cast<int>(LiveDataSource::ReadingType::FromEnd));
+	ui.cbReadingType->addItem(i18n("Till End"), static_cast<int>(LiveDataSource::ReadingType::TillEnd));
 	ui.cbReadingType->addItem(i18n("Whole File"), static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 
 	ui.bOpen->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
@@ -375,6 +380,15 @@ void ImportFileWidget::loadSettings() {
 }
 
 ImportFileWidget::~ImportFileWidget() {
+	// clean up and deletions
+#ifdef HAVE_MQTT
+	delete m_connectTimeoutTimer;
+	delete m_subscriptionWidget;
+#endif
+
+	if (m_embedded)
+		return;
+
 	// save current settings
 	QString confName;
 	if (m_liveDataSource)
@@ -408,9 +422,6 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("RelativePath", (int)ui.chbRelativePath->checkState());
 
 #ifdef HAVE_MQTT
-	delete m_connectTimeoutTimer;
-	delete m_subscriptionWidget;
-
 	// MQTT related settings
 	conf.writeEntry("Connection", ui.cbConnection->currentText());
 	conf.writeEntry("mqttWillMessageType", static_cast<int>(m_willSettings.willMessageType));
@@ -604,17 +615,15 @@ int ImportFileWidget::baudRate() const {
 	saves the settings to the data source \c source.
 */
 void ImportFileWidget::saveSettings(LiveDataSource* source) const {
-	auto fileType = currentFileType();
-	auto updateType = static_cast<LiveDataSource::UpdateType>(ui.cbUpdateType->currentIndex());
-	auto sourceType = currentSourceType();
-	auto readingType = static_cast<LiveDataSource::ReadingType>(ui.cbReadingType->currentIndex());
-
+	// file type
+	const auto fileType = currentFileType();
 	source->setFileType(fileType);
 	currentFileFilter();
 	source->setFilter(m_currentFilter.release()); // pass ownership of the filter to the LiveDataSource
 
+	// source type
+	const auto sourceType = currentSourceType();
 	source->setSourceType(sourceType);
-
 	switch (sourceType) {
 	case LiveDataSource::SourceType::FileOrPipe:
 		source->setFileName(fileName());
@@ -642,6 +651,8 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 	}
 
 	// reading options
+	const auto readingType = static_cast<LiveDataSource::ReadingType>(ui.cbReadingType->currentData().toInt());
+	const auto updateType = static_cast<LiveDataSource::UpdateType>(ui.cbUpdateType->currentIndex());
 	source->setReadingType(readingType);
 	source->setKeepNValues(ui.sbKeepNValues->value());
 	source->setUpdateType(updateType);
@@ -1020,7 +1031,6 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	Q_EMIT error(QString()); // clear previous errors
 
 	const QString fileName = absolutePath(name);
-
 	bool fileExists = QFile::exists(fileName);
 	ui.gbOptions->setEnabled(fileExists);
 	ui.cbFilter->setEnabled(fileExists);
@@ -1500,14 +1510,14 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
 
 		// File type given by "file"
 #ifdef Q_OS_LINUX
-		const QString fileFullPath = QStandardPaths::findExecutable(QStringLiteral("file"));
+		const QString fileFullPath = safeExecutableName(QStringLiteral("file"));
 		if (fileFullPath.isEmpty())
 			return i18n("file command not found");
 
 		QProcess proc;
 		QStringList args;
 		args << QStringLiteral("-b") << fileName;
-		proc.start(fileFullPath, args);
+		startHostProcess(proc, fileFullPath, args);
 
 		if (proc.waitForReadyRead(1000) == false)
 			infoStrings << i18n("Reading from file %1 failed.", fileName);
@@ -1637,19 +1647,19 @@ void ImportFileWidget::refreshPreview() {
 	if (m_suppressRefresh || !ui.gbOptions->isVisible())
 		return;
 
-	WAIT_CURSOR;
-
 	auto* currentFilter = currentFileFilter();
 	currentFilter->setLastError(QString()); // clear the last error message, if any available
 
-	QString file = absolutePath(fileName());
-	const QString dbcFile = dbcFileName();
-	auto fileType = currentFileType();
-	auto sourceType = currentSourceType();
-	int lines = ui.sbPreviewLines->value();
+	auto file = absolutePath(fileName());
+	const auto sourceType = currentSourceType();
 
-	if (sourceType == LiveDataSource::SourceType::FileOrPipe)
-		DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(file));
+	if (sourceType == LiveDataSource::SourceType::FileOrPipe && file.isEmpty())
+		return; // initial open with no file selected yet, nothing to preview
+
+	const auto fileType = currentFileType();
+	DEBUG(Q_FUNC_INFO << ", Data File Type: " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
+	const auto& dbcFile = dbcFileName();
+	int lines = ui.sbPreviewLines->value();
 
 	// default preview widget
 	if (fileType == AbstractFileFilter::FileType::Ascii || fileType == AbstractFileFilter::FileType::Binary || fileType == AbstractFileFilter::FileType::JSON
@@ -1664,10 +1674,14 @@ void ImportFileWidget::refreshPreview() {
 	QVector<QStringList> importedStrings;
 	QStringList vectorNameList;
 	QVector<AbstractColumn::ColumnMode> columnModes;
+
 	DEBUG(Q_FUNC_INFO << ", Data File Type: " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
 	QVector<QString> s;
 	QString currentMcapTopic;
 	QJsonDocument doc;
+
+	WAIT_CURSOR;
+
 	switch (fileType) {
 	case AbstractFileFilter::FileType::Ascii: {
 		ui.tePreview->clear();
@@ -1677,6 +1691,7 @@ void ImportFileWidget::refreshPreview() {
 		DEBUG(Q_FUNC_INFO << ", Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, sourceType));
 		switch (sourceType) {
 		case LiveDataSource::SourceType::FileOrPipe: {
+			DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(file));
 			importedStrings = filter->preview(file, lines);
 			break;
 		}
@@ -2001,6 +2016,8 @@ void ImportFileWidget::refreshPreview() {
 	error(currentFilter->lastError());
 
 	RESET_CURSOR;
+	if (currentFilter->lastError().isEmpty())
+		Q_EMIT previewReady();
 }
 
 void ImportFileWidget::updateStartRow(int line) {

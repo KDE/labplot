@@ -40,7 +40,8 @@ using Dimension = CartesianCoordinateSystem::Dimension;
 
 ReferenceLine::ReferenceLine(CartesianPlot* plot, const QString& name, bool loading)
 	: WorksheetElement(name, new ReferenceLinePrivate(this), AspectType::ReferenceLine) {
-	m_plot = plot;
+	Q_D(ReferenceLine);
+	d->m_plot = plot;
 	init(loading);
 }
 
@@ -57,6 +58,7 @@ void ReferenceLine::init(bool loading) {
 	addChild(d->line);
 	connect(d->line, &Line::updatePixmapRequested, [=] {
 		d->update();
+		Q_EMIT changed();
 	});
 	connect(d->line, &Line::updateRequested, [=] {
 		d->recalcShapeAndBoundingRect();
@@ -74,8 +76,8 @@ void ReferenceLine::init(bool loading) {
 			d->coordinateBindingEnabled = true;
 			// default position
 			auto cs = plot()->coordinateSystem(plot()->defaultCoordinateSystemIndex());
-			const auto x = m_plot->range(Dimension::X, cs->index(Dimension::X)).center();
-			const auto y = m_plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
+			const auto x = d->m_plot->range(Dimension::X, cs->index(Dimension::X)).center();
+			const auto y = d->m_plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
 			DEBUG(Q_FUNC_INFO << ", x/y pos = " << x << " / " << y)
 			d->positionLogical = QPointF(x, y);
 		} else
@@ -229,8 +231,8 @@ void ReferenceLinePrivate::retransform() {
 		return;
 
 	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
-	const auto& xRange = q->m_plot->range(Dimension::X, cs->index(Dimension::X));
-	const auto& yRange = q->m_plot->range(Dimension::Y, cs->index(Dimension::Y));
+	const auto& xRange = m_plot->range(Dimension::X, cs->index(Dimension::X));
+	const auto& yRange = m_plot->range(Dimension::Y, cs->index(Dimension::Y));
 
 	// calculate the position in the scene coordinates
 	if (orientation == ReferenceLine::Orientation::Vertical)
@@ -306,6 +308,8 @@ void ReferenceLinePrivate::recalcShapeAndBoundingRect() {
 		m_shape.addPath(WorksheetElement::shapeFromPath(path, line->pen()));
 		m_boundingRectangle = m_shape.boundingRect();
 	}
+
+	Q_EMIT q->changed();
 }
 
 void ReferenceLinePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {

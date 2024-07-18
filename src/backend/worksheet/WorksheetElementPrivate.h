@@ -37,6 +37,8 @@ public:
 	WorksheetElement* const q{nullptr};
 	bool insidePlot{true}; // point inside the plot (visible) or not
 	bool lock{false};
+	// parent plot if available
+	CartesianPlot* m_plot{nullptr};
 
 	bool swapVisible(bool on);
 	QString name() const;
@@ -47,6 +49,7 @@ public:
 	virtual QPainterPath shape() const override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 	virtual void keyPressEvent(QKeyEvent*) override;
+	virtual void mousePressEvent(QGraphicsSceneMouseEvent*) override;
 	virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
 	virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 	virtual QVariant itemChange(GraphicsItemChange, const QVariant& value) override;
@@ -63,6 +66,7 @@ private:
 
 protected:
 	bool m_hovered{false};
+	bool m_leftButtonPressed{false};
 	bool m_moveStarted{false};
 	QRectF m_boundingRectangle; // bounding rectangle of the element
 	QPainterPath m_shape;

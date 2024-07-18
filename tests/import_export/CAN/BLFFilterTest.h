@@ -11,7 +11,6 @@
 #define BLFFILTERTEST_H
 
 #include "../../CommonTest.h"
-#include <QtTest>
 
 namespace Vector {
 namespace BLF {

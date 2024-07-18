@@ -142,7 +142,7 @@ String2DateTimeFilterSetFormatCmd::String2DateTimeFilterSetFormatCmd(String2Date
 void String2DateTimeFilterSetFormatCmd::redo() {
 	QString tmp = m_target->m_format;
 	m_target->m_format = m_other_format;
-	m_other_format = tmp;
+	m_other_format = std::move(tmp);
 	Q_EMIT m_target->formatChanged();
 }
 

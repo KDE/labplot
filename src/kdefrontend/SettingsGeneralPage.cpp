@@ -13,6 +13,7 @@
 #include <cantor/backend.h>
 #endif
 #include "backend/core/Settings.h"
+#include "backend/lib/Debug.h"
 #include "backend/lib/macros.h"
 #include "kdefrontend/MainWin.h" // LoadOnStart
 
@@ -26,6 +27,9 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent)
 	: SettingsPage(parent) {
 	ui.setupUi(this);
 	ui.sbAutoSaveInterval->setSuffix(i18n("min."));
+#ifdef NDEBUG
+	ui.chkDebugTrace->setVisible(false);
+#endif
 	retranslateUi();
 
 	connect(ui.cbLoadOnStart, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::loadOnStartChanged);
@@ -44,6 +48,8 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent)
 	connect(ui.chkSaveDockStates, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkSaveCalculations, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkCompatible, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
+	connect(ui.chkDebugTrace, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
+	connect(ui.chkPerfTrace, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 
 #ifdef HAVE_CANTOR_LIBS
 	for (auto* backend : Cantor::Backend::availableBackends()) {
@@ -126,12 +132,19 @@ void SettingsGeneralPage::applySettings() {
 	group.writeEntry(QLatin1String("SaveDockStates"), ui.chkSaveDockStates->isChecked());
 	group.writeEntry(QLatin1String("SaveCalculations"), ui.chkSaveCalculations->isChecked());
 	group.writeEntry(QLatin1String("CompatibleSave"), ui.chkCompatible->isChecked());
-	Settings::writeDockPosBehaviour(static_cast<Settings::DockPosBehaviour>(ui.cbDockWindowPositionReopen->currentData().toInt()));
+	const bool debugTraceEnabled = ui.chkDebugTrace->isChecked();
+	group.writeEntry(QLatin1String("DebugTrace"), debugTraceEnabled);
+	enableDebugTrace(debugTraceEnabled);
+	const bool perfTraceEnabled = ui.chkPerfTrace->isChecked();
+	group.writeEntry(QLatin1String("PerfTrace"), perfTraceEnabled);
+	enablePerfTrace(perfTraceEnabled);
+
+	Settings::writeDockPosBehavior(static_cast<Settings::DockPosBehavior>(ui.cbDockWindowPositionReopen->currentData().toInt()));
 }
 
 void SettingsGeneralPage::restoreDefaults() {
 	ui.cbLoadOnStart->setCurrentIndex(ui.cbLoadOnStart->findData(static_cast<int>(MainWin::LoadOnStart::NewProject)));
-	ui.cbNewProject->setCurrentIndex(ui.cbNewProject->findData(static_cast<int>(MainWin::NewProject::WithWorksheet)));
+	ui.cbNewProject->setCurrentIndex(ui.cbNewProject->findData(static_cast<int>(MainWin::NewProject::WithSpreadsheet)));
 	ui.cbTitleBar->setCurrentIndex(0);
 	ui.cbUnits->setCurrentIndex(0);
 	ui.cbDecimalSeparator->setCurrentIndex(static_cast<int>(DecimalSeparator::Automatic));
@@ -144,17 +157,19 @@ void SettingsGeneralPage::restoreDefaults() {
 	ui.chkSaveDockStates->setChecked(false);
 	ui.chkSaveCalculations->setChecked(true);
 	ui.chkCompatible->setChecked(false);
-	ui.cbDockWindowPositionReopen->setCurrentIndex(ui.cbDockWindowPositionReopen->findData(static_cast<int>(Settings::DockPosBehaviour::AboveLastActive)));
+	ui.chkDebugTrace->setChecked(false);
+	ui.chkPerfTrace->setChecked(false);
+	ui.cbDockWindowPositionReopen->setCurrentIndex(ui.cbDockWindowPositionReopen->findData(static_cast<int>(Settings::DockPosBehavior::AboveLastActive)));
 }
 
 void SettingsGeneralPage::loadSettings() {
-	const auto group = Settings::group(QStringLiteral("Settings_General"));
+	const auto group = Settings::settingsGeneral();
 
 	const auto loadOnStart = group.readEntry(QLatin1String("LoadOnStart"), static_cast<int>(MainWin::LoadOnStart::NewProject));
 	ui.cbLoadOnStart->setCurrentIndex(ui.cbLoadOnStart->findData(loadOnStart));
 	loadOnStartChanged();
 
-	const auto newProject = group.readEntry(QLatin1String("NewProject"), static_cast<int>(MainWin::NewProject::WithWorksheet));
+	const auto newProject = group.readEntry(QLatin1String("NewProject"), static_cast<int>(MainWin::NewProject::WithSpreadsheet));
 	ui.cbNewProject->setCurrentIndex(ui.cbNewProject->findData(newProject));
 	newProjectChanged(); // call it to update notebook related widgets also if the current index above was not changed (true for index=0)
 
@@ -168,7 +183,7 @@ void SettingsGeneralPage::loadSettings() {
 #endif
 
 	ui.cbTitleBar->setCurrentIndex(group.readEntry(QLatin1String("TitleBar"), 0));
-	ui.cbDockWindowPositionReopen->setCurrentIndex(ui.cbDockWindowPositionReopen->findData(static_cast<int>(Settings::readDockPosBehaviour())));
+	ui.cbDockWindowPositionReopen->setCurrentIndex(ui.cbDockWindowPositionReopen->findData(static_cast<int>(Settings::readDockPosBehavior())));
 
 	ui.cbUnits->setCurrentIndex(group.readEntry(QLatin1String("Units"), 0));
 	// must be done, because locale.language() will return the default locale if AnyLanguage is passed
@@ -193,6 +208,8 @@ void SettingsGeneralPage::loadSettings() {
 	ui.chkSaveDockStates->setChecked(group.readEntry<bool>(QLatin1String("SaveDockStates"), false));
 	ui.chkSaveCalculations->setChecked(group.readEntry<bool>(QLatin1String("SaveCalculations"), true));
 	ui.chkCompatible->setChecked(group.readEntry<bool>(QLatin1String("CompatibleSave"), false));
+	ui.chkDebugTrace->setChecked(group.readEntry<bool>(QLatin1String("DebugTrace"), false));
+	ui.chkPerfTrace->setChecked(group.readEntry<bool>(QLatin1String("PerfTrace"), false));
 }
 
 void SettingsGeneralPage::retranslateUi() {
@@ -202,9 +219,9 @@ void SettingsGeneralPage::retranslateUi() {
 	// ui.cbLoadOnStart->addItem(i18n("Show Welcome Screen"), static_cast<int>(MainWin::LoadOnStart::WelcomeScreen));
 
 	ui.cbNewProject->clear();
-	ui.cbNewProject->addItem(i18n("With Worksheet"), static_cast<int>(MainWin::NewProject::WithWorksheet));
 	ui.cbNewProject->addItem(i18n("With Spreadsheet"), static_cast<int>(MainWin::NewProject::WithSpreadsheet));
-	ui.cbNewProject->addItem(i18n("With Worksheet and Spreadsheet"), static_cast<int>(MainWin::NewProject::WithWorksheetSpreadsheet));
+	ui.cbNewProject->addItem(i18n("With Worksheet"), static_cast<int>(MainWin::NewProject::WithWorksheet));
+	ui.cbNewProject->addItem(i18n("With Spreadsheet and Worksheet"), static_cast<int>(MainWin::NewProject::WithSpreadsheetWorksheet));
 #ifdef HAVE_CANTOR_LIBS
 	ui.cbNewProject->addItem(i18n("With Notebook"), static_cast<int>(MainWin::NewProject::WithNotebook));
 #endif
@@ -217,8 +234,8 @@ void SettingsGeneralPage::retranslateUi() {
 	ui.lDockWindowPositionReopen->setToolTip(msg);
 	ui.cbDockWindowPositionReopen->setToolTip(msg);
 	ui.cbDockWindowPositionReopen->clear();
-	ui.cbDockWindowPositionReopen->addItem(i18n("Original Position"), static_cast<int>(Settings::DockPosBehaviour::OriginalPos));
-	ui.cbDockWindowPositionReopen->addItem(i18n("On top of the last active Dock Widget"), static_cast<int>(Settings::DockPosBehaviour::AboveLastActive));
+	ui.cbDockWindowPositionReopen->addItem(i18n("Original Position"), static_cast<int>(Settings::DockPosBehavior::OriginalPos));
+	ui.cbDockWindowPositionReopen->addItem(i18n("On top of the last active Dock Widget"), static_cast<int>(Settings::DockPosBehavior::AboveLastActive));
 
 	ui.cbTitleBar->clear();
 	ui.cbTitleBar->addItem(i18n("Show File Path"));
@@ -240,7 +257,7 @@ void SettingsGeneralPage::retranslateUi() {
 
 	msg = i18n(
 		"Save the state (position and geometry) of the docks in the project file. \n"
-		"Determines the default behaviour for new projects. \n"
+		"Determines the default behavior for new projects. \n"
 		"The setting can be changed for every project separately in the project properties.");
 	ui.lSaveDockStates->setToolTip(msg);
 	ui.chkSaveDockStates->setToolTip(msg);
@@ -248,10 +265,14 @@ void SettingsGeneralPage::retranslateUi() {
 	msg = i18n(
 		"Save the results of the calculations in the analysis curves in the project file. \n"
 		"Uncheck this option to reduce the size of the project file at costs of the longer project load times. \n"
-		"Determines the default behaviour for new projects. \n"
+		"Determines the default behavior for new projects. \n"
 		"The setting can be changed for every project separately in the project properties.");
 	ui.lSaveCalculations->setToolTip(msg);
 	ui.chkSaveCalculations->setToolTip(msg);
+
+	ui.lTracing->setToolTip(i18n("Activates additional tracing output in the terminal."));
+	ui.chkDebugTrace->setToolTip(i18n("Debug trace - helpful to diagnose the application, can have a negative impact on the performance."));
+	ui.chkPerfTrace->setToolTip(i18n("Performance trace - helpful to analyze performance relevant aspects and bottlenecks."));
 }
 
 void SettingsGeneralPage::loadOnStartChanged() {

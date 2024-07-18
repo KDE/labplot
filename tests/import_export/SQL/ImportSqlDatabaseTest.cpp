@@ -15,17 +15,14 @@
 #include <KConfigGroup>
 
 void ImportSqlDatabaseTest::initTestCase() {
+	CommonTest::initTestCase();
+
 	// prepare the database connection
 	QString m_configPath(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() + QStringLiteral("sql_connections"));
 	KConfig config(m_configPath, KConfig::SimpleConfig);
 	KConfigGroup group = config.group(QStringLiteral("chinook"));
 	group.writeEntry("Driver", QStringLiteral("QSQLITE"));
 	group.writeEntry("DatabaseName", QFINDTESTDATA(QLatin1String("data/chinook.db")));
-
-	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
-	// TODO: redesign/remove this
-	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
-	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
 }
 
 // ##############################################################################

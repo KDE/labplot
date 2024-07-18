@@ -11,7 +11,6 @@
 #include "WorksheetElementTest.h"
 #include "helperMacros.h"
 
-#include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/Image.h"
@@ -31,12 +30,6 @@
 #include <QItemSelectionModel>
 #include <QMenu>
 #include <QTreeView>
-
-void WorksheetElementTest::initTestCase() {
-	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
-	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
-	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
-}
 
 #define ALL_WORKSHEETELEMENT_TESTS(WorksheetElementType, DockType, dockSetElementsMethodName)                                                                  \
 	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_SETPOSITIONLOGICAL, DockType, dockSetElementsMethodName)                                      \

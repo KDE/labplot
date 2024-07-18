@@ -19,7 +19,12 @@ class Column;
 class PlotPrivate;
 class QPointF;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT Plot : public WorksheetElement {
+#else
 class Plot : public WorksheetElement {
+#endif
 	Q_OBJECT
 
 public:

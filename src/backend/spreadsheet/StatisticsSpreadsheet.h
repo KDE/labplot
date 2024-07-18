@@ -62,10 +62,12 @@ public:
 private:
 	void init();
 	void update();
+	void updateColumnNames();
 
 	Spreadsheet* m_spreadsheet{nullptr};
 	Metrics m_metrics;
-	QMap<Metric, QString> m_metricNames;
+	QVector<Metric> m_metricValues;
+	QVector<QString> m_metricNames;
 
 	friend class SpreadsheetTest;
 };

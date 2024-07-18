@@ -11,6 +11,7 @@
 #include "NetCDFFilterPrivate.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/hostprocess.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
@@ -254,14 +255,14 @@ QString NetCDFFilter::fileCDLString(const QString& fileName) {
 
 	QString CDLString;
 #ifdef Q_OS_LINUX
-	const QString ncdumpFullPath = QStandardPaths::findExecutable(QLatin1String("ncdump"));
+	const QString ncdumpFullPath = safeExecutableName(QStringLiteral("ncdump"));
 	if (ncdumpFullPath.isEmpty())
 		return i18n("ncdump not found.");
 
 	QProcess proc;
 	QStringList args;
 	args << QStringLiteral("-cs") << fileName;
-	proc.start(ncdumpFullPath, args);
+	startHostProcess(proc, ncdumpFullPath, args);
 
 	if (proc.waitForReadyRead(1000) == false)
 		CDLString += i18n("Reading from file %1 failed.", fileName);

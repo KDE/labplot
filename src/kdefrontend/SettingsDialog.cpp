@@ -83,6 +83,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 	m_datasetsPage = new SettingsDatasetsPage(this);
 	KPageWidgetItem* datasetsFrame = addPage(m_datasetsPage, i18n("Datasets"));
 	datasetsFrame->setIcon(QIcon::fromTheme(QLatin1String("database-index")));
+	connect(m_datasetsPage, &SettingsDatasetsPage::settingsChanged, this, &SettingsDialog::changed);
 
 	// 	m_welcomePage = new SettingsWelcomePage(this);
 	// 	KPageWidgetItem* welcomeFrame = addPage(m_welcomePage, i18n("Welcome Screen"));
@@ -149,6 +150,7 @@ void SettingsDialog::applySettings() {
 #ifdef HAVE_CANTOR_LIBS
 	m_notebookPage->applySettings();
 #endif
+	m_datasetsPage->applySettings();
 
 	Settings::sync();
 
@@ -169,4 +171,5 @@ void SettingsDialog::restoreDefaults() {
 #ifdef HAVE_CANTOR_LIBS
 	m_notebookPage->restoreDefaults();
 #endif
+	m_datasetsPage->restoreDefaults();
 }

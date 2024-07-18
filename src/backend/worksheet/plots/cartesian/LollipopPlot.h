@@ -20,7 +20,7 @@ class Value;
 
 #ifdef SDK
 #include "labplot_export.h"
-class LABPLOT_EXPORT LollipopPlot : Plot {
+class LABPLOT_EXPORT LollipopPlot : public Plot {
 #else
 class LollipopPlot : public Plot {
 #endif
@@ -44,7 +44,6 @@ public:
 	BASIC_D_ACCESSOR_DECL(QVector<const AbstractColumn*>, dataColumns, DataColumns)
 	QVector<QString>& dataColumnPaths() const;
 	BASIC_D_ACCESSOR_DECL(LollipopPlot::Orientation, orientation, Orientation)
-	BASIC_D_ACCESSOR_DECL(double, widthFactor, WidthFactor)
 
 	Line* lineAt(int) const;
 	Symbol* symbolAt(int) const;

@@ -4,13 +4,15 @@
 	Description          : Aspect that manages a column
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2013-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "backend/core/column/Column.h"
+#ifndef SDK
 #include "backend/cantorWorksheet/CantorWorksheet.h"
+#endif
 #include "backend/core/AbstractSimpleFilter.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/ColumnPrivate.h"
@@ -147,7 +149,7 @@ QMenu* Column::createContextMenu() {
 			auto* spreadsheet = static_cast<Spreadsheet*>(parentAspect());
 			spreadsheet->fillColumnContextMenu(menu, this);
 		} else if (parentAspect()->type() == AspectType::CantorWorksheet) {
-#ifdef HAVE_CANTOR_LIBS
+#if defined(HAVE_CANTOR_LIBS) && !defined(SDK)
 			auto* worksheet = static_cast<CantorWorksheet*>(parentAspect());
 			worksheet->fillColumnContextMenu(menu, this);
 #endif
@@ -273,7 +275,7 @@ void Column::copyData() {
 		const Double2StringFilter* filter = static_cast<Double2StringFilter*>(outputFilter());
 		char format = filter->numericFormat();
 		for (int r = 0; r < rows; r++) {
-			output += numberLocale.toString(valueAt(r), format, 16); // copy with max. precision
+			output += numberLocale.toString(doubleAt(r), format, 16); // copy with max. precision
 			if (r < rows - 1)
 				output += QLatin1Char('\n');
 		}
@@ -303,9 +305,11 @@ QPixmap Column::sparkline() {
 }
 
 void Column::pasteData() {
+#ifndef SDK
 	auto* spreadsheet = dynamic_cast<Spreadsheet*>(parentAspect());
 	if (spreadsheet)
 		static_cast<SpreadsheetView*>(spreadsheet->view())->pasteIntoSelection();
+#endif
 }
 
 /*!
@@ -473,7 +477,7 @@ void Column::setWidth(int value) {
 }
 
 /**
- * \brief Clear the whole column
+ * \brief Clear the content of the column (data and formula definition)
  */
 void Column::clear(QUndoCommand* parent) {
 	if (d->formula().isEmpty()) {
@@ -538,6 +542,13 @@ bool Column::formulaAutoResize() const {
  */
 void Column::setFormula(const QString& formula, const QStringList& variableNames, const QVector<Column*>& columns, bool autoUpdate, bool autoResize) {
 	exec(new ColumnSetGlobalFormulaCmd(d, formula, variableNames, columns, autoUpdate, autoResize));
+}
+
+/**
+ * \brief Clears the formula used to generate column values
+ */
+void Column::clearFormula() {
+	setFormula(QString(), QStringList(), QVector<Column*>());
 }
 
 /*!
@@ -666,8 +677,7 @@ void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
 
 void Column::addValueLabel(const QDateTime& value, const QString& label) {
 	d->addValueLabel(value, label);
-	if (project())
-		project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void Column::setValues(const QVector<double>& values) {
@@ -700,8 +710,7 @@ void Column::replaceValues(int first, const QVector<double>& new_values) {
 
 void Column::addValueLabel(double value, const QString& label) {
 	d->addValueLabel(value, label);
-	if (project())
-		project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void Column::setIntegers(const QVector<int>& integers) {
@@ -734,7 +743,7 @@ void Column::replaceInteger(int first, const QVector<int>& new_values) {
 
 void Column::addValueLabel(int value, const QString& label) {
 	d->addValueLabel(value, label);
-	project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void Column::setBigInts(const QVector<qint64>& bigInts) {
@@ -767,7 +776,7 @@ void Column::replaceBigInt(int first, const QVector<qint64>& new_values) {
 
 void Column::addValueLabel(qint64 value, const QString& label) {
 	d->addValueLabel(value, label);
-	project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 /*!
@@ -800,7 +809,7 @@ void* Column::data() const {
 }
 
 /*!
- * return \c true if the column has numeric values, \c false otherwise.
+ * return \c true if the column has at least one valid (not empty) value, \c false otherwise.
  */
 bool Column::hasValues() const {
 	if (d->available.hasValues)
@@ -810,7 +819,7 @@ bool Column::hasValues() const {
 	switch (columnMode()) {
 	case ColumnMode::Double: {
 		for (int row = 0; row < rowCount(); ++row) {
-			if (!std::isnan(valueAt(row))) {
+			if (!std::isnan(doubleAt(row))) {
 				foundValues = true;
 				break;
 			}
@@ -849,6 +858,36 @@ bool Column::hasValues() const {
 	return d->hasValues;
 }
 
+/*!
+ * return \c true if the column has a valid value in the row \row.
+ */
+bool Column::hasValueAt(int row) const {
+	bool foundValue = false;
+	switch (columnMode()) {
+	case ColumnMode::Double: {
+		foundValue = !std::isnan(doubleAt(row));
+		break;
+	}
+	case ColumnMode::Text: {
+		foundValue = !textAt(row).isEmpty();
+		break;
+	}
+	case ColumnMode::Integer:
+	case ColumnMode::BigInt:
+		// integer values are always valid
+		foundValue = true;
+		break;
+	case ColumnMode::DateTime:
+	case ColumnMode::Month:
+	case ColumnMode::Day: {
+		foundValue = dateTimeAt(row).isValid();
+		break;
+	}
+	}
+
+	return foundValue;
+}
+
 /*
  * set item at i to col[j] for same columnMode()
  */
@@ -859,7 +898,7 @@ void Column::setFromColumn(int i, AbstractColumn* col, int j) {
 
 	switch (columnMode()) {
 	case ColumnMode::Double:
-		setValueAt(i, col->valueAt(j));
+		setValueAt(i, col->doubleAt(j));
 		break;
 	case ColumnMode::Integer:
 		setIntegerAt(i, col->integerAt(j));
@@ -945,9 +984,9 @@ qint64 Column::bigIntAt(int row) const {
  * This is used e.g. in \c XYFitCurvePrivate::recalculate()
  */
 void Column::setChanged() {
+	invalidateProperties();
 	if (!m_suppressDataChangedSignal)
 		Q_EMIT dataChanged(this);
-	invalidateProperties();
 }
 
 bool Column::valueLabelsInitialized() const {
@@ -964,17 +1003,17 @@ double Column::valueLabelsMaximum() const {
 
 void Column::setLabelsMode(ColumnMode mode) {
 	d->setLabelsMode(mode);
-	project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void Column::valueLabelsRemoveAll() {
 	d->valueLabelsRemoveAll();
-	project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void Column::removeValueLabel(const QString& key) {
 	d->removeValueLabel(key);
-	project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 const QVector<Column::ValueLabel<QString>>* Column::textValueLabels() const {
@@ -2254,14 +2293,15 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 	// DEBUG(Q_FUNC_INFO << ", values = " << v1 << " .. " << v2)
 	start = -1;
 	end = -1;
-	if (rowCount() == 0)
+	const int rowCount = this->rowCount();
+	if (rowCount == 0)
 		return false;
 
 	// Assumption: v1 is always the smaller value
 	if (v1 > v2)
 		qSwap(v1, v2);
 
-	Properties property = properties();
+	const auto& property = properties();
 	if (property == Properties::MonotonicIncreasing || property == Properties::MonotonicDecreasing) {
 		start = indexForValue(v1);
 		end = indexForValue(v2);
@@ -2273,12 +2313,12 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 			if (property == Properties::MonotonicIncreasing) {
 				if (start > 0 && valueAt(start - 1) <= v2 && valueAt(start - 1) >= v1)
 					start--;
-				if (end < rowCount() - 1 && valueAt(end + 1) <= v2 && valueAt(end + 1) >= v1)
+				if (end < rowCount - 1 && valueAt(end + 1) <= v2 && valueAt(end + 1) >= v1)
 					end++;
 			} else {
 				if (end > 0 && valueAt(end - 1) <= v2 && valueAt(end - 1) >= v1)
 					end--;
-				if (start < rowCount() - 1 && valueAt(start + 1) <= v2 && valueAt(start + 1) >= v1)
+				if (start < rowCount - 1 && valueAt(start + 1) <= v2 && valueAt(start + 1) >= v1)
 					start++;
 			}
 
@@ -2297,7 +2337,7 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 						start--;
 				}
 
-				if (end > rowCount() - 1) {
+				if (end > rowCount - 1) {
 					value = dateTimeAt(end + 1).toMSecsSinceEpoch();
 					if (value <= v2int64 && value >= v1int64)
 						end++;
@@ -2309,7 +2349,7 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 						end--;
 				}
 
-				if (start > rowCount() - 1) {
+				if (start > rowCount - 1) {
 					value = dateTimeAt(start + 1).toMSecsSinceEpoch();
 					if (value <= v2int64 && value >= v1int64)
 						start++;
@@ -2325,7 +2365,7 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 		return true;
 	} else if (property == Properties::Constant) {
 		start = 0;
-		end = rowCount() - 1;
+		end = rowCount - 1;
 		return true;
 	}
 	// property == Properties::No || AbstractColumn::Properties::NonMonotonic
@@ -2334,7 +2374,7 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 	case ColumnMode::BigInt:
 	case ColumnMode::Double: {
 		double value;
-		for (int i = 0; i < rowCount(); i++) {
+		for (int i = 0; i < rowCount; i++) {
 			if (!isValid(i) || isMasked(i))
 				continue;
 			value = valueAt(i);
@@ -2352,7 +2392,7 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 		qint64 value;
 		qint64 v2int64 = v2;
 		qint64 v1int64 = v1;
-		for (int i = 0; i < rowCount(); i++) {
+		for (int i = 0; i < rowCount; i++) {
 			if (!isValid(i) || isMasked(i))
 				continue;
 			value = dateTimeAt(i).toMSecsSinceEpoch();

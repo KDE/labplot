@@ -55,7 +55,7 @@ Worksheet::Worksheet(const QString& name, bool loading)
 	: AbstractPart(name, AspectType::Worksheet)
 	, d_ptr(new WorksheetPrivate(this)) {
 	Q_D(Worksheet);
-	d->background = new Background(QString());
+	d->background = new Background(QStringLiteral("background"));
 	addChild(d->background);
 	d->background->setHidden(true);
 	connect(d->background, &Background::updateRequested, [=] {
@@ -65,6 +65,7 @@ Worksheet::Worksheet(const QString& name, bool loading)
 	connect(this, &Worksheet::childAspectAdded, this, &Worksheet::handleAspectAdded);
 	connect(this, &Worksheet::childAspectAboutToBeRemoved, this, &Worksheet::handleAspectAboutToBeRemoved);
 	connect(this, &Worksheet::childAspectRemoved, this, &Worksheet::handleAspectRemoved);
+	connect(this, &Worksheet::childAspectMoved, this, &Worksheet::handleAspectMoved);
 
 	if (!loading)
 		init();
@@ -201,6 +202,10 @@ QVector<AspectType> Worksheet::pasteTypes() const {
 
 bool Worksheet::exportView() const {
 #ifndef SDK
+	setPrinting(true);
+	// Retransform all elements with print enabled
+	for (auto* child : children<WorksheetElement>())
+		child->retransform();
 	auto* dlg = new ExportWorksheetDialog(m_view);
 	dlg->setProjectFileName(const_cast<Worksheet*>(this)->project()->fileName());
 	dlg->setFileName(name());
@@ -217,6 +222,7 @@ bool Worksheet::exportView() const {
 		RESET_CURSOR;
 	}
 	delete dlg;
+	setPrinting(false);
 	return ret;
 #else
 	return true;
@@ -233,6 +239,11 @@ bool Worksheet::exportView(QPixmap& pixmap) const {
 
 bool Worksheet::printView() {
 #ifndef SDK
+	setPrinting(true);
+	// for print/export, retransform all XYCurves to get better quality with the disabled line optimization
+	for (auto* curve : children<XYCurve>())
+		curve->retransform();
+
 	QPrinter printer;
 	auto* dlg = new QPrintDialog(&printer, m_view);
 	dlg->setWindowTitle(i18nc("@title:window", "Print Worksheet"));
@@ -241,6 +252,7 @@ bool Worksheet::printView() {
 		m_view->print(&printer);
 
 	delete dlg;
+	setPrinting(false);
 	return ret;
 #else
 	return true;
@@ -249,9 +261,16 @@ bool Worksheet::printView() {
 
 bool Worksheet::printPreview() const {
 #ifndef SDK
+	setPrinting(true);
+	// for print/export, retransform all XYCurves to get better quality with the disabled line optimization
+	for (auto* curve : children<XYCurve>())
+		curve->retransform();
+
 	auto* dlg = new QPrintPreviewDialog(m_view);
 	connect(dlg, &QPrintPreviewDialog::paintRequested, m_view, &WorksheetView::print);
-	return dlg->exec();
+	const auto r = dlg->exec();
+	setPrinting(false);
+	return r;
 #else
 	return true;
 #endif
@@ -312,7 +331,8 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 		cursorModelPlotAdded(p->name());
 	}
 	qreal zVal = 0;
-	for (auto* child : children<WorksheetElement>(ChildIndexFlag::IncludeHidden))
+	const auto& children = this->children<WorksheetElement>(ChildIndexFlag::IncludeHidden);
+	for (auto* child : children)
 		child->graphicsItem()->setZValue(zVal++);
 
 	// if a theme was selected in the worksheet, apply this theme for newly added children
@@ -328,7 +348,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 		else {
 			if (plot) {
 				// make other plots non-resizable
-				const auto& containers = children<WorksheetElementContainer>();
+				const auto& containers = this->children<WorksheetElementContainer>();
 				for (auto* container : containers)
 					container->setResizeEnabled(false);
 
@@ -343,7 +363,7 @@ void Worksheet::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(Worksheet);
 	const auto* removedElement = qobject_cast<const WorksheetElement*>(aspect);
 	if (removedElement) {
-		QGraphicsItem* item = removedElement->graphicsItem();
+		auto* item = removedElement->graphicsItem();
 		// TODO: disabled until Origin project import is fixed
 		if (item->scene() == d->m_scene)
 			d->m_scene->removeItem(item);
@@ -357,6 +377,16 @@ void Worksheet::handleAspectRemoved(const AbstractAspect* /*parent*/, const Abst
 	auto* plot = dynamic_cast<const CartesianPlot*>(child);
 	if (plot)
 		cursorModelPlotRemoved(plot->name());
+}
+
+/*!
+ * called when one of the children was moved, re-adjusts the Z-values for all children.
+ */
+void Worksheet::handleAspectMoved() {
+	qreal zVal = 0;
+	const auto& children = this->children<WorksheetElement>(ChildIndexFlag::IncludeHidden);
+	for (auto* child : children)
+		child->graphicsItem()->setZValue(zVal++);
 }
 
 QGraphicsScene* Worksheet::scene() const {
@@ -567,7 +597,7 @@ void Worksheet::setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode mo
 		return;
 
 	d->cartesianPlotActionMode = mode;
-	project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void Worksheet::setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMode mode) {
@@ -590,7 +620,7 @@ void Worksheet::setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMode mo
 		d->suppressCursorPosChanged = false;
 	}
 	updateCompleteCursorTreeModel();
-	project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void Worksheet::setInteractive(bool value) {
@@ -609,7 +639,7 @@ void Worksheet::setPlotsInteractive(bool interactive) {
 	for (auto* plot : children<CartesianPlot>())
 		plot->setInteractive(interactive);
 
-	project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void Worksheet::registerShortcuts() {

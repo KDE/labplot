@@ -50,11 +50,11 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, fileName, FileName)
 	CLASS_D_ACCESSOR_DECL(QString, author, Author)
 	CLASS_D_ACCESSOR_DECL(QDateTime, modificationTime, ModificationTime)
-	BASIC_D_ACCESSOR_DECL(bool, saveDockStates, SaveDockStates)
 	BASIC_D_ACCESSOR_DECL(bool, saveCalculations, SaveCalculations)
-	CLASS_D_ACCESSOR_DECL(QString, windowState, WindowState)
+	CLASS_D_ACCESSOR_DECL(QString, dockWidgetState, DockWidgetState)
+	BASIC_D_ACCESSOR_DECL(bool, saveDefaultDockWidgetState, SaveDefaultDockWidgetState)
+	CLASS_D_ACCESSOR_DECL(QString, defaultDockWidgetState, DefaultDockWidgetState)
 
-	void setChanged(const bool value = true);
 	bool hasChanged() const;
 	void navigateTo(const QString& path);
 
@@ -64,6 +64,7 @@ public:
 	void save(const QPixmap&, QXmlStreamWriter*);
 	bool load(XmlStreamReader*, bool preview) override;
 	bool load(const QString&, bool preview = false);
+	bool loadNotebook(const QString&);
 	static void restorePointers(AbstractAspect*);
 	static void retransformElements(AbstractAspect*);
 
@@ -85,7 +86,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 	void authorChanged(const QString&);
-	void saveDockStatesChanged(bool);
+	void saveDefaultDockWidgetStateChanged(bool);
 	void saveCalculationsChanged(bool);
 	void requestSaveState(QXmlStreamWriter*) const;
 	void requestLoadState(XmlStreamReader*);
@@ -108,6 +109,12 @@ private:
 
 	template<typename T>
 	void updateDependencies(const QVector<const AbstractAspect*>);
+
+private:
+	void setChanged(const bool value = true);
+	friend class AbstractAspect;
+	friend class MainWin;
+	friend class ImportDialog;
 };
 
 #endif // ifndef PROJECT_H

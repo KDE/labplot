@@ -29,19 +29,14 @@
 #include <QVector>
 
 void DatasetsTest::initTestCase() {
-	DEBUG(Q_FUNC_INFO)
+	CommonTest::initTestCase();
+
 	const QString currentDir = QStringLiteral(__FILE__);
 	m_dataDir = currentDir.left(currentDir.lastIndexOf(QDir::separator())) + QDir::separator() + QLatin1String("data") + QDir::separator();
 
 	const QString baseDir = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).first();
 	const QString containingDir = QStringLiteral("labplot_data");
 	m_jsonDir = baseDir + QDir::separator() + containingDir + QDir::separator();
-
-	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
-	// TODO: redesign/remove this
-
-	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
-	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
 
 	removeFiles();
 	copyFiles();

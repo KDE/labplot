@@ -96,7 +96,7 @@ QStringList ThemeHandler::themeList() {
  * get list of all theme names
  */
 QStringList ThemeHandler::themes() {
-	DEBUG("ThemeHandler::themes()");
+	DEBUG(Q_FUNC_INFO);
 	QStringList themePaths = themeList();
 
 	QStringList themes;
@@ -119,7 +119,7 @@ QStringList ThemeHandler::themes() {
  * get path for theme of name 'name'
  */
 const QString ThemeHandler::themeFilePath(const QString& name) {
-	DEBUG("ThemeHandler::themeFilePath() name = " << STDSTRING(name));
+	DEBUG(Q_FUNC_INFO << ", name = " << STDSTRING(name));
 	QStringList themePaths = themeList();
 
 	for (int i = 0; i < themePaths.size(); ++i) {

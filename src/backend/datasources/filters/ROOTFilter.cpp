@@ -510,7 +510,7 @@ bool ROOTFilterPrivate::setFile(const QString& fileName) {
 		return false;
 	}
 
-	auto modified = file.lastModified();
+	const auto& modified = file.lastModified();
 	qint64 size = file.size();
 	if (!currentROOTData || fileName != currentFile.name || modified != currentFile.modified || size != currentFile.size) {
 		currentFile.name = fileName;
@@ -868,11 +868,15 @@ ROOTData::ROOTData(const std::string& filename)
 void ROOTData::readNBins(ROOTData::KeyBuffer& kbuffer) {
 	std::string buffer = data(kbuffer);
 	if (!buffer.empty()) {
+		auto search = streamerInfo.find("TH1");
+		if (search == streamerInfo.end())
+			return;
+		const auto& streamerTH1 = search->second;
 		char* buf = &buffer[0];
 		std::map<std::string, size_t> counts;
 		Version(buf); // TH1(D/F/I/S/C)
 		Version(buf); // TH1
-		advanceTo(buf, streamerInfo.find("TH1")->second, std::string(), "fNcells", counts);
+		advanceTo(buf, streamerTH1, std::string(), "fNcells", counts);
 		kbuffer.nrows = read<int>(buf); // fNcells
 	}
 }
@@ -900,9 +904,11 @@ std::vector<ROOTData::BinPars> ROOTData::readHistogram(long int pos) {
 	if (!buffer.empty()) {
 		char* buf = &buffer[0];
 		std::map<std::string, size_t> counts;
-		auto& streamerTH1 = streamerInfo.find("TH1")->second;
-		auto& streamerTAxis = streamerInfo.find("TAxis")->second;
 
+		auto search = streamerInfo.find("TH1");
+		if (search == streamerInfo.end())
+			return {};
+		const auto& streamerTH1 = search->second;
 		size_t count;
 		Version(buf); // TH1(D/F/I/S/C)
 		Version(buf, count); // TH1
@@ -914,9 +920,13 @@ std::vector<ROOTData::BinPars> ROOTData::readHistogram(long int pos) {
 			return {};
 
 		r.front().lowedge = -std::numeric_limits<double>::infinity();
-
 		advanceTo(buf, streamerTH1, "fNcells", "fXaxis", counts);
+
 		// x-Axis
+		search = streamerInfo.find("TAxis");
+		if (search == streamerInfo.end())
+			return {};
+		const auto& streamerTAxis = search->second;
 		Version(buf, count); // TAxis
 		char* const nbuf = buf + count;
 		advanceTo(buf, streamerTAxis, std::string(), "fNbins", counts);
@@ -962,12 +972,17 @@ std::vector<ROOTData::BinPars> ROOTData::readHistogram(long int pos) {
 void ROOTData::readNEntries(ROOTData::KeyBuffer& kbuffer) {
 	std::string buffer = data(kbuffer);
 	if (!buffer.empty()) {
+		auto search = streamerInfo.find("TTree");
+		if (search == streamerInfo.end())
+			return;
+		const auto& streamerTTree = search->second;
+
 		char* buf = &buffer[0];
 		std::map<std::string, size_t> counts;
 		if (kbuffer.type == ContentType::NTuple)
 			Version(buf); // TNtuple(D)
 		Version(buf); // TTree
-		advanceTo(buf, streamerInfo.find("TTree")->second, std::string(), "fEntries", counts);
+		advanceTo(buf, streamerTTree, std::string(), "fEntries", counts);
 		kbuffer.nrows = read<long int>(buf); // fEntries
 	}
 }
@@ -1002,12 +1017,21 @@ std::vector<ROOTData::LeafInfo> ROOTData::listLeaves(long int pos) const {
 	char* buf = &datastring[0];
 	char* const buf0 = buf - it->second.keylength;
 	std::map<std::string, size_t> counts;
-	auto& streamerTBranch = streamerInfo.find("TBranch")->second;
+
+	auto search = streamerInfo.find("TBranch");
+	if (search == streamerInfo.end())
+		return leaves;
+	const auto& streamerTBranch = search->second;
+
+	search = streamerInfo.find("TTree");
+	if (search == streamerInfo.end())
+		return leaves;
+	const auto& streamerTTree = search->second;
 
 	if (it->second.type == ContentType::NTuple)
 		Version(buf); // TNtuple(D)
 	Version(buf); // TTree
-	advanceTo(buf, streamerInfo.find("TTree")->second, std::string(), "fBranches", counts);
+	advanceTo(buf, streamerTTree, std::string(), "fBranches", counts);
 
 	// read the list of branches
 	Version(buf); // TObjArray
@@ -1080,11 +1104,19 @@ ROOTData::listEntries(long int pos, const std::string& branchname, const std::st
 	if (datastring.empty())
 		return entries;
 
+	auto search = streamerInfo.find("TTree");
+	if (search == streamerInfo.end())
+		return entries;
+	const auto& streamerTTree = search->second;
+
+	search = streamerInfo.find("TBranch");
+	if (search == streamerInfo.end())
+		return entries;
+	const auto& streamerTBranch = search->second;
+
 	char* buf = &datastring[0];
 	char* const buf0 = buf - it->second.keylength;
 	std::map<std::string, size_t> counts;
-	auto& streamerTTree = streamerInfo.find("TTree")->second;
-	auto& streamerTBranch = streamerInfo.find("TBranch")->second;
 
 	if (it->second.type == ContentType::NTuple)
 		Version(buf); // TNtuple(D)

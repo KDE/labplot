@@ -52,6 +52,6 @@ if (ENABLE_TEST_IMPORTEXPORT)
             add_subdirectory(Ods)
     ENDIF ()
 
-    add_subdirectory(DATASETS)
+    add_subdirectory(Datasets)
 
 endif()

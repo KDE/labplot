@@ -11,7 +11,6 @@
 #define ROOTFILTERTEST_H
 
 #include "../../CommonTest.h"
-#include <QtTest>
 
 class ROOTFilterTest : public CommonTest {
 	Q_OBJECT

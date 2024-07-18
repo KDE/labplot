@@ -712,7 +712,7 @@ void CartesianPlot::initMenus() {
 			return;
 		auto* themeWidget = new ThemesWidget(nullptr);
 		themeWidget->setFixedMode();
-		connect(themeWidget, &ThemesWidget::themeSelected, this, &CartesianPlot::loadTheme);
+		connect(themeWidget, &ThemesWidget::themeSelected, this, &CartesianPlot::setTheme);
 		connect(themeWidget, &ThemesWidget::themeSelected, themeMenu, &QMenu::close);
 
 		auto* widgetAction = new QWidgetAction(this);
@@ -1219,8 +1219,7 @@ void CartesianPlot::setRangeFormat(const Dimension dim, const int index, const R
 	}
 	if (format != rangeFormat(dim, index)) {
 		exec(new CartesianPlotSetRangeFormatIndexCmd(d, dim, format, index));
-		if (project())
-			project()->setChanged(true);
+		setProjectChanged(true);
 	}
 }
 
@@ -1304,8 +1303,7 @@ void CartesianPlot::enableAutoScale(const Dimension dim, int index, const bool e
 		DEBUG(Q_FUNC_INFO << ", x range " << index << " enable auto scale: " << enable)
 		// TODO: maybe using the first and then adding the first one as parent to the next undo command
 		exec(new CartesianPlotEnableAutoScaleIndexCmd(d, dim, enable, index, fullRange));
-		if (project())
-			project()->setChanged(true);
+		setProjectChanged(true);
 	}
 }
 
@@ -1429,26 +1427,22 @@ void CartesianPlot::setRangeDirty(const Dimension dim, int index, bool dirty) {
 void CartesianPlot::addXRange() {
 	Q_D(CartesianPlot);
 	d->xRanges.append(CartesianPlot::Private::RichRange());
-	if (project())
-		project()->setChanged(true);
+	setProjectChanged(true);
 }
 void CartesianPlot::addYRange() {
 	Q_D(CartesianPlot);
 	d->yRanges.append(CartesianPlot::Private::RichRange());
-	if (project())
-		project()->setChanged(true);
+	setProjectChanged(true);
 }
 void CartesianPlot::addXRange(const Range<double>& range) {
 	Q_D(CartesianPlot);
 	d->xRanges.append(CartesianPlot::Private::RichRange(range));
-	if (project())
-		project()->setChanged(true);
+	setProjectChanged(true);
 }
 void CartesianPlot::addYRange(const Range<double>& range) {
 	Q_D(CartesianPlot);
 	d->yRanges.append(CartesianPlot::Private::RichRange(range));
-	if (project())
-		project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void CartesianPlot::removeRange(const Dimension dim, int index) {
@@ -1467,8 +1461,7 @@ void CartesianPlot::removeRange(const Dimension dim, int index) {
 		break;
 	}
 
-	if (project())
-		project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void CartesianPlot::setMin(const Dimension dim, int index, double value) {
@@ -1568,7 +1561,7 @@ void CartesianPlot::setRangeScale(const Dimension dim, const int index, const Ra
 		if (r == newRange) {
 			exec(new CartesianPlotSetScaleIndexCmd(d, dim, scale, index));
 			if (project())
-				project()->setChanged(true);
+				setProjectChanged(true);
 		} else
 			setRange(dim, index, r);
 	}
@@ -1606,7 +1599,7 @@ void CartesianPlot::addCoordinateSystem() {
 void CartesianPlot::addCoordinateSystem(CartesianCoordinateSystem* s) {
 	m_coordinateSystems.append(s);
 	if (project())
-		project()->setChanged(true);
+		setProjectChanged(true);
 }
 void CartesianPlot::removeCoordinateSystem(int index) {
 	if (index < 0 || index > coordinateSystemCount()) {
@@ -1617,7 +1610,7 @@ void CartesianPlot::removeCoordinateSystem(int index) {
 	// TODO: deleting cSystem?
 	m_coordinateSystems.remove(index);
 	if (project())
-		project()->setChanged(true);
+		setProjectChanged(true);
 }
 
 STD_SETTER_CMD_IMPL_S(CartesianPlot, SetDefaultCoordinateSystemIndex, int, defaultCoordinateSystemIndex)
@@ -2828,6 +2821,10 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 			range.setEnd(plot->maximum(dim));
 		}
 
+		// check ranges for nonlinear scales
+		if (range.scale() != RangeT::Scale::Linear)
+			range = d->checkRange(range);
+
 		if (range.start() < d->dataRange(dim, index).start())
 			d->dataRange(dim, index).start() = range.start();
 
@@ -2839,10 +2836,6 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 
 	// data range is used to nice extend, so set correct scale
 	d->dataRange(dim, index).setScale(range.scale());
-
-	// check ranges for nonlinear scales
-	if (d->dataRange(dim, index).scale() != RangeT::Scale::Linear)
-		d->dataRange(dim, index) = d->checkRange(d->dataRange(dim, index));
 
 	DEBUG(Q_FUNC_INFO << ", data " << CartesianCoordinateSystem::dimensionToString(dim).toStdString()
 					  << " range = " << d->dataRange(dim, index).toStdString(false))
@@ -4049,6 +4042,7 @@ void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 		suppressRetransform = false;
 
 		QGraphicsItem::mouseReleaseEvent(event);
+		Q_EMIT q->changed(); // notify about the position change
 	} else if (mouseMode == CartesianPlot::MouseMode::ZoomSelection || mouseMode == CartesianPlot::MouseMode::ZoomXSelection
 			   || mouseMode == CartesianPlot::MouseMode::ZoomYSelection) {
 		Q_EMIT q->mouseReleaseZoomSelectionModeSignal();

@@ -58,7 +58,7 @@ void PlotArea::init() {
 	KConfigGroup group = config.group(QStringLiteral("PlotArea"));
 
 	// Background
-	d->background = new Background(QString());
+	d->background = new Background(QStringLiteral("background"));
 	addChild(d->background);
 	d->background->setHidden(true);
 	d->background->init(group);
@@ -74,7 +74,7 @@ void PlotArea::init() {
 	type.setFlag(PlotArea::BorderTypeFlags::BorderBottom);
 	d->borderType = static_cast<PlotArea::BorderType>(group.readEntry(QStringLiteral("BorderType"), static_cast<int>(type)));
 
-	d->borderLine = new Line(QString());
+	d->borderLine = new Line(QStringLiteral("borderLine"));
 	d->borderLine->setPrefix(QStringLiteral("Border"));
 	d->borderLine->setCreateXmlElement(false);
 	d->borderLine->setHidden(true);

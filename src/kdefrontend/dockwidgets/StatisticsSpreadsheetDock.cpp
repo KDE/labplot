@@ -18,7 +18,7 @@
 
 /*!
  \class StatisticsSpreadsheetDock
- \brief Provides a widget for editing which statistical metris of the parent spreadsheet should be shown in the statistics spreadsheet.
+ \brief Provides a widget for editing which statistical metrics of the parent spreadsheet should be shown in the statistics spreadsheet.
 
  \ingroup kdefrontend
 */
@@ -50,6 +50,9 @@ StatisticsSpreadsheetDock::StatisticsSpreadsheetDock(QWidget* parent)
 	m_mappingComboBoxMetric[ui.cbKurtosis] = StatisticsSpreadsheet::Metric::Kurtosis;
 	m_mappingComboBoxMetric[ui.cbEntropy] = StatisticsSpreadsheet::Metric::Entropy;
 
+	ui.bSelectAll->setIcon(QIcon::fromTheme(QLatin1String("edit-select-symbolic")));
+	ui.bSelectNone->setIcon(QIcon::fromTheme(QLatin1String("edit-none-symbolic")));
+
 	connect(ui.cbCount, &QCheckBox::toggled, this, &StatisticsSpreadsheetDock::metricChanged);
 	connect(ui.cbMinimum, &QCheckBox::toggled, this, &StatisticsSpreadsheetDock::metricChanged);
 	connect(ui.cbMaximum, &QCheckBox::toggled, this, &StatisticsSpreadsheetDock::metricChanged);
@@ -72,6 +75,9 @@ StatisticsSpreadsheetDock::StatisticsSpreadsheetDock(QWidget* parent)
 	connect(ui.cbSkewness, &QCheckBox::toggled, this, &StatisticsSpreadsheetDock::metricChanged);
 	connect(ui.cbKurtosis, &QCheckBox::toggled, this, &StatisticsSpreadsheetDock::metricChanged);
 	connect(ui.cbEntropy, &QCheckBox::toggled, this, &StatisticsSpreadsheetDock::metricChanged);
+
+	connect(ui.bSelectAll, &QPushButton::clicked, this, &StatisticsSpreadsheetDock::selectAll);
+	connect(ui.bSelectNone, &QPushButton::clicked, this, &StatisticsSpreadsheetDock::selectNone);
 
 	// templates
 	auto* templateHandler = new TemplateHandler(this, QLatin1String("StatisticsSpreadsheet"));
@@ -102,6 +108,28 @@ void StatisticsSpreadsheetDock::metricChanged(bool state) {
 
 	for (auto* spreadsheet : m_spreadsheets)
 		spreadsheet->setMetrics(metrics);
+}
+
+void StatisticsSpreadsheetDock::selectAll() {
+	StatisticsSpreadsheet::Metrics metrics;
+	for (const auto& metric : m_mappingComboBoxMetric)
+		metrics.setFlag(metric, true);
+
+	for (auto* spreadsheet : m_spreadsheets)
+		spreadsheet->setMetrics(metrics);
+
+	load();
+}
+
+void StatisticsSpreadsheetDock::selectNone() {
+	StatisticsSpreadsheet::Metrics metrics;
+	for (const auto& metric : m_mappingComboBoxMetric)
+		metrics.setFlag(metric, false);
+
+	for (auto* spreadsheet : m_spreadsheets)
+		spreadsheet->setMetrics(metrics);
+
+	load();
 }
 
 //*************************************************************

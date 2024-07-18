@@ -1117,6 +1117,7 @@ void WorksheetView::keyReleaseEvent(QKeyEvent* event) {
 }
 
 void WorksheetView::dragEnterEvent(QDragEnterEvent* event) {
+#ifndef SDK
 	// ignore events not related to internal drags of columns etc., e.g. dropping of external files onto LabPlot
 	const auto* mimeData = event->mimeData();
 	if (!mimeData) {
@@ -1134,6 +1135,9 @@ void WorksheetView::dragEnterEvent(QDragEnterEvent* event) {
 	m_worksheet->dockWidget()->dockManager()->setDockWidgetFocused(m_worksheet->dockWidget());
 
 	event->setAccepted(true);
+#else
+	Q_UNUSED(event)
+#endif
 }
 
 void WorksheetView::dragMoveEvent(QDragMoveEvent* event) {
@@ -1340,6 +1344,7 @@ void WorksheetView::addNew(QAction* action) {
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot4Action);
 	} else if (action == addCartesianPlotTemplateAction) {
+#ifndef SDK
 		// open dialog
 		PlotTemplateDialog d;
 		if (d.exec() != QDialog::Accepted)
@@ -1353,6 +1358,7 @@ void WorksheetView::addNew(QAction* action) {
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlotTemplateAction);
+#endif
 	} else if (action == addTextLabelAction) {
 		auto* l = new TextLabel(i18n("Text Label"));
 		l->setText(i18n("Text Label"));
@@ -1665,7 +1671,7 @@ void WorksheetView::selectionChanged() {
 		m_worksheet->setSelectedInView(false);
 	}
 
-	m_selectedItems = items;
+	m_selectedItems = std::move(items);
 	handleCartesianPlotActions();
 }
 
@@ -2307,8 +2313,11 @@ void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, con
 	}
 
 	// draw the scene items
-	if (!selection) // if no selection effects have to be exported, set the printing flag to suppress it in the paint()'s of the children
+	if (!selection) { // if no selection effects have to be exported, set the printing flag to suppress it in the paint()'s of the children
 		m_worksheet->setPrinting(true);
+		for (auto* child : m_worksheet->children<WorksheetElement>())
+			child->retransform();
+	}
 	scene()->render(painter, QRectF(), sourceRect);
 	if (!selection)
 		m_worksheet->setPrinting(false);

@@ -42,6 +42,7 @@ public:
 		int64,
 		float32,
 		float64,
+		datetime64_ns,
 		datetime64_ms,
 		datetime64_s,
 		datetime64_m,

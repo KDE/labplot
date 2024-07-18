@@ -11,7 +11,6 @@
 #define BINARYFILTERTEST_H
 
 #include "../../CommonTest.h"
-#include <QtTest>
 
 class BinaryFilterTest : public CommonTest {
 	Q_OBJECT

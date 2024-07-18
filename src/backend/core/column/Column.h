@@ -75,8 +75,10 @@ public:
 	AbstractSimpleFilter* outputFilter() const;
 	ColumnStringIO* asStringColumn() const;
 
+	// functions related to the formula used to generate column values
 	void setFormula(const QString& formula, const QStringList& variableNames, const QVector<Column*>& columns, bool autoUpdate = false, bool autoResize = true);
 	QString formula() const;
+	void clearFormula();
 	struct FormulaData {
 #if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0)) // required to use in QVector
 		FormulaData() = default;
@@ -128,6 +130,7 @@ public:
 	bool formulaAutoUpdate() const;
 	bool formulaAutoResize() const;
 
+	// functions related to the cells/rows formulas
 	QString formula(int) const override;
 	QVector<Interval<int>> formulaIntervals() const override;
 	void setFormula(const Interval<int>&, const QString&) override;
@@ -138,6 +141,7 @@ public:
 	void* data() const;
 	void setData(void*);
 	bool hasValues() const;
+	bool hasValueAt(int row) const;
 	bool valueLabelsInitialized() const;
 	double valueLabelsMinimum() const;
 	double valueLabelsMaximum() const;

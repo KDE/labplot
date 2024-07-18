@@ -498,6 +498,12 @@ Project* AbstractAspect::project() {
 	return parentAspect() ? parentAspect()->project() : nullptr;
 }
 
+void AbstractAspect::setProjectChanged(bool changed) {
+	auto* p = project();
+	if (p)
+		p->setChanged(changed);
+}
+
 /**
  * \brief Return the path that leads from the top-most Aspect (usually a Project) to me.
  */
@@ -969,7 +975,7 @@ bool AbstractAspect::readBasicAttributes(XmlStreamReader* reader) {
 	} else {
 		QDateTime creation_time = QDateTime::fromString(str, QLatin1String("yyyy-dd-MM hh:mm:ss:zzz"));
 		if (creation_time.isValid())
-			d->m_creation_time = creation_time;
+			d->m_creation_time = std::move(creation_time);
 		else
 			d->m_creation_time = QDateTime::currentDateTime();
 	}
@@ -1019,7 +1025,7 @@ void AbstractAspect::exec(QUndoCommand* cmd) {
 		}
 
 		if (project())
-			project()->setChanged(true);
+			setProjectChanged(true);
 	} else {
 		cmd->redo();
 		delete cmd;

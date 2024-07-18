@@ -15,8 +15,8 @@ bool sync();
 	datatype read##setting_name();                                                                                                                             \
 	void write##setting_name(const datatype& value);
 
-enum class DockPosBehaviour { OriginalPos, AboveLastActive };
-SETUP_SETTING2(DockPosBehaviour, DockPosBehaviour)
+enum class DockPosBehavior { OriginalPos, AboveLastActive };
+SETUP_SETTING2(DockPosBehavior, DockPosBehavior)
 }
 
 #endif // SETTINGS_H

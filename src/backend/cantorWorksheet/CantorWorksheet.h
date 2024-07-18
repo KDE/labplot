@@ -12,7 +12,7 @@
 #define CANTORWORKSHEET_H
 
 #include <backend/core/AbstractPart.h>
-#ifdef HAVE_CANTOR_LIBS
+#if defined(HAVE_CANTOR_LIBS)
 #include <cantor/session.h>
 #endif
 

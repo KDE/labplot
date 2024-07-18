@@ -88,34 +88,15 @@ KDEPlotDock::KDEPlotDock(QWidget* parent)
 	retranslateUi();
 }
 
-KDEPlotDock::~KDEPlotDock() {
-	if (m_aspectTreeModel)
-		delete m_aspectTreeModel;
-}
+KDEPlotDock::~KDEPlotDock() = default;
 
 void KDEPlotDock::setModel() {
-	m_aspectTreeModel->enablePlottableColumnsOnly(true);
-	m_aspectTreeModel->enableShowPlotDesignation(true);
-
-	QList<AspectType> list{AspectType::Folder,
-						   AspectType::Workbook,
-						   AspectType::Datapicker,
-						   AspectType::DatapickerCurve,
-						   AspectType::Spreadsheet,
-						   AspectType::LiveDataSource,
-						   AspectType::Column,
-						   AspectType::Worksheet,
-						   AspectType::CartesianPlot,
-						   AspectType::XYFitCurve,
-						   AspectType::XYSmoothCurve,
-						   AspectType::CantorWorksheet};
-
-	cbDataColumn->setTopLevelClasses(list);
-
-	list = {AspectType::Column};
-	m_aspectTreeModel->setSelectableAspects(list);
-
-	cbDataColumn->setModel(m_aspectTreeModel);
+	auto* model = aspectModel();
+	model->enablePlottableColumnsOnly(true);
+	model->enableShowPlotDesignation(true);
+	model->setSelectableAspects({AspectType::Column});
+	cbDataColumn->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
+	cbDataColumn->setModel(model);
 }
 
 void KDEPlotDock::setPlots(QList<KDEPlot*> list) {
@@ -124,7 +105,6 @@ void KDEPlotDock::setPlots(QList<KDEPlot*> list) {
 	m_plot = list.first();
 	setAspects(list);
 	Q_ASSERT(m_plot);
-	m_aspectTreeModel = new AspectTreeModel(m_plot->project());
 	setModel();
 
 	// initialize widgets for common properties

@@ -77,17 +77,17 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.cbDataSourceType->addItem(i18n("Histogram"));
 
 	cbDataSourceCurve = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbDataSourceCurve, 5, 3, 1, 4);
+	gridLayout->addWidget(cbDataSourceCurve, 5, 2, 1, 2);
 
 	cbXDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbXDataColumn, 6, 3, 1, 4);
+	gridLayout->addWidget(cbXDataColumn, 6, 2, 1, 2);
 
 	cbXErrorColumn = new TreeViewComboBox(generalTab);
 	cbXErrorColumn->setEnabled(false);
 	uiGeneralTab.hlXError->addWidget(cbXErrorColumn);
 
 	cbYDataColumn = new TreeViewComboBox(generalTab);
-	gridLayout->addWidget(cbYDataColumn, 7, 3, 1, 4);
+	gridLayout->addWidget(cbYDataColumn, 7, 2, 1, 2);
 
 	cbYErrorColumn = new TreeViewComboBox(generalTab);
 	cbYErrorColumn->setEnabled(false);
@@ -178,7 +178,7 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.twGoodness->item(1, 0)->setText(uiGeneralTab.twGoodness->item(1, 0)->text() + UTF8_QSTRING(" (χ²/dof)"));
 	uiGeneralTab.twGoodness->item(3, 0)->setText(uiGeneralTab.twGoodness->item(3, 0)->text() + UTF8_QSTRING(" (R²)"));
 	uiGeneralTab.twGoodness->item(4, 0)->setText(uiGeneralTab.twGoodness->item(4, 0)->text() + UTF8_QSTRING(" (R̄²)"));
-	uiGeneralTab.twGoodness->item(5, 0)->setText(UTF8_QSTRING("χ²-") + i18n("test") + UTF8_QSTRING(" (P > χ²)"));
+	uiGeneralTab.twGoodness->item(5, 0)->setText(UTF8_QSTRING("χ²-") + i18n("Test") + UTF8_QSTRING(" (P > χ²)"));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setContentsMargins(0, 0, 0, 0);
@@ -279,21 +279,14 @@ void XYFitCurveDock::setModel() {
 		hiddenAspects << curve;
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
-	QList<AspectType> list = {AspectType::Folder,
-							  AspectType::Workbook,
-							  AspectType::Spreadsheet,
-							  AspectType::LiveDataSource,
-							  AspectType::CantorWorksheet,
-							  AspectType::Datapicker,
-							  AspectType::Column};
-	cbXDataColumn->setTopLevelClasses(list);
-	cbYDataColumn->setTopLevelClasses(list);
-	cbXErrorColumn->setTopLevelClasses(list);
-	cbYErrorColumn->setTopLevelClasses(list);
+	const auto& topLevelClasses = TreeViewComboBox::plotColumnTopLevelClasses();
+	cbXDataColumn->setTopLevelClasses(topLevelClasses);
+	cbYDataColumn->setTopLevelClasses(topLevelClasses);
+	cbXErrorColumn->setTopLevelClasses(topLevelClasses);
+	cbYErrorColumn->setTopLevelClasses(topLevelClasses);
 
-	list = {AspectType::Column};
 	auto* model = aspectModel();
-	model->setSelectableAspects(list);
+	model->setSelectableAspects({AspectType::Column});
 
 	cbXDataColumn->setModel(model);
 	cbYDataColumn->setModel(model);
@@ -322,7 +315,7 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	m_fitData = m_fitCurve->fitData();
 
 	DEBUG(Q_FUNC_INFO << ", model type = " << m_fitData.modelType);
-	DEBUG(Q_FUNC_INFO << ", model = " << STDSTRING(m_fitData.model));
+	DEBUG(Q_FUNC_INFO << ", model expression = " << STDSTRING(m_fitData.model));
 	DEBUG(Q_FUNC_INFO << ", model degree = " << m_fitData.degree);
 	DEBUG(Q_FUNC_INFO << ", # params = " << m_fitData.paramNames.size());
 	DEBUG(Q_FUNC_INFO << ", # start values = " << m_fitData.paramStartValues.size());
@@ -331,12 +324,14 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 
 	fitParametersWidget->setFitData(&m_fitData);
 
+	if (m_messageWidget && m_messageWidget->isVisible()) {
+		DEBUG(Q_FUNC_INFO << ", close message")
+		m_messageWidget->animatedHide();
+	}
+
 	initGeneralTab();
 	initTabs();
 	setSymbols(list);
-
-	if (m_messageWidget && m_messageWidget->isVisible())
-		m_messageWidget->close();
 
 	showFitResult();
 	enableRecalculate();
@@ -357,6 +352,42 @@ bool XYFitCurveDock::eventFilter(QObject* obj, QEvent* event) {
 		}
 	}
 	return QWidget::eventFilter(obj, event);
+}
+
+void XYFitCurveDock::checkDataColumns() {
+	DEBUG(Q_FUNC_INFO)
+	if (!m_messageWidget) {
+		m_messageWidget = new KMessageWidget(this);
+		uiGeneralTab.gridLayout_2->addWidget(m_messageWidget, 23, 2, 1, 2);
+	}
+	switch (m_fitCurve->dataSourceType()) {
+	case XYAnalysisCurve::DataSourceType::Spreadsheet: {
+		auto xColumn = m_fitCurve->xDataColumn();
+		auto yColumn = m_fitCurve->yDataColumn();
+		if (!xColumn && !yColumn)
+			m_messageWidget->setText(i18n("No X and Y column specified!"));
+		else if (!xColumn)
+			m_messageWidget->setText(i18n("No X column specified!"));
+		else if (!yColumn)
+			m_messageWidget->setText(i18n("No Y column specified!"));
+		else if (xColumn->availableRowCount(1) == 0)
+			m_messageWidget->setText(i18n("No X data available!"));
+		else if (yColumn->availableRowCount(1) == 0)
+			m_messageWidget->setText(i18n("No Y data available!"));
+
+		if (!xColumn || !yColumn || xColumn->availableRowCount(1) == 0 || yColumn->availableRowCount(1) == 0)
+			m_messageWidget->animatedShow();
+		break;
+	}
+	case XYAnalysisCurve::DataSourceType::Curve:
+		// TODO: check for enough data
+		m_messageWidget->animatedHide();
+		break;
+	case XYAnalysisCurve::DataSourceType::Histogram:
+		// TODO: check for enough data
+		m_messageWidget->animatedHide();
+		break;
+	}
 }
 
 //*************************************************************
@@ -430,6 +461,8 @@ void XYFitCurveDock::dataSourceTypeChanged(int index) {
 			}
 		}
 	}
+
+	enableRecalculate();
 
 	CONDITIONAL_LOCK_RETURN;
 
@@ -805,18 +838,21 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 
 	const AbstractColumn* xColumn = nullptr;
 	if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		DEBUG("	data source: Spreadsheet")
+		DEBUG(Q_FUNC_INFO << ", data source: Spreadsheet")
 		// auto* aspect = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		// xColumn = dynamic_cast<AbstractColumn*>(aspect);
 		xColumn = m_fitCurve->xDataColumn();
 	} else {
-		DEBUG("	data source: Curve or Histogram")
+		DEBUG(Q_FUNC_INFO << ", data source: Curve or Histogram")
 		if (m_fitCurve->dataSourceCurve())
 			xColumn = m_fitCurve->dataSourceCurve()->xColumn();
 	}
 	// with no xColumn: show all models (assume 100 data points)
 	const int availableRowCount = xColumn ? xColumn->availableRowCount(100) : 100;
-	DEBUG("	available row count = " << availableRowCount)
+	DEBUG(Q_FUNC_INFO << ", available row count = " << availableRowCount)
+	auto yColumn = m_fitCurve->yDataColumn();
+	if (availableRowCount == 0 || !xColumn || !yColumn)
+		checkDataColumns();
 
 	bool disableFit = false;
 	switch (m_fitData.modelCategory) {
@@ -885,9 +921,13 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 		m_fitData.modelType = index;
 
 	updateModelEquation();
+	// TODO: update parameter list?
+	//  updateParameterList();
 
 	if (disableFit)
 		uiGeneralTab.pbRecalculate->setEnabled(false);
+
+	DEBUG(Q_FUNC_INFO << ", DONE")
 }
 
 /*!
@@ -912,8 +952,11 @@ void XYFitCurveDock::updateModelEquation() {
 		static_cast<XYFitCurve*>(m_curve)->initStartValues(m_fitData, m_curve);
 		// udpate parameter widget
 		fitParametersWidget->setFitData(&m_fitData);
-		if (m_messageWidget)
-			m_messageWidget->close();
+		if (m_messageWidget && m_messageWidget->isVisible()) {
+			DEBUG(Q_FUNC_INFO << ", close message")
+			m_messageWidget->animatedHide();
+		}
+
 		showFitResult(); // show result of preview
 	}
 
@@ -1098,6 +1141,7 @@ void XYFitCurveDock::parametersChanged(bool updateParameterWidget) {
 		fitParametersWidget->setFitData(&m_fitData);
 
 	enableRecalculate();
+	DEBUG(Q_FUNC_INFO << " DONE")
 }
 void XYFitCurveDock::parametersValid(bool valid) {
 	DEBUG(Q_FUNC_INFO << ", valid = " << valid);
@@ -1157,17 +1201,16 @@ void XYFitCurveDock::recalculateClicked() {
 	m_fitCurve->recalculate();
 	// setPlotXRange();
 
-	// update fitParametersWidget
-	if (m_fitData.useResults) {
-		DEBUG(" nr of param names = " << m_fitData.paramNames.size())
-		DEBUG("	size of start values = " << m_fitData.paramStartValues.size())
-		DEBUG("	size of param values = " << m_fitCurve->fitResult().paramValues.size())
+	if (m_fitData.useResults) { // update fitParametersWidget
+		DEBUG(Q_FUNC_INFO << ", nr of param names = " << m_fitData.paramNames.size())
+		DEBUG(Q_FUNC_INFO << ", size of start values = " << m_fitData.paramStartValues.size())
+		DEBUG(Q_FUNC_INFO << ", size of param values = " << m_fitCurve->fitResult().paramValues.size())
 		if (m_fitCurve->fitResult().paramValues.size() > 0) { // may be 0 if fit fails
 			for (int i = 0; i < m_fitData.paramNames.size(); i++)
 				m_fitData.paramStartValues[i] = m_fitCurve->fitResult().paramValues.at(i);
 			fitParametersWidget->setFitData(&m_fitData);
 		} else {
-			DEBUG(" WARNING: no fit result available!")
+			DEBUG(Q_FUNC_INFO << ", WARNING: no fit result available!")
 		}
 	}
 
@@ -1179,20 +1222,23 @@ void XYFitCurveDock::recalculateClicked() {
 	const QString& status = fitResult.status;
 	if (status != i18n("Success")) {
 		Q_EMIT info(i18n("Fit status: %1", fitResult.status));
-		if (!m_messageWidget) {
-			m_messageWidget = new KMessageWidget(this);
-			uiGeneralTab.gridLayout_2->addWidget(m_messageWidget, 25, 3, 1, 4);
-		}
+		checkDataColumns();
 
 		if (!fitResult.valid)
 			m_messageWidget->setMessageType(KMessageWidget::Error);
 		else
 			m_messageWidget->setMessageType(KMessageWidget::Warning);
-		m_messageWidget->setText(status);
+
+		if (!status.isEmpty())
+			m_messageWidget->setText(status);
+		else // only reason to get here
+			m_messageWidget->setText(i18n("No data source available!"));
 		m_messageWidget->animatedShow();
 	} else {
-		if (m_messageWidget && m_messageWidget->isVisible())
-			m_messageWidget->close();
+		if (m_messageWidget && m_messageWidget->isVisible()) {
+			DEBUG(Q_FUNC_INFO << ", close message")
+			m_messageWidget->animatedHide();
+		}
 	}
 
 	QApplication::restoreOverrideCursor();
@@ -1341,7 +1387,8 @@ void XYFitCurveDock::showFitResult() {
 	const auto& fitResult = m_fitCurve->fitResult();
 
 	if (!fitResult.available) {
-		DEBUG(Q_FUNC_INFO << ", fit result not available");
+		DEBUG(Q_FUNC_INFO << ", fit result not available")
+		checkDataColumns();
 		return;
 	}
 
@@ -1350,7 +1397,11 @@ void XYFitCurveDock::showFitResult() {
 
 	if (!fitResult.valid) {
 		DEBUG(Q_FUNC_INFO << ", fit result not valid");
+		checkDataColumns();
 		return;
+	} else if (m_messageWidget && m_messageWidget->isVisible()) {
+		DEBUG(Q_FUNC_INFO << ", close message")
+		m_messageWidget->animatedHide();
 	}
 
 	const auto numberLocale = QLocale();

@@ -14,6 +14,8 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
 
+#include <KLocalizedString>
+
 //////////////////////////////////////////////////////////////////////
 CANFilter::CANFilter(FileType type, CANFilterPrivate* p)
 	: AbstractFileFilter(type)

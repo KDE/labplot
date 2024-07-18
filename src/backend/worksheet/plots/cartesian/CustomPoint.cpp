@@ -48,7 +48,8 @@ constexpr auto name = "customPoint";
 
 CustomPoint::CustomPoint(CartesianPlot* plot, const QString& name, bool loading)
 	: WorksheetElement(name, new CustomPointPrivate(this), AspectType::CustomPoint) {
-	m_plot = plot;
+	Q_D(CustomPoint);
+	d->m_plot = plot;
 
 	init(loading);
 }
@@ -69,6 +70,7 @@ void CustomPoint::init(bool loading) {
 	});
 	connect(d->symbol, &Symbol::updatePixmapRequested, [=] {
 		d->update();
+		Q_EMIT changed();
 	});
 
 	// init the properties
@@ -80,8 +82,8 @@ void CustomPoint::init(bool loading) {
 		if (plot()) {
 			d->coordinateBindingEnabled = true; // By default on
 			auto cs = plot()->coordinateSystem(plot()->defaultCoordinateSystemIndex());
-			const auto x = m_plot->range(Dimension::X, cs->index(Dimension::X)).center();
-			const auto y = m_plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
+			const auto x = d->m_plot->range(Dimension::X, cs->index(Dimension::X)).center();
+			const auto y = d->m_plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
 			DEBUG(Q_FUNC_INFO << ", x/y pos = " << x << " / " << y)
 			d->positionLogical = QPointF(x, y);
 		} else
@@ -142,7 +144,7 @@ CustomPointPrivate::CustomPointPrivate(CustomPoint* owner)
 }
 
 const CartesianPlot* CustomPointPrivate::plot() {
-	return q->m_plot;
+	return m_plot;
 }
 
 /*!
@@ -180,6 +182,8 @@ void CustomPointPrivate::recalcShapeAndBoundingRect() {
 		m_shape.addPath(WorksheetElement::shapeFromPath(trafo.map(path), symbol->pen()));
 		m_boundingRectangle = m_shape.boundingRect();
 	}
+
+	Q_EMIT q->changed();
 }
 
 void CustomPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {

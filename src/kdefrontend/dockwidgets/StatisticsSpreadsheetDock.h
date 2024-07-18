@@ -34,6 +34,8 @@ private:
 
 private Q_SLOTS:
 	void metricChanged(bool);
+	void selectAll();
+	void selectNone();
 
 	// save/load template
 	void loadConfigFromTemplate(KConfig&);

@@ -11,7 +11,6 @@
 #define HDF5FILTERTEST_H
 
 #include "../../CommonTest.h"
-#include <QtTest>
 
 class HDF5FilterTest : public CommonTest {
 	Q_OBJECT

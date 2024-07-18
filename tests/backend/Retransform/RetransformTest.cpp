@@ -40,13 +40,6 @@
 
 using Dimension = CartesianCoordinateSystem::Dimension;
 
-void RetransformTest::initTestCase() {
-	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
-	// TODO: redesign/remove this
-	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
-	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
-}
-
 void RetransformTest::TestLoadProject() {
 	RetransformCallCounter c;
 	Project project;
@@ -920,7 +913,7 @@ void RetransformTest::TestImportCSV() {
 	QCOMPARE(c.logsXScaleRetransformed.count(), 1); // one plot with 1 x-Axis
 	QCOMPARE(c.logsXScaleRetransformed.at(0).plot, p);
 	QCOMPARE(c.logsXScaleRetransformed.at(0).index, 0);
-	QCOMPARE(c.logsYScaleRetransformed.count(), 1); // one plot with 1 x-Axis
+	QCOMPARE(c.logsYScaleRetransformed.count(), 1); // one plot with 1 y-Axis
 	QCOMPARE(c.logsYScaleRetransformed.at(0).plot, p);
 	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0);
 
@@ -931,6 +924,94 @@ void RetransformTest::TestImportCSV() {
 		qDebug() << s;
 		QCOMPARE(c.callCount(s), 1);
 	}
+}
+
+// Same as AsciiFilterTest::plotUpdateAfterImportWithColumnRemove() but with retransform check
+void RetransformTest::TestImportCSVInvalidateCurve() {
+	Project project; // need a project object since the column restore logic is in project
+
+	// create the spreadsheet with the source data
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(spreadsheet);
+	spreadsheet->setColumnCount(2);
+	spreadsheet->setRowCount(3);
+
+	auto* col = spreadsheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col->setName(QStringLiteral("1"));
+	col->setValueAt(0, 10.);
+	col->setValueAt(1, 20.);
+	col->setValueAt(2, 30.);
+
+	col = spreadsheet->column(1);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col->setName(QStringLiteral("2"));
+	col->setValueAt(0, 10.);
+	col->setValueAt(1, 20.);
+	col->setValueAt(2, 30.);
+
+	// create a xy-curve with the both columns in the source spreadsheet and check the ranges
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	project.addChild(p);
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	p->addChild(curve);
+	curve->setXColumn(spreadsheet->column(0)); // use "1" for x
+	curve->setYColumn(spreadsheet->column(1)); // use "2" for y
+
+	auto rangeX = p->range(Dimension::X);
+	QCOMPARE(rangeX.start(), 10);
+	QCOMPARE(rangeX.end(), 30);
+
+	auto rangeY = p->range(Dimension::Y);
+	QCOMPARE(rangeY.start(), 10);
+	QCOMPARE(rangeY.end(), 30);
+
+	const auto& children = project.children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive);
+	RetransformCallCounter c;
+	// CartesianPlot "plot"
+	// XYCurve "curve"
+	// Spreadsheet "test"
+	// Column "1"
+	// Column "2"
+	QCOMPARE(children.length(), 5);
+	for (const auto& child : children) {
+		qDebug() << child->name();
+		connect(child, &AbstractAspect::retransformCalledSignal, &c, &RetransformCallCounter::aspectRetransformed);
+	}
+
+	const auto& plots = project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive);
+	for (const auto& plot : plots)
+		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::scaleRetransformed, &c, &RetransformCallCounter::retransformScaleCalled);
+
+	// import the data into the source spreadsheet, the columns are renamed to "c1" and "c2"
+	AsciiFilter filter;
+
+	QStringList fileContent = {
+		QStringLiteral("c1;c2"),
+		QStringLiteral("1;1"),
+		QStringLiteral("2;2"),
+		QStringLiteral("3;3"),
+	};
+	QString savePath;
+	SAVE_FILE("testfile", fileContent);
+
+	filter.setCommentCharacter(QString());
+	filter.setSeparatingCharacter(QStringLiteral(";"));
+	filter.setHeaderEnabled(true);
+	filter.setHeaderLine(1);
+	filter.readDataFromFile(savePath, spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	// the assignment to the data columns got lost since the columns were renamed
+	QCOMPARE(curve->xColumn(), nullptr);
+	QCOMPARE(curve->yColumn(), nullptr);
+
+	// the range of the plot didn't change, no retransform
+	QCOMPARE(c.logsXScaleRetransformed.count(), 0);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 0);
+
+	// the curve that lost the column assignemnt should be retransformed
+	QCOMPARE(c.elementLogCount(false), 1);
+	QCOMPARE(c.callCount(QStringLiteral("Project/plot/curve")), 1);
 }
 
 void RetransformTest::TestSetScale() {
