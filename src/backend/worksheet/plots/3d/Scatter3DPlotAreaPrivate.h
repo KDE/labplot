@@ -11,9 +11,9 @@ class Scatter3DPlotAreaPrivate : public WorksheetElementContainerPrivate {
 public:
 	explicit Scatter3DPlotAreaPrivate(Scatter3DPlotArea*);
 
-	const AbstractColumn* xColumn;
-	const AbstractColumn* yColumn;
-	const AbstractColumn* zColumn;
+	const AbstractColumn* xColumn{nullptr};
+	const AbstractColumn* yColumn{nullptr};
+	const AbstractColumn* zColumn{nullptr};
 	Scatter3DPlotArea::Theme theme{Scatter3DPlotArea::Theme::Qt};
 	Scatter3DPlotArea::PointStyle pointStyle{Scatter3DPlotArea::PointStyle::Sphere};
 	Scatter3DPlotArea::ShadowQuality shadowQuality{Scatter3DPlotArea::ShadowQuality::High};
