@@ -19,6 +19,5 @@ class CommonMetaTest : public CommonTest {
 
 protected Q_SLOTS:
 	void initTestCase();
-
 };
 #endif
