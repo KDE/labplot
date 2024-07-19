@@ -12,6 +12,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 
 #include <KLocalizedString>
+#include <QTemporaryFile>
 
 void MCAPFilterTest::initTestCase() {
 	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
@@ -124,10 +125,13 @@ void MCAPFilterTest::testExport() {
 	QElapsedTimer timer_export;
 	timer_export.start();
 
-	filter.write(QLatin1String("/tmp/basic_out.mcap"), &spreadsheet);
-	QCOMPARE(QFile::exists(QLatin1String("/tmp/basic_out.mcap")), true);
+	QTemporaryFile tmpFile;
+	if (tmpFile.open()) {
+		filter.write(tmpFile.fileName(), &spreadsheet);
+		QCOMPARE(QFile::exists(tmpFile.fileName()), true);
+	}
 
-	qDebug() << "The exporting" << timer_export.elapsed() << "milliseconds";
+	qDebug() << "The exporting took" << timer_export.elapsed() << "milliseconds";
 }
 
 void MCAPFilterTest::testImportWithoutValidTopics() {
