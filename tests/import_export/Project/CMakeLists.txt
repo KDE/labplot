@@ -9,6 +9,6 @@ IF (ENABLE_LIBORIGIN)
 	ENDIF()
 ENDIF ()
 
-target_link_libraries(ProjectImportTest labplot2backendlib labplot2lib labplot2nsllib labplot2test)
+target_link_libraries(ProjectImportTest labplot2backendlib labplot2lib labplot2nsllib labplot2metatest)
 
 add_test(NAME ProjectImportTest COMMAND ProjectImportTest)

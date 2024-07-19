@@ -2,8 +2,11 @@ set(SRC_DIR ${labplot2_SOURCE_DIR}/src)
 INCLUDE_DIRECTORIES(${SRC_DIR} ${GSL_INCLUDE_DIR})
 
 # shared code
-add_library(labplot2test STATIC CommonTest.cpp CommonMetaTest.cpp analysis/AnalysisTest.h nsl/NSLTest.h ../src/backend/lib/Debug.cpp)
+add_library(labplot2test STATIC CommonTest.cpp analysis/AnalysisTest.cpp nsl/NSLTest.h ../src/backend/lib/Debug.cpp)
 target_link_libraries(labplot2test Qt${QT_MAJOR_VERSION}::Test KF${KF_MAJOR_VERSION}::ConfigCore Qt${QT_MAJOR_VERSION}::Widgets KF${KF_MAJOR_VERSION}::I18n)
+add_library(labplot2metatest STATIC CommonMetaTest.cpp)
+target_link_libraries(labplot2metatest labplot2test)
+
 if (KUserFeedback_FOUND AND QT_MAJOR_VERSION EQUAL 6)
 	target_link_libraries( labplot2test KUserFeedbackCoreQt6 KUserFeedbackWidgetsQt6 )
 endif ()
