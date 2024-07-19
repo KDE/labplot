@@ -10,7 +10,7 @@
 #ifndef BLFFILTERTEST_H
 #define BLFFILTERTEST_H
 
-#include "../../CommonTest.h"
+#include "../../CommonMetaTest.h"
 
 namespace Vector {
 namespace BLF {
@@ -18,7 +18,7 @@ struct CanMessage2;
 } // namespace BLF
 } // namespace Vector
 
-class BLFFilterTest : public CommonTest {
+class BLFFilterTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

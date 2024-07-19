@@ -11,9 +11,9 @@
 #ifndef JSONFILTERTEST_H
 #define JSONFILTERTEST_H
 
-#include "../../CommonTest.h"
+#include "../../CommonMetaTest.h"
 
-class JSONFilterTest : public CommonTest {
+class JSONFilterTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:
