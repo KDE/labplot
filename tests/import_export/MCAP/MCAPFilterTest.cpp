@@ -4,6 +4,7 @@
 	Description          : Tests for the MCAP I/O-filter.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2018 Andrey Cygankov <craftplace.ms@gmail.com>
+	SPDX-FileCopyrightText: 2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -13,13 +14,6 @@
 
 #include <KLocalizedString>
 #include <QTemporaryFile>
-
-void MCAPFilterTest::initTestCase() {
-	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
-	// TODO: redesign/remove this
-	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
-	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
-}
 
 void MCAPFilterTest::testArrayImport() {
 	// This mcap file has one topic with name: integer_topic with 10 entries

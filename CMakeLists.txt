@@ -292,7 +292,7 @@ option(ENABLE_MQTT "Build with MQTT support" ON)
 option(ENABLE_QTSERIALPORT "Build with QtSerialPort support" ON)
 option(ENABLE_DISCOUNT "Build with Discount support" ON)
 option(ENABLE_XLSX "Build with XLSX (Excel) support" ON)
-option(ENABLE_MCAP "Build with MCAP support" OFF)
+option(ENABLE_MCAP "Build with MCAP support" ON)
 
 IF (WIN32 AND QT_MAJOR_VERSION LESS 6)	# C++17 needed by Orcus not working with MSVC2019 (Craft QT5-LTS)
 	option(ENABLE_ORCUS "Build with Orcus support" OFF)
