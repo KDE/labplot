@@ -38,8 +38,8 @@
 #endif
 
 #define MCAP_IMPLEMENTATION
-#include <3rdparty/mcap/include/mcap/mcap.hpp>
-#include <3rdparty/mcap/include/mcap/writer.hpp>
+#include "mcap/mcap.hpp"
+#include "mcap/writer.hpp"
 
 /*!
 \class McapFilter

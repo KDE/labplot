@@ -524,7 +524,14 @@ IF (ENABLE_ROOT OR ENABLE_MCAP)
 ENDIF()
 ### ZSTD for MCAP #################
 
+option(LOCAL_MCAP_DOWNLOAD "Download MCAP" ON)
 IF(ENABLE_MCAP)
+	IF (LOCAL_MCAP_DOWNLOAD)
+		message(STATUS "Downloading MCAP")
+	ELSE ()
+		message(STATUS "Using included MCAP")
+	ENDIF ()
+
 	add_definitions (-DHAVE_MCAP)
 	FIND_PACKAGE(ZSTD)
 	IF (ZSTD_FOUND)
