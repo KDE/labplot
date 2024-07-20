@@ -1,6 +1,7 @@
 -----2.12 -----
 	* [import]
 		* Download datasets from kaggle.com
+		* Support MCAP file import
 
 -----2.11.1 (16.07.2024) -----
 Bug fixes:
