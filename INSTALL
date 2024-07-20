@@ -30,6 +30,7 @@ optional packages
 	* Discount to support Markdown markup language text
 	* Eigen3 to support fast baseline removal
 	* fast_float, dbc_parser_cpp and vector_blf for Vector BLF support (can be fetched from git by setting -DLOCAL_DBC_PARSER=ON and -DLOCAL_VECTOR_BLF=ON)
+	* MCAP for MCAP file support (Using local copy instead of downloading can be set by using LOCAL_MCAP_DOWNLOAD=OFF)
 
 ===============================================================================
 To build LabPlot execute
@@ -61,6 +62,7 @@ To compile LabPlot without optional dependencies even if they are present on the
 -DENABLE_ORCUS=OFF
 -DENABLE_VECTOR_BLF=OFF
 -DENABLE_EIGEN3=OFF
+-DENABLE_MCAP=OFF
 -DENABLE_TOUCHBAR=OFF
 
 Note, by switching off these libraries the feature set of LabPlot will be reduced.
