@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>521</width>
-    <height>900</height>
+    <width>411</width>
+    <height>780</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,111 +24,12 @@
        <string>General</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="1" column="3">
-        <widget class="ResizableTextEdit" name="teComment">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="labelY">
-         <property name="text">
-          <string>y-data</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <spacer name="verticalSpacer_10">
-         <property name="orientation">
-          <enum>Qt::Orientation::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Policy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>28</width>
-           <height>13</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="6" column="0">
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Orientation::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Policy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>28</width>
-           <height>13</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="4" column="3">
-        <widget class="TreeViewComboBox" name="cbYCoordinate"/>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="labelX">
-         <property name="text">
-          <string>x-data</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0" colspan="2">
-        <widget class="QCheckBox" name="chkVisible">
-         <property name="text">
-          <string>visible</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="3">
-        <widget class="TimedLineEdit" name="leName"/>
-       </item>
-       <item row="1" column="0" colspan="2">
-        <widget class="QLabel" name="lComment">
-         <property name="text">
-          <string>Comment</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="labelZ">
-         <property name="text">
-          <string>z-data</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
+       <item row="0" column="0" colspan="2">
         <widget class="QLabel" name="lName">
          <property name="text">
           <string>Name</string>
          </property>
         </widget>
-       </item>
-       <item row="7" column="1">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Orientation::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>159</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="3" column="3">
-        <widget class="TreeViewComboBox" name="cbXCoordinate"/>
        </item>
        <item row="0" column="2">
         <spacer name="horizontalSpacer_4">
@@ -146,42 +47,90 @@
          </property>
         </spacer>
        </item>
+       <item row="4" column="0" colspan="2">
+        <widget class="QLabel" name="labelX">
+         <property name="text">
+          <string>X-Data:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0" colspan="2">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>159</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="5" column="0" colspan="2">
+        <widget class="QLabel" name="labelY">
+         <property name="text">
+          <string>Y-Data:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0" colspan="2">
+        <widget class="QLabel" name="labelZ">
+         <property name="text">
+          <string>Z-Data:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="ResizableTextEdit" name="teComment">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <widget class="TimedLineEdit" name="leName"/>
+       </item>
        <item row="5" column="3">
+        <widget class="TreeViewComboBox" name="cbYCoordinate"/>
+       </item>
+       <item row="6" column="3">
         <widget class="TreeViewComboBox" name="cbZCoordinate"/>
        </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tabMesh">
-      <attribute name="title">
-       <string>Mesh</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout_3">
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_2">
+       <item row="1" column="0" colspan="2">
+        <widget class="QLabel" name="lComment">
          <property name="text">
-          <string>Shadow Quality:</string>
+          <string>Comment</string>
          </property>
         </widget>
        </item>
-       <item row="14" column="0">
-        <widget class="QSlider" name="slYRot">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
+       <item row="4" column="3">
+        <widget class="TreeViewComboBox" name="cbXCoordinate"/>
+       </item>
+       <item row="8" column="0" colspan="3">
+        <widget class="QCheckBox" name="chkVisible">
+         <property name="text">
+          <string>visible</string>
          </property>
         </widget>
        </item>
-       <item row="10" column="0">
-        <widget class="QSlider" name="slZoom">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
+       <item row="3" column="0" colspan="2">
+        <widget class="QLabel" name="label">
+         <property name="font">
+          <font>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Data:</string>
          </property>
         </widget>
        </item>
-       <item row="15" column="1">
-        <widget class="KComboBox" name="cbTheme"/>
-       </item>
-       <item row="2" column="0">
-        <spacer name="verticalSpacer_3">
+       <item row="2" column="0" colspan="2">
+        <spacer name="verticalSpacer_10">
          <property name="orientation">
           <enum>Qt::Orientation::Vertical</enum>
          </property>
@@ -196,13 +145,13 @@
          </property>
         </spacer>
        </item>
-       <item row="13" column="0">
-        <widget class="QLabel" name="lYRot">
-         <property name="text">
-          <string>Y Rotation Slider</string>
-         </property>
-        </widget>
-       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabMesh">
+      <attribute name="title">
+       <string>Mesh</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_3">
        <item row="0" column="0">
         <widget class="QLabel" name="lType">
          <property name="text">
@@ -210,70 +159,10 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="KComboBox" name="cbShadowQuality"/>
+       <item row="13" column="2">
+        <widget class="KComboBox" name="cbTheme"/>
        </item>
-       <item row="6" column="0">
-        <spacer name="verticalSpacer_4">
-         <property name="orientation">
-          <enum>Qt::Orientation::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Policy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="5" column="1">
-        <widget class="QDoubleSpinBox" name="dsbOpacity"/>
-       </item>
-       <item row="16" column="0">
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Orientation::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>398</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="15" column="0">
-        <widget class="QLabel" name="lTheme">
-         <property name="text">
-          <string>Theme</string>
-         </property>
-        </widget>
-       </item>
-       <item row="11" column="0">
-        <widget class="QLabel" name="lXRot">
-         <property name="text">
-          <string>X Rotation Slider</string>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="0">
-        <widget class="QLabel" name="lZoom">
-         <property name="text">
-          <string>Zoom Slider</string>
-         </property>
-        </widget>
-       </item>
-       <item row="12" column="0">
-        <widget class="QSlider" name="slXRot">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
+       <item row="0" column="2">
         <widget class="KComboBox" name="cbPointStyle">
          <property name="enabled">
           <bool>true</bool>
@@ -286,12 +175,135 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="0">
+       <item row="4" column="0">
         <widget class="QLabel" name="lSmoothRendering">
          <property name="text">
           <string>Opacity</string>
          </property>
         </widget>
+       </item>
+       <item row="14" column="0">
+        <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="9" column="2">
+        <widget class="QSlider" name="slXRot">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0">
+        <widget class="QLabel" name="lXRot">
+         <property name="text">
+          <string>X Rotation</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QDoubleSpinBox" name="dsbOpacity"/>
+       </item>
+       <item row="11" column="0">
+        <widget class="QLabel" name="lYRot">
+         <property name="text">
+          <string>Y Rotation</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="KComboBox" name="cbShadowQuality"/>
+       </item>
+       <item row="7" column="2">
+        <widget class="QSlider" name="slZoom">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Shadow Quality:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="0">
+        <widget class="QLabel" name="lTheme">
+         <property name="text">
+          <string>Theme</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="lZoom">
+         <property name="text">
+          <string>Zoom</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="2">
+        <widget class="QSlider" name="slYRot">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Policy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>10</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="5" column="0">
+        <spacer name="verticalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Policy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="12" column="0">
+        <spacer name="verticalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Policy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -322,7 +334,6 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>tabWidget</tabstop>
   <tabstop>leName</tabstop>
   <tabstop>teComment</tabstop>
   <tabstop>cbXCoordinate</tabstop>

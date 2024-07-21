@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>322</width>
-    <height>737</height>
+    <width>419</width>
+    <height>626</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -16,8 +16,8 @@
     <height>16777215</height>
    </size>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="enabled">
       <bool>true</bool>
@@ -35,12 +35,13 @@
       <attribute name="title">
        <string>General</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="4" column="1" colspan="2">
-        <widget class="QDoubleSpinBox" name="dsbMinRange"/>
-       </item>
-       <item row="0" column="1" colspan="2">
-        <widget class="QLineEdit" name="leXLabel"/>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="2" column="0">
+        <widget class="QLabel" name="segmentCountLabel">
+         <property name="text">
+          <string>Segment Count</string>
+         </property>
+        </widget>
        </item>
        <item row="5" column="0">
         <widget class="QLabel" name="maxRangeLabel">
@@ -49,36 +50,18 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="segmentCountLabel">
-         <property name="text">
-          <string>Segment Count</string>
+       <item row="6" column="0">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="xLabel">
-         <property name="text">
-          <string>Text</string>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
          </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="subSegmentCountLabel">
-         <property name="text">
-          <string>Sub-segment Count</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1" colspan="2">
-        <widget class="QSpinBox" name="sbSegmentCount"/>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="xAxisFormatLabel">
-         <property name="text">
-          <string>Format</string>
-         </property>
-        </widget>
+        </spacer>
        </item>
        <item row="7" column="0">
         <widget class="QCheckBox" name="chkVisible">
@@ -90,24 +73,34 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="1" colspan="2">
+       <item row="5" column="2">
         <widget class="QDoubleSpinBox" name="dsbMaxRange"/>
        </item>
-       <item row="6" column="0">
-        <spacer name="verticalSpacer_5">
-         <property name="orientation">
-          <enum>Qt::Orientation::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>272</height>
-          </size>
-         </property>
-        </spacer>
+       <item row="2" column="2">
+        <widget class="QSpinBox" name="sbSegmentCount"/>
        </item>
-       <item row="1" column="1" colspan="2">
-        <widget class="QComboBox" name="cbXLabelFormat"/>
+       <item row="3" column="0">
+        <widget class="QLabel" name="subSegmentCountLabel">
+         <property name="text">
+          <string>Sub-segment Count</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="QSpinBox" name="sbSubSegmentCount"/>
+       </item>
+       <item row="0" column="2">
+        <widget class="QLineEdit" name="leXLabel"/>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="xLabel">
+         <property name="text">
+          <string>Text</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QDoubleSpinBox" name="dsbMinRange"/>
        </item>
        <item row="4" column="0">
         <widget class="QLabel" name="minRangeLabel">
@@ -116,8 +109,38 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1" colspan="2">
-        <widget class="QSpinBox" name="sbSubSegmentCount"/>
+       <item row="1" column="2">
+        <widget class="QComboBox" name="cbXLabelFormat">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="xAxisFormatLabel">
+         <property name="text">
+          <string>Format</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Policy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>10</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>

@@ -18,6 +18,8 @@ public:
 
 private:
 	void updateUiVisibility();
+	void load();
+	void loadConfig(KConfig&);
 
 private Q_SLOTS:
 	void retranslateUi();
@@ -50,9 +52,6 @@ private:
 	Ui::Scatter3DPlotAreaDock ui;
 	QList<Scatter3DPlotArea*> m_scatters;
 	Scatter3DPlotArea* m_scatter{nullptr};
-
-	void load();
-	void loadConfig(KConfig&);
 
 Q_SIGNALS:
 	void info(const QString&);
