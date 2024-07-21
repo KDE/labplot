@@ -18,10 +18,10 @@
 #include "XYDataReductionCurve.h"
 #include "XYDifferentiationCurve.h"
 #include "XYEquationCurve.h"
-#include "XYEquationCurve2.h"
 #include "XYFitCurve.h"
 #include "XYFourierFilterCurve.h"
 #include "XYFourierTransformCurve.h"
+#include "XYFunctionCurve.h"
 #include "XYHilbertTransformCurve.h"
 #include "XYIntegrationCurve.h"
 #include "XYInterpolationCurve.h"
@@ -428,7 +428,7 @@ void CartesianPlot::initActions() {
 	//"add new" actions
 	addCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("xy-curve"), this);
 	addEquationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve")), i18n("xy-curve from a Formula"), this);
-	addEquationCurve2Action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve")), i18n("xy-curve from other curves"), this);
+	addFunctionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve")), i18n("xy-curve from other curves"), this);
 
 	// statistical plots
 	addHistogramAction = new QAction(QIcon::fromTheme(QStringLiteral("view-object-histogram-linear")), i18n("Histogram"), this);
@@ -472,8 +472,8 @@ void CartesianPlot::initActions() {
 	connect(addEquationCurveAction, &QAction::triggered, this, [=]() {
 		addChild(new XYEquationCurve(QStringLiteral("f(x)")));
 	});
-	connect(addEquationCurve2Action, &QAction::triggered, this, [=]() {
-		addChild(new XYEquationCurve2(QStringLiteral("f(x)")));
+	connect(addFunctionCurveAction, &QAction::triggered, this, [=]() {
+		addChild(new XYFunctionCurve(QStringLiteral("f(x)")));
 	});
 
 	// bar plots
@@ -616,7 +616,7 @@ void CartesianPlot::initMenus() {
 	m_addNewMenu->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 	m_addNewMenu->addAction(addCurveAction);
 	m_addNewMenu->addAction(addEquationCurveAction);
-	m_addNewMenu->addAction(addEquationCurve2Action);
+	m_addNewMenu->addAction(addFunctionCurveAction);
 
 	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"), m_addNewMenu);
 	addNewStatisticalPlotsMenu->addAction(addHistogramAction);
@@ -813,7 +813,7 @@ QVector<AspectType> CartesianPlot::pasteTypes() const {
 							  AspectType::QQPlot,
 							  AspectType::Axis,
 							  AspectType::XYEquationCurve,
-							  AspectType::XYEquationCurve2,
+							  AspectType::XYFunctionCurve,
 							  AspectType::XYConvolutionCurve,
 							  AspectType::XYCorrelationCurve,
 							  AspectType::XYDataReductionCurve,
@@ -5105,8 +5105,8 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				delete curve;
 				return false;
 			}
-		} else if (reader->name() == XYEquationCurve2::saveName) {
-			auto* curve = new XYEquationCurve2(QString());
+		} else if (reader->name() == XYFunctionCurve::saveName) {
+			auto* curve = new XYFunctionCurve(QString());
 			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);

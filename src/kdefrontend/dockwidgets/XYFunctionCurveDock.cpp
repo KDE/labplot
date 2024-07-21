@@ -1,16 +1,16 @@
 /*
-	File             : XYEquationCurve2Dock.cpp
+	File             : XYFunctionCurveDock.cpp
 	Project          : LabPlot
-	Description      : widget for editing properties of equation curves
+	Description      : widget for editing properties of function curves
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2024 Martin Marmsoler <martin.marmsoler@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "XYEquationCurve2Dock.h"
+#include "XYFunctionCurveDock.h"
 #include "backend/core/Project.h"
 #include "backend/gsl/ExpressionParser.h"
-#include "backend/worksheet/plots/cartesian/XYEquationCurve2.h"
+#include "backend/worksheet/plots/cartesian/XYFunctionCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/widgets/ConstantsWidget.h"
 #include "kdefrontend/widgets/FunctionsWidget.h"
@@ -23,9 +23,9 @@
 #include <KLocalizedString>
 
 /*!
-  \class XYEquationCurve2Dock
-  \brief  Provides a widget for editing the properties of the XYEquationCurves
-		(2D-curves defined by a mathematical equation) currently selected in
+  \class XYFunctionCurveDock
+  \brief  Provides a widget for editing the properties of the XYFunctionCurves
+		(2D-curves defined by a mathematical function) currently selected in
 		the project explorer.
 
   If more than one curves are set, the properties of the first column are shown.
@@ -36,7 +36,7 @@
   \ingroup kdefrontend
 */
 
-XYEquationCurve2Dock::XYEquationCurve2Dock(QWidget* parent)
+XYFunctionCurveDock::XYFunctionCurveDock(QWidget* parent)
 	: XYAnalysisCurveDock(parent) {
 	// remove the tab "Error bars"
 	ui.tabWidget->removeTab(5);
@@ -45,7 +45,7 @@ XYEquationCurve2Dock::XYEquationCurve2Dock(QWidget* parent)
 /*!
  * 	// Tab "General"
  */
-void XYEquationCurve2Dock::setupGeneral() {
+void XYFunctionCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
@@ -80,22 +80,22 @@ void XYEquationCurve2Dock::setupGeneral() {
 	uiGeneralTab.tbFunctions->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-font")));
 
 	// Slots
-	connect(uiGeneralTab.bAddVariable, &QPushButton::clicked, this, &XYEquationCurve2Dock::addVariable);
-	connect(uiGeneralTab.teEquation, &ExpressionTextEdit::expressionChanged, this, &XYEquationCurve2Dock::enableRecalculate);
-	connect(uiGeneralTab.tbConstants, &QToolButton::clicked, this, &XYEquationCurve2Dock::showConstants);
-	connect(uiGeneralTab.tbFunctions, &QToolButton::clicked, this, &XYEquationCurve2Dock::showFunctions);
-	connect(uiGeneralTab.pbRecalculate, &QToolButton::clicked, this, &XYEquationCurve2Dock::recalculateClicked);
+	connect(uiGeneralTab.bAddVariable, &QPushButton::clicked, this, &XYFunctionCurveDock::addVariable);
+	connect(uiGeneralTab.teFunction, &ExpressionTextEdit::expressionChanged, this, &XYFunctionCurveDock::enableRecalculate);
+	connect(uiGeneralTab.tbConstants, &QToolButton::clicked, this, &XYFunctionCurveDock::showConstants);
+	connect(uiGeneralTab.tbFunctions, &QToolButton::clicked, this, &XYFunctionCurveDock::showFunctions);
+	connect(uiGeneralTab.pbRecalculate, &QToolButton::clicked, this, &XYFunctionCurveDock::recalculateClicked);
 }
 
-void XYEquationCurve2Dock::initGeneralTab() {
+void XYFunctionCurveDock::initGeneralTab() {
 	// show the properties of the first curve
-	const auto* equationCurve = static_cast<const XYEquationCurve2*>(m_curve);
+	const auto* functionCurve = static_cast<const XYFunctionCurve*>(m_curve);
 	const auto* plot = m_curve->plot();
-	Q_ASSERT(equationCurve);
-	uiGeneralTab.teEquation->setText(equationCurve->equation());
+	Q_ASSERT(functionCurve);
+	uiGeneralTab.teFunction->setText(functionCurve->function());
 
 	removeAllVariableWidgets();
-	const auto& formulaData = equationCurve->equationData();
+	const auto& formulaData = functionCurve->functionData();
 
 	if (formulaData.isEmpty()) { // no formula was used for this column -> add the first variable "x"
 		addVariable();
@@ -142,13 +142,13 @@ void XYEquationCurve2Dock::initGeneralTab() {
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
 	// Slots
-	connect(m_equationCurve, &XYEquationCurve2::equationDataChanged, this, &XYEquationCurve2Dock::curveEquationDataChanged);
+	connect(m_functionCurve, &XYFunctionCurve::functionDataChanged, this, &XYFunctionCurveDock::curveFunctionDataChanged);
 }
 
 /*!
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
-void XYEquationCurve2Dock::setCurves(QList<XYCurve*> list) {
+void XYFunctionCurveDock::setCurves(QList<XYCurve*> list) {
 	CONDITIONAL_LOCK_RETURN;
 	m_curve = list.first();
 	const auto* plot = m_curve->plot();
@@ -167,8 +167,8 @@ void XYEquationCurve2Dock::setCurves(QList<XYCurve*> list) {
 	setAspects(list);
 
 	aspectModel()->setRoot(m_curve->project());
-	m_equationCurve = dynamic_cast<XYEquationCurve2*>(m_curve);
-	Q_ASSERT(m_equationCurve);
+	m_functionCurve = dynamic_cast<XYFunctionCurve*>(m_curve);
+	Q_ASSERT(m_functionCurve);
 	XYCurveDock::setModel();
 
 	initGeneralTab();
@@ -180,9 +180,9 @@ void XYEquationCurve2Dock::setCurves(QList<XYCurve*> list) {
 }
 
 //*************************************************************
-//**** SLOTs for changes triggered in XYEquationCurve2Dock ****
+//**** SLOTs for changes triggered in XYFunctionCurveDock ****
 //*************************************************************
-void XYEquationCurve2Dock::addVariable() {
+void XYFunctionCurveDock::addVariable() {
 	const auto row{m_variableLineEdits.size()};
 
 	// text field for the variable name
@@ -191,14 +191,14 @@ void XYEquationCurve2Dock::addVariable() {
 	auto* validator = new QRegularExpressionValidator(QRegularExpression(QLatin1String("[a-zA-Z][a-zA-Z0-9_]*")), le);
 	le->setValidator(validator);
 	// le->setMaximumWidth(40); // hardcoding size is bad. 40 is enough for three letters
-	connect(le, &QLineEdit::textChanged, this, &XYEquationCurve2Dock::variableNameChanged);
+	connect(le, &QLineEdit::textChanged, this, &XYFunctionCurveDock::variableNameChanged);
 	m_gridLayoutVariables->addWidget(le, row, 0, 1, 1);
 	m_variableLineEdits << le;
 
 	// combo box for the data column
 	auto* cb{new TreeViewComboBox()};
 	cb->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
-	connect(cb, &TreeViewComboBox::currentModelIndexChanged, this, &XYEquationCurve2Dock::variableColumnChanged);
+	connect(cb, &TreeViewComboBox::currentModelIndexChanged, this, &XYFunctionCurveDock::variableColumnChanged);
 	m_gridLayoutCurves->addWidget(cb, row, 2, 1, 1);
 	m_variableComboBoxes << cb;
 
@@ -226,11 +226,11 @@ void XYEquationCurve2Dock::addVariable() {
 		b->setToolTip(i18n("Delete variable"));
 		m_gridLayoutCurves->addWidget(b, row, 3, 1, 1);
 		m_variableDeleteButtons << b;
-		connect(b, &QToolButton::pressed, this, &XYEquationCurve2Dock::deleteVariable);
+		connect(b, &QToolButton::pressed, this, &XYFunctionCurveDock::deleteVariable);
 	}
 }
 
-void XYEquationCurve2Dock::removeAllVariableWidgets() {
+void XYFunctionCurveDock::removeAllVariableWidgets() {
 	while (!m_variableLineEdits.isEmpty())
 		delete m_variableLineEdits.takeFirst();
 
@@ -241,7 +241,7 @@ void XYEquationCurve2Dock::removeAllVariableWidgets() {
 		delete m_variableDeleteButtons.takeFirst();
 }
 
-void XYEquationCurve2Dock::deleteVariable() {
+void XYFunctionCurveDock::deleteVariable() {
 	QObject* ob{QObject::sender()};
 	const auto index{m_variableDeleteButtons.indexOf(qobject_cast<QToolButton*>(ob))};
 
@@ -259,7 +259,7 @@ void XYEquationCurve2Dock::deleteVariable() {
 }
 
 // TODO Copied from FunctionValuesDialog. Try to reduce copy paste!!!!
-void XYEquationCurve2Dock::variableNameChanged() {
+void XYFunctionCurveDock::variableNameChanged() {
 	QStringList vars;
 	QString argText;
 	for (auto* varName : m_variableLineEdits) {
@@ -279,12 +279,12 @@ void XYEquationCurve2Dock::variableNameChanged() {
 		funText = QStringLiteral("f(") + argText + QStringLiteral(") = ");
 
 	uiGeneralTab.lFunction->setText(funText);
-	uiGeneralTab.teEquation->setVariables(vars);
+	uiGeneralTab.teFunction->setVariables(vars);
 	enableRecalculate();
 }
 
 // TODO Copied from FunctionValuesDialog. Try to reduce copy paste!!!!
-void XYEquationCurve2Dock::variableColumnChanged(const QModelIndex& index) {
+void XYFunctionCurveDock::variableColumnChanged(const QModelIndex& index) {
 	// combobox was potentially red-highlighted because of a missing column
 	// remove the highlighting when we have a valid selection now
 	auto* aspect{static_cast<AbstractAspect*>(index.internalPointer())};
@@ -297,8 +297,8 @@ void XYEquationCurve2Dock::variableColumnChanged(const QModelIndex& index) {
 	enableRecalculate();
 }
 
-void XYEquationCurve2Dock::recalculateClicked() {
-	const auto& equation = uiGeneralTab.teEquation->document()->toPlainText();
+void XYFunctionCurveDock::recalculateClicked() {
+	const auto& function = uiGeneralTab.teFunction->document()->toPlainText();
 
 	// determine variable names and data vectors of the specified curves
 	QStringList variableNames;
@@ -315,17 +315,17 @@ void XYEquationCurve2Dock::recalculateClicked() {
 	}
 
 	for (auto* curve : m_curvesList)
-		static_cast<XYEquationCurve2*>(curve)->setEquation(equation, variableNames, variableCurves);
+		static_cast<XYFunctionCurve*>(curve)->setFunction(function, variableNames, variableCurves);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	updatePlotRangeList(); // axes range may change when range on auto scale
 }
 
-void XYEquationCurve2Dock::showConstants() {
+void XYFunctionCurveDock::showConstants() {
 	QMenu menu;
 	ConstantsWidget constants(&menu);
 
-	connect(&constants, &ConstantsWidget::constantSelected, this, &XYEquationCurve2Dock::insertConstant);
+	connect(&constants, &ConstantsWidget::constantSelected, this, &XYFunctionCurveDock::insertConstant);
 	connect(&constants, &ConstantsWidget::constantSelected, &menu, &QMenu::close);
 	connect(&constants, &ConstantsWidget::canceled, &menu, &QMenu::close);
 
@@ -337,10 +337,10 @@ void XYEquationCurve2Dock::showConstants() {
 	menu.exec(uiGeneralTab.tbConstants->mapToGlobal(pos));
 }
 
-void XYEquationCurve2Dock::showFunctions() {
+void XYFunctionCurveDock::showFunctions() {
 	QMenu menu;
 	FunctionsWidget functions(&menu);
-	connect(&functions, &FunctionsWidget::functionSelected, this, &XYEquationCurve2Dock::insertFunction);
+	connect(&functions, &FunctionsWidget::functionSelected, this, &XYFunctionCurveDock::insertFunction);
 	connect(&functions, &FunctionsWidget::functionSelected, &menu, &QMenu::close);
 	connect(&functions, &FunctionsWidget::canceled, &menu, &QMenu::close);
 
@@ -352,18 +352,18 @@ void XYEquationCurve2Dock::showFunctions() {
 	menu.exec(uiGeneralTab.tbFunctions->mapToGlobal(pos));
 }
 
-void XYEquationCurve2Dock::insertFunction(const QString& functionName) {
-	uiGeneralTab.teEquation->insertPlainText(functionName + ExpressionParser::functionArgumentString(functionName, XYEquationCurve::EquationType::Neutral));
+void XYFunctionCurveDock::insertFunction(const QString& functionName) {
+	uiGeneralTab.teFunction->insertPlainText(functionName + ExpressionParser::functionArgumentString(functionName, XYEquationCurve::EquationType::Neutral));
 }
 
-void XYEquationCurve2Dock::insertConstant(const QString& constantsName) {
-	uiGeneralTab.teEquation->insertPlainText(constantsName);
+void XYFunctionCurveDock::insertConstant(const QString& constantsName) {
+	uiGeneralTab.teFunction->insertPlainText(constantsName);
 }
 
-void XYEquationCurve2Dock::enableRecalculate() const {
+void XYFunctionCurveDock::enableRecalculate() const {
 	// check whether the formula expressions are correct
 	bool valid = false;
-	valid = uiGeneralTab.teEquation->isValid();
+	valid = uiGeneralTab.teFunction->isValid();
 
 	uiGeneralTab.pbRecalculate->setEnabled(valid);
 }
@@ -372,8 +372,8 @@ void XYEquationCurve2Dock::enableRecalculate() const {
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
 // General-Tab
-void XYEquationCurve2Dock::curveEquationDataChanged(const XYEquationCurve2::EquationData& data) {
+void XYFunctionCurveDock::curveFunctionDataChanged(const XYFunctionCurve::FunctionData& data) {
 	CONDITIONAL_LOCK_RETURN;
 	// TODOOOOOOO!!!!
-	// uiGeneralTab.teEquation->setText(data.expression);
+	// uiGeneralTab.teFunction->setText(data.expression);
 }

@@ -1,32 +1,32 @@
 /*
-	File             : XYEquationCurve2Dock.h
+	File             : XYFunctionCurveDock.h
 	Project          : LabPlot
-	Description      : widget for editing properties of equation curves
+	Description      : widget for editing properties of function curves
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2024 Martin Marmsoler <martin.marmsoler@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef XYEQUATIONCURVE2DOCK_H
-#define XYEQUATIONCURVE2DOCK_H
+#ifndef XYFUNCTIONCURVEDOCK_H
+#define XYFUNCTIONCURVEDOCK_H
 
-#include "backend/worksheet/plots/cartesian/XYEquationCurve2.h"
+#include "backend/worksheet/plots/cartesian/XYFunctionCurve.h"
 #include "kdefrontend/dockwidgets/XYAnalysisCurveDock.h"
-#include "ui_xyequationcurve2dockgeneraltab.h"
+#include "ui_xyfunctioncurvedockgeneraltab.h"
 
-class XYEquationCurve2Dock : public XYAnalysisCurveDock {
+class XYFunctionCurveDock : public XYAnalysisCurveDock {
 	Q_OBJECT
 
 public:
-	explicit XYEquationCurve2Dock(QWidget*);
+	explicit XYFunctionCurveDock(QWidget*);
 	void setupGeneral() override;
 	void setCurves(QList<XYCurve*>);
 
 private:
 	void initGeneralTab() override;
 
-	Ui::XYEquationCurve2DockGeneralTab uiGeneralTab;
-	XYEquationCurve2* m_equationCurve{nullptr};
+	Ui::XYFunctionCurveDockGeneralTab uiGeneralTab;
+	XYFunctionCurve* m_functionCurve{nullptr};
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYCurveDock
@@ -45,9 +45,10 @@ private Q_SLOTS:
 
 	// SLOTs for changes triggered in XYCurve
 	// General-Tab
-	void curveEquationDataChanged(const XYEquationCurve2::EquationData&);
+	void curveFunctionDataChanged(const XYFunctionCurve::FunctionData&);
 
-	// Everything related to equation handling
+	// Everything related to function handling
+
 private:
 	// variable widgets
 	QGridLayout* m_gridLayoutCurves;

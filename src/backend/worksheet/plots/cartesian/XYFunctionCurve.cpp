@@ -1,21 +1,21 @@
 /*
-	File                 : XYEquationCurve2.cpp
+	File                 : XYFunctionCurve.cpp
 	Project              : LabPlot
-	Description          : A xy-curve defined by a mathematical equation from other curves
+	Description          : A xy-curve that is calculated as a function of other curves
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2024 Martin Marmsoler <martin.marmsoler@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 /*!
-  \class XYEquationCurve2
-  \brief A xy-curve defined by a mathematical equation
+  \class XYFunctionCurve
+  \brief A xy-curve that is calculated as a function of other curves
 
   \ingroup worksheet
 */
 
-#include "XYEquationCurve2.h"
-#include "XYEquationCurve2Private.h"
+#include "XYFunctionCurve.h"
+#include "XYFunctionCurvePrivate.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Folder.h"
 #include "backend/core/column/Column.h"
@@ -29,20 +29,20 @@
 #include <QElapsedTimer>
 #include <QIcon>
 
-XYEquationCurve2::XYEquationCurve2(const QString& name)
-	: XYAnalysisCurve(name, new XYEquationCurve2Private(this), AspectType::XYEquationCurve2) {
+XYFunctionCurve::XYFunctionCurve(const QString& name)
+	: XYAnalysisCurve(name, new XYFunctionCurvePrivate(this), AspectType::XYFunctionCurve) {
 	init();
 }
 
-XYEquationCurve2::XYEquationCurve2(const QString& name, XYEquationCurve2Private* dd)
-	: XYAnalysisCurve(name, dd, AspectType::XYEquationCurve2) {
+XYFunctionCurve::XYFunctionCurve(const QString& name, XYFunctionCurvePrivate* dd)
+	: XYAnalysisCurve(name, dd, AspectType::XYFunctionCurve) {
 	init();
 }
 
-void XYEquationCurve2::init() {
-	Q_D(XYEquationCurve2);
+void XYFunctionCurve::init() {
+	Q_D(XYFunctionCurve);
 
-	// TODO: read from the saved settings for XYEquationCurve2?
+	// TODO: read from the saved settings for XYFunctionCurve?
 	d->lineType = XYCurve::LineType::Line;
 	d->symbol->setStyle(Symbol::Style::NoSymbols);
 }
@@ -50,164 +50,164 @@ void XYEquationCurve2::init() {
 /*!
 	Returns an icon to be used in the project explorer.
 */
-QIcon XYEquationCurve2::icon() const {
-	return QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve"));
+QIcon XYFunctionCurve::icon() const {
+	return QIcon::fromTheme(QStringLiteral("labplot-xy-function-curve"));
 }
 
-const XYAnalysisCurve::Result& XYEquationCurve2::result() const {
-	Q_D(const XYEquationCurve2);
+const XYAnalysisCurve::Result& XYFunctionCurve::result() const {
+	Q_D(const XYFunctionCurve);
 	return d->m_result;
 }
 
-void XYEquationCurve2::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) {
-	Q_D(XYEquationCurve2);
+void XYFunctionCurve::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) {
+	Q_D(XYFunctionCurve);
 	d->handleAspectUpdated(aspectPath, element);
 }
 
 // ##############################################################################
 // ##########################  getter methods  ##################################
 // ##############################################################################
-// BASIC_SHARED_D_READER_IMPL(XYEquationCurve2, XYEquationCurve2::EquationData, equationData, equationData)
+// BASIC_SHARED_D_READER_IMPL(XYFunctionCurve, XYFunctionCurve::FunctionData, functionData, functionData)
 
 // ##############################################################################
 // #################  setter methods and undo commands ##########################
 // ##############################################################################
 
-class CurveSetGlobalEquationCmd : public QUndoCommand {
+class CurveSetGlobalFunctionCmd : public QUndoCommand {
 public:
-	explicit CurveSetGlobalEquationCmd(XYEquationCurve2Private* curve,
-									   QString equation,
+	explicit CurveSetGlobalFunctionCmd(XYFunctionCurvePrivate* curve,
+									   QString function,
 									   QStringList variableNames,
 									   QVector<const XYCurve*> variableCurves,
 									   QUndoCommand* parent = nullptr)
 		: QUndoCommand(parent)
 		, m_curve(curve)
-		, m_newEquation(std::move(equation))
+		, m_newFunction(std::move(function))
 		, m_newVariableNames(std::move(variableNames))
 		, m_newVariableCurves(std::move(variableCurves)) {
-		setText(i18n("%1: set equation", curve->name()));
+		setText(i18n("%1: set function", curve->name()));
 	}
 
 	void redo() override {
 		if (!m_copied) {
-			m_equation = m_curve->equation();
-			for (auto& d : m_curve->equationData()) {
+			m_function = m_curve->function();
+			for (auto& d : m_curve->functionData()) {
 				m_variableNames << d.variableName();
 				m_variableCurves << d.m_curve;
 			}
 			m_copied = true;
 		}
 
-		QVector<XYEquationCurve2::EquationData> equationData;
+		QVector<XYFunctionCurve::FunctionData> functionData;
 		for (int i = 0; i < m_newVariableNames.count(); i++)
 			if (i < m_newVariableCurves.size()) // names may be defined but without column
-				equationData << XYEquationCurve2::EquationData(m_newVariableNames.at(i), m_newVariableCurves.at(i));
+				functionData << XYFunctionCurve::FunctionData(m_newVariableNames.at(i), m_newVariableCurves.at(i));
 
-		m_curve->setEquation(m_newEquation, equationData);
+		m_curve->setFunction(m_newFunction, functionData);
 	}
 
 	void undo() override {
-		QVector<XYEquationCurve2::EquationData> equationData;
+		QVector<XYFunctionCurve::FunctionData> functionData;
 		for (int i = 0; i < m_variableNames.count(); i++)
-			equationData << XYEquationCurve2::EquationData(m_variableNames.at(i), m_variableCurves.at(i));
-		m_curve->setEquation(m_equation, equationData);
+			functionData << XYFunctionCurve::FunctionData(m_variableNames.at(i), m_variableCurves.at(i));
+		m_curve->setFunction(m_function, functionData);
 	}
 
 private:
-	XYEquationCurve2Private* m_curve;
-	QString m_equation;
+	XYFunctionCurvePrivate* m_curve;
+	QString m_function;
 	QStringList m_variableNames;
 	QVector<const XYCurve*> m_variableCurves;
-	QString m_newEquation;
+	QString m_newFunction;
 	QStringList m_newVariableNames;
 	QVector<const XYCurve*> m_newVariableCurves;
 	bool m_copied{false};
 };
 
-void XYEquationCurve2::setEquation(const QString& equation, const QStringList& variableNames, const QVector<const XYCurve*>& curves) {
-	Q_D(XYEquationCurve2);
-	exec(new CurveSetGlobalEquationCmd(d, equation, variableNames, curves));
+void XYFunctionCurve::setFunction(const QString& function, const QStringList& variableNames, const QVector<const XYCurve*>& curves) {
+	Q_D(XYFunctionCurve);
+	exec(new CurveSetGlobalFunctionCmd(d, function, variableNames, curves));
 }
 
 /**
- * \brief Clears the equation used to generate column values
+ * \brief Clears the function used to generate column values
  */
-void XYEquationCurve2::clearEquation() {
-	setEquation(QString(), QStringList(), QVector<const XYCurve*>());
+void XYFunctionCurve::clearFunction() {
+	setFunction(QString(), QStringList(), QVector<const XYCurve*>());
 }
 
-QString XYEquationCurve2::equation() const {
-	Q_D(const XYEquationCurve2);
-	return d->equation();
+QString XYFunctionCurve::function() const {
+	Q_D(const XYFunctionCurve);
+	return d->function();
 }
 
-const QVector<XYEquationCurve2::EquationData>& XYEquationCurve2::equationData() const {
-	Q_D(const XYEquationCurve2);
-	return d->equationData();
+const QVector<XYFunctionCurve::FunctionData>& XYFunctionCurve::functionData() const {
+	Q_D(const XYFunctionCurve);
+	return d->functionData();
 }
 
-void XYEquationCurve2::setEquationVariableCurve(const XYCurve* c) {
-	Q_D(XYEquationCurve2);
-	d->setEquationVariableCurve(c);
+void XYFunctionCurve::setFunctionVariableCurve(const XYCurve* c) {
+	Q_D(XYFunctionCurve);
+	d->setFunctionVariableCurve(c);
 }
 
 // ##############################################################################
 // #################################  SLOTS  ####################################
 // ##############################################################################
 
-void XYEquationCurve2::equationVariableCurveRemoved(const AbstractAspect* aspect) {
-	Q_D(XYEquationCurve2);
-	d->equationVariableCurveRemoved(aspect);
+void XYFunctionCurve::functionVariableCurveRemoved(const AbstractAspect* aspect) {
+	Q_D(XYFunctionCurve);
+	d->functionVariableCurveRemoved(aspect);
 }
 
-void XYEquationCurve2::equationVariableCurveAdded(const AbstractAspect* aspect) {
-	Q_D(XYEquationCurve2);
-	d->equationVariableCurveAdded(aspect);
+void XYFunctionCurve::functionVariableCurveAdded(const AbstractAspect* aspect) {
+	Q_D(XYFunctionCurve);
+	d->functionVariableCurveAdded(aspect);
 }
 
-void XYEquationCurve2::recalculate() {
-	Q_D(XYEquationCurve2);
+void XYFunctionCurve::recalculate() {
+	Q_D(XYFunctionCurve);
 	d->recalculate();
 }
 
 // ##############################################################################
 // ######################### Private implementation #############################
 // ##############################################################################
-XYEquationCurve2Private::XYEquationCurve2Private(XYEquationCurve2* owner)
+XYFunctionCurvePrivate::XYFunctionCurvePrivate(XYFunctionCurve* owner)
 	: XYAnalysisCurvePrivate(owner)
 	, q(owner) {
 	dataSourceType = XYAnalysisCurve::DataSourceType::Curve;
 }
 
-QString XYEquationCurve2Private::equation() const {
-	return m_equation;
+QString XYFunctionCurvePrivate::function() const {
+	return m_function;
 }
 
-const QVector<XYEquationCurve2::EquationData>& XYEquationCurve2Private::equationData() const {
-	return m_equationData;
+const QVector<XYFunctionCurve::FunctionData>& XYFunctionCurvePrivate::functionData() const {
+	return m_functionData;
 }
 
-void XYEquationCurve2Private::setEquation(const QString& equation, const QStringList& variableNames, const QStringList& variableCurvePaths) {
-	m_equation = equation;
-	m_equationData.clear();
+void XYFunctionCurvePrivate::setFunction(const QString& function, const QStringList& variableNames, const QStringList& variableCurvePaths) {
+	m_function = function;
+	m_functionData.clear();
 	for (int i = 0; i < variableNames.count(); i++)
-		m_equationData.append(XYEquationCurve2::EquationData(variableNames.at(i), variableCurvePaths.at(i)));
+		m_functionData.append(XYFunctionCurve::FunctionData(variableNames.at(i), variableCurvePaths.at(i)));
 }
 
-void XYEquationCurve2Private::setEquationVariableCurvesPath(int index, const QString& path) {
-	if (!m_equationData[index].setCurvePath(path))
+void XYFunctionCurvePrivate::setFunctionVariableCurvesPath(int index, const QString& path) {
+	if (!m_functionData[index].setCurvePath(path))
 		DEBUG(Q_FUNC_INFO << ": For some reason, there was already a curve assigned");
 }
 
-void XYEquationCurve2Private::setEquationVariableCurve(int index, const XYCurve* curve) {
-	if (m_equationData.at(index).curve()) // if there exists already a valid curve, disconnect it first
-		q->disconnect(m_equationData.at(index).m_curve, nullptr, q, nullptr);
-	m_equationData[index].setCurve(curve);
-	connectEquationCurve(curve);
+void XYFunctionCurvePrivate::setFunctionVariableCurve(int index, const XYCurve* curve) {
+	if (m_functionData.at(index).curve()) // if there exists already a valid curve, disconnect it first
+		q->disconnect(m_functionData.at(index).m_curve, nullptr, q, nullptr);
+	m_functionData[index].setCurve(curve);
+	connectFunctionCurve(curve);
 }
 
-void XYEquationCurve2Private::setEquationVariableCurve(const XYCurve* c) {
-	for (auto& d : m_equationData) {
+void XYFunctionCurvePrivate::setFunctionVariableCurve(const XYCurve* c) {
+	for (auto& d : m_functionData) {
 		if (d.curvePath() == c->path()) {
 			d.setCurve(c);
 			break;
@@ -215,56 +215,56 @@ void XYEquationCurve2Private::setEquationVariableCurve(const XYCurve* c) {
 	}
 }
 
-void XYEquationCurve2Private::connectEquationCurve(const XYCurve* curve) {
+void XYFunctionCurvePrivate::connectFunctionCurve(const XYCurve* curve) {
 	if (!curve)
 		return;
 
 	// avoid circular dependencies - the current curve cannot be part of the variable curve.
-	// this should't actually happen because of the checks done when the equation is defined,
+	// this should't actually happen because of the checks done when the function is defined,
 	// but in case we have bugs somewhere or somebody manipulated the project xml file we add
 	// a sanity check to avoid recursive calls here and crash because of the stack overflow.
 	if (curve == q)
 		return;
 
 	DEBUG(Q_FUNC_INFO)
-	m_connectionsUpdateEquation << q->connect(curve, &XYCurve::dataChanged, q, &XYEquationCurve2::recalculate);
-	m_connectionsUpdateEquation << q->connect(curve, &XYCurve::xDataChanged, q, &XYEquationCurve2::recalculate);
-	m_connectionsUpdateEquation << q->connect(curve, &XYCurve::yDataChanged, q, &XYEquationCurve2::recalculate);
-	m_connectionsUpdateEquation << q->connect(curve, &AbstractAspect::aspectAboutToBeRemoved, q, &XYEquationCurve2::equationVariableCurveRemoved);
-	// m_connectionsUpdateEquation << q->connect(curve->parentAspect(), &AbstractAspect::childAspectAdded, q, &XYEquationCurve2::equationVariableCurveAdded);
+	m_connectionsUpdateFunction << q->connect(curve, &XYCurve::dataChanged, q, &XYFunctionCurve::recalculate);
+	m_connectionsUpdateFunction << q->connect(curve, &XYCurve::xDataChanged, q, &XYFunctionCurve::recalculate);
+	m_connectionsUpdateFunction << q->connect(curve, &XYCurve::yDataChanged, q, &XYFunctionCurve::recalculate);
+	m_connectionsUpdateFunction << q->connect(curve, &AbstractAspect::aspectAboutToBeRemoved, q, &XYFunctionCurve::functionVariableCurveRemoved);
+	// m_connectionsUpdateFunction << q->connect(curve->parentAspect(), &AbstractAspect::childAspectAdded, q, &XYFunctionCurve::functionVariableCurveAdded);
 }
 
-void XYEquationCurve2Private::equationVariableCurveRemoved(const AbstractAspect* aspect) {
+void XYFunctionCurvePrivate::functionVariableCurveRemoved(const AbstractAspect* aspect) {
 	const XYCurve* curve = dynamic_cast<const XYCurve*>(aspect);
 	if (!curve)
 		return;
 	q->disconnect(curve, nullptr, q, nullptr);
 	int index = -1;
-	for (int i = 0; i < equationData().count(); i++) {
-		auto& d = equationData().at(i);
+	for (int i = 0; i < functionData().count(); i++) {
+		auto& d = functionData().at(i);
 		if (d.curve() == curve) {
 			index = i;
 			break;
 		}
 	}
 	if (index != -1) {
-		m_equationData[index].setCurve(nullptr);
-		DEBUG(Q_FUNC_INFO << ", calling updateEquation()")
+		m_functionData[index].setCurve(nullptr);
+		DEBUG(Q_FUNC_INFO << ", calling updateFunction()")
 		q->recalculate();
 	}
 }
 
-void XYEquationCurve2Private::equationVariableCurveAdded(const AbstractAspect* aspect) {
+void XYFunctionCurvePrivate::functionVariableCurveAdded(const AbstractAspect* aspect) {
 	auto* curve = dynamic_cast<XYCurve*>(const_cast<AbstractAspect*>(aspect));
 	if (!curve)
 		return;
 
 	const auto& path = aspect->path();
-	for (int i = 0; i < equationData().count(); i++) {
-		if (equationData().at(i).curvePath() == path) {
-			// m_equationData[index].setColumn(const_cast<Column*>(column));
-			// DEBUG(Q_FUNC_INFO << ", calling updateEquation()")
-			setEquationVariableCurve(i, curve);
+	for (int i = 0; i < functionData().count(); i++) {
+		if (functionData().at(i).curvePath() == path) {
+			// m_functionData[index].setColumn(const_cast<Column*>(column));
+			// DEBUG(Q_FUNC_INFO << ", calling updateFunction()")
+			setFunctionVariableCurve(i, curve);
 			recalculate();
 			return;
 		}
@@ -272,31 +272,31 @@ void XYEquationCurve2Private::equationVariableCurveAdded(const AbstractAspect* a
 }
 
 /**
- * \brief Sets the equation used to generate column values
+ * \brief Sets the function used to generate column values
  */
-void XYEquationCurve2Private::setEquation(const QString& equation, const QVector<XYEquationCurve2::EquationData>& equationData) {
-	m_equation = equation;
-	m_equationData = equationData; // TODO: disconnecting everything?
+void XYFunctionCurvePrivate::setFunction(const QString& function, const QVector<XYFunctionCurve::FunctionData>& functionData) {
+	m_function = function;
+	m_functionData = functionData; // TODO: disconnecting everything?
 
-	for (auto& connection : m_connectionsUpdateEquation)
+	for (auto& connection : m_connectionsUpdateFunction)
 		if (static_cast<bool>(connection))
 			q->disconnect(connection);
 
-	for (const auto& data : qAsConst(m_equationData)) {
+	for (const auto& data : qAsConst(m_functionData)) {
 		const auto* curve = data.curve();
 		if (curve)
-			connectEquationCurve(curve);
+			connectFunctionCurve(curve);
 	}
 	q->recalculate();
 }
 
-void XYEquationCurve2Private::resetResults() {
-	m_result = XYEquationCurve2::Result();
+void XYFunctionCurvePrivate::resetResults() {
+	m_result = XYFunctionCurve::Result();
 }
 
 // ...
 // see XYFitCurvePrivate
-bool XYEquationCurve2Private::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
+bool XYFunctionCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
 	QElapsedTimer timer;
 	timer.start();
 
@@ -304,10 +304,10 @@ bool XYEquationCurve2Private::recalculateSpecific(const AbstractColumn* tmpXData
 	QString status = QStringLiteral("Valid");
 
 	int numberElements = 0;
-	if (m_equationData.length() == 0) {
+	if (m_functionData.length() == 0) {
 		valid = false;
 	} else {
-		const auto* curve = m_equationData.first().curve();
+		const auto* curve = m_functionData.first().curve();
 		if (!curve || !curve->xColumn() || !curve->yColumn() || curve->xColumn()->rowCount() != curve->yColumn()->rowCount()) {
 			if (!curve)
 				status = i18n("First curve not valid");
@@ -324,7 +324,7 @@ bool XYEquationCurve2Private::recalculateSpecific(const AbstractColumn* tmpXData
 	}
 
 	if (valid) {
-		for (const auto& ed : qAsConst(m_equationData)) {
+		for (const auto& ed : qAsConst(m_functionData)) {
 			const auto* curve = ed.curve();
 			if (!curve || !curve->xColumn() || !curve->yColumn() || curve->xColumn()->rowCount() != numberElements
 				|| curve->yColumn()->rowCount() != numberElements) {
@@ -343,9 +343,9 @@ bool XYEquationCurve2Private::recalculateSpecific(const AbstractColumn* tmpXData
 	}
 
 	if (valid) {
-		const auto rowCount = m_equationData.first().curve()->xColumn()->rowCount();
+		const auto rowCount = m_functionData.first().curve()->xColumn()->rowCount();
 		yVector->resize(rowCount);
-		const auto* xColumn = dynamic_cast<const Column*>(m_equationData.first().curve()->xColumn());
+		const auto* xColumn = dynamic_cast<const Column*>(m_functionData.first().curve()->xColumn());
 		Q_ASSERT(xColumn);
 		xVector->resize(rowCount);
 		// convert integers to doubles first
@@ -353,14 +353,14 @@ bool XYEquationCurve2Private::recalculateSpecific(const AbstractColumn* tmpXData
 			(*xVector)[i] = xColumn->valueAt(i);
 
 		QVector<QVector<double>*> xVectors;
-		QStringList equationVariableNames;
-		for (const auto& equationData : qAsConst(m_equationData)) {
-			const auto* curve = equationData.curve();
-			const auto& varName = equationData.variableName();
+		QStringList functionVariableNames;
+		for (const auto& functionData : qAsConst(m_functionData)) {
+			const auto* curve = functionData.curve();
+			const auto& varName = functionData.variableName();
 			const auto* column = dynamic_cast<const Column*>(curve->yColumn());
 			Q_ASSERT(column);
 
-			equationVariableNames << varName;
+			functionVariableNames << varName;
 
 			if (column->columnMode() == AbstractColumn::ColumnMode::Double)
 				xVectors << static_cast<QVector<double>*>(column->data());
@@ -374,7 +374,7 @@ bool XYEquationCurve2Private::recalculateSpecific(const AbstractColumn* tmpXData
 			}
 		}
 
-		// const auto payload = std::make_shared<PayloadColumn>(m_equationData);
+		// const auto payload = std::make_shared<PayloadColumn>(m_functionData);
 
 		// evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.
 		auto* parser = ExpressionParser::getInstance();
@@ -407,7 +407,7 @@ bool XYEquationCurve2Private::recalculateSpecific(const AbstractColumn* tmpXData
 		// parser->setSpecialFunction1(colfun_entropy, columnEntropy, payload);
 		// parser->setSpecialFunction2(colfun_percentile, columnPercentile, payload);
 		// parser->setSpecialFunction2(colfun_quantile, columnQuantile, payload);
-		parser->evaluateCartesian(m_equation, equationVariableNames, xVectors, yVector);
+		parser->evaluateCartesian(m_function, functionVariableNames, xVectors, yVector);
 	}
 	m_result.available = true;
 	m_result.valid = valid;
@@ -416,19 +416,19 @@ bool XYEquationCurve2Private::recalculateSpecific(const AbstractColumn* tmpXData
 	return valid;
 }
 
-bool XYEquationCurve2Private::preparationValid(const AbstractColumn*, const AbstractColumn*) {
+bool XYFunctionCurvePrivate::preparationValid(const AbstractColumn*, const AbstractColumn*) {
 	return true;
 }
 
-void XYEquationCurve2Private::prepareTmpDataColumn(const AbstractColumn**, const AbstractColumn**) {
+void XYFunctionCurvePrivate::prepareTmpDataColumn(const AbstractColumn**, const AbstractColumn**) {
 	// Nothing to do
 }
 
-void XYEquationCurve2Private::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) {
+void XYFunctionCurvePrivate::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) {
 	const auto curve = dynamic_cast<const XYCurve*>(element);
 	if (!curve)
 		return;
-	for (auto& data : m_equationData) {
+	for (auto& data : m_functionData) {
 		if (data.curvePath() == aspectPath) {
 			data.m_curve = curve;
 			// No break, because it could be used multiple times
@@ -441,34 +441,34 @@ void XYEquationCurve2Private::handleAspectUpdated(const QString& aspectPath, con
 // ##################  Serialization/Deserialization  ###########################
 // ##############################################################################
 //! Save as XML
-void XYEquationCurve2::save(QXmlStreamWriter* writer) const {
-	Q_D(const XYEquationCurve2);
+void XYFunctionCurve::save(QXmlStreamWriter* writer) const {
+	Q_D(const XYFunctionCurve);
 
-	writer->writeStartElement(XYEquationCurve2::saveName);
+	writer->writeStartElement(XYFunctionCurve::saveName);
 
 	// write xy-curve information
 	XYAnalysisCurve::save(writer);
 
-	// write xy-equationCurve specific information
-	// save the equation used to generate column values, if available
-	if (!equation().isEmpty()) {
-		writer->writeStartElement(QStringLiteral("equation"));
-		writer->writeTextElement(QStringLiteral("text"), equation());
+	// write xy-functionCurve specific information
+	// save the function used to generate column values, if available
+	if (!function().isEmpty()) {
+		writer->writeStartElement(QStringLiteral("function"));
+		writer->writeTextElement(QStringLiteral("text"), function());
 
-		QStringList equationVariableNames;
-		QStringList equationVariableColumnPaths;
-		for (auto& d : equationData()) {
-			equationVariableNames << d.variableName();
-			equationVariableColumnPaths << d.curvePath();
+		QStringList functionVariableNames;
+		QStringList functionVariableColumnPaths;
+		for (auto& d : functionData()) {
+			functionVariableNames << d.variableName();
+			functionVariableColumnPaths << d.curvePath();
 		}
 
 		writer->writeStartElement(QStringLiteral("variableNames"));
-		for (const auto& name : equationVariableNames)
+		for (const auto& name : functionVariableNames)
 			writer->writeTextElement(QStringLiteral("name"), name);
 		writer->writeEndElement();
 
 		writer->writeStartElement(QStringLiteral("curvePaths"));
-		for (const auto& path : equationVariableColumnPaths)
+		for (const auto& path : functionVariableColumnPaths)
 			writer->writeTextElement(QStringLiteral("path"), path);
 		writer->writeEndElement(); // curvePaths
 
@@ -478,14 +478,14 @@ void XYEquationCurve2::save(QXmlStreamWriter* writer) const {
 			d->yColumn->save(writer);
 		}
 
-		writer->writeEndElement(); // equation
+		writer->writeEndElement(); // function
 	}
-	writer->writeEndElement(); // XYEquationCurve2
+	writer->writeEndElement(); // XYFunctionCurve
 }
 
 //! Load from XML
-bool XYEquationCurve2::load(XmlStreamReader* reader, bool preview) {
-	Q_D(XYEquationCurve2);
+bool XYFunctionCurve::load(XmlStreamReader* reader, bool preview) {
+	Q_D(XYFunctionCurve);
 
 	// QXmlStreamAttributes attribs;
 	// QString str;
@@ -501,8 +501,8 @@ bool XYEquationCurve2::load(XmlStreamReader* reader, bool preview) {
 		if (reader->name() == QLatin1String("xyCurve")) {
 			if (!XYAnalysisCurve::load(reader, preview))
 				return false;
-		} else if (reader->name() == QLatin1String("equation")) {
-			if (!XmlReadEquation(reader, preview))
+		} else if (reader->name() == QLatin1String("function")) {
+			if (!XmlReadFunction(reader, preview))
 				return false;
 		} else { // unknown element
 			reader->raiseUnknownElementWarning();
@@ -515,11 +515,11 @@ bool XYEquationCurve2::load(XmlStreamReader* reader, bool preview) {
 }
 
 /**
- * \brief Read XML equation element
+ * \brief Read XML function element
  */
-bool XYEquationCurve2::XmlReadEquation(XmlStreamReader* reader, bool preview) {
-	Q_D(XYEquationCurve2);
-	QString equation;
+bool XYFunctionCurve::XmlReadFunction(XmlStreamReader* reader, bool preview) {
+	Q_D(XYFunctionCurve);
+	QString function;
 	QStringList variableNames;
 	QStringList curvePaths;
 
@@ -528,7 +528,7 @@ bool XYEquationCurve2::XmlReadEquation(XmlStreamReader* reader, bool preview) {
 			break;
 
 		if (reader->name() == QLatin1String("text"))
-			equation = reader->readElementText();
+			function = reader->readElementText();
 		else if (reader->name() == QLatin1String("variableNames")) {
 			while (reader->readNext()) {
 				if (reader->name() == QLatin1String("variableNames") && reader->isEndElement())
@@ -562,7 +562,7 @@ bool XYEquationCurve2::XmlReadEquation(XmlStreamReader* reader, bool preview) {
 		}
 	}
 
-	d->setEquation(equation, variableNames, curvePaths);
+	d->setFunction(function, variableNames, curvePaths);
 
 	if (d->xColumn && d->yColumn) {
 		d->xColumn->setHidden(true);

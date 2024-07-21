@@ -368,7 +368,7 @@ void XYCurveDock::setModel() {
 			AspectType::XYCorrelationCurve,
 			AspectType::XYDataReductionCurve,
 			AspectType::XYEquationCurve,
-			AspectType::XYEquationCurve2,
+			AspectType::XYFunctionCurve
 		};
 	else
 		list = {AspectType::Column};

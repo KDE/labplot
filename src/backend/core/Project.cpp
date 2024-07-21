@@ -26,8 +26,8 @@
 #include "backend/worksheet/plots/cartesian/LollipopPlot.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
-#include "backend/worksheet/plots/cartesian/XYEquationCurve2.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
+#include "backend/worksheet/plots/cartesian/XYFunctionCurve.h"
 #ifdef HAVE_LIBORIGIN
 #include "backend/datasources/projects/OriginProjectParser.h"
 #endif
@@ -1011,15 +1011,15 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	for (auto* element : elements)
 		element->assignCurve(curves);
 
-	QVector<XYEquationCurve2*> xyEquationCurve2s;
-	if (aspect->type() == AspectType::XYEquationCurve2) // check for the type first. InfoElement has children, but they are not relevant here
-		xyEquationCurve2s << static_cast<XYEquationCurve2*>(aspect);
+	QVector<XYFunctionCurve*> xyEquationCurve2s;
+	if (aspect->type() == AspectType::XYFunctionCurve) // check for the type first. InfoElement has children, but they are not relevant here
+		xyEquationCurve2s << static_cast<XYFunctionCurve*>(aspect);
 	else if (hasChildren)
-		xyEquationCurve2s = aspect->children<XYEquationCurve2>(ChildIndexFlag::Recursive);
+		xyEquationCurve2s = aspect->children<XYFunctionCurve>(ChildIndexFlag::Recursive);
 
 	for (auto* eq : xyEquationCurve2s) {
 		for (const auto* curve : qAsConst(curves))
-			eq->setEquationVariableCurve(curve);
+			eq->setFunctionVariableCurve(curve);
 	}
 
 	// axes

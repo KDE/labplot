@@ -437,11 +437,11 @@ void XYFitCurveDock::dataSourceTypeChanged(int index) {
 								   AspectType::XYCurve,
 								   AspectType::XYAnalysisCurve,
 								   AspectType::XYEquationCurve,
-								   AspectType::XYEquationCurve2};
+								   AspectType::XYFunctionCurve};
 			cbDataSourceCurve->setTopLevelClasses(list);
 
 			if (m_dataSourceModel) {
-				list = {AspectType::XYCurve, AspectType::XYAnalysisCurve, AspectType::XYEquationCurve, AspectType::XYEquationCurve2};
+				list = {AspectType::XYCurve, AspectType::XYAnalysisCurve, AspectType::XYEquationCurve, AspectType::XYFunctionCurve};
 				m_dataSourceModel->setSelectableAspects(list);
 				cbDataSourceCurve->setModel(m_dataSourceModel);
 				cbDataSourceCurve->setAspect(m_fitCurve->dataSourceCurve());

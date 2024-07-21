@@ -229,7 +229,7 @@ private:
 	//"add new" actions
 	QAction* addCurveAction{nullptr};
 	QAction* addEquationCurveAction{nullptr};
-	QAction* addEquationCurve2Action{nullptr};
+	QAction* addFunctionCurveAction{nullptr};
 
 	// statistical plots
 	QAction* addHistogramAction{nullptr};

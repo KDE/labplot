@@ -125,6 +125,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYAnalysisCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYEquationCurve.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/XYFunctionCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYDataReductionCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYDifferentiationCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYIntegrationCurve.cpp
