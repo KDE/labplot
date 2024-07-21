@@ -706,6 +706,11 @@ IF (ENABLE_LIBORIGIN)
 		target_include_directories( labplot2lib PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin" )
 	ENDIF()
 ENDIF ()
+
+IF(LZ4_FOUND)
+	target_include_directories(labplot2backendlib PRIVATE ${LZ4_INCLUDE_DIR})
+ENDIF ()
+
 IF (PSAPI)
 	target_link_libraries( labplot2lib ${PSAPI} )
 ENDIF ()
