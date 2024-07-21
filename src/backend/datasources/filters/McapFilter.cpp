@@ -204,7 +204,7 @@ QString McapFilter::fileInfoString(const QString& fileName) {
 		info += QLatin1String("<br>");
 		info += i18n("Channel count: ") + QString::number(stats.value().channelCount);
 		info += QLatin1String("<br>");
-		info += i18n("Attachement count: ") + QString::number(stats.value().attachmentCount);
+		info += i18n("Attachment count: ") + QString::number(stats.value().attachmentCount);
 		info += QLatin1String("<br>");
 		info += i18n("Metadata count: ") + QString::number(stats.value().metadataCount);
 		info += QLatin1String("<br>");
