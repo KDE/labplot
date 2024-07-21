@@ -195,7 +195,6 @@ void Scatter3DPlotAreaDock::scatterPointStyleChanged(Scatter3DPlotArea::PointSty
 void Scatter3DPlotAreaDock::scatterOpacityChanged(double opacity) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.dsbOpacity->setValue(opacity);
-
 }
 void Scatter3DPlotAreaDock::scatterThemeChanged(Scatter3DPlotArea::Theme theme) {
 	CONDITIONAL_LOCK_RETURN;

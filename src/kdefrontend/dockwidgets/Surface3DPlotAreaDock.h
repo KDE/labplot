@@ -44,36 +44,32 @@ private Q_SLOTS:
 	void xColumnChanged(const QModelIndex&);
 	void yColumnChanged(const QModelIndex&);
 	void zColumnChanged(const QModelIndex&);
-
-	void xRotationChanged(int);
-	void yRotationChanged(int);
-	void zoomChanged(int);
-
 	void matrixChanged(const QModelIndex&);
 
+	// Appearance properties
+	void drawModeChanged(int);
+	void shadowQualityChanged(int);
+	void flatShadingChanged(bool);
+	void zoomLevelChanged(int);
+	void xRotationChanged(int);
+	void yRotationChanged(int);
+	void themeChanged(int);
+	void smoothChanged(bool);
+
 	// SLOTs for changes triggered in Surface3DPlotArea
-	void sourceTypeChanged(Surface3DPlotArea::DataSource);
+	void surfaceDrawModeChanged(Surface3DPlotArea::DrawMode mode);
+	void surfaceThemeChanged(Surface3DPlotArea::Theme theme);
+	void surfaceFlatShadingChanged(bool);
+	void surfaceShadowsQualityChanged(Surface3DPlotArea::ShadowQuality quality);
+	void surfaceSourceTypeChanged(Surface3DPlotArea::DataSource);
 	void surfaceXColumnChanged(const AbstractColumn*);
 	void surfaceYColumnChanged(const AbstractColumn*);
 	void surfaceZColumnChanged(const AbstractColumn*);
 	void surfaceMatrixChanged(const Matrix*);
-
-	// Appearance properties
-	void onDrawModeChanged(int);
-	void onShadowQualityChanged(int);
-	void onFlatShadingChanged(bool);
-	void onZoomLevelChanged(int);
-	void onXRotationChanged(int);
-	void onYRotationChanged(int);
-	void onThemeChanged(int);
-
-	// Rendering properties
-	void onSmoothChanged(bool);
-
-	void drawModeChanged(Surface3DPlotArea::DrawMode mode);
-	void themeChanged(Surface3DPlotArea::Theme theme);
-	void flatShadingChanged(bool);
-	void shadowsQualityChanged(Surface3DPlotArea::ShadowQuality quality);
+	void surfaceXRotationChanged(int);
+	void surfaceYRotationChanged(int);
+	void surfaceSmoothChanged(bool);
+	void surfaceZoomChanged(int);
 
 private:
 	Ui::Surface3DPlotAreaDock ui;
