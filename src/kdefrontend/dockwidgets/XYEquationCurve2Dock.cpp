@@ -52,6 +52,18 @@ void XYEquationCurve2Dock::setupGeneral() {
 	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate);
 	setVisibilityWidgets(uiGeneralTab.chkVisible, uiGeneralTab.chkLegendVisible);
 
+	m_gridLayoutVariables = new QGridLayout(uiGeneralTab.frameVariables);
+	m_gridLayoutVariables->setContentsMargins(0, 0, 0, 0);
+	m_gridLayoutVariables->setHorizontalSpacing(2);
+	m_gridLayoutVariables->setVerticalSpacing(2);
+	uiGeneralTab.frameVariables->setLayout(m_gridLayoutVariables);
+
+	m_gridLayoutCurves = new QGridLayout(uiGeneralTab.frameCurves);
+	m_gridLayoutCurves->setContentsMargins(0, 0, 0, 0);
+	m_gridLayoutCurves->setHorizontalSpacing(2);
+	m_gridLayoutCurves->setVerticalSpacing(2);
+	uiGeneralTab.frameCurves->setLayout(m_gridLayoutCurves);
+
 	auto* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
 		gridLayout->setContentsMargins(2, 2, 2, 2);
@@ -63,17 +75,16 @@ void XYEquationCurve2Dock::setupGeneral() {
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
 
+	uiGeneralTab.bAddVariable->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 	uiGeneralTab.tbConstants->setIcon(QIcon::fromTheme(QStringLiteral("labplot-format-text-symbol")));
 	uiGeneralTab.tbFunctions->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-font")));
-	uiGeneralTab.bAddVariable->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 
 	// Slots
+	connect(uiGeneralTab.bAddVariable, &QPushButton::clicked, this, &XYEquationCurve2Dock::addVariable);
 	connect(uiGeneralTab.teEquation, &ExpressionTextEdit::expressionChanged, this, &XYEquationCurve2Dock::enableRecalculate);
 	connect(uiGeneralTab.tbConstants, &QToolButton::clicked, this, &XYEquationCurve2Dock::showConstants);
 	connect(uiGeneralTab.tbFunctions, &QToolButton::clicked, this, &XYEquationCurve2Dock::showFunctions);
 	connect(uiGeneralTab.pbRecalculate, &QToolButton::clicked, this, &XYEquationCurve2Dock::recalculateClicked);
-
-	connect(uiGeneralTab.bAddVariable, &QPushButton::pressed, this, &XYEquationCurve2Dock::addVariable);
 }
 
 void XYEquationCurve2Dock::initGeneralTab() {
@@ -82,31 +93,33 @@ void XYEquationCurve2Dock::initGeneralTab() {
 	const auto* plot = m_curve->plot();
 	Q_ASSERT(equationCurve);
 	uiGeneralTab.teEquation->setText(equationCurve->equation());
-	const auto& formulaData = equationCurve->equationData();
+
 	removeAllVariableWidgets();
+	const auto& formulaData = equationCurve->equationData();
+
 	if (formulaData.isEmpty()) { // no formula was used for this column -> add the first variable "x"
 		addVariable();
-		m_variableLineEdits[0]->setText(QStringLiteral("x"));
+		m_variableLineEdits.constFirst()->setText(QStringLiteral("x"));
 	} else { // formula and variables are available
 		// add all available variables and select the corresponding columns
 		const auto& curves = plot->children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
 		for (int i = 0; i < formulaData.size(); ++i) {
 			addVariable();
-			m_variableLineEdits[i]->setText(formulaData.at(i).variableName());
+			m_variableLineEdits.at(i)->setText(formulaData.at(i).variableName());
+			auto* cb = m_variableComboBoxes.at(i);
 
 			bool found = false;
-			for (const auto* c : curves) {
-				if (c != formulaData.at(i).curve())
+			for (const auto* curve : curves) {
+				if (curve != formulaData.at(i).curve())
 					continue;
 
-				const auto* curve = dynamic_cast<const XYCurve*>(c);
 				if (curve)
-					m_variableDataCurves[i]->setCurrentModelIndex(aspectModel()->modelIndexOfAspect(curve));
+					cb->setCurrentModelIndex(aspectModel()->modelIndexOfAspect(curve));
 				else
-					m_variableDataCurves[i]->setCurrentModelIndex(QModelIndex());
+					cb->setCurrentModelIndex(QModelIndex());
 
-				m_variableDataCurves[i]->useCurrentIndexText(true);
-				m_variableDataCurves[i]->setInvalid(false);
+				cb->useCurrentIndexText(true);
+				cb->setInvalid(false);
 
 				found = true;
 				break;
@@ -115,12 +128,12 @@ void XYEquationCurve2Dock::initGeneralTab() {
 			// for the current variable name no curve exists anymore (was deleted)
 			//->highlight the combobox red
 			if (!found) {
-				m_variableDataCurves[i]->setCurrentModelIndex(QModelIndex());
-				m_variableDataCurves[i]->useCurrentIndexText(false);
-				m_variableDataCurves[i]->setInvalid(
+				cb->setCurrentModelIndex(QModelIndex());
+				cb->useCurrentIndexText(false);
+				cb->setInvalid(
 					true,
 					i18n("The curve \"%1\"\nis not available anymore. It will be automatically used once it is created again.", formulaData.at(i).curvePath()));
-				m_variableDataCurves[i]->setText(formulaData.at(i).curvePath().split(QLatin1Char('/')).last());
+				cb->setText(formulaData.at(i).curvePath().split(QLatin1Char('/')).last());
 			}
 		}
 	}
@@ -157,41 +170,37 @@ void XYEquationCurve2Dock::setCurves(QList<XYCurve*> list) {
 	m_equationCurve = dynamic_cast<XYEquationCurve2*>(m_curve);
 	Q_ASSERT(m_equationCurve);
 	XYCurveDock::setModel();
+
 	initGeneralTab();
 	initTabs();
+
 	setSymbols(list);
 	enableRecalculate();
 	updatePlotRangeList();
 }
 
 //*************************************************************
-//**** SLOTs for changes triggered in XYEquationCurve2Dock *****
+//**** SLOTs for changes triggered in XYEquationCurve2Dock ****
 //*************************************************************
-
-// TODO Copied from FunctionValuesDialog. Try to reduce copy paste!!!!
 void XYEquationCurve2Dock::addVariable() {
-	auto* layout{uiGeneralTab.gridLayoutVariables};
-	auto row{m_variableLineEdits.size()};
+	const auto row{m_variableLineEdits.size()};
+
 	// text field for the variable name
 	auto* le{new QLineEdit};
 	le->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));
 	auto* validator = new QRegularExpressionValidator(QRegularExpression(QLatin1String("[a-zA-Z][a-zA-Z0-9_]*")), le);
 	le->setValidator(validator);
-	// hardcoding size is bad. 40 is enough for three letters
-	le->setMaximumWidth(40);
+	// le->setMaximumWidth(40); // hardcoding size is bad. 40 is enough for three letters
 	connect(le, &QLineEdit::textChanged, this, &XYEquationCurve2Dock::variableNameChanged);
-	layout->addWidget(le, row, 0, 1, 1);
+	m_gridLayoutVariables->addWidget(le, row, 0, 1, 1);
 	m_variableLineEdits << le;
-	auto* l{new QLabel(QStringLiteral("="))};
-	layout->addWidget(l, row, 1, 1, 1);
-	m_variableLabels << l;
 
 	// combo box for the data column
 	auto* cb{new TreeViewComboBox()};
 	cb->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
 	connect(cb, &TreeViewComboBox::currentModelIndexChanged, this, &XYEquationCurve2Dock::variableColumnChanged);
-	layout->addWidget(cb, row, 2, 1, 1);
-	m_variableDataCurves << cb;
+	m_gridLayoutCurves->addWidget(cb, row, 2, 1, 1);
+	m_variableComboBoxes << cb;
 
 	setModelCurve(cb);
 
@@ -201,8 +210,8 @@ void XYEquationCurve2Dock::addVariable() {
 		aspects << c;
 	cb->setHiddenAspects(aspects);
 
-	const auto& plot = m_curve->plot();
 	// for the variable curve select the first non-selected curve
+	const auto& plot = m_curve->plot();
 	for (auto* c : plot->children<XYCurve>()) {
 		if (m_curvesList.indexOf(c) == -1) {
 			cb->setCurrentModelIndex(aspectModel()->modelIndexOfAspect(c));
@@ -210,32 +219,23 @@ void XYEquationCurve2Dock::addVariable() {
 		}
 	}
 
-	// move the add-button to the next row
-	layout->removeWidget(uiGeneralTab.bAddVariable);
-	layout->addWidget(uiGeneralTab.bAddVariable, row + 1, 3, 1, 1);
-
 	// add delete-button for the just added variable
 	if (row != 0) {
 		auto* b{new QToolButton()};
 		b->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
 		b->setToolTip(i18n("Delete variable"));
-		layout->addWidget(b, row, 3, 1, 1);
+		m_gridLayoutCurves->addWidget(b, row, 3, 1, 1);
 		m_variableDeleteButtons << b;
 		connect(b, &QToolButton::pressed, this, &XYEquationCurve2Dock::deleteVariable);
 	}
-
-	uiGeneralTab.lVariable->setText(i18n("Variables:"));
 }
 
 void XYEquationCurve2Dock::removeAllVariableWidgets() {
 	while (!m_variableLineEdits.isEmpty())
 		delete m_variableLineEdits.takeFirst();
 
-	while (!m_variableLabels.isEmpty())
-		delete m_variableLabels.takeFirst();
-
-	while (!m_variableDataCurves.isEmpty())
-		delete m_variableDataCurves.takeFirst();
+	while (!m_variableComboBoxes.isEmpty())
+		delete m_variableComboBoxes.takeFirst();
 
 	while (!m_variableDeleteButtons.isEmpty())
 		delete m_variableDeleteButtons.takeFirst();
@@ -246,8 +246,7 @@ void XYEquationCurve2Dock::deleteVariable() {
 	const auto index{m_variableDeleteButtons.indexOf(qobject_cast<QToolButton*>(ob))};
 
 	delete m_variableLineEdits.takeAt(index + 1);
-	delete m_variableLabels.takeAt(index + 1);
-	delete m_variableDataCurves.takeAt(index + 1);
+	delete m_variableComboBoxes.takeAt(index + 1);
 	delete m_variableDeleteButtons.takeAt(index);
 
 	variableNameChanged();
@@ -283,6 +282,7 @@ void XYEquationCurve2Dock::variableNameChanged() {
 	uiGeneralTab.teEquation->setVariables(vars);
 	enableRecalculate();
 }
+
 // TODO Copied from FunctionValuesDialog. Try to reduce copy paste!!!!
 void XYEquationCurve2Dock::variableColumnChanged(const QModelIndex& index) {
 	// combobox was potentially red-highlighted because of a missing column
@@ -306,7 +306,7 @@ void XYEquationCurve2Dock::recalculateClicked() {
 	for (int i = 0; i < m_variableLineEdits.size(); ++i) {
 		variableNames << m_variableLineEdits.at(i)->text().simplified();
 
-		auto* aspect{static_cast<AbstractAspect*>(m_variableDataCurves.at(i)->currentModelIndex().internalPointer())};
+		auto* aspect{static_cast<AbstractAspect*>(m_variableComboBoxes.at(i)->currentModelIndex().internalPointer())};
 		if (aspect) {
 			auto* curve{dynamic_cast<const XYCurve*>(aspect)};
 			if (curve)

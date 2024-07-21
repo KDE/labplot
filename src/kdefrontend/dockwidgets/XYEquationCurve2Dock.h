@@ -50,9 +50,10 @@ private Q_SLOTS:
 	// Everything related to equation handling
 private:
 	// variable widgets
+	QGridLayout* m_gridLayoutCurves;
+	QGridLayout* m_gridLayoutVariables;
 	QList<QLineEdit*> m_variableLineEdits;
-	QList<QLabel*> m_variableLabels; // '=' labels
-	QList<TreeViewComboBox*> m_variableDataCurves;
+	QList<TreeViewComboBox*> m_variableComboBoxes;
 	QList<QToolButton*> m_variableDeleteButtons;
 };
 
