@@ -11,9 +11,9 @@
 #ifndef RETRANSFORMTEST_H
 #define RETRANSFORMTEST_H
 
-#include "../../CommonTest.h"
+#include "../../CommonMetaTest.h"
 
-class RetransformTest : public CommonTest {
+class RetransformTest : public CommonMetaTest {
 	Q_OBJECT
 
 	// Tests

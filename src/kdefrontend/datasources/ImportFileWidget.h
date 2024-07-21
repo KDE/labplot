@@ -33,6 +33,7 @@ class FITSOptionsWidget;
 class HDF5OptionsWidget;
 class ImageOptionsWidget;
 class JsonOptionsWidget;
+class McapOptionsWidget;
 class MatioOptionsWidget;
 class NetCDFOptionsWidget;
 class OdsOptionsWidget;
@@ -110,6 +111,8 @@ private:
 	std::unique_ptr<MatioOptionsWidget> m_matioOptionsWidget;
 	std::unique_ptr<FITSOptionsWidget> m_fitsOptionsWidget;
 	std::unique_ptr<JsonOptionsWidget> m_jsonOptionsWidget;
+	std::unique_ptr<McapOptionsWidget> m_mcapOptionsWidget;
+
 	std::unique_ptr<ROOTOptionsWidget> m_rootOptionsWidget;
 
 	mutable std::unique_ptr<AbstractFileFilter> m_currentFilter;
@@ -124,6 +127,7 @@ private:
 	bool m_suppressRefresh{false};
 	bool m_embedded{false};
 	TemplateHandler* m_templateHandler{nullptr};
+	bool mcapTopicsInitialized{false};
 
 Q_SIGNALS:
 	void enableImportToMatrix(bool enable);
@@ -151,6 +155,7 @@ private Q_SLOTS:
 	void refreshPreview();
 	void updateStartRow(int);
 	void enableDataPortionSelection(bool);
+	void changeTopic();
 
 	// save/load template
 	void loadConfigFromTemplate(KConfig&);
@@ -161,6 +166,7 @@ private Q_SLOTS:
 	friend class NetCDFOptionsWidget; // to access refreshPreview() and others
 	friend class FITSOptionsWidget;
 	friend class JsonOptionsWidget;
+	friend class McapOptionsWidget;
 	friend class ROOTOptionsWidget; // to access refreshPreview() and others
 	friend class OdsOptionsWidget; // to access refreshPreview()
 	friend class XLSXOptionsWidget; // to access refreshPreview()

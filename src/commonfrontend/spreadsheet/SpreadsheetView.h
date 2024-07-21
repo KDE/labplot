@@ -95,6 +95,7 @@ private:
 	void exportToFits(const QString& path, int exportTo, bool commentsAsUnits) const;
 	void exportToXLSX(const QString& path, bool exportHeaders) const;
 	void exportToSQLite(const QString& path) const;
+	void exportToMCAP(const QString& path, int compression_mode, int compression_level) const;
 	int maxRowToExport() const;
 	bool hasValues(const QVector<Column*>);
 

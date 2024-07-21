@@ -1,6 +1,6 @@
 ## 3rd party libraries
 
-This folder contains versions of libraries and files LabPlot depends on.
+This folder contains or downloads versions of libraries and files LabPlot can use.
 
 
 ## KDMacTouchBar
@@ -25,6 +25,14 @@ QXlsx is an excel file(.xlsx) reader/writer MIT-licensed C++ (with Qt) library (
 ## Qt Advanced Docking System
 
 Qt Advanced Docking System lets you create customizable layouts using a full featured window docking system ([link](https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System))
+
+## MCAP
+
+MCAP provides classes for reading and writing the MCAP file format.
+
+https://github.com/foxglove/mcap
+
+copy cpp/mcap/{include,LICENSE} -> mcap/
 
 ## QStringTokenizer
 

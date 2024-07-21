@@ -16,6 +16,7 @@
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
 #include "backend/datasources/filters/FITSFilter.h"
+#include "backend/datasources/filters/McapFilter.h"
 #include "backend/datasources/filters/XLSXFilter.h"
 #include "backend/lib/hostprocess.h"
 #include "backend/lib/macros.h"
@@ -3781,6 +3782,7 @@ void SpreadsheetView::selectionChanged(const QItemSelection& /*selected*/, const
 }
 
 bool SpreadsheetView::exportView() {
+	QDEBUG(Q_FUNC_INFO)
 	auto* dlg = new ExportSpreadsheetDialog(this);
 	dlg->setProjectFileName(m_spreadsheet->project()->fileName());
 	dlg->setFileName(m_spreadsheet->name());
@@ -3795,7 +3797,6 @@ bool SpreadsheetView::exportView() {
 	}
 	if (selectedColumnCount(false /* partial selection */) == 0)
 		dlg->setExportSelection(false);
-
 	bool ret;
 	if ((ret = dlg->exec()) == QDialog::Accepted) {
 		const QString path = dlg->path();
@@ -3825,13 +3826,21 @@ bool SpreadsheetView::exportView() {
 #endif
 			break;
 		}
-		case ExportSpreadsheetDialog::Format::XLSX:
+		case ExportSpreadsheetDialog::Format::XLSX: {
 			exportToXLSX(path, exportHeader);
 			break;
-		case ExportSpreadsheetDialog::Format::SQLite:
+		}
+		case ExportSpreadsheetDialog::Format::SQLite: {
 			exportToSQLite(path);
 			break;
 		}
+		case ExportSpreadsheetDialog::Format::MCAP: {
+			std::pair<int, int> compressionSettings = dlg->getMcapSettings();
+			exportToMCAP(path, compressionSettings.first, compressionSettings.second);
+			break;
+		}
+		}
+
 		RESET_CURSOR;
 	}
 	delete dlg;
@@ -4413,6 +4422,13 @@ void SpreadsheetView::exportToFits(const QString& fileName, const int exportTo, 
 	filter->setExportTo(exportTo);
 	filter->setCommentsAsUnits(commentsAsUnits);
 	filter->write(fileName, m_spreadsheet);
+
+	delete filter;
+}
+
+void SpreadsheetView::exportToMCAP(const QString& fileName, int compressionMode, int compressionLevel) const {
+	auto* filter = new McapFilter;
+	filter->writeWithOptions(fileName, m_spreadsheet, compressionMode, compressionLevel);
 
 	delete filter;
 }

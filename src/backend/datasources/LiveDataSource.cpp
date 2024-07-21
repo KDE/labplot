@@ -420,6 +420,7 @@ QIcon LiveDataSource::icon() const {
 	case AbstractFileFilter::FileType::HDF5:
 	case AbstractFileFilter::FileType::NETCDF:
 	case AbstractFileFilter::FileType::VECTOR_BLF:
+	case AbstractFileFilter::FileType::MCAP:
 		break;
 	}
 
@@ -584,6 +585,7 @@ void LiveDataSource::read() {
 		case AbstractFileFilter::FileType::JSON:
 		case AbstractFileFilter::FileType::READSTAT:
 		case AbstractFileFilter::FileType::MATIO:
+		case AbstractFileFilter::FileType::MCAP:
 			break;
 		}
 		break;

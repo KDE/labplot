@@ -11,9 +11,9 @@
 #ifndef PROJECTIMPORTTEST_H
 #define PROJECTIMPORTTEST_H
 
-#include "tests/CommonTest.h"
+#include "tests/CommonMetaTest.h"
 
-class ProjectImportTest : public CommonTest {
+class ProjectImportTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

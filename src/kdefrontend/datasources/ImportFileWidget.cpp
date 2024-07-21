@@ -19,6 +19,7 @@
 #include "ImageOptionsWidget.h"
 #include "JsonOptionsWidget.h"
 #include "MatioOptionsWidget.h"
+#include "McapOptionsWidget.h"
 #include "NetCDFOptionsWidget.h"
 #include "OdsOptionsWidget.h"
 #include "ROOTOptionsWidget.h"
@@ -29,11 +30,18 @@
 #include "backend/lib/macros.h"
 #include "kdefrontend/TemplateHandler.h"
 
+#include <KConfig>
+#include <KConfigGroup>
+#include <KLocalizedString>
 #include <QCompleter>
 #include <QDir>
 #include <QFileDialog>
 #include <QFileSystemModel>
 #include <QIntValidator>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonValue>
 #include <QLocalSocket>
 #include <QProcess>
 #include <QStandardItemModel>
@@ -44,16 +52,13 @@
 #include <QUdpSocket>
 #include <QWhatsThis>
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KLocalizedString>
-
 #include <KUrlComboBox>
 
 #ifdef HAVE_MQTT
 #include "MQTTConnectionManagerDialog.h"
 #include "MQTTSubscriptionWidget.h"
 #include "kdefrontend/widgets/MQTTWillSettingsWidget.h"
+#include <QJsonDocument>
 #include <QMenu>
 #include <QMqttClient>
 #include <QMqttMessage>
@@ -127,7 +132,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 #ifdef HAVE_MATIO
 		ui.cbFileType->addItem(i18n("MATLAB MAT file"), static_cast<int>(AbstractFileFilter::FileType::MATIO));
 #endif
-
+#ifdef HAVE_MCAP
+		ui.cbFileType->addItem(i18n("MCAP Data"), static_cast<int>(AbstractFileFilter::FileType::MCAP));
+#endif
 		// hide widgets relevant for live data reading only
 		ui.lRelativePath->hide();
 		ui.chbRelativePath->hide();
@@ -441,6 +448,8 @@ ImportFileWidget::~ImportFileWidget() {
 		m_imageOptionsWidget->saveSettings();
 	if (m_jsonOptionsWidget)
 		m_jsonOptionsWidget->saveSettings();
+	if (m_mcapOptionsWidget)
+		m_mcapOptionsWidget->saveSettings();
 	if (m_canOptionsWidget)
 		m_canOptionsWidget->saveSettings();
 }
@@ -467,6 +476,8 @@ void ImportFileWidget::initSlots() {
 
 	if (m_asciiOptionsWidget)
 		connect(m_asciiOptionsWidget.get(), &AsciiOptionsWidget::headerLineChanged, this, &ImportFileWidget::updateStartRow);
+
+	connect(ui.cbTopics, QOverload<int>::of(&KComboBox::activated), this, &ImportFileWidget::changeTopic);
 
 #ifdef HAVE_MQTT
 	connect(ui.cbConnection, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImportFileWidget::mqttConnectionChanged);
@@ -845,6 +856,21 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 
 		break;
 	}
+	case AbstractFileFilter::FileType::MCAP: {
+		if (!m_currentFilter)
+			m_currentFilter.reset(new McapFilter);
+		auto filter = static_cast<McapFilter*>(m_currentFilter.get());
+
+		m_mcapOptionsWidget->applyFilterSettings(filter);
+
+		filter->setStartRow(ui.sbStartRow->value());
+		filter->setEndRow(ui.sbEndRow->value());
+		filter->setStartColumn(ui.sbStartColumn->value());
+		filter->setEndColumn(ui.sbEndColumn->value());
+		filter->setCurrentTopic(ui.cbTopics->currentText());
+
+		break;
+	}
 	case AbstractFileFilter::FileType::ROOT: {
 		DEBUG(Q_FUNC_INFO << ", ROOT");
 		if (!m_currentFilter)
@@ -1049,7 +1075,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 			}
 		}
 	}
-
+	mcapTopicsInitialized = false;
 	Q_EMIT fileNameChanged();
 	refreshPreview();
 }
@@ -1157,6 +1183,8 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 
 	showJsonModel(false);
 
+	ui.cbTopics->hide();
+
 	switch (fileType) {
 	case AbstractFileFilter::FileType::Ascii:
 		ui.lFilter->show();
@@ -1215,6 +1243,9 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 		break;
 	case AbstractFileFilter::FileType::JSON:
 		showJsonModel(true);
+		break;
+	case AbstractFileFilter::FileType::MCAP:
+		ui.cbTopics->show();
 		break;
 	case AbstractFileFilter::FileType::READSTAT:
 		ui.tabWidget->removeTab(0);
@@ -1375,6 +1406,17 @@ void ImportFileWidget::initOptionsWidget() {
 			m_jsonOptionsWidget->clearModel();
 		ui.swOptions->setCurrentWidget(m_jsonOptionsWidget->parentWidget());
 		showJsonModel(true);
+		break;
+	case AbstractFileFilter::FileType::MCAP:
+		if (!m_mcapOptionsWidget) {
+			auto* jsonw = new QWidget();
+			m_mcapOptionsWidget = std::unique_ptr<McapOptionsWidget>(new McapOptionsWidget(jsonw));
+			ui.swOptions->addWidget(jsonw);
+			m_mcapOptionsWidget->loadSettings();
+
+			connect(m_mcapOptionsWidget.get(), &McapOptionsWidget::error, this, &ImportFileWidget::error);
+		}
+		ui.swOptions->setCurrentWidget(m_mcapOptionsWidget->parentWidget());
 		break;
 	case AbstractFileFilter::FileType::ROOT:
 		if (!m_rootOptionsWidget) {
@@ -1546,6 +1588,9 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
 		case AbstractFileFilter::FileType::JSON:
 			infoStrings << JsonFilter::fileInfoString(fileName);
 			break;
+		case AbstractFileFilter::FileType::MCAP:
+			infoStrings << McapFilter::fileInfoString(fileName);
+			break;
 		case AbstractFileFilter::FileType::ROOT:
 			infoStrings << ROOTFilter::fileInfoString(fileName);
 			break;
@@ -1572,6 +1617,8 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
  * enables the options if the filter "custom" was chosen. Disables the options otherwise.
  */
 void ImportFileWidget::filterChanged(int index) {
+	DEBUG(Q_FUNC_INFO)
+
 	// filter settings are available for ASCII and Binary only, ignore for other file types
 	auto fileType = currentFileType();
 	if (fileType != AbstractFileFilter::FileType::Ascii && fileType != AbstractFileFilter::FileType::Binary) {
@@ -1616,8 +1663,8 @@ void ImportFileWidget::refreshPreview() {
 
 	// default preview widget
 	if (fileType == AbstractFileFilter::FileType::Ascii || fileType == AbstractFileFilter::FileType::Binary || fileType == AbstractFileFilter::FileType::JSON
-		|| fileType == AbstractFileFilter::FileType::Spice || fileType == AbstractFileFilter::FileType::VECTOR_BLF
-		|| fileType == AbstractFileFilter::FileType::READSTAT)
+		|| fileType == AbstractFileFilter::FileType::MCAP || fileType == AbstractFileFilter::FileType::Spice
+		|| fileType == AbstractFileFilter::FileType::VECTOR_BLF || fileType == AbstractFileFilter::FileType::READSTAT)
 		m_twPreview->show();
 	else
 		m_twPreview->hide();
@@ -1627,6 +1674,11 @@ void ImportFileWidget::refreshPreview() {
 	QVector<QStringList> importedStrings;
 	QStringList vectorNameList;
 	QVector<AbstractColumn::ColumnMode> columnModes;
+
+	DEBUG(Q_FUNC_INFO << ", Data File Type: " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
+	QVector<QString> s;
+	QString currentMcapTopic;
+	QJsonDocument doc;
 
 	WAIT_CURSOR;
 
@@ -1817,7 +1869,29 @@ void ImportFileWidget::refreshPreview() {
 		auto filter = static_cast<JsonFilter*>(currentFilter);
 		m_jsonOptionsWidget->applyFilterSettings(filter, ui.tvJson->currentIndex());
 		importedStrings = filter->preview(file, lines);
+		vectorNameList = filter->vectorNames();
+		columnModes = filter->columnModes();
+		break;
+	}
+	case AbstractFileFilter::FileType::MCAP: {
+		DEBUG(Q_FUNC_INFO << ", MCAP");
 
+		ui.tePreview->clear();
+		auto filter = static_cast<McapFilter*>(currentFileFilter());
+
+		if (!mcapTopicsInitialized) {
+			ui.cbTopics->clear();
+			s = filter->getValidTopics(file);
+			for (int i = 0; i < s.size(); i++) {
+				ui.cbTopics->addItem(s[i]);
+			}
+			mcapTopicsInitialized = true;
+		}
+
+		currentMcapTopic = ui.cbTopics->currentText();
+		DEBUG("Current selected topic" << STDSTRING(currentMcapTopic));
+		filter->setCurrentTopic(currentMcapTopic);
+		importedStrings = filter->preview(file, lines);
 		vectorNameList = filter->vectorNames();
 		columnModes = filter->columnModes();
 		break;
@@ -1882,8 +1956,6 @@ void ImportFileWidget::refreshPreview() {
 		break;
 	}
 	}
-	QDEBUG(Q_FUNC_INFO << ", imported strings =" << importedStrings)
-
 	// fill the table widget
 	tmpTableWidget->setRowCount(0);
 	tmpTableWidget->setColumnCount(0);
@@ -1954,12 +2026,15 @@ void ImportFileWidget::updateStartRow(int line) {
 }
 
 void ImportFileWidget::updateContent(const QString& fileName) {
+	DEBUG(Q_FUNC_INFO)
+
 	if (m_suppressRefresh)
 		return;
 
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 	WAIT_CURSOR;
-
+	QString currentMcapTopic;
+	QVector<QString> mcapTopics;
 	DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(fileName));
 	if (auto filter = currentFileFilter()) {
 		switch (filter->type()) {
@@ -1989,6 +2064,25 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 			m_jsonOptionsWidget->loadDocument(fileName);
 			ui.tvJson->setExpanded(m_jsonOptionsWidget->model()->index(0, 0), true); // expand the root node
 			break;
+		case AbstractFileFilter::FileType::MCAP: {
+#ifdef HAVE_MCAP
+			DEBUG(Q_FUNC_INFO << "loadDocument, file name = " << STDSTRING(fileName));
+			auto* mcap_filter = static_cast<McapFilter*>(filter);
+
+			if (!mcapTopicsInitialized) {
+				ui.cbTopics->clear();
+				mcapTopics = mcap_filter->getValidTopics(fileName);
+				for (int i = 0; i < mcapTopics.size(); i++)
+					ui.cbTopics->addItem(mcapTopics.at(i));
+				mcapTopicsInitialized = true;
+			}
+
+			currentMcapTopic = ui.cbTopics->currentText();
+			DEBUG("Current selected topic" << STDSTRING(currentMcapTopic));
+			mcap_filter->setCurrentTopic(currentMcapTopic);
+#endif
+			break;
+		}
 		case AbstractFileFilter::FileType::MATIO:
 			m_matioOptionsWidget->updateContent(static_cast<MatioFilter*>(filter), fileName);
 			break;
@@ -2304,6 +2398,39 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 
 void ImportFileWidget::enableDataPortionSelection(bool enabled) {
 	ui.tabWidget->setTabEnabled(ui.tabWidget->indexOf(ui.tabDataPortion), enabled);
+}
+
+void ImportFileWidget::changeTopic() {
+	DEBUG(Q_FUNC_INFO);
+	QString current_topic;
+	if (auto filter = currentFileFilter()) {
+		switch (filter->type()) {
+		case AbstractFileFilter::FileType::MCAP: {
+			auto* mcap_filter = static_cast<McapFilter*>(filter);
+			if (!(mcap_filter->getCurrentTopic() == ui.cbTopics->currentText()))
+				refreshPreview();
+			break;
+		}
+		case AbstractFileFilter::FileType::Ascii:
+		case AbstractFileFilter::FileType::Binary:
+		case AbstractFileFilter::FileType::XLSX:
+		case AbstractFileFilter::FileType::Ods:
+		case AbstractFileFilter::FileType::Image:
+		case AbstractFileFilter::FileType::HDF5:
+		case AbstractFileFilter::FileType::NETCDF:
+		case AbstractFileFilter::FileType::VECTOR_BLF:
+		case AbstractFileFilter::FileType::FITS:
+		case AbstractFileFilter::FileType::JSON:
+		case AbstractFileFilter::FileType::ROOT:
+		case AbstractFileFilter::FileType::Spice:
+		case AbstractFileFilter::FileType::READSTAT:
+		case AbstractFileFilter::FileType::MATIO:
+			break;
+		default: {
+			break;
+		}
+		}
+	}
 }
 
 #ifdef HAVE_MQTT

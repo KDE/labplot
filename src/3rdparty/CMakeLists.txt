@@ -168,3 +168,14 @@ elseif(LOCAL_QT_ADVANCED_DOCK_COPY)
     add_subdirectory(Qt-Advanced-Docking-System EXCLUDE_FROM_ALL)
 endif()
 
+if (LOCAL_MCAP_DOWNLOAD)
+	FetchContent_Declare(mcap
+		URL https://github.com/foxglove/mcap/archive/refs/tags/releases/cpp/v1.4.0.tar.gz
+		URL_HASH SHA256=64ff3e51119f37ffcfaf9deecbd987a7cb4d4d9035d74a3fd3773395a470fda1 # v1.4.0
+	)
+	FetchContent_MakeAvailable(mcap)
+	#set(_mcap_include_dir ${mcap_SOURCE_DIR}/cpp/mcap/include)
+	target_include_directories(labplot2backendlib PUBLIC ${mcap_SOURCE_DIR}/cpp/mcap/include)
+else ()
+	target_include_directories(labplot2backendlib PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/mcap/include)
+endif ()

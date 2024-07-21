@@ -2,8 +2,10 @@
 New features:
 	* [import]
 		* Download datasets from kaggle.com
+		* Support MCAP file import
 	* [analysis]
 		* Add possibility to do calculations on curves
+
 
 -----2.11.1 (16.07.2024) -----
 Bug fixes:
@@ -13,6 +15,7 @@ Bug fixes:
 	* Don't crash when opening a project which a hidden spreadsheet view
 	* Fixed the background color of the sparklines in the spreadsheet
 	* Fixed copy&paste and duplication of the matrix
+
 
 -----2.11.0 (09.07.2024) -----
 New features:
@@ -287,7 +290,7 @@ Bug fixes:
 		* React on text changes for values prefix and suffix and not on return pressed event in the curve properties explorer
 		* Fix log scale axis for one tick and ln-scale typo
 		* Fix sqrt and square axis scale
-		* adjust the range format (numeric vs. datetime) also when the the column of the first curve is changed and not only when a new curve is added
+		* adjust the range format (numeric vs. datetime) also when the column of the first curve is changed and not only when a new curve is added
 		* simplified the naming of the initial axes for the default plot types (box blot with four axes,  etc.) - use "x" instead of "x axis 1", etc.
 		* export to more image formats (jpg, bmp, ppm, xbm, xpm)
 	* [spreadsheet]

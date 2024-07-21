@@ -20,10 +20,6 @@
 void CommonTest::initTestCase() {
 	KLocalizedString::setApplicationDomain("labplot2");
 
-	// TODO: fix linkage
-	//	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
-	//	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
-
 #ifdef _WIN32
 //	if (AttachConsole(ATTACH_PARENT_PROCESS)) {
 //		freopen("CONOUT$", "w", stdout);

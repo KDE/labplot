@@ -17,6 +17,7 @@
 #include "backend/datasources/filters/ImageFilter.h"
 #include "backend/datasources/filters/JsonFilter.h"
 #include "backend/datasources/filters/MatioFilter.h"
+#include "backend/datasources/filters/McapFilter.h"
 #include "backend/datasources/filters/NetCDFFilter.h"
 #include "backend/datasources/filters/OdsFilter.h"
 #include "backend/datasources/filters/ROOTFilter.h"

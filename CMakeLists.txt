@@ -292,6 +292,8 @@ option(ENABLE_MQTT "Build with MQTT support" ON)
 option(ENABLE_QTSERIALPORT "Build with QtSerialPort support" ON)
 option(ENABLE_DISCOUNT "Build with Discount support" ON)
 option(ENABLE_XLSX "Build with XLSX (Excel) support" ON)
+option(ENABLE_MCAP "Build with MCAP support" ON)
+
 IF (WIN32 AND QT_MAJOR_VERSION LESS 6)	# C++17 needed by Orcus not working with MSVC2019 (Craft QT5-LTS)
 	option(ENABLE_ORCUS "Build with Orcus support" OFF)
 ELSE ()
@@ -310,6 +312,7 @@ ENDIF ()
 option(ENABLE_REPRODUCIBLE "Enable reproducible builds" OFF)
 option(ENABLE_TESTS "Build with tests" ON)
 option(ENABLE_SDK "Build with SDK support" ON)
+
 
 ### OS macros ####################################
 IF (WIN32)
@@ -502,7 +505,6 @@ ELSE ()
 ENDIF ()
 
 ### ZLIB for ROOT and READSTAT #################
-
 FIND_PACKAGE(ZLIB)
 SET_PACKAGE_PROPERTIES (ZLIB PROPERTIES
 	DESCRIPTION "General purpose compression library"
@@ -512,9 +514,38 @@ IF (NOT ZLIB_FOUND)
 	SET(ZLIB_LIBRARIES "")
 ENDIF ()
 
+### LZ4 for ROOT and MCAP #################
+IF (ENABLE_ROOT OR ENABLE_MCAP)
+	FIND_PACKAGE(LZ4)
+	IF(LZ4_FOUND)
+		MESSAGE (STATUS "Found LZ4")
+		add_definitions (-DHAVE_LZ4)
+	ENDIF()
+ENDIF()
+### ZSTD for MCAP #################
+
+option(LOCAL_MCAP_DOWNLOAD "Download MCAP" ON)
+IF(ENABLE_MCAP)
+	IF (LOCAL_MCAP_DOWNLOAD)
+		message(STATUS "Downloading MCAP")
+	ELSE ()
+		message(STATUS "Using included MCAP")
+	ENDIF ()
+
+	add_definitions (-DHAVE_MCAP)
+	FIND_PACKAGE(ZSTD)
+	IF (ZSTD_FOUND)
+		MESSAGE (STATUS "Found ZSTD (used for MCAP ZSTD support)")
+		add_definitions (-DHAVE_ZSTD)
+	ELSE ()
+		MESSAGE (STATUS "Could not find ZSTD (needed for MCAP ZSTD support)")
+	ENDIF ()
+ELSE ()
+	MESSAGE (STATUS "MCAP DISABLED")
+ENDIF ()
+
 ### ROOT (optional) #############################
 IF (ENABLE_ROOT)
-	FIND_PACKAGE(LZ4)
 	IF (ZLIB_FOUND AND LZ4_FOUND)
 		MESSAGE (STATUS "Found ZIP libraries ZLIB and LZ4 (needed for ROOT importer)")
 		add_definitions (-DHAVE_ZIP)
