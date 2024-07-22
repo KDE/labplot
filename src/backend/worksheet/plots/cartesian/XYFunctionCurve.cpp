@@ -23,6 +23,7 @@
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
 #include <KLocalizedString>
+#include <QElapsedTimer>
 #include <QIcon>
 
 XYFunctionCurve::XYFunctionCurve(const QString& name)

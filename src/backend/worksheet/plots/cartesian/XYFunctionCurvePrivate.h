@@ -7,7 +7,7 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef XYEFUNCTIONCURVEPRIVATE_H
+#ifndef XYFUNCTIONCURVEPRIVATE_H
 #define XYFUNCTIONCURVEPRIVATE_H
 
 #include "XYFunctionCurve.h"
