@@ -58,7 +58,7 @@ void XYFunctionCurveTest::setCurves() {
 	dock.setupGeneral();
 	dock.setCurves({functionCurve});
 
-	functionCurve->setEquation(QStringLiteral("2*x"), {QStringLiteral("x")}, {equationCurve});
+	functionCurve->setFunction(QStringLiteral("2*x"), {QStringLiteral("x")}, {equationCurve});
 
 	{
 		const auto* xColumn = functionCurve->xColumn();
@@ -143,7 +143,7 @@ void XYFunctionCurveTest::removeCurves() {
 	dock.setupGeneral();
 	dock.setCurves({functionCurve});
 
-	functionCurve->setEquation(QStringLiteral("2*x"), {QStringLiteral("x")}, {curve});
+	functionCurve->setFunction(QStringLiteral("2*x"), {QStringLiteral("x")}, {curve});
 
 	{
 		const auto* xColumn = functionCurve->xColumn();
@@ -159,9 +159,9 @@ void XYFunctionCurveTest::removeCurves() {
 	curve->remove();
 
 	QCOMPARE(functionCurve->xColumn()->rowCount(), 0);
-	QCOMPARE(functionCurve->equationData().count(), 1);
-	QCOMPARE(functionCurve->equationData().at(0).curve(), nullptr);
-	QCOMPARE(functionCurve->equationData().at(0).curvePath(), QStringLiteral("Project/Worksheet/plot/curve1"));
+	QCOMPARE(functionCurve->functionData().count(), 1);
+	QCOMPARE(functionCurve->functionData().at(0).curve(), nullptr);
+	QCOMPARE(functionCurve->functionData().at(0).curvePath(), QStringLiteral("Project/Worksheet/plot/curve1"));
 }
 
 void XYFunctionCurveTest::removeColumnFromCurve() {
@@ -205,7 +205,7 @@ void XYFunctionCurveTest::removeColumnFromCurve() {
 	dock.setupGeneral();
 	dock.setCurves({functionCurve});
 
-	functionCurve->setEquation(QStringLiteral("2*x"), {QStringLiteral("x")}, {curve});
+	functionCurve->setFunction(QStringLiteral("2*x"), {QStringLiteral("x")}, {curve});
 
 	sheet->column(1)->remove();
 
@@ -248,7 +248,7 @@ void XYFunctionCurveTest::removeCurveRenameAutomaticAdd() {
 	dock.setupGeneral();
 	dock.setCurves({functionCurve});
 
-	functionCurve->setEquation(QStringLiteral("2*x"), {QStringLiteral("x")}, {equationCurve});
+	functionCurve->setFunction(QStringLiteral("2*x"), {QStringLiteral("x")}, {equationCurve});
 
 	{
 		const auto* xColumn = functionCurve->xColumn();
@@ -263,8 +263,8 @@ void XYFunctionCurveTest::removeCurveRenameAutomaticAdd() {
 
 	equationCurve->remove();
 
-	QCOMPARE(functionCurve->equationData().at(0).curve(), nullptr);
-	QCOMPARE(functionCurve->equationData().at(0).curvePath(), QStringLiteral("Project/Worksheet/plot/eq"));
+	QCOMPARE(functionCurve->functionData().at(0).curve(), nullptr);
+	QCOMPARE(functionCurve->functionData().at(0).curvePath(), QStringLiteral("Project/Worksheet/plot/eq"));
 
 	p->addChild(new XYEquationCurve(QLatin1String("eqDifferent"))); // different name than eq!
 	auto eqs = p->children(AspectType::XYEquationCurve);
@@ -273,13 +273,13 @@ void XYFunctionCurveTest::removeCurveRenameAutomaticAdd() {
 	data.expression1 = QStringLiteral("x^2");
 	equationCurveNew->setEquationData(data);
 
-	QCOMPARE(functionCurve->equationData().at(0).curve(), nullptr);
-	QCOMPARE(functionCurve->equationData().at(0).curvePath(), QStringLiteral("Project/Worksheet/plot/eq"));
+	QCOMPARE(functionCurve->functionData().at(0).curve(), nullptr);
+	QCOMPARE(functionCurve->functionData().at(0).curvePath(), QStringLiteral("Project/Worksheet/plot/eq"));
 
 	equationCurveNew->setName(QStringLiteral("eq"));
 
-	QCOMPARE(functionCurve->equationData().at(0).curve(), equationCurveNew);
-	QCOMPARE(functionCurve->equationData().at(0).curvePath(), QStringLiteral("Project/Worksheet/plot/eq"));
+	QCOMPARE(functionCurve->functionData().at(0).curve(), equationCurveNew);
+	QCOMPARE(functionCurve->functionData().at(0).curvePath(), QStringLiteral("Project/Worksheet/plot/eq"));
 
 	{
 		const auto* xColumn = functionCurve->xColumn();
@@ -331,7 +331,7 @@ void XYFunctionCurveTest::saveLoad() {
 		dock.setupGeneral();
 		dock.setCurves({functionCurve});
 
-		functionCurve->setEquation(QStringLiteral("2*z"), {QStringLiteral("z")}, {equationCurve});
+		functionCurve->setFunction(QStringLiteral("2*z"), {QStringLiteral("z")}, {equationCurve});
 
 		{
 			const auto* xColumn = functionCurve->xColumn();
@@ -359,7 +359,7 @@ void XYFunctionCurveTest::saveLoad() {
 		const auto* eq = p->child<XYEquationCurve>(0);
 		QVERIFY(eq);
 
-		const auto& data = functionCurve->equationData();
+		const auto& data = functionCurve->functionData();
 		QCOMPARE(data.length(), 1);
 		QCOMPARE(data.at(0).curvePath(), QStringLiteral("Project/Worksheet/plot/eq"));
 		QCOMPARE(data.at(0).curve(), eq);

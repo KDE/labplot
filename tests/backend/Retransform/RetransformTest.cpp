@@ -1998,10 +1998,10 @@ void RetransformTest::xyFunctionCurve() {
 
 	p->addChild(new XYFunctionCurve(QLatin1String("eq2")));
 	auto functionCurves = p->children(AspectType::XYFunctionCurve);
-	QCOMPARE(functionCurve.count(), 1);
-	auto* functionCurve = static_cast<XYFunctionCurve*>(functionCurve.at(0));
+	QCOMPARE(functionCurves.count(), 1);
+	auto* functionCurve = static_cast<XYFunctionCurve*>(functionCurves.at(0));
 
-	c.aspectAdded(eq2);
+	c.aspectAdded(functionCurve);
 
 	c.resetRetransformCount();
 
