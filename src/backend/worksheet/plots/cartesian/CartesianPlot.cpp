@@ -428,7 +428,9 @@ void CartesianPlot::initActions() {
 	//"add new" actions
 	addCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("xy-curve"), this);
 	addEquationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve")), i18n("xy-curve from a Formula"), this);
-	addFunctionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve")), i18n("xy-curve from other curves"), this);
+	addEquationCurveAction->setToolTip(i18n("Add a new xy-curve that is defined via a mathematical expression."));
+	addFunctionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve")), i18n("xy-curve from a Function"), this);
+	addFunctionCurveAction->setToolTip(i18n("Add a new xy-curve that is defined as a function of other xy-curves (scaled, shifted, etc.)"));
 
 	// statistical plots
 	addHistogramAction = new QAction(QIcon::fromTheme(QStringLiteral("view-object-histogram-linear")), i18n("Histogram"), this);
@@ -617,6 +619,7 @@ void CartesianPlot::initMenus() {
 	m_addNewMenu->addAction(addCurveAction);
 	m_addNewMenu->addAction(addEquationCurveAction);
 	m_addNewMenu->addAction(addFunctionCurveAction);
+	m_addNewMenu->addSeparator();
 
 	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"), m_addNewMenu);
 	addNewStatisticalPlotsMenu->addAction(addHistogramAction);

@@ -23,7 +23,7 @@
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
-#include "backend/worksheet/plots/cartesian/XYEquationCurve2.h"
+#include "backend/worksheet/plots/cartesian/XYFunctionCurve.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
 #include "kdefrontend/dockwidgets/AxisDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotDock.h"
@@ -1960,7 +1960,7 @@ void RetransformTest::testPlotRecalcRetransform() {
 	}
 }
 
-void RetransformTest::xyEquationCurve2() {
+void RetransformTest::xyFunctionCurve() {
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
 	QVERIFY(ws != nullptr);
@@ -1996,10 +1996,10 @@ void RetransformTest::xyEquationCurve2() {
 
 	QCOMPARE(equationCurve->xColumn()->rowCount(), data.count);
 
-	p->addChild(new XYEquationCurve2(QLatin1String("eq2")));
-	auto equationCurves2 = p->children(AspectType::XYEquationCurve2);
-	QCOMPARE(equationCurves2.count(), 1);
-	auto* eq2 = static_cast<XYEquationCurve2*>(equationCurves2.at(0));
+	p->addChild(new XYFunctionCurve(QLatin1String("eq2")));
+	auto functionCurve = p->children(AspectType::XYFunctionCurve);
+	QCOMPARE(functionCurve.count(), 1);
+	auto* eq2 = static_cast<XYFunctionCurve*>(functionCurve.at(0));
 
 	c.aspectAdded(eq2);
 
