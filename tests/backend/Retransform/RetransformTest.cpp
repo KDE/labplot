@@ -1997,21 +1997,21 @@ void RetransformTest::xyFunctionCurve() {
 	QCOMPARE(equationCurve->xColumn()->rowCount(), data.count);
 
 	p->addChild(new XYFunctionCurve(QLatin1String("eq2")));
-	auto functionCurve = p->children(AspectType::XYFunctionCurve);
+	auto functionCurves = p->children(AspectType::XYFunctionCurve);
 	QCOMPARE(functionCurve.count(), 1);
-	auto* eq2 = static_cast<XYFunctionCurve*>(functionCurve.at(0));
+	auto* functionCurve = static_cast<XYFunctionCurve*>(functionCurve.at(0));
 
 	c.aspectAdded(eq2);
 
 	c.resetRetransformCount();
 
-	eq2->setEquation(QStringLiteral("2*x"), {QStringLiteral("x")}, {equationCurve});
+	functionCurve->setFunction(QStringLiteral("2*x"), {QStringLiteral("x")}, {equationCurve});
 
 	{
 		const auto stat = c.statistic(false);
-		QCOMPARE(stat.count(), 4); // equationCurve, eq2, xAxis and yAxis are inside
+		QCOMPARE(stat.count(), 4); // equationCurve, functionCurve, xAxis and yAxis are inside
 		QCOMPARE(stat.contains(equationCurve->path()), true);
-		QCOMPARE(stat.contains(eq2->path()), true);
+		QCOMPARE(stat.contains(functionCurve->path()), true);
 		QCOMPARE(stat.contains(axes.at(0)->path()), true);
 		QCOMPARE(stat.contains(axes.at(1)->path()), true);
 		QVERIFY(c.calledExact(1, false));
@@ -2020,8 +2020,8 @@ void RetransformTest::xyFunctionCurve() {
 	}
 
 	{
-		const auto* xColumn = eq2->xColumn();
-		const auto* yColumn = eq2->yColumn();
+		const auto* xColumn = functionCurve->xColumn();
+		const auto* yColumn = functionCurve->yColumn();
 		QCOMPARE(xColumn->rowCount(), data.count);
 		QCOMPARE(yColumn->rowCount(), data.count);
 		for (int i = 0; i < xColumn->rowCount(); i++) {
@@ -2039,9 +2039,9 @@ void RetransformTest::xyFunctionCurve() {
 
 	{
 		const auto stat = c.statistic(false);
-		QCOMPARE(stat.count(), 4); // equationCurve, eq2, xAxis and yAxis are inside
+		QCOMPARE(stat.count(), 4); // equationCurve, functionCurve, xAxis and yAxis are inside
 		QCOMPARE(stat.contains(equationCurve->path()), true);
-		QCOMPARE(stat.contains(eq2->path()), true);
+		QCOMPARE(stat.contains(functionCurve->path()), true);
 		QCOMPARE(stat.contains(axes.at(0)->path()), true);
 		QCOMPARE(stat.contains(axes.at(1)->path()), true);
 		// QVERIFY(c.calledExact(1, false)); // TODO: how to verify that retransform gets called only once?
