@@ -708,7 +708,7 @@ IF (ENABLE_LIBORIGIN)
 ENDIF ()
 
 IF(LZ4_FOUND)
-	target_include_directories(labplot2backendlib PRIVATE ${LZ4_INCLUDE_DIR})
+	target_include_directories(labplot2backendlib PUBLIC ${LZ4_INCLUDE_DIR})
 ENDIF ()
 
 IF (PSAPI)
