@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-21 01:45+0000\n"
+"POT-Creation-Date: 2024-07-22 01:46+0000\n"
 "PO-Revision-Date: 2024-04-30 12:35+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -1912,7 +1912,7 @@ msgstr "Computo de folio: %1"
 #: src/backend/datasources/filters/McapFilter.cpp:207
 #, fuzzy, kde-format
 #| msgid "Sheet count: %1"
-msgid "Attachement count: "
+msgid "Attachment count: "
 msgstr "Computo de folio: %1"
 
 #: src/backend/datasources/filters/McapFilter.cpp:209

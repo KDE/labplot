@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-21 01:45+0000\n"
+"POT-Creation-Date: 2024-07-22 01:46+0000\n"
 "PO-Revision-Date: 2022-07-14 10:06-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -1955,9 +1955,10 @@ msgid "Channel count: "
 msgstr ""
 
 #: src/backend/datasources/filters/McapFilter.cpp:207
-#, kde-format
-msgid "Attachement count: "
-msgstr ""
+#, fuzzy, kde-format
+#| msgid "%1: set +delta_X column"
+msgid "Attachment count: "
+msgstr "%1: definir a coluna do +delta_X"
 
 #: src/backend/datasources/filters/McapFilter.cpp:209
 #, fuzzy, kde-format

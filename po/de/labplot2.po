@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-21 01:45+0000\n"
+"POT-Creation-Date: 2024-07-22 01:46+0000\n"
 "PO-Revision-Date: 2024-07-13 09:03+0200\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni.kn>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -1917,7 +1917,7 @@ msgstr "Anzahl Blätter: %1"
 #: src/backend/datasources/filters/McapFilter.cpp:207
 #, fuzzy, kde-format
 #| msgid "Sheet count: %1"
-msgid "Attachement count: "
+msgid "Attachment count: "
 msgstr "Anzahl Blätter: %1"
 
 #: src/backend/datasources/filters/McapFilter.cpp:209

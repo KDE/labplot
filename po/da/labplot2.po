@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-21 01:45+0000\n"
+"POT-Creation-Date: 2024-07-22 01:46+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -2028,9 +2028,10 @@ msgid "Channel count: "
 msgstr ""
 
 #: src/backend/datasources/filters/McapFilter.cpp:207
-#, kde-format
-msgid "Attachement count: "
-msgstr ""
+#, fuzzy, kde-format
+#| msgid "&Insert Empty Columns"
+msgid "Attachment count: "
+msgstr "&Indsæt tomme kolonner"
 
 #: src/backend/datasources/filters/McapFilter.cpp:209
 #, fuzzy, kde-format
