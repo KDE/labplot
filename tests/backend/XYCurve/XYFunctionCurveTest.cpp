@@ -354,8 +354,8 @@ void XYFunctionCurveTest::saveLoad() {
 		QVERIFY(ws);
 		const auto* p = ws->child<CartesianPlot>(0);
 		QVERIFY(p);
-		const auto* eq2 = p->child<XYFunctionCurve>(0);
-		QVERIFY(eq2);
+		const auto* functionCurve = p->child<XYFunctionCurve>(0);
+		QVERIFY(functionCurve);
 		const auto* eq = p->child<XYEquationCurve>(0);
 		QVERIFY(eq);
 
