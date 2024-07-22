@@ -149,7 +149,7 @@ private:
 
 	friend class RetransformTest;
 	friend class XYCurveTest;
-	friend class XYEquationCurve2Test;
+	friend class XYFunctionCurveTest;
 };
 
 #endif

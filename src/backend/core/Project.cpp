@@ -1011,15 +1011,15 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	for (auto* element : elements)
 		element->assignCurve(curves);
 
-	QVector<XYFunctionCurve*> xyEquationCurve2s;
+	QVector<XYFunctionCurve*> functionCurves;
 	if (aspect->type() == AspectType::XYFunctionCurve) // check for the type first. InfoElement has children, but they are not relevant here
-		xyEquationCurve2s << static_cast<XYFunctionCurve*>(aspect);
+		functionCurves << static_cast<XYFunctionCurve*>(aspect);
 	else if (hasChildren)
-		xyEquationCurve2s = aspect->children<XYFunctionCurve>(ChildIndexFlag::Recursive);
+		functionCurves = aspect->children<XYFunctionCurve>(ChildIndexFlag::Recursive);
 
-	for (auto* eq : xyEquationCurve2s) {
+	for (auto* functionCurve : functionCurves) {
 		for (const auto* curve : qAsConst(curves))
-			eq->setFunctionVariableCurve(curve);
+			functionCurve->setFunctionVariableCurve(curve);
 	}
 
 	// axes

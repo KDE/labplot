@@ -365,7 +365,7 @@ void XYFunctionCurveTest::saveLoad() {
 		QCOMPARE(data.at(0).curve(), eq);
 		QCOMPARE(data.at(0).variableName(), QStringLiteral("z"));
 
-		QCOMPARE(functionCurve->equation(), QStringLiteral("2*z"));
+		QCOMPARE(functionCurve->function(), QStringLiteral("2*z"));
 
 		{
 			const auto* xColumn = functionCurve->xColumn();
