@@ -1,14 +1,14 @@
 /*
-	File                 : XYEquationCurve2Test.cpp
+	File                 : XYFunctionCurveTest.cpp
 	Project              : LabPlot
-	Description          : Tests for XYEquationCurve2
+	Description          : Tests for XYFunctionCurve
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2024 Martin Marmsoler <martin.marmsoler@gmail.com>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "XYEquationCurve2Test.h"
+#include "XYFunctionCurveTest.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -16,13 +16,13 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
-#include "backend/worksheet/plots/cartesian/XYEquationCurve2.h"
-#include "backend/worksheet/plots/cartesian/XYEquationCurve2Private.h"
-#include "kdefrontend/dockwidgets/XYEquationCurve2Dock.h"
+#include "backend/worksheet/plots/cartesian/XYFunctionCurve.h"
+#include "backend/worksheet/plots/cartesian/XYFunctionCurvePrivate.h"
+#include "kdefrontend/dockwidgets/XYFunctionCurveDock.h"
 
 #include <QUndoStack>
 
-void XYEquationCurve2Test::setCurves() {
+void XYFunctionCurveTest::setCurves() {
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
 	QVERIFY(ws != nullptr);
@@ -49,20 +49,20 @@ void XYEquationCurve2Test::setCurves() {
 
 	QCOMPARE(equationCurve->xColumn()->rowCount(), data.count);
 
-	p->addChild(new XYEquationCurve2(QLatin1String("eq2")));
-	auto equationCurves2 = p->children(AspectType::XYEquationCurve2);
-	QCOMPARE(equationCurves2.count(), 1);
-	auto* eq2 = static_cast<XYEquationCurve2*>(equationCurves2.at(0));
+	p->addChild(new XYFunctionCurve(QLatin1String("eq2")));
+	auto functionCurves = p->children(AspectType::XYFunctionCurve);
+	QCOMPARE(functionCurves.count(), 1);
+	auto* functionCurve = static_cast<XYFunctionCurve*>(functionCurves.at(0));
 
-	auto dock = XYEquationCurve2Dock(nullptr);
+	auto dock = XYFunctionCurveDock(nullptr);
 	dock.setupGeneral();
-	dock.setCurves({eq2});
+	dock.setCurves({functionCurve});
 
-	eq2->setEquation(QStringLiteral("2*x"), {QStringLiteral("x")}, {equationCurve});
+	functionCurve->setEquation(QStringLiteral("2*x"), {QStringLiteral("x")}, {equationCurve});
 
 	{
-		const auto* xColumn = eq2->xColumn();
-		const auto* yColumn = eq2->yColumn();
+		const auto* xColumn = functionCurve->xColumn();
+		const auto* yColumn = functionCurve->yColumn();
 		QCOMPARE(xColumn->rowCount(), data.count);
 		QCOMPARE(yColumn->rowCount(), data.count);
 		for (int i = 0; i < xColumn->rowCount(); i++) {
@@ -71,15 +71,15 @@ void XYEquationCurve2Test::setCurves() {
 		}
 	}
 
-	eq2->undoStack()->undo();
+	functionCurve->undoStack()->undo();
 
-	QCOMPARE(eq2->xColumn()->rowCount(), 0);
+	QCOMPARE(functionCurve->xColumn()->rowCount(), 0);
 
-	eq2->undoStack()->redo();
+	functionCurve->undoStack()->redo();
 
 	{
-		const auto* xColumn = eq2->xColumn();
-		const auto* yColumn = eq2->yColumn();
+		const auto* xColumn = functionCurve->xColumn();
+		const auto* yColumn = functionCurve->yColumn();
 		QCOMPARE(xColumn->rowCount(), data.count);
 		QCOMPARE(yColumn->rowCount(), data.count);
 		for (int i = 0; i < xColumn->rowCount(); i++) {
@@ -93,8 +93,8 @@ void XYEquationCurve2Test::setCurves() {
 	equationCurve->setEquationData(data);
 
 	{
-		const auto* xColumn = eq2->xColumn();
-		const auto* yColumn = eq2->yColumn();
+		const auto* xColumn = functionCurve->xColumn();
+		const auto* yColumn = functionCurve->yColumn();
 		QCOMPARE(xColumn->rowCount(), data.count);
 		QCOMPARE(yColumn->rowCount(), data.count);
 		for (int i = 0; i < xColumn->rowCount(); i++) {
@@ -104,7 +104,7 @@ void XYEquationCurve2Test::setCurves() {
 	}
 }
 
-void XYEquationCurve2Test::removeCurves() {
+void XYFunctionCurveTest::removeCurves() {
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
 	QVERIFY(ws != nullptr);
@@ -134,20 +134,20 @@ void XYEquationCurve2Test::removeCurves() {
 	curve->setXColumn(sheet->column(0));
 	curve->setYColumn(sheet->column(1));
 
-	p->addChild(new XYEquationCurve2(QLatin1String("eq2")));
-	auto equationCurves2 = p->children(AspectType::XYEquationCurve2);
-	QCOMPARE(equationCurves2.count(), 1);
-	auto* eq2 = static_cast<XYEquationCurve2*>(equationCurves2.at(0));
+	p->addChild(new XYFunctionCurve(QLatin1String("eq2")));
+	auto functionCurves = p->children(AspectType::XYFunctionCurve);
+	QCOMPARE(functionCurves.count(), 1);
+	auto* functionCurve = static_cast<XYFunctionCurve*>(functionCurves.at(0));
 
-	auto dock = XYEquationCurve2Dock(nullptr);
+	auto dock = XYFunctionCurveDock(nullptr);
 	dock.setupGeneral();
-	dock.setCurves({eq2});
+	dock.setCurves({functionCurve});
 
-	eq2->setEquation(QStringLiteral("2*x"), {QStringLiteral("x")}, {curve});
+	functionCurve->setEquation(QStringLiteral("2*x"), {QStringLiteral("x")}, {curve});
 
 	{
-		const auto* xColumn = eq2->xColumn();
-		const auto* yColumn = eq2->yColumn();
+		const auto* xColumn = functionCurve->xColumn();
+		const auto* yColumn = functionCurve->yColumn();
 		QCOMPARE(xColumn->rowCount(), 11);
 		QCOMPARE(yColumn->rowCount(), 11);
 		for (int i = 0; i < xColumn->rowCount(); i++) {
@@ -158,12 +158,13 @@ void XYEquationCurve2Test::removeCurves() {
 
 	curve->remove();
 
-	QCOMPARE(eq2->xColumn()->rowCount(), 0);
-	QCOMPARE(eq2->equationData().count(), 1);
-	QCOMPARE(eq2->equationData().at(0).curve(), nullptr);
-	QCOMPARE(eq2->equationData().at(0).curvePath(), QStringLiteral("Project/Worksheet/plot/curve1"));
+	QCOMPARE(functionCurve->xColumn()->rowCount(), 0);
+	QCOMPARE(functionCurve->equationData().count(), 1);
+	QCOMPARE(functionCurve->equationData().at(0).curve(), nullptr);
+	QCOMPARE(functionCurve->equationData().at(0).curvePath(), QStringLiteral("Project/Worksheet/plot/curve1"));
 }
-void XYEquationCurve2Test::removeColumnFromCurve() {
+
+void XYFunctionCurveTest::removeColumnFromCurve() {
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
 	QVERIFY(ws != nullptr);
@@ -195,22 +196,23 @@ void XYEquationCurve2Test::removeColumnFromCurve() {
 	curve->setXColumn(sheet->column(0));
 	curve->setYColumn(sheet->column(1));
 
-	p->addChild(new XYEquationCurve2(QLatin1String("eq2")));
-	auto equationCurves2 = p->children(AspectType::XYEquationCurve2);
-	QCOMPARE(equationCurves2.count(), 1);
-	auto* eq2 = static_cast<XYEquationCurve2*>(equationCurves2.at(0));
+	p->addChild(new XYFunctionCurve(QLatin1String("eq2")));
+	auto functionCurves = p->children(AspectType::XYFunctionCurve);
+	QCOMPARE(functionCurves.count(), 1);
+	auto* functionCurve = static_cast<XYFunctionCurve*>(functionCurves.at(0));
 
-	auto dock = XYEquationCurve2Dock(nullptr);
+	auto dock = XYFunctionCurveDock(nullptr);
 	dock.setupGeneral();
-	dock.setCurves({eq2});
+	dock.setCurves({functionCurve});
 
-	eq2->setEquation(QStringLiteral("2*x"), {QStringLiteral("x")}, {curve});
+	functionCurve->setEquation(QStringLiteral("2*x"), {QStringLiteral("x")}, {curve});
 
 	sheet->column(1)->remove();
 
-	QCOMPARE(eq2->xColumn()->rowCount(), 0);
+	QCOMPARE(functionCurve->xColumn()->rowCount(), 0);
 }
-void XYEquationCurve2Test::removeCurveRenameAutomaticAdd() {
+
+void XYFunctionCurveTest::removeCurveRenameAutomaticAdd() {
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
 	QVERIFY(ws != nullptr);
@@ -237,20 +239,20 @@ void XYEquationCurve2Test::removeCurveRenameAutomaticAdd() {
 
 	QCOMPARE(equationCurve->xColumn()->rowCount(), data.count);
 
-	p->addChild(new XYEquationCurve2(QLatin1String("eq2")));
-	auto equationCurves2 = p->children(AspectType::XYEquationCurve2);
-	QCOMPARE(equationCurves2.count(), 1);
-	auto* eq2 = static_cast<XYEquationCurve2*>(equationCurves2.at(0));
+	p->addChild(new XYFunctionCurve(QLatin1String("eq2")));
+	auto functionCurves = p->children(AspectType::XYFunctionCurve);
+	QCOMPARE(functionCurves.count(), 1);
+	auto* functionCurve = static_cast<XYFunctionCurve*>(functionCurves.at(0));
 
-	auto dock = XYEquationCurve2Dock(nullptr);
+	auto dock = XYFunctionCurveDock(nullptr);
 	dock.setupGeneral();
-	dock.setCurves({eq2});
+	dock.setCurves({functionCurve});
 
-	eq2->setEquation(QStringLiteral("2*x"), {QStringLiteral("x")}, {equationCurve});
+	functionCurve->setEquation(QStringLiteral("2*x"), {QStringLiteral("x")}, {equationCurve});
 
 	{
-		const auto* xColumn = eq2->xColumn();
-		const auto* yColumn = eq2->yColumn();
+		const auto* xColumn = functionCurve->xColumn();
+		const auto* yColumn = functionCurve->yColumn();
 		QCOMPARE(xColumn->rowCount(), data.count);
 		QCOMPARE(yColumn->rowCount(), data.count);
 		for (int i = 0; i < xColumn->rowCount(); i++) {
@@ -261,8 +263,8 @@ void XYEquationCurve2Test::removeCurveRenameAutomaticAdd() {
 
 	equationCurve->remove();
 
-	QCOMPARE(eq2->equationData().at(0).curve(), nullptr);
-	QCOMPARE(eq2->equationData().at(0).curvePath(), QStringLiteral("Project/Worksheet/plot/eq"));
+	QCOMPARE(functionCurve->equationData().at(0).curve(), nullptr);
+	QCOMPARE(functionCurve->equationData().at(0).curvePath(), QStringLiteral("Project/Worksheet/plot/eq"));
 
 	p->addChild(new XYEquationCurve(QLatin1String("eqDifferent"))); // different name than eq!
 	auto eqs = p->children(AspectType::XYEquationCurve);
@@ -271,17 +273,17 @@ void XYEquationCurve2Test::removeCurveRenameAutomaticAdd() {
 	data.expression1 = QStringLiteral("x^2");
 	equationCurveNew->setEquationData(data);
 
-	QCOMPARE(eq2->equationData().at(0).curve(), nullptr);
-	QCOMPARE(eq2->equationData().at(0).curvePath(), QStringLiteral("Project/Worksheet/plot/eq"));
+	QCOMPARE(functionCurve->equationData().at(0).curve(), nullptr);
+	QCOMPARE(functionCurve->equationData().at(0).curvePath(), QStringLiteral("Project/Worksheet/plot/eq"));
 
 	equationCurveNew->setName(QStringLiteral("eq"));
 
-	QCOMPARE(eq2->equationData().at(0).curve(), equationCurveNew);
-	QCOMPARE(eq2->equationData().at(0).curvePath(), QStringLiteral("Project/Worksheet/plot/eq"));
+	QCOMPARE(functionCurve->equationData().at(0).curve(), equationCurveNew);
+	QCOMPARE(functionCurve->equationData().at(0).curvePath(), QStringLiteral("Project/Worksheet/plot/eq"));
 
 	{
-		const auto* xColumn = eq2->xColumn();
-		const auto* yColumn = eq2->yColumn();
+		const auto* xColumn = functionCurve->xColumn();
+		const auto* yColumn = functionCurve->yColumn();
 		QCOMPARE(xColumn->rowCount(), data.count);
 		QCOMPARE(yColumn->rowCount(), data.count);
 		for (int i = 0; i < xColumn->rowCount(); i++) {
@@ -291,7 +293,7 @@ void XYEquationCurve2Test::removeCurveRenameAutomaticAdd() {
 	}
 }
 
-void XYEquationCurve2Test::saveLoad() {
+void XYFunctionCurveTest::saveLoad() {
 	QString savePath;
 	{
 		Project project;
@@ -320,20 +322,20 @@ void XYEquationCurve2Test::saveLoad() {
 
 		QCOMPARE(equationCurve->xColumn()->rowCount(), data.count);
 
-		p->addChild(new XYEquationCurve2(QLatin1String("eq2")));
-		auto equationCurves2 = p->children(AspectType::XYEquationCurve2);
-		QCOMPARE(equationCurves2.count(), 1);
-		auto* eq2 = static_cast<XYEquationCurve2*>(equationCurves2.at(0));
+		p->addChild(new XYFunctionCurve(QLatin1String("eq2")));
+		auto functionCurves = p->children(AspectType::XYFunctionCurve);
+		QCOMPARE(functionCurves.count(), 1);
+		auto* functionCurve = static_cast<XYFunctionCurve*>(functionCurves.at(0));
 
-		auto dock = XYEquationCurve2Dock(nullptr);
+		auto dock = XYFunctionCurveDock(nullptr);
 		dock.setupGeneral();
-		dock.setCurves({eq2});
+		dock.setCurves({functionCurve});
 
-		eq2->setEquation(QStringLiteral("2*z"), {QStringLiteral("z")}, {equationCurve});
+		functionCurve->setEquation(QStringLiteral("2*z"), {QStringLiteral("z")}, {equationCurve});
 
 		{
-			const auto* xColumn = eq2->xColumn();
-			const auto* yColumn = eq2->yColumn();
+			const auto* xColumn = functionCurve->xColumn();
+			const auto* yColumn = functionCurve->yColumn();
 			QCOMPARE(xColumn->rowCount(), data.count);
 			QCOMPARE(yColumn->rowCount(), data.count);
 			for (int i = 0; i < xColumn->rowCount(); i++) {
@@ -341,7 +343,7 @@ void XYEquationCurve2Test::saveLoad() {
 				VALUES_EQUAL(yColumn->valueAt(i), (i + 1) * 2);
 			}
 		}
-		SAVE_PROJECT("TestXYEquationCurve2SaveLoad");
+		SAVE_PROJECT("TestXYFunctionCurveSaveLoad");
 	}
 
 	{
@@ -352,22 +354,22 @@ void XYEquationCurve2Test::saveLoad() {
 		QVERIFY(ws);
 		const auto* p = ws->child<CartesianPlot>(0);
 		QVERIFY(p);
-		const auto* eq2 = p->child<XYEquationCurve2>(0);
+		const auto* eq2 = p->child<XYFunctionCurve>(0);
 		QVERIFY(eq2);
 		const auto* eq = p->child<XYEquationCurve>(0);
 		QVERIFY(eq);
 
-		const auto& data = eq2->equationData();
+		const auto& data = functionCurve->equationData();
 		QCOMPARE(data.length(), 1);
 		QCOMPARE(data.at(0).curvePath(), QStringLiteral("Project/Worksheet/plot/eq"));
 		QCOMPARE(data.at(0).curve(), eq);
 		QCOMPARE(data.at(0).variableName(), QStringLiteral("z"));
 
-		QCOMPARE(eq2->equation(), QStringLiteral("2*z"));
+		QCOMPARE(functionCurve->equation(), QStringLiteral("2*z"));
 
 		{
-			const auto* xColumn = eq2->xColumn();
-			const auto* yColumn = eq2->yColumn();
+			const auto* xColumn = functionCurve->xColumn();
+			const auto* yColumn = functionCurve->yColumn();
 			QVERIFY(xColumn);
 			QVERIFY(yColumn);
 			QCOMPARE(xColumn->rowCount(), 100);
@@ -379,8 +381,8 @@ void XYEquationCurve2Test::saveLoad() {
 		}
 
 		// Check that the logical points are really set
-		QCOMPARE(eq2->d_func()->m_logicalPoints.length(), 100);
+		QCOMPARE(functionCurve->d_func()->m_logicalPoints.length(), 100);
 	}
 }
 
-QTEST_MAIN(XYEquationCurve2Test)
+QTEST_MAIN(XYFunctionCurveTest)

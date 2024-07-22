@@ -8,12 +8,12 @@ if (ENABLE_TEST_BACKEND_XYCURVE)
     add_test(NAME XYCurveTest COMMAND XYCurveTest)
 endif()
 
-option(ENABLE_TEST_BACKEND_XYEQUATIONCURVE2 "Enable XYEquationCurve2 Tests" ON)
+option(ENABLE_TEST_BACKEND_XYEQUATIONCURVE2 "Enable XYFunctionCurve Tests" ON)
 
 if (ENABLE_TEST_BACKEND_XYEQUATIONCURVE2)
-    add_executable (XYEquationCurve2Test XYEquationCurve2Test.cpp)
+    add_executable (XYFunctionCurveTest XYFunctionCurveTest.cpp)
 
-    target_link_libraries(XYEquationCurve2Test labplot2backendlib labplot2lib labplot2nsllib labplot2test)
+    target_link_libraries(XYFunctionCurveTest labplot2backendlib labplot2lib labplot2nsllib labplot2test)
 
-    add_test(NAME XYEquationCurve2Test COMMAND XYEquationCurve2Test)
+    add_test(NAME XYFunctionCurveTest COMMAND XYFunctionCurveTest)
 endif()

@@ -1,19 +1,19 @@
 /*
-	File                 : XYEquationCurve2Test.h
+	File                 : XYFunctionCurveTest.h
 	Project              : LabPlot
-	Description          : Tests for XYEquationCurve2
+	Description          : Tests for XYFunctionCurve
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2024 Martin Marmsoler <martin.marmsoler@gmail.com>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef XYEQUATIONCURVE2TEST_H
-#define XYEQUATIONCURVE2TEST_H
+#ifndef XYFUNCTIONCURVETEST_H
+#define XYFUNCTIONCURVETEST_H
 
 #include "../../CommonTest.h"
 
-class XYEquationCurve2Test : public CommonTest {
+class XYFunctionCurveTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
@@ -24,4 +24,4 @@ private Q_SLOTS:
 	void saveLoad();
 };
 
-#endif // XYEQUATIONCURVE2TEST_H
+#endif // XYFUNCTIONCURVETEST_H
