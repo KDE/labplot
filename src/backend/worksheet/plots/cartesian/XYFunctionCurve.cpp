@@ -482,11 +482,6 @@ void XYFunctionCurve::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool XYFunctionCurve::load(XmlStreamReader* reader, bool preview) {
-	Q_D(XYFunctionCurve);
-
-	// QXmlStreamAttributes attribs;
-	// QString str;
-
 	while (!reader->atEnd()) {
 		reader->readNext();
 		if (reader->isEndElement() && reader->name() == saveName)
@@ -495,7 +490,7 @@ bool XYFunctionCurve::load(XmlStreamReader* reader, bool preview) {
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == QLatin1String("xyCurve")) {
+		if (reader->name() == QLatin1String("xyAnalysisCurve")) {
 			if (!XYAnalysisCurve::load(reader, preview))
 				return false;
 		} else if (reader->name() == QLatin1String("function")) {

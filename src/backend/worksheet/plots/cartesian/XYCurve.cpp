@@ -198,7 +198,6 @@ QMenu* XYCurve::createContextMenu() {
 	QAction* visibilityAction = this->visibilityAction(); // skip the first action because of the "title-action", second is visible
 
 	//"data analysis" menu
-	//	auto* plot = static_cast<CartesianPlot*>(parentAspect());
 	menu->insertMenu(visibilityAction, d->m_plot->analysisMenu());
 	menu->insertSeparator(visibilityAction);
 

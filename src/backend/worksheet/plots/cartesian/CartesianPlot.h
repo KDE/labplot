@@ -306,6 +306,7 @@ public Q_SLOTS:
 	void addSmoothCurve();
 	void addFitCurve();
 	void addFourierFilterCurve();
+	void addFunctionCurve();
 
 	void addLegend();
 	void addTextLabel();

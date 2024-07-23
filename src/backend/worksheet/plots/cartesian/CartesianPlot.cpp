@@ -429,7 +429,7 @@ void CartesianPlot::initActions() {
 	addCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("xy-curve"), this);
 	addEquationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve")), i18n("xy-curve from a Formula"), this);
 	addEquationCurveAction->setToolTip(i18n("Add a new xy-curve that is defined via a mathematical expression."));
-	addFunctionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve")), i18n("xy-curve from a Function"), this);
+	addFunctionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve")), i18n("Function"), this);
 	addFunctionCurveAction->setToolTip(i18n("Add a new xy-curve that is defined as a function of other xy-curves (scaled, shifted, etc.)"));
 
 	// statistical plots
@@ -474,9 +474,7 @@ void CartesianPlot::initActions() {
 	connect(addEquationCurveAction, &QAction::triggered, this, [=]() {
 		addChild(new XYEquationCurve(QStringLiteral("f(x)")));
 	});
-	connect(addFunctionCurveAction, &QAction::triggered, this, [=]() {
-		addChild(new XYFunctionCurve(QStringLiteral("f(x)")));
-	});
+	connect(addFunctionCurveAction, &QAction::triggered, this, &CartesianPlot::addFunctionCurve);
 
 	// bar plots
 	connect(addBarPlotAction, &QAction::triggered, this, [=]() {
@@ -618,7 +616,6 @@ void CartesianPlot::initMenus() {
 	m_addNewMenu->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 	m_addNewMenu->addAction(addCurveAction);
 	m_addNewMenu->addAction(addEquationCurveAction);
-	m_addNewMenu->addAction(addFunctionCurveAction);
 	m_addNewMenu->addSeparator();
 
 	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"), m_addNewMenu);
@@ -652,6 +649,8 @@ void CartesianPlot::initMenus() {
 	addNewAnalysisMenu->addAction(addCorrelationCurveAction);
 	addNewAnalysisMenu->addSeparator();
 	addNewAnalysisMenu->addAction(addDataReductionCurveAction);
+	addNewAnalysisMenu->addSeparator();
+	addNewAnalysisMenu->addAction(addFunctionCurveAction);
 	m_addNewMenu->addMenu(addNewAnalysisMenu);
 
 	m_addNewMenu->addSeparator();
@@ -695,6 +694,7 @@ void CartesianPlot::initMenus() {
 	dataFitMenu->addAction(addFitActions.at(10));
 	dataAnalysisMenu->addMenu(dataFitMenu);
 
+	// TODO: re-use addNewAnalysisMenu?
 	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addAction(addDifferentiationAction);
 	dataAnalysisMenu->addAction(addIntegrationAction);
@@ -710,7 +710,10 @@ void CartesianPlot::initMenus() {
 	dataAnalysisMenu->addAction(addCorrelationAction);
 	dataAnalysisMenu->addSeparator();
 	// 	dataAnalysisMenu->insertMenu(nullptr, dataManipulationMenu);
+	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addAction(addDataReductionAction);
+	dataAnalysisMenu->addSeparator();
+	dataAnalysisMenu->addAction(addFunctionCurveAction);
 
 	// theme menu
 	themeMenu = new QMenu(i18n("Theme"));
@@ -1959,6 +1962,20 @@ void CartesianPlot::addFourierFilterCurve() {
 	}
 	this->addChild(curve);
 
+	endMacro();
+}
+
+void CartesianPlot::addFunctionCurve() {
+	auto* curve = new XYFunctionCurve(i18n("Function"));
+	const auto* curCurve = currentCurve();
+	if (curCurve) {
+		beginMacro(i18n("%1: add function of '%2'", name(), curCurve->name()));
+		curve->setName(i18n("Function of '%1'", curCurve->name()));
+		curve->setFunction(QString(), {QStringLiteral("x")}, {curCurve});
+	} else
+		beginMacro(i18n("%1: add function curve", name()));
+
+	this->addChild(curve);
 	endMacro();
 }
 
