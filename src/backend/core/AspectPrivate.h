@@ -25,6 +25,7 @@ public:
 
 	void insertChild(int index, AbstractAspect*);
 	int indexOfChild(const AbstractAspect*) const;
+	QString name();
 
 public:
 	QVector<AbstractAspect*> m_children;

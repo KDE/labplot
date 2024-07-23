@@ -100,7 +100,7 @@ Q_SIGNALS:
 	void xColumnChanged(const AbstractColumn*);
 	void yColumnChanged(const AbstractColumn*);
 	void zColumnChanged(const AbstractColumn*);
-	void zoomChanged(int);
+	void zoomLevelChanged(int);
 	void xRotationChanged(int);
 	void yRotationChanged(int);
 	void rectChanged(QRectF&);

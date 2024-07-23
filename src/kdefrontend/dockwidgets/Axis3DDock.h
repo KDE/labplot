@@ -31,7 +31,6 @@ private:
 	void updateUiVisibility();
 	void load();
 	void loadConfig(KConfig&);
-	void changeParentPlot(Axis3D*);
 
 private Q_SLOTS:
 	void retranslateUi();

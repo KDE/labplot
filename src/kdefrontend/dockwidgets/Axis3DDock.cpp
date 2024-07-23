@@ -66,26 +66,6 @@ void Axis3DDock::loadConfig(KConfig& config) {
 	// Implement loading from config logic here
 }
 
-void Axis3DDock::changeParentPlot(Axis3D* axis) {
-	if (auto* parentPlot = qobject_cast<Surface3DPlotArea*>(axis->parentAspect())) {
-		QValue3DAxis* qValueAxis = axis->m_axis;
-
-		switch (axis->type()) {
-		case Axis3D::X:
-			parentPlot->m_surface->axisXChanged(qValueAxis);
-			break;
-		case Axis3D::Y:
-			parentPlot->m_surface->axisYChanged(qValueAxis);
-			break;
-		case Axis3D::Z:
-			parentPlot->m_surface->axisZChanged(qValueAxis);
-			break;
-		default:
-			break;
-		}
-	}
-}
-
 void Axis3DDock::retranslateUi() {
 	ui.cbXLabelFormat->insertItem(Axis3D::Format::Format_Decimal, i18n("Numeric"));
 	ui.cbXLabelFormat->insertItem(Axis3D::Format::Format_Scientific, i18n("Scientific"));
@@ -100,7 +80,6 @@ void Axis3DDock::titleChanged(const QString& text) {
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* axis : m_axes) {
 		axis->setTitle(text);
-		changeParentPlot(axis);
 	}
 }
 
@@ -108,14 +87,12 @@ void Axis3DDock::minRangeChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* axis : m_axes) {
 		axis->setMinRange(value);
-		changeParentPlot(axis);
 	}
 }
 void Axis3DDock::maxRangeChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* axis : m_axes) {
 		axis->setMaxRange(value);
-		changeParentPlot(axis);
 	}
 }
 
@@ -123,7 +100,6 @@ void Axis3DDock::segmentCountChanged(int count) {
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* axis : m_axes) {
 		axis->setSegmentCount(count);
-		changeParentPlot(axis);
 	}
 }
 
@@ -131,7 +107,6 @@ void Axis3DDock::subSegmentCountChanged(int count) {
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* axis : m_axes) {
 		axis->setSubSegmentCount(count);
-		changeParentPlot(axis);
 	}
 }
 
@@ -140,7 +115,6 @@ void Axis3DDock::formatChanged(int index) {
 	Axis3D::Format newFormat = static_cast<Axis3D::Format>(index);
 	for (auto* axis : m_axes) {
 		axis->setAxisFormat(newFormat);
-		changeParentPlot(axis);
 	}
 }
 

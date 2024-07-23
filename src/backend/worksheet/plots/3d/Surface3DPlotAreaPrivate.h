@@ -70,5 +70,9 @@ public:
 	void updateFlatShading();
 	void updateShadowQuality();
 	void updateSmoothMesh();
+	void updateXRotation();
+	void updateYRotation();
+	void updateZoomLevel();
+	void updateTheme();
 };
 #endif // SURFACE3DPLOTAREAPRIVATE_H

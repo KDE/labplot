@@ -135,6 +135,7 @@ public:
 	friend class AbstractAspectPrivate;
 
 	AbstractAspect(const QString& name, AspectType type);
+	AbstractAspect(AbstractAspectPrivate*, AspectType type);
 	~AbstractAspect() override;
 
 	enum class NameHandling {
@@ -226,6 +227,12 @@ public:
 			return QStringLiteral("LollipopPlot");
 		case AspectType::AbstractPart:
 			return QStringLiteral("AbstractPart");
+		case AspectType::Axis3D:
+			return QStringLiteral("Axis3D");
+		case AspectType::SurfacePlot:
+			return QStringLiteral("Surface Plot");
+		case AspectType::Scatter3DPlot:
+			return QStringLiteral("Scatter3DPlot");
 		case AspectType::AbstractDataSource:
 			return QStringLiteral("AbstractDataSource");
 		case AspectType::Matrix:
@@ -266,8 +273,6 @@ public:
 			return QStringLiteral("MQTTClient");
 		case AspectType::MQTTSubscription:
 			return QStringLiteral("MQTTSubscription");
-		case AspectType::SurfacePlot:
-			return QStringLiteral("SurfacePlot");
 		}
 
 		return {};

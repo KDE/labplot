@@ -1,7 +1,6 @@
 #ifndef SCATTER3DPLOTAREAPRIVATE_H
 #define SCATTER3DPLOTAREAPRIVATE_H
 #include "backend/worksheet/plots/3d/Scatter3DPlotArea.h"
-#include "qfont.h"
 #include <backend/core/AbstractColumn.h>
 #include <backend/worksheet/WorksheetElementContainerPrivate.h>
 #include <backend/worksheet/plots/cartesian/Symbol.h>
@@ -27,15 +26,18 @@ public:
 	int zoomLevel;
 	void retransform() override;
 	void recalcShapeAndBoundingRect() override;
-	void generateData();
+	void recalc();
 
-	Scatter3DPlotArea* const q;
+	Scatter3DPlotArea* const q{nullptr};
 
 	void updateTheme();
 	void updatePointStyle();
 	void updateShadowQuality();
 	void updateColor();
 	void updateOpacity();
+	void updateXRotation();
+	void updateYRotation();
+	void updateZoomLevel();
 };
 
 #endif // SCATTER3DPLOTAREAPRIVATE_H
