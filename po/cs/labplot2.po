@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-22 01:46+0000\n"
-"PO-Revision-Date: 2024-07-15 15:31+0200\n"
+"PO-Revision-Date: 2024-07-22 16:54+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -1869,62 +1869,55 @@ msgid "Variables with rank greater than 2 not supported yet."
 msgstr ""
 
 #: src/backend/datasources/filters/McapFilter.cpp:196
-#, fuzzy, kde-format
-#| msgid "Invalid DBC file."
+#, kde-format
 msgid "Valid MCAP file"
-msgstr "Neplatný soubor DBC."
+msgstr "Platný soubor MCAP"
 
 #: src/backend/datasources/filters/McapFilter.cpp:201
 #, kde-format
 msgid "Message count: "
-msgstr ""
+msgstr "Počet zpráv:"
 
 #: src/backend/datasources/filters/McapFilter.cpp:203
 #, kde-format
 msgid "Schema count: "
-msgstr ""
+msgstr "Počet schémat:"
 
 #: src/backend/datasources/filters/McapFilter.cpp:205
 #, kde-format
 msgid "Channel count: "
-msgstr ""
+msgstr "Počet kanálů:"
 
 #: src/backend/datasources/filters/McapFilter.cpp:207
-#, fuzzy, kde-format
-#| msgid "%1: set data column"
+#, kde-format
 msgid "Attachment count: "
-msgstr "%1: nastavit sloupec dat"
+msgstr "Počet příloh:"
 
 #: src/backend/datasources/filters/McapFilter.cpp:209
-#, fuzzy, kde-format
-#| msgid "%1: set data column"
+#, kde-format
 msgid "Metadata count: "
-msgstr "%1: nastavit sloupec dat"
+msgstr "Počet metadat:"
 
 #: src/backend/datasources/filters/McapFilter.cpp:211
-#, fuzzy, kde-format
-#| msgid "Start Time:"
+#, kde-format
 msgid "Message Start Time: "
-msgstr "Čas zahájení:"
+msgstr "Čas začátku zprávy:"
 
 #: src/backend/datasources/filters/McapFilter.cpp:213
-#, fuzzy, kde-format
-#| msgid "End Time: %1"
+#, kde-format
 msgid "Message End Time: "
-msgstr "Čas ukončení: %1"
+msgstr "Čas konce zprávy:"
 
 #: src/backend/datasources/filters/McapFilter.cpp:215
-#, fuzzy, kde-format
-#| msgid "Row Statisti&cs"
+#, kde-format
 msgid "No Statistics found."
-msgstr "Statis&tika řady"
+msgstr "Nenalezena žádná statistika."
 
 #: src/backend/datasources/filters/McapFilter.cpp:469
 #: src/backend/datasources/filters/McapFilter.cpp:962
-#, fuzzy, kde-format
-#| msgid "Failed to read the file."
+#, kde-format
 msgid "Failed to read the file. Reason: %1"
-msgstr "Soubor se nepodařilo přečíst."
+msgstr "Soubor se nepodařilo otevřít. Důvod: %1"
 
 #: src/backend/datasources/filters/McapFilter.cpp:477
 #, kde-format
@@ -12085,10 +12078,9 @@ msgid "MATLAB MAT file"
 msgstr ""
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:136
-#, fuzzy, kde-format
-#| msgid "Copy Data"
+#, kde-format
 msgid "MCAP Data"
-msgstr "Kopírovat data"
+msgstr "Data MCAP"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:145
 #, kde-format
@@ -16591,10 +16583,9 @@ msgid "Excel 2007+ (*.xlsx)"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:415
-#, fuzzy, kde-format
-#| msgid "DBC file (*.dbc)"
+#, kde-format
 msgid "MCAP Files (*.mcap)"
-msgstr "Soubor DBC (*.dbc)"
+msgstr "Soubor MCAP (*.mcap)"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:418
 #, kde-format
@@ -22279,16 +22270,15 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, compressionGroup)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:192
-#, fuzzy, kde-format
-#| msgid "Compression: %1"
+#, kde-format
 msgid "Compression"
-msgstr "Komprese: %1"
+msgstr "Komprese"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbLZ4)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:205
 #, kde-format
 msgid "LZ4"
-msgstr ""
+msgstr "LZ4"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbZSTD)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:212
@@ -22298,10 +22288,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:222
-#, fuzzy, kde-format
-#| msgid "Compression Level: %1"
+#, kde-format
 msgid "Compression Level"
-msgstr "Úroveň komprese: %1"
+msgstr "Úroveň komprese"
 
 #. i18n: ectx: property (text), widget (QLabel, lExportToFITS)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:232

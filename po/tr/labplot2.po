@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-22 01:46+0000\n"
-"PO-Revision-Date: 2024-07-21 19:55+0300\n"
+"PO-Revision-Date: 2024-07-22 12:51+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -1899,8 +1899,7 @@ msgid "Channel count: "
 msgstr "Kanal sayısı: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:207
-#, fuzzy, kde-format
-#| msgid "Attachement count: "
+#, kde-format
 msgid "Attachment count: "
 msgstr "Ek sayısı: "
 

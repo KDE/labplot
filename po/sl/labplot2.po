@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-22 01:46+0000\n"
-"PO-Revision-Date: 2024-07-21 06:38+0200\n"
+"PO-Revision-Date: 2024-07-22 06:31+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -1908,10 +1908,9 @@ msgid "Channel count: "
 msgstr "Števec kanalov: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:207
-#, fuzzy, kde-format
-#| msgid "Attachement count: "
+#, kde-format
 msgid "Attachment count: "
-msgstr "Števec prilog: "
+msgstr "Števec priloge: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:209
 #, kde-format
@@ -12639,7 +12638,7 @@ msgstr "Ni bilo mogoče ustvariti %1"
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:295
 #, kde-format
 msgid "Could not find .csv files in %1"
-msgstr "Ni bilo mogoče najti datotek .csv v %1."
+msgstr "Ni bilo mogoče najti datotek .csv v %1"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:84
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:519
