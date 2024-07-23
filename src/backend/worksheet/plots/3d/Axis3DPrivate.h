@@ -7,18 +7,24 @@
 
 class WorksheetElementPrivate;
 class AbstractAspectPrivate;
-class Axis3DPrivate : public AbstractAspectPrivate {
+class Axis3DPrivate {
 public:
-	explicit Axis3DPrivate(Axis3D* owner, const QString& name);
+	explicit Axis3DPrivate(Axis3D* owner);
 	Axis3D* const q{nullptr};
 	Axis3D::Format axisFormat;
 	Axis3D::Type type;
-
+	QString name() const;
 	float minRange;
 	float maxRange;
 	QString title;
 	int segmentCount;
 	int subSegmentCount;
+	void updateTitle();
+	void updateMaxRange();
+	void updateMinRange();
+	void updateSegmentCount();
+	void updateSubSegmentCount();
+	void updateFormat();
 };
 
 #endif // AXIS3DPRIVATE_H

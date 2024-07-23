@@ -179,31 +179,29 @@ void Surface3DPlotArea::setZColumn(const AbstractColumn* zCol) {
 	if (zCol != d->zColumn)
 		exec(new Surface3DPlotAreaSetZColumnCmd(d, zCol, ki18n("%1: Z Column changed")));
 }
-
-void Surface3DPlotArea::setZoomLevel(int zoomLevel) {
-	Q_D(Surface3DPlotArea);
-	m_surface->setCameraZoomLevel(zoomLevel);
-	d->zoomLevel = zoomLevel;
-	Q_EMIT zoomChanged(zoomLevel);
-}
+STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetXRotation, int, xRotation, updateXRotation)
 void Surface3DPlotArea::setXRotation(int value) {
 	Q_D(Surface3DPlotArea);
-	m_surface->setCameraXRotation(value);
-	d->xRotation = value;
-	Q_EMIT xRotationChanged(value);
+	if (value != d->xRotation)
+		exec(new Surface3DPlotAreaSetXRotationCmd(d, value, ki18n("%1: X Rotation changed")));
 }
+STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetYRotation, int, yRotation, updateYRotation)
 void Surface3DPlotArea::setYRotation(int value) {
 	Q_D(Surface3DPlotArea);
-	m_surface->setCameraYRotation(value);
-	d->yRotation = value;
-	Q_EMIT yRotationChanged(value);
+	if (value != d->yRotation)
+		exec(new Surface3DPlotAreaSetYRotationCmd(d, value, ki18n("%1: X Rotation changed")));
 }
+STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetZoomLevel, int, zoomLevel, updateZoomLevel)
+void Surface3DPlotArea::setZoomLevel(int value) {
+	Q_D(Surface3DPlotArea);
+	if (value != d->zoomLevel)
+		exec(new Surface3DPlotAreaSetZoomLevelCmd(d, value, ki18n("%1: Zoom Level changed")));
+}
+STD_SETTER_CMD_IMPL_F_S(Surface3DPlotArea, SetTheme, Surface3DPlotArea::Theme, theme, updateTheme)
 void Surface3DPlotArea::setTheme(Surface3DPlotArea::Theme theme) {
 	Q_D(Surface3DPlotArea);
-	m_surface->activeTheme()->setType(static_cast<Q3DTheme::Theme>(theme));
-	d->theme = theme;
-	Q_EMIT themeChanged(theme);
-	Q_EMIT changed();
+	if (theme != d->theme)
+		exec(new Surface3DPlotAreaSetThemeCmd(d, theme, ki18n("%1: theme changed")));
 }
 class Surface3DPlotAreaSetRectCmd : public QUndoCommand {
 public:
@@ -473,7 +471,22 @@ void Surface3DPlotAreaPrivate::generateSpreadsheetData() const {
 	q->m_surface->addSeries(series);
 
 	qDebug() << "Data generation complete";
-} ////////////////////////////////////////////////////////////////////////////////
+}
+void Surface3DPlotAreaPrivate::updateXRotation() {
+	q->m_surface->setCameraXRotation(xRotation);
+}
+
+void Surface3DPlotAreaPrivate::updateYRotation() {
+	q->m_surface->setCameraYRotation(yRotation);
+}
+
+void Surface3DPlotAreaPrivate::updateZoomLevel() {
+	q->m_surface->setCameraZoomLevel(zoomLevel);
+}
+void Surface3DPlotAreaPrivate::updateTheme() {
+	q->m_surface->activeTheme()->setType(static_cast<Q3DTheme::Theme>(theme));
+}
+////////////////////////////////////////////////////////////////////////////////
 
 void Surface3DPlotAreaPrivate::saveSpreadsheetConfig(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("spreadsheet");

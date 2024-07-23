@@ -6,7 +6,8 @@
 class Axis3DPrivate;
 Axis3D::Axis3D(QString name, Type type)
 	: AbstractAspect(name, AspectType::Axis3D)
-	, m_axis(new QValue3DAxis()) {
+	, m_axis(new QValue3DAxis())
+	, d_ptr(new Axis3DPrivate(this)) {
 	setType(type);
 }
 
@@ -60,58 +61,79 @@ void Axis3D::setType(Axis3D::Type type) {
 	if (d->type != type)
 		d->type = type;
 }
+STD_SETTER_CMD_IMPL_F_S(Axis3D, SetTitle, QString, title, updateTitle)
 void Axis3D::setTitle(QString title) {
 	Q_D(Axis3D);
-	if (title != d->title) {
-		m_axis->setTitle(title);
-		d->title = title;
-		Q_EMIT titleChanged(title);
-	}
+	if (title != d->title)
+		exec(new Axis3DSetTitleCmd(d, title, ki18n("%1: Axis3D title changed")));
 }
+STD_SETTER_CMD_IMPL_F_S(Axis3D, SetMaxRange, float, maxRange, updateMaxRange)
 void Axis3D::setMaxRange(float max) {
 	Q_D(Axis3D);
-	if (max != d->maxRange) {
-		m_axis->setMax(max);
-		d->maxRange = max;
-		Q_EMIT maxRangeChanged(max);
-	}
+	if (max != d->maxRange)
+		exec(new Axis3DSetMaxRangeCmd(d, max, ki18n("%1: Axis3D max range changed")));
 }
+STD_SETTER_CMD_IMPL_F_S(Axis3D, SetMinRange, float, minRange, updateMinRange)
 void Axis3D::setMinRange(float min) {
 	Q_D(Axis3D);
-	if (min != d->minRange) {
-		m_axis->setMin(min);
-		d->minRange = min;
-		Q_EMIT minRangeChanged(min);
-	}
+	if (min != d->minRange)
+		exec(new Axis3DSetMinRangeCmd(d, min, ki18n("%1: Axis3D min range changed")));
 }
+STD_SETTER_CMD_IMPL_F_S(Axis3D, SetSegmentCount, int, segmentCount, updateSegmentCount)
 void Axis3D::setSegmentCount(int count) {
 	Q_D(Axis3D);
-	if (count != d->segmentCount) {
-		m_axis->setSegmentCount(count);
-		d->segmentCount = count;
-		Q_EMIT segmentCountChanged(count);
-	}
+	if (count != d->segmentCount)
+		exec(new Axis3DSetSegmentCountCmd(d, count, ki18n("%1 Axis3D segment count changed")));
 }
+
+STD_SETTER_CMD_IMPL_F_S(Axis3D, SetSubSegmentCount, int, subSegmentCount, updateSubSegmentCount)
 void Axis3D::setSubSegmentCount(int count) {
 	Q_D(Axis3D);
-	if (count != d->segmentCount) {
-		m_axis->setMax(count);
-		d->subSegmentCount = count;
-		Q_EMIT subSegmentCountChanged(count);
-	}
+	if (count != d->segmentCount)
+		exec(new Axis3DSetSubSegmentCountCmd(d, count, ki18n("%1 Axis3D sub segment count changed")));
 }
+STD_SETTER_CMD_IMPL_F_S(Axis3D, SetFormat, Axis3D::Format, axisFormat, updateFormat)
 void Axis3D::setAxisFormat(Axis3D::Format format) {
 	Q_D(Axis3D);
-	if (format != d->axisFormat) {
-		m_axis->setLabelFormat(formatToString(format));
-		d->axisFormat = format;
-		Q_EMIT axisFormatChanged(format);
-	}
+	if (format != d->axisFormat)
+		exec(new Axis3DSetFormatCmd(d, format, ki18n("%1: Axis3D format Changed")));
 }
 // #####################################################################
 // ################### Private implementation ##########################
 // #####################################################################
-Axis3DPrivate::Axis3DPrivate(Axis3D* owner, const QString& name)
-	: AbstractAspectPrivate(owner, name)
-	, q(owner) {
+Axis3DPrivate::Axis3DPrivate(Axis3D* owner)
+	: q(owner)
+	, axisFormat(Axis3D::Format_Decimal)
+	, minRange(0)
+	, maxRange(100)
+	, title(QStringLiteral(""))
+	, segmentCount(10)
+	, subSegmentCount(10) {
+}
+
+QString Axis3DPrivate::name() const {
+	return q->parentAspect()->name();
+}
+
+void Axis3DPrivate::updateTitle() {
+	q->m_axis->setTitle(title);
+}
+
+void Axis3DPrivate::updateMaxRange() {
+	q->m_axis->setMax(maxRange);
+}
+
+void Axis3DPrivate::updateMinRange() {
+	q->m_axis->setMin(minRange);
+}
+
+void Axis3DPrivate::updateSegmentCount() {
+	q->m_axis->setSegmentCount(segmentCount);
+}
+
+void Axis3DPrivate::updateSubSegmentCount() {
+	q->m_axis->setSubSegmentCount(subSegmentCount);
+}
+void Axis3DPrivate::updateFormat() {
+	q->m_axis->setSegmentCount(segmentCount);
 }

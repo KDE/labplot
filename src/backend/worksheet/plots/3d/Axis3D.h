@@ -2,14 +2,13 @@
 #define AXIS3D_H
 
 #include "backend/lib/macros.h"
-#include <backend/core/AbstractAspect.h>
 
 #include <QValue3DAxis>
+#include <backend/core/AbstractAspect.h>
 
-#include <backend/worksheet/WorksheetElement.h>
 class QValue3DAxis;
-class AbstractAspect;
 class Axis3DPrivate;
+class AbstractAspect;
 class Axis3D : public AbstractAspect {
 	Q_OBJECT
 public:
@@ -33,11 +32,15 @@ public:
 
 	QValue3DAxis* m_axis;
 	typedef Axis3DPrivate Private;
+
+protected:
+	Axis3DPrivate* const d_ptr;
 public Q_SLOTS:
 
 private:
 	Q_DECLARE_PRIVATE(Axis3D)
 Q_SIGNALS:
+	void typeChanged(Axis3D::Type);
 	void titleChanged(QString);
 	void maxRangeChanged(double);
 	void minRangeChanged(double);

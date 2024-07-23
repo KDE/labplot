@@ -54,19 +54,19 @@ BASIC_SHARED_D_READER_IMPL(Scatter3DPlotArea, int, zoomLevel, zoomLevel)
 // ##############################################################################
 // #################  setter methods and undo commands ##########################
 // ##############################################################################
-STD_SETTER_CMD_IMPL_F_S(Scatter3DPlotArea, SetXColumn, const AbstractColumn*, xColumn, generateData)
+STD_SETTER_CMD_IMPL_F_S(Scatter3DPlotArea, SetXColumn, const AbstractColumn*, xColumn, recalc)
 void Scatter3DPlotArea::setXColumn(const AbstractColumn* xCol) {
 	Q_D(Scatter3DPlotArea);
 	if (xCol != d->xColumn)
 		exec(new Scatter3DPlotAreaSetXColumnCmd(d, xCol, ki18n("%1: X Column changed")));
 }
-STD_SETTER_CMD_IMPL_F_S(Scatter3DPlotArea, SetYColumn, const AbstractColumn*, yColumn, generateData)
+STD_SETTER_CMD_IMPL_F_S(Scatter3DPlotArea, SetYColumn, const AbstractColumn*, yColumn, recalc)
 void Scatter3DPlotArea::setYColumn(const AbstractColumn* yCol) {
 	Q_D(Scatter3DPlotArea);
 	if (yCol != d->yColumn)
 		exec(new Scatter3DPlotAreaSetYColumnCmd(d, yCol, ki18n("%1: Y Column changed")));
 }
-STD_SETTER_CMD_IMPL_F_S(Scatter3DPlotArea, SetZColumn, const AbstractColumn*, zColumn, generateData)
+STD_SETTER_CMD_IMPL_F_S(Scatter3DPlotArea, SetZColumn, const AbstractColumn*, zColumn, recalc)
 void Scatter3DPlotArea::setZColumn(const AbstractColumn* zCol) {
 	Q_D(Scatter3DPlotArea);
 	if (zCol != d->zColumn)
@@ -102,6 +102,24 @@ void Scatter3DPlotArea::setOpacity(double opacity) {
 	if (opacity != d->opacity)
 		exec(new Scatter3DPlotAreaSetOpacityCmd(d, opacity, ki18n("%1: opacity changed")));
 }
+STD_SETTER_CMD_IMPL_F_S(Scatter3DPlotArea, SetXRotation, int, xRotation, updateXRotation)
+void Scatter3DPlotArea::setXRotation(int value) {
+	Q_D(Scatter3DPlotArea);
+	if (value != d->xRotation)
+		exec(new Scatter3DPlotAreaSetXRotationCmd(d, value, ki18n("%1: X Rotation changed")));
+}
+STD_SETTER_CMD_IMPL_F_S(Scatter3DPlotArea, SetYRotation, int, yRotation, updateYRotation)
+void Scatter3DPlotArea::setYRotation(int value) {
+	Q_D(Scatter3DPlotArea);
+	if (value != d->xRotation)
+		exec(new Scatter3DPlotAreaSetYRotationCmd(d, value, ki18n("%1: X Rotation changed")));
+}
+STD_SETTER_CMD_IMPL_F_S(Scatter3DPlotArea, SetZoomLevel, int, zoomLevel, updateZoomLevel)
+void Scatter3DPlotArea::setZoomLevel(int value) {
+	Q_D(Scatter3DPlotArea);
+	if (value != d->zoomLevel)
+		exec(new Scatter3DPlotAreaSetZoomLevelCmd(d, value, ki18n("%1: Zoom Level changed")));
+}
 class Scatter3DPlotAreaSetRectCmd : public QUndoCommand {
 public:
 	Scatter3DPlotAreaSetRectCmd(Scatter3DPlotAreaPrivate* private_obj, const QRectF& rect)
@@ -134,9 +152,9 @@ void Scatter3DPlotArea::setRect(const QRectF& rect) {
 	if (rect != d->rect)
 		exec(new Scatter3DPlotAreaSetRectCmd(d, rect));
 }
-class Surface3DPlotAreaSetPrevRectCmd : public QUndoCommand {
+class Scatter3DPlotAreaSetPrevRectCmd : public QUndoCommand {
 public:
-	Surface3DPlotAreaSetPrevRectCmd(Scatter3DPlotAreaPrivate* private_obj, const QRectF& rect)
+	Scatter3DPlotAreaSetPrevRectCmd(Scatter3DPlotAreaPrivate* private_obj, const QRectF& rect)
 		: m_private(private_obj)
 		, m_rect(rect) {
 		setText(i18n("%1: change geometry rect", m_private->name()));
@@ -167,7 +185,7 @@ private:
 
 void Scatter3DPlotArea::setPrevRect(const QRectF& prevRect) {
 	Q_D(Scatter3DPlotArea);
-	exec(new Surface3DPlotAreaSetPrevRectCmd(d, prevRect));
+	exec(new Scatter3DPlotAreaSetPrevRectCmd(d, prevRect));
 }
 
 void Scatter3DPlotArea::xColumnAboutToBeRemoved(const AbstractAspect*) {
@@ -217,7 +235,7 @@ void Scatter3DPlotAreaPrivate::retransform() {
 }
 void Scatter3DPlotAreaPrivate::recalcShapeAndBoundingRect() {
 }
-void Scatter3DPlotAreaPrivate::generateData() {
+void Scatter3DPlotAreaPrivate::recalc() {
 	if (xColumn == nullptr || yColumn == nullptr || zColumn == nullptr)
 		return;
 
@@ -244,24 +262,7 @@ void Scatter3DPlotAreaPrivate::generateData() {
 	series->dataProxy()->resetArray(*data);
 	q->m_scatter->addSeries(series);
 }
-void Scatter3DPlotArea::setZoomLevel(int zoomLevel) {
-	Q_D(Scatter3DPlotArea);
-	m_scatter->setCameraZoomLevel(zoomLevel);
-	d->zoomLevel = zoomLevel;
-	Q_EMIT zoomLevelChanged(zoomLevel);
-}
-void Scatter3DPlotArea::setXRotation(int value) {
-	Q_D(Scatter3DPlotArea);
-	m_scatter->setCameraXRotation(value);
-	d->xRotation = value;
-	Q_EMIT xRotationChanged(value);
-}
-void Scatter3DPlotArea::setYRotation(int value) {
-	Q_D(Scatter3DPlotArea);
-	m_scatter->setCameraYRotation(value);
-	d->yRotation = value;
-	Q_EMIT yRotationChanged(value);
-}
+
 void Scatter3DPlotAreaPrivate::updateTheme() {
 	q->m_scatter->activeTheme()->setType(static_cast<Q3DTheme::Theme>(theme));
 	q->m_scatter->update();
@@ -304,7 +305,6 @@ void Scatter3DPlotAreaPrivate::updateColor() {
 	QScatter3DSeries* series = q->m_scatter->seriesList().at(0); // Assuming there is at least one series
 	if (!series)
 		return;
-
 	series->setBaseColor(color);
 	q->m_scatter->update();
 	Q_EMIT q->changed();
@@ -313,10 +313,21 @@ void Scatter3DPlotAreaPrivate::updateOpacity() {
 	QScatter3DSeries* series = q->m_scatter->seriesList().at(0); // Assuming there is at least one series
 	if (!series)
 		return;
-
 	QColor baseColor = series->baseColor();
 	baseColor.setAlphaF(opacity);
 	series->setBaseColor(baseColor);
 	q->m_scatter->update();
 	Q_EMIT q->changed();
+}
+
+void Scatter3DPlotAreaPrivate::updateXRotation() {
+	q->m_scatter->setCameraXRotation(xRotation);
+}
+
+void Scatter3DPlotAreaPrivate::updateYRotation() {
+	q->m_scatter->setCameraYRotation(yRotation);
+}
+
+void Scatter3DPlotAreaPrivate::updateZoomLevel() {
+	q->m_scatter->setCameraZoomLevel(zoomLevel);
 }

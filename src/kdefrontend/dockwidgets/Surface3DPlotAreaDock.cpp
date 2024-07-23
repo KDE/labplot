@@ -104,7 +104,7 @@ void Surface3DPlotAreaDock::setSurfaces(const QList<Surface3DPlotArea*>& surface
 	connect(m_surface, &Surface3DPlotArea::flatShadingChanged, this, &Surface3DPlotAreaDock::surfaceFlatShadingChanged);
 	connect(m_surface, &Surface3DPlotArea::shadowQualityChanged, this, &Surface3DPlotAreaDock::surfaceShadowsQualityChanged);
 	connect(m_surface, &Surface3DPlotArea::smoothChanged, this, &Surface3DPlotAreaDock::surfaceSmoothChanged);
-	connect(m_surface, &Surface3DPlotArea::zoomChanged, this, &Surface3DPlotAreaDock::surfaceZoomChanged);
+	connect(m_surface, &Surface3DPlotArea::zoomLevelChanged, this, &Surface3DPlotAreaDock::surfaceZoomChanged);
 	connect(m_surface, &Surface3DPlotArea::xRotationChanged, this, &Surface3DPlotAreaDock::surfaceXRotationChanged);
 	connect(m_surface, &Surface3DPlotArea::yRotationChanged, this, &Surface3DPlotAreaDock::surfaceYRotationChanged);
 	connect(m_surface, &Surface3DPlotArea::themeChanged, this, &Surface3DPlotAreaDock::surfaceThemeChanged);
