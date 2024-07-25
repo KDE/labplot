@@ -1,7 +1,7 @@
 /*
 	File                 : XYFunctionCurve.h
 	Project              : LabPlot
-	Description          : A xy-curvethat is calculated as a function of other curves
+	Description          : A xy-curve that is calculated as a function of other curves
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2024 Martin Marmsoler <martin.marmsoler@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -11,8 +11,6 @@
 #define XYFUNCTIONCURVE_H
 
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
-
-#include <QString>
 
 struct ConstLatin1String : public QLatin1String {
 	constexpr ConstLatin1String(const char* const s)
@@ -43,21 +41,13 @@ public:
 	inline static constexpr ConstLatin1String saveName = "xyFunctionCurve";
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
-
-	// CLASS_D_ACCESSOR_DECL(Formu, functionData, FunctionData);
-
-	typedef XYFunctionCurvePrivate Private;
-
 	const XYAnalysisCurve::Result& result() const override;
 
-	// void setFunctionData(const XYFunctionCurve::FunctionData& functionData);
 	void setFunction(const QString& function, const QStringList& variableNames, const QVector<const XYCurve*>& curve);
 	QString function() const;
 	void clearFunction();
+
 	struct FunctionData {
-		// #if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0)) // required to use in QVector
-		// 		FunctionData() = default;
-		// #endif
 		FunctionData(const QString& variableName, const QString& curvePath)
 			: m_variableName(variableName)
 			, m_curvePath(curvePath) {
@@ -100,21 +90,22 @@ public:
 	};
 	const QVector<FunctionData>& functionData() const;
 
+	typedef XYFunctionCurvePrivate Private;
+
 protected:
 	XYFunctionCurve(const QString& name, XYFunctionCurvePrivate* dd);
 	virtual void handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) override;
 
-private Q_SLOTS:
-	void functionVariableCurveRemoved(const AbstractAspect* aspect);
-	void functionVariableCurveAdded(const AbstractAspect* aspect);
 
 private:
 	Q_DECLARE_PRIVATE(XYFunctionCurve)
 	void init();
 	void setFunctionVariableCurve(const XYCurve*);
-	bool XmlReadFunction(XmlStreamReader* reader, bool preview);
+	bool XmlReadFunction(XmlStreamReader*, bool preview);
 
-public Q_SLOTS:
+private Q_SLOTS:
+	void functionVariableCurveRemoved(const AbstractAspect*);
+	void functionVariableCurveAdded(const AbstractAspect*);
 
 Q_SIGNALS:
 	void functionDataChanged(const XYFunctionCurve::FunctionData&);

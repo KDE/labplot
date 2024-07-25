@@ -62,11 +62,6 @@ void XYFunctionCurve::handleAspectUpdated(const QString& aspectPath, const Abstr
 }
 
 // ##############################################################################
-// ##########################  getter methods  ##################################
-// ##############################################################################
-// BASIC_SHARED_D_READER_IMPL(XYFunctionCurve, XYFunctionCurve::FunctionData, functionData, functionData)
-
-// ##############################################################################
 // #################  setter methods and undo commands ##########################
 // ##############################################################################
 
@@ -246,7 +241,6 @@ void XYFunctionCurvePrivate::functionVariableCurveRemoved(const AbstractAspect* 
 	}
 	if (index != -1) {
 		m_functionData[index].setCurve(nullptr);
-		DEBUG(Q_FUNC_INFO << ", calling updateFunction()")
 		q->recalculate();
 	}
 }
@@ -293,7 +287,7 @@ void XYFunctionCurvePrivate::resetResults() {
 
 // ...
 // see XYFitCurvePrivate
-bool XYFunctionCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
+bool XYFunctionCurvePrivate::recalculateSpecific(const AbstractColumn*, const AbstractColumn*) {
 	QElapsedTimer timer;
 	timer.start();
 
@@ -315,9 +309,8 @@ bool XYFunctionCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataC
 			else if (curve->xColumn()->rowCount() != curve->yColumn()->rowCount())
 				status = i18n("Number of x and y values do not match for the first curve");
 			valid = false;
-		} else {
+		} else
 			numberElements = curve->xColumn()->rowCount();
-		}
 	}
 
 	if (valid) {
@@ -371,39 +364,8 @@ bool XYFunctionCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataC
 			}
 		}
 
-		// const auto payload = std::make_shared<PayloadColumn>(m_functionData);
-
 		// evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.
 		auto* parser = ExpressionParser::getInstance();
-		// parser->setSpecialFunction1(colfun_size, columnSize, payload);
-		// parser->setSpecialFunction1(colfun_min, columnMin, payload);
-		// parser->setSpecialFunction1(colfun_max, columnMax, payload);
-		// parser->setSpecialFunction1(colfun_mean, columnMean, payload);
-		// parser->setSpecialFunction1(colfun_median, columnMedian, payload);
-		// parser->setSpecialFunction1(colfun_stdev, columnStdev, payload);
-		// parser->setSpecialFunction1(colfun_var, columnVar, payload);
-		// parser->setSpecialFunction1(colfun_gm, columnGm, payload);
-		// parser->setSpecialFunction1(colfun_hm, columnHm, payload);
-		// parser->setSpecialFunction1(colfun_chm, columnChm, payload);
-		// parser->setSpecialFunction1(colfun_mode, columnStatisticsMode, payload);
-		// parser->setSpecialFunction1(colfun_quartile1, columnQuartile1, payload);
-		// parser->setSpecialFunction1(colfun_quartile3, columnQuartile3, payload);
-		// parser->setSpecialFunction1(colfun_iqr, columnIqr, payload);
-		// parser->setSpecialFunction1(colfun_percentile1, columnPercentile1, payload);
-		// parser->setSpecialFunction1(colfun_percentile5, columnPercentile5, payload);
-		// parser->setSpecialFunction1(colfun_percentile10, columnPercentile10, payload);
-		// parser->setSpecialFunction1(colfun_percentile90, columnPercentile90, payload);
-		// parser->setSpecialFunction1(colfun_percentile95, columnPercentile95, payload);
-		// parser->setSpecialFunction1(colfun_percentile99, columnPercentile99, payload);
-		// parser->setSpecialFunction1(colfun_trimean, columnTrimean, payload);
-		// parser->setSpecialFunction1(colfun_meandev, columnMeandev, payload);
-		// parser->setSpecialFunction1(colfun_meandevmedian, columnMeandevmedian, payload);
-		// parser->setSpecialFunction1(colfun_mediandev, columnMediandev, payload);
-		// parser->setSpecialFunction1(colfun_skew, columnSkew, payload);
-		// parser->setSpecialFunction1(colfun_kurt, columnKurt, payload);
-		// parser->setSpecialFunction1(colfun_entropy, columnEntropy, payload);
-		// parser->setSpecialFunction2(colfun_percentile, columnPercentile, payload);
-		// parser->setSpecialFunction2(colfun_quantile, columnQuantile, payload);
 		parser->evaluateCartesian(m_function, functionVariableNames, xVectors, yVector);
 	}
 	m_result.available = true;
@@ -411,10 +373,6 @@ bool XYFunctionCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataC
 	m_result.status = status;
 	m_result.elapsedTime = timer.elapsed();
 	return valid;
-}
-
-bool XYFunctionCurvePrivate::preparationValid(const AbstractColumn*, const AbstractColumn*) {
-	return true;
 }
 
 void XYFunctionCurvePrivate::prepareTmpDataColumn(const AbstractColumn**, const AbstractColumn**) {

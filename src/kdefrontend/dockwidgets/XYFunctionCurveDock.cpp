@@ -362,9 +362,7 @@ void XYFunctionCurveDock::insertConstant(const QString& constantsName) {
 
 void XYFunctionCurveDock::enableRecalculate() const {
 	// check whether the formula expressions are correct
-	bool valid = false;
-	valid = uiGeneralTab.teFunction->isValid();
-
+	const bool valid = uiGeneralTab.teFunction->isValid();
 	uiGeneralTab.pbRecalculate->setEnabled(valid);
 }
 
