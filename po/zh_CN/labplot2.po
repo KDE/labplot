@@ -1895,23 +1895,20 @@ msgid "Message Start Time: "
 msgstr ""
 
 #: src/backend/datasources/filters/McapFilter.cpp:213
-#, fuzzy, kde-format
-#| msgid "Date and Time"
+#, kde-format
 msgid "Message End Time: "
-msgstr "日期和时间"
+msgstr ""
 
 #: src/backend/datasources/filters/McapFilter.cpp:215
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "No Statistics found."
-msgstr "详情"
+msgstr ""
 
 #: src/backend/datasources/filters/McapFilter.cpp:469
 #: src/backend/datasources/filters/McapFilter.cpp:962
-#, fuzzy, kde-format
-#| msgid "Failed to read data."
+#, kde-format
 msgid "Failed to read the file. Reason: %1"
-msgstr "读取数据失败。"
+msgstr ""
 
 #: src/backend/datasources/filters/McapFilter.cpp:477
 #, kde-format
@@ -12022,10 +12019,9 @@ msgid "MATLAB MAT file"
 msgstr ""
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:136
-#, fuzzy, kde-format
-#| msgid "Plot Data"
+#, kde-format
 msgid "MCAP Data"
-msgstr "数据绘图"
+msgstr ""
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:145
 #, kde-format
@@ -22186,10 +22182,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, compressionGroup)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:192
-#, fuzzy, kde-format
-#| msgid "dimension"
+#, kde-format
 msgid "Compression"
-msgstr "维数"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbLZ4)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:205

@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-22 01:46+0000\n"
-"PO-Revision-Date: 2024-06-26 21:41+0200\n"
+"PO-Revision-Date: 2024-07-15 10:20+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -9619,10 +9619,9 @@ msgid "Bayesian information criterion"
 msgstr "Critère d'informations bayésien"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2251
-#, fuzzy, kde-format
-#| msgid "Model has no parameters."
+#, kde-format
 msgid "Model has no parameters!"
-msgstr "Le modèle n'a pas de paramètre."
+msgstr "Le modèle ne possède aucun paramètre !"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2258
 #, fuzzy, kde-format
@@ -9632,10 +9631,9 @@ msgstr "Les points de données fournis n'ont pas des coefficients suffisant."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2335
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:374
-#, fuzzy, kde-format
-#| msgid "No data points available."
+#, kde-format
 msgid "No X data available!"
-msgstr "Aucun point de données disponible."
+msgstr "Aucun valeur en X n'est disponible !"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2342
 #, fuzzy, kde-format
@@ -12134,20 +12132,17 @@ msgid "Prepend"
 msgstr "Ajouter avant"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:145
-#, fuzzy, kde-format
-#| msgid "New Workbook"
+#, kde-format
 msgid "Add a new Workbook"
-msgstr "Nouveau classeur"
+msgstr "Ajouter une nouvelle feuille de travail"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:146
-#, fuzzy, kde-format
-#| msgid "Workbook"
+#, kde-format
 msgid "Workbook name:"
-msgstr "Classeur"
+msgstr "Nome de la feuille de travail :"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:148
-#, fuzzy, kde-format
-#| msgid "Add new Spreadsheet"
+#, kde-format
 msgid "Add a new Spreadsheet"
 msgstr "Ajouter une nouvelle feuille de calcul"
 
@@ -12157,16 +12152,14 @@ msgid "Spreadsheet name:"
 msgstr "Nom de la feuille de calcul :"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:151
-#, fuzzy, kde-format
-#| msgid "Add new Matrix"
+#, kde-format
 msgid "Add a new Matrix"
 msgstr "Ajouter une nouvelle matrice"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:152
-#, fuzzy, kde-format
-#| msgid "Matrix not square"
+#, kde-format
 msgid "Matrix name:"
-msgstr "Matrice non carrée"
+msgstr "Nom de la matrice :"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
@@ -12722,28 +12715,25 @@ msgid "Connecting to '%1:%2' timed out."
 msgstr "Le délai maximum pour la connexion à « %1 : %2 » a été atteint."
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetDialog.cpp:37
-#, fuzzy, kde-format
-#| msgid "Filter Options"
+#, kde-format
 msgid "Toggle Options"
-msgstr "Filtrer les options"
+msgstr "Basculer les options"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetDialog.cpp:57
-#, fuzzy, kde-format
-#| msgid "Import from File"
+#, kde-format
 msgctxt "@title:window"
 msgid "Import from kaggle.com"
-msgstr "Importer depuis un fichier"
+msgstr "Importer depuis la page de kaggle.com"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:41
-#, fuzzy, kde-format
-#| msgid "Use previous value"
+#, kde-format
 msgid "Show previous datasets"
-msgstr "Utiliser une valeur précédente"
+msgstr "Afficher l'ensemble de données précédent"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:42
 #, kde-format
 msgid "Show next datasets"
-msgstr ""
+msgstr "Afficher l'ensemble de données suivant"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:43
 #, kde-format
@@ -12758,28 +12748,24 @@ msgid "Dataset:"
 msgstr "Ensemble de données :"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:241
-#, fuzzy, kde-format
-#| msgid "Last read: %1"
+#, kde-format
 msgid "Could not read %1"
-msgstr "Dernier accès en lecture : %1"
+msgstr "Impossible de lire %1"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:249
-#, fuzzy, kde-format
-#| msgid "could not open device"
+#, kde-format
 msgid "Could not open %1"
-msgstr "impossible d'ouvrir le périphérique"
+msgstr "Impossible d'ouvrir %1"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:266
-#, fuzzy, kde-format
-#| msgid "Connect"
+#, kde-format
 msgid "Could not create %1"
-msgstr "Connecter"
+msgstr "Impossible de créer %1"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:295
-#, fuzzy, kde-format
-#| msgid "Couldn't save the file '%1'."
+#, kde-format
 msgid "Could not find .csv files in %1"
-msgstr "Impossible d'enregistrer le fichier « %1 »."
+msgstr "Impossible de trouver des fichiers « .csv » dans %1"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:84
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:519
@@ -14614,28 +14600,24 @@ msgid "t statistic"
 msgstr "Statistiques T"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:368
-#, fuzzy, kde-format
-#| msgid "No column available"
+#, kde-format
 msgid "No X and Y column specified!"
-msgstr "Aucune colonne disponible"
+msgstr "Aucune colonne en X et en Y spécifiée !"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:370
-#, fuzzy, kde-format
-#| msgid "No column available"
+#, kde-format
 msgid "No X column specified!"
-msgstr "Aucune colonne disponible"
+msgstr "Aucune colonne en X disponible !"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:372
-#, fuzzy, kde-format
-#| msgid "No column available"
+#, kde-format
 msgid "No Y column specified!"
-msgstr "Aucune colonne disponible"
+msgstr "Aucune colonne en Y disponible !"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:376
-#, fuzzy, kde-format
-#| msgid "No data points available."
+#, kde-format
 msgid "No Y data available!"
-msgstr "Aucun point de données disponible."
+msgstr "Aucun valeur en Y n'est disponible !"
 
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceCurve)
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:431
@@ -14675,10 +14657,9 @@ msgid "Fit status: %1"
 msgstr "État de ajustement : %1"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1235
-#, fuzzy, kde-format
-#| msgid "No data points available."
+#, kde-format
 msgid "No data source available!"
-msgstr "Aucun point de données disponible."
+msgstr "Aucun source de données disponible !"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1410
 #, kde-format
@@ -15553,46 +15534,39 @@ msgstr "Impossible d'ouvrir"
 
 #. i18n: ectx: ToolBar (main_toolbar)
 #: src/kdefrontend/labplot2ui.rc:6
-#, fuzzy, kde-format
-#| msgid "Project Explorer"
+#, kde-format
 msgid "Project Toolbar"
-msgstr "Explorateur de projet"
+msgstr "Barre d'outils du projet"
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:24
-#, fuzzy, kde-format
-#| msgid "Worksheet"
+#, kde-format
 msgid "Worksheet Toolbar"
-msgstr "Feuille de travail"
+msgstr "Barre d'outils des feuilles de travail"
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
 #: src/kdefrontend/labplot2ui.rc:28
-#, fuzzy, kde-format
-#| msgid "Data Extractor"
+#, kde-format
 msgid "Data Extractor Toolbar"
-msgstr "Extracteur de données"
+msgstr "Barre d'outils pour l'extracteur de données"
 
 #. i18n: ectx: ToolBar (spreadsheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:32
-#, fuzzy, kde-format
-#| msgid "Spreadsheet"
+#, kde-format
 msgid "Spreadsheet Toolbar"
-msgstr "Feuille de calcul"
+msgstr "Barre d'outils de feuilles de calcul"
 
 #. i18n: ectx: ToolBar (notebook_toolbar)
 #: src/kdefrontend/labplot2ui.rc:36
-#, fuzzy, kde-format
-#| msgid "Notebook"
+#, kde-format
 msgid "Notebook Toolbar"
-msgstr "Cahier de notes"
+msgstr "Barre d'outils des cahiers de notes"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
 #: src/kdefrontend/labplot2ui.rc:40
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Plot Area Templates"
+#, kde-format
 msgid "Plot Area Toolbar"
-msgstr "Modèles de zones de tracé"
+msgstr "Barre d'outils pour les zones de tracé"
 
 #. i18n: ectx: Menu (file)
 #: src/kdefrontend/labplot2ui.rc:44
@@ -15775,16 +15749,14 @@ msgid "Import data from a regular file"
 msgstr "Importer des données à partir d'un fichier normal"
 
 #: src/kdefrontend/MainWin.cpp:683
-#, fuzzy, kde-format
-#| msgid "From File..."
+#, kde-format
 msgid "From kaggle.com..."
-msgstr "Depuis le fichier..."
+msgstr "Depuis la page de kaggle.com..."
 
 #: src/kdefrontend/MainWin.cpp:684
-#, fuzzy, kde-format
-#| msgid "Import data from a regular file"
+#, kde-format
 msgid "Import data from kaggle.com"
-msgstr "Importer des données à partir d'un fichier normal"
+msgstr "Importer des données à partir du site kaggle.com"
 
 #: src/kdefrontend/MainWin.cpp:689
 #, kde-format
@@ -15797,10 +15769,9 @@ msgid "From Dataset Collection..."
 msgstr "A partir de la collection de l'ensemble de données..."
 
 #: src/kdefrontend/MainWin.cpp:694
-#, fuzzy, kde-format
-#| msgid "Imports data from an online dataset"
+#, kde-format
 msgid "Import data from an online dataset"
-msgstr "Importe des données à partir d'un ensemble de données en ligne"
+msgstr "Importer des données à partir d'un ensemble de données en ligne"
 
 #: src/kdefrontend/MainWin.cpp:698
 #, kde-format
@@ -15988,8 +15959,7 @@ msgid "Worksheet Preview"
 msgstr "Aperçu de feuille de travail"
 
 #: src/kdefrontend/MainWin.cpp:1420
-#, fuzzy, kde-format
-#| msgid "Content"
+#, kde-format
 msgctxt "@title:window"
 msgid "Content"
 msgstr "Contenu"
@@ -16285,7 +16255,7 @@ msgstr "Effacer les fichiers téléchargés"
 #: src/kdefrontend/SettingsDatasetsPage.cpp:34
 #, kde-format
 msgid "How to Use Kaggle"
-msgstr ""
+msgstr "Comment utiliser Kaggle"
 
 #: src/kdefrontend/SettingsDatasetsPage.cpp:86
 #, kde-format
@@ -22486,7 +22456,7 @@ msgstr "Cache :"
 #: src/kdefrontend/ui/settingsdatasetspage.ui:39
 #, kde-format
 msgid "Kaggle"
-msgstr ""
+msgstr "Kaggle"
 
 #. i18n: ectx: property (text), widget (QLabel, lKagglePath)
 #: src/kdefrontend/ui/settingsdatasetspage.ui:46

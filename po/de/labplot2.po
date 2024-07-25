@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-22 01:46+0000\n"
-"PO-Revision-Date: 2024-07-13 09:03+0200\n"
+"PO-Revision-Date: 2024-07-22 10:08+0200\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni.kn>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -12543,33 +12543,30 @@ msgid "Connecting to '%1:%2' timed out."
 msgstr "Zeitüberschreitung bei der Verbindung zu „%1:%2“."
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetDialog.cpp:37
-#, fuzzy, kde-format
-#| msgid "Filter Options"
+#, kde-format
 msgid "Toggle Options"
-msgstr "Filtereinstellungen"
+msgstr "Optionen an/aus"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetDialog.cpp:57
-#, fuzzy, kde-format
-#| msgid "Import from File"
+#, kde-format
 msgctxt "@title:window"
 msgid "Import from kaggle.com"
-msgstr "Aus Datei importieren"
+msgstr "Von kaggle.com importieren"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:41
-#, fuzzy, kde-format
-#| msgid "Use previous value"
+#, kde-format
 msgid "Show previous datasets"
-msgstr "Verwende vorherigen Wert"
+msgstr "Zeige vorherige Datensätze"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:42
 #, kde-format
 msgid "Show next datasets"
-msgstr ""
+msgstr "Zeige nächste Datensätze"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:43
 #, kde-format
 msgid "Download the current dataset for preview and import"
-msgstr ""
+msgstr "Lade den aktuellen Datensatz für Vorschau und Import herunter"
 
 #. i18n: ectx: property (text), widget (QLabel, lCategories)
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:130
@@ -12579,28 +12576,24 @@ msgid "Dataset:"
 msgstr "Datensatz:"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:241
-#, fuzzy, kde-format
-#| msgid "Last read: %1"
+#, kde-format
 msgid "Could not read %1"
-msgstr "Letzter Lesezugriff: %1"
+msgstr "Konnte %1 nicht lesen"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:249
-#, fuzzy, kde-format
-#| msgid "could not open device"
+#, kde-format
 msgid "Could not open %1"
-msgstr "Das Gerät kann nicht geöffnet werden"
+msgstr "Konnte %1 nicht öffnen"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:266
-#, fuzzy, kde-format
-#| msgid "Couldn't connect"
+#, kde-format
 msgid "Could not create %1"
-msgstr "Verbinden ist fehlgeschlagen"
+msgstr "Konnte %1 nicht erzeugen"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:295
-#, fuzzy, kde-format
-#| msgid "Couldn't save the file '%1'."
+#, kde-format
 msgid "Could not find .csv files in %1"
-msgstr "Die Datei '%1' konnte nicht gespeichert werden."
+msgstr "Konnte .csv in %1 nicht finden"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:84
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:519
@@ -15543,16 +15536,14 @@ msgid "Import data from a regular file"
 msgstr "Daten aus einer Datei importieren"
 
 #: src/kdefrontend/MainWin.cpp:683
-#, fuzzy, kde-format
-#| msgid "From File..."
+#, kde-format
 msgid "From kaggle.com..."
-msgstr "Aus Datei..."
+msgstr "Von kaggle.com..."
 
 #: src/kdefrontend/MainWin.cpp:684
-#, fuzzy, kde-format
-#| msgid "Import data from a regular file"
+#, kde-format
 msgid "Import data from kaggle.com"
-msgstr "Daten aus einer Datei importieren"
+msgstr "Daten von kaggle.com importieren"
 
 #: src/kdefrontend/MainWin.cpp:689
 #, kde-format
@@ -15565,8 +15556,7 @@ msgid "From Dataset Collection..."
 msgstr "Aus Datensatzsammlung..."
 
 #: src/kdefrontend/MainWin.cpp:694
-#, fuzzy, kde-format
-#| msgid "Imports data from an online dataset"
+#, kde-format
 msgid "Import data from an online dataset"
 msgstr "Daten aus einem Online-Datensatz importieren"
 
@@ -15888,7 +15878,7 @@ msgstr "Das geteilte Projekt findet sich unter: <a href=\"%1\">%1</a>"
 #: src/kdefrontend/MainWin.cpp:2666
 #, kde-format
 msgid "Running Kaggle CLI tool failed"
-msgstr ""
+msgstr "Kaggle CLI fehlgeschlagen"
 
 #: src/kdefrontend/MainWin.cpp:2667
 #, kde-format
@@ -15896,6 +15886,8 @@ msgid ""
 "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
 "\">\"How to Use Kaggle\"</a> to setup the Kaggle CLI tool."
 msgstr ""
+"Bitte folgen Sie den Instruktionen auf <a href=\"https://www.kaggle.com/docs/"
+"api\">\"How to Use Kaggle\"</a>, um Kaggle CLI einzurichten."
 
 #: src/kdefrontend/MainWin.cpp:2730
 #, kde-format
@@ -16048,7 +16040,7 @@ msgstr "Heruntergeladene Dateien löschen"
 #: src/kdefrontend/SettingsDatasetsPage.cpp:34
 #, kde-format
 msgid "How to Use Kaggle"
-msgstr ""
+msgstr "Wie man Kaggle nutzt"
 
 #: src/kdefrontend/SettingsDatasetsPage.cpp:86
 #, kde-format
@@ -22189,13 +22181,13 @@ msgstr "Zwischenspeicher:"
 #: src/kdefrontend/ui/settingsdatasetspage.ui:39
 #, kde-format
 msgid "Kaggle"
-msgstr ""
+msgstr "Kaggle"
 
 #. i18n: ectx: property (text), widget (QLabel, lKagglePath)
 #: src/kdefrontend/ui/settingsdatasetspage.ui:46
 #, kde-format
 msgid "CLI Path:"
-msgstr ""
+msgstr "CLI Pfad:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/kdefrontend/ui/settingsdatasetspage.ui:66
