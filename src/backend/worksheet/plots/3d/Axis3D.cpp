@@ -1,4 +1,5 @@
 #include "Axis3D.h"
+#include "Scatter3DPlotArea.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 #include "backend/worksheet/plots/3d/Axis3DPrivate.h"
@@ -9,26 +10,9 @@ Axis3D::Axis3D(QString name, Type type)
 	, m_axis(new QValue3DAxis())
 	, d_ptr(new Axis3DPrivate(this)) {
 	setType(type);
+	m_axis->setTitleVisible(true);
 }
 
-QString Axis3D::formatToString(Format format) {
-	switch (format) {
-	case Axis3D::Format_Decimal:
-		return QStringLiteral("%.2f"); // Decimal format with 2 decimal places
-	case Axis3D::Format_Scientific:
-		return QStringLiteral("%.1e"); // Scientific notation with 1 decimal place
-	case Axis3D::Format_PowerOf10:
-		return QStringLiteral("10^%.2f"); // Custom format for Power of 10 (may need special handling)
-	case Axis3D::Format_PowerOf2:
-		return QStringLiteral("2^%.2f"); // Custom format for Power of 2 (may need special handling)
-	case Axis3D::Format_PowerOfE:
-		return QStringLiteral("e^%.2f"); // Custom format for Power of E (may need special handling)
-	case Axis3D::Format_MultiplierOfPi:
-		return QStringLiteral("%.2fPi"); // Custom format for Pi (may need special handling)
-	default:
-		return QStringLiteral("%.2f"); // Default to Decimal format
-	}
-}
 void Axis3D::setRange(float min, float max) {
 	Q_D(Axis3D);
 	m_axis->setRange(min, max);
@@ -110,30 +94,59 @@ Axis3DPrivate::Axis3DPrivate(Axis3D* owner)
 	, segmentCount(10)
 	, subSegmentCount(10) {
 }
-
+QString Axis3DPrivate::formatToString(Axis3D::Format format) {
+	switch (format) {
+	case Axis3D::Format_Decimal:
+		return QStringLiteral("%.2f"); // Decimal format with 2 decimal places
+	case Axis3D::Format_Scientific:
+		return QStringLiteral("%.1e"); // Scientific notation with 1 decimal place
+	case Axis3D::Format_PowerOf10:
+		return QStringLiteral("10^%.2f"); // Custom format for Power of 10 (may need special handling)
+	case Axis3D::Format_PowerOf2:
+		return QStringLiteral("2^%.2f"); // Custom format for Power of 2 (may need special handling)
+	case Axis3D::Format_PowerOfE:
+		return QStringLiteral("e^%.2f"); // Custom format for Power of E (may need special handling)
+	case Axis3D::Format_MultiplierOfPi:
+		return QStringLiteral("%.2fPi"); // Custom format for Pi (may need special handling)
+	default:
+		return QStringLiteral("%.2f"); // Default to Decimal format
+	}
+}
 QString Axis3DPrivate::name() const {
 	return q->parentAspect()->name();
 }
 
 void Axis3DPrivate::updateTitle() {
 	q->m_axis->setTitle(title);
+	WorksheetElement* element = static_cast<WorksheetElement*>(q->parent(AspectType::WorksheetElement));
+	element->changed();
 }
 
 void Axis3DPrivate::updateMaxRange() {
 	q->m_axis->setMax(maxRange);
+	WorksheetElement* element = static_cast<WorksheetElement*>(q->parent(AspectType::WorksheetElement));
+	element->changed();
 }
 
 void Axis3DPrivate::updateMinRange() {
 	q->m_axis->setMin(minRange);
+	WorksheetElement* element = static_cast<WorksheetElement*>(q->parent(AspectType::WorksheetElement));
+	element->changed();
 }
 
 void Axis3DPrivate::updateSegmentCount() {
 	q->m_axis->setSegmentCount(segmentCount);
+	WorksheetElement* element = static_cast<WorksheetElement*>(q->parent(AspectType::WorksheetElement));
+	element->changed();
 }
 
 void Axis3DPrivate::updateSubSegmentCount() {
 	q->m_axis->setSubSegmentCount(subSegmentCount);
+	WorksheetElement* element = static_cast<WorksheetElement*>(q->parent(AspectType::WorksheetElement));
+	element->changed();
 }
 void Axis3DPrivate::updateFormat() {
-	q->m_axis->setSegmentCount(segmentCount);
+	q->m_axis->setLabelFormat(formatToString(axisFormat));
+	WorksheetElement* element = static_cast<WorksheetElement*>(q->parent(AspectType::WorksheetElement));
+	element->changed();
 }

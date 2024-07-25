@@ -2,6 +2,7 @@
 #include "Axis3D.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/lib/trace.h"
 #include <QXmlStreamAttributes>
 
 #include "backend/worksheet/plots/3d/Scatter3DPlotAreaPrivate.h"
@@ -240,7 +241,7 @@ void Scatter3DPlotAreaPrivate::recalc() {
 		return;
 
 	qDebug() << Q_FUNC_INFO << "Columns have been set";
-
+	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	const int numPoints = std::min(xColumn->availableRowCount(), std::min(yColumn->availableRowCount(), zColumn->availableRowCount()));
 	if (numPoints == 0)
 		return;
@@ -261,6 +262,7 @@ void Scatter3DPlotAreaPrivate::recalc() {
 	QScatter3DSeries* series = new QScatter3DSeries;
 	series->dataProxy()->resetArray(*data);
 	q->m_scatter->addSeries(series);
+	Q_EMIT q->changed();
 }
 
 void Scatter3DPlotAreaPrivate::updateTheme() {
@@ -322,12 +324,15 @@ void Scatter3DPlotAreaPrivate::updateOpacity() {
 
 void Scatter3DPlotAreaPrivate::updateXRotation() {
 	q->m_scatter->setCameraXRotation(xRotation);
+	Q_EMIT q->changed();
 }
 
 void Scatter3DPlotAreaPrivate::updateYRotation() {
 	q->m_scatter->setCameraYRotation(yRotation);
+	Q_EMIT q->changed();
 }
 
 void Scatter3DPlotAreaPrivate::updateZoomLevel() {
 	q->m_scatter->setCameraZoomLevel(zoomLevel);
+	Q_EMIT q->changed();
 }

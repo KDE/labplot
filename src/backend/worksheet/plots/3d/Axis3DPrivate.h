@@ -19,6 +19,7 @@ public:
 	QString title;
 	int segmentCount;
 	int subSegmentCount;
+	QString formatToString(Axis3D::Format format);
 	void updateTitle();
 	void updateMaxRange();
 	void updateMinRange();
