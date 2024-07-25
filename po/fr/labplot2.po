@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-16 03:05+0000\n"
-"PO-Revision-Date: 2024-06-26 21:41+0200\n"
+"PO-Revision-Date: 2024-07-15 10:20+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -9549,10 +9549,9 @@ msgid "Bayesian information criterion"
 msgstr "Critère d'informations bayésien"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2251
-#, fuzzy, kde-format
-#| msgid "Model has no parameters."
+#, kde-format
 msgid "Model has no parameters!"
-msgstr "Le modèle n'a pas de paramètre."
+msgstr "Le modèle ne possède aucun paramètre !"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2258
 #, fuzzy, kde-format
@@ -9562,10 +9561,9 @@ msgstr "Les points de données fournis n'ont pas des coefficients suffisant."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2335
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:374
-#, fuzzy, kde-format
-#| msgid "No data points available."
+#, kde-format
 msgid "No X data available!"
-msgstr "Aucun point de données disponible."
+msgstr "Aucun valeur en X n'est disponible !"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2342
 #, fuzzy, kde-format
@@ -12061,20 +12059,17 @@ msgid "Prepend"
 msgstr "Ajouter avant"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:145
-#, fuzzy, kde-format
-#| msgid "New Workbook"
+#, kde-format
 msgid "Add a new Workbook"
-msgstr "Nouveau classeur"
+msgstr "Ajouter une nouvelle feuille de travail"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:146
-#, fuzzy, kde-format
-#| msgid "Workbook"
+#, kde-format
 msgid "Workbook name:"
-msgstr "Classeur"
+msgstr "Nome de la feuille de travail :"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:148
-#, fuzzy, kde-format
-#| msgid "Add new Spreadsheet"
+#, kde-format
 msgid "Add a new Spreadsheet"
 msgstr "Ajouter une nouvelle feuille de calcul"
 
@@ -12084,16 +12079,14 @@ msgid "Spreadsheet name:"
 msgstr "Nom de la feuille de calcul :"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:151
-#, fuzzy, kde-format
-#| msgid "Add new Matrix"
+#, kde-format
 msgid "Add a new Matrix"
 msgstr "Ajouter une nouvelle matrice"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:152
-#, fuzzy, kde-format
-#| msgid "Matrix not square"
+#, kde-format
 msgid "Matrix name:"
-msgstr "Matrice non carrée"
+msgstr "Nom de la matrice :"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
@@ -14471,25 +14464,22 @@ msgstr "Statistiques T"
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:368
 #, kde-format
 msgid "No X and Y column specified!"
-msgstr ""
+msgstr "Aucune colonne en X et en Y spécifiée !"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:370
-#, fuzzy, kde-format
-#| msgid "Fit model not specified."
+#, kde-format
 msgid "No X column specified!"
-msgstr "Modèle d'ajustement non spécifié."
+msgstr "Aucune colonne en X disponible !"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:372
-#, fuzzy, kde-format
-#| msgid "Fit model not specified."
+#, kde-format
 msgid "No Y column specified!"
-msgstr "Modèle d'ajustement non spécifié."
+msgstr "Aucune colonne en Y disponible !"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:376
-#, fuzzy, kde-format
-#| msgid "No data points available."
+#, kde-format
 msgid "No Y data available!"
-msgstr "Aucun point de données disponible."
+msgstr "Aucun valeur en Y n'est disponible !"
 
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceCurve)
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:431
@@ -14529,10 +14519,9 @@ msgid "Fit status: %1"
 msgstr "État de ajustement : %1"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1235
-#, fuzzy, kde-format
-#| msgid "No data points available."
+#, kde-format
 msgid "No data source available!"
-msgstr "Aucun point de données disponible."
+msgstr "Aucun source de données disponible !"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1410
 #, kde-format
@@ -15407,45 +15396,39 @@ msgstr "Impossible d'ouvrir"
 
 #. i18n: ectx: ToolBar (main_toolbar)
 #: src/kdefrontend/labplot2ui.rc:6
-#, fuzzy, kde-format
-#| msgid "Project Explorer"
+#, kde-format
 msgid "Project Toolbar"
-msgstr "Explorateur de projet"
+msgstr "Barre d'outils du projet"
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:24
-#, fuzzy, kde-format
-#| msgid "Worksheet"
+#, kde-format
 msgid "Worksheet Toolbar"
-msgstr "Feuille de travail"
+msgstr "Barre d'outils des feuilles de travail"
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
 #: src/kdefrontend/labplot2ui.rc:28
-#, fuzzy, kde-format
-#| msgid "Data Extractor"
+#, kde-format
 msgid "Data Extractor Toolbar"
-msgstr "Extracteur de données"
+msgstr "Barre d'outils pour l'extracteur de données"
 
 #. i18n: ectx: ToolBar (spreadsheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:32
-#, fuzzy, kde-format
-#| msgid "Spreadsheet"
+#, kde-format
 msgid "Spreadsheet Toolbar"
-msgstr "Feuille de calcul"
+msgstr "Barre d'outils de feuilles de calcul"
 
 #. i18n: ectx: ToolBar (notebook_toolbar)
 #: src/kdefrontend/labplot2ui.rc:36
-#, fuzzy, kde-format
-#| msgid "Notebook"
+#, kde-format
 msgid "Notebook Toolbar"
-msgstr "Cahier de notes"
+msgstr "Barre d'outils des cahiers de notes"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
 #: src/kdefrontend/labplot2ui.rc:40
-#, fuzzy, kde-format
-#| msgid "Plot Area"
+#, kde-format
 msgid "Plot Area Toolbar"
-msgstr "Zone de tracé"
+msgstr "Barre d'outils pour les zones de tracé"
 
 #. i18n: ectx: Menu (file)
 #: src/kdefrontend/labplot2ui.rc:44
@@ -15828,8 +15811,7 @@ msgid "Worksheet Preview"
 msgstr "Aperçu de feuille de travail"
 
 #: src/kdefrontend/MainWin.cpp:1412
-#, fuzzy, kde-format
-#| msgid "Content"
+#, kde-format
 msgctxt "@title:window"
 msgid "Content"
 msgstr "Contenu"
