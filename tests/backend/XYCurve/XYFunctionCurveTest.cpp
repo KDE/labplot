@@ -66,8 +66,8 @@ void XYFunctionCurveTest::setCurves() {
 		QCOMPARE(xColumn->rowCount(), data.count);
 		QCOMPARE(yColumn->rowCount(), data.count);
 		for (int i = 0; i < xColumn->rowCount(); i++) {
-			VALUES_EQUAL(xColumn->valueAt(i), i + 1);
-			VALUES_EQUAL(yColumn->valueAt(i), (i + 1) * 2);
+			VALUES_EQUAL(xColumn->valueAt(i), i + 1.);
+			VALUES_EQUAL(yColumn->valueAt(i), (i + 1.) * 2.);
 		}
 	}
 
@@ -83,8 +83,8 @@ void XYFunctionCurveTest::setCurves() {
 		QCOMPARE(xColumn->rowCount(), data.count);
 		QCOMPARE(yColumn->rowCount(), data.count);
 		for (int i = 0; i < xColumn->rowCount(); i++) {
-			VALUES_EQUAL(xColumn->valueAt(i), i + 1);
-			VALUES_EQUAL(yColumn->valueAt(i), (i + 1) * 2);
+			VALUES_EQUAL(xColumn->valueAt(i), i + 1.);
+			VALUES_EQUAL(yColumn->valueAt(i), (i + 1.) * 2.);
 		}
 	}
 
@@ -98,8 +98,8 @@ void XYFunctionCurveTest::setCurves() {
 		QCOMPARE(xColumn->rowCount(), data.count);
 		QCOMPARE(yColumn->rowCount(), data.count);
 		for (int i = 0; i < xColumn->rowCount(); i++) {
-			VALUES_EQUAL(xColumn->valueAt(i), i + 1);
-			VALUES_EQUAL(yColumn->valueAt(i), 2 * (qPow(i + 1, 2)));
+			VALUES_EQUAL(xColumn->valueAt(i), i + 1.);
+			VALUES_EQUAL(yColumn->valueAt(i), 2 * (qPow(i + 1., 2.)));
 		}
 	}
 }
@@ -151,8 +151,8 @@ void XYFunctionCurveTest::removeCurves() {
 		QCOMPARE(xColumn->rowCount(), 11);
 		QCOMPARE(yColumn->rowCount(), 11);
 		for (int i = 0; i < xColumn->rowCount(); i++) {
-			VALUES_EQUAL(xColumn->valueAt(i), i);
-			VALUES_EQUAL(yColumn->valueAt(i), 2 * (2 * i + 1));
+			VALUES_EQUAL(xColumn->valueAt(i), (double)i);
+			VALUES_EQUAL(yColumn->valueAt(i), 2 * (2 * i + 1.));
 		}
 	}
 
@@ -256,8 +256,8 @@ void XYFunctionCurveTest::removeCurveRenameAutomaticAdd() {
 		QCOMPARE(xColumn->rowCount(), data.count);
 		QCOMPARE(yColumn->rowCount(), data.count);
 		for (int i = 0; i < xColumn->rowCount(); i++) {
-			VALUES_EQUAL(xColumn->valueAt(i), i + 1);
-			VALUES_EQUAL(yColumn->valueAt(i), (i + 1) * 2);
+			VALUES_EQUAL(xColumn->valueAt(i), i + 1.);
+			VALUES_EQUAL(yColumn->valueAt(i), (i + 1.) * 2.);
 		}
 	}
 
@@ -287,8 +287,8 @@ void XYFunctionCurveTest::removeCurveRenameAutomaticAdd() {
 		QCOMPARE(xColumn->rowCount(), data.count);
 		QCOMPARE(yColumn->rowCount(), data.count);
 		for (int i = 0; i < xColumn->rowCount(); i++) {
-			VALUES_EQUAL(xColumn->valueAt(i), i + 1);
-			VALUES_EQUAL(yColumn->valueAt(i), 2 * qPow(i + 1, 2));
+			VALUES_EQUAL(xColumn->valueAt(i), i + 1.);
+			VALUES_EQUAL(yColumn->valueAt(i), 2 * qPow(i + 1., 2.));
 		}
 	}
 }
@@ -339,8 +339,8 @@ void XYFunctionCurveTest::saveLoad() {
 			QCOMPARE(xColumn->rowCount(), data.count);
 			QCOMPARE(yColumn->rowCount(), data.count);
 			for (int i = 0; i < xColumn->rowCount(); i++) {
-				VALUES_EQUAL(xColumn->valueAt(i), i + 1);
-				VALUES_EQUAL(yColumn->valueAt(i), (i + 1) * 2);
+				VALUES_EQUAL(xColumn->valueAt(i), i + 1.);
+				VALUES_EQUAL(yColumn->valueAt(i), (i + 1.) * 2.);
 			}
 		}
 		SAVE_PROJECT("TestXYFunctionCurveSaveLoad");
@@ -375,8 +375,8 @@ void XYFunctionCurveTest::saveLoad() {
 			QCOMPARE(xColumn->rowCount(), 100);
 			QCOMPARE(yColumn->rowCount(), 100);
 			for (int i = 0; i < xColumn->rowCount(); i++) {
-				VALUES_EQUAL(xColumn->valueAt(i), i + 1);
-				VALUES_EQUAL(yColumn->valueAt(i), (i + 1) * 2);
+				VALUES_EQUAL(xColumn->valueAt(i), i + 1.);
+				VALUES_EQUAL(yColumn->valueAt(i), (i + 1.) * 2.);
 			}
 		}
 
