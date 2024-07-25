@@ -284,7 +284,10 @@ void Surface3DPlotArea::retransform() {
 // #####################################################################
 Surface3DPlotAreaPrivate::Surface3DPlotAreaPrivate(Surface3DPlotArea* owner)
 	: WorksheetElementContainerPrivate(owner)
-	, q(owner) {
+	, q(owner)
+	, sourceType(Surface3DPlotArea::DataSource_Spreadsheet)
+	, drawMode(Surface3DPlotArea::DrawWireframeSurface)
+	, shadowQuality(Surface3DPlotArea::SoftHigh) {
 }
 
 void Surface3DPlotAreaPrivate::retransform() {
@@ -320,13 +323,7 @@ void Surface3DPlotAreaPrivate::recalc() {
 void Surface3DPlotAreaPrivate::updateDrawMode() {
 	qDebug() << Q_FUNC_INFO;
 	QSurface3DSeries* series = q->m_surface->seriesList().first();
-	// Debug the current draw mode and the new one
-	qDebug() << "Current draw mode:" << series->drawMode();
-	qDebug() << "New draw mode:" << drawMode;
 	series->setDrawMode(static_cast<QSurface3DSeries::DrawFlags>(drawMode));
-	// Debug the new draw mode to confirm it was set
-	qDebug() << "Updated draw mode:" << series->drawMode();
-	// Force a refresh/redraw if necessary
 	q->m_surface->update(); // or q->m_surface->repaint();
 	Q_EMIT q->changed();
 }
@@ -353,8 +350,7 @@ void Surface3DPlotAreaPrivate::updateFlatShading() {
 }
 
 void Surface3DPlotAreaPrivate::updateShadowQuality() {
-	qDebug() << Q_FUNC_INFO;
-	q->m_surface->setShadowQuality(static_cast<Q3DSurface::ShadowQuality>(shadowQuality));
+	q->m_surface->setShadowQuality(static_cast<QAbstract3DGraph::ShadowQuality>(shadowQuality));
 	q->m_surface->update(); // or q->m_surface->repaint();
 	Q_EMIT q->changed();
 }
@@ -369,10 +365,10 @@ void Surface3DPlotAreaPrivate::updateSmoothMesh() {
 
 void Surface3DPlotAreaPrivate::generateDemoData() const {
 	qDebug() << Q_FUNC_INFO << q->name();
-
+	if (!q->m_surface->seriesList().empty())
+		q->m_surface->removeSeries(q->m_surface->seriesList().first());
 	QSurfaceDataArray* dataArray = new QSurfaceDataArray;
 	dataArray->reserve(50);
-
 	// Parameters for sphere
 	int n = 50; // Number of points
 	float radius = 10.0f; // Radius of the sphere
@@ -398,6 +394,7 @@ void Surface3DPlotAreaPrivate::generateDemoData() const {
 	q->m_surface->axisX()->setRange(-radius, radius);
 	q->m_surface->axisY()->setRange(-radius, radius);
 	q->m_surface->axisZ()->setRange(-radius, radius);
+	Q_EMIT q->changed();
 }
 
 void Surface3DPlotAreaPrivate::generateMatrixData() const {
@@ -407,6 +404,8 @@ void Surface3DPlotAreaPrivate::generateMatrixData() const {
 	}
 	if (!matrix->rowCount())
 		return;
+	if (!q->m_surface->seriesList().empty())
+		q->m_surface->removeSeries(q->m_surface->seriesList().first());
 
 	qDebug() << Q_FUNC_INFO << q->name() << "Matrix has been set!";
 	QSurfaceDataArray* dataArray = new QSurfaceDataArray;
@@ -422,8 +421,7 @@ void Surface3DPlotAreaPrivate::generateMatrixData() const {
 			const double x_val = matrix->xStart() + deltaX * x;
 			const double y_val = matrix->yStart() + deltaY * y;
 			const double z_val = matrix->cell<double>(x, y);
-
-			(*newRow)[y].setPosition(QVector3D(x_val, y_val, z_val));
+			(*newRow)[y].setPosition(QVector3D(x_val, z_val, y_val));
 		}
 
 		*dataArray << *newRow;
@@ -434,10 +432,13 @@ void Surface3DPlotAreaPrivate::generateMatrixData() const {
 
 	// Add the series to the Q3DSurface
 	q->m_surface->addSeries(series);
+	Q_EMIT q->changed();
 }
 
 void Surface3DPlotAreaPrivate::generateSpreadsheetData() const {
 	qDebug() << Q_FUNC_INFO;
+	if (!q->m_surface->seriesList().empty())
+		q->m_surface->removeSeries(q->m_surface->seriesList().first());
 	if (!xColumn || !yColumn || !zColumn)
 		return;
 	if (!xColumn->rowCount() || !yColumn->rowCount() || !zColumn->rowCount())
@@ -470,21 +471,25 @@ void Surface3DPlotAreaPrivate::generateSpreadsheetData() const {
 	QSurface3DSeries* series = new QSurface3DSeries(dataProxy);
 	q->m_surface->addSeries(series);
 
-	qDebug() << "Data generation complete";
+	Q_EMIT q->changed();
 }
 void Surface3DPlotAreaPrivate::updateXRotation() {
 	q->m_surface->setCameraXRotation(xRotation);
+	Q_EMIT q->changed();
 }
 
 void Surface3DPlotAreaPrivate::updateYRotation() {
 	q->m_surface->setCameraYRotation(yRotation);
+	Q_EMIT q->changed();
 }
 
 void Surface3DPlotAreaPrivate::updateZoomLevel() {
 	q->m_surface->setCameraZoomLevel(zoomLevel);
+	Q_EMIT q->changed();
 }
 void Surface3DPlotAreaPrivate::updateTheme() {
 	q->m_surface->activeTheme()->setType(static_cast<Q3DTheme::Theme>(theme));
+	Q_EMIT q->changed();
 }
 ////////////////////////////////////////////////////////////////////////////////
 
