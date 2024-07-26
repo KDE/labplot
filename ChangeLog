@@ -2,6 +2,8 @@
 	* [import]
 		* Download datasets from kaggle.com
 		* Support MCAP file import
+	* [spreadsheet]
+		* support periodic and random sampling as function: psample(n;x), rsample(x)
 
 -----2.11.1 (16.07.2024) -----
 Bug fixes:
