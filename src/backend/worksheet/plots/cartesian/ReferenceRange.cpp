@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Reference range on the plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -36,76 +36,72 @@
  * x- and y- coordinates in parent's coordinate system
  */
 
-ReferenceRange::ReferenceRange(CartesianPlot* plot, const QString& name)
+ReferenceRange::ReferenceRange(CartesianPlot* plot, const QString& name, bool loading)
 	: WorksheetElement(name, new ReferenceRangePrivate(this), AspectType::ReferenceRange) {
-	m_plot = plot;
-	init();
+	Q_D(ReferenceRange);
+	d->m_plot = plot;
+	init(loading);
 }
 
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
 // and is deleted during the cleanup in QGraphicsScene
 ReferenceRange::~ReferenceRange() = default;
 
-void ReferenceRange::init() {
+void ReferenceRange::init(bool loading) {
 	Q_D(ReferenceRange);
 
-	KConfig config;
-	KConfigGroup group = config.group(QStringLiteral("ReferenceRange"));
-
-	d->orientation = (Orientation)group.readEntry(QStringLiteral("Orientation"), static_cast<int>(Orientation::Vertical));
-	switch (d->orientation) {
-	case WorksheetElement::Orientation::Horizontal:
-		d->position.positionLimit = WorksheetElement::PositionLimit::Y;
-		break;
-	case WorksheetElement::Orientation::Vertical:
-		d->position.positionLimit = WorksheetElement::PositionLimit::X;
-		break;
-	case WorksheetElement::Orientation::Both:
-		d->position.positionLimit = WorksheetElement::PositionLimit::None;
-		break;
-	}
-
-	if (plot()) {
-		m_cSystemIndex = plot()->defaultCoordinateSystemIndex();
-		cSystem = plot()->coordinateSystem(m_cSystemIndex);
-		d->coordinateBindingEnabled = true;
-		// default position - 10% of the plot width/height positioned around the center
-		auto cs = plot()->coordinateSystem(coordinateSystemIndex());
-		const auto x = m_plot->range(Dimension::X, cs->index(Dimension::X)).center();
-		const auto y = m_plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
-		const auto w = m_plot->range(Dimension::X, cs->index(Dimension::X)).length() * 0.1;
-		const auto h = m_plot->range(Dimension::Y, cs->index(Dimension::Y)).length() * 0.1;
-		d->positionLogical = QPointF(x, y);
-		d->positionLogicalStart = QPointF(x - w / 2, y - h / 2);
-		d->positionLogicalEnd = QPointF(x + w / 2, y + h / 2);
-	} else
-		d->position.point = QPointF(0, 0); // center of parent
-	d->updatePosition(); // to update also scene coordinates
-
-	// background
+	// create the background
 	d->background = new Background(QString());
 	d->background->setEnabledAvailable(true);
 	addChild(d->background);
 	d->background->setHidden(true);
-	d->background->init(group);
 	connect(d->background, &Background::updateRequested, [=] {
 		d->update();
+		Q_EMIT changed();
 	});
 
-	// border
+	// create the border line
 	d->line = new Line(QString());
 	d->line->setHidden(true);
 	addChild(d->line);
-	d->line->init(group);
 	connect(d->line, &Line::updatePixmapRequested, [=] {
 		d->update();
+		Q_EMIT changed();
 	});
 	connect(d->line, &Line::updateRequested, [=] {
 		d->recalcShapeAndBoundingRect();
 	});
 
+	// init the properties
+	if (!loading) {
+		KConfig config;
+		KConfigGroup group = config.group(QStringLiteral("ReferenceRange"));
+
+		d->orientation = (Orientation)group.readEntry(QStringLiteral("Orientation"), static_cast<int>(Orientation::Vertical));
+		d->updatePositionLimit(); // set the position limit after the orientation was set
+		d->background->init(group);
+		d->line->init(group);
+
+		if (plot()) {
+			m_cSystemIndex = plot()->defaultCoordinateSystemIndex();
+			cSystem = plot()->coordinateSystem(m_cSystemIndex);
+			d->coordinateBindingEnabled = true;
+			// default position - 10% of the plot width/height positioned around the center
+			auto cs = plot()->coordinateSystem(coordinateSystemIndex());
+			const auto x = d->m_plot->range(Dimension::X, cs->index(Dimension::X)).center();
+			const auto y = d->m_plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
+			const auto w = d->m_plot->range(Dimension::X, cs->index(Dimension::X)).length() * 0.1;
+			const auto h = d->m_plot->range(Dimension::Y, cs->index(Dimension::Y)).length() * 0.1;
+			d->positionLogical = QPointF(x, y);
+			d->positionLogicalStart = QPointF(x - w / 2, y - h / 2);
+			d->positionLogicalEnd = QPointF(x + w / 2, y + h / 2);
+		} else
+			d->position.point = QPointF(0, 0); // center of parent
+		d->updatePosition(); // to update also scene coordinates
+	}
+
 	connect(this, &WorksheetElement::objectPositionChanged, this, &ReferenceRange::updateStartEndPositions);
-	retransform();
+	retransform(); // TODO: why is this required here?!?
 }
 
 /*!
@@ -275,13 +271,13 @@ QPointF ReferenceRangePrivate::recalculateRect() {
 	QPointF p1, p2;
 	switch (orientation) {
 	case ReferenceRange::Orientation::Vertical: {
-		const auto yRange{q->m_plot->range(Dimension::Y, cs->index(Dimension::Y))};
+		const auto& yRange = m_plot->range(Dimension::Y, cs->index(Dimension::Y));
 		p1 = QPointF(positionLogicalStart.x(), yRange.start());
 		p2 = QPointF(positionLogicalEnd.x(), yRange.end());
 		break;
 	}
 	case ReferenceRange::Orientation::Horizontal: {
-		const auto xRange{q->m_plot->range(Dimension::X, cs->index(Dimension::X))};
+		const auto& xRange = m_plot->range(Dimension::X, cs->index(Dimension::X));
 		p1 = QPointF(xRange.start(), positionLogicalStart.y());
 		p2 = QPointF(xRange.end(), positionLogicalEnd.y());
 		break;
@@ -396,12 +392,16 @@ void ReferenceRangePrivate::retransform() {
 	const QPointF newPosScene = recalculateRect();
 
 	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
-
 	positionLogical = cs->mapSceneToLogical(newPosScene, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
 	updatePosition();
 }
 
 void ReferenceRangePrivate::updateOrientation() {
+	updatePositionLimit();
+	retransform();
+}
+
+void ReferenceRangePrivate::updatePositionLimit() {
 	switch (orientation) {
 	case WorksheetElement::Orientation::Horizontal:
 		position.positionLimit = WorksheetElement::PositionLimit::Y;
@@ -413,7 +413,6 @@ void ReferenceRangePrivate::updateOrientation() {
 		position.positionLimit = WorksheetElement::PositionLimit::None;
 		break;
 	}
-	retransform();
 }
 
 /*!
@@ -478,6 +477,8 @@ void ReferenceRangePrivate::recalcShapeAndBoundingRect() {
 		m_shape.addPath(WorksheetElement::shapeFromPath(path, line->pen()));
 		m_boundingRectangle = m_shape.boundingRect();
 	}
+
+	Q_EMIT q->changed();
 }
 
 void ReferenceRangePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
@@ -487,15 +488,9 @@ void ReferenceRangePrivate::paint(QPainter* painter, const QStyleOptionGraphicsI
 	if (rect.width() == 0 || rect.height() == 0)
 		return;
 
-	// draw filling
-	if (background->enabled()) {
-		painter->setOpacity(background->opacity());
-		painter->setPen(Qt::NoPen);
-		drawFilling(painter);
-	}
-
-	// draw the background
-	painter->drawRect(rect);
+	// draw the background filling
+	if (background->enabled())
+		background->draw(painter, QPolygonF(rect));
 
 	// draw the border
 	if (line->style() != Qt::NoPen) {
@@ -514,84 +509,6 @@ void ReferenceRangePrivate::paint(QPainter* painter, const QStyleOptionGraphicsI
 	if (isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
 		painter->drawPath(m_shape);
-	}
-}
-
-void ReferenceRangePrivate::drawFilling(QPainter* painter) const {
-	if (background->type() == Background::Type::Color) {
-		switch (background->colorStyle()) {
-		case Background::ColorStyle::SingleColor: {
-			painter->setBrush(QBrush(background->firstColor()));
-			break;
-		}
-		case Background::ColorStyle::HorizontalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::VerticalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::TopLeftDiagonalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::BottomLeftDiagonalLinearGradient: {
-			QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::RadialGradient: {
-			QRadialGradient radialGrad(rect.center(), rect.width() / 2);
-			radialGrad.setColorAt(0, background->firstColor());
-			radialGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(radialGrad));
-			break;
-		}
-		}
-	} else if (background->type() == Background::Type::Image) {
-		if (!background->fileName().trimmed().isEmpty()) {
-			QPixmap pix(background->fileName());
-			switch (background->imageStyle()) {
-			case Background::ImageStyle::ScaledCropped:
-				pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				break;
-			case Background::ImageStyle::Scaled:
-				pix = pix.scaled(rect.size().toSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				break;
-			case Background::ImageStyle::ScaledAspectRatio:
-				pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				break;
-			case Background::ImageStyle::Centered:
-				painter->drawPixmap(QPointF(rect.center().x() - pix.size().width() / 2, rect.center().y() - pix.size().height() / 2), pix);
-				break;
-			case Background::ImageStyle::Tiled:
-				painter->setBrush(QBrush(pix));
-				break;
-			case Background::ImageStyle::CenterTiled:
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-			}
-		}
-	} else if (background->type() == Background::Type::Pattern) {
-		painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
 	}
 }
 
@@ -646,6 +563,7 @@ bool ReferenceRange::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QStringLiteral("geometry")) {
 			attribs = reader->attributes();
 			READ_INT_VALUE("orientation", orientation, Orientation);
+			d->updatePositionLimit(); // set the position limit after the orientation was set
 			WorksheetElement::load(reader, preview);
 
 			str = attribs.value(QStringLiteral("logicalPosStartX")).toString();

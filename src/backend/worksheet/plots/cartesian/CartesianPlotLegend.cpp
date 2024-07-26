@@ -97,7 +97,7 @@ void CartesianPlotLegend::init() {
 	connect(d->title, &TextLabel::changed, this, &CartesianPlotLegend::retransform);
 
 	// Background
-	d->background = new Background(QString());
+	d->background = new Background(QStringLiteral("background"));
 	addChild(d->background);
 	d->background->setHidden(true);
 	d->background->init(group);
@@ -106,7 +106,7 @@ void CartesianPlotLegend::init() {
 	});
 
 	// Border
-	d->borderLine = new Line(QString());
+	d->borderLine = new Line(QStringLiteral("border"));
 	d->borderLine->setPrefix(QStringLiteral("Border"));
 	d->borderLine->setCreateXmlElement(false);
 	d->borderLine->setHidden(true);
@@ -360,7 +360,8 @@ void CartesianPlotLegendPrivate::retransform() {
 			m_plots << barPlot;
 			const auto& columns = barPlot->dataColumns();
 			for (auto* column : columns)
-				m_names << column->name();
+				if (column)
+					m_names << column->name();
 
 			continue;
 		}
@@ -651,7 +652,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				painter->setBrush(symbol->brush());
 				painter->setPen(symbol->pen());
 
-				auto path = Symbol::stylePath(symbol->style());
+				auto path = WorksheetElement::shapeFromPath(Symbol::stylePath(symbol->style()), symbol->pen());
 				QTransform trafo;
 				trafo.scale(symbol->size(), symbol->size());
 				path = trafo.map(path);
@@ -739,6 +740,8 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			const auto& columns = barPlot->dataColumns();
 			int index = 0;
 			for (auto* column : columns) {
+				if (!column)
+					continue;
 				// draw the bar
 				auto* background = barPlot->backgroundAt(index);
 				painter->setOpacity(background->opacity());
@@ -781,7 +784,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 					painter->setBrush(symbol->brush());
 					painter->setPen(symbol->pen());
 
-					auto path = Symbol::stylePath(symbol->style());
+					auto path = WorksheetElement::shapeFromPath(Symbol::stylePath(symbol->style()), symbol->pen());
 					QTransform trafo;
 					trafo.scale(symbol->size(), symbol->size());
 					path = trafo.map(path);
@@ -833,7 +836,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				painter->setBrush(symbol->brush());
 				painter->setPen(symbol->pen());
 
-				auto path = Symbol::stylePath(symbol->style());
+				auto path = WorksheetElement::shapeFromPath(Symbol::stylePath(symbol->style()), symbol->pen());
 				QTransform trafo;
 				trafo.scale(symbol->size(), symbol->size());
 				path = trafo.map(path);

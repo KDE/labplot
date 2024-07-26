@@ -32,6 +32,8 @@
 #include <KLocalizedString>
 
 #include <QIcon>
+#include <QMenu>
+#include <QTimer>
 #include <QUndoCommand>
 #include <QXmlStreamWriter>
 
@@ -109,6 +111,14 @@ QWidget* Spreadsheet::view() const {
 		m_partView = m_view;
 		connect(this, &Spreadsheet::viewAboutToBeDeleted, [this]() {
 			m_view = nullptr;
+		});
+
+		// navigate to the first cell and set the focus so the user can start directly entering new data
+		QTimer::singleShot(0, this, [=]() {
+			if (m_view) { // we're accessing m_view outside of the event loop, it can be already deleted, check for nulltpr
+				m_view->goToCell(0, 0);
+				m_view->setFocus();
+			}
 		});
 	}
 	return m_partView;
@@ -639,12 +649,26 @@ QMenu* Spreadsheet::createContextMenu() {
 	Q_ASSERT(menu);
 	if (type() != AspectType::StatisticsSpreadsheet)
 		Q_EMIT requestProjectContextMenu(menu);
+	else {
+		menu->addSeparator();
+		auto* action = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete"), this);
+		connect(action, &QAction::triggered, this, [=]() {
+			auto* parentSpreadsheet = static_cast<Spreadsheet*>(parentAspect());
+			parentSpreadsheet->toggleStatisticsSpreadsheet(false);
+		});
+		menu->addAction(action);
+	}
 	return menu;
 }
 
 void Spreadsheet::fillColumnContextMenu(QMenu* menu, Column* column) {
+#ifndef SDK
 	if (m_view)
 		m_view->fillColumnContextMenu(menu, column);
+#else
+	Q_UNUSED(menu)
+	Q_UNUSED(column)
+#endif
 }
 
 void Spreadsheet::moveColumn(int from, int to) {
@@ -654,31 +678,6 @@ void Spreadsheet::moveColumn(int from, int to) {
 	col->remove();
 	insertChildBefore(col, columns.at(to));
 	endMacro();
-}
-
-void Spreadsheet::copy(Spreadsheet* other) {
-	WAIT_CURSOR;
-	beginMacro(i18n("%1: copy %2", name(), other->name()));
-
-	for (auto* col : children<Column>())
-		col->remove();
-	for (auto* src_col : other->children<Column>()) {
-		Column* new_col = new Column(src_col->name(), src_col->columnMode());
-		new_col->copy(src_col);
-		new_col->setPlotDesignation(src_col->plotDesignation());
-		QVector<Interval<int>> masks = src_col->maskedIntervals();
-		for (const auto& iv : masks)
-			new_col->setMasked(iv);
-		QVector<Interval<int>> formulas = src_col->formulaIntervals();
-		for (const auto& iv : formulas)
-			new_col->setFormula(iv, src_col->formula(iv.start()));
-		new_col->setWidth(src_col->width());
-		addChild(new_col);
-	}
-	setComment(other->comment());
-
-	endMacro();
-	RESET_CURSOR;
 }
 
 // FIXME: replace index-based API with Column*-based one
@@ -1193,7 +1192,7 @@ void Spreadsheet::toggleStatisticsSpreadsheet(bool on) {
 			return;
 
 		d->statisticsSpreadsheet = new StatisticsSpreadsheet(this);
-		addChild(d->statisticsSpreadsheet);
+		addChildFast(d->statisticsSpreadsheet);
 	} else {
 		if (!d->statisticsSpreadsheet)
 			return;
@@ -1304,9 +1303,11 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 							   const QVector<AbstractColumn::ColumnMode>& columnMode,
 							   bool& ok,
 							   bool initializeContainer) {
+	Q_D(Spreadsheet);
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	DEBUG(Q_FUNC_INFO << ", resize spreadsheet to rows = " << actualRows << " and cols = " << actualCols)
 	QDEBUG(Q_FUNC_INFO << ", column name list = " << colNameList)
+	assert(d->m_usedInPlots.size() == 0);
 	int columnOffset = 0;
 	setUndoAware(false);
 	if (m_model != nullptr)
@@ -1326,17 +1327,19 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 	const auto& columns = children<Column>(); // Get new children because of the resize it might be different
 
 	// resize the spreadsheet
-	try {
-		if (importMode == AbstractFileFilter::ImportMode::Replace) {
-			clear();
-			setRowCount(actualRows);
-		} else {
-			if (rowCount() < actualRows)
+	if (initializeContainer) {
+		try {
+			if (importMode == AbstractFileFilter::ImportMode::Replace) {
+				clear();
 				setRowCount(actualRows);
+			} else {
+				if (rowCount() < actualRows)
+					setRowCount(actualRows);
+			}
+		} catch (std::bad_alloc&) {
+			ok = false;
+			return 0;
 		}
-	} catch (std::bad_alloc&) {
-		ok = false;
-		return 0;
 	}
 
 	if (columnMode.size() < actualCols) {
@@ -1390,6 +1393,7 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 			}
 			}
 		} else {
+			// Assign already allocated datacontainer to the column
 			column->setData(dataContainer[n]);
 		}
 	}
@@ -1405,7 +1409,7 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 	resize data source to cols columns
 	returns column offset depending on import mode
 */
-int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, int cols) {
+int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, const QStringList& names, int cols) {
 	//	PERFTRACE(Q_FUNC_INFO);
 	DEBUG(Q_FUNC_INFO << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, mode) << ", cols = " << cols)
 	// QDEBUG("	column name list = " << colNameList)
@@ -1477,10 +1481,12 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, 
 		// 4. column->aspectDescriptionChanged() to trigger the update of the dependencies on column in Project.
 		const auto& columns = children<Column>();
 		int index = 0;
+		Q_D(Spreadsheet);
 		for (auto* column : columns) {
 			column->setSuppressDataChangedSignal(true);
 			const auto& newName = uniqueNames.at(index);
 			if (column->name() != newName) {
+				column->addUsedInPlots(d->m_usedInPlots);
 				column->reset();
 				column->setName(newName, AbstractAspect::NameHandling::UniqueNotRequired);
 				column->aspectDescriptionChanged(column);
@@ -1500,19 +1506,21 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 								 const QString& dateTimeFormat,
 								 AbstractFileFilter::ImportMode importMode) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
+	Q_D(Spreadsheet);
 	// DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " / " << endColumn);
 
 	// determine the dependent plots
-	QVector<CartesianPlot*> plots;
 	if (importMode == AbstractFileFilter::ImportMode::Replace) {
 		for (size_t n = startColumn; n <= endColumn; n++) {
 			auto* column = this->column((int)(columnOffset + n - startColumn));
 			if (column)
-				column->addUsedInPlots(plots);
+				column->addUsedInPlots(d->m_usedInPlots);
 		}
+	}
 
+	if (importMode == AbstractFileFilter::ImportMode::Replace) {
 		// suppress retransform in the dependent plots
-		for (auto* plot : plots)
+		for (auto* plot : d->m_usedInPlots)
 			plot->setSuppressRetransform(true);
 	}
 
@@ -1559,11 +1567,12 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 
 	if (importMode == AbstractFileFilter::ImportMode::Replace) {
 		// retransform the dependent plots
-		for (auto* plot : plots) {
+		for (auto* plot : d->m_usedInPlots) {
 			plot->setSuppressRetransform(false);
 			plot->dataChanged(-1, -1); // TODO: check if all ranges must be updated
 		}
 	}
+	d->m_usedInPlots.clear();
 
 	// make the spreadsheet and all its children undo aware again
 	setUndoAware(true);
@@ -1583,6 +1592,15 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 	Q_EMIT rowCountChanged(rowCount());
 
 	// DEBUG(Q_FUNC_INFO << " DONE");
+}
+
+void Spreadsheet::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* aspect) {
+	const auto* sh = dynamic_cast<const Spreadsheet*>(aspect);
+	if (sh && linkedSpreadsheetPath() == aspectPath) {
+		setUndoAware(false);
+		setLinkedSpreadsheet(sh);
+		setUndoAware(true);
+	}
 }
 
 // ##############################################################################

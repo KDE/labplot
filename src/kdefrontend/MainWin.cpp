@@ -4,7 +4,7 @@
 	Description          : Main window of the application
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2008-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2009-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -23,9 +23,6 @@
 #ifdef HAVE_LIBORIGIN
 #include "backend/datasources/projects/OriginProjectParser.h"
 #endif
-#ifdef HAVE_CANTOR_LIBS
-#include "backend/cantorWorksheet/CantorWorksheet.h"
-#endif
 #include "backend/datapicker/Datapicker.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
@@ -38,17 +35,15 @@
 
 #include "commonfrontend/ProjectExplorer.h"
 #include "commonfrontend/core/ContentDockWidget.h"
-#include "commonfrontend/matrix/MatrixView.h"
-#include "commonfrontend/spreadsheet/SpreadsheetView.h"
-#include "commonfrontend/worksheet/WorksheetView.h"
-#ifdef HAVE_CANTOR_LIBS
-#include "commonfrontend/cantorWorksheet/CantorWorksheetView.h"
-#endif
 #include "commonfrontend/datapicker/DatapickerImageView.h"
 #include "commonfrontend/datapicker/DatapickerView.h"
+#include "commonfrontend/matrix/MatrixView.h"
 #include "commonfrontend/note/NoteView.h"
+#include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "commonfrontend/widgets/MemoryWidget.h"
+#include "commonfrontend/worksheet/WorksheetView.h"
 
+#include "kdefrontend/CASSettingsDialog.h"
 #include "kdefrontend/GuiObserver.h"
 #include "kdefrontend/HistoryDialog.h"
 #include "kdefrontend/SettingsDialog.h"
@@ -56,6 +51,7 @@
 #include "kdefrontend/datasources/ImportDatasetDialog.h"
 #include "kdefrontend/datasources/ImportDatasetWidget.h"
 #include "kdefrontend/datasources/ImportFileDialog.h"
+#include "kdefrontend/datasources/ImportKaggleDatasetDialog.h"
 #include "kdefrontend/datasources/ImportProjectDialog.h"
 #include "kdefrontend/datasources/ImportSQLDatabaseDialog.h"
 #include "kdefrontend/dockwidgets/CursorDock.h"
@@ -94,6 +90,7 @@
 #include <QMimeType>
 #endif
 
+#include <DockAreaWidget.h>
 #include <DockManager.h>
 
 #ifdef HAVE_TOUCHBAR
@@ -102,16 +99,15 @@
 
 #include <QActionGroup>
 #include <QCloseEvent>
-#include <QDockWidget>
 #include <QElapsedTimer>
 #include <QFileDialog>
 #include <QMenu>
 #include <QMenuBar>
 #include <QMimeData>
+#include <QProcess>
 #include <QStackedWidget>
 #include <QStatusBar>
 #include <QTemporaryFile>
-#include <QTimeLine>
 #include <QUndoStack>
 // #include <QtWidgets>
 // #include <QtQuickWidgets/QQuickWidget>
@@ -140,16 +136,9 @@
 #include <kxmlguifactory.h>
 
 #ifdef HAVE_CANTOR_LIBS
-#include <KConfigDialog>
-#include <KConfigSkeleton>
-#include <KCoreConfigSkeleton>
+#include "backend/cantorWorksheet/CantorWorksheet.h"
+#include "commonfrontend/cantorWorksheet/CantorWorksheetView.h"
 #include <cantor/backend.h>
-
-// required to parse Cantor and Jupyter files
-#include <KZip>
-#include <QBuffer>
-#include <QJsonDocument>
-#include <QJsonParseError>
 #endif
 
 /*!
@@ -189,16 +178,12 @@ MainWin::~MainWin() {
 	// save the current settings in MainWin
 	m_recentProjectsAction->saveEntries(Settings::group(QStringLiteral("Recent Files")));
 
-	KConfigGroup group = Settings::group(QStringLiteral("MainWin"));
-	group.writeEntry(QLatin1String("geometry"), saveGeometry());
-	group.writeEntry(QLatin1String("WindowState"), saveState());
+	auto group = Settings::group(QStringLiteral("MainWin"));
+	group.writeEntry(QLatin1String("geometry"), saveGeometry()); // current geometry of the main window
+	group.writeEntry(QLatin1String("WindowState"), saveState()); // current state of QMainWindow's toolbars
 	group.writeEntry(QLatin1String("lastOpenFileFilter"), m_lastOpenFileFilter);
 	group.writeEntry(QLatin1String("ShowMemoryInfo"), (m_memoryInfoWidget != nullptr));
 	Settings::sync();
-
-	// if welcome screen is shown, save its settings prior to deleting it
-	// 	if (dynamic_cast<QQuickWidget*>(centralWidget()))
-	// 		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
 
 	if (m_project) {
 		delete m_guiObserver;
@@ -206,6 +191,10 @@ MainWin::~MainWin() {
 		disconnect(m_project, nullptr, this, nullptr);
 		delete m_project;
 	}
+
+	// if welcome screen is shown, save its settings prior to deleting it
+	// 	if (dynamic_cast<QQuickWidget*>(centralWidget()))
+	// 		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
 
 	//	delete m_welcomeScreenHelper;
 }
@@ -222,9 +211,8 @@ void MainWin::showPresenter() {
 		if (worksheets.size() > 0) {
 			auto* view = static_cast<WorksheetView*>(worksheets.constFirst()->view());
 			view->presenterMode();
-		} else {
+		} else
 			QMessageBox::information(this, i18n("Presenter Mode"), i18n("No worksheets are available in the project. The presenter mode will not be started."));
-		}
 	}
 }
 
@@ -251,6 +239,10 @@ void MainWin::initGUI(const QString& fileName) {
 	setUnifiedTitleAndToolBarOnMac(true);
 #endif
 	setupGUI();
+
+	// Workaround to get a resonable size at first start
+	// TODO: need a better fix
+	resize(800, 600);
 
 	// all toolbars created via the KXMLGUI framework are locked on default:
 	//  * on the very first program start, unlock all toolbars
@@ -338,7 +330,7 @@ void MainWin::initGUI(const QString& fileName) {
 	connect(&m_autoSaveTimer, &QTimer::timeout, this, &MainWin::autoSaveProject);
 
 	if (!fileName.isEmpty()) {
-		createADS();
+		initDocks();
 		if (Project::isSupportedProject(fileName)) {
 			QTimer::singleShot(0, this, [=]() {
 				openProject(fileName);
@@ -357,9 +349,9 @@ void MainWin::initGUI(const QString& fileName) {
 		// in case we're starting with the settings created with an older version where the LoadOnStart enum had more values
 		// or in case the config file was manipulated, we need to ensure we start with proper values and properly initialize the docks
 		// by mapping the old/manipulated values to the new/correct values:
-		// * old value 0 - "do nothing" -> map to new values "new project" and "with worksheet" which are default
-		// * old value 1 - "new project" -> map to new values "new project" and "with worksheet" which are default
-		// * old value 2 - "new project with worksheet" -> map to new values "new project" and "with worksheet" which are default
+		// * old value 0 - "do nothing" -> map to new values "new project" and "with spreadsheet" which are default
+		// * old value 1 - "new project" -> map to new values "new project" and "with spreadsheet" which are default
+		// * old value 2 - "new project with worksheet" -> map to new values "new project" and "with worksheet"
 		// * old value 3 - "new project with spreadsheet" -> map to new values "new project" and "with spreadsheet"
 		// * old value 4 - "last project" -> map to the new "last project"
 		// * any higher values or <0, manipulated file -> map to the new default values
@@ -384,11 +376,11 @@ void MainWin::initGUI(const QString& fileName) {
 
 		switch (load) {
 		case LoadOnStart::NewProject:
-			createADS();
+			initDocks();
 			newProject();
 			break;
 		case LoadOnStart::LastProject: {
-			createADS();
+			initDocks();
 			const QString& path = Settings::group(QStringLiteral("MainWin")).readEntry("LastOpenProject", "");
 			if (!path.isEmpty())
 				openProject(path);
@@ -411,13 +403,14 @@ void MainWin::initGUI(const QString& fileName) {
 	// show memory info
 	m_memoryInfoAction->setEnabled(statusBar()->isEnabled()); // disable/enable menu with statusbar
 	bool memoryInfoShown = groupMainWin.readEntry(QLatin1String("ShowMemoryInfo"), true);
-	DEBUG(Q_FUNC_INFO << ", memory info enabled in config: " << memoryInfoShown)
+	// DEBUG(Q_FUNC_INFO << ", memory info enabled in config: " << memoryInfoShown)
 	m_memoryInfoAction->setChecked(memoryInfoShown);
 	if (memoryInfoShown)
 		toggleMemoryInfo();
 
 	// restore the geometry
-	restoreGeometry(groupMainWin.readEntry("geometry", QByteArray()));
+	if (groupMainWin.hasKey(QStringLiteral("geometry")))
+		restoreGeometry(groupMainWin.readEntry("geometry", QByteArray()));
 
 	m_lastOpenFileFilter = groupMainWin.readEntry(QLatin1String("lastOpenFileFilter"), QString());
 }
@@ -480,69 +473,23 @@ void MainWin::resetWelcomeScreen() {
 }
 */
 
-void MainWin::createADS() {
-	KToolBar* toolbar = toolBar();
-	if (toolbar)
-		toolbar->setVisible(true);
-
-	// Save welcome screen's dimensions.
-	// 	if (m_showWelcomeScreen)
-	// 		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
-
-	// As per documentation the configuration Flags must be set prior a DockManager will be created!
-	// https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System/blob/master/doc/user-guide.md#configuration-flags
-	ads::CDockManager::setConfigFlag(ads::CDockManager::XmlCompressionEnabled, false);
-	ads::CDockManager::setConfigFlag(ads::CDockManager::FocusHighlighting, true);
-	ads::CDockManager::setConfigFlag(ads::CDockManager::MiddleMouseButtonClosesTab, true);
-	// must be after the config flags!
-	ads::CDockManager::setAutoHideConfigFlags(ads::CDockManager::DefaultAutoHideConfig);
-	ads::CDockManager::setAutoHideConfigFlag(ads::CDockManager::AutoHideShowOnMouseOver, true);
-
-	m_DockManager = new ads::CDockManager(this);
-	connect(m_DockManager, &ads::CDockManager::focusedDockWidgetChanged, this, &MainWin::dockFocusChanged); // TODO: seems not to work
-	// setCentralWidget(m_DockManager); // Automatically done by CDockManager
-	connect(m_DockManager, &ads::CDockManager::dockWidgetAboutToBeRemoved, this, &MainWin::dockWidgetAboutToBeRemoved);
-	connect(m_DockManager, &ads::CDockManager::dockWidgetRemoved, this, &MainWin::dockWidgetRemoved);
-
-	connect(m_closeWindowAction, &QAction::triggered, [this] {
-		m_DockManager->removeDockWidget(m_currentDock);
-	});
-	connect(m_closeAllWindowsAction, &QAction::triggered, [this]() {
-		for (auto dock : m_DockManager->dockWidgetsMap()) {
-			// Do not remove them, because it makes no sense
-			if (specialDock(dock))
-				continue;
-			m_DockManager->removeDockWidget(dock);
-		}
-	});
-
-	connect(m_nextWindowAction, &QAction::triggered, this, &MainWin::activateNextDock);
-	connect(m_prevWindowAction, &QAction::triggered, this, &MainWin::activatePreviousDock);
-}
-
-bool MainWin::specialDock(ads::CDockWidget* dock) {
-	return dock == m_projectExplorerDock || dock == m_propertiesDock || dock == m_worksheetPreviewDock;
-}
-
 void MainWin::changeVisibleAllDocks(bool visible) {
-	for (auto dock : m_DockManager->dockWidgetsMap())
+	for (auto dock : m_dockManagerContent->dockWidgetsMap())
 		dock->toggleView(visible);
 }
 
 void MainWin::activateNextDock() {
-	const auto* focusedDock = m_DockManager->focusedDockWidget();
+	const auto* focusedDock = m_dockManagerContent->focusedDockWidget();
 
-	auto itrForward = m_DockManager->dockWidgetsMap().constBegin();
+	auto itrForward = m_dockManagerContent->dockWidgetsMap().constBegin();
 
 	bool focusedFound = false;
-	while (itrForward != m_DockManager->dockWidgetsMap().constEnd()) {
+	while (itrForward != m_dockManagerContent->dockWidgetsMap().constEnd()) {
 		auto* dock = itrForward.value();
 		if (focusedFound) {
-			if (!specialDock(dock)) {
-				dock->toggleView(true);
-				m_DockManager->setDockWidgetFocused(dock);
-				return;
-			}
+			dock->toggleView(true);
+			m_dockManagerContent->setDockWidgetFocused(dock);
+			return;
 		}
 
 		if (dock == focusedDock)
@@ -551,31 +498,26 @@ void MainWin::activateNextDock() {
 	}
 
 	if (!focusedFound) {
-		if (!m_DockManager->dockWidgetsMap().count())
+		if (!m_dockManagerContent->dockWidgetsMap().count())
 			return;
-		auto* dock = m_DockManager->dockWidgetsMap().first();
+		auto* dock = m_dockManagerContent->dockWidgetsMap().first();
 		dock->toggleView(true);
-		m_DockManager->setDockWidgetFocused(dock);
+		m_dockManagerContent->setDockWidgetFocused(dock);
 		return;
 	}
 
-	// wrap around
-	auto itrWrap = m_DockManager->dockWidgetsMap().constBegin();
-	while (itrWrap != m_DockManager->dockWidgetsMap().constEnd()) {
-		auto* dock = itrWrap.value();
-		if (!specialDock(dock)) {
-			dock->toggleView(true);
-			m_DockManager->setDockWidgetFocused(dock);
-			return;
-		}
-		itrWrap++;
+	// select the first dock otherwise
+	auto* dock = m_dockManagerContent->dockWidgetsMap().first();
+	if (dock) {
+		dock->toggleView(true);
+		m_dockManagerContent->setDockWidgetFocused(dock);
 	}
 }
 
 void MainWin::activatePreviousDock() {
-	const auto* focusedDock = m_DockManager->focusedDockWidget();
+	const auto* focusedDock = m_dockManagerContent->focusedDockWidget();
 
-	auto itrForward = QMapIterator<QString, ads::CDockWidget*>(m_DockManager->dockWidgetsMap());
+	auto itrForward = QMapIterator<QString, ads::CDockWidget*>(m_dockManagerContent->dockWidgetsMap());
 	itrForward.toBack();
 
 	bool focusedFound = false;
@@ -583,11 +525,9 @@ void MainWin::activatePreviousDock() {
 		itrForward.previous();
 		auto* dock = itrForward.value();
 		if (focusedFound) {
-			if (!specialDock(dock)) {
-				dock->toggleView(true);
-				m_DockManager->setDockWidgetFocused(dock);
-				return;
-			}
+			dock->toggleView(true);
+			m_dockManagerContent->setDockWidgetFocused(dock);
+			return;
 		}
 
 		if (dock == focusedDock) {
@@ -596,52 +536,25 @@ void MainWin::activatePreviousDock() {
 	}
 
 	if (!focusedFound) {
-		if (!m_DockManager->dockWidgetsMap().count())
+		if (!m_dockManagerContent->dockWidgetsMap().count())
 			return;
-		auto* dock = m_DockManager->dockWidgetsMap().first();
+		auto* dock = m_dockManagerContent->dockWidgetsMap().first();
 		dock->toggleView(true);
-		m_DockManager->setDockWidgetFocused(dock);
+		m_dockManagerContent->setDockWidgetFocused(dock);
 		return;
 	}
 
-	// wrap around
-	auto itrWrap = QMapIterator<QString, ads::CDockWidget*>(m_DockManager->dockWidgetsMap());
-	itrWrap.toBack();
-	while (itrWrap.hasPrevious()) {
-		itrWrap.previous();
-		auto* dock = itrWrap.value();
-		if (!specialDock(dock)) {
-			dock->toggleView(true);
-			m_DockManager->setDockWidgetFocused(dock);
-			return;
-		}
+	// select the last dock otherwise
+	auto* dock = m_dockManagerContent->dockWidgetsMap().last();
+	if (dock) {
+		dock->toggleView(true);
+		m_dockManagerContent->setDockWidgetFocused(dock);
 	}
 }
 
 void MainWin::dockWidgetRemoved(ads::CDockWidget* w) {
-	if (w == m_projectExplorerDock) {
-		delete m_projectExplorerDock;
-		m_projectExplorerDock = nullptr;
-	} else if (w == m_propertiesDock) {
-		delete m_propertiesDock;
-		m_propertiesDock = nullptr;
-	} else if (w == m_worksheetPreviewDock) {
-		delete m_worksheetPreviewDock;
-		m_worksheetPreviewDock = nullptr;
-	}
-
 	if (w == m_currentAspectDock)
 		m_currentAspectDock = nullptr;
-}
-
-void MainWin::dockWidgetAboutToBeRemoved(ads::CDockWidget* w) {
-	if (w == m_projectExplorerDock) {
-		delete m_projectExplorer;
-		m_projectExplorer = nullptr;
-	} else if (w == m_propertiesDock)
-		delete m_propertiesDock->widget();
-	else if (w == m_worksheetPreviewDock)
-		delete m_worksheetPreviewDock->widget();
 }
 
 void MainWin::dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now) {
@@ -690,8 +603,11 @@ void MainWin::initActions() {
 	actionCollection()->addAction(QLatin1String("file_example_open"), openExample);
 	connect(openExample, &QAction::triggered, this, [=]() {
 		auto* dlg = new ExamplesDialog(this);
-		if (dlg->exec() == QDialog::Accepted)
-			openProject(dlg->path());
+		if (dlg->exec() == QDialog::Accepted) {
+			const auto& path = dlg->path();
+			if (!path.isEmpty())
+				openProject(path);
+		}
 		delete dlg;
 	});
 
@@ -764,13 +680,18 @@ void MainWin::initActions() {
 		importFileDialog();
 	});
 
+	m_importKaggleDatasetAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-kaggle")), i18n("From kaggle.com..."), this);
+	m_importKaggleDatasetAction->setWhatsThis(i18n("Import data from kaggle.com"));
+	actionCollection()->addAction(QLatin1String("import_dataset_kaggle"), m_importKaggleDatasetAction);
+	connect(m_importKaggleDatasetAction, &QAction::triggered, this, &MainWin::importKaggleDatasetDialog);
+
 	m_importSqlAction = new QAction(QIcon::fromTheme(QLatin1String("network-server-database")), i18n("From SQL Database..."), this);
 	m_importSqlAction->setWhatsThis(i18n("Import data from a SQL database"));
 	actionCollection()->addAction(QLatin1String("import_sql"), m_importSqlAction);
 	connect(m_importSqlAction, &QAction::triggered, this, &MainWin::importSqlDialog);
 
 	m_importDatasetAction = new QAction(QIcon::fromTheme(QLatin1String("database-index")), i18n("From Dataset Collection..."), this);
-	m_importDatasetAction->setWhatsThis(i18n("Imports data from an online dataset"));
+	m_importDatasetAction->setWhatsThis(i18n("Import data from an online dataset"));
 	actionCollection()->addAction(QLatin1String("import_dataset_datasource"), m_importDatasetAction);
 	connect(m_importDatasetAction, &QAction::triggered, this, &MainWin::importDatasetDialog);
 
@@ -935,7 +856,7 @@ void MainWin::initActions() {
 	m_configureCASAction->setWhatsThis(i18n("Opens the settings for Computer Algebra Systems to modify the available systems or to enable new ones"));
 	m_configureCASAction->setMenuRole(QAction::NoRole); // prevent macOS Qt heuristics to select this action for preferences
 	actionCollection()->addAction(QLatin1String("configure_cas"), m_configureCASAction);
-	connect(m_configureCASAction, &QAction::triggered, this, &MainWin::cantorSettingsDialog);
+	connect(m_configureCASAction, &QAction::triggered, this, &MainWin::casSettingsDialog);
 #endif
 }
 
@@ -981,6 +902,7 @@ void MainWin::initMenus() {
 	m_importMenu->addAction(m_importFileAction_2);
 	m_importMenu->addAction(m_importSqlAction);
 	m_importMenu->addAction(m_importDatasetAction);
+	m_importMenu->addAction(m_importKaggleDatasetAction);
 	m_importMenu->addSeparator();
 	m_importMenu->addAction(m_importLabPlotAction);
 #ifdef HAVE_LIBORIGIN
@@ -998,8 +920,6 @@ void MainWin::initMenus() {
 	m_visibilityMenu->addAction(m_visibilitySubfolderAction);
 	m_visibilityMenu->addAction(m_visibilityAllAction);
 
-// 	//menu for editing files
-// 	m_editMenu = new QMenu(i18n("Edit"), this);
 #ifdef HAVE_FITS
 //	m_editMenu->addAction(m_editFitsFileAction);
 #endif
@@ -1069,16 +989,9 @@ void MainWin::initMenus() {
 }
 
 void MainWin::colorSchemeChanged(QAction* action) {
-	QString schemeName = KLocalizedString::removeAcceleratorMarker(action->text());
-
-	// background of the mdi area is not updated on theme changes, do it here.
-	// QModelIndex index = m_schemeManager->indexForScheme(schemeName);
-	// const QPalette& palette = KColorScheme::createApplicationPalette(KSharedConfig::openConfig(index.data(Qt::UserRole).toString()));
-	// const QBrush& brush = palette.brush(QPalette::Dark);
-	// m_DockManager->setBackground(brush);
-
 	// save the selected color scheme
-	KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
+	auto group = Settings::group(QStringLiteral("Settings_General"));
+	const auto& schemeName = KLocalizedString::removeAcceleratorMarker(action->text());
 	group.writeEntry(QStringLiteral("ColorScheme"), schemeName);
 	group.sync();
 }
@@ -1125,13 +1038,13 @@ bool MainWin::warnModified() {
  * updates the state of actions, menus and toolbars (enabled or disabled)
  * on project changes (project closes and opens)
  */
-void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
+void MainWin::updateGUIOnProjectChanges() {
 	// return;
 	if (m_closing)
 		return;
 
 	auto* factory = this->guiFactory();
-	if (!m_DockManager || !m_DockManager->focusedDockWidget()) {
+	if (!m_dockManagerContent || !m_dockManagerContent->focusedDockWidget()) {
 		factory->container(QLatin1String("spreadsheet"), this)->setEnabled(false);
 		factory->container(QLatin1String("matrix"), this)->setEnabled(false);
 		factory->container(QLatin1String("worksheet"), this)->setEnabled(false);
@@ -1151,29 +1064,6 @@ void MainWin::updateGUIOnProjectChanges(const QByteArray& windowState) {
 	// undo/redo actions are disabled in both cases - when the project is closed or opened
 	m_undoAction->setEnabled(false);
 	m_redoAction->setEnabled(false);
-
-	if (!windowState.isEmpty()) {
-		for (auto dock : m_DockManager->dockWidgetsMap()) {
-			auto* d = dynamic_cast<ContentDockWidget*>(dock);
-			if (d)
-				d->part()->suppressDeletion(true);
-		}
-		changeVisibleAllDocks(false);
-		for (auto dock : m_DockManager->dockWidgetsMap()) {
-			auto* d = dynamic_cast<ContentDockWidget*>(dock);
-			if (d)
-				d->part()->suppressDeletion(false);
-		}
-		m_DockManager->restoreState(windowState);
-	} else {
-		// They might be not available, if at startup the "Do nothing" option is selected
-		if (m_projectExplorerDock)
-			m_projectExplorerDock->toggleView(true);
-		if (m_propertiesDock)
-			m_propertiesDock->toggleView(true);
-		if (m_worksheetPreviewDock)
-			m_worksheetPreviewDock->toggleView(true);
-	}
 }
 
 /*
@@ -1196,7 +1086,7 @@ void MainWin::updateGUI() {
 #endif
 
 	auto* factory = this->guiFactory();
-	if (!m_DockManager || !m_DockManager->focusedDockWidget()) {
+	if (!m_dockManagerContent || !m_dockManagerContent->focusedDockWidget()) {
 		factory->container(QLatin1String("spreadsheet"), this)->setEnabled(false);
 		factory->container(QLatin1String("matrix"), this)->setEnabled(false);
 		factory->container(QLatin1String("worksheet"), this)->setEnabled(false);
@@ -1419,72 +1309,16 @@ bool MainWin::newProject(bool createInitialContent) {
 		statusBar()->showMessage(text);
 	});
 
-	// newProject is called for the first time, there is no project explorer yet
-	//-> initialize the project explorer,  the GUI-observer and the dock widgets.
-	if (!m_projectExplorer) {
-		const auto groupMainWin = Settings::group(QStringLiteral("MainWin"));
-
-		// project explorer
-		m_projectExplorerDock = new ads::CDockWidget(i18nc("@title:window", "Project Explorer"));
-		m_projectExplorerDock->setObjectName(QLatin1String("projectexplorer"));
-		m_projectExplorerDock->setWindowTitle(m_projectExplorerDock->windowTitle().replace(QLatin1String("&"), QString()));
-		m_projectExplorerDock->toggleViewAction()->setText(QLatin1String(""));
-
-		m_projectExplorer = new ProjectExplorer(m_projectExplorerDock);
-		m_projectExplorerDock->setWidget(m_projectExplorer);
-
-		connect(m_projectExplorer, &ProjectExplorer::currentAspectChanged, this, &MainWin::handleCurrentAspectChanged);
-		connect(m_projectExplorer, &ProjectExplorer::activateView, this, &MainWin::activateSubWindowForAspect);
-		connect(m_projectExplorerDock, &ads::CDockWidget::viewToggled, this, &MainWin::projectExplorerDockVisibilityChanged);
-
-		// Properties dock
-		m_propertiesDock = new ads::CDockWidget(i18nc("@title:window", "Properties"));
-		m_propertiesDock->setObjectName(QLatin1String("aspect_properties_dock"));
-		m_propertiesDock->setWindowTitle(m_propertiesDock->windowTitle().replace(QLatin1String("&"), QString()));
-
-		// worksheet preview
-		m_worksheetPreviewDock = new ads::CDockWidget(i18nc("@title:window", "Worksheet Preview"));
-		m_worksheetPreviewDock->setObjectName(QLatin1String("worksheetpreview"));
-		m_worksheetPreviewDock->setWindowTitle(m_worksheetPreviewDock->windowTitle().replace(QLatin1String("&"), QString()));
-		m_worksheetPreviewDock->toggleViewAction()->setText(QLatin1String(""));
-		connect(m_worksheetPreviewDock, &ads::CDockWidget::viewToggled, this, &MainWin::worksheetPreviewDockVisibilityChanged);
-
-		m_worksheetPreviewWidget = new WorksheetPreviewWidget(m_worksheetPreviewDock);
-		m_worksheetPreviewDock->setWidget(m_worksheetPreviewWidget);
-
-		// restore the position of the dock widgets:
-		//"WindowState" doesn't always contain the positions of the dock widgets,
-		// user opened the application and closed it without creating a new project
-		// and with this the dock widgets - this creates a "WindowState" section in the settings without dock widgets positions.
-		// So, we set our default positions first and then read from the saved "WindowState" section
-		m_DockManager->addDockWidget(ads::LeftDockWidgetArea, m_projectExplorerDock);
-		m_DockManager->addDockWidget(ads::RightDockWidgetArea, m_propertiesDock);
-		m_DockManager->addDockWidget(ads::RightDockWidgetArea, m_worksheetPreviewDock, m_projectExplorerDock->dockAreaWidget());
-		if (groupMainWin.keyList().indexOf(QLatin1String("WindowState")) != -1)
-			restoreState(groupMainWin.readEntry("WindowState", QByteArray()));
-
-		auto* scrollArea = new QScrollArea(m_propertiesDock);
-		scrollArea->setWidgetResizable(true);
-
-		stackedWidget = new QStackedWidget(scrollArea);
-		scrollArea->setWidget(stackedWidget); // stacked widget inside scroll area
-		m_propertiesDock->setWidget(scrollArea); // scroll area inside dock
-
-		connect(m_propertiesDock, &ads::CDockWidget::viewToggled, this, &MainWin::propertiesDockVisibilityChanged);
-	}
-
-	m_projectExplorer->setModel(m_aspectTreeModel);
-	m_projectExplorer->setProject(m_project);
-	m_projectExplorer->setCurrentAspect(m_project);
-	m_worksheetPreviewWidget->setProject(m_project);
-
 	m_newProjectAction->setEnabled(false);
 #ifdef HAVE_PURPOSE
 	m_shareAction->setEnabled(false); // sharing is only possible after the project was saved to a file
 #endif
 
+	m_projectExplorer->setModel(m_aspectTreeModel);
+	m_projectExplorer->setProject(m_project);
+	m_projectExplorer->setCurrentAspect(m_project);
+	m_worksheetPreviewWidget->setProject(m_project);
 	m_guiObserver = new GuiObserver(this); // initialize after all docks were createad
-	m_guiObserver->selectedAspectsChanged({static_cast<AbstractAspect*>(m_project)}); // Trigger showing properties
 
 	connect(m_project, &Project::childAspectAdded, this, &MainWin::handleAspectAdded);
 	connect(m_project, &Project::childAspectRemoved, this, &MainWin::handleAspectRemoved);
@@ -1498,7 +1332,7 @@ bool MainWin::newProject(bool createInitialContent) {
 
 	// depending on the settings, create the default project content (add a worksheet, etc.)
 	if (createInitialContent) {
-		const auto newProject = (NewProject)group.readEntry(QStringLiteral("NewProject"), static_cast<int>(NewProject::WithWorksheet));
+		const auto newProject = (NewProject)group.readEntry(QStringLiteral("NewProject"), static_cast<int>(NewProject::WithSpreadsheet));
 		switch (newProject) {
 		case NewProject::WithWorksheet:
 			newWorksheet();
@@ -1506,9 +1340,9 @@ bool MainWin::newProject(bool createInitialContent) {
 		case NewProject::WithSpreadsheet:
 			newSpreadsheet();
 			break;
-		case NewProject::WithWorksheetSpreadsheet:
-			newWorksheet();
+		case NewProject::WithSpreadsheetWorksheet:
 			newSpreadsheet();
+			newWorksheet();
 			break;
 		case NewProject::WithNotebook: {
 #ifdef HAVE_CANTOR_LIBS
@@ -1521,12 +1355,135 @@ bool MainWin::newProject(bool createInitialContent) {
 		}
 
 		m_project->setChanged(false); // the project was initialized on startup, nothing has changed from user's perspective
+
+		updateGUIOnProjectChanges();
+		m_undoViewEmptyLabel = i18n("%1: created", m_project->name());
 	}
 
-	m_undoViewEmptyLabel = i18n("%1: created", m_project->name());
-	updateGUIOnProjectChanges();
-
 	return true;
+}
+
+void MainWin::initDocks() {
+	auto* toolbar = toolBar();
+	if (toolbar)
+		toolbar->setVisible(true);
+
+	// As per documentation the configuration Flags must be set prior a DockManager will be created!
+	// https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System/blob/master/doc/user-guide.md#configuration-flags
+	ads::CDockManager::setConfigFlag(ads::CDockManager::XmlCompressionEnabled, false);
+	ads::CDockManager::setConfigFlag(ads::CDockManager::FocusHighlighting, true);
+	ads::CDockManager::setConfigFlag(ads::CDockManager::MiddleMouseButtonClosesTab, true);
+	ads::CDockManager::setConfigFlag(ads::CDockManager::AllTabsHaveCloseButton, true);
+	ads::CDockManager::setConfigFlag(ads::CDockManager::RetainTabSizeWhenCloseButtonHidden, true);
+	// must be after the config flags!
+	ads::CDockManager::setAutoHideConfigFlags(ads::CDockManager::DefaultAutoHideConfig);
+	ads::CDockManager::setAutoHideConfigFlag(ads::CDockManager::AutoHideShowOnMouseOver, true);
+
+	// main dock manager for the default docks of the application (project explorer, etc)
+	m_dockManagerMain = new ads::CDockManager(this);
+
+	// project explorer
+	m_projectExplorerDock = new ads::CDockWidget(i18nc("@title:window", "Project Explorer"));
+	m_projectExplorerDock->setObjectName(QLatin1String("project-explorer"));
+	m_projectExplorerDock->setWindowTitle(m_projectExplorerDock->windowTitle().replace(QLatin1String("&"), QString()));
+	m_projectExplorerDock->toggleViewAction()->setText(QLatin1String(""));
+
+	m_projectExplorer = new ProjectExplorer(m_projectExplorerDock);
+	m_projectExplorerDock->setWidget(m_projectExplorer);
+
+	connect(m_projectExplorer, &ProjectExplorer::currentAspectChanged, this, &MainWin::handleCurrentAspectChanged);
+	connect(m_projectExplorer, &ProjectExplorer::activateView, this, &MainWin::activateSubWindowForAspect);
+	connect(m_projectExplorerDock, &ads::CDockWidget::viewToggled, this, &MainWin::projectExplorerDockVisibilityChanged);
+
+	// properties explorer
+	m_propertiesDock = new ads::CDockWidget(i18nc("@title:window", "Properties"));
+	m_propertiesDock->setObjectName(QLatin1String("properties-explorer"));
+	m_propertiesDock->setWindowTitle(m_propertiesDock->windowTitle().replace(QLatin1String("&"), QString()));
+
+	auto* scrollArea = new QScrollArea(m_propertiesDock);
+	scrollArea->setWidgetResizable(true);
+	stackedWidget = new QStackedWidget(scrollArea);
+	scrollArea->setWidget(stackedWidget); // stacked widget inside scroll area
+	m_propertiesDock->setWidget(scrollArea); // scroll area inside dock
+	connect(m_propertiesDock, &ads::CDockWidget::viewToggled, this, &MainWin::propertiesDockVisibilityChanged);
+
+	// worksheet preview
+	m_worksheetPreviewDock = new ads::CDockWidget(i18nc("@title:window", "Worksheet Preview"));
+	m_worksheetPreviewDock->setObjectName(QLatin1String("worksheet-preview"));
+	m_worksheetPreviewDock->setWindowTitle(m_worksheetPreviewDock->windowTitle().replace(QLatin1String("&"), QString()));
+	m_worksheetPreviewDock->toggleViewAction()->setText(QLatin1String(""));
+
+	m_worksheetPreviewWidget = new WorksheetPreviewWidget(m_worksheetPreviewDock);
+	m_worksheetPreviewDock->setWidget(m_worksheetPreviewWidget);
+	connect(m_worksheetPreviewDock, &ads::CDockWidget::viewToggled, this, &MainWin::worksheetPreviewDockVisibilityChanged);
+
+	auto contentDock = new ads::CDockWidget(i18nc("@title:window", "Content"));
+	contentDock->setObjectName(QLatin1String("content-dock"));
+	m_dockManagerContent = new ads::CDockManager(contentDock);
+	contentDock->setWidget(m_dockManagerContent);
+
+	// resize to the minimal sizes
+	// TODO: doesn't work, the default docks are smaller than they should be
+	m_projectExplorerDock->resize(m_projectExplorerDock->minimumSize());
+	m_propertiesDock->resize(m_propertiesDock->minimumSize());
+	m_worksheetPreviewDock->resize(m_worksheetPreviewDock->minimumSize());
+
+	auto* area = m_dockManagerMain->setCentralWidget(contentDock);
+	Q_ASSERT(area); // Check if success
+
+	// add the default docks to the main dock manager and don't allow to stretch them horizontally,
+	// the available space should go to the content dock widgets
+	auto* areaWidget = m_dockManagerMain->addDockWidget(ads::LeftDockWidgetArea, m_projectExplorerDock);
+	auto policy = areaWidget->sizePolicy();
+	policy.setHorizontalStretch(0);
+	areaWidget->setSizePolicy(policy);
+
+	areaWidget = m_dockManagerMain->addDockWidget(ads::RightDockWidgetArea, m_worksheetPreviewDock);
+	policy = areaWidget->sizePolicy();
+	policy.setHorizontalStretch(0);
+	areaWidget->setSizePolicy(policy);
+
+	areaWidget = m_dockManagerMain->addDockWidget(ads::RightDockWidgetArea, m_propertiesDock, m_worksheetPreviewDock->dockAreaWidget());
+	policy = areaWidget->sizePolicy();
+	policy.setHorizontalStretch(0);
+	areaWidget->setSizePolicy(policy);
+
+	// signal-slot connections for the window handling for the content docks
+	connect(m_dockManagerContent, &ads::CDockManager::focusedDockWidgetChanged, this, &MainWin::dockFocusChanged); // TODO: seems not to work
+	connect(m_dockManagerContent, &ads::CDockManager::dockWidgetRemoved, this, &MainWin::dockWidgetRemoved);
+
+	connect(m_closeWindowAction, &QAction::triggered, [this] {
+		m_dockManagerContent->removeDockWidget(m_currentDock);
+	});
+	connect(m_closeAllWindowsAction, &QAction::triggered, [this]() {
+		for (auto dock : m_dockManagerContent->dockWidgetsMap())
+			m_dockManagerContent->removeDockWidget(dock);
+	});
+
+	connect(m_nextWindowAction, &QAction::triggered, this, &MainWin::activateNextDock);
+	connect(m_prevWindowAction, &QAction::triggered, this, &MainWin::activatePreviousDock);
+
+	// restore the last used dock state
+	restoreDefaultDockState();
+}
+
+/*!
+ * restores the default state of the default application dock widgets (Project Explorer, etc.)
+ */
+void MainWin::restoreDefaultDockState() const {
+	auto group = Settings::group(QStringLiteral("MainWin"));
+	if (group.hasKey(QStringLiteral("DockWidgetState"))) {
+		auto state = group.readEntry(QStringLiteral("DockWidgetState"), QByteArray());
+		m_dockManagerMain->restoreState(state); // restore the state of of the default docks
+	} else {
+		// the state of the dock widgets not available yet, starting for the first time:
+		// show the project and properties explorers, hide the worksheet preview.
+		// for this, check the actions for the project and properties explorer, uncheck for worksheet preview
+		m_projectExplorerDockAction->setChecked(true);
+		m_propertiesDockAction->setChecked(true);
+		m_worksheetPreviewAction->setChecked(false);
+		m_worksheetPreviewDock->toggleView(false);
+	}
 }
 
 void MainWin::openProject() {
@@ -1613,120 +1570,8 @@ void MainWin::openProject(const QString& filename) {
 #endif
 
 #ifdef HAVE_CANTOR_LIBS
-	else if (QFileInfo(filename).completeSuffix() == QLatin1String("cws")) {
-		QFile file(filename);
-		KZip archive(&file);
-		rc = archive.open(QIODevice::ReadOnly);
-		if (rc) {
-			const auto* contentEntry = archive.directory()->entry(QLatin1String("content.xml"));
-			if (contentEntry && contentEntry->isFile()) {
-				const auto* contentFile = static_cast<const KArchiveFile*>(contentEntry);
-				QByteArray data = contentFile->data();
-				archive.close();
-
-				// determine the name of the backend
-				QDomDocument doc;
-				doc.setContent(data);
-				QString backendName = doc.documentElement().attribute(QLatin1String("backend"));
-
-				if (!backendName.isEmpty()) {
-					// create new Cantor worksheet and load the data
-					auto* worksheet = new CantorWorksheet(backendName);
-					worksheet->setName(QFileInfo(filename).fileName());
-					worksheet->setComment(filename);
-
-					rc = file.open(QIODevice::ReadOnly);
-					if (rc) {
-						QByteArray content = file.readAll();
-						rc = worksheet->init(&content);
-						if (rc)
-							m_project->addChild(worksheet);
-						else {
-							delete worksheet;
-							RESET_CURSOR;
-							QMessageBox::critical(this, i18n("Failed to open project"), i18n("Failed to process the content of the file '%1'.", filename));
-						}
-					} else {
-						RESET_CURSOR;
-						QMessageBox::critical(this, i18n("Failed to open project"), i18n("Failed to open the file '%1'.", filename));
-					}
-				} else {
-					RESET_CURSOR;
-					rc = false;
-					QMessageBox::critical(this, i18n("Failed to open project"), i18n("Failed to process the content of the file '%1'.", filename));
-				}
-			} else {
-				RESET_CURSOR;
-				rc = false;
-				QMessageBox::critical(this, i18n("Failed to open project"), i18n("Failed to process the content of the file '%1'.", filename));
-			}
-		} else {
-			RESET_CURSOR;
-			QMessageBox::critical(this, i18n("Failed to open project"), i18n("Failed to open the file '%1'.", filename));
-		}
-	} else if (QFileInfo(filename).completeSuffix() == QLatin1String("ipynb")) {
-		QFile file(filename);
-		rc = file.open(QIODevice::ReadOnly);
-		if (rc) {
-			QByteArray content = file.readAll();
-			QJsonParseError error;
-			// TODO: use QJsonDocument& doc = QJsonDocument::fromJson(content, &error); if minimum Qt version is at least 5.10
-			const QJsonDocument& jsonDoc = QJsonDocument::fromJson(content, &error);
-			const QJsonObject& doc = jsonDoc.object();
-			if (error.error == QJsonParseError::NoError) {
-				// determine the backend name
-				QString backendName;
-				// TODO: use doc["metadata"]["kernelspec"], etc. if minimum Qt version is at least 5.10
-				if ((doc[QLatin1String("metadata")] != QJsonValue::Undefined && doc[QLatin1String("metadata")].isObject())
-					&& (doc[QLatin1String("metadata")].toObject()[QLatin1String("kernelspec")] != QJsonValue::Undefined
-						&& doc[QLatin1String("metadata")].toObject()[QLatin1String("kernelspec")].isObject())) {
-					QString kernel;
-					if (doc[QLatin1String("metadata")].toObject()[QLatin1String("kernelspec")].toObject()[QLatin1String("name")] != QJsonValue::Undefined)
-						kernel = doc[QLatin1String("metadata")].toObject()[QLatin1String("kernelspec")].toObject()[QLatin1String("name")].toString();
-
-					if (!kernel.isEmpty()) {
-						if (kernel.startsWith(QLatin1String("julia")))
-							backendName = QLatin1String("julia");
-						else if (kernel == QLatin1String("sagemath"))
-							backendName = QLatin1String("sage");
-						else if (kernel == QLatin1String("ir"))
-							backendName = QLatin1String("r");
-						else if (kernel == QLatin1String("python3") || kernel == QLatin1String("python2"))
-							backendName = QLatin1String("python");
-						else
-							backendName = kernel;
-					} else
-						backendName = doc[QLatin1String("metadata")].toObject()[QLatin1String("kernelspec")].toObject()[QLatin1String("language")].toString();
-
-					if (!backendName.isEmpty()) {
-						// create new Cantor worksheet and load the data
-						auto* worksheet = new CantorWorksheet(backendName);
-						worksheet->setName(QFileInfo(filename).fileName());
-						worksheet->setComment(filename);
-						rc = worksheet->init(&content);
-						if (rc)
-							m_project->addChild(worksheet);
-						else {
-							delete worksheet;
-							RESET_CURSOR;
-							QMessageBox::critical(this, i18n("Failed to open project"), i18n("Failed to process the content of the file '%1'.", filename));
-						}
-					} else {
-						RESET_CURSOR;
-						rc = false;
-						QMessageBox::critical(this, i18n("Failed to open project"), i18n("Failed to process the content of the file '%1'.", filename));
-					}
-				} else {
-					RESET_CURSOR;
-					rc = false;
-					QMessageBox::critical(this, i18n("Failed to open project"), i18n("Failed to process the content of the file '%1'.", filename));
-				}
-			}
-		} else {
-			RESET_CURSOR;
-			rc = false;
-			QMessageBox::critical(this, i18n("Failed to open project"), i18n("Failed to open the file '%1'.", filename));
-		}
+	else if (filename.endsWith(QLatin1String(".cws"), Qt::CaseInsensitive) || filename.endsWith(QLatin1String(".ipynb"), Qt::CaseInsensitive)) {
+		rc = m_project->loadNotebook(filename);
 	}
 #endif
 
@@ -1741,10 +1586,33 @@ void MainWin::openProject(const QString& filename) {
 	m_project->undoStack()->clear();
 	m_undoViewEmptyLabel = i18n("%1: opened", m_project->name());
 	m_recentProjectsAction->addUrl(QUrl(filename));
-	updateGUIOnProjectChanges(m_project->windowState().toUtf8());
+
+	updateGUIOnProjectChanges();
 	updateGUI(); // there are most probably worksheets or spreadsheets in the open project -> update the GUI
-	if (m_project->windowState().toUtf8().isEmpty())
+
+	const auto& dockWidgetsState = m_project->dockWidgetState().toUtf8();
+	if (!dockWidgetsState.isEmpty()) {
+		for (auto dock : m_dockManagerContent->dockWidgetsMap()) {
+			auto* d = dynamic_cast<ContentDockWidget*>(dock);
+			if (d)
+				d->part()->suppressDeletion(true);
+		}
+		changeVisibleAllDocks(false);
+		for (auto dock : m_dockManagerContent->dockWidgetsMap()) {
+			auto* d = dynamic_cast<ContentDockWidget*>(dock);
+			if (d)
+				d->part()->suppressDeletion(false);
+		}
+
+		// restore the state of the content docks
+		m_dockManagerContent->restoreState(dockWidgetsState);
+
+		// restore the state of the default docks if it was saved in the project file
+		if (m_project->saveDefaultDockWidgetState())
+			m_dockManagerMain->restoreState(m_project->defaultDockWidgetState().toUtf8());
+	} else
 		updateDockWindowVisibility();
+
 	m_saveAction->setEnabled(false);
 	m_newProjectAction->setEnabled(true);
 #ifdef HAVE_PURPOSE
@@ -1763,11 +1631,6 @@ void MainWin::openProject(const QString& filename) {
 }
 
 void MainWin::openRecentProject(const QUrl& url) {
-	// 	if (dynamic_cast<QQuickWidget*>(centralWidget())) {
-	// 		createMdiArea();
-	// 		setCentralWidget(m_mdiArea);
-	// 	}
-
 	if (url.isLocalFile()) // fix for Windows
 		this->openProject(url.toLocalFile());
 	else
@@ -1796,12 +1659,8 @@ bool MainWin::closeProject() {
 		// 		}
 	}
 
-	for (auto dock : m_DockManager->dockWidgetsMap()) {
-		// No need to delete them, because they are used everywhere and can be reused
-		if (specialDock(dock))
-			continue;
-		m_DockManager->removeDockWidget(dock);
-	}
+	for (auto dock : m_dockManagerContent->dockWidgetsMap())
+		m_dockManagerContent->removeDockWidget(dock);
 
 	m_projectClosing = true;
 	statusBar()->clearMessage();
@@ -1816,9 +1675,6 @@ bool MainWin::closeProject() {
 	// update the UI if we're just closing a project
 	// and not closing(quitting) the application
 	if (!m_closing) {
-		m_projectExplorerDock->toggleView(false);
-		m_propertiesDock->toggleView(false);
-		m_worksheetPreviewDock->toggleView(false);
 		m_currentAspect = nullptr;
 		m_currentFolder = nullptr;
 		updateGUIOnProjectChanges();
@@ -1907,22 +1763,47 @@ bool MainWin::save(const QString& fileName) {
 	if (file->open(QIODevice::WriteOnly)) {
 		m_project->setFileName(fileName);
 
-		QPixmap thumbnail;
-		const auto& windows = m_DockManager->dockWidgetsMap();
-		if (!windows.isEmpty()) {
-			// determine the bounding rectangle surrounding all visible sub-windows
-			QRect rect;
-			for (auto* window : windows)
-				rect = rect.united(window->frameGeometry());
+		// thumbnail, used for the project preview
+		QPixmap thumbnail = centralWidget()->grab(centralWidget()->childrenRect());
 
-			thumbnail = centralWidget()->grab(rect);
+		// instead of doing a screenshot of the whole application window including also the special docks (project explorer, etc.) above,
+		// we can also implement the following two cases:
+		// 1. if the states of the dock widgets are saved in the project file, do the screenshot of the whole window
+		// 2. if the states are not saved, determine the area of dock widgets without the special docks.
+		// The logic below is an attempt to achieve this but it doesn't produce the desired results in all cases,
+		// for example not if some of dock widgets are placed above the special docks.
+		// TODO: decide what to do with this logic.
+		/*
+		if (m_project->saveDockStates())
+			thumbnail = centralWidget()->grab(centralWidget()->childrenRect());
+		else {
+			// determine the bounding rectangle of the content (area without the special docks like project explorer, etc.)
+			const auto& docks = m_dockManagerContent->dockWidgetsMap();
+			QRect rect;
+			for (auto* dock : docks) {
+				auto dockRect = QRect(dock->mapToGlobal(dock->geometry().topLeft()), dock->geometry().size());
+				rect = rect.united(dockRect);
+			}
+
+			if (!rect.isEmpty())
+				thumbnail = centralWidget()->grab(QRect(centralWidget()->mapFromGlobal(rect.topLeft()), rect.size()));
+		}
+		*/
+
+		// set the state of the content dock widgets
+		auto state = m_dockManagerContent->saveState();
+		// This conversion is fine, because in the dockmanager xml compression is turned off
+		m_project->setDockWidgetState(QString::fromStdString(state.data()));
+
+		// set the state of the default dock widgets, if needed
+		if (m_project->saveDefaultDockWidgetState()) {
+			state = m_dockManagerMain->saveState();
+			m_project->setDefaultDockWidgetState(QString::fromStdString(state.data()));
 		}
 
-		QXmlStreamWriter writer(file);
-		auto windowState = m_DockManager->saveState();
-		// This conversion is fine, because in the dockmanager xml compression is turned off
-		m_project->setWindowState(QString::fromStdString(windowState.data()));
 		m_project->setFileName(fileName);
+
+		QXmlStreamWriter writer(file);
 		m_project->save(thumbnail, &writer);
 		m_project->setChanged(false);
 		undoStackIndexLastSave = m_project->undoStack()->index();
@@ -2148,7 +2029,7 @@ Spreadsheet* MainWin::activeSpreadsheet() const {
 /*
 	adds a new Cantor Spreadsheet to the project.
 */
-void MainWin::newCantorWorksheet() {
+void MainWin::newNotebook() {
 	auto* action = static_cast<QAction*>(QObject::sender());
 	auto* cantorworksheet = new CantorWorksheet(action->data().toString());
 	this->addAspectToProject(cantorworksheet);
@@ -2220,7 +2101,7 @@ void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	if (!workbook && !datapicker && part->dockWidgetExists()) {
 		ContentDockWidget* win = part->dockWidget();
 		if (win)
-			m_DockManager->removeDockWidget(win);
+			m_dockManagerContent->removeDockWidget(win);
 	}
 }
 
@@ -2250,6 +2131,7 @@ void MainWin::handleCurrentAspectChanged(AbstractAspect* aspect) {
 
 void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) {
 	Q_ASSERT(aspect);
+	Q_ASSERT(m_dockManagerContent);
 	const auto* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (part) {
 		ContentDockWidget* win{nullptr};
@@ -2267,18 +2149,23 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) {
 		else
 			win = part->dockWidget();
 
-		auto* dock = m_DockManager->findDockWidget(win->objectName());
-		if (m_DockManager && dock == nullptr) {
+		auto* dock = m_dockManagerContent->findDockWidget(win->objectName());
+		if (dock == nullptr) {
 			// Add new dock if not found
-			if (m_DockManager->dockWidgetsMap().count() == 2 || !m_currentAspectDock) {
+			ads::CDockAreaWidget* areaWidget{nullptr};
+			if (m_dockManagerContent->dockWidgetsMap().isEmpty() || !m_currentAspectDock) {
 				// If only project explorer and properties dock exist place it right to the project explorer
-				m_DockManager->addDockWidget(ads::RightDockWidgetArea,
-											 win,
-											 m_projectExplorerDock->dockAreaWidget()); // Right of the project explorer by default
+				areaWidget = m_dockManagerContent->addDockWidget(ads::CenterDockWidgetArea, win);
 			} else {
 				// Add dock on top of the current aspect, so it is directly visible
-				m_DockManager->addDockWidget(ads::CenterDockWidgetArea, win, m_currentAspectDock->dockAreaWidget());
+				areaWidget = m_dockManagerContent->addDockWidget(ads::CenterDockWidgetArea, win, m_currentAspectDock->dockAreaWidget());
 			}
+
+			// the dock area for the content widgets should be stretched to take the whole free space
+			auto policy = areaWidget->sizePolicy();
+			policy.setHorizontalStretch(1);
+			areaWidget->setSizePolicy(policy);
+
 			win->show();
 
 			// Qt provides its own "system menu" for every sub-window. The shortcut for the close-action
@@ -2286,12 +2173,11 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) {
 			// remove the shortcuts in the system menu to avoid this collision.
 			for (QAction* action : win->titleBarActions())
 				action->setShortcut(QKeySequence());
-		} else if (m_DockManager)
+		} else
 			dock->toggleView(true);
 
 		m_currentAspectDock = win;
-		if (m_DockManager)
-			m_DockManager->setDockWidgetFocused(win);
+		m_dockManagerContent->setDockWidgetFocused(win);
 	} else {
 		// activate the mdiView of the parent, if a child was selected
 		const AbstractAspect* parent = aspect->parentAspect();
@@ -2393,7 +2279,7 @@ void MainWin::redo() {
 	Shows/hides docks depending on the current visibility policy.
 */
 void MainWin::updateDockWindowVisibility() const {
-	auto windows = m_DockManager->dockWidgetsMap();
+	auto windows = m_dockManagerContent->dockWidgetsMap();
 	switch (m_project->dockVisibility()) {
 	case Project::DockVisibility::allDocks:
 		for (auto* window : windows)
@@ -2448,7 +2334,6 @@ void MainWin::toggleStatusBar(bool checked) {
 }
 
 void MainWin::toggleMemoryInfo() {
-	DEBUG(Q_FUNC_INFO)
 	if (m_memoryInfoWidget) {
 		statusBar()->removeWidget(m_memoryInfoWidget);
 		delete m_memoryInfoWidget;
@@ -2556,7 +2441,7 @@ void MainWin::cartesianPlotMouseModeChanged(CartesianPlot::MouseMode mode) {
 			cursorWidget = new CursorDock(cursorDock);
 			cursorDock->setWidget(cursorWidget);
 			connect(cursorDock, &ads::CDockWidget::viewToggled, this, &MainWin::cursorDockVisibilityChanged);
-			m_DockManager->addDockWidget(ads::CenterDockWidgetArea, cursorDock, m_propertiesDock->dockAreaWidget());
+			m_dockManagerMain->addDockWidget(ads::CenterDockWidgetArea, cursorDock, m_propertiesDock->dockAreaWidget());
 		} else
 			focusCursorDock();
 
@@ -2570,7 +2455,7 @@ void MainWin::cartesianPlotMouseModeChanged(CartesianPlot::MouseMode mode) {
 void MainWin::focusCursorDock() {
 	if (cursorDock) {
 		cursorDock->toggleView(true);
-		m_DockManager->setDockWidgetFocused(cursorDock);
+		m_dockManagerMain->setDockWidgetFocused(cursorDock);
 	}
 }
 
@@ -2609,6 +2494,11 @@ void MainWin::toggleFullScreen(bool t) {
 
 void MainWin::closeEvent(QCloseEvent* event) {
 	m_closing = true;
+
+	// save the current state of the default dock widgets (project explorer, etc) _before_ all other content docks are closed
+	auto group = Settings::group(QStringLiteral("MainWin"));
+	group.writeEntry(QLatin1String("DockWidgetState"), m_dockManagerMain->saveState());
+
 	if (!this->closeProject()) {
 		m_closing = false;
 		event->ignore();
@@ -2638,18 +2528,20 @@ void MainWin::dropEvent(QDropEvent* event) {
 
 void MainWin::updateLocale() {
 	// Set default locale
-	QLocale::Language numberLocaleLanguage =
+	auto numberLocaleLanguage =
 		static_cast<QLocale::Language>(Settings::group(QStringLiteral("Settings_General"))
 										   .readEntry(QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale::Language::AnyLanguage)));
-	QLocale::NumberOptions numberOptions = static_cast<QLocale::NumberOptions>(
+
+	auto numberOptions = static_cast<QLocale::NumberOptions>(
 		Settings::group(QStringLiteral("Settings_General")).readEntry(QLatin1String("NumberOptions"), static_cast<int>(QLocale::DefaultNumberOptions)));
+
 	QLocale l(numberLocaleLanguage == QLocale::AnyLanguage ? QLocale() : numberLocaleLanguage);
 	l.setNumberOptions(numberOptions);
 	QLocale::setDefault(l);
 }
 
 void MainWin::handleSettingsChanges() {
-	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
+	const auto group = Settings::group(QStringLiteral("Settings_General"));
 
 	// title bar
 	MainWin::TitleBarMode titleBarMode = static_cast<MainWin::TitleBarMode>(group.readEntry("TitleBar", 0));
@@ -2657,17 +2549,6 @@ void MainWin::handleSettingsChanges() {
 		m_titleBarMode = titleBarMode;
 		updateTitleBar();
 	}
-
-	// view mode
-	// 	if (dynamic_cast<QQuickWidget*>(centralWidget()) == nullptr) {
-	//	QMdiArea::ViewMode viewMode = QMdiArea::ViewMode(group.readEntry("ViewMode", 0));
-	//	if (m_mdiArea->viewMode() != viewMode) {
-	//		m_mdiArea->setViewMode(viewMode);
-	//		if (viewMode == QMdiArea::SubWindowView)
-	//			this->updateMdiWindowVisibility();
-	//	}
-
-	// 	}
 
 	// window visibility
 	auto vis = Project::DockVisibility(group.readEntry("DockVisibility", 0));
@@ -2774,6 +2655,22 @@ void MainWin::importFileDialog(const QString& fileName) {
 	DEBUG(Q_FUNC_INFO << " DONE");
 }
 
+void MainWin::importKaggleDatasetDialog() {
+	DEBUG(Q_FUNC_INFO);
+
+	if (ImportKaggleDatasetDialog::checkKaggle()) {
+		auto* dlg = new ImportKaggleDatasetDialog(this);
+		dlg->exec();
+	} else
+		QMessageBox::critical(this,
+							  i18n("Running Kaggle CLI tool failed"),
+							  i18n("Please follow the instructions on "
+								   "<a href=\"https://www.kaggle.com/docs/api\">\"How to Use Kaggle\"</a> "
+								   "to setup the Kaggle CLI tool."));
+
+	DEBUG(Q_FUNC_INFO << " DONE");
+}
+
 void MainWin::importSqlDialog() {
 	DEBUG(Q_FUNC_INFO);
 	auto* dlg = new ImportSQLDatabaseDialog(this);
@@ -2815,8 +2712,10 @@ void MainWin::importProjectDialog() {
  * \brief opens a dialog to import datasets
  */
 void MainWin::importDatasetDialog() {
+	DEBUG(Q_FUNC_INFO);
 	auto* dlg = new ImportDatasetDialog(this);
 	dlg->exec();
+	DEBUG(Q_FUNC_INFO << ", DONE");
 }
 
 /*!
@@ -2903,20 +2802,10 @@ void MainWin::settingsDialog() {
 }
 
 #ifdef HAVE_CANTOR_LIBS
-void MainWin::cantorSettingsDialog() {
-	static auto* emptyConfig = new KCoreConfigSkeleton();
-	auto* dlg = new KConfigDialog(this, QLatin1String("Cantor Settings"), emptyConfig);
-	for (auto* backend : Cantor::Backend::availableBackends())
-		if (backend->config()) // It has something to configure, so add it to the dialog
-			dlg->addPage(backend->settingsWidget(dlg), backend->config(), backend->name(), backend->icon());
-
-	// in case the settings were modified (we only need paths), update the "add new notebook" actions
-	// to get the new list of available backend systems in the menu
-	connect(dlg, &KConfigDialog::settingsChanged, this, [=]() {
-		updateNotebookActions();
-	});
-
-	dlg->show();
+void MainWin::casSettingsDialog() {
+	auto* dlg = new CASSettingsDialog(this);
+	connect(dlg, &CASSettingsDialog::settingsChanged, this, &MainWin::updateNotebookActions);
+	dlg->exec();
 
 	DEBUG(Q_FUNC_INFO << ", found " << Cantor::Backend::availableBackends().size() << " backends")
 	if (Cantor::Backend::availableBackends().size() == 0)
@@ -2936,7 +2825,7 @@ void MainWin::updateNotebookActions() {
 		action->setData(backend->name());
 		action->setWhatsThis(i18n("Creates a new %1 notebook", backend->name()));
 		actionCollection()->addAction(QLatin1String("notebook_") + backend->name(), action);
-		connect(action, &QAction::triggered, this, &MainWin::newCantorWorksheet);
+		connect(action, &QAction::triggered, this, &MainWin::newNotebook);
 		newBackendActions << action;
 		menu->addAction(action);
 		m_newNotebookMenu->addAction(action);

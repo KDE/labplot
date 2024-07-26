@@ -10,15 +10,12 @@
 #ifndef READSTATFILTERTEST_H
 #define READSTATFILTERTEST_H
 
-#include "../../CommonTest.h"
-#include <QtTest>
+#include "../../CommonMetaTest.h"
 
-class ReadStatFilterTest : public CommonTest {
+class ReadStatFilterTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void initTestCase();
-
 	void testDTAImport();
 	void testSASImport();
 	void testSAVImport();

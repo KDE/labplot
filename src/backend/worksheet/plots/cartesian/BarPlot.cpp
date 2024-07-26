@@ -33,6 +33,8 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
+#include <kdefrontend/GuiTools.h>
+
 /**
  * \class BarPlot
  * \brief Box Plot
@@ -214,9 +216,12 @@ bool BarPlot::usingColumn(const Column* column) const {
 	return false;
 }
 
-void BarPlot::updateColumnDependencies(const AbstractColumn* column) {
+void BarPlot::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* aspect) {
 	Q_D(const BarPlot);
-	const QString& columnPath = column->path();
+	const auto column = dynamic_cast<const AbstractColumn*>(aspect);
+	if (!column)
+		return;
+
 	const auto dataColumnPaths = d->dataColumnPaths;
 	auto dataColumns = d->dataColumns;
 	bool changed = false;
@@ -224,7 +229,7 @@ void BarPlot::updateColumnDependencies(const AbstractColumn* column) {
 	for (int i = 0; i < dataColumnPaths.count(); ++i) {
 		const auto& path = dataColumnPaths.at(i);
 
-		if (path == columnPath) {
+		if (path == aspectPath) {
 			dataColumns[i] = column;
 			changed = true;
 		}
@@ -331,6 +336,8 @@ void BarPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 		if (aspect == d->dataColumns.at(i)) {
 			d->dataColumns[i] = nullptr;
 			d->retransform();
+			Q_EMIT dataChanged();
+			Q_EMIT changed();
 			break;
 		}
 	}
@@ -361,7 +368,7 @@ BarPlotPrivate::BarPlotPrivate(BarPlot* owner)
 }
 
 Background* BarPlotPrivate::addBackground(const KConfigGroup& group) {
-	auto* background = new Background(QString());
+	auto* background = new Background(QStringLiteral("background"));
 	background->setPrefix(QLatin1String("Filling"));
 	background->setEnabledAvailable(true);
 	background->setHidden(true);
@@ -381,7 +388,7 @@ Background* BarPlotPrivate::addBackground(const KConfigGroup& group) {
 }
 
 Line* BarPlotPrivate::addBorderLine(const KConfigGroup& group) {
-	auto* line = new Line(QString());
+	auto* line = new Line(QStringLiteral("line"));
 	line->setPrefix(QLatin1String("Border"));
 	line->setHidden(true);
 	q->addChild(line);
@@ -404,7 +411,7 @@ Line* BarPlotPrivate::addBorderLine(const KConfigGroup& group) {
 }
 
 void BarPlotPrivate::addValue(const KConfigGroup& group) {
-	value = new Value(QString());
+	value = new Value(QStringLiteral("value"));
 	q->addChild(value);
 	value->setHidden(true);
 	value->setcenterPositionAvailable(true);
@@ -421,7 +428,7 @@ void BarPlotPrivate::addValue(const KConfigGroup& group) {
 }
 
 ErrorBar* BarPlotPrivate::addErrorBar(const KConfigGroup& group) {
-	auto* errorBar = new ErrorBar(QString(), ErrorBar::Dimension::Y);
+	auto* errorBar = new ErrorBar(QStringLiteral("errorBar"), ErrorBar::Dimension::Y);
 	errorBar->setHidden(true);
 	q->addChild(errorBar);
 	if (!q->isLoading())
@@ -432,7 +439,9 @@ ErrorBar* BarPlotPrivate::addErrorBar(const KConfigGroup& group) {
 	});
 
 	q->connect(errorBar, &ErrorBar::updateRequested, [=] {
-		updateErrorBars(errorBars.indexOf(errorBar));
+		const int index = errorBars.indexOf(errorBar);
+		if (index != -1)
+			updateErrorBars(index);
 	});
 
 	errorBars << errorBar;
@@ -540,6 +549,8 @@ void BarPlotPrivate::recalc() {
 	int barGroupsCount = 0;
 	int columnIndex = 0;
 	for (auto* column : qAsConst(dataColumns)) {
+		if (!column)
+			continue;
 		int size = static_cast<const Column*>(column)->statistics().size;
 		m_barLines[columnIndex].resize(size);
 		m_fillPolygons[columnIndex].resize(size);
@@ -613,6 +624,8 @@ void BarPlotPrivate::recalc() {
 		switch (type) {
 		case BarPlot::Type::Grouped: {
 			for (auto* column : dataColumns) {
+				if (!column)
+					continue;
 				double max = column->maximum();
 				if (max > yMax)
 					yMax = max;
@@ -1235,7 +1248,7 @@ void BarPlotPrivate::recalcShapeAndBoundingRect() {
 			}
 		}
 
-		if (errorBars.at(index)->yErrorType() != ErrorBar::ErrorType::NoError)
+		if (index < errorBars.size() && errorBars.at(index) && errorBars.at(index)->yErrorType() != ErrorBar::ErrorType::NoError)
 			m_shape.addPath(WorksheetElement::shapeFromPath(m_errorBarsPaths.at(index), errorBars.at(index)->line()->pen()));
 
 		++index;
@@ -1250,22 +1263,20 @@ void BarPlotPrivate::recalcShapeAndBoundingRect() {
 
 void BarPlotPrivate::updatePixmap() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
-	QPixmap pixmap(m_boundingRectangle.width(), m_boundingRectangle.height());
+	m_pixmap = QPixmap(m_boundingRectangle.width(), m_boundingRectangle.height());
 	if (m_boundingRectangle.width() == 0. || m_boundingRectangle.height() == 0.) {
-		m_pixmap = pixmap;
 		m_hoverEffectImageIsDirty = true;
 		m_selectionEffectImageIsDirty = true;
 		return;
 	}
-	pixmap.fill(Qt::transparent);
-	QPainter painter(&pixmap);
+	m_pixmap.fill(Qt::transparent);
+	QPainter painter(&m_pixmap);
 	painter.setRenderHint(QPainter::Antialiasing, true);
 	painter.translate(-m_boundingRectangle.topLeft());
 
 	draw(&painter);
 	painter.end();
 
-	m_pixmap = pixmap;
 	m_hoverEffectImageIsDirty = true;
 	m_selectionEffectImageIsDirty = true;
 	Q_EMIT q->changed();
@@ -1304,7 +1315,7 @@ void BarPlotPrivate::draw(QPainter* painter) {
 
 		// draw error bars
 		auto* errorBar = errorBars.at(columnIndex);
-		if (errorBar->yErrorType() != ErrorBar::ErrorType::NoError)
+		if (errorBar && errorBar->yErrorType() != ErrorBar::ErrorType::NoError)
 			errorBar->draw(painter, m_errorBarsPaths.at(columnIndex));
 
 		++columnIndex;
@@ -1322,7 +1333,7 @@ void BarPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 	painter->setBrush(Qt::NoBrush);
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
-	if (Settings::group(QStringLiteral("Settings_Worksheet")).readEntry<bool>("DoubleBuffering", true))
+	if (!q->isPrinting() && Settings::group(QStringLiteral("Settings_Worksheet")).readEntry<bool>("DoubleBuffering", true))
 		painter->drawPixmap(m_boundingRectangle.topLeft(), m_pixmap); // draw the cached pixmap (fast)
 	else
 		draw(painter); // draw directly again (slow)
@@ -1541,6 +1552,14 @@ void BarPlot::loadThemeConfig(const KConfig& config) {
 		// bar border lines
 		auto* line = d->borderLines.at(i);
 		line->loadThemeConfig(group, color);
+
+		// line
+		if (plot->theme() == QLatin1String("Sparkline")) {
+			if (!GuiTools::isDarkMode())
+				line->setColor(Qt::black);
+			else
+				line->setColor(Qt::white);
+		}
 
 		// error bars
 		auto* errorBar = d->errorBars.at(i);

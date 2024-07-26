@@ -11,13 +11,13 @@ set(SRC_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
 
 find_package(qt${QT_VERSION_MAJOR}advanceddocking CONFIG)
 if (NOT qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
-    option(LOCAL_QT_ADVANCED_DOCK_DOWNLOAD "Use local build of qt advanced dock downloaded directly from the git repository" OFF)
-    option(LOCAL_QT_ADVANCED_DOCK_COPY "Use local build of qt advanced dock copied into the Qt-Advanced-Docking-System subfolder" ON)
-    if (TARGET Qt${QT_VERSION_MAJOR}::GuiPrivate)
-        MESSAGE (STATUS "Building local version of Qt-Advanced-Docking-System.")
-    else ()
-	MESSAGE (FATAL_ERROR "Missing Qt${QT_VERSION_MAJOR}::GuiPrivate to build local version of Qt-Advanced-Docking-System.")
-    endif ()
+	option(LOCAL_QT_ADVANCED_DOCK_DOWNLOAD "Use local build of qt advanced dock downloaded directly from the git repository" OFF)
+	option(LOCAL_QT_ADVANCED_DOCK_COPY "Use local build of qt advanced dock copied into the Qt-Advanced-Docking-System subfolder" ON)
+	if (TARGET Qt${QT_VERSION_MAJOR}::GuiPrivate)
+		MESSAGE (STATUS "Building local version of Qt-Advanced-Docking-System.")
+	else ()
+		MESSAGE (FATAL_ERROR "Missing Qt${QT_VERSION_MAJOR}::GuiPrivate to build local version of Qt-Advanced-Docking-System.")
+	endif ()
 endif ()
 
 set(GUI_SOURCES
@@ -35,6 +35,7 @@ set(GUI_SOURCES
 # 	${KDEFRONTEND_DIR}/SettingsWelcomePage.cpp
 	${KDEFRONTEND_DIR}/SettingsDatasetsPage.cpp
 	${KDEFRONTEND_DIR}/SettingsPage.h
+	${KDEFRONTEND_DIR}/CASSettingsDialog.cpp
 	${KDEFRONTEND_DIR}/TemplateHandler.cpp
 	${KDEFRONTEND_DIR}/ThemeHandler.cpp
 	${KDEFRONTEND_DIR}/examples/ExamplesDialog.cpp
@@ -60,6 +61,8 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/ImportWarningsDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportFileWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportFileDialog.cpp
+	${KDEFRONTEND_DIR}/datasources/ImportKaggleDatasetWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/ImportKaggleDatasetDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportProjectDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportSQLDatabaseDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportSQLDatabaseWidget.cpp
@@ -68,6 +71,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/ROOTOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/FITSOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/JsonOptionsWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/McapOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/BaseDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/AspectDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
@@ -151,7 +155,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditAddUnitDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/ResizableTextEdit.cpp
-  ${KDEFRONTEND_DIR}/widgets/TimedLineEdit.cpp
+	${KDEFRONTEND_DIR}/widgets/TimedLineEdit.cpp
 )
 
 if (Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
@@ -194,6 +198,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/hdf5optionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/imageoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importdatasetwidget.ui
+  ${KDEFRONTEND_DIR}/ui/datasources/importkaggledatasetwidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importfilewidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importwarningsdialog.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importprojectwidget.ui
@@ -203,6 +208,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/rootoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/fitsoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/jsonoptionswidget.ui
+	${KDEFRONTEND_DIR}/ui/datasources/mcapoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/odsoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/xlsxoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/aspectdock.ui
@@ -288,7 +294,6 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/AbstractFilter.cpp
 	${BACKEND_DIR}/core/AbstractSimpleFilter.cpp
 	${BACKEND_DIR}/core/column/Column.cpp
-
 	${BACKEND_DIR}/core/column/ColumnPrivate.cpp
 	${BACKEND_DIR}/core/column/ColumnStringIO.cpp
 	${BACKEND_DIR}/core/column/columncommands.cpp
@@ -353,6 +358,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/filters/HDF5Filter.cpp
 	${BACKEND_DIR}/datasources/filters/ImageFilter.cpp
 	${BACKEND_DIR}/datasources/filters/JsonFilter.cpp
+	${BACKEND_DIR}/datasources/filters/McapFilter.cpp
 	${BACKEND_DIR}/datasources/filters/MatioFilter.cpp
 	${BACKEND_DIR}/datasources/filters/NetCDFFilter.cpp
 	${BACKEND_DIR}/datasources/filters/OdsFilter.cpp
@@ -369,9 +375,11 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/gsl/ExpressionParser.cpp
 	${BACKEND_DIR}/gsl/constants.cpp
 	${BACKEND_DIR}/gsl/functions.cpp
-	${BACKEND_DIR}/lib/Range.cpp
+	${BACKEND_DIR}/lib/Range.h
+	${BACKEND_DIR}/lib/Debug.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
 	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
+	${BACKEND_DIR}/lib/hostprocess.cpp
 	${BACKEND_DIR}/matrix/Matrix.cpp
 	${BACKEND_DIR}/matrix/matrixcommands.cpp
 	${BACKEND_DIR}/matrix/MatrixModel.cpp
@@ -458,6 +466,7 @@ set(NSL_SOURCES
 	${BACKEND_DIR}/nsl/nsl_kde.c
 	${BACKEND_DIR}/nsl/nsl_math.c
 	${BACKEND_DIR}/nsl/nsl_peak.cpp
+	${BACKEND_DIR}/nsl/nsl_randist.c
 	${BACKEND_DIR}/nsl/nsl_sf_basic.c
 	${BACKEND_DIR}/nsl/nsl_sf_kernel.c
 	${BACKEND_DIR}/nsl/nsl_sf_poly.c
@@ -481,10 +490,10 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/note/NoteView.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetCommentsHeaderModel.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetHeaderView.cpp
-        ${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetSparkLineHeaderModel.cpp
+	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetSparkLineHeaderModel.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetItemDelegate.cpp
-        ${COMMONFRONTEND_DIR}/spreadsheet/SparklineRunnable.h
-        ${COMMONFRONTEND_DIR}/spreadsheet/SparklineRunnable.cpp
+	${COMMONFRONTEND_DIR}/spreadsheet/SparklineRunnable.h
+	${COMMONFRONTEND_DIR}/spreadsheet/SparklineRunnable.cpp
 	${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetView.cpp
 	${COMMONFRONTEND_DIR}/workbook/WorkbookView.cpp
 	${COMMONFRONTEND_DIR}/worksheet/WorksheetView.cpp
@@ -577,6 +586,7 @@ target_link_libraries( labplot2backendlib
 	KF${KF_MAJOR_VERSION}::ConfigWidgets	# KStandardAction
 	KF${KF_MAJOR_VERSION}::Archive	# KFilterDev
 	KF${KF_MAJOR_VERSION}::TextWidgets	# KTextEdit
+	KF${KF_MAJOR_VERSION}::CoreAddons	# kcoreaddons_version.h
 	${ZLIB_LIBRARIES}
 	${LZ4_LIBRARIES}
 	${GSL_LIBRARIES}
@@ -640,6 +650,9 @@ ENDIF ()
 IF (KF${KF_MAJOR_VERSION}Purpose_FOUND)
 	target_link_libraries( labplot2lib KF${KF_MAJOR_VERSION}::PurposeWidgets )
 ENDIF ()
+IF (ZSTD_FOUND)
+        target_link_libraries( labplot2backendlib ${ZSTD_LIBRARIES})
+ENDIF()
 
 IF (RECENT_CANTOR)
 	# KFX::Service, KFX::Parts is optional but probably required by Cantor
@@ -693,6 +706,11 @@ IF (ENABLE_LIBORIGIN)
 		target_include_directories( labplot2lib PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin" )
 	ENDIF()
 ENDIF ()
+
+IF(LZ4_FOUND)
+	target_include_directories(labplot2backendlib PUBLIC ${LZ4_INCLUDE_DIR})
+ENDIF ()
+
 IF (PSAPI)
 	target_link_libraries( labplot2lib ${PSAPI} )
 ENDIF ()
@@ -754,8 +772,8 @@ if (APPLE) # Apple app package
     set_target_properties(labplot2 PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
     set_target_properties(labplot2 PROPERTIES
     MACOSX_BUNDLE_BUNDLE_NAME "LabPlot2"
-    MACOSX_BUNDLE_LONG_VERSION_STRING "${LABPLOT_VERSION}"
-    MACOSX_BUNDLE_SHORT_VERSION_STRING "${LABPLOT_VERSION}"
+    MACOSX_BUNDLE_LONG_VERSION_STRING "${labplot2_VERSION}"
+    MACOSX_BUNDLE_SHORT_VERSION_STRING "${labplot2_VERSION}"
     MACOSX_BUNDLE_GUI_IDENTIFIER "org.kde.labplot")
 endif()
 

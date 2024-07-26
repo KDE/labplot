@@ -328,7 +328,7 @@ QString MatioFilter::fileInfoString(const QString& fileName) {
 	info += QLatin1String("<br>");
 
 	size_t n;
-	char** dir = Mat_GetDir(matfp, &n);
+	auto* dir = Mat_GetDir(matfp, &n);
 	info += i18n("Number of variables: ") + QString::number(n);
 	info += QStringLiteral("<br>");
 	if (dir && n < 10) { // only show variable info when there are not too many
@@ -536,7 +536,7 @@ void MatioFilterPrivate::parse(const QString& fileName) {
 	}
 
 	// get names of all vars
-	char** dir = Mat_GetDir(matfp, &varCount);
+	auto* dir = Mat_GetDir(matfp, &varCount);
 	DEBUG(Q_FUNC_INFO << ", found " << varCount << " vars")
 
 	varsInfo.clear();
@@ -1162,10 +1162,11 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 						break;
 					}
 
-					if (fields[i]->rank == 2)
+					if (fields[i]->rank == 2) {
 						DEBUG(Q_FUNC_INFO << "  rank = 2 (" << fields[i]->dims[0] << " x " << fields[i]->dims[1] << ")")
-					else
+					} else {
 						DEBUG(Q_FUNC_INFO << "  rank = " << fields[i]->rank)
+					}
 
 					if (fields[i]->data_type == MAT_T_UINT16 || fields[i]->data_type == MAT_T_INT16) {
 						auto* data = (mat_uint16_t*)fields[i]->data;

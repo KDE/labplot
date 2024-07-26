@@ -68,7 +68,6 @@ public:
 	double zoomFactor() const;
 	void update();
 	void setPrinting(bool) const;
-	void setThemeName(const QString&);
 
 	void setItemSelectedInView(const QGraphicsItem*, const bool);
 	void setSelectedInView(const bool);
@@ -150,6 +149,7 @@ private Q_SLOTS:
 	void handleAspectAdded(const AbstractAspect*);
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
 	void handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
+	void handleAspectMoved();
 
 	void childSelected(const AbstractAspect*) override;
 	void childDeselected(const AbstractAspect*) override;

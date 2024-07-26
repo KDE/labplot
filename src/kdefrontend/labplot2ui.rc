@@ -3,7 +3,7 @@
 <gui name="LabPlot" version="1">
 
 <ToolBar name="main_toolbar">
-<text>Project</text>
+<text>Project Toolbar</text>
 <Action name="toggle_project_explorer_dock"/>
 <Action name="toggle_properties_explorer_dock"/>
 <Action name="toggle_worksheet_preview_dock"/>
@@ -21,23 +21,23 @@
 </ToolBar>
 
 <ToolBar name="worksheet_toolbar">
-<text>Worksheet</text>
+<text>Worksheet Toolbar</text>
 </ToolBar>
 
 <ToolBar name="datapicker_toolbar">
-<text>Data Extractor</text>
+<text>Data Extractor Toolbar</text>
 </ToolBar>
 
 <ToolBar name="spreadsheet_toolbar">
-<text>Spreadsheet</text>
+<text>Spreadsheet Toolbar</text>
 </ToolBar>
 
 <ToolBar name="notebook_toolbar">
-<text>Notebook</text>
+<text>Notebook Toolbar</text>
 </ToolBar>
 
 <ToolBar name="cartesian_plot_toolbar" position="left">
-<text>CartesianPlot</text>
+<text>Plot Area Toolbar</text>
 </ToolBar>
 
 <MenuBar>
@@ -63,7 +63,8 @@
 <Menu name="import"><text>Import</text>
 	<Action name="import_file" />
 	<Action name="import_sql" />
-    <Action name="import_dataset_datasource" />
+	<Action name="import_dataset_datasource" />
+	<Action name="import_dataset_kaggle" />
 	<Separator/>
 	<Action name="import_labplot" />
 	<Action name="import_opj" />

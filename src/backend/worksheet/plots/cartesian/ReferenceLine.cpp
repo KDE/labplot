@@ -38,58 +38,52 @@ using Dimension = CartesianCoordinateSystem::Dimension;
  * x- and y- coordinates in parent's coordinate system
  */
 
-ReferenceLine::ReferenceLine(CartesianPlot* plot, const QString& name)
+ReferenceLine::ReferenceLine(CartesianPlot* plot, const QString& name, bool loading)
 	: WorksheetElement(name, new ReferenceLinePrivate(this), AspectType::ReferenceLine) {
-	m_plot = plot;
-	init();
+	Q_D(ReferenceLine);
+	d->m_plot = plot;
+	init(loading);
 }
 
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
 // and is deleted during the cleanup in QGraphicsScene
 ReferenceLine::~ReferenceLine() = default;
 
-void ReferenceLine::init() {
+void ReferenceLine::init(bool loading) {
 	Q_D(ReferenceLine);
 
-	KConfig config;
-	KConfigGroup group = config.group(QStringLiteral("ReferenceLine"));
-
-	d->orientation = (Orientation)group.readEntry(QStringLiteral("Orientation"), static_cast<int>(Orientation::Vertical));
-	switch (d->orientation) {
-	case WorksheetElement::Orientation::Horizontal:
-		d->position.positionLimit = WorksheetElement::PositionLimit::Y;
-		break;
-	case WorksheetElement::Orientation::Vertical:
-		d->position.positionLimit = WorksheetElement::PositionLimit::X;
-		break;
-	case WorksheetElement::Orientation::Both:
-		d->position.positionLimit = WorksheetElement::PositionLimit::None;
-		break;
-	}
-
-	if (plot()) {
-		d->coordinateBindingEnabled = true;
-		// default position
-		auto cs = plot()->coordinateSystem(plot()->defaultCoordinateSystemIndex());
-		const auto x = m_plot->range(Dimension::X, cs->index(Dimension::X)).center();
-		const auto y = m_plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
-		DEBUG(Q_FUNC_INFO << ", x/y pos = " << x << " / " << y)
-		d->positionLogical = QPointF(x, y);
-	} else
-		d->position.point = QPointF(0, 0);
-	d->updatePosition(); // To update also scene coordinates
-
-	// line
+	// create the line
 	d->line = new Line(QString());
 	d->line->setHidden(true);
 	addChild(d->line);
-	d->line->init(group);
 	connect(d->line, &Line::updatePixmapRequested, [=] {
 		d->update();
+		Q_EMIT changed();
 	});
 	connect(d->line, &Line::updateRequested, [=] {
 		d->recalcShapeAndBoundingRect();
 	});
+
+	// init the properties
+	if (!loading) {
+		KConfig config;
+		KConfigGroup group = config.group(QStringLiteral("ReferenceLine"));
+		d->orientation = (Orientation)group.readEntry(QStringLiteral("Orientation"), static_cast<int>(Orientation::Vertical));
+		d->updatePositionLimit(); // set the position limit after the orientation was set
+		d->line->init(group);
+
+		if (plot()) {
+			d->coordinateBindingEnabled = true;
+			// default position
+			auto cs = plot()->coordinateSystem(plot()->defaultCoordinateSystemIndex());
+			const auto x = d->m_plot->range(Dimension::X, cs->index(Dimension::X)).center();
+			const auto y = d->m_plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
+			DEBUG(Q_FUNC_INFO << ", x/y pos = " << x << " / " << y)
+			d->positionLogical = QPointF(x, y);
+		} else
+			d->position.point = QPointF(0, 0);
+		d->updatePosition(); // To update also scene coordinates
+	}
 }
 
 /*!
@@ -237,8 +231,8 @@ void ReferenceLinePrivate::retransform() {
 		return;
 
 	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
-	const auto xRange{q->m_plot->range(Dimension::X, cs->index(Dimension::X))};
-	const auto yRange{q->m_plot->range(Dimension::Y, cs->index(Dimension::Y))};
+	const auto& xRange = m_plot->range(Dimension::X, cs->index(Dimension::X));
+	const auto& yRange = m_plot->range(Dimension::Y, cs->index(Dimension::Y));
 
 	// calculate the position in the scene coordinates
 	if (orientation == ReferenceLine::Orientation::Vertical)
@@ -278,6 +272,11 @@ void ReferenceLinePrivate::retransform() {
 }
 
 void ReferenceLinePrivate::updateOrientation() {
+	updatePositionLimit();
+	retransform();
+}
+
+void ReferenceLinePrivate::updatePositionLimit() {
 	switch (orientation) {
 	case WorksheetElement::Orientation::Horizontal:
 		position.positionLimit = WorksheetElement::PositionLimit::Y;
@@ -289,9 +288,7 @@ void ReferenceLinePrivate::updateOrientation() {
 		position.positionLimit = WorksheetElement::PositionLimit::None;
 		break;
 	}
-	retransform();
 }
-
 /*!
   recalculates the outer bounds and the shape of the item.
 */
@@ -311,6 +308,8 @@ void ReferenceLinePrivate::recalcShapeAndBoundingRect() {
 		m_shape.addPath(WorksheetElement::shapeFromPath(path, line->pen()));
 		m_boundingRectangle = m_shape.boundingRect();
 	}
+
+	Q_EMIT q->changed();
 }
 
 void ReferenceLinePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
@@ -391,6 +390,7 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 			d->coordinateBindingEnabled = true;
 
 			READ_INT_VALUE("orientation", orientation, Orientation);
+			d->updatePositionLimit(); // set the position limit after the orientation was set
 			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
 
 			str = attribs.value(QStringLiteral("visible")).toString();
@@ -402,6 +402,7 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 			// new logic for the position for xmlVersion >= 6
 			READ_INT_VALUE("orientation", orientation, Orientation);
+			d->updatePositionLimit(); // set the position limit after the orientation was set
 			WorksheetElement::load(reader, preview);
 		} else if (!preview && reader->name() == QLatin1String("line")) {
 			d->line->load(reader, preview);

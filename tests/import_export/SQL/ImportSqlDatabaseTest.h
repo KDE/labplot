@@ -10,10 +10,9 @@
 #ifndef IMPORTSQLDATABASETEST_H
 #define IMPORTSQLDATABASETEST_H
 
-#include "../../CommonTest.h"
-#include <QtTest>
+#include "../../CommonMetaTest.h"
 
-class ImportSqlDatabaseTest : public CommonTest {
+class ImportSqlDatabaseTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

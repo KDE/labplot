@@ -20,7 +20,7 @@ class Symbol;
 
 #ifdef SDK
 #include "labplot_export.h"
-class LABPLOT_EXPORT BoxPlot : Plot {
+class LABPLOT_EXPORT BoxPlot : public Plot {
 #else
 class BoxPlot : public Plot {
 #endif
@@ -30,7 +30,7 @@ public:
 	enum class Ordering { None, MedianAscending, MedianDescending, MeanAscending, MeanDescending };
 	enum class WhiskersType { MinMax, IQR, SD, MAD, PERCENTILES_10_90, PERCENTILES_5_95, PERCENTILES_1_99 };
 
-	explicit BoxPlot(const QString&);
+	explicit BoxPlot(const QString&, bool loading = false);
 	~BoxPlot() override;
 
 	QIcon icon() const override;
@@ -85,17 +85,17 @@ public:
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	bool hasData() const override;
 	bool usingColumn(const Column*) const override;
-	void updateColumnDependencies(const AbstractColumn*) override;
 	QColor color() const override;
 
 	typedef BoxPlotPrivate Private;
 
 protected:
 	BoxPlot(const QString& name, BoxPlotPrivate* dd);
+	virtual void handleAspectUpdated(const QString& aspectPath, const AbstractAspect*) override;
 
 private:
 	Q_DECLARE_PRIVATE(BoxPlot)
-	void init();
+	void init(bool loading = false);
 	void initActions();
 	void initMenus();
 

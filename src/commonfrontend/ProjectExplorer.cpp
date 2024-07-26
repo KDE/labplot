@@ -261,8 +261,8 @@ void ProjectExplorer::setModel(AspectTreeModel* treeModel) {
 		if (!showAllColumnsAction) {
 			showAllColumnsAction = new QAction(i18n("Show All"), this);
 			showAllColumnsAction->setCheckable(true);
-			showAllColumnsAction->setChecked(true);
-			showAllColumnsAction->setEnabled(false);
+			showAllColumnsAction->setChecked(false);
+			showAllColumnsAction->setEnabled(true);
 			connect(showAllColumnsAction, &QAction::triggered, this, &ProjectExplorer::showAllColumns);
 		}
 
@@ -276,7 +276,7 @@ void ProjectExplorer::setModel(AspectTreeModel* treeModel) {
 
 		// create an action for every available column in the model
 		for (int i = 0; i < m_treeView->model()->columnCount(); i++) {
-			QAction* showColumnAction = new QAction(treeModel->headerData(i, Qt::Horizontal).toString(), this);
+			auto* showColumnAction = new QAction(treeModel->headerData(i, Qt::Horizontal).toString(), this);
 			showColumnAction->setCheckable(true);
 
 			// restore the status, if available
@@ -285,8 +285,13 @@ void ProjectExplorer::setModel(AspectTreeModel* treeModel) {
 					showColumnAction->setChecked(true);
 				else
 					m_treeView->hideColumn(i);
-			} else
-				showColumnAction->setChecked(true);
+			} else {
+				// initially, show the first two columns only (name and type)
+				if (i < 2)
+					showColumnAction->setChecked(true);
+				else
+					m_treeView->hideColumn(i);
+			}
 
 			list_showColumnActions.append(showColumnAction);
 
@@ -310,7 +315,7 @@ void ProjectExplorer::setProject(Project* project) {
 	m_project = project;
 
 	// for newly created projects, resize the header to fit the size of the header section names.
-	// for projects loaded from a file, this function will be called laterto fit the sizes
+	// for projects loaded from a file, this function will be called later to fit the sizes
 	// of the content once the project is loaded
 	resizeHeader();
 

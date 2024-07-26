@@ -33,9 +33,6 @@ private:
 	XYFourierTransformCurve* m_transformCurve{nullptr};
 	XYFourierTransformCurve::TransformData m_transformData;
 
-protected:
-	void setModel();
-
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYFourierTransformCurveDock
 	// general tab

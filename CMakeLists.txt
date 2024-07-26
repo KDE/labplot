@@ -1,6 +1,5 @@
 cmake_minimum_required (VERSION 3.17.0 FATAL_ERROR)
-project(labplot2)
-set(LABPLOT_VERSION 2.10.1)
+project(labplot2 VERSION 2.11.80 LANGUAGES CXX C)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -228,7 +227,7 @@ endif()
 
 include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-add_definitions (-DLVERSION=\"${LABPLOT_VERSION}\")
+add_definitions (-DLVERSION=\"${labplot2_VERSION}\")
 add_definitions (-DCXX_COMPILER=\"${CMAKE_CXX_COMPILER_ID}\ ${CMAKE_CXX_COMPILER_VERSION}\")
 add_definitions (-DCXX_COMPILER_FLAGS=\"${CMAKE_CXX_FLAGS}\")
 set(BUILD_SHARED_LIBS true)
@@ -282,20 +281,20 @@ option(ENABLE_FITS "Build with FITS support" ON)
 option(ENABLE_LIBCERF "Build with libcerf support" ON)
 option(ENABLE_LIBORIGIN "Build with liborigin support" ON)
 option(ENABLE_ROOT "Build with ROOT (CERN) support" ON)
-# PENDING: latest stable 1.1.9 fails with GCC 13
-if ("${CMAKE_C_COMPILER_ID}" MATCHES "GNU" AND CMAKE_C_COMPILER_VERSION VERSION_GREATER 12)
+# FreeBSD fails with missing csv.h
+if ("${CMAKE_SYSTEM_NAME}" MATCHES "FreeBSD")
 	option(ENABLE_READSTAT "Build with ReadStat support" OFF)
 else ()
 	option(ENABLE_READSTAT "Build with ReadStat support" ON)
 endif ()
 option(ENABLE_MATIO "Build with Matio support" ON)
-option(ENABLE_TESTS "Build with tests" ON)
 option(ENABLE_MQTT "Build with MQTT support" ON)
 option(ENABLE_QTSERIALPORT "Build with QtSerialPort support" ON)
 option(ENABLE_DISCOUNT "Build with Discount support" ON)
-option(ENABLE_REPRODUCIBLE "Enable reproducible builds" OFF)
 option(ENABLE_XLSX "Build with XLSX (Excel) support" ON)
-IF (WIN32)	# C++17 needed by Orcus not working with MSVC
+option(ENABLE_MCAP "Build with MCAP support" ON)
+
+IF (WIN32 AND QT_MAJOR_VERSION LESS 6)	# C++17 needed by Orcus not working with MSVC2019 (Craft QT5-LTS)
 	option(ENABLE_ORCUS "Build with Orcus support" OFF)
 ELSE ()
 	option(ENABLE_ORCUS "Build with Orcus support" ON)
@@ -303,8 +302,17 @@ ENDIF ()
 option(ENABLE_VECTOR_BLF "Build with Vector BLF file format support" ON)
 option(ENABLE_EIGEN3 "Build with Eigen3 support" ON)
 IF (APPLE)
-	option(ENABLE_TOUCHBAR "Enable touch bar support on macOS" ON)
+	# touch bar is Qt5 only
+	if (QT_MAJOR_VERSION GREATER_EQUAL 6)
+		option(ENABLE_TOUCHBAR "Enable touch bar support on macOS" OFF)
+	else ()
+		option(ENABLE_TOUCHBAR "Enable touch bar support on macOS" ON)
+	endif ()
 ENDIF ()
+option(ENABLE_REPRODUCIBLE "Enable reproducible builds" OFF)
+option(ENABLE_TESTS "Build with tests" ON)
+option(ENABLE_SDK "Build with SDK support" ON)
+
 
 ### OS macros ####################################
 IF (WIN32)
@@ -434,8 +442,6 @@ ENDIF ()
 
 ### MQTT (optional) ###############################
 IF (ENABLE_MQTT)
-# ATTENTION: unit test uses qWaitFor() which needs Qt >= 5.10
-# avoid warning for the moment using QUIET
 	find_package(Qt${QT_VERSION_MAJOR}Mqtt ${QT_MIN_VERSION} NO_MODULE)
 	SET_PACKAGE_PROPERTIES (Qt${QT_VERSION_MAJOR}Mqtt PROPERTIES
 		DESCRIPTION "Qt Module to implement MQTT protocol version 3.1 and 3.1.1"
@@ -499,7 +505,6 @@ ELSE ()
 ENDIF ()
 
 ### ZLIB for ROOT and READSTAT #################
-
 FIND_PACKAGE(ZLIB)
 SET_PACKAGE_PROPERTIES (ZLIB PROPERTIES
 	DESCRIPTION "General purpose compression library"
@@ -509,9 +514,38 @@ IF (NOT ZLIB_FOUND)
 	SET(ZLIB_LIBRARIES "")
 ENDIF ()
 
+### LZ4 for ROOT and MCAP #################
+IF (ENABLE_ROOT OR ENABLE_MCAP)
+	FIND_PACKAGE(LZ4)
+	IF(LZ4_FOUND)
+		MESSAGE (STATUS "Found LZ4 version ${LZ4_VERSION} (${LZ4_LIBRARIES}; ${LZ4_INCLUDE_DIR})")
+		add_definitions (-DHAVE_LZ4)
+	ENDIF()
+ENDIF()
+### ZSTD for MCAP #################
+
+option(LOCAL_MCAP_DOWNLOAD "Download MCAP" OFF)
+IF(ENABLE_MCAP)
+	IF (LOCAL_MCAP_DOWNLOAD)
+		message(STATUS "Downloading MCAP")
+	ELSE ()
+		message(STATUS "Using included MCAP")
+	ENDIF ()
+
+	add_definitions (-DHAVE_MCAP)
+	FIND_PACKAGE(ZSTD)
+	IF (ZSTD_FOUND)
+		MESSAGE (STATUS "Found ZSTD (used for MCAP ZSTD support)")
+		add_definitions (-DHAVE_ZSTD)
+	ELSE ()
+		MESSAGE (STATUS "Could not find ZSTD (needed for MCAP ZSTD support)")
+	ENDIF ()
+ELSE ()
+	MESSAGE (STATUS "MCAP DISABLED")
+ENDIF ()
+
 ### ROOT (optional) #############################
 IF (ENABLE_ROOT)
-	FIND_PACKAGE(LZ4)
 	IF (ZLIB_FOUND AND LZ4_FOUND)
 		MESSAGE (STATUS "Found ZIP libraries ZLIB and LZ4 (needed for ROOT importer)")
 		add_definitions (-DHAVE_ZIP)
@@ -617,12 +651,12 @@ IF (ENABLE_ORCUS)
 	IF (Orcus_FOUND)
 		add_definitions (-DHAVE_ORCUS)
 		include_directories(${Orcus_INCLUDE_DIR} ${Ixion_INCLUDE_DIR})
-		MESSAGE (STATUS "Found Orcus/Ixion: ${Orcus_INCLUDE_DIR} ${Ixion_INCLUDE_DIR}, ${Orcus_LIBRARIES} ${Ixion_LIBRARY}")
+		MESSAGE (STATUS "Found Orcus and Ixion: ${Orcus_INCLUDE_DIR} ${Ixion_INCLUDE_DIR}, ${Orcus_LIBRARIES} ${Ixion_LIBRARY}")
 	ELSE ()
-		MESSAGE (STATUS "Orcus library NOT FOUND.")
+		MESSAGE (STATUS "Orcus library or Ixion NOT FOUND.")
 	ENDIF ()
 ELSE ()
-	MESSAGE (STATUS "Orcus (ODS) DISABLED")
+	MESSAGE (STATUS "Orcus (ODS support) DISABLED")
 ENDIF ()
 
 ### Eigen (optional) #############################
@@ -664,18 +698,23 @@ FIND_PATH (XLOCALE_INCLUDE_DIR xlocale.h
 IF (XLOCALE_INCLUDE_DIR)
 	add_definitions (-DHAVE_XLOCALE)
 	include_directories (${XLOCALE_INCLUDE_DIR})
-ENDIF()
+ENDIF ()
 
 add_subdirectory(data)
 add_subdirectory(icons)
 add_subdirectory(src)
 add_subdirectory(doc)
-#add_subdirectory(lib)
 
-if (ENABLE_TESTS)
+IF (ENABLE_TESTS)
     enable_testing(true)
     add_subdirectory(tests)
-endif()
+ENDIF ()
+IF (ENABLE_SDK)
+	message(STATUS "SDK build ENABLED")
+	add_subdirectory(lib)
+ELSE ()
+	message(STATUS "SDK build DISABLED")
+ENDIF ()
 
 install(FILES org.kde.labplot2.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 
@@ -690,6 +729,6 @@ find_package(KF${KF_MAJOR_VERSION}I18n CONFIG REQUIRED)
 IF (KF${KF_MAJOR_VERSION}I18n_FOUND)
 	ki18n_install(po)
 ENDIF()
-if (KF${KF_MAJOR_VERSION}DocTools_FOUND)
+IF (KF${KF_MAJOR_VERSION}DocTools_FOUND)
 	kdoctools_install(po)
 ENDIF()

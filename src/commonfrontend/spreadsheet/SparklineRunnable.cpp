@@ -7,6 +7,7 @@
 */
 
 #include "SparklineRunnable.h"
+#include "backend/worksheet/Background.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
@@ -62,7 +63,7 @@ void SparkLineRunnable::run() {
 		for (const auto& pair : qAsConst(pairs))
 			data << pair.second;
 		dataColumn->replaceInteger(0, data);
-		QVector<const AbstractColumn*> columns{dataColumn};
+		const QVector<const AbstractColumn*> columns{dataColumn};
 		barPlot->setDataColumns(columns);
 		plot->addChild(barPlot);
 		barPlot->setSuppressRetransform(false);
@@ -86,6 +87,8 @@ void SparkLineRunnable::run() {
 	}
 
 	worksheet->setTheme(sparklineTheme);
+	worksheet->background()->setOpacity(1);
+	worksheet->background()->setFirstColor(QApplication::palette().color(QPalette::Base));
 	plot->setSuppressRetransform(false);
 	plot->retransform();
 

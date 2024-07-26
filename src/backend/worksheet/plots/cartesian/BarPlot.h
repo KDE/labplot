@@ -21,7 +21,7 @@ class Value;
 
 #ifdef SDK
 #include "labplot_export.h"
-class LABPLOT_EXPORT BarPlot : Plot {
+class LABPLOT_EXPORT BarPlot : public Plot {
 #else
 class BarPlot : public Plot {
 #endif
@@ -62,7 +62,7 @@ public:
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	bool hasData() const override;
 	bool usingColumn(const Column*) const override;
-	void updateColumnDependencies(const AbstractColumn*) override;
+	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) override;
 	QColor color() const override;
 
 	typedef BarPlotPrivate Private;

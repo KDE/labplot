@@ -40,13 +40,6 @@
 
 using Dimension = CartesianCoordinateSystem::Dimension;
 
-void RetransformTest::initTestCase() {
-	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
-	// TODO: redesign/remove this
-	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
-	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
-}
-
 void RetransformTest::TestLoadProject() {
 	RetransformCallCounter c;
 	Project project;
@@ -920,7 +913,7 @@ void RetransformTest::TestImportCSV() {
 	QCOMPARE(c.logsXScaleRetransformed.count(), 1); // one plot with 1 x-Axis
 	QCOMPARE(c.logsXScaleRetransformed.at(0).plot, p);
 	QCOMPARE(c.logsXScaleRetransformed.at(0).index, 0);
-	QCOMPARE(c.logsYScaleRetransformed.count(), 1); // one plot with 1 x-Axis
+	QCOMPARE(c.logsYScaleRetransformed.count(), 1); // one plot with 1 y-Axis
 	QCOMPARE(c.logsYScaleRetransformed.at(0).plot, p);
 	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0);
 
@@ -931,6 +924,94 @@ void RetransformTest::TestImportCSV() {
 		qDebug() << s;
 		QCOMPARE(c.callCount(s), 1);
 	}
+}
+
+// Same as AsciiFilterTest::plotUpdateAfterImportWithColumnRemove() but with retransform check
+void RetransformTest::TestImportCSVInvalidateCurve() {
+	Project project; // need a project object since the column restore logic is in project
+
+	// create the spreadsheet with the source data
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(spreadsheet);
+	spreadsheet->setColumnCount(2);
+	spreadsheet->setRowCount(3);
+
+	auto* col = spreadsheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col->setName(QStringLiteral("1"));
+	col->setValueAt(0, 10.);
+	col->setValueAt(1, 20.);
+	col->setValueAt(2, 30.);
+
+	col = spreadsheet->column(1);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col->setName(QStringLiteral("2"));
+	col->setValueAt(0, 10.);
+	col->setValueAt(1, 20.);
+	col->setValueAt(2, 30.);
+
+	// create a xy-curve with the both columns in the source spreadsheet and check the ranges
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	project.addChild(p);
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	p->addChild(curve);
+	curve->setXColumn(spreadsheet->column(0)); // use "1" for x
+	curve->setYColumn(spreadsheet->column(1)); // use "2" for y
+
+	auto rangeX = p->range(Dimension::X);
+	QCOMPARE(rangeX.start(), 10);
+	QCOMPARE(rangeX.end(), 30);
+
+	auto rangeY = p->range(Dimension::Y);
+	QCOMPARE(rangeY.start(), 10);
+	QCOMPARE(rangeY.end(), 30);
+
+	const auto& children = project.children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive);
+	RetransformCallCounter c;
+	// CartesianPlot "plot"
+	// XYCurve "curve"
+	// Spreadsheet "test"
+	// Column "1"
+	// Column "2"
+	QCOMPARE(children.length(), 5);
+	for (const auto& child : children) {
+		qDebug() << child->name();
+		connect(child, &AbstractAspect::retransformCalledSignal, &c, &RetransformCallCounter::aspectRetransformed);
+	}
+
+	const auto& plots = project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive);
+	for (const auto& plot : plots)
+		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::scaleRetransformed, &c, &RetransformCallCounter::retransformScaleCalled);
+
+	// import the data into the source spreadsheet, the columns are renamed to "c1" and "c2"
+	AsciiFilter filter;
+
+	QStringList fileContent = {
+		QStringLiteral("c1;c2"),
+		QStringLiteral("1;1"),
+		QStringLiteral("2;2"),
+		QStringLiteral("3;3"),
+	};
+	QString savePath;
+	SAVE_FILE("testfile", fileContent);
+
+	filter.setCommentCharacter(QString());
+	filter.setSeparatingCharacter(QStringLiteral(";"));
+	filter.setHeaderEnabled(true);
+	filter.setHeaderLine(1);
+	filter.readDataFromFile(savePath, spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	// the assignment to the data columns got lost since the columns were renamed
+	QCOMPARE(curve->xColumn(), nullptr);
+	QCOMPARE(curve->yColumn(), nullptr);
+
+	// the range of the plot didn't change, no retransform
+	QCOMPARE(c.logsXScaleRetransformed.count(), 0);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 0);
+
+	// the curve that lost the column assignemnt should be retransformed
+	QCOMPARE(c.elementLogCount(false), 1);
+	QCOMPARE(c.callCount(QStringLiteral("Project/plot/curve")), 1);
 }
 
 void RetransformTest::TestSetScale() {
@@ -2011,6 +2092,151 @@ void RetransformCallCounter::aspectAdded(const AbstractAspect* aspect) {
 	auto* plot = dynamic_cast<const CartesianPlot*>(aspect);
 	if (plot)
 		connect(plot, &CartesianPlot::scaleRetransformed, this, &RetransformCallCounter::retransformScaleCalled);
+}
+
+void RetransformTest::removeReaddxColum() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* sheet = new Spreadsheet(QStringLiteral("Spreadsheet"), false);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(11);
+	project.addChild(sheet);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve{new XYEquationCurve(QStringLiteral("f(x)"))};
+	curve->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	p->addChild(curve);
+
+	XYEquationCurve::EquationData data;
+	data.min = QStringLiteral("0");
+	data.max = QStringLiteral("10");
+	data.count = 11;
+	data.expression1 = QStringLiteral("x");
+	curve->setEquationData(data);
+	curve->recalculate();
+
+	auto* curve2 = new XYCurve(QStringLiteral("curve2"));
+	p->addChild(curve2);
+
+	auto* xColumn = sheet->column(0);
+	auto* yColumn = sheet->column(1);
+	{
+		QVector<int> xData;
+		QVector<double> yData;
+		for (int i = 1; i < 11; i++) { // different to the above
+			xData.append(i);
+			yData.append(pow(i, 2));
+		}
+
+		xColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
+		xColumn->replaceInteger(0, xData);
+		yColumn->setColumnMode(AbstractColumn::ColumnMode::Double);
+		yColumn->replaceValues(0, yData);
+		curve2->setXColumn(xColumn);
+		curve2->setYColumn(yColumn);
+	}
+
+	CHECK_RANGE(p, curve, Dimension::X, 0., 10.);
+	CHECK_RANGE(p, curve, Dimension::Y, 0., 100.);
+
+	sheet->removeChild(xColumn);
+
+	// Curve 2 got invalid
+	CHECK_RANGE(p, curve, Dimension::X, 0., 10.);
+	CHECK_RANGE(p, curve, Dimension::Y, 0., 10.);
+
+	const auto oldNameXColumn = xColumn->name();
+	xColumn->setName(QStringLiteral("NewName"));
+
+	sheet->addChild(xColumn);
+
+	CHECK_RANGE(p, curve, Dimension::X, 0., 10.);
+	CHECK_RANGE(p, curve, Dimension::Y, 0., 10.);
+
+	xColumn->setName(oldNameXColumn);
+
+	QCOMPARE(curve2->xColumn(), xColumn);
+	QCOMPARE(curve2->yColumn(), yColumn);
+
+	CHECK_RANGE(p, curve, Dimension::X, 0., 10.);
+	CHECK_RANGE(p, curve, Dimension::Y, 0., 100.);
+}
+
+void RetransformTest::removeReaddyColum() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* sheet = new Spreadsheet(QStringLiteral("Spreadsheet"), false);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(11);
+	project.addChild(sheet);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve{new XYEquationCurve(QStringLiteral("f(x)"))};
+	curve->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	p->addChild(curve);
+
+	XYEquationCurve::EquationData data;
+	data.min = QStringLiteral("0");
+	data.max = QStringLiteral("10");
+	data.count = 11;
+	data.expression1 = QStringLiteral("x");
+	curve->setEquationData(data);
+	curve->recalculate();
+
+	auto* curve2 = new XYCurve(QStringLiteral("curve2"));
+	p->addChild(curve2);
+
+	auto* xColumn = sheet->column(0);
+	auto* yColumn = sheet->column(1);
+	{
+		QVector<int> xData;
+		QVector<double> yData;
+		for (int i = 1; i < 11; i++) { // different to the above
+			xData.append(i);
+			yData.append(pow(i, 2));
+		}
+
+		xColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
+		xColumn->replaceInteger(0, xData);
+		yColumn->setColumnMode(AbstractColumn::ColumnMode::Double);
+		yColumn->replaceValues(0, yData);
+		curve2->setXColumn(xColumn);
+		curve2->setYColumn(yColumn);
+	}
+
+	CHECK_RANGE(p, curve, Dimension::X, 0., 10.);
+	CHECK_RANGE(p, curve, Dimension::Y, 0., 100.);
+
+	sheet->removeChild(yColumn);
+
+	// Curve 2 got invalid
+	CHECK_RANGE(p, curve, Dimension::X, 0., 10.);
+	CHECK_RANGE(p, curve, Dimension::Y, 0., 10.);
+
+	const auto oldNameYColumn = yColumn->name();
+	yColumn->setName(QStringLiteral("NewName"));
+
+	sheet->addChild(yColumn);
+
+	CHECK_RANGE(p, curve, Dimension::X, 0., 10.);
+	CHECK_RANGE(p, curve, Dimension::Y, 0., 10.);
+
+	yColumn->setName(oldNameYColumn);
+
+	CHECK_RANGE(p, curve, Dimension::X, 0., 10.);
+	CHECK_RANGE(p, curve, Dimension::Y, 0., 100.);
 }
 
 // Test change data

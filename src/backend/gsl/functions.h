@@ -4,7 +4,7 @@
 	Description          : definition of functions
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2014-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2014-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -121,6 +121,7 @@ enum class FunctionGroups : int {
 	GeometricDistribution,
 	HypergeometricDistribution,
 	LogarithmicDistribution,
+	TriangularDistribution,
 	// Not implemented
 	// i18n("Coupling Coefficients")
 	// i18n("Elementary Operations")
@@ -168,6 +169,8 @@ extern const char* specialfun_smmin;
 extern const char* specialfun_smmax;
 extern const char* specialfun_sma;
 extern const char* specialfun_smr;
+extern const char* specialfun_psample;
+extern const char* specialfun_rsample;
 
 double andFunction(const double v1, const double v2);
 double orFunction(const double v1, const double v2);

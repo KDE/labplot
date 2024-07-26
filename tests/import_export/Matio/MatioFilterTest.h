@@ -10,10 +10,9 @@
 #ifndef MATIOFILTERTEST_H
 #define MATIOFILTERTEST_H
 
-#include "../../CommonTest.h"
-#include <QtTest>
+#include "../../CommonMetaTest.h"
 
-class MatioFilterTest : public CommonTest {
+class MatioFilterTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

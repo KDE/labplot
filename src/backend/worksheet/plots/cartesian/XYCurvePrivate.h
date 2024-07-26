@@ -27,7 +27,7 @@ public:
 
 	void retransform() override;
 	void recalc();
-	void updateLines();
+	void updateLines(bool performanceOptimization = true);
 	void addLine(QPointF p,
 				 double& x,
 				 double& minY,
@@ -37,7 +37,8 @@ public:
 				 int numberOfPixelX,
 				 double minDiffX,
 				 RangeT::Scale scale,
-				 bool& prevPixelDiffZero); // for any x scale
+				 bool& prevPixelDiffZero,
+				 bool performanceOptimization); // for any x scale
 	static void addUniqueLine(QPointF p,
 							  double& minY,
 							  double& maxY,
@@ -116,7 +117,7 @@ public:
 
 private:
 	CartesianPlot* plot() const {
-		return q->m_plot;
+		return m_plot;
 	} // convenience method
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
 	QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;

@@ -18,6 +18,7 @@
 #include "backend/datasources/LiveDataSource.h"
 #include "backend/datasources/filters/HDF5FilterPrivate.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/hostprocess.h"
 #include "backend/lib/macros.h"
 
 #include <KLocalizedString>
@@ -344,14 +345,14 @@ QString HDF5Filter::fileDDLString(const QString& fileName) {
 
 	QString DDLString;
 #ifdef Q_OS_LINUX
-	const QString h5dumpFullPath = QStandardPaths::findExecutable(QLatin1String("h5dump"));
+	const QString h5dumpFullPath = safeExecutableName(QStringLiteral("h5dump"));
 	if (h5dumpFullPath.isEmpty())
 		return i18n("h5dump not found.");
 
 	QProcess proc;
 	QStringList args;
 	args << QStringLiteral("-H") << fileName;
-	proc.start(h5dumpFullPath, args);
+	startHostProcess(proc, h5dumpFullPath, args);
 
 	if (proc.waitForReadyRead(1000) == false)
 		DDLString += i18n("Reading from file %1 failed.", fileName);

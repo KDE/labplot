@@ -22,6 +22,7 @@ public:
 	void retransform() override;
 	void recalcShapeAndBoundingRect() override;
 	void updateOrientation();
+	void updatePositionLimit();
 
 	ReferenceLine::Orientation orientation{ReferenceLine::Orientation::Horizontal};
 	double length{0.0}; // length of the line in graphic item's coordinates

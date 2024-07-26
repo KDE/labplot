@@ -76,18 +76,19 @@ StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* pa
 			+ QStringLiteral("<tr></tr>")
 			+ QStringLiteral("<tr><td colspan=2 align=center bgcolor=") + htmlColor + QStringLiteral("><b><big>")
 			+ i18n("Dispersion Measures") + QStringLiteral("</big></b></td></tr>")
-			+ QStringLiteral("<tr><td><b>") + i18n("Variance") + QStringLiteral("<b></td><td>%13</td></tr>")
-			+ QStringLiteral("<tr><td><b>") + i18n("Standard deviation") + QStringLiteral("<b></td><td>%14</td></tr>")
-			+ QStringLiteral("<tr><td><b>") + i18n("Mean absolute deviation around mean") + QStringLiteral("<b></td><td>%15</td></tr>")
-			+ QStringLiteral("<tr><td><b>") + i18n("Mean absolute deviation around median") + QStringLiteral("<b></td><td>%16</td></tr>")
-			+ QStringLiteral("<tr><td><b>") + i18n("Median absolute deviation") + QStringLiteral("<b></td><td>%17</td></tr>")
-			+ QStringLiteral("<tr><td><b>") + i18n("Interquartile Range") + QStringLiteral("<b></td><td>%18</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Range") + QStringLiteral("<b></td><td>%13</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Variance") + QStringLiteral("<b></td><td>%14</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Standard deviation") + QStringLiteral("<b></td><td>%15</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Mean absolute deviation around mean") + QStringLiteral("<b></td><td>%16</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Mean absolute deviation around median") + QStringLiteral("<b></td><td>%17</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Median absolute deviation") + QStringLiteral("<b></td><td>%18</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Interquartile Range") + QStringLiteral("<b></td><td>%19</td></tr>")
 			+ QStringLiteral("<tr></tr>")
 			+ QStringLiteral("<tr><td colspan=2 align=center bgcolor=") + htmlColor + QStringLiteral("><b><big>")
 			+ i18n("Shape Measures") + QStringLiteral("</big></b></td></tr>")
-			+ QStringLiteral("<tr><td><b>") + i18n("Skewness") + QStringLiteral("<b></td><td>%19</td></tr>")
-			+ QStringLiteral("<tr><td><b>") + i18n("Kurtosis") + QStringLiteral("<b></td><td>%20</td></tr>")
-			+ QStringLiteral("<tr><td><b>") + i18n("Entropy") + QStringLiteral("<b></td><td>%21</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Skewness") + QStringLiteral("<b></td><td>%20</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Kurtosis") + QStringLiteral("<b></td><td>%21</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Entropy") + QStringLiteral("<b></td><td>%22</td></tr>")
 			+ QStringLiteral("</table>");
 	} else if (column->columnMode() == AbstractColumn::ColumnMode::Text) {
 		m_htmlOverview = QStringLiteral("<table border=0 width=100%><tr><td colspan=2 align=center bgcolor=")
@@ -138,7 +139,7 @@ StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* pa
 									   QLatin1String("-"),
 									   QLatin1String("-"),
 									   QLatin1String("-"))
-								  .arg(QLatin1String("-"), QLatin1String("-"), QLatin1String("-")));
+								  .arg(QLatin1String("-"), QLatin1String("-"), QLatin1String("-"), QLatin1String("-")));
 		m_tabWidget->addTab(&m_histogramWidget, i18n("Histogram"));
 		m_tabWidget->addTab(&m_kdePlotWidget, i18n("KDE Plot"));
 		m_tabWidget->addTab(&m_qqPlotWidget, i18n("Normal Q-Q Plot"));
@@ -209,6 +210,7 @@ void StatisticsColumnWidget::showOverview() {
 								  .arg(isNanValue(statistics.median),
 									   isNanValue(statistics.thirdQuartile),
 									   isNanValue(statistics.trimean),
+									   isNanValue(statistics.maximum - statistics.minimum),
 									   isNanValue(statistics.variance),
 									   isNanValue(statistics.standardDeviation),
 									   isNanValue(statistics.meanDeviation),

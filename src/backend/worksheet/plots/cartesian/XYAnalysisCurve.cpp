@@ -58,32 +58,6 @@ bool XYAnalysisCurve::usingColumn(const Column* column) const {
 		return (d->dataSourceCurve->xColumn() == column || d->dataSourceCurve->yColumn() == column);
 }
 
-void XYAnalysisCurve::updateColumnDependencies(const AbstractColumn* column) {
-	D(const XYAnalysisCurve);
-	const QString& columnPath = column->path();
-	setUndoAware(false);
-
-	if (d->xDataColumnPath == columnPath)
-		setXDataColumn(column);
-	if (d->yDataColumnPath == columnPath)
-		setYDataColumn(column);
-	if (d->y2DataColumnPath == columnPath)
-		setY2DataColumn(column);
-
-	auto* fitCurve = dynamic_cast<XYFitCurve*>(this);
-	if (fitCurve) {
-		if (fitCurve->xErrorColumnPath() == columnPath)
-			fitCurve->setXErrorColumn(column);
-		if (fitCurve->yErrorColumnPath() == columnPath)
-			fitCurve->setYErrorColumn(column);
-	}
-
-	if (d->valuesColumnPath == columnPath)
-		setValuesColumn(column);
-
-	setUndoAware(true);
-}
-
 // copy valid data from x/y data columns to x/y data vectors
 // for analysis functions
 // avgUniqueX: average y values for duplicate x values
@@ -397,6 +371,25 @@ void XYAnalysisCurve::createDataSpreadsheet() {
 	folder()->addChild(spreadsheet);
 }
 
+void XYAnalysisCurve::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* aspect) {
+	const auto column = dynamic_cast<const AbstractColumn*>(aspect);
+	if (!column)
+		return;
+
+	setUndoAware(false);
+	if (xDataColumnPath() == aspectPath)
+		setXDataColumn(column);
+	if (yDataColumnPath() == aspectPath)
+		setYDataColumn(column);
+	if (y2DataColumnPath() == aspectPath)
+		setY2DataColumn(column);
+
+	// From XYCurve
+	if (valuesColumnPath() == aspectPath)
+		setValuesColumn(column);
+	setUndoAware(true);
+}
+
 // ##############################################################################
 // ######################### Private implementation #############################
 // ##############################################################################
@@ -441,8 +434,10 @@ void XYAnalysisCurvePrivate::recalculate() {
 	} else {
 		xColumn->invalidateProperties();
 		yColumn->invalidateProperties();
-		xVector->clear();
-		yVector->clear();
+		if (xVector)
+			xVector->clear();
+		if (yVector)
+			yVector->clear();
 	}
 
 	resetResults();

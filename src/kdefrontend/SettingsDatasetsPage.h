@@ -25,9 +25,13 @@ public:
 private:
 	Ui::SettingsDatasetsPage ui;
 	void loadSettings();
+	bool m_changed{false};
 
 private Q_SLOTS:
 	void clearCache();
+
+Q_SIGNALS:
+	void settingsChanged();
 };
 
 #endif

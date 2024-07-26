@@ -29,6 +29,7 @@ public:
 	void setVariables(const QStringList&);
 	bool isValid() const;
 	QString errorMessage() const;
+	bool expressionUsesVariables();
 
 protected:
 	void keyPressEvent(QKeyEvent*) override;

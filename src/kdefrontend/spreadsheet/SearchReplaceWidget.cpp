@@ -1532,99 +1532,82 @@ void SearchReplaceWidget::showExtendedContextMenu(bool replace, const QPoint& po
 		return;
 	}
 
-	bool extendMenu = true;
-	bool regexMode = true;
-
+	// create the extension sub-menu
 	AddMenuManager addMenuManager(contextMenu, 37);
-	if (!extendMenu)
-		addMenuManager.enableMenu(extendMenu);
-	else {
-		// Build menu
-		if (!replace) {
-			if (regexMode) {
-				addMenuManager.addEntry(QStringLiteral("^"), QString(), i18n("Beginning of line"));
-				addMenuManager.addEntry(QStringLiteral("$"), QString(), i18n("End of line"));
-				addMenuManager.addSeparator();
-				addMenuManager.addEntry(QStringLiteral("."), QString(), i18n("Match any character excluding new line (by default)"));
-				addMenuManager.addEntry(QStringLiteral("+"), QString(), i18n("One or more occurrences"));
-				addMenuManager.addEntry(QStringLiteral("*"), QString(), i18n("Zero or more occurrences"));
-				addMenuManager.addEntry(QStringLiteral("?"), QString(), i18n("Zero or one occurrences"));
-				addMenuManager.addEntry(QStringLiteral("{a"),
-										QStringLiteral(",b}"),
-										i18n("<a> through <b> occurrences"),
-										QStringLiteral("{"),
-										QStringLiteral(",}"));
+	if (!replace) {
+		addMenuManager.addEntry(QStringLiteral("^"), QString(), i18n("Beginning of line"));
+		addMenuManager.addEntry(QStringLiteral("$"), QString(), i18n("End of line"));
+		addMenuManager.addSeparator();
+		addMenuManager.addEntry(QStringLiteral("."), QString(), i18n("Match any character excluding new line (by default)"));
+		addMenuManager.addEntry(QStringLiteral("+"), QString(), i18n("One or more occurrences"));
+		addMenuManager.addEntry(QStringLiteral("*"), QString(), i18n("Zero or more occurrences"));
+		addMenuManager.addEntry(QStringLiteral("?"), QString(), i18n("Zero or one occurrences"));
+		addMenuManager.addEntry(QStringLiteral("{a"), QStringLiteral(",b}"), i18n("<a> through <b> occurrences"), QStringLiteral("{"), QStringLiteral(",}"));
+		addMenuManager.addSeparator();
+		addMenuManager.addEntry(QStringLiteral("("), QStringLiteral(")"), i18n("Group, capturing"));
+		addMenuManager.addEntry(QStringLiteral("|"), QString(), i18n("Or"));
+		addMenuManager.addEntry(QStringLiteral("["), QStringLiteral("]"), i18n("Set of characters"));
+		addMenuManager.addEntry(QStringLiteral("[^"), QStringLiteral("]"), i18n("Negative set of characters"));
+		addMenuManager.addSeparator();
+	} else {
+		addMenuManager.addEntry(QStringLiteral("\\0"), QString(), i18n("Whole match reference"));
+		addMenuManager.addSeparator();
+		const QString pattern = uiSearchReplace.cbReplace->currentText();
+		const auto& capturePatterns = this->capturePatterns(pattern);
 
-				addMenuManager.addSeparator();
-				addMenuManager.addSeparator();
-				addMenuManager.addEntry(QStringLiteral("("), QStringLiteral(")"), i18n("Group, capturing"));
-				addMenuManager.addEntry(QStringLiteral("|"), QString(), i18n("Or"));
-				addMenuManager.addEntry(QStringLiteral("["), QStringLiteral("]"), i18n("Set of characters"));
-				addMenuManager.addEntry(QStringLiteral("[^"), QStringLiteral("]"), i18n("Negative set of characters"));
-				addMenuManager.addSeparator();
-			}
-		} else {
-			addMenuManager.addEntry(QStringLiteral("\\0"), QString(), i18n("Whole match reference"));
-			addMenuManager.addSeparator();
-			if (regexMode) {
-				const QString pattern = uiSearchReplace.cbReplace->currentText();
-				const QVector<QString> capturePatterns = this->capturePatterns(pattern);
-
-				const int captureCount = capturePatterns.count();
-				for (int i = 1; i <= 9; i++) {
-					const QString number = QString::number(i);
-					const QString& captureDetails =
-						(i <= captureCount) ? QLatin1String(" = (") + QStringView(capturePatterns[i - 1]).left(30) + QLatin1Char(')') : QString();
-					addMenuManager.addEntry(QLatin1String("\\") + number, QString(), i18n("Reference") + QLatin1Char(' ') + number + captureDetails);
-				}
-
-				addMenuManager.addSeparator();
-			}
+		const int captureCount = capturePatterns.count();
+		for (int i = 1; i <= 9; i++) {
+			const QString number = QString::number(i);
+			const QString& captureDetails =
+				(i <= captureCount) ? QLatin1String(" = (") + QStringView(capturePatterns[i - 1]).left(30) + QLatin1Char(')') : QString();
+			addMenuManager.addEntry(QLatin1String("\\") + number, QString(), i18n("Reference") + QLatin1Char(' ') + number + captureDetails);
 		}
 
-		addMenuManager.addEntry(QStringLiteral("\\n"), QString(), i18n("Line break"));
-		addMenuManager.addEntry(QStringLiteral("\\t"), QString(), i18n("Tab"));
-
-		if (!replace && regexMode) {
-			addMenuManager.addEntry(QStringLiteral("\\b"), QString(), i18n("Word boundary"));
-			addMenuManager.addEntry(QStringLiteral("\\B"), QString(), i18n("Not word boundary"));
-			addMenuManager.addEntry(QStringLiteral("\\d"), QString(), i18n("Digit"));
-			addMenuManager.addEntry(QStringLiteral("\\D"), QString(), i18n("Non-digit"));
-			addMenuManager.addEntry(QStringLiteral("\\s"), QString(), i18n("Whitespace (excluding line breaks)"));
-			addMenuManager.addEntry(QStringLiteral("\\S"), QString(), i18n("Non-whitespace"));
-			addMenuManager.addEntry(QStringLiteral("\\w"), QString(), i18n("Word character (alphanumerics plus '_')"));
-			addMenuManager.addEntry(QStringLiteral("\\W"), QString(), i18n("Non-word character"));
-		}
-
-		addMenuManager.addEntry(QStringLiteral("\\0???"), QString(), i18n("Octal character 000 to 377 (2^8-1)"), QStringLiteral("\\0"));
-		addMenuManager.addEntry(QStringLiteral("\\x{????}"), QString(), i18n("Hex character 0000 to FFFF (2^16-1)"), QStringLiteral("\\x{....}"));
-		addMenuManager.addEntry(QStringLiteral("\\\\"), QString(), i18n("Backslash"));
-
-		if (!replace && regexMode) {
-			addMenuManager.addSeparator();
-			addMenuManager.addEntry(QStringLiteral("(?:E"), QStringLiteral(")"), i18n("Group, non-capturing"), QStringLiteral("(?:"));
-			addMenuManager.addEntry(QStringLiteral("(?=E"), QStringLiteral(")"), i18n("Positive Lookahead"), QStringLiteral("(?="));
-			addMenuManager.addEntry(QStringLiteral("(?!E"), QStringLiteral(")"), i18n("Negative lookahead"), QStringLiteral("(?!"));
-			// variable length positive/negative lookbehind is an experimental feature in Perl 5.30
-			// see: https://perldoc.perl.org/perlre.html
-			// currently QRegularExpression only supports fixed-length positive/negative lookbehind (2020-03-01)
-			addMenuManager.addEntry(QStringLiteral("(?<=E"), QStringLiteral(")"), i18n("Fixed-length positive lookbehind"), QStringLiteral("(?<="));
-			addMenuManager.addEntry(QStringLiteral("(?<!E"), QStringLiteral(")"), i18n("Fixed-length negative lookbehind"), QStringLiteral("(?<!"));
-		}
-
-		// TODO: support case conversion line in Kate later?
-		/*
-		if (replace) {
-			addMenuManager.addSeparator();
-			addMenuManager.addEntry(QStringLiteral("\\L"), QString(), i18n("Begin lowercase conversion"));
-			addMenuManager.addEntry(QStringLiteral("\\U"), QString(), i18n("Begin uppercase conversion"));
-			addMenuManager.addEntry(QStringLiteral("\\E"), QString(), i18n("End case conversion"));
-			addMenuManager.addEntry(QStringLiteral("\\l"), QString(), i18n("Lowercase first character conversion"));
-			addMenuManager.addEntry(QStringLiteral("\\u"), QString(), i18n("Uppercase first character conversion"));
-			addMenuManager.addEntry(QStringLiteral("\\#[#..]"), QString(), i18n("Replacement counter (for Replace All)"), QStringLiteral("\\#"));
-		}
-		*/
+		addMenuManager.addSeparator();
 	}
+
+	addMenuManager.addEntry(QStringLiteral("\\n"), QString(), i18n("Line break"));
+	addMenuManager.addEntry(QStringLiteral("\\t"), QString(), i18n("Tab"));
+
+	if (!replace) {
+		addMenuManager.addEntry(QStringLiteral("\\b"), QString(), i18n("Word boundary"));
+		addMenuManager.addEntry(QStringLiteral("\\B"), QString(), i18n("Not word boundary"));
+		addMenuManager.addEntry(QStringLiteral("\\d"), QString(), i18n("Digit"));
+		addMenuManager.addEntry(QStringLiteral("\\D"), QString(), i18n("Non-digit"));
+		addMenuManager.addEntry(QStringLiteral("\\s"), QString(), i18n("Whitespace (excluding line breaks)"));
+		addMenuManager.addEntry(QStringLiteral("\\S"), QString(), i18n("Non-whitespace"));
+		addMenuManager.addEntry(QStringLiteral("\\w"), QString(), i18n("Word character (alphanumerics plus '_')"));
+		addMenuManager.addEntry(QStringLiteral("\\W"), QString(), i18n("Non-word character"));
+	}
+
+	addMenuManager.addEntry(QStringLiteral("\\0???"), QString(), i18n("Octal character 000 to 377 (2^8-1)"), QStringLiteral("\\0"));
+	addMenuManager.addEntry(QStringLiteral("\\x{????}"), QString(), i18n("Hex character 0000 to FFFF (2^16-1)"), QStringLiteral("\\x{....}"));
+	addMenuManager.addEntry(QStringLiteral("\\\\"), QString(), i18n("Backslash"));
+
+	if (!replace) {
+		addMenuManager.addSeparator();
+		addMenuManager.addEntry(QStringLiteral("(?:E"), QStringLiteral(")"), i18n("Group, non-capturing"), QStringLiteral("(?:"));
+		addMenuManager.addEntry(QStringLiteral("(?=E"), QStringLiteral(")"), i18n("Positive Lookahead"), QStringLiteral("(?="));
+		addMenuManager.addEntry(QStringLiteral("(?!E"), QStringLiteral(")"), i18n("Negative lookahead"), QStringLiteral("(?!"));
+		// variable length positive/negative lookbehind is an experimental feature in Perl 5.30
+		// see: https://perldoc.perl.org/perlre.html
+		// currently QRegularExpression only supports fixed-length positive/negative lookbehind (2020-03-01)
+		addMenuManager.addEntry(QStringLiteral("(?<=E"), QStringLiteral(")"), i18n("Fixed-length positive lookbehind"), QStringLiteral("(?<="));
+		addMenuManager.addEntry(QStringLiteral("(?<!E"), QStringLiteral(")"), i18n("Fixed-length negative lookbehind"), QStringLiteral("(?<!"));
+	}
+
+	// TODO: support case conversion line in Kate later?
+	/*
+	if (replace) {
+		addMenuManager.addSeparator();
+		addMenuManager.addEntry(QStringLiteral("\\L"), QString(), i18n("Begin lowercase conversion"));
+		addMenuManager.addEntry(QStringLiteral("\\U"), QString(), i18n("Begin uppercase conversion"));
+		addMenuManager.addEntry(QStringLiteral("\\E"), QString(), i18n("End case conversion"));
+		addMenuManager.addEntry(QStringLiteral("\\l"), QString(), i18n("Lowercase first character conversion"));
+		addMenuManager.addEntry(QStringLiteral("\\u"), QString(), i18n("Uppercase first character conversion"));
+		addMenuManager.addEntry(QStringLiteral("\\#[#..]"), QString(), i18n("Replacement counter (for Replace All)"), QStringLiteral("\\#"));
+	}
+	*/
 
 	// Show menu
 	auto* const result = contextMenu->exec(lineEdit->mapToGlobal(pos));

@@ -105,7 +105,6 @@ public:
 	TextLabel(const QString& name, CartesianPlot*, Type = Type::General);
 	~TextLabel() override;
 
-	Type type() const;
 	QIcon icon() const override;
 
 	void save(QXmlStreamWriter*) const override;
@@ -116,9 +115,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(TextWrapper, text, Text)
 	BASIC_D_ACCESSOR_DECL(QColor, fontColor, FontColor)
 	BASIC_D_ACCESSOR_DECL(QColor, backgroundColor, BackgroundColor)
-	CLASS_D_ACCESSOR_DECL(TextWrapper, textPlaceholder, PlaceholderText)
-	BASIC_D_ACCESSOR_DECL(QColor, teXFontColor, TeXFontColor)
-	BASIC_D_ACCESSOR_DECL(QColor, teXBackgroundColor, TeXBackgroundColor)
+	void setPlaceholderText(const TextWrapper& value);
 	CLASS_D_ACCESSOR_DECL(QFont, teXFont, TeXFont)
 
 	BASIC_D_ACCESSOR_DECL(BorderShape, borderShape, BorderShape)
@@ -133,7 +130,7 @@ public:
 #if (QT_VERSION < QT_VERSION_CHECK(5, 13, 0)) // we need a default constructor for QVector
 		GluePoint() = default;
 #endif
-		GluePoint(QPointF point, QString name)
+		GluePoint(QPointF point, const QString& name)
 			: point(point)
 			, name(name) {
 		}

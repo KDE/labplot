@@ -114,12 +114,34 @@
 		QVERIFY(!savePath.isEmpty());                                                                                                                          \
 	} while (0);
 
+/*!
+ * Save content \p content in a temporary file. The filename is used to identify the file during debugging
+ * The filename is stored in the variable savePath wich must be of type QString.
+ * content is the content of the file and is expected that it is a QStringList. The elements of this list
+ * don't need a new line character \n at the end because it will be appended already in this macro it self
+ */
+#define SAVE_FILE(filename, content)                                                                                                                           \
+	do {                                                                                                                                                       \
+		auto* tempFile = new QTemporaryFile(QStringLiteral("XXXXXX_") + QLatin1String(filename), this);                                                        \
+		QCOMPARE(tempFile->open(), true);                                                                                                                      \
+		savePath = tempFile->fileName();                                                                                                                       \
+		QFile file(savePath);                                                                                                                                  \
+		QCOMPARE(file.open(QIODevice::WriteOnly), true);                                                                                                       \
+                                                                                                                                                               \
+		for (const auto& d : fileContent) {                                                                                                                    \
+			file.write(d.toLatin1() + "\n");                                                                                                                   \
+		}                                                                                                                                                      \
+		file.close();                                                                                                                                          \
+		DEBUG(QStringLiteral("File stored as: ").toStdString() << savePath.toStdString());                                                                     \
+		QVERIFY(!savePath.isEmpty());                                                                                                                          \
+	} while (0)
+
 ///////////////////////////////////////////////////////
 
 class CommonTest : public QObject {
 	Q_OBJECT
 
-private Q_SLOTS:
+protected Q_SLOTS:
 	void initTestCase();
 
 protected:
@@ -133,5 +155,6 @@ protected:
 			QVERIFY(!gsl_fcmp(actual, expected, delta));
 		}
 	}
+	static void listStack(QUndoStack* stack);
 };
 #endif

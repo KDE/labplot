@@ -13,14 +13,12 @@
 #ifndef COLUMNTEST_H
 #define COLUMNTEST_H
 
-#include "../../CommonTest.h"
+#include "../../CommonMetaTest.h"
 
-class ColumnTest : public CommonTest {
+class ColumnTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void initTestCase();
-
 	// ranges
 	void doubleMinimum();
 	void doubleMaximum();
@@ -78,6 +76,8 @@ private Q_SLOTS:
 	void testFormulasmmin();
 	void testFormulasmmax();
 	void testFormulasma();
+	void testFormulapsample();
+	void testFormularsample();
 
 	void testFormulasMinColumnInvalid();
 

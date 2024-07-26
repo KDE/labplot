@@ -103,9 +103,9 @@ private:
  *
  *  \ingroup worksheet
  */
-Axis::Axis(const QString& name, Orientation orientation)
+Axis::Axis(const QString& name, Orientation orientation, bool loading)
 	: WorksheetElement(name, new AxisPrivate(this), AspectType::Axis) {
-	init(orientation);
+	init(orientation, loading);
 }
 
 Axis::Axis(const QString& name, Orientation orientation, AxisPrivate* dd)
@@ -113,9 +113,96 @@ Axis::Axis(const QString& name, Orientation orientation, AxisPrivate* dd)
 	init(orientation);
 }
 
-void Axis::init(Orientation orientation) {
+void Axis::init(Orientation orientation, bool loading) {
 	Q_D(Axis);
 
+	// line
+	d->line = new Line(QStringLiteral("line"));
+	d->line->setHidden(true);
+	d->line->setCreateXmlElement(false); // line properties are written out together with arrow properties in Axis::save()
+	addChild(d->line);
+	connect(d->line, &Line::updatePixmapRequested, [=] {
+		d->update();
+		Q_EMIT changed();
+	});
+	connect(d->line, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
+
+	// axis title
+	d->title = new TextLabel(this->name(), TextLabel::Type::AxisTitle);
+	d->title->setText(this->name());
+	connect(d->title, &TextLabel::changed, this, &Axis::labelChanged);
+	addChild(d->title);
+	d->title->setHidden(true);
+	d->title->graphicsItem()->setParentItem(d);
+	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, false);
+	d->title->graphicsItem()->setAcceptHoverEvents(false);
+
+	// major ticks line
+	d->majorTicksLine = new Line(QStringLiteral("majorTicksLine"));
+	d->majorTicksLine->setHidden(true);
+	d->majorTicksLine->setPrefix(QStringLiteral("MajorTicks"));
+	d->majorTicksLine->setCreateXmlElement(false);
+	addChild(d->majorTicksLine);
+	connect(d->majorTicksLine, &Line::updatePixmapRequested, [=] {
+		d->update();
+		Q_EMIT changed();
+	});
+	connect(d->majorTicksLine, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
+
+	// minor ticks line
+	d->minorTicksLine = new Line(QStringLiteral("minorTicksLine"));
+	d->minorTicksLine->setHidden(true);
+	d->minorTicksLine->setPrefix(QStringLiteral("MinorTicks"));
+	d->minorTicksLine->setCreateXmlElement(false);
+	addChild(d->minorTicksLine);
+	connect(d->minorTicksLine, &Line::updatePixmapRequested, [=] {
+		d->update();
+		Q_EMIT changed();
+	});
+	connect(d->minorTicksLine, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
+
+	// major grid line
+	d->majorGridLine = new Line(QStringLiteral("majorGridLine"));
+	d->majorGridLine->setPrefix(QStringLiteral("MajorGrid"));
+	d->majorGridLine->setHidden(true);
+	addChild(d->majorGridLine);
+	connect(d->majorGridLine, &Line::updatePixmapRequested, [=] {
+		d->updateGrid();
+		Q_EMIT changed();
+	});
+	connect(d->majorGridLine, &Line::updateRequested, [=] {
+		d->retransformMajorGrid();
+	});
+
+	// minor grid line
+	d->minorGridLine = new Line(QStringLiteral("minorGridLine"));
+	d->minorGridLine->setPrefix(QStringLiteral("MinorGrid"));
+	d->minorGridLine->setHidden(true);
+	addChild(d->minorGridLine);
+	connect(d->minorGridLine, &Line::updatePixmapRequested, [=] {
+		d->updateGrid();
+		Q_EMIT changed();
+	});
+	connect(d->minorGridLine, &Line::updateRequested, [=] {
+		d->retransformMinorGrid();
+	});
+
+	connect(this, &WorksheetElement::coordinateSystemIndexChanged, [this]() {
+		Q_D(Axis);
+		d->retransformRange();
+	});
+
+	if (loading)
+		return;
+
+	// init the properties
 	KConfig config;
 	KConfigGroup group = config.group(QStringLiteral("Axis"));
 
@@ -133,33 +220,11 @@ void Axis::init(Orientation orientation) {
 	d->zeroOffset = group.readEntry(QStringLiteral("ZeroOffset"), 0);
 	d->showScaleOffset = group.readEntry(QStringLiteral("ShowScaleOffset"), true);
 
-	// line
-	d->line = new Line(QString());
-	d->line->setHidden(true);
-	d->line->setCreateXmlElement(false); // line properties are written out together with arrow properties in Axis::save()
-	addChild(d->line);
 	d->line->init(group);
-	connect(d->line, &Line::updatePixmapRequested, [=] {
-		d->update();
-	});
-	connect(d->line, &Line::updateRequested, [=] {
-		d->recalcShapeAndBoundingRect();
-	});
-
 	d->arrowType = (Axis::ArrowType)group.readEntry(QStringLiteral("ArrowType"), static_cast<int>(ArrowType::NoArrow));
 	d->arrowPosition = (Axis::ArrowPosition)group.readEntry(QStringLiteral("ArrowPosition"), static_cast<int>(ArrowPosition::Right));
 	d->arrowSize = group.readEntry(QStringLiteral("ArrowSize"), Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
 
-	// axis title
-	d->title = new TextLabel(this->name(), TextLabel::Type::AxisTitle);
-	d->title->setText(this->name());
-	connect(d->title, &TextLabel::changed, this, &Axis::labelChanged);
-	addChild(d->title);
-	d->title->setHidden(true);
-	d->title->graphicsItem()->setParentItem(d);
-	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
-	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, false);
-	d->title->graphicsItem()->setAcceptHoverEvents(false);
 	if (d->orientation == Orientation::Vertical) {
 		d->title->setRotationAngle(90);
 		d->titleOffsetX = 0; // distance to the axis tick labels
@@ -169,6 +234,7 @@ void Axis::init(Orientation orientation) {
 		d->titleOffsetY = 0; // distance to the axis tick labels
 	}
 
+	d->majorTicksLine->init(group);
 	d->majorTicksDirection = (Axis::TicksDirection)group.readEntry(QStringLiteral("MajorTicksDirection"), (int)Axis::ticksOut);
 	d->majorTicksType = (TicksType)group.readEntry(QStringLiteral("MajorTicksType"), static_cast<int>(TicksType::TotalNumber));
 	d->majorTicksNumber = group.readEntry(QStringLiteral("MajorTicksNumber"), 11);
@@ -176,37 +242,12 @@ void Axis::init(Orientation orientation) {
 										   0.0); // set to 0, so axisdock determines the value to not have to many labels the first time switched to Spacing
 	d->majorTicksLength = group.readEntry(QStringLiteral("MajorTicksLength"), Worksheet::convertToSceneUnits(6.0, Worksheet::Unit::Point));
 
-	d->majorTicksLine = new Line(QString());
-	d->majorTicksLine->setHidden(true);
-	d->majorTicksLine->setPrefix(QStringLiteral("MajorTicks"));
-	d->majorTicksLine->setCreateXmlElement(false);
-	addChild(d->majorTicksLine);
-	d->majorTicksLine->init(group);
-	connect(d->majorTicksLine, &Line::updatePixmapRequested, [=] {
-		d->update();
-	});
-	connect(d->majorTicksLine, &Line::updateRequested, [=] {
-		d->recalcShapeAndBoundingRect();
-	});
-
+	d->minorTicksLine->init(group);
 	d->minorTicksDirection = (TicksDirection)group.readEntry(QStringLiteral("MinorTicksDirection"), (int)Axis::ticksOut);
 	d->minorTicksType = (TicksType)group.readEntry(QStringLiteral("MinorTicksType"), static_cast<int>(TicksType::TotalNumber));
 	d->minorTicksNumber = group.readEntry(QStringLiteral("MinorTicksNumber"), 1);
 	d->minorTicksIncrement = group.readEntry(QStringLiteral("MinorTicksIncrement"), 0.0); // see MajorTicksIncrement
 	d->minorTicksLength = group.readEntry(QStringLiteral("MinorTicksLength"), Worksheet::convertToSceneUnits(3.0, Worksheet::Unit::Point));
-
-	d->minorTicksLine = new Line(QString());
-	d->minorTicksLine->setHidden(true);
-	d->minorTicksLine->setPrefix(QStringLiteral("MinorTicks"));
-	d->minorTicksLine->setCreateXmlElement(false);
-	addChild(d->minorTicksLine);
-	d->minorTicksLine->init(group);
-	connect(d->minorTicksLine, &Line::updatePixmapRequested, [=] {
-		d->update();
-	});
-	connect(d->minorTicksLine, &Line::updateRequested, [=] {
-		d->recalcShapeAndBoundingRect();
-	});
 
 	// Labels
 	d->labelsFormat = (LabelsFormat)group.readEntry(QStringLiteral("LabelsFormat"), static_cast<int>(LabelsFormat::Decimal));
@@ -227,36 +268,9 @@ void Axis::init(Orientation orientation) {
 	d->labelsSuffix = group.readEntry(QStringLiteral("LabelsSuffix"), QStringLiteral(""));
 	d->labelsOpacity = group.readEntry(QStringLiteral("LabelsOpacity"), 1.0);
 
-	// major grid
-	d->majorGridLine = new Line(QString());
-	d->majorGridLine->setPrefix(QStringLiteral("MajorGrid"));
-	d->majorGridLine->setHidden(true);
-	addChild(d->majorGridLine);
+	// grid lines
 	d->majorGridLine->init(group);
-	connect(d->majorGridLine, &Line::updatePixmapRequested, [=] {
-		d->updateGrid();
-	});
-	connect(d->majorGridLine, &Line::updateRequested, [=] {
-		d->retransformMajorGrid();
-	});
-
-	// minor grid
-	d->minorGridLine = new Line(QString());
-	d->minorGridLine->setPrefix(QStringLiteral("MinorGrid"));
-	d->minorGridLine->setHidden(true);
-	addChild(d->minorGridLine);
 	d->minorGridLine->init(group);
-	connect(d->minorGridLine, &Line::updatePixmapRequested, [=] {
-		d->updateGrid();
-	});
-	connect(d->minorGridLine, &Line::updateRequested, [=] {
-		d->retransformMinorGrid();
-	});
-
-	connect(this, &WorksheetElement::coordinateSystemIndexChanged, [this]() {
-		Q_D(Axis);
-		d->retransformRange();
-	});
 }
 
 /*!
@@ -546,8 +560,8 @@ bool Axis::isDefault() const {
 bool Axis::isNumeric() const {
 	Q_D(const Axis);
 	const int xIndex{cSystem->index(Dimension::X)}, yIndex{cSystem->index(Dimension::Y)};
-	bool numeric = ((d->orientation == Axis::Orientation::Horizontal && m_plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
-					|| (d->orientation == Axis::Orientation::Vertical && m_plot->yRangeFormat(yIndex) == RangeT::Format::Numeric));
+	bool numeric = ((d->orientation == Axis::Orientation::Horizontal && d->m_plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
+					|| (d->orientation == Axis::Orientation::Vertical && d->m_plot->yRangeFormat(yIndex) == RangeT::Format::Numeric));
 	return numeric;
 }
 
@@ -1133,18 +1147,18 @@ void AxisPrivate::retransformRange() {
 	switch (rangeType) { // also if not changing (like on plot range changes)
 	case Axis::RangeType::Auto: {
 		if (orientation == Axis::Orientation::Horizontal)
-			range = q->m_plot->range(Dimension::X, q->cSystem->index(Dimension::X));
+			range = m_plot->range(Dimension::X, q->cSystem->index(Dimension::X));
 		else
-			range = q->m_plot->range(Dimension::Y, q->cSystem->index(Dimension::Y));
+			range = m_plot->range(Dimension::Y, q->cSystem->index(Dimension::Y));
 
 		DEBUG(Q_FUNC_INFO << ", new auto range = " << range.toStdString())
 		break;
 	}
 	case Axis::RangeType::AutoData:
 		if (orientation == Axis::Orientation::Horizontal)
-			range = q->m_plot->dataRange(Dimension::X, q->cSystem->index(Dimension::X));
+			range = m_plot->dataRange(Dimension::X, q->cSystem->index(Dimension::X));
 		else
-			range = q->m_plot->dataRange(Dimension::Y, q->cSystem->index(Dimension::Y));
+			range = m_plot->dataRange(Dimension::Y, q->cSystem->index(Dimension::Y));
 
 		DEBUG(Q_FUNC_INFO << ", new auto data range = " << range.toStdString())
 		break;
@@ -1198,7 +1212,7 @@ void AxisPrivate::retransformLine() {
 
 			if (sceneRange.size() > 0) {
 				// std::max/std::min: stay inside rect()
-				QRectF rect = q->m_plot->dataRect();
+				QRectF rect = m_plot->dataRect();
 				startPoint = QPointF(std::max(sceneRange.at(0).x1(), rect.x()), pos.y());
 				endPoint = QPointF(std::min(sceneRange.at(0).x2(), rect.x() + rect.width()), pos.y());
 
@@ -1231,7 +1245,7 @@ void AxisPrivate::retransformLine() {
 			// QDEBUG(Q_FUNC_INFO << ", scene range = " << sceneRange)
 			if (sceneRange.size() > 0) {
 				// std::max/std::min: stay inside rect()
-				QRectF rect = q->m_plot->dataRect();
+				QRectF rect = m_plot->dataRect();
 				startPoint = QPointF(pos.x(), std::min(sceneRange.at(0).y1(), rect.y() + rect.height()));
 				endPoint = QPointF(pos.x(), std::max(sceneRange.at(0).y2(), rect.y()));
 
@@ -1754,7 +1768,7 @@ void AxisPrivate::retransformTicks() {
 			else
 				nextMajorTickPos = majorTickPos;
 		} else if (majorTicksType == Axis::TicksType::ColumnLabels) {
-			const Column* c = dynamic_cast<const Column*>(majorTicksColumn);
+			const auto* c = static_cast<const Column*>(majorTicksColumn);
 			Q_ASSERT(tmpMajorTicksNumber > 0);
 			Q_ASSERT(c);
 			columnIndex = c->valueLabelsIndexForValue(majorTickPos);
@@ -2560,8 +2574,8 @@ void AxisPrivate::retransformMajorGrid() {
 	DEBUG(Q_FUNC_INFO << ", x range " << q->cSystem->index(Dimension::X) + 1)
 	DEBUG(Q_FUNC_INFO << ", y range " << q->cSystem->index(Dimension::Y) + 1)
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-	const auto xRange{plot()->range(Dimension::X, cs->index(Dimension::X))};
-	const auto yRange{plot()->range(Dimension::Y, cs->index(Dimension::Y))};
+	const auto& xRange = plot()->range(Dimension::X, cs->index(Dimension::X));
+	const auto& yRange = plot()->range(Dimension::Y, cs->index(Dimension::Y));
 
 	// TODO:
 	// when iterating over all grid lines, skip the first and the last points for auto scaled axes,
@@ -2731,6 +2745,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	doc.setHtml(title->text().text);
 	// QDEBUG(Q_FUNC_INFO << ", title text plain: " << doc.toPlainText())
 	QPainterPath titlePath;
+	QPolygonF polygon;
 	if (title->isVisible() && !doc.toPlainText().isEmpty()) {
 		const QRectF& titleRect = title->graphicsItem()->boundingRect();
 		if (titleRect.size() != QSizeF(0, 0)) {
@@ -2751,18 +2766,81 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 				title->setPosition(QPointF(rect.topLeft().x() + offsetX, (rect.topLeft().y() + rect.bottomLeft().y()) / 2. - titleOffsetY));
 			}
 			titlePath = WorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen);
-			tmpPath.addPath(titlePath);
+			const auto& axisTopLeft = axisRect.topLeft();
+			const auto& axisTopRight = axisRect.topRight();
+			const auto& axisBottomLeft = axisRect.bottomLeft();
+			const auto& axisBottomRight = axisRect.bottomRight();
+			const auto& titleTopLeft = titlePath.boundingRect().topLeft();
+			const auto& titleTopRight = titlePath.boundingRect().topRight();
+			const auto& titleBottomLeft = titlePath.boundingRect().bottomLeft();
+			const auto& titleBottomRight = titlePath.boundingRect().bottomRight();
+
+			QVector<QPointF> vertices;
+
+			if (titlePath.intersects(tmpPath)) {
+				// Draw cross shaped bounded rect
+				if (Axis::Orientation::Horizontal == orientation) {
+					if (axisTopLeft.y() < titleTopLeft.y()) {
+						vertices << axisTopLeft << axisBottomLeft << QPointF(titleTopLeft.x(), axisBottomLeft.y()) << titleBottomLeft << titleBottomRight
+								 << QPointF(titleTopRight.x(), axisBottomRight.y()) << axisBottomRight << axisTopRight << axisTopLeft;
+					} else if (axisBottomLeft.y() > titleBottomLeft.y()) {
+						vertices << axisTopLeft << QPointF(titleBottomLeft.x(), axisTopLeft.y()) << titleTopLeft << titleTopRight
+								 << QPointF(titleBottomRight.x(), axisTopRight.y()) << axisTopRight << axisBottomRight << axisBottomLeft << axisTopLeft;
+					} else {
+						vertices << titleTopLeft << QPointF(titleTopLeft.x(), axisTopLeft.y()) << axisTopLeft << axisBottomLeft
+								 << QPointF(titleBottomLeft.x(), axisBottomLeft.y()) << titleBottomLeft << titleBottomRight
+								 << QPointF(titleBottomRight.x(), axisBottomRight.y()) << axisBottomRight << axisTopRight
+								 << QPointF(titleTopRight.x(), axisTopRight.y()) << titleTopRight << titleTopLeft;
+					}
+				} else {
+					if (axisTopRight.x() > titleTopRight.x()) {
+						vertices << axisTopLeft << QPointF(axisTopLeft.x(), titleTopRight.y()) << titleTopLeft << titleBottomLeft
+								 << QPointF(axisBottomLeft.x(), titleBottomRight.y()) << axisBottomLeft << axisBottomRight << axisTopRight << axisTopLeft;
+					} else if (axisTopLeft.x() < titleTopLeft.x()) {
+						vertices << axisTopLeft << axisTopRight << QPointF(axisTopRight.x(), titleTopRight.y()) << titleTopRight << titleBottomRight
+								 << QPointF(axisBottomRight.x(), titleBottomLeft.y()) << axisBottomRight << axisBottomLeft << axisTopLeft;
+					} else {
+						vertices << axisTopLeft << QPointF(axisTopLeft.x(), titleTopLeft.y()) << titleTopLeft << titleBottomLeft
+								 << QPointF(axisTopLeft.x(), titleBottomLeft.y()) << axisBottomLeft << axisBottomRight
+								 << QPointF(axisTopRight.x(), titleBottomRight.y()) << titleBottomRight << titleTopRight
+								 << QPointF(axisTopRight.x(), titleTopRight.y()) << axisTopRight << axisTopLeft;
+					}
+				}
+			} else {
+				// Draw T-shaped bounded rect
+				if (Axis::Orientation::Horizontal == orientation) {
+					if (axisTopLeft.y() < titleTopLeft.y() || axisBottomLeft.y() < titleBottomLeft.y())
+						vertices << axisTopLeft << axisBottomLeft << QPointF(titleTopLeft.x(), axisBottomLeft.y()) << titleBottomLeft << titleBottomRight
+								 << QPointF(titleTopRight.x(), axisBottomRight.y()) << axisBottomRight << axisTopRight << axisTopLeft;
+					else
+						vertices << axisTopLeft << QPointF(titleBottomLeft.x(), axisTopLeft.y()) << titleTopLeft << titleTopRight
+								 << QPointF(titleBottomRight.x(), axisTopRight.y()) << axisTopRight << axisBottomRight << axisBottomLeft << axisTopLeft;
+				} else {
+					if (axisTopLeft.x() > titleTopLeft.x() || axisBottomLeft.x() > titleBottomLeft.x())
+						vertices << axisTopLeft << QPointF(axisTopLeft.x(), titleTopRight.y()) << titleTopLeft << titleBottomLeft
+								 << QPointF(axisBottomLeft.x(), titleBottomRight.y()) << axisBottomLeft << axisBottomRight << axisTopRight << axisTopLeft;
+					else
+						vertices << axisTopLeft << axisTopRight << QPointF(axisTopRight.x(), titleTopRight.y()) << titleTopRight << titleBottomRight
+								 << QPointF(axisBottomRight.x(), titleBottomLeft.y()) << axisBottomRight << axisBottomLeft << axisTopLeft;
+				}
+			}
+			for (auto vertex : vertices)
+				polygon.append(vertex);
+			tmpPath.addPolygon(polygon);
 		}
 	}
-
 	m_boundingRectangle = tmpPath.boundingRect();
 	m_shape = QPainterPath();
-	m_shape.addRect(m_boundingRectangle);
-
+	if (!polygon.isEmpty())
+		m_shape.addPolygon(polygon);
+	else
+		m_shape.addRect(m_boundingRectangle);
 	// if the axis goes beyond the current bounding box of the plot (too high offset is used, too long labels etc.)
 	// request a prepareGeometryChange() for the plot in order to properly keep track of geometry changes
 	if (plot())
 		plot()->prepareGeometryChange();
+
+	Q_EMIT q->changed();
 }
 
 /*!

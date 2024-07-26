@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Aspect providing a spreadsheet table with column logic
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "StatisticsSpreadsheet.h"
@@ -27,34 +27,65 @@
 StatisticsSpreadsheet::StatisticsSpreadsheet(Spreadsheet* spreadsheet, bool loading, AspectType type)
 	: Spreadsheet(i18n("Column Statistics"), loading, type)
 	, m_spreadsheet(spreadsheet) {
+	m_metricValues = {
+		StatisticsSpreadsheet::Metric::Count,
+		StatisticsSpreadsheet::Metric::Minimum,
+		StatisticsSpreadsheet::Metric::Maximum,
+		StatisticsSpreadsheet::Metric::ArithmeticMean,
+		StatisticsSpreadsheet::Metric::GeometricMean,
+		StatisticsSpreadsheet::Metric::HarmonicMean,
+		StatisticsSpreadsheet::Metric::ContraharmonicMean,
+		StatisticsSpreadsheet::Metric::Mode,
+		StatisticsSpreadsheet::Metric::FirstQuartile,
+		StatisticsSpreadsheet::Metric::Median,
+		StatisticsSpreadsheet::Metric::ThirdQuartile,
+		StatisticsSpreadsheet::Metric::IQR,
+		StatisticsSpreadsheet::Metric::Percentile1,
+		StatisticsSpreadsheet::Metric::Percentile5,
+		StatisticsSpreadsheet::Metric::Percentile10,
+		StatisticsSpreadsheet::Metric::Percentile90,
+		StatisticsSpreadsheet::Metric::Percentile95,
+		StatisticsSpreadsheet::Metric::Percentile99,
+		StatisticsSpreadsheet::Metric::Trimean,
+		StatisticsSpreadsheet::Metric::Range,
+		StatisticsSpreadsheet::Metric::Variance,
+		StatisticsSpreadsheet::Metric::StandardDeviation,
+		StatisticsSpreadsheet::Metric::MeanDeviation,
+		StatisticsSpreadsheet::Metric::MeanDeviationAroundMedian,
+		StatisticsSpreadsheet::Metric::MedianDeviation,
+		StatisticsSpreadsheet::Metric::Skewness,
+		StatisticsSpreadsheet::Metric::Kurtosis,
+		StatisticsSpreadsheet::Metric::Entropy,
+	};
 	m_metricNames = {
-		{StatisticsSpreadsheet::Metric::Count, i18n("Count")},
-		{StatisticsSpreadsheet::Metric::Minimum, i18n("Minimum")},
-		{StatisticsSpreadsheet::Metric::Maximum, i18n("Maximum")},
-		{StatisticsSpreadsheet::Metric::ArithmeticMean, i18n("ArithmeticMean")},
-		{StatisticsSpreadsheet::Metric::GeometricMean, i18n("GeometricMean")},
-		{StatisticsSpreadsheet::Metric::HarmonicMean, i18n("HarmonicMean")},
-		{StatisticsSpreadsheet::Metric::ContraharmonicMean, i18n("ContraharmonicMean")},
-		{StatisticsSpreadsheet::Metric::Mode, i18n("Mode")},
-		{StatisticsSpreadsheet::Metric::FirstQuartile, i18n("FirstQuartile")},
-		{StatisticsSpreadsheet::Metric::Median, i18n("Median")},
-		{StatisticsSpreadsheet::Metric::ThirdQuartile, i18n("ThirdQuartile")},
-		{StatisticsSpreadsheet::Metric::IQR, i18n("Interquartile Range")},
-		{StatisticsSpreadsheet::Metric::Percentile1, i18n("Percentile1")},
-		{StatisticsSpreadsheet::Metric::Percentile5, i18n("Percentile5")},
-		{StatisticsSpreadsheet::Metric::Percentile10, i18n("Percentile10")},
-		{StatisticsSpreadsheet::Metric::Percentile90, i18n("Percentile90")},
-		{StatisticsSpreadsheet::Metric::Percentile95, i18n("Percentile95")},
-		{StatisticsSpreadsheet::Metric::Percentile99, i18n("Percentile99")},
-		{StatisticsSpreadsheet::Metric::Trimean, i18n("Trimean")},
-		{StatisticsSpreadsheet::Metric::Variance, i18n("Variance")},
-		{StatisticsSpreadsheet::Metric::StandardDeviation, i18n("StandardDeviation")},
-		{StatisticsSpreadsheet::Metric::MeanDeviation, i18n("MeanDeviation")},
-		{StatisticsSpreadsheet::Metric::MeanDeviationAroundMedian, i18n("MeanDeviationAroundMedian")},
-		{StatisticsSpreadsheet::Metric::MedianDeviation, i18n("MedianDeviation")},
-		{StatisticsSpreadsheet::Metric::Skewness, i18n("Skewness")},
-		{StatisticsSpreadsheet::Metric::Kurtosis, i18n("Kurtosis")},
-		{StatisticsSpreadsheet::Metric::Entropy, i18n("Entropy")},
+		i18n("Count"),
+		i18n("Minimum"),
+		i18n("Maximum"),
+		i18n("ArithmeticMean"),
+		i18n("GeometricMean"),
+		i18n("HarmonicMean"),
+		i18n("ContraharmonicMean"),
+		i18n("Mode"),
+		i18n("FirstQuartile"),
+		i18n("Median"),
+		i18n("ThirdQuartile"),
+		i18n("Interquartile Range"),
+		i18n("Percentile1"),
+		i18n("Percentile5"),
+		i18n("Percentile10"),
+		i18n("Percentile90"),
+		i18n("Percentile95"),
+		i18n("Percentile99"),
+		i18n("Trimean"),
+		i18n("Range"),
+		i18n("Variance"),
+		i18n("StandardDeviation"),
+		i18n("MeanDeviation"),
+		i18n("MeanDeviationAroundMedian"),
+		i18n("MedianDeviation"),
+		i18n("Skewness"),
+		i18n("Kurtosis"),
+		i18n("Entropy"),
 	};
 
 	auto* model = m_spreadsheet->model();
@@ -63,6 +94,7 @@ StatisticsSpreadsheet::StatisticsSpreadsheet(Spreadsheet* spreadsheet, bool load
 	connect(model, &SpreadsheetModel::rowsInserted, this, &StatisticsSpreadsheet::update);
 	connect(model, &SpreadsheetModel::columnsRemoved, this, &StatisticsSpreadsheet::update);
 	connect(model, &SpreadsheetModel::columnsInserted, this, &StatisticsSpreadsheet::update);
+	connect(model, &SpreadsheetModel::headerDataChanged, this, &StatisticsSpreadsheet::updateColumnNames);
 
 	setUndoAware(false);
 	setFixed(true);
@@ -111,14 +143,16 @@ void StatisticsSpreadsheet::init() {
 	update();
 }
 
+/*!
+ * updates the content of the statistics spreadsheet.
+ * called when the data in the parent spreadsheet was modified.
+ */
 void StatisticsSpreadsheet::update() {
 	// determine the number of activated metrics and properly resize the spreadsheet
 	int colCount = 1; // first column for "column name"
-	auto it = m_metricNames.constBegin();
-	while (it != m_metricNames.constEnd()) {
-		if (m_metrics.testFlag(it.key()))
+	for (const auto& metric : m_metricValues) {
+		if (m_metrics.testFlag(metric))
 			++colCount;
-		++it;
 	}
 
 	setUndoAware(false);
@@ -133,41 +167,35 @@ void StatisticsSpreadsheet::update() {
 		col->setFixed(true);
 	}
 
-	// rename the columns
-	statisticsColumns.at(0)->setName(i18n("Column"));
-	statisticsColumns.at(0)->setColumnMode(AbstractColumn::ColumnMode::Text);
-
-	int colIndex = 1;
-	it = m_metricNames.constBegin();
-	while (it != m_metricNames.constEnd()) {
-		if (m_metrics.testFlag(it.key())) {
-			statisticsColumns.at(colIndex)->setName(it.value());
-
-			if (it.key() == StatisticsSpreadsheet::Metric::Count)
-				statisticsColumns.at(colIndex)->setColumnMode(AbstractColumn::ColumnMode::Integer);
-
-			++colIndex;
-		}
-		++it;
-	}
-
 	// show the column names in the first column of the statistics spreadsheet
-	const auto& columns = m_spreadsheet->children<Column>();
 	auto* statisticsColumn = statisticsColumns.at(0);
+	statisticsColumn->setName(i18n("Column"));
+	statisticsColumn->setColumnMode(AbstractColumn::ColumnMode::Text);
+	const auto& columns = m_spreadsheet->children<Column>();
 	for (int i = 0; i < columns.count(); ++i)
 		statisticsColumn->setTextAt(i, columns.at(i)->name());
 
 	// show other statistics metrics that were activated
-	colIndex = 1;
-	it = m_metricNames.constBegin();
-	while (it != m_metricNames.constEnd()) {
-		if (m_metrics.testFlag(it.key())) {
-			statisticsColumn = statisticsColumns.at(colIndex);
+	int colIndex = 1;
+	int metricIndex = 0;
+	for (const auto& metric : m_metricValues) {
+		if (m_metrics.testFlag(metric)) {
+			// rename the statistics column
+			auto* statisticsColumn = statisticsColumns.at(colIndex);
+			statisticsColumn->setName(m_metricNames.at(metricIndex));
+
+			// set the column mode
+			if (m_metricValues.at(metricIndex) == StatisticsSpreadsheet::Metric::Count)
+				statisticsColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
+			else
+				statisticsColumn->setColumnMode(AbstractColumn::ColumnMode::Double);
+
+			// set the cell values
 			for (int i = 0; i < columns.count(); ++i) {
 				const auto* column = columns.at(i);
 				const auto& statistics = column->statistics();
 
-				switch (it.key()) {
+				switch (metric) {
 				case Metric::Count:
 					statisticsColumn->setIntegerAt(i, statistics.size);
 					break;
@@ -225,6 +253,9 @@ void StatisticsSpreadsheet::update() {
 				case Metric::Trimean:
 					statisticsColumn->setValueAt(i, statistics.trimean);
 					break;
+				case Metric::Range:
+					statisticsColumn->setValueAt(i, statistics.maximum - statistics.minimum);
+					break;
 				case Metric::Variance:
 					statisticsColumn->setValueAt(i, statistics.variance);
 					break;
@@ -251,12 +282,21 @@ void StatisticsSpreadsheet::update() {
 					break;
 				}
 			}
-
 			++colIndex;
 		}
-
-		++it;
+		++metricIndex;
 	}
+}
+
+/*!
+ * updates the content of the first column that has the names of the columns of the parent spreadsheet.
+ * called when the columns in the parent spreadsheet are renamed.
+ */
+void StatisticsSpreadsheet::updateColumnNames() {
+	const auto& columns = m_spreadsheet->children<Column>();
+	auto* nameColumn = children<Column>().at(0);
+	for (int i = 0; i < columns.count(); ++i)
+		nameColumn->setTextAt(i, columns.at(i)->name());
 }
 
 // ##############################################################################

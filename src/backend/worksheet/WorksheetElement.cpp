@@ -59,16 +59,17 @@ WorksheetElement::~WorksheetElement() {
 
 void WorksheetElement::finalizeAdd() {
 	DEBUG(Q_FUNC_INFO)
-	if (!m_plot) {
+	Q_D(WorksheetElement);
+	if (!d->m_plot) {
 		// determine the plot parent which is not neccessarily the parent aspect like for
 		// * child CustomPoint in InfoeElement
 		// * child XYCurves in QQPlot
 		// * etc.
-		m_plot = dynamic_cast<CartesianPlot*>(parent(AspectType::CartesianPlot));
+		d->m_plot = dynamic_cast<CartesianPlot*>(parent(AspectType::CartesianPlot));
 	}
 
-	if (m_plot) {
-		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem(m_cSystemIndex));
+	if (d->m_plot) {
+		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(d->m_plot->coordinateSystem(m_cSystemIndex));
 		Q_EMIT plotRangeListChanged();
 	} else
 		DEBUG(Q_FUNC_INFO << ", WARNING: no plot available.")
@@ -522,6 +523,22 @@ QPointF WorksheetElement::relativePosToParentPos(PositionWrapper position) const
 	return parentPos;
 }
 
+/*!
+ * \brief handleAspectUpdated
+ * in some cases one aspect can depend on another, like a XYCurve on Column
+ * or InfoElement on XYCurve. This is a generic function called for
+ * all Elements when a new aspect will be added even it is not a child of the
+ * current element
+ *
+ * Path is explicit specified, so it must not be recalculated every time when iterating over multiple
+ * WorksheetElements. The path is the same as aspect->path()
+ * \param path
+ */
+void WorksheetElement::handleAspectUpdated(const QString& path, const AbstractAspect* aspect) {
+	Q_UNUSED(path);
+	Q_UNUSED(aspect);
+}
+
 void WorksheetElement::save(QXmlStreamWriter* writer) const {
 	Q_D(const WorksheetElement);
 	writer->writeAttribute(QStringLiteral("x"), QString::number(d->position.point.x()));
@@ -560,6 +577,15 @@ bool WorksheetElement::load(XmlStreamReader* reader, bool preview) {
 
 	READ_INT_VALUE("horizontalPosition", position.horizontalPosition, HorizontalPosition);
 	READ_INT_VALUE("verticalPosition", position.verticalPosition, VerticalPosition);
+	if (Project::xmlVersion() < 11) {
+		// In earlier versions 3 was custom which is now center. But now 3 is relative
+		if ((int)d->position.horizontalPosition == 3) {
+			d->position.horizontalPosition = HorizontalPosition::Center;
+		}
+		if ((int)d->position.verticalPosition == 3) {
+			d->position.verticalPosition = VerticalPosition::Center;
+		}
+	}
 	if (Project::xmlVersion() < 1) {
 		// Before 2.9.0 the position.point is only used when horizontalPosition or
 		// vertical position was set to Custom, otherwise the label was attached to the
@@ -683,16 +709,18 @@ void WorksheetElement::setCoordinateSystemIndex(int index, QUndoCommand* parent)
 }
 
 int WorksheetElement::coordinateSystemCount() const {
-	if (m_plot)
-		return m_plot->coordinateSystemCount();
+	Q_D(const WorksheetElement);
+	if (d->m_plot)
+		return d->m_plot->coordinateSystemCount();
 	DEBUG(Q_FUNC_INFO << ", WARNING: no plot set!")
 
 	return 0;
 }
 
 QString WorksheetElement::coordinateSystemInfo(const int index) const {
-	if (m_plot)
-		return m_plot->coordinateSystem(index)->info();
+	Q_D(const WorksheetElement);
+	if (d->m_plot)
+		return d->m_plot->coordinateSystem(index)->info();
 
 	return {};
 }
@@ -917,14 +945,25 @@ void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
 		QGraphicsItem::keyPressEvent(event);
 }
 
+void WorksheetElementPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+	// when moving the element with the mouse (left button pressed), the move event doesn't have
+	// the information about the pressed button anymore (NoButton) that is needed in mouseMoveEvent()
+	// to decide if the element move was started or not. So, we check the pressed buttong here.
+	if (event->button() == Qt::LeftButton)
+		m_leftButtonPressed = true;
+
+	QGraphicsItem::mousePressEvent(event);
+}
+
 void WorksheetElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
-	if (!m_moveStarted && event->button() == Qt::LeftButton)
+	if (!m_moveStarted && m_leftButtonPressed)
 		m_moveStarted = true;
 
 	QGraphicsItem::mouseMoveEvent(event);
 }
 
 void WorksheetElementPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+	m_leftButtonPressed = false;
 	if (!m_moveStarted) {
 		QGraphicsItem::mouseReleaseEvent(event);
 		return;
@@ -936,7 +975,7 @@ void WorksheetElementPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 	if (point != position.point) {
 		// position was changed -> set the position related member variables
 		suppressRetransform = true;
-		WorksheetElement::PositionWrapper tempPosition = position;
+		auto tempPosition = position;
 		tempPosition.point = point;
 		q->setPosition(tempPosition);
 		updatePosition(); // to update the logical position if available
@@ -978,7 +1017,7 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 			Q_EMIT q->objectPositionChanged();
 		} else {
 			// convert item's center point in parent's coordinates
-			WorksheetElement::PositionWrapper tempPosition = position;
+			auto tempPosition = position;
 			tempPosition.point = q->parentPosToRelativePos(newPos, position);
 			tempPosition.point = q->align(tempPosition.point, boundingRect(), horizontalAlignment, verticalAlignment, false);
 
@@ -1064,4 +1103,9 @@ void WorksheetElementPrivate::setHover(bool on) {
 	m_hovered = on;
 	Q_EMIT q->hoveredChanged(on);
 	update();
+}
+
+CartesianPlot* WorksheetElement::plot() const {
+	Q_D(const WorksheetElement);
+	return d->m_plot;
 }

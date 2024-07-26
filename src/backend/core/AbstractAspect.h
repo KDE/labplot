@@ -278,6 +278,7 @@ public:
 	bool isLoading() const;
 	virtual QIcon icon() const;
 	virtual QMenu* createContextMenu();
+	void setProjectChanged(bool);
 
 	AspectType type() const;
 	bool inherits(AspectType type) const;
@@ -510,6 +511,7 @@ public:
 		q->mRetransformCalled += 1;
 
 	friend class AbstractAspectTest;
+	friend class InfoElementTest;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(AbstractAspect::ChildIndexFlags)

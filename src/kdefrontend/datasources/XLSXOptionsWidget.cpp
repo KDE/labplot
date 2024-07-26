@@ -181,7 +181,7 @@ QStringList XLSXOptionsWidget::selectedXLSXRegionNames() const {
 		if (item->parent()) { // child of sheet
 			const auto sheetName = item->parent()->text(0);
 			// DEBUG(Q_FUNC_INFO << ", name = " << STDSTRING(sheetName))
-			names.push_back({sheetName + QLatin1Char('!') + item->text(0)});
+			names.push_back(QString(sheetName + QLatin1Char('!') + item->text(0)));
 		}
 	}
 

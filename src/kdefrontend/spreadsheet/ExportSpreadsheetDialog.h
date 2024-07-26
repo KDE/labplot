@@ -47,8 +47,12 @@ public:
 	bool commentsAsUnitsFits() const;
 	void setExportTo(const QStringList& to);
 	void setExportToImage(bool possible);
+	void onCompressionToggled(bool checked);
 
-	enum class Format { ASCII, LaTeX, FITS, XLSX, SQLite };
+	std::pair<int, int> getMcapSettings();
+
+	// Todo: Get rid of order matters. Fits need to be at the end.
+	enum class Format { ASCII, LaTeX, XLSX, SQLite, MCAP, FITS };
 
 	Format format() const;
 

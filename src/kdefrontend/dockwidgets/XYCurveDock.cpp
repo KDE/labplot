@@ -341,28 +341,12 @@ void XYCurveDock::init() {
 	ui.cbValuesPosition->addItem(i18n("Right"));
 }
 
-QList<AspectType> XYCurveDock::defaultColumnTopLevelClasses() {
-	return {AspectType::Folder,
-			AspectType::Workbook,
-			AspectType::Datapicker,
-			AspectType::DatapickerCurve,
-			AspectType::Spreadsheet,
-			AspectType::LiveDataSource,
-			AspectType::Column,
-			AspectType::Worksheet,
-			AspectType::CartesianPlot,
-			AspectType::CantorWorksheet};
-}
-
 void XYCurveDock::setModel() {
 	auto* model = aspectModel();
 	model->enablePlottableColumnsOnly(true);
 	model->enableShowPlotDesignation(true);
 
-	QList<AspectType> list = defaultColumnTopLevelClasses();
-	list.append(AspectType::XYFitCurve);
-	list.append(AspectType::XYSmoothCurve);
-
+	auto list = TreeViewComboBox::plotColumnTopLevelClasses();
 	if (cbXColumn && cbYColumn) {
 		cbXColumn->setTopLevelClasses(list);
 		cbYColumn->setTopLevelClasses(list);
@@ -471,10 +455,8 @@ void XYCurveDock::initGeneralTab() {
 	updatePlotRangeList();
 
 	// Slots
-	connect(m_curve, &XYCurve::aspectDescriptionChanged, this, &XYCurveDock::curveDescriptionChanged);
 	connect(m_curve, &XYCurve::xColumnChanged, this, &XYCurveDock::curveXColumnChanged);
 	connect(m_curve, &XYCurve::yColumnChanged, this, &XYCurveDock::curveYColumnChanged);
-	connect(m_curve, &WorksheetElement::plotRangeListChanged, this, &XYCurveDock::updatePlotRangeList);
 }
 
 void XYCurveDock::initTabs() {

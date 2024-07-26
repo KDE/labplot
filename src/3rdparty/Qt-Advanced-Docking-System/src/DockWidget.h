@@ -165,6 +165,7 @@ public:
         DefaultDockWidgetFeatures = DockWidgetClosable | DockWidgetMovable | DockWidgetFloatable | DockWidgetFocusable | DockWidgetPinnable,
         AllDockWidgetFeatures = DefaultDockWidgetFeatures | DockWidgetDeleteOnClose | CustomCloseHandling,
         DockWidgetAlwaysCloseAndDelete = DockWidgetForceCloseWithArea | DockWidgetDeleteOnClose,
+        GloballyLockableFeatures = DockWidgetClosable | DockWidgetMovable | DockWidgetFloatable | DockWidgetPinnable,
         NoDockWidgetFeatures = 0x000
     };
     Q_DECLARE_FLAGS(DockWidgetFeatures, DockWidgetFeature)
@@ -287,7 +288,7 @@ public:
      * provide the InsertMode ForceNoScrollArea
      */
     void setWidget(QWidget* widget, eInsertMode InsertMode = AutoScrollArea);
-	
+
 	/**
 	 * Only used when the feature flag DeleteContentOnClose is set.
 	 * Using the flag and setting a widget factory allows to free the resources
@@ -299,7 +300,7 @@ public:
 	 */
 	using FactoryFunc = std::function<QWidget*(QWidget*)>;
 	void setWidgetFactory(FactoryFunc createWidget, eInsertMode InsertMode = AutoScrollArea);
-	
+
     /**
      * Remove the widget from the dock and give ownership back to the caller
      */
@@ -335,6 +336,11 @@ public:
      * DockWidgetMovable and DockWidgetFloatable.
      */
     DockWidgetFeatures features() const;
+
+    /**
+     * Triggers notification of feature change signals and functions
+     */
+    void notifyFeaturesChanged();
 
     /**
      * Returns the dock manager that manages the dock widget or 0 if the widget

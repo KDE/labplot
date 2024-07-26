@@ -1,5 +1,5 @@
 include(CMakeFindDependencyMacro)
-find_dependency(Qt${QT_VERSION_MAJOR}Core ${REQUIRED_QT_VERSION} REQUIRED)
-find_dependency(Qt${QT_VERSION_MAJOR}Gui ${REQUIRED_QT_VERSION} REQUIRED)
-find_dependency(Qt${QT_VERSION_MAJOR}Widgets ${REQUIRED_QT_VERSION} REQUIRED)
+find_dependency(Qt5Core ${REQUIRED_QT_VERSION} REQUIRED)
+find_dependency(Qt5Gui ${REQUIRED_QT_VERSION} REQUIRED)
+find_dependency(Qt5Widgets ${REQUIRED_QT_VERSION} REQUIRED)
 include("${CMAKE_CURRENT_LIST_DIR}/adsTargets.cmake")

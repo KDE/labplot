@@ -33,11 +33,13 @@ class FITSOptionsWidget;
 class HDF5OptionsWidget;
 class ImageOptionsWidget;
 class JsonOptionsWidget;
+class McapOptionsWidget;
 class MatioOptionsWidget;
 class NetCDFOptionsWidget;
 class OdsOptionsWidget;
 class ROOTOptionsWidget;
 class TemplateHandler;
+class ImportKaggleDatasetWidget;
 
 class QTableWidget;
 class QCompleter;
@@ -53,7 +55,7 @@ class ImportFileWidget : public QWidget {
 public:
 	static QString absolutePath(const QString& fileName);
 
-	explicit ImportFileWidget(QWidget*, bool liveDataSource, const QString& fileName = QString());
+	explicit ImportFileWidget(QWidget*, bool liveDataSource, const QString& fileName = QString(), bool embedded = false);
 	~ImportFileWidget() override;
 
 	void showOptions(bool);
@@ -82,6 +84,8 @@ public:
 	QString serialPort() const;
 	int baudRate() const;
 
+	friend class ImportKaggleDatasetWidget;
+
 public Q_SLOTS:
 	void dataContainerChanged(AbstractAspect*);
 
@@ -107,6 +111,8 @@ private:
 	std::unique_ptr<MatioOptionsWidget> m_matioOptionsWidget;
 	std::unique_ptr<FITSOptionsWidget> m_fitsOptionsWidget;
 	std::unique_ptr<JsonOptionsWidget> m_jsonOptionsWidget;
+	std::unique_ptr<McapOptionsWidget> m_mcapOptionsWidget;
+
 	std::unique_ptr<ROOTOptionsWidget> m_rootOptionsWidget;
 
 	mutable std::unique_ptr<AbstractFileFilter> m_currentFilter;
@@ -119,7 +125,9 @@ private:
 	const QString m_dbcFileName;
 	bool m_liveDataSource;
 	bool m_suppressRefresh{false};
+	bool m_embedded{false};
 	TemplateHandler* m_templateHandler{nullptr};
+	bool mcapTopicsInitialized{false};
 
 Q_SIGNALS:
 	void enableImportToMatrix(bool enable);
@@ -128,6 +136,7 @@ Q_SIGNALS:
 	void hostChanged();
 	void portChanged();
 	void error(const QString&);
+	void previewReady();
 
 private Q_SLOTS:
 	void fileNameChanged(const QString&);
@@ -146,6 +155,7 @@ private Q_SLOTS:
 	void refreshPreview();
 	void updateStartRow(int);
 	void enableDataPortionSelection(bool);
+	void changeTopic();
 
 	// save/load template
 	void loadConfigFromTemplate(KConfig&);
@@ -156,6 +166,7 @@ private Q_SLOTS:
 	friend class NetCDFOptionsWidget; // to access refreshPreview() and others
 	friend class FITSOptionsWidget;
 	friend class JsonOptionsWidget;
+	friend class McapOptionsWidget;
 	friend class ROOTOptionsWidget; // to access refreshPreview() and others
 	friend class OdsOptionsWidget; // to access refreshPreview()
 	friend class XLSXOptionsWidget; // to access refreshPreview()

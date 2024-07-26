@@ -10,10 +10,10 @@
 #include "SpiceFilterPrivate.h"
 #include "SpiceReader.h"
 #include "backend/datasources/AbstractDataSource.h"
-
-#include <QXmlStreamWriter>
-
 #include "backend/lib/macros.h"
+
+#include <KLocalizedString>
+#include <QXmlStreamWriter>
 
 const QString SpiceFilter::xmlElementName = QStringLiteral("SpiceFilter");
 

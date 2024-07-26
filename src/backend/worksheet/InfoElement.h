@@ -36,14 +36,11 @@ public:
 
 	struct MarkerPoints_T {
 		MarkerPoints_T() = default;
-		MarkerPoints_T(CustomPoint* custompoint, const XYCurve* curve, QString curvePath)
-			: customPoint(custompoint)
-			, curve(curve)
-			, curvePath(curvePath) {
-		}
+		MarkerPoints_T(CustomPoint* custompoint, const XYCurve* curve, QString curvePath);
 		CustomPoint* customPoint{nullptr};
 		const XYCurve* curve{nullptr};
 		QString curvePath;
+		bool visible{true};
 	};
 
 	void save(QXmlStreamWriter*) const override;
@@ -55,6 +52,7 @@ public:
 	void addCurvePath(const QString& curvePath, CustomPoint* = nullptr);
 	bool assignCurve(const QVector<XYCurve*>&);
 	void removeCurve(const XYCurve*);
+	void curveDeleted(const AbstractAspect*);
 	void setZValue(qreal) override;
 	int markerPointsCount() const;
 	MarkerPoints_T markerPointAt(int index) const;
@@ -75,6 +73,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, connectionLineCurveName, ConnectionLineCurveName)
 	Line* verticalLine() const;
 	Line* connectionLine() const;
+	bool isValid() const;
 
 	virtual void setVisible(bool on) override;
 
@@ -88,31 +87,29 @@ public Q_SLOTS:
 	void childAdded(const AbstractAspect*);
 	void labelBorderShapeChanged();
 	void labelTextWrapperChanged(TextLabel::TextWrapper);
-	void moveElementBegin();
-	void moveElementEnd();
 	void curveVisibilityChanged();
 	void curveDataChanged();
 	void curveCoordinateSystemIndexChanged(int);
+	void pointVisibleChanged(bool visible);
 
 private:
 	Q_DECLARE_PRIVATE(InfoElement)
 	TextLabel* m_title{nullptr};
+	bool m_suppressVisibleChange{false};
 	QVector<struct MarkerPoints_T> markerpoints;
 	bool m_menusInitialized{false};
 	bool m_suppressChildRemoved{false};
 	bool m_suppressChildPositionChanged{false};
 	bool m_setTextLabelText{false};
-	/*!
-	 * This variable is set when a curve is moved in the order, because there
-	 * the curve is removed and readded and we would like to ignore this remove and
-	 * add. Because of single thread it makes no problems.
-	 */
-	bool m_curveGetsMoved{false};
 
 	void init();
 	void initActions();
 	void initMenus();
 	void initCurveConnections(const XYCurve*);
+	void initCustomPointConnections(const CustomPoint*);
+	void updateValid();
+	void setConnectionLineNextValidCurve();
+	virtual void handleAspectUpdated(const QString& path, const AbstractAspect*) override;
 	void loadPoints(XmlStreamReader* reader, bool preview);
 
 Q_SIGNALS:

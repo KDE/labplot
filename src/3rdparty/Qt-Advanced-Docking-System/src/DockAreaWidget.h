@@ -215,7 +215,7 @@ public:
 	 * Returns the auto hide dock container widget this dock area widget belongs to or 0
 	 * if there is no
 	 */
-	CAutoHideDockContainer* autoHideDockContainer() const; 
+	CAutoHideDockContainer* autoHideDockContainer() const;
 
 	/**
 	 * Returns the parent splitter that contains this dock area

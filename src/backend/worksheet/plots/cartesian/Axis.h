@@ -94,7 +94,7 @@ public:
 
 	typedef AxisPrivate Private; // for Axis::Private used in macros instead of AxisPrivate
 
-	explicit Axis(const QString&, Orientation = Orientation::Horizontal);
+	explicit Axis(const QString&, Orientation = Orientation::Horizontal, bool loading = false);
 	~Axis() override;
 
 	QIcon icon() const override;
@@ -122,7 +122,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(bool, showScaleOffset, ShowScaleOffset)
 	BASIC_D_ACCESSOR_DECL(double, logicalPosition, LogicalPosition)
 
-	POINTER_D_ACCESSOR_DECL(TextLabel, title, Title)
+	TextLabel* title() const;
 	BASIC_D_ACCESSOR_DECL(double, titleOffsetX, TitleOffsetX)
 	BASIC_D_ACCESSOR_DECL(double, titleOffsetY, TitleOffsetY)
 
@@ -185,7 +185,6 @@ public:
 	void setDefault(bool);
 	bool isDefault() const;
 
-	bool isHovered() const;
 	void setSuppressRetransform(bool);
 	void retransform() override;
 	void retransformTickLabelStrings();
@@ -197,7 +196,7 @@ protected:
 
 private:
 	Q_DECLARE_PRIVATE(Axis)
-	void init(Orientation);
+	void init(Orientation, bool loading = false);
 	void initActions();
 	void initMenus();
 

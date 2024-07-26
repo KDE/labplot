@@ -35,6 +35,7 @@ IF (BUILD_READSTAT)
 	set(ext_insource ON)
 	#set(ext_make ${CMAKE_MAKE_PROGRAM} CXXFLAGS=-fPIC CFLAGS=-fPIC)
 
+	set(patch_command git apply ${CMAKE_CURRENT_SOURCE_DIR}/patches/readstat-1.1.9.patch)
 	set(readstat_library libreadstat.a)
 #endif()
 	ExternalProject_Add(3rdparty_readstat
@@ -43,6 +44,7 @@ IF (BUILD_READSTAT)
 		SOURCE_DIR ${ext_src}
 		CONFIGURE_COMMAND ${ext_configure}
 		BUILD_IN_SOURCE ${ext_insource}
+		PATCH_COMMAND ${patch_command}
 		#BUILD_COMMAND ${ext_make}
 		# libtool install does not work with spaces
 		#INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install
@@ -53,7 +55,7 @@ ENDIF ()
 
 IF (BUILD_QXLSX)
 	set(BUILD_SHARED_LIBS OFF)
-	add_subdirectory(QXlsx)
+	add_subdirectory(QXlsx EXCLUDE_FROM_ALL)
 ENDIF ()
 
 # preview.sty
@@ -72,17 +74,28 @@ if (ENABLE_VECTOR_BLF)
       FetchContent_Declare(
         dbc_parser_cpp
         GIT_REPOSITORY https://github.com/LinuxDevon/dbc_parser_cpp.git
-        GIT_TAG 0f3b22b3fe124976a86a85fcd1bfdd55c20ca428 # At least this version is needed!
+        GIT_TAG cc4e80c7b6e1f7a13cc47b45f226756f823888e2 # v0.4.0
       )
       # fix missing variable and keyword for fast_float
       IF (NOT MSVC_FOUND)
           add_definitions (-DFASTFLOAT_VISUAL_STUDIO=0)
           add_definitions (-D__forceinline=inline)
       ENDIF ()
+      # disable -Werror=maybe-uninitialized since gcc gives false positive warnings when address sanitizer is used
+      IF ("${CMAKE_C_COMPILER_ID}" MATCHES "GNU")
+          set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=maybe-uninitialized")
+      ENDIF ()
       # dbc is the root project name
       # https://gitlab.kitware.com/cmake/cmake/-/issues/19854
       set(CMAKE_PROJECT_dbc_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/dbc_database_parser_disableTests.cmake")
-      FetchContent_MakeAvailable(dbc_parser_cpp)
+      # don't install dbc_parser_cpp
+      # see https://stackoverflow.com/questions/65527126/disable-install-for-fetchcontent
+      # FetchContent_MakeAvailable(dbc_parser_cpp)
+      FetchContent_GetProperties(dbc_parser_cpp)
+      if(NOT dbc_parser_cpp_POPULATED)
+          FetchContent_Populate(dbc_parser_cpp)
+          add_subdirectory(${dbc_parser_cpp_SOURCE_DIR} ${dbc_parser_cpp_BINARY_DIR} EXCLUDE_FROM_ALL)
+      endif()
       # headerfiles of the projects are referring to <libdbc/someheader.h> and therefore
       # the path must be added
       target_include_directories(labplot2backendlib PUBLIC ${dbc_parser_cpp_SOURCE_DIR}/include)
@@ -107,6 +120,7 @@ if (ENABLE_VECTOR_BLF)
         GIT_TAG 2c1a8e649328f2e06ce4d45c6223628bc39fd178
       )
       set(CMAKE_PROJECT_Vector_BLF_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/vector_blf_config.cmake")
+      # TODO: link static and don't install (see dbc_parser_cpp)
       FetchContent_MakeAvailable(vector_blf)
       # headerfiles of the projects are referring to <Vector/BLF/someheader.h> and therefore
       # the path must be added
@@ -137,12 +151,31 @@ if (LOCAL_QT_ADVANCED_DOCK_DOWNLOAD)
         qt_advanced_dock
         GIT_REPOSITORY https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System.git
         GIT_TAG a940fc29c6d1fbcb5ee1e2fecf86f20bb86a7fb6
-      )
-      FetchContent_MakeAvailable(qt_advanced_dock)
+    )
+    set(CMAKE_PROJECT_QtADS_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/QtADS_config.cmake")
+    # don't install qt_advanced_dock
+    # see https://stackoverflow.com/questions/65527126/disable-install-for-fetchcontent
+    # FetchContent_MakeAvailable(qt_advanced_dock)
+    FetchContent_GetProperties(qt_advanced_dock)
+    if(NOT qt_advanced_dock_POPULATED)
+        FetchContent_Populate(qt_advanced_dock)
+        add_subdirectory(${qt_advanced_dock_SOURCE_DIR} ${qt_advanced_dock_BINARY_DIR} EXCLUDE_FROM_ALL)
+    endif()
 elseif(LOCAL_QT_ADVANCED_DOCK_COPY)
     # https://cmake.org/cmake/help/latest/variable/CMAKE_PROJECT_INCLUDE.html
     set(CMAKE_PROJECT_QtADS_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/QtADS_config.cmake")
-    set(ADS_VERSION ${LABPLOT_VERSION})
-    add_subdirectory(Qt-Advanced-Docking-System)
+    set(ADS_VERSION ${labplot2_VERSION})
+    add_subdirectory(Qt-Advanced-Docking-System EXCLUDE_FROM_ALL)
 endif()
 
+if (LOCAL_MCAP_DOWNLOAD)
+	FetchContent_Declare(mcap
+		URL https://github.com/foxglove/mcap/archive/refs/tags/releases/cpp/v1.4.0.tar.gz
+		URL_HASH SHA256=64ff3e51119f37ffcfaf9deecbd987a7cb4d4d9035d74a3fd3773395a470fda1 # v1.4.0
+	)
+	FetchContent_MakeAvailable(mcap)
+	#set(_mcap_include_dir ${mcap_SOURCE_DIR}/cpp/mcap/include)
+	target_include_directories(labplot2backendlib PUBLIC ${mcap_SOURCE_DIR}/cpp/mcap/include)
+else ()
+	target_include_directories(labplot2backendlib PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/mcap/include)
+endif ()

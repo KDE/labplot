@@ -105,7 +105,13 @@ void Segments::scrollSegment(Segment** left, Segment** right, int height) {
 /*!
 	identify the runs in a column, and connect them to segments
 */
-void Segments::matchRunsToSegments(int x, int height, bool* lastBool, Segment** lastSegment, const bool* currBool, Segment** currSegment, bool* nextBool) {
+void Segments::matchRunsToSegments(int x,
+								   int height,
+								   const bool* lastBool,
+								   Segment** lastSegment,
+								   const bool* currBool,
+								   Segment** currSegment,
+								   const bool* nextBool) {
 	loadSegment(currSegment, height);
 
 	int yStart = 0;
@@ -190,7 +196,7 @@ void Segments::setAcceptHoverEvents(bool on) {
 	either side, this run will be added to an existing segment, or the start of
 	a new segment
 */
-void Segments::finishRun(bool* lastBool, bool* nextBool, Segment** lastSegment, Segment** currSegment, int x, int yStart, int yStop, int height) {
+void Segments::finishRun(const bool* lastBool, const bool* nextBool, Segment** lastSegment, Segment** currSegment, int x, int yStart, int yStop, int height) {
 	// count runs that touch on the left
 	if (adjacentRuns(lastBool, yStart, yStop, height) > 1)
 		return;
@@ -200,20 +206,20 @@ void Segments::finishRun(bool* lastBool, bool* nextBool, Segment** lastSegment, 
 		return;
 
 	Segment* seg;
-	int y = (int)((yStart + yStop) / 2);
+	int yLast = (int)((yStart + yStop) / 2);
 	if (adjacentSegments(lastSegment, yStart, yStop, height) == 0) {
 		seg = new Segment(m_image);
-		QLine* line = new QLine(QPoint(x, y), QPoint(x, y));
+		QLine* line = new QLine(QPoint(x, yLast), QPoint(x, yLast));
 		seg->path.append(line);
-		seg->yLast = y;
+		seg->yLast = yLast;
 		segments.append(seg);
 	} else {
 		// this is the continuation of an existing segment
 		seg = adjacentSegment(lastSegment, yStart, yStop, height);
-		QLine* line = new QLine(QPoint(x - 1, seg->yLast), QPoint(x, y));
-		seg->length += abs(1 + (seg->yLast - y) * (seg->yLast - y));
+		QLine* line = new QLine(QPoint(x - 1, seg->yLast), QPoint(x, yLast));
+		seg->length += abs(1 + (seg->yLast - yLast) * (seg->yLast - yLast));
 		seg->path.append(line);
-		seg->yLast = y;
+		seg->yLast = yLast;
 	}
 
 	seg->retransform();

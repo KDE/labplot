@@ -82,7 +82,7 @@ public:
 	static void updateLocale();
 
 	enum class LoadOnStart { NewProject, LastProject, WelcomeScreen };
-	enum class NewProject { WithWorksheet, WithSpreadsheet, WithWorksheetSpreadsheet, WithNotebook };
+	enum class NewProject { WithSpreadsheet, WithWorksheet, WithSpreadsheetWorksheet, WithNotebook };
 	enum class TitleBarMode { ShowFilePath, ShowFileName, ShowProjectName };
 
 #ifdef HAVE_KUSERFEEDBACK
@@ -92,7 +92,8 @@ public:
 #endif
 
 private:
-	ads::CDockManager* m_DockManager{nullptr};
+	ads::CDockManager* m_dockManagerContent{nullptr};
+	ads::CDockManager* m_dockManagerMain{nullptr};
 	KColorSchemeManager* m_schemeManager{nullptr};
 	ContentDockWidget* m_currentDock{nullptr}; // Currently selected dock
 	Project* m_project{nullptr};
@@ -142,6 +143,7 @@ private:
 	QAction* m_printPreviewAction;
 	QAction* m_importFileAction;
 	QAction* m_importFileAction_2;
+	QAction* m_importKaggleDatasetAction;
 	QAction* m_importSqlAction;
 	QAction* m_importDatasetAction;
 	QAction* m_importLabPlotAction;
@@ -208,7 +210,8 @@ private:
 	// 	void toggleHideWidget(QWidget* widget, bool hideToLeft);
 	// 	QQuickWidget* createWelcomeScreen();
 	// 	void resetWelcomeScreen();
-	void createADS();
+	void initDocks();
+	void restoreDefaultDockState() const;
 
 	Spreadsheet* activeSpreadsheet() const;
 
@@ -222,15 +225,13 @@ protected:
 
 private Q_SLOTS:
 	void initGUI(const QString&);
-	bool specialDock(ads::CDockWidget* dock);
 	void changeVisibleAllDocks(bool);
 	void activateNextDock();
 	void activatePreviousDock();
-	void dockWidgetAboutToBeRemoved(ads::CDockWidget*);
 	void dockWidgetRemoved(ads::CDockWidget*);
 	void dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now);
 	void updateGUI();
-	void updateGUIOnProjectChanges(const QByteArray& windowState = QByteArray());
+	void updateGUIOnProjectChanges();
 	void undo();
 	void redo();
 
@@ -249,6 +250,7 @@ private Q_SLOTS:
 
 	void historyDialog();
 	void importFileDialog(const QString& fileName = QString());
+	void importKaggleDatasetDialog();
 	void importSqlDialog();
 	void importProjectDialog();
 	void importDatasetDialog();
@@ -259,10 +261,9 @@ private Q_SLOTS:
 	void colorSchemeChanged(QAction*);
 	void openDatasetExample();
 
-	// Cantor
 #ifdef HAVE_CANTOR_LIBS
-	void newCantorWorksheet();
-	void cantorSettingsDialog();
+	void newNotebook();
+	void casSettingsDialog();
 	void updateNotebookActions();
 #endif
 

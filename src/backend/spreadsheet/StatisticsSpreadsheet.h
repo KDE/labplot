@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Aspect providing a spreadsheet with the columns statistics for the parent spreadsheet
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -46,7 +46,8 @@ public:
 		MedianDeviation = 0x00800000,
 		Skewness = 0x01000000,
 		Kurtosis = 0x02000000,
-		Entropy = 0x04000000
+		Entropy = 0x04000000,
+		Range = 0x08000000
 	};
 	Q_DECLARE_FLAGS(Metrics, Metric)
 
@@ -61,10 +62,12 @@ public:
 private:
 	void init();
 	void update();
+	void updateColumnNames();
 
 	Spreadsheet* m_spreadsheet{nullptr};
 	Metrics m_metrics;
-	QMap<Metric, QString> m_metricNames;
+	QVector<Metric> m_metricValues;
+	QVector<QString> m_metricNames;
 
 	friend class SpreadsheetTest;
 };

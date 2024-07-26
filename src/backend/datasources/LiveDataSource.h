@@ -173,6 +173,8 @@ private:
 	QIODevice* m_device{nullptr};
 	QAction* m_plotDataAction{nullptr};
 
+	void finalizeRead();
+
 public Q_SLOTS:
 	void read();
 	void readOnUpdate();
@@ -186,6 +188,9 @@ private Q_SLOTS:
 #ifdef HAVE_QTSERIALPORT
 	void serialPortError(QSerialPort::SerialPortError);
 #endif
+
+Q_SIGNALS:
+	void readOnUpdateCalled();
 };
 
 #endif

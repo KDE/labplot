@@ -67,7 +67,7 @@ public:
 		initialize();
 		value_type tmp = *m_target.*m_field;
 		*m_target.*m_field = m_otherValue;
-		m_otherValue = tmp;
+		m_otherValue = std::move(tmp);
 		QUndoCommand::redo(); // redo all childs
 		finalize();
 	}

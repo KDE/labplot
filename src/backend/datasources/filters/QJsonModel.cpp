@@ -92,12 +92,12 @@ QJsonTreeItem* QJsonTreeItem::load(const QJsonValue& value, QJsonTreeItem* paren
 		rootItem->setSize(QJsonDocument(object).toJson(QJsonDocument::Compact).size());
 
 		// read all children
-		for (const QString& key : object.keys()) {
-			const QJsonValue& v = object.value(key);
-			QJsonTreeItem* child = load(v, rootItem);
-			child->setKey(key);
-			child->setType(v.type());
-			rootItem->appendChild(child);
+		for (const auto& k : object.keys()) {
+			const auto& v = object.value(k);
+			auto* childItem = load(v, rootItem);
+			childItem->setKey(k);
+			childItem->setType(v.type());
+			rootItem->appendChild(childItem);
 		}
 	} else if (value.isArray()) {
 		const auto& array = value.toArray();
@@ -106,10 +106,10 @@ QJsonTreeItem* QJsonTreeItem::load(const QJsonValue& value, QJsonTreeItem* paren
 		int index = 0;
 		rootItem->reserve(array.count());
 		for (const QJsonValue& v : array) {
-			QJsonTreeItem* child = load(v, rootItem);
-			child->setKey(QString::number(index));
-			child->setType(v.type());
-			rootItem->appendChild(child);
+			auto* childItem = load(v, rootItem);
+			childItem->setKey(QString::number(index));
+			childItem->setType(v.type());
+			rootItem->appendChild(childItem);
 			++index;
 		}
 	} else {
@@ -241,7 +241,7 @@ QVariant QJsonModel::data(const QModelIndex& index, int role) const {
 	if (!index.isValid())
 		return {};
 
-	auto* item = static_cast<QJsonTreeItem*>(index.internalPointer());
+	const auto* item = static_cast<QJsonTreeItem*>(index.internalPointer());
 
 	if (role == Qt::DisplayRole) {
 		if (index.column() == 0)

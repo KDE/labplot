@@ -91,25 +91,8 @@ void QQPlotDock::setModel() {
 	auto* model = aspectModel();
 	model->enablePlottableColumnsOnly(true);
 	model->enableShowPlotDesignation(true);
-
-	QList<AspectType> list{AspectType::Folder,
-						   AspectType::Workbook,
-						   AspectType::Datapicker,
-						   AspectType::DatapickerCurve,
-						   AspectType::Spreadsheet,
-						   AspectType::LiveDataSource,
-						   AspectType::Column,
-						   AspectType::Worksheet,
-						   AspectType::CartesianPlot,
-						   AspectType::XYFitCurve,
-						   AspectType::XYSmoothCurve,
-						   AspectType::CantorWorksheet};
-
-	cbDataColumn->setTopLevelClasses(list);
-
-	list = {AspectType::Column};
-	model->setSelectableAspects(list);
-
+	model->setSelectableAspects({AspectType::Column});
+	cbDataColumn->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
 	cbDataColumn->setModel(model);
 }
 
@@ -158,7 +141,7 @@ void QQPlotDock::retranslateUi() {
 	ui.cbDistribution->clear();
 
 	QVector<QPair<QString, int>> distros;
-	for (int i = 0; i < NSL_SF_STATS_DISTRIBUTION_RNG_COUNT; i++)
+	for (int i = 0; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++)
 		distros << QPair<QString, int>(i18n(nsl_sf_stats_distribution_name[i]), i);
 
 	std::sort(std::begin(distros), std::end(distros));
@@ -170,7 +153,7 @@ void QQPlotDock::retranslateUi() {
 			|| d.second == nsl_sf_stats_poisson || d.second == nsl_sf_stats_bernoulli || d.second == nsl_sf_stats_binomial
 			|| d.second == nsl_sf_stats_negative_binomial || d.second == nsl_sf_stats_pascal || d.second == nsl_sf_stats_geometric
 			|| d.second == nsl_sf_stats_hypergeometric || d.second == nsl_sf_stats_logarithmic || d.second == nsl_sf_stats_maxwell_boltzmann
-			|| d.second == nsl_sf_stats_sech || d.second == nsl_sf_stats_levy || d.second == nsl_sf_stats_frechet)
+			|| d.second == nsl_sf_stats_sech || d.second == nsl_sf_stats_levy || d.second == nsl_sf_stats_frechet || d.second == nsl_sf_stats_triangular)
 			continue;
 
 		ui.cbDistribution->addItem(d.first, d.second);

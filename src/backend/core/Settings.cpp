@@ -51,6 +51,6 @@ KConfigGroup settingsGeneral() {
 	return group(settingsGeneralConfigName);
 }
 
-SETUP_SETTING(DockPosBehaviour, DockPosBehaviour, int, settingsGeneral(), DockReopenPositionAfterClose, DockPosBehaviour::AboveLastActive)
+SETUP_SETTING(DockPosBehavior, DockPosBehavior, int, settingsGeneral(), DockReopenPositionAfterClose, DockPosBehavior::AboveLastActive)
 
 } // namespace Settings

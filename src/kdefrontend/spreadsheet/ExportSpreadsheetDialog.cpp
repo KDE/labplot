@@ -24,12 +24,14 @@
 
 #include <QCompleter>
 #include <QDialogButtonBox>
+
 // see https://gitlab.kitware.com/cmake/cmake/-/issues/21609
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 #include <QFileSystemModel>
 #else
 #include <QDirModel>
 #endif
+#include <QDebug>
 #include <QFileDialog>
 #include <QSqlDatabase>
 #include <QStandardItemModel>
@@ -75,7 +77,9 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 	const QStringList& drivers = QSqlDatabase::drivers();
 	if (drivers.contains(QLatin1String("QSQLITE")) || drivers.contains(QLatin1String("QSQLITE3")))
 		ui->cbFormat->addItem(QStringLiteral("SQLite"), static_cast<int>(Format::SQLite));
-
+#ifdef HAVE_MCAP
+	ui->cbFormat->addItem(QStringLiteral("MCAP"), static_cast<int>(Format::MCAP));
+#endif
 	QStringList separators = AsciiFilter::separatorCharacters();
 	separators.takeAt(0); // remove the first entry "auto"
 	ui->cbSeparator->addItems(separators);
@@ -87,11 +91,27 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 	ui->cbLaTeXExport->addItem(i18n("Export Spreadsheet"));
 	ui->cbLaTeXExport->addItem(i18n("Export Selection"));
 
+	// See: https://mcap.dev/docs/cpp/e3B3464E30CB968FB
+#ifdef HAVE_MCAP
+	ui->cbCompressionLevel->addItem(QStringLiteral("Fastest"), 0); // mcap::CompressionLevel::Fastest
+	ui->cbCompressionLevel->addItem(QStringLiteral("Fast"), 1); // mcap::CompressionLevel::Fast
+	ui->cbCompressionLevel->addItem(QStringLiteral("Default"), 2); // mcap::CompressionLevel::Default
+	ui->cbCompressionLevel->addItem(QStringLiteral("Slow"), 3); // mcap::CompressionLevel::Slow
+	ui->cbCompressionLevel->addItem(QStringLiteral("Slowest"), 4); // mcap::CompressionLevel::Slowest
+
+	ui->cbCompressionLevel->setCurrentIndex(2); // Default
+
+	ui->rbNone->setChecked(true);
+	ui->cbCompressionLevel->setEnabled(false);
+
+	ui->rbLZ4->setChecked(false);
+	ui->rbZSTD->setChecked(false);
+#endif
 	ui->bOpen->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
 
 	ui->leFileName->setFocus();
 
-	const QString textNumberFormatShort = i18n("This option determines how the convert numbers to strings.");
+	const QString textNumberFormatShort = i18n("This option determines how to convert numbers to strings.");
 	ui->lDecimalSeparator->setToolTip(textNumberFormatShort);
 	ui->lDecimalSeparator->setToolTip(textNumberFormatShort);
 
@@ -100,7 +120,11 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 	connect(m_showOptionsButton, &QPushButton::clicked, this, &ExportSpreadsheetDialog::toggleOptions);
 	connect(ui->cbFormat, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ExportSpreadsheetDialog::formatChanged);
 	connect(ui->cbExportToFITS, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ExportSpreadsheetDialog::fitsExportToChanged);
-
+#ifdef HAVE_MCAP
+	connect(ui->rbZSTD, &QRadioButton::toggled, this, &ExportSpreadsheetDialog::onCompressionToggled);
+	connect(ui->rbLZ4, &QRadioButton::toggled, this, &ExportSpreadsheetDialog::onCompressionToggled);
+	connect(ui->rbNone, &QRadioButton::toggled, this, &ExportSpreadsheetDialog::onCompressionToggled);
+#endif
 	setWindowTitle(i18nc("@title:window", "Export Spreadsheet"));
 	setWindowIcon(QIcon::fromTheme(QStringLiteral("document-export-database")));
 
@@ -167,8 +191,7 @@ void ExportSpreadsheetDialog::setProjectFileName(const QString& name) {
 	if (name.isEmpty())
 		return;
 
-	QFileInfo fi(name);
-	m_projectPath = fi.dir().canonicalPath();
+	m_projectPath = QFileInfo(name).canonicalPath();
 }
 
 void ExportSpreadsheetDialog::setFileName(const QString& name) {
@@ -199,6 +222,17 @@ void ExportSpreadsheetDialog::fitsExportToChanged(int idx) {
 			ui->lColumnAsUnits->show();
 		}
 	}
+}
+
+std::pair<int, int> ExportSpreadsheetDialog::getMcapSettings() {
+	int compressionLevel = ui->cbCompressionLevel->currentIndex();
+	int compressionMode = 0; // mcap::Compression::None
+	if (ui->rbLZ4->isChecked()) {
+		compressionMode = 1; // mcap::Compression::Lz4
+	} else if (ui->rbZSTD->isChecked()) {
+		compressionMode = 2; // mcap::Compression::ZSTD
+	}
+	return std::pair<int, int>(compressionMode, compressionLevel);
 }
 
 void ExportSpreadsheetDialog::setMatrixMode(bool b) {
@@ -377,6 +411,9 @@ void ExportSpreadsheetDialog::selectFile() {
 	case Format::XLSX:
 		extensions = i18n("Excel 2007+ (*.xlsx)");
 		break;
+	case Format::MCAP:
+		extensions = i18n("MCAP Files (*.mcap)");
+		break;
 	case Format::SQLite:
 		extensions = i18n("SQLite databases files (*.db *.sqlite *.sdb *.db2 *.sqlite2 *.sdb2 *.db3 *.sqlite3 *.sdb3)");
 		break;
@@ -408,6 +445,9 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 	extensions << QStringLiteral(".xlsx");
 #endif
 	extensions << QStringLiteral(".db");
+#ifdef HAVE_MCAP
+	extensions << QStringLiteral(".mcap"); // Todo: Order of suffixes matters
+#endif
 	QString path = ui->leFileName->text();
 	int i = path.indexOf(QLatin1Char('.'));
 	if (index != -1) {
@@ -418,8 +458,10 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 	}
 
 	const auto format = Format(ui->cbFormat->itemData(ui->cbFormat->currentIndex()).toInt());
+	QString extension;
 	switch (format) {
 	case Format::LaTeX:
+		extension = QStringLiteral(".tex");
 		ui->cbSeparator->hide();
 		ui->lSeparator->hide();
 		ui->lDecimalSeparator->hide();
@@ -451,9 +493,10 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 		ui->lExportToFITS->hide();
 		ui->lColumnAsUnits->hide();
 		ui->chkColumnsAsUnits->hide();
-
+		ui->mcapwidget->hide();
 		break;
 	case Format::FITS:
+		extension = QStringLiteral(".fits");
 		ui->lCaptions->hide();
 		ui->lEmptyRows->hide();
 		ui->lExportArea->hide();
@@ -483,9 +526,11 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 				ui->chkColumnsAsUnits->show();
 			}
 		}
+		ui->mcapwidget->hide();
 
 		break;
 	case Format::SQLite:
+		extension = QStringLiteral(".db");
 		ui->cbSeparator->hide();
 		ui->lSeparator->hide();
 		ui->lDecimalSeparator->hide();
@@ -514,9 +559,11 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 		ui->lExportToFITS->hide();
 		ui->lColumnAsUnits->hide();
 		ui->chkColumnsAsUnits->hide();
+		ui->mcapwidget->hide();
 
 		break;
 	case Format::XLSX:
+		extension = QStringLiteral(".xlsx");
 		ui->cbSeparator->hide();
 		ui->lSeparator->hide();
 		ui->lDecimalSeparator->hide();
@@ -542,8 +589,42 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 		ui->lExportToFITS->hide();
 		ui->lColumnAsUnits->hide();
 		ui->chkColumnsAsUnits->hide();
+		ui->mcapwidget->hide();
+		break;
+	case Format::MCAP:
+		ui->cbSeparator->hide();
+		ui->lSeparator->hide();
+		ui->lDecimalSeparator->hide();
+		ui->cbDecimalSeparator->hide();
+
+		ui->chkCaptions->hide();
+		ui->chkEmptyRows->hide();
+		ui->chkGridLines->hide();
+		ui->lEmptyRows->hide();
+		ui->lExportArea->hide();
+		ui->lGridLines->hide();
+		ui->lCaptions->hide();
+		ui->cbLaTeXExport->hide();
+		ui->cbLaTeXExport->hide();
+		ui->lMatrixHHeader->hide();
+		ui->lMatrixVHeader->hide();
+		ui->chkMatrixHHeader->hide();
+		ui->chkMatrixVHeader->hide();
+
+		ui->lHeader->hide();
+		ui->chkHeaders->hide();
+		ui->chkExportHeader->hide();
+		ui->lExportHeader->hide();
+
+		ui->cbExportToFITS->hide();
+		ui->lExportToFITS->hide();
+		ui->lColumnAsUnits->hide();
+		ui->chkColumnsAsUnits->hide();
+		ui->mcapwidget->show();
+
 		break;
 	case Format::ASCII:
+		extension = QStringLiteral(".txt");
 		ui->cbSeparator->show();
 		ui->lSeparator->show();
 		ui->lDecimalSeparator->show();
@@ -569,15 +650,19 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 		ui->lExportToFITS->hide();
 		ui->lColumnAsUnits->hide();
 		ui->chkColumnsAsUnits->hide();
+		ui->mcapwidget->hide();
 	}
 
-	if (!m_matrixMode && !(format == Format::FITS || format == Format::SQLite)) {
+	if (!m_matrixMode && !(format == Format::FITS || format == Format::SQLite || format == Format::MCAP)) {
 		ui->chkExportHeader->show();
 		ui->lExportHeader->show();
 	}
 
 	setFormat(static_cast<Format>(index));
-	ui->leFileName->setText(path);
+
+	// add/replace the file extension for the current file format
+	if (!path.isEmpty())
+		ui->leFileName->setText(GuiTools::replaceExtension(path, extension));
 }
 
 void ExportSpreadsheetDialog::setExportSelection(bool enable) {
@@ -618,4 +703,14 @@ void ExportSpreadsheetDialog::fileNameChanged(const QString& name) {
 	}
 
 	m_okButton->setEnabled(true);
+}
+
+void ExportSpreadsheetDialog::onCompressionToggled(bool checked) {
+	if (checked) {
+		auto* btn = static_cast<QRadioButton*>(sender());
+		if (btn->objectName() == QLatin1String("rbNone"))
+			ui->cbCompressionLevel->setEnabled(false);
+		else
+			ui->cbCompressionLevel->setEnabled(true);
+	}
 }

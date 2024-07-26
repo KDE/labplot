@@ -552,9 +552,9 @@
            </widget>
           </item>
           <item>
-           <widget class="QRadioButton" name="rbJitter">
+           <widget class="QRadioButton" name="rbData">
             <property name="text">
-             <string>Data</string>
+             <string>Data (excl. Outlier and Far Out)</string>
             </property>
            </widget>
           </item>

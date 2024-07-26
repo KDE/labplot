@@ -18,12 +18,14 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Line.h"
+#include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 
 // ##############################################################################
 // #####################  import of LabPlot projects ############################
@@ -1035,6 +1037,65 @@ void ProjectImportTest::testOriginMultiLayersAsCoordinateSystemsWithLegend() {
 	// legend
 	const auto& legends = plot->children<CartesianPlotLegend>();
 	QCOMPARE(legends.count(), 1);
+}
+
+void ProjectImportTest::testImportOriginStrings() {
+	OriginProjectParser parser;
+	parser.setProjectFileName(QFINDTESTDATA(QLatin1String("data/strings_testing.opj")));
+	// parser.setGraphLayerAsPlotArea(false); // read every layer as a new coordinate system
+	Project project;
+	parser.importTo(&project, QStringList());
+
+	const auto& plots = project.children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(plots.count(), 1);
+
+	const auto* plot = plots.first();
+	QVERIFY(plot != nullptr);
+
+	const auto& curves = plot->children<XYCurve>();
+	QCOMPARE(curves.count(), 3); // formula ignored
+	// const auto* curve = curves.at(0);
+	const auto& axes = plot->children<Axis>();
+	QCOMPARE(axes.count(), 4);
+	const auto* xAxis = axes.at(0);
+	const auto* x2Axis = axes.at(1);
+	const auto* yAxis = axes.at(2);
+	const auto* y2Axis = axes.at(3);
+
+	// axis label
+	QCOMPARE(xAxis->name(), QStringLiteral("x"));
+	QCOMPARE(yAxis->name(), QStringLiteral("y"));
+	QCOMPARE(x2Axis->name(), QStringLiteral("x top"));
+	QCOMPARE(y2Axis->name(), QStringLiteral("y right"));
+	QTextEdit xte(xAxis->title()->text().text);
+	QCOMPARE(xte.toPlainText(), QStringLiteral("A"));
+	QTextEdit yte(yAxis->title()->text().text);
+	QCOMPARE(yte.toPlainText(), QStringLiteral("Log of x"));
+	QTextEdit x2te(x2Axis->title()->text().text);
+	QCOMPARE(x2te.toPlainText(), QStringLiteral("x axis title"));
+	QTextEdit y2te(y2Axis->title()->text().text);
+	QCOMPARE(y2te.toPlainText(), QStringLiteral("B"));
+
+	// axis prefix, suffix
+	QCOMPARE(xAxis->labelsPrefix(), QStringLiteral("pb"));
+	QCOMPARE(xAxis->labelsSuffix(), QStringLiteral("sb"));
+	QCOMPARE(yAxis->labelsPrefix(), QStringLiteral("pl"));
+	QCOMPARE(yAxis->labelsSuffix(), QStringLiteral("sl"));
+	QCOMPARE(x2Axis->labelsPrefix(), QStringLiteral("pt"));
+	QCOMPARE(x2Axis->labelsSuffix(), QStringLiteral("st"));
+	QCOMPARE(y2Axis->labelsPrefix(), QStringLiteral("pr"));
+	QCOMPARE(y2Axis->labelsSuffix(), QStringLiteral("sr"));
+	// TODO: axis formula is not imported yet
+	QCOMPARE(xAxis->scalingFactor(), 1.);
+	QCOMPARE(yAxis->scalingFactor(), 1.);
+	QCOMPARE(x2Axis->scalingFactor(), 1.);
+	QCOMPARE(y2Axis->scalingFactor(), 1.);
+
+	// TODO: formula
+	// const auto& eqCurves = plot->children<XYEquationCurve>();
+	// QCOMPARE(curves.count(), 1);
+	// const auto* curve = curves.at(0);
+	// DEBUG("EQUATION FORMULA: " << curve->equationData().expression1.toStdString())
 }
 
 void ProjectImportTest::testParseOriginTags_data() {

@@ -33,6 +33,11 @@ private Q_SLOTS:
 	void testQQPlotInit();
 	void testQQPlotDuplicate();
 	void testQQPlotRange();
+
+	// Bar plot
+	void testBarPlotInit();
+	void testBarPlotDuplicate();
+	void testBarPlotRange();
 };
 
 #endif

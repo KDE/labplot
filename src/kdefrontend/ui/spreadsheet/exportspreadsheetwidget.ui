@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>615</width>
-    <height>672</height>
+    <height>780</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -75,6 +75,209 @@
       <string>Options</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
+      <item row="6" column="1">
+       <widget class="QCheckBox" name="chkCaptions">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QCheckBox" name="chkMatrixVHeader">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="11" column="1">
+       <widget class="QCheckBox" name="chkColumnsAsUnits">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QCheckBox" name="chkGridLines">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="1">
+       <widget class="QCheckBox" name="chkEmptyRows">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="1">
+       <widget class="QCheckBox" name="chkHeaders">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="0">
+       <widget class="QLabel" name="lExportArea">
+        <property name="text">
+         <string>Area to export:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="lMatrixHHeader">
+        <property name="text">
+         <string>Export horizontal header:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="0">
+       <widget class="QLabel" name="lEmptyRows">
+        <property name="text">
+         <string>Skip empty rows:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lMatrixVHeader">
+        <property name="text">
+         <string>Export vertical header:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QCheckBox" name="chkMatrixHHeader">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="1">
+       <widget class="QComboBox" name="cbLaTeXExport"/>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="lSeparator">
+        <property name="text">
+         <string>Separating string:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QComboBox" name="cbDecimalSeparator"/>
+      </item>
+      <item row="12" column="0" colspan="2">
+       <widget class="QWidget" name="mcapwidget" native="true">
+        <layout class="QGridLayout" name="mcapgroup">
+         <item row="1" column="1">
+          <widget class="QComboBox" name="cbCompressionLevel"/>
+         </item>
+         <item row="0" column="0" rowspan="3">
+          <widget class="QGroupBox" name="compressionGroup">
+           <property name="title">
+            <string>Compression</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_2">
+            <item>
+             <widget class="QRadioButton" name="rbNone">
+              <property name="text">
+               <string>None</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="rbLZ4">
+              <property name="text">
+               <string>LZ4</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="rbZSTD">
+              <property name="text">
+               <string>ZSTD</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Compression Level</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="10" column="0">
+       <widget class="QLabel" name="lExportToFITS">
+        <property name="text">
+         <string>Export to:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="lDecimalSeparator">
+        <property name="text">
+         <string>Decimal separator:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="KComboBox" name="cbSeparator">
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="lGridLines">
+        <property name="text">
+         <string>Grid lines:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="1">
+       <widget class="QComboBox" name="cbExportToFITS">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0">
+       <widget class="QLabel" name="lHeader">
+        <property name="text">
+         <string>Headers:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="lCaptions">
+        <property name="text">
+         <string>Table captions:</string>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="0">
        <widget class="QLabel" name="lExportHeader">
         <property name="text">
@@ -98,167 +301,10 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="lMatrixVHeader">
-        <property name="text">
-         <string>Export vertical header:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QCheckBox" name="chkMatrixVHeader">
-        <property name="text">
-         <string/>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="lMatrixHHeader">
-        <property name="text">
-         <string>Export horizontal header:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QCheckBox" name="chkMatrixHHeader">
-        <property name="text">
-         <string/>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="lSeparator">
-        <property name="text">
-         <string>Separating string:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="KComboBox" name="cbSeparator">
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="lDecimalSeparator">
-        <property name="text">
-         <string>Decimal separator:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="1">
-       <widget class="QComboBox" name="cbDecimalSeparator"/>
-      </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="lGridLines">
-        <property name="text">
-         <string>Grid lines:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="1">
-       <widget class="QCheckBox" name="chkGridLines">
-        <property name="text">
-         <string/>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="0">
-       <widget class="QLabel" name="lCaptions">
-        <property name="text">
-         <string>Table captions:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="1">
-       <widget class="QCheckBox" name="chkCaptions">
-        <property name="text">
-         <string/>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="0">
-       <widget class="QLabel" name="lHeader">
-        <property name="text">
-         <string>Headers:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="1">
-       <widget class="QCheckBox" name="chkHeaders">
-        <property name="text">
-         <string/>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="0">
-       <widget class="QLabel" name="lEmptyRows">
-        <property name="text">
-         <string>Skip empty rows:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="1">
-       <widget class="QCheckBox" name="chkEmptyRows">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="9" column="0">
-       <widget class="QLabel" name="lExportArea">
-        <property name="text">
-         <string>Area to export:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="9" column="1">
-       <widget class="QComboBox" name="cbLaTeXExport"/>
-      </item>
-      <item row="10" column="0">
-       <widget class="QLabel" name="lExportToFITS">
-        <property name="text">
-         <string>Export to:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="10" column="1">
-       <widget class="QComboBox" name="cbExportToFITS">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
       <item row="11" column="0">
        <widget class="QLabel" name="lColumnAsUnits">
         <property name="text">
          <string>Comments as column units:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="11" column="1">
-       <widget class="QCheckBox" name="chkColumnsAsUnits">
-        <property name="text">
-         <string/>
         </property>
        </widget>
       </item>

@@ -881,12 +881,17 @@ void WorksheetView::zoom(int numSteps) {
 	if (m_numScheduledScalings * numSteps < 0) // if user moved the wheel in another direction, we reset previously scheduled scalings
 		m_numScheduledScalings = numSteps;
 
-	auto* anim = new QTimeLine(350, this);
-	anim->setUpdateInterval(20);
+	if (!m_zoomTimeLine) {
+		m_zoomTimeLine = new QTimeLine(350, this);
+		m_zoomTimeLine->setUpdateInterval(20);
+		connect(m_zoomTimeLine, &QTimeLine::valueChanged, this, &WorksheetView::scalingTime);
+		connect(m_zoomTimeLine, &QTimeLine::finished, this, &WorksheetView::animFinished);
+	}
 
-	connect(anim, &QTimeLine::valueChanged, this, &WorksheetView::scalingTime);
-	connect(anim, &QTimeLine::finished, this, &WorksheetView::animFinished);
-	anim->start();
+	if (m_zoomTimeLine->state() == QTimeLine::Running)
+		m_zoomTimeLine->stop();
+
+	m_zoomTimeLine->start();
 }
 
 void WorksheetView::scalingTime() {
@@ -899,7 +904,6 @@ void WorksheetView::animFinished() {
 		m_numScheduledScalings--;
 	else
 		m_numScheduledScalings++;
-	sender()->~QObject();
 
 	updateLabelsZoom();
 }
@@ -1113,6 +1117,7 @@ void WorksheetView::keyReleaseEvent(QKeyEvent* event) {
 }
 
 void WorksheetView::dragEnterEvent(QDragEnterEvent* event) {
+#ifndef SDK
 	// ignore events not related to internal drags of columns etc., e.g. dropping of external files onto LabPlot
 	const auto* mimeData = event->mimeData();
 	if (!mimeData) {
@@ -1130,6 +1135,9 @@ void WorksheetView::dragEnterEvent(QDragEnterEvent* event) {
 	m_worksheet->dockWidget()->dockManager()->setDockWidgetFocused(m_worksheet->dockWidget());
 
 	event->setAccepted(true);
+#else
+	Q_UNUSED(event)
+#endif
 }
 
 void WorksheetView::dragMoveEvent(QDragMoveEvent* event) {
@@ -1336,6 +1344,7 @@ void WorksheetView::addNew(QAction* action) {
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot4Action);
 	} else if (action == addCartesianPlotTemplateAction) {
+#ifndef SDK
 		// open dialog
 		PlotTemplateDialog d;
 		if (d.exec() != QDialog::Accepted)
@@ -1349,6 +1358,7 @@ void WorksheetView::addNew(QAction* action) {
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlotTemplateAction);
+#endif
 	} else if (action == addTextLabelAction) {
 		auto* l = new TextLabel(i18n("Text Label"));
 		l->setText(i18n("Text Label"));
@@ -1404,14 +1414,14 @@ void WorksheetView::addNew(QAction* action) {
 	// if there is already an element fading in, stop the time line and show the element with the full opacity.
 	if (m_fadeInTimeLine->state() == QTimeLine::Running) {
 		m_fadeInTimeLine->stop();
-		auto* effect = new QGraphicsOpacityEffect();
+		auto* effect = new QGraphicsOpacityEffect(this);
 		effect->setOpacity(1);
 		lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
 	}
 
 	// create the opacity effect and start the actual fade-in
 	lastAddedWorksheetElement = aspect;
-	auto* effect = new QGraphicsOpacityEffect();
+	auto* effect = new QGraphicsOpacityEffect(this);
 	effect->setOpacity(0);
 	lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
 	m_fadeInTimeLine->start();
@@ -1661,7 +1671,7 @@ void WorksheetView::selectionChanged() {
 		m_worksheet->setSelectedInView(false);
 	}
 
-	m_selectedItems = items;
+	m_selectedItems = std::move(items);
 	handleCartesianPlotActions();
 }
 
@@ -2070,8 +2080,8 @@ void WorksheetView::handleCartesianPlotActions() {
 		cartesianPlotZoomXSelectionModeAction->setChecked(false);
 		cartesianPlotZoomYSelectionModeAction->setEnabled(false);
 		cartesianPlotZoomYSelectionModeAction->setChecked(false);
-		for (auto* plot : m_worksheet->children<CartesianPlot>())
-			plot->setMouseMode(CartesianPlot::MouseMode::Selection);
+		for (auto* p : m_worksheet->children<CartesianPlot>())
+			p->setMouseMode(CartesianPlot::MouseMode::Selection);
 		zoomInAction->setEnabled(false);
 		zoomOutAction->setEnabled(false);
 		zoomInXAction->setEnabled(false);
@@ -2303,8 +2313,11 @@ void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, con
 	}
 
 	// draw the scene items
-	if (!selection) // if no selection effects have to be exported, set the printing flag to suppress it in the paint()'s of the children
+	if (!selection) { // if no selection effects have to be exported, set the printing flag to suppress it in the paint()'s of the children
 		m_worksheet->setPrinting(true);
+		for (auto* child : m_worksheet->children<WorksheetElement>())
+			child->retransform();
+	}
 	scene()->render(painter, QRectF(), sourceRect);
 	if (!selection)
 		m_worksheet->setPrinting(false);

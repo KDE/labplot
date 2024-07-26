@@ -3,7 +3,7 @@
 	Project		: LabPlot
 	Description	: Represents live data source
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 
@@ -18,6 +18,8 @@
 #include "backend/datasources/filters/ROOTFilter.h"
 #include "backend/datasources/filters/SpiceFilter.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/trace.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "kdefrontend/spreadsheet/PlotDataDialog.h"
 
@@ -49,7 +51,7 @@ LiveDataSource::LiveDataSource(const QString& name, bool loading)
 	, m_updateTimer(new QTimer(this))
 	, m_watchTimer(new QTimer(this)) {
 	m_watchTimer->setSingleShot(true);
-	m_watchTimer->setInterval(100);
+	m_watchTimer->setInterval(100); // maximum read frequency is 1/100ms = 10Hz
 
 	// stop reading from the source before removing the child from the project
 	connect(this, &AbstractAspect::childAspectAboutToBeRemoved, [this](const AbstractAspect* aspect) {
@@ -314,6 +316,7 @@ void LiveDataSource::setUpdateType(UpdateType updatetype) {
 			m_fileSystemWatcher = new QFileSystemWatcher(this);
 
 		m_fileSystemWatcher->addPath(m_fileName);
+
 		QFileInfo file(m_fileName);
 		// If the watched file currently does not exist (because it is recreated for instance), watch its containing
 		// directory instead. Once the file exists again, switch to watching the file in readOnUpdate().
@@ -417,6 +420,7 @@ QIcon LiveDataSource::icon() const {
 	case AbstractFileFilter::FileType::HDF5:
 	case AbstractFileFilter::FileType::NETCDF:
 	case AbstractFileFilter::FileType::VECTOR_BLF:
+	case AbstractFileFilter::FileType::MCAP:
 		break;
 	}
 
@@ -432,6 +436,7 @@ QIcon LiveDataSource::icon() const {
  * presumably has finished. Also see LiveDataSource::setUpdateType().
  */
 void LiveDataSource::readOnUpdate() {
+	DEBUG(Q_FUNC_INFO)
 	if (!m_fileSystemWatcher->files().contains(m_fileName)) {
 		m_fileSystemWatcher->addPath(m_fileName);
 		QFileInfo file(m_fileName);
@@ -447,6 +452,8 @@ void LiveDataSource::readOnUpdate() {
 		m_pending = true;
 	else
 		read();
+
+	Q_EMIT readOnUpdateCalled();
 }
 
 /*
@@ -578,6 +585,7 @@ void LiveDataSource::read() {
 		case AbstractFileFilter::FileType::JSON:
 		case AbstractFileFilter::FileType::READSTAT:
 		case AbstractFileFilter::FileType::MATIO:
+		case AbstractFileFilter::FileType::MCAP:
 			break;
 		}
 		break;
@@ -616,7 +624,36 @@ void LiveDataSource::read() {
 		break;
 	}
 
+	finalizeRead();
+
 	m_reading = false;
+}
+
+/*!
+ * notify all affected columns and plots about the changes.
+ * this is simililar to \sa Spreadsheet::finalizeImport().
+ */
+void LiveDataSource::finalizeRead() {
+	PERFTRACE(QLatin1String("AsciiLiveDataImport, notify affected columns and plots"));
+
+	// determine the dependent plots
+	QVector<CartesianPlot*> plots;
+	const auto& columns = children<Column>();
+	for (auto* column : columns)
+		column->addUsedInPlots(plots);
+
+	// suppress retransform in the dependent plots
+	for (auto* plot : plots)
+		plot->setSuppressRetransform(true);
+
+	for (auto* column : columns)
+		column->setChanged();
+
+	// retransform the dependent plots
+	for (auto* plot : plots) {
+		plot->setSuppressRetransform(false);
+		plot->dataChanged(-1, -1); // TODO: check if all ranges must be updated!
+	}
 }
 
 /*!

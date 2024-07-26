@@ -25,7 +25,7 @@
   */
 #define CURVE_COLUMN_CONNECT(class_name, Prefix, prefix, recalc_func)                                                                                          \
 	void class_name::connect##Prefix##Column(const AbstractColumn* column) {                                                                                   \
-		connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &class_name::prefix##ColumnAboutToBeRemoved);                      \
+		connect(column, &AbstractAspect::aspectAboutToBeRemoved, this, &class_name::prefix##ColumnAboutToBeRemoved);                                           \
 		/* When the column is reused with different name, the curve should be informed to disconnect */                                                        \
 		connect(column, &AbstractColumn::aboutToReset, this, &class_name::prefix##ColumnAboutToBeRemoved);                                                     \
 		/* after the curve was updated, emit the signal to update the plot ranges */                                                                           \
@@ -90,5 +90,10 @@
 		const AbstractColumn* m_column{nullptr};                                                                                                               \
 		const AbstractColumn* m_columnOld{nullptr};                                                                                                            \
 	};
+
+#define CURVE_COLUMN_REMOVED(prefix)                                                                                                                           \
+	Q_EMIT prefix##ColumnChanged(d->prefix##Column);                                                                                                           \
+	/* emit DataChanged() in order to notify the plot about the changes */                                                                                     \
+	Q_EMIT prefix##DataChanged();
 
 #endif // MACROSXYCURVE_H

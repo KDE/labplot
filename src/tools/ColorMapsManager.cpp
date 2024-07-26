@@ -79,7 +79,7 @@ QStringList ColorMapsManager::colorMapNames(const QString& collectionName) {
 					const auto& colorsArray = colorMaps.value(key).toArray();
 					for (const auto& color : colorsArray)
 						colors << color.toString();
-					m_colors[key] = colors;
+					m_colors[key] = std::move(colors);
 				}
 			}
 		}

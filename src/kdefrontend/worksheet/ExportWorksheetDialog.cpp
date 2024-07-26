@@ -66,22 +66,32 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent)
 	ui->bOpen->setIcon(QIcon::fromTheme(QLatin1String("document-open")));
 
 	// see WorksheetView::ExportFormat
-	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("application-pdf")), i18n("Portable Data Format (PDF)"));
-	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-svg+xml")), i18n("Scalable Vector Graphics (SVG)"));
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("application-pdf")),
+						  i18n("Portable Data Format (PDF)"),
+						  static_cast<int>(WorksheetView::ExportFormat::PDF));
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-svg+xml")),
+						  i18n("Scalable Vector Graphics (SVG)"),
+						  static_cast<int>(WorksheetView::ExportFormat::SVG));
 	ui->cbFormat->insertSeparator(3);
-	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-png")), i18n("Portable Network Graphics (PNG)"));
-	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-jpeg")), i18n("Joint Photographic Experts Group (JPG)"));
-	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-bmp")), i18n("Windows Bitmap (BMP)"));
-	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-x-generic")), i18n("Portable Pixmap (PPM)"));
-	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-x-generic")), i18n("X11 Bitmap (XBM)"));
-	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-x-generic")), i18n("X11 Bitmap (XPM)"));
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-png")),
+						  i18n("Portable Network Graphics (PNG)"),
+						  static_cast<int>(WorksheetView::ExportFormat::PNG));
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-jpeg")),
+						  i18n("Joint Photographic Experts Group (JPG)"),
+						  static_cast<int>(WorksheetView::ExportFormat::JPG));
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-bmp")), i18n("Windows Bitmap (BMP)"), static_cast<int>(WorksheetView::ExportFormat::BMP));
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-x-generic")),
+						  i18n("Portable Pixmap (PPM)"),
+						  static_cast<int>(WorksheetView::ExportFormat::PPM));
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-x-generic")), i18n("X11 Bitmap (XBM)"), static_cast<int>(WorksheetView::ExportFormat::XBM));
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-x-generic")), i18n("X11 Bitmap (XPM)"), static_cast<int>(WorksheetView::ExportFormat::XPM));
 
 	ui->cbExportTo->addItem(i18n("File"));
 	ui->cbExportTo->addItem(i18n("Clipboard"));
 
-	ui->cbExportArea->addItem(i18n("Object's Bounding Box"));
-	ui->cbExportArea->addItem(i18n("Current Selection"));
-	ui->cbExportArea->addItem(i18n("Complete Worksheet"));
+	ui->cbExportArea->addItem(i18n("Object's Bounding Box"), static_cast<int>(WorksheetView::ExportArea::BoundingBox));
+	ui->cbExportArea->addItem(i18n("Current Selection"), static_cast<int>(WorksheetView::ExportArea::Selection));
+	ui->cbExportArea->addItem(i18n("Complete Worksheet"), static_cast<int>(WorksheetView::ExportArea::Worksheet));
 
 	ui->cbResolution->addItem(
 		i18nc("%1 is the value of DPI of the current screen", "%1 (desktop)", QString::number(QApplication::primaryScreen()->physicalDotsPerInchX())));
@@ -143,8 +153,7 @@ void ExportWorksheetDialog::setProjectFileName(const QString& name) {
 	if (name.isEmpty())
 		return;
 
-	QFileInfo fi(name);
-	m_projectPath = fi.dir().canonicalPath();
+	m_projectPath = QFileInfo(name).canonicalPath();
 }
 
 void ExportWorksheetDialog::setFileName(const QString& name) {
@@ -179,7 +188,7 @@ WorksheetView::ExportFormat ExportWorksheetDialog::exportFormat() const {
 }
 
 WorksheetView::ExportArea ExportWorksheetDialog::exportArea() const {
-	return WorksheetView::ExportArea(ui->cbExportArea->currentIndex());
+	return WorksheetView::ExportArea(ui->cbExportArea->currentData().toInt());
 }
 
 bool ExportWorksheetDialog::exportBackground() const {
@@ -253,40 +262,36 @@ void ExportWorksheetDialog::selectFile() {
 	KConfigGroup conf = Settings::group(QStringLiteral("ExportWorksheetDialog"));
 	const QString dir = conf.readEntry("LastDir", "");
 
-	DEBUG(Q_FUNC_INFO << ", format" << ui->cbFormat->currentIndex())
-	QString format;
-	int index = ui->cbFormat->currentIndex();
-	if (index > 2) // consider separator
-		index--;
-
-	switch ((WorksheetView::ExportFormat)index) {
+	const auto format = WorksheetView::ExportFormat(ui->cbFormat->currentData().toInt());
+	QString caption;
+	switch (format) {
 	case WorksheetView::ExportFormat::PDF:
-		format = i18n("Portable Data Format (*.pdf *.PDF)");
+		caption = i18n("Portable Data Format (*.pdf *.PDF)");
 		break;
 	case WorksheetView::ExportFormat::SVG:
-		format = i18n("Scalable Vector Graphics (*.svg *.SVG)");
+		caption = i18n("Scalable Vector Graphics (*.svg *.SVG)");
 		break;
 	case WorksheetView::ExportFormat::PNG:
-		format = i18n("Portable Network Graphics (*.png *.PNG)");
+		caption = i18n("Portable Network Graphics (*.png *.PNG)");
 		break;
 	case WorksheetView::ExportFormat::JPG:
-		format = i18n("Joint Photographic Experts Group (*.jpg *.jpeg *.JPG *.JPEG)");
+		caption = i18n("Joint Photographic Experts Group (*.jpg *.jpeg *.JPG *.JPEG)");
 		break;
 	case WorksheetView::ExportFormat::BMP:
-		format = i18n("Windows Bitmap (*.bmp *.BMP)");
+		caption = i18n("Windows Bitmap (*.bmp *.BMP)");
 		break;
 	case WorksheetView::ExportFormat::PPM:
-		format = i18n("Portable Pixmap (*.ppm *.PPM)");
+		caption = i18n("Portable Pixmap (*.ppm *.PPM)");
 		break;
 	case WorksheetView::ExportFormat::XBM:
-		format = i18n("X11 Bitmap (*.xbm *.XBM)");
+		caption = i18n("X11 Bitmap (*.xbm *.XBM)");
 		break;
 	case WorksheetView::ExportFormat::XPM:
-		format = i18n("X11 Bitmap (*.xpm *.XPM)");
+		caption = i18n("X11 Bitmap (*.xpm *.XPM)");
 		break;
 	}
 
-	const QString path = QFileDialog::getSaveFileName(this, i18nc("@title:window", "Export to File"), dir, format);
+	const QString path = QFileDialog::getSaveFileName(this, i18nc("@title:window", "Export to File"), dir, caption);
 	if (!path.isEmpty()) {
 		// if the file is already existing, the user was already asked
 		// in QFileDialog whether to overwrite or not.
@@ -309,28 +314,46 @@ void ExportWorksheetDialog::selectFile() {
 /*!
 	called when the output format was changed. Adjusts the extension for the specified file.
  */
-void ExportWorksheetDialog::formatChanged(int index) {
-	// we have a separator in the format combobox at the 3rd position -> skip it
-	if (index > 2)
-		index--;
-
-	QStringList extensions;
-	// see WorksheetView::ExportFormat
-	extensions << QLatin1String(".pdf") << QLatin1String(".svg") << QLatin1String(".png") << QLatin1String(".jpg") << QLatin1String(".bmp")
-			   << QLatin1String(".ppm") << QLatin1String(".xbm") << QLatin1String(".xpm");
-	QString path = ui->leFileName->text();
-	int i = path.indexOf(QLatin1Char('.'));
-	if (i == -1)
-		path = path + extensions.at(index);
-	else
-		path = path.left(i) + extensions.at(index);
-
-	ui->leFileName->setText(path);
+void ExportWorksheetDialog::formatChanged(int) {
+	const auto format = WorksheetView::ExportFormat(ui->cbFormat->currentData().toInt());
 
 	// show resolution option for png format
-	bool visible = (index == 2);
+	const bool visible = (format == WorksheetView::ExportFormat::PNG);
 	ui->lResolution->setVisible(visible);
 	ui->cbResolution->setVisible(visible);
+
+	// add/replace the file extension for the current file format
+	QString extension;
+	switch (format) {
+	case WorksheetView::ExportFormat::PDF:
+		extension = QStringLiteral(".pdf");
+		break;
+	case WorksheetView::ExportFormat::SVG:
+		extension = QStringLiteral(".svg");
+		break;
+	case WorksheetView::ExportFormat::PNG:
+		extension = QStringLiteral(".png");
+		break;
+	case WorksheetView::ExportFormat::JPG:
+		extension = QStringLiteral(".jpg");
+		break;
+	case WorksheetView::ExportFormat::BMP:
+		extension = QStringLiteral(".bmp");
+		break;
+	case WorksheetView::ExportFormat::PPM:
+		extension = QStringLiteral(".ppm");
+		break;
+	case WorksheetView::ExportFormat::XBM:
+		extension = QStringLiteral(".xbm");
+		break;
+	case WorksheetView::ExportFormat::XPM:
+		extension = QStringLiteral(".xpm");
+		break;
+	}
+
+	const auto& path = ui->leFileName->text();
+	if (!path.isEmpty())
+		ui->leFileName->setText(GuiTools::replaceExtension(path, extension));
 }
 
 /*!

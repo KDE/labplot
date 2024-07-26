@@ -98,6 +98,10 @@ private Q_SLOTS:
 	void fontChanged(const QFont&);
 	void teXFontChanged(const QFont&);
 	void fontSizeChanged(int);
+	void alignLeft();
+	void alignCenter();
+	void alignRight();
+	void alignJustify();
 	void dateTimeMenu();
 	void insertDateTime(QAction*);
 

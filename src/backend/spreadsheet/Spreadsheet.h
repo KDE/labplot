@@ -62,8 +62,6 @@ public:
 	int colY(int col);
 	QString text(int row, int col) const;
 
-	void copy(Spreadsheet* other);
-
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
@@ -89,7 +87,7 @@ public:
 					  bool& ok,
 					  bool initializeContainer) override;
 	void finalizeImport(size_t columnOffset, size_t startColumn, size_t endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode) override;
-	int resize(AbstractFileFilter::ImportMode, QStringList colNameList, int cols);
+	int resize(AbstractFileFilter::ImportMode, const QStringList& colNameList, int cols);
 
 	struct Linking {
 		bool linking{false};
@@ -148,6 +146,7 @@ private Q_SLOTS:
 	void childDeselected(const AbstractAspect*) override;
 	void linkedSpreadsheetDeleted();
 	void linkedSpreadsheetNewRowCount(int);
+	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect*);
 
 Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
@@ -176,6 +175,7 @@ Q_SIGNALS:
 
 	friend class SpreadsheetSetLinkingCmd;
 	friend class SpreadsheetSetColumnCountCommand;
+	friend class Project; // handleAspectUpdated required
 };
 
 #endif

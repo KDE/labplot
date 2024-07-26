@@ -3,7 +3,7 @@
     Description          : Origin file parser base class
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2008 Alex Kargovsky <kargovsky@yumr.phys.msu.su>
-    SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2017-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -66,8 +66,8 @@ public:
     std::vector<Origin::Note> notes;
     tree<Origin::ProjectNode> projectTree;
     std::string resultsLog;
-    unsigned int windowsCount;
-    unsigned int fileVersion, buildVersion;
+    unsigned int windowsCount{ 0 };
+    unsigned int fileVersion{ 0 }, buildVersion{ 0 };
 };
 
 OriginParser *createOriginAnyParser(const std::string &fileName);

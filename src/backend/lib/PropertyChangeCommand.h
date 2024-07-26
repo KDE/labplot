@@ -34,7 +34,7 @@ public:
 	void redo() override {
 		T tmp = *m_property;
 		*m_property = m_other_value;
-		m_other_value = tmp;
+		m_other_value = std::move(tmp);
 	}
 
 	void undo() override {

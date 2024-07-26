@@ -70,9 +70,11 @@ void XYAnalysisCurveDock::setAnalysisCurves(QList<XYCurve*> curves) {
 
 	if (!curves.isEmpty())
 		m_analysisCurve = m_analysisCurves.first();
+
+	setModel();
 }
 
-void XYAnalysisCurveDock::setModel(const QList<AspectType>& topLevelClasses) {
+void XYAnalysisCurveDock::setModel() {
 	if (cbDataSourceCurve) {
 		// The FourierTransformCurveDock and the XYHilbertTransformCurveDock don't use this datasource
 		// choosing therefore cbDataSourceCurve will not be initialized
@@ -91,6 +93,7 @@ void XYAnalysisCurveDock::setModel(const QList<AspectType>& topLevelClasses) {
 	}
 
 	auto* model = aspectModel();
+	const auto& topLevelClasses = TreeViewComboBox::plotColumnTopLevelClasses();
 	if (cbY2DataColumn) {
 		cbY2DataColumn->setTopLevelClasses(topLevelClasses);
 		cbY2DataColumn->setModel(model);

@@ -4,7 +4,7 @@
 	Description          : Tests for the ascii filter
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2017-2023 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2022-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -20,13 +20,6 @@
 
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
-
-void AsciiFilterTest::initTestCase() {
-	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
-	// TODO: redesign/remove this
-	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
-	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
-}
 
 // ##############################################################################
 // #################  handling of empty and sparse files ########################
@@ -216,6 +209,36 @@ void AsciiFilterTest::testSparseFile03() {
 	QCOMPARE(spreadsheet.column(2)->valueAt(3), 3.);
 }
 
+void AsciiFilterTest::testFileEndingWithoutLinebreak() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/file_ending_without_line_break.txt"));
+
+	filter.setHeaderEnabled(true);
+	// filter.setHeaderLine(1);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 5);
+	QCOMPARE(spreadsheet.columnCount(), 2);
+
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("some data"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("more data"));
+
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
+	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
+	QCOMPARE(spreadsheet.column(0)->integerAt(2), 3);
+	QCOMPARE(spreadsheet.column(0)->integerAt(3), 4);
+	QCOMPARE(spreadsheet.column(0)->integerAt(4), 5);
+	QCOMPARE(spreadsheet.column(1)->integerAt(0), 1);
+	QCOMPARE(spreadsheet.column(1)->integerAt(1), 4);
+	QCOMPARE(spreadsheet.column(1)->integerAt(2), 9);
+	QCOMPARE(spreadsheet.column(1)->integerAt(3), 16);
+	QCOMPARE(spreadsheet.column(1)->integerAt(4), 25);
+}
+
 // ##############################################################################
 // ################################  header handling ############################
 // ##############################################################################
@@ -372,7 +395,7 @@ void AsciiFilterTest::testHeader07a() {
 	filter.setSeparatingCharacter(QStringLiteral("TAB"));
 	filter.setHeaderLine(2);
 	filter.setHeaderEnabled(true);
-	filter.setStartRow(4);
+	filter.setStartRow(2);
 	filter.setDateTimeFormat(QLatin1String("yyyy-MM-dd hh:mm:ss.zzz"));
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -535,6 +558,27 @@ void AsciiFilterTest::testHeader11a() {
 	QCOMPARE(spreadsheet.columnCount(), 2);
 	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("Column 1"));
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("Column 2"));
+}
+
+/*!
+ * test column modes when header is in second line
+ */
+void AsciiFilterTest::testHeader12() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/lds_test.csv"));
+
+	// filter.setSeparatingCharacter(QStringLiteral(" "));
+	filter.setHeaderEnabled(true);
+	filter.setHeaderLine(2);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 1);
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("x"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("y"));
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
 }
 
 // ##############################################################################
@@ -702,6 +746,7 @@ void AsciiFilterTest::testRowRange00() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
 
 	filter.setSeparatingCharacter(QStringLiteral("auto"));
+	filter.setHeaderEnabled(false);
 	filter.setStartRow(3);
 	filter.setEndRow(5);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
@@ -895,7 +940,7 @@ void AsciiFilterTest::testQuotedStrings02() {
 	QCOMPARE(QFile::exists(fileName), true);
 
 	filter.setSeparatingCharacter(QStringLiteral(","));
-	// filter.setHeaderEnabled(false);
+	filter.setHeaderEnabled(false);
 	filter.setRemoveQuotesEnabled(true);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -1262,6 +1307,7 @@ void AsciiFilterTest::testMatrixHeader() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
 
 	filter.setSeparatingCharacter(QStringLiteral("auto"));
+	filter.setHeaderEnabled(false);
 	filter.readDataFromFile(fileName, &matrix, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(matrix.rowCount(), 5);

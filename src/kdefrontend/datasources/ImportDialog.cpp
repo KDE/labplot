@@ -124,7 +124,7 @@ void ImportDialog::setModel() {
 void ImportDialog::setCurrentIndex(const QModelIndex& index) {
 	QDEBUG(Q_FUNC_INFO << ", index =" << index);
 	cbAddTo->setCurrentModelIndex(index);
-	QDEBUG("cbAddTo->currentModelIndex() =" << cbAddTo->currentModelIndex());
+	QDEBUG(Q_FUNC_INFO << ", cbAddTo->currentModelIndex() =" << cbAddTo->currentModelIndex());
 	checkOkButton();
 }
 
@@ -137,17 +137,27 @@ void ImportDialog::currentModelIndexChanged(const QModelIndex& index) {
 void ImportDialog::newDataContainer(QAction* action) {
 	DEBUG(Q_FUNC_INFO);
 	QString name = selectedObject();
-	QString type = action->iconText().split(QLatin1Char(' ')).at(1);
 	if (name.isEmpty())
 		name = action->iconText();
+	int actionIndex = m_newDataContainerMenu->actions().indexOf(action);
+	QString addText, nameText;
+	if (actionIndex == 0) {
+		addText = i18n("Add a new Workbook");
+		nameText = i18n("Workbook name:");
+	} else if (actionIndex == 1) {
+		addText = i18n("Add a new Spreadsheet");
+		nameText = i18n("Spreadsheet name:");
+	} else {
+		addText = i18n("Add a new Matrix");
+		nameText = i18n("Matrix name:");
+	}
 
 	bool ok;
 	// child widgets can't have own icons
 	auto* dlg = new QInputDialog(this);
-	name = dlg->getText(this, i18n("Add %1", action->iconText()), i18n("%1 name:", type), QLineEdit::Normal, name, &ok);
+	name = dlg->getText(this, addText, nameText, QLineEdit::Normal, name, &ok);
 	if (ok) {
 		AbstractAspect* aspect;
-		int actionIndex = m_newDataContainerMenu->actions().indexOf(action);
 		if (actionIndex == 0)
 			aspect = new Workbook(name);
 		else if (actionIndex == 1)
@@ -156,7 +166,7 @@ void ImportDialog::newDataContainer(QAction* action) {
 			aspect = new Matrix(name);
 
 		m_mainWin->addAspectToProject(aspect);
-		QDEBUG("cbAddTo->setCurrentModelIndex() to " << m_mainWin->model()->modelIndexOfAspect(aspect));
+		QDEBUG(Q_FUNC_INFO << ", cbAddTo->setCurrentModelIndex() to " << m_mainWin->model()->modelIndexOfAspect(aspect));
 		cbAddTo->setCurrentModelIndex(m_mainWin->model()->modelIndexOfAspect(aspect));
 		checkOkButton();
 
@@ -188,10 +198,13 @@ void ImportDialog::showErrorMessage(const QString& message) {
 }
 
 void ImportDialog::accept() {
-	bool rc = importTo(m_mainWin->statusBar());
-	if (rc) {
-		// the import was successful, set the project to Changed and close the dialog
-		m_mainWin->project()->setChanged(true);
+	if (!m_liveDataSource) {
+		bool rc = importTo(m_mainWin->statusBar());
+		if (rc) {
+			// the import was successful, set the project to Changed and close the dialog
+			m_mainWin->project()->setChanged(true);
+			QDialog::accept();
+		}
+	} else
 		QDialog::accept();
-	}
 }

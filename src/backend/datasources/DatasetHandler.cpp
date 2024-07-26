@@ -193,7 +193,7 @@ void DatasetHandler::downloadFinished(QNetworkReply* reply) {
 		QString filename = saveFileName(url);
 		if (saveToDisk(filename, reply)) {
 			// qDebug("Download of %s succeeded (saved to %s)\n", url.toEncoded().constData(), qPrintable(filename));
-			m_fileName = filename;
+			m_fileName = std::move(filename);
 			Q_EMIT downloadCompleted();
 		}
 	}

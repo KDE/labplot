@@ -52,7 +52,7 @@ ContentDockWidget* AbstractPart::dockWidget() const {
 	if (!m_dockWidget) {
 		m_dockWidget = new ContentDockWidget(const_cast<AbstractPart*>(this));
 		connect(m_dockWidget, &ads::CDockWidget::closed, [this] {
-			const bool deleteOnClose = Settings::readDockPosBehaviour() == Settings::DockPosBehaviour::AboveLastActive;
+			const bool deleteOnClose = Settings::readDockPosBehavior() == Settings::DockPosBehavior::AboveLastActive;
 			if (deleteOnClose && !m_suppressDeletion) {
 				m_dockWidget->dockManager()->removeDockWidget(m_dockWidget);
 				m_dockWidget = nullptr;
@@ -130,6 +130,7 @@ QMenu* AbstractPart::createContextMenu() {
 	menu->addSeparator();
 
 	// window state related actions
+#ifndef SDK
 	if (m_dockWidget) {
 		const QStyle* style = m_dockWidget->style();
 		if (!m_dockWidget->isClosed()) {
@@ -156,6 +157,7 @@ QMenu* AbstractPart::createContextMenu() {
 			});
 		}
 	}
+#endif
 
 	return menu;
 }

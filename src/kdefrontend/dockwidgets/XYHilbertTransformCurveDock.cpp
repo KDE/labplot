@@ -99,13 +99,6 @@ void XYHilbertTransformCurveDock::initGeneralTab() {
 	connect(m_transformCurve, &XYHilbertTransformCurve::sourceDataChanged, this, &XYHilbertTransformCurveDock::enableRecalculate);
 }
 
-void XYHilbertTransformCurveDock::setModel() {
-	auto list = defaultColumnTopLevelClasses();
-	list.append(AspectType::XYFitCurve);
-
-	XYAnalysisCurveDock::setModel(list);
-}
-
 /*!
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
@@ -116,7 +109,6 @@ void XYHilbertTransformCurveDock::setCurves(QList<XYCurve*> list) {
 	setAspects(list);
 	setAnalysisCurves(list);
 	m_transformCurve = static_cast<XYHilbertTransformCurve*>(m_curve);
-	this->setModel();
 	m_transformData = m_transformCurve->transformData();
 
 	initGeneralTab();

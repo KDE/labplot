@@ -62,11 +62,11 @@ private Q_SLOTS:
 		QSKIP("Skipping ReadStat Tests, because it was not found or could not be build!");
 	}
 #endif
-#ifdef EXCEL_DISABLED
+#ifdef XLSX_DISABLED
 	void checkXLSX() {
 		QSKIP("Skipping XLSX Tests, because it was disabled!");
 	}
-#elif !defined(HAVE_EXCEL)
+#elif !defined(HAVE_QXLSX)
 	void checkXLSX() {
 		QSKIP("Skipping XLSX Tests, because it was not found or could not be build!");
 	}

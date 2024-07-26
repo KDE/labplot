@@ -13,6 +13,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
@@ -372,6 +373,133 @@ void StatisticalPlotsTest::testQQPlotRange() {
 	const auto& range = p->range(Dimension::X);
 	QCOMPARE(range.start(), -2.5);
 	QCOMPARE(range.end(), 2.5);
+}
+
+// ##############################################################################
+// ############################## BAr Plot ######################################
+// ##############################################################################
+
+/*!
+ * \brief create and add a new BarPlot, undo and redo this step
+ */
+void StatisticalPlotsTest::testBarPlotInit() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* barPlot = new BarPlot(QStringLiteral("barplot"));
+	p->addChild(barPlot);
+
+	auto children = p->children<BarPlot>();
+
+	QCOMPARE(children.size(), 1);
+
+	project.undoStack()->undo();
+	children = p->children<BarPlot>();
+	QCOMPARE(children.size(), 0);
+
+	project.undoStack()->redo();
+	children = p->children<BarPlot>();
+	QCOMPARE(children.size(), 1);
+}
+
+/*!
+ * \brief create and add a new BarPlot, duplicate it and check the number of children
+ */
+void StatisticalPlotsTest::testBarPlotDuplicate() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* barPlot = new BarPlot(QStringLiteral("barplot"));
+	p->addChild(barPlot);
+
+	barPlot->duplicate();
+
+	auto children = p->children<BarPlot>();
+	QCOMPARE(children.size(), 2);
+}
+
+/*!
+ * \brief create BarPlot for the given data and check the plot ranges.
+ */
+void StatisticalPlotsTest::testBarPlotRange() {
+	Project project;
+
+	// prepare the data
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(2);
+	auto* column1 = sheet->column(0);
+	auto* column2 = sheet->column(1);
+
+	// create a generator chosen by the environment variable GSL_RNG_TYPE
+	column1->setValueAt(0, 10);
+	column1->setValueAt(1, 1);
+	column2->setValueAt(0, 20);
+	column2->setValueAt(1, 2);
+
+	// prepare the worksheet + plot
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* barPlot = new BarPlot(QStringLiteral("barplot"));
+	p->addChild(barPlot);
+	barPlot->setDataColumns({column1, column2});
+
+	// check the ranges which should be [0, 2] for x and [0, 20] for y
+	const auto& rangeX = p->range(Dimension::X);
+	QCOMPARE(rangeX.start(), 0);
+	QCOMPARE(rangeX.end(), 2);
+
+	const auto& rangeY = p->range(Dimension::Y);
+	QCOMPARE(rangeY.start(), 0);
+	QCOMPARE(rangeY.end(), 20);
+
+	// remove the first row in the spreadsheet and check the ranges which should be [0, 1] for x and [0, 2] for y
+	sheet->removeRows(0, 1);
+
+	QCOMPARE(rangeX.start(), 0);
+	QCOMPARE(rangeX.end(), 1);
+
+	QCOMPARE(rangeY.start(), 0);
+	QCOMPARE(rangeY.end(), 2);
+
+	// undo the removal and check again
+	project.undoStack()->undo();
+	QCOMPARE(rangeX.start(), 0);
+	QCOMPARE(rangeX.end(), 2);
+
+	QCOMPARE(rangeY.start(), 0);
+	QCOMPARE(rangeY.end(), 20);
+
+	// mask the first row in the spreadsheet and check the ranges which should be [0, 1] for x and [0, 2] for y
+	project.undoStack()->beginMacro(QStringLiteral("mask"));
+	column1->setMasked(0);
+	column2->setMasked(0);
+	project.undoStack()->endMacro();
+
+	QCOMPARE(rangeX.start(), 0);
+	QCOMPARE(rangeX.end(), 1);
+
+	QCOMPARE(rangeY.start(), 0);
+	QCOMPARE(rangeY.end(), 2);
+
+	// undo the masking and check again
+	project.undoStack()->undo();
+	QCOMPARE(rangeX.start(), 0);
+	QCOMPARE(rangeX.end(), 2);
+
+	QCOMPARE(rangeY.start(), 0);
+	QCOMPARE(rangeY.end(), 20);
 }
 
 QTEST_MAIN(StatisticalPlotsTest)

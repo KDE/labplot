@@ -37,9 +37,6 @@ private:
 	unsigned int dataPoints{0}; // number of data points in selected column
 	bool m_dateTimeRange{false};
 
-protected:
-	void setModel();
-
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYInterpolationCurveDock
 	// general tab

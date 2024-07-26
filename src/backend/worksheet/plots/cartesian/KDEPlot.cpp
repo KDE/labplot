@@ -63,7 +63,7 @@ void KDEPlot::init() {
 	d->bandwidth = group.readEntry(QStringLiteral("bandwidth"), 0.1);
 
 	// estimation curve
-	d->estimationCurve = new XYCurve(QString());
+	d->estimationCurve = new XYCurve(QStringLiteral("estimation"));
 	d->estimationCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->estimationCurve->setHidden(true);
 	d->estimationCurve->graphicsItem()->setParentItem(d);
@@ -86,7 +86,7 @@ void KDEPlot::init() {
 	d->estimationCurve->setYColumn(d->yEstimationColumn);
 
 	// xy-curve for the rug plot
-	d->rugCurve = new XYCurve(QString());
+	d->rugCurve = new XYCurve(QStringLiteral("rug"));
 	d->rugCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->rugCurve->setHidden(true);
 	d->rugCurve->graphicsItem()->setParentItem(d);
@@ -187,13 +187,15 @@ bool KDEPlot::usingColumn(const Column* column) const {
 	return (d->dataColumn == column);
 }
 
-void KDEPlot::updateColumnDependencies(const AbstractColumn* column) {
+void KDEPlot::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* aspect) {
 	Q_D(KDEPlot);
-	const QString& columnPath = column->path();
+	const auto column = dynamic_cast<const AbstractColumn*>(aspect);
+	if (!column)
+		return;
 
 	if (d->dataColumn == column) // the column is the same and was just renamed -> update the column path
-		d->dataColumnPath = columnPath;
-	else if (d->dataColumnPath == columnPath) { // another column was renamed to the current path -> set and connect to the new column
+		d->dataColumnPath = aspectPath;
+	else if (d->dataColumnPath == aspectPath) { // another column was renamed to the current path -> set and connect to the new column
 		setUndoAware(false);
 		setDataColumn(column);
 		setUndoAware(true);
@@ -268,6 +270,8 @@ void KDEPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	if (aspect == d->dataColumn) {
 		d->dataColumn = nullptr;
 		d->retransform();
+		Q_EMIT dataChanged();
+		Q_EMIT changed();
 	}
 }
 

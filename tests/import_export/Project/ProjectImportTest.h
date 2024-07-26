@@ -4,16 +4,16 @@
 	Description          : Tests for project imports
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2018-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef PROJECTIMPORTTEST_H
 #define PROJECTIMPORTTEST_H
 
-#include "tests/CommonTest.h"
-#include <QtTest>
+#include "tests/CommonMetaTest.h"
 
-class ProjectImportTest : public CommonTest {
+class ProjectImportTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:
@@ -38,9 +38,13 @@ private Q_SLOTS:
 	void testOriginMultiLayersAsCoordinateSystems();
 	void testOriginMultiLayersAsCoordinateSystemsWithLegend();
 
+	// test import strings
+	void testImportOriginStrings();
+
 	// test tags
 	void testParseOriginTags_data();
 	void testParseOriginTags();
+
 #endif
 };
 #endif

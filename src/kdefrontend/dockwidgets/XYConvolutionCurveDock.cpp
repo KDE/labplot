@@ -148,16 +148,6 @@ void XYConvolutionCurveDock::initGeneralTab() {
 	connect(m_convolutionCurve, &XYConvolutionCurve::sourceDataChanged, this, &XYConvolutionCurveDock::enableRecalculate);
 }
 
-void XYConvolutionCurveDock::setModel() {
-	DEBUG(Q_FUNC_INFO);
-	auto list = defaultColumnTopLevelClasses();
-	list.append(AspectType::XYConvolutionCurve);
-
-	XYAnalysisCurveDock::setModel(list);
-
-	DEBUG("XYConvolutionCurveDock::setModel() DONE");
-}
-
 /*!
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
@@ -168,7 +158,6 @@ void XYConvolutionCurveDock::setCurves(QList<XYCurve*> list) {
 	setAspects(list);
 	setAnalysisCurves(list);
 	m_convolutionCurve = static_cast<XYConvolutionCurve*>(m_curve);
-	this->setModel();
 	m_convolutionData = m_convolutionCurve->convolutionData();
 
 	const auto numberLocale = QLocale();

@@ -34,10 +34,20 @@
 #include <QMenu>
 #include <QPainter>
 #include <QTextEdit>
+#include <qglobal.h>
+
+InfoElement::MarkerPoints_T::MarkerPoints_T(CustomPoint* custompoint, const XYCurve* curve, QString curvePath)
+	: customPoint(custompoint)
+	, curve(curve)
+	, curvePath(curvePath) {
+	if (customPoint)
+		visible = custompoint->isVisible();
+}
 
 InfoElement::InfoElement(const QString& name, CartesianPlot* plot)
 	: WorksheetElement(name, new InfoElementPrivate(this), AspectType::InfoElement) {
-	m_plot = plot;
+	Q_D(InfoElement);
+	d->m_plot = plot;
 
 	init();
 	setVisible(false);
@@ -46,7 +56,7 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* plot)
 InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* curve, double logicalPos)
 	: WorksheetElement(name, new InfoElementPrivate(this, curve), AspectType::InfoElement) {
 	Q_D(InfoElement);
-	m_plot = p;
+	d->m_plot = p;
 
 	init();
 
@@ -54,7 +64,7 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* c
 
 	if (curve) {
 		d->connectionLineCurveName = curve->name();
-		auto* custompoint = new CustomPoint(m_plot, curve->name());
+		auto* custompoint = new CustomPoint(d->m_plot, curve->name());
 		custompoint->setFixed(true);
 		custompoint->setCoordinateBindingEnabled(true);
 		custompoint->setCoordinateSystemIndex(curve->coordinateSystemIndex());
@@ -124,7 +134,8 @@ InfoElement::~InfoElement() {
 }
 
 void InfoElement::init() {
-	cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem(m_cSystemIndex));
+	Q_D(InfoElement);
+	cSystem = dynamic_cast<const CartesianCoordinateSystem*>(d->m_plot->coordinateSystem(m_cSystemIndex));
 
 	initActions();
 	initMenus();
@@ -132,7 +143,7 @@ void InfoElement::init() {
 	connect(this, &InfoElement::childAspectRemoved, this, &InfoElement::childRemoved);
 	connect(this, &InfoElement::childAspectAdded, this, &InfoElement::childAdded);
 
-	m_title = new TextLabel(i18n("Label"), m_plot);
+	m_title = new TextLabel(i18n("Label"), d->m_plot);
 	m_title->setHidden(true);
 	TextLabel::TextWrapper text;
 	text.allowPlaceholder = true;
@@ -148,7 +159,6 @@ void InfoElement::init() {
 	const auto& group = config.group(QStringLiteral("Axis"));
 
 	// lines
-	Q_D(InfoElement);
 	d->verticalLine = new Line(QString());
 	d->verticalLine->setHidden(true);
 	d->verticalLine->setPrefix(QStringLiteral("VerticalLine"));
@@ -185,12 +195,24 @@ void InfoElement::initCurveConnections(const XYCurve* curve) {
 	connect(curve, &XYCurve::visibleChanged, this, &InfoElement::curveVisibilityChanged);
 	connect(curve, &XYCurve::coordinateSystemIndexChanged, this, &InfoElement::curveCoordinateSystemIndexChanged);
 	connect(curve, &XYCurve::dataChanged, this, &InfoElement::curveDataChanged);
-	connect(curve, &XYCurve::moveBegin, this, [this]() {
-		m_curveGetsMoved = true;
+	connect(curve, &XYCurve::xColumnChanged, [this](const AbstractColumn*) {
+		retransform();
 	});
-	connect(curve, &XYCurve::moveEnd, this, [this]() {
-		m_curveGetsMoved = false;
+	connect(curve, &XYCurve::yColumnChanged, [this](const AbstractColumn*) {
+		retransform();
 	});
+	connect(curve, &XYCurve::aspectAboutToBeRemoved, this, &InfoElement::curveDeleted);
+}
+
+void InfoElement::pointVisibleChanged(bool visible) {
+	const auto* point = QObject::sender();
+
+	if (m_suppressVisibleChange)
+		return;
+	for (auto& c : markerpoints) {
+		if (c.customPoint == point)
+			c.visible = visible;
+	}
 }
 
 QMenu* InfoElement::createContextMenu() {
@@ -218,10 +240,12 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 
 	if (!custompoint) {
 		m_suppressChildPositionChanged = true;
-		custompoint = new CustomPoint(m_plot, curve->name());
+		custompoint = new CustomPoint(d->m_plot, curve->name());
 		custompoint->setCoordinateBindingEnabled(true);
 		custompoint->setCoordinateSystemIndex(curve->coordinateSystemIndex());
+		setUndoAware(false);
 		addChild(custompoint);
+		setUndoAware(true);
 
 		if (curve->xColumn() && curve->yColumn()) {
 			bool valueFound;
@@ -283,8 +307,9 @@ void InfoElement::addCurvePath(const QString& curvePath, CustomPoint* custompoin
 			return;
 	}
 
+	Q_D(const InfoElement);
 	if (!custompoint) {
-		custompoint = new CustomPoint(m_plot, i18n("Symbol"));
+		custompoint = new CustomPoint(d->m_plot, i18n("Symbol"));
 		custompoint->setVisible(false);
 		m_suppressChildPositionChanged = true;
 		custompoint->setCoordinateBindingEnabled(true);
@@ -309,7 +334,6 @@ bool InfoElement::assignCurve(const QVector<XYCurve*>& curves) {
 			if (mp.curvePath == curve->path()) {
 				mp.curve = curve;
 				initCurveConnections(curve);
-				mp.customPoint->setVisible(curve->isVisible()); // initial visibility
 				mp.customPoint->setCoordinateSystemIndex(curve->coordinateSystemIndex());
 				break;
 			}
@@ -328,24 +352,56 @@ bool InfoElement::assignCurve(const QVector<XYCurve*>& curves) {
 	return success;
 }
 
+void InfoElement::curveDeleted(const AbstractAspect* aspect) {
+	auto curve = dynamic_cast<const XYCurve*>(aspect);
+	if (!curve)
+		return;
+
+	for (auto& mp : markerpoints) {
+		if (mp.curve == curve) {
+			disconnect(curve, nullptr, this, nullptr);
+			// No remove of the custompoint
+
+			Lock lock(m_suppressVisibleChange);
+			assert(mp.curvePath == curve->path());
+			mp.curve = nullptr;
+			mp.customPoint->setVisible(false);
+		}
+	}
+
+	updateValid();
+
+	if (curve->name() == connectionLineCurveName())
+		setConnectionLineNextValidCurve();
+}
+
+void InfoElement::setConnectionLineNextValidCurve() {
+	for (const auto& mp : markerpoints) {
+		if (mp.curve) {
+			setConnectionLineCurveName(mp.curve->name());
+			return;
+		}
+	}
+	setConnectionLineCurveName(QLatin1String());
+}
+
 /*!
  * Remove markerpoint from a curve
  * @param curve
  */
 void InfoElement::removeCurve(const XYCurve* curve) {
-	if (m_curveGetsMoved)
-		return;
-
 	for (const auto& mp : markerpoints) {
 		if (mp.curve == curve) {
 			disconnect(curve, nullptr, this, nullptr);
+			setUndoAware(false);
 			removeChild(mp.customPoint);
+			setUndoAware(true);
 		}
 	}
 
 	setUndoAware(false);
 	if (curve->name() == connectionLineCurveName())
-		setConnectionLineCurveName(markerpoints.count() > 0 ? markerpoints.at(0).curve->name() : QStringLiteral());
+		setConnectionLineNextValidCurve();
 	setUndoAware(true);
 
 	m_title->setUndoAware(false);
@@ -353,9 +409,7 @@ void InfoElement::removeCurve(const XYCurve* curve) {
 
 	// hide the label if now curves are selected
 	if (markerpoints.isEmpty()) {
-		m_title->setUndoAware(false);
 		m_title->setVisible(false); // hide in the worksheet view
-		m_title->setUndoAware(true);
 		Q_D(InfoElement);
 		d->update(); // redraw to remove all children graphic items belonging to InfoElement
 	}
@@ -409,7 +463,7 @@ InfoElement::MarkerPoints_T InfoElement::markerPointAt(int index) const {
  */
 TextLabel::TextWrapper InfoElement::createTextLabelText() {
 	// TODO: save positions of the variables in extra variables to replace faster, because replace takes long time
-	TextLabel::TextWrapper wrapper = m_title->text();
+	auto wrapper = m_title->text();
 	if (markerPointsCount() < 1) {
 		DEBUG(STDSTRING(wrapper.text))
 		DEBUG(STDSTRING(wrapper.textPlaceholder))
@@ -422,20 +476,19 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 
 	Q_D(const InfoElement);
 
-	QString text = wrapper.textPlaceholder;
-
 	// replace the placeholder for the x-value
 	QString xValueStr;
-	auto columnMode = markerpoints.at(0).curve->xColumn()->columnMode();
+	const auto columnMode = markerpoints.at(0).curve->xColumn()->columnMode();
 	if (columnMode == AbstractColumn::ColumnMode::Double || columnMode == AbstractColumn::ColumnMode::Integer
 		|| columnMode == AbstractColumn::ColumnMode::BigInt)
 		xValueStr = QString::number(d->positionLogical);
 	else if (columnMode == AbstractColumn::ColumnMode::Day || columnMode == AbstractColumn::ColumnMode::Month
 			 || columnMode == AbstractColumn::ColumnMode::DateTime) {
 		const auto& dateTime = QDateTime::fromMSecsSinceEpoch(d->positionLogical, Qt::UTC);
-		xValueStr = dateTime.toString(m_plot->rangeDateTimeFormat(Dimension::X));
+		xValueStr = dateTime.toString(d->m_plot->rangeDateTimeFormat(Dimension::X));
 	}
 
+	QString text = wrapper.textPlaceholder;
 	if (wrapper.mode == TextLabel::Mode::Text)
 		text.replace(QStringLiteral("&amp;(x)"), xValueStr);
 	else
@@ -494,26 +547,6 @@ void InfoElement::labelTextWrapperChanged(TextLabel::TextWrapper) {
 
 	Q_D(InfoElement);
 	d->retransform();
-}
-
-/*!
- * \brief InfoElement::moveElementBegin
- * Called, when a child is moved in front or behind another element.
- * Needed, because the child calls child removed, when moving and then
- * everything will be deleted
- */
-void InfoElement::moveElementBegin() {
-	m_suppressChildRemoved = true;
-}
-
-/*!
- * \brief InfoElement::moveElementEnd
- * Called, when a child is moved in front or behind another element.
- * Needed, because the child calls child removed, when moving and then
- * everything will be deleted
- */
-void InfoElement::moveElementEnd() {
-	m_suppressChildRemoved = false;
 }
 
 void InfoElement::curveCoordinateSystemIndexChanged(int /*index*/) {
@@ -636,8 +669,7 @@ void InfoElement::childAdded(const AbstractAspect* child) {
 		// Must be done after setCoordinateBindingEnabled, otherwise positionChanged will be called and
 		// then the InfoElement position will be set incorrectly
 		connect(point, &CustomPoint::positionChanged, this, &InfoElement::pointPositionChanged);
-		connect(point, &CustomPoint::moveBegin, this, &InfoElement::moveElementBegin);
-		connect(point, &CustomPoint::moveEnd, this, &InfoElement::moveElementEnd);
+		connect(point, &CustomPoint::visibleChanged, this, &InfoElement::pointVisibleChanged);
 		return;
 	}
 
@@ -647,8 +679,6 @@ void InfoElement::childAdded(const AbstractAspect* child) {
 		connect(m_title, &TextLabel::visibleChanged, this, &InfoElement::labelVisibleChanged);
 		connect(m_title, &TextLabel::textWrapperChanged, this, &InfoElement::labelTextWrapperChanged);
 		connect(m_title, &TextLabel::borderShapeChanged, this, &InfoElement::labelBorderShapeChanged);
-		connect(m_title, &TextLabel::moveBegin, this, &InfoElement::moveElementBegin);
-		connect(m_title, &TextLabel::moveEnd, this, &InfoElement::moveElementEnd);
 		connect(m_title, &TextLabel::rotationAngleChanged, this, &InfoElement::retransform);
 
 		auto* l = const_cast<TextLabel*>(m_titleChild);
@@ -663,9 +693,13 @@ void InfoElement::childAdded(const AbstractAspect* child) {
  * \return
  */
 int InfoElement::currentIndex(double x, double* found_x) const {
+	if (!isValid())
+		return -1;
 	for (auto& markerpoint : markerpoints) {
 		if (markerpoint.curve->name() == connectionLineCurveName()) {
-			int index = markerpoint.curve->xColumn()->indexForValue(x);
+			if (!markerpoint.curve->xColumn())
+				return -1;
+			const int index = markerpoint.curve->xColumn()->indexForValue(x);
 
 			if (found_x && index >= 0) {
 				auto mode = markerpoint.curve->xColumn()->columnMode();
@@ -695,18 +729,28 @@ int InfoElement::currentIndex(double x, double* found_x) const {
 double InfoElement::setMarkerpointPosition(double x) {
 	// TODO: can be optimized when it will be checked if all markerpoints have the same xColumn, then the index m_index is the same
 	Q_D(InfoElement);
+	updateValid();
 	double x_new;
 	double x_new_first = 0;
 	for (int i = 0; i < markerpoints.length(); i++) {
+		auto* point = markerpoints[i].customPoint;
 		bool valueFound;
 		double y = markerpoints[i].curve->y(x, x_new, valueFound);
+		m_suppressVisibleChange = true;
+		if (y == std::nan("0")) {
+			point->setVisible(false);
+			m_title->setVisible(false);
+		} else {
+			point->setVisible(markerpoints[i].visible);
+			m_title->setVisible(true);
+		}
+		m_suppressVisibleChange = false;
 		d->positionLogical = x_new;
 		if (i == 0)
 			x_new_first = x_new;
 
 		if (valueFound) {
 			m_suppressChildPositionChanged = true;
-			auto* point = markerpoints[i].customPoint;
 			point->graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
 			point->setUndoAware(false);
 			point->setPositionLogical(QPointF(x_new, y));
@@ -745,6 +789,23 @@ void InfoElement::retransform() {
 }
 
 void InfoElement::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
+}
+
+void InfoElement::handleAspectUpdated(const QString& path, const AbstractAspect* aspect) {
+	const auto* curve = dynamic_cast<const XYCurve*>(aspect);
+	if (!curve)
+		return;
+
+	// The curve name changed and now it matches the correct path
+	// Add the curve again
+	for (auto& p : markerpoints) {
+		if (!p.curve && p.curvePath.compare(path) == 0) {
+			p.curve = curve;
+			updateValid();
+			retransform();
+			break;
+		}
+	}
 }
 
 // ##############################################################################
@@ -810,6 +871,43 @@ void InfoElement::setVisible(bool on) {
 		exec(new InfoElementSetVisibleCmd(d, on, on ? ki18n("%1: set visible") : ki18n("%1: set invisible")));
 }
 
+bool InfoElement::isValid() const {
+	Q_D(const InfoElement);
+	return d->valid;
+}
+
+void InfoElement::updateValid() {
+	Q_D(InfoElement);
+	bool valid = false;
+	for (const auto& mp : markerpoints) {
+		if (mp.curve && mp.curve->xColumn() && mp.curve->yColumn())
+			valid = true; // at least one valid curve
+	}
+
+	d->valid = valid;
+
+	Lock lock(m_suppressVisibleChange);
+	m_title->setUndoAware(false);
+	m_title->setVisible(valid);
+	m_title->setUndoAware(true);
+
+	if (valid) {
+		for (auto& mp : markerpoints) {
+			if (mp.curve && mp.curve->xColumn() && mp.curve->yColumn()) {
+				mp.customPoint->setUndoAware(false);
+				mp.customPoint->setVisible(mp.visible);
+				mp.customPoint->setUndoAware(true);
+			}
+		}
+	} else {
+		for (auto& mp : markerpoints) {
+			mp.customPoint->setUndoAware(false);
+			mp.customPoint->setVisible(false);
+			mp.customPoint->setUndoAware(true);
+		}
+	}
+}
+
 // ##############################################################################
 // ######  SLOTs for changes triggered via QActions in the context menu  ########
 // ##############################################################################
@@ -847,10 +945,15 @@ void InfoElementPrivate::init() {
  */
 void InfoElementPrivate::retransform() {
 	DEBUG(Q_FUNC_INFO)
-	if (!q->m_title || q->markerpoints.isEmpty() || q->isLoading() || !parentItem())
+	q->updateValid();
+	if (!q->m_title || q->markerpoints.isEmpty() || q->isLoading() || !parentItem() || !valid) {
+		update(m_boundingRectangle);
 		return;
+	}
 
-	q->m_suppressChildPositionChanged = true;
+	Lock lock(q->m_suppressChildPositionChanged);
+	xposLine = QLineF();
+	m_connectionLine = QLineF();
 
 	// new bounding rectangle
 	const QRectF& rect = parentItem()->mapRectFromScene(q->plot()->rect());
@@ -865,15 +968,20 @@ void InfoElementPrivate::retransform() {
 
 	// determine the position to connect the line to
 	QPointF pointPos;
+	bool validPos = false;
 	for (int i = 0; i < q->markerPointsCount(); ++i) {
 		const auto* curve = q->markerpoints.at(i).curve;
-		if (curve && curve->name() == connectionLineCurveName) {
+		if (curve && curve->isVisible() && curve->name() == connectionLineCurveName) {
 			const auto& point = q->markerpoints.at(i).customPoint;
 			const auto* cSystem = q->plot()->coordinateSystem(point->coordinateSystemIndex());
 			pointPos = cSystem->mapLogicalToScene(point->positionLogical(), insidePlot, AbstractCoordinateSystem::MappingFlag::SuppressPageClippingVisible);
+			validPos = true;
 			break;
 		}
 	}
+
+	if (!validPos)
+		return;
 
 	if (!insidePlot)
 		return;
@@ -895,13 +1003,11 @@ void InfoElementPrivate::retransform() {
 	QDEBUG(Q_FUNC_INFO << ", connection line = " << m_connectionLine)
 
 	// vertical line
-	const QRectF& dataRect = mapFromParent(q->m_plot->dataRect()).boundingRect();
+	const QRectF& dataRect = mapFromParent(m_plot->dataRect()).boundingRect();
 	xposLine = QLineF(pointPosItemCoords.x(), dataRect.bottom(), pointPosItemCoords.x(), dataRect.top());
 	QDEBUG(Q_FUNC_INFO << ", vertical line " << xposLine)
 
 	recalcShapeAndBoundingRect(newBoundingRect);
-
-	q->m_suppressChildPositionChanged = false;
 }
 
 void InfoElementPrivate::updatePosition() {
@@ -937,21 +1043,21 @@ bool InfoElementPrivate::changeVisibility(bool on) {
 }
 
 void InfoElementPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) {
-	if (!insidePlot)
+	if (!insidePlot || !valid)
 		return;
 
 	if (q->markerpoints.isEmpty())
 		return;
 
 	// do not draw connection line when the label is not visible
-	if (connectionLine->style() != Qt::NoPen && q->m_title->isVisible()) {
+	if (connectionLine->style() != Qt::NoPen && q->m_title->isVisible() && !m_connectionLine.isNull()) {
 		painter->setOpacity(connectionLine->opacity());
 		painter->setPen(connectionLine->pen());
 		painter->drawLine(m_connectionLine);
 	}
 
 	// draw vertical line, which connects all points together
-	if (verticalLine->style() != Qt::NoPen) {
+	if (verticalLine->style() != Qt::NoPen && !xposLine.isNull()) {
 		painter->setOpacity(verticalLine->opacity());
 		painter->setPen(verticalLine->pen());
 		painter->drawLine(xposLine);
@@ -1014,16 +1120,16 @@ void InfoElementPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 }
 
 void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
-	QPointF eventPos = mapToParent(event->pos());
+	const auto eventPos = mapToParent(event->pos());
 	// 	DEBUG("EventPos: " << eventPos.x() << " Y: " << eventPos.y());
-	QPointF delta = eventPos - oldMousePos;
+	const auto delta = eventPos - oldMousePos;
 	if (delta == QPointF(0, 0))
 		return;
 
 	if (!q->cSystem->isValid())
 		return;
-	QPointF eventLogicPos = q->cSystem->mapSceneToLogical(eventPos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-	QPointF delta_logic = eventLogicPos - q->cSystem->mapSceneToLogical(oldMousePos);
+	const auto eventLogicPos = q->cSystem->mapSceneToLogical(eventPos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	const auto delta_logic = eventLogicPos - q->cSystem->mapSceneToLogical(oldMousePos);
 
 	if (!q->m_title)
 		return;
@@ -1044,6 +1150,8 @@ void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	}
 	x += delta_logic.x();
 	auto xColumn = q->markerpoints[activeIndex].curve->xColumn();
+	if (!xColumn)
+		return;
 	int xindex = xColumn->indexForValue(x);
 	double x_new = NAN;
 	if (xColumn->isNumeric())
@@ -1068,7 +1176,6 @@ void InfoElementPrivate::keyPressEvent(QKeyEvent* event) {
 		return QGraphicsItem::keyPressEvent(event);
 	}
 
-	TextLabel::TextWrapper text;
 	if (event->key() == Qt::Key_Right || event->key() == Qt::Key_Left) {
 		int index;
 		if (event->key() == Qt::Key_Right)
@@ -1082,6 +1189,8 @@ void InfoElementPrivate::keyPressEvent(QKeyEvent* event) {
 		for (int i = 0; i < q->markerPointsCount(); i++) {
 			const auto* curve = q->markerpoints[i].curve;
 			if (curve->name().compare(connectionLineCurveName) == 0) {
+				if (!curve->xColumn())
+					return;
 				auto rowCount = curve->xColumn()->rowCount();
 				m_index += index;
 				if (m_index > rowCount - 1)
@@ -1177,6 +1286,7 @@ void InfoElement::save(QXmlStreamWriter* writer) const {
 		for (const auto& custompoint : markerpoints) {
 			writer->writeStartElement(QStringLiteral("point"));
 			writer->writeAttribute(QLatin1String("curvepath"), custompoint.curve->path());
+			writer->writeAttribute(QLatin1String("visible"), QString::number(custompoint.visible));
 			custompoint.customPoint->save(writer);
 			writer->writeEndElement(); // close "point"
 		}
@@ -1227,7 +1337,7 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 			d->connectionLine->load(reader, preview);
 		} else if (reader->name() == QLatin1String("textLabel")) {
 			if (!m_title) {
-				m_title = new TextLabel(i18n("Label"), m_plot);
+				m_title = new TextLabel(i18n("Label"), d->m_plot);
 				m_title->setIsLoading(true);
 				this->addChild(m_title);
 			}
@@ -1251,6 +1361,7 @@ void InfoElement::loadPoints(XmlStreamReader* reader, bool preview) {
 		return;
 
 	while (!(reader->isEndElement() && reader->name() == QStringLiteral("points"))) {
+		Q_D(const InfoElement);
 		if (!reader->isStartElement()) {
 			reader->readNext();
 			continue;
@@ -1259,17 +1370,19 @@ void InfoElement::loadPoints(XmlStreamReader* reader, bool preview) {
 			break;
 		const auto& attribs = reader->attributes();
 		const QString curvePath = attribs.value(QStringLiteral("curvepath")).toString();
+		const bool visible = attribs.value(QStringLiteral("visible")).toInt();
 
 		reader->readNextStartElement();
 		if (reader->name() != CustomPoint::xmlName())
 			break;
 
-		auto* point = new CustomPoint(m_plot, QString());
+		auto* point = new CustomPoint(d->m_plot, QString());
 		point->setIsLoading(true);
 		if (!point->load(reader, preview)) {
 			delete point;
 			return;
 		}
+		point->setVisible(visible);
 		this->addChild(point);
 		addCurvePath(curvePath, point);
 	}

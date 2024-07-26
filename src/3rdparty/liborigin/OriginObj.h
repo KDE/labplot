@@ -2,7 +2,7 @@
     File                 : OriginObj.h
     Description          : Origin internal object classes
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2005-2007, 2017 Stefan Gerlach
+    SPDX-FileCopyrightText: 2005-2007, 2017-2024 Stefan Gerlach
     SPDX-FileCopyrightText: 2007-2008 Alex Kargovsky <kargovsky*yumr.phys.msu.su>
     SPDX-FileCopyrightText: 2007-2008 Ion Vasilief <ion_vasilief*yahoo.fr>
     SPDX-License-Identifier: GPL-2.0-or-later
@@ -197,7 +197,8 @@ struct Rect
     short right;
     short bottom;
 
-    Rect(short width = 0, short height = 0) : left(0), top(0), right(width), bottom(height){};
+    explicit Rect(short width = 0, short height = 0)
+        : left(0), top(0), right(width), bottom(height){};
 
     int height() const { return bottom - top; };
 
@@ -247,8 +248,8 @@ struct Window
     Color windowBackgroundColorBase;
     Color windowBackgroundColorEnd;
 
-    Window(const std::string &_name = std::string(), const std::string &_label = std::string(),
-           bool _hidden = false)
+    explicit Window(const std::string &_name = std::string(),
+                    const std::string &_label = std::string(), bool _hidden = false)
         : name(_name),
           label(_label),
           objectID(-1),
@@ -308,6 +309,15 @@ public:
         m_type = v.m_type;
         return *this;
     }
+    bool operator< (const Origin::Variant& v) const
+    {
+	if (m_type == V_DOUBLE && v.m_type == V_DOUBLE)
+            return as_double() < v.as_double();
+	else if (m_type == V_STRING && v.m_type == V_STRING)
+	    return as_string() < v.as_string();
+	else
+	    return false;
+    }
 
     ~Variant()
     {
@@ -352,7 +362,7 @@ struct SpreadColumn
     unsigned int endRow;
     std::vector<variant> data;
 
-    SpreadColumn(const std::string &_name = std::string(), unsigned int _index = 0)
+    explicit SpreadColumn(const std::string &_name = std::string(), unsigned int _index = 0)
         : name(_name),
           type(ColumnType::Y),
           valueType(Numeric),
@@ -376,7 +386,7 @@ struct SpreadSheet : public Window
     unsigned int sheets;
     std::vector<SpreadColumn> columns;
 
-    SpreadSheet(const std::string &_name = std::string())
+    explicit SpreadSheet(const std::string &_name = std::string())
         : Window(_name), maxRows(30), loose(true), sheets(1){};
 };
 
@@ -386,8 +396,9 @@ struct Excel : public Window
     bool loose;
     std::vector<SpreadSheet> sheets;
 
-    Excel(const std::string &_name = std::string(), const std::string &_label = std::string(),
-          int _maxRows = 0, bool _hidden = false, bool _loose = true)
+    explicit Excel(const std::string &_name = std::string(),
+                   const std::string &_label = std::string(), int _maxRows = 0,
+                   bool _hidden = false, bool _loose = true)
         : Window(_name, _label, _hidden), maxRows(_maxRows), loose(_loose){};
 };
 
@@ -410,7 +421,7 @@ struct MatrixSheet
     std::vector<double> data;
     std::vector<double> coordinates;
 
-    MatrixSheet(const std::string &_name = std::string(), unsigned int _index = 0)
+    explicit MatrixSheet(const std::string &_name = std::string(), unsigned int _index = 0)
         : name(_name),
           rowCount(8),
           columnCount(8),
@@ -438,7 +449,7 @@ struct Matrix : public Window
     HeaderViewType header;
     std::vector<MatrixSheet> sheets;
 
-    Matrix(const std::string &_name = std::string())
+    explicit Matrix(const std::string &_name = std::string())
         : Window(_name), activeSheet(0), header(ColumnRow){};
 };
 
@@ -454,7 +465,7 @@ struct Function
     int totalPoints;
     unsigned int index;
 
-    Function(const std::string &_name = std::string(), unsigned int _index = 0)
+    explicit Function(const std::string &_name = std::string(), unsigned int _index = 0)
         : name(_name), type(Normal), begin(0.0), end(0.0), totalPoints(0), index(_index){};
 };
 
@@ -470,7 +481,7 @@ struct TextBox
     Attach attach;
     bool shown;
 
-    TextBox(const std::string &_text = std::string())
+    explicit TextBox(const std::string &_text = std::string())
         : text(_text),
           color({ Color::Regular, { Color::Black } }),
           fontSize(20),
@@ -679,9 +690,9 @@ struct GraphCurve
         Pie = 225,
         Contour = 226,
         Unknown = 230,
-        ErrorBar = 231,
+        ErrorBar = 231, // yEr+-
         TextPlot = 232,
-        XErrorBar = 233,
+        XErrorBar = 233, // xEr+-
         SurfaceColorMap = 236,
         SurfaceColorFill = 237,
         SurfaceWireframe = 238,
@@ -884,7 +895,7 @@ struct Figure
     double fillAreaPatternWidth;
     bool useBorderColor;
 
-    Figure(FigureType _type = Rectangle)
+    explicit Figure(FigureType _type = Rectangle)
         : type(_type),
           attach(Frame),
           color({ Color::Regular, { Color::Black } }),
@@ -928,7 +939,7 @@ struct Bitmap
     BorderType borderType;
     unsigned char *data;
 
-    Bitmap(const std::string &_name = std::string())
+    explicit Bitmap(const std::string &_name = std::string())
         : attach(Frame), size(0), windowName(_name), borderType(BlackLine), data(nullptr){};
 
     Bitmap(const Bitmap &bitmap)
@@ -1077,7 +1088,7 @@ struct GraphLayerRange
     double max;
     double step;
 
-    GraphLayerRange(double _min = 0.0, double _max = 0.0, double _step = 0.0)
+    explicit GraphLayerRange(double _min = 0.0, double _max = 0.0, double _step = 0.0)
         : min(_min), max(_max), step(_step){};
 };
 
@@ -1091,7 +1102,7 @@ struct Graph : public Window
     bool connectMissingData;
     std::string templateName;
 
-    Graph(const std::string &_name = std::string())
+    explicit Graph(const std::string &_name = std::string())
         : Window(_name),
           width(400),
           height(300),
@@ -1103,7 +1114,7 @@ struct Graph : public Window
 struct Note : public Window
 {
     std::string text;
-    Note(const std::string &_name = std::string()) : Window(_name){};
+    explicit Note(const std::string &_name = std::string()) : Window(_name){};
 };
 
 struct ProjectNode
@@ -1116,9 +1127,9 @@ struct ProjectNode
     time_t modificationDate;
     bool active;
 
-    ProjectNode(const std::string &_name = std::string(), NodeType _type = Folder,
-                const time_t _creationDate = time(nullptr),
-                const time_t _modificationDate = time(nullptr), bool _active = false)
+    explicit ProjectNode(const std::string &_name = std::string(), NodeType _type = Folder,
+                         const time_t _creationDate = time(nullptr),
+                         const time_t _modificationDate = time(nullptr), bool _active = false)
         : type(_type),
           name(_name),
           creationDate(_creationDate),
