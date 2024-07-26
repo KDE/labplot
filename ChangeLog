@@ -1,9 +1,13 @@
 -----2.12 -----
+New features:
 	* [import]
 		* Download datasets from kaggle.com
 		* Support MCAP file import
 	* [spreadsheet]
 		* support periodic and random sampling as function: psample(n;x), rsample(x)
+
+Bug fixes:
+	* Fix crash selecting "cell" from function list in function dialog
 
 -----2.11.1 (16.07.2024) -----
 Bug fixes:
