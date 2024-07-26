@@ -195,6 +195,7 @@ const char* specialfun_smmax = "smmax";
 const char* specialfun_sma = "sma";
 const char* specialfun_smr = "smr";
 const char* specialfun_psample = "psample";
+const char* specialfun_rsample = "rsample";
 
 const char* colfun_size = "size";
 const char* colfun_min = "min";
@@ -240,6 +241,7 @@ struct funs _special_functions[] = {
 	{[]() { return i18n("Simple Moving Average"); }, specialfun_sma, func_t2Payload(), 2, nullptr, FunctionGroups::MovingStatistics},
 	{[]() { return i18n("Simple Moving Range"); }, specialfun_smr, func_t2Payload(), 2, nullptr, FunctionGroups::MovingStatistics},
 	{[]() { return i18n("Period sample"); }, specialfun_psample, func_t2Payload(), 2, nullptr, FunctionGroups::MovingStatistics},
+	{[]() { return i18n("Random sample"); }, specialfun_rsample, func_t1Payload(), 1, nullptr, FunctionGroups::MovingStatistics},
 
 	// Values independent of the row index!!!
 	// Important: When adding function here, implement it somewhere. For example column functions are implemented in ColumnPrivate!
