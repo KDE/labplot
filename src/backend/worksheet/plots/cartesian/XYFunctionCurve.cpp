@@ -375,6 +375,10 @@ bool XYFunctionCurvePrivate::recalculateSpecific(const AbstractColumn*, const Ab
 	return valid;
 }
 
+bool XYFunctionCurvePrivate::preparationValid(const AbstractColumn*, const AbstractColumn*) {
+	return true;
+}
+
 void XYFunctionCurvePrivate::prepareTmpDataColumn(const AbstractColumn**, const AbstractColumn**) {
 	// Nothing to do
 }

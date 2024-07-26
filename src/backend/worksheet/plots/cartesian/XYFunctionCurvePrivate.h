@@ -34,6 +34,7 @@ public:
 
 	void functionVariableCurveRemoved(const AbstractAspect*);
 	void functionVariableCurveAdded(const AbstractAspect*);
+	bool preparationValid(const AbstractColumn*, const AbstractColumn*) override;
 
 	void prepareTmpDataColumn(const AbstractColumn**, const AbstractColumn**) override;
 	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element);
