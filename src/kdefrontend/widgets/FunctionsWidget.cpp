@@ -128,7 +128,8 @@ void FunctionsWidget::insertClicked() {
 
 	// determine the currently selected function from text
 	const QString& text = ui.lwFunctions->currentItem()->text();
-	const QString& name = text.left(text.indexOf(QStringLiteral(" (")));
+	// strip " (FUNCTIONNAME)" from end
+	const QString& name = text.left(text.lastIndexOf(QStringLiteral(" (")));
 	int index = names.indexOf(name);
 	QDEBUG("text = " << text << ", name = " << name << ", index = " << index)
 

@@ -2,6 +2,8 @@
 	* [import]
 		* Download datasets from kaggle.com
 		* Support MCAP file import
+Bug fixes:
+	* Fix crash selecting "cell" from function list in function dialog
 
 -----2.11.1 (16.07.2024) -----
 Bug fixes:
