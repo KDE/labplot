@@ -627,7 +627,7 @@ double rsample(const char* variable, const std::weak_ptr<Payload> payload) {
 	double value;
 	do { // loop until valid index generated
 		int randomIndex = dist(gen);
-		value = cell(randomIndex, variable, payload);
+		value = cell(randomIndex + 1, variable, payload);
 	} while (std::isnan(value));
 
 	return value;

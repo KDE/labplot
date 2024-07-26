@@ -1420,11 +1420,57 @@ void ColumnTest::testFormulasma() {
 	VALUES_EQUAL(c2.valueAt(7), 13. / 3.);
 }
 
+void ColumnTest::testFormulapsample() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.replaceValues(-1, {10., 9., 8., 7., 6., 5., 4., 3., 2., 1.});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.replaceValues(-1, {1., 2., 3., 4., 5.});
+
+	c2.setFormula(QStringLiteral("psample(2; x)"), {QStringLiteral("x")}, QVector<Column*>({&c1}), true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 5); // set before
+	VALUES_EQUAL(c2.valueAt(0), 10.);
+	VALUES_EQUAL(c2.valueAt(1), 8.);
+	VALUES_EQUAL(c2.valueAt(2), 6.);
+	VALUES_EQUAL(c2.valueAt(3), 4.);
+	VALUES_EQUAL(c2.valueAt(4), 2.);
+}
+
+void ColumnTest::testFormularsample() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.replaceValues(-1, {1., 1., 1., 1., 2.});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.replaceValues(-1, {3., 3., 3., 3., 3.});
+
+	c2.setFormula(QStringLiteral("rsample(x)"), {QStringLiteral("x")}, QVector<Column*>({&c1}), true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 5); // set before
+
+	std::cout << c2.valueAt(0) << std::endl;
+	std::cout << c2.valueAt(1) << std::endl;
+	std::cout << c2.valueAt(2) << std::endl;
+	std::cout << c2.valueAt(3) << std::endl;
+	std::cout << c2.valueAt(4) << std::endl;
+
+	// 1. or 2. randomly
+	QVERIFY(c2.valueAt(0) == 1. || c2.valueAt(0) == 2.);
+	QVERIFY(c2.valueAt(1) == 1. || c2.valueAt(1) == 2.);
+	QVERIFY(c2.valueAt(2) == 1. || c2.valueAt(2) == 2.);
+	QVERIFY(c2.valueAt(3) == 1. || c2.valueAt(3) == 2.);
+	QVERIFY(c2.valueAt(4) == 1. || c2.valueAt(4) == 2.);
+}
+
+/////////////////////////////////////////////////////
+
 void ColumnTest::testFormulasMinColumnInvalid() {
 	const QVector<double> c1Vector = {1., -1., 5., 5., 3., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
 	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
 	COLUMN2_SET_FORMULA_AND_EVALUATE("min()", NAN) // All invalid
 }
+
+/////////////////////////////////////////////////////
 
 void ColumnTest::testFormulasSize() {
 	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
