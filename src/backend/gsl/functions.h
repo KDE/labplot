@@ -169,6 +169,7 @@ extern const char* specialfun_smmin;
 extern const char* specialfun_smmax;
 extern const char* specialfun_sma;
 extern const char* specialfun_smr;
+extern const char* specialfun_psample;
 
 double andFunction(const double v1, const double v2);
 double orFunction(const double v1, const double v2);

@@ -598,6 +598,17 @@ double smr(double x, const char* variable, const std::weak_ptr<Payload> payload)
 	return smmax(x, variable, payload) - smmin(x, variable, payload);
 }
 
+double psample(double n, const char* variable, const std::weak_ptr<Payload> payload) {
+	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
+	if (!p) {
+		assert(p); // Debug build
+		return NAN;
+	}
+
+	// every n-th value, starting @ first
+	return cell(n * p->row + 1, variable, payload);
+}
+
 void ExpressionParser::setSpecialFunction1(const char* function_name, func_t1Payload funct, std::shared_ptr<Payload> payload) {
 	set_specialfunction1(function_name, funct, payload);
 }
@@ -642,6 +653,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 	set_specialfunction2(specialfun_smmax, smmax, payload);
 	set_specialfunction2(specialfun_sma, sma, payload);
 	set_specialfunction2(specialfun_smr, smr, payload);
+	set_specialfunction2(specialfun_psample, psample, payload);
 
 	bool constExpression = false;
 	for (int i = 0; i < minSize || (constExpression && i < yVector->size()); i++) {
