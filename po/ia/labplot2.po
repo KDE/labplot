@@ -1,14 +1,14 @@
 # Copyright (C) 2023 This file is copyright:
 # This file is distributed under the same license as the labplot package.
 #
-# SPDX-FileCopyrightText: 2023 giovanni <g.sora@tiscali.it>
+# SPDX-FileCopyrightText: 2023, 2024 giovanni <g.sora@tiscali.it>
 # giovanni <g.sora@tiscali.it>, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-22 01:46+0000\n"
-"PO-Revision-Date: 2024-04-30 12:35+0200\n"
+"PO-Revision-Date: 2024-07-25 15:58+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -44,11 +44,9 @@ msgstr ""
 "Non poteva trovar le plugin per %1. Pro favor tu verifica tu installation."
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:111
-#, fuzzy, kde-format
-#| msgid "Couldn't find the plugin for %1. Please check your installation."
+#, kde-format
 msgid "Couldn't create the sessions for %1. Please check your installation."
 msgstr ""
-"Non poteva trovar le plugin per %1. Pro favor tu verifica tu installation."
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:289
 #, kde-format
@@ -721,10 +719,9 @@ msgid "%1: set author"
 msgstr "%1: assigna autor"
 
 #: src/backend/core/Project.cpp:306
-#, fuzzy, kde-format
-#| msgid "%1: save dock states changed"
+#, kde-format
 msgid "%1: save dock state changed"
-msgstr "%1: salveguarda statos de dock (bassino) modificate"
+msgstr ""
 
 #: src/backend/core/Project.cpp:313
 #, kde-format
@@ -1886,65 +1883,55 @@ msgid "Variables with rank greater than 2 not supported yet."
 msgstr ""
 
 #: src/backend/datasources/filters/McapFilter.cpp:196
-#, fuzzy, kde-format
-#| msgid "Invalid DBC file."
+#, kde-format
 msgid "Valid MCAP file"
-msgstr "File DBC invalide"
+msgstr "Valide file de MCAP"
 
 #: src/backend/datasources/filters/McapFilter.cpp:201
-#, fuzzy, kde-format
-#| msgid "Message type:"
+#, kde-format
 msgid "Message count: "
-msgstr "Typo de message:"
+msgstr "Computo de Message: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:203
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Schema count: "
-msgstr "Computo de folio: %1"
+msgstr "Computo de schema: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:205
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Channel count: "
-msgstr "Computo de folio: %1"
+msgstr "Computo de canal"
 
 #: src/backend/datasources/filters/McapFilter.cpp:207
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Attachment count: "
-msgstr "Computo de folio: %1"
+msgstr "Computo de attachamento:"
 
 #: src/backend/datasources/filters/McapFilter.cpp:209
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Metadata count: "
-msgstr "Computo de folio: %1"
+msgstr ""
 
 #: src/backend/datasources/filters/McapFilter.cpp:211
-#, fuzzy, kde-format
-#| msgid "Start Time:"
+#, kde-format
 msgid "Message Start Time: "
-msgstr "Tempore de initio:"
+msgstr "Tempore de initio Message:"
 
 #: src/backend/datasources/filters/McapFilter.cpp:213
-#, fuzzy, kde-format
-#| msgid "End Time: %1"
+#, kde-format
 msgid "Message End Time: "
-msgstr "Tempore de Fin:  %1"
+msgstr "Tempore de Fin Message:"
 
 #: src/backend/datasources/filters/McapFilter.cpp:215
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "No Statistics found."
-msgstr "Statistica"
+msgstr "Nulle Statisticas trovate."
 
 #: src/backend/datasources/filters/McapFilter.cpp:469
 #: src/backend/datasources/filters/McapFilter.cpp:962
-#, fuzzy, kde-format
-#| msgid "Failed to read the file."
+#, kde-format
 msgid "Failed to read the file. Reason: %1"
-msgstr "Falleva a leger le file."
+msgstr "Falleva a leger le file. Motivation: %1"
 
 #: src/backend/datasources/filters/McapFilter.cpp:477
 #, kde-format
@@ -3503,10 +3490,9 @@ msgid "Logarithmic Distribution"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:183
-#, fuzzy, kde-format
-#| msgid "Distribution:"
+#, kde-format
 msgid "Triangular Distribution"
-msgstr "Distribution:"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:187
 #, kde-format
@@ -4963,28 +4949,24 @@ msgid "Second synchrotron function"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:596
-#, fuzzy, kde-format
-#| msgid "Error function"
+#, kde-format
 msgid "Transport function J2"
-msgstr "Function de error"
+msgstr "Function de transporto J2"
 
 #: src/backend/gsl/functions.cpp:597
-#, fuzzy, kde-format
-#| msgid "Error function"
+#, kde-format
 msgid "Transport function J3"
-msgstr "Function de error"
+msgstr "Function de transporto J3"
 
 #: src/backend/gsl/functions.cpp:598
-#, fuzzy, kde-format
-#| msgid "Error function"
+#, kde-format
 msgid "Transport function J4"
-msgstr "Function de error"
+msgstr "Function de transporto J4"
 
 #: src/backend/gsl/functions.cpp:599
-#, fuzzy, kde-format
-#| msgid "Error function"
+#, kde-format
 msgid "Transport function J5"
-msgstr "Function de error"
+msgstr "Function de transporto J5"
 
 #: src/backend/gsl/functions.cpp:602
 #, kde-format
@@ -5854,22 +5836,19 @@ msgid "Probability density for a triangular distribution"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:840
-#, fuzzy, kde-format
-#| msgid "Distribution:"
+#, kde-format
 msgid "Cumulative triangular distribution function P"
-msgstr "Distribution:"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:841
-#, fuzzy, kde-format
-#| msgid "Distribution:"
+#, kde-format
 msgid "Cumulative triangular distribution function Q"
-msgstr "Distribution:"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:842
-#, fuzzy, kde-format
-#| msgid "Distribution:"
+#, kde-format
 msgid "p-th quantile for triangular distribution"
-msgstr "Distribution:"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:948 src/backend/gsl/functions.cpp:960
 #: src/backend/gsl/functions.cpp:974 src/backend/gsl/functions.cpp:986
@@ -5971,8 +5950,7 @@ msgid "Square"
 msgstr "Quadrate"
 
 #: src/backend/lib/Range.h:48
-#, fuzzy, kde-format
-#| msgid "Reverse"
+#, kde-format
 msgid "Inverse"
 msgstr "Revertite"
 
@@ -6747,7 +6725,7 @@ msgstr ""
 #: src/backend/nsl/nsl_interp.c:26
 #, kde-format
 msgid "Integral"
-msgstr ""
+msgstr "Integral"
 
 #: src/backend/nsl/nsl_sf_stats.c:13
 #, kde-format
@@ -8276,7 +8254,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:196
 #, kde-format
 msgid "Analysis"
-msgstr ""
+msgstr "Analyse"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:707
 #: src/commonfrontend/worksheet/WorksheetView.cpp:541
@@ -9325,10 +9303,9 @@ msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1823
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3092
-#, fuzzy, kde-format
-#| msgid "Results:"
+#, kde-format
 msgid "Fit Results"
-msgstr "Resultatos:"
+msgstr "Adapta Resultatos:"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1847
 #, kde-format
@@ -9338,11 +9315,10 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1853
 #, kde-format
 msgid "MODEL"
-msgstr ""
+msgstr "MODELLO"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1857
-#, fuzzy, kde-format
-#| msgid "Degree:"
+#, kde-format
 msgid "Degree"
 msgstr "Grado:"
 
@@ -9354,7 +9330,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1881
 #, kde-format
 msgid "PARAMETERS"
-msgstr ""
+msgstr "PARAMETROS"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
@@ -9363,16 +9339,14 @@ msgid "Uncertainty"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
-#, fuzzy, kde-format
-#| msgid "X-Uncertainty"
+#, kde-format
 msgid "Uncertainty,%"
-msgstr "X-Uncertainty (incertitude X)"
+msgstr "Uncertainty (incertitude),%"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "t Statistic"
-msgstr "Statistica"
+msgstr "Statistica t"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1886
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:150
@@ -9404,10 +9378,9 @@ msgid "Residuals mean square"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1906
-#, fuzzy, kde-format
-#| msgid "Standard deviation"
+#, kde-format
 msgid "Root mean square deviation"
-msgstr "Deviation standard"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1907
@@ -9434,10 +9407,9 @@ msgid "Test"
 msgstr "Essaya"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1910
-#, fuzzy, kde-format
-#| msgid "Test"
+#, kde-format
 msgid "F-Test"
-msgstr "Essaya"
+msgstr "F-Test"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1912
 #, kde-format
@@ -10410,10 +10382,9 @@ msgid "&Unmask"
 msgstr "&Disvela"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:309
-#, fuzzy, kde-format
-#| msgid "Reverse"
+#, kde-format
 msgid "&Reverse"
-msgstr "Revertite"
+msgstr "&Revertite"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:310
 #, kde-format
@@ -11429,12 +11400,10 @@ msgid "%1: Remove selected worksheet elements."
 msgstr ""
 
 #: src/kdefrontend/CASSettingsDialog.cpp:34
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Preferences"
+#, kde-format
 msgctxt "@title:window"
 msgid "CAS Preferences"
-msgstr "Preferentias"
+msgstr "Preferentias de CAS"
 
 #: src/kdefrontend/colormaps/ColorMapsDialog.cpp:42
 #, kde-format
@@ -11879,40 +11848,34 @@ msgid "Prepend"
 msgstr "Antepone"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:145
-#, fuzzy, kde-format
-#| msgid "Add new folder"
+#, kde-format
 msgid "Add a new Workbook"
-msgstr "Adde nove dossier"
+msgstr "Adde nove Fasciculo de labor (Workbook)"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:146
-#, fuzzy, kde-format
-#| msgid "Folder name:"
+#, kde-format
 msgid "Workbook name:"
-msgstr "Nomine de dossier:"
+msgstr "Nomine de fasciculo de labor (Workbook):"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:148
-#, fuzzy, kde-format
-#| msgid "Spreadsheet"
+#, kde-format
 msgid "Add a new Spreadsheet"
-msgstr "Folio de calculo electronic"
+msgstr "Adde un nove Folio de calculo electronic"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:149
-#, fuzzy, kde-format
-#| msgid "Spreadsheet"
+#, kde-format
 msgid "Spreadsheet name:"
-msgstr "Folio de calculo electronic"
+msgstr "nomine de Folio de calculo electronic:"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:151
-#, fuzzy, kde-format
-#| msgid "Add new variable"
+#, kde-format
 msgid "Add a new Matrix"
-msgstr "Adde nove variabile"
+msgstr "Adde un nove Matrix"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:152
-#, fuzzy, kde-format
-#| msgid "Matrix"
+#, kde-format
 msgid "Matrix name:"
-msgstr "Matrix"
+msgstr "Nomine de Matrix:"
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:73
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:42
@@ -12103,10 +12066,9 @@ msgid "MATLAB MAT file"
 msgstr ""
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:136
-#, fuzzy, kde-format
-#| msgid "Copy Data"
+#, kde-format
 msgid "MCAP Data"
-msgstr "Copia datos"
+msgstr "Datos de MCAP"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:145
 #, kde-format
@@ -12432,10 +12394,9 @@ msgid "Connecting to '%1:%2' timed out."
 msgstr ""
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetDialog.cpp:37
-#, fuzzy, kde-format
-#| msgid "Filter Options"
+#, kde-format
 msgid "Toggle Options"
-msgstr "Optiones de filtro"
+msgstr "Commuta Optiones"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetDialog.cpp:57
 #, kde-format
@@ -12466,22 +12427,19 @@ msgid "Dataset:"
 msgstr "Insimul de datos:"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:241
-#, fuzzy, kde-format
-#| msgid "Last read: %1"
+#, kde-format
 msgid "Could not read %1"
-msgstr "Ultime legite: %1"
+msgstr "Il non pote leger %1"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:249
-#, fuzzy, kde-format
-#| msgid "could not open device"
+#, kde-format
 msgid "Could not open %1"
-msgstr "Il non pote aperir dispositivo "
+msgstr "Non pote aperir %1."
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:266
-#, fuzzy, kde-format
-#| msgid "Couldn't read the project file %1."
+#, kde-format
 msgid "Could not create %1"
-msgstr "Non poteva leger le file de projecto %1."
+msgstr "Non poteva crear %1"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:295
 #, kde-format
@@ -13464,7 +13422,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:106
 #, kde-format
 msgid "Plot Range:"
-msgstr ""
+msgstr "Extension de Traciar (Plot):"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:870
 #, kde-format
@@ -14143,7 +14101,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/XYEquationCurveDock.cpp:72
 #, kde-format
 msgid "Polar"
-msgstr ""
+msgstr "Polar"
 
 #: src/kdefrontend/dockwidgets/XYEquationCurveDock.cpp:73
 #, kde-format
@@ -15114,17 +15072,15 @@ msgstr "Falleva a aperir  "
 
 #. i18n: ectx: ToolBar (main_toolbar)
 #: src/kdefrontend/labplot2ui.rc:6
-#, fuzzy, kde-format
-#| msgid "Project"
+#, kde-format
 msgid "Project Toolbar"
-msgstr "Projecto"
+msgstr "Barra de instrumento de Projecto"
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:24
-#, fuzzy, kde-format
-#| msgid "Worksheet"
+#, kde-format
 msgid "Worksheet Toolbar"
-msgstr "Folio de labor"
+msgstr "Barra de instrumento de Folio de labor"
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
 #: src/kdefrontend/labplot2ui.rc:28
@@ -15134,24 +15090,21 @@ msgstr ""
 
 #. i18n: ectx: ToolBar (spreadsheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:32
-#, fuzzy, kde-format
-#| msgid "Spreadsheet"
+#, kde-format
 msgid "Spreadsheet Toolbar"
-msgstr "Folio de calculo electronic"
+msgstr "Barra de instrumento de Folio de calculo electronic"
 
 #. i18n: ectx: ToolBar (notebook_toolbar)
 #: src/kdefrontend/labplot2ui.rc:36
-#, fuzzy, kde-format
-#| msgid "Notebook"
+#, kde-format
 msgid "Notebook Toolbar"
-msgstr " Notebook (quaderno)"
+msgstr "Barra de instrumento de  Notebook (quaderno)"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
 #: src/kdefrontend/labplot2ui.rc:40
-#, fuzzy, kde-format
-#| msgid "Plot Area"
+#, kde-format
 msgid "Plot Area Toolbar"
-msgstr "Tracia Area"
+msgstr "Barra de instrumento de Traciar Area"
 
 #. i18n: ectx: Menu (file)
 #: src/kdefrontend/labplot2ui.rc:44
@@ -15327,10 +15280,9 @@ msgid "Import data from a regular file"
 msgstr ""
 
 #: src/kdefrontend/MainWin.cpp:683
-#, fuzzy, kde-format
-#| msgid "From File..."
+#, kde-format
 msgid "From kaggle.com..."
-msgstr "Ex File..."
+msgstr "Ex kaggle.com..."
 
 #: src/kdefrontend/MainWin.cpp:684
 #, kde-format
@@ -15533,8 +15485,7 @@ msgid "Worksheet Preview"
 msgstr "Vista preliminar de Folio de labor"
 
 #: src/kdefrontend/MainWin.cpp:1420
-#, fuzzy, kde-format
-#| msgid "Content"
+#, kde-format
 msgctxt "@title:window"
 msgid "Content"
 msgstr "Contento"
@@ -15956,10 +15907,9 @@ msgid "With Worksheet"
 msgstr "Con Folio de calculo"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:224
-#, fuzzy, kde-format
-#| msgid "With Worksheet and Spreadsheet"
+#, kde-format
 msgid "With Spreadsheet and Worksheet"
-msgstr "Crea Folio de calculo electronic  e spreadsheet de datos"
+msgstr "Con Folio de calculo electronic  e spreadsheet de datos"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:226
 #, kde-format
@@ -20443,7 +20393,7 @@ msgstr "Largessa de banda:"
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:135
 #, kde-format
 msgid "Plot range:"
-msgstr ""
+msgstr "Extension de Traciar (Plot):"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabKDE)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:211
@@ -20600,7 +20550,7 @@ msgstr "Autor:"
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:253
 #, kde-format
 msgid "Save Calculations:"
-msgstr ""
+msgstr "Salveguarda Calculationes:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDistribution)
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:109
@@ -20657,10 +20607,9 @@ msgstr "Lineas Sparkline:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:198
-#, fuzzy, kde-format
-#| msgid "Column %1"
+#, kde-format
 msgid "Column Header"
-msgstr "Columna %1"
+msgstr "Capite de Columna"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:222
@@ -21198,7 +21147,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1028
 #, kde-format
 msgid "F test"
-msgstr ""
+msgstr "F test"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1038
@@ -22041,10 +21990,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lTracing)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:329
-#, fuzzy, kde-format
-#| msgid "Spacing:"
+#, kde-format
 msgid "Tracing:"
-msgstr "Spatiar:"
+msgstr "Traciar:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPerfTrace)
 #. i18n: ectx: property (text), widget (QLabel, lPerformance)
@@ -22058,7 +22006,7 @@ msgstr "Prestation"
 #: src/kdefrontend/ui/settingsgeneralpage.ui:383
 #, kde-format
 msgid "Debug"
-msgstr ""
+msgstr "Cribra (debug)"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -22301,16 +22249,15 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, compressionGroup)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:192
-#, fuzzy, kde-format
-#| msgid "Compression: %1"
+#, kde-format
 msgid "Compression"
-msgstr "Compression: %1"
+msgstr "Compression"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbLZ4)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:205
 #, kde-format
 msgid "LZ4"
-msgstr ""
+msgstr "LZ4"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbZSTD)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:212
@@ -22320,10 +22267,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:222
-#, fuzzy, kde-format
-#| msgid "Compression Level: %1"
+#, kde-format
 msgid "Compression Level"
-msgstr "Nivello de Compression: %1"
+msgstr "Nivello de Compression"
 
 #. i18n: ectx: property (text), widget (QLabel, lExportToFITS)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:232
