@@ -27,7 +27,6 @@ class LABPLOT_EXPORT XYFunctionCurve : public XYAnalysisCurve {
 class XYFunctionCurve : public XYAnalysisCurve {
 #endif
 	Q_OBJECT
-	Q_ENUMS(FunctionType)
 
 public:
 	explicit XYFunctionCurve(const QString& name);

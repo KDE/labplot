@@ -48,7 +48,7 @@ void XYFunctionCurve::init() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYFunctionCurve::icon() const {
-	return QIcon::fromTheme(QStringLiteral("labplot-xy-function-curve"));
+	return QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve"));
 }
 
 const XYAnalysisCurve::Result& XYFunctionCurve::result() const {

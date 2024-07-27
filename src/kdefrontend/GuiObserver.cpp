@@ -288,7 +288,7 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		m_xyEquationCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
 	case AspectType::XYFunctionCurve:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: XY-Equation from Curve"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Function Curve"));
 		raiseDockSetupConnect(m_xyFunctionCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_xyFunctionCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;

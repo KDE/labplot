@@ -24,14 +24,9 @@
 
 /*!
   \class XYFunctionCurveDock
-  \brief  Provides a widget for editing the properties of the XYFunctionCurves
+  \brief Provides a widget for editing the properties of the XYFunctionCurves
 		(2D-curves defined by a mathematical function) currently selected in
 		the project explorer.
-
-  If more than one curves are set, the properties of the first column are shown.
-  The changes of the properties are applied to all curves.
-  The exclusions are the name, the comment and the datasets (columns) of
-  the curves  - these properties can only be changed if there is only one single curve.
 
   \ingroup kdefrontend
 */
@@ -370,8 +365,7 @@ void XYFunctionCurveDock::enableRecalculate() const {
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
 // General-Tab
-void XYFunctionCurveDock::curveFunctionDataChanged(const XYFunctionCurve::FunctionData& data) {
+void XYFunctionCurveDock::curveFunctionDataChanged(const XYFunctionCurve::FunctionData&) {
 	CONDITIONAL_LOCK_RETURN;
-	// TODOOOOOOO!!!!
-	// uiGeneralTab.teFunction->setText(data.expression);
+	uiGeneralTab.teFunction->setText(m_functionCurve->function());
 }
