@@ -5,6 +5,7 @@ New features:
 		* Support MCAP file import
 	* [spreadsheet]
 		* support periodic and random sampling as function: psample(n;x), rsample(x)
+		* save the properties used to generate random values in the column for later re-use
 
 Bug fixes:
 	* Fix crash selecting "cell" from function list in function dialog
