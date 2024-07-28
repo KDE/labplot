@@ -355,21 +355,19 @@ void XYCurveDock::setModel() {
 
 	if (m_curve->inherits(AspectType::XYAnalysisCurve))
 		// the model is used in the combobox for curve data sources -> allow to also select analysis curves
-		list = {
-			AspectType::Column,
-			AspectType::XYCurve,
-			AspectType::XYFitCurve,
-			AspectType::XYIntegrationCurve,
-			AspectType::XYInterpolationCurve,
-			AspectType::XYSmoothCurve,
-			AspectType::XYFourierFilterCurve,
-			AspectType::XYFourierTransformCurve,
-			AspectType::XYConvolutionCurve,
-			AspectType::XYCorrelationCurve,
-			AspectType::XYDataReductionCurve,
-			AspectType::XYEquationCurve,
-			AspectType::XYFunctionCurve
-		};
+		list = {AspectType::Column,
+				AspectType::XYCurve,
+				AspectType::XYFitCurve,
+				AspectType::XYIntegrationCurve,
+				AspectType::XYInterpolationCurve,
+				AspectType::XYSmoothCurve,
+				AspectType::XYFourierFilterCurve,
+				AspectType::XYFourierTransformCurve,
+				AspectType::XYConvolutionCurve,
+				AspectType::XYCorrelationCurve,
+				AspectType::XYDataReductionCurve,
+				AspectType::XYEquationCurve,
+				AspectType::XYFunctionCurve};
 	else
 		list = {AspectType::Column};
 

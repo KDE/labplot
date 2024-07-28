@@ -95,7 +95,6 @@ protected:
 	XYFunctionCurve(const QString& name, XYFunctionCurvePrivate* dd);
 	virtual void handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) override;
 
-
 private:
 	Q_DECLARE_PRIVATE(XYFunctionCurve)
 	void init();
