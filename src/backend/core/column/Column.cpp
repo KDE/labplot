@@ -21,6 +21,7 @@
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
 #include "backend/core/datatypes/String2DateTimeFilter.h"
+#include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -583,6 +584,15 @@ void Column::clearFormulas() {
 	exec(new ColumnClearFormulasCmd(d));
 }
 
+STD_SETTER_CMD_IMPL(Column, SetRandomValuesData, Column::RandomValuesData, randomValuesData)
+void Column::setRandomValuesData(const RandomValuesData& data) {
+	exec(new ColumnSetRandomValuesDataCmd(d, data, ki18n("%1: set fit options and perform the fit")));
+}
+
+Column::RandomValuesData Column::randomValuesData() const {
+	return d->randomValuesData;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 //@}
 ////////////////////////////////////////////////////////////////////////////////
@@ -1114,6 +1124,16 @@ void Column::save(QXmlStreamWriter* writer) const {
 		writer->writeEndElement();
 	}
 
+	if (d->randomValuesData.available) {
+		writer->writeStartElement(QStringLiteral("randomValuesData"));
+		writer->writeAttribute(QStringLiteral("distribution"), QString::number(static_cast<int>(d->randomValuesData.distribution)));
+		writer->writeAttribute(QStringLiteral("parameter1"), QString::number(d->randomValuesData.parameter1));
+		writer->writeAttribute(QStringLiteral("parameter2"), QString::number(d->randomValuesData.parameter2));
+		writer->writeAttribute(QStringLiteral("parameter3"), QString::number(d->randomValuesData.parameter3));
+		writer->writeAttribute(QStringLiteral("seed"), QString::number(d->randomValuesData.seed));
+		writer->writeEndElement();
+	}
+
 	writeCommentElement(writer);
 
 	writer->writeStartElement(QStringLiteral("input_filter"));
@@ -1360,7 +1380,15 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 				ret_val = XmlReadMask(reader);
 			else if (reader->name() == QLatin1String("formula"))
 				ret_val = XmlReadFormula(reader);
-			else if (reader->name() == QLatin1String("heatmapFormat")) {
+			else if (reader->name() == QLatin1String("randomValuesData")) {
+				attribs = reader->attributes();
+				d->randomValuesData.available = true;
+				READ_INT_VALUE("distribution", randomValuesData.distribution, nsl_sf_stats_distribution);
+				READ_DOUBLE_VALUE("parameter1", randomValuesData.parameter1);
+				READ_DOUBLE_VALUE("parameter2", randomValuesData.parameter2);
+				READ_DOUBLE_VALUE("parameter3", randomValuesData.parameter3);
+				READ_DOUBLE_VALUE("seed", randomValuesData.seed);
+			} else if (reader->name() == QLatin1String("heatmapFormat")) {
 				attribs = reader->attributes();
 
 				auto& format = heatmapFormat();
