@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-27 01:49+0000\n"
-"PO-Revision-Date: 2024-07-22 19:31+0200\n"
+"PO-Revision-Date: 2024-07-27 15:53+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -3536,16 +3536,14 @@ msgid "Simple Moving Range"
 msgstr "Intervalo móbil simple"
 
 #: src/backend/gsl/functions.cpp:243
-#, fuzzy, kde-format
-#| msgid "Periodically"
+#, kde-format
 msgid "Period sample"
-msgstr "Periodicamente"
+msgstr "Mostra dun período"
 
 #: src/backend/gsl/functions.cpp:244
-#, fuzzy, kde-format
-#| msgid "Random Values"
+#, kde-format
 msgid "Random sample"
-msgstr "Valores aleatorios"
+msgstr "Mostra aleatoria"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:248

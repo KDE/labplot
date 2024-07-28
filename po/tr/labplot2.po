@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-27 01:49+0000\n"
-"PO-Revision-Date: 2024-07-22 12:51+0300\n"
+"PO-Revision-Date: 2024-07-27 14:32+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -3531,16 +3531,14 @@ msgid "Simple Moving Range"
 msgstr "Temel Hareket Eden Erim"
 
 #: src/backend/gsl/functions.cpp:243
-#, fuzzy, kde-format
-#| msgid "Periodically"
+#, kde-format
 msgid "Period sample"
-msgstr "Periyodik olarak"
+msgstr "Periyot örneklemi"
 
 #: src/backend/gsl/functions.cpp:244
-#, fuzzy, kde-format
-#| msgid "Random Values"
+#, kde-format
 msgid "Random sample"
-msgstr "Rastgele Değerler"
+msgstr "Rastgele örneklem"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:248

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-27 01:49+0000\n"
-"PO-Revision-Date: 2024-07-22 20:37+0200\n"
+"PO-Revision-Date: 2024-07-27 06:23+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -3530,16 +3530,14 @@ msgid "Simple Moving Range"
 msgstr "Enkelt rörligt intervall"
 
 #: src/backend/gsl/functions.cpp:243
-#, fuzzy, kde-format
-#| msgid "Periodically"
+#, kde-format
 msgid "Period sample"
-msgstr "Periodisk"
+msgstr "Periodisk sampling"
 
 #: src/backend/gsl/functions.cpp:244
-#, fuzzy, kde-format
-#| msgid "Random Values"
+#, kde-format
 msgid "Random sample"
-msgstr "Slumpvärden"
+msgstr "Slumpmässing sampling"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:248

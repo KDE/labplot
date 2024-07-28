@@ -1,5 +1,5 @@
 # Translation of labplot to Spanish
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the labplot package.
 #
 # SPDX-FileCopyrightText: 2014, 2015, 2017, 2019, 2020, 2021, 2022, 2023, 2024 Eloy Cuadra <ecuadra@eloihr.net>
@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-27 01:49+0000\n"
-"PO-Revision-Date: 2024-07-23 00:52+0200\n"
+"PO-Revision-Date: 2024-07-27 11:11+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -3543,16 +3543,14 @@ msgid "Simple Moving Range"
 msgstr "Intervalo móvil simple"
 
 #: src/backend/gsl/functions.cpp:243
-#, fuzzy, kde-format
-#| msgid "Periodically"
+#, kde-format
 msgid "Period sample"
-msgstr "Periódicamente"
+msgstr "Muestra periódica"
 
 #: src/backend/gsl/functions.cpp:244
-#, fuzzy, kde-format
-#| msgid "Random Values"
+#, kde-format
 msgid "Random sample"
-msgstr "Valores aleatorios"
+msgstr "Muestra aleatoria"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:248
