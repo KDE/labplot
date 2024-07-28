@@ -39,6 +39,7 @@ Scatter3DPlotAreaDock::Scatter3DPlotAreaDock(QWidget* parent)
 	connect(ui.slXRot, &QSlider::sliderMoved, this, &Scatter3DPlotAreaDock::xRotationChanged);
 	connect(ui.slYRot, &QSlider::sliderMoved, this, &Scatter3DPlotAreaDock::yRotationChanged);
 	connect(ui.slZoom, &QSlider::sliderMoved, this, &Scatter3DPlotAreaDock::zoomLevelChanged);
+	// connect(ui.kcbColor)
 }
 
 void Scatter3DPlotAreaDock::setScatters(const QList<Scatter3DPlotArea*>& scatters) {

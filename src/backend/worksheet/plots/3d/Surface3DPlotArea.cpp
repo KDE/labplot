@@ -101,9 +101,8 @@ const QString& Surface3DPlotArea::zColumnPath() const {
 }
 
 void Surface3DPlotArea::show(bool visible) {
-	if (m_surface) {
+	if (m_surface)
 		m_surface->setVisible(visible);
-	}
 }
 
 // ##############################################################################
@@ -287,7 +286,8 @@ Surface3DPlotAreaPrivate::Surface3DPlotAreaPrivate(Surface3DPlotArea* owner)
 	, q(owner)
 	, sourceType(Surface3DPlotArea::DataSource_Spreadsheet)
 	, drawMode(Surface3DPlotArea::DrawWireframeSurface)
-	, shadowQuality(Surface3DPlotArea::SoftHigh) {
+	, shadowQuality(Surface3DPlotArea::SoftHigh)
+	, theme(Surface3DPlotArea::Qt) {
 }
 
 void Surface3DPlotAreaPrivate::retransform() {
@@ -329,6 +329,11 @@ void Surface3DPlotAreaPrivate::updateDrawMode() {
 }
 
 void Surface3DPlotAreaPrivate::updateColor() {
+	auto* series = q->m_surface->seriesList().first();
+	if (!series)
+		return;
+	series->setBaseColor(color);
+	Q_EMIT q->changed();
 }
 
 void Surface3DPlotAreaPrivate::updateOpacity() {
@@ -337,14 +342,7 @@ void Surface3DPlotAreaPrivate::updateOpacity() {
 void Surface3DPlotAreaPrivate::updateFlatShading() {
 	qDebug() << Q_FUNC_INFO;
 	QSurface3DSeries* series = q->m_surface->seriesList().first();
-	// Debug the current draw mode and the new one
-	qDebug() << "Supported draw mode:" << series->isFlatShadingSupported();
-	qDebug() << "Current draw mode:" << series->isFlatShadingEnabled();
-	qDebug() << "New draw mode:" << drawMode;
 	series->setFlatShadingEnabled(flatShading);
-	// Debug the new draw mode to confirm it was set
-	qDebug() << "Updated draw mode:" << series->isFlatShadingEnabled();
-	// Force a refresh/redraw if necessary
 	q->m_surface->update(); // or q->m_surface->repaint();
 	Q_EMIT q->changed();
 }
@@ -439,40 +437,41 @@ void Surface3DPlotAreaPrivate::generateSpreadsheetData() const {
 	qDebug() << Q_FUNC_INFO;
 	if (!q->m_surface->seriesList().empty())
 		q->m_surface->removeSeries(q->m_surface->seriesList().first());
+
 	if (!xColumn || !yColumn || !zColumn)
 		return;
-	if (!xColumn->rowCount() || !yColumn->rowCount() || !zColumn->rowCount())
+
+	int xRowCount = xColumn->availableRowCount();
+	int yRowCount = yColumn->availableRowCount();
+	int zRowCount = zColumn->availableRowCount();
+
+	if (xRowCount < 1 || yRowCount < 1 || zRowCount < 1 || xRowCount != yRowCount || yRowCount != zRowCount)
+		return;
+	int numPoints = xRowCount; // Assuming xRowCount, yRowCount, and zRowCount are the same
+	int numRows = std::sqrt(numPoints); // Assuming square grid; adjust if not square
+	if (numRows * numRows != numPoints)
 		return;
 	auto dataArray = std::make_unique<QSurfaceDataArray>();
-	qDebug() << "Start generating points";
-
-	int numPoints = std::min({xColumn->availableRowCount(), yColumn->availableRowCount(), zColumn->availableRowCount()});
-	qDebug() << numPoints;
-
-	for (int i = 0; i < numPoints - 1; i += 2) {
-		auto dataRow = std::make_unique<QSurfaceDataRow>();
-
-		int xVal1 = xColumn->valueAt(i);
-		int yVal1 = yColumn->valueAt(i);
-		int zVal1 = zColumn->valueAt(i);
-		dataRow->append(QSurfaceDataItem(xVal1, yVal1, zVal1));
-
-		int xVal2 = xColumn->valueAt(i + 1);
-		int yVal2 = yColumn->valueAt(i + 1);
-		int zVal2 = zColumn->valueAt(i + 1);
-		dataRow->append(QSurfaceDataItem(xVal2, yVal2, zVal2));
-
+	dataArray->reserve(numRows);
+	// Insert data rows into the data array
+	for (int y = 0; y < numRows; ++y) {
+		auto dataRow = std::make_unique<QSurfaceDataRow>(numRows);
+		for (int x = 0; x < numRows; ++x) {
+			int index = y * numRows + x;
+			float xVal = xColumn->valueAt(index);
+			float yVal = yColumn->valueAt(index);
+			float zVal = zColumn->valueAt(index);
+			(*dataRow)[x] = QSurfaceDataItem(QVector3D(xVal, yVal, zVal));
+		}
 		dataArray->append(*dataRow.release());
 	}
-
 	QSurfaceDataProxy* dataProxy = new QSurfaceDataProxy();
 	dataProxy->resetArray(*dataArray.release());
-
 	QSurface3DSeries* series = new QSurface3DSeries(dataProxy);
 	q->m_surface->addSeries(series);
-
 	Q_EMIT q->changed();
 }
+
 void Surface3DPlotAreaPrivate::updateXRotation() {
 	q->m_surface->setCameraXRotation(xRotation);
 	Q_EMIT q->changed();

@@ -1,5 +1,4 @@
 #include "Axis3D.h"
-#include "Scatter3DPlotArea.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 #include "backend/worksheet/plots/3d/Axis3DPrivate.h"
@@ -11,6 +10,12 @@ Axis3D::Axis3D(QString name, Type type)
 	, d_ptr(new Axis3DPrivate(this)) {
 	setType(type);
 	m_axis->setTitleVisible(true);
+	if (type == Axis3D::Type::X)
+		m_axis->setTitle(QLatin1String("X"));
+	if (type == Axis3D::Type::Y)
+		m_axis->setTitle(QLatin1String("Y"));
+	if (type == Axis3D::Type::Z)
+		m_axis->setTitle(QLatin1String("Z"));
 }
 
 void Axis3D::setRange(float min, float max) {
@@ -89,8 +94,7 @@ Axis3DPrivate::Axis3DPrivate(Axis3D* owner)
 	: q(owner)
 	, axisFormat(Axis3D::Format_Decimal)
 	, minRange(0)
-	, maxRange(100)
-	, title(QStringLiteral(""))
+	, maxRange(5)
 	, segmentCount(10)
 	, subSegmentCount(10) {
 }
