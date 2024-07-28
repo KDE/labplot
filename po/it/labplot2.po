@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-27 01:49+0000\n"
-"PO-Revision-Date: 2024-07-22 09:51+0200\n"
+"PO-Revision-Date: 2024-07-26 14:53+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -1919,16 +1919,14 @@ msgid "Channel count: "
 msgstr "Conteggio dei fogli: %1"
 
 #: src/backend/datasources/filters/McapFilter.cpp:207
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Attachment count: "
-msgstr "Conteggio dei fogli: %1"
+msgstr "Conteggio degli allegati: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:209
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Metadata count: "
-msgstr "Conteggio dei fogli: %1"
+msgstr "Conteggio dei metadati: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:211
 #, fuzzy, kde-format
@@ -1943,17 +1941,15 @@ msgid "Message End Time: "
 msgstr "Ora di fine: %1"
 
 #: src/backend/datasources/filters/McapFilter.cpp:215
-#, fuzzy, kde-format
-#| msgid "No templates found."
+#, kde-format
 msgid "No Statistics found."
-msgstr "Nessun modello trovato."
+msgstr "Nessuna statistica trovata."
 
 #: src/backend/datasources/filters/McapFilter.cpp:469
 #: src/backend/datasources/filters/McapFilter.cpp:962
-#, fuzzy, kde-format
-#| msgid "Failed to read the file."
+#, kde-format
 msgid "Failed to read the file. Reason: %1"
-msgstr "Impossibile leggere il file."
+msgstr "Impossibile leggere il file. Motivo: %1"
 
 #: src/backend/datasources/filters/McapFilter.cpp:477
 #, kde-format
@@ -3513,10 +3509,9 @@ msgid "Logarithmic Distribution"
 msgstr "Distribuzione logaritmica"
 
 #: src/backend/gsl/functions.cpp:183
-#, fuzzy, kde-format
-#| msgid "Landau Distribution"
+#, kde-format
 msgid "Triangular Distribution"
-msgstr "Distribuzione di Landau"
+msgstr "Distribuzione triangolare"
 
 #: src/backend/gsl/functions.cpp:187
 #, kde-format
@@ -5036,28 +5031,24 @@ msgid "Second synchrotron function"
 msgstr "Seconda funzione sincrotrone"
 
 #: src/backend/gsl/functions.cpp:600
-#, fuzzy, kde-format
-#| msgid "Transport function"
+#, kde-format
 msgid "Transport function J2"
-msgstr "Funzione di trasporto"
+msgstr "Funzione di trasporto J2"
 
 #: src/backend/gsl/functions.cpp:601
-#, fuzzy, kde-format
-#| msgid "Transport function"
+#, kde-format
 msgid "Transport function J3"
-msgstr "Funzione di trasporto"
+msgstr "Funzione di trasporto J3"
 
 #: src/backend/gsl/functions.cpp:602
-#, fuzzy, kde-format
-#| msgid "Transport function"
+#, kde-format
 msgid "Transport function J4"
-msgstr "Funzione di trasporto"
+msgstr "Funzione di trasporto J4"
 
 #: src/backend/gsl/functions.cpp:603
-#, fuzzy, kde-format
-#| msgid "Transport function"
+#, kde-format
 msgid "Transport function J5"
-msgstr "Funzione di trasporto"
+msgstr "Funzione di trasporto J5"
 
 #: src/backend/gsl/functions.cpp:606
 #, kde-format
@@ -7730,10 +7721,9 @@ msgid "%1: set axis range"
 msgstr "%1: imposta l'intervallo degli assi"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:641
-#, fuzzy, kde-format
-#| msgid "%1: set x scale"
+#, kde-format
 msgid "%1: set range scale"
-msgstr "%1: imposta la scala di x"
+msgstr "%1: imposta la scala dell'intervallo"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:648
 #, kde-format
@@ -8757,10 +8747,9 @@ msgstr "%1: imposta il conteggio delle colonne della disposizione"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:140
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:188
-#, fuzzy, kde-format
-#| msgid "%1: x-error type changed"
+#, kde-format
 msgid "%1: error type changed"
-msgstr "%1: tipo di errore x modificato"
+msgstr "%1: tipo di errore modificato"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:147
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:159
@@ -9496,7 +9485,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1853
 #, kde-format
 msgid "MODEL"
-msgstr ""
+msgstr "MODELLO"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1857
 #, kde-format
@@ -9506,12 +9495,12 @@ msgstr "Gradi"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1862
 #, kde-format
 msgid "Peaks"
-msgstr ""
+msgstr "Picchi"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1881
 #, kde-format
 msgid "PARAMETERS"
-msgstr ""
+msgstr "PARAMETRI"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
@@ -9544,7 +9533,7 @@ msgstr "Maiuscolo"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1902
 #, kde-format
 msgid "GOODNESS OF FIT"
-msgstr ""
+msgstr "BONTÀ DI ADATTAMENTO"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1904
@@ -9595,22 +9584,19 @@ msgid "F-Test"
 msgstr "Test F"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1912
-#, fuzzy, kde-format
-#| msgid "mean absolute error:"
+#, kde-format
 msgid "Mean absolute error"
-msgstr "errore medio assoluto:"
+msgstr "Errore medio assoluto"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1913
-#, fuzzy, kde-format
-#| msgid "Akaike information criterion:"
+#, kde-format
 msgid "Akaike information criterion"
-msgstr "Criterio d'informazione di Akaike:"
+msgstr "Criterio d'informazione di Akaike"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1914
-#, fuzzy, kde-format
-#| msgid "Bayesian information criterion:"
+#, kde-format
 msgid "Bayesian information criterion"
-msgstr "Criterio di informazione Bayesiano:"
+msgstr "Criterio di informazione Bayesiano"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2251
 #, kde-format
@@ -12712,10 +12698,9 @@ msgid "Import from kaggle.com"
 msgstr "Importa da kaggle.com"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:41
-#, fuzzy, kde-format
-#| msgid "Use previous value"
+#, kde-format
 msgid "Show previous datasets"
-msgstr "Usa il valore precedente"
+msgstr "Mostra gli insiemi di dati precedenti"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:42
 #, kde-format
@@ -13712,12 +13697,12 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:99
 #, kde-format
 msgid "Select to modify the properties of the symbol for the mean value."
-msgstr ""
+msgstr "Seleziona per modificare le proprietà del simbolo del valore medio."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:102
 #, kde-format
 msgid "Select to modify the properties of the symbol for the median value."
-msgstr ""
+msgstr "Seleziona per modificare le proprietà del simbolo del valore mediano."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:105
 #, kde-format
@@ -15731,8 +15716,7 @@ msgid "From Dataset Collection..."
 msgstr "Dalla collezione di insieme di dati..."
 
 #: src/kdefrontend/MainWin.cpp:694
-#, fuzzy, kde-format
-#| msgid "Imports data from an online dataset"
+#, kde-format
 msgid "Import data from an online dataset"
 msgstr "Importa dati da un insieme di dati online"
 
@@ -15919,8 +15903,7 @@ msgid "Worksheet Preview"
 msgstr "Anteprima del foglio di lavoro"
 
 #: src/kdefrontend/MainWin.cpp:1420
-#, fuzzy, kde-format
-#| msgid "Content"
+#, kde-format
 msgctxt "@title:window"
 msgid "Content"
 msgstr "Continuità"
@@ -16347,10 +16330,9 @@ msgid "With Worksheet"
 msgstr "Con il foglio di lavoro"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:224
-#, fuzzy, kde-format
-#| msgid "With Worksheet and Spreadsheet"
+#, kde-format
 msgid "With Spreadsheet and Worksheet"
-msgstr "Con il foglio di lavoro e il foglio elettronico"
+msgstr "Con il Foglio elettronico e il foglio di lavoro"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:226
 #, kde-format
@@ -16456,15 +16438,7 @@ msgstr ""
 "nelle proprietà del progetto."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:266
-#, fuzzy, kde-format
-#| msgid ""
-#| "Save the results of the calculations in the analysis curves in the "
-#| "project file. \n"
-#| "Uncheck this option to reduce the size of the project file at costs of "
-#| "the longer project load times. \n"
-#| "Determines the default behaviour for new projects. \n"
-#| "The setting can be changed for every project separately in the project "
-#| "properties."
+#, kde-format
 msgid ""
 "Save the results of the calculations in the analysis curves in the project "
 "file. \n"
@@ -17006,8 +16980,7 @@ msgid "Export Selection"
 msgstr "Esporta la selezione"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:114
-#, fuzzy, kde-format
-#| msgid "This option determines how the convert numbers to strings."
+#, kde-format
 msgid "This option determines how to convert numbers to strings."
 msgstr "Questa opzione determina come convertire i numeri in stringhe."
 
@@ -22812,14 +22785,13 @@ msgstr "LZ4"
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:212
 #, kde-format
 msgid "ZSTD"
-msgstr ""
+msgstr "zstd"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:222
-#, fuzzy, kde-format
-#| msgid "Compression Level: %1"
+#, kde-format
 msgid "Compression Level"
-msgstr "Livello di compressione: %1"
+msgstr "Livello di compressione"
 
 #. i18n: ectx: property (text), widget (QLabel, lExportToFITS)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:232
@@ -23796,11 +23768,7 @@ msgstr ""
 "modalità testuale che utilizza il linguaggio a marcatori Markdown</li></ul>"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:224
-#, fuzzy, kde-format
-#| msgid ""
-#| "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
-#| "li><li>LaTeX - text setting using LaTeX, installation of LaTeX required</"
-#| "li><li>Markdown - text setting using Markdown markup language</li></ul>"
+#, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
 "li><li>LaTeX - text setting using LaTeX, installation of LaTeX required</"
@@ -23808,8 +23776,7 @@ msgid ""
 msgstr ""
 "Impostazione della modalità testuale:<ul><li>Testo - modalità testuale che "
 "utilizza una formattazione per testo ricco</li><li>LaTeX - modalità testuale "
-"che utilizza LaTeX, è richiesta l'installazione di LaTeX</li><li>Markdown - "
-"modalità testuale che utilizza il linguaggio a marcatori Markdown</li></ul>"
+"che utilizza LaTeX, è richiesta l'installazione di LaTeX</li></ul>"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:922
 #: src/kdefrontend/widgets/LabelWidget.cpp:948

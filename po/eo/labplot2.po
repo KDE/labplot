@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-27 01:49+0000\n"
-"PO-Revision-Date: 2024-07-16 21:47+0200\n"
+"PO-Revision-Date: 2024-07-27 16:22+0200\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -1879,70 +1879,60 @@ msgid "Variables with rank greater than 2 not supported yet."
 msgstr "Variablo kun rango pli granda ol 2 ne subtenatas."
 
 #: src/backend/datasources/filters/McapFilter.cpp:196
-#, fuzzy, kde-format
-#| msgid "Invalid DBC file."
+#, kde-format
 msgid "Valid MCAP file"
-msgstr "Nevalida BLF-dosiero."
+msgstr "Valida MCAP-dosiero."
 
 #: src/backend/datasources/filters/McapFilter.cpp:201
-#, fuzzy, kde-format
-#| msgid "Message type:"
+#, kde-format
 msgid "Message count: "
-msgstr "Mesaĝo tipo:"
+msgstr "Nombro da mesaĝoj:"
 
 #: src/backend/datasources/filters/McapFilter.cpp:203
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Schema count: "
-msgstr "Folikalkulo: %1"
+msgstr "Nombro da skemoj:"
 
 #: src/backend/datasources/filters/McapFilter.cpp:205
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Channel count: "
-msgstr "Folikalkulo: %1"
+msgstr "Nombro da kanaloj:"
 
 #: src/backend/datasources/filters/McapFilter.cpp:207
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Attachment count: "
-msgstr "Folikalkulo: %1"
+msgstr "Nombro da kunsendaĵoj:"
 
 #: src/backend/datasources/filters/McapFilter.cpp:209
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Metadata count: "
-msgstr "Folikalkulo: %1"
+msgstr "Nombro da metadatumoj:"
 
 #: src/backend/datasources/filters/McapFilter.cpp:211
-#, fuzzy, kde-format
-#| msgid "Start Time:"
+#, kde-format
 msgid "Message Start Time: "
-msgstr "Komenca Tempo:"
+msgstr "Komenca Tempo de Mesaĝo:"
 
 #: src/backend/datasources/filters/McapFilter.cpp:213
-#, fuzzy, kde-format
-#| msgid "End Time: %1"
+#, kde-format
 msgid "Message End Time: "
-msgstr "Fina Tempo: %1"
+msgstr "Fina Tempo de Mesaĝo:"
 
 #: src/backend/datasources/filters/McapFilter.cpp:215
-#, fuzzy, kde-format
-#| msgid "No templates found."
+#, kde-format
 msgid "No Statistics found."
-msgstr "Neniuj ŝablonoj trovitaj."
+msgstr "Neniuj Statistikoj trovitaj."
 
 #: src/backend/datasources/filters/McapFilter.cpp:469
 #: src/backend/datasources/filters/McapFilter.cpp:962
-#, fuzzy, kde-format
-#| msgid "Failed to read the file."
+#, kde-format
 msgid "Failed to read the file. Reason: %1"
-msgstr "Malsukcesis legi la dosieron."
+msgstr "Malsukcesis legi la dosieron. Kialo: %1"
 
 #: src/backend/datasources/filters/McapFilter.cpp:477
 #, kde-format
 msgid "No JSON encoded topics found."
-msgstr ""
+msgstr "Neniuj JSON-koditaj temoj trovitaj."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:213
 #, kde-format
@@ -3543,16 +3533,14 @@ msgid "Simple Moving Range"
 msgstr "Simpla Movanta Gamo"
 
 #: src/backend/gsl/functions.cpp:243
-#, fuzzy, kde-format
-#| msgid "Periodically"
+#, kde-format
 msgid "Period sample"
-msgstr "Periode"
+msgstr "Perioda specimeno"
 
 #: src/backend/gsl/functions.cpp:244
-#, fuzzy, kde-format
-#| msgid "Random Values"
+#, kde-format
 msgid "Random sample"
-msgstr "Hazardaj Valoroj"
+msgstr "Hazarda specimeno"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:248
@@ -12167,7 +12155,7 @@ msgstr "ROOT (CERN)"
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:150
 #, kde-format
 msgid "Spice"
-msgstr "Spico"
+msgstr "Spice"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:130
 #, kde-format
@@ -12180,15 +12168,14 @@ msgid "MATLAB MAT file"
 msgstr "MATLAB MAT-dosiero"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:136
-#, fuzzy, kde-format
-#| msgid "Copy Data"
+#, kde-format
 msgid "MCAP Data"
-msgstr "Kopii Datumoj"
+msgstr "MCAP-Datumoj"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:145
 #, kde-format
 msgid "ASCII Data"
-msgstr "ASCII-datumoj"
+msgstr "ASCII-Datumoj"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:146
 #, kde-format
@@ -15877,7 +15864,7 @@ msgstr "Vi povas trovi la kundividitan projekton ĉe: <a href=\"%1\">%1</a>"
 #: src/kdefrontend/MainWin.cpp:2666
 #, kde-format
 msgid "Running Kaggle CLI tool failed"
-msgstr ""
+msgstr "Rulo de Kaggle KLI-ilo malsukcesis"
 
 #: src/kdefrontend/MainWin.cpp:2667
 #, kde-format
@@ -15885,6 +15872,9 @@ msgid ""
 "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
 "\">\"How to Use Kaggle\"</a> to setup the Kaggle CLI tool."
 msgstr ""
+"Bonvolu sekvi la instruojn en <a href=\"https://www.kaggle.com/docs/api\">"
+"\"\"How to Use Kaggle\"</a> por agordi la KomandLiniInterfacan ilon de "
+"Kaggle."
 
 #: src/kdefrontend/MainWin.cpp:2730
 #, kde-format
@@ -16038,7 +16028,7 @@ msgstr "Forigi elŝutitajn dosierojn"
 #: src/kdefrontend/SettingsDatasetsPage.cpp:34
 #, kde-format
 msgid "How to Use Kaggle"
-msgstr ""
+msgstr "Kiel Uzi Kaggle"
 
 #: src/kdefrontend/SettingsDatasetsPage.cpp:86
 #, kde-format
@@ -16857,10 +16847,9 @@ msgid "Excel 2007+ (*.xlsx)"
 msgstr "Excel 2007+ (*.xlsx)"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:415
-#, fuzzy, kde-format
-#| msgid "DBC file (*.dbc)"
+#, kde-format
 msgid "MCAP Files (*.mcap)"
-msgstr "DBC-dosiero (*.dbc)"
+msgstr "MCAO-dosiero (*.mcap)"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:418
 #, kde-format
@@ -22180,19 +22169,19 @@ msgstr "Kaŝaĵo:"
 #: src/kdefrontend/ui/settingsdatasetspage.ui:39
 #, kde-format
 msgid "Kaggle"
-msgstr ""
+msgstr "Kaggle"
 
 #. i18n: ectx: property (text), widget (QLabel, lKagglePath)
 #: src/kdefrontend/ui/settingsdatasetspage.ui:46
 #, kde-format
 msgid "CLI Path:"
-msgstr ""
+msgstr "Vojo de KLI (KomandLiniInterfaco):"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/kdefrontend/ui/settingsdatasetspage.ui:66
 #, kde-format
 msgid "Total size - "
-msgstr "Tuta grandeco -"
+msgstr "Suma grandeco -"
 
 #. i18n: ectx: property (text), widget (QLabel, lFiles)
 #: src/kdefrontend/ui/settingsdatasetspage.ui:73
@@ -22587,29 +22576,27 @@ msgstr "Eksporti vertikalan kaplinion:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, compressionGroup)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:192
-#, fuzzy, kde-format
-#| msgid "Compression: %1"
+#, kde-format
 msgid "Compression"
-msgstr "Kunpremo: %1"
+msgstr "Kunpremo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbLZ4)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:205
 #, kde-format
 msgid "LZ4"
-msgstr ""
+msgstr "LZ4"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbZSTD)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:212
 #, kde-format
 msgid "ZSTD"
-msgstr ""
+msgstr "ZSTD"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:222
-#, fuzzy, kde-format
-#| msgid "Compression Level: %1"
+#, kde-format
 msgid "Compression Level"
-msgstr "Kunprema Nivelo: %1"
+msgstr "Kunprema Nivelo"
 
 #. i18n: ectx: property (text), widget (QLabel, lExportToFITS)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:232
