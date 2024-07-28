@@ -29,7 +29,6 @@ Surface3DPlotAreaDock::Surface3DPlotAreaDock(QWidget* parent)
 
 	// Matrix data source
 	ui.cbMatrix->setTopLevelClasses({AspectType::Folder, AspectType::Workbook, AspectType::Matrix});
-	// TODO  ui.cbMatrix->setSelectableAspects({AspectType::Matrix});
 
 	// SIGNALs/SLOTs
 	// General
@@ -44,10 +43,10 @@ Surface3DPlotAreaDock::Surface3DPlotAreaDock(QWidget* parent)
 	connect(ui.chkFlatShading, SIGNAL(toggled(bool)), SLOT(flatShadingChanged(bool)));
 	connect(ui.cbShadowQuality, SIGNAL(currentIndexChanged(int)), SLOT(shadowQualityChanged(int)));
 	connect(ui.chkSmooth, SIGNAL(toggled(bool)), SLOT(smoothChanged(bool)));
-
 	connect(ui.slXRot, &QSlider::sliderMoved, this, &Surface3DPlotAreaDock::xRotationChanged);
 	connect(ui.slYRot, &QSlider::sliderMoved, this, &Surface3DPlotAreaDock::yRotationChanged);
 	connect(ui.slZoom, &QSlider::sliderMoved, this, &Surface3DPlotAreaDock::zoomLevelChanged);
+	connect(ui.kcbColor, &KColorButton::changed, this, &Surface3DPlotAreaDock::colorChanged);
 	connect(ui.cbTheme, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &Surface3DPlotAreaDock::themeChanged);
 }
 
@@ -78,9 +77,6 @@ void Surface3DPlotAreaDock::setSurfaces(const QList<Surface3DPlotArea*>& surface
 	surfaceXColumnChanged(m_surface->xColumn());
 	surfaceXColumnChanged(m_surface->yColumn());
 	surfaceXColumnChanged(m_surface->zColumn());
-
-	// // TODO: matrix
-	// ui.cbMatrix->setMatrix(m_surface->matrix(), m_surface->matrixPath());
 	surfaceMatrixChanged(m_surface->matrix());
 	// tab "Mesh"
 
@@ -108,7 +104,7 @@ void Surface3DPlotAreaDock::setSurfaces(const QList<Surface3DPlotArea*>& surface
 	connect(m_surface, &Surface3DPlotArea::xRotationChanged, this, &Surface3DPlotAreaDock::surfaceXRotationChanged);
 	connect(m_surface, &Surface3DPlotArea::yRotationChanged, this, &Surface3DPlotAreaDock::surfaceYRotationChanged);
 	connect(m_surface, &Surface3DPlotArea::themeChanged, this, &Surface3DPlotAreaDock::surfaceThemeChanged);
-
+	connect(m_surface, &Surface3DPlotArea::colorChanged, this, &Surface3DPlotAreaDock::colorChanged);
 	connect(m_surface, &Surface3DPlotArea::matrixChanged, this, &Surface3DPlotAreaDock::surfaceMatrixChanged);
 	connect(m_surface, &Surface3DPlotArea::xColumnChanged, this, &Surface3DPlotAreaDock::surfaceXColumnChanged);
 	connect(m_surface, &Surface3DPlotArea::yColumnChanged, this, &Surface3DPlotAreaDock::surfaceYColumnChanged);
@@ -300,6 +296,11 @@ void Surface3DPlotAreaDock::smoothChanged(bool vis) {
 	for (Surface3DPlotArea* surface : m_surfaces)
 		surface->setSmooth(vis);
 }
+void Surface3DPlotAreaDock::colorChanged(QColor color) {
+	CONDITIONAL_LOCK_RETURN;
+	for (Surface3DPlotArea* surface : m_surfaces)
+		surface->setColor(color);
+}
 
 //*************************************************************
 //***** SLOTs for changes triggered in Surface3DPlotArea ******
@@ -366,6 +367,10 @@ void Surface3DPlotAreaDock::surfaceYRotationChanged(int val) {
 void Surface3DPlotAreaDock::surfaceSmoothChanged(bool vis) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.chkSmooth->setEnabled(vis);
+}
+void Surface3DPlotAreaDock::surfaceColorChanged(QColor color) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.kcbColor->setColor(color);
 }
 
 //*************************************************************

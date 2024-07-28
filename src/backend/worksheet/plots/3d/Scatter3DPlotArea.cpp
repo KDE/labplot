@@ -215,6 +215,9 @@ void Scatter3DPlotArea::retransform() {
 // #####################################################################
 Scatter3DPlotAreaPrivate::Scatter3DPlotAreaPrivate(Scatter3DPlotArea* owner)
 	: WorksheetElementContainerPrivate(owner)
+	, theme(Scatter3DPlotArea::Qt)
+	, pointStyle(Scatter3DPlotArea::Sphere)
+	, shadowQuality(Scatter3DPlotArea::None)
 	, q(owner) {
 }
 
@@ -272,7 +275,7 @@ void Scatter3DPlotAreaPrivate::updateTheme() {
 }
 
 void Scatter3DPlotAreaPrivate::updatePointStyle() {
-	QScatter3DSeries* series = q->m_scatter->seriesList().at(0); // Assuming there is at least one series
+	QScatter3DSeries* series = q->m_scatter->seriesList().at(0);
 	if (!series)
 		return;
 
@@ -304,7 +307,7 @@ void Scatter3DPlotAreaPrivate::updateShadowQuality() {
 }
 
 void Scatter3DPlotAreaPrivate::updateColor() {
-	QScatter3DSeries* series = q->m_scatter->seriesList().at(0); // Assuming there is at least one series
+	QScatter3DSeries* series = q->m_scatter->seriesList().at(0);
 	if (!series)
 		return;
 	series->setBaseColor(color);
@@ -312,7 +315,7 @@ void Scatter3DPlotAreaPrivate::updateColor() {
 	Q_EMIT q->changed();
 }
 void Scatter3DPlotAreaPrivate::updateOpacity() {
-	QScatter3DSeries* series = q->m_scatter->seriesList().at(0); // Assuming there is at least one series
+	QScatter3DSeries* series = q->m_scatter->seriesList().at(0);
 	if (!series)
 		return;
 	QColor baseColor = series->baseColor();

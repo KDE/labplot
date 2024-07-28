@@ -55,6 +55,7 @@ private Q_SLOTS:
 	void yRotationChanged(int);
 	void themeChanged(int);
 	void smoothChanged(bool);
+	void colorChanged(QColor);
 
 	// SLOTs for changes triggered in Surface3DPlotArea
 	void surfaceDrawModeChanged(Surface3DPlotArea::DrawMode mode);
@@ -70,6 +71,7 @@ private Q_SLOTS:
 	void surfaceYRotationChanged(int);
 	void surfaceSmoothChanged(bool);
 	void surfaceZoomChanged(int);
+	void surfaceColorChanged(QColor);
 
 private:
 	Ui::Surface3DPlotAreaDock ui;

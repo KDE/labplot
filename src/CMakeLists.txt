@@ -259,6 +259,7 @@ set(UI_SOURCES
         ${KDEFRONTEND_DIR}/ui/dockwidgets/surface3dplotareadock.ui
         ${KDEFRONTEND_DIR}/ui/dockwidgets/axis3ddock.ui
         ${KDEFRONTEND_DIR}/ui/dockwidgets/scatter3dplotareadock.ui
+        ${KDEFRONTEND_DIR}/ui/dockwidgets/bar3dplotareadock.ui
 	${KDEFRONTEND_DIR}/ui/matrix/matrixfunctionwidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/plotdatawidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/equidistantvalueswidget.ui
@@ -443,6 +444,7 @@ set(BACKEND_SOURCES
         ${BACKEND_DIR}/worksheet/plots/3d/Surface3DPlotArea.cpp
         ${BACKEND_DIR}/worksheet/plots/3d/Axis3D.cpp
         ${BACKEND_DIR}/worksheet/plots/3d/Scatter3DPlotArea.cpp
+        ${BACKEND_DIR}/worksheet/plots/3d/Bar3DPlotArea.cpp
 
 )
 
@@ -779,6 +781,8 @@ if(APPLE AND ${ECM_VERSION} VERSION_GREATER "5.48.0")
 endif()
 add_executable(labplot ${LABPLOT_SOURCE} ${GUI_QRC} ${qml_QRC})
 target_link_libraries(labplot labplotlib labplotbackendlib labplotnsllib)
+    kdefrontend/dockwidgets/Bar3DPlotArea.h
+    kdefrontend/dockwidgets/Bar3DPlotArea.cpp
 
 
 #if(KUserFeedbackQt6_FOUND)

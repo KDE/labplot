@@ -16,7 +16,6 @@ public:
 	enum Type { X, Y, Z };
 	explicit Axis3D(QString name, Axis3D::Type type);
 
-
 	void setRange(float min, float max);
 	BASIC_D_ACCESSOR_DECL(float, minRange, MinRange)
 	BASIC_D_ACCESSOR_DECL(float, maxRange, MaxRange)

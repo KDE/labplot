@@ -60,6 +60,9 @@ enum class AspectType : quint64 {
 	// 3D Scatter
 	Scatter3DPlot = 0x0210092,
 
+	// 3D Bar
+	Bar3DPlot = 0x0210093,
+
 	// bar plots
 	BarPlot = 0x0210200,
 	LollipopPlot = 0x0210400,
