@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-27 01:49+0000\n"
+"POT-Creation-Date: 2024-07-29 01:48+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -615,33 +615,33 @@ msgstr "actualização automática: falsa"
 msgid "The name \"%1\" is already in use. Choose another name."
 msgstr "O nome \"%1\" já está a ser usado. Escolha outro nome."
 
-#: src/backend/core/column/Column.cpp:121
+#: src/backend/core/column/Column.cpp:122
 #, kde-format
 msgid "Copy Data"
 msgstr "Copiar os Dados"
 
-#: src/backend/core/column/Column.cpp:124
+#: src/backend/core/column/Column.cpp:125
 #, kde-format
 msgid "Paste Data"
 msgstr "Colar os Dados"
 
-#: src/backend/core/column/Column.cpp:160
+#: src/backend/core/column/Column.cpp:161
 #, kde-format
 msgid "Used in"
 msgstr "Usado em"
 
-#: src/backend/core/column/Column.cpp:177
+#: src/backend/core/column/Column.cpp:178
 #, fuzzy, kde-format
 #| msgid "Plot"
 msgid "Plots"
 msgstr "Gráfico"
 
-#: src/backend/core/column/Column.cpp:195
+#: src/backend/core/column/Column.cpp:196
 #, kde-format
 msgid "Axes"
 msgstr "Eixos"
 
-#: src/backend/core/column/Column.cpp:221
+#: src/backend/core/column/Column.cpp:222
 #, kde-format
 msgid "Calculations"
 msgstr "Cálculos"
@@ -656,7 +656,7 @@ msgstr "Cálculos"
 #. else	// Cancel
 #. return;
 #. }
-#: src/backend/core/column/Column.cpp:350
+#: src/backend/core/column/Column.cpp:351
 #: src/backend/core/column/columncommands.cpp:89
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:338
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:362
@@ -665,20 +665,26 @@ msgstr "Cálculos"
 msgid "%1: change column type"
 msgstr "%1: mudar o tipo da coluna"
 
-#: src/backend/core/column/Column.cpp:488
+#: src/backend/core/column/Column.cpp:489
 #: src/backend/core/column/columncommands.cpp:580
 #, kde-format
 msgid "%1: clear column"
 msgstr "%1: limpar a coluna"
 
-#: src/backend/core/column/Column.cpp:1593
+#: src/backend/core/column/Column.cpp:589
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:977
+#, kde-format
+msgid "%1: set fit options and perform the fit"
+msgstr "%1: mudar as opções de ajuste e efectuar o mesmo"
+
+#: src/backend/core/column/Column.cpp:1621
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "índice da linha inválido ou em falta"
 
-#: src/backend/core/column/Column.cpp:1602
-#: src/backend/core/column/Column.cpp:1611
-#: src/backend/core/column/Column.cpp:1620
+#: src/backend/core/column/Column.cpp:1630
+#: src/backend/core/column/Column.cpp:1639
+#: src/backend/core/column/Column.cpp:1648
 #, kde-format
 msgid "invalid row value"
 msgstr "valor da linha inválido"
@@ -3195,7 +3201,7 @@ msgstr "A factorização falhou"
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:605
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:625
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:660
-#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:449
+#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:464
 #, kde-format
 msgid "Failed to allocate memory"
 msgstr "Não foi possível reservar memória"
@@ -9621,11 +9627,6 @@ msgstr "%1: atribuir o erro em X"
 #, kde-format
 msgid "%1: assign y-error"
 msgstr "%1: atribuir o erro em Y"
-
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:977
-#, kde-format
-msgid "%1: set fit options and perform the fit"
-msgstr "%1: mudar as opções de ajuste e efectuar o mesmo"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1823
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3092
@@ -17215,7 +17216,7 @@ msgstr[1] "%1: preencher as colunas com números equidistantes"
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:605
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:625
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:660
-#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:449
+#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:464
 #, kde-format
 msgid "Not enough memory to perform this operation."
 msgstr "Não existe memória suficiente para executar esta operação."
@@ -17654,7 +17655,7 @@ msgstr ""
 "\"><span style=\" text-decoration: underline; color:#2980b9;\">documentação "
 "do GSL</span></a></p></body></html>"
 
-#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:470
+#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:485
 #, kde-format
 msgid "%1: fill column with non-uniform random numbers"
 msgid_plural "%1: fill columns with non-uniform random numbers"
@@ -21339,7 +21340,7 @@ msgstr "Gravar os Cálculos:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDistribution)
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:109
-#: src/kdefrontend/ui/spreadsheet/randomvalueswidget.ui:100
+#: src/kdefrontend/ui/spreadsheet/randomvalueswidget.ui:97
 #, kde-format
 msgid "Distribution:"
 msgstr "Distribuição:"
@@ -23199,31 +23200,31 @@ msgid "Create Plot for original Data"
 msgstr "Criar um Gráfico para os Dados Originais"
 
 #. i18n: ectx: property (text), widget (QLabel, lParameter2)
-#: src/kdefrontend/ui/spreadsheet/randomvalueswidget.ui:42
+#: src/kdefrontend/ui/spreadsheet/randomvalueswidget.ui:41
 #, kde-format
 msgid "2:"
 msgstr "2:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunc)
-#: src/kdefrontend/ui/spreadsheet/randomvalueswidget.ui:58
+#: src/kdefrontend/ui/spreadsheet/randomvalueswidget.ui:56
 #, kde-format
 msgid "p(x)"
 msgstr "p(x)"
 
 #. i18n: ectx: property (text), widget (QLabel, lParameter1)
-#: src/kdefrontend/ui/spreadsheet/randomvalueswidget.ui:90
+#: src/kdefrontend/ui/spreadsheet/randomvalueswidget.ui:87
 #, kde-format
 msgid "1:"
 msgstr "1:"
 
 #. i18n: ectx: property (text), widget (QLabel, lParameter3)
-#: src/kdefrontend/ui/spreadsheet/randomvalueswidget.ui:113
+#: src/kdefrontend/ui/spreadsheet/randomvalueswidget.ui:109
 #, kde-format
 msgid "3:"
 msgstr "3:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbDistribution)
-#: src/kdefrontend/ui/spreadsheet/randomvalueswidget.ui:149
+#: src/kdefrontend/ui/spreadsheet/randomvalueswidget.ui:145
 #, kde-format
 msgid ""
 "<html><head/><body><p>Random number distributions as defined in <a href="
@@ -23237,7 +23238,7 @@ msgstr ""
 "do GSL</span></a></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lSeed)
-#: src/kdefrontend/ui/spreadsheet/randomvalueswidget.ui:156
+#: src/kdefrontend/ui/spreadsheet/randomvalueswidget.ui:152
 #, kde-format
 msgid "Seed:"
 msgstr "Base:"
