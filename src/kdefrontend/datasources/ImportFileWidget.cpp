@@ -4,7 +4,7 @@
 	Description          : import file data widget
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2009-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2018 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2018-2019 Kovacs Ferencz <kferike98@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -261,10 +261,11 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	ui.bLWT->setIcon(ui.bLWT->style()->standardIcon(QStyle::SP_FileDialogDetailedView));
 #endif
 
-	// templates for plot properties
+	// templates for filter properties
 	m_templateHandler = new TemplateHandler(this, QLatin1String("import"), false);
 	m_templateHandler->setSaveDefaultAvailable(false);
 	m_templateHandler->setLoadAvailable(false);
+	m_templateHandler->setToolButtonStyle(Qt::ToolButtonStyle::ToolButtonIconOnly);
 	ui.hLayoutFilter->addWidget(m_templateHandler);
 	connect(m_templateHandler, &TemplateHandler::saveConfigRequested, this, &ImportFileWidget::saveConfigAsTemplate);
 }
@@ -477,7 +478,7 @@ void ImportFileWidget::initSlots() {
 	if (m_asciiOptionsWidget)
 		connect(m_asciiOptionsWidget.get(), &AsciiOptionsWidget::headerLineChanged, this, &ImportFileWidget::updateStartRow);
 
-	connect(ui.cbTopics, QOverload<int>::of(&KComboBox::activated), this, &ImportFileWidget::changeTopic);
+	connect(ui.cbMcapTopics, QOverload<int>::of(&KComboBox::activated), this, &ImportFileWidget::changeMcapTopic);
 
 #ifdef HAVE_MQTT
 	connect(ui.cbConnection, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImportFileWidget::mqttConnectionChanged);
@@ -867,7 +868,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		filter->setEndRow(ui.sbEndRow->value());
 		filter->setStartColumn(ui.sbStartColumn->value());
 		filter->setEndColumn(ui.sbEndColumn->value());
-		filter->setCurrentTopic(ui.cbTopics->currentText());
+		filter->setCurrentTopic(ui.cbMcapTopics->currentText());
 
 		break;
 	}
@@ -1000,14 +1001,14 @@ void ImportFileWidget::setMQTTVisible(bool visible) {
 
 	// topics
 	if (ui.cbConnection->currentIndex() != -1 && visible) {
-		ui.lTopics->setVisible(true);
+		ui.lMqttTopics->setVisible(true);
 		ui.frameSubscriptions->setVisible(true);
 #ifdef HAVE_MQTT
 		m_subscriptionWidget->setVisible(true);
 		m_subscriptionWidget->makeVisible(true);
 #endif
 	} else {
-		ui.lTopics->setVisible(false);
+		ui.lMqttTopics->setVisible(false);
 		ui.frameSubscriptions->setVisible(false);
 #ifdef HAVE_MQTT
 		m_subscriptionWidget->setVisible(false);
@@ -1183,7 +1184,8 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 
 	showJsonModel(false);
 
-	ui.cbTopics->hide();
+	ui.lMcapTopics->hide();
+	ui.cbMcapTopics->hide();
 
 	switch (fileType) {
 	case AbstractFileFilter::FileType::Ascii:
@@ -1245,7 +1247,8 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 		showJsonModel(true);
 		break;
 	case AbstractFileFilter::FileType::MCAP:
-		ui.cbTopics->show();
+		ui.lMcapTopics->show();
+		ui.cbMcapTopics->show();
 		break;
 	case AbstractFileFilter::FileType::READSTAT:
 		ui.tabWidget->removeTab(0);
@@ -1676,9 +1679,6 @@ void ImportFileWidget::refreshPreview() {
 	QVector<AbstractColumn::ColumnMode> columnModes;
 
 	DEBUG(Q_FUNC_INFO << ", Data File Type: " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
-	QVector<QString> s;
-	QString currentMcapTopic;
-	QJsonDocument doc;
 
 	WAIT_CURSOR;
 
@@ -1880,15 +1880,15 @@ void ImportFileWidget::refreshPreview() {
 		auto filter = static_cast<McapFilter*>(currentFileFilter());
 
 		if (!mcapTopicsInitialized) {
-			ui.cbTopics->clear();
-			s = filter->getValidTopics(file);
+			ui.cbMcapTopics->clear();
+			auto s = filter->getValidTopics(file);
 			for (int i = 0; i < s.size(); i++) {
-				ui.cbTopics->addItem(s[i]);
+				ui.cbMcapTopics->addItem(s[i]);
 			}
 			mcapTopicsInitialized = true;
 		}
 
-		currentMcapTopic = ui.cbTopics->currentText();
+		const auto& currentMcapTopic = ui.cbMcapTopics->currentText();
 		DEBUG("Current selected topic" << STDSTRING(currentMcapTopic));
 		filter->setCurrentTopic(currentMcapTopic);
 		importedStrings = filter->preview(file, lines);
@@ -2026,16 +2026,14 @@ void ImportFileWidget::updateStartRow(int line) {
 }
 
 void ImportFileWidget::updateContent(const QString& fileName) {
-	DEBUG(Q_FUNC_INFO)
+	DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(fileName));
 
 	if (m_suppressRefresh)
 		return;
 
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 	WAIT_CURSOR;
-	QString currentMcapTopic;
-	QVector<QString> mcapTopics;
-	DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(fileName));
+
 	if (auto filter = currentFileFilter()) {
 		switch (filter->type()) {
 		case AbstractFileFilter::FileType::HDF5: {
@@ -2070,14 +2068,14 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 			auto* mcap_filter = static_cast<McapFilter*>(filter);
 
 			if (!mcapTopicsInitialized) {
-				ui.cbTopics->clear();
-				mcapTopics = mcap_filter->getValidTopics(fileName);
+				ui.cbMcapTopics->clear();
+				const auto& mcapTopics = mcap_filter->getValidTopics(fileName);
 				for (int i = 0; i < mcapTopics.size(); i++)
-					ui.cbTopics->addItem(mcapTopics.at(i));
+					ui.cbMcapTopics->addItem(mcapTopics.at(i));
 				mcapTopicsInitialized = true;
 			}
 
-			currentMcapTopic = ui.cbTopics->currentText();
+			const auto& currentMcapTopic = ui.cbMcapTopics->currentText();
 			DEBUG("Current selected topic" << STDSTRING(currentMcapTopic));
 			mcap_filter->setCurrentTopic(currentMcapTopic);
 #endif
@@ -2400,37 +2398,15 @@ void ImportFileWidget::enableDataPortionSelection(bool enabled) {
 	ui.tabWidget->setTabEnabled(ui.tabWidget->indexOf(ui.tabDataPortion), enabled);
 }
 
-void ImportFileWidget::changeTopic() {
-	DEBUG(Q_FUNC_INFO);
-	QString current_topic;
-	if (auto filter = currentFileFilter()) {
-		switch (filter->type()) {
-		case AbstractFileFilter::FileType::MCAP: {
-			auto* mcap_filter = static_cast<McapFilter*>(filter);
-			if (!(mcap_filter->getCurrentTopic() == ui.cbTopics->currentText()))
-				refreshPreview();
-			break;
-		}
-		case AbstractFileFilter::FileType::Ascii:
-		case AbstractFileFilter::FileType::Binary:
-		case AbstractFileFilter::FileType::XLSX:
-		case AbstractFileFilter::FileType::Ods:
-		case AbstractFileFilter::FileType::Image:
-		case AbstractFileFilter::FileType::HDF5:
-		case AbstractFileFilter::FileType::NETCDF:
-		case AbstractFileFilter::FileType::VECTOR_BLF:
-		case AbstractFileFilter::FileType::FITS:
-		case AbstractFileFilter::FileType::JSON:
-		case AbstractFileFilter::FileType::ROOT:
-		case AbstractFileFilter::FileType::Spice:
-		case AbstractFileFilter::FileType::READSTAT:
-		case AbstractFileFilter::FileType::MATIO:
-			break;
-		default: {
-			break;
-		}
-		}
-	}
+void ImportFileWidget::changeMcapTopic() {
+	auto filter = currentFileFilter();
+	if (filter->type() != AbstractFileFilter::FileType::MCAP)
+		return;
+
+	auto* mcap_filter = static_cast<McapFilter*>(filter);
+	if (!(mcap_filter->getCurrentTopic() == ui.cbMcapTopics->currentText()))
+		refreshPreview();
+
 }
 
 #ifdef HAVE_MQTT
@@ -2443,7 +2419,7 @@ void ImportFileWidget::mqttConnectionChanged() {
 	if (m_initialisingMQTT || ui.cbConnection->currentIndex() == -1) {
 		ui.lLWT->hide();
 		ui.bLWT->hide();
-		ui.lTopics->hide();
+		ui.lMqttTopics->hide();
 		return;
 	}
 
@@ -2532,7 +2508,7 @@ void ImportFileWidget::onMqttConnect() {
 			Q_EMIT error(QString());
 			ui.lLWT->show();
 			ui.bLWT->show();
-			ui.lTopics->show();
+			ui.lMqttTopics->show();
 		}
 	} else
 		Q_EMIT error(QStringLiteral("on mqtt connect error ") + QString::number(m_client->error()));
@@ -2549,7 +2525,7 @@ void ImportFileWidget::onMqttDisconnect() {
 	DEBUG("Disconnected from " << STDSTRING(m_client->hostname()));
 	m_connectTimeoutTimer->stop();
 
-	ui.lTopics->hide();
+	ui.lMqttTopics->hide();
 	ui.frameSubscriptions->hide();
 	ui.lLWT->hide();
 	ui.bLWT->hide();
