@@ -2406,7 +2406,6 @@ void ImportFileWidget::changeMcapTopic() {
 	auto* mcap_filter = static_cast<McapFilter*>(filter);
 	if (!(mcap_filter->getCurrentTopic() == ui.cbMcapTopics->currentText()))
 		refreshPreview();
-
 }
 
 #ifdef HAVE_MQTT
