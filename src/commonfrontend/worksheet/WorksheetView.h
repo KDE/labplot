@@ -185,6 +185,7 @@ private:
 
 	QAction* add3DPlotAction{nullptr};
 	QAction* add3DScatterPlotAction{nullptr};
+	QAction* add3DBarPlotAction{nullptr};
 
 	QAction* verticalLayoutAction{nullptr};
 	QAction* horizontalLayoutAction{nullptr};

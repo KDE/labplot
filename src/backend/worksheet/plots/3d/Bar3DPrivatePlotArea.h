@@ -8,7 +8,7 @@ class WorksheetElementContainerPrivate;
 class Bar3DPlotAreaPrivate : public WorksheetElementContainerPrivate {
 public:
 	explicit Bar3DPlotAreaPrivate(Bar3DPlotArea* owner);
-	QVector<AbstractColumn*> columns{nullptr};
+	QVector<AbstractColumn*> dataColumns{nullptr};
 	QVector<QString> columnPaths;
 	Bar3DPlotArea* const q{nullptr};
 	Bar3DPlotArea::ShadowQuality shadowQuality;

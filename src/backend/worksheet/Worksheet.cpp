@@ -44,6 +44,7 @@
 #include <KLocalizedString>
 #include <QGraphicsProxyWidget>
 
+#include <backend/worksheet/plots/3d/Bar3DPlotArea.h>
 #include <backend/worksheet/plots/3d/Scatter3DPlotArea.h>
 
 /**
@@ -333,7 +334,27 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 			}
 			graph->show();
 		}
-	} else {
+	}  else if (aspect->type() == AspectType::Bar3DPlot) {
+		const auto* addedElement = static_cast<const Bar3DPlotArea*>(aspect);
+		Q3DBars* graph = addedElement->m_bar;
+		graph->setFocusPolicy(Qt::StrongFocus);
+		if (graph) {
+			QWidget* window = graph->window();
+			if (window) {
+				window->setFocusPolicy(Qt::StrongFocus);
+				QGraphicsProxyWidget* proxy = d->m_scene->addWidget(window);
+				proxy->setFocusPolicy(Qt::StrongFocus); // Ensure the proxy can gain focus
+				proxy->setAcceptHoverEvents(true);
+				proxy->setAcceptedMouseButtons(Qt::AllButtons);
+				// Set the proxy size dynamically
+				QRectF sceneRect = d->m_scene->sceneRect();
+				double width = sceneRect.width() - d->layoutLeftMargin - d->layoutRightMargin;
+				double height = sceneRect.height() - d->layoutTopMargin - d->layoutBottomMargin;
+				proxy->resize(width, height);
+			}
+			graph->show();
+		}
+	}else {
 		auto* item = addedElement->graphicsItem();
 		d->m_scene->addItem(item);
 	}

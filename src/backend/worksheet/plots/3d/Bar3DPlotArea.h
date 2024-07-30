@@ -7,9 +7,10 @@
 
 class Bar3DPlotAreaPrivate;
 class WorsheetElementContainer;
-class Bar3DPlotArea : WorksheetElementContainer {
+class Bar3DPlotArea : public WorksheetElementContainer {
+	Q_OBJECT
 public:
-	explicit Bar3DPlotArea(QString name);
+	explicit Bar3DPlotArea(const QString& name);
 	~Bar3DPlotArea() override;
 	enum ShadowQuality { None = 0, Low = 1, Medium = 2, High = 3, SoftLow = 4, SoftMedium = 5, SoftHigh = 6 };
 
@@ -25,7 +26,7 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 	void recalc();
-	BASIC_D_ACCESSOR_DECL(QVector<AbstractColumn*>, columns, Columns)
+	BASIC_D_ACCESSOR_DECL(QVector<AbstractColumn*>, dataColumns, DataColumns)
 	CLASS_D_ACCESSOR_DECL(QVector<QString>, columnPaths, ColumnPaths)
 	BASIC_D_ACCESSOR_DECL(Bar3DPlotArea::ShadowQuality, shadowQuality, ShadowQuality);
 	BASIC_D_ACCESSOR_DECL(Bar3DPlotArea::Theme, theme, Theme)
@@ -47,7 +48,7 @@ private Q_SLOTS:
 	void columnAboutToBeRemoved(const AbstractAspect*);
 Q_SIGNALS:
 	void dataChanged();
-	void columnsChanged(QVector<AbstractColumn*>);
+	void dataColumnsChanged(QVector<AbstractColumn*>);
 	void themeChanged(Bar3DPlotArea::Theme);
 	void shadowQualityChanged(Bar3DPlotArea::ShadowQuality);
 	void colorChanged(QColor);

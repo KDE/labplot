@@ -73,27 +73,26 @@ void Surface3DPlotAreaDock::setSurfaces(const QList<Surface3DPlotArea*>& surface
 	// show the properties of the first surface
 	// tab "General"
 	ui.cbDataSourceType->setCurrentIndex(static_cast<int>(m_surface->dataSource()));
-	dataSourceTypeChanged(ui.cbDataSourceType->currentIndex());
-	surfaceXColumnChanged(m_surface->xColumn());
-	surfaceXColumnChanged(m_surface->yColumn());
-	surfaceXColumnChanged(m_surface->zColumn());
-	surfaceMatrixChanged(m_surface->matrix());
+	ui.cbXColumn->setColumn(m_surface->xColumn(), m_surface->xColumnPath());
+	ui.cbYColumn->setColumn(m_surface->yColumn(), m_surface->yColumnPath());
+	ui.cbZColumn->setColumn(m_surface->zColumn(), m_surface->zColumnPath());
+	ui.cbMatrix->setMatrix(m_surface->matrix(), m_surface->matrixPath());
 	// tab "Mesh"
 
 	ui.cbShadowQuality->setCurrentIndex(static_cast<int>(m_surface->shadowQuality()));
-	drawModeChanged(m_surface->drawMode());
 	ui.cbDrawType->setCurrentIndex(static_cast<int>(m_surface->drawMode() - 1));
 
 	dataSourceTypeChanged(m_surface->dataSource());
 
-	ui.slXRot->setRange(0, 360);
+	ui.slXRot->setRange(0, 90);
 	ui.slXRot->setValue(m_surface->xRotation());
-	ui.slYRot->setRange(0, 360);
+	ui.slYRot->setRange(0, 90);
 	ui.slYRot->setValue(m_surface->yRotation());
-	ui.slZoom->setRange(0, 5);
+	ui.slZoom->setRange(100, 400);
 	ui.slZoom->setValue(m_surface->zoomLevel());
 
 	ui.cbTheme->setCurrentIndex(static_cast<int>(m_surface->theme()));
+	ui.kcbColor->setColor(Qt::green);
 
 	connect(m_surface, &Surface3DPlotArea::drawModeChanged, this, &Surface3DPlotAreaDock::surfaceDrawModeChanged);
 	connect(m_surface, &Surface3DPlotArea::sourceTypeChanged, this, &Surface3DPlotAreaDock::surfaceSourceTypeChanged);
