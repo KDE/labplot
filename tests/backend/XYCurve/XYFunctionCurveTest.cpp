@@ -356,6 +356,9 @@ void XYFunctionCurveTest::saveLoad() {
 		QVERIFY(p);
 		const auto* functionCurve = p->child<XYFunctionCurve>(0);
 		QVERIFY(functionCurve);
+		auto size = functionCurve->d_func()->m_logicalPoints.size();
+		if (size < 100)
+			DEBUG("WARNING: m_logicalPoints not restored yet. (" << size << " < 100)")
 		const auto* eq = p->child<XYEquationCurve>(0);
 		QVERIFY(eq);
 

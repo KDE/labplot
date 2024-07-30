@@ -3034,10 +3034,10 @@ void ColumnPrivate::updateProperties() {
 		DEBUG("	setting column CONSTANT")
 	} else if (monotonic_decreasing > 0) {
 		properties = AbstractColumn::Properties::MonotonicDecreasing;
-		DEBUG("	setting column MONTONIC DECREASING")
+		DEBUG("	setting column MONOTONIC DECREASING")
 	} else if (monotonic_increasing > 0) {
 		properties = AbstractColumn::Properties::MonotonicIncreasing;
-		DEBUG("	setting column MONTONIC INCREASING")
+		DEBUG("	setting column MONOTONIC INCREASING")
 	}
 
 	available.properties = true;

@@ -357,7 +357,7 @@ void WorksheetElementTest::referenceRangeSaveLoad() {
 		pp.point = QPointF(0, 0);
 		referenceRange->setPosition(pp);
 		referenceRange->setCoordinateBindingEnabled(true);
-		SAVE_PROJECT("testReferenceRangeSaveLoad")
+		SAVE_PROJECT("testReferenceRangeSaveLoad");
 	}
 
 	{

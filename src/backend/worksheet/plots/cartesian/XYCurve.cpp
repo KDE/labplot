@@ -43,6 +43,7 @@
 #include <QMenu>
 #include <QPainter>
 #include <QScreen>
+#include <QThreadPool>
 
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_math.h>
@@ -785,8 +786,10 @@ void XYCurvePrivate::calculateScenePoints() {
 			int startIndex, endIndex;
 			if (columnProperties == AbstractColumn::Properties::MonotonicDecreasing || columnProperties == AbstractColumn::Properties::MonotonicIncreasing) {
 				DEBUG(Q_FUNC_INFO << ", column monotonic")
-				if (!q->cSystem->isValid())
+				if (!q->cSystem->isValid()) {
+					DEBUG(Q_FUNC_INFO << ", cSystem not valid!")
 					return;
+				}
 				double xMin = q->cSystem->mapSceneToLogical(dataRect.topLeft()).x();
 				double xMax = q->cSystem->mapSceneToLogical(dataRect.bottomRight()).x();
 				DEBUG(Q_FUNC_INFO << ", xMin/xMax = " << xMin << '/' << xMax)
@@ -870,6 +873,8 @@ void XYCurvePrivate::retransform() {
  */
 void XYCurvePrivate::recalc() {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO) + QStringLiteral(", curve ") + name());
+	// wait for columns to be read
+	QThreadPool::globalInstance()->waitForDone();
 
 	m_pointVisible.clear();
 	m_logicalPoints.clear();
@@ -886,6 +891,7 @@ void XYCurvePrivate::recalc() {
 
 	// take only valid and non masked points
 	for (int row = 0; row < rows; row++) {
+		// DEBUG("row = " << row << " valid x/y = " << xColumn->isValid(row) << " " << yColumn->isValid(row))
 		if (xColumn->isValid(row) && yColumn->isValid(row) && (!xColumn->isMasked(row)) && (!yColumn->isMasked(row))) {
 			QPointF tempPoint;
 
@@ -1056,7 +1062,7 @@ void XYCurvePrivate::updateLines(bool performanceOptimization) {
 	linePath = QPainterPath();
 	m_lines.clear();
 	if (lineType == XYCurve::LineType::NoLine) {
-		DEBUG(Q_FUNC_INFO << ", nothing to do, since line type is XYCurve::LineType::NoLine");
+		DEBUG(Q_FUNC_INFO << ", nothing to do, line type is XYCurve::LineType::NoLine");
 		updateFilling();
 		recalcShapeAndBoundingRect();
 		return;
@@ -1091,8 +1097,10 @@ void XYCurvePrivate::updateLines(bool performanceOptimization) {
 		const auto& columnProperties = q->xColumn()->properties();
 		if (columnProperties == AbstractColumn::Properties::MonotonicDecreasing || columnProperties == AbstractColumn::Properties::MonotonicIncreasing) {
 			DEBUG(Q_FUNC_INFO << ", monotonic")
-			if (!q->cSystem->isValid())
+			if (!q->cSystem->isValid()) {
+				DEBUG(Q_FUNC_INFO << ", cSystem invalid")
 				return;
+			}
 			const double xMin = q->cSystem->mapSceneToLogical(pageRect.topLeft()).x();
 			const double xMax = q->cSystem->mapSceneToLogical(pageRect.bottomRight()).x();
 
