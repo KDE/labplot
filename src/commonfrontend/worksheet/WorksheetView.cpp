@@ -61,6 +61,7 @@
 
 #include <limits>
 
+#include <backend/worksheet/plots/3d/Bar3DPlotArea.h>
 #include <backend/worksheet/plots/3d/Scatter3DPlotArea.h>
 #include <backend/worksheet/plots/3d/Surface3DPlotArea.h>
 
@@ -222,6 +223,7 @@ void WorksheetView::initActions() {
 		new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes-centered-origin")), i18n("Two Axes, Crossing at Origin"), addNewActionGroup);
 	add3DPlotAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes")), i18n("3D Surface plot"), addNewActionGroup);
 	add3DScatterPlotAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes")), i18n("3D Scatter plot"), addNewActionGroup);
+	add3DBarPlotAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes")), i18n("3D Bar plot"), addNewActionGroup);
 
 	addCartesianPlotTemplateAction = new QAction(QIcon::fromTheme(QStringLiteral("document-new-from-template")), i18n("Load from Template"), addNewActionGroup);
 	addTextLabelAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-text")), i18n("Text"), addNewActionGroup);
@@ -439,6 +441,7 @@ void WorksheetView::initMenus() {
 	m_addNewMenu->addMenu(m_addNewCartesianPlotMenu)->setIcon(QIcon::fromTheme(QStringLiteral("office-chart-line")));
 	m_addNewMenu->addAction(add3DPlotAction);
 	m_addNewMenu->addAction(add3DScatterPlotAction);
+	m_addNewMenu->addAction(add3DBarPlotAction);
 
 	m_addNewMenu->addSeparator();
 	m_addNewMenu->addAction(addTextLabelAction);
@@ -1377,10 +1380,13 @@ void WorksheetView::addNew(QAction* action) {
 		Image* image = new Image(i18n("Image"));
 		aspect = image;
 	} else if (action == add3DPlotAction) {
-		auto* plot = new Surface3DPlotArea(QStringLiteral("3D Plot"));
+		auto* plot = new Surface3DPlotArea(QStringLiteral("3D Surface Plot"));
 		aspect = plot;
-	} else if (action = add3DScatterPlotAction) {
+	} else if (action == add3DScatterPlotAction) {
 		auto* plot = new Scatter3DPlotArea(QStringLiteral("3D Scatter Plot"));
+		aspect = plot;
+	} else if (action == add3DBarPlotAction) {
+		auto* plot = new Bar3DPlotArea(QStringLiteral("3D Bar Plot"));
 		aspect = plot;
 	}
 

@@ -26,7 +26,7 @@ private:
 	void load();
 	void loadConfig(KConfig&);
 	void setDataColumns();
-
+	void loadDataColumns();
 private Q_SLOTS:
 	void retranslateUi();
 	void addDataColumn();
@@ -37,8 +37,8 @@ private Q_SLOTS:
 	void yRotationChanged(int);
 	void zoomLevelChanged(int);
 	void shadowQualityChanged(int);
-	void opacityChanged(double);
 	void themeChanged(int);
+	void colorChanged(QColor);
 
 	// SLOTs for changes triggered in Bar3DPlotArea
 	void barColumnsChanged(const QVector<const AbstractColumn*>&);
@@ -46,8 +46,8 @@ private Q_SLOTS:
 	void barYRotationChanged(int);
 	void barZoomLevelChanged(int);
 	void barShadowQualityChanged(Bar3DPlotArea::ShadowQuality);
-	void barOpacityChanged(double);
 	void barThemeChanged(Bar3DPlotArea::Theme);
+	void barColorChanged(QColor);
 
 private:
 	Ui::Bar3DPlotAreaDock ui;

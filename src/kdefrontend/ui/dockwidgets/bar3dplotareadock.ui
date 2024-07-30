@@ -60,9 +60,6 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="2">
-        <widget class="TreeViewComboBox" name="cbXColumn"/>
-       </item>
        <item row="5" column="0">
         <widget class="QCheckBox" name="chkVisible">
          <property name="text">
@@ -106,6 +103,16 @@
          </property>
         </spacer>
        </item>
+       <item row="3" column="2">
+        <widget class="QFrame" name="frameColumns">
+         <property name="frameShape">
+          <enum>QFrame::Shape::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Shadow::Raised</enum>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tabMesh">
@@ -132,6 +139,9 @@
        </item>
        <item row="6" column="1">
         <widget class="QSlider" name="slYRot">
+         <property name="maximum">
+          <number>90</number>
+         </property>
          <property name="orientation">
           <enum>Qt::Orientation::Horizontal</enum>
          </property>
@@ -202,6 +212,9 @@
        </item>
        <item row="5" column="1">
         <widget class="QSlider" name="slXRot">
+         <property name="maximum">
+          <number>180</number>
+         </property>
          <property name="orientation">
           <enum>Qt::Orientation::Horizontal</enum>
          </property>
@@ -230,6 +243,16 @@
          </property>
         </spacer>
        </item>
+       <item row="10" column="0">
+        <widget class="QLabel" name="lColumn">
+         <property name="text">
+          <string>Column</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="1">
+        <widget class="QComboBox" name="cbNumber"/>
+       </item>
       </layout>
      </widget>
     </widget>
@@ -257,15 +280,9 @@
    <extends>QTextEdit</extends>
    <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
   </customwidget>
-  <customwidget>
-   <class>TreeViewComboBox</class>
-   <extends>QComboBox</extends>
-   <header>commonfrontend/widgets/TreeViewComboBox.h</header>
-  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>tabWidget</tabstop>
-  <tabstop>cbXColumn</tabstop>
   <tabstop>chkVisible</tabstop>
  </tabstops>
  <resources/>

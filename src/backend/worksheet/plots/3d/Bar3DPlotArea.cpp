@@ -4,7 +4,7 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
 
-Bar3DPlotArea::Bar3DPlotArea(QString name)
+Bar3DPlotArea::Bar3DPlotArea(const QString& name)
 	: WorksheetElementContainer(name, new Bar3DPlotAreaPrivate(this), AspectType::Bar3DPlot)
 	, m_bar{new Q3DBars()} {
 }
@@ -29,30 +29,31 @@ void Bar3DPlotArea::recalc() {
 // ##########################  getter methods  ##################################
 // ##############################################################################
 
-BASIC_SHARED_D_READER_IMPL(Bar3DPlotArea, QVector<AbstractColumn*>, columns, columns)
+BASIC_SHARED_D_READER_IMPL(Bar3DPlotArea, QVector<AbstractColumn*>, dataColumns, dataColumns)
 BASIC_SHARED_D_READER_IMPL(Bar3DPlotArea, QVector<QString>, columnPaths, columnPaths)
 BASIC_SHARED_D_READER_IMPL(Bar3DPlotArea, int, xRotation, xRotation)
 BASIC_SHARED_D_READER_IMPL(Bar3DPlotArea, int, yRotation, yRotation)
 BASIC_SHARED_D_READER_IMPL(Bar3DPlotArea, int, zoomLevel, zoomLevel)
 BASIC_SHARED_D_READER_IMPL(Bar3DPlotArea, Bar3DPlotArea::Theme, theme, theme)
 BASIC_SHARED_D_READER_IMPL(Bar3DPlotArea, Bar3DPlotArea::ShadowQuality, shadowQuality, shadowQuality)
+BASIC_SHARED_D_READER_IMPL(Bar3DPlotArea, QColor, color, color)
 
 // ##############################################################################
 // #################  setter methods and undo commands ##########################
 // ##############################################################################
 
-STD_SETTER_CMD_IMPL_F_S(Bar3DPlotArea, SetColumns, QVector<AbstractColumn*>, columns, recalc)
-void Bar3DPlotArea::setColumns(QVector<AbstractColumn*> columns) {
+STD_SETTER_CMD_IMPL_F_S(Bar3DPlotArea, SetColumns, QVector<AbstractColumn*>, dataColumns, recalc)
+void Bar3DPlotArea::setDataColumns(QVector<AbstractColumn*> dataColumns) {
 	Q_D(Bar3DPlotArea);
-	if (columns != d->columns) {
-		exec(new Bar3DPlotAreaSetColumnsCmd(d, columns, ki18n("%1: columns changed")));
-		for (auto* column : columns) {
+	if (dataColumns != d->dataColumns) {
+		exec(new Bar3DPlotAreaSetColumnsCmd(d, dataColumns, ki18n("%1: columns changed")));
+		for (auto* column : dataColumns) {
 			if (!column)
 				continue;
-			connect(column, &AbstractColumn::dataChanged, &Bar3DPlotArea::recalc);
+			connect(column, &AbstractColumn::dataChanged, this, &Bar3DPlotArea::recalc);
 			if (column->parentAspect())
-				connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, &Bar3DPlotArea::columnAboutToBeRemoved);
-			connect(column, &AbstractColumn::dataChanged, &Bar3DPlotArea::dataChanged);
+				connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &Bar3DPlotArea::columnAboutToBeRemoved);
+			connect(column, &AbstractColumn::dataChanged, this, &Bar3DPlotArea::dataChanged);
 		}
 	}
 }
@@ -86,7 +87,7 @@ STD_SETTER_CMD_IMPL_F_S(Bar3DPlotArea, SetYRotation, int, yRotation, updateYRota
 void Bar3DPlotArea::setYRotation(int yRot) {
 	Q_D(Bar3DPlotArea);
 	if (yRot != d->yRotation)
-		exec(new Bar3DPlotAreaSetXRotationCmd(d, yRot, ki18n("%1: Y Rotation changed")));
+		exec(new Bar3DPlotAreaSetYRotationCmd(d, yRot, ki18n("%1: Y Rotation changed")));
 }
 STD_SETTER_CMD_IMPL_F_S(Bar3DPlotArea, SetZoomLevel, int, zoomLevel, updateZoomLevel)
 void Bar3DPlotArea::setZoomLevel(int zoom) {
@@ -176,9 +177,9 @@ void Bar3DPlotArea::retransform() {
 
 void Bar3DPlotArea::columnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(Bar3DPlotArea);
-	for (int i = 0; i < d->columns.size(); ++i) {
-		if (aspect == d->columns.at(i)) {
-			d->columns[i] = nullptr;
+	for (int i = 0; i < d->dataColumns.size(); ++i) {
+		if (aspect == d->dataColumns.at(i)) {
+			d->dataColumns[i] = nullptr;
 			d->recalc();
 			Q_EMIT changed();
 			break;
@@ -191,8 +192,11 @@ void Bar3DPlotArea::columnAboutToBeRemoved(const AbstractAspect* aspect) {
 Bar3DPlotAreaPrivate::Bar3DPlotAreaPrivate(Bar3DPlotArea* owner)
 	: WorksheetElementContainerPrivate(owner)
 	, q(owner)
-	, shadowQuality(Bar3DPlotArea::None)
-	, theme(Bar3DPlotArea::Qt) {
+	, shadowQuality(Bar3DPlotArea::Medium)
+	, xRotation(90)
+	, yRotation(0)
+	, theme(Bar3DPlotArea::Qt)
+	, color(Qt::green) {
 }
 void Bar3DPlotAreaPrivate::retransform() {
 	const bool suppress = suppressRetransform || q->isLoading();
@@ -212,14 +216,14 @@ void Bar3DPlotAreaPrivate::retransform() {
 void Bar3DPlotAreaPrivate::recalcShapeAndBoundingRect() {
 }
 void Bar3DPlotAreaPrivate::recalc() {
-	if (columns.isEmpty())
+	if (dataColumns.isEmpty())
 		return;
 	qDebug() << Q_FUNC_INFO << "Columns have been set";
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	// Determine the number of columns and rows
-	const int numColumns = columns.size();
+	const int numColumns = dataColumns.size();
 	int numRows = INT_MAX;
-	for (const auto& column : columns) {
+	for (const auto& column : dataColumns) {
 		if (column != nullptr)
 			numRows = std::min(numRows, column->availableRowCount());
 	}
@@ -230,8 +234,8 @@ void Bar3DPlotAreaPrivate::recalc() {
 	for (int col = 0; col < numColumns; ++col) {
 		QBarDataRow* dataRow = new QBarDataRow(numRows);
 		for (int row = 0; row < numRows; ++row) {
-			if (columns[col] != nullptr) {
-				const float value = static_cast<float>(columns[col]->valueAt(row));
+			if (dataColumns[col] != nullptr) {
+				const float value = static_cast<float>(dataColumns[col]->valueAt(row));
 				(*dataRow)[row].setValue(value);
 			}
 		}
@@ -265,7 +269,7 @@ void Bar3DPlotAreaPrivate::updateXRotation() {
 	Q_EMIT q->changed();
 }
 void Bar3DPlotAreaPrivate::updateYRotation() {
-	q->m_bar->setCameraXRotation(xRotation);
+	q->m_bar->setCameraYRotation(yRotation);
 	Q_EMIT q->changed();
 }
 void Bar3DPlotAreaPrivate::updateZoomLevel() {

@@ -35,6 +35,7 @@ private Q_SLOTS:
 	void pointStyleChanged(int);
 	void opacityChanged(double);
 	void themeChanged(int);
+	void colorChanged(QColor);
 
 	// SLOTs for changes triggered in Scatter3DPlotArea
 	void scatterXColumnChanged(const AbstractColumn*);
@@ -47,6 +48,7 @@ private Q_SLOTS:
 	void scatterPointStyleChanged(Scatter3DPlotArea::PointStyle);
 	void scatterOpacityChanged(double);
 	void scatterThemeChanged(Scatter3DPlotArea::Theme);
+	void scatterColorChanged(QColor);
 
 private:
 	Ui::Scatter3DPlotAreaDock ui;

@@ -112,8 +112,8 @@ void Scatter3DPlotArea::setXRotation(int value) {
 STD_SETTER_CMD_IMPL_F_S(Scatter3DPlotArea, SetYRotation, int, yRotation, updateYRotation)
 void Scatter3DPlotArea::setYRotation(int value) {
 	Q_D(Scatter3DPlotArea);
-	if (value != d->xRotation)
-		exec(new Scatter3DPlotAreaSetYRotationCmd(d, value, ki18n("%1: X Rotation changed")));
+	if (value != d->yRotation)
+		exec(new Scatter3DPlotAreaSetYRotationCmd(d, value, ki18n("%1: Y Rotation changed")));
 }
 STD_SETTER_CMD_IMPL_F_S(Scatter3DPlotArea, SetZoomLevel, int, zoomLevel, updateZoomLevel)
 void Scatter3DPlotArea::setZoomLevel(int value) {
@@ -217,7 +217,11 @@ Scatter3DPlotAreaPrivate::Scatter3DPlotAreaPrivate(Scatter3DPlotArea* owner)
 	: WorksheetElementContainerPrivate(owner)
 	, theme(Scatter3DPlotArea::Qt)
 	, pointStyle(Scatter3DPlotArea::Sphere)
-	, shadowQuality(Scatter3DPlotArea::None)
+	, shadowQuality(Scatter3DPlotArea::Medium)
+	, color(Qt::green)
+	, xRotation(90)
+	, yRotation(0)
+	, zoomLevel(100)
 	, q(owner) {
 }
 

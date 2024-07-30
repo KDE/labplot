@@ -1,7 +1,7 @@
 /*
-	File                 : bar3DPlotAreaDock.cpp
+	File                 : Bar3DPlotAreaDock.cpp
 	Project              : LabPlot
-	Description          : widget for bar3DPlotArea properties
+	Description          : widget for Bar3DPlotArea properties
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2024 Kuntal Bar <barkuntal6@gmail.com>
 
@@ -11,9 +11,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
 #include "Bar3DPlotAreaDock.h"
 #include "TreeViewComboBox.h"
 #include "backend/core/AbstractColumn.h"
-#include "backend/matrix/Matrix.h"
 #include <backend/core/AspectTreeModel.h>
-// #include <kdefrontend/TemplateHandler.h>
 
 Bar3DPlotAreaDock::Bar3DPlotAreaDock(QWidget* parent)
 	: BaseDock(parent) {
@@ -26,21 +24,21 @@ Bar3DPlotAreaDock::Bar3DPlotAreaDock(QWidget* parent)
 	m_buttonNew = new QPushButton();
 	m_buttonNew->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 
-	m_gridLayout = new QGridLayout(ui.frameDataColumns);
+	m_gridLayout = new QGridLayout(ui.frameColumns);
 	m_gridLayout->setContentsMargins(0, 0, 0, 0);
 	m_gridLayout->setHorizontalSpacing(2);
 	m_gridLayout->setVerticalSpacing(2);
-	ui.frameDataColumns->setLayout(m_gridLayout);
+	ui.frameColumns->setLayout(m_gridLayout);
 
 	// SIGNALs/SLOTs
 	// General
-	connect(m_buttonNew, &QPushButton::clicked, this, &Bar3DPlotDock::addDataColumn);
-	connect(ui.cbTheme, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &bar3DPlotAreaDock::themeChanged);
-	connect(ui.cbShadowQuality, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &bar3DPlotAreaDock::shadowQualityChanged);
+	connect(m_buttonNew, &QPushButton::clicked, this, &Bar3DPlotAreaDock::addDataColumn);
+	connect(ui.cbTheme, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &Bar3DPlotAreaDock::themeChanged);
+	connect(ui.cbShadowQuality, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &Bar3DPlotAreaDock::shadowQualityChanged);
 	connect(ui.slXRot, &QSlider::sliderMoved, this, &Bar3DPlotAreaDock::xRotationChanged);
 	connect(ui.slYRot, &QSlider::sliderMoved, this, &Bar3DPlotAreaDock::yRotationChanged);
 	connect(ui.slZoom, &QSlider::sliderMoved, this, &Bar3DPlotAreaDock::zoomLevelChanged);
-	// connect(ui.kcbColor)
+	connect(ui.kcbColor, &KColorButton::changed, this, &Bar3DPlotAreaDock::colorChanged);
 }
 
 void Bar3DPlotAreaDock::setBars(const QList<Bar3DPlotArea*>& bars) {
@@ -48,20 +46,20 @@ void Bar3DPlotAreaDock::setBars(const QList<Bar3DPlotArea*>& bars) {
 	m_bars = bars;
 	m_bar = m_bars.first();
 	setAspects(bars);
-	auto* model = aspectModel();
-
-	model->enablePlottableColumnsOnly(true);
-	model->enableShowPlotDesignation(true);
-	model->setSelectableAspects({AspectType::Column});
 
 	// show the properties of the first bar
 	// tab "General"
+	loadDataColumns();
 
-	barThemeChanged(m_bar->theme());
-	barShadowQualityChanged(m_bar->shadowQuality());
-	barZoomLevelChanged(m_bar->zoomLevel());
-	barXRotationChanged(m_bar->xRotation());
-	barYRotationChanged(m_bar->yRotation());
+	ui.cbTheme->setCurrentIndex(m_bar->theme());
+	ui.cbShadowQuality->setCurrentIndex(m_bar->shadowQuality());
+	ui.slZoom->setValue(m_bar->zoomLevel());
+	ui.slXRot->setRange(0, 90);
+	ui.slYRot->setRange(0, 90);
+	ui.slZoom->setRange(100, 400);
+	ui.slXRot->setValue(m_bar->xRotation());
+	ui.slYRot->setValue(m_bar->yRotation());
+	ui.kcbColor->setColor(m_bar->color());
 
 	connect(m_bar, &Bar3DPlotArea::themeChanged, this, &Bar3DPlotAreaDock::barThemeChanged);
 	connect(m_bar, &Bar3DPlotArea::shadowQualityChanged, this, &Bar3DPlotAreaDock::barShadowQualityChanged);
@@ -90,7 +88,7 @@ void Bar3DPlotAreaDock::retranslateUi() {
 }
 void Bar3DPlotAreaDock::setDataColumns() {
 	int newCount = m_dataComboBoxes.count();
-	int oldCount = m_bar->columns().count();
+	int oldCount = m_bar->dataColumns().count();
 
 	if (newCount > oldCount) {
 		ui.cbNumber->addItem(QString::number(newCount));
@@ -108,27 +106,19 @@ void Bar3DPlotAreaDock::setDataColumns() {
 			columns << static_cast<AbstractColumn*>(aspect);
 	}
 
-	m_bar->setColumns(columns);
+	m_bar->setDataColumns(columns);
 }
 
 void Bar3DPlotAreaDock::addDataColumn() {
 	auto* cb = new TreeViewComboBox(this);
+	cb->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
+	auto* model = aspectModel();
 
-	static const QList<AspectType> list{AspectType::Folder,
-										AspectType::Workbook,
-										AspectType::Datapicker,
-										AspectType::DatapickerCurve,
-										AspectType::Spreadsheet,
-										AspectType::LiveDataSource,
-										AspectType::Column,
-										AspectType::Worksheet,
-										AspectType::CartesianPlot,
-										AspectType::XYFitCurve,
-										AspectType::XYSmoothCurve,
-										AspectType::CantorWorksheet};
-	cb->setTopLevelClasses(list);
-	cb->setModel(aspectModel());
-	connect(cb, &TreeViewComboBox::currentModelIndexChanged, this, &BarPlotDock::dataColumnChanged);
+	model->enablePlottableColumnsOnly(true);
+	model->enableShowPlotDesignation(true);
+	model->setSelectableAspects({AspectType::Column});
+	cb->setModel(model);
+	connect(cb, &TreeViewComboBox::currentModelIndexChanged, this, &Bar3DPlotAreaDock::columnChanged);
 
 	int index = m_dataComboBoxes.size();
 
@@ -141,7 +131,7 @@ void Bar3DPlotAreaDock::addDataColumn() {
 	} else {
 		auto* button = new QPushButton();
 		button->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
-		connect(button, &QPushButton::clicked, this, &BarPlotDock::removeDataColumn);
+		connect(button, &QPushButton::clicked, this, &Bar3DPlotAreaDock::removeDataColumn);
 		m_gridLayout->addWidget(button, index, 1, 1, 1);
 		m_removeButtons << button;
 	}
@@ -150,7 +140,7 @@ void Bar3DPlotAreaDock::addDataColumn() {
 	m_gridLayout->addWidget(m_buttonNew, index + 1, 1, 1, 1);
 
 	m_dataComboBoxes << cb;
-	ui.lDataColumn->setText(i18n("Columns:"));
+	ui.lColumn->setText(i18n("Columns:"));
 }
 
 void Bar3DPlotAreaDock::removeDataColumn() {
@@ -174,11 +164,10 @@ void Bar3DPlotAreaDock::removeDataColumn() {
 		}
 	}
 
-	// TODO
 	if (!m_removeButtons.isEmpty()) {
-		ui.lDataColumn->setText(i18n("Columns:"));
+		ui.lColumn->setText(i18n("Columns:"));
 	} else {
-		ui.lDataColumn->setText(i18n("Column:"));
+		ui.lColumn->setText(i18n("Column:"));
 	}
 
 	if (!m_initializing)
@@ -192,6 +181,7 @@ void Bar3DPlotAreaDock::removeDataColumn() {
 
 void Bar3DPlotAreaDock::columnChanged(const QModelIndex&) {
 	CONDITIONAL_LOCK_RETURN;
+	setDataColumns();
 }
 
 //*************************************************************
@@ -221,6 +211,11 @@ void Bar3DPlotAreaDock::barThemeChanged(Bar3DPlotArea::Theme theme) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbTheme->setCurrentIndex(theme);
 }
+
+void Bar3DPlotAreaDock::barColorChanged(QColor color) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.kcbColor->setColor(color);
+}
 void Bar3DPlotAreaDock::xRotationChanged(int xRot) {
 	CONDITIONAL_LOCK_RETURN;
 	m_bar->setXRotation(xRot);
@@ -244,6 +239,68 @@ void Bar3DPlotAreaDock::themeChanged(int theme) {
 	CONDITIONAL_LOCK_RETURN;
 	for (Bar3DPlotArea* bar : m_bars)
 		bar->setTheme(static_cast<Bar3DPlotArea::Theme>(theme));
+}
+
+void Bar3DPlotAreaDock::colorChanged(QColor color) {
+	CONDITIONAL_LOCK_RETURN;
+	for (Bar3DPlotArea* bar : m_bars)
+		bar->setColor(color);
+}
+void Bar3DPlotAreaDock::loadDataColumns() {
+	// add the combobox for the first column, is always present
+	if (m_dataComboBoxes.count() == 0)
+		addDataColumn();
+
+	int count = m_bar->dataColumns().count();
+	ui.cbNumber->clear();
+
+	auto* model = aspectModel();
+	if (count != 0) {
+		// box plot has already data columns, make sure we have the proper number of comboboxes
+		int diff = count - m_dataComboBoxes.count();
+		if (diff > 0) {
+			for (int i = 0; i < diff; ++i)
+				addDataColumn();
+		} else if (diff < 0) {
+			for (int i = diff; i != 0; ++i)
+				removeDataColumn();
+		}
+
+		// show the columns in the comboboxes
+		for (int i = 0; i < count; ++i) {
+			m_dataComboBoxes.at(i)->setModel(model); // the model might have changed in-between, reset the current model
+			m_dataComboBoxes.at(i)->setAspect(m_bar->dataColumns().at(i));
+		}
+
+		// show columns names in the combobox for the selection of the bar to be modified
+		for (int i = 0; i < count; ++i)
+			if (m_bar->dataColumns().at(i)) {
+				const auto& name = m_bar->dataColumns().at(i)->name();
+				ui.cbNumber->addItem(name);
+			}
+	} else {
+		// no data columns set in the box plot yet, we show the first combo box only and reset its model
+		m_dataComboBoxes.first()->setModel(model);
+		m_dataComboBoxes.first()->setAspect(nullptr);
+		for (int i = 0; i < m_dataComboBoxes.count(); ++i)
+			removeDataColumn();
+	}
+
+	// disable data column widgets if we're modifying more than one box plot at the same time
+	bool enabled = (m_bars.count() == 1);
+	m_buttonNew->setVisible(enabled);
+	for (auto* cb : m_dataComboBoxes)
+		cb->setEnabled(enabled);
+	for (auto* b : m_removeButtons)
+		b->setVisible(enabled);
+
+	// select the first column after all of them were added to the combobox
+	ui.cbNumber->setCurrentIndex(0);
+}
+
+void Bar3DPlotAreaDock::barColumnsChanged(const QVector<const AbstractColumn*>&) {
+	CONDITIONAL_LOCK_RETURN;
+	loadDataColumns();
 }
 
 //*************************************************************

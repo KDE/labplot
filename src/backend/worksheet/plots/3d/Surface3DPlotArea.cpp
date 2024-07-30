@@ -286,8 +286,12 @@ Surface3DPlotAreaPrivate::Surface3DPlotAreaPrivate(Surface3DPlotArea* owner)
 	, q(owner)
 	, sourceType(Surface3DPlotArea::DataSource_Spreadsheet)
 	, drawMode(Surface3DPlotArea::DrawWireframeSurface)
-	, shadowQuality(Surface3DPlotArea::SoftHigh)
-	, theme(Surface3DPlotArea::Qt) {
+	, shadowQuality(Surface3DPlotArea::Medium)
+	, xRotation(90)
+	, yRotation(0)
+	, theme(Surface3DPlotArea::Qt)
+	, color(Qt::green)
+	 {
 }
 
 void Surface3DPlotAreaPrivate::retransform() {
