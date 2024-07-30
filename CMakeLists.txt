@@ -232,7 +232,7 @@ if(NOT WIN32)
     # when application code iterates over a QVector<QPoint> for instance, unless
     # Qt itself was also built with strict iterators.
     # See example at https://bugreports.qt.io/browse/AUTOSUITE-946
-    add_definitions(-DQT_STRICT_ITERATORS)
+    # add_definitions(-DQT_STRICT_ITERATORS)
 endif()
 
 include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
@@ -746,6 +746,10 @@ if(XLOCALE_INCLUDE_DIR)
     include_directories(${XLOCALE_INCLUDE_DIR})
 endif()
 
+find_package(Python3 COMPONENTS Development Development.Embed Interpreter REQUIRED)
+find_package(PySide2 REQUIRED)
+find_package(Shiboken2 REQUIRED)
+
 add_subdirectory(data)
 add_subdirectory(icons)
 add_subdirectory(src)
@@ -761,6 +765,7 @@ endif()
 if(ENABLE_SDK)
     message(STATUS "SDK build ENABLED")
     add_subdirectory(lib)
+    add_subdirectory(pylabplot)
 else()
     message(STATUS "SDK build DISABLED")
 endif()
