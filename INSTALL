@@ -30,7 +30,7 @@ optional packages
 	* Discount to support Markdown markup language text
 	* Eigen3 to support fast baseline removal
 	* fast_float, dbc_parser_cpp and vector_blf for Vector BLF support (can be fetched from git by setting -DLOCAL_DBC_PARSER=ON and -DLOCAL_VECTOR_BLF=ON)
-	* MCAP for MCAP file support (Using local copy instead of downloading can be set by using LOCAL_MCAP_DOWNLOAD=OFF)
+	* MCAP for MCAP file support (Downloading instead of using local copy can be set by using LOCAL_MCAP_DOWNLOAD=ON)
 
 ===============================================================================
 To build LabPlot execute

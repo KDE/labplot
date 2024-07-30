@@ -95,6 +95,9 @@ public:
 	void setFormula(int row, const QString& formula);
 	void clearFormulas();
 
+	// settings used to generate random values
+	Column::RandomValuesData randomValuesData;
+
 	QString textAt(int row) const;
 	void setValueAt(int row, QString new_value);
 	void setTextAt(int row, const QString&);
@@ -251,6 +254,8 @@ public:
 	void addValueLabel(const QString&, const QString&);
 	const QVector<Column::ValueLabel<QString>>* textValueLabels() const;
 
+	Column* const q{nullptr};
+
 private:
 	AbstractColumn::ColumnMode m_columnMode; // type of column data
 	void* m_data{nullptr}; // pointer to the data container (QVector<T>)
@@ -267,7 +272,6 @@ private:
 	IntervalAttribute<QString> m_formulas;
 	AbstractColumn::PlotDesignation m_plotDesignation{AbstractColumn::PlotDesignation::NoDesignation};
 	int m_width{0}; // column width in the view
-	Column* m_owner{nullptr};
 	QVector<QMetaObject::Connection> m_connectionsUpdateFormula;
 
 	void initDictionary();
@@ -286,13 +290,13 @@ private:
 
 		invalidate();
 
-		Q_EMIT m_owner->dataAboutToChange(m_owner);
+		Q_EMIT q->dataAboutToChange(q);
 		if (row >= rowCount())
 			resizeTo(row + 1);
 
 		static_cast<QVector<T>*>(m_data)->replace(row, new_value);
-		if (!m_owner->m_suppressDataChangedSignal)
-			Q_EMIT m_owner->dataChanged(m_owner);
+		if (!q->m_suppressDataChangedSignal)
+			Q_EMIT q->dataChanged(q);
 	}
 
 	// Never call this function directly, because it does no
@@ -307,7 +311,7 @@ private:
 
 		invalidate();
 
-		Q_EMIT m_owner->dataAboutToChange(m_owner);
+		Q_EMIT q->dataAboutToChange(q);
 
 		if (first < 0)
 			*static_cast<QVector<T>*>(m_data) = new_values;
@@ -320,8 +324,8 @@ private:
 				ptr[first + i] = new_values.at(i);
 		}
 
-		if (!m_owner->m_suppressDataChangedSignal)
-			Q_EMIT m_owner->dataChanged(m_owner);
+		if (!q->m_suppressDataChangedSignal)
+			Q_EMIT q->dataChanged(q);
 	}
 
 private Q_SLOTS:

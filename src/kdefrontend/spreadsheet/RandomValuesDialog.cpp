@@ -137,6 +137,21 @@ RandomValuesDialog::~RandomValuesDialog() {
 
 void RandomValuesDialog::setColumns(const QVector<Column*>& columns) {
 	m_columns = columns;
+
+	const auto& data = m_columns.constFirst()->randomValuesData();
+	if (data.available) {
+		const int dist = static_cast<int>(data.distribution);
+		ui.cbDistribution->setCurrentIndex(ui.cbDistribution->findData(dist));
+		distributionChanged(ui.cbDistribution->currentIndex());
+
+		const auto numberLocale = QLocale();
+		ui.leParameter1->setText(numberLocale.toString(data.parameter1));
+		ui.leParameter2->setText(numberLocale.toString(data.parameter2));
+		ui.leParameter3->setText(numberLocale.toString(data.parameter3));
+
+		if (data.seed != 0)
+			ui.leSeed->setText(numberLocale.toString(data.seed));
+	}
 }
 
 void RandomValuesDialog::distributionChanged(int index) {
@@ -474,9 +489,17 @@ void RandomValuesDialog::generate() {
 		col->clearFormula(); // clear the potentially available column formula
 	}
 
-	const int index = ui.cbDistribution->currentIndex();
-	const auto dist = (nsl_sf_stats_distribution)ui.cbDistribution->itemData(index).toInt();
+	const auto dist = (nsl_sf_stats_distribution)ui.cbDistribution->currentData().toInt();
 	DEBUG(Q_FUNC_INFO << ", random number distribution: " << nsl_sf_stats_distribution_name[dist]);
+
+	Column::RandomValuesData randomValuesData;
+	randomValuesData.available = true;
+	randomValuesData.distribution = dist;
+	SET_DOUBLE_FROM_LE(randomValuesData.parameter1, ui.leParameter1)
+	SET_DOUBLE_FROM_LE(randomValuesData.parameter2, ui.leParameter2)
+	SET_DOUBLE_FROM_LE(randomValuesData.parameter3, ui.leParameter3)
+	if (!ui.leSeed->text().isEmpty())
+		randomValuesData.seed = seed;
 
 	switch (dist) {
 	case nsl_sf_stats_gaussian: {
@@ -1160,6 +1183,7 @@ void RandomValuesDialog::generate() {
 	}
 
 	for (auto* col : m_columns) {
+		col->setRandomValuesData(randomValuesData);
 		col->setSuppressDataChangedSignal(false);
 		col->setChanged();
 	}

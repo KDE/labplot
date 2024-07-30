@@ -76,6 +76,8 @@ private Q_SLOTS:
 	void testFormulasmmin();
 	void testFormulasmmax();
 	void testFormulasma();
+	void testFormulapsample();
+	void testFormularsample();
 
 	void testFormulasMinColumnInvalid();
 

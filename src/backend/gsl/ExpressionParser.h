@@ -14,6 +14,7 @@
 #include "backend/gsl/parser.h"
 #include "backend/lib/Range.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
+
 #include <QVector>
 
 class ExpressionParser {

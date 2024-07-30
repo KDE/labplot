@@ -4,7 +4,7 @@
 	Description      : C++ wrapper for the bison generated parser.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2014-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2014-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -15,6 +15,8 @@
 #include <KLocalizedString>
 
 #include <QRegularExpression>
+
+#include <random>
 
 #include <gsl/gsl_const_mksa.h>
 #include <gsl/gsl_const_num.h>
@@ -598,6 +600,39 @@ double smr(double x, const char* variable, const std::weak_ptr<Payload> payload)
 	return smmax(x, variable, payload) - smmin(x, variable, payload);
 }
 
+double psample(double n, const char* variable, const std::weak_ptr<Payload> payload) {
+	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
+	if (!p) {
+		assert(p); // Debug build
+		return NAN;
+	}
+
+	// every n-th value, starting @ first
+	return cell((int)n * p->row + 1, variable, payload);
+}
+
+double rsample(const char* variable, const std::weak_ptr<Payload> payload) {
+	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
+	if (!p) {
+		assert(p); // Debug build
+		return NAN;
+	}
+
+	// random value of all rows
+	auto size = p->xVectors->at(0)->size();
+
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> dist(0, size - 1);
+	double value;
+	do { // loop until valid index generated
+		int randomIndex = dist(gen);
+		value = cell(randomIndex + 1, variable, payload);
+	} while (std::isnan(value));
+
+	return value;
+}
+
 void ExpressionParser::setSpecialFunction1(const char* function_name, func_t1Payload funct, std::shared_ptr<Payload> payload) {
 	set_specialfunction1(function_name, funct, payload);
 }
@@ -642,6 +677,8 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 	set_specialfunction2(specialfun_smmax, smmax, payload);
 	set_specialfunction2(specialfun_sma, sma, payload);
 	set_specialfunction2(specialfun_smr, smr, payload);
+	set_specialfunction2(specialfun_psample, psample, payload);
+	set_specialfunction1(specialfun_rsample, rsample, payload);
 
 	bool constExpression = false;
 	for (int i = 0; i < minSize || (constExpression && i < yVector->size()); i++) {

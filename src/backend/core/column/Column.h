@@ -13,6 +13,7 @@
 #define COLUMN_H
 
 #include "backend/core/AbstractColumn.h"
+#include "backend/nsl/nsl_sf_stats.h"
 #include <QPixmap>
 
 class AbstractSimpleFilter;
@@ -20,7 +21,6 @@ class CartesianPlot;
 class ColumnStringIO;
 class QAction;
 class QActionGroup;
-class XmlStreamReader;
 class ColumnPrivate;
 class ColumnSetGlobalFormulaCmd;
 
@@ -130,6 +130,19 @@ public:
 	bool formulaAutoUpdate() const;
 	bool formulaAutoResize() const;
 
+	// functions related to the settings used to generate random values
+	struct RandomValuesData {
+		RandomValuesData() = default;
+		bool available{false};
+		nsl_sf_stats_distribution distribution{nsl_sf_stats_gaussian};
+		double parameter1{1.};
+		double parameter2{1.};
+		double parameter3{1.};
+		ulong seed{0}; // use 0 for "no fixed seed"
+	};
+	void setRandomValuesData(const RandomValuesData&);
+	RandomValuesData randomValuesData() const;
+
 	// functions related to the cells/rows formulas
 	QString formula(int) const override;
 	QVector<Interval<int>> formulaIntervals() const override;
@@ -226,6 +239,8 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 	void finalizeLoad();
+
+	typedef ColumnPrivate Private;
 
 public Q_SLOTS:
 	void pasteData();
