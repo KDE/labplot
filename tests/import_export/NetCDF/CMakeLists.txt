@@ -1,5 +1,5 @@
 add_executable(NetCDFFilterTest NetCDFFilterTest.cpp)
 
-target_link_libraries(NetCDFFilterTest labplot2backendlib labplot2lib labplot2nsllib labplot2metatest)
+target_link_libraries(NetCDFFilterTest labplot2metatest)
 
 add_test(NAME NetCDFFilterTest COMMAND NetCDFFilterTest)

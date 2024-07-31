@@ -10,7 +10,7 @@ if(ENABLE_TEST_BACKEND_GSL)
 
     add_executable(ExpressionParserTest ExpressionParserTest.cpp)
 
-    target_link_libraries(ExpressionParserTest labplot2test labplot2backendlib labplot2nsllib)
+    target_link_libraries(ExpressionParserTest labplot2test labplot2backendlib)
 
     add_test(NAME ExpressionParserTest COMMAND ExpressionParserTest)
 endif()
