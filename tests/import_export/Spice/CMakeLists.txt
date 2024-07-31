@@ -1,4 +1,4 @@
-add_executable (SpiceFilterTest SpiceFilterTest.cpp)
+add_executable(SpiceFilterTest SpiceFilterTest.cpp)
 target_compile_definitions(SpiceFilterTest PRIVATE SPICEFILTERTEST_EN)
 
 target_link_libraries(SpiceFilterTest labplot2backendlib labplot2lib labplot2nsllib labplot2metatest)

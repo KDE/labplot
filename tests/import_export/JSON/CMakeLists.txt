@@ -1,4 +1,4 @@
-add_executable (JSONFilterTest JSONFilterTest.cpp)
+add_executable(JSONFilterTest JSONFilterTest.cpp)
 
 target_link_libraries(JSONFilterTest labplot2backendlib labplot2lib labplot2nsllib labplot2metatest)
 

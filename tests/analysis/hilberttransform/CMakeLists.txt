@@ -1,4 +1,4 @@
-add_executable (HilbertTransformTest HilbertTransformTest.cpp)
+add_executable(HilbertTransformTest HilbertTransformTest.cpp)
 
 target_link_libraries(HilbertTransformTest labplot2backendlib labplot2lib labplot2nsllib labplot2test)
 

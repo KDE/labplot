@@ -1,4 +1,4 @@
-add_executable (NSLPeakTest NSLPeakTest.cpp)
+add_executable(NSLPeakTest NSLPeakTest.cpp)
 
 target_link_libraries(NSLPeakTest labplot2nsllib labplot2test)
 

@@ -1,4 +1,4 @@
-add_executable (NSLIntTest NSLIntTest.cpp)
+add_executable(NSLIntTest NSLIntTest.cpp)
 
 target_link_libraries(NSLIntTest labplot2nsllib ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} labplot2test)
 

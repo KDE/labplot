@@ -1,7 +1,6 @@
 option(ENABLE_TEST_BACKEND "Enable Backend Tests" ON)
 
-if (ENABLE_TEST_BACKEND)
-
+if(ENABLE_TEST_BACKEND)
     add_subdirectory(Axis)
     add_subdirectory(BarPlot)
     add_subdirectory(Column)
@@ -15,5 +14,4 @@ if (ENABLE_TEST_BACKEND)
     add_subdirectory(TextLabel)
     add_subdirectory(Worksheet)
     add_subdirectory(XYCurve)
-
 endif()

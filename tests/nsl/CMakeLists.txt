@@ -1,7 +1,6 @@
 option(ENABLE_TEST_NSL "Enable NSL Tests" ON)
 
-if (ENABLE_TEST_NSL)
-
+if(ENABLE_TEST_NSL)
     add_subdirectory(baseline)
     add_subdirectory(dft)
     add_subdirectory(diff)
@@ -14,5 +13,4 @@ if (ENABLE_TEST_NSL)
     add_subdirectory(sf)
     add_subdirectory(smooth)
     add_subdirectory(stats)
-
 endif()

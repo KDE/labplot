@@ -1,4 +1,4 @@
-add_executable (MatioFilterTest MatioFilterTest.cpp)
+add_executable(MatioFilterTest MatioFilterTest.cpp)
 
 target_link_libraries(MatioFilterTest labplot2backendlib labplot2lib labplot2nsllib labplot2metatest)
 
