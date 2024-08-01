@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-31 01:47+0000\n"
-"PO-Revision-Date: 2024-07-27 10:58+0200\n"
+"PO-Revision-Date: 2024-07-31 09:07+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -8104,6 +8104,8 @@ msgstr "Corba XY des d'una fórmula"
 #, kde-format
 msgid "Add a new xy-curve that is defined via a mathematical expression."
 msgstr ""
+"Afegeix una corba XY nova que es defineix mitjançant una expressió "
+"matemàtica."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:433
 #, kde-format
@@ -8111,6 +8113,8 @@ msgid ""
 "Add a new xy-curve that is defined as a function of other xy-curves (scaled, "
 "shifted, etc.)"
 msgstr ""
+"Afegeix una corba XY nova que es defineix com una funció d'altres corbes XY "
+"(escalada, desplaçada, etc.)"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:436
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:492
@@ -8629,7 +8633,7 @@ msgstr "%1: afegeix una corba d'ajust"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1956
 #, kde-format
 msgid "%1: Fourier filtering of '%2'"
-msgstr "%1: Filtre de Fourier de «%2»"
+msgstr "%1: filtre de Fourier de «%2»"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1957
 #, kde-format
@@ -8642,22 +8646,19 @@ msgid "%1: add Fourier filter curve"
 msgstr "%1: afegeix una corba de filtre de Fourier"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1972
-#, fuzzy, kde-format
-#| msgid "Reduction of '%1'"
+#, kde-format
 msgid "%1: add function of '%2'"
-msgstr "Reducció de «%1»"
+msgstr "%1: afegeix una funció de «%2»"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1973
-#, fuzzy, kde-format
-#| msgid "Reduction of '%1'"
+#, kde-format
 msgid "Function of '%1'"
-msgstr "Reducció de «%1»"
+msgstr "Funció de «%1»"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1976
-#, fuzzy, kde-format
-#| msgid "%1: add fit curve"
+#, kde-format
 msgid "%1: add function curve"
-msgstr "%1: afegeix una corba d'ajust"
+msgstr "%1: afegeix una corba de funció"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2025
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1363
@@ -9662,51 +9663,49 @@ msgstr ""
 "transformada de Fourier"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:80
-#, fuzzy, kde-format
-#| msgid "%1: set equation"
+#, kde-format
 msgid "%1: set function"
-msgstr "%1: estableix una equació"
+msgstr "%1: estableix una funció"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:304
 #, kde-format
 msgid "First curve not valid"
-msgstr ""
+msgstr "La primera corba no és vàlida"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:306
 #, kde-format
 msgid "xColumn of first curve not valid"
-msgstr ""
+msgstr "La columna X de la primera corba no és vàlida"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:308
 #, kde-format
 msgid "yColumn of first curve not valid"
-msgstr ""
+msgstr "La columna Y de la primera corba no és vàlida"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:310
 #, kde-format
 msgid "Number of x and y values do not match for the first curve"
-msgstr ""
+msgstr "El nombre de valors X i Y no coincideixen a la primera corba"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:323
 #, kde-format
 msgid "Curve '%1' not valid"
-msgstr ""
+msgstr "La corba «%1» no és vàlida"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:325
 #, kde-format
 msgid "xColumn of curve '%1' not valid"
-msgstr ""
+msgstr "La columna X de la corba «%1» no és vàlida"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:327
 #, kde-format
 msgid "yColumn of curve '%1' not valid"
-msgstr ""
+msgstr "La columna Y de la corba «%1» no és vàlida"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:329
-#, fuzzy, kde-format
-#| msgid "Number of x and y data points must be equal."
+#, kde-format
 msgid "Number of x and y values do not match for curve '%1'"
-msgstr "El nombre de punts de les dades de X i Y han de ser iguals."
+msgstr "El nombre de valors X i Y no coincideixen a la corba «%1»"
 
 #: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:72
 #, kde-format
@@ -14754,17 +14753,13 @@ msgid "Fourier transformation status: %1"
 msgstr "Estat de la transformada de Fourier: %1"
 
 #: src/kdefrontend/dockwidgets/XYFunctionCurveDock.cpp:130
-#, fuzzy, kde-format
-#| msgid ""
-#| "The column \"%1\"\n"
-#| "is not available anymore. It will be automatically used once it is "
-#| "created again."
+#, kde-format
 msgid ""
 "The curve \"%1\"\n"
 "is not available anymore. It will be automatically used once it is created "
 "again."
 msgstr ""
-"La columna «%1»\n"
+"La corba «%1»\n"
 "ja no està disponible. S'usarà automàticament quan es torni a crear."
 
 #: src/kdefrontend/dockwidgets/XYFunctionCurveDock.cpp:185
@@ -14924,12 +14919,10 @@ msgid "Properties: XY-Equation"
 msgstr "Propietats: Equació-XY"
 
 #: src/kdefrontend/GuiObserver.cpp:291
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Datapicker Curve"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Function Curve"
-msgstr "Propietats: Corba del selector de dades"
+msgstr "Propietats: Corba de funció"
 
 #: src/kdefrontend/GuiObserver.cpp:296
 #, kde-format

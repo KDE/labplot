@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-31 01:47+0000\n"
-"PO-Revision-Date: 2024-07-27 14:32+0300\n"
+"PO-Revision-Date: 2024-08-01 01:13+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -8003,7 +8003,7 @@ msgstr "Bir Formülten xy Eğrisi"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:431
 #, kde-format
 msgid "Add a new xy-curve that is defined via a mathematical expression."
-msgstr ""
+msgstr "Bir matematiksel ifadeyle tanımlanan yeni bir XY eğrisi ekleyin."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:433
 #, kde-format
@@ -8011,6 +8011,8 @@ msgid ""
 "Add a new xy-curve that is defined as a function of other xy-curves (scaled, "
 "shifted, etc.)"
 msgstr ""
+"Diğer XY eğrilerinin bir işlevi olarak tanımlanmış yeni bir XY eğrisi "
+"ekleyin (ölçekli, kaydırılmış vb.)."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:436
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:492
@@ -8539,22 +8541,19 @@ msgid "%1: add Fourier filter curve"
 msgstr "%1: Fourier süzgeci eğrisi ekle"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1972
-#, fuzzy, kde-format
-#| msgid "Reduction of '%1'"
+#, kde-format
 msgid "%1: add function of '%2'"
-msgstr "“%1” Ögesinin indirgenmesi"
+msgstr "%1: “%2” işlevini ekle"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1973
-#, fuzzy, kde-format
-#| msgid "Reduction of '%1'"
+#, kde-format
 msgid "Function of '%1'"
-msgstr "“%1” Ögesinin indirgenmesi"
+msgstr "“%1” işlevi"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1976
-#, fuzzy, kde-format
-#| msgid "%1: add fit curve"
+#, kde-format
 msgid "%1: add function curve"
-msgstr "%1: Sığdırma eğrisi ekle"
+msgstr "%1: İşlev eğrisi ekle"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2025
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1363
@@ -9552,51 +9551,49 @@ msgid "%1: set transform options and perform the Fourier transform"
 msgstr "%1: Dönüşüm seçeneklerini ayarla ve Fourier dönüşümünü uygula"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:80
-#, fuzzy, kde-format
-#| msgid "%1: set equation"
+#, kde-format
 msgid "%1: set function"
-msgstr "%1: Denklemi ayarla"
+msgstr "%1: İşlev ayarla"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:304
 #, kde-format
 msgid "First curve not valid"
-msgstr ""
+msgstr "İlk eğri geçerli değil"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:306
 #, kde-format
 msgid "xColumn of first curve not valid"
-msgstr ""
+msgstr "İlk eğrinin X sütunu geçerli değil"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:308
 #, kde-format
 msgid "yColumn of first curve not valid"
-msgstr ""
+msgstr "İlk eğrinin Y sütunu geçerli değil"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:310
 #, kde-format
 msgid "Number of x and y values do not match for the first curve"
-msgstr ""
+msgstr "İlk eğri için X ve Y değerlerinin sayısı eşleşmiyor"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:323
 #, kde-format
 msgid "Curve '%1' not valid"
-msgstr ""
+msgstr "“%1” eğrisi geçerli değil"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:325
 #, kde-format
 msgid "xColumn of curve '%1' not valid"
-msgstr ""
+msgstr "“%1” eğrisinin X sütunu geçerli değil"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:327
 #, kde-format
 msgid "yColumn of curve '%1' not valid"
-msgstr ""
+msgstr "“%1” eğrisinin Y sütunu geçerli değil"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:329
-#, fuzzy, kde-format
-#| msgid "Number of x and y data points must be equal."
+#, kde-format
 msgid "Number of x and y values do not match for curve '%1'"
-msgstr "x ve y veri noktalarının sayısı eşit olmalıdır."
+msgstr "“%1” eğrisi için X ve Y değerlerinin sayısı eşleşmiyor"
 
 #: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:72
 #, kde-format
@@ -14585,18 +14582,14 @@ msgid "Fourier transformation status: %1"
 msgstr "Fourier dönüşüm durumu: %1"
 
 #: src/kdefrontend/dockwidgets/XYFunctionCurveDock.cpp:130
-#, fuzzy, kde-format
-#| msgid ""
-#| "The column \"%1\"\n"
-#| "is not available anymore. It will be automatically used once it is "
-#| "created again."
+#, kde-format
 msgid ""
 "The curve \"%1\"\n"
 "is not available anymore. It will be automatically used once it is created "
 "again."
 msgstr ""
-"“%1” sütunu\n"
-"artık kullanılamıyor. Yeniden oluşturulunca kendiliğinden bir kez kullanılır."
+"“%1” eğrisi artık kullanılamıyor.\n"
+"Yeniden oluşturulunca kendiliğinden bir kez kullanılır."
 
 #: src/kdefrontend/dockwidgets/XYFunctionCurveDock.cpp:185
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:221
@@ -14753,12 +14746,10 @@ msgid "Properties: XY-Equation"
 msgstr "Özellikler: XY Denklemi"
 
 #: src/kdefrontend/GuiObserver.cpp:291
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Datapicker Curve"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Function Curve"
-msgstr "Özellikler: Veri Seçicisi Eğrisi"
+msgstr "Özellikler: İşlev Eğrisi"
 
 #: src/kdefrontend/GuiObserver.cpp:296
 #, kde-format

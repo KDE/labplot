@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-31 01:47+0000\n"
-"PO-Revision-Date: 2024-07-27 06:23+0200\n"
+"PO-Revision-Date: 2024-07-31 07:35+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -8008,7 +8008,7 @@ msgstr "xy-kurva från en formel"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:431
 #, kde-format
 msgid "Add a new xy-curve that is defined via a mathematical expression."
-msgstr ""
+msgstr "Lägg till ny xy-kurva som definieras via ett matematiskt uttryck."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:433
 #, kde-format
@@ -8016,6 +8016,8 @@ msgid ""
 "Add a new xy-curve that is defined as a function of other xy-curves (scaled, "
 "shifted, etc.)"
 msgstr ""
+"Lägg till en ny xy-kurva som definieras som en funktion av andra xy-kurvor "
+"(skalad, skiftad, etc.)"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:436
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:492
@@ -8544,22 +8546,19 @@ msgid "%1: add Fourier filter curve"
 msgstr "%1: lägg till fourierfilterkurva"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1972
-#, fuzzy, kde-format
-#| msgid "Reduction of '%1'"
+#, kde-format
 msgid "%1: add function of '%2'"
-msgstr "Reducering av '%1'"
+msgstr "%1: lägg till funktion av '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1973
-#, fuzzy, kde-format
-#| msgid "Reduction of '%1'"
+#, kde-format
 msgid "Function of '%1'"
-msgstr "Reducering av '%1'"
+msgstr "Funktion av '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1976
-#, fuzzy, kde-format
-#| msgid "%1: add fit curve"
+#, kde-format
 msgid "%1: add function curve"
-msgstr "%1: lägg till anpassningskurva."
+msgstr "%1: lägg till funktionskurva"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2025
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1363
@@ -9557,53 +9556,49 @@ msgid "%1: set transform options and perform the Fourier transform"
 msgstr "%1: ställ in transformalternativ och utför Fouriertransformen"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:80
-#, fuzzy, kde-format
-#| msgid "%1: set equation"
+#, kde-format
 msgid "%1: set function"
-msgstr "%1: ställ in ekvation"
+msgstr "%1: ställ in funktion"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:304
 #, kde-format
 msgid "First curve not valid"
-msgstr ""
+msgstr "Första kurvan ogiltig"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:306
 #, kde-format
 msgid "xColumn of first curve not valid"
-msgstr ""
+msgstr "X-kolumn av första kurvan ogiltig"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:308
 #, kde-format
 msgid "yColumn of first curve not valid"
-msgstr ""
+msgstr "Y-kolumn av första kurvan ogiltig"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:310
 #, kde-format
 msgid "Number of x and y values do not match for the first curve"
-msgstr ""
+msgstr "Antal x- och y-värden stämmer inte för den första kurvan"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:323
 #, kde-format
 msgid "Curve '%1' not valid"
-msgstr ""
+msgstr "Kurvan '%1' ogiltig"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:325
-#, fuzzy, kde-format
-#| msgid "column mode invalid"
+#, kde-format
 msgid "xColumn of curve '%1' not valid"
-msgstr "kolumnläge ogiltigt"
+msgstr "X-kolumn av kurvan '%1' ogiltig"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:327
-#, fuzzy, kde-format
-#| msgid "column mode invalid"
+#, kde-format
 msgid "yColumn of curve '%1' not valid"
-msgstr "kolumnläge ogiltigt"
+msgstr "Y-kolumn av kurvan '%1' ogiltig"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:329
-#, fuzzy, kde-format
-#| msgid "Number of x and y data points must be equal."
+#, kde-format
 msgid "Number of x and y values do not match for curve '%1'"
-msgstr "Antal x- och y-datapunkter måste vara lika."
+msgstr "Antal x- och y-värden stämmer inte för kurvan '%1'"
 
 #: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:72
 #, kde-format
@@ -14598,17 +14593,13 @@ msgid "Fourier transformation status: %1"
 msgstr "Fouriertransformstatus: %1"
 
 #: src/kdefrontend/dockwidgets/XYFunctionCurveDock.cpp:130
-#, fuzzy, kde-format
-#| msgid ""
-#| "The column \"%1\"\n"
-#| "is not available anymore. It will be automatically used once it is "
-#| "created again."
+#, kde-format
 msgid ""
 "The curve \"%1\"\n"
 "is not available anymore. It will be automatically used once it is created "
 "again."
 msgstr ""
-"Kolumnen \"%1\"\n"
+"Kurvan \"%1\"\n"
 "är inte längre tillgänglig. Den används automatiskt när den väl har skapats "
 "igen."
 
@@ -14767,12 +14758,10 @@ msgid "Properties: XY-Equation"
 msgstr "Egenskaper: XY-ekvation"
 
 #: src/kdefrontend/GuiObserver.cpp:291
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Datapicker Curve"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Function Curve"
-msgstr "Egenskaper: Dataväljarkurva"
+msgstr "Egenskaper: Funktionskurva"
 
 #: src/kdefrontend/GuiObserver.cpp:296
 #, kde-format
