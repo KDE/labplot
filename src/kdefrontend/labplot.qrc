@@ -1,6 +1,6 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
-    <qresource prefix="/kxmlgui5/labplot2">
-        <file>labplot2ui.rc</file>
+    <qresource prefix="/kxmlgui5/labplot">
+        <file>labplotui.rc</file>
     </qresource>
 </RCC>

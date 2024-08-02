@@ -2,7 +2,7 @@
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
   <mime-type type="application/x-labplot">
     <sub-class-of type="application/gzip"/>
-    <comment>LabPlot2 Project File</comment>
+    <comment>LabPlot Project File</comment>
     <comment xml:lang="ar">ملف مشروع معمل رسم</comment>
     <comment xml:lang="ca">Fitxer de projecte LabPlot</comment>
     <comment xml:lang="ca@valencia">Fitxer de projecte LabPlot</comment>

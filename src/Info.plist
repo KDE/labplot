@@ -38,7 +38,7 @@
 	<array>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>LabPlot2 project</string>
+			<string>LabPlot project</string>
 			<key>CFBundleTypeIconFile</key>
 			<string>LML_ICONS.icns</string>
 			<key>CFBundleTypeExtensions</key>
