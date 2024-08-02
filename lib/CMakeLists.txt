@@ -271,7 +271,7 @@ endif()
 install(TARGETS liblabplot DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/liblabplot_export.h  DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot COMPONENT Devel)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/labplot_export.h  DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot COMPONENT Devel)
 
 install(FILES labplot.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/ COMPONENT Devel)
 install(FILES ../src/backend/core/AbstractAspect.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/core/ COMPONENT Devel)
