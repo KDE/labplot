@@ -717,7 +717,7 @@ else()
     message(STATUS "SDK build DISABLED")
 endif()
 
-install(FILES org.kde.labplot.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
+install(FILES org.kde.labplot2.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 
 # clang format
 #file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES *.cpp *.h *.c)
