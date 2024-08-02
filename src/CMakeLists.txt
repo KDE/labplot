@@ -542,9 +542,9 @@ set(GENERATED_SOURCES
 )
 
 ##############################################################################
-INCLUDE_DIRECTORIES(. ${BACKEND_DIR}/gsl ${GSL_INCLUDE_DIR} )
-set(LABPLOT_SRCS ${GUI_SOURCES} )
-ki18n_wrap_ui(LABPLOT_SRCS ${UI_SOURCES} )
+INCLUDE_DIRECTORIES(. ${BACKEND_DIR}/gsl ${GSL_INCLUDE_DIR})
+set(LABPLOT_SRCS ${GUI_SOURCES})
+ki18n_wrap_ui(LABPLOT_SRCS ${UI_SOURCES})
 # see also QT_MIN_VERSION in CMakeLists.txt
 add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50700)
 #if(QT_MAJOR_VERSION MATCHES 5 AND QT_MINOR_VERSION MATCHES 15)
@@ -554,9 +554,9 @@ add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50700)
 #add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50F00)
 
 # static library
-add_library(labplotnsllib STATIC ${NSL_SOURCES} )
-add_library(labplotbackendlib STATIC ${BACKEND_SOURCES} ${UI_SOURCES} ${BACKEND_TOOLS_SOURCES} ${GENERATED_SOURCES} )
-add_library(labplotlib STATIC ${LABPLOT_SRCS} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${QTMOC_HDRS} )
+add_library(labplotnsllib STATIC ${NSL_SOURCES})
+add_library(labplotbackendlib STATIC ${BACKEND_SOURCES} ${UI_SOURCES} ${BACKEND_TOOLS_SOURCES} ${GENERATED_SOURCES})
+add_library(labplotlib STATIC ${LABPLOT_SRCS} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${QTMOC_HDRS})
 # set_property(TARGET ${objlib} PROPERTY POSITION_INDEPENDENT_CODE 1)
 target_include_directories(labplotbackendlib PUBLIC ${COMMONFRONTEND_DIR}/widgets) # so that the MOC finds numberSpinbox.h
 target_include_directories(labplotlib PUBLIC ${COMMONFRONTEND_DIR}/widgets) # so that the MOC finds numberSpinbox.h
@@ -566,8 +566,8 @@ if(qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
     get_target_property(QADS_INCLUDES ads::qt${QT_VERSION_MAJOR}advanceddocking INTERFACE_INCLUDE_DIRECTORIES)
     get_target_property(QADS_LIBRARIES ads::qt${QT_VERSION_MAJOR}advanceddocking INTERFACE_LINK_LIBRARIES)
     message(STATUS "QADS Found LINK_LIBRARIES: ${QADS_LIBRARIES} INCLUDES: ${QADS_INCLUDES}")
-    target_include_directories(labplotbackendlib PRIVATE ${QADS_INCLUDES} )
-    target_include_directories(labplotlib PRIVATE ${QADS_INCLUDES} )
+    target_include_directories(labplotbackendlib PRIVATE ${QADS_INCLUDES})
+    target_include_directories(labplotlib PRIVATE ${QADS_INCLUDES})
 endif()
 target_compile_definitions(labplotbackendlib PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 target_compile_definitions(labplotlib PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
@@ -600,7 +600,7 @@ target_link_libraries(labplotbackendlib
     ${LIBCERF_LIBRARIES}
     ${MATIO_LIBRARIES}
     ads::qt${QT_VERSION_MAJOR}advanceddocking
-    )
+)
 target_link_libraries(labplotlib
     Qt${QT_MAJOR_VERSION}::Svg
     Qt${QT_MAJOR_VERSION}::Sql
@@ -620,37 +620,37 @@ target_link_libraries(labplotlib
     KF${KF_MAJOR_VERSION}::TextWidgets    # KTextEdit
     ${Poppler_LIBRARIES}
     ads::qt${QT_VERSION_MAJOR}advanceddocking
-    )
+)
 
 if(Qt${QT_MAJOR_VERSION}SerialPort_FOUND)
-    target_link_libraries(labplotbackendlib Qt${QT_MAJOR_VERSION}::SerialPort )
-    target_link_libraries(labplotlib Qt${QT_MAJOR_VERSION}::SerialPort )
+    target_link_libraries(labplotbackendlib Qt${QT_MAJOR_VERSION}::SerialPort)
+    target_link_libraries(labplotlib Qt${QT_MAJOR_VERSION}::SerialPort)
 endif()
 if(Qt${QT_MAJOR_VERSION}Mqtt_FOUND)
-    target_link_libraries(labplotbackendlib Qt${QT_MAJOR_VERSION}::Mqtt )
-    target_link_libraries(labplotlib Qt${QT_MAJOR_VERSION}::Mqtt )
+    target_link_libraries(labplotbackendlib Qt${QT_MAJOR_VERSION}::Mqtt)
+    target_link_libraries(labplotlib Qt${QT_MAJOR_VERSION}::Mqtt)
 endif()
 if(KF${KF_MAJOR_VERSION}SyntaxHighlighting_FOUND)
-    target_link_libraries(labplotlib KF${KF_MAJOR_VERSION}::SyntaxHighlighting )
+    target_link_libraries(labplotlib KF${KF_MAJOR_VERSION}::SyntaxHighlighting)
 endif()
 if(KUserFeedback_FOUND)
-    target_link_libraries(labplotlib KUserFeedbackWidgets )
+    target_link_libraries(labplotlib KUserFeedbackWidgets)
 endif()
 if(KUserFeedbackQt6_FOUND)
-    target_link_libraries(labplotlib KUserFeedbackCoreQt6 KUserFeedbackWidgetsQt6 )
+    target_link_libraries(labplotlib KUserFeedbackCoreQt6 KUserFeedbackWidgetsQt6)
 endif()
 if(Discount_FOUND)
-    target_link_libraries(labplotlib Discount::Lib )
+    target_link_libraries(labplotlib Discount::Lib)
 endif()
 if(Orcus_FOUND)
-    target_link_libraries(labplotlib ${Orcus_LIBRARIES} ${Ixion_LIBRARY} )
+    target_link_libraries(labplotlib ${Orcus_LIBRARIES} ${Ixion_LIBRARY})
 endif()
 # TODO: KF6::NewStuff not found even though KF6NewStuff_FOUND
 if(KF5NewStuff_FOUND)
-    target_link_libraries(labplotlib KF5::NewStuff )
+    target_link_libraries(labplotlib KF5::NewStuff)
 endif()
 if(KF${KF_MAJOR_VERSION}Purpose_FOUND)
-    target_link_libraries(labplotlib KF${KF_MAJOR_VERSION}::PurposeWidgets )
+    target_link_libraries(labplotlib KF${KF_MAJOR_VERSION}::PurposeWidgets)
 endif()
 if(ZSTD_FOUND)
         target_link_libraries(labplotbackendlib ${ZSTD_LIBRARIES})
@@ -658,14 +658,14 @@ endif()
 
 if(RECENT_CANTOR)
     # KFX::Service, KFX::Parts is optional but probably required by Cantor
-    target_link_libraries(labplotbackendlib Cantor::cantorlibs KF${KF_MAJOR_VERSION}::Service KF${KF_MAJOR_VERSION}::Parts )
-    target_link_libraries(labplotlib Cantor::cantorlibs KF${KF_MAJOR_VERSION}::Service KF${KF_MAJOR_VERSION}::Parts )
+    target_link_libraries(labplotbackendlib Cantor::cantorlibs KF${KF_MAJOR_VERSION}::Service KF${KF_MAJOR_VERSION}::Parts)
+    target_link_libraries(labplotlib Cantor::cantorlibs KF${KF_MAJOR_VERSION}::Service KF${KF_MAJOR_VERSION}::Parts)
 endif()
 
 if(ENABLE_READSTAT)
     # build before using
     if(BUILD_READSTAT)
-        add_dependencies(labplotbackendlib 3rdparty_readstat )
+        add_dependencies(labplotbackendlib 3rdparty_readstat)
     endif()
     # link system readstat with iconv
     if(READSTAT_FOUND)
@@ -763,10 +763,10 @@ if(APPLE AND ${ECM_VERSION} VERSION_GREATER "5.48.0")
 endif()
 
 add_executable(labplot ${LABPLOT_SOURCE} ${GUI_QRC} ${qml_QRC})
-target_link_libraries(labplot labplotlib labplotbackendlib labplotnsllib )
+target_link_libraries(labplot labplotlib labplotbackendlib labplotnsllib)
 
 #if(KUserFeedbackQt6_FOUND)
-#    target_link_libraries(labplot KUserFeedbackCoreQt6 KUserFeedbackWidgetsQt6 )
+#    target_link_libraries(labplot KUserFeedbackCoreQt6 KUserFeedbackWidgetsQt6)
 #endif()
 target_compile_definitions(labplot PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 
@@ -781,14 +781,14 @@ endif()
 
 ############## installation ################################
 install(TARGETS labplot ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
-install(FILES ${KDEFRONTEND_DIR}/splash.png ${KDEFRONTEND_DIR}/labplot.ico ${CMAKE_CURRENT_SOURCE_DIR}/../icons/application-x-labplot.ico DESTINATION ${KDE_INSTALL_DATADIR}/${PROJECT_NAME} )
-install(FILES org.kde.labplot.desktop DESTINATION ${KDE_INSTALL_APPDIR} )
-install(FILES labplot.xml DESTINATION ${KDE_INSTALL_MIMEDIR} )
+install(FILES ${KDEFRONTEND_DIR}/splash.png ${KDEFRONTEND_DIR}/labplot.ico ${CMAKE_CURRENT_SOURCE_DIR}/../icons/application-x-labplot.ico DESTINATION ${KDE_INSTALL_DATADIR}/${PROJECT_NAME})
+install(FILES org.kde.labplot.desktop DESTINATION ${KDE_INSTALL_APPDIR})
+install(FILES labplot.xml DESTINATION ${KDE_INSTALL_MIMEDIR})
 # if(${ECM_VERSION} VERSION_GREATER "5.58.0")
-#     install(FILES labplot_themes.knsrc DESTINATION ${KDE_INSTALL_KNSRCDIR} )
-#     install(FILES labplot_datasets.knsrc DESTINATION ${KDE_INSTALL_KNSRCDIR} )
+#     install(FILES labplot_themes.knsrc DESTINATION ${KDE_INSTALL_KNSRCDIR})
+#     install(FILES labplot_datasets.knsrc DESTINATION ${KDE_INSTALL_KNSRCDIR})
 # else ()
-#     install(FILES labplot_themes.knsrc DESTINATION ${KDE_INSTALL_CONFDIR} )
-#     install(FILES labplot_datasets.knsrc DESTINATION ${KDE_INSTALL_CONFDIR} )
+#     install(FILES labplot_themes.knsrc DESTINATION ${KDE_INSTALL_CONFDIR})
+#     install(FILES labplot_datasets.knsrc DESTINATION ${KDE_INSTALL_CONFDIR})
 # endif()
-update_xdg_mimetypes(${KDE_INSTALL_MIMEDIR} )
+update_xdg_mimetypes(${KDE_INSTALL_MIMEDIR})
