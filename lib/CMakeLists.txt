@@ -220,10 +220,13 @@ add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50500)
 #endif ()
 
 # dynamic library
-add_library(labplot ${GUI_SOURCES} ${BACKEND_SOURCES} ${NSL_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${GENERATED_SOURCES} ${QTMOC_HDRS})
-generate_export_header(labplot)
+add_library(liblabplot ${GUI_SOURCES} ${BACKEND_SOURCES} ${NSL_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${GENERATED_SOURCES} ${QTMOC_HDRS})
+# name it liblabplot, not libliblabplot
+set_property(TARGET liblabplot PROPERTY OUTPUT_NAME labplot)
+# generate labplot_export.h + LABPLOT_EXPORT
+generate_export_header(liblabplot BASE_NAME labplot)
 
-target_link_libraries(labplot
+target_link_libraries(liblabplot
     KF${KF_MAJOR_VERSION}::Archive
     KF${KF_MAJOR_VERSION}::ConfigCore
     KF${KF_MAJOR_VERSION}::ConfigWidgets
@@ -244,28 +247,28 @@ target_link_libraries(labplot
     ${LIBCERF_LIBRARIES})
 
 if(Discount_FOUND)
-    target_link_libraries(labplot Discount::Lib)
+    target_link_libraries(liblabplot Discount::Lib)
 endif()
 
 if(ENABLE_LIBORIGIN)
     if(LIBORIGIN_FOUND)
-        target_link_libraries(labplot ${LIBORIGIN_LIBRARIES})
+        target_link_libraries(liblabplot ${LIBORIGIN_LIBRARIES})
     else()
-        target_link_libraries(labplot liborigin-static)
+        target_link_libraries(liblabplot liborigin-static)
     endif()
 endif()
 
 if(RECENT_CANTOR)
     # KFX::Service, KFX::Parts is optional but probably required by Cantor
-    target_link_libraries(labplot Cantor::cantorlibs KF${KF_MAJOR_VERSION}::Service KF${KF_MAJOR_VERSION}::Parts)
+    target_link_libraries(liblabplot Cantor::cantorlibs KF${KF_MAJOR_VERSION}::Service KF${KF_MAJOR_VERSION}::Parts)
 endif()
 
 if(WIN32)
-    target_link_libraries(labplot ${PSAPI})
+    target_link_libraries(liblabplot ${PSAPI})
 endif()
 
 ############## installation ################################
-install(TARGETS labplot DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS liblabplot DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/labplot_export.h  DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot COMPONENT Devel)

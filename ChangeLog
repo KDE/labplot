@@ -12,6 +12,10 @@ New features:
 Bug fixes:
 	* Fix crash selecting "cell" from function list in function dialog
 
+Internal:
+	* use name LabPlot/labplot consistenly (renamed Labplot2/labplot2)
+
+
 -----2.11.1 (16.07.2024) -----
 Bug fixes:
 	* Improve ODS support (selected platforms only)

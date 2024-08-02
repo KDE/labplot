@@ -16,18 +16,18 @@
 </refentryinfo>
 
 <refmeta>
-<refentrytitle><command>labplot2</command></refentrytitle>
+<refentrytitle><command>labplot</command></refentrytitle>
 <manvolnum>1</manvolnum>
 </refmeta>
 
 <refnamediv>
-<refname>labplot2</refname>
+<refname>labplot</refname>
 <refpurpose>an application by KDE for interactive graphing and analysis of scientific data.</refpurpose>
 </refnamediv>
 <!-- body begins here -->
 <refsynopsisdiv id='synopsis'>
 <cmdsynopsis>
-  <command>labplot2</command>
+  <command>labplot</command>
     <arg choice="opt"><replaceable>LabPlot options</replaceable></arg>
     <arg choice="opt"><replaceable>file</replaceable></arg>
 </cmdsynopsis>
@@ -42,14 +42,14 @@
     Its features include 2D and 3D data and function plotting, easy editing of plots, analysis of data and functions, support for different worksheets using MDI and LabPlot project files.
 </para>
 <para>
-    Note that LabPlot is called using <command>labplot2</command>.
+    Note that LabPlot is called using <command>labplot</command>.
 </para>
 
 </refsect1>
 
 <refsect1 id="options"><title>LabPlot options</title>
 <para>
-    For a full summary of generic options, run <userinput><command>labplot2</command> <parameter>--help</parameter></userinput>.
+    For a full summary of generic options, run <userinput><command>labplot</command> <parameter>--help</parameter></userinput>.
 </para>
 
 <variablelist>
@@ -86,10 +86,10 @@
 <simplelist>
 <member>Full user documentation is available through the KDE Help Centre.
 You can also enter the URL <ulink
-url="help:/labplot2">help:/labplot2</ulink>
+url="help:/labplot">help:/labplot</ulink>
 (either enter this <acronym>URL</acronym> into &dolphin;, or run
 <userinput><command>khelpcenter</command>
-<parameter>help:/labplot2</parameter></userinput>).</member>
+<parameter>help:/labplot</parameter></userinput>).</member>
 <member>kf5options(7)</member>
 <member>qt5options(7)</member>
 <member>There is also further information available at
@@ -99,7 +99,7 @@ url="help:/labplot2">help:/labplot2</ulink>
 
 <refsect1 id="authors"><title>Authors</title>
 <para>
-    LabPlot2 was written by
+    LabPlot was written by
 </para>
 <simplelist>
     <member>Stefan Gerlach &lt;stefan.gerlach@uni.kn&gt;,</member>

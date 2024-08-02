@@ -1,12 +1,12 @@
 {
-    "id": "org.kde.labplot2",
+    "id": "org.kde.labplot",
     "branch": "master",
     "runtime": "org.kde.Platform",
     "runtime-version": "5.15-23.08",
     "base": "io.qt.qtwebengine.BaseApp",
     "base-version": "5.15-23.08",
     "sdk": "org.kde.Sdk",
-    "command": "labplot2",
+    "command": "labplot",
     "tags": ["nightly"],
     "desktop-file-name-suffix": " (Nightly)",
     "finish-args": [

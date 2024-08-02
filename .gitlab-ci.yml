@@ -93,9 +93,6 @@ flatpak:
     - if: '$CI_COMMIT_REF_NAME == "master"'
       when: manual
       allow_failure: true
-  variables:
-    KDE_FLATPAK_MODULE_NAME: labplot2
-    KDE_FLATPAK_APP_ID: org.kde.${KDE_FLATPAK_MODULE_NAME}
 
 variables:
     QT_TEST_TIMEOUT_FUNCTION: "600"

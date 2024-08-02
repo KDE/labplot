@@ -1,5 +1,5 @@
 add_executable(CorrelationTest CorrelationTest.cpp)
 
-target_link_libraries(CorrelationTest labplot2backendlib labplot2lib labplot2test)
+target_link_libraries(CorrelationTest labplotbackendlib labplotlib labplottest)
 
 add_test(NAME CorrelationTest COMMAND CorrelationTest)

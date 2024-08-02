@@ -1,13 +1,13 @@
 function get_files
 {
-    echo labplot2.xml
+    echo labplot.xml
 }
 
 function po_for_file
 {
     case "$1" in
-       labplot2.xml)
-           echo labplot2_xml_mimetypes.po
+       labplot.xml)
+           echo labplot_xml_mimetypes.po
        ;;
     esac
 }
@@ -15,7 +15,7 @@ function po_for_file
 function tags_for_file
 {
     case "$1" in
-       labplot2.xml)
+       labplot.xml)
            echo comment
        ;;
     esac

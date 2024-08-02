@@ -1,6 +1,6 @@
 # see https://community.kde.org/Policies/CMake_Coding_Style
 cmake_minimum_required(VERSION 3.17.0 FATAL_ERROR)
-project(labplot2 VERSION 2.11.80 LANGUAGES CXX C)
+project(labplot VERSION 2.11.80 LANGUAGES CXX C)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -228,7 +228,7 @@ endif()
 
 include_directories(${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-add_definitions(-DLVERSION=\"${labplot2_VERSION}\")
+add_definitions(-DLVERSION=\"${labplot_VERSION}\")
 add_definitions(-DCXX_COMPILER=\"${CMAKE_CXX_COMPILER_ID}\ ${CMAKE_CXX_COMPILER_VERSION}\")
 add_definitions(-DCXX_COMPILER_FLAGS=\"${CMAKE_CXX_FLAGS}\")
 set(BUILD_SHARED_LIBS true)
@@ -717,7 +717,7 @@ else()
     message(STATUS "SDK build DISABLED")
 endif()
 
-install(FILES org.kde.labplot2.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
+install(FILES org.kde.labplot.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 
 # clang format
 #file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES *.cpp *.h *.c)

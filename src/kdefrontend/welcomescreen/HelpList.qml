@@ -13,12 +13,12 @@ ListView {
                 model: ListModel {
                     ListElement {
                         name: "Documentation"
-                        link: "https://docs.kde.org/?application=labplot2"
+                        link: "https://docs.kde.org/?application=labplot"
                     }
 
                     ListElement {
                         name: "FAQ"
-                        link: "https://docs.kde.org/?application=labplot2&branch=trunk5&path=faq.html"
+                        link: "https://docs.kde.org/?application=labplot&branch=trunk5&path=faq.html"
                     }
 
                     ListElement {
