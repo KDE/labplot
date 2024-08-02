@@ -304,7 +304,7 @@ void MainWin::initGUI(const QString& fileName) {
 	m_hamburgerMenu->setMenuBar(menuBar());
 #endif
 
-	setWindowIcon(QIcon::fromTheme(QLatin1String("LabPlot2"), QGuiApplication::windowIcon()));
+	setWindowIcon(QIcon::fromTheme(QLatin1String("LabPlot"), QGuiApplication::windowIcon()));
 	setAttribute(Qt::WA_DeleteOnClose);
 
 	// make the status bar of a fixed size in order to avoid height changes when placing a ProgressBar there.

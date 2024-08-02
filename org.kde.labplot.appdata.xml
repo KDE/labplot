@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component type="desktop">
-  <id>org.kde.labplot2.desktop</id>
+  <id>org.kde.labplot.desktop</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <developer_name translate="no">KDE</developer_name>
-  <launchable type="desktop-id">org.kde.labplot2.desktop</launchable>
+  <launchable type="desktop-id">org.kde.labplot.desktop</launchable>
   <name>LabPlot</name>
   <name xml:lang="ar">معمل الرسم</name>
   <name xml:lang="bs">LabPlot</name>
@@ -442,7 +442,7 @@
   </screenshots>
   <project_group>KDE</project_group>
   <provides>
-    <binary>labplot2</binary>
+    <binary>labplot</binary>
   </provides>
   <content_rating type="oars-1.1"/>
   <releases>

@@ -236,7 +236,7 @@ void ThemeHandler::showPanel() {
 // 		return;
 //
 // 	// creating upload dialog
-// 	KNS3::UploadDialog dialog("labplot2_themes.knsrc", this);
+// 	KNS3::UploadDialog dialog("labplot_themes.knsrc", this);
 // 	dialog.setUploadFile(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + '/' + "themes" + '/' + m_currentLocalTheme);
 // 	dialog.setUploadName(m_currentLocalTheme);
 // 	//dialog.setDescription(); TODO: allow the user to provide a short description for the theme to be uploaded

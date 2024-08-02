@@ -121,9 +121,9 @@ void PlotTemplateDialog::customTemplatePathChanged(const QString& path) {
 
 QString PlotTemplateDialog::defaultTemplateInstallPath() {
 	// folder where config files will be stored in object specific sub-folders:
-	// Linux    - ~/.local/share/labplot2/plot_templates/
-	// Mac      - /Library/Application Support/labplot2
-	// Windows  - C:/Users/<USER>/AppData/Roaming/labplot2/plot_templates/
+	// Linux    - ~/.local/share/labplot/plot_templates/
+	// Mac      - /Library/Application Support/labplot
+	// Windows  - C:/Users/<USER>/AppData/Roaming/labplot/plot_templates/
 	return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1String("/plot_templates/");
 }
 
