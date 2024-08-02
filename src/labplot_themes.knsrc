@@ -2,6 +2,6 @@
 ProvidersUrl=https://autoconfig.kde.org/ocs/providers.xml
 Categories=Labplot Themes
 UploadCategories=Labplot Themes
-TargetDir=labplot/themes
+TargetDir=labplot2/themes
 Uncompress=never
 CustomName=true

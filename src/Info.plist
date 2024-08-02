@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>labplot</string>
+	<string>labplot2</string>
 	<key>CFBundleGetInfoString</key>
 	<string>${MACOSX_BUNDLE_INFO_STRING}</string>
 	<key>CFBundleIconFile</key>
@@ -47,7 +47,7 @@
 			</array>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
-				<string>application/x-labplot</string>
+				<string>application/x-labplot2</string>
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>

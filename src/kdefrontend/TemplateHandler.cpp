@@ -109,9 +109,9 @@ TemplateHandler::TemplateHandler(QWidget* parent, const QString& className, bool
 	m_className = className.toLower();
 
 	// folder where config files will be stored in object specific sub-folders:
-	// Linux    - ~/.local/share/labplot/templates/
+	// Linux    - ~/.local/share/labplot2/templates/
 	// Mac      - //TODO
-	// Windows  - C:/Users/<USER>/AppData/Roaming/labplot/templates/
+	// Windows  - C:/Users/<USER>/AppData/Roaming/labplot2/templates/
 	m_dirName = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1String("/templates/");
 
 	this->retranslateUi();

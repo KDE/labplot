@@ -104,7 +104,7 @@ void ThemesWidget::applyClicked(const QModelIndex& index) {
 
 // TODO: activate this later
 //  void ThemesWidget::downloadThemes() {
-//  	KNS3::DownloadDialog dialog("labplot_themes.knsrc", this);
+//  	KNS3::DownloadDialog dialog("labplot2_themes.knsrc", this);
 //  	dialog.exec();
 //  	foreach (const KNS3::Entry& e, dialog.changedEntries()) {
 //  	    kDebug() << "Changed Entry: " << e.name();

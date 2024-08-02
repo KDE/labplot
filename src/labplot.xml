@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
-  <mime-type type="application/x-labplot">
+  <mime-type type="application/x-labplot2">
     <sub-class-of type="application/gzip"/>
     <comment>LabPlot Project File</comment>
     <comment xml:lang="ar">ملف مشروع معمل رسم</comment>
