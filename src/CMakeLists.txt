@@ -725,22 +725,22 @@ endif()
 # icons for the executable and project files on Windows and Mac OS X
 
 set(LABPLOT_ICONS
-    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/16-apps-labplot2.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/32-apps-labplot2.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/48-apps-labplot2.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/64-apps-labplot2.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/128-apps-labplot2.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/256-apps-labplot2.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/512-apps-labplot2.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/16-apps-labplot.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/32-apps-labplot.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/48-apps-labplot.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/64-apps-labplot.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/128-apps-labplot.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/256-apps-labplot.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/512-apps-labplot.png
 )
 set(LML_ICONS
-    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/16-application-x-labplot2.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/32-application-x-labplot2.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/48-application-x-labplot2.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/64-application-x-labplot2.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/128-application-x-labplot2.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/256-application-x-labplot2.png
-    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/512-application-x-labplot2.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/16-application-x-labplot.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/32-application-x-labplot.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/48-application-x-labplot.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/64-application-x-labplot.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/128-application-x-labplot.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/256-application-x-labplot.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/../icons/512-application-x-labplot.png
 )
 
 add_subdirectory(3rdparty)
@@ -781,7 +781,7 @@ endif()
 
 ############## installation ################################
 install(TARGETS labplot ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
-install(FILES ${KDEFRONTEND_DIR}/splash.png ${KDEFRONTEND_DIR}/labplot2.ico ${CMAKE_CURRENT_SOURCE_DIR}/../icons/application-x-labplot2.ico DESTINATION ${KDE_INSTALL_DATADIR}/${PROJECT_NAME} )
+install(FILES ${KDEFRONTEND_DIR}/splash.png ${KDEFRONTEND_DIR}/labplot.ico ${CMAKE_CURRENT_SOURCE_DIR}/../icons/application-x-labplot.ico DESTINATION ${KDE_INSTALL_DATADIR}/${PROJECT_NAME} )
 install(FILES org.kde.labplot2.desktop DESTINATION ${KDE_INSTALL_APPDIR} )
 install(FILES labplot2.xml DESTINATION ${KDE_INSTALL_MIMEDIR} )
 # if(${ECM_VERSION} VERSION_GREATER "5.58.0")
