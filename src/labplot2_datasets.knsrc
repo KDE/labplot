@@ -2,6 +2,6 @@
 ProvidersUrl=https://autoconfig.kde.org/ocs/providers.xml
 Categories=Labplot_Datasets
 UploadCategories=Labplot_Datasets
-TargetDir=labplot2/datasets
+TargetDir=labplot/datasets
 Uncompress=never
 CustomName=true
