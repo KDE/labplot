@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-31 01:47+0000\n"
-"PO-Revision-Date: 2024-07-25 15:58+0200\n"
+"PO-Revision-Date: 2024-08-01 16:35+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -3546,16 +3546,14 @@ msgid "Simple Moving Range"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:243
-#, fuzzy, kde-format
-#| msgid "Period"
+#, kde-format
 msgid "Period sample"
-msgstr "Periodo"
+msgstr "Exemplo de Periodo"
 
 #: src/backend/gsl/functions.cpp:244
-#, fuzzy, kde-format
-#| msgid "Random"
+#, kde-format
 msgid "Random sample"
-msgstr "Casual"
+msgstr "Exemplo Casual"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:248
@@ -8512,22 +8510,19 @@ msgid "%1: add Fourier filter curve"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1972
-#, fuzzy, kde-format
-#| msgid "%1: differentiate '%2'"
+#, kde-format
 msgid "%1: add function of '%2'"
-msgstr "%1: Differentiar '%2'"
+msgstr "%1: adde function de '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1973
-#, fuzzy, kde-format
-#| msgid "Function"
+#, kde-format
 msgid "Function of '%1'"
-msgstr "Function"
+msgstr "Function de '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1976
-#, fuzzy, kde-format
-#| msgid "%1, active curve \"%2\""
+#, kde-format
 msgid "%1: add function curve"
-msgstr "%1, curva active \"%2\""
+msgstr "%1: adde curva de unction "
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2025
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1363
@@ -9385,7 +9380,7 @@ msgstr "PARAMETROS"
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #, kde-format
 msgid "Uncertainty"
-msgstr ""
+msgstr "Uncertainty (incertitude)"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
 #, kde-format
@@ -9521,10 +9516,9 @@ msgid "%1: set transform options and perform the Fourier transform"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:80
-#, fuzzy, kde-format
-#| msgid "%1: set font"
+#, kde-format
 msgid "%1: set function"
-msgstr "%1: assigna font"
+msgstr "%1: assigna function"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:304
 #, kde-format
@@ -14242,12 +14236,12 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #, kde-format
 msgid "Uncertainty, %"
-msgstr ""
+msgstr "Uncertainty (incertitude), %"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #, kde-format
 msgid "t statistic"
-msgstr ""
+msgstr "Statistica t"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:368
 #, kde-format
@@ -14519,12 +14513,10 @@ msgid "Properties: XY-Equation"
 msgstr ""
 
 #: src/kdefrontend/GuiObserver.cpp:291
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Folder"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Function Curve"
-msgstr "Proprietates: Dossier "
+msgstr "Proprietates: Curva de Function"
 
 #: src/kdefrontend/GuiObserver.cpp:296
 #, kde-format
@@ -21140,7 +21132,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:472
 #, kde-format
 msgid "Fit results"
-msgstr ""
+msgstr "Adapta Resultatos"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lDegree)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:514
