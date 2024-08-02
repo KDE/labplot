@@ -1,5 +1,5 @@
 add_executable(ConvolutionTest ConvolutionTest.cpp)
 
-target_link_libraries(ConvolutionTest labplot2backendlib labplot2lib labplot2test)
+target_link_libraries(ConvolutionTest labplotbackendlib labplotlib labplottest)
 
 add_test(NAME ConvolutionTest COMMAND ConvolutionTest)
