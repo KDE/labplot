@@ -352,6 +352,9 @@ void CantorWorksheet::fillColumnContextMenu(QMenu* menu, Column* column) {
 #ifndef SDK
 	if (m_view)
 		m_view->fillColumnContextMenu(menu, column);
+#else
+	Q_UNUSED(menu)
+	Q_UNUSED(column)
 #endif
 }
 
