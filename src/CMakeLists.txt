@@ -170,7 +170,7 @@ if(APPLE)
 endif()
 
 set(GUI_QRC
-    ${KDEFRONTEND_DIR}/labplot2.qrc
+    ${KDEFRONTEND_DIR}/labplot.qrc
 )
 
 set(UI_SOURCES
