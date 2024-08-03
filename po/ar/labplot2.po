@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-31 01:47+0000\n"
+"POT-Creation-Date: 2024-08-03 01:48+0000\n"
 "PO-Revision-Date: 2022-09-05 22:28+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -15571,7 +15571,7 @@ msgstr ""
 #: src/kdefrontend/LabPlot.cpp:115
 #, kde-format
 msgctxt "@info:credit"
-msgid "Porting LabPlot2 to KF5 and Integration with Cantor"
+msgid "Porting LabPlot to KF5 and Integration with Cantor"
 msgstr ""
 
 #: src/kdefrontend/LabPlot.cpp:118
@@ -15613,122 +15613,122 @@ msgid "Failed to Open"
 msgstr "فشل الفتح"
 
 #. i18n: ectx: ToolBar (main_toolbar)
-#: src/kdefrontend/labplot2ui.rc:6
+#: src/kdefrontend/labplotui.rc:6
 #, fuzzy, kde-format
 #| msgid "Project"
 msgid "Project Toolbar"
 msgstr "المشروع"
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
-#: src/kdefrontend/labplot2ui.rc:24
+#: src/kdefrontend/labplotui.rc:24
 #, fuzzy, kde-format
 #| msgid "Worksheet"
 msgid "Worksheet Toolbar"
 msgstr "ورقة العمل"
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
-#: src/kdefrontend/labplot2ui.rc:28
+#: src/kdefrontend/labplotui.rc:28
 #, kde-format
 msgid "Data Extractor Toolbar"
 msgstr ""
 
 #. i18n: ectx: ToolBar (spreadsheet_toolbar)
-#: src/kdefrontend/labplot2ui.rc:32
+#: src/kdefrontend/labplotui.rc:32
 #, fuzzy, kde-format
 #| msgid "Spreadsheet"
 msgid "Spreadsheet Toolbar"
 msgstr "ورقة عمل"
 
 #. i18n: ectx: ToolBar (notebook_toolbar)
-#: src/kdefrontend/labplot2ui.rc:36
+#: src/kdefrontend/labplotui.rc:36
 #, fuzzy, kde-format
 #| msgid "Notebook"
 msgid "Notebook Toolbar"
 msgstr "دفتر"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
-#: src/kdefrontend/labplot2ui.rc:40
+#: src/kdefrontend/labplotui.rc:40
 #, fuzzy, kde-format
 #| msgid "Plot data"
 msgid "Plot Area Toolbar"
 msgstr "ارسم البيانات"
 
 #. i18n: ectx: Menu (file)
-#: src/kdefrontend/labplot2ui.rc:44
+#: src/kdefrontend/labplotui.rc:44
 #, kde-format
 msgid "&File"
 msgstr "&ملف"
 
 #. i18n: ectx: Menu (new)
-#: src/kdefrontend/labplot2ui.rc:46
+#: src/kdefrontend/labplotui.rc:46
 #, kde-format
 msgid "&Add New"
 msgstr "أضف جديد"
 
 #. i18n: ectx: Menu (new_notebook)
 #. i18n: ectx: Menu (notebook)
-#: src/kdefrontend/labplot2ui.rc:56 src/kdefrontend/labplot2ui.rc:84
+#: src/kdefrontend/labplotui.rc:56 src/kdefrontend/labplotui.rc:84
 #, kde-format
 msgid "&Notebook"
 msgstr "&دفتر"
 
 #. i18n: ectx: Menu (import)
-#: src/kdefrontend/labplot2ui.rc:63
+#: src/kdefrontend/labplotui.rc:63
 #, fuzzy, kde-format
 #| msgid "Import Data"
 msgid "Import"
 msgstr "استورد بيانات"
 
 #. i18n: ectx: Menu (edit)
-#: src/kdefrontend/labplot2ui.rc:76
+#: src/kdefrontend/labplotui.rc:76
 #, kde-format
 msgid "&Edit"
 msgstr "ت&حرير"
 
 #. i18n: ectx: Menu (spreadsheet)
-#: src/kdefrontend/labplot2ui.rc:81
+#: src/kdefrontend/labplotui.rc:81
 #, kde-format
 msgid "&Spreadsheet"
 msgstr "ورقة &عمل"
 
 #. i18n: ectx: Menu (matrix)
-#: src/kdefrontend/labplot2ui.rc:82
+#: src/kdefrontend/labplotui.rc:82
 #, kde-format
 msgid "&Matrix"
 msgstr "&مصفوفة"
 
 #. i18n: ectx: Menu (worksheet)
-#: src/kdefrontend/labplot2ui.rc:83
+#: src/kdefrontend/labplotui.rc:83
 #, kde-format
 msgid "&Worksheet"
 msgstr "&ورقة العمل"
 
 #. i18n: ectx: Menu (datapicker)
-#: src/kdefrontend/labplot2ui.rc:85
+#: src/kdefrontend/labplotui.rc:85
 #, kde-format
 msgid "&Data Extractor"
 msgstr ""
 
 #. i18n: ectx: Menu (drawing)
-#: src/kdefrontend/labplot2ui.rc:86
+#: src/kdefrontend/labplotui.rc:86
 #, kde-format
 msgid "&Drawing"
 msgstr "&رسم"
 
 #. i18n: ectx: Menu (script)
-#: src/kdefrontend/labplot2ui.rc:87
+#: src/kdefrontend/labplotui.rc:87
 #, kde-format
 msgid "&Script"
 msgstr "س&كربت"
 
 #. i18n: ectx: Menu (tools)
-#: src/kdefrontend/labplot2ui.rc:88
+#: src/kdefrontend/labplotui.rc:88
 #, kde-format
 msgid "&Tools"
 msgstr "أ&دوات"
 
 #. i18n: ectx: Menu (windows)
-#: src/kdefrontend/labplot2ui.rc:92
+#: src/kdefrontend/labplotui.rc:92
 #, kde-format
 msgid "&Windows"
 msgstr "ال&نوافذ"

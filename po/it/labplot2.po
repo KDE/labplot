@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-31 01:47+0000\n"
+"POT-Creation-Date: 2024-08-03 01:48+0000\n"
 "PO-Revision-Date: 2024-07-26 14:53+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -15569,9 +15569,11 @@ msgid "Garvit Khatri"
 msgstr "Garvit Khatri"
 
 #: src/kdefrontend/LabPlot.cpp:115
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@info:credit"
+#| msgid "Porting LabPlot2 to KF5 and Integration with Cantor"
 msgctxt "@info:credit"
-msgid "Porting LabPlot2 to KF5 and Integration with Cantor"
+msgid "Porting LabPlot to KF5 and Integration with Cantor"
 msgstr "Conversione di Labplot a KF5 ed integrazione con Cantor"
 
 #: src/kdefrontend/LabPlot.cpp:118
@@ -15615,116 +15617,116 @@ msgid "Failed to Open"
 msgstr "Impossibile aprire"
 
 #. i18n: ectx: ToolBar (main_toolbar)
-#: src/kdefrontend/labplot2ui.rc:6
+#: src/kdefrontend/labplotui.rc:6
 #, kde-format
 msgid "Project Toolbar"
 msgstr "Barra degli strumenti dei progetti"
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
-#: src/kdefrontend/labplot2ui.rc:24
+#: src/kdefrontend/labplotui.rc:24
 #, kde-format
 msgid "Worksheet Toolbar"
 msgstr "Barra degli strumenti dei fogli di lavoro"
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
-#: src/kdefrontend/labplot2ui.rc:28
+#: src/kdefrontend/labplotui.rc:28
 #, kde-format
 msgid "Data Extractor Toolbar"
 msgstr "Barra degli strumenti dell'estrattore di dati"
 
 #. i18n: ectx: ToolBar (spreadsheet_toolbar)
-#: src/kdefrontend/labplot2ui.rc:32
+#: src/kdefrontend/labplotui.rc:32
 #, kde-format
 msgid "Spreadsheet Toolbar"
 msgstr "Barra degli strumenti dei fogli elettronici"
 
 #. i18n: ectx: ToolBar (notebook_toolbar)
-#: src/kdefrontend/labplot2ui.rc:36
+#: src/kdefrontend/labplotui.rc:36
 #, kde-format
 msgid "Notebook Toolbar"
 msgstr "Barra degli strumenti Notebook"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
-#: src/kdefrontend/labplot2ui.rc:40
+#: src/kdefrontend/labplotui.rc:40
 #, kde-format
 msgid "Plot Area Toolbar"
 msgstr "Barra degli strumenti dell'area del grafico"
 
 #. i18n: ectx: Menu (file)
-#: src/kdefrontend/labplot2ui.rc:44
+#: src/kdefrontend/labplotui.rc:44
 #, kde-format
 msgid "&File"
 msgstr "&File"
 
 #. i18n: ectx: Menu (new)
-#: src/kdefrontend/labplot2ui.rc:46
+#: src/kdefrontend/labplotui.rc:46
 #, kde-format
 msgid "&Add New"
 msgstr "&Aggiungi nuovo"
 
 #. i18n: ectx: Menu (new_notebook)
 #. i18n: ectx: Menu (notebook)
-#: src/kdefrontend/labplot2ui.rc:56 src/kdefrontend/labplot2ui.rc:84
+#: src/kdefrontend/labplotui.rc:56 src/kdefrontend/labplotui.rc:84
 #, kde-format
 msgid "&Notebook"
 msgstr "&Notebook"
 
 #. i18n: ectx: Menu (import)
-#: src/kdefrontend/labplot2ui.rc:63
+#: src/kdefrontend/labplotui.rc:63
 #, kde-format
 msgid "Import"
 msgstr "Importa"
 
 #. i18n: ectx: Menu (edit)
-#: src/kdefrontend/labplot2ui.rc:76
+#: src/kdefrontend/labplotui.rc:76
 #, kde-format
 msgid "&Edit"
 msgstr "&Modifica"
 
 #. i18n: ectx: Menu (spreadsheet)
-#: src/kdefrontend/labplot2ui.rc:81
+#: src/kdefrontend/labplotui.rc:81
 #, kde-format
 msgid "&Spreadsheet"
 msgstr "&Foglio elettronico"
 
 #. i18n: ectx: Menu (matrix)
-#: src/kdefrontend/labplot2ui.rc:82
+#: src/kdefrontend/labplotui.rc:82
 #, kde-format
 msgid "&Matrix"
 msgstr "&Matrice"
 
 #. i18n: ectx: Menu (worksheet)
-#: src/kdefrontend/labplot2ui.rc:83
+#: src/kdefrontend/labplotui.rc:83
 #, kde-format
 msgid "&Worksheet"
 msgstr "Foglio di &lavoro"
 
 #. i18n: ectx: Menu (datapicker)
-#: src/kdefrontend/labplot2ui.rc:85
+#: src/kdefrontend/labplotui.rc:85
 #, kde-format
 msgid "&Data Extractor"
 msgstr "Estrattore di &dati"
 
 #. i18n: ectx: Menu (drawing)
-#: src/kdefrontend/labplot2ui.rc:86
+#: src/kdefrontend/labplotui.rc:86
 #, kde-format
 msgid "&Drawing"
 msgstr "&Disegna"
 
 #. i18n: ectx: Menu (script)
-#: src/kdefrontend/labplot2ui.rc:87
+#: src/kdefrontend/labplotui.rc:87
 #, kde-format
 msgid "&Script"
 msgstr "&Script"
 
 #. i18n: ectx: Menu (tools)
-#: src/kdefrontend/labplot2ui.rc:88
+#: src/kdefrontend/labplotui.rc:88
 #, kde-format
 msgid "&Tools"
 msgstr "S&trumenti"
 
 #. i18n: ectx: Menu (windows)
-#: src/kdefrontend/labplot2ui.rc:92
+#: src/kdefrontend/labplotui.rc:92
 #, kde-format
 msgid "&Windows"
 msgstr "&Finestre"
