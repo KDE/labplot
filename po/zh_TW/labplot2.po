@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-31 01:47+0000\n"
+"POT-Creation-Date: 2024-08-03 01:48+0000\n"
 "PO-Revision-Date: 2024-04-17 05:07+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -15693,7 +15693,7 @@ msgstr "矩陣"
 #: src/kdefrontend/LabPlot.cpp:115
 #, kde-format
 msgctxt "@info:credit"
-msgid "Porting LabPlot2 to KF5 and Integration with Cantor"
+msgid "Porting LabPlot to KF5 and Integration with Cantor"
 msgstr ""
 
 #: src/kdefrontend/LabPlot.cpp:118
@@ -15736,51 +15736,51 @@ msgid "Failed to Open"
 msgstr "開啟失敗"
 
 #. i18n: ectx: ToolBar (main_toolbar)
-#: src/kdefrontend/labplot2ui.rc:6
+#: src/kdefrontend/labplotui.rc:6
 #, fuzzy, kde-format
 msgid "Project Toolbar"
 msgstr "專案屬性"
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
-#: src/kdefrontend/labplot2ui.rc:24
+#: src/kdefrontend/labplotui.rc:24
 #, fuzzy, kde-format
 #| msgid "Worksheet"
 msgid "Worksheet Toolbar"
 msgstr "工作表"
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
-#: src/kdefrontend/labplot2ui.rc:28
+#: src/kdefrontend/labplotui.rc:28
 #, fuzzy, kde-format
 msgid "Data Extractor Toolbar"
 msgstr "資料格式"
 
 #. i18n: ectx: ToolBar (spreadsheet_toolbar)
-#: src/kdefrontend/labplot2ui.rc:32
+#: src/kdefrontend/labplotui.rc:32
 #, fuzzy, kde-format
 #| msgid "Spreadsheet"
 msgid "Spreadsheet Toolbar"
 msgstr "試算表"
 
 #. i18n: ectx: ToolBar (notebook_toolbar)
-#: src/kdefrontend/labplot2ui.rc:36
+#: src/kdefrontend/labplotui.rc:36
 #, fuzzy, kde-format
 msgid "Notebook Toolbar"
 msgstr "備忘"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
-#: src/kdefrontend/labplot2ui.rc:40
+#: src/kdefrontend/labplotui.rc:40
 #, fuzzy, kde-format
 msgid "Plot Area Toolbar"
 msgstr "從"
 
 #. i18n: ectx: Menu (file)
-#: src/kdefrontend/labplot2ui.rc:44
+#: src/kdefrontend/labplotui.rc:44
 #, fuzzy, kde-format
 msgid "&File"
 msgstr "檔案(&F)"
 
 #. i18n: ectx: Menu (new)
-#: src/kdefrontend/labplot2ui.rc:46
+#: src/kdefrontend/labplotui.rc:46
 #, fuzzy, kde-format
 #| msgid "Add new"
 msgid "&Add New"
@@ -15788,67 +15788,67 @@ msgstr "新增"
 
 #. i18n: ectx: Menu (new_notebook)
 #. i18n: ectx: Menu (notebook)
-#: src/kdefrontend/labplot2ui.rc:56 src/kdefrontend/labplot2ui.rc:84
+#: src/kdefrontend/labplotui.rc:56 src/kdefrontend/labplotui.rc:84
 #, fuzzy, kde-format
 msgid "&Notebook"
 msgstr "備忘"
 
 #. i18n: ectx: Menu (import)
-#: src/kdefrontend/labplot2ui.rc:63
+#: src/kdefrontend/labplotui.rc:63
 #, fuzzy, kde-format
 msgid "Import"
 msgstr "匯入"
 
 #. i18n: ectx: Menu (edit)
-#: src/kdefrontend/labplot2ui.rc:76
+#: src/kdefrontend/labplotui.rc:76
 #, kde-format
 msgid "&Edit"
 msgstr "編輯(&E)"
 
 #. i18n: ectx: Menu (spreadsheet)
-#: src/kdefrontend/labplot2ui.rc:81
+#: src/kdefrontend/labplotui.rc:81
 #, kde-format
 msgid "&Spreadsheet"
 msgstr "試算表(&S)"
 
 #. i18n: ectx: Menu (matrix)
-#: src/kdefrontend/labplot2ui.rc:82
+#: src/kdefrontend/labplotui.rc:82
 #, fuzzy, kde-format
 msgid "&Matrix"
 msgstr "矩陣"
 
 #. i18n: ectx: Menu (worksheet)
-#: src/kdefrontend/labplot2ui.rc:83
+#: src/kdefrontend/labplotui.rc:83
 #, kde-format
 msgid "&Worksheet"
 msgstr "工作表(&W)"
 
 #. i18n: ectx: Menu (datapicker)
-#: src/kdefrontend/labplot2ui.rc:85
+#: src/kdefrontend/labplotui.rc:85
 #, fuzzy, kde-format
 msgid "&Data Extractor"
 msgstr "資料格式"
 
 #. i18n: ectx: Menu (drawing)
-#: src/kdefrontend/labplot2ui.rc:86
+#: src/kdefrontend/labplotui.rc:86
 #, fuzzy, kde-format
 msgid "&Drawing"
 msgstr "繪圖"
 
 #. i18n: ectx: Menu (script)
-#: src/kdefrontend/labplot2ui.rc:87
+#: src/kdefrontend/labplotui.rc:87
 #, fuzzy, kde-format
 msgid "&Script"
 msgstr "文稿"
 
 #. i18n: ectx: Menu (tools)
-#: src/kdefrontend/labplot2ui.rc:88
+#: src/kdefrontend/labplotui.rc:88
 #, kde-format
 msgid "&Tools"
 msgstr ""
 
 #. i18n: ectx: Menu (windows)
-#: src/kdefrontend/labplot2ui.rc:92
+#: src/kdefrontend/labplotui.rc:92
 #, kde-format
 msgid "&Windows"
 msgstr "視窗(&W)"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-31 01:47+0000\n"
+"POT-Creation-Date: 2024-08-03 01:48+0000\n"
 "PO-Revision-Date: 2017-04-20 14:04+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -15950,7 +15950,7 @@ msgstr ""
 #: src/kdefrontend/LabPlot.cpp:115
 #, kde-format
 msgctxt "@info:credit"
-msgid "Porting LabPlot2 to KF5 and Integration with Cantor"
+msgid "Porting LabPlot to KF5 and Integration with Cantor"
 msgstr ""
 
 #: src/kdefrontend/LabPlot.cpp:118
@@ -15993,123 +15993,123 @@ msgid "Failed to Open"
 msgstr ""
 
 #. i18n: ectx: ToolBar (main_toolbar)
-#: src/kdefrontend/labplot2ui.rc:6
+#: src/kdefrontend/labplotui.rc:6
 #, fuzzy, kde-format
 #| msgid "Project Explorer"
 msgid "Project Toolbar"
 msgstr "Εξερευνητής Έργων"
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
-#: src/kdefrontend/labplot2ui.rc:24
+#: src/kdefrontend/labplotui.rc:24
 #, fuzzy, kde-format
 #| msgid "&Worksheet"
 msgid "Worksheet Toolbar"
 msgstr "&Φύλλο εργασίας"
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
-#: src/kdefrontend/labplot2ui.rc:28
+#: src/kdefrontend/labplotui.rc:28
 #, fuzzy, kde-format
 #| msgid "Max. iterations"
 msgid "Data Extractor Toolbar"
 msgstr "Max. επαναλήψεις"
 
 #. i18n: ectx: ToolBar (spreadsheet_toolbar)
-#: src/kdefrontend/labplot2ui.rc:32
+#: src/kdefrontend/labplotui.rc:32
 #, fuzzy, kde-format
 #| msgid "&Spreadsheet"
 msgid "Spreadsheet Toolbar"
 msgstr "Λογι&στικό φύλλο"
 
 #. i18n: ectx: ToolBar (notebook_toolbar)
-#: src/kdefrontend/labplot2ui.rc:36
+#: src/kdefrontend/labplotui.rc:36
 #, fuzzy, kde-format
 #| msgid "Workbook"
 msgid "Notebook Toolbar"
 msgstr "Βιβλίο εργασίας"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
-#: src/kdefrontend/labplot2ui.rc:40
+#: src/kdefrontend/labplotui.rc:40
 #, fuzzy, kde-format
 #| msgid "From"
 msgid "Plot Area Toolbar"
 msgstr "Από"
 
 #. i18n: ectx: Menu (file)
-#: src/kdefrontend/labplot2ui.rc:44
+#: src/kdefrontend/labplotui.rc:44
 #, kde-format
 msgid "&File"
 msgstr "&Αρχείο"
 
 #. i18n: ectx: Menu (new)
-#: src/kdefrontend/labplot2ui.rc:46
+#: src/kdefrontend/labplotui.rc:46
 #, kde-format
 msgid "&Add New"
 msgstr ""
 
 #. i18n: ectx: Menu (new_notebook)
 #. i18n: ectx: Menu (notebook)
-#: src/kdefrontend/labplot2ui.rc:56 src/kdefrontend/labplot2ui.rc:84
+#: src/kdefrontend/labplotui.rc:56 src/kdefrontend/labplotui.rc:84
 #, kde-format
 msgid "&Notebook"
 msgstr ""
 
 #. i18n: ectx: Menu (import)
-#: src/kdefrontend/labplot2ui.rc:63
+#: src/kdefrontend/labplotui.rc:63
 #, kde-format
 msgid "Import"
 msgstr "Εισαγωγή"
 
 #. i18n: ectx: Menu (edit)
-#: src/kdefrontend/labplot2ui.rc:76
+#: src/kdefrontend/labplotui.rc:76
 #, kde-format
 msgid "&Edit"
 msgstr "&Επεξεργασία"
 
 #. i18n: ectx: Menu (spreadsheet)
-#: src/kdefrontend/labplot2ui.rc:81
+#: src/kdefrontend/labplotui.rc:81
 #, kde-format
 msgid "&Spreadsheet"
 msgstr "Λογι&στικό φύλλο"
 
 #. i18n: ectx: Menu (matrix)
-#: src/kdefrontend/labplot2ui.rc:82
+#: src/kdefrontend/labplotui.rc:82
 #, kde-format
 msgid "&Matrix"
 msgstr "&Μήτρα"
 
 #. i18n: ectx: Menu (worksheet)
-#: src/kdefrontend/labplot2ui.rc:83
+#: src/kdefrontend/labplotui.rc:83
 #, kde-format
 msgid "&Worksheet"
 msgstr "&Φύλλο εργασίας"
 
 #. i18n: ectx: Menu (datapicker)
-#: src/kdefrontend/labplot2ui.rc:85
+#: src/kdefrontend/labplotui.rc:85
 #, fuzzy, kde-format
 #| msgid "Max. iterations"
 msgid "&Data Extractor"
 msgstr "Max. επαναλήψεις"
 
 #. i18n: ectx: Menu (drawing)
-#: src/kdefrontend/labplot2ui.rc:86
+#: src/kdefrontend/labplotui.rc:86
 #, kde-format
 msgid "&Drawing"
 msgstr ""
 
 #. i18n: ectx: Menu (script)
-#: src/kdefrontend/labplot2ui.rc:87
+#: src/kdefrontend/labplotui.rc:87
 #, kde-format
 msgid "&Script"
 msgstr "&Σενάριο"
 
 #. i18n: ectx: Menu (tools)
-#: src/kdefrontend/labplot2ui.rc:88
+#: src/kdefrontend/labplotui.rc:88
 #, kde-format
 msgid "&Tools"
 msgstr "&Εργαλεία"
 
 #. i18n: ectx: Menu (windows)
-#: src/kdefrontend/labplot2ui.rc:92
+#: src/kdefrontend/labplotui.rc:92
 #, kde-format
 msgid "&Windows"
 msgstr "&Παράθυρα"
