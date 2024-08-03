@@ -575,6 +575,8 @@ target_compile_definitions(labplotlib PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 target_link_libraries(labplotnsllib
     Qt${QT_MAJOR_VERSION}::Core
     Qt${QT_MAJOR_VERSION}::Widgets    # QApplication
+    ${GSL_LIBRARIES}
+    ${GSL_CBLAS_LIBRARIES}
 )
 target_link_libraries(labplotbackendlib
     Qt${QT_MAJOR_VERSION}::Core
