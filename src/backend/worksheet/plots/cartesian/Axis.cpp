@@ -1428,11 +1428,35 @@ bool AxisPrivate::calculateTickHorizontal(Axis::TicksDirection tickDirection,
 		anchorPointOut.setY(yAnchorPos);
 		// for yDirection == -1 start is above end
 		if (anchorPointOut.y() >= centerValue) { // below
-			startPointOut = anchorPointOut + QPointF(0, (tickDirection & Axis::ticksIn) ? rangeDirection * ticksLength : 0);
-			endPointOut = anchorPointOut + QPointF(0, (tickDirection & Axis::ticksOut) ? -rangeDirection * ticksLength : 0);
+			switch (tickDirection) {
+			case Axis::ticksIn: {
+				if (colorBar)
+					anchorPointOut.setY(anchorPointOut.y() + colorBarWidth);
+				startPointOut = anchorPointOut + QPointF(0, rangeDirection * ticksLength);
+				endPointOut = anchorPointOut + QPointF(0, 0);
+				break;
+			}
+			case Axis::ticksOut: {
+				startPointOut = anchorPointOut + QPointF(0, 0);
+				endPointOut = anchorPointOut + QPointF(0, -rangeDirection * ticksLength);
+				break;
+			}
+			}
 		} else { // above
-			startPointOut = anchorPointOut + QPointF(0, (tickDirection & Axis::ticksOut) ? rangeDirection * ticksLength : 0);
-			endPointOut = anchorPointOut + QPointF(0, (tickDirection & Axis::ticksIn) ? -rangeDirection * ticksLength : 0);
+			switch (tickDirection) {
+			case Axis::ticksIn: {
+				startPointOut = anchorPointOut + QPointF(0, 0);
+				endPointOut = anchorPointOut + QPointF(0, -rangeDirection * ticksLength);
+				break;
+			}
+			case Axis::ticksOut: {
+				if (colorBar)
+					anchorPointOut.setY(anchorPointOut.y() - colorBarWidth);
+				startPointOut = anchorPointOut + QPointF(0, rangeDirection * ticksLength);
+				endPointOut = anchorPointOut + QPointF(0, 0);
+				break;
+			}
+			}
 		}
 	}
 	return valid;
@@ -1452,12 +1476,36 @@ bool AxisPrivate::calculateTickVertical(Axis::TicksDirection tickDirection,
 		anchorPointOut.setX(xAnchorPos);
 		anchorPointOut.setY(yTickPos);
 		// for xDirection == 1 start is right of end
-		if (anchorPointOut.x() < centerValue) { // left
-			startPointOut = anchorPointOut + QPointF((tickDirection & Axis::ticksIn) ? rangeDirection * ticksLength : 0, 0);
-			endPointOut = anchorPointOut + QPointF((tickDirection & Axis::ticksOut) ? -rangeDirection * ticksLength : 0, 0);
+		if (anchorPointOut.x() < centerValue) { // left		
+			switch (tickDirection) {
+			case Axis::ticksIn: {
+				if (colorBar)
+					anchorPointOut.setX(anchorPointOut.x() + colorBarWidth);
+				startPointOut = anchorPointOut + QPointF(rangeDirection * ticksLength, 0);
+				endPointOut = anchorPointOut + QPointF(0, 0);
+				break;
+			}
+			case Axis::ticksOut: {
+				startPointOut = anchorPointOut + QPointF(0, 0);
+				endPointOut = anchorPointOut + QPointF(-rangeDirection * ticksLength, 0);
+				break;
+			}
+			}
 		} else { // right
-			startPointOut = anchorPointOut + QPointF((tickDirection & Axis::ticksOut) ? rangeDirection * ticksLength : 0, 0);
-			endPointOut = anchorPointOut + QPointF((tickDirection & Axis::ticksIn) ? -rangeDirection * ticksLength : 0, 0);
+			switch (tickDirection) {
+			case Axis::ticksIn: {
+				startPointOut = anchorPointOut + QPointF(0, 0);
+				endPointOut = anchorPointOut + QPointF(-rangeDirection * ticksLength, 0);
+				break;
+			}
+			case Axis::ticksOut: {
+				if (colorBar)
+					anchorPointOut.setX(anchorPointOut.x() + colorBarWidth);
+				startPointOut = anchorPointOut + QPointF(rangeDirection * ticksLength, 0);
+				endPointOut = anchorPointOut + QPointF(0, 0);
+				break;
+			}
+			}
 		}
 	}
 	return valid;
