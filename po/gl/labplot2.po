@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-16 03:05+0000\n"
-"PO-Revision-Date: 2024-07-08 18:17+0200\n"
+"PO-Revision-Date: 2024-08-03 12:41+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -9452,7 +9452,7 @@ msgstr "Non se indicou o modelo de axuste!"
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:85
 #, kde-format
 msgid "%1: set filter options and perform the Fourier filter"
-msgstr "%1: definir as opcións de filtro e aplicar o filtro de Fourier"
+msgstr "%1: definir as opcións de filtro e aplicar o filtro de Fourier."
 
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:175
 #: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:125
@@ -9466,7 +9466,7 @@ msgstr "Non hai puntos de datos dispoñíbeis."
 msgid "%1: set transform options and perform the Fourier transform"
 msgstr ""
 "%1: definir as opcións de transformación e aplicar a transformación de "
-"Fourier"
+"Fourier."
 
 #: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:72
 #, kde-format
