@@ -177,6 +177,10 @@ public:
 	BASIC_D_ACCESSOR_DECL(qreal, labelsOpacity, LabelsOpacity)
 	static int maxNumberMajorTicksCustomColumn();
 
+	BASIC_D_ACCESSOR_DECL(double, colorBarWidth, ColorBarWidth)
+	BASIC_D_ACCESSOR_DECL(bool, colorBar, ColorBar)
+	POINTER_D_ACCESSOR_DECL(const Heatmap, heatmap, Heatmap)
+
 	Line* majorGridLine() const;
 	Line* minorGridLine() const;
 

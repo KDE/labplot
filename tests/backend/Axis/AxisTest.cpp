@@ -2525,4 +2525,53 @@ void AxisTest::autoScaleLog102Vertical() {
 	COMPARE_STRING_VECTORS(yAxis->tickLabelStrings(), expectedStrings);
 }
 
+void AxisTest::colorBar() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+
+	auto* xAxis = static_cast<Axis*>(axes.at(0));
+	QCOMPARE(xAxis->colorBar(), false);
+
+	int counter = 0;
+	connect(xAxis, &Axis::trackRetransformCalled, [this, &counter](bool suppress) {
+		QCOMPARE(suppress, false);
+		counter++;
+	});
+	QCOMPARE(xAxis->setColorBar(true));
+	QCOMPARE(counter, 1);
+
+	// Nothing happens, because no Heatmap is set
+	auto* hm = new Heatmap("Heatmap");
+	format.min = 0;
+	format.max = 100;
+	hm->setFormat(format);
+	xAxis->setHeatmap(hm);
+	QCOMPARE(counter, 2);
+
+	{
+		const auto v = xAxis->tickLabelStrings();
+		QStringList expectedStrings{
+			QStringLiteral("0"),
+			QStringLiteral("50"),
+			QStringLiteral("100"),
+		};
+		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
+	}
+
+	// Check that color bar is drawn
+}
+
 QTEST_MAIN(AxisTest)
