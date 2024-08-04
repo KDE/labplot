@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-03 01:48+0000\n"
-"PO-Revision-Date: 2024-07-05 14:15+0100\n"
+"PO-Revision-Date: 2024-08-03 13:16+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
 "Language: en_GB\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.05.0\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -720,10 +720,9 @@ msgid "%1: set author"
 msgstr "%1: set author"
 
 #: src/backend/core/Project.cpp:307
-#, fuzzy, kde-format
-#| msgid "%1: save dock states changed"
+#, kde-format
 msgid "%1: save dock state changed"
-msgstr "%1: save dock states changed"
+msgstr "%1: save dock state changed"
 
 #: src/backend/core/Project.cpp:314
 #, kde-format
@@ -1889,70 +1888,60 @@ msgid "Variables with rank greater than 2 not supported yet."
 msgstr "Variables with rank greater than 2 not supported yet."
 
 #: src/backend/datasources/filters/McapFilter.cpp:196
-#, fuzzy, kde-format
-#| msgid "Invalid DBC file."
+#, kde-format
 msgid "Valid MCAP file"
-msgstr "Invalid DBC file."
+msgstr "Valid MCAP file"
 
 #: src/backend/datasources/filters/McapFilter.cpp:201
-#, fuzzy, kde-format
-#| msgid "Message type:"
+#, kde-format
 msgid "Message count: "
-msgstr "Message type:"
+msgstr "Message count: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:203
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Schema count: "
-msgstr "Sheet count: %1"
+msgstr "Schema count: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:205
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Channel count: "
-msgstr "Sheet count: %1"
+msgstr "Channel count: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:207
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Attachment count: "
-msgstr "Sheet count: %1"
+msgstr "Attachment count: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:209
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Metadata count: "
-msgstr "Sheet count: %1"
+msgstr "Metadata count: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:211
-#, fuzzy, kde-format
-#| msgid "Start Time:"
+#, kde-format
 msgid "Message Start Time: "
-msgstr "Start Time:"
+msgstr "Message Start Time: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:213
-#, fuzzy, kde-format
-#| msgid "End Time: %1"
+#, kde-format
 msgid "Message End Time: "
-msgstr "End Time: %1"
+msgstr "Message End Time: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:215
-#, fuzzy, kde-format
-#| msgid "No templates found."
+#, kde-format
 msgid "No Statistics found."
-msgstr "No templates found."
+msgstr "No Statistics found."
 
 #: src/backend/datasources/filters/McapFilter.cpp:469
 #: src/backend/datasources/filters/McapFilter.cpp:962
-#, fuzzy, kde-format
-#| msgid "Failed to read the file."
+#, kde-format
 msgid "Failed to read the file. Reason: %1"
-msgstr "Failed to read the file."
+msgstr "Failed to read the file. Reason: %1"
 
 #: src/backend/datasources/filters/McapFilter.cpp:477
 #, kde-format
 msgid "No JSON encoded topics found."
-msgstr ""
+msgstr "No JSON encoded topics found."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:213
 #, kde-format
@@ -3552,16 +3541,14 @@ msgid "Simple Moving Range"
 msgstr "Simple Moving Range"
 
 #: src/backend/gsl/functions.cpp:243
-#, fuzzy, kde-format
-#| msgid "Periodically"
+#, kde-format
 msgid "Period sample"
-msgstr "Periodically"
+msgstr "Period sample"
 
 #: src/backend/gsl/functions.cpp:244
-#, fuzzy, kde-format
-#| msgid "Random Values"
+#, kde-format
 msgid "Random sample"
-msgstr "Random Values"
+msgstr "Random sample"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:248
@@ -8016,7 +8003,7 @@ msgstr "xy-curve from a Formula"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:431
 #, kde-format
 msgid "Add a new xy-curve that is defined via a mathematical expression."
-msgstr ""
+msgstr "Add a new xy-curve that is defined via a mathematical expression."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:433
 #, kde-format
@@ -8024,6 +8011,8 @@ msgid ""
 "Add a new xy-curve that is defined as a function of other xy-curves (scaled, "
 "shifted, etc.)"
 msgstr ""
+"Add a new xy-curve that is defined as a function of other xy-curves (scaled, "
+"shifted, etc.)"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:436
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:492
@@ -8552,22 +8541,19 @@ msgid "%1: add Fourier filter curve"
 msgstr "%1: add Fourier filter curve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1972
-#, fuzzy, kde-format
-#| msgid "Reduction of '%1'"
+#, kde-format
 msgid "%1: add function of '%2'"
-msgstr "Reduction of '%1'"
+msgstr "%1: add function of '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1973
-#, fuzzy, kde-format
-#| msgid "Reduction of '%1'"
+#, kde-format
 msgid "Function of '%1'"
-msgstr "Reduction of '%1'"
+msgstr "Function of '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1976
-#, fuzzy, kde-format
-#| msgid "%1: add fit curve"
+#, kde-format
 msgid "%1: add function curve"
-msgstr "%1: add fit curve"
+msgstr "%1: add function curve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2025
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1363
@@ -9565,53 +9551,49 @@ msgid "%1: set transform options and perform the Fourier transform"
 msgstr "%1: set transform options and perform the Fourier transform"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:80
-#, fuzzy, kde-format
-#| msgid "%1: set equation"
+#, kde-format
 msgid "%1: set function"
-msgstr "%1: set equation"
+msgstr "%1: set function"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:304
 #, kde-format
 msgid "First curve not valid"
-msgstr ""
+msgstr "First curve not valid"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:306
 #, kde-format
 msgid "xColumn of first curve not valid"
-msgstr ""
+msgstr "xColumn of first curve not valid"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:308
 #, kde-format
 msgid "yColumn of first curve not valid"
-msgstr ""
+msgstr "yColumn of first curve not valid"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:310
 #, kde-format
 msgid "Number of x and y values do not match for the first curve"
-msgstr ""
+msgstr "Number of x and y values do not match for the first curve"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:323
 #, kde-format
 msgid "Curve '%1' not valid"
-msgstr ""
+msgstr "Curve '%1' not valid"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:325
-#, fuzzy, kde-format
-#| msgid "column mode invalid"
+#, kde-format
 msgid "xColumn of curve '%1' not valid"
-msgstr "column mode invalid"
+msgstr "xColumn of curve '%1' not valid"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:327
-#, fuzzy, kde-format
-#| msgid "column mode invalid"
+#, kde-format
 msgid "yColumn of curve '%1' not valid"
-msgstr "column mode invalid"
+msgstr "yColumn of curve '%1' not valid"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:329
-#, fuzzy, kde-format
-#| msgid "Number of x and y data points must be equal."
+#, kde-format
 msgid "Number of x and y values do not match for curve '%1'"
-msgstr "Number of x and y data points must be equal."
+msgstr "Number of x and y values do not match for curve '%1'"
 
 #: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:72
 #, kde-format
@@ -12279,10 +12261,9 @@ msgid "MATLAB MAT file"
 msgstr "MATLAB MAT file"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:136
-#, fuzzy, kde-format
-#| msgid "Copy Data"
+#, kde-format
 msgid "MCAP Data"
-msgstr "Copy Data"
+msgstr "MCAP Data"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:145
 #, kde-format
@@ -12632,33 +12613,30 @@ msgid "Connecting to '%1:%2' timed out."
 msgstr "Connecting to '%1:%2' timed out."
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetDialog.cpp:37
-#, fuzzy, kde-format
-#| msgid "Filter Options"
+#, kde-format
 msgid "Toggle Options"
-msgstr "Filter Options"
+msgstr "Toggle Options"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetDialog.cpp:57
-#, fuzzy, kde-format
-#| msgid "Import from File"
+#, kde-format
 msgctxt "@title:window"
 msgid "Import from kaggle.com"
-msgstr "Import from File"
+msgstr "Import from kaggle.com"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:41
-#, fuzzy, kde-format
-#| msgid "Use previous value"
+#, kde-format
 msgid "Show previous datasets"
-msgstr "Use previous value"
+msgstr "Show previous datasets"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:42
 #, kde-format
 msgid "Show next datasets"
-msgstr ""
+msgstr "Show next datasets"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:43
 #, kde-format
 msgid "Download the current dataset for preview and import"
-msgstr ""
+msgstr "Download the current dataset for preview and import"
 
 #. i18n: ectx: property (text), widget (QLabel, lCategories)
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:130
@@ -12668,28 +12646,24 @@ msgid "Dataset:"
 msgstr "Dataset:"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:241
-#, fuzzy, kde-format
-#| msgid "Last read: %1"
+#, kde-format
 msgid "Could not read %1"
-msgstr "Last read: %1"
+msgstr "Could not read %1"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:249
-#, fuzzy, kde-format
-#| msgid "could not open device"
+#, kde-format
 msgid "Could not open %1"
-msgstr "could not open device"
+msgstr "Could not open %1"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:266
-#, fuzzy, kde-format
-#| msgid "Couldn't connect"
+#, kde-format
 msgid "Could not create %1"
-msgstr "Could not connect"
+msgstr "Could not create %1"
 
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:295
-#, fuzzy, kde-format
-#| msgid "Couldn't save the file '%1'."
+#, kde-format
 msgid "Could not find .csv files in %1"
-msgstr "Could not save the file '%1'."
+msgstr "Could not find .csv files in %1"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:84
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:519
@@ -14153,15 +14127,12 @@ msgid "%1 matrices: template \"%2\" loaded"
 msgstr "%1 matrices: template \"%2\" loaded"
 
 #: src/kdefrontend/dockwidgets/ProjectDock.cpp:28
-#, fuzzy, kde-format
-#| msgid ""
-#| "If checked, the state (position and geometry) of the docks is saved in "
-#| "the project file and restored on project load."
+#, kde-format
 msgid ""
 "If checked, the state of the default application docks is saved in the "
 "project file and restored on project load."
 msgstr ""
-"If ticked, the state (position and geometry) of the docks is saved in the "
+"If ticked, the state of the default application docks is saved in the "
 "project file and restored on project load."
 
 #: src/kdefrontend/dockwidgets/ProjectDock.cpp:33
@@ -14616,18 +14587,14 @@ msgid "Fourier transformation status: %1"
 msgstr "Fourier transformation status: %1"
 
 #: src/kdefrontend/dockwidgets/XYFunctionCurveDock.cpp:130
-#, fuzzy, kde-format
-#| msgid ""
-#| "The column \"%1\"\n"
-#| "is not available anymore. It will be automatically used once it is "
-#| "created again."
+#, kde-format
 msgid ""
 "The curve \"%1\"\n"
 "is not available anymore. It will be automatically used once it is created "
 "again."
 msgstr ""
-"The column \"%1\"\n"
-"is not available any more. It will be automatically used once it is created "
+"The curve \"%1\"\n"
+"is not available anymore. It will be automatically used once it is created "
 "again."
 
 #: src/kdefrontend/dockwidgets/XYFunctionCurveDock.cpp:185
@@ -14787,12 +14754,10 @@ msgid "Properties: XY-Equation"
 msgstr "Properties: XY-Equation"
 
 #: src/kdefrontend/GuiObserver.cpp:291
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Datapicker Curve"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Function Curve"
-msgstr "Properties: Datapicker Curve"
+msgstr "Properties: Function Curve"
 
 #: src/kdefrontend/GuiObserver.cpp:296
 #, kde-format
@@ -15437,12 +15402,10 @@ msgid "Garvit Khatri"
 msgstr "Garvit Khatri"
 
 #: src/kdefrontend/LabPlot.cpp:115
-#, fuzzy, kde-format
-#| msgctxt "@info:credit"
-#| msgid "Porting LabPlot2 to KF5 and Integration with Cantor"
+#, kde-format
 msgctxt "@info:credit"
 msgid "Porting LabPlot to KF5 and Integration with Cantor"
-msgstr "Porting LabPlot2 to KF5 and Integration with Cantor"
+msgstr "Porting LabPlot to KF5 and Integration with Cantor"
 
 #: src/kdefrontend/LabPlot.cpp:118
 #, kde-format
@@ -15696,16 +15659,14 @@ msgid "Import data from a regular file"
 msgstr "Import data from a regular file"
 
 #: src/kdefrontend/MainWin.cpp:683
-#, fuzzy, kde-format
-#| msgid "From File..."
+#, kde-format
 msgid "From kaggle.com..."
-msgstr "From File..."
+msgstr "From kaggle.com..."
 
 #: src/kdefrontend/MainWin.cpp:684
-#, fuzzy, kde-format
-#| msgid "Import data from a regular file"
+#, kde-format
 msgid "Import data from kaggle.com"
-msgstr "Import data from a regular file"
+msgstr "Import data from kaggle.com"
 
 #: src/kdefrontend/MainWin.cpp:689
 #, kde-format
@@ -15718,10 +15679,9 @@ msgid "From Dataset Collection..."
 msgstr "From Dataset Collection..."
 
 #: src/kdefrontend/MainWin.cpp:694
-#, fuzzy, kde-format
-#| msgid "Imports data from an online dataset"
+#, kde-format
 msgid "Import data from an online dataset"
-msgstr "Imports data from an online dataset"
+msgstr "Import data from an online dataset"
 
 #: src/kdefrontend/MainWin.cpp:698
 #, kde-format
@@ -15906,8 +15866,7 @@ msgid "Worksheet Preview"
 msgstr "Worksheet Preview"
 
 #: src/kdefrontend/MainWin.cpp:1420
-#, fuzzy, kde-format
-#| msgid "Content"
+#, kde-format
 msgctxt "@title:window"
 msgid "Content"
 msgstr "Content"
@@ -16042,7 +16001,7 @@ msgstr "You can find the shared project at: <a href=\"%1\">%1</a>"
 #: src/kdefrontend/MainWin.cpp:2666
 #, kde-format
 msgid "Running Kaggle CLI tool failed"
-msgstr ""
+msgstr "Running Kaggle CLI tool failed"
 
 #: src/kdefrontend/MainWin.cpp:2667
 #, kde-format
@@ -16050,6 +16009,8 @@ msgid ""
 "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
 "\">\"How to Use Kaggle\"</a> to setup the Kaggle CLI tool."
 msgstr ""
+"Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
+"\">\"How to Use Kaggle\"</a> to setup the Kaggle CLI tool."
 
 #: src/kdefrontend/MainWin.cpp:2730
 #, kde-format
@@ -16201,7 +16162,7 @@ msgstr "Clear downloaded files"
 #: src/kdefrontend/SettingsDatasetsPage.cpp:34
 #, kde-format
 msgid "How to Use Kaggle"
-msgstr ""
+msgstr "How to Use Kaggle"
 
 #: src/kdefrontend/SettingsDatasetsPage.cpp:86
 #, kde-format
@@ -17019,10 +16980,9 @@ msgid "Excel 2007+ (*.xlsx)"
 msgstr "Excel 2007+ (*.xlsx)"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:415
-#, fuzzy, kde-format
-#| msgid "DBC file (*.dbc)"
+#, kde-format
 msgid "MCAP Files (*.mcap)"
-msgstr "DBC file (*.dbc)"
+msgstr "MCAP Files (*.mcap)"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:418
 #, kde-format
@@ -22332,13 +22292,13 @@ msgstr "Cache:"
 #: src/kdefrontend/ui/settingsdatasetspage.ui:39
 #, kde-format
 msgid "Kaggle"
-msgstr ""
+msgstr "Kaggle"
 
 #. i18n: ectx: property (text), widget (QLabel, lKagglePath)
 #: src/kdefrontend/ui/settingsdatasetspage.ui:46
 #, kde-format
 msgid "CLI Path:"
-msgstr ""
+msgstr "CLI Path:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/kdefrontend/ui/settingsdatasetspage.ui:66
@@ -22739,29 +22699,27 @@ msgstr "Export vertical header:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, compressionGroup)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:192
-#, fuzzy, kde-format
-#| msgid "Compression: %1"
+#, kde-format
 msgid "Compression"
-msgstr "Compression: %1"
+msgstr "Compression"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbLZ4)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:205
 #, kde-format
 msgid "LZ4"
-msgstr ""
+msgstr "LZ4"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbZSTD)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:212
 #, kde-format
 msgid "ZSTD"
-msgstr ""
+msgstr "ZSTD"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:222
-#, fuzzy, kde-format
-#| msgid "Compression Level: %1"
+#, kde-format
 msgid "Compression Level"
-msgstr "Compression Level: %1"
+msgstr "Compression Level"
 
 #. i18n: ectx: property (text), widget (QLabel, lExportToFITS)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:232

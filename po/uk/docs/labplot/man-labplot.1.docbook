@@ -29,7 +29,7 @@
 <refmeta>
 <refentrytitle
 ><command
->labplot2</command
+>labplot</command
 ></refentrytitle>
 <manvolnum
 >1</manvolnum>
@@ -37,7 +37,7 @@
 
 <refnamediv>
 <refname
->labplot2</refname>
+>labplot</refname>
 <refpurpose
 >програма KDE для інтерактивної побудови графіків та аналізу наукових даних.</refpurpose>
 </refnamediv>
@@ -45,7 +45,7 @@
 <refsynopsisdiv id='synopsis'>
 <cmdsynopsis
 ><command
->labplot2</command
+>labplot</command
 > <arg choice="opt"
 ><replaceable
 >параметри LabPlot</replaceable
@@ -67,7 +67,7 @@
 >Серед можливостей програми креслення плоских і просторових графіків за даними або функціональними залежностями, просте редагування графіків, аналіз даних і функцій, підтримка різних робочих аркушів з використанням багатодокументного інтерфейсу та збереження даних у файлах проєктів LabPlot. </para>
 <para
 >Зауважте, що LabPlot запускається командою <command
->labplot2</command
+>labplot</command
 >. </para>
 
 </refsect1>
@@ -78,7 +78,7 @@
 <para
 >Щоб ознайомитися із повним списком загальних параметрів, віддайте команду <userinput
 ><command
->labplot2</command
+>labplot</command
 > <parameter
 >--help</parameter
 ></userinput
@@ -141,13 +141,13 @@
 >Також прочитайте</title>
 <simplelist>
 <member
->Із повною документацією для користувачів можна ознайомитися у Центрі довідки KDE. Ви також можете ввести адресу <ulink url="help:/labplot2"
->help:/labplot2</ulink
+>Із повною документацією для користувачів можна ознайомитися у Центрі довідки KDE. Ви також можете ввести адресу <ulink url="help:/labplot"
+>help:/labplot</ulink
 > (безпосередньо у поле адреси &dolphin; або за допомогою рядка команди <userinput
 ><command
 >khelpcenter</command
 > <parameter
->help:/labplot2</parameter
+>help:/labplot</parameter
 ></userinput
 >).</member>
 <member
@@ -165,7 +165,7 @@
 ><title
 >Автори</title>
 <para
->Авторами LabPlot2 є </para>
+>Авторами LabPlot є </para>
 <simplelist>
     <member
 >Stefan Gerlach &lt;stefan.gerlach@uni.kn&gt;,</member>
