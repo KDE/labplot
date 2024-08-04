@@ -41,6 +41,10 @@ private Q_SLOTS:
 	void columnLabelValuesMaxValues();
 
 	void customTextLabels();
+	void colorBar();
+
+	void tickDrawingPosition(); // Check that ticks are positioned correctly without colorbar
+	void tickDrawingPositionColorBar(); // Check that ticks are positioned correctly with colorbar
 };
 
 #endif // AXISTEST_H

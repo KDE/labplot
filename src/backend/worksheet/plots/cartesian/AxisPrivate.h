@@ -22,6 +22,7 @@ class QGraphicsSceneHoverEvent;
 class AxisGrid;
 class Line;
 class TextLabel;
+class Heatmap;
 
 class AxisPrivate : public WorksheetElementPrivate {
 public:
@@ -31,6 +32,7 @@ public:
 	void retransformRange();
 	void retransformLine();
 	void retransformArrow();
+	void retransformColorBar();
 	void retransformTicks();
 	void retransformTickLabelPositions();
 	void retransformTickLabelStrings();
@@ -113,6 +115,11 @@ public:
 	qreal labelsOpacity{1.0};
 	QString labelsPrefix;
 	QString labelsSuffix;
+
+	bool colorBar{false};
+	Heatmap* heatmap{nullptr};
+	QString heatmapPath;
+	double colorBarWidth{0};
 
 	// Grid
 	AxisGrid* gridItem{nullptr};
