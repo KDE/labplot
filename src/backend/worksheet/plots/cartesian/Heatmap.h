@@ -97,6 +97,9 @@ public:
 
 	using Private = HeatmapPrivate;
 
+protected:
+	void handleAspectUpdated(const QString& path, const AbstractAspect* aspect);
+
 Q_SIGNALS:
 	void valueDrawn(double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value);
 	void xDataChanged();
