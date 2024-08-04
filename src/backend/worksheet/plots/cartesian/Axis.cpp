@@ -523,6 +523,7 @@ BASIC_SHARED_D_READER_IMPL(Axis, QColor, labelsBackgroundColor, labelsBackground
 BASIC_SHARED_D_READER_IMPL(Axis, QString, labelsPrefix, labelsPrefix)
 BASIC_SHARED_D_READER_IMPL(Axis, QString, labelsSuffix, labelsSuffix)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, labelsOpacity, labelsOpacity)
+BASIC_SHARED_D_READER_IMPL(Axis, bool, colorBar, colorBar)
 
 int Axis::maxNumberMajorTicksCustomColumn() {
 	return _maxNumberMajorTicksCustomColumn;
@@ -987,6 +988,7 @@ void Axis::setLabelsTextColumn(const AbstractColumn* column) {
 	if (column != d->labelsTextColumn) {
 		exec(new AxisSetLabelsTextColumnCmd(d, column, ki18n("%1: set labels text column")));
 
+		// TODO: move into Undocommand!
 		if (column) {
 			connect(column, &AbstractColumn::dataChanged, this, &Axis::retransformTicks);
 			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &Axis::retransformTicks);
@@ -1255,9 +1257,27 @@ void AxisPrivate::retransformLine() {
 		}
 	}
 
-	for (const auto& line : qAsConst(lines)) {
-		linePath.moveTo(line.p1());
-		linePath.lineTo(line.p2());
+	if (colorBar && !lines.isEmpty()) {
+		// Instead of a line, a colorbar is shown
+		assert(lines.size() == 1);
+		const auto line = lines.at(0);
+		switch (orientation) {
+		case Axis::Orientation::Horizontal: {
+			QRectF rect(line.p1().x(), line.p1().y(), line.p2().x() - line.p1().x(), colorBarWidth);
+			linePath.addRect(rect);
+			break;
+		}
+		case Axis::Orientation::Vertical: {
+			QRectF rect(line.p1().x(), line.p1().y(), colorBarWidth, line.p2().y() - line.p1().y());
+			linePath.addRect(rect);
+			break;
+		}
+		}
+	} else {
+		for (const auto& line : qAsConst(lines)) {
+			linePath.moveTo(line.p1());
+			linePath.lineTo(line.p2());
+		}
 	}
 
 	if (linePath.isEmpty()) {
@@ -1267,7 +1287,11 @@ void AxisPrivate::retransformLine() {
 	} else {
 		retransformArrow();
 		retransformTicks();
+		retransformColorBar();
 	}
+}
+
+void AxisPrivate::retransformColorBar() {
 }
 
 void AxisPrivate::retransformArrow() {
