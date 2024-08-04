@@ -230,6 +230,7 @@ private:
 	QAction* addCurveAction{nullptr};
 	QAction* addEquationCurveAction{nullptr};
 	QAction* addFunctionCurveAction{nullptr};
+	QAction* addHeatmapAction{nullptr};
 
 	// statistical plots
 	QAction* addHistogramAction{nullptr};

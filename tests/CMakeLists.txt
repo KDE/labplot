@@ -12,7 +12,7 @@ if(KUserFeedback_FOUND AND QT_MAJOR_VERSION EQUAL 6)
 endif()
 target_compile_definitions(labplottest PUBLIC ${LABPLOT_COMPILE_DEFINITIONS})
 
-add_subdirectory(analysis)
+#add_subdirectory(analysis)
 add_subdirectory(backend)
 add_subdirectory(cartesianplot)
 add_subdirectory(import_export)

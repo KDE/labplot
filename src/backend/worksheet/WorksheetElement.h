@@ -18,6 +18,8 @@
 
 #define D(obj_class) auto* d = static_cast<obj_class##Private*>(d_ptr)
 
+class Matrix;
+class AbstractColumn;
 class CartesianPlot;
 class CartesianCoordinateSystem;
 class WorksheetElementPrivate;
@@ -61,6 +63,11 @@ public:
 
 	typedef WorksheetElementPrivate Private;
 
+	enum class CoordinateSystemSource {Plot, Custom};
+
+	BASIC_D_ACCESSOR_DEL(CoordinateSystemSource, coordinateSystemSource, CoordinateSystemSource)
+	void setCoordinateSystem(const CartesianCoordinateSystem*, bool undo = true);
+	const CartesianCoordinateSystem* coordinateSystem() const;
 	CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position)
 	bool setCoordinateBindingEnabled(bool);
 	bool coordinateBindingEnabled() const;
@@ -104,6 +111,10 @@ public:
 
 	static QPainterPath shapeFromPath(const QPainterPath&, const QPen&);
 	virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize = false) = 0;
+	// Path is explicit specified, so it must not be recalculated every time when iterating over multiple
+	// WorksheetElements. The path is the same as column->path()
+	virtual void handleColumnAdded(const QString& path, const AbstractColumn*);
+	virtual void handleMatrixAdded(const QString& path, const Matrix*);
 
 	CartesianPlot* plot() const; // used in the element docks
 	int coordinateSystemIndex() const {
@@ -166,6 +177,8 @@ Q_SIGNALS:
 	void coordinateSystemIndexChanged(int) const;
 	void changed();
 	void hoveredChanged(bool) const;
+	void coordinateSystemChanged(const CartesianCoordinateSystem*) const;
+	void coordinateSystemSourceChanged(CoordinateSystemSource) const;
 
 	void objectPositionChanged(); // Position changed, independend of logical or scene, bot are triggering this
 
