@@ -111,10 +111,6 @@ public:
 
 	static QPainterPath shapeFromPath(const QPainterPath&, const QPen&);
 	virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize = false) = 0;
-	// Path is explicit specified, so it must not be recalculated every time when iterating over multiple
-	// WorksheetElements. The path is the same as column->path()
-	virtual void handleColumnAdded(const QString& path, const AbstractColumn*);
-	virtual void handleMatrixAdded(const QString& path, const Matrix*);
 
 	CartesianPlot* plot() const; // used in the element docks
 	int coordinateSystemIndex() const {

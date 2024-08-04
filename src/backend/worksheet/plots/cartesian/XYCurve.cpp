@@ -329,7 +329,6 @@ bool XYCurve::hasData() const {
 	return (d->xColumn != nullptr || d->yColumn != nullptr);
 }
 
-<<<<<<< refs/remotes/origin/master
 bool XYCurve::usingColumn(const Column* column) const {
 	Q_D(const XYCurve);
 	return (d->xColumn == column || d->yColumn == column
@@ -398,14 +397,14 @@ QColor XYCurve::color() const {
 	else if (d->symbol->style() != Symbol::Style::NoSymbols)
 		return d->symbol->pen().color();
 	return QColor();
-=======
+}
+
 int XYCurve::dataCount(Dimension dim) const {
 	Q_D(const XYCurve);
 	if (!hasData())
 		return -1; // No valid data
 
 	return column(dim)->rowCount();
->>>>>>> single heatmap commit
 }
 
 // ##############################################################################
