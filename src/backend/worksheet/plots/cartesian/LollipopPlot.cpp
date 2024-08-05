@@ -383,6 +383,11 @@ Symbol* LollipopPlotPrivate::addSymbol(const KConfigGroup& group) {
 		Q_EMIT q->appearanceChanged();
 	});
 
+	q->connect(symbol, &Symbol::updatePixmapRequested, [=] {
+		updatePixmap();
+		Q_EMIT q->appearanceChanged();
+	});
+
 	symbols << symbol;
 
 	return symbol;
