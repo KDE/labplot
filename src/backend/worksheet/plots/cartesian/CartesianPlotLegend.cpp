@@ -648,23 +648,8 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			// curve's symbol
 			const auto* symbol = curve->symbol();
 			if (symbol->style() != Symbol::Style::NoSymbols) {
-				painter->setOpacity(symbol->opacity());
-				painter->setBrush(symbol->brush());
-				painter->setPen(symbol->pen());
-
-				auto path = WorksheetElement::shapeFromPath(Symbol::stylePath(symbol->style()), symbol->pen());
-				QTransform trafo;
-				trafo.scale(symbol->size(), symbol->size());
-				path = trafo.map(path);
-
-				if (symbol->rotationAngle() != 0) {
-					trafo.reset();
-					trafo.rotate(symbol->rotationAngle());
-					path = trafo.map(path);
-				}
-
 				painter->translate(QPointF(lineSymbolWidth / 2, h / 2));
-				painter->drawPath(path);
+				symbol->draw(painter, QPointF(0., 0.));
 				painter->translate(-QPointF(lineSymbolWidth / 2, h / 2));
 			}
 
@@ -742,6 +727,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			for (auto* column : columns) {
 				if (!column)
 					continue;
+
 				// draw the bar
 				auto* background = barPlot->backgroundAt(index);
 				painter->setOpacity(background->opacity());
@@ -780,23 +766,8 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				// draw the symbol
 				const auto* symbol = lollipopPlot->symbolAt(index);
 				if (symbol->style() != Symbol::Style::NoSymbols) {
-					painter->setOpacity(symbol->opacity());
-					painter->setBrush(symbol->brush());
-					painter->setPen(symbol->pen());
-
-					auto path = WorksheetElement::shapeFromPath(Symbol::stylePath(symbol->style()), symbol->pen());
-					QTransform trafo;
-					trafo.scale(symbol->size(), symbol->size());
-					path = trafo.map(path);
-
-					if (symbol->rotationAngle() != 0) {
-						trafo.reset();
-						trafo.rotate(symbol->rotationAngle());
-						path = trafo.map(path);
-					}
-
 					painter->translate(QPointF(lineSymbolWidth / 2, h * 0.25));
-					painter->drawPath(path);
+					symbol->draw(painter, QPointF(0., 0.));
 					painter->translate(-QPointF(lineSymbolWidth / 2, h * 0.25));
 				}
 
@@ -832,23 +803,8 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			// symbol
 			const auto* symbol = qqPlot->symbol();
 			if (symbol->style() != Symbol::Style::NoSymbols) {
-				painter->setOpacity(symbol->opacity());
-				painter->setBrush(symbol->brush());
-				painter->setPen(symbol->pen());
-
-				auto path = WorksheetElement::shapeFromPath(Symbol::stylePath(symbol->style()), symbol->pen());
-				QTransform trafo;
-				trafo.scale(symbol->size(), symbol->size());
-				path = trafo.map(path);
-
-				if (symbol->rotationAngle() != 0) {
-					trafo.reset();
-					trafo.rotate(symbol->rotationAngle());
-					path = trafo.map(path);
-				}
-
 				painter->translate(QPointF(lineSymbolWidth / 2, h / 2));
-				painter->drawPath(path);
+				symbol->draw(painter, QPointF(0., 0.));
 				painter->translate(-QPointF(lineSymbolWidth / 2, h / 2));
 			}
 
