@@ -219,6 +219,8 @@ void CartesianPlot::setType(Type type) {
 	switch (type) {
 	case Type::FourAxes: {
 		// Axes
+
+		// x1
 		Axis* axis = new Axis(QLatin1String("x"), Axis::Orientation::Horizontal);
 		axis->setDefault(true);
 		axis->setSuppressRetransform(true);
@@ -228,24 +230,26 @@ void CartesianPlot::setType(Type type) {
 		axis->setMajorTicksDirection(Axis::ticksIn);
 		axis->setMinorTicksDirection(Axis::ticksIn);
 		axis->setMinorTicksNumber(1);
+		axis->minorGridLine()->setStyle(Qt::NoPen);
 		axis->setSuppressRetransform(false);
 
+		// x2
 		axis = new Axis(QLatin1String("x2"), Axis::Orientation::Horizontal);
 		axis->title()->setText(QString());
 		axis->setDefault(true);
 		axis->setSuppressRetransform(true);
-
 		addChild(axis);
 		axis->setPosition(Axis::Position::Top);
 		axis->setRange(0., 1.);
-		axis->setMajorTicksDirection(Axis::ticksIn);
-		axis->setMinorTicksDirection(Axis::ticksIn);
+		axis->setMajorTicksDirection(Axis::noTicks);
+		axis->setMinorTicksDirection(Axis::noTicks);
 		axis->setMinorTicksNumber(1);
 		axis->majorGridLine()->setStyle(Qt::NoPen);
 		axis->minorGridLine()->setStyle(Qt::NoPen);
 		axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
 		axis->setSuppressRetransform(false);
 
+		// y1
 		axis = new Axis(QLatin1String("y"), Axis::Orientation::Vertical);
 		axis->setDefault(true);
 		axis->setSuppressRetransform(true);
@@ -255,8 +259,10 @@ void CartesianPlot::setType(Type type) {
 		axis->setMajorTicksDirection(Axis::ticksIn);
 		axis->setMinorTicksDirection(Axis::ticksIn);
 		axis->setMinorTicksNumber(1);
+		axis->minorGridLine()->setStyle(Qt::NoPen);
 		axis->setSuppressRetransform(false);
 
+		// y2
 		axis = new Axis(QLatin1String("y2"), Axis::Orientation::Vertical);
 		axis->title()->setText(QString());
 		axis->setDefault(true);
@@ -264,8 +270,8 @@ void CartesianPlot::setType(Type type) {
 		addChild(axis);
 		axis->setPosition(Axis::Position::Right);
 		axis->setRange(0., 1.);
-		axis->setMajorTicksDirection(Axis::ticksIn);
-		axis->setMinorTicksDirection(Axis::ticksIn);
+		axis->setMajorTicksDirection(Axis::noTicks);
+		axis->setMinorTicksDirection(Axis::noTicks);
 		axis->setMinorTicksNumber(1);
 		axis->majorGridLine()->setStyle(Qt::NoPen);
 		axis->minorGridLine()->setStyle(Qt::NoPen);

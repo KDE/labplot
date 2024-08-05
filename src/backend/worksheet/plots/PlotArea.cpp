@@ -68,10 +68,6 @@ void PlotArea::init() {
 
 	// Border
 	PlotArea::BorderType type; // default value
-	type.setFlag(PlotArea::BorderTypeFlags::BorderLeft);
-	type.setFlag(PlotArea::BorderTypeFlags::BorderTop);
-	type.setFlag(PlotArea::BorderTypeFlags::BorderRight);
-	type.setFlag(PlotArea::BorderTypeFlags::BorderBottom);
 	d->borderType = static_cast<PlotArea::BorderType>(group.readEntry(QStringLiteral("BorderType"), static_cast<int>(type)));
 
 	d->borderLine = new Line(QStringLiteral("borderLine"));
