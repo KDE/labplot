@@ -576,7 +576,9 @@ if(ENABLE_READSTAT)
         endif()
         include_directories(${CMAKE_BINARY_DIR}/src/3rdparty/install/include)
         # in case the target is not installed yet: use source dir
-        include_directories(${CMAKE_BINARY_DIR}/src/3rdparty/readstat/src/readstat/src)
+	if(EXISTS ${CMAKE_BINARY_DIR}/src/3rdparty/readstat/src/readstat/src)
+            include_directories(${CMAKE_BINARY_DIR}/src/3rdparty/readstat/src/readstat/src)
+        endif()
     endif()
     if(READSTAT_FOUND OR BUILD_READSTAT)    # found or build
         add_definitions(-DHAVE_READSTAT)
