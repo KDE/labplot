@@ -50,7 +50,7 @@ Surface3DPlotAreaDock::Surface3DPlotAreaDock(QWidget* parent)
 	connect(ui.cbTheme, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &Surface3DPlotAreaDock::themeChanged);
 }
 
-void Surface3DPlotAreaDock::setSurfaces(const QList<Surface3DPlotArea*>& surfaces) {
+void Surface3DPlotAreaDock::setSurfaces(const QList<Surface3DPlot*>& surfaces) {
 	CONDITIONAL_LOCK_RETURN;
 	m_surfaces = surfaces;
 	m_surface = m_surfaces.first();
@@ -59,13 +59,13 @@ void Surface3DPlotAreaDock::setSurfaces(const QList<Surface3DPlotArea*>& surface
 
 	model->enablePlottableColumnsOnly(true);
 	model->enableShowPlotDesignation(true);
-	if (m_surface->dataSource() == Surface3DPlotArea::DataSource::DataSource_Spreadsheet)
+	if (m_surface->dataSource() == Surface3DPlot::DataSource::DataSource_Spreadsheet)
 		model->setSelectableAspects({AspectType::Column});
 
 	ui.cbXColumn->setModel(model);
 	ui.cbYColumn->setModel(model);
 	ui.cbZColumn->setModel(model);
-	if (m_surface->dataSource() == Surface3DPlotArea::DataSource::DataSource_Matrix)
+	if (m_surface->dataSource() == Surface3DPlot::DataSource::DataSource_Matrix)
 		model->setSelectableAspects({AspectType::Matrix});
 
 	ui.cbMatrix->setModel(model);
@@ -94,20 +94,20 @@ void Surface3DPlotAreaDock::setSurfaces(const QList<Surface3DPlotArea*>& surface
 	ui.cbTheme->setCurrentIndex(static_cast<int>(m_surface->theme()));
 	ui.kcbColor->setColor(Qt::green);
 
-	connect(m_surface, &Surface3DPlotArea::drawModeChanged, this, &Surface3DPlotAreaDock::surfaceDrawModeChanged);
-	connect(m_surface, &Surface3DPlotArea::sourceTypeChanged, this, &Surface3DPlotAreaDock::surfaceSourceTypeChanged);
-	connect(m_surface, &Surface3DPlotArea::flatShadingChanged, this, &Surface3DPlotAreaDock::surfaceFlatShadingChanged);
-	connect(m_surface, &Surface3DPlotArea::shadowQualityChanged, this, &Surface3DPlotAreaDock::surfaceShadowsQualityChanged);
-	connect(m_surface, &Surface3DPlotArea::smoothChanged, this, &Surface3DPlotAreaDock::surfaceSmoothChanged);
-	connect(m_surface, &Surface3DPlotArea::zoomLevelChanged, this, &Surface3DPlotAreaDock::surfaceZoomChanged);
-	connect(m_surface, &Surface3DPlotArea::xRotationChanged, this, &Surface3DPlotAreaDock::surfaceXRotationChanged);
-	connect(m_surface, &Surface3DPlotArea::yRotationChanged, this, &Surface3DPlotAreaDock::surfaceYRotationChanged);
-	connect(m_surface, &Surface3DPlotArea::themeChanged, this, &Surface3DPlotAreaDock::surfaceThemeChanged);
-	connect(m_surface, &Surface3DPlotArea::colorChanged, this, &Surface3DPlotAreaDock::colorChanged);
-	connect(m_surface, &Surface3DPlotArea::matrixChanged, this, &Surface3DPlotAreaDock::surfaceMatrixChanged);
-	connect(m_surface, &Surface3DPlotArea::xColumnChanged, this, &Surface3DPlotAreaDock::surfaceXColumnChanged);
-	connect(m_surface, &Surface3DPlotArea::yColumnChanged, this, &Surface3DPlotAreaDock::surfaceYColumnChanged);
-	connect(m_surface, &Surface3DPlotArea::zColumnChanged, this, &Surface3DPlotAreaDock::surfaceZColumnChanged);
+	connect(m_surface, &Surface3DPlot::drawModeChanged, this, &Surface3DPlotAreaDock::surfaceDrawModeChanged);
+	connect(m_surface, &Surface3DPlot::sourceTypeChanged, this, &Surface3DPlotAreaDock::surfaceSourceTypeChanged);
+	connect(m_surface, &Surface3DPlot::flatShadingChanged, this, &Surface3DPlotAreaDock::surfaceFlatShadingChanged);
+	connect(m_surface, &Surface3DPlot::shadowQualityChanged, this, &Surface3DPlotAreaDock::surfaceShadowsQualityChanged);
+	connect(m_surface, &Surface3DPlot::smoothChanged, this, &Surface3DPlotAreaDock::surfaceSmoothChanged);
+	connect(m_surface, &Surface3DPlot::zoomLevelChanged, this, &Surface3DPlotAreaDock::surfaceZoomChanged);
+	connect(m_surface, &Surface3DPlot::xRotationChanged, this, &Surface3DPlotAreaDock::surfaceXRotationChanged);
+	connect(m_surface, &Surface3DPlot::yRotationChanged, this, &Surface3DPlotAreaDock::surfaceYRotationChanged);
+	connect(m_surface, &Surface3DPlot::themeChanged, this, &Surface3DPlotAreaDock::surfaceThemeChanged);
+	connect(m_surface, &Surface3DPlot::colorChanged, this, &Surface3DPlotAreaDock::colorChanged);
+	connect(m_surface, &Surface3DPlot::matrixChanged, this, &Surface3DPlotAreaDock::surfaceMatrixChanged);
+	connect(m_surface, &Surface3DPlot::xColumnChanged, this, &Surface3DPlotAreaDock::surfaceXColumnChanged);
+	connect(m_surface, &Surface3DPlot::yColumnChanged, this, &Surface3DPlotAreaDock::surfaceYColumnChanged);
+	connect(m_surface, &Surface3DPlot::zColumnChanged, this, &Surface3DPlotAreaDock::surfaceZColumnChanged);
 }
 
 void Surface3DPlotAreaDock::showItem(QWidget* label, QWidget* comboBox, bool pred) {
@@ -127,29 +127,29 @@ void Surface3DPlotAreaDock::showTriangleInfo(bool pred) {
 }
 
 void Surface3DPlotAreaDock::retranslateUi() {
-	ui.cbDataSourceType->insertItem(Surface3DPlotArea::DataSource_Spreadsheet, i18n("Spreadsheet"));
-	ui.cbDataSourceType->insertItem(Surface3DPlotArea::DataSource_Matrix, i18n("Matrix"));
-	ui.cbDataSourceType->insertItem(Surface3DPlotArea::DataSource_Empty, i18n("Demo"));
+	ui.cbDataSourceType->insertItem(Surface3DPlot::DataSource_Spreadsheet, i18n("Spreadsheet"));
+	ui.cbDataSourceType->insertItem(Surface3DPlot::DataSource_Matrix, i18n("Matrix"));
+	ui.cbDataSourceType->insertItem(Surface3DPlot::DataSource_Empty, i18n("Demo"));
 
-	ui.cbDrawType->insertItem(Surface3DPlotArea::DrawWireframe, i18n("Wireframe"));
-	ui.cbDrawType->insertItem(Surface3DPlotArea::DrawSurface, i18n("Surface"));
-	ui.cbDrawType->insertItem(Surface3DPlotArea::DrawWireframeSurface, i18n("Wireframe & Surface"));
+	ui.cbDrawType->insertItem(Surface3DPlot::DrawWireframe, i18n("Wireframe"));
+	ui.cbDrawType->insertItem(Surface3DPlot::DrawSurface, i18n("Surface"));
+	ui.cbDrawType->insertItem(Surface3DPlot::DrawWireframeSurface, i18n("Wireframe & Surface"));
 
-	ui.cbShadowQuality->insertItem(Surface3DPlotArea::None, i18n("None"));
-	ui.cbShadowQuality->insertItem(Surface3DPlotArea::Low, i18n("Low"));
-	ui.cbShadowQuality->insertItem(Surface3DPlotArea::Medium, i18n("Medium"));
-	ui.cbShadowQuality->insertItem(Surface3DPlotArea::High, i18n("High"));
-	ui.cbShadowQuality->insertItem(Surface3DPlotArea::SoftLow, i18n("Soft Low"));
-	ui.cbShadowQuality->insertItem(Surface3DPlotArea::SoftMedium, i18n("Soft Medium"));
-	ui.cbShadowQuality->insertItem(Surface3DPlotArea::SoftHigh, i18n("Soft High"));
+	ui.cbShadowQuality->insertItem(Surface3DPlot::None, i18n("None"));
+	ui.cbShadowQuality->insertItem(Surface3DPlot::Low, i18n("Low"));
+	ui.cbShadowQuality->insertItem(Surface3DPlot::Medium, i18n("Medium"));
+	ui.cbShadowQuality->insertItem(Surface3DPlot::High, i18n("High"));
+	ui.cbShadowQuality->insertItem(Surface3DPlot::SoftLow, i18n("Soft Low"));
+	ui.cbShadowQuality->insertItem(Surface3DPlot::SoftMedium, i18n("Soft Medium"));
+	ui.cbShadowQuality->insertItem(Surface3DPlot::SoftHigh, i18n("Soft High"));
 
-	ui.cbTheme->insertItem(Surface3DPlotArea::Theme::Qt, i18n("Qt"));
-	ui.cbTheme->insertItem(Surface3DPlotArea::Theme::PrimaryColors, i18n("Primary Colors"));
-	ui.cbTheme->insertItem(Surface3DPlotArea::Theme::StoneMoss, i18n("Stone Moss"));
-	ui.cbTheme->insertItem(Surface3DPlotArea::Theme::ArmyBlue, i18n("Army Blue"));
-	ui.cbTheme->insertItem(Surface3DPlotArea::Theme::Retro, i18n("Retro"));
-	ui.cbTheme->insertItem(Surface3DPlotArea::Theme::Ebony, i18n("Ebony"));
-	ui.cbTheme->insertItem(Surface3DPlotArea::Theme::Isabelle, i18n("Isabelle"));
+	ui.cbTheme->insertItem(Surface3DPlot::Theme::Qt, i18n("Qt"));
+	ui.cbTheme->insertItem(Surface3DPlot::Theme::PrimaryColors, i18n("Primary Colors"));
+	ui.cbTheme->insertItem(Surface3DPlot::Theme::StoneMoss, i18n("Stone Moss"));
+	ui.cbTheme->insertItem(Surface3DPlot::Theme::ArmyBlue, i18n("Army Blue"));
+	ui.cbTheme->insertItem(Surface3DPlot::Theme::Retro, i18n("Retro"));
+	ui.cbTheme->insertItem(Surface3DPlot::Theme::Ebony, i18n("Ebony"));
+	ui.cbTheme->insertItem(Surface3DPlot::Theme::Isabelle, i18n("Isabelle"));
 }
 
 //*************************************************************
@@ -158,9 +158,9 @@ void Surface3DPlotAreaDock::retranslateUi() {
 // Tab "General"
 
 void Surface3DPlotAreaDock::dataSourceTypeChanged(int index) {
-	const auto type = static_cast<Surface3DPlotArea::DataSource>(index);
-	const bool spreadsheet = (type == Surface3DPlotArea::DataSource::DataSource_Spreadsheet);
-	const bool matrix = (type == Surface3DPlotArea::DataSource::DataSource_Matrix);
+	const auto type = static_cast<Surface3DPlot::DataSource>(index);
+	const bool spreadsheet = (type == Surface3DPlot::DataSource::DataSource_Spreadsheet);
+	const bool matrix = (type == Surface3DPlot::DataSource::DataSource_Matrix);
 
 	ui.lXColumn->setVisible(spreadsheet);
 	ui.cbXColumn->setVisible(spreadsheet);
@@ -224,22 +224,22 @@ void Surface3DPlotAreaDock::zColumnChanged(const QModelIndex& index) {
 
 void Surface3DPlotAreaDock::xRotationChanged(int value) {
 	CONDITIONAL_LOCK_RETURN;
-	m_surface->setXRotation(value);
+	m_surface->setXRotation(value, Plot3DArea::Surface);
 }
 
 void Surface3DPlotAreaDock::yRotationChanged(int value) {
 	CONDITIONAL_LOCK_RETURN;
-	m_surface->setYRotation(value);
+	m_surface->setYRotation(value, Plot3DArea::Surface);
 }
 
 void Surface3DPlotAreaDock::themeChanged(int value) {
 	CONDITIONAL_LOCK_RETURN;
-	m_surface->setTheme(static_cast<Surface3DPlotArea::Theme>(value));
+	m_surface->setTheme(static_cast<Plot3DArea::Theme>(value), Plot3DArea::Surface);
 }
 
 void Surface3DPlotAreaDock::zoomLevelChanged(int value) {
 	CONDITIONAL_LOCK_RETURN;
-	m_surface->setZoomLevel(value);
+	m_surface->setZoomLevel(value, Plot3DArea::Surface);
 }
 
 void Surface3DPlotAreaDock::matrixChanged(const QModelIndex& index) {
@@ -259,10 +259,10 @@ void Surface3DPlotAreaDock::matrixChanged(const QModelIndex& index) {
 void Surface3DPlotAreaDock::updateUiVisibility() {
 	const int type = ui.cbDrawType->currentIndex();
 	const int dataType = ui.cbDataSourceType->currentIndex();
-	if (type == Surface3DPlotArea::DrawMode::DrawSurface || type == Surface3DPlotArea::DrawMode::DrawWireframe) {
+	if (type == Surface3DPlot::DrawMode::DrawSurface || type == Surface3DPlot::DrawMode::DrawWireframe) {
 		showItem(ui.lDataSourceType, ui.cbDataSourceType, true);
 		showItem(ui.lMatrix, ui.cbMatrix, false);
-		showTriangleInfo(dataType == Surface3DPlotArea::DataSource_Spreadsheet);
+		showTriangleInfo(dataType == Surface3DPlot::DataSource_Spreadsheet);
 	} else {
 		showItem(ui.lDataSourceType, ui.cbDataSourceType, false);
 		showTriangleInfo(false);
@@ -274,30 +274,30 @@ void Surface3DPlotAreaDock::updateUiVisibility() {
 // Tab "Mesh"
 void Surface3DPlotAreaDock::drawModeChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
-	for (Surface3DPlotArea* surface : m_surfaces)
-		surface->setDrawMode(static_cast<Surface3DPlotArea::DrawMode>(index + 1));
+	for (Surface3DPlot* surface : m_surfaces)
+		surface->setDrawMode(static_cast<Surface3DPlot::DrawMode>(index + 1));
 }
 
 void Surface3DPlotAreaDock::flatShadingChanged(bool vis) {
 	CONDITIONAL_LOCK_RETURN;
-	for (Surface3DPlotArea* surface : m_surfaces)
+	for (Surface3DPlot* surface : m_surfaces)
 		surface->setFlatShading(vis);
 }
 
 void Surface3DPlotAreaDock::shadowQualityChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
-	for (Surface3DPlotArea* surface : m_surfaces)
-		surface->setShadowQuality(static_cast<Surface3DPlotArea::ShadowQuality>(index));
+	for (Surface3DPlot* surface : m_surfaces)
+		surface->setShadowQuality(static_cast<Surface3DPlot::ShadowQuality>(index), Plot3DArea::Surface);
 }
 
 void Surface3DPlotAreaDock::smoothChanged(bool vis) {
 	CONDITIONAL_LOCK_RETURN;
-	for (Surface3DPlotArea* surface : m_surfaces)
+	for (Surface3DPlot* surface : m_surfaces)
 		surface->setSmooth(vis);
 }
 void Surface3DPlotAreaDock::colorChanged(QColor color) {
 	CONDITIONAL_LOCK_RETURN;
-	for (Surface3DPlotArea* surface : m_surfaces)
+	for (Surface3DPlot* surface : m_surfaces)
 		surface->setColor(color);
 }
 
@@ -326,12 +326,12 @@ void Surface3DPlotAreaDock::surfaceZColumnChanged(const AbstractColumn* column) 
 }
 
 // Tab "Mesh"
-void Surface3DPlotAreaDock::surfaceDrawModeChanged(Surface3DPlotArea::DrawMode mode) {
+void Surface3DPlotAreaDock::surfaceDrawModeChanged(Surface3DPlot::DrawMode mode) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbDrawType->setCurrentIndex(mode - 1);
 }
 
-void Surface3DPlotAreaDock::surfaceThemeChanged(Surface3DPlotArea::Theme theme) {
+void Surface3DPlotAreaDock::surfaceThemeChanged(Plot3DArea::Theme theme) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbTheme->setCurrentIndex(theme);
 }
@@ -341,12 +341,12 @@ void Surface3DPlotAreaDock::surfaceFlatShadingChanged(bool vis) {
 	ui.chkFlatShading->setEnabled(vis);
 }
 
-void Surface3DPlotAreaDock::surfaceShadowsQualityChanged(Surface3DPlotArea::ShadowQuality quality) {
+void Surface3DPlotAreaDock::surfaceShadowsQualityChanged(Plot3DArea::ShadowQuality quality) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbShadowQuality->setCurrentIndex(quality);
 }
 
-void Surface3DPlotAreaDock::surfaceSourceTypeChanged(Surface3DPlotArea::DataSource type) {
+void Surface3DPlotAreaDock::surfaceSourceTypeChanged(Surface3DPlot::DataSource type) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbDataSourceType->setCurrentIndex(type);
 }

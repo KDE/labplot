@@ -11,7 +11,7 @@
 #include "Axis3DDock.h"
 #include "TreeViewComboBox.h"
 #include "backend/core/AbstractColumn.h"
-#include "backend/worksheet/plots/3d/Surface3DPlotArea.h"
+#include "backend/worksheet/plots/3d/Surface3DPlot.h"
 #include <backend/core/AspectTreeModel.h>
 
 Axis3DDock::Axis3DDock(QWidget* parent)

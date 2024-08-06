@@ -10,30 +10,24 @@
 #ifndef SURFACE3DPLOTAREAPRIVATE_H
 #define SURFACE3DPLOTAREAPRIVATE_H
 
-#include "Surface3DPlotArea.h"
+#include "Plot3DAreaPrivate.h"
+#include "Surface3DPlot.h"
 #include <backend/matrix/Matrix.h>
 #include <backend/worksheet/WorksheetElementContainerPrivate.h>
 #include <backend/worksheet/WorksheetElementPrivate.h>
 
-class Surface3DPlotArea;
+class Surface3DPlot;
 class WorksheetElementContainerPrivate;
 
-class Surface3DPlotAreaPrivate : public WorksheetElementContainerPrivate {
+class Surface3DPlotPrivate : public Plot3DAreaPrivate {
 public:
-	explicit Surface3DPlotAreaPrivate(Surface3DPlotArea* owner);
-	Surface3DPlotArea* const q{nullptr};
-	Surface3DPlotArea::DataSource sourceType{Surface3DPlotArea::DataSource::DataSource_Spreadsheet};
-	Surface3DPlotArea::DrawMode drawMode{Surface3DPlotArea::DrawMode::DrawWireframeSurface};
+	explicit Surface3DPlotPrivate(Surface3DPlot* owner);
+	Surface3DPlot* const q{nullptr};
+	Surface3DPlot::DataSource sourceType{Surface3DPlot::DataSource::DataSource_Spreadsheet};
+	Surface3DPlot::DrawMode drawMode{Surface3DPlot::DrawMode::DrawWireframeSurface};
 	bool flatShading;
-	Surface3DPlotArea::ShadowQuality shadowQuality;
 	bool smooth;
-	int xRotation;
-	int yRotation;
-	int zoomLevel;
-	Surface3DPlotArea::Theme theme;
-
 	QColor color;
-	double opacity;
 
 	// Spreadsheet properties
 	const AbstractColumn* xColumn{nullptr};
@@ -47,9 +41,6 @@ public:
 	QString xColumnPath;
 	QString yColumnPath;
 	QString zColumnPath;
-
-	void retransform() override;
-	void recalcShapeAndBoundingRect() override;
 
 	// Data generation
 	void generateDemoData() const;
@@ -66,13 +57,7 @@ public:
 	void recalc();
 	void updateDrawMode();
 	void updateColor();
-	void updateOpacity();
 	void updateFlatShading();
-	void updateShadowQuality();
 	void updateSmoothMesh();
-	void updateXRotation();
-	void updateYRotation();
-	void updateZoomLevel();
-	void updateTheme();
 };
 #endif // SURFACE3DPLOTAREAPRIVATE_H

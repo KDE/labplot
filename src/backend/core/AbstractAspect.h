@@ -51,6 +51,9 @@ enum class AspectType : quint64 {
 	ReferenceRange = 0x0210060,
 	InfoElement = 0x0210080,
 
+	// 3D Basic Scene
+	Plot3DArea = 0x0210089,
+
 	// 3D Axis
 	Axis3D = 0x0210091,
 

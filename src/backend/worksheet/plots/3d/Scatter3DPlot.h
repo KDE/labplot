@@ -1,17 +1,18 @@
-#ifndef SCATTER3DPLOTAREA_H
-#define SCATTER3DPLOTAREA_H
+#ifndef Scatter3DPlot_H
+#define Scatter3DPlot_H
 
+#include "Plot3DArea.h"
 #include "backend/core/AbstractColumn.h"
 #include <Q3DScatter>
 #include <backend/worksheet/WorksheetElementContainer.h>
 
-class Scatter3DPlotAreaPrivate;
+class Scatter3DPlotPrivate;
 class WorksheetElementContainer;
-class Scatter3DPlotArea : public WorksheetElementContainer {
+class Scatter3DPlot : public Plot3DArea {
 	Q_OBJECT
 public:
-	Scatter3DPlotArea(const QString& name);
-	~Scatter3DPlotArea() override;
+	Scatter3DPlot(const QString& name);
+	~Scatter3DPlot() override;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
@@ -44,21 +45,15 @@ public:
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, zColumn, ZColumn)
-	BASIC_D_ACCESSOR_DECL(Theme, theme, Theme)
-	BASIC_D_ACCESSOR_DECL(ShadowQuality, shadowQuality, ShadowQuality)
 	BASIC_D_ACCESSOR_DECL(PointStyle, pointStyle, PointStyle)
 	BASIC_D_ACCESSOR_DECL(QColor, color, Color)
-	BASIC_D_ACCESSOR_DECL(double, opacity, Opacity)
-	BASIC_D_ACCESSOR_DECL(int, zoomLevel, ZoomLevel)
-	BASIC_D_ACCESSOR_DECL(int, xRotation, XRotation)
-	BASIC_D_ACCESSOR_DECL(int, yRotation, YRotation)
+
 	void setRect(const QRectF&) override;
 	void setPrevRect(const QRectF&) override;
 	CLASS_D_ACCESSOR_DECL(QString, xColumnPath, XColumnPath)
 	CLASS_D_ACCESSOR_DECL(QString, yColumnPath, YColumnPath)
 	CLASS_D_ACCESSOR_DECL(QString, zColumnPath, ZColumnPath)
-	typedef Scatter3DPlotAreaPrivate Private;
-	Q3DScatter* m_scatter;
+	typedef Scatter3DPlotPrivate Private;
 	void recalc();
 private Q_SLOTS:
 	void xColumnAboutToBeRemoved(const AbstractAspect*);
@@ -70,26 +65,16 @@ protected:
 	void retransform() override;
 
 private:
-	Q_DECLARE_PRIVATE(Scatter3DPlotArea)
+	Q_DECLARE_PRIVATE(Scatter3DPlot)
 
 Q_SIGNALS:
 	// General-Tab
-	void xDataChanged();
-	void yDataChanged();
-	void zDataChanged();
-	void selected(double pos);
 	void rectChanged(QRectF&);
 	void xColumnChanged(const AbstractColumn*);
 	void yColumnChanged(const AbstractColumn*);
 	void zColumnChanged(const AbstractColumn*);
-	void themeChanged(Scatter3DPlotArea::Theme);
-	void shadowQualityChanged(Scatter3DPlotArea::ShadowQuality);
-	void pointStyleChanged(Scatter3DPlotArea::PointStyle);
+	void pointStyleChanged(Scatter3DPlot::PointStyle);
 	void colorChanged(QColor);
-	void opacityChanged(double);
-	void zoomLevelChanged(int);
-	void xRotationChanged(int);
-	void yRotationChanged(int);
 };
 
-#endif // SCATTER3DPLOTAREA_H
+#endif // Scatter3DPlot_H

@@ -35,14 +35,13 @@ Scatter3DPlotAreaDock::Scatter3DPlotAreaDock(QWidget* parent)
 	connect(ui.cbPointStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &Scatter3DPlotAreaDock::pointStyleChanged);
 	connect(ui.cbTheme, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &Scatter3DPlotAreaDock::themeChanged);
 	connect(ui.cbShadowQuality, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &Scatter3DPlotAreaDock::shadowQualityChanged);
-	connect(ui.dsbOpacity, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &Scatter3DPlotAreaDock::opacityChanged);
 	connect(ui.slXRot, &QSlider::sliderMoved, this, &Scatter3DPlotAreaDock::xRotationChanged);
 	connect(ui.slYRot, &QSlider::sliderMoved, this, &Scatter3DPlotAreaDock::yRotationChanged);
 	connect(ui.slZoom, &QSlider::sliderMoved, this, &Scatter3DPlotAreaDock::zoomLevelChanged);
 	connect(ui.kcbColor, &KColorButton::changed, this, &Scatter3DPlotAreaDock::colorChanged);
 }
 
-void Scatter3DPlotAreaDock::setScatters(const QList<Scatter3DPlotArea*>& scatters) {
+void Scatter3DPlotAreaDock::setScatters(const QList<Scatter3DPlot*>& scatters) {
 	CONDITIONAL_LOCK_RETURN;
 	m_scatters = scatters;
 	m_scatter = m_scatters.first();
@@ -59,56 +58,53 @@ void Scatter3DPlotAreaDock::setScatters(const QList<Scatter3DPlotArea*>& scatter
 
 	// show the properties of the first scatter
 	// tab "General"
-	ui.cbXCoordinate->setColumn(m_scatter->xColumn(),m_scatter->xColumnPath());
-	ui.cbYCoordinate->setColumn(m_scatter->yColumn(),m_scatter->yColumnPath());
-	ui.cbZCoordinate->setColumn(m_scatter->zColumn(),m_scatter->zColumnPath());
+	ui.cbXCoordinate->setColumn(m_scatter->xColumn(), m_scatter->xColumnPath());
+	ui.cbYCoordinate->setColumn(m_scatter->yColumn(), m_scatter->yColumnPath());
+	ui.cbZCoordinate->setColumn(m_scatter->zColumn(), m_scatter->zColumnPath());
 	ui.cbTheme->setCurrentIndex(m_scatter->theme());
 	ui.cbShadowQuality->setCurrentIndex(m_scatter->shadowQuality());
 	ui.cbPointStyle->setCurrentIndex(m_scatter->pointStyle());
-	ui.dsbOpacity->setValue(m_scatter->opacity());
-	ui.slZoom->setRange(100,400);
-	ui.slXRot->setRange(0,90);
-	ui.slYRot->setRange(0,90);
+	ui.slZoom->setRange(100, 400);
+	ui.slXRot->setRange(0, 90);
+	ui.slYRot->setRange(0, 90);
 	ui.slZoom->setValue(m_scatter->zoomLevel());
 	ui.slXRot->setValue(m_scatter->xRotation());
 	ui.slYRot->setValue(m_scatter->yRotation());
 	ui.kcbColor->setColor(Qt::green);
-	connect(m_scatter, &Scatter3DPlotArea::xColumnChanged, this, &Scatter3DPlotAreaDock::scatterXColumnChanged);
-	connect(m_scatter, &Scatter3DPlotArea::yColumnChanged, this, &Scatter3DPlotAreaDock::scatterYColumnChanged);
-	connect(m_scatter, &Scatter3DPlotArea::zColumnChanged, this, &Scatter3DPlotAreaDock::scatterZColumnChanged);
-	connect(m_scatter, &Scatter3DPlotArea::themeChanged, this, &Scatter3DPlotAreaDock::scatterThemeChanged);
-	connect(m_scatter, &Scatter3DPlotArea::shadowQualityChanged, this, &Scatter3DPlotAreaDock::scatterShadowQualityChanged);
-	connect(m_scatter, &Scatter3DPlotArea::pointStyleChanged, this, &Scatter3DPlotAreaDock::scatterPointStyleChanged);
-	connect(m_scatter, &Scatter3DPlotArea::opacityChanged, this, &Scatter3DPlotAreaDock::scatterOpacityChanged);
-	connect(m_scatter, &Scatter3DPlotArea::zoomLevelChanged, this, &Scatter3DPlotAreaDock::scatterZoomLevelChanged);
-	connect(m_scatter, &Scatter3DPlotArea::xRotationChanged, this, &Scatter3DPlotAreaDock::scatterXRotationChanged);
-	connect(m_scatter, &Scatter3DPlotArea::yRotationChanged, this, &Scatter3DPlotAreaDock::scatterYRotationChanged);
-	connect(m_scatter, &Scatter3DPlotArea::colorChanged, this, &Scatter3DPlotAreaDock::scatterColorChanged);
-
+	connect(m_scatter, &Scatter3DPlot::xColumnChanged, this, &Scatter3DPlotAreaDock::scatterXColumnChanged);
+	connect(m_scatter, &Scatter3DPlot::yColumnChanged, this, &Scatter3DPlotAreaDock::scatterYColumnChanged);
+	connect(m_scatter, &Scatter3DPlot::zColumnChanged, this, &Scatter3DPlotAreaDock::scatterZColumnChanged);
+	connect(m_scatter, &Scatter3DPlot::themeChanged, this, &Scatter3DPlotAreaDock::scatterThemeChanged);
+	connect(m_scatter, &Scatter3DPlot::shadowQualityChanged, this, &Scatter3DPlotAreaDock::scatterShadowQualityChanged);
+	connect(m_scatter, &Scatter3DPlot::pointStyleChanged, this, &Scatter3DPlotAreaDock::scatterPointStyleChanged);
+	connect(m_scatter, &Scatter3DPlot::zoomLevelChanged, this, &Scatter3DPlotAreaDock::scatterZoomLevelChanged);
+	connect(m_scatter, &Scatter3DPlot::xRotationChanged, this, &Scatter3DPlotAreaDock::scatterXRotationChanged);
+	connect(m_scatter, &Scatter3DPlot::yRotationChanged, this, &Scatter3DPlotAreaDock::scatterYRotationChanged);
+	connect(m_scatter, &Scatter3DPlot::colorChanged, this, &Scatter3DPlotAreaDock::scatterColorChanged);
 }
 
 void Scatter3DPlotAreaDock::retranslateUi() {
 	// This function should contain translation code if needed
-	ui.cbShadowQuality->insertItem(Scatter3DPlotArea::None, i18n("None"));
-	ui.cbShadowQuality->insertItem(Scatter3DPlotArea::Low, i18n("Low"));
-	ui.cbShadowQuality->insertItem(Scatter3DPlotArea::Medium, i18n("Medium"));
-	ui.cbShadowQuality->insertItem(Scatter3DPlotArea::High, i18n("High"));
-	ui.cbShadowQuality->insertItem(Scatter3DPlotArea::SoftLow, i18n("Soft Low"));
-	ui.cbShadowQuality->insertItem(Scatter3DPlotArea::SoftMedium, i18n("Soft Medium"));
-	ui.cbShadowQuality->insertItem(Scatter3DPlotArea::SoftHigh, i18n("Soft High"));
+	ui.cbShadowQuality->insertItem(Scatter3DPlot::None, i18n("None"));
+	ui.cbShadowQuality->insertItem(Scatter3DPlot::Low, i18n("Low"));
+	ui.cbShadowQuality->insertItem(Scatter3DPlot::Medium, i18n("Medium"));
+	ui.cbShadowQuality->insertItem(Scatter3DPlot::High, i18n("High"));
+	ui.cbShadowQuality->insertItem(Scatter3DPlot::SoftLow, i18n("Soft Low"));
+	ui.cbShadowQuality->insertItem(Scatter3DPlot::SoftMedium, i18n("Soft Medium"));
+	ui.cbShadowQuality->insertItem(Scatter3DPlot::SoftHigh, i18n("Soft High"));
 
-	ui.cbTheme->insertItem(Scatter3DPlotArea::Theme::Qt, i18n("Qt"));
-	ui.cbTheme->insertItem(Scatter3DPlotArea::Theme::PrimaryColors, i18n("Primary Colors"));
-	ui.cbTheme->insertItem(Scatter3DPlotArea::Theme::StoneMoss, i18n("Stone Moss"));
-	ui.cbTheme->insertItem(Scatter3DPlotArea::Theme::ArmyBlue, i18n("Army Blue"));
-	ui.cbTheme->insertItem(Scatter3DPlotArea::Theme::Retro, i18n("Retro"));
-	ui.cbTheme->insertItem(Scatter3DPlotArea::Theme::Ebony, i18n("Ebony"));
-	ui.cbTheme->insertItem(Scatter3DPlotArea::Theme::Isabelle, i18n("Isabelle"));
+	ui.cbTheme->insertItem(Scatter3DPlot::Theme::Qt, i18n("Qt"));
+	ui.cbTheme->insertItem(Scatter3DPlot::Theme::PrimaryColors, i18n("Primary Colors"));
+	ui.cbTheme->insertItem(Scatter3DPlot::Theme::StoneMoss, i18n("Stone Moss"));
+	ui.cbTheme->insertItem(Scatter3DPlot::Theme::ArmyBlue, i18n("Army Blue"));
+	ui.cbTheme->insertItem(Scatter3DPlot::Theme::Retro, i18n("Retro"));
+	ui.cbTheme->insertItem(Scatter3DPlot::Theme::Ebony, i18n("Ebony"));
+	ui.cbTheme->insertItem(Scatter3DPlot::Theme::Isabelle, i18n("Isabelle"));
 
-	ui.cbPointStyle->insertItem(Scatter3DPlotArea::Sphere, i18n("Sphere"));
-	ui.cbPointStyle->insertItem(Scatter3DPlotArea::Cube, i18n("Cube"));
-	ui.cbPointStyle->insertItem(Scatter3DPlotArea::Cone, i18n("Cone"));
-	ui.cbPointStyle->insertItem(Scatter3DPlotArea::Pyramid, i18n("Pyramid"));
+	ui.cbPointStyle->insertItem(Scatter3DPlot::Sphere, i18n("Sphere"));
+	ui.cbPointStyle->insertItem(Scatter3DPlot::Cube, i18n("Cube"));
+	ui.cbPointStyle->insertItem(Scatter3DPlot::Cone, i18n("Cone"));
+	ui.cbPointStyle->insertItem(Scatter3DPlot::Pyramid, i18n("Pyramid"));
 }
 
 //*************************************************************
@@ -190,19 +186,16 @@ void Scatter3DPlotAreaDock::scatterZoomLevelChanged(int val) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.slZoom->setValue(val);
 }
-void Scatter3DPlotAreaDock::scatterShadowQualityChanged(Scatter3DPlotArea::ShadowQuality shadowQuality) {
+void Scatter3DPlotAreaDock::scatterShadowQualityChanged(Plot3DArea::ShadowQuality shadowQuality) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbShadowQuality->setCurrentIndex(shadowQuality);
 }
-void Scatter3DPlotAreaDock::scatterPointStyleChanged(Scatter3DPlotArea::PointStyle pointStyle) {
+void Scatter3DPlotAreaDock::scatterPointStyleChanged(Scatter3DPlot::PointStyle pointStyle) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbPointStyle->setCurrentIndex(pointStyle);
 }
-void Scatter3DPlotAreaDock::scatterOpacityChanged(double opacity) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.dsbOpacity->setValue(opacity);
-}
-void Scatter3DPlotAreaDock::scatterThemeChanged(Scatter3DPlotArea::Theme theme) {
+
+void Scatter3DPlotAreaDock::scatterThemeChanged(Plot3DArea::Theme theme) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbTheme->setCurrentIndex(theme);
 }
@@ -213,41 +206,37 @@ void Scatter3DPlotAreaDock::scatterColorChanged(QColor color) {
 }
 void Scatter3DPlotAreaDock::xRotationChanged(int xRot) {
 	CONDITIONAL_LOCK_RETURN;
-	m_scatter->setXRotation(xRot);
+	m_scatter->setXRotation(xRot, Plot3DArea::Scatter);
 }
 
 void Scatter3DPlotAreaDock::yRotationChanged(int yRot) {
 	CONDITIONAL_LOCK_RETURN;
-	m_scatter->setYRotation(yRot);
+	m_scatter->setYRotation(yRot, Plot3DArea::Scatter);
 }
 void Scatter3DPlotAreaDock::zoomLevelChanged(int zoomLevel) {
 	CONDITIONAL_LOCK_RETURN;
-	m_scatter->setZoomLevel(zoomLevel);
+	m_scatter->setZoomLevel(zoomLevel, Plot3DArea::Scatter);
 }
 void Scatter3DPlotAreaDock::shadowQualityChanged(int shadowQuality) {
 	CONDITIONAL_LOCK_RETURN;
-	for (Scatter3DPlotArea* surface : m_scatters)
-		surface->setShadowQuality(static_cast<Scatter3DPlotArea::ShadowQuality>(shadowQuality));
+	for (Scatter3DPlot* surface : m_scatters)
+		surface->setShadowQuality(static_cast<Plot3DArea::ShadowQuality>(shadowQuality), Plot3DArea::Scatter);
 }
 void Scatter3DPlotAreaDock::pointStyleChanged(int pointStyle) {
 	CONDITIONAL_LOCK_RETURN;
-	for (Scatter3DPlotArea* surface : m_scatters)
-		surface->setPointStyle(static_cast<Scatter3DPlotArea::PointStyle>(pointStyle));
+	for (Scatter3DPlot* surface : m_scatters)
+		surface->setPointStyle(static_cast<Scatter3DPlot::PointStyle>(pointStyle));
 }
-void Scatter3DPlotAreaDock::opacityChanged(double opacity) {
-	CONDITIONAL_LOCK_RETURN;
-	for (Scatter3DPlotArea* surface : m_scatters)
-		surface->setOpacity(opacity);
-}
+
 void Scatter3DPlotAreaDock::themeChanged(int theme) {
 	CONDITIONAL_LOCK_RETURN;
-	for (Scatter3DPlotArea* surface : m_scatters)
-		surface->setTheme(static_cast<Scatter3DPlotArea::Theme>(theme));
+	for (Scatter3DPlot* surface : m_scatters)
+		surface->setTheme(static_cast<Plot3DArea::Theme>(theme), Plot3DArea::Scatter);
 }
 
 void Scatter3DPlotAreaDock::colorChanged(QColor color) {
 	CONDITIONAL_LOCK_RETURN;
-	for (Scatter3DPlotArea* surface : m_scatters)
+	for (Scatter3DPlot* surface : m_scatters)
 		surface->setColor(color);
 }
 

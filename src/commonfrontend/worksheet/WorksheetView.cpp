@@ -61,9 +61,9 @@
 
 #include <limits>
 
-#include <backend/worksheet/plots/3d/Bar3DPlotArea.h>
-#include <backend/worksheet/plots/3d/Scatter3DPlotArea.h>
-#include <backend/worksheet/plots/3d/Surface3DPlotArea.h>
+#include <backend/worksheet/plots/3d/Bar3DPlot.h>
+#include <backend/worksheet/plots/3d/Scatter3DPlot.h>
+#include <backend/worksheet/plots/3d/Surface3DPlot.h>
 
 /**
  * \class WorksheetView
@@ -1380,13 +1380,13 @@ void WorksheetView::addNew(QAction* action) {
 		Image* image = new Image(i18n("Image"));
 		aspect = image;
 	} else if (action == add3DPlotAction) {
-		auto* plot = new Surface3DPlotArea(QStringLiteral("3D Surface Plot"));
+		auto* plot = new Surface3DPlot(QStringLiteral("3D Surface Plot"));
 		aspect = plot;
 	} else if (action == add3DScatterPlotAction) {
-		auto* plot = new Scatter3DPlotArea(QStringLiteral("3D Scatter Plot"));
+		auto* plot = new Scatter3DPlot(QStringLiteral("3D Scatter Plot"));
 		aspect = plot;
 	} else if (action == add3DBarPlotAction) {
-		auto* plot = new Bar3DPlotArea(QStringLiteral("3D Bar Plot"));
+		auto* plot = new Bar3DPlot(QStringLiteral("3D Bar Plot"));
 		aspect = plot;
 	}
 
