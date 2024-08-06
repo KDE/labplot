@@ -28,7 +28,7 @@ public:
 	};
 
 	BASIC_D_ACCESSOR_DECL_2ARG(Plot3DArea::ShadowQuality, Plot3DArea::Type, shadowQuality, ShadowQuality)
-	BASIC_D_ACCESSOR_DECL_2ARG(Plot3DArea::Theme,Plot3DArea::Type, theme, Theme)
+	BASIC_D_ACCESSOR_DECL_2ARG(Plot3DArea::Theme, Plot3DArea::Type, theme, Theme)
 	BASIC_D_ACCESSOR_DECL_2ARG(int, Plot3DArea::Type, zoomLevel, ZoomLevel)
 	BASIC_D_ACCESSOR_DECL_2ARG(int, Plot3DArea::Type, xRotation, XRotation)
 	BASIC_D_ACCESSOR_DECL_2ARG(int, Plot3DArea::Type, yRotation, YRotation)
