@@ -133,6 +133,11 @@ private:
 #define BASIC_D_ACCESSOR_DECL(type, method, Method)                                                                                                            \
 	type method() const;                                                                                                                                       \
 	void set##Method(const type value);
+
+#define BASIC_D_ACCESSOR_DECL_2ARG(type, arg2, method, Method)                                                                                                 \
+	type method() const;                                                                                                                                       \
+	void set##Method(const type value, arg2);
+
 #define CLASS_D_ACCESSOR_DECL(type, method, Method)                                                                                                            \
 	type method() const;                                                                                                                                       \
 	void set##Method(const type& value);
@@ -239,6 +244,27 @@ private:
 			Q_EMIT m_target->q->field_name##Changed(m_target->*m_field);                                                                                       \
 		}                                                                                                                                                      \
 	};
+
+// setter class for 3D plot classes need extra type var
+#define STD_SETTER_CMD_IMPL_S_T(class_name, cmd_name, value_type, field_name, type_name, finalize_method)                                                      \
+class class_name##cmd_name##Cmd : public StandardSetterCmd<class_name::Private, value_type> {                                                              \
+		public:                                                                                                                                                    \
+		class_name##cmd_name##Cmd(class_name::Private* target,                                                                                                 \
+								  value_type newValue,                                                                                                         \
+								  type_name type,                                                                                                              \
+								  const KLocalizedString& description,                                                                                         \
+								  QUndoCommand* parent = nullptr)                                                                                              \
+			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description, parent)                      \
+, plotType(type) {                                                                                                                                 \
+}                                                                                                                                                      \
+		virtual void finalize() override {                                                                                                                     \
+			m_target->finalize_method(static_cast<type_name>(plotType));                                                                                       \
+Q_EMIT m_target->q->field_name##Changed(m_target->*m_field);                                                                                       \
+}                                                                                                                                                      \
+																																							   \
+	private:                                                                                                                                                   \
+type_name plotType;                                                                                                                                    \
+};
 
 // setter class with finalize() and signal emitting.
 #define STD_SETTER_CMD_IMPL_F_S(class_name, cmd_name, value_type, field_name, finalize_method)                                                                 \

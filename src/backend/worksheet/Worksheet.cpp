@@ -21,7 +21,7 @@
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/TreeModel.h"
-#include "backend/worksheet/plots/3d/Surface3DPlotArea.h"
+#include "backend/worksheet/plots/3d/Surface3DPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
@@ -44,8 +44,8 @@
 #include <KLocalizedString>
 #include <QGraphicsProxyWidget>
 
-#include <backend/worksheet/plots/3d/Bar3DPlotArea.h>
-#include <backend/worksheet/plots/3d/Scatter3DPlotArea.h>
+#include <backend/worksheet/plots/3d/Bar3DPlot.h>
+#include <backend/worksheet/plots/3d/Scatter3DPlot.h>
 
 /**
  * \class Worksheet
@@ -295,7 +295,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	// DEBUG(Q_FUNC_INFO << ", ADDING child to SCENE")
 
 	if (aspect->type() == AspectType::SurfacePlot) {
-		const auto* addedElement = static_cast<const Surface3DPlotArea*>(aspect);
+		const auto* addedElement = static_cast<const Surface3DPlot*>(aspect);
 		Q3DSurface* graph = addedElement->m_surface;
 		graph->setFocusPolicy(Qt::StrongFocus);
 		if (graph) {
@@ -315,7 +315,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 			graph->show();
 		}
 	} else if (aspect->type() == AspectType::Scatter3DPlot) {
-		const auto* addedElement = static_cast<const Scatter3DPlotArea*>(aspect);
+		const auto* addedElement = static_cast<const Scatter3DPlot*>(aspect);
 		Q3DScatter* graph = addedElement->m_scatter;
 		graph->setFocusPolicy(Qt::StrongFocus);
 		if (graph) {
@@ -334,8 +334,8 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 			}
 			graph->show();
 		}
-	}  else if (aspect->type() == AspectType::Bar3DPlot) {
-		const auto* addedElement = static_cast<const Bar3DPlotArea*>(aspect);
+	} else if (aspect->type() == AspectType::Bar3DPlot) {
+		const auto* addedElement = static_cast<const Bar3DPlot*>(aspect);
 		Q3DBars* graph = addedElement->m_bar;
 		graph->setFocusPolicy(Qt::StrongFocus);
 		if (graph) {
@@ -354,7 +354,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 			}
 			graph->show();
 		}
-	}else {
+	} else {
 		auto* item = addedElement->graphicsItem();
 		d->m_scene->addItem(item);
 	}

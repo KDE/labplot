@@ -391,12 +391,12 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 	case AspectType::SurfacePlot:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Surface Plot"));
 		raiseDock(m_surfacePlotDock, m_mainWindow->stackedWidget);
-		m_surfacePlotDock->setSurfaces(castList<Surface3DPlotArea>(selectedAspects));
+		m_surfacePlotDock->setSurfaces(castList<Surface3DPlot>(selectedAspects));
 		break;
 	case AspectType::Scatter3DPlot:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Scatter 3D Plot"));
 		raiseDock(m_scatter3DPlotDock, m_mainWindow->stackedWidget);
-		m_scatter3DPlotDock->setScatters(castList<Scatter3DPlotArea>(selectedAspects));
+		m_scatter3DPlotDock->setScatters(castList<Scatter3DPlot>(selectedAspects));
 		break;
 	case AspectType::Axis3D:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Axis 3D"));
@@ -406,7 +406,7 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 	case AspectType::Bar3DPlot:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Bar 3D"));
 		raiseDock(m_bar3DPlotDock, m_mainWindow->stackedWidget);
-		m_bar3DPlotDock->setBars(castList<Bar3DPlotArea>(selectedAspects));
+		m_bar3DPlotDock->setBars(castList<Bar3DPlot>(selectedAspects));
 		break;
 	case AspectType::TextLabel:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Text Label"));

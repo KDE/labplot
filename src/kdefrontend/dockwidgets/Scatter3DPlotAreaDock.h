@@ -1,11 +1,11 @@
 #ifndef SCATTER3DPLOTAREADOCK_H
 #define SCATTER3DPLOTAREADOCK_H
 #include "BaseDock.h"
-#include "backend/worksheet/plots/3d/Scatter3DPlotArea.h"
+#include "backend/worksheet/plots/3d/Scatter3DPlot.h"
 
 #include "ui_scatter3dplotareadock.h"
 
-class Scatter3DPlotArea;
+class Scatter3DPlot;
 class AbstractColumn;
 class TreeViewComboBox;
 
@@ -14,7 +14,7 @@ class Scatter3DPlotAreaDock : public BaseDock {
 
 public:
 	explicit Scatter3DPlotAreaDock(QWidget* parent);
-	void setScatters(const QList<Scatter3DPlotArea*>& scatters);
+	void setScatters(const QList<Scatter3DPlot*>& scatters);
 
 private:
 	void updateUiVisibility();
@@ -33,7 +33,6 @@ private Q_SLOTS:
 	void zoomLevelChanged(int);
 	void shadowQualityChanged(int);
 	void pointStyleChanged(int);
-	void opacityChanged(double);
 	void themeChanged(int);
 	void colorChanged(QColor);
 
@@ -44,16 +43,15 @@ private Q_SLOTS:
 	void scatterXRotationChanged(int);
 	void scatterYRotationChanged(int);
 	void scatterZoomLevelChanged(int);
-	void scatterShadowQualityChanged(Scatter3DPlotArea::ShadowQuality);
-	void scatterPointStyleChanged(Scatter3DPlotArea::PointStyle);
-	void scatterOpacityChanged(double);
-	void scatterThemeChanged(Scatter3DPlotArea::Theme);
+	void scatterShadowQualityChanged(Plot3DArea::ShadowQuality);
+	void scatterPointStyleChanged(Scatter3DPlot::PointStyle);
+	void scatterThemeChanged(Plot3DArea::Theme);
 	void scatterColorChanged(QColor);
 
 private:
 	Ui::Scatter3DPlotAreaDock ui;
-	QList<Scatter3DPlotArea*> m_scatters;
-	Scatter3DPlotArea* m_scatter{nullptr};
+	QList<Scatter3DPlot*> m_scatters;
+	Scatter3DPlot* m_scatter{nullptr};
 
 Q_SIGNALS:
 	void info(const QString&);

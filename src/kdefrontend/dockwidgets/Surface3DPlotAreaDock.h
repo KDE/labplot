@@ -12,11 +12,11 @@
 #define SURFACE3DPLOTAREADOCK_H
 
 #include "BaseDock.h"
-#include "backend/worksheet/plots/3d/Surface3DPlotArea.h"
+#include "backend/worksheet/plots/3d/Surface3DPlot.h"
 
 #include "ui_surface3dplotareadock.h"
 
-class Surface3DPlotArea;
+class Surface3DPlot;
 class Matrix;
 class AbstractColumn;
 class AspectTreeModel;
@@ -28,7 +28,7 @@ class Surface3DPlotAreaDock : public BaseDock {
 
 public:
 	explicit Surface3DPlotAreaDock(QWidget* parent);
-	void setSurfaces(const QList<Surface3DPlotArea*>& surfaces);
+	void setSurfaces(const QList<Surface3DPlot*>& surfaces);
 
 private:
 	void showTriangleInfo(bool pred);
@@ -58,11 +58,11 @@ private Q_SLOTS:
 	void colorChanged(QColor);
 
 	// SLOTs for changes triggered in Surface3DPlotArea
-	void surfaceDrawModeChanged(Surface3DPlotArea::DrawMode mode);
-	void surfaceThemeChanged(Surface3DPlotArea::Theme theme);
+	void surfaceDrawModeChanged(Surface3DPlot::DrawMode mode);
+	void surfaceThemeChanged(Plot3DArea::Theme theme);
 	void surfaceFlatShadingChanged(bool);
-	void surfaceShadowsQualityChanged(Surface3DPlotArea::ShadowQuality quality);
-	void surfaceSourceTypeChanged(Surface3DPlotArea::DataSource);
+	void surfaceShadowsQualityChanged(Plot3DArea::ShadowQuality quality);
+	void surfaceSourceTypeChanged(Surface3DPlot::DataSource);
 	void surfaceXColumnChanged(const AbstractColumn*);
 	void surfaceYColumnChanged(const AbstractColumn*);
 	void surfaceZColumnChanged(const AbstractColumn*);
@@ -75,8 +75,8 @@ private Q_SLOTS:
 
 private:
 	Ui::Surface3DPlotAreaDock ui;
-	QList<Surface3DPlotArea*> m_surfaces;
-	Surface3DPlotArea* m_surface{nullptr};
+	QList<Surface3DPlot*> m_surfaces;
+	Surface3DPlot* m_surface{nullptr};
 
 	void load();
 	void loadConfig(KConfig&);

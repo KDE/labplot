@@ -2,17 +2,17 @@
 #define BAR3DPLOTAREADOCK_H
 
 #include "BaseDock.h"
-#include "backend/worksheet/plots/3d/Bar3DPlotArea.h"
+#include "backend/worksheet/plots/3d/Bar3DPlot.h"
 #include "ui_bar3dplotareadock.h"
 
 class AbstractColumn;
 class TreeViewComboBox;
-class Bar3DPlotArea;
+class Bar3DPlot;
 class Bar3DPlotAreaDock : public BaseDock {
 	Q_OBJECT
 public:
 	explicit Bar3DPlotAreaDock(QWidget* parent);
-	void setBars(const QList<Bar3DPlotArea*>& bars);
+	void setBars(const QList<Bar3DPlot*>& bars);
 
 private:
 	// for data columns
@@ -45,14 +45,14 @@ private Q_SLOTS:
 	void barXRotationChanged(int);
 	void barYRotationChanged(int);
 	void barZoomLevelChanged(int);
-	void barShadowQualityChanged(Bar3DPlotArea::ShadowQuality);
-	void barThemeChanged(Bar3DPlotArea::Theme);
+	void barShadowQualityChanged(Plot3DArea::ShadowQuality);
+	void barThemeChanged(Plot3DArea::Theme);
 	void barColorChanged(QColor);
 
 private:
 	Ui::Bar3DPlotAreaDock ui;
-	QList<Bar3DPlotArea*> m_bars;
-	Bar3DPlotArea* m_bar{nullptr};
+	QList<Bar3DPlot*> m_bars;
+	Bar3DPlot* m_bar{nullptr};
 
 Q_SIGNALS:
 	void info(const QString&);
