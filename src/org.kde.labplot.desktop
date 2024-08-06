@@ -4,6 +4,7 @@ Exec=labplot %f
 Icon=labplot
 Name=LabPlot
 Name[ca]=LabPlot
+Name[ca@valencia]=LabPlot
 Name[en_GB]=LabPlot
 Name[es]=LabPlot
 Name[nl]=LabPlot
