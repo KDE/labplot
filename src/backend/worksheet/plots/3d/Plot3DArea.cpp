@@ -21,39 +21,37 @@ BASIC_SHARED_D_READER_IMPL(Plot3DArea, int, zoomLevel, zoomLevel)
 // #################  setter methods and undo commands ##########################
 // ##############################################################################
 
-STD_SETTER_CMD_IMPL_S(Plot3DArea, SetShadowQuality, Plot3DArea::ShadowQuality, shadowQuality);
-void Plot3DArea::setShadowQuality(Plot3DArea::ShadowQuality shadowQuality, Plot3DArea::Type type) {
+STD_SETTER_CMD_IMPL_F_S(Plot3DArea, SetShadowQuality, Plot3DArea::ShadowQuality, shadowQuality, updateShadowQuality)
+void Plot3DArea::setShadowQuality(Plot3DArea::ShadowQuality shadowQuality) {
 	Q_D(Plot3DArea);
-	if (shadowQuality != d->shadowQuality) {
+	if (shadowQuality != d->shadowQuality)
 		exec(new Plot3DAreaSetShadowQualityCmd(d, shadowQuality, ki18n("%1: shadow quality changed")));
-		d->updateXRotation(type);
-	}
 }
 
-STD_SETTER_CMD_IMPL_S_T(Plot3DArea, SetTheme, Plot3DArea::Theme, theme, Plot3DArea::Type, updateTheme)
-void Plot3DArea::setTheme(Plot3DArea::Theme theme, Plot3DArea::Type type) {
+STD_SETTER_CMD_IMPL_F_S(Plot3DArea, SetTheme, Plot3DArea::Theme, theme, updateTheme)
+void Plot3DArea::setTheme(Plot3DArea::Theme theme) {
 	Q_D(Plot3DArea);
 	if (theme != d->theme)
-		exec(new Plot3DAreaSetThemeCmd(d, theme, type, ki18n("%1: theme changed")));
+		exec(new Plot3DAreaSetThemeCmd(d, theme, ki18n("%1: theme changed")));
 }
 
-STD_SETTER_CMD_IMPL_S_T(Plot3DArea, SetXRotation, int, xRotation, Plot3DArea::Type, updateXRotation)
-void Plot3DArea::setXRotation(int xRot, Plot3DArea::Type type) {
+STD_SETTER_CMD_IMPL_F_S(Plot3DArea, SetXRotation, int, xRotation, updateXRotation)
+void Plot3DArea::setXRotation(int xRot) {
 	Q_D(Plot3DArea);
 	if (xRot != d->xRotation)
-		exec(new Plot3DAreaSetXRotationCmd(d, xRot, type, ki18n("%1: X Rotation changed")));
+		exec(new Plot3DAreaSetXRotationCmd(d, xRot, ki18n("%1: X Rotation changed")));
 }
-STD_SETTER_CMD_IMPL_S_T(Plot3DArea, SetYRotation, int, yRotation, Plot3DArea::Type, updateYRotation)
-void Plot3DArea::setYRotation(int yRot, Plot3DArea::Type type) {
+STD_SETTER_CMD_IMPL_F_S(Plot3DArea, SetYRotation, int, yRotation, updateYRotation)
+void Plot3DArea::setYRotation(int yRot) {
 	Q_D(Plot3DArea);
 	if (yRot != d->yRotation)
-		exec(new Plot3DAreaSetYRotationCmd(d, yRot, type, ki18n("%1: Y Rotation changed")));
+		exec(new Plot3DAreaSetYRotationCmd(d, yRot, ki18n("%1: Y Rotation changed")));
 }
-STD_SETTER_CMD_IMPL_S_T(Plot3DArea, SetZoomLevel, int, zoomLevel, Plot3DArea::Type, updateZoomLevel)
-void Plot3DArea::setZoomLevel(int zoom, Plot3DArea::Type type) {
+STD_SETTER_CMD_IMPL_F_S(Plot3DArea, SetZoomLevel, int, zoomLevel, updateZoomLevel)
+void Plot3DArea::setZoomLevel(int zoom) {
 	Q_D(Plot3DArea);
 	if (zoom != d->zoomLevel)
-		exec(new Plot3DAreaSetZoomLevelCmd(d, zoom, type, ki18n("%1: zoom changed")));
+		exec(new Plot3DAreaSetZoomLevelCmd(d, zoom, ki18n("%1: zoom changed")));
 }
 
 class Plot3DAreaSetRectCmd : public QUndoCommand {
@@ -133,7 +131,7 @@ void Plot3DArea::retransform() {
 // #####################################################################
 // ################### Private implementation ##########################
 // #####################################################################
-Plot3DAreaPrivate::Plot3DAreaPrivate(Plot3DArea* owner)
+Plot3DAreaPrivate::Plot3DAreaPrivate(Plot3DArea* owner, Plot3DArea::Type type)
 	: WorksheetElementContainerPrivate(owner)
 	, xRotation(90)
 	, yRotation(0)
@@ -141,6 +139,7 @@ Plot3DAreaPrivate::Plot3DAreaPrivate(Plot3DArea* owner)
 	, zoomLevel(100)
 	, shadowQuality(Plot3DArea::Medium)
 	, q(owner) {
+	this->type = type;
 }
 
 void Plot3DAreaPrivate::recalcShapeAndBoundingRect() {
@@ -162,7 +161,7 @@ void Plot3DAreaPrivate::retransform() {
 	q->WorksheetElementContainer::retransform();
 }
 
-void Plot3DAreaPrivate::updateTheme(Plot3DArea::Type type) {
+void Plot3DAreaPrivate::updateTheme() {
 	switch (type) {
 	case Plot3DArea::Type::Surface:
 		q->m_surface->activeTheme()->setType(static_cast<Q3DTheme::Theme>(theme));
@@ -180,7 +179,7 @@ void Plot3DAreaPrivate::updateTheme(Plot3DArea::Type type) {
 	Q_EMIT q->changed();
 }
 
-void Plot3DAreaPrivate::updateZoomLevel(Plot3DArea::Type type) {
+void Plot3DAreaPrivate::updateZoomLevel() {
 	switch (type) {
 	case Plot3DArea::Type::Surface:
 		q->m_surface->setCameraZoomLevel(zoomLevel);
@@ -197,7 +196,7 @@ void Plot3DAreaPrivate::updateZoomLevel(Plot3DArea::Type type) {
 	Q_EMIT q->changed();
 }
 
-void Plot3DAreaPrivate::updateShadowQuality(Plot3DArea::Type type) {
+void Plot3DAreaPrivate::updateShadowQuality() {
 	switch (type) {
 	case Plot3DArea::Type::Surface:
 		q->m_surface->setShadowQuality(static_cast<QAbstract3DGraph::ShadowQuality>(shadowQuality));
@@ -213,7 +212,7 @@ void Plot3DAreaPrivate::updateShadowQuality(Plot3DArea::Type type) {
 	}
 	Q_EMIT q->changed();
 }
-void Plot3DAreaPrivate::updateXRotation(Plot3DArea::Type type) {
+void Plot3DAreaPrivate::updateXRotation() {
 	switch (type) {
 	case Plot3DArea::Type::Surface:
 		q->m_surface->setCameraXRotation(xRotation);
@@ -229,7 +228,7 @@ void Plot3DAreaPrivate::updateXRotation(Plot3DArea::Type type) {
 	}
 	Q_EMIT q->changed();
 }
-void Plot3DAreaPrivate::updateYRotation(Plot3DArea::Type type) {
+void Plot3DAreaPrivate::updateYRotation() {
 	switch (type) {
 	case Plot3DArea::Type::Surface:
 		q->m_surface->setCameraYRotation(yRotation);

@@ -6,7 +6,9 @@
 class WorksheetElementContainerPrivate;
 class Plot3DAreaPrivate : public WorksheetElementContainerPrivate {
 public:
-	explicit Plot3DAreaPrivate(Plot3DArea* owner);
+	explicit Plot3DAreaPrivate(Plot3DArea* owner, Plot3DArea::Type);
+
+	Plot3DArea::Type type;
 	int xRotation;
 	int yRotation;
 	Plot3DArea::Theme theme;
@@ -18,12 +20,11 @@ public:
 	Plot3DArea* q{nullptr};
 
 	// trigger update
-	void updateXRotation(Plot3DArea::Type);
-	void updateYRotation(Plot3DArea::Type);
-	void updateTheme(Plot3DArea::Type);
-	void updateZoomLevel(Plot3DArea::Type);
-	void updateOpacity(Plot3DArea::Type);
-	void updateShadowQuality(Plot3DArea::Type);
+	void updateXRotation();
+	void updateYRotation();
+	void updateTheme();
+	void updateZoomLevel();
+	void updateShadowQuality();
 };
 
 #endif // PLOT3DAREAPRIVATE_H

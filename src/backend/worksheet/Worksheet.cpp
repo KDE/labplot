@@ -304,10 +304,11 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 				window->setFocusPolicy(Qt::StrongFocus);
 				QGraphicsProxyWidget* proxy = d->m_scene->addWidget(window);
 				proxy->setFocusPolicy(Qt::StrongFocus); // Ensure the proxy can gain focus
+				proxy->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 				proxy->setAcceptHoverEvents(true);
 				proxy->setAcceptedMouseButtons(Qt::AllButtons);
 				// Set the proxy size dynamically
-				QRectF sceneRect = d->m_scene->sceneRect();
+				QRectF sceneRect = d->pageRect;
 				double width = sceneRect.width() - d->layoutLeftMargin - d->layoutRightMargin;
 				double height = sceneRect.height() - d->layoutTopMargin - d->layoutBottomMargin;
 				proxy->resize(width, height);
@@ -318,6 +319,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 		const auto* addedElement = static_cast<const Scatter3DPlot*>(aspect);
 		Q3DScatter* graph = addedElement->m_scatter;
 		graph->setFocusPolicy(Qt::StrongFocus);
+		graph->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 		if (graph) {
 			QWidget* window = graph->window();
 			if (window) {
@@ -327,7 +329,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 				proxy->setAcceptHoverEvents(true);
 				proxy->setAcceptedMouseButtons(Qt::AllButtons);
 				// Set the proxy size dynamically
-				QRectF sceneRect = d->m_scene->sceneRect();
+				QRectF sceneRect = d->pageRect;
 				double width = sceneRect.width() - d->layoutLeftMargin - d->layoutRightMargin;
 				double height = sceneRect.height() - d->layoutTopMargin - d->layoutBottomMargin;
 				proxy->resize(width, height);
@@ -344,10 +346,11 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 				window->setFocusPolicy(Qt::StrongFocus);
 				QGraphicsProxyWidget* proxy = d->m_scene->addWidget(window);
 				proxy->setFocusPolicy(Qt::StrongFocus); // Ensure the proxy can gain focus
+				proxy->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 				proxy->setAcceptHoverEvents(true);
 				proxy->setAcceptedMouseButtons(Qt::AllButtons);
 				// Set the proxy size dynamically
-				QRectF sceneRect = d->m_scene->sceneRect();
+				QRectF sceneRect = d->pageRect;
 				double width = sceneRect.width() - d->layoutLeftMargin - d->layoutRightMargin;
 				double height = sceneRect.height() - d->layoutTopMargin - d->layoutBottomMargin;
 				proxy->resize(width, height);

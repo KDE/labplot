@@ -1,12 +1,14 @@
 #include "Bar3DPlot.h"
 #include "Axis3D.h"
 #include "Bar3DPlotPrivate.h"
+#include "MouseInteractor.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
 
 Bar3DPlot::Bar3DPlot(const QString& name)
 	: Plot3DArea(name, new Bar3DPlotPrivate(this), AspectType::Bar3DPlot) {
 	m_bar = new Q3DBars();
+	m_bar->setActiveInputHandler(new MouseInteractor());
 }
 
 Bar3DPlot::~Bar3DPlot() {
@@ -155,7 +157,7 @@ void Bar3DPlot::columnAboutToBeRemoved(const AbstractAspect* aspect) {
 // ################### Private implementation ##########################
 // #####################################################################
 Bar3DPlotPrivate::Bar3DPlotPrivate(Bar3DPlot* owner)
-	: Plot3DAreaPrivate(owner)
+	: Plot3DAreaPrivate(owner, Plot3DArea::Type::Bar)
 	, q(owner)
 	, color(Qt::green) {
 }

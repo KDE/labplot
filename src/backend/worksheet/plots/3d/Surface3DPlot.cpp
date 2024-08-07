@@ -10,6 +10,7 @@
 
 #include "Surface3DPlot.h"
 #include "Axis3D.h"
+#include "MouseInteractor.h"
 #include "Surface3DPlotPrivate.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
@@ -30,6 +31,7 @@ Surface3DPlot::Surface3DPlot(const QString& name)
 	m_surface->setAxisX(xAxis->m_axis);
 	m_surface->setAxisY(yAxis->m_axis);
 	m_surface->setAxisZ(zAxis->m_axis);
+	m_surface->setActiveInputHandler(new MouseInteractor());
 }
 
 Surface3DPlot::~Surface3DPlot() {
@@ -167,7 +169,7 @@ void Surface3DPlot::setZColumn(const AbstractColumn* zCol) {
 // #####################################################################
 
 Surface3DPlotPrivate::Surface3DPlotPrivate(Surface3DPlot* owner)
-	: Plot3DAreaPrivate(owner)
+	: Plot3DAreaPrivate(owner, Plot3DArea::Type::Surface)
 	, q(owner)
 	, sourceType(Surface3DPlot::DataSource_Spreadsheet)
 	, drawMode(Surface3DPlot::DrawWireframeSurface)

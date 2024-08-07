@@ -6,6 +6,8 @@
 #include <QXmlStreamAttributes>
 
 #include "backend/worksheet/plots/3d/Scatter3DPlotPrivate.h"
+
+#include "MouseInteractor.h"
 class Scatter3DPlot;
 class Scatter3DPlotPrivate;
 Scatter3DPlot::Scatter3DPlot(const QString& name)
@@ -20,6 +22,7 @@ Scatter3DPlot::Scatter3DPlot(const QString& name)
 	m_scatter->setAxisX(xAxis->m_axis);
 	m_scatter->setAxisY(yAxis->m_axis);
 	m_scatter->setAxisZ(zAxis->m_axis);
+	m_scatter->setActiveInputHandler(new MouseInteractor());
 }
 
 Scatter3DPlot::~Scatter3DPlot() {
@@ -174,7 +177,7 @@ void Scatter3DPlot::retransform() {
 // ################### Private implementation ##########################
 // #####################################################################
 Scatter3DPlotPrivate::Scatter3DPlotPrivate(Scatter3DPlot* owner)
-	: Plot3DAreaPrivate(owner)
+	: Plot3DAreaPrivate(owner, Plot3DArea::Type::Scatter)
 	, pointStyle(Scatter3DPlot::Sphere)
 	, color(Qt::green)
 	, q(owner) {
