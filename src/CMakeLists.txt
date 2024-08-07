@@ -447,6 +447,7 @@ set(BACKEND_SOURCES
         ${BACKEND_DIR}/worksheet/plots/3d/Scatter3DPlot.cpp
         ${BACKEND_DIR}/worksheet/plots/3d/Bar3DPlot.cpp
         ${BACKEND_DIR}/worksheet/plots/3d/Plot3DArea.cpp
+        ${BACKEND_DIR}/worksheet/plots/3d/MouseInteractor.cpp
 )
 
 if(Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
@@ -642,12 +643,12 @@ target_link_libraries(labplotlib
 	)
 
 if(Qt${QT_MAJOR_VERSION}SerialPort_FOUND)
-	target_link_libraries( labplot2backendlib Qt${QT_MAJOR_VERSION}::SerialPort )
-	target_link_libraries( labplot2lib Qt${QT_MAJOR_VERSION}::SerialPort )
+        target_link_libraries( labplotbackendlib Qt${QT_MAJOR_VERSION}::SerialPort )
+        target_link_libraries( labplotlib Qt${QT_MAJOR_VERSION}::SerialPort )
 endif()
 if(Qt${QT_MAJOR_VERSION}Mqtt_FOUND)
-	target_link_libraries( labplot2backendlib Qt${QT_MAJOR_VERSION}::Mqtt )
-	target_link_libraries( labplot2lib Qt${QT_MAJOR_VERSION}::Mqtt )
+        target_link_libraries( labplotbackendlib Qt${QT_MAJOR_VERSION}::Mqtt )
+        target_link_libraries( labplotlib Qt${QT_MAJOR_VERSION}::Mqtt )
 endif()
 if(KF${KF_MAJOR_VERSION}SyntaxHighlighting_FOUND)
     target_link_libraries(labplotlib KF${KF_MAJOR_VERSION}::SyntaxHighlighting)
@@ -780,7 +781,8 @@ endif()
 if(APPLE AND ${ECM_VERSION} VERSION_GREATER "5.48.0")
 	ecm_add_app_icon(LABPLOT_SOURCE ICONS ${LML_ICONS} OUTFILE_BASENAME LML_ICONS)
 endif()
-add_executable(labplot ${LABPLOT_SOURCE} ${GUI_QRC} ${qml_QRC})
+add_executable(labplot ${LABPLOT_SOURCE} ${GUI_QRC} ${qml_QRC}
+    )
 target_link_libraries(labplot labplotlib labplotbackendlib labplotnsllib)
 
 

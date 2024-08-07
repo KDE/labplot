@@ -218,27 +218,27 @@ void Bar3DPlotAreaDock::barColorChanged(QColor color) {
 }
 void Bar3DPlotAreaDock::xRotationChanged(int xRot) {
 	CONDITIONAL_LOCK_RETURN;
-	m_bar->setXRotation(xRot, Plot3DArea::Bar);
+	m_bar->setXRotation(xRot);
 }
 
 void Bar3DPlotAreaDock::yRotationChanged(int yRot) {
 	CONDITIONAL_LOCK_RETURN;
-	m_bar->setYRotation(yRot, Plot3DArea::Bar);
+	m_bar->setYRotation(yRot);
 }
 void Bar3DPlotAreaDock::zoomLevelChanged(int zoomLevel) {
 	CONDITIONAL_LOCK_RETURN;
-	m_bar->setZoomLevel(zoomLevel, Plot3DArea::Bar);
+	m_bar->setZoomLevel(zoomLevel);
 }
 void Bar3DPlotAreaDock::shadowQualityChanged(int shadowQuality) {
 	CONDITIONAL_LOCK_RETURN;
 	for (Bar3DPlot* bar : m_bars)
-		bar->setShadowQuality(static_cast<Plot3DArea::ShadowQuality>(shadowQuality), Plot3DArea::Bar);
+		bar->setShadowQuality(static_cast<Plot3DArea::ShadowQuality>(shadowQuality));
 }
 
 void Bar3DPlotAreaDock::themeChanged(int theme) {
 	CONDITIONAL_LOCK_RETURN;
 	for (Bar3DPlot* bar : m_bars)
-		bar->setTheme(static_cast<Plot3DArea::Theme>(theme), Plot3DArea::Bar);
+		bar->setTheme(static_cast<Plot3DArea::Theme>(theme));
 }
 
 void Bar3DPlotAreaDock::colorChanged(QColor color) {

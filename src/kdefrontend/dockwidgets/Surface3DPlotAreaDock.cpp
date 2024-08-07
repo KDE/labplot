@@ -224,22 +224,22 @@ void Surface3DPlotAreaDock::zColumnChanged(const QModelIndex& index) {
 
 void Surface3DPlotAreaDock::xRotationChanged(int value) {
 	CONDITIONAL_LOCK_RETURN;
-	m_surface->setXRotation(value, Plot3DArea::Surface);
+	m_surface->setXRotation(value);
 }
 
 void Surface3DPlotAreaDock::yRotationChanged(int value) {
 	CONDITIONAL_LOCK_RETURN;
-	m_surface->setYRotation(value, Plot3DArea::Surface);
+	m_surface->setYRotation(value);
 }
 
 void Surface3DPlotAreaDock::themeChanged(int value) {
 	CONDITIONAL_LOCK_RETURN;
-	m_surface->setTheme(static_cast<Plot3DArea::Theme>(value), Plot3DArea::Surface);
+	m_surface->setTheme(static_cast<Plot3DArea::Theme>(value));
 }
 
 void Surface3DPlotAreaDock::zoomLevelChanged(int value) {
 	CONDITIONAL_LOCK_RETURN;
-	m_surface->setZoomLevel(value, Plot3DArea::Surface);
+	m_surface->setZoomLevel(value);
 }
 
 void Surface3DPlotAreaDock::matrixChanged(const QModelIndex& index) {
@@ -287,7 +287,7 @@ void Surface3DPlotAreaDock::flatShadingChanged(bool vis) {
 void Surface3DPlotAreaDock::shadowQualityChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 	for (Surface3DPlot* surface : m_surfaces)
-		surface->setShadowQuality(static_cast<Surface3DPlot::ShadowQuality>(index), Plot3DArea::Surface);
+		surface->setShadowQuality(static_cast<Surface3DPlot::ShadowQuality>(index));
 }
 
 void Surface3DPlotAreaDock::smoothChanged(bool vis) {

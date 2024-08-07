@@ -206,21 +206,21 @@ void Scatter3DPlotAreaDock::scatterColorChanged(QColor color) {
 }
 void Scatter3DPlotAreaDock::xRotationChanged(int xRot) {
 	CONDITIONAL_LOCK_RETURN;
-	m_scatter->setXRotation(xRot, Plot3DArea::Scatter);
+	m_scatter->setXRotation(xRot);
 }
 
 void Scatter3DPlotAreaDock::yRotationChanged(int yRot) {
 	CONDITIONAL_LOCK_RETURN;
-	m_scatter->setYRotation(yRot, Plot3DArea::Scatter);
+	m_scatter->setYRotation(yRot);
 }
 void Scatter3DPlotAreaDock::zoomLevelChanged(int zoomLevel) {
 	CONDITIONAL_LOCK_RETURN;
-	m_scatter->setZoomLevel(zoomLevel, Plot3DArea::Scatter);
+	m_scatter->setZoomLevel(zoomLevel);
 }
 void Scatter3DPlotAreaDock::shadowQualityChanged(int shadowQuality) {
 	CONDITIONAL_LOCK_RETURN;
 	for (Scatter3DPlot* surface : m_scatters)
-		surface->setShadowQuality(static_cast<Plot3DArea::ShadowQuality>(shadowQuality), Plot3DArea::Scatter);
+		surface->setShadowQuality(static_cast<Plot3DArea::ShadowQuality>(shadowQuality));
 }
 void Scatter3DPlotAreaDock::pointStyleChanged(int pointStyle) {
 	CONDITIONAL_LOCK_RETURN;
@@ -231,7 +231,7 @@ void Scatter3DPlotAreaDock::pointStyleChanged(int pointStyle) {
 void Scatter3DPlotAreaDock::themeChanged(int theme) {
 	CONDITIONAL_LOCK_RETURN;
 	for (Scatter3DPlot* surface : m_scatters)
-		surface->setTheme(static_cast<Plot3DArea::Theme>(theme), Plot3DArea::Scatter);
+		surface->setTheme(static_cast<Plot3DArea::Theme>(theme));
 }
 
 void Scatter3DPlotAreaDock::colorChanged(QColor color) {
