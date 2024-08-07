@@ -784,7 +784,7 @@ endif()
 ############## installation ################################
 install(TARGETS labplot ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES ${KDEFRONTEND_DIR}/splash.png ${KDEFRONTEND_DIR}/labplot.ico ${CMAKE_CURRENT_SOURCE_DIR}/../icons/application-x-labplot.ico DESTINATION ${KDE_INSTALL_DATADIR}/${PROJECT_NAME})
-install(FILES org.kde.labplot.desktop DESTINATION ${KDE_INSTALL_APPDIR})
+install(FILES org.kde.labplot2.desktop DESTINATION ${KDE_INSTALL_APPDIR})
 install(FILES labplot.xml DESTINATION ${KDE_INSTALL_MIMEDIR})
 # if(${ECM_VERSION} VERSION_GREATER "5.58.0")
 #     install(FILES labplot2_themes.knsrc DESTINATION ${KDE_INSTALL_KNSRCDIR})
