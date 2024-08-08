@@ -70,7 +70,7 @@ void Scatter3DPlotAreaDock::setScatters(const QList<Scatter3DPlot*>& scatters) {
 	ui.slZoom->setValue(m_scatter->zoomLevel());
 	ui.slXRot->setValue(m_scatter->xRotation());
 	ui.slYRot->setValue(m_scatter->yRotation());
-	ui.kcbColor->setColor(Qt::green);
+	ui.kcbColor->setColor(m_scatter->color());
 	connect(m_scatter, &Scatter3DPlot::xColumnChanged, this, &Scatter3DPlotAreaDock::scatterXColumnChanged);
 	connect(m_scatter, &Scatter3DPlot::yColumnChanged, this, &Scatter3DPlotAreaDock::scatterYColumnChanged);
 	connect(m_scatter, &Scatter3DPlot::zColumnChanged, this, &Scatter3DPlotAreaDock::scatterZColumnChanged);

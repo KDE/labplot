@@ -29,29 +29,28 @@ void Plot3DArea::setShadowQuality(Plot3DArea::ShadowQuality shadowQuality) {
 }
 
 STD_SETTER_CMD_IMPL_F_S(Plot3DArea, SetTheme, Plot3DArea::Theme, theme, updateTheme)
-void Plot3DArea::setTheme(Plot3DArea::Theme theme) {
+void Plot3DArea::setTheme(Plot3DArea::Theme value) {
 	Q_D(Plot3DArea);
-	if (theme != d->theme)
-		exec(new Plot3DAreaSetThemeCmd(d, theme, ki18n("%1: theme changed")));
+	if (value != d->theme)
+		exec(new Plot3DAreaSetThemeCmd(d, value, ki18n("%1: theme changed")));
 }
-
 STD_SETTER_CMD_IMPL_F_S(Plot3DArea, SetXRotation, int, xRotation, updateXRotation)
-void Plot3DArea::setXRotation(int xRot) {
+void Plot3DArea::setXRotation(int value) {
 	Q_D(Plot3DArea);
-	if (xRot != d->xRotation)
-		exec(new Plot3DAreaSetXRotationCmd(d, xRot, ki18n("%1: X Rotation changed")));
+	if (value != d->xRotation)
+		exec(new Plot3DAreaSetXRotationCmd(d, value, ki18n("%1: X Rotation changed")));
 }
 STD_SETTER_CMD_IMPL_F_S(Plot3DArea, SetYRotation, int, yRotation, updateYRotation)
-void Plot3DArea::setYRotation(int yRot) {
+void Plot3DArea::setYRotation(int value) {
 	Q_D(Plot3DArea);
-	if (yRot != d->yRotation)
-		exec(new Plot3DAreaSetYRotationCmd(d, yRot, ki18n("%1: Y Rotation changed")));
+	if (value != d->yRotation)
+		exec(new Plot3DAreaSetYRotationCmd(d, value, ki18n("%1: Y Rotation changed")));
 }
 STD_SETTER_CMD_IMPL_F_S(Plot3DArea, SetZoomLevel, int, zoomLevel, updateZoomLevel)
-void Plot3DArea::setZoomLevel(int zoom) {
+void Plot3DArea::setZoomLevel(int value) {
 	Q_D(Plot3DArea);
-	if (zoom != d->zoomLevel)
-		exec(new Plot3DAreaSetZoomLevelCmd(d, zoom, ki18n("%1: zoom changed")));
+	if (value != d->zoomLevel)
+		exec(new Plot3DAreaSetZoomLevelCmd(d, value, ki18n("%1: zoom changed")));
 }
 
 class Plot3DAreaSetRectCmd : public QUndoCommand {
