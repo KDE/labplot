@@ -84,12 +84,9 @@ int main(int argc, char* argv[]) {
 #endif
 	QApplication app(argc, argv);
 	KLocalizedString::setApplicationDomain("labplot");
-	KCrash::initialize();
-
 	MainWin::updateLocale();
 
 	QString systemInfo{getSystemInfo()};
-
 	KAboutData aboutData(QStringLiteral("labplot"),
 						 QStringLiteral("LabPlot"),
 						 QLatin1String(LVERSION),
@@ -122,6 +119,7 @@ int main(int argc, char* argv[]) {
 	aboutData.setOrganizationDomain(QByteArray("kde.org"));
 	aboutData.setDesktopFileName(QStringLiteral("org.kde.labplot"));
 	KAboutData::setApplicationData(aboutData);
+	KCrash::initialize();
 
 	const auto& group = Settings::settingsGeneral();
 	enableDebugTrace(group.readEntry<bool>(QLatin1String("DebugTrace"), false));
