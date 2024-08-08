@@ -14,7 +14,7 @@
 ><surname
 >Faulkner</surname
 > <contrib
->Página man de LabPlot.</contrib
+>LabPlot man page.</contrib
 > <email
 >helen_ml_faulkner@yahoo.co.uk</email
 ></author>
@@ -29,7 +29,7 @@
 <refmeta>
 <refentrytitle
 ><command
->labplot2</command
+>labplot</command
 ></refentrytitle>
 <manvolnum
 >1</manvolnum>
@@ -37,15 +37,15 @@
 
 <refnamediv>
 <refname
->labplot2</refname>
+>labplot</refname>
 <refpurpose
->una aplicación creada por KDE para representar gráficamente datos científicos y analizarlos.</refpurpose>
+>Aplicación de KDE para gráficos interactivos y análisis de datos científicos.</refpurpose>
 </refnamediv>
 <!-- body begins here -->
 <refsynopsisdiv id='synopsis'>
 <cmdsynopsis
 ><command
->labplot2</command
+>labplot</command
 > <arg choice="opt"
 ><replaceable
 >opciones de LabPlot</replaceable
@@ -60,14 +60,14 @@
 
 <refsect1 id="description"
 ><title
->Descripción</title>
+>Description</title>
 <para
->LabPlot es una herramienta de representación gráfica y análisis de datos. </para>
+>LabPlot es una herramienta de trazado y análisis de datos. </para>
 <para
->Sus funcionalidades incluyen representación gráfica 2D y 3D de datos y funciones, fácil edición de los gráficos, análisis de datos y funciones, y compatibilidad con diferentes hojas de trabajo que usan archivos de proyectos MDI y LabPlot. </para>
+>Sus funciones incluyen gráficos de datos y funciones 2D y 3D, fácil edición de los gráficos, análisis de datos y funciones, así como compatibilidad con distintas hojas de trabajo que usan archivos de proyectos MDI y LabPlot. </para>
 <para
->Tenga en cuenta que LabPlot se invoca usando la orden <command
->labplot2</command
+>Recuerde que LabPlot se llama usando <command
+>labplot</command
 >. </para>
 
 </refsect1>
@@ -76,9 +76,9 @@
 ><title
 >Opciones de LabPlot</title>
 <para
->Para obtener un resumen de las opciones generales, ejecute <userinput
+>Para un completo resumen de las opciones generales, ejecute <userinput
 ><command
->labplot2</command
+>labplot</command
 > <parameter
 >--help</parameter
 ></userinput
@@ -120,14 +120,14 @@
 ></term>
   <listitem>
     <para
->La ubicación del proyecto a abrir, normalmente terminado en <literal role="extension"
+>La ubicación del proyecto que se va a abrir, normalmente con la extensión <literal role="extension"
 >.lml</literal
 >.</para>
     <para
->El archivo de proyecto también puede estar comprimido, con el nombre de archivo terminado en <literal role="extension"
+>El archivo de proyecto también puede estar comprimido, con el nombre de archivo terminando con alguna de las extensiones <literal role="extension"
 >.lml.gz</literal
 >, <literal role="extension"
->.lml.bz2</literal
+>lml.bz2</literal
 > o <literal role="extension"
 >.lml.xz</literal
 >.</para>
@@ -141,15 +141,15 @@
 >Consulte también</title>
 <simplelist>
 <member
->Dispone de una documentación completa en el centro de ayuda de KDE. También puede introducir el URL <ulink url="help:/labplot2"
->help:/labplot2</ulink
-> (introduzca dicho <acronym
+>Dispone de una completa documentación del usuario a través del centro de ayuda de KDE. También puede introducir la URL <ulink url="help:/labplot"
+>help:/labplot</ulink
+> (puede introducir dicha <acronym
 >URL</acronym
-> en &dolphin; o ejecute <userinput
+> en &dolphin; o ejecutar <userinput
 ><command
 >khelpcenter</command
 > <parameter
->help:/labplot2</parameter
+>help:/labplot</parameter
 ></userinput
 >).</member>
 <member
@@ -159,7 +159,7 @@
 <member
 >También dispone de más información en <ulink url="https://labplot.kde.org/"
 >https://labplot.kde.org/</ulink
-></member>
+>.</member>
 </simplelist>
 </refsect1>
 
@@ -167,7 +167,7 @@
 ><title
 >Autores</title>
 <para
->LabPlot2 ha sido escrito por </para>
+>LabPlot fue escrito por </para>
 <simplelist>
     <member
 >Stefan Gerlach &lt;stefan.gerlach@uni.kn&gt;,</member>
@@ -179,9 +179,9 @@
 >y otros autores más.</member>
 </simplelist>
 <para
->Esta página de manual ha sido preparada por Helen Faulkner &lt;helen_ml_faulkner@yahoo.co.uk&gt; para el sistema GNU/Linux Debian (aunque se puede usar en otros). </para>
+>Esta página de manual fue preparada por Helen Faulkner &lt;helen_ml_faulkner@yahoo.co.uk&gt; para el sistema GNU/Linux de Debian (aunque también se puede usar en otros). </para>
 <para
->Licencia: Pública General de GNU Versión 2 &lt;<ulink url="http://www.gnu.org/licenses/gpl-2.0.html"
+>Licencia: GNU General Public Versión 2 &lt;<ulink url="http://www.gnu.org/licenses/gpl-2.0.html"
 >http://www.gnu.org/licenses/gpl-2.0.html</ulink
 >&gt; </para>
 </refsect1>

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-06 01:47+0000\n"
-"PO-Revision-Date: 2024-08-03 12:41+0200\n"
+"PO-Revision-Date: 2024-08-07 21:27+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -15442,12 +15442,10 @@ msgid "Garvit Khatri"
 msgstr "Garvit Khatri"
 
 #: src/kdefrontend/LabPlot.cpp:115
-#, fuzzy, kde-format
-#| msgctxt "@info:credit"
-#| msgid "Porting LabPlot2 to KF5 and Integration with Cantor"
+#, kde-format
 msgctxt "@info:credit"
 msgid "Porting LabPlot to KF5 and Integration with Cantor"
-msgstr "Adaptar LabPlot2 a KF5 e integralo con Cantor"
+msgstr "Adaptar LabPlot a KF5 e integralo con Cantor."
 
 #: src/kdefrontend/LabPlot.cpp:118
 #, kde-format
