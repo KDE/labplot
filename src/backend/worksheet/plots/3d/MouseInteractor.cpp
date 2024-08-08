@@ -7,7 +7,7 @@ const int MouseInteractor::deltaZoom = 1;
 MouseInteractor::MouseInteractor(QObject* parent)
 	: QAbstract3DInputHandler(parent)
 	, mouseRotation(false)
-	, zoomFactor(130)
+	, zoomFactor(100)
 	, xRotation(40)
 	, yRotation(30) {
 }
