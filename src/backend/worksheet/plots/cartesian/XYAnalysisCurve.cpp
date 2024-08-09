@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Base class for all analysis curves
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2017-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2018-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -56,6 +56,13 @@ bool XYAnalysisCurve::usingColumn(const Column* column) const {
 		return (d->xDataColumn == column || d->yDataColumn == column || d->y2DataColumn == column);
 	else
 		return (d->dataSourceCurve->xColumn() == column || d->dataSourceCurve->yColumn() == column);
+}
+
+bool XYAnalysisCurve::isFitDistribution(AnalysisAction action) {
+	bool fitDistribution = (action == AnalysisAction::FitDistributionGauss || action == AnalysisAction::FitDistributionExp || action == AnalysisAction::FitDistributionLaplace
+							|| action == AnalysisAction::FitDistributionCauchyLorentz || action == AnalysisAction::FitDistributionLogNormal || action == AnalysisAction::FitDistributionPoisson
+							|| action == AnalysisAction::FitDistributionBinomial);
+	return fitDistribution;
 }
 
 // copy valid data from x/y data columns to x/y data vectors
