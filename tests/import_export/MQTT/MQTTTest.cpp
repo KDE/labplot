@@ -136,6 +136,7 @@ void MQTTTest::testCommonFalse() {
 // #################  test handling of data received by messages  ###############
 // ##############################################################################
 void MQTTTest::testIntegerMessage() {
+	QSKIP("broker.hivemq.com is not available anymore.");
 	AsciiFilter* filter = new AsciiFilter();
 	filter->setAutoModeEnabled(true);
 
@@ -230,6 +231,7 @@ void MQTTTest::testIntegerMessage() {
 }
 
 void MQTTTest::testNumericMessage() {
+	QSKIP("broker.hivemq.com is not available anymore.");
 	AsciiFilter* filter = new AsciiFilter();
 	filter->setAutoModeEnabled(true);
 
@@ -324,6 +326,7 @@ void MQTTTest::testNumericMessage() {
 }
 
 void MQTTTest::testTextMessage() {
+	QSKIP("broker.hivemq.com is not available anymore.");
 	AsciiFilter* filter = new AsciiFilter();
 	filter->setAutoModeEnabled(true);
 
