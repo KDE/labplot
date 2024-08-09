@@ -36,6 +36,7 @@ git branch --set-upstream-to=origin/release/2.8
 
 4. Create Installer (.0: when macOS MR is done)
 * rebuild packages (AppImage, Win, macos-arm64+x86_64) on gitlab (release/2.8 branch)
+TODO: check if version shown in Apps on Windows fits the new version. Otherwise the blueprint needs to be updated first (after tar.gz is on download.kde.org)
 
 
 5. Upload tarball and packages to ftp://upload.kde.org/incoming (Read readme: ftp://upload.kde.org/README)
