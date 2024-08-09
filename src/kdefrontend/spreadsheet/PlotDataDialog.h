@@ -33,7 +33,7 @@ class PlotDataDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	enum class PlotType { XYCurve, Histogram, BoxPlot, KDEPlot, QQPlot, BarPlot, LollipopPlot };
+	enum class PlotType { XYCurve, Histogram, BoxPlot, KDEPlot, QQPlot, BarPlot, LollipopPlot, DistributionFit };
 
 	explicit PlotDataDialog(AbstractAspect*, PlotType = PlotType::XYCurve, QWidget* parent = nullptr);
 	~PlotDataDialog() override;

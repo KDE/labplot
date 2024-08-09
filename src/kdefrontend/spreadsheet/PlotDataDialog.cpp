@@ -109,10 +109,8 @@ PlotDataDialog::PlotDataDialog(AbstractAspect* parentAspect, PlotType type, QWid
 	cbExistingWorksheets->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
 	gridLayout->addWidget(cbExistingWorksheets, 1, 1, 1, 1);
 
-	QList<AspectType> list{AspectType::Folder, AspectType::Worksheet, AspectType::CartesianPlot};
-	cbExistingPlots->setTopLevelClasses(list);
-	list = {AspectType::CartesianPlot};
-	m_plotsModel->setSelectableAspects(list);
+	cbExistingPlots->setTopLevelClasses({AspectType::Folder, AspectType::Worksheet, AspectType::CartesianPlot});
+	m_plotsModel->setSelectableAspects({AspectType::CartesianPlot});
 	cbExistingPlots->setModel(m_plotsModel);
 
 	// select the first available plot, if available
@@ -122,10 +120,8 @@ PlotDataDialog::PlotDataDialog(AbstractAspect* parentAspect, PlotType type, QWid
 		cbExistingPlots->setCurrentModelIndex(m_plotsModel->modelIndexOfAspect(plot));
 	}
 
-	list = {AspectType::Folder, AspectType::Worksheet};
-	cbExistingWorksheets->setTopLevelClasses(list);
-	list = {AspectType::Worksheet};
-	m_worksheetsModel->setSelectableAspects(list);
+	cbExistingWorksheets->setTopLevelClasses({AspectType::Folder, AspectType::Worksheet});
+	m_worksheetsModel->setSelectableAspects({AspectType::Worksheet});
 	cbExistingWorksheets->setModel(m_worksheetsModel);
 
 	// select the first available worksheet, if available
@@ -224,8 +220,10 @@ PlotDataDialog::~PlotDataDialog() {
 void PlotDataDialog::setAnalysisAction(XYAnalysisCurve::AnalysisAction action) {
 	m_analysisAction = action;
 	m_analysisMode = true;
-	ui->spacer->changeSize(0, 40);
-	ui->chkCreateDataCurve->show();
+	if (!XYAnalysisCurve::isFitDistribution(action)) {
+		ui->spacer->changeSize(0, 40);
+		ui->chkCreateDataCurve->show();
+	}
 }
 
 void PlotDataDialog::fillMenu(QMenu* menu, QActionGroup* group) {
@@ -329,6 +327,7 @@ void PlotDataDialog::setSelectedColumns(QVector<Column*> selectedColumns) {
 	case PlotType::BoxPlot:
 	case PlotType::BarPlot:
 	case PlotType::LollipopPlot:
+	case PlotType::DistributionFit:
 		processColumnsForHistogram(columnNames);
 		break;
 	}
@@ -575,7 +574,8 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) {
 	}
 	case PlotType::Histogram:
 	case PlotType::KDEPlot:
-	case PlotType::QQPlot: {
+	case PlotType::QQPlot:
+	case PlotType::DistributionFit: {
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
 			Column* column = columnFromName(name);
@@ -629,7 +629,8 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 	}
 	case PlotType::Histogram:
 	case PlotType::KDEPlot:
-	case PlotType::QQPlot: {
+	case PlotType::QQPlot:
+	case PlotType::DistributionFit: {
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
 			Column* column = columnFromName(name);
@@ -727,6 +728,14 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 		case XYAnalysisCurve::AnalysisAction::FourierFilter:
 			analysisCurve = new XYFourierFilterCurve(i18n("Fourier Filter of '%1'", name));
 			break;
+		case XYAnalysisCurve::AnalysisAction::FitDistributionGauss:
+		case XYAnalysisCurve::AnalysisAction::FitDistributionExp:
+		case XYAnalysisCurve::AnalysisAction::FitDistributionLaplace:
+		case XYAnalysisCurve::AnalysisAction::FitDistributionCauchyLorentz:
+		case XYAnalysisCurve::AnalysisAction::FitDistributionLogNormal:
+		case XYAnalysisCurve::AnalysisAction::FitDistributionPoisson:
+		case XYAnalysisCurve::AnalysisAction::FitDistributionBinomial:
+			break;
 		}
 
 		if (analysisCurve != nullptr) {
@@ -758,6 +767,20 @@ void PlotDataDialog::addSingleSourceColumnPlot(const Column* column, CartesianPl
 		auto* qqPlot = new QQPlot(name);
 		qqPlot->setDataColumn(column);
 		plot = qqPlot;
+	} else if (m_plotType == PlotType::DistributionFit) {
+		auto* histogram = new Histogram(i18n("Probability Density of '%1'", name));
+		histogram->setNormalization(Histogram::Normalization::ProbabilityDensity);
+		histogram->setDataColumn(column);
+		plotArea->addChild(histogram);
+
+		auto* fitCurve = new XYFitCurve(i18n("Distribution Fit to '%1'", name));
+		fitCurve->setDataSourceType(XYAnalysisCurve::DataSourceType::Histogram);
+		fitCurve->setDataSourceHistogram(histogram);
+		// TODO:
+		// fitCurve->initFitData(m_analysisAction);
+		// fitCurve->initStartValues(histogram);
+		fitCurve->recalculate();
+		plot = fitCurve;
 	}
 
 	if (plot) {
@@ -914,7 +937,8 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 		break;
 	}
 	case PlotType::Histogram:
-	case PlotType::KDEPlot: {
+	case PlotType::KDEPlot:
+	case PlotType::DistributionFit: {
 		// x-axis title
 		for (auto* axis : axes) {
 			if (axis->orientation() == Axis::Orientation::Horizontal) {

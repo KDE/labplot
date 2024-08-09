@@ -210,7 +210,8 @@ private:
 	QAction* addIntegrationAction{nullptr};
 	QAction* addInterpolationAction{nullptr};
 	QAction* addSmoothAction{nullptr};
-	QVector<QAction*> addFitAction;
+	QVector<QAction*> addFitActions;
+	QVector<QAction*> addDistributionFitActions;
 	QAction* addFourierFilterAction{nullptr};
 
 	// Menus
