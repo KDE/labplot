@@ -8,10 +8,11 @@ New features:
 	* [spreadsheet]
 		* support periodic and random sampling as function: psample(n;x), rsample(x)
 		* save the properties used to generate random values in the column for later re-use
+	* [worksheet] more space for plots and less "ink" - no layout spacings, no minor grid lines, not plot borders, no ticks on secondary axes on default
 
 Bug fixes:
 	* Fix crash selecting "cell" from function list in function dialog
-	* Properly draw the border line of the symbol in the legend (BUG 470792)
+	* Properly draw the border line of the symbol in the legend (BUG 491310)
 
 Internal:
 	* use name LabPlot/labplot consistenly (renamed Labplot2/labplot2)

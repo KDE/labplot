@@ -127,31 +127,31 @@ bool CantorWorksheet::init(QByteArray* content) {
 		// TODO: right now we don't have the direct accces to Cantor's worksheet and to all its public methods
 		// and we need to go through the actions provided in cantor_part.
 		//-> redesign this! expose Cantor's Worksheet directly and add more settings here.
-		auto* action = m_part->action("enable_highlighting");
+		auto* action = m_part->action(QStringLiteral("enable_highlighting"));
 		if (action) {
 			bool value = group.readEntry(QLatin1String("SyntaxHighlighting"), false);
 			action->setChecked(value);
 		}
 
-		action = m_part->action("enable_completion");
+		action = m_part->action(QStringLiteral("enable_completion"));
 		if (action) {
 			bool value = group.readEntry(QLatin1String("SyntaxCompletion"), false);
 			action->setChecked(value);
 		}
 
-		action = m_part->action("enable_expression_numbers");
+		action = m_part->action(QStringLiteral("enable_expression_numbers"));
 		if (action) {
 			bool value = group.readEntry(QLatin1String("LineNumbers"), false);
 			action->setChecked(value);
 		}
 
-		action = m_part->action("enable_typesetting");
+		action = m_part->action(QStringLiteral("enable_typesetting"));
 		if (action) {
 			bool value = group.readEntry(QLatin1String("LatexTypesetting"), false);
 			action->setChecked(value);
 		}
 
-		action = m_part->action("enable_animations");
+		action = m_part->action(QStringLiteral("enable_animations"));
 		if (action) {
 			bool value = group.readEntry(QLatin1String("Animations"), false);
 			action->setChecked(value);
@@ -366,7 +366,7 @@ bool CantorWorksheet::exportView() const {
 	// TODO: file_export_pdf exists starting with Cantor 23.12,
 	// remove this check later once 23.12 is the minimal
 	// supported version of Cantor.
-	auto* action = m_part->action("file_export_pdf");
+	auto* action = m_part->action(QStringLiteral("file_export_pdf"));
 	if (action) {
 		action->trigger();
 		return true;
@@ -375,21 +375,21 @@ bool CantorWorksheet::exportView() const {
 }
 
 bool CantorWorksheet::printView() {
-	m_part->action("file_print")->trigger();
+	m_part->action(QStringLiteral("file_print"))->trigger();
 	return true;
 }
 
 bool CantorWorksheet::printPreview() const {
-	m_part->action("file_print_preview")->trigger();
+	m_part->action(QStringLiteral("file_print_preview"))->trigger();
 	return true;
 }
 
 void CantorWorksheet::evaluate() {
-	m_part->action("evaluate_worksheet")->trigger();
+	m_part->action(QStringLiteral("evaluate_worksheet"))->trigger();
 }
 
 void CantorWorksheet::restart() {
-	m_part->action("restart_backend")->trigger();
+	m_part->action(QStringLiteral("restart_backend"))->trigger();
 }
 
 // ##############################################################################
