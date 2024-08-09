@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 01:47+0000\n"
-"PO-Revision-Date: 2024-07-22 10:08+0200\n"
+"POT-Creation-Date: 2024-08-09 01:44+0000\n"
+"PO-Revision-Date: 2024-08-02 18:12+0200\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni.kn>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -1902,70 +1902,60 @@ msgid "Variables with rank greater than 2 not supported yet."
 msgstr "Variablen mit Rank > 2 noch nicht unterstützt."
 
 #: src/backend/datasources/filters/McapFilter.cpp:196
-#, fuzzy, kde-format
-#| msgid "Invalid DBC file."
+#, kde-format
 msgid "Valid MCAP file"
-msgstr "Ungültige DBC Datei."
+msgstr "Gültige MCAP Datei"
 
 #: src/backend/datasources/filters/McapFilter.cpp:201
-#, fuzzy, kde-format
-#| msgid "Message type:"
+#, kde-format
 msgid "Message count: "
-msgstr "Nachrichtentyp:"
+msgstr "Anzahl Nachrichten:"
 
 #: src/backend/datasources/filters/McapFilter.cpp:203
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Schema count: "
-msgstr "Anzahl Blätter: %1"
+msgstr "Anzahl Schemen:"
 
 #: src/backend/datasources/filters/McapFilter.cpp:205
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Channel count: "
-msgstr "Anzahl Blätter: %1"
+msgstr "Anzahl Kanäle:"
 
 #: src/backend/datasources/filters/McapFilter.cpp:207
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Attachment count: "
-msgstr "Anzahl Blätter: %1"
+msgstr "Anzahl Anhänge:"
 
 #: src/backend/datasources/filters/McapFilter.cpp:209
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Metadata count: "
-msgstr "Anzahl Blätter: %1"
+msgstr "Anzahl Metadaten:"
 
 #: src/backend/datasources/filters/McapFilter.cpp:211
-#, fuzzy, kde-format
-#| msgid "Start Time:"
+#, kde-format
 msgid "Message Start Time: "
-msgstr "Startzeit:"
+msgstr "Nachrichten-Startzeit:"
 
 #: src/backend/datasources/filters/McapFilter.cpp:213
-#, fuzzy, kde-format
-#| msgid "End Time: %1"
+#, kde-format
 msgid "Message End Time: "
-msgstr "Endzeit: %1"
+msgstr "Nachrichten-Endzeit:"
 
 #: src/backend/datasources/filters/McapFilter.cpp:215
-#, fuzzy, kde-format
-#| msgid "No templates found."
+#, kde-format
 msgid "No Statistics found."
-msgstr "Keine Vorlage gefunden."
+msgstr "Keine Statistiken gefunden."
 
 #: src/backend/datasources/filters/McapFilter.cpp:469
 #: src/backend/datasources/filters/McapFilter.cpp:962
-#, fuzzy, kde-format
-#| msgid "Failed to read the file."
+#, kde-format
 msgid "Failed to read the file. Reason: %1"
-msgstr "Fehler beim Lesen der Datei."
+msgstr "Fehler beim Lesen der Datei. Ursache: %1"
 
 #: src/backend/datasources/filters/McapFilter.cpp:477
 #, kde-format
 msgid "No JSON encoded topics found."
-msgstr ""
+msgstr "Keine JSON-kodierten Themen gefunden."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:213
 #, kde-format
@@ -3567,16 +3557,14 @@ msgid "Simple Moving Range"
 msgstr "Einfacher Gleitender Bereich"
 
 #: src/backend/gsl/functions.cpp:243
-#, fuzzy, kde-format
-#| msgid "Periodically"
+#, kde-format
 msgid "Period sample"
-msgstr "periodisch"
+msgstr "periodische Auswahl"
 
 #: src/backend/gsl/functions.cpp:244
-#, fuzzy, kde-format
-#| msgid "Random Values"
+#, kde-format
 msgid "Random sample"
-msgstr "Zufällige Werte"
+msgstr "Zufällige Auswahl"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:248
@@ -12289,10 +12277,9 @@ msgid "MATLAB MAT file"
 msgstr "MATLAB MAT Datei"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:136
-#, fuzzy, kde-format
-#| msgid "Copy Data"
+#, kde-format
 msgid "MCAP Data"
-msgstr "Daten Kopieren"
+msgstr "MCAP Daten"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:145
 #, kde-format
@@ -15342,7 +15329,7 @@ msgstr "C++ Compiler: "
 msgid "C++ Compiler Flags: "
 msgstr "C++ Compiler Optionen: "
 
-#: src/kdefrontend/LabPlot.cpp:96
+#: src/kdefrontend/LabPlot.cpp:93
 #, kde-format
 msgid ""
 "LabPlot is a FREE, open-source and cross-platform Data Visualization and "
@@ -15351,66 +15338,66 @@ msgstr ""
 "LabPlot ist ein FREIE, Open Source und plattformübergreifende Software zur "
 "Datenvisualisierung und -analyse, die für jeden verfügbar ist."
 
-#: src/kdefrontend/LabPlot.cpp:98
+#: src/kdefrontend/LabPlot.cpp:95
 #, kde-format
 msgid "(c) 2007-2024"
 msgstr "(c) 2007-2024"
 
-#: src/kdefrontend/LabPlot.cpp:101
+#: src/kdefrontend/LabPlot.cpp:98
 #, kde-format
 msgid "Stefan Gerlach"
 msgstr "Stefan Gerlach"
 
-#: src/kdefrontend/LabPlot.cpp:101 src/kdefrontend/LabPlot.cpp:102
-#: src/kdefrontend/LabPlot.cpp:103 src/kdefrontend/LabPlot.cpp:104
+#: src/kdefrontend/LabPlot.cpp:98 src/kdefrontend/LabPlot.cpp:99
+#: src/kdefrontend/LabPlot.cpp:100 src/kdefrontend/LabPlot.cpp:101
 #, kde-format
 msgctxt "@info:credit"
 msgid "Developer"
 msgstr "Entwickler"
 
-#: src/kdefrontend/LabPlot.cpp:102
+#: src/kdefrontend/LabPlot.cpp:99
 #, kde-format
 msgid "Alexander Semke"
 msgstr "Alexander Semke"
 
-#: src/kdefrontend/LabPlot.cpp:103
+#: src/kdefrontend/LabPlot.cpp:100
 #, kde-format
 msgid "Fábián Kristóf-Szabolcs"
 msgstr "Fábián Kristóf-Szabolcs"
 
-#: src/kdefrontend/LabPlot.cpp:104
+#: src/kdefrontend/LabPlot.cpp:101
 #, kde-format
 msgid "Martin Marmsoler"
 msgstr "Martin Marmsoler"
 
-#: src/kdefrontend/LabPlot.cpp:105
+#: src/kdefrontend/LabPlot.cpp:102
 #, kde-format
 msgid "Dariusz Laska"
 msgstr "Dariusz Laska"
 
-#: src/kdefrontend/LabPlot.cpp:106
+#: src/kdefrontend/LabPlot.cpp:103
 #, kde-format
 msgctxt "@info:credit"
 msgid "Conceptual work, documentation, example projects"
 msgstr "Konzeptionelle Arbeit, Dokumentation, Beispielprojekte"
 
-#: src/kdefrontend/LabPlot.cpp:109
+#: src/kdefrontend/LabPlot.cpp:106
 #, kde-format
 msgid "Andreas Kainz"
 msgstr "Andreas Kainz"
 
-#: src/kdefrontend/LabPlot.cpp:109
+#: src/kdefrontend/LabPlot.cpp:106
 #, kde-format
 msgctxt "@info:credit"
 msgid "Icon designer"
 msgstr "Symboldesigner"
 
-#: src/kdefrontend/LabPlot.cpp:110
+#: src/kdefrontend/LabPlot.cpp:107
 #, kde-format
 msgid "Yuri Chornoivan"
 msgstr "Yuri Chornoivan"
 
-#: src/kdefrontend/LabPlot.cpp:111
+#: src/kdefrontend/LabPlot.cpp:108
 #, kde-format
 msgctxt "@info:credit"
 msgid ""
@@ -15419,12 +15406,12 @@ msgid ""
 msgstr ""
 "Hilfe bei vielen Fragen zur KDE-Infrastruktur und zum Übersetzungsprozess"
 
-#: src/kdefrontend/LabPlot.cpp:114
+#: src/kdefrontend/LabPlot.cpp:111
 #, kde-format
 msgid "Garvit Khatri"
 msgstr "Garvit Khatri"
 
-#: src/kdefrontend/LabPlot.cpp:115
+#: src/kdefrontend/LabPlot.cpp:112
 #, fuzzy, kde-format
 #| msgctxt "@info:credit"
 #| msgid "Porting LabPlot2 to KF5 and Integration with Cantor"
@@ -15432,33 +15419,33 @@ msgctxt "@info:credit"
 msgid "Porting LabPlot to KF5 and Integration with Cantor"
 msgstr "Portierung von LabPlot2 auf KF5 und Cantor-Integration"
 
-#: src/kdefrontend/LabPlot.cpp:118
+#: src/kdefrontend/LabPlot.cpp:115
 #, kde-format
 msgid "Christoph Roick"
 msgstr "Christoph Roick"
 
-#: src/kdefrontend/LabPlot.cpp:119
+#: src/kdefrontend/LabPlot.cpp:116
 #, kde-format
 msgctxt "@info:credit"
 msgid "Support import of ROOT (CERN) TH1 histograms"
 msgstr "Unterstützung beim Import vom ROOT (CERN) TH1 Histogrammen"
 
-#: src/kdefrontend/LabPlot.cpp:134
+#: src/kdefrontend/LabPlot.cpp:132
 #, kde-format
 msgid "Disable splash screen"
 msgstr "Startbildschirm deaktivieren"
 
-#: src/kdefrontend/LabPlot.cpp:137
+#: src/kdefrontend/LabPlot.cpp:135
 #, kde-format
 msgid "Start in the presenter mode"
 msgstr "Im Präsentationsmodus starten"
 
-#: src/kdefrontend/LabPlot.cpp:140
+#: src/kdefrontend/LabPlot.cpp:138
 #, kde-format
 msgid "Open a project file."
 msgstr "Eine Projektdatei Öffnen."
 
-#: src/kdefrontend/LabPlot.cpp:159
+#: src/kdefrontend/LabPlot.cpp:157
 #, kde-format
 msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
@@ -15467,7 +15454,7 @@ msgstr ""
 "Die Datei „%1“ kann nicht geöffnet werden. Klicken Sie auf „Fortsetzen“ um "
 "weiter zu machen, oder auf „Abbrechen“, um die Anwendung zu beenden."
 
-#: src/kdefrontend/LabPlot.cpp:160
+#: src/kdefrontend/LabPlot.cpp:158
 #, kde-format
 msgid "Failed to Open"
 msgstr "Fehler beim Öffnen"
@@ -17006,10 +16993,9 @@ msgid "Excel 2007+ (*.xlsx)"
 msgstr "Excel 2007+ (*.xlsx)"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:415
-#, fuzzy, kde-format
-#| msgid "DBC file (*.dbc)"
+#, kde-format
 msgid "MCAP Files (*.mcap)"
-msgstr "DBC-Datei (*.dbc)"
+msgstr "MCAP-Dateien (*.mcap)"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:418
 #, kde-format
@@ -22729,29 +22715,27 @@ msgstr "Vertikalen Kopf exportieren:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, compressionGroup)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:192
-#, fuzzy, kde-format
-#| msgid "Compression: %1"
+#, kde-format
 msgid "Compression"
-msgstr "Komprimierung: %1"
+msgstr "Komprimierung"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbLZ4)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:205
 #, kde-format
 msgid "LZ4"
-msgstr ""
+msgstr "LZ4"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbZSTD)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:212
 #, kde-format
 msgid "ZSTD"
-msgstr ""
+msgstr "ZSTD"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:222
-#, fuzzy, kde-format
-#| msgid "Compression Level: %1"
+#, kde-format
 msgid "Compression Level"
-msgstr "Komprimierungsstufe: %1"
+msgstr "Komprimierungsstufe"
 
 #. i18n: ectx: property (text), widget (QLabel, lExportToFITS)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:232

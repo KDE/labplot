@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 01:47+0000\n"
+"POT-Creation-Date: 2024-08-09 01:44+0000\n"
 "PO-Revision-Date: 2024-07-27 16:22+0200\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -15315,7 +15315,7 @@ msgstr "C++ Kompililo:"
 msgid "C++ Compiler Flags: "
 msgstr "C++ Kompililo Flagoj:"
 
-#: src/kdefrontend/LabPlot.cpp:96
+#: src/kdefrontend/LabPlot.cpp:93
 #, kde-format
 msgid ""
 "LabPlot is a FREE, open-source and cross-platform Data Visualization and "
@@ -15324,66 +15324,66 @@ msgstr ""
 "LabPlot estas LIBERA, malfermfonta kaj plurplatforma programaro pri Vidigo "
 "kaj Analizo de Datumoj alirebla por ĉiuj."
 
-#: src/kdefrontend/LabPlot.cpp:98
+#: src/kdefrontend/LabPlot.cpp:95
 #, kde-format
 msgid "(c) 2007-2024"
 msgstr "(c) 2007-2024"
 
-#: src/kdefrontend/LabPlot.cpp:101
+#: src/kdefrontend/LabPlot.cpp:98
 #, kde-format
 msgid "Stefan Gerlach"
 msgstr "Stefan Gerlach"
 
-#: src/kdefrontend/LabPlot.cpp:101 src/kdefrontend/LabPlot.cpp:102
-#: src/kdefrontend/LabPlot.cpp:103 src/kdefrontend/LabPlot.cpp:104
+#: src/kdefrontend/LabPlot.cpp:98 src/kdefrontend/LabPlot.cpp:99
+#: src/kdefrontend/LabPlot.cpp:100 src/kdefrontend/LabPlot.cpp:101
 #, kde-format
 msgctxt "@info:credit"
 msgid "Developer"
 msgstr "Ellaboranto"
 
-#: src/kdefrontend/LabPlot.cpp:102
+#: src/kdefrontend/LabPlot.cpp:99
 #, kde-format
 msgid "Alexander Semke"
 msgstr "Aleksandro Semke"
 
-#: src/kdefrontend/LabPlot.cpp:103
+#: src/kdefrontend/LabPlot.cpp:100
 #, kde-format
 msgid "Fábián Kristóf-Szabolcs"
 msgstr "Fábián Kristóf-Szabolcs"
 
-#: src/kdefrontend/LabPlot.cpp:104
+#: src/kdefrontend/LabPlot.cpp:101
 #, kde-format
 msgid "Martin Marmsoler"
 msgstr "Martin Marmsoler"
 
-#: src/kdefrontend/LabPlot.cpp:105
+#: src/kdefrontend/LabPlot.cpp:102
 #, kde-format
 msgid "Dariusz Laska"
 msgstr "Dariusz Laska"
 
-#: src/kdefrontend/LabPlot.cpp:106
+#: src/kdefrontend/LabPlot.cpp:103
 #, kde-format
 msgctxt "@info:credit"
 msgid "Conceptual work, documentation, example projects"
 msgstr "Koncepta laboro, dokumentado, ekzemploprojektoj"
 
-#: src/kdefrontend/LabPlot.cpp:109
+#: src/kdefrontend/LabPlot.cpp:106
 #, kde-format
 msgid "Andreas Kainz"
 msgstr "Andreas Kainz"
 
-#: src/kdefrontend/LabPlot.cpp:109
+#: src/kdefrontend/LabPlot.cpp:106
 #, kde-format
 msgctxt "@info:credit"
 msgid "Icon designer"
 msgstr "Piktogramo-dezajnisto"
 
-#: src/kdefrontend/LabPlot.cpp:110
+#: src/kdefrontend/LabPlot.cpp:107
 #, kde-format
 msgid "Yuri Chornoivan"
 msgstr "Jurij Chornoivan"
 
-#: src/kdefrontend/LabPlot.cpp:111
+#: src/kdefrontend/LabPlot.cpp:108
 #, kde-format
 msgctxt "@info:credit"
 msgid ""
@@ -15391,12 +15391,12 @@ msgid ""
 "topics"
 msgstr "Helpo pri multaj demandoj pri la KDE-infrastrukturo kaj tradukaj temoj"
 
-#: src/kdefrontend/LabPlot.cpp:114
+#: src/kdefrontend/LabPlot.cpp:111
 #, kde-format
 msgid "Garvit Khatri"
 msgstr "Garvit Khatri"
 
-#: src/kdefrontend/LabPlot.cpp:115
+#: src/kdefrontend/LabPlot.cpp:112
 #, fuzzy, kde-format
 #| msgctxt "@info:credit"
 #| msgid "Porting LabPlot2 to KF5 and Integration with Cantor"
@@ -15404,33 +15404,33 @@ msgctxt "@info:credit"
 msgid "Porting LabPlot to KF5 and Integration with Cantor"
 msgstr "Porting LabPlot2 al KF5 kaj Integriĝo kun Cantor"
 
-#: src/kdefrontend/LabPlot.cpp:118
+#: src/kdefrontend/LabPlot.cpp:115
 #, kde-format
 msgid "Christoph Roick"
 msgstr "Christoph Roick"
 
-#: src/kdefrontend/LabPlot.cpp:119
+#: src/kdefrontend/LabPlot.cpp:116
 #, kde-format
 msgctxt "@info:credit"
 msgid "Support import of ROOT (CERN) TH1 histograms"
 msgstr "Subteni importadon de Histogramoj ROOT (CERN) TH1"
 
-#: src/kdefrontend/LabPlot.cpp:134
+#: src/kdefrontend/LabPlot.cpp:132
 #, kde-format
 msgid "Disable splash screen"
 msgstr "Malebligi plaŭdan ekranon"
 
-#: src/kdefrontend/LabPlot.cpp:137
+#: src/kdefrontend/LabPlot.cpp:135
 #, kde-format
 msgid "Start in the presenter mode"
 msgstr "Komenci en la prezentisto-reĝimo"
 
-#: src/kdefrontend/LabPlot.cpp:140
+#: src/kdefrontend/LabPlot.cpp:138
 #, kde-format
 msgid "Open a project file."
 msgstr "Malfermi projektdosieron."
 
-#: src/kdefrontend/LabPlot.cpp:159
+#: src/kdefrontend/LabPlot.cpp:157
 #, kde-format
 msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
@@ -15439,7 +15439,7 @@ msgstr ""
 "Ne eblis malfermi dosieron '%1'. Alklaku 'Daŭrigu' por komenci komenci aŭ "
 "'Nuligi' por eliri la aplikaĵon."
 
-#: src/kdefrontend/LabPlot.cpp:160
+#: src/kdefrontend/LabPlot.cpp:158
 #, kde-format
 msgid "Failed to Open"
 msgstr "Malsukcesis malfermi"
