@@ -11,6 +11,7 @@
 #define PLOTDATADIALOG_H
 
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
+#include "backend/nsl/nsl_sf_stats.h"
 
 namespace Ui {
 class PlotDataWidget;
@@ -40,6 +41,7 @@ public:
 
 	void setSelectedColumns(QVector<Column*>);
 	void setAnalysisAction(XYAnalysisCurve::AnalysisAction);
+	void setFitDistribution(nsl_sf_stats_distribution);
 	static void fillMenu(QMenu*, QActionGroup*);
 
 private:
@@ -54,6 +56,7 @@ private:
 	AspectTreeModel* m_worksheetsModel;
 	PlotType m_plotType;
 	XYAnalysisCurve::AnalysisAction m_analysisAction{XYAnalysisCurve::AnalysisAction::Differentiation};
+	nsl_sf_stats_distribution m_fitDistribution{nsl_sf_stats_gaussian};
 	bool m_analysisMode{false};
 	AbstractAspect* m_lastAddedCurve{nullptr};
 

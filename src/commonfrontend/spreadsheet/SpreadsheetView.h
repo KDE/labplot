@@ -269,6 +269,7 @@ private Q_SLOTS:
 
 	void plotData(QAction*);
 	void plotAnalysisData();
+	void plotDataDistributionFit();
 
 	void fillSelectedCellsWithRowNumbers();
 	void fillSelectedCellsWithRandomNumbers();

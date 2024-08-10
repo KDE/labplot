@@ -220,10 +220,12 @@ PlotDataDialog::~PlotDataDialog() {
 void PlotDataDialog::setAnalysisAction(XYAnalysisCurve::AnalysisAction action) {
 	m_analysisAction = action;
 	m_analysisMode = true;
-	if (!XYAnalysisCurve::isFitDistribution(action)) {
-		ui->spacer->changeSize(0, 40);
-		ui->chkCreateDataCurve->show();
-	}
+	ui->spacer->changeSize(0, 40);
+	ui->chkCreateDataCurve->show();
+}
+
+void PlotDataDialog::setFitDistribution(nsl_sf_stats_distribution distribution) {
+	m_fitDistribution = distribution;
 }
 
 void PlotDataDialog::fillMenu(QMenu* menu, QActionGroup* group) {
@@ -728,14 +730,6 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 		case XYAnalysisCurve::AnalysisAction::FourierFilter:
 			analysisCurve = new XYFourierFilterCurve(i18n("Fourier Filter of '%1'", name));
 			break;
-		case XYAnalysisCurve::AnalysisAction::FitDistributionGauss:
-		case XYAnalysisCurve::AnalysisAction::FitDistributionExp:
-		case XYAnalysisCurve::AnalysisAction::FitDistributionLaplace:
-		case XYAnalysisCurve::AnalysisAction::FitDistributionCauchyLorentz:
-		case XYAnalysisCurve::AnalysisAction::FitDistributionLogNormal:
-		case XYAnalysisCurve::AnalysisAction::FitDistributionPoisson:
-		case XYAnalysisCurve::AnalysisAction::FitDistributionBinomial:
-			break;
 		}
 
 		if (analysisCurve != nullptr) {
@@ -768,17 +762,24 @@ void PlotDataDialog::addSingleSourceColumnPlot(const Column* column, CartesianPl
 		qqPlot->setDataColumn(column);
 		plot = qqPlot;
 	} else if (m_plotType == PlotType::DistributionFit) {
+		// histogram
 		auto* histogram = new Histogram(i18n("Probability Density of '%1'", name));
 		histogram->setNormalization(Histogram::Normalization::ProbabilityDensity);
 		histogram->setDataColumn(column);
 		plotArea->addChild(histogram);
 
+		// set fit model category and type and initialize fit
 		auto* fitCurve = new XYFitCurve(i18n("Distribution Fit to '%1'", name));
 		fitCurve->setDataSourceType(XYAnalysisCurve::DataSourceType::Histogram);
 		fitCurve->setDataSourceHistogram(histogram);
-		// TODO:
-		// fitCurve->initFitData(m_analysisAction);
-		// fitCurve->initStartValues(histogram);
+
+		auto fitData = fitCurve->fitData();
+		fitData.modelCategory = nsl_fit_model_distribution;
+		fitData.modelType = (int)m_fitDistribution;
+		fitData.algorithm = nsl_fit_algorithm_ml; // ML distribution fit
+		XYFitCurve::initFitData(fitData);
+		fitCurve->setFitData(fitData);
+
 		fitCurve->recalculate();
 		plot = fitCurve;
 	}

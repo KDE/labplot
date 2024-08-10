@@ -38,14 +38,7 @@ public:
 		FitTanh,
 		FitErrFunc,
 		FitCustom,
-		FourierFilter,
-		FitDistributionGauss,
-		FitDistributionExp,
-		FitDistributionLaplace,
-		FitDistributionCauchyLorentz,
-		FitDistributionLogNormal,
-		FitDistributionPoisson,
-		FitDistributionBinomial
+		FourierFilter
 	};
 
 	struct Result {
@@ -59,8 +52,6 @@ public:
 	};
 
 	~XYAnalysisCurve() override;
-
-	static bool isFitDistribution(AnalysisAction);
 
 	static void copyData(QVector<double>& xData,
 						 QVector<double>& yData,

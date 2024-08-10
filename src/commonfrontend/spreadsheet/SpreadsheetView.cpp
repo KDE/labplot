@@ -560,31 +560,31 @@ void SpreadsheetView::initActions() {
 
 	// distribution fit actions
 	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Gaussian (Normal)"));
-	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitDistributionGauss));
+	fitAction->setData(static_cast<int>(nsl_sf_stats_gaussian));
 	addDistributionFitActions.append(fitAction);
 
 	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Exponential"));
-	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitDistributionExp));
+	fitAction->setData(static_cast<int>(nsl_sf_stats_exponential));
 	addDistributionFitActions.append(fitAction);
 
 	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Laplace"));
-	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitDistributionLaplace));
+	fitAction->setData(static_cast<int>(nsl_sf_stats_laplace));
 	addDistributionFitActions.append(fitAction);
 
 	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Cauchy-Lorentz"));
-	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitDistributionCauchyLorentz));
+	fitAction->setData(static_cast<int>(nsl_sf_stats_cauchy_lorentz));
 	addDistributionFitActions.append(fitAction);
 
 	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Log-normal"));
-	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitDistributionLogNormal));
+	fitAction->setData(static_cast<int>(nsl_sf_stats_lognormal));
 	addDistributionFitActions.append(fitAction);
 
 	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Poisson"));
-	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitDistributionPoisson));
+	fitAction->setData(static_cast<int>(nsl_sf_stats_poisson));
 	addDistributionFitActions.append(fitAction);
 
 	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Binomial"));
-	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitDistributionBinomial));
+	fitAction->setData(static_cast<int>(nsl_sf_stats_binomial));
 	addDistributionFitActions.append(fitAction);
 
 	connectActions();
@@ -954,7 +954,7 @@ void SpreadsheetView::connectActions() {
 	for (const auto& action : addFitActions)
 		connect(action, &QAction::triggered, this, &SpreadsheetView::plotAnalysisData);
 	for (const auto& action : addDistributionFitActions)
-		connect(action, &QAction::triggered, this, &SpreadsheetView::plotAnalysisData);
+		connect(action, &QAction::triggered, this, &SpreadsheetView::plotDataDistributionFit);
 }
 
 void SpreadsheetView::fillToolBar(QToolBar* toolBar) {
@@ -2259,17 +2259,26 @@ void SpreadsheetView::plotData(QAction* action) {
 
 void SpreadsheetView::plotAnalysisData() {
 	const auto* action = dynamic_cast<const QAction*>(QObject::sender());
-	auto analysisAction = static_cast<XYAnalysisCurve::AnalysisAction>(action->data().toInt());
+	const auto analysisAction = static_cast<XYAnalysisCurve::AnalysisAction>(action->data().toInt());
 
-	PlotDataDialog::PlotType plotType;
-	if (XYAnalysisCurve::isFitDistribution(analysisAction))
-		plotType = PlotDataDialog::PlotType::DistributionFit;
-	else
-		plotType = PlotDataDialog::PlotType::XYCurve;
-
-	auto* dlg = new PlotDataDialog(m_spreadsheet, plotType);
-
+	auto* dlg = new PlotDataDialog(m_spreadsheet, PlotDataDialog::PlotType::XYCurve);
 	dlg->setAnalysisAction(analysisAction);
+
+	// use all spreadsheet columns if no columns are selected
+	auto columns = selectedColumns(true);
+	if (columns.isEmpty())
+		columns = m_spreadsheet->children<Column>();
+	dlg->setSelectedColumns(columns);
+
+	dlg->exec();
+}
+
+void SpreadsheetView::plotDataDistributionFit() {
+	const auto* action = dynamic_cast<const QAction*>(QObject::sender());
+	const auto distribution = static_cast<nsl_sf_stats_distribution>(action->data().toInt());
+
+	auto* dlg = new PlotDataDialog(m_spreadsheet, PlotDataDialog::PlotType::DistributionFit);
+	dlg->setFitDistribution(distribution);
 
 	// use all spreadsheet columns if no columns are selected
 	auto columns = selectedColumns(true);

@@ -58,13 +58,6 @@ bool XYAnalysisCurve::usingColumn(const Column* column) const {
 		return (d->dataSourceCurve->xColumn() == column || d->dataSourceCurve->yColumn() == column);
 }
 
-bool XYAnalysisCurve::isFitDistribution(AnalysisAction action) {
-	bool fitDistribution = (action == AnalysisAction::FitDistributionGauss || action == AnalysisAction::FitDistributionExp || action == AnalysisAction::FitDistributionLaplace
-							|| action == AnalysisAction::FitDistributionCauchyLorentz || action == AnalysisAction::FitDistributionLogNormal || action == AnalysisAction::FitDistributionPoisson
-							|| action == AnalysisAction::FitDistributionBinomial);
-	return fitDistribution;
-}
-
 // copy valid data from x/y data columns to x/y data vectors
 // for analysis functions
 // avgUniqueX: average y values for duplicate x values
