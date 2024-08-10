@@ -10,8 +10,8 @@
 #ifndef PLOTDATADIALOG_H
 #define PLOTDATADIALOG_H
 
-#include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 #include "backend/nsl/nsl_sf_stats.h"
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 
 namespace Ui {
 class PlotDataWidget;
