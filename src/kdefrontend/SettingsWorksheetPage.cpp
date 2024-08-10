@@ -54,9 +54,9 @@ SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent)
 	loadSettings();
 }
 
-void SettingsWorksheetPage::applySettings() {
+bool SettingsWorksheetPage::applySettings() {
 	if (!m_changed)
-		return;
+		return false;
 
 	KConfigGroup group = Settings::group(QStringLiteral("Settings_Worksheet"));
 	if (m_cbThemes->currentText() == i18n("Default"))
@@ -66,6 +66,7 @@ void SettingsWorksheetPage::applySettings() {
 	group.writeEntry(QLatin1String("PresenterModeInteractive"), ui.chkPresenterModeInteractive->isChecked());
 	group.writeEntry(QLatin1String("DoubleBuffering"), ui.chkDoubleBuffering->isChecked());
 	group.writeEntry(QLatin1String("LaTeXEngine"), ui.cbTexEngine->itemData(ui.cbTexEngine->currentIndex()));
+	return true;
 }
 
 void SettingsWorksheetPage::restoreDefaults() {

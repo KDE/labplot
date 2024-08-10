@@ -34,7 +34,6 @@ set(GUI_SOURCES
 #     ${KDEFRONTEND_DIR}/SettingsWelcomePage.cpp
     ${KDEFRONTEND_DIR}/SettingsDatasetsPage.cpp
     ${KDEFRONTEND_DIR}/SettingsPage.h
-    ${KDEFRONTEND_DIR}/CASSettingsDialog.cpp
     ${KDEFRONTEND_DIR}/TemplateHandler.cpp
     ${KDEFRONTEND_DIR}/ThemeHandler.cpp
     ${KDEFRONTEND_DIR}/examples/ExamplesDialog.cpp

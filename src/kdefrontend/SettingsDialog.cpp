@@ -49,7 +49,7 @@
  */
 SettingsDialog::SettingsDialog(QWidget* parent)
 	: KPageDialog(parent) {
-	setFaceType(List);
+	setFaceType(Tree);
 	setWindowTitle(i18nc("@title:window", "Preferences"));
 	setWindowIcon(QIcon::fromTheme(QLatin1String("preferences-other")));
 	setAttribute(Qt::WA_DeleteOnClose);
@@ -76,6 +76,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 #ifdef HAVE_CANTOR_LIBS
 	m_notebookPage = new SettingsNotebookPage(this);
 	KPageWidgetItem* notebookFrame = addPage(m_notebookPage, i18n("Notebook"));
+	m_notebookPage->addSubPages(notebookFrame, this);
 	notebookFrame->setIcon(QIcon::fromTheme(QLatin1String("cantor")));
 	connect(m_notebookPage, &SettingsNotebookPage::settingsChanged, this, &SettingsDialog::changed);
 #endif
@@ -144,13 +145,19 @@ void SettingsDialog::changed() {
 
 void SettingsDialog::applySettings() {
 	m_changed = false;
-	m_generalPage->applySettings();
-	m_worksheetPage->applySettings();
-	m_spreadsheetPage->applySettings();
+	QList<SettingsType> changes;
+	if (m_generalPage->applySettings())
+		changes.append(SettingsType::General);
+	if (m_worksheetPage->applySettings())
+		changes.append(SettingsType::Worksheet);
+	if (m_spreadsheetPage->applySettings())
+		changes.append(SettingsType::Spreadsheet);
 #ifdef HAVE_CANTOR_LIBS
-	m_notebookPage->applySettings();
+	if (m_notebookPage->applySettings())
+		changes.append(SettingsType::Notebook);
 #endif
-	m_datasetsPage->applySettings();
+	if (m_datasetsPage->applySettings())
+		changes.append(SettingsType::Datasets);
 
 	Settings::sync();
 
@@ -160,7 +167,7 @@ void SettingsDialog::applySettings() {
 	mainWin->userFeedbackProvider().setSurveyInterval(m_userFeedbackWidget->surveyInterval());
 #endif
 
-	Q_EMIT settingsChanged();
+	Q_EMIT settingsChanged(changes);
 }
 
 void SettingsDialog::restoreDefaults() {

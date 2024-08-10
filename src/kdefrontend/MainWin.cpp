@@ -43,7 +43,6 @@
 #include "commonfrontend/widgets/MemoryWidget.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
 
-#include "kdefrontend/CASSettingsDialog.h"
 #include "kdefrontend/GuiObserver.h"
 #include "kdefrontend/HistoryDialog.h"
 #include "kdefrontend/SettingsDialog.h"
@@ -283,8 +282,7 @@ void MainWin::initGUI(const QString& fileName) {
 #ifdef HAVE_CANTOR_LIBS
 	auto* tbNotebook = new QToolButton(mainToolBar);
 	tbNotebook->setPopupMode(QToolButton::MenuButtonPopup);
-	tbNotebook->setMenu(m_newNotebookMenu);
-	tbNotebook->setDefaultAction(m_configureCASAction);
+	tbNotebook->setMenu(m_newNotebookMenu); // it is possible for m_newNotebookMenu to be null when we have no backends
 	auto* lastAction = mainToolBar->actions().at(mainToolBar->actions().count() - 2);
 	mainToolBar->insertWidget(lastAction, tbNotebook);
 #endif
@@ -849,15 +847,6 @@ void MainWin::initActions() {
 		}
 	});
 	this->addAction(m_searchAction);
-
-#ifdef HAVE_CANTOR_LIBS
-	// configure CAS backends
-	m_configureCASAction = new QAction(QIcon::fromTheme(QLatin1String("cantor")), i18n("Configure CAS..."), this);
-	m_configureCASAction->setWhatsThis(i18n("Opens the settings for Computer Algebra Systems to modify the available systems or to enable new ones"));
-	m_configureCASAction->setMenuRole(QAction::NoRole); // prevent macOS Qt heuristics to select this action for preferences
-	actionCollection()->addAction(QLatin1String("configure_cas"), m_configureCASAction);
-	connect(m_configureCASAction, &QAction::triggered, this, &MainWin::casSettingsDialog);
-#endif
 }
 
 void MainWin::initMenus() {
@@ -965,10 +954,10 @@ void MainWin::initMenus() {
 		WARN("Backend: " << STDSTRING(b))
 #endif
 
-	if (!backendNames.isEmpty()) {
-		// sub-menu shown in the main toolbar
-		m_newNotebookMenu = new QMenu(this);
+	// sub-menu shown in the main toolbar
+	m_newNotebookMenu = new QMenu(this);
 
+	if (!backendNames.isEmpty()) {
 		// sub-menu shown in the main menu bar
 		auto* menu = dynamic_cast<QMenu*>(factory()->container(QLatin1String("new_notebook"), this));
 		if (menu) {
@@ -978,8 +967,25 @@ void MainWin::initMenus() {
 			updateNotebookActions();
 		}
 
-		if (settingsMenu)
-			settingsMenu->addAction(m_configureCASAction);
+	} else {
+		auto* menu = dynamic_cast<QMenu*>(factory()->container(QLatin1String("new_notebook"), this));
+		if (menu) {
+			connect(menu, &QMenu::aboutToShow, [&] {
+				QMessageBox::critical(this,
+							  i18n("No Cantor Backends Found"),
+							  i18n("Please follow the instructions on "
+								   "<a href=\"https://www.kaggle.com/docs/api\">\"How to Use Kaggle\"</a> "
+								   "to setup the Kaggle CLI tool."));
+			});
+		}
+
+		connect(m_newNotebookMenu, &QMenu::aboutToShow, [&] {
+			QMessageBox::critical(this,
+							  i18n("No Cantor Backends Found"),
+							  i18n("Please follow the instructions on "
+								   "<a href=\"https://www.kaggle.com/docs/api\">\"How to Use Kaggle\"</a> "
+								   "to setup the Kaggle CLI tool."));
+		});
 	}
 #else
 	delete this->guiFactory()->container(QStringLiteral("notebook"), this);
@@ -2540,7 +2546,7 @@ void MainWin::updateLocale() {
 	QLocale::setDefault(l);
 }
 
-void MainWin::handleSettingsChanges() {
+void MainWin::handleSettingsChanges(QList<SettingsDialog::SettingsType> changes) {
 	const auto group = Settings::group(QStringLiteral("Settings_General"));
 
 	// title bar
@@ -2606,6 +2612,11 @@ void MainWin::handleSettingsChanges() {
 	// bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
 	// if (m_showWelcomeScreen != showWelcomeScreen)
 	// 	m_showWelcomeScreen = showWelcomeScreen;
+
+	#ifdef HAVE_CANTOR_LIBS
+	if (changes.contains(SettingsDialog::SettingsType::Notebook))
+		updateNotebookActions();
+	#endif
 }
 
 void MainWin::openDatasetExample() {
@@ -2802,22 +2813,13 @@ void MainWin::settingsDialog() {
 }
 
 #ifdef HAVE_CANTOR_LIBS
-void MainWin::casSettingsDialog() {
-	auto* dlg = new CASSettingsDialog(this);
-	connect(dlg, &CASSettingsDialog::settingsChanged, this, &MainWin::updateNotebookActions);
-	dlg->exec();
-
-	DEBUG(Q_FUNC_INFO << ", found " << Cantor::Backend::availableBackends().size() << " backends")
-	if (Cantor::Backend::availableBackends().size() == 0)
-		KMessageBox::error(nullptr, i18n("No Cantor backends found. Please install the ones you want to use."));
-}
-
 void MainWin::updateNotebookActions() {
 	auto* menu = static_cast<QMenu*>(factory()->container(QLatin1String("new_notebook"), this));
 	unplugActionList(QLatin1String("backends_list"));
 	QList<QAction*> newBackendActions;
 	menu->clear();
 	for (auto* backend : Cantor::Backend::availableBackends()) {
+		continue;
 		if (!backend->isEnabled())
 			continue;
 
@@ -2832,11 +2834,5 @@ void MainWin::updateNotebookActions() {
 	}
 
 	plugActionList(QLatin1String("backends_list"), newBackendActions);
-
-	menu->addSeparator();
-	menu->addAction(m_configureCASAction);
-
-	m_newNotebookMenu->addSeparator();
-	m_newNotebookMenu->addAction(m_configureCASAction);
 }
 #endif

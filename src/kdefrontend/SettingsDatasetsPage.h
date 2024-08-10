@@ -19,7 +19,7 @@ class SettingsDatasetsPage : public SettingsPage {
 public:
 	explicit SettingsDatasetsPage(QWidget*);
 
-	void applySettings() override;
+	bool applySettings() override;
 	void restoreDefaults() override;
 
 private:

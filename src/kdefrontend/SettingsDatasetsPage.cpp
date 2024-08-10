@@ -48,13 +48,14 @@ SettingsDatasetsPage::SettingsDatasetsPage(QWidget* parent)
 	});
 }
 
-void SettingsDatasetsPage::applySettings() {
+bool SettingsDatasetsPage::applySettings() {
 	DEBUG(Q_FUNC_INFO)
 	if (!m_changed)
-		return;
+		return false;
 
 	KConfigGroup group = Settings::group(QStringLiteral("Settings_Datasets"));
 	group.writeEntry(QLatin1String("KaggleCLIPath"), ui.leKagglePath->text());
+	return true;
 }
 
 void SettingsDatasetsPage::restoreDefaults() {

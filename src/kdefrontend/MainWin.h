@@ -13,6 +13,7 @@
 #define MAINWIN_H
 
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "SettingsDialog.h"
 
 #include <KXmlGuiWindow>
 #include <QStringLiteral>
@@ -175,7 +176,6 @@ private:
 	KToggleAction* m_statusBarAction;
 	QAction* m_memoryInfoAction;
 	KToggleFullScreenAction* m_fullScreenAction;
-	QAction* m_configureCASAction;
 
 	// window visibility
 	QAction* m_visibilityFolderAction;
@@ -263,7 +263,6 @@ private Q_SLOTS:
 
 #ifdef HAVE_CANTOR_LIBS
 	void newNotebook();
-	void casSettingsDialog();
 	void updateNotebookActions();
 #endif
 
@@ -285,7 +284,7 @@ private Q_SLOTS:
 	void handleCurrentAspectChanged(AbstractAspect*);
 	void handleShowSubWindowRequested();
 
-	void handleSettingsChanges();
+	void handleSettingsChanges(QList<SettingsDialog::SettingsType>);
 
 	void setDockVisibility(QAction*);
 	void updateDockWindowVisibility() const;

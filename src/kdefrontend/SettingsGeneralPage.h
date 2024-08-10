@@ -24,7 +24,7 @@ public:
 	static DecimalSeparator decimalSeparator(QLocale locale = QLocale());
 	QLocale::Language decimalSeparatorLocale() const;
 
-	void applySettings() override;
+	bool applySettings() override;
 	void restoreDefaults() override;
 
 private:

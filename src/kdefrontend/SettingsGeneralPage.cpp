@@ -103,10 +103,10 @@ QLocale::Language SettingsGeneralPage::decimalSeparatorLocale() const {
 	}
 }
 
-void SettingsGeneralPage::applySettings() {
+bool SettingsGeneralPage::applySettings() {
 	DEBUG(Q_FUNC_INFO)
 	if (!m_changed)
-		return;
+		return false;
 
 	KConfigGroup group = Settings::settingsGeneral();
 	group.writeEntry(QLatin1String("LoadOnStart"), ui.cbLoadOnStart->currentData().toInt());
@@ -140,6 +140,7 @@ void SettingsGeneralPage::applySettings() {
 	enablePerfTrace(perfTraceEnabled);
 
 	Settings::writeDockPosBehavior(static_cast<Settings::DockPosBehavior>(ui.cbDockWindowPositionReopen->currentData().toInt()));
+	return true;
 }
 
 void SettingsGeneralPage::restoreDefaults() {

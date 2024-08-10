@@ -13,18 +13,25 @@
 #include "SettingsPage.h"
 #include "ui_settingsnotebookpage.h"
 
+class KPageWidgetItem;
+class KPageDialog;
+class KConfigDialogManager;
+
 class SettingsNotebookPage : public SettingsPage {
 	Q_OBJECT
 
 public:
 	explicit SettingsNotebookPage(QWidget*);
 
-	void applySettings() override;
+	bool applySettings() override;
 	void restoreDefaults() override;
+
+	void addSubPages(KPageWidgetItem*, KPageDialog*) override;
 
 private:
 	Ui::SettingsNotebookPage ui;
 	bool m_changed{false};
+	QList<KConfigDialogManager*> m_cantorBackendConfigManagers;
 
 	void loadSettings();
 
