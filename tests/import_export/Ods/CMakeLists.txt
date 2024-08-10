@@ -1,5 +1,5 @@
-add_executable (OdsFilterTest OdsFilterTest.cpp)
+add_executable(OdsFilterTest OdsFilterTest.cpp)
 
-target_link_libraries(OdsFilterTest labplot2backendlib labplot2lib labplot2nsllib labplot2metatest)
+target_link_libraries(OdsFilterTest labplotmetatest)
 
 add_test(NAME OdsFilterTest COMMAND OdsFilterTest)

@@ -74,7 +74,6 @@ void NSLSFBasicTest::test_triangular_Quantile() {
 	QCOMPARE(nsl_sf_triangular_Quantile(0., 1., 1., 1.), 1.);
 	QCOMPARE(nsl_sf_triangular_Quantile(1., 1., 2., 1.), 2.);
 
-	// enableDebugTrace(true);
 	WARN(nsl_sf_triangular_Quantile(0.25, 1., 3., 2.))
 	WARN(nsl_sf_triangular_Quantile(0.25, 1., 4., 3.))
 	WARN(nsl_sf_triangular_Quantile(0.5, 1., 3., 2.))

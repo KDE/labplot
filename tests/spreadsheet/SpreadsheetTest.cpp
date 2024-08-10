@@ -3047,7 +3047,7 @@ void SpreadsheetTest::testLinkSpreadsheetSaveLoad() {
 		QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 		QCOMPARE(sheetCalculations->rowCount(), 10);
 
-		SAVE_PROJECT("testLinkSpreadsheetSaveLoad")
+		SAVE_PROJECT("testLinkSpreadsheetSaveLoad");
 	}
 
 	{

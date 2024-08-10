@@ -1,7 +1,7 @@
-add_executable (SpiceFilterTest SpiceFilterTest.cpp)
+add_executable(SpiceFilterTest SpiceFilterTest.cpp)
 target_compile_definitions(SpiceFilterTest PRIVATE SPICEFILTERTEST_EN)
 
-target_link_libraries(SpiceFilterTest labplot2backendlib labplot2lib labplot2nsllib labplot2metatest)
-target_compile_definitions(labplot2backendlib PRIVATE SPICEFILTERTEST_EN)
+target_link_libraries(SpiceFilterTest labplotmetatest)
+target_compile_definitions(labplotbackendlib PRIVATE SPICEFILTERTEST_EN)
 
 add_test(NAME SpiceFilterTest COMMAND SpiceFilterTest)

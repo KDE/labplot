@@ -12,9 +12,9 @@ apps:
     labplot:
         # extensions:
         # - kde-neon
-        common-id: org.kde.labplot2.desktop
-        desktop: usr/share/applications/org.kde.labplot2.desktop
-        command: usr/bin/labplot2
+        common-id: org.kde.labplot.desktop
+        desktop: usr/share/applications/org.kde.labplot.desktop
+        command: usr/bin/labplot
         plugs:
         - home
         - desktop
@@ -145,7 +145,7 @@ parts:
         - kde-neon
         - qxlsx
         parse-info:
-        - usr/share/metainfo/org.kde.labplot2.appdata.xml
+        - usr/share/metainfo/org.kde.labplot.appdata.xml
         plugin: cmake
         build-packages:
         - libqt5mqtt-dev

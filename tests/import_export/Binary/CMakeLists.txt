@@ -1,5 +1,5 @@
-add_executable (BinaryFilterTest BinaryFilterTest.cpp)
+add_executable(BinaryFilterTest BinaryFilterTest.cpp)
 
-target_link_libraries(BinaryFilterTest labplot2backendlib labplot2lib labplot2nsllib labplot2metatest)
+target_link_libraries(BinaryFilterTest labplotmetatest)
 
 add_test(NAME BinaryFilterTest COMMAND BinaryFilterTest)

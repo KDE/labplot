@@ -899,7 +899,7 @@ QPainterPath Symbol::stylePath(Symbol::Style style) {
 	return path;
 }
 
-void Symbol::draw(QPainter* painter, QPointF point) {
+void Symbol::draw(QPainter* painter, QPointF point) const {
 	Q_D(const Symbol);
 	if (d->style == Symbol::Style::NoSymbols)
 		return;
@@ -920,7 +920,7 @@ void Symbol::draw(QPainter* painter, QPointF point) {
 	painter->drawPath(trafo.map(path));
 }
 
-void Symbol::draw(QPainter* painter, const QVector<QPointF>& points) {
+void Symbol::draw(QPainter* painter, const QVector<QPointF>& points) const {
 	Q_D(const Symbol);
 	if (d->style == Symbol::Style::NoSymbols || points.isEmpty())
 		return;

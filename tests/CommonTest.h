@@ -45,7 +45,7 @@
 		QCOMPARE(scales.length(), 1);                                                                                                                          \
 		QVERIFY(scales.at(0) != nullptr);                                                                                                                      \
 		CHECK_SCALE(scales.at(0), a_ref, b_ref, c_ref);                                                                                                        \
-	} while (false);
+	} while (false)
 
 #define CHECK_SCALE(scale, a_ref, b_ref, c_ref)                                                                                                                \
 	do {                                                                                                                                                       \
@@ -57,7 +57,7 @@
 		QVERIFY2(nsl_math_approximately_equal(a, a_ref), qPrintable(QStringLiteral("a: v1:%1, ref:%2").arg(a).arg(a_ref)));                                    \
 		QVERIFY2(nsl_math_approximately_equal(b, b_ref), qPrintable(QStringLiteral("b: v1:%1, ref:%2").arg(b).arg(b_ref)));                                    \
 		QVERIFY2(nsl_math_approximately_equal(c, c_ref), qPrintable(QStringLiteral("c: v1:%1, ref:%2").arg(c).arg(c_ref)));                                    \
-	} while (false);
+	} while (false)
 
 #define DEBUG_RANGE(plot, aspect)                                                                                                                              \
 	{                                                                                                                                                          \
@@ -102,17 +102,18 @@
 		auto* tempFile = new QTemporaryFile(QStringLiteral("XXXXXX_") + QLatin1String(project_name) + QLatin1String(".lml"), this);                            \
 		QCOMPARE(tempFile->open(), true);                                                                                                                      \
 		savePath = tempFile->fileName();                                                                                                                       \
+		QVERIFY(!savePath.isEmpty());                                                                                                                          \
+		tempFile->close();                                                                                                                                     \
 		QFile file(savePath);                                                                                                                                  \
 		QCOMPARE(file.open(QIODevice::WriteOnly), true);                                                                                                       \
                                                                                                                                                                \
-		project.setFileName(tempFile->fileName());                                                                                                             \
+		project.setFileName(savePath);                                                                                                                         \
 		QXmlStreamWriter writer(&file);                                                                                                                        \
 		QPixmap thumbnail;                                                                                                                                     \
 		project.save(thumbnail, &writer);                                                                                                                      \
 		file.close();                                                                                                                                          \
-		DEBUG(QStringLiteral("File stored as: ").toStdString() << savePath.toStdString());                                                                     \
-		QVERIFY(!savePath.isEmpty());                                                                                                                          \
-	} while (0);
+		DEBUG(QStringLiteral("Project stored as: ").toStdString() << savePath.toStdString());                                                                  \
+	} while (false)
 
 /*!
  * Save content \p content in a temporary file. The filename is used to identify the file during debugging
@@ -125,6 +126,8 @@
 		auto* tempFile = new QTemporaryFile(QStringLiteral("XXXXXX_") + QLatin1String(filename), this);                                                        \
 		QCOMPARE(tempFile->open(), true);                                                                                                                      \
 		savePath = tempFile->fileName();                                                                                                                       \
+		QVERIFY(!savePath.isEmpty());                                                                                                                          \
+		tempFile->close();                                                                                                                                     \
 		QFile file(savePath);                                                                                                                                  \
 		QCOMPARE(file.open(QIODevice::WriteOnly), true);                                                                                                       \
                                                                                                                                                                \
@@ -133,8 +136,7 @@
 		}                                                                                                                                                      \
 		file.close();                                                                                                                                          \
 		DEBUG(QStringLiteral("File stored as: ").toStdString() << savePath.toStdString());                                                                     \
-		QVERIFY(!savePath.isEmpty());                                                                                                                          \
-	} while (0)
+	} while (false)
 
 ///////////////////////////////////////////////////////
 

@@ -83,14 +83,11 @@ int main(int argc, char* argv[]) {
 	QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 #endif
 	QApplication app(argc, argv);
-	KLocalizedString::setApplicationDomain("labplot2");
-	KCrash::initialize();
-
+	KLocalizedString::setApplicationDomain("labplot");
 	MainWin::updateLocale();
 
 	QString systemInfo{getSystemInfo()};
-
-	KAboutData aboutData(QStringLiteral("labplot2"),
+	KAboutData aboutData(QStringLiteral("labplot"),
 						 QStringLiteral("LabPlot"),
 						 QLatin1String(LVERSION),
 						 i18n("LabPlot is a FREE, open-source and cross-platform Data Visualization and Analysis software accessible to everyone."),
@@ -112,7 +109,7 @@ int main(int argc, char* argv[]) {
 						QStringLiteral("yurchor@ukr.net"),
 						QString());
 	aboutData.addCredit(i18n("Garvit Khatri"),
-						i18nc("@info:credit", "Porting LabPlot2 to KF5 and Integration with Cantor"),
+						i18nc("@info:credit", "Porting LabPlot to KF5 and Integration with Cantor"),
 						QStringLiteral("garvitdelhi@gmail.com"),
 						QString());
 	aboutData.addCredit(i18n("Christoph Roick"),
@@ -120,8 +117,9 @@ int main(int argc, char* argv[]) {
 						QStringLiteral("chrisito@gmx.de"),
 						QString());
 	aboutData.setOrganizationDomain(QByteArray("kde.org"));
-	aboutData.setDesktopFileName(QStringLiteral("org.kde.labplot2"));
+	aboutData.setDesktopFileName(QStringLiteral("org.kde.labplot"));
 	KAboutData::setApplicationData(aboutData);
+	KCrash::initialize();
 
 	const auto& group = Settings::settingsGeneral();
 	enableDebugTrace(group.readEntry<bool>(QLatin1String("DebugTrace"), false));

@@ -229,6 +229,7 @@ private:
 	//"add new" actions
 	QAction* addCurveAction{nullptr};
 	QAction* addEquationCurveAction{nullptr};
+	QAction* addFunctionCurveAction{nullptr};
 
 	// statistical plots
 	QAction* addHistogramAction{nullptr};
@@ -305,6 +306,7 @@ public Q_SLOTS:
 	void addSmoothCurve();
 	void addFitCurve();
 	void addFourierFilterCurve();
+	void addFunctionCurve();
 
 	void addLegend();
 	void addTextLabel();

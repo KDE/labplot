@@ -1,5 +1,5 @@
-add_executable (StatisticalPlotsTest StatisticalPlotsTest.cpp)
+add_executable(StatisticalPlotsTest StatisticalPlotsTest.cpp)
 
-target_link_libraries(StatisticalPlotsTest labplot2backendlib labplot2lib labplot2nsllib labplot2test)
+target_link_libraries(StatisticalPlotsTest labplotbackendlib labplotlib labplottest)
 
 add_test(NAME StatisticalPlotsTest COMMAND StatisticalPlotsTest)

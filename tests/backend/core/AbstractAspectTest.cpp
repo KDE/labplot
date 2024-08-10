@@ -185,7 +185,7 @@ void AbstractAspectTest::saveLoad() {
 	equationCurve->recalculate();
 
 	QString savePath;
-	SAVE_PROJECT("testLinkSpreadsheetSaveLoad")
+	SAVE_PROJECT("testLinkSpreadsheetSaveLoad");
 
 	Project project2;
 	QCOMPARE(project2.load(savePath), true);

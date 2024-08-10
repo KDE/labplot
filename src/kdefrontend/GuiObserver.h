@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : GUI observer
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -39,6 +39,7 @@ class SpreadsheetDock;
 class StatisticsSpreadsheetDock;
 class XYCurveDock;
 class XYEquationCurveDock;
+class XYFunctionCurveDock;
 class XYDataReductionCurveDock;
 class XYDifferentiationCurveDock;
 class XYIntegrationCurveDock;
@@ -98,6 +99,7 @@ private:
 
 	XYCurveDock* m_xyCurveDock{nullptr};
 	XYEquationCurveDock* m_xyEquationCurveDock{nullptr};
+	XYFunctionCurveDock* m_xyFunctionCurveDock{nullptr};
 
 	// bar plots
 	BarPlotDock* m_barPlotDock{nullptr};

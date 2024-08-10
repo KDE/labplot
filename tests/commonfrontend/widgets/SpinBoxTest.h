@@ -18,7 +18,7 @@ class SpinBoxTest : public CommonTest {
 
 private Q_SLOTS:
 	void initTestCase() {
-		KLocalizedString::setApplicationDomain("labplot2");
+		KLocalizedString::setApplicationDomain("labplot");
 		QLocale::setDefault(QLocale(QLocale::Language::English));
 	}
 

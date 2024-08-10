@@ -81,6 +81,7 @@ enum class AspectType : quint64 {
 	XYIntegrationCurve = 0x0280100,
 	XYSmoothCurve = 0x0280200,
 	XYHilbertTransformCurve = 0x0280400,
+	XYFunctionCurve = 0x0280800,
 
 	AbstractPart = 0x0400000,
 	AbstractDataSource = 0x0410000,
@@ -178,6 +179,8 @@ public:
 			return QStringLiteral("XYCurve");
 		case AspectType::XYEquationCurve:
 			return QStringLiteral("XYEquationCurve");
+		case AspectType::XYFunctionCurve:
+			return QStringLiteral("XYFunctionCurve");
 		case AspectType::XYAnalysisCurve:
 			return QStringLiteral("XYAnalysisCurve");
 		case AspectType::XYConvolutionCurve:

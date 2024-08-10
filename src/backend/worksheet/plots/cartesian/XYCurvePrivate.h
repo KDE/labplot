@@ -149,6 +149,7 @@ private:
 
 	friend class RetransformTest;
 	friend class XYCurveTest;
+	friend class XYFunctionCurveTest;
 };
 
 #endif

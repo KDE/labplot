@@ -23,11 +23,11 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/ ${ECM_MODULE_PATH})
 
 find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} COMPONENTS Widgets REQUIRED)
 find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
-	Config
-	I18n
+    Config
+    I18n
 )
 
 add_executable(example main.cpp)
-INCLUDE_DIRECTORIES(/usr/include/labplot/)
+include_directories(/usr/include/labplot/)
 
 target_link_libraries(example labplot Qt${QT_MAJOR_VERSION}::Widgets KF${KF_MAJOR_VERSION}::ConfigCore KF${KF_MAJOR_VERSION}::I18n)

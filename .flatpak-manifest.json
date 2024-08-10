@@ -6,7 +6,7 @@
     "base": "io.qt.qtwebengine.BaseApp",
     "base-version": "5.15-23.08",
     "sdk": "org.kde.Sdk",
-    "command": "labplot2",
+    "command": "labplot",
     "tags": ["nightly"],
     "desktop-file-name-suffix": " (Nightly)",
     "finish-args": [
@@ -398,7 +398,7 @@
         {
             "name": "labplot",
             "buildsystem": "cmake-ninja",
-            "config-opts": [ "-DQt5Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt5Mqtt", "-DLOCAL_QT_ADVANCED_DOCK_COPY=OFF"],
+            "config-opts": [ "-DQt5Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt5Mqtt", "-DLOCAL_QT_ADVANCED_DOCK_COPY=OFF", "-DENABLE_TESTS=OFF"],
 	    "sources": [
                 {
                     "type": "dir",

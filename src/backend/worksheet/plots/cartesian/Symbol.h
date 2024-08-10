@@ -98,8 +98,8 @@ public:
 	~Symbol() override;
 	void init(const KConfigGroup&);
 
-	void draw(QPainter*, QPointF);
-	void draw(QPainter*, const QVector<QPointF>&);
+	void draw(QPainter*, QPointF) const;
+	void draw(QPainter*, const QVector<QPointF>&) const;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

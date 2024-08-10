@@ -10,6 +10,7 @@
 #ifndef PLOTDATADIALOG_H
 #define PLOTDATADIALOG_H
 
+#include "backend/nsl/nsl_sf_stats.h"
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 
 namespace Ui {
@@ -33,13 +34,14 @@ class PlotDataDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	enum class PlotType { XYCurve, Histogram, BoxPlot, KDEPlot, QQPlot, BarPlot, LollipopPlot };
+	enum class PlotType { XYCurve, Histogram, BoxPlot, KDEPlot, QQPlot, BarPlot, LollipopPlot, DistributionFit };
 
 	explicit PlotDataDialog(AbstractAspect*, PlotType = PlotType::XYCurve, QWidget* parent = nullptr);
 	~PlotDataDialog() override;
 
 	void setSelectedColumns(QVector<Column*>);
 	void setAnalysisAction(XYAnalysisCurve::AnalysisAction);
+	void setFitDistribution(nsl_sf_stats_distribution);
 	static void fillMenu(QMenu*, QActionGroup*);
 
 private:
@@ -54,6 +56,7 @@ private:
 	AspectTreeModel* m_worksheetsModel;
 	PlotType m_plotType;
 	XYAnalysisCurve::AnalysisAction m_analysisAction{XYAnalysisCurve::AnalysisAction::Differentiation};
+	nsl_sf_stats_distribution m_fitDistribution{nsl_sf_stats_gaussian};
 	bool m_analysisMode{false};
 	AbstractAspect* m_lastAddedCurve{nullptr};
 

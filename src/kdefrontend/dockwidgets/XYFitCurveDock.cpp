@@ -436,11 +436,12 @@ void XYFitCurveDock::dataSourceTypeChanged(int index) {
 								   AspectType::CartesianPlot,
 								   AspectType::XYCurve,
 								   AspectType::XYAnalysisCurve,
-								   AspectType::XYEquationCurve};
+								   AspectType::XYEquationCurve,
+								   AspectType::XYFunctionCurve};
 			cbDataSourceCurve->setTopLevelClasses(list);
 
 			if (m_dataSourceModel) {
-				list = {AspectType::XYCurve, AspectType::XYAnalysisCurve, AspectType::XYEquationCurve};
+				list = {AspectType::XYCurve, AspectType::XYAnalysisCurve, AspectType::XYEquationCurve, AspectType::XYFunctionCurve};
 				m_dataSourceModel->setSelectableAspects(list);
 				cbDataSourceCurve->setModel(m_dataSourceModel);
 				cbDataSourceCurve->setAspect(m_fitCurve->dataSourceCurve());

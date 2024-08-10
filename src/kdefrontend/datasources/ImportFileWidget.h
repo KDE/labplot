@@ -155,7 +155,7 @@ private Q_SLOTS:
 	void refreshPreview();
 	void updateStartRow(int);
 	void enableDataPortionSelection(bool);
-	void changeTopic();
+	void changeMcapTopic();
 
 	// save/load template
 	void loadConfigFromTemplate(KConfig&);

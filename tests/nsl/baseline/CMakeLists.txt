@@ -1,5 +1,5 @@
-add_executable (NSLBaselineTest NSLBaselineTest.cpp)
+add_executable(NSLBaselineTest NSLBaselineTest.cpp)
 
-target_link_libraries(NSLBaselineTest labplot2test labplot2nsllib ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
+target_link_libraries(NSLBaselineTest labplottest)
 
 add_test(NAME NSLBaselineTest COMMAND NSLBaselineTest)

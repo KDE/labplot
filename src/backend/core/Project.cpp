@@ -27,6 +27,7 @@
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
+#include "backend/worksheet/plots/cartesian/XYFunctionCurve.h"
 #ifdef HAVE_LIBORIGIN
 #include "backend/datasources/projects/OriginProjectParser.h"
 #endif
@@ -1009,6 +1010,17 @@ void Project::restorePointers(AbstractAspect* aspect) {
 
 	for (auto* element : elements)
 		element->assignCurve(curves);
+
+	QVector<XYFunctionCurve*> functionCurves;
+	if (aspect->type() == AspectType::XYFunctionCurve) // check for the type first. InfoElement has children, but they are not relevant here
+		functionCurves << static_cast<XYFunctionCurve*>(aspect);
+	else if (hasChildren)
+		functionCurves = aspect->children<XYFunctionCurve>(ChildIndexFlag::Recursive);
+
+	for (auto* functionCurve : functionCurves) {
+		for (const auto* curve : qAsConst(curves))
+			functionCurve->setFunctionVariableCurve(curve);
+	}
 
 	// axes
 	QVector<Axis*> axes;

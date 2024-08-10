@@ -98,8 +98,8 @@ void Worksheet::init() {
 	d->layoutBottomMargin = group.readEntry(QStringLiteral("LayoutBottomMargin"), convertToSceneUnits(0., Unit::Centimeter));
 	d->layoutLeftMargin = group.readEntry(QStringLiteral("LayoutLeftMargin"), convertToSceneUnits(0., Unit::Centimeter));
 	d->layoutRightMargin = group.readEntry(QStringLiteral("LayoutRightMargin"), convertToSceneUnits(0., Unit::Centimeter));
-	d->layoutVerticalSpacing = group.readEntry(QStringLiteral("LayoutVerticalSpacing"), convertToSceneUnits(0.5, Unit::Centimeter));
-	d->layoutHorizontalSpacing = group.readEntry(QStringLiteral("LayoutHorizontalSpacing"), convertToSceneUnits(0.5, Unit::Centimeter));
+	d->layoutVerticalSpacing = group.readEntry(QStringLiteral("LayoutVerticalSpacing"), convertToSceneUnits(0., Unit::Centimeter));
+	d->layoutHorizontalSpacing = group.readEntry(QStringLiteral("LayoutHorizontalSpacing"), convertToSceneUnits(0., Unit::Centimeter));
 	d->layoutRowCount = group.readEntry(QStringLiteral("LayoutRowCount"), 2);
 	d->layoutColumnCount = group.readEntry(QStringLiteral("LayoutColumnCount"), 2);
 

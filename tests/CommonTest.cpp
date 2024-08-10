@@ -18,7 +18,9 @@
 #endif
 
 void CommonTest::initTestCase() {
-	KLocalizedString::setApplicationDomain("labplot2");
+	// always enable debugging
+	enableDebugTrace(true);
+	KLocalizedString::setApplicationDomain("labplot");
 
 #ifdef _WIN32
 //	if (AttachConsole(ATTACH_PARENT_PROCESS)) {

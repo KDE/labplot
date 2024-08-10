@@ -21,6 +21,7 @@
 #include "XYFitCurve.h"
 #include "XYFourierFilterCurve.h"
 #include "XYFourierTransformCurve.h"
+#include "XYFunctionCurve.h"
 #include "XYHilbertTransformCurve.h"
 #include "XYIntegrationCurve.h"
 #include "XYInterpolationCurve.h"
@@ -218,6 +219,8 @@ void CartesianPlot::setType(Type type) {
 	switch (type) {
 	case Type::FourAxes: {
 		// Axes
+
+		// x1
 		Axis* axis = new Axis(QLatin1String("x"), Axis::Orientation::Horizontal);
 		axis->setDefault(true);
 		axis->setSuppressRetransform(true);
@@ -227,24 +230,26 @@ void CartesianPlot::setType(Type type) {
 		axis->setMajorTicksDirection(Axis::ticksIn);
 		axis->setMinorTicksDirection(Axis::ticksIn);
 		axis->setMinorTicksNumber(1);
+		axis->minorGridLine()->setStyle(Qt::NoPen);
 		axis->setSuppressRetransform(false);
 
+		// x2
 		axis = new Axis(QLatin1String("x2"), Axis::Orientation::Horizontal);
 		axis->title()->setText(QString());
 		axis->setDefault(true);
 		axis->setSuppressRetransform(true);
-
 		addChild(axis);
 		axis->setPosition(Axis::Position::Top);
 		axis->setRange(0., 1.);
-		axis->setMajorTicksDirection(Axis::ticksIn);
-		axis->setMinorTicksDirection(Axis::ticksIn);
+		axis->setMajorTicksDirection(Axis::noTicks);
+		axis->setMinorTicksDirection(Axis::noTicks);
 		axis->setMinorTicksNumber(1);
 		axis->majorGridLine()->setStyle(Qt::NoPen);
 		axis->minorGridLine()->setStyle(Qt::NoPen);
 		axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
 		axis->setSuppressRetransform(false);
 
+		// y1
 		axis = new Axis(QLatin1String("y"), Axis::Orientation::Vertical);
 		axis->setDefault(true);
 		axis->setSuppressRetransform(true);
@@ -254,8 +259,10 @@ void CartesianPlot::setType(Type type) {
 		axis->setMajorTicksDirection(Axis::ticksIn);
 		axis->setMinorTicksDirection(Axis::ticksIn);
 		axis->setMinorTicksNumber(1);
+		axis->minorGridLine()->setStyle(Qt::NoPen);
 		axis->setSuppressRetransform(false);
 
+		// y2
 		axis = new Axis(QLatin1String("y2"), Axis::Orientation::Vertical);
 		axis->title()->setText(QString());
 		axis->setDefault(true);
@@ -263,8 +270,8 @@ void CartesianPlot::setType(Type type) {
 		addChild(axis);
 		axis->setPosition(Axis::Position::Right);
 		axis->setRange(0., 1.);
-		axis->setMajorTicksDirection(Axis::ticksIn);
-		axis->setMinorTicksDirection(Axis::ticksIn);
+		axis->setMajorTicksDirection(Axis::noTicks);
+		axis->setMinorTicksDirection(Axis::noTicks);
 		axis->setMinorTicksNumber(1);
 		axis->majorGridLine()->setStyle(Qt::NoPen);
 		axis->minorGridLine()->setStyle(Qt::NoPen);
@@ -427,6 +434,9 @@ void CartesianPlot::initActions() {
 	//"add new" actions
 	addCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("xy-curve"), this);
 	addEquationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve")), i18n("xy-curve from a Formula"), this);
+	addEquationCurveAction->setToolTip(i18n("Add a new xy-curve that is defined via a mathematical expression."));
+	addFunctionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve")), i18n("Function"), this);
+	addFunctionCurveAction->setToolTip(i18n("Add a new xy-curve that is defined as a function of other xy-curves (scaled, shifted, etc.)"));
 
 	// statistical plots
 	addHistogramAction = new QAction(QIcon::fromTheme(QStringLiteral("view-object-histogram-linear")), i18n("Histogram"), this);
@@ -470,6 +480,7 @@ void CartesianPlot::initActions() {
 	connect(addEquationCurveAction, &QAction::triggered, this, [=]() {
 		addChild(new XYEquationCurve(QStringLiteral("f(x)")));
 	});
+	connect(addFunctionCurveAction, &QAction::triggered, this, &CartesianPlot::addFunctionCurve);
 
 	// bar plots
 	connect(addBarPlotAction, &QAction::triggered, this, [=]() {
@@ -611,6 +622,7 @@ void CartesianPlot::initMenus() {
 	m_addNewMenu->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 	m_addNewMenu->addAction(addCurveAction);
 	m_addNewMenu->addAction(addEquationCurveAction);
+	m_addNewMenu->addSeparator();
 
 	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"), m_addNewMenu);
 	addNewStatisticalPlotsMenu->addAction(addHistogramAction);
@@ -643,6 +655,8 @@ void CartesianPlot::initMenus() {
 	addNewAnalysisMenu->addAction(addCorrelationCurveAction);
 	addNewAnalysisMenu->addSeparator();
 	addNewAnalysisMenu->addAction(addDataReductionCurveAction);
+	addNewAnalysisMenu->addSeparator();
+	addNewAnalysisMenu->addAction(addFunctionCurveAction);
 	m_addNewMenu->addMenu(addNewAnalysisMenu);
 
 	m_addNewMenu->addSeparator();
@@ -686,6 +700,7 @@ void CartesianPlot::initMenus() {
 	dataFitMenu->addAction(addFitActions.at(10));
 	dataAnalysisMenu->addMenu(dataFitMenu);
 
+	// TODO: re-use addNewAnalysisMenu?
 	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addAction(addDifferentiationAction);
 	dataAnalysisMenu->addAction(addIntegrationAction);
@@ -701,7 +716,10 @@ void CartesianPlot::initMenus() {
 	dataAnalysisMenu->addAction(addCorrelationAction);
 	dataAnalysisMenu->addSeparator();
 	// 	dataAnalysisMenu->insertMenu(nullptr, dataManipulationMenu);
+	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addAction(addDataReductionAction);
+	dataAnalysisMenu->addSeparator();
+	dataAnalysisMenu->addAction(addFunctionCurveAction);
 
 	// theme menu
 	themeMenu = new QMenu(i18n("Theme"));
@@ -807,6 +825,7 @@ QVector<AspectType> CartesianPlot::pasteTypes() const {
 							  AspectType::QQPlot,
 							  AspectType::Axis,
 							  AspectType::XYEquationCurve,
+							  AspectType::XYFunctionCurve,
 							  AspectType::XYConvolutionCurve,
 							  AspectType::XYCorrelationCurve,
 							  AspectType::XYDataReductionCurve,
@@ -1949,6 +1968,20 @@ void CartesianPlot::addFourierFilterCurve() {
 	}
 	this->addChild(curve);
 
+	endMacro();
+}
+
+void CartesianPlot::addFunctionCurve() {
+	auto* curve = new XYFunctionCurve(i18n("Function"));
+	const auto* curCurve = currentCurve();
+	if (curCurve) {
+		beginMacro(i18n("%1: add function of '%2'", name(), curCurve->name()));
+		curve->setName(i18n("Function of '%1'", curCurve->name()));
+		curve->setFunction(QString(), {QStringLiteral("x")}, {curCurve});
+	} else
+		beginMacro(i18n("%1: add function curve", name()));
+
+	this->addChild(curve);
 	endMacro();
 }
 
@@ -5091,6 +5124,15 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == QLatin1String("xyEquationCurve")) {
 			auto* curve = new XYEquationCurve(QString());
+			curve->setIsLoading(true);
+			if (curve->load(reader, preview))
+				addChildFast(curve);
+			else {
+				delete curve;
+				return false;
+			}
+		} else if (reader->name() == XYFunctionCurve::saveName) {
+			auto* curve = new XYFunctionCurve(QString());
 			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
