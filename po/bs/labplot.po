@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-09 01:44+0000\n"
+"POT-Creation-Date: 2024-08-10 01:52+0000\n"
 "PO-Revision-Date: 2015-02-25 20:16+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -317,7 +317,7 @@ msgstr "iteracije"
 #. i18n: ectx: property (text), widget (QLabel, lValuesText)
 #: src/backend/core/AbstractColumn.cpp:229
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:470
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:95
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:96
 #: src/commonfrontend/worksheet/WorksheetView.cpp:220
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:208
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1524
@@ -8682,7 +8682,7 @@ msgstr "Smjer"
 #. i18n: ectx: property (text), widget (QLabel, lDifferentiation)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:453
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1842
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:147
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:148
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:269
 #, fuzzy, kde-format
 #| msgid "Orientation"
@@ -8692,7 +8692,7 @@ msgstr "Orijentacija"
 #. i18n: ectx: property (text), widget (QLabel, lIntegration)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:454
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1861
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:153
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:154
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:157
 #, fuzzy, kde-format
 #| msgid "iterations"
@@ -8805,7 +8805,7 @@ msgstr "vertikalna oa"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:471
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2048
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:108
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:109
 #: src/commonfrontend/matrix/MatrixView.cpp:133
 #: src/commonfrontend/worksheet/WorksheetView.cpp:221
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1367
@@ -8917,7 +8917,7 @@ msgid "Error Function"
 msgstr "Funkcije"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:621
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:166
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:167
 #: src/commonfrontend/workbook/WorkbookView.cpp:135
 #: src/commonfrontend/worksheet/WorksheetView.cpp:291
 #: src/commonfrontend/worksheet/WorksheetView.cpp:430
@@ -10604,13 +10604,13 @@ msgstr "%1: postavi koordinate matrice"
 msgid "%1: set logical position"
 msgstr "%1: postavi poziciju oznake"
 
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:39
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:40
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to initialize %1."
 msgstr "Otvaranje neuspješno"
 
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:52
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:53
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:120
 #: src/commonfrontend/matrix/MatrixView.cpp:192
 #: src/commonfrontend/worksheet/WorksheetView.cpp:145
@@ -10620,7 +10620,7 @@ msgstr "Otvaranje neuspješno"
 msgid "Zoom In"
 msgstr "Uvećaj"
 
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:56
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:57
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:123
 #: src/commonfrontend/matrix/MatrixView.cpp:193
 #: src/commonfrontend/worksheet/WorksheetView.cpp:146
@@ -10630,150 +10630,150 @@ msgstr "Uvećaj"
 msgid "Zoom Out"
 msgstr "Umanji"
 
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:60
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:61
 #, kde-format
 msgid "Find"
 msgstr ""
 
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:64
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:65
 #: src/kdefrontend/datasources/ImportDialog.cpp:110
 #, kde-format
 msgid "Replace"
 msgstr "Zamijeni"
 
 #. i18n: ectx: property (text), widget (QPushButton, bRestart)
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:68
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:69
 #: src/kdefrontend/ui/dockwidgets/cantorworksheetdock.ui:111
 #, kde-format
 msgid "Restart Backend"
 msgstr ""
 
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:71
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:342
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:72
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:343
 #, fuzzy, kde-format
 #| msgid "Fitted Points"
 msgid "Evaluate Notebook"
 msgstr "Tačke podešavanja"
 
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:83
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:84
 #, fuzzy, kde-format
 #| msgid "Fitted Points"
 msgid "Evaluate Entry"
 msgstr "Tačke podešavanja"
 
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:87
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:88
 #, kde-format
 msgid "Remove Current Entry"
 msgstr ""
 
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:91
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:92
 #, fuzzy, kde-format
 #| msgid "Comment"
 msgid "Command"
 msgstr "Komentar"
 
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:101
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:102
 #: src/kdefrontend/widgets/LabelWidget.cpp:211
 #, kde-format
 msgid "Markdown"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lTex)
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:105
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:106
 #: src/kdefrontend/ui/settingsworksheetpage.ui:147
 #: src/kdefrontend/widgets/LabelWidget.cpp:209
 #, kde-format
 msgid "LaTeX"
 msgstr ""
 
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:111
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:112
 #, fuzzy, kde-format
 #| msgid "Scale Breakings"
 msgid "Page Break"
 msgstr "Probijanja granica skale"
 
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:123
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:124
 #, kde-format
 msgid "Compute Eigenvectors"
 msgstr ""
 
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:129
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:130
 #, fuzzy, kde-format
 #| msgid "Clear Matrix"
 msgid "Create Matrix"
 msgstr "Očisti matricu"
 
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:135
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:136
 #, fuzzy, kde-format
 #| msgid "no values"
 msgid "Compute Eigenvalues"
 msgstr "nema vrijednosti"
 
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:141
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:142
 #, fuzzy, kde-format
 #| msgid "Matrix"
 msgid "Invert Matrix"
 msgstr "Matrica"
 
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:159
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:160
 #, fuzzy, kde-format
 #| msgid "Tree options"
 msgid "Solve Equations"
 msgstr "Opcije stabla"
 
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:182
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:183
 #, fuzzy, kde-format
 #| msgid "linear"
 msgid "Linear Algebra"
 msgstr "linearan"
 
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:194
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:195
 #, fuzzy, kde-format
 #| msgid "Recalculate"
 msgid "Calculate"
 msgstr "Preračunaj"
 
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:204
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:205
 #, kde-format
 msgid "Settings"
 msgstr ""
 
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:253
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:254
 #, fuzzy, kde-format
 #| msgid "Constants"
 msgid "Assistants"
 msgstr "Konstante"
 
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:288
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:289
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:598
 #, fuzzy, kde-format
 #| msgid "Plot Area"
 msgid "Plot Data"
 msgstr "Prostor za Crtanje"
 
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:291
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:292
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "Variable Statistics..."
 msgstr "Statistike"
 
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:338
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:339
 #, fuzzy, kde-format
 #| msgid "iterations"
 msgid "Interrupt"
 msgstr "iteracije"
 
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:340
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:341
 #, kde-format
 msgid "Calculating..."
 msgstr ""
 
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:344
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:345
 #, kde-format
 msgid "Ready"
 msgstr ""
 
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:362
+#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:363
 #, fuzzy, kde-format
 #| msgid "Row Statisti&cs"
 msgid "%1: variable statistics"
