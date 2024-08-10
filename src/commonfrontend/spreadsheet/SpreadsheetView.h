@@ -210,9 +210,10 @@ private:
 	QAction* addIntegrationAction{nullptr};
 	QAction* addInterpolationAction{nullptr};
 	QAction* addSmoothAction{nullptr};
-	QVector<QAction*> addFitActions;
-	QVector<QAction*> addDistributionFitActions;
 	QAction* addFourierFilterAction{nullptr};
+	QActionGroup* addAnalysisActionGroup{nullptr};
+	QActionGroup* addFitActionGroup{nullptr};
+	QActionGroup* addDistributionFitActionGroup{nullptr};
 
 	// Menus
 	QMenu* m_selectionMenu{nullptr};
@@ -268,8 +269,8 @@ private Q_SLOTS:
 	void reverseSelection();
 
 	void plotData(QAction*);
-	void plotAnalysisData();
-	void plotDataDistributionFit();
+	void plotAnalysisData(QAction*);
+	void plotDataDistributionFit(QAction*);
 
 	void fillSelectedCellsWithRowNumbers();
 	void fillSelectedCellsWithRandomNumbers();

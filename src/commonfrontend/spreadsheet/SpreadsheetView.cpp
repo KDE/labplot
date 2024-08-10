@@ -497,95 +497,80 @@ void SpreadsheetView::initActions() {
 	action_statistics_rows = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Row Statisti&cs"), this);
 
 	// Analyze and plot menu actions
-	addDataReductionAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Reduce Data"), this);
+	addAnalysisActionGroup = new QActionGroup(this);
+	addDataReductionAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Reduce Data"), addAnalysisActionGroup);
 	//	addDataReductionAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-data-reduction-curve")), i18n("Reduce Data"), this);
 	addDataReductionAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::DataReduction));
-	addDifferentiationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Differentiate"), this);
+	addDifferentiationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Differentiate"), addAnalysisActionGroup);
 	//	addDifferentiationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-differentiation-curve")), i18n("Differentiate"), this);
 	addDifferentiationAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Differentiation));
-	addIntegrationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Integrate"), this);
+	addIntegrationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Integrate"), addAnalysisActionGroup);
 	//	addIntegrationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-integration-curve")), i18n("Integrate"), this);
 	addIntegrationAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Integration));
-	addInterpolationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-interpolation-curve")), i18n("Interpolate"), this);
+	addInterpolationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-interpolation-curve")), i18n("Interpolate"), addAnalysisActionGroup);
 	addInterpolationAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Interpolation));
-	addSmoothAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-smoothing-curve")), i18n("Smooth"), this);
+	addSmoothAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-smoothing-curve")), i18n("Smooth"), addAnalysisActionGroup);
 	addSmoothAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Smoothing));
-	addFourierFilterAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-filter-curve")), i18n("Fourier Filter"), this);
+	addFourierFilterAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-filter-curve")), i18n("Fourier Filter"), addAnalysisActionGroup);
 	addFourierFilterAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FourierFilter));
 
 	// data fit actions
-	QAction* fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Linear"), this);
+	addFitActionGroup = new QActionGroup(this);
+	QAction* fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Linear"), addFitActionGroup);
 	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitLinear));
-	addFitActions.append(fitAction);
 
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Power"), this);
+	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Power"), addFitActionGroup);
 	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitPower));
-	addFitActions.append(fitAction);
 
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Exponential (degree 1)"), this);
+	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Exponential (degree 1)"), addFitActionGroup);
 	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitExp1));
-	addFitActions.append(fitAction);
 
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Exponential (degree 2)"), this);
+	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Exponential (degree 2)"), addFitActionGroup);
 	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitExp2));
-	addFitActions.append(fitAction);
 
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Inverse Exponential"), this);
+	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Inverse Exponential"), addFitActionGroup);
 	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitInvExp));
-	addFitActions.append(fitAction);
 
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Gauss"), this);
+	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Gauss"), addFitActionGroup);
 	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitGauss));
-	addFitActions.append(fitAction);
 
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Cauchy-Lorentz"), this);
+	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Cauchy-Lorentz"), addFitActionGroup);
 	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitCauchyLorentz));
-	addFitActions.append(fitAction);
 
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Arc Tangent"), this);
+	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Arc Tangent"), addFitActionGroup);
 	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitTan));
-	addFitActions.append(fitAction);
 
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Hyperbolic Tangent"), this);
+	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Hyperbolic Tangent"), addFitActionGroup);
 	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitTanh));
-	addFitActions.append(fitAction);
 
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Error Function"), this);
+	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Error Function"), addFitActionGroup);
 	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitErrFunc));
-	addFitActions.append(fitAction);
 
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Custom"), this);
+	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Custom"), addFitActionGroup);
 	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitCustom));
-	addFitActions.append(fitAction);
 
 	// distribution fit actions
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Gaussian (Normal)"));
+	addDistributionFitActionGroup = new QActionGroup(this);
+	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Gaussian (Normal)"), addDistributionFitActionGroup);
 	fitAction->setData(static_cast<int>(nsl_sf_stats_gaussian));
-	addDistributionFitActions.append(fitAction);
 
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Exponential"));
+	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Exponential"), addDistributionFitActionGroup);
 	fitAction->setData(static_cast<int>(nsl_sf_stats_exponential));
-	addDistributionFitActions.append(fitAction);
 
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Laplace"));
+	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Laplace"), addDistributionFitActionGroup);
 	fitAction->setData(static_cast<int>(nsl_sf_stats_laplace));
-	addDistributionFitActions.append(fitAction);
 
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Cauchy-Lorentz"));
+	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Cauchy-Lorentz"), addDistributionFitActionGroup);
 	fitAction->setData(static_cast<int>(nsl_sf_stats_cauchy_lorentz));
-	addDistributionFitActions.append(fitAction);
 
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Log-normal"));
+	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Log-normal"), addDistributionFitActionGroup);
 	fitAction->setData(static_cast<int>(nsl_sf_stats_lognormal));
-	addDistributionFitActions.append(fitAction);
 
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Poisson"));
+	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Poisson"), addDistributionFitActionGroup);
 	fitAction->setData(static_cast<int>(nsl_sf_stats_poisson));
-	addDistributionFitActions.append(fitAction);
 
-	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Binomial"));
+	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Binomial"), addDistributionFitActionGroup);
 	fitAction->setData(static_cast<int>(nsl_sf_stats_binomial));
-	addDistributionFitActions.append(fitAction);
 
 	connectActions();
 }
@@ -640,6 +625,7 @@ void SpreadsheetView::initMenus() {
 	// Data fit sub-menu
 	QMenu* dataFitMenu = new QMenu(i18n("Fit"), this);
 	dataFitMenu->setIcon(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")));
+	const auto& addFitActions = addFitActionGroup->actions();
 	dataFitMenu->addAction(addFitActions.at(0));
 	dataFitMenu->addAction(addFitActions.at(1));
 	dataFitMenu->addAction(addFitActions.at(2));
@@ -658,6 +644,7 @@ void SpreadsheetView::initMenus() {
 	// distribution fit sub-menu
 	QMenu* distributionFitMenu = new QMenu(i18n("Fit Distribution"), this);
 	distributionFitMenu->setIcon(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")));
+	const auto& addDistributionFitActions = addDistributionFitActionGroup->actions();
 	distributionFitMenu->addAction(addDistributionFitActions.at(0));
 	distributionFitMenu->addAction(addDistributionFitActions.at(1));
 	distributionFitMenu->addAction(addDistributionFitActions.at(2));
@@ -945,16 +932,9 @@ void SpreadsheetView::connectActions() {
 	connect(action_toggle_sparklines, &QAction::triggered, this, &SpreadsheetView::toggleSparkLines);
 
 	// analysis
-	connect(addDataReductionAction, &QAction::triggered, this, &SpreadsheetView::plotAnalysisData);
-	connect(addDifferentiationAction, &QAction::triggered, this, &SpreadsheetView::plotAnalysisData);
-	connect(addIntegrationAction, &QAction::triggered, this, &SpreadsheetView::plotAnalysisData);
-	connect(addInterpolationAction, &QAction::triggered, this, &SpreadsheetView::plotAnalysisData);
-	connect(addSmoothAction, &QAction::triggered, this, &SpreadsheetView::plotAnalysisData);
-	connect(addFourierFilterAction, &QAction::triggered, this, &SpreadsheetView::plotAnalysisData);
-	for (const auto& action : addFitActions)
-		connect(action, &QAction::triggered, this, &SpreadsheetView::plotAnalysisData);
-	for (const auto& action : addDistributionFitActions)
-		connect(action, &QAction::triggered, this, &SpreadsheetView::plotDataDistributionFit);
+	connect(addAnalysisActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::plotAnalysisData);
+	connect(addFitActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::plotAnalysisData);
+	connect(addDistributionFitActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::plotDataDistributionFit);
 }
 
 void SpreadsheetView::fillToolBar(QToolBar* toolBar) {
@@ -2257,11 +2237,9 @@ void SpreadsheetView::plotData(QAction* action) {
 	dlg->exec();
 }
 
-void SpreadsheetView::plotAnalysisData() {
-	const auto* action = dynamic_cast<const QAction*>(QObject::sender());
-	const auto analysisAction = static_cast<XYAnalysisCurve::AnalysisAction>(action->data().toInt());
-
+void SpreadsheetView::plotAnalysisData(QAction* action) {
 	auto* dlg = new PlotDataDialog(m_spreadsheet, PlotDataDialog::PlotType::XYCurve);
+	const auto analysisAction = static_cast<XYAnalysisCurve::AnalysisAction>(action->data().toInt());
 	dlg->setAnalysisAction(analysisAction);
 
 	// use all spreadsheet columns if no columns are selected
@@ -2273,11 +2251,9 @@ void SpreadsheetView::plotAnalysisData() {
 	dlg->exec();
 }
 
-void SpreadsheetView::plotDataDistributionFit() {
-	const auto* action = dynamic_cast<const QAction*>(QObject::sender());
-	const auto distribution = static_cast<nsl_sf_stats_distribution>(action->data().toInt());
-
+void SpreadsheetView::plotDataDistributionFit(QAction* action) {
 	auto* dlg = new PlotDataDialog(m_spreadsheet, PlotDataDialog::PlotType::DistributionFit);
+	const auto distribution = static_cast<nsl_sf_stats_distribution>(action->data().toInt());
 	dlg->setFitDistribution(distribution);
 
 	// use all spreadsheet columns if no columns are selected
