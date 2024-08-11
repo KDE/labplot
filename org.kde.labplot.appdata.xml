@@ -51,6 +51,7 @@
   <summary xml:lang="eu">Datuen irudikatze eta analisi elkarreragilea</summary>
   <summary xml:lang="fi">Vuorovaikutteinen tiedon visualisointi ja analyysi</summary>
   <summary xml:lang="fr">Analyse et affichage interactif de données</summary>
+  <summary xml:lang="gl">Visualización e análise interactiva de datos.</summary>
   <summary xml:lang="ia">Visualisation e Analyse de Datos Interactive</summary>
   <summary xml:lang="id">Visualisasi dan Analisis Data Interaktif</summary>
   <summary xml:lang="it">Analisi e visualizzazione dei dati interattiva</summary>
@@ -79,6 +80,7 @@
     <p xml:lang="eu">LabPlot is a FREE, open source and cross-platform Data Visualization and Analysis software accessible to everyone.</p>
     <p xml:lang="fi">LabPlot on VAPAA, kaikkien käytettävissä oleva, avointa lähdekoodia ja monialustainen tiedon visualisointi- ja analyysiohjelma.</p>
     <p xml:lang="fr">LabPlot est un logiciel d'affichage et d'analyse de données, libre, « Open-source » et multi-plate-forme, accessible à tous.</p>
+    <p xml:lang="gl">LabPlot é software libre, de código aberto e multiplataforma de visualización e análise de datos, a disposición de calquera.</p>
     <p xml:lang="ia">LabPlot es un software LIBERE e gratuite, a fonte aperite e inter-platteforma per Visualisation e Analyse de datos accessibile a omnes.</p>
     <p xml:lang="id">LabPlot adalah perangkat lunak Analisis dan Visualisasi Data open source dan lintas platform GRATIS yang bisa diakses oleh semua orang.</p>
     <p xml:lang="it">LabPlot è un software GRATUITO, open source e multi piattaforma per la visualizzazione e per l'analisi dei dati accessibile da chiunque.</p>
@@ -144,6 +146,7 @@
       <caption xml:lang="eu">Datuen oinarrizko irudikatzea</caption>
       <caption xml:lang="fi">Tiedon perusvisualisointi</caption>
       <caption xml:lang="fr">Affichage basique de données</caption>
+      <caption xml:lang="gl">Visualización básica de datos.</caption>
       <caption xml:lang="ia">Visualisation basice de datos</caption>
       <caption xml:lang="id">Visualisasi dasar data</caption>
       <caption xml:lang="it">Visualizzazione di base dei dati</caption>
@@ -173,6 +176,7 @@
       <caption xml:lang="eu">Datuen oinarrizko irudikatzea</caption>
       <caption xml:lang="fi">Tiedon perusvisualisointi</caption>
       <caption xml:lang="fr">Affichage basique de données</caption>
+      <caption xml:lang="gl">Visualización básica de datos.</caption>
       <caption xml:lang="ia">Visualisation basice de datos</caption>
       <caption xml:lang="id">Visualisasi dasar data</caption>
       <caption xml:lang="it">Visualizzazione di base dei dati</caption>
@@ -201,6 +205,7 @@
       <caption xml:lang="eu">Irudien eta trazuen antolamendu aurreratua</caption>
       <caption xml:lang="fi">Kaavioiden ja kuvioiden edistynyt asettelu</caption>
       <caption xml:lang="fr">Mise en forme avancée de tracés et d'images</caption>
+      <caption xml:lang="gl">Disposicións avanzadas de gráficos e imaxes.</caption>
       <caption xml:lang="ia">Dispositionar avantiate de tracias (plots) e imagines</caption>
       <caption xml:lang="id">Tata letak plot dan gambar tingkat lanjut</caption>
       <caption xml:lang="it">Tracciamento avanzato di grafici e immagini</caption>
@@ -230,6 +235,7 @@
       <caption xml:lang="eu">Gaiak aldatzea</caption>
       <caption xml:lang="fi">Teemoitus</caption>
       <caption xml:lang="fr">Application de thèmes</caption>
+      <caption xml:lang="gl">Temas.</caption>
       <caption xml:lang="ia">Facer Themas</caption>
       <caption xml:lang="id">Penemaan</caption>
       <caption xml:lang="it">Temi</caption>
@@ -258,6 +264,7 @@
       <caption xml:lang="eu">Funtzio matematikoak irudikatzea</caption>
       <caption xml:lang="fi">Matemaattisten funktioiden visualisointi</caption>
       <caption xml:lang="fr">Affichage de fonctions mathématiques</caption>
+      <caption xml:lang="gl">Visualización de funcións matemáticas.</caption>
       <caption xml:lang="ia">Visualisation de functiones mathematic</caption>
       <caption xml:lang="id">Visualisasi fungsi matematika</caption>
       <caption xml:lang="it">Visualizzazione di funzioni matematiche</caption>
@@ -286,6 +293,7 @@
       <caption xml:lang="eu">Datuei aurrez definitutako edo neurrira egindako ereduak egokitu</caption>
       <caption xml:lang="fi">Sovita tietoon ennalta-asetettuja ja mukautettuja malleja</caption>
       <caption xml:lang="fr">Ajuster des modèles prédéfinis ou personnalisés aux données</caption>
+      <caption xml:lang="gl">Axustar os modelos predefinidos ou personalizados aos datos.</caption>
       <caption xml:lang="ia">Adapta modellos predefinite o personalisat al datos</caption>
       <caption xml:lang="id">Mengepaskan model kustom atau yang telah ditentukan sebelumnya ke data</caption>
       <caption xml:lang="it">Adatta modelli predefiniti o personalizzati ai dati</caption>
@@ -313,6 +321,7 @@
       <caption xml:lang="eu">Datuak leundu, leuntzeko hainbat metodoen laguntzarekin</caption>
       <caption xml:lang="fi">Tasoita tietoja eri tasoitusmenetelmillä</caption>
       <caption xml:lang="fr">Lisser les données grâce aux différentes méthodes de lissage</caption>
+      <caption xml:lang="gl">Suavizar os datos coa axuda de varios métodos de suavizado.</caption>
       <caption xml:lang="ia">Lisia le datos con le adjuta de varie metodos de lisiar</caption>
       <caption xml:lang="id">Menghaluskan data dengan bantuan berbagai metode penghalusan</caption>
       <caption xml:lang="it">Smussa i dati per mezzo di diversi metodi di smussatura</caption>
@@ -340,6 +349,7 @@
       <caption xml:lang="eu">Ohar-blokaren interfazea, Maxima, Octave, R, Sage, Scilab, Python, Julia, eta abarrekin saio elkarreragileak egiteko</caption>
       <caption xml:lang="fi">Muistiokäyttöliittymä vuorovaikutteisiin istuntoihin Maximassa, Octavessa, R:ssä, Sagessa, Scilabissa, Pythonissa, Juliassa jne.</caption>
       <caption xml:lang="fr">Interface pour ordinateur de type « Notebook » pour des sessions interactives pour Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
+      <caption xml:lang="gl">Interface de caderno para sesións interactivas en Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="ia">Interfacie de Notebook per sessiones interactive in Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="id">Antarmuka notebook untuk sesi interaktif di Maxima, Octave, R, Sage, Scilab, Python, Julia, dll</caption>
       <caption xml:lang="it">Interfaccia a taccuino per sessioni integrate in Maxima, Octave, R, Sage, Scilab, Python, Julia, eccetera</caption>
@@ -368,6 +378,7 @@
       <caption xml:lang="eu">Seinaleen analisia</caption>
       <caption xml:lang="fi">Signaalianalyysi</caption>
       <caption xml:lang="fr">Analyse de signaux</caption>
+      <caption xml:lang="gl">Análise de sinais.</caption>
       <caption xml:lang="ia">Analyse de signal</caption>
       <caption xml:lang="id">Analisis sinyal</caption>
       <caption xml:lang="it">Analisi del segnale</caption>
@@ -396,6 +407,7 @@
       <caption xml:lang="eu">Herzsprung-Russel diagrama LabPlot-en</caption>
       <caption xml:lang="fi">Herzsprung-Russel-diagrammi LabPlotissa</caption>
       <caption xml:lang="fr">Diagramme de Herzsprung-Russel dans LabPlot</caption>
+      <caption xml:lang="gl">Diagrama de Herzsprung-Russel diagram en LabPlot.</caption>
       <caption xml:lang="ia">Diagramma de Herzsprung-Russel  in LabPlot</caption>
       <caption xml:lang="id">Diagram Hertzsprung-Russell di LabPlot</caption>
       <caption xml:lang="it">Diagramma Hertzsprung-Russell in LabPlot</caption>
@@ -424,6 +436,7 @@
       <caption xml:lang="eu">Maxima saio elkarreragile batean kalkulatuta datuen irudikapena</caption>
       <caption xml:lang="fi">Vuorovaikutteisessa Maxima-istunnossa lasketun tiedon visualisointi</caption>
       <caption xml:lang="fr">Affichage de données calculées dans une session interactive de Maxima</caption>
+      <caption xml:lang="gl">Visualización de datos calculados nunha sesión interactiva de Maxima.</caption>
       <caption xml:lang="ia">Visualisation de datos calculate in unsession interactide de Maxima</caption>
       <caption xml:lang="id">Visualisasi data yang dihitung dalam sesi Maxima interaktif</caption>
       <caption xml:lang="it">Visualizzazione dei dati calcolati in una sessione interattiva di Maxima</caption>
