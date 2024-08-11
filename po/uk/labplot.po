@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 01:52+0000\n"
+"POT-Creation-Date: 2024-08-11 01:47+0000\n"
 "PO-Revision-Date: 2024-08-03 10:06+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -379,13 +379,13 @@ msgid "%1: unmask cells"
 msgstr "%1: зняти маскування з комірок"
 
 #: src/backend/core/abstractcolumncommands.cpp:253
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2584
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2623
 #, kde-format
 msgid "%1: set heatmap format"
 msgstr "%1: встановити формат теплової карти"
 
 #: src/backend/core/abstractcolumncommands.cpp:280
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2602
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2641
 #, kde-format
 msgid "%1: remove heatmap format"
 msgstr "%1: вилучити формат теплової карти"
@@ -635,7 +635,7 @@ msgid "%1: change cell values"
 msgstr "%1: змінити значення у комірках"
 
 #: src/backend/core/column/columncommands.cpp:531
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2809
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2848
 #, kde-format
 msgid "%1: set plot designation"
 msgstr "%1: встановити позначення графіка"
@@ -866,9 +866,9 @@ msgstr "невідомий елемент вибору даних «%1»"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/backend/datapicker/DatapickerCurve.cpp:176
 #: src/commonfrontend/matrix/MatrixView.cpp:130
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:411
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:430
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:438
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:412
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:431
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:439
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:220
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:311
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:411
@@ -1142,10 +1142,10 @@ msgstr "Не вдалося відкрити пристрій або файл а
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
 #: src/commonfrontend/matrix/MatrixView.cpp:619
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2486
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2507
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2525
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2542
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2546
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2564
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2581
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:188
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:182
@@ -6019,7 +6019,7 @@ msgstr "ep"
 
 #: src/backend/lib/Range.h:48 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:548
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:514
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:519
 #, kde-format
 msgid "Linear"
 msgstr "лінійна"
@@ -6071,13 +6071,13 @@ msgid "unexpected end of document"
 msgstr "неочікуване завершення документа"
 
 #: src/backend/matrix/Matrix.cpp:129
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3790
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3829
 #, kde-format
 msgid "FITS image"
 msgstr "Зображення FITS"
 
 #: src/backend/matrix/Matrix.cpp:129
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3790
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3829
 #, kde-format
 msgid "FITS table"
 msgstr "Таблиця FITS"
@@ -6427,7 +6427,7 @@ msgstr "Уявна частина"
 
 #: src/backend/nsl/nsl_dft.c:22 src/backend/nsl/nsl_fit.c:26
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:552
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:518
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:522
 #, kde-format
 msgid "Power"
 msgstr "степенева"
@@ -6463,7 +6463,7 @@ msgid "Raw"
 msgstr "Без обробки"
 
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:939
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:964
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:227
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:326
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:489
@@ -6586,7 +6586,7 @@ msgstr "Статистика (розподіли)"
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:588
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1871
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:554
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:549
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1267
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:242
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:171
@@ -6598,13 +6598,14 @@ msgid "Custom"
 msgstr "Нетипове"
 
 #: src/backend/nsl/nsl_fit.c:26
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:530
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:531
 #, kde-format
 msgid "Inverse Exponential"
 msgstr "обернена експоненційна"
 
 #: src/backend/nsl/nsl_fit.c:26 src/backend/nsl/nsl_interp.c:22
 #: src/backend/nsl/nsl_sf_stats.c:15
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:557
 #, kde-format
 msgid "Exponential"
 msgstr "експоненційне"
@@ -6626,7 +6627,8 @@ msgstr "Гауса (нормальний)"
 
 #: src/backend/nsl/nsl_fit.c:31
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:572
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:538
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:537
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:563
 #, kde-format
 msgid "Cauchy-Lorentz"
 msgstr "Коші-Лоренца"
@@ -6658,7 +6660,7 @@ msgstr "Арктангенс"
 
 #: src/backend/nsl/nsl_fit.c:45
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:580
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:546
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:543
 #, kde-format
 msgid "Hyperbolic Tangent"
 msgstr "гіперболічний тангенс"
@@ -6840,6 +6842,7 @@ msgid "Integral"
 msgstr "Інтеграл"
 
 #: src/backend/nsl/nsl_sf_stats.c:13
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:554
 #, kde-format
 msgid "Gaussian (Normal)"
 msgstr "Гауса (нормальний)"
@@ -6850,6 +6853,7 @@ msgid "Gaussian Tail"
 msgstr "Хвостовий Гауса"
 
 #: src/backend/nsl/nsl_sf_stats.c:16
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:560
 #, kde-format
 msgid "Laplace"
 msgstr "Лапласа"
@@ -6950,6 +6954,7 @@ msgid "Gumbel Type-2"
 msgstr "Ґумбеля, тип 2"
 
 #: src/backend/nsl/nsl_sf_stats.c:36
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:569
 #, kde-format
 msgid "Poisson"
 msgstr "Пуассонів"
@@ -6960,6 +6965,7 @@ msgid "Bernoulli"
 msgstr "Бернуллі"
 
 #: src/backend/nsl/nsl_sf_stats.c:38 src/backend/nsl/nsl_smooth.c:25
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:572
 #, kde-format
 msgid "Binomial"
 msgstr "Біноміальний"
@@ -8106,7 +8112,7 @@ msgstr "Гістограма"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:443
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:495
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:243
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:773
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:797
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:146
 #, kde-format
 msgid "Box Plot"
@@ -8130,8 +8136,8 @@ msgstr "Діаграма Q-Q"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:448
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:487
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:257
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:775
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:777
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:799
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:801
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:149
 #, kde-format
 msgid "Bar Plot"
@@ -8174,7 +8180,7 @@ msgstr "Інтегрування"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:456
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:544
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1899
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:511
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:512
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:73
 #, kde-format
 msgid "Smooth"
@@ -8183,7 +8189,7 @@ msgstr "Згладжування"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:457
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:685
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1918
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:612
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:626
 #: src/commonfrontend/worksheet/WorksheetView.cpp:178
 #, kde-format
 msgid "Fit"
@@ -8192,7 +8198,7 @@ msgstr "Наближення"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:458
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:592
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1959
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:558
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:514
 #, kde-format
 msgid "Fourier Filter"
 msgstr "Фільтр Фур'є"
@@ -8312,19 +8318,19 @@ msgid "Convolution"
 msgstr "Згортка"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:541
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:503
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:504
 #, kde-format
 msgid "Differentiate"
 msgstr "Диференціювати"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:542
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:506
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:507
 #, kde-format
 msgid "Integrate"
 msgstr "Інтегрувати"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:543
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:509
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:510
 #, kde-format
 msgid "Interpolate"
 msgstr "Інтерполювати"
@@ -8335,13 +8341,13 @@ msgid "Convolute/Deconvolute"
 msgstr "Згорнути/Розгорнути"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:556
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:522
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:525
 #, kde-format
 msgid "Exponential (degree 1)"
 msgstr "експоненційна (порядок 1)"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:560
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:526
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:528
 #, kde-format
 msgid "Exponential (degree 2)"
 msgstr "експоненційна (порядок 2)"
@@ -8352,13 +8358,13 @@ msgid "Inverse exponential"
 msgstr "обернене експоненційне"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:576
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:542
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:540
 #, kde-format
 msgid "Arc Tangent"
 msgstr "арктангенс"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:584
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:550
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:546
 #, kde-format
 msgid "Error Function"
 msgstr "функція помилки"
@@ -8505,6 +8511,7 @@ msgid "%1: distribution fit to '%2'"
 msgstr "%1: відповідність розподілу «%2»"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1780
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:772
 #, kde-format
 msgid "Distribution Fit to '%1'"
 msgstr "Відповідність розподілу «%1»"
@@ -8515,7 +8522,7 @@ msgid "%1: reduce '%2'"
 msgstr "%1: зведено «%2»"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1827
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:698
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:701
 #, kde-format
 msgid "Reduction of '%1'"
 msgstr "Зведення «%1»"
@@ -8531,7 +8538,7 @@ msgid "%1: differentiate '%2'"
 msgstr "%1: диференціювати «%2»"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1846
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:701
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:704
 #, kde-format
 msgid "Derivative of '%1'"
 msgstr "Похідна «%1»"
@@ -8547,7 +8554,7 @@ msgid "%1: integrate '%2'"
 msgstr "%1: інтегрувати «%2»"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1865
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:704
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:707
 #, kde-format
 msgid "Integral of '%1'"
 msgstr "Інтеграл «%1»"
@@ -8563,7 +8570,7 @@ msgid "%1: interpolate '%2'"
 msgstr "%1: наблизити «%2»"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1884
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:707
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:710
 #, kde-format
 msgid "Interpolation of '%1'"
 msgstr "Інтерполяція «%1»"
@@ -8579,7 +8586,7 @@ msgid "%1: smooth '%2'"
 msgstr "%1: згладити «%2»"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1903
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:710
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:713
 #, kde-format
 msgid "Smoothing of '%1'"
 msgstr "Згладжування «%1»"
@@ -8595,7 +8602,7 @@ msgid "%1: fit to '%2'"
 msgstr "%1: апроксимація «%2»"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1922
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:723
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:726
 #, kde-format
 msgid "Fit to '%1'"
 msgstr "Апроксимація «%1»"
@@ -10016,7 +10023,7 @@ msgid "Assistants"
 msgstr "Допоміжні засоби"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:289
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:598
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:612
 #, kde-format
 msgid "Plot Data"
 msgstr "Графік даних"
@@ -10202,16 +10209,16 @@ msgid "Curve"
 msgstr "Крива"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4037
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4091
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4076
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4130
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2217
 #, kde-format
 msgid "Failed to export"
 msgstr "Не вдалося експортувати"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4037
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4091
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4076
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4130
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2217
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -10373,19 +10380,19 @@ msgid "Clea&r Rows"
 msgstr "Споро&жнити рядки"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:246
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:568
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:582
 #, kde-format
 msgid "Selection"
 msgstr "Позначене"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:268
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:662
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:692
 #, kde-format
 msgid "Generate Data"
 msgstr "Створення даних"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:273
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:677
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:707
 #, kde-format
 msgid "Manipulate Data"
 msgstr "Керування даними"
@@ -10433,7 +10440,7 @@ msgid "%1: cut selected cell(s)"
 msgstr "%1: вирізати позначені комірки"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:689
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1785
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1812
 #, kde-format
 msgid "%1: paste from clipboard"
 msgstr "%1: вставити з буфера обміну"
@@ -10639,8 +10646,8 @@ msgid "Flatten Columns"
 msgstr "Спростити стовпчики"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:327
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1150
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1527
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1177
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1554
 #, kde-format
 msgid "Show Comments"
 msgstr "Показувати коментарі"
@@ -10709,7 +10716,7 @@ msgid "Delete Selected Column(s)"
 msgstr "Вилучити позначені стовпчики"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:349
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1617
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1644
 #, kde-format
 msgid "Freeze Column"
 msgstr "Заморозити стовпчик"
@@ -10906,85 +10913,96 @@ msgstr "Маскувати рядки з пропущеними значення
 msgid "Row Statisti&cs"
 msgstr "Ст&атистика рядків"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:500
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:501
 #, kde-format
 msgid "Reduce Data"
 msgstr "Спростити дані"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:602
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:566
+#, fuzzy, kde-format
+#| msgid "Log-Normal (Galton)"
+msgid "Log-normal"
+msgstr "Логнормальний (Ґалтона)"
+
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:616
 #, kde-format
 msgid "Conditional Formatting"
 msgstr "Умовне форматування"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:630
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:645
+#, kde-format
+msgid "Fit Distribution"
+msgstr "Відповідність розподілу"
+
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:659
 #, kde-format
 msgid "Analyze and Plot Data"
 msgstr "Аналіз і побудова графіків даних"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:644
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:674
 #, kde-format
 msgid "Set Column As"
 msgstr "Встановити стовпчик як"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:713
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:743
 #, kde-format
 msgid "Normalize"
 msgstr "Нормалізувати"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:736
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:766
 #, kde-format
 msgid "Ladder of Powers"
 msgstr "Ланцюг степенів"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1148
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1525
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1175
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1552
 #, kde-format
 msgid "Hide Comments"
 msgstr "Приховати коментарі"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1159
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1530
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1186
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1557
 #, kde-format
 msgid "Hide Sparklines"
 msgstr "Приховати спарклайни"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1161
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1532
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1188
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1559
 #, kde-format
 msgid "Show Sparklines"
 msgstr "Показати спарклайни"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1621
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1648
 #, kde-format
 msgid "Unfreeze Column"
 msgstr "Розморозити стовпчик"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1704
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1731
 #, kde-format
 msgid "%1: cut selected cells"
 msgstr "%1: вирізати позначені комірки"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2028
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2055
 #, kde-format
 msgid "Not enough memory to finalize this operation."
 msgstr "Недостатньо пам'яті для завершення цієї дії."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2042
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2069
 #, kde-format
 msgid "%1: mask selected cells"
 msgstr "%1: замаскувати позначені комірки"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2084
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2111
 #, kde-format
 msgid "%1: unmask selected cells"
 msgstr "%1: зняти маскування позначених комірок"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2240
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2279
 #, kde-format
 msgid "%1: fill cells with row numbers"
 msgstr "%1: заповнити комірки номерами рядків"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2305
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2344
 #, kde-format
 msgid "%1: fill column with row numbers"
 msgid_plural "%1: fill columns with row numbers"
@@ -10993,37 +11011,37 @@ msgstr[1] "%1: заповнити стовпчики номерами рядкі
 msgstr[2] "%1: заповнити стовпчики номерами рядків"
 msgstr[3] "%1: заповнити стовпчик номерами рядків"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2349
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2388
 #, kde-format
 msgid "%1: fill cells with random values"
 msgstr "%1: заповнити комірки випадковими значеннями"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2475
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2514
 #, kde-format
 msgid "%1: fill cells with const values"
 msgstr "%1: заповнити комірки сталими значеннями"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2485
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2507
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2525
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2542
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2524
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2546
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2564
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2581
 #, kde-format
 msgid "Fill the selection with constant value"
 msgstr "Заповнити позначене сталими значеннями"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2622
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2656
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2661
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2695
 #, kde-format
 msgid "Insert empty columns"
 msgstr "Вставлення порожніх стовпчиків"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2623
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2657
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2662
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2696
 #, kde-format
 msgid "Enter the number of columns to insert"
 msgstr "Вкажіть кількість стовпчиків, які слід вставити"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2675
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2714
 #, kde-format
 msgid "%1: insert empty column"
 msgid_plural "%1: insert empty columns"
@@ -11032,12 +11050,12 @@ msgstr[1] "%1: вставити порожні стовпчики"
 msgstr[2] "%1: вставити порожні стовпчики"
 msgstr[3] "%1: вставити порожній стовпчик"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2745
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2784
 #, kde-format
 msgid "%1: remove selected columns"
 msgstr "%1: вилучити позначені стовпчики"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2842
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2881
 #, kde-format
 msgid "%1: reverse column"
 msgid_plural "%1: reverse columns"
@@ -11046,7 +11064,7 @@ msgstr[1] "%1: обернути стовпчики"
 msgstr[2] "%1: обернути стовпчики"
 msgstr[3] "%1: обернути стовпчик"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2915
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2954
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
@@ -11055,123 +11073,123 @@ msgstr ""
 "Позначені стовпчики містять дані різних типів. Через це їх не можна "
 "спростити."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2953
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2992
 #, kde-format
 msgid "%1: normalize columns"
 msgstr "%1: нормалізувати стовпчики"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2973
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3012
 #, kde-format
 msgid "Sum = 0"
 msgstr "Сума = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2984
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3023
 #, kde-format
 msgid "Min = 0"
 msgstr "Min = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2995
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3034
 #, kde-format
 msgid "Max = 0"
 msgstr "Max = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3006
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3045
 #, kde-format
 msgid "Count = 0"
 msgstr "Кількість = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3017
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3056
 #, kde-format
 msgid "Mean = 0"
 msgstr "Середнє = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3028
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3067
 #, kde-format
 msgid "Median = 0"
 msgstr "Медіана = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3040
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3079
 #, kde-format
 msgid "Mode = 0"
 msgstr "Мода = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3042
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3081
 #, kde-format
 msgid "'Mode not defined'"
 msgstr "'Моду не визначено'"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3053
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3092
 #, kde-format
 msgid "Range = 0"
 msgstr "Діапазон = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3064
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3098
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3103
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3137
 #, kde-format
 msgid "SD = 0"
 msgstr "СВ = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3075
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3110
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3114
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3149
 #, kde-format
 msgid "MAD = 0"
 msgstr "МАВ = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3086
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3122
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3125
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3161
 #, kde-format
 msgid "IQR = 0"
 msgstr "МКР = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3134
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3173
 #, kde-format
 msgid "Max - Min = 0"
 msgstr "Max - Min = 0"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3153
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3192
 #, kde-format
 msgid "Normalization not possible"
 msgstr "Нормалізація неможлива"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3165
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3204
 #, kde-format
 msgid "%1: power transform columns"
 msgstr "%1: стовпчики перетворення степенів"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3283
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3322
 #, kde-format
 msgid "%1: column statistics"
 msgstr "%1: статистика щодо стовпчиків"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3314
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3353
 #, kde-format
 msgid "Selection in %1"
 msgstr "Позначене у %1"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3357
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3396
 #, kde-format
 msgid "%1: row statistics"
 msgstr "%1: статистика щодо рядків"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3367
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3406
 #, kde-format
 msgid "Row %1"
 msgstr "Рядок %1"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3392
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3431
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3470
 #, kde-format
 msgid "Insert multiple rows"
 msgstr "Вставлення декількох рядків"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3393
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3432
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3471
 #, kde-format
 msgid "Enter the number of rows to insert"
 msgstr "Вкажіть кількість рядків, які слід вставити"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3412
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3451
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3490
 #, kde-format
 msgid "%1: insert empty row"
 msgid_plural "%1: insert empty rows"
@@ -11180,17 +11198,17 @@ msgstr[1] "%1: вставити порожні рядки"
 msgstr[2] "%1: вставити порожні рядки"
 msgstr[3] "%1: вставити порожній рядок"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3467
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3506
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr "%1: вилучити позначені рядки"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3492
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3531
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: спорожнити позначені комірки"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3754
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3793
 #, kde-format
 msgid "row"
 msgid_plural "rows"
@@ -11199,7 +11217,7 @@ msgstr[1] "рядки"
 msgstr[2] "рядків"
 msgstr[3] "рядок"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3755
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3794
 #, kde-format
 msgid "column"
 msgid_plural "columns"
@@ -11208,74 +11226,74 @@ msgstr[1] "стовпчики"
 msgstr[2] "стовпчиків"
 msgstr[3] "стовпчик"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3756
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3795
 #, kde-format
 msgid "cells"
 msgstr "комірки"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3757
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3796
 #, kde-format
 msgid "masked value"
 msgstr "замасковане значення"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3757
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3796
 #, kde-format
 msgid "masked values"
 msgstr "замасковані значення"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3758
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3797
 #, kde-format
 msgid "missing value"
 msgstr "не вистачає значення"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3758
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3797
 #, kde-format
 msgid "missing values"
 msgstr "не вистачає значень"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3759
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3798
 #, kde-format
 msgid " , "
 msgstr " , "
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3759
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3760
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3798
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3799
 #, kde-format
 msgid "%1"
 msgstr "%1"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3760
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3799
 #, kde-format
 msgid ", "
 msgstr ", "
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3763
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3802
 #, kde-format
 msgid "Selected: %1 %2 , %3 %4%5 %6 %7 %8"
 msgstr "Позначено: %1 %2 , %3 %4%5 %6 %7 %8"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3773
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3812
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
 msgstr "Позначено: %1 %2%3 %4 %5 %6"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3854
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3893
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Друк електронної таблиці"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4466
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4505
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr "Не вдалося створити базу даних SQLite %1."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4498
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4537
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr "Не вдалося створити таблицю у базі даних SQLite %1."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4551
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4590
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr "Не вдалося вставити значення до таблиці."
@@ -17324,90 +17342,96 @@ msgstr "Накреслити позначені дані"
 msgid "&Plot"
 msgstr "&Креслення"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:358
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:359
 #, kde-format
 msgid "Y-data"
 msgstr "Дані y"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:368
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:423
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:369
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:424
 #, kde-format
 msgid "Add Plot to"
 msgstr "Додати креслення до"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbPlotPlacement)
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:426
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:427
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:180
 #, kde-format
 msgid "Add Plots to"
 msgstr "Додати креслення до"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:458
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:469
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:499
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:459
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:470
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:500
 #, kde-format
 msgid "Plot Area - %1"
 msgstr "Область графіка — %1"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:465
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:494
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:466
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:495
 #, kde-format
 msgid "Worksheet - %1"
 msgstr "Робочий аркуш — %1"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:493
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:494
 #, kde-format
 msgid "Plot data from %1"
 msgstr "Накреслити дані з %1"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:619
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:637
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:654
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:621
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:640
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:657
 #, kde-format
 msgid "Plot Area %1"
 msgstr "Область графіка %1"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:728
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:731
 #, kde-format
 msgid "Fourier Filter of '%1'"
 msgstr "Фільтрування Фур'є «%1»"
 
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:766
+#, fuzzy, kde-format
+#| msgid "Probability Density"
+msgid "Probability Density of '%1'"
+msgstr "Щільність ймовірності"
+
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:941
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:966
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:350
 #: src/kdefrontend/ui/plotsurfacestylewidget.ui:23
 #, kde-format
 msgid "Density"
 msgstr "Щільність"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:951
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:976
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:381
 #, kde-format
 msgid "Theoretical Quantiles"
 msgstr "Теоретичні квантилі"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:959
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:984
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:383
 #, kde-format
 msgid "Sample Quantiles"
 msgstr "Квантилі вибірки"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1073
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1098
 #, kde-format
 msgid "No data selected to plot."
 msgstr "Не вибрано даних для креслення."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1078
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1103
 #, kde-format
 msgid "An already existing plot area has to be selected."
 msgstr "Слід позначити наявну область креслення."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1083
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1108
 #, kde-format
 msgid "An already existing worksheet has to be selected."
 msgstr "Слід позначити наявний робочий аркуш."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1089
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1114
 #, kde-format
 msgid "Close the dialog and plot the data."
 msgstr "Закрити діалогове вікно і накреслити дані."
@@ -25131,10 +25155,6 @@ msgstr "Не вдалося відкрити файл:"
 
 #~ msgid "No PanelPluginHandle found for the Cantor Part."
 #~ msgstr "Не знайдено PanelPluginHandle для модуля Cantor."
-
-#~| msgid "Beta Distribution"
-#~ msgid "Fit Distribution"
-#~ msgstr "Відповідність розподілу"
 
 #~ msgid "Date/Time"
 #~ msgstr "Дата і час"

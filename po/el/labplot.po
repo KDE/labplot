@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-10 01:52+0000\n"
+"POT-Creation-Date: 2024-08-11 01:47+0000\n"
 "PO-Revision-Date: 2017-04-20 14:04+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -384,14 +384,14 @@ msgid "%1: unmask cells"
 msgstr "%1: εμφάνιση κελιών"
 
 #: src/backend/core/abstractcolumncommands.cpp:253
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2584
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2623
 #, fuzzy, kde-format
 #| msgid "%1: set date-time format to %2"
 msgid "%1: set heatmap format"
 msgstr "%1: ορισμός μορφής ημερομηνίας-ώρας σε %2"
 
 #: src/backend/core/abstractcolumncommands.cpp:280
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2602
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2641
 #, fuzzy, kde-format
 #| msgid "%1: set date-time format to %2"
 msgid "%1: remove heatmap format"
@@ -656,7 +656,7 @@ msgid "%1: change cell values"
 msgstr "%1: αλλαγή τιμών σε κελιά"
 
 #: src/backend/core/column/columncommands.cpp:531
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2809
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2848
 #, kde-format
 msgid "%1: set plot designation"
 msgstr "%1: ορισμός τίτλου γραφικής παράστασης"
@@ -891,9 +891,9 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/backend/datapicker/DatapickerCurve.cpp:176
 #: src/commonfrontend/matrix/MatrixView.cpp:130
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:411
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:430
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:438
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:412
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:431
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:439
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:220
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:311
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:411
@@ -1166,10 +1166,10 @@ msgstr "Σύνδεση:"
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
 #: src/commonfrontend/matrix/MatrixView.cpp:619
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2486
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2507
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2525
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2542
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2546
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2564
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2581
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:188
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:182
@@ -6123,7 +6123,7 @@ msgstr ""
 
 #: src/backend/lib/Range.h:48 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:548
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:514
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:519
 #, fuzzy, kde-format
 #| msgid "Line:"
 msgid "Linear"
@@ -6176,13 +6176,13 @@ msgid "unexpected end of document"
 msgstr ""
 
 #: src/backend/matrix/Matrix.cpp:129
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3790
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3829
 #, kde-format
 msgid "FITS image"
 msgstr ""
 
 #: src/backend/matrix/Matrix.cpp:129
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3790
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3829
 #, kde-format
 msgid "FITS table"
 msgstr ""
@@ -6537,7 +6537,7 @@ msgstr "Δεδομένα:"
 
 #: src/backend/nsl/nsl_dft.c:22 src/backend/nsl/nsl_fit.c:26
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:552
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:518
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:522
 #, kde-format
 msgid "Power"
 msgstr ""
@@ -6573,7 +6573,7 @@ msgid "Raw"
 msgstr ""
 
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:939
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:964
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:227
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:326
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:489
@@ -6701,7 +6701,7 @@ msgstr "Κατανομή"
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:588
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1871
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:554
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:549
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1267
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:242
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:171
@@ -6713,13 +6713,14 @@ msgid "Custom"
 msgstr ""
 
 #: src/backend/nsl/nsl_fit.c:26
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:530
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:531
 #, kde-format
 msgid "Inverse Exponential"
 msgstr ""
 
 #: src/backend/nsl/nsl_fit.c:26 src/backend/nsl/nsl_interp.c:22
 #: src/backend/nsl/nsl_sf_stats.c:15
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:557
 #, kde-format
 msgid "Exponential"
 msgstr ""
@@ -6741,7 +6742,8 @@ msgstr ""
 
 #: src/backend/nsl/nsl_fit.c:31
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:572
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:538
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:537
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:563
 #, kde-format
 msgid "Cauchy-Lorentz"
 msgstr ""
@@ -6773,7 +6775,7 @@ msgstr ""
 
 #: src/backend/nsl/nsl_fit.c:45
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:580
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:546
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:543
 #, kde-format
 msgid "Hyperbolic Tangent"
 msgstr ""
@@ -6965,6 +6967,7 @@ msgid "Integral"
 msgstr "Ολοκλήρωση:"
 
 #: src/backend/nsl/nsl_sf_stats.c:13
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:554
 #, kde-format
 msgid "Gaussian (Normal)"
 msgstr ""
@@ -6975,6 +6978,7 @@ msgid "Gaussian Tail"
 msgstr ""
 
 #: src/backend/nsl/nsl_sf_stats.c:16
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:560
 #, kde-format
 msgid "Laplace"
 msgstr ""
@@ -7076,6 +7080,7 @@ msgid "Gumbel Type-2"
 msgstr ""
 
 #: src/backend/nsl/nsl_sf_stats.c:36
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:569
 #, kde-format
 msgid "Poisson"
 msgstr ""
@@ -7086,6 +7091,7 @@ msgid "Bernoulli"
 msgstr ""
 
 #: src/backend/nsl/nsl_sf_stats.c:38 src/backend/nsl/nsl_smooth.c:25
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:572
 #, kde-format
 msgid "Binomial"
 msgstr ""
@@ -8292,7 +8298,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:443
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:495
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:243
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:773
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:797
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:146
 #, fuzzy, kde-format
 #| msgid "LabPlot2"
@@ -8319,8 +8325,8 @@ msgstr "LabPlot2"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:448
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:487
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:257
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:775
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:777
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:799
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:801
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:149
 #, fuzzy, kde-format
 #| msgid "LabPlot2"
@@ -8365,7 +8371,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:456
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:544
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1899
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:511
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:512
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:73
 #, kde-format
 msgid "Smooth"
@@ -8374,7 +8380,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:457
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:685
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1918
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:612
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:626
 #: src/commonfrontend/worksheet/WorksheetView.cpp:178
 #, kde-format
 msgid "Fit"
@@ -8383,7 +8389,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:458
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:592
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1959
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:558
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:514
 #, kde-format
 msgid "Fourier Filter"
 msgstr ""
@@ -8510,21 +8516,21 @@ msgid "Convolution"
 msgstr "Σύνδεση:"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:541
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:503
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:504
 #, fuzzy, kde-format
 #| msgid "Differentiation:"
 msgid "Differentiate"
 msgstr "Διαφορισμός:"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:542
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:506
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:507
 #, fuzzy, kde-format
 #| msgid "Integration:"
 msgid "Integrate"
 msgstr "Ολοκλήρωση:"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:543
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:509
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:510
 #, fuzzy, kde-format
 #| msgid "Interpolation:"
 msgid "Interpolate"
@@ -8537,13 +8543,13 @@ msgid "Convolute/Deconvolute"
 msgstr "Σύνδεση:"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:556
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:522
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:525
 #, kde-format
 msgid "Exponential (degree 1)"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:560
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:526
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:528
 #, kde-format
 msgid "Exponential (degree 2)"
 msgstr ""
@@ -8554,13 +8560,13 @@ msgid "Inverse exponential"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:576
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:542
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:540
 #, kde-format
 msgid "Arc Tangent"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:584
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:550
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:546
 #, fuzzy, kde-format
 #| msgid "Functions"
 msgid "Error Function"
@@ -8724,6 +8730,7 @@ msgid "%1: distribution fit to '%2'"
 msgstr "Διαφορισμός:"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1780
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:772
 #, fuzzy, kde-format
 #| msgid "Distribution"
 msgid "Distribution Fit to '%1'"
@@ -8736,7 +8743,7 @@ msgid "%1: reduce '%2'"
 msgstr "%1: αφαίρεση του %2"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1827
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:698
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:701
 #, fuzzy, kde-format
 #| msgid "Derivative"
 msgid "Reduction of '%1'"
@@ -8755,7 +8762,7 @@ msgid "%1: differentiate '%2'"
 msgstr "Διαφορισμός:"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1846
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:701
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:704
 #, fuzzy, kde-format
 #| msgid "Derivative"
 msgid "Derivative of '%1'"
@@ -8774,7 +8781,7 @@ msgid "%1: integrate '%2'"
 msgstr "Διαφορισμός:"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1865
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:704
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:707
 #, fuzzy, kde-format
 #| msgid "Derivative"
 msgid "Integral of '%1'"
@@ -8793,7 +8800,7 @@ msgid "%1: interpolate '%2'"
 msgstr "Διαφορισμός:"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1884
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:707
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:710
 #, fuzzy, kde-format
 #| msgid "Derivative"
 msgid "Interpolation of '%1'"
@@ -8812,7 +8819,7 @@ msgid "%1: smooth '%2'"
 msgstr "%1: αφαίρεση του %2"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1903
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:710
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:713
 #, fuzzy, kde-format
 #| msgid "Derivative"
 msgid "Smoothing of '%1'"
@@ -8831,7 +8838,7 @@ msgid "%1: fit to '%2'"
 msgstr "Διαφορισμός:"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1922
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:723
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:726
 #, fuzzy, kde-format
 #| msgid "Derivative"
 msgid "Fit to '%1'"
@@ -10329,7 +10336,7 @@ msgid "Assistants"
 msgstr "Σταθερές"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:289
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:598
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:612
 #, fuzzy, kde-format
 #| msgid "Plot Area"
 msgid "Plot Data"
@@ -10522,8 +10529,8 @@ msgid "Curve"
 msgstr ""
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4037
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4091
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4076
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4130
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2217
 #, fuzzy, kde-format
 #| msgid "Error when opening the project"
@@ -10531,8 +10538,8 @@ msgid "Failed to export"
 msgstr "Σφάλμα κατά το άνοιγμα του έργου"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:870
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4037
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4091
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4076
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4130
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2217
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -10698,19 +10705,19 @@ msgid "Clea&r Rows"
 msgstr ""
 
 #: src/commonfrontend/matrix/MatrixView.cpp:246
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:568
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:582
 #, kde-format
 msgid "Selection"
 msgstr ""
 
 #: src/commonfrontend/matrix/MatrixView.cpp:268
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:662
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:692
 #, kde-format
 msgid "Generate Data"
 msgstr ""
 
 #: src/commonfrontend/matrix/MatrixView.cpp:273
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:677
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:707
 #, kde-format
 msgid "Manipulate Data"
 msgstr ""
@@ -10759,7 +10766,7 @@ msgid "%1: cut selected cell(s)"
 msgstr ""
 
 #: src/commonfrontend/matrix/MatrixView.cpp:689
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1785
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1812
 #, kde-format
 msgid "%1: paste from clipboard"
 msgstr ""
@@ -10968,8 +10975,8 @@ msgid "Flatten Columns"
 msgstr "Στήλη έναρξης:"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:327
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1150
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1527
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1177
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1554
 #, kde-format
 msgid "Show Comments"
 msgstr ""
@@ -11047,7 +11054,7 @@ msgid "Delete Selected Column(s)"
 msgstr "Στήλη έναρξης:"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:349
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1617
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1644
 #, fuzzy, kde-format
 #| msgid "Start column:"
 msgid "Freeze Column"
@@ -11268,129 +11275,141 @@ msgstr ""
 msgid "Row Statisti&cs"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:500
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:501
 #, kde-format
 msgid "Reduce Data"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:602
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:566
+#, fuzzy, kde-format
+#| msgid "Connection:"
+msgid "Log-normal"
+msgstr "Σύνδεση:"
+
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:616
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgid "Conditional Formatting"
 msgstr "Σύνδεση:"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:630
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:645
+#, fuzzy, kde-format
+#| msgid "Distribution"
+msgid "Fit Distribution"
+msgstr "Κατανομή"
+
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:659
 #, kde-format
 msgid "Analyze and Plot Data"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:644
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:674
 #, fuzzy, kde-format
 #| msgid "Start column:"
 msgid "Set Column As"
 msgstr "Στήλη έναρξης:"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:713
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:743
 #, kde-format
 msgid "Normalize"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:736
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:766
 #, kde-format
 msgid "Ladder of Powers"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1148
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1525
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1175
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1552
 #, kde-format
 msgid "Hide Comments"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1159
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1530
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1186
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1557
 #, fuzzy, kde-format
 #| msgid "Options:"
 msgid "Hide Sparklines"
 msgstr "Επιλογές:"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1161
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1532
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1188
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1559
 #, fuzzy, kde-format
 #| msgid "Show all windows"
 msgid "Show Sparklines"
 msgstr "Εμφάνιση όλων των παραθύρων"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1621
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1648
 #, kde-format
 msgid "Unfreeze Column"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1704
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1731
 #, kde-format
 msgid "%1: cut selected cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2028
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2055
 #, kde-format
 msgid "Not enough memory to finalize this operation."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2042
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2069
 #, kde-format
 msgid "%1: mask selected cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2084
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2111
 #, kde-format
 msgid "%1: unmask selected cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2240
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2279
 #, kde-format
 msgid "%1: fill cells with row numbers"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2305
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2344
 #, kde-format
 msgid "%1: fill column with row numbers"
 msgid_plural "%1: fill columns with row numbers"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2349
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2388
 #, kde-format
 msgid "%1: fill cells with random values"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2475
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2514
 #, kde-format
 msgid "%1: fill cells with const values"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2485
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2507
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2525
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2542
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2524
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2546
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2564
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2581
 #, kde-format
 msgid "Fill the selection with constant value"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2622
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2656
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2661
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2695
 #, fuzzy, kde-format
 #| msgid "%1: insert 1 row"
 #| msgid_plural "%1: insert %2 rows"
 msgid "Insert empty columns"
 msgstr "%1: εισαγωγή 1 γραμμής"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2623
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2657
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2662
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2696
 #, fuzzy, kde-format
 #| msgid "Specify the name of the file to import."
 msgid "Enter the number of columns to insert"
 msgstr "Ορίζει το όνομα του αρχείου προς εισαγωγή."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2675
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2714
 #, fuzzy, kde-format
 #| msgid "%1: insert 1 row"
 #| msgid_plural "%1: insert %2 rows"
@@ -11399,153 +11418,153 @@ msgid_plural "%1: insert empty columns"
 msgstr[0] "%1: εισαγωγή 1 γραμμής"
 msgstr[1] "%1: εισαγωγή 1 γραμμής"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2745
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2784
 #, kde-format
 msgid "%1: remove selected columns"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2842
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2881
 #, kde-format
 msgid "%1: reverse column"
 msgid_plural "%1: reverse columns"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2915
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2954
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
 "because of this. "
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2953
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2992
 #, kde-format
 msgid "%1: normalize columns"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2973
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3012
 #, kde-format
 msgid "Sum = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2984
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3023
 #, kde-format
 msgid "Min = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2995
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3034
 #, fuzzy, kde-format
 #| msgid "x = "
 msgid "Max = 0"
 msgstr "x = "
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3006
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3045
 #, kde-format
 msgid "Count = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3017
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3056
 #, fuzzy, kde-format
 #| msgid "Mean"
 msgid "Mean = 0"
 msgstr "Μέσος"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3028
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3067
 #, fuzzy, kde-format
 #| msgid "Vertical"
 msgid "Median = 0"
 msgstr "Κατακόρυφα"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3040
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3079
 #, fuzzy, kde-format
 #| msgid "Model"
 msgid "Mode = 0"
 msgstr "Μοντέλο"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3042
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3081
 #, kde-format
 msgid "'Mode not defined'"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3053
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3092
 #, fuzzy, kde-format
 #| msgid "x-Range:"
 msgid "Range = 0"
 msgstr "x-Range"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3064
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3098
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3103
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3137
 #, kde-format
 msgid "SD = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3075
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3110
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3114
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3149
 #, kde-format
 msgid "MAD = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3086
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3122
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3125
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3161
 #, kde-format
 msgid "IQR = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3134
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3173
 #, kde-format
 msgid "Max - Min = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3153
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3192
 #, kde-format
 msgid "Normalization not possible"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3165
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3204
 #, fuzzy, kde-format
 #| msgid "%1: insert 1 row"
 #| msgid_plural "%1: insert %2 rows"
 msgid "%1: power transform columns"
 msgstr "%1: εισαγωγή 1 γραμμής"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3283
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3322
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "%1: column statistics"
 msgstr "Στατιστική"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3314
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3353
 #, fuzzy, kde-format
 #| msgid "Derivative"
 msgid "Selection in %1"
 msgstr "Παράγωγος"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3357
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3396
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "%1: row statistics"
 msgstr "Στατιστική"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3367
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3406
 #, kde-format
 msgid "Row %1"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3392
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3431
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3470
 #, kde-format
 msgid "Insert multiple rows"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3393
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3432
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3471
 #, fuzzy, kde-format
 #| msgid "Specify the name of the file to import."
 msgid "Enter the number of rows to insert"
 msgstr "Ορίζει το όνομα του αρχείου προς εισαγωγή."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3412
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3451
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3490
 #, fuzzy, kde-format
 #| msgid "%1: insert 1 row"
 #| msgid_plural "%1: insert %2 rows"
@@ -11554,17 +11573,17 @@ msgid_plural "%1: insert empty rows"
 msgstr[0] "%1: εισαγωγή 1 γραμμής"
 msgstr[1] "%1: εισαγωγή 1 γραμμής"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3467
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3506
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3492
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3531
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3754
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3793
 #, fuzzy, kde-format
 #| msgid "Arrow:"
 msgid "row"
@@ -11572,7 +11591,7 @@ msgid_plural "rows"
 msgstr[0] "Βέλος:"
 msgstr[1] "Βέλος:"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3755
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3794
 #, fuzzy, kde-format
 #| msgid "Start column:"
 msgid "column"
@@ -11580,84 +11599,84 @@ msgid_plural "columns"
 msgstr[0] "Στήλη έναρξης:"
 msgstr[1] "Στήλη έναρξης:"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3756
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3795
 #, kde-format
 msgid "cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3757
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3796
 #, fuzzy, kde-format
 #| msgid "%1 value"
 #| msgid_plural "%1 values"
 msgid "masked value"
 msgstr "%1 τιμή"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3757
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3796
 #, fuzzy, kde-format
 #| msgid "%1 value"
 #| msgid_plural "%1 values"
 msgid "masked values"
 msgstr "%1 τιμή"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3758
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3797
 #, fuzzy, kde-format
 #| msgid "%1 value"
 #| msgid_plural "%1 values"
 msgid "missing value"
 msgstr "%1 τιμή"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3758
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3797
 #, fuzzy, kde-format
 #| msgid "%1 value"
 #| msgid_plural "%1 values"
 msgid "missing values"
 msgstr "%1 τιμή"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3759
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3798
 #, kde-format
 msgid " , "
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3759
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3760
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3798
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3799
 #, fuzzy, kde-format
 #| msgid "10"
 msgid "%1"
 msgstr "10"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3760
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3799
 #, kde-format
 msgid ", "
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3763
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3802
 #, kde-format
 msgid "Selected: %1 %2 , %3 %4%5 %6 %7 %8"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3773
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3812
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3854
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3893
 #, fuzzy, kde-format
 #| msgid "&Spreadsheet"
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Λογι&στικό φύλλο"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4466
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4505
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4498
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4537
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4551
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4590
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr ""
@@ -17818,99 +17837,104 @@ msgstr ""
 msgid "&Plot"
 msgstr "LabPlot2"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:358
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:359
 #, fuzzy, kde-format
 #| msgid "x-data"
 msgid "Y-data"
 msgstr "x-data"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:368
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:423
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:369
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:424
 #, fuzzy, kde-format
 #| msgid "LabPlot2"
 msgid "Add Plot to"
 msgstr "LabPlot2"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbPlotPlacement)
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:426
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:427
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:180
 #, fuzzy, kde-format
 #| msgid "LabPlot2"
 msgid "Add Plots to"
 msgstr "LabPlot2"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:458
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:469
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:499
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:459
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:470
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:500
 #, fuzzy, kde-format
 #| msgid "Plot Area"
 msgid "Plot Area - %1"
 msgstr "Περιοχή σχεδίασης"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:465
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:494
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:466
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:495
 #, fuzzy, kde-format
 #| msgid "&Worksheet"
 msgid "Worksheet - %1"
 msgstr "&Φύλλο εργασίας"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:493
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:494
 #, fuzzy, kde-format
 #| msgid "Plot Area"
 msgid "Plot data from %1"
 msgstr "Περιοχή σχεδίασης"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:619
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:637
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:654
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:621
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:640
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:657
 #, fuzzy, kde-format
 #| msgid "Plot Area"
 msgid "Plot Area %1"
 msgstr "Περιοχή σχεδίασης"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:728
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:731
 #, fuzzy, kde-format
 #| msgid "Derivative"
 msgid "Fourier Filter of '%1'"
 msgstr "Παράγωγος"
 
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:766
+#, kde-format
+msgid "Probability Density of '%1'"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:941
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:966
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:350
 #: src/kdefrontend/ui/plotsurfacestylewidget.ui:23
 #, kde-format
 msgid "Density"
 msgstr "Πυκνότητα"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:951
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:976
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:381
 #, fuzzy, kde-format
 #| msgid "Derivative"
 msgid "Theoretical Quantiles"
 msgstr "Παράγωγος"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:959
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:984
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:383
 #, kde-format
 msgid "Sample Quantiles"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1073
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1098
 #, kde-format
 msgid "No data selected to plot."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1078
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1103
 #, kde-format
 msgid "An already existing plot area has to be selected."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1083
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1108
 #, kde-format
 msgid "An already existing worksheet has to be selected."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1089
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1114
 #, kde-format
 msgid "Close the dialog and plot the data."
 msgstr ""
