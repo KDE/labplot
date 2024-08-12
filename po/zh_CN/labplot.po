@@ -10765,10 +10765,9 @@ msgid "Conditional Formatting"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:645
-#, fuzzy, kde-format
-#| msgid "Distribution:"
+#, kde-format
 msgid "Fit Distribution"
-msgstr "分布:"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:659
 #, kde-format

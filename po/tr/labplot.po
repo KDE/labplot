@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-11 01:47+0000\n"
-"PO-Revision-Date: 2024-08-03 13:39+0300\n"
+"PO-Revision-Date: 2024-08-11 23:05+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -10835,10 +10835,9 @@ msgid "Reduce Data"
 msgstr "Veriyi İndirge"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:566
-#, fuzzy, kde-format
-#| msgid "Log-Normal (Galton)"
+#, kde-format
 msgid "Log-normal"
-msgstr "Log Normal (Galton)"
+msgstr "Log Normal"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:616
 #, kde-format
@@ -10846,10 +10845,9 @@ msgid "Conditional Formatting"
 msgstr "Koşullu Biçimlendirme"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:645
-#, fuzzy, kde-format
-#| msgid "Beta Distribution"
+#, kde-format
 msgid "Fit Distribution"
-msgstr "Beta Dağılımı"
+msgstr "Fit Dağılımı"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:659
 #, kde-format
@@ -17253,10 +17251,9 @@ msgid "Fourier Filter of '%1'"
 msgstr "“%1” Ögesinin Fourier Süzgeci"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:766
-#, fuzzy, kde-format
-#| msgid "Probability Density"
+#, kde-format
 msgid "Probability Density of '%1'"
-msgstr "Olasılık Yoğunluğu"
+msgstr "“%1” Olasılık Yoğunluğu"
 
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:966
