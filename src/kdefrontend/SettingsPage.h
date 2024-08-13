@@ -24,8 +24,8 @@ public:
 
 	virtual bool applySettings() = 0;
 	virtual void restoreDefaults() = 0;
-	virtual void addSubPages(KPageWidgetItem*, KPageDialog*) {
-		
+	virtual void addSubPages(KPageWidgetItem*, KPageDialog*){
+
 	};
 };
 

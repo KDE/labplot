@@ -12,8 +12,8 @@
 #ifndef MAINWIN_H
 #define MAINWIN_H
 
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "SettingsDialog.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 #include <KXmlGuiWindow>
 #include <QStringLiteral>

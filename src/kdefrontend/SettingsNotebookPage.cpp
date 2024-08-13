@@ -10,11 +10,11 @@
 #include "SettingsNotebookPage.h"
 #include "backend/core/Settings.h"
 
+#include <KConfigDialogManager>
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KPageDialog>
 #include <KPageWidgetItem>
-#include <KConfigDialogManager>
 
 #ifdef HAVE_CANTOR_LIBS
 #include <cantor/backend.h>

@@ -848,7 +848,6 @@ void MainWin::initActions() {
 	});
 	this->addAction(m_searchAction);
 
-
 #ifdef HAVE_CANTOR_LIBS
 	// configure CAS backends
 	m_configureCASAction = new QAction(QIcon::fromTheme(QLatin1String("cantor")), i18n("Configure CAS..."), this);
@@ -976,7 +975,6 @@ void MainWin::initMenus() {
 			m_newMenu->addMenu(menu);
 			updateNotebookActions();
 		}
-
 	}
 #else
 	delete this->guiFactory()->container(QStringLiteral("notebook"), this);
@@ -2604,10 +2602,10 @@ void MainWin::handleSettingsChanges(QList<SettingsDialog::SettingsType> changes)
 	// if (m_showWelcomeScreen != showWelcomeScreen)
 	// 	m_showWelcomeScreen = showWelcomeScreen;
 
-	#ifdef HAVE_CANTOR_LIBS
+#ifdef HAVE_CANTOR_LIBS
 	if (changes.contains(SettingsDialog::SettingsType::Notebook))
 		updateNotebookActions();
-	#endif
+#endif
 }
 
 void MainWin::openDatasetExample() {
