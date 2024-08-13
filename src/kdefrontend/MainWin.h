@@ -176,6 +176,7 @@ private:
 	KToggleAction* m_statusBarAction;
 	QAction* m_memoryInfoAction;
 	KToggleFullScreenAction* m_fullScreenAction;
+	QAction* m_configureCASAction;
 
 	// window visibility
 	QAction* m_visibilityFolderAction;

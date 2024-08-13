@@ -847,6 +847,16 @@ void MainWin::initActions() {
 		}
 	});
 	this->addAction(m_searchAction);
+
+
+#ifdef HAVE_CANTOR_LIBS
+	// configure CAS backends
+	m_configureCASAction = new QAction(QIcon::fromTheme(QLatin1String("cantor")), i18n("Configure CAS..."), this);
+	m_configureCASAction->setWhatsThis(i18n("Opens the settings for Computer Algebra Systems to modify the available systems or to enable new ones"));
+	m_configureCASAction->setMenuRole(QAction::NoRole); // prevent macOS Qt heuristics to select this action for preferences
+	actionCollection()->addAction(QLatin1String("configure_cas"), m_configureCASAction);
+	connect(m_configureCASAction, &QAction::triggered, this, &MainWin::settingsDialog); // TODO: go to the Notebook page in the settings dialog directly
+#endif
 }
 
 void MainWin::initMenus() {
@@ -967,25 +977,6 @@ void MainWin::initMenus() {
 			updateNotebookActions();
 		}
 
-	} else {
-		auto* menu = dynamic_cast<QMenu*>(factory()->container(QLatin1String("new_notebook"), this));
-		if (menu) {
-			connect(menu, &QMenu::aboutToShow, [&] {
-				QMessageBox::critical(this,
-							  i18n("No Cantor Backends Found"),
-							  i18n("Please follow the instructions on "
-								   "<a href=\"https://www.kaggle.com/docs/api\">\"How to Use Kaggle\"</a> "
-								   "to setup the Kaggle CLI tool."));
-			});
-		}
-
-		connect(m_newNotebookMenu, &QMenu::aboutToShow, [&] {
-			QMessageBox::critical(this,
-							  i18n("No Cantor Backends Found"),
-							  i18n("Please follow the instructions on "
-								   "<a href=\"https://www.kaggle.com/docs/api\">\"How to Use Kaggle\"</a> "
-								   "to setup the Kaggle CLI tool."));
-		});
 	}
 #else
 	delete this->guiFactory()->container(QStringLiteral("notebook"), this);
@@ -2819,7 +2810,6 @@ void MainWin::updateNotebookActions() {
 	QList<QAction*> newBackendActions;
 	menu->clear();
 	for (auto* backend : Cantor::Backend::availableBackends()) {
-		continue;
 		if (!backend->isEnabled())
 			continue;
 
@@ -2834,5 +2824,11 @@ void MainWin::updateNotebookActions() {
 	}
 
 	plugActionList(QLatin1String("backends_list"), newBackendActions);
+
+	menu->addSeparator();
+	menu->addAction(m_configureCASAction);
+
+	m_newNotebookMenu->addSeparator();
+	m_newNotebookMenu->addAction(m_configureCASAction);
 }
 #endif
