@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-11 01:47+0000\n"
+"POT-Creation-Date: 2024-08-15 01:49+0000\n"
 "PO-Revision-Date: 2024-08-11 14:21+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -387,13 +387,13 @@ msgstr "In%1"
 msgid "Import Data"
 msgstr "Gegevens importeren"
 
-#: src/backend/core/AbstractPart.cpp:116 src/kdefrontend/MainWin.cpp:667
-#: src/kdefrontend/MainWin.cpp:676
+#: src/backend/core/AbstractPart.cpp:116 src/kdefrontend/MainWin.cpp:665
+#: src/kdefrontend/MainWin.cpp:674
 #, kde-format
 msgid "From File..."
 msgstr "Uit bestand..."
 
-#: src/backend/core/AbstractPart.cpp:118 src/kdefrontend/MainWin.cpp:688
+#: src/backend/core/AbstractPart.cpp:118 src/kdefrontend/MainWin.cpp:686
 #, kde-format
 msgid "From SQL Database..."
 msgstr "Uit SQL-database..."
@@ -420,7 +420,7 @@ msgstr "Afdrukken"
 msgid "Print Preview"
 msgstr "Afdrukvoorbeeld"
 
-#: src/backend/core/AbstractPart.cpp:137 src/kdefrontend/MainWin.cpp:760
+#: src/backend/core/AbstractPart.cpp:137 src/kdefrontend/MainWin.cpp:758
 #, kde-format
 msgid "&Close"
 msgstr "&Sluiten"
@@ -1826,7 +1826,7 @@ msgstr "Onbekend"
 #: src/backend/datasources/filters/MatioFilter.cpp:434
 #: src/commonfrontend/workbook/WorkbookView.cpp:53
 #: src/commonfrontend/workbook/WorkbookView.cpp:160
-#: src/kdefrontend/MainWin.cpp:638 src/kdefrontend/MainWin.cpp:1973
+#: src/kdefrontend/MainWin.cpp:636 src/kdefrontend/MainWin.cpp:1968
 #, kde-format
 msgid "Matrix"
 msgstr "Matrix"
@@ -8303,7 +8303,7 @@ msgstr "Error Function"
 #: src/commonfrontend/workbook/WorkbookView.cpp:135
 #: src/commonfrontend/worksheet/WorksheetView.cpp:291
 #: src/commonfrontend/worksheet/WorksheetView.cpp:430
-#: src/kdefrontend/MainWin.cpp:887
+#: src/kdefrontend/MainWin.cpp:885
 #, kde-format
 msgid "Add New"
 msgstr "Nieuw toevoegen"
@@ -11266,7 +11266,7 @@ msgstr ""
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:116
 #: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:57
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:75
-#: src/kdefrontend/MainWin.cpp:632 src/kdefrontend/MainWin.cpp:1955
+#: src/kdefrontend/MainWin.cpp:630 src/kdefrontend/MainWin.cpp:1950
 #: src/kdefrontend/SettingsDialog.cpp:72
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:122
 #, kde-format
@@ -11378,7 +11378,7 @@ msgstr "Aan rooster koppelen"
 
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:265
-#: src/kdefrontend/MainWin.cpp:215
+#: src/kdefrontend/MainWin.cpp:214
 #: src/kdefrontend/ui/settingsworksheetpage.ui:75
 #, kde-format
 msgid "Presenter Mode"
@@ -11442,7 +11442,7 @@ msgstr "Y-regio selecteren en inzoomen"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:359
-#: src/kdefrontend/MainWin.cpp:2440
+#: src/kdefrontend/MainWin.cpp:2435
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1426
 #, kde-format
 msgid "Cursor"
@@ -11559,12 +11559,6 @@ msgstr[1] "Wilt u werkelijk de %1 geselecteerde objecten wissen?"
 #, kde-format
 msgid "%1: Remove selected worksheet elements."
 msgstr "%1: Geselecteerde werkblad-elementen verwijderen"
-
-#: src/kdefrontend/CASSettingsDialog.cpp:34
-#, kde-format
-msgctxt "@title:window"
-msgid "CAS Preferences"
-msgstr "CAS-voorkeuren"
 
 #: src/kdefrontend/colormaps/ColorMapsDialog.cpp:42
 #, kde-format
@@ -12473,7 +12467,7 @@ msgid "Data format && preview"
 msgstr "Gegevensopmaak && voorbeeld"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1266
-#: src/kdefrontend/SettingsGeneralPage.cpp:251
+#: src/kdefrontend/SettingsGeneralPage.cpp:252
 #, kde-format
 msgid "Automatic"
 msgstr "Automatisch"
@@ -12824,7 +12818,7 @@ msgid "Open LabPlot Project"
 msgstr "Labplot Project openen"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:445
-#: src/kdefrontend/MainWin.cpp:1492
+#: src/kdefrontend/MainWin.cpp:1487
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "LabPlot-projecten (%1)"
@@ -14721,7 +14715,7 @@ msgid ""
 "installation."
 msgstr "Kon bestand %1 met voorbeelden niet openen. Controleer uw installatie."
 
-#: src/kdefrontend/GuiObserver.cpp:191 src/kdefrontend/MainWin.cpp:1399
+#: src/kdefrontend/GuiObserver.cpp:191 src/kdefrontend/MainWin.cpp:1394
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -15601,7 +15595,7 @@ msgstr "H&ulpmiddelen"
 msgid "&Windows"
 msgstr "&Vensters"
 
-#: src/kdefrontend/MainWin.cpp:215
+#: src/kdefrontend/MainWin.cpp:214
 #, kde-format
 msgid ""
 "No worksheets are available in the project. The presenter mode will not be "
@@ -15610,261 +15604,261 @@ msgstr ""
 "In het project zijn geen werkbladen beschikbaar. De presenteermodus kan niet "
 "worden gestart."
 
-#: src/kdefrontend/MainWin.cpp:229
+#: src/kdefrontend/MainWin.cpp:228
 #, kde-format
 msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr "Welkom bij LabPlot %1"
 
-#: src/kdefrontend/MainWin.cpp:601
+#: src/kdefrontend/MainWin.cpp:599
 #, kde-format
 msgid "&Open Example"
 msgstr "Voorbeeld  &Openen"
 
-#: src/kdefrontend/MainWin.cpp:622 src/kdefrontend/MainWin.cpp:1939
+#: src/kdefrontend/MainWin.cpp:620 src/kdefrontend/MainWin.cpp:1934
 #, kde-format
 msgid "Workbook"
 msgstr "Werkboek"
 
-#: src/kdefrontend/MainWin.cpp:624
+#: src/kdefrontend/MainWin.cpp:622
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 "Maakt een nieuw werkblad aan voor collectie werkbladen, matrices en plots"
 
-#: src/kdefrontend/MainWin.cpp:627 src/kdefrontend/MainWin.cpp:1947
+#: src/kdefrontend/MainWin.cpp:625 src/kdefrontend/MainWin.cpp:1942
 #, kde-format
 msgid "Data Extractor"
 msgstr "Gegevens verkrijgen"
 
-#: src/kdefrontend/MainWin.cpp:628
+#: src/kdefrontend/MainWin.cpp:626
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr ""
 "Maakt een nieuwe mogelijkheid aan voor het verkrijgen van gegevens uit een "
 "afbeelding"
 
-#: src/kdefrontend/MainWin.cpp:634
+#: src/kdefrontend/MainWin.cpp:632
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr "Maakt een nieuw rekenblad aan voor bewerken gegevens"
 
-#: src/kdefrontend/MainWin.cpp:640
+#: src/kdefrontend/MainWin.cpp:638
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr "Maakt een nieuwe matrix aan voor bewerken gegevens"
 
-#: src/kdefrontend/MainWin.cpp:644 src/kdefrontend/MainWin.cpp:1991
+#: src/kdefrontend/MainWin.cpp:642 src/kdefrontend/MainWin.cpp:1986
 #: src/kdefrontend/SettingsDialog.cpp:67
 #, kde-format
 msgid "Worksheet"
 msgstr "Werkblad"
 
-#: src/kdefrontend/MainWin.cpp:646
+#: src/kdefrontend/MainWin.cpp:644
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr "Maakt een nieuw werkblad aan voor plotten van gegevens"
 
-#: src/kdefrontend/MainWin.cpp:650 src/kdefrontend/MainWin.cpp:1999
+#: src/kdefrontend/MainWin.cpp:648 src/kdefrontend/MainWin.cpp:1994
 #, kde-format
 msgid "Note"
 msgstr "Notitie"
 
-#: src/kdefrontend/MainWin.cpp:651
+#: src/kdefrontend/MainWin.cpp:649
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr "Maakt een nieuwe notitie aan voor willekeurige tekst"
 
-#: src/kdefrontend/MainWin.cpp:655 src/kdefrontend/MainWin.cpp:1931
+#: src/kdefrontend/MainWin.cpp:653 src/kdefrontend/MainWin.cpp:1926
 #, kde-format
 msgid "Folder"
 msgstr "Map"
 
-#: src/kdefrontend/MainWin.cpp:656
+#: src/kdefrontend/MainWin.cpp:654
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr "Maakt een nieuwe map aan voor bladen en andere elementen"
 
-#: src/kdefrontend/MainWin.cpp:661
+#: src/kdefrontend/MainWin.cpp:659
 #, kde-format
 msgid "Live Data Source..."
 msgstr "Actieve gegevensbron..."
 
-#: src/kdefrontend/MainWin.cpp:662
+#: src/kdefrontend/MainWin.cpp:660
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr ""
 "Maakt een actieve gegevensbron aan om gegevens te lezen uit een reëel "
 "tijdapparaat"
 
-#: src/kdefrontend/MainWin.cpp:669 src/kdefrontend/MainWin.cpp:678
+#: src/kdefrontend/MainWin.cpp:667 src/kdefrontend/MainWin.cpp:676
 #, kde-format
 msgid "Import data from a regular file"
 msgstr "Gegevens importeren uit regulier bestand"
 
-#: src/kdefrontend/MainWin.cpp:683
+#: src/kdefrontend/MainWin.cpp:681
 #, kde-format
 msgid "From kaggle.com..."
 msgstr "Uit kaggle.com..."
 
-#: src/kdefrontend/MainWin.cpp:684
+#: src/kdefrontend/MainWin.cpp:682
 #, kde-format
 msgid "Import data from kaggle.com"
 msgstr "Gegevens importeren uit kaggle.com"
 
-#: src/kdefrontend/MainWin.cpp:689
+#: src/kdefrontend/MainWin.cpp:687
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr "Gegevens importeren uit SQL-database"
 
-#: src/kdefrontend/MainWin.cpp:693
+#: src/kdefrontend/MainWin.cpp:691
 #, kde-format
 msgid "From Dataset Collection..."
 msgstr "Uit collectie gegevensverzamelingen..."
 
-#: src/kdefrontend/MainWin.cpp:694
+#: src/kdefrontend/MainWin.cpp:692
 #, kde-format
 msgid "Import data from an online dataset"
 msgstr "Gegevens importeren uit een online gegevensset"
 
-#: src/kdefrontend/MainWin.cpp:698
+#: src/kdefrontend/MainWin.cpp:696
 #, kde-format
 msgid "LabPlot Project..."
 msgstr "LabPlot-project..."
 
-#: src/kdefrontend/MainWin.cpp:699
+#: src/kdefrontend/MainWin.cpp:697
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr "Een project importeren uit een projectbestand van LabPlot (.lml)"
 
-#: src/kdefrontend/MainWin.cpp:704
+#: src/kdefrontend/MainWin.cpp:702
 #, kde-format
 msgid "Origin Project (OPJ)..."
 msgstr "Origin Project (OPJ)..."
 
-#: src/kdefrontend/MainWin.cpp:705
+#: src/kdefrontend/MainWin.cpp:703
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr ""
 "Een project importeren uit een projectbestand van OriginLab Origin (.lml)"
 
-#: src/kdefrontend/MainWin.cpp:710
+#: src/kdefrontend/MainWin.cpp:708
 #, kde-format
 msgid "Export..."
 msgstr "Exporteren..."
 
-#: src/kdefrontend/MainWin.cpp:711
+#: src/kdefrontend/MainWin.cpp:709
 #, kde-format
 msgid "Export selected element"
 msgstr "Geselecteerd element exporteren"
 
-#: src/kdefrontend/MainWin.cpp:717 src/kdefrontend/MainWin.cpp:2476
-#: src/kdefrontend/MainWin.cpp:2484
+#: src/kdefrontend/MainWin.cpp:715 src/kdefrontend/MainWin.cpp:2471
+#: src/kdefrontend/MainWin.cpp:2479
 #, kde-format
 msgid "Share"
 msgstr "Delen"
 
-#: src/kdefrontend/MainWin.cpp:722
+#: src/kdefrontend/MainWin.cpp:720
 #, kde-format
 msgid "Color Maps Browser"
 msgstr "Browser voor kleurkaarten"
 
-#: src/kdefrontend/MainWin.cpp:723
+#: src/kdefrontend/MainWin.cpp:721
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr "Dialoog openen voor het bladeren door de beschikbare kleurkaarten."
 
-#: src/kdefrontend/MainWin.cpp:732
+#: src/kdefrontend/MainWin.cpp:730
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "Editor metagegevens van FITS..."
 
-#: src/kdefrontend/MainWin.cpp:733
+#: src/kdefrontend/MainWin.cpp:731
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr "Editor openen voor bewerken FITS-metadata"
 
-#: src/kdefrontend/MainWin.cpp:742
+#: src/kdefrontend/MainWin.cpp:740
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr "Geschiedenis ongedaan/opnieuw..."
 
-#: src/kdefrontend/MainWin.cpp:762
+#: src/kdefrontend/MainWin.cpp:760
 #, kde-format
 msgid "Close the active window"
 msgstr "Actieve venster sluiten"
 
-#: src/kdefrontend/MainWin.cpp:765
+#: src/kdefrontend/MainWin.cpp:763
 #, kde-format
 msgid "Close &All"
 msgstr "&Alle sluiten"
 
-#: src/kdefrontend/MainWin.cpp:766
+#: src/kdefrontend/MainWin.cpp:764
 #, kde-format
 msgid "Close all the windows"
 msgstr "Alle vensters sluiten"
 
-#: src/kdefrontend/MainWin.cpp:769
+#: src/kdefrontend/MainWin.cpp:767
 #, kde-format
 msgid "Ne&xt"
 msgstr "&Volgende"
 
-#: src/kdefrontend/MainWin.cpp:771
+#: src/kdefrontend/MainWin.cpp:769
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "Focus naar volgend venster verplaatsen"
 
-#: src/kdefrontend/MainWin.cpp:774
+#: src/kdefrontend/MainWin.cpp:772
 #, kde-format
 msgid "Pre&vious"
 msgstr "&Vorige"
 
-#: src/kdefrontend/MainWin.cpp:776
+#: src/kdefrontend/MainWin.cpp:774
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "Focus naar vorig venster verplaatsen"
 
-#: src/kdefrontend/MainWin.cpp:783
+#: src/kdefrontend/MainWin.cpp:781
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "Alleen huidige &map"
 
-#: src/kdefrontend/MainWin.cpp:788
+#: src/kdefrontend/MainWin.cpp:786
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "Huidige map en &submappen"
 
-#: src/kdefrontend/MainWin.cpp:792
+#: src/kdefrontend/MainWin.cpp:790
 #, kde-format
 msgid "&All"
 msgstr "&Alle"
 
-#: src/kdefrontend/MainWin.cpp:814
+#: src/kdefrontend/MainWin.cpp:812
 #, kde-format
 msgid "Show Memory Usage"
 msgstr "Geheugengebruik tonen"
 
-#: src/kdefrontend/MainWin.cpp:822
+#: src/kdefrontend/MainWin.cpp:820
 #, kde-format
 msgid "Project Explorer"
 msgstr "Projectverkenner"
 
-#: src/kdefrontend/MainWin.cpp:827
+#: src/kdefrontend/MainWin.cpp:825
 #, kde-format
 msgid "Properties Explorer"
 msgstr "Eigenschappen verkenner"
 
-#: src/kdefrontend/MainWin.cpp:832
+#: src/kdefrontend/MainWin.cpp:830
 #, kde-format
 msgid "Worksheet Preview"
 msgstr "Werkbladvoorbeeld"
 
-#: src/kdefrontend/MainWin.cpp:855
+#: src/kdefrontend/MainWin.cpp:853
 #, kde-format
 msgid "Configure CAS..."
 msgstr "CAS instellen..."
 
-#: src/kdefrontend/MainWin.cpp:856
+#: src/kdefrontend/MainWin.cpp:854
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
@@ -15873,118 +15867,118 @@ msgstr ""
 "Opent de instellingen voor Computer Algebra Systemen om de beschikbare "
 "systemen te wijzigen of nieuwe beschikbaar te maken"
 
-#: src/kdefrontend/MainWin.cpp:917
+#: src/kdefrontend/MainWin.cpp:915
 #, kde-format
 msgid "Window Visibility"
 msgstr "Zichtbaarheid venster"
 
-#: src/kdefrontend/MainWin.cpp:941 src/kdefrontend/MainWin.cpp:943
+#: src/kdefrontend/MainWin.cpp:939 src/kdefrontend/MainWin.cpp:941
 #, kde-format
 msgid "Color Scheme"
 msgstr "Kleurenschema"
 
-#: src/kdefrontend/MainWin.cpp:1007 src/kdefrontend/MainWin.cpp:1021
+#: src/kdefrontend/MainWin.cpp:1002 src/kdefrontend/MainWin.cpp:1016
 #, kde-format
 msgid "The current project %1 has been modified. Do you want to save it?"
 msgstr "Het huidige project %1 is gewijzigd. Wilt u het opslaan?"
 
-#: src/kdefrontend/MainWin.cpp:1008 src/kdefrontend/MainWin.cpp:1022
+#: src/kdefrontend/MainWin.cpp:1003 src/kdefrontend/MainWin.cpp:1017
 #, kde-format
 msgid "Save Project"
 msgstr "Project opslaan"
 
-#: src/kdefrontend/MainWin.cpp:1360
+#: src/kdefrontend/MainWin.cpp:1355
 #, kde-format
 msgid "%1: created"
 msgstr "%1: aangemaakt"
 
-#: src/kdefrontend/MainWin.cpp:1386
+#: src/kdefrontend/MainWin.cpp:1381
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Projectverkenner"
 
-#: src/kdefrontend/MainWin.cpp:1411
+#: src/kdefrontend/MainWin.cpp:1406
 #, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "Werkbladvoorbeeld"
 
-#: src/kdefrontend/MainWin.cpp:1420
+#: src/kdefrontend/MainWin.cpp:1415
 #, kde-format
 msgctxt "@title:window"
 msgid "Content"
 msgstr "Inhoud"
 
-#: src/kdefrontend/MainWin.cpp:1497
+#: src/kdefrontend/MainWin.cpp:1492
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr "Origin-projecten (%1)"
 
-#: src/kdefrontend/MainWin.cpp:1503
+#: src/kdefrontend/MainWin.cpp:1498
 #, kde-format
 msgid "Cantor Projects (*.cws)"
 msgstr "Cantorprojecten (*.cws)"
 
-#: src/kdefrontend/MainWin.cpp:1504
+#: src/kdefrontend/MainWin.cpp:1499
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "Jupyter Notebooks (*.ipynb)"
 
-#: src/kdefrontend/MainWin.cpp:1511
+#: src/kdefrontend/MainWin.cpp:1506
 #, kde-format
 msgid "All supported files (%1)"
 msgstr "Alle ondersteunde bestanden (%1)"
 
-#: src/kdefrontend/MainWin.cpp:1515
+#: src/kdefrontend/MainWin.cpp:1510
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Project openen"
 
-#: src/kdefrontend/MainWin.cpp:1532
+#: src/kdefrontend/MainWin.cpp:1527
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "Het projectbestand %1 is reeds geopend."
 
-#: src/kdefrontend/MainWin.cpp:1532 src/kdefrontend/MainWin.cpp:1540
-#: src/kdefrontend/MainWin.cpp:1545
+#: src/kdefrontend/MainWin.cpp:1527 src/kdefrontend/MainWin.cpp:1535
+#: src/kdefrontend/MainWin.cpp:1540
 #, kde-format
 msgid "Open Project"
 msgstr "Project openen"
 
-#: src/kdefrontend/MainWin.cpp:1540
+#: src/kdefrontend/MainWin.cpp:1535
 #, kde-format
 msgid "The project file %1 doesn't exist."
 msgstr "Het projectbestand %1 bestaat niet."
 
-#: src/kdefrontend/MainWin.cpp:1545
+#: src/kdefrontend/MainWin.cpp:1540
 #, kde-format
 msgid "Couldn't read the project file %1."
 msgstr "Kon het projectbestand %1 niet lezen."
 
-#: src/kdefrontend/MainWin.cpp:1554
+#: src/kdefrontend/MainWin.cpp:1549
 #, kde-format
 msgid "Loading %1..."
 msgstr "%1 inlezen ..."
 
-#: src/kdefrontend/MainWin.cpp:1587
+#: src/kdefrontend/MainWin.cpp:1582
 #, kde-format
 msgid "%1: opened"
 msgstr "%1 geopend"
 
-#: src/kdefrontend/MainWin.cpp:1622
+#: src/kdefrontend/MainWin.cpp:1617
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Project met succes geopend (in %1 seconden)."
 
-#: src/kdefrontend/MainWin.cpp:1712
+#: src/kdefrontend/MainWin.cpp:1707
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Project opslaan als"
 
-#: src/kdefrontend/MainWin.cpp:1714
+#: src/kdefrontend/MainWin.cpp:1709
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -15993,52 +15987,52 @@ msgstr ""
 "LabPlot Projecten (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML."
 "BZ2 *.LML.XZ)"
 
-#: src/kdefrontend/MainWin.cpp:1740
+#: src/kdefrontend/MainWin.cpp:1735
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "Kon tijdelijk bestand niet openen voor schrijven."
 
-#: src/kdefrontend/MainWin.cpp:1820
+#: src/kdefrontend/MainWin.cpp:1815
 #, kde-format
 msgid "Project saved"
 msgstr "Project opgeslagen"
 
-#: src/kdefrontend/MainWin.cpp:1836
+#: src/kdefrontend/MainWin.cpp:1831
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "Kon  bestand niet opslaan als '%1'."
 
-#: src/kdefrontend/MainWin.cpp:1841
+#: src/kdefrontend/MainWin.cpp:1836
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Kon bestand '%1' niet openen voor schrijven."
 
-#: src/kdefrontend/MainWin.cpp:1891
+#: src/kdefrontend/MainWin.cpp:1886
 #, kde-format
 msgid "Changed"
 msgstr "Gewijzigd"
 
-#: src/kdefrontend/MainWin.cpp:1906 src/kdefrontend/MainWin.cpp:1918
+#: src/kdefrontend/MainWin.cpp:1901 src/kdefrontend/MainWin.cpp:1913
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Afdrukken %1 wordt voorbereid"
 
-#: src/kdefrontend/MainWin.cpp:1908 src/kdefrontend/MainWin.cpp:1920
+#: src/kdefrontend/MainWin.cpp:1903 src/kdefrontend/MainWin.cpp:1915
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 afgedrukt"
 
-#: src/kdefrontend/MainWin.cpp:2476
+#: src/kdefrontend/MainWin.cpp:2471
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "Er was een probleem bij delen van het project: %1"
 
-#: src/kdefrontend/MainWin.cpp:2480
+#: src/kdefrontend/MainWin.cpp:2475
 #, kde-format
 msgid "Project shared successfully"
 msgstr "Project succesvol gedeeld"
 
-#: src/kdefrontend/MainWin.cpp:2483
+#: src/kdefrontend/MainWin.cpp:2478
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "U kunt het gedeelde project vinden op: <a href=\"%1\">%1</a>"
@@ -16082,13 +16076,7 @@ msgstr "Er is al een MQTT-client met deze host!"
 msgid "Live data source%1"
 msgstr "Actieve gegevensbron %1"
 
-#: src/kdefrontend/MainWin.cpp:2812
-#, kde-format
-msgid "No Cantor backends found. Please install the ones you want to use."
-msgstr ""
-"Geen backends voor Cantor gevonden. Installeer a.u.b. die die u nodig heeft."
-
-#: src/kdefrontend/MainWin.cpp:2826
+#: src/kdefrontend/MainWin.cpp:2816
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Maakt een nieuw %1 notitieboek aan"
@@ -16136,7 +16124,7 @@ msgstr "Plotgebiedsjablonen"
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
 #: src/kdefrontend/PlotTemplateDialog.cpp:44
 #: src/kdefrontend/SettingsWorksheetPage.cpp:62
-#: src/kdefrontend/SettingsWorksheetPage.cpp:72
+#: src/kdefrontend/SettingsWorksheetPage.cpp:73
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:99
 #: src/kdefrontend/widgets/ThemesComboBox.cpp:72
 #: src/kdefrontend/widgets/ThemesWidget.cpp:69
@@ -16210,38 +16198,38 @@ msgstr "Gedownloade bestanden wissen"
 msgid "How to Use Kaggle"
 msgstr "Hoe Kaggle te gebruiken"
 
-#: src/kdefrontend/SettingsDatasetsPage.cpp:86
+#: src/kdefrontend/SettingsDatasetsPage.cpp:87
 #, kde-format
 msgid "Files - %1"
 msgstr "Bestanden - %1"
 
-#: src/kdefrontend/SettingsDatasetsPage.cpp:101
+#: src/kdefrontend/SettingsDatasetsPage.cpp:102
 #, kde-format
 msgid "Total size - %1"
 msgstr "Totale grootte - %1"
 
-#: src/kdefrontend/SettingsDatasetsPage.cpp:111
+#: src/kdefrontend/SettingsDatasetsPage.cpp:112
 #, kde-format
 msgid "Files - 0"
 msgstr "Bestanden - 0"
 
-#: src/kdefrontend/SettingsDatasetsPage.cpp:112
+#: src/kdefrontend/SettingsDatasetsPage.cpp:113
 #, kde-format
 msgid "Total size - 0B"
 msgstr "Totale grootte - 0B"
 
-#: src/kdefrontend/SettingsDatasetsPage.cpp:114
+#: src/kdefrontend/SettingsDatasetsPage.cpp:115
 #, kde-format
 msgid "Datasets cache"
 msgstr "Cache gegevensverzamelingen"
 
-#: src/kdefrontend/SettingsDatasetsPage.cpp:114
+#: src/kdefrontend/SettingsDatasetsPage.cpp:115
 #, kde-format
 msgid "Downloaded files successfully deleted."
 msgstr "Gedownloade bestanden met succes gewist."
 
-#: src/kdefrontend/SettingsDialog.cpp:53 src/kdefrontend/SettingsDialog.cpp:122
-#: src/kdefrontend/SettingsDialog.cpp:133
+#: src/kdefrontend/SettingsDialog.cpp:53 src/kdefrontend/SettingsDialog.cpp:123
+#: src/kdefrontend/SettingsDialog.cpp:134
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences"
@@ -16285,24 +16273,24 @@ msgstr "Algemeen"
 msgid "Notebook"
 msgstr "Notebook"
 
-#: src/kdefrontend/SettingsDialog.cpp:84
+#: src/kdefrontend/SettingsDialog.cpp:85
 #, kde-format
 msgid "Datasets"
 msgstr "Gegevensverzamelingen"
 
-#: src/kdefrontend/SettingsDialog.cpp:99
+#: src/kdefrontend/SettingsDialog.cpp:100
 #, kde-format
 msgid "User Feedback"
 msgstr "Reacties van gebruiker"
 
-#: src/kdefrontend/SettingsDialog.cpp:126
+#: src/kdefrontend/SettingsDialog.cpp:127
 #, kde-format
 msgid "All settings will be reset to default values. Do you want to continue?"
 msgstr ""
 "Alle instellingen worden teruggezet naar de standaardwaarden. Wilt u verder "
 "gaan?"
 
-#: src/kdefrontend/SettingsDialog.cpp:141
+#: src/kdefrontend/SettingsDialog.cpp:142
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences    [Changed]"
@@ -16319,42 +16307,42 @@ msgstr "Voorkeuren [Gewijzigd]"
 msgid "min."
 msgstr "min."
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:217
+#: src/kdefrontend/SettingsGeneralPage.cpp:218
 #, kde-format
 msgid "Create New Project"
 msgstr "Nieuw project aanmaken"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:218
+#: src/kdefrontend/SettingsGeneralPage.cpp:219
 #, kde-format
 msgid "Load Last Used Project"
 msgstr "Laatst gebruikte project inlezen"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:222
+#: src/kdefrontend/SettingsGeneralPage.cpp:223
 #, kde-format
 msgid "With Spreadsheet"
 msgstr "Met rekenblad"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:223
+#: src/kdefrontend/SettingsGeneralPage.cpp:224
 #, kde-format
 msgid "With Worksheet"
 msgstr "Met werkblad"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:224
+#: src/kdefrontend/SettingsGeneralPage.cpp:225
 #, kde-format
 msgid "With Spreadsheet and Worksheet"
 msgstr "Met rekenblad en werkblad"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:226
+#: src/kdefrontend/SettingsGeneralPage.cpp:227
 #, kde-format
 msgid "With Notebook"
 msgstr "Met notitieboek"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:229
+#: src/kdefrontend/SettingsGeneralPage.cpp:230
 #, kde-format
 msgid "Notebook type to create automatically on startup"
 msgstr "Type notitieboek om automatisch aan te maken bij opstarten"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:233
+#: src/kdefrontend/SettingsGeneralPage.cpp:234
 #, kde-format
 msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
@@ -16363,57 +16351,57 @@ msgstr ""
 "Bestuurt het gedrag vanwaar de vastgezette widgets worden geplaatst na "
 "opnieuw te zijn geopend"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:237
+#: src/kdefrontend/SettingsGeneralPage.cpp:238
 #, kde-format
 msgid "Original Position"
 msgstr "Oorspronkelijke positie"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:238
+#: src/kdefrontend/SettingsGeneralPage.cpp:239
 #, kde-format
 msgid "On top of the last active Dock Widget"
 msgstr "Bovenop het laatst actieve vastgezette widget"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:241
+#: src/kdefrontend/SettingsGeneralPage.cpp:242
 #, kde-format
 msgid "Show File Path"
 msgstr "Pad bestand tonen"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:242
+#: src/kdefrontend/SettingsGeneralPage.cpp:243
 #, kde-format
 msgid "Show File Name"
 msgstr "Naam bestand tonen"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:243
+#: src/kdefrontend/SettingsGeneralPage.cpp:244
 #, kde-format
 msgid "Show Project Name"
 msgstr "Naam project tonen"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:245
+#: src/kdefrontend/SettingsGeneralPage.cpp:246
 #, kde-format
 msgid "Metric"
 msgstr "Metrisch"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:246
+#: src/kdefrontend/SettingsGeneralPage.cpp:247
 #, kde-format
 msgid "Imperial"
 msgstr "Imperial"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:248
+#: src/kdefrontend/SettingsGeneralPage.cpp:249
 #, kde-format
 msgid "Dot (.)"
 msgstr "Punt (.)"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:249
+#: src/kdefrontend/SettingsGeneralPage.cpp:250
 #, kde-format
 msgid "Comma (,)"
 msgstr "Komma (,)"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:250
+#: src/kdefrontend/SettingsGeneralPage.cpp:251
 #, kde-format
 msgid "Arabic (٫)"
 msgstr "Arabisch (٫)"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:254
+#: src/kdefrontend/SettingsGeneralPage.cpp:255
 #, kde-format
 msgid ""
 "Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/"
@@ -16424,7 +16412,7 @@ msgstr ""
 "common/documents/jcgm/JCGM_100_2008_E.pdf\">Gids voor het uitdrukken van "
 "onzekerheid in metingen (GUM)</a>"
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:259
+#: src/kdefrontend/SettingsGeneralPage.cpp:260
 #, kde-format
 msgid ""
 "Save the state (position and geometry) of the docks in the project file. \n"
@@ -16438,7 +16426,7 @@ msgstr ""
 "De instelling kan gewijzigd worden voor elk project apart in de "
 "eigenschappen van het project."
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:266
+#: src/kdefrontend/SettingsGeneralPage.cpp:267
 #, kde-format
 msgid ""
 "Save the results of the calculations in the analysis curves in the project "
@@ -16456,12 +16444,12 @@ msgstr ""
 "De instelling kan voor elk apart project gewijzigd worden in de "
 "eigenschappen van het project."
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:273
+#: src/kdefrontend/SettingsGeneralPage.cpp:274
 #, kde-format
 msgid "Activates additional tracing output in the terminal."
 msgstr "Activeert extra uitvoer voor trace in de terminal."
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:274
+#: src/kdefrontend/SettingsGeneralPage.cpp:275
 #, kde-format
 msgid ""
 "Debug trace - helpful to diagnose the application, can have a negative "
@@ -16470,7 +16458,7 @@ msgstr ""
 "Debug-trace - behulpzaam om de toepassing te diagnosticeren, kan een "
 "negatieve invloed hebben op de prestaties."
 
-#: src/kdefrontend/SettingsGeneralPage.cpp:275
+#: src/kdefrontend/SettingsGeneralPage.cpp:276
 #, kde-format
 msgid ""
 "Performance trace - helpful to analyze performance relevant aspects and "
@@ -16479,22 +16467,22 @@ msgstr ""
 "Prestatie-trace - behulpzaam bij het analyseren van relevante aspecten van "
 "prestatie en bottlenecks."
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:23
+#: src/kdefrontend/SettingsNotebookPage.cpp:30
 #, kde-format
 msgid "Enable syntax highlighting"
 msgstr "Syntaxis markeren aanzetten"
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:24
+#: src/kdefrontend/SettingsNotebookPage.cpp:31
 #, kde-format
 msgid "Enable syntax completion"
 msgstr "Syntaxis-voltooiing aanzetten"
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:25
+#: src/kdefrontend/SettingsNotebookPage.cpp:32
 #, kde-format
 msgid "Show line numbers"
 msgstr "Regelnummers tonen"
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:26
+#: src/kdefrontend/SettingsNotebookPage.cpp:33
 #, kde-format
 msgid ""
 "Use LaTeX typesetting for the results of calculations, if supported by the "
@@ -16503,17 +16491,17 @@ msgstr ""
 "Gebruik LaTeX-lettertypen voor de rekenresultaten, indien de backend dit "
 "mogelijk maakt."
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:27
+#: src/kdefrontend/SettingsNotebookPage.cpp:34
 #, kde-format
 msgid "Animate transitions"
 msgstr "Overgangen animeren"
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:29
+#: src/kdefrontend/SettingsNotebookPage.cpp:36
 #, kde-format
 msgid "Automatically re-evaluate all entries below the current one."
 msgstr "Alle invoer onder de huidige automatisch herberekenen."
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:30
+#: src/kdefrontend/SettingsNotebookPage.cpp:37
 #, kde-format
 msgid "Ask for confirmation when restarting the backend system."
 msgstr "Bevestiging vragen bij herstarten van de backend."
@@ -16524,7 +16512,7 @@ msgid "Default theme for newly created worksheets and worksheet objects"
 msgstr ""
 "Standaard thema voor nieuw aangemaakte werkbladen en objecten in werkbladen "
 
-#: src/kdefrontend/SettingsWorksheetPage.cpp:133
+#: src/kdefrontend/SettingsWorksheetPage.cpp:134
 #, kde-format
 msgid ""
 "No LaTeX installation found or selected. LaTeX typesetting not possible."
@@ -16532,18 +16520,18 @@ msgstr ""
 "Geen installatie van LaTeX gevonden of geselecteerd. LaTeX lettertypes "
 "onmogelijk."
 
-#: src/kdefrontend/SettingsWorksheetPage.cpp:143
+#: src/kdefrontend/SettingsWorksheetPage.cpp:144
 #, kde-format
 msgid "No 'convert' found. LaTeX typesetting not possible."
 msgstr "Geen 'convert' gevonden. LaTeX lettertypes onmogelijk."
 
-#: src/kdefrontend/SettingsWorksheetPage.cpp:149
+#: src/kdefrontend/SettingsWorksheetPage.cpp:150
 #, kde-format
 msgid "No 'dvips' found. LaTeX typesetting not possible."
 msgstr "Geen 'dvips' gevonden. LaTeX lettertypes onmogelijk."
 
-#: src/kdefrontend/SettingsWorksheetPage.cpp:156
-#: src/kdefrontend/SettingsWorksheetPage.cpp:162
+#: src/kdefrontend/SettingsWorksheetPage.cpp:157
+#: src/kdefrontend/SettingsWorksheetPage.cpp:163
 #, kde-format
 msgid "No Ghostscript found. LaTeX typesetting not possible."
 msgstr "Geen Ghostscript gevonden. LaTeX lettertypes onmogelijk."
@@ -24028,6 +24016,15 @@ msgstr "conversie is mislukt, exitcode ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Kon bestand niet openen:"
+
+#~ msgctxt "@title:window"
+#~ msgid "CAS Preferences"
+#~ msgstr "CAS-voorkeuren"
+
+#~ msgid "No Cantor backends found. Please install the ones you want to use."
+#~ msgstr ""
+#~ "Geen backends voor Cantor gevonden. Installeer a.u.b. die die u nodig "
+#~ "heeft."
 
 #~ msgid "Excel"
 #~ msgstr "Excel"
