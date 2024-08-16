@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-15 01:49+0000\n"
-"PO-Revision-Date: 2024-08-03 11:42+0200\n"
+"PO-Revision-Date: 2024-08-11 10:00+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -10952,10 +10952,9 @@ msgid "Reduce Data"
 msgstr "Reduïx les dades"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:566
-#, fuzzy, kde-format
-#| msgid "Log-Normal (Galton)"
+#, kde-format
 msgid "Log-normal"
-msgstr "Log-normal (Galton)"
+msgstr "Log-normal"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:616
 #, kde-format
@@ -10963,10 +10962,9 @@ msgid "Conditional Formatting"
 msgstr "Format condicional"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:645
-#, fuzzy, kde-format
-#| msgid "Beta Distribution"
+#, kde-format
 msgid "Fit Distribution"
-msgstr "Distribució beta"
+msgstr "Ajusta a la distribució"
 
 # skip-rule: t-sc-plot
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:659
@@ -17441,10 +17439,9 @@ msgid "Fourier Filter of '%1'"
 msgstr "Filtre de Fourier de «%1»"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:766
-#, fuzzy, kde-format
-#| msgid "Probability Density"
+#, kde-format
 msgid "Probability Density of '%1'"
-msgstr "Densitat de probabilitat"
+msgstr "Densitat de probabilitat de «%1»"
 
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:966
@@ -24208,11 +24205,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgctxt "@title:window"
-#~ msgid "CAS Preferences"
-#~ msgstr "Preferències de CAS"
-
-#~ msgid "No Cantor backends found. Please install the ones you want to use."
-#~ msgstr ""
-#~ "No s'ha trobat cap dorsal de Cantor. Instal·leu els que vulgueu emprar."
