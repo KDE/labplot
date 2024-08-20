@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-16 03:05+0000\n"
-"PO-Revision-Date: 2024-08-03 12:41+0200\n"
+"PO-Revision-Date: 2024-08-19 17:24+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -2563,7 +2563,7 @@ msgstr "Masa do electrón"
 #: src/backend/gsl/constants.cpp:89
 #, kde-format
 msgid "Mass of the muon"
-msgstr "Masa do múon"
+msgstr "Masa do muón"
 
 #: src/backend/gsl/constants.cpp:90
 #, kde-format
