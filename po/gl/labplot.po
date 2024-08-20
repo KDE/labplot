@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-15 01:49+0000\n"
-"PO-Revision-Date: 2024-08-07 21:27+0200\n"
+"PO-Revision-Date: 2024-08-19 17:24+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -2634,7 +2634,7 @@ msgstr "Masa do electrón"
 #: src/backend/gsl/constants.cpp:89
 #, kde-format
 msgid "Mass of the muon"
-msgstr "Masa do múon"
+msgstr "Masa do muón"
 
 #: src/backend/gsl/constants.cpp:90
 #, kde-format
@@ -10862,10 +10862,9 @@ msgid "Reduce Data"
 msgstr "Reducir os datos"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:566
-#, fuzzy, kde-format
-#| msgid "Log-Normal (Galton)"
+#, kde-format
 msgid "Log-normal"
-msgstr "Normal logarítmica (Galton)"
+msgstr "Normal logarítmica"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:616
 #, kde-format
@@ -10873,10 +10872,9 @@ msgid "Conditional Formatting"
 msgstr "Formato condicional"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:645
-#, fuzzy, kde-format
-#| msgid "Beta Distribution"
+#, kde-format
 msgid "Fit Distribution"
-msgstr "Distribución beta"
+msgstr "Axustar á distribución"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:659
 #, kde-format
@@ -17298,10 +17296,9 @@ msgid "Fourier Filter of '%1'"
 msgstr "Filtro de Fourier de «%1»"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:766
-#, fuzzy, kde-format
-#| msgid "Probability Density"
+#, kde-format
 msgid "Probability Density of '%1'"
-msgstr "Densidade de probabilidade"
+msgstr "Densidade de probabilidade de «%1»"
 
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:966
