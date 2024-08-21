@@ -417,7 +417,7 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	connect(m_plot, &CartesianPlot::rangeFormatChanged, this, &CartesianPlotDock::plotRangeFormatChanged);
 
 	// range breaks
-	//TODO: activate later once range breaking is implemented
+	// TODO: activate later once range breaking is implemented
 	/*
 	connect(m_plot, &CartesianPlot::xRangeBreakingEnabledChanged, this, &CartesianPlotDock::plotXRangeBreakingEnabledChanged);
 	connect(m_plot, &CartesianPlot::xRangeBreaksChanged, this, &CartesianPlotDock::plotXRangeBreaksChanged);
@@ -795,7 +795,7 @@ void CartesianPlotDock::updatePlotRangeList() {
 		DEBUG(Q_FUNC_INFO << ", coordinate system " << i + 1 << " : xIndex = " << xIndex << ", yIndex = " << yIndex)
 		DEBUG(Q_FUNC_INFO << ", x range = " << xRange.toStdString() << ", auto scale = " << xRange.autoScale())
 		DEBUG(Q_FUNC_INFO << ", y range = " << yRange.toStdString() << ", auto scale = " << yRange.autoScale())
-	
+
 		// X-range
 		auto* cb = new ComboBoxIgnoreWheel(ui.twPlotRanges);
 		cb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);

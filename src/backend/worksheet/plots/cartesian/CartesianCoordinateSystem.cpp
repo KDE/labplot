@@ -49,7 +49,7 @@ QString CartesianCoordinateSystem::info() const {
 	DEBUG(Q_FUNC_INFO)
 	if (!name().isEmpty())
 		return name();
-	
+
 	if (d->plot)
 		return QString(QLatin1String("x = ") + d->plot->range(Dimension::X, d->xIndex).toString() + QLatin1String(", y = ")
 					   + d->plot->range(Dimension::Y, d->yIndex).toString());
