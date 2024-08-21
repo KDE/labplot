@@ -9,7 +9,9 @@ New features:
 		* support periodic and random sampling as function: psample(n;x), rsample(x)
 		* save the properties used to generate random values in the column for later re-use
 		* allow to perform the distribution fit to the data directly from the spreadsheet
-	* [worksheet] more space for plots and less "ink" - no layout spacings, no minor grid lines, not plot borders, no ticks on secondary axes on default
+	* [worksheet] 
+		* more space for plots and less "ink" - no layout spacings, no minor grid lines, not plot borders, no ticks on secondary axes on default
+		* allow to provide names for plot ranges for easier lookup and assignemnt in the plot elements
 
 Bug fixes:
 	* Fix crash selecting "cell" from function list in function dialog

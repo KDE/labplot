@@ -170,3 +170,11 @@ bool AbstractCoordinateSystem::clipLineToRect(QLineF* line, const QRectF& rect, 
 	}
 	return true;
 }
+
+QString AbstractCoordinateSystem::name() const {
+	return m_name;
+}
+
+void AbstractCoordinateSystem::setName(const QString& name) {
+	m_name = name;
+}

@@ -99,6 +99,11 @@
            <string>Default</string>
           </property>
          </column>
+         <column>
+          <property name="text">
+           <string>Name</string>
+          </property>
+         </column>
         </widget>
        </item>
        <item row="22" column="0">
