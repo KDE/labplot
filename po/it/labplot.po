@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-15 01:49+0000\n"
-"PO-Revision-Date: 2024-07-26 14:53+0200\n"
+"PO-Revision-Date: 2024-08-16 09:55+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -5406,28 +5406,24 @@ msgid "Probability density for an exponential distribution"
 msgstr "Densità di probabilità p(x) per una distribuzione esponenziale"
 
 #: src/backend/gsl/functions.cpp:690
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function P"
+#, kde-format
 msgid "Cumulative exponential distribution function P"
-msgstr "Funzione di distribuzione cumulativa dell'unità P"
+msgstr "Funzione di distribuzione esponenziale cumulativa dell'unità P"
 
 #: src/backend/gsl/functions.cpp:691
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function Q"
+#, kde-format
 msgid "Cumulative exponential distribution function Q"
-msgstr "Funzione di distribuzione cumulativa dell'unità Q"
+msgstr "Funzione di distribuzione esponenziale cumulativa dell'unità Q"
 
 #: src/backend/gsl/functions.cpp:692
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative unit distribution function P"
+#, kde-format
 msgid "Inverse cumulative exponential distribution function P"
-msgstr "Funzione di distribuzione cumulata inversa dell'unità P"
+msgstr "Funzione di distribuzione esponenziale cumulata inversa dell'unità P"
 
 #: src/backend/gsl/functions.cpp:693
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative unit distribution function Q"
+#, kde-format
 msgid "Inverse cumulative exponential distribution function Q"
-msgstr "Funzione di distribuzione cumulata inversa dell'unità Q"
+msgstr "Funzione di distribuzione esponenziale cumulata inversa dell'unità Q"
 
 #: src/backend/gsl/functions.cpp:696
 #, kde-format
@@ -5435,28 +5431,24 @@ msgid "Probability density for a Laplace distribution"
 msgstr "Densità di probabilità p(x) per una distribuzione di Laplace"
 
 #: src/backend/gsl/functions.cpp:697
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative Laplace distribution function P"
-msgstr "Funzione di distribuzione cumulata P"
+msgstr "Funzione di distribuzione di Laplace cumulata P"
 
 #: src/backend/gsl/functions.cpp:698
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative Laplace distribution function Q"
-msgstr "Funzione di distribuzione cumulata Q"
+msgstr "Funzione di distribuzione di Laplace cumulata Q"
 
 #: src/backend/gsl/functions.cpp:699
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative Laplace distribution function P"
-msgstr "funzione di distribuzione cumulata inversa P"
+msgstr "funzione di distribuzione di Laplace cumulata inversa P"
 
 #: src/backend/gsl/functions.cpp:700
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative Laplace distribution function Q"
-msgstr "funzione di distribuzione cumulata inversa Q"
+msgstr "funzione di distribuzione di Laplace cumulata inversa Q"
 
 #: src/backend/gsl/functions.cpp:703
 #, kde-format
@@ -5464,16 +5456,16 @@ msgid "Probability density for an exponential power distribution"
 msgstr "Densità di probabilità per una distribuzione di potenza esponenziale"
 
 #: src/backend/gsl/functions.cpp:704
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function P"
+#, kde-format
 msgid "cumulative exponential power distribution function P"
-msgstr "Funzione di distribuzione cumulativa dell'unità P"
+msgstr ""
+"Funzione di distribuzione di potenza esponenziale cumulativa dell'unità P"
 
 #: src/backend/gsl/functions.cpp:705
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function Q"
+#, kde-format
 msgid "Cumulative exponential power distribution function Q"
-msgstr "Funzione di distribuzione cumulativa dell'unità Q"
+msgstr ""
+"Funzione di distribuzione di potenza esponenziale cumulativa dell'unità Q"
 
 #: src/backend/gsl/functions.cpp:708
 #, kde-format
@@ -5481,28 +5473,24 @@ msgid "Probability density for a Cauchy distribution"
 msgstr "Densità di probabilità per una distribuzione di Cauchy"
 
 #: src/backend/gsl/functions.cpp:709
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative Cauchy distribution function P"
-msgstr "Funzione di distribuzione cumulata P"
+msgstr "Funzione di distribuzione di Cauchy cumulata P"
 
 #: src/backend/gsl/functions.cpp:710
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative Cauchy distribution function Q"
-msgstr "Funzione di distribuzione cumulata Q"
+msgstr "Funzione di distribuzione di Cauchy cumulata Q"
 
 #: src/backend/gsl/functions.cpp:711
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative Cauchy distribution function P"
-msgstr "funzione di distribuzione cumulata inversa P"
+msgstr "funzione di distribuzione di Cauchy cumulata inversa P"
 
 #: src/backend/gsl/functions.cpp:712
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative Cauchy distribution function Q"
-msgstr "funzione di distribuzione cumulata inversa Q"
+msgstr "funzione di distribuzione di Cauchy cumulata inversa Q"
 
 #: src/backend/gsl/functions.cpp:715
 #, kde-format
@@ -5510,28 +5498,24 @@ msgid "Probability density for a Rayleigh distribution"
 msgstr "Densità di probabilità per una distribuzione di Rayleigh"
 
 #: src/backend/gsl/functions.cpp:716
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative Rayleigh distribution function P"
-msgstr "Funzione di distribuzione cumulata P"
+msgstr "Funzione di distribuzione di Rayleigh cumulata P"
 
 #: src/backend/gsl/functions.cpp:717
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative Rayleigh distribution function Q"
-msgstr "Funzione di distribuzione cumulata Q"
+msgstr "Funzione di distribuzione di Rayleigh cumulata Q"
 
 #: src/backend/gsl/functions.cpp:718
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative Rayleigh distribution function P"
-msgstr "funzione di distribuzione cumulata inversa P"
+msgstr "funzione di distribuzione di Rayleigh cumulata inversa P"
 
 #: src/backend/gsl/functions.cpp:719
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative Rayleigh distribution function Q"
-msgstr "funzione di distribuzione cumulata inversa Q"
+msgstr "funzione di distribuzione di Rayleigh cumulata inversa Q"
 
 #: src/backend/gsl/functions.cpp:720
 #, kde-format
@@ -5549,28 +5533,24 @@ msgid "Probability density for a gamma distribution"
 msgstr "Densità di probabilità per una distribuzione gamma"
 
 #: src/backend/gsl/functions.cpp:727
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative gamma distribution function P"
-msgstr "Funzione di distribuzione cumulata P"
+msgstr "Funzione di distribuzione gamma cumulata P"
 
 #: src/backend/gsl/functions.cpp:728
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative gamma distribution function Q"
-msgstr "Funzione di distribuzione cumulata Q"
+msgstr "Funzione di distribuzione gamma cumulata Q"
 
 #: src/backend/gsl/functions.cpp:729
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative gamma distribution function P"
-msgstr "funzione di distribuzione cumulata inversa P"
+msgstr "funzione di distribuzione gamma cumulata inversa P"
 
 #: src/backend/gsl/functions.cpp:730
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative gamma distribution function Q"
-msgstr "funzione di distribuzione cumulata inversa Q"
+msgstr "funzione di distribuzione gamma cumulata inversa Q"
 
 #: src/backend/gsl/functions.cpp:733
 #, kde-format
@@ -5578,28 +5558,24 @@ msgid "Probability density for a uniform distribution"
 msgstr "Densità di probabilità per una distribuzione uniforme"
 
 #: src/backend/gsl/functions.cpp:734
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function P"
+#, kde-format
 msgid "Cumulative uniform distribution function P"
-msgstr "Funzione di distribuzione cumulativa dell'unità P"
+msgstr "Funzione di distribuzione uniforme cumulativa dell'unità P"
 
 #: src/backend/gsl/functions.cpp:735
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function Q"
+#, kde-format
 msgid "Cumulative uniform distribution function Q"
-msgstr "Funzione di distribuzione cumulativa dell'unità Q"
+msgstr "Funzione di distribuzione uniforme cumulativa dell'unità Q"
 
 #: src/backend/gsl/functions.cpp:736
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative unit distribution function P"
+#, kde-format
 msgid "Inverse cumulative uniform distribution function P"
-msgstr "Funzione di distribuzione cumulata inversa dell'unità P"
+msgstr "Funzione di distribuzione uniforme cumulata inversa dell'unità P"
 
 #: src/backend/gsl/functions.cpp:737
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative unit distribution function Q"
+#, kde-format
 msgid "Inverse cumulative uniform distribution function Q"
-msgstr "Funzione di distribuzione cumulata inversa dell'unità Q"
+msgstr "Funzione di distribuzione uniforme cumulata inversa dell'unità Q"
 
 #: src/backend/gsl/functions.cpp:740
 #, kde-format
@@ -5607,28 +5583,24 @@ msgid "Probability density for a lognormal distribution"
 msgstr "Densità di probabilità per una distribuzione lognormale"
 
 #: src/backend/gsl/functions.cpp:741
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative lognormal distribution function P"
-msgstr "Funzione di distribuzione cumulata P"
+msgstr "Funzione di distribuzione lognormale cumulata P"
 
 #: src/backend/gsl/functions.cpp:742
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative lognormal distribution function Q"
-msgstr "Funzione di distribuzione cumulata Q"
+msgstr "Funzione di distribuzione lognormale cumulata Q"
 
 #: src/backend/gsl/functions.cpp:743
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative lognormal distribution function P"
-msgstr "funzione di distribuzione cumulata inversa P"
+msgstr "funzione di distribuzione lognormale cumulata inversa P"
 
 #: src/backend/gsl/functions.cpp:744
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative lognormal distribution function Q"
-msgstr "funzione di distribuzione cumulata inversa Q"
+msgstr "funzione di distribuzione lognormale cumulata inversa Q"
 
 #: src/backend/gsl/functions.cpp:747
 #, kde-format
@@ -5636,28 +5608,24 @@ msgid "Probability density for a chi squared distribution"
 msgstr "Densità di probabilità per una distribuzione chi quadrato"
 
 #: src/backend/gsl/functions.cpp:748
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative chi squared distribution function P"
-msgstr "Funzione di distribuzione cumulata P"
+msgstr "Funzione di distribuzione chi quadrato cumulata P"
 
 #: src/backend/gsl/functions.cpp:749
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative chi squared distribution function Q"
-msgstr "Funzione di distribuzione cumulata Q"
+msgstr "Funzione di distribuzione chi quadrato cumulata Q"
 
 #: src/backend/gsl/functions.cpp:750
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative chi squared distribution function P"
-msgstr "funzione di distribuzione cumulata inversa P"
+msgstr "funzione di distribuzione chi quadrato cumulata inversa P"
 
 #: src/backend/gsl/functions.cpp:751
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative chi squared distribution function Q"
-msgstr "funzione di distribuzione cumulata inversa Q"
+msgstr "funzione di distribuzione chi quadrato cumulata inversa Q"
 
 #: src/backend/gsl/functions.cpp:754
 #, kde-format
@@ -5665,28 +5633,24 @@ msgid "Probability density for a F-distribution"
 msgstr "Densità di probabilità per una distribuzione di Fisher-Snedecor"
 
 #: src/backend/gsl/functions.cpp:755
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative F-distribution function P"
-msgstr "Funzione di distribuzione cumulata P"
+msgstr "Funzione di distribuzione di Fisher-Snedecor cumulata P"
 
 #: src/backend/gsl/functions.cpp:756
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative F-distribution function Q"
-msgstr "Funzione di distribuzione cumulata Q"
+msgstr "Funzione di distribuzione di Fisher-Snedecor cumulata Q"
 
 #: src/backend/gsl/functions.cpp:757
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative F-distribution function P"
-msgstr "funzione di distribuzione cumulata inversa P"
+msgstr "funzione di distribuzione di Fisher-Snedecor cumulata inversa P"
 
 #: src/backend/gsl/functions.cpp:758
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative F-distribution function Q"
-msgstr "funzione di distribuzione cumulata inversa Q"
+msgstr "funzione di distribuzione di Fisher-Snedecor cumulata inversa Q"
 
 #: src/backend/gsl/functions.cpp:761
 #, kde-format
@@ -5694,28 +5658,24 @@ msgid "Probability density for a t-distribution"
 msgstr "Densità di probabilità per una distribuzione t di Student"
 
 #: src/backend/gsl/functions.cpp:762
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative t-distribution function P"
-msgstr "Funzione di distribuzione cumulata P"
+msgstr "Funzione di distribuzione t cumulata P"
 
 #: src/backend/gsl/functions.cpp:763
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative t-distribution function Q"
-msgstr "Funzione di distribuzione cumulata Q"
+msgstr "Funzione di distribuzione t cumulata Q"
 
 #: src/backend/gsl/functions.cpp:764
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative t-distribution function P"
-msgstr "funzione di distribuzione cumulata inversa P"
+msgstr "funzione di distribuzione t cumulata inversa P"
 
 #: src/backend/gsl/functions.cpp:765
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative t-distribution function Q"
-msgstr "funzione di distribuzione cumulata inversa Q"
+msgstr "funzione di distribuzione t cumulata inversa Q"
 
 #: src/backend/gsl/functions.cpp:768
 #, kde-format
@@ -5723,28 +5683,24 @@ msgid "Probability density for a beta distribution"
 msgstr "Densità di probabilità per una distribuzione beta"
 
 #: src/backend/gsl/functions.cpp:769
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative beta distribution function P"
-msgstr "Funzione di distribuzione cumulata P"
+msgstr "Funzione di distribuzione beta cumulata P"
 
 #: src/backend/gsl/functions.cpp:770
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative beta distribution function Q"
-msgstr "Funzione di distribuzione cumulata Q"
+msgstr "Funzione di distribuzione beta cumulata Q"
 
 #: src/backend/gsl/functions.cpp:771
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative beta distribution function P"
-msgstr "funzione di distribuzione cumulata inversa P"
+msgstr "funzione di distribuzione beta cumulata inversa P"
 
 #: src/backend/gsl/functions.cpp:772
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative beta distribution function Q"
-msgstr "funzione di distribuzione cumulata inversa Q"
+msgstr "funzione di distribuzione beta cumulata inversa Q"
 
 #: src/backend/gsl/functions.cpp:775
 #, kde-format
@@ -5752,28 +5708,24 @@ msgid "Probability density for a logistic distribution"
 msgstr "Densità di probabilità per una distribuzione logistica"
 
 #: src/backend/gsl/functions.cpp:776
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function P"
+#, kde-format
 msgid "Cumulative logistic distribution function P"
-msgstr "Funzione di distribuzione cumulativa dell'unità P"
+msgstr "Funzione di distribuzione logistica cumulativa dell'unità P"
 
 #: src/backend/gsl/functions.cpp:777
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function Q"
+#, kde-format
 msgid "Cumulative logistic distribution function Q"
-msgstr "Funzione di distribuzione cumulativa dell'unità Q"
+msgstr "Funzione di distribuzione logistica cumulativa dell'unità Q"
 
 #: src/backend/gsl/functions.cpp:778
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative unit distribution function P"
+#, kde-format
 msgid "Inverse cumulative logistic distribution function P"
-msgstr "Funzione di distribuzione cumulata inversa dell'unità P"
+msgstr "Funzione di distribuzione logistica cumulata inversa dell'unità P"
 
 #: src/backend/gsl/functions.cpp:779
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative unit distribution function Q"
+#, kde-format
 msgid "Inverse cumulative logistic distribution function Q"
-msgstr "Funzione di distribuzione cumulata inversa dell'unità Q"
+msgstr "Funzione di distribuzione logistica cumulata inversa dell'unità Q"
 
 #: src/backend/gsl/functions.cpp:782
 #, kde-format
@@ -5781,28 +5733,24 @@ msgid "Probability density for a Pareto distribution"
 msgstr "Densità di probabilità per una distribuzione di Pareto"
 
 #: src/backend/gsl/functions.cpp:783
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative Pareto distribution function P"
-msgstr "Funzione di distribuzione cumulata P"
+msgstr "Funzione di distribuzione di Pareto cumulata P"
 
 #: src/backend/gsl/functions.cpp:784
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative Pareto distribution function Q"
-msgstr "Funzione di distribuzione cumulata Q"
+msgstr "Funzione di distribuzione di Pareto cumulata Q"
 
 #: src/backend/gsl/functions.cpp:785
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative Pareto distribution function P"
-msgstr "funzione di distribuzione cumulata inversa P"
+msgstr "funzione di distribuzione di Pareto cumulata inversa P"
 
 #: src/backend/gsl/functions.cpp:786
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative Pareto distribution function Q"
-msgstr "funzione di distribuzione cumulata inversa Q"
+msgstr "funzione di distribuzione di Pareto cumulata inversa Q"
 
 #: src/backend/gsl/functions.cpp:789
 #, kde-format
@@ -5810,28 +5758,24 @@ msgid "Probability density for a Weibull distribution"
 msgstr "Densità di probabilità per una distribuzione di Weibull"
 
 #: src/backend/gsl/functions.cpp:790
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative Weibull distribution function P"
-msgstr "Funzione di distribuzione cumulata P"
+msgstr "Funzione di distribuzione di Weibull cumulata P"
 
 #: src/backend/gsl/functions.cpp:791
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative Weibull distribution function Q"
-msgstr "Funzione di distribuzione cumulata Q"
+msgstr "Funzione di distribuzione di Weibull cumulata Q"
 
 #: src/backend/gsl/functions.cpp:792
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative Weibull distribution function P"
-msgstr "funzione di distribuzione cumulata inversa P"
+msgstr "funzione di distribuzione di Weibull cumulata inversa P"
 
 #: src/backend/gsl/functions.cpp:793
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative Weibull distribution function Q"
-msgstr "funzione di distribuzione cumulata inversa Q"
+msgstr "funzione di distribuzione di Weibull cumulata inversa Q"
 
 #: src/backend/gsl/functions.cpp:796
 #, kde-format
@@ -5839,28 +5783,24 @@ msgid "Probability density for a Type-1 Gumbel distribution"
 msgstr "Densità di probabilità per una distribuzione di Gumbel di tipo 1"
 
 #: src/backend/gsl/functions.cpp:797
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative Type-1 Gumbel distribution function P"
-msgstr "Funzione di distribuzione cumulata P"
+msgstr "Funzione di distribuzione di Gumbel di tipo 1 cumulata P"
 
 #: src/backend/gsl/functions.cpp:798
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative Type-1 Gumbel distribution function Q"
-msgstr "Funzione di distribuzione cumulata Q"
+msgstr "Funzione di distribuzione di Gumbel di tipo 1 cumulata Q"
 
 #: src/backend/gsl/functions.cpp:799
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative Type-1 Gumbel distribution function P"
-msgstr "funzione di distribuzione cumulata inversa P"
+msgstr "funzione di distribuzione di Gumbel di tipo 1 cumulata inversa P"
 
 #: src/backend/gsl/functions.cpp:800
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative Type-1 Gumbel distribution function Q"
-msgstr "funzione di distribuzione cumulata inversa Q"
+msgstr "funzione di distribuzione di Gumbel di tipo 1 cumulata inversa Q"
 
 #: src/backend/gsl/functions.cpp:801
 #, kde-format
@@ -5868,28 +5808,24 @@ msgid "Probability density for a Type-2 Gumbel distribution"
 msgstr "Densità di probabilità per una distribuzione di Gumbel di tipo 2"
 
 #: src/backend/gsl/functions.cpp:802
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative Type-2 Gumbel distribution function P"
-msgstr "Funzione di distribuzione cumulata P"
+msgstr "Funzione di distribuzione di Gumbel di tipo 2 cumulata P"
 
 #: src/backend/gsl/functions.cpp:803
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative Type-2 Gumbel distribution function Q"
-msgstr "Funzione di distribuzione cumulata Q"
+msgstr "Funzione di distribuzione di Gumbel di tipo 2 cumulata Q"
 
 #: src/backend/gsl/functions.cpp:804
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative Type-2 Gumbel distribution function P"
-msgstr "funzione di distribuzione cumulata inversa P"
+msgstr "funzione di distribuzione di Gumbel di tipo 2 cumulata inversa P"
 
 #: src/backend/gsl/functions.cpp:805
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative Type-2 Gumbel distribution function Q"
-msgstr "funzione di distribuzione cumulata inversa Q"
+msgstr "funzione di distribuzione di Gumbel di tipo 2 cumulata inversa Q"
 
 #: src/backend/gsl/functions.cpp:808
 #, kde-format
@@ -5897,16 +5833,14 @@ msgid "Probability density for a Poisson distribution"
 msgstr "Densità di probabilità per una distribuzione di Poisson"
 
 #: src/backend/gsl/functions.cpp:809
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative Poisson distribution function P"
-msgstr "Funzione di distribuzione cumulata P"
+msgstr "Funzione di distribuzione di Poisson cumulata P"
 
 #: src/backend/gsl/functions.cpp:810
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative Poisson distribution function Q"
-msgstr "Funzione di distribuzione cumulata Q"
+msgstr "Funzione di distribuzione di Poisson cumulata Q"
 
 #: src/backend/gsl/functions.cpp:813
 #, kde-format
@@ -5919,16 +5853,14 @@ msgid "Probability density for a binomial distribution"
 msgstr "Densità di probabilità per una distribuzione binomiale"
 
 #: src/backend/gsl/functions.cpp:817
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function P"
+#, kde-format
 msgid "Cumulative binomial distribution function P"
-msgstr "Funzione di distribuzione cumulativa dell'unità P"
+msgstr "Funzione di distribuzione binomiale cumulativa dell'unità P"
 
 #: src/backend/gsl/functions.cpp:818
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function Q"
+#, kde-format
 msgid "Cumulative binomial distribution function Q"
-msgstr "Funzione di distribuzione cumulativa dell'unità Q"
+msgstr "Funzione di distribuzione binomiale cumulativa dell'unità Q"
 
 #: src/backend/gsl/functions.cpp:819
 #, kde-format
@@ -5936,16 +5868,14 @@ msgid "Probability density for a negative binomial distribution"
 msgstr "Densità di probabilità per una distribuzione binomiale negativa"
 
 #: src/backend/gsl/functions.cpp:820
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function P"
+#, kde-format
 msgid "Cumulative negative binomial distribution function P"
-msgstr "Funzione di distribuzione cumulativa dell'unità P"
+msgstr "Funzione di distribuzione binomiale cumulativa dell'unità P"
 
 #: src/backend/gsl/functions.cpp:821
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function Q"
+#, kde-format
 msgid "Cumulative negative binomial distribution function Q"
-msgstr "Funzione di distribuzione cumulativa dell'unità Q"
+msgstr "Funzione di distribuzione binomiale cumulativa dell'unità Q"
 
 #: src/backend/gsl/functions.cpp:824
 #, kde-format
@@ -5953,16 +5883,14 @@ msgid "Probability density for a Pascal distribution"
 msgstr "Densità di probabilità per una distribuzione di Pascal"
 
 #: src/backend/gsl/functions.cpp:825
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative Pascal distribution function P"
-msgstr "Funzione di distribuzione cumulata P"
+msgstr "Funzione di distribuzione di Pascal cumulata P"
 
 #: src/backend/gsl/functions.cpp:826
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative Pascal distribution function Q"
-msgstr "Funzione di distribuzione cumulata Q"
+msgstr "Funzione di distribuzione di Pascal cumulata Q"
 
 #: src/backend/gsl/functions.cpp:829
 #, kde-format
@@ -5970,16 +5898,14 @@ msgid "Probability density for a geometric distribution"
 msgstr "Densità di probabilità per una distribuzione geometrica"
 
 #: src/backend/gsl/functions.cpp:830
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative geometric distribution function P"
-msgstr "Funzione di distribuzione cumulata P"
+msgstr "Funzione di distribuzione geometrica cumulata P"
 
 #: src/backend/gsl/functions.cpp:831
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative geometric distribution function Q"
-msgstr "Funzione di distribuzione cumulata Q"
+msgstr "Funzione di distribuzione geometrica cumulata Q"
 
 #: src/backend/gsl/functions.cpp:834
 #, kde-format
@@ -5987,16 +5913,14 @@ msgid "Probability density for a hypergeometric distribution"
 msgstr "Densità di probabilità per una distribuzione ipergeometrica"
 
 #: src/backend/gsl/functions.cpp:835
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative hypergeometric distribution function P"
-msgstr "Funzione di distribuzione cumulata P"
+msgstr "Funzione di distribuzione ipergeometrica cumulata P"
 
 #: src/backend/gsl/functions.cpp:836
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative hypergeometric distribution function Q"
-msgstr "Funzione di distribuzione cumulata Q"
+msgstr "Funzione di distribuzione ipergeometrica cumulata Q"
 
 #: src/backend/gsl/functions.cpp:839
 #, kde-format
@@ -6004,22 +5928,19 @@ msgid "Probability density for a logarithmic distribution"
 msgstr "Densità di probabilità per una distribuzione logaritmica"
 
 #: src/backend/gsl/functions.cpp:843
-#, fuzzy, kde-format
-#| msgid "Probability density for a Landau distribution"
+#, kde-format
 msgid "Probability density for a triangular distribution"
-msgstr "Densità di probabilità per una distribuzione di Landau"
+msgstr "Densità di probabilità per una distribuzione triangolare"
 
 #: src/backend/gsl/functions.cpp:844
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative triangular distribution function P"
-msgstr "Funzione di distribuzione cumulata P"
+msgstr "Funzione di distribuzione triangolare cumulata P"
 
 #: src/backend/gsl/functions.cpp:845
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative triangular distribution function Q"
-msgstr "Funzione di distribuzione cumulata Q"
+msgstr "Funzione di distribuzione triangolare cumulata Q"
 
 #: src/backend/gsl/functions.cpp:846
 #, fuzzy, kde-format
@@ -8136,7 +8057,7 @@ msgstr "curva xy da una formula"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:437
 #, kde-format
 msgid "Add a new xy-curve that is defined via a mathematical expression."
-msgstr ""
+msgstr "Aggiungi una nuova curva definita da un'espressione matematica."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:439
 #, kde-format
@@ -8673,16 +8594,14 @@ msgid "%1: add Fourier filter curve"
 msgstr "%1: aggiungi una curva filtro di Fourier"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1978
-#, fuzzy, kde-format
-#| msgid "Reduction of '%1'"
+#, kde-format
 msgid "%1: add function of '%2'"
-msgstr "Riduzione di «%1»"
+msgstr "%1: aggiungi funzione di «%2»"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1979
-#, fuzzy, kde-format
-#| msgid "Reduction of '%1'"
+#, kde-format
 msgid "Function of '%1'"
-msgstr "Riduzione di «%1»"
+msgstr "Funzione di «%1»"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1982
 #, fuzzy, kde-format
@@ -9691,15 +9610,14 @@ msgstr ""
 "%1: imposta le opzioni di trasformazione ad esegui la trasformata di Fourier"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:80
-#, fuzzy, kde-format
-#| msgid "%1: set equation"
+#, kde-format
 msgid "%1: set function"
-msgstr "%1: imposta l'equazione"
+msgstr "%1: imposta funzione"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:304
 #, kde-format
 msgid "First curve not valid"
-msgstr ""
+msgstr "Prima curva non valida"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:306
 #, kde-format
@@ -9719,7 +9637,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:323
 #, kde-format
 msgid "Curve '%1' not valid"
-msgstr ""
+msgstr "La curva «%1» non è valida"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:325
 #, kde-format
@@ -10974,10 +10892,9 @@ msgid "Reduce Data"
 msgstr "Riduci i dati"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:566
-#, fuzzy, kde-format
-#| msgid "Log-Normal (Galton)"
+#, kde-format
 msgid "Log-normal"
-msgstr "Log-normale (Galton)"
+msgstr "Lognormale"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:616
 #, kde-format
@@ -12210,10 +12127,9 @@ msgid "Add a new Workbook"
 msgstr "Aggiungi una nuova cartella di lavoro"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:146
-#, fuzzy, kde-format
-#| msgid "Workbook"
+#, kde-format
 msgid "Workbook name:"
-msgstr "Cartella di lavoro"
+msgstr "Nome cartella di lavoro:"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:148
 #, kde-format
@@ -12808,7 +12724,7 @@ msgstr "Mostra i prossimi insiemi di dati"
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:43
 #, kde-format
 msgid "Download the current dataset for preview and import"
-msgstr ""
+msgstr "Scarica l'insieme di dati corrente per l'anteprima e l'importazione"
 
 #. i18n: ectx: property (text), widget (QLabel, lCategories)
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:130
@@ -14761,19 +14677,14 @@ msgid "Fourier transformation status: %1"
 msgstr "Stato della trasformata di Fourier: %1"
 
 #: src/kdefrontend/dockwidgets/XYFunctionCurveDock.cpp:130
-#, fuzzy, kde-format
-#| msgid ""
-#| "The column \"%1\"\n"
-#| "is not available anymore. It will be automatically used once it is "
-#| "created again."
+#, kde-format
 msgid ""
 "The curve \"%1\"\n"
 "is not available anymore. It will be automatically used once it is created "
 "again."
 msgstr ""
-"La colonna «%1»\n"
-"non è più disponibile. Verrà usata automaticamente una volta che verrà "
-"ricreata."
+"La curva «%1»\n"
+"non è più disponibile. Verrà usata automaticamente quando verrà ricreata."
 
 #: src/kdefrontend/dockwidgets/XYFunctionCurveDock.cpp:185
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:221
@@ -15582,12 +15493,10 @@ msgid "Garvit Khatri"
 msgstr "Garvit Khatri"
 
 #: src/kdefrontend/LabPlot.cpp:112
-#, fuzzy, kde-format
-#| msgctxt "@info:credit"
-#| msgid "Porting LabPlot2 to KF5 and Integration with Cantor"
+#, kde-format
 msgctxt "@info:credit"
 msgid "Porting LabPlot to KF5 and Integration with Cantor"
-msgstr "Conversione di Labplot a KF5 ed integrazione con Cantor"
+msgstr "Conversione di Labplot a KF5, e integrazione con Cantor"
 
 #: src/kdefrontend/LabPlot.cpp:115
 #, kde-format
