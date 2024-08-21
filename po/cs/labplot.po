@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-15 01:49+0000\n"
-"PO-Revision-Date: 2024-08-14 09:06+0200\n"
+"PO-Revision-Date: 2024-08-20 15:08+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -11286,7 +11286,7 @@ msgstr "Svislé rozvržení"
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:48
 #, kde-format
 msgid "Horizontal Layout"
-msgstr "Vodorovné rozložení"
+msgstr "Vodorovné rozvržení"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:235
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:49
