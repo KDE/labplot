@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-15 01:49+0000\n"
-"PO-Revision-Date: 2024-07-15 10:20+0200\n"
+"POT-Creation-Date: 2024-08-22 01:52+0000\n"
+"PO-Revision-Date: 2024-08-12 09:22+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -480,9 +480,11 @@ msgstr "%1 : déplacer %2 vers %3."
 msgid "%1: rename to %2"
 msgstr "%1 : renommer vers %2"
 
+#. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
 #: src/backend/core/AspectTreeModel.cpp:164
 #: src/kdefrontend/datasources/HDF5OptionsWidget.cpp:27
 #: src/kdefrontend/datasources/NetCDFOptionsWidget.cpp:29
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:104
 #: src/kdefrontend/widgets/FitParametersWidget.cpp:35
 #, kde-format
 msgid "Name"
@@ -741,10 +743,9 @@ msgid "%1: set author"
 msgstr "%1 : définir l'auteur"
 
 #: src/backend/core/Project.cpp:307
-#, fuzzy, kde-format
-#| msgid "%1: save dock states changed"
+#, kde-format
 msgid "%1: save dock state changed"
-msgstr "%1 : enregistrer les modifications des états de panneaux :"
+msgstr "%1 : enregistrer les modifications de l'état des panneaux"
 
 #: src/backend/core/Project.cpp:314
 #, kde-format
@@ -1928,70 +1929,60 @@ msgstr ""
 "charge."
 
 #: src/backend/datasources/filters/McapFilter.cpp:196
-#, fuzzy, kde-format
-#| msgid "Invalid DBC file."
+#, kde-format
 msgid "Valid MCAP file"
-msgstr "Fichier « DBC » non valable."
+msgstr "Fichier « MCAP » valable"
 
 #: src/backend/datasources/filters/McapFilter.cpp:201
-#, fuzzy, kde-format
-#| msgid "Message type:"
+#, kde-format
 msgid "Message count: "
-msgstr "Type de message :"
+msgstr "Nombre de messages :"
 
 #: src/backend/datasources/filters/McapFilter.cpp:203
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Schema count: "
-msgstr "Compteur de feuilles : %1"
+msgstr "Compteur de thèmes :"
 
 #: src/backend/datasources/filters/McapFilter.cpp:205
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Channel count: "
-msgstr "Compteur de feuilles : %1"
+msgstr "Nombre de canaux : "
 
 #: src/backend/datasources/filters/McapFilter.cpp:207
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Attachment count: "
-msgstr "Compteur de feuilles : %1"
+msgstr "Nombre de pièces jointes : "
 
 #: src/backend/datasources/filters/McapFilter.cpp:209
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Metadata count: "
-msgstr "Compteur de feuilles : %1"
+msgstr "Nombre de métadonnées : "
 
 #: src/backend/datasources/filters/McapFilter.cpp:211
-#, fuzzy, kde-format
-#| msgid "Start Time:"
+#, kde-format
 msgid "Message Start Time: "
-msgstr "Date de début :"
+msgstr "Heure de début du message :"
 
 #: src/backend/datasources/filters/McapFilter.cpp:213
-#, fuzzy, kde-format
-#| msgid "End Time: %1"
+#, kde-format
 msgid "Message End Time: "
-msgstr "Heure de fin : %1"
+msgstr "Heure de fin du message :"
 
 #: src/backend/datasources/filters/McapFilter.cpp:215
-#, fuzzy, kde-format
-#| msgid "No templates found."
+#, kde-format
 msgid "No Statistics found."
-msgstr "Aucun modèle trouvé"
+msgstr "Aucun statistique trouvée."
 
 #: src/backend/datasources/filters/McapFilter.cpp:469
 #: src/backend/datasources/filters/McapFilter.cpp:962
-#, fuzzy, kde-format
-#| msgid "Failed to read the file."
+#, kde-format
 msgid "Failed to read the file. Reason: %1"
-msgstr "Impossible de lire le fichier."
+msgstr "Impossible de lire le fichier. Raison : %1"
 
 #: src/backend/datasources/filters/McapFilter.cpp:477
 #, kde-format
 msgid "No JSON encoded topics found."
-msgstr ""
+msgstr "Aucun sujet encodé au format « JSON » n'a été trouvé."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:213
 #, kde-format
@@ -3596,16 +3587,14 @@ msgid "Simple Moving Range"
 msgstr "Intervalle simple glissant"
 
 #: src/backend/gsl/functions.cpp:243
-#, fuzzy, kde-format
-#| msgid "Periodically"
+#, kde-format
 msgid "Period sample"
-msgstr "Périodiquement"
+msgstr "Échantillonnage périodique"
 
 #: src/backend/gsl/functions.cpp:244
-#, fuzzy, kde-format
-#| msgid "Random Values"
+#, kde-format
 msgid "Random sample"
-msgstr "Valeurs aléatoires"
+msgstr "Échantillonnage aléatoire"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:248
@@ -5436,28 +5425,24 @@ msgid "Probability density for an exponential distribution"
 msgstr "Densité de probabilité pour une distribution exponentielle"
 
 #: src/backend/gsl/functions.cpp:690
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function P"
+#, kde-format
 msgid "Cumulative exponential distribution function P"
-msgstr "Fonction P cumulative de distribution par unité"
+msgstr "Fonction P cumulative de distribution exponentielle"
 
 #: src/backend/gsl/functions.cpp:691
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function Q"
+#, kde-format
 msgid "Cumulative exponential distribution function Q"
-msgstr "Fonction Q cumulative de distribution par unité"
+msgstr "Fonction Q cumulative de distribution exponentielle"
 
 #: src/backend/gsl/functions.cpp:692
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative unit distribution function P"
+#, kde-format
 msgid "Inverse cumulative exponential distribution function P"
-msgstr "Fonction P cumulative inverse de distribution par unité"
+msgstr "Fonction P cumulative inverse de distribution exponentielle"
 
 #: src/backend/gsl/functions.cpp:693
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative unit distribution function Q"
+#, kde-format
 msgid "Inverse cumulative exponential distribution function Q"
-msgstr "Fonction Q cumulative inverse de distribution par unité"
+msgstr "Fonction Q cumulative inverse de distribution exponentielle"
 
 #: src/backend/gsl/functions.cpp:696
 #, kde-format
@@ -5465,28 +5450,24 @@ msgid "Probability density for a Laplace distribution"
 msgstr "Densité de probabilité pour une distribution de Laplace."
 
 #: src/backend/gsl/functions.cpp:697
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative Laplace distribution function P"
-msgstr "Fonction de distribution cumulative P"
+msgstr "Fonction P cumulative de distribution de Laplace"
 
 #: src/backend/gsl/functions.cpp:698
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative Laplace distribution function Q"
-msgstr "Fonction de distribution cumulative Q"
+msgstr "Fonction Q cumulative de distribution de Laplace"
 
 #: src/backend/gsl/functions.cpp:699
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative Laplace distribution function P"
-msgstr "Fonction P cumulative inverse de distribution"
+msgstr "Fonction P cumulative inverse de distribution de Laplace"
 
 #: src/backend/gsl/functions.cpp:700
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative Laplace distribution function Q"
-msgstr "Fonction Q cumulative inverse de distribution"
+msgstr "Fonction Q cumulative inverse de distribution de Laplace"
 
 #: src/backend/gsl/functions.cpp:703
 #, kde-format
@@ -5495,16 +5476,14 @@ msgstr ""
 "Densité de probabilité pour une distribution de puissance exponentielle"
 
 #: src/backend/gsl/functions.cpp:704
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function P"
+#, kde-format
 msgid "cumulative exponential power distribution function P"
-msgstr "Fonction P cumulative de distribution par unité"
+msgstr "Fonction P cumulative de distribution exponentielle"
 
 #: src/backend/gsl/functions.cpp:705
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function Q"
+#, kde-format
 msgid "Cumulative exponential power distribution function Q"
-msgstr "Fonction Q cumulative de distribution par unité"
+msgstr "Fonction Q cumulative de distribution exponentielle"
 
 #: src/backend/gsl/functions.cpp:708
 #, kde-format
@@ -5512,28 +5491,24 @@ msgid "Probability density for a Cauchy distribution"
 msgstr "Densité de probabilité pour une distribution de Cauchy."
 
 #: src/backend/gsl/functions.cpp:709
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative Cauchy distribution function P"
-msgstr "Fonction de distribution cumulative P"
+msgstr "Fonction P cumulative de distribution de Cauchy"
 
 #: src/backend/gsl/functions.cpp:710
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative Cauchy distribution function Q"
-msgstr "Fonction de distribution cumulative Q"
+msgstr "Fonction Q cumulative de distribution de Cauchy"
 
 #: src/backend/gsl/functions.cpp:711
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative Cauchy distribution function P"
-msgstr "Fonction P cumulative inverse de distribution"
+msgstr "Fonction P cumulative inverse de distribution de Cauchy"
 
 #: src/backend/gsl/functions.cpp:712
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative Cauchy distribution function Q"
-msgstr "Fonction Q cumulative inverse de distribution"
+msgstr "Fonction Q cumulative inverse de distribution de Cauchy"
 
 #: src/backend/gsl/functions.cpp:715
 #, kde-format
@@ -5541,28 +5516,24 @@ msgid "Probability density for a Rayleigh distribution"
 msgstr "Densité de probabilité pour une distribution de Rayleigh."
 
 #: src/backend/gsl/functions.cpp:716
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative Rayleigh distribution function P"
-msgstr "Fonction de distribution cumulative P"
+msgstr "Fonction P cumulative de distribution de Rayleigh"
 
 #: src/backend/gsl/functions.cpp:717
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative Rayleigh distribution function Q"
-msgstr "Fonction de distribution cumulative Q"
+msgstr "Fonction Q cumulative de distribution de Rayleigh"
 
 #: src/backend/gsl/functions.cpp:718
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative Rayleigh distribution function P"
-msgstr "Fonction P cumulative inverse de distribution"
+msgstr "Fonction P cumulative inverse de distribution de Rayleigh"
 
 #: src/backend/gsl/functions.cpp:719
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative Rayleigh distribution function Q"
-msgstr "Fonction Q cumulative inverse de distribution"
+msgstr "Fonction Q cumulative inverse de distribution de Rayleigh"
 
 #: src/backend/gsl/functions.cpp:720
 #, kde-format
@@ -5580,28 +5551,24 @@ msgid "Probability density for a gamma distribution"
 msgstr "Densité de probabilité pour une distribution « gamma »."
 
 #: src/backend/gsl/functions.cpp:727
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative gamma distribution function P"
-msgstr "Fonction de distribution cumulative P"
+msgstr "Fonction P cumulative de distribution Gamma"
 
 #: src/backend/gsl/functions.cpp:728
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative gamma distribution function Q"
-msgstr "Fonction de distribution cumulative Q"
+msgstr "Fonction Q cumulative de distribution Gamma"
 
 #: src/backend/gsl/functions.cpp:729
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative gamma distribution function P"
-msgstr "Fonction P cumulative inverse de distribution"
+msgstr "Fonction P cumulative inverse de distribution en gamma"
 
 #: src/backend/gsl/functions.cpp:730
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative gamma distribution function Q"
-msgstr "Fonction Q cumulative inverse de distribution"
+msgstr "Fonction Q cumulative inverse de distribution en gamma"
 
 #: src/backend/gsl/functions.cpp:733
 #, kde-format
@@ -5609,28 +5576,24 @@ msgid "Probability density for a uniform distribution"
 msgstr "Densité de probabilité pour une distribution uniforme."
 
 #: src/backend/gsl/functions.cpp:734
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function P"
+#, kde-format
 msgid "Cumulative uniform distribution function P"
-msgstr "Fonction P cumulative de distribution par unité"
+msgstr "Fonction P cumulative de distribution uniforme"
 
 #: src/backend/gsl/functions.cpp:735
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function Q"
+#, kde-format
 msgid "Cumulative uniform distribution function Q"
-msgstr "Fonction Q cumulative de distribution par unité"
+msgstr "Fonction Q cumulative de distribution uniforme"
 
 #: src/backend/gsl/functions.cpp:736
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative unit distribution function P"
+#, kde-format
 msgid "Inverse cumulative uniform distribution function P"
-msgstr "Fonction P cumulative inverse de distribution par unité"
+msgstr "Fonction P cumulative inverse de distribution uniforme"
 
 #: src/backend/gsl/functions.cpp:737
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative unit distribution function Q"
+#, kde-format
 msgid "Inverse cumulative uniform distribution function Q"
-msgstr "Fonction Q cumulative inverse de distribution par unité"
+msgstr "Fonction Q cumulative inverse de distribution uniforme"
 
 #: src/backend/gsl/functions.cpp:740
 #, kde-format
@@ -5638,28 +5601,24 @@ msgid "Probability density for a lognormal distribution"
 msgstr "Densité de probabilité pour une distribution « log-normale »."
 
 #: src/backend/gsl/functions.cpp:741
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative lognormal distribution function P"
-msgstr "Fonction de distribution cumulative P"
+msgstr "Fonction P cumulative de distribution log-normale"
 
 #: src/backend/gsl/functions.cpp:742
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative lognormal distribution function Q"
-msgstr "Fonction de distribution cumulative Q"
+msgstr "Fonction Q cumulative de distribution log-normale"
 
 #: src/backend/gsl/functions.cpp:743
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative lognormal distribution function P"
-msgstr "Fonction P cumulative inverse de distribution"
+msgstr "Fonction P cumulative inverse de distribution log-normale"
 
 #: src/backend/gsl/functions.cpp:744
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative lognormal distribution function Q"
-msgstr "Fonction Q cumulative inverse de distribution"
+msgstr "Fonction Q cumulative inverse de distribution log-normale"
 
 #: src/backend/gsl/functions.cpp:747
 #, kde-format
@@ -5667,28 +5626,24 @@ msgid "Probability density for a chi squared distribution"
 msgstr "Densité de probabilité pour une distribution « chi carré »."
 
 #: src/backend/gsl/functions.cpp:748
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative chi squared distribution function P"
-msgstr "Fonction de distribution cumulative P"
+msgstr "Fonction P cumulative de distribution en chi carré "
 
 #: src/backend/gsl/functions.cpp:749
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative chi squared distribution function Q"
-msgstr "Fonction de distribution cumulative Q"
+msgstr "Fonction Q cumulative de distribution en chi carré "
 
 #: src/backend/gsl/functions.cpp:750
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative chi squared distribution function P"
-msgstr "Fonction P cumulative inverse de distribution"
+msgstr "Fonction P cumulative inverse de distribution en chi carré "
 
 #: src/backend/gsl/functions.cpp:751
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative chi squared distribution function Q"
-msgstr "Fonction Q cumulative inverse de distribution"
+msgstr "Fonction Q cumulative inverse de distribution en chi carré "
 
 #: src/backend/gsl/functions.cpp:754
 #, kde-format
@@ -5696,28 +5651,24 @@ msgid "Probability density for a F-distribution"
 msgstr "Densité de probabilité pour une distribution F"
 
 #: src/backend/gsl/functions.cpp:755
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative F-distribution function P"
-msgstr "Fonction de distribution cumulative P"
+msgstr "Fonction P de distribution F cumulative"
 
 #: src/backend/gsl/functions.cpp:756
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative F-distribution function Q"
-msgstr "Fonction de distribution cumulative Q"
+msgstr "Fonction Q de distribution F cumulative"
 
 #: src/backend/gsl/functions.cpp:757
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative F-distribution function P"
-msgstr "Fonction P cumulative inverse de distribution"
+msgstr "Fonction P cumulative inverse de distribution F"
 
 #: src/backend/gsl/functions.cpp:758
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative F-distribution function Q"
-msgstr "Fonction Q cumulative inverse de distribution"
+msgstr "Fonction Q cumulative inverse de distribution F"
 
 #: src/backend/gsl/functions.cpp:761
 #, kde-format
@@ -5725,28 +5676,24 @@ msgid "Probability density for a t-distribution"
 msgstr "Densité de probabilité pour une distribution t"
 
 #: src/backend/gsl/functions.cpp:762
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative t-distribution function P"
-msgstr "Fonction de distribution cumulative P"
+msgstr "Fonction P de distribution t cumulative"
 
 #: src/backend/gsl/functions.cpp:763
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative t-distribution function Q"
-msgstr "Fonction de distribution cumulative Q"
+msgstr "Fonction Q de distribution t cumulative"
 
 #: src/backend/gsl/functions.cpp:764
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative t-distribution function P"
-msgstr "Fonction P cumulative inverse de distribution"
+msgstr "Fonction P cumulative inverse de distribution t"
 
 #: src/backend/gsl/functions.cpp:765
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative t-distribution function Q"
-msgstr "Fonction Q cumulative inverse de distribution"
+msgstr "Fonction Q cumulative inverse de distribution t"
 
 #: src/backend/gsl/functions.cpp:768
 #, kde-format
@@ -5754,28 +5701,24 @@ msgid "Probability density for a beta distribution"
 msgstr "Densité de probabilité pour une distribution « bêta »."
 
 #: src/backend/gsl/functions.cpp:769
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative beta distribution function P"
-msgstr "Fonction de distribution cumulative P"
+msgstr "Fonction P de distribution Bêta cumulative"
 
 #: src/backend/gsl/functions.cpp:770
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative beta distribution function Q"
-msgstr "Fonction de distribution cumulative Q"
+msgstr "Fonction Q de distribution Bêta cumulative"
 
 #: src/backend/gsl/functions.cpp:771
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative beta distribution function P"
-msgstr "Fonction P cumulative inverse de distribution"
+msgstr "Fonction P cumulative inverse de distribution bếta"
 
 #: src/backend/gsl/functions.cpp:772
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative beta distribution function Q"
-msgstr "Fonction Q cumulative inverse de distribution"
+msgstr "Fonction Q cumulative inverse de distribution bếta"
 
 #: src/backend/gsl/functions.cpp:775
 #, kde-format
@@ -5783,28 +5726,24 @@ msgid "Probability density for a logistic distribution"
 msgstr "Densité de probabilité pour une distribution logistique"
 
 #: src/backend/gsl/functions.cpp:776
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function P"
+#, kde-format
 msgid "Cumulative logistic distribution function P"
-msgstr "Fonction P cumulative de distribution par unité"
+msgstr "Fonction P cumulative de distribution logistique"
 
 #: src/backend/gsl/functions.cpp:777
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function Q"
+#, kde-format
 msgid "Cumulative logistic distribution function Q"
-msgstr "Fonction Q cumulative de distribution par unité"
+msgstr "Fonction Q cumulative de distribution logistique"
 
 #: src/backend/gsl/functions.cpp:778
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative unit distribution function P"
+#, kde-format
 msgid "Inverse cumulative logistic distribution function P"
-msgstr "Fonction P cumulative inverse de distribution par unité"
+msgstr "Fonction P cumulative inverse de distribution logistique"
 
 #: src/backend/gsl/functions.cpp:779
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative unit distribution function Q"
+#, kde-format
 msgid "Inverse cumulative logistic distribution function Q"
-msgstr "Fonction Q cumulative inverse de distribution par unité"
+msgstr "Fonction Q cumulative inverse de distribution logistique"
 
 #: src/backend/gsl/functions.cpp:782
 #, kde-format
@@ -5812,28 +5751,24 @@ msgid "Probability density for a Pareto distribution"
 msgstr "Densité de probabilité pour une distribution de Pareto."
 
 #: src/backend/gsl/functions.cpp:783
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative Pareto distribution function P"
-msgstr "Fonction de distribution cumulative P"
+msgstr "Fonction P cumulative de distribution de Pareto"
 
 #: src/backend/gsl/functions.cpp:784
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative Pareto distribution function Q"
-msgstr "Fonction de distribution cumulative Q"
+msgstr "Fonction Q cumulative de distribution de Pareto"
 
 #: src/backend/gsl/functions.cpp:785
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative Pareto distribution function P"
-msgstr "Fonction P cumulative inverse de distribution"
+msgstr "Fonction P cumulative inverse de distribution de Pareto"
 
 #: src/backend/gsl/functions.cpp:786
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative Pareto distribution function Q"
-msgstr "Fonction Q cumulative inverse de distribution"
+msgstr "Fonction Q cumulative inverse de distribution de Pareto"
 
 #: src/backend/gsl/functions.cpp:789
 #, kde-format
@@ -5841,28 +5776,24 @@ msgid "Probability density for a Weibull distribution"
 msgstr "Densité de probabilité pour une distribution de Weibull."
 
 #: src/backend/gsl/functions.cpp:790
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative Weibull distribution function P"
-msgstr "Fonction de distribution cumulative P"
+msgstr "Fonction P cumulative de distribution de Weibull"
 
 #: src/backend/gsl/functions.cpp:791
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative Weibull distribution function Q"
-msgstr "Fonction de distribution cumulative Q"
+msgstr "Fonction Q cumulative de distribution de Weibull"
 
 #: src/backend/gsl/functions.cpp:792
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative Weibull distribution function P"
-msgstr "Fonction P cumulative inverse de distribution"
+msgstr "Fonction P cumulative inverse de distribution de Weibull"
 
 #: src/backend/gsl/functions.cpp:793
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative Weibull distribution function Q"
-msgstr "Fonction Q cumulative inverse de distribution"
+msgstr "Fonction Q cumulative inverse de distribution de Weibull"
 
 #: src/backend/gsl/functions.cpp:796
 #, kde-format
@@ -5870,28 +5801,24 @@ msgid "Probability density for a Type-1 Gumbel distribution"
 msgstr "Densité de probabilité pour une distribution de Gumbel Type-1"
 
 #: src/backend/gsl/functions.cpp:797
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative Type-1 Gumbel distribution function P"
-msgstr "Fonction de distribution cumulative P"
+msgstr "Fonction P cumulative de distribution de Gumbel de type-1"
 
 #: src/backend/gsl/functions.cpp:798
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative Type-1 Gumbel distribution function Q"
-msgstr "Fonction de distribution cumulative Q"
+msgstr "Fonction Q cumulative de distribution de Gumbel de type-1"
 
 #: src/backend/gsl/functions.cpp:799
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative Type-1 Gumbel distribution function P"
-msgstr "Fonction P cumulative inverse de distribution"
+msgstr "Fonction P cumulative inverse de distribution de Gumbel de type-1"
 
 #: src/backend/gsl/functions.cpp:800
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative Type-1 Gumbel distribution function Q"
-msgstr "Fonction Q cumulative inverse de distribution"
+msgstr "Fonction Q cumulative inverse de distribution de Gumbel de type-1"
 
 #: src/backend/gsl/functions.cpp:801
 #, kde-format
@@ -5899,28 +5826,24 @@ msgid "Probability density for a Type-2 Gumbel distribution"
 msgstr "Densité de probabilité pour une distribution de Gumbel Type-2"
 
 #: src/backend/gsl/functions.cpp:802
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative Type-2 Gumbel distribution function P"
-msgstr "Fonction de distribution cumulative P"
+msgstr "Fonction P cumulative de distribution de Gumbel de type-2"
 
 #: src/backend/gsl/functions.cpp:803
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative Type-2 Gumbel distribution function Q"
-msgstr "Fonction de distribution cumulative Q"
+msgstr "Fonction Q cumulative de distribution de Gumbel de type-2"
 
 #: src/backend/gsl/functions.cpp:804
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function P"
+#, kde-format
 msgid "Inverse cumulative Type-2 Gumbel distribution function P"
-msgstr "Fonction P cumulative inverse de distribution"
+msgstr "Fonction P cumulative inverse de distribution de Gumbel de type-2"
 
 #: src/backend/gsl/functions.cpp:805
-#, fuzzy, kde-format
-#| msgid "Inverse cumulative distribution function Q"
+#, kde-format
 msgid "Inverse cumulative Type-2 Gumbel distribution function Q"
-msgstr "Fonction Q cumulative inverse de distribution"
+msgstr "Fonction Q cumulative inverse de distribution de Gumbel de type-2"
 
 #: src/backend/gsl/functions.cpp:808
 #, kde-format
@@ -5928,16 +5851,14 @@ msgid "Probability density for a Poisson distribution"
 msgstr "Densité de probabilité pour une distribution de Poisson."
 
 #: src/backend/gsl/functions.cpp:809
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative Poisson distribution function P"
-msgstr "Fonction de distribution cumulative P"
+msgstr "Fonction P cumulative de distribution de Poisson"
 
 #: src/backend/gsl/functions.cpp:810
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative Poisson distribution function Q"
-msgstr "Fonction de distribution cumulative Q"
+msgstr "Fonction Q cumulative de distribution de Poisson"
 
 #: src/backend/gsl/functions.cpp:813
 #, kde-format
@@ -5950,16 +5871,14 @@ msgid "Probability density for a binomial distribution"
 msgstr "Densité de probabilité pour une distribution binomiale."
 
 #: src/backend/gsl/functions.cpp:817
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function P"
+#, kde-format
 msgid "Cumulative binomial distribution function P"
-msgstr "Fonction P cumulative de distribution par unité"
+msgstr "Fonction P cumulative de distribution binomiale"
 
 #: src/backend/gsl/functions.cpp:818
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function Q"
+#, kde-format
 msgid "Cumulative binomial distribution function Q"
-msgstr "Fonction Q cumulative de distribution par unité"
+msgstr "Fonction Q cumulative de distribution binomiale"
 
 #: src/backend/gsl/functions.cpp:819
 #, kde-format
@@ -5968,16 +5887,14 @@ msgstr ""
 "Densité de probabilité pour une distribution de puissance binomiale négative."
 
 #: src/backend/gsl/functions.cpp:820
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function P"
+#, kde-format
 msgid "Cumulative negative binomial distribution function P"
-msgstr "Fonction P cumulative de distribution par unité"
+msgstr "Fonction P cumulative négative de distribution binomiale"
 
 #: src/backend/gsl/functions.cpp:821
-#, fuzzy, kde-format
-#| msgid "Cumulative unit distribution function Q"
+#, kde-format
 msgid "Cumulative negative binomial distribution function Q"
-msgstr "Fonction Q cumulative de distribution par unité"
+msgstr "Fonction Q cumulative négative de distribution binomiale"
 
 #: src/backend/gsl/functions.cpp:824
 #, kde-format
@@ -5985,16 +5902,14 @@ msgid "Probability density for a Pascal distribution"
 msgstr "Densité de probabilité pour une distribution de Pascal."
 
 #: src/backend/gsl/functions.cpp:825
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative Pascal distribution function P"
-msgstr "Fonction de distribution cumulative P"
+msgstr "Fonction P cumulative de distribution de Pascal"
 
 #: src/backend/gsl/functions.cpp:826
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative Pascal distribution function Q"
-msgstr "Fonction de distribution cumulative Q"
+msgstr "Fonction Q cumulative de distribution de Pascal"
 
 #: src/backend/gsl/functions.cpp:829
 #, kde-format
@@ -6002,16 +5917,14 @@ msgid "Probability density for a geometric distribution"
 msgstr "Densité de probabilité pour une distribution géométrique."
 
 #: src/backend/gsl/functions.cpp:830
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative geometric distribution function P"
-msgstr "Fonction de distribution cumulative P"
+msgstr "Fonction P cumulative de distribution géométrique"
 
 #: src/backend/gsl/functions.cpp:831
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative geometric distribution function Q"
-msgstr "Fonction de distribution cumulative Q"
+msgstr "Fonction Q de distribution cumulative géométrique"
 
 #: src/backend/gsl/functions.cpp:834
 #, kde-format
@@ -6019,16 +5932,14 @@ msgid "Probability density for a hypergeometric distribution"
 msgstr "Densité de probabilité pour une distribution hypergéométrique."
 
 #: src/backend/gsl/functions.cpp:835
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative hypergeometric distribution function P"
-msgstr "Fonction de distribution cumulative P"
+msgstr "Fonction P de distribution cumulative hypergéométrique"
 
 #: src/backend/gsl/functions.cpp:836
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative hypergeometric distribution function Q"
-msgstr "Fonction de distribution cumulative Q"
+msgstr "Fonction Q de distribution cumulative hypergéométrique"
 
 #: src/backend/gsl/functions.cpp:839
 #, kde-format
@@ -6036,28 +5947,24 @@ msgid "Probability density for a logarithmic distribution"
 msgstr "Densité de probabilité pour une distribution logarithmique"
 
 #: src/backend/gsl/functions.cpp:843
-#, fuzzy, kde-format
-#| msgid "Probability density for a Landau distribution"
+#, kde-format
 msgid "Probability density for a triangular distribution"
-msgstr "Densité de probabilité pour une distribution de Landau."
+msgstr "Densité de probabilité pour une distribution triangulaire."
 
 #: src/backend/gsl/functions.cpp:844
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function P"
+#, kde-format
 msgid "Cumulative triangular distribution function P"
-msgstr "Fonction de distribution cumulative P"
+msgstr "Fonction P cumulative de distribution triangulaire"
 
 #: src/backend/gsl/functions.cpp:845
-#, fuzzy, kde-format
-#| msgid "Cumulative distribution function Q"
+#, kde-format
 msgid "Cumulative triangular distribution function Q"
-msgstr "Fonction de distribution cumulative Q"
+msgstr "Fonction Q cumulative de distribution triangulaire"
 
 #: src/backend/gsl/functions.cpp:846
-#, fuzzy, kde-format
-#| msgid "Probability density for a Landau distribution"
+#, kde-format
 msgid "p-th quantile for triangular distribution"
-msgstr "Densité de probabilité pour une distribution de Landau."
+msgstr "Quantile de rang p de distribution triangulaire"
 
 #: src/backend/gsl/functions.cpp:952 src/backend/gsl/functions.cpp:964
 #: src/backend/gsl/functions.cpp:978 src/backend/gsl/functions.cpp:990
@@ -6391,9 +6298,9 @@ msgstr "Circulaire"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:904
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1212
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1606
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:198
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:338
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:379
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:203
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:343
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:384
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:214
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:350
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:223
@@ -7635,13 +7542,13 @@ msgstr "%1 : définir l'opacité de ligne"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:100
 #: src/backend/worksheet/plots/AbstractPlot.cpp:128
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1338
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1352
 #, kde-format
 msgid "%1: set horizontal padding"
 msgstr "%1: définir le remplissage horizontal"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:107
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1364
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1378
 #, kde-format
 msgid "%1: set vertical padding"
 msgstr "%1: définir le remplissage vertical"
@@ -7685,8 +7592,8 @@ msgstr "Horizontal"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:259
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:57
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:53
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:890
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:894
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:904
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:908
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:158
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:52
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:28
@@ -7717,7 +7624,7 @@ msgstr "Orientation"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:488
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:628
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:687
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1437
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1442
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:235
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:233
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:248
@@ -8140,16 +8047,16 @@ msgstr "%1 : modifier la longueur de la couverture"
 msgid "%1: change rug offset"
 msgstr "%1 : modifier le décalage de la couverture"
 
-#: src/backend/worksheet/plots/cartesian/CartesianCoordinateSystem.cpp:54
+#: src/backend/worksheet/plots/cartesian/CartesianCoordinateSystem.cpp:57
 #, kde-format
 msgid "no info available"
 msgstr "Aucune information disponible."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:166
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5073
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5077
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:483
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:543
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:548
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:466
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:224
 #, kde-format
@@ -8171,6 +8078,8 @@ msgstr "Courbe en XY à partir d'une formule"
 #, kde-format
 msgid "Add a new xy-curve that is defined via a mathematical expression."
 msgstr ""
+"Ajouter une nouvelle courbe en x / y définie comme une expression "
+"mathématique"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:439
 #, kde-format
@@ -8178,6 +8087,8 @@ msgid ""
 "Add a new xy-curve that is defined as a function of other xy-curves (scaled, "
 "shifted, etc.)"
 msgstr ""
+"Ajouter une nouvelle courbe en x / y définie comme fonction des autres "
+"courbes en x / y  (Mise à l'échelle, décalée, etc.)"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:442
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:498
@@ -8578,7 +8489,7 @@ msgid "%1: load default theme"
 msgstr "%1 : charger le thème par défaut"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1729
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5385
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5389
 #: src/backend/worksheet/Worksheet.cpp:848
 #, kde-format
 msgid "%1: set theme"
@@ -8708,22 +8619,19 @@ msgid "%1: add Fourier filter curve"
 msgstr "%1 : ajouter une courbe de filtrage de Fourier"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1978
-#, fuzzy, kde-format
-#| msgid "Reduction of '%1'"
+#, kde-format
 msgid "%1: add function of '%2'"
-msgstr "Réduction de « %1 »"
+msgstr "%1: ajouter la fonction de « %2 »"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1979
-#, fuzzy, kde-format
-#| msgid "Reduction of '%1'"
+#, kde-format
 msgid "Function of '%1'"
-msgstr "Réduction de « %1 »"
+msgstr "Fonction de « %1 »"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1982
-#, fuzzy, kde-format
-#| msgid "%1: add fit curve"
+#, kde-format
 msgid "%1: add function curve"
-msgstr "%1 : ajouter une courbe d'ajustement"
+msgstr "%1 : ajouter une courbe de fonction"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2031
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1363
@@ -9680,10 +9588,9 @@ msgid "Model has no parameters!"
 msgstr "Le modèle ne possède aucun paramètre !"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2258
-#, fuzzy, kde-format
-#| msgid "Not sufficient weight data points provided."
+#, kde-format
 msgid "Not sufficient weight data points provided!"
-msgstr "Les points de données fournis n'ont pas des coefficients suffisant."
+msgstr "Trop peu de points de données de pondération ont été fournis !"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2335
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:374
@@ -9692,22 +9599,18 @@ msgid "No X data available!"
 msgstr "Aucun valeur en X n'est disponible !"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2342
-#, fuzzy, kde-format
-#| msgid ""
-#| "The number of data points (%1) must be greater than or equal to the "
-#| "number of parameters (%2)."
+#, kde-format
 msgid ""
 "The number of data points (%1) must be greater than or equal to the number "
 "of parameters (%2)!"
 msgstr ""
 "Le nombre de points de données (%1) doit être supérieur ou égal au nombre de "
-"paramètres (%2)."
+"paramètres (%2) !"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2349
-#, fuzzy, kde-format
-#| msgid "Fit model not specified."
+#, kde-format
 msgid "Fit model not specified!"
-msgstr "Modèle d'ajustement non spécifié."
+msgstr "Modèle d'ajustement non spécifié !"
 
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:85
 #, kde-format
@@ -9730,53 +9633,51 @@ msgstr ""
 "Fourier."
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:80
-#, fuzzy, kde-format
-#| msgid "%1: set equation"
+#, kde-format
 msgid "%1: set function"
-msgstr "%1 : définir l'équation"
+msgstr "%1 : définir une fonction"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:304
 #, kde-format
 msgid "First curve not valid"
-msgstr ""
+msgstr "Première courbe non valable"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:306
 #, kde-format
 msgid "xColumn of first curve not valid"
-msgstr ""
+msgstr "Colonne en X de la première courbe non valable"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:308
 #, kde-format
 msgid "yColumn of first curve not valid"
-msgstr ""
+msgstr "Colonne en Y de la première courbe non valable"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:310
 #, kde-format
 msgid "Number of x and y values do not match for the first curve"
 msgstr ""
+"Le nombre de valeurs en x et y ne correspond pas pour la première courbe."
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:323
 #, kde-format
 msgid "Curve '%1' not valid"
-msgstr ""
+msgstr "La courbe « %1 » est non valable."
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:325
-#, fuzzy, kde-format
-#| msgid "column mode invalid"
+#, kde-format
 msgid "xColumn of curve '%1' not valid"
-msgstr "Mode de colonne non valable"
+msgstr "Colonne en X de la courbe « %1 » non valable"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:327
-#, fuzzy, kde-format
-#| msgid "column mode invalid"
+#, kde-format
 msgid "yColumn of curve '%1' not valid"
-msgstr "Mode de colonne non valable"
+msgstr "Colonne en Y de la courbe « %1 » non valable"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:329
-#, fuzzy, kde-format
-#| msgid "Number of x and y data points must be equal."
+#, kde-format
 msgid "Number of x and y values do not match for curve '%1'"
-msgstr "Le nombre de points de données en x et y doit être égal."
+msgstr ""
+"Le nombre de valeurs en x et y ne correspond pas pour la courbe  «%1 »."
 
 #: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:72
 #, kde-format
@@ -9921,7 +9822,7 @@ msgstr "%1 : déverrouiller"
 #: src/kdefrontend/ui/datapickerimagewidget.ui:826
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:58
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:241
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:535
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:540
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:134
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:260
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:113
@@ -11017,10 +10918,9 @@ msgid "Reduce Data"
 msgstr "Réduire les données"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:566
-#, fuzzy, kde-format
-#| msgid "Log-Normal (Galton)"
+#, kde-format
 msgid "Log-normal"
-msgstr "Log-normal (Galton)"
+msgstr "Lognormal"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:616
 #, kde-format
@@ -11028,10 +10928,9 @@ msgid "Conditional Formatting"
 msgstr "Formatage conditionnel"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:645
-#, fuzzy, kde-format
-#| msgid "Beta Distribution"
+#, kde-format
 msgid "Fit Distribution"
-msgstr "Distribution bêta"
+msgstr "Ajuster à la distribution"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:659
 #, kde-format
@@ -11620,7 +11519,7 @@ msgstr "Sélectionnez une région en Y et l'agrandir"
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:359
 #: src/kdefrontend/MainWin.cpp:2435
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1426
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1431
 #, kde-format
 msgid "Cursor"
 msgstr "Curseur"
@@ -11693,7 +11592,7 @@ msgstr "Zone de tracé"
 #. i18n: ectx: attribute (title), widget (QWidget, tabLayout_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tabLayout)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:463
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:548
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:553
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:610
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:265
 #, kde-format
@@ -12223,8 +12122,8 @@ msgstr "Ajouter un nouveau conteneur de données au projet"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:65
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:616
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1272
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:996
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1158
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1001
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1163
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:42
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:180
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:88
@@ -12469,10 +12368,9 @@ msgid "MATLAB MAT file"
 msgstr "Fichier « MAT » de Matlab"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:136
-#, fuzzy, kde-format
-#| msgid "Copy Data"
+#, kde-format
 msgid "MCAP Data"
-msgstr "Copier les données"
+msgstr "Données « MCAP »"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:145
 #, kde-format
@@ -12851,6 +12749,8 @@ msgstr "Afficher l'ensemble de données suivant"
 #, kde-format
 msgid "Download the current dataset for preview and import"
 msgstr ""
+"Téléchargez l'ensemble des données actuelles pour afficher un aperçu et "
+"faire une importation"
 
 #. i18n: ectx: property (text), widget (QLabel, lCategories)
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:130
@@ -13678,7 +13578,7 @@ msgstr "%1 axes : modèle « %2 » chargé"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2047
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:523
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:728
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1839
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1853
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:781
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:378
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:562
@@ -13852,22 +13752,28 @@ msgstr ""
 #, kde-format
 msgid "Select to modify the properties of the symbol for the mean value."
 msgstr ""
+"Sélectionnez pour modifier les propriétés du symbole pour la valeur moyenne."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:102
 #, kde-format
 msgid "Select to modify the properties of the symbol for the median value."
 msgstr ""
+"Sélectionnez pour modifier les propriétés du symbole pour la valeur médiane."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:105
 #, kde-format
 msgid "Select to modify the properties of the symbol for the outlier values."
 msgstr ""
+"Sélectionnez pour modifier les propriétés du symbole pour les valeurs "
+"aberrantes."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:108
 #, kde-format
 msgid ""
 "Select to modify the properties of the symbol for the \"far out\" values."
 msgstr ""
+"Sélectionnez pour modifier les propriétés du symbole pour les valeurs « trop "
+"distantes »."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:111
 #, kde-format
@@ -13875,12 +13781,16 @@ msgid ""
 "Select to modify the properties of the symbol for all data values excluding "
 "the outlier and \"far out\" values."
 msgstr ""
+"Sélectionnez pour modifier les propriétés du symbole pour toutes les valeurs "
+"de données à l'exclusion des valeurs aberrantes et « trop distantes »."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:114
 #, kde-format
 msgid ""
 "Select to modify the properties of the symbol for the ends of the whiskers."
 msgstr ""
+"Sélectionnez pour modifier les propriétés du symbole pour les extrémités des "
+"moustaches."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:117
 #, kde-format
@@ -13888,6 +13798,9 @@ msgid ""
 "Activate to randomize the positions of the symbols (\"jittering\"), helpful "
 "for dense and overlapping data points."
 msgstr ""
+"Activez pour géné er de façon aléatoireles positions des symboles "
+"(« scintillement »), ce qui est utile pour les points de données denses et "
+"qui se chevauchent."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:726
 #, kde-format
@@ -13899,36 +13812,36 @@ msgstr "%1 tracés en boîte : modèle « %2 » chargé"
 msgid "File Browser"
 msgstr "Navigateur de fichiers"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:228
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:229
 #, kde-format
 msgid "Save current plot area definition as template"
 msgstr "Enregistrer la définition courante de la zone de tracé comme modèle"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:605
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:608
 #, kde-format
 msgid "%1-Ranges:"
 msgstr "%1 - Intervalles :"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:607
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:610
 #, kde-format
 msgid "%1-Range:"
 msgstr "%1 - Intervalles :"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:631
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:634
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:209
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:53
 #, kde-format
 msgid "Numeric"
 msgstr "Numérique"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:777
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:780
 #, kde-format
 msgid "Plot Ranges:"
 msgstr "Intervalles du tracé :"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:779
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:782
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:262
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:186
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:90
@@ -13955,22 +13868,22 @@ msgstr "Intervalles du tracé :"
 msgid "Plot Range:"
 msgstr "Intervalle du tracé :"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:870
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:884
 #, kde-format
 msgid "Free"
 msgstr "Libre"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:871
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:885
 #, kde-format
 msgid "Last Points"
 msgstr "Derniers points"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:872
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:886
 #, kde-format
 msgid "First Points"
 msgstr "Premiers points"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:875
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:889
 #, kde-format
 msgid ""
 "Data Range:<ul><li>Free - full data range is plotted</li><li>Last Points - "
@@ -13982,49 +13895,49 @@ msgstr ""
 "tracé,</li><li>Premiers points - Un nombre donné de premiers points est "
 "tracé.</li></ul>"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:884
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:898
 #, kde-format
 msgid "If checked, automatically extend the plot range to nice values"
 msgstr ""
 "Si cette option est sélectionnée, étend automatiquement la plage de tracé à "
 "de valeurs agréables."
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:889
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:893
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:903
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:907
 #, kde-format
 msgid "Simple"
 msgstr "Simple"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:891
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:895
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:905
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:909
 #, kde-format
 msgid "Sloped"
 msgstr "Incliné"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1150
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1159
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1164
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1173
 #, kde-format
 msgid "%1 range %2 is used in plot range %3. "
 msgstr "L'intervalle %1 en %2 est utilisé pour l'intervalle %3 de tracé."
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1151
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1160
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1212
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1219
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1165
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1174
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1226
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1233
 #, kde-format
 msgid "Really remove it?"
 msgstr "Voulez-vous vraiment le supprimer ?"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1212
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1219
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1226
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1233
 #, kde-format
 msgid "Plot range %1 is used by element \"%2\". "
 msgstr "L'intervalle %1 de tracé est utilisé par l'élément %2."
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1310
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:561
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1324
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:566
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:761
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:342
 #, kde-format
@@ -14033,8 +13946,8 @@ msgstr "Horizontale :"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVertical)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1311
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:862
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1325
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:867
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:716
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:428
 #, kde-format
@@ -14043,8 +13956,8 @@ msgstr "Verticale :"
 
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1313
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:797
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1327
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:802
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:709
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:414
 #, kde-format
@@ -14053,26 +13966,26 @@ msgstr "Gauche :"
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1314
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:804
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1328
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:809
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:658
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:407
 #, kde-format
 msgid "Top:"
 msgstr "Haut : "
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1646
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1660
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
 msgstr "Sélectionnez le modèle de fichier d'enregistrement"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1648
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1662
 #, kde-format
 msgid "Labplot Plot Templates (*%1)"
 msgstr "Modèles de tracés LabPlot (*%1)"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1837
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1851
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr "%1 tracés cartésiens : modèle « %2 » chargé"
@@ -14359,17 +14272,14 @@ msgid "%1 matrices: template \"%2\" loaded"
 msgstr "%1 matrices : modèle « %2 » chargé"
 
 #: src/kdefrontend/dockwidgets/ProjectDock.cpp:28
-#, fuzzy, kde-format
-#| msgid ""
-#| "If checked, the state (position and geometry) of the docks is saved in "
-#| "the project file and restored on project load."
+#, kde-format
 msgid ""
 "If checked, the state of the default application docks is saved in the "
 "project file and restored on project load."
 msgstr ""
-"Si cette option est sélectionnée, l'état (position et géométrie) des "
-"panneaux est enregistré dans le fichier du projet et restauré au chargement "
-"du projet."
+"Si cette option est sélectionnée, l'état des panneaux par défaut pour "
+"l'application est enregistré dans le fichier du projet et restauré au "
+"chargement du projet."
 
 #: src/kdefrontend/dockwidgets/ProjectDock.cpp:33
 #, kde-format
@@ -14827,17 +14737,13 @@ msgid "Fourier transformation status: %1"
 msgstr "État de la transformation de Fourier : %1"
 
 #: src/kdefrontend/dockwidgets/XYFunctionCurveDock.cpp:130
-#, fuzzy, kde-format
-#| msgid ""
-#| "The column \"%1\"\n"
-#| "is not available anymore. It will be automatically used once it is "
-#| "created again."
+#, kde-format
 msgid ""
 "The curve \"%1\"\n"
 "is not available anymore. It will be automatically used once it is created "
 "again."
 msgstr ""
-"La colonne « %1 »\n"
+"La courbe « %1 »\n"
 "n'est plus disponible. Elle sera automatiquement utilisée une fois créée à "
 "nouveau."
 
@@ -14998,12 +14904,10 @@ msgid "Properties: XY-Equation"
 msgstr "Propriétés : équation en XY"
 
 #: src/kdefrontend/GuiObserver.cpp:291
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Datapicker Curve"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Function Curve"
-msgstr "Propriétés : différentiation"
+msgstr "Propriétés : courbe de fonction"
 
 #: src/kdefrontend/GuiObserver.cpp:296
 #, kde-format
@@ -15648,12 +15552,11 @@ msgid "Garvit Khatri"
 msgstr "Garvit Khatri"
 
 #: src/kdefrontend/LabPlot.cpp:112
-#, fuzzy, kde-format
-#| msgctxt "@info:credit"
-#| msgid "Porting LabPlot2 to KF5 and Integration with Cantor"
+#, kde-format
 msgctxt "@info:credit"
 msgid "Porting LabPlot to KF5 and Integration with Cantor"
-msgstr "Portage de LabPlot2 vers « KF5 » et intégration avec Cantor"
+msgstr ""
+"Portage de LabPlot vers l'environnement « KF5 » et intégration avec Cantor"
 
 #: src/kdefrontend/LabPlot.cpp:115
 #, kde-format
@@ -16257,7 +16160,7 @@ msgstr "Vous pouvez trouver le projet partagé à : <a href=\"%1\">%1</a>"
 #: src/kdefrontend/MainWin.cpp:2666
 #, kde-format
 msgid "Running Kaggle CLI tool failed"
-msgstr ""
+msgstr "Il a été impossible d'exécuter l'outil « Kaggle CLI »"
 
 #: src/kdefrontend/MainWin.cpp:2667
 #, kde-format
@@ -16265,6 +16168,9 @@ msgid ""
 "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
 "\">\"How to Use Kaggle\"</a> to setup the Kaggle CLI tool."
 msgstr ""
+"Veuillez suivre les instructions sur <a href=\"https://www.kaggle.com/docs/"
+"api\"> « Comment utiliser Kaggle » </a> pour configurer l'outil « Kaggle "
+"CLI »."
 
 #: src/kdefrontend/MainWin.cpp:2730
 #, kde-format
@@ -16629,13 +16535,7 @@ msgstr ""
 "Uncertainty in Measurement)</a>"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:260
-#, fuzzy, kde-format
-#| msgid ""
-#| "Save the state (position and geometry) of the docks in the project "
-#| "file. \n"
-#| "Determines the default behaviour for new projects. \n"
-#| "The setting can be changed for every project separately in the project "
-#| "properties."
+#, kde-format
 msgid ""
 "Save the state (position and geometry) of the docks in the project file. \n"
 "Determines the default behavior for new projects. \n"
@@ -16649,15 +16549,7 @@ msgstr ""
 "propriétés du projet."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:267
-#, fuzzy, kde-format
-#| msgid ""
-#| "Save the results of the calculations in the analysis curves in the "
-#| "project file. \n"
-#| "Uncheck this option to reduce the size of the project file at costs of "
-#| "the longer project load times. \n"
-#| "Determines the default behaviour for new projects. \n"
-#| "The setting can be changed for every project separately in the project "
-#| "properties."
+#, kde-format
 msgid ""
 "Save the results of the calculations in the analysis curves in the project "
 "file. \n"
@@ -16690,10 +16582,7 @@ msgstr ""
 "peut avoir un impact négatif sur les performances."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:276
-#, fuzzy, kde-format
-#| msgid ""
-#| "Performance trace - helpful to analyse performance relevant aspects and "
-#| "bottlenecks."
+#, kde-format
 msgid ""
 "Performance trace - helpful to analyze performance relevant aspects and "
 "bottlenecks."
@@ -17265,10 +17154,9 @@ msgid "Excel 2007+ (*.xlsx)"
 msgstr "Excel 2007+ (*.xlsx)"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:415
-#, fuzzy, kde-format
-#| msgid "DBC file (*.dbc)"
+#, kde-format
 msgid "MCAP Files (*.mcap)"
-msgstr "Fichier « DBC » (*.dbc)"
+msgstr "Fichier « MCAP » (*.mcap)"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:418
 #, kde-format
@@ -17345,7 +17233,7 @@ msgstr "&Format"
 #. i18n: ectx: attribute (title), widget (QWidget, tabBackground)
 #: src/kdefrontend/spreadsheet/FormattingHeatmapDialog.cpp:61
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1432
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1395
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1400
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:471
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:483
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:219
@@ -17525,10 +17413,9 @@ msgid "Fourier Filter of '%1'"
 msgstr "Filtre de Fourier de « %1 »"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:766
-#, fuzzy, kde-format
-#| msgid "Probability Density"
+#, kde-format
 msgid "Probability Density of '%1'"
-msgstr "Densité de probabilité"
+msgstr "Densité de probabilité de « %1 »"
 
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:966
@@ -18146,7 +18033,7 @@ msgstr "Type d'erreur en Y :"
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:157
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:185
 #: src/kdefrontend/ui/dockwidgets/cantorworksheetdock.ui:65
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:437
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:442
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:288
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:17
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:267
@@ -18197,7 +18084,7 @@ msgstr "Commentaire :"
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:101
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:67
 #: src/kdefrontend/ui/dockwidgets/cantorworksheetdock.ui:33
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:447
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:452
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:117
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:50
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:208
@@ -18275,8 +18162,8 @@ msgstr "Barres d'erreurs"
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:125
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:135
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:145
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1006
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1131
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1011
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1136
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:78
 #: src/kdefrontend/ui/labelwidget.ui:619 src/kdefrontend/ui/symbolwidget.ui:45
 #: src/kdefrontend/ui/symbolwidget.ui:184
@@ -18428,15 +18315,15 @@ msgstr "Taille : "
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:873
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:895
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:920
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:577
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:611
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:666
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:688
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:710
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:768
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:827
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:849
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1345
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:582
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:616
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:671
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:693
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:715
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:773
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:832
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:854
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1350
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:62
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:101
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:153
@@ -18742,7 +18629,7 @@ msgstr "Emplacement relatif"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1498
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:59
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:111
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1208
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1213
 #: src/kdefrontend/ui/dockwidgets/errorbarwidget.ui:90
 #: src/kdefrontend/ui/dockwidgets/errorbarwidget.ui:228
 #: src/kdefrontend/ui/dockwidgets/errorbarwidget.ui:245
@@ -20117,8 +20004,8 @@ msgstr "Format :"
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbValuesOpacity)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1396
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:184
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1013
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1148
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1018
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1153
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:462
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:108
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:153
@@ -20165,8 +20052,8 @@ msgstr "Grille principale"
 #. i18n: ectx: property (text), widget (QLabel, lRugEnabled)
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:42
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:794
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1035
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1042
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1040
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1047
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:491
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:336
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:611
@@ -20260,7 +20147,7 @@ msgstr "Barres"
 #. i18n: ectx: attribute (title), widget (QWidget, tabBorder)
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:271
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:449
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1329
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1334
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:586
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:557
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:303
@@ -20361,7 +20248,7 @@ msgstr "Loin"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:557
 #, kde-format
 msgid "Data (excl. Outlier and Far Out)"
-msgstr ""
+msgstr "Données (Sauf les valeurs aberrantes et trop éloignées)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbWhiskerEnd)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:564
@@ -20415,7 +20302,7 @@ msgstr "Tracé de la couverture"
 #. i18n: ectx: property (text), widget (QLabel, lRugWidth)
 #. i18n: ectx: property (text), widget (QLabel, lWidth)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:837
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:554
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:559
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:498
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:69
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:404
@@ -20452,7 +20339,7 @@ msgid "Y Range"
 msgstr "Intervalle en Y"
 
 #. i18n: ectx: property (toolTip), widget (QTableWidget, twYRanges)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:173
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:178
 #, kde-format
 msgid "list of y ranges"
 msgstr "Liste des intervalles en Y"
@@ -20462,8 +20349,8 @@ msgstr "Liste des intervalles en Y"
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #. i18n: ectx: property (text), widget (QLabel, lValuesFormat)
 #. i18n: ectx: property (text), widget (QLabel, lFormat_2)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:203
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:343
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:208
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:348
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:78
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:201
 #: src/kdefrontend/ui/dockwidgets/errorbarwidget.ui:137
@@ -20476,24 +20363,24 @@ msgstr "Format"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twYRanges)
 #. i18n: ectx: property (text), widget (QTableWidget, twXRanges)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:208
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:348
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:213
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:353
 #, kde-format
 msgid "Start"
 msgstr "Début"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twYRanges)
 #. i18n: ectx: property (text), widget (QTableWidget, twXRanges)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:213
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:353
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:218
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:358
 #, kde-format
 msgid "End"
 msgstr "Fin"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twYRanges)
 #. i18n: ectx: property (text), widget (QTableWidget, twXRanges)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:218
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:358
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:223
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:363
 #, kde-format
 msgid "Scale"
 msgstr "Échelle"
@@ -20501,7 +20388,7 @@ msgstr "Échelle"
 #. i18n: ectx: property (text), widget (QLabel, lRangePoints)
 #. i18n: ectx: property (text), widget (QLabel, lPoints)
 #. i18n: ectx: property (text), widget (QLabel, lNumber)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:242
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:247
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:17
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:424
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:496
@@ -20510,13 +20397,13 @@ msgid "Points:"
 msgstr "Points :"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbAddXRange)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:267
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:272
 #, kde-format
 msgid "<html><head/><body><p>Add a new x range</p></body></html>"
 msgstr "<html><head/><body><p>Ajouter un nouvel intervalle</p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbRemoveXRange)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:278
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:283
 #, kde-format
 msgid "Remove the current selected x range"
 msgstr "Supprimer l'intervalle courant des X sélectionnés"
@@ -20525,52 +20412,52 @@ msgstr "Supprimer l'intervalle courant des X sélectionnés"
 #. i18n: ectx: property (text), widget (QToolButton, tbAddPlotRange)
 #. i18n: ectx: property (text), widget (QToolButton, tbRemovePlotRange)
 #. i18n: ectx: property (text), widget (QToolButton, bAddVariable)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:281
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:410
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:424
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:286
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:415
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:429
 #: src/kdefrontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:264
 #, kde-format
 msgid "..."
 msgstr "..."
 
 #. i18n: ectx: property (text), widget (QLabel, lRangeType)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:297
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:302
 #, kde-format
 msgid "Data Range:"
 msgstr "Intervalle de données :"
 
 #. i18n: ectx: property (toolTip), widget (QTableWidget, twXRanges)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:310
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:315
 #, kde-format
 msgid "List of x ranges"
 msgstr "Liste des intervalles en X"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbAddPlotRange)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:407
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:412
 #, kde-format
 msgid "Add new plot range"
 msgstr "Ajouter un nouvel intervalle de tracé"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbRemovePlotRange)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:421
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:426
 #, kde-format
 msgid "Remove current plot range"
 msgstr "Supprimer l'intervalle courant de tracé"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbAddYRange)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:488
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:493
 #, kde-format
 msgid "Add a new y range"
 msgstr "Ajouter un nouvel intervalle en Y"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbRemoveYRange)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:499
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:504
 #, kde-format
 msgid "remove the current selected y range"
 msgstr "Supprimer l'intervalle courant des Y sélectionnés"
 
 #. i18n: ectx: property (text), widget (QLabel, lNiceExtend)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:512
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:517
 #, kde-format
 msgid "Extend:"
 msgstr "Extension :"
@@ -20593,15 +20480,15 @@ msgstr "Extension :"
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbLayoutHorizontalSpacing)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbLayoutTopMargin)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbLayoutVerticalSpacing)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:580
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:614
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:669
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:691
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:713
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:771
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:830
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:852
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1348
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:585
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:619
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:674
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:696
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:718
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:776
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:835
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:857
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1353
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:156
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:195
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:252
@@ -20630,7 +20517,7 @@ msgstr " cm"
 
 #. i18n: ectx: property (text), widget (QLabel, lGeometry)
 #. i18n: ectx: property (text), widget (QLabel, lPosition)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:595
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:600
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:392
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:59
 #: src/kdefrontend/ui/labelwidget.ui:645
@@ -20639,20 +20526,20 @@ msgid "Geometry"
 msgstr "Géométrie"
 
 #. i18n: ectx: property (text), widget (QLabel, lPadding)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:629
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:634
 #, kde-format
 msgid "Padding"
 msgstr "Remplissage"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:643
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:648
 #, kde-format
 msgid "Symmetric:"
 msgstr "Symétrique :"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVerticalDown)
 #. i18n: ectx: property (text), widget (QLabel, lBottomMargin)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:650
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:655
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:832
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:349
 #, kde-format
@@ -20661,7 +20548,7 @@ msgstr "En bas :"
 
 #. i18n: ectx: property (text), widget (QLabel, lRightMargin)
 #. i18n: ectx: property (text), widget (QLabel, lHeight)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:752
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:757
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:523
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:33
 #, kde-format
@@ -20670,7 +20557,7 @@ msgstr "Hauteur :"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontalRight)
 #. i18n: ectx: property (text), widget (QLabel, lRightMargin)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:811
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:816
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:768
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:369
 #, kde-format
@@ -20678,7 +20565,7 @@ msgid "Right:"
 msgstr "À droite :"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabScales)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:870
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:875
 #, kde-format
 msgid "Range Breaks"
 msgstr "Interruptions d'échelle"
@@ -20687,8 +20574,8 @@ msgstr "Interruptions d'échelle"
 #. i18n: ectx: property (text), widget (QLabel, lToDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lYBreakEnd)
 #. i18n: ectx: property (text), widget (QLabel, lXBreakEnd)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:876
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:912
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:881
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:917
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:27
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:144
 #, kde-format
@@ -20697,30 +20584,30 @@ msgstr "Vers :"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bAddXBreak)
 #. i18n: ectx: property (toolTip), widget (QPushButton, bAddYBreak)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:966
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1079
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:971
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1084
 #, kde-format
 msgid "Add new scale breaking"
 msgstr "Ajouter une nouvelle interruption d'échelle"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bRemoveXBreak)
 #. i18n: ectx: property (toolTip), widget (QPushButton, bRemoveYBreak)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:976
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1089
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:981
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1094
 #, kde-format
 msgid "Remove scale breaking"
 msgstr "Supprimer l'interruption d'échelle"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbXBreak)
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbYBreak)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:986
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1099
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:991
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1104
 #, kde-format
 msgid "Current scale breaking"
 msgstr "interruption d'échelle courante"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1028
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1033
 #, kde-format
 msgid "Y-Range"
 msgstr "Intervalle en Y"
@@ -20730,8 +20617,8 @@ msgstr "Intervalle en Y"
 #. i18n: ectx: property (text), widget (QLabel, lFromDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lXBreakStart)
 #. i18n: ectx: property (text), widget (QLabel, lYBreakStart)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1109
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1165
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1114
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1170
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:60
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:107
 #, kde-format
@@ -20739,19 +20626,19 @@ msgid "From:"
 msgstr "De :"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1121
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1126
 #, kde-format
 msgid "X-Range"
 msgstr "Intervalle en X"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPlotArea)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1202
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1207
 #, kde-format
 msgid "Area"
 msgstr "Zone"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderCornerRadius)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1402
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1407
 #, kde-format
 msgid "Corner Radius:"
 msgstr "Rayon de coin :"
@@ -22615,7 +22502,7 @@ msgstr "Kaggle"
 #: src/kdefrontend/ui/settingsdatasetspage.ui:46
 #, kde-format
 msgid "CLI Path:"
-msgstr ""
+msgstr "Emplacement CLI :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/kdefrontend/ui/settingsdatasetspage.ui:66
@@ -23018,29 +22905,27 @@ msgstr "Exporter l'en-tête verticale :"
 
 #. i18n: ectx: property (title), widget (QGroupBox, compressionGroup)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:192
-#, fuzzy, kde-format
-#| msgid "Compression: %1"
+#, kde-format
 msgid "Compression"
-msgstr "Compression : %1"
+msgstr "Compression"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbLZ4)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:205
 #, kde-format
 msgid "LZ4"
-msgstr ""
+msgstr "LZ4"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbZSTD)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:212
 #, kde-format
 msgid "ZSTD"
-msgstr ""
+msgstr "ZSTD"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:222
-#, fuzzy, kde-format
-#| msgid "Compression Level: %1"
+#, kde-format
 msgid "Compression Level"
-msgstr "Niveau de compression : %1"
+msgstr "Niveau de compression"
 
 #. i18n: ectx: property (text), widget (QLabel, lExportToFITS)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:232
@@ -24008,11 +23893,7 @@ msgstr ""
 "langage à balises « Markdown ».</li></ul>"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:224
-#, fuzzy, kde-format
-#| msgid ""
-#| "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
-#| "li><li>LaTeX - text setting using LaTeX, installation of LaTeX required</"
-#| "li><li>Markdown - text setting using Markdown markup language</li></ul>"
+#, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
 "li><li>LaTeX - text setting using LaTeX, installation of LaTeX required</"
@@ -24021,8 +23902,7 @@ msgstr ""
 "Mode de configuration du texte : <ul><li>Texte - Configuration du texte par "
 "utilisation du format « Texte Riche » (RTF),</li><li>LaTeX - Configuration "
 "du texte par utilisation du format « LaTeX ». L'installation de « LaTeX » "
-"est nécessaire,</li><li>Markdown - Configuration du texte par utilisation du "
-"langage à balises « Markdown ».</li></ul>"
+"est nécessaire,</li></ul>"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:922
 #: src/kdefrontend/widgets/LabelWidget.cpp:948
