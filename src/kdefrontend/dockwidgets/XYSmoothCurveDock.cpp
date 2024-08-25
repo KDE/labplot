@@ -10,8 +10,7 @@
 */
 
 #include "XYSmoothCurveDock.h"
-#include "backend/core/AspectTreeModel.h"
-#include "backend/core/Project.h"
+#include "backend/core/column/Column.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
@@ -42,17 +41,14 @@ XYSmoothCurveDock::XYSmoothCurveDock(QWidget* parent)
 void XYSmoothCurveDock::setupGeneral() {
 	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
-	m_leName = uiGeneralTab.leName;
-	m_teComment = uiGeneralTab.teComment;
-	m_teComment->setFixedHeight(1.2 * m_leName->height());
+	setPlotRangeCombobox(uiGeneralTab.cbPlotRanges);
+	setBaseWidgets(uiGeneralTab.leName, uiGeneralTab.teComment, uiGeneralTab.pbRecalculate, uiGeneralTab.cbDataSourceType);
+	setVisibilityWidgets(uiGeneralTab.chkVisible, uiGeneralTab.chkLegendVisible);
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
 	gridLayout->setHorizontalSpacing(2);
 	gridLayout->setVerticalSpacing(2);
-
-	uiGeneralTab.cbDataSourceType->addItem(i18n("Spreadsheet"));
-	uiGeneralTab.cbDataSourceType->addItem(i18n("XY-Curve"));
 
 	cbDataSourceCurve = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbDataSourceCurve, 5, 2, 1, 3);
@@ -73,16 +69,11 @@ void XYSmoothCurveDock::setupGeneral() {
 	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
 	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
 
-	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
-
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
-	layout->setMargin(0);
+	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
 
 	// Slots
-	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYSmoothCurveDock::nameChanged);
-	connect(uiGeneralTab.teComment, &QTextEdit::textChanged, this, &XYSmoothCurveDock::commentChanged);
-	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYSmoothCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYSmoothCurveDock::dataSourceTypeChanged);
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYSmoothCurveDock::autoRangeChanged);
 	connect(uiGeneralTab.leMin, &QLineEdit::textChanged, this, &XYSmoothCurveDock::xRangeMinChanged);
@@ -99,7 +90,6 @@ void XYSmoothCurveDock::setupGeneral() {
 	connect(uiGeneralTab.sbLeftValue, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYSmoothCurveDock::valueChanged);
 	connect(uiGeneralTab.sbRightValue, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYSmoothCurveDock::valueChanged);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYSmoothCurveDock::recalculateClicked);
-	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYSmoothCurveDock::plotRangeChanged);
 
 	connect(cbDataSourceCurve, &TreeViewComboBox::currentModelIndexChanged, this, &XYSmoothCurveDock::dataSourceCurveChanged);
 	connect(cbXDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYSmoothCurveDock::xDataColumnChanged);
@@ -107,27 +97,6 @@ void XYSmoothCurveDock::setupGeneral() {
 }
 
 void XYSmoothCurveDock::initGeneralTab() {
-	DEBUG(Q_FUNC_INFO);
-
-	// if there are more than one curve in the list, disable the tab "general"
-	if (m_curvesList.size() == 1) {
-		uiGeneralTab.lName->setEnabled(true);
-		uiGeneralTab.leName->setEnabled(true);
-		uiGeneralTab.lComment->setEnabled(true);
-		uiGeneralTab.teComment->setEnabled(true);
-
-		uiGeneralTab.leName->setText(m_curve->name());
-		uiGeneralTab.teComment->setText(m_curve->comment());
-	} else {
-		uiGeneralTab.lName->setEnabled(false);
-		uiGeneralTab.leName->setEnabled(false);
-		uiGeneralTab.lComment->setEnabled(false);
-		uiGeneralTab.teComment->setEnabled(false);
-
-		uiGeneralTab.leName->setText(QString());
-		uiGeneralTab.teComment->setText(QString());
-	}
-
 	// show the properties of the first curve
 	// data source
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_smoothCurve->dataSourceType()));
@@ -178,40 +147,28 @@ void XYSmoothCurveDock::initGeneralTab() {
 	valueChanged();
 	this->showSmoothResult();
 
+	uiGeneralTab.chkLegendVisible->setChecked(m_curve->legendVisible());
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
 	// Slots
-	connect(m_smoothCurve, &XYSmoothCurve::aspectDescriptionChanged, this, &XYSmoothCurveDock::aspectDescriptionChanged);
 	connect(m_smoothCurve, &XYSmoothCurve::dataSourceTypeChanged, this, &XYSmoothCurveDock::curveDataSourceTypeChanged);
 	connect(m_smoothCurve, &XYSmoothCurve::dataSourceCurveChanged, this, &XYSmoothCurveDock::curveDataSourceCurveChanged);
 	connect(m_smoothCurve, &XYSmoothCurve::xDataColumnChanged, this, &XYSmoothCurveDock::curveXDataColumnChanged);
 	connect(m_smoothCurve, &XYSmoothCurve::yDataColumnChanged, this, &XYSmoothCurveDock::curveYDataColumnChanged);
 	connect(m_smoothCurve, &XYSmoothCurve::smoothDataChanged, this, &XYSmoothCurveDock::curveSmoothDataChanged);
 	connect(m_smoothCurve, &XYSmoothCurve::sourceDataChanged, this, &XYSmoothCurveDock::enableRecalculate);
-	connect(m_smoothCurve, &WorksheetElement::plotRangeListChanged, this, &XYSmoothCurveDock::updatePlotRanges);
-	connect(m_smoothCurve, &WorksheetElement::visibleChanged, this, &XYSmoothCurveDock::curveVisibilityChanged);
-}
-
-void XYSmoothCurveDock::setModel() {
-	auto list = defaultColumnTopLevelClasses();
-	list.append(AspectType::XYFitCurve);
-
-	XYAnalysisCurveDock::setModel(list);
 }
 
 /*!
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
 void XYSmoothCurveDock::setCurves(QList<XYCurve*> list) {
-	DEBUG(Q_FUNC_INFO);
-
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_curvesList = list;
 	m_curve = list.first();
 	setAspects(list);
+	setAnalysisCurves(list);
 	m_smoothCurve = static_cast<XYSmoothCurve*>(m_curve);
-	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
-	this->setModel();
 	m_smoothData = m_smoothCurve->smoothData();
 
 	const auto numberLocale = QLocale();
@@ -222,17 +179,8 @@ void XYSmoothCurveDock::setCurves(QList<XYCurve*> list) {
 	initGeneralTab();
 	initTabs();
 	setSymbols(list);
-	m_initializing = false;
 
-	updatePlotRanges();
-
-	// hide the "skip gaps" option after the curves were set
-	ui.lLineSkipGaps->hide();
-	ui.chkLineSkipGaps->hide();
-}
-
-void XYSmoothCurveDock::updatePlotRanges() {
-	updatePlotRangeList(uiGeneralTab.cbPlotRanges);
+	updatePlotRangeList();
 }
 
 //*************************************************************
@@ -260,21 +208,14 @@ void XYSmoothCurveDock::dataSourceTypeChanged(int index) {
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYSmoothCurve*>(curve)->setDataSourceType(type);
-}
 
-void XYSmoothCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
-	for (auto* curve : m_curvesList)
-		static_cast<XYSmoothCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
+	enableRecalculate();
 }
 
 void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-
 	for (auto* curve : m_curvesList)
 		static_cast<XYSmoothCurve*>(curve)->setXDataColumn(column);
 
@@ -286,47 +227,19 @@ void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
 			uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 		}
 
-		unsigned int n = 0;
-		for (int row = 0; row < column->rowCount(); row++) {
-			if (column->isMasked(row))
-				continue;
-
-			switch (column->columnMode()) {
-			case AbstractColumn::ColumnMode::Double:
-			case AbstractColumn::ColumnMode::Integer:
-			case AbstractColumn::ColumnMode::BigInt:
-				if (!std::isnan(column->valueAt(row)))
-					n++;
-				break;
-			case AbstractColumn::ColumnMode::DateTime:
-			case AbstractColumn::ColumnMode::Month:
-			case AbstractColumn::ColumnMode::Day:
-				n++;
-				break;
-			case AbstractColumn::ColumnMode::Text:
-				break;
-			}
-		}
-
-		DEBUG("	Set maximum points to " << n)
-		// set maximum of sbPoints to number of columns
-		uiGeneralTab.sbPoints->setMaximum((int)n);
+		updateSettings(column);
 	}
 
-	cbXDataColumn->useCurrentIndexText(true);
-	cbXDataColumn->setInvalid(false);
+	enableRecalculate();
 }
 
-void XYSmoothCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
+void XYSmoothCurveDock::updateSettings(const AbstractColumn* column) {
+	if (!column)
+		return;
 
-	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
-
-	for (auto* curve : m_curvesList)
-		static_cast<XYSmoothCurve*>(curve)->setYDataColumn(column);
-
-	cbYDataColumn->useCurrentIndexText(true);
-	cbYDataColumn->setInvalid(false);
+	// set maximum of sbPoints to the number of valid rows in the data column for x
+	const auto& statistics = static_cast<const Column*>(column)->statistics();
+	uiGeneralTab.sbPoints->setMaximum(statistics.size);
 }
 
 void XYSmoothCurveDock::autoRangeChanged() {
@@ -376,14 +289,14 @@ void XYSmoothCurveDock::xRangeMinDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
 	m_smoothData.xRange.first() = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYSmoothCurveDock::xRangeMaxDateTimeChanged(qint64 value) {
 	CONDITIONAL_LOCK_RETURN;
 
 	m_smoothData.xRange.last() = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	enableRecalculate();
 }
 
 void XYSmoothCurveDock::typeChanged(int index) {
@@ -500,74 +413,21 @@ void XYSmoothCurveDock::recalculateClicked() {
 	QApplication::restoreOverrideCursor();
 }
 
-void XYSmoothCurveDock::enableRecalculate() const {
-	CONDITIONAL_RETURN_NO_LOCK;
-
-	// no smoothing possible without the x- and y-data
-	bool hasSourceData = false;
-	if (m_smoothCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
-		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-		hasSourceData = (aspectX && aspectY);
-		if (aspectX) {
-			cbXDataColumn->useCurrentIndexText(true);
-			cbXDataColumn->setInvalid(false);
-		}
-		if (aspectY) {
-			cbYDataColumn->useCurrentIndexText(true);
-			cbYDataColumn->setInvalid(false);
-		}
-	} else {
-		hasSourceData = (m_smoothCurve->dataSourceCurve() != nullptr);
-	}
-
-	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);
-}
-
 /*!
  * show the result and details of the smooth
  */
 void XYSmoothCurveDock::showSmoothResult() {
-	showResult(m_smoothCurve, uiGeneralTab.teResult, uiGeneralTab.pbRecalculate);
+	showResult(m_smoothCurve, uiGeneralTab.teResult);
 }
 
 //*************************************************************
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
 // General-Tab
-void XYSmoothCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	CONDITIONAL_LOCK_RETURN;
-	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
-}
-
-void XYSmoothCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	CONDITIONAL_LOCK_RETURN;
-	cbDataSourceCurve->setAspect(curve);
-}
-
-void XYSmoothCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	CONDITIONAL_LOCK_RETURN;
-	cbXDataColumn->setColumn(column, m_smoothCurve->xDataColumnPath());
-}
-
-void XYSmoothCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	CONDITIONAL_LOCK_RETURN;
-	cbYDataColumn->setColumn(column, m_smoothCurve->yDataColumnPath());
-}
-
 void XYSmoothCurveDock::curveSmoothDataChanged(const XYSmoothCurve::SmoothData& smoothData) {
 	CONDITIONAL_LOCK_RETURN;
 	m_smoothData = smoothData;
 	uiGeneralTab.cbType->setCurrentIndex(m_smoothData.type);
 
 	this->showSmoothResult();
-}
-
-void XYSmoothCurveDock::dataChanged() {
-	this->enableRecalculate();
-}
-
-void XYSmoothCurveDock::curveVisibilityChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	uiGeneralTab.chkVisible->setChecked(on);
 }

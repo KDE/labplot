@@ -3,7 +3,7 @@
 	Project          : LabPlot
 	Description      : widget for curve properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -19,8 +19,8 @@
 #include "ui_xycurvedock.h"
 #include "ui_xycurvedockgeneraltab.h"
 
-class AspectTreeModel;
 class BackgroundWidget;
+class ErrorBarWidget;
 class LineWidget;
 class Column;
 class SymbolWidget;
@@ -40,7 +40,6 @@ public:
 private:
 	virtual void initGeneralTab();
 	void updateValuesWidgets();
-	void updatePlotRanges() override;
 
 	void load();
 	void loadConfig(KConfig&);
@@ -50,10 +49,6 @@ private:
 	TreeViewComboBox* cbXColumn{nullptr};
 	TreeViewComboBox* cbYColumn{nullptr};
 	TreeViewComboBox* cbValuesColumn;
-	TreeViewComboBox* cbXErrorPlusColumn;
-	TreeViewComboBox* cbXErrorMinusColumn;
-	TreeViewComboBox* cbYErrorPlusColumn;
-	TreeViewComboBox* cbYErrorMinusColumn;
 
 protected:
 	void initTabs();
@@ -66,13 +61,10 @@ protected:
 	LineWidget* dropLineWidget{nullptr};
 	BackgroundWidget* backgroundWidget{nullptr};
 	SymbolWidget* symbolWidget{nullptr};
-	LineWidget* errorBarsLineWidget{nullptr};
+	ErrorBarWidget* errorBarWidget{nullptr};
 	QList<XYCurve*> m_curvesList;
 	XYCurve* m_curve{nullptr};
-	AspectTreeModel* m_aspectTreeModel{nullptr};
-
-public Q_SLOTS:
-	void visibilityChanged(bool);
+	AspectTreeModel* m_valuesModel{nullptr};
 
 private Q_SLOTS:
 	void init();
@@ -81,7 +73,6 @@ private Q_SLOTS:
 	// SLOTs for changes triggered in XYCurveDock
 	void xColumnChanged(const QModelIndex&);
 	void yColumnChanged(const QModelIndex&);
-	void legendVisibleChanged(bool);
 
 	// Line-Tab
 	void lineTypeChanged(int);
@@ -104,14 +95,6 @@ private Q_SLOTS:
 	void valuesFontChanged(const QFont&);
 	void valuesColorChanged(const QColor&);
 
-	//"Error bars"-Tab
-	void xErrorTypeChanged(int);
-	void yErrorTypeChanged(int);
-	void xErrorPlusColumnChanged(const QModelIndex&);
-	void xErrorMinusColumnChanged(const QModelIndex&);
-	void yErrorPlusColumnChanged(const QModelIndex&);
-	void yErrorMinusColumnChanged(const QModelIndex&);
-
 	//"Margin Plots"-Tab
 	void rugEnabledChanged(bool);
 	void rugOrientationChanged(int);
@@ -124,8 +107,6 @@ private Q_SLOTS:
 	void curveDescriptionChanged(const AbstractAspect*);
 	void curveXColumnChanged(const AbstractColumn*);
 	void curveYColumnChanged(const AbstractColumn*);
-	void curveLegendVisibleChanged(bool);
-	void curveVisibilityChanged(bool);
 
 	// Line-Tab
 	void curveLineTypeChanged(XYCurve::LineType);
@@ -147,14 +128,6 @@ private Q_SLOTS:
 	void curveValuesSuffixChanged(const QString&);
 	void curveValuesFontChanged(QFont);
 	void curveValuesColorChanged(QColor);
-
-	//"Error bars"-Tab
-	void curveXErrorTypeChanged(XYCurve::ErrorType);
-	void curveXErrorPlusColumnChanged(const AbstractColumn*);
-	void curveXErrorMinusColumnChanged(const AbstractColumn*);
-	void curveYErrorTypeChanged(XYCurve::ErrorType);
-	void curveYErrorPlusColumnChanged(const AbstractColumn*);
-	void curveYErrorMinusColumnChanged(const AbstractColumn*);
 
 	//"Margin Plots"-Tab
 	void curveRugEnabledChanged(bool);

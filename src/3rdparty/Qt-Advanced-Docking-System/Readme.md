@@ -1,4 +1,4 @@
 Copy of Qt-Advanced-Docking-System
 https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System
 
-Commit id: a940fc29c6d1fbcb5ee1e2fecf86f20bb86a7fb6
+Commit id: 8da0713bf0d964f0c5b62e87a8aa61bcae3fa212

@@ -3,18 +3,17 @@
 	Project              : LabPlot
 	Description          : Tests for the ascii filter
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef ASCIIFILTERTEST_H
 #define ASCIIFILTERTEST_H
 
-#include "../../CommonTest.h"
-#include <QtTest>
+#include "../../CommonMetaTest.h"
 
-class AsciiFilterTest : public CommonTest {
+class AsciiFilterTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:
@@ -28,6 +27,8 @@ private Q_SLOTS:
 	void testSparseFile01();
 	void testSparseFile02();
 	void testSparseFile03();
+
+	void testFileEndingWithoutLinebreak();
 
 	// header handling
 	void testHeader01();
@@ -43,6 +44,7 @@ private Q_SLOTS:
 	void testHeader10();
 	void testHeader11();
 	void testHeader11a();
+	void testHeader12();
 
 	// read ranges
 	void testColumnRange00();
@@ -70,6 +72,7 @@ private Q_SLOTS:
 	void testQuotedStrings05();
 
 	// different locales
+	void testUtf8Cyrillic();
 
 	// handling of NANs
 
@@ -80,13 +83,21 @@ private Q_SLOTS:
 
 	// datetime data
 	void testDateTime00();
+	void testDateTime01();
 	void testDateTimeHex();
 
 	// matrix import
 	void testMatrixHeader();
 
-	// benchmarks
+	// check updates in the dependent objects after the data was modified by the import
+	void spreadsheetFormulaUpdateAfterImport();
+	void spreadsheetFormulaUpdateAfterImportWithColumnRestore();
+	void plotUpdateAfterImport();
+	void plotUpdateAfterImportWithColumnRestore();
+	void plotUpdateAfterImportWithColumnRenaming();
+	void plotUpdateAfterImportWithColumnRemove();
 
+	// benchmarks
 	void benchDoubleImport_data();
 	// this is called multiple times (warm-up of BENCHMARK)
 	// see https://stackoverflow.com/questions/36916962/qtest-executes-test-case-twic
@@ -95,7 +106,7 @@ private Q_SLOTS:
 
 private:
 	QString benchDataFileName;
-	const size_t lines = 1e6;
+	const size_t lines = 1e5;
 	static const int paths = 5;
 };
 #endif

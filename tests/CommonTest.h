@@ -13,9 +13,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include <QtTest>
 
-extern "C" {
 #include <gsl/gsl_math.h>
-}
 
 ///////////////////////// macros ///////////
 
@@ -47,7 +45,7 @@ extern "C" {
 		QCOMPARE(scales.length(), 1);                                                                                                                          \
 		QVERIFY(scales.at(0) != nullptr);                                                                                                                      \
 		CHECK_SCALE(scales.at(0), a_ref, b_ref, c_ref);                                                                                                        \
-	} while (false);
+	} while (false)
 
 #define CHECK_SCALE(scale, a_ref, b_ref, c_ref)                                                                                                                \
 	do {                                                                                                                                                       \
@@ -59,7 +57,7 @@ extern "C" {
 		QVERIFY2(nsl_math_approximately_equal(a, a_ref), qPrintable(QStringLiteral("a: v1:%1, ref:%2").arg(a).arg(a_ref)));                                    \
 		QVERIFY2(nsl_math_approximately_equal(b, b_ref), qPrintable(QStringLiteral("b: v1:%1, ref:%2").arg(b).arg(b_ref)));                                    \
 		QVERIFY2(nsl_math_approximately_equal(c, c_ref), qPrintable(QStringLiteral("c: v1:%1, ref:%2").arg(c).arg(c_ref)));                                    \
-	} while (false);
+	} while (false)
 
 #define DEBUG_RANGE(plot, aspect)                                                                                                                              \
 	{                                                                                                                                                          \
@@ -74,12 +72,20 @@ extern "C" {
 		WARN(Q_FUNC_INFO << ", y index = " << yIndex << ", range = " << yrange.start() << " .. " << yrange.end())                                              \
 	}
 
+#define COMPARE_DOUBLE_VECTORS_AT_LEAST_LENGTH(res, ref)                                                                                                       \
+	do {                                                                                                                                                       \
+		QVERIFY(res.length() >= ref.length());                                                                                                                 \
+		for (int i = 0; i < ref.length(); i++)                                                                                                                 \
+			QVERIFY2(qFuzzyCompare(res.at(i), ref.at(i)),                                                                                                      \
+					 qPrintable(QStringLiteral("i=") + QString::number(i) + QStringLiteral(", res=") + QString::number(res.at(i)) + QStringLiteral(", ref=")   \
+								+ QString::number(ref.at(i))));                                                                                                \
+	} while (false)
+
 #define COMPARE_DOUBLE_VECTORS(res, ref)                                                                                                                       \
-	QCOMPARE(res.length(), ref.length());                                                                                                                      \
-	for (int i = 0; i < res.length(); i++)                                                                                                                     \
-		QVERIFY2(qFuzzyCompare(res.at(i), ref.at(i)),                                                                                                          \
-				 qPrintable(QStringLiteral("i=") + QString::number(i) + QStringLiteral(", res=") + QString::number(res.at(i)) + QStringLiteral(", ref=")       \
-							+ QString::number(ref.at(i))));
+	do {                                                                                                                                                       \
+		QCOMPARE(res.length(), ref.length());                                                                                                                  \
+		COMPARE_DOUBLE_VECTORS_AT_LEAST_LENGTH(res, ref);                                                                                                      \
+	} while (false)
 
 #define COMPARE_STRING_VECTORS(res, ref)                                                                                                                       \
 	QCOMPARE(res.length(), ref.length());                                                                                                                      \
@@ -96,24 +102,48 @@ extern "C" {
 		auto* tempFile = new QTemporaryFile(QStringLiteral("XXXXXX_") + QLatin1String(project_name) + QLatin1String(".lml"), this);                            \
 		QCOMPARE(tempFile->open(), true);                                                                                                                      \
 		savePath = tempFile->fileName();                                                                                                                       \
+		QVERIFY(!savePath.isEmpty());                                                                                                                          \
+		tempFile->close();                                                                                                                                     \
 		QFile file(savePath);                                                                                                                                  \
 		QCOMPARE(file.open(QIODevice::WriteOnly), true);                                                                                                       \
                                                                                                                                                                \
-		project.setFileName(tempFile->fileName());                                                                                                             \
+		project.setFileName(savePath);                                                                                                                         \
 		QXmlStreamWriter writer(&file);                                                                                                                        \
 		QPixmap thumbnail;                                                                                                                                     \
 		project.save(thumbnail, &writer);                                                                                                                      \
 		file.close();                                                                                                                                          \
-		DEBUG(QStringLiteral("File stored as: ").toStdString() << savePath.toStdString());                                                                     \
+		DEBUG(QStringLiteral("Project stored as: ").toStdString() << savePath.toStdString());                                                                  \
+	} while (false)
+
+/*!
+ * Save content \p content in a temporary file. The filename is used to identify the file during debugging
+ * The filename is stored in the variable savePath wich must be of type QString.
+ * content is the content of the file and is expected that it is a QStringList. The elements of this list
+ * don't need a new line character \n at the end because it will be appended already in this macro it self
+ */
+#define SAVE_FILE(filename, content)                                                                                                                           \
+	do {                                                                                                                                                       \
+		auto* tempFile = new QTemporaryFile(QStringLiteral("XXXXXX_") + QLatin1String(filename), this);                                                        \
+		QCOMPARE(tempFile->open(), true);                                                                                                                      \
+		savePath = tempFile->fileName();                                                                                                                       \
 		QVERIFY(!savePath.isEmpty());                                                                                                                          \
-	} while (0);
+		tempFile->close();                                                                                                                                     \
+		QFile file(savePath);                                                                                                                                  \
+		QCOMPARE(file.open(QIODevice::WriteOnly), true);                                                                                                       \
+                                                                                                                                                               \
+		for (const auto& d : fileContent) {                                                                                                                    \
+			file.write(d.toLatin1() + "\n");                                                                                                                   \
+		}                                                                                                                                                      \
+		file.close();                                                                                                                                          \
+		DEBUG(QStringLiteral("File stored as: ").toStdString() << savePath.toStdString());                                                                     \
+	} while (false)
 
 ///////////////////////////////////////////////////////
 
 class CommonTest : public QObject {
 	Q_OBJECT
 
-private Q_SLOTS:
+protected Q_SLOTS:
 	void initTestCase();
 
 protected:
@@ -127,5 +157,6 @@ protected:
 			QVERIFY(!gsl_fcmp(actual, expected, delta));
 		}
 	}
+	static void listStack(QUndoStack* stack);
 };
 #endif

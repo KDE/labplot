@@ -8,10 +8,10 @@
 */
 
 #include "SettingsSpreadsheetPage.h"
+#include "backend/core/Settings.h"
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
 
 /**
  * \brief Page for Spreadsheet settings of the Labplot settings dialog.
@@ -24,13 +24,14 @@ SettingsSpreadsheetPage::SettingsSpreadsheetPage(QWidget* parent)
 	loadSettings();
 }
 
-void SettingsSpreadsheetPage::applySettings() {
+bool SettingsSpreadsheetPage::applySettings() {
 	if (!m_changed)
-		return;
+		return false;
 
-	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Spreadsheet"));
+	KConfigGroup group = Settings::group(QStringLiteral("Settings_Spreadsheet"));
 	group.writeEntry(QLatin1String("ShowColumnType"), ui.chkShowColumnType->isChecked());
 	group.writeEntry(QLatin1String("ShowPlotDesignation"), ui.chkShowPlotDesignation->isChecked());
+	return true;
 }
 
 void SettingsSpreadsheetPage::restoreDefaults() {
@@ -39,7 +40,7 @@ void SettingsSpreadsheetPage::restoreDefaults() {
 }
 
 void SettingsSpreadsheetPage::loadSettings() {
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Spreadsheet"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_Spreadsheet"));
 	ui.chkShowColumnType->setChecked(group.readEntry(QLatin1String("ShowColumnType"), true));
 	ui.chkShowPlotDesignation->setChecked(group.readEntry(QLatin1String("ShowPlotDesignation"), true));
 }

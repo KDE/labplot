@@ -4,21 +4,21 @@
 	Description          : Widget providing options for the import of json data.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2018 Andrey Cygankov <craftplace.ms@gmail.com>
-	SPDX-FileCopyrightText: 2018-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "JsonOptionsWidget.h"
 #include "ImportFileWidget.h"
+#include "backend/core/Settings.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/datasources/filters/JsonFilter.h"
 #include "backend/datasources/filters/QJsonModel.h"
 #include "backend/lib/trace.h"
 
+#include <KCompressionDevice>
 #include <KConfigGroup>
-#include <KFilterDev>
 #include <KLocalizedString>
-#include <KSharedConfig>
 
 /*!
 \class JsonOptionsWidget
@@ -26,15 +26,16 @@
 
 \ingroup kdefrontend
 */
-JsonOptionsWidget::JsonOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget)
+JsonOptionsWidget::JsonOptionsWidget(QWidget* parent)
 	: QWidget(parent)
-	, m_fileWidget(fileWidget)
 	, m_model(new QJsonModel()) {
 	ui.setupUi(parent);
 
 	ui.cbDecimalSeparator->addItem(i18n("Point '.'"));
 	ui.cbDecimalSeparator->addItem(i18n("Comma ','"));
 	ui.cbDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
+
+	connect(m_model, &QJsonModel::error, this, &JsonOptionsWidget::error);
 
 	setTooltips();
 }
@@ -73,9 +74,9 @@ void JsonOptionsWidget::clearModel() {
 }
 
 void JsonOptionsWidget::loadSettings() const {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportJson");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportJson"));
 
-	const QChar decimalSeparator = QLocale().decimalPoint();
+	const auto decimalSeparator = QLocale().decimalPoint();
 	int index = (decimalSeparator == QLatin1Char('.')) ? 0 : 1;
 	ui.cbDecimalSeparator->setCurrentIndex(conf.readEntry("DecimalSeparator", index));
 
@@ -86,7 +87,7 @@ void JsonOptionsWidget::loadSettings() const {
 }
 
 void JsonOptionsWidget::saveSettings() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportJson");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportJson"));
 
 	conf.writeEntry("DecimalSeparator", ui.cbDecimalSeparator->currentIndex());
 	conf.writeEntry("DateTimeFormat", ui.cbDateTimeFormat->currentText());
@@ -102,7 +103,7 @@ void JsonOptionsWidget::loadDocument(const QString& filename) {
 	else
 		m_filename = filename;
 
-	KFilterDev device(m_filename);
+	KCompressionDevice device(m_filename);
 	m_model->clear();
 	if (!device.open(QIODevice::ReadOnly) || (device.atEnd() && !device.isSequential()) || // empty file
 		!m_model->loadJson(device.readAll()))

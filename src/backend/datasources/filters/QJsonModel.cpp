@@ -1,6 +1,6 @@
 /*
 	SPDX-FileCopyrightText: 2011 SCHUTZ Sacha
-	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2023 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: MIT
 */
@@ -9,8 +9,8 @@
 #include "backend/lib/trace.h"
 
 #include <QFile>
-#include <QMessageBox>
 #include <QPainter>
+#include <QPalette>
 
 #include <KLocalizedString>
 
@@ -92,12 +92,12 @@ QJsonTreeItem* QJsonTreeItem::load(const QJsonValue& value, QJsonTreeItem* paren
 		rootItem->setSize(QJsonDocument(object).toJson(QJsonDocument::Compact).size());
 
 		// read all children
-		for (const QString& key : object.keys()) {
-			const QJsonValue& v = object.value(key);
-			QJsonTreeItem* child = load(v, rootItem);
-			child->setKey(key);
-			child->setType(v.type());
-			rootItem->appendChild(child);
+		for (const auto& k : object.keys()) {
+			const auto& v = object.value(k);
+			auto* childItem = load(v, rootItem);
+			childItem->setKey(k);
+			childItem->setType(v.type());
+			rootItem->appendChild(childItem);
 		}
 	} else if (value.isArray()) {
 		const auto& array = value.toArray();
@@ -106,10 +106,10 @@ QJsonTreeItem* QJsonTreeItem::load(const QJsonValue& value, QJsonTreeItem* paren
 		int index = 0;
 		rootItem->reserve(array.count());
 		for (const QJsonValue& v : array) {
-			QJsonTreeItem* child = load(v, rootItem);
-			child->setKey(QString::number(index));
-			child->setType(v.type());
-			rootItem->appendChild(child);
+			auto* childItem = load(v, rootItem);
+			childItem->setKey(QString::number(index));
+			childItem->setType(v.type());
+			rootItem->appendChild(childItem);
 			++index;
 		}
 	} else {
@@ -191,13 +191,19 @@ bool QJsonModel::load(QIODevice* device) {
 }
 
 bool QJsonModel::loadJson(const QByteArray& json) {
-	QJsonParseError error;
+	QJsonParseError jsonError;
 
-	const QJsonDocument& doc = QJsonDocument::fromJson(json, &error);
-	if (error.error == QJsonParseError::NoError)
-		return loadJson(doc);
-	else {
-		QMessageBox::critical(nullptr, i18n("Failed to load JSON document"), i18n("Failed to load JSON document. Error: %1.", error.errorString()));
+	const QJsonDocument& doc = QJsonDocument::fromJson(json, &jsonError);
+	if (jsonError.error == QJsonParseError::NoError) {
+		const bool rc = loadJson(doc);
+		if (!rc)
+			Q_EMIT error(i18n("Failed to load the JSON file. Empty JSON document."));
+		else
+			Q_EMIT error(QString());
+
+		return rc;
+	} else {
+		Q_EMIT error(i18n("Failed to load JSON document. Error: %1.", jsonError.errorString()));
 		return false;
 	}
 }
@@ -235,7 +241,7 @@ QVariant QJsonModel::data(const QModelIndex& index, int role) const {
 	if (!index.isValid())
 		return {};
 
-	auto* item = static_cast<QJsonTreeItem*>(index.internalPointer());
+	const auto* item = static_cast<QJsonTreeItem*>(index.internalPointer());
 
 	if (role == Qt::DisplayRole) {
 		if (index.column() == 0)

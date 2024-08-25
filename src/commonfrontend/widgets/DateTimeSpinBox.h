@@ -12,6 +12,8 @@
 
 #include <QAbstractSpinBox>
 
+#include "src/backend/core/Time.h"
+
 class QRegularExpressionValidator;
 
 // Assumption: Month has always 30 days
@@ -25,6 +27,8 @@ private:
 
 public:
 	explicit DateTimeSpinBox(QWidget* parent);
+	~DateTimeSpinBox() override;
+
 	void keyPressEvent(QKeyEvent*) override;
 	void stepBy(int steps) override;
 	QAbstractSpinBox::StepEnabled stepEnabled() const override;
@@ -40,7 +44,7 @@ public:
 
 private:
 	QRegularExpressionValidator* m_regularExpressionValidator;
-	qint64 m_year{0}, m_month{0}, m_day{0}, m_hour{0}, m_minute{0}, m_second{0}, m_millisecond{0};
+	DateTime::DateTime mDateTime;
 
 Q_SIGNALS:
 	void valueChanged();

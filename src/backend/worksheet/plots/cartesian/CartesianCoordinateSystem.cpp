@@ -13,9 +13,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystemPrivate.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
-extern "C" {
 #include "backend/nsl/nsl_math.h"
-}
 
 using Dimension = CartesianCoordinateSystem::Dimension;
 
@@ -49,6 +47,9 @@ QString CartesianCoordinateSystem::dimensionToString(Dimension dim) {
 
 QString CartesianCoordinateSystem::info() const {
 	DEBUG(Q_FUNC_INFO)
+	if (!name().isEmpty())
+		return name();
+
 	if (d->plot)
 		return QString(QLatin1String("x = ") + d->plot->range(Dimension::X, d->xIndex).toString() + QLatin1String(", y = ")
 					   + d->plot->range(Dimension::Y, d->yIndex).toString());
@@ -313,7 +314,7 @@ Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFl
 	double yGapBefore;
 	double yGapAfter = NAN;
 
-	DEBUG(Q_FUNC_INFO << ", xScales/yScales size: " << d->xScales.size() << '/' << d->yScales.size())
+	// DEBUG(Q_FUNC_INFO << ", xScales/yScales size: " << d->xScales.size() << '/' << d->yScales.size())
 
 	QVectorIterator<CartesianScale*> xIterator(d->xScales);
 	while (xIterator.hasNext()) {
@@ -450,7 +451,7 @@ Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFl
 				QLineF mappedLine(QPointF(x1, y1), QPointF(x2, y2));
 				if (doPageClipping) {
 					if (!AbstractCoordinateSystem::clipLineToRect(&mappedLine, pageRect)) {
-						DEBUG(Q_FUNC_INFO << ", WARNING: OMIT mapped line!")
+						// DEBUG(Q_FUNC_INFO << ", WARNING: OMIT mapped line!")
 						continue;
 					}
 				}

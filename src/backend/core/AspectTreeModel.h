@@ -22,6 +22,7 @@ class AspectTreeModel : public QAbstractItemModel {
 
 public:
 	explicit AspectTreeModel(AbstractAspect* root, QObject* parent = nullptr);
+	void setRoot(AbstractAspect*);
 
 	QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
 	QModelIndex parent(const QModelIndex& index) const override;
@@ -59,15 +60,21 @@ private Q_SLOTS:
 	void aspectSelectedInView(const AbstractAspect*);
 	void aspectDeselectedInView(const AbstractAspect*);
 	void renameRequestedSlot();
+	void aspectAboutToBeMoved(const AbstractAspect*, int destinationRow);
+	void aspectMoved();
 
 private:
-	AbstractAspect* m_root;
+	AbstractAspect* m_root{nullptr};
 	bool m_readOnly{false};
 	bool m_folderSelectable{true};
 	bool m_plottableColumnsOnly{false};
 	bool m_numericColumnsOnly{false};
 	bool m_nonEmptyNumericColumnsOnly{false};
 	bool m_showPlotDesignation{false};
+	/*!
+	 * \brief m_selectableAspects
+	 * Determines the types of selected aspects. If empty all aspects are selectable
+	 */
 	QList<AspectType> m_selectableAspects;
 
 	QString m_filterString;
@@ -75,6 +82,7 @@ private:
 	bool m_matchCompleteWord{false};
 	bool containsFilterString(const AbstractAspect*) const;
 	bool m_aspectAboutToBeRemovedCalled{false};
+	bool m_aspectAboutToBeMovedCalled{false};
 
 Q_SIGNALS:
 	void renameRequested(const QModelIndex&);

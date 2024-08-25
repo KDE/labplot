@@ -44,7 +44,7 @@ public:
 
 	QVector<AspectType> dropableOn() const override;
 
-	BASIC_D_ACCESSOR_DECL(AbstractColumn::ColumnMode, mode, Mode)
+	AbstractColumn::ColumnMode mode() const;
 	BASIC_D_ACCESSOR_DECL(int, rowCount, RowCount)
 	BASIC_D_ACCESSOR_DECL(int, columnCount, ColumnCount)
 	BASIC_D_ACCESSOR_DECL(char, numericFormat, NumericFormat)
@@ -94,8 +94,6 @@ public:
 	template<typename T>
 	void setRowCells(int row, int first_column, int last_column, const QVector<T>& values);
 
-	void copy(Matrix* other);
-
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
@@ -103,8 +101,9 @@ public:
 					  AbstractFileFilter::ImportMode,
 					  int rows,
 					  int cols,
-					  QStringList colNameList,
-					  QVector<AbstractColumn::ColumnMode>,
+					  const QStringList& colNameList,
+					  const QVector<AbstractColumn::ColumnMode>&,
+					  bool& ok,
 					  bool initializeDataContainer) override;
 	void finalizeImport(size_t columnOffset, size_t startColumn, size_t endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode) override;
 
@@ -118,7 +117,6 @@ public Q_SLOTS:
 
 	void addColumns();
 	void addRows();
-	void duplicate();
 
 Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
@@ -148,7 +146,9 @@ Q_SIGNALS:
 private:
 	void init();
 
-	MatrixPrivate* const d;
+	Q_DECLARE_PRIVATE(Matrix)
+	MatrixPrivate* const d_ptr;
+
 	mutable MatrixModel* m_model{nullptr};
 	mutable MatrixView* m_view{nullptr};
 

@@ -36,9 +36,7 @@
 ColumnDock::ColumnDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(m_leName->height());
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	// add formats for numeric values
 	ui.cbNumericFormat->addItem(i18n("Decimal"), QVariant('f'));
@@ -56,8 +54,6 @@ ColumnDock::ColumnDock(QWidget* parent)
 	ui.twLabels->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
 	ui.twLabels->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
 
-	connect(ui.leName, &QLineEdit::textChanged, this, &ColumnDock::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &ColumnDock::commentChanged);
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ColumnDock::typeChanged);
 	connect(ui.cbNumericFormat, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ColumnDock::numericFormatChanged);
 	connect(ui.sbPrecision, QOverload<int>::of(&QSpinBox::valueChanged), this, &ColumnDock::precisionChanged);
@@ -79,12 +75,20 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	// check whether we have non-editable columns:
 	// 1. columns in a LiveDataSource
 	// 2. columns in the spreadsheet of a datapicker curve
-	// 3. columns for residuals calculated in XYFitCurve)
+	// 3. columns in the statistics spreadsheet
+	// 4. columns for residuals calculated in XYFitCurve (don't have Spreadsheet as the parent)
 	bool nonEditable = false;
+	bool statisticsColumn = false;
 	for (auto* col : m_columnsList) {
 		auto* s = dynamic_cast<Spreadsheet*>(col->parentAspect());
 		if (s) {
 			if (s->type() == AspectType::LiveDataSource || s->parentAspect()->type() == AspectType::DatapickerCurve) {
+				nonEditable = true;
+				break;
+			}
+
+			if (s->type() == AspectType::StatisticsSpreadsheet) {
+				statisticsColumn = true;
 				nonEditable = true;
 				break;
 			}
@@ -98,24 +102,12 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	bool sameMode = true;
 
 	if (list.size() == 1) {
-		// names and comments of non-editable columns in a file data source can be changed.
+		// names and comments of non-editable columns in a file data source cannot be changed.
 		if (!nonEditable && m_column->parentAspect()->type() == AspectType::LiveDataSource) {
 			ui.leName->setEnabled(false);
 			ui.teComment->setEnabled(false);
-		} else {
-			ui.leName->setEnabled(true);
-			ui.teComment->setEnabled(true);
 		}
-
-		ui.leName->setText(m_column->name());
-		ui.teComment->setText(m_column->comment());
 	} else {
-		ui.leName->setEnabled(false);
-		ui.teComment->setEnabled(false);
-
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
-
 		auto mode = m_column->columnMode();
 		for (auto* col : m_columnsList) {
 			if (col->columnMode() != mode) {
@@ -137,6 +129,11 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	ui.twLabels->setEnabled(sameMode);
 	ui.frameLabels->setEnabled(sameMode);
 
+	// no value labels to columns in StatisticsSpreadsheet
+	ui.lLabels->setVisible(!statisticsColumn);
+	ui.twLabels->setVisible(!statisticsColumn);
+	ui.frameLabels->setVisible(!statisticsColumn);
+
 	ui.leName->setStyleSheet(QString());
 	ui.leName->setToolTip(QString());
 
@@ -148,18 +145,17 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	if (sameMode)
 		showValueLabels();
 	else {
-		for (int i = 0; ui.twLabels->rowCount(); ++i)
+		for (int i = 0; i < ui.twLabels->rowCount(); ++i)
 			ui.twLabels->removeRow(0);
 	}
 
 	// slots
-	connect(m_column, &AbstractColumn::aspectDescriptionChanged, this, &ColumnDock::aspectDescriptionChanged);
 	connect(m_column, &AbstractColumn::modeChanged, this, &ColumnDock::columnModeChanged);
 	connect(m_column->outputFilter(), &AbstractSimpleFilter::formatChanged, this, &ColumnDock::columnFormatChanged);
 	connect(m_column->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &ColumnDock::columnPrecisionChanged);
 	connect(m_column, &AbstractColumn::plotDesignationChanged, this, &ColumnDock::columnPlotDesignationChanged);
 
-	// don't allow to change the column type at least one non-editable column
+	// don't allow to change the column type if there is at least one non-editable column
 	if (sameMode)
 		ui.cbType->setEnabled(!nonEditable);
 }
@@ -215,7 +211,7 @@ void ColumnDock::updateTypeWidgets(AbstractColumn::ColumnMode mode) {
 }
 
 void ColumnDock::showValueLabels() {
-	for (int i = 0; ui.twLabels->rowCount(); ++i)
+	while (ui.twLabels->rowCount() > 0)
 		ui.twLabels->removeRow(0);
 
 	if (m_column->valueLabelsInitialized()) {
@@ -503,7 +499,7 @@ void ColumnDock::addLabel() {
 	// reload all, because due to the migration the view
 	// might be changed
 	showValueLabels();
-	m_column->project()->setChanged(true);
+	m_column->setProjectChanged(true);
 }
 
 void ColumnDock::removeLabel() {
@@ -517,7 +513,7 @@ void ColumnDock::removeLabel() {
 		col->removeValueLabel(value);
 
 	ui.twLabels->removeRow(ui.twLabels->currentRow());
-	m_column->project()->setChanged(true);
+	m_column->setProjectChanged(true);
 }
 
 void ColumnDock::batchEditLabels() {
@@ -527,7 +523,7 @@ void ColumnDock::batchEditLabels() {
 		showValueLabels(); // new value labels were saved into the columns in the dialog, show them here
 
 	delete dlg;
-	m_column->project()->setChanged(true);
+	m_column->setProjectChanged(true);
 }
 
 //*************************************************************

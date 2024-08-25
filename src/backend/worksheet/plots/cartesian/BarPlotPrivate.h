@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Bar Plot - private implementation
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -11,13 +11,16 @@
 #ifndef BARPLOTPRIVATE_H
 #define BARPLOTPRIVATE_H
 
+#include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/PlotPrivate.h"
 #include <QPen>
 
 class Background;
+class ErrorBar;
 class Line;
 class CartesianCoordinateSystem;
 class Value;
+class KConfigGroup;
 
 typedef QVector<QPointF> Points;
 
@@ -34,15 +37,7 @@ public:
 	Background* addBackground(const KConfigGroup&);
 	Line* addBorderLine(const KConfigGroup&);
 	void addValue(const KConfigGroup&);
-
-	bool m_suppressRecalc{false};
-
-	// reimplemented from QGraphicsItem
-	QRectF boundingRect() const override;
-	QPainterPath shape() const override;
-
-	bool activatePlot(QPointF mouseScenePos, double maxDist);
-	void setHover(bool on);
+	ErrorBar* addErrorBar(const KConfigGroup&);
 
 	BarPlot* const q;
 
@@ -61,36 +56,27 @@ public:
 	double yMin{0.};
 	double yMax{1.};
 
-	// bar properties
 	QVector<Background*> backgrounds;
 	QVector<Line*> borderLines;
-
-	// values
+	QVector<ErrorBar*> errorBars;
 	Value* value{nullptr};
 
 private:
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void recalc(int);
 	void verticalBarPlot(int);
 	void horizontalBarPlot(int);
+	void updateErrorBars(int);
 	void updateFillingRect(int columnIndex, int valueIndex, const QVector<QLineF>&);
 
 	void draw(QPainter*);
-	void drawFilling(QPainter*, int columnIndex, int valueIndex);
 
-	bool m_hovered{false};
-
-	QRectF m_boundingRectangle;
-	QPainterPath m_barPlotShape;
-
-	QVector<QPointF> m_valuesPoints;
-	QVector<QPointF> m_valuesPointsLogical;
+	QVector<QPointF> m_valuesPoints; // positions of values in scene coordinates for all columns
+	QVector<QVector<QPointF>> m_valuesPointsLogical; // QVector<QPointF> contains the points in logical coordinates for the value positions for one data column
 	QVector<QString> m_valuesStrings;
 	QPainterPath m_valuesPath;
+	QVector<QPainterPath> m_errorBarsPaths;
 
 	QVector<QVector<QVector<QLineF>>> m_barLines; // QVector<QLineF> contains four lines that are clipped on the plot rectangle
 	QVector<QVector<QPolygonF>> m_fillPolygons; // polygons used for the filling (clipped versions of the boxes)
@@ -100,13 +86,6 @@ private:
 	double m_widthScaleFactor{1.0};
 	double m_groupWidth{1.0}; // width of a bar group
 	double m_groupGap{0.0}; // gap around a group of bars
-
-	QPixmap m_pixmap;
-	QImage m_hoverEffectImage;
-	QImage m_selectionEffectImage;
-
-	bool m_hoverEffectImageIsDirty{false};
-	bool m_selectionEffectImageIsDirty{false};
 };
 
 #endif

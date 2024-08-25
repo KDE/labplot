@@ -61,7 +61,7 @@ void MatioOptionsWidget::updateContent(MatioFilter* filter, const QString& fileN
 	updates the selected var name of a Matio file when the table widget item is selected
 */
 void MatioOptionsWidget::selectionChanged() {
-	DEBUG(Q_FUNC_INFO);
+	DEBUG(Q_FUNC_INFO)
 	// QDEBUG(Q_FUNC_INFO << ", SELECTED ITEMS =" << ui.twContent->selectedItems());
 
 	if (ui.twContent->selectedItems().isEmpty())
@@ -75,7 +75,7 @@ void MatioOptionsWidget::selectionChanged() {
 	selects first item if nothing is selected
 */
 const QStringList MatioOptionsWidget::selectedNames() const {
-	QDEBUG(Q_FUNC_INFO);
+	DEBUG(Q_FUNC_INFO)
 	QStringList names;
 
 	if (ui.twContent->selectedItems().size() == 0)

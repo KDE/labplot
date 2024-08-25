@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dock widget for the custom point on the plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2015-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -14,7 +14,6 @@
 #include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_custompointdock.h"
 
-class AbstractAspect;
 class CustomPoint;
 class SymbolWidget;
 class KConfig;
@@ -43,7 +42,7 @@ private Q_SLOTS:
 	void positionYChanged(int);
 	void customPositionXChanged(double);
 	void customPositionYChanged(double);
-	void visibilityChanged(bool);
+	void lockChanged(bool);
 	void bindingChanged(bool checked);
 
 	void positionXLogicalChanged(double);
@@ -53,8 +52,7 @@ private Q_SLOTS:
 
 	// SLOTs for changes triggered in CustomPoint
 	// General-Tab
-	void updatePlotRanges() override;
-	void pointVisibilityChanged(bool);
+	void pointLockChanged(bool);
 	void pointPositionChanged(const WorksheetElement::PositionWrapper&);
 	void pointPositionLogicalChanged(QPointF);
 	void pointCoordinateBindingEnabledChanged(bool);

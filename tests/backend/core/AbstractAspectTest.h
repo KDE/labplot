@@ -17,11 +17,13 @@ class AbstractAspectTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
+	void name();
 	void copyPaste();
 	void saveLoad();
 
 	void moveUp();
 	void moveDown();
+	void moveUpDown();
 };
 
 #endif // ABSTRACTASPECTTEST_H

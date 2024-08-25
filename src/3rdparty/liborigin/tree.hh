@@ -394,8 +394,8 @@ public:
     iter replace(iter position, const iterator_base &from);
     /// Replace string of siblings (plus their children) with copy of a new string (with children);
     /// see above
-    sibling_iterator replace(sibling_iterator orig_begin, sibling_iterator orig_end,
-                             sibling_iterator new_begin, sibling_iterator new_end);
+    sibling_iterator replace(const sibling_iterator& orig_begin, const sibling_iterator& orig_end,
+                             const sibling_iterator& new_begin, const sibling_iterator& new_end);
 
     /// Move all children of node at 'position' to be siblings, returns position.
     template<typename iter>
@@ -425,12 +425,12 @@ public:
 
     /// Merge with other tree, creating new branches and leaves only if they are not already
     /// present.
-    void merge(sibling_iterator, sibling_iterator, sibling_iterator, sibling_iterator,
+    void merge(const sibling_iterator&, const sibling_iterator&, const sibling_iterator&, const sibling_iterator&,
                bool duplicate_leaves = false);
     /// Sort (std::sort only moves values of nodes, this one moves children as well).
-    void sort(sibling_iterator from, sibling_iterator to, bool deep = false);
+    void sort(const sibling_iterator& from, const sibling_iterator& to, bool deep = false);
     template<class StrictWeakOrdering>
-    void sort(sibling_iterator from, sibling_iterator to, StrictWeakOrdering comp,
+    void sort(const sibling_iterator& from, const sibling_iterator& to, StrictWeakOrdering comp,
               bool deep = false);
     /// Compare two ranges of nodes (compares nodes as well as tree structure).
     template<typename iter>
@@ -442,8 +442,8 @@ public:
     template<typename iter, class BinaryPredicate>
     bool equal_subtree(const iter &one, const iter &two, BinaryPredicate) const;
     /// Extract a new tree formed by the range of siblings plus all their children.
-    tree subtree(sibling_iterator from, sibling_iterator to) const;
-    void subtree(tree &, sibling_iterator from, sibling_iterator to) const;
+    tree subtree(const sibling_iterator& from, const sibling_iterator& to) const;
+    void subtree(tree &, const sibling_iterator& from, const sibling_iterator& to) const;
     /// Exchange the node (plus subtree) with its sibling node (do nothing if no sibling present).
     void swap(sibling_iterator it);
     /// Exchange two nodes (plus subtrees)
@@ -1232,8 +1232,8 @@ iter tree<T, tree_node_allocator>::replace(iter position, const iterator_base &f
 
 template<class T, class tree_node_allocator>
 typename tree<T, tree_node_allocator>::sibling_iterator
-tree<T, tree_node_allocator>::replace(sibling_iterator orig_begin, sibling_iterator orig_end,
-                                      sibling_iterator new_begin, sibling_iterator new_end)
+tree<T, tree_node_allocator>::replace(const sibling_iterator& orig_begin, const sibling_iterator& orig_end,
+                                      const sibling_iterator& new_begin, const sibling_iterator& new_end)
 {
     tree_node *orig_first = orig_begin.node;
     tree_node *new_first = new_begin.node;
@@ -1535,8 +1535,8 @@ iter tree<T, tree_node_allocator>::move_ontop(iter target, iter source)
 }
 
 template<class T, class tree_node_allocator>
-void tree<T, tree_node_allocator>::merge(sibling_iterator to1, sibling_iterator to2,
-                                         sibling_iterator from1, sibling_iterator from2,
+void tree<T, tree_node_allocator>::merge(const sibling_iterator& to1, const sibling_iterator& to2,
+                                         const sibling_iterator& from1, const sibling_iterator& from2,
                                          bool duplicate_leaves)
 {
     sibling_iterator fnd;
@@ -1556,7 +1556,7 @@ void tree<T, tree_node_allocator>::merge(sibling_iterator to1, sibling_iterator 
 }
 
 template<class T, class tree_node_allocator>
-void tree<T, tree_node_allocator>::sort(sibling_iterator from, sibling_iterator to, bool deep)
+void tree<T, tree_node_allocator>::sort(const sibling_iterator& from, const sibling_iterator& to, bool deep)
 {
     std::less<T> comp;
     sort(from, to, comp, deep);
@@ -1564,7 +1564,7 @@ void tree<T, tree_node_allocator>::sort(sibling_iterator from, sibling_iterator 
 
 template<class T, class tree_node_allocator>
 template<class StrictWeakOrdering>
-void tree<T, tree_node_allocator>::sort(sibling_iterator from, sibling_iterator to,
+void tree<T, tree_node_allocator>::sort(const sibling_iterator& from, const sibling_iterator& to,
                                         StrictWeakOrdering comp, bool deep)
 {
     if (from == to)
@@ -1679,8 +1679,8 @@ bool tree<T, tree_node_allocator>::equal_subtree(const iter &one_, const iter &t
 }
 
 template<class T, class tree_node_allocator>
-tree<T, tree_node_allocator> tree<T, tree_node_allocator>::subtree(sibling_iterator from,
-                                                                   sibling_iterator to) const
+tree<T, tree_node_allocator> tree<T, tree_node_allocator>::subtree(const sibling_iterator& from,
+                                                                   const sibling_iterator& to) const
 {
     tree tmp;
     tmp.set_head(value_type());
@@ -1689,8 +1689,8 @@ tree<T, tree_node_allocator> tree<T, tree_node_allocator>::subtree(sibling_itera
 }
 
 template<class T, class tree_node_allocator>
-void tree<T, tree_node_allocator>::subtree(tree &tmp, sibling_iterator from,
-                                           sibling_iterator to) const
+void tree<T, tree_node_allocator>::subtree(tree &tmp, const sibling_iterator& from,
+                                           const sibling_iterator& to) const
 {
     tmp.set_head(value_type());
     tmp.replace(tmp.begin(), tmp.end(), from, to);

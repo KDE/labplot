@@ -65,6 +65,11 @@ bool ExpressionTextEdit::isValid() const {
 	return (!document()->toPlainText().simplified().isEmpty() && m_isValid);
 }
 
+QString ExpressionTextEdit::errorMessage() const {
+	const auto parser = ExpressionParser::getInstance();
+	return parser->errorMessage();
+}
+
 void ExpressionTextEdit::setExpressionType(XYEquationCurve::EquationType type) {
 	m_expressionType = type;
 	m_variables.clear();
@@ -102,6 +107,17 @@ void ExpressionTextEdit::insertCompletion(const QString& completion) {
 }
 
 /*!
+ * check if expression uses variables
+ * if not, we don't need to check the variable columns (see function values dialog)
+ */
+bool ExpressionTextEdit::expressionUsesVariables() {
+	QString text = toPlainText().simplified();
+	auto parser = ExpressionParser::getInstance();
+
+	return !parser->isValid(text);
+}
+
+/*!
  * \brief Validates the current expression if the text was changed and highlights the text field if the expression is invalid.
  * \param force forces the validation and highlighting when no text changes were made, used when new parameters/variables were provided
  */
@@ -111,13 +127,17 @@ void ExpressionTextEdit::validateExpression(bool force) {
 	bool textChanged{(text != m_currentExpression) ? true : false};
 
 	if (textChanged || force) {
-		m_isValid = ExpressionParser::getInstance()->isValid(text, m_variables);
-		if (!m_isValid)
+		auto parser = ExpressionParser::getInstance();
+		m_isValid = parser->isValid(text, m_variables);
+		if (!m_isValid) {
+			setToolTip(parser->errorMessage());
 			SET_WARNING_STYLE(this)
-		else
+		} else {
+			setToolTip(QStringLiteral(""));
 			setStyleSheet(QString());
+		}
 
-		m_currentExpression = text;
+		m_currentExpression = std::move(text);
 	}
 	if (textChanged)
 		Q_EMIT expressionChanged();

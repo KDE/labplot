@@ -19,18 +19,13 @@
 NoteDock::NoteDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(1.2 * m_leName->height());
-
-	connect(ui.leName, &QLineEdit::textChanged, this, &NoteDock::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &NoteDock::commentChanged);
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	connect(ui.kcbBgColor, &KColorButton::changed, this, &NoteDock::backgroundColorChanged);
 	connect(ui.kcbTextColor, &KColorButton::changed, this, &NoteDock::textColorChanged);
 	connect(ui.kfrTextFont, &KFontRequester::fontSelected, this, &NoteDock::textFontChanged);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Worksheet);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("Note"));
 	ui.gridLayout->addWidget(templateHandler, 8, 3);
 	templateHandler->show();
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &NoteDock::loadConfigFromTemplate);
@@ -40,7 +35,7 @@ NoteDock::NoteDock(QWidget* parent)
 void NoteDock::setNotesList(QList<Note*> list) {
 	m_notesList = list;
 	m_notes = list.first();
-	setAspects(list);
+	setAspects(std::move(list));
 
 	CONDITIONAL_LOCK_RETURN;
 
@@ -50,8 +45,6 @@ void NoteDock::setNotesList(QList<Note*> list) {
 	ui.kcbBgColor->setColor(m_notes->backgroundColor());
 	ui.kcbTextColor->setColor(m_notes->textColor());
 	ui.kfrTextFont->setFont(m_notes->textFont());
-
-	connect(m_notes, &Note::aspectDescriptionChanged, this, &NoteDock::aspectDescriptionChanged);
 }
 
 //*************************************************************
@@ -82,16 +75,16 @@ void NoteDock::textFontChanged(const QFont& font) {
 //************************* Settings **************************
 //*************************************************************
 void NoteDock::loadConfigFromTemplate(KConfig& config) {
-	KConfigGroup group = config.group("Notes");
-	ui.kcbBgColor->setColor(group.readEntry("BackgroundColor", m_notes->backgroundColor()));
-	ui.kcbTextColor->setColor(group.readEntry("TextColor", m_notes->textColor()));
-	ui.kfrTextFont->setFont(group.readEntry("TextColor", m_notes->textFont()));
+	KConfigGroup group = config.group(QStringLiteral("Notes"));
+	ui.kcbBgColor->setColor(group.readEntry(QStringLiteral("BackgroundColor"), m_notes->backgroundColor()));
+	ui.kcbTextColor->setColor(group.readEntry(QStringLiteral("TextColor"), m_notes->textColor()));
+	ui.kfrTextFont->setFont(group.readEntry(QStringLiteral("TextColor"), m_notes->textFont()));
 }
 
 void NoteDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group("Notes");
+	KConfigGroup group = config.group(QStringLiteral("Notes"));
 
-	group.writeEntry("BackgroundColor", ui.kcbBgColor->color());
-	group.writeEntry("TextColor", ui.kcbTextColor->color());
-	group.writeEntry("TextFont", ui.kfrTextFont->font());
+	group.writeEntry(QStringLiteral("BackgroundColor"), ui.kcbBgColor->color());
+	group.writeEntry(QStringLiteral("TextColor"), ui.kcbTextColor->color());
+	group.writeEntry(QStringLiteral("TextFont"), ui.kfrTextFont->font());
 }

@@ -13,6 +13,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "src/backend/core/Time.h"
 #include "src/backend/worksheet/Line.h"
 #include "src/backend/worksheet/TextLabel.h"
 #include "src/backend/worksheet/WorksheetElement.h"
@@ -31,6 +32,103 @@
 		for (int i = 0; i < expectedTickValues.length(); i++)                                                                                                  \
 			QCOMPARE(currentTickValues.at(i), expectedTickValues.at(i));                                                                                       \
 	}
+
+void AxisTest::axisLine() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+
+	auto* xAxis = axes.at(0);
+	auto* yAxis1 = axes.at(1);
+
+	const auto dataRect = p->dataRect();
+	const auto bottomLeft = dataRect.bottomLeft();
+	const auto topLeft = dataRect.topLeft();
+	const auto bottomRight = dataRect.bottomRight();
+
+	{
+		auto* axis = yAxis1;
+
+		QCOMPARE(axis->offset(), 0);
+		QCOMPARE(axis->position(), Axis::Position::Left);
+
+		const auto& linePath = axis->d_func()->linePath;
+		QCOMPARE(linePath.isEmpty(), false);
+		QCOMPARE(linePath.elementCount(), 2);
+
+		auto element = linePath.elementAt(0);
+		QCOMPARE(element.type, QPainterPath::MoveToElement);
+		QCOMPARE(element.x, bottomLeft.x());
+		QCOMPARE(element.y, bottomLeft.y());
+		element = linePath.elementAt(1);
+		QCOMPARE(element.type, QPainterPath::LineToElement);
+		QCOMPARE(element.x, topLeft.x());
+		QCOMPARE(element.y, topLeft.y());
+	}
+
+	{
+		auto* axis = xAxis;
+
+		QCOMPARE(axis->offset(), 0);
+		QCOMPARE(axis->position(), Axis::Position::Bottom);
+
+		const auto& linePath = axis->d_func()->linePath;
+		QCOMPARE(linePath.isEmpty(), false);
+		QCOMPARE(linePath.elementCount(), 2);
+
+		auto element = linePath.elementAt(0);
+		QCOMPARE(element.type, QPainterPath::MoveToElement);
+		QCOMPARE(element.x, bottomLeft.x());
+		QCOMPARE(element.y, bottomLeft.y());
+		element = linePath.elementAt(1);
+		QCOMPARE(element.type, QPainterPath::LineToElement);
+		QCOMPARE(element.x, bottomRight.x());
+		QCOMPARE(element.y, bottomRight.y());
+	}
+
+	yAxis1->copy();
+	p->paste();
+
+	axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 3);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+	QCOMPARE(axes.at(1), yAxis1);
+	QVERIFY(axes.at(2)->name().startsWith(QLatin1Char('y')));
+
+	auto yAxis2 = axes.at(2);
+
+	{
+		auto* axis = yAxis2;
+
+		QCOMPARE(axis->offset(), 0);
+		QCOMPARE(axis->position(), Axis::Position::Left);
+
+		const auto& linePath = axis->d_func()->linePath;
+		QCOMPARE(linePath.isEmpty(), false);
+		QCOMPARE(linePath.elementCount(), 2);
+
+		auto element = linePath.elementAt(0);
+		QCOMPARE(element.type, QPainterPath::MoveToElement);
+		QCOMPARE(element.x, bottomLeft.x());
+		QCOMPARE(element.y, bottomLeft.y());
+		element = linePath.elementAt(1);
+		QCOMPARE(element.type, QPainterPath::LineToElement);
+		QCOMPARE(element.x, topLeft.x());
+		QCOMPARE(element.y, topLeft.y());
+	}
+}
 
 void AxisTest::majorTicksAutoNumberEnableDisable() {
 	Project project;
@@ -237,7 +335,7 @@ void AxisTest::majorTicksStartValue() {
 
 	QCOMPARE(xAxis->majorTicksStartType(), Axis::TicksStartType::Absolute);
 	{
-		QVector<double> expectedTickValues = {0.1, 0.3, 0.5, 0.7, 0.9}; // starting now from 0.1
+		QVector<double> expectedTickValues = {0.1, 0.4, 0.7, 1.0}; // starting now from 0.1
 		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
 	}
 
@@ -254,7 +352,7 @@ void AxisTest::majorTicksStartValue() {
 	QCOMPARE(xAxis->majorTicksStartType(), Axis::TicksStartType::Absolute);
 
 	{
-		QVector<double> expectedTickValues = {0.1, 0.3, 0.5, 0.7, 0.9}; // starting now from 0.1
+		QVector<double> expectedTickValues = {0.1, 0.4, 0.7, 1.0}; // starting now from 0.1
 		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
 	}
 
@@ -313,9 +411,27 @@ void AxisTest::TestSetCoordinateSystem() {
 }
 
 void AxisTest::TestSetRange() {
-	Axis a(QStringLiteral("x"), Axis::Orientation::Horizontal);
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	auto xAxis = axes.at(0);
+	QCOMPARE(xAxis->name(), QStringLiteral("x"));
 
-	auto arange = a.range();
+	// This does not work anymore, because isNumeric() is depending on the
+	// CoordinateSystem which is not available when using creating the object
+	// TODO: find a way to sync AxisPrivate::Range with the CartesianPlotRange
+	// (Not only the start/end, but also the format and the scale!)
+	// Then this can be used again
+	// Axis xAxis(QStringLiteral("x"), Axis::Orientation::Horizontal);
+
+	auto arange = xAxis->range();
 	// different to default values!
 	Range<double> r(5, 11, RangeT::Format::DateTime, RangeT::Scale::Log10);
 	QVERIFY(arange.start() != r.start());
@@ -323,29 +439,29 @@ void AxisTest::TestSetRange() {
 	QVERIFY(arange.format() != r.format());
 	QVERIFY(arange.scale() != r.scale());
 
-	a.setRange(r);
-	arange = a.range();
+	xAxis->setRange(r);
+	arange = xAxis->range();
 	QCOMPARE(arange.start(), 5);
 	QCOMPARE(arange.end(), 11);
 	QCOMPARE(arange.format(), RangeT::Format::DateTime);
 	QCOMPARE(arange.scale(), RangeT::Scale::Log10);
 
-	a.setStart(1);
-	arange = a.range();
+	xAxis->setStart(1);
+	arange = xAxis->range();
 	QCOMPARE(arange.start(), 1);
 	QCOMPARE(arange.end(), 11);
 	QCOMPARE(arange.format(), RangeT::Format::DateTime);
 	QCOMPARE(arange.scale(), RangeT::Scale::Log10);
 
-	a.setEnd(23);
-	arange = a.range();
+	xAxis->setEnd(23);
+	arange = xAxis->range();
 	QCOMPARE(arange.start(), 1);
 	QCOMPARE(arange.end(), 23);
 	QCOMPARE(arange.format(), RangeT::Format::DateTime);
 	QCOMPARE(arange.scale(), RangeT::Scale::Log10);
 
-	a.setRange(-10, 10);
-	arange = a.range();
+	xAxis->setRange(-10, 10);
+	arange = xAxis->range();
 	QCOMPARE(arange.start(), -10);
 	QCOMPARE(arange.end(), 10);
 	QCOMPARE(arange.format(), RangeT::Format::DateTime);
@@ -724,6 +840,7 @@ void AxisTest::automaticTicNumberUpdateDockMajorTicks() {
 	auto* xAxis = static_cast<Axis*>(axes.at(0));
 
 	AxisDock dock(nullptr);
+
 	dock.setAxes({xAxis, yAxis});
 	dock.ui.cbMajorTicksAutoNumber->setChecked(false);
 	dock.ui.sbMajorTicksNumber->setValue(10);
@@ -851,6 +968,68 @@ void AxisTest::columnLabelValues() {
 			QStringLiteral("Status 2"),
 			QStringLiteral("Status 3"),
 		};
+		COMPARE_STRING_VECTORS(yAxis->tickLabelStrings(), expectedStrings);
+	}
+}
+
+/*!
+ * \brief AxisTest::columnLabelValuesMaxValues
+ * Same as columnLabelValuesMaxValues() with the difference
+ * that more columnLabels are available than the maximum number of ticks allowed
+ * in the axis. This leads to a limited representation of ticks/labels
+ */
+void AxisTest::columnLabelValuesMaxValues() {
+	constexpr int valueLabelsCount = 1000;
+	QLocale::setDefault(QLocale::C); // . as decimal separator
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	Spreadsheet* spreadsheet = new Spreadsheet(QStringLiteral("test"), false);
+	spreadsheet->setColumnCount(2);
+	spreadsheet->setRowCount(3);
+	project.addChild(spreadsheet);
+
+	auto* xCol = spreadsheet->column(0);
+	xCol->replaceValues(-1, QVector<double>({1., 100.}));
+
+	auto* yCol = spreadsheet->column(1);
+	yCol->replaceValues(-1, QVector<double>({1., 1000.}));
+
+	QCOMPARE(spreadsheet->rowCount(), 2);
+	QCOMPARE(spreadsheet->columnCount(), 2);
+
+	for (int i = 0; i <= valueLabelsCount; i++) {
+		yCol->addValueLabel(i, QStringLiteral("Status ") + QString::number(i));
+	}
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve = new XYCurve(QStringLiteral("xy-curve"));
+	curve->setXColumn(xCol);
+	curve->setYColumn(yCol);
+	p->addChild(curve);
+
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+	auto* yAxis = static_cast<Axis*>(axes.at(1));
+	// auto* xAxis = static_cast<Axis*>(axes.at(0));
+
+	{
+		yAxis->setMajorTicksType(Axis::TicksType::ColumnLabels);
+		yAxis->setMajorTicksColumn(yCol);
+
+		const auto v = yAxis->tickLabelStrings();
+		QStringList expectedStrings;
+		for (int i = 0; i <= valueLabelsCount; i += valueLabelsCount / (Axis::maxNumberMajorTicksCustomColumn() - 1))
+			expectedStrings.push_back(QStringLiteral("Status ") + QString::number(i));
+
 		COMPARE_STRING_VECTORS(yAxis->tickLabelStrings(), expectedStrings);
 	}
 }

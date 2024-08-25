@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Base class for all analysis curves
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2017-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2018-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -42,7 +42,8 @@ public:
 	};
 
 	struct Result {
-		Result(){};
+		Result() {
+		}
 
 		bool available{false};
 		bool valid{false};
@@ -63,6 +64,7 @@ public:
 	virtual void recalculate() = 0;
 	bool resultAvailable() const;
 	virtual const Result& result() const = 0;
+	bool usingColumn(const Column*) const override;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
@@ -84,6 +86,7 @@ public:
 
 protected:
 	XYAnalysisCurve(const QString& name, XYAnalysisCurvePrivate*, AspectType);
+	virtual void handleAspectUpdated(const QString& aspectPath, const AbstractAspect*) override;
 
 private:
 	Q_DECLARE_PRIVATE(XYAnalysisCurve)

@@ -4,25 +4,25 @@
 	Description      : C++ wrapper for the bison generated parser.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2014-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2014-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include <QRegularExpression>
-
 #include "backend/gsl/ExpressionParser.h"
 #include "backend/lib/macros.h"
+#include "backend/lib/trace.h"
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
-extern "C" {
-#include "backend/gsl/parser.h"
+#include <QRegularExpression>
+
+#include <random>
+
 #include <gsl/gsl_const_mksa.h>
 #include <gsl/gsl_const_num.h>
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_version.h>
-}
 
 ExpressionParser* ExpressionParser::m_instance{nullptr};
 
@@ -36,7 +36,13 @@ ExpressionParser::ExpressionParser() {
 void ExpressionParser::initFunctions() {
 	for (int i = 0; i < _number_functions; i++) {
 		const auto& function = _functions[i];
-		m_functionsDescription << function.description;
+		m_functionsDescription << function.description();
+		m_functions << QLatin1String(function.name);
+		m_functionsGroupIndex << function.group;
+	}
+	for (int i = 0; i < _number_specialfunctions; i++) {
+		const auto& function = _special_functions[i];
+		m_functionsDescription << function.description();
 		m_functions << QLatin1String(function.name);
 		m_functionsGroupIndex << function.group;
 	}
@@ -46,7 +52,7 @@ void ExpressionParser::initFunctions() {
 void ExpressionParser::initConstants() {
 	for (int i = 0; i < _number_constants; i++) {
 		const auto& constant = _constants[i];
-		m_constantsDescription << constant.description;
+		m_constantsDescription << constant.description();
 		m_constants << QLatin1String(constant.name);
 		m_constantsValues << QString::number(constant.value, 'g', 15);
 		m_constantsUnits << QLatin1String(constant.unit);
@@ -92,6 +98,10 @@ int ExpressionParser::functionArgumentCount(const QString& functionName) {
 		if (functionName == QLatin1String(_functions[i].name))
 			return _functions[i].argc;
 	}
+	for (int i = 0; i < _number_specialfunctions; i++) {
+		if (functionName == QLatin1String(_special_functions[i].name))
+			return _special_functions[i].argc;
+	}
 
 	// DEBUG(Q_FUNC_INFO << ", Found function " << STDSTRING(functionName) << " at index " << index);
 	// DEBUG(Q_FUNC_INFO << ", function " << STDSTRING(functionName) << " has " << _functions[index].argc << " arguments");
@@ -102,25 +112,46 @@ QString ExpressionParser::parameters(const QString& functionName) {
 	for (int i = 0; i < _number_functions; i++) {
 		if (functionName == QLatin1String(_functions[i].name)) {
 			int count = _functions[i].argc;
-			QString (*parameterFunction)(int) = _functions[i].parameterFunction;
+			const auto& parameterFunction = _functions[i].parameterFunction;
 
 			if (parameterFunction == nullptr)
-				return QStringLiteral();
+				return QStringLiteral("");
 
 			if (count == 0)
 				return QStringLiteral("()");
 
 			QString parameter = QStringLiteral("(");
 			for (int p = 0; p < count - 1; p++)
-				parameter += (*parameterFunction)(p) + QStringLiteral(", ");
-			parameter += (*parameterFunction)(count - 1);
+				parameter += parameterFunction(p) + QStringLiteral("; ");
+			parameter += parameterFunction(count - 1);
 			parameter += QStringLiteral(")");
 			return parameter;
 		}
 		// DEBUG(Q_FUNC_INFO << ", Found function " << STDSTRING(functionName) << " at index " << index);
 		// DEBUG(Q_FUNC_INFO << ", function " << STDSTRING(functionName) << " has " << _functions[index].argc << " arguments");
 	}
-	return QStringLiteral();
+	for (int i = 0; i < _number_specialfunctions; i++) {
+		if (functionName == QLatin1String(_special_functions[i].name)) {
+			int count = _special_functions[i].argc;
+			const auto& parameterFunction = _special_functions[i].parameterFunction;
+
+			if (parameterFunction == nullptr)
+				return QStringLiteral("");
+
+			if (count == 0)
+				return QStringLiteral("()");
+
+			QString parameter = QStringLiteral("(");
+			for (int p = 0; p < count - 1; p++)
+				parameter += parameterFunction(p) + QStringLiteral("; ");
+			parameter += parameterFunction(count - 1);
+			parameter += QStringLiteral(")");
+			return parameter;
+		}
+		// DEBUG(Q_FUNC_INFO << ", Found function " << STDSTRING(functionName) << " at index " << index);
+		// DEBUG(Q_FUNC_INFO << ", function " << STDSTRING(functionName) << " has " << _functions[index].argc << " arguments");
+	}
+	return QStringLiteral("");
 }
 
 QString ExpressionParser::functionArgumentString(const QString& functionName, const XYEquationCurve::EquationType type) {
@@ -148,40 +179,40 @@ QString ExpressionParser::functionArgumentString(const QString& functionName, co
 	case 2:
 		switch (type) {
 		case XYEquationCurve::EquationType::Cartesian:
-			return QStringLiteral("(x, y)");
+			return QStringLiteral("(x; y)");
 		case XYEquationCurve::EquationType::Polar:
-			return QStringLiteral("(phi, theta)");
+			return QStringLiteral("(phi; theta)");
 		case XYEquationCurve::EquationType::Parametric:
-			return QStringLiteral("(u, v)");
+			return QStringLiteral("(u; v)");
 		case XYEquationCurve::EquationType::Implicit:
 		case XYEquationCurve::EquationType::Neutral:
-			return QStringLiteral("(x, y)");
+			return QStringLiteral("(x; y)");
 		}
 		break;
 	case 3:
 		switch (type) {
 		case XYEquationCurve::EquationType::Cartesian:
-			return QStringLiteral("(x, y, z)");
+			return QStringLiteral("(x; y; z)");
 		case XYEquationCurve::EquationType::Polar:
-			return QStringLiteral("(alpha, beta, gamma)");
+			return QStringLiteral("(alpha; beta; gamma)");
 		case XYEquationCurve::EquationType::Parametric:
-			return QStringLiteral("(u, v, w)");
+			return QStringLiteral("(u; v; w)");
 		case XYEquationCurve::EquationType::Implicit:
 		case XYEquationCurve::EquationType::Neutral:
-			return QStringLiteral("(x, y, z)");
+			return QStringLiteral("(x; y; z)");
 		}
 		break;
 	case 4:
 		switch (type) {
 		case XYEquationCurve::EquationType::Cartesian:
-			return QStringLiteral("(a, b, c, d)");
+			return QStringLiteral("(a; b; c; d)");
 		case XYEquationCurve::EquationType::Polar:
-			return QStringLiteral("(alpha, beta, gamma, delta)");
+			return QStringLiteral("(alpha; beta; gamma; delta)");
 		case XYEquationCurve::EquationType::Parametric:
-			return QStringLiteral("(a, b, c, d)");
+			return QStringLiteral("(a; b; c; d)");
 		case XYEquationCurve::EquationType::Implicit:
 		case XYEquationCurve::EquationType::Neutral:
-			return QStringLiteral("(a, b, c, d)");
+			return QStringLiteral("(a; b; c; d)");
 		}
 		break;
 	}
@@ -192,18 +223,20 @@ QString ExpressionParser::functionArgumentString(const QString& functionName, co
 QString ExpressionParser::functionDescription(const QString& function) {
 	for (int index = 0; index < _number_functions; index++) {
 		if (function == QLatin1String(_functions[index].name))
-			return m_functionsDescription.at(index);
+			return _functions[index].description();
 	}
-
-	return QStringLiteral();
+	for (int index = 0; index < _number_specialfunctions; index++) {
+		if (function == QLatin1String(_special_functions[index].name))
+			return _special_functions[index].description();
+	}
+	return QStringLiteral("");
 }
 QString ExpressionParser::constantDescription(const QString& constant) {
 	for (int index = 0; index < _number_constants; index++) {
 		if (constant == QLatin1String(_constants[index].name))
-			return m_constantsDescription.at(index) + QStringLiteral(" (") + m_constantsValues.at(index) + QStringLiteral(" ") + m_constantsUnits.at(index)
-				+ QStringLiteral(")");
+			return QStringLiteral("%1 (%2 %3)").arg(_constants[index].description()).arg(_constants[index].value).arg(QLatin1String(_constants[index].unit));
 	}
-	return QStringLiteral();
+	return QStringLiteral("");
 }
 
 const QStringList& ExpressionParser::constants() {
@@ -232,14 +265,18 @@ const QVector<ConstantGroups>& ExpressionParser::constantsGroupIndices() {
 
 bool ExpressionParser::isValid(const QString& expr, const QStringList& vars) {
 	QDEBUG(Q_FUNC_INFO << ", expr:" << expr << ", vars:" << vars);
+	if (expr.isEmpty())
+		return true;
+
 	gsl_set_error_handler_off();
+
+	Lock l(skipSpecialFunctionEvaluation);
 
 	for (const auto& var : vars)
 		assign_symbol(qPrintable(var), 0);
 
-	// cell() supports index i: make i valid
-	if (expr.contains(QLatin1String("cell")))
-		assign_symbol("i", 0);
+	// Row index
+	assign_symbol("i", 0);
 
 	const auto numberLocale = QLocale();
 	DEBUG(Q_FUNC_INFO << ", number locale: " << STDSTRING(numberLocale.name()))
@@ -257,8 +294,6 @@ bool ExpressionParser::isValid(const QString& expr, const QStringList& vars) {
 	/* remove temporarily defined symbols */
 	for (const auto& var : vars)
 		remove_symbol(qPrintable(var));
-	if (expr.contains(QLatin1String("cell")))
-		remove_symbol("i");
 
 	return !(parse_errors() > 0);
 }
@@ -274,11 +309,7 @@ QStringList ExpressionParser::getParameter(const QString& expr, const QStringLis
 #endif
 	QDEBUG(Q_FUNC_INFO << ", found strings:" << strings);
 	// RE for any number
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
 	const QRegularExpression re(QRegularExpression::anchoredPattern(QStringLiteral("[0-9]*")));
-#else
-	const QRegularExpression re("\\A(?:" + QStringLiteral("[0-9]*") + ")\\z");
-#endif
 	for (const QString& string : strings) {
 		QDEBUG(string << ':' << constants().indexOf(string) << ' ' << functions().indexOf(string) << ' ' << vars.indexOf(string) << ' '
 					  << re.match(string).hasMatch());
@@ -436,12 +467,189 @@ bool ExpressionParser::evaluateCartesian(const QString& expr,
 	return true;
 }
 
+struct PayloadExpressionParser : public Payload {
+	PayloadExpressionParser() {
+	}
+	PayloadExpressionParser(const QStringList* vars, const QVector<QVector<double>*>* xVectors, bool constant = false)
+		: Payload(constant)
+		, vars(vars)
+		, xVectors(xVectors) {
+	}
+	const QStringList* vars{nullptr};
+	int row{0};
+	const QVector<QVector<double>*>* xVectors{nullptr};
+};
+
+double cell(double x, const char* variable, const std::weak_ptr<Payload> payload) {
+	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
+	if (!p) {
+		assert(p); // Debug build
+		return NAN;
+	}
+
+	const int index = (int)x - 1;
+	for (int i = 0; i < p->vars->length(); i++) {
+		if (p->vars->at(i).compare(QLatin1String(variable)) == 0) {
+			if (index >= 0 && index < p->xVectors->at(i)->length())
+				return p->xVectors->at(i)->at(index);
+			else
+				break;
+		}
+	}
+
+	return NAN;
+}
+
+double ma(const char* variable, const std::weak_ptr<Payload> payload) {
+	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
+	if (!p) {
+		assert(p); // Debug build
+		return NAN;
+	}
+	return (cell(p->row, variable, payload) + cell(p->row + 1, variable, payload)) / 2.;
+}
+
+double mr(const char* variable, const std::weak_ptr<Payload> payload) {
+	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
+	if (!p) {
+		assert(p); // Debug build
+		return NAN;
+	}
+	return fabs(cell(p->row + 1, variable, payload) - cell(p->row + 1 - 1, variable, payload));
+}
+
+double smmin(double x, const char* variable, const std::weak_ptr<Payload> payload) {
+	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
+	if (!p) {
+		assert(p); // Debug build
+		return NAN;
+	}
+
+	for (int i = 0; i < p->vars->length(); i++) {
+		if (p->vars->at(i).compare(QLatin1String(variable)) == 0) {
+			const int N = x;
+			DEBUG("N = " << N)
+			if (N < 1)
+				break;
+			// calculate min of last n points
+			double min = INFINITY;
+			const int row = p->row;
+			for (int index = std::max(0, row - N + 1); index <= row; index++) {
+				const double v = p->xVectors->at(i)->at(index);
+				if (v < min)
+					min = v;
+			}
+			return min;
+		}
+	}
+	return NAN;
+}
+
+double smmax(double x, const char* variable, const std::weak_ptr<Payload> payload) {
+	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
+	if (!p) {
+		assert(p); // Debug build
+		return NAN;
+	}
+
+	for (int i = 0; i < p->vars->length(); i++) {
+		if (p->vars->at(i).compare(QLatin1String(variable)) == 0) {
+			const int N = x;
+			DEBUG("N = " << N)
+			if (N < 1)
+				break;
+			// calculate max of last n points
+			double max = -INFINITY;
+			const int row = p->row;
+			for (int index = std::max(0, row - N + 1); index <= row; index++) {
+				const double v = p->xVectors->at(i)->at(index);
+				if (v > max)
+					max = v;
+			}
+			return max;
+		}
+	}
+	return NAN;
+}
+
+double sma(double x, const char* variable, const std::weak_ptr<Payload> payload) {
+	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
+	if (!p) {
+		assert(p); // Debug build
+		return NAN;
+	}
+
+	for (int i = 0; i < p->vars->length(); i++) {
+		if (p->vars->at(i).compare(QLatin1String(variable)) == 0) {
+			const int N = x;
+			DEBUG("N = " << N)
+			if (N < 1)
+				break;
+			// calculate max of last n points
+			double sum = 0.;
+			const int row = p->row;
+			for (int index = std::max(0, row - N + 1); index <= row; index++)
+				sum += p->xVectors->at(i)->at(index);
+			return sum / N;
+		}
+	}
+	return NAN;
+}
+
+double smr(double x, const char* variable, const std::weak_ptr<Payload> payload) {
+	return smmax(x, variable, payload) - smmin(x, variable, payload);
+}
+
+double psample(double n, const char* variable, const std::weak_ptr<Payload> payload) {
+	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
+	if (!p) {
+		assert(p); // Debug build
+		return NAN;
+	}
+
+	// every n-th value, starting @ first
+	return cell((int)n * p->row + 1, variable, payload);
+}
+
+double rsample(const char* variable, const std::weak_ptr<Payload> payload) {
+	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
+	if (!p) {
+		assert(p); // Debug build
+		return NAN;
+	}
+
+	// random value of all rows
+	auto size = p->xVectors->at(0)->size();
+
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> dist(0, size - 1);
+	double value;
+	do { // loop until valid index generated
+		int randomIndex = dist(gen);
+		value = cell(randomIndex + 1, variable, payload);
+	} while (std::isnan(value));
+
+	return value;
+}
+
+void ExpressionParser::setSpecialFunction1(const char* function_name, func_t1Payload funct, std::shared_ptr<Payload> payload) {
+	set_specialfunction1(function_name, funct, payload);
+}
+
+void ExpressionParser::setSpecialFunction2(const char* function_name, func_t2Payload funct, std::shared_ptr<Payload> payload) {
+	set_specialfunction2(function_name, funct, payload);
+}
+
 /*!
 	evaluates multivariate function y=f(x_1, x_2, ...).
 	Variable names (x_1, x_2, ...) are stored in \c vars.
 	Data is stored in \c xVectors.
  */
 bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList& vars, const QVector<QVector<double>*>& xVectors, QVector<double>* yVector) {
+#if PERFTRACE_EXPRESSION_PARSER
+	PERFTRACE(QLatin1String(Q_FUNC_INFO));
+#endif
 	DEBUG(Q_FUNC_INFO << ", v5")
 	Q_ASSERT(vars.size() == xVectors.size());
 	gsl_set_error_handler_off();
@@ -459,120 +667,39 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 	const auto numberLocale = QLocale();
 	DEBUG("Parsing with locale " << qPrintable(numberLocale.name()))
 
-	for (int i = 0; i < minSize; i++) {
+	const auto payload = std::make_shared<PayloadExpressionParser>(&vars, &xVectors);
+	const auto payloadConst = std::make_shared<PayloadExpressionParser>(&vars, &xVectors, true);
+
+	set_specialfunction2(specialfun_cell, cell, payloadConst);
+	set_specialfunction1(specialfun_ma, ma, payload);
+	set_specialfunction1(specialfun_mr, mr, payload);
+	set_specialfunction2(specialfun_smmin, smmin, payload);
+	set_specialfunction2(specialfun_smmax, smmax, payload);
+	set_specialfunction2(specialfun_sma, sma, payload);
+	set_specialfunction2(specialfun_smr, smr, payload);
+	set_specialfunction2(specialfun_psample, psample, payload);
+	set_specialfunction1(specialfun_rsample, rsample, payload);
+
+	bool constExpression = false;
+	for (int i = 0; i < minSize || (constExpression && i < yVector->size()); i++) {
 		QString tmpExpr = expr;
 
-		// assign vars with value from xVectors
+		payload->row = i; // all special functions contain pointer to payload so they get this information
+		assign_symbol("i", i + 1);
+
 		for (int n = 0; n < vars.size(); ++n) {
-			assign_symbol(qPrintable(vars.at(n)), xVectors.at(n)->at(i));
-
-			// if expr contains cell(f(i), g(x,..)): replace this with xVectors.at(n)->at(f(i))
-			QRegExp rxcell(QStringLiteral("cell\\((.*),(.*)\\)"));
-			rxcell.setMinimal(true); // only match one method call at a time
-
-			int pos = 0;
-			while ((pos = rxcell.indexIn(tmpExpr, pos)) != -1) {
-				const QString f = rxcell.cap(1);
-				QString g = rxcell.cap(2);
-				// QDEBUG("f(i) =" << f)
-				// QDEBUG("g(x,..) =" << g)
-				assign_symbol("i", i + 1); // row number i = 1 .. minSize
-				const int index = parse(qPrintable(f), qPrintable(numberLocale.name()));
-				// DEBUG("INDEX = " << index)
-
-				if (index > 0 && index <= xVectors.at(n)->size()) {
-					const QString newg = g.replace(vars.at(n), numberLocale.toString(xVectors.at(n)->at(index - 1)));
-					// QDEBUG("new g(x,..) =" << newg)
-					const QString replace = QStringLiteral("cell(") + f + QStringLiteral(",") + newg + QStringLiteral(")");
-					// QDEBUG("MATCH =" << rxcell.cap(0))
-					// QDEBUG("replacement =" << replace)
-					tmpExpr.replace(rxcell.cap(0), replace);
-					pos++; // avoid endless loop
-				} else
-					tmpExpr.replace(rxcell.cap(0), numberLocale.toString(NAN));
-			}
-
-			// if expr contains smmin(N, x)
-			QRegExp rxmin(QLatin1String("smmin\\((.*),.*%1\\)").arg(vars.at(n)));
-			rxmin.setMinimal(true); // only match one method call at a time
-			pos = 0;
-			while ((pos = rxmin.indexIn(tmpExpr, pos)) != -1) {
-				const QString arg = rxmin.cap(1);
-				// QDEBUG("ARG = " << arg)
-				//  number of points to consider
-				const int N = numberLocale.toDouble(rxmin.cap(1));
-				// DEBUG("N = " << N)
-				if (N < 1)
-					continue;
-				// calculate min of last n points
-				double min = INFINITY;
-				for (int index = std::max(0, i - N + 1); index <= i; index++) {
-					const double v = xVectors.at(n)->at(index);
-					if (v < min)
-						min = v;
-				}
-
-				tmpExpr.replace(rxmin.cap(0), numberLocale.toString(min));
-			}
-			// if expr contains smmax(N, x)
-			QRegExp rxmax(QLatin1String("smmax\\((.*),.*%1\\)").arg(vars.at(n)));
-			rxmax.setMinimal(true); // only match one method call at a time
-			pos = 0;
-			while ((pos = rxmax.indexIn(tmpExpr, pos)) != -1) {
-				const QString arg = rxmax.cap(1);
-				// QDEBUG("ARG = " << arg)
-				//  number of points to consider
-				const int N = numberLocale.toDouble(rxmax.cap(1));
-				// DEBUG("N = " << N)
-				if (N < 1)
-					continue;
-				// calculate max of last n points
-				double max = -INFINITY;
-				for (int index = std::max(0, i - N + 1); index <= i; index++) {
-					const double v = xVectors.at(n)->at(index);
-					if (v > max)
-						max = v;
-				}
-
-				tmpExpr.replace(rxmax.cap(0), numberLocale.toString(max));
-			}
-			// if expr contains sma(N, x)
-			QRegExp rxsma(QLatin1String("sma\\((.*),.*%1\\)").arg(vars.at(n)));
-			rxsma.setMinimal(true); // only match one method call at a time
-			pos = 0;
-			while ((pos = rxsma.indexIn(tmpExpr, pos)) != -1) {
-				const QString arg = rxsma.cap(1);
-				// QDEBUG("ARG = " << arg)
-				//  number of points to consider
-				const int N = numberLocale.toDouble(rxsma.cap(1));
-				// DEBUG("N = " << N)
-				if (N < 1)
-					continue;
-				// calculate avg of last n points
-				double sum = 0.;
-				for (int index = std::max(0, i - N + 1); index <= i; index++)
-					sum += xVectors.at(n)->at(index);
-
-				tmpExpr.replace(rxsma.cap(0), numberLocale.toString(sum / N));
-			}
+			if (!constExpression)
+				assign_symbol(qPrintable(vars.at(n)), xVectors.at(n)->at(i));
 		}
-
-		// QDEBUG("PRE expression to parse = " << tmpExpr)
-
-		// finally replace all cell() calls with second argument (g)
-		QRegExp rxcellfinal(QLatin1String("cell\\(.*,(.*)\\)"));
-		rxcellfinal.setMinimal(true); // only match one method call at a time
-		int pos = 0;
-		while ((pos = rxcellfinal.indexIn(tmpExpr, pos)) != -1)
-			tmpExpr.replace(rxcellfinal.cap(0), rxcellfinal.cap(1));
-
-		// QDEBUG("FINAL expression to parse = " << tmpExpr)
 
 		double y = parse(qPrintable(tmpExpr), qPrintable(numberLocale.name()));
 		if (parse_errors() > 0) { // try default locale if failing
 			// DEBUG("Parsing with locale failed. Using en_US.")
 			y = parse(qPrintable(tmpExpr), "en_US");
 		}
+
+		if (parse_errors() == 0)
+			constExpression = variablesCounter() == 0;
 		// continue with next value
 		// if (parse_errors() > 0)
 		//	return false;
@@ -584,8 +711,10 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 	}
 
 	// if the y-vector is longer than the x-vector(s), set all exceeding elements to NaN
-	for (int i = minSize; i < yVector->size(); ++i)
-		(*yVector)[i] = NAN;
+	if (!constExpression) {
+		for (int i = minSize; i < yVector->size(); ++i)
+			(*yVector)[i] = NAN;
+	}
 
 	return true;
 }
@@ -660,4 +789,8 @@ bool ExpressionParser::evaluateParametric(const QString& xexpr,
 	}
 
 	return true;
+}
+
+QString ExpressionParser::errorMessage() const {
+	return QLatin1String(lastErrorMessage());
 }

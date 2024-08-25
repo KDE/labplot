@@ -16,7 +16,6 @@
 
 #include <QJsonValue>
 
-class QStringList;
 class QIODevice;
 class QJsonDocument;
 class QJsonModel;
@@ -36,17 +35,13 @@ public:
 	static QString fileInfoString(const QString&);
 
 	// read data from any device
-	void readDataFromDevice(QIODevice& device, AbstractDataSource*, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
+	void readDataFromDevice(QIODevice& device, AbstractDataSource*, ImportMode = ImportMode::Replace, int lines = -1);
 	// overloaded function to read from file
-	void
-	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
+	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
 
 	QVector<QStringList> preview(const QString& fileName, int lines);
 	QVector<QStringList> preview(QIODevice& device, int lines);
-
-	void loadFilterSettings(const QString&) override;
-	void saveFilterSettings(const QString&) const override;
 
 	void setDataRowType(const QJsonValue::Type);
 	QJsonValue::Type dataRowType() const;

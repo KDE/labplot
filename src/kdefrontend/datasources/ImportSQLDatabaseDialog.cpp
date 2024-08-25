@@ -3,14 +3,14 @@
 	Project              : LabPlot
 	Description          : import SQL dataase dialog
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2016 Ankit Wagadre <wagadre.ankit@gmail.com>
-	SPDX-FileCopyrightText: 2016-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "ImportSQLDatabaseDialog.h"
 #include "ImportSQLDatabaseWidget.h"
 #include "backend/core/AspectTreeModel.h"
+#include "backend/core/Settings.h"
 #include "backend/core/Workbook.h"
 #include "backend/lib/macros.h"
 #include "backend/matrix/Matrix.h"
@@ -25,7 +25,7 @@
 #include <QWindow>
 
 #include <KLocalizedString>
-#include <KSharedConfig>
+
 #include <KWindowConfig>
 
 /*!
@@ -51,12 +51,13 @@ ImportSQLDatabaseDialog::ImportSQLDatabaseDialog(MainWin* parent)
 
 	// Signals/Slots
 	connect(importSQLDatabaseWidget, &ImportSQLDatabaseWidget::stateChanged, this, &ImportSQLDatabaseDialog::checkOkButton);
-	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+	connect(importSQLDatabaseWidget, &ImportSQLDatabaseWidget::error, this, &ImportSQLDatabaseDialog::showErrorMessage);
+	connect(buttonBox, &QDialogButtonBox::accepted, this, &ImportDialog::accept);
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportSQLDatabaseDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportSQLDatabaseDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -66,16 +67,16 @@ ImportSQLDatabaseDialog::ImportSQLDatabaseDialog(MainWin* parent)
 
 ImportSQLDatabaseDialog::~ImportSQLDatabaseDialog() {
 	// save current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportSQLDatabaseDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportSQLDatabaseDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
-void ImportSQLDatabaseDialog::importTo(QStatusBar* statusBar) const {
+bool ImportSQLDatabaseDialog::importTo(QStatusBar* statusBar) const {
 	DEBUG("ImportSQLDatabaseDialog::import()");
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
 	if (!aspect) {
 		DEBUG("ERROR: No aspect available!");
-		return;
+		return false;
 	}
 
 	const auto mode = AbstractFileFilter::ImportMode(cbPosition->currentIndex());
@@ -92,6 +93,7 @@ void ImportSQLDatabaseDialog::importTo(QStatusBar* statusBar) const {
 	WAIT_CURSOR;
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
+	// TODO: error handling
 	QElapsedTimer timer;
 	timer.start();
 	if (aspect->inherits(AspectType::Matrix)) {
@@ -120,6 +122,7 @@ void ImportSQLDatabaseDialog::importTo(QStatusBar* statusBar) const {
 
 	RESET_CURSOR;
 	statusBar->removeWidget(progressBar);
+	return true;
 }
 
 QString ImportSQLDatabaseDialog::selectedObject() const {

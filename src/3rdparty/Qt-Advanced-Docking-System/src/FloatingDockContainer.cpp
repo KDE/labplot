@@ -4,7 +4,7 @@
  **
  ** This library is free software; you can redistribute it and/or
  ** modify it under the terms of the GNU Lesser General Public
- ** License as published by the Free Software Foundation; either
+ ** License as published by the Free Software Foundation;
  ** version 2.1 of the License, or (at your option) any later version.
  **
  ** This library is distributed in the hope that it will be useful,
@@ -62,7 +62,7 @@ namespace ads
 #ifdef Q_OS_WIN
 #if 0 // set to 1 if you need this function for debugging
 /**
- * Just for debuging to convert windows message identifiers to strings
+ * Just for debugging to convert windows message identifiers to strings
  */
 static const char* windowsMessageString(int MessageId)
 {
@@ -357,7 +357,7 @@ static const char* windowsMessageString(int MessageId)
 #endif
 
 
-static unsigned int zOrderCounter = 0;
+static unsigned int zOrderCounterFloating = 0;
 /**
  * Private data class of CFloatingDockContainer class (pimpl)
  */
@@ -365,7 +365,7 @@ struct FloatingDockContainerPrivate
 {
 	CFloatingDockContainer *_this;
 	CDockContainerWidget *DockContainer;
-	unsigned int zOrderIndex = ++zOrderCounter;
+	unsigned int zOrderIndex = ++zOrderCounterFloating;
 	QPointer<CDockManager> DockManager;
 	eDragState DraggingState = DraggingInactive;
 	QPoint DragStartMousePosition;
@@ -378,6 +378,7 @@ struct FloatingDockContainerPrivate
     QWidget* MouseEventHandler = nullptr;
     CFloatingWidgetTitleBar* TitleBar = nullptr;
 	bool IsResizing = false;
+    bool MousePressed = false;
 #endif
 
 	/**
@@ -498,10 +499,8 @@ void FloatingDockContainerPrivate::titleMouseReleaseEvent()
 		return;
 	}
 
-	if (DockManager->dockAreaOverlay()->dropAreaUnderCursor()
-	    != InvalidDockWidgetArea
-	    || DockManager->containerOverlay()->dropAreaUnderCursor()
-	        != InvalidDockWidgetArea)
+	if (DockManager->dockAreaOverlay()->dropAreaUnderCursor() != InvalidDockWidgetArea
+	 || DockManager->containerOverlay()->dropAreaUnderCursor() != InvalidDockWidgetArea)
 	{
 		CDockOverlay *Overlay = DockManager->containerOverlay();
 		if (!Overlay->dropOverlayRect().isValid())
@@ -509,21 +508,26 @@ void FloatingDockContainerPrivate::titleMouseReleaseEvent()
 			Overlay = DockManager->dockAreaOverlay();
 		}
 
-		// Resize the floating widget to the size of the highlighted drop area
-		// rectangle
-		QRect Rect = Overlay->dropOverlayRect();
-		int FrameWidth = (_this->frameSize().width() - _this->rect().width())
-		    / 2;
-		int TitleBarHeight = _this->frameSize().height()
-		    - _this->rect().height() - FrameWidth;
-		if (Rect.isValid())
+		// Do not resize if we drop into an autohide sidebar area to preserve
+		// the dock area size for the initial size of the auto hide area
+		if (!ads::internal::isSideBarArea(Overlay->dropAreaUnderCursor()))
 		{
-			QPoint TopLeft = Overlay->mapToGlobal(Rect.topLeft());
-			TopLeft.ry() += TitleBarHeight;
-			_this->setGeometry(
-			    QRect(TopLeft,
-			        QSize(Rect.width(), Rect.height() - TitleBarHeight)));
-			QApplication::processEvents();
+			// Resize the floating widget to the size of the highlighted drop area
+			// rectangle
+			QRect Rect = Overlay->dropOverlayRect();
+			int FrameWidth = (_this->frameSize().width() - _this->rect().width())
+				/ 2;
+			int TitleBarHeight = _this->frameSize().height()
+				- _this->rect().height() - FrameWidth;
+			if (Rect.isValid())
+			{
+				QPoint TopLeft = Overlay->mapToGlobal(Rect.topLeft());
+				TopLeft.ry() += TitleBarHeight;
+				_this->setGeometry(
+					QRect(TopLeft,
+						QSize(Rect.width(), Rect.height() - TitleBarHeight)));
+				QApplication::processEvents();
+			}
 		}
 		DropContainer->dropFloatingWidget(_this, QCursor::pos());
 	}
@@ -531,6 +535,7 @@ void FloatingDockContainerPrivate::titleMouseReleaseEvent()
 	DockManager->containerOverlay()->hideOverlay();
 	DockManager->dockAreaOverlay()->hideOverlay();
 }
+
 
 //============================================================================
 void FloatingDockContainerPrivate::updateDropOverlays(const QPoint &GlobalPos)
@@ -585,11 +590,25 @@ void FloatingDockContainerPrivate::updateDropOverlays(const QPoint &GlobalPos)
 	}
 
 	int VisibleDockAreas = TopContainer->visibleDockAreaCount();
-	ContainerOverlay->setAllowedAreas(
-	    VisibleDockAreas > 1 ? OuterDockAreas : AllDockAreas);
+	DockWidgetAreas AllowedContainerAreas = (VisibleDockAreas > 1) ? OuterDockAreas : AllDockAreas;
+	auto DockArea = TopContainer->dockAreaAt(GlobalPos);
+	// If the dock container contains only one single DockArea, then we need
+	// to respect the allowed areas - only the center area is relevant here because
+	// all other allowed areas are from the container
+	if (VisibleDockAreas == 1 && DockArea)
+	{
+		AllowedContainerAreas.setFlag(CenterDockWidgetArea, DockArea->allowedAreas().testFlag(CenterDockWidgetArea));
+	}
+
+	if (DockContainer->features().testFlag(CDockWidget::DockWidgetPinnable))
+	{
+		AllowedContainerAreas |= AutoHideDockAreas;
+	}
+
+	ContainerOverlay->setAllowedAreas(AllowedContainerAreas);
+
 	DockWidgetArea ContainerArea = ContainerOverlay->showOverlay(TopContainer);
 	ContainerOverlay->enableDropPreview(ContainerArea != InvalidDockWidgetArea);
-	auto DockArea = TopContainer->dockAreaAt(GlobalPos);
 	if (DockArea && DockArea->isVisible() && VisibleDockAreas > 0)
 	{
 		DockAreaOverlay->enableDropPreview(true);
@@ -643,7 +662,6 @@ CFloatingDockContainer::CFloatingDockContainer(CDockManager *DockManager) :
 
 #if defined(Q_OS_UNIX) && !defined(Q_OS_MACOS)
 	QDockWidget::setWidget(d->DockContainer);
-	QDockWidget::setFloating(true);
 	QDockWidget::setFeatures(QDockWidget::DockWidgetClosable
 		| QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
 
@@ -670,16 +688,16 @@ CFloatingDockContainer::CFloatingDockContainer(CDockManager *DockManager) :
 	else
 	{
 		// KDE doesn't seem to fire MoveEvents while moving windows, so for now no native titlebar for everything using KWin.
-		QString window_manager = internal::windowManager().toUpper().split(" ")[0];
-                native_window = window_manager != "KWIN";
+		QString window_manager = internal::windowManager().toUpper().split(QStringLiteral(" "))[0];
+                native_window = window_manager != QStringLiteral("KWIN");
 	}
 
     if (native_window)
     {
         // Native windows do not work if wayland is used. Ubuntu 22.04 uses wayland by default. To use
         // native windows, switch to Xorg
-        QString XdgSessionType = qgetenv("XDG_SESSION_TYPE").toLower();
-        if ("wayland" == XdgSessionType)
+        QString XdgSessionType = QString::fromLocal8Bit(qgetenv("XDG_SESSION_TYPE").toLower());
+        if (QStringLiteral("wayland") == XdgSessionType)
         {
             native_window = false;
         }
@@ -742,6 +760,7 @@ CFloatingDockContainer::CFloatingDockContainer(CDockWidget *DockWidget) :
     d->DockManager->notifyWidgetOrAreaRelocation(DockWidget);
 }
 
+
 //============================================================================
 CFloatingDockContainer::~CFloatingDockContainer()
 {
@@ -751,6 +770,36 @@ CFloatingDockContainer::~CFloatingDockContainer()
 		d->DockManager->removeFloatingWidget(this);
 	}
 	delete d;
+}
+
+
+//============================================================================
+void CFloatingDockContainer::deleteContent()
+{
+	std::vector<QPointer<ads::CDockAreaWidget>> areas;
+	for (int i = 0; i != dockContainer()->dockAreaCount(); ++i)
+	{
+		areas.push_back( dockContainer()->dockArea(i) );
+	}
+	for (auto area : areas)
+	{
+		if (!area)
+		{
+			continue;
+		}
+
+		// QPointer delete safety - just in case some dock widget in destruction
+		// deletes another related/twin or child dock widget.
+		std::vector<QPointer<QWidget>> deleteWidgets;
+		for (auto widget : area->dockWidgets())
+		{
+			deleteWidgets.push_back(widget);
+		}
+		for (auto ptrWdg : deleteWidgets)
+		{
+			delete ptrWdg;
+		}
+	}
 }
 
 //============================================================================
@@ -763,18 +812,43 @@ CDockContainerWidget* CFloatingDockContainer::dockContainer() const
 void CFloatingDockContainer::changeEvent(QEvent *event)
 {
 	Super::changeEvent(event);
-	if ((event->type() == QEvent::ActivationChange) && isActiveWindow())
+	switch (event->type())
 	{
-		ADS_PRINT("FloatingWidget::changeEvent QEvent::ActivationChange ");
-		d->zOrderIndex = ++zOrderCounter;
+	case QEvent::ActivationChange:
+		if (isActiveWindow())
+		{
+			ADS_PRINT("FloatingWidget::changeEvent QEvent::ActivationChange ");
+			d->zOrderIndex = ++zOrderCounterFloating;
 
 #if defined(Q_OS_UNIX) && !defined(Q_OS_MACOS)
-		if (d->DraggingState == DraggingFloatingWidget)
-		{
-			d->titleMouseReleaseEvent();
-			d->DraggingState = DraggingInactive;
-		}
+			if (d->DraggingState == DraggingFloatingWidget)
+			{
+				d->titleMouseReleaseEvent();
+				d->DraggingState = DraggingInactive;
+			}
 #endif
+		}
+		break;
+
+	case QEvent::WindowStateChange:
+	    // If the DockManager window is restored from minimized on Windows
+		// then the FloatingWidgets are not properly restored to maximized but
+		// to normal state.
+		// We simply check here, if the FloatingWidget was maximized before
+		// and if the DockManager is just leaving the minimized state. In this
+		// case, we restore the maximized state of this floating widget
+		if (d->DockManager->isLeavingMinimizedState())
+		{
+			QWindowStateChangeEvent* ev = static_cast<QWindowStateChangeEvent*>(event);
+			if (ev->oldState().testFlag(Qt::WindowMaximized))
+			{
+				this->showMaximized();
+			}
+		}
+		break;
+
+	default:
+		break; // do nothing
 	}
 }
 
@@ -985,7 +1059,7 @@ void CFloatingDockContainer::moveFloating()
 		// the main window as the active window for some reason. This fixes
 		// that by resetting the active window to the floating widget after
 		// updating the overlays.
-		QApplication::setActiveWindow(this);
+		activateWindow();
 #endif
 		break;
 	default:
@@ -1099,15 +1173,25 @@ QList<CDockWidget*> CFloatingDockContainer::dockWidgets() const
 }
 
 //============================================================================
-void CFloatingDockContainer::hideAndDeleteLater()
+void CFloatingDockContainer::finishDropOperation()
 {
-	// Widget has been redocked, so it must be hidden right way (see 
+	// Widget has been redocked, so it must be hidden right way (see
 	// https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System/issues/351)
 	// but AutoHideChildren must be set to false because "this" still contains
 	// dock widgets that shall not be toggled hidden.
 	d->AutoHideChildren = false;
 	hide();
+	// The floating widget will be deleted now. Ensure, that the destructor
+	// of the floating widget does not delete any dock areas that have been
+	// moved to a new container - simply remove all dock areas before deleting
+	// the floating widget
+	d->DockContainer->removeAllDockAreas();
 	deleteLater();
+	if (d->DockManager)
+	{
+		d->DockManager->removeFloatingWidget(this);
+		d->DockManager->removeDockContainer(this->dockContainer());
+	}
 }
 
 //============================================================================
@@ -1218,7 +1302,7 @@ void CFloatingDockContainer::moveEvent(QMoveEvent *event)
 		// the main window as the active window for some reason. This fixes
 		// that by resetting the active window to the floating widget after
 		// updating the overlays.
-		QApplication::setActiveWindow(this);
+		activateWindow();
 		break;
 	default:
 		break;
@@ -1298,12 +1382,12 @@ void CFloatingDockContainer::resizeEvent(QResizeEvent *event)
 	Super::resizeEvent(event);
 }
 
-static bool s_mousePressed = false;
+
 //============================================================================
 void CFloatingDockContainer::moveEvent(QMoveEvent *event)
 {
 	Super::moveEvent(event);
-	if (!d->IsResizing && event->spontaneous() && s_mousePressed)
+    if (!d->IsResizing && event->spontaneous() && d->MousePressed)
 	{
         d->setState(DraggingFloatingWidget);
 		d->updateDropOverlays(QCursor::pos());
@@ -1319,10 +1403,10 @@ bool CFloatingDockContainer::event(QEvent *e)
 	switch (e->type())
 	{
 	case QEvent::WindowActivate:
-		s_mousePressed = false;
+        d->MousePressed = false;
 		break;
 	case QEvent::WindowDeactivate:
-		s_mousePressed = true;
+        d->MousePressed = true;
 		break;
 	default:
 		break;

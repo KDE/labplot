@@ -9,10 +9,10 @@
 */
 
 #include "BinaryOptionsWidget.h"
+#include "backend/core/Settings.h"
 #include "backend/datasources/filters/BinaryFilter.h"
 
 #include <KConfigGroup>
-#include <KSharedConfig>
 
 /*!
 	\class BinaryOptionsWidget
@@ -61,23 +61,33 @@ void BinaryOptionsWidget::applyFilterSettings(BinaryFilter* filter) const {
 }
 
 void BinaryOptionsWidget::loadSettings() const {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportBinary");
-
-	ui.niVectors->setValue(conf.readEntry("Vectors", "2").toInt());
-	ui.cbDataType->setCurrentIndex(conf.readEntry("DataType", 0));
-	ui.cbByteOrder->setCurrentIndex(conf.readEntry("ByteOrder", 0));
-	ui.sbSkipStartBytes->setValue(conf.readEntry("SkipStartBytes", 0));
-	ui.sbSkipBytes->setValue(conf.readEntry("SkipBytes", 0));
-	ui.chbCreateIndex->setChecked(conf.readEntry("CreateIndex", false));
+	auto config = KConfig();
+	loadConfigFromTemplate(config);
 }
 
-void BinaryOptionsWidget::saveSettings() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportBinary");
+void BinaryOptionsWidget::saveSettings() const {
+	auto config = KConfig();
+	saveConfigAsTemplate(config);
+}
 
-	conf.writeEntry("Vectors", ui.niVectors->value());
-	conf.writeEntry("ByteOrder", ui.cbByteOrder->currentIndex());
-	conf.writeEntry("DataType", ui.cbDataType->currentIndex());
-	conf.writeEntry("SkipStartBytes", ui.sbSkipStartBytes->value());
-	conf.writeEntry("SkipBytes", ui.sbSkipBytes->value());
-	conf.writeEntry("CreateIndex", ui.chbCreateIndex->isChecked());
+void BinaryOptionsWidget::loadConfigFromTemplate(KConfig& config) const {
+	auto group = config.group(QStringLiteral("ImportBinary"));
+
+	ui.niVectors->setValue(group.readEntry("Vectors", "2").toInt());
+	ui.cbDataType->setCurrentIndex(group.readEntry("DataType", 0));
+	ui.cbByteOrder->setCurrentIndex(group.readEntry("ByteOrder", 0));
+	ui.sbSkipStartBytes->setValue(group.readEntry("SkipStartBytes", 0));
+	ui.sbSkipBytes->setValue(group.readEntry("SkipBytes", 0));
+	ui.chbCreateIndex->setChecked(group.readEntry("CreateIndex", false));
+}
+
+void BinaryOptionsWidget::saveConfigAsTemplate(KConfig& config) const {
+	auto group = config.group(QStringLiteral("ImportBinary"));
+
+	group.writeEntry("Vectors", ui.niVectors->value());
+	group.writeEntry("ByteOrder", ui.cbByteOrder->currentIndex());
+	group.writeEntry("DataType", ui.cbDataType->currentIndex());
+	group.writeEntry("SkipStartBytes", ui.sbSkipStartBytes->value());
+	group.writeEntry("SkipBytes", ui.sbSkipBytes->value());
+	group.writeEntry("CreateIndex", ui.chbCreateIndex->isChecked());
 }

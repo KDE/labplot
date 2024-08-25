@@ -3,14 +3,12 @@
 	Project              : LabPlot
 	Description          : axes widget class
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "AxisDock.h"
-#include "backend/core/AspectTreeModel.h"
-#include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
 #include "backend/worksheet/Worksheet.h"
@@ -22,6 +20,7 @@
 #include "kdefrontend/widgets/LabelWidget.h"
 #include "kdefrontend/widgets/LineWidget.h"
 
+#include <KConfig>
 #include <KLineEdit>
 #include <KLocalizedString>
 #include <KMessageBox>
@@ -30,10 +29,8 @@
 #include <QPainter>
 #include <QTimer>
 
-extern "C" {
 #include "backend/nsl/nsl_math.h"
 #include <gsl/gsl_math.h>
-}
 
 namespace {
 enum PositionAlignmentComboBoxIndex {
@@ -56,9 +53,9 @@ using Dimension = CartesianCoordinateSystem::Dimension;
 AxisDock::AxisDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(1.5 * m_leName->height());
+	setPlotRangeCombobox(ui.cbPlotRanges);
+	setBaseWidgets(ui.leName, ui.teComment);
+	setVisibilityWidgets(ui.chkVisible);
 
 	//"Title"-tab
 	auto* hboxLayout = new QHBoxLayout(ui.tabTitle);
@@ -79,24 +76,28 @@ AxisDock::AxisDock(QWidget* parent)
 	dtsbMajorTicksIncrement = new DateTimeSpinBox(ui.tabTicks);
 	gridLayout->addWidget(dtsbMajorTicksIncrement, 5, 2);
 
+	auto layout = ui.tabTicks->findChild<QHBoxLayout*>(QStringLiteral("layoutMajorTickStartOffset"));
+	dtsbMajorTicksDateTimeStartOffset = new DateTimeSpinBox(ui.tabTicks);
+	layout->insertWidget(0, dtsbMajorTicksDateTimeStartOffset);
+
 	cbMajorTicksColumn = new TreeViewComboBox(ui.tabTicks);
-	gridLayout->addWidget(cbMajorTicksColumn, 9, 2);
+	gridLayout->addWidget(cbMajorTicksColumn, 10, 2);
 
 	cbLabelsTextColumn = new TreeViewComboBox(ui.tabTicks);
-	gridLayout->addWidget(cbLabelsTextColumn, 11, 2);
+	gridLayout->addWidget(cbLabelsTextColumn, 12, 2);
 
 	majorTicksLineWidget = new LineWidget(ui.tabTicks);
-	gridLayout->addWidget(majorTicksLineWidget, 14, 0, 1, 3);
+	gridLayout->addWidget(majorTicksLineWidget, 15, 0, 1, 3);
 
 	// minor ticks
 	dtsbMinorTicksIncrement = new DateTimeSpinBox(ui.tabTicks);
-	gridLayout->addWidget(dtsbMinorTicksIncrement, 21, 2);
+	gridLayout->addWidget(dtsbMinorTicksIncrement, 22, 2);
 
 	cbMinorTicksColumn = new TreeViewComboBox(ui.tabTicks);
-	gridLayout->addWidget(cbMinorTicksColumn, 22, 2);
+	gridLayout->addWidget(cbMinorTicksColumn, 23, 2);
 
 	minorTicksLineWidget = new LineWidget(ui.tabTicks);
-	gridLayout->addWidget(minorTicksLineWidget, 25, 0, 1, 3);
+	gridLayout->addWidget(minorTicksLineWidget, 26, 0, 1, 3);
 
 	// "Grid"-tab
 	gridLayout = qobject_cast<QGridLayout*>(ui.tabGrid->layout());
@@ -117,11 +118,11 @@ AxisDock::AxisDock(QWidget* parent)
 		layout->setVerticalSpacing(2);
 	}
 
+	init();
+
 	//**********************************  Slots **********************************************
 
 	//"General"-tab
-	connect(ui.leName, &QLineEdit::textChanged, this, &AxisDock::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &AxisDock::commentChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &AxisDock::visibilityChanged);
 
 	connect(ui.kcbAxisColor, &KColorButton::changed, this, &AxisDock::colorChanged);
@@ -131,6 +132,7 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(ui.sbPosition, QOverload<double>::of(&NumberSpinBox::valueChanged), this, QOverload<double>::of(&AxisDock::positionChanged));
 	connect(ui.sbPositionLogical, QOverload<double>::of(&NumberSpinBox::valueChanged), this, QOverload<double>::of(&AxisDock::logicalPositionChanged));
 	connect(ui.cbScale, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::scaleChanged);
+	connect(ui.cbRangeScale, &QCheckBox::toggled, this, &AxisDock::rangeScaleChanged);
 
 	connect(ui.cbRangeType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::rangeTypeChanged);
 	connect(ui.sbStart, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::startChanged);
@@ -148,8 +150,6 @@ AxisDock::AxisDock(QWidget* parent)
 
 	connect(ui.chkShowScaleOffset, &QCheckBox::toggled, this, &AxisDock::showScaleOffsetChanged);
 
-	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::plotRangeChanged);
-
 	//"Line"-tab
 	connect(lineWidget, &LineWidget::colorChanged, this, &AxisDock::updateArrowLineColor);
 	connect(ui.cbArrowPosition, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::arrowPositionChanged);
@@ -165,7 +165,9 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(dtsbMajorTicksIncrement, &DateTimeSpinBox::valueChanged, this, &AxisDock::majorTicksSpacingChanged);
 	connect(ui.cbMajorTicksStartType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::majorTicksStartTypeChanged);
 	connect(ui.sbMajorTickStartOffset, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::majorTicksStartOffsetChanged);
+	connect(dtsbMajorTicksDateTimeStartOffset, &DateTimeSpinBox::valueChanged, this, &AxisDock::majorTicksDateTimeStartOffsetChanged);
 	connect(ui.sbMajorTickStartValue, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::majorTicksStartValueChanged);
+	connect(ui.sbMajorTickStartDateTime, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &AxisDock::majorTicksStartDateTimeChanged);
 	connect(ui.tbFirstTickData, &QToolButton::clicked, this, &AxisDock::setTickOffsetData);
 	connect(ui.tbFirstTickAuto, &QToolButton::clicked, this, &AxisDock::setTickOffsetAuto);
 	connect(cbMajorTicksColumn, &TreeViewComboBox::currentModelIndexChanged, this, &AxisDock::majorTicksColumnChanged);
@@ -214,21 +216,16 @@ AxisDock::AxisDock(QWidget* parent)
 	auto* hlayout = new QHBoxLayout(frame);
 	hlayout->setContentsMargins(0, 11, 0, 11);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Axis);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("Axis"));
 	hlayout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &AxisDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &AxisDock::saveConfigAsTemplate);
 	connect(templateHandler, &TemplateHandler::info, this, &AxisDock::info);
 
 	ui.verticalLayout->addWidget(frame);
-
-	init();
 }
 
-AxisDock::~AxisDock() {
-	if (m_aspectTreeModel)
-		delete m_aspectTreeModel;
-}
+AxisDock::~AxisDock() = default;
 
 void AxisDock::init() {
 	CONDITIONAL_LOCK_RETURN;
@@ -255,8 +252,8 @@ void AxisDock::init() {
 	ui.cbRangeType->setToolTip(msg);
 
 	// scales
-	for (const auto& name : RangeT::scaleNames())
-		ui.cbScale->addItem(name);
+	for (const auto& name : RangeT::scaleNames)
+		ui.cbScale->addItem(name.toString());
 
 	ui.cbOrientation->addItem(i18n("Horizontal"));
 	ui.cbOrientation->addItem(i18n("Vertical"));
@@ -328,11 +325,12 @@ void AxisDock::setModel() {
 	cbLabelsTextColumn->setTopLevelClasses(list);
 
 	list = {AspectType::Column};
-	m_aspectTreeModel->setSelectableAspects(list);
+	auto* model = aspectModel();
+	model->setSelectableAspects(list);
 
-	cbMajorTicksColumn->setModel(m_aspectTreeModel);
-	cbMinorTicksColumn->setModel(m_aspectTreeModel);
-	cbLabelsTextColumn->setModel(m_aspectTreeModel);
+	cbMajorTicksColumn->setModel(model);
+	cbMinorTicksColumn->setModel(model);
+	cbLabelsTextColumn->setModel(model);
 }
 
 /*!
@@ -345,35 +343,20 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	m_axis = list.first();
 	setAspects(list);
 	Q_ASSERT(m_axis != nullptr);
-	m_aspectTreeModel = new AspectTreeModel(m_axis->project());
 	this->setModel();
 
 	labelWidget->setAxes(list);
 
 	// if there are more than one axis in the list, disable the tab "general"
 	if (list.size() == 1) {
-		ui.lName->setEnabled(true);
-		ui.leName->setEnabled(true);
-		ui.lComment->setEnabled(true);
-		ui.teComment->setEnabled(true);
-		ui.leName->setText(m_axis->name());
-		ui.teComment->setText(m_axis->comment());
 		this->setModelIndexFromColumn(cbMajorTicksColumn, m_axis->majorTicksColumn());
 		this->setModelIndexFromColumn(cbMinorTicksColumn, m_axis->minorTicksColumn());
 		this->setModelIndexFromColumn(cbLabelsTextColumn, m_axis->labelsTextColumn());
 	} else {
-		ui.lName->setEnabled(false);
-		ui.leName->setEnabled(false);
-		ui.lComment->setEnabled(false);
-		ui.teComment->setEnabled(false);
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
 		cbMajorTicksColumn->setCurrentModelIndex(QModelIndex());
 		cbMinorTicksColumn->setCurrentModelIndex(QModelIndex());
 		cbLabelsTextColumn->setCurrentModelIndex(QModelIndex());
 	}
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
 
 	// show the properties of the first axis
 	this->load();
@@ -397,25 +380,24 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	majorGridLineWidget->setLines(majorGridLines);
 	minorGridLineWidget->setLines(minorGridLines);
 
-	updatePlotRanges();
+	updatePlotRangeList();
 	initConnections();
 }
 
 void AxisDock::initConnections() {
 	// general
-	connect(m_axis, &Axis::aspectDescriptionChanged, this, &AxisDock::aspectDescriptionChanged);
 	connect(m_axis, &Axis::orientationChanged, this, QOverload<Axis::Orientation>::of(&AxisDock::axisOrientationChanged));
 	connect(m_axis, QOverload<Axis::Position>::of(&Axis::positionChanged), this, QOverload<Axis::Position>::of(&AxisDock::axisPositionChanged));
 	connect(m_axis, QOverload<double>::of(&Axis::positionChanged), this, QOverload<double>::of(&AxisDock::axisPositionChanged));
 	connect(m_axis, &Axis::logicalPositionChanged, this, &AxisDock::axisLogicalPositionChanged);
 	connect(m_axis, &Axis::scaleChanged, this, &AxisDock::axisScaleChanged);
+	connect(m_axis, &Axis::rangeScaleChanged, this, &AxisDock::axisRangeScaleChanged);
 	connect(m_axis, &Axis::rangeTypeChanged, this, &AxisDock::axisRangeTypeChanged);
 	connect(m_axis, &Axis::startChanged, this, &AxisDock::axisStartChanged);
 	connect(m_axis, &Axis::endChanged, this, &AxisDock::axisEndChanged);
 	connect(m_axis, &Axis::zeroOffsetChanged, this, &AxisDock::axisZeroOffsetChanged);
 	connect(m_axis, &Axis::scalingFactorChanged, this, &AxisDock::axisScalingFactorChanged);
 	connect(m_axis, &Axis::showScaleOffsetChanged, this, &AxisDock::axisShowScaleOffsetChanged);
-	connect(m_axis, &WorksheetElement::plotRangeListChanged, this, &AxisDock::updatePlotRanges);
 
 	// line
 	connect(m_axis, &Axis::arrowTypeChanged, this, &AxisDock::axisArrowTypeChanged);
@@ -482,8 +464,8 @@ void AxisDock::updateLocale() {
 
 	// scales
 	ui.cbScale->clear();
-	for (const auto& name : RangeT::scaleNames())
-		ui.cbScale->addItem(name);
+	for (const auto& name : RangeT::scaleNames)
+		ui.cbScale->addItem(name.toString());
 
 	labelWidget->updateLocale();
 	lineWidget->updateLocale();
@@ -522,13 +504,13 @@ void AxisDock::activateTitleTab() {
 
 void AxisDock::setModelIndexFromColumn(TreeViewComboBox* cb, const AbstractColumn* column) {
 	if (column)
-		cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(column));
+		cb->setCurrentModelIndex(aspectModel()->modelIndexOfAspect(column));
 	else
 		cb->setCurrentModelIndex(QModelIndex());
 }
 
-void AxisDock::updatePlotRanges() {
-	updatePlotRangeList(ui.cbPlotRanges);
+void AxisDock::updatePlotRangeList() {
+	BaseDock::updatePlotRangeList();
 
 	if (m_axis->coordinateSystemCount() == 0)
 		return;
@@ -716,19 +698,29 @@ void AxisDock::scaleChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
 	auto scale = static_cast<RangeT::Scale>(index);
-	for (auto* axis : m_axesList)
+	for (auto* axis : m_axesList) {
 		axis->setScale(scale);
+
+		if (axis->majorTicksAutoNumber())
+			ui.sbMajorTicksNumber->setValue(axis->majorTicksNumber());
+	}
+}
+
+void AxisDock::rangeScaleChanged(bool set) {
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* axis : m_axesList)
+		axis->setRangeScale(set);
 }
 
 void AxisDock::rangeTypeChanged(int index) {
-	CONDITIONAL_LOCK_RETURN;
-
 	auto rangeType = static_cast<Axis::RangeType>(index);
 	bool autoScale = (rangeType != Axis::RangeType::Custom);
 	ui.sbStart->setEnabled(!autoScale);
 	ui.sbEnd->setEnabled(!autoScale);
 	ui.dateTimeEditStart->setEnabled(!autoScale);
 	ui.dateTimeEditEnd->setEnabled(!autoScale);
+
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
 		axis->setRangeType(rangeType);
@@ -933,6 +925,7 @@ void AxisDock::arrowSizeChanged(int value) {
 void AxisDock::majorTicksDirectionChanged(int index) {
 	const auto direction = Axis::TicksDirection(index);
 	const bool b = (direction != Axis::noTicks);
+	const bool numeric = m_axis->isNumeric();
 	ui.cbMajorTicksType->setEnabled(b);
 	ui.cbMajorTicksType->setEnabled(b);
 	ui.cbMajorTicksAutoNumber->setEnabled(b);
@@ -948,8 +941,10 @@ void AxisDock::majorTicksDirectionChanged(int index) {
 	ui.sbMajorTicksSpacingNumeric->setEnabled(b);
 	dtsbMajorTicksIncrement->setEnabled(b);
 	ui.cbMajorTicksStartType->setEnabled(b);
-	ui.sbMajorTickStartValue->setEnabled(b);
-	ui.sbMajorTickStartOffset->setEnabled(b);
+	ui.sbMajorTickStartValue->setEnabled(b && numeric);
+	ui.sbMajorTickStartDateTime->setEnabled(b && !numeric);
+	ui.sbMajorTickStartOffset->setEnabled(b && numeric);
+	dtsbMajorTicksDateTimeStartOffset->setEnabled(b && !numeric);
 	ui.tbFirstTickData->setEnabled(b);
 	ui.tbFirstTickAuto->setEnabled(b);
 	cbMajorTicksColumn->setEnabled(b);
@@ -977,8 +972,9 @@ void AxisDock::majorTicksTypeChanged(int index) {
 
 	ui.lLabelsTextType->setVisible(type != Axis::TicksType::ColumnLabels);
 	ui.cbLabelsTextType->setVisible(type != Axis::TicksType::ColumnLabels);
-	ui.lLabelsTextColumn->setVisible(type != Axis::TicksType::ColumnLabels);
-	cbLabelsTextColumn->setVisible(type != Axis::TicksType::ColumnLabels);
+	const auto customValues = m_axis->labelsTextType() == Axis::LabelsTextType::CustomValues;
+	ui.lLabelsTextColumn->setVisible(type != Axis::TicksType::ColumnLabels && customValues);
+	cbLabelsTextColumn->setVisible(type != Axis::TicksType::ColumnLabels && customValues);
 
 	switch (type) {
 	case Axis::TicksType::TotalNumber: {
@@ -1007,17 +1003,15 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		ui.lMajorTicksStartType->show();
 		ui.cbMajorTicksStartType->show();
 
-		if (m_axis->isNumeric()) {
-			ui.lMajorTicksIncrementDateTime->hide();
-			dtsbMajorTicksIncrement->hide();
-			ui.lMajorTicksSpacingNumeric->show();
-			ui.sbMajorTicksSpacingNumeric->show();
-		} else {
-			ui.lMajorTicksIncrementDateTime->show();
-			dtsbMajorTicksIncrement->show();
-			ui.lMajorTicksSpacingNumeric->hide();
-			ui.sbMajorTicksSpacingNumeric->hide();
-		}
+		const bool numeric = m_axis->isNumeric();
+
+		ui.lMajorTicksSpacingNumeric->setVisible(numeric);
+		ui.sbMajorTicksSpacingNumeric->setVisible(numeric);
+
+		ui.lMajorTicksIncrementDateTime->setVisible(!numeric);
+		dtsbMajorTicksIncrement->setVisible(!numeric);
+		ui.lMajorTicksIncrementDateTime->setVisible(!numeric);
+		dtsbMajorTicksDateTimeStartOffset->setVisible(!numeric);
 
 		ui.lMajorTicksColumn->hide();
 		cbMajorTicksColumn->hide();
@@ -1030,13 +1024,12 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		majorTicksSpacingChanged();
 		break;
 	}
-
 	case Axis::TicksType::ColumnLabels:
 		// Fall through
 	case Axis::TicksType::CustomColumn: {
-		ui.lMajorTicksNumber->hide();
-		ui.sbMajorTicksNumber->hide();
-		ui.cbMajorTicksAutoNumber->hide();
+		ui.lMajorTicksNumber->show();
+		ui.sbMajorTicksNumber->show();
+		ui.cbMajorTicksAutoNumber->show();
 		ui.lMajorTicksSpacingNumeric->hide();
 		ui.sbMajorTicksSpacingNumeric->hide();
 		ui.lMajorTicksIncrementDateTime->hide();
@@ -1110,6 +1103,17 @@ void AxisDock::majorTicksStartTypeChanged(int state) {
 		axis->setMajorTicksStartType(type);
 }
 
+void AxisDock::majorTicksDateTimeStartOffsetChanged() {
+	if (m_axis->isNumeric())
+		return;
+	const qint64 value = dtsbMajorTicksDateTimeStartOffset->value();
+	ui.sbMajorTickStartOffset->setClearButtonEnabled(value != 0);
+
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* axis : m_axesList)
+		axis->setMajorTickStartOffset(value);
+}
+
 void AxisDock::majorTicksStartOffsetChanged(double value) {
 	ui.sbMajorTickStartOffset->setClearButtonEnabled(value != 0);
 
@@ -1117,6 +1121,15 @@ void AxisDock::majorTicksStartOffsetChanged(double value) {
 
 	for (auto* axis : m_axesList)
 		axis->setMajorTickStartOffset(value);
+}
+
+void AxisDock::majorTicksStartDateTimeChanged(qint64 value) {
+	ui.sbMajorTickStartValue->setClearButtonEnabled(value != 0);
+
+	CONDITIONAL_RETURN_NO_LOCK;
+
+	for (auto* axis : m_axesList)
+		axis->setMajorTickStartValue(value);
 }
 
 void AxisDock::majorTicksStartValueChanged(double value) {
@@ -1142,6 +1155,7 @@ void AxisDock::setTickOffsetData(bool nice) {
 	const double offset = dataRange.start() - m_axis->range().start();
 
 	ui.sbMajorTickStartOffset->setValue(offset);
+	dtsbMajorTicksDateTimeStartOffset->setValue(offset);
 }
 
 void AxisDock::majorTicksColumnChanged(const QModelIndex& index) {
@@ -1565,6 +1579,23 @@ void AxisDock::axisScaleChanged(RangeT::Scale scale) {
 	ui.cbScale->setCurrentIndex(static_cast<int>(scale));
 }
 
+void AxisDock::updateScale() {
+	if (m_axis->rangeScale()) {
+		ui.cbScale->setEnabled(false);
+		ui.cbScale->setToolTip(i18n("Scale is in sync with the plot scale"));
+	} else {
+		ui.cbScale->setEnabled(true);
+		ui.cbScale->setToolTip(i18n("Scale is async with the plot"));
+	}
+}
+
+void AxisDock::axisRangeScaleChanged(bool rangeScale) {
+	updateScale();
+
+	CONDITIONAL_LOCK_RETURN;
+	ui.cbRangeScale->setChecked(rangeScale);
+}
+
 void AxisDock::axisRangeTypeChanged(Axis::RangeType type) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbRangeType->setCurrentIndex(static_cast<int>(type));
@@ -1662,10 +1693,12 @@ void AxisDock::axisMajorTicksStartTypeChanged(Axis::TicksStartType type) {
 void AxisDock::axisMajorTicksStartOffsetChanged(qreal value) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbMajorTickStartOffset->setValue(value);
+	dtsbMajorTicksDateTimeStartOffset->setValue(value);
 }
 void AxisDock::axisMajorTicksStartValueChanged(qreal value) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbMajorTickStartValue->setValue(value);
+	ui.sbMajorTickStartDateTime->setMSecsSinceEpochUTC(value);
 }
 void AxisDock::axisMajorTicksColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
@@ -1786,13 +1819,18 @@ void AxisDock::axisLabelsOpacityChanged(qreal opacity) {
 
 void AxisDock::updateMajorTicksStartType(bool visible) {
 	const bool absoluteValue = (ui.cbMajorTicksStartType->currentIndex() == 0);
+	const bool numeric = m_axis->isNumeric();
 
-	ui.lMajorTickStartOffset->setVisible(visible && !absoluteValue);
-	ui.sbMajorTickStartOffset->setVisible(visible && !absoluteValue);
+	ui.lMajorTickStartOffset->setVisible(visible && !absoluteValue); // for datetime and numeric
+	ui.sbMajorTickStartOffset->setVisible(visible && !absoluteValue && numeric);
+	dtsbMajorTicksDateTimeStartOffset->setVisible(visible && !absoluteValue && !numeric);
 	ui.tbFirstTickData->setVisible(visible && !absoluteValue);
 	ui.tbFirstTickAuto->setVisible(visible && !absoluteValue);
-	ui.sbMajorTickStartValue->setVisible(visible && absoluteValue);
-	ui.lMajorTickStartValue->setVisible(visible && absoluteValue);
+
+	ui.sbMajorTickStartValue->setVisible(visible && absoluteValue && numeric);
+	ui.lMajorTickStartValue->setVisible(visible && absoluteValue && numeric);
+	ui.lMajorTickStartDateTime->setVisible(visible && absoluteValue && !numeric);
+	ui.sbMajorTickStartDateTime->setVisible(visible && absoluteValue && !numeric);
 }
 
 void AxisDock::axisVisibilityChanged(bool on) {
@@ -1850,8 +1888,21 @@ void AxisDock::load() {
 	spinBoxCalculateMinMax(ui.sbPositionLogical, logicalRange, m_axis->logicalPosition());
 	ui.sbPositionLogical->setValue(m_axis->logicalPosition());
 
+	updateScale();
+	const bool rangeScale = m_axis->rangeScale();
+	ui.cbRangeScale->setChecked(rangeScale);
 	ui.cbScale->setCurrentIndex(static_cast<int>(m_axis->scale()));
-	ui.cbRangeType->setCurrentIndex(static_cast<int>(m_axis->rangeType()));
+	// Changing the scale in the axis for the ticks is deprecated
+	// So show the options only if rangeScale is not turned on.
+	// So the user is once able to enable it and then the dialog
+	// disappears
+	ui.cbRangeScale->setVisible(!rangeScale);
+	ui.cbScale->setVisible(!rangeScale);
+	ui.lScale->setVisible(!rangeScale);
+
+	index = static_cast<int>(m_axis->rangeType());
+	ui.cbRangeType->setCurrentIndex(index);
+	rangeTypeChanged(index);
 	ui.sbStart->setValue(m_axis->range().start());
 	ui.sbEnd->setValue(m_axis->range().end());
 
@@ -1919,7 +1970,9 @@ void AxisDock::load() {
 		dtsbMajorTicksIncrement->setValue(value);
 	ui.cbMajorTicksStartType->setCurrentIndex(static_cast<int>(m_axis->majorTicksStartType()));
 	ui.sbMajorTickStartOffset->setValue(m_axis->majorTickStartOffset());
+	dtsbMajorTicksDateTimeStartOffset->setValue(m_axis->majorTickStartOffset());
 	ui.sbMajorTickStartValue->setValue(m_axis->majorTickStartValue());
+	ui.sbMajorTickStartDateTime->setMSecsSinceEpochUTC(m_axis->majorTickStartValue());
 	ui.sbMajorTicksLength->setValue(Worksheet::convertFromSceneUnits(m_axis->majorTicksLength(), Worksheet::Unit::Point));
 
 	// Minor ticks
@@ -1957,6 +2010,7 @@ void AxisDock::load() {
 	ui.leLabelsSuffix->setText(m_axis->labelsSuffix());
 	ui.sbLabelsOpacity->setValue(round(m_axis->labelsOpacity() * 100.0));
 
+	majorTicksDirectionChanged(ui.cbMajorTicksDirection->currentIndex());
 	majorTicksTypeChanged(ui.cbMajorTicksType->currentIndex());
 	minorTicksTypeChanged(ui.cbMinorTicksType->currentIndex());
 	labelsTextTypeChanged(ui.cbLabelsTextType->currentIndex());
@@ -1985,14 +2039,7 @@ void AxisDock::updateAxisColor() {
 }
 
 void AxisDock::loadConfigFromTemplate(KConfig& config) {
-	// extract the name of the template from the file name
-	QString name;
-	int index = config.name().lastIndexOf(QLatin1Char('/'));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
+	auto name = TemplateHandler::templateName(config);
 	int size = m_axesList.size();
 	if (size > 1)
 		m_axis->beginMacro(i18n("%1 axes: template \"%2\" loaded", size, name));
@@ -2005,43 +2052,45 @@ void AxisDock::loadConfigFromTemplate(KConfig& config) {
 }
 
 void AxisDock::loadConfig(KConfig& config) {
-	KConfigGroup group = config.group("Axis");
+	KConfigGroup group = config.group(QStringLiteral("Axis"));
 
 	// General
-	ui.cbOrientation->setCurrentIndex(group.readEntry("Orientation", (int)m_axis->orientation()));
+	ui.cbOrientation->setCurrentIndex(group.readEntry(QStringLiteral("Orientation"), (int)m_axis->orientation()));
 
-	int index = group.readEntry("Position", (int)m_axis->position());
+	int index = group.readEntry(QStringLiteral("Position"), (int)m_axis->position());
 	if (index > 1)
 		ui.cbPosition->setCurrentIndex(index - 2);
 	else
 		ui.cbPosition->setCurrentIndex(index);
 
-	ui.sbPositionLogical->setValue(group.readEntry("LogicalPosition", m_axis->logicalPosition()));
-	ui.sbPosition->setValue(Worksheet::convertFromSceneUnits(group.readEntry("PositionOffset", m_axis->offset()), m_worksheetUnit));
-	ui.cbScale->setCurrentIndex(group.readEntry("Scale", static_cast<int>(m_axis->scale())));
-	ui.cbRangeType->setCurrentIndex(group.readEntry("RangeType", static_cast<int>(m_axis->rangeType())));
-	ui.sbStart->setValue(group.readEntry("Start", m_axis->range().start()));
-	ui.sbEnd->setValue(group.readEntry("End", m_axis->range().end()));
-	ui.sbZeroOffset->setValue(group.readEntry("ZeroOffset", m_axis->zeroOffset()));
-	ui.sbScalingFactor->setValue(group.readEntry("ScalingFactor", m_axis->scalingFactor()));
-	ui.chkShowScaleOffset->setChecked(group.readEntry("ShowScaleOffset", static_cast<int>(m_axis->showScaleOffset())));
+	ui.sbPositionLogical->setValue(group.readEntry(QStringLiteral("LogicalPosition"), m_axis->logicalPosition()));
+	ui.sbPosition->setValue(Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("PositionOffset"), m_axis->offset()), m_worksheetUnit));
+	ui.cbScale->setCurrentIndex(group.readEntry(QStringLiteral("Scale"), static_cast<int>(m_axis->scale())));
+	index = static_cast<int>(m_axis->rangeType());
+	ui.cbRangeType->setCurrentIndex(group.readEntry(QStringLiteral("RangeType"), index));
+	rangeTypeChanged(index);
+	ui.sbStart->setValue(group.readEntry(QStringLiteral("Start"), m_axis->range().start()));
+	ui.sbEnd->setValue(group.readEntry(QStringLiteral("End"), m_axis->range().end()));
+	ui.sbZeroOffset->setValue(group.readEntry(QStringLiteral("ZeroOffset"), m_axis->zeroOffset()));
+	ui.sbScalingFactor->setValue(group.readEntry(QStringLiteral("ScalingFactor"), m_axis->scalingFactor()));
+	ui.chkShowScaleOffset->setChecked(group.readEntry(QStringLiteral("ShowScaleOffset"), static_cast<int>(m_axis->showScaleOffset())));
 
 	// Title
-	KConfigGroup axisLabelGroup = config.group("AxisLabel");
+	KConfigGroup axisLabelGroup = config.group(QStringLiteral("AxisLabel"));
 	labelWidget->loadConfig(axisLabelGroup);
 
 	// Line
 	lineWidget->loadConfig(group);
-	ui.cbArrowType->setCurrentIndex(group.readEntry("ArrowType", (int)m_axis->arrowType()));
-	ui.cbArrowPosition->setCurrentIndex(group.readEntry("ArrowPosition", (int)m_axis->arrowPosition()));
-	ui.sbArrowSize->setValue(Worksheet::convertFromSceneUnits(group.readEntry("ArrowSize", m_axis->arrowSize()), Worksheet::Unit::Point));
+	ui.cbArrowType->setCurrentIndex(group.readEntry(QStringLiteral("ArrowType"), (int)m_axis->arrowType()));
+	ui.cbArrowPosition->setCurrentIndex(group.readEntry(QStringLiteral("ArrowPosition"), (int)m_axis->arrowPosition()));
+	ui.sbArrowSize->setValue(Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("ArrowSize"), m_axis->arrowSize()), Worksheet::Unit::Point));
 	updateArrowLineColor(m_axis->line()->color());
 
 	// Major ticks
-	ui.cbMajorTicksDirection->setCurrentIndex(group.readEntry("MajorTicksDirection", (int)m_axis->majorTicksDirection()));
-	ui.cbMajorTicksType->setCurrentIndex(ui.cbMajorTicksType->findData(group.readEntry("MajorTicksType", (int)m_axis->majorTicksType())));
-	ui.sbMajorTicksNumber->setValue(group.readEntry("MajorTicksNumber", m_axis->majorTicksNumber()));
-	auto value{group.readEntry("MajorTicksIncrement", m_axis->majorTicksSpacing())};
+	ui.cbMajorTicksDirection->setCurrentIndex(group.readEntry(QStringLiteral("MajorTicksDirection"), (int)m_axis->majorTicksDirection()));
+	ui.cbMajorTicksType->setCurrentIndex(ui.cbMajorTicksType->findData(group.readEntry(QStringLiteral("MajorTicksType"), (int)m_axis->majorTicksType())));
+	ui.sbMajorTicksNumber->setValue(group.readEntry(QStringLiteral("MajorTicksNumber"), m_axis->majorTicksNumber()));
+	auto value{group.readEntry(QStringLiteral("MajorTicksIncrement"), m_axis->majorTicksSpacing())};
 	bool numeric = m_axis->isNumeric();
 	if (numeric) {
 		ui.sbMajorTicksSpacingNumeric->setDecimals(nsl_math_decimal_places(value) + 1);
@@ -2049,17 +2098,22 @@ void AxisDock::loadConfig(KConfig& config) {
 		ui.sbMajorTicksSpacingNumeric->setSingleStep(value / 10.);
 	} else
 		dtsbMajorTicksIncrement->setValue(value);
-	ui.cbMajorTicksStartType->setCurrentIndex(group.readEntry("MajorTicksStartType", (int)m_axis->majorTicksStartType()));
-	ui.sbMajorTickStartOffset->setValue(group.readEntry("MajorTickStartOffset", m_axis->majorTickStartOffset()));
-	ui.sbMajorTickStartValue->setValue(group.readEntry("MajorTickStartValue", m_axis->majorTickStartValue()));
-	ui.sbMajorTicksLength->setValue(Worksheet::convertFromSceneUnits(group.readEntry("MajorTicksLength", m_axis->majorTicksLength()), Worksheet::Unit::Point));
+	ui.cbMajorTicksStartType->setCurrentIndex(group.readEntry(QStringLiteral("MajorTicksStartType"), (int)m_axis->majorTicksStartType()));
+	const auto majorTickStartOffset = group.readEntry(QStringLiteral("MajorTickStartOffset"), m_axis->majorTickStartOffset());
+	ui.sbMajorTickStartOffset->setValue(majorTickStartOffset);
+	dtsbMajorTicksDateTimeStartOffset->setValue(majorTickStartOffset);
+	const auto majorTickStartValue = group.readEntry(QStringLiteral("MajorTickStartValue"), m_axis->majorTickStartValue());
+	ui.sbMajorTickStartValue->setValue(majorTickStartValue);
+	ui.sbMajorTickStartDateTime->setMSecsSinceEpochUTC(majorTickStartValue);
+	ui.sbMajorTicksLength->setValue(
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("MajorTicksLength"), m_axis->majorTicksLength()), Worksheet::Unit::Point));
 	majorTicksLineWidget->loadConfig(group);
 
 	// Minor ticks
-	ui.cbMinorTicksDirection->setCurrentIndex(group.readEntry("MinorTicksDirection", (int)m_axis->minorTicksDirection()));
-	ui.cbMinorTicksType->setCurrentIndex(group.readEntry("MinorTicksType", (int)m_axis->minorTicksType()));
-	ui.sbMinorTicksNumber->setValue(group.readEntry("MinorTicksNumber", m_axis->minorTicksNumber()));
-	value = group.readEntry("MinorTicksIncrement", m_axis->minorTicksSpacing());
+	ui.cbMinorTicksDirection->setCurrentIndex(group.readEntry(QStringLiteral("MinorTicksDirection"), (int)m_axis->minorTicksDirection()));
+	ui.cbMinorTicksType->setCurrentIndex(group.readEntry(QStringLiteral("MinorTicksType"), (int)m_axis->minorTicksType()));
+	ui.sbMinorTicksNumber->setValue(group.readEntry(QStringLiteral("MinorTicksNumber"), m_axis->minorTicksNumber()));
+	value = group.readEntry(QStringLiteral("MinorTicksIncrement"), m_axis->minorTicksSpacing());
 	if (numeric)
 		ui.sbMinorTicksSpacingNumeric->setValue(value);
 	else
@@ -2072,26 +2126,27 @@ void AxisDock::loadConfig(KConfig& config) {
 
 	// Tick label
 	ui.cbLabelsFormat->setCurrentIndex(
-		Axis::labelsFormatToIndex((Axis::LabelsFormat)(group.readEntry("LabelsFormat", Axis::labelsFormatToIndex(m_axis->labelsFormat())))));
-	ui.chkLabelsAutoPrecision->setChecked(group.readEntry("LabelsAutoPrecision", (int)m_axis->labelsAutoPrecision()));
-	ui.sbLabelsPrecision->setValue(group.readEntry("LabelsPrecision", (int)m_axis->labelsPrecision()));
-	ui.cbLabelsDateTimeFormat->setCurrentText(group.readEntry("LabelsDateTimeFormat", "yyyy-MM-dd hh:mm:ss"));
-	ui.cbLabelsPosition->setCurrentIndex(group.readEntry("LabelsPosition", (int)m_axis->labelsPosition()));
-	ui.sbLabelsOffset->setValue(Worksheet::convertFromSceneUnits(group.readEntry("LabelsOffset", m_axis->labelsOffset()), Worksheet::Unit::Point));
-	ui.sbLabelsRotation->setValue(group.readEntry("LabelsRotation", m_axis->labelsRotationAngle()));
-	ui.cbLabelsTextType->setCurrentIndex(group.readEntry("LabelsTextType", (int)m_axis->labelsTextType()));
+		Axis::labelsFormatToIndex((Axis::LabelsFormat)(group.readEntry(QStringLiteral("LabelsFormat"), Axis::labelsFormatToIndex(m_axis->labelsFormat())))));
+	ui.chkLabelsAutoPrecision->setChecked(group.readEntry(QStringLiteral("LabelsAutoPrecision"), (int)m_axis->labelsAutoPrecision()));
+	ui.sbLabelsPrecision->setValue(group.readEntry(QStringLiteral("LabelsPrecision"), (int)m_axis->labelsPrecision()));
+	ui.cbLabelsDateTimeFormat->setCurrentText(group.readEntry(QStringLiteral("LabelsDateTimeFormat"), QStringLiteral("yyyy-MM-dd hh:mm:ss")));
+	ui.cbLabelsPosition->setCurrentIndex(group.readEntry(QStringLiteral("LabelsPosition"), (int)m_axis->labelsPosition()));
+	ui.sbLabelsOffset->setValue(
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("LabelsOffset"), m_axis->labelsOffset()), Worksheet::Unit::Point));
+	ui.sbLabelsRotation->setValue(group.readEntry(QStringLiteral("LabelsRotation"), m_axis->labelsRotationAngle()));
+	ui.cbLabelsTextType->setCurrentIndex(group.readEntry(QStringLiteral("LabelsTextType"), (int)m_axis->labelsTextType()));
 
 	// we need to set the font size in points for KFontRequester
 	QFont font = m_axis->labelsFont();
 	font.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)));
-	ui.kfrLabelsFont->setFont(group.readEntry("LabelsFont", font));
+	ui.kfrLabelsFont->setFont(group.readEntry(QStringLiteral("LabelsFont"), font));
 
-	ui.kcbLabelsFontColor->setColor(group.readEntry("LabelsFontColor", m_axis->labelsColor()));
-	ui.cbLabelsBackgroundType->setCurrentIndex(group.readEntry("LabelsBackgroundType", (int)m_axis->labelsBackgroundType()));
-	ui.kcbLabelsBackgroundColor->setColor(group.readEntry("LabelsBackgroundColor", m_axis->labelsBackgroundColor()));
-	ui.leLabelsPrefix->setText(group.readEntry("LabelsPrefix", m_axis->labelsPrefix()));
-	ui.leLabelsSuffix->setText(group.readEntry("LabelsSuffix", m_axis->labelsSuffix()));
-	ui.sbLabelsOpacity->setValue(round(group.readEntry("LabelsOpacity", m_axis->labelsOpacity()) * 100.0));
+	ui.kcbLabelsFontColor->setColor(group.readEntry(QStringLiteral("LabelsFontColor"), m_axis->labelsColor()));
+	ui.cbLabelsBackgroundType->setCurrentIndex(group.readEntry(QStringLiteral("LabelsBackgroundType"), (int)m_axis->labelsBackgroundType()));
+	ui.kcbLabelsBackgroundColor->setColor(group.readEntry(QStringLiteral("LabelsBackgroundColor"), m_axis->labelsBackgroundColor()));
+	ui.leLabelsPrefix->setText(group.readEntry(QStringLiteral("LabelsPrefix"), m_axis->labelsPrefix()));
+	ui.leLabelsSuffix->setText(group.readEntry(QStringLiteral("LabelsSuffix"), m_axis->labelsSuffix()));
+	ui.sbLabelsOpacity->setValue(round(group.readEntry(QStringLiteral("LabelsOpacity"), m_axis->labelsOpacity()) * 100.0));
 
 	// Grid
 	majorGridLineWidget->loadConfig(group);
@@ -2103,82 +2158,87 @@ void AxisDock::loadConfig(KConfig& config) {
 }
 
 void AxisDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group("Axis");
+	KConfigGroup group = config.group(QStringLiteral("Axis"));
 
 	// General
-	group.writeEntry("Orientation", ui.cbOrientation->currentIndex());
+	group.writeEntry(QStringLiteral("Orientation"), ui.cbOrientation->currentIndex());
 
 	if (ui.cbPosition->currentIndex() == 2) {
-		group.writeEntry("Position", static_cast<int>(Axis::Position::Centered));
+		group.writeEntry(QStringLiteral("Position"), static_cast<int>(Axis::Position::Centered));
 	} else if (ui.cbPosition->currentIndex() == 3) {
-		group.writeEntry("Position", static_cast<int>(Axis::Position::Centered));
+		group.writeEntry(QStringLiteral("Position"), static_cast<int>(Axis::Position::Centered));
 	} else {
 		if (ui.cbOrientation->currentIndex() == static_cast<int>(Axis::Orientation::Horizontal))
-			group.writeEntry("Position", ui.cbPosition->currentIndex());
+			group.writeEntry(QStringLiteral("Position"), ui.cbPosition->currentIndex());
 		else
-			group.writeEntry("Position", ui.cbPosition->currentIndex() + 2);
+			group.writeEntry(QStringLiteral("Position"), ui.cbPosition->currentIndex() + 2);
 	}
 
-	group.writeEntry("LogicalPosition", ui.sbPositionLogical->value());
-	group.writeEntry("PositionOffset", Worksheet::convertToSceneUnits(ui.sbPosition->value(), m_worksheetUnit));
-	group.writeEntry("Scale", ui.cbScale->currentIndex());
-	group.writeEntry("RangeType", ui.cbRangeType->currentIndex());
-	group.writeEntry("Start", ui.sbStart->value());
-	group.writeEntry("End", ui.sbEnd->value());
-	group.writeEntry("ZeroOffset", ui.sbZeroOffset->value());
-	group.writeEntry("ScalingFactor", ui.sbScalingFactor->value());
-	group.writeEntry("ShowScaleOffset", ui.chkShowScaleOffset->isChecked());
+	group.writeEntry(QStringLiteral("LogicalPosition"), ui.sbPositionLogical->value());
+	group.writeEntry(QStringLiteral("PositionOffset"), Worksheet::convertToSceneUnits(ui.sbPosition->value(), m_worksheetUnit));
+	group.writeEntry(QStringLiteral("Scale"), ui.cbScale->currentIndex());
+	group.writeEntry(QStringLiteral("RangeType"), ui.cbRangeType->currentIndex());
+	group.writeEntry(QStringLiteral("Start"), ui.sbStart->value());
+	group.writeEntry(QStringLiteral("End"), ui.sbEnd->value());
+	group.writeEntry(QStringLiteral("ZeroOffset"), ui.sbZeroOffset->value());
+	group.writeEntry(QStringLiteral("ScalingFactor"), ui.sbScalingFactor->value());
+	group.writeEntry(QStringLiteral("ShowScaleOffset"), ui.chkShowScaleOffset->isChecked());
 
 	// Title
-	KConfigGroup axisLabelGroup = config.group("AxisLabel");
+	KConfigGroup axisLabelGroup = config.group(QStringLiteral("AxisLabel"));
 	labelWidget->saveConfig(axisLabelGroup);
 
 	// Line
 	lineWidget->saveConfig(group);
 
 	// Major ticks
-	group.writeEntry("MajorTicksDirection", ui.cbMajorTicksDirection->currentIndex());
-	group.writeEntry("MajorTicksType", ui.cbMajorTicksType->itemData(ui.cbMajorTicksType->currentIndex()));
-	group.writeEntry("MajorTicksNumber", ui.sbMajorTicksNumber->value());
+	group.writeEntry(QStringLiteral("MajorTicksDirection"), ui.cbMajorTicksDirection->currentIndex());
+	group.writeEntry(QStringLiteral("MajorTicksType"), ui.cbMajorTicksType->itemData(ui.cbMajorTicksType->currentIndex()));
+	group.writeEntry(QStringLiteral("MajorTicksNumber"), ui.sbMajorTicksNumber->value());
 	bool numeric = m_axis->isNumeric();
 	if (numeric)
-		group.writeEntry("MajorTicksIncrement", QString::number(ui.sbMajorTicksSpacingNumeric->value()));
+		group.writeEntry(QStringLiteral("MajorTicksIncrement"), QString::number(ui.sbMajorTicksSpacingNumeric->value()));
 	else
-		group.writeEntry("MajorTicksIncrement", QString::number(dtsbMajorTicksIncrement->value()));
-	group.writeEntry("MajorTicksStartType", ui.cbMajorTicksStartType->currentIndex());
-	group.writeEntry("MajorTickStartOffset", ui.sbMajorTickStartOffset->value());
-	group.writeEntry("MajorTickStartValue", ui.sbMajorTickStartValue->value());
-	group.writeEntry("MajorTicksLength", Worksheet::convertToSceneUnits(ui.sbMajorTicksLength->value(), Worksheet::Unit::Point));
+		group.writeEntry(QStringLiteral("MajorTicksIncrement"), QString::number(dtsbMajorTicksIncrement->value()));
+	group.writeEntry(QStringLiteral("MajorTicksStartType"), ui.cbMajorTicksStartType->currentIndex());
+	if (numeric) {
+		group.writeEntry(QStringLiteral("MajorTickStartOffset"), ui.sbMajorTickStartOffset->value());
+		group.writeEntry(QStringLiteral("MajorTickStartValue"), ui.sbMajorTickStartValue->value());
+	} else {
+		group.writeEntry(QStringLiteral("MajorTickStartOffset"), dtsbMajorTicksDateTimeStartOffset->value());
+		group.writeEntry(QStringLiteral("MajorTickStartValue"), ui.sbMajorTickStartDateTime->dateTime().toMSecsSinceEpoch());
+	}
+	group.writeEntry(QStringLiteral("MajorTicksLength"), Worksheet::convertToSceneUnits(ui.sbMajorTicksLength->value(), Worksheet::Unit::Point));
 	majorTicksLineWidget->saveConfig(group);
 
 	// Minor ticks
-	group.writeEntry("MinorTicksDirection", ui.cbMinorTicksDirection->currentIndex());
-	group.writeEntry("MinorTicksType", ui.cbMinorTicksType->currentIndex());
-	group.writeEntry("MinorTicksNumber", ui.sbMinorTicksNumber->value());
+	group.writeEntry(QStringLiteral("MinorTicksDirection"), ui.cbMinorTicksDirection->currentIndex());
+	group.writeEntry(QStringLiteral("MinorTicksType"), ui.cbMinorTicksType->currentIndex());
+	group.writeEntry(QStringLiteral("MinorTicksNumber"), ui.sbMinorTicksNumber->value());
 	if (numeric)
-		group.writeEntry("MinorTicksIncrement", QString::number(ui.sbMinorTicksSpacingNumeric->value()));
+		group.writeEntry(QStringLiteral("MinorTicksIncrement"), QString::number(ui.sbMinorTicksSpacingNumeric->value()));
 	else
-		group.writeEntry("MinorTicksIncrement", QString::number(dtsbMinorTicksIncrement->value()));
-	group.writeEntry("MinorTicksLength", Worksheet::convertFromSceneUnits(ui.sbMinorTicksLength->value(), Worksheet::Unit::Point));
+		group.writeEntry(QStringLiteral("MinorTicksIncrement"), QString::number(dtsbMinorTicksIncrement->value()));
+	group.writeEntry(QStringLiteral("MinorTicksLength"), Worksheet::convertFromSceneUnits(ui.sbMinorTicksLength->value(), Worksheet::Unit::Point));
 	minorTicksLineWidget->saveConfig(group);
 
 	// Extra ticks
 	//  TODO
 
 	// Tick label
-	group.writeEntry("LabelsFormat", static_cast<int>(Axis::indexToLabelsFormat(ui.cbLabelsFormat->currentIndex())));
-	group.writeEntry("LabelsAutoPrecision", ui.chkLabelsAutoPrecision->isChecked());
-	group.writeEntry("LabelsPrecision", ui.sbLabelsPrecision->value());
-	group.writeEntry("LabelsPosition", ui.cbLabelsPosition->currentIndex());
-	group.writeEntry("LabelsOffset", Worksheet::convertToSceneUnits(ui.sbLabelsOffset->value(), Worksheet::Unit::Point));
-	group.writeEntry("LabelsRotation", ui.sbLabelsRotation->value());
-	group.writeEntry("LabelsFont", ui.kfrLabelsFont->font());
-	group.writeEntry("LabelsFontColor", ui.kcbLabelsFontColor->color());
-	group.writeEntry("LabelsBackgroundType", ui.cbLabelsBackgroundType->currentIndex());
-	group.writeEntry("LabelsBackgroundColor", ui.kcbLabelsBackgroundColor->color());
-	group.writeEntry("LabelsPrefix", ui.leLabelsPrefix->text());
-	group.writeEntry("LabelsSuffix", ui.leLabelsSuffix->text());
-	group.writeEntry("LabelsOpacity", ui.sbLabelsOpacity->value() / 100.);
+	group.writeEntry(QStringLiteral("LabelsFormat"), static_cast<int>(Axis::indexToLabelsFormat(ui.cbLabelsFormat->currentIndex())));
+	group.writeEntry(QStringLiteral("LabelsAutoPrecision"), ui.chkLabelsAutoPrecision->isChecked());
+	group.writeEntry(QStringLiteral("LabelsPrecision"), ui.sbLabelsPrecision->value());
+	group.writeEntry(QStringLiteral("LabelsPosition"), ui.cbLabelsPosition->currentIndex());
+	group.writeEntry(QStringLiteral("LabelsOffset"), Worksheet::convertToSceneUnits(ui.sbLabelsOffset->value(), Worksheet::Unit::Point));
+	group.writeEntry(QStringLiteral("LabelsRotation"), ui.sbLabelsRotation->value());
+	group.writeEntry(QStringLiteral("LabelsFont"), ui.kfrLabelsFont->font());
+	group.writeEntry(QStringLiteral("LabelsFontColor"), ui.kcbLabelsFontColor->color());
+	group.writeEntry(QStringLiteral("LabelsBackgroundType"), ui.cbLabelsBackgroundType->currentIndex());
+	group.writeEntry(QStringLiteral("LabelsBackgroundColor"), ui.kcbLabelsBackgroundColor->color());
+	group.writeEntry(QStringLiteral("LabelsPrefix"), ui.leLabelsPrefix->text());
+	group.writeEntry(QStringLiteral("LabelsSuffix"), ui.leLabelsSuffix->text());
+	group.writeEntry(QStringLiteral("LabelsOpacity"), ui.sbLabelsOpacity->value() / 100.);
 
 	// Grid
 	majorGridLineWidget->saveConfig(group);

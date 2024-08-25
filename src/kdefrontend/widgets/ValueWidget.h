@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : value settings widget
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -15,6 +15,7 @@
 
 #include <KConfigGroup>
 
+class AspectTreeModel;
 class TreeViewComboBox;
 
 class ValueWidget : public QWidget {
@@ -22,6 +23,7 @@ class ValueWidget : public QWidget {
 
 public:
 	explicit ValueWidget(QWidget*);
+	~ValueWidget();
 
 	void setValues(const QList<Value*>&);
 
@@ -35,6 +37,7 @@ private:
 	QList<Value*> m_values;
 	bool m_initializing{false};
 	TreeViewComboBox* cbColumn{nullptr};
+	AspectTreeModel* m_aspectModel{nullptr};
 
 	void updateWidgets();
 

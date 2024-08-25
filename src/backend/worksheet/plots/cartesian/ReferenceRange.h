@@ -25,12 +25,11 @@ class ReferenceRange : public WorksheetElement {
 	Q_OBJECT
 
 public:
-	explicit ReferenceRange(CartesianPlot*, const QString&);
+	explicit ReferenceRange(CartesianPlot*, const QString&, bool loading = false);
 	~ReferenceRange() override;
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
-	QGraphicsItem* graphicsItem() const override;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
@@ -55,11 +54,10 @@ protected:
 
 private:
 	Q_DECLARE_PRIVATE(ReferenceRange)
-	void init();
+	void init(bool loading);
 	void initActions();
 	void initMenus();
 
-	QAction* visibilityAction{nullptr};
 	QAction* orientationHorizontalAction{nullptr};
 	QAction* orientationVerticalAction{nullptr};
 
@@ -76,7 +74,6 @@ private Q_SLOTS:
 	void orientationChangedSlot(QAction*);
 	void lineStyleChanged(QAction*);
 	void lineColorChanged(QAction*);
-	void visibilityChangedSlot();
 
 	void updateStartEndPositions();
 

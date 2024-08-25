@@ -4,16 +4,21 @@
 	Description          : View class for CantorWorksheet
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
-	SPDX-FileCopyrightText: 2016-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "CantorWorksheetView.h"
 #include "backend/cantorWorksheet/CantorWorksheet.h"
+#include "backend/core/column/Column.h"
+#include "kdefrontend/spreadsheet/PlotDataDialog.h"
+#include "kdefrontend/spreadsheet/StatisticsDialog.h"
 
+#include <QActionGroup>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QMenu>
+#include <QTimer>
 #include <QToolBar>
 
 #include <KLocalizedString>
@@ -93,7 +98,7 @@ void CantorWorksheetView::initMenus() {
 
 	// markdown entry is only available if cantor was compiled with libdiscovery (cantor 18.12 and later)
 	QAction* insertMarkdownEntryAction = nullptr;
-	if (m_part->action("insert_markdown_entry")) {
+	if (m_part->action(QStringLiteral("insert_markdown_entry"))) {
 		insertMarkdownEntryAction = new QAction(QIcon::fromTheme(QLatin1String("text-x-markdown")), i18n("Markdown"), m_actionGroup);
 		insertMarkdownEntryAction->setData(QStringLiteral("insert_markdown_entry"));
 	}
@@ -115,43 +120,43 @@ void CantorWorksheetView::initMenus() {
 
 	// actions for "assistants", that are backend specific and not always available
 	QAction* computeEigenvectorsAction = nullptr;
-	if (m_part->action("eigenvectors_assistant")) {
+	if (m_part->action(QStringLiteral("eigenvectors_assistant"))) {
 		computeEigenvectorsAction = new QAction(i18n("Compute Eigenvectors"), m_actionGroup);
 		computeEigenvectorsAction->setData(QStringLiteral("eigenvectors_assistant"));
 	}
 
 	QAction* createMatrixAction = nullptr;
-	if (m_part->action("creatematrix_assistant")) {
+	if (m_part->action(QStringLiteral("creatematrix_assistant"))) {
 		createMatrixAction = new QAction(i18n("Create Matrix"), m_actionGroup);
 		createMatrixAction->setData(QStringLiteral("creatematrix_assistant"));
 	}
 
 	QAction* computeEigenvaluesAction = nullptr;
-	if (m_part->action("eigenvalues_assistant")) {
+	if (m_part->action(QStringLiteral("eigenvalues_assistant"))) {
 		computeEigenvaluesAction = new QAction(i18n("Compute Eigenvalues"), m_actionGroup);
 		computeEigenvaluesAction->setData(QStringLiteral("eigenvalues_assistant"));
 	}
 
 	QAction* invertMatrixAction = nullptr;
-	if (m_part->action("invertmatrix_assistant")) {
+	if (m_part->action(QStringLiteral("invertmatrix_assistant"))) {
 		invertMatrixAction = new QAction(i18n("Invert Matrix"), m_actionGroup);
 		invertMatrixAction->setData(QStringLiteral("invertmatrix_assistant"));
 	}
 
 	QAction* differentiationAction = nullptr;
-	if (m_part->action("differentiate_assistant")) {
+	if (m_part->action(QStringLiteral("differentiate_assistant"))) {
 		differentiationAction = new QAction(i18n("Differentiation"), m_actionGroup);
 		differentiationAction->setData(QStringLiteral("differentiate_assistant"));
 	}
 
 	QAction* integrationAction = nullptr;
-	if (m_part->action("integrate_assistant")) {
+	if (m_part->action(QStringLiteral("integrate_assistant"))) {
 		integrationAction = new QAction(i18n("Integration"), m_actionGroup);
 		integrationAction->setData(QStringLiteral("integrate_assistant"));
 	}
 
 	QAction* solveEquationsAction = nullptr;
-	if (m_part->action("solve_assistant")) {
+	if (m_part->action(QStringLiteral("solve_assistant"))) {
 		solveEquationsAction = new QAction(i18n("Solve Equations"), m_actionGroup);
 		solveEquationsAction->setData(QStringLiteral("solve_assistant"));
 	}
@@ -199,12 +204,12 @@ void CantorWorksheetView::initMenus() {
 	//"Notebook Settings"
 	m_settingsMenu = new QMenu(i18n("Settings"), m_part->widget());
 	m_settingsMenu->setIcon(QIcon::fromTheme(QLatin1String("settings-configure")));
-	m_settingsMenu->addAction(m_part->action("enable_expression_numbers"));
-	m_settingsMenu->addAction(m_part->action("enable_highlighting"));
-	m_settingsMenu->addAction(m_part->action("enable_completion"));
-	m_settingsMenu->addAction(m_part->action("enable_animations"));
+	m_settingsMenu->addAction(m_part->action(QStringLiteral("enable_expression_numbers")));
+	m_settingsMenu->addAction(m_part->action(QStringLiteral("enable_highlighting")));
+	m_settingsMenu->addAction(m_part->action(QStringLiteral("enable_completion")));
+	m_settingsMenu->addAction(m_part->action(QStringLiteral("enable_animations")));
 	m_settingsMenu->addSeparator();
-	m_settingsMenu->addAction(m_part->action("enable_typesetting"));
+	m_settingsMenu->addAction(m_part->action(QStringLiteral("enable_typesetting")));
 }
 
 /*!
@@ -239,9 +244,9 @@ void CantorWorksheetView::createContextMenu(QMenu* menu) {
 
 	// results related actions
 	menu->insertSeparator(firstAction);
-	menu->addAction(m_part->action("all_entries_collapse_results"));
-	menu->addAction(m_part->action("all_entries_uncollapse_results"));
-	menu->addAction(m_part->action("all_entries_remove_all_results"));
+	menu->addAction(m_part->action(QStringLiteral("all_entries_collapse_results")));
+	menu->addAction(m_part->action(QStringLiteral("all_entries_uncollapse_results")));
+	menu->addAction(m_part->action(QStringLiteral("all_entries_remove_all_results")));
 
 	// assistants, if available
 	if (m_linearAlgebraMenu || m_calculateMenu) {
@@ -269,6 +274,38 @@ void CantorWorksheetView::createContextMenu(QMenu* menu) {
 	menu->insertSeparator(firstAction);
 }
 
+/*!
+ * adds column specific actions in SpreadsheetView to the context menu shown in the project explorer.
+ */
+void CantorWorksheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
+	if (!column)
+		return; // should never happen, since the sender is always a Column
+
+	m_contextMenuColumn = column;
+
+	if (!m_plotDataMenu) {
+		auto* plotDataActionGroup = new QActionGroup(this);
+		connect(plotDataActionGroup, &QActionGroup::triggered, this, &CantorWorksheetView::plotData);
+		m_plotDataMenu = new QMenu(i18n("Plot Data"), this);
+		PlotDataDialog::fillMenu(m_plotDataMenu, plotDataActionGroup);
+
+		m_statisticsAction = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Variable Statistics..."), this);
+		connect(m_statisticsAction, &QAction::triggered, this, &CantorWorksheetView::showStatistics);
+	}
+
+	const bool hasValues = column->hasValues();
+	const bool plottable = column->isPlottable();
+
+	QAction* firstAction = menu->actions().at(1);
+	menu->insertMenu(firstAction, m_plotDataMenu);
+	menu->insertSeparator(firstAction);
+	m_plotDataMenu->setEnabled(plottable && hasValues);
+
+	menu->insertSeparator(firstAction);
+	menu->insertAction(firstAction, m_statisticsAction);
+	m_statisticsAction->setEnabled(hasValues);
+}
+
 void CantorWorksheetView::fillToolBar(QToolBar* toolbar) {
 	if (!m_part)
 		return;
@@ -286,7 +323,7 @@ void CantorWorksheetView::fillToolBar(QToolBar* toolbar) {
 void CantorWorksheetView::triggerAction(QAction* action) {
 	const auto& name = action->data().toString();
 	if (!name.isEmpty()) {
-		auto* action = m_part->action(name.toStdString().c_str());
+		auto* action = m_part->action(name);
 		if (action)
 			action->trigger();
 	}
@@ -307,4 +344,28 @@ void CantorWorksheetView::statusChanged(Cantor::Session::Status status) {
 		m_evaluateWorsheetAction->setIcon(QIcon::fromTheme(QLatin1String("system-run")));
 		Q_EMIT m_worksheet->statusInfo(i18n("Ready"));
 	}
+}
+
+void CantorWorksheetView::plotData(QAction* action) {
+	if (!m_contextMenuColumn)
+		return;
+
+	auto type = static_cast<PlotDataDialog::PlotType>(action->data().toInt());
+	auto* dlg = new PlotDataDialog(m_worksheet, type);
+	dlg->setSelectedColumns(QVector<Column*>({m_contextMenuColumn}));
+	dlg->exec();
+}
+
+void CantorWorksheetView::showStatistics() {
+	if (!m_contextMenuColumn)
+		return;
+
+	QString dlgTitle(i18n("%1: variable statistics", m_contextMenuColumn->name()));
+	auto* dlg = new StatisticsDialog(dlgTitle, QVector<Column*>({m_contextMenuColumn}));
+	dlg->setModal(true);
+	dlg->show();
+	QApplication::processEvents(QEventLoop::AllEvents, 0);
+	QTimer::singleShot(0, this, [=]() {
+		dlg->showStatistics();
+	});
 }

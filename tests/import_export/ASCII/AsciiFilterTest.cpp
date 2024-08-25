@@ -3,22 +3,23 @@
 	Project              : LabPlot
 	Description          : Tests for the ascii filter
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "AsciiFilterTest.h"
+#include "backend/core/Project.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/lib/macros.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
 
-extern "C" {
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
-}
 
 // ##############################################################################
 // #################  handling of empty and sparse files ########################
@@ -70,7 +71,7 @@ void AsciiFilterTest::testEmptyLines01() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/empty_lines_01.txt"));
 
 	filter.setSeparatingCharacter(QStringLiteral("auto"));
-	// filter.setHeaderEnabled(true);
+	filter.setHeaderEnabled(true);
 	filter.setHeaderLine(1);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -102,7 +103,7 @@ void AsciiFilterTest::testSparseFile01() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/sparse_file_01.txt"));
 
 	filter.setSeparatingCharacter(QStringLiteral(","));
-	// filter.setHeaderEnabled(true);
+	filter.setHeaderEnabled(true);
 	filter.setHeaderLine(1);
 	filter.setSimplifyWhitespacesEnabled(true);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
@@ -140,7 +141,7 @@ void AsciiFilterTest::testSparseFile02() {
 	filter.setNaNValueToZero(false);
 	filter.setSimplifyWhitespacesEnabled(true);
 	filter.setSkipEmptyParts(false);
-	// filter.setHeaderEnabled(true);
+	filter.setHeaderEnabled(true);
 	filter.setHeaderLine(1);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -177,7 +178,7 @@ void AsciiFilterTest::testSparseFile03() {
 	filter.setNaNValueToZero(true);
 	filter.setSimplifyWhitespacesEnabled(true);
 	filter.setSkipEmptyParts(false);
-	// filter.setHeaderEnabled(true);
+	filter.setHeaderEnabled(true);
 	filter.setHeaderLine(1);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -208,6 +209,36 @@ void AsciiFilterTest::testSparseFile03() {
 	QCOMPARE(spreadsheet.column(2)->valueAt(3), 3.);
 }
 
+void AsciiFilterTest::testFileEndingWithoutLinebreak() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/file_ending_without_line_break.txt"));
+
+	filter.setHeaderEnabled(true);
+	// filter.setHeaderLine(1);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 5);
+	QCOMPARE(spreadsheet.columnCount(), 2);
+
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("some data"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("more data"));
+
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
+	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
+	QCOMPARE(spreadsheet.column(0)->integerAt(2), 3);
+	QCOMPARE(spreadsheet.column(0)->integerAt(3), 4);
+	QCOMPARE(spreadsheet.column(0)->integerAt(4), 5);
+	QCOMPARE(spreadsheet.column(1)->integerAt(0), 1);
+	QCOMPARE(spreadsheet.column(1)->integerAt(1), 4);
+	QCOMPARE(spreadsheet.column(1)->integerAt(2), 9);
+	QCOMPARE(spreadsheet.column(1)->integerAt(3), 16);
+	QCOMPARE(spreadsheet.column(1)->integerAt(4), 25);
+}
+
 // ##############################################################################
 // ################################  header handling ############################
 // ##############################################################################
@@ -231,7 +262,7 @@ void AsciiFilterTest::testHeader02() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon.txt"));
 
 	filter.setSeparatingCharacter(QStringLiteral(";"));
-	// filter.setHeaderEnabled(true);
+	filter.setHeaderEnabled(true);
 	filter.setHeaderLine(1);
 	filter.setVectorNames(QString());
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
@@ -248,7 +279,7 @@ void AsciiFilterTest::testHeader03() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon.txt"));
 
 	filter.setSeparatingCharacter(QStringLiteral(";"));
-	// filter.setHeaderEnabled(false);
+	filter.setHeaderEnabled(false);
 	filter.setVectorNames(QStringLiteral("x"));
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -315,8 +346,8 @@ void AsciiFilterTest::testHeader07() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/comment_header_comment.txt"));
 
 	filter.setSeparatingCharacter(QStringLiteral("TAB"));
+	filter.setHeaderEnabled(true);
 	filter.setHeaderLine(2);
-	// filter.setHeaderEnabled(true);
 	filter.setDateTimeFormat(QLatin1String("yyyy-MM-dd hh:mm:ss.zzz"));
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -363,8 +394,8 @@ void AsciiFilterTest::testHeader07a() {
 
 	filter.setSeparatingCharacter(QStringLiteral("TAB"));
 	filter.setHeaderLine(2);
-	// filter.setHeaderEnabled(true);
-	filter.setStartRow(4);
+	filter.setHeaderEnabled(true);
+	filter.setStartRow(2);
 	filter.setDateTimeFormat(QLatin1String("yyyy-MM-dd hh:mm:ss.zzz"));
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -406,7 +437,7 @@ void AsciiFilterTest::testHeader08() {
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_tab_with_header_with_spaces.txt"));
 
-	// filter.setHeaderEnabled(true);
+	filter.setHeaderEnabled(true);
 	filter.setHeaderLine(1);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -458,7 +489,7 @@ void AsciiFilterTest::testHeader10() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon_with_header_duplicated_names.txt"));
 
 	filter.setSeparatingCharacter(QStringLiteral(";"));
-	// filter.setHeaderEnabled(true);
+	filter.setHeaderEnabled(true);
 	filter.setHeaderLine(1);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -477,6 +508,7 @@ void AsciiFilterTest::testHeader11() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/column_names.txt"));
 
 	filter.setSeparatingCharacter(QStringLiteral(" "));
+	filter.setHeaderEnabled(true);
 	filter.setHeaderLine(1);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -489,6 +521,7 @@ void AsciiFilterTest::testHeader11() {
 	AsciiFilter filter2; // create a new filter so we go through the prepare logic from scratch for the 2nd file
 	const QString& fileName2 = QFINDTESTDATA(QLatin1String("data/column_names_reversed.txt"));
 	filter2.setSeparatingCharacter(QStringLiteral(" "));
+	filter.setHeaderEnabled(true);
 	filter2.setHeaderLine(1);
 	filter2.readDataFromFile(fileName2, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -507,6 +540,7 @@ void AsciiFilterTest::testHeader11a() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/column_names.txt"));
 
 	filter.setSeparatingCharacter(QStringLiteral(" "));
+	filter.setHeaderEnabled(true);
 	filter.setHeaderLine(1);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -516,7 +550,7 @@ void AsciiFilterTest::testHeader11a() {
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("B"));
 
 	AsciiFilter filter2;
-
+	filter2.setHeaderEnabled(false);
 	filter2.setSeparatingCharacter(QStringLiteral(" "));
 	filter2.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -524,6 +558,27 @@ void AsciiFilterTest::testHeader11a() {
 	QCOMPARE(spreadsheet.columnCount(), 2);
 	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("Column 1"));
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("Column 2"));
+}
+
+/*!
+ * test column modes when header is in second line
+ */
+void AsciiFilterTest::testHeader12() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/lds_test.csv"));
+
+	// filter.setSeparatingCharacter(QStringLiteral(" "));
+	filter.setHeaderEnabled(true);
+	filter.setHeaderLine(2);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 1);
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("x"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("y"));
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
 }
 
 // ##############################################################################
@@ -691,6 +746,7 @@ void AsciiFilterTest::testRowRange00() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
 
 	filter.setSeparatingCharacter(QStringLiteral("auto"));
+	filter.setHeaderEnabled(false);
 	filter.setStartRow(3);
 	filter.setEndRow(5);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
@@ -837,7 +893,7 @@ void AsciiFilterTest::testQuotedStrings01() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/quoted_strings_with_header.txt"));
 
 	filter.setSeparatingCharacter(QStringLiteral(","));
-	// filter.setHeaderEnabled(true);
+	filter.setHeaderEnabled(true);
 	filter.setHeaderLine(1);
 	filter.setSimplifyWhitespacesEnabled(true);
 	filter.setRemoveQuotesEnabled(true);
@@ -884,7 +940,7 @@ void AsciiFilterTest::testQuotedStrings02() {
 	QCOMPARE(QFile::exists(fileName), true);
 
 	filter.setSeparatingCharacter(QStringLiteral(","));
-	// filter.setHeaderEnabled(false);
+	filter.setHeaderEnabled(false);
 	filter.setRemoveQuotesEnabled(true);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -909,7 +965,7 @@ void AsciiFilterTest::testQuotedStrings03() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/quoted_strings_one_line_with_header.txt"));
 
 	filter.setSeparatingCharacter(QStringLiteral(","));
-	// filter.setHeaderEnabled(true);
+	filter.setHeaderEnabled(true);
 	filter.setHeaderLine(1);
 	filter.setSimplifyWhitespacesEnabled(true);
 	filter.setRemoveQuotesEnabled(true);
@@ -994,6 +1050,34 @@ void AsciiFilterTest::testQuotedStrings05() {
 }
 
 // ##############################################################################
+// ################################## locales ###################################
+// ##############################################################################
+void AsciiFilterTest::testUtf8Cyrillic() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/utf8_cyrillic.txt"));
+
+	filter.setSeparatingCharacter(QStringLiteral("auto"));
+	filter.setHeaderLine(1);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	// column names
+	QCOMPARE(spreadsheet.column(0)->name(), QString::fromUtf8("перший_стовпець"));
+	QCOMPARE(spreadsheet.column(1)->name(), QString::fromUtf8("другий_стовпець"));
+
+	// data types
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	// values
+	QCOMPARE(spreadsheet.column(0)->textAt(0), QString::fromUtf8("тест1"));
+	QCOMPARE(spreadsheet.column(1)->integerAt(0), 1);
+
+	QCOMPARE(spreadsheet.column(0)->textAt(1), QString::fromUtf8("тест2"));
+	QCOMPARE(spreadsheet.column(1)->integerAt(1), 2);
+}
+
+// ##############################################################################
 // ###############################  skip comments ###############################
 // ##############################################################################
 void AsciiFilterTest::testComments00() {
@@ -1001,6 +1085,7 @@ void AsciiFilterTest::testComments00() {
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/multi_line_comment.txt"));
 
+	filter.setHeaderEnabled(false);
 	filter.setSeparatingCharacter(QStringLiteral(","));
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -1023,6 +1108,7 @@ void AsciiFilterTest::testComments01() {
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/multi_line_comment_with_empty_lines.txt"));
 
+	filter.setHeaderEnabled(false);
 	filter.setSeparatingCharacter(QStringLiteral(","));
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -1050,7 +1136,7 @@ void AsciiFilterTest::testComments02() {
 
 	filter.setCommentCharacter(QString());
 	filter.setSeparatingCharacter(QStringLiteral(";"));
-	// filter.setHeaderEnabled(true);
+	filter.setHeaderEnabled(true);
 	filter.setHeaderLine(1);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -1091,9 +1177,47 @@ void AsciiFilterTest::testDateTime00() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/datetime_01.csv"));
 
 	filter.setSeparatingCharacter(QStringLiteral(","));
-	// filter.setHeaderEnabled(true);
+	filter.setHeaderEnabled(true);
 	filter.setHeaderLine(1);
 	filter.setDateTimeFormat(QLatin1String("dd/MM/yy hh:mm:ss"));
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	// spreadsheet size
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.rowCount(), 2);
+
+	// column names
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("Date"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("Water Pressure"));
+
+	// data types
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
+
+	// values
+	auto value = QDateTime::fromString(QLatin1String("01/01/2019 00:00:00"), QLatin1String("dd/MM/yyyy hh:mm:ss"));
+	value.setTimeSpec(Qt::UTC);
+	QCOMPARE(spreadsheet.column(0)->dateTimeAt(0), value);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 14.7982);
+
+	value = QDateTime::fromString(QLatin1String("01/01/2019 00:30:00"), QLatin1String("dd/MM/yyyy hh:mm:ss"));
+	value.setTimeSpec(Qt::UTC);
+	QCOMPARE(spreadsheet.column(0)->dateTimeAt(1), value);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 14.8026);
+}
+
+/*!
+ * same as in the previous test, but with the auto-detection of the datetime format
+ */
+void AsciiFilterTest::testDateTime01() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/datetime_01.csv"));
+
+	filter.setSeparatingCharacter(QStringLiteral(","));
+	filter.setHeaderEnabled(true);
+	filter.setHeaderLine(1);
+	filter.setDateTimeFormat(QLatin1String()); // auto detect the format
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	// spreadsheet size
@@ -1183,6 +1307,7 @@ void AsciiFilterTest::testMatrixHeader() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
 
 	filter.setSeparatingCharacter(QStringLiteral("auto"));
+	filter.setHeaderEnabled(false);
 	filter.readDataFromFile(fileName, &matrix, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(matrix.rowCount(), 5);
@@ -1208,8 +1333,396 @@ void AsciiFilterTest::testMatrixHeader() {
 	QCOMPARE(matrix.cell<double>(4, 2), -0.284112);
 }
 
-// BENCHMARKS
+// ##############################################################################
+// ############# updates in the dependent objects after the import ##############
+// ##############################################################################
+/*!
+ * test the update of the column values calculated via a formula after the values
+ * in the source spreadsheet were modified by the import.
+ */
+void AsciiFilterTest::spreadsheetFormulaUpdateAfterImport() {
+	// create the first spreadsheet with the source data
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	spreadsheet.setColumnCount(2);
+	spreadsheet.setRowCount(3);
 
+	auto* col = spreadsheet.column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col->setName(QStringLiteral("c1"));
+	col->setValueAt(0, 10.);
+	col->setValueAt(1, 20.);
+	col->setValueAt(2, 30.);
+
+	col = spreadsheet.column(1);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col->setName(QStringLiteral("c2"));
+	col->setValueAt(0, 10.);
+	col->setValueAt(1, 20.);
+	col->setValueAt(2, 30.);
+
+	// create the second spreadsheet with one single column calculated via a formula from the first spreadsheet
+	Spreadsheet spreadsheetFormula(QStringLiteral("formula"), false);
+	spreadsheetFormula.setColumnCount(1);
+	spreadsheetFormula.setRowCount(3);
+	col = spreadsheetFormula.column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+
+	QStringList variableNames{QLatin1String("x"), QLatin1String("y")};
+	QVector<Column*> variableColumns{spreadsheet.column(0), spreadsheet.column(1)};
+	col->setFormula(QLatin1String("x+y"), variableNames, variableColumns, true);
+	col->updateFormula();
+
+	// check the results of the calculation first
+	QCOMPARE(spreadsheetFormula.columnCount(), 1);
+	QCOMPARE(spreadsheetFormula.rowCount(), 3);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(col->valueAt(0), 20.);
+	QCOMPARE(col->valueAt(1), 40.);
+	QCOMPARE(col->valueAt(2), 60.);
+
+	// import the data into the source spreadsheet
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon_with_header.txt"));
+	filter.setCommentCharacter(QString());
+	filter.setSeparatingCharacter(QStringLiteral(";"));
+	filter.setHeaderEnabled(true);
+	filter.setHeaderLine(1);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	// re-check the results of the calculation
+	QCOMPARE(spreadsheetFormula.columnCount(), 1);
+	QCOMPARE(spreadsheetFormula.rowCount(), 3);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(col->valueAt(0), 2.);
+	QCOMPARE(col->valueAt(1), 4.);
+	QCOMPARE(col->valueAt(2), 6.);
+}
+
+/*!
+ * test the update of the column values calculated via a formula after one of the source columns
+ * was deleted first and was restored and the source values were modified by the import.
+ */
+void AsciiFilterTest::spreadsheetFormulaUpdateAfterImportWithColumnRestore() {
+	Project project; // need a project object since the column restore logic is in project
+
+	// create the first spreadsheet with the source data
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(spreadsheet);
+	spreadsheet->setColumnCount(2);
+	spreadsheet->setRowCount(3);
+
+	auto* col = spreadsheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col->setName(QStringLiteral("c1"));
+	col->setValueAt(0, 10.);
+	col->setValueAt(1, 20.);
+	col->setValueAt(2, 30.);
+
+	col = spreadsheet->column(1);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col->setName(QStringLiteral("c2"));
+	col->setValueAt(0, 10.);
+	col->setValueAt(1, 20.);
+	col->setValueAt(2, 30.);
+
+	// create the second spreadsheet with one single column calculated via a formula from the first spreadsheet
+	auto* spreadsheetFormula = new Spreadsheet(QStringLiteral("formula"), false);
+	project.addChild(spreadsheetFormula);
+	spreadsheetFormula->setColumnCount(1);
+	spreadsheetFormula->setRowCount(3);
+	col = spreadsheetFormula->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+
+	QStringList variableNames{QLatin1String("x"), QLatin1String("y")};
+	QVector<Column*> variableColumns{spreadsheet->column(0), spreadsheet->column(1)};
+	col->setFormula(QLatin1String("x+y"), variableNames, variableColumns, true);
+	col->updateFormula();
+
+	// delete the first column in the source spreadsheet and check the results of the calculation first,
+	// the cells should be empty
+	spreadsheet->removeChild(spreadsheet->column(0));
+	QCOMPARE(spreadsheetFormula->columnCount(), 1);
+	QCOMPARE(spreadsheetFormula->rowCount(), 3);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE((bool)std::isnan(col->valueAt(0)), true);
+	QCOMPARE((bool)std::isnan(col->valueAt(1)), true);
+	QCOMPARE((bool)std::isnan(col->valueAt(2)), true);
+
+	// import the data into the source spreadsheet, the deleted column with the name "c1" is re-created again
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon_with_header.txt"));
+	filter.setCommentCharacter(QString());
+	filter.setSeparatingCharacter(QStringLiteral(";"));
+	filter.setHeaderEnabled(true);
+	filter.setHeaderLine(1);
+	filter.readDataFromFile(fileName, spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	// re-check the results of the calculation after one of the source columns was re-created and the values were changed
+	QCOMPARE(spreadsheetFormula->columnCount(), 1);
+	QCOMPARE(spreadsheetFormula->rowCount(), 3);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(col->valueAt(0), 2.);
+	QCOMPARE(col->valueAt(1), 4.);
+	QCOMPARE(col->valueAt(2), 6.);
+}
+
+/*!
+ * test the update of the xycurve and plot ranges after the values
+ * in the source columns were modified by the import.
+ */
+void AsciiFilterTest::plotUpdateAfterImport() {
+	// create the spreadsheet with the source data
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	spreadsheet.setColumnCount(2);
+	spreadsheet.setRowCount(3);
+
+	auto* col = spreadsheet.column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col->setName(QStringLiteral("c1"));
+	col->setValueAt(0, 10.);
+	col->setValueAt(1, 20.);
+	col->setValueAt(2, 30.);
+
+	col = spreadsheet.column(1);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col->setName(QStringLiteral("c2"));
+	col->setValueAt(0, 10.);
+	col->setValueAt(1, 20.);
+	col->setValueAt(2, 30.);
+
+	// create a xy-curve with the both columns in the source spreadsheet and check the ranges
+	CartesianPlot p(QStringLiteral("plot"));
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	p.addChild(curve);
+	curve->setXColumn(spreadsheet.column(0));
+	curve->setYColumn(spreadsheet.column(1));
+
+	auto rangeX = p.range(Dimension::X);
+	QCOMPARE(rangeX.start(), 10);
+	QCOMPARE(rangeX.end(), 30);
+
+	auto rangeY = p.range(Dimension::Y);
+	QCOMPARE(rangeY.start(), 10);
+	QCOMPARE(rangeY.end(), 30);
+
+	// import the data into the source spreadsheet
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon_with_header.txt"));
+	filter.setCommentCharacter(QString());
+	filter.setSeparatingCharacter(QStringLiteral(";"));
+	filter.setHeaderEnabled(true);
+	filter.setHeaderLine(1);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	// re-check the plot ranges with the new data
+	rangeX = p.range(Dimension::X);
+	QCOMPARE(rangeX.start(), 1);
+	QCOMPARE(rangeX.end(), 3);
+
+	rangeY = p.range(Dimension::Y);
+	QCOMPARE(rangeY.start(), 1);
+	QCOMPARE(rangeY.end(), 3);
+}
+
+/*!
+ * test the update of the xycurve and plot ranges after one of the source columns
+ * was deleted first and was restored and the source values were modified by the import.
+ */
+void AsciiFilterTest::plotUpdateAfterImportWithColumnRestore() {
+	Project project; // need a project object since the column restore logic is in project
+
+	// create the spreadsheet with the source data
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(spreadsheet);
+	spreadsheet->setColumnCount(2);
+	spreadsheet->setRowCount(3);
+
+	auto* col = spreadsheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col->setName(QStringLiteral("c1"));
+	col->setValueAt(0, 10.);
+	col->setValueAt(1, 20.);
+	col->setValueAt(2, 30.);
+
+	col = spreadsheet->column(1);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col->setName(QStringLiteral("c2"));
+	col->setValueAt(0, 10.);
+	col->setValueAt(1, 20.);
+	col->setValueAt(2, 30.);
+
+	// create a xy-curve with the both columns in the source spreadsheet and check the ranges
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	project.addChild(p);
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	p->addChild(curve);
+	curve->setXColumn(spreadsheet->column(0));
+	curve->setYColumn(spreadsheet->column(1));
+
+	auto rangeX = p->range(Dimension::X);
+	QCOMPARE(rangeX.start(), 10);
+	QCOMPARE(rangeX.end(), 30);
+
+	auto rangeY = p->range(Dimension::Y);
+	QCOMPARE(rangeY.start(), 10);
+	QCOMPARE(rangeY.end(), 30);
+
+	// delete the first source column
+	spreadsheet->removeChild(spreadsheet->column(0));
+
+	// import the data into the source spreadsheet, the deleted column with the name "c1" is re-created again
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon_with_header.txt"));
+	filter.setCommentCharacter(QString());
+	filter.setSeparatingCharacter(QStringLiteral(";"));
+	filter.setHeaderEnabled(true);
+	filter.setHeaderLine(1);
+	filter.readDataFromFile(fileName, spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	// re-check the plot ranges with the new data
+	rangeX = p->range(Dimension::X);
+	QCOMPARE(rangeX.start(), 1);
+	QCOMPARE(rangeX.end(), 3);
+
+	rangeY = p->range(Dimension::Y);
+	QCOMPARE(rangeY.start(), 1);
+	QCOMPARE(rangeY.end(), 3);
+}
+
+/*!
+ * test the update of the xycurve and plot ranges after the order or columns (their names)
+ * was changed during the import.
+ */
+void AsciiFilterTest::plotUpdateAfterImportWithColumnRenaming() {
+	Project project; // need a project object since the column restore logic is in project
+
+	// create the spreadsheet with the source data
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(spreadsheet);
+	spreadsheet->setColumnCount(3);
+	spreadsheet->setRowCount(3);
+
+	auto* col = spreadsheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col->setName(QStringLiteral("c0")); // dummy column, values not required
+
+	col = spreadsheet->column(1);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col->setName(QStringLiteral("c1"));
+	col->setValueAt(0, 10.);
+	col->setValueAt(1, 20.);
+	col->setValueAt(2, 30.);
+
+	col = spreadsheet->column(2);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col->setName(QStringLiteral("c2"));
+	col->setValueAt(0, 10.);
+	col->setValueAt(1, 20.);
+	col->setValueAt(2, 30.);
+
+	// create a xy-curve with the both columns in the source spreadsheet and check the ranges
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	project.addChild(p);
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	p->addChild(curve);
+	curve->setXColumn(spreadsheet->column(1)); // use "c1" for x
+	curve->setYColumn(spreadsheet->column(2)); // use "c2" for y
+
+	auto rangeX = p->range(Dimension::X);
+	QCOMPARE(rangeX.start(), 10);
+	QCOMPARE(rangeX.end(), 30);
+
+	auto rangeY = p->range(Dimension::Y);
+	QCOMPARE(rangeY.start(), 10);
+	QCOMPARE(rangeY.end(), 30);
+
+	// import the data into the source spreadsheet:
+	// the columns "c0", "c1" and "c2" are renamed to "c1", "c2" and "c3" and xy-curve should still be using "c1" and "c2"
+	// event hough their positions in the spreadsheet have changed
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon_with_header.txt"));
+	filter.setCommentCharacter(QString());
+	filter.setSeparatingCharacter(QStringLiteral(";"));
+	filter.setHeaderEnabled(true);
+	filter.setHeaderLine(1);
+	filter.readDataFromFile(fileName, spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	// check the connection to the new columns
+	QCOMPARE(curve->xColumn(), spreadsheet->column(0)); // "c1" for x
+	QCOMPARE(curve->yColumn(), spreadsheet->column(1)); // "c2" for y
+
+	// re-check the plot ranges with the new data
+	rangeX = p->range(Dimension::X);
+	QCOMPARE(rangeX.start(), 1);
+	QCOMPARE(rangeX.end(), 3);
+
+	rangeY = p->range(Dimension::Y);
+	QCOMPARE(rangeY.start(), 1);
+	QCOMPARE(rangeY.end(), 3);
+}
+
+/*!
+ * test the update of the xycurve after the source columns were renamed
+ * during the import, the curve becomes invalid after this.
+ */
+void AsciiFilterTest::plotUpdateAfterImportWithColumnRemove() {
+	Project project; // need a project object since the column restore logic is in project
+
+	// create the spreadsheet with the source data
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(spreadsheet);
+	spreadsheet->setColumnCount(2);
+	spreadsheet->setRowCount(3);
+
+	auto* col = spreadsheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col->setName(QStringLiteral("1"));
+	col->setValueAt(0, 10.);
+	col->setValueAt(1, 20.);
+	col->setValueAt(2, 30.);
+
+	col = spreadsheet->column(1);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col->setName(QStringLiteral("2"));
+	col->setValueAt(0, 10.);
+	col->setValueAt(1, 20.);
+	col->setValueAt(2, 30.);
+
+	// create a xy-curve with the both columns in the source spreadsheet and check the ranges
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	project.addChild(p);
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	p->addChild(curve);
+	curve->setXColumn(spreadsheet->column(0)); // use "1" for x
+	curve->setYColumn(spreadsheet->column(1)); // use "2" for y
+
+	auto rangeX = p->range(Dimension::X);
+	QCOMPARE(rangeX.start(), 10);
+	QCOMPARE(rangeX.end(), 30);
+
+	auto rangeY = p->range(Dimension::Y);
+	QCOMPARE(rangeY.start(), 10);
+	QCOMPARE(rangeY.end(), 30);
+
+	// import the data into the source spreadsheet, the columns are renamed to "c1" and "c2"
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon_with_header.txt"));
+	filter.setCommentCharacter(QString());
+	filter.setSeparatingCharacter(QStringLiteral(";"));
+	filter.setHeaderEnabled(true);
+	filter.setHeaderLine(1);
+	filter.readDataFromFile(fileName, spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	// the assignment to the data columns got lost since the columns were renamed
+	QCOMPARE(curve->xColumn(), nullptr);
+	QCOMPARE(curve->yColumn(), nullptr);
+
+	// TODO: further checks to make sure the curve was really and properly invalidated
+}
+
+// ##############################################################################
+// ################################# Benchmarks #################################
+// ##############################################################################
 void AsciiFilterTest::benchDoubleImport_data() {
 	QTest::addColumn<size_t>("lineCount");
 	// can't transfer file name since needed in clean up

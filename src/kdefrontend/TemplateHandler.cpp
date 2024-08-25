@@ -20,6 +20,7 @@
 #include <QToolButton>
 #include <QWidgetAction>
 
+#include <QActionGroup>
 #include <QApplication>
 #include <QMouseEvent>
 #include <QTimer>
@@ -41,14 +42,16 @@ static QVector<TemplateHandler*> templateHandlers;
  \ingroup kdefrontend
 */
 
-TemplateHandler::TemplateHandler(QWidget* parent, ClassName name)
+TemplateHandler::TemplateHandler(QWidget* parent, const QString& className, bool alignRight)
 	: QWidget(parent) {
 	auto* horizontalLayout = new QHBoxLayout(this);
 	horizontalLayout->setSpacing(0);
-	horizontalLayout->setMargin(0);
+	horizontalLayout->setContentsMargins(0, 0, 0, 0);
 
-	auto* horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-	horizontalLayout->addItem(horizontalSpacer);
+	if (alignRight) {
+		auto* horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+		horizontalLayout->addItem(horizontalSpacer);
+	}
 
 	int size = KIconLoader::global()->currentSize(KIconLoader::MainToolbar);
 
@@ -83,6 +86,11 @@ TemplateHandler::TemplateHandler(QWidget* parent, ClassName name)
 	// 	m_tbCopy->setIcon(QIcon::fromTheme(QLatin1String("edit-copy")));
 	// 	m_tbPaste->setIcon(QIcon::fromTheme(QLatin1String("edit-paste")));
 
+	if (!alignRight) {
+		auto* horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+		horizontalLayout->addItem(horizontalSpacer);
+	}
+
 	connect(m_tbLoad, &QToolButton::clicked, this, &TemplateHandler::loadMenu);
 	connect(m_tbSave, &QToolButton::clicked, this, &TemplateHandler::saveMenu);
 	connect(m_tbSaveDefault, &QToolButton::clicked, this, &TemplateHandler::saveDefaults);
@@ -98,24 +106,18 @@ TemplateHandler::TemplateHandler(QWidget* parent, ClassName name)
 	m_tbSave->installEventFilter(this);
 	m_tbSaveDefault->installEventFilter(this);
 
-	m_className = name;
+	m_className = className.toLower();
 
 	// folder where config files will be stored in object specific sub-folders:
-	// Linux    - ~/.local/share/labplot2/templates/
+	// Linux    - ~/.local/share/labplot/templates/
 	// Mac      - //TODO
-	// Windows  - C:/Users/<USER>/AppData/Roaming/labplot2/templates/
+	// Windows  - C:/Users/<USER>/AppData/Roaming/labplot/templates/
 	m_dirName = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1String("/templates/");
-
-	// synchronize this with the ordering in TemplateHandler::ClassName
-	enum ClassName { Spreadsheet, Matrix, Worksheet, CartesianPlot, CartesianPlotLegend, Histogram, XYCurve, Axis, CustomPoint };
-	m_subDirNames << QLatin1String("spreadsheet") << QLatin1String("matrix") << QLatin1String("worksheet") << QLatin1String("cartesianplot")
-				  << QLatin1String("cartesianplotlegend") << QLatin1String("histogram") << QLatin1String("xycurve") << QLatin1String("axis")
-				  << QLatin1String("custompoint") << QLatin1String("referenceline");
 
 	this->retranslateUi();
 
 	// disable the load-button if no templates are available yet
-	QStringList list = QDir(m_dirName + m_subDirNames.at(static_cast<int>(m_className))).entryList();
+	QStringList list = QDir(m_dirName + m_className).entryList();
 	list.removeAll(QLatin1String("."));
 	list.removeAll(QLatin1String(".."));
 	m_tbLoad->setEnabled(list.size());
@@ -125,6 +127,54 @@ TemplateHandler::TemplateHandler(QWidget* parent, ClassName name)
 	// 	m_tbPaste->hide();
 
 	templateHandlers << this;
+}
+
+void TemplateHandler::setClassName(const QString& className) {
+	m_className = className.toLower();
+}
+
+void TemplateHandler::setSaveDefaultAvailable(bool on) {
+	m_tbSaveDefault->setVisible(on);
+}
+
+void TemplateHandler::setLoadAvailable(bool on) {
+	m_tbLoad->setVisible(on);
+}
+
+/*!
+ * returns the config object for the given template name \c name.
+ */
+KConfig TemplateHandler::config(const QString& name) {
+	QString configFile = m_dirName + m_className + QLatin1Char('/') + name;
+	return KConfig(configFile, KConfig::SimpleConfig);
+}
+
+/*!
+ * returns the name of the template for the config object \c config.
+ */
+QString TemplateHandler::templateName(const KConfig& config) {
+	// extract the name of the template from the file name
+	QString name;
+	int index = config.name().lastIndexOf(QLatin1Char('/'));
+	if (index != -1)
+		name = config.name().right(config.name().size() - index - 1);
+	else
+		name = config.name();
+
+	return name;
+}
+
+QStringList TemplateHandler::templateNames() const {
+	QStringList names;
+	auto list = QDir(m_dirName + m_className).entryList();
+	list.removeAll(QLatin1String("."));
+	list.removeAll(QLatin1String(".."));
+	for (int i = 0; i < list.size(); ++i) {
+		QFileInfo fileinfo(list.at(i));
+		names << fileinfo.baseName();
+	}
+
+	return names;
 }
 
 void TemplateHandler::retranslateUi() {
@@ -217,7 +267,7 @@ void TemplateHandler::loadMenu() {
 	QMenu menu(this);
 	menu.addSection(i18n("Load From Template"));
 
-	auto list = QDir(m_dirName + m_subDirNames.at(static_cast<int>(m_className))).entryList();
+	auto list = QDir(m_dirName + m_className).entryList();
 	list.removeAll(QLatin1String("."));
 	list.removeAll(QLatin1String(".."));
 	for (int i = 0; i < list.size(); ++i) {
@@ -232,7 +282,7 @@ void TemplateHandler::loadMenu() {
 }
 
 void TemplateHandler::loadMenuSelected(QAction* action) {
-	QString configFile = m_dirName + m_subDirNames.at(static_cast<int>(m_className)) + QLatin1Char('/') + action->data().toString();
+	QString configFile = m_dirName + m_className + QLatin1Char('/') + action->data().toString();
 	KConfig config(configFile, KConfig::SimpleConfig);
 	Q_EMIT loadConfigRequested(config);
 	Q_EMIT info(i18n("Template \"%1\" was loaded.", action->text().remove(QLatin1Char('&'))));
@@ -242,7 +292,7 @@ void TemplateHandler::saveMenu() {
 	QMenu menu(this);
 	menu.addSection(i18n("Save As Template"));
 
-	auto list = QDir(m_dirName + m_subDirNames.at(static_cast<int>(m_className))).entryList();
+	auto list = QDir(m_dirName + m_className).entryList();
 	list.removeAll(QLatin1String("."));
 	list.removeAll(QLatin1String(".."));
 	for (int i = 0; i < list.size(); ++i) {
@@ -282,7 +332,7 @@ void TemplateHandler::saveMenu() {
  * Emits \c saveConfigRequested, the receiver of the signal has to config.sync().
  */
 void TemplateHandler::saveNewSelected(const QString& filename) {
-	QString path = m_dirName + m_subDirNames.at(static_cast<int>(m_className)) + QLatin1Char('/') + filename;
+	QString path = m_dirName + m_className + QLatin1Char('/') + filename;
 	KConfig config(path, KConfig::SimpleConfig);
 	Q_EMIT saveConfigRequested(config);
 	Q_EMIT info(i18n("New template \"%1\" was saved.", filename));
@@ -296,7 +346,7 @@ void TemplateHandler::saveNewSelected(const QString& filename) {
  * Emits \c saveConfigRequested, the receiver of the signal has to config.sync().
  */
 void TemplateHandler::saveMenuSelected(QAction* action) {
-	QString path = m_dirName + m_subDirNames.at(static_cast<int>(m_className)) + QLatin1Char('/') + action->data().toString();
+	QString path = m_dirName + m_className + QLatin1Char('/') + action->data().toString();
 	KConfig config(path, KConfig::SimpleConfig);
 	Q_EMIT saveConfigRequested(config);
 	Q_EMIT info(i18n("Template \"%1\" was saved.", action->text()));

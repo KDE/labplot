@@ -4,7 +4,7 @@
 	Description          : View class for CantorWorksheet
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
-	SPDX-FileCopyrightText: 2016-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -12,13 +12,17 @@
 #define CANTORWORKSHEETVIEW_H
 
 #include <QWidget>
+#ifdef HAVE_CANTOR_LIBS
 #include <cantor/session.h>
+#endif
 
 class QActionGroup;
 class QMenu;
 class QToolBar;
 
 class CantorWorksheet;
+class Column;
+
 namespace KParts {
 class ReadWritePart;
 }
@@ -32,6 +36,7 @@ public:
 
 public Q_SLOTS:
 	void createContextMenu(QMenu*);
+	void fillColumnContextMenu(QMenu*, Column*);
 	void fillToolBar(QToolBar*);
 
 private Q_SLOTS:
@@ -50,8 +55,11 @@ private:
 	QAction* m_zoomOut{nullptr};
 	QAction* m_find{nullptr};
 	QAction* m_replace{nullptr};
+	QAction* m_statisticsAction{nullptr};
+	Column* m_contextMenuColumn{nullptr};
 
 	QMenu* m_addNewMenu{nullptr};
+	QMenu* m_plotDataMenu{nullptr};
 	QMenu* m_linearAlgebraMenu{nullptr};
 	QMenu* m_calculateMenu{nullptr};
 	QMenu* m_settingsMenu{nullptr};
@@ -61,6 +69,8 @@ private:
 
 private Q_SLOTS:
 	void statusChanged(Cantor::Session::Status);
+	void plotData(QAction*);
+	void showStatistics();
 };
 
 #endif // CANTORWORKSHEETVIEW_H

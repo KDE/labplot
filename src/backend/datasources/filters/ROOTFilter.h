@@ -14,7 +14,6 @@
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
 class ROOTFilterPrivate;
-class QStringList;
 class QIODevice;
 
 /// Manages the importing of histograms from ROOT files
@@ -34,13 +33,9 @@ public:
 	 *
 	 * The ROOT file is kept open until the file name is changed
 	 */
-	void
-	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
+	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) override;
 	/// Currently writing to ROOT files is not supported
 	void write(const QString& fileName, AbstractDataSource*) override;
-
-	void loadFilterSettings(const QString&) override;
-	void saveFilterSettings(const QString&) const override;
 
 	/// Internal directory structure in a ROOT file
 	struct Directory {

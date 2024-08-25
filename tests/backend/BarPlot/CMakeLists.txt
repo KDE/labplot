@@ -1,5 +1,9 @@
-add_executable (BarPlotTest BarPlotTest.cpp)
+option(ENABLE_TEST_BACKEND_BARPLOT "Enable Barplot Tests" ON)
 
-target_link_libraries(BarPlotTest labplot2lib labplot2test)
+if(ENABLE_TEST_BACKEND_BARPLOT)
+    add_executable (BarPlotTest BarPlotTest.cpp)
 
-add_test(NAME BarPlotTest COMMAND BarPlotTest)
+    target_link_libraries(BarPlotTest labplotbackendlib labplottest labplotlib)
+
+    add_test(NAME BarPlotTest COMMAND BarPlotTest)
+endif()

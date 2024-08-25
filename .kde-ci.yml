@@ -1,5 +1,6 @@
+# see https://invent.kde.org/sysadmin/repo-metadata/-/blob/master/branch-rules.yml
 Dependencies:
-- 'on': ['Linux/Qt5', 'FreeBSD/Qt5', 'Windows/Qt5']
+- 'on': ['Linux/Qt5', 'FreeBSD/Qt5', 'Windows/Qt5', 'macOS/Qt5']
   'require':
     'frameworks/extra-cmake-modules': '@stable'
     'frameworks/kcrash': '@stable'
@@ -15,9 +16,11 @@ Dependencies:
     'frameworks/ktexteditor': '@stable'
     'frameworks/kxmlgui': '@stable'
     'frameworks/knewstuff': '@stable'
-    'libraries/kuserfeedback': '@stable'
-    'education/cantor': '@stable'
-- 'on': ['Linux/Qt6', 'FreeBSD/Qt6', 'Windows/Qt6']
+    'frameworks/kuserfeedback': '@stable'
+    'frameworks/purpose': '@stable'
+    'education/cantor': '@latest'
+
+- 'on': ['Linux/Qt6', 'FreeBSD/Qt6', 'Windows/Qt6', 'macOS/Qt6']
   'require':
     'frameworks/extra-cmake-modules': '@latest-kf6'
     'frameworks/kcrash': '@latest-kf6'
@@ -33,11 +36,14 @@ Dependencies:
     'frameworks/ktexteditor': '@latest-kf6'
     'frameworks/kxmlgui': '@latest-kf6'
     'frameworks/knewstuff': '@latest-kf6'
-    'libraries/kuserfeedback': '@latest-kf6'
+    'frameworks/kuserfeedback': '@latest-kf6'
+    'frameworks/purpose': '@latest-kf6'
 
 Environment:
   KDECI_BUILD: "TRUE"
 
 Options:
-  setup-dbus-session: False
+  setup-dbus-session: True
+  per-test-timeout: 120
   require-passing-tests-on: ['@all']
+  cmake-options: '-DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON'

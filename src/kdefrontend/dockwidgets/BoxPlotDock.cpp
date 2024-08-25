@@ -3,14 +3,12 @@
 	Project              : LabPlot
 	Description          : Dock widget for the reference line on the plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "BoxPlotDock.h"
 #include "backend/core/AbstractColumn.h"
-#include "backend/core/AspectTreeModel.h"
-#include "backend/core/Project.h"
 #include "backend/lib/macros.h"
 #include "backend/worksheet/Worksheet.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
@@ -28,9 +26,9 @@
 BoxPlotDock::BoxPlotDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(m_leName->height());
+	setPlotRangeCombobox(ui.cbPlotRanges);
+	setBaseWidgets(ui.leName, ui.teComment);
+	setVisibilityWidgets(ui.chkVisible, ui.chkLegendVisible);
 
 	// Tab "General"
 	m_buttonNew = new QPushButton();
@@ -98,6 +96,27 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	symbolWidget = new SymbolWidget(ui.tabSymbol);
 	gridLayout->addWidget(symbolWidget, 2, 0, 1, 3);
 
+	msg = i18n("Select to modify the properties of the symbol for the mean value.");
+	ui.rbMean->setToolTip(msg);
+
+	msg = i18n("Select to modify the properties of the symbol for the median value.");
+	ui.rbMedian->setToolTip(msg);
+
+	msg = i18n("Select to modify the properties of the symbol for the outlier values.");
+	ui.rbOutlier->setToolTip(msg);
+
+	msg = i18n("Select to modify the properties of the symbol for the \"far out\" values.");
+	ui.rbFarOut->setToolTip(msg);
+
+	msg = i18n("Select to modify the properties of the symbol for all data values excluding the outlier and \"far out\" values.");
+	ui.rbData->setToolTip(msg);
+
+	msg = i18n("Select to modify the properties of the symbol for the ends of the whiskers.");
+	ui.rbWhiskerEnd->setToolTip(msg);
+
+	msg = i18n("Activate to randomize the positions of the symbols (\"jittering\"), helpful for dense and overlapping data points.");
+	ui.chkJitteringEnabled->setToolTip(msg);
+
 	// Tab "Whiskers"
 	gridLayout = static_cast<QGridLayout*>(ui.tabWhiskers->layout());
 	whiskersLineWidget = new LineWidget(ui.tabBox);
@@ -122,14 +141,10 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 
 	// SLOTS
 	// Tab "General"
-	connect(ui.leName, &QLineEdit::textChanged, this, &BoxPlotDock::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &BoxPlotDock::commentChanged);
 	connect(ui.cbOrdering, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::orderingChanged);
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::orientationChanged);
 	connect(ui.chkVariableWidth, &QCheckBox::toggled, this, &BoxPlotDock::variableWidthChanged);
 	connect(ui.chkNotches, &QCheckBox::toggled, this, &BoxPlotDock::notchesEnabledChanged);
-	connect(ui.chkVisible, &QCheckBox::toggled, this, &BoxPlotDock::visibilityChanged);
-	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::plotRangeChanged);
 
 	// Tab "Box"
 	connect(ui.cbNumber, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::currentBoxChanged);
@@ -140,7 +155,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	connect(ui.rbMedian, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
 	connect(ui.rbOutlier, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
 	connect(ui.rbFarOut, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
-	connect(ui.rbJitter, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
+	connect(ui.rbData, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
 	connect(ui.rbWhiskerEnd, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
 	connect(ui.chkJitteringEnabled, &QCheckBox::toggled, this, &BoxPlotDock::jitteringEnabledChanged);
 
@@ -160,7 +175,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	auto* layout = new QHBoxLayout(frame);
 	layout->setContentsMargins(0, 11, 0, 11);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Worksheet);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("BoxPlot"));
 	layout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &BoxPlotDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &BoxPlotDock::saveConfigAsTemplate);
@@ -175,31 +190,7 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	m_boxPlot = list.first();
 	setAspects(list);
 	Q_ASSERT(m_boxPlot);
-	m_aspectTreeModel = new AspectTreeModel(m_boxPlot->project());
 	setModel();
-
-	// if there is more than one point in the list, disable the comment and name widgets in "general"
-	if (list.size() == 1) {
-		ui.lName->setEnabled(true);
-		ui.leName->setEnabled(true);
-		ui.lComment->setEnabled(true);
-		ui.teComment->setEnabled(true);
-		ui.leName->setText(m_boxPlot->name());
-		ui.teComment->setText(m_boxPlot->comment());
-
-		ui.lDataColumn->setEnabled(true);
-	} else {
-		ui.lName->setEnabled(false);
-		ui.leName->setEnabled(false);
-		ui.lComment->setEnabled(false);
-		ui.teComment->setEnabled(false);
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
-
-		ui.lDataColumn->setEnabled(false);
-	}
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
 
 	QList<Background*> backgrounds;
 	QList<Line*> borderLines;
@@ -220,20 +211,18 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	whiskersCapLineWidget->setLines(whiskersCapLines);
 
 	// show the properties of the first box plot
+	ui.chkLegendVisible->setChecked(m_boxPlot->legendVisible());
 	ui.chkVisible->setChecked(m_boxPlot->isVisible());
 	load();
 	loadDataColumns();
 
-	updatePlotRanges();
+	updatePlotRangeList();
 
 	// set the current locale
 	updateLocale();
 
 	// SIGNALs/SLOTs
 	// general
-	connect(m_boxPlot, &AbstractAspect::aspectDescriptionChanged, this, &BoxPlotDock::plotDescriptionChanged);
-	connect(m_boxPlot, &WorksheetElement::plotRangeListChanged, this, &BoxPlotDock::updatePlotRanges);
-	connect(m_boxPlot, &BoxPlot::visibleChanged, this, &BoxPlotDock::plotVisibilityChanged);
 	connect(m_boxPlot, &BoxPlot::orientationChanged, this, &BoxPlotDock::plotOrientationChanged);
 	connect(m_boxPlot, &BoxPlot::variableWidthChanged, this, &BoxPlotDock::plotVariableWidthChanged);
 	connect(m_boxPlot, &BoxPlot::notchesEnabledChanged, this, &BoxPlotDock::plotNotchesEnabledChanged);
@@ -256,11 +245,12 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 }
 
 void BoxPlotDock::setModel() {
-	m_aspectTreeModel->enablePlottableColumnsOnly(true);
-	m_aspectTreeModel->enableShowPlotDesignation(true);
+	auto* model = aspectModel();
+	model->enablePlottableColumnsOnly(true);
+	model->enableShowPlotDesignation(true);
 
 	QList<AspectType> list{AspectType::Column};
-	m_aspectTreeModel->setSelectableAspects(list);
+	model->setSelectableAspects(list);
 }
 
 /*
@@ -274,10 +264,6 @@ void BoxPlotDock::updateLocale() {
 	whiskersCapLineWidget->updateLocale();
 }
 
-void BoxPlotDock::updatePlotRanges() {
-	updatePlotRangeList(ui.cbPlotRanges);
-}
-
 void BoxPlotDock::loadDataColumns() {
 	// add the combobox for the first column, is always present
 	if (m_dataComboBoxes.count() == 0)
@@ -286,6 +272,7 @@ void BoxPlotDock::loadDataColumns() {
 	int count = m_boxPlot->dataColumns().count();
 	ui.cbNumber->clear();
 
+	auto* model = aspectModel();
 	if (count != 0) {
 		// box plot has already data columns, make sure we have the proper number of comboboxes
 		int diff = count - m_dataComboBoxes.count();
@@ -298,15 +285,18 @@ void BoxPlotDock::loadDataColumns() {
 		}
 
 		// show the columns in the comboboxes
-		for (int i = 0; i < count; ++i)
+		for (int i = 0; i < count; ++i) {
+			m_dataComboBoxes.at(i)->setModel(model); // the model might have changed in-between, reset the current model
 			m_dataComboBoxes.at(i)->setAspect(m_boxPlot->dataColumns().at(i));
+		}
 
 		// show columns names in the combobox for the selection of the box to be modified
 		for (int i = 0; i < count; ++i)
 			if (m_boxPlot->dataColumns().at(i))
 				ui.cbNumber->addItem(m_boxPlot->dataColumns().at(i)->name());
 	} else {
-		// no data columns set in the box plot yet, we show the first combo box only
+		// no data columns set in the box plot yet, we show the first combo box only and reset its model
+		m_dataComboBoxes.first()->setModel(model);
 		m_dataComboBoxes.first()->setAspect(nullptr);
 		for (int i = 1; i < m_dataComboBoxes.count(); ++i)
 			removeDataColumn();
@@ -340,22 +330,9 @@ void BoxPlotDock::setDataColumns() const {
 //*** SLOTs for changes triggered in BoxPlotDock *****
 //**********************************************************
 void BoxPlotDock::addDataColumn() {
-	auto* cb = new TreeViewComboBox;
-
-	static const QList<AspectType> list{AspectType::Folder,
-										AspectType::Workbook,
-										AspectType::Datapicker,
-										AspectType::DatapickerCurve,
-										AspectType::Spreadsheet,
-										AspectType::LiveDataSource,
-										AspectType::Column,
-										AspectType::Worksheet,
-										AspectType::CartesianPlot,
-										AspectType::XYFitCurve,
-										AspectType::XYSmoothCurve,
-										AspectType::CantorWorksheet};
-	cb->setTopLevelClasses(list);
-	cb->setModel(m_aspectTreeModel);
+	auto* cb = new TreeViewComboBox(this);
+	cb->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
+	cb->setModel(aspectModel());
 	connect(cb, &TreeViewComboBox::currentModelIndexChanged, this, &BoxPlotDock::dataColumnChanged);
 
 	int index = m_dataComboBoxes.size();
@@ -455,13 +432,6 @@ void BoxPlotDock::notchesEnabledChanged(bool state) {
 		boxPlot->setNotchesEnabled(state);
 }
 
-void BoxPlotDock::visibilityChanged(bool state) {
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* boxPlot : m_boxPlots)
-		boxPlot->setVisible(state);
-}
-
 //"Box"-tab
 /*!
  * called when the current box number was changed, shows the box properties for the selected box.
@@ -515,7 +485,7 @@ void BoxPlotDock::symbolCategoryChanged() {
 			symbols << plot->symbolOutlier();
 		else if (ui.rbFarOut->isChecked())
 			symbols << plot->symbolFarOut();
-		else if (ui.rbJitter->isChecked())
+		else if (ui.rbData->isChecked())
 			symbols << plot->symbolData();
 		else if (ui.rbWhiskerEnd->isChecked())
 			symbols << plot->symbolWhiskerEnd();
@@ -635,15 +605,11 @@ void BoxPlotDock::plotNotchesEnabledChanged(bool on) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.chkNotches->setChecked(on);
 }
-void BoxPlotDock::plotVisibilityChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.chkVisible->setChecked(on);
-}
 
 // box
 void BoxPlotDock::plotWidthFactorChanged(double factor) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.sbWidthFactor->setValue(round(factor * 100));
+	ui.sbWidthFactor->setValue(round(factor * 100.));
 }
 
 // symbols
@@ -697,7 +663,7 @@ void BoxPlotDock::load() {
 	ui.chkNotches->setChecked(m_boxPlot->notchesEnabled());
 
 	// box
-	ui.sbWidthFactor->setValue(round(m_boxPlot->widthFactor()) * 100);
+	ui.sbWidthFactor->setValue(round(m_boxPlot->widthFactor() * 100.));
 
 	// symbols
 	symbolCategoryChanged();
@@ -721,28 +687,29 @@ void BoxPlotDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group(QStringLiteral("BoxPlot"));
 
 	// general
-	ui.cbOrdering->setCurrentIndex(group.readEntry("Ordering", (int)m_boxPlot->ordering()));
-	ui.cbOrientation->setCurrentIndex(group.readEntry("Orientation", (int)m_boxPlot->orientation()));
-	ui.chkVariableWidth->setChecked(group.readEntry("VariableWidth", m_boxPlot->variableWidth()));
-	ui.chkNotches->setChecked(group.readEntry("NotchesEnabled", m_boxPlot->notchesEnabled()));
+	ui.cbOrdering->setCurrentIndex(group.readEntry(QStringLiteral("Ordering"), (int)m_boxPlot->ordering()));
+	ui.cbOrientation->setCurrentIndex(group.readEntry(QStringLiteral("Orientation"), (int)m_boxPlot->orientation()));
+	ui.chkVariableWidth->setChecked(group.readEntry(QStringLiteral("QStringLiteral(VariableWidth"), m_boxPlot->variableWidth()));
+	ui.chkNotches->setChecked(group.readEntry(QStringLiteral("NotchesEnabled"), m_boxPlot->notchesEnabled()));
 
 	// box
-	ui.sbWidthFactor->setValue(round(group.readEntry("WidthFactor", m_boxPlot->widthFactor()) * 100));
+	ui.sbWidthFactor->setValue(round(group.readEntry(QStringLiteral("WidthFactor"), m_boxPlot->widthFactor()) * 100.));
 	backgroundWidget->loadConfig(group);
 	borderLineWidget->loadConfig(group);
 	medianLineWidget->loadConfig(group);
 
 	// symbols
 	symbolCategoryChanged();
-	ui.chkJitteringEnabled->setChecked(group.readEntry("JitteringEnabled", m_boxPlot->jitteringEnabled()));
+	ui.chkJitteringEnabled->setChecked(group.readEntry(QStringLiteral("JitteringEnabled"), m_boxPlot->jitteringEnabled()));
 
 	// whiskers
-	ui.cbWhiskersType->setCurrentIndex(group.readEntry("WhiskersType", (int)m_boxPlot->whiskersType()));
+	ui.cbWhiskersType->setCurrentIndex(group.readEntry(QStringLiteral("WhiskersType"), (int)m_boxPlot->whiskersType()));
 	ui.leWhiskersRangeParameter->setText(QLocale().toString(m_boxPlot->whiskersRangeParameter()));
 	whiskersLineWidget->loadConfig(group);
 
 	// whiskers cap
-	ui.sbWhiskersCapSize->setValue(Worksheet::convertFromSceneUnits(group.readEntry("WhiskersCapSize", m_boxPlot->whiskersCapSize()), Worksheet::Unit::Point));
+	ui.sbWhiskersCapSize->setValue(
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("WhiskersCapSize"), m_boxPlot->whiskersCapSize()), Worksheet::Unit::Point));
 	whiskersCapLineWidget->loadConfig(group);
 
 	// Margin plots
@@ -753,17 +720,10 @@ void BoxPlotDock::loadConfig(KConfig& config) {
 }
 
 void BoxPlotDock::loadConfigFromTemplate(KConfig& config) {
-	// extract the name of the template from the file name
-	QString name;
-	int index = config.name().lastIndexOf(QLatin1Char('/'));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
+	auto name = TemplateHandler::templateName(config);
 	int size = m_boxPlots.size();
 	if (size > 1)
-		m_boxPlot->beginMacro(i18n("%1 xy-curves: template \"%2\" loaded", size, name));
+		m_boxPlot->beginMacro(i18n("%1 box plots: template \"%2\" loaded", size, name));
 	else
 		m_boxPlot->beginMacro(i18n("%1: template \"%2\" loaded", m_boxPlot->name(), name));
 
@@ -773,31 +733,31 @@ void BoxPlotDock::loadConfigFromTemplate(KConfig& config) {
 }
 
 void BoxPlotDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group("BoxPlot");
+	KConfigGroup group = config.group(QStringLiteral("BoxPlot"));
 
 	// general
-	group.writeEntry("Ordering", ui.cbOrdering->currentIndex());
-	group.writeEntry("Orientation", ui.cbOrientation->currentIndex());
-	group.writeEntry("VariableWidth", ui.chkVariableWidth->isChecked());
-	group.writeEntry("NotchesEnabled", ui.chkNotches->isChecked());
+	group.writeEntry(QStringLiteral("Ordering"), ui.cbOrdering->currentIndex());
+	group.writeEntry(QStringLiteral("Orientation"), ui.cbOrientation->currentIndex());
+	group.writeEntry(QStringLiteral("VariableWidth"), ui.chkVariableWidth->isChecked());
+	group.writeEntry(QStringLiteral("NotchesEnabled"), ui.chkNotches->isChecked());
 
 	// box
-	group.writeEntry("WidthFactor", ui.sbWidthFactor->value() / 100.0);
+	group.writeEntry(QStringLiteral("WidthFactor"), ui.sbWidthFactor->value() / 100.0);
 	backgroundWidget->saveConfig(group);
 	borderLineWidget->saveConfig(group);
 	medianLineWidget->saveConfig(group);
 
 	// symbols
 	// TODO: save symbol properties for outliers, etc.?
-	group.writeEntry("JitteringEnabled", ui.chkJitteringEnabled->isChecked());
+	group.writeEntry(QStringLiteral("JitteringEnabled"), ui.chkJitteringEnabled->isChecked());
 
 	// whiskers
-	group.writeEntry("WhiskersType", ui.cbWhiskersType->currentIndex());
-	group.writeEntry("WhiskersRangeParameter", QLocale().toDouble(ui.leWhiskersRangeParameter->text()));
+	group.writeEntry(QStringLiteral("WhiskersType"), ui.cbWhiskersType->currentIndex());
+	group.writeEntry(QStringLiteral("WhiskersRangeParameter"), QLocale().toDouble(ui.leWhiskersRangeParameter->text()));
 	whiskersLineWidget->saveConfig(group);
 
 	// whiskers cap
-	group.writeEntry("WhiskersCapSize", Worksheet::convertToSceneUnits(ui.sbWhiskersCapSize->value(), Worksheet::Unit::Point));
+	group.writeEntry(QStringLiteral("WhiskersCapSize"), Worksheet::convertToSceneUnits(ui.sbWhiskersCapSize->value(), Worksheet::Unit::Point));
 	whiskersCapLineWidget->saveConfig(group);
 
 	config.sync();

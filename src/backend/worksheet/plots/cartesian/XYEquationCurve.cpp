@@ -155,7 +155,7 @@ void XYEquationCurvePrivate::recalculate() {
 			// invalid number of points provided
 			xVector->clear();
 			yVector->clear();
-			recalcLogicalPoints();
+			recalc();
 			Q_EMIT q->dataChanged();
 			return;
 		}
@@ -189,7 +189,7 @@ void XYEquationCurvePrivate::recalculate() {
 	xColumn->invalidateProperties();
 	yColumn->invalidateProperties();
 
-	recalcLogicalPoints();
+	recalc();
 	Q_EMIT q->dataChanged();
 }
 
@@ -222,7 +222,6 @@ void XYEquationCurve::save(QXmlStreamWriter* writer) const {
 bool XYEquationCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYEquationCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -246,6 +245,10 @@ bool XYEquationCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_STRING_VALUE("min", equationData.min);
 			READ_STRING_VALUE("max", equationData.max);
 			READ_INT_VALUE("count", equationData.count, int);
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 

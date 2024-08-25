@@ -10,16 +10,20 @@
 */
 
 #include "backend/spreadsheet/SpreadsheetModel.h"
+#include "backend/core/Settings.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
+#include <KConfigGroup>
+#include <KLocalizedString>
+
 #include <QBrush>
 #include <QIcon>
 #include <QPalette>
 
-#include <KLocalizedString>
+#include <commonfrontend/spreadsheet/SpreadsheetSparkLineHeaderModel.h>
 
 /*!
 	\class SpreadsheetModel
@@ -111,6 +115,10 @@ QModelIndex SpreadsheetModel::index(const QString& text) const {
 	}
 
 	return createIndex(-1, -1);
+}
+
+Spreadsheet* SpreadsheetModel::spreadsheet() {
+	return m_spreadsheet;
 }
 
 QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
@@ -215,7 +223,13 @@ QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, 
 		case Qt::DecorationRole:
 			return m_spreadsheet->child<Column>(section)->icon();
 		case static_cast<int>(CustomDataRole::CommentRole):
+			// Return the comment associated with the column
 			return m_spreadsheet->child<Column>(section)->comment();
+
+		case static_cast<int>(CustomDataRole::SparkLineRole): {
+			// Return the sparkline associated with the column
+			return m_spreadsheet->child<Column>(section)->sparkline();
+		}
 		}
 		break;
 	case Qt::Vertical:
@@ -301,8 +315,11 @@ void SpreadsheetModel::handleAspectsAboutToBeInserted(int first, int last) {
 	beginInsertColumns(QModelIndex(), first, last);
 }
 
-void SpreadsheetModel::handleAspectAboutToBeAdded(const AbstractAspect*, int index, const AbstractAspect*) {
+void SpreadsheetModel::handleAspectAboutToBeAdded(const AbstractAspect* parent, int index, const AbstractAspect* aspect) {
 	if (m_spreadsheetColumnCountChanging || m_suppressSignals)
+		return;
+	const Column* col = dynamic_cast<const Column*>(aspect);
+	if (!col || parent != m_spreadsheet)
 		return;
 	beginInsertColumns(QModelIndex(), index, index);
 }
@@ -333,6 +350,9 @@ void SpreadsheetModel::handleAspectsInserted(int first, int last) {
 void SpreadsheetModel::handleAspectAdded(const AbstractAspect* aspect) {
 	// PERFTRACE(Q_FUNC_INFO);
 	if (m_spreadsheetColumnCountChanging)
+		return;
+	const Column* col = dynamic_cast<const Column*>(aspect);
+	if (!col || aspect->parentAspect() != m_spreadsheet)
 		return;
 	int index = m_spreadsheet->indexOfChild<Column>(aspect);
 	handleAspectsInserted(index, index);
@@ -374,8 +394,9 @@ void SpreadsheetModel::handleAspectsRemoved() {
 	m_spreadsheetColumnCountChanging = false;
 }
 
-void SpreadsheetModel::handleAspectRemoved(const AbstractAspect* /*parent*/, const AbstractAspect* /*before*/, const AbstractAspect* /*child*/) {
-	if (m_spreadsheetColumnCountChanging)
+void SpreadsheetModel::handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* /*before*/, const AbstractAspect* child) {
+	// same conditions as in handleAspectAboutToBeRemoved()
+	if (m_spreadsheetColumnCountChanging || child->type() != AspectType::Column || parent != m_spreadsheet)
 		return;
 
 	handleAspectsRemoved();
@@ -493,7 +514,7 @@ void SpreadsheetModel::updateHorizontalHeader(bool sendSignal) {
 	while (m_horizontal_header_data.size() > column_count)
 		m_horizontal_header_data.removeLast();
 
-	KConfigGroup group = KSharedConfig::openConfig()->group("Settings_Spreadsheet");
+	KConfigGroup group = Settings::group(QStringLiteral("Settings_Spreadsheet"));
 	bool showColumnType = group.readEntry(QLatin1String("ShowColumnType"), true);
 	bool showPlotDesignation = group.readEntry(QLatin1String("ShowPlotDesignation"), true);
 
@@ -537,7 +558,7 @@ bool SpreadsheetModel::formulaModeActive() const {
 }
 
 QVariant SpreadsheetModel::color(const AbstractColumn* column, int row, AbstractColumn::Formatting type) const {
-	if ((!column->isNumeric() && column->columnMode() != AbstractColumn::ColumnMode::Text) || !column->isValid(row) || !column->hasHeatmapFormat())
+	if (!column->hasHeatmapFormat() || (!column->isNumeric() && column->columnMode() != AbstractColumn::ColumnMode::Text) || !column->isValid(row))
 		return {};
 
 	const auto& format = column->heatmapFormat();

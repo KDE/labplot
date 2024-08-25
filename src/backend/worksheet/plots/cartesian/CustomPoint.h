@@ -25,21 +25,20 @@ class CustomPoint : public WorksheetElement {
 	Q_OBJECT
 
 public:
-	explicit CustomPoint(CartesianPlot*, const QString&);
+	explicit CustomPoint(CartesianPlot*, const QString&, bool loading = false);
 	~CustomPoint() override;
 
 	QIcon icon() const override;
-	QMenu* createContextMenu() override;
-	QGraphicsItem* graphicsItem() const override;
+	virtual QMenu* createContextMenu() override;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
 	Symbol* symbol() const;
-	void setParentGraphicsItem(QGraphicsItem* item);
 
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+	static QString xmlName();
 
 	typedef CustomPointPrivate Private;
 
@@ -48,10 +47,8 @@ protected:
 
 private:
 	Q_DECLARE_PRIVATE(CustomPoint)
-	void init();
+	void init(bool loading);
 	void initActions();
-
-	QAction* visibilityAction;
 
 Q_SIGNALS:
 	friend class CustomPointSetPositionCmd;

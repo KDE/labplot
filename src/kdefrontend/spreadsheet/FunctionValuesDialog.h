@@ -38,8 +38,6 @@ private:
 #else
 	std::unique_ptr<AspectTreeModel> m_aspectTreeModel;
 #endif
-	QList<AspectType> m_topLevelClasses;
-	QList<AspectType> m_selectableClasses;
 
 	// variable widgets
 	QList<QLineEdit*> m_variableLineEdits;

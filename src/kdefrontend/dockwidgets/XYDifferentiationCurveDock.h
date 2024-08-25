@@ -4,7 +4,7 @@
 	Description      : widget for editing properties of differentiation curves
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2023 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -28,26 +28,18 @@ public:
 
 private:
 	void initGeneralTab() override;
-	void updatePlotRanges() override;
-	void updateSettings(const AbstractColumn*);
+	void updateSettings(const AbstractColumn*) override;
 	void showDifferentiationResult();
 
 	Ui::XYDifferentiationCurveDockGeneralTab uiGeneralTab;
-
 	XYDifferentiationCurve* m_differentiationCurve{nullptr};
 	XYDifferentiationCurve::DifferentiationData m_differentiationData;
 	bool m_dateTimeRange{false};
-
-protected:
-	void setModel();
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYDifferentiationCurveDock
 	// general tab
 	void dataSourceTypeChanged(int);
-	void dataSourceCurveChanged(const QModelIndex&);
-	void xDataColumnChanged(const QModelIndex&);
-	void yDataColumnChanged(const QModelIndex&);
 	void autoRangeChanged();
 	void xRangeMinChanged();
 	void xRangeMaxChanged();
@@ -55,19 +47,11 @@ private Q_SLOTS:
 	void xRangeMaxDateTimeChanged(qint64);
 	void derivOrderChanged(int);
 	void accOrderChanged(int);
-
 	void recalculateClicked();
-	void enableRecalculate() const;
 
 	// SLOTs for changes triggered in XYDifferentiationCurve
 	// General-Tab
-	void curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType);
-	void curveDataSourceCurveChanged(const XYCurve*);
-	void curveXDataColumnChanged(const AbstractColumn*);
-	void curveYDataColumnChanged(const AbstractColumn*);
 	void curveDifferentiationDataChanged(const XYDifferentiationCurve::DifferentiationData&);
-	void dataChanged();
-	void curveVisibilityChanged(bool);
 };
 
 #endif

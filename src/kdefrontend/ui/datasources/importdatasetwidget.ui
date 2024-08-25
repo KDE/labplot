@@ -147,7 +147,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="leSearch">
+      <widget class="TimedLineEdit" name="leSearch">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -166,6 +166,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TimedLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>src/kdefrontend/widgets/TimedLineEdit.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>cbCollections</tabstop>
   <tabstop>twCategories</tabstop>

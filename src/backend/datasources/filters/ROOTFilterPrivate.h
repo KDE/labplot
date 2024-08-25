@@ -20,8 +20,6 @@
 #include <string>
 #include <vector>
 
-class QString;
-class QStringList;
 class AbstractDataSource;
 class AbstractColumn;
 
@@ -252,7 +250,7 @@ private:
 
 class ROOTFilterPrivate {
 public:
-	ROOTFilterPrivate();
+	ROOTFilterPrivate(ROOTFilter*);
 	/**
 	 * @brief Read data from the currently selected histogram
 	 *
@@ -284,6 +282,8 @@ public:
 	int endRow = -1;
 	/// Columns to read
 	QVector<QStringList> columns;
+
+	ROOTFilter* const q;
 
 private:
 	enum class FileType { Invalid = 0, Hist, Tree };

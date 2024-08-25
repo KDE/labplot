@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
-	SPDX-FileCopyrightText: 2011-2015 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -17,11 +17,15 @@
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/worksheet/plots/cartesian/KDEPlot.h"
+#include "backend/worksheet/plots/cartesian/LollipopPlot.h"
+#include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/cartesian/XYConvolutionCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCorrelationCurve.h"
@@ -97,12 +101,24 @@ public:
 			return new XYInterpolationCurve(QString());
 		else if (type == AspectType::XYSmoothCurve)
 			return new XYSmoothCurve(QString());
-		else if (type == AspectType::Histogram)
-			return new Histogram(QString());
-		else if (type == AspectType::BoxPlot)
-			return new BoxPlot(QString());
 		else if (type == AspectType::CartesianPlotLegend)
 			return new CartesianPlotLegend(QString());
+
+		/* statistical plots */
+		else if (type == AspectType::BoxPlot)
+			return new BoxPlot(QString());
+		else if (type == AspectType::Histogram)
+			return new Histogram(QString());
+		else if (type == AspectType::KDEPlot)
+			return new KDEPlot(QString());
+		else if (type == AspectType::QQPlot)
+			return new QQPlot(QString());
+
+		/* bar plots */
+		else if (type == AspectType::BarPlot)
+			return new BarPlot(QString());
+		else if (type == AspectType::LollipopPlot)
+			return new LollipopPlot(QString());
 
 		/* data containers */
 		else if (type == AspectType::Spreadsheet)
@@ -112,7 +128,7 @@ public:
 
 #ifndef SDK
 		else if (type == AspectType::Matrix)
-			return new Matrix(QString());
+			return new Matrix(QString(), true /*loading*/);
 		else if (type == AspectType::Datapicker)
 			return new Datapicker(QString());
 		else if (type == AspectType::Note)

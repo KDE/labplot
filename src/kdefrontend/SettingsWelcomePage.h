@@ -19,7 +19,7 @@ class SettingsWelcomePage : public SettingsPage {
 public:
 	explicit SettingsWelcomePage(QWidget*);
 
-	void applySettings() override;
+	bool applySettings() override;
 	void restoreDefaults() override;
 
 private:

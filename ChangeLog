@@ -1,11 +1,129 @@
------XX.XX.XX () -----
+-----2.12 -----
 New features:
+	* [import]
+		* Download datasets from kaggle.com
+		* Support MCAP file import
+	* [analysis]
+		* Add possibility to do calculations on curves
+	* [spreadsheet]
+		* support periodic and random sampling as function: psample(n;x), rsample(x)
+		* save the properties used to generate random values in the column for later re-use
+		* allow to perform the distribution fit to the data directly from the spreadsheet
+	* [worksheet] 
+		* more space for plots and less "ink" - no layout spacings, no minor grid lines, not plot borders, no ticks on secondary axes on default
+		* allow to provide names for plot ranges for easier lookup and assignemnt in the plot elements
+
+Bug fixes:
+	* Fix crash selecting "cell" from function list in function dialog
+	* Properly draw the border line of the symbol in the legend (BUG 491310)
+
+Internal:
+	* use name LabPlot/labplot consistenly (renamed Labplot2/labplot2)
+
+
+-----2.11.1 (16.07.2024) -----
+Bug fixes:
+	* Improve ODS support (selected platforms only)
+	* Fixed the initial positioninig of the docks, should be put besides each other and not below
+	* Don't try to restore the window size when starting for the first time, let the window manager do the initial size
+	* Don't crash when opening a project which a hidden spreadsheet view
+	* Fixed the background color of the sparklines in the spreadsheet
+	* Fixed copy&paste and duplication of the matrix
+
+
+-----2.11.0 (09.07.2024) -----
+New features:
+	* [general]
+		* New application theme "Dracula"
+		* New categorical color map "Dracula"
+		* New option in the application settings to run a selected CAS engine at startup
+		* New option in the application settings to control if the state of the dock widgets should be saved in the project file
+		* Share the project via email, Nextcloud, etc. directly from the main menu
+		* Allow to activate and deactivate the debug and performance tracing output in the terminal in the application settings
 	* [worksheet]
+		* Preview panel for all available worksheets in the project
 		* Add possibility to use column labels as axis ticks
+		* New visualization types:
+			* Lollipop plot
+			* Q-Q plot
+			* KDE plot
+		* Error bars for bar plots
+		* New worksheet theme "Dracula"
+		* Add possibility to lock elements for unintentional change in the plot
+		* New panel in the presenter widget to allow the selection, zooming and navigation also in the presenter mode
+		* Add possibility to limit the number of ticks for custom columns
+		* Allow to show/hide the entry in the legend for all supported plot types and not only for XY-Curve
+		* Add setting legend and text position relative to plot
+		* Text alignment (left, center, right, block) in text labels
 	* [spreadsheet]
 		* Spreadsheet linking - allow to synchronize number of rows across multiple spreadsheets
+		* Extended search and replace
+		* Column statistics spreadsheet - child spreadsheet showing various statistical properties of the parent spreadsheet
+		* Remove/mask rows with missing values
+		* Allow to sort the whole spreadsheet even if one single column was selected, use it rather as the key sort column
+		* When generating values via a function, allow to control whether the target spreadsheet should be resized to the size of the variable columns
+		* When generating values via a mathematical expression ("generate function values"), allow to use variables in CAS-notebooks as source columns
+		* Generation of equidistant values: support for date&time and integer columns
+		* Generation of equidistant values: allow to fix the number of values and the increment at the same time
+		* Support parsing more functions and operators for formulas and expressions
+		* Add support to show the Sparkline of each respective column
+		* Add triangular distributions (PDF, CDF) to parser and random number generation
+		* Allow to reverse the current selection of cells
+	* [notebook]
+		* Export to PDF
+		* "Configure CAS" in the menu to create a new notebook to directly allow the user to enable new backends in case not done yet
+		* In case the correct path to a CAS like Maxima, etc. was configured, allow to use it without restarting LabPlot
+		* Allow to show variable statistics and to plot data from the context menu in the project explorer similarly to spreadsheet columns
+	* [import]
+		* Templates for ASCII and Binary import filters - allow to save and load current filter settings
+		* Support data import from ODS (Open Document Spreadsheet) files
+		* When importing tables from SQL databases, allow to specify which data region to read (start/end values for columns and records)
+		* Add seaborn's datasets to the collection of datasets
+		* Properly handle out-of-memory situations when importing large amount of data
+		* Better reporting of error messages in the import dialog
+		* BLF
+			* show additional information about the file (application name the file was created with, etc.) in the import dialog
+		* OPJ:
+			* Properly import projects having graphs with multiple axes (BUG 476355)
+			* correctly import font sizes and legend fixes (#839)
+			* improved text and legend label and positioning
+			* import histogram and error bars
+	* [analysis]
+		* Add note for fit results
 
------2.10.1 () -----
+Performance improvements:
+	* Make baseline removal much faster by using Eigen3 library (optional dependency)
+	* Refactor formula parsing including better error handling
+	* Reduced the memory consumption during the import of BLF files.
+
+Bug fixes:
+	* Support host processes (latex, octave, etc.) in sandboxed builds (like Flatpak)
+	* Set mousemode to selection when leaving the plot (Issue #614)
+	* Fix plot range field not being updated (Issue #603)
+	* Fix wrong axis tick type used (Issue #571)
+	* Fix wrong infoelement position when removing active curve (Issue #666)
+	* Fix copying Elements (Issue #622)
+	* Fix calculating skewness and kurtosis
+	* Support start/end row/column in XLSX import preview
+	* Fixed wrong string to load CANSettings
+	* Don't draw any border line for the worksheet canvas (BUG 470625)
+	* Fix ascii import (Issues #898, #901)
+	* Use "export" instead of "import" in the tooltip texts in Export Worksheet Dialog (BUG 485706)
+	* Don't allow to move axes with the arrow keys (BUG 480593)
+	* Don't draw the border line that for the worksheet canvas (BUG 470625)
+	* Fix crash during the data import into spreadsheet with column names changes (BUG 487748)
+	* Use the vectorized version of the plot during the export for all plot types and not for XYCurve only (BUG 489861)
+
+Internal:
+	* Switch from C++11 to C++17
+	* Support Qt6
+	* Reduce code duplication caused by multiple plot types (Issue #540)
+	* Update included QXlsx to 1.4.6
+	* Build separate libraries for backend, nsl and everything and link only when needed in tests
+	* Log skipped tests
+
+
+-----2.10.1 (12.07.2023) -----
 Bug fixes:
 	* Support markdown library discount version 3
 	* Improve Vector BLF dependency (git download must be enabled if needed)
@@ -13,7 +131,23 @@ Bug fixes:
 	* Fix group separator problem in formulas (BUG 468098)
 	* Improve log scales (auto scaling and tick number)
 	* Improve auto scale (Issue #536)
+	* Fix limits when changing scale (Issue #446)
 	* Use system liborigin headers if linking against system liborigin (BUG 469367)
+	* Don't clear the undo history when saving the project (BUG 470727)
+	* Properly react on orientation changes in the worksheet properties explorer
+	* In the collections of example projects, color maps and data sets allow also to search for sub-strings and do the search case-insensitive
+	* Properly save and load the property "visible" for box and bar plots in the project file
+	* Fixed copy&paste and duplication of box and bar plots
+	* .xlsx import:
+		* Fix crash importing empty cells
+		* support datetime import (Issue #531)
+	* Properly set the initial properties of the reference line like line width, etc. (Issue #580)
+	* Properly show the initial value of the property "visible" for the reference range (Issue #582)
+	* React of Delete and Backspace keys to delete selected cells in spreadsheet columns (Issue #596)
+	* Update the plot legend on column name changes used in box and bar plots (Issue #597)
+	* Fixed the positioning of values labels for horizontal bar plots (Issue #599)
+	* Initialize the parameters for the baseline subtraction with reasonable values on first startup and better apperance of the preview plot (Issues #594)
+
 
 -----2.10.0 (21.03.2023) -----
 New features:
@@ -170,7 +304,7 @@ Bug fixes:
 		* React on text changes for values prefix and suffix and not on return pressed event in the curve properties explorer
 		* Fix log scale axis for one tick and ln-scale typo
 		* Fix sqrt and square axis scale
-		* adjust the range format (numeric vs. datetime) also when the the column of the first curve is changed and not only when a new curve is added
+		* adjust the range format (numeric vs. datetime) also when the column of the first curve is changed and not only when a new curve is added
 		* simplified the naming of the initial axes for the default plot types (box blot with four axes,  etc.) - use "x" instead of "x axis 1", etc.
 		* export to more image formats (jpg, bmp, ppm, xbm, xpm)
 	* [spreadsheet]

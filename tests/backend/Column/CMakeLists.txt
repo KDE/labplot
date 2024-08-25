@@ -1,5 +1,9 @@
-add_executable (ColumnTest ColumnTest.cpp)
+option(ENABLE_TEST_BACKEND_COLUMN "Enable Column Tests" ON)
 
-target_link_libraries(ColumnTest labplot2lib labplot2test)
+if(ENABLE_TEST_BACKEND_COLUMN)
+	add_executable (ColumnTest ColumnTest.cpp)
 
-add_test(NAME ColumnTest COMMAND ColumnTest)
+	target_link_libraries(ColumnTest labplotmetatest)
+
+	add_test(NAME ColumnTest COMMAND ColumnTest)
+endif()

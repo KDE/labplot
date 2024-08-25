@@ -11,19 +11,21 @@
 #include "ThemesWidget.h"
 #include "kdefrontend/ThemeHandler.h"
 
-#include <QApplication>
-#include <QDesktopWidget>
-#include <QFile>
-#include <QListWidgetItem>
-#include <QPainter>
-#include <QStandardItemModel>
-#include <QStandardPaths>
-
 #include <KLocalizedString>
 #include <KMessageBox>
 // #include <knewstuff3/downloaddialog.h>
 
+#include <QApplication>
+#include <QFile>
+#include <QListWidgetItem>
+#include <QPainter>
+#include <QScreen>
+#include <QStandardItemModel>
+#include <QStandardPaths>
+
 #include <cmath>
+
+#include <gsl/gsl_const_cgs.h>
 
 /*!
 	\class ThemesWidget
@@ -40,7 +42,7 @@ ThemesWidget::ThemesWidget(QWidget* parent)
 	setDragDropMode(QListView::NoDragDrop);
 
 	// make the icon 3x3cm big and show two of them in the height
-	static const int themeIconSize = std::ceil(3.0 / 2.54 * QApplication::desktop()->physicalDpiX());
+	static const int themeIconSize = std::ceil(3.0 / GSL_CONST_CGS_INCH * QApplication::primaryScreen()->physicalDotsPerInchX());
 	setIconSize(QSize(themeIconSize, themeIconSize));
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
@@ -114,7 +116,7 @@ void ThemesWidget::setFixedMode() {
 	int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
 	QFont font;
 	QFontMetrics fm(font);
-	static const int themeIconSize = std::ceil(3.0 / 2.54 * QApplication::desktop()->physicalDpiX());
+	static const int themeIconSize = std::ceil(3.0 / GSL_CONST_CGS_INCH * QApplication::primaryScreen()->physicalDotsPerInchX());
 	QSize widgetSize(themeIconSize + style()->pixelMetric(QStyle::PM_ScrollBarExtent) + frameWidth * 2,
 					 3 * (themeIconSize + fm.height() + 2 * frameWidth) + fm.height() + frameWidth);
 	setMinimumSize(widgetSize);

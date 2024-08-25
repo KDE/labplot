@@ -9,27 +9,27 @@
 */
 
 %{
-#include <string.h>
-#include <ctype.h>
-#include <stdlib.h>
-#include <locale.h>
+#include <cstring>
+#include <cctype>
+#include <cstdlib>
+#include <clocale>
 #include <cmath>
 #ifdef HAVE_XLOCALE
 #include <xlocale.h>
 #endif
 #include "parser.h"
+#include "constants.h"
+#include "functions.h"
 #if defined(_WIN32)
 #define locale_t _locale_t
 #define strtod_l _strtod_l
 #define freelocale _free_locale
 #endif
 
-extern "C" {
-    #include "gsl/gsl_sf_gamma.h"
-}
+#include <gsl/gsl_sf_gamma.h>
 
 #ifdef PDEBUG
-#include <stdio.h>
+#include <cstdio>
 #define pdebug(...) fprintf(stderr, __VA_ARGS__)
 #else
 #define pdebug(...) {}
@@ -46,8 +46,42 @@ typedef struct param {
 
 int yyerror(param *p, const char *err);
 int yylex(param *p);
+int _variablesCounter = 0;
+bool skipSpecialFunctionEvaluation = false;
+
+int variablesCounter() {
+	return _variablesCounter;
+}
 
 double res;
+char _lastErrorMessage[256] = "";
+
+const char* lastErrorMessage() {
+	return _lastErrorMessage;
+}
+
+static void wrongArgumentNumberMessage(const char* function_name, int provided, int expected) {
+	snprintf(_lastErrorMessage, sizeof(_lastErrorMessage), "Parsing Error: Wrong argument count for %s. Provided: %d, Expected: %d", function_name, provided, expected);
+}
+
+static void wrongArgumentInternalErrorMessage(const char* function_name, int expected) {
+	snprintf(_lastErrorMessage, sizeof(_lastErrorMessage), "Internal parsing Error: Wrong argument count for %s. Expected: %d , but function does not have this number of arguments", function_name, expected);
+}
+
+static void notImplementedError(const char* function_name) {
+	snprintf(_lastErrorMessage, sizeof(_lastErrorMessage), "Parsing Error: '%s' not implemented.", function_name);
+}
+
+static void yyerrorFunction(const char* function_name, const char* msg) {
+	snprintf(_lastErrorMessage, sizeof(_lastErrorMessage), "Parsing Error: In function '%s': %s", function_name, msg);
+}
+
+static void yyerror(const char* msg) {
+	snprintf(_lastErrorMessage, sizeof(_lastErrorMessage), "Parsing Error: %s", msg);
+}
+
+
+
 %}
 
 %lex-param {param *p}
@@ -59,12 +93,17 @@ symbol *tptr;   /* For returning symbol-table pointers */
 }
 
 %token <dval>  NUM 	/* Simple double precision number */
-%token <tptr> VAR FNCT	/* VARiable and FuNCTion */
+%token <tptr> VAR FNCT SPECFNCT /* VARiable and FuNCTion and Special functions*/
+/* https://www.gnu.org/software/bison/manual/html_node/Token-Decl.html */
+%token <operator> OR "||"
+%token <operator> AND "&&"
+%token <operator> LE "<="
+%token <operator> GE ">="
 %type  <dval>  expr
 
 %right '='
-%left '-' '+'
-%left '*' '/' '%'
+%left '-' '+' OR LE GE '<' '>'
+%left '*' '/' '%' AND
 %left NEG     /* Negation--unary minus */
 %right '^' '!'
 
@@ -79,28 +118,329 @@ line:	'\n'
 ;
 
 expr:      NUM       { $$ = $1;                            }
-| VAR                { $$ = $1->value.var;                 }
-| VAR '=' expr       { $$ = $3; $1->value.var = $3;        }
-| FNCT '(' ')'       { $$ = (*($1->value.fnctptr))();      }
-| FNCT '(' expr ')'  { $$ = (*((func_t1)($1->value.fnctptr)))($3); }
-| FNCT '(' expr ',' expr ')'  { $$ = (*((func_t2)($1->value.fnctptr)))($3,$5); }
-| FNCT '(' expr ',' expr ','expr ')'  { $$ = (*((func_t3)($1->value.fnctptr)))($3,$5,$7); }
-| FNCT '(' expr ',' expr ',' expr ','expr ')'  { $$ = (*((func_t4)($1->value.fnctptr)))($3,$5,$7,$9); }
-| FNCT '(' expr ';' expr ')'  { $$ = (*((func_t2)($1->value.fnctptr)))($3,$5); }
-| FNCT '(' expr ';' expr ';'expr ')'  { $$ = (*((func_t3)($1->value.fnctptr)))($3,$5,$7); }
-| FNCT '(' expr ';' expr ';' expr ';'expr ')'  { $$ = (*((func_t4)($1->value.fnctptr)))($3,$5,$7,$9); }
+| VAR                { $$ = std::get<double>($1->value); _variablesCounter++;}
+| VAR '=' expr       { $$ = std::get<double>($1->value) = $3; _variablesCounter++;       }
+| SPECFNCT '(' ')'       {
+							const auto& special_function = std::get<special_function_def>($1->value);
+							if (!special_function.payload.expired() && !special_function.payload.lock()->constant)
+								_variablesCounter++;
+							const int argc = special_function.funsptr->argc;
+							if (argc != 0) {
+								wrongArgumentNumberMessage($1->name, 0, argc);
+								yynerrs++;
+								return 1;
+							}
+							try {
+								const auto function = std::get<func_tPayload>(special_function.funsptr->fnct);
+								if (!skipSpecialFunctionEvaluation) {
+									if (function == nullptr) {
+										notImplementedError($1->name);
+										yynerrs++;
+										return 2;
+									}
+									$$ = function(special_function.payload);
+								} else
+									$$ = std::nan("0");
+							} catch (const std::bad_variant_access& ex) {
+								wrongArgumentInternalErrorMessage($1->name, 0);
+								yynerrs++;
+								return 1;
+							}
+						}
+| SPECFNCT '(' VAR ')'  {
+							const auto& special_function = std::get<special_function_def>($1->value);
+							if (!special_function.payload.expired() && !special_function.payload.lock()->constant)
+								_variablesCounter++;
+							const int argc = special_function.funsptr->argc;
+							if (argc != 1) {
+								wrongArgumentNumberMessage($1->name, 1, argc);
+								yynerrs++;
+								return 1;
+							}
+							try {
+								const auto function = std::get<func_t1Payload>(special_function.funsptr->fnct);
+								if (!skipSpecialFunctionEvaluation) {
+									if (function == nullptr) {
+										notImplementedError($1->name);
+										yynerrs++;
+										return 2;
+									}
+									$$ = function($3->name, special_function.payload);
+								} else
+									$$ = std::nan("0");
+							} catch (const std::bad_variant_access& ex) {
+								wrongArgumentInternalErrorMessage($1->name, 1);
+								yynerrs++;
+								return 1;
+							}
+						}
+| SPECFNCT '(' expr ';' VAR ')'  {
+									const auto& special_function = std::get<special_function_def>($1->value);
+									if (!special_function.payload.expired() && !special_function.payload.lock()->constant)
+										_variablesCounter++;
+									const int argc = special_function.funsptr->argc;
+									if (argc != 2) {
+										wrongArgumentNumberMessage($1->name, 2, argc);
+										yynerrs++;
+										return 1;
+									}
+									try {
+										const auto function = std::get<func_t2Payload>(special_function.funsptr->fnct);
+										if (!skipSpecialFunctionEvaluation) {
+											if (function == nullptr) {
+												notImplementedError($1->name);
+												yynerrs++;
+												return 2;
+											}
+											$$ = function($3 ,$5->name, special_function.payload);
+										} else
+											$$ = std::nan("0");
+									} catch (const std::bad_variant_access& ex) {
+										wrongArgumentInternalErrorMessage($1->name, 2);
+										yynerrs++;
+										return 1;
+									}
+								  }
+| SPECFNCT '(' expr ';' expr ';' VAR ')'  {
+											const auto& special_function = std::get<special_function_def>($1->value);
+											if (!special_function.payload.expired() && !special_function.payload.lock()->constant)
+												_variablesCounter++;
+											const int argc = special_function.funsptr->argc;
+											if (argc != 3) {
+												wrongArgumentNumberMessage($1->name, 3, argc);
+												yynerrs++;
+												return 1;
+											}
+											try {
+												const auto function = std::get<func_t3Payload>(special_function.funsptr->fnct);
+												if (!skipSpecialFunctionEvaluation) {
+													if (function == nullptr) {
+														notImplementedError($1->name);
+														yynerrs++;
+														return 2;
+													}
+													$$ = function($3, $5, $7->name, special_function.payload);
+												} else
+													$$ = std::nan("0");
+											} catch (const std::bad_variant_access& ex) {
+												wrongArgumentInternalErrorMessage($1->name, 3);
+												yynerrs++;
+												return 1;
+											}
+										  }
+| SPECFNCT '(' expr ';' expr ';' expr ';' VAR ')'  {
+													const auto& special_function = std::get<special_function_def>($1->value);
+													if (!special_function.payload.expired() && !special_function.payload.lock()->constant)
+														_variablesCounter++;
+													const int argc = special_function.funsptr->argc;
+													if (argc != 4) {
+														wrongArgumentNumberMessage($1->name, 4, argc);
+														yynerrs++;
+														return 1;
+													}
+													try {
+														const auto function = std::get<func_t4Payload>(special_function.funsptr->fnct);
+														if (!skipSpecialFunctionEvaluation) {
+															if (function == nullptr) {
+																notImplementedError($1->name);
+																yynerrs++;
+																return 2;
+															}
+															$$ = function($3, $5, $7, $9->name, special_function.payload);
+														} else
+															$$ = std::nan("0");
+													} catch (const std::bad_variant_access& ex) {
+														wrongArgumentInternalErrorMessage($1->name, 4);
+														yynerrs++;
+														return 1;
+													}
+
+
+												  }
+| SPECFNCT '(' expr ')'  { yynerrs++; yyerrorFunction($1->name, "Argument must be a variable not an expression");}
+| SPECFNCT '(' expr ';' expr ')'   { yynerrs++; yyerrorFunction($1->name, "Last argument must be a variable not an expression");}
+| SPECFNCT '(' expr ';' expr ';' expr ')'  { yynerrs++; yyerrorFunction($1->name, "Last argument must be a variable not an expression");}
+| SPECFNCT '(' expr ';' expr ';' expr ';' expr ')'  { yynerrs++; yyerrorFunction($1->name, "Last argument must be a variable not an expression");}
+| FNCT '(' ')'       {
+						const funs* function = std::get<funs*>($1->value);
+						const int argc = function->argc;
+						if (argc != 0) {
+							wrongArgumentNumberMessage($1->name, 0, argc);
+							yynerrs++;
+							return 1;
+						} else {
+							try {
+								const auto fnct_ptr = std::get<func_t>(function->fnct);
+								$$ = fnct_ptr();
+							} catch (const std::bad_variant_access& ex) {
+								wrongArgumentInternalErrorMessage($1->name, 0);
+								yynerrs++;
+								return 1;
+							}
+						}
+					}
+| FNCT '(' expr ')'  {
+						const funs* function = std::get<funs*>($1->value);
+						const int argc = function->argc;
+						if (argc != 1) {
+							wrongArgumentNumberMessage($1->name, 1, argc);
+							yynerrs++;
+							return 1;
+						} else {
+							try {
+								const auto fnct_ptr = std::get<func_t1>(function->fnct);
+								$$ = fnct_ptr($3);
+							} catch (const std::bad_variant_access& ex) {
+								wrongArgumentInternalErrorMessage($1->name, 1);
+								yynerrs++;
+								return 1;
+							}
+						}
+					}
+| FNCT '(' expr ',' expr ')'  {
+								const funs* function = std::get<funs*>($1->value);
+								const int argc = function->argc;
+								if (argc != 2) {
+									wrongArgumentNumberMessage($1->name, 2, argc);
+									yynerrs++;
+									return 1;
+								} else {
+									try {
+										const auto fnct_ptr = std::get<func_t2>(function->fnct);
+										$$ = fnct_ptr($3,$5);
+									} catch (const std::bad_variant_access& ex) {
+										wrongArgumentInternalErrorMessage($1->name, 2);
+										yynerrs++;
+										return 1;
+									}
+								}
+							}
+| FNCT '(' expr ',' expr ',' expr ')'  {
+										const funs* function = std::get<funs*>($1->value);
+										const int argc = function->argc;
+										if (argc != 3) {
+											wrongArgumentNumberMessage($1->name, 3, argc);
+											yynerrs++;
+											return 1;
+										} else {
+											try {
+												const auto fnct_ptr = std::get<func_t3>(function->fnct);
+												$$ = fnct_ptr($3,$5,$7);
+											} catch (const std::bad_variant_access& ex) {
+												wrongArgumentInternalErrorMessage($1->name, 3);
+												yynerrs++;
+												return 1;
+											}
+										}
+									}
+| FNCT '(' expr ',' expr ',' expr ',' expr ')'  {
+													const funs* function = std::get<funs*>($1->value);
+													const int argc = function->argc;
+													if (argc != 4) {
+														wrongArgumentNumberMessage($1->name, 4, argc);
+														yynerrs++;
+														return 1;
+													} else {
+														try {
+															const auto fnct_ptr = std::get<func_t4>(function->fnct);
+															$$ = fnct_ptr($3,$5,$7,$9);
+														} catch (const std::bad_variant_access& ex) {
+															wrongArgumentInternalErrorMessage($1->name, 4);
+															yynerrs++;
+															return 1;
+														}
+													}
+												}
+| FNCT '(' expr ';' expr ')'  {
+								const funs* function = std::get<funs*>($1->value);
+								const int argc = function->argc;
+								if (argc != 2) {
+									wrongArgumentNumberMessage($1->name, 2, argc);
+									yynerrs++;
+									return 1;
+								} else {
+									try {
+										const auto fnct_ptr = std::get<func_t2>(function->fnct);
+										$$ = fnct_ptr($3,$5);
+									} catch (const std::bad_variant_access& ex) {
+										wrongArgumentInternalErrorMessage($1->name, 2);
+										yynerrs++;
+										return 1;
+									}
+								}
+							}
+| FNCT '(' expr ';' expr ';' expr ')'  {
+										const funs* function = std::get<funs*>($1->value);
+										const int argc = function->argc;
+										if (argc != 3) {
+											wrongArgumentNumberMessage($1->name, 3, argc);
+											yynerrs++;
+											return 1;
+										} else {
+											try {
+												const auto fnct_ptr = std::get<func_t3>(function->fnct);
+												$$ = fnct_ptr($3,$5,$7);
+											} catch (const std::bad_variant_access& ex) {
+												wrongArgumentInternalErrorMessage($1->name, 3);
+												yynerrs++;
+												return 1;
+											}
+										}
+									}
+| FNCT '(' expr ';' expr ';' expr ';' expr ')'  {
+													const funs* function = std::get<funs*>($1->value);
+													const int argc = function->argc;
+													if (argc != 4) {
+														wrongArgumentNumberMessage($1->name, 4, argc);
+														yynerrs++;
+														return 1;
+													} else {
+														try {
+															const auto fnct_ptr = std::get<func_t4>(function->fnct);
+															$$ = fnct_ptr($3,$5,$7,$9);
+														} catch (const std::bad_variant_access& ex) {
+															wrongArgumentInternalErrorMessage($1->name, 4);
+															yynerrs++;
+															return 1;
+														}
+													}
+												}
+| FNCT '(' expr ';' expr ';' expr ';' expr ';' expr ')'  {
+													const funs* function = std::get<funs*>($1->value);
+													const int argc = function->argc;
+													if (argc != 5) {
+														wrongArgumentNumberMessage($1->name, 5, argc);
+														yynerrs++;
+														return 1;
+													} else {
+														try {
+															const auto fnct_ptr = std::get<func_t5>(function->fnct);
+															$$ = fnct_ptr($3,$5,$7,$9,$11);
+														} catch (const std::bad_variant_access& ex) {
+															wrongArgumentInternalErrorMessage($1->name, 5);
+															yynerrs++;
+															return 1;
+														}
+													}
+}
 | expr '+' expr      { $$ = $1 + $3;                       }
 | expr '-' expr      { $$ = $1 - $3;                       }
+| expr OR expr       { $$ = orFunction($1, $3);            }
 | expr '*' expr      { $$ = $1 * $3;                       }
 | expr '/' expr      { $$ = $1 / $3;                       }
 | expr '%' expr      { $$ = (int)($1) % (int)($3);         }
+| expr AND expr      { $$ = andFunction($1, $3);           }
+| '!' expr           { $$ = notFunction($2);               }
+| expr GE expr       { $$ = greaterEqualThan($1, $3);      }
+| expr LE expr       { $$ = lessEqualThan($1, $3);         }
+| expr '>' expr      { $$ = greaterThan($1, $3);           }
+| expr '<' expr      { $$ = lessThan($1, $3);              }
 | '-' expr  %prec NEG{ $$ = -$2;                           }
 | expr '^' expr      { $$ = std::pow($1, $3);              }
 | expr '*' '*' expr  { $$ = std::pow($1, $4);              }
 | '(' expr ')'       { $$ = $2;                            }
 | '|' expr '|'       { $$ = std::abs($2);                  }
 | expr '!'           { $$ = gsl_sf_fact((unsigned int)$1); }
-/* logical operators (!,&&,||) are not supported */
 ;
 
 %%
@@ -124,14 +464,24 @@ int yyerror(param *p, const char *s) {
 symbol* put_symbol(const char *symbol_name, int symbol_type) {
 /*	pdebug("PARSER: put_symbol(): symbol_name = '%s'\n", symbol_name); */
 
-	symbol *ptr = (symbol *)malloc(sizeof(symbol));
+	symbol *ptr = new symbol;
+	assert(ptr);
 	ptr->name = (char *)malloc(strlen(symbol_name) + 1);
 	strcpy(ptr->name, symbol_name);
 	ptr->type = symbol_type;
-	ptr->value.var = 0;	/* set value to 0 even if fctn */
+	switch (symbol_type) {
+	case VAR: ptr->value = 0.; break;
+	case FNCT: ptr->value = nullptr; break;
+	case SPECFNCT: {
+		special_function_def sfp;
+		ptr->value = sfp;
+		break;
+	}
+	}
+
 	ptr->next = (symbol *)symbol_table;
 	symbol_table = ptr;
-	
+
 /*	pdebug("PARSER: put_symbol() DONE\n"); */
 	return ptr;
 }
@@ -144,11 +494,11 @@ int remove_symbol(const char *symbol_name) {
 
 	/* check if head contains symbol */
 	if (ptr && (strcmp(ptr->name, symbol_name) == 0)) {
-		if (ptr->type == VAR && ptr->value.var == 0) {
+		if (ptr->type == VAR && std::get<double>(ptr->value) == 0) {
 			pdebug("PARSER: REMOVING symbol '%s'\n", symbol_name);
 			symbol_table = ptr->next;
 			free(ptr->name);
-			free(ptr);
+			delete ptr;
 		}
 		return 0;
 	}
@@ -161,14 +511,14 @@ int remove_symbol(const char *symbol_name) {
 	}
 
 	/* symbol not found or is not a variable or is not 0 */
-	if (!ptr || ptr->type != VAR || ptr->value.var != 0)
+	if (!ptr || ptr->type != VAR || std::get<double>(ptr->value) != 0)
 		return 1;
 
 	/* remove symbol */
 	pdebug("PARSER: REMOVING symbol '%s'\n", symbol_name);
 	prev->next = ptr->next;
 	free(ptr->name);
-	free(ptr);
+	delete ptr;
 
 	return 0;
 }
@@ -177,7 +527,7 @@ int remove_symbol(const char *symbol_name) {
    returns 0 if symbol not found */
 symbol* get_symbol(const char *symbol_name) {
 	pdebug("PARSER: get_symbol(): symbol_name = '%s'\n", symbol_name);
-	
+
 	symbol *ptr;
 	for (ptr = symbol_table; ptr != nullptr; ptr = (symbol *)ptr->next) {
 		/* pdebug("%s ", ptr->name); */
@@ -200,15 +550,97 @@ void init_table(void) {
 	/* add functions */
 	for (i = 0; i < _number_functions; i++) {
 		ptr = put_symbol(_functions[i].name, FNCT);
-		ptr->value.fnctptr = _functions[i].fnct;
+		ptr->value = &_functions[i];
+	}
+	/* add special functions */
+	for (i = 0; i < _number_specialfunctions; i++) {
+		ptr = put_symbol(_special_functions[i].name, SPECFNCT);
+
+		special_function_def sfd;
+		sfd.funsptr = &_special_functions[i];
+		ptr->value = sfd;
 	}
 	/* add constants */
 	for (i = 0; i < _number_constants; i++) {
 		ptr = put_symbol(_constants[i].name, VAR);
-		ptr->value.var = _constants[i].value;
+		ptr->value = _constants[i].value;
 	}
 
 	pdebug("PARSER: init_table() DONE. sym_table = %p\n", ptr);
+}
+
+bool set_specialfunction0(const char* function_name, func_tPayload function, std::weak_ptr<Payload> payload) {
+	pdebug("PARSER: set_SpecialFunction0()\n");
+
+
+	symbol *ptr = get_symbol(function_name);
+	if (!ptr) // function name not found
+		return false;
+
+	assert(std::get<special_function_def>(ptr->value).funsptr->argc == 0);
+	std::get<special_function_def>(ptr->value).funsptr->fnct = function;
+	std::get<special_function_def>(ptr->value).funsptr->name = function_name;
+	std::get<special_function_def>(ptr->value).payload = payload;
+	return true;
+}
+
+bool set_specialfunction1(const char* function_name, func_t1Payload function, std::shared_ptr<Payload> payload) {
+	pdebug("PARSER: set_SpecialFunction1()\n");
+
+
+	symbol *ptr = get_symbol(function_name);
+	if (!ptr) // function name not found
+		return false;
+	assert(std::get<special_function_def>(ptr->value).funsptr->argc == 1);
+	std::get<special_function_def>(ptr->value).funsptr->fnct = function;
+	std::get<special_function_def>(ptr->value).funsptr->name = function_name;
+	std::get<special_function_def>(ptr->value).payload = payload;
+	return true;
+}
+
+bool set_specialfunction2(const char* function_name, func_t2Payload function, std::shared_ptr<Payload> payload) {
+	pdebug("PARSER: set_SpecialFunction2()\n");
+
+
+	symbol *ptr = get_symbol(function_name);
+	if (!ptr) // function name not found
+		return false;
+
+	assert(std::get<special_function_def>(ptr->value).funsptr->argc == 2);
+	std::get<special_function_def>(ptr->value).funsptr->fnct = function;
+	std::get<special_function_def>(ptr->value).funsptr->name = function_name;
+	std::get<special_function_def>(ptr->value).payload = payload;
+	return true;
+}
+
+bool set_specialfunction3(const char* function_name, func_t3Payload function, std::shared_ptr<Payload> payload) {
+	pdebug("PARSER: set_SpecialFunction3()\n");
+
+
+	symbol *ptr = get_symbol(function_name);
+	if (!ptr) // function name not found
+		return false;
+
+	assert(std::get<special_function_def>(ptr->value).funsptr->argc == 3);
+	std::get<special_function_def>(ptr->value).funsptr->fnct = function;
+	std::get<special_function_def>(ptr->value).funsptr->name = function_name;
+	std::get<special_function_def>(ptr->value).payload = payload;
+	return true;
+}
+
+bool set_specialfunction4(const char* function_name, func_t4Payload function, std::shared_ptr<Payload> payload) {
+	pdebug("PARSER: set_SpecialFunction4()\n");
+
+
+	symbol *ptr = get_symbol(function_name);
+	if (!ptr) // function name not found
+		return false;
+
+	assert(std::get<special_function_def>(ptr->value).funsptr->argc == 4);
+	std::get<special_function_def>(ptr->value).funsptr->fnct = function;
+	std::get<special_function_def>(ptr->value).funsptr->name = function_name;
+	std::get<special_function_def>(ptr->value).payload = payload;
+	return true;
 }
 
 void delete_table(void) {
@@ -239,7 +671,7 @@ symbol* assign_symbol(const char* symbol_name, double value) {
 
 	/* do not assign value if symbol already exits as function */
 	if (ptr->type == VAR)
-		ptr->value.var = value;
+		ptr->value = value;
 
 	return ptr;
 }
@@ -265,6 +697,9 @@ double parse(const char* string, const char* locale) {
 	/* be sure that the symbol table has been initialized */
 	if (!symbol_table)
 		init_table();
+
+	_variablesCounter = 0;
+	_lastErrorMessage[0] = 0;
 
 	param p;
 	p.pos = 0;
@@ -330,6 +765,29 @@ int yylex(param *p) {
 		return c;
 	}
 
+	if (c == '&') {
+		// Check if the next is also an &, because then it is the AND operator
+		if (getcharstr(p) == '&') {
+			return AND;
+		}
+		ungetcstr(&(p->pos));
+	} else if (c == '|') {
+		if (getcharstr(p) == '|') {
+			return OR;
+		}
+		ungetcstr(&(p->pos));
+	} else if (c == '>') {
+		if (getcharstr(p) == '=') {	// >=
+			return GE;
+		}
+		ungetcstr(&(p->pos));
+	} else if (c == '<') {
+		if (getcharstr(p) == '=') {	// <=
+			return LE;
+		}
+		ungetcstr(&(p->pos));
+	}
+
 	pdebug("PARSER: PROCESSING character '%c'\n", c);
 
 	/* process numbers */
@@ -358,7 +816,7 @@ int yylex(param *p) {
 #endif
 		double result;
 		if (locale != nullptr) {
-#if defined(__OpenBSD__)
+#if defined(__OpenBSD__) || defined(__HAIKU__)
 			result = strtod(s, &remain);
 #else
 			result = strtod_l(s, &remain, locale);

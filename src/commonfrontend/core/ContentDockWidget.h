@@ -1,11 +1,10 @@
 /*
-	File                 : PartMdiView.h
+	File                 : ContentDockWidget.h
 	Project              : LabPlot
-	Description          : QMdiSubWindow wrapper for aspect views.
+	Description          : ads::CDockWidget wrapper for aspect views.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2013-2019 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2007, 2008 Knut Franke <knut.franke@gmx.de>
+	SPDX-FileCopyrightText: 2013-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023 Martin Marmsoler <martin.marmsoler@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -24,9 +23,9 @@ public:
 	explicit ContentDockWidget(AbstractPart*);
 	~ContentDockWidget() override;
 	AbstractPart* part() const;
+	void suppressDeletion(bool);
 
 private:
-	void closeEvent(QCloseEvent*) override;
 	AbstractPart* m_part;
 	bool m_closing{false};
 

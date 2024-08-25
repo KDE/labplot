@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Base class for all analysis curves
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2017-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2018-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -47,6 +47,15 @@ void XYAnalysisCurve::init() {
 
 bool XYAnalysisCurve::resultAvailable() const {
 	return result().available;
+}
+
+bool XYAnalysisCurve::usingColumn(const Column* column) const {
+	Q_D(const XYAnalysisCurve);
+
+	if (d->dataSourceType == DataSourceType::Spreadsheet)
+		return (d->xDataColumn == column || d->yDataColumn == column || d->y2DataColumn == column);
+	else
+		return (d->dataSourceCurve->xColumn() == column || d->dataSourceCurve->yColumn() == column);
 }
 
 // copy valid data from x/y data columns to x/y data vectors
@@ -362,6 +371,25 @@ void XYAnalysisCurve::createDataSpreadsheet() {
 	folder()->addChild(spreadsheet);
 }
 
+void XYAnalysisCurve::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* aspect) {
+	const auto column = dynamic_cast<const AbstractColumn*>(aspect);
+	if (!column)
+		return;
+
+	setUndoAware(false);
+	if (xDataColumnPath() == aspectPath)
+		setXDataColumn(column);
+	if (yDataColumnPath() == aspectPath)
+		setYDataColumn(column);
+	if (y2DataColumnPath() == aspectPath)
+		setY2DataColumn(column);
+
+	// From XYCurve
+	if (valuesColumnPath() == aspectPath)
+		setValuesColumn(column);
+	setUndoAware(true);
+}
+
 // ##############################################################################
 // ######################### Private implementation #############################
 // ##############################################################################
@@ -406,8 +434,10 @@ void XYAnalysisCurvePrivate::recalculate() {
 	} else {
 		xColumn->invalidateProperties();
 		yColumn->invalidateProperties();
-		xVector->clear();
-		yVector->clear();
+		if (xVector)
+			xVector->clear();
+		if (yVector)
+			yVector->clear();
 	}
 
 	resetResults();
@@ -425,7 +455,7 @@ void XYAnalysisCurvePrivate::recalculate() {
 
 		if (result) {
 			// redraw the curve
-			recalcLogicalPoints();
+			recalc();
 		}
 	}
 	Q_EMIT q->dataChanged();
@@ -463,7 +493,6 @@ void XYAnalysisCurve::save(QXmlStreamWriter* writer) const {
 bool XYAnalysisCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYAnalysisCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -485,6 +514,10 @@ bool XYAnalysisCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
 			READ_COLUMN(y2DataColumn);
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 

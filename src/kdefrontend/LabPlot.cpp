@@ -10,10 +10,12 @@
 
 #include "MainWin.h"
 #include "backend/core/AbstractColumn.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/macros.h"
 
 #include <KAboutData>
 #include <KColorSchemeManager>
+#include <KConfigGroup>
 #include <KCrash>
 #include <KLocalizedString>
 #include <KMessageBox>
@@ -76,22 +78,21 @@ const QString getSystemInfo() {
 }
 
 int main(int argc, char* argv[]) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 	QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 	QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+#endif
 	QApplication app(argc, argv);
-	KLocalizedString::setApplicationDomain("labplot2");
-	KCrash::initialize();
-
+	KLocalizedString::setApplicationDomain("labplot");
 	MainWin::updateLocale();
 
 	QString systemInfo{getSystemInfo()};
-
-	KAboutData aboutData(QStringLiteral("labplot2"),
+	KAboutData aboutData(QStringLiteral("labplot"),
 						 QStringLiteral("LabPlot"),
 						 QLatin1String(LVERSION),
 						 i18n("LabPlot is a FREE, open-source and cross-platform Data Visualization and Analysis software accessible to everyone."),
 						 KAboutLicense::GPL,
-						 i18n("(c) 2007-2023"),
+						 i18n("(c) 2007-2024"),
 						 systemInfo,
 						 QStringLiteral("https://labplot.kde.org"));
 	aboutData.addAuthor(i18n("Stefan Gerlach"), i18nc("@info:credit", "Developer"), QStringLiteral("stefan.gerlach@uni.kn"), QString());
@@ -108,7 +109,7 @@ int main(int argc, char* argv[]) {
 						QStringLiteral("yurchor@ukr.net"),
 						QString());
 	aboutData.addCredit(i18n("Garvit Khatri"),
-						i18nc("@info:credit", "Porting LabPlot2 to KF5 and Integration with Cantor"),
+						i18nc("@info:credit", "Porting LabPlot to KF5 and Integration with Cantor"),
 						QStringLiteral("garvitdelhi@gmail.com"),
 						QString());
 	aboutData.addCredit(i18n("Christoph Roick"),
@@ -116,8 +117,13 @@ int main(int argc, char* argv[]) {
 						QStringLiteral("chrisito@gmx.de"),
 						QString());
 	aboutData.setOrganizationDomain(QByteArray("kde.org"));
-	aboutData.setDesktopFileName(QStringLiteral("org.kde.labplot2"));
+	aboutData.setDesktopFileName(QStringLiteral("org.kde.labplot"));
 	KAboutData::setApplicationData(aboutData);
+	KCrash::initialize();
+
+	const auto& group = Settings::settingsGeneral();
+	enableDebugTrace(group.readEntry<bool>(QLatin1String("DebugTrace"), false));
+	enablePerfTrace(group.readEntry<bool>(QLatin1String("PerfTrace"), false));
 
 	// TODO: add library information (GSL version, etc.) in about dialog
 
@@ -207,7 +213,6 @@ int main(int argc, char* argv[]) {
 		WARN("	" << STDSTRING(path))
 #endif
 
-	const auto& group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
 #if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 67, 0) // KColorSchemeManager has a system default option
 	QString schemeName = group.readEntry("ColorScheme");
 #else

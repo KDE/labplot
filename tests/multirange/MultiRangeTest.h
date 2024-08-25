@@ -1,7 +1,7 @@
 /*
 	File                 : MultiRangeTest.h
 	Project              : LabPlot
-	Description          : Tests for project imports
+	Description          : Tests for multi ranges, part 1
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2018 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
@@ -29,6 +29,8 @@ private Q_SLOTS:
 
 	// zoom tests (including auto scale)
 	void zoomInX_SingleRange();
+	void zoomInX_SingleRangeDateTimeMonotonicIncrease();
+	void zoomInX_SingleRangeDateTimeNonMonotonic();
 	void zoomInX_AllRanges();
 	void zoomInY_SingleRange();
 	void zoomInY_AllRanges();
@@ -46,17 +48,5 @@ private Q_SLOTS:
 	void shiftDown_SingleRange();
 	void shiftUp_AllRanges();
 	void shiftDown_AllRanges();
-
-	void autoScaleYAfterZoomInX();
-	void autoScaleXAfterZoomInY();
-
-	void baseDockSetAspects_NoPlotRangeChange();
-
-	void mouseWheelXAxisApplyToAllX();
-	void mouseWheelTanCurveApplyToAllX();
-	void mouseWheelXAxisApplyToSelected();
-
-	void axisMouseMoveApplyToAllX();
-	void axisMouseMoveApplyToSelection();
 };
 #endif

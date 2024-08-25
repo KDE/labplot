@@ -223,6 +223,10 @@ int AbstractSimpleFilter::rowCount() const {
 	return m_inputs.value(0) ? m_inputs.at(0)->rowCount() : 0;
 }
 
+int AbstractSimpleFilter::rowCount(double min, double max) const {
+	return m_inputs.value(0) ? m_inputs.at(0)->rowCount(min, max) : 0;
+}
+
 /**
  * \brief Number of output rows == number of input rows
  *
@@ -272,22 +276,22 @@ void AbstractSimpleFilter::inputDataChanged(const AbstractColumn*) {
 }
 
 void AbstractSimpleFilter::inputRowsAboutToBeInserted(const AbstractColumn* /*source*/, int before, int /*count*/) {
-	foreach (const Interval<int>& output_range, dependentRows(Interval<int>(before, before)))
+	for (const auto& output_range : dependentRows(Interval<int>(before, before)))
 		Q_EMIT m_output_column->rowsAboutToBeInserted(m_output_column, output_range.start(), output_range.size());
 }
 
 void AbstractSimpleFilter::inputRowsInserted(const AbstractColumn* /*source*/, int before, int /*count*/) {
-	foreach (const Interval<int>& output_range, dependentRows(Interval<int>(before, before)))
+	for (const auto& output_range : dependentRows(Interval<int>(before, before)))
 		Q_EMIT m_output_column->rowsInserted(m_output_column, output_range.start(), output_range.size());
 }
 
 void AbstractSimpleFilter::inputRowsAboutToBeRemoved(const AbstractColumn* /*source*/, int first, int count) {
-	foreach (const Interval<int>& output_range, dependentRows(Interval<int>(first, first + count - 1)))
+	for (const auto& output_range : dependentRows(Interval<int>(first, first + count - 1)))
 		Q_EMIT m_output_column->rowsAboutToBeRemoved(m_output_column, output_range.start(), output_range.size());
 }
 
 void AbstractSimpleFilter::inputRowsRemoved(const AbstractColumn* /*source*/, int first, int count) {
-	foreach (const Interval<int>& output_range, dependentRows(Interval<int>(first, first + count - 1)))
+	for (const auto& output_range : dependentRows(Interval<int>(first, first + count - 1)))
 		Q_EMIT m_output_column->rowsRemoved(m_output_column, output_range.start(), output_range.size());
 }
 

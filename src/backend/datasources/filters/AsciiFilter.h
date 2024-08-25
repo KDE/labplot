@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : ASCII I/O-filter
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -14,7 +14,6 @@
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
 class Spreadsheet;
-class QStringList;
 class QIODevice;
 class AsciiFilterPrivate;
 class QAbstractSocket;
@@ -39,19 +38,16 @@ public:
 	size_t lineNumber(QIODevice&, size_t maxLines = std::numeric_limits<std::size_t>::max()) const; // calculate number of lines if device supports it
 
 	// read data from any device
-	void readDataFromDevice(QIODevice& device, AbstractDataSource*, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
+	void readDataFromDevice(QIODevice& device, AbstractDataSource*, ImportMode = ImportMode::Replace, int lines = -1);
 	void readFromLiveDeviceNotFile(QIODevice& device, AbstractDataSource* dataSource);
 	qint64 readFromLiveDevice(QIODevice& device, AbstractDataSource*, qint64 from = -1);
+
 	// overloaded function to read from file
-	void
-	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
+	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
 
 	QVector<QStringList> preview(const QString& fileName, int lines);
 	QVector<QStringList> preview(QIODevice& device);
-
-	void loadFilterSettings(const QString&) override;
-	void saveFilterSettings(const QString&) const override;
 
 #ifdef HAVE_MQTT
 	QVector<QStringList> preview(const QString& message);

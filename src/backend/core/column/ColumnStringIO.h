@@ -21,6 +21,7 @@ public:
 	AbstractColumn::ColumnMode columnMode() const override;
 	AbstractColumn::PlotDesignation plotDesignation() const override;
 	int rowCount() const override;
+	int rowCount(double min, double max) const override;
 	QString textAt(int) const override;
 	int availableRowCount(int max = -1) const override;
 	void setTextAt(int, const QString&) override;

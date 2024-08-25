@@ -12,11 +12,12 @@
 #define GSL_CONSTANTS_H
 
 #include <QString>
+#include <functional>
 
 enum class ConstantGroups;
 
 struct cons {
-	QString description;
+	std::function<QString(void)> description;
 	const char* name;
 	double value;
 	const char* unit;

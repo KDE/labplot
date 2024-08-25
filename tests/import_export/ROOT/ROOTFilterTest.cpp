@@ -12,10 +12,8 @@
 #include "backend/datasources/filters/ROOTFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
-extern "C" {
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
-}
 
 void ROOTFilterTest::importFile1() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/advanced_zlib.root"));

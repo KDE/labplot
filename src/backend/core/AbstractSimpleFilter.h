@@ -49,6 +49,7 @@ public:
 	}
 
 	virtual int rowCount() const;
+	virtual int rowCount(double min, double max) const;
 	virtual int availableRowCount(int max = -1) const;
 	virtual QList<Interval<int>> dependentRows(const Interval<int>& inputRange) const;
 
@@ -90,6 +91,9 @@ public:
 	AbstractColumn::ColumnMode columnMode() const override;
 	int rowCount() const override {
 		return m_owner->rowCount();
+	}
+	int rowCount(double /*min*/, double /*max*/) const override {
+		return 0;
 	}
 	int availableRowCount(int max = -1) const override {
 		return m_owner->availableRowCount(max);

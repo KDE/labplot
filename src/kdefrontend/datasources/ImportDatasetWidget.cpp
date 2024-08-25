@@ -4,11 +4,12 @@
 	Description          : import online dataset widget
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2019 Kovacs Ferencz <kferike98@gmail.com>
-	SPDX-FileCopyrightText: 2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2019-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "kdefrontend/datasources/ImportDatasetWidget.h"
+#include "backend/core/Settings.h"
 #include "backend/datasources/DatasetHandler.h"
 #include "backend/lib/macros.h"
 #include "kdefrontend/DatasetModel.h"
@@ -28,7 +29,6 @@
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
 
 /*!
 	\class ImportDatasetWidget
@@ -63,7 +63,7 @@ ImportDatasetWidget::ImportDatasetWidget(QWidget* parent)
 			updateDatasets(ui.twCategories->selectedItems().first());
 	});
 
-	connect(ui.leSearch, &QLineEdit::textChanged, this, &ImportDatasetWidget::updateCategories);
+	connect(ui.leSearch, &TimedLineEdit::textChanged, this, &ImportDatasetWidget::updateCategories);
 	connect(ui.lwDatasets, &QListWidget::itemSelectionChanged, [this]() {
 		if (!m_initializing)
 			datasetChanged();
@@ -74,7 +74,7 @@ ImportDatasetWidget::ImportDatasetWidget(QWidget* parent)
 	connect(m_networkManager, &QNetworkAccessManager::finished, this, &ImportDatasetWidget::downloadFinished);
 
 	// select the last used collection
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportDatasetWidget");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportDatasetWidget"));
 	const QString& collection = conf.readEntry("Collection", QString());
 	if (collection.isEmpty())
 		ui.cbCollections->setCurrentIndex(0);
@@ -93,7 +93,7 @@ ImportDatasetWidget::~ImportDatasetWidget() {
 
 	// save the selected collection
 	if (ui.cbCollections->currentIndex() != -1) {
-		KConfigGroup conf(KSharedConfig::openConfig(), "ImportDatasetWidget");
+		KConfigGroup conf = Settings::group(QStringLiteral("ImportDatasetWidget"));
 		conf.writeEntry("Collection", ui.cbCollections->itemData(ui.cbCollections->currentIndex()).toString());
 	}
 }
@@ -183,24 +183,24 @@ void ImportDatasetWidget::collectionChanged(int index) {
 		m_collection = QString();
 
 	// update the info field
-	QString info;
+	m_collectionDescription.clear();
 	if (!m_allCollections) {
 		for (const QJsonValueRef col : m_collections) {
 			const QJsonObject& collection = col.toObject();
 			if (m_collection == collection[QLatin1String("name")].toString()) {
-				info += collection[QLatin1String("description")].toString();
-				info += QStringLiteral("<br><br></hline><br><br>");
+				m_collectionDescription = collection[QLatin1String("description")].toString();
+				m_collectionDescription += QStringLiteral("<br></hline><br>");
 				break;
 			}
 		}
 	} else {
 		for (const QJsonValueRef col : m_collections) {
 			const QJsonObject& collection = col.toObject();
-			info += collection[QLatin1String("description")].toString();
-			info += QStringLiteral("<br><br>");
+			m_collectionDescription = collection[QLatin1String("description")].toString();
+			m_collectionDescription += QStringLiteral("<br>");
 		}
 	}
-	ui.lInfo->setText(info);
+	ui.lInfo->setText(m_collectionDescription);
 	updateCategories();
 
 	// update the completer
@@ -220,7 +220,8 @@ void ImportDatasetWidget::collectionChanged(int index) {
 
 	m_completer = new QCompleter(keywords, this);
 	m_completer->setCompletionMode(QCompleter::PopupCompletion);
-	m_completer->setCaseSensitivity(Qt::CaseSensitive);
+	m_completer->setCaseSensitivity(Qt::CaseInsensitive);
+	m_completer->setFilterMode(Qt::MatchContains);
 	ui.leSearch->setCompleter(m_completer);
 }
 
@@ -449,7 +450,7 @@ const DatasetsMap& ImportDatasetWidget::getDatasetsMap() {
  * @param category the name of the collection
  */
 void ImportDatasetWidget::setCollection(const QString& collection) {
-	ui.cbCollections->setCurrentText(collection + QStringLiteral(" (") + QString(m_model->datasetCount(collection)) + QLatin1Char(')'));
+	ui.cbCollections->setCurrentText(collection + QStringLiteral(" (") + QString::number(m_model->datasetCount(collection)) + QLatin1Char(')'));
 }
 
 /**
@@ -512,25 +513,8 @@ void ImportDatasetWidget::datasetChanged() {
 	m_prevSubcategory = m_subcategory;
 	m_prevDataset = dataset;
 
-	QString info;
-	if (ui.cbCollections->currentIndex() != 0) {
-		const QString& m_collection = ui.cbCollections->itemData(ui.cbCollections->currentIndex()).toString();
-		for (const QJsonValueRef col : m_collections) {
-			const QJsonObject& collection = col.toObject();
-			if (m_collection.startsWith(collection[QLatin1String("name")].toString())) {
-				info += collection[QLatin1String("description")].toString();
-				info += QStringLiteral("<br><br>");
-				break;
-			}
-		}
-	}
-
 	if (!dataset.isEmpty()) {
 		m_datasetObject = loadDatasetObject();
-
-		info += QStringLiteral("<b>") + i18n("Dataset") + QStringLiteral(":</b><br>");
-		info += m_datasetObject[QLatin1String("name")].toString();
-		info += QStringLiteral("<br><br>");
 
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
 		if (m_datasetObject.contains(QLatin1String("description_url"))
@@ -541,14 +525,20 @@ void ImportDatasetWidget::datasetChanged() {
 			WAIT_CURSOR;
 			m_networkManager->get(QNetworkRequest(QUrl(m_datasetObject[QLatin1String("description_url")].toString())));
 		} else {
-			info += QStringLiteral("<b>") + i18n("Description") + QStringLiteral(":</b><br>");
-			m_datasetDescription = m_datasetObject[QLatin1String("description")].toString();
+			m_datasetDescription = QStringLiteral("<b>") + i18n("Dataset") + QStringLiteral(":</b><br>");
+			m_datasetDescription += m_datasetObject[QLatin1String("name")].toString();
+			m_datasetDescription += QStringLiteral("<br><br>");
+			m_datasetDescription += QStringLiteral("<b>") + i18n("Description") + QStringLiteral(":</b><br>");
+			m_datasetDescription += m_datasetObject[QLatin1String("description")].toString();
+
+			if (!m_allCollections)
+				ui.lInfo->setText(m_collectionDescription + m_datasetDescription);
+			else
+				ui.lInfo->setText(m_datasetDescription);
 		}
-		info += m_datasetDescription;
 	} else
 		m_datasetObject = QJsonObject();
 
-	ui.lInfo->setText(info);
 	Q_EMIT datasetSelected();
 }
 
@@ -601,13 +591,18 @@ void ImportDatasetWidget::downloadFinished(QNetworkReply* reply) {
 			info = info.replace(QLatin1String("REFERENCES:"), QLatin1String("<b>REFERENCES:</b>"), Qt::CaseSensitive);
 			info = info.replace(QLatin1String("SUBMITTED BY:"), QLatin1String("<b>SUBMITTED BY:</b>"), Qt::CaseSensitive);
 		}
-		ui.lInfo->setText(ui.lInfo->text() + info);
+
 		m_datasetDescription = info;
 	} else {
 		DEBUG("Failed to fetch the description.");
 		m_datasetDescription = m_datasetObject[QLatin1String("description")].toString();
-		ui.lInfo->setText(ui.lInfo->text() + m_datasetDescription);
 	}
+
+	if (!m_allCollections)
+		ui.lInfo->setText(m_collectionDescription + m_datasetDescription);
+	else
+		ui.lInfo->setText(m_datasetDescription);
+
 	reply->deleteLater();
 	RESET_CURSOR;
 }

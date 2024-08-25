@@ -1,106 +1,117 @@
 # SPDX-FileCopyrightText: 2020 Volker Krause <vkrause@kde.org>
-# SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+# SPDX-FileCopyrightText: 2022-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 # SPDX-License-Identifier: CC0-1.0
 
+# full path: https://invent.kde.org/sysadmin/ci-utilities/-/tree/master/gitlab-templates
 include:
-# Tumbleweed (disabled until readstat fixes GCC 13 issue)
-#  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux.yml
-#  needs more work
-#  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux-qt6.yml
-# replaced with own target
-#  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/windows.yml
-#  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/freebsd.yml
-#  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/flatpak.yml
+  - project: sysadmin/ci-utilities
+    file:
+# reuse-lint fails
+#      - /gitlab-templates/reuse-lint.yml
+      - /gitlab-templates/clang-format.yml
+#      - /gitlab-templates/linux.yml
+#      - /gitlab-templates/windows.yml
+      - /gitlab-templates/linux-qt6.yml
+      - /gitlab-templates/windows-qt6.yml
+#      - /gitlab-templates/freebsd.yml
+      - /gitlab-templates/freebsd-qt6.yml
+### DEPLOY
+#      - /gitlab-templates/craft-appimage.yml
+      - /gitlab-templates/craft-appimage-qt6.yml
+# see below for flatpak variables
+      - /gitlab-templates/flatpak.yml
+#      - /gitlab-templates/craft-windows-x86-64.yml
+      - /gitlab-templates/craft-windows-x86-64-qt6.yml
+#      - /gitlab-templates/craft-macos-x86-64.yml
+#      - /gitlab-templates/craft-macos-arm64.yml
+      - /gitlab-templates/craft-macos-x86-64-qt6.yml
+      - /gitlab-templates/craft-macos-arm64-qt6.yml
+# only for publishing in the MS Store
+#      - /gitlab-templates/craft-windows-appx-qt5.yml
+#      - /gitlab-templates/craft-windows-appx-qt6.yml
+# MinGW fails linking tests due to undefined references to GSL functions
+#      - /gitlab-templates/craft-windows-mingw64.yml
+#      - /gitlab-templates/craft-windows-mingw64-qt6.yml
 
-# needed for tests (use "ctest -V" for more output)
-variables:
-  QT_TEST_TIMEOUT_FUNCTION: "600"
-  QT_QPA_PLATFORM: "eglfs"
-
-# test builds (prepend '.' to temporary disable):
-# Win (Release)
-# FreeBSD (Debug)
-# Ubuntu 22.04 min (Debug)
-# Ubuntu 22.04 full (Release)
-# Fedora 37 min (Debug)
-# Fedora 37 full (Release)
-# OS 15.4 min (Release)
-# OS 15.4 full (Debug)
-
-workflow:
+#craft_appimage_qt515_x86_64:
+#  rules:
+#    - if: '$CI_COMMIT_REF_NAME == "master"'
+#      when: manual
+#      allow_failure: true
+craft_appimage_qt6_x86_64:
   rules:
-    # Prevent branch pipelines if an MR is open on the branch.
-    - if: $CI_COMMIT_BRANCH && $CI_PIPELINE_SOURCE == "push" && $CI_OPEN_MERGE_REQUESTS
-      when: never
-    # Allow merge request pipelines.
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    # Build tags and branches too
-    - if: $CI_COMMIT_TAG
-    - if: $CI_COMMIT_BRANCH
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+      when: manual
+      allow_failure: true
 
-# replaced default targets:
-# only changed "script" section
-windows_qt515:
-  stage: build
-  image: kdeorg/windows-msvc2019-qt515:latest
-  tags:
-    - Windows
-  variables:
-    KDECI_CACHE_PATH: C:/Gitlab/Artifacts/windows-qt5.15/
-    KDECI_GITLAB_SERVER: https://invent.kde.org/
-    KDECI_PACKAGE_PROJECT: teams/ci-artifacts/windows-qt5.15
-    CRAFT_ROOT: C:/Craft/windows-msvc2019_64-cl/
-    CXX: cl.exe
-    CC: cl.exe
-    PYTHONUTF8: 1
-    QT_QPA_PLATFORM: "windows"
-  interruptible: true
-  before_script:
-    - git clone https://invent.kde.org/sysadmin/ci-utilities
-    - git clone https://invent.kde.org/sysadmin/repo-metadata ci-utilities/repo-metadata/
-  script:
-    - . ci-utilities/resources/setup-msvc-env.ps1
-    - python -u ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Windows/Qt5/Shared --extra-cmake-args "-DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON"
-  artifacts:
-    expire_in: 2 weeks
-    when: on_success
-    #paths:
-    #  - _install
-    reports:
-      junit: JUnitTestResults.xml
+#craft_windows_qt515_x86_64:
+#  rules:
+#    - if: '$CI_COMMIT_REF_NAME == "master"'
+#      when: manual
+#      allow_failure: true
+craft_windows_qt6_x86_64:
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+      when: manual
+      allow_failure: true
 
-# only changed "script" section
-freebsd_qt515:
-  stage: build
-  tags:
-    - FreeBSD
-  variables:
-    KDECI_CC_CACHE: /var/tmp/gitlab_runner/caches/freebsd-qt5.15/
-    KDECI_CACHE_PATH: /var/tmp/gitlab_runner/artifacts/freebsd-qt5.15/
-    KDECI_GITLAB_SERVER: https://invent.kde.org/
-    KDECI_PACKAGE_PROJECT: teams/ci-artifacts/freebsd-qt5.15
-    QT_QPA_PLATFORM: "xcb"
-  interruptible: true
+#craft_macos_x86_64:
+#  rules:
+#    - if: '$CI_COMMIT_REF_NAME == "master"'
+#      when: manual
+#      allow_failure: true
+craft_macos_qt6_x86_64:
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+      when: manual
+      allow_failure: true
+
+#craft_macos_arm64:
+#  rules:
+#    - if: '$CI_COMMIT_REF_NAME == "master"'
+#      when: manual
+#      allow_failure: true
+craft_macos_qt6_arm64:
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+      when: manual
+      allow_failure: true
+
+clang_format:
+  stage: test
+  image: debian:bookworm
   before_script:
-    - git clone https://invent.kde.org/sysadmin/ci-utilities
-    - git clone https://invent.kde.org/sysadmin/repo-metadata ci-utilities/repo-metadata/
-  script:
-    - python3 -u ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform FreeBSD/Qt5/Shared --extra-cmake-args "-DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON"
-  after_script:
-    - rm -rf _build _install _staging
-  artifacts:
-    expire_in: 2 weeks
-    when: on_success
-    reports:
-      junit: JUnitTestResults.xml
+    - apt-get update
+    - apt-get install --yes --no-install-recommends git clang-format-13
+  script: |
+    ./cl-fmt.sh
+    git diff --exit-code
+
+# see above
+flatpak:
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+      when: manual
+      allow_failure: true
+
+variables:
+    QT_TEST_TIMEOUT_FUNCTION: "600"
 
 ########################################################
+# test builds (prepend '.' to temporary disable):
+## Ubuntu 22.04 min (Debug)
+## Ubuntu 22.04 full (Release)
+## Fedora 38 min (Debug)
+## Fedora 38 full (Release)
+## OS 15.5 min (Release)
+## OS 15.5 full (Debug)
+## Tumbleweed full (Debug)
 
-ubuntu_22.04_min:
+.ubuntu_22.04_min:
   stage: build
   image: ubuntu:22.04
   only:
-#    - merge_requests
+    - merge_requests
     - master
   before_script:
     - apt update
@@ -108,12 +119,12 @@ ubuntu_22.04_min:
     - eatmydata apt install --yes --no-install-recommends locales-all ninja-build git cmake make g++ extra-cmake-modules xvfb libqt5svg5-dev libkf5kio-dev libkf5archive-dev libkf5crash-dev libkf5newstuff-dev libkf5doctools-dev libkf5textwidgets-dev kuserfeedback-dev bison libgsl-dev pkg-config ca-certificates zlib1g-dev qtbase5-private-dev
   script:
     - mkdir -p build && cd build
-    - cmake -DCMAKE_BUILD_TYPE=Debug -DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON -G Ninja ..
+    - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
     - ninja
 # 1 test fails: FAIL!  : SpreadsheetTest::testFlatten01() Received a fatal error.
 #    - xvfb-run ctest -T Test --output-on-failure
 
-ubuntu_22.04_full:
+.ubuntu_22.04_full:
   stage: build
   image: ubuntu:22.04
   only:
@@ -125,22 +136,24 @@ ubuntu_22.04_full:
     - eatmydata apt install --yes --no-install-recommends locales-all ninja-build git cmake g++ extra-cmake-modules xvfb libqt5svg5-dev libkf5kio-dev libkf5archive-dev libkf5crash-dev libkf5newstuff-dev libkf5doctools-dev libkf5textwidgets-dev kuserfeedback-dev bison libgsl-dev libkf5parts-dev libkf5syntaxhighlighting-dev cantor libcantor-dev libpoppler-qt5-dev libfftw3-dev libreadstat-dev liborigin2-dev libhdf5-dev libnetcdf-dev libqt5serialport5-dev libcfitsio-dev libcerf-dev liblz4-dev libmatio-dev libmarkdown2-dev libspectre-dev qtbase5-private-dev ca-certificates
   script:
     - mkdir -p build && cd build
-    - cmake -DCMAKE_BUILD_TYPE=Release -DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON -G Ninja ..
+    - cmake -DCMAKE_BUILD_TYPE=Release -G Ninja ..
     - ninja
 # 1 test fails: FAIL!  : SpreadsheetTest::testFlatten01() Received a fatal error.
 #    - xvfb-run ctest -T Test --output-on-failure
 
-fedora_37_min:
+.fedora_38_min:
   stage: build
-  image: fedora:37
+  image: fedora:38
   only:
-#    - merge_requests
+    - merge_requests
     - master
   before_script:
     - dnf -y --setopt=install_weak_deps=False install git gcc-c++ make bison shared-mime-info cmake ninja-build xorg-x11-server-Xvfb mesa-dri-drivers wayland-devel gsl-devel qt5-qtbase-devel qt5-qtsvg-devel qt5-qtwayland-devel extra-cmake-modules kf5-ki18n-devel kf5-kio-devel kf5-knewstuff-devel kf5-karchive-devel kf5-kcrash-devel kf5-kdoctools-devel kf5-kiconthemes-devel kf5-ktextwidgets-devel kuserfeedback-devel zlib-devel qt5-qtbase-private-devel
   script:
     - mkdir -p build && cd build
-    - cmake -DCMAKE_BUILD_TYPE=Debug -DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON -G Ninja ..
+# readstat disabled until fixed for GCC 13
+# dbc_parser fails with GCC 13 atm (-DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON)
+    - cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_READSTAT=OFF -G Ninja ..
     - ninja
 # FAIL!  : ParserTest::testLocale() Compared doubles are not the same (fuzzy compare)
 #   Actual   (parse(qPrintable(expr.first), "de_DE")): nan
@@ -148,9 +161,9 @@ fedora_37_min:
 # FAIL!  : SpreadsheetTest::testFlatten01() Received a fatal error.
 #    - xvfb-run ctest -T Test --output-on-failure
 
-fedora_37_full:
+.fedora_38_full:
   stage: build
-  image: fedora:37
+  image: fedora:38
   only:
 #   - merge_requests
     - master
@@ -158,14 +171,16 @@ fedora_37_full:
     - dnf -y --setopt=install_weak_deps=False install git gcc-c++ make bison shared-mime-info cmake ninja-build xorg-x11-server-Xvfb mesa-dri-drivers wayland-devel gsl-devel qt5-qtbase-devel qt5-qtsvg-devel qt5-qtwayland-devel extra-cmake-modules kf5-ki18n-devel kf5-kio-devel kf5-knewstuff-devel kf5-karchive-devel kf5-kcrash-devel kf5-kdoctools-devel kf5-kiconthemes-devel kf5-ktextwidgets-devel kuserfeedback-devel kf5-kparts-devel kf5-syntax-highlighting-devel cantor-devel poppler-qt5-devel libspectre-devel liborigin-devel fftw3-devel netcdf-devel qt5-qtserialport-devel cfitsio-devel libcerf-devel lz4-devel matio-devel discount qt5-qtbase-private-devel
   script:
     - mkdir -p build && cd build
-    - cmake -DCMAKE_BUILD_TYPE=Release -DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON -G Ninja ..
+# readstat disabled until fixed for GCC 13
+# dbc_parser fails with GCC 13 atm (-DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON)
+    - cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_READSTAT=OFF -G Ninja ..
     - ninja
-# see fedora_37_min
+# see fedora_38_min
 #    - xvfb-run ctest -T Test --output-on-failure
 
-leap_15.4_min:
+.leap_15.5_min:
   stage: build
-  image: opensuse/leap:15.4
+  image: opensuse/leap:15.5
   only:
     - merge_requests
     - master
@@ -173,33 +188,37 @@ leap_15.4_min:
     - zypper ref
     - zypper --non-interactive install --recommends -t pattern devel_qt5 devel_kde_frameworks
 # Mesa-libEGL1 xvfb-run libwayland-egl1 for tests (not working)
-    - zypper in -y gsl-devel ninja libQt5Gui-private-headers-devel
+    - zypper in -y gsl-devel ninja libQt5Gui-private-headers-devel kdoctools-devel
   script:
     - mkdir -p build && cd build
-    - cmake -DCMAKE_BUILD_TYPE=Release -DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON -G Ninja ..
+# readstat disabled until fixed for GCC 13
+# could not find git for clone of dbc_parser_cpp-populate (-DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON)
+    - cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_READSTAT=OFF -G Ninja ..
     - ninja
 # libEGL warning: DRI2: failed to create any config
 #    - xvfb-run ctest -T Test --output-on-failure
 
-leap_15.4_full:
+.leap_15.5_full:
   stage: build
-  image: opensuse/leap:15.4
+  image: opensuse/leap:15.5
   only:
 #    - merge_requests
     - master
   before_script:
     - zypper ref
     - zypper --non-interactive install --recommends -t pattern devel_qt5 devel_kde_frameworks
-# readstat-devel in Science repo only, see leap_15.4_min for tests
-    - zypper in -y gsl-devel ninja kuserfeedback-devel liborigin-devel cantor-devel fftw3-devel hdf5-devel netcdf-devel cfitsio-devel libcerf-devel liblz4-devel libmatio-devel discount libQt5Gui-private-headers-devel
+# readstat-devel in Science repo only, see leap_15.5_min for tests
+    - zypper in -y gsl-devel ninja libQt5Gui-private-headers-devel kdoctools-devel kuserfeedback-devel liborigin-devel cantor-devel fftw3-devel hdf5-devel netcdf-devel cfitsio-devel libcerf-devel liblz4-devel libmatio-devel discount
   script:
     - mkdir -p build && cd build
-    - cmake -DCMAKE_BUILD_TYPE=Debug -DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON -G Ninja ..
+# readstat disabled until fixed for GCC 13
+# could not find git for clone of dbc_parser_cpp-populate (-DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON)
+    - cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_READSTAT=OFF -G Ninja ..
     - ninja
 # libEGL warning: DRI2: failed to create any config
 #    - xvfb-run ctest -T Test --output-on-failure
 
-tumbleweed_full:
+.tumbleweed_full:
   stage: build
   image: opensuse/tumbleweed
   only:
@@ -219,72 +238,4 @@ tumbleweed_full:
     - ninja
 # libEGL warning: DRI2: failed to create any config
 #    - xvfb-run ctest -T Test --output-on-failure
-
-#########################################################
-
-clang_format:
-  stage: test
-  image: debian:testing
-  before_script:
-    - apt-get update
-    - apt-get install --yes --no-install-recommends git clang-format-13
-  script: |
-    ./cl-fmt.sh
-    git diff --exit-code
-
-# see https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux.yml
-cppcheck:
-  stage: build
-  image: invent-registry.kde.org/sysadmin/ci-images/suse-qt515:latest
-  tags:
-    - Linux
-  interruptible: true
-  before_script:
-    - git clone https://invent.kde.org/sysadmin/ci-utilities
-  script:
-    - python3 -u ci-utilities/run-cppcheck.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME
-  rules:
-    - changes:
-      - "**/*.c"
-      - "**/*.h"
-      - "**/*.cc"
-      - "**/*.hh"
-      - "**/*.cpp"
-      - "**/*.hpp"
-  artifacts:
-    expire_in: 1 week
-    when: on_success
-    reports:
-      codequality: cppcheck.json
-
-# see https://invent.kde.org/sysadmin/ci-utilities/-/blob/master/gitlab-templates/flatpak.yml
-# own rule needed for correct module name
-flatpak:
-  stage: deploy
-  image: invent-registry.kde.org/sysadmin/ci-images/flatpak-builder:latest
-  only:
-#    - merge_requests
-    - master
-  tags:
-    - Linux
-  variables:
-    KDE_FLATPAK_MODULE_NAME: labplot2
-    KDE_FLATPAK_APP_ID: org.kde.${KDE_FLATPAK_MODULE_NAME}
-  interruptible: true
-  before_script:
-    - git clone https://invent.kde.org/sysadmin/ci-utilities
-  script:
-    - echo ${KDE_FLATPAK_MODULE_NAME}
-    - echo ${KDE_FLATPAK_APP_ID}
-    # Build and install
-    - python3 -u ci-utilities/flatpak-build.py ${KDE_FLATPAK_MODULE_NAME}
-    # Make Bundle
-    - flatpak build-bundle repo ${KDE_FLATPAK_MODULE_NAME}.flatpak ${KDE_FLATPAK_APP_ID} master
-  artifacts:
-    name: Flatpak artifacts
-    expose_as: 'Flatpak Bundle'
-    when: on_success
-    paths:
-      - "${KDE_FLATPAK_MODULE_NAME}.flatpak"
-    expire_in: 14 days
 

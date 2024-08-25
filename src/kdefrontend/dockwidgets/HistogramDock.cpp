@@ -4,15 +4,14 @@
 	Description          : widget for Histogram properties
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
-	SPDX-FileCopyrightText: 2018-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "HistogramDock.h"
-#include "backend/core/AspectTreeModel.h"
-#include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
@@ -23,6 +22,7 @@
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/widgets/BackgroundWidget.h"
+#include "kdefrontend/widgets/ErrorBarWidget.h"
 #include "kdefrontend/widgets/LineWidget.h"
 #include "kdefrontend/widgets/SymbolWidget.h"
 #include "kdefrontend/widgets/ValueWidget.h"
@@ -42,14 +42,14 @@
   \ingroup kdefrontend
 */
 HistogramDock::HistogramDock(QWidget* parent)
-	: BaseDock(parent)
-	, cbDataColumn(new TreeViewComboBox) {
+	: BaseDock(parent) {
 	ui.setupUi(this);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(2 * m_leName->height());
+	setPlotRangeCombobox(ui.cbPlotRanges);
+	setBaseWidgets(ui.leName, ui.teComment);
+	setVisibilityWidgets(ui.chkVisible, ui.chkLegendVisible);
 
 	// Tab "General"
+	cbDataColumn = new TreeViewComboBox(ui.tabGeneral);
 	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
 	gridLayout->addWidget(cbDataColumn, 3, 2, 1, 1);
 
@@ -78,22 +78,13 @@ HistogramDock::HistogramDock(QWidget* parent)
 	layout->insertWidget(0, backgroundWidget);
 
 	// Tab "Error Bars"
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("Settings_General"));
-	if (group.readEntry("GUMTerms", false)) {
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
+	if (group.readEntry(QStringLiteral("GUMTerms"), false))
 		ui.tabWidget->setTabText(ui.tabWidget->indexOf(ui.tabErrorBars), i18n("Uncertainty Bars"));
-		ui.lErrorBar->setText(i18n("X Uncertainty"));
-	}
 
-	gridLayout = qobject_cast<QGridLayout*>(ui.tabErrorBars->layout());
-
-	cbErrorPlusColumn = new TreeViewComboBox(ui.tabErrorBars);
-	gridLayout->addWidget(cbErrorPlusColumn, 2, 2, 1, 1);
-
-	cbErrorMinusColumn = new TreeViewComboBox(ui.tabErrorBars);
-	gridLayout->addWidget(cbErrorMinusColumn, 3, 2, 1, 1);
-
-	errorBarsLineWidget = new LineWidget(ui.tabErrorBars);
-	gridLayout->addWidget(errorBarsLineWidget, 6, 0, 1, 3);
+	errorBarWidget = new ErrorBarWidget(ui.tabErrorBars, true);
+	auto* vLayout = qobject_cast<QVBoxLayout*>(ui.tabErrorBars->layout());
+	vLayout->insertWidget(0, errorBarWidget);
 
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
@@ -106,34 +97,20 @@ HistogramDock::HistogramDock(QWidget* parent)
 		layout->setVerticalSpacing(2);
 	}
 
-	// validators
-	ui.leBinWidth->setValidator(new QDoubleValidator(ui.leBinWidth));
-	ui.leBinRangesMin->setValidator(new QDoubleValidator(ui.leBinRangesMin));
-	ui.leBinRangesMax->setValidator(new QDoubleValidator(ui.leBinRangesMax));
-
 	// Slots
 	// General
-	connect(ui.leName, &QLineEdit::textChanged, this, &HistogramDock::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &HistogramDock::commentChanged);
-	connect(ui.chkVisible, &QCheckBox::clicked, this, &HistogramDock::visibilityChanged);
 	connect(cbDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &HistogramDock::dataColumnChanged);
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::typeChanged);
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::orientationChanged);
 	connect(ui.cbNormalization, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::normalizationChanged);
 	connect(ui.cbBinningMethod, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::binningMethodChanged);
 	connect(ui.sbBinCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &HistogramDock::binCountChanged);
-	connect(ui.leBinWidth, &QLineEdit::textChanged, this, &HistogramDock::binWidthChanged);
+	connect(ui.sbBinWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &HistogramDock::binWidthChanged);
 	connect(ui.chkAutoBinRanges, &QCheckBox::toggled, this, &HistogramDock::autoBinRangesChanged);
-	connect(ui.leBinRangesMin, &QLineEdit::textChanged, this, &HistogramDock::binRangesMinChanged);
-	connect(ui.leBinRangesMax, &QLineEdit::textChanged, this, &HistogramDock::binRangesMaxChanged);
+	connect(ui.sbBinRangesMin, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &HistogramDock::binRangesMinChanged);
+	connect(ui.sbBinRangesMax, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &HistogramDock::binRangesMaxChanged);
 	connect(ui.dteBinRangesMin, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &HistogramDock::binRangesMinDateTimeChanged);
 	connect(ui.dteBinRangesMax, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &HistogramDock::binRangesMaxDateTimeChanged);
-	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::plotRangeChanged);
-
-	// Error bars
-	connect(ui.cbErrorType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::errorTypeChanged);
-	connect(cbErrorPlusColumn, &TreeViewComboBox::currentModelIndexChanged, this, &HistogramDock::errorPlusColumnChanged);
-	connect(cbErrorMinusColumn, &TreeViewComboBox::currentModelIndexChanged, this, &HistogramDock::errorMinusColumnChanged);
 
 	// Margin Plots
 	connect(ui.chkRugEnabled, &QCheckBox::toggled, this, &HistogramDock::rugEnabledChanged);
@@ -146,7 +123,7 @@ HistogramDock::HistogramDock(QWidget* parent)
 	layout = new QHBoxLayout(frame);
 	layout->setContentsMargins(0, 11, 0, 11);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Histogram);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("Histogram"));
 	layout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &HistogramDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &HistogramDock::saveConfigAsTemplate);
@@ -159,10 +136,7 @@ HistogramDock::HistogramDock(QWidget* parent)
 	init();
 }
 
-HistogramDock::~HistogramDock() {
-	if (m_aspectTreeModel)
-		delete m_aspectTreeModel;
-}
+HistogramDock::~HistogramDock() = default;
 
 void HistogramDock::init() {
 	// General
@@ -189,49 +163,16 @@ void HistogramDock::init() {
 	ui.cbNormalization->addItem(i18n("Probability"));
 	ui.cbNormalization->addItem(i18n("Count Density"));
 	ui.cbNormalization->addItem(i18n("Probability Density"));
-
-	// Error-bars
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("Settings_General"));
-	if (group.readEntry("GUMTerms", false)) {
-		ui.cbErrorType->addItem(i18n("No Uncertainties"));
-		ui.cbErrorType->addItem(i18n("Poisson variance, sqrt(N)"));
-		ui.cbErrorType->addItem(i18n("Custom Uncertainty Values, symmetric"));
-		ui.cbErrorType->addItem(i18n("Custom Uncertainty Values, asymmetric"));
-	} else {
-		ui.cbErrorType->addItem(i18n("No Errors"));
-		ui.cbErrorType->addItem(i18n("Poisson variance, sqrt(N)"));
-		ui.cbErrorType->addItem(i18n("Custom Error Values, symmetric"));
-		ui.cbErrorType->addItem(i18n("Custom Error Values, asymmetric"));
-	}
 }
 
 void HistogramDock::setModel() {
-	m_aspectTreeModel->enablePlottableColumnsOnly(true);
-	m_aspectTreeModel->enableShowPlotDesignation(true);
-
-	QList<AspectType> list{AspectType::Folder,
-						   AspectType::Workbook,
-						   AspectType::Datapicker,
-						   AspectType::DatapickerCurve,
-						   AspectType::Spreadsheet,
-						   AspectType::LiveDataSource,
-						   AspectType::Column,
-						   AspectType::Worksheet,
-						   AspectType::CartesianPlot,
-						   AspectType::XYFitCurve,
-						   AspectType::XYSmoothCurve,
-						   AspectType::CantorWorksheet};
-
-	cbDataColumn->setTopLevelClasses(list);
-	cbErrorPlusColumn->setTopLevelClasses(list);
-	cbErrorMinusColumn->setTopLevelClasses(list);
-
-	list = {AspectType::Column};
-	m_aspectTreeModel->setSelectableAspects(list);
-
-	cbDataColumn->setModel(m_aspectTreeModel);
-	cbErrorPlusColumn->setModel(m_aspectTreeModel);
-	cbErrorMinusColumn->setModel(m_aspectTreeModel);
+	auto* model = aspectModel();
+	model->enablePlottableColumnsOnly(true);
+	model->enableShowPlotDesignation(true);
+	model->setSelectableAspects({AspectType::Column});
+	cbDataColumn->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
+	cbDataColumn->setModel(model);
+	errorBarWidget->setModel(model);
 }
 
 void HistogramDock::setCurves(QList<Histogram*> list) {
@@ -240,7 +181,6 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	m_curve = list.first();
 	setAspects(list);
 	Q_ASSERT(m_curve);
-	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	setModel();
 
 	// initialize widgets for common properties
@@ -248,65 +188,41 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	QList<Symbol*> symbols;
 	QList<Background*> backgrounds;
 	QList<Value*> values;
-	QList<Line*> errorBarLines;
+	QList<ErrorBar*> errorBars;
 	for (auto* hist : m_curvesList) {
 		lines << hist->line();
 		symbols << hist->symbol();
 		backgrounds << hist->background();
 		values << hist->value();
-		errorBarLines << hist->errorBarsLine();
+		errorBars << hist->errorBar();
 	}
 	lineWidget->setLines(lines);
 	symbolWidget->setSymbols(symbols);
 	backgroundWidget->setBackgrounds(backgrounds);
 	valueWidget->setValues(values);
-	errorBarsLineWidget->setLines(errorBarLines);
+	errorBarWidget->setErrorBars(errorBars);
 
 	// if there are more than one curve in the list, disable the content in the tab "general"
 	if (m_curvesList.size() == 1) {
-		ui.lName->setEnabled(true);
-		ui.leName->setEnabled(true);
-		ui.lComment->setEnabled(true);
-		ui.teComment->setEnabled(true);
-
-		ui.lXColumn->setEnabled(true);
 		cbDataColumn->setEnabled(true);
-
 		cbDataColumn->setColumn(m_curve->dataColumn(), m_curve->dataColumnPath());
-		cbErrorPlusColumn->setColumn(m_curve->errorPlusColumn(), m_curve->errorPlusColumnPath());
-		cbErrorMinusColumn->setColumn(m_curve->errorMinusColumn(), m_curve->errorMinusColumnPath());
-		ui.leName->setText(m_curve->name());
-		ui.teComment->setText(m_curve->comment());
 	} else {
-		ui.lName->setEnabled(false);
-		ui.leName->setEnabled(false);
-		ui.lComment->setEnabled(false);
-		ui.teComment->setEnabled(false);
-
-		ui.lXColumn->setEnabled(false);
 		cbDataColumn->setEnabled(false);
 		cbDataColumn->setCurrentModelIndex(QModelIndex());
-		cbErrorPlusColumn->setCurrentModelIndex(QModelIndex());
-		cbErrorMinusColumn->setCurrentModelIndex(QModelIndex());
-
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
 	}
-
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
 
 	// show the properties of the first curve
 	const auto numberLocale = QLocale();
 	ui.cbType->setCurrentIndex(m_curve->type());
-	ui.cbOrientation->setCurrentIndex(m_curve->orientation());
+	ui.cbOrientation->setCurrentIndex(static_cast<int>(m_curve->orientation()));
 	ui.cbNormalization->setCurrentIndex(m_curve->normalization());
 	ui.cbBinningMethod->setCurrentIndex(m_curve->binningMethod());
 	ui.sbBinCount->setValue(m_curve->binCount());
-	ui.leBinWidth->setText(numberLocale.toString(m_curve->binWidth()));
+	ui.sbBinWidth->setValue(m_curve->binWidth());
 	ui.chkAutoBinRanges->setChecked(m_curve->autoBinRanges());
-	ui.leBinRangesMin->setText(numberLocale.toString(m_curve->binRangesMin()));
-	ui.leBinRangesMax->setText(numberLocale.toString(m_curve->binRangesMax()));
+	ui.sbBinRangesMin->setValue(m_curve->binRangesMin());
+	ui.sbBinRangesMax->setValue(m_curve->binRangesMax());
+	ui.chkLegendVisible->setChecked(m_curve->legendVisible());
 	ui.chkVisible->setChecked(m_curve->isVisible());
 
 	// handle numeric vs. datetime widgets
@@ -322,8 +238,8 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 
 	ui.lBinRangesMin->setVisible(numeric);
 	ui.lBinRangesMax->setVisible(numeric);
-	ui.leBinRangesMin->setVisible(numeric);
-	ui.leBinRangesMax->setVisible(numeric);
+	ui.sbBinRangesMin->setVisible(numeric);
+	ui.sbBinRangesMax->setVisible(numeric);
 
 	ui.lBinRangesMinDateTime->setVisible(!numeric);
 	ui.dteBinRangesMin->setVisible(!numeric);
@@ -333,11 +249,10 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	// load the remaining properties
 	load();
 
-	updatePlotRanges();
+	updatePlotRangeList();
 
 	// Slots
 	// General-tab
-	connect(m_curve, &Histogram::aspectDescriptionChanged, this, &HistogramDock::aspectDescriptionChanged);
 	connect(m_curve, &Histogram::dataColumnChanged, this, &HistogramDock::curveDataColumnChanged);
 	connect(m_curve, &Histogram::typeChanged, this, &HistogramDock::curveTypeChanged);
 	connect(m_curve, &Histogram::orientationChanged, this, &HistogramDock::curveOrientationChanged);
@@ -348,12 +263,6 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	connect(m_curve, &Histogram::autoBinRangesChanged, this, &HistogramDock::curveAutoBinRangesChanged);
 	connect(m_curve, &Histogram::binRangesMinChanged, this, &HistogramDock::curveBinRangesMinChanged);
 	connect(m_curve, &Histogram::binRangesMaxChanged, this, &HistogramDock::curveBinRangesMaxChanged);
-	connect(m_curve, &Histogram::visibleChanged, this, &HistogramDock::curveVisibilityChanged);
-
-	//"Error bars"-Tab
-	connect(m_curve, &Histogram::errorTypeChanged, this, &HistogramDock::curveErrorTypeChanged);
-	connect(m_curve, &Histogram::errorPlusColumnChanged, this, &HistogramDock::curveErrorPlusColumnChanged);
-	connect(m_curve, &Histogram::errorMinusColumnChanged, this, &HistogramDock::curveErrorMinusColumnChanged);
 
 	//"Margin Plots"-Tab
 	connect(m_curve, &Histogram::rugEnabledChanged, this, &HistogramDock::curveRugEnabledChanged);
@@ -372,25 +281,11 @@ void HistogramDock::retranslateUi() {
 
 	// TODO updatePenStyles, updateBrushStyles for all comboboxes
 }
-void HistogramDock::updatePlotRanges() {
-	const int cSystemCount{m_curve->coordinateSystemCount()};
-	const int cSystemIndex{m_curve->coordinateSystemIndex()};
-	DEBUG(Q_FUNC_INFO << ", plot ranges count: " << cSystemCount)
-	DEBUG(Q_FUNC_INFO << ", current plot range: " << cSystemIndex + 1)
-
-	// fill ui.cbPlotRanges
-	ui.cbPlotRanges->clear();
-	for (int i{0}; i < cSystemCount; i++)
-		ui.cbPlotRanges->addItem(QString::number(i + 1) + QLatin1String(" : ") + m_curve->coordinateSystemInfo(i));
-	ui.cbPlotRanges->setCurrentIndex(cSystemIndex);
-	// disable when there is only on plot range
-	ui.cbPlotRanges->setEnabled(cSystemCount == 1 ? false : true);
-}
 
 void HistogramDock::updateLocale() {
 	lineWidget->updateLocale();
 	symbolWidget->updateLocale();
-	errorBarsLineWidget->updateLocale();
+	errorBarWidget->updateLocale();
 }
 
 //*************************************************************
@@ -398,13 +293,6 @@ void HistogramDock::updateLocale() {
 //*************************************************************
 
 // "General"-tab
-void HistogramDock::visibilityChanged(bool state) {
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* curve : m_curvesList)
-		curve->setVisible(state);
-}
-
 void HistogramDock::typeChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
@@ -449,17 +337,17 @@ void HistogramDock::binningMethodChanged(int index) {
 		ui.lBinCount->show();
 		ui.sbBinCount->show();
 		ui.lBinWidth->hide();
-		ui.leBinWidth->hide();
+		ui.sbBinWidth->hide();
 	} else if (binningMethod == Histogram::ByWidth) {
 		ui.lBinCount->hide();
 		ui.sbBinCount->hide();
 		ui.lBinWidth->show();
-		ui.leBinWidth->show();
+		ui.sbBinWidth->show();
 	} else {
 		ui.lBinCount->hide();
 		ui.sbBinCount->hide();
 		ui.lBinWidth->hide();
-		ui.leBinWidth->hide();
+		ui.sbBinWidth->hide();
 	}
 
 	CONDITIONAL_LOCK_RETURN;
@@ -475,49 +363,37 @@ void HistogramDock::binCountChanged(int value) {
 		curve->setBinCount(value);
 }
 
-void HistogramDock::binWidthChanged() {
-	CONDITIONAL_LOCK_RETURN;
+void HistogramDock::binWidthChanged(double width) {
+	CONDITIONAL_RETURN_NO_LOCK;
 
-	bool ok;
-	const double width{QLocale().toDouble(ui.leBinWidth->text(), &ok)};
-	if (ok) {
-		for (auto* curve : m_curvesList)
-			curve->setBinWidth(width);
-	}
+	for (auto* curve : m_curvesList)
+		curve->setBinWidth(width);
 }
 
 void HistogramDock::autoBinRangesChanged(bool state) {
-	ui.leBinRangesMin->setEnabled(!state);
-	ui.leBinRangesMax->setEnabled(!state);
+	ui.sbBinRangesMin->setEnabled(!state);
+	ui.sbBinRangesMax->setEnabled(!state);
 	ui.dteBinRangesMin->setEnabled(!state);
 	ui.dteBinRangesMax->setEnabled(!state);
 
-	CONDITIONAL_LOCK_RETURN;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* hist : m_curvesList)
 		hist->setAutoBinRanges(state);
 }
 
-void HistogramDock::binRangesMinChanged(const QString& value) {
-	CONDITIONAL_LOCK_RETURN;
+void HistogramDock::binRangesMinChanged(double value) {
+	CONDITIONAL_RETURN_NO_LOCK;
 
-	bool ok;
-	const double min{QLocale().toDouble(value, &ok)};
-	if (ok) {
-		for (auto* hist : m_curvesList)
-			hist->setBinRangesMin(min);
-	}
+	for (auto* hist : m_curvesList)
+		hist->setBinRangesMin(value);
 }
 
-void HistogramDock::binRangesMaxChanged(const QString& value) {
-	CONDITIONAL_LOCK_RETURN;
+void HistogramDock::binRangesMaxChanged(double value) {
+	CONDITIONAL_RETURN_NO_LOCK;
 
-	bool ok;
-	const double max{QLocale().toDouble(value, &ok)};
-	if (ok) {
-		for (auto* hist : m_curvesList)
-			hist->setBinRangesMax(max);
-	}
+	for (auto* hist : m_curvesList)
+		hist->setBinRangesMax(value);
 }
 
 void HistogramDock::binRangesMinDateTimeChanged(qint64 value) {
@@ -532,62 +408,6 @@ void HistogramDock::binRangesMaxDateTimeChanged(qint64 value) {
 
 	for (auto* hist : m_curvesList)
 		hist->setBinRangesMax(value);
-}
-
-//"Error bars"-Tab
-void HistogramDock::errorTypeChanged(int index) {
-	if (index == 0 /* no errors */ || index == 1 /* Poisson */) {
-		// no error
-		ui.lErrorDataPlus->setVisible(false);
-		cbErrorPlusColumn->setVisible(false);
-		ui.lErrorDataMinus->setVisible(false);
-		cbErrorMinusColumn->setVisible(false);
-	} else if (index == 2) {
-		// symmetric error
-		ui.lErrorDataPlus->setVisible(true);
-		cbErrorPlusColumn->setVisible(true);
-		ui.lErrorDataMinus->setVisible(false);
-		cbErrorMinusColumn->setVisible(false);
-		ui.lErrorDataPlus->setText(i18n("Data, +-:"));
-	} else if (index == 3) {
-		// asymmetric error
-		ui.lErrorDataPlus->setVisible(true);
-		cbErrorPlusColumn->setVisible(true);
-		ui.lErrorDataMinus->setVisible(true);
-		cbErrorMinusColumn->setVisible(true);
-		ui.lErrorDataPlus->setText(i18n("Data, +:"));
-	}
-
-	const bool b = (index != 0);
-	ui.lErrorFormat->setVisible(b);
-	errorBarsLineWidget->setVisible(b);
-
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* curve : m_curvesList)
-		curve->setErrorType(Histogram::ErrorType(index));
-}
-
-void HistogramDock::errorPlusColumnChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* column = dynamic_cast<AbstractColumn*>(aspect);
-	Q_ASSERT(column);
-
-	for (auto* curve : m_curvesList)
-		curve->setErrorPlusColumn(column);
-}
-
-void HistogramDock::errorMinusColumnChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* column = dynamic_cast<AbstractColumn*>(aspect);
-	Q_ASSERT(column);
-
-	for (auto* curve : m_curvesList)
-		curve->setErrorMinusColumn(column);
 }
 
 //"Margin Plots"-Tab
@@ -658,7 +478,7 @@ void HistogramDock::curveBinCountChanged(int count) {
 
 void HistogramDock::curveBinWidthChanged(double width) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.leBinWidth->setText(QLocale().toString(width));
+	ui.sbBinWidth->setValue(width);
 }
 
 void HistogramDock::curveAutoBinRangesChanged(bool value) {
@@ -668,33 +488,14 @@ void HistogramDock::curveAutoBinRangesChanged(bool value) {
 
 void HistogramDock::curveBinRangesMinChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.leBinRangesMin->setText(QLocale().toString(value));
+	ui.sbBinRangesMin->setValue(value);
 	ui.dteBinRangesMin->setMSecsSinceEpochUTC(value);
 }
 
 void HistogramDock::curveBinRangesMaxChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.leBinRangesMax->setText(QLocale().toString(value));
+	ui.sbBinRangesMax->setValue(value);
 	ui.dteBinRangesMax->setMSecsSinceEpochUTC(value);
-}
-
-void HistogramDock::curveVisibilityChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.chkVisible->setChecked(on);
-}
-
-//"Error bars"-Tab
-void HistogramDock::curveErrorTypeChanged(Histogram::ErrorType type) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.cbErrorType->setCurrentIndex((int)type);
-}
-void HistogramDock::curveErrorPlusColumnChanged(const AbstractColumn* column) {
-	CONDITIONAL_LOCK_RETURN;
-	cbErrorPlusColumn->setColumn(column, m_curve->errorPlusColumnPath());
-}
-void HistogramDock::curveErrorMinusColumnChanged(const AbstractColumn* column) {
-	CONDITIONAL_LOCK_RETURN;
-	cbErrorMinusColumn->setColumn(column, m_curve->errorMinusColumnPath());
 }
 
 //"Margin Plot"-Tab
@@ -724,9 +525,6 @@ void HistogramDock::load() {
 	// It doesn't make sense to load/save them in the template.
 	// This data is read in HistogramDock::setCurves().
 
-	// Error bars
-	ui.cbErrorType->setCurrentIndex((int)m_curve->errorType());
-
 	// Margin plots
 	ui.chkRugEnabled->setChecked(m_curve->rugEnabled());
 	ui.sbRugWidth->setValue(Worksheet::convertFromSceneUnits(m_curve->rugWidth(), Worksheet::Unit::Point));
@@ -735,7 +533,7 @@ void HistogramDock::load() {
 }
 
 void HistogramDock::loadConfig(KConfig& config) {
-	KConfigGroup group = config.group(QLatin1String("Histogram"));
+	KConfigGroup group = config.group(QStringLiteral("Histogram"));
 
 	// General
 	// we don't load/save the settings in the general-tab, since they are not style related.
@@ -746,10 +544,7 @@ void HistogramDock::loadConfig(KConfig& config) {
 	symbolWidget->loadConfig(group);
 	valueWidget->loadConfig(group);
 	backgroundWidget->loadConfig(group);
-
-	// Error bars
-	ui.cbErrorType->setCurrentIndex(group.readEntry("ErrorType", (int)m_curve->errorType()));
-	errorBarsLineWidget->loadConfig(group);
+	errorBarWidget->loadConfig(group);
 
 	// Margin plots
 	ui.chkRugEnabled->setChecked(m_curve->rugEnabled());
@@ -759,17 +554,10 @@ void HistogramDock::loadConfig(KConfig& config) {
 }
 
 void HistogramDock::loadConfigFromTemplate(KConfig& config) {
-	// extract the name of the template from the file name
-	QString name;
-	int index = config.name().lastIndexOf(QLatin1String("/"));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
+	auto name = TemplateHandler::templateName(config);
 	int size = m_curvesList.size();
 	if (size > 1)
-		m_curve->beginMacro(i18n("%1 xy-curves: template \"%2\" loaded", size, name));
+		m_curve->beginMacro(i18n("%1 histograms: template \"%2\" loaded", size, name));
 	else
 		m_curve->beginMacro(i18n("%1: template \"%2\" loaded", m_curve->name(), name));
 
@@ -779,13 +567,13 @@ void HistogramDock::loadConfigFromTemplate(KConfig& config) {
 }
 
 void HistogramDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group("Histogram");
+	KConfigGroup group = config.group(QStringLiteral("Histogram"));
 
 	lineWidget->saveConfig(group);
 	symbolWidget->saveConfig(group);
 	valueWidget->saveConfig(group);
 	backgroundWidget->saveConfig(group);
-	group.writeEntry("ErrorType", ui.cbErrorType->currentIndex());
+	errorBarWidget->saveConfig(group);
 
 	config.sync();
 }

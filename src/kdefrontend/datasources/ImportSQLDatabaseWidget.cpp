@@ -1,9 +1,9 @@
 /*
 	File                 : ImportSQLDatabaseWidget.cpp
 	Project              : LabPlot
-	Description          : Datapicker
+	Description          : widget for the import from SQL databases
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2016-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2023 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -11,20 +11,22 @@
 #include "ImportSQLDatabaseWidget.h"
 #include "DatabaseManagerDialog.h"
 #include "DatabaseManagerWidget.h"
+#include "backend/core/Settings.h"
 #include "backend/datasources/AbstractDataSource.h"
 #include "backend/lib/macros.h"
+#include "kdefrontend/GuiTools.h"
 
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KMessageBox>
-#include <KSharedConfig>
+
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 #include <KSyntaxHighlighting/Definition>
 #include <KSyntaxHighlighting/SyntaxHighlighter>
 #include <KSyntaxHighlighting/Theme>
 #endif
 
+#include <QFile>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlRecord>
@@ -117,8 +119,8 @@ ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent)
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 	m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(ui.teQuery->document());
 	m_highlighter->setDefinition(m_repository.definitionForName(QStringLiteral("SQL")));
-	m_highlighter->setTheme(DARKMODE ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
-									 : m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
+	m_highlighter->setTheme(GuiTools::isDarkMode() ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
+												   : m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
 #endif
 
 	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() + QStringLiteral("sql_connections");
@@ -134,19 +136,22 @@ ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent)
 }
 
 void ImportSQLDatabaseWidget::loadSettings() {
+	DEBUG("ImportSQLDatabaseWidget::loadSettings()");
 	m_initializing = true;
 
 	// read available connections
 	readConnections();
 
 	// load last used connection and other settings
-	KConfigGroup config(KSharedConfig::openConfig(), "ImportSQLDatabaseWidget");
+	KConfigGroup config = Settings::group(QStringLiteral("ImportSQLDatabaseWidget"));
 	ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(config.readEntry("Connection", "")));
+	if (ui.cbConnection->currentIndex() == -1 && ui.cbConnection->count() > 0) // show the first available connection if none was selected yet
+		ui.cbConnection->setCurrentIndex(0);
 	ui.cbImportFrom->setCurrentIndex(config.readEntry("ImportFrom", 0));
 	importFromChanged(ui.cbImportFrom->currentIndex());
 
 	// TODO: use general setting for decimal separator?
-	const QChar decimalSeparator = QLocale().decimalPoint();
+	const auto decimalSeparator = QLocale().decimalPoint();
 	int index = (decimalSeparator == QLatin1Char('.')) ? 0 : 1;
 	ui.cbDecimalSeparator->setCurrentIndex(config.readEntry("DecimalSeparator", index));
 
@@ -154,7 +159,6 @@ void ImportSQLDatabaseWidget::loadSettings() {
 	QList<int> defaultSizes{100, 100};
 	ui.splitterMain->setSizes(config.readEntry("SplitterMainSizes", defaultSizes));
 	ui.splitterPreview->setSizes(config.readEntry("SplitterPreviewSizes", defaultSizes));
-	// TODO
 
 	m_initializing = false;
 
@@ -164,14 +168,13 @@ void ImportSQLDatabaseWidget::loadSettings() {
 
 ImportSQLDatabaseWidget::~ImportSQLDatabaseWidget() {
 	// save current settings
-	KConfigGroup config(KSharedConfig::openConfig(), "ImportSQLDatabaseWidget");
+	KConfigGroup config = Settings::group(QStringLiteral("ImportSQLDatabaseWidget"));
 	config.writeEntry("Connection", ui.cbConnection->currentText());
 	config.writeEntry("ImportFrom", ui.cbImportFrom->currentIndex());
 	config.writeEntry("DecimalSeparator", ui.cbDecimalSeparator->currentIndex());
 	config.writeEntry("DateTimeFormat", ui.cbDateTimeFormat->currentText());
 	config.writeEntry("SplitterMainSizes", ui.splitterMain->sizes());
 	config.writeEntry("SplitterPreviewSizes", ui.splitterPreview->sizes());
-	// TODO
 }
 
 /*!
@@ -245,7 +248,7 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 	const QString& dbName = group.readEntry("DatabaseName");
 	if (DatabaseManagerWidget::isFileDB(driver)) {
 		if (!QFile::exists(dbName)) {
-			KMessageBox::error(this, i18n("Couldn't find the database file '%1'. Please check the connection settings.", dbName), i18n("Connection Failed"));
+			Q_EMIT error(i18n("Couldn't find the database file '%1'. Please check the connection settings.", dbName));
 			setInvalid();
 			return;
 		} else
@@ -266,10 +269,8 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 	WAIT_CURSOR;
 	if (!m_db.open()) {
 		RESET_CURSOR;
-		KMessageBox::error(this,
-						   i18n("Failed to connect to the database '%1'. Please check the connection settings.", ui.cbConnection->currentText())
-							   + QStringLiteral("\n\n") + m_db.lastError().databaseText(),
-						   i18n("Connection Failed"));
+		Q_EMIT error(i18n("Failed to connect to the database '%1'. Please check the connection settings.", ui.cbConnection->currentText())
+					 + QStringLiteral("\n\n") + m_db.lastError().databaseText());
 		setInvalid();
 		return;
 	}
@@ -286,6 +287,7 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 	// show the last used query
 	ui.teQuery->setText(group.readEntry("Query"));
 
+	Q_EMIT error(QString());
 	RESET_CURSOR;
 }
 
@@ -297,7 +299,6 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 
 	WAIT_CURSOR;
 	ui.twPreview->clear();
-
 	bool customQuery = (ui.cbImportFrom->currentIndex() != 0);
 
 	// save the last used custom query
@@ -316,13 +317,19 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	}
 
 	QSqlQuery q;
-	q.prepare(currentQuery(true));
+	if (!q.prepare(query)) {
+		RESET_CURSOR;
+		setInvalid();
+		return;
+	}
 	q.setForwardOnly(true);
 	q.exec();
 	if (!q.isActive() || !q.next()) { // check if query was successful and got to first record
 		RESET_CURSOR;
 		if (!q.lastError().databaseText().isEmpty())
-			KMessageBox::error(this, q.lastError().databaseText(), i18n("Unable to Execute Query"));
+			Q_EMIT error(i18n("Failed to execute the query for the preview") + QStringLiteral(" \n") + q.lastError().databaseText());
+		else
+			Q_EMIT error(i18n("Failed to execute the query for the preview"));
 
 		setInvalid();
 		return;
@@ -362,11 +369,6 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 		item->setTextAlignment(Qt::AlignLeft);
 		item->setIcon(AbstractColumn::modeIcon(mode));
 		ui.twPreview->setHorizontalHeaderItem(i, item);
-
-		// create checked items
-		// 		QTableWidgetItem* itemChecked = new QTableWidgetItem();
-		// 		itemChecked->setCheckState(Qt::Checked);
-		// 		ui.twPreview->setItem(0, i, itemChecked);
 	}
 
 	// preview the data
@@ -392,15 +394,18 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 		Q_EMIT stateChanged();
 	}
 
+	Q_EMIT error(QString());
 	RESET_CURSOR;
 }
 
 void ImportSQLDatabaseWidget::importFromChanged(int index) {
 	if (index == 0) { // import from a table
+		ui.tabWidget->setTabVisible(1, true); // show the "Data Portion" tab
 		ui.gbQuery->hide();
 		ui.lwTables->show();
 		ui.bRefreshPreview->setToolTip(i18n("Refresh the data preview of the selected table"));
 	} else { // import the result set of a custom query
+		ui.tabWidget->setTabVisible(1, false); // hide the "Data Portion" tab, what to import is determine by the custom query
 		ui.gbQuery->show();
 		ui.lwTables->hide();
 		ui.twPreview->clear();
@@ -414,44 +419,9 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 	if (!dataSource)
 		return;
 
-	WAIT_CURSOR;
-
-	const bool customQuery = (ui.cbImportFrom->currentIndex() != 0);
-
-	// execute the current query (select on a table or a custom query)
+	// execute the current query and determine the start/end rows and columns to read
 	QSqlQuery q;
-
-	// when reading from a table, the total number of rows to be read is determined below
-	// via a SELECT COUNT(*) statement and we don't need to navigate back and forth in the resultset.
-	// So, in this case we can use QSqlQuery::setForwardOnly() to reduce the memory consumption
-	if (!customQuery)
-		q.setForwardOnly(true);
-
-	q.prepare(currentQuery());
-	if (!q.exec() || !q.isActive()) {
-		RESET_CURSOR;
-		if (!q.lastError().databaseText().isEmpty())
-			KMessageBox::error(this, q.lastError().databaseText(), i18n("Unable to Execute Query"));
-
-		setInvalid();
-		return;
-	}
-
-	// determine the number of rows/records to read
-	int rows = 0;
-	if (!customQuery) {
-		const QString& tableName = ui.lwTables->currentItem()->text();
-		QSqlQuery countQuery(QStringLiteral("SELECT COUNT(*) FROM ") + tableName);
-		while (countQuery.next())
-			rows = countQuery.value(0).toInt();
-	} else {
-		q.last();
-		rows = q.at() + 1;
-		q.first();
-	}
-
-	if (rows == 0) {
-		DEBUG("	0 records");
+	if (!prepareAndExecute(q) || m_actualRows == 0) {
 		RESET_CURSOR;
 		return;
 	}
@@ -459,7 +429,11 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 	// pointers to the actual data containers
 	// columnOffset indexes the "start column" in the datasource. Data will be imported starting from this column.
 	std::vector<void*> dataContainer;
-	const int columnOffset = dataSource->prepareImport(dataContainer, importMode, rows, m_cols, m_columnNames, m_columnModes);
+	bool ok = false;
+	const int columnOffset = dataSource->prepareImport(dataContainer, importMode, m_actualRows, m_actualCols, m_actualColumnNames, m_actualColumnModes, ok);
+	// TODO: error handling
+	if (!ok)
+		return;
 
 	// number and DateTime formatting
 	const auto& dateTimeFormat = ui.cbDateTimeFormat->currentText();
@@ -474,14 +448,24 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 
 	// read the data
 	int progressIndex = 0;
-	const qreal progressInterval = 0.01 * rows; // update on every 1% only
-	int row = 0;
+	const qreal progressInterval = 0.01 * m_actualRows; // update on every 1% only
+	int rowIndex = 0;
 	while (q.next()) {
-		for (int col = 0; col < m_cols; ++col) {
-			const auto& valueString = q.value(col).toString();
+		if (rowIndex < m_startRow) {
+			++rowIndex;
+			continue;
+		}
+
+		if (rowIndex > m_endRow)
+			break;
+
+		for (int colIndex = m_startCol; colIndex <= m_endCol; ++colIndex) {
+			const auto& valueString = q.value(colIndex).toString();
+			const int col = colIndex - m_startCol;
+			const int row = rowIndex - m_startRow;
 
 			// set the value depending on the data type
-			switch (m_columnModes.at(col)) {
+			switch (m_actualColumnModes.at(col)) {
 			case AbstractColumn::ColumnMode::Double: {
 				bool isNumber;
 				const double value = numberFormat.toDouble(valueString, &isNumber);
@@ -514,28 +498,123 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 			}
 		}
 
-		row++;
+		++rowIndex;
 
 		// ask to update the progress bar only if we have more than 1000 lines and only in 1% steps
 		progressIndex++;
-		if (rows > 1000 && progressIndex > progressInterval) {
-			double value = 100. * row / rows;
+		if (m_actualRows > 1000 && progressIndex > progressInterval) {
+			double value = 100. * rowIndex / m_actualRows;
 			Q_EMIT completed(static_cast<int>(value));
 			progressIndex = 0;
 			QApplication::processEvents(QEventLoop::AllEvents, 0);
 		}
-	};
-	DEBUG("	Read " << row << " rows");
+	}
+	DEBUG("	Read " << rowIndex << " rows");
 
-	dataSource->finalizeImport(columnOffset, 1, m_cols, dateTimeFormat, importMode);
+	dataSource->finalizeImport(columnOffset, 1, m_actualCols, dateTimeFormat, importMode);
+
+	Q_EMIT error(QString());
 	RESET_CURSOR;
+}
+
+bool ImportSQLDatabaseWidget::prepareAndExecute(QSqlQuery& q) {
+	// when reading from a table, the total number of rows to be read is determined below
+	// via a SELECT COUNT(*) statement and we don't need to navigate back and forth in the resultset.
+	// So, in this case we can use QSqlQuery::setForwardOnly() to reduce the memory consumption
+	const bool customQuery = (ui.cbImportFrom->currentIndex() != 0);
+	if (!customQuery)
+		q.setForwardOnly(true);
+
+	WAIT_CURSOR;
+	q.prepare(currentQuery());
+	if (!q.exec() || !q.isActive()) {
+		RESET_CURSOR;
+		if (!q.lastError().databaseText().isEmpty())
+			Q_EMIT error(i18n("Failed to execute the query") + QStringLiteral(" \n") + q.lastError().databaseText());
+		else
+			Q_EMIT error(i18n("Failed to execute the query"));
+
+		setInvalid();
+		return false;
+	}
+
+	// determine the number of rows and columns to read
+	m_cols = q.record().count(); // total number of columns
+	m_actualCols = m_cols; // actual number of columns in the resultset to be read
+	m_actualRows = 0; // actual number of rows in the resultset to be read
+	m_startCol = 0;
+	m_endCol = m_cols - 1;
+	m_startRow = 0;
+	m_endRow = 0;
+	if (!customQuery) {
+		// determine the total number of records in the table
+		const QString& tableName = ui.lwTables->currentItem()->text();
+		QSqlQuery countQuery(QStringLiteral("SELECT COUNT(*) FROM ") + tableName);
+		while (countQuery.next())
+			m_actualRows = countQuery.value(0).toInt();
+
+		// columns to read
+		m_startCol = ui.sbStartColumn->value() - 1;
+		if (ui.sbEndColumn->value() != -1) {
+			m_endCol = ui.sbEndColumn->value() - 1;
+			if (m_endCol >= m_cols)
+				m_endCol = m_cols - 1;
+		}
+
+		m_actualCols = m_endCol - m_startCol + 1;
+
+		// determine the names and modes for columns to be read
+		if (m_startCol != 0 || m_endCol != m_cols - 1) {
+			for (int col = m_startCol; col <= m_endCol; ++col) {
+				m_actualColumnModes << m_columnModes.at(col);
+				m_actualColumnNames << m_columnNames.at(col);
+			}
+		} else {
+			// all columns are read
+			m_actualColumnModes = m_columnModes;
+			m_actualColumnNames = m_columnNames;
+		}
+
+		// rows to read
+		m_startRow = ui.sbStartRow->value() - 1;
+		if (ui.sbEndRow->value() != -1) {
+			m_endRow = ui.sbEndRow->value() - 1;
+			if (m_endRow >= m_actualRows)
+				m_endRow = m_actualRows - 1;
+
+			m_actualRows = m_endRow - m_startRow + 1;
+		} else
+			m_endRow = m_actualRows - 1; // all rows to be read
+	} else {
+		// custom query, navigate to the last record to get the total number of records in the resultset
+		q.last();
+		m_actualRows = q.at() + 1;
+		q.first();
+		q.previous(); // navigate in front of the first record so we also read it below in the whie loop
+
+		m_endRow = m_actualRows - 1; // all rows to be read
+		m_actualColumnModes = m_columnModes;
+		m_actualColumnNames = m_columnNames;
+	}
+
+	DEBUG(Q_FUNC_INFO << " start col: " << m_startCol);
+	DEBUG(Q_FUNC_INFO << " end col: " << m_endCol);
+	DEBUG(Q_FUNC_INFO << " start row: " << m_startRow);
+	DEBUG(Q_FUNC_INFO << " end row: " << m_endRow);
+	QDEBUG(Q_FUNC_INFO << " column names: " << m_actualColumnNames);
+
+	return true;
 }
 
 QString ImportSQLDatabaseWidget::currentQuery(bool preview) {
 	QString query;
 	const bool customQuery = (ui.cbImportFrom->currentIndex() != 0);
 	if (!customQuery) {
-		const QString& tableName = ui.lwTables->currentItem()->text();
+		const auto* item = ui.lwTables->currentItem();
+		if (!item)
+			return query; // no tables available in the database, return an empty string for the query
+
+		const QString& tableName = item->text();
 		if (!preview) {
 			query = QStringLiteral("SELECT * FROM ") + tableName;
 		} else {
@@ -602,4 +681,35 @@ void ImportSQLDatabaseWidget::setValid() {
 		m_valid = true;
 		Q_EMIT stateChanged();
 	}
+}
+
+// ##############################################################################
+// ###################### heper functions for unit tests  #######################
+// ##############################################################################
+void ImportSQLDatabaseWidget::setCustomQuery(bool custom) {
+	if (custom)
+		ui.cbImportFrom->setCurrentIndex(1);
+	else
+		ui.cbImportFrom->setCurrentIndex(0);
+}
+
+void ImportSQLDatabaseWidget::setStartRow(int row) {
+	ui.sbStartRow->setValue(row);
+}
+
+void ImportSQLDatabaseWidget::setEndRow(int row) {
+	ui.sbEndRow->setValue(row);
+}
+
+void ImportSQLDatabaseWidget::setStartColumn(int col) {
+	ui.sbStartColumn->setValue(col);
+}
+
+void ImportSQLDatabaseWidget::setEndColumn(int col) {
+	ui.sbEndColumn->setValue(col);
+}
+
+void ImportSQLDatabaseWidget::setQuery(const QString& query) {
+	ui.cbImportFrom->setCurrentIndex(1);
+	ui.teQuery->setPlainText(query);
 }

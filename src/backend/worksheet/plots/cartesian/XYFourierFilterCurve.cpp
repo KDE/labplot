@@ -24,8 +24,8 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 
-extern "C" {
 #include <gsl/gsl_sf_pow_int.h>
+extern "C" {
 #ifdef HAVE_FFTW3
 #include <fftw3.h>
 #endif
@@ -229,6 +229,7 @@ bool XYFourierFilterCurvePrivate::recalculateSpecific(const AbstractColumn* tmpX
 	DEBUG("bandwidth =" << bandwidth);
 
 	// run filter
+	gsl_set_error_handler_off();
 	int status = nsl_filter_fourier(ydata, n, type, form, order, cutindex, bandwidth);
 
 	xVector->resize((int)n);
@@ -292,7 +293,6 @@ void XYFourierFilterCurve::save(QXmlStreamWriter* writer) const {
 bool XYFourierFilterCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYFourierFilterCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -336,6 +336,10 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader, bool preview) {
 				d->xColumn = column;
 			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 
@@ -358,7 +362,7 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader, bool preview) {
 		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
 		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;
 
-		recalcLogicalPoints();
+		recalc();
 	}
 
 	return true;

@@ -3,7 +3,7 @@
 	Project		: LabPlot
 	Description	: Represents live data source
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 
@@ -18,6 +18,8 @@
 #include "backend/datasources/filters/ROOTFilter.h"
 #include "backend/datasources/filters/SpiceFilter.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/trace.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "kdefrontend/spreadsheet/PlotDataDialog.h"
 
@@ -49,7 +51,7 @@ LiveDataSource::LiveDataSource(const QString& name, bool loading)
 	, m_updateTimer(new QTimer(this))
 	, m_watchTimer(new QTimer(this)) {
 	m_watchTimer->setSingleShot(true);
-	m_watchTimer->setInterval(100);
+	m_watchTimer->setInterval(100); // maximum read frequency is 1/100ms = 10Hz
 
 	// stop reading from the source before removing the child from the project
 	connect(this, &AbstractAspect::childAspectAboutToBeRemoved, [this](const AbstractAspect* aspect) {
@@ -72,6 +74,7 @@ LiveDataSource::~LiveDataSource() {
 #ifdef HAVE_QTSERIALPORT
 	delete m_serialPort;
 #endif
+	delete m_device;
 }
 
 QWidget* LiveDataSource::view() const {
@@ -313,6 +316,7 @@ void LiveDataSource::setUpdateType(UpdateType updatetype) {
 			m_fileSystemWatcher = new QFileSystemWatcher(this);
 
 		m_fileSystemWatcher->addPath(m_fileName);
+
 		QFileInfo file(m_fileName);
 		// If the watched file currently does not exist (because it is recreated for instance), watch its containing
 		// directory instead. Once the file exists again, switch to watching the file in readOnUpdate().
@@ -392,11 +396,9 @@ QIcon LiveDataSource::icon() const {
 	case AbstractFileFilter::FileType::Image:
 		icon = QIcon::fromTheme(QStringLiteral("image-x-generic"));
 		break;
-	// TODO: missing icons
-	case AbstractFileFilter::FileType::HDF5:
-	case AbstractFileFilter::FileType::NETCDF:
-	case AbstractFileFilter::FileType::Excel:
-	case AbstractFileFilter::FileType::VECTOR_BLF:
+	case AbstractFileFilter::FileType::XLSX:
+	case AbstractFileFilter::FileType::Ods:
+		icon = QIcon::fromTheme(QStringLiteral("x-office-spreadsheet"));
 		break;
 	case AbstractFileFilter::FileType::FITS:
 		icon = QIcon::fromTheme(QStringLiteral("kstars_fitsviewer"));
@@ -413,32 +415,16 @@ QIcon LiveDataSource::icon() const {
 	case AbstractFileFilter::FileType::ROOT:
 		icon = QIcon::fromTheme(QStringLiteral("application-x-root"));
 		break;
+	// TODO: missing icons
 	case AbstractFileFilter::FileType::Spice:
+	case AbstractFileFilter::FileType::HDF5:
+	case AbstractFileFilter::FileType::NETCDF:
+	case AbstractFileFilter::FileType::VECTOR_BLF:
+	case AbstractFileFilter::FileType::MCAP:
 		break;
 	}
 
 	return icon;
-}
-
-QMenu* LiveDataSource::createContextMenu() {
-	QMenu* menu = AbstractPart::createContextMenu();
-
-	QAction* firstAction = nullptr;
-	// if we're populating the context menu for the project explorer, then
-	// there're already actions available there. Skip the first title-action
-	// and insert the action at the beginning of the menu.
-	if (menu->actions().size() > 1)
-		firstAction = menu->actions().at(1);
-
-	if (!m_plotDataAction) {
-		m_plotDataAction = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-line")), i18n("Plot data"), this);
-		connect(m_plotDataAction, &QAction::triggered, this, &LiveDataSource::plotData);
-	}
-
-	menu->insertAction(firstAction, m_plotDataAction);
-	menu->insertSeparator(firstAction);
-
-	return menu;
 }
 
 // ##############################################################################
@@ -450,6 +436,7 @@ QMenu* LiveDataSource::createContextMenu() {
  * presumably has finished. Also see LiveDataSource::setUpdateType().
  */
 void LiveDataSource::readOnUpdate() {
+	DEBUG(Q_FUNC_INFO)
 	if (!m_fileSystemWatcher->files().contains(m_fileName)) {
 		m_fileSystemWatcher->addPath(m_fileName);
 		QFileInfo file(m_fileName);
@@ -465,6 +452,8 @@ void LiveDataSource::readOnUpdate() {
 		m_pending = true;
 	else
 		read();
+
+	Q_EMIT readOnUpdateCalled();
 }
 
 /*
@@ -554,10 +543,7 @@ void LiveDataSource::read() {
 			// only connect to readyRead when update is on new data
 			if (m_updateType == UpdateType::NewData)
 				connect(m_serialPort, &QSerialPort::readyRead, this, &LiveDataSource::readyRead);
-			connect(m_serialPort,
-					static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
-					this,
-					&LiveDataSource::serialPortError);
+			connect(m_serialPort, &QSerialPort::errorOccurred, this, &LiveDataSource::serialPortError);
 #endif
 			break;
 		case SourceType::MQTT:
@@ -589,7 +575,8 @@ void LiveDataSource::read() {
 			m_filter->readDataFromFile(m_fileName, this);
 			break;
 		// TODO: other types not implemented yet
-		case AbstractFileFilter::FileType::Excel:
+		case AbstractFileFilter::FileType::XLSX:
+		case AbstractFileFilter::FileType::Ods:
 		case AbstractFileFilter::FileType::Image:
 		case AbstractFileFilter::FileType::HDF5:
 		case AbstractFileFilter::FileType::VECTOR_BLF:
@@ -598,6 +585,7 @@ void LiveDataSource::read() {
 		case AbstractFileFilter::FileType::JSON:
 		case AbstractFileFilter::FileType::READSTAT:
 		case AbstractFileFilter::FileType::MATIO:
+		case AbstractFileFilter::FileType::MCAP:
 			break;
 		}
 		break;
@@ -636,7 +624,36 @@ void LiveDataSource::read() {
 		break;
 	}
 
+	finalizeRead();
+
 	m_reading = false;
+}
+
+/*!
+ * notify all affected columns and plots about the changes.
+ * this is simililar to \sa Spreadsheet::finalizeImport().
+ */
+void LiveDataSource::finalizeRead() {
+	PERFTRACE(QLatin1String("AsciiLiveDataImport, notify affected columns and plots"));
+
+	// determine the dependent plots
+	QVector<CartesianPlot*> plots;
+	const auto& columns = children<Column>();
+	for (auto* column : columns)
+		column->addUsedInPlots(plots);
+
+	// suppress retransform in the dependent plots
+	for (auto* plot : plots)
+		plot->setSuppressRetransform(true);
+
+	for (auto* column : columns)
+		column->setChanged();
+
+	// retransform the dependent plots
+	for (auto* plot : plots) {
+		plot->setSuppressRetransform(false);
+		plot->dataChanged(-1, -1); // TODO: check if all ranges must be updated!
+	}
 }
 
 /*!
@@ -705,8 +722,8 @@ void LiveDataSource::tcpSocketError(QAbstractSocket::SocketError /*socketError*/
 }
 
 #ifdef HAVE_QTSERIALPORT
-void LiveDataSource::serialPortError(QSerialPort::SerialPortError serialPortError) {
-	switch (serialPortError) {
+void LiveDataSource::serialPortError(QSerialPort::SerialPortError error) {
+	switch (error) {
 	case QSerialPort::DeviceNotFoundError:
 		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("Failed to open the device."));
 		break;
@@ -728,14 +745,13 @@ void LiveDataSource::serialPortError(QSerialPort::SerialPortError serialPortErro
 	case QSerialPort::TimeoutError:
 		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("The device timed out."));
 		break;
-#ifndef _MSC_VER
-	// MSVC complains about the usage of deprecated enums, g++ and clang complain about missing enums
+	case QSerialPort::WriteError:
+	case QSerialPort::UnsupportedOperationError:
+#if QT_VERSION <= QT_VERSION_CHECK(6, 0, 0)
 	case QSerialPort::ParityError:
 	case QSerialPort::FramingError:
 	case QSerialPort::BreakConditionError:
 #endif
-	case QSerialPort::WriteError:
-	case QSerialPort::UnsupportedOperationError:
 	case QSerialPort::UnknownError:
 		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("The following error occurred: %1.", m_serialPort->errorString()));
 		break;
@@ -828,7 +844,6 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -850,50 +865,50 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("fileName")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("fileName")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("fileName"));
 			else
 				m_fileName = str;
 
 			str = attribs.value(QStringLiteral("fileType")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("fileType")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("fileType"));
 			else
 				m_fileType = (AbstractFileFilter::FileType)str.toInt();
 
 			str = attribs.value(QStringLiteral("fileLinked")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("fileLinked")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("fileLinked"));
 			else
 				m_fileLinked = str.toInt();
 
 			str = attribs.value(QStringLiteral("relativePath")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("relativePath")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("relativePath"));
 			else
 				m_relativePath = str.toInt();
 
 			str = attribs.value(QStringLiteral("updateType")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("updateType")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("updateType"));
 			else
 				m_updateType = static_cast<UpdateType>(str.toInt());
 
 			str = attribs.value(QStringLiteral("sourceType")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("sourceType")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("sourceType"));
 			else
 				m_sourceType = static_cast<SourceType>(str.toInt());
 
 			str = attribs.value(QStringLiteral("readingType")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("readingType")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("readingType"));
 			else
 				m_readingType = static_cast<ReadingType>(str.toInt());
 
 			if (m_updateType == UpdateType::TimeInterval) {
 				str = attribs.value(QStringLiteral("updateInterval")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("updateInterval")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("updateInterval"));
 				else
 					m_updateInterval = str.toInt();
 			}
@@ -901,7 +916,7 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 			if (m_readingType != ReadingType::TillEnd) {
 				str = attribs.value(QStringLiteral("sampleSize")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("sampleSize")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("sampleSize"));
 				else
 					m_sampleSize = str.toInt();
 			}
@@ -910,13 +925,13 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 			case SourceType::SerialPort:
 				str = attribs.value(QStringLiteral("baudRate")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("baudRate")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("baudRate"));
 				else
 					m_baudRate = str.toInt();
 
 				str = attribs.value(QStringLiteral("serialPortName")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("serialPortName")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("serialPortName"));
 				else
 					m_serialPortName = str;
 
@@ -925,13 +940,13 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 			case SourceType::NetworkUDPSocket:
 				str = attribs.value(QStringLiteral("host")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("host")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("host"));
 				else
 					m_host = str;
 
 				str = attribs.value(QStringLiteral("port")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("port")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("port"));
 				else
 					m_port = str.toInt();
 				break;
@@ -965,7 +980,7 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 			column->setFixed(true);
 			addChild(column);
 		} else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}

@@ -30,23 +30,17 @@
 
 ROOTFilter::ROOTFilter()
 	: AbstractFileFilter(FileType::ROOT)
-	, d(new ROOTFilterPrivate) {
+	, d(new ROOTFilterPrivate(this)) {
 }
 
 ROOTFilter::~ROOTFilter() = default;
 
-void ROOTFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+void ROOTFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode) {
 	d->readDataFromFile(fileName, dataSource, importMode);
 }
 
 void ROOTFilter::write(const QString& fileName, AbstractDataSource* dataSource) {
 	d->write(fileName, dataSource);
-}
-
-void ROOTFilter::loadFilterSettings(const QString& /*filterName*/) {
-}
-
-void ROOTFilter::saveFilterSettings(const QString& /*filterName*/) const {
 }
 
 void ROOTFilter::setCurrentObject(const QString& object) {
@@ -159,12 +153,16 @@ bool ROOTFilter::load(XmlStreamReader* reader) {
 
 /**************** ROOTFilterPrivate implementation *******************/
 
-ROOTFilterPrivate::ROOTFilterPrivate() = default;
+ROOTFilterPrivate::ROOTFilterPrivate(ROOTFilter* owner)
+	: q(owner) {
+}
 
 ROOTFilterPrivate::FileType ROOTFilterPrivate::currentObjectPosition(const QString& fileName, long int& pos) {
 	QStringList typeobject = currentObject.split(QLatin1Char(':'));
-	if (typeobject.size() < 2)
+	if (typeobject.size() < 2) {
+		q->setLastError(i18n("Unsupported file type, neither histogram no tree."));
 		return FileType::Invalid;
+	}
 
 	FileType type;
 	if (typeobject.first() == QStringLiteral("Hist"))
@@ -226,12 +224,18 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 		}
 
 		std::vector<void*> dataContainer;
+		bool ok = false;
 		const int columnOffset = dataSource->prepareImport(dataContainer,
 														   importMode,
 														   last - first + 1,
 														   columns.size(),
 														   headers,
-														   QVector<AbstractColumn::ColumnMode>(columns.size(), AbstractColumn::ColumnMode::Double));
+														   QVector<AbstractColumn::ColumnMode>(columns.size(), AbstractColumn::ColumnMode::Double),
+														   ok);
+		if (!ok) {
+			q->setLastError(i18n("Not enough memory."));
+			return;
+		}
 
 		// read data
 		DEBUG("	reading " << last - first + 1 << " lines");
@@ -281,7 +285,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 			QString lastelement = l.back();
 			bool isArray = false;
 			if (lastelement.at(0) == QLatin1Char('[') && lastelement.at(lastelement.size() - 1) == QLatin1Char(']')) {
-				lastelement.midRef(1, lastelement.length() - 2).toUInt(&isArray);
+				lastelement.mid(1, lastelement.length() - 2).toUInt(&isArray);
 			}
 			if (!isArray || l.count() == 2)
 				headers << l.join(isArray ? QString() : QLatin1String(":"));
@@ -290,12 +294,18 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 		}
 
 		std::vector<void*> dataContainer;
+		bool ok = false;
 		const int columnOffset = dataSource->prepareImport(dataContainer,
 														   importMode,
 														   last - first + 1,
 														   columns.size(),
 														   headers,
-														   QVector<AbstractColumn::ColumnMode>(columns.size(), AbstractColumn::ColumnMode::Double));
+														   QVector<AbstractColumn::ColumnMode>(columns.size(), AbstractColumn::ColumnMode::Double),
+														   ok);
+		if (!ok) {
+			q->setLastError(i18n("Not enough memory."));
+			return;
+		}
 
 		int c = 0;
 		for (const auto& l : columns) {
@@ -304,7 +314,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 			QString lastelement = l.back(), leaf = l.front();
 			bool isArray = false;
 			if (lastelement.at(0) == QLatin1Char('[') && lastelement.at(lastelement.size() - 1) == QLatin1Char(']')) {
-				element = lastelement.midRef(1, lastelement.length() - 2).toUInt(&isArray);
+				element = lastelement.mid(1, lastelement.length() - 2).toUInt(&isArray);
 				if (!isArray)
 					element = 0;
 				if (l.count() > 2)
@@ -451,7 +461,7 @@ QVector<QStringList> ROOTFilterPrivate::previewCurrentObject(const QString& file
 			QString lastelement = l.back(), leaf = l.front();
 			bool isArray = false;
 			if (lastelement.at(0) == QLatin1Char('[') && lastelement.at(lastelement.size() - 1) == QLatin1Char(']')) {
-				element = lastelement.midRef(1, lastelement.length() - 2).toUInt(&isArray);
+				element = lastelement.mid(1, lastelement.length() - 2).toUInt(&isArray);
 				if (!isArray)
 					element = 0;
 				if (l.count() > 2)
@@ -500,7 +510,7 @@ bool ROOTFilterPrivate::setFile(const QString& fileName) {
 		return false;
 	}
 
-	QDateTime modified = file.lastModified();
+	const auto& modified = file.lastModified();
 	qint64 size = file.size();
 	if (!currentROOTData || fileName != currentFile.name || modified != currentFile.modified || size != currentFile.size) {
 		currentFile.name = fileName;
@@ -858,11 +868,15 @@ ROOTData::ROOTData(const std::string& filename)
 void ROOTData::readNBins(ROOTData::KeyBuffer& kbuffer) {
 	std::string buffer = data(kbuffer);
 	if (!buffer.empty()) {
+		auto search = streamerInfo.find("TH1");
+		if (search == streamerInfo.end())
+			return;
+		const auto& streamerTH1 = search->second;
 		char* buf = &buffer[0];
 		std::map<std::string, size_t> counts;
 		Version(buf); // TH1(D/F/I/S/C)
 		Version(buf); // TH1
-		advanceTo(buf, streamerInfo.find("TH1")->second, std::string(), "fNcells", counts);
+		advanceTo(buf, streamerTH1, std::string(), "fNcells", counts);
 		kbuffer.nrows = read<int>(buf); // fNcells
 	}
 }
@@ -890,9 +904,11 @@ std::vector<ROOTData::BinPars> ROOTData::readHistogram(long int pos) {
 	if (!buffer.empty()) {
 		char* buf = &buffer[0];
 		std::map<std::string, size_t> counts;
-		auto& streamerTH1 = streamerInfo.find("TH1")->second;
-		auto& streamerTAxis = streamerInfo.find("TAxis")->second;
 
+		auto search = streamerInfo.find("TH1");
+		if (search == streamerInfo.end())
+			return {};
+		const auto& streamerTH1 = search->second;
 		size_t count;
 		Version(buf); // TH1(D/F/I/S/C)
 		Version(buf, count); // TH1
@@ -904,9 +920,13 @@ std::vector<ROOTData::BinPars> ROOTData::readHistogram(long int pos) {
 			return {};
 
 		r.front().lowedge = -std::numeric_limits<double>::infinity();
-
 		advanceTo(buf, streamerTH1, "fNcells", "fXaxis", counts);
+
 		// x-Axis
+		search = streamerInfo.find("TAxis");
+		if (search == streamerInfo.end())
+			return {};
+		const auto& streamerTAxis = search->second;
 		Version(buf, count); // TAxis
 		char* const nbuf = buf + count;
 		advanceTo(buf, streamerTAxis, std::string(), "fNbins", counts);
@@ -952,12 +972,17 @@ std::vector<ROOTData::BinPars> ROOTData::readHistogram(long int pos) {
 void ROOTData::readNEntries(ROOTData::KeyBuffer& kbuffer) {
 	std::string buffer = data(kbuffer);
 	if (!buffer.empty()) {
+		auto search = streamerInfo.find("TTree");
+		if (search == streamerInfo.end())
+			return;
+		const auto& streamerTTree = search->second;
+
 		char* buf = &buffer[0];
 		std::map<std::string, size_t> counts;
 		if (kbuffer.type == ContentType::NTuple)
 			Version(buf); // TNtuple(D)
 		Version(buf); // TTree
-		advanceTo(buf, streamerInfo.find("TTree")->second, std::string(), "fEntries", counts);
+		advanceTo(buf, streamerTTree, std::string(), "fEntries", counts);
 		kbuffer.nrows = read<long int>(buf); // fEntries
 	}
 }
@@ -992,12 +1017,21 @@ std::vector<ROOTData::LeafInfo> ROOTData::listLeaves(long int pos) const {
 	char* buf = &datastring[0];
 	char* const buf0 = buf - it->second.keylength;
 	std::map<std::string, size_t> counts;
-	auto& streamerTBranch = streamerInfo.find("TBranch")->second;
+
+	auto search = streamerInfo.find("TBranch");
+	if (search == streamerInfo.end())
+		return leaves;
+	const auto& streamerTBranch = search->second;
+
+	search = streamerInfo.find("TTree");
+	if (search == streamerInfo.end())
+		return leaves;
+	const auto& streamerTTree = search->second;
 
 	if (it->second.type == ContentType::NTuple)
 		Version(buf); // TNtuple(D)
 	Version(buf); // TTree
-	advanceTo(buf, streamerInfo.find("TTree")->second, std::string(), "fBranches", counts);
+	advanceTo(buf, streamerTTree, std::string(), "fBranches", counts);
 
 	// read the list of branches
 	Version(buf); // TObjArray
@@ -1070,11 +1104,19 @@ ROOTData::listEntries(long int pos, const std::string& branchname, const std::st
 	if (datastring.empty())
 		return entries;
 
+	auto search = streamerInfo.find("TTree");
+	if (search == streamerInfo.end())
+		return entries;
+	const auto& streamerTTree = search->second;
+
+	search = streamerInfo.find("TBranch");
+	if (search == streamerInfo.end())
+		return entries;
+	const auto& streamerTBranch = search->second;
+
 	char* buf = &datastring[0];
 	char* const buf0 = buf - it->second.keylength;
 	std::map<std::string, size_t> counts;
-	auto& streamerTTree = streamerInfo.find("TTree")->second;
-	auto& streamerTBranch = streamerInfo.find("TBranch")->second;
 
 	if (it->second.type == ContentType::NTuple)
 		Version(buf); // TNtuple(D)

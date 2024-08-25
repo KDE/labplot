@@ -1,9 +1,9 @@
 #include "CANOptionsWidget.h"
+#include "backend/core/Settings.h"
 #include "backend/datasources/filters/VectorBLFFilter.h"
 #include "ui_CANOptionsWidget.h"
 
 #include <KConfigGroup>
-#include <KSharedConfig>
 
 CANOptionsWidget::CANOptionsWidget(QWidget* parent)
 	: QWidget(parent)
@@ -30,14 +30,14 @@ void CANOptionsWidget::applyFilterSettings(VectorBLFFilter* filter) const {
 }
 
 void CANOptionsWidget::saveSettings() const {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportCANOptions");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportCANOptions"));
 
 	conf.writeEntry("ConvertSeconds", ui->cbConvertSeconds->isChecked());
 	conf.writeEntry("TimeHandlingMode", ui->cbImportMode->itemData(ui->cbImportMode->currentIndex()));
 }
 
 void CANOptionsWidget::loadSettings() const {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportJson");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportCANOptions"));
 
 	ui->cbConvertSeconds->setChecked(conf.readEntry("ConvertSeconds", true));
 	const auto mode = conf.readEntry("TimeHandlingMode", (int)VectorBLFFilter::TimeHandling::ConcatPrevious);

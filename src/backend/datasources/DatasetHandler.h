@@ -28,10 +28,10 @@ public:
 	void processMetadata(const QJsonObject&, const QString&);
 
 private:
-	Spreadsheet* m_spreadsheet;
-	AsciiFilter* m_filter;
+	Spreadsheet* m_spreadsheet{nullptr};
+	AsciiFilter* m_filter{nullptr};
 	QJsonObject* m_object{nullptr};
-	QNetworkAccessManager* m_downloadManager;
+	QNetworkAccessManager* m_downloadManager{nullptr};
 	QNetworkReply* m_currentDownload{nullptr};
 	QString m_fileName;
 	bool m_invalidMetadataFile{false};
@@ -43,7 +43,6 @@ private:
 	void prepareForDataset();
 	void processDataset();
 	void doDownload(const QUrl&);
-	bool isHttpRedirect(QNetworkReply*);
 	QString saveFileName(const QUrl&);
 	bool saveToDisk(const QString& filename, QIODevice*);
 	void markMetadataAsInvalid();
@@ -54,6 +53,7 @@ private Q_SLOTS:
 Q_SIGNALS:
 	void downloadCompleted();
 	void downloadProgress(int progress);
+	void error(const QString&);
 };
 
 #endif // DATASETHANDLER_H

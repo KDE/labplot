@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : NSL math functions
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2018-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2018-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -158,4 +158,38 @@ double nsl_math_round_basex(double value, int p, double base) {
 	*/
 
 	return round(scaled_value) / scale * power_of_x;
+}
+
+double nsl_math_round_multiple(double value, double m) {
+	return nsl_math_multiple(value, m, Round);
+}
+double nsl_math_floor_multiple(double value, double m) {
+	return nsl_math_multiple(value, m, Floor);
+}
+double nsl_math_ceil_multiple(double value, double m) {
+	return nsl_math_multiple(value, m, Ceil);
+}
+double nsl_math_trunc_multiple(double value, double m) {
+	return nsl_math_multiple(value, m, Trunc);
+}
+
+double nsl_math_multiple(double value, double multiple, round_method method) {
+	// no need to round
+	if (value == 0. || multiple == 0. || isnan(value) || isnan(multiple) || isinf(value) || isinf(multiple)) {
+		/*		printf("nsl_math_multiple(): not changed : %.19g\n", value); */
+		return value;
+	}
+
+	switch (method) {
+	case Round:
+		return multiple * round(value / multiple);
+	case Floor:
+		return multiple * floor(value / multiple);
+	case Ceil:
+		return multiple * ceil(value / multiple);
+	case Trunc:
+		return multiple * trunc(value / multiple);
+	}
+
+	return value;
 }

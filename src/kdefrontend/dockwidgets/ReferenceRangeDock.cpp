@@ -20,9 +20,9 @@
 ReferenceRangeDock::ReferenceRangeDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(1.2 * m_leName->height());
+	setPlotRangeCombobox(ui.cbPlotRanges);
+	setBaseWidgets(ui.leName, ui.teComment);
+	setVisibilityWidgets(ui.chkVisible);
 
 	ui.cbOrientation->addItem(i18n("Horizontal"));
 	ui.cbOrientation->addItem(i18n("Vertical"));
@@ -38,16 +38,11 @@ ReferenceRangeDock::ReferenceRangeDock(QWidget* parent)
 
 	// SLOTS
 	// General
-	connect(ui.leName, &QLineEdit::textChanged, this, &ReferenceRangeDock::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &ReferenceRangeDock::commentChanged);
-
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceRangeDock::orientationChanged);
 	connect(ui.sbPositionStart, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ReferenceRangeDock::positionLogicalStartChanged);
 	connect(ui.sbPositionEnd, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ReferenceRangeDock::positionLogicalEndChanged);
 	connect(ui.dtePositionStart, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &ReferenceRangeDock::positionLogicalDateTimeStartChanged);
 	connect(ui.dtePositionEnd, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &ReferenceRangeDock::positionLogicalDateTimeEndChanged);
-	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceRangeDock::plotRangeChanged);
-	connect(ui.chkVisible, &QCheckBox::clicked, this, &ReferenceRangeDock::visibilityChanged);
 }
 
 void ReferenceRangeDock::setReferenceRanges(QList<ReferenceRange*> list) {
@@ -56,25 +51,6 @@ void ReferenceRangeDock::setReferenceRanges(QList<ReferenceRange*> list) {
 	m_range = list.first();
 	setAspects(list);
 	Q_ASSERT(m_range);
-
-	// if there is more than one point in the list, disable the comment and name widgets in "general"
-	if (list.size() == 1) {
-		ui.lName->setEnabled(true);
-		ui.leName->setEnabled(true);
-		ui.lComment->setEnabled(true);
-		ui.teComment->setEnabled(true);
-		ui.leName->setText(m_range->name());
-		ui.teComment->setText(m_range->comment());
-	} else {
-		ui.lName->setEnabled(false);
-		ui.leName->setEnabled(false);
-		ui.lComment->setEnabled(false);
-		ui.teComment->setEnabled(false);
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
-	}
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
 
 	// initialize widgets for common properties
 	QList<Line*> lines;
@@ -89,14 +65,9 @@ void ReferenceRangeDock::setReferenceRanges(QList<ReferenceRange*> list) {
 	// show the properties of the first reference range
 	this->load();
 
-	updatePlotRanges();
+	updatePlotRangeList();
 
 	// SIGNALs/SLOTs
-	connect(m_range, &AbstractAspect::aspectDescriptionChanged, this, &ReferenceRangeDock::aspectDescriptionChanged);
-	connect(m_range, &WorksheetElement::plotRangeListChanged, this, &ReferenceRangeDock::updatePlotRanges);
-	connect(m_range, &ReferenceRange::visibleChanged, this, &ReferenceRangeDock::rangeVisibilityChanged);
-
-	// position
 	connect(m_range, &ReferenceRange::orientationChanged, this, &ReferenceRangeDock::rangeOrientationChanged);
 	connect(m_range, &ReferenceRange::positionLogicalStartChanged, this, &ReferenceRangeDock::rangePositionLogicalStartChanged);
 	connect(m_range, &ReferenceRange::positionLogicalEndChanged, this, &ReferenceRangeDock::rangePositionLogicalEndChanged);
@@ -111,10 +82,6 @@ void ReferenceRangeDock::updateLocale() {
 	ui.sbPositionEnd->setLocale(numberLocale);
 
 	// TODO datetime
-}
-
-void ReferenceRangeDock::updatePlotRanges() {
-	updatePlotRangeList(ui.cbPlotRanges);
 }
 
 //**********************************************************
@@ -222,13 +189,6 @@ void ReferenceRangeDock::positionLogicalDateTimeEndChanged(qint64 pos) {
 	}
 }
 
-void ReferenceRangeDock::visibilityChanged(bool state) {
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* range : m_rangeList)
-		range->setVisible(state);
-}
-
 //*************************************************************
 //******* SLOTs for changes triggered in ReferenceRange ********
 //*************************************************************
@@ -257,11 +217,6 @@ void ReferenceRangeDock::rangePositionLogicalEndChanged(const QPointF& positionL
 void ReferenceRangeDock::rangeOrientationChanged(ReferenceRange::Orientation orientation) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbOrientation->setCurrentIndex(static_cast<int>(orientation));
-}
-
-void ReferenceRangeDock::rangeVisibilityChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.chkVisible->setChecked(on);
 }
 
 //**********************************************************
@@ -298,4 +253,6 @@ void ReferenceRangeDock::load() {
 			ui.dtePositionEnd->setMSecsSinceEpochUTC(m_range->positionLogicalEnd().x());
 		}
 	}
+
+	ui.chkVisible->setChecked(m_range->isVisible());
 }

@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
-	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -29,7 +29,7 @@ class QXmlStreamWriter;
 
 /// Information about class inheritance
 /// enum values are chosen such that @verbatim inherits(base)@endverbatim
-/// returns true iff the class inherits from @verbatim base@endverbatim.
+/// returns true if the class inherits from @verbatim base@endverbatim.
 ///
 /// AspectType is used in GuiObserver to select the correct dock widget.
 enum class AspectType : quint64 {
@@ -44,21 +44,31 @@ enum class AspectType : quint64 {
 	Axis = 0x0210001,
 	CartesianPlotLegend = 0x0210002,
 	CustomPoint = 0x0210004,
-	Histogram = 0x0210008,
 	PlotArea = 0x0210010,
 	TextLabel = 0x0210020,
 	Image = 0x0210030,
 	ReferenceLine = 0x0210040,
 	ReferenceRange = 0x0210060,
 	InfoElement = 0x0210080,
-	BoxPlot = 0x0210100,
+
+	// bar plots
 	BarPlot = 0x0210200,
+	LollipopPlot = 0x0210400,
+
+	// statistical plots
+	Histogram = 0x0210008,
+	BoxPlot = 0x0210100,
+	QQPlot = 0x0210800,
+	KDEPlot = 0x0210802,
+
 	WorksheetElementContainer = 0x0220000,
 	AbstractPlot = 0x0221000,
 	CartesianPlot = 0x0221001,
 	WorksheetElementGroup = 0x0222000,
 	XYCurve = 0x0240000,
 	XYEquationCurve = 0x0240001,
+
+	// analysis curves
 	XYAnalysisCurve = 0x0280000,
 	XYConvolutionCurve = 0x0280001,
 	XYCorrelationCurve = 0x0280002,
@@ -71,6 +81,7 @@ enum class AspectType : quint64 {
 	XYIntegrationCurve = 0x0280100,
 	XYSmoothCurve = 0x0280200,
 	XYHilbertTransformCurve = 0x0280400,
+	XYFunctionCurve = 0x0280800,
 
 	AbstractPart = 0x0400000,
 	AbstractDataSource = 0x0410000,
@@ -78,6 +89,7 @@ enum class AspectType : quint64 {
 	Spreadsheet = 0x0412000,
 	LiveDataSource = 0x0412001,
 	MQTTTopic = 0x0412002,
+	StatisticsSpreadsheet = 0x0412004,
 	CantorWorksheet = 0x0420001,
 	Datapicker = 0x0420002,
 	DatapickerImage = 0x0420004,
@@ -167,6 +179,8 @@ public:
 			return QStringLiteral("XYCurve");
 		case AspectType::XYEquationCurve:
 			return QStringLiteral("XYEquationCurve");
+		case AspectType::XYFunctionCurve:
+			return QStringLiteral("XYFunctionCurve");
 		case AspectType::XYAnalysisCurve:
 			return QStringLiteral("XYAnalysisCurve");
 		case AspectType::XYConvolutionCurve:
@@ -195,6 +209,12 @@ public:
 			return QStringLiteral("BarPlot");
 		case AspectType::BoxPlot:
 			return QStringLiteral("BoxPlot");
+		case AspectType::QQPlot:
+			return QStringLiteral("QQPlot");
+		case AspectType::KDEPlot:
+			return QStringLiteral("KDEPlot");
+		case AspectType::LollipopPlot:
+			return QStringLiteral("LollipopPlot");
 		case AspectType::AbstractPart:
 			return QStringLiteral("AbstractPart");
 		case AspectType::AbstractDataSource:
@@ -203,6 +223,8 @@ public:
 			return QStringLiteral("Matrix");
 		case AspectType::Spreadsheet:
 			return QStringLiteral("Spreadsheet");
+		case AspectType::StatisticsSpreadsheet:
+			return QStringLiteral("StatisticsSpreadsheet");
 		case AspectType::LiveDataSource:
 			return QStringLiteral("LiveDataSource");
 		case AspectType::MQTTTopic:
@@ -259,6 +281,7 @@ public:
 	bool isLoading() const;
 	virtual QIcon icon() const;
 	virtual QMenu* createContextMenu();
+	void setProjectChanged(bool);
 
 	AspectType type() const;
 	bool inherits(AspectType type) const;
@@ -285,6 +308,7 @@ public:
 	 */
 	void removeChild(AbstractAspect*, QUndoCommand* parent = nullptr);
 	void removeAllChildren();
+	void moveChild(AbstractAspect*, int steps, QUndoCommand* parent = nullptr);
 	virtual QVector<AbstractAspect*> dependsOn() const;
 
 	virtual QVector<AspectType> pasteTypes() const;
@@ -390,7 +414,7 @@ public:
 
 protected:
 	void info(const QString& text) {
-		emit statusInfo(text);
+		Q_EMIT statusInfo(text);
 	}
 
 	// serialization/deserialization
@@ -455,6 +479,8 @@ Q_SIGNALS:
 	 * Called by the aspect itself when it's being removed
 	 */
 	void aspectAboutToBeRemoved(const AbstractAspect*);
+	void childAspectAboutToBeMoved(const AbstractAspect*, int destinationRow);
+	void childAspectMoved();
 	void aspectHiddenAboutToChange(const AbstractAspect*);
 	void aspectHiddenChanged(const AbstractAspect*);
 	void statusInfo(const QString&);
@@ -483,11 +509,12 @@ public:
 	int mRetransformCalled{0};
 
 #define trackRetransformCalled(suppressed)                                                                                                                     \
-	emit q->retransformCalledSignal(q, suppressed);                                                                                                            \
+	Q_EMIT q->retransformCalledSignal(q, suppressed);                                                                                                          \
 	if (!suppressed)                                                                                                                                           \
 		q->mRetransformCalled += 1;
 
 	friend class AbstractAspectTest;
+	friend class InfoElementTest;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(AbstractAspect::ChildIndexFlags)

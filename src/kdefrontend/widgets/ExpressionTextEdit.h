@@ -14,7 +14,7 @@
 #define EXPRESSIONTEXTEDIT_H
 
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
-#include <KTextWidgets/KTextEdit>
+#include <KTextEdit>
 
 class QCompleter;
 class EquationHighlighter;
@@ -28,6 +28,8 @@ public:
 	void setExpressionType(XYEquationCurve::EquationType);
 	void setVariables(const QStringList&);
 	bool isValid() const;
+	QString errorMessage() const;
+	bool expressionUsesVariables();
 
 protected:
 	void keyPressEvent(QKeyEvent*) override;

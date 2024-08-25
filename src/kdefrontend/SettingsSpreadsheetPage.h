@@ -21,7 +21,7 @@ class SettingsSpreadsheetPage : public SettingsPage {
 public:
 	explicit SettingsSpreadsheetPage(QWidget*);
 
-	void applySettings() override;
+	bool applySettings() override;
 	void restoreDefaults() override;
 
 private:

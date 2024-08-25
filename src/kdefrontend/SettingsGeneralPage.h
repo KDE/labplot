@@ -24,7 +24,7 @@ public:
 	static DecimalSeparator decimalSeparator(QLocale locale = QLocale());
 	QLocale::Language decimalSeparatorLocale() const;
 
-	void applySettings() override;
+	bool applySettings() override;
 	void restoreDefaults() override;
 
 private:
@@ -35,6 +35,8 @@ private:
 	void retranslateUi();
 
 private Q_SLOTS:
+	void loadOnStartChanged();
+	void newProjectChanged();
 	void autoSaveChanged(bool);
 	void changed();
 

@@ -16,6 +16,7 @@
 #include "backend/datasources/LiveDataSource.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/spreadsheet/StatisticsSpreadsheet.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/TextLabel.h"
@@ -27,6 +28,8 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/worksheet/plots/cartesian/KDEPlot.h"
+#include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #ifdef HAVE_CANTOR_LIBS
@@ -55,13 +58,17 @@
 #include "kdefrontend/dockwidgets/HistogramDock.h"
 #include "kdefrontend/dockwidgets/ImageDock.h"
 #include "kdefrontend/dockwidgets/InfoElementDock.h"
+#include "kdefrontend/dockwidgets/KDEPlotDock.h"
 #include "kdefrontend/dockwidgets/LiveDataDock.h"
+#include "kdefrontend/dockwidgets/LollipopPlotDock.h"
 #include "kdefrontend/dockwidgets/MatrixDock.h"
 #include "kdefrontend/dockwidgets/NoteDock.h"
 #include "kdefrontend/dockwidgets/ProjectDock.h"
+#include "kdefrontend/dockwidgets/QQPlotDock.h"
 #include "kdefrontend/dockwidgets/ReferenceLineDock.h"
 #include "kdefrontend/dockwidgets/ReferenceRangeDock.h"
 #include "kdefrontend/dockwidgets/SpreadsheetDock.h"
+#include "kdefrontend/dockwidgets/StatisticsSpreadsheetDock.h"
 #include "kdefrontend/dockwidgets/WorksheetDock.h"
 #include "kdefrontend/dockwidgets/XYConvolutionCurveDock.h"
 #include "kdefrontend/dockwidgets/XYCorrelationCurveDock.h"
@@ -72,6 +79,7 @@
 #include "kdefrontend/dockwidgets/XYFitCurveDock.h"
 #include "kdefrontend/dockwidgets/XYFourierFilterCurveDock.h"
 #include "kdefrontend/dockwidgets/XYFourierTransformCurveDock.h"
+#include "kdefrontend/dockwidgets/XYFunctionCurveDock.h"
 #include "kdefrontend/dockwidgets/XYHilbertTransformCurveDock.h"
 #include "kdefrontend/dockwidgets/XYIntegrationCurveDock.h"
 #include "kdefrontend/dockwidgets/XYInterpolationCurveDock.h"
@@ -84,7 +92,7 @@
 #include "kdefrontend/widgets/LabelWidget.h"
 
 #include <DockWidget.h>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <QStackedWidget>
 #include <QStatusBar>
 #include <QToolBar>
@@ -176,7 +184,6 @@ GuiObserver::~GuiObserver() {
   and activates the corresponding dockwidgets, toolbars etc.
 */
 void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedAspects) {
-	DEBUG(Q_FUNC_INFO)
 	auto clearDock = [&]() {
 		if (m_mainWindow->stackedWidget->currentWidget())
 			m_mainWindow->stackedWidget->currentWidget()->hide();
@@ -220,6 +227,11 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Spreadsheet"));
 		raiseDockConnect(m_spreadsheetDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_spreadsheetDock->setSpreadsheets(castList<Spreadsheet>(selectedAspects));
+		break;
+	case AspectType::StatisticsSpreadsheet:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Column Statistics"));
+		raiseDockConnect(m_statisticsSpreadsheetDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_statisticsSpreadsheetDock->setSpreadsheets(castList<StatisticsSpreadsheet>(selectedAspects));
 		break;
 	case AspectType::Column: {
 #ifdef HAVE_CANTOR_LIBS
@@ -274,6 +286,11 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: XY-Equation"));
 		raiseDockSetupConnect(m_xyEquationCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_xyEquationCurveDock->setCurves(castList<XYCurve>(selectedAspects));
+		break;
+	case AspectType::XYFunctionCurve:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Function Curve"));
+		raiseDockSetupConnect(m_xyFunctionCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_xyFunctionCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
 	case AspectType::XYDataReductionCurve:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Data Reduction"));
@@ -351,10 +368,25 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		raiseDock(m_barPlotDock, m_mainWindow->stackedWidget);
 		m_barPlotDock->setBarPlots(castList<BarPlot>(selectedAspects));
 		break;
+	case AspectType::LollipopPlot:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Lollipop Plot"));
+		raiseDock(m_lollipopPlotDock, m_mainWindow->stackedWidget);
+		m_lollipopPlotDock->setPlots(castList<LollipopPlot>(selectedAspects));
+		break;
 	case AspectType::BoxPlot:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Box Plot"));
 		raiseDock(m_boxPlotDock, m_mainWindow->stackedWidget);
 		m_boxPlotDock->setBoxPlots(castList<BoxPlot>(selectedAspects));
+		break;
+	case AspectType::KDEPlot:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "KDE Plot"));
+		raiseDock(m_kdePlotDock, m_mainWindow->stackedWidget);
+		m_kdePlotDock->setPlots(castList<KDEPlot>(selectedAspects));
+		break;
+	case AspectType::QQPlot:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Q-Q Plot"));
+		raiseDock(m_qqPlotDock, m_mainWindow->stackedWidget);
+		m_qqPlotDock->setPlots(castList<QQPlot>(selectedAspects));
 		break;
 	case AspectType::TextLabel:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Text Label"));

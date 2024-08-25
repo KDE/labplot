@@ -9,7 +9,6 @@
 */
 
 #include "CartesianPlotTest.h"
-#include "tests/CommonTest.h"
 
 #include "backend/core/Project.h"
 #include "backend/core/Workbook.h"
@@ -29,13 +28,6 @@
 
 #include <QAction>
 #include <QUndoStack>
-
-void CartesianPlotTest::initTestCase() {
-	//	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
-	//	//TODO: redesign/remove this
-	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
-	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
-}
 
 // ##############################################################################
 // #####################  import of LabPlot projects ############################
@@ -754,6 +746,81 @@ void CartesianPlotTest::rangeFormatNonDefaultRange() {
 	QCOMPARE(plot->rangeFormat(Dimension::Y, 1), RangeT::Format::Numeric);
 }
 
+void CartesianPlotTest::invalidStartValueLogScaling() {
+	Project project;
+
+	Spreadsheet* sheet = new Spreadsheet(QStringLiteral("Spreadsheet"), false);
+	project.addChild(sheet);
+
+	sheet->setColumnCount(3);
+	sheet->setRowCount(3);
+
+	sheet->column(0)->setColumnMode(AbstractColumn::ColumnMode::Double);
+	sheet->column(1)->setColumnMode(AbstractColumn::ColumnMode::Double);
+	sheet->column(2)->setColumnMode(AbstractColumn::ColumnMode::Double);
+
+	sheet->column(0)->setValueAt(0, 0.);
+	sheet->column(0)->setValueAt(1, 1.);
+	sheet->column(0)->setValueAt(2, 2.);
+
+	sheet->column(1)->setValueAt(0, 0.);
+	sheet->column(1)->setValueAt(1, 1.);
+	sheet->column(1)->setValueAt(2, 2.);
+
+	sheet->column(2)->setValueAt(0, 0.00001);
+	sheet->column(2)->setValueAt(1, 0.1);
+	sheet->column(2)->setValueAt(2, 1.);
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+
+	// Create new cSystem
+	Range<double> xRange;
+	xRange.setFormat(RangeT::Format::Numeric);
+	Range<double> yRange;
+	yRange.setFormat(RangeT::Format::Numeric);
+	yRange.setScale(RangeT::Scale::Log10);
+	plot->addXRange(xRange);
+	plot->addYRange(yRange);
+	CartesianCoordinateSystem* cSystem = new CartesianCoordinateSystem(plot);
+	cSystem->setIndex(Dimension::X, 1);
+	cSystem->setIndex(Dimension::Y, 1);
+	plot->addCoordinateSystem(cSystem);
+	plot->setNiceExtend(false);
+
+	auto* curve1 = new XYCurve(QStringLiteral("curve1"));
+	plot->addChild(curve1);
+
+	curve1->setXColumn(sheet->column(0));
+	curve1->setYColumn(sheet->column(1));
+	curve1->setCoordinateSystemIndex(1);
+
+	QCOMPARE(plot->rangeFormat(Dimension::X, 0), RangeT::Format::Numeric);
+	QCOMPARE(plot->rangeFormat(Dimension::Y, 0), RangeT::Format::Numeric);
+	QCOMPARE(plot->rangeFormat(Dimension::X, 1), RangeT::Format::Numeric);
+	QCOMPARE(plot->rangeFormat(Dimension::Y, 1), RangeT::Format::Numeric);
+
+	auto* curve2 = new XYCurve(QStringLiteral("curve2"));
+	plot->addChild(curve2);
+
+	curve2->setXColumn(sheet->column(0));
+	curve2->setYColumn(sheet->column(2));
+	curve2->setCoordinateSystemIndex(1);
+
+	plot->zoomOut(1, 1);
+
+	plot->navigate(1, CartesianPlot::NavigationOperation::ScaleAuto);
+
+	// Doesn't matter which curve is used here, because both are using the same cSystem
+	CHECK_RANGE(plot, curve1, Dimension::X, 0., 2.);
+	// 0 is not valid for log10 scaling, so use the smallest valid values of the curves
+	CHECK_RANGE(plot, curve1, Dimension::Y, 0.00001, 2.);
+}
+
 /*!
  * \brief CartesianPlotTest::invalidcSystem
  * Plot with 2 CoordinateSystems (with common x range), but the second has invalid start end (0, 0).
@@ -949,6 +1016,552 @@ void CartesianPlotTest::autoScaleFitCurveCalculation() {
 
 	CHECK_RANGE(plot, equationCurve, Dimension::X, 0., 3.);
 	CHECK_RANGE(plot, equationCurve, Dimension::Y, 0., 3.);
+}
+
+void CartesianPlotTest::wheelEventCenterAxes() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+	auto* view = dynamic_cast<WorksheetView*>(worksheet->view());
+	QVERIFY(view != nullptr);
+	view->initMenus(); // needed by SET_CARTESIAN_MOUSE_MODE()
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	plot->setNiceExtend(false);
+
+	auto* equationCurve{new XYEquationCurve(QStringLiteral("f(x)"))};
+	equationCurve->setCoordinateSystemIndex(plot->defaultCoordinateSystemIndex());
+	plot->addChild(equationCurve);
+
+	XYEquationCurve::EquationData data;
+	data.min = QStringLiteral("0");
+	data.max = QStringLiteral("10");
+	data.count = 10;
+	data.expression1 = QStringLiteral("x");
+	equationCurve->setEquationData(data);
+	equationCurve->recalculate();
+
+	CHECK_RANGE(plot, equationCurve, Dimension::X, 0., 10.);
+	CHECK_RANGE(plot, equationCurve, Dimension::Y, 0., 10.);
+
+	plot->m_zoomFactor = 2;
+	plot->setNiceExtend(false);
+	const auto& rect = plot->dataRect();
+
+	int signalEmittedCounter = 0;
+	connect(plot,
+			&CartesianPlot::wheelEventSignal,
+			[&signalEmittedCounter](const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
+				signalEmittedCounter++;
+				if (signalEmittedCounter == 1) {
+					QCOMPARE(sceneRelPos.x(), 0.5);
+					QCOMPARE(sceneRelPos.y(), 0.5);
+					QVERIFY(delta > 0);
+					QCOMPARE(xIndex, 0);
+					QCOMPARE(yIndex, 0);
+					QCOMPARE(considerDimension, true);
+					QCOMPARE(dim, Dimension::X);
+				} else {
+					QCOMPARE(sceneRelPos.x(), 0.5);
+					QCOMPARE(sceneRelPos.y(), 0.5);
+					QVERIFY(delta < 0);
+					QCOMPARE(xIndex, 0);
+					QCOMPARE(yIndex, 0);
+					QCOMPARE(considerDimension, true);
+					QCOMPARE(dim, Dimension::Y);
+				}
+			});
+
+	const auto& axes = plot->children<Axis>();
+	QCOMPARE(axes.length(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+	auto* xAxis = axes.at(0);
+	auto* yAxis = axes.at(1);
+
+	plot->enableAutoScale(Dimension::X, 0, false);
+	plot->enableAutoScale(Dimension::Y, 0, false);
+
+	xAxis->setSelected(true);
+	QGraphicsSceneWheelEvent event;
+	event.setPos(QPointF(rect.center().x(), rect.center().y()));
+	event.setDelta(10); // value not important, only sign
+	plot->d_func()->wheelEvent(&event);
+	CHECK_RANGE(plot, equationCurve, Dimension::X, 2.5, 7.5);
+	CHECK_RANGE(plot, equationCurve, Dimension::Y, 0., 10.);
+	QCOMPARE(signalEmittedCounter, 1);
+
+	xAxis->setSelected(false);
+	yAxis->setSelected(true);
+	event.setPos(QPointF(rect.center().x(), rect.center().y()));
+	event.setDelta(-10); // value not important, only sign
+	plot->d_func()->wheelEvent(&event);
+	CHECK_RANGE(plot, equationCurve, Dimension::X, 2.5, 7.5);
+	CHECK_RANGE(plot, equationCurve, Dimension::Y, -5., 15.0);
+	QCOMPARE(signalEmittedCounter, 2);
+}
+
+void CartesianPlotTest::wheelEventNotCenter() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+	auto* view = dynamic_cast<WorksheetView*>(worksheet->view());
+	QVERIFY(view != nullptr);
+	view->initMenus(); // needed by SET_CARTESIAN_MOUSE_MODE()
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	plot->setNiceExtend(false);
+
+	auto* equationCurve{new XYEquationCurve(QStringLiteral("f(x)"))};
+	equationCurve->setCoordinateSystemIndex(plot->defaultCoordinateSystemIndex());
+	plot->addChild(equationCurve);
+
+	XYEquationCurve::EquationData data;
+	data.min = QStringLiteral("0");
+	data.max = QStringLiteral("10");
+	data.count = 10;
+	data.expression1 = QStringLiteral("x");
+	equationCurve->setEquationData(data);
+	equationCurve->recalculate();
+
+	CHECK_RANGE(plot, equationCurve, Dimension::X, 0., 10.);
+	CHECK_RANGE(plot, equationCurve, Dimension::Y, 0., 10.);
+
+	plot->m_zoomFactor = 2;
+	plot->setNiceExtend(false);
+	const auto& rect = plot->dataRect();
+
+	const auto& axes = plot->children<Axis>();
+	QCOMPARE(axes.length(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+	auto* xAxis = axes.at(0);
+	//	const auto* yAxis = axes.at(1);
+
+	int signalEmittedCounter = 0;
+	connect(plot,
+			&CartesianPlot::wheelEventSignal,
+			[&signalEmittedCounter](const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
+				signalEmittedCounter++;
+				QCOMPARE(sceneRelPos.x(), 0.75);
+				QCOMPARE(sceneRelPos.y(), 0.2);
+				QVERIFY(delta > 0);
+				QCOMPARE(xIndex, 0);
+				QCOMPARE(yIndex, 0);
+				QCOMPARE(considerDimension, true);
+				QCOMPARE(dim, Dimension::X);
+			});
+
+	xAxis->setSelected(true);
+	QGraphicsSceneWheelEvent event;
+	event.setPos(QPointF(rect.left() + rect.width() * 3 / 4, rect.top() + rect.height() * 0.8));
+	event.setDelta(10); // value not important, only sign
+	plot->d_func()->wheelEvent(&event);
+	CHECK_RANGE(plot, equationCurve, Dimension::X, 3.75, 8.75);
+	CHECK_RANGE(plot, equationCurve, Dimension::Y, 10. / 3., 8.8888888888888888);
+	QCOMPARE(signalEmittedCounter, 1);
+}
+
+void CartesianPlotTest::wheelEventOutsideTopLeft() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+	auto* view = dynamic_cast<WorksheetView*>(worksheet->view());
+	QVERIFY(view != nullptr);
+	view->initMenus(); // needed by SET_CARTESIAN_MOUSE_MODE()
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	plot->setNiceExtend(false);
+	plot->setHorizontalPadding(Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter));
+	plot->setVerticalPadding(Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter));
+	plot->setRightPadding(Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter));
+	plot->setBottomPadding(Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter));
+
+	auto* equationCurve{new XYEquationCurve(QStringLiteral("f(x)"))};
+	equationCurve->setCoordinateSystemIndex(plot->defaultCoordinateSystemIndex());
+	plot->addChild(equationCurve);
+
+	XYEquationCurve::EquationData data;
+	data.min = QStringLiteral("0");
+	data.max = QStringLiteral("10");
+	data.count = 10;
+	data.expression1 = QStringLiteral("x");
+	equationCurve->setEquationData(data);
+	equationCurve->recalculate();
+
+	CHECK_RANGE(plot, equationCurve, Dimension::X, 0., 10.);
+	CHECK_RANGE(plot, equationCurve, Dimension::Y, 0., 10.);
+
+	plot->m_zoomFactor = 2;
+	plot->setNiceExtend(false);
+	const auto& rect = plot->dataRect();
+
+	int signalEmittedCounter = 0;
+	connect(plot,
+			&CartesianPlot::wheelEventSignal,
+			[&signalEmittedCounter](const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
+				signalEmittedCounter++;
+				QCOMPARE(sceneRelPos.x(), -0.2);
+				QCOMPARE(sceneRelPos.y(), 1.3);
+				QVERIFY(delta > 0);
+				Q_UNUSED(xIndex);
+				Q_UNUSED(yIndex);
+				QCOMPARE(considerDimension, false);
+				Q_UNUSED(dim);
+			});
+
+	QGraphicsSceneWheelEvent event;
+	event.setPos(QPointF(rect.left() - 140, rect.top() - 210));
+	event.setDelta(10); // value not important, only sign
+	plot->d_func()->wheelEvent(&event);
+	CHECK_RANGE(plot, equationCurve, Dimension::X, -1., 4.);
+	CHECK_RANGE(plot, equationCurve, Dimension::Y, 6.5, 11.5);
+	QCOMPARE(signalEmittedCounter, 1);
+}
+
+void CartesianPlotTest::wheelEventOutsideBottomRight() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+	auto* view = dynamic_cast<WorksheetView*>(worksheet->view());
+	QVERIFY(view != nullptr);
+	view->initMenus(); // needed by SET_CARTESIAN_MOUSE_MODE()
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	plot->setNiceExtend(false);
+	plot->setHorizontalPadding(Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter));
+	plot->setVerticalPadding(Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter));
+	plot->setRightPadding(Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter));
+	plot->setBottomPadding(Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter));
+
+	auto* equationCurve{new XYEquationCurve(QStringLiteral("f(x)"))};
+	equationCurve->setCoordinateSystemIndex(plot->defaultCoordinateSystemIndex());
+	plot->addChild(equationCurve);
+
+	XYEquationCurve::EquationData data;
+	data.min = QStringLiteral("0");
+	data.max = QStringLiteral("10");
+	data.count = 10;
+	data.expression1 = QStringLiteral("x");
+	equationCurve->setEquationData(data);
+	equationCurve->recalculate();
+
+	CHECK_RANGE(plot, equationCurve, Dimension::X, 0., 10.);
+	CHECK_RANGE(plot, equationCurve, Dimension::Y, 0., 10.);
+
+	plot->m_zoomFactor = 2;
+	plot->setNiceExtend(false);
+	const auto& rect = plot->dataRect();
+
+	int signalEmittedCounter = 0;
+	connect(plot,
+			&CartesianPlot::wheelEventSignal,
+			[&signalEmittedCounter](const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
+				signalEmittedCounter++;
+				QCOMPARE(sceneRelPos.x(), 1.4);
+				QCOMPARE(sceneRelPos.y(), -0.7);
+				QVERIFY(delta > 0);
+				Q_UNUSED(xIndex);
+				Q_UNUSED(yIndex);
+				QCOMPARE(considerDimension, false);
+				Q_UNUSED(dim);
+			});
+
+	QGraphicsSceneWheelEvent event;
+	event.setPos(QPointF(rect.right() + 280, rect.bottom() + 490));
+	event.setDelta(10); // value not important, only sign
+	plot->d_func()->wheelEvent(&event);
+	CHECK_RANGE(plot, equationCurve, Dimension::X, 7., 12.);
+	CHECK_RANGE(plot, equationCurve, Dimension::Y, -3.5, 1.5);
+	QCOMPARE(signalEmittedCounter, 1);
+}
+
+void CartesianPlotTest::spreadsheetRemoveRows() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	plot->setNiceExtend(false);
+
+	auto* sheet = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(2);
+
+	const auto& columns = sheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+	Column* xColumn = columns.at(0);
+	Column* yColumn = columns.at(1);
+
+	xColumn->replaceValues(-1,
+						   {
+							   1.,
+							   2.,
+							   3.,
+							   4.,
+							   5.,
+						   });
+	yColumn->replaceValues(-1,
+						   {
+							   0.,
+							   4.,
+							   6.,
+							   8.,
+							   10.,
+						   });
+
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	plot->addChild(curve);
+	curve->setXColumn(xColumn);
+	curve->setYColumn(yColumn);
+
+	CHECK_RANGE(plot, curve, Dimension::X, 1., 5.);
+	CHECK_RANGE(plot, curve, Dimension::Y, 0., 10.);
+
+	sheet->removeRows(4, 1);
+
+	CHECK_RANGE(plot, curve, Dimension::X, 1., 4.);
+	CHECK_RANGE(plot, curve, Dimension::Y, 0., 8.);
+
+	project.undoStack()->undo();
+
+	CHECK_RANGE(plot, curve, Dimension::X, 1., 5.);
+	CHECK_RANGE(plot, curve, Dimension::Y, 0., 10.);
+}
+
+void CartesianPlotTest::spreadsheetInsertRows() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	plot->setNiceExtend(false);
+
+	auto* sheet = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(2);
+
+	const auto& columns = sheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+	Column* xColumn = columns.at(0);
+	Column* yColumn = columns.at(1);
+
+	xColumn->replaceValues(-1,
+						   {
+							   1.,
+							   2.,
+							   3.,
+							   4.,
+							   5.,
+						   });
+	yColumn->replaceValues(-1,
+						   {
+							   0.,
+							   4.,
+							   6.,
+							   8.,
+							   10.,
+						   });
+
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	plot->addChild(curve);
+	curve->setXColumn(xColumn);
+	curve->setYColumn(yColumn);
+
+	CHECK_RANGE(plot, curve, Dimension::X, 1., 5.);
+	CHECK_RANGE(plot, curve, Dimension::Y, 0., 10.);
+
+	sheet->insertRows(4, 1);
+	QCOMPARE(xColumn->rowCount(), 6);
+	QCOMPARE(yColumn->rowCount(), 6);
+
+	xColumn->replaceValues(5, {13});
+	yColumn->replaceValues(5, {25});
+
+	CHECK_RANGE(plot, curve, Dimension::X, 1., 13.);
+	CHECK_RANGE(plot, curve, Dimension::Y, 0., 25.);
+
+	project.undoStack()->undo(); // xColumn replace values
+	project.undoStack()->undo(); // yColumn replace values
+	project.undoStack()->undo(); // spreadsheet insertRows
+
+	CHECK_RANGE(plot, curve, Dimension::X, 1., 5.);
+	CHECK_RANGE(plot, curve, Dimension::Y, 0., 10.);
+}
+
+void CartesianPlotTest::columnRemove() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	plot->setNiceExtend(false);
+
+	auto* sheet = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(2);
+
+	const auto& columns = sheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+	const auto* xColumn = columns.at(0);
+	const auto* yColumn = columns.at(1);
+	const auto& xColumnPath = xColumn->path();
+	const auto& yColumnPath = yColumn->path();
+
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	plot->addChild(curve);
+	curve->setXColumn(xColumn);
+	curve->setYColumn(yColumn);
+
+	QSignalSpy xColumnSpy(curve, SIGNAL(xDataChanged()));
+	QSignalSpy yColumnSpy(curve, SIGNAL(yDataChanged()));
+
+	// remove the second column in the spreadsheet
+	// the x-column in the curve is invalidated, the old path is still valid so we can restore later
+	sheet->removeColumns(1, 1);
+	QCOMPARE(curve->xColumn(), xColumn);
+	QCOMPARE(curve->xColumnPath(), xColumnPath);
+	QCOMPARE(xColumnSpy.count(), 0);
+
+	QCOMPARE(curve->yColumn(), nullptr);
+	QCOMPARE(curve->yColumnPath(), yColumnPath);
+	QCOMPARE(yColumnSpy.count(), 1); // data changed signal has to be emitted to notify the parent plot
+
+	// undo the removal and check again
+	project.undoStack()->undo();
+	QCOMPARE(curve->xColumn(), xColumn);
+	QCOMPARE(curve->xColumnPath(), xColumnPath);
+	QCOMPARE(xColumnSpy.count(), 0);
+
+	QCOMPARE(curve->yColumn(), yColumn);
+	QCOMPARE(curve->yColumnPath(), yColumnPath);
+	QCOMPARE(yColumnSpy.count(), 2);
+}
+
+void CartesianPlotTest::spreadsheetRemove() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	plot->setNiceExtend(false);
+
+	auto* sheet = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(2);
+
+	const auto& columns = sheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+	const auto* xColumn = columns.at(0);
+	const auto* yColumn = columns.at(1);
+	const auto& xColumnPath = xColumn->path();
+	const auto& yColumnPath = yColumn->path();
+
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	plot->addChild(curve);
+	curve->setXColumn(xColumn);
+	curve->setYColumn(yColumn);
+
+	QSignalSpy xColumnSpy(curve, SIGNAL(xDataChanged()));
+	QSignalSpy yColumnSpy(curve, SIGNAL(yDataChanged()));
+
+	// remove the spreadsheet
+	// the x- and y-columns in the curve are invalidated, the old paths are still valid so we can restore later
+	project.removeChild(sheet);
+	QCOMPARE(curve->xColumn(), nullptr);
+	QCOMPARE(curve->xColumnPath(), xColumnPath);
+	QCOMPARE(xColumnSpy.count(), 1);
+
+	QCOMPARE(curve->yColumn(), nullptr);
+	QCOMPARE(curve->yColumnPath(), yColumnPath);
+	QCOMPARE(yColumnSpy.count(), 1);
+
+	// undo the removal and check again
+	project.undoStack()->undo();
+	QCOMPARE(curve->xColumn(), xColumn);
+	QCOMPARE(curve->xColumnPath(), xColumnPath);
+	QCOMPARE(xColumnSpy.count(), 2);
+
+	QCOMPARE(curve->yColumn(), yColumn);
+	QCOMPARE(curve->yColumnPath(), yColumnPath);
+	QCOMPARE(yColumnSpy.count(), 2);
+}
+
+/*!
+ * tests the handling of z-values on changes in the child hierarchy.
+ */
+void CartesianPlotTest::zValueAfterAddMoveRemove() {
+	LOAD_PROJECT_HISTOGRAM_FIT_CURVE
+
+	// after the objects were added, the order of children is
+	// * histogram
+	// * curve1
+	// * curve2
+	int zValueHistogram = h->graphicsItem()->zValue();
+	int zValueCurve1 = curve1->graphicsItem()->zValue();
+	int zValueCurve2 = curve2->graphicsItem()->zValue();
+	QVERIFY(zValueHistogram < zValueCurve1);
+	QVERIFY(zValueCurve1 < zValueCurve2);
+
+	// move curve1 up
+	plot->moveChild(curve1, -1);
+
+	// after the move, the order of children is
+	// * curve1
+	// * histogram
+	// * curve2
+	zValueHistogram = h->graphicsItem()->zValue();
+	zValueCurve1 = curve1->graphicsItem()->zValue();
+	zValueCurve2 = curve2->graphicsItem()->zValue();
+	QVERIFY(zValueCurve1 < zValueHistogram);
+	QVERIFY(zValueHistogram < zValueCurve2);
+
+	// move histogram down
+	plot->moveChild(h, 1);
+
+	// after the move, the order of children is
+	// * curve1
+	// * curve2
+	// * histogram
+	zValueHistogram = h->graphicsItem()->zValue();
+	zValueCurve1 = curve1->graphicsItem()->zValue();
+	zValueCurve2 = curve2->graphicsItem()->zValue();
+	QVERIFY(zValueCurve1 < zValueCurve2);
+	QVERIFY(zValueCurve2 < zValueHistogram);
+
+	// remove curve2
+	plot->removeChild(curve2);
+
+	// after the remove, the order of children is
+	// * curve1
+	// * histogram
+	zValueHistogram = h->graphicsItem()->zValue();
+	zValueCurve1 = curve1->graphicsItem()->zValue();
+	QVERIFY(zValueCurve1 < zValueHistogram);
 }
 
 QTEST_MAIN(CartesianPlotTest)

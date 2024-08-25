@@ -30,7 +30,7 @@ public:
 	Worksheet* const q;
 	QRectF pageRect;
 	QGraphicsScene* m_scene;
-	Worksheet::ZoomFit zoomFit{Worksheet::ZoomFit::None};
+	Worksheet::ZoomFit zoomFit{Worksheet::ZoomFit::Fit};
 	bool useViewSize{false};
 	bool scaleContent{false};
 
@@ -53,14 +53,17 @@ public:
 	int layoutColumnCount{2};
 	int layoutRowCount{2};
 	QString theme;
-	bool plotsLocked{false};
+	bool plotsInteractive{true};
 	bool updateCompleteCursorModel{true};
 	Worksheet::CartesianPlotActionMode cartesianPlotActionMode{Worksheet::CartesianPlotActionMode::ApplyActionToSelection};
 	Worksheet::CartesianPlotActionMode cartesianPlotCursorMode{Worksheet::CartesianPlotActionMode::ApplyActionToAll};
 
+	int cursorTreeModelCurveBackgroundAlpha{50};
 	enum class TreeModelColumn { PLOTNAME = 0, SIGNALNAME = 0, CURSOR0, CURSOR1, CURSORDIFF };
 
 	TreeModel* cursorData{nullptr};
+
+	friend class WorksheetTest;
 };
 
 #endif

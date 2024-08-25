@@ -21,129 +21,28 @@
        <string>General</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="3" column="0">
-        <widget class="QLabel" name="lXColumn">
+       <item row="0" column="0">
+        <widget class="QLabel" name="lName">
          <property name="text">
-          <string>Data:</string>
+          <string>Name:</string>
          </property>
         </widget>
        </item>
-       <item row="20" column="2">
-        <widget class="QCheckBox" name="chkAutoBinRanges">
+       <item row="9" column="2">
+        <widget class="QComboBox" name="cbNormalization"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="lComment">
          <property name="text">
-          <string>Auto</string>
+          <string>Comment:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
-       <item row="8" column="0">
-        <widget class="QLabel" name="lOrientation">
-         <property name="text">
-          <string>Orientation:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="24" column="2">
-        <widget class="UTCDateTimeEdit" name="dteBinRangesMax">
-         <property name="calendarPopup">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="2">
-        <widget class="QComboBox" name="cbOrientation"/>
-       </item>
-       <item row="18" column="2">
-        <widget class="QLineEdit" name="leBinWidth"/>
-       </item>
-       <item row="25" column="0">
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>18</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="23" column="0">
-        <widget class="QLabel" name="lBinRangesMinDateTime">
-         <property name="text">
-          <string>Minimum:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="26" column="2">
-        <widget class="QComboBox" name="cbPlotRanges"/>
-       </item>
-       <item row="23" column="2">
-        <widget class="UTCDateTimeEdit" name="dteBinRangesMin">
-         <property name="calendarPopup">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="15" column="0">
-        <widget class="QLabel" name="lBinning">
-         <property name="font">
-          <font>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Binning</string>
-         </property>
-        </widget>
-       </item>
-       <item row="17" column="0">
-        <widget class="QLabel" name="lBinCount">
-         <property name="text">
-          <string>Bin Count:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="16" column="2">
-        <widget class="QComboBox" name="cbBinningMethod"/>
-       </item>
-       <item row="19" column="0">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>18</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="21" column="2">
-        <widget class="QLineEdit" name="leBinRangesMin"/>
-       </item>
-       <item row="17" column="2">
-        <widget class="QSpinBox" name="sbBinCount">
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>9999</number>
-         </property>
-         <property name="value">
-          <number>10</number>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <spacer name="verticalSpacerST_2">
+       <item row="2" column="0">
+        <spacer name="verticalSpacerST">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -165,11 +64,8 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="2">
-        <widget class="QLineEdit" name="leName"/>
-       </item>
-       <item row="2" column="0">
-        <spacer name="verticalSpacerST">
+       <item row="10" column="0">
+        <spacer name="verticalSpacerHT">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -179,85 +75,10 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>32</width>
-           <height>18</height>
+           <height>30</height>
           </size>
          </property>
         </spacer>
-       </item>
-       <item row="27" column="0">
-        <spacer name="verticalSpacerGeneral">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::MinimumExpanding</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>24</width>
-           <height>10</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="20" column="0">
-        <widget class="QLabel" name="lBinRanges">
-         <property name="font">
-          <font>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Bin Ranges</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="ResizableTextEdit" name="teComment"/>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="lComment">
-         <property name="text">
-          <string>Comment:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="lType">
-         <property name="text">
-          <string>Type:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="2">
-        <widget class="QComboBox" name="cbType"/>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="lName">
-         <property name="text">
-          <string>Name:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="22" column="2">
-        <widget class="QLineEdit" name="leBinRangesMax"/>
-       </item>
-       <item row="22" column="0">
-        <widget class="QLabel" name="lBinRangesMax">
-         <property name="text">
-          <string>Maximum:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="24" column="0">
-        <widget class="QLabel" name="lBinRangesMaxDateTime">
-         <property name="text">
-          <string>Maximum:</string>
-         </property>
-        </widget>
        </item>
        <item row="0" column="1">
         <spacer name="hsName">
@@ -275,6 +96,125 @@
          </property>
         </spacer>
        </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="lOrientation">
+         <property name="text">
+          <string>Orientation:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="0">
+        <widget class="QLabel" name="lBinning">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Binning</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="lXColumn">
+         <property name="text">
+          <string>Data:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="26" column="0">
+        <widget class="QLabel" name="lPlotRange">
+         <property name="text">
+          <string>Plot Range:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="25" column="0">
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="21" column="2">
+        <widget class="NumberSpinBox" name="sbBinRangesMin">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="2">
+        <widget class="QComboBox" name="cbOrientation"/>
+       </item>
+       <item row="16" column="0">
+        <widget class="QLabel" name="lBinningMethod">
+         <property name="text">
+          <string>Method:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="24" column="0">
+        <widget class="QLabel" name="lBinRangesMaxDateTime">
+         <property name="text">
+          <string>Maximum:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="TimedLineEdit" name="leName"/>
+       </item>
+       <item row="27" column="0">
+        <spacer name="verticalSpacerGeneral">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::MinimumExpanding</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>24</width>
+           <height>10</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="lType">
+         <property name="text">
+          <string>Type:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="20" column="2">
+        <widget class="QCheckBox" name="chkAutoBinRanges">
+         <property name="text">
+          <string>Auto</string>
+         </property>
+        </widget>
+       </item>
        <item row="18" column="0">
         <widget class="QLabel" name="lBinWidth">
          <property name="text">
@@ -282,8 +222,41 @@
          </property>
         </widget>
        </item>
-       <item row="10" column="0">
-        <spacer name="verticalSpacerHT">
+       <item row="23" column="0">
+        <widget class="QLabel" name="lBinRangesMinDateTime">
+         <property name="text">
+          <string>Minimum:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0">
+        <widget class="QLabel" name="lNormalization">
+         <property name="text">
+          <string>Normalization:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="18" column="2">
+        <widget class="NumberSpinBox" name="sbBinWidth">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <spacer name="verticalSpacerST_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -293,39 +266,123 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>32</width>
-           <height>30</height>
+           <height>18</height>
           </size>
          </property>
         </spacer>
        </item>
-       <item row="26" column="0">
-        <widget class="QLabel" name="lPlotRange">
+       <item row="20" column="0">
+        <widget class="QLabel" name="lBinRanges">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
-          <string>Plot Range:</string>
+          <string>Bin Ranges</string>
          </property>
         </widget>
        </item>
-       <item row="28" column="0">
+       <item row="17" column="2">
+        <widget class="QSpinBox" name="sbBinCount">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>9999</number>
+         </property>
+         <property name="value">
+          <number>10</number>
+         </property>
+        </widget>
+       </item>
+       <item row="29" column="0">
         <widget class="QCheckBox" name="chkVisible">
          <property name="text">
           <string>visible</string>
          </property>
         </widget>
        </item>
-       <item row="16" column="0">
-        <widget class="QLabel" name="lBinningMethod">
-         <property name="text">
-          <string>Method:</string>
+       <item row="22" column="2">
+        <widget class="NumberSpinBox" name="sbBinRangesMax">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item row="9" column="2">
-        <widget class="QComboBox" name="cbNormalization"/>
+       <item row="19" column="0">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
        </item>
-       <item row="9" column="0">
-        <widget class="QLabel" name="lNormalization">
+       <item row="16" column="2">
+        <widget class="QComboBox" name="cbBinningMethod"/>
+       </item>
+       <item row="17" column="0">
+        <widget class="QLabel" name="lBinCount">
          <property name="text">
-          <string>Normalization:</string>
+          <string>Bin Count:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="24" column="2">
+        <widget class="UTCDateTimeEdit" name="dteBinRangesMax">
+         <property name="calendarPopup">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="23" column="2">
+        <widget class="UTCDateTimeEdit" name="dteBinRangesMin">
+         <property name="calendarPopup">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="ResizableTextEdit" name="teComment"/>
+       </item>
+       <item row="26" column="2">
+        <widget class="QComboBox" name="cbPlotRanges"/>
+       </item>
+       <item row="7" column="2">
+        <widget class="QComboBox" name="cbType"/>
+       </item>
+       <item row="22" column="0">
+        <widget class="QLabel" name="lBinRangesMax">
+         <property name="text">
+          <string>Maximum:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="28" column="0">
+        <widget class="QCheckBox" name="chkLegendVisible">
+         <property name="text">
+          <string>Legend</string>
          </property>
         </widget>
        </item>
@@ -385,124 +442,7 @@
       <attribute name="title">
        <string>Error Bars</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0">
-        <widget class="QLabel" name="lErrorBar">
-         <property name="font">
-          <font>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Error</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="lErrorDataPlus">
-         <property name="text">
-          <string>Data, +:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="lErrorDataMinus">
-         <property name="text">
-          <string>Data, -:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="lErrorType">
-         <property name="text">
-          <string>Type:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="0">
-        <spacer name="verticalSpacer_4">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="1" column="1">
-        <spacer name="horizontalSpacer_7">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>10</width>
-           <height>23</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="4" column="0">
-        <spacer name="verticalSpacer_10">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>18</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="lErrorFormat">
-         <property name="font">
-          <font>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Format</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="KComboBox" name="cbErrorType">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <spacer name="verticalSpacer_5">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>18</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
+      <layout class="QVBoxLayout" name="verticalLayout_4"/>
      </widget>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -563,6 +503,7 @@
         <widget class="QLabel" name="lRug">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -671,11 +612,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
    <class>NumberSpinBox</class>
    <extends>QDoubleSpinBox</extends>
    <header>NumberSpinBox.h</header>
@@ -690,6 +626,11 @@
    <extends>QDateTimeEdit</extends>
    <header>UTCDateTimeEdit.h</header>
   </customwidget>
+  <customwidget>
+   <class>TimedLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>src/kdefrontend/widgets/TimedLineEdit.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>tabWidget</tabstop>
@@ -699,12 +640,8 @@
   <tabstop>cbOrientation</tabstop>
   <tabstop>cbBinningMethod</tabstop>
   <tabstop>sbBinCount</tabstop>
-  <tabstop>leBinWidth</tabstop>
   <tabstop>chkAutoBinRanges</tabstop>
-  <tabstop>leBinRangesMin</tabstop>
-  <tabstop>leBinRangesMax</tabstop>
   <tabstop>chkVisible</tabstop>
-  <tabstop>cbErrorType</tabstop>
  </tabstops>
  <resources/>
  <connections/>

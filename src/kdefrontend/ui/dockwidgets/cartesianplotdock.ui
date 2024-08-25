@@ -55,7 +55,7 @@
         </widget>
        </item>
        <item row="0" column="4">
-        <widget class="QLineEdit" name="leName">
+        <widget class="TimedLineEdit" name="leName">
          <property name="clearButtonEnabled">
           <bool>true</bool>
          </property>
@@ -97,6 +97,11 @@
          <column>
           <property name="text">
            <string>Default</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Name</string>
           </property>
          </column>
         </widget>
@@ -1467,6 +1472,11 @@
    <class>ResizableTextEdit</class>
    <extends>QTextEdit</extends>
    <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TimedLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>src/kdefrontend/widgets/TimedLineEdit.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

@@ -9,12 +9,12 @@
 */
 
 #include "SettingsWorksheetPage.h"
+#include "backend/core/Settings.h"
 #include "kdefrontend/widgets/ThemesComboBox.h"
 #include "tools/TeXRenderer.h"
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
 
 /**
  * \brief Page for the 'General' settings of the Labplot settings dialog.
@@ -54,11 +54,11 @@ SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent)
 	loadSettings();
 }
 
-void SettingsWorksheetPage::applySettings() {
+bool SettingsWorksheetPage::applySettings() {
 	if (!m_changed)
-		return;
+		return false;
 
-	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Worksheet"));
+	KConfigGroup group = Settings::group(QStringLiteral("Settings_Worksheet"));
 	if (m_cbThemes->currentText() == i18n("Default"))
 		group.writeEntry(QLatin1String("Theme"), QString());
 	else
@@ -66,6 +66,7 @@ void SettingsWorksheetPage::applySettings() {
 	group.writeEntry(QLatin1String("PresenterModeInteractive"), ui.chkPresenterModeInteractive->isChecked());
 	group.writeEntry(QLatin1String("DoubleBuffering"), ui.chkDoubleBuffering->isChecked());
 	group.writeEntry(QLatin1String("LaTeXEngine"), ui.cbTexEngine->itemData(ui.cbTexEngine->currentIndex()));
+	return true;
 }
 
 void SettingsWorksheetPage::restoreDefaults() {
@@ -86,7 +87,7 @@ void SettingsWorksheetPage::restoreDefaults() {
 }
 
 void SettingsWorksheetPage::loadSettings() {
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Worksheet"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_Worksheet"));
 	m_cbThemes->setItemText(0, group.readEntry(QLatin1String("Theme"), ""));
 	ui.chkPresenterModeInteractive->setChecked(group.readEntry(QLatin1String("PresenterModeInteractive"), false));
 	ui.chkDoubleBuffering->setChecked(group.readEntry(QLatin1String("DoubleBuffering"), true));
@@ -108,7 +109,7 @@ void SettingsWorksheetPage::loadSettings() {
 
 		if (index != -1) {
 			// one of the tex engines was found -> automatically save it in the settings without any user action
-			KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Worksheet"));
+			KConfigGroup group = Settings::group(QStringLiteral("Settings_Worksheet"));
 			group.writeEntry(QLatin1String("LaTeXEngine"), ui.cbTexEngine->itemData(index));
 		}
 	} else

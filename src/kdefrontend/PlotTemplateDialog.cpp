@@ -12,6 +12,7 @@
 #include "ui_PlotTemplateDialog.h"
 
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
@@ -54,7 +55,7 @@ PlotTemplateDialog::PlotTemplateDialog(QWidget* parent)
 
 	ui->pbCustomFolder->setToolTip(i18n("Open the folder for the location of plot area templates"));
 
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("PlotTemplateDialog"));
+	KConfigGroup conf = Settings::group(QLatin1String("PlotTemplateDialog"));
 
 	m_project = new Project;
 
@@ -94,7 +95,7 @@ PlotTemplateDialog::PlotTemplateDialog(QWidget* parent)
 
 PlotTemplateDialog::~PlotTemplateDialog() {
 	// save current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("PlotTemplateDialog"));
+	KConfigGroup conf = Settings::group(QLatin1String("PlotTemplateDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 	conf.writeEntry(QLatin1String("Location"), ui->cbLocation->currentIndex());
 
@@ -103,7 +104,7 @@ PlotTemplateDialog::~PlotTemplateDialog() {
 }
 
 void PlotTemplateDialog::customTemplatePathChanged(const QString& path) {
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("PlotTemplateDialog"));
+	KConfigGroup conf = Settings::group(QLatin1String("PlotTemplateDialog"));
 	if (!path.isEmpty())
 		conf.writeEntry(lastDirConfigEntry, path);
 
@@ -120,15 +121,15 @@ void PlotTemplateDialog::customTemplatePathChanged(const QString& path) {
 
 QString PlotTemplateDialog::defaultTemplateInstallPath() {
 	// folder where config files will be stored in object specific sub-folders:
-	// Linux    - ~/.local/share/labplot2/plot_templates/
-	// Mac      - /Library/Application Support/labplot2
-	// Windows  - C:/Users/<USER>/AppData/Roaming/labplot2/plot_templates/
+	// Linux    - ~/.local/share/labplot/plot_templates/
+	// Mac      - /Library/Application Support/labplot
+	// Windows  - C:/Users/<USER>/AppData/Roaming/labplot/plot_templates/
 	return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1String("/plot_templates/");
 }
 
 void PlotTemplateDialog::chooseTemplateSearchPath() {
 	// Lock lock(mLoading); // No lock needed
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("PlotTemplateDialog"));
+	KConfigGroup conf = Settings::group(QLatin1String("PlotTemplateDialog"));
 	const QString& dir = conf.readEntry(lastDirConfigEntry, QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
 
 	const QString& path = QFileDialog::getExistingDirectory(nullptr, i18nc("@title:window", "Select template search path"), dir);

@@ -12,22 +12,29 @@
 #include "commonfrontend/matrix/MatrixView.h"
 #include "backend/core/column/Column.h"
 #include "backend/datasources/filters/FITSFilter.h"
+#include "backend/lib/hostprocess.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/matrix/MatrixModel.h"
 #include "backend/matrix/matrixcommands.h"
+#ifndef SDK
 #include "kdefrontend/matrix/MatrixFunctionDialog.h"
 #include "kdefrontend/spreadsheet/AddSubtractValueDialog.h"
+#endif
 #include "kdefrontend/spreadsheet/StatisticsDialog.h"
 #include "tools/ColorMapsManager.h"
 
 #include <KLocalizedString>
 
 #include <QAction>
+#include <QActionGroup>
 #include <QClipboard>
+#include <QFile>
+#include <QHBoxLayout>
 #include <QHeaderView>
 #include <QIcon>
 #include <QInputDialog>
 #include <QKeyEvent>
+#include <QLabel>
 #include <QMenu>
 #include <QMimeData>
 #include <QMutex>
@@ -35,7 +42,6 @@
 #include <QPrinter>
 #include <QProcess>
 #include <QScrollArea>
-#include <QShortcut>
 #include <QStackedWidget>
 #include <QTableView>
 #include <QTextStream>
@@ -43,6 +49,8 @@
 
 #include <cfloat>
 #include <cmath>
+
+#include <gsl/gsl_const_cgs.h>
 
 MatrixView::MatrixView(Matrix* matrix)
 	: QWidget()
@@ -106,13 +114,6 @@ void MatrixView::init() {
 	// SLOTs
 	connect(m_matrix, &Matrix::requestProjectContextMenu, this, &MatrixView::createContextMenu);
 	connect(m_model, &MatrixModel::changed, this, &MatrixView::matrixDataChanged);
-
-	// keyboard shortcuts
-	auto* sel_all = new QShortcut(QKeySequence(tr("Ctrl+A", "Matrix: select all")), m_tableView);
-	connect(sel_all, &QShortcut::activated, m_tableView, &QTableView::selectAll);
-
-	// TODO: add shortcuts for copy&paste,
-	// for a single shortcut we need to descriminate between copy&paste for columns, rows or selected cells.
 }
 
 void MatrixView::initActions() {
@@ -142,6 +143,7 @@ void MatrixView::initActions() {
 	action_mirror_horizontally = new QAction(QIcon::fromTheme(QStringLiteral("object-flip-horizontal")), i18n("Mirror &Horizontally"), this);
 	action_mirror_vertically = new QAction(QIcon::fromTheme(QStringLiteral("object-flip-vertical")), i18n("Mirror &Vertically"), this);
 
+#ifndef SDK
 	action_add_value = new QAction(i18n("Add Value"), this);
 	action_add_value->setData(AddSubtractValueDialog::Add);
 	action_subtract_value = new QAction(i18n("Subtract Value"), this);
@@ -150,6 +152,7 @@ void MatrixView::initActions() {
 	action_multiply_value->setData(AddSubtractValueDialog::Multiply);
 	action_divide_value = new QAction(i18n("Divide Value"), this);
 	action_divide_value->setData(AddSubtractValueDialog::Divide);
+#endif
 
 	// 	action_duplicate = new QAction(i18nc("duplicate matrix", "&Duplicate"), this);
 	// TODO
@@ -605,8 +608,10 @@ void MatrixView::handleVerticalSectionResized(int logicalIndex, int /*oldSize*/,
 }
 
 void MatrixView::fillWithFunctionValues() {
+#ifndef SDK
 	auto* dlg = new MatrixFunctionDialog(m_matrix);
 	dlg->exec();
+#endif
 }
 
 void MatrixView::fillWithConstValues() {
@@ -785,7 +790,7 @@ public:
 			for (int col = 0; col < m_image.width(); ++col) {
 				const double value = (data->operator[](col))[row];
 				if (!std::isnan(value) && !std::isinf(value)) {
-					int index = (value - m_min) / range;
+					const int index = range != 0 ? (value - m_min) / range : 0;
 					QColor color;
 					if (index < m_colors.count())
 						color = m_colors.at(index);
@@ -810,6 +815,7 @@ private:
 };
 
 void MatrixView::updateImage() {
+#ifndef SDK
 	WAIT_CURSOR;
 	m_image = QImage(m_matrix->columnCount(), m_matrix->rowCount(), QImage::Format_ARGB32);
 
@@ -857,6 +863,7 @@ void MatrixView::updateImage() {
 	}
 	m_imageIsDirty = false;
 	RESET_CURSOR;
+#endif
 }
 
 // ############################# matrix related slots ###########################
@@ -1034,7 +1041,7 @@ void MatrixView::print(QPrinter* printer) const {
 	QPainter painter(printer);
 
 	const int dpiy = printer->logicalDpiY();
-	const int margin = (int)((1 / 2.54) * dpiy); // 1 cm margins
+	const int margin = (int)((1 / GSL_CONST_CGS_INCH) * dpiy); // 1 cm margins
 
 	QHeaderView* hHeader = m_tableView->horizontalHeader();
 	QHeaderView* vHeader = m_tableView->verticalHeader();
@@ -1281,14 +1288,14 @@ void MatrixView::exportToLaTeX(const QString& path,
 	bool columnsSeparating = (cols > columnsPerTable);
 	QTextStream out(&file);
 
-	const QString latexFullPath = QStandardPaths::findExecutable(QLatin1String("latex"));
+	const QString latexFullPath = safeExecutableName(QStringLiteral("latex"));
 	if (latexFullPath.isEmpty()) {
 		DEBUG(Q_FUNC_INFO << ", WARNING: latex not found!")
 		return;
 	}
 
 	QProcess tex;
-	tex.start(latexFullPath, QStringList() << QStringLiteral("--version"), QProcess::ReadOnly);
+	startHostProcess(tex, latexFullPath, QStringList() << QStringLiteral("--version"), QProcess::ReadOnly);
 	tex.waitForFinished(500);
 	QString texVersionOutput = QLatin1String(tex.readAllStandardOutput());
 	texVersionOutput = texVersionOutput.split(QLatin1Char('\n'))[0];
@@ -1305,10 +1312,10 @@ void MatrixView::exportToLaTeX(const QString& path,
 		yearidx -= 3;
 
 	bool ok;
-	texVersionOutput.midRef(yearidx, 4).toInt(&ok);
+	texVersionOutput.mid(yearidx, 4).toInt(&ok);
 	int version = -1;
 	if (ok)
-		version = texVersionOutput.midRef(yearidx, 4).toInt(&ok);
+		version = texVersionOutput.mid(yearidx, 4).toInt(&ok);
 
 	if (latexHeaders) {
 		out << QLatin1String("\\documentclass[11pt,a4paper]{article} \n");
@@ -1540,6 +1547,7 @@ void MatrixView::exportToLaTeX(const QString& path,
 // ############################  Dialogs  ######################################
 // ##############################################################################
 void MatrixView::showColumnStatistics() {
+#ifndef SDK
 	if (selectedColumnCount() > 0) {
 		QString dlgTitle(m_matrix->name() + QStringLiteral(" column statistics"));
 		QVector<Column*> columns;
@@ -1556,16 +1564,20 @@ void MatrixView::showColumnStatistics() {
 			columns.clear();
 		}
 	}
+#endif
 }
 
 void MatrixView::modifyValues() {
+#ifndef SDK
 	const QAction* action = dynamic_cast<const QAction*>(QObject::sender());
 	auto op = (AddSubtractValueDialog::Operation)action->data().toInt();
 	auto* dlg = new AddSubtractValueDialog(m_matrix, op);
 	dlg->exec();
+#endif
 }
 
 void MatrixView::showRowStatistics() {
+#ifndef SDK
 	if (selectedRowCount() > 0) {
 		QString dlgTitle(m_matrix->name() + QStringLiteral(" row statistics"));
 		QVector<Column*> columns;
@@ -1583,11 +1595,17 @@ void MatrixView::showRowStatistics() {
 			columns.clear();
 		}
 	}
+#endif
 }
 
 void MatrixView::exportToFits(const QString& fileName, const int exportTo) const {
+#ifndef SDK
 	auto* filter = new FITSFilter;
 	filter->setExportTo(exportTo);
 	filter->write(fileName, m_matrix);
 	delete filter;
+#else
+	Q_UNUSED(fileName)
+	Q_UNUSED(exportTo)
+#endif
 }

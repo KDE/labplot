@@ -21,7 +21,8 @@ SettingsWelcomePage::SettingsWelcomePage(QWidget* parent)
 	loadSettings();
 }
 
-void SettingsWelcomePage::applySettings() {
+bool SettingsWelcomePage::applySettings() {
+	return true;
 }
 
 void SettingsWelcomePage::restoreDefaults() {

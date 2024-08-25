@@ -11,7 +11,6 @@
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
-class QStringList;
 class MatioFilterPrivate;
 
 // Docu:
@@ -31,16 +30,9 @@ public:
 	static QString fileInfoString(const QString&);
 
 	void parse(const QString& fileName);
-	void
-	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
-	QVector<QStringList> readCurrentVar(const QString& fileName,
-										AbstractDataSource* = nullptr,
-										AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace,
-										int lines = -1);
+	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) override;
+	QVector<QStringList> readCurrentVar(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*) override;
-
-	void loadFilterSettings(const QString&) override;
-	void saveFilterSettings(const QString&) const override;
 
 	void setCurrentVarName(const QString&);
 	void setSelectedVarNames(const QStringList&);
@@ -49,13 +41,13 @@ public:
 	QVector<QStringList> varsInfo() const;
 
 	// TODO: -> AbstractFileFilter?
-	void setStartRow(const int);
+	void setStartRow(int);
 	int startRow() const;
-	void setEndRow(const int);
+	void setEndRow(int);
 	int endRow() const;
-	void setStartColumn(const int);
+	void setStartColumn(int);
 	int startColumn() const;
-	void setEndColumn(const int);
+	void setEndColumn(int);
 	int endColumn() const;
 
 	void save(QXmlStreamWriter*) const override;
@@ -63,6 +55,7 @@ public:
 
 private:
 	std::unique_ptr<MatioFilterPrivate> const d;
+
 	friend class MatioFilterPrivate;
 };
 

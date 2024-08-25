@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for CustomPoint properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2015-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -19,9 +19,9 @@
 CustomPointDock::CustomPointDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(m_leName->height());
+	setPlotRangeCombobox(ui.cbPlotRanges);
+	setBaseWidgets(ui.leName, ui.teComment);
+	setVisibilityWidgets(ui.chkVisible);
 
 	//"Symbol"-tab
 	auto* hboxLayout = new QHBoxLayout(ui.tabSymbol);
@@ -54,10 +54,7 @@ CustomPointDock::CustomPointDock(QWidget* parent)
 
 	// SLOTS
 	// General
-	connect(ui.leName, &QLineEdit::textChanged, this, &CustomPointDock::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &CustomPointDock::commentChanged);
-	connect(ui.chkVisible, &QCheckBox::clicked, this, &CustomPointDock::visibilityChanged);
-	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CustomPointDock::plotRangeChanged);
+	connect(ui.chbLock, &QCheckBox::clicked, this, &CustomPointDock::lockChanged);
 
 	// positioning
 	connect(ui.chbBindLogicalPos, &QCheckBox::clicked, this, &CustomPointDock::bindingChanged);
@@ -75,7 +72,7 @@ CustomPointDock::CustomPointDock(QWidget* parent)
 	auto* hlayout = new QHBoxLayout(frame);
 	hlayout->setContentsMargins(0, 11, 0, 11);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::CustomPoint);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("CustomPoint"));
 	hlayout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &CustomPointDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &CustomPointDock::saveConfigAsTemplate);
@@ -97,29 +94,10 @@ void CustomPointDock::setPoints(QList<CustomPoint*> points) {
 
 	symbolWidget->setSymbols(symbols);
 
-	// if there is more than one point in the list, disable the comment and name widgets in "general"
-	if (m_points.size() == 1) {
-		ui.lName->setEnabled(true);
-		ui.leName->setEnabled(true);
-		ui.lComment->setEnabled(true);
-		ui.teComment->setEnabled(true);
-		ui.leName->setText(m_point->name());
-		ui.teComment->setText(m_point->comment());
-	} else {
-		ui.lName->setEnabled(false);
-		ui.leName->setEnabled(false);
-		ui.lComment->setEnabled(false);
-		ui.teComment->setEnabled(false);
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
-	}
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
-
 	// show the properties of the first custom point
 	this->load();
 	initConnections();
-	updatePlotRanges(); // needed when loading project
+	updatePlotRangeList(); // needed when loading project
 
 	// for custom points being children of an InfoElement, the position is changed
 	// via the parent settings -> disable the positioning here.
@@ -133,10 +111,7 @@ void CustomPointDock::setPoints(QList<CustomPoint*> points) {
 
 void CustomPointDock::initConnections() const {
 	// SIGNALs/SLOTs
-	//  general
-	connect(m_point, &CustomPoint::aspectDescriptionChanged, this, &CustomPointDock::aspectDescriptionChanged);
-	connect(m_point, &WorksheetElement::plotRangeListChanged, this, &CustomPointDock::updatePlotRanges);
-	connect(m_point, &CustomPoint::visibleChanged, this, &CustomPointDock::pointVisibilityChanged);
+	connect(m_point, &CustomPoint::lockChanged, this, &CustomPointDock::pointLockChanged);
 	connect(m_point, &CustomPoint::positionChanged, this, &CustomPointDock::pointPositionChanged);
 	connect(m_point, &CustomPoint::positionLogicalChanged, this, &CustomPointDock::pointPositionLogicalChanged);
 	connect(m_point, &CustomPoint::coordinateBindingEnabledChanged, this, &CustomPointDock::pointCoordinateBindingEnabledChanged);
@@ -152,10 +127,6 @@ void CustomPointDock::updateLocale() {
 	ui.sbPositionXLogical->setLocale(numberLocale);
 	ui.sbPositionYLogical->setLocale(numberLocale);
 	symbolWidget->updateLocale();
-}
-
-void CustomPointDock::updatePlotRanges() {
-	updatePlotRangeList(ui.cbPlotRanges);
 }
 
 //**********************************************************
@@ -249,13 +220,10 @@ void CustomPointDock::positionYLogicalDateTimeChanged(qint64 value) {
 		point->setPositionLogical(pos);
 }
 
-void CustomPointDock::visibilityChanged(bool state) {
+void CustomPointDock::lockChanged(bool locked) {
 	CONDITIONAL_LOCK_RETURN;
-
-	m_point->beginMacro(i18n("%1 CustomPoints: visibility changed", m_points.count()));
 	for (auto* point : m_points)
-		point->setVisible(state);
-	m_point->endMacro();
+		point->setLock(locked);
 }
 
 /*!
@@ -330,9 +298,9 @@ void CustomPointDock::pointPositionLogicalChanged(QPointF pos) {
 	ui.dtePositionYLogical->setMSecsSinceEpochUTC(pos.y());
 }
 
-void CustomPointDock::pointVisibilityChanged(bool on) {
+void CustomPointDock::pointLockChanged(bool on) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.chkVisible->setChecked(on);
+	ui.chbLock->setChecked(on);
 }
 
 //**********************************************************
@@ -396,30 +364,25 @@ void CustomPointDock::load() {
 		ui.lPositionYLogicalDateTime->hide();
 		ui.dtePositionYLogical->hide();
 	}
+
+	ui.chbLock->setChecked(m_point->isLocked());
 	ui.chkVisible->setChecked(m_point->isVisible());
 }
 
 void CustomPointDock::loadConfigFromTemplate(KConfig& config) {
-	// extract the name of the template from the file name
-	QString name;
-	int index = config.name().lastIndexOf(QLatin1String("/"));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
+	auto name = TemplateHandler::templateName(config);
 	int size = m_points.size();
 	if (size > 1)
 		m_point->beginMacro(i18n("%1 custom points: template \"%2\" loaded", size, name));
 	else
 		m_point->beginMacro(i18n("%1: template \"%2\" loaded", m_point->name(), name));
 
-	symbolWidget->loadConfig(config.group("CustomPoint"));
+	symbolWidget->loadConfig(config.group(QStringLiteral("CustomPoint")));
 
 	m_point->endMacro();
 }
 
 void CustomPointDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group("CustomPoint");
+	KConfigGroup group = config.group(QStringLiteral("CustomPoint"));
 	symbolWidget->saveConfig(group);
 }

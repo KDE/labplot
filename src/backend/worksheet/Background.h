@@ -39,6 +39,8 @@ public:
 	const QString& prefix() const;
 	void init(const KConfigGroup&);
 
+	void draw(QPainter*, const QPolygonF&) const;
+
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 	void loadThemeConfig(const KConfigGroup&);

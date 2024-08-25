@@ -11,15 +11,15 @@
 #define RANGE_H
 
 #include "backend/gsl/parser.h"
+#include "backend/nsl/nsl_math.h"
 #include "macros.h" //const auto numberLocale = QLocale();
 
-extern "C" {
-#include "backend/nsl/nsl_math.h"
-}
+#include <KLocalizedString>
 
+#include <QDateTime>
 #include <QStringList>
+
 #include <cmath>
-#include <klocalizedstring.h>
 
 class QString;
 
@@ -44,9 +44,8 @@ public:
 	// TODO: InverseOffset, Prob, Probit, Logit, Weibull
 	enum class Scale { Linear, Log10, Log2, Ln, Sqrt, Square, Inverse };
 	Q_ENUM(Scale)
-	static const QStringList& scaleNames(); // see Range.cpp
-	// TODO: when we have C++17: use inline initialization
-	//	const static inline QStringList scaleNames{ i18n("Linear"), i18n("Log10"), i18n("Log2"), i18n("Ln"), i18n("Sqrt"), i18n("Square") };
+	static inline QList<KLocalizedString>
+		scaleNames{ki18n("Linear"), ki18n("Log10"), ki18n("Log2"), ki18n("Ln"), ki18n("Sqrt"), ki18n("Square"), ki18n("Inverse")};
 	static bool isLogScale(Scale scale) {
 		if (scale == Scale::Log10 || scale == Scale::Log2 || scale == Scale::Ln)
 			return true;
@@ -153,7 +152,23 @@ public:
 		return qAbs(m_end - m_start);
 	}
 	T center() const {
-		return (m_start + m_end) / 2;
+		switch (m_scale) {
+		case Scale::Linear:
+			return (m_start + m_end) / 2.;
+		case Scale::Log10:
+			return std::pow(10., log10(m_end * m_start) / 2.);
+		case Scale::Log2:
+			return std::pow(2., log2(m_end * m_start) / 2.);
+		case Scale::Ln:
+			return std::exp(log(m_end * m_start) / 2.);
+		case Scale::Sqrt:
+			return std::pow((std::sqrt(m_end) + std::sqrt(m_start)) / 2., 2.);
+		case Scale::Square:
+			return std::sqrt((std::pow(m_end, 2.) + std::pow(m_start, 2.)) / 2.);
+		case Scale::Inverse:
+			return 1. / ((1. / m_end + 1. / m_start) / 2.);
+		}
+		return T();
 	}
 	// calculate step size from number of steps
 	T stepSize(const int steps) const {
@@ -193,10 +208,10 @@ public:
 		m_end += value;
 	}
 	bool operator==(const Range<T>& other) const {
-		return (m_start == other.start() && m_end == other.end());
+		return (m_start == other.start() && m_end == other.end() && m_format == other.format() && m_scale == other.scale());
 	}
 	bool operator!=(const Range<T>& other) const {
-		return (m_start != other.start() || m_end != other.end());
+		return (m_start != other.start() || m_end != other.end() || m_format != other.format() || m_scale != other.scale());
 	}
 	Range<T>& operator+=(const T value) {
 		m_start += value;
@@ -226,6 +241,41 @@ public:
 	QString toLocaleString(bool round = true) const {
 		return this->toString(round, QLocale());
 	}
+
+	// fix start and end when not supported by scale
+	void fixLimits() {
+		switch (m_scale) {
+		case Scale::Linear: // all values are allowed (catch inf, nan?)
+			break;
+		case Scale::Log10:
+			if (m_end <= 0)
+				m_end = 10.;
+			if (m_start <= 0)
+				m_start = m_end / 10.;
+			break;
+		case Scale::Log2:
+			if (m_end <= 0)
+				m_end = 2.;
+			if (m_start <= 0)
+				m_start = m_end / 2.;
+			break;
+		case Scale::Ln:
+			if (m_end <= 0)
+				m_end = M_E;
+			if (m_start <= 0)
+				m_start = m_end / M_E;
+			break;
+		case Scale::Sqrt:
+		case Scale::Square:
+		case Scale::Inverse:
+			if (m_end <= 0) // end must be > 0 for start to be < end
+				m_end = 1.;
+			if (m_start < 0)
+				m_start = 0.;
+			break;
+		}
+	}
+
 	// extend/shrink range to nice numbers (used in auto scaling)
 	//  get nice size to extend to (see Glassner: Graphic Gems)
 	double niceSize(double size, bool round) {
@@ -300,7 +350,7 @@ public:
 			return; // log scales end here
 		}
 
-		DEBUG("scale = " << (int)scale() << ", old size = " << oldSize)
+		DEBUG(Q_FUNC_INFO << ", scale = " << (int)scale() << ", old size = " << oldSize)
 
 		const double newSize = niceSize(oldSize, false);
 		DEBUG(Q_FUNC_INFO << ", new size = " << newSize);
@@ -437,6 +487,86 @@ public:
 		return 11 + 1;
 	}
 	// TODO: touches(), merge(), subtract(), split(), etc. (see Interval)
+
+	/*!
+	 * TODO: implement zooming depending on the relZoomPosScene also for non linear scales!
+	 */
+	void zoom(const double factor, const bool nice, const double relZoomPosScene = 0.5) {
+		const double start{this->start()}, end{this->end()};
+		switch (scale()) {
+		case RangeT::Scale::Linear: {
+			if (relZoomPosScene == 0.5 || nice)
+				extend(size() * (factor - 1.) / 2.);
+			else {
+				// zoom and shift in one step
+				//                                                              Example:		        Example 1      Example 2        Example 3
+				//                                                              Start                   0               0             4.5
+				//                                                              End                     10              10            9.5
+				//                                                              factor:                 0.5             0.5           2
+				//                                                              relZoomPosScene:        0.9             0.5           0.9
+				//                                                              Expected new start:     2.5             0
+				//                                                              Expected new end:       7.5             10
+				const double pos = start + (end - start) * relZoomPosScene; // Number at pos scene     9               5             9
+				this->start() += (pos - start) * (1 - factor); // 4.5             2.5           0
+				this->end() -= (end - pos) * (1 - factor); // 9.5             7.5          relZoomPos at number    0.9 (fine)      0.5 (fine)           (Number
+														   // at pos scene - start) / (end - start)
+			}
+			break;
+		}
+		case RangeT::Scale::Log10: {
+			if (start == 0 || end / start <= 0)
+				break;
+			const double diff = log10(end / start) * (factor - 1.);
+			const double extend = pow(10, diff / 2.);
+			this->end() *= extend;
+			this->start() /= extend;
+			break;
+		}
+		case RangeT::Scale::Log2: {
+			if (start == 0 || end / start <= 0)
+				break;
+			const double diff = log2(end / start) * (factor - 1.);
+			const double extend = exp2(diff / 2.);
+			this->end() *= extend;
+			this->start() /= extend;
+			break;
+		}
+		case RangeT::Scale::Ln: {
+			if (start == 0 || end / start <= 0)
+				break;
+			const double diff = log(end / start) * (factor - 1.);
+			const double extend = exp(diff / 2.);
+			this->end() *= extend;
+			this->start() /= extend;
+			break;
+		}
+		case RangeT::Scale::Sqrt: {
+			if (start < 0 || end < 0)
+				break;
+			const double diff = (sqrt(end) - sqrt(start)) * (factor - 1.);
+			extend(diff * diff / 4.);
+			break;
+		}
+		case RangeT::Scale::Square: {
+			const double diff = (end * end - start * start) * (factor - 1.);
+			extend(sqrt(std::abs(diff / 2.)));
+			break;
+		}
+		case RangeT::Scale::Inverse: {
+			const double diff = (1. / start - 1. / end) * (factor - 1.);
+			extend(1. / std::abs(diff / 2.));
+			break;
+		}
+		}
+
+		// make nice again
+		if (nice) {
+			if (factor < 1) // zoomIn
+				niceShrink();
+			else
+				niceExtend();
+		}
+	}
 
 private:
 	T m_start{0}; // start value

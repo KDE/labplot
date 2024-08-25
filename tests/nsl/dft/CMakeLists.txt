@@ -1,5 +1,5 @@
-add_executable (NSLDFTTest NSLDFTTest.cpp)
+add_executable(NSLDFTTest NSLDFTTest.cpp)
 
-target_link_libraries(NSLDFTTest labplot2lib labplot2test)
+target_link_libraries(NSLDFTTest labplottest)
 
 add_test(NAME NSLDFTTest COMMAND NSLDFTTest)

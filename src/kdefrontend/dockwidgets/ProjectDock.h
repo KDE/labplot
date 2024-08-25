@@ -4,7 +4,7 @@
 	Description          : widget for worksheet properties
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2012 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
-	SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -31,10 +31,12 @@ private:
 
 private Q_SLOTS:
 	void authorChanged();
+	void saveDockStatesChanged(bool);
 	void saveCalculationsChanged(bool);
 
 	// SLOTs for changes triggered in Project
 	void projectAuthorChanged(const QString&);
+	void projectSaveDockStatesChanged(bool);
 	void projectSaveCalculationsChanged(bool);
 };
 

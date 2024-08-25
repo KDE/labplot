@@ -110,26 +110,6 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
-       <widget class="QToolButton" name="tbFunctions">
-        <property name="toolTip">
-         <string>Functions</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QToolButton" name="tbConstants">
-        <property name="toolTip">
-         <string>Constants</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="0">
        <widget class="QLabel" name="lFunction">
         <property name="font">
@@ -146,13 +126,43 @@
         </property>
        </widget>
       </item>
+      <item row="1" column="2">
+       <widget class="QToolButton" name="tbConstants">
+        <property name="toolTip">
+         <string>Constants</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QToolButton" name="tbFunctions">
+        <property name="toolTip">
+         <string>Functions</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
    <item>
     <widget class="QCheckBox" name="chkAutoUpdate">
      <property name="text">
-      <string>auto update</string>
+      <string>auto update the values</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="chkAutoResize">
+     <property name="text">
+      <string>auto resize the column</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -175,7 +185,7 @@
   <customwidget>
    <class>ExpressionTextEdit</class>
    <extends>QTextEdit</extends>
-   <header>kdefrontend/widgets/ExpressionTextEdit.h</header>
+   <header>src/kdefrontend/widgets/ExpressionTextEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

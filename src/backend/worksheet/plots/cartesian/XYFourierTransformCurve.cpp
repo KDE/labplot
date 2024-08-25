@@ -150,6 +150,7 @@ bool XYFourierTransformCurvePrivate::recalculateSpecific(const AbstractColumn* t
 
 	///////////////////////////////////////////////////////////
 	// transform with window
+	gsl_set_error_handler_off();
 	int status = nsl_dft_transform_window(ydata, 1, n, twoSided, type, windowType);
 
 	unsigned int N = n;
@@ -255,7 +256,6 @@ void XYFourierTransformCurve::save(QXmlStreamWriter* writer) const {
 bool XYFourierTransformCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYFourierTransformCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -297,6 +297,10 @@ bool XYFourierTransformCurve::load(XmlStreamReader* reader, bool preview) {
 				d->xColumn = column;
 			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 
@@ -319,7 +323,7 @@ bool XYFourierTransformCurve::load(XmlStreamReader* reader, bool preview) {
 		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
 		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;
 
-		recalcLogicalPoints();
+		recalc();
 	}
 
 	return true;

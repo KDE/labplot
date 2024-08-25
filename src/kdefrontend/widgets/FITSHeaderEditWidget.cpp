@@ -10,13 +10,14 @@
 #include "FITSHeaderEditWidget.h"
 #include "FITSHeaderEditAddUnitDialog.h"
 #include "FITSHeaderEditNewKeywordDialog.h"
+#include "backend/core/Settings.h"
 #include "backend/datasources/filters/FITSFilter.h"
 #include "backend/lib/macros.h"
 #include "ui_fitsheadereditwidget.h"
 
 #include <KConfigGroup>
 #include <KMessageBox>
-#include <KSharedConfig>
+
 #include <kcoreaddons_version.h>
 
 #include <QContextMenuEvent>
@@ -87,6 +88,7 @@ FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget* parent)
  */
 FITSHeaderEditWidget::~FITSHeaderEditWidget() {
 	delete m_fitsFilter;
+	delete ui;
 }
 
 /*!
@@ -143,7 +145,7 @@ void FITSHeaderEditWidget::fillTableSlot(QTreeWidgetItem* item, int col) {
 		if (item->parent() != nullptr) {
 			if (item->parent()->parent() != nullptr) {
 				bool ok;
-				int hduNum = itemText.rightRef(1).toInt(&ok);
+				int hduNum = itemText.right(1).toInt(&ok);
 				selectedExtension = item->parent()->parent()->text(0) + QStringLiteral("[") + QString::number(hduNum - 1) + QStringLiteral("]");
 			}
 		}
@@ -167,7 +169,7 @@ void FITSHeaderEditWidget::fillTableSlot(QTreeWidgetItem* item, int col) {
  * then the file is parsed, so the treeview for the extensions is built and the table is filled.
  */
 void FITSHeaderEditWidget::openFile() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "FITSHeaderEditWidget");
+	KConfigGroup conf = Settings::group(QStringLiteral("FITSHeaderEditWidget"));
 	QString dir = conf.readEntry("LastDir", "");
 	QString fileName = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Open FITS File"), dir, i18n("FITS files (*.fits *.fit *.fts)"));
 	if (fileName.isEmpty())
@@ -380,10 +382,11 @@ void FITSHeaderEditWidget::removeKeyword() {
 												  i18n("Confirm Deletion"),
 												  KStandardGuiItem::del(),
 												  KStandardGuiItem::cancel());
+	if (status == KMessageBox::PrimaryAction) {
 #else
 	auto status = KMessageBox::questionYesNo(this, i18n("Are you sure you want to delete the keyword '%1'?", key), i18n("Confirm Deletion"));
-#endif
 	if (status == KMessageBox::Yes) {
+#endif
 		bool remove = true;
 		for (const QString& k : mandatoryKeywords()) {
 			if (!k.compare(key)) {

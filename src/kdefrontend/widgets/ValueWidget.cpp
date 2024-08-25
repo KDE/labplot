@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : values settings widget
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -16,14 +16,14 @@
 
 /*!
 	\class ValueWidget
-	\brief Widget for editing the properties of a Value object, mostly used in an appropriate dock widget.
+	\brief Widget for editing the properties of a
+   Value object, mostly used in an appropriate dock widget.
 
 	\ingroup kdefrontend
  */
 ValueWidget::ValueWidget(QWidget* parent)
 	: QWidget(parent) {
 	ui.setupUi(this);
-
 	auto* gridLayout = static_cast<QGridLayout*>(layout());
 	cbColumn = new TreeViewComboBox(this);
 	gridLayout->addWidget(cbColumn, 2, 2, 1, 1);
@@ -73,15 +73,26 @@ ValueWidget::ValueWidget(QWidget* parent)
 	connect(ui.kcbColor, &KColorButton::changed, this, &ValueWidget::colorChanged);
 }
 
+ValueWidget::~ValueWidget() {
+	delete m_aspectModel;
+}
+
 void ValueWidget::setValues(const QList<Value*>& values) {
 	m_values = values;
 	m_value = m_values.first();
 
 	ui.sbDistance->setLocale(QLocale());
 
-	auto* m_aspectTreeModel = new AspectTreeModel(m_value->project());
-	m_aspectTreeModel->enablePlottableColumnsOnly(true);
-	m_aspectTreeModel->enableShowPlotDesignation(true);
+	if (!m_aspectModel) {
+		m_aspectModel = new AspectTreeModel(m_value->project());
+		m_aspectModel->enablePlottableColumnsOnly(true);
+		m_aspectModel->enableShowPlotDesignation(true);
+	}
+
+	// add center value if position is available
+	if (m_value->centerPositionAvailable())
+		if (!ui.cbPosition->contains(i18n("Center")))
+			ui.cbPosition->addItem(i18n("Center"));
 
 	QList<AspectType> list{AspectType::Folder,
 						   AspectType::Workbook,
@@ -97,11 +108,9 @@ void ValueWidget::setValues(const QList<Value*>& values) {
 						   AspectType::CantorWorksheet};
 
 	cbColumn->setTopLevelClasses(list);
+	m_aspectModel->setSelectableAspects({AspectType::Column});
 
-	list = {AspectType::Column};
-	m_aspectTreeModel->setSelectableAspects(list);
-
-	cbColumn->setModel(m_aspectTreeModel);
+	cbColumn->setModel(m_aspectModel);
 
 	load();
 
@@ -121,7 +130,7 @@ void ValueWidget::setValues(const QList<Value*>& values) {
 }
 
 //*************************************************************
-//******** SLOTs for changes triggered in ValueWidget ****
+//******** SLOTs for changes triggered in ValueWidget *********
 //*************************************************************
 /*!
   called when the type of the values (none, x, y, (x,y) etc.) was changed.
@@ -137,9 +146,10 @@ void ValueWidget::typeChanged(int index) {
 }
 
 /*!
-  depending on the currently selected values column type (column mode) updates the widgets for the values column format,
-  shows/hides the allowed widgets, fills the corresponding combobox with the possible entries.
-  Called when the values column was changed.
+  depending on the currently selected values column type (column mode) updates
+  the widgets for the values column format, shows/hides the allowed widgets,
+  fills the corresponding combobox with the possible entries. Called when the
+  values column was changed.
 */
 void ValueWidget::updateWidgets() {
 	const auto type = Value::Type(ui.cbType->currentIndex());

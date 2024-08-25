@@ -46,6 +46,10 @@ private Q_SLOTS:
 	void formulamr();
 	void formulasma();
 	void formulasmr();
+
+	// check updates of columns defined via a formula on changes
+	void formulaUpdateAfterCellChange();
+	void formulaUpdateAfterPaste();
 };
 
 #endif

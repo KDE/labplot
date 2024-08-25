@@ -4,7 +4,8 @@
 	Description          : Tests for Column
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2022 Martin Marmsoler <martin.marmsoler@gmail.com>
-	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2022-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2022-2023 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -15,8 +16,22 @@
 #include "backend/core/column/ColumnPrivate.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/trace.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 
 #include <QUndoStack>
+
+#define SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)                                                                                                                \
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);                                                                                \
+	c1.replaceValues(-1, c1Vector);                                                                                                                            \
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);                                                                             \
+	c2.replaceValues(-1, c2Vector);
+
+#define COLUMN2_SET_FORMULA_AND_EVALUATE(formula, result)                                                                                                      \
+	c2.setFormula(QStringLiteral(formula), {QStringLiteral("x")}, QVector<Column*>({&c1}), true);                                                              \
+	c2.updateFormula();                                                                                                                                        \
+	QCOMPARE(c2.rowCount(), 8);                                                                                                                                \
+	for (int i = 0; i < c2.rowCount(); i++)                                                                                                                    \
+		VALUES_EQUAL(c2.valueAt(i), result);
 
 void ColumnTest::doubleMinimum() {
 	Column c(QStringLiteral("Double column"), Column::ColumnMode::Double);
@@ -150,8 +165,8 @@ void ColumnTest::statisticsDouble() {
 	QCOMPARE(stats.meanDeviation, 1.375);
 	QCOMPARE(stats.meanDeviationAroundMedian, 1.25);
 	QCOMPARE(stats.medianDeviation, 0.5);
-	QCOMPARE(stats.skewness, 0.621946425108);
-	QCOMPARE(stats.kurtosis, -1.7913399134667);
+	QCOMPARE(stats.skewness, 0.95754916255356);
+	QCOMPARE(stats.kurtosis, 2.1487290427258);
 	QCOMPARE(stats.entropy, 1.5);
 }
 void ColumnTest::statisticsDoubleNegative() {
@@ -185,8 +200,8 @@ void ColumnTest::statisticsDoubleNegative() {
 	QCOMPARE(stats.meanDeviation, 2.);
 	QCOMPARE(stats.meanDeviationAroundMedian, 2.);
 	QCOMPARE(stats.medianDeviation, 1.5);
-	QCOMPARE(stats.skewness, 0.323969548293623);
-	QCOMPARE(stats.kurtosis, -2.00892857142857);
+	QCOMPARE(stats.skewness, 0.49878374911084);
+	QCOMPARE(stats.kurtosis, 1.7619047619048);
 	QCOMPARE(stats.entropy, 2.);
 }
 void ColumnTest::statisticsDoubleBigNegative() {
@@ -220,8 +235,8 @@ void ColumnTest::statisticsDoubleBigNegative() {
 	QCOMPARE(stats.meanDeviation, 38.375);
 	QCOMPARE(stats.meanDeviationAroundMedian, 26.75);
 	QCOMPARE(stats.medianDeviation, 2.5);
-	QCOMPARE(stats.skewness, -0.746367760881076);
-	QCOMPARE(stats.kurtosis, -1.68988867569211);
+	QCOMPARE(stats.skewness, -1.1491083404244);
+	QCOMPARE(stats.kurtosis, 2.3290867987696);
 	QCOMPARE(stats.entropy, 2.);
 }
 void ColumnTest::statisticsDoubleZero() {
@@ -255,8 +270,8 @@ void ColumnTest::statisticsDoubleZero() {
 	QCOMPARE(stats.meanDeviation, 1.5);
 	QCOMPARE(stats.meanDeviationAroundMedian, 1.5);
 	QCOMPARE(stats.medianDeviation, 1.);
-	QCOMPARE(stats.skewness, 0.446377548104623);
-	QCOMPARE(stats.kurtosis, -1.875);
+	QCOMPARE(stats.skewness, 0.68724319348909);
+	QCOMPARE(stats.kurtosis, 2.);
 	QCOMPARE(stats.entropy, 2.);
 }
 
@@ -291,8 +306,8 @@ void ColumnTest::statisticsInt() {
 	QCOMPARE(stats.meanDeviation, 1.375);
 	QCOMPARE(stats.meanDeviationAroundMedian, 1.25);
 	QCOMPARE(stats.medianDeviation, 0.5);
-	QCOMPARE(stats.skewness, 0.621946425108);
-	QCOMPARE(stats.kurtosis, -1.7913399134667);
+	QCOMPARE(stats.skewness, 0.95754916255356);
+	QCOMPARE(stats.kurtosis, 2.1487290427258);
 	QCOMPARE(stats.entropy, 1.5);
 }
 void ColumnTest::statisticsIntNegative() {
@@ -326,8 +341,8 @@ void ColumnTest::statisticsIntNegative() {
 	QCOMPARE(stats.meanDeviation, 2.);
 	QCOMPARE(stats.meanDeviationAroundMedian, 2.);
 	QCOMPARE(stats.medianDeviation, 1.5);
-	QCOMPARE(stats.skewness, 0.323969548293623);
-	QCOMPARE(stats.kurtosis, -2.00892857142857);
+	QCOMPARE(stats.skewness, 0.49878374911084);
+	QCOMPARE(stats.kurtosis, 1.7619047619048);
 	QCOMPARE(stats.entropy, 2.);
 }
 void ColumnTest::statisticsIntBigNegative() {
@@ -361,8 +376,8 @@ void ColumnTest::statisticsIntBigNegative() {
 	QCOMPARE(stats.meanDeviation, 38.375);
 	QCOMPARE(stats.meanDeviationAroundMedian, 26.75);
 	QCOMPARE(stats.medianDeviation, 2.5);
-	QCOMPARE(stats.skewness, -0.746367760881076);
-	QCOMPARE(stats.kurtosis, -1.68988867569211);
+	QCOMPARE(stats.skewness, -1.1491083404244);
+	QCOMPARE(stats.kurtosis, 2.3290867987696);
 	QCOMPARE(stats.entropy, 2.);
 }
 void ColumnTest::statisticsIntZero() {
@@ -396,8 +411,8 @@ void ColumnTest::statisticsIntZero() {
 	QCOMPARE(stats.meanDeviation, 1.5);
 	QCOMPARE(stats.meanDeviationAroundMedian, 1.5);
 	QCOMPARE(stats.medianDeviation, 1.);
-	QCOMPARE(stats.skewness, 0.446377548104623);
-	QCOMPARE(stats.kurtosis, -1.875);
+	QCOMPARE(stats.skewness, 0.68724319348909);
+	QCOMPARE(stats.kurtosis, 2.);
 	QCOMPARE(stats.entropy, 2.);
 }
 void ColumnTest::statisticsIntOverflow() {
@@ -432,7 +447,7 @@ void ColumnTest::statisticsIntOverflow() {
 	QCOMPARE(stats.meanDeviationAroundMedian, 100000000);
 	QCOMPARE(stats.medianDeviation, 100000000);
 	QCOMPARE(stats.skewness, 0.);
-	QCOMPARE(stats.kurtosis, -2.0775);
+	QCOMPARE(stats.kurtosis, 1.64);
 	QCOMPARE(stats.entropy, 2.);
 }
 void ColumnTest::statisticsBigInt() {
@@ -468,8 +483,8 @@ void ColumnTest::statisticsBigInt() {
 	QCOMPARE(stats.meanDeviation, 5250000000);
 	QCOMPARE(stats.meanDeviationAroundMedian, 5250000000);
 	QCOMPARE(stats.medianDeviation, 5000000000);
-	QCOMPARE(stats.skewness, -0.0683349251790571);
-	QCOMPARE(stats.kurtosis, -1.87918466941373);
+	QCOMPARE(stats.skewness, -0.10520849985915);
+	QCOMPARE(stats.kurtosis, 1.9925605877089);
 	QCOMPARE(stats.entropy, 2.);
 #endif
 }
@@ -486,6 +501,224 @@ void ColumnTest::statisticsText() {
 
 	QCOMPARE(stats.size, 5);
 	QCOMPARE(stats.unique, 2);
+}
+
+void ColumnTest::statisticsMaskValues() {
+	Project project;
+	auto* c = new Column(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
+	c->setIntegers({1, 2, 3});
+	project.addChild(c);
+
+	// check the statistics
+	auto& stats1 = c->statistics();
+	QCOMPARE(stats1.size, 3);
+	QCOMPARE(stats1.minimum, 1.);
+	QCOMPARE(stats1.maximum, 3.);
+
+	// mask the last value and check the statistics
+	c->setMasked(2);
+	auto& stats2 = c->statistics();
+	QCOMPARE(stats2.size, 2);
+	QCOMPARE(stats2.minimum, 1.);
+	QCOMPARE(stats2.maximum, 2.);
+
+	// undo the masking change and check the statistics
+	project.undoStack()->undo();
+	auto& stats3 = c->statistics();
+	QCOMPARE(stats3.size, 3);
+	QCOMPARE(stats3.minimum, 1.);
+	QCOMPARE(stats3.maximum, 3.);
+
+	// redo the masking change and check the statistics
+	project.undoStack()->redo();
+	auto& stats4 = c->statistics();
+	QCOMPARE(stats4.size, 2);
+	QCOMPARE(stats4.minimum, 1.);
+	QCOMPARE(stats4.maximum, 2.);
+}
+
+void ColumnTest::statisticsClearSpreadsheetMasks() {
+	Project project;
+
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("spreadsheet"));
+	project.addChild(spreadsheet);
+	spreadsheet->setColumnCount(1);
+	spreadsheet->setRowCount(3);
+	auto* c = spreadsheet->column(0);
+	c->setValues({1., 2., 3.});
+
+	// check the statistics
+	auto& stats1 = c->statistics();
+	QCOMPARE(stats1.size, 3);
+	QCOMPARE(stats1.minimum, 1.);
+	QCOMPARE(stats1.maximum, 3.);
+
+	// mask the last value and check the statistics
+	c->setMasked(2);
+	auto& stats2 = c->statistics();
+	QCOMPARE(stats2.size, 2);
+	QCOMPARE(stats2.minimum, 1.);
+	QCOMPARE(stats2.maximum, 2.);
+
+	// clear the masked values in the spreadsheet
+	spreadsheet->clearMasks();
+	auto& stats3 = c->statistics();
+	QCOMPARE(stats3.size, 3);
+	QCOMPARE(stats3.minimum, 1.);
+	QCOMPARE(stats3.maximum, 3.);
+
+	// undo the "clear masked valus"-change and check the statistics
+	project.undoStack()->undo();
+	auto& stats4 = c->statistics();
+	QCOMPARE(stats4.size, 2);
+	QCOMPARE(stats4.minimum, 1.);
+	QCOMPARE(stats4.maximum, 2.);
+
+	// redo the "clear masked values"-change and check the statistics
+	project.undoStack()->redo();
+	auto& stats5 = c->statistics();
+	QCOMPARE(stats5.size, 3);
+	QCOMPARE(stats5.minimum, 1.);
+	QCOMPARE(stats5.maximum, 3.);
+}
+
+void ColumnTest::testFormulaAutoUpdateEnabled() {
+	Column sourceColumn(QStringLiteral("source"), Column::ColumnMode::Integer);
+	sourceColumn.setIntegers({1, 2, 3});
+
+	Column targetColumn(QStringLiteral("target"), Column::ColumnMode::Integer);
+	targetColumn.setIntegers({3, 2, 1});
+
+	// evaluatue 2*x and check the generated values in the target column
+	targetColumn.setColumnMode(AbstractColumn::ColumnMode::Double); // should happen automatically in Column::setFormula()
+	targetColumn.setFormula(QStringLiteral("2*x"),
+							QStringList{QStringLiteral("x")},
+							QVector<Column*>({&sourceColumn}),
+							true /* autoUpdate */,
+							false /* autoResize */);
+	targetColumn.updateFormula();
+	QCOMPARE(targetColumn.rowCount(), 3);
+	QCOMPARE(targetColumn.valueAt(0), 2);
+	QCOMPARE(targetColumn.valueAt(1), 4);
+	QCOMPARE(targetColumn.valueAt(2), 6);
+
+	// modify value in the source column and check the target column again which should be updated
+	sourceColumn.setIntegers({3, 2, 1});
+	QCOMPARE(targetColumn.rowCount(), 3);
+	QCOMPARE(targetColumn.valueAt(0), 6);
+	QCOMPARE(targetColumn.valueAt(1), 4);
+	QCOMPARE(targetColumn.valueAt(2), 2);
+}
+
+void ColumnTest::testFormulaAutoUpdateDisabled() {
+	Column sourceColumn(QStringLiteral("source"), Column::ColumnMode::Integer);
+	sourceColumn.setIntegers({1, 2, 3});
+
+	Column targetColumn(QStringLiteral("target"), Column::ColumnMode::Integer);
+	targetColumn.setIntegers({3, 2, 1});
+
+	// evaluatue 2*x and check the generated values in the target column
+	targetColumn.setColumnMode(AbstractColumn::ColumnMode::Double);
+	targetColumn.setFormula(QStringLiteral("2*x"),
+							QStringList{QStringLiteral("x")},
+							QVector<Column*>({&sourceColumn}),
+							false /* autoUpdate */,
+							false /* autoResize */);
+	targetColumn.updateFormula();
+	QCOMPARE(targetColumn.rowCount(), 3);
+	QCOMPARE(targetColumn.valueAt(0), 2);
+	QCOMPARE(targetColumn.valueAt(1), 4);
+	QCOMPARE(targetColumn.valueAt(2), 6);
+
+	// modify value in the source column and check the target column again which shouldn't be updated
+	sourceColumn.setIntegers({3, 2, 1});
+	QCOMPARE(targetColumn.rowCount(), 3);
+	QCOMPARE(targetColumn.valueAt(0), 2);
+	QCOMPARE(targetColumn.valueAt(1), 4);
+	QCOMPARE(targetColumn.valueAt(2), 6);
+}
+
+void ColumnTest::testFormulaAutoResizeEnabled() {
+	Column sourceColumn1(QStringLiteral("source1"), Column::ColumnMode::Integer);
+	sourceColumn1.setIntegers({1, 2, 3});
+
+	Column sourceColumn2(QStringLiteral("source2"), Column::ColumnMode::Integer);
+	sourceColumn2.setIntegers({1, 2, 3});
+
+	// spreadsheet needs to be created since the resize of the column is happening via the resize of the spreadsheet
+	Spreadsheet targetSpreadsheet(QStringLiteral("target"));
+	targetSpreadsheet.setColumnCount(1);
+	targetSpreadsheet.setRowCount(1);
+	Column* targetColumn = targetSpreadsheet.column(0);
+
+	// evaluatue x+y
+	targetColumn->setColumnMode(AbstractColumn::ColumnMode::Double);
+	targetColumn->setFormula(QStringLiteral("x+y"),
+							 QStringList{QStringLiteral("x"), QStringLiteral("y")},
+							 QVector<Column*>({&sourceColumn1, &sourceColumn2}),
+							 false /* autoUpdate */,
+							 true /* autoResize */);
+	targetColumn->updateFormula();
+
+	// check the generated values in the target column which should have been resized
+	QCOMPARE(targetColumn->rowCount(), 3);
+	QCOMPARE(targetColumn->valueAt(0), 2);
+	QCOMPARE(targetColumn->valueAt(1), 4);
+	QCOMPARE(targetColumn->valueAt(2), 6);
+}
+
+void ColumnTest::testFormulaAutoResizeDisabled() {
+	Column sourceColumn1(QStringLiteral("source1"), Column::ColumnMode::Integer);
+	sourceColumn1.setIntegers({1, 2, 3});
+
+	Column sourceColumn2(QStringLiteral("source2"), Column::ColumnMode::Integer);
+	sourceColumn2.setIntegers({1, 2, 3});
+
+	Column targetColumn(QStringLiteral("target"), Column::ColumnMode::Integer);
+	targetColumn.setIntegers({1});
+
+	// evaluatue x+y
+	targetColumn.setColumnMode(AbstractColumn::ColumnMode::Double);
+	targetColumn.setFormula(QStringLiteral("x+y"),
+							QStringList{QStringLiteral("x"), QStringLiteral("y")},
+							QVector<Column*>({&sourceColumn1, &sourceColumn2}),
+							false /* autoUpdate */,
+							false /* autoResize */);
+	targetColumn.updateFormula();
+
+	// check the generated values in the target column which should not have been resized
+	QCOMPARE(targetColumn.rowCount(), 1);
+	QCOMPARE(targetColumn.valueAt(0), 2);
+}
+
+void ColumnTest::testFormulaAutoUpdateEnabledResize() {
+	Column sourceColumn(QStringLiteral("source"), Column::ColumnMode::Integer);
+	sourceColumn.setIntegers({1, 2, 3, 4});
+
+	Column targetColumn(QStringLiteral("target"), Column::ColumnMode::Integer);
+	targetColumn.setIntegers({3, 2, 1});
+
+	// evaluatue 2*x and check the generated values in the target column
+	targetColumn.setColumnMode(AbstractColumn::ColumnMode::Double); // should happen automatically in Column::setFormula()
+	targetColumn.setFormula(QStringLiteral("2*x"),
+							QStringList{QStringLiteral("x")},
+							QVector<Column*>({&sourceColumn}),
+							true /* autoUpdate */,
+							false /* autoResize */);
+	targetColumn.updateFormula();
+	QCOMPARE(targetColumn.rowCount(), 3);
+	QCOMPARE(targetColumn.valueAt(0), 2);
+	QCOMPARE(targetColumn.valueAt(1), 4);
+	QCOMPARE(targetColumn.valueAt(2), 6);
+
+	targetColumn.insertRows(3, 1); // Rowcount of the target changes
+
+	// Values updated
+	QCOMPARE(targetColumn.rowCount(), 4);
+	QCOMPARE(targetColumn.valueAt(0), 2);
+	QCOMPARE(targetColumn.valueAt(1), 4);
+	QCOMPARE(targetColumn.valueAt(2), 6);
+	QCOMPARE(targetColumn.valueAt(3), 8);
 }
 
 void ColumnTest::testDictionaryIndex() {
@@ -1038,6 +1271,511 @@ void ColumnTest::testRemoveRow() {
 	QCOMPARE(rowsAboutToBeRemovedCounter, 3);
 	QCOMPARE(rowsInsertedCounter, 1);
 	QCOMPARE(rowsRemovedCounter, 3);
+}
+
+void ColumnTest::testFormula() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.replaceValues(-1, {1., 2., 3.});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
+
+	c2.setFormula(QStringLiteral("mean(x)"), {QStringLiteral("x")}, QVector<Column*>({&c1}), true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 7);
+	for (int i = 0; i < c2.rowCount(); i++) {
+		VALUES_EQUAL(c2.valueAt(i), 2.);
+	}
+}
+
+void ColumnTest::testFormulaCell() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.replaceValues(-1, {1., 5., -1.});
+
+	auto c3 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c3.replaceValues(-1, {3., 2., 1.});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
+
+	c2.setFormula(QStringLiteral("cell(y; x)"), {QStringLiteral("x"), QStringLiteral("y")}, QVector<Column*>({&c1, &c3}), true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 7);
+	VALUES_EQUAL(c2.valueAt(0), -1.);
+	VALUES_EQUAL(c2.valueAt(1), 5.);
+	VALUES_EQUAL(c2.valueAt(2), 1.);
+	VALUES_EQUAL(c2.valueAt(3), NAN);
+	VALUES_EQUAL(c2.valueAt(4), NAN);
+	VALUES_EQUAL(c2.valueAt(5), NAN);
+	VALUES_EQUAL(c2.valueAt(6), NAN);
+}
+
+/*!
+ * index in cell higher than rownumber
+ */
+void ColumnTest::testFormulaCellInvalid() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.replaceValues(-1, {1., 2., 3.});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
+
+	c2.setFormula(QStringLiteral("cell(10,x)"), {QStringLiteral("x")}, QVector<Column*>({&c1}), true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 7);
+	// All invalid
+	for (int i = 0; i < c2.rowCount(); i++)
+		VALUES_EQUAL(c2.valueAt(i), NAN);
+}
+
+void ColumnTest::testFormulaCellConstExpression() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.replaceValues(-1, {1., -1., 5.});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
+
+	c2.setFormula(QStringLiteral("cell(2; x)"), {QStringLiteral("x")}, QVector<Column*>({&c1}), true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 7);
+	// All invalid
+	for (int i = 0; i < c2.rowCount(); i++)
+		VALUES_EQUAL(c2.valueAt(i), -1.);
+}
+
+void ColumnTest::testFormulaCellMulti() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.replaceValues(-1, {1., -1., 5.});
+
+	auto c3 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c3.replaceValues(-1, {-5., 100., 3});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
+
+	c2.setFormula(QStringLiteral("cell(2; x) + cell(1; y)"), {QStringLiteral("x"), QStringLiteral("y")}, QVector<Column*>({&c1, &c3}), true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 7);
+	for (int i = 0; i < c2.rowCount(); i++)
+		VALUES_EQUAL(c2.valueAt(i), -6.);
+}
+
+void ColumnTest::testFormulasmmin() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.replaceValues(-1, {1., -1., 5., 5., 3., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("smmin(3; x)"), {QStringLiteral("x")}, {&c1}, true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 8);
+	VALUES_EQUAL(c2.valueAt(0), 1.);
+	VALUES_EQUAL(c2.valueAt(1), -1.);
+	VALUES_EQUAL(c2.valueAt(2), -1.);
+	VALUES_EQUAL(c2.valueAt(3), -1.);
+	VALUES_EQUAL(c2.valueAt(4), 3.);
+	VALUES_EQUAL(c2.valueAt(5), 3.);
+	VALUES_EQUAL(c2.valueAt(6), 3.);
+	VALUES_EQUAL(c2.valueAt(7), -5.);
+}
+
+void ColumnTest::testFormulasmmax() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.replaceValues(-1, {1., -1., 5., 5., 3., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("smmax(3; x)"), {QStringLiteral("x")}, QVector<Column*>({&c1}), true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 8);
+	VALUES_EQUAL(c2.valueAt(0), 1.);
+	VALUES_EQUAL(c2.valueAt(1), 1.);
+	VALUES_EQUAL(c2.valueAt(2), 5.);
+	VALUES_EQUAL(c2.valueAt(3), 5.);
+	VALUES_EQUAL(c2.valueAt(4), 5.);
+	VALUES_EQUAL(c2.valueAt(5), 8.);
+	VALUES_EQUAL(c2.valueAt(6), 10.);
+	VALUES_EQUAL(c2.valueAt(7), 10.);
+}
+
+void ColumnTest::testFormulasma() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.replaceValues(-1, {1., -1., 5., 5., 3., 8., 10., -5});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17., 18.});
+
+	c2.setFormula(QStringLiteral("sma(3; x)"), {QStringLiteral("x")}, QVector<Column*>({&c1}), true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 8);
+	VALUES_EQUAL(c2.valueAt(0), 1. / 3.);
+	VALUES_EQUAL(c2.valueAt(1), 0.);
+	VALUES_EQUAL(c2.valueAt(2), 5. / 3.);
+	VALUES_EQUAL(c2.valueAt(3), 3.);
+	VALUES_EQUAL(c2.valueAt(4), 13. / 3.);
+	VALUES_EQUAL(c2.valueAt(5), 16. / 3.);
+	VALUES_EQUAL(c2.valueAt(6), 7.);
+	VALUES_EQUAL(c2.valueAt(7), 13. / 3.);
+}
+
+void ColumnTest::testFormulapsample() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.replaceValues(-1, {10., 9., 8., 7., 6., 5., 4., 3., 2., 1.});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.replaceValues(-1, {1., 2., 3., 4., 5.});
+
+	c2.setFormula(QStringLiteral("psample(2; x)"), {QStringLiteral("x")}, QVector<Column*>({&c1}), true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 5); // set before
+	VALUES_EQUAL(c2.valueAt(0), 10.);
+	VALUES_EQUAL(c2.valueAt(1), 8.);
+	VALUES_EQUAL(c2.valueAt(2), 6.);
+	VALUES_EQUAL(c2.valueAt(3), 4.);
+	VALUES_EQUAL(c2.valueAt(4), 2.);
+}
+
+void ColumnTest::testFormularsample() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.replaceValues(-1, {1., 1., 1., 1., 2.});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.replaceValues(-1, {3., 3., 3., 3., 3.});
+
+	c2.setFormula(QStringLiteral("rsample(x)"), {QStringLiteral("x")}, QVector<Column*>({&c1}), true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 5); // set before
+
+	std::cout << c2.valueAt(0) << std::endl;
+	std::cout << c2.valueAt(1) << std::endl;
+	std::cout << c2.valueAt(2) << std::endl;
+	std::cout << c2.valueAt(3) << std::endl;
+	std::cout << c2.valueAt(4) << std::endl;
+
+	// 1. or 2. randomly
+	QVERIFY(c2.valueAt(0) == 1. || c2.valueAt(0) == 2.);
+	QVERIFY(c2.valueAt(1) == 1. || c2.valueAt(1) == 2.);
+	QVERIFY(c2.valueAt(2) == 1. || c2.valueAt(2) == 2.);
+	QVERIFY(c2.valueAt(3) == 1. || c2.valueAt(3) == 2.);
+	QVERIFY(c2.valueAt(4) == 1. || c2.valueAt(4) == 2.);
+}
+
+/////////////////////////////////////////////////////
+
+void ColumnTest::testFormulasMinColumnInvalid() {
+	const QVector<double> c1Vector = {1., -1., 5., 5., 3., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("min()", NAN) // All invalid
+}
+
+/////////////////////////////////////////////////////
+
+void ColumnTest::testFormulasSize() {
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("size(x)", 5.)
+}
+void ColumnTest::testFormulasMin() {
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("min(x)", -5.)
+}
+void ColumnTest::testFormulasMax() {
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("max(x)", 10.)
+}
+void ColumnTest::testFormulasMean() {
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("mean(x)", 13. / 5.)
+}
+void ColumnTest::testFormulasMedian() {
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("median(x)", 1.)
+}
+void ColumnTest::testFormulasStdev() {
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("stdev(x)", 6.2689712074) // calculated with octave "std"
+}
+void ColumnTest::testFormulasVar() {
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("var(x)", 39.3) // calculated with octave "var"
+}
+void ColumnTest::testFormulasGm() {
+	const QVector<double> c1Vector = {1., 100., 8., 10., 3}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("gm(x)", 7.51696) // Calculated with R exp(mean(log(x)))
+}
+void ColumnTest::testFormulasHm() {
+	const QVector<double> c1Vector = {1., -3., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("hm(x)", 7.228916) // calculated with R harmonic.mean(x)
+}
+void ColumnTest::testFormulasChm() {
+	const QVector<double> c1Vector = {1.0, 0.0, 2.0, 5.0}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("chm(x)", 3.75) // Result used from: statisticsDoubleZero()
+}
+void ColumnTest::testFormulasStatisticsMode() {
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+
+	// Calculated with R:
+	// Mode <- function(x) {
+	// ux <- unique(x)
+	//	 ux[which.max(tabulate(match(x, ux)))]
+	// }
+	// Mode(x)
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("mode(x)", NAN)
+}
+void ColumnTest::testFormulasQuartile1() {
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("quartile1(x)", -1.) // Calculated with R: summary(x)
+}
+void ColumnTest::testFormulasQuartile3() {
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("quartile3(x)", 8.) // Calculated with R: summary(x)
+}
+void ColumnTest::testFormulasIqr() {
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("iqr(x)", 9.); // Calculated with R: IQR(x)
+}
+void ColumnTest::testFormulasPercentile1() {
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("percentile1(x)", -4.84); // Calculated with R: quantile(x, 1/100)
+}
+void ColumnTest::testFormulasPercentile5() {
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("percentile5(x)", -4.2); // Calculated with R: quantile(x, 5/100)
+}
+void ColumnTest::testFormulasPercentile10() {
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("percentile10(x)", -3.4); // Calculated with R: quantile(x, 10/100)
+}
+void ColumnTest::testFormulasPercentile90() {
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("percentile90(x)", 9.2); // Calculated with R: quantile(x, 90/100)
+}
+void ColumnTest::testFormulasPercentile95() {
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("percentile95(x)", 9.6); // Calculated with R: quantile(x, 95/100)
+}
+void ColumnTest::testFormulasPercentile99() {
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("percentile99(x)", 9.92); // Calculated with R: quantile(x, 99/100)
+}
+void ColumnTest::testFormulasTrimean() {
+	const QVector<double> c1Vector = {1.0, 0.0, 2.0, 5.0}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("trimean(x)", 1.625); // Value used from statisticsDoubleZero()
+}
+void ColumnTest::testFormulasMeandev() {
+	const QVector<double> c1Vector = {1.0, 0.0, 2.0, 5.0}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("meandev(x)", 1.5); // Value used from statisticsDoubleZero()
+}
+void ColumnTest::testFormulasMeandevmedian() {
+	const QVector<double> c1Vector = {1.0, 0.0, 2.0, 5.0}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("meandevmedian(x)", 1.5); // Value used from statisticsDoubleZero()
+}
+void ColumnTest::testFormulasMediandev() {
+	const QVector<double> c1Vector = {1.0, 0.0, 2.0, 5.0}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("mediandev(x)", 1.); // Value used from statisticsDoubleZero()
+}
+void ColumnTest::testFormulasSkew() {
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("skew(x)", 0.082773441985478); // Calculated with R: skewness(x)
+}
+void ColumnTest::testFormulasKurt() {
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("kurt(x)", 1.4891031991143); // Calculated with R: kurtosis(x)
+}
+void ColumnTest::testFormulasEntropy() {
+	const QVector<double> c1Vector = {1.0, 0.0, 2.0, 5.0}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("entropy(x)", 2.); // Value from statisticsDoubleZero()
+}
+
+void ColumnTest::testFormulasQuantile() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("quantile(0.1;x)", -3.4); // Calculated with R: quantile(x, 0.1)
+}
+
+void ColumnTest::testFormulasPercentile() {
+	const QVector<double> c1Vector = {1., -1., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
+
+	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
+	COLUMN2_SET_FORMULA_AND_EVALUATE("percentile(30;x)", -0.6); // Calculated with R: quantile(x, 30/100)
+}
+
+void ColumnTest::clearContentNoFormula() {
+	Project project;
+	auto* c = new Column(QStringLiteral("Test"), Column::ColumnMode::Double);
+	project.addChild(c);
+	c->resizeTo(100);
+	QCOMPARE(c->rowCount(), 100);
+
+	for (int i = 0; i < c->rowCount(); i++)
+		c->setValueAt(i, i);
+
+	QCOMPARE(c->rowCount(), 100);
+	for (int i = 0; i < c->rowCount(); i++)
+		QCOMPARE(c->valueAt(i), i);
+
+	c->clear();
+
+	QCOMPARE(c->rowCount(), 100);
+	for (int i = 0; i < c->rowCount(); i++)
+		QCOMPARE(c->valueAt(i), NAN);
+}
+
+void ColumnTest::clearContentFormula() {
+	Project project;
+	auto* c = new Column(QStringLiteral("Test"), Column::ColumnMode::Double);
+	project.addChild(c);
+	c->resizeTo(100);
+	QCOMPARE(c->rowCount(), 100);
+
+	for (int i = 0; i < c->rowCount(); i++)
+		c->setValueAt(i, i);
+
+	QCOMPARE(c->rowCount(), 100);
+	for (int i = 0; i < c->rowCount(); i++)
+		QCOMPARE(c->valueAt(i), i);
+
+	c->setFormula(QStringLiteral("x"), {QStringLiteral("zet")}, QVector<Column*>({c}), true);
+	c->clear();
+
+	QCOMPARE(c->rowCount(), 100);
+	for (int i = 0; i < c->rowCount(); i++)
+		QCOMPARE(c->valueAt(i), NAN);
+
+	QCOMPARE(c->formula().isEmpty(), true);
+
+	c->undoStack()->undo();
+
+	QCOMPARE(c->rowCount(), 100);
+	for (int i = 0; i < c->rowCount(); i++)
+		QCOMPARE(c->valueAt(i), i);
+
+	QCOMPARE(c->formula(), QStringLiteral("x"));
+	QCOMPARE(c->formulaData().count(), 1);
+	QCOMPARE(c->formulaData().at(0).column(), c);
+	QCOMPARE(c->formulaData().at(0).variableName(), QStringLiteral("zet"));
+}
+
+void ColumnTest::testRowCountMonotonIncrease() {
+	Column c(QStringLiteral("Test"), Column::ColumnMode::Double);
+	c.replaceValues(-1, {-3., 1., 2., 5., 11.});
+
+	QCOMPARE(c.rowCount(1., 5.), 3);
+}
+
+void ColumnTest::testRowCountMonotonDecrease() {
+	Column c(QStringLiteral("Test"), Column::ColumnMode::Double);
+	c.replaceValues(-1, {11., 9., 3., -4., -154.});
+
+	QCOMPARE(c.rowCount(9., -4.), 3);
+}
+
+void ColumnTest::testRowCountNonMonoton() {
+	Column c(QStringLiteral("Test"), Column::ColumnMode::Double);
+	c.replaceValues(-1, {-3., 1., -5., 5., 11., 9., 100., 2., 4.});
+
+	QCOMPARE(c.rowCount(1., 5.), 4);
+}
+
+void ColumnTest::testRowCountDateTime() {
+	Column c(QStringLiteral("Test"), Column::ColumnMode::DateTime);
+	c.replaceDateTimes(-1,
+					   {QDateTime::fromString(QStringLiteral("2018-03-26T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs),
+						QDateTime::fromString(QStringLiteral("2018-03-27T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs),
+						QDateTime::fromString(QStringLiteral("2018-03-28T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs),
+						QDateTime::fromString(QStringLiteral("2018-03-29T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs),
+						QDateTime::fromString(QStringLiteral("2018-03-30T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs),
+						QDateTime::fromString(QStringLiteral("2018-03-31T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs)});
+
+	QCOMPARE(c.rowCount(QDateTime::fromString(QStringLiteral("2018-03-27T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs).toMSecsSinceEpoch(),
+						QDateTime::fromString(QStringLiteral("2018-03-30T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs).toMSecsSinceEpoch()),
+			 4);
+}
+
+void ColumnTest::testRowCountDateTimeMonotonDecrease() {
+	Column c(QStringLiteral("Test"), Column::ColumnMode::DateTime);
+	c.replaceDateTimes(-1,
+					   {
+						   QDateTime::fromString(QStringLiteral("2018-03-31T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs),
+						   QDateTime::fromString(QStringLiteral("2018-03-30T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs),
+						   QDateTime::fromString(QStringLiteral("2018-03-29T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs),
+						   QDateTime::fromString(QStringLiteral("2018-03-28T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs),
+						   QDateTime::fromString(QStringLiteral("2018-03-27T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs),
+						   QDateTime::fromString(QStringLiteral("2018-03-26T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs),
+					   });
+
+	QCOMPARE(c.rowCount(QDateTime::fromString(QStringLiteral("2018-03-27T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs).toMSecsSinceEpoch(),
+						QDateTime::fromString(QStringLiteral("2018-03-30T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs).toMSecsSinceEpoch()),
+			 4);
+}
+
+void ColumnTest::testRowCountValueLabels() {
+	Column c(QStringLiteral("Test"), Column::ColumnMode::Double);
+	c.addValueLabel(-2., QStringLiteral("Status 1"));
+	c.addValueLabel(-1., QStringLiteral("Status 2"));
+	c.addValueLabel(4., QStringLiteral("Status 3"));
+	c.addValueLabel(5., QStringLiteral("Status 2"));
+	c.addValueLabel(6., QStringLiteral("Status 3"));
+
+	QCOMPARE(c.valueLabelsCount(-1., 5.), 3);
+}
+
+void ColumnTest::testRowCountValueLabelsDateTime() {
+	Column c(QStringLiteral("Test"), Column::ColumnMode::DateTime);
+	c.addValueLabel(QDateTime::fromString(QStringLiteral("2018-03-26T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs), QStringLiteral("Status 1"));
+	c.addValueLabel(QDateTime::fromString(QStringLiteral("2018-03-27T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs), QStringLiteral("Status 2"));
+	c.addValueLabel(QDateTime::fromString(QStringLiteral("2018-03-28T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs), QStringLiteral("Status 3"));
+	c.addValueLabel(QDateTime::fromString(QStringLiteral("2018-03-30T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs), QStringLiteral("Status 4"));
+	c.addValueLabel(QDateTime::fromString(QStringLiteral("2018-03-31T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs), QStringLiteral("Status 5"));
+
+	QCOMPARE(c.valueLabelsCount(QDateTime::fromString(QStringLiteral("2018-03-27T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs).toMSecsSinceEpoch(),
+								QDateTime::fromString(QStringLiteral("2018-03-30T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs).toMSecsSinceEpoch()),
+			 3);
 }
 
 QTEST_MAIN(ColumnTest)

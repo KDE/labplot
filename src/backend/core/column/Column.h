@@ -13,13 +13,14 @@
 #define COLUMN_H
 
 #include "backend/core/AbstractColumn.h"
+#include "backend/nsl/nsl_sf_stats.h"
+#include <QPixmap>
 
 class AbstractSimpleFilter;
 class CartesianPlot;
 class ColumnStringIO;
 class QAction;
 class QActionGroup;
-class XmlStreamReader;
 class ColumnPrivate;
 class ColumnSetGlobalFormulaCmd;
 
@@ -66,6 +67,7 @@ public:
 	bool isReadOnly() const override;
 	void resizeTo(int);
 	int rowCount() const override;
+	int rowCount(double min, double max) const override;
 	int availableRowCount(int max = -1) const override;
 	int width() const;
 	void setWidth(const int);
@@ -73,8 +75,10 @@ public:
 	AbstractSimpleFilter* outputFilter() const;
 	ColumnStringIO* asStringColumn() const;
 
-	void setFormula(const QString& formula, const QStringList& variableNames, const QVector<Column*>& columns, bool autoUpdate);
+	// functions related to the formula used to generate column values
+	void setFormula(const QString& formula, const QStringList& variableNames, const QVector<Column*>& columns, bool autoUpdate = false, bool autoResize = true);
 	QString formula() const;
+	void clearFormula();
 	struct FormulaData {
 #if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0)) // required to use in QVector
 		FormulaData() = default;
@@ -124,7 +128,22 @@ public:
 	void setFormulVariableColumnsPath(int index, const QString& path);
 	void setFormulVariableColumn(int index, Column*);
 	bool formulaAutoUpdate() const;
+	bool formulaAutoResize() const;
 
+	// functions related to the settings used to generate random values
+	struct RandomValuesData {
+		RandomValuesData() = default;
+		bool available{false};
+		nsl_sf_stats_distribution distribution{nsl_sf_stats_gaussian};
+		double parameter1{1.};
+		double parameter2{1.};
+		double parameter3{1.};
+		ulong seed{0}; // use 0 for "no fixed seed"
+	};
+	void setRandomValuesData(const RandomValuesData&);
+	RandomValuesData randomValuesData() const;
+
+	// functions related to the cells/rows formulas
 	QString formula(int) const override;
 	QVector<Interval<int>> formulaIntervals() const override;
 	void setFormula(const Interval<int>&, const QString&) override;
@@ -135,13 +154,16 @@ public:
 	void* data() const;
 	void setData(void*);
 	bool hasValues() const;
+	bool hasValueAt(int row) const;
 	bool valueLabelsInitialized() const;
+	double valueLabelsMinimum() const;
+	double valueLabelsMaximum() const;
 	void setLabelsMode(ColumnMode mode);
 	void removeValueLabel(const QString&);
 	void valueLabelsRemoveAll();
 
 	Properties properties() const override;
-	void invalidateProperties();
+	void invalidateProperties() override;
 
 	void setFromColumn(int, AbstractColumn*, int);
 	QString textAt(int) const override;
@@ -189,7 +211,6 @@ public:
 
 	void setChanged();
 	void setSuppressDataChangedSignal(const bool);
-
 	void addUsedInPlots(QVector<CartesianPlot*>&);
 
 	// Value Labels
@@ -200,6 +221,10 @@ public:
 	};
 	AbstractColumn::ColumnMode labelsMode() const;
 	int valueLabelsCount() const;
+	int valueLabelsCount(double min, double max) const;
+	int valueLabelsIndexForValue(double x) const;
+	double valueLabelsValueAt(int index) const;
+	QString valueLabelAt(int index) const;
 	void addValueLabel(qint64, const QString&);
 	const QVector<ValueLabel<qint64>>* bigIntValueLabels() const;
 	void addValueLabel(int, const QString&);
@@ -215,9 +240,16 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 	void finalizeLoad();
 
+	typedef ColumnPrivate Private;
+
 public Q_SLOTS:
 	void pasteData();
 	void updateFormula();
+	void setSparkline(const QPixmap&);
+	QPixmap sparkline();
+
+protected:
+	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect*);
 
 private:
 	bool XmlReadInputFilter(XmlStreamReader*);
@@ -236,6 +268,8 @@ private:
 	ColumnPrivate* d;
 	ColumnStringIO* m_string_io;
 
+	QPixmap m_sparkline;
+
 Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
 	void formulaChanged(const AbstractColumn*);
@@ -247,6 +281,9 @@ private Q_SLOTS:
 
 	friend class ColumnPrivate;
 	friend class ColumnStringIO;
+	friend class ColumnRemoveRowsCmd;
+	friend class ColumnInsertRowsCmd;
+	friend class Project; // requires handleAspectUpdated()
 };
 
 #endif

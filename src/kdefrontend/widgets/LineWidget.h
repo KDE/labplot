@@ -23,7 +23,6 @@ public:
 	explicit LineWidget(QWidget*);
 
 	void setLines(const QList<Line*>&);
-	void adjustLayout();
 	void setEnabled(bool);
 	void updateLocale();
 
@@ -41,11 +40,11 @@ private:
 	QString m_prefix;
 
 	void showEvent(QShowEvent*) override;
+	void adjustLayout();
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in LineWidget
 	void typeChanged(int);
-	void capSizeChanged(double);
 
 	void styleChanged(int);
 	void colorChangedSlot(const QColor&);
@@ -54,8 +53,6 @@ private Q_SLOTS:
 
 	// SLOTs for changes triggered in Line
 	void histogramLineTypeChanged(Histogram::LineType);
-	void errorBarsTypeChanged(XYCurve::ErrorBarsType);
-	void errorBarsCapSizeChanged(double);
 	void dropLineTypeChanged(XYCurve::DropLineType);
 
 	void lineStyleChanged(Qt::PenStyle);
@@ -67,6 +64,7 @@ Q_SIGNALS:
 	void colorChanged(const QColor&);
 
 	friend class AxisTest;
+	friend class AxisTest2;
 };
 
 #endif // LINEWIDGET_H

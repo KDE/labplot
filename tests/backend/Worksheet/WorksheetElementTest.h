@@ -1,7 +1,7 @@
 /*
-	File                 : WorksheetTest.h
+	File                 : WorksheetElementTest.h
 	Project              : LabPlot
-	Description          : Tests for Worksheets and positioning them on the plot
+	Description          : Tests for WorksheetElements and positioning them on the plot
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2023 Martin Marmsoler <martin.marmsoler@gmail.com>
 
@@ -54,6 +54,18 @@ private Q_SLOTS:
 	void referenceRangeYKeyPressUp();
 
 	void referenceRangeSaveLoad();
+
+	void referenceLineLinearScaling();
+	void referenceLineLog10Scaling();
+	void referenceLineSquareScaling();
+	void referenceLineSqrtScaling();
+	void referenceLineInverseScaling();
+
+	void moveElementBefore();
+	void moveElementAfter();
+	void prepareDrawingMenu();
+
+	void moveTreeModelInteraction();
 };
 
 #endif // WORKSHEETELEMENTTEST_H

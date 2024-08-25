@@ -1,5 +1,9 @@
-add_executable (RetransformTest RetransformTest.cpp)
+option(ENABLE_TEST_BACKEND_RETRANSFORM "Enable Retransform Tests" ON)
 
-target_link_libraries(RetransformTest labplot2lib labplot2test)
+if(ENABLE_TEST_BACKEND_RETRANSFORM)
+    add_executable (RetransformTest RetransformTest.cpp)
 
-add_test(NAME RetransformTest COMMAND RetransformTest)
+    target_link_libraries(RetransformTest labplotmetatest)
+
+    add_test(NAME RetransformTest COMMAND RetransformTest)
+endif()

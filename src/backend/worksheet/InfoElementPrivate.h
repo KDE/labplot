@@ -24,7 +24,6 @@ public:
 	InfoElementPrivate(InfoElement* owner, const XYCurve*);
 
 	// reimplemented from QGraphicsItem
-	QRectF boundingRect() const override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 	void keyPressEvent(QKeyEvent*) override;
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
@@ -36,8 +35,9 @@ public:
 	void updateVerticalLine();
 	void updateConnectionLine();
 	bool changeVisibility(bool on);
+	void updateValid();
 
-	virtual void recalcShapeAndBoundingRect() override{};
+	virtual bool activate(QPointF mouseScenePos, double maxDist = -1);
 
 	// TextLabel Gluepoint
 	int gluePointIndex{-1}; // negative value means automatic mode
@@ -48,16 +48,23 @@ public:
 	Line* verticalLine{nullptr};
 	Line* connectionLine{nullptr};
 
+	bool valid{true};
+
 	// TODO
 	//	CartesianPlot* plot{nullptr};
 
 	InfoElement* const q;
 
 private:
+	void recalcShape();
+	void recalcShapeAndBoundingRect(const QRectF&);
+	virtual void recalcShapeAndBoundingRect() override;
+	virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
+
+private:
 	QPointF sceneDeltaPoint; // delta position from worksheetinfoElementPrivate to the first marker point in scene coords
 	QPointF sceneDeltaTextLabel;
 
-	QRectF boundingRectangle; // bounding rectangle of the connection line between CustomPoint and TextLabel
 	QLineF m_connectionLine; // line between CustomPoint and TextLabel
 	QLineF xposLine; // Line which connects all markerpoints, when there are more than 1
 	QPointF oldMousePos;

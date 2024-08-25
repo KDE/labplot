@@ -14,8 +14,8 @@
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 extern "C" {
 #include "backend/nsl/nsl_interp.h"
-#include <gsl/gsl_version.h>
 }
+#include <gsl/gsl_version.h>
 
 class XYInterpolationCurvePrivate;
 

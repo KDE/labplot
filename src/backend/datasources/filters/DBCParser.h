@@ -5,7 +5,10 @@
 #include <QVector>
 #ifdef HAVE_DBC_PARSER
 #include <libdbc/dbc.hpp>
+#include <libdbc/exceptions/error.hpp>
 #endif
+
+#include <vector>
 
 class QString;
 
@@ -59,7 +62,7 @@ private:
 	DbcParser::ParseStatus m_parseFileStatus{DbcParser::ParseStatus::ErrorDBCParserUnsupported};
 	// QMap<uint32_t, libdbc::Message> m_messages;
 #ifdef HAVE_DBC_PARSER
-	libdbc::DbcParser m_parser;
+	Libdbc::DbcParser m_parser;
 #endif
 };
 

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for image properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2019-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2019-2023 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -59,8 +59,8 @@ private Q_SLOTS:
 	void verticalAlignmentChanged(int);
 	void rotationChanged(int);
 
+	void lockChanged(bool);
 	void bindingChanged(bool checked);
-	void visibilityChanged(bool);
 
 	// SLOTs for changes triggered in Image
 	void imageFileNameChanged(const QString&);
@@ -77,7 +77,7 @@ private Q_SLOTS:
 	void imageVerticalAlignmentChanged(WorksheetElement::VerticalAlignment);
 	void imageRotationAngleChanged(qreal);
 
-	void imageVisibleChanged(bool);
+	void imageLockChanged(bool);
 
 Q_SIGNALS:
 	void info(const QString&);

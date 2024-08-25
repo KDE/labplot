@@ -33,6 +33,19 @@ public:
 	explicit SettingsDialog(QWidget*);
 	~SettingsDialog() override;
 
+	enum class SettingsType {
+		General,
+		Worksheet,
+		Spreadsheet,
+#ifdef HAVE_CANTOR_LIBS
+		Notebook,
+#endif
+		Datasets,
+#ifdef HAVE_KUSERFEEDBACK
+		Feedback
+#endif
+	};
+
 private Q_SLOTS:
 	void changed();
 	void slotButtonClicked(QAbstractButton*);
@@ -56,7 +69,7 @@ private:
 	void restoreDefaults();
 
 Q_SIGNALS:
-	void settingsChanged();
+	void settingsChanged(QList<SettingsType>);
 	void resetWelcomeScreen();
 };
 

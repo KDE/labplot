@@ -28,6 +28,7 @@ public:
 	explicit TreeViewComboBox(QWidget* parent = nullptr);
 
 	void setModel(AspectTreeModel*);
+	// void setModel(AbstractItemModel*) override;
 	void setCurrentModelIndex(const QModelIndex&);
 	void setAspect(const AbstractAspect*);
 	AbstractAspect* currentAspect() const;
@@ -45,6 +46,8 @@ public:
 
 	QString currentText() const;
 	void setText(const QString& text);
+
+	static QList<AspectType> plotColumnTopLevelClasses();
 
 private:
 	AspectTreeModel* m_model{nullptr};

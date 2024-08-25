@@ -11,11 +11,11 @@
 #ifndef EXPRESSIONPARSER_H
 #define EXPRESSIONPARSER_H
 
+#include "backend/gsl/parser.h"
 #include "backend/lib/Range.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
-#include <QVector>
 
-class QStringList;
+#include <QVector>
 
 class ExpressionParser {
 public:
@@ -25,8 +25,10 @@ public:
 	static QString functionArgumentString(const QString& functionName, const XYEquationCurve::EquationType);
 	QString functionDescription(const QString& function);
 	QString constantDescription(const QString& constant);
+	void setSpecialFunction1(const char* function_name, func_t1Payload funct, std::shared_ptr<Payload> payload);
+	void setSpecialFunction2(const char* function_name, func_t2Payload funct, std::shared_ptr<Payload> payload);
 
-	bool isValid(const QString& expr, const QStringList& vars);
+	static bool isValid(const QString& expr, const QStringList& vars = QStringList());
 	QStringList getParameter(const QString& expr, const QStringList& vars);
 	bool evaluateCartesian(const QString& expr,
 						   Range<double> range,
@@ -50,7 +52,7 @@ public:
 						   QVector<double>* yVector,
 						   const QStringList& paramNames,
 						   const QVector<double>& paramValues);
-	bool evaluateCartesian(const QString& expr, const QStringList& vars, const QVector<QVector<double>*>& xVectors, QVector<double>* yVector);
+	static bool evaluateCartesian(const QString& expr, const QStringList& vars, const QVector<QVector<double>*>& xVectors, QVector<double>* yVector);
 	bool evaluatePolar(const QString& expr, const QString& min, const QString& max, int count, QVector<double>* xVector, QVector<double>* yVector);
 	bool evaluateParametric(const QString& expr1,
 							const QString& expr2,
@@ -59,6 +61,7 @@ public:
 							int count,
 							QVector<double>* xVector,
 							QVector<double>* yVector);
+	QString errorMessage() const;
 
 	const QStringList& functions();
 	const QStringList& functionsGroups();

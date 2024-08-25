@@ -1,6 +1,46 @@
 #!/bin/bash
 
-BUILDDIR=build
+case $1 in
+"")
+	BUILDDIR=build
+	;;
+clang)
+	BUILDDIR=build-clang
+	export CC=clang
+	export CXX=clang++
+	;;
+clazy)
+	BUILDDIR=build-clazy
+	export CC=clang
+	export CXX=clang++
+	;;
+debug)
+	BUILDDIR=build-debug
+	;;
+devel)
+	BUILDDIR=build-devel
+	;;
+intel)
+	BUILDDIR=build-intel
+	export CC=icc
+	export CXX=icpc
+	;;
+macos)
+	BUILDDIR=build-macos
+	;;
+pgi)
+	BUILDDIR=build-pgi
+	export CC=pgcc
+	export CXX=pgc++
+	;;
+profile)
+	BUILDDIR=build-profile
+	;;
+esac
+
+echo "BUILDDIR=$BUILDDIR"
+
+THREADS="${2:-6}"
 
 if [ ! -d $BUILDDIR ]; then
 	mkdir $BUILDDIR
@@ -8,6 +48,60 @@ fi
 
 cd $BUILDDIR
 
-cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr && make -j 6
+case $1 in
+"")
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr && make -j $THREADS
 
 #cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DBUILD_COVERAGE=ON -DECM_ENABLE_SANITIZERS='address'  -DCMAKE_INSTALL_PREFIX=/usr && make -j 6
+	;;
+clang)
+cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=/usr -DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON -DENABLE_SDK=OFF && make -j $THREADS
+#cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=/usr && make -j $THREADS
+# debug
+# -ftime-trace for clang >= 9
+#cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS="-D_GNU_SOURCE -O2 -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -Wdeprecated -fno-omit-frame-pointer -fstack-protector -fno-exceptions -fsanitize=address -fsanitize=undefined -fPIE"  -DCMAKE_CXX_FLAGS="-D_GNU_SOURCE -std=c++11 -O2 -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -Wdeprecated -fno-omit-frame-pointer -fstack-protector -fno-exceptions -fsanitize=address -fsanitize=undefined -fPIE" -DCMAKE_INSTALL_PREFIX=/usr && make -j $THREADS
+# tidy
+#cmake .. -DCMAKE_BUILD_TYPE=Release -DENABLE_CLANG_TIDY=on -DCMAKE_INSTALL_PREFIX=/usr && make
+	;;
+clazy)
+#https://github.com/KDE/clazy
+# There are many checks and they are divided in levels:
+#
+# level0: Very stable checks, 99.99% safe, no false-positives
+# level1: Similar to level0, but sometimes (rarely) there might be some false-positives
+# level2: Sometimes has false-positives (20-30%).
+# level3: Not always correct, possibly very noisy, might require a knowledgeable developer to review, might have a very big rate of false-positives, might have bugs.
+
+export CLAZY_CHECKS="level2,no-qenums,no-qt-macros"
+
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="-Xclang -load -Xclang ClazyPlugin.so -Xclang -add-plugin -Xclang clazy -D_GNU_SOURCE -O2 -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -fno-omit-frame-pointer -fstack-protector -fno-exceptions" -DCMAKE_CXX_FLAGS="-D_GNU_SOURCE -std=c++11 -O2 -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -fno-omit-frame-pointer -fstack-protector -fno-exceptions" -DCMAKE_INSTALL_PREFIX=/usr && make -j $THREADS
+	;;
+debug)
+# -DCMAKE_C_FLAGS="-ftime-report" -DCMAKE_CXX_FLAGS="-ftime-report" -DENABLE_FFTW=OFF
+cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=/usr -DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON && make -j $THREADS
+	;;
+devel)
+# debug w/o tests
+cmake .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr -DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON -DENABLE_SDK=OFF && make -j $THREADS
+	;;
+intel)
+cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=/usr && make -j $THREADS
+	;;
+macos)
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/Users/user/kde ..
+# no Cantor
+#cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_CANTOR=OFF -DCMAKE_INSTALL_PREFIX=/Users/user/kde ..
+# no tests
+#cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/Users/user/kde ..
+# Debug
+# cmake -DCMAKE_BUILD_TYPE=DebugFull -DCMAKE_INSTALL_PREFIX=/Users/user/kde ..
+make -j $THREADS
+sudo make install
+	;;
+pgi)
+cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=/usr && make -k -j $THREADS
+	;;
+profile)
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="-O2 -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -fno-omit-frame-pointer -fstack-protector -fno-exceptions -pg" -DCMAKE_CXX_FLAGS="-std=c++11 -O2 -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -fno-omit-frame-pointer -fstack-protector -fno-exceptions -pg" -DCMAKE_INSTALL_PREFIX=/usr && make -j $THREADS
+	;;
+esac

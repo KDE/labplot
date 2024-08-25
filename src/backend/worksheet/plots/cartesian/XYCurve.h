@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : A xy-curve
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -12,12 +12,8 @@
 #define XYCURVE_H
 
 #include "Plot.h"
-#include "backend/lib/Range.h"
-#include "backend/lib/macros.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-
+#include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include <QFont>
-#include <QPen>
 
 class AbstractColumn;
 class Background;
@@ -58,40 +54,31 @@ public:
 	enum class DropLineType { NoDropLine, X, Y, XY, XZeroBaseline, XMinBaseline, XMaxBaseline };
 	enum class ValuesType { NoValues, X, Y, XY, XYBracketed, CustomColumn };
 	enum class ValuesPosition { Above, Under, Left, Right };
-	enum class ErrorType { NoError, Symmetric, Asymmetric };
-	enum class ErrorBarsType { Simple, WithEnds };
 
-	explicit XYCurve(const QString& name, AspectType type = AspectType::XYCurve);
+	explicit XYCurve(const QString& name, AspectType type = AspectType::XYCurve, bool loading = false);
 	~XYCurve() override;
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
-	QGraphicsItem* graphicsItem() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 	void loadThemeConfig(const KConfig&) override;
 	void saveThemeConfig(const KConfig&) override;
 	double y(double x, bool& valueFound) const;
 	QDateTime yDateTime(double x, bool& valueFound) const;
-	bool minMax(const AbstractColumn* column1,
-				const AbstractColumn* column2,
-				const ErrorType errorType,
-				const AbstractColumn* errorPlusColumn,
-				const AbstractColumn* errorMinusColumn,
-				const Range<int>& indexRange,
-				Range<double>& yRange,
-				bool includeErrorBars) const;
-	bool minMax(const CartesianCoordinateSystem::Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const;
 
-	bool activatePlot(QPointF mouseScenePos, double maxDist = -1) override;
-	void setHover(bool on) override;
+	bool minMax(const CartesianCoordinateSystem::Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const override;
+	double minimum(CartesianCoordinateSystem::Dimension dim) const override;
+	double maximum(CartesianCoordinateSystem::Dimension dim) const override;
+	bool hasData() const override;
+	bool usingColumn(const Column*) const override;
+	QColor color() const override;
 
 	const AbstractColumn* column(CartesianCoordinateSystem::Dimension dim) const;
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn)
 	CLASS_D_ACCESSOR_DECL(QString, xColumnPath, XColumnPath)
 	CLASS_D_ACCESSOR_DECL(QString, yColumnPath, YColumnPath)
-	BASIC_D_ACCESSOR_DECL(bool, legendVisible, LegendVisible)
 
 	BASIC_D_ACCESSOR_DECL(LineType, lineType, LineType)
 	BASIC_D_ACCESSOR_DECL(bool, lineSkipGaps, LineSkipGaps)
@@ -118,17 +105,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QColor, valuesColor, ValuesColor)
 	CLASS_D_ACCESSOR_DECL(QFont, valuesFont, ValuesFont)
 
-	BASIC_D_ACCESSOR_DECL(ErrorType, xErrorType, XErrorType)
-	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xErrorPlusColumn, XErrorPlusColumn)
-	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xErrorMinusColumn, XErrorMinusColumn)
-	BASIC_D_ACCESSOR_DECL(ErrorType, yErrorType, YErrorType)
-	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yErrorPlusColumn, YErrorPlusColumn)
-	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yErrorMinusColumn, YErrorMinusColumn)
-	CLASS_D_ACCESSOR_DECL(QString, xErrorPlusColumnPath, XErrorPlusColumnPath)
-	CLASS_D_ACCESSOR_DECL(QString, xErrorMinusColumnPath, XErrorMinusColumnPath)
-	CLASS_D_ACCESSOR_DECL(QString, yErrorPlusColumnPath, YErrorPlusColumnPath)
-	CLASS_D_ACCESSOR_DECL(QString, yErrorMinusColumnPath, YErrorMinusColumnPath)
-	Line* errorBarsLine() const;
+	ErrorBar* errorBar() const;
 
 	// margin plots
 	BASIC_D_ACCESSOR_DECL(bool, rugEnabled, RugEnabled)
@@ -142,7 +119,7 @@ public:
 	typedef XYCurvePrivate Private;
 
 	void retransform() override;
-	void recalcLogicalPoints();
+	void recalc() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 	double y(double x, double& x_new, bool& valueFound) const;
 	int getNextValue(double xpos, int index, double& x, double& y, bool& valueFound) const;
@@ -153,36 +130,31 @@ private Q_SLOTS:
 	void xColumnAboutToBeRemoved(const AbstractAspect*);
 	void yColumnAboutToBeRemoved(const AbstractAspect*);
 	void valuesColumnAboutToBeRemoved(const AbstractAspect*);
-	void xErrorPlusColumnAboutToBeRemoved(const AbstractAspect*);
-	void xErrorMinusColumnAboutToBeRemoved(const AbstractAspect*);
-	void yErrorPlusColumnAboutToBeRemoved(const AbstractAspect*);
-	void yErrorMinusColumnAboutToBeRemoved(const AbstractAspect*);
-	void xColumnNameChanged();
-	void yColumnNameChanged();
-	void xErrorPlusColumnNameChanged();
-	void xErrorMinusColumnNameChanged();
-	void yErrorPlusColumnNameChanged();
-	void yErrorMinusColumnNameChanged();
-	void valuesColumnNameChanged();
+
 	// SLOTs for changes triggered via QActions in the context menu
 	void navigateTo();
 
 protected:
 	XYCurve(const QString& name, XYCurvePrivate* dd, AspectType type);
+	virtual void handleAspectUpdated(const QString& aspectPath, const AbstractAspect*) override;
 
 private:
 	Q_DECLARE_PRIVATE(XYCurve)
-	void init();
+	void init(bool loading = false);
 	void initActions();
 	void connectXColumn(const AbstractColumn*);
 	void connectYColumn(const AbstractColumn*);
-	void connectXErrorPlusColumn(const AbstractColumn*);
-	void connectXErrorMinusColumn(const AbstractColumn*);
-	void connectYErrorPlusColumn(const AbstractColumn*);
-	void connectYErrorMinusColumn(const AbstractColumn*);
 	void connectValuesColumn(const AbstractColumn*);
 
-	QAction* visibilityAction{nullptr};
+	bool minMax(const AbstractColumn* column1,
+				const AbstractColumn* column2,
+				const ErrorBar::ErrorType errorType,
+				const AbstractColumn* errorPlusColumn,
+				const AbstractColumn* errorMinusColumn,
+				const Range<int>& indexRange,
+				Range<double>& yRange,
+				bool includeErrorBars) const;
+
 	QAction* navigateToAction{nullptr};
 	bool m_menusInitialized{false};
 
@@ -192,12 +164,7 @@ Q_SIGNALS:
 	// General-Tab
 	void xDataChanged();
 	void yDataChanged();
-	void xErrorPlusDataChanged();
-	void xErrorMinusDataChanged();
-	void yErrorPlusDataChanged();
-	void yErrorMinusDataChanged();
 	void valuesDataChanged();
-	void legendVisibleChanged(bool);
 	void selected(double pos);
 
 	void xColumnChanged(const AbstractColumn*);
@@ -224,14 +191,6 @@ Q_SIGNALS:
 	void valuesSuffixChanged(QString);
 	void valuesFontChanged(QFont);
 	void valuesColorChanged(QColor);
-
-	// Error bars
-	void xErrorTypeChanged(XYCurve::ErrorType);
-	void xErrorPlusColumnChanged(const AbstractColumn*);
-	void xErrorMinusColumnChanged(const AbstractColumn*);
-	void yErrorTypeChanged(XYCurve::ErrorType);
-	void yErrorPlusColumnChanged(const AbstractColumn*);
-	void yErrorMinusColumnChanged(const AbstractColumn*);
 
 	// Margin Plots
 	void rugEnabledChanged(bool);

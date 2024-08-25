@@ -32,20 +32,18 @@
 SpreadsheetDock::SpreadsheetDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	ui.teComment->setFixedHeight(1.2 * ui.leName->height());
+	setBaseWidgets(ui.leName, ui.teComment);
 
-	connect(ui.leName, &QLineEdit::textChanged, this, &SpreadsheetDock::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &SpreadsheetDock::commentChanged);
 	connect(ui.sbColumnCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &SpreadsheetDock::columnCountChanged);
 	connect(ui.sbRowCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &SpreadsheetDock::rowCountChanged);
 	connect(ui.cbShowComments, &QCheckBox::toggled, this, &SpreadsheetDock::commentsShownChanged);
+	connect(ui.cbShowSparklines, &QCheckBox::toggled, this, &SpreadsheetDock::sparklinesShownChanged);
+
 	connect(ui.cbLinkingEnabled, &QCheckBox::toggled, this, &SpreadsheetDock::linkingChanged);
 	connect(ui.cbLinkedSpreadsheet, &TreeViewComboBox::currentModelIndexChanged, this, &SpreadsheetDock::linkedSpreadsheetChanged);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Spreadsheet);
-	ui.gridLayout->addWidget(templateHandler, 16, 0, 1, 4);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("Spreadsheet"));
+	ui.gridLayout->addWidget(templateHandler, 17, 0, 1, 4);
 	templateHandler->show();
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &SpreadsheetDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &SpreadsheetDock::saveConfigAsTemplate);
@@ -79,36 +77,13 @@ void SpreadsheetDock::setSpreadsheets(const QList<Spreadsheet*> list) {
 		}
 	}
 
-	if (list.size() == 1) {
-		ui.leName->setEnabled(true);
-		ui.teComment->setEnabled(true);
+	auto* model = aspectModel();
+	model->setSelectableAspects({AspectType::Spreadsheet});
+	model->enableNumericColumnsOnly(true);
+	// model->enableNonEmptyNumericColumnsOnly(true);
 
-		ui.leName->setText(m_spreadsheet->name());
-		ui.teComment->setText(m_spreadsheet->comment());
-	} else {
-		// disable the fields "Name" and "Comment" if there are more than one spreadsheet
-		ui.leName->setEnabled(false);
-		ui.teComment->setEnabled(false);
-
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
-	}
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
-
-	const QList<AspectType> topLevelClasses = {AspectType::Spreadsheet};
-// needed for buggy compiler
-#if __cplusplus < 201103L
-	m_aspectTreeModel = std::auto_ptr<AspectTreeModel>(new AspectTreeModel(m_spreadsheet->project()));
-#else
-	m_aspectTreeModel = std::unique_ptr<AspectTreeModel>(new AspectTreeModel(m_spreadsheet->project()));
-#endif
-	m_aspectTreeModel->setSelectableAspects(topLevelClasses);
-	m_aspectTreeModel->enableNumericColumnsOnly(true);
-	// m_aspectTreeModel->enableNonEmptyNumericColumnsOnly(true);
-
-	ui.cbLinkedSpreadsheet->setTopLevelClasses(topLevelClasses);
-	ui.cbLinkedSpreadsheet->setModel(m_aspectTreeModel.get());
+	ui.cbLinkedSpreadsheet->setTopLevelClasses({AspectType::Folder, AspectType::Workbook, AspectType::Spreadsheet});
+	ui.cbLinkedSpreadsheet->setModel(model);
 
 	// don't allow to select self spreadsheet!
 	QList<const AbstractAspect*> aspects;
@@ -120,7 +95,6 @@ void SpreadsheetDock::setSpreadsheets(const QList<Spreadsheet*> list) {
 	this->load();
 
 	// undo functions
-	connect(m_spreadsheet, &AbstractAspect::aspectDescriptionChanged, this, &SpreadsheetDock::aspectDescriptionChanged);
 	connect(m_spreadsheet, &Spreadsheet::rowCountChanged, this, &SpreadsheetDock::spreadsheetRowCountChanged);
 	connect(m_spreadsheet, &Spreadsheet::columnCountChanged, this, &SpreadsheetDock::spreadsheetColumnCountChanged);
 	connect(m_spreadsheet, &Spreadsheet::linkingChanged, this, &SpreadsheetDock::spreadsheetLinkingChanged);
@@ -135,6 +109,8 @@ void SpreadsheetDock::setSpreadsheets(const QList<Spreadsheet*> list) {
 	ui.lFormat->setVisible(!nonEditable);
 	ui.lShowComments->setVisible(!nonEditable);
 	ui.cbShowComments->setVisible(!nonEditable);
+	ui.lShowSparklines->setVisible(!nonEditable);
+	ui.cbShowSparklines->setVisible(!nonEditable);
 }
 
 //*************************************************************
@@ -162,6 +138,15 @@ void SpreadsheetDock::commentsShownChanged(bool state) {
 
 	for (auto* spreadsheet : m_spreadsheetList)
 		static_cast<SpreadsheetView*>(spreadsheet->view())->showComments(state);
+}
+/*!
+  enable/disable the sparkline header in the views of the selected spreadsheets.
+*/
+void SpreadsheetDock::sparklinesShownChanged(bool state) {
+	CONDITIONAL_LOCK_RETURN;
+
+	for (auto* spreadsheet : m_spreadsheetList)
+		static_cast<SpreadsheetView*>(spreadsheet->view())->showSparkLines(state);
 }
 
 void SpreadsheetDock::linkingChanged(bool linking) {
@@ -209,6 +194,11 @@ void SpreadsheetDock::spreadsheetShowCommentsChanged(bool checked) {
 	ui.cbShowComments->setChecked(checked);
 }
 
+void SpreadsheetDock::spreadsheetShowSparklinesChanged(bool checked) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.cbShowSparklines->setChecked(checked);
+}
+
 void SpreadsheetDock::spreadsheetLinkingChanged(bool linking) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbLinkingEnabled->setChecked(linking);
@@ -216,7 +206,7 @@ void SpreadsheetDock::spreadsheetLinkingChanged(bool linking) {
 
 void SpreadsheetDock::spreadsheetLinkedSpreadsheetChanged(const Spreadsheet* spreadsheet) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.cbLinkedSpreadsheet->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(spreadsheet));
+	ui.cbLinkedSpreadsheet->setAspect(spreadsheet);
 }
 
 //*************************************************************
@@ -228,21 +218,14 @@ void SpreadsheetDock::load() {
 
 	auto* view = static_cast<SpreadsheetView*>(m_spreadsheet->view());
 	ui.cbShowComments->setChecked(view->areCommentsShown());
-
-	ui.cbLinkedSpreadsheet->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(m_spreadsheet->linkedSpreadsheet()));
+	ui.cbShowSparklines->setChecked(view->areSparkLinesShown());
+	ui.cbLinkedSpreadsheet->setAspect(m_spreadsheet->linkedSpreadsheet());
 	ui.cbLinkingEnabled->setChecked(m_spreadsheet->linking());
 	linkingChanged(m_spreadsheet->linking()); // call this to update the widgets
 }
 
 void SpreadsheetDock::loadConfigFromTemplate(KConfig& config) {
-	// extract the name of the template from the file name
-	QString name;
-	const int index = config.name().lastIndexOf(QLatin1Char('/'));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
+	auto name = TemplateHandler::templateName(config);
 	const int size = m_spreadsheetList.size();
 	if (size > 1)
 		m_spreadsheet->beginMacro(i18n("%1 spreadsheets: template \"%2\" loaded", size, name));
@@ -258,22 +241,25 @@ void SpreadsheetDock::loadConfigFromTemplate(KConfig& config) {
 	loads saved spreadsheet properties from \c config.
  */
 void SpreadsheetDock::loadConfig(KConfig& config) {
-	KConfigGroup group = config.group("Spreadsheet");
+	KConfigGroup group = config.group(QStringLiteral("Spreadsheet"));
 
-	ui.sbColumnCount->setValue(group.readEntry("ColumnCount", m_spreadsheet->columnCount()));
-	ui.sbRowCount->setValue(group.readEntry("RowCount", m_spreadsheet->rowCount()));
+	ui.sbColumnCount->setValue(group.readEntry(QStringLiteral("ColumnCount"), m_spreadsheet->columnCount()));
+	ui.sbRowCount->setValue(group.readEntry(QStringLiteral("RowCount"), m_spreadsheet->rowCount()));
 
 	auto* view = static_cast<SpreadsheetView*>(m_spreadsheet->view());
-	ui.cbShowComments->setChecked(group.readEntry("ShowComments", view->areCommentsShown()));
+	ui.cbShowComments->setChecked(group.readEntry(QStringLiteral("ShowComments"), view->areCommentsShown()));
+	ui.cbShowSparklines->setChecked(group.readEntry(QStringLiteral("ShowSparklines"), view->areSparkLinesShown()));
 }
 
 /*!
 	saves spreadsheet properties to \c config.
  */
 void SpreadsheetDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group("Spreadsheet");
-	group.writeEntry("ColumnCount", ui.sbColumnCount->value());
-	group.writeEntry("RowCount", ui.sbRowCount->value());
-	group.writeEntry("ShowComments", ui.cbShowComments->isChecked());
+	KConfigGroup group = config.group(QStringLiteral("Spreadsheet"));
+	group.writeEntry(QStringLiteral("ColumnCount"), ui.sbColumnCount->value());
+	group.writeEntry(QStringLiteral("RowCount"), ui.sbRowCount->value());
+	group.writeEntry(QStringLiteral("ShowComments"), ui.cbShowComments->isChecked());
+	group.writeEntry(QStringLiteral("ShowSparklines"), ui.cbShowSparklines->isChecked());
+
 	config.sync();
 }

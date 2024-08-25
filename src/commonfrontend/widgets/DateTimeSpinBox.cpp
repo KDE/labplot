@@ -27,6 +27,10 @@ DateTimeSpinBox::DateTimeSpinBox(QWidget* parent)
 	lineEdit()->setValidator(m_regularExpressionValidator);
 }
 
+DateTimeSpinBox::~DateTimeSpinBox() {
+	delete m_regularExpressionValidator;
+}
+
 void DateTimeSpinBox::keyPressEvent(QKeyEvent* event) {
 	if (event->key() >= Qt::Key_0 && event->key() <= Qt::Key_9) {
 		int cursorPos = lineEdit()->cursorPosition();
@@ -68,41 +72,22 @@ void DateTimeSpinBox::stepBy(int steps) {
  * Write value to lineEdit of the spinbox
  */
 void DateTimeSpinBox::writeValue() {
-	lineEdit()->setText(
-		QString::number(m_year) + QLatin1Char('.') + QStringLiteral("%1").arg(m_month, 2, 10, QLatin1Char('0')) + QLatin1Char('.')
-		+ QStringLiteral("%1").arg(m_day, 2, 10, QLatin1Char('0')) + QLatin1Char(' ') + QStringLiteral("%1").arg(m_hour, 2, 10, QLatin1Char('0'))
-		+ QLatin1Char(':') + QStringLiteral("%1").arg(m_minute, 2, 10, QLatin1Char('0')) + QLatin1Char(':')
-		+ QStringLiteral("%1").arg(m_second, 2, 10, QLatin1Char('0')) + QLatin1Char('.') + QStringLiteral("%1").arg(m_millisecond, 3, 10, QLatin1Char('0')));
+	lineEdit()->setText(QString::number(mDateTime.year) + QLatin1Char('.') + QStringLiteral("%1").arg(mDateTime.month, 2, 10, QLatin1Char('0'))
+						+ QLatin1Char('.') + QStringLiteral("%1").arg(mDateTime.day, 2, 10, QLatin1Char('0')) + QLatin1Char(' ')
+						+ QStringLiteral("%1").arg(mDateTime.hour, 2, 10, QLatin1Char('0')) + QLatin1Char(':')
+						+ QStringLiteral("%1").arg(mDateTime.minute, 2, 10, QLatin1Char('0')) + QLatin1Char(':')
+						+ QStringLiteral("%1").arg(mDateTime.second, 2, 10, QLatin1Char('0')) + QLatin1Char('.')
+						+ QStringLiteral("%1").arg(mDateTime.millisecond, 3, 10, QLatin1Char('0')));
 	Q_EMIT valueChanged();
 }
 
 void DateTimeSpinBox::setValue(qint64 increment) {
-	qint64 divisor = qint64(12) * 30 * 24 * 60 * 60 * 1000;
-	qint64 rest;
-	m_year = increment / divisor;
-	rest = increment - m_year * divisor;
-	divisor = qint64(30) * 24 * 60 * 60 * 1000;
-	m_month = rest / divisor;
-	rest = rest - m_month * divisor;
-	divisor = qint64(24) * 60 * 60 * 1000;
-	m_day = rest / divisor;
-	rest = rest - m_day * divisor;
-	divisor = qint64(60) * 60 * 1000;
-	m_hour = rest / divisor;
-	rest -= m_hour * divisor;
-	divisor = qint64(60) * 1000;
-	m_minute = rest / divisor;
-	rest -= m_minute * divisor;
-	divisor = qint64(1000);
-	m_second = rest / divisor;
-	rest -= m_second * divisor;
-	m_millisecond = rest;
-
+	mDateTime = DateTime::dateTime(increment);
 	writeValue();
 }
 
 qint64 DateTimeSpinBox::value() {
-	return m_millisecond + 1000 * (m_second + 60 * (m_minute + 60 * (m_hour + 24 * (m_day + 30 * (m_month + 12 * m_year)))));
+	return DateTime::createValue(mDateTime.year, mDateTime.month, mDateTime.day, mDateTime.hour, mDateTime.minute, mDateTime.second, mDateTime.millisecond);
 }
 
 /*!
@@ -117,25 +102,25 @@ void DateTimeSpinBox::getValue() {
 		if (text[i] == QLatin1Char('.') || text[i] == QLatin1Char(':') || text[i] == QLatin1Char(' ') || i == text.length() - 1) {
 			switch (counter) {
 			case Type::year:
-				m_year = text.midRef(startIndex, i - startIndex).toInt();
+				mDateTime.year = text.mid(startIndex, i - startIndex).toInt();
 				break;
 			case Type::month:
-				m_month = text.midRef(startIndex, i - startIndex).toInt();
+				mDateTime.month = text.mid(startIndex, i - startIndex).toInt();
 				break;
 			case Type::day:
-				m_day = text.midRef(startIndex, i - startIndex).toInt();
+				mDateTime.day = text.mid(startIndex, i - startIndex).toInt();
 				break;
 			case Type::hour:
-				m_hour = text.midRef(startIndex, i - startIndex).toInt();
+				mDateTime.hour = text.mid(startIndex, i - startIndex).toInt();
 				break;
 			case Type::minute:
-				m_minute = text.midRef(startIndex, i - startIndex).toInt();
+				mDateTime.minute = text.mid(startIndex, i - startIndex).toInt();
 				break;
 			case Type::second:
-				m_second = text.midRef(startIndex, i - startIndex).toInt();
+				mDateTime.second = text.mid(startIndex, i - startIndex).toInt();
 				break;
 			case Type::millisecond:
-				m_millisecond = text.midRef(startIndex, i - startIndex + 1).toInt(); // because of the condition (i == text.length()-1)
+				mDateTime.millisecond = text.mid(startIndex, i - startIndex + 1).toInt(); // because of the condition (i == text.length()-1)
 				break;
 			}
 			startIndex = i + 1;
@@ -168,30 +153,30 @@ bool DateTimeSpinBox::valid() {
 bool DateTimeSpinBox::increaseValue(DateTimeSpinBox::Type type, int step) {
 	switch (type) {
 	case Type::year: {
-		if (m_year + step < 0 && step < 0) {
-			m_year = 0;
+		if (mDateTime.year + step < 0 && step < 0) {
+			mDateTime.year = 0;
 			return false;
 		}
-		m_year += step;
+		mDateTime.year += step;
 		return true;
 	} break;
 	case Type::month:
-		return changeValue(m_month, Type::year, step);
+		return changeValue(mDateTime.month, Type::year, step);
 		break;
 	case Type::day:
-		return changeValue(m_day, Type::month, step);
+		return changeValue(mDateTime.day, Type::month, step);
 		break;
 	case Type::hour:
-		return changeValue(m_hour, Type::day, step);
+		return changeValue(mDateTime.hour, Type::day, step);
 		break;
 	case Type::minute:
-		return changeValue(m_minute, Type::hour, step);
+		return changeValue(mDateTime.minute, Type::hour, step);
 		break;
 	case Type::second:
-		return changeValue(m_second, Type::minute, step);
+		return changeValue(mDateTime.second, Type::minute, step);
 		break;
 	case Type::millisecond:
-		return changeValue(m_millisecond, Type::second, step);
+		return changeValue(mDateTime.millisecond, Type::second, step);
 		break;
 	default:
 		return false;

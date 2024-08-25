@@ -4,20 +4,24 @@
 	Description          : Notes Widget for taking notes
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009-2015 Garvit Khatri <garvitdelhi@gmail.com>
-	SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "Note.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
 #include "commonfrontend/note/NoteView.h"
 
+#include <QFileDialog>
+#include <QMessageBox>
 #include <QPalette>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include <QPrinter>
+#include <QTextStream>
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -26,11 +30,11 @@
 Note::Note(const QString& name)
 	: AbstractPart(name, AspectType::Note) {
 	KConfig config;
-	KConfigGroup group = config.group("Notes");
+	KConfigGroup group = config.group(QStringLiteral("Notes"));
 
-	m_backgroundColor = group.readEntry("BackgroundColor", QColor(Qt::yellow));
-	m_textColor = group.readEntry("TextColor", QColor(Qt::black));
-	m_textFont = group.readEntry("TextFont", QFont());
+	m_backgroundColor = group.readEntry(QStringLiteral("BackgroundColor"), QColor(Qt::yellow));
+	m_textColor = group.readEntry(QStringLiteral("TextColor"), QColor(Qt::black));
+	m_textFont = group.readEntry(QStringLiteral("TextFont"), QFont());
 }
 
 QIcon Note::icon() const {
@@ -40,7 +44,7 @@ QIcon Note::icon() const {
 bool Note::printView() {
 	QPrinter printer;
 	auto* dlg = new QPrintDialog(&printer, m_view);
-	dlg->setWindowTitle(i18nc("@title:window", "Print Worksheet"));
+	dlg->setWindowTitle(i18nc("@title:window", "Print Note"));
 	bool ret;
 	if ((ret = (dlg->exec() == QDialog::Accepted)))
 		m_view->print(&printer);
@@ -56,16 +60,43 @@ bool Note::printPreview() const {
 }
 
 bool Note::exportView() const {
-	return false;
+	KConfigGroup conf = Settings::group(QStringLiteral("ExportNote"));
+	QString dir = conf.readEntry("LastDir", "");
+	QString extensions = i18n("Text file (*.txt)");
+
+	const QString path = QFileDialog::getSaveFileName(view(), i18nc("@title:window", "Export to File"), dir, extensions);
+
+	if (path.isEmpty())
+		return false;
+
+	int pos = path.lastIndexOf(QStringLiteral("/"));
+	if (pos != -1) {
+		QString newDir = path.left(pos);
+		if (newDir != dir)
+			conf.writeEntry(QStringLiteral("LastDir"), newDir);
+	}
+
+	QFile file(path);
+	if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+		QMessageBox::critical(view(), i18n("Export failed"), i18n("Failed to open '%1' for writing.", path));
+		return false;
+	}
+
+	QTextStream out(&file);
+	out << m_text;
+	file.close();
+
+	return true;
 }
 
-void Note::setNote(const QString& note) {
-	m_note = note;
-	project()->setChanged(true);
+void Note::setText(const QString& text) {
+	m_text = text;
+	setProjectChanged(true);
+	Q_EMIT textChanged(text);
 }
 
-const QString& Note::note() const {
-	return m_note;
+const QString& Note::text() const {
+	return m_text;
 }
 
 void Note::setBackgroundColor(const QColor& color) {
@@ -119,7 +150,7 @@ void Note::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement(QStringLiteral("text"));
 	WRITE_QCOLOR(m_textColor);
 	WRITE_QFONT(m_textFont);
-	writer->writeAttribute(QStringLiteral("text"), m_note);
+	writer->writeAttribute(QStringLiteral("text"), m_text);
 	writer->writeEndElement();
 
 	writer->writeEndElement(); // close "note" section
@@ -134,7 +165,6 @@ bool Note::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -156,7 +186,11 @@ bool Note::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 			READ_QCOLOR(m_textColor);
 			READ_QFONT(m_textFont);
-			m_note = attribs.value(QStringLiteral("text")).toString();
+			m_text = attribs.value(QStringLiteral("text")).toString();
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 

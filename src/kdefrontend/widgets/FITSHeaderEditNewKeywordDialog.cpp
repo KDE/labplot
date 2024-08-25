@@ -8,9 +8,10 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "FITSHeaderEditNewKeywordDialog.h"
+#include "backend/core/Settings.h"
 
 #include <KMessageBox>
-#include <KSharedConfig>
+
 #include <KWindowConfig>
 #include <kcoreaddons_version.h>
 
@@ -60,7 +61,7 @@ FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget* parent)
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(KSharedConfig::openConfig(), "FITSHeaderEditNewKeywordDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("FITSHeaderEditNewKeywordDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -69,7 +70,7 @@ FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget* parent)
 }
 
 FITSHeaderEditNewKeywordDialog::~FITSHeaderEditNewKeywordDialog() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "FITSHeaderEditNewKeywordDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("FITSHeaderEditNewKeywordDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
@@ -88,11 +89,13 @@ int FITSHeaderEditNewKeywordDialog::okClicked() {
 													 i18n("Cannot add empty key"),
 													 KStandardGuiItem::ok(),
 													 KStandardGuiItem::cancel());
+		if (status == KMessageBox::SecondaryAction)
+			return QMessageBox::Cancel;
 #else
 		auto status = KMessageBox::warningYesNo(this, i18n("Cannot add new keyword without key, would you like to try again?"), i18n("Cannot add empty key"));
-#endif
 		if (status == KMessageBox::No)
 			return QMessageBox::Cancel;
+#endif
 		return status;
 	}
 }

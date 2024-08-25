@@ -55,10 +55,10 @@ void PlotArea::init() {
 	d->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
 
 	KConfig config;
-	KConfigGroup group = config.group("PlotArea");
+	KConfigGroup group = config.group(QStringLiteral("PlotArea"));
 
 	// Background
-	d->background = new Background(QString());
+	d->background = new Background(QStringLiteral("background"));
 	addChild(d->background);
 	d->background->setHidden(true);
 	d->background->init(group);
@@ -68,14 +68,10 @@ void PlotArea::init() {
 
 	// Border
 	PlotArea::BorderType type; // default value
-	type.setFlag(PlotArea::BorderTypeFlags::BorderLeft);
-	type.setFlag(PlotArea::BorderTypeFlags::BorderTop);
-	type.setFlag(PlotArea::BorderTypeFlags::BorderRight);
-	type.setFlag(PlotArea::BorderTypeFlags::BorderBottom);
-	d->borderType = static_cast<PlotArea::BorderType>(group.readEntry("BorderType", static_cast<int>(type)));
+	d->borderType = static_cast<PlotArea::BorderType>(group.readEntry(QStringLiteral("BorderType"), static_cast<int>(type)));
 
-	d->borderLine = new Line(QString());
-	d->borderLine->setPrefix(QLatin1String("Border"));
+	d->borderLine = new Line(QStringLiteral("borderLine"));
+	d->borderLine->setPrefix(QStringLiteral("Border"));
 	d->borderLine->setCreateXmlElement(false);
 	d->borderLine->setHidden(true);
 	addChild(d->borderLine);
@@ -85,9 +81,10 @@ void PlotArea::init() {
 	});
 	connect(d->borderLine, &Line::updateRequested, [=] {
 		d->recalcShapeAndBoundingRect();
+		Q_EMIT changed();
 	});
 
-	d->borderCornerRadius = group.readEntry("BorderCornerRadius", 0.0);
+	d->borderCornerRadius = group.readEntry(QStringLiteral("BorderCornerRadius"), 0.0);
 }
 
 QGraphicsItem* PlotArea::graphicsItem() const {
@@ -208,6 +205,16 @@ QPainterPath PlotAreaPrivate::shape() const {
 		path.addRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 
 	return path;
+}
+
+void PlotAreaPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
+	// Ignore context menu event and forward to next
+	QGraphicsItem::contextMenuEvent(event);
+}
+
+void PlotAreaPrivate::update() {
+	QGraphicsItem::update();
+	Q_EMIT q->changed();
 }
 
 void PlotAreaPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
@@ -373,7 +380,6 @@ bool PlotArea::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -398,11 +404,11 @@ bool PlotArea::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("borderCornerRadius")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("borderCornerRadius")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("borderCornerRadius"));
 			else
 				d->borderCornerRadius = str.toDouble();
 		} else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}
@@ -413,10 +419,10 @@ bool PlotArea::load(XmlStreamReader* reader, bool preview) {
 
 void PlotArea::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group;
-	if (config.hasGroup(QLatin1String("Theme")))
-		group = config.group("CartesianPlot");
+	if (config.hasGroup(QStringLiteral("Theme")))
+		group = config.group(QStringLiteral("CartesianPlot"));
 	else
-		group = config.group("PlotArea");
+		group = config.group(QStringLiteral("PlotArea"));
 
 	// background
 	background()->loadThemeConfig(group);
@@ -424,11 +430,11 @@ void PlotArea::loadThemeConfig(const KConfig& config) {
 	// border
 	Q_D(PlotArea);
 	d->borderLine->loadThemeConfig(group);
-	this->setBorderCornerRadius(group.readEntry("BorderCornerRadius", 0.0));
+	this->setBorderCornerRadius(group.readEntry(QStringLiteral("BorderCornerRadius"), 0.0));
 }
 
 void PlotArea::saveThemeConfig(const KConfig& config) {
-	KConfigGroup group = config.group("CartesianPlot");
+	KConfigGroup group = config.group(QStringLiteral("CartesianPlot"));
 
 	// background
 	background()->saveThemeConfig(group);
@@ -436,5 +442,5 @@ void PlotArea::saveThemeConfig(const KConfig& config) {
 	// border
 	Q_D(PlotArea);
 	d->borderLine->saveThemeConfig(group);
-	group.writeEntry("BorderCornerRadius", this->borderCornerRadius());
+	group.writeEntry(QStringLiteral("BorderCornerRadius"), this->borderCornerRadius());
 }

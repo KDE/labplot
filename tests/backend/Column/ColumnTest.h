@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Martin Marmsoler <martin.marmsoler@gmail.com>
 	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2023 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -13,9 +13,9 @@
 #ifndef COLUMNTEST_H
 #define COLUMNTEST_H
 
-#include "../../CommonTest.h"
+#include "../../CommonMetaTest.h"
 
-class ColumnTest : public CommonTest {
+class ColumnTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:
@@ -40,6 +40,16 @@ private Q_SLOTS:
 	void statisticsBigInt(); // big ints
 	void statisticsText();
 
+	void statisticsMaskValues();
+	void statisticsClearSpreadsheetMasks();
+
+	// generation of column values via a formula
+	void testFormulaAutoUpdateEnabledResize();
+	void testFormulaAutoUpdateEnabled();
+	void testFormulaAutoUpdateDisabled();
+	void testFormulaAutoResizeEnabled();
+	void testFormulaAutoResizeDisabled();
+
 	// dictionary related tests for text columns
 	void testDictionaryIndex();
 	void testTextFrequencies();
@@ -57,6 +67,61 @@ private Q_SLOTS:
 
 	void testInsertRow();
 	void testRemoveRow();
+
+	void testFormula();
+	void testFormulaCell();
+	void testFormulaCellInvalid();
+	void testFormulaCellConstExpression();
+	void testFormulaCellMulti();
+	void testFormulasmmin();
+	void testFormulasmmax();
+	void testFormulasma();
+	void testFormulapsample();
+	void testFormularsample();
+
+	void testFormulasMinColumnInvalid();
+
+	void testFormulasSize();
+	void testFormulasMin();
+	void testFormulasMax();
+	void testFormulasMean();
+	void testFormulasMedian();
+	void testFormulasStdev();
+	void testFormulasVar();
+	void testFormulasGm();
+	void testFormulasHm();
+	void testFormulasChm();
+	void testFormulasStatisticsMode();
+	void testFormulasQuartile1();
+	void testFormulasQuartile3();
+	void testFormulasIqr();
+	void testFormulasPercentile1();
+	void testFormulasPercentile5();
+	void testFormulasPercentile10();
+	void testFormulasPercentile90();
+	void testFormulasPercentile95();
+	void testFormulasPercentile99();
+	void testFormulasTrimean();
+	void testFormulasMeandev();
+	void testFormulasMeandevmedian();
+	void testFormulasMediandev();
+	void testFormulasSkew();
+	void testFormulasKurt();
+	void testFormulasEntropy();
+	void testFormulasQuantile();
+	void testFormulasPercentile();
+
+	void clearContentNoFormula();
+	void clearContentFormula();
+
+	void testRowCountMonotonIncrease();
+	void testRowCountMonotonDecrease();
+	void testRowCountNonMonoton();
+	void testRowCountDateTime();
+	void testRowCountDateTimeMonotonDecrease();
+
+	void testRowCountValueLabels();
+	void testRowCountValueLabelsDateTime();
 };
 
 #endif // COLUMNTEST_H

@@ -1,5 +1,15 @@
-add_executable (WorksheetElementTest WorksheetElementTest.cpp)
+option(ENABLE_TEST_BACKEND_WORKSHEET "Enable Worksheet Tests" ON)
 
-target_link_libraries(WorksheetElementTest labplot2lib labplot2test)
+if(ENABLE_TEST_BACKEND_WORKSHEET)
+    add_executable (WorksheetElementTest WorksheetElementTest.cpp)
 
-add_test(NAME WorksheetElementTest COMMAND WorksheetElementTest)
+    target_link_libraries(WorksheetElementTest labplotbackendlib labplotlib labplottest)
+
+    add_test(NAME WorksheetElementTest COMMAND WorksheetElementTest)
+
+    add_executable (WorksheetTest WorksheetTest.cpp)
+
+    target_link_libraries(WorksheetTest labplotbackendlib labplotlib labplottest)
+
+    add_test(NAME WorksheetTest COMMAND WorksheetTest)
+endif()

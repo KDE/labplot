@@ -53,18 +53,18 @@ void DatapickerCurve::init() {
 
 	KConfig config;
 	KConfigGroup group;
-	group = config.group("DatapickerCurve");
-	d->pointVisibility = group.readEntry("PointVisibility", true);
+	group = config.group(QStringLiteral("DatapickerCurve"));
+	d->pointVisibility = group.readEntry(QStringLiteral("PointVisibility"), true);
 
 	// error bars
-	d->curveErrorTypes.x = (ErrorType)group.readEntry("CurveErrorType_X", static_cast<int>(ErrorType::NoError));
-	d->curveErrorTypes.y = (ErrorType)group.readEntry("CurveErrorType_Y", static_cast<int>(ErrorType::NoError));
-	d->pointErrorBarSize = group.readEntry("ErrorBarSize", Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
-	d->pointErrorBarBrush.setStyle((Qt::BrushStyle)group.readEntry("ErrorBarFillingStyle", (int)Qt::NoBrush));
-	d->pointErrorBarBrush.setColor(group.readEntry("ErrorBarFillingColor", QColor(Qt::black)));
-	d->pointErrorBarPen.setStyle((Qt::PenStyle)group.readEntry("ErrorBarBorderStyle", (int)Qt::SolidLine));
-	d->pointErrorBarPen.setColor(group.readEntry("ErrorBarBorderColor", QColor(Qt::black)));
-	d->pointErrorBarPen.setWidthF(group.readEntry("ErrorBarBorderWidth", Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point)));
+	d->curveErrorTypes.x = (ErrorType)group.readEntry(QStringLiteral("CurveErrorType_X"), static_cast<int>(ErrorType::NoError));
+	d->curveErrorTypes.y = (ErrorType)group.readEntry(QStringLiteral("CurveErrorType_Y"), static_cast<int>(ErrorType::NoError));
+	d->pointErrorBarSize = group.readEntry(QStringLiteral("ErrorBarSize"), Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
+	d->pointErrorBarBrush.setStyle((Qt::BrushStyle)group.readEntry(QStringLiteral("ErrorBarFillingStyle"), (int)Qt::NoBrush));
+	d->pointErrorBarBrush.setColor(group.readEntry(QStringLiteral("ErrorBarFillingColor"), QColor(Qt::black)));
+	d->pointErrorBarPen.setStyle((Qt::PenStyle)group.readEntry(QStringLiteral("ErrorBarBorderStyle"), (int)Qt::SolidLine));
+	d->pointErrorBarPen.setColor(group.readEntry(QStringLiteral("ErrorBarBorderColor"), QColor(Qt::black)));
+	d->pointErrorBarPen.setWidthF(group.readEntry(QStringLiteral("ErrorBarBorderWidth"), Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point)));
 
 	// initialize the symbol
 	d->symbol = new Symbol(QString());
@@ -550,7 +550,6 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -587,25 +586,25 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("pointRotationAngle")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("pointRotationAngle")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("pointRotationAngle"));
 			else
 				d->symbol->setRotationAngle(str.toDouble());
 
 			str = attribs.value(QStringLiteral("pointOpacity")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("pointOpacity")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("pointOpacity"));
 			else
 				d->symbol->setOpacity(str.toDouble());
 
 			str = attribs.value(QStringLiteral("pointSize")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("pointSize")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("pointSize"));
 			else
 				d->symbol->setSize(str.toDouble());
 
 			str = attribs.value(QStringLiteral("pointStyle")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("pointStyle")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("pointStyle"));
 			else
 				d->symbol->setStyle(static_cast<Symbol::Style>(str.toInt()));
 
@@ -613,26 +612,26 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 			QBrush brush;
 			str = attribs.value(QStringLiteral("brush_style")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("brush_style")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("brush_style"));
 			else
 				brush.setStyle(static_cast<Qt::BrushStyle>(str.toInt()));
 
 			QColor color;
 			str = attribs.value(QStringLiteral("brush_color_r")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("brush_color_r")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("brush_color_r"));
 			else
 				color.setRed(str.toInt());
 
 			str = attribs.value(QStringLiteral("brush_color_g")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("brush_color_g")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("brush_color_g"));
 			else
 				color.setGreen(str.toInt());
 
 			str = attribs.value(QStringLiteral("brush_color_b")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("brush_color_b")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("brush_color_b"));
 			else
 				color.setBlue(str.toInt());
 
@@ -643,25 +642,25 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 			QPen pen;
 			str = attribs.value(QStringLiteral("style")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("style")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("style"));
 			else
 				pen.setStyle(static_cast<Qt::PenStyle>(str.toInt()));
 
 			str = attribs.value(QStringLiteral("color_r")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("color_r")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("color_r"));
 			else
 				color.setRed(str.toInt());
 
 			str = attribs.value(QStringLiteral("color_g")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("color_g")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("color_g"));
 			else
 				color.setGreen(str.toInt());
 
 			str = attribs.value(QStringLiteral("color_b")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("color_b")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("color_b"));
 			else
 				color.setBlue(str.toInt());
 
@@ -669,7 +668,7 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("width")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("width")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("width"));
 			else
 				pen.setWidthF(str.toDouble());
 
@@ -708,7 +707,7 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 				m_datasheet = datasheet;
 			}
 		} else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}

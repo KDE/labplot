@@ -1,11 +1,15 @@
-add_executable (MatrixTest MatrixTest.cpp)
+option(ENABLE_TEST_MATRIX "Enable Matrix Tests" ON)
 
-target_link_libraries(MatrixTest labplot2lib labplot2test)
+if(ENABLE_TEST_MATRIX)
+    add_executable (MatrixTest MatrixTest.cpp)
 
-add_test(NAME MatrixTest COMMAND MatrixTest)
+    target_link_libraries(MatrixTest labplotbackendlib labplotlib labplottest)
 
-add_executable (MatrixFormulaTest MatrixFormulaTest.cpp)
+    add_test(NAME MatrixTest COMMAND MatrixTest)
 
-target_link_libraries(MatrixFormulaTest labplot2lib labplot2test)
+    add_executable (MatrixFormulaTest MatrixFormulaTest.cpp)
 
-add_test(NAME MatrixFormulaTest COMMAND MatrixFormulaTest)
+    target_link_libraries(MatrixFormulaTest labplotbackendlib labplotlib labplottest)
+
+    add_test(NAME MatrixFormulaTest COMMAND MatrixFormulaTest)
+endif()

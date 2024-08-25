@@ -8,10 +8,11 @@
 */
 
 #include "HistoryDialog.h"
+#include "backend/core/Settings.h"
 
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KSharedConfig>
+
 #include <KWindowConfig>
 #include <kcoreaddons_version.h>
 
@@ -72,7 +73,7 @@ HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& 
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(KSharedConfig::openConfig(), "HistoryDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("HistoryDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -82,7 +83,7 @@ HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& 
 
 HistoryDialog::~HistoryDialog() {
 	// save dialog size
-	KConfigGroup conf(KSharedConfig::openConfig(), "HistoryDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("HistoryDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 

@@ -4,7 +4,7 @@
 	Description          : Worksheet element container - parent of multiple elements
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -16,7 +16,7 @@
 #include "backend/worksheet/ResizeItem.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/WorksheetElementContainerPrivate.h"
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/plots/cartesian/Plot.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsSceneContextMenuEvent>
@@ -36,20 +36,18 @@
 WorksheetElementContainer::WorksheetElementContainer(const QString& name, AspectType type)
 	: WorksheetElement(name, new WorksheetElementContainerPrivate(this), type) {
 	connect(this, &WorksheetElementContainer::childAspectAdded, this, &WorksheetElementContainer::handleAspectAdded);
+	connect(this, &WorksheetElementContainer::childAspectMoved, this, &WorksheetElementContainer::handleAspectMoved);
 }
 
 WorksheetElementContainer::WorksheetElementContainer(const QString& name, WorksheetElementContainerPrivate* dd, AspectType type)
 	: WorksheetElement(name, dd, type) {
 	connect(this, &WorksheetElementContainer::childAspectAdded, this, &WorksheetElementContainer::handleAspectAdded);
+	connect(this, &WorksheetElementContainer::childAspectMoved, this, &WorksheetElementContainer::handleAspectMoved);
 }
 
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
 // and is deleted during the cleanup in QGraphicsScene
 WorksheetElementContainer::~WorksheetElementContainer() = default;
-
-QGraphicsItem* WorksheetElementContainer::graphicsItem() const {
-	return const_cast<QGraphicsItem*>(static_cast<const QGraphicsItem*>(d_ptr));
-}
 
 QRectF WorksheetElementContainer::rect() const {
 	Q_D(const WorksheetElementContainer);
@@ -70,15 +68,15 @@ void WorksheetElementContainer::setVisible(bool on) {
 		beginMacro(i18n("%1: set invisible", name()));
 
 	// change the visibility of all children
-	const auto& elements = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden | AbstractAspect::ChildIndexFlag::Compress);
+	const auto& elements = children<Plot>(AbstractAspect::ChildIndexFlag::IncludeHidden | AbstractAspect::ChildIndexFlag::Compress);
 	for (auto* elem : elements) {
-		auto* curve = dynamic_cast<XYCurve*>(elem);
-		if (curve) {
+		auto* plot = dynamic_cast<Plot*>(elem);
+		if (plot) {
 			// making curves invisible triggers the recalculation of plot ranges if auto-scale is active.
 			// this should be avoided by supressing the retransformation in the curves.
-			curve->setSuppressRetransform(true);
+			plot->setSuppressRetransform(true);
 			elem->setVisible(on);
-			curve->setSuppressRetransform(false);
+			plot->setSuppressRetransform(false);
 		} else if (elem)
 			elem->setVisible(on);
 	}
@@ -122,6 +120,10 @@ void WorksheetElementContainer::retransform() {
 	PERFTRACE(QStringLiteral("WorksheetElementContainer::retransform()"));
 	Q_D(WorksheetElementContainer);
 
+	// when retransforming every child here, don't emit the changed signal for every child,
+	// emit it only once for the whole plot to avoid multiple refreshes of the worksheet preview.
+	d->suppressChanged = true;
+
 	const auto& elements = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden | AbstractAspect::ChildIndexFlag::Compress);
 	for (auto* child : elements)
 		child->retransform();
@@ -130,6 +132,9 @@ void WorksheetElementContainer::retransform() {
 
 	if (m_resizeItem)
 		m_resizeItem->setRect(rect());
+
+	d->suppressChanged = false;
+	Q_EMIT changed();
 }
 
 /*!
@@ -160,6 +165,7 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect* aspect) 
 	if (element && (aspect->parentAspect() == this)) {
 		connect(element, &WorksheetElement::hovered, this, &WorksheetElementContainer::childHovered);
 		connect(element, &WorksheetElement::unhovered, this, &WorksheetElementContainer::childUnhovered);
+		connect(element, &WorksheetElement::changed, this, &WorksheetElementContainer::childChanged);
 		element->graphicsItem()->setParentItem(d);
 
 		qreal zVal = 0;
@@ -171,21 +177,38 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect* aspect) 
 		d->recalcShapeAndBoundingRect();
 }
 
+/*!
+ * called when one of the children was moved, re-adjusts the Z-values for all children.
+ */
+void WorksheetElementContainer::handleAspectMoved() {
+	qreal zVal = 0;
+	const auto& children = this->children<WorksheetElement>(ChildIndexFlag::IncludeHidden);
+	for (auto* child : children)
+		child->setZValue(zVal++);
+}
+
 void WorksheetElementContainer::childHovered() {
 	Q_D(WorksheetElementContainer);
 	if (!d->isSelected()) {
-		if (d->m_hovered)
-			d->m_hovered = false;
-		d->update();
+		if (isHovered())
+			setHover(false);
+		else
+			d->update();
 	}
 }
 
 void WorksheetElementContainer::childUnhovered() {
 	Q_D(WorksheetElementContainer);
-	if (!d->isSelected()) {
-		d->m_hovered = true;
-		d->update();
-	}
+	if (!d->isSelected())
+		setHover(true);
+}
+
+void WorksheetElementContainer::childChanged() {
+	Q_D(WorksheetElementContainer);
+	if (d->suppressChanged)
+		return;
+
+	Q_EMIT changed();
 }
 
 void WorksheetElementContainer::prepareGeometryChange() {
@@ -209,20 +232,6 @@ void WorksheetElementContainerPrivate::contextMenuEvent(QGraphicsSceneContextMen
 	menu->exec(event->screenPos());
 }
 
-void WorksheetElementContainerPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	if (!isSelected()) {
-		m_hovered = true;
-		update();
-	}
-}
-
-void WorksheetElementContainerPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	if (m_hovered) {
-		m_hovered = false;
-		update();
-	}
-}
-
 void WorksheetElementContainerPrivate::prepareGeometryChangeRequested() {
 	prepareGeometryChange(); // this is not const!
 	recalcShapeAndBoundingRect();
@@ -240,24 +249,24 @@ void WorksheetElementContainerPrivate::recalcShapeAndBoundingRect() {
 	// 		boundingRectangle |= elem->graphicsItem()->mapRectToParent(elem->graphicsItem()->boundingRect());
 	//
 	qreal penWidth = 2.;
-	boundingRectangle = q->rect();
+	m_boundingRectangle = q->rect();
 	// QDEBUG(Q_FUNC_INFO << ", bound rect = " << boundingRectangle)
-	boundingRectangle = QRectF(-boundingRectangle.width() / 2. - penWidth / 2.,
-							   -boundingRectangle.height() / 2. - penWidth / 2.,
-							   boundingRectangle.width() + penWidth,
-							   boundingRectangle.height() + penWidth);
+	m_boundingRectangle = QRectF(-m_boundingRectangle.width() / 2. - penWidth / 2.,
+								 -m_boundingRectangle.height() / 2. - penWidth / 2.,
+								 m_boundingRectangle.width() + penWidth,
+								 m_boundingRectangle.height() + penWidth);
 
 	QPainterPath path;
-	path.addRect(boundingRectangle);
+	path.addRect(m_boundingRectangle);
 
 	// make the shape somewhat thicker than the hoveredPen to make the selection/hovering box more visible
-	containerShape = QPainterPath();
-	containerShape.addPath(WorksheetElement::shapeFromPath(path, QPen(QBrush(), penWidth)));
+	m_shape = QPainterPath();
+	m_shape.addPath(WorksheetElement::shapeFromPath(path, QPen(QBrush(), penWidth)));
 }
 
 // Inherited from QGraphicsItem
 QRectF WorksheetElementContainerPrivate::boundingRect() const {
-	return boundingRectangle;
+	return m_boundingRectangle;
 }
 
 // Inherited from QGraphicsItem
@@ -267,12 +276,12 @@ void WorksheetElementContainerPrivate::paint(QPainter* painter, const QStyleOpti
 
 	if (m_hovered && !isSelected() && !m_printing) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
-		painter->drawPath(containerShape);
+		painter->drawPath(m_shape);
 	}
 
 	if (isSelected() && !m_printing) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
-		painter->drawPath(containerShape);
+		painter->drawPath(m_shape);
 	}
 }
 

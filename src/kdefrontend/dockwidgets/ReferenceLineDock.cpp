@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dock widget for the reference line on the plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -14,14 +14,15 @@
 #include "kdefrontend/widgets/LineWidget.h"
 
 #include <KConfig>
+#include <KConfigGroup>
 #include <KLocalizedString>
 
 ReferenceLineDock::ReferenceLineDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(1.2 * m_leName->height());
+	setPlotRangeCombobox(ui.cbPlotRanges);
+	setBaseWidgets(ui.leName, ui.teComment);
+	setVisibilityWidgets(ui.chkVisible);
 
 	ui.cbOrientation->addItem(i18n("Horizontal"));
 	ui.cbOrientation->addItem(i18n("Vertical"));
@@ -32,21 +33,17 @@ ReferenceLineDock::ReferenceLineDock(QWidget* parent)
 
 	// SLOTS
 	// General
-	connect(ui.leName, &QLineEdit::textChanged, this, &ReferenceLineDock::nameChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &ReferenceLineDock::commentChanged);
-
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceLineDock::orientationChanged);
 	connect(ui.sbPosition, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ReferenceLineDock::positionLogicalChanged);
 	connect(ui.dtePosition, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &ReferenceLineDock::positionLogicalDateTimeChanged);
-	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceLineDock::plotRangeChanged);
-	connect(ui.chkVisible, &QCheckBox::clicked, this, &ReferenceLineDock::visibilityChanged);
+	connect(ui.chbLock, &QCheckBox::clicked, this, &ReferenceLineDock::lockChanged);
 
 	// Template handler
 	auto* frame = new QFrame(this);
 	auto* hlayout = new QHBoxLayout(frame);
 	hlayout->setContentsMargins(0, 11, 0, 11);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::ReferenceLine);
+	auto* templateHandler = new TemplateHandler(this, QLatin1String("ReferenceLine"));
 	hlayout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &ReferenceLineDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &ReferenceLineDock::saveConfigAsTemplate);
@@ -62,25 +59,6 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
 	setAspects(list);
 	Q_ASSERT(m_line);
 
-	// if there is more than one point in the list, disable the comment and name widgets in "general"
-	if (list.size() == 1) {
-		ui.lName->setEnabled(true);
-		ui.leName->setEnabled(true);
-		ui.lComment->setEnabled(true);
-		ui.teComment->setEnabled(true);
-		ui.leName->setText(m_line->name());
-		ui.teComment->setText(m_line->comment());
-	} else {
-		ui.lName->setEnabled(false);
-		ui.leName->setEnabled(false);
-		ui.lComment->setEnabled(false);
-		ui.teComment->setEnabled(false);
-		ui.leName->setText(QString());
-		ui.teComment->setText(QString());
-	}
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
-
 	// show the properties of the first reference line
 	this->load();
 
@@ -89,14 +67,10 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
 		lines << line->line();
 	lineWidget->setLines(lines);
 
-	updatePlotRanges();
+	updatePlotRangeList();
 
 	// SIGNALs/SLOTs
-	connect(m_line, &AbstractAspect::aspectDescriptionChanged, this, &ReferenceLineDock::aspectDescriptionChanged);
-	connect(m_line, &WorksheetElement::plotRangeListChanged, this, &ReferenceLineDock::updatePlotRanges);
-	connect(m_line, &ReferenceLine::visibleChanged, this, &ReferenceLineDock::lineVisibilityChanged);
-
-	// position
+	connect(m_line, &ReferenceLine::lockChanged, this, &ReferenceLineDock::lineLockChanged);
 	connect(m_line, &ReferenceLine::orientationChanged, this, &ReferenceLineDock::lineOrientationChanged);
 	connect(m_line, &ReferenceLine::positionLogicalChanged, this, &ReferenceLineDock::linePositionLogicalChanged);
 }
@@ -116,10 +90,6 @@ void ReferenceLineDock::updateLocale() {
 	}
 
 	lineWidget->updateLocale();
-}
-
-void ReferenceLineDock::updatePlotRanges() {
-	updatePlotRangeList(ui.cbPlotRanges);
 }
 
 void ReferenceLineDock::updateWidgetsOrientation(ReferenceLine::Orientation orientation) {
@@ -184,11 +154,11 @@ void ReferenceLineDock::positionLogicalDateTimeChanged(qint64 pos) {
 	}
 }
 
-void ReferenceLineDock::visibilityChanged(bool state) {
+void ReferenceLineDock::lockChanged(bool locked) {
 	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* line : m_linesList)
-		line->setVisible(state);
+		line->setLock(locked);
 }
 
 //*************************************************************
@@ -210,9 +180,9 @@ void ReferenceLineDock::lineOrientationChanged(ReferenceLine::Orientation orient
 	ui.cbOrientation->setCurrentIndex(static_cast<int>(orientation));
 }
 
-void ReferenceLineDock::lineVisibilityChanged(bool on) {
+void ReferenceLineDock::lineLockChanged(bool on) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.chkVisible->setChecked(on);
+	ui.chbLock->setChecked(on);
 }
 
 //**********************************************************
@@ -246,25 +216,19 @@ void ReferenceLineDock::load() {
 		}
 	}
 
+	ui.chbLock->setChecked(m_line->isLocked());
 	ui.chkVisible->setChecked(m_line->isVisible());
 }
 
 void ReferenceLineDock::loadConfigFromTemplate(KConfig& config) {
-	// extract the name of the template from the file name
-	QString name;
-	int index = config.name().lastIndexOf(QLatin1String("/"));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
+	auto name = TemplateHandler::templateName(config);
 	int size = m_linesList.size();
 	if (size > 1)
 		m_line->beginMacro(i18n("%1 reference lines: template \"%2\" loaded", size, name));
 	else
 		m_line->beginMacro(i18n("%1: template \"%2\" loaded", m_line->name(), name));
 
-	lineWidget->loadConfig(config.group("ReferenceLine"));
+	lineWidget->loadConfig(config.group(QStringLiteral("ReferenceLine")));
 
 	m_line->endMacro();
 }

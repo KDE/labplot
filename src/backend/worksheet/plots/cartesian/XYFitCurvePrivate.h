@@ -11,6 +11,7 @@
 #ifndef XYFITCURVEPRIVATE_H
 #define XYFITCURVEPRIVATE_H
 
+#include "backend/note/Note.h"
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 
@@ -18,9 +19,7 @@ class XYFitCurve;
 class Column;
 class Histogram;
 
-extern "C" {
 #include <gsl/gsl_multifit_nlin.h>
-}
 
 class XYFitCurvePrivate : public XYAnalysisCurvePrivate {
 public:
@@ -30,6 +29,7 @@ public:
 	virtual bool recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) override;
 	virtual void prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) override;
 	virtual void resetResults() override;
+	void updateResultsNote();
 	void runLevenbergMarquardt(const AbstractColumn* xcol, const AbstractColumn* ycol, Range<double> xRange);
 	void runMaximumLikelihood(const AbstractColumn* xcol, double normalization);
 	bool evaluate(bool preview = false);
@@ -47,6 +47,7 @@ public:
 
 	Column* residualsColumn{nullptr};
 	QVector<double>* residualsVector{nullptr};
+	Note* resultsNote{nullptr};
 
 	XYFitCurve* const q;
 

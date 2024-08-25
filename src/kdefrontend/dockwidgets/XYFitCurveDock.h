@@ -33,10 +33,10 @@ public:
 
 private:
 	void initGeneralTab() override;
-	void updatePlotRanges() override;
 	void updateSettings(const AbstractColumn*);
 	void showFitResult();
 	bool eventFilter(QObject*, QEvent*) override;
+	void checkDataColumns(); // check if data columns are available and contain data
 
 	Ui::XYFitCurveDockGeneralTab uiGeneralTab;
 	TreeViewComboBox* cbDataSourceCurve{nullptr};
@@ -108,7 +108,6 @@ private Q_SLOTS:
 	void curveYErrorColumnChanged(const AbstractColumn*);
 	void curveFitDataChanged(const XYFitCurve::FitData&);
 	void dataChanged();
-	void curveVisibilityChanged(bool);
 };
 
 #endif

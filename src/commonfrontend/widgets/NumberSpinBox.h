@@ -17,6 +17,7 @@ class NumberSpinBox : public QDoubleSpinBox {
 public:
 	struct NumberProperties {
 		QChar integerSign;
+		bool groupSeparators;
 		int integer;
 		int intergerDigits;
 
@@ -98,7 +99,7 @@ private:
 	double m_maximum{std::numeric_limits<double>::max()};
 	double m_minimum{std::numeric_limits<double>::lowest()};
 
-	friend class WidgetsTest;
+	friend class SpinBoxTest;
 };
 
 #endif // NUMBERSPINBOX_H

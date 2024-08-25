@@ -11,12 +11,11 @@
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
 #include <QTableWidget>
 #include <QTreeWidget>
 
-class QStringList;
 class QXmlStreamReader;
 class FITSFilterPrivate;
 class FITSHeaderEditWidget;
@@ -28,8 +27,7 @@ public:
 	FITSFilter();
 	~FITSFilter() override;
 
-	void
-	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
+	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
 	QVector<QStringList> readChdu(const QString& fileName, bool* okToMatrix = nullptr, int lines = -1);
 	void save(QXmlStreamWriter*) const override;
@@ -84,9 +82,6 @@ public:
 	static QStringList mandatoryImageExtensionKeywords();
 	static QStringList mandatoryTableExtensionKeywords();
 	static QStringList units();
-
-	void loadFilterSettings(const QString&) override;
-	void saveFilterSettings(const QString&) const override;
 
 	void setStartRow(const int);
 	int startRow() const;

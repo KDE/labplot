@@ -4,7 +4,7 @@
 	Description          : import online dataset widget
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2019 Kovacs Ferencz <kferike98@gmail.com>
-	SPDX-FileCopyrightText: 2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2019-2023 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -59,6 +59,7 @@ private:
 	QNetworkAccessManager* m_networkManager;
 	QJsonArray m_collections;
 	QJsonObject m_datasetObject;
+	QString m_collectionDescription;
 	QString m_datasetDescription;
 
 	void updateDatasetCompleter();

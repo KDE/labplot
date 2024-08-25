@@ -13,7 +13,7 @@
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
-#include "backend/lib/macros.h"
+#include "backend/lib/trace.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
@@ -24,9 +24,12 @@
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/worksheet/plots/cartesian/KDEPlot.h"
+#include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "kdefrontend/GuiTools.h"
 
 #include <QTabWidget>
 #include <QTextEdit>
@@ -39,10 +42,10 @@
 
 extern "C" {
 #include "backend/nsl/nsl_kde.h"
+}
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_statistics.h>
-}
 
 StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* parent)
 	: QWidget(parent)
@@ -53,7 +56,7 @@ StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* pa
 	layout->addWidget(m_tabWidget);
 	setLayout(layout);
 
-	const QString htmlColor = DARKMODE ? QLatin1String("#5f5f5f") : QLatin1String("#D1D1D1");
+	const QString htmlColor = GuiTools::isDarkMode() ? QLatin1String("#5f5f5f") : QLatin1String("#D1D1D1");
 	// clang-format off
 	if (column->isNumeric()) {
 		m_htmlOverview = QStringLiteral("<table border=0 width=100%><tr><td colspan=2 align=center bgcolor=") + htmlColor
@@ -73,18 +76,19 @@ StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* pa
 			+ QStringLiteral("<tr></tr>")
 			+ QStringLiteral("<tr><td colspan=2 align=center bgcolor=") + htmlColor + QStringLiteral("><b><big>")
 			+ i18n("Dispersion Measures") + QStringLiteral("</big></b></td></tr>")
-			+ QStringLiteral("<tr><td><b>") + i18n("Variance") + QStringLiteral("<b></td><td>%13</td></tr>")
-			+ QStringLiteral("<tr><td><b>") + i18n("Standard deviation") + QStringLiteral("<b></td><td>%14</td></tr>")
-			+ QStringLiteral("<tr><td><b>") + i18n("Mean absolute deviation around mean") + QStringLiteral("<b></td><td>%15</td></tr>")
-			+ QStringLiteral("<tr><td><b>") + i18n("Mean absolute deviation around median") + QStringLiteral("<b></td><td>%16</td></tr>")
-			+ QStringLiteral("<tr><td><b>") + i18n("Median absolute deviation") + QStringLiteral("<b></td><td>%17</td></tr>")
-			+ QStringLiteral("<tr><td><b>") + i18n("Interquartile Range") + QStringLiteral("<b></td><td>%18</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Range") + QStringLiteral("<b></td><td>%13</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Variance") + QStringLiteral("<b></td><td>%14</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Standard deviation") + QStringLiteral("<b></td><td>%15</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Mean absolute deviation around mean") + QStringLiteral("<b></td><td>%16</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Mean absolute deviation around median") + QStringLiteral("<b></td><td>%17</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Median absolute deviation") + QStringLiteral("<b></td><td>%18</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Interquartile Range") + QStringLiteral("<b></td><td>%19</td></tr>")
 			+ QStringLiteral("<tr></tr>")
 			+ QStringLiteral("<tr><td colspan=2 align=center bgcolor=") + htmlColor + QStringLiteral("><b><big>")
 			+ i18n("Shape Measures") + QStringLiteral("</big></b></td></tr>")
-			+ QStringLiteral("<tr><td><b>") + i18n("Skewness") + QStringLiteral("<b></td><td>%19</td></tr>")
-			+ QStringLiteral("<tr><td><b>") + i18n("Kurtosis") + QStringLiteral("<b></td><td>%20</td></tr>")
-			+ QStringLiteral("<tr><td><b>") + i18n("Entropy") + QStringLiteral("<b></td><td>%21</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Skewness") + QStringLiteral("<b></td><td>%20</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Kurtosis") + QStringLiteral("<b></td><td>%21</td></tr>")
+			+ QStringLiteral("<tr><td><b>") + i18n("Entropy") + QStringLiteral("<b></td><td>%22</td></tr>")
 			+ QStringLiteral("</table>");
 	} else if (column->columnMode() == AbstractColumn::ColumnMode::Text) {
 		m_htmlOverview = QStringLiteral("<table border=0 width=100%><tr><td colspan=2 align=center bgcolor=")
@@ -135,7 +139,7 @@ StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* pa
 									   QLatin1String("-"),
 									   QLatin1String("-"),
 									   QLatin1String("-"))
-								  .arg(QLatin1String("-"), QLatin1String("-"), QLatin1String("-")));
+								  .arg(QLatin1String("-"), QLatin1String("-"), QLatin1String("-"), QLatin1String("-")));
 		m_tabWidget->addTab(&m_histogramWidget, i18n("Histogram"));
 		m_tabWidget->addTab(&m_kdePlotWidget, i18n("KDE Plot"));
 		m_tabWidget->addTab(&m_qqPlotWidget, i18n("Normal Q-Q Plot"));
@@ -206,6 +210,7 @@ void StatisticsColumnWidget::showOverview() {
 								  .arg(isNanValue(statistics.median),
 									   isNanValue(statistics.thirdQuartile),
 									   isNanValue(statistics.trimean),
+									   isNanValue(statistics.maximum - statistics.minimum),
 									   isNanValue(statistics.variance),
 									   isNanValue(statistics.standardDeviation),
 									   isNanValue(statistics.meanDeviation),
@@ -216,7 +221,7 @@ void StatisticsColumnWidget::showOverview() {
 	} else if (m_column->columnMode() == AbstractColumn::ColumnMode::Text) {
 		// add the frequencies table
 		const auto& frequencies = m_column->frequencies();
-		const QString htmlColor = DARKMODE ? QStringLiteral("#5f5f5f") : QStringLiteral("#D1D1D1");
+		const QString htmlColor = GuiTools::isDarkMode() ? QStringLiteral("#5f5f5f") : QStringLiteral("#D1D1D1");
 		m_htmlOverview += QStringLiteral("<br><table border=0 width=100%>") + QStringLiteral("<tr>") + QStringLiteral("<td colspan=3 align=center bgcolor=")
 			+ htmlColor + QStringLiteral("><b><big>") + i18n("Frequency Table") + QStringLiteral("</big><b></td>") + QStringLiteral("</tr>")
 			+ QStringLiteral("<tr>") + QStringLiteral("<td width=60%></td>") + QStringLiteral("<td>") + i18n("Frequency") + QStringLiteral("</td>")
@@ -286,6 +291,7 @@ void StatisticsColumnWidget::showOverviewPlot() {
 
 	// x
 	auto* xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
+	m_project->addChild(xColumn);
 	int rows = m_column->rowCount();
 	QVector<int> xData;
 	xData.resize(rows);
@@ -354,44 +360,13 @@ void StatisticsColumnWidget::showKDEPlot() {
 	histogram->setNormalization(Histogram::ProbabilityDensity);
 	histogram->setDataColumn(m_column);
 
-	// copy the non-nan and not masked values
-	QVector<double> data;
-	copyValidData(data);
+	// add KDE Plot
+	auto* kdePlot = new KDEPlot(QString());
+	plot->addChild(kdePlot);
+	kdePlot->setKernelType(nsl_kernel_gauss);
+	kdePlot->setBandwidthType(nsl_kde_bandwidth_silverman);
+	kdePlot->setDataColumn(m_column);
 
-	// calculate 200 points to plot
-	int count = 200;
-	QVector<double> xData;
-	QVector<double> yData;
-	xData.resize(count);
-	yData.resize(count);
-	double min = *std::min_element(data.constBegin(), data.constEnd());
-	double max = *std::max_element(data.constBegin(), data.constEnd());
-	double step = (max - min) / count;
-	int n = data.count();
-	double h = std::max(nsl_kde_normal_dist_bandwith(data.data(), n), 1e-6);
-	for (int i = 0; i < count; ++i) {
-		double x = min + i * step;
-		xData[i] = x;
-		yData[i] = nsl_kde(data.data(), x, h, n);
-	}
-
-	auto* xColumn = new Column(QStringLiteral("x"));
-	xColumn->setValues(xData);
-
-	auto* yColumn = new Column(QStringLiteral("y"));
-	yColumn->setValues(yData);
-
-	// add KDE curve
-	auto* curve = new XYCurve(QString());
-	curve->setSuppressRetransform(false);
-	plot->addChild(curve);
-	curve->line()->setStyle(Qt::SolidLine);
-	curve->symbol()->setStyle(Symbol::Style::NoSymbols);
-	curve->background()->setPosition(Background::Position::No);
-	curve->setXColumn(xColumn);
-	curve->setYColumn(yColumn);
-
-	curve->setSuppressRetransform(false);
 	plot->retransform();
 	m_kdePlotInitialized = true;
 }
@@ -411,78 +386,10 @@ void StatisticsColumnWidget::showQQPlot() {
 	}
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
-	// copy the non-nan and not masked values into a new vector
-	QVector<double> rawData;
-	copyValidData(rawData);
-	size_t n = rawData.count();
+	auto* qqPlot = new QQPlot(QString());
+	plot->addChild(qqPlot);
+	qqPlot->setDataColumn(m_column);
 
-	// sort the data to calculate the percentiles
-	std::sort(rawData.begin(), rawData.end());
-
-	// calculate y-values - the percentiles for the column data
-	Column* yColumn = new Column(QStringLiteral("y"));
-	m_project->addChildFast(yColumn);
-	QVector<double> yData;
-	for (int i = 1; i < 100; ++i)
-		yData << gsl_stats_quantile_from_sorted_data(rawData.data(), 1, n, double(i) / 100.);
-
-	yColumn->setValues(yData);
-
-	// calculate x-values - the percentiles for the standard normal distribution
-	Column* xColumn = new Column(QStringLiteral("x"));
-	m_project->addChildFast(xColumn);
-	QVector<double> xData;
-	for (int i = 1; i < 100; ++i)
-		xData << gsl_cdf_gaussian_Pinv(double(i) / 100., 1.0);
-
-	xColumn->setValues(xData);
-
-	// add curve with the quantiles
-	auto* curve = new XYCurve(QString());
-	curve->setSuppressRetransform(true);
-	plot->addChild(curve);
-	curve->line()->setStyle(Qt::NoPen);
-	curve->symbol()->setStyle(Symbol::Style::Circle);
-	curve->background()->setPosition(Background::Position::No);
-	curve->setXColumn(xColumn);
-	curve->setYColumn(yColumn);
-
-	// add the reference line connecting (x1, y1) = (-0.6745, Q1) and (x2, y2) = (0.6745, Q2)
-	double y1 = gsl_stats_quantile_from_sorted_data(rawData.data(), 1, n, 0.25);
-	double y2 = gsl_stats_quantile_from_sorted_data(rawData.data(), 1, n, 0.75);
-	double x1 = -0.6745;
-	double x2 = 0.6745;
-
-	// we only want do show the line starting from x = PInv(0.01) = -2.32635
-	// and going to x = PInv(0.99) = 2.32635;
-	double k = (y2 - y1) / (x2 - x1);
-	double b = y1 - k * x1;
-	double x1New = -2.32635;
-	double x2New = 2.32635;
-	double y1New = k * x1New + b;
-	double y2New = k * x2New + b;
-
-	Column* xColumn2 = new Column(QStringLiteral("x2"));
-	m_project->addChildFast(xColumn2);
-	xColumn2->setValueAt(0, x1New);
-	xColumn2->setValueAt(1, x2New);
-
-	Column* yColumn2 = new Column(QStringLiteral("y2"));
-	m_project->addChildFast(yColumn2);
-	yColumn2->setValueAt(0, y1New);
-	yColumn2->setValueAt(1, y2New);
-
-	auto* curve2 = new XYCurve(QStringLiteral("2"));
-	curve2->setSuppressRetransform(true);
-	plot->addChild(curve2);
-	curve2->line()->setStyle(Qt::SolidLine);
-	curve2->symbol()->setStyle(Symbol::Style::NoSymbols);
-	curve2->background()->setPosition(Background::Position::No);
-	curve2->setXColumn(xColumn2);
-	curve2->setYColumn(yColumn2);
-
-	curve->setSuppressRetransform(false);
-	curve2->setSuppressRetransform(false);
 	plot->retransform();
 	m_qqPlotInitialized = true;
 }
@@ -534,9 +441,11 @@ void StatisticsColumnWidget::showBarPlot() {
 	// generate columns holding the data and the labels
 	auto* dataColumn = new Column(QStringLiteral("data"));
 	dataColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	m_project->addChild(dataColumn);
 
 	auto* labelsColumn = new Column(QStringLiteral("labels"));
 	labelsColumn->setColumnMode(AbstractColumn::ColumnMode::Text);
+	m_project->addChild(labelsColumn);
 
 	// sort the frequencies and the accompanying labels
 	const auto& frequencies = m_column->frequencies();
@@ -624,12 +533,15 @@ void StatisticsColumnWidget::showParetoPlot() {
 
 	auto* dataColumn = new Column(QStringLiteral("data"));
 	dataColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	m_project->addChild(dataColumn);
 
 	auto* xColumn = new Column(QStringLiteral("x"));
 	xColumn->setColumnMode(AbstractColumn::ColumnMode::Double);
+	m_project->addChild(xColumn);
 	QVector<double> xData(count);
 
 	auto* yColumn = new Column(QStringLiteral("y"));
+	m_project->addChild(yColumn);
 	QVector<double> yData(count);
 
 	auto* labelsColumn = new Column(QStringLiteral("labels"));

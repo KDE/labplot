@@ -10,14 +10,12 @@
 #ifndef CARTESIANPLOTTEST_H
 #define CARTESIANPLOTTEST_H
 
-#include <QtTest>
+#include "../CommonTest.h"
 
-class CartesianPlotTest : public QObject {
+class CartesianPlotTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void initTestCase();
-
 	// change data in spreadsheet source
 	void changeData1();
 	void changeData2();
@@ -50,6 +48,23 @@ private Q_SLOTS:
 
 	void invalidcSystem();
 
+	void invalidStartValueLogScaling();
+
 	void autoScaleFitCurveCalculation();
+
+	void wheelEventCenterAxes();
+	void wheelEventNotCenter();
+
+	void wheelEventOutsideTopLeft();
+	void wheelEventOutsideBottomRight();
+
+	// checks after modifications in/on spreadsheet
+	void spreadsheetRemoveRows();
+	void spreadsheetInsertRows();
+	void columnRemove();
+	void spreadsheetRemove();
+
+	// handling of z-values on changes in the child hierarchy
+	void zValueAfterAddMoveRemove();
 };
 #endif

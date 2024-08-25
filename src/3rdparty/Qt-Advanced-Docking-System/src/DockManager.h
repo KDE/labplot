@@ -55,6 +55,8 @@ class CIconProvider;
 class CDockComponentsFactory;
 class CDockFocusController;
 class CAutoHideSideBar;
+class CAutoHideTab;
+struct AutoHideTabPrivate;
 
 /**
  * The central dock manager that maintains the complete docking system.
@@ -87,6 +89,14 @@ private:
 	friend class CDockAreaTitleBar;
 	friend class CAutoHideDockContainer;
 	friend CAutoHideSideBar;
+	friend CAutoHideTab;
+	friend AutoHideTabPrivate;
+
+public Q_SLOTS:
+	/**
+	 * Ends the isRestoringFromMinimizedState
+	 */
+	void endLeavingMinimizedState();
 
 
 protected:
@@ -144,7 +154,7 @@ protected:
 	virtual void showEvent(QShowEvent *event) override;
 
 	/**
-	 * Acces for the internal dock focus controller.
+	 * Access for the internal dock focus controller.
 	 * This function only returns a valid object, if the FocusHighlighting
 	 * flag is set.
 	 */
@@ -203,6 +213,8 @@ public:
 														 //!< If neither this nor FloatingContainerForceNativeTitleBar is set (the default) native titlebars are used except on known bad systems.
 														 //! Users can overwrite this by setting the environment variable ADS_UseNativeTitle to "1" or "0".
 		MiddleMouseButtonClosesTab = 0x2000000, //! If the flag is set, the user can use the mouse middle button to close the tab under the mouse
+		DisableTabTextEliding =      0x4000000, //! Set this flag to disable eliding of tab texts in dock area tabs
+		ShowTabTextOnlyForActiveTab =0x8000000, //! Set this flag to show label texts in dock area tabs only for active tabs
 
         DefaultDockAreaButtons = DockAreaHasCloseButton
 							   | DockAreaHasUndockButton
@@ -239,9 +251,14 @@ public:
 		AutoHideButtonCheckable = 0x08, //!< If the flag is set, the auto hide button will be checked and unchecked depending on the auto hide state. Mainly for styling purposes.
 		AutoHideSideBarsIconOnly = 0x10,///< show only icons in auto hide side tab - if a tab has no icon, then the text will be shown
 		AutoHideShowOnMouseOver = 0x20, ///< show the auto hide window on mouse over tab and hide it if mouse leaves auto hide container
+		AutoHideCloseButtonCollapsesDock = 0x40, ///< Close button of an auto hide container collapses the dock instead of hiding it completely
+		AutoHideHasCloseButton = 0x80, //< If the flag is set an auto hide title bar has a close button
+		AutoHideHasMinimizeButton = 0x100, ///< if this flag is set, the auto hide title bar has a minimize button to collapse the dock widget
 
 		DefaultAutoHideConfig = AutoHideFeatureEnabled
-			                  | DockAreaHasAutoHideButton ///< the default configuration for left and right side bars
+			                  | DockAreaHasAutoHideButton
+			                  | AutoHideHasMinimizeButton
+
 	};
     Q_DECLARE_FLAGS(AutoHideFlags, eAutoHideFlag)
 
@@ -528,7 +545,7 @@ public:
 	 * The order defines how the actions are added to the view menu.
 	 * The default insertion order is MenuAlphabeticallySorted to make it
 	 * easier for users to find the menu entry for a certain dock widget.
-	 * You need to call this function befor you insert the first menu item
+	 * You need to call this function before you insert the first menu item
 	 * into the view menu.
 	 */
 	void setViewMenuInsertionOrder(eViewMenuInsertionOrder Order);
@@ -538,6 +555,15 @@ public:
 	 * stateRestored() signals.
 	 */
 	bool isRestoringState() const;
+
+	/**
+	 * This function returns true, if the DockManager window is restoring from
+	 * minimized state.
+	 * The DockManager is in this state starting from the QWindowStateChangeEvent
+	 * that signals the state change from minimized to normal until
+	 * endLeavingMinimizedState() function is called.
+	 */
+	bool isLeavingMinimizedState() const;
 
 	/**
 	 * The distance the user needs to move the mouse with the left button
@@ -560,9 +586,7 @@ public:
 		widget->setFocus(Qt::OtherFocusReason);
 	}
 
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MACOS)
 	bool eventFilter(QObject *obj, QEvent *e) override;
-#endif
 
 	/**
 	 * Returns the dock widget that has focus style in the ui or a nullptr if
@@ -605,6 +629,68 @@ public:
 	 * QGuiApplication::applicationDisplayName().
 	 */
 	static QString floatingContainersTitle();
+
+    /**
+     * This function sets the tool button style for the given dock widget state.
+     * It is possible to switch the tool button style depending on the state.
+     * If a dock widget is floating, then here are more space and it is
+     * possible to select a style that requires more space like
+     * Qt::ToolButtonTextUnderIcon. For the docked state Qt::ToolButtonIconOnly
+     * might be better.
+     */
+    void setDockWidgetToolBarStyle(Qt::ToolButtonStyle Style, CDockWidget::eState State);
+
+    /**
+     * Returns the tool button style for the given docking state.
+     * \see setToolBarStyle()
+     */
+    Qt::ToolButtonStyle dockWidgetToolBarStyle(CDockWidget::eState State) const;
+
+    /**
+     * This function sets the tool button icon size for the given state.
+     * If a dock widget is floating, there is more space and increasing the
+     * icon size is possible. For docked widgets, small icon sizes, eg. 16 x 16
+     * might be better.
+     */
+    void setDockWidgetToolBarIconSize(const QSize& IconSize, CDockWidget::eState State);
+
+    /**
+     * Returns the icon size for a given docking state.
+     * \see setToolBarIconSize()
+     */
+    QSize dockWidgetToolBarIconSize(CDockWidget::eState State) const;
+
+    /**
+     * Returns all dock widget features that are globally locked by the dock
+     * manager.
+     * Globally locked features are removed from the features of all dock
+     * widgets.
+     */
+    CDockWidget::DockWidgetFeatures globallyLockedDockWidgetFeatures() const;
+
+    /**
+     * Globally Lock features of all dock widgets to "freeze" the current
+     * workspace layout.
+     * For example, it is now possible to lock the workspace to avoid
+     * accidentally dragging a docked view. Locking wasn’t possible before.
+     * So, users had to manually dock it back to the desired place after
+     * each accidental undock.
+     * You can use a combination of the following feature flags:
+     * - CDockWidget::DockWidgetClosable
+     * - CDockWidget::DockWidgetMovable
+     * - CDockWidget::DockWidgetFloatable
+     * - CDockWidget::DockWidgetPinable
+     *
+     * To clear the locked features, you can use CDockWidget::NoDockWidgetFeatures
+     * The following code shows how to lock and unlock dock widget features
+     * globally.
+     *
+     * \code
+     * DockManager->lockDockWidgetFeaturesGlobally();
+     * DockManager->lockDockWidgetFeaturesGlobally(CDockWidget::NoDockWidgetFeatures);
+     * \code
+     */
+    void lockDockWidgetFeaturesGlobally(CDockWidget::DockWidgetFeatures Features = CDockWidget::GloballyLockableFeatures);
 
 public Q_SLOTS:
 	/**

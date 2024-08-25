@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Value
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -22,7 +22,7 @@ class Value : public AbstractAspect {
 
 public:
 	enum Type { NoValues, BinEntries, CustomColumn };
-	enum Position { Above, Under, Left, Right };
+	enum Position { Above, Under, Left, Right, Center };
 
 	explicit Value(const QString& name);
 	~Value() override;
@@ -38,7 +38,9 @@ public:
 	BASIC_D_ACCESSOR_DECL(Type, type, Type)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, column, Column)
 	QString& columnPath() const;
+	void setColumnPath(const QString&);
 	BASIC_D_ACCESSOR_DECL(Position, position, Position)
+	BASIC_D_ACCESSOR_DECL(bool, centerPositionAvailable, centerPositionAvailable)
 	BASIC_D_ACCESSOR_DECL(double, distance, Distance)
 	BASIC_D_ACCESSOR_DECL(double, rotationAngle, RotationAngle)
 	BASIC_D_ACCESSOR_DECL(double, opacity, Opacity)

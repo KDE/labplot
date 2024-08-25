@@ -302,8 +302,10 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 					const QString& backendName = reader->attributes().value(QStringLiteral("backend_name")).toString().trimmed();
 					if (!backendName.isEmpty())
 						reader->raiseMissingCASWarning(backendName);
-				} else
-					reader->skipToEndElement();
+				} else {
+					if (!reader->skipToEndElement())
+						return false;
+				}
 			}
 		}
 #endif

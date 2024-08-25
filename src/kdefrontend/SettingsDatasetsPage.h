@@ -19,15 +19,19 @@ class SettingsDatasetsPage : public SettingsPage {
 public:
 	explicit SettingsDatasetsPage(QWidget*);
 
-	void applySettings() override;
+	bool applySettings() override;
 	void restoreDefaults() override;
 
 private:
 	Ui::SettingsDatasetsPage ui;
 	void loadSettings();
+	bool m_changed{false};
 
 private Q_SLOTS:
 	void clearCache();
+
+Q_SIGNALS:
+	void settingsChanged();
 };
 
 #endif

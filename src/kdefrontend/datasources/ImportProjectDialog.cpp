@@ -3,13 +3,14 @@
 	Project              : LabPlot
 	Description          : import project dialog
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2017-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "ImportProjectDialog.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/datasources/projects/LabPlotProjectParser.h"
 #ifdef HAVE_LIBORIGIN
 #include "backend/datasources/projects/OriginProjectParser.h"
@@ -20,7 +21,6 @@
 
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KSharedConfig>
 #include <KUrlComboBox>
 #include <KWindowConfig>
 #include <kcoreaddons_version.h>
@@ -29,8 +29,10 @@
 #include <QDir>
 #include <QElapsedTimer>
 #include <QFileDialog>
+#include <QFileSystemModel>
 #include <QInputDialog>
 #include <QProgressBar>
+#include <QSortFilterProxyModel>
 #include <QStatusBar>
 #include <QWindow>
 
@@ -45,11 +47,10 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type)
 	, m_mainWin(parent)
 	, m_projectType(type)
 	, m_aspectTreeModel(new AspectTreeModel(parent->project())) {
-	auto* vLayout = new QVBoxLayout(this);
-
 	// main widget
 	auto* mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
+	ui.lUnusedObjects->hide();
 	ui.chbUnusedObjects->hide();
 
 	m_cbFileName = new KUrlComboBox(KUrlComboBox::Mode::Files, this);
@@ -58,6 +59,7 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type)
 	if (l)
 		l->insertWidget(1, m_cbFileName);
 
+	auto* vLayout = new QVBoxLayout(this);
 	vLayout->addWidget(mainWidget);
 
 	ui.tvPreview->setAnimated(true);
@@ -95,7 +97,6 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type)
 	});
 	connect(ui.bOpen, &QPushButton::clicked, this, &ImportProjectDialog::selectFile);
 	connect(m_bNewFolder, &QPushButton::clicked, this, &ImportProjectDialog::newFolder);
-	connect(ui.chbUnusedObjects, &QCheckBox::toggled, this, &ImportProjectDialog::refreshPreview);
 	connect(m_buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
 	connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
@@ -132,7 +133,7 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type)
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportProjectDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportProjectDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -145,10 +146,39 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type)
 	case ProjectType::LabPlot:
 		file = QStringLiteral("LastImportedLabPlotProject");
 		files = QStringLiteral("LastImportedLabPlotProjects");
+		ui.lGraphLayer->hide();
+		ui.cbGraphLayer->hide();
 		break;
 	case ProjectType::Origin:
 		file = QStringLiteral("LastImportedOriginProject");
 		files = QStringLiteral("LastImportedOriginProjects");
+
+		ui.chbUnusedObjects->setChecked(conf.readEntry(QStringLiteral("ShowUnusedObjects"), false));
+		connect(ui.chbUnusedObjects, &QCheckBox::toggled, this, &ImportProjectDialog::refreshPreview);
+
+		// add options to control how to read Origin's graph layers - as new plot areas or as new coordinate systems
+		ui.cbGraphLayer->addItem(i18n("As Plot Area"));
+		ui.cbGraphLayer->addItem(i18n("As Coordinate System"));
+		ui.cbGraphLayer->setCurrentIndex(conf.readEntry(QStringLiteral("GraphLayer"), 0));
+
+		// show more info for https://www.originlab.com/doc/Origin-Help/MultiLayer-Graph
+		info = i18n("Specify how to import multi-layered graphs.");
+		ui.lGraphLayer->setToolTip(info);
+		ui.cbGraphLayer->setToolTip(info);
+
+		info = i18n(
+			"Multiple layers are used in Origin to either implement multiple plots or multiple axes on the same plot "
+			"(see <a href=\"https://www.originlab.com/doc/Origin-Help/MultiLayer-Graph\">Origin's Documentation</a> for more details)."
+			"LabPlot can process only one type at the same time."
+			"<br><br>"
+			"Specify how to import multi-layered graphs in the selected project:"
+			"<ul>"
+			"<li>As Plot Area - a new plot area is created for every layer.</li>"
+			"<li>As Coordinate System - a new coordinate system (data range) on the same plot area is created for every layer</li>"
+			"</ul>");
+
+		ui.lGraphLayer->setWhatsThis(info);
+		ui.cbGraphLayer->setWhatsThis(info);
 		break;
 	}
 
@@ -162,7 +192,7 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type)
 
 ImportProjectDialog::~ImportProjectDialog() {
 	// save current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportProjectDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportProjectDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 
 	QString file;
@@ -175,11 +205,16 @@ ImportProjectDialog::~ImportProjectDialog() {
 	case ProjectType::Origin:
 		file = QStringLiteral("LastImportedOriginProject");
 		files = QStringLiteral("LastImportedOriginProjects");
+		conf.writeEntry(QStringLiteral("GraphLayer"), ui.cbGraphLayer->currentIndex());
+		conf.writeEntry(QStringLiteral("ShowUnusedObjects"), ui.chbUnusedObjects->isChecked());
 		break;
 	}
 
 	conf.writeEntry(file, m_cbFileName->currentText());
 	conf.writeXdgListEntry(files, m_cbFileName->urls());
+
+	delete ui.tvPreview->model();
+	delete m_projectParser;
 }
 
 void ImportProjectDialog::setCurrentFolder(const Folder* folder) {
@@ -187,13 +222,20 @@ void ImportProjectDialog::setCurrentFolder(const Folder* folder) {
 }
 
 void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
-	DEBUG("ImportProjectDialog::importTo()");
+	DEBUG(Q_FUNC_INFO)
 
-	// determine the selected objects, convert the model indexes to string pathes
-	const QModelIndexList& indexes = ui.tvPreview->selectionModel()->selectedIndexes();
+	// determine the selected objects.
+	// in case only the root index (first row corresponding to the project node) was selected, select all children to import everything.
+	const auto& selectedRows = ui.tvPreview->selectionModel()->selectedRows();
+	if (selectedRows.count() == 1 && selectedRows.constFirst().row() == 0)
+		ui.tvPreview->selectAll();
+
+	const auto& indexes = ui.tvPreview->selectionModel()->selectedIndexes();
+
+	// convert the model indexes to string pathes:
 	QStringList selectedPathes;
 	for (int i = 0; i < indexes.size() / 4; ++i) {
-		QModelIndex index = indexes.at(i * 4);
+		const auto& index = indexes.at(i * 4);
 		const auto* aspect = static_cast<const AbstractAspect*>(index.internalPointer());
 
 		// path of the current aspect and the pathes of all aspects it depends on
@@ -204,11 +246,11 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 	}
 	selectedPathes.removeDuplicates();
 
-	Folder* targetFolder = static_cast<Folder*>(m_cbAddTo->currentModelIndex().internalPointer());
+	auto* targetFolder = static_cast<Folder*>(m_cbAddTo->currentModelIndex().internalPointer());
 
-	// check whether the selected pathes already exist in the target folder and warn the user
-	const QString& targetFolderPath = targetFolder->path();
-	const Project* targetProject = targetFolder->project();
+	// check whether the selected paths already exist in the target folder and warn the user
+	const auto& targetFolderPath = targetFolder->path();
+	const auto* targetProject = targetFolder->project();
 	QStringList targetAllPathes;
 	for (const auto* aspect : targetProject->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::Recursive)) {
 		if (aspect && !dynamic_cast<const Folder*>(aspect))
@@ -238,11 +280,13 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 #if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
 		auto status =
 			KMessageBox::warningTwoActions(nullptr, msg, i18n("Override existing objects?"), KStandardGuiItem::overwrite(), KStandardGuiItem::cancel());
+		if (status == KMessageBox::SecondaryAction)
+			return;
 #else
 		auto status = KMessageBox::warningYesNo(nullptr, msg, i18n("Override existing objects?"));
-#endif
 		if (status == KMessageBox::No)
 			return;
+#endif
 	}
 
 	// show a progress bar in the status bar
@@ -262,8 +306,13 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 	connect(m_projectParser, &ProjectParser::completed, progressBar, &QProgressBar::setValue);
 
 #ifdef HAVE_LIBORIGIN
-	if (m_projectType == ProjectType::Origin && ui.chbUnusedObjects->isVisible() && ui.chbUnusedObjects->isChecked())
-		reinterpret_cast<OriginProjectParser*>(m_projectParser)->setImportUnusedObjects(true);
+	if (m_projectType == ProjectType::Origin) {
+		auto* originParser = reinterpret_cast<OriginProjectParser*>(m_projectParser);
+		if (ui.chbUnusedObjects->isVisible() && ui.chbUnusedObjects->isChecked())
+			originParser->setImportUnusedObjects(true);
+
+		originParser->setGraphLayerAsPlotArea(ui.cbGraphLayer->currentIndex() == 0);
+	}
 #endif
 
 	m_projectParser->importTo(targetFolder, selectedPathes);
@@ -283,17 +332,21 @@ void ImportProjectDialog::refreshPreview() {
 #ifdef HAVE_LIBORIGIN
 	if (m_projectType == ProjectType::Origin) {
 		auto* originParser = reinterpret_cast<OriginProjectParser*>(m_projectParser);
-		if (originParser->hasUnusedObjects())
-			ui.chbUnusedObjects->show();
-		else
-			ui.chbUnusedObjects->hide();
+		bool hasUnusedObjects = false;
+		bool hasMultiLayerGraphs = false;
+		originParser->checkContent(hasUnusedObjects, hasMultiLayerGraphs);
 
-		originParser->setImportUnusedObjects(ui.chbUnusedObjects->isVisible() && ui.chbUnusedObjects->isChecked());
+		ui.lUnusedObjects->setVisible(hasUnusedObjects);
+		ui.chbUnusedObjects->setVisible(hasUnusedObjects);
+		originParser->setImportUnusedObjects(hasUnusedObjects && ui.chbUnusedObjects->isChecked());
+
+		ui.lGraphLayer->setVisible(hasMultiLayerGraphs);
+		ui.cbGraphLayer->setVisible(hasMultiLayerGraphs);
 	}
 #endif
 
+	delete ui.tvPreview->model();
 	ui.tvPreview->setModel(m_projectParser->model());
-
 	connect(ui.tvPreview->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ImportProjectDialog::selectionChanged);
 
 	// show top-level containers only
@@ -326,7 +379,7 @@ void ImportProjectDialog::showTopLevelOnly(const QModelIndex& index) {
 	checks whether \c aspect is one of the allowed top level types
 */
 bool ImportProjectDialog::isTopLevel(const AbstractAspect* aspect) const {
-	foreach (AspectType type, m_projectParser->topLevelClasses()) {
+	for (auto type : m_projectParser->topLevelClasses()) {
 		if (aspect->inherits(type))
 			return true;
 	}
@@ -362,11 +415,24 @@ void ImportProjectDialog::selectionChanged(const QItemSelection& selected, const
 		m_buttonBox->button(QDialogButtonBox::Ok)->setToolTip(i18n("Select object(s) to be imported."));
 }
 
+class OPJFilterProxyModel : public QSortFilterProxyModel {
+protected:
+	virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override;
+};
+
+bool OPJFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const {
+	const auto& index0 = sourceModel()->index(sourceRow, 0, sourceParent);
+	const auto* fileModel = qobject_cast<QFileSystemModel*>(sourceModel());
+	return fileModel->fileName(index0).indexOf(QStringLiteral(".opju")) < 0;
+	// uncomment to call the default implementation
+	// return QSortFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
+}
+
 /*!
 	opens a file dialog and lets the user select the project file.
 */
 void ImportProjectDialog::selectFile() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportProjectDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportProjectDialog"));
 
 	QString title;
 	QString lastDir;
@@ -380,17 +446,29 @@ void ImportProjectDialog::selectFile() {
 		break;
 	case ProjectType::Origin:
 #ifdef HAVE_LIBORIGIN
-		title = i18nc("@title:window", "Open Origin Project");
-		lastDirConfEntryName = QStringLiteral("LastImportOriginProjecttDir");
-		supportedFormats = i18n("Origin Projects (%1)", OriginProjectParser::supportedExtensions());
+		title = i18nc("@title:window", "Open Origin OPJ Project");
+		lastDirConfEntryName = QStringLiteral("LastImportOriginProjectDir");
+		supportedFormats = i18n("Origin OPJ Projects (%1)", OriginProjectParser::supportedExtensions());
 #endif
 		break;
 	}
 
 	lastDir = conf.readEntry(lastDirConfEntryName, "");
-	QString path = QFileDialog::getOpenFileName(this, title, lastDir, supportedFormats);
+
+	QString path;
+	if (m_projectType == ProjectType::Origin) { // need custom filter to avoid matching .opju files
+		QFileDialog dialog(this, title, lastDir);
+		dialog.setOption(QFileDialog::DontUseNativeDialog);
+		dialog.setProxyModel(new OPJFilterProxyModel);
+		dialog.setNameFilter(supportedFormats);
+		dialog.setFileMode(QFileDialog::ExistingFile);
+		if (dialog.exec())
+			path = dialog.selectedFiles().first();
+	} else
+		path = QFileDialog::getOpenFileName(this, title, lastDir, supportedFormats);
+
 	if (path.isEmpty())
-		return; // cancel was clicked in the file-dialog
+		return; // cancel was clicked in the file dialog
 
 	int pos = path.lastIndexOf(QLatin1Char('/'));
 	if (pos != -1) {
@@ -423,6 +501,7 @@ void ImportProjectDialog::fileNameChanged(const QString& name) {
 	if (!fileExists) {
 		// file doesn't exist -> delete the content preview that is still potentially
 		// available from the previously selected file
+		delete ui.tvPreview->model();
 		ui.tvPreview->setModel(nullptr);
 		m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 		return;

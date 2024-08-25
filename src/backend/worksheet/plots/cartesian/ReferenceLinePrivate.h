@@ -22,27 +22,16 @@ public:
 	void retransform() override;
 	void recalcShapeAndBoundingRect() override;
 	void updateOrientation();
-
-	bool m_hovered{false};
-
-	QRectF boundingRectangle;
-	QPainterPath lineShape;
+	void updatePositionLimit();
 
 	ReferenceLine::Orientation orientation{ReferenceLine::Orientation::Horizontal};
 	double length{0.0}; // length of the line in graphic item's coordinates
 	Line* line{nullptr};
 
 	// reimplemented from QGraphicsItem
-	QRectF boundingRect() const override;
-	QPainterPath shape() const override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	ReferenceLine* const q;
-
-private:
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 };
 
 #endif

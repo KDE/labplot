@@ -4,7 +4,7 @@
 	Description          : widget for project properties
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2012-2013 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
-	SPDX-FileCopyrightText: 2013-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -23,73 +23,71 @@
 ProjectDock::ProjectDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
-	m_leName = ui.leName;
-	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(1.2 * m_leName->height());
+	setBaseWidgets(ui.leName, ui.teComment);
 
-	QString msg = i18n(
+	QString msg = i18n("If checked, the state of the default application docks is saved in the project file and restored on project load.");
+	ui.lSaveDockStates->setToolTip(msg);
+	ui.chkSaveDockStates->setToolTip(msg);
+
+	msg = i18n(
 		"If checked, the results of the calculations in the analysis curves will be saved in the project file.\n"
 		"Uncheck this option to reduce the size of the project file at costs of the longer project load times.");
-
 	ui.lSaveCalculations->setToolTip(msg);
 	ui.chkSaveCalculations->setToolTip(msg);
 
 	// SLOTS
-	connect(ui.leName, &QLineEdit::textChanged, this, &ProjectDock::nameChanged);
 	connect(ui.leAuthor, &QLineEdit::textChanged, this, &ProjectDock::authorChanged);
-	connect(ui.teComment, &QTextEdit::textChanged, this, &ProjectDock::commentChanged);
+	connect(ui.chkSaveDockStates, &QCheckBox::toggled, this, &ProjectDock::saveDockStatesChanged);
 	connect(ui.chkSaveCalculations, &QCheckBox::toggled, this, &ProjectDock::saveCalculationsChanged);
 }
 
 void ProjectDock::setProject(Project* project) {
+	CONDITIONAL_LOCK_RETURN;
 	m_project = project;
 	setAspects(QList<Project*>({project}));
 
-	CONDITIONAL_LOCK_RETURN;
 	ui.leFileName->setText(project->fileName());
-	ui.leName->setStyleSheet(QString());
-	ui.leName->setToolTip(QString());
-	ui.leName->setText(m_project->name());
 	ui.leAuthor->setText(m_project->author());
-
-	ui.teComment->setText(m_project->comment());
-
-	// resize the height of the comment field to fit the content (word wrap is ignored)
-	const QFont& font = ui.teComment->document()->defaultFont();
-	QFontMetrics fontMetrics(font);
-	const QSize& textSize = fontMetrics.size(0, m_project->comment());
-	double height = textSize.height() + 50;
-	ui.teComment->setMinimumSize(0, height);
-	ui.teComment->resize(ui.teComment->width(), height);
 
 	ui.lVersion->setText(project->version());
 	ui.lCreated->setText(project->creationTime().toString());
 	ui.lModified->setText(project->modificationTime().toString());
+	ui.chkSaveDockStates->setChecked(project->saveDefaultDockWidgetState());
 
 	bool visible = !project->children<XYAnalysisCurve>(AbstractAspect::ChildIndexFlag::Recursive).isEmpty();
-	ui.lSettings->setVisible(visible);
-	ui.lineSettings->setVisible(visible);
 	ui.lSaveCalculations->setVisible(visible);
 	ui.chkSaveCalculations->setVisible(visible);
 	ui.chkSaveCalculations->setChecked(project->saveCalculations());
 
-	connect(m_project, &Project::aspectDescriptionChanged, this, &ProjectDock::aspectDescriptionChanged);
+	// resize the height of the comment field to fit the content (word wrap is ignored)
+	const double height = ui.teComment->document()->size().height() + ui.teComment->contentsMargins().top() * 2;
+	// HACK: we set the fixed height first and then set the min and max values back to the default ones,
+	// other methods don't seem to properly trigger the update of the layout and we don't get the proper
+	// widgets sizes in the dock widget.
+	ui.teComment->setFixedHeight(height);
+	ui.teComment->setMinimumHeight(0);
+	ui.teComment->setMaximumHeight(16777215);
+
 	connect(m_project, &Project::authorChanged, this, &ProjectDock::projectAuthorChanged);
+	connect(m_project, &Project::saveDefaultDockWidgetStateChanged, this, &ProjectDock::projectSaveDockStatesChanged);
 	connect(m_project, &Project::saveCalculationsChanged, this, &ProjectDock::projectSaveCalculationsChanged);
 }
 
 //************************************************************
-//****************** SLOTS ********************************
+//********************* SLOTS ********************************
 //************************************************************
 void ProjectDock::authorChanged() {
 	CONDITIONAL_LOCK_RETURN;
-
 	m_project->setAuthor(ui.leAuthor->text());
+}
+
+void ProjectDock::saveDockStatesChanged(bool state) {
+	CONDITIONAL_LOCK_RETURN;
+	m_project->setSaveDefaultDockWidgetState(state);
 }
 
 void ProjectDock::saveCalculationsChanged(bool state) {
 	CONDITIONAL_LOCK_RETURN;
-
 	m_project->setSaveCalculations(state);
 }
 
@@ -99,6 +97,11 @@ void ProjectDock::saveCalculationsChanged(bool state) {
 void ProjectDock::projectAuthorChanged(const QString& author) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.leAuthor->setText(author);
+}
+
+void ProjectDock::projectSaveDockStatesChanged(bool b) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.chkSaveDockStates->setChecked(b);
 }
 
 void ProjectDock::projectSaveCalculationsChanged(bool b) {

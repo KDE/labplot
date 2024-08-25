@@ -43,6 +43,7 @@ public:
 	Q_DECLARE_FLAGS(TicksDirection, TicksFlags)
 
 	enum class TicksType { TotalNumber, Spacing, CustomColumn, CustomValues, ColumnLabels };
+	Q_ENUM(TicksType)
 	enum class ArrowType { NoArrow, SimpleSmall, SimpleBig, FilledSmall, FilledBig, SemiFilledSmall, SemiFilledBig };
 	enum class ArrowPosition { Left, Right, Both };
 	enum class LabelsPosition { NoLabels, In, Out };
@@ -93,13 +94,11 @@ public:
 
 	typedef AxisPrivate Private; // for Axis::Private used in macros instead of AxisPrivate
 
-	explicit Axis(const QString&, Orientation = Orientation::Horizontal);
+	explicit Axis(const QString&, Orientation = Orientation::Horizontal, bool loading = false);
 	~Axis() override;
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
-
-	QGraphicsItem* graphicsItem() const override;
 	void setZValue(qreal) override;
 
 	void save(QXmlStreamWriter*) const override;
@@ -110,11 +109,9 @@ public:
 	BASIC_D_ACCESSOR_DECL(RangeType, rangeType, RangeType)
 	BASIC_D_ACCESSOR_DECL(Orientation, orientation, Orientation)
 	BASIC_D_ACCESSOR_DECL(Position, position, Position)
-	BASIC_D_ACCESSOR_DECL(Range<double>, range, Range) // range contains scale
-	void setScale(RangeT::Scale scale);
-	RangeT::Scale scale() {
-		return range().scale();
-	}
+	BASIC_D_ACCESSOR_DECL(Range<double>, range, Range)
+	BASIC_D_ACCESSOR_DECL(bool, rangeScale, RangeScale) // if true, the scale of the range will be used
+	BASIC_D_ACCESSOR_DECL(RangeT::Scale, scale, Scale)
 	void setStart(const double);
 	void setEnd(const double);
 	void setRange(const double, const double);
@@ -125,7 +122,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(bool, showScaleOffset, ShowScaleOffset)
 	BASIC_D_ACCESSOR_DECL(double, logicalPosition, LogicalPosition)
 
-	POINTER_D_ACCESSOR_DECL(TextLabel, title, Title)
+	TextLabel* title() const;
 	BASIC_D_ACCESSOR_DECL(double, titleOffsetX, TitleOffsetX)
 	BASIC_D_ACCESSOR_DECL(double, titleOffsetY, TitleOffsetY)
 
@@ -178,6 +175,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, labelsPrefix, LabelsPrefix)
 	CLASS_D_ACCESSOR_DECL(QString, labelsSuffix, LabelsSuffix)
 	BASIC_D_ACCESSOR_DECL(qreal, labelsOpacity, LabelsOpacity)
+	static int maxNumberMajorTicksCustomColumn();
 
 	Line* majorGridLine() const;
 	Line* minorGridLine() const;
@@ -187,7 +185,6 @@ public:
 	void setDefault(bool);
 	bool isDefault() const;
 
-	bool isHovered() const;
 	void setSuppressRetransform(bool);
 	void retransform() override;
 	void retransformTickLabelStrings();
@@ -199,11 +196,10 @@ protected:
 
 private:
 	Q_DECLARE_PRIVATE(Axis)
-	void init(Orientation);
+	void init(Orientation, bool loading = false);
 	void initActions();
 	void initMenus();
 
-	QAction* visibilityAction{nullptr};
 	QAction* orientationHorizontalAction{nullptr};
 	QAction* orientationVerticalAction{nullptr};
 
@@ -226,13 +222,13 @@ private Q_SLOTS:
 	void orientationChangedSlot(QAction*);
 	void lineStyleChanged(QAction*);
 	void lineColorChanged(QAction*);
-	void visibilityChangedSlot();
 
 Q_SIGNALS:
 	void orientationChanged(Orientation);
 	void positionChanged(Position);
 	void positionChanged(double);
 	void scaleChanged(RangeT::Scale);
+	void rangeScaleChanged(bool);
 	void startChanged(double);
 	void rangeTypeChanged(RangeType);
 	void endChanged(double);
@@ -293,6 +289,9 @@ Q_SIGNALS:
 	void labelsOpacityChanged(qreal);
 
 	friend class RetransformTest;
+	friend class AxisTest;
+	friend class AxisTest2;
+	friend class AxisTest3;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Axis::TicksDirection)

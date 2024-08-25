@@ -15,8 +15,6 @@
 #include "kdefrontend/dockwidgets/XYAnalysisCurveDock.h"
 #include "ui_xyhilberttransformcurvedockgeneraltab.h"
 
-class TreeViewComboBox;
-
 class XYHilbertTransformCurveDock : public XYAnalysisCurveDock {
 	Q_OBJECT
 
@@ -27,38 +25,25 @@ public:
 
 private:
 	void initGeneralTab() override;
-	void updatePlotRanges() override;
 	void showTransformResult();
 
 	Ui::XYHilbertTransformCurveDockGeneralTab uiGeneralTab;
-
 	XYHilbertTransformCurve* m_transformCurve{nullptr};
 	XYHilbertTransformCurve::TransformData m_transformData;
-
-protected:
-	void setModel();
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYHilbertTransformCurveDock
 	// general tab
 	void xDataColumnChanged(const QModelIndex&);
-	void yDataColumnChanged(const QModelIndex&);
 	void autoRangeChanged();
 	void xRangeMinChanged();
 	void xRangeMaxChanged();
 	void typeChanged();
-
-	//	void showOptions();
 	void recalculateClicked();
-	void enableRecalculate() const;
 
 	// SLOTs for changes triggered in XYCurve
 	// General-Tab
-	void curveXDataColumnChanged(const AbstractColumn*);
-	void curveYDataColumnChanged(const AbstractColumn*);
 	void curveTransformDataChanged(const XYHilbertTransformCurve::TransformData&);
-	void dataChanged();
-	void curveVisibilityChanged(bool);
 };
 
 #endif

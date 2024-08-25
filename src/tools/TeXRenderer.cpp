@@ -9,12 +9,13 @@
 */
 
 #include "TeXRenderer.h"
+#include "backend/core/Settings.h"
+#include "backend/lib/hostprocess.h"
 #include "backend/lib/macros.h"
 #include "kdefrontend/GuiTools.h"
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
 
 #include <QColor>
 #include <QDir>
@@ -58,20 +59,20 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 #endif
 
 	// make sure we have preview.sty available
-	if (!tempPath.contains(QLatin1String("preview.sty"))) {
-		QString file = QStandardPaths::locate(QStandardPaths::AppDataLocation, QLatin1String("latex/preview.sty"));
+	if (!tempPath.contains(QStringLiteral("preview.sty"))) {
+		QString file = QStandardPaths::locate(QStandardPaths::AppDataLocation, QStringLiteral("latex/preview.sty"));
 		if (file.isEmpty()) {
 			QString err = i18n("Couldn't find preview.sty.");
 			WARN(err.toStdString());
 			res->successful = false;
-			res->errorMessage = err;
+			res->errorMessage = std::move(err);
 			return {};
 		} else
-			QFile::copy(file, tempPath + QLatin1String("/") + QLatin1String("preview.sty"));
+			QFile::copy(file, tempPath + QLatin1Char('/') + QStringLiteral("preview.sty"));
 	}
 
 	// create a temporary file
-	QTemporaryFile file(tempPath + QStringLiteral("/") + QStringLiteral("labplot_XXXXXX.tex"));
+	QTemporaryFile file(tempPath + QLatin1Char('/') + QStringLiteral("labplot_XXXXXX.tex"));
 	// FOR DEBUG: file.setAutoRemove(false);
 	// DEBUG("temp file path = " << file.fileName().toUtf8().constData());
 	if (file.open()) {
@@ -80,22 +81,22 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 		QString err = i18n("Couldn't open the file") + QStringLiteral(" ") + file.fileName();
 		WARN(err.toStdString());
 		res->successful = false;
-		res->errorMessage = err;
+		res->errorMessage = std::move(err);
 		return {};
 	}
 
 	// determine latex engine to be used
-	const auto& group = KSharedConfig::openConfig()->group("Settings_Worksheet");
-	const auto& engine = group.readEntry("LaTeXEngine", "pdflatex");
+	const auto& group = Settings::group(QStringLiteral("Settings_Worksheet"));
+	const auto& engine = group.readEntry(QStringLiteral("LaTeXEngine"), QStringLiteral("pdflatex"));
 
 	// create latex code
 	QTextStream out(&file);
-	int headerIndex = teXString.indexOf(QLatin1String("\\begin{document}"));
+	const int headerIndex = teXString.indexOf(QStringLiteral("\\begin{document}"));
 	QString body;
 	if (headerIndex != -1) {
 		// user provided a complete latex document -> extract the document header and body
 		QString header = teXString.left(headerIndex);
-		int footerIndex = teXString.indexOf(QLatin1String("\\end{document}"));
+		const int footerIndex = teXString.indexOf(QStringLiteral("\\end{document}"));
 		body = teXString.mid(headerIndex + 16, footerIndex - headerIndex - 16);
 		out << header;
 	} else {
@@ -110,31 +111,35 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 		body = body.replace(QLatin1String("\n"), QLatin1String("\\\\"));
 	}
 
-	if (engine == QLatin1String("xelatex") || engine == QLatin1String("lualatex")) {
-		out << "\\usepackage{fontspec}";
-		out << "\\defaultfontfeatures{Ligatures=TeX}";
+	if (engine == QStringLiteral("xelatex") || engine == QStringLiteral("lualatex")) {
+		out << QStringLiteral("\\usepackage{fontspec}");
+		out << QStringLiteral("\\defaultfontfeatures{Ligatures=TeX}");
 		if (!fontFamily.isEmpty())
-			out << "\\setmainfont[Mapping=tex-text]{" << fontFamily << "}";
+			out << QStringLiteral("\\setmainfont[Mapping=tex-text]{") << fontFamily << QLatin1Char('}');
 	}
 
-	out << "\\usepackage{color}";
-	out << "\\usepackage[active,displaymath,textmath,tightpage]{preview}";
+	out << QStringLiteral("\\usepackage{color}");
+	out << QStringLiteral("\\usepackage[active,displaymath,textmath,tightpage]{preview}");
 	out << "\\setlength\\PreviewBorder{0pt}";
 	// TODO: this fails with pdflatex
 	// out << "\\usepackage{mathtools}";
-	out << "\\begin{document}";
-	out << "\\begin{preview}";
-	out << "\\setlength{\\fboxsep}{1.0pt}";
-	out << "\\colorbox[rgb]{" << backgroundColor.redF() << ',' << backgroundColor.greenF() << ',' << backgroundColor.blueF() << "}{";
-	out << "\\fontsize{" << QString::number(fontSize) << "}{" << QString::number(fontSize) << "}\\selectfont";
-	out << "\\color[rgb]{" << fontColor.redF() << ',' << fontColor.greenF() << ',' << fontColor.blueF() << "}";
+	out << QStringLiteral("\\begin{document}");
+	out << QStringLiteral("\\begin{preview}");
+	out << QStringLiteral("\\setlength{\\fboxsep}{1.0pt}");
+	if (backgroundColor.alpha() != 0)
+		out << QStringLiteral("\\colorbox[rgb]{") << backgroundColor.redF() << QLatin1Char(',') << backgroundColor.greenF() << QLatin1Char(',')
+			<< backgroundColor.blueF() << QLatin1Char('}');
+	out << QLatin1Char('{');
+	out << QStringLiteral("\\fontsize{") << QString::number(fontSize) << QStringLiteral("}{") << QString::number(fontSize) << QStringLiteral("}\\selectfont");
+	out << QStringLiteral("\\color[rgb]{") << fontColor.redF() << QLatin1Char(',') << fontColor.greenF() << QLatin1Char(',') << fontColor.blueF()
+		<< QLatin1Char('}');
 	out << body;
-	out << "}";
-	out << "\\end{preview}";
-	out << "\\end{document}";
+	out << QLatin1Char('}');
+	out << QStringLiteral("\\end{preview}");
+	out << QStringLiteral("\\end{document}");
 	out.flush();
 
-	if (engine == QLatin1String("latex"))
+	if (engine == QStringLiteral("latex"))
 		return imageFromDVI(file, dpi, res);
 	else
 		return imageFromPDF(file, engine, res);
@@ -146,7 +151,7 @@ bool TeXRenderer::executeLatexProcess(const QString engine,
 									  const QString& resultFileExtension,
 									  Result* res) {
 	// latex: produce the DVI file
-	const QString engineFullPath = QStandardPaths::findExecutable(engine);
+	const QString engineFullPath = safeExecutableName(engine);
 	if (engineFullPath.isEmpty()) {
 		res->successful = false;
 		res->errorMessage = i18n("%1 not found").arg(engine);
@@ -157,7 +162,7 @@ bool TeXRenderer::executeLatexProcess(const QString engine,
 	WARN(QStringLiteral("Engine fullpath: %1").arg(engineFullPath).toStdString());
 
 	QProcess latexProcess;
-	latexProcess.start(engineFullPath, QStringList() << QStringLiteral("-interaction=batchmode") << file.fileName());
+	startHostProcess(latexProcess, engineFullPath, QStringList() << QStringLiteral("-interaction=batchmode") << file.fileName());
 
 	WARN(QStringLiteral("Workdir: %1").arg(QDir::currentPath()).toStdString());
 
@@ -198,7 +203,7 @@ bool TeXRenderer::executeLatexProcess(const QString engine,
 		}
 
 		res->successful = false;
-		res->errorMessage = err;
+		res->errorMessage = std::move(err);
 		QFile::remove(baseName + QStringLiteral(".aux"));
 		QFile::remove(logFile.fileName());
 		QFile::remove(baseName + QStringLiteral(".%1").arg(resultFileExtension)); // in some cases the file was also created
@@ -247,7 +252,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 		return {};
 
 	// dvips: DVI -> PS
-	const QString dvipsFullPath = QStandardPaths::findExecutable(QLatin1String("dvips"));
+	const QString dvipsFullPath = safeExecutableName(QStringLiteral("dvips"));
 	if (dvipsFullPath.isEmpty()) {
 		res->successful = false;
 		res->errorMessage = i18n("dvips not found");
@@ -255,12 +260,12 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 		return {};
 	}
 	QProcess dvipsProcess;
-	dvipsProcess.start(dvipsFullPath, QStringList() << QStringLiteral("-E") << baseName);
+	startHostProcess(dvipsProcess, dvipsFullPath, QStringList() << QStringLiteral("-E") << baseName);
 	if (!dvipsProcess.waitForFinished() || dvipsProcess.exitCode() != 0) {
 		QString err = i18n("dvips process failed, exit code =") + QStringLiteral(" ") + QString::number(dvipsProcess.exitCode());
 		WARN(err.toStdString());
 		res->successful = false;
-		res->errorMessage = err;
+		res->errorMessage = std::move(err);
 		QFile::remove(baseName + QStringLiteral(".aux"));
 		QFile::remove(baseName + QStringLiteral(".log"));
 		QFile::remove(baseName + QStringLiteral(".dvi"));
@@ -270,12 +275,12 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 	// convert: PS -> PNG
 	QProcess convertProcess;
 #if defined(HAVE_WINDOWS)
-	// need to set path to magick coder modules (which are in the labplot2 directory)
+	// need to set path to magick coder modules (which are in the labplot directory)
 	QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-	env.insert(QStringLiteral("MAGICK_CODER_MODULE_PATH"), QString::fromLocal8Bit(qgetenv("PROGRAMFILES")) + QStringLiteral("\\labplot2"));
+	env.insert(QStringLiteral("MAGICK_CODER_MODULE_PATH"), QString::fromLocal8Bit(qgetenv("PROGRAMFILES")) + QStringLiteral("\\labplot"));
 	convertProcess.setProcessEnvironment(env);
 #endif
-	const QString convertFullPath = QStandardPaths::findExecutable(QLatin1String("convert"));
+	const QString convertFullPath = safeExecutableName(QStringLiteral("convert"));
 	if (convertFullPath.isEmpty()) {
 		WARN("convert not found");
 		res->successful = false;
@@ -284,13 +289,13 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 	}
 
 	const QStringList params{QStringLiteral("-density"), QString::number(dpi), baseName + QStringLiteral(".ps"), baseName + QStringLiteral(".pdf")};
-	convertProcess.start(convertFullPath, params);
+	startHostProcess(convertProcess, convertFullPath, params);
 
 	if (!convertProcess.waitForFinished() || convertProcess.exitCode() != 0) {
 		QString err = i18n("convert process failed, exit code =") + QStringLiteral(" ") + QString::number(convertProcess.exitCode());
 		WARN(err.toStdString());
 		res->successful = false;
-		res->errorMessage = err;
+		res->errorMessage = std::move(err);
 		QFile::remove(baseName + QStringLiteral(".aux"));
 		QFile::remove(baseName + QStringLiteral(".log"));
 		QFile::remove(baseName + QStringLiteral(".dvi"));
@@ -322,7 +327,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 }
 
 bool TeXRenderer::enabled() {
-	KConfigGroup group = KSharedConfig::openConfig()->group("Settings_Worksheet");
+	KConfigGroup group = Settings::group(QStringLiteral("Settings_Worksheet"));
 	QString engine = group.readEntry("LaTeXEngine", "");
 	if (engine.isEmpty()) {
 		// empty string was found in the settings (either the settings never saved or no tex engine was available during the last save)
@@ -376,5 +381,5 @@ bool TeXRenderer::enabled() {
 }
 
 bool TeXRenderer::executableExists(const QString& exe) {
-	return !QStandardPaths::findExecutable(exe).isEmpty();
+	return !safeExecutableName(exe).isEmpty();
 }

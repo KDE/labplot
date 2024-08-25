@@ -12,7 +12,6 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
-class QStringList;
 class SpiceFilterPrivate;
 
 // NgSpice/LtSpice Filter
@@ -27,12 +26,8 @@ public:
 	static QString fileInfoString(const QString&);
 
 	QVector<QStringList> preview(const QString& fileName, int lines);
-	void
-	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
+	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
-
-	void loadFilterSettings(const QString&) override;
-	void saveFilterSettings(const QString&) const override;
 
 	QStringList vectorNames() const;
 	QVector<AbstractColumn::ColumnMode> columnModes();

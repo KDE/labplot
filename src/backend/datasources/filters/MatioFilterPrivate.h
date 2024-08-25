@@ -36,8 +36,6 @@ public:
 	static AbstractColumn::ColumnMode typeMode(matio_types dataType);
 #endif
 
-	const MatioFilter* q;
-
 	size_t varCount{0};
 	QString currentVarName;
 	QStringList selectedVarNames;
@@ -46,6 +44,8 @@ public:
 	int endRow{-1};
 	int startColumn{1};
 	int endColumn{-1};
+
+	MatioFilter* const q;
 
 private:
 #ifdef HAVE_MATIO

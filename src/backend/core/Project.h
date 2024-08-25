@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Represents a LabPlot project.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -16,12 +16,11 @@
 #include "backend/lib/macros.h"
 
 class AbstractColumn;
-class BoxPlot;
-class Histogram;
-class XYCurve;
+class Spreadsheet;
+class ProjectPrivate;
+
 class QMimeData;
 class QString;
-class Spreadsheet;
 
 class Project : public Folder {
 	Q_OBJECT
@@ -52,19 +51,21 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, author, Author)
 	CLASS_D_ACCESSOR_DECL(QDateTime, modificationTime, ModificationTime)
 	BASIC_D_ACCESSOR_DECL(bool, saveCalculations, SaveCalculations)
-	CLASS_D_ACCESSOR_DECL(QString, windowState, WindowState)
+	CLASS_D_ACCESSOR_DECL(QString, dockWidgetState, DockWidgetState)
+	BASIC_D_ACCESSOR_DECL(bool, saveDefaultDockWidgetState, SaveDefaultDockWidgetState)
+	CLASS_D_ACCESSOR_DECL(QString, defaultDockWidgetState, DefaultDockWidgetState)
 
-	void setChanged(const bool value = true);
 	bool hasChanged() const;
 	void navigateTo(const QString& path);
 
 	void setSuppressAspectAddedSignal(bool);
 	bool aspectAddedSignalSuppressed() const;
 
-	void save(const QPixmap&, QXmlStreamWriter*) const;
+	void save(const QPixmap&, QXmlStreamWriter*);
 	bool load(XmlStreamReader*, bool preview) override;
 	bool load(const QString&, bool preview = false);
-	static void restorePointers(AbstractAspect*, bool preview = false);
+	bool loadNotebook(const QString&);
+	static void restorePointers(AbstractAspect*);
 	static void retransformElements(AbstractAspect*);
 
 	static bool isSupportedProject(const QString& fileName);
@@ -77,7 +78,7 @@ public:
 	static void setXmlVersion(int version);
 	static int currentBuildXmlVersion();
 
-	class Private;
+	typedef ProjectPrivate Private;
 
 public Q_SLOTS:
 	void descriptionChanged(const AbstractAspect*);
@@ -85,6 +86,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 	void authorChanged(const QString&);
+	void saveDefaultDockWidgetStateChanged(bool);
 	void saveCalculationsChanged(bool);
 	void requestSaveState(QXmlStreamWriter*) const;
 	void requestLoadState(XmlStreamReader*);
@@ -95,15 +97,24 @@ Q_SIGNALS:
 	void requestNavigateTo(const QString& path);
 	void closeRequested();
 	void saved() const;
+	void loaded() const;
+	void aboutToClose() const;
 
 private:
-	Private* d;
-	void updateColumnDependencies(const QVector<XYCurve*>&, const AbstractColumn*) const;
-	void updateColumnDependencies(const QVector<Histogram*>&, const AbstractColumn*) const;
-	void updateColumnDependencies(const QVector<BoxPlot*>& boxPlots, const AbstractColumn* column) const;
-	void updateSpreadsheetDependencies(const QVector<Spreadsheet*>&, const Spreadsheet*) const;
+	Q_DECLARE_PRIVATE(Project)
+	ProjectPrivate* const d_ptr;
+	void updateSpreadsheetDependencies(const Spreadsheet*) const;
 	bool readProjectAttributes(XmlStreamReader*);
 	void save(QXmlStreamWriter*) const override;
+
+	template<typename T>
+	void updateDependencies(const QVector<const AbstractAspect*>);
+
+private:
+	void setChanged(const bool value = true);
+	friend class AbstractAspect;
+	friend class MainWin;
+	friend class ImportDialog;
 };
 
 #endif // ifndef PROJECT_H

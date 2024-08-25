@@ -104,6 +104,8 @@ Q_SIGNALS:
 	void activateView(AbstractAspect*);
 	void selectedAspectsChanged(QList<AbstractAspect*>&);
 	void hiddenAspectSelected(const AbstractAspect*);
+
+	friend class WorksheetElementTest;
 };
 
 #endif // ifndef PROJECT_EXPLORER_H

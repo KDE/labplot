@@ -8,6 +8,7 @@
 */
 
 #include "SampleValuesDialog.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -23,10 +24,8 @@
 
 #include <cmath>
 
-extern "C" {
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
-}
 
 enum class Method { Periodic, Random };
 
@@ -70,7 +69,7 @@ SampleValuesDialog::SampleValuesDialog(Spreadsheet* s, QWidget* parent)
 	connect(btnBox, &QDialogButtonBox::rejected, this, &SampleValuesDialog::reject);
 
 	// restore saved settings if available
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("SampleValuesDialog"));
+	KConfigGroup conf = Settings::group(QLatin1String("SampleValuesDialog"));
 	ui.cbMethod->setCurrentIndex(conf.readEntry("Method", 0));
 	ui.sbValue->setValue(conf.readEntry("Value", 1));
 	methodChanged(ui.cbMethod->currentIndex());
@@ -85,7 +84,7 @@ SampleValuesDialog::SampleValuesDialog(Spreadsheet* s, QWidget* parent)
 
 SampleValuesDialog::~SampleValuesDialog() {
 	// save the current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("SampleValuesDialog"));
+	KConfigGroup conf = Settings::group(QLatin1String("SampleValuesDialog"));
 	conf.writeEntry("Method", ui.cbMethod->currentIndex());
 	conf.writeEntry("Value", ui.sbValue->value());
 	KWindowConfig::saveWindowSize(windowHandle(), conf);

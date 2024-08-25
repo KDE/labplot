@@ -13,6 +13,8 @@
 #include "backend/datasources/MQTTSubscription.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/trace.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "kdefrontend/spreadsheet/PlotDataDialog.h"
 
@@ -170,6 +172,34 @@ void MQTTTopic::read() {
 		qDebug() << "Reading from topic " << m_topicName;
 		const QString tempMessage = m_messagePuffer.takeFirst();
 		m_filter->readMQTTTopic(tempMessage, this);
+		finalizeRead();
+	}
+}
+
+/*!
+ * notify all affected columns and plots about the changes.
+ * this is simililar to \sa Spreadsheet::finalizeImport().
+ */
+void MQTTTopic::finalizeRead() {
+	PERFTRACE(QLatin1String("AsciiLiveDataImport, notify affected columns and plots"));
+
+	// determine the dependent plots
+	QVector<CartesianPlot*> plots;
+	const auto& columns = children<Column>();
+	for (auto* column : columns)
+		column->addUsedInPlots(plots);
+
+	// suppress retransform in the dependent plots
+	for (auto* plot : plots)
+		plot->setSuppressRetransform(true);
+
+	for (auto* column : columns)
+		column->setChanged();
+
+	// retransform the dependent plots
+	for (auto* plot : plots) {
+		plot->setSuppressRetransform(false);
+		plot->dataChanged(-1, -1); // TODO: check if all ranges must be updated!
 	}
 }
 

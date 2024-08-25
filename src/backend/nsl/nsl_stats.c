@@ -185,6 +185,9 @@ double nsl_stats_tdist_z(double alpha, double dof) {
 	return gsl_cdf_tdist_Pinv(1. - alpha / 2., dof);
 }
 double nsl_stats_tdist_margin(double alpha, double dof, double error) {
+	if (error == 0.)
+		return 0.;
+
 	return nsl_stats_tdist_z(alpha, dof) * error;
 }
 
@@ -210,6 +213,9 @@ double nsl_stats_fdist_F(double rsquare, size_t np, size_t dof) {
 	return dof / (np - 1.) / (1. / rsquare - 1.);
 }
 double nsl_stats_fdist_p(double F, size_t np, double dof) {
+	if (isnan(F))
+		return 0.;
+
 	double p = gsl_cdf_fdist_Q(F, (double)np, dof);
 	if (p < 1.e-9)
 		p = 0;

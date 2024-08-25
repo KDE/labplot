@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : import file data dialog
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2018 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2008-2015 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -11,6 +11,7 @@
 #include "ImportDialog.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/core/Workbook.h"
 #include "backend/lib/macros.h"
 #include "backend/matrix/Matrix.h"
@@ -30,8 +31,7 @@
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KMessageBox>
-#include <KSharedConfig>
+#include <KMessageWidget>
 
 /*!
 	\class ImportDialog
@@ -44,6 +44,8 @@ ImportDialog::ImportDialog(MainWin* parent)
 	, vLayout(new QVBoxLayout(this))
 	, m_mainWin(parent)
 	, m_aspectTreeModel(new AspectTreeModel(parent->project())) {
+	setAttribute(Qt::WA_DeleteOnClose);
+
 	// menu for new data container
 	m_newDataContainerMenu = new QMenu(this);
 	m_newDataContainerMenu->addAction(QIcon::fromTheme(QStringLiteral("labplot-workbook-new")), i18n("New Workbook"));
@@ -58,7 +60,7 @@ ImportDialog::~ImportDialog() {
 
 	// save the last used import position for file imports, no need to do this for live data source (cbPosition=0)
 	if (cbPosition) {
-		KConfigGroup conf(KSharedConfig::openConfig(), "ImportDialog");
+		KConfigGroup conf = Settings::group(QStringLiteral("ImportDialog"));
 		conf.writeEntry("Position", cbPosition->currentIndex());
 	}
 }
@@ -77,7 +79,7 @@ void ImportDialog::setModel() {
 	auto* grid = new QGridLayout(frameAddTo);
 	grid->addWidget(label, 0, 0);
 
-	cbAddTo = new TreeViewComboBox();
+	cbAddTo = new TreeViewComboBox(this);
 	cbAddTo->setToolTip(i18n("Data container where the data has to be imported into"));
 	cbAddTo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	grid->addWidget(cbAddTo, 0, 1);
@@ -106,7 +108,7 @@ void ImportDialog::setModel() {
 	cbPosition->addItem(i18n("Append"));
 	cbPosition->addItem(i18n("Prepend"));
 	cbPosition->addItem(i18n("Replace"));
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportDialog"));
 	cbPosition->setCurrentIndex(conf.readEntry("Position", 0));
 
 	cbPosition->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
@@ -122,7 +124,7 @@ void ImportDialog::setModel() {
 void ImportDialog::setCurrentIndex(const QModelIndex& index) {
 	QDEBUG(Q_FUNC_INFO << ", index =" << index);
 	cbAddTo->setCurrentModelIndex(index);
-	QDEBUG("cbAddTo->currentModelIndex() =" << cbAddTo->currentModelIndex());
+	QDEBUG(Q_FUNC_INFO << ", cbAddTo->currentModelIndex() =" << cbAddTo->currentModelIndex());
 	checkOkButton();
 }
 
@@ -135,17 +137,27 @@ void ImportDialog::currentModelIndexChanged(const QModelIndex& index) {
 void ImportDialog::newDataContainer(QAction* action) {
 	DEBUG(Q_FUNC_INFO);
 	QString name = selectedObject();
-	QString type = action->iconText().split(QLatin1Char(' ')).at(1);
 	if (name.isEmpty())
 		name = action->iconText();
+	int actionIndex = m_newDataContainerMenu->actions().indexOf(action);
+	QString addText, nameText;
+	if (actionIndex == 0) {
+		addText = i18n("Add a new Workbook");
+		nameText = i18n("Workbook name:");
+	} else if (actionIndex == 1) {
+		addText = i18n("Add a new Spreadsheet");
+		nameText = i18n("Spreadsheet name:");
+	} else {
+		addText = i18n("Add a new Matrix");
+		nameText = i18n("Matrix name:");
+	}
 
 	bool ok;
 	// child widgets can't have own icons
 	auto* dlg = new QInputDialog(this);
-	name = dlg->getText(this, i18n("Add %1", action->iconText()), i18n("%1 name:", type), QLineEdit::Normal, name, &ok);
+	name = dlg->getText(this, addText, nameText, QLineEdit::Normal, name, &ok);
 	if (ok) {
 		AbstractAspect* aspect;
-		int actionIndex = m_newDataContainerMenu->actions().indexOf(action);
 		if (actionIndex == 0)
 			aspect = new Workbook(name);
 		else if (actionIndex == 1)
@@ -154,7 +166,7 @@ void ImportDialog::newDataContainer(QAction* action) {
 			aspect = new Matrix(name);
 
 		m_mainWin->addAspectToProject(aspect);
-		QDEBUG("cbAddTo->setCurrentModelIndex() to " << m_mainWin->model()->modelIndexOfAspect(aspect));
+		QDEBUG(Q_FUNC_INFO << ", cbAddTo->setCurrentModelIndex() to " << m_mainWin->model()->modelIndexOfAspect(aspect));
 		cbAddTo->setCurrentModelIndex(m_mainWin->model()->modelIndexOfAspect(aspect));
 		checkOkButton();
 
@@ -167,4 +179,32 @@ void ImportDialog::newDataContainer(QAction* action) {
 
 void ImportDialog::newDataContainerMenu() {
 	m_newDataContainerMenu->exec(tbNewDataContainer->mapToGlobal(tbNewDataContainer->rect().bottomLeft()));
+}
+
+void ImportDialog::showErrorMessage(const QString& message) {
+	if (message.isEmpty()) {
+		if (m_messageWidget && m_messageWidget->isVisible())
+			m_messageWidget->close();
+	} else {
+		if (!m_messageWidget) {
+			m_messageWidget = new KMessageWidget(this);
+			m_messageWidget->setMessageType(KMessageWidget::Error);
+			vLayout->insertWidget(vLayout->count() - 1, m_messageWidget);
+		}
+		m_messageWidget->setText(message);
+		m_messageWidget->animatedShow();
+		QDEBUG(message);
+	}
+}
+
+void ImportDialog::accept() {
+	if (!m_liveDataSource) {
+		bool rc = importTo(m_mainWin->statusBar());
+		if (rc) {
+			// the import was successful, set the project to Changed and close the dialog
+			m_mainWin->project()->setChanged(true);
+			QDialog::accept();
+		}
+	} else
+		QDialog::accept();
 }

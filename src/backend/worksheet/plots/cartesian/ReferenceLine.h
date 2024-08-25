@@ -22,12 +22,11 @@ class ReferenceLine : public WorksheetElement {
 	Q_OBJECT
 
 public:
-	explicit ReferenceLine(CartesianPlot*, const QString&);
+	explicit ReferenceLine(CartesianPlot*, const QString&, bool loading = false);
 	~ReferenceLine() override;
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
-	QGraphicsItem* graphicsItem() const override;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
@@ -46,11 +45,10 @@ protected:
 
 private:
 	Q_DECLARE_PRIVATE(ReferenceLine)
-	void init();
+	void init(bool loading = false);
 	void initActions();
 	void initMenus();
 
-	QAction* visibilityAction{nullptr};
 	QAction* orientationHorizontalAction{nullptr};
 	QAction* orientationVerticalAction{nullptr};
 
@@ -67,11 +65,12 @@ private Q_SLOTS:
 	void orientationChangedSlot(QAction*);
 	void lineStyleChanged(QAction*);
 	void lineColorChanged(QAction*);
-	void visibilityChangedSlot();
 
 Q_SIGNALS:
 	friend class ReferenceLineSetPositionCmd;
 	void orientationChanged(Orientation);
+
+	friend class WorksheetElementTest;
 };
 
 #endif

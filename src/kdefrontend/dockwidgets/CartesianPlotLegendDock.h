@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for cartesian legend properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2013-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2023 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -48,7 +48,7 @@ private Q_SLOTS:
 
 	// SLOTs for changes triggered in CartesianPlotLegendDock
 	//"General"-tab
-	void visibilityChanged(bool);
+	void lockChanged(bool);
 	void labelFontChanged(const QFont&);
 	void labelColorChanged(const QColor&);
 	void labelOrderChanged(int);
@@ -80,9 +80,9 @@ private Q_SLOTS:
 	void legendLabelOrderChanged(bool);
 	void legendLineSymbolWidthChanged(float);
 	void legendPositionChanged(const CartesianPlotLegend::PositionWrapper&);
-	void legendRotationAngleChanged(qreal);
-	void legendVisibilityChanged(bool);
 	void legendPositionLogicalChanged(QPointF);
+	void legendRotationAngleChanged(qreal);
+	void legendLockChanged(bool);
 	void legendHorizontalAlignmentChanged(const WorksheetElement::HorizontalAlignment);
 	void legendVerticalAlignmentChanged(const WorksheetElement::VerticalAlignment);
 

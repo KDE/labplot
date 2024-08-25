@@ -19,7 +19,6 @@ class AbstractAspect;
 class LineWidget;
 class LabelWidget;
 class TreeViewComboBox;
-class AspectTreeModel;
 class AbstractColumn;
 class DateTimeSpinBox;
 class NumberSpinBox;
@@ -41,7 +40,6 @@ private:
 	Ui::AxisDock ui;
 	QList<Axis*> m_axesList;
 	Axis* m_axis{nullptr};
-	AspectTreeModel* m_aspectTreeModel{nullptr};
 	LabelWidget* labelWidget; // Title
 	TreeViewComboBox* cbMajorTicksColumn;
 	TreeViewComboBox* cbMinorTicksColumn;
@@ -55,7 +53,7 @@ private:
 
 	void setModel();
 	void setModelIndexFromColumn(TreeViewComboBox*, const AbstractColumn*);
-	void updatePlotRanges() override;
+	void updatePlotRangeList() override;
 	void updateMajorTicksStartType(bool visible);
 	void initConnections();
 
@@ -64,12 +62,14 @@ private:
 	void updatePositionText(Axis::Orientation);
 	void updateLabelsPosition(Axis::LabelsPosition);
 	void updateAxisColor();
+	void updateScale();
 
 	void setOffset(double);
 
 	// own created widgets
 	DateTimeSpinBox* dtsbMajorTicksIncrement{nullptr};
 	DateTimeSpinBox* dtsbMinorTicksIncrement{nullptr};
+	DateTimeSpinBox* dtsbMajorTicksDateTimeStartOffset{nullptr};
 
 	friend class AxisTest;
 
@@ -85,6 +85,7 @@ private Q_SLOTS:
 	void positionChanged(double value);
 	void logicalPositionChanged(double value);
 	void scaleChanged(int);
+	void rangeScaleChanged(bool);
 	void rangeTypeChanged(int);
 	void startChanged(double);
 	void endChanged(double);
@@ -114,8 +115,10 @@ private Q_SLOTS:
 	void majorTicksSpacingChanged();
 	void majorTicksColumnChanged(const QModelIndex&);
 	void majorTicksStartTypeChanged(int state);
+	void majorTicksDateTimeStartOffsetChanged();
 	void majorTicksStartOffsetChanged(double);
 	void majorTicksStartValueChanged(double);
+	void majorTicksStartDateTimeChanged(qint64 value);
 	void setTickOffsetData(bool nice = false); // set first tick on first data point (if nice: nice value)
 	void setTickOffsetAuto() {
 		setTickOffsetData(true);
@@ -159,6 +162,7 @@ private Q_SLOTS:
 	void axisPositionChanged(double);
 	void axisLogicalPositionChanged(double);
 	void axisScaleChanged(RangeT::Scale);
+	void axisRangeScaleChanged(bool);
 	void axisRangeTypeChanged(Axis::RangeType);
 	void axisStartChanged(double);
 	void axisEndChanged(double);
@@ -219,7 +223,7 @@ private Q_SLOTS:
 Q_SIGNALS:
 	void info(const QString&);
 
-	friend class AxisTest;
+	friend class AxisTest2;
 };
 
 #endif

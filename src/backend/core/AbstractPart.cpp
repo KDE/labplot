@@ -4,13 +4,15 @@
 	Description          : Base class of Aspects with MDI windows as views.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2008 Knut Franke <knut.franke@gmx.de>
-	SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "backend/core/AbstractPart.h"
+#include "backend/core/Settings.h"
 #include "commonfrontend/core/ContentDockWidget.h"
 
+#include <DockManager.h>
 #include <QMenu>
 #include <QStyle>
 
@@ -47,10 +49,27 @@ AbstractPart::~AbstractPart() {
  */
 ContentDockWidget* AbstractPart::dockWidget() const {
 #ifndef SDK
-	if (!m_dockWidget)
+	if (!m_dockWidget) {
 		m_dockWidget = new ContentDockWidget(const_cast<AbstractPart*>(this));
+		connect(m_dockWidget, &ads::CDockWidget::closed, [this] {
+			const bool deleteOnClose = Settings::readDockPosBehavior() == Settings::DockPosBehavior::AboveLastActive;
+			if (deleteOnClose && !m_suppressDeletion) {
+				m_dockWidget->dockManager()->removeDockWidget(m_dockWidget);
+				m_dockWidget = nullptr;
+				deleteView();
+			}
+		});
+	}
 #endif
 	return m_dockWidget;
+}
+
+bool AbstractPart::dockWidgetExists() const {
+	return m_dockWidget != nullptr;
+}
+
+void AbstractPart::suppressDeletion(bool suppress) {
+	m_suppressDeletion = suppress;
 }
 
 bool AbstractPart::hasMdiSubWindow() const {
@@ -73,9 +92,9 @@ void AbstractPart::deleteView() const {
 	}
 
 	if (m_partView) {
+		Q_EMIT viewAboutToBeDeleted();
 		delete m_partView;
 		m_partView = nullptr;
-		m_dockWidget = nullptr;
 	}
 }
 
@@ -83,9 +102,13 @@ void AbstractPart::deleteView() const {
  * \brief Return AbstractAspect::createContextMenu() plus operations on the primary view.
  */
 QMenu* AbstractPart::createContextMenu() {
-	QMenu* menu = AbstractAspect::createContextMenu();
-	menu->addSeparator();
 	auto type = this->type();
+	QMenu* menu;
+	if (type != AspectType::StatisticsSpreadsheet) {
+		menu = AbstractAspect::createContextMenu();
+		menu->addSeparator();
+	} else
+		menu = new QMenu();
 
 	// import actions for spreadsheet and matrix
 	if ((type == AspectType::Spreadsheet || type == AspectType::Matrix) && type != AspectType::LiveDataSource && type != AspectType::MQTTTopic) {
@@ -107,6 +130,7 @@ QMenu* AbstractPart::createContextMenu() {
 	menu->addSeparator();
 
 	// window state related actions
+#ifndef SDK
 	if (m_dockWidget) {
 		const QStyle* style = m_dockWidget->style();
 		if (!m_dockWidget->isClosed()) {
@@ -133,6 +157,7 @@ QMenu* AbstractPart::createContextMenu() {
 			});
 		}
 	}
+#endif
 
 	return menu;
 }

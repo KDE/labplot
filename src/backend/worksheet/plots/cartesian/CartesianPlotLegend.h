@@ -35,8 +35,6 @@ public:
 
 	void finalizeAdd() override;
 	QIcon icon() const override;
-	QMenu* createContextMenu() override;
-	QGraphicsItem* graphicsItem() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 	void loadThemeConfig(const KConfig& config) override;
@@ -74,11 +72,6 @@ private:
 	Q_DECLARE_PRIVATE(CartesianPlotLegend)
 	void init();
 	void initActions();
-	QAction* visibilityAction{nullptr};
-
-private Q_SLOTS:
-	// SLOTs for changes triggered via QActions in the context menu
-	void visibilityChangedSlot();
 
 Q_SIGNALS:
 	void labelFontChanged(QFont&);

@@ -51,7 +51,7 @@ void SpanSlider::sliderSpanChanged(int min, int max) {
 	sbMin->setValue(min);
 	sbMax->setValue(max);
 
-	emit spanChanged(min, max);
+	Q_EMIT spanChanged(min, max);
 }
 
 void SpanSlider::spinBoxMinChanged(int min) {
@@ -59,7 +59,7 @@ void SpanSlider::spinBoxMinChanged(int min) {
 
 	spanslider->setSpan(min, sbMax->value());
 
-	emit spanChanged(min, sbMax->value());
+	Q_EMIT spanChanged(min, sbMax->value());
 }
 
 void SpanSlider::spinBoxMaxChanged(int max) {
@@ -67,7 +67,7 @@ void SpanSlider::spinBoxMaxChanged(int max) {
 
 	spanslider->setSpan(sbMin->value(), max);
 
-	emit spanChanged(sbMin->value(), max);
+	Q_EMIT spanChanged(sbMin->value(), max);
 }
 
 void SpanSlider::setToolTip(const QString& str) {

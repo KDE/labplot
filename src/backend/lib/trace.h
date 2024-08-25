@@ -16,13 +16,17 @@
 class PerfTracer {
 public:
 	explicit PerfTracer(QString m) {
-		msg = STDSTRING(m);
-		start = std::chrono::high_resolution_clock::now();
+		if (perfTraceEnabled()) {
+			msg = STDSTRING(m);
+			start = std::chrono::high_resolution_clock::now();
+		}
 	};
 	~PerfTracer() {
-		auto end = std::chrono::high_resolution_clock::now();
-		auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-		std::cout << msg << ": " << diff << " ms" << std::endl;
+		if (perfTraceEnabled()) {
+			const auto end = std::chrono::high_resolution_clock::now();
+			const auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+			std::cout << msg << ": " << diff << " ms" << std::endl;
+		}
 	}
 
 private:
@@ -33,8 +37,10 @@ private:
 #define PERFTRACE_ENABLED 1
 
 #define PERFTRACE_CURVES 1
+#define PERFTRACE_AXIS 1
 #define PERFTRACE_LIVE_IMPORT 1
 #define PERFTRACE_AUTOSCALE 1
+#define PERFTRACE_EXPRESSION_PARSER 1
 
 #ifdef PERFTRACE_ENABLED
 #define PERFTRACE(msg) PerfTracer tracer(msg)
@@ -109,5 +115,36 @@ static inline void print_callstack() {
 	std::cout << "stack trace:\n" << out.str();
 }
 #endif // #ifndef HAVE_WINDOWS
+
+#define DEBUG_DUMP_PAINTER_PATH 1
+#if DEBUG_DUMP_PAINTER_PATH == 0
+#define DUMP_PAINTER_PATH(path)                                                                                                                                \
+	do {                                                                                                                                                       \
+		DEBUG("Dump QPainterPath");                                                                                                                            \
+		if (path.isEmpty())                                                                                                                                    \
+			DEBUG("\tPath is empty");                                                                                                                          \
+		for (int i = 0; i < path.elementCount(); i++) {                                                                                                        \
+			const auto& element = path.elementAt(i);                                                                                                           \
+			QString type;                                                                                                                                      \
+			switch (element.type) {                                                                                                                            \
+			case QPainterPath::MoveToElement:                                                                                                                  \
+				type = QStringLiteral("MoveToElement");                                                                                                        \
+				break;                                                                                                                                         \
+			case QPainterPath::LineToElement:                                                                                                                  \
+				type = QStringLiteral("LineToElement");                                                                                                        \
+				break;                                                                                                                                         \
+			case QPainterPath::CurveToElement:                                                                                                                 \
+				type = QStringLiteral("CurveToElement");                                                                                                       \
+				break;                                                                                                                                         \
+			case QPainterPath::CurveToDataElement:                                                                                                             \
+				type = QStringLiteral("CurveToDataElement");                                                                                                   \
+				break;                                                                                                                                         \
+			}                                                                                                                                                  \
+			DEBUG("\tQPainterPathElement: " << type.toStdString() << " (" << element.x << "," << element.y << ")");                                            \
+		}                                                                                                                                                      \
+	} while (false);
+#else
+#define DUMP_PAINTER_PATH(path)
+#endif
 
 #endif // TRACE_H

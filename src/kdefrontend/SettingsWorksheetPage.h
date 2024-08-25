@@ -21,7 +21,7 @@ class SettingsWorksheetPage : public SettingsPage {
 public:
 	explicit SettingsWorksheetPage(QWidget*);
 
-	void applySettings() override;
+	bool applySettings() override;
 	void restoreDefaults() override;
 
 private:

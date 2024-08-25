@@ -14,7 +14,7 @@ DbcParser::ParseStatus DbcParser::parseFile(const QString& filename) {
 	try {
 		m_parser.parse_file(filename.toStdString());
 		m_parseFileStatus = DbcParser::ParseStatus::Success;
-	} catch (libdbc::validity_error e) {
+	} catch (const Libdbc::ValidityError&) {
 		// e.what(); // TODO: turn on
 		m_parseFileStatus = DbcParser::ParseStatus::ErrorInvalidFile;
 	}
@@ -28,16 +28,16 @@ DbcParser::ParseStatus DbcParser::parseMessage(const uint32_t id, const std::vec
 #ifdef HAVE_DBC_PARSER
 	if (m_parseFileStatus != ParseStatus::Success)
 		return m_parseFileStatus;
-	switch (m_parser.parseMessage(id, data, out)) {
-	case libdbc::Message::ParseSignalsStatus::Success:
+	switch (m_parser.parse_message(id, data, out)) {
+	case Libdbc::Message::ParseSignalsStatus::Success:
 		return ParseStatus::Success;
-	case libdbc::Message::ParseSignalsStatus::ErrorMessageToLong:
+	case Libdbc::Message::ParseSignalsStatus::ErrorMessageToLong:
 		return ParseStatus::ErrorMessageToLong;
-	case libdbc::Message::ParseSignalsStatus::ErrorBigEndian:
+	case Libdbc::Message::ParseSignalsStatus::ErrorBigEndian:
 		return ParseStatus::ErrorBigEndian;
-	case libdbc::Message::ParseSignalsStatus::ErrorUnknownID:
+	case Libdbc::Message::ParseSignalsStatus::ErrorUnknownID:
 		return ParseStatus::ErrorUnknownID;
-	case libdbc::Message::ParseSignalsStatus::ErrorInvalidConversion:
+	case Libdbc::Message::ParseSignalsStatus::ErrorInvalidConversion:
 		return ParseStatus::ErrorInvalidConversion;
 	}
 #else
@@ -62,7 +62,7 @@ void DbcParser::getSignals(const QVector<uint32_t> ids, PrefixType p, SuffixType
 		for (const auto& message : m_parser.get_messages()) {
 			if (message.id() == id) {
 				idIndex.insert(id, out.value_descriptions.size());
-				for (const auto& signal_ : message.getSignals()) {
+				for (const auto& signal_ : message.get_signals()) {
 					std::string signal_name;
 					switch (p) {
 					case PrefixType::Message:
@@ -87,8 +87,8 @@ void DbcParser::getSignals(const QVector<uint32_t> ids, PrefixType p, SuffixType
 					}
 					out.signal_names.append(QString::fromStdString(signal_name));
 					std::vector<ValueDescriptions> vd;
-					vd.reserve(signal_.svDescriptions.size());
-					for (const auto& svdescription : signal_.svDescriptions) {
+					vd.reserve(signal_.value_descriptions.size());
+					for (const auto& svdescription : signal_.value_descriptions) {
 						vd.push_back({svdescription.value, QString::fromStdString(svdescription.description)});
 					}
 					out.value_descriptions.push_back({vd});
@@ -99,6 +99,8 @@ void DbcParser::getSignals(const QVector<uint32_t> ids, PrefixType p, SuffixType
 	}
 #else
 	Q_UNUSED(ids)
+	Q_UNUSED(p)
+	Q_UNUSED(s)
 	Q_UNUSED(idIndex)
 	Q_UNUSED(out)
 #endif

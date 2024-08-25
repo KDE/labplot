@@ -3,25 +3,25 @@
 	Project              : LabPlot
 	Description          : Bar Plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef BARPLOT_H
 #define BARPLOT_H
 
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/Plot.h"
 
 class BarPlotPrivate;
 class AbstractColumn;
 class Background;
+class ErrorBar;
 class Line;
 class Value;
 
 #ifdef SDK
 #include "labplot_export.h"
-class LABPLOT_EXPORT BarPlot : Plot {
+class LABPLOT_EXPORT BarPlot : public Plot {
 #else
 class BarPlot : public Plot {
 #endif
@@ -35,39 +35,35 @@ public:
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
-	QGraphicsItem* graphicsItem() const override;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 	void loadThemeConfig(const KConfig&) override;
 
-	// reimplemented from Plot
-	bool activatePlot(QPointF mouseScenePos, double maxDist = -1) override;
-	void setHover(bool on) override;
-
 	// general
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
 	QString& xColumnPath() const;
 	BASIC_D_ACCESSOR_DECL(QVector<const AbstractColumn*>, dataColumns, DataColumns)
-	QVector<QString>& dataColumnPaths() const;
+	CLASS_D_ACCESSOR_DECL(QVector<QString>, dataColumnPaths, DataColumnPaths)
 	BASIC_D_ACCESSOR_DECL(BarPlot::Type, type, Type)
 	BASIC_D_ACCESSOR_DECL(BarPlot::Orientation, orientation, Orientation)
 	BASIC_D_ACCESSOR_DECL(double, widthFactor, WidthFactor)
 
-	// box filling
-	Background* backgroundAt(int) const;
-
-	// box border line
-	Line* lineAt(int) const;
-
-	// values
+	Background* backgroundAt(int) const; // box filling
+	Line* lineAt(int) const; // box border line
 	Value* value() const;
+	ErrorBar* errorBarAt(int) const;
 
 	void retransform() override;
+	void recalc() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
-	double minimum(CartesianCoordinateSystem::Dimension dim) const;
-	double maximum(CartesianCoordinateSystem::Dimension dim) const;
+	double minimum(CartesianCoordinateSystem::Dimension) const override;
+	double maximum(CartesianCoordinateSystem::Dimension) const override;
+	bool hasData() const override;
+	bool usingColumn(const Column*) const override;
+	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) override;
+	QColor color() const override;
 
 	typedef BarPlotPrivate Private;
 
@@ -82,16 +78,11 @@ private:
 
 	QAction* orientationHorizontalAction{nullptr};
 	QAction* orientationVerticalAction{nullptr};
-	QAction* visibilityAction{nullptr};
 	QMenu* orientationMenu{nullptr};
-
-public Q_SLOTS:
-	void recalc();
 
 private Q_SLOTS:
 	// SLOTs for changes triggered via QActions in the context menu
 	void orientationChangedSlot(QAction*);
-	void visibilityChangedSlot();
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
 
 Q_SIGNALS:

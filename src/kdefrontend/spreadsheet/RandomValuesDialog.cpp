@@ -4,15 +4,21 @@
 	Description          : Dialog for generating non-uniformly distributed random numbers
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014-2023 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2016-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "RandomValuesDialog.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
+#include "backend/nsl/nsl_randist.h"
+#include "backend/nsl/nsl_sf_stats.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "kdefrontend/GuiTools.h"
+
+#include <KLocalizedString>
+#include <KWindowConfig>
 
 #include <QDialogButtonBox>
 #include <QDir>
@@ -21,16 +27,9 @@
 #include <QStandardPaths>
 #include <QWindow>
 
-#include <KLocalizedString>
-#include <KWindowConfig>
-
 #include <cmath>
-
-extern "C" {
-#include "backend/nsl/nsl_sf_stats.h"
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
-}
 
 /*!
 	\class RandomValuesDialog
@@ -62,9 +61,11 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent)
 	layout->addWidget(buttonBox);
 	setLayout(layout);
 	setAttribute(Qt::WA_DeleteOnClose);
+
 	QVector<QPair<QString, int>> distros;
-	for (int i = 0; i < NSL_SF_STATS_DISTRIBUTION_RNG_COUNT; i++)
-		distros << QPair<QString, int>(i18n(nsl_sf_stats_distribution_name[i]), i);
+	for (int i = 0; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++)
+		if (nsl_sf_stats_distribution_supports_RNG(nsl_sf_stats_distribution(i)))
+			distros << QPair<QString, int>(i18n(nsl_sf_stats_distribution_name[i]), i);
 	std::sort(std::begin(distros), std::end(distros));
 	for (const auto& d : distros)
 		ui.cbDistribution->addItem(d.first, d.second);
@@ -87,6 +88,9 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent)
 	ui.lSeed->setToolTip(info);
 	ui.leSeed->setToolTip(info);
 
+	info = i18n("Random number distributions as defined in <a href=\"https://www.gnu.org/software/gsl/doc/html/randist.html\">GSL documentation</a>");
+	ui.cbDistribution->setWhatsThis(info);
+
 	connect(ui.cbDistribution, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &RandomValuesDialog::distributionChanged);
 	connect(ui.leParameter1, &QLineEdit::textChanged, this, &RandomValuesDialog::checkValues);
 	connect(ui.leParameter2, &QLineEdit::textChanged, this, &RandomValuesDialog::checkValues);
@@ -95,31 +99,31 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent)
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	const KConfigGroup conf(KSharedConfig::openConfig(), "RandomValuesDialog");
-	if (conf.exists()) {
-		const int dist = conf.readEntry("Distribution", defaultDist);
-		ui.cbDistribution->setCurrentIndex(ui.cbDistribution->findData(dist));
-		if (ui.cbDistribution->currentIndex() == 0) // if index=0 no signal is emitted above, call this slot directly
-			this->distributionChanged();
-		const auto numberLocale = QLocale();
-		// read parameter or set values for default dist
-		ui.leParameter1->setText(numberLocale.toString(conf.readEntry("Parameter1", 0.0)));
-		ui.leParameter2->setText(numberLocale.toString(conf.readEntry("Parameter2", 1.0)));
-		ui.leParameter3->setText(numberLocale.toString(conf.readEntry("Parameter3", 1.0)));
-		ui.leSeed->setText(conf.readEntry("Seed", QString()));
+	const KConfigGroup conf = Settings::group(QStringLiteral("RandomValuesDialog"));
 
+	const int dist = conf.readEntry("Distribution", defaultDist);
+	ui.cbDistribution->setCurrentIndex(ui.cbDistribution->findData(dist));
+	if (ui.cbDistribution->currentIndex() == 0) // if index=0 no signal is emitted above, call this slot directly
+		this->distributionChanged();
+	const auto numberLocale = QLocale();
+	// read parameter or set values for default dist
+	ui.leParameter1->setText(numberLocale.toString(conf.readEntry("Parameter1", 0.0)));
+	ui.leParameter2->setText(numberLocale.toString(conf.readEntry("Parameter2", 1.0)));
+	ui.leParameter3->setText(numberLocale.toString(conf.readEntry("Parameter3", 1.0)));
+	ui.leSeed->setText(conf.readEntry("Seed", QString()));
+
+	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
 	} else {
 		ui.cbDistribution->setCurrentIndex(ui.cbDistribution->findData(defaultDist));
-
 		resize(QSize(400, 0).expandedTo(minimumSize()));
 	}
 }
 
 RandomValuesDialog::~RandomValuesDialog() {
 	// save current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), "RandomValuesDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("RandomValuesDialog"));
 	// saving enum value to be consistent
 	conf.writeEntry("Distribution", ui.cbDistribution->itemData(ui.cbDistribution->currentIndex()).toInt());
 	const auto numberLocale = QLocale();
@@ -133,14 +137,29 @@ RandomValuesDialog::~RandomValuesDialog() {
 
 void RandomValuesDialog::setColumns(const QVector<Column*>& columns) {
 	m_columns = columns;
+
+	const auto& data = m_columns.constFirst()->randomValuesData();
+	if (data.available) {
+		const int dist = static_cast<int>(data.distribution);
+		ui.cbDistribution->setCurrentIndex(ui.cbDistribution->findData(dist));
+		distributionChanged(ui.cbDistribution->currentIndex());
+
+		const auto numberLocale = QLocale();
+		ui.leParameter1->setText(numberLocale.toString(data.parameter1));
+		ui.leParameter2->setText(numberLocale.toString(data.parameter2));
+		ui.leParameter3->setText(numberLocale.toString(data.parameter3));
+
+		if (data.seed != 0)
+			ui.leSeed->setText(numberLocale.toString(data.seed));
+	}
 }
 
 void RandomValuesDialog::distributionChanged(int index) {
 	DEBUG(Q_FUNC_INFO << ", index = " << index)
-	const nsl_sf_stats_distribution dist = (nsl_sf_stats_distribution)ui.cbDistribution->itemData(index).toInt();
+	const auto dist = (nsl_sf_stats_distribution)ui.cbDistribution->itemData(index).toInt();
 	DEBUG(Q_FUNC_INFO << ", dist = " << nsl_sf_stats_distribution_name[(int)dist])
 
-	// default settings (used by most distributions)
+	// default settings: show two parameter (used by most distributions)
 	ui.lParameter1->show();
 	ui.leParameter1->show();
 	ui.lParameter2->show();
@@ -354,7 +373,17 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.leParameter2->setText(numberLocale.toString(2.0));
 		ui.leParameter3->setText(numberLocale.toString(3.0));
 		break;
-	case nsl_sf_stats_maxwell_boltzmann: // additional non-GSL distros
+	case nsl_sf_stats_triangular:
+		ui.lParameter3->show();
+		ui.leParameter3->show();
+		ui.lParameter1->setText(QStringLiteral("a ="));
+		ui.lParameter2->setText(QStringLiteral("b ="));
+		ui.lParameter3->setText(QStringLiteral("c ="));
+		ui.leParameter1->setText(numberLocale.toString(0.0));
+		ui.leParameter2->setText(numberLocale.toString(1.0));
+		ui.leParameter3->setText(numberLocale.toString(0.5));
+		break;
+	case nsl_sf_stats_maxwell_boltzmann: // distributions not supporting RNG
 	case nsl_sf_stats_sech:
 	case nsl_sf_stats_levy:
 	case nsl_sf_stats_frechet:
@@ -367,7 +396,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 	QImage image = GuiTools::importPDFFile(file);
 
 	// use system palette for background
-	if (DARKMODE) {
+	if (GuiTools::isDarkMode()) {
 		// invert image if in dark mode
 		image.invertPixels();
 
@@ -452,15 +481,25 @@ void RandomValuesDialog::generate() {
 
 	gsl_rng_set(r, seed);
 
-	for (auto* col : m_columns)
-		col->setSuppressDataChangedSignal(true);
-
 	m_spreadsheet->beginMacro(
 		i18np("%1: fill column with non-uniform random numbers", "%1: fill columns with non-uniform random numbers", m_spreadsheet->name(), m_columns.size()));
 
-	const int index = ui.cbDistribution->currentIndex();
-	const nsl_sf_stats_distribution dist = (nsl_sf_stats_distribution)ui.cbDistribution->itemData(index).toInt();
+	for (auto* col : m_columns) {
+		col->setSuppressDataChangedSignal(true);
+		col->clearFormula(); // clear the potentially available column formula
+	}
+
+	const auto dist = (nsl_sf_stats_distribution)ui.cbDistribution->currentData().toInt();
 	DEBUG(Q_FUNC_INFO << ", random number distribution: " << nsl_sf_stats_distribution_name[dist]);
+
+	Column::RandomValuesData randomValuesData;
+	randomValuesData.available = true;
+	randomValuesData.distribution = dist;
+	SET_DOUBLE_FROM_LE(randomValuesData.parameter1, ui.leParameter1)
+	SET_DOUBLE_FROM_LE(randomValuesData.parameter2, ui.leParameter2)
+	SET_DOUBLE_FROM_LE(randomValuesData.parameter3, ui.leParameter3)
+	if (!ui.leSeed->text().isEmpty())
+		randomValuesData.seed = seed;
 
 	switch (dist) {
 	case nsl_sf_stats_gaussian: {
@@ -1113,7 +1152,29 @@ void RandomValuesDialog::generate() {
 		}
 		break;
 	}
-	// additional non-GSL distributions not needed
+	case nsl_sf_stats_triangular: {
+		double a{0.0}, b{1.0}, c{0.5};
+		SET_DOUBLE_FROM_LE(a, ui.leParameter1)
+		SET_DOUBLE_FROM_LE(b, ui.leParameter2)
+		SET_DOUBLE_FROM_LE(c, ui.leParameter3)
+		for (auto* col : m_columns) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
+				for (int i = 0; i < rows; ++i)
+					data[i] = nsl_ran_triangular(r, a, b, c);
+				col->setValues(data);
+			} else if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
+				for (int i = 0; i < rows; ++i)
+					data_int[i] = (int)nsl_ran_triangular(r, a, b, c);
+				col->setIntegers(data_int);
+			} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
+				for (int i = 0; i < rows; ++i)
+					data_bigint[i] = (qint64)nsl_ran_triangular(r, a, b, c);
+				col->setBigInts(data_bigint);
+			}
+		}
+		break;
+	}
+	// distributions without RNG
 	case nsl_sf_stats_maxwell_boltzmann:
 	case nsl_sf_stats_sech:
 	case nsl_sf_stats_levy:
@@ -1122,6 +1183,7 @@ void RandomValuesDialog::generate() {
 	}
 
 	for (auto* col : m_columns) {
+		col->setRandomValuesData(randomValuesData);
 		col->setSuppressDataChangedSignal(false);
 		col->setChanged();
 	}

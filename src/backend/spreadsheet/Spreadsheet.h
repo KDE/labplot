@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Aspect providing a spreadsheet table with column logic
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2006-2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -19,6 +19,7 @@ class AbstractFileFilter;
 class SpreadsheetView;
 class SpreadsheetModel;
 class SpreadsheetPrivate;
+class StatisticsSpreadsheet;
 
 class Spreadsheet : public AbstractDataSource {
 	Q_OBJECT
@@ -31,6 +32,7 @@ public:
 	QMenu* createContextMenu() override;
 	void fillColumnContextMenu(QMenu*, Column*);
 	QWidget* view() const override;
+	StatisticsSpreadsheet* statisticsSpreadsheet() const;
 
 	bool exportView() const override;
 	bool printView() override;
@@ -60,8 +62,6 @@ public:
 	int colY(int col);
 	QString text(int row, int col) const;
 
-	void copy(Spreadsheet* other);
-
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
@@ -69,22 +69,25 @@ public:
 
 	// used from model to inform dock
 	void emitRowCountChanged() {
-		emit rowCountChanged(rowCount());
+		Q_EMIT rowCountChanged(rowCount());
 	}
 	void emitColumnCountChanged() {
-		emit columnCountChanged(columnCount());
+		Q_EMIT columnCountChanged(columnCount());
 	}
+
+	bool isSparklineShown{false};
 
 	// data import
 	int prepareImport(std::vector<void*>& dataContainer,
 					  AbstractFileFilter::ImportMode,
 					  int rows,
 					  int cols,
-					  QStringList colNameList,
-					  QVector<AbstractColumn::ColumnMode>,
+					  const QStringList& colNameList,
+					  const QVector<AbstractColumn::ColumnMode>&,
+					  bool& ok,
 					  bool initializeContainer) override;
 	void finalizeImport(size_t columnOffset, size_t startColumn, size_t endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode) override;
-	int resize(AbstractFileFilter::ImportMode, QStringList colNameList, int cols);
+	int resize(AbstractFileFilter::ImportMode, const QStringList& colNameList, int cols);
 
 	struct Linking {
 		bool linking{false};
@@ -103,6 +106,8 @@ public:
 public Q_SLOTS:
 	void appendRows(int);
 	void appendRow();
+	void removeEmptyRows();
+	void maskEmptyRows();
 	void appendColumns(int);
 	void appendColumn();
 	void prependColumns(int);
@@ -122,9 +127,12 @@ public Q_SLOTS:
 	void moveColumn(int from, int to);
 	void sortColumns(Column* leading, const QVector<Column*>&, bool ascending);
 
+	void toggleStatisticsSpreadsheet(bool);
+
 private:
 	void init();
 	void initConnectionsLinking(const Spreadsheet* sender, const Spreadsheet* receiver);
+	QVector<int> rowsWithMissingValues() const;
 	Q_DECLARE_PRIVATE(Spreadsheet)
 
 	SpreadsheetPrivate* const d_ptr;
@@ -138,6 +146,7 @@ private Q_SLOTS:
 	void childDeselected(const AbstractAspect*) override;
 	void linkedSpreadsheetDeleted();
 	void linkedSpreadsheetNewRowCount(int);
+	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect*);
 
 Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
@@ -166,6 +175,7 @@ Q_SIGNALS:
 
 	friend class SpreadsheetSetLinkingCmd;
 	friend class SpreadsheetSetColumnCountCommand;
+	friend class Project; // handleAspectUpdated required
 };
 
 #endif

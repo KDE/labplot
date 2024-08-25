@@ -21,9 +21,9 @@ InfoElementDock::InfoElementDock(QWidget* parent)
 	: BaseDock(parent)
 	, ui(new Ui::InfoElementDock) {
 	ui->setupUi(this);
-	m_leName = ui->leName;
-	m_teComment = ui->teComment;
-	m_teComment->setFixedHeight(m_leName->height());
+	setPlotRangeCombobox(ui->cbPlotRanges);
+	setBaseWidgets(ui->leName, ui->teComment);
+	setVisibilityWidgets(ui->chbVisible);
 
 	//"Title"-tab
 	auto* hboxLayout = new QHBoxLayout(ui->tabTitle);
@@ -48,14 +48,10 @@ InfoElementDock::InfoElementDock(QWidget* parent)
 
 	//**********************************  Slots **********************************************
 	// general
-	connect(ui->leName, &QLineEdit::textChanged, this, &InfoElementDock::nameChanged);
-	connect(ui->teComment, &QTextEdit::textChanged, this, &InfoElementDock::commentChanged);
 	connect(ui->sbPosition, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &InfoElementDock::positionChanged);
 	connect(ui->dateTimeEditPosition, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &InfoElementDock::positionDateTimeChanged);
 	connect(ui->cbConnectToCurve, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::curveChanged);
 	connect(ui->cbConnectToAnchor, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::gluePointChanged);
-	connect(ui->cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::plotRangeChanged);
-	connect(ui->chbVisible, &QCheckBox::toggled, this, &InfoElementDock::visibilityChanged);
 }
 
 void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
@@ -92,23 +88,6 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 
 	ui->lwCurves->clear();
 	ui->cbConnectToCurve->clear();
-
-	// if there are more than one info element in the list, disable the name and comment fields
-	if (list.size() == 1) {
-		ui->lName->setEnabled(true);
-		ui->leName->setEnabled(true);
-		ui->lComment->setEnabled(true);
-		ui->teComment->setEnabled(true);
-		ui->leName->setText(m_element->name());
-		ui->teComment->setText(m_element->comment());
-	} else {
-		ui->lName->setEnabled(false);
-		ui->leName->setEnabled(false);
-		ui->lComment->setEnabled(false);
-		ui->teComment->setEnabled(false);
-		ui->leName->setText(QString());
-		ui->teComment->setText(QString());
-	}
 
 	ui->chbVisible->setChecked(m_element->isVisible());
 
@@ -168,23 +147,14 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 		ui->dateTimeEditPosition->show();
 	}
 
-	// connections
-
-	updatePlotRanges(); // needed when loading project
+	updatePlotRangeList(); // needed when loading project
 
 	// general
-	connect(m_element, &InfoElement::aspectDescriptionChanged, this, &InfoElementDock::aspectDescriptionChanged);
 	connect(m_element, &InfoElement::positionLogicalChanged, this, &InfoElementDock::elementPositionChanged);
 	connect(m_element, &InfoElement::gluePointIndexChanged, this, &InfoElementDock::elementGluePointIndexChanged);
 	connect(m_element, &InfoElement::connectionLineCurveNameChanged, this, &InfoElementDock::elementConnectionLineCurveChanged);
 	connect(m_element, &InfoElement::labelBorderShapeChangedSignal, this, &InfoElementDock::elementLabelBorderShapeChanged);
 	connect(m_element, &InfoElement::curveRemoved, this, &InfoElementDock::elementCurveRemoved);
-	connect(m_element, &WorksheetElement::plotRangeListChanged, this, &InfoElementDock::updatePlotRanges);
-	connect(m_element, &InfoElement::visibleChanged, this, &InfoElementDock::elementVisibilityChanged);
-}
-
-void InfoElementDock::updatePlotRanges() {
-	updatePlotRangeList(ui->cbPlotRanges);
 }
 
 //*************************************************************
@@ -209,7 +179,7 @@ void InfoElementDock::positionDateTimeChanged(qint64 value) {
 		element->setPositionLogical(value);
 }
 
-void InfoElementDock::curveSelectionChanged(bool state) {
+void InfoElementDock::curveSelectionChanged(bool enabled) {
 	CONDITIONAL_LOCK_RETURN;
 	if (!m_sameParent)
 		return;
@@ -226,7 +196,7 @@ void InfoElementDock::curveSelectionChanged(bool state) {
 	}
 
 	// add/remove the changed curve
-	if (state && curve) {
+	if (enabled && curve) {
 		for (auto* element : m_elements)
 			element->addCurve(curve);
 
@@ -254,8 +224,10 @@ void InfoElementDock::curveSelectionChanged(bool state) {
 			}
 		}
 
-		for (auto* element : m_elements)
-			element->removeCurve(curve);
+		if (curve) {
+			for (auto* element : m_elements)
+				element->removeCurve(curve);
+		}
 
 		if (macroStarted)
 			m_element->endMacro();
@@ -277,21 +249,9 @@ void InfoElementDock::gluePointChanged(int index) {
 		infoElement->setGluePointIndex(index - 1); // index 0 means automatic, which is defined as -1
 }
 
-void InfoElementDock::visibilityChanged(bool state) {
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* infoElement : m_elements)
-		infoElement->setVisible(state);
-}
-
 //***********************************************************
 //******* SLOTs for changes triggered in InfoElement ********
 //***********************************************************
-void InfoElementDock::elementVisibilityChanged(const bool visible) {
-	CONDITIONAL_LOCK_RETURN;
-	ui->chbVisible->setChecked(visible);
-}
-
 void InfoElementDock::elementGluePointIndexChanged(const int index) {
 	CONDITIONAL_LOCK_RETURN;
 	if (index < 0)

@@ -17,9 +17,13 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/AxisPrivate.h"
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
+#include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
+#include "backend/worksheet/plots/cartesian/XYFunctionCurve.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
 #include "kdefrontend/dockwidgets/AxisDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotDock.h"
@@ -75,6 +79,7 @@ void RetransformTest::TestLoadProject() {
 
 // Problem in this project was that the second axis labels are not loaded. Zooming in/out once shows the correct range
 void RetransformTest::TestLoadProject2() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
 	RetransformCallCounter c;
 	Project project;
 
@@ -226,6 +231,14 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	QVERIFY(plot2);
 	QCOMPARE(plot2->name(), QLatin1String("plot2"));
 
+	QCOMPARE(plot->childCount<XYCurve>(), 3);
+	QCOMPARE(plot->child<XYCurve>(0)->name(), QStringLiteral("sin"));
+	QCOMPARE(plot->child<XYCurve>(0)->coordinateSystemIndex(), 0);
+	QCOMPARE(plot->child<XYCurve>(1)->name(), QStringLiteral("cos"));
+	QCOMPARE(plot->child<XYCurve>(1)->coordinateSystemIndex(), 0);
+	QCOMPARE(plot->child<XYCurve>(2)->name(), QStringLiteral("tan"));
+	QCOMPARE(plot->child<XYCurve>(2)->coordinateSystemIndex(), 1);
+
 	QAction a(nullptr);
 	a.setData(static_cast<int>(CartesianPlot::MouseMode::ZoomXSelection));
 	view->cartesianPlotMouseModeChanged(&a);
@@ -233,9 +246,9 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	QCOMPARE(c.elementLogCount(false), 0);
 	QVERIFY(c.calledExact(0, false));
 
-	emit plot->mousePressZoomSelectionModeSignal(QPointF(0.2, -150));
-	emit plot->mouseMoveZoomSelectionModeSignal(QPointF(0.6, 100));
-	emit plot->mouseReleaseZoomSelectionModeSignal();
+	Q_EMIT plot->mousePressZoomSelectionModeSignal(QPointF(0.2, -150));
+	Q_EMIT plot->mouseMoveZoomSelectionModeSignal(QPointF(0.6, 100));
+	Q_EMIT plot->mouseReleaseZoomSelectionModeSignal();
 
 	// x and y are called only once
 	QCOMPARE(c.logsXScaleRetransformed.count(), 2); // 2 plots with each one x axis
@@ -244,7 +257,7 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	QCOMPARE(c.logsXScaleRetransformed.at(1).plot, plot2);
 	QCOMPARE(c.logsXScaleRetransformed.at(1).index, 0);
 	QCOMPARE(c.logsYScaleRetransformed.count(),
-			 3); // there are two vertical ranges (sin,cos and tan range) for the first plot and one y axis for the second plot
+			 3); // there are two vertical ranges (sin, cos and tan range) for the first plot and one y axis for the second plot
 	QCOMPARE(c.logsYScaleRetransformed.at(0).plot, plot);
 	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0);
 	QCOMPARE(c.logsYScaleRetransformed.at(1).plot, plot);
@@ -266,7 +279,7 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 		QStringLiteral("Project/Worksheet/xy-plot/legend"),
 		QStringLiteral("Project/Worksheet/xy-plot/plotText"),
 		QStringLiteral("Project/Worksheet/xy-plot/plotImage"),
-		/* second plot starting */
+		// second plot starting
 		QStringLiteral("Project/Worksheet/plot2/x"),
 		QStringLiteral("Project/Worksheet/plot2/y"),
 		QStringLiteral("Project/Worksheet/plot2/xy-curve"),
@@ -291,7 +304,7 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	QCOMPARE(c.logsXScaleRetransformed.at(1).plot, plot2);
 	QCOMPARE(c.logsXScaleRetransformed.at(1).index, 0); // first x axis of second plot
 	QCOMPARE(c.logsYScaleRetransformed.count(),
-			 3); // there are two vertical ranges (sin,cos and tan range) for the first plot and one y axis for the second plot
+			 3); // there are two vertical ranges (sin, cos and tan range) for the first plot and one y axis for the second plot
 	QCOMPARE(c.logsYScaleRetransformed.at(0).plot, plot);
 	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0); // first y axis of first plot
 	QCOMPARE(c.logsYScaleRetransformed.at(1).plot, plot);
@@ -388,9 +401,9 @@ void RetransformTest::TestZoomAutoscaleSingleYRange() {
 	view->setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode::ApplyActionToAllX);
 
 	// Zoom selection
-	emit plot->mousePressZoomSelectionModeSignal(QPointF(2, 0));
-	emit plot->mouseMoveZoomSelectionModeSignal(QPointF(3, 100));
-	emit plot->mouseReleaseZoomSelectionModeSignal();
+	Q_EMIT plot->mousePressZoomSelectionModeSignal(QPointF(2, 0));
+	Q_EMIT plot->mouseMoveZoomSelectionModeSignal(QPointF(3, 100));
+	Q_EMIT plot->mouseReleaseZoomSelectionModeSignal();
 
 	CHECK_RANGE(plot, curve1, Dimension::X, 2., 3.);
 	CHECK_RANGE(plot, curve1, Dimension::Y, 1002.2, 1003.3); // Nice Extend applied
@@ -486,9 +499,9 @@ void RetransformTest::TestZoomAutoscaleSingleXRange() {
 	view->setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode::ApplyActionToAllY);
 
 	// Zoom selection
-	emit plot->mousePressZoomSelectionModeSignal(QPointF(0, 2));
-	emit plot->mouseMoveZoomSelectionModeSignal(QPointF(100, 3));
-	emit plot->mouseReleaseZoomSelectionModeSignal();
+	Q_EMIT plot->mousePressZoomSelectionModeSignal(QPointF(0, 2));
+	Q_EMIT plot->mouseMoveZoomSelectionModeSignal(QPointF(100, 3));
+	Q_EMIT plot->mouseReleaseZoomSelectionModeSignal();
 
 	CHECK_RANGE(plot, curve1, Dimension::Y, 2., 3.);
 	CHECK_RANGE(plot, curve1, Dimension::X, 1002.2, 1003.3); // Nice Extend applied
@@ -641,7 +654,7 @@ void RetransformTest::TestAddCurve() {
 
 	RetransformCallCounter c;
 
-	p->addEquationCurve();
+	p->addChild(new XYEquationCurve(QLatin1String("curve")));
 
 	// check that plot will be recalculated if a curve will be added
 	QCOMPARE(c.callCount(p), 1);
@@ -677,8 +690,9 @@ void RetransformTest::TestAddCurve() {
 	auto list =
 		QStringList({QStringLiteral("Project/Worksheet/plot/x"), QStringLiteral("Project/Worksheet/plot/y"), QStringLiteral("Project/Worksheet/plot/f(x)")});
 	QCOMPARE(c.elementLogCount(false), list.count());
-	for (auto& s : list)
-		QCOMPARE(c.callCount(s), 1);
+	QCOMPARE(c.callCount(list.at(0)), 1);
+	QCOMPARE(c.callCount(list.at(1)), 1);
+	QCOMPARE(c.callCount(list.at(2)), 0);
 
 	// x and y are called only once
 	QCOMPARE(c.logsXScaleRetransformed.count(), 1);
@@ -713,9 +727,8 @@ void RetransformTest::TestBarPlotOrientation() {
 	for (const auto& child : children)
 		connect(child, &AbstractAspect::retransformCalledSignal, &c, &RetransformCallCounter::aspectRetransformed);
 
-	for (const auto& plot : project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive)) {
+	for (const auto& plot : project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive))
 		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::scaleRetransformed, &c, &RetransformCallCounter::retransformScaleCalled);
-	}
 
 	auto barplots = project.children(AspectType::BarPlot, AbstractAspect::ChildIndexFlag::Recursive);
 	QCOMPARE(barplots.length(), 1);
@@ -901,7 +914,7 @@ void RetransformTest::TestImportCSV() {
 	QCOMPARE(c.logsXScaleRetransformed.count(), 1); // one plot with 1 x-Axis
 	QCOMPARE(c.logsXScaleRetransformed.at(0).plot, p);
 	QCOMPARE(c.logsXScaleRetransformed.at(0).index, 0);
-	QCOMPARE(c.logsYScaleRetransformed.count(), 1); // one plot with 1 x-Axis
+	QCOMPARE(c.logsYScaleRetransformed.count(), 1); // one plot with 1 y-Axis
 	QCOMPARE(c.logsYScaleRetransformed.at(0).plot, p);
 	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0);
 
@@ -912,6 +925,94 @@ void RetransformTest::TestImportCSV() {
 		qDebug() << s;
 		QCOMPARE(c.callCount(s), 1);
 	}
+}
+
+// Same as AsciiFilterTest::plotUpdateAfterImportWithColumnRemove() but with retransform check
+void RetransformTest::TestImportCSVInvalidateCurve() {
+	Project project; // need a project object since the column restore logic is in project
+
+	// create the spreadsheet with the source data
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(spreadsheet);
+	spreadsheet->setColumnCount(2);
+	spreadsheet->setRowCount(3);
+
+	auto* col = spreadsheet->column(0);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col->setName(QStringLiteral("1"));
+	col->setValueAt(0, 10.);
+	col->setValueAt(1, 20.);
+	col->setValueAt(2, 30.);
+
+	col = spreadsheet->column(1);
+	col->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col->setName(QStringLiteral("2"));
+	col->setValueAt(0, 10.);
+	col->setValueAt(1, 20.);
+	col->setValueAt(2, 30.);
+
+	// create a xy-curve with the both columns in the source spreadsheet and check the ranges
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	project.addChild(p);
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	p->addChild(curve);
+	curve->setXColumn(spreadsheet->column(0)); // use "1" for x
+	curve->setYColumn(spreadsheet->column(1)); // use "2" for y
+
+	auto rangeX = p->range(Dimension::X);
+	QCOMPARE(rangeX.start(), 10);
+	QCOMPARE(rangeX.end(), 30);
+
+	auto rangeY = p->range(Dimension::Y);
+	QCOMPARE(rangeY.start(), 10);
+	QCOMPARE(rangeY.end(), 30);
+
+	const auto& children = project.children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive);
+	RetransformCallCounter c;
+	// CartesianPlot "plot"
+	// XYCurve "curve"
+	// Spreadsheet "test"
+	// Column "1"
+	// Column "2"
+	QCOMPARE(children.length(), 5);
+	for (const auto& child : children) {
+		qDebug() << child->name();
+		connect(child, &AbstractAspect::retransformCalledSignal, &c, &RetransformCallCounter::aspectRetransformed);
+	}
+
+	const auto& plots = project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive);
+	for (const auto& plot : plots)
+		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::scaleRetransformed, &c, &RetransformCallCounter::retransformScaleCalled);
+
+	// import the data into the source spreadsheet, the columns are renamed to "c1" and "c2"
+	AsciiFilter filter;
+
+	QStringList fileContent = {
+		QStringLiteral("c1;c2"),
+		QStringLiteral("1;1"),
+		QStringLiteral("2;2"),
+		QStringLiteral("3;3"),
+	};
+	QString savePath;
+	SAVE_FILE("testfile", fileContent);
+
+	filter.setCommentCharacter(QString());
+	filter.setSeparatingCharacter(QStringLiteral(";"));
+	filter.setHeaderEnabled(true);
+	filter.setHeaderLine(1);
+	filter.readDataFromFile(savePath, spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	// the assignment to the data columns got lost since the columns were renamed
+	QCOMPARE(curve->xColumn(), nullptr);
+	QCOMPARE(curve->yColumn(), nullptr);
+
+	// the range of the plot didn't change, no retransform
+	QCOMPARE(c.logsXScaleRetransformed.count(), 0);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 0);
+
+	// the curve that lost the column assignemnt should be retransformed
+	QCOMPARE(c.elementLogCount(false), 1);
+	QCOMPARE(c.callCount(QStringLiteral("Project/plot/curve")), 1);
 }
 
 void RetransformTest::TestSetScale() {
@@ -987,7 +1088,7 @@ void RetransformTest::TestSetScale() {
 		QCOMPARE(c.callCount(s), 1);
 
 	// x and y are called only once
-	QCOMPARE(c.logsXScaleRetransformed.count(), 1); // one plot with 2 x-Axes but both are using the same range so 1
+	QCOMPARE(c.logsXScaleRetransformed.count(), 1);
 	QCOMPARE(c.logsXScaleRetransformed.at(0).plot, plot);
 	QCOMPARE(c.logsXScaleRetransformed.at(0).index, 0);
 	QCOMPARE(c.logsYScaleRetransformed.count(), 0);
@@ -1674,11 +1775,295 @@ void RetransformTest::TestChangePlotRangeElement3() {
 		QCOMPARE(line.p2().y(), dataRect.top());
 	}
 }
+// ##############################################################################
+// ####### Tests checking the retransform behavior on plot shape changes  #######
+// ##############################################################################
+/*!
+ * recalculation of plots without changing the min and max values of the data ranges.
+ */
+void RetransformTest::testPlotRecalcNoRetransform() {
+	// prepare the data
+	Spreadsheet sheet(QStringLiteral("test"), false);
+	sheet.setColumnCount(1);
+	sheet.setRowCount(100);
+	auto* column = sheet.column(0);
+	column->setValueAt(0, 2.);
+	column->setValueAt(1, 4.);
+	column->setValueAt(2, 6.);
+	QVector<const AbstractColumn*> dataColumns;
+	dataColumns << column;
+
+	// prepare the worksheet + plots
+	RetransformCallCounter c;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	ws->addChild(p);
+	c.aspectAdded(p);
+	const auto& axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	c.aspectAdded(axes.at(0));
+	c.aspectAdded(axes.at(1));
+
+	auto* barPlot = new BarPlot(QStringLiteral("barPlot"));
+	barPlot->setDataColumns(dataColumns);
+	p->addChild(barPlot);
+	c.aspectAdded(barPlot);
+
+	auto* boxPlot = new BoxPlot(QStringLiteral("boxPlot"));
+	boxPlot->setDataColumns(dataColumns);
+	p->addChild(boxPlot);
+	c.aspectAdded(boxPlot);
+
+	auto* histPlot = new Histogram(QStringLiteral("histPlot"));
+	histPlot->setDataColumn(column);
+	p->addChild(histPlot);
+	c.aspectAdded(histPlot);
+
+	// call recalc() in the created plots which is called at runtime when modifying the data
+	// or any plot properties affecting the shape of the plot.
+	// since the data was not changed and no properties were changed affecting plot ranges
+	// like the orientation of a box plot changing min and max values for x and y, etc.,
+	// there shouldn't be any retransform calls in the parent plot area
+	c.resetRetransformCount();
+	barPlot->recalc();
+	{
+		QCOMPARE(c.elementLogCount(false), 1); // only barplot
+		const auto stat = c.statistic(false);
+		QCOMPARE(stat.contains(barPlot->path()), true);
+		QVERIFY(c.calledExact(1, false));
+		QCOMPARE(c.logsXScaleRetransformed.count(), 0);
+		QCOMPARE(c.logsYScaleRetransformed.count(), 0);
+	}
+
+	c.resetRetransformCount();
+
+	boxPlot->recalc();
+	{
+		QCOMPARE(c.elementLogCount(false), 1); // only boxPlot
+		const auto stat = c.statistic(false);
+		QCOMPARE(stat.contains(boxPlot->path()), true);
+		QVERIFY(c.calledExact(1, false));
+		QCOMPARE(c.logsXScaleRetransformed.count(), 0);
+		QCOMPARE(c.logsYScaleRetransformed.count(), 0);
+	}
+
+	c.resetRetransformCount();
+
+	histPlot->recalc();
+
+	{
+		QCOMPARE(c.elementLogCount(false), 1); // only histPlot
+		const auto stat = c.statistic(false);
+		QCOMPARE(stat.contains(histPlot->path()), true);
+		QVERIFY(c.calledExact(1, false));
+		QCOMPARE(c.logsXScaleRetransformed.count(), 0);
+		QCOMPARE(c.logsYScaleRetransformed.count(), 0);
+	}
+}
+
+/*!
+ * recalculation of plots with changing the min and max values of the data ranges.
+ */
+void RetransformTest::testPlotRecalcRetransform() {
+	// prepare the data
+	Spreadsheet sheet(QStringLiteral("test"), false);
+	sheet.setColumnCount(1);
+	sheet.setRowCount(100);
+	auto* column = sheet.column(0);
+	column->setValueAt(0, 2.);
+	column->setValueAt(1, 4.);
+	column->setValueAt(2, 6.);
+	QVector<const AbstractColumn*> dataColumns;
+	dataColumns << column;
+
+	RetransformCallCounter c;
+
+	// prepare the worksheet + plots
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	ws->addChild(p);
+	c.aspectAdded(p);
+	const auto& axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	c.aspectAdded(axes.at(0));
+	c.aspectAdded(axes.at(1));
+
+	auto* barPlot = new BarPlot(QStringLiteral("barPlot"));
+	barPlot->setDataColumns(dataColumns);
+	p->addChild(barPlot);
+	c.aspectAdded(barPlot);
+
+	auto* boxPlot = new BoxPlot(QStringLiteral("boxPlot"));
+	boxPlot->setDataColumns(dataColumns);
+	p->addChild(boxPlot);
+	c.aspectAdded(boxPlot);
+
+	auto* histPlot = new Histogram(QStringLiteral("histPlot"));
+	histPlot->setDataColumn(column);
+	p->addChild(histPlot);
+	c.aspectAdded(histPlot);
+
+	c.resetRetransformCount();
+
+	// modify one of the plots so its min and max values are changed.
+	// this should trigger the recalculation of the data ranges in the parent plot area
+	// and a retransform call for all its children
+	QCOMPARE(histPlot->orientation(), Histogram::Orientation::Vertical);
+	histPlot->setOrientation(Histogram::Orientation::Horizontal);
+
+	{
+		const auto stat = c.statistic(false);
+		QCOMPARE(stat.count(), 5); // barPlot, boxPlot, histPlot, xAxis and yAxis are inside
+		QCOMPARE(stat.contains(barPlot->path()), true);
+		QCOMPARE(stat.contains(boxPlot->path()), true);
+		QCOMPARE(stat.contains(histPlot->path()), true);
+		QCOMPARE(stat.contains(axes.at(0)->path()), true);
+		QCOMPARE(stat.contains(axes.at(1)->path()), true);
+		QVERIFY(c.calledExact(1, false));
+		QCOMPARE(c.logsXScaleRetransformed.count(), 1);
+		QCOMPARE(c.logsYScaleRetransformed.count(), 0); // y range did not change, because boxplot and barplot  are still vertical
+	}
+
+	{
+		c.resetRetransformCount();
+		QCOMPARE(barPlot->orientation(), BarPlot::Orientation::Vertical);
+		barPlot->setOrientation(BarPlot::Orientation::Horizontal);
+		const auto stat = c.statistic(false);
+		QCOMPARE(stat.count(), 5); // barPlot, boxPlot, histPlot, xAxis and yAxis are inside
+		QCOMPARE(stat.contains(barPlot->path()), true);
+		QCOMPARE(stat.contains(boxPlot->path()), true);
+		QCOMPARE(stat.contains(histPlot->path()), true);
+		QCOMPARE(stat.contains(axes.at(0)->path()), true);
+		QCOMPARE(stat.contains(axes.at(1)->path()), true);
+		QVERIFY(c.calledExact(1, false));
+		QCOMPARE(c.logsXScaleRetransformed.count(), 1);
+		QCOMPARE(c.logsYScaleRetransformed.count(), 0); // y range did not change, because boxplot  is still vertical
+	}
+
+	{
+		c.resetRetransformCount();
+		QCOMPARE(boxPlot->orientation(), BoxPlot::Orientation::Vertical);
+		boxPlot->setOrientation(BoxPlot::Orientation::Horizontal);
+
+		const auto stat = c.statistic(false);
+		QCOMPARE(stat.count(), 5); // barPlot, boxPlot, histPlot, xAxis and yAxis are inside
+		QCOMPARE(stat.contains(barPlot->path()), true);
+		QCOMPARE(stat.contains(boxPlot->path()), true);
+		QCOMPARE(stat.contains(histPlot->path()), true);
+		QCOMPARE(stat.contains(axes.at(0)->path()), true);
+		QCOMPARE(stat.contains(axes.at(1)->path()), true);
+		QVERIFY(c.calledExact(1, false));
+		QCOMPARE(c.logsXScaleRetransformed.count(), 1);
+		QCOMPARE(c.logsYScaleRetransformed.count(), 1); // y range changes
+	}
+}
+
+void RetransformTest::xyFunctionCurve() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	RetransformCallCounter c;
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+	c.aspectAdded(p);
+	const auto& axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	c.aspectAdded(axes.at(0));
+	c.aspectAdded(axes.at(1));
+
+	p->addChild(new XYEquationCurve(QLatin1String("eq")));
+
+	auto equationCurves = p->children(AspectType::XYEquationCurve);
+	QCOMPARE(equationCurves.count(), 1);
+	auto* equationCurve = static_cast<XYEquationCurve*>(equationCurves.at(0));
+	XYEquationCurve::EquationData data;
+	data.count = 100;
+	data.expression1 = QStringLiteral("x");
+	data.expression2 = QString();
+	data.min = QStringLiteral("1");
+	data.max = QStringLiteral("100");
+	data.type = XYEquationCurve::EquationType::Cartesian;
+	equationCurve->setEquationData(data);
+
+	c.aspectAdded(equationCurve);
+
+	QCOMPARE(equationCurve->xColumn()->rowCount(), data.count);
+
+	p->addChild(new XYFunctionCurve(QLatin1String("eq2")));
+	auto functionCurves = p->children(AspectType::XYFunctionCurve);
+	QCOMPARE(functionCurves.count(), 1);
+	auto* functionCurve = static_cast<XYFunctionCurve*>(functionCurves.at(0));
+
+	c.aspectAdded(functionCurve);
+
+	c.resetRetransformCount();
+
+	functionCurve->setFunction(QStringLiteral("2*x"), {QStringLiteral("x")}, {equationCurve});
+
+	{
+		const auto stat = c.statistic(false);
+		QCOMPARE(stat.count(), 4); // equationCurve, functionCurve, xAxis and yAxis are inside
+		QCOMPARE(stat.contains(equationCurve->path()), true);
+		QCOMPARE(stat.contains(functionCurve->path()), true);
+		QCOMPARE(stat.contains(axes.at(0)->path()), true);
+		QCOMPARE(stat.contains(axes.at(1)->path()), true);
+		QVERIFY(c.calledExact(1, false));
+		QCOMPARE(c.logsXScaleRetransformed.count(), 0); // only the y range changed
+		QCOMPARE(c.logsYScaleRetransformed.count(), 1);
+	}
+
+	{
+		const auto* xColumn = functionCurve->xColumn();
+		const auto* yColumn = functionCurve->yColumn();
+		QCOMPARE(xColumn->rowCount(), data.count);
+		QCOMPARE(yColumn->rowCount(), data.count);
+		for (int i = 0; i < xColumn->rowCount(); i++) {
+			VALUES_EQUAL(xColumn->valueAt(i), i + 1.);
+			VALUES_EQUAL(yColumn->valueAt(i), (i + 1.) * 2.0);
+		}
+	}
+
+	c.resetRetransformCount();
+
+	data.expression1 = QStringLiteral("2*x");
+	data.min = QStringLiteral("10");
+	data.max = QStringLiteral("1000");
+	equationCurve->setEquationData(data);
+
+	{
+		const auto stat = c.statistic(false);
+		QCOMPARE(stat.count(), 4); // equationCurve, functionCurve, xAxis and yAxis are inside
+		QCOMPARE(stat.contains(equationCurve->path()), true);
+		QCOMPARE(stat.contains(functionCurve->path()), true);
+		QCOMPARE(stat.contains(axes.at(0)->path()), true);
+		QCOMPARE(stat.contains(axes.at(1)->path()), true);
+		// QVERIFY(c.calledExact(1, false)); // TODO: how to verify that retransform gets called only once?
+		QCOMPARE(c.logsXScaleRetransformed.count(), 1);
+		QVERIFY(c.logsYScaleRetransformed.count() >= 1);
+		// QCOMPARE(c.logsYScaleRetransformed.count(), 1);
+	}
+}
 
 // ############################################################################################
 // ############################################################################################
 // ############################################################################################
 
+/*!
+ * \brief RetransformCallCounter::statistic
+ * Returns a statistic how often retransform was called for a specific element
+ * They key is the path of the element and the value is the value how often
+ * retransform was called
+ * \param includeSuppressed. If true all retransforms even the suppressed once will
+ * be counted. If false only the retransforms which are really executed are counted
+ * \return
+ */
 QHash<QString, int> RetransformCallCounter::statistic(bool includeSuppressed) {
 	QHash<QString, int> result;
 	for (auto& log : logsRetransformed) {
@@ -1694,10 +2079,23 @@ QHash<QString, int> RetransformCallCounter::statistic(bool includeSuppressed) {
 	return result;
 }
 
+/*!
+ * \brief RetransformCallCounter::elementLogCount
+ * Counts the number of different elements which got at least one retransform
+ * \param includeSuppressed
+ * \return
+ */
 int RetransformCallCounter::elementLogCount(bool includeSuppressed) {
 	return statistic(includeSuppressed).count();
 }
 
+/*!
+ * \brief RetransformCallCounter::calledExact
+ * Checks if all elements are retransformed \p requiredCallCount times
+ * \param requiredCallCount
+ * \param includeSuppressed
+ * \return True if all elements are retransformed \p requiredCallCount times, else false
+ */
 bool RetransformCallCounter::calledExact(int requiredCallCount, bool includeSuppressed) {
 	const auto& result = statistic(includeSuppressed);
 	QHash<QString, int>::const_iterator i;
@@ -1710,6 +2108,12 @@ bool RetransformCallCounter::calledExact(int requiredCallCount, bool includeSupp
 	return true;
 }
 
+/*!
+ * \brief RetransformCallCounter::callCount
+ * Returns the call count of a specific element defined by \p path
+ * \param path The path of the element element->path()
+ * \return
+ */
 int RetransformCallCounter::callCount(const QString& path) {
 	const auto& result = statistic(false);
 	if (!result.contains(path))
@@ -1718,20 +2122,47 @@ int RetransformCallCounter::callCount(const QString& path) {
 	return result.value(path);
 }
 
+/*!
+ * \brief RetransformCallCounter::callCount
+ * Returns the number of retransform called for a specific object. This counter contains
+ * all retransforms from the beginning when the object was created and not yet connected
+ * to the RetransformCallCounter object. This is usefull when checking the retransform
+ * counts during loading of a project or during creation of an aspect
+ * \param aspect
+ * \return
+ */
 int RetransformCallCounter::callCount(const AbstractAspect* aspect) {
 	return aspect->retransformCalled();
 }
 
+/*!
+ * \brief RetransformCallCounter::resetRetransformCount
+ * Reset all counters
+ */
 void RetransformCallCounter::resetRetransformCount() {
 	logsRetransformed.clear();
 	logsXScaleRetransformed.clear();
 	logsYScaleRetransformed.clear();
 }
 
+/*!
+ * \brief RetransformCallCounter::aspectRetransformed
+ * Slot called whenever an aspects retransform was called after RetransformCallCounter::aspectAdded()
+ * was called on the object.
+ * \param sender
+ * \param suppressed
+ */
 void RetransformCallCounter::aspectRetransformed(const AbstractAspect* sender, bool suppressed) {
 	logsRetransformed.append({sender, suppressed});
 }
 
+/*!
+ * \brief RetransformCallCounter::retransformScaleCalled
+ * Slot called whenever an aspects retransformScale was called after RetransformCallCounter::aspectAdded()
+ * was called on the object.
+ * \param sender
+ * \param suppressed
+ */
 void RetransformCallCounter::retransformScaleCalled(const CartesianPlot* plot, const Dimension dim, int index) {
 	switch (dim) {
 	case Dimension::X:
@@ -1743,8 +2174,161 @@ void RetransformCallCounter::retransformScaleCalled(const CartesianPlot* plot, c
 	}
 }
 
+/*!
+ * \brief RetransformCallCounter::aspectAdded
+ * Connect RetransformCallCounter to the aspects signals to count the retransform calls
+ * \param aspect
+ */
 void RetransformCallCounter::aspectAdded(const AbstractAspect* aspect) {
 	connect(aspect, &AbstractAspect::retransformCalledSignal, this, &RetransformCallCounter::aspectRetransformed);
+	auto* plot = dynamic_cast<const CartesianPlot*>(aspect);
+	if (plot)
+		connect(plot, &CartesianPlot::scaleRetransformed, this, &RetransformCallCounter::retransformScaleCalled);
+}
+
+void RetransformTest::removeReaddxColum() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* sheet = new Spreadsheet(QStringLiteral("Spreadsheet"), false);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(11);
+	project.addChild(sheet);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve{new XYEquationCurve(QStringLiteral("f(x)"))};
+	curve->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	p->addChild(curve);
+
+	XYEquationCurve::EquationData data;
+	data.min = QStringLiteral("0");
+	data.max = QStringLiteral("10");
+	data.count = 11;
+	data.expression1 = QStringLiteral("x");
+	curve->setEquationData(data);
+	curve->recalculate();
+
+	auto* curve2 = new XYCurve(QStringLiteral("curve2"));
+	p->addChild(curve2);
+
+	auto* xColumn = sheet->column(0);
+	auto* yColumn = sheet->column(1);
+	{
+		QVector<int> xData;
+		QVector<double> yData;
+		for (int i = 1; i < 11; i++) { // different to the above
+			xData.append(i);
+			yData.append(pow(i, 2));
+		}
+
+		xColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
+		xColumn->replaceInteger(0, xData);
+		yColumn->setColumnMode(AbstractColumn::ColumnMode::Double);
+		yColumn->replaceValues(0, yData);
+		curve2->setXColumn(xColumn);
+		curve2->setYColumn(yColumn);
+	}
+
+	CHECK_RANGE(p, curve, Dimension::X, 0., 10.);
+	CHECK_RANGE(p, curve, Dimension::Y, 0., 100.);
+
+	sheet->removeChild(xColumn);
+
+	// Curve 2 got invalid
+	CHECK_RANGE(p, curve, Dimension::X, 0., 10.);
+	CHECK_RANGE(p, curve, Dimension::Y, 0., 10.);
+
+	const auto oldNameXColumn = xColumn->name();
+	xColumn->setName(QStringLiteral("NewName"));
+
+	sheet->addChild(xColumn);
+
+	CHECK_RANGE(p, curve, Dimension::X, 0., 10.);
+	CHECK_RANGE(p, curve, Dimension::Y, 0., 10.);
+
+	xColumn->setName(oldNameXColumn);
+
+	QCOMPARE(curve2->xColumn(), xColumn);
+	QCOMPARE(curve2->yColumn(), yColumn);
+
+	CHECK_RANGE(p, curve, Dimension::X, 0., 10.);
+	CHECK_RANGE(p, curve, Dimension::Y, 0., 100.);
+}
+
+void RetransformTest::removeReaddyColum() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* sheet = new Spreadsheet(QStringLiteral("Spreadsheet"), false);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(11);
+	project.addChild(sheet);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve{new XYEquationCurve(QStringLiteral("f(x)"))};
+	curve->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	p->addChild(curve);
+
+	XYEquationCurve::EquationData data;
+	data.min = QStringLiteral("0");
+	data.max = QStringLiteral("10");
+	data.count = 11;
+	data.expression1 = QStringLiteral("x");
+	curve->setEquationData(data);
+	curve->recalculate();
+
+	auto* curve2 = new XYCurve(QStringLiteral("curve2"));
+	p->addChild(curve2);
+
+	auto* xColumn = sheet->column(0);
+	auto* yColumn = sheet->column(1);
+	{
+		QVector<int> xData;
+		QVector<double> yData;
+		for (int i = 1; i < 11; i++) { // different to the above
+			xData.append(i);
+			yData.append(pow(i, 2));
+		}
+
+		xColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
+		xColumn->replaceInteger(0, xData);
+		yColumn->setColumnMode(AbstractColumn::ColumnMode::Double);
+		yColumn->replaceValues(0, yData);
+		curve2->setXColumn(xColumn);
+		curve2->setYColumn(yColumn);
+	}
+
+	CHECK_RANGE(p, curve, Dimension::X, 0., 10.);
+	CHECK_RANGE(p, curve, Dimension::Y, 0., 100.);
+
+	sheet->removeChild(yColumn);
+
+	// Curve 2 got invalid
+	CHECK_RANGE(p, curve, Dimension::X, 0., 10.);
+	CHECK_RANGE(p, curve, Dimension::Y, 0., 10.);
+
+	const auto oldNameYColumn = yColumn->name();
+	yColumn->setName(QStringLiteral("NewName"));
+
+	sheet->addChild(yColumn);
+
+	CHECK_RANGE(p, curve, Dimension::X, 0., 10.);
+	CHECK_RANGE(p, curve, Dimension::Y, 0., 10.);
+
+	yColumn->setName(oldNameYColumn);
+
+	CHECK_RANGE(p, curve, Dimension::X, 0., 10.);
+	CHECK_RANGE(p, curve, Dimension::Y, 0., 100.);
 }
 
 // Test change data

@@ -23,10 +23,6 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 
-extern "C" {
-// #include "backend/nsl/nsl_sf_poly.h"
-}
-
 #include <KLocalizedString>
 #include <QDebug> // qWarning()
 #include <QElapsedTimer>
@@ -155,6 +151,7 @@ bool XYHilbertTransformCurvePrivate::recalculateSpecific(const AbstractColumn* t
 	///////////////////////////////////////////////////////////
 	// transform with window
 	//	TODO: type
+	gsl_set_error_handler_off();
 	int status = nsl_hilbert_transform(ydata, 1, n, type);
 
 	unsigned int N = n;
@@ -219,7 +216,6 @@ void XYHilbertTransformCurve::save(QXmlStreamWriter* writer) const {
 bool XYHilbertTransformCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYHilbertTransformCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -257,6 +253,10 @@ bool XYHilbertTransformCurve::load(XmlStreamReader* reader, bool preview) {
 				d->xColumn = column;
 			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 
@@ -279,7 +279,7 @@ bool XYHilbertTransformCurve::load(XmlStreamReader* reader, bool preview) {
 		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
 		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;
 
-		recalcLogicalPoints();
+		recalc();
 	}
 
 	return true;

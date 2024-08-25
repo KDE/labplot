@@ -4,11 +4,14 @@
 	Description          : Base class for all Worksheet children.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024 Stefan Gerlach <stefan.gerlach@uni.kn>
+
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "backend/worksheet/WorksheetElement.h"
+#include "backend/core/AspectPrivate.h"
 #include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
@@ -17,15 +20,15 @@
 #include "plots/AbstractPlot.h"
 #include "plots/PlotArea.h"
 #include "plots/cartesian/CartesianCoordinateSystem.h"
+#include "plots/cartesian/Plot.h"
 
 #include <KLocalizedString>
 #include <QGraphicsItem>
 #include <QGraphicsScene>
+#include <QGraphicsSceneContextMenuEvent>
 #include <QKeyEvent>
 #include <QMenu>
 #include <QPen>
-#include <QStringLiteral>
-#include <QXmlStreamReader>
 
 /**
  * \class WorksheetElement
@@ -44,7 +47,8 @@ WorksheetElement::WorksheetElement(const QString& name, WorksheetElementPrivate*
 }
 
 void WorksheetElement::init() {
-	d_ptr->setData(0, static_cast<quint64>(type()));
+	Q_D(WorksheetElement);
+	d->setData(0, static_cast<quint64>(type()));
 }
 
 WorksheetElement::~WorksheetElement() {
@@ -55,16 +59,17 @@ WorksheetElement::~WorksheetElement() {
 
 void WorksheetElement::finalizeAdd() {
 	DEBUG(Q_FUNC_INFO)
-	if (!m_plot) {
-		/*Not in every case the parentAspect is a cartesian plot. When creating an infoelement, the parent
-		 * of a custom point is not the CartesianPlot (and so this function returns a nullptr), but the InfoElement.
-		 * So the plot is set manally in the custompoint and therefore the plot should not be set anymore.
-		 */
-		m_plot = dynamic_cast<CartesianPlot*>(parentAspect());
+	Q_D(WorksheetElement);
+	if (!d->m_plot) {
+		// determine the plot parent which is not neccessarily the parent aspect like for
+		// * child CustomPoint in InfoeElement
+		// * child XYCurves in QQPlot
+		// * etc.
+		d->m_plot = dynamic_cast<CartesianPlot*>(parent(AspectType::CartesianPlot));
 	}
 
-	if (m_plot) {
-		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem(m_cSystemIndex));
+	if (d->m_plot) {
+		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(d->m_plot->coordinateSystem(m_cSystemIndex));
 		Q_EMIT plotRangeListChanged();
 	} else
 		DEBUG(Q_FUNC_INFO << ", WARNING: no plot available.")
@@ -75,6 +80,19 @@ void WorksheetElement::finalizeAdd() {
  * \brief Return the graphics item representing this element.
  *
  */
+QGraphicsItem* WorksheetElement::graphicsItem() const {
+	return d_ptr;
+}
+
+/*!
+ * \brief WorksheetElement::setParentGraphicsItem
+ * Sets the parent graphicsitem, needed for binding to coord
+ * \param item parent graphicsitem
+ */
+void WorksheetElement::setParentGraphicsItem(QGraphicsItem* item) {
+	Q_D(WorksheetElement);
+	d->setParentItem(item);
+}
 
 /**
  * \fn void WorksheetElement::setVisible(bool on)
@@ -122,6 +140,20 @@ void WorksheetElement::setZValue(qreal value) {
 void WorksheetElement::changeVisibility() {
 	Q_D(const WorksheetElement);
 	this->setVisible(!d->isVisible());
+}
+
+void WorksheetElement::changeLocking() {
+	this->setLock(!isLocked());
+}
+
+STD_SETTER_CMD_IMPL_S(WorksheetElement, SetLock, bool, lock)
+void WorksheetElement::setLock(bool lock) {
+	Q_D(WorksheetElement);
+	if (lock != d->lock) {
+		if (!lock && isHovered())
+			setHover(false);
+		exec(new WorksheetElementSetLockCmd(d, lock, lock ? ki18n("%1: lock") : ki18n("%1: unlock")));
+	}
 }
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL_F(WorksheetElement, SetVisible, bool, swapVisible, update)
@@ -182,6 +214,24 @@ QPainterPath WorksheetElement::shapeFromPath(const QPainterPath& path, const QPe
 	return p;
 }
 
+QAction* WorksheetElement::visibilityAction() {
+	if (!m_visibilityAction) {
+		m_visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
+		m_visibilityAction->setCheckable(true);
+		connect(m_visibilityAction, &QAction::triggered, this, &WorksheetElement::changeVisibility);
+	}
+	return m_visibilityAction;
+}
+
+QAction* WorksheetElement::lockingAction() {
+	if (!m_lockingAction) {
+		m_lockingAction = new QAction(QIcon::fromTheme(QStringLiteral("hidemouse")), i18n("Lock"), this);
+		m_lockingAction->setCheckable(true);
+		connect(m_lockingAction, &QAction::triggered, this, &WorksheetElement::changeLocking);
+	}
+	return m_lockingAction;
+}
+
 QMenu* WorksheetElement::createContextMenu() {
 	if (!m_drawingOrderMenu) {
 		m_drawingOrderMenu = new QMenu(i18n("Drawing &order"));
@@ -201,9 +251,22 @@ QMenu* WorksheetElement::createContextMenu() {
 	}
 
 	QMenu* menu = AbstractAspect::createContextMenu();
+	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
+
+	auto* visibilityAction = this->visibilityAction();
+	visibilityAction->setChecked(isVisible());
+	menu->insertAction(firstAction, visibilityAction);
+	menu->insertSeparator(firstAction);
+
+	// don't add the lock action for elements which cannot be freely moved on the worksheet (like axis and curves/plots)
+	if (!dynamic_cast<Axis*>(this) && !dynamic_cast<Plot*>(this)) {
+		auto* lockingAction = this->lockingAction();
+		lockingAction->setChecked(isLocked());
+		menu->insertAction(firstAction, lockingAction);
+		menu->insertSeparator(firstAction);
+	}
 
 	// add the sub-menu for the drawing order
-
 	// don't add the drawing order menu for axes and legends, they're always drawn on top of each other elements
 	if (type() == AspectType::Axis || type() == AspectType::CartesianPlotLegend)
 		return menu;
@@ -246,14 +309,16 @@ QMenu* WorksheetElement::createContextMenu() {
 }
 
 void WorksheetElement::prepareDrawingOrderMenu() {
-	const AbstractAspect* parent = parentAspect();
-	const int index = parent->indexOfChild<WorksheetElement>(this);
-	const auto& children = parent->children<WorksheetElement>();
+	const auto* parent = parentAspect();
+	const int index = parent->indexOfChild<AbstractAspect>(this, ChildIndexFlag::IncludeHidden);
+	const auto& children = parent->children<AbstractAspect>(ChildIndexFlag::IncludeHidden);
 
 	//"move behind" sub-menu
 	m_moveBehindMenu->clear();
 	for (int i = 0; i < index; ++i) {
 		const auto* elem = children.at(i);
+		if (elem->hidden())
+			continue;
 		// axes and legends are always drawn on top of other elements, don't add them to the menu
 		if (elem->type() != AspectType::Axis && elem->type() != AspectType::CartesianPlotLegend) {
 			auto* action = m_moveBehindMenu->addAction(elem->icon(), elem->name());
@@ -265,6 +330,8 @@ void WorksheetElement::prepareDrawingOrderMenu() {
 	m_moveInFrontOfMenu->clear();
 	for (int i = index + 1; i < children.size(); ++i) {
 		const auto* elem = children.at(i);
+		if (elem->hidden())
+			continue;
 		// axes and legends are always drawn on top of other elements, don't add them to the menu
 		if (elem->type() != AspectType::Axis && elem->type() != AspectType::CartesianPlotLegend) {
 			auto* action = m_moveInFrontOfMenu->addAction(elem->icon(), elem->name());
@@ -278,64 +345,43 @@ void WorksheetElement::prepareDrawingOrderMenu() {
 }
 
 void WorksheetElement::execMoveInFrontOf(QAction* action) {
-	Q_EMIT moveBegin();
-	AbstractAspect* parent = parentAspect();
-	int index = action->data().toInt();
-	AbstractAspect* sibling1 = parent->child<WorksheetElement>(index);
-	AbstractAspect* sibling2 = parent->child<WorksheetElement>(index + 1);
-	beginMacro(i18n("%1: move behind %2.", name(), sibling1->name()));
-	setMoved(true);
-	remove();
-	parent->insertChildBefore(this, sibling2);
-	setMoved(false);
-	endMacro();
-	Q_EMIT moveEnd();
+	auto* parent = parentAspect();
+	const int newIndex = action->data().toInt();
+	const int currIndex = parent->indexOfChild<AbstractAspect>(this, ChildIndexFlag::IncludeHidden);
+	parent->moveChild(this, newIndex - currIndex);
 }
 
 void WorksheetElement::execMoveBehind(QAction* action) {
-	Q_EMIT moveBegin();
-	AbstractAspect* parent = parentAspect();
-	int index = action->data().toInt();
-	AbstractAspect* sibling = parent->child<WorksheetElement>(index);
-	beginMacro(i18n("%1: move in front of %2.", name(), sibling->name()));
-	setMoved(true);
-	remove();
-	parent->insertChildBefore(this, sibling);
-	setMoved(false);
-	endMacro();
-	Q_EMIT moveEnd();
+	auto* parent = parentAspect();
+	const int newIndex = action->data().toInt();
+	const int currIndex = parent->indexOfChild<AbstractAspect>(this, ChildIndexFlag::IncludeHidden);
+	parent->moveChild(this, newIndex - currIndex);
 }
 
 QPointF WorksheetElement::align(QPointF pos, QRectF rect, HorizontalAlignment horAlign, VerticalAlignment vertAlign, bool positive) const {
 	// positive is right
-	double xAlign;
+	double xAlign = 0.;
 	switch (horAlign) {
-	case WorksheetElement::HorizontalAlignment::Left:
-		xAlign = rect.width() / 2;
+	case HorizontalAlignment::Left:
+		xAlign = rect.width() / 2.;
 		break;
-	case WorksheetElement::HorizontalAlignment::Right:
-		xAlign = -rect.width() / 2;
+	case HorizontalAlignment::Right:
+		xAlign = -rect.width() / 2.;
 		break;
-	case WorksheetElement::HorizontalAlignment::Center:
-		// Fall through
-	default:
-		xAlign = 0;
+	case HorizontalAlignment::Center:
 		break;
 	}
 
 	// positive is to top
-	double yAlign;
+	double yAlign = 0.;
 	switch (vertAlign) {
-	case WorksheetElement::VerticalAlignment::Bottom:
-		yAlign = -rect.height() / 2;
+	case VerticalAlignment::Bottom:
+		yAlign = -rect.height() / 2.;
 		break;
-	case WorksheetElement::VerticalAlignment::Top:
-		yAlign = rect.height() / 2;
+	case VerticalAlignment::Top:
+		yAlign = rect.height() / 2.;
 		break;
-	case WorksheetElement::VerticalAlignment::Center:
-		// Fall through
-	default:
-		yAlign = 0;
+	case VerticalAlignment::Center:
 		break;
 	}
 
@@ -348,7 +394,7 @@ QPointF WorksheetElement::align(QPointF pos, QRectF rect, HorizontalAlignment ho
 
 QRectF WorksheetElement::parentRect() const {
 	QRectF rect;
-	auto parent = parentAspect();
+	auto* parent = parentAspect();
 	if (parent && parent->type() == AspectType::CartesianPlot && plot()) {
 		if (type() != AspectType::Axis)
 			rect = plot()->graphicsItem()->mapRectFromScene(plot()->rect());
@@ -383,22 +429,40 @@ QPointF WorksheetElement::parentPosToRelativePos(QPointF parentPos, PositionWrap
 	// increasing parent pos hor --> right
 	// increasing parent pos vert --> bottom
 
-	QPointF relPos;
 	QRectF parentRect = this->parentRect();
+	QPointF relPos;
 
-	if (position.horizontalPosition == HorizontalPosition::Left)
-		relPos.setX(parentPos.x() - parentRect.x());
-	else if (position.horizontalPosition == HorizontalPosition::Center || position.horizontalPosition == HorizontalPosition::Custom)
-		relPos.setX(parentPos.x() - (parentRect.x() + parentRect.width() / 2));
-	else // position.horizontalPosition == WorksheetElement::HorizontalPosition::Right // default
-		relPos.setX(parentPos.x() - (parentRect.x() + parentRect.width()));
+	double percentage = 0.;
+	switch (position.horizontalPosition) {
+	case HorizontalPosition::Left:
+		break;
+	case HorizontalPosition::Center:
+		percentage = 0.5;
+		break;
+	case HorizontalPosition::Right:
+		percentage = 1.0;
+		break;
+	case HorizontalPosition::Relative:
+		percentage = position.point.x();
+	}
 
-	if (position.verticalPosition == VerticalPosition::Center || position.verticalPosition == VerticalPosition::Custom)
-		relPos.setY(parentRect.y() + parentRect.height() / 2 - parentPos.y());
-	else if (position.verticalPosition == VerticalPosition::Bottom)
-		relPos.setY(parentRect.y() + parentRect.height() - parentPos.y());
-	else // position.verticalPosition == VerticalPosition::Top // default
-		relPos.setY(parentRect.y() - parentPos.y());
+	relPos.setX(parentPos.x() - (parentRect.x() + parentRect.width() * percentage));
+
+	switch (position.verticalPosition) {
+	case VerticalPosition::Top:
+		percentage = 0.;
+		break;
+	case VerticalPosition::Center:
+		percentage = 0.5;
+		break;
+	case VerticalPosition::Bottom:
+		percentage = 1.0;
+		break;
+	case VerticalPosition::Relative:
+		percentage = position.point.y();
+	}
+
+	relPos.setY(parentRect.y() + parentRect.height() * percentage - parentPos.y());
 
 	return relPos;
 }
@@ -416,24 +480,63 @@ QPointF WorksheetElement::relativePosToParentPos(PositionWrapper position) const
 	// increasing parent pos hor --> right
 	// increasing parent pos vert --> bottom
 
-	QPointF parentPos;
 	QRectF parentRect = this->parentRect();
+	QPointF parentPos;
 
-	if (position.horizontalPosition == HorizontalPosition::Left)
-		parentPos.setX(parentRect.x() + position.point.x());
-	else if (position.horizontalPosition == HorizontalPosition::Center || position.horizontalPosition == HorizontalPosition::Custom)
-		parentPos.setX(parentRect.x() + parentRect.width() / 2 + position.point.x());
-	else // position.horizontalPosition == WorksheetElement::HorizontalPosition::Right // default
-		parentPos.setX(parentRect.x() + parentRect.width() + position.point.x());
+	double percentage = 0.;
+	switch (position.horizontalPosition) {
+	case HorizontalPosition::Left:
+	case HorizontalPosition::Relative:
+		break;
+	case HorizontalPosition::Center:
+		percentage = 0.5;
+		break;
+	case HorizontalPosition::Right:
+		percentage = 1.0;
+		break;
+	}
 
-	if (position.verticalPosition == VerticalPosition::Center || position.verticalPosition == VerticalPosition::Custom)
-		parentPos.setY(parentRect.y() + parentRect.height() / 2 - position.point.y());
-	else if (position.verticalPosition == VerticalPosition::Bottom)
-		parentPos.setY(parentRect.y() + parentRect.height() - position.point.y());
-	else // position.verticalPosition == WorksheetElement::VerticalPosition::Top // default
-		parentPos.setY(parentRect.y() - position.point.y());
+	if (position.horizontalPosition == HorizontalPosition::Relative)
+		parentPos.setX(parentRect.x() + parentRect.width() * position.point.x());
+	else
+		parentPos.setX(parentRect.x() + parentRect.width() * percentage + position.point.x());
+
+	switch (position.verticalPosition) {
+	case VerticalPosition::Top:
+		percentage = 0.;
+		break;
+	case VerticalPosition::Center:
+		percentage = 0.5;
+		break;
+	case VerticalPosition::Bottom:
+		percentage = 1.0;
+		break;
+	case VerticalPosition::Relative:
+		break;
+	}
+
+	if (position.verticalPosition == VerticalPosition::Relative)
+		parentPos.setY(parentRect.y() + parentRect.height() * position.point.y());
+	else
+		parentPos.setY(parentRect.y() + parentRect.height() * percentage - position.point.y());
 
 	return parentPos;
+}
+
+/*!
+ * \brief handleAspectUpdated
+ * in some cases one aspect can depend on another, like a XYCurve on Column
+ * or InfoElement on XYCurve. This is a generic function called for
+ * all Elements when a new aspect will be added even it is not a child of the
+ * current element
+ *
+ * Path is explicit specified, so it must not be recalculated every time when iterating over multiple
+ * WorksheetElements. The path is the same as aspect->path()
+ * \param path
+ */
+void WorksheetElement::handleAspectUpdated(const QString& path, const AbstractAspect* aspect) {
+	Q_UNUSED(path);
+	Q_UNUSED(aspect);
 }
 
 void WorksheetElement::save(QXmlStreamWriter* writer) const {
@@ -450,6 +553,7 @@ void WorksheetElement::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("coordinateBinding"), QString::number(d->coordinateBindingEnabled));
 	writer->writeAttribute(QStringLiteral("logicalPosX"), QString::number(d->positionLogical.x()));
 	writer->writeAttribute(QStringLiteral("logicalPosY"), QString::number(d->positionLogical.y()));
+	writer->writeAttribute(QStringLiteral("locked"), QString::number(d->lock));
 }
 
 bool WorksheetElement::load(XmlStreamReader* reader, bool preview) {
@@ -457,60 +561,67 @@ bool WorksheetElement::load(XmlStreamReader* reader, bool preview) {
 		return true;
 
 	Q_D(WorksheetElement);
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	auto attribs = reader->attributes();
 
 	auto str = attribs.value(QStringLiteral("x")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("x")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("x"));
 	else
 		d->position.point.setX(str.toDouble());
 
 	str = attribs.value(QStringLiteral("y")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("y")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("y"));
 	else
 		d->position.point.setY(str.toDouble());
 
-	READ_INT_VALUE("horizontalPosition", position.horizontalPosition, WorksheetElement::HorizontalPosition);
-	READ_INT_VALUE("verticalPosition", position.verticalPosition, WorksheetElement::VerticalPosition);
+	READ_INT_VALUE("horizontalPosition", position.horizontalPosition, HorizontalPosition);
+	READ_INT_VALUE("verticalPosition", position.verticalPosition, VerticalPosition);
+	if (Project::xmlVersion() < 11) {
+		// In earlier versions 3 was custom which is now center. But now 3 is relative
+		if ((int)d->position.horizontalPosition == 3) {
+			d->position.horizontalPosition = HorizontalPosition::Center;
+		}
+		if ((int)d->position.verticalPosition == 3) {
+			d->position.verticalPosition = VerticalPosition::Center;
+		}
+	}
 	if (Project::xmlVersion() < 1) {
 		// Before 2.9.0 the position.point is only used when horizontalPosition or
-		// vertical position was set to custom, otherwise the label was attached to the
-		// "position" and it was not possible to arrange relative to this alignpoint
+		// vertical position was set to Custom, otherwise the label was attached to the
+		// "position" and it was not possible to arrange relative to this anchor point
 		// From 2.9.0, the horizontalPosition and verticalPosition indicate the anchor
 		// point and position.point indicates the distance to them
-		// Custom is the same as Center, so rename it, because Custom is legacy
-		if (d->position.horizontalPosition != WorksheetElement::HorizontalPosition::Custom) {
+		if (d->position.horizontalPosition != HorizontalPosition::Relative) {
 			d->position.point.setX(0);
-			if (d->position.horizontalPosition == WorksheetElement::HorizontalPosition::Left)
-				d->horizontalAlignment = WorksheetElement::HorizontalAlignment::Left;
-			else if (d->position.horizontalPosition == WorksheetElement::HorizontalPosition::Right)
-				d->horizontalAlignment = WorksheetElement::HorizontalAlignment::Right;
-		} else
-			d->position.horizontalPosition = WorksheetElement::HorizontalPosition::Center;
+			if (d->position.horizontalPosition == HorizontalPosition::Left)
+				d->horizontalAlignment = HorizontalAlignment::Left;
+			else if (d->position.horizontalPosition == HorizontalPosition::Right)
+				d->horizontalAlignment = HorizontalAlignment::Right;
+		} else // TODO
+			d->position.horizontalPosition = HorizontalPosition::Center;
 
-		if (d->position.verticalPosition != WorksheetElement::VerticalPosition::Custom) {
+		if (d->position.verticalPosition != VerticalPosition::Relative) {
 			d->position.point.setY(0);
-			if (d->position.verticalPosition == WorksheetElement::VerticalPosition::Top)
-				d->verticalAlignment = WorksheetElement::VerticalAlignment::Top;
-			else if (d->position.verticalPosition == WorksheetElement::VerticalPosition::Bottom)
-				d->verticalAlignment = WorksheetElement::VerticalAlignment::Bottom;
-		} else
-			d->position.verticalPosition = WorksheetElement::VerticalPosition::Center;
+			if (d->position.verticalPosition == VerticalPosition::Top)
+				d->verticalAlignment = VerticalAlignment::Top;
+			else if (d->position.verticalPosition == VerticalPosition::Bottom)
+				d->verticalAlignment = VerticalAlignment::Bottom;
+		} else // TODO
+			d->position.verticalPosition = VerticalPosition::Center;
 
-		// in the old format the order was reversed, multiple by -1 here
+		// in the old format the order was reversed, multiply by -1 here
 		d->position.point.setY(-d->position.point.y());
 	} else {
-		READ_INT_VALUE("horizontalAlignment", horizontalAlignment, WorksheetElement::HorizontalAlignment);
-		READ_INT_VALUE("verticalAlignment", verticalAlignment, WorksheetElement::VerticalAlignment);
+		READ_INT_VALUE("horizontalAlignment", horizontalAlignment, HorizontalAlignment);
+		READ_INT_VALUE("verticalAlignment", verticalAlignment, VerticalAlignment);
 	}
 	if (project()->xmlVersion() >= 8) {
 		QGRAPHICSITEM_READ_DOUBLE_VALUE("rotationAngle", Rotation);
 	} else {
 		str = attribs.value(QStringLiteral("rotationAngle")).toString();
 		if (str.isEmpty())
-			reader->raiseWarning(attributeWarning.subs(QStringLiteral("rotationAngle")).toString());
+			reader->raiseMissingAttributeWarning(QStringLiteral("rotationAngle"));
 		else
 			d->setRotation(-1 * str.toDouble());
 	}
@@ -518,7 +629,7 @@ bool WorksheetElement::load(XmlStreamReader* reader, bool preview) {
 
 	str = attribs.value(QStringLiteral("visible")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("visible"));
 	else
 		d->setVisible(str.toInt());
 
@@ -526,15 +637,21 @@ bool WorksheetElement::load(XmlStreamReader* reader, bool preview) {
 
 	str = attribs.value(QStringLiteral("logicalPosX")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("logicalPosX")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("logicalPosX"));
 	else
 		d->positionLogical.setX(str.toDouble());
 
 	str = attribs.value(QStringLiteral("logicalPosY")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("logicalPosY")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("logicalPosY"));
 	else
 		d->positionLogical.setY(str.toDouble());
+
+	str = attribs.value(QStringLiteral("locked")).toString();
+	if (str.isEmpty())
+		reader->raiseMissingAttributeWarning(QStringLiteral("locked"));
+	else
+		d->lock = static_cast<bool>(str.toInt());
 
 	return true;
 }
@@ -547,28 +664,75 @@ void WorksheetElement::saveThemeConfig(const KConfig&) {
 
 // coordinate system
 
-void WorksheetElement::setCoordinateSystemIndex(int index) {
-	m_cSystemIndex = index;
-	if (m_plot)
-		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem(index));
-	else
-		DEBUG(Q_FUNC_INFO << ", WARNING: No plot found. Failed setting csystem index.")
-	emit coordinateSystemIndexChanged(m_cSystemIndex);
+class SetCoordinateSystemIndexCmd : public QUndoCommand {
+public:
+	SetCoordinateSystemIndexCmd(WorksheetElement* element, int index, QUndoCommand* parent = nullptr)
+		: QUndoCommand(parent)
+		, m_element(element)
+		, m_index(index) {
+	}
+
+	virtual void redo() override {
+		const auto oldIndex = m_element->m_cSystemIndex;
+		m_element->m_cSystemIndex = m_index;
+		if (m_element->plot())
+			m_element->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_element->plot()->coordinateSystem(m_index));
+		else
+			DEBUG(Q_FUNC_INFO << ", WARNING: No plot found. Failed setting csystem index.")
+
+		m_index = oldIndex;
+		m_element->retransform();
+		Q_EMIT m_element->coordinateSystemIndexChanged(m_element->m_cSystemIndex);
+	}
+
+	virtual void undo() override {
+		redo();
+	}
+
+private:
+	WorksheetElement* m_element;
+	int m_index;
+};
+
+void WorksheetElement::setCoordinateSystemIndex(int index, QUndoCommand* parent) {
+	if (index != m_cSystemIndex) {
+		auto* command = new SetCoordinateSystemIndexCmd(this, index, parent);
+		if (!parent)
+			exec(command);
+	} else if (!cSystem) {
+		// during load the index will be set,
+		// but the element might not have yet a plot assigned
+		if (plot())
+			cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot()->coordinateSystem(index));
+		retransform();
+	}
 }
 
 int WorksheetElement::coordinateSystemCount() const {
-	if (m_plot)
-		return m_plot->coordinateSystemCount();
+	Q_D(const WorksheetElement);
+	if (d->m_plot)
+		return d->m_plot->coordinateSystemCount();
 	DEBUG(Q_FUNC_INFO << ", WARNING: no plot set!")
 
 	return 0;
 }
 
 QString WorksheetElement::coordinateSystemInfo(const int index) const {
-	if (m_plot)
-		return m_plot->coordinateSystem(index)->info();
+	Q_D(const WorksheetElement);
+	if (d->m_plot)
+		return d->m_plot->coordinateSystem(index)->info();
 
 	return {};
+}
+
+bool WorksheetElement::isHovered() const {
+	Q_D(const WorksheetElement);
+	return d->isHovered();
+}
+
+void WorksheetElement::setHover(bool on) {
+	Q_D(WorksheetElement);
+	d->setHover(on);
 }
 
 /* ============================ getter methods ================= */
@@ -582,6 +746,7 @@ BASIC_SHARED_D_READER_IMPL(WorksheetElement,
 						   rotation() * -1) // the rotation is in qgraphicsitem different to the convention used in labplot
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, bool, coordinateBindingEnabled, coordinateBindingEnabled)
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, qreal, scale, scale())
+BASIC_SHARED_D_READER_IMPL(WorksheetElement, bool, isLocked, lock)
 
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_F_S_SC(WorksheetElement, SetPosition, WorksheetElement::PositionWrapper, position, updatePosition, objectPositionChanged)
@@ -683,7 +848,11 @@ QString WorksheetElementPrivate::name() const {
 }
 
 QRectF WorksheetElementPrivate::boundingRect() const {
-	return boundingRectangle;
+	return m_boundingRectangle;
+}
+
+QPainterPath WorksheetElementPrivate::shape() const {
+	return m_shape;
 }
 
 void WorksheetElementPrivate::paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) {
@@ -713,6 +882,21 @@ void WorksheetElementPrivate::updatePosition() {
 	suppressItemChangeEvent = true;
 	setPos(p);
 	suppressItemChangeEvent = false;
+
+	Q_EMIT q->changed();
+}
+
+bool WorksheetElementPrivate::sceneEvent(QEvent* event) {
+	// don't allow to move the element with the mouse or with the cursor keys if it's locked
+	// or if its not movable (ItemIsMovable blocks mouse moves only, we also need to block key press events),
+	// react on all other events
+	if ((lock && (event->type() == QEvent::GraphicsSceneMouseMove || event->type() == QEvent::KeyPress))
+		|| (!flags().testFlag(QGraphicsItem::ItemIsMovable) && event->type() == QEvent::KeyPress)) {
+		event->ignore();
+		return true;
+	}
+
+	return QGraphicsItem::sceneEvent(event);
 }
 
 void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
@@ -742,7 +926,7 @@ void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
 			q->setPositionLogical(pLogic); // So it is undoable
 		} else {
 			QPointF point = q->parentPosToRelativePos(pos(), position);
-			point = q->align(point, boundingRectangle, horizontalAlignment, verticalAlignment, false);
+			point = q->align(point, m_boundingRectangle, horizontalAlignment, verticalAlignment, false);
 
 			if (event->key() == Qt::Key_Left) {
 				point.setX(point.x() - delta);
@@ -761,20 +945,44 @@ void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
 		QGraphicsItem::keyPressEvent(event);
 }
 
+void WorksheetElementPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+	// when moving the element with the mouse (left button pressed), the move event doesn't have
+	// the information about the pressed button anymore (NoButton) that is needed in mouseMoveEvent()
+	// to decide if the element move was started or not. So, we check the pressed buttong here.
+	if (event->button() == Qt::LeftButton)
+		m_leftButtonPressed = true;
+
+	QGraphicsItem::mousePressEvent(event);
+}
+
+void WorksheetElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
+	if (!m_moveStarted && m_leftButtonPressed)
+		m_moveStarted = true;
+
+	QGraphicsItem::mouseMoveEvent(event);
+}
+
 void WorksheetElementPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+	m_leftButtonPressed = false;
+	if (!m_moveStarted) {
+		QGraphicsItem::mouseReleaseEvent(event);
+		return;
+	}
+
 	// convert position of the item in parent coordinates to label's position
 	QPointF point = q->parentPosToRelativePos(pos(), position);
 	point = q->align(point, boundingRect(), horizontalAlignment, verticalAlignment, false);
 	if (point != position.point) {
 		// position was changed -> set the position related member variables
 		suppressRetransform = true;
-		WorksheetElement::PositionWrapper tempPosition = position;
+		auto tempPosition = position;
 		tempPosition.point = point;
 		q->setPosition(tempPosition);
 		updatePosition(); // to update the logical position if available
 		suppressRetransform = false;
 	}
 
+	m_moveStarted = false;
 	QGraphicsItem::mouseReleaseEvent(event);
 }
 
@@ -802,14 +1010,14 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 		if (coordinateBindingEnabled) {
 			if (!q->cSystem->isValid())
 				return QGraphicsItem::itemChange(change, value);
-			QPointF pos = q->align(newPos, boundingRectangle, horizontalAlignment, verticalAlignment, false);
+			QPointF pos = q->align(newPos, m_boundingRectangle, horizontalAlignment, verticalAlignment, false);
 
 			positionLogical = q->cSystem->mapSceneToLogical(mapParentToPlotArea(pos), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			Q_EMIT q->positionLogicalChanged(positionLogical);
 			Q_EMIT q->objectPositionChanged();
 		} else {
 			// convert item's center point in parent's coordinates
-			WorksheetElement::PositionWrapper tempPosition = position;
+			auto tempPosition = position;
 			tempPosition.point = q->parentPosToRelativePos(newPos, position);
 			tempPosition.point = q->align(tempPosition.point, boundingRect(), horizontalAlignment, verticalAlignment, false);
 
@@ -831,8 +1039,8 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
  * \param point point in parent coordinates
  * \return point in PlotArea coordinates
  */
-QPointF WorksheetElementPrivate::mapParentToPlotArea(QPointF point) {
-	AbstractAspect* parent = q->parent(AspectType::CartesianPlot);
+QPointF WorksheetElementPrivate::mapParentToPlotArea(QPointF point) const {
+	auto* parent = q->parent(AspectType::CartesianPlot);
 	if (parent) {
 		auto* plot = static_cast<CartesianPlot*>(parent);
 		// mapping from parent to item coordinates and them to plot area
@@ -851,9 +1059,8 @@ QPointF WorksheetElementPrivate::mapParentToPlotArea(QPointF point) {
  * \param point point in plotArea coordinates
  * \return point in parent coordinates
  */
-QPointF WorksheetElementPrivate::mapPlotAreaToParent(QPointF point) {
-	AbstractAspect* parent = q->parent(AspectType::CartesianPlot);
-
+QPointF WorksheetElementPrivate::mapPlotAreaToParent(QPointF point) const {
+	auto* parent = q->parent(AspectType::CartesianPlot);
 	if (parent) {
 		auto* plot = static_cast<CartesianPlot*>(parent);
 		// first mapping to item coordinates and from there back to parent
@@ -863,4 +1070,42 @@ QPointF WorksheetElementPrivate::mapPlotAreaToParent(QPointF point) {
 	}
 
 	return point; // don't map if no parent set. Then it's during load
+}
+
+void WorksheetElementPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
+	if (!isSelected())
+		setHover(true);
+}
+
+void WorksheetElementPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
+	setHover(false);
+}
+
+void WorksheetElementPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
+	// don't show any context menu if the element is hidden which is the case
+	// for example for axis and plot title labels. For such objects the context menu
+	// of their parents, i.e. of axis and plot, is used.
+	if (!q->hidden()) {
+		auto* menu = q->createContextMenu();
+		if (menu)
+			menu->exec(event->screenPos());
+	}
+}
+
+bool WorksheetElementPrivate::isHovered() const {
+	return m_hovered;
+}
+
+void WorksheetElementPrivate::setHover(bool on) {
+	if (on == m_hovered)
+		return; // don't update if state not changed
+
+	m_hovered = on;
+	Q_EMIT q->hoveredChanged(on);
+	update();
+}
+
+CartesianPlot* WorksheetElement::plot() const {
+	Q_D(const WorksheetElement);
+	return d->m_plot;
 }

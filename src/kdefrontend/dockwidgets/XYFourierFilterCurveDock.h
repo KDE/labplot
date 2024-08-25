@@ -27,26 +27,20 @@ public:
 
 private:
 	void initGeneralTab() override;
-	void updatePlotRanges() override;
+	void updateSettings(const AbstractColumn*) override;
 	void showFilterResult();
 	void updateCutoffSpinBoxes(NumberSpinBox* sb, nsl_filter_cutoff_unit newUnit, nsl_filter_cutoff_unit oldUnit, double oldValue);
 
 	Ui::XYFourierFilterCurveDockGeneralTab uiGeneralTab;
-
 	XYFourierFilterCurve* m_filterCurve{nullptr};
 	XYFourierFilterCurve::FilterData m_filterData;
 	bool m_dateTimeRange{false};
-
-protected:
-	void setModel();
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYFourierFilterCurveDock
 	// general tab
 	void dataSourceTypeChanged(int);
-	void dataSourceCurveChanged(const QModelIndex&);
 	void xDataColumnChanged(const QModelIndex&);
-	void yDataColumnChanged(const QModelIndex&);
 	void autoRangeChanged();
 	void xRangeMinChanged();
 	void xRangeMaxChanged();
@@ -57,19 +51,11 @@ private Q_SLOTS:
 	void orderChanged();
 	void unitChanged();
 	void unit2Changed();
-
 	void recalculateClicked();
-	void enableRecalculate() const;
 
 	// SLOTs for changes triggered in XYCurve
 	// General-Tab
-	void curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType);
-	void curveDataSourceCurveChanged(const XYCurve*);
-	void curveXDataColumnChanged(const AbstractColumn*);
-	void curveYDataColumnChanged(const AbstractColumn*);
 	void curveFilterDataChanged(const XYFourierFilterCurve::FilterData&);
-	void dataChanged();
-	void curveVisibilityChanged(bool);
 };
 
 #endif

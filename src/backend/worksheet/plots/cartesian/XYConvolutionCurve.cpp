@@ -26,9 +26,7 @@
 #include <QIcon>
 #include <QThreadPool>
 
-extern "C" {
 #include <gsl/gsl_math.h>
-}
 
 XYConvolutionCurve::XYConvolutionCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYConvolutionCurvePrivate(this), AspectType::XYConvolutionCurve) {
@@ -278,10 +276,8 @@ void XYConvolutionCurve::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool XYConvolutionCurve::load(XmlStreamReader* reader, bool preview) {
-	DEBUG("XYConvolutionCurve::load()");
 	Q_D(XYConvolutionCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -325,6 +321,10 @@ bool XYConvolutionCurve::load(XmlStreamReader* reader, bool preview) {
 				d->xColumn = column;
 			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 
@@ -347,7 +347,7 @@ bool XYConvolutionCurve::load(XmlStreamReader* reader, bool preview) {
 		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
 		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;
 
-		recalcLogicalPoints();
+		recalc();
 	}
 
 	return true;

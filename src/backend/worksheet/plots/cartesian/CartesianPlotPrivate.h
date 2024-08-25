@@ -33,7 +33,7 @@ public:
 	void rangeChanged();
 	void niceExtendChanged();
 	void rangeFormatChanged(const Dimension dim);
-	void wheelEvent(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
+	void wheelEvent(const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
 	void mouseMoveZoomSelectionMode(QPointF logicalPos, int cSystemIndex);
 	void mouseMoveSelectionMode(QPointF logicalStart, QPointF logicalEnd);
 	void mouseMoveCursorMode(int cursorNumber, QPointF logicalPos);
@@ -196,7 +196,7 @@ public:
 		case Dimension::X:
 			return xRanges[index].dataRange;
 		case Dimension::Y:
-			return yRanges[index].dataRange;
+			break;
 		}
 		return yRanges[index].dataRange;
 	}
@@ -284,7 +284,7 @@ public:
 
 	CartesianPlot::MouseMode mouseMode{CartesianPlot::MouseMode::Selection};
 	bool panningStarted{false};
-	bool locked{false};
+	bool interactive{true};
 	QPointF scenePos; // current position under the mouse cursor in scene coordinates
 	QPointF logicalPos; // current position under the mouse cursor in plot coordinates
 	bool calledFromContextMenu{false}; // we set the current position under the cursor when "add new" is called via the context menu
@@ -307,15 +307,15 @@ Q_SIGNALS:
 
 private:
 	QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
-	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
-	void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
-	void wheelEvent(QGraphicsSceneWheelEvent*) override;
-	void keyPressEvent(QKeyEvent*) override;
-	void hoverMoveEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
-	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
+	virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
+	virtual void mousePressEvent(QGraphicsSceneMouseEvent*) override;
+	virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
+	virtual void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
+	virtual void wheelEvent(QGraphicsSceneWheelEvent*) override;
+	virtual void keyPressEvent(QKeyEvent*) override;
+	virtual void hoverMoveEvent(QGraphicsSceneHoverEvent*) override;
+	virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+	virtual void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void updateDataRect();
 	CartesianScale* createScale(RangeT::Scale, const Range<double>& sceneRange, const Range<double>& logicalRange);
@@ -333,7 +333,8 @@ private:
 	QStaticText m_cursor0Text{QStringLiteral("1")};
 	QStaticText m_cursor1Text{QStringLiteral("2")};
 
-	friend class MultiRangeTest;
+	friend class MultiRangeTest2;
+	friend class CartesianPlotTest;
 };
 
 #endif

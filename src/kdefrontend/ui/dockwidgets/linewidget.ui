@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>238</width>
-    <height>252</height>
+    <height>167</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,17 +29,7 @@
    <property name="spacing">
     <number>2</number>
    </property>
-   <item row="2" column="2">
-    <widget class="KComboBox" name="cbStyle">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
+   <item row="1" column="1">
     <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -55,15 +45,18 @@
      </property>
     </spacer>
    </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="lStyle">
-     <property name="text">
-      <string>Style:</string>
+   <item row="2" column="2">
+    <widget class="KColorButton" name="kcbColor">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
     </widget>
    </item>
-   <item row="0" column="2">
-    <widget class="KComboBox" name="cbType">
+   <item row="1" column="2">
+    <widget class="KComboBox" name="cbStyle">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -72,7 +65,35 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="2">
+   <item row="3" column="0">
+    <widget class="QLabel" name="lWidth">
+     <property name="text">
+      <string>Width:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="lStyle">
+     <property name="text">
+      <string>Style:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="lType">
+     <property name="text">
+      <string>Type:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="lColor">
+     <property name="text">
+      <string>Color:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2">
     <widget class="QSpinBox" name="sbOpacity">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -100,58 +121,14 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="lType">
-     <property name="text">
-      <string>Type:</string>
-     </property>
-    </widget>
-   </item>
    <item row="4" column="0">
-    <widget class="QLabel" name="lWidth">
-     <property name="text">
-      <string>Width:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="lColor">
-     <property name="text">
-      <string>Color:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="2">
-    <widget class="KColorButton" name="kcbColor">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
     <widget class="QLabel" name="lOpacity">
      <property name="text">
       <string>Opacity:</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="lErrorBarsCapSize">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>Cap size:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="2">
+   <item row="3" column="2">
     <widget class="NumberSpinBox" name="sbWidth">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -176,28 +153,13 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="2">
-    <widget class="NumberSpinBox" name="sbErrorBarsCapSize">
+   <item row="0" column="2">
+    <widget class="KComboBox" name="cbType">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
-     </property>
-     <property name="toolTip">
-      <string/>
-     </property>
-     <property name="whatsThis">
-      <string>Spinbox for numbers.</string>
-     </property>
-     <property name="suffix">
-      <string> pt</string>
-     </property>
-     <property name="minimum">
-      <double>0.000000000000000</double>
-     </property>
-     <property name="feedback" stdset="0">
-      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -222,7 +184,6 @@
  </customwidgets>
  <tabstops>
   <tabstop>cbType</tabstop>
-  <tabstop>sbErrorBarsCapSize</tabstop>
   <tabstop>cbStyle</tabstop>
   <tabstop>kcbColor</tabstop>
   <tabstop>sbWidth</tabstop>

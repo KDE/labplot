@@ -13,17 +13,17 @@
 #include "backend/core/AbstractPart.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/WorksheetElement.h"
 #include "commonfrontend/core/ContentDockWidget.h"
-
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KMessageWidget>
-#include <KSharedConfig>
+
 #include <kcoreaddons_version.h>
 #if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 79, 0)
 #define HAS_FUZZY_MATCHER true
@@ -109,7 +109,7 @@ ProjectExplorer::~ProjectExplorer() {
 			status += QString::number(i);
 		}
 	}
-	KConfigGroup group(KSharedConfig::openConfig(), QLatin1String("ProjectExplorer"));
+	KConfigGroup group = Settings::group(QStringLiteral("ProjectExplorer"));
 	group.writeEntry("VisibleColumns", status);
 }
 
@@ -249,7 +249,7 @@ void ProjectExplorer::setModel(AspectTreeModel* treeModel) {
 	// this is done here since the number of columns is  not available in createActions() yet.
 	if (list_showColumnActions.isEmpty()) {
 		// read the status of the column actions if available
-		KConfigGroup group(KSharedConfig::openConfig(), QLatin1String("ProjectExplorer"));
+		KConfigGroup group = Settings::group(QStringLiteral("ProjectExplorer"));
 		const QString& status = group.readEntry(QLatin1String("VisibleColumns"), QString());
 		QVector<int> checkedActions;
 		if (!status.isEmpty()) {
@@ -261,8 +261,8 @@ void ProjectExplorer::setModel(AspectTreeModel* treeModel) {
 		if (!showAllColumnsAction) {
 			showAllColumnsAction = new QAction(i18n("Show All"), this);
 			showAllColumnsAction->setCheckable(true);
-			showAllColumnsAction->setChecked(true);
-			showAllColumnsAction->setEnabled(false);
+			showAllColumnsAction->setChecked(false);
+			showAllColumnsAction->setEnabled(true);
 			connect(showAllColumnsAction, &QAction::triggered, this, &ProjectExplorer::showAllColumns);
 		}
 
@@ -276,7 +276,7 @@ void ProjectExplorer::setModel(AspectTreeModel* treeModel) {
 
 		// create an action for every available column in the model
 		for (int i = 0; i < m_treeView->model()->columnCount(); i++) {
-			QAction* showColumnAction = new QAction(treeModel->headerData(i, Qt::Horizontal).toString(), this);
+			auto* showColumnAction = new QAction(treeModel->headerData(i, Qt::Horizontal).toString(), this);
 			showColumnAction->setCheckable(true);
 
 			// restore the status, if available
@@ -285,8 +285,13 @@ void ProjectExplorer::setModel(AspectTreeModel* treeModel) {
 					showColumnAction->setChecked(true);
 				else
 					m_treeView->hideColumn(i);
-			} else
-				showColumnAction->setChecked(true);
+			} else {
+				// initially, show the first two columns only (name and type)
+				if (i < 2)
+					showColumnAction->setChecked(true);
+				else
+					m_treeView->hideColumn(i);
+			}
 
 			list_showColumnActions.append(showColumnAction);
 
@@ -310,7 +315,7 @@ void ProjectExplorer::setProject(Project* project) {
 	m_project = project;
 
 	// for newly created projects, resize the header to fit the size of the header section names.
-	// for projects loaded from a file, this function will be called laterto fit the sizes
+	// for projects loaded from a file, this function will be called later to fit the sizes
 	// of the content once the project is loaded
 	resizeHeader();
 
@@ -355,6 +360,11 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 	} else if (obj == m_treeView->viewport()) {
 		if (event->type() == QEvent::MouseButtonPress) {
 			auto* e = static_cast<QMouseEvent*>(event);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+			const auto position = e->globalPosition().toPoint();
+#else
+			const auto position = e->globalPos();
+#endif
 			if (e->button() == Qt::LeftButton) {
 				QModelIndex index = m_treeView->indexAt(e->pos());
 				if (!index.isValid())
@@ -362,14 +372,19 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 
 				auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 				if (aspect->isDraggable()) {
-					m_dragStartPos = e->globalPos();
+					m_dragStartPos = position;
 					m_dragStarted = false;
 				}
 			}
 		} else if (event->type() == QEvent::MouseMove) {
 			auto* e = static_cast<QMouseEvent*>(event);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+			const auto position = e->globalPosition().toPoint();
+#else
+			const auto position = e->globalPos();
+#endif
 			if (!m_dragStarted && m_treeView->selectionModel()->selectedIndexes().size() > 0
-				&& (e->globalPos() - m_dragStartPos).manhattanLength() >= QApplication::startDragDistance()) {
+				&& (position - m_dragStartPos).manhattanLength() >= QApplication::startDragDistance()) {
 				m_dragStarted = true;
 				auto* drag = new QDrag(this);
 				auto* mimeData = new QMimeData;
@@ -433,8 +448,12 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 			if (!sourceAspect)
 				return false;
 
-			// determine the aspect under the cursor
+				// determine the aspect under the cursor
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+			QModelIndex index = m_treeView->indexAt(dragMoveEvent->position().toPoint());
+#else
 			QModelIndex index = m_treeView->indexAt(dragMoveEvent->pos());
+#endif
 			if (!index.isValid())
 				return false;
 
@@ -453,7 +472,11 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 			if (vec.isEmpty())
 				return false;
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+			QModelIndex index = m_treeView->indexAt(dropEvent->position().toPoint());
+#else
 			QModelIndex index = m_treeView->indexAt(dropEvent->pos());
+#endif
 			if (!index.isValid())
 				return false;
 
@@ -553,17 +576,19 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect) {
 		return;
 
 	// don't do anything for newly added data spreadsheets of data picker curves
-	if (aspect->inherits(AspectType::Spreadsheet) && aspect->parentAspect()->inherits(AspectType::DatapickerCurve))
+	if (aspect->type() == AspectType::Spreadsheet && aspect->parentAspect()->type() == AspectType::DatapickerCurve)
 		return;
 
 	const auto* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
 	const auto& index = tree_model->modelIndexOfAspect(aspect);
 
 	// expand and make the aspect visible
-	m_treeView->setExpanded(index, true);
+	// no need to expand and to show child columns of a statistics spreadsheet
+	if (aspect->type() != AspectType::StatisticsSpreadsheet)
+		m_treeView->setExpanded(index, true);
 
 	// newly added columns are only expanded but not selected, return here
-	if (aspect->inherits(AspectType::Column)) {
+	if (aspect->type() == AspectType::Column) {
 		m_treeView->setExpanded(tree_model->modelIndexOfAspect(aspect->parentAspect()), true);
 		return;
 	}
@@ -914,12 +939,13 @@ void ProjectExplorer::deleteSelected() {
 												 i18np("Delete selected object", "Delete selected objects", aspects.size()),
 												 KStandardGuiItem::del(),
 												 KStandardGuiItem::cancel());
+	if (status == KMessageBox::SecondaryAction)
+		return;
 #else
 	auto status = KMessageBox::warningYesNo(this, msg, i18np("Delete selected object", "Delete selected objects", aspects.size()));
-#endif
-
 	if (status == KMessageBox::No)
 		return;
+#endif
 
 	m_project->beginMacro(i18np("Project Explorer: delete %1 selected object", "Project Explorer: delete %1 selected objects", items.size() / 4));
 
@@ -1038,7 +1064,6 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 	QList<QModelIndex> expanded;
 	QModelIndex currentIndex;
 	QString str;
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 
 	// xmlVersion < 3: old logic where the "rows" for the selected and expanded items were saved
 	// ignoring the sub-folder structure. Remove it later.
@@ -1111,7 +1136,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 
 					str = attribs.value(QStringLiteral("state")).toString();
 					if (str.isEmpty())
-						reader->raiseWarning(attributeWarning.subs(QStringLiteral("state")).toString());
+						reader->raiseMissingAttributeWarning(QStringLiteral("state"));
 					else {
 						part->view()->setWindowState(Qt::WindowStates(str.toInt()));
 						part->dockWidget()->setWindowState(Qt::WindowStates(str.toInt()));
@@ -1123,25 +1148,25 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 					QRect geometry;
 					str = attribs.value(QStringLiteral("x")).toString();
 					if (str.isEmpty())
-						reader->raiseWarning(attributeWarning.subs(QStringLiteral("x")).toString());
+						reader->raiseMissingAttributeWarning(QStringLiteral("x"));
 					else
 						geometry.setX(str.toInt());
 
 					str = attribs.value(QStringLiteral("y")).toString();
 					if (str.isEmpty())
-						reader->raiseWarning(attributeWarning.subs(QStringLiteral("y")).toString());
+						reader->raiseMissingAttributeWarning(QStringLiteral("y"));
 					else
 						geometry.setY(str.toInt());
 
 					str = attribs.value(QStringLiteral("width")).toString();
 					if (str.isEmpty())
-						reader->raiseWarning(attributeWarning.subs(QStringLiteral("width")).toString());
+						reader->raiseMissingAttributeWarning(QStringLiteral("width"));
 					else
 						geometry.setWidth(str.toInt());
 
 					str = attribs.value(QStringLiteral("height")).toString();
 					if (str.isEmpty())
-						reader->raiseWarning(attributeWarning.subs(QStringLiteral("height")).toString());
+						reader->raiseMissingAttributeWarning(QStringLiteral("height"));
 					else
 						geometry.setHeight(str.toInt());
 
@@ -1179,7 +1204,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 
 				str = attribs.value(QStringLiteral("state")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("state")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("state"));
 				else {
 					part->view()->setWindowState(Qt::WindowStates(str.toInt()));
 					part->dockWidget()->setWindowState(Qt::WindowStates(str.toInt()));
@@ -1191,25 +1216,25 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 				QRect geometry;
 				str = attribs.value(QStringLiteral("x")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("x")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("x"));
 				else
 					geometry.setX(str.toInt());
 
 				str = attribs.value(QStringLiteral("y")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("y")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("y"));
 				else
 					geometry.setY(str.toInt());
 
 				str = attribs.value(QStringLiteral("width")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("width")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("width"));
 				else
 					geometry.setWidth(str.toInt());
 
 				str = attribs.value(QStringLiteral("height")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("height")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("height"));
 				else
 					geometry.setHeight(str.toInt());
 

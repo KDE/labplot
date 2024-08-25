@@ -11,9 +11,9 @@
 #ifndef RETRANSFORMTEST_H
 #define RETRANSFORMTEST_H
 
-#include "../../CommonTest.h"
+#include "../../CommonMetaTest.h"
 
-class RetransformTest : public CommonTest {
+class RetransformTest : public CommonMetaTest {
 	Q_OBJECT
 
 	// Tests
@@ -21,20 +21,32 @@ private Q_SLOTS:
 	void TestLoadProject();
 	void TestLoadProject2();
 	void TestResizeWindows();
-	void TestZoomSelectionAutoscale();
-	void TestZoomAutoscaleSingleYRange();
-	void TestZoomAutoscaleSingleXRange();
 	void TestPadding();
 	void TestCopyPastePlot();
 	void TestAddCurve();
-	void TestBarPlotOrientation();
-	void TestZoom();
 	void TestImportCSV();
+	void TestImportCSVInvalidateCurve();
 	void TestSetScale();
+
+	void TestZoomSelectionAutoscale();
+	void TestZoomAutoscaleSingleYRange();
+	void TestZoomAutoscaleSingleXRange();
+	void TestZoom();
+
 	void TestChangePlotRange();
 	void TestChangePlotRangeElement();
 	void TestChangePlotRangeElement2();
 	void TestChangePlotRangeElement3();
+
+	void TestBarPlotOrientation();
+
+	void testPlotRecalcRetransform();
+	void testPlotRecalcNoRetransform();
+
+	void removeReaddxColum();
+	void removeReaddyColum();
+
+	void xyFunctionCurve();
 };
 
 /*!

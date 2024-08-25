@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Provides a QTreeView in a QComboBox
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -37,7 +37,7 @@ TreeViewComboBox::TreeViewComboBox(QWidget* parent)
 	, m_treeView(new QTreeView)
 	, m_groupBox(new QGroupBox)
 	, m_lineEdit(new QLineEdit) {
-	auto* layout = new QVBoxLayout;
+	auto* layout = new QVBoxLayout(this);
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->setSpacing(0);
 
@@ -97,7 +97,10 @@ void TreeViewComboBox::setModel(AspectTreeModel* model) {
 */
 void TreeViewComboBox::setCurrentModelIndex(const QModelIndex& index) {
 	m_treeView->setCurrentIndex(index);
-	QComboBox::setItemText(0, index.data().toString());
+	if (index.isValid()) {
+		setToolTip(m_model->data(index, Qt::ToolTipRole).toString());
+		QComboBox::setItemText(0, index.data().toString());
+	}
 }
 
 /*!
@@ -187,8 +190,29 @@ void TreeViewComboBox::setInvalid(bool invalid, const QString& tooltip) {
 		setToolTip(tooltip);
 	} else {
 		setPalette(qApp->palette());
-		setToolTip(QString());
+		setToolTip(m_model->data(currentModelIndex(), Qt::ToolTipRole).toString());
 	}
+}
+
+/*!
+ * returns the list of aspect types that can have Column as a child.
+ * used in the dock widgets for the different plot types to show in the combo boxes
+ * for the data source those top level aspects only that can have Column as a child.
+ */
+QList<AspectType> TreeViewComboBox::plotColumnTopLevelClasses() {
+	return {AspectType::Folder,
+			AspectType::Workbook,
+			AspectType::Datapicker,
+			AspectType::DatapickerCurve,
+			AspectType::Spreadsheet,
+			AspectType::StatisticsSpreadsheet,
+			AspectType::LiveDataSource,
+			AspectType::Column,
+			AspectType::Worksheet,
+			AspectType::CartesianPlot,
+			AspectType::XYFitCurve,
+			AspectType::XYSmoothCurve,
+			AspectType::CantorWorksheet};
 }
 
 /*!
@@ -221,6 +245,7 @@ void TreeViewComboBox::treeViewIndexActivated(const QModelIndex& index) {
 	if (index.internalPointer()) {
 		QComboBox::setCurrentIndex(0);
 		QComboBox::setItemText(0, index.data().toString());
+		setToolTip(m_model->data(index, Qt::ToolTipRole).toString());
 		Q_EMIT currentModelIndexChanged(index);
 		m_groupBox->hide();
 		return;

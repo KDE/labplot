@@ -9,9 +9,10 @@
 */
 
 #include "ImportFileDialog.h"
-#include "ImportErrorDialog.h"
 #include "ImportFileWidget.h"
+#include "ImportWarningsDialog.h"
 #include "backend/core/AspectTreeModel.h"
+#include "backend/core/Settings.h"
 #include "backend/core/Workbook.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/datasources/filters/filters.h"
@@ -25,9 +26,6 @@
 #endif
 
 #include <KLocalizedString>
-#include <KMessageBox>
-#include <KMessageWidget>
-#include <KSharedConfig>
 #include <KWindowConfig>
 
 #include <QDialogButtonBox>
@@ -53,6 +51,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	: ImportDialog(parent)
 	, m_importFileWidget(new ImportFileWidget(this, liveDataSource, fileName)) {
 	vLayout->addWidget(m_importFileWidget);
+	m_liveDataSource = liveDataSource;
 
 	// dialog buttons
 	auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Reset | QDialogButtonBox::Cancel);
@@ -61,12 +60,13 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	okButton->setEnabled(false); // ok is only available if a valid container was selected
 	vLayout->addWidget(buttonBox);
 
-	// hide the data-source related widgets
 	if (!liveDataSource)
-		setModel();
+		setModel(); // set the model and hide the data-source related widgets
+	else
+		setAttribute(Qt::WA_DeleteOnClose, false); // don't delete on close for live data sources, it's done in MainWin::newLiveDataSource()
 
 	// Signals/Slots
-	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+	connect(buttonBox, &QDialogButtonBox::accepted, this, &ImportDialog::accept);
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
 	if (!liveDataSource)
@@ -82,7 +82,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 	m_importFileWidget->loadSettings();
 
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportFileDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportFileDialog"));
 	if (conf.exists()) {
 		m_showOptions = conf.readEntry("ShowOptions", false);
 
@@ -113,7 +113,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 
 ImportFileDialog::~ImportFileDialog() {
 	// save current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImportFileDialog");
+	KConfigGroup conf = Settings::group(QStringLiteral("ImportFileDialog"));
 	conf.writeEntry("ShowOptions", m_showOptions);
 	if (cbPosition)
 		conf.writeEntry("Position", cbPosition->currentIndex());
@@ -165,7 +165,7 @@ void ImportFileDialog::importToMQTT(MQTTClient* client) const {
 /*!
   triggers data import to the currently selected data container
 */
-void ImportFileDialog::importTo(QStatusBar* statusBar) const {
+bool ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	DEBUG(Q_FUNC_INFO);
 	QDEBUG("	cbAddTo->currentModelIndex() =" << cbAddTo->currentModelIndex());
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
@@ -173,20 +173,8 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		DEBUG(Q_FUNC_INFO << ", ERROR: No aspect available");
 		DEBUG("	cbAddTo->currentModelIndex().isValid() = " << cbAddTo->currentModelIndex().isValid());
 		DEBUG("	cbAddTo->currentModelIndex() row/column = " << cbAddTo->currentModelIndex().row() << ' ' << cbAddTo->currentModelIndex().column());
-		return;
-	}
-
-	auto filter = m_importFileWidget->currentFileFilter();
-	if (m_importFileWidget->importValid()) {
-		auto errors = filter->lastErrors();
-		if (errors.isEmpty()) {
-			// Default message, because not all filters implement lastErrors yet
-			errors.append(i18n("No data to import."));
-		}
-		ImportErrorDialog* d = new ImportErrorDialog(errors);
-		d->setAttribute(Qt::WA_DeleteOnClose);
-		d->show();
-		return;
+		const_cast<ImportFileDialog*>(this)->showErrorMessage(i18n("No target data container selected"));
+		return false;
 	}
 
 	QString fileName = m_importFileWidget->fileName();
@@ -195,6 +183,9 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	// show a progress bar in the status bar
 	auto* progressBar = new QProgressBar();
 	progressBar->setRange(0, 100);
+	auto* filter = m_importFileWidget->currentFileFilter();
+	filter->setLastError(QString()); // clear the previos error, if any available
+	filter->clearLastWarnings(); // clear the previos warnings, if any available
 	connect(filter, &AbstractFileFilter::completed, progressBar, &QProgressBar::setValue);
 
 	statusBar->clearMessage();
@@ -221,10 +212,10 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		auto sheets = workbook->children<AbstractAspect>();
 
 		AbstractFileFilter::FileType fileType = m_importFileWidget->currentFileType();
-		// multiple data sets/variables for special types
+		// types supporting multiple data sets/variables
 		if (fileType == AbstractFileFilter::FileType::HDF5 || fileType == AbstractFileFilter::FileType::NETCDF || fileType == AbstractFileFilter::FileType::ROOT
-			|| fileType == AbstractFileFilter::FileType::MATIO || fileType == AbstractFileFilter::FileType::Excel
-			|| fileType == AbstractFileFilter::FileType::VECTOR_BLF) {
+			|| fileType == AbstractFileFilter::FileType::MATIO || fileType == AbstractFileFilter::FileType::XLSX
+			|| fileType == AbstractFileFilter::FileType::Ods || fileType == AbstractFileFilter::FileType::VECTOR_BLF) {
 			QStringList names;
 			if (fileType == AbstractFileFilter::FileType::HDF5)
 				names = m_importFileWidget->selectedHDF5Names();
@@ -236,11 +227,13 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 				names = m_importFileWidget->selectedROOTNames();
 			else if (fileType == AbstractFileFilter::FileType::MATIO)
 				names = m_importFileWidget->selectedMatioNames();
-			else if (fileType == AbstractFileFilter::FileType::Excel)
-				names = m_importFileWidget->selectedExcelRegionNames();
+			else if (fileType == AbstractFileFilter::FileType::XLSX)
+				names = m_importFileWidget->selectedXLSXRegionNames();
+			else if (fileType == AbstractFileFilter::FileType::Ods)
+				names = m_importFileWidget->selectedOdsSheetNames();
 
 			int nrNames = names.size(), offset = sheets.size();
-			// QDEBUG(Q_FUNC_INFO << ", selected names: " << names)
+			QDEBUG(Q_FUNC_INFO << ", selected names: " << names)
 
 			// TODO: think about importing multiple sets into one sheet
 
@@ -261,10 +254,10 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 
 				// rename the available sheets
 				for (int i = 0; i < offset; ++i) {
-					// HDF5 variable names contain the whole path, remove it and keep the name only
+					// HDF5 and Ods names contain the whole path, remove it and keep the name only
 					QString sheetName = names.at(i);
-					if (fileType == AbstractFileFilter::FileType::HDF5)
-						sheetName = names.at(i).mid(names.at(i).lastIndexOf(QLatin1Char('/')) + 1);
+					if (fileType == AbstractFileFilter::FileType::HDF5 || fileType == AbstractFileFilter::FileType::Ods)
+						sheetName = sheetName.split(QLatin1Char('/')).last();
 
 					auto* sheet = sheets.at(i);
 					sheet->setUndoAware(false);
@@ -275,10 +268,10 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 
 			// add additional spreadsheets
 			for (int i = start; i < nrNames; ++i) {
-				// HDF5 variable names contain the whole path, remove it and keep the name only
+				// HDF5 and Ods names contain the whole path, remove it and keep the name only
 				QString sheetName = names.at(i);
-				if (fileType == AbstractFileFilter::FileType::HDF5)
-					sheetName = names.at(i).mid(names.at(i).lastIndexOf(QLatin1Char('/')) + 1);
+				if (fileType == AbstractFileFilter::FileType::HDF5 || fileType == AbstractFileFilter::FileType::Ods)
+					sheetName = sheetName.split(QLatin1Char('/')).last();
 
 				auto* spreadsheet = new Spreadsheet(sheetName);
 				if (mode == AbstractFileFilter::ImportMode::Prepend && !sheets.isEmpty())
@@ -300,12 +293,14 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 					static_cast<NetCDFFilter*>(filter)->setCurrentVarName(names.at(i));
 				else if (fileType == AbstractFileFilter::FileType::MATIO)
 					static_cast<MatioFilter*>(filter)->setCurrentVarName(names.at(i));
-				else if (fileType == AbstractFileFilter::FileType::Excel) {
-					const auto& nameSplit = names[i].split(QLatin1Char('!'));
-					const auto& sheet = nameSplit[0];
-					const auto& range = nameSplit[1];
-					static_cast<ExcelFilter*>(filter)->setCurrentSheet(sheet);
-					static_cast<ExcelFilter*>(filter)->setCurrentRange(range);
+				else if (fileType == AbstractFileFilter::FileType::Ods) // all selected sheets are imported
+					static_cast<OdsFilter*>(filter)->setSelectedSheetNames(QStringList() << names.at(i));
+				else if (fileType == AbstractFileFilter::FileType::XLSX) {
+					const auto& nameSplit = names.at(i).split(QLatin1Char('!'));
+					const auto& sheet = nameSplit.at(0);
+					const auto& range = nameSplit.at(1);
+					static_cast<XLSXFilter*>(filter)->setCurrentSheet(sheet);
+					static_cast<XLSXFilter*>(filter)->setCurrentRange(range);
 				} else
 					static_cast<ROOTFilter*>(filter)->setCurrentObject(names.at(i));
 
@@ -315,30 +310,34 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 
 			workbook->setUndoAware(true);
 		} else { // single import file types
-			// use active spreadsheet/matrix if present, else new spreadsheet
-			auto* sheet = workbook->currentSpreadsheet();
-			if (sheet)
-				filter->readDataFromFile(fileName, sheet, mode);
-			else {
-				workbook->setUndoAware(true);
-				auto* spreadsheet = new Spreadsheet(fileName);
-				workbook->addChild(spreadsheet);
-				workbook->setUndoAware(false);
-				filter->readDataFromFile(fileName, spreadsheet, mode);
-			}
+			// workbook selected -> create a new spreadsheet in the workbook
+			workbook->setUndoAware(true);
+			auto* spreadsheet = new Spreadsheet(fileName);
+			workbook->addChild(spreadsheet);
+			workbook->setUndoAware(false);
+			filter->readDataFromFile(fileName, spreadsheet, mode);
 		}
 	}
 	statusBar->showMessage(i18n("File %1 imported in %2 seconds.", fileName, (float)timer.elapsed() / 1000));
 
-	const auto errors = filter->lastErrors();
-	if (!errors.isEmpty()) {
-		ImportErrorDialog* d = new ImportErrorDialog(errors);
-		d->setAttribute(Qt::WA_DeleteOnClose);
+	RESET_CURSOR;
+
+	// handle errors
+	if (!filter->lastError().isEmpty()) {
+		const_cast<ImportFileDialog*>(this)->showErrorMessage(filter->lastError());
+		return false;
+	}
+
+	// show warnings, if available
+	const auto& warnings = filter->lastWarnings();
+	if (!warnings.isEmpty()) {
+		auto* d = new ImportWarningsDialog(warnings, m_mainWin);
 		d->show();
 	}
 
-	RESET_CURSOR;
 	statusBar->removeWidget(progressBar);
+	DEBUG(Q_FUNC_INFO << ", DONE")
+	return true;
 }
 
 void ImportFileDialog::toggleOptions() {
@@ -392,10 +391,10 @@ void ImportFileDialog::checkOkButton() {
 	if (fileName.isEmpty())
 		return;
 
-	DEBUG("Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, m_importFileWidget->currentSourceType()));
+	DEBUG(Q_FUNC_INFO << ", Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, m_importFileWidget->currentSourceType()));
 	switch (m_importFileWidget->currentSourceType()) {
 	case LiveDataSource::SourceType::FileOrPipe: {
-		DEBUG("	fileName = " << qPrintable(fileName));
+		DEBUG(Q_FUNC_INFO << ", fileName = " << qPrintable(fileName));
 		const bool enable = QFile::exists(fileName);
 		okButton->setEnabled(enable);
 		if (enable) {
@@ -495,10 +494,10 @@ void ImportFileDialog::checkOkButton() {
 	case LiveDataSource::SourceType::SerialPort: {
 #ifdef HAVE_QTSERIALPORT
 		const QString sPort = m_importFileWidget->serialPort();
-		const int baudRate = m_importFileWidget->baudRate();
 
 		if (!sPort.isEmpty()) {
 			QSerialPort serialPort{this};
+			const int baudRate = m_importFileWidget->baudRate();
 
 			DEBUG("	Port: " << STDSTRING(sPort) << ", Settings: " << baudRate << ',' << serialPort.dataBits() << ',' << serialPort.parity() << ','
 							<< serialPort.stopBits());
@@ -544,19 +543,4 @@ void ImportFileDialog::checkOkButton() {
 
 QString ImportFileDialog::selectedObject() const {
 	return m_importFileWidget->selectedObject();
-}
-
-void ImportFileDialog::showErrorMessage(const QString& message) {
-	if (message.isEmpty()) {
-		if (m_messageWidget && m_messageWidget->isVisible())
-			m_messageWidget->close();
-	} else {
-		if (!m_messageWidget) {
-			m_messageWidget = new KMessageWidget(this);
-			m_messageWidget->setMessageType(KMessageWidget::Error);
-			vLayout->insertWidget(vLayout->count() - 1, m_messageWidget);
-		}
-		m_messageWidget->setText(message);
-		m_messageWidget->animatedShow();
-	}
 }

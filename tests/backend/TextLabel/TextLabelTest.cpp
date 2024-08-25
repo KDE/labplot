@@ -27,18 +27,23 @@ struct TextProperties {
 };
 
 QColor getColorFromHTMLText(const QString& text, const QString& colortype) {
-	const QString htmlColorPattern(QStringLiteral("#[0-9A-Fa-f]{6}"));
+	const QString htmlColorPattern(QStringLiteral("(#[0-9A-Fa-f]{6})|(transparent)"));
 	QRegularExpression fontColorPattern(colortype + QStringLiteral(":") + htmlColorPattern);
 	QRegularExpressionMatch matchColor = fontColorPattern.match(text);
 	// QVERIFY(matchColor.hasMatch());
 	// QCOMPARE(matchColor.capturedTexts().count(), 1);
-	QString color = matchColor.capturedTexts().at(0).split(colortype + QStringLiteral(":#")).at(1);
+	const auto& splitted = matchColor.capturedTexts().at(0).split(colortype + QStringLiteral(":"));
+	QColor c;
+	if (splitted.length() > 1) {
+		QString color = splitted.at(1);
+		int r = color.mid(1, 2).toInt(nullptr, 16);
+		int g = color.mid(3, 2).toInt(nullptr, 16);
+		int b = color.mid(5, 2).toInt(nullptr, 16);
 
-	int r = color.leftRef(2).toInt(nullptr, 16);
-	int g = color.midRef(2, 2).toInt(nullptr, 16);
-	int b = color.midRef(4, 2).toInt(nullptr, 16);
-
-	QColor c(r, g, b);
+		c = QColor(r, g, b);
+	} else {
+		c = QColor(Qt::transparent);
+	}
 	return c;
 }
 
@@ -97,9 +102,9 @@ void TextLabelTest::addPlot() {
 	ws->addChild(l);
 
 	QCOMPARE(l->text().mode, TextLabel::Mode::Text);
-	VERIFYLABELCOLORS(l, Qt::black, Qt::white);
+	VERIFYLABELCOLORS(l, Qt::black, Qt::transparent);
 	QCOMPARE(l->fontColor(), Qt::black);
-	QCOMPARE(l->backgroundColor(), Qt::white);
+	QCOMPARE(l->backgroundColor(), Qt::transparent);
 
 	// add title?
 
@@ -128,7 +133,7 @@ void TextLabelTest::multiLabelEditColorChange() {
 	l1->setText(QStringLiteral("Text1"));
 	ws->addChild(l1);
 
-	VERIFYLABELCOLORS(l1, Qt::black, Qt::white);
+	VERIFYLABELCOLORS(l1, Qt::black, Qt::transparent);
 
 	auto* l2 = new TextLabel(QStringLiteral("Label"));
 	QVERIFY(l2 != nullptr);
@@ -227,7 +232,7 @@ void TextLabelTest::multiLabelEditColorChangeSelection() {
 	ws->addChild(l1);
 	l1->setText(QStringLiteral("This is the text of label 1"));
 
-	VERIFYLABELCOLORS(l1, Qt::black, Qt::white);
+	VERIFYLABELCOLORS(l1, Qt::black, Qt::transparent);
 
 	auto* l2 = new TextLabel(QStringLiteral("Label"));
 	QVERIFY(l2 != nullptr);

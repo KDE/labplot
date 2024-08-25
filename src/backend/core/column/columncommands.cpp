@@ -388,6 +388,8 @@ ColumnInsertRowsCmd::ColumnInsertRowsCmd(ColumnPrivate* col, int before, int cou
  */
 void ColumnInsertRowsCmd::redo() {
 	m_col->insertRows(m_before, m_count);
+	m_col->q->updateFormula(); // only needed in redo
+	finalize();
 }
 
 /**
@@ -395,6 +397,12 @@ void ColumnInsertRowsCmd::redo() {
  */
 void ColumnInsertRowsCmd::undo() {
 	m_col->removeRows(m_before, m_count);
+	finalize();
+}
+
+void ColumnInsertRowsCmd::finalize() const {
+	if (!m_col->q->m_suppressDataChangedSignal)
+		Q_EMIT m_col->q->dataChanged(m_col->q);
 }
 
 /** ***************************************************************************
@@ -474,6 +482,7 @@ void ColumnRemoveRowsCmd::redo() {
 		m_formulas = m_col->formulaAttribute();
 	}
 	m_col->removeRows(m_first, m_count);
+	finalize();
 }
 
 /**
@@ -484,6 +493,12 @@ void ColumnRemoveRowsCmd::undo() {
 	m_col->copy(m_backup, 0, m_first, m_data_row_count);
 	m_col->resizeTo(m_old_size);
 	m_col->replaceFormulas(m_formulas);
+	finalize();
+}
+
+void ColumnRemoveRowsCmd::finalize() const {
+	if (!m_col->q->m_suppressDataChangedSignal)
+		Q_EMIT m_col->q->dataChanged(m_col->q);
 }
 
 /** ***************************************************************************
@@ -680,13 +695,15 @@ ColumnSetGlobalFormulaCmd::ColumnSetGlobalFormulaCmd(ColumnPrivate* col,
 													 QStringList variableNames,
 													 QVector<Column*> variableColumns,
 													 bool autoUpdate,
+													 bool autoResize,
 													 QUndoCommand* parent)
 	: QUndoCommand(parent)
 	, m_col(col)
 	, m_newFormula(std::move(formula))
 	, m_newVariableNames(std::move(variableNames))
 	, m_newVariableColumns(std::move(variableColumns))
-	, m_newAutoUpdate(autoUpdate) {
+	, m_newAutoUpdate(autoUpdate)
+	, m_newAutoResize(autoResize) {
 	setText(i18n("%1: set formula", col->name()));
 }
 
@@ -698,6 +715,7 @@ void ColumnSetGlobalFormulaCmd::redo() {
 			m_variableColumns << d.m_column;
 		}
 		m_autoUpdate = m_col->formulaAutoUpdate();
+		m_autoResize = m_col->formulaAutoResize();
 		m_copied = true;
 	}
 
@@ -706,14 +724,14 @@ void ColumnSetGlobalFormulaCmd::redo() {
 		if (i < m_newVariableColumns.size()) // names may be defined but without column
 			formulaData << Column::FormulaData(m_newVariableNames.at(i), m_newVariableColumns.at(i));
 
-	m_col->setFormula(m_newFormula, formulaData, m_newAutoUpdate);
+	m_col->setFormula(m_newFormula, formulaData, m_newAutoUpdate, m_newAutoResize);
 }
 
 void ColumnSetGlobalFormulaCmd::undo() {
 	QVector<Column::FormulaData> formulaData;
 	for (int i = 0; i < m_variableNames.count(); i++)
 		formulaData << Column::FormulaData(m_variableNames.at(i), m_variableColumns.at(i));
-	m_col->setFormula(m_formula, formulaData, m_autoUpdate);
+	m_col->setFormula(m_formula, formulaData, m_autoUpdate, m_autoResize);
 }
 
 /** ***************************************************************************

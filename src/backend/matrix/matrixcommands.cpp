@@ -89,7 +89,7 @@ MatrixSetFormulaCmd::MatrixSetFormulaCmd(MatrixPrivate* private_obj, QString for
 void MatrixSetFormulaCmd::redo() {
 	QString tmp = m_private_obj->formula;
 	m_private_obj->formula = m_other_formula;
-	m_other_formula = tmp;
+	m_other_formula = std::move(tmp);
 }
 
 void MatrixSetFormulaCmd::undo() {

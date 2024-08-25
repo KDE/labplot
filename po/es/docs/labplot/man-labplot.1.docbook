@@ -1,0 +1,189 @@
+<?xml version="1.0" ?>
+<!DOCTYPE refentry PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+<!ENTITY % Spanish "INCLUDE">
+]>
+
+<!--  Please keep this man page content in sync with Command Line Options sections of Okular handbook -->
+<refentry lang="&language;">
+<refentryinfo>
+<title
+>Manual del usuario de LabPlot</title>
+<author
+><firstname
+>Helen</firstname
+><surname
+>Faulkner</surname
+> <contrib
+>LabPlot man page.</contrib
+> <email
+>helen_ml_faulkner@yahoo.co.uk</email
+></author>
+<date
+>2018-09-28</date>
+<releaseinfo
+>LabPlot 2.6</releaseinfo>
+<productname
+>LabPlot</productname>
+</refentryinfo>
+
+<refmeta>
+<refentrytitle
+><command
+>labplot</command
+></refentrytitle>
+<manvolnum
+>1</manvolnum>
+</refmeta>
+
+<refnamediv>
+<refname
+>labplot</refname>
+<refpurpose
+>Aplicación de KDE para gráficos interactivos y análisis de datos científicos.</refpurpose>
+</refnamediv>
+<!-- body begins here -->
+<refsynopsisdiv id='synopsis'>
+<cmdsynopsis
+><command
+>labplot</command
+> <arg choice="opt"
+><replaceable
+>opciones de LabPlot</replaceable
+></arg
+> <arg choice="opt"
+><replaceable
+>archivo</replaceable
+></arg
+> </cmdsynopsis>
+</refsynopsisdiv>
+
+
+<refsect1 id="description"
+><title
+>Description</title>
+<para
+>LabPlot es una herramienta de trazado y análisis de datos. </para>
+<para
+>Sus funciones incluyen gráficos de datos y funciones 2D y 3D, fácil edición de los gráficos, análisis de datos y funciones, así como compatibilidad con distintas hojas de trabajo que usan archivos de proyectos MDI y LabPlot. </para>
+<para
+>Recuerde que LabPlot se llama usando <command
+>labplot</command
+>. </para>
+
+</refsect1>
+
+<refsect1 id="options"
+><title
+>Opciones de LabPlot</title>
+<para
+>Para un completo resumen de las opciones generales, ejecute <userinput
+><command
+>labplot</command
+> <parameter
+>--help</parameter
+></userinput
+>. </para>
+
+<variablelist>
+<varlistentry>
+<term
+><option
+>--no-splash</option
+></term>
+<listitem>
+<para
+>No mostrar la pantalla de bienvenida.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><option
+>--presenter</option
+></term>
+<listitem>
+<para
+>Empezar en el modo de presentación.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect1>
+
+<refsect1 id="arguments"
+><title
+>Argumentos</title>
+<variablelist>
+  <varlistentry>
+    <term
+><option
+>archivo</option
+></term>
+  <listitem>
+    <para
+>La ubicación del proyecto que se va a abrir, normalmente con la extensión <literal role="extension"
+>.lml</literal
+>.</para>
+    <para
+>El archivo de proyecto también puede estar comprimido, con el nombre de archivo terminando con alguna de las extensiones <literal role="extension"
+>.lml.gz</literal
+>, <literal role="extension"
+>lml.bz2</literal
+> o <literal role="extension"
+>.lml.xz</literal
+>.</para>
+  </listitem>
+  </varlistentry>
+</variablelist>
+</refsect1>
+
+<refsect1>
+<title
+>Consulte también</title>
+<simplelist>
+<member
+>Dispone de una completa documentación del usuario a través del centro de ayuda de KDE. También puede introducir la URL <ulink url="help:/labplot"
+>help:/labplot</ulink
+> (puede introducir dicha <acronym
+>URL</acronym
+> en &dolphin; o ejecutar <userinput
+><command
+>khelpcenter</command
+> <parameter
+>help:/labplot</parameter
+></userinput
+>).</member>
+<member
+>kf5options(7)</member>
+<member
+>qt5options(7)</member>
+<member
+>También dispone de más información en <ulink url="https://labplot.kde.org/"
+>https://labplot.kde.org/</ulink
+>.</member>
+</simplelist>
+</refsect1>
+
+<refsect1 id="authors"
+><title
+>Autores</title>
+<para
+>LabPlot fue escrito por </para>
+<simplelist>
+    <member
+>Stefan Gerlach &lt;stefan.gerlach@uni.kn&gt;,</member>
+    <member
+>Alexander Semke &lt;alexander.semke@web.de&gt;,</member>
+    <member
+>F&aacute;bi&aacute;n Krist&oacute;f-Szabolcs &lt;f-kristof@hotmail.com&gt;</member>
+    <member
+>y otros autores más.</member>
+</simplelist>
+<para
+>Esta página de manual fue preparada por Helen Faulkner &lt;helen_ml_faulkner@yahoo.co.uk&gt; para el sistema GNU/Linux de Debian (aunque también se puede usar en otros). </para>
+<para
+>Licencia: GNU General Public Versión 2 &lt;<ulink url="http://www.gnu.org/licenses/gpl-2.0.html"
+>http://www.gnu.org/licenses/gpl-2.0.html</ulink
+>&gt; </para>
+</refsect1>
+</refentry>
+

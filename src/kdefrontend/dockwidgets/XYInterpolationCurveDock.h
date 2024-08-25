@@ -28,27 +28,19 @@ public:
 
 private:
 	void initGeneralTab() override;
-	void updateSettings(const AbstractColumn*);
-	void updatePlotRanges() override;
+	void updateSettings(const AbstractColumn*) override;
 	void showInterpolationResult();
 
 	Ui::XYInterpolationCurveDockGeneralTab uiGeneralTab;
-
 	XYInterpolationCurve* m_interpolationCurve{nullptr};
 	XYInterpolationCurve::InterpolationData m_interpolationData;
 	unsigned int dataPoints{0}; // number of data points in selected column
 	bool m_dateTimeRange{false};
 
-protected:
-	void setModel();
-
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYInterpolationCurveDock
 	// general tab
 	void dataSourceTypeChanged(int);
-	void dataSourceCurveChanged(const QModelIndex&);
-	void xDataColumnChanged(const QModelIndex&);
-	void yDataColumnChanged(const QModelIndex&);
 	void autoRangeChanged();
 	void xRangeMinChanged();
 	void xRangeMaxChanged();
@@ -62,18 +54,11 @@ private Q_SLOTS:
 	void evaluateChanged(int);
 	void numberOfPointsChanged();
 	void pointsModeChanged(int);
-
 	void recalculateClicked();
-	void enableRecalculate() const;
 
 	// SLOTs for changes triggered in XYCurve
 	// General-Tab
-	void curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType);
-	void curveDataSourceCurveChanged(const XYCurve*);
-	void curveXDataColumnChanged(const AbstractColumn*);
-	void curveYDataColumnChanged(const AbstractColumn*);
 	void curveInterpolationDataChanged(const XYInterpolationCurve::InterpolationData&);
-	void dataChanged();
 };
 
 #endif

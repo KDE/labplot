@@ -3,6 +3,7 @@
 UTCDateTimeEdit::UTCDateTimeEdit(QWidget* parent)
 	: QDateTimeEdit(parent) {
 	setMinimumDate(QDate(100, 1, 1));
+	setTimeSpec(Qt::TimeSpec::UTC);
 	connect(this, &QDateTimeEdit::dateTimeChanged, this, &UTCDateTimeEdit::dateTimeChanged);
 }
 
@@ -11,7 +12,5 @@ void UTCDateTimeEdit::setMSecsSinceEpochUTC(qint64 value) {
 }
 
 void UTCDateTimeEdit::dateTimeChanged(const QDateTime& datetime) {
-	QDateTime dt = datetime;
-	dt.setTimeSpec(Qt::TimeSpec::UTC);
-	Q_EMIT mSecsSinceEpochUTCChanged(dt.toMSecsSinceEpoch());
+	Q_EMIT mSecsSinceEpochUTCChanged(datetime.toMSecsSinceEpoch());
 }

@@ -22,10 +22,6 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 
-extern "C" {
-#include <gsl/gsl_errno.h>
-}
-
 #include <KLocalizedString>
 #include <QElapsedTimer>
 #include <QIcon>
@@ -223,7 +219,6 @@ void XYDifferentiationCurve::save(QXmlStreamWriter* writer) const {
 bool XYDifferentiationCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYDifferentiationCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -261,6 +256,10 @@ bool XYDifferentiationCurve::load(XmlStreamReader* reader, bool preview) {
 				d->xColumn = column;
 			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 
@@ -283,7 +282,7 @@ bool XYDifferentiationCurve::load(XmlStreamReader* reader, bool preview) {
 		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
 		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;
 
-		recalcLogicalPoints();
+		recalc();
 	}
 
 	return true;

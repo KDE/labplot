@@ -15,7 +15,6 @@
 #include "backend/core/AbstractColumn.h"
 #include <QAbstractItemModel>
 
-class QStringList;
 class Column;
 class Spreadsheet;
 class AbstractAspect;
@@ -30,6 +29,7 @@ public:
 		MaskingRole = Qt::UserRole, //!< bool determining whether the cell is masked
 		FormulaRole = Qt::UserRole + 1, //!< the cells formula
 		CommentRole = Qt::UserRole + 2, //!< the column comment (for headerData())
+		SparkLineRole = Qt::UserRole + 3, // the sparkline comment ( for headerData())
 	};
 
 	Qt::ItemFlags flags(const QModelIndex&) const override;
@@ -52,6 +52,8 @@ public:
 
 	void setSearchText(const QString&);
 	QModelIndex index(const QString&) const;
+
+	Spreadsheet* spreadsheet();
 
 private Q_SLOTS:
 	void handleAspectsAboutToBeInserted(int first, int last);

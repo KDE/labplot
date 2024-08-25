@@ -4,7 +4,7 @@
 	Description          : DatapickerImage view for datapicker
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-	SPDX-FileCopyrightText: 2015-2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2023 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -19,14 +19,15 @@
 
 #include <limits>
 
+#include <QActionGroup>
 #include <QClipboard>
-#include <QDesktopWidget>
 #include <QFileInfo>
 #include <QImage>
 #include <QMenu>
 #include <QMessageBox>
 #include <QMimeData>
 #include <QPrinter>
+#include <QScreen>
 #include <QSvgGenerator>
 #include <QTimeLine>
 #include <QToolBar>
@@ -94,14 +95,14 @@ DatapickerImageView::DatapickerImageView(DatapickerImage* image)
 	if (!m_image->isLoading()) {
 		float w = Worksheet::convertFromSceneUnits(sceneRect().width(), Worksheet::Unit::Inch);
 		float h = Worksheet::convertFromSceneUnits(sceneRect().height(), Worksheet::Unit::Inch);
-		w *= QApplication::desktop()->physicalDpiX();
-		h *= QApplication::desktop()->physicalDpiY();
+		w *= QApplication::primaryScreen()->physicalDotsPerInchX();
+		h *= QApplication::primaryScreen()->physicalDotsPerInchY();
 		resize(w * 1.1, h * 1.1);
 	}
 
 	// rescale to the original size
-	static const float hscale = QApplication::desktop()->physicalDpiX() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
-	static const float vscale = QApplication::desktop()->physicalDpiY() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+	static const float hscale = QApplication::primaryScreen()->physicalDotsPerInchX() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+	static const float vscale = QApplication::primaryScreen()->physicalDotsPerInchY() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
 	setTransform(QTransform::fromScale(hscale, vscale));
 }
 
@@ -117,13 +118,13 @@ void DatapickerImageView::initActions() {
 
 	// Zoom actions
 	zoomInViewAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-in")), i18n("Zoom In"), zoomActionGroup);
-	zoomInViewAction->setShortcut(Qt::CTRL + Qt::Key_Plus);
+	zoomInViewAction->setShortcut(Qt::CTRL | Qt::Key_Plus);
 
 	zoomOutViewAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-out")), i18n("Zoom Out"), zoomActionGroup);
-	zoomOutViewAction->setShortcut(Qt::CTRL + Qt::Key_Minus);
+	zoomOutViewAction->setShortcut(Qt::CTRL | Qt::Key_Minus);
 
 	zoomOriginAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-original")), i18n("Original Size"), zoomActionGroup);
-	zoomOriginAction->setShortcut(Qt::CTRL + Qt::Key_1);
+	zoomOriginAction->setShortcut(Qt::CTRL | Qt::Key_1);
 
 	zoomFitPageHeightAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-height")), i18n("Fit to Height"), zoomActionGroup);
 	zoomFitPageWidthAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-width")), i18n("Fit to Width"), zoomActionGroup);
@@ -641,8 +642,10 @@ void DatapickerImageView::changeZoom(QAction* action) {
 	else if (action == zoomOutViewAction)
 		zoom(-1);
 	else if (action == zoomOriginAction) {
-		static const float hscale = QApplication::desktop()->physicalDpiX() / (25.4 * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
-		static const float vscale = QApplication::desktop()->physicalDpiY() / (25.4 * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
+		static const float hscale =
+			QApplication::primaryScreen()->physicalDotsPerInchX() / (25.4 * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
+		static const float vscale =
+			QApplication::primaryScreen()->physicalDotsPerInchY() / (25.4 * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
 		setTransform(QTransform::fromScale(hscale, vscale));
 		m_rotationAngle = 0;
 	} else if (action == zoomFitPageWidthAction) {
@@ -715,9 +718,11 @@ void DatapickerImageView::changeSelectedItemsPosition(QAction* action) {
 }
 
 void DatapickerImageView::magnificationChanged(QAction* action) {
-	if (action == noMagnificationAction)
+	if (action == noMagnificationAction) {
 		magnificationFactor = 0;
-	else if (action == twoTimesMagnificationAction)
+		if (m_image->m_magnificationWindow)
+			m_image->m_magnificationWindow->setVisible(false);
+	} else if (action == twoTimesMagnificationAction)
 		magnificationFactor = 2;
 	else if (action == threeTimesMagnificationAction)
 		magnificationFactor = 3;
@@ -781,8 +786,7 @@ void DatapickerImageView::handleImageActions() {
 }
 
 void DatapickerImageView::exportToFile(const QString& path, const WorksheetView::ExportFormat format, const int resolution) {
-	QRectF sourceRect;
-	sourceRect = scene()->sceneRect();
+	QRectF sourceRect = scene()->sceneRect();
 
 	// print
 	if (format == WorksheetView::ExportFormat::PDF) {
@@ -807,8 +811,8 @@ void DatapickerImageView::exportToFile(const QString& path, const WorksheetView:
 		generator.setFileName(path);
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
 		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
-		w = w * QApplication::desktop()->physicalDpiX() / 25.4;
-		h = h * QApplication::desktop()->physicalDpiY() / 25.4;
+		w = w * QApplication::primaryScreen()->physicalDotsPerInchX() / 25.4;
+		h = h * QApplication::primaryScreen()->physicalDotsPerInchY() / 25.4;
 
 		generator.setSize(QSize(w, h));
 		QRectF targetRect(0, 0, w, h);
@@ -870,6 +874,12 @@ void DatapickerImageView::exportToFile(const QString& path, const WorksheetView:
 }
 
 void DatapickerImageView::exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect) {
+	bool magnificationActive = false;
+	if (m_image->m_magnificationWindow && m_image->m_magnificationWindow->isVisible()) {
+		magnificationActive = true;
+		m_image->m_magnificationWindow->setVisible(false);
+	}
+
 	painter->save();
 	painter->scale(targetRect.width() / sourceRect.width(), targetRect.height() / sourceRect.height());
 	drawBackground(painter, sourceRect);
@@ -877,12 +887,15 @@ void DatapickerImageView::exportPaint(QPainter* painter, const QRectF& targetRec
 	m_image->setPrinting(true);
 	scene()->render(painter, QRectF(), sourceRect);
 	m_image->setPrinting(false);
+
+	if (magnificationActive)
+		m_image->m_magnificationWindow->setVisible(true);
 }
 
 void DatapickerImageView::print(QPrinter* printer) {
-	const QRectF scene_rect = sceneRect();
-	int w = Worksheet::convertFromSceneUnits(scene_rect.width(), Worksheet::Unit::Millimeter);
-	int h = Worksheet::convertFromSceneUnits(scene_rect.height(), Worksheet::Unit::Millimeter);
+	const QRectF& scene_rect = sceneRect();
+	const int w = Worksheet::convertFromSceneUnits(scene_rect.width(), Worksheet::Unit::Millimeter);
+	const int h = Worksheet::convertFromSceneUnits(scene_rect.height(), Worksheet::Unit::Millimeter);
 	printer->setPageSize(QPageSize(QSizeF(w, h), QPageSize::Millimeter));
 	printer->setPageMargins(QMarginsF(0, 0, 0, 0), QPageLayout::Millimeter);
 	printer->setPrintRange(QPrinter::PageRange);
@@ -903,9 +916,8 @@ void DatapickerImageView::print(QPrinter* printer) {
 		} else if (m_image->plotImageType() == DatapickerImage::PlotImageType::ProcessedImage) {
 			QImage todraw = m_image->processedPlotImage.scaled(scene_rect.width(), scene_rect.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 			painter.drawImage(scene_rect.topLeft(), todraw);
-		} else {
+		} else
 			painter.fillRect(scene_rect, Qt::white);
-		}
 	} else {
 		painter.setBrush(QBrush(Qt::gray));
 		painter.drawRect(scene_rect);
@@ -913,9 +925,17 @@ void DatapickerImageView::print(QPrinter* printer) {
 
 	painter.restore();
 	m_image->setPrinting(true);
+	bool magnificationActive = false;
+	if (m_image->m_magnificationWindow && m_image->m_magnificationWindow->isVisible()) {
+		magnificationActive = true;
+		m_image->m_magnificationWindow->setVisible(false);
+	}
 	scene()->render(&painter, QRectF(), scene_rect);
 	m_image->setPrinting(false);
 	painter.end();
+
+	if (magnificationActive)
+		m_image->m_magnificationWindow->setVisible(true);
 }
 
 void DatapickerImageView::updateBackground() {

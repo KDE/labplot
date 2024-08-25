@@ -23,7 +23,7 @@
 #include <QStandardPaths>
 #include <QXmlStreamReader>
 
-#include <KFilterDev>
+#include <KCompressionDevice>
 #include <KLocalizedString>
 
 ExamplesManager* ExamplesManager::m_instance{nullptr};
@@ -113,7 +113,7 @@ QStringList ExamplesManager::exampleNames(const QString& collectionName) {
 						QByteArray ba = QByteArray::fromBase64(content.toLatin1());
 						QPixmap pixmap;
 						pixmap.loadFromData(ba);
-						m_pixmaps[name] = pixmap;
+						m_pixmaps[name] = std::move(pixmap);
 					} else if (reader.name() == QLatin1String("comment")) {
 						m_descriptions[name] = reader.readElementText();
 						break;
@@ -125,7 +125,7 @@ QStringList ExamplesManager::exampleNames(const QString& collectionName) {
 			delete file;
 		}
 
-		m_examples[collectionName] = names;
+		m_examples[collectionName] = std::move(names);
 	}
 
 	return m_examples[collectionName];

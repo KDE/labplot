@@ -8,10 +8,17 @@
 */
 
 #include "SettingsNotebookPage.h"
+#include "backend/core/Settings.h"
 
+#include <KConfigDialogManager>
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
+#include <KPageDialog>
+#include <KPageWidgetItem>
+
+#ifdef HAVE_CANTOR_LIBS
+#include <cantor/backend.h>
+#endif
 
 /**
  * \brief Page for Notebook settings of the Labplot settings dialog.
@@ -40,11 +47,11 @@ SettingsNotebookPage::SettingsNotebookPage(QWidget* parent)
 	loadSettings();
 }
 
-void SettingsNotebookPage::applySettings() {
+bool SettingsNotebookPage::applySettings() {
 	if (!m_changed)
-		return;
+		return false;
 
-	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Notebook"));
+	KConfigGroup group = Settings::group(QStringLiteral("Settings_Notebook"));
 
 	// Appearance
 	group.writeEntry(QLatin1String("SyntaxHighlighting"), ui.chkSyntaxHighlighting->isChecked());
@@ -56,6 +63,12 @@ void SettingsNotebookPage::applySettings() {
 	// Evaluation
 	group.writeEntry(QLatin1String("ReevaluateEntries"), ui.chkReevaluateEntries->isChecked());
 	group.writeEntry(QLatin1String("AskConfirmation"), ui.chkAskConfirmation->isChecked());
+
+	for (auto* manager : m_cantorBackendConfigManagers) {
+		manager->updateSettings();
+	}
+
+	return true;
 }
 
 void SettingsNotebookPage::restoreDefaults() {
@@ -69,10 +82,14 @@ void SettingsNotebookPage::restoreDefaults() {
 	// Evaluation
 	ui.chkReevaluateEntries->setChecked(false);
 	ui.chkAskConfirmation->setChecked(true);
+
+	for (auto* manager : m_cantorBackendConfigManagers) {
+		manager->updateWidgetsDefault();
+	}
 }
 
 void SettingsNotebookPage::loadSettings() {
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Notebook"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_Notebook"));
 
 	// Appearance
 	ui.chkSyntaxHighlighting->setChecked(group.readEntry(QLatin1String("SyntaxHighlighting"), true));
@@ -89,4 +106,21 @@ void SettingsNotebookPage::loadSettings() {
 void SettingsNotebookPage::changed() {
 	m_changed = true;
 	Q_EMIT settingsChanged();
+}
+
+void SettingsNotebookPage::addSubPages(KPageWidgetItem* rootFrame, KPageDialog* settingsDialog) {
+#ifdef HAVE_CANTOR_LIBS
+	for (auto* backend : Cantor::Backend::availableBackends())
+		if (backend->config()) {
+			auto* widget = backend->settingsWidget(this);
+
+			KPageWidgetItem* item = settingsDialog->addSubPage(rootFrame, widget, backend->name());
+			item->setHeader(backend->name());
+			item->setIcon(QIcon::fromTheme(backend->icon()));
+
+			auto* manager = new KConfigDialogManager(widget, backend->config());
+			connect(manager, &KConfigDialogManager::widgetModified, this, &SettingsNotebookPage::changed);
+			m_cantorBackendConfigManagers.append(manager);
+		}
+#endif
 }

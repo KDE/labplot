@@ -98,6 +98,10 @@ private Q_SLOTS:
 	void fontChanged(const QFont&);
 	void teXFontChanged(const QFont&);
 	void fontSizeChanged(int);
+	void alignLeft();
+	void alignCenter();
+	void alignRight();
+	void alignJustify();
 	void dateTimeMenu();
 	void insertDateTime(QAction*);
 
@@ -122,7 +126,7 @@ private Q_SLOTS:
 	void borderWidthChanged(double);
 	void borderOpacityChanged(int);
 
-	void visibilityChanged(bool);
+	void lockChanged(bool);
 	void bindingChanged(bool checked);
 	void showPlaceholderTextChanged(bool checked);
 
@@ -145,13 +149,14 @@ private Q_SLOTS:
 	void labelBorderPenChanged(const QPen&);
 	void labelBorderOpacityChanged(float);
 
-	void labelVisibleChanged(bool);
+	void labelLockChanged(bool);
 	void labelCartesianPlotParent(bool on);
 	void labelModeChanged(TextLabel::Mode);
 
-	friend TextLabelTest;
+	friend class AxisDock; // fontColorChanged() and labelFontColorChanged() are private methods of LabelWidget
+	friend class TextLabelTest;
 	friend class AxisTest;
-	friend class AxisDock; // fontColorChanged() is a private method of LabelWidget, needs to be called
+	friend class AxisTest2;
 	friend class WorksheetElementTest;
 };
 
