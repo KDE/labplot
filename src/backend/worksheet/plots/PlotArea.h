@@ -15,6 +15,8 @@
 #include "backend/lib/macros.h"
 #include "backend/worksheet/WorksheetElement.h"
 
+#include <backend/worksheet/plots/3d/Plot3DArea.h>
+
 class Background;
 class CartesianPlot;
 class Line;
@@ -25,6 +27,7 @@ class PlotArea : public WorksheetElement {
 
 public:
 	explicit PlotArea(const QString& name, CartesianPlot* parent);
+	explicit PlotArea(const QString& name,Plot3DArea* parent);
 	~PlotArea() override;
 
 	enum class BorderTypeFlags { NoBorder = 0x0, BorderLeft = 0x1, BorderTop = 0x2, BorderRight = 0x4, BorderBottom = 0x8 };
@@ -66,6 +69,7 @@ Q_SIGNALS:
 
 private:
 	CartesianPlot* m_parent;
+	Plot3DArea* m_parent3d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(PlotArea::BorderType)

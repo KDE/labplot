@@ -20,7 +20,7 @@
 #include <QXmlStreamAttributes>
 
 Surface3DPlot::Surface3DPlot(const QString& name)
-	: Plot3DArea(name, new Surface3DPlotPrivate(this), AspectType::SurfacePlot) {
+	: Base3DArea(name, Base3DArea::Surface, AspectType::Surface3DPlot) {
 	m_surface = new Q3DSurface();
 	Axis3D* xAxis = new Axis3D(QStringLiteral("x-axis"), Axis3D::X);
 	Axis3D* yAxis = new Axis3D(QStringLiteral("y-axis"), Axis3D::Y);
@@ -169,7 +169,7 @@ void Surface3DPlot::setZColumn(const AbstractColumn* zCol) {
 // #####################################################################
 
 Surface3DPlotPrivate::Surface3DPlotPrivate(Surface3DPlot* owner)
-	: Plot3DAreaPrivate(owner, Plot3DArea::Type::Surface)
+	: Base3DAreaPrivate(owner)
 	, q(owner)
 	, sourceType(Surface3DPlot::DataSource_Spreadsheet)
 	, drawMode(Surface3DPlot::DrawWireframeSurface)

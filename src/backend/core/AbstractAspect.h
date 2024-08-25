@@ -58,7 +58,7 @@ enum class AspectType : quint64 {
 	Axis3D = 0x0210091,
 
 	// 3D plots
-	SurfacePlot = 0x0210090,
+	Surface3DPlot = 0x0210090,
 
 	// 3D Scatter
 	Scatter3DPlot = 0x0210092,
@@ -235,7 +235,7 @@ public:
 			return QStringLiteral("AbstractPart");
 		case AspectType::Axis3D:
 			return QStringLiteral("Axis3D");
-		case AspectType::SurfacePlot:
+		case AspectType::Surface3DPlot:
 			return QStringLiteral("Surface Plot");
 		case AspectType::Scatter3DPlot:
 			return QStringLiteral("Scatter3DPlot");

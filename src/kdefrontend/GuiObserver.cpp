@@ -388,7 +388,7 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		raiseDock(m_qqPlotDock, m_mainWindow->stackedWidget);
 		m_qqPlotDock->setPlots(castList<QQPlot>(selectedAspects));
 		break;
-	case AspectType::SurfacePlot:
+	case AspectType::Surface3DPlot:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Surface Plot"));
 		raiseDock(m_surfacePlotDock, m_mainWindow->stackedWidget);
 		m_surfacePlotDock->setSurfaces(castList<Surface3DPlot>(selectedAspects));

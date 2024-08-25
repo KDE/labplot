@@ -1,245 +1,111 @@
 #include "Plot3DArea.h"
+#include "backend/worksheet/plots/3d/Plot3DAreaPrivate.h"
+#include "backend/worksheet/plots/PlotArea.h"
 
-#include "Plot3DAreaPrivate.h"
-#include "backend/lib/commandtemplates.h"
+#include <QAction>
+#include <QIcon>
+#include <QMenu>
 
-Plot3DArea::Plot3DArea(const QString& name, Plot3DAreaPrivate* dd, AspectType type)
-	: WorksheetElementContainer(name, dd, type)
-	, d_ptr(dd) {
+Plot3DArea::Plot3DArea(QString& name)
+	: WorksheetElementContainer(name, new Plot3DAreaPrivate(this), AspectType::Plot3DArea) {
 }
-// ##############################################################################
-// ##########################  getter methods  ##################################
-// ##############################################################################
 
-BASIC_SHARED_D_READER_IMPL(Plot3DArea, Plot3DArea::Theme, theme, theme)
-BASIC_SHARED_D_READER_IMPL(Plot3DArea, Plot3DArea::ShadowQuality, shadowQuality, shadowQuality)
-BASIC_SHARED_D_READER_IMPL(Plot3DArea, int, xRotation, xRotation)
-BASIC_SHARED_D_READER_IMPL(Plot3DArea, int, yRotation, yRotation)
-BASIC_SHARED_D_READER_IMPL(Plot3DArea, int, zoomLevel, zoomLevel)
-
-// ##############################################################################
-// #################  setter methods and undo commands ##########################
-// ##############################################################################
-
-STD_SETTER_CMD_IMPL_F_S(Plot3DArea, SetShadowQuality, Plot3DArea::ShadowQuality, shadowQuality, updateShadowQuality)
-void Plot3DArea::setShadowQuality(Plot3DArea::ShadowQuality shadowQuality) {
+void Plot3DArea::init(bool transform) {
 	Q_D(Plot3DArea);
-	if (shadowQuality != d->shadowQuality)
-		exec(new Plot3DAreaSetShadowQualityCmd(d, shadowQuality, ki18n("%1: shadow quality changed")));
+	if (d->isInitialized)
+		return;
+
+	qDebug() << Q_FUNC_INFO << "Init";
+
+	auto m_plotArea = new PlotArea(name() + " plot area", this);
+	addChild(m_plotArea);
+
+	initActions();
+
+	d->init();
+	d->isInitialized = true;
+
+	initMenus();
+
+	if (transform)
+		retransform();
 }
 
-STD_SETTER_CMD_IMPL_F_S(Plot3DArea, SetTheme, Plot3DArea::Theme, theme, updateTheme)
-void Plot3DArea::setTheme(Plot3DArea::Theme value) {
-	Q_D(Plot3DArea);
-	if (value != d->theme)
-		exec(new Plot3DAreaSetThemeCmd(d, value, ki18n("%1: theme changed")));
-}
-STD_SETTER_CMD_IMPL_F_S(Plot3DArea, SetXRotation, int, xRotation, updateXRotation)
-void Plot3DArea::setXRotation(int value) {
-	Q_D(Plot3DArea);
-	if (value != d->xRotation)
-		exec(new Plot3DAreaSetXRotationCmd(d, value, ki18n("%1: X Rotation changed")));
-}
-STD_SETTER_CMD_IMPL_F_S(Plot3DArea, SetYRotation, int, yRotation, updateYRotation)
-void Plot3DArea::setYRotation(int value) {
-	Q_D(Plot3DArea);
-	if (value != d->yRotation)
-		exec(new Plot3DAreaSetYRotationCmd(d, value, ki18n("%1: Y Rotation changed")));
-}
-STD_SETTER_CMD_IMPL_F_S(Plot3DArea, SetZoomLevel, int, zoomLevel, updateZoomLevel)
-void Plot3DArea::setZoomLevel(int value) {
-	Q_D(Plot3DArea);
-	if (value != d->zoomLevel)
-		exec(new Plot3DAreaSetZoomLevelCmd(d, value, ki18n("%1: zoom changed")));
-}
-
-class Plot3DAreaSetRectCmd : public QUndoCommand {
-public:
-	Plot3DAreaSetRectCmd(Plot3DAreaPrivate* private_obj, const QRectF& rect)
-		: m_private(private_obj)
-		, m_rect(rect) {
-		setText(i18n("%1: change geometry rect", m_private->name()));
-	}
-
-	void redo() override {
-		// 		const double horizontalRatio = m_rect.width() / m_private->rect.width();
-		// 		const double verticalRatio = m_rect.height() / m_private->rect.height();
-
-		qSwap(m_private->rect, m_rect);
-
-		// 		m_private->q->handleResize(horizontalRatio, verticalRatio, false);
-		m_private->retransform();
-		Q_EMIT m_private->q->rectChanged(m_private->rect);
-	}
-
-	void undo() override {
-		redo();
-	}
-
-private:
-	Plot3DAreaPrivate* m_private;
-	QRectF m_rect;
-};
-void Plot3DArea::setRect(const QRectF& rect) {
-	Q_D(Plot3DArea);
-	if (rect != d->rect)
-		exec(new Plot3DAreaSetRectCmd(d, rect));
-}
-class Plot3DAreaSetPrevRectCmd : public QUndoCommand {
-public:
-	Plot3DAreaSetPrevRectCmd(Plot3DAreaPrivate* private_obj, const QRectF& rect)
-		: m_private(private_obj)
-		, m_rect(rect) {
-		setText(i18n("%1: change geometry rect", m_private->name()));
-	}
-
-	void redo() override {
-		if (m_initilized) {
-			qSwap(m_private->rect, m_rect);
-			m_private->retransform();
-			Q_EMIT m_private->q->rectChanged(m_private->rect);
-		} else {
-			// this function is called for the first time,
-			// nothing to do, we just need to remember what the previous rect was
-			// which has happened already in the constructor.
-			m_initilized = true;
-		}
-	}
-
-	void undo() override {
-		redo();
-	}
-
-private:
-	Plot3DAreaPrivate* m_private;
-	QRectF m_rect;
-	bool m_initilized{false};
-};
-
-void Plot3DArea::setPrevRect(const QRectF& prevRect) {
-	Q_D(Plot3DArea);
-	exec(new Plot3DAreaSetPrevRectCmd(d, prevRect));
-}
-
-void Plot3DArea::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
-}
 void Plot3DArea::retransform() {
 	Q_D(Plot3DArea);
+
+	if (!d->isInitialized)
+		init(false);
+
 	d->retransform();
+	WorksheetElementContainer::retransform();
 }
+
+void Plot3DArea::initActions() {
+	Q_D(Plot3DArea);
+	//"add new" actions
+	addSurfaceAction = new QAction(QIcon(QStringLiteral("3d-surface")), i18n("3D-surface"), this);
+	addScatterAction= new QAction(QIcon(QStringLiteral("3d-scatter")), i18n("3D-scatter"), this);
+	addBarAction = new QAction(QIcon(QStringLiteral("3d-bar")), i18n("3D-bar"), this);
+
+	connect(addSurfaceAction, SIGNAL(triggered()), SLOT(addSurface()));
+	connect(addScatterAction, SIGNAL(triggered()), SLOT(addScatter()));
+	connect(addBarAction, SIGNAL(triggered()), SLOT(addBar()));
+}
+void Plot3DArea::initMenus() {
+	addNewMenu = new QMenu(i18n("Add new"));
+	addNewMenu->addAction(addSurfaceAction);
+	addNewMenu->addAction(addScatterAction);
+	addNewMenu->addAction(addBarAction);
+}
+
+void Plot3DArea::configureAspect(AbstractAspect* aspect) {
+}
+
+void Plot3DArea::addScatter() {
+	Q_D(Plot3DArea);
+	Scatter3DPlot* newScatter = new Scatter3DPlot(i18n("Scatter 3D Plot"));
+	d->scatters.insert(newScatter);
+}
+
+void Plot3DArea::addBar() {
+	Q_D(Plot3DArea);
+	Bar3DPlot* newBar = new Bar3DPlot(i18n("Surface 3D Plot"));
+	d->bars.insert(newBar);
+}
+void Plot3DArea::addSurface() {
+	Q_D(Plot3DArea);
+	Surface3DPlot* newSurface = new Surface3DPlot(i18n("Surface 3D Plot"));
+
+	d->surfaces.insert(newSurface);
+}
+
 // #####################################################################
 // ################### Private implementation ##########################
 // #####################################################################
-Plot3DAreaPrivate::Plot3DAreaPrivate(Plot3DArea* owner, Plot3DArea::Type type)
+
+Plot3DAreaPrivate::Plot3DAreaPrivate(Plot3DArea* owner)
 	: WorksheetElementContainerPrivate(owner)
-	, xRotation(90)
-	, yRotation(0)
-	, theme(Plot3DArea::Qt)
-	, zoomLevel(100)
-	, shadowQuality(Plot3DArea::Medium)
 	, q(owner) {
-	this->type = type;
 }
 
-void Plot3DAreaPrivate::recalcShapeAndBoundingRect() {
+void Plot3DAreaPrivate::init() {
+	// TODO setup connect objects
 }
+
 void Plot3DAreaPrivate::retransform() {
-	const bool suppress = suppressRetransform || q->isLoading();
-	trackRetransformCalled(suppress);
-
-	if (suppress)
+	if (!isInitialized)
 		return;
 
 	prepareGeometryChange();
-	setPos(rect.x() + rect.width() / 2, rect.y() + rect.height() / 2);
-
+	const double halfWidth = rect.width() / 2;
+	const double halfHeight = rect.height() / 2;
+	setPos(rect.x() + halfWidth, rect.y() + halfHeight);
 	q->setRect(rect);
 
 	WorksheetElementContainerPrivate::recalcShapeAndBoundingRect();
 
 	q->WorksheetElementContainer::retransform();
-}
 
-void Plot3DAreaPrivate::updateTheme() {
-	switch (type) {
-	case Plot3DArea::Type::Surface:
-		q->m_surface->activeTheme()->setType(static_cast<Q3DTheme::Theme>(theme));
-		break;
-	case Plot3DArea::Type::Scatter:
-		q->m_scatter->activeTheme()->setType(static_cast<Q3DTheme::Theme>(theme));
-		break;
-	case Plot3DArea::Type::Bar:
-		q->m_bar->activeTheme()->setType(static_cast<Q3DTheme::Theme>(theme));
-		break;
-	default:
-		break;
-	}
-
-	Q_EMIT q->changed();
-}
-
-void Plot3DAreaPrivate::updateZoomLevel() {
-	switch (type) {
-	case Plot3DArea::Type::Surface:
-		q->m_surface->setCameraZoomLevel(zoomLevel);
-		break;
-	case Plot3DArea::Type::Scatter:
-		q->m_scatter->setCameraZoomLevel(zoomLevel);
-		break;
-	case Plot3DArea::Type::Bar:
-		q->m_bar->setCameraZoomLevel(zoomLevel);
-		break;
-	default:
-		break;
-	}
-	Q_EMIT q->changed();
-}
-
-void Plot3DAreaPrivate::updateShadowQuality() {
-	switch (type) {
-	case Plot3DArea::Type::Surface:
-		q->m_surface->setShadowQuality(static_cast<QAbstract3DGraph::ShadowQuality>(shadowQuality));
-		break;
-	case Plot3DArea::Type::Scatter:
-		q->m_scatter->setShadowQuality(static_cast<QAbstract3DGraph::ShadowQuality>(shadowQuality));
-		break;
-	case Plot3DArea::Type::Bar:
-		q->m_bar->setShadowQuality(static_cast<QAbstract3DGraph::ShadowQuality>(shadowQuality));
-		break;
-	default:
-		break;
-	}
-	Q_EMIT q->changed();
-}
-void Plot3DAreaPrivate::updateXRotation() {
-	switch (type) {
-	case Plot3DArea::Type::Surface:
-		q->m_surface->setCameraXRotation(xRotation);
-		break;
-	case Plot3DArea::Type::Scatter:
-		q->m_scatter->setCameraXRotation(xRotation);
-		break;
-	case Plot3DArea::Type::Bar:
-		q->m_bar->setCameraXRotation(xRotation);
-		break;
-	default:
-		break;
-	}
-	Q_EMIT q->changed();
-}
-void Plot3DAreaPrivate::updateYRotation() {
-	switch (type) {
-	case Plot3DArea::Type::Surface:
-		q->m_surface->setCameraYRotation(yRotation);
-		break;
-	case Plot3DArea::Type::Scatter:
-		q->m_scatter->setCameraYRotation(yRotation);
-		break;
-	case Plot3DArea::Type::Bar:
-		q->m_bar->setCameraYRotation(yRotation);
-		break;
-	default:
-		break;
-	}
-	Q_EMIT q->changed();
+	WorksheetElementContainerPrivate::recalcShapeAndBoundingRect();
 }

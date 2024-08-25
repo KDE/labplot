@@ -446,7 +446,7 @@ set(BACKEND_SOURCES
         ${BACKEND_DIR}/worksheet/plots/3d/Axis3D.cpp
         ${BACKEND_DIR}/worksheet/plots/3d/Scatter3DPlot.cpp
         ${BACKEND_DIR}/worksheet/plots/3d/Bar3DPlot.cpp
-        ${BACKEND_DIR}/worksheet/plots/3d/Plot3DArea.cpp
+        ${BACKEND_DIR}/worksheet/plots/3d/Base3DArea.cpp
         ${BACKEND_DIR}/worksheet/plots/3d/MouseInteractor.cpp
 )
 
@@ -782,6 +782,9 @@ if(APPLE AND ${ECM_VERSION} VERSION_GREATER "5.48.0")
 	ecm_add_app_icon(LABPLOT_SOURCE ICONS ${LML_ICONS} OUTFILE_BASENAME LML_ICONS)
 endif()
 add_executable(labplot ${LABPLOT_SOURCE} ${GUI_QRC} ${qml_QRC}
+    backend/worksheet/plots/3d/Plot3DAreaPrivate.h
+    backend/worksheet/plots/3d/Plot3DArea.h
+    backend/worksheet/plots/3d/Plot3DArea.cpp
     )
 target_link_libraries(labplot labplotlib labplotbackendlib labplotnsllib)
 

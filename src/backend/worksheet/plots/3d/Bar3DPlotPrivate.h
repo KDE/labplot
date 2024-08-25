@@ -2,12 +2,12 @@
 #define BAR3DPRIVATEPLOTAREA_H
 
 #include "Bar3DPlot.h"
-#include "Plot3DAreaPrivate.h"
+#include "Base3DAreaPrivate.h"
 
 #include <backend/worksheet/WorksheetElementContainerPrivate.h>
 
 class WorksheetElementContainerPrivate;
-class Bar3DPlotPrivate : public Plot3DAreaPrivate {
+class Bar3DPlotPrivate : public Base3DAreaPrivate {
 public:
 	explicit Bar3DPlotPrivate(Bar3DPlot* owner);
 	QVector<AbstractColumn*> dataColumns{nullptr};
