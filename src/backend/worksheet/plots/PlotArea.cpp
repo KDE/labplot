@@ -37,6 +37,12 @@ PlotArea::PlotArea(const QString& name, CartesianPlot* parent)
 	init();
 }
 
+PlotArea::PlotArea(const QString& name, Plot3DArea* parent)
+	: WorksheetElement(name, new PlotAreaPrivate(this), AspectType::PlotArea)
+	, m_parent3d(parent) {
+	init();
+}
+
 PlotArea::PlotArea(const QString& name, CartesianPlot* parent, PlotAreaPrivate* dd)
 	: WorksheetElement(name, dd, AspectType::PlotArea)
 	, m_parent(parent) {

@@ -11,7 +11,7 @@
 class Scatter3DPlot;
 class Scatter3DPlotPrivate;
 Scatter3DPlot::Scatter3DPlot(const QString& name)
-	: Plot3DArea(name, new Scatter3DPlotPrivate(this), AspectType::Scatter3DPlot) {
+	: Base3DArea(name, Base3DArea::Scatter, AspectType::Scatter3DPlot) {
 	m_scatter = new Q3DScatter();
 	Axis3D* xAxis = new Axis3D(QStringLiteral("x-axis"), Axis3D::X);
 	Axis3D* yAxis = new Axis3D(QStringLiteral("y-axis"), Axis3D::Y);
@@ -84,74 +84,6 @@ void Scatter3DPlot::setColor(QColor color) {
 		exec(new Scatter3DPlotSetColorCmd(d, color, ki18n("%1: color changed")));
 }
 
-class Scatter3DPlotSetRectCmd : public QUndoCommand {
-public:
-	Scatter3DPlotSetRectCmd(Scatter3DPlotPrivate* private_obj, const QRectF& rect)
-		: m_private(private_obj)
-		, m_rect(rect) {
-		setText(i18n("%1: change geometry rect", m_private->name()));
-	}
-
-	void redo() override {
-		// 		const double horizontalRatio = m_rect.width() / m_private->rect.width();
-		// 		const double verticalRatio = m_rect.height() / m_private->rect.height();
-
-		qSwap(m_private->rect, m_rect);
-
-		// 		m_private->q->handleResize(horizontalRatio, verticalRatio, false);
-		m_private->retransform();
-		Q_EMIT m_private->q->rectChanged(m_private->rect);
-	}
-
-	void undo() override {
-		redo();
-	}
-
-private:
-	Scatter3DPlotPrivate* m_private;
-	QRectF m_rect;
-};
-void Scatter3DPlot::setRect(const QRectF& rect) {
-	Q_D(Scatter3DPlot);
-	if (rect != d->rect)
-		exec(new Scatter3DPlotSetRectCmd(d, rect));
-}
-class Scatter3DPlotSetPrevRectCmd : public QUndoCommand {
-public:
-	Scatter3DPlotSetPrevRectCmd(Scatter3DPlotPrivate* private_obj, const QRectF& rect)
-		: m_private(private_obj)
-		, m_rect(rect) {
-		setText(i18n("%1: change geometry rect", m_private->name()));
-	}
-
-	void redo() override {
-		if (m_initilized) {
-			qSwap(m_private->rect, m_rect);
-			m_private->retransform();
-			Q_EMIT m_private->q->rectChanged(m_private->rect);
-		} else {
-			// this function is called for the first time,
-			// nothing to do, we just need to remember what the previous rect was
-			// which has happened already in the constructor.
-			m_initilized = true;
-		}
-	}
-
-	void undo() override {
-		redo();
-	}
-
-private:
-	Scatter3DPlotPrivate* m_private;
-	QRectF m_rect;
-	bool m_initilized{false};
-};
-
-void Scatter3DPlot::setPrevRect(const QRectF& prevRect) {
-	Q_D(Scatter3DPlot);
-	exec(new Scatter3DPlotSetPrevRectCmd(d, prevRect));
-}
-
 void Scatter3DPlot::xColumnAboutToBeRemoved(const AbstractAspect*) {
 	Q_D(Scatter3DPlot);
 	d->xColumn = nullptr;
@@ -177,7 +109,7 @@ void Scatter3DPlot::retransform() {
 // ################### Private implementation ##########################
 // #####################################################################
 Scatter3DPlotPrivate::Scatter3DPlotPrivate(Scatter3DPlot* owner)
-	: Plot3DAreaPrivate(owner, Plot3DArea::Type::Scatter)
+	: Base3DAreaPrivate(owner)
 	, pointStyle(Scatter3DPlot::Sphere)
 	, color(Qt::green)
 	, q(owner) {

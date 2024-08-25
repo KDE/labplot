@@ -11,7 +11,7 @@
 #ifndef SURFACE3DPLOTAREA_H
 #define SURFACE3DPLOTAREA_H
 
-#include "Plot3DArea.h"
+#include "Base3DArea.h"
 
 #include <Q3DSurface> // TODO: get rid of this include, use forward declaration only
 #include <backend/worksheet/WorksheetElementContainer.h>
@@ -24,7 +24,7 @@ class Q3DSurface;
 class QSurface3DSeries;
 class QSurfaceDataProxy;
 
-class Surface3DPlot : public Plot3DArea {
+class Surface3DPlot : public Base3DArea {
 	Q_OBJECT
 public:
 	Surface3DPlot(const QString& name);

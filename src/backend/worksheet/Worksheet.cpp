@@ -294,10 +294,9 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	// add the GraphicsItem of the added child to the scene
 	// DEBUG(Q_FUNC_INFO << ", ADDING child to SCENE")
 
-	if (aspect->type() == AspectType::SurfacePlot) {
+	if (aspect->type() == AspectType::Surface3DPlot) {
 		const auto* addedElement = static_cast<const Surface3DPlot*>(aspect);
 		Q3DSurface* graph = addedElement->m_surface;
-		graph->setFocusPolicy(Qt::StrongFocus);
 		if (graph) {
 			QWidget* window = graph->window();
 			if (window) {
@@ -318,8 +317,6 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	} else if (aspect->type() == AspectType::Scatter3DPlot) {
 		const auto* addedElement = static_cast<const Scatter3DPlot*>(aspect);
 		Q3DScatter* graph = addedElement->m_scatter;
-		graph->setFocusPolicy(Qt::StrongFocus);
-		graph->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 		if (graph) {
 			QWidget* window = graph->window();
 			if (window) {
@@ -339,7 +336,6 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	} else if (aspect->type() == AspectType::Bar3DPlot) {
 		const auto* addedElement = static_cast<const Bar3DPlot*>(aspect);
 		Q3DBars* graph = addedElement->m_bar;
-		graph->setFocusPolicy(Qt::StrongFocus);
 		if (graph) {
 			QWidget* window = graph->window();
 			if (window) {

@@ -1,14 +1,14 @@
 #ifndef Scatter3DPlot_H
 #define Scatter3DPlot_H
 
-#include "Plot3DArea.h"
+#include "Base3DArea.h"
 #include "backend/core/AbstractColumn.h"
 #include <Q3DScatter>
 #include <backend/worksheet/WorksheetElementContainer.h>
 
 class Scatter3DPlotPrivate;
 class WorksheetElementContainer;
-class Scatter3DPlot : public Plot3DArea {
+class Scatter3DPlot : public Base3DArea {
 	Q_OBJECT
 public:
 	Scatter3DPlot(const QString& name);
@@ -47,9 +47,6 @@ public:
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, zColumn, ZColumn)
 	BASIC_D_ACCESSOR_DECL(PointStyle, pointStyle, PointStyle)
 	BASIC_D_ACCESSOR_DECL(QColor, color, Color)
-
-	void setRect(const QRectF&) override;
-	void setPrevRect(const QRectF&) override;
 	CLASS_D_ACCESSOR_DECL(QString, xColumnPath, XColumnPath)
 	CLASS_D_ACCESSOR_DECL(QString, yColumnPath, YColumnPath)
 	CLASS_D_ACCESSOR_DECL(QString, zColumnPath, ZColumnPath)
@@ -69,7 +66,6 @@ private:
 
 Q_SIGNALS:
 	// General-Tab
-	void rectChanged(QRectF&);
 	void xColumnChanged(const AbstractColumn*);
 	void yColumnChanged(const AbstractColumn*);
 	void zColumnChanged(const AbstractColumn*);

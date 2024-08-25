@@ -10,7 +10,7 @@
 #ifndef SURFACE3DPLOTAREAPRIVATE_H
 #define SURFACE3DPLOTAREAPRIVATE_H
 
-#include "Plot3DAreaPrivate.h"
+#include "Base3DAreaPrivate.h"
 #include "Surface3DPlot.h"
 #include <backend/matrix/Matrix.h>
 #include <backend/worksheet/WorksheetElementContainerPrivate.h>
@@ -19,7 +19,7 @@
 class Surface3DPlot;
 class WorksheetElementContainerPrivate;
 
-class Surface3DPlotPrivate : public Plot3DAreaPrivate {
+class Surface3DPlotPrivate : public Base3DAreaPrivate {
 public:
 	explicit Surface3DPlotPrivate(Surface3DPlot* owner);
 	Surface3DPlot* const q{nullptr};

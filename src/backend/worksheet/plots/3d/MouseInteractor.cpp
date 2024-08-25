@@ -19,9 +19,8 @@ void MouseInteractor::mousePressEvent(QMouseEvent* event, const QPoint& mousePos
 		yRotation = cameraYRotation();
 		mouseRotation = true;
 	} else if (event->button() == Qt::MouseButton::RightButton) {
-		Q_EMIT showContextMenu();
+		mouseRotation = false;
 	}
-	Q_EMIT activateParentWindow();
 	QAbstract3DInputHandler::mousePressEvent(event, mousePos);
 }
 
@@ -40,6 +39,7 @@ void MouseInteractor::mouseMoveEvent(QMouseEvent* event, const QPoint& mousePos)
 		setCameraXRotation(xrotation);
 		setCameraYRotation(yrotation);
 		setCameraZoomLevel(zoomFactor);
+		scene()->needRender();
 	}
 	QAbstract3DInputHandler::mouseMoveEvent(event, mousePos);
 }
@@ -48,5 +48,6 @@ void MouseInteractor::wheelEvent(QWheelEvent* event) {
 	zoomFactor = cameraZoomLevel();
 	(event->angleDelta().y() > 0) ? zoomFactor += deltaZoom : zoomFactor -= deltaZoom;
 	setCameraZoomLevel(zoomFactor);
+	scene()->needRender();
 	QAbstract3DInputHandler::wheelEvent(event);
 }

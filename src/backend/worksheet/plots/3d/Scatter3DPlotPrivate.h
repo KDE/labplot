@@ -1,13 +1,13 @@
 #ifndef Scatter3DPlotPRIVATE_H
 #define Scatter3DPlotPRIVATE_H
-#include "Plot3DAreaPrivate.h"
+#include "Base3DAreaPrivate.h"
 #include "backend/worksheet/plots/3d/Scatter3DPlot.h"
 #include <backend/core/AbstractColumn.h>
 #include <backend/worksheet/WorksheetElementContainerPrivate.h>
 #include <backend/worksheet/plots/cartesian/Symbol.h>
 class WorksheetElementContainerPrivate;
 class Scatter3DPlot;
-class Scatter3DPlotPrivate : public Plot3DAreaPrivate {
+class Scatter3DPlotPrivate : public Base3DAreaPrivate {
 public:
 	explicit Scatter3DPlotPrivate(Scatter3DPlot*);
 

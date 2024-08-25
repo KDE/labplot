@@ -1,7 +1,7 @@
 #ifndef BAR3DPLOTAREA_H
 #define BAR3DPLOTAREA_H
 
-#include "Plot3DArea.h"
+#include "Base3DArea.h"
 #include "backend/core/AbstractColumn.h"
 #include <Q3DBars>
 #include <backend/worksheet/WorksheetElementContainer.h>
@@ -9,7 +9,7 @@
 class Bar3DPlotPrivate;
 class WorsheetElementContainer;
 class Plot3DArea;
-class Bar3DPlot : public Plot3DArea {
+class Bar3DPlot : public Base3DArea {
 	Q_OBJECT
 public:
 	explicit Bar3DPlot(const QString& name);

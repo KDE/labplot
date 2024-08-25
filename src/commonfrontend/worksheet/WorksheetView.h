@@ -136,6 +136,8 @@ private:
 	// Menus
 	QMenu* m_addNewMenu{nullptr};
 	QMenu* m_addNewCartesianPlotMenu{nullptr};
+	QMenu* m_addNew3DPlotMenu{nullptr};
+
 	QMenu* m_zoomMenu{nullptr};
 	QMenu* m_magnificationMenu{nullptr};
 	QMenu* m_layoutMenu{nullptr};
@@ -155,6 +157,9 @@ private:
 	QToolButton* tbMagnification{nullptr};
 	QAction* currentZoomAction{nullptr};
 	QAction* currentMagnificationAction{nullptr};
+
+	QToolButton* tbNew3DPlot{nullptr};
+
 
 	// Actions
 	QAction* selectAllAction{nullptr};
@@ -183,7 +188,7 @@ private:
 	QAction* addImageAction{nullptr};
 	QAction* addGlobalInfoElementAction{nullptr};
 
-	QAction* add3DPlotAction{nullptr};
+	QAction* add3DSurfacePlotAction{nullptr};
 	QAction* add3DScatterPlotAction{nullptr};
 	QAction* add3DBarPlotAction{nullptr};
 

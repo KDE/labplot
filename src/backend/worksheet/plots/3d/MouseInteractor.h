@@ -7,14 +7,10 @@ class MouseInteractor : public QAbstract3DInputHandler {
 public:
 	MouseInteractor(QObject* parent = nullptr);
 
-	virtual void mousePressEvent(QMouseEvent* event, const QPoint& mousePos) override;
-	virtual void mouseReleaseEvent(QMouseEvent* event, const QPoint& mousePos) override;
-	virtual void mouseMoveEvent(QMouseEvent* event, const QPoint& mousePos) override;
-	virtual void wheelEvent(QWheelEvent* event) override;
-
-Q_SIGNALS:
-	void showContextMenu();
-	void activateParentWindow();
+	void mousePressEvent(QMouseEvent* event, const QPoint& mousePos) override;
+	void mouseReleaseEvent(QMouseEvent* event, const QPoint& mousePos) override;
+	void mouseMoveEvent(QMouseEvent* event, const QPoint& mousePos) override;
+	void wheelEvent(QWheelEvent* event) override;
 
 private:
 	QPoint mousePoint;

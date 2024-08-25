@@ -1,30 +1,35 @@
 #ifndef PLOT3DAREAPRIVATE_H
 #define PLOT3DAREAPRIVATE_H
+
+#include "Axis3D.h"
+#include "Bar3DPlot.h"
 #include "Plot3DArea.h"
+#include "Scatter3DPlot.h"
+#include "Surface3DPlot.h"
 
 #include <backend/worksheet/WorksheetElementContainerPrivate.h>
-class WorksheetElementContainerPrivate;
+
+class Plot3DArea;
+
 class Plot3DAreaPrivate : public WorksheetElementContainerPrivate {
+	Q_OBJECT
 public:
-	explicit Plot3DAreaPrivate(Plot3DArea* owner, Plot3DArea::Type);
+	explicit Plot3DAreaPrivate(Plot3DArea* owner);
+	~Plot3DAreaPrivate() override;
+	void init();
 
-	Plot3DArea::Type type;
-	int xRotation;
-	int yRotation;
-	Plot3DArea::Theme theme;
-	int zoomLevel;
-	Plot3DArea::ShadowQuality shadowQuality;
+	Axis3D* axes;
+	QSet<Surface3DPlot*> surfaces;
+	QSet<Scatter3DPlot*> scatters;
+	QSet<Bar3DPlot*> bars;
+
+	// General parameters
+
+	Plot3DArea* const q;
+	bool isInitialized;
 	void retransform() override;
-	void recalcShapeAndBoundingRect() override;
 
-	Plot3DArea* q{nullptr};
 
-	// trigger update
-	void updateXRotation();
-	void updateYRotation();
-	void updateTheme();
-	void updateZoomLevel();
-	void updateShadowQuality();
+
 };
-
 #endif // PLOT3DAREAPRIVATE_H
