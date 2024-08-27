@@ -491,7 +491,7 @@ void CartesianPlot::initActions() {
 		icon = QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes-centered-origin"));
 		break;
 	}
-	addInsetPlotAction = new QAction(icon, i18n("Inset Plot"), this);
+	addInsetPlotAction = new QAction(icon, i18n("Inset Plot Area"), this);
 
 	connect(addCurveAction, &QAction::triggered, this, [=]() {
 		addChild(new XYCurve(QStringLiteral("xy-curve")));
@@ -2135,7 +2135,7 @@ void CartesianPlot::addInsetPlot() {
 	// allow to resize it with the mouse (not controlled by worksheet's layout)
 	const auto& plots = children<CartesianPlot>();
 	auto* insetPlot = plots.last();
-	insetPlot->setName(i18n("Inset Plot"));
+	insetPlot->setName(i18n("Inset Plot Area"));
 
 	auto insetRect = rect();
 	insetRect.setWidth(insetRect.width() * 0.3);
@@ -3254,7 +3254,12 @@ void CartesianPlotPrivate::retransform() {
 	updateDataRect();
 
 	// plotArea position is always (0, 0) in parent's coordinates, don't need to update here
-	q->plotArea()->setRect(rect);
+	if (q->parentAspect()->type() == AspectType::CartesianPlot) {
+		auto* parentPlot = static_cast<CartesianPlot*>(q->parentAspect());
+		auto newRect = parentPlot->graphicsItem()->mapRectToScene(q->graphicsItem()->mapRectToParent(rect));
+		q->plotArea()->setRect(mapRectFromScene(newRect));
+	} else
+		q->plotArea()->setRect(mapRectFromScene(rect));
 
 	WorksheetElementContainerPrivate::recalcShapeAndBoundingRect();
 
@@ -3419,7 +3424,12 @@ void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
  * in plot's coordinates.
  */
 void CartesianPlotPrivate::updateDataRect() {
-	dataRect = mapRectFromScene(rect);
+	if (q->parentAspect()->type() == AspectType::CartesianPlot) {
+		auto* parentPlot = static_cast<CartesianPlot*>(q->parentAspect());
+		dataRect = parentPlot->graphicsItem()->mapRectToScene(q->graphicsItem()->mapRectToParent(q->rect()));
+	} else
+		dataRect = mapRectFromScene(rect);
+
 	double paddingLeft = horizontalPadding;
 	double paddingRight = rightPadding;
 	double paddingTop = verticalPadding;
@@ -4600,23 +4610,6 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 		}
 
 		painter->restore();
-	}
-
-	const bool selected = isSelected();
-	const bool hovered = (m_hovered && !selected);
-	if ((hovered || selected) && !m_printing) {
-		static double penWidth = 2.; // why static?
-		const QRectF& br = q->m_plotArea->graphicsItem()->boundingRect();
-		const qreal width = br.width();
-		const qreal height = br.height();
-		const QRectF rect = QRectF(-width / 2 + penWidth / 2, -height / 2 + penWidth / 2, width - penWidth, height - penWidth);
-
-		if (hovered)
-			painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), penWidth));
-		else
-			painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), penWidth));
-
-		painter->drawRect(rect);
 	}
 }
 
