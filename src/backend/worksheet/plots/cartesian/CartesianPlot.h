@@ -265,21 +265,6 @@ private:
 	QAction* addReferenceRangeAction{nullptr};
 	QAction* addInsetPlotAction{nullptr};
 
-	// scaling, zooming, navigation actions
-	QAction* scaleAutoXAction;
-	QAction* scaleAutoYAction;
-	QAction* scaleAutoAction;
-	QAction* zoomInAction;
-	QAction* zoomOutAction;
-	QAction* zoomInXAction;
-	QAction* zoomOutXAction;
-	QAction* zoomInYAction;
-	QAction* zoomOutYAction;
-	QAction* shiftLeftXAction;
-	QAction* shiftRightXAction;
-	QAction* shiftUpYAction;
-	QAction* shiftDownYAction;
-
 	// analysis menu actions
 	QAction* addDataOperationAction{nullptr};
 	QAction* addDataReductionAction{nullptr};
