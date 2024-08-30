@@ -3250,19 +3250,12 @@ void CartesianPlotPrivate::retransform() {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	
 	prepareGeometryChange();
-	// TODO: the positioning (or the data rect only?) is still wrong
-	/*
-	if (q->parentAspect()->type() == AspectType::CartesianPlot)
-		setPos(0, 0);
-	else
-	*/ 
 	setPos(rect.x() + rect.width() / 2, rect.y() + rect.height() / 2);
-
 	updateDataRect();
 
 	// plotArea position is always (0, 0) in parent's coordinates, don't need to update here
 	if (q->parentAspect()->type() == AspectType::CartesianPlot)
-		q->plotArea()->setRect(q->graphicsItem()->mapRectToParent(rect));
+		q->plotArea()->setRect(mapRectToParent(rect));
 	else
 		q->plotArea()->setRect(mapRectFromScene(rect));
 
@@ -3425,14 +3418,20 @@ void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
 }
 
 /*
- * calculates the rectangular of the are showing the actual data (plot's rect minus padding),
+ * calculates the rectangular of the area showing the actual data (plot's rect minus padding),
  * in plot's coordinates.
  */
 void CartesianPlotPrivate::updateDataRect() {
-	if (q->parentAspect()->type() == AspectType::CartesianPlot)
-		dataRect = q->graphicsItem()->mapRectToParent(rect);
-	else
-		dataRect = mapRectFromScene(rect);
+	// map the rectangle rect, which is in scene coordinates, to this item's coordinate system
+	dataRect = mapRectFromScene(rect);
+
+	// for plot in a plot, transfer x and y coordinates
+	if (q->parentAspect()->type() == AspectType::CartesianPlot) {
+		dataRect.setX(-rect.width() / 2);
+		dataRect.setY(-rect.height() / 2);
+		dataRect.setWidth(rect.width());
+		dataRect.setHeight(rect.height());
+	}
 
 	double paddingLeft = horizontalPadding;
 	double paddingRight = rightPadding;
