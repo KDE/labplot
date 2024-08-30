@@ -844,6 +844,13 @@ void AbstractAspect::paste(bool duplicate) {
 			plot->addLegend(legend);
 		}
 
+		// special handling for inset plots to resize them to make sure they are not bigger than the plot they are being pasted into
+		if (type() == AspectType::CartesianPlot && aspect->type() == AspectType::CartesianPlot) {
+			auto* plot = static_cast<CartesianPlot*>(this);
+			auto* insetPlot = static_cast<CartesianPlot*>(aspect);
+			plot->resizeInsetPlot(insetPlot);
+		}
+
 		project()->restorePointers(aspect);
 		project()->retransformElements(aspect);
 		aspect->setPasted(false);

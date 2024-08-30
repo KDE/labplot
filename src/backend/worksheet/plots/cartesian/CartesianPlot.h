@@ -202,6 +202,8 @@ public:
 	void retransformScales();
 	void retransformScale(Dimension, int index);
 
+  	void resizeInsetPlot(CartesianPlot*);
+
 	QString theme() const;
 
 	typedef CartesianPlotPrivate Private;

@@ -838,7 +838,8 @@ QVector<AbstractAspect*> CartesianPlot::dependsOn() const {
 }
 
 QVector<AspectType> CartesianPlot::pasteTypes() const {
-	QVector<AspectType> types{AspectType::XYCurve,
+	QVector<AspectType> types{AspectType::CartesianPlot,
+							  AspectType::XYCurve,
 							  AspectType::Histogram,
 							  AspectType::BarPlot,
 							  AspectType::LollipopPlot,
@@ -2131,19 +2132,24 @@ void CartesianPlot::addInsetPlot() {
 	copy();
 	paste(true);
 
-	// rename the new child plot and resize it to 30% of the current size,
-	// allow to resize it with the mouse (not controlled by worksheet's layout)
+	// rename and resize the new child plot 
 	const auto& plots = children<CartesianPlot>();
 	auto* insetPlot = plots.last();
 	insetPlot->setName(i18n("Inset Plot Area"));
+	resizeInsetPlot(insetPlot);
+	endMacro();
+}
 
+/*!
+* sets the size of the inset plot to 30% of the parent plot's size
+* and allows to resize it with the mouse (not controlled by worksheet's layout)
+*/
+void CartesianPlot::resizeInsetPlot(CartesianPlot* insetPlot) {
 	auto insetRect = rect();
 	insetRect.setWidth(insetRect.width() * 0.3);
 	insetRect.setHeight(insetRect.height() * 0.3);
 	insetPlot->setRect(insetRect);
 	insetPlot->setResizeEnabled(true);
-
-	endMacro();
 }
 
 void CartesianPlot::addReferenceRange() {
