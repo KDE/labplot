@@ -50,7 +50,6 @@ void Bar3DPlot::setDataColumns(QVector<AbstractColumn*> dataColumns) {
 			connect(column, &AbstractColumn::dataChanged, this, &Bar3DPlot::recalc);
 			if (column->parentAspect())
 				connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &Bar3DPlot::columnAboutToBeRemoved);
-			connect(column, &AbstractColumn::dataChanged, this, &Bar3DPlot::dataChanged);
 		}
 	}
 }
