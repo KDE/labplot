@@ -43,9 +43,9 @@ private Q_SLOTS:
 	void scatterXRotationChanged(int);
 	void scatterYRotationChanged(int);
 	void scatterZoomLevelChanged(int);
-	void scatterShadowQualityChanged(Plot3DArea::ShadowQuality);
+	void scatterShadowQualityChanged(Base3DArea::ShadowQuality);
 	void scatterPointStyleChanged(Scatter3DPlot::PointStyle);
-	void scatterThemeChanged(Plot3DArea::Theme);
+	void scatterThemeChanged(Base3DArea::Theme);
 	void scatterColorChanged(QColor);
 
 private:

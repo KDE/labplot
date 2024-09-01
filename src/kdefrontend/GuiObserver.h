@@ -14,6 +14,7 @@
 
 #include <kdefrontend/dockwidgets/Axis3DDock.h>
 #include <kdefrontend/dockwidgets/Bar3DPlotAreaDock.h>
+#include <kdefrontend/dockwidgets/Plot3DAreaDock.h>
 #include <kdefrontend/dockwidgets/Scatter3DPlotAreaDock.h>
 #include <kdefrontend/dockwidgets/Surface3DPlotAreaDock.h>
 
@@ -127,6 +128,8 @@ private:
 
 	// bar 3d dock
 	Bar3DPlotAreaDock* m_bar3DPlotDock{nullptr};
+
+	Plot3DAreaDock* m_plot3DAreaDock{nullptr};
 
 	// analysis plots
 	XYDataReductionCurveDock* m_xyDataReductionCurveDock{nullptr};

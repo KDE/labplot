@@ -186,7 +186,7 @@ void Scatter3DPlotAreaDock::scatterZoomLevelChanged(int val) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.slZoom->setValue(val);
 }
-void Scatter3DPlotAreaDock::scatterShadowQualityChanged(Plot3DArea::ShadowQuality shadowQuality) {
+void Scatter3DPlotAreaDock::scatterShadowQualityChanged(Base3DArea::ShadowQuality shadowQuality) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbShadowQuality->setCurrentIndex(shadowQuality);
 }
@@ -195,7 +195,7 @@ void Scatter3DPlotAreaDock::scatterPointStyleChanged(Scatter3DPlot::PointStyle p
 	ui.cbPointStyle->setCurrentIndex(pointStyle);
 }
 
-void Scatter3DPlotAreaDock::scatterThemeChanged(Plot3DArea::Theme theme) {
+void Scatter3DPlotAreaDock::scatterThemeChanged(Base3DArea::Theme theme) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbTheme->setCurrentIndex(theme);
 }
@@ -220,7 +220,7 @@ void Scatter3DPlotAreaDock::zoomLevelChanged(int zoomLevel) {
 void Scatter3DPlotAreaDock::shadowQualityChanged(int shadowQuality) {
 	CONDITIONAL_LOCK_RETURN;
 	for (Scatter3DPlot* surface : m_scatters)
-		surface->setShadowQuality(static_cast<Plot3DArea::ShadowQuality>(shadowQuality));
+		surface->setShadowQuality(static_cast<Base3DArea::ShadowQuality>(shadowQuality));
 }
 void Scatter3DPlotAreaDock::pointStyleChanged(int pointStyle) {
 	CONDITIONAL_LOCK_RETURN;
@@ -231,7 +231,7 @@ void Scatter3DPlotAreaDock::pointStyleChanged(int pointStyle) {
 void Scatter3DPlotAreaDock::themeChanged(int theme) {
 	CONDITIONAL_LOCK_RETURN;
 	for (Scatter3DPlot* surface : m_scatters)
-		surface->setTheme(static_cast<Plot3DArea::Theme>(theme));
+		surface->setTheme(static_cast<Base3DArea::Theme>(theme));
 }
 
 void Scatter3DPlotAreaDock::colorChanged(QColor color) {

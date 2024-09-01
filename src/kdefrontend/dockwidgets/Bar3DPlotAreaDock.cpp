@@ -202,12 +202,12 @@ void Bar3DPlotAreaDock::barZoomLevelChanged(int val) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.slZoom->setValue(val);
 }
-void Bar3DPlotAreaDock::barShadowQualityChanged(Plot3DArea::ShadowQuality shadowQuality) {
+void Bar3DPlotAreaDock::barShadowQualityChanged(Base3DArea::ShadowQuality shadowQuality) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbShadowQuality->setCurrentIndex(shadowQuality);
 }
 
-void Bar3DPlotAreaDock::barThemeChanged(Plot3DArea::Theme theme) {
+void Bar3DPlotAreaDock::barThemeChanged(Base3DArea::Theme theme) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbTheme->setCurrentIndex(theme);
 }
@@ -232,13 +232,13 @@ void Bar3DPlotAreaDock::zoomLevelChanged(int zoomLevel) {
 void Bar3DPlotAreaDock::shadowQualityChanged(int shadowQuality) {
 	CONDITIONAL_LOCK_RETURN;
 	for (Bar3DPlot* bar : m_bars)
-		bar->setShadowQuality(static_cast<Plot3DArea::ShadowQuality>(shadowQuality));
+		bar->setShadowQuality(static_cast<Base3DArea::ShadowQuality>(shadowQuality));
 }
 
 void Bar3DPlotAreaDock::themeChanged(int theme) {
 	CONDITIONAL_LOCK_RETURN;
 	for (Bar3DPlot* bar : m_bars)
-		bar->setTheme(static_cast<Plot3DArea::Theme>(theme));
+		bar->setTheme(static_cast<Base3DArea::Theme>(theme));
 }
 
 void Bar3DPlotAreaDock::colorChanged(QColor color) {

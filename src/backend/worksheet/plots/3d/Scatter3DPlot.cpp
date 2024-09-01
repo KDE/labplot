@@ -11,7 +11,7 @@
 class Scatter3DPlot;
 class Scatter3DPlotPrivate;
 Scatter3DPlot::Scatter3DPlot(const QString& name)
-	: Base3DArea(name, Base3DArea::Scatter, AspectType::Scatter3DPlot) {
+	: Base3DArea(name, new Scatter3DPlotPrivate(this), Base3DArea::Scatter, AspectType::Scatter3DPlot) {
 	m_scatter = new Q3DScatter();
 	Axis3D* xAxis = new Axis3D(QStringLiteral("x-axis"), Axis3D::X);
 	Axis3D* yAxis = new Axis3D(QStringLiteral("y-axis"), Axis3D::Y);

@@ -59,9 +59,9 @@ private Q_SLOTS:
 
 	// SLOTs for changes triggered in Surface3DPlotArea
 	void surfaceDrawModeChanged(Surface3DPlot::DrawMode mode);
-	void surfaceThemeChanged(Plot3DArea::Theme theme);
+	void surfaceThemeChanged(Base3DArea::Theme theme);
 	void surfaceFlatShadingChanged(bool);
-	void surfaceShadowsQualityChanged(Plot3DArea::ShadowQuality quality);
+	void surfaceShadowsQualityChanged(Base3DArea::ShadowQuality quality);
 	void surfaceSourceTypeChanged(Surface3DPlot::DataSource);
 	void surfaceXColumnChanged(const AbstractColumn*);
 	void surfaceYColumnChanged(const AbstractColumn*);

@@ -234,7 +234,7 @@ void Surface3DPlotAreaDock::yRotationChanged(int value) {
 
 void Surface3DPlotAreaDock::themeChanged(int value) {
 	CONDITIONAL_LOCK_RETURN;
-	m_surface->setTheme(static_cast<Plot3DArea::Theme>(value));
+	m_surface->setTheme(static_cast<Base3DArea::Theme>(value));
 }
 
 void Surface3DPlotAreaDock::zoomLevelChanged(int value) {
@@ -331,7 +331,7 @@ void Surface3DPlotAreaDock::surfaceDrawModeChanged(Surface3DPlot::DrawMode mode)
 	ui.cbDrawType->setCurrentIndex(mode - 1);
 }
 
-void Surface3DPlotAreaDock::surfaceThemeChanged(Plot3DArea::Theme theme) {
+void Surface3DPlotAreaDock::surfaceThemeChanged(Base3DArea::Theme theme) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbTheme->setCurrentIndex(theme);
 }
@@ -341,7 +341,7 @@ void Surface3DPlotAreaDock::surfaceFlatShadingChanged(bool vis) {
 	ui.chkFlatShading->setEnabled(vis);
 }
 
-void Surface3DPlotAreaDock::surfaceShadowsQualityChanged(Plot3DArea::ShadowQuality quality) {
+void Surface3DPlotAreaDock::surfaceShadowsQualityChanged(Base3DArea::ShadowQuality quality) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbShadowQuality->setCurrentIndex(quality);
 }

@@ -27,7 +27,7 @@ class PlotArea : public WorksheetElement {
 
 public:
 	explicit PlotArea(const QString& name, CartesianPlot* parent);
-	explicit PlotArea(const QString& name,Plot3DArea* parent);
+	explicit PlotArea(const QString& name, Plot3DArea* parent);
 	~PlotArea() override;
 
 	enum class BorderTypeFlags { NoBorder = 0x0, BorderLeft = 0x1, BorderTop = 0x2, BorderRight = 0x4, BorderBottom = 0x8 };

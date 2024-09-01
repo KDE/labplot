@@ -6,7 +6,7 @@
 #include "backend/lib/trace.h"
 
 Bar3DPlot::Bar3DPlot(const QString& name)
-	: Base3DArea(name, Base3DArea::Bar, AspectType::Bar3DPlot) {
+	: Base3DArea(name, new Bar3DPlotPrivate(this), Base3DArea::Bar, AspectType::Bar3DPlot) {
 	m_bar = new Q3DBars();
 	m_bar->setActiveInputHandler(new MouseInteractor());
 }

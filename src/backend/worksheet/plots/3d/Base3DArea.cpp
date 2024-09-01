@@ -3,15 +3,12 @@
 #include "Base3DAreaPrivate.h"
 #include "backend/lib/commandtemplates.h"
 
-Base3DArea::Base3DArea(const QString& name, Base3DArea::Type BaseType, AspectType type)
-	: WorksheetElementContainer(name, new Base3DAreaPrivate(this), type) {
+Base3DArea::Base3DArea(const QString& name, Base3DAreaPrivate* dd, Base3DArea::Type baseType, AspectType type)
+	: WorksheetElementContainer(name, dd, type) {
 	Q_D(Base3DArea);
-	d->type = BaseType;
+	d->type = baseType;
 }
 
-Base3DArea::Base3DArea(const QString& name, Base3DAreaPrivate* dd, AspectType type)
-	: WorksheetElementContainer(name, dd, type) {
-}
 // ##############################################################################
 // ##########################  getter methods  ##################################
 // ##############################################################################
