@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-16 03:05+0000\n"
-"PO-Revision-Date: 2024-08-19 17:24+0200\n"
+"PO-Revision-Date: 2024-08-31 15:04+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -2743,7 +2743,7 @@ msgstr "Volume dun galón americano"
 #: src/backend/gsl/constants.cpp:134
 #, kde-format
 msgid "Volume of 1 Canadian gallon"
-msgstr "Volume dun galón canadiense"
+msgstr "Volume dun galón canadense"
 
 #: src/backend/gsl/constants.cpp:135
 #, kde-format
@@ -2898,17 +2898,17 @@ msgstr "Fluxo luminoso dun lumen"
 #: src/backend/gsl/constants.cpp:174
 #, kde-format
 msgid "Illuminance of 1 lux"
-msgstr "Emitancia luminosa dun lux"
+msgstr "Iluminación dun lux"
 
 #: src/backend/gsl/constants.cpp:175
 #, kde-format
 msgid "Illuminance of 1 phot"
-msgstr "Emitancia luminosa dun phot"
+msgstr "Iluminación dun phot"
 
 #: src/backend/gsl/constants.cpp:176
 #, kde-format
 msgid "Illuminance of 1 footcandle"
-msgstr "Emitancia luminosa dunha vela"
+msgstr "Iluminación dunha vela"
 
 #: src/backend/gsl/constants.cpp:177
 #, kde-format
@@ -2955,7 +2955,7 @@ msgstr "Unidade de enerxía do SI"
 #: src/backend/gsl/constants.cpp:189
 #, kde-format
 msgid "Energy 1 erg"
-msgstr "Enerxía dun erguio"
+msgstr "Enerxía dun erg"
 
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2065
@@ -3724,12 +3724,15 @@ msgstr "enteiro pseudo-aleatorio [0, MÁX_ALEA]"
 #: src/backend/gsl/functions.cpp:280
 #, kde-format
 msgid "nonlinear additive feedback rng [0, RAND_MAX]"
-msgstr "pseudo-anel non lineal de retroacción activa [0, MÁX_ALEA]"
+msgstr ""
+"xerador de números aleatorios de retroalimentación aditiva non lineal [0, "
+"RAND_MAX]"
 
 #: src/backend/gsl/functions.cpp:281
 #, kde-format
 msgid "nonlinear additive feedback rng [0, 1]"
-msgstr "pseudo-anel non lineal de retroacción activa [0, 1]"
+msgstr ""
+"xerador de números aleatorios de retroalimentación aditiva non lineal [0, 1]"
 
 #: src/backend/gsl/functions.cpp:282
 #, kde-format
@@ -3764,7 +3767,7 @@ msgstr "Funcións de signo"
 #: src/backend/gsl/functions.cpp:289
 #, kde-format
 msgid "Heavyside theta function"
-msgstr "Función zeta de Heaviside"
+msgstr "Función zeta de Heavyside"
 
 #: src/backend/gsl/functions.cpp:290
 #, kde-format
@@ -4548,12 +4551,12 @@ msgstr "Logaritmo do factorial dobre"
 #: src/backend/gsl/functions.cpp:487
 #, kde-format
 msgid "Combinatorial factor"
-msgstr "Factor combinacional"
+msgstr "Factor combinatorio"
 
 #: src/backend/gsl/functions.cpp:488
 #, kde-format
 msgid "Logarithm of the combinatorial factor"
-msgstr "Logaritmo do factor combinacional"
+msgstr "Logaritmo do factor combinatorio"
 
 #: src/backend/gsl/functions.cpp:489
 #, kde-format
@@ -4633,7 +4636,7 @@ msgstr "Versión física de polinómicos de Hermite"
 #: src/backend/gsl/functions.cpp:510
 #, kde-format
 msgid "Hermite polynomials probabilists version"
-msgstr "Versión probabilística de polinómicos de Hermite"
+msgstr "Versión probabilista de polinómicos de Hermite"
 
 #: src/backend/gsl/functions.cpp:511
 #, kde-format
@@ -4653,7 +4656,7 @@ msgstr "Derivadas da versión física de polinómicos de Hermite"
 #: src/backend/gsl/functions.cpp:516
 #, kde-format
 msgid "Derivatives of Hermite polynomials probabilists version"
-msgstr "Derivadas da versión probabilística de polinómicos de Hermite"
+msgstr "Derivadas da versión probabilista de polinómicos de Hermite"
 
 #: src/backend/gsl/functions.cpp:517
 #, kde-format
@@ -4714,17 +4717,17 @@ msgstr "Función hiperxeométrica 2F0"
 #: src/backend/gsl/functions.cpp:533
 #, kde-format
 msgid "generalized Laguerre polynomials L_1"
-msgstr "Polinómica xeralizada de Laguerre L_1"
+msgstr "Polinómica xeneralizada de Laguerre L_1"
 
 #: src/backend/gsl/functions.cpp:534
 #, kde-format
 msgid "generalized Laguerre polynomials L_2"
-msgstr "Polinómica xeralizada de Laguerre L_2"
+msgstr "Polinómica xeneralizada de Laguerre L_2"
 
 #: src/backend/gsl/functions.cpp:535
 #, kde-format
 msgid "generalized Laguerre polynomials L_3"
-msgstr "Polinómica xeralizada de Laguerre L_3"
+msgstr "Polinómica xeneralizada de Laguerre L_3"
 
 #: src/backend/gsl/functions.cpp:536
 #, kde-format
@@ -4822,7 +4825,7 @@ msgid ""
 "Zeroth radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic "
 "space"
 msgstr ""
-"Autofunción radial cero do operador de Laplace no espazo hiperbólico "
+"Función propia radial cero do operador de Laplace no espazo hiperbólico "
 "tridimensional"
 
 #: src/backend/gsl/functions.cpp:560
@@ -4831,7 +4834,7 @@ msgid ""
 "First radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic "
 "space"
 msgstr ""
-"Autofunción radial un do operador de Laplace no espazo hiperbólico "
+"Función propia radial un do operador de Laplace no espazo hiperbólico "
 "tridimensional"
 
 #: src/backend/gsl/functions.cpp:561
@@ -4840,7 +4843,7 @@ msgid ""
 "l-th radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic "
 "space"
 msgstr ""
-"Autofunción radial l do operador de Laplace no espazo hiperbólico "
+"Función propia radial l do operador de Laplace no espazo hiperbólico "
 "tridimensional"
 
 #: src/backend/gsl/functions.cpp:564
@@ -4921,7 +4924,7 @@ msgstr "Función trigamma psi'"
 #: src/backend/gsl/functions.cpp:589
 #, kde-format
 msgid "Polygamma function psi^(n)"
-msgstr "Función poligamma psi^(n)"
+msgstr "Función poligama psi^(n)"
 
 #: src/backend/gsl/functions.cpp:592
 #, kde-format
@@ -6085,7 +6088,7 @@ msgstr "%1: definir os valores da cela"
 #: src/backend/matrix/matrixcommands.h:306
 #, kde-format
 msgid "%1: transpose"
-msgstr "%1: transpor"
+msgstr "%1: traspor"
 
 #: src/backend/matrix/matrixcommands.h:347
 #, kde-format
@@ -6211,7 +6214,7 @@ msgstr "Suma"
 #: src/backend/nsl/nsl_conv.c:22
 #, kde-format
 msgid "Euclidean"
-msgstr "Euclídeas"
+msgstr "Euclidianas"
 
 #: src/backend/nsl/nsl_conv.c:23
 #, kde-format
@@ -6231,7 +6234,7 @@ msgstr "Suavización triangular"
 #: src/backend/nsl/nsl_conv.c:26
 #, kde-format
 msgid "Pseudo-Gaussian Smooth"
-msgstr "Suavización de pseudo de Gauss"
+msgstr "Pseudo-suavización de Gauss"
 
 #: src/backend/nsl/nsl_conv.c:27
 #, kde-format
@@ -8177,7 +8180,7 @@ msgstr "Interpolar"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:534
 #, kde-format
 msgid "Convolute/Deconvolute"
-msgstr "Convoluír/deconvoluír"
+msgstr "Aplicar convolución/deconvolución"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:545
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:521
@@ -8432,7 +8435,7 @@ msgstr "Suavización de «%1»"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1891
 #, kde-format
 msgid "%1: add smoothing curve"
-msgstr "%1: engadir unha curva de suavización"
+msgstr "%1: engadir unha curva de suavidade"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1902
 #, kde-format
@@ -9501,7 +9504,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:82
 #, kde-format
 msgid "%1: set options and perform the smooth"
-msgstr "%1: definir as opcións e aplicar a suavización"
+msgstr "%1: definir as opcións e aplicar a suavidade"
 
 #: src/backend/worksheet/plots/PlotArea.cpp:145
 #, kde-format
@@ -10070,7 +10073,7 @@ msgstr "&Ir á cela…"
 #: src/commonfrontend/matrix/MatrixView.cpp:142
 #, kde-format
 msgid "&Transpose"
-msgstr "&Transpor"
+msgstr "&Traspor"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:143
 #, kde-format
@@ -10532,7 +10535,7 @@ msgstr "Valores de caída"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:392
 #, kde-format
 msgid "Mask Values"
-msgstr "Enmarcarar os valores"
+msgstr "Enmascarar os valores"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:394
 #, kde-format
@@ -11631,7 +11634,8 @@ msgid ""
 msgstr ""
 "<table> <tr><td>little endian</td><td>orde de bytes típica en procesadores "
 "x86 de Intel.</td></tr> <tr><td>big endian</td><td>orde de bytes típica en "
-"procesadores Mainframe (IBM), SPARC, PowerPC e Motorola.</td></tr> </table>"
+"procesadores de ordenador central (IBM), SPARC, PowerPC e Motorola.</td></"
+"tr> </table>"
 
 #: src/kdefrontend/datasources/CANOptionsWidget.cpp:13
 #, kde-format
@@ -13270,7 +13274,7 @@ msgstr "A escala non está sincronizada coa gráfica"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2045
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
-msgstr "%1 eixos: cargouse o modelo «%2»"
+msgstr "%1 eixes: cargouse o modelo «%2»"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2047
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:523
@@ -14116,7 +14120,7 @@ msgstr "3 segmentos"
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:205
 #, kde-format
 msgid "Akima-spline (Natural)"
-msgstr "Eixe nervado de Alima (natural)"
+msgstr "Eixe nervado de Akima (natural)"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:206
 #, kde-format
@@ -14454,7 +14458,7 @@ msgstr "Estado da interpolación: %1"
 #: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:412
 #, kde-format
 msgid "Smoothing status: %1"
-msgstr "Estado da suavización: %1"
+msgstr "Estado de suavidade: %1"
 
 #: src/kdefrontend/examples/ExamplesDialog.cpp:42
 #, kde-format
@@ -14571,7 +14575,7 @@ msgstr "Propiedades: interpolación"
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Smoothing"
-msgstr "Propiedades:; suavización"
+msgstr "Propiedades: suavidade"
 
 #: src/kdefrontend/GuiObserver.cpp:326
 #, kde-format
@@ -16347,8 +16351,7 @@ msgstr "Liña base (algoritmo arPLS)"
 msgid ""
 "Smoothness parameter - the larger the value the smoother the resulting "
 "background."
-msgstr ""
-"Parámetro de suavización. A maior valor máis suave é o fondo resultante."
+msgstr "Parámetro de suavidade. A maior valor máis suave é o fondo resultante."
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:172
 #, kde-format
@@ -16563,7 +16566,7 @@ msgstr "Enmascarar os valores da rexión indicada."
 #, kde-format
 msgctxt "@title:window"
 msgid "Mask Values"
-msgstr "Enmarcarar os valores"
+msgstr "Enmascarar os valores"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:78
 #, kde-format
@@ -16592,7 +16595,7 @@ msgstr "Valor numérico non válido."
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:968
 #, kde-format
 msgid "%1: mask values"
-msgstr "%1: enmarcarar os valores"
+msgstr "%1: enmascarar os valores"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:1024
 #, kde-format
@@ -18628,7 +18631,7 @@ msgstr "Usar a primeira fila para nomear os vectores."
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:127
 #, kde-format
 msgid "Simplify whitespaces"
-msgstr "Simplifizar os espazos en branco."
+msgstr "Simplificar os espazos en branco."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbRemoveQuotes)
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:144
@@ -18774,19 +18777,19 @@ msgstr "Ficheiro ou tubo con nome"
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:113
 #, kde-format
 msgid "Network TCP Socket"
-msgstr "Sócket TCP de rede"
+msgstr "Toma TCP de rede"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbSourceType)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:118
 #, kde-format
 msgid "Network UDP Socket"
-msgstr "Sócket UDP de rede"
+msgstr "Toma UDP de rede"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbSourceType)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:123
 #, kde-format
 msgid "Local Socket"
-msgstr "Sócket local"
+msgstr "Toma local"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbSourceType)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:128
@@ -20237,7 +20240,7 @@ msgstr "Raio da esquina:"
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:30
 #, kde-format
 msgid "Hor. align.:"
-msgstr "Aliñ. hor.:"
+msgstr "Aliñamento horizontal:"
 
 #. i18n: ectx: property (text), widget (QLabel, lOrdering)
 #. i18n: ectx: property (text), widget (QLabel, lOrder)
@@ -20253,7 +20256,7 @@ msgstr "Orde:"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:212
 #, kde-format
 msgid "Ver. align.:"
-msgstr "Aliñ. vert.:"
+msgstr "Aliñamento vertical:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLineSymbolWidth)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:219
@@ -20530,7 +20533,7 @@ msgstr "Incrustado:"
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:361
 #, kde-format
 msgid "Vert. align.:"
-msgstr "Aliñ. vert.:"
+msgstr "Aliñamento vertical:"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:418
@@ -21013,7 +21016,7 @@ msgstr "Conexión"
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:160
 #, kde-format
 msgid "Monoton incr. X:"
-msgstr "X de aum. monotónico:"
+msgstr "X de aumento monotónico:"
 
 #. i18n: ectx: property (text), widget (QLabel, lYColumn)
 #: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:107
@@ -22356,7 +22359,7 @@ msgstr "Valor final:"
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:136
 #, kde-format
 msgid "Smoothness (Power of 10):"
-msgstr "Suavización (potencia de 10):"
+msgstr "Suavidade (potencia de 10):"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter2)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:162
@@ -22899,7 +22902,7 @@ msgid ""
 "Everything outside of this range will be set to white."
 msgstr ""
 "Seleccione o intervalo para o ton.\n"
-"Calquera valor fóra do intervalo convertirase en branco."
+"Calquera valor fóra do intervalo converterase en branco."
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:145
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:199
@@ -22909,7 +22912,7 @@ msgid ""
 "Everything outside of this range will be set to white."
 msgstr ""
 "Seleccione o intervalo para a saturación.\n"
-"Calquera valor fóra do intervalo convertirase en branco."
+"Calquera valor fóra do intervalo converterase en branco."
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:150
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:204
@@ -22919,7 +22922,7 @@ msgid ""
 "Everything outside of this range will be set to white."
 msgstr ""
 "Seleccione o intervalo para o valor, o grao de claridade da cor.\n"
-"Calquera valor fóra do intervalo convertirase en branco."
+"Calquera valor fóra do intervalo converterase en branco."
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:155
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:209
@@ -22929,7 +22932,7 @@ msgid ""
 "Everything outside of this range will be set to white."
 msgstr ""
 "Seleccione o intervalo para a intensidade.\n"
-"Calquera valor fóra do intervalo convertirase en branco."
+"Calquera valor fóra do intervalo converterase en branco."
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:161
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:215
@@ -22939,7 +22942,7 @@ msgid ""
 "Everything outside of this range will be set to white."
 msgstr ""
 "Seleccione o intervalo para as cores que non forman parte da cor de fondo.\n"
-"Calquera valor fóra do intervalo convertirase en branco."
+"Calquera valor fóra do intervalo converterase en branco."
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:165
 #, kde-format
