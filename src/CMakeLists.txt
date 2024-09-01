@@ -114,6 +114,7 @@ set(GUI_SOURCES
         ${KDEFRONTEND_DIR}/dockwidgets/Axis3DDock.cpp
         ${KDEFRONTEND_DIR}/dockwidgets/Scatter3DPlotAreaDock.cpp
         ${KDEFRONTEND_DIR}/dockwidgets/Bar3DPlotAreaDock.cpp
+        ${KDEFRONTEND_DIR}/dockwidgets/Plot3DAreaDock.cpp
 	${KDEFRONTEND_DIR}/matrix/MatrixFunctionDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/PlotDataDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/EquidistantValuesDialog.cpp
@@ -261,6 +262,7 @@ set(UI_SOURCES
         ${KDEFRONTEND_DIR}/ui/dockwidgets/axis3ddock.ui
         ${KDEFRONTEND_DIR}/ui/dockwidgets/scatter3dplotareadock.ui
         ${KDEFRONTEND_DIR}/ui/dockwidgets/bar3dplotareadock.ui
+        ${KDEFRONTEND_DIR}/ui/dockwidgets/plot3dareadock.ui
 	${KDEFRONTEND_DIR}/ui/matrix/matrixfunctionwidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/plotdatawidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/equidistantvalueswidget.ui
@@ -366,7 +368,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/filters/HDF5Filter.cpp
 	${BACKEND_DIR}/datasources/filters/ImageFilter.cpp
 	${BACKEND_DIR}/datasources/filters/JsonFilter.cpp
-    ${BACKEND_DIR}/datasources/filters/McapFilter.cpp
+        ${BACKEND_DIR}/datasources/filters/McapFilter.cpp
 	${BACKEND_DIR}/datasources/filters/MatioFilter.cpp
 	${BACKEND_DIR}/datasources/filters/NetCDFFilter.cpp
 	${BACKEND_DIR}/datasources/filters/OdsFilter.cpp
@@ -429,7 +431,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYAnalysisCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYEquationCurve.cpp
-    ${BACKEND_DIR}/worksheet/plots/cartesian/XYFunctionCurve.cpp
+        ${BACKEND_DIR}/worksheet/plots/cartesian/XYFunctionCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYDataReductionCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYDifferentiationCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYIntegrationCurve.cpp
@@ -448,6 +450,7 @@ set(BACKEND_SOURCES
         ${BACKEND_DIR}/worksheet/plots/3d/Bar3DPlot.cpp
         ${BACKEND_DIR}/worksheet/plots/3d/Base3DArea.cpp
         ${BACKEND_DIR}/worksheet/plots/3d/MouseInteractor.cpp
+        ${BACKEND_DIR}/worksheet/plots/3d/Plot3DArea.cpp
 )
 
 if(Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
@@ -782,9 +785,6 @@ if(APPLE AND ${ECM_VERSION} VERSION_GREATER "5.48.0")
 	ecm_add_app_icon(LABPLOT_SOURCE ICONS ${LML_ICONS} OUTFILE_BASENAME LML_ICONS)
 endif()
 add_executable(labplot ${LABPLOT_SOURCE} ${GUI_QRC} ${qml_QRC}
-    backend/worksheet/plots/3d/Plot3DAreaPrivate.h
-    backend/worksheet/plots/3d/Plot3DArea.h
-    backend/worksheet/plots/3d/Plot3DArea.cpp
     )
 target_link_libraries(labplot labplotlib labplotbackendlib labplotnsllib)
 

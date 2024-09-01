@@ -160,7 +160,6 @@ private:
 
 	QToolButton* tbNew3DPlot{nullptr};
 
-
 	// Actions
 	QAction* selectAllAction{nullptr};
 	QAction* deleteAction{nullptr};
@@ -188,9 +187,7 @@ private:
 	QAction* addImageAction{nullptr};
 	QAction* addGlobalInfoElementAction{nullptr};
 
-	QAction* add3DSurfacePlotAction{nullptr};
-	QAction* add3DScatterPlotAction{nullptr};
-	QAction* add3DBarPlotAction{nullptr};
+	QAction* add3DPlotAction{nullptr};
 
 	QAction* verticalLayoutAction{nullptr};
 	QAction* horizontalLayoutAction{nullptr};

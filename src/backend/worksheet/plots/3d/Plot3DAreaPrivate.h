@@ -9,13 +9,11 @@
 
 #include <backend/worksheet/WorksheetElementContainerPrivate.h>
 
-class Plot3DArea;
+#include <backend/worksheet/plots/AbstractPlotPrivate.h>
 
-class Plot3DAreaPrivate : public WorksheetElementContainerPrivate {
-	Q_OBJECT
+class Plot3DAreaPrivate : public AbstractPlotPrivate {
 public:
-	explicit Plot3DAreaPrivate(Plot3DArea* owner);
-	~Plot3DAreaPrivate() override;
+	explicit Plot3DAreaPrivate(Plot3DArea*);
 	void init();
 
 	Axis3D* axes;
@@ -28,8 +26,6 @@ public:
 	Plot3DArea* const q;
 	bool isInitialized;
 	void retransform() override;
-
-
-
+	void recalcShapeAndBoundingRect() override;
 };
 #endif // PLOT3DAREAPRIVATE_H

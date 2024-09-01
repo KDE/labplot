@@ -45,8 +45,8 @@ private Q_SLOTS:
 	void barXRotationChanged(int);
 	void barYRotationChanged(int);
 	void barZoomLevelChanged(int);
-	void barShadowQualityChanged(Plot3DArea::ShadowQuality);
-	void barThemeChanged(Plot3DArea::Theme);
+	void barShadowQualityChanged(Base3DArea::ShadowQuality);
+	void barThemeChanged(Base3DArea::Theme);
 	void barColorChanged(QColor);
 
 private:

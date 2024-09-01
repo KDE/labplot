@@ -62,6 +62,7 @@
 #include <limits>
 
 #include <backend/worksheet/plots/3d/Bar3DPlot.h>
+#include <backend/worksheet/plots/3d/Plot3DArea.h>
 #include <backend/worksheet/plots/3d/Scatter3DPlot.h>
 #include <backend/worksheet/plots/3d/Surface3DPlot.h>
 
@@ -78,6 +79,9 @@ WorksheetView::WorksheetView(Worksheet* worksheet)
 	: QGraphicsView()
 	, m_worksheet(worksheet) {
 	setScene(m_worksheet->scene());
+
+	for (Plot3DArea* child : worksheet->children<Plot3DArea>())
+		child->init();
 
 	setRenderHint(QPainter::Antialiasing);
 	setRubberBandSelectionMode(Qt::ContainsItemBoundingRect);
@@ -222,11 +226,7 @@ void WorksheetView::initActions() {
 	addCartesianPlot4Action =
 		new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes-centered-origin")), i18n("Two Axes, Crossing at Origin"), addNewActionGroup);
 
-	add3DBarPlotAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes-centered-origin")), i18n("3D Bar Plot"), addNewActionGroup);
-	add3DSurfacePlotAction =
-		new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes-centered-origin")), i18n("3D Surface Plot"), addNewActionGroup);
-	add3DScatterPlotAction =
-		new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes-centered-origin")), i18n("3D Scatter Plot"), addNewActionGroup);
+	add3DPlotAction = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-line")), i18n("3D plot"), addNewActionGroup);
 
 	addCartesianPlotTemplateAction = new QAction(QIcon::fromTheme(QStringLiteral("document-new-from-template")), i18n("Load from Template"), addNewActionGroup);
 	addTextLabelAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-text")), i18n("Text"), addNewActionGroup);
@@ -439,17 +439,12 @@ void WorksheetView::initMenus() {
 	m_addNewCartesianPlotMenu->addSeparator();
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlotTemplateAction);
 
-	m_addNew3DPlotMenu = new QMenu(i18n("Plot 3D Area"), this);
-
-	m_addNew3DPlotMenu->addAction(add3DScatterPlotAction);
-	m_addNew3DPlotMenu->addAction(add3DBarPlotAction);
-	m_addNew3DPlotMenu->addAction(add3DSurfacePlotAction);
-	m_addNew3DPlotMenu->addSeparator();
-
 	m_addNewMenu = new QMenu(i18n("Add New"), this);
 	m_addNewMenu->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 	m_addNewMenu->addMenu(m_addNewCartesianPlotMenu)->setIcon(QIcon::fromTheme(QStringLiteral("office-chart-line")));
-	m_addNewMenu->addMenu(m_addNew3DPlotMenu)->setIcon(QIcon::fromTheme(QStringLiteral("office-chart-line")));
+	m_addNewMenu->addSeparator();
+
+	m_addNewMenu->addAction(add3DPlotAction);
 
 	m_addNewMenu->addSeparator();
 	m_addNewMenu->addAction(addTextLabelAction);
@@ -626,13 +621,7 @@ void WorksheetView::fillToolBar(QToolBar* toolBar) {
 	toolBar->addWidget(tbNewCartesianPlot);
 	toolBar->addAction(addTextLabelAction);
 	toolBar->addAction(addImageAction);
-
-	toolBar->addSeparator();
-	tbNew3DPlot = new QToolButton(toolBar);
-	tbNew3DPlot->setPopupMode(QToolButton::MenuButtonPopup);
-	tbNew3DPlot->setMenu(m_addNew3DPlotMenu);
-	tbNew3DPlot->setDefaultAction(add3DScatterPlotAction);
-
+	toolBar->addAction(add3DPlotAction);
 	toolBar->addSeparator();
 	toolBar->addAction(verticalLayoutAction);
 	toolBar->addAction(horizontalLayoutAction);
@@ -1393,23 +1382,10 @@ void WorksheetView::addNew(QAction* action) {
 	} else if (action == addImageAction) {
 		Image* image = new Image(i18n("Image"));
 		aspect = image;
-	} else if (action == add3DBarPlotAction) {
-		auto* plot = new Bar3DPlot(i18n("Bar Plot"));
+	} else if (action == add3DPlotAction) {
+		auto* plot = new Plot3DArea(i18n("Plot 3D Area"));
+		plot->init();
 		aspect = plot;
-		if (tbNew3DPlot)
-			tbNew3DPlot->setDefaultAction(add3DBarPlotAction);
-	} else if (action == add3DScatterPlotAction) {
-		auto* plot = new Scatter3DPlot(i18n("Scatter Plot"));
-
-		aspect = plot;
-		if (tbNew3DPlot)
-			tbNew3DPlot->setDefaultAction(add3DScatterPlotAction);
-	} else if (action == add3DSurfacePlotAction) {
-		auto* plot = new Surface3DPlot(i18n("Surface Plot"));
-
-		aspect = plot;
-		if (tbNew3DPlot)
-			tbNew3DPlot->setDefaultAction(add3DSurfacePlotAction);
 	}
 
 	if (!aspect)

@@ -408,6 +408,11 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		raiseDock(m_bar3DPlotDock, m_mainWindow->stackedWidget);
 		m_bar3DPlotDock->setBars(castList<Bar3DPlot>(selectedAspects));
 		break;
+	case AspectType::Plot3DArea:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Plot Area 3D"));
+		raiseDock(m_plot3DAreaDock, m_mainWindow->stackedWidget);
+		m_plot3DAreaDock->setPlots(castList<Plot3DArea>(selectedAspects));
+		break;
 	case AspectType::TextLabel:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Text Label"));
 		raiseDock(m_textLabelDock, m_mainWindow->stackedWidget);

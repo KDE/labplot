@@ -15,8 +15,7 @@ public:
 		Surface,
 		Bar,
 	};
-	explicit Base3DArea(const QString& name,Base3DArea::Type ,AspectType type);
-	explicit Base3DArea(const QString& name, Base3DAreaPrivate*, AspectType);
+	explicit Base3DArea(const QString& name, Base3DAreaPrivate*, Base3DArea::Type, AspectType);
 	enum ShadowQuality { None = 0, Low = 1, Medium = 2, High = 3, SoftLow = 4, SoftMedium = 5, SoftHigh = 6 };
 	enum Theme {
 		Qt = 0,

@@ -20,7 +20,7 @@
 #include <QXmlStreamAttributes>
 
 Surface3DPlot::Surface3DPlot(const QString& name)
-	: Base3DArea(name, Base3DArea::Surface, AspectType::Surface3DPlot) {
+	: Base3DArea(name, new Surface3DPlotPrivate(this), Base3DArea::Surface, AspectType::Surface3DPlot) {
 	m_surface = new Q3DSurface();
 	Axis3D* xAxis = new Axis3D(QStringLiteral("x-axis"), Axis3D::X);
 	Axis3D* yAxis = new Axis3D(QStringLiteral("y-axis"), Axis3D::Y);
@@ -218,7 +218,6 @@ void Surface3DPlotPrivate::updateSmoothMesh() {
 }
 
 void Surface3DPlotPrivate::generateDemoData() const {
-	qDebug() << Q_FUNC_INFO << q->name();
 	if (!q->m_surface->seriesList().empty())
 		q->m_surface->removeSeries(q->m_surface->seriesList().first());
 	QSurfaceDataArray* dataArray = new QSurfaceDataArray;

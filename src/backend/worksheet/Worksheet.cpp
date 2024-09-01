@@ -288,26 +288,17 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	if (!addedElement)
 		return;
 
-	if (aspect->parentAspect() != this)
-		return;
-
 	// add the GraphicsItem of the added child to the scene
 	// DEBUG(Q_FUNC_INFO << ", ADDING child to SCENE")
-
 	if (aspect->type() == AspectType::Surface3DPlot) {
 		const auto* addedElement = static_cast<const Surface3DPlot*>(aspect);
 		Q3DSurface* graph = addedElement->m_surface;
 		if (graph) {
 			QWidget* window = graph->window();
 			if (window) {
-				window->setFocusPolicy(Qt::StrongFocus);
 				QGraphicsProxyWidget* proxy = d->m_scene->addWidget(window);
-				proxy->setFocusPolicy(Qt::StrongFocus); // Ensure the proxy can gain focus
-				proxy->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-				proxy->setAcceptHoverEvents(true);
-				proxy->setAcceptedMouseButtons(Qt::AllButtons);
 				// Set the proxy size dynamically
-				QRectF sceneRect = d->pageRect;
+				QRectF sceneRect = d->m_scene->sceneRect();
 				double width = sceneRect.width() - d->layoutLeftMargin - d->layoutRightMargin;
 				double height = sceneRect.height() - d->layoutTopMargin - d->layoutBottomMargin;
 				proxy->resize(width, height);
