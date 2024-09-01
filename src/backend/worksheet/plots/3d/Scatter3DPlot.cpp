@@ -56,18 +56,33 @@ void Scatter3DPlot::setXColumn(const AbstractColumn* xCol) {
 	Q_D(Scatter3DPlot);
 	if (xCol != d->xColumn)
 		exec(new Scatter3DPlotSetXColumnCmd(d, xCol, ki18n("%1: X Column changed")));
+	if (xCol) {
+		connect(xCol, &AbstractColumn::dataChanged, this, &Scatter3DPlot::recalc);
+		if (xCol->parentAspect())
+			connect(xCol->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &Scatter3DPlot::xColumnAboutToBeRemoved);
+	}
 }
 STD_SETTER_CMD_IMPL_F_S(Scatter3DPlot, SetYColumn, const AbstractColumn*, yColumn, recalc)
 void Scatter3DPlot::setYColumn(const AbstractColumn* yCol) {
 	Q_D(Scatter3DPlot);
 	if (yCol != d->yColumn)
 		exec(new Scatter3DPlotSetYColumnCmd(d, yCol, ki18n("%1: Y Column changed")));
+	if (yCol) {
+		connect(yCol, &AbstractColumn::dataChanged, this, &Scatter3DPlot::recalc);
+		if (yCol->parentAspect())
+			connect(yCol->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &Scatter3DPlot::yColumnAboutToBeRemoved);
+	}
 }
 STD_SETTER_CMD_IMPL_F_S(Scatter3DPlot, SetZColumn, const AbstractColumn*, zColumn, recalc)
 void Scatter3DPlot::setZColumn(const AbstractColumn* zCol) {
 	Q_D(Scatter3DPlot);
 	if (zCol != d->zColumn)
 		exec(new Scatter3DPlotSetZColumnCmd(d, zCol, ki18n("%1: Z Column changed")));
+	if (zCol) {
+		connect(zCol, &AbstractColumn::dataChanged, this, &Scatter3DPlot::recalc);
+		if (zCol->parentAspect())
+			connect(zCol->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &Scatter3DPlot::zColumnAboutToBeRemoved);
+	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(Scatter3DPlot, SetPointStyle, Scatter3DPlot::PointStyle, pointStyle, updatePointStyle)
@@ -104,6 +119,11 @@ void Scatter3DPlot::handleResize(double horizontalRatio, double verticalRatio, b
 void Scatter3DPlot::retransform() {
 	Q_D(Scatter3DPlot);
 	d->retransform();
+}
+
+void Scatter3DPlot::recalc(){
+	Q_D(Scatter3DPlot);
+	d->recalc();
 }
 // #####################################################################
 // ################### Private implementation ##########################

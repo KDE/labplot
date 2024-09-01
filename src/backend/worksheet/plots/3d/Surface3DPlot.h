@@ -53,6 +53,8 @@ public:
 
 	void show(bool visible);
 
+	void recalc();
+
 	typedef Surface3DPlotPrivate Private;
 
 private:
@@ -76,5 +78,6 @@ Q_SIGNALS:
 	void xColumnChanged(const AbstractColumn*);
 	void yColumnChanged(const AbstractColumn*);
 	void zColumnChanged(const AbstractColumn*);
+	void dataChanged();
 };
 #endif // SURFACE3DPLOTAREA_H

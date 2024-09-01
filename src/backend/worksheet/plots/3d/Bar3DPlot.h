@@ -33,7 +33,6 @@ protected:
 private Q_SLOTS:
 	void columnAboutToBeRemoved(const AbstractAspect*);
 Q_SIGNALS:
-	void dataChanged();
 	void dataColumnsChanged(QVector<AbstractColumn*>);
 	void colorChanged(QColor);
 	void rectChanged(QRectF&);

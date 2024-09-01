@@ -101,6 +101,11 @@ void Surface3DPlot::show(bool visible) {
 		m_surface->setVisible(visible);
 }
 
+void Surface3DPlot::recalc() {
+	Q_D(Surface3DPlot);
+	d->recalc();
+}
+
 // ##############################################################################
 // #################  setter methods and undo commands ##########################
 // ##############################################################################
@@ -144,24 +149,44 @@ void Surface3DPlot::setMatrix(const Matrix* matrix) {
 	Q_D(Surface3DPlot);
 	if (matrix != d->matrix)
 		exec(new Surface3DPlotSetMatrixCmd(d, matrix, ki18n("%1: matrix changed")));
+	if (matrix) {
+		connect(matrix, &Matrix::dataChanged, this, &Surface3DPlot::recalc);
+		if (matrix->parentAspect())
+			connect(matrix->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &Surface3DPlot::matrixAboutToBeRemoved);
+	}
 }
 STD_SETTER_CMD_IMPL_F_S(Surface3DPlot, SetXColumn, const AbstractColumn*, xColumn, recalc)
 void Surface3DPlot::setXColumn(const AbstractColumn* xCol) {
 	Q_D(Surface3DPlot);
 	if (xCol != d->xColumn)
 		exec(new Surface3DPlotSetXColumnCmd(d, xCol, ki18n("%1: X Column changed")));
+	if (xCol) {
+		connect(xCol, &AbstractColumn::dataChanged, this, &Surface3DPlot::recalc);
+		if (xCol->parentAspect())
+			connect(xCol->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &Surface3DPlot::xColumnAboutToBeRemoved);
+	}
 }
 STD_SETTER_CMD_IMPL_F_S(Surface3DPlot, SetYColumn, const AbstractColumn*, yColumn, recalc)
 void Surface3DPlot::setYColumn(const AbstractColumn* yCol) {
 	Q_D(Surface3DPlot);
 	if (yCol != d->yColumn)
 		exec(new Surface3DPlotSetYColumnCmd(d, yCol, ki18n("%1: Y Column changed")));
+	if (yCol) {
+		connect(yCol, &AbstractColumn::dataChanged, this, &Surface3DPlot::recalc);
+		if (yCol->parentAspect())
+			connect(yCol->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &Surface3DPlot::yColumnAboutToBeRemoved);
+	}
 }
 STD_SETTER_CMD_IMPL_F_S(Surface3DPlot, SetZColumn, const AbstractColumn*, zColumn, recalc)
 void Surface3DPlot::setZColumn(const AbstractColumn* zCol) {
 	Q_D(Surface3DPlot);
 	if (zCol != d->zColumn)
 		exec(new Surface3DPlotSetZColumnCmd(d, zCol, ki18n("%1: Z Column changed")));
+	if (zCol) {
+		connect(zCol, &AbstractColumn::dataChanged, this, &Surface3DPlot::recalc);
+		if (zCol->parentAspect())
+			connect(zCol->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &Surface3DPlot::zColumnAboutToBeRemoved);
+	}
 }
 
 // #####################################################################
