@@ -63,8 +63,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://poppler.freedesktop.org/poppler-24.07.0.tar.xz",
-                    "sha256": "19eb4f49198e4ae3fd9e5a6cf24d0fc7e674e8802046a7de14baab1e40cc2f1d",
+                    "url": "https://poppler.freedesktop.org/poppler-24.09.0.tar.xz",
+                    "sha256": "ebd857987e2395608c69fdc44009692d5906f13b612c5280beff65a0b75dc255",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 3686,
@@ -84,8 +84,8 @@
                     "sources": [
                         {
                             "type": "archive",
-                            "url": "https://boostorg.jfrog.io/artifactory/main/release/1.85.0/source/boost_1_85_0.tar.bz2",
-                            "sha256": "7009fe1faa1697476bdc7027703a2badb84e849b7b0baad5086b087b971f8617",
+                            "url": "https://boostorg.jfrog.io/artifactory/main/release/1.86.0/source/boost_1_86_0.tar.bz2",
+                            "sha256": "1bed88e40401b2cb7a1f76d4bab499e352fa4d0c5f31c0dbae64e24d34d7513b",
                             "x-checker-data": {
                                 "type": "anitya",
                                 "project-id": 6845,
@@ -169,8 +169,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://fossies.org/linux/misc/cfitsio-4.4.1.tar.gz",
-                    "sha256": "66a1dc3f21800f9eeabd9eac577b91fcdd9aabba678fbba3b8527319110d1d25",
+                    "url": "https://fossies.org/linux/misc/cfitsio-4.5.0.tar.gz",
+                    "sha256": "e4854fc3365c1462e493aa586bfaa2f3d0bb8c20b75a524955db64c27427ce09",
 		    "disable-http-decompression": true,
 		    "x-checker-data": {
                         "type": "anitya",
@@ -384,8 +384,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://download.kde.org/stable/release-service/24.05.2/src/cantor-24.05.2.tar.xz",
-                    "sha256": "41fb9b47ab194d393e4ff33f3afba24267b409f30801c09934f05c52e7ba533f",
+                    "url": "https://download.kde.org/stable/release-service/24.08.0/src/cantor-24.08.0.tar.xz",
+                    "sha256": "5292977d1a96e30d62011532aa642d3071b751f3c9656371401e0ee8d9e7092f",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 236341,
