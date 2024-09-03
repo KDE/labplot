@@ -9,27 +9,13 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
-message(STATUS "Found Qt version ${QT_VERSION_MAJOR}")
-# see also -DQT_DISABLE_DEPRECATED_BEFORE in src/CMakeLists.txt
-set(QT_MIN_VERSION "5.12.0")
-set(KF_MAJOR_VERSION "5")
-set(KF_MIN_VERSION "5.32.0")
-#set(QT_VERSION_MAJOR "6")
-if(QT_VERSION_MAJOR GREATER_EQUAL 6)
-    set(KF_MIN_VERSION "5.240.0")
-    find_package(ECM ${KF_MIN_VERSION} NO_MODULE)
-    if(ECM_FOUND)
-        set(KF_MAJOR_VERSION "6")
-        set(QT_MIN_VERSION "6.2.2")		# openSUSE 15.4 version
-    else()
-        message(STATUS "KF6 not found! Trying Qt5")
-    find_package(QT NAMES Qt5 REQUIRED COMPONENTS Core)
-    message(STATUS "Found Qt version ${QT_VERSION_MAJOR}")
-        set(KF_MIN_VERSION "5.32.0")
-    endif()
-endif()
+find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core)
+message(STATUS "Found Qt version ${QT_VERSION}")
 set(QT_MAJOR_VERSION ${QT_VERSION_MAJOR})
+# see also -DQT_DISABLE_DEPRECATED_BEFORE in src/CMakeLists.txt
+set(QT_MIN_VERSION "6.5.0")
+set(KF_MAJOR_VERSION "6")
+set(KF_MIN_VERSION "5.240.0")
 
 set(APPLE_SUPPRESS_X11_WARNING ON)
 
@@ -173,8 +159,13 @@ else()
 endif()
 
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
-    message(STATUS "GNU C++ compiler ${CMAKE_CXX_COMPILER_VERSION} detected, adding compile flags")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS} ${GENERIC_GNU_FLAGS} -Wzero-as-null-pointer-constant") # -Wzero-as-null-pointer-constant since version 5
+    if(QT_VERSION VERSION_GREATER_EQUAL 5.7.0 AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "9")
+	# see Qt supported compiler
+        message(FATAL_ERROR "Insufficient GNU C++ version ${CMAKE_CXX_COMPILER_VERSION} (Qt 6.7+ requires at least GNU g++ 9)")
+    else()
+        message(STATUS "GNU C++ compiler ${CMAKE_CXX_COMPILER_VERSION} detected, adding compile flags")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS} ${GENERIC_GNU_FLAGS} -Wzero-as-null-pointer-constant") # -Wzero-as-null-pointer-constant since version 5
+    endif()
 elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
     message(STATUS "Clang C++ compiler ${CMAKE_CXX_COMPILER_VERSION} detected, adding compile flags")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GNU_SOURCE ${GENERIC_CXX_FLAGS} ${GENERIC_GNU_FLAGS} -Wzero-as-null-pointer-constant") # -Wzero-as-null-pointer-constant since version 5
