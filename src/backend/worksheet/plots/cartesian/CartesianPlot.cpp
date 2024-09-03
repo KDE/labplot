@@ -47,6 +47,7 @@
 #include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/LollipopPlot.h"
+#include "backend/worksheet/plots/cartesian/ProcessBehaviorChart.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/cartesian/ReferenceRange.h"
@@ -504,6 +505,11 @@ void CartesianPlot::initActions() {
 		addChild(new KDEPlot(i18n("KDE Plot")));
 	});
 
+	// continious improvement plots
+	connect(addProcessBehaviorChartAction, &QAction::triggered, this, [=]() {
+		addChild(new ProcessBehaviorChart(i18n("Process Behavior Chart")));
+	});
+
 	// analysis curves
 	connect(addDataReductionCurveAction, &QAction::triggered, this, &CartesianPlot::addDataReductionCurve);
 	connect(addDifferentiationCurveAction, &QAction::triggered, this, &CartesianPlot::addDifferentiationCurve);
@@ -624,6 +630,7 @@ void CartesianPlot::initMenus() {
 	m_addNewMenu->addAction(addEquationCurveAction);
 	m_addNewMenu->addSeparator();
 
+	// statistical plots
 	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"), m_addNewMenu);
 	addNewStatisticalPlotsMenu->addAction(addHistogramAction);
 	addNewStatisticalPlotsMenu->addAction(addBoxPlotAction);
@@ -631,10 +638,16 @@ void CartesianPlot::initMenus() {
 	addNewStatisticalPlotsMenu->addAction(addQQPlotAction);
 	m_addNewMenu->addMenu(addNewStatisticalPlotsMenu);
 
+	// bar plots
 	auto* addNewBarPlotsMenu = new QMenu(i18n("Bar Plots"), m_addNewMenu);
 	addNewBarPlotsMenu->addAction(addBarPlotAction);
 	addNewBarPlotsMenu->addAction(addLollipopPlotAction);
 	m_addNewMenu->addMenu(addNewBarPlotsMenu);
+
+	// continious improvement plots
+	auto* addNewCIPlotsMenu = new QMenu(i18n("Continious Improvement"), m_addNewMenu);
+	addNewCIPlotsMenu->addAction(addProcessBehaviorChartAction);
+	m_addNewMenu->addMenu(addNewCIPlotsMenu);
 
 	m_addNewMenu->addSeparator();
 

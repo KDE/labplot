@@ -241,6 +241,9 @@ private:
 	QAction* addBarPlotAction{nullptr};
 	QAction* addLollipopPlotAction{nullptr};
 
+	// continious improvement
+	QAction* addProcessBehaviorChartAction{nullptr};
+
 	// analysis curves
 	QAction* addDataReductionCurveAction{nullptr};
 	QAction* addDifferentiationCurveAction{nullptr};
