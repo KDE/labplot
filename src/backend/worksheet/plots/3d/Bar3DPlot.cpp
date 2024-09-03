@@ -2,6 +2,7 @@
 #include "Axis3D.h"
 #include "Bar3DPlotPrivate.h"
 #include "MouseInteractor.h"
+#include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
 
@@ -14,14 +15,6 @@ Bar3DPlot::Bar3DPlot(const QString& name)
 Bar3DPlot::~Bar3DPlot() {
 }
 
-void Bar3DPlot::save(QXmlStreamWriter*) const {
-	// TODO
-}
-
-bool Bar3DPlot::load(XmlStreamReader*, bool preview) {
-	// TODO
-	return 1;
-}
 void Bar3DPlot::recalc() {
 	Q_D(Bar3DPlot);
 	d->recalc();
@@ -215,4 +208,98 @@ void Bar3DPlotPrivate::updateColor() {
 	series->setBaseColor(color);
 	q->m_bar->update();
 	Q_EMIT q->changed();
+}
+
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
+//! Save as XML
+void Bar3DPlot::save(QXmlStreamWriter* writer) const {
+	Q_D(const Bar3DPlot);
+
+	writer->writeStartElement("bar3dplot");
+
+	// Saving data columns
+	for (const auto& column : d->dataColumns) {
+		if (column) {
+			writer->writeStartElement("datacolumn");
+			writer->writeAttribute("path", d->columnPaths.value(d->dataColumns.indexOf(column)));
+			writer->writeEndElement(); // datacolumn
+		}
+	}
+
+	// Saving color
+	writer->writeStartElement("color");
+	writer->writeAttribute("value", d->color.name());
+	writer->writeEndElement(); // color
+
+	// Saving attributes from the Base3DAreaPrivate class
+	writer->writeStartElement("base3darea");
+
+	writer->writeAttribute("xRotation", QString::number(d->xRotation));
+	writer->writeAttribute("yRotation", QString::number(d->yRotation));
+	writer->writeAttribute("theme", QString::number(static_cast<int>(d->theme)));
+	writer->writeAttribute("zoomLevel", QString::number(d->zoomLevel));
+	writer->writeAttribute("shadowQuality", QString::number(static_cast<int>(d->shadowQuality)));
+
+	writer->writeEndElement(); // base3darea
+
+	// Saving basic attributes and comments, similar to the Curve3D example
+	writeBasicAttributes(writer);
+	writeCommentElement(writer);
+
+	writer->writeEndElement(); // bar3dplot
+}
+
+bool Bar3DPlot::load(XmlStreamReader* reader, bool preview) {
+	Q_D(Bar3DPlot);
+
+	// Reading basic attributes
+	if (!readBasicAttributes(reader))
+		return false;
+
+	QXmlStreamAttributes attribs;
+	QString str;
+
+	while (!reader->atEnd()) {
+		reader->readNext();
+
+		if (reader->isEndElement() && reader->name() == QLatin1String("bar3dplot"))
+			break;
+
+		if (!reader->isStartElement())
+			continue;
+
+		if (!preview && reader->name() == QLatin1String("comment")) {
+			if (!readCommentElement(reader))
+				return false;
+		} else if (!preview && reader->name() == QLatin1String("general")) {
+			attribs = reader->attributes();
+
+			READ_INT_VALUE("xRotation", xRotation, int);
+			READ_INT_VALUE("yRotation", yRotation, int);
+			READ_INT_VALUE("theme", theme, Base3DArea::Theme);
+			READ_INT_VALUE("zoomLevel", zoomLevel, int);
+			READ_INT_VALUE("shadowQuality", shadowQuality, Base3DArea::ShadowQuality);
+
+			str = attribs.value(QStringLiteral("color")).toString();
+			if (!str.isEmpty())
+				d->color.setNamedColor(str);
+		} else if (reader->name() == QLatin1String("column")) {
+			attribs = reader->attributes();
+
+			str = attribs.value(QStringLiteral("path")).toString();
+			if (!str.isEmpty())
+				d->columnPaths << str;
+			// READ_COLUMN logic can be placed here if needed.
+		} else { // Unknown element handling
+			reader->raiseWarning(i18n("Unknown element '%1'", reader->name().toString()));
+			if (!reader->skipToEndElement())
+				return false;
+		}
+	}
+
+	d->dataColumns.resize(d->columnPaths.size());
+
+	return true;
 }

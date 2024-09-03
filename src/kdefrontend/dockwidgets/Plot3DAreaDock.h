@@ -1,8 +1,8 @@
 #ifndef PLOT3DAREADOCK_H
 #define PLOT3DAREADOCK_H
 #include "BaseDock.h"
-#include <backend/worksheet/plots/3d/Plot3DArea.h>
 #include "ui_plot3dareadock.h"
+#include <backend/worksheet/plots/3d/Plot3DArea.h>
 class Plot3DAreaDock : public BaseDock {
 	Q_OBJECT
 public:

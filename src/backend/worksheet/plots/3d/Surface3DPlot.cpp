@@ -352,7 +352,9 @@ void Surface3DPlotPrivate::generateSpreadsheetData() const {
 	Q_EMIT q->changed();
 }
 
-////////////////////////////////////////////////////////////////////////////////
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 
 void Surface3DPlotPrivate::saveSpreadsheetConfig(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("spreadsheet");
@@ -382,5 +384,127 @@ bool Surface3DPlotPrivate::loadSpreadsheetConfig(XmlStreamReader* reader) {
 bool Surface3DPlotPrivate::loadMatrixConfig(XmlStreamReader* reader) {
 	const QXmlStreamAttributes& attribs = reader->attributes();
 	matrixPath = attribs.value("matrixPath").toString();
+	return true;
+}
+void Surface3DPlot::save(QXmlStreamWriter* writer) const {
+	Q_D(const Surface3DPlot);
+
+	writer->writeStartElement("surface3dplot");
+
+	// Save basic attributes
+	writeBasicAttributes(writer);
+
+	writer->writeStartElement("general");
+	writer->writeAttribute("color", d->color.name());
+	writer->writeAttribute("sourceType", QString::number(d->sourceType));
+	writer->writeAttribute("drawMode", QString::number(d->drawMode));
+	writer->writeAttribute("flatShading", QString::number(d->flatShading));
+	writer->writeAttribute("smooth", QString::number(d->smooth));
+	writer->writeAttribute("xRotation", QString::number(d->xRotation));
+	writer->writeAttribute("yRotation", QString::number(d->yRotation));
+	writer->writeAttribute("theme", QString::number(d->theme));
+	writer->writeAttribute("zoomLevel", QString::number(d->zoomLevel));
+	writer->writeAttribute("shadowQuality", QString::number(d->shadowQuality));
+	writer->writeEndElement(); // End of "general"
+
+	if (!d->xColumnPath.isEmpty()) {
+		writer->writeStartElement("column");
+		writer->writeAttribute("path", d->xColumnPath);
+		writer->writeEndElement(); // End of "column"
+	}
+
+	if (!d->yColumnPath.isEmpty()) {
+		writer->writeStartElement("column");
+		writer->writeAttribute("path", d->yColumnPath);
+		writer->writeEndElement(); // End of "column"
+	}
+
+	if (!d->zColumnPath.isEmpty()) {
+		writer->writeStartElement("column");
+		writer->writeAttribute("path", d->zColumnPath);
+		writer->writeEndElement(); // End of "column"
+	}
+
+	// Save matrix or spreadsheet config based on sourceType
+	if (d->sourceType == Surface3DPlot::DataSource::DataSource_Matrix) {
+		d->saveMatrixConfig(writer);
+	} else if (d->sourceType == Surface3DPlot::DataSource::DataSource_Spreadsheet) {
+		d->saveSpreadsheetConfig(writer);
+	}
+
+	writer->writeEndElement(); // End of "surface3dplot"
+}
+
+bool Surface3DPlot::load(XmlStreamReader* reader, bool preview) {
+	Q_D(Surface3DPlot);
+
+	// Reading basic attributes
+	if (!readBasicAttributes(reader))
+		return false;
+
+	QXmlStreamAttributes attribs;
+	QString str;
+
+	while (!reader->atEnd()) {
+		reader->readNext();
+
+		if (reader->isEndElement() && reader->name() == QLatin1String("surface3dplot"))
+			break;
+
+		if (!reader->isStartElement())
+			continue;
+
+		if (!preview && reader->name() == QLatin1String("comment")) {
+			if (!readCommentElement(reader))
+				return false;
+		} else if (!preview && reader->name() == QLatin1String("general")) {
+			attribs = reader->attributes();
+
+			READ_INT_VALUE("xRotation", xRotation, int);
+			READ_INT_VALUE("yRotation", yRotation, int);
+			READ_INT_VALUE("theme", theme, Base3DArea::Theme);
+			READ_INT_VALUE("zoomLevel", zoomLevel, int);
+			READ_INT_VALUE("shadowQuality", shadowQuality, Base3DArea::ShadowQuality);
+
+			str = attribs.value(QStringLiteral("color")).toString();
+			if (!str.isEmpty())
+				d->color.setNamedColor(str);
+
+			str = attribs.value(QStringLiteral("sourceType")).toString();
+			if (!str.isEmpty())
+				d->sourceType = static_cast<Surface3DPlot::DataSource>(str.toInt());
+
+			str = attribs.value(QStringLiteral("drawMode")).toString();
+			if (!str.isEmpty())
+				d->drawMode = static_cast<Surface3DPlot::DrawMode>(str.toInt());
+
+			READ_INT_VALUE("flatShading", flatShading, bool)
+			READ_INT_VALUE("smooth", smooth, bool)
+		} else if (reader->name() == QLatin1String("column")) {
+			attribs = reader->attributes();
+
+			str = attribs.value(QStringLiteral("path")).toString();
+			if (attribs.hasAttribute("xColumn"))
+				d->xColumnPath = str;
+			else if (attribs.hasAttribute("yColumn"))
+				d->yColumnPath = str;
+			else if (attribs.hasAttribute("zColumn"))
+				d->zColumnPath = str;
+		} else if (reader->name() == QLatin1String("matrix")) {
+			if (!d->loadMatrixConfig(reader))
+				return false;
+		} else if (reader->name() == QLatin1String("spreadsheet")) {
+			if (!d->loadSpreadsheetConfig(reader))
+				return false;
+		} else { // Unknown element handling
+			reader->raiseWarning(i18n("Unknown element '%1'", reader->name().toString()));
+			if (!reader->skipToEndElement())
+				return false;
+		}
+	}
+
+	// Set up dataColumns if needed
+	// d->dataColumns.resize(d->columnPaths.size());  // Adjust based on your implementation
+
 	return true;
 }

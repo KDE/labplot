@@ -171,7 +171,7 @@ void Plot3DArea::addSurface() {
 Plot3DAreaPrivate::Plot3DAreaPrivate(Plot3DArea* owner)
 	: AbstractPlotPrivate(owner)
 	, q(owner)
-	, isInitialized(false){
+	, isInitialized(false) {
 }
 
 void Plot3DAreaPrivate::init() {
