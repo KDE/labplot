@@ -11,10 +11,8 @@
 #define PROCESSBEHAVIORCHART_H
 
 #include "Plot.h"
-#include "backend/nsl/nsl_sf_stats.h"
 
 class AbstractColumn;
-class Background;
 class Line;
 class Symbol;
 class ProcessBehaviorChartPrivate;
@@ -28,7 +26,8 @@ class ProcessBehaviorChart : public Plot {
 	Q_OBJECT
 
 public:
-	friend class ProcessBehaviorChartSetDataColumnCmd;
+	friend class ProcessBehaviorChartSetXDataColumnCmd;
+	friend class ProcessBehaviorChartSetYDataColumnCmd;
 
 	enum class Type {XmR, mR, XbarR, R, XbarS, S, P, NP, C, U};
 
@@ -46,8 +45,10 @@ public:
 	void saveThemeConfig(const KConfig&) override;
 
 	BASIC_D_ACCESSOR_DECL(ProcessBehaviorChart::Type, type, Type)
-	POINTER_D_ACCESSOR_DECL(const AbstractColumn, dataColumn, DataColumn)
-	CLASS_D_ACCESSOR_DECL(QString, dataColumnPath, DataColumnPath)
+	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
+	CLASS_D_ACCESSOR_DECL(QString, xDataColumnPath, XDataColumnPath)
+	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)
+	CLASS_D_ACCESSOR_DECL(QString, yDataColumnPath, YDataColumnPath)
 	BASIC_D_ACCESSOR_DECL(int, subgroupSize, SubgroupSize)
 
 	Symbol* dataSymbol() const;
@@ -80,7 +81,8 @@ protected:
 private:
 	Q_DECLARE_PRIVATE(ProcessBehaviorChart)
 	void init();
-	void connectDataColumn(const AbstractColumn*);
+	void connectXDataColumn(const AbstractColumn*);
+	void connectYDataColumn(const AbstractColumn*);
 
 	QAction* navigateToAction{nullptr};
 	bool m_menusInitialized{false};
@@ -89,9 +91,12 @@ Q_SIGNALS:
 	void linesUpdated(const ProcessBehaviorChart*, const QVector<QLineF>&);
 
 	// General-Tab
+	void typeChanged(ProcessBehaviorChart::Type);
 	void dataChanged(); // emitted when the actual curve data to be plotted was changed to re-adjust the plot
-	void dataDataChanged();
-	void dataColumnChanged(const AbstractColumn*);
+	void xDataDataChanged();
+	void yDataDataChanged();
+	void xDataColumnChanged(const AbstractColumn*);
+	void yDataColumnChanged(const AbstractColumn*);
 	void subgroupSizeChanged(int);
 };
 

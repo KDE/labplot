@@ -20,6 +20,7 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macrosCurve.h"
 #include "backend/lib/trace.h"
+#include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
@@ -31,7 +32,10 @@
 #include <KLocalizedString>
 #include <KSharedConfig>
 
-CURVE_COLUMN_CONNECT(ProcessBehaviorChart, Data, data, recalc)
+#include <gsl/gsl_statistics.h>
+
+CURVE_COLUMN_CONNECT(ProcessBehaviorChart, XData, xData, recalc)
+CURVE_COLUMN_CONNECT(ProcessBehaviorChart, YData, yData, recalc)
 
 ProcessBehaviorChart::ProcessBehaviorChart(const QString& name)
 	: Plot(name, new ProcessBehaviorChartPrivate(this), AspectType::ProcessBehaviorChart) {
@@ -93,13 +97,6 @@ void ProcessBehaviorChart::init() {
 	d->lowerLimitCurve->line()->setStyle(Qt::SolidLine);
 	d->lowerLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 	d->lowerLimitCurve->background()->setPosition(Background::Position::No);
-
-	// columns holding the data for the reference curve
-	d->xReferenceColumn = new Column(QStringLiteral("xReference"));
-	d->xReferenceColumn->setHidden(true);
-	d->xReferenceColumn->setUndoAware(false);
-	addChildFast(d->xReferenceColumn);
-	d->referenceCurve->setXColumn(d->xReferenceColumn);
 
 	// synchronize the names of the internal XYCurves with the name of the current q-q plot
 	// so we have the same name shown on the undo stack
@@ -225,7 +222,7 @@ double ProcessBehaviorChart::maximum(const Dimension dim) const {
 	Q_D(const ProcessBehaviorChart);
 	switch (dim) {
 	case Dimension::X:
-		return d->referenceCurve->maximum(dim);
+		return d->dataCurve->maximum(dim);
 	case Dimension::Y:
 	// TODO
 		// return std::max(d->referenceCurve->maximum(dim), d->percentilesCurve->maximum(dim));
@@ -296,12 +293,12 @@ void ProcessBehaviorChart::setYDataColumn(const AbstractColumn* column) {
 		exec(new ProcessBehaviorChartSetYDataColumnCmd(d, column, ki18n("%1: set y data column")));
 }
 
-void ProcessBehaviorChart::setXDataColumnPath(const QString& path) {
+void ProcessBehaviorChart::setYDataColumnPath(const QString& path) {
 	Q_D(ProcessBehaviorChart);
-	d->xDataColumnPath = path;
+	d->yDataColumnPath = path;
 }
 
-STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetType, ProcessBehaviorChart::Type, type, updateType)
+STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetType, ProcessBehaviorChart::Type, type, recalc)
 void ProcessBehaviorChart::setType(ProcessBehaviorChart::Type type) {
 	Q_D(ProcessBehaviorChart);
 	if (type != d->type)
@@ -394,7 +391,7 @@ void ProcessBehaviorChartPrivate::recalc() {
 		// no column for x provided, use the index for x
 		xDataColumn->clear();
 		const int count = yDataColumn->rowCount();
-		xDataColumn->setRowCount(count);
+		// TODO xDataColumn->setRowsCount(count);
 		for (int i = 0; i < count; ++i)
 			xDataColumn->setValueAt(i, i + 1);
 	}
@@ -402,12 +399,12 @@ void ProcessBehaviorChartPrivate::recalc() {
 	// min and max values for x
 	const double xMin = xDataColumn->statistics().minimum;
 	const double xMax = xDataColumn->statistics().maximum;
-	xCenterLineColumn->setValueAt(0, xMin);
-	xCenterLineColumn->setValueAt(1, xMax);
-	xUpperLimitLineColumn->setValueAt(0, xMin);
-	xUpperLimitLineColumn->setValueAt(1, xMax);
-	xLowerLimitLineColumn->setValueAt(0, xMin);
-	xLowerLimitLineColumn->setValueAt(1, xMax);
+	xCenterColumn->setValueAt(0, xMin);
+	xCenterColumn->setValueAt(1, xMax);
+	xUpperLimitColumn->setValueAt(0, xMin);
+	xUpperLimitColumn->setValueAt(1, xMax);
+	xLowerLimitColumn->setValueAt(0, xMin);
+	xLowerLimitColumn->setValueAt(1, xMax);
 
 	updateControlLimits();
 
@@ -452,13 +449,13 @@ C: Calculates the average number of defects per unit and sets the control limits
 U: Calculates the average number of defects per unit and sets the control limits based on this average.
 This implementation assumes that the necessary constants (like d2 and c4) are known and used correctly for the given subgroup sizes. Adjust the constants as needed based on the actual subgroup sizes and control chart requirements.
 */
-void ProcessBehaviorChart::updateControlLimits() {
+void ProcessBehaviorChartPrivate::updateControlLimits() {
     switch (type) {
     case ProcessBehaviorChart::Type::XmR: {
 		// center line
 		const double mean = yDataColumn->statistics().arithmeticMean;
-		yCenterLineColumn->setValue(0, mean);
-        yCenterLineColumn->setValue(1, mean);
+		yCenterColumn->setValueAt(0, mean);
+        yCenterColumn->setValueAt(1, mean);
 
         // calculate the mean moving range
         std::vector<double> movingRange;
@@ -470,10 +467,10 @@ void ProcessBehaviorChart::updateControlLimits() {
         // upper and lower limits
         const double upperLimit = yDataColumn->statistics().arithmeticMean + 3. * meanMovingRange / 1.128;
         const double lowerLimit = yDataColumn->statistics().arithmeticMean - 3. * meanMovingRange / 1.128;
-        yUpperLimitLineColumn->setValue(0, upperLimit);
-        yUpperLimitLineColumn->setValue(1, upperLimit);
-        yLowerLimitLineColumn->setValue(0, lowerLimit);
-        yLowerLimitLineColumn->setValue(1, lowerLimit);
+        yUpperLimitColumn->setValueAt(0, upperLimit);
+        yUpperLimitColumn->setValueAt(1, upperLimit);
+        yLowerLimitColumn->setValueAt(0, lowerLimit);
+        yLowerLimitColumn->setValueAt(1, lowerLimit);
         break;
     }
     case ProcessBehaviorChart::Type::mR: {
@@ -485,16 +482,16 @@ void ProcessBehaviorChart::updateControlLimits() {
         const double meanMovingRange = gsl_stats_mean(movingRange.data(), 1, movingRange.size());
 
 		// center line
-		yCenterLineColumn->setValue(0, meanMovingRange);
-        yCenterLineColumn->setValue(1, meanMovingRange);
+		yCenterColumn->setValueAt(0, meanMovingRange);
+        yCenterColumn->setValueAt(1, meanMovingRange);
 
         // upper and lower limits
         const double upperLimit = 0;
         const double lowerLimit = 3.2665 * meanMovingRange;
-        yUpperLimitLineColumn->setValue(0, upperLimit);
-        yUpperLimitLineColumn->setValue(1, upperLimit);
-        yLowerLimitLineColumn->setValue(0, lowerLimit);
-        yLowerLimitLineColumn->setValue(1, lowerLimit);
+        yUpperLimitColumn->setValueAt(0, upperLimit);
+        yUpperLimitColumn->setValueAt(1, upperLimit);
+        yLowerLimitColumn->setValueAt(0, lowerLimit);
+        yLowerLimitColumn->setValueAt(1, lowerLimit);
         break;
     }
     case ProcessBehaviorChart::Type::XbarR: {
@@ -509,8 +506,8 @@ void ProcessBehaviorChart::updateControlLimits() {
         }
 
         const double meanOfMeans = gsl_stats_mean(subgroupMeans.data(), 1, subgroupMeans.size());
-        yCenterLineColumn->setValue(0, meanOfMeans);
-        yCenterLineColumn->setValue(1, meanOfMeans);
+        yCenterColumn->setValueAt(0, meanOfMeans);
+        yCenterColumn->setValueAt(1, meanOfMeans);
 
         // Calculate the range of subgroups
         std::vector<double> subgroupRanges;
@@ -529,10 +526,10 @@ void ProcessBehaviorChart::updateControlLimits() {
         const double d2 = 2.326; // d2 constant for subgroup size 5
         const double upperLimit = meanOfMeans + 3. * meanRange / d2;
         const double lowerLimit = meanOfMeans - 3. * meanRange / d2;
-        yUpperLimitLineColumn->setValue(0, upperLimit);
-        yUpperLimitLineColumn->setValue(1, upperLimit);
-        yLowerLimitLineColumn->setValue(0, lowerLimit);
-        yLowerLimitLineColumn->setValue(1, lowerLimit);
+        yUpperLimitColumn->setValueAt(0, upperLimit);
+        yUpperLimitColumn->setValueAt(1, upperLimit);
+        yLowerLimitColumn->setValueAt(0, lowerLimit);
+        yLowerLimitColumn->setValueAt(1, lowerLimit);
         break;
     }
     case ProcessBehaviorChart::Type::XbarS: {
@@ -547,8 +544,8 @@ void ProcessBehaviorChart::updateControlLimits() {
         }
 
         const double meanOfMeans = gsl_stats_mean(subgroupMeans.data(), 1, subgroupMeans.size());
-        yCenterLineColumn->setValue(0, meanOfMeans);
-        yCenterLineColumn->setValue(1, meanOfMeans);
+        yCenterColumn->setValueAt(0, meanOfMeans);
+        yCenterColumn->setValueAt(1, meanOfMeans);
 
         // Calculate the standard deviation of subgroups
         std::vector<double> subgroupStdDevs;
@@ -565,10 +562,10 @@ void ProcessBehaviorChart::updateControlLimits() {
         const double c4 = 0.94; // c4 constant for subgroup size 5
         const double upperLimit = meanOfMeans + 3. * meanStdDev / c4;
         const double lowerLimit = meanOfMeans - 3. * meanStdDev / c4;
-        yUpperLimitLineColumn->setValue(0, upperLimit);
-        yUpperLimitLineColumn->setValue(1, upperLimit);
-        yLowerLimitLineColumn->setValue(0, lowerLimit);
-        yLowerLimitLineColumn->setValue(1, lowerLimit);
+        yUpperLimitColumn->setValueAt(0, upperLimit);
+        yUpperLimitColumn->setValueAt(1, upperLimit);
+        yLowerLimitColumn->setValueAt(0, lowerLimit);
+        yLowerLimitColumn->setValueAt(1, lowerLimit);
         break;
     }
     case ProcessBehaviorChart::Type::P: {
@@ -578,16 +575,16 @@ void ProcessBehaviorChart::updateControlLimits() {
             totalDefectives += yDataColumn->valueAt(i);
         }
         const double pBar = totalDefectives / yDataColumn->rowCount();
-        yCenterLineColumn->setValue(0, pBar);
-        yCenterLineColumn->setValue(1, pBar);
+        yCenterColumn->setValueAt(0, pBar);
+        yCenterColumn->setValueAt(1, pBar);
 
         // Calculate the control limits
         const double upperLimit = pBar + 3. * std::sqrt(pBar * (1 - pBar) / yDataColumn->rowCount());
         const double lowerLimit = pBar - 3. * std::sqrt(pBar * (1 - pBar) / yDataColumn->rowCount());
-        yUpperLimitLineColumn->setValue(0, upperLimit);
-        yUpperLimitLineColumn->setValue(1, upperLimit);
-        yLowerLimitLineColumn->setValue(0, lowerLimit);
-        yLowerLimitLineColumn->setValue(1, lowerLimit);
+        yUpperLimitColumn->setValueAt(0, upperLimit);
+        yUpperLimitColumn->setValueAt(1, upperLimit);
+        yLowerLimitColumn->setValueAt(0, lowerLimit);
+        yLowerLimitColumn->setValueAt(1, lowerLimit);
         break;
     }
     case ProcessBehaviorChart::Type::NP: {
@@ -597,16 +594,16 @@ void ProcessBehaviorChart::updateControlLimits() {
             totalDefectives += yDataColumn->valueAt(i);
         }
         const double npBar = totalDefectives;
-        yCenterLineColumn->setValue(0, npBar);
-        yCenterLineColumn->setValue(1, npBar);
+        yCenterColumn->setValueAt(0, npBar);
+        yCenterColumn->setValueAt(1, npBar);
 
         // Calculate the control limits
         const double upperLimit = npBar + 3. * std::sqrt(npBar * (1 - npBar / yDataColumn->rowCount()));
         const double lowerLimit = npBar - 3. * std::sqrt(npBar * (1 - npBar / yDataColumn->rowCount()));
-        yUpperLimitLineColumn->setValue(0, upperLimit);
-        yUpperLimitLineColumn->setValue(1, upperLimit);
-        yLowerLimitLineColumn->setValue(0, lowerLimit);
-        yLowerLimitLineColumn->setValue(1, lowerLimit);
+        yUpperLimitColumn->setValueAt(0, upperLimit);
+        yUpperLimitColumn->setValueAt(1, upperLimit);
+        yLowerLimitColumn->setValueAt(0, lowerLimit);
+        yLowerLimitColumn->setValueAt(1, lowerLimit);
         break;
     }
     case ProcessBehaviorChart::Type::C: {
@@ -616,16 +613,16 @@ void ProcessBehaviorChart::updateControlLimits() {
             totalDefects += yDataColumn->valueAt(i);
         }
         const double cBar = totalDefects / yDataColumn->rowCount();
-        yCenterLineColumn->setValue(0, cBar);
-        yCenterLineColumn->setValue(1, cBar);
+        yCenterColumn->setValueAt(0, cBar);
+        yCenterColumn->setValueAt(1, cBar);
 
         // Calculate the control limits
         const double upperLimit = cBar + 3. * std::sqrt(cBar);
         const double lowerLimit = cBar - 3. * std::sqrt(cBar);
-        yUpperLimitLineColumn->setValue(0, upperLimit);
-        yUpperLimitLineColumn->setValue(1, upperLimit);
-        yLowerLimitLineColumn->setValue(0, lowerLimit);
-        yLowerLimitLineColumn->setValue(1, lowerLimit);
+        yUpperLimitColumn->setValueAt(0, upperLimit);
+        yUpperLimitColumn->setValueAt(1, upperLimit);
+        yLowerLimitColumn->setValueAt(0, lowerLimit);
+        yLowerLimitColumn->setValueAt(1, lowerLimit);
         break;
     }
     case ProcessBehaviorChart::Type::U: {
@@ -635,16 +632,16 @@ void ProcessBehaviorChart::updateControlLimits() {
             totalDefects += yDataColumn->valueAt(i);
         }
         const double uBar = totalDefects / yDataColumn->rowCount();
-        yCenterLineColumn->setValue(0, uBar);
-        yCenterLineColumn->setValue(1, uBar);
+        yCenterColumn->setValueAt(0, uBar);
+        yCenterColumn->setValueAt(1, uBar);
 
         // Calculate the control limits
         const double upperLimit = uBar + 3. * std::sqrt(uBar / yDataColumn->rowCount());
         const double lowerLimit = uBar - 3. * std::sqrt(uBar / yDataColumn->rowCount());
-        yUpperLimitLineColumn->setValue(0, upperLimit);
-        yUpperLimitLineColumn->setValue(1, upperLimit);
-        yLowerLimitLineColumn->setValue(0, lowerLimit);
-        yLowerLimitLineColumn->setValue(1, lowerLimit);
+        yUpperLimitColumn->setValueAt(0, upperLimit);
+        yUpperLimitColumn->setValueAt(1, upperLimit);
+        yLowerLimitColumn->setValueAt(0, lowerLimit);
+        yLowerLimitColumn->setValueAt(1, lowerLimit);
         break;
     }
     }
@@ -682,6 +679,8 @@ void ProcessBehaviorChart::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement(QStringLiteral("general"));
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
+	WRITE_COLUMN(d->xCenterColumn, xCenterColumn);
+	WRITE_COLUMN(d->yCenterColumn, yCenterColumn);
 	WRITE_COLUMN(d->xUpperLimitColumn, xUpperLimitColumn);
 	WRITE_COLUMN(d->yUpperLimitColumn, yUpperLimtColumn);
 	WRITE_COLUMN(d->xLowerLimitColumn, xLowerLimitColumn);
@@ -692,6 +691,8 @@ void ProcessBehaviorChart::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	// save the internal columns, above only the references to them were saved
+	d->xCenterColumn->save(writer);
+	d->yCenterColumn->save(writer);
 	d->xUpperLimitColumn->save(writer);
 	d->yUpperLimitColumn->save(writer);
 	d->xLowerLimitColumn->save(writer);
@@ -699,6 +700,7 @@ void ProcessBehaviorChart::save(QXmlStreamWriter* writer) const {
 
 	// save the internal curves
 	d->dataCurve->save(writer);
+	d->centerCurve->save(writer);
 	d->upperLimitCurve->save(writer);
 	d->lowerLimitCurve->save(writer);
 
@@ -730,6 +732,8 @@ bool ProcessBehaviorChart::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
+			READ_COLUMN(xCenterColumn);
+			READ_COLUMN(yCenterColumn);
 			READ_COLUMN(xUpperLimitColumn);
 			READ_COLUMN(yUpperLimitColumn);
 			READ_COLUMN(xLowerLimitColumn);
@@ -750,6 +754,10 @@ bool ProcessBehaviorChart::load(XmlStreamReader* reader, bool preview) {
 				rc = d->xDataColumn->load(reader, preview);
 			else if (name == QLatin1String("yData"))
 				rc = d->yDataColumn->load(reader, preview);
+			else if (name == QLatin1String("xCenterLine"))
+				rc = d->xCenterColumn->load(reader, preview);
+			else if (name == QLatin1String("yCenterLine"))
+				rc = d->yCenterColumn->load(reader, preview);
 			else if (name == QLatin1String("xUpperLimit"))
 				rc = d->xUpperLimitColumn->load(reader, preview);
 			else if (name == QLatin1String("yUpperLimit"))
@@ -766,6 +774,8 @@ bool ProcessBehaviorChart::load(XmlStreamReader* reader, bool preview) {
 			bool rc = false;
 			if (attribs.value(QStringLiteral("name")) == QLatin1String("data"))
 				rc = d->dataCurve->load(reader, preview);
+			else if (attribs.value(QStringLiteral("name")) == QLatin1String("center"))
+				rc = d->centerCurve->load(reader, preview);
 			else if (attribs.value(QStringLiteral("name")) == QLatin1String("upper limit"))
 				rc = d->upperLimitCurve->load(reader, preview);
 			else if (attribs.value(QStringLiteral("name")) == QLatin1String("lower limit"))
@@ -799,10 +809,11 @@ void ProcessBehaviorChart::loadThemeConfig(const KConfig& config) {
 	Q_D(ProcessBehaviorChart);
 	d->suppressRecalc = true;
 
+/*
 	d->referenceCurve->line()->loadThemeConfig(group, themeColor);
 	d->percentilesCurve->line()->setStyle(Qt::NoPen);
 	d->percentilesCurve->symbol()->loadThemeConfig(group, themeColor);
-
+*/
 	d->suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
 }
@@ -810,6 +821,6 @@ void ProcessBehaviorChart::loadThemeConfig(const KConfig& config) {
 void ProcessBehaviorChart::saveThemeConfig(const KConfig& config) {
 	Q_D(const ProcessBehaviorChart);
 	KConfigGroup group = config.group(QStringLiteral("ProcessBehaviorChart"));
-	d->referenceCurve->line()->saveThemeConfig(group);
-	d->percentilesCurve->symbol()->saveThemeConfig(group);
+//	d->referenceCurve->line()->saveThemeConfig(group);
+//	d->percentilesCurve->symbol()->saveThemeConfig(group);
 }

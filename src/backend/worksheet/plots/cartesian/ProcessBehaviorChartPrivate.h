@@ -7,13 +7,12 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef PROCESSBEHAVIORCHARTRIVATE_H
+#ifndef PROCESSBEHAVIORCHARTPRIVATE_H
 #define PROCESSBEHAVIORCHARTPRIVATE_H
 
 #include "backend/worksheet/plots/cartesian/PlotPrivate.h"
 
 class Column;
-class Line;
 class ProcessBehaviorChart;
 
 class ProcessBehaviorChartPrivate : public PlotPrivate {
@@ -31,7 +30,7 @@ public:
 	XYCurve* dataCurve{nullptr};
 	XYCurve* centerCurve{nullptr};
 	XYCurve* upperLimitCurve{nullptr};
-	XYCurve* lowerLimitLimitCurve{nullptr};
+	XYCurve* lowerLimitCurve{nullptr};
 
 	Column* xDataColumn{nullptr};
 	QString xDataColumnPath;
@@ -46,7 +45,7 @@ public:
 	Column* xUpperLimitColumn{nullptr};
 	QString xUpperLimitColumnPath;
 	Column* yUpperLimitColumn{nullptr};
-	QString yUppeLimitColumnPath;
+	QString yUpperLimitColumnPath;
 
 	Column* xLowerLimitColumn{nullptr};
 	QString xLowerLimitColumnPath;

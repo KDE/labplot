@@ -25,6 +25,7 @@
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/LollipopPlot.h"
+#include "backend/worksheet/plots/cartesian/ProcessBehaviorChart.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/cartesian/XYConvolutionCurve.h"
@@ -119,6 +120,10 @@ public:
 			return new BarPlot(QString());
 		else if (type == AspectType::LollipopPlot)
 			return new LollipopPlot(QString());
+
+		/* continious improvement pltos */
+		else if (type == AspectType::ProcessBehaviorChart)
+			return new ProcessBehaviorChart(QString());
 
 		/* data containers */
 		else if (type == AspectType::Spreadsheet)
