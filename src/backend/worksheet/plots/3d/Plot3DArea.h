@@ -21,10 +21,8 @@ public:
 
 	QMenu* createContextMenu() override;
 
-
 	typedef Plot3DArea BaseClass;
 	typedef Plot3DAreaPrivate Private;
-
 
 private:
 	void initActions();

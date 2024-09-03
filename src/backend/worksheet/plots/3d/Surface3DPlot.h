@@ -42,6 +42,9 @@ public:
 	POINTER_D_ACCESSOR_DECL(const Matrix, matrix, Matrix)
 	const QString& matrixPath() const;
 
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
+
 	// Spreadsheet parameters
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn)

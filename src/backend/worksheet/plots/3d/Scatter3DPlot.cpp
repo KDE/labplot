@@ -28,13 +28,6 @@ Scatter3DPlot::Scatter3DPlot(const QString& name)
 Scatter3DPlot::~Scatter3DPlot() {
 }
 
-void Scatter3DPlot::save(QXmlStreamWriter*) const {
-}
-
-bool Scatter3DPlot::load(XmlStreamReader*, bool preview) {
-	return true;
-}
-
 // ##############################################################################
 // ##########################  getter methods  ##################################
 // ##############################################################################
@@ -121,7 +114,7 @@ void Scatter3DPlot::retransform() {
 	d->retransform();
 }
 
-void Scatter3DPlot::recalc(){
+void Scatter3DPlot::recalc() {
 	Q_D(Scatter3DPlot);
 	d->recalc();
 }
@@ -213,4 +206,90 @@ void Scatter3DPlotPrivate::updatePointStyle() {
 	}
 	q->m_scatter->update();
 	Q_EMIT q->changed();
+}
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
+//! Save as XML
+void Scatter3DPlot::save(QXmlStreamWriter* writer) const {
+	Q_D(const Scatter3DPlot);
+
+	writer->writeStartElement("scatter3dplot");
+
+	// Save x, y, z columns
+	WRITE_COLUMN(d->xColumn, xColumn);
+	WRITE_COLUMN(d->yColumn, yColumn);
+	WRITE_COLUMN(d->zColumn, zColumn);
+
+	// Save Scatter3DPlot specific attributes
+	writer->writeAttribute("pointStyle", QString::number(static_cast<int>(d->pointStyle)));
+	writer->writeAttribute("color", d->color.name());
+
+	// Save Base3DAreaPrivate attributes
+	writer->writeAttribute("xRotation", QString::number(d->xRotation));
+	writer->writeAttribute("yRotation", QString::number(d->yRotation));
+	writer->writeAttribute("theme", QString::number(static_cast<int>(d->theme)));
+	writer->writeAttribute("zoomLevel", QString::number(d->zoomLevel));
+	writer->writeAttribute("shadowQuality", QString::number(static_cast<int>(d->shadowQuality)));
+
+	// Save base class attributes
+	writeBasicAttributes(writer);
+	writeCommentElement(writer);
+
+	writer->writeEndElement();
+}
+
+//! Load as XML
+bool Scatter3DPlot::load(XmlStreamReader* reader, bool preview) {
+	Q_D(Scatter3DPlot);
+
+	// Reading basic attributes
+	if (!readBasicAttributes(reader))
+		return false;
+
+	QXmlStreamAttributes attribs;
+	QString str;
+
+	while (!reader->atEnd()) {
+		reader->readNext();
+
+		if (reader->isEndElement() && reader->name() == QLatin1String("scatter3dplot"))
+			break;
+
+		if (!reader->isStartElement())
+			continue;
+
+		if (!preview && reader->name() == QLatin1String("comment")) {
+			if (!readCommentElement(reader))
+				return false;
+		} else if (!preview && reader->name() == QLatin1String("general")) {
+			attribs = reader->attributes();
+
+			READ_INT_VALUE("xRotation", xRotation, int);
+			READ_INT_VALUE("yRotation", yRotation, int);
+			READ_INT_VALUE("theme", theme, Base3DArea::Theme);
+			READ_INT_VALUE("zoomLevel", zoomLevel, int);
+			READ_INT_VALUE("shadowQuality", shadowQuality, Base3DArea::ShadowQuality);
+
+			str = attribs.value(QStringLiteral("color")).toString();
+			if (!str.isEmpty())
+				d->color.setNamedColor(str);
+
+			str = attribs.value(QStringLiteral("pointStyle")).toString();
+			if (!str.isEmpty())
+				d->pointStyle = static_cast<Scatter3DPlot::PointStyle>(str.toInt());
+		} else if (reader->name() == QLatin1String("column")) {
+			attribs = reader->attributes();
+
+			str = attribs.value(QStringLiteral("path")).toString();
+			if (!str.isEmpty())
+				d->xColumnPath = str; // Assuming xColumnPath should be set here. Adapt as needed.
+		} else { // Unknown element handling
+			reader->raiseWarning(i18n("Unknown element '%1'", reader->name().toString()));
+			if (!reader->skipToEndElement())
+				return false;
+		}
+	}
+
+	return true;
 }
