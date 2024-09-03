@@ -27,6 +27,7 @@ class LollipopPlotDock;
 class BoxPlotDock;
 class KDEPlotDock;
 class QQPlotDock;
+class ProcessBehaviorChartDock;
 class CartesianPlotLegendDock;
 class CustomPointDock;
 class ReferenceLineDock;
@@ -110,6 +111,9 @@ private:
 	HistogramDock* m_histogramDock{nullptr};
 	KDEPlotDock* m_kdePlotDock{nullptr};
 	QQPlotDock* m_qqPlotDock{nullptr};
+
+	// continious improvement plots
+	ProcessBehaviorChartDock* m_processBehaviorChartDock{nullptr};
 
 	// analysis plots
 	XYDataReductionCurveDock* m_xyDataReductionCurveDock{nullptr};

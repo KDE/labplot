@@ -47,7 +47,6 @@ QQPlotDock::QQPlotDock(QWidget* parent)
 	hBoxLayout->insertWidget(0, lineWidget);
 
 	// Tab "Percentiles"
-	// hBoxLayout = new QHBoxLayout(ui.tabPercentiles);
 	hBoxLayout = static_cast<QHBoxLayout*>(ui.tabPercentiles->layout());
 	symbolWidget = new SymbolWidget(ui.tabPercentiles);
 	hBoxLayout->insertWidget(0, symbolWidget);

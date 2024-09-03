@@ -88,6 +88,7 @@ set(GUI_SOURCES
     ${KDEFRONTEND_DIR}/dockwidgets/LiveDataDock.cpp
     ${KDEFRONTEND_DIR}/dockwidgets/LollipopPlotDock.cpp
     ${KDEFRONTEND_DIR}/dockwidgets/MatrixDock.cpp
+    ${KDEFRONTEND_DIR}/dockwidgets/ProcessBehaviorChartDock.cpp
     ${KDEFRONTEND_DIR}/dockwidgets/ProjectDock.cpp
     ${KDEFRONTEND_DIR}/dockwidgets/ReferenceLineDock.cpp
     ${KDEFRONTEND_DIR}/dockwidgets/ReferenceRangeDock.cpp
@@ -230,6 +231,7 @@ set(UI_SOURCES
     ${KDEFRONTEND_DIR}/ui/dockwidgets/lollipopplotdock.ui
     ${KDEFRONTEND_DIR}/ui/dockwidgets/notedock.ui
     ${KDEFRONTEND_DIR}/ui/dockwidgets/matrixdock.ui
+    ${KDEFRONTEND_DIR}/ui/dockwidgets/processbehaviorchartdock.ui
     ${KDEFRONTEND_DIR}/ui/dockwidgets/projectdock.ui
     ${KDEFRONTEND_DIR}/ui/dockwidgets/referencelinedock.ui
     ${KDEFRONTEND_DIR}/ui/dockwidgets/referencerangedock.ui

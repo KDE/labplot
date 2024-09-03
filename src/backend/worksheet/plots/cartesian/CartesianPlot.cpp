@@ -506,6 +506,7 @@ void CartesianPlot::initActions() {
 	});
 
 	// continious improvement plots
+	addProcessBehaviorChartAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Process Behavior Chart"), this);
 	connect(addProcessBehaviorChartAction, &QAction::triggered, this, [=]() {
 		addChild(new ProcessBehaviorChart(i18n("Process Behavior Chart")));
 	});

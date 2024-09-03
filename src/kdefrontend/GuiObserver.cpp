@@ -64,6 +64,7 @@
 #include "kdefrontend/dockwidgets/MatrixDock.h"
 #include "kdefrontend/dockwidgets/NoteDock.h"
 #include "kdefrontend/dockwidgets/ProjectDock.h"
+#include "kdefrontend/dockwidgets/ProcessBehaviorChartDock.h"
 #include "kdefrontend/dockwidgets/QQPlotDock.h"
 #include "kdefrontend/dockwidgets/ReferenceLineDock.h"
 #include "kdefrontend/dockwidgets/ReferenceRangeDock.h"
@@ -363,6 +364,7 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		raiseDockConnect(m_histogramDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_histogramDock->setCurves(castList<Histogram>(selectedAspects));
 		break;
+	// bar plots
 	case AspectType::BarPlot:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Bar Plot"));
 		raiseDock(m_barPlotDock, m_mainWindow->stackedWidget);
@@ -373,6 +375,7 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		raiseDock(m_lollipopPlotDock, m_mainWindow->stackedWidget);
 		m_lollipopPlotDock->setPlots(castList<LollipopPlot>(selectedAspects));
 		break;
+	// statistical plots
 	case AspectType::BoxPlot:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Box Plot"));
 		raiseDock(m_boxPlotDock, m_mainWindow->stackedWidget);
@@ -387,6 +390,12 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Q-Q Plot"));
 		raiseDock(m_qqPlotDock, m_mainWindow->stackedWidget);
 		m_qqPlotDock->setPlots(castList<QQPlot>(selectedAspects));
+		break;
+	// continious improvement plots
+	case AspectType::ProcessBehaviorChart:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Process Behavior Chart"));
+		raiseDock(m_processBehaviorChartDock, m_mainWindow->stackedWidget);
+		m_processBehaviorChartDock->setPlots(castList<ProcessBehaviorChart>(selectedAspects));
 		break;
 	case AspectType::TextLabel:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Text Label"));
