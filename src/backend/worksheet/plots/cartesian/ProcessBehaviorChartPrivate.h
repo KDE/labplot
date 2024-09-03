@@ -32,9 +32,9 @@ public:
 	XYCurve* upperLimitCurve{nullptr};
 	XYCurve* lowerLimitCurve{nullptr};
 
-	Column* xDataColumn{nullptr};
+	const AbstractColumn* xDataColumn{nullptr};
 	QString xDataColumnPath;
-	Column* yDataColumn{nullptr};
+	const AbstractColumn* yDataColumn{nullptr};
 	QString yDataColumnPath;
 
 	Column* xCenterColumn{nullptr};

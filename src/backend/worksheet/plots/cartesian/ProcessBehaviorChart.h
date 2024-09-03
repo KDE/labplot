@@ -73,7 +73,8 @@ public:
 	typedef ProcessBehaviorChartPrivate Private;
 
 private Q_SLOTS:
-	void dataColumnAboutToBeRemoved(const AbstractAspect*);
+	void xDataColumnAboutToBeRemoved(const AbstractAspect*);
+	void yDataColumnAboutToBeRemoved(const AbstractAspect*);
 
 protected:
 	ProcessBehaviorChart(const QString& name, ProcessBehaviorChartPrivate* dd);
