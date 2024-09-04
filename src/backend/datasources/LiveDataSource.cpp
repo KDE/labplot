@@ -722,28 +722,29 @@ void LiveDataSource::tcpSocketError(QAbstractSocket::SocketError /*socketError*/
 }
 
 #ifdef HAVE_QTSERIALPORT
-void LiveDataSource::serialPortError(QSerialPort::SerialPortError error) {
+QString LiveDataSource::serialPortErrorEnumToString(QSerialPort::SerialPortError error, const QString errorString) {
+	QString msg;
 	switch (error) {
 	case QSerialPort::DeviceNotFoundError:
-		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("Failed to open the device."));
+		msg = i18n("Device doesn't exist.");
 		break;
 	case QSerialPort::PermissionError:
-		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("Failed to open the device. Please check your permissions on this device."));
+		msg = i18n("User doesn't have enough permissions to open the device.");
 		break;
 	case QSerialPort::OpenError:
-		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("Device already opened."));
+		msg = i18n("Device already opened.");
 		break;
 	case QSerialPort::NotOpenError:
-		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("The device is not opened."));
+		msg = i18n("Device is not opened.");
 		break;
 	case QSerialPort::ReadError:
-		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("Failed to read data."));
+		msg = i18n("Failed to read data.");
 		break;
 	case QSerialPort::ResourceError:
-		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("Failed to read data. The device is removed."));
+		msg = i18n("Device not available.");
 		break;
 	case QSerialPort::TimeoutError:
-		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("The device timed out."));
+		msg = i18n("Timeout occured.");
 		break;
 	case QSerialPort::WriteError:
 	case QSerialPort::UnsupportedOperationError:
@@ -753,11 +754,17 @@ void LiveDataSource::serialPortError(QSerialPort::SerialPortError error) {
 	case QSerialPort::BreakConditionError:
 #endif
 	case QSerialPort::UnknownError:
-		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("The following error occurred: %1.", m_serialPort->errorString()));
+		msg = i18n("The following error occurred: %1.", errorString);
 		break;
 	case QSerialPort::NoError:
 		break;
 	}
+
+	return msg;
+}
+
+void LiveDataSource::serialPortError(QSerialPort::SerialPortError error) {
+	QMessageBox::critical(nullptr, i18n("Serial Port Error"), serialPortErrorEnumToString(error, m_serialPort->errorString()));
 }
 #endif
 

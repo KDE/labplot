@@ -62,6 +62,9 @@ public:
 
 	static QStringList supportedBaudRates();
 	static QStringList availablePorts();
+#ifdef HAVE_QTSERIALPORT
+	static QString serialPortErrorEnumToString(QSerialPort::SerialPortError, const QString errorString);
+#endif
 
 	void setFileType(const AbstractFileFilter::FileType);
 	AbstractFileFilter::FileType fileType() const;

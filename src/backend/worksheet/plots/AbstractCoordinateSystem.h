@@ -44,6 +44,9 @@ public:
 		return {};
 	};
 
+	QString name() const;
+	void setName(const QString&);
+
 	class LineClipResult {
 	public:
 		LineClipResult() {
@@ -65,6 +68,9 @@ public:
 
 	// static members
 	static bool clipLineToRect(QLineF* line, const QRectF& rect, LineClipResult* clipResult = nullptr);
+
+private:
+	QString m_name;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(AbstractCoordinateSystem::MappingFlags)

@@ -511,7 +511,7 @@ void ImportFileDialog::checkOkButton() {
 				showErrorMessage(QString());
 				serialPort.close();
 			} else {
-				QString msg = i18n("Could not connect to the provided serial port.");
+				QString msg = LiveDataSource::serialPortErrorEnumToString(serialPort.error(), serialPort.errorString());
 				okButton->setToolTip(msg);
 				showErrorMessage(msg);
 			}

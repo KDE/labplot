@@ -14,14 +14,15 @@
 #include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
-#include "kdefrontend/widgets/BackgroundWidget.h"
-#include "kdefrontend/widgets/LineWidget.h"
 
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/PlotTemplateDialog.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/ThemeHandler.h"
+#include "kdefrontend/widgets/BackgroundWidget.h"
 #include "kdefrontend/widgets/LabelWidget.h"
+#include "kdefrontend/widgets/LineWidget.h"
+#include "kdefrontend/widgets/TimedLineEdit.h"
 
 #include <KIconLoader>
 #include <KMessageBox>
@@ -41,7 +42,7 @@
 namespace {
 enum TwRangesColumn { Automatic = 0, Format, Min, Max, Scale };
 
-enum TwPlotRangesColumn { XRange, YRange, Default };
+enum TwPlotRangesColumn { XRange, YRange, Default, Name };
 
 // https://stackoverflow.com/questions/5821802/qspinbox-inside-a-qscrollarea-how-to-prevent-spin-box-from-stealing-focus-when
 class ComboBoxIgnoreWheel : public QComboBox {
@@ -416,11 +417,13 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	connect(m_plot, &CartesianPlot::rangeFormatChanged, this, &CartesianPlotDock::plotRangeFormatChanged);
 
 	// range breaks
+	// TODO: activate later once range breaking is implemented
+	/*
 	connect(m_plot, &CartesianPlot::xRangeBreakingEnabledChanged, this, &CartesianPlotDock::plotXRangeBreakingEnabledChanged);
 	connect(m_plot, &CartesianPlot::xRangeBreaksChanged, this, &CartesianPlotDock::plotXRangeBreaksChanged);
 	connect(m_plot, &CartesianPlot::yRangeBreakingEnabledChanged, this, &CartesianPlotDock::plotYRangeBreakingEnabledChanged);
 	connect(m_plot, &CartesianPlot::yRangeBreaksChanged, this, &CartesianPlotDock::plotYRangeBreaksChanged);
-
+	*/
 	// Layout
 	connect(m_plot, &CartesianPlot::horizontalPaddingChanged, this, &CartesianPlotDock::plotHorizontalPaddingChanged);
 	connect(m_plot, &CartesianPlot::verticalPaddingChanged, this, &CartesianPlotDock::plotVerticalPaddingChanged);
@@ -781,9 +784,10 @@ void CartesianPlotDock::updatePlotRangeList() {
 	ui.twPlotRanges->horizontalHeader()->setSectionResizeMode(TwPlotRangesColumn::XRange, QHeaderView::ResizeMode::Stretch);
 	ui.twPlotRanges->horizontalHeader()->setSectionResizeMode(TwPlotRangesColumn::YRange, QHeaderView::ResizeMode::Stretch);
 	ui.twPlotRanges->horizontalHeader()->setSectionResizeMode(TwPlotRangesColumn::Default, QHeaderView::ResizeMode::ResizeToContents);
+	ui.twPlotRanges->horizontalHeader()->setSectionResizeMode(TwPlotRangesColumn::Name, QHeaderView::ResizeMode::ResizeToContents);
 	ui.twPlotRanges->horizontalHeader()->setStretchLastSection(false);
 	for (int i = 0; i < cSystemCount; i++) {
-		const auto* cSystem{m_plot->coordinateSystem(i)};
+		auto* cSystem{m_plot->coordinateSystem(i)};
 		const int xIndex{cSystem->index(Dimension::X)}, yIndex{cSystem->index(Dimension::Y)};
 		const auto& xRange = m_plot->range(Dimension::X, xIndex);
 		const auto& yRange = m_plot->range(Dimension::Y, yIndex);
@@ -792,6 +796,7 @@ void CartesianPlotDock::updatePlotRangeList() {
 		DEBUG(Q_FUNC_INFO << ", x range = " << xRange.toStdString() << ", auto scale = " << xRange.autoScale())
 		DEBUG(Q_FUNC_INFO << ", y range = " << yRange.toStdString() << ", auto scale = " << yRange.autoScale())
 
+		// X-range
 		auto* cb = new ComboBoxIgnoreWheel(ui.twPlotRanges);
 		cb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 		cb->setEditable(true); // to have a line edit
@@ -810,6 +815,7 @@ void CartesianPlotDock::updatePlotRangeList() {
 		}
 		ui.twPlotRanges->setCellWidget(i, TwPlotRangesColumn::XRange, cb);
 
+		// Y-range
 		cb = new ComboBoxIgnoreWheel(ui.twPlotRanges);
 		cb->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 		cb->setEditable(true); // to have a line edit
@@ -827,6 +833,14 @@ void CartesianPlotDock::updatePlotRangeList() {
 			cb->setStyleSheet(QStringLiteral("QComboBox::drop-down {border-width: 0px;}")); // hide arrow if there is only one range
 		}
 		ui.twPlotRanges->setCellWidget(i, TwPlotRangesColumn::YRange, cb);
+
+		// Name
+		auto* le = new TimedLineEdit(ui.twPlotRanges);
+		le->setText(cSystem->name());
+		ui.twPlotRanges->setCellWidget(i, TwPlotRangesColumn::Name, le);
+		connect(le, &TimedLineEdit::textEdited, this, [=]() {
+			cSystem->setName(le->text());
+		});
 	}
 
 	// adjust the size of the table widget

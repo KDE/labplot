@@ -4658,6 +4658,7 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("niceExtend"), QString::number(d->niceExtend));
 	for (const auto& cSystem : m_coordinateSystems) {
 		writer->writeStartElement(QStringLiteral("coordinateSystem"));
+		writer->writeAttribute(QStringLiteral("name"), cSystem->name());
 		writer->writeAttribute(QStringLiteral("xIndex"), QString::number(static_cast<CartesianCoordinateSystem*>(cSystem)->index(Dimension::X)));
 		writer->writeAttribute(QStringLiteral("yIndex"), QString::number(static_cast<CartesianCoordinateSystem*>(cSystem)->index(Dimension::Y)));
 		writer->writeEndElement();
@@ -4906,6 +4907,9 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 					cSystem->setIndex(Dimension::Y, str.toInt());
 
 				addCoordinateSystem(cSystem);
+
+				str = attribs.value(QStringLiteral("name")).toString();
+				cSystem->setName(str);
 			}
 
 			// old style (pre 2.9.0, to read old projects)

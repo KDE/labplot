@@ -13,6 +13,8 @@ New features:
 		* new visualization type "Process Behavior Chart"
 		* more space for plots and less "ink" - no layout spacings, no minor grid lines, not plot borders, no ticks on secondary axes on default
 		* allow to provide names for plot ranges for easier lookup and assignemnt in the plot elements
+	* [import]
+		* show error messages for the serial port when creating a live data source to notify directly about missing device permissions, etc.
 
 Bug fixes:
 	* Fix crash selecting "cell" from function list in function dialog
