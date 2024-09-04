@@ -79,6 +79,18 @@ void ProcessBehaviorChart::init() {
 	d->centerCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 	d->centerCurve->background()->setPosition(Background::Position::No);
 
+	d->xCenterColumn = new Column(QStringLiteral("xCenter"));
+	d->xCenterColumn->setHidden(true);
+	d->xCenterColumn->setUndoAware(false);
+	addChildFast(d->xCenterColumn);
+	d->centerCurve->setXColumn(d->xCenterColumn);
+
+	d->yCenterColumn = new Column(QStringLiteral("yCenter"));
+	d->yCenterColumn->setHidden(true);
+	d->yCenterColumn->setUndoAware(false);
+	addChildFast(d->yCenterColumn);
+	d->centerCurve->setYColumn(d->yCenterColumn);
+
 	// curve for the upper and lower limit lines
 	d->upperLimitCurve = new XYCurve(QStringLiteral("upper limit"));
 	d->upperLimitCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
@@ -89,6 +101,18 @@ void ProcessBehaviorChart::init() {
 	d->upperLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 	d->upperLimitCurve->background()->setPosition(Background::Position::No);
 
+	d->xUpperLimitColumn = new Column(QStringLiteral("xUpperLimit"));
+	d->xUpperLimitColumn->setHidden(true);
+	d->xUpperLimitColumn->setUndoAware(false);
+	addChildFast(d->xUpperLimitColumn);
+	d->upperLimitCurve->setXColumn(d->xUpperLimitColumn);
+
+	d->yUpperLimitColumn = new Column(QStringLiteral("yUpperLimit"));
+	d->yUpperLimitColumn->setHidden(true);
+	d->yUpperLimitColumn->setUndoAware(false);
+	addChildFast(d->yUpperLimitColumn);
+	d->upperLimitCurve->setYColumn(d->yUpperLimitColumn);
+
 	d->lowerLimitCurve = new XYCurve(QStringLiteral("lower limit"));
 	d->lowerLimitCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->lowerLimitCurve->setHidden(true);
@@ -97,6 +121,18 @@ void ProcessBehaviorChart::init() {
 	d->lowerLimitCurve->line()->setStyle(Qt::SolidLine);
 	d->lowerLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 	d->lowerLimitCurve->background()->setPosition(Background::Position::No);
+
+	d->xLowerLimitColumn = new Column(QStringLiteral("xLowerLimit"));
+	d->xLowerLimitColumn->setHidden(true);
+	d->xLowerLimitColumn->setUndoAware(false);
+	addChildFast(d->xLowerLimitColumn);
+	d->lowerLimitCurve->setXColumn(d->xLowerLimitColumn);
+
+	d->yLowerLimitColumn = new Column(QStringLiteral("yLowerLimit"));
+	d->yLowerLimitColumn->setHidden(true);
+	d->yLowerLimitColumn->setUndoAware(false);
+	addChildFast(d->yLowerLimitColumn);
+	d->lowerLimitCurve->setYColumn(d->yLowerLimitColumn);
 
 	// synchronize the names of the internal XYCurves with the name of the current q-q plot
 	// so we have the same name shown on the undo stack
@@ -212,9 +248,7 @@ double ProcessBehaviorChart::minimum(const Dimension dim) const {
 	case Dimension::X:
 		return d->dataCurve->minimum(dim);
 	case Dimension::Y:
-	// TODO
-		// return std::min(d->referenceCurve->minimum(dim), d->percentilesCurve->minimum(dim));
-		return NAN;
+		return d->lowerLimitCurve->minimum(dim);
 	}
 	return NAN;
 }
@@ -225,9 +259,7 @@ double ProcessBehaviorChart::maximum(const Dimension dim) const {
 	case Dimension::X:
 		return d->dataCurve->maximum(dim);
 	case Dimension::Y:
-	// TODO
-		// return std::max(d->referenceCurve->maximum(dim), d->percentilesCurve->maximum(dim));
-		return NAN;
+		return d->upperLimitCurve->minimum(dim);
 	}
 	return NAN;
 }
@@ -336,7 +368,6 @@ void ProcessBehaviorChart::yDataColumnAboutToBeRemoved(const AbstractAspect* asp
 	}
 }
 
-
 // ##############################################################################
 // ######################### Private implementation #############################
 // ##############################################################################
@@ -377,7 +408,9 @@ void ProcessBehaviorChartPrivate::retransform() {
 void ProcessBehaviorChartPrivate::recalc() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
-	if (!yDataColumn) {
+	if (yDataColumn)
+		dataCurve->setYColumn(yDataColumn);
+	else {
 		xCenterColumn->clear();
 		yCenterColumn->clear();
 		xUpperLimitColumn->clear();
@@ -388,19 +421,27 @@ void ProcessBehaviorChartPrivate::recalc() {
 		return;
 	}
 
-	// if (!xDataColumn) {
-	// 	// no column for x provided, use the index for x
-	// 	xDataColumn->clear();
-	// 	const int count = yDataColumn->rowCount();
-	// 	// TODO xDataColumn->setRowsCount(count);
-	// 	for (int i = 0; i < count; ++i)
-	// 		xDataColumn->setValueAt(i, i + 1);
-	// }
+	double xMin = 0.;
+	double xMax = 0.;
+	if (xDataColumn) {
+		dataCurve->setXColumn(xDataColumn);
+		const auto& statistics = static_cast<const Column*>(xDataColumn)->statistics();
+		xMin = statistics.minimum;
+		xMax = statistics.maximum;
+	} else {
+		// no column for x provided, use the index for x
+		xIndexColumn->clear();
+		const int count = yDataColumn->rowCount();
+		xMin = 1.;
+		xMin = count;
+		xIndexColumn->resizeTo(count);
+		for (int i = 1; i <= count; ++i)
+			xIndexColumn->setValueAt(i, i);
+
+		dataCurve->setXColumn(xIndexColumn);
+	}
 
 	// min and max values for x
-	const auto& statistics = static_cast<const Column*>(xDataColumn)->statistics();
-	const double xMin = statistics.minimum;
-	const double xMax = statistics.maximum;
 	xCenterColumn->setValueAt(0, xMin);
 	xCenterColumn->setValueAt(1, xMax);
 	xUpperLimitColumn->setValueAt(0, xMin);
@@ -413,32 +454,6 @@ void ProcessBehaviorChartPrivate::recalc() {
 	// Q_EMIT dataChanged() in order to retransform everything with the new size/shape of the plot
 	Q_EMIT q->dataChanged();
 }
-
-/*
-#include <vector>
-#include <cmath>
-#include <gsl/gsl_statistics.h>
-
-void ProcessBehaviorChart::recalcMeanAndStandardDeviation() {
-    if (data.empty()) {
-        mean = 0.0;
-        standardDeviation = 0.0;
-        return;
-    }
-
-    double sum = 0.0;
-    for (double value : data) {
-        sum += value;
-    }
-    mean = sum / data.size();
-
-    double varianceSum = 0.0;
-    for (double value : data) {
-        varianceSum += (value - mean) * (value - mean);
-    }
-    standardDeviation = std::sqrt(varianceSum / data.size());
-}
-*/
 
 /*
 Explanation:
@@ -813,11 +828,18 @@ void ProcessBehaviorChart::loadThemeConfig(const KConfig& config) {
 	Q_D(ProcessBehaviorChart);
 	d->suppressRecalc = true;
 
-/*
-	d->referenceCurve->line()->loadThemeConfig(group, themeColor);
-	d->percentilesCurve->line()->setStyle(Qt::NoPen);
-	d->percentilesCurve->symbol()->loadThemeConfig(group, themeColor);
-*/
+	d->dataCurve->line()->loadThemeConfig(group, themeColor);
+	d->dataCurve->symbol()->loadThemeConfig(group, themeColor);
+
+	d->centerCurve->line()->loadThemeConfig(group, themeColor);
+	d->centerCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
+
+	d->upperLimitCurve->line()->loadThemeConfig(group, themeColor);
+	d->upperLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
+
+	d->lowerLimitCurve->line()->loadThemeConfig(group, themeColor);
+	d->lowerLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
+
 	d->suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
 }
@@ -825,6 +847,9 @@ void ProcessBehaviorChart::loadThemeConfig(const KConfig& config) {
 void ProcessBehaviorChart::saveThemeConfig(const KConfig& config) {
 	Q_D(const ProcessBehaviorChart);
 	KConfigGroup group = config.group(QStringLiteral("ProcessBehaviorChart"));
-//	d->referenceCurve->line()->saveThemeConfig(group);
-//	d->percentilesCurve->symbol()->saveThemeConfig(group);
+	d->dataCurve->line()->saveThemeConfig(group);
+	d->dataCurve->symbol()->saveThemeConfig(group);
+	d->centerCurve->line()->saveThemeConfig(group);
+	d->upperLimitCurve->line()->saveThemeConfig(group);
+	d->lowerLimitCurve->line()->saveThemeConfig(group);
 }

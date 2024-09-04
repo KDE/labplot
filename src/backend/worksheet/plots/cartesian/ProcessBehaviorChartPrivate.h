@@ -37,6 +37,8 @@ public:
 	const AbstractColumn* yDataColumn{nullptr};
 	QString yDataColumnPath;
 
+	Column* xIndexColumn{nullptr};
+
 	Column* xCenterColumn{nullptr};
 	QString xCenterColumnPath;
 	Column* yCenterColumn{nullptr};
