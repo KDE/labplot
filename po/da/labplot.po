@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 01:52+0000\n"
+"POT-Creation-Date: 2024-09-04 01:43+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -2520,60 +2520,53 @@ msgstr ""
 msgid "Invalid region specified."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:728
-#: src/backend/datasources/LiveDataSource.cpp:731
-#: src/backend/datasources/LiveDataSource.cpp:734
-#: src/backend/datasources/LiveDataSource.cpp:737
-#: src/backend/datasources/LiveDataSource.cpp:740
-#: src/backend/datasources/LiveDataSource.cpp:743
-#: src/backend/datasources/LiveDataSource.cpp:746
-#: src/backend/datasources/LiveDataSource.cpp:756
-#, kde-format
-msgid "Serial Port Error"
-msgstr ""
-
-#: src/backend/datasources/LiveDataSource.cpp:728
+#: src/backend/datasources/LiveDataSource.cpp:729
 #, fuzzy, kde-format
-#| msgid "Could not open file %1 for reading."
-msgid "Failed to open the device."
-msgstr "Kunne ikke åbne filen \"%1\" til læsning."
+#| msgid "The project file %1 is already opened."
+msgid "Device doesn't exist."
+msgstr "Projektfilen %1 er allerede åben."
 
-#: src/backend/datasources/LiveDataSource.cpp:731
+#: src/backend/datasources/LiveDataSource.cpp:732
 #, kde-format
-msgid ""
-"Failed to open the device. Please check your permissions on this device."
+msgid "User doesn't have enough permissions to open the device."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:734
+#: src/backend/datasources/LiveDataSource.cpp:735
 #, fuzzy, kde-format
 #| msgid "The project file %1 is already opened."
 msgid "Device already opened."
 msgstr "Projektfilen %1 er allerede åben."
 
-#: src/backend/datasources/LiveDataSource.cpp:737
+#: src/backend/datasources/LiveDataSource.cpp:738
 #, fuzzy, kde-format
 #| msgid "The project file %1 is already opened."
-msgid "The device is not opened."
+msgid "Device is not opened."
 msgstr "Projektfilen %1 er allerede åben."
 
-#: src/backend/datasources/LiveDataSource.cpp:740
+#: src/backend/datasources/LiveDataSource.cpp:741
 #, kde-format
 msgid "Failed to read data."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:743
+#: src/backend/datasources/LiveDataSource.cpp:744
+#, fuzzy, kde-format
+#| msgid "%1: cut selected cell(s)"
+msgid "Device not available."
+msgstr "%1: Klip markerede celler"
+
+#: src/backend/datasources/LiveDataSource.cpp:747
 #, kde-format
-msgid "Failed to read data. The device is removed."
+msgid "Timeout occured."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:746
-#, kde-format
-msgid "The device timed out."
-msgstr ""
-
-#: src/backend/datasources/LiveDataSource.cpp:756
+#: src/backend/datasources/LiveDataSource.cpp:757
 #, kde-format
 msgid "The following error occurred: %1."
+msgstr ""
+
+#: src/backend/datasources/LiveDataSource.cpp:767
+#, kde-format
+msgid "Serial Port Error"
 msgstr ""
 
 #: src/backend/datasources/MQTTTopic.cpp:144
@@ -12976,11 +12969,6 @@ msgstr ""
 #| msgid "Could not open file %1 for reading."
 msgid "Could not connect to the provided UDP socket. Error: %1."
 msgstr "Kunne ikke åbne filen \"%1\" til læsning."
-
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:514
-#, kde-format
-msgid "Could not connect to the provided serial port."
-msgstr ""
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:520
 #, kde-format
@@ -25331,6 +25319,11 @@ msgid "Unable to open file:"
 msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 
 #, fuzzy
+#~| msgid "Could not open file %1 for reading."
+#~ msgid "Failed to open the device."
+#~ msgstr "Kunne ikke åbne filen \"%1\" til læsning."
+
+#, fuzzy
 #~| msgid "Preferences"
 #~ msgctxt "@title:window"
 #~ msgid "CAS Preferences"
@@ -26365,11 +26358,6 @@ msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 #~| msgid "Connection:"
 #~ msgid "Connect line to curve"
 #~ msgstr "Forbindelse:"
-
-#, fuzzy
-#~| msgid "%1: cut selected cell(s)"
-#~ msgid "Server unavailable"
-#~ msgstr "%1: Klip markerede celler"
 
 #, fuzzy
 #~| msgid "Connection:"

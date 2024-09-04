@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 01:52+0000\n"
+"POT-Creation-Date: 2024-09-04 01:43+0000\n"
 "PO-Revision-Date: 2023-10-30 14:32+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -2538,61 +2538,55 @@ msgstr ""
 msgid "Invalid region specified."
 msgstr "Annettu virheellinen parametri"
 
-#: src/backend/datasources/LiveDataSource.cpp:728
-#: src/backend/datasources/LiveDataSource.cpp:731
-#: src/backend/datasources/LiveDataSource.cpp:734
-#: src/backend/datasources/LiveDataSource.cpp:737
-#: src/backend/datasources/LiveDataSource.cpp:740
-#: src/backend/datasources/LiveDataSource.cpp:743
-#: src/backend/datasources/LiveDataSource.cpp:746
-#: src/backend/datasources/LiveDataSource.cpp:756
-#, kde-format
-msgid "Serial Port Error"
-msgstr ""
-
-#: src/backend/datasources/LiveDataSource.cpp:728
+#: src/backend/datasources/LiveDataSource.cpp:729
 #, fuzzy, kde-format
-#| msgid "Failed to open"
-msgid "Failed to open the device."
-msgstr "Avaaminen epäonnistui"
+#| msgid "The project file %1 is already opened."
+msgid "Device doesn't exist."
+msgstr "Projektitiedosto %1 on jo avattu."
 
-#: src/backend/datasources/LiveDataSource.cpp:731
+#: src/backend/datasources/LiveDataSource.cpp:732
 #, kde-format
-msgid ""
-"Failed to open the device. Please check your permissions on this device."
+msgid "User doesn't have enough permissions to open the device."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:734
+#: src/backend/datasources/LiveDataSource.cpp:735
 #, fuzzy, kde-format
 #| msgid "The project file %1 is already opened."
 msgid "Device already opened."
 msgstr "Projektitiedosto %1 on jo avattu."
 
-#: src/backend/datasources/LiveDataSource.cpp:737
+#: src/backend/datasources/LiveDataSource.cpp:738
 #, fuzzy, kde-format
 #| msgid "The project file %1 is already opened."
-msgid "The device is not opened."
+msgid "Device is not opened."
 msgstr "Projektitiedosto %1 on jo avattu."
 
-#: src/backend/datasources/LiveDataSource.cpp:740
+#: src/backend/datasources/LiveDataSource.cpp:741
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to read data."
 msgstr "Avaaminen epäonnistui"
 
-#: src/backend/datasources/LiveDataSource.cpp:743
-#, kde-format
-msgid "Failed to read data. The device is removed."
-msgstr ""
+#: src/backend/datasources/LiveDataSource.cpp:744
+#, fuzzy, kde-format
+#| msgid "Selected variable name"
+msgid "Device not available."
+msgstr "Valittu muuttujan nimi"
 
-#: src/backend/datasources/LiveDataSource.cpp:746
-#, kde-format
-msgid "The device timed out."
-msgstr ""
+#: src/backend/datasources/LiveDataSource.cpp:747
+#, fuzzy, kde-format
+#| msgid "An error occurred."
+msgid "Timeout occured."
+msgstr "Sattui virhe."
 
-#: src/backend/datasources/LiveDataSource.cpp:756
+#: src/backend/datasources/LiveDataSource.cpp:757
 #, kde-format
 msgid "The following error occurred: %1."
+msgstr ""
+
+#: src/backend/datasources/LiveDataSource.cpp:767
+#, kde-format
+msgid "Serial Port Error"
 msgstr ""
 
 #: src/backend/datasources/MQTTTopic.cpp:144
@@ -12977,11 +12971,6 @@ msgstr ""
 #| msgid "Failed to open"
 msgid "Could not connect to the provided UDP socket. Error: %1."
 msgstr "Avaaminen epäonnistui"
-
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:514
-#, kde-format
-msgid "Could not connect to the provided serial port."
-msgstr ""
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:520
 #, kde-format
@@ -25031,6 +25020,11 @@ msgid "Unable to open file:"
 msgstr "Tiedostoa ei voi avata:"
 
 #, fuzzy
+#~| msgid "Failed to open"
+#~ msgid "Failed to open the device."
+#~ msgstr "Avaaminen epäonnistui"
+
+#, fuzzy
 #~| msgctxt "@title:window"
 #~| msgid "Preferences"
 #~ msgctxt "@title:window"
@@ -26420,11 +26414,6 @@ msgstr "Tiedostoa ei voi avata:"
 #~| msgid "Connection:"
 #~ msgid "Connect line to curve"
 #~ msgstr "Yhteys:"
-
-#, fuzzy
-#~| msgid "Selected variable name"
-#~ msgid "Server unavailable"
-#~ msgstr "Valittu muuttujan nimi"
 
 #, fuzzy
 #~| msgid "Connection:"

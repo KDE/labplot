@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 01:52+0000\n"
+"POT-Creation-Date: 2024-09-04 01:43+0000\n"
 "PO-Revision-Date: 2024-08-11 23:05+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -2333,58 +2333,56 @@ msgstr "Sayfalar: "
 msgid "Invalid region specified."
 msgstr "Geçersiz bölge belirtildi."
 
-#: src/backend/datasources/LiveDataSource.cpp:728
-#: src/backend/datasources/LiveDataSource.cpp:731
-#: src/backend/datasources/LiveDataSource.cpp:734
-#: src/backend/datasources/LiveDataSource.cpp:737
-#: src/backend/datasources/LiveDataSource.cpp:740
-#: src/backend/datasources/LiveDataSource.cpp:743
-#: src/backend/datasources/LiveDataSource.cpp:746
-#: src/backend/datasources/LiveDataSource.cpp:756
-#, kde-format
-msgid "Serial Port Error"
-msgstr "Seri Kapı Hatası"
+#: src/backend/datasources/LiveDataSource.cpp:729
+#, fuzzy, kde-format
+#| msgid "File does not exist."
+msgid "Device doesn't exist."
+msgstr "Dosya yok."
 
-#: src/backend/datasources/LiveDataSource.cpp:728
-#, kde-format
-msgid "Failed to open the device."
-msgstr "Aygıt açılamadı."
-
-#: src/backend/datasources/LiveDataSource.cpp:731
-#, kde-format
-msgid ""
-"Failed to open the device. Please check your permissions on this device."
+#: src/backend/datasources/LiveDataSource.cpp:732
+#, fuzzy, kde-format
+#| msgid ""
+#| "Failed to open the device. Please check your permissions on this device."
+msgid "User doesn't have enough permissions to open the device."
 msgstr "Aygıt açılamadı. Aygıt izinlerinizi denetleyin."
 
-#: src/backend/datasources/LiveDataSource.cpp:734
+#: src/backend/datasources/LiveDataSource.cpp:735
 #, kde-format
 msgid "Device already opened."
 msgstr "Aygıt zaten açık."
 
-#: src/backend/datasources/LiveDataSource.cpp:737
-#, kde-format
-msgid "The device is not opened."
+#: src/backend/datasources/LiveDataSource.cpp:738
+#, fuzzy, kde-format
+#| msgid "The device is not opened."
+msgid "Device is not opened."
 msgstr "Aygıt açılamadı."
 
-#: src/backend/datasources/LiveDataSource.cpp:740
+#: src/backend/datasources/LiveDataSource.cpp:741
 #, kde-format
 msgid "Failed to read data."
 msgstr "Veri okunamadı."
 
-#: src/backend/datasources/LiveDataSource.cpp:743
-#, kde-format
-msgid "Failed to read data. The device is removed."
-msgstr "Veri okunamadı. Aygıt kaldırılmış."
+#: src/backend/datasources/LiveDataSource.cpp:744
+#, fuzzy, kde-format
+#| msgid "no info available"
+msgid "Device not available."
+msgstr "kullanılabilir veri yok"
 
-#: src/backend/datasources/LiveDataSource.cpp:746
-#, kde-format
-msgid "The device timed out."
-msgstr "Aygıt zaman aşımına uğradı."
+#: src/backend/datasources/LiveDataSource.cpp:747
+#, fuzzy, kde-format
+#| msgid "An error occurred."
+msgid "Timeout occured."
+msgstr "Bir hata oluştu."
 
-#: src/backend/datasources/LiveDataSource.cpp:756
+#: src/backend/datasources/LiveDataSource.cpp:757
 #, kde-format
 msgid "The following error occurred: %1."
 msgstr "Şu hata oluştu: %1."
+
+#: src/backend/datasources/LiveDataSource.cpp:767
+#, kde-format
+msgid "Serial Port Error"
+msgstr "Seri Kapı Hatası"
 
 #: src/backend/datasources/MQTTTopic.cpp:144
 #, kde-format
@@ -12187,11 +12185,6 @@ msgstr "Ya makine adı ya da kapı numarası eksik."
 #, kde-format
 msgid "Could not connect to the provided UDP socket. Error: %1."
 msgstr "Sağlanan UDP yuvasına bağlanılamadı. Hata: %1."
-
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:514
-#, kde-format
-msgid "Could not connect to the provided serial port."
-msgstr "Sağlanan seri kapıya bağlanılamadı."
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:520
 #, kde-format
@@ -23979,6 +23972,18 @@ msgstr "dönüştürme süreci başarısız, çıkış kodu ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Dosya açılamadı:"
+
+#~ msgid "Failed to open the device."
+#~ msgstr "Aygıt açılamadı."
+
+#~ msgid "Failed to read data. The device is removed."
+#~ msgstr "Veri okunamadı. Aygıt kaldırılmış."
+
+#~ msgid "The device timed out."
+#~ msgstr "Aygıt zaman aşımına uğradı."
+
+#~ msgid "Could not connect to the provided serial port."
+#~ msgstr "Sağlanan seri kapıya bağlanılamadı."
 
 #~ msgctxt "@title:window"
 #~ msgid "CAS Preferences"

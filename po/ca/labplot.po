@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 01:52+0000\n"
+"POT-Creation-Date: 2024-09-04 01:43+0000\n"
 "PO-Revision-Date: 2024-08-11 10:00+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -2358,60 +2358,58 @@ msgstr "Fulls: "
 msgid "Invalid region specified."
 msgstr "Regió especificada no vàlida."
 
-#: src/backend/datasources/LiveDataSource.cpp:728
-#: src/backend/datasources/LiveDataSource.cpp:731
-#: src/backend/datasources/LiveDataSource.cpp:734
-#: src/backend/datasources/LiveDataSource.cpp:737
-#: src/backend/datasources/LiveDataSource.cpp:740
-#: src/backend/datasources/LiveDataSource.cpp:743
-#: src/backend/datasources/LiveDataSource.cpp:746
-#: src/backend/datasources/LiveDataSource.cpp:756
-#, kde-format
-msgid "Serial Port Error"
-msgstr "Error del port en sèrie"
+#: src/backend/datasources/LiveDataSource.cpp:729
+#, fuzzy, kde-format
+#| msgid "File does not exist."
+msgid "Device doesn't exist."
+msgstr "El fitxer no existeix."
 
-#: src/backend/datasources/LiveDataSource.cpp:728
-#, kde-format
-msgid "Failed to open the device."
-msgstr "Ha fallat en obrir el dispositiu."
-
-#: src/backend/datasources/LiveDataSource.cpp:731
-#, kde-format
-msgid ""
-"Failed to open the device. Please check your permissions on this device."
+#: src/backend/datasources/LiveDataSource.cpp:732
+#, fuzzy, kde-format
+#| msgid ""
+#| "Failed to open the device. Please check your permissions on this device."
+msgid "User doesn't have enough permissions to open the device."
 msgstr ""
 "Ha fallat en obrir el dispositiu. Comproveu els vostres permisos sobre "
 "aquest dispositiu."
 
-#: src/backend/datasources/LiveDataSource.cpp:734
+#: src/backend/datasources/LiveDataSource.cpp:735
 #, kde-format
 msgid "Device already opened."
 msgstr "El dispositiu ja està obert."
 
-#: src/backend/datasources/LiveDataSource.cpp:737
-#, kde-format
-msgid "The device is not opened."
+#: src/backend/datasources/LiveDataSource.cpp:738
+#, fuzzy, kde-format
+#| msgid "The device is not opened."
+msgid "Device is not opened."
 msgstr "El dispositiu no està obert."
 
-#: src/backend/datasources/LiveDataSource.cpp:740
+#: src/backend/datasources/LiveDataSource.cpp:741
 #, kde-format
 msgid "Failed to read data."
 msgstr "Ha fallat en llegir les dades."
 
-#: src/backend/datasources/LiveDataSource.cpp:743
-#, kde-format
-msgid "Failed to read data. The device is removed."
-msgstr "Ha fallat en llegir les dades. El dispositiu està extret."
+#: src/backend/datasources/LiveDataSource.cpp:744
+#, fuzzy, kde-format
+#| msgid "no info available"
+msgid "Device not available."
+msgstr "sense informació disponible"
 
-#: src/backend/datasources/LiveDataSource.cpp:746
-#, kde-format
-msgid "The device timed out."
-msgstr "El dispositiu ha excedit el temps."
+#: src/backend/datasources/LiveDataSource.cpp:747
+#, fuzzy, kde-format
+#| msgid "An error occurred."
+msgid "Timeout occured."
+msgstr "S'ha produït un error."
 
-#: src/backend/datasources/LiveDataSource.cpp:756
+#: src/backend/datasources/LiveDataSource.cpp:757
 #, kde-format
 msgid "The following error occurred: %1."
 msgstr "Ha ocorregut el següent error: %1."
+
+#: src/backend/datasources/LiveDataSource.cpp:767
+#, kde-format
+msgid "Serial Port Error"
+msgstr "Error del port en sèrie"
 
 # skip-rule: t-sc-plot
 #: src/backend/datasources/MQTTTopic.cpp:144
@@ -12315,11 +12313,6 @@ msgstr "Falta el nom de la màquina o el número del port."
 #, kde-format
 msgid "Could not connect to the provided UDP socket. Error: %1."
 msgstr "No s'ha pogut connectar amb el sòcol UDP proporcionat. Error: %1."
-
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:514
-#, kde-format
-msgid "Could not connect to the provided serial port."
-msgstr "No s'ha pogut connectar amb el port en sèrie proporcionat."
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:520
 #, kde-format
@@ -24203,6 +24196,18 @@ msgstr "El procés «convert» ha fallat, codi de sortida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
+
+#~ msgid "Failed to open the device."
+#~ msgstr "Ha fallat en obrir el dispositiu."
+
+#~ msgid "Failed to read data. The device is removed."
+#~ msgstr "Ha fallat en llegir les dades. El dispositiu està extret."
+
+#~ msgid "The device timed out."
+#~ msgstr "El dispositiu ha excedit el temps."
+
+#~ msgid "Could not connect to the provided serial port."
+#~ msgstr "No s'ha pogut connectar amb el port en sèrie proporcionat."
 
 #~ msgctxt "@title:window"
 #~ msgid "CAS Preferences"

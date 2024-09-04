@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 01:52+0000\n"
+"POT-Creation-Date: 2024-09-04 01:43+0000\n"
 "PO-Revision-Date: 2014-06-30 02:02+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: lt\n"
@@ -2321,57 +2321,49 @@ msgstr ""
 msgid "Invalid region specified."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:728
-#: src/backend/datasources/LiveDataSource.cpp:731
-#: src/backend/datasources/LiveDataSource.cpp:734
-#: src/backend/datasources/LiveDataSource.cpp:737
-#: src/backend/datasources/LiveDataSource.cpp:740
-#: src/backend/datasources/LiveDataSource.cpp:743
-#: src/backend/datasources/LiveDataSource.cpp:746
-#: src/backend/datasources/LiveDataSource.cpp:756
+#: src/backend/datasources/LiveDataSource.cpp:729
 #, kde-format
-msgid "Serial Port Error"
+msgid "Device doesn't exist."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:728
+#: src/backend/datasources/LiveDataSource.cpp:732
 #, kde-format
-msgid "Failed to open the device."
+msgid "User doesn't have enough permissions to open the device."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:731
-#, kde-format
-msgid ""
-"Failed to open the device. Please check your permissions on this device."
-msgstr ""
-
-#: src/backend/datasources/LiveDataSource.cpp:734
+#: src/backend/datasources/LiveDataSource.cpp:735
 #, kde-format
 msgid "Device already opened."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:737
+#: src/backend/datasources/LiveDataSource.cpp:738
 #, kde-format
-msgid "The device is not opened."
+msgid "Device is not opened."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:740
+#: src/backend/datasources/LiveDataSource.cpp:741
 #, kde-format
 msgid "Failed to read data."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:743
+#: src/backend/datasources/LiveDataSource.cpp:744
 #, kde-format
-msgid "Failed to read data. The device is removed."
+msgid "Device not available."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:746
+#: src/backend/datasources/LiveDataSource.cpp:747
 #, kde-format
-msgid "The device timed out."
+msgid "Timeout occured."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:756
+#: src/backend/datasources/LiveDataSource.cpp:757
 #, kde-format
 msgid "The following error occurred: %1."
+msgstr ""
+
+#: src/backend/datasources/LiveDataSource.cpp:767
+#, kde-format
+msgid "Serial Port Error"
 msgstr ""
 
 #: src/backend/datasources/MQTTTopic.cpp:144
@@ -12106,11 +12098,6 @@ msgstr ""
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:483
 #, kde-format
 msgid "Could not connect to the provided UDP socket. Error: %1."
-msgstr ""
-
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:514
-#, kde-format
-msgid "Could not connect to the provided serial port."
 msgstr ""
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:520

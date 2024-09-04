@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 01:52+0000\n"
+"POT-Creation-Date: 2024-09-04 01:43+0000\n"
 "PO-Revision-Date: 2024-08-11 07:20+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -2342,58 +2342,56 @@ msgstr "Listi: "
 msgid "Invalid region specified."
 msgstr "Navedena neveljavna regija."
 
-#: src/backend/datasources/LiveDataSource.cpp:728
-#: src/backend/datasources/LiveDataSource.cpp:731
-#: src/backend/datasources/LiveDataSource.cpp:734
-#: src/backend/datasources/LiveDataSource.cpp:737
-#: src/backend/datasources/LiveDataSource.cpp:740
-#: src/backend/datasources/LiveDataSource.cpp:743
-#: src/backend/datasources/LiveDataSource.cpp:746
-#: src/backend/datasources/LiveDataSource.cpp:756
-#, kde-format
-msgid "Serial Port Error"
-msgstr "Napaka zaporednih vrat"
+#: src/backend/datasources/LiveDataSource.cpp:729
+#, fuzzy, kde-format
+#| msgid "File does not exist."
+msgid "Device doesn't exist."
+msgstr "Datoteka ne obstaja."
 
-#: src/backend/datasources/LiveDataSource.cpp:728
-#, kde-format
-msgid "Failed to open the device."
-msgstr "Odpiranje naprave ni uspelo."
-
-#: src/backend/datasources/LiveDataSource.cpp:731
-#, kde-format
-msgid ""
-"Failed to open the device. Please check your permissions on this device."
+#: src/backend/datasources/LiveDataSource.cpp:732
+#, fuzzy, kde-format
+#| msgid ""
+#| "Failed to open the device. Please check your permissions on this device."
+msgid "User doesn't have enough permissions to open the device."
 msgstr "Odpiranje naprave ni uspelo. Preverite dovoljenja za to napravo."
 
-#: src/backend/datasources/LiveDataSource.cpp:734
+#: src/backend/datasources/LiveDataSource.cpp:735
 #, kde-format
 msgid "Device already opened."
 msgstr "Naprava je že odprta."
 
-#: src/backend/datasources/LiveDataSource.cpp:737
-#, kde-format
-msgid "The device is not opened."
+#: src/backend/datasources/LiveDataSource.cpp:738
+#, fuzzy, kde-format
+#| msgid "The device is not opened."
+msgid "Device is not opened."
 msgstr "Naprava ni odprta."
 
-#: src/backend/datasources/LiveDataSource.cpp:740
+#: src/backend/datasources/LiveDataSource.cpp:741
 #, kde-format
 msgid "Failed to read data."
 msgstr "Branja podatkov ni uspelo."
 
-#: src/backend/datasources/LiveDataSource.cpp:743
-#, kde-format
-msgid "Failed to read data. The device is removed."
-msgstr "Branja podatkov ni uspelo. Naprava je odstranjena."
+#: src/backend/datasources/LiveDataSource.cpp:744
+#, fuzzy, kde-format
+#| msgid "no info available"
+msgid "Device not available."
+msgstr "informacije niso na voljo"
 
-#: src/backend/datasources/LiveDataSource.cpp:746
-#, kde-format
-msgid "The device timed out."
-msgstr "Čas za napravo je potekel."
+#: src/backend/datasources/LiveDataSource.cpp:747
+#, fuzzy, kde-format
+#| msgid "An error occurred."
+msgid "Timeout occured."
+msgstr "Prišlo je do napake."
 
-#: src/backend/datasources/LiveDataSource.cpp:756
+#: src/backend/datasources/LiveDataSource.cpp:757
 #, kde-format
 msgid "The following error occurred: %1."
 msgstr "Prišlo je do naslednje napake: %1."
+
+#: src/backend/datasources/LiveDataSource.cpp:767
+#, kde-format
+msgid "Serial Port Error"
+msgstr "Napaka zaporednih vrat"
 
 #: src/backend/datasources/MQTTTopic.cpp:144
 #, kde-format
@@ -12253,11 +12251,6 @@ msgstr "Ime gostitelja ali številka vrat manjka."
 #, kde-format
 msgid "Could not connect to the provided UDP socket. Error: %1."
 msgstr "Povezave z vtičnico UDP ni bilo mogoče vzpostaviti. Napaka: %1."
-
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:514
-#, kde-format
-msgid "Could not connect to the provided serial port."
-msgstr "Povezave z navedenimi serijskimi vrati ni bilo mogoče vzpostaviti."
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:520
 #, kde-format
@@ -24058,6 +24051,18 @@ msgstr "proces convert je izpadel, izhodna koda ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ni mogoče odpreti datoteke:"
+
+#~ msgid "Failed to open the device."
+#~ msgstr "Odpiranje naprave ni uspelo."
+
+#~ msgid "Failed to read data. The device is removed."
+#~ msgstr "Branja podatkov ni uspelo. Naprava je odstranjena."
+
+#~ msgid "The device timed out."
+#~ msgstr "Čas za napravo je potekel."
+
+#~ msgid "Could not connect to the provided serial port."
+#~ msgstr "Povezave z navedenimi serijskimi vrati ni bilo mogoče vzpostaviti."
 
 #~ msgctxt "@title:window"
 #~ msgid "CAS Preferences"

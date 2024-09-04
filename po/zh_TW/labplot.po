@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 01:52+0000\n"
+"POT-Creation-Date: 2024-09-04 01:43+0000\n"
 "PO-Revision-Date: 2024-04-17 05:07+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -2404,59 +2404,50 @@ msgstr ""
 msgid "Invalid region specified."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:728
-#: src/backend/datasources/LiveDataSource.cpp:731
-#: src/backend/datasources/LiveDataSource.cpp:734
-#: src/backend/datasources/LiveDataSource.cpp:737
-#: src/backend/datasources/LiveDataSource.cpp:740
-#: src/backend/datasources/LiveDataSource.cpp:743
-#: src/backend/datasources/LiveDataSource.cpp:746
-#: src/backend/datasources/LiveDataSource.cpp:756
-#, kde-format
-msgid "Serial Port Error"
-msgstr ""
-
-#: src/backend/datasources/LiveDataSource.cpp:728
+#: src/backend/datasources/LiveDataSource.cpp:729
 #, fuzzy, kde-format
-#| msgid "Failed to open"
-msgid "Failed to open the device."
-msgstr "開啟失敗"
+msgid "Device doesn't exist."
+msgstr "無法開啟檔案 %1 以讀取"
 
-#: src/backend/datasources/LiveDataSource.cpp:731
+#: src/backend/datasources/LiveDataSource.cpp:732
 #, kde-format
-msgid ""
-"Failed to open the device. Please check your permissions on this device."
+msgid "User doesn't have enough permissions to open the device."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:734
+#: src/backend/datasources/LiveDataSource.cpp:735
 #, fuzzy, kde-format
 msgid "Device already opened."
 msgstr "無法開啟檔案 %1 以讀取"
 
-#: src/backend/datasources/LiveDataSource.cpp:737
-#, kde-format
-msgid "The device is not opened."
-msgstr ""
+#: src/backend/datasources/LiveDataSource.cpp:738
+#, fuzzy, kde-format
+msgid "Device is not opened."
+msgstr "無法開啟檔案 %1 以讀取"
 
-#: src/backend/datasources/LiveDataSource.cpp:740
+#: src/backend/datasources/LiveDataSource.cpp:741
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to read data."
 msgstr "開啟失敗"
 
-#: src/backend/datasources/LiveDataSource.cpp:743
+#: src/backend/datasources/LiveDataSource.cpp:744
+#, fuzzy, kde-format
+msgid "Device not available."
+msgstr "全部選取"
+
+#: src/backend/datasources/LiveDataSource.cpp:747
 #, kde-format
-msgid "Failed to read data. The device is removed."
+msgid "Timeout occured."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:746
-#, kde-format
-msgid "The device timed out."
-msgstr ""
-
-#: src/backend/datasources/LiveDataSource.cpp:756
+#: src/backend/datasources/LiveDataSource.cpp:757
 #, kde-format
 msgid "The following error occurred: %1."
+msgstr ""
+
+#: src/backend/datasources/LiveDataSource.cpp:767
+#, kde-format
+msgid "Serial Port Error"
 msgstr ""
 
 #: src/backend/datasources/MQTTTopic.cpp:144
@@ -12523,11 +12514,6 @@ msgstr ""
 #| msgid "Failed to open"
 msgid "Could not connect to the provided UDP socket. Error: %1."
 msgstr "開啟失敗"
-
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:514
-#, kde-format
-msgid "Could not connect to the provided serial port."
-msgstr ""
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:520
 #, kde-format
@@ -24381,6 +24367,11 @@ msgid "Unable to open file:"
 msgstr "開啟失敗"
 
 #, fuzzy
+#~| msgid "Failed to open"
+#~ msgid "Failed to open the device."
+#~ msgstr "開啟失敗"
+
+#, fuzzy
 #~ msgctxt "@title:window"
 #~ msgid "CAS Preferences"
 #~ msgstr "喜好設定"
@@ -25437,10 +25428,6 @@ msgstr "開啟失敗"
 #, fuzzy
 #~ msgid "Connect line to curve"
 #~ msgstr "連線"
-
-#, fuzzy
-#~ msgid "Server unavailable"
-#~ msgstr "全部選取"
 
 #, fuzzy
 #~ msgid ""

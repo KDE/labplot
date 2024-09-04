@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 01:52+0000\n"
+"POT-Creation-Date: 2024-09-04 01:43+0000\n"
 "PO-Revision-Date: 2024-08-16 09:55+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -2355,58 +2355,56 @@ msgstr "Fogli: "
 msgid "Invalid region specified."
 msgstr "Regione specificata non valida."
 
-#: src/backend/datasources/LiveDataSource.cpp:728
-#: src/backend/datasources/LiveDataSource.cpp:731
-#: src/backend/datasources/LiveDataSource.cpp:734
-#: src/backend/datasources/LiveDataSource.cpp:737
-#: src/backend/datasources/LiveDataSource.cpp:740
-#: src/backend/datasources/LiveDataSource.cpp:743
-#: src/backend/datasources/LiveDataSource.cpp:746
-#: src/backend/datasources/LiveDataSource.cpp:756
-#, kde-format
-msgid "Serial Port Error"
-msgstr "Errore della porta seriale"
+#: src/backend/datasources/LiveDataSource.cpp:729
+#, fuzzy, kde-format
+#| msgid "File does not exist."
+msgid "Device doesn't exist."
+msgstr "Il file non esiste."
 
-#: src/backend/datasources/LiveDataSource.cpp:728
-#, kde-format
-msgid "Failed to open the device."
-msgstr "Impossibile aprire il dispositivo."
-
-#: src/backend/datasources/LiveDataSource.cpp:731
-#, kde-format
-msgid ""
-"Failed to open the device. Please check your permissions on this device."
+#: src/backend/datasources/LiveDataSource.cpp:732
+#, fuzzy, kde-format
+#| msgid ""
+#| "Failed to open the device. Please check your permissions on this device."
+msgid "User doesn't have enough permissions to open the device."
 msgstr "Impossibile aprire il dispositivo. Controlla i permessi su di esso."
 
-#: src/backend/datasources/LiveDataSource.cpp:734
+#: src/backend/datasources/LiveDataSource.cpp:735
 #, kde-format
 msgid "Device already opened."
 msgstr "Il dispositivo è già aperto."
 
-#: src/backend/datasources/LiveDataSource.cpp:737
-#, kde-format
-msgid "The device is not opened."
+#: src/backend/datasources/LiveDataSource.cpp:738
+#, fuzzy, kde-format
+#| msgid "The device is not opened."
+msgid "Device is not opened."
 msgstr "Il dispositivo non è aperto."
 
-#: src/backend/datasources/LiveDataSource.cpp:740
+#: src/backend/datasources/LiveDataSource.cpp:741
 #, kde-format
 msgid "Failed to read data."
 msgstr "Impossibile leggere i dati."
 
-#: src/backend/datasources/LiveDataSource.cpp:743
-#, kde-format
-msgid "Failed to read data. The device is removed."
-msgstr "Impossibile leggere i dati, il dispositivo è stato rimosso."
+#: src/backend/datasources/LiveDataSource.cpp:744
+#, fuzzy, kde-format
+#| msgid "Server unavailable"
+msgid "Device not available."
+msgstr "Server non disponibile"
 
-#: src/backend/datasources/LiveDataSource.cpp:746
-#, kde-format
-msgid "The device timed out."
-msgstr "Tempo scaduto per il dispositivo."
+#: src/backend/datasources/LiveDataSource.cpp:747
+#, fuzzy, kde-format
+#| msgid "An error occurred."
+msgid "Timeout occured."
+msgstr "Si è verificato un errore."
 
-#: src/backend/datasources/LiveDataSource.cpp:756
+#: src/backend/datasources/LiveDataSource.cpp:757
 #, kde-format
 msgid "The following error occurred: %1."
 msgstr "Si è verificato il seguente errore: %1."
+
+#: src/backend/datasources/LiveDataSource.cpp:767
+#, kde-format
+msgid "Serial Port Error"
+msgstr "Errore della porta seriale"
 
 #: src/backend/datasources/MQTTTopic.cpp:144
 #, kde-format
@@ -12259,11 +12257,6 @@ msgstr "Sia il nome dell'host che la porta sono mancanti."
 #, kde-format
 msgid "Could not connect to the provided UDP socket. Error: %1."
 msgstr "Impossibile connettersi al socket UDP fornito. Errore: %1."
-
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:514
-#, kde-format
-msgid "Could not connect to the provided serial port."
-msgstr "Impossibile connettersi alla porta seriale fornita."
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:520
 #, kde-format
@@ -24097,6 +24090,18 @@ msgstr "processo convert non riuscito, codice di uscita ="
 msgid "Unable to open file:"
 msgstr "Impossibile aprire il file:"
 
+#~ msgid "Failed to open the device."
+#~ msgstr "Impossibile aprire il dispositivo."
+
+#~ msgid "Failed to read data. The device is removed."
+#~ msgstr "Impossibile leggere i dati, il dispositivo è stato rimosso."
+
+#~ msgid "The device timed out."
+#~ msgstr "Tempo scaduto per il dispositivo."
+
+#~ msgid "Could not connect to the provided serial port."
+#~ msgstr "Impossibile connettersi alla porta seriale fornita."
+
 #~ msgctxt "@title:window"
 #~ msgid "CAS Preferences"
 #~ msgstr "Preferenze CAS"
@@ -25426,9 +25431,6 @@ msgstr "Impossibile aprire il file:"
 
 #~ msgid "Show Status Bar"
 #~ msgstr "Mostra la barra di stato"
-
-#~ msgid "Server unavailable"
-#~ msgstr "Server non disponibile"
 
 #~ msgid "Not authorized"
 #~ msgstr "Non autorizzato"
