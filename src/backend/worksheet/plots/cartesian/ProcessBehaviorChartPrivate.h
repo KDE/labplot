@@ -25,7 +25,7 @@ public:
 	void recalcShapeAndBoundingRect() override;
 	void updateControlLimits();
 
-	ProcessBehaviorChart::Type type;
+	ProcessBehaviorChart::Type type{ProcessBehaviorChart::Type::XmR};
 
 	XYCurve* dataCurve{nullptr};
 	XYCurve* centerCurve{nullptr};

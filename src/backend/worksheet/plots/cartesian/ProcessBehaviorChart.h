@@ -93,7 +93,6 @@ Q_SIGNALS:
 
 	// General-Tab
 	void typeChanged(ProcessBehaviorChart::Type);
-	void dataChanged(); // emitted when the actual curve data to be plotted was changed to re-adjust the plot
 	void xDataDataChanged();
 	void yDataDataChanged();
 	void xDataColumnChanged(const AbstractColumn*);

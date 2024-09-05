@@ -83,7 +83,6 @@ Q_SIGNALS:
 	void linesUpdated(const QQPlot*, const QVector<QLineF>&);
 
 	// General-Tab
-	void dataChanged(); // emitted when the actual curve data to be plotted was changed to re-adjust the plot
 	void dataDataChanged();
 	void dataColumnChanged(const AbstractColumn*);
 	void distributionChanged(nsl_sf_stats_distribution);

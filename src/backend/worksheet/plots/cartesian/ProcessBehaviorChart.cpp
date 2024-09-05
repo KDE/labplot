@@ -214,28 +214,27 @@ Symbol* ProcessBehaviorChart::dataSymbol() const {
 }
 
 bool ProcessBehaviorChart::minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& r, bool /* includeErrorBars */) const {
+	DEBUG(Q_FUNC_INFO)
 	Q_D(const ProcessBehaviorChart);
 
 	switch (dim) {
 	case Dimension::X:
 		return d->dataCurve->minMax(dim, indexRange, r, false);
 	case Dimension::Y: {
-		// TODO
-		/*
-		Range referenceRange(r);
-		Range percentilesRange(r);
+		Range upperLimitRange(r);
+		Range lowerLimitRange(r);
 		bool rc = true;
-		rc = d->referenceCurve->minMax(dim, indexRange, referenceRange, false);
+		rc = d->upperLimitCurve->minMax(dim, indexRange, upperLimitRange, false);
 		if (!rc)
 			return false;
 
-		rc = d->percentilesCurve->minMax(dim, indexRange, percentilesRange, false);
+		rc = d->lowerLimitCurve->minMax(dim, indexRange, lowerLimitRange, false);
 		if (!rc)
 			return false;
 
-		r.setStart(std::min(referenceRange.start(), percentilesRange.start()));
-		r.setEnd(std::max(referenceRange.end(), percentilesRange.end()));
-		*/
+		r.setStart(std::min(upperLimitRange.start(), lowerLimitRange.start()));
+		r.setEnd(std::max(upperLimitRange.end(), lowerLimitRange.end()));
+
 		return true;
 	}
 	}
@@ -243,6 +242,7 @@ bool ProcessBehaviorChart::minMax(const Dimension dim, const Range<int>& indexRa
 }
 
 double ProcessBehaviorChart::minimum(const Dimension dim) const {
+	DEBUG(Q_FUNC_INFO)
 	Q_D(const ProcessBehaviorChart);
 	switch (dim) {
 	case Dimension::X:
@@ -254,6 +254,7 @@ double ProcessBehaviorChart::minimum(const Dimension dim) const {
 }
 
 double ProcessBehaviorChart::maximum(const Dimension dim) const {
+	DEBUG(Q_FUNC_INFO)
 	Q_D(const ProcessBehaviorChart);
 	switch (dim) {
 	case Dimension::X:
@@ -430,10 +431,16 @@ void ProcessBehaviorChartPrivate::recalc() {
 		xMax = statistics.maximum;
 	} else {
 		// no column for x provided, use the index for x
+		if (!xIndexColumn) {
+			xIndexColumn = new Column(QStringLiteral("xLowerLimit"));
+			xIndexColumn->setHidden(true);
+			xIndexColumn->setUndoAware(false);
+			q->addChildFast(xIndexColumn);
+		}
 		xIndexColumn->clear();
 		const int count = yDataColumn->rowCount();
 		xMin = 1.;
-		xMin = count;
+		xMax = count;
 		xIndexColumn->resizeTo(count);
 		for (int i = 1; i <= count; ++i)
 			xIndexColumn->setValueAt(i, i);
@@ -441,6 +448,7 @@ void ProcessBehaviorChartPrivate::recalc() {
 		dataCurve->setXColumn(xIndexColumn);
 	}
 
+	// qDebug()<<"x min/max " << xMin << "  " << xMax;
 	// min and max values for x
 	xCenterColumn->setValueAt(0, xMin);
 	xCenterColumn->setValueAt(1, xMax);
@@ -451,7 +459,7 @@ void ProcessBehaviorChartPrivate::recalc() {
 
 	updateControlLimits();
 
-	// Q_EMIT dataChanged() in order to retransform everything with the new size/shape of the plot
+	// emit dataChanged() in order to retransform everything with the new size/shape of the plot
 	Q_EMIT q->dataChanged();
 }
 
@@ -467,12 +475,16 @@ U: Calculates the average number of defects per unit and sets the control limits
 This implementation assumes that the necessary constants (like d2 and c4) are known and used correctly for the given subgroup sizes. Adjust the constants as needed based on the actual subgroup sizes and control chart requirements.
 */
 void ProcessBehaviorChartPrivate::updateControlLimits() {
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 	switch (type) {
 	case ProcessBehaviorChart::Type::XmR: {
-		const auto& statistics = static_cast<const Column*>(xDataColumn)->statistics();
+		double mean = 0.;
+		if (xDataColumn)
+			mean = static_cast<const Column*>(xDataColumn)->statistics().arithmeticMean;
+		else
+			mean = static_cast<const Column*>(xIndexColumn)->statistics().arithmeticMean;
 
 		// center line
-		const double mean = statistics.arithmeticMean;
 		yCenterColumn->setValueAt(0, mean);
 		yCenterColumn->setValueAt(1, mean);
 
@@ -481,11 +493,14 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		for (int i = 1; i < yDataColumn->rowCount(); ++i)
 			movingRange.push_back(std::abs(yDataColumn->valueAt(i) - yDataColumn->valueAt(i - 1)));
 
+		// qDebug()<<"movingRange " << movingRange;
 		const double meanMovingRange = gsl_stats_mean(movingRange.data(), 1, movingRange.size());
 
 		// upper and lower limits
-		const double upperLimit = statistics.arithmeticMean + 3. * meanMovingRange / 1.128;
-		const double lowerLimit = statistics.arithmeticMean - 3. * meanMovingRange / 1.128;
+		const double upperLimit = mean + 3. * meanMovingRange / 1.128;
+		const double lowerLimit = mean - 3. * meanMovingRange / 1.128;
+		// qDebug()<<"upperLimit " << upperLimit;
+		// qDebug()<<"lowerLimit " << lowerLimit;
 		yUpperLimitColumn->setValueAt(0, upperLimit);
 		yUpperLimitColumn->setValueAt(1, upperLimit);
 		yLowerLimitColumn->setValueAt(0, lowerLimit);

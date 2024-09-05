@@ -368,7 +368,7 @@ void KDEPlotPrivate::recalc() {
 	xEstimationColumn->setValues(xData);
 	yEstimationColumn->setValues(yData);
 
-	// Q_EMIT dataChanged() in order to retransform everything with the new size/shape of the plot
+	// emit dataChanged() in order to retransform everything with the new size/shape of the plot
 	Q_EMIT q->dataChanged();
 }
 
