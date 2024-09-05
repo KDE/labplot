@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-04 01:43+0000\n"
-"PO-Revision-Date: 2024-08-13 11:44+0200\n"
+"PO-Revision-Date: 2024-09-04 16:37+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 24.08.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2344,19 +2344,14 @@ msgid "Invalid region specified."
 msgstr "Se ha indicado una región no válida."
 
 #: src/backend/datasources/LiveDataSource.cpp:729
-#, fuzzy, kde-format
-#| msgid "File does not exist."
+#, kde-format
 msgid "Device doesn't exist."
-msgstr "El archivo no existe."
+msgstr "El dispositivo no existe."
 
 #: src/backend/datasources/LiveDataSource.cpp:732
-#, fuzzy, kde-format
-#| msgid ""
-#| "Failed to open the device. Please check your permissions on this device."
+#, kde-format
 msgid "User doesn't have enough permissions to open the device."
-msgstr ""
-"No se ha podido abrir el dispositivo. Compruebe sus permisos sobre este "
-"dispositivo."
+msgstr "El usuario no tiene suficientes permisos para abrir el dispositivo."
 
 #: src/backend/datasources/LiveDataSource.cpp:735
 #, kde-format
@@ -2364,8 +2359,7 @@ msgid "Device already opened."
 msgstr "Dispositivo ya abierto."
 
 #: src/backend/datasources/LiveDataSource.cpp:738
-#, fuzzy, kde-format
-#| msgid "The device is not opened."
+#, kde-format
 msgid "Device is not opened."
 msgstr "El dispositivo no está abierto."
 
@@ -2375,16 +2369,14 @@ msgid "Failed to read data."
 msgstr "Ha fallado la lectura de datos."
 
 #: src/backend/datasources/LiveDataSource.cpp:744
-#, fuzzy, kde-format
-#| msgid "Server unavailable"
+#, kde-format
 msgid "Device not available."
-msgstr "Servidor no disponible"
+msgstr "Dispositivo no disponible."
 
 #: src/backend/datasources/LiveDataSource.cpp:747
-#, fuzzy, kde-format
-#| msgid "An error occurred."
+#, kde-format
 msgid "Timeout occured."
-msgstr "Ha ocurrido un error."
+msgstr "Se ha agotado el tiempo de espera."
 
 #: src/backend/datasources/LiveDataSource.cpp:757
 #, kde-format

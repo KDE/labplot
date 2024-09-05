@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-04 01:43+0000\n"
-"PO-Revision-Date: 2024-08-11 09:25+0300\n"
+"PO-Revision-Date: 2024-09-04 11:45+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -2357,19 +2357,14 @@ msgid "Invalid region specified."
 msgstr "Вказано некоректний регіон."
 
 #: src/backend/datasources/LiveDataSource.cpp:729
-#, fuzzy, kde-format
-#| msgid "File does not exist."
+#, kde-format
 msgid "Device doesn't exist."
-msgstr "Файла не існує."
+msgstr "Пристрою не існує."
 
 #: src/backend/datasources/LiveDataSource.cpp:732
-#, fuzzy, kde-format
-#| msgid ""
-#| "Failed to open the device. Please check your permissions on this device."
+#, kde-format
 msgid "User doesn't have enough permissions to open the device."
-msgstr ""
-"Не вдалося відкрити пристрій. Будь ласка, перевірте ваші права доступу до "
-"цього пристрою."
+msgstr "У користувача недостатні права доступу для відкриття пристрою."
 
 #: src/backend/datasources/LiveDataSource.cpp:735
 #, kde-format
@@ -2377,8 +2372,7 @@ msgid "Device already opened."
 msgstr "Пристрій вже відкрито."
 
 #: src/backend/datasources/LiveDataSource.cpp:738
-#, fuzzy, kde-format
-#| msgid "The device is not opened."
+#, kde-format
 msgid "Device is not opened."
 msgstr "Пристрій не відкрито."
 
@@ -2388,16 +2382,14 @@ msgid "Failed to read data."
 msgstr "Не вдалося прочитати дані."
 
 #: src/backend/datasources/LiveDataSource.cpp:744
-#, fuzzy, kde-format
-#| msgid "Server unavailable"
+#, kde-format
 msgid "Device not available."
-msgstr "Немає доступу до сервера"
+msgstr "Пристрій недоступний."
 
 #: src/backend/datasources/LiveDataSource.cpp:747
-#, fuzzy, kde-format
-#| msgid "An error occurred."
+#, kde-format
 msgid "Timeout occured."
-msgstr "Сталася помилка."
+msgstr "Перевищено час очікування на дані."
 
 #: src/backend/datasources/LiveDataSource.cpp:757
 #, kde-format

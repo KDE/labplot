@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-04 01:43+0000\n"
-"PO-Revision-Date: 2024-08-11 23:05+0300\n"
+"PO-Revision-Date: 2024-09-05 01:15+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -2334,17 +2334,14 @@ msgid "Invalid region specified."
 msgstr "Geçersiz bölge belirtildi."
 
 #: src/backend/datasources/LiveDataSource.cpp:729
-#, fuzzy, kde-format
-#| msgid "File does not exist."
+#, kde-format
 msgid "Device doesn't exist."
-msgstr "Dosya yok."
+msgstr "Aygıt yok."
 
 #: src/backend/datasources/LiveDataSource.cpp:732
-#, fuzzy, kde-format
-#| msgid ""
-#| "Failed to open the device. Please check your permissions on this device."
+#, kde-format
 msgid "User doesn't have enough permissions to open the device."
-msgstr "Aygıt açılamadı. Aygıt izinlerinizi denetleyin."
+msgstr "Kullanıcının aygıtı açmak için yeterli izni yok."
 
 #: src/backend/datasources/LiveDataSource.cpp:735
 #, kde-format
@@ -2352,10 +2349,9 @@ msgid "Device already opened."
 msgstr "Aygıt zaten açık."
 
 #: src/backend/datasources/LiveDataSource.cpp:738
-#, fuzzy, kde-format
-#| msgid "The device is not opened."
+#, kde-format
 msgid "Device is not opened."
-msgstr "Aygıt açılamadı."
+msgstr "Aygıt açılmadı."
 
 #: src/backend/datasources/LiveDataSource.cpp:741
 #, kde-format
@@ -2363,16 +2359,14 @@ msgid "Failed to read data."
 msgstr "Veri okunamadı."
 
 #: src/backend/datasources/LiveDataSource.cpp:744
-#, fuzzy, kde-format
-#| msgid "no info available"
+#, kde-format
 msgid "Device not available."
-msgstr "kullanılabilir veri yok"
+msgstr "Aygıt kullanılabilir değil."
 
 #: src/backend/datasources/LiveDataSource.cpp:747
-#, fuzzy, kde-format
-#| msgid "An error occurred."
+#, kde-format
 msgid "Timeout occured."
-msgstr "Bir hata oluştu."
+msgstr "Zaman aşımı oluştu."
 
 #: src/backend/datasources/LiveDataSource.cpp:757
 #, kde-format

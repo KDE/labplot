@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-04 01:43+0000\n"
-"PO-Revision-Date: 2024-08-11 10:00+0200\n"
+"PO-Revision-Date: 2024-09-04 18:39+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 24.08.0\n"
 "X-Accelerator-Marker: &\n"
 
 #, kde-format
@@ -2359,19 +2359,14 @@ msgid "Invalid region specified."
 msgstr "Regió especificada no vàlida."
 
 #: src/backend/datasources/LiveDataSource.cpp:729
-#, fuzzy, kde-format
-#| msgid "File does not exist."
+#, kde-format
 msgid "Device doesn't exist."
-msgstr "El fitxer no existeix."
+msgstr "El dispositiu no existeix."
 
 #: src/backend/datasources/LiveDataSource.cpp:732
-#, fuzzy, kde-format
-#| msgid ""
-#| "Failed to open the device. Please check your permissions on this device."
+#, kde-format
 msgid "User doesn't have enough permissions to open the device."
-msgstr ""
-"Ha fallat en obrir el dispositiu. Comproveu els vostres permisos sobre "
-"aquest dispositiu."
+msgstr "L'usuari no té suficient permís per a obrir el dispositiu."
 
 #: src/backend/datasources/LiveDataSource.cpp:735
 #, kde-format
@@ -2379,8 +2374,7 @@ msgid "Device already opened."
 msgstr "El dispositiu ja està obert."
 
 #: src/backend/datasources/LiveDataSource.cpp:738
-#, fuzzy, kde-format
-#| msgid "The device is not opened."
+#, kde-format
 msgid "Device is not opened."
 msgstr "El dispositiu no està obert."
 
@@ -2390,16 +2384,14 @@ msgid "Failed to read data."
 msgstr "Ha fallat en llegir les dades."
 
 #: src/backend/datasources/LiveDataSource.cpp:744
-#, fuzzy, kde-format
-#| msgid "no info available"
+#, kde-format
 msgid "Device not available."
-msgstr "sense informació disponible"
+msgstr "El dispositiu no està disponible."
 
 #: src/backend/datasources/LiveDataSource.cpp:747
-#, fuzzy, kde-format
-#| msgid "An error occurred."
+#, kde-format
 msgid "Timeout occured."
-msgstr "S'ha produït un error."
+msgstr "Ha vençut el temps d'espera."
 
 #: src/backend/datasources/LiveDataSource.cpp:757
 #, kde-format

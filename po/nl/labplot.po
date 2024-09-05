@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-04 01:43+0000\n"
-"PO-Revision-Date: 2024-08-11 14:21+0200\n"
+"PO-Revision-Date: 2024-09-04 13:58+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 24.08.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2333,17 +2333,14 @@ msgid "Invalid region specified."
 msgstr "Ongeldig gebied gespecificeerd."
 
 #: src/backend/datasources/LiveDataSource.cpp:729
-#, fuzzy, kde-format
-#| msgid "File does not exist."
+#, kde-format
 msgid "Device doesn't exist."
-msgstr "Bestand bestaat niet."
+msgstr "Apparaat bestaat niet."
 
 #: src/backend/datasources/LiveDataSource.cpp:732
-#, fuzzy, kde-format
-#| msgid ""
-#| "Failed to open the device. Please check your permissions on this device."
+#, kde-format
 msgid "User doesn't have enough permissions to open the device."
-msgstr "Openen apparaat is mislukt. Controleer uw permissies op dit apparaat."
+msgstr "Gebruiker heeft niet genoeg rechten om het apparaat te openen."
 
 #: src/backend/datasources/LiveDataSource.cpp:735
 #, kde-format
@@ -2351,10 +2348,9 @@ msgid "Device already opened."
 msgstr "Apparaat is reeds geopend"
 
 #: src/backend/datasources/LiveDataSource.cpp:738
-#, fuzzy, kde-format
-#| msgid "The device is not opened."
+#, kde-format
 msgid "Device is not opened."
-msgstr "Het apparaat is niet geopend."
+msgstr "Apparaat is niet geopend."
 
 #: src/backend/datasources/LiveDataSource.cpp:741
 #, kde-format
@@ -2362,16 +2358,14 @@ msgid "Failed to read data."
 msgstr "Gegevens inlezen is mislukt."
 
 #: src/backend/datasources/LiveDataSource.cpp:744
-#, fuzzy, kde-format
-#| msgid "Server unavailable"
+#, kde-format
 msgid "Device not available."
-msgstr "Server niet beschikbaar"
+msgstr "Apparaat is niet beschikbaar."
 
 #: src/backend/datasources/LiveDataSource.cpp:747
-#, fuzzy, kde-format
-#| msgid "An error occurred."
+#, kde-format
 msgid "Timeout occured."
-msgstr "Er is een fout."
+msgstr "Tijdslimiet is overschreden."
 
 #: src/backend/datasources/LiveDataSource.cpp:757
 #, kde-format
