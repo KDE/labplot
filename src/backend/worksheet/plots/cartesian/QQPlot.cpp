@@ -171,8 +171,7 @@ bool QQPlot::minMax(const Dimension dim, const Range<int>& indexRange, Range<dou
 	case Dimension::Y: {
 		Range referenceRange(r);
 		Range percentilesRange(r);
-		bool rc = true;
-		rc = d->referenceCurve->minMax(dim, indexRange, referenceRange, false);
+		bool rc = d->referenceCurve->minMax(dim, indexRange, referenceRange, false);
 		if (!rc)
 			return false;
 

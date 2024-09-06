@@ -214,7 +214,6 @@ Symbol* ProcessBehaviorChart::dataSymbol() const {
 }
 
 bool ProcessBehaviorChart::minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& r, bool /* includeErrorBars */) const {
-	DEBUG(Q_FUNC_INFO)
 	Q_D(const ProcessBehaviorChart);
 
 	switch (dim) {
@@ -223,8 +222,7 @@ bool ProcessBehaviorChart::minMax(const Dimension dim, const Range<int>& indexRa
 	case Dimension::Y: {
 		Range upperLimitRange(r);
 		Range lowerLimitRange(r);
-		bool rc = true;
-		rc = d->upperLimitCurve->minMax(dim, indexRange, upperLimitRange, false);
+		bool rc = d->upperLimitCurve->minMax(dim, indexRange, upperLimitRange, false);
 		if (!rc)
 			return false;
 
@@ -242,7 +240,6 @@ bool ProcessBehaviorChart::minMax(const Dimension dim, const Range<int>& indexRa
 }
 
 double ProcessBehaviorChart::minimum(const Dimension dim) const {
-	DEBUG(Q_FUNC_INFO)
 	Q_D(const ProcessBehaviorChart);
 	switch (dim) {
 	case Dimension::X:
@@ -254,7 +251,6 @@ double ProcessBehaviorChart::minimum(const Dimension dim) const {
 }
 
 double ProcessBehaviorChart::maximum(const Dimension dim) const {
-	DEBUG(Q_FUNC_INFO)
 	Q_D(const ProcessBehaviorChart);
 	switch (dim) {
 	case Dimension::X:

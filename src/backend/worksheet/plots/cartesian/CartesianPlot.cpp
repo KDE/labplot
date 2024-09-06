@@ -627,6 +627,7 @@ void CartesianPlot::initMenus() {
 
 	m_addNewMenu = new QMenu(i18n("Add New"));
 	m_addNewMenu->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
+
 	m_addNewMenu->addAction(addCurveAction);
 	m_addNewMenu->addAction(addEquationCurveAction);
 	m_addNewMenu->addSeparator();
@@ -646,7 +647,7 @@ void CartesianPlot::initMenus() {
 	m_addNewMenu->addMenu(addNewBarPlotsMenu);
 
 	// continious improvement plots
-	auto* addNewCIPlotsMenu = new QMenu(i18n("Continious Improvement"), m_addNewMenu);
+	auto* addNewCIPlotsMenu = new QMenu(i18n("Continual Improvement Plots"), m_addNewMenu);
 	addNewCIPlotsMenu->addAction(addProcessBehaviorChartAction);
 	m_addNewMenu->addMenu(addNewCIPlotsMenu);
 
@@ -2862,6 +2863,9 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 			plot->minMax(dim, indexRange, range, true);
 		} else if (plot->type() == AspectType::QQPlot) {
 			Range<int> indexRange{0, 99}; // 100 percentile values are calculated, max index is 99
+			plot->minMax(dim, indexRange, range, true);
+		} else if (plot->type() == AspectType::ProcessBehaviorChart) {
+			Range<int> indexRange{0, 100}; // TODO
 			plot->minMax(dim, indexRange, range, true);
 		} else {
 			range.setStart(plot->minimum(dim));
