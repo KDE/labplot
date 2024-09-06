@@ -2340,10 +2340,9 @@ msgid "Failed to read data."
 msgstr "读取数据失败。"
 
 #: src/backend/datasources/LiveDataSource.cpp:744
-#, fuzzy, kde-format
-#| msgid "Delete variable"
+#, kde-format
 msgid "Device not available."
-msgstr "删除变量"
+msgstr ""
 
 #: src/backend/datasources/LiveDataSource.cpp:747
 #, kde-format
