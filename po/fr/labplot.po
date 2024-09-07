@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-04 01:43+0000\n"
-"PO-Revision-Date: 2024-08-12 09:22+0200\n"
+"PO-Revision-Date: 2024-09-05 09:04+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -2374,19 +2374,16 @@ msgid "Invalid region specified."
 msgstr "Zone spécifiée non valable."
 
 #: src/backend/datasources/LiveDataSource.cpp:729
-#, fuzzy, kde-format
-#| msgid "File does not exist."
+#, kde-format
 msgid "Device doesn't exist."
-msgstr "Le fichier n'existe pas."
+msgstr "Le périphérique n'existe pas."
 
 #: src/backend/datasources/LiveDataSource.cpp:732
-#, fuzzy, kde-format
-#| msgid ""
-#| "Failed to open the device. Please check your permissions on this device."
+#, kde-format
 msgid "User doesn't have enough permissions to open the device."
 msgstr ""
-"Impossible d'ouvrir le périphérique. Veuillez vérifier vos permissions sur "
-"ce périphérique."
+"L'utilisateur ne possède par de droits suffisants pour ouvrir le "
+"périphérique."
 
 #: src/backend/datasources/LiveDataSource.cpp:735
 #, kde-format
@@ -2394,8 +2391,7 @@ msgid "Device already opened."
 msgstr "Périphérique déjà ouvert."
 
 #: src/backend/datasources/LiveDataSource.cpp:738
-#, fuzzy, kde-format
-#| msgid "The device is not opened."
+#, kde-format
 msgid "Device is not opened."
 msgstr "Le périphérique n'est pas ouvert."
 
@@ -2405,16 +2401,14 @@ msgid "Failed to read data."
 msgstr "Impossible de lire les données."
 
 #: src/backend/datasources/LiveDataSource.cpp:744
-#, fuzzy, kde-format
-#| msgid "Delete variable"
+#, kde-format
 msgid "Device not available."
-msgstr "Supprimer la variable"
+msgstr "Le périphérique est indisponible"
 
 #: src/backend/datasources/LiveDataSource.cpp:747
-#, fuzzy, kde-format
-#| msgid "An error occurred."
+#, kde-format
 msgid "Timeout occured."
-msgstr "Une erreur est survenue."
+msgstr "Le délai maximum d'attente a été atteint."
 
 #: src/backend/datasources/LiveDataSource.cpp:757
 #, kde-format
