@@ -138,6 +138,7 @@ void ProcessBehaviorChart::init() {
 	// so we have the same name shown on the undo stack
 	connect(this, &AbstractAspect::aspectDescriptionChanged, [this] {
 		Q_D(ProcessBehaviorChart);
+		d->dataCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 		d->centerCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 		d->upperLimitCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 		d->lowerLimitCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
@@ -405,9 +406,7 @@ void ProcessBehaviorChartPrivate::retransform() {
 void ProcessBehaviorChartPrivate::recalc() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
-	if (yDataColumn)
-		dataCurve->setYColumn(yDataColumn);
-	else {
+	if (!yDataColumn) {
 		xCenterColumn->clear();
 		yCenterColumn->clear();
 		xUpperLimitColumn->clear();
@@ -427,24 +426,23 @@ void ProcessBehaviorChartPrivate::recalc() {
 		xMax = statistics.maximum;
 	} else {
 		// no column for x provided, use the index for x
-		if (!xIndexColumn) {
-			xIndexColumn = new Column(QStringLiteral("xLowerLimit"));
-			xIndexColumn->setHidden(true);
-			xIndexColumn->setUndoAware(false);
-			q->addChildFast(xIndexColumn);
+		if (!xColumn) {
+			xColumn = new Column(QStringLiteral("xColumn"));
+			xColumn->setHidden(true);
+			xColumn->setUndoAware(false);
+			q->addChildFast(xColumn);
 		}
-		xIndexColumn->clear();
+		xColumn->clear();
 		const int count = yDataColumn->rowCount();
 		xMin = 1.;
 		xMax = count;
-		xIndexColumn->resizeTo(count);
-		for (int i = 1; i <= count; ++i)
-			xIndexColumn->setValueAt(i, i);
+		xColumn->resizeTo(count);
+		for (int i = 0; i < count; ++i)
+			xColumn->setValueAt(i, i + 1);
 
-		dataCurve->setXColumn(xIndexColumn);
+		dataCurve->setXColumn(xColumn);
 	}
 
-	// qDebug()<<"x min/max " << xMin << "  " << xMax;
 	// min and max values for x
 	xCenterColumn->setValueAt(0, xMin);
 	xCenterColumn->setValueAt(1, xMax);
@@ -474,42 +472,50 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 	switch (type) {
 	case ProcessBehaviorChart::Type::XmR: {
-		double mean = 0.;
-		if (xDataColumn)
-			mean = static_cast<const Column*>(xDataColumn)->statistics().arithmeticMean;
-		else
-			mean = static_cast<const Column*>(xIndexColumn)->statistics().arithmeticMean;
-
 		// center line
+		const double mean = static_cast<const Column*>(yDataColumn)->statistics().arithmeticMean;
 		yCenterColumn->setValueAt(0, mean);
 		yCenterColumn->setValueAt(1, mean);
 
 		// calculate the mean moving range
 		std::vector<double> movingRange;
-		for (int i = 1; i < yDataColumn->rowCount(); ++i)
-			movingRange.push_back(std::abs(yDataColumn->valueAt(i) - yDataColumn->valueAt(i - 1)));
+		for (int i = 1; i < yDataColumn->rowCount(); ++i) {
+			if (yDataColumn->isValid(i) && !yDataColumn->isMasked(i))
+				movingRange.push_back(std::abs(yDataColumn->valueAt(i) - yDataColumn->valueAt(i - 1)));
+		}
 
-		// qDebug()<<"movingRange " << movingRange;
 		const double meanMovingRange = gsl_stats_mean(movingRange.data(), 1, movingRange.size());
 
 		// upper and lower limits
 		const double upperLimit = mean + 3. * meanMovingRange / 1.128;
 		const double lowerLimit = mean - 3. * meanMovingRange / 1.128;
-		// qDebug()<<"upperLimit " << upperLimit;
-		// qDebug()<<"lowerLimit " << lowerLimit;
 		yUpperLimitColumn->setValueAt(0, upperLimit);
 		yUpperLimitColumn->setValueAt(1, upperLimit);
 		yLowerLimitColumn->setValueAt(0, lowerLimit);
 		yLowerLimitColumn->setValueAt(1, lowerLimit);
+
+		// plotted data - original data
+		dataCurve->setYColumn(yDataColumn);
+
 		break;
 	}
 	case ProcessBehaviorChart::Type::mR: {
-		// calculate the mean moving range
-		std::vector<double> movingRange;
-		for (int i = 1; i < yDataColumn->rowCount(); ++i)
-			movingRange.push_back(std::abs(yDataColumn->valueAt(i) - yDataColumn->valueAt(i - 1)));
+		// calculate the mean moving ranges
+		if (!yColumn) {
+			yColumn = new Column(QStringLiteral("xColumn"));
+			yColumn->setHidden(true);
+			yColumn->setUndoAware(false);
+			q->addChildFast(yColumn);
+		}
+		yColumn->resizeTo(yDataColumn->rowCount());
+		yColumn->clear();
 
-		const double meanMovingRange = gsl_stats_mean(movingRange.data(), 1, movingRange.size());
+		for (int i = 1; i < yDataColumn->rowCount(); ++i) {
+			if (yDataColumn->isValid(i) && !yDataColumn->isMasked(i))
+				yColumn->setValueAt(i - 1, std::abs(yDataColumn->valueAt(i) - yDataColumn->valueAt(i - 1)));
+		}
+
+		const double meanMovingRange = yColumn->statistics().arithmeticMean;
 
 		// center line
 		yCenterColumn->setValueAt(0, meanMovingRange);
@@ -522,6 +528,10 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		yUpperLimitColumn->setValueAt(1, upperLimit);
 		yLowerLimitColumn->setValueAt(0, lowerLimit);
 		yLowerLimitColumn->setValueAt(1, lowerLimit);
+
+		// plotted data - moving ranges
+		dataCurve->setYColumn(yColumn);
+
 		break;
 	}
 	case ProcessBehaviorChart::Type::XbarR: {
@@ -834,13 +844,15 @@ void ProcessBehaviorChart::loadThemeConfig(const KConfig& config) {
 
 	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
 	int index = plot->curveChildIndex(this);
-	const QColor themeColor = plot->themeColorPalette(index);
+	QColor themeColor = plot->themeColorPalette(index);
 
 	Q_D(ProcessBehaviorChart);
 	d->suppressRecalc = true;
 
 	d->dataCurve->line()->loadThemeConfig(group, themeColor);
 	d->dataCurve->symbol()->loadThemeConfig(group, themeColor);
+
+	themeColor = plot->themeColorPalette(index + 1);
 
 	d->centerCurve->line()->loadThemeConfig(group, themeColor);
 	d->centerCurve->symbol()->setStyle(Symbol::Style::NoSymbols);

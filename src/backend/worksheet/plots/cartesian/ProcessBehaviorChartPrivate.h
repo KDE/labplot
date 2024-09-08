@@ -37,7 +37,10 @@ public:
 	const AbstractColumn* yDataColumn{nullptr};
 	QString yDataColumnPath;
 
-	Column* xIndexColumn{nullptr};
+	// columns used for the data curve in case other statistics is being plotted
+	// and not the original data provided by the user in xDataColumn and yDataColumn above
+	Column* xColumn{nullptr};
+	Column* yColumn{nullptr};
 
 	Column* xCenterColumn{nullptr};
 	QString xCenterColumnPath;

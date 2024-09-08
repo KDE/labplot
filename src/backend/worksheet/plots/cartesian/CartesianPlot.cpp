@@ -2155,12 +2155,15 @@ double CartesianPlot::cursorPos(int cursorNumber) {
  */
 int CartesianPlot::curveChildIndex(const WorksheetElement* curve) const {
 	int index = 0;
-	const auto& children = this->children<WorksheetElement>();
-	for (auto* child : children) {
-		if (child == curve)
+	const auto& plots = this->children<Plot>();
+	for (auto* plot : plots) {
+		if (plot == curve)
 			break;
 
-		if (dynamic_cast<const Plot*>(child))
+		++index;
+
+		// for the process behavior chart two colors are used - for the data and for the control linex
+		if (plot->type() == AspectType::ProcessBehaviorChart)
 			++index;
 	}
 

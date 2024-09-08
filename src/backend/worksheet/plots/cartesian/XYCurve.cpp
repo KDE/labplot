@@ -2284,6 +2284,9 @@ bool XYCurve::minMax(const AbstractColumn* column1,
 #ifdef PERFTRACE_AUTOSCALE
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 #endif
+	if (!column1)
+		return false;
+
 	// when property is increasing or decreasing there is a benefit in finding minimum and maximum
 	// for property == AbstractColumn::Properties::No it must be iterated over all values so it does not matter if this function or the below one is used
 	// if the property of the second column is not AbstractColumn::Properties::No means, that all values are valid and not masked
