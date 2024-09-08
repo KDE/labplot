@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-04 01:43+0000\n"
-"PO-Revision-Date: 2024-08-24 12:18+0100\n"
+"PO-Revision-Date: 2024-09-07 12:28+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
 "Language: en_GB\n"
@@ -2332,18 +2332,14 @@ msgid "Invalid region specified."
 msgstr "Invalid region specified."
 
 #: src/backend/datasources/LiveDataSource.cpp:729
-#, fuzzy, kde-format
-#| msgid "File does not exist."
+#, kde-format
 msgid "Device doesn't exist."
-msgstr "File does not exist."
+msgstr "Device does not exist."
 
 #: src/backend/datasources/LiveDataSource.cpp:732
-#, fuzzy, kde-format
-#| msgid ""
-#| "Failed to open the device. Please check your permissions on this device."
+#, kde-format
 msgid "User doesn't have enough permissions to open the device."
-msgstr ""
-"Failed to open the device. Please check your permissions on this device."
+msgstr "User doesn't have enough permissions to open the device."
 
 #: src/backend/datasources/LiveDataSource.cpp:735
 #, kde-format
@@ -2351,10 +2347,9 @@ msgid "Device already opened."
 msgstr "Device already opened."
 
 #: src/backend/datasources/LiveDataSource.cpp:738
-#, fuzzy, kde-format
-#| msgid "The device is not opened."
+#, kde-format
 msgid "Device is not opened."
-msgstr "The device is not opened."
+msgstr "Device is not opened."
 
 #: src/backend/datasources/LiveDataSource.cpp:741
 #, kde-format
@@ -2362,16 +2357,14 @@ msgid "Failed to read data."
 msgstr "Failed to read data."
 
 #: src/backend/datasources/LiveDataSource.cpp:744
-#, fuzzy, kde-format
-#| msgid "Server unavailable"
+#, kde-format
 msgid "Device not available."
-msgstr "Server unavailable"
+msgstr "Device not available."
 
 #: src/backend/datasources/LiveDataSource.cpp:747
-#, fuzzy, kde-format
-#| msgid "An error occurred."
+#, kde-format
 msgid "Timeout occured."
-msgstr "An error occurred."
+msgstr "Timeout occurred."
 
 #: src/backend/datasources/LiveDataSource.cpp:757
 #, kde-format

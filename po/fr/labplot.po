@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-04 01:43+0000\n"
-"PO-Revision-Date: 2024-09-05 09:04+0200\n"
+"PO-Revision-Date: 2024-09-06 21:13+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -2695,7 +2695,7 @@ msgstr "Rayon de Bohr"
 #: src/backend/gsl/constants.cpp:95
 #, kde-format
 msgid "Length of 1 angstrom"
-msgstr "Longueur de un angstrom"
+msgstr "Longueur de un Angström"
 
 #: src/backend/gsl/constants.cpp:96
 #, kde-format
@@ -2984,7 +2984,7 @@ msgstr "Viscosité dynamique de un poise"
 #: src/backend/gsl/constants.cpp:169
 #, kde-format
 msgid "Kinematic viscosity of 1 stokes"
-msgstr "Viscosité cinématique de un « stoke »"
+msgstr "Viscosité cinématique de un Stoke"
 
 #. i18n("Light and Illumination"));
 #: src/backend/gsl/constants.cpp:172
@@ -3015,7 +3015,7 @@ msgstr "Éclairage de un candela par pied"
 #: src/backend/gsl/constants.cpp:177
 #, kde-format
 msgid "Luminance of 1 lambert"
-msgstr "Luminance de un lambert"
+msgstr "Luminance de un Lambert"
 
 #: src/backend/gsl/constants.cpp:178
 #, kde-format
@@ -5253,12 +5253,12 @@ msgstr "Fonction zeta de Hurwitz"
 #: src/backend/gsl/functions.cpp:645
 #, kde-format
 msgid "Eta function for integer n"
-msgstr "Fonction Eta pour l'entier n"
+msgstr "Fonction « Êta » pour l'entier n"
 
 #: src/backend/gsl/functions.cpp:646
 #, kde-format
 msgid "Eta function"
-msgstr "Fonction « Eta »"
+msgstr "Fonction « Êta »"
 
 #: src/backend/gsl/functions.cpp:650
 #, kde-format
@@ -5705,12 +5705,12 @@ msgstr "Fonction Q de distribution Bêta cumulative"
 #: src/backend/gsl/functions.cpp:771
 #, kde-format
 msgid "Inverse cumulative beta distribution function P"
-msgstr "Fonction P cumulative inverse de distribution bếta"
+msgstr "Fonction P cumulative inverse de distribution Bêta"
 
 #: src/backend/gsl/functions.cpp:772
 #, kde-format
 msgid "Inverse cumulative beta distribution function Q"
-msgstr "Fonction Q cumulative inverse de distribution bếta"
+msgstr "Fonction Q cumulative inverse de distribution Bêta"
 
 #: src/backend/gsl/functions.cpp:775
 #, kde-format
@@ -6632,12 +6632,12 @@ msgstr "Cauchy-Lorentz"
 #: src/backend/nsl/nsl_fit.c:32 src/backend/nsl/nsl_sf_stats.c:45
 #, kde-format
 msgid "Hyperbolic Secant (sech)"
-msgstr "Sécante hyperbolique (sech)"
+msgstr "Sécante hyperbolique (Sech)"
 
 #: src/backend/nsl/nsl_fit.c:33
 #, kde-format
 msgid "Logistic (sech squared)"
-msgstr "Logistique (sech carré)"
+msgstr "Logistique (Sech carré)"
 
 #: src/backend/nsl/nsl_fit.c:34
 #, kde-format
@@ -6927,7 +6927,7 @@ msgstr "Bêta"
 #: src/backend/nsl/nsl_sf_stats.c:31
 #, kde-format
 msgid "Logistic (Sech-Squared)"
-msgstr "Logistique (sech carré)"
+msgstr "Logistique (Sech carré)"
 
 #: src/backend/nsl/nsl_sf_stats.c:32
 #, kde-format
@@ -9207,7 +9207,7 @@ msgstr "latin"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:402
 #, kde-format
 msgid "david"
-msgstr "david"
+msgstr "David"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:404
 #, kde-format
@@ -9402,7 +9402,7 @@ msgstr "%1 : définir l'orientation de la couverture"
 #, kde-format
 msgid "Error: Akima spline interpolation requires a minimum of 5 points."
 msgstr ""
-"Erreur : l'interpolation par spline d'Akima nécessite au minimum 5 points."
+"Erreur : l'interpolation par spline de Akima nécessite au minimum 5 points."
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1420
 #, kde-format
@@ -13785,7 +13785,7 @@ msgid ""
 "Activate to randomize the positions of the symbols (\"jittering\"), helpful "
 "for dense and overlapping data points."
 msgstr ""
-"Activez pour géné er de façon aléatoireles positions des symboles "
+"Activez pour générer de façon aléatoire les positions des symboles "
 "(« scintillement »), ce qui est utile pour les points de données denses et "
 "qui se chevauchent."
 
@@ -14406,7 +14406,7 @@ msgstr "Début Vert."
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:199
 #, kde-format
 msgid "Horiz. Midpoint"
-msgstr "Point milieu horiz."
+msgstr "Point central horizontal"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:200
 #, kde-format
@@ -15168,7 +15168,7 @@ msgstr "Extrêmement épars"
 #: src/kdefrontend/GuiTools.cpp:165
 #, kde-format
 msgid "Horiz. Lines"
-msgstr "Lignes horiz."
+msgstr "Lignes horizontales"
 
 #: src/kdefrontend/GuiTools.cpp:166
 #, kde-format
@@ -18785,7 +18785,7 @@ msgstr "Noms personnalisés :"
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:203
 #, kde-format
 msgid "Remove Quotes"
-msgstr "Supprimer les quotes"
+msgstr "Supprimer les guillemets"
 
 #. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:210
@@ -19028,7 +19028,7 @@ msgstr "Simplifier les espaces"
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:144
 #, kde-format
 msgid "Remove quotes"
-msgstr "Supprimer les quotes"
+msgstr "Supprimer les guillemets"
 
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:193
