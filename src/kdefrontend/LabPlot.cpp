@@ -78,10 +78,6 @@ const QString getSystemInfo() {
 }
 
 int main(int argc, char* argv[]) {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-	QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-	QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
-#endif
 	QApplication app(argc, argv);
 	KLocalizedString::setApplicationDomain("labplot");
 	MainWin::updateLocale();
@@ -213,13 +209,7 @@ int main(int argc, char* argv[]) {
 		WARN("	" << STDSTRING(path))
 #endif
 
-#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 67, 0) // KColorSchemeManager has a system default option
 	QString schemeName = group.readEntry("ColorScheme");
-#else
-	KConfigGroup generalGlobalsGroup = KSharedConfig::openConfig(QLatin1String("kdeglobals"))->group("General");
-	QString defaultSchemeName = generalGlobalsGroup.readEntry("ColorScheme", QStringLiteral("Breeze"));
-	QString schemeName = group.readEntry("ColorScheme", defaultSchemeName);
-#endif
 	KColorSchemeManager manager;
 	manager.activateScheme(manager.indexForScheme(schemeName));
 

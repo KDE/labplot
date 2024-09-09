@@ -866,9 +866,7 @@ void LabelWidget::fontChanged(const QFont& font) {
 	// because this avoids textChanged() after every command
 	QTextCharFormat format;
 	format.setFontFamily(font.family());
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
 	format.setFontFamilies({font.family()}); // see QTBUG-80475
-#endif
 	format.setFontPointSize(font.pointSize());
 	format.setFontItalic(font.italic());
 	format.setFontWeight(font.weight());

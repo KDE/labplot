@@ -501,7 +501,7 @@ private:
 		writer->writeAttribute(QStringLiteral("fontItalic"), QString::number(font.italic()));                                                                  \
 	}
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0) // uses font.setLegacyWeight(int)
+// uses font.setLegacyWeight(int)
 #define READ_QFONT(font)                                                                                                                                       \
 	{                                                                                                                                                          \
 		str = attribs.value(QStringLiteral("fontFamily")).toString();                                                                                          \
@@ -540,46 +540,6 @@ private:
 		else                                                                                                                                                   \
 			font.setItalic(str.toInt());                                                                                                                       \
 	}
-#else
-#define READ_QFONT(font)                                                                                                                                       \
-	{                                                                                                                                                          \
-		str = attribs.value(QStringLiteral("fontFamily")).toString();                                                                                          \
-		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseMissingAttributeWarning(QStringLiteral("fontFamily"));                                                                                \
-		else                                                                                                                                                   \
-			font.setFamily(str);                                                                                                                               \
-                                                                                                                                                               \
-		str = attribs.value(QStringLiteral("fontSize")).toString();                                                                                            \
-		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseMissingAttributeWarning(QStringLiteral("fontSize"));                                                                                  \
-		else {                                                                                                                                                 \
-			int size = str.toInt();                                                                                                                            \
-			if (size != -1)                                                                                                                                    \
-				font.setPixelSize(size);                                                                                                                       \
-		}                                                                                                                                                      \
-                                                                                                                                                               \
-		str = attribs.value(QStringLiteral("fontPointSize")).toString();                                                                                       \
-		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseMissingAttributeWarning(QStringLiteral("fontPointSize"));                                                                             \
-		else {                                                                                                                                                 \
-			int size = str.toInt();                                                                                                                            \
-			if (size != -1)                                                                                                                                    \
-				font.setPointSize(size);                                                                                                                       \
-		}                                                                                                                                                      \
-                                                                                                                                                               \
-		str = attribs.value(QStringLiteral("fontWeight")).toString();                                                                                          \
-		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseMissingAttributeWarning(QStringLiteral("fontWeight"));                                                                                \
-		else                                                                                                                                                   \
-			font.setWeight(str.toInt());                                                                                                                       \
-                                                                                                                                                               \
-		str = attribs.value(QStringLiteral("fontItalic")).toString();                                                                                          \
-		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseMissingAttributeWarning(QStringLiteral("fontItalic"));                                                                                \
-		else                                                                                                                                                   \
-			font.setItalic(str.toInt());                                                                                                                       \
-	}
-#endif
 
 // QBrush
 #define WRITE_QBRUSH(brush)                                                                                                                                    \

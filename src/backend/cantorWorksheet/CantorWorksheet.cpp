@@ -56,27 +56,6 @@ CantorWorksheet::CantorWorksheet(const QString& name, bool loading)
 bool CantorWorksheet::init(QByteArray* content) {
 	DEBUG(Q_FUNC_INFO)
 
-#if KCOREADDONS_VERSION < QT_VERSION_CHECK(5, 86, 0)
-	KPluginLoader loader(QLatin1String("kf5/parts/cantorpart"));
-	KPluginLoader oldLoader(QLatin1String("cantorpart")); // old path
-	KPluginFactory* factory = loader.factory();
-
-	if (!factory) { // try old path
-		WARN("Failed to load Cantor plugins; file name: " << STDSTRING(loader.fileName()))
-		WARN("Error message: " << STDSTRING(loader.errorString()))
-		factory = oldLoader.factory();
-	}
-	if (!factory) {
-		// we can only get to this here if we open a project having Cantor content and Cantor plugins were not found.
-		// return false here, a proper error message will be created in load() and propagated further.
-		WARN("Failed to load Cantor plugins; file name: " << STDSTRING(oldLoader.fileName()))
-		WARN("Error message: " << STDSTRING(oldLoader.errorString()))
-		m_error = i18n("Couldn't find the dynamic library 'cantorpart'. Please check your installation.");
-		return false;
-	} else {
-		m_part = factory->create<KParts::ReadWritePart>(this, QVariantList() << m_backendName << QLatin1String("--noprogress"));
-
-#else
 	const auto result = KPluginFactory::instantiatePlugin<KParts::ReadWritePart>(KPluginMetaData(QStringLiteral("kf5/parts/cantorpart")),
 																				 this,
 																				 QVariantList() << m_backendName << QLatin1String("--noprogress"));
@@ -86,7 +65,6 @@ bool CantorWorksheet::init(QByteArray* content) {
 		return false;
 	} else {
 		m_part = result.plugin;
-#endif
 		if (!m_part) {
 			WARN("Could not create the Cantor Part for backend " << STDSTRING(m_backendName))
 			m_error = i18n("Couldn't find the plugin for %1. Please check your installation.", m_backendName);

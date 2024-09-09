@@ -376,17 +376,12 @@ void FITSHeaderEditWidget::removeKeyword() {
 		return;
 
 	QString key = ui->twKeywordsTable->item(row, 0)->text();
-#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
 	auto status = KMessageBox::questionTwoActions(this,
 												  i18n("Are you sure you want to delete the keyword '%1'?", key),
 												  i18n("Confirm Deletion"),
 												  KStandardGuiItem::del(),
 												  KStandardGuiItem::cancel());
 	if (status == KMessageBox::PrimaryAction) {
-#else
-	auto status = KMessageBox::questionYesNo(this, i18n("Are you sure you want to delete the keyword '%1'?", key), i18n("Confirm Deletion"));
-	if (status == KMessageBox::Yes) {
-#endif
 		bool remove = true;
 		for (const QString& k : mandatoryKeywords()) {
 			if (!k.compare(key)) {

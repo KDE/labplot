@@ -1158,7 +1158,6 @@ void CartesianPlotDock::removeRange(const Dimension dim) {
 	if (msg.size() > 0) {
 		DEBUG(Q_FUNC_INFO << ", range used in plot range " << STDSTRING(msg))
 
-#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
 		auto status = KMessageBox::warningTwoActions(
 			this,
 			i18n("%1 range %2 is used in plot range %3. ", CartesianCoordinateSystem::dimensionToString(dim).toUpper(), currentRow + 1, msg)
@@ -1167,13 +1166,6 @@ void CartesianPlotDock::removeRange(const Dimension dim) {
 			KStandardGuiItem::remove(),
 			KStandardGuiItem::cancel());
 		if (status == KMessageBox::SecondaryAction)
-#else
-		auto status = KMessageBox::warningYesNo(
-			this,
-			i18n("%1 range %2 is used in plot range %3. ", CartesianCoordinateSystem::dimensionToString(dim).toUpper(), currentRow + 1, msg)
-				+ i18n("Really remove it?"));
-		if (status == KMessageBox::No)
-#endif
 			return;
 		else {
 			// reset x ranges of cSystems using the range to be removed
@@ -1220,7 +1212,6 @@ void CartesianPlotDock::removePlotRange() {
 		if (cSystemIndex == currentRow) {
 			DEBUG(Q_FUNC_INFO << ", WARNING: plot range used in element")
 
-#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
 			auto status =
 				KMessageBox::warningTwoActions(this,
 											   i18n("Plot range %1 is used by element \"%2\". ", currentRow + 1, element->name()) + i18n("Really remove it?"),
@@ -1228,11 +1219,6 @@ void CartesianPlotDock::removePlotRange() {
 											   KStandardGuiItem::remove(),
 											   KStandardGuiItem::cancel());
 			if (status == KMessageBox::SecondaryAction)
-#else
-			auto status =
-				KMessageBox::warningYesNo(this, i18n("Plot range %1 is used by element \"%2\". ", currentRow + 1, element->name()) + i18n("Really remove it?"));
-			if (status == KMessageBox::No)
-#endif
 				return;
 			else
 				element->setCoordinateSystemIndex(0); // reset

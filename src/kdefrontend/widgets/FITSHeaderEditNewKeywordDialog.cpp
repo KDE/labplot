@@ -83,7 +83,6 @@ int FITSHeaderEditNewKeywordDialog::okClicked() {
 		m_newKeyword = FITSFilter::Keyword(ui.leKey->text(), ui.leValue->text(), ui.leComment->text());
 		return QMessageBox::Ok;
 	} else {
-#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
 		auto status = KMessageBox::warningTwoActions(this,
 													 i18n("Cannot add new keyword without key, would you like to try again?"),
 													 i18n("Cannot add empty key"),
@@ -91,11 +90,6 @@ int FITSHeaderEditNewKeywordDialog::okClicked() {
 													 KStandardGuiItem::cancel());
 		if (status == KMessageBox::SecondaryAction)
 			return QMessageBox::Cancel;
-#else
-		auto status = KMessageBox::warningYesNo(this, i18n("Cannot add new keyword without key, would you like to try again?"), i18n("Cannot add empty key"));
-		if (status == KMessageBox::No)
-			return QMessageBox::Cancel;
-#endif
 		return status;
 	}
 }

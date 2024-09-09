@@ -47,11 +47,7 @@ void MQTTTest::testContainFalse() {
 
 		while (!in.atEnd()) {
 			QString line = in.readLine();
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 			QStringList topics = line.split(QLatin1Char(' '), Qt::SkipEmptyParts);
-#else
-			QStringList topics = line.split(QLatin1Char(' '), QString::SkipEmptyParts);
-#endif
 			QCOMPARE(client->checkTopicContains(topics[0], topics[1]), false);
 		}
 
@@ -70,11 +66,7 @@ void MQTTTest::testContainTrue() {
 
 		while (!in.atEnd()) {
 			QString line = in.readLine();
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 			QStringList topics = line.split(QLatin1Char(' '), Qt::SkipEmptyParts);
-#else
-			QStringList topics = line.split(QLatin1Char(' '), QString::SkipEmptyParts);
-#endif
 			QCOMPARE(client->checkTopicContains(topics[0], topics[1]), true);
 		}
 
@@ -96,11 +88,7 @@ void MQTTTest::testCommonTrue() {
 
 		while (!in.atEnd()) {
 			QString line = in.readLine();
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 			QStringList topics = line.split(QLatin1Char(' '), Qt::SkipEmptyParts);
-#else
-			QStringList topics = line.split(QLatin1Char(' '), QString::SkipEmptyParts);
-#endif
 			QCOMPARE(client->checkCommonLevel(topics[0], topics[1]), topics[2]);
 		}
 
@@ -119,11 +107,7 @@ void MQTTTest::testCommonFalse() {
 
 		while (!in.atEnd()) {
 			QString line = in.readLine();
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 			QStringList topics = line.split(QLatin1Char(' '), Qt::SkipEmptyParts);
-#else
-			QStringList topics = line.split(QLatin1Char(' '), QString::SkipEmptyParts);
-#endif
 			QCOMPARE(client->checkCommonLevel(topics[0], topics[1]), QString());
 		}
 

@@ -61,32 +61,19 @@
 #include "kdefrontend/worksheet/WorksheetPreviewWidget.h"
 
 #ifdef HAVE_KUSERFEEDBACK
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #include <KUserFeedbackQt6/ApplicationVersionSource>
 #include <KUserFeedbackQt6/PlatformInfoSource>
 #include <KUserFeedbackQt6/QtVersionSource>
 #include <KUserFeedbackQt6/ScreenInfoSource>
 #include <KUserFeedbackQt6/StartCountSource>
 #include <KUserFeedbackQt6/UsageTimeSource>
-#else
-#include <KUserFeedback/ApplicationVersionSource>
-#include <KUserFeedback/PlatformInfoSource>
-#include <KUserFeedback/QtVersionSource>
-#include <KUserFeedback/ScreenInfoSource>
-#include <KUserFeedback/StartCountSource>
-#include <KUserFeedback/UsageTimeSource>
-#endif
 #endif
 
 #ifdef HAVE_PURPOSE
 #include <Purpose/AlternativesModel>
-#include <purpose_version.h>
-#if PURPOSE_VERSION >= QT_VERSION_CHECK(5, 104, 0)
 #include <Purpose/Menu>
-#else
-#include <PurposeWidgets/Menu>
-#endif
 #include <QMimeType>
+#include <purpose_version.h>
 #endif
 
 #include <DockAreaWidget.h>
@@ -119,10 +106,7 @@
 #include <KActionMenu>
 #include <KColorScheme>
 #include <KColorSchemeManager>
-#include <kconfigwidgets_version.h>
-#if KCONFIGWIDGETS_VERSION >= QT_VERSION_CHECK(5, 107, 0)
 #include <KColorSchemeMenu>
-#endif
 #include <KCompressionDevice>
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -132,6 +116,7 @@
 #include <KToggleAction>
 #include <KToggleFullScreenAction>
 #include <KToolBar>
+#include <kconfigwidgets_version.h>
 #include <kxmlguifactory.h>
 
 #ifdef HAVE_CANTOR_LIBS
@@ -295,12 +280,10 @@ void MainWin::initGUI(const QString& fileName) {
 	mainToolBar->insertWidget(lastAction_, tbImport);
 
 	// hamburger menu
-#if KCONFIGWIDGETS_VERSION >= QT_VERSION_CHECK(5, 81, 0)
 	m_hamburgerMenu = KStandardAction::hamburgerMenu(nullptr, nullptr, actionCollection());
 	toolBar()->addAction(m_hamburgerMenu);
 	m_hamburgerMenu->hideActionsOf(toolBar());
 	m_hamburgerMenu->setMenuBar(menuBar());
-#endif
 
 	setWindowIcon(QIcon::fromTheme(QLatin1String("LabPlot"), QGuiApplication::windowIcon()));
 	setAttribute(Qt::WA_DeleteOnClose);
@@ -924,22 +907,12 @@ void MainWin::initMenus() {
 
 	// set the action for the current color scheme checked
 	auto group = Settings::group(QStringLiteral("Settings_General"));
-#if KCONFIGWIDGETS_VERSION >= QT_VERSION_CHECK(5, 67, 0) // KColorSchemeManager has a system default option
 	QString schemeName = group.readEntry("ColorScheme");
-#else
-	auto generalGlobalsGroup = KSharedConfig::openConfig(QLatin1String("kdeglobals"))->group("General");
-	QString defaultSchemeName = generalGlobalsGroup.readEntry("ColorScheme", QStringLiteral("Breeze"));
-	QString schemeName = group.readEntry("ColorScheme", defaultSchemeName);
-#endif
 	// default dark scheme on Windows is not optimal (Breeze dark is better)
 	// we can't find out if light or dark mode is used, so we don't switch to Breeze/Breeze dark here
 	DEBUG(Q_FUNC_INFO << ", Color scheme = " << STDSTRING(schemeName))
-#if KCONFIGWIDGETS_VERSION >= QT_VERSION_CHECK(5, 107, 0) // use KColorSchemeMenu::createMenu and set the text and check an action manually
 	auto* schemesMenu = KColorSchemeMenu::createMenu(m_schemeManager, this);
 	schemesMenu->setText(i18n("Color Scheme"));
-#else
-	auto* schemesMenu = m_schemeManager->createSchemeSelectionMenu(i18n("Color Scheme"), schemeName, this);
-#endif
 	schemesMenu->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-color")));
 	connect(schemesMenu->menu(), &QMenu::triggered, this, &MainWin::colorSchemeChanged);
 
@@ -997,7 +970,6 @@ void MainWin::colorSchemeChanged(QAction* action) {
  */
 bool MainWin::warnModified() {
 	if (m_project->hasChanged()) {
-#if KCONFIGWIDGETS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
 		int option = KMessageBox::warningTwoActionsCancel(this,
 														  i18n("The current project %1 has been modified. Do you want to save it?", m_project->name()),
 														  i18n("Save Project"),
@@ -1011,19 +983,6 @@ bool MainWin::warnModified() {
 		case KMessageBox::Cancel:
 			return true;
 		}
-#else
-		int option = KMessageBox::warningYesNoCancel(this,
-													 i18n("The current project %1 has been modified. Do you want to save it?", m_project->name()),
-													 i18n("Save Project"));
-		switch (option) {
-		case KMessageBox::Yes:
-			return !saveProject();
-		case KMessageBox::No:
-			break;
-		case KMessageBox::Cancel:
-			return true;
-		}
-#endif
 	}
 
 	return false;

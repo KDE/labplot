@@ -562,11 +562,7 @@ bool Project::load(const QString& filename, bool preview) {
 			KMessageBox::error(nullptr, i18n("The project file is empty."), i18n("Error opening project"));
 			return false;
 		}
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 		QDEBUG(Q_FUNC_INFO << ", got magic: " << magic << Qt::hex << "0x" << magic)
-#else
-		QDEBUG(Q_FUNC_INFO << ", got magic: " << magic << hex << "0x" << magic)
-#endif
 
 		if (magic == 0xfd37) // XZ compressed data
 			file = new KCompressionDevice(filename, KCompressionDevice::Xz);
@@ -635,13 +631,8 @@ bool Project::load(const QString& filename, bool preview) {
 			"If you modify and save the project, the CAS content will be lost.\n\n"
 			"Do you want to continue?",
 			reader.missingCASWarning());
-#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
 		auto status = KMessageBox::warningTwoActions(nullptr, msg, i18n("Missing Support for CAS"), KStandardGuiItem::cont(), KStandardGuiItem::cancel());
 		if (status == KMessageBox::SecondaryAction) {
-#else
-		auto status = KMessageBox::warningYesNo(nullptr, msg, i18n("Missing Support for CAS"));
-		if (status == KMessageBox::No) {
-#endif
 			file->close();
 			delete file;
 			return false;

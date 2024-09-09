@@ -345,11 +345,7 @@ void ImportFileWidget::loadSettings() {
 	m_willSettings.willTimeInterval = conf.readEntry("mqttWillUpdateInterval", m_willSettings.willTimeInterval);
 
 	const QString& willStatistics = conf.readEntry("mqttWillStatistics", "");
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 	const QStringList& statisticsList = willStatistics.split(QLatin1Char('|'), Qt::SkipEmptyParts);
-#else
-	const QStringList& statisticsList = willStatistics.split(QLatin1Char('|'), QString::SkipEmptyParts);
-#endif
 	for (auto value : statisticsList)
 		m_willSettings.willStatistics[value.toInt()] = true;
 #endif
@@ -1968,11 +1964,7 @@ void ImportFileWidget::refreshPreview() {
 			item->setText(importedStrings[0][0]);
 			tmpTableWidget->setItem(0, 0, item);
 		} else {
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 			const int rowCount = std::max(importedStrings.size(), static_cast<qsizetype>(1));
-#else
-			const int rowCount = std::max(importedStrings.size(), 1);
-#endif
 			const int maxColumns = 300;
 			tmpTableWidget->setRowCount(rowCount);
 
@@ -1990,11 +1982,7 @@ void ImportFileWidget::refreshPreview() {
 			// XLSX and Ods has special h/vheader, don't overwrite the preview table
 			if (fileType != AbstractFileFilter::FileType::XLSX && fileType != AbstractFileFilter::FileType::Ods) {
 				// set header if columnMode available
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 				for (int i = 0; i < std::min(static_cast<qsizetype>(tmpTableWidget->columnCount()), columnModes.size()); ++i) {
-#else
-				for (int i = 0; i < std::min(tmpTableWidget->columnCount(), columnModes.size()); ++i) {
-#endif
 					QString columnName = QString::number(i + 1);
 					if (i < vectorNameList.size())
 						columnName = vectorNameList.at(i);
@@ -2607,11 +2595,7 @@ void ImportFileWidget::mqttMessageReceived(const QByteArray& /*message*/, const 
 	const QChar sep = QLatin1Char('/');
 
 	if (topic.name().contains(sep)) {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 		const QStringList& list = topic.name().split(sep, Qt::SkipEmptyParts);
-#else
-		const QStringList& list = topic.name().split(sep, QString::SkipEmptyParts);
-#endif
 
 		if (!list.isEmpty()) {
 			rootName = list.at(0);
@@ -2675,11 +2659,7 @@ void ImportFileWidget::mqttMessageReceived(const QByteArray& /*message*/, const 
 
 	// if a subscribed topic contains the new topic, we have to update twSubscriptions
 	for (int i = 0; i < m_subscriptionWidget->subscriptionCount(); ++i) {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 		const QStringList subscriptionName = m_subscriptionWidget->topLevelSubscription(i)->text(0).split(sep, Qt::SkipEmptyParts);
-#else
-		const QStringList subscriptionName = m_subscriptionWidget->topLevelSubscription(i)->text(0).split(sep, QString::SkipEmptyParts);
-#endif
 		if (!subscriptionName.isEmpty()) {
 			if (rootName == subscriptionName.first()) {
 				QVector<QString> subscriptions;

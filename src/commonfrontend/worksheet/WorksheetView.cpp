@@ -869,11 +869,7 @@ void WorksheetView::wheelEvent(QWheelEvent* event) {
 		QGraphicsView::wheelEvent(event);
 
 	if (m_magnificationWindow && m_magnificationWindow->isVisible())
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
 		updateMagnificationWindow(mapToScene(event->position().toPoint()));
-#else
-		updateMagnificationWindow(mapToScene(event->pos()));
-#endif
 }
 
 void WorksheetView::zoom(int numSteps) {
@@ -1142,20 +1138,12 @@ void WorksheetView::dragEnterEvent(QDragEnterEvent* event) {
 
 void WorksheetView::dragMoveEvent(QDragMoveEvent* event) {
 	// only accept drop events if we have a plot under the cursor where we can drop columns onto
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 	bool plot = isPlotAtPos(event->position().toPoint());
-#else
-	bool plot = isPlotAtPos(event->pos());
-#endif
 	event->setAccepted(plot);
 }
 
 void WorksheetView::dropEvent(QDropEvent* event) {
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 	auto* plot = plotAt(event->position().toPoint());
-#else
-	auto* plot = plotAt(event->pos());
-#endif
 	if (!plot)
 		return;
 
@@ -1452,7 +1440,6 @@ void WorksheetView::deleteElement() {
 	if (m_selectedItems.isEmpty())
 		return;
 
-#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
 	auto status = KMessageBox::warningTwoActions(
 		this,
 		i18np("Do you really want to delete the selected object?", "Do you really want to delete the selected %1 objects?", m_selectedItems.size()),
@@ -1461,14 +1448,6 @@ void WorksheetView::deleteElement() {
 		KStandardGuiItem::cancel());
 	if (status == KMessageBox::SecondaryAction)
 		return;
-#else
-	auto status = KMessageBox::warningYesNo(
-		this,
-		i18np("Do you really want to delete the selected object?", "Do you really want to delete the selected %1 objects?", m_selectedItems.size()),
-		i18np("Delete selected object", "Delete selected objects", m_selectedItems.size()));
-	if (status == KMessageBox::No)
-		return;
-#endif
 
 	m_suppressSelectionChangedEvent = true;
 	m_worksheet->beginMacro(i18n("%1: Remove selected worksheet elements.", m_worksheet->name()));

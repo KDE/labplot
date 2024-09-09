@@ -22,12 +22,7 @@
 #include <KLocalizedString>
 
 #include <QCompleter>
-// see https://gitlab.kitware.com/cmake/cmake/-/issues/21609
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 #include <QFileSystemModel>
-#else
-#include <QDirModel>
-#endif
 #include <QPageSize>
 
 #include <gsl/gsl_const_cgs.h>
@@ -46,11 +41,7 @@ ImageDock::ImageDock(QWidget* parent)
 	setVisibilityWidgets(ui.chbVisible);
 
 	ui.bOpen->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 	ui.leFileName->setCompleter(new QCompleter(new QFileSystemModel, this));
-#else
-	ui.leFileName->setCompleter(new QCompleter(new QDirModel, this));
-#endif
 
 	// 	ui.cbSize->addItem(i18n("Original"));
 	// 	ui.cbSize->addItem(i18n("Custom"));

@@ -80,9 +80,6 @@ public:
 	QString formula() const;
 	void clearFormula();
 	struct FormulaData {
-#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0)) // required to use in QVector
-		FormulaData() = default;
-#endif
 		FormulaData(const QString& variableName, const QString& columnPath)
 			: m_variableName(variableName)
 			, m_columnPath(columnPath) {

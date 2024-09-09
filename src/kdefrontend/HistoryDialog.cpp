@@ -88,15 +88,11 @@ HistoryDialog::~HistoryDialog() {
 }
 
 void HistoryDialog::clearUndoStack() {
-#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
 	if (KMessageBox::questionTwoActions(this,
 										i18n("Do you really want to clear the undo history?"),
 										i18n("Clear History"),
 										KStandardGuiItem::clear(),
 										KStandardGuiItem::cancel())
 		== KMessageBox::PrimaryAction)
-#else
-	if (KMessageBox::questionYesNo(this, i18n("Do you really want to clear the undo history?"), i18n("Clear History")) == KMessageBox::Yes)
-#endif
 		m_undoStack->clear();
 }
