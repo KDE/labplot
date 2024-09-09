@@ -32,6 +32,7 @@ public:
 	XYCurve* upperLimitCurve{nullptr};
 	XYCurve* lowerLimitCurve{nullptr};
 
+	// columns for the source data
 	const AbstractColumn* xDataColumn{nullptr};
 	QString xDataColumnPath;
 	const AbstractColumn* yDataColumn{nullptr};
@@ -40,8 +41,11 @@ public:
 	// columns used for the data curve in case other statistics is being plotted
 	// and not the original data provided by the user in xDataColumn and yDataColumn above
 	Column* xColumn{nullptr};
+	QString xColumnPath;
 	Column* yColumn{nullptr};
+	QString yColumnPath;
 
+	// columns for control limit lines
 	Column* xCenterColumn{nullptr};
 	QString xCenterColumnPath;
 	Column* yCenterColumn{nullptr};

@@ -75,6 +75,7 @@ public:
 private Q_SLOTS:
 	void xDataColumnAboutToBeRemoved(const AbstractAspect*);
 	void yDataColumnAboutToBeRemoved(const AbstractAspect*);
+	void renameInternalCurves();
 
 protected:
 	ProcessBehaviorChart(const QString& name, ProcessBehaviorChartPrivate* dd);

@@ -59,7 +59,7 @@ void ProcessBehaviorChart::init() {
 	KConfig config;
 	KConfigGroup group = config.group(QStringLiteral("ProcessBehaviorChart"));
 
-	// curve for the data points
+	// curve and columns for the data points
 	d->dataCurve = new XYCurve(QStringLiteral("data"));
 	d->dataCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->dataCurve->setHidden(true);
@@ -69,7 +69,17 @@ void ProcessBehaviorChart::init() {
 	d->dataCurve->symbol()->setStyle(Symbol::Style::Circle);
 	d->dataCurve->background()->setPosition(Background::Position::No);
 
-	// curve for the central line
+	d->xColumn = new Column(QStringLiteral("x"));
+	d->xColumn->setHidden(true);
+	d->xColumn->setUndoAware(false);
+	addChildFast(d->xColumn);
+
+	d->yColumn = new Column(QStringLiteral("y"));
+	d->yColumn->setHidden(true);
+	d->yColumn->setUndoAware(false);
+	addChildFast(d->yColumn);
+
+	// curve and columns for the central line
 	d->centerCurve = new XYCurve(QStringLiteral("center"));
 	d->centerCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->centerCurve->setHidden(true);
@@ -91,8 +101,8 @@ void ProcessBehaviorChart::init() {
 	addChildFast(d->yCenterColumn);
 	d->centerCurve->setYColumn(d->yCenterColumn);
 
-	// curve for the upper and lower limit lines
-	d->upperLimitCurve = new XYCurve(QStringLiteral("upper limit"));
+	// curve and columns for the upper and lower limit lines
+	d->upperLimitCurve = new XYCurve(QStringLiteral("upperLimit"));
 	d->upperLimitCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->upperLimitCurve->setHidden(true);
 	d->upperLimitCurve->graphicsItem()->setParentItem(d);
@@ -113,7 +123,7 @@ void ProcessBehaviorChart::init() {
 	addChildFast(d->yUpperLimitColumn);
 	d->upperLimitCurve->setYColumn(d->yUpperLimitColumn);
 
-	d->lowerLimitCurve = new XYCurve(QStringLiteral("lower limit"));
+	d->lowerLimitCurve = new XYCurve(QStringLiteral("lowerLimit"));
 	d->lowerLimitCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->lowerLimitCurve->setHidden(true);
 	d->lowerLimitCurve->graphicsItem()->setParentItem(d);
@@ -134,15 +144,9 @@ void ProcessBehaviorChart::init() {
 	addChildFast(d->yLowerLimitColumn);
 	d->lowerLimitCurve->setYColumn(d->yLowerLimitColumn);
 
-	// synchronize the names of the internal XYCurves with the name of the current q-q plot
+	// synchronize the names of the internal XYCurves with the name of the current plot
 	// so we have the same name shown on the undo stack
-	connect(this, &AbstractAspect::aspectDescriptionChanged, [this] {
-		Q_D(ProcessBehaviorChart);
-		d->dataCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
-		d->centerCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
-		d->upperLimitCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
-		d->lowerLimitCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
-	});
+	connect(this, &AbstractAspect::aspectDescriptionChanged, this, &ProcessBehaviorChart::renameInternalCurves);
 }
 
 void ProcessBehaviorChart::finalizeAdd() {
@@ -154,6 +158,14 @@ void ProcessBehaviorChart::finalizeAdd() {
 	addChildFast(d->lowerLimitCurve);
 }
 
+void ProcessBehaviorChart::renameInternalCurves() {
+	Q_D(ProcessBehaviorChart);
+	d->dataCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
+	d->centerCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
+	d->upperLimitCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
+	d->lowerLimitCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
+
+}
 /*!
   Returns an icon to be used in the project explorer.
   */
@@ -425,17 +437,10 @@ void ProcessBehaviorChartPrivate::recalc() {
 		xMin = statistics.minimum;
 		xMax = statistics.maximum;
 	} else {
-		// no column for x provided, use the index for x
-		if (!xColumn) {
-			xColumn = new Column(QStringLiteral("xColumn"));
-			xColumn->setHidden(true);
-			xColumn->setUndoAware(false);
-			q->addChildFast(xColumn);
-		}
-		xColumn->clear();
 		const int count = yDataColumn->rowCount();
 		xMin = 1.;
 		xMax = count;
+		xColumn->clear();
 		xColumn->resizeTo(count);
 		for (int i = 0; i < count; ++i)
 			xColumn->setValueAt(i, i + 1);
@@ -501,15 +506,8 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 	}
 	case ProcessBehaviorChart::Type::mR: {
 		// calculate the mean moving ranges
-		if (!yColumn) {
-			yColumn = new Column(QStringLiteral("xColumn"));
-			yColumn->setHidden(true);
-			yColumn->setUndoAware(false);
-			q->addChildFast(yColumn);
-		}
-		yColumn->resizeTo(yDataColumn->rowCount());
 		yColumn->clear();
-
+		yColumn->resizeTo(yDataColumn->rowCount());
 		for (int i = 1; i < yDataColumn->rowCount(); ++i) {
 			if (yDataColumn->isValid(i) && !yDataColumn->isMasked(i))
 				yColumn->setValueAt(i - 1, std::abs(yDataColumn->valueAt(i) - yDataColumn->valueAt(i - 1)));
@@ -719,6 +717,8 @@ void ProcessBehaviorChart::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement(QStringLiteral("general"));
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
+	WRITE_COLUMN(d->xColumn, xColumn);
+	WRITE_COLUMN(d->yColumn, yColumn);
 	WRITE_COLUMN(d->xCenterColumn, xCenterColumn);
 	WRITE_COLUMN(d->yCenterColumn, yCenterColumn);
 	WRITE_COLUMN(d->xUpperLimitColumn, xUpperLimitColumn);
@@ -731,6 +731,8 @@ void ProcessBehaviorChart::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	// save the internal columns, above only the references to them were saved
+	d->xColumn->save(writer);
+	d->yColumn->save(writer);
 	d->xCenterColumn->save(writer);
 	d->yCenterColumn->save(writer);
 	d->xUpperLimitColumn->save(writer);
@@ -739,10 +741,17 @@ void ProcessBehaviorChart::save(QXmlStreamWriter* writer) const {
 	d->yLowerLimitColumn->save(writer);
 
 	// save the internal curves
+	// disconnect temporarily from renameInternalCurves so we can use unique names to be able to properly load the curves later
+	disconnect(this, &AbstractAspect::aspectDescriptionChanged, this, &ProcessBehaviorChart::renameInternalCurves);
+	d->dataCurve->setName(QStringLiteral("data"));
 	d->dataCurve->save(writer);
+	d->centerCurve->setName(QStringLiteral("center"));
 	d->centerCurve->save(writer);
+	d->upperLimitCurve->setName(QStringLiteral("upperLimit"));
 	d->upperLimitCurve->save(writer);
+	d->lowerLimitCurve->setName(QStringLiteral("lowerLimit"));
 	d->lowerLimitCurve->save(writer);
+	connect(this, &AbstractAspect::aspectDescriptionChanged, this, &ProcessBehaviorChart::renameInternalCurves);
 
 	writer->writeEndElement(); // close "ProcessBehaviorChart" section
 }
@@ -772,6 +781,8 @@ bool ProcessBehaviorChart::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 			READ_COLUMN(xDataColumn);
 			READ_COLUMN(yDataColumn);
+			READ_COLUMN(xColumn);
+			READ_COLUMN(yColumn);
 			READ_COLUMN(xCenterColumn);
 			READ_COLUMN(yCenterColumn);
 			READ_COLUMN(xUpperLimitColumn);
@@ -790,13 +801,13 @@ bool ProcessBehaviorChart::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 			bool rc = false;
 			const auto& name = attribs.value(QStringLiteral("name"));
-			if (name == QLatin1String("xData"))
-				rc = const_cast<AbstractColumn*>(d->xDataColumn)->load(reader, preview);
-			else if (name == QLatin1String("yData"))
-				rc = const_cast<AbstractColumn*>(d->yDataColumn)->load(reader, preview);
-			else if (name == QLatin1String("xCenterLine"))
+			if (name == QLatin1String("x"))
+				rc = d->xColumn->load(reader, preview);
+			else if (name == QLatin1String("y"))
+				rc = d->yColumn->load(reader, preview);
+			else if (name == QLatin1String("xCenter"))
 				rc = d->xCenterColumn->load(reader, preview);
-			else if (name == QLatin1String("yCenterLine"))
+			else if (name == QLatin1String("yCenter"))
 				rc = d->yCenterColumn->load(reader, preview);
 			else if (name == QLatin1String("xUpperLimit"))
 				rc = d->xUpperLimitColumn->load(reader, preview);
@@ -816,9 +827,9 @@ bool ProcessBehaviorChart::load(XmlStreamReader* reader, bool preview) {
 				rc = d->dataCurve->load(reader, preview);
 			else if (attribs.value(QStringLiteral("name")) == QLatin1String("center"))
 				rc = d->centerCurve->load(reader, preview);
-			else if (attribs.value(QStringLiteral("name")) == QLatin1String("upper limit"))
+			else if (attribs.value(QStringLiteral("name")) == QLatin1String("upperLimit"))
 				rc = d->upperLimitCurve->load(reader, preview);
-			else if (attribs.value(QStringLiteral("name")) == QLatin1String("lower limit"))
+			else if (attribs.value(QStringLiteral("name")) == QLatin1String("lowerLimit"))
 				rc = d->lowerLimitCurve->load(reader, preview);
 		
 			if (!rc)

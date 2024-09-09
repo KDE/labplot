@@ -24,6 +24,7 @@
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/LollipopPlot.h"
+#include "backend/worksheet/plots/cartesian/ProcessBehaviorChart.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
@@ -1190,6 +1191,20 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		lollipopPlot->setDataColumns(std::move(dataColumns));
 
 		RESTORE_COLUMN_POINTER(lollipopPlot, xColumn, XColumn);
+	}
+
+	// process behavior charts/plots
+	QVector<ProcessBehaviorChart*> pbPlots;
+	if (hasChildren)
+		pbPlots = aspect->children<ProcessBehaviorChart>(ChildIndexFlag::Recursive);
+	else if (aspect->type() == AspectType::ProcessBehaviorChart)
+		pbPlots << static_cast<ProcessBehaviorChart*>(aspect);
+
+	for (auto* plot : pbPlots) {
+		if (!plot)
+			continue;
+		RESTORE_COLUMN_POINTER(plot, xDataColumn, XDataColumn);
+		RESTORE_COLUMN_POINTER(plot, yDataColumn, YDataColumn);
 	}
 
 	// data picker curves
