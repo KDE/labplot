@@ -272,7 +272,7 @@ void DatapickerCurve::setCurveErrorTypes(const DatapickerCurve::Errors errors) {
 				setPlusDeltaXColumn(appendColumn(QLatin1String("+delta_x")));
 			else
 				d->plusDeltaXColumn->setName(QLatin1String("+delta_x")); // make sure we have the proper name when switching from Symmetric to Asymmetric
-		} else if (errors.x == ErrorType::SymmetricError){
+		} else if (errors.x == ErrorType::SymmetricError) {
 			if (!d->plusDeltaXColumn)
 				setPlusDeltaXColumn(appendColumn(QLatin1String("+-delta_x")));
 			else
