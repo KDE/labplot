@@ -1265,9 +1265,9 @@ bool CartesianPlot::autoScale(const Dimension dim, int index) const {
 
 class CartesianPlotEnableAutoScaleIndexCmd : public QUndoCommand {
 public:
-	CartesianPlotEnableAutoScaleIndexCmd(CartesianPlotPrivate* private_obj, const Dimension dim, bool autoScale, int index, bool fullRange, QUndoCommand* parent = nullptr)
-		: QUndoCommand(parent)
-		, m_private(private_obj)
+    CartesianPlotEnableAutoScaleIndexCmd(CartesianPlotPrivate* private_obj, const Dimension dim, bool autoScale, int index, bool fullRange, QUndoCommand* parent = nullptr)
+        : QUndoCommand(parent)
+        , m_private(private_obj)
 		, m_dimension(dim)
 		, m_autoScale(autoScale)
 		, m_index(index)
@@ -1315,15 +1315,15 @@ void CartesianPlot::enableAutoScale(const Dimension dim, int index, const bool e
 
 	if (index == -1) { // all x ranges
 		for (int i = 0; i < rangeCount(dim); i++)
-			enableAutoScale(dim, i, enable, fullRange, parent);
+            enableAutoScale(dim, i, enable, fullRange, parent);
 		return;
 	}
 
 	if (enable != range(dim, index).autoScale()) {
-		auto* cmd = new CartesianPlotEnableAutoScaleIndexCmd(d, dim, enable, index, fullRange, parent);
+        auto* cmd = new CartesianPlotEnableAutoScaleIndexCmd(d, dim, enable, index, fullRange, parent);
 		DEBUG(Q_FUNC_INFO << ", x range " << index << " enable auto scale: " << enable)
-		if (!parent)
-			exec(cmd);
+        if (!parent)
+            exec(cmd);
 		setProjectChanged(true);
 	}
 }
@@ -1347,8 +1347,8 @@ void CartesianPlot::setRangeDefault(const Dimension dim, const Range<double> ran
 
 class CartesianPlotSetRangeIndexCmd : public QUndoCommand {
 public:
-	CartesianPlotSetRangeIndexCmd(CartesianPlot::Private* target, const Dimension dim, Range<double> newValue, int index, QUndoCommand* parent)
-		: QUndoCommand(parent)
+    CartesianPlotSetRangeIndexCmd(CartesianPlot::Private* target, const Dimension dim, Range<double> newValue, int index, QUndoCommand* parent)
+        : QUndoCommand(parent)
 		, m_target(target)
 		, m_index(index)
 		, m_dimension(dim)
@@ -1403,9 +1403,9 @@ void CartesianPlot::setRange(const Dimension dim, const int index, const Range<d
 
 	auto r = d->checkRange(range);
 	if (index >= 0 && index < rangeCount(dim) && r.finite() && r != d->rangeConst(dim, index)) {
-		auto* cmd = new CartesianPlotSetRangeIndexCmd(d, dim, r, index, parent);
-		if (!parent)
-			exec(cmd);
+        auto* cmd = new CartesianPlotSetRangeIndexCmd(d, dim, r, index, parent);
+        if (!parent)
+            exec(cmd);
 	} else if (index < 0 || index >= rangeCount(dim))
 		DEBUG(Q_FUNC_INFO << QStringLiteral("Warning: wrong index: %1").arg(index).toStdString());
 
@@ -1437,42 +1437,42 @@ bool CartesianPlot::rangeDirty(const Dimension dim, int index) const {
 
 class CartesianPlotSetRangeDirtyCmd: public QUndoCommand {
 public:
-	CartesianPlotSetRangeDirtyCmd(CartesianPlotPrivate* p, Dimension dim, int index, bool dirty, QUndoCommand* parent = nullptr): QUndoCommand(parent), m_private(p), m_dim(dim), m_index(index), m_dirty(dirty) {}
+    CartesianPlotSetRangeDirtyCmd(CartesianPlotPrivate* p, Dimension dim, int index, bool dirty, QUndoCommand* parent = nullptr): QUndoCommand(parent), m_private(p), m_dim(dim), m_index(index), m_dirty(dirty) {}
 
-	void redo() override {
-		bool dirty = m_private->rangeDirty(m_dim, m_index);
-		m_private->setRangeDirty(m_dim, m_index, m_dirty);
-		m_dirty = dirty;
-	}
+    void redo() override {
+        bool dirty = m_private->rangeDirty(m_dim, m_index);
+        m_private->setRangeDirty(m_dim, m_index, m_dirty);
+        m_dirty = dirty;
+    }
 
-	void undo() override {
-		redo();
-	}
+    void undo() override {
+        redo();
+    }
 
 private:
-	CartesianPlotPrivate* m_private;
-	Dimension m_dim;
-	int m_index;
-	bool m_dirty;
+    CartesianPlotPrivate* m_private;
+    Dimension m_dim;
+    int m_index;
+    bool m_dirty;
 };
 
 void CartesianPlot::setRangeDirty(const Dimension dim, int index, bool dirty, QUndoCommand* parent) {
 	Q_D(CartesianPlot);
 	if (index >= rangeCount(dim))
 		return;
-	if (index >= 0) {
-		if (parent) {
-			new CartesianPlotSetRangeDirtyCmd(d, dim, index, dirty, parent);
-		} else
-			d->setRangeDirty(dim, index, dirty);
-	} else {
-		for (int i = 0; i < rangeCount(dim); i++) {
-			if (parent) {
-				new CartesianPlotSetRangeDirtyCmd(d, dim, i, dirty, parent);
-			} else {
-				d->setRangeDirty(dim, i, dirty);
-			}
-		}
+    if (index >= 0) {
+        if (parent) {
+            new CartesianPlotSetRangeDirtyCmd(d, dim, index, dirty, parent);
+        } else
+            d->setRangeDirty(dim, index, dirty);
+    } else {
+        for (int i = 0; i < rangeCount(dim); i++) {
+            if (parent) {
+                new CartesianPlotSetRangeDirtyCmd(d, dim, i, dirty, parent);
+            } else {
+                d->setRangeDirty(dim, i, dirty);
+            }
+        }
 	}
 }
 
@@ -2919,51 +2919,53 @@ void CartesianPlot::retransformScale(Dimension dim, int index) {
 // zoom
 
 void CartesianPlot::zoomIn(int xIndex, int yIndex, const QPointF& sceneRelPos) {
-	zoomInOut(xIndex, yIndex, sceneRelPos, true);
+    zoomInOut(xIndex, yIndex, sceneRelPos, true);
 }
 
 void CartesianPlot::zoomOut(int xIndex, int yIndex, const QPointF& sceneRelPos) {
-	zoomInOut(xIndex, yIndex, sceneRelPos, false);
+    zoomInOut(xIndex, yIndex, sceneRelPos, false);
 }
 
 class ZoomInOutCmd: public QUndoCommand {
 public:
-	ZoomInOutCmd(CartesianPlotPrivate* c, int xIndex, int yIndex, QUndoCommand* parent = nullptr): QUndoCommand(parent), m_private(c), m_xIndex(xIndex), m_yIndex(yIndex) {}
+    ZoomInOutCmd(CartesianPlotPrivate* c, int xIndex, int yIndex, QUndoCommand* parent = nullptr): QUndoCommand(parent), m_private(c), m_xIndex(xIndex), m_yIndex(yIndex) {
+        setText(i18n("%1: Zoom", m_private->name()));
+    }
 
-	void redo() override {
-		QUndoCommand::redo();
-		finalize();
-	}
+    void redo() override {
+        QUndoCommand::redo();
+        finalize();
+    }
 
-	void undo() override {
-		QUndoCommand::undo();
-		finalize();
-	}
+    void undo() override {
+        QUndoCommand::undo();
+        finalize();
+    }
 
-	void finalize() {
-		m_private->retransformScales(m_xIndex, m_yIndex);
-		m_private->q->WorksheetElementContainer::retransform();
-	}
+    void finalize() {
+        m_private->retransformScales(m_xIndex, m_yIndex);
+        m_private->q->WorksheetElementContainer::retransform();
+    }
 
 private:
-	CartesianPlotPrivate* m_private;
-	int m_xIndex;
-	int m_yIndex;
+    CartesianPlotPrivate* m_private;
+    int m_xIndex;
+    int m_yIndex;
 };
 
 void CartesianPlot::zoomInOut(int xIndex, int yIndex, const QPointF& sceneRelPos, bool zoomIn) {
-	Q_D(CartesianPlot);
-	auto* zoomInOutCmd = new ZoomInOutCmd(d, xIndex, yIndex);
+    Q_D(CartesianPlot);
+    auto* zoomInOutCmd = new ZoomInOutCmd(d, xIndex, yIndex);
 
-	enableAutoScale(Dimension::X, xIndex, false, zoomInOutCmd);
-	enableAutoScale(Dimension::Y, yIndex, false, zoomInOutCmd);
+    enableAutoScale(Dimension::X, xIndex, false, zoomInOutCmd);
+    enableAutoScale(Dimension::Y, yIndex, false, zoomInOutCmd);
 
-	setRangeDirty(Dimension::X, xIndex, true, zoomInOutCmd);
-	setRangeDirty(Dimension::Y, yIndex, true, zoomInOutCmd);
-	zoom(xIndex, Dimension::X, zoomIn, sceneRelPos.x(), zoomInOutCmd); // zoom out x
-	zoom(yIndex, Dimension::Y, zoomIn, sceneRelPos.y(), zoomInOutCmd); // zoom out y
+    setRangeDirty(Dimension::X, xIndex, true, zoomInOutCmd);
+    setRangeDirty(Dimension::Y, yIndex, true, zoomInOutCmd);
+    zoom(xIndex, Dimension::X, zoomIn, sceneRelPos.x(), zoomInOutCmd); // zoom out x
+    zoom(yIndex, Dimension::Y, zoomIn, sceneRelPos.y(), zoomInOutCmd); // zoom out y
 
-	exec(zoomInOutCmd);
+    exec(zoomInOutCmd);
 }
 
 void CartesianPlot::zoomInX(int index) {
@@ -2984,66 +2986,68 @@ void CartesianPlot::zoomOutY(int index) {
 
 class ZoomInOutCmdSingleDim: public QUndoCommand {
 public:
-	ZoomInOutCmdSingleDim(CartesianPlotPrivate* c, Dimension dim, int index, QUndoCommand* parent = nullptr): QUndoCommand(parent), m_private(c), m_dim(dim), m_index(index) {}
+    ZoomInOutCmdSingleDim(CartesianPlotPrivate* c, Dimension dim, int index, QUndoCommand* parent = nullptr): QUndoCommand(parent), m_private(c), m_dim(dim), m_index(index) {
+        setText(i18n("%1: Zoom", m_private->name()));
+    }
 
-	void redo() override {
-		QUndoCommand::redo();
-		finalize();
-	}
+    void redo() override {
+        QUndoCommand::redo();
+        finalize();
+    }
 
-	void undo() override {
-		QUndoCommand::undo();
-		finalize();
-	}
+    void undo() override {
+        QUndoCommand::undo();
+        finalize();
+    }
 
-	void finalize() {
-		Dimension dim_other = Dimension::Y;
-		if (m_dim == Dimension::Y)
-			dim_other = Dimension::X;
+    void finalize() {
+        Dimension dim_other = Dimension::Y;
+        if (m_dim == Dimension::Y)
+            dim_other = Dimension::X;
 
-		bool retrans = false;
-		auto* p = m_private->q;
-		for (int i = 0; i < p->coordinateSystemCount(); i++) {
-			const auto cs = p->coordinateSystem(i);
-			if (m_index == -1 || m_index == cs->index(m_dim)) {
-				if (p->autoScale(dim_other, cs->index(dim_other)))
-					p->scaleAuto(dim_other, cs->index(dim_other), false);
-				retrans = true;
-			}
-		}
+        bool retrans = false;
+        auto* p = m_private->q;
+        for (int i = 0; i < p->coordinateSystemCount(); i++) {
+            const auto cs = p->coordinateSystem(i);
+            if (m_index == -1 || m_index == cs->index(m_dim)) {
+                if (p->autoScale(dim_other, cs->index(dim_other)))
+                    p->scaleAuto(dim_other, cs->index(dim_other), false);
+                retrans = true;
+            }
+        }
 
-		if (retrans) {
-			// If the other dimension is autoScale it will be scaled and then
-			// retransformScale() will be called. So here we just have to do
-			// it for the nontransformed scale because in zoom it will not be done
-			if (m_index == -1) {
-				for (int i = 0; i < p->rangeCount(m_dim); i++)
-					m_private->retransformScale(m_dim, i);
-			} else
-				m_private->retransformScale(m_dim, m_index);
-			p->WorksheetElementContainer::retransform();
-		}
-	}
+        if (retrans) {
+            // If the other dimension is autoScale it will be scaled and then
+            // retransformScale() will be called. So here we just have to do
+            // it for the nontransformed scale because in zoom it will not be done
+            if (m_index == -1) {
+                for (int i = 0; i < p->rangeCount(m_dim); i++)
+                    m_private->retransformScale(m_dim, i);
+            } else
+                m_private->retransformScale(m_dim, m_index);
+            p->WorksheetElementContainer::retransform();
+        }
+    }
 
 private:
-	CartesianPlotPrivate* m_private;
-	Dimension m_dim;
-	int m_index;
+    CartesianPlotPrivate* m_private;
+    Dimension m_dim;
+    int m_index;
 };
 
 void CartesianPlot::zoomInOut(const int index, const Dimension dim, const bool zoomIn, const double relScenePosRange) {
-	Q_D(CartesianPlot);
-	Dimension dim_other = Dimension::Y;
+    Q_D(CartesianPlot);
+    Dimension dim_other = Dimension::Y;
 	if (dim == Dimension::Y)
 		dim_other = Dimension::X;
 
-	auto* zoomInOutCmd = new ZoomInOutCmdSingleDim(d, dim, index);
+    auto* zoomInOutCmd = new ZoomInOutCmdSingleDim(d, dim, index);
 
-	enableAutoScale(dim, index, false, zoomInOutCmd);
-	setRangeDirty(dim_other, index, true, zoomInOutCmd);
-	zoom(index, dim, zoomIn, relScenePosRange, zoomInOutCmd);
+    enableAutoScale(dim, index, false, zoomInOutCmd);
+    setRangeDirty(dim_other, index, true, zoomInOutCmd);
+    zoom(index, dim, zoomIn, relScenePosRange, zoomInOutCmd);
 
-	exec(zoomInOutCmd);
+    exec(zoomInOutCmd);
 }
 
 /*!
@@ -3062,7 +3066,7 @@ void CartesianPlot::zoom(int index, const Dimension dim, bool zoom_in, const dou
 			int idx = coordinateSystem(i)->index(dim);
 			if (zoomedIndices.contains(idx))
 				continue;
-			zoom(idx, dim, zoom_in, relPosSceneRange, parent);
+            zoom(idx, dim, zoom_in, relPosSceneRange, parent);
 			zoomedIndices.append(idx);
 		}
 		return;
@@ -3075,8 +3079,8 @@ void CartesianPlot::zoom(int index, const Dimension dim, bool zoom_in, const dou
 	range.zoom(factor, d->niceExtend, relPosSceneRange);
 
 	if (range.finite())
-		setRange(dim, index, range, parent);
-		//d->setRange(dim, index, range);
+        setRange(dim, index, range, parent);
+        //d->setRange(dim, index, range);
 }
 
 /*!
