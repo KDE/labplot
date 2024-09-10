@@ -27,6 +27,7 @@
 #include "backend/worksheet/plots/cartesian/LollipopPlot.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
+#include "backend/worksheet/plots/cartesian/ReferenceRange.h"
 #include "backend/worksheet/plots/cartesian/XYConvolutionCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCorrelationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYDataReductionCurve.h"
@@ -69,6 +70,9 @@ public:
 		} else if (type == AspectType::ReferenceLine) {
 			auto* plot = static_cast<CartesianPlot*>(parent);
 			return new ReferenceLine(plot, QString());
+		} else if (type == AspectType::ReferenceRange) {
+			auto* plot = static_cast<CartesianPlot*>(parent);
+			return new ReferenceRange(plot, QString());
 		} else if (type == AspectType::InfoElement) {
 			auto* plot = static_cast<CartesianPlot*>(parent);
 			return new InfoElement(QString(), plot);
