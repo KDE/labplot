@@ -535,7 +535,7 @@ private:
 			if (Project::xmlVersion() < 13)                                                                                                                    \
 				font.setLegacyWeight(str.toInt());                                                                                                             \
 			else                                                                                                                                               \
-				font.setWeight(str.toInt());                                                                                                                   \
+				font.setWeight(static_cast<QFont::Weight>(str.toInt()));                                                                                       \
 		}                                                                                                                                                      \
 		str = attribs.value(QStringLiteral("fontItalic")).toString();                                                                                          \
 		if (str.isEmpty())                                                                                                                                     \
