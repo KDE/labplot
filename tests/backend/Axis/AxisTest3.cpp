@@ -150,6 +150,10 @@ void AxisTest3::dateTimeSpacing() {
 			QStringLiteral("2017-12-24 00:00:00"),
 		};
 		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
+
+		QCOMPARE(xAxis->minorTicksAutoNumber(), true);
+		QCOMPARE(xAxis->minorTicksNumber(), 1);
+		QCOMPARE(xAxis->d_func()->minorTickPoints.size(), 5); // Between every major tick
 	}
 }
 
