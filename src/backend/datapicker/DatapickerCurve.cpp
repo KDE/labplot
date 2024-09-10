@@ -267,8 +267,10 @@ void DatapickerCurve::setCurveErrorTypes(const DatapickerCurve::Errors errors) {
 		beginMacro(i18n("%1: set xy-error type", name()));
 		exec(new DatapickerCurveSetCurveErrorTypesCmd(d, errors, ki18n("%1: set xy-error type")));
 
-		if (errors.x != ErrorType::NoError && !d->plusDeltaXColumn)
+		if (errors.x == ErrorType::AsymmetricError && !d->plusDeltaXColumn)
 			setPlusDeltaXColumn(appendColumn(QLatin1String("+delta_x")));
+		else if (errors.x == ErrorType::SymmetricError && !d->plusDeltaXColumn)
+			setPlusDeltaXColumn(appendColumn(QLatin1String("+-delta_x")));
 		else if (d->plusDeltaXColumn && errors.x == ErrorType::NoError) {
 			d->plusDeltaXColumn->remove();
 			d->plusDeltaXColumn = nullptr;
@@ -281,8 +283,10 @@ void DatapickerCurve::setCurveErrorTypes(const DatapickerCurve::Errors errors) {
 			d->minusDeltaXColumn = nullptr;
 		}
 
-		if (errors.y != ErrorType::NoError && !d->plusDeltaYColumn)
+		if (errors.y == ErrorType::AsymmetricError && !d->plusDeltaYColumn)
 			setPlusDeltaYColumn(appendColumn(QLatin1String("+delta_y")));
+		else if (errors.y == ErrorType::SymmetricError && !d->plusDeltaYColumn)
+			setPlusDeltaYColumn(appendColumn(QLatin1String("+-delta_y")));
 		else if (d->plusDeltaYColumn && errors.y == ErrorType::NoError) {
 			d->plusDeltaYColumn->remove();
 			d->plusDeltaYColumn = nullptr;
