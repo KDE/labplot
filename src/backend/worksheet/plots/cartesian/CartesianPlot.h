@@ -145,17 +145,17 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, rangeFirstValues, RangeFirstValues)
 
 	bool autoScale(const Dimension, int index = -1) const;
-	void enableAutoScale(const Dimension, int index, bool enable, bool fullRange = false);
+	void enableAutoScale(const Dimension, int index, bool enable, bool fullRange = false, QUndoCommand* parent = nullptr);
 
 	int rangeCount(const Dimension) const;
 	const Range<double>& range(const Dimension, int index = -1) const; // get range of (default) plot range
 	void setRangeDefault(const Dimension, const Range<double>); // set range of default plot range
-	void setRange(const Dimension, const int index, const Range<double>& range);
+	void setRange(const Dimension, const int index, const Range<double>& range, QUndoCommand *parent = nullptr);
 	void setXRange(int index, const Range<double>&);
 	void setYRange(int index, const Range<double>&);
 	const Range<double>& dataRange(const Dimension, int index = -1);
 	bool rangeDirty(const Dimension, int index) const;
-	void setRangeDirty(const Dimension, int index, bool dirty);
+	void setRangeDirty(const Dimension, int index, bool dirty, QUndoCommand *parent = nullptr);
 	void addXRange(); // add new x range
 	void addYRange(); // add new y range
 	void addXRange(const Range<double>&); // add x range
@@ -216,7 +216,7 @@ private:
 	void initMenus();
 	void setColorPalette(const KConfig&);
 	const XYCurve* currentCurve() const;
-	void zoom(int index, const Dimension, bool in, const double relPosSceneRange);
+	void zoom(int index, const Dimension, bool in, const double relPosSceneRange, QUndoCommand *parent);
 	void checkAxisFormat(const int cSystemIndex, const AbstractColumn*, Axis::Orientation);
 	void calculateDataRange(const Dimension, const int index, bool completeRange = true);
 	int curveTotalCount() const;
@@ -321,6 +321,7 @@ public Q_SLOTS:
 
 	void zoomIn(int xIndex = -1, int yIndex = -1, const QPointF& sceneRelPos = QPointF(0.5, 0.5));
 	void zoomOut(int xIndex = -1, int yIndex = -1, const QPointF& sceneRelPos = QPointF(0.5, 0.5));
+	void zoomInOut(int xIndex = -1, int yIndex = -1, const QPointF& sceneRelPos = QPointF(0.5, 0.5), bool zoomIn = true);
 	void zoomInX(int index = -1);
 	void zoomOutX(int index = -1);
 	void zoomInY(int index = -1);
