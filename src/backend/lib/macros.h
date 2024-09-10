@@ -531,9 +531,12 @@ private:
 		str = attribs.value(QStringLiteral("fontWeight")).toString();                                                                                          \
 		if (str.isEmpty())                                                                                                                                     \
 			reader->raiseMissingAttributeWarning(QStringLiteral("fontWeight"));                                                                                \
-		else                                                                                                                                                   \
-			font.setLegacyWeight(str.toInt());                                                                                                                 \
-                                                                                                                                                               \
+		else {                                                                                                                                                 \
+			if (Project::xmlVersion() < 13)                                                                                                                    \
+				font.setLegacyWeight(str.toInt());                                                                                                             \
+			else                                                                                                                                               \
+				font.setWeight(static_cast<QFont::Weight>(str.toInt()));                                                                                       \
+		}                                                                                                                                                      \
 		str = attribs.value(QStringLiteral("fontItalic")).toString();                                                                                          \
 		if (str.isEmpty())                                                                                                                                     \
 			reader->raiseMissingAttributeWarning(QStringLiteral("fontItalic"));                                                                                \

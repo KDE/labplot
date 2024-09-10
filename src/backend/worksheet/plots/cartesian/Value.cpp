@@ -17,6 +17,7 @@
 #include "Value.h"
 #include "ValuePrivate.h"
 #include "backend/core/AbstractColumn.h"
+#include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 
