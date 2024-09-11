@@ -30,11 +30,7 @@
 #include <kcoreaddons_version.h>
 
 #ifdef HAVE_KUSERFEEDBACK
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #include <KUserFeedbackQt6/FeedbackConfigWidget>
-#else
-#include <KUserFeedback/FeedbackConfigWidget>
-#endif
 #endif
 
 #include <QDialogButtonBox>
@@ -125,11 +121,7 @@ void SettingsDialog::slotButtonClicked(QAbstractButton* button) {
 		}
 	} else if (button == buttonBox()->button(QDialogButtonBox::RestoreDefaults)) {
 		const QString text(i18n("All settings will be reset to default values. Do you want to continue?"));
-#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
 		if (KMessageBox::questionTwoActions(this, text, QString(), KStandardGuiItem::reset(), KStandardGuiItem::cancel()) == KMessageBox::PrimaryAction) {
-#else
-		if (KMessageBox::questionYesNo(this, text) == KMessageBox::Yes) {
-#endif
 			restoreDefaults();
 			setWindowTitle(i18nc("@title:window", "Preferences"));
 			buttonBox()->button(QDialogButtonBox::Apply)->setEnabled(false);

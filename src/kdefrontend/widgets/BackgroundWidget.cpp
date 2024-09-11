@@ -12,13 +12,8 @@
 #include "kdefrontend/dockwidgets/BaseDock.h"
 
 #include <QCompleter>
-// see https://gitlab.kitware.com/cmake/cmake/-/issues/21609
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-#include <QFileSystemModel>
-#else
-#include <QDirModel>
-#endif
 #include <QFile>
+#include <QFileSystemModel>
 
 /*!
 	\class BackgroundWidget
@@ -32,11 +27,7 @@ BackgroundWidget::BackgroundWidget(QWidget* parent)
 
 	ui.cbColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
 	ui.bOpen->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 	ui.leFileName->setCompleter(new QCompleter(new QFileSystemModel, this));
-#else
-	ui.leFileName->setCompleter(new QCompleter(new QDirModel, this));
-#endif
 
 	connect(ui.chkEnabled, &QCheckBox::toggled, this, &BackgroundWidget::enabledChanged);
 	connect(ui.cbPosition, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BackgroundWidget::positionChanged);

@@ -19,9 +19,7 @@
 #include "backend/lib/trace.h"
 #include "backend/matrix/Matrix.h"
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 #include "3rdparty/stringtokenizer/qstringtokenizer.h"
-#endif
 
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTClient.h"
@@ -227,11 +225,7 @@ size_t AsciiFilter::lineNumber(const QString& fileName, const size_t maxLines) {
 				QString line = QLatin1String(cmd.readLine());
 				// QDEBUG("OUTPUT: " << line)
 				// wc on macOS has leading spaces: use SkipEmptyParts
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 				lineCount = line.split(QLatin1Char(' '), Qt::SkipEmptyParts).at(0).toInt();
-#else
-				lineCount = line.split(QLatin1Char(' '), QString::SkipEmptyParts).at(0).toInt();
-#endif
 			}
 			return lineCount;
 		} else {
@@ -1303,7 +1297,6 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 	int progressIndex = 0;
 	const qreal progressInterval = 0.01 * lines; // update on every 1% only
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 	// when reading numerical data the options removeQuotesEnabled, simplifyWhitespacesEnabled and skipEmptyParts
 	// are not relevant and we can provide a more faster version that avoids many of string allocations, etc.
 	if (!removeQuotesEnabled && !simplifyWhitespacesEnabled && !skipEmptyParts) {
@@ -1363,7 +1356,6 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 			}
 		}
 	} else {
-#endif
 		QString valueString;
 		for (int i = 0; i < lines; ++i) {
 			line = QString::fromUtf8(device.readLine());
@@ -1428,10 +1420,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 				QApplication::processEvents(QEventLoop::AllEvents, 0);
 			}
 		}
-
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 	}
-#endif
 
 	DEBUG(Q_FUNC_INFO << ", Read " << currentRow << " lines");
 
@@ -1494,11 +1483,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice& device) {
 	}
 
 	// parse the first data line to determine data type for each column
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 	QStringList firstLineStringList = newData.at(0).split(separatingCharacter, Qt::SkipEmptyParts);
-#else
-	QStringList firstLineStringList = newData.at(0).split(separatingCharacter, QString::SkipEmptyParts);
-#endif
 	int i = 1;
 	for (auto& valueString : firstLineStringList) {
 		if (simplifyWhitespacesEnabled)
@@ -1542,12 +1527,8 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice& device) {
 		if (createTimestampEnabled)
 			lineString += QDateTime::currentDateTime().toString();
 
-			// TODO: use separator
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+		// TODO: use separator
 		QStringList lineStringList = line.split(separatingCharacter, Qt::SkipEmptyParts);
-#else
-		QStringList lineStringList = line.split(separatingCharacter, QString::SkipEmptyParts);
-#endif
 		QDEBUG(" line = " << lineStringList);
 
 		// parse columns
@@ -1875,18 +1856,10 @@ QStringList AsciiFilterPrivate::split(const QString& line, bool autoSeparator) {
 	QStringList lineStringList;
 	if (autoSeparator) {
 		static const QRegularExpression regExp(QStringLiteral("[,;:]?\\s+"));
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 		lineStringList = line.split(regExp, (Qt::SplitBehavior)skipEmptyParts);
-#else
-		lineStringList = line.split(regExp, (QString::SplitBehavior)skipEmptyParts);
-#endif
 		// TODO: determine the separator here and perform the merge of columns as in the else-case, if needed
 	} else {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 		lineStringList = line.split(m_separator, (Qt::SplitBehavior)skipEmptyParts);
-#else
-		lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
-#endif
 
 		// merge the columns if they were splitted because of the separators inside the quotes
 		for (int i = 0; i < lineStringList.size(); ++i) {
@@ -2216,11 +2189,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 	}
 
 	// TODO: bool sampleSizeReached = false;
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 	const QStringList newDataList = message.split(QRegularExpression(QStringLiteral("\n|\r\n|\r")), Qt::SkipEmptyParts);
-#else
-	const QStringList newDataList = message.split(QRegularExpression(QStringLiteral("\n|\r\n|\r")), QString::SkipEmptyParts);
-#endif
 	for (auto& line : newDataList) {
 		newData.push_back(line);
 		newLinesTillEnd++;
@@ -2433,14 +2402,9 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 		// but only after the preparation step
 		if (keepNValues == 0) {
 			if (readingType != MQTTClient::ReadingType::TillEnd)
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 				m_actualRows += std::min(newData.size(), static_cast<qsizetype>(spreadsheet->mqttClient()->sampleSize()));
-#else
-				m_actualRows += std::min(newData.size(), spreadsheet->mqttClient()->sampleSize());
-#endif
-			else {
+			else
 				m_actualRows += newData.size();
-			}
 		}
 
 		// fixed size

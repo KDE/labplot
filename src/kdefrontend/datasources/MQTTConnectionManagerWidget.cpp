@@ -410,7 +410,6 @@ void MQTTConnectionManagerWidget::addConnection() {
 		removes the current selected connection.
  */
 void MQTTConnectionManagerWidget::deleteConnection() {
-#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
 	auto status = KMessageBox::questionTwoActions(this,
 												  i18n("Do you really want to delete the connection '%1'?", ui.lwConnections->currentItem()->text()),
 												  i18n("Delete Connection"),
@@ -418,13 +417,6 @@ void MQTTConnectionManagerWidget::deleteConnection() {
 												  KStandardGuiItem::cancel());
 	if (status != KMessageBox::PrimaryAction)
 		return;
-#else
-	auto status = KMessageBox::questionYesNo(this,
-											 i18n("Do you really want to delete the connection '%1'?", ui.lwConnections->currentItem()->text()),
-											 i18n("Delete Connection"));
-	if (status != KMessageBox::Yes)
-		return;
-#endif
 
 	// remove the current selected connection
 	m_connections.removeAt(ui.lwConnections->currentRow());

@@ -277,16 +277,10 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 			msg += QLatin1Char('\n') + path.right(path.length() - path.indexOf(QLatin1Char('/')) - 1); // strip away the name of the root folder "Project"
 		msg += QStringLiteral("\n\n") + i18n("Do you want to proceed?");
 
-#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
 		auto status =
 			KMessageBox::warningTwoActions(nullptr, msg, i18n("Override existing objects?"), KStandardGuiItem::overwrite(), KStandardGuiItem::cancel());
 		if (status == KMessageBox::SecondaryAction)
 			return;
-#else
-		auto status = KMessageBox::warningYesNo(nullptr, msg, i18n("Override existing objects?"));
-		if (status == KMessageBox::No)
-			return;
-#endif
 	}
 
 	// show a progress bar in the status bar

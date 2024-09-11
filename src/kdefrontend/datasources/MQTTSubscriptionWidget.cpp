@@ -188,13 +188,8 @@ bool MQTTSubscriptionWidget::checkTopicContains(const QString& superior, const Q
 	if (!superior.contains(QLatin1Char('/')))
 		return false;
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 	const QStringList& superiorList = superior.split(QLatin1Char('/'), Qt::SkipEmptyParts);
 	const QStringList& inferiorList = inferior.split(QLatin1Char('/'), Qt::SkipEmptyParts);
-#else
-	const QStringList& superiorList = superior.split(QLatin1Char('/'), QString::SkipEmptyParts);
-	const QStringList& inferiorList = inferior.split(QLatin1Char('/'), QString::SkipEmptyParts);
-#endif
 
 	// a longer topic can't contain a shorter one
 	if (superiorList.size() > inferiorList.size())
@@ -281,11 +276,7 @@ void MQTTSubscriptionWidget::manageCommonLevelSubscriptions() {
 				topics.next();
 
 				int level = commonLevelIndex(topics.value().last(), topics.value().first());
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 				QStringList commonList = topics.value().first().split(QLatin1Char('/'), Qt::SkipEmptyParts);
-#else
-				QStringList commonList = topics.value().first().split(QLatin1Char('/'), QString::SkipEmptyParts);
-#endif
 				QTreeWidgetItem* currentItem = nullptr;
 
 				// search the corresponding item to the common topics first level(root)
@@ -399,11 +390,7 @@ void MQTTSubscriptionWidget::updateSubscriptionTree(const QVector<QString>& mqtt
 			auto* newItem = new QTreeWidgetItem(name);
 			ui.twSubscriptions->addTopLevelItem(newItem);
 			name.clear();
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 			name = sub.split(QLatin1Char('/'), Qt::SkipEmptyParts);
-#else
-			name = sub.split(QLatin1Char('/'), QString::SkipEmptyParts);
-#endif
 
 			// find the corresponding "root" item in twTopics
 			QTreeWidgetItem* topic = nullptr;
@@ -592,13 +579,8 @@ int MQTTSubscriptionWidget::checkCommonChildCount(int levelIdx, int level, QStri
  * \return The index of the unequal level, if there is a common topic, otherwise -1
  */
 int MQTTSubscriptionWidget::commonLevelIndex(const QString& first, const QString& second) {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 	QStringList firstList = first.split(QLatin1Char('/'), Qt::SkipEmptyParts);
 	QStringList secondtList = second.split(QLatin1Char('/'), Qt::SkipEmptyParts);
-#else
-	QStringList firstList = first.split(QLatin1Char('/'), QString::SkipEmptyParts);
-	QStringList secondtList = second.split(QLatin1Char('/'), QString::SkipEmptyParts);
-#endif
 	QString commonTopic;
 	int differIndex = -1;
 
@@ -654,19 +636,11 @@ int MQTTSubscriptionWidget::commonLevelIndex(const QString& first, const QString
  * \return The name of the common topic, if it exists, otherwise ""
  */
 QString MQTTSubscriptionWidget::checkCommonLevel(const QString& first, const QString& second) {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 	const QStringList& firstList = first.split(QLatin1Char('/'), Qt::SkipEmptyParts);
-#else
-	const QStringList& firstList = first.split(QLatin1Char('/'), QString::SkipEmptyParts);
-#endif
 	if (firstList.isEmpty())
 		return {};
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 	const QStringList& secondtList = second.split(QLatin1Char('/'), Qt::SkipEmptyParts);
-#else
-	const QStringList& secondtList = second.split(QLatin1Char('/'), QString::SkipEmptyParts);
-#endif
 	QString commonTopic;
 
 	// the two topics have to be the same size and can't be identic
@@ -796,11 +770,7 @@ void MQTTSubscriptionWidget::mqttSubscribe() {
 				// if an already existing subscription contains a topic that the new subscription also contains
 				// we decompose the already existing subscription
 				// by unsubscribing from its topics, that are present in the new subscription as well
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 				const QStringList nameList = name.split(QLatin1Char('/'), Qt::SkipEmptyParts);
-#else
-				const QStringList nameList = name.split(QLatin1Char('/'), QString::SkipEmptyParts);
-#endif
 				const QString& root = nameList.first();
 				QVector<QTreeWidgetItem*> children;
 				for (int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
@@ -939,11 +909,7 @@ void MQTTSubscriptionWidget::mqttUnsubscribe() {
  */
 void MQTTSubscriptionWidget::setTopicCompleter(const QString& topic) {
 	if (!m_searching) {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 		const QStringList& list = topic.split(QLatin1Char('/'), Qt::SkipEmptyParts);
-#else
-		const QStringList& list = topic.split(QLatin1Char('/'), QString::SkipEmptyParts);
-#endif
 		QString tempTopic;
 		if (!list.isEmpty())
 			tempTopic = list.at(0);

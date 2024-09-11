@@ -1842,17 +1842,9 @@ void SpreadsheetView::pasteIntoSelection() {
 		for (int i = 0; i < input_row_count; i++) {
 			if (hasTabs)
 				cellTexts.append(input_rows.at(i).split(QLatin1Char('\t')));
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 			else if (numberLocale.groupSeparator().trimmed().isEmpty()
-#else
-			else if (numberLocale.groupSeparator().isSpace()
-#endif
 					 && !(numberLocale.numberOptions() & QLocale::OmitGroupSeparator)) // locale with ' ' as group separator && omit group separator not set
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
 				cellTexts.append(input_rows.at(i).split(QRegularExpression(QStringLiteral("\\s\\s")), (Qt::SplitBehavior)0x1)); // split with two spaces
-#else
-				cellTexts.append(input_rows.at(i).split(QRegularExpression(QStringLiteral("\\s\\s")), (QString::SplitBehavior)0x1)); // split with two spaces
-#endif
 			else
 				cellTexts.append(input_rows.at(i).split(QRegularExpression(QStringLiteral("\\s+"))));
 

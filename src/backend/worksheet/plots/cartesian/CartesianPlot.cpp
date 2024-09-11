@@ -1675,7 +1675,7 @@ void CartesianPlot::setXRangeBreakingEnabled(bool enabled) {
 	if (enabled != d->xRangeBreakingEnabled) {
 		exec(new CartesianPlotSetXRangeBreakingEnabledCmd(d, enabled, ki18n("%1: x-range breaking enabled")));
 		retransformScales(); // TODO: replace by retransformScale(Dimension::X, ) with the corresponding index!
-		WorksheetElementContainer::retransform(); // retransformScales does not contain any retransfrom() anymore
+		WorksheetElementContainer::retransform(); // retransformScales does not contain any retransform() anymore
 	}
 }
 
@@ -1684,7 +1684,7 @@ void CartesianPlot::setXRangeBreaks(const RangeBreaks& breakings) {
 	Q_D(CartesianPlot);
 	exec(new CartesianPlotSetXRangeBreaksCmd(d, breakings, ki18n("%1: x-range breaks changed")));
 	retransformScales(); // TODO: replace by retransformScale(Dimension::X, ) with the corresponding index!
-	WorksheetElementContainer::retransform(); // retransformScales does not contain any retransfrom() anymore
+	WorksheetElementContainer::retransform(); // retransformScales does not contain any retransform() anymore
 }
 
 STD_SETTER_CMD_IMPL_S(CartesianPlot, SetYRangeBreakingEnabled, bool, yRangeBreakingEnabled)
@@ -1693,7 +1693,7 @@ void CartesianPlot::setYRangeBreakingEnabled(bool enabled) {
 	if (enabled != d->yRangeBreakingEnabled) {
 		exec(new CartesianPlotSetYRangeBreakingEnabledCmd(d, enabled, ki18n("%1: y-range breaking enabled")));
 		retransformScales(); // TODO: replace by retransformScale(Dimension::Y, ) with the corresponding index!
-		WorksheetElementContainer::retransform(); // retransformScales does not contain any retransfrom() anymore
+		WorksheetElementContainer::retransform(); // retransformScales does not contain any retransform() anymore
 	}
 }
 
@@ -1702,7 +1702,7 @@ void CartesianPlot::setYRangeBreaks(const RangeBreaks& breaks) {
 	Q_D(CartesianPlot);
 	exec(new CartesianPlotSetYRangeBreaksCmd(d, breaks, ki18n("%1: y-range breaks changed")));
 	retransformScales(); // TODO: replace by retransformScale(Dimension::Y, ) with the corresponding index!
-	WorksheetElementContainer::retransform(); // retransformScales does not contain any retransfrom() anymore
+	WorksheetElementContainer::retransform(); // retransformScales does not contain any retransform() anymore
 }
 
 // cursor

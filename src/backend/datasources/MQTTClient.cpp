@@ -560,13 +560,8 @@ bool MQTTClient::checkTopicContains(const QString& superior, const QString& infe
 		return true;
 	else {
 		if (superior.contains(QLatin1String("/"))) {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 			QStringList superiorList = superior.split(QLatin1Char('/'), Qt::SkipEmptyParts);
 			QStringList inferiorList = inferior.split(QLatin1Char('/'), Qt::SkipEmptyParts);
-#else
-			QStringList superiorList = superior.split(QLatin1Char('/'), QString::SkipEmptyParts);
-			QStringList inferiorList = inferior.split(QLatin1Char('/'), QString::SkipEmptyParts);
-#endif
 
 			// a longer topic can't contain a shorter one
 			if (superiorList.size() > inferiorList.size())
@@ -603,13 +598,8 @@ bool MQTTClient::checkTopicContains(const QString& superior, const QString& infe
  * \return The name of the common topic, if it exists, otherwise an empty string
  */
 QString MQTTClient::checkCommonLevel(const QString& first, const QString& second) {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 	QStringList firstList = first.split(QLatin1Char('/'), Qt::SkipEmptyParts);
 	QStringList secondtList = second.split(QLatin1Char('/'), Qt::SkipEmptyParts);
-#else
-	QStringList firstList = first.split(QLatin1Char('/'), QString::SkipEmptyParts);
-	QStringList secondtList = second.split(QLatin1Char('/'), QString::SkipEmptyParts);
-#endif
 	QString commonTopic;
 
 	if (!firstList.isEmpty()) {

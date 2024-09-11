@@ -41,26 +41,29 @@ private Q_SLOTS:
 	ALL_WORKSHEET_TESTS_DEFINITION(TextLabel)
 	ALL_WORKSHEET_TESTS_DEFINITION(Image)
 
+	// tests for ReferenceRange
+	void testReferenceRangeInit();
+	void testReferenceRangeDuplicate();
 	void referenceRangeXMouseMove();
 	void referenceRangeYMouseMove();
-
 	void referenceRangeXClippingLeftMouse();
 	void referenceRangeXClippingLeftSetStart();
 	void referenceRangeXClippingRightSetEnd();
-
 	void referenceRangeYClippingBottomSetEnd();
 	void referenceRangeYClippingTopSetEnd();
-
 	void referenceRangeYKeyPressUp();
-
 	void referenceRangeSaveLoad();
 
+	// tests for ReferenceLine
+	void testReferenceLineInit();
+	void testReferenceLineDuplicate();
 	void referenceLineLinearScaling();
 	void referenceLineLog10Scaling();
 	void referenceLineSquareScaling();
 	void referenceLineSqrtScaling();
 	void referenceLineInverseScaling();
 
+	// general tests
 	void moveElementBefore();
 	void moveElementAfter();
 	void prepareDrawingMenu();

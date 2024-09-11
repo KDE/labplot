@@ -25,14 +25,9 @@
 #include <QCompleter>
 #include <QDialogButtonBox>
 
-// see https://gitlab.kitware.com/cmake/cmake/-/issues/21609
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-#include <QFileSystemModel>
-#else
-#include <QDirModel>
-#endif
 #include <QDebug>
 #include <QFileDialog>
+#include <QFileSystemModel>
 #include <QSqlDatabase>
 #include <QStandardItemModel>
 #include <QWindow>
@@ -58,11 +53,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
 	m_cancelButton = btnBox->button(QDialogButtonBox::Cancel);
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 	ui->leFileName->setCompleter(new QCompleter(new QFileSystemModel, this));
-#else
-	ui->leFileName->setCompleter(new QCompleter(new QDirModel, this));
-#endif
 
 	// supported formats. see also ImportFileWidget.cpp
 	ui->cbFormat->addItem(QStringLiteral("ASCII"), static_cast<int>(Format::ASCII));
@@ -339,17 +330,12 @@ void ExportSpreadsheetDialog::setExportToImage(bool possible) {
 void ExportSpreadsheetDialog::okClicked() {
 	if (format() != Format::FITS)
 		if (QFile::exists(ui->leFileName->text())) {
-#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
 			int status = KMessageBox::questionTwoActions(this,
 														 i18n("The file already exists. Do you really want to overwrite it?"),
 														 i18n("Export"),
 														 KStandardGuiItem::overwrite(),
 														 KStandardGuiItem::cancel());
 			if (status == KMessageBox::SecondaryAction)
-#else
-			int status = KMessageBox::questionYesNo(this, i18n("The file already exists. Do you really want to overwrite it?"), i18n("Export"));
-			if (status == KMessageBox::No)
-#endif
 				return;
 		}
 	KConfigGroup conf = Settings::group(QStringLiteral("ExportSpreadsheetDialog"));

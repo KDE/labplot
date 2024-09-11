@@ -267,9 +267,17 @@ void DatapickerCurve::setCurveErrorTypes(const DatapickerCurve::Errors errors) {
 		beginMacro(i18n("%1: set xy-error type", name()));
 		exec(new DatapickerCurveSetCurveErrorTypesCmd(d, errors, ki18n("%1: set xy-error type")));
 
-		if (errors.x != ErrorType::NoError && !d->plusDeltaXColumn)
-			setPlusDeltaXColumn(appendColumn(QLatin1String("+delta_x")));
-		else if (d->plusDeltaXColumn && errors.x == ErrorType::NoError) {
+		if (errors.x == ErrorType::AsymmetricError) {
+			if (!d->plusDeltaXColumn)
+				setPlusDeltaXColumn(appendColumn(QLatin1String("+delta_x")));
+			else
+				d->plusDeltaXColumn->setName(QLatin1String("+delta_x")); // make sure we have the proper name when switching from Symmetric to Asymmetric
+		} else if (errors.x == ErrorType::SymmetricError) {
+			if (!d->plusDeltaXColumn)
+				setPlusDeltaXColumn(appendColumn(QLatin1String("+-delta_x")));
+			else
+				d->plusDeltaXColumn->setName(QLatin1String("+-delta_x")); // make sure we have the proper name when switching from Asymmetric to Symmetric
+		} else if (d->plusDeltaXColumn && errors.x == ErrorType::NoError) {
 			d->plusDeltaXColumn->remove();
 			d->plusDeltaXColumn = nullptr;
 		}
@@ -281,9 +289,17 @@ void DatapickerCurve::setCurveErrorTypes(const DatapickerCurve::Errors errors) {
 			d->minusDeltaXColumn = nullptr;
 		}
 
-		if (errors.y != ErrorType::NoError && !d->plusDeltaYColumn)
-			setPlusDeltaYColumn(appendColumn(QLatin1String("+delta_y")));
-		else if (d->plusDeltaYColumn && errors.y == ErrorType::NoError) {
+		if (errors.y == ErrorType::AsymmetricError) {
+			if (!d->plusDeltaYColumn)
+				setPlusDeltaYColumn(appendColumn(QLatin1String("+delta_y")));
+			else
+				d->plusDeltaYColumn->setName(QLatin1String("+delta_y")); // make sure we have the proper name when switching from Symmetric to Asymmetric
+		} else if (errors.y == ErrorType::SymmetricError) {
+			if (!d->plusDeltaYColumn)
+				setPlusDeltaYColumn(appendColumn(QLatin1String("+-delta_y")));
+			else
+				d->plusDeltaYColumn->setName(QLatin1String("+-delta_y")); // make sure we have the proper name when switching from Asymmetric to Symmetric
+		} else if (d->plusDeltaYColumn && errors.y == ErrorType::NoError) {
 			d->plusDeltaYColumn->remove();
 			d->plusDeltaYColumn = nullptr;
 		}

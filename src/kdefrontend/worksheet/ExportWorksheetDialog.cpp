@@ -21,14 +21,9 @@
 #include <kcoreaddons_version.h>
 
 #include <QCompleter>
-// see https://gitlab.kitware.com/cmake/cmake/-/issues/21609
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-#include <QFileSystemModel>
-#else
-#include <QDirModel>
-#endif
 #include <QDialogButtonBox>
 #include <QFileDialog>
+#include <QFileSystemModel>
 #include <QScreen>
 #include <QWindow>
 
@@ -57,11 +52,7 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent)
 
 	m_cancelButton->setToolTip(i18n("Close this dialog without exporting."));
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 	ui->leFileName->setCompleter(new QCompleter(new QFileSystemModel, this));
-#else
-	ui->leFileName->setCompleter(new QCompleter(new QDirModel, this));
-#endif
 
 	ui->bOpen->setIcon(QIcon::fromTheme(QLatin1String("document-open")));
 
@@ -213,17 +204,12 @@ void ExportWorksheetDialog::slotButtonClicked(QAbstractButton* button) {
 void ExportWorksheetDialog::okClicked() {
 	if (ui->cbExportTo->currentIndex() == 0 /*export to file*/
 		&& m_askOverwrite && QFile::exists(ui->leFileName->text())) {
-#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 100, 0)
 		int status = KMessageBox::questionTwoActions(this,
 													 i18n("The file already exists. Do you really want to overwrite it?"),
 													 i18n("Export"),
 													 KStandardGuiItem::overwrite(),
 													 KStandardGuiItem::cancel());
 		if (status == KMessageBox::SecondaryAction)
-#else
-		int status = KMessageBox::questionYesNo(this, i18n("The file already exists. Do you really want to overwrite it?"), i18n("Export"));
-		if (status == KMessageBox::No)
-#endif
 			return;
 	}
 
