@@ -1873,8 +1873,8 @@ void AxisPrivate::retransformTicks() {
 
 		// minor ticks
 		// DEBUG("	tmpMinorTicksNumber = " << tmpMinorTicksNumber)
-		if (Axis::noTicks != minorTicksDirection && tmpMinorTicksNumber > 0 && ((tmpMajorTicksNumber > 1 && iMajor < tmpMajorTicksNumber - 1) || (dateTimeSpacing && dtValid))
-			&& nextMajorTickPos != majorTickPos) {
+		if (Axis::noTicks != minorTicksDirection && tmpMinorTicksNumber > 0
+			&& ((tmpMajorTicksNumber > 1 && iMajor < tmpMajorTicksNumber - 1) || (dateTimeSpacing && dtValid)) && nextMajorTickPos != majorTickPos) {
 			// minor ticks are placed at equidistant positions independent of the selected scaling for the major ticks positions
 			double minorTicksIncrement = (nextMajorTickPos - majorTickPos) / (tmpMinorTicksNumber + 1);
 			// DEBUG("	nextMajorTickPos = " << nextMajorTickPos)
