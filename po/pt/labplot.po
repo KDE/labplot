@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-10 01:44+0000\n"
+"POT-Creation-Date: 2024-09-11 01:43+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -946,57 +946,57 @@ msgstr "Dados"
 msgid "%1: set xy-error type"
 msgstr "%1: mudar o tipo de erros em XY"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:306
+#: src/backend/datapicker/DatapickerCurve.cpp:322
 #, kde-format
 msgid "%1: set position X column"
 msgstr "%1: definir a coluna da posição em X"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:313
+#: src/backend/datapicker/DatapickerCurve.cpp:329
 #, kde-format
 msgid "%1: set position Y column"
 msgstr "%1: definir a coluna da posição em Y"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:320
+#: src/backend/datapicker/DatapickerCurve.cpp:336
 #, kde-format
 msgid "%1: set position Z column"
 msgstr "%1: definir a coluna da posição em Z"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:327
+#: src/backend/datapicker/DatapickerCurve.cpp:343
 #, kde-format
 msgid "%1: set +delta_X column"
 msgstr "%1: definir a coluna do +delta_X"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:334
+#: src/backend/datapicker/DatapickerCurve.cpp:350
 #, kde-format
 msgid "%1: set -delta_X column"
 msgstr "%1: definir a coluna do -delta_X"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:341
+#: src/backend/datapicker/DatapickerCurve.cpp:357
 #, kde-format
 msgid "%1: set +delta_Y column"
 msgstr "%1: definir a coluna do +delta_Y"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:348
+#: src/backend/datapicker/DatapickerCurve.cpp:364
 #, kde-format
 msgid "%1: set -delta_Y column"
 msgstr "%1: definir a coluna do -delta_Y"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:355
+#: src/backend/datapicker/DatapickerCurve.cpp:371
 #, kde-format
 msgid "%1: set error bar size"
 msgstr "%1: mudar o tamanho da barra de erros"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:362
+#: src/backend/datapicker/DatapickerCurve.cpp:378
 #, kde-format
 msgid "%1: set error bar filling"
 msgstr "%1: mudar o preenchimento da barra de erros"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:369
+#: src/backend/datapicker/DatapickerCurve.cpp:385
 #, kde-format
 msgid "%1: set error bar outline style"
 msgstr "%1: mudar o estilo do contorno da barra de erros"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:376
+#: src/backend/datapicker/DatapickerCurve.cpp:392
 #: src/backend/datapicker/DatapickerImage.cpp:415
 #: src/backend/worksheet/InfoElement.cpp:871
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
@@ -1008,7 +1008,7 @@ msgstr "%1: mudar o estilo do contorno da barra de erros"
 msgid "%1: set visible"
 msgstr "%1: mudar para visível"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:376
+#: src/backend/datapicker/DatapickerCurve.cpp:392
 #: src/backend/datapicker/DatapickerImage.cpp:415
 #: src/backend/worksheet/InfoElement.cpp:871
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
@@ -9450,79 +9450,79 @@ msgstr "espadas"
 msgid "club"
 msgstr "paus"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:113
+#: src/backend/worksheet/plots/cartesian/Value.cpp:114
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:467
 #, kde-format
 msgid "%1: set values type"
 msgstr "%1: mudar o tipo dos valores"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:124
+#: src/backend/worksheet/plots/cartesian/Value.cpp:125
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:474
 #, kde-format
 msgid "%1: set values column"
 msgstr "%1: mudar a coluna dos valores"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:136
+#: src/backend/worksheet/plots/cartesian/Value.cpp:137
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:493
 #, kde-format
 msgid "%1: set values position"
 msgstr "%1: mudar a posição dos valores"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:143
+#: src/backend/worksheet/plots/cartesian/Value.cpp:144
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:500
 #, kde-format
 msgid "%1: set values distance"
 msgstr "%1: mudar a distância dos valores"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:150
+#: src/backend/worksheet/plots/cartesian/Value.cpp:151
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:507
 #, kde-format
 msgid "%1: rotate values"
 msgstr "%1: rodar os valores"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:157
+#: src/backend/worksheet/plots/cartesian/Value.cpp:158
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:514
 #, kde-format
 msgid "%1: set values opacity"
 msgstr "%1: mudar a opacidade dos valores"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:164
+#: src/backend/worksheet/plots/cartesian/Value.cpp:165
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:521
 #, kde-format
 msgid "%1: set values numeric format"
 msgstr "%1: mudar o formato numérico dos valores"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:171
+#: src/backend/worksheet/plots/cartesian/Value.cpp:172
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:528
 #, kde-format
 msgid "%1: set values precision"
 msgstr "%1: mudar a precisão dos valores"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:178
+#: src/backend/worksheet/plots/cartesian/Value.cpp:179
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:535
 #, kde-format
 msgid "%1: set values datetime format"
 msgstr "%1: mudar o formato das datas/horas dos valores"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:185
+#: src/backend/worksheet/plots/cartesian/Value.cpp:186
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:542
 #, kde-format
 msgid "%1: set values prefix"
 msgstr "%1: mudar o prefixo dos valores"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:192
+#: src/backend/worksheet/plots/cartesian/Value.cpp:193
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:549
 #, kde-format
 msgid "%1: set values suffix"
 msgstr "%1: mudar o sufixo dos valores"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:199
+#: src/backend/worksheet/plots/cartesian/Value.cpp:200
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:556
 #, kde-format
 msgid "%1: set values font"
 msgstr "%1: mudar o tipo de letra dos valores"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:206
+#: src/backend/worksheet/plots/cartesian/Value.cpp:207
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:563
 #, kde-format
 msgid "%1: set values color"

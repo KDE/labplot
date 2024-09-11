@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-10 01:44+0000\n"
+"POT-Creation-Date: 2024-09-11 01:43+0000\n"
 "PO-Revision-Date: 2024-07-07 10:27+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -866,57 +866,57 @@ msgstr "მონაცემები"
 msgid "%1: set xy-error type"
 msgstr "%1: xy-error -ს ტიპის დაყენება"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:306
+#: src/backend/datapicker/DatapickerCurve.cpp:322
 #, kde-format
 msgid "%1: set position X column"
 msgstr "%1: მდებარეობის X ღერძის დაყენება"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:313
+#: src/backend/datapicker/DatapickerCurve.cpp:329
 #, kde-format
 msgid "%1: set position Y column"
 msgstr "%1: მდებარეობის Y ღერძის დაყენება"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:320
+#: src/backend/datapicker/DatapickerCurve.cpp:336
 #, kde-format
 msgid "%1: set position Z column"
 msgstr "%1: მდებარეობის Z ღერძის დაყენება"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:327
+#: src/backend/datapicker/DatapickerCurve.cpp:343
 #, kde-format
 msgid "%1: set +delta_X column"
 msgstr "%1: +delta_X სვეტის დაყენება"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:334
+#: src/backend/datapicker/DatapickerCurve.cpp:350
 #, kde-format
 msgid "%1: set -delta_X column"
 msgstr "%1: -delta_X სვეტის დაყენება"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:341
+#: src/backend/datapicker/DatapickerCurve.cpp:357
 #, kde-format
 msgid "%1: set +delta_Y column"
 msgstr "%1: +delta_Y სვეტის დაყენება"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:348
+#: src/backend/datapicker/DatapickerCurve.cpp:364
 #, kde-format
 msgid "%1: set -delta_Y column"
 msgstr "%1: -delta_Y სვეტის დაყენება"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:355
+#: src/backend/datapicker/DatapickerCurve.cpp:371
 #, kde-format
 msgid "%1: set error bar size"
 msgstr "%1: შეცდომის ზოლის ზომის დაყენება"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:362
+#: src/backend/datapicker/DatapickerCurve.cpp:378
 #, kde-format
 msgid "%1: set error bar filling"
 msgstr "%1: შეცდომის ზოლის შევსების დაყენება"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:369
+#: src/backend/datapicker/DatapickerCurve.cpp:385
 #, kde-format
 msgid "%1: set error bar outline style"
 msgstr "%1: შეცდომის ზოლის მონახაზის სტილის დაყენება"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:376
+#: src/backend/datapicker/DatapickerCurve.cpp:392
 #: src/backend/datapicker/DatapickerImage.cpp:415
 #: src/backend/worksheet/InfoElement.cpp:871
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
@@ -928,7 +928,7 @@ msgstr "%1: შეცდომის ზოლის მონახაზის
 msgid "%1: set visible"
 msgstr "%1: ხილვადად დაყენება"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:376
+#: src/backend/datapicker/DatapickerCurve.cpp:392
 #: src/backend/datapicker/DatapickerImage.cpp:415
 #: src/backend/worksheet/InfoElement.cpp:871
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
@@ -9135,79 +9135,79 @@ msgstr "პიკები"
 msgid "club"
 msgstr "კლუბი"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:113
+#: src/backend/worksheet/plots/cartesian/Value.cpp:114
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:467
 #, kde-format
 msgid "%1: set values type"
 msgstr "%1: მნიშვნელობების ტიპის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:124
+#: src/backend/worksheet/plots/cartesian/Value.cpp:125
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:474
 #, kde-format
 msgid "%1: set values column"
 msgstr "%1: მნიშვნელობების სვეტის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:136
+#: src/backend/worksheet/plots/cartesian/Value.cpp:137
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:493
 #, kde-format
 msgid "%1: set values position"
 msgstr "%1: მნიშვნელობების მდებარეობის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:143
+#: src/backend/worksheet/plots/cartesian/Value.cpp:144
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:500
 #, kde-format
 msgid "%1: set values distance"
 msgstr "%1: მნიშვნელობების დაშორების დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:150
+#: src/backend/worksheet/plots/cartesian/Value.cpp:151
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:507
 #, kde-format
 msgid "%1: rotate values"
 msgstr "%1: მნიშვნელობების მოტრიალება"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:157
+#: src/backend/worksheet/plots/cartesian/Value.cpp:158
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:514
 #, kde-format
 msgid "%1: set values opacity"
 msgstr "%1: მნიშვნელობების გაუმჭვირვალობის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:164
+#: src/backend/worksheet/plots/cartesian/Value.cpp:165
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:521
 #, kde-format
 msgid "%1: set values numeric format"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:171
+#: src/backend/worksheet/plots/cartesian/Value.cpp:172
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:528
 #, kde-format
 msgid "%1: set values precision"
 msgstr "%1: მნიშვნელობების სიზუსტის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:178
+#: src/backend/worksheet/plots/cartesian/Value.cpp:179
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:535
 #, kde-format
 msgid "%1: set values datetime format"
 msgstr "%1: მნიშვნელობის თარიღისა და დროის ფორმატის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:185
+#: src/backend/worksheet/plots/cartesian/Value.cpp:186
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:542
 #, kde-format
 msgid "%1: set values prefix"
 msgstr "%1: მნიშვნელობების პრეფიქსის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:192
+#: src/backend/worksheet/plots/cartesian/Value.cpp:193
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:549
 #, kde-format
 msgid "%1: set values suffix"
 msgstr "%1: მნიშვნელობების სუფიქსის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:199
+#: src/backend/worksheet/plots/cartesian/Value.cpp:200
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:556
 #, kde-format
 msgid "%1: set values font"
 msgstr "%1: მნიშვნელობების ფონტის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:206
+#: src/backend/worksheet/plots/cartesian/Value.cpp:207
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:563
 #, kde-format
 msgid "%1: set values color"

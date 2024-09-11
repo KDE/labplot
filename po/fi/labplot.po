@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-10 01:44+0000\n"
+"POT-Creation-Date: 2024-09-11 01:43+0000\n"
 "PO-Revision-Date: 2023-10-30 14:32+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -944,67 +944,67 @@ msgstr "Data:"
 msgid "%1: set xy-error type"
 msgstr "%1: aseta reunan tyyli"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:306
+#: src/backend/datapicker/DatapickerCurve.cpp:322
 #, fuzzy, kde-format
 #| msgid "%1: set position"
 msgid "%1: set position X column"
 msgstr "%1: aseta sijainti"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:313
+#: src/backend/datapicker/DatapickerCurve.cpp:329
 #, fuzzy, kde-format
 #| msgid "%1: set position"
 msgid "%1: set position Y column"
 msgstr "%1: aseta sijainti"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:320
+#: src/backend/datapicker/DatapickerCurve.cpp:336
 #, fuzzy, kde-format
 #| msgid "%1: set position"
 msgid "%1: set position Z column"
 msgstr "%1: aseta sijainti"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:327
+#: src/backend/datapicker/DatapickerCurve.cpp:343
 #, fuzzy, kde-format
 #| msgid "%1: insert empty columns"
 msgid "%1: set +delta_X column"
 msgstr "%1: lisää tyhjiä sarakkeita"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:334
+#: src/backend/datapicker/DatapickerCurve.cpp:350
 #, fuzzy, kde-format
 #| msgid "%1: insert empty columns"
 msgid "%1: set -delta_X column"
 msgstr "%1: lisää tyhjiä sarakkeita"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:341
+#: src/backend/datapicker/DatapickerCurve.cpp:357
 #, fuzzy, kde-format
 #| msgid "%1: insert empty columns"
 msgid "%1: set +delta_Y column"
 msgstr "%1: lisää tyhjiä sarakkeita"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:348
+#: src/backend/datapicker/DatapickerCurve.cpp:364
 #, fuzzy, kde-format
 #| msgid "%1: insert empty columns"
 msgid "%1: set -delta_Y column"
 msgstr "%1: lisää tyhjiä sarakkeita"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:355
+#: src/backend/datapicker/DatapickerCurve.cpp:371
 #, fuzzy, kde-format
 #| msgid "%1: set page size"
 msgid "%1: set error bar size"
 msgstr "%1: aseta sivukoko"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:362
+#: src/backend/datapicker/DatapickerCurve.cpp:378
 #, fuzzy, kde-format
 #| msgid "%1: set creation time"
 msgid "%1: set error bar filling"
 msgstr "%1: aseta luontiaika"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:369
+#: src/backend/datapicker/DatapickerCurve.cpp:385
 #, fuzzy, kde-format
 #| msgid "%1: set major grid style"
 msgid "%1: set error bar outline style"
 msgstr "%1: aseta pääruudukon tyyli"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:376
+#: src/backend/datapicker/DatapickerCurve.cpp:392
 #: src/backend/datapicker/DatapickerImage.cpp:415
 #: src/backend/worksheet/InfoElement.cpp:871
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
@@ -1016,7 +1016,7 @@ msgstr "%1: aseta pääruudukon tyyli"
 msgid "%1: set visible"
 msgstr "%1: aseta näkyväksi"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:376
+#: src/backend/datapicker/DatapickerCurve.cpp:392
 #: src/backend/datapicker/DatapickerImage.cpp:415
 #: src/backend/worksheet/InfoElement.cpp:871
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
@@ -9815,82 +9815,82 @@ msgstr "pata"
 msgid "club"
 msgstr "risti"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:113
+#: src/backend/worksheet/plots/cartesian/Value.cpp:114
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:467
 #, kde-format
 msgid "%1: set values type"
 msgstr "%1: aseta arvojen tyyppi"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:124
+#: src/backend/worksheet/plots/cartesian/Value.cpp:125
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:474
 #, kde-format
 msgid "%1: set values column"
 msgstr "%1: aseta arvojen sarake"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:136
+#: src/backend/worksheet/plots/cartesian/Value.cpp:137
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:493
 #, kde-format
 msgid "%1: set values position"
 msgstr "%1: aseta arvojen sijainti"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:143
+#: src/backend/worksheet/plots/cartesian/Value.cpp:144
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:500
 #, kde-format
 msgid "%1: set values distance"
 msgstr "%1: aseta arvojen etäisyys"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:150
+#: src/backend/worksheet/plots/cartesian/Value.cpp:151
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:507
 #, kde-format
 msgid "%1: rotate values"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:157
+#: src/backend/worksheet/plots/cartesian/Value.cpp:158
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:514
 #, kde-format
 msgid "%1: set values opacity"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:164
+#: src/backend/worksheet/plots/cartesian/Value.cpp:165
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:521
 #, fuzzy, kde-format
 #| msgid "%1: set numeric format to '%2'"
 msgid "%1: set values numeric format"
 msgstr "%1: aseta numeeriseksi muodoksi ”%2”"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:171
+#: src/backend/worksheet/plots/cartesian/Value.cpp:172
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:528
 #, fuzzy, kde-format
 #| msgid "%1: set page size"
 msgid "%1: set values precision"
 msgstr "%1: aseta sivukoko"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:178
+#: src/backend/worksheet/plots/cartesian/Value.cpp:179
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:535
 #, fuzzy, kde-format
 #| msgid "%1: set date-time format to %2"
 msgid "%1: set values datetime format"
 msgstr "%1: aseta päiväyksen ja ajan muodoksi %2"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:185
+#: src/backend/worksheet/plots/cartesian/Value.cpp:186
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:542
 #, kde-format
 msgid "%1: set values prefix"
 msgstr "%1: aseta arvojen etuliite"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:192
+#: src/backend/worksheet/plots/cartesian/Value.cpp:193
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:549
 #, kde-format
 msgid "%1: set values suffix"
 msgstr "%1: aseta arvojen jälkiliite"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:199
+#: src/backend/worksheet/plots/cartesian/Value.cpp:200
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:556
 #, kde-format
 msgid "%1: set values font"
 msgstr "%1: aseta arvojen fontti"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:206
+#: src/backend/worksheet/plots/cartesian/Value.cpp:207
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:563
 #, kde-format
 msgid "%1: set values color"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-10 01:44+0000\n"
+"POT-Creation-Date: 2024-09-11 01:43+0000\n"
 "PO-Revision-Date: 2022-09-05 22:28+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -888,57 +888,57 @@ msgstr "البيانات"
 msgid "%1: set xy-error type"
 msgstr ""
 
-#: src/backend/datapicker/DatapickerCurve.cpp:306
+#: src/backend/datapicker/DatapickerCurve.cpp:322
 #, kde-format
 msgid "%1: set position X column"
 msgstr ""
 
-#: src/backend/datapicker/DatapickerCurve.cpp:313
+#: src/backend/datapicker/DatapickerCurve.cpp:329
 #, kde-format
 msgid "%1: set position Y column"
 msgstr ""
 
-#: src/backend/datapicker/DatapickerCurve.cpp:320
+#: src/backend/datapicker/DatapickerCurve.cpp:336
 #, kde-format
 msgid "%1: set position Z column"
 msgstr ""
 
-#: src/backend/datapicker/DatapickerCurve.cpp:327
+#: src/backend/datapicker/DatapickerCurve.cpp:343
 #, kde-format
 msgid "%1: set +delta_X column"
 msgstr ""
 
-#: src/backend/datapicker/DatapickerCurve.cpp:334
+#: src/backend/datapicker/DatapickerCurve.cpp:350
 #, kde-format
 msgid "%1: set -delta_X column"
 msgstr ""
 
-#: src/backend/datapicker/DatapickerCurve.cpp:341
+#: src/backend/datapicker/DatapickerCurve.cpp:357
 #, kde-format
 msgid "%1: set +delta_Y column"
 msgstr ""
 
-#: src/backend/datapicker/DatapickerCurve.cpp:348
+#: src/backend/datapicker/DatapickerCurve.cpp:364
 #, kde-format
 msgid "%1: set -delta_Y column"
 msgstr ""
 
-#: src/backend/datapicker/DatapickerCurve.cpp:355
+#: src/backend/datapicker/DatapickerCurve.cpp:371
 #, kde-format
 msgid "%1: set error bar size"
 msgstr ""
 
-#: src/backend/datapicker/DatapickerCurve.cpp:362
+#: src/backend/datapicker/DatapickerCurve.cpp:378
 #, kde-format
 msgid "%1: set error bar filling"
 msgstr ""
 
-#: src/backend/datapicker/DatapickerCurve.cpp:369
+#: src/backend/datapicker/DatapickerCurve.cpp:385
 #, kde-format
 msgid "%1: set error bar outline style"
 msgstr ""
 
-#: src/backend/datapicker/DatapickerCurve.cpp:376
+#: src/backend/datapicker/DatapickerCurve.cpp:392
 #: src/backend/datapicker/DatapickerImage.cpp:415
 #: src/backend/worksheet/InfoElement.cpp:871
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
@@ -950,7 +950,7 @@ msgstr ""
 msgid "%1: set visible"
 msgstr ""
 
-#: src/backend/datapicker/DatapickerCurve.cpp:376
+#: src/backend/datapicker/DatapickerCurve.cpp:392
 #: src/backend/datapicker/DatapickerImage.cpp:415
 #: src/backend/worksheet/InfoElement.cpp:871
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
@@ -9396,79 +9396,79 @@ msgstr "مسحاة"
 msgid "club"
 msgstr "نادي"
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:113
+#: src/backend/worksheet/plots/cartesian/Value.cpp:114
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:467
 #, kde-format
 msgid "%1: set values type"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:124
+#: src/backend/worksheet/plots/cartesian/Value.cpp:125
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:474
 #, kde-format
 msgid "%1: set values column"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:136
+#: src/backend/worksheet/plots/cartesian/Value.cpp:137
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:493
 #, kde-format
 msgid "%1: set values position"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:143
+#: src/backend/worksheet/plots/cartesian/Value.cpp:144
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:500
 #, kde-format
 msgid "%1: set values distance"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:150
+#: src/backend/worksheet/plots/cartesian/Value.cpp:151
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:507
 #, kde-format
 msgid "%1: rotate values"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:157
+#: src/backend/worksheet/plots/cartesian/Value.cpp:158
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:514
 #, kde-format
 msgid "%1: set values opacity"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:164
+#: src/backend/worksheet/plots/cartesian/Value.cpp:165
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:521
 #, kde-format
 msgid "%1: set values numeric format"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:171
+#: src/backend/worksheet/plots/cartesian/Value.cpp:172
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:528
 #, kde-format
 msgid "%1: set values precision"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:178
+#: src/backend/worksheet/plots/cartesian/Value.cpp:179
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:535
 #, kde-format
 msgid "%1: set values datetime format"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:185
+#: src/backend/worksheet/plots/cartesian/Value.cpp:186
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:542
 #, kde-format
 msgid "%1: set values prefix"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:192
+#: src/backend/worksheet/plots/cartesian/Value.cpp:193
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:549
 #, kde-format
 msgid "%1: set values suffix"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:199
+#: src/backend/worksheet/plots/cartesian/Value.cpp:200
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:556
 #, kde-format
 msgid "%1: set values font"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Value.cpp:206
+#: src/backend/worksheet/plots/cartesian/Value.cpp:207
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:563
 #, kde-format
 msgid "%1: set values color"
