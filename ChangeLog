@@ -18,6 +18,7 @@ New features:
 Bug fixes:
 	* Fix crash selecting "cell" from function list in function dialog
 	* Properly draw the border line of the symbol in the legend (BUG 491310)
+	* Show Ticks on inverted axes (BUG 491502 & 492475)
 
 Internal:
 	* use name LabPlot/labplot consistenly (renamed Labplot2/labplot2)
