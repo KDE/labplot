@@ -222,6 +222,7 @@ protected:
 
 private Q_SLOTS:
 	void initGUI(const QString&);
+	void customAboutDialog();
 	void changeVisibleAllDocks(bool);
 	void activateNextDock();
 	void activatePreviousDock();

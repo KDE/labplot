@@ -109,6 +109,7 @@
 #include <KColorSchemeMenu>
 #include <KCompressionDevice>
 #include <KConfigGroup>
+#include <KHelpMenu>
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KRecentFilesAction>
@@ -394,6 +395,15 @@ void MainWin::initGUI(const QString& fileName) {
 		restoreGeometry(groupMainWin.readEntry("geometry", QByteArray()));
 
 	m_lastOpenFileFilter = groupMainWin.readEntry(QLatin1String("lastOpenFileFilter"), QString());
+
+	// cutom about dialog
+	// KHelpMenu *helpMenu = new KHelpMenu(this);
+	auto* menu = parent()->helpMenu();
+	connect(menu, &KHelpMenu::showAboutApplication, this, &MainWin::customAboutDialog);
+}
+
+void MainWin::customAboutDialog() {
+	DEBUG(Q_FUNC_INFO)
 }
 
 /**
