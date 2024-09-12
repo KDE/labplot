@@ -1686,6 +1686,8 @@ void AxisPrivate::retransformTicks() {
 	const bool dateTimeSpacing = !q->isNumeric() && q->scale() == RangeT::Scale::Linear && majorTicksType == Axis::TicksType::Spacing;
 	DateTime::DateTime dt;
 	QDateTime majorTickPosDateTime;
+	QDateTime nextMajorTickPosDateTime;
+	qreal nextMajorTickPos = 0.0;
 	if (dateTimeSpacing) {
 		dt = DateTime::dateTime(majorTicksSpacing);
 		majorTickPosDateTime = QDateTime::fromMSecsSinceEpoch(start, Qt::UTC);
@@ -1695,7 +1697,6 @@ void AxisPrivate::retransformTicks() {
 	for (int iMajor = 0; iMajor < tmpMajorTicksNumber || (dateTimeSpacing && dtValid); iMajor++) {
 		// DEBUG(Q_FUNC_INFO << ", major tick " << iMajor)
 		qreal majorTickPos = 0.0;
-		qreal nextMajorTickPos = 0.0;
 		// calculate major tick's position
 
 		if (!dateTimeSpacing) {
@@ -1737,12 +1738,16 @@ void AxisPrivate::retransformTicks() {
 			if (iMajor == 0)
 				majorTickPos = start;
 			else {
-				majorTickPosDateTime = majorTickPosDateTime.addYears(dt.year);
-				majorTickPosDateTime = majorTickPosDateTime.addMonths(dt.month);
-				majorTickPosDateTime = majorTickPosDateTime.addDays(dt.day);
-				majorTickPosDateTime = majorTickPosDateTime.addMSecs(DateTime::milliseconds(dt.hour, dt.minute, dt.second, dt.millisecond));
-				majorTickPos = majorTickPosDateTime.toMSecsSinceEpoch();
+				majorTickPosDateTime = nextMajorTickPosDateTime;
+				majorTickPos = nextMajorTickPos;
 			}
+
+			nextMajorTickPosDateTime = majorTickPosDateTime;
+			nextMajorTickPosDateTime = nextMajorTickPosDateTime.addYears(dt.year);
+			nextMajorTickPosDateTime = nextMajorTickPosDateTime.addMonths(dt.month);
+			nextMajorTickPosDateTime = nextMajorTickPosDateTime.addDays(dt.day);
+			nextMajorTickPosDateTime = nextMajorTickPosDateTime.addMSecs(DateTime::milliseconds(dt.hour, dt.minute, dt.second, dt.millisecond));
+			nextMajorTickPos = nextMajorTickPosDateTime.toMSecsSinceEpoch();
 		}
 
 		// finish here when out of range
@@ -1868,8 +1873,8 @@ void AxisPrivate::retransformTicks() {
 
 		// minor ticks
 		// DEBUG("	tmpMinorTicksNumber = " << tmpMinorTicksNumber)
-		if (Axis::noTicks != minorTicksDirection && tmpMajorTicksNumber > 1 && tmpMinorTicksNumber > 0 && iMajor < tmpMajorTicksNumber - 1
-			&& nextMajorTickPos != majorTickPos) {
+		if (Axis::noTicks != minorTicksDirection && tmpMinorTicksNumber > 0
+			&& ((tmpMajorTicksNumber > 1 && iMajor < tmpMajorTicksNumber - 1) || (dateTimeSpacing && dtValid)) && nextMajorTickPos != majorTickPos) {
 			// minor ticks are placed at equidistant positions independent of the selected scaling for the major ticks positions
 			double minorTicksIncrement = (nextMajorTickPos - majorTickPos) / (tmpMinorTicksNumber + 1);
 			// DEBUG("	nextMajorTickPos = " << nextMajorTickPos)
