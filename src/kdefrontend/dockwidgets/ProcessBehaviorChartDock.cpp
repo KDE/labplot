@@ -226,6 +226,10 @@ void ProcessBehaviorChartDock::yDataColumnChanged(const QModelIndex& index) {
 void ProcessBehaviorChartDock::typeChanged(int index) {
 	const auto type  = static_cast<ProcessBehaviorChart::Type>(ui.cbType->itemData(index).toInt());
 
+	bool visible = (type == ProcessBehaviorChart::Type::XbarR || type == ProcessBehaviorChart::Type::R);
+	ui.lSubgroupSize->setVisible(visible);
+	ui.sbSubgroupSize->setVisible(visible);
+
 	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* plot : m_plots)
@@ -264,10 +268,14 @@ void ProcessBehaviorChartDock::load() {
 void ProcessBehaviorChartDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group(QStringLiteral("ProcessBehaviorChart"));
 
-	// distribution
-	auto dist = group.readEntry(QStringLiteral("distribution"), static_cast<int>(m_plot->type()));
-	int index = ui.cbType->findData(static_cast<int>(dist));
+	// type
+	auto dist = group.readEntry(QStringLiteral("type"), static_cast<int>(m_plot->type()));
+	const int index = ui.cbType->findData(static_cast<int>(dist));
 	ui.cbType->setCurrentIndex(index);
+
+	// subgroup size
+	const int size = group.readEntry(QStringLiteral("subgroupSize"), static_cast<int>(m_plot->subgroupSize()));
+	ui.sbSubgroupSize->setValue(size);
 
 	// properties of the reference and percentile curves
 	dataLineWidget->loadConfig(group);
@@ -294,7 +302,8 @@ void ProcessBehaviorChartDock::saveConfigAsTemplate(KConfig& config) {
 	KConfigGroup group = config.group(QStringLiteral("ProcessBehaviorChart"));
 
 	// distribution
-	group.writeEntry(QStringLiteral("kernelType"), static_cast<int>(m_plot->type()));
+	group.writeEntry(QStringLiteral("type"), static_cast<int>(m_plot->type()));
+	group.writeEntry(QStringLiteral("subgroupSize"), m_plot->subgroupSize());
 
 	// properties of the reference and percentile curves
 	dataLineWidget->saveConfig(group);

@@ -194,6 +194,7 @@ void ProcessBehaviorChart::setVisible(bool on) {
 // ##############################################################################
 //  general
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, ProcessBehaviorChart::Type, type, type)
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, int, subgroupSize, subgroupSize)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, const AbstractColumn*, xDataColumn, xDataColumn)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, QString, xDataColumnPath, xDataColumnPath)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, const AbstractColumn*, yDataColumn, yDataColumn)
@@ -347,6 +348,13 @@ void ProcessBehaviorChart::setType(ProcessBehaviorChart::Type type) {
 	Q_D(ProcessBehaviorChart);
 	if (type != d->type)
 		exec(new ProcessBehaviorChartSetTypeCmd(d, type, ki18n("%1: set type")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetSubgroupSize, int, subgroupSize, recalc)
+void ProcessBehaviorChart::setSubgroupSize(int subgroupSize) {
+	Q_D(ProcessBehaviorChart);
+	if (subgroupSize != d->subgroupSize)
+		exec(new ProcessBehaviorChartSetSubgroupSizeCmd(d, subgroupSize, ki18n("%1: set subgroup size")));
 }
 
 // ##############################################################################
@@ -533,41 +541,93 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		break;
 	}
 	case ProcessBehaviorChart::Type::XbarR: {
-		// Calculate the mean of subgroups
-		std::vector<double> subgroupMeans;
+		yColumn->clear();
+		yColumn->resizeTo(subgroupSize);
+
+		// Calculate the mean for each subgroup
 		for (int i = 0; i < yDataColumn->rowCount(); i += subgroupSize) {
 			double sum = 0.0;
-			for (int j = 0; j < subgroupSize && (i + j) < yDataColumn->rowCount(); ++j) {
-				sum += yDataColumn->valueAt(i + j);
+			int j = 0;
+			for (; j < subgroupSize && (i + j) < yDataColumn->rowCount(); ++j) {
+				if (yDataColumn->isValid(i) && !yDataColumn->isMasked(i))
+					sum += yDataColumn->valueAt(i + j);
 			}
-			subgroupMeans.push_back(sum / subgroupSize);
+
+			yColumn->setValueAt(i, sum / subgroupSize);
 		}
 
-		const double meanOfMeans = gsl_stats_mean(subgroupMeans.data(), 1, subgroupMeans.size());
+		// center line at the mean of subgroup means ("grand average")
+		const double meanOfMeans = yColumn->statistics().arithmeticMean;
 		yCenterColumn->setValueAt(0, meanOfMeans);
 		yCenterColumn->setValueAt(1, meanOfMeans);
 
-		// Calculate the range of subgroups
+		// Calculate the range for each subgroups
 		std::vector<double> subgroupRanges;
 		for (int i = 0; i < yDataColumn->rowCount(); i += subgroupSize) {
 			double minVal = yDataColumn->valueAt(i);
 			double maxVal = yDataColumn->valueAt(i);
 			for (int j = 1; j < subgroupSize && (i + j) < yDataColumn->rowCount(); ++j) {
-				double val = yDataColumn->valueAt(i + j);
-				if (val < minVal) minVal = val;
-				if (val > maxVal) maxVal = val;
+				if (yDataColumn->isValid(i) && !yDataColumn->isMasked(i)) {
+					double val = yDataColumn->valueAt(i + j);
+					if (val < minVal)
+						minVal = val;
+					if (val > maxVal)
+						maxVal = val;
+				}
 			}
 			subgroupRanges.push_back(maxVal - minVal);
 		}
 
+		// limits - the mean of means plus/minus normalized mean range
 		const double meanRange = gsl_stats_mean(subgroupRanges.data(), 1, subgroupRanges.size());
-		const double d2 = 2.326; // d2 constant for subgroup size 5
-		const double upperLimit = meanOfMeans + 3. * meanRange / d2;
-		const double lowerLimit = meanOfMeans - 3. * meanRange / d2;
+		const double upperLimit = meanOfMeans + 3. * meanRange / std::sqrt(subgroupSize);
+		const double lowerLimit = meanOfMeans - 3. * meanRange / std::sqrt(subgroupSize);
 		yUpperLimitColumn->setValueAt(0, upperLimit);
 		yUpperLimitColumn->setValueAt(1, upperLimit);
 		yLowerLimitColumn->setValueAt(0, lowerLimit);
 		yLowerLimitColumn->setValueAt(1, lowerLimit);
+
+		// plotted data - means of subroups
+		dataCurve->setYColumn(yColumn);
+
+		break;
+	}
+	case ProcessBehaviorChart::Type::R: {
+		yColumn->clear();
+		yColumn->resizeTo(subgroupSize);
+
+		// Calculate the range of subgroups
+		for (int i = 0; i < yDataColumn->rowCount(); i += subgroupSize) {
+			double minVal = yDataColumn->valueAt(i);
+			double maxVal = yDataColumn->valueAt(i);
+			for (int j = 1; j < subgroupSize && (i + j) < yDataColumn->rowCount(); ++j) {
+				if (yDataColumn->isValid(i) && !yDataColumn->isMasked(i)) {
+					double val = yDataColumn->valueAt(i + j);
+					if (val < minVal)
+						minVal = val;
+					if (val > maxVal)
+						maxVal = val;
+				}
+			}
+			yColumn->setValueAt(i, maxVal - minVal);
+		}
+
+		// center line at the average range
+		const double meanRange= yColumn->statistics().arithmeticMean;
+		yCenterColumn->setValueAt(0, meanRange);
+		yCenterColumn->setValueAt(1, meanRange);
+
+		// upper and lower limits
+		const double upperLimit = meanRange + 3. * meanRange / std::sqrt(subgroupSize);
+		const double lowerLimit = meanRange - 3. * meanRange / std::sqrt(subgroupSize);
+		yUpperLimitColumn->setValueAt(0, upperLimit);
+		yUpperLimitColumn->setValueAt(1, upperLimit);
+		yLowerLimitColumn->setValueAt(0, lowerLimit);
+		yLowerLimitColumn->setValueAt(1, lowerLimit);
+
+		// plotted data - subroup ranges
+		dataCurve->setYColumn(yDataColumn);
+
 		break;
 	}
 	case ProcessBehaviorChart::Type::XbarS: {
@@ -604,6 +664,10 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		yUpperLimitColumn->setValueAt(1, upperLimit);
 		yLowerLimitColumn->setValueAt(0, lowerLimit);
 		yLowerLimitColumn->setValueAt(1, lowerLimit);
+		break;
+	}
+	case ProcessBehaviorChart::Type::S: {
+
 		break;
 	}
 	case ProcessBehaviorChart::Type::P: {
@@ -726,6 +790,7 @@ void ProcessBehaviorChart::save(QXmlStreamWriter* writer) const {
 	WRITE_COLUMN(d->xLowerLimitColumn, xLowerLimitColumn);
 	WRITE_COLUMN(d->yLowerLimitColumn, yLowerLimitColumn);
 	writer->writeAttribute(QStringLiteral("type"), QString::number(static_cast<int>(d->type)));
+	writer->writeAttribute(QStringLiteral("subgroupSize"), QString::number(d->subgroupSize));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
 	writer->writeEndElement();
@@ -790,6 +855,7 @@ bool ProcessBehaviorChart::load(XmlStreamReader* reader, bool preview) {
 			READ_COLUMN(xLowerLimitColumn);
 			READ_COLUMN(yLowerLimitColumn);
 			READ_INT_VALUE("type", type, ProcessBehaviorChart::Type);
+			READ_INT_VALUE("subgroupSize", subgroupSize, int);
 			READ_INT_VALUE("legendVisible", legendVisible, bool);
 
 			str = attribs.value(QStringLiteral("visible")).toString();
