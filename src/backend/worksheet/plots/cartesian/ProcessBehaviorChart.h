@@ -29,7 +29,7 @@ public:
 	friend class ProcessBehaviorChartSetXDataColumnCmd;
 	friend class ProcessBehaviorChartSetYDataColumnCmd;
 
-	enum class Type {XmR, mR, XbarR, R, XbarS, S, P, NP, C, U};
+	enum class Type {XmR, mR, XbarR, R, XbarS, S};
 
 	explicit ProcessBehaviorChart(const QString& name);
 	~ProcessBehaviorChart() override;

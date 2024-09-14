@@ -45,14 +45,10 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 
 	ui.cbType->addItem(QStringLiteral("XmR"), static_cast<int>(ProcessBehaviorChart::Type::XmR));
 	ui.cbType->addItem(QStringLiteral("mR"), static_cast<int>(ProcessBehaviorChart::Type::mR));
-	ui.cbType->addItem(QStringLiteral("XbarR"), static_cast<int>(ProcessBehaviorChart::Type::XbarR));
+	ui.cbType->addItem(QStringLiteral("X̅R"), static_cast<int>(ProcessBehaviorChart::Type::XbarR));
 	ui.cbType->addItem(QStringLiteral("R"), static_cast<int>(ProcessBehaviorChart::Type::R));
-	ui.cbType->addItem(QStringLiteral("XbarS"), static_cast<int>(ProcessBehaviorChart::Type::XbarS));
+	ui.cbType->addItem(QStringLiteral("X̅S"), static_cast<int>(ProcessBehaviorChart::Type::XbarS));
 	ui.cbType->addItem(QStringLiteral("S"), static_cast<int>(ProcessBehaviorChart::Type::S));
-	ui.cbType->addItem(QStringLiteral("P"), static_cast<int>(ProcessBehaviorChart::Type::P));
-	ui.cbType->addItem(QStringLiteral("NP"), static_cast<int>(ProcessBehaviorChart::Type::NP));
-	ui.cbType->addItem(QStringLiteral("C"), static_cast<int>(ProcessBehaviorChart::Type::C));
-	ui.cbType->addItem(QStringLiteral("U"), static_cast<int>(ProcessBehaviorChart::Type::U));
 
 	// Tab "Data Line"
 	auto* hBoxLayout = static_cast<QHBoxLayout*>(ui.tabDataLine->layout());
@@ -174,7 +170,35 @@ void ProcessBehaviorChartDock::setPlots(QList<ProcessBehaviorChart*> list) {
 }
 
 void ProcessBehaviorChartDock::retranslateUi() {
-	// ui.cbType->clear();
+	// tooltips
+
+	ui.cbType->addItem(QStringLiteral("XmR"), static_cast<int>(ProcessBehaviorChart::Type::XmR));
+	ui.cbType->addItem(QStringLiteral("mR"), static_cast<int>(ProcessBehaviorChart::Type::mR));
+	ui.cbType->addItem(QStringLiteral("X̅R"), static_cast<int>(ProcessBehaviorChart::Type::XbarR));
+	ui.cbType->addItem(QStringLiteral("R"), static_cast<int>(ProcessBehaviorChart::Type::R));
+	ui.cbType->addItem(QStringLiteral("X̅S"), static_cast<int>(ProcessBehaviorChart::Type::XbarS));
+	ui.cbType->addItem(QStringLiteral("S"), static_cast<int>(ProcessBehaviorChart::Type::S));
+
+	QString info = i18n(
+		"Individual Value and Moving Range Charts:"
+		"<ul>"
+		"<li>XmR.</li>"
+		"<li>mR.</li>"
+		"</ul>"
+		"Average and Range Charts:"
+		"<ul>"
+		"<li>X̅R.</li>"
+		"<li>R.</li>"
+		"</ul>"
+		"Standard Deviation Charts:"
+		"<ul>"
+		"<li>X̅S.</li>"
+		"<li>S.</li>"
+		"</ul>");
+	ui.lType->setToolTip(info);
+	ui.cbType->setToolTip(info);
+
+
 }
 
 /*
@@ -226,7 +250,8 @@ void ProcessBehaviorChartDock::yDataColumnChanged(const QModelIndex& index) {
 void ProcessBehaviorChartDock::typeChanged(int index) {
 	const auto type  = static_cast<ProcessBehaviorChart::Type>(ui.cbType->itemData(index).toInt());
 
-	bool visible = (type == ProcessBehaviorChart::Type::XbarR || type == ProcessBehaviorChart::Type::R);
+	bool visible = (type == ProcessBehaviorChart::Type::XbarR || type == ProcessBehaviorChart::Type::R
+				|| type == ProcessBehaviorChart::Type::XbarS || type == ProcessBehaviorChart::Type::S);
 	ui.lSubgroupSize->setVisible(visible);
 	ui.sbSubgroupSize->setVisible(visible);
 

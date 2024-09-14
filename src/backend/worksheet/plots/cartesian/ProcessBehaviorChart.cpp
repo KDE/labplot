@@ -470,42 +470,33 @@ void ProcessBehaviorChartPrivate::recalc() {
 	Q_EMIT q->dataChanged();
 }
 
-/*
-Explanation:
-XmR: Calculates the mean moving range and sets the control limits based on the mean and the mean moving range.
-XbarR: Calculates the mean of subgroups and the range of subgroups, then sets the control limits based on these values.
-XbarS: Calculates the mean of subgroups and the standard deviation of subgroups, then sets the control limits based on these values.
-P: Calculates the proportion of defectives and sets the control limits based on this proportion.
-NP: Calculates the number of defectives and sets the control limits based on this number.
-C: Calculates the average number of defects per unit and sets the control limits based on this average.
-U: Calculates the average number of defects per unit and sets the control limits based on this average.
-This implementation assumes that the necessary constants (like d2 and c4) are known and used correctly for the given subgroup sizes. Adjust the constants as needed based on the actual subgroup sizes and control chart requirements.
-*/
+/*!
+ * conventions and definitions taken from Wheeler's "Making Use of Data"
+ */
 void ProcessBehaviorChartPrivate::updateControlLimits() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
+	double center = 0.;
+	double upperLimit = 0.;
+	double lowerLimit = 0.;
+
 	switch (type) {
 	case ProcessBehaviorChart::Type::XmR: {
-		// center line
-		const double mean = static_cast<const Column*>(yDataColumn)->statistics().arithmeticMean;
-		yCenterColumn->setValueAt(0, mean);
-		yCenterColumn->setValueAt(1, mean);
-
 		// calculate the mean moving range
 		std::vector<double> movingRange;
 		for (int i = 1; i < yDataColumn->rowCount(); ++i) {
-			if (yDataColumn->isValid(i) && !yDataColumn->isMasked(i))
+			if (yDataColumn->isValid(i) && !yDataColumn->isMasked(i) && yDataColumn->isValid(i - 1) && !yDataColumn->isMasked(i - 1))
 				movingRange.push_back(std::abs(yDataColumn->valueAt(i) - yDataColumn->valueAt(i - 1)));
 		}
 
-		const double meanMovingRange = gsl_stats_mean(movingRange.data(), 1, movingRange.size());
+		// center line at the mean of the data
+		const double mean = static_cast<const Column*>(yDataColumn)->statistics().arithmeticMean;
+		center = mean;
 
 		// upper and lower limits
-		const double upperLimit = mean + 3. * meanMovingRange / 1.128;
-		const double lowerLimit = mean - 3. * meanMovingRange / 1.128;
-		yUpperLimitColumn->setValueAt(0, upperLimit);
-		yUpperLimitColumn->setValueAt(1, upperLimit);
-		yLowerLimitColumn->setValueAt(0, lowerLimit);
-		yLowerLimitColumn->setValueAt(1, lowerLimit);
+		const double meanMovingRange = gsl_stats_mean(movingRange.data(), 1, movingRange.size());
+		const double d2 = 1.; // TODO
+		upperLimit = mean + 3. * meanMovingRange / d2;
+		lowerLimit = mean - 3. * meanMovingRange / d2;
 
 		// plotted data - original data
 		dataCurve->setYColumn(yDataColumn);
@@ -513,27 +504,25 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		break;
 	}
 	case ProcessBehaviorChart::Type::mR: {
-		// calculate the mean moving ranges
 		yColumn->clear();
 		yColumn->resizeTo(yDataColumn->rowCount());
+
+		// calculate the mean moving ranges
 		for (int i = 1; i < yDataColumn->rowCount(); ++i) {
-			if (yDataColumn->isValid(i) && !yDataColumn->isMasked(i))
+			if (yDataColumn->isValid(i) && !yDataColumn->isMasked(i) && yDataColumn->isValid(i - 1) && !yDataColumn->isMasked(i - 1))
 				yColumn->setValueAt(i - 1, std::abs(yDataColumn->valueAt(i) - yDataColumn->valueAt(i - 1)));
 		}
 
-		const double meanMovingRange = yColumn->statistics().arithmeticMean;
-
 		// center line
-		yCenterColumn->setValueAt(0, meanMovingRange);
-		yCenterColumn->setValueAt(1, meanMovingRange);
+		const double meanMovingRange = yColumn->statistics().arithmeticMean;
+		center = meanMovingRange;
 
 		// upper and lower limits
-		const double upperLimit = 0;
-		const double lowerLimit = 3.2665 * meanMovingRange;
-		yUpperLimitColumn->setValueAt(0, upperLimit);
-		yUpperLimitColumn->setValueAt(1, upperLimit);
-		yLowerLimitColumn->setValueAt(0, lowerLimit);
-		yLowerLimitColumn->setValueAt(1, lowerLimit);
+		const double d2 = 1.; // TODO
+		const double d3 = 1.; // TODO
+		const double D4 = 1 + 3 * d3 / d2;
+		upperLimit = 0;
+		lowerLimit = D4 * meanMovingRange;
 
 		// plotted data - moving ranges
 		dataCurve->setYColumn(yColumn);
@@ -544,22 +533,17 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		yColumn->clear();
 		yColumn->resizeTo(subgroupSize);
 
-		// Calculate the mean for each subgroup
+		// calculate the mean for each subgroup
 		for (int i = 0; i < yDataColumn->rowCount(); i += subgroupSize) {
 			double sum = 0.0;
 			int j = 0;
 			for (; j < subgroupSize && (i + j) < yDataColumn->rowCount(); ++j) {
-				if (yDataColumn->isValid(i) && !yDataColumn->isMasked(i))
+				if (yDataColumn->isValid(i + j) && !yDataColumn->isMasked(i + j))
 					sum += yDataColumn->valueAt(i + j);
 			}
 
 			yColumn->setValueAt(i, sum / subgroupSize);
 		}
-
-		// center line at the mean of subgroup means ("grand average")
-		const double meanOfMeans = yColumn->statistics().arithmeticMean;
-		yCenterColumn->setValueAt(0, meanOfMeans);
-		yCenterColumn->setValueAt(1, meanOfMeans);
 
 		// Calculate the range for each subgroups
 		std::vector<double> subgroupRanges;
@@ -578,14 +562,16 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 			subgroupRanges.push_back(maxVal - minVal);
 		}
 
-		// limits - the mean of means plus/minus normalized mean range
+		// center line at the mean of subgroup means ("grand average")
+		const double meanOfMeans = yColumn->statistics().arithmeticMean;
+		center = meanOfMeans;
+
+		// upper and lower limits - the mean of means plus/minus normalized mean range
 		const double meanRange = gsl_stats_mean(subgroupRanges.data(), 1, subgroupRanges.size());
-		const double upperLimit = meanOfMeans + 3. * meanRange / std::sqrt(subgroupSize);
-		const double lowerLimit = meanOfMeans - 3. * meanRange / std::sqrt(subgroupSize);
-		yUpperLimitColumn->setValueAt(0, upperLimit);
-		yUpperLimitColumn->setValueAt(1, upperLimit);
-		yLowerLimitColumn->setValueAt(0, lowerLimit);
-		yLowerLimitColumn->setValueAt(1, lowerLimit);
+		const double d2 = 1.; // TODO
+		const double A2 = 3 / d2 / std::sqrt(subgroupSize);
+		upperLimit = meanOfMeans + A2 * meanRange;
+		lowerLimit = meanOfMeans - A2 * meanRange;
 
 		// plotted data - means of subroups
 		dataCurve->setYColumn(yColumn);
@@ -613,140 +599,100 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		}
 
 		// center line at the average range
-		const double meanRange= yColumn->statistics().arithmeticMean;
-		yCenterColumn->setValueAt(0, meanRange);
-		yCenterColumn->setValueAt(1, meanRange);
+		const double meanRange = yColumn->statistics().arithmeticMean;
+		center = meanRange;
 
 		// upper and lower limits
-		const double upperLimit = meanRange + 3. * meanRange / std::sqrt(subgroupSize);
-		const double lowerLimit = meanRange - 3. * meanRange / std::sqrt(subgroupSize);
-		yUpperLimitColumn->setValueAt(0, upperLimit);
-		yUpperLimitColumn->setValueAt(1, upperLimit);
-		yLowerLimitColumn->setValueAt(0, lowerLimit);
-		yLowerLimitColumn->setValueAt(1, lowerLimit);
+		const double d2 = 1.; // TODO
+		const double d3 = 1.; // TODO
+		const double D3 = 1 + 3 * d3 / d2;
+		const double D4 = 1 + 3 * d3 / d2;
+		upperLimit = D3 * meanRange;
+		lowerLimit = D4 * meanRange;
 
 		// plotted data - subroup ranges
 		dataCurve->setYColumn(yDataColumn);
 
 		break;
 	}
-	case ProcessBehaviorChart::Type::XbarS: {
+	case ProcessBehaviorChart::Type::XbarS: { // chart based on the means and standard deviations for each subgroup
 		// Calculate the mean of subgroups
-		std::vector<double> subgroupMeans;
 		for (int i = 0; i < yDataColumn->rowCount(); i += subgroupSize) {
 			double sum = 0.0;
 			for (int j = 0; j < subgroupSize && (i + j) < yDataColumn->rowCount(); ++j) {
-				sum += yDataColumn->valueAt(i + j);
+				if (yDataColumn->isValid(i) && !yDataColumn->isMasked(i))
+					sum += yDataColumn->valueAt(i + j);
 			}
-			subgroupMeans.push_back(sum / subgroupSize);
+
+			yColumn->setValueAt(i, sum / subgroupSize);
 		}
 
-		const double meanOfMeans = gsl_stats_mean(subgroupMeans.data(), 1, subgroupMeans.size());
-		yCenterColumn->setValueAt(0, meanOfMeans);
-		yCenterColumn->setValueAt(1, meanOfMeans);
-
-		// Calculate the standard deviation of subgroups
+		// Calculate the standard deviations of subgroups
 		std::vector<double> subgroupStdDevs;
 		for (int i = 0; i < yDataColumn->rowCount(); i += subgroupSize) {
 			std::vector<double> subgroup;
 			for (int j = 0; j < subgroupSize && (i + j) < yDataColumn->rowCount(); ++j) {
-				subgroup.push_back(yDataColumn->valueAt(i + j));
+				if (yDataColumn->isValid(i) && !yDataColumn->isMasked(i))
+					subgroup.push_back(yDataColumn->valueAt(i + j));
 			}
 			const double stddev = gsl_stats_sd(subgroup.data(), 1, subgroup.size());
 			subgroupStdDevs.push_back(stddev);
 		}
 
+		// center line at the mean of means
+		const double meanOfMeans = yColumn->statistics().arithmeticMean;
+		center = meanOfMeans;
+
+		// upper and lower limits
 		const double meanStdDev = gsl_stats_mean(subgroupStdDevs.data(), 1, subgroupStdDevs.size());
-		const double c4 = 0.94; // c4 constant for subgroup size 5
-		const double upperLimit = meanOfMeans + 3. * meanStdDev / c4;
-		const double lowerLimit = meanOfMeans - 3. * meanStdDev / c4;
-		yUpperLimitColumn->setValueAt(0, upperLimit);
-		yUpperLimitColumn->setValueAt(1, upperLimit);
-		yLowerLimitColumn->setValueAt(0, lowerLimit);
-		yLowerLimitColumn->setValueAt(1, lowerLimit);
+		const double c4 = 1.; // TODO
+		const double A3 = 3. / c4 / std::sqrt(subgroupSize);
+		upperLimit = meanOfMeans + A3 * meanStdDev;
+		lowerLimit = meanOfMeans - A3 * meanStdDev;
+
+		// plotted data - subroup means
+		dataCurve->setYColumn(yColumn);
+
 		break;
 	}
 	case ProcessBehaviorChart::Type::S: {
+		yColumn->clear();
+		yColumn->resizeTo(subgroupSize);
 
-		break;
-	}
-	case ProcessBehaviorChart::Type::P: {
-		// Calculate the proportion of defectives
-		double totalDefectives = 0.0;
-		for (int i = 0; i < yDataColumn->rowCount(); ++i) {
-			totalDefectives += yDataColumn->valueAt(i);
+		// Calculate the standard deviation for each subgroup
+		for (int i = 0; i < yDataColumn->rowCount(); i += subgroupSize) {
+			std::vector<double> subgroup;
+			for (int j = 0; j < subgroupSize && (i + j) < yDataColumn->rowCount(); ++j) {
+				if (yDataColumn->isValid(i + j) && !yDataColumn->isMasked(i + j))
+					subgroup.push_back(yDataColumn->valueAt(i + j));
+			}
+			const double stddev = gsl_stats_sd(subgroup.data(), 1, subgroup.size());
+			yColumn->setValueAt(i, stddev);
 		}
-		const double pBar = totalDefectives / yDataColumn->rowCount();
-		yCenterColumn->setValueAt(0, pBar);
-		yCenterColumn->setValueAt(1, pBar);
 
-		// Calculate the control limits
-		const double upperLimit = pBar + 3. * std::sqrt(pBar * (1 - pBar) / yDataColumn->rowCount());
-		const double lowerLimit = pBar - 3. * std::sqrt(pBar * (1 - pBar) / yDataColumn->rowCount());
-		yUpperLimitColumn->setValueAt(0, upperLimit);
-		yUpperLimitColumn->setValueAt(1, upperLimit);
-		yLowerLimitColumn->setValueAt(0, lowerLimit);
-		yLowerLimitColumn->setValueAt(1, lowerLimit);
-		break;
-	}
-	case ProcessBehaviorChart::Type::NP: {
-		// Calculate the number of defectives
-		double totalDefectives = 0.0;
-		for (int i = 0; i < yDataColumn->rowCount(); ++i) {
-			totalDefectives += yDataColumn->valueAt(i);
-		}
-		const double npBar = totalDefectives;
-		yCenterColumn->setValueAt(0, npBar);
-		yCenterColumn->setValueAt(1, npBar);
+		// center line
+		const double meanStdDev = yColumn->statistics().arithmeticMean;
+		center = meanStdDev;
 
-		// Calculate the control limits
-		const double upperLimit = npBar + 3. * std::sqrt(npBar * (1 - npBar / yDataColumn->rowCount()));
-		const double lowerLimit = npBar - 3. * std::sqrt(npBar * (1 - npBar / yDataColumn->rowCount()));
-		yUpperLimitColumn->setValueAt(0, upperLimit);
-		yUpperLimitColumn->setValueAt(1, upperLimit);
-		yLowerLimitColumn->setValueAt(0, lowerLimit);
-		yLowerLimitColumn->setValueAt(1, lowerLimit);
-		break;
-	}
-	case ProcessBehaviorChart::Type::C: {
-		// Calculate the average number of defects per unit
-		double totalDefects = 0.0;
-		for (int i = 0; i < yDataColumn->rowCount(); ++i) {
-			totalDefects += yDataColumn->valueAt(i);
-		}
-		const double cBar = totalDefects / yDataColumn->rowCount();
-		yCenterColumn->setValueAt(0, cBar);
-		yCenterColumn->setValueAt(1, cBar);
+		// upper and lower limits
+		const double c4 = 1.; // TODO
+		const double weight = 3 / c4 * std::sqrt(1 - std::pow(c4, 2));
+		upperLimit = meanStdDev + meanStdDev * weight;
+		lowerLimit = meanStdDev - meanStdDev * weight;
 
-		// Calculate the control limits
-		const double upperLimit = cBar + 3. * std::sqrt(cBar);
-		const double lowerLimit = cBar - 3. * std::sqrt(cBar);
-		yUpperLimitColumn->setValueAt(0, upperLimit);
-		yUpperLimitColumn->setValueAt(1, upperLimit);
-		yLowerLimitColumn->setValueAt(0, lowerLimit);
-		yLowerLimitColumn->setValueAt(1, lowerLimit);
-		break;
-	}
-	case ProcessBehaviorChart::Type::U: {
-		// Calculate the average number of defects per unit
-		double totalDefects = 0.0;
-		for (int i = 0; i < yDataColumn->rowCount(); ++i) {
-			totalDefects += yDataColumn->valueAt(i);
-		}
-		const double uBar = totalDefects / yDataColumn->rowCount();
-		yCenterColumn->setValueAt(0, uBar);
-		yCenterColumn->setValueAt(1, uBar);
+		// plotted data - subroup standard deviations
+		dataCurve->setYColumn(yColumn);
 
-		// Calculate the control limits
-		const double upperLimit = uBar + 3. * std::sqrt(uBar / yDataColumn->rowCount());
-		const double lowerLimit = uBar - 3. * std::sqrt(uBar / yDataColumn->rowCount());
-		yUpperLimitColumn->setValueAt(0, upperLimit);
-		yUpperLimitColumn->setValueAt(1, upperLimit);
-		yLowerLimitColumn->setValueAt(0, lowerLimit);
-		yLowerLimitColumn->setValueAt(1, lowerLimit);
 		break;
 	}
 	}
+
+	yCenterColumn->setValueAt(0, center);
+	yCenterColumn->setValueAt(1, center);
+	yUpperLimitColumn->setValueAt(0, upperLimit);
+	yUpperLimitColumn->setValueAt(1, upperLimit);
+	yLowerLimitColumn->setValueAt(0, lowerLimit);
+	yLowerLimitColumn->setValueAt(1, lowerLimit);
 }
 
 /*!
