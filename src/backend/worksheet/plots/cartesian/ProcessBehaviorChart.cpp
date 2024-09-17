@@ -20,7 +20,9 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macrosCurve.h"
 #include "backend/lib/trace.h"
+extern "C" {
 #include "backend/nsl/nsl_pcm.h"
+}
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
@@ -480,6 +482,9 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 	double upperLimit = 0.;
 	double lowerLimit = 0.;
 
+	for (int n = 2; n < 20; ++n)
+		qDebug()<< n << "  " << nsl_pcm_d2(n);
+
 	switch (type) {
 	case ProcessBehaviorChart::Type::XmR: {
 		// calculate the mean moving range
@@ -495,7 +500,7 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 
 		// upper and lower limits
 		const double meanMovingRange = gsl_stats_mean(movingRange.data(), 1, movingRange.size());
-		const double d2 = 1.; // TODO
+		const double d2 = nsl_pcm_d2(subgroupSize);
 		const double E2 = 3 / d2;
 		upperLimit = mean + E2 * meanMovingRange;
 		lowerLimit = mean - E2 * meanMovingRange;
@@ -520,11 +525,8 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		center = meanMovingRange;
 
 		// upper and lower limits
-		const double d2 = nsl_pcm_d2(subgroupSize);
-		const double d3 = nsl_pcm_d3(subgroupSize);
-		const double D4 = 1 + 3 * d3 / d2;
-		upperLimit = 0;
-		lowerLimit = D4 * meanMovingRange;
+		upperLimit = nsl_pcm_D4(subgroupSize) * meanMovingRange;
+		lowerLimit = nsl_pcm_D3(subgroupSize) * meanMovingRange;
 
 		// plotted data - moving ranges
 		dataCurve->setYColumn(yColumn);
@@ -570,8 +572,7 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 
 		// upper and lower limits - the mean of means plus/minus normalized mean range
 		const double meanRange = gsl_stats_mean(subgroupRanges.data(), 1, subgroupRanges.size());
-		const double d2 = nsl_pcm_d2(subgroupSize);
-		const double A2 = 3 / d2 / std::sqrt(subgroupSize);
+		const double A2 = nsl_pcm_A2(subgroupSize);
 		upperLimit = meanOfMeans + A2 * meanRange;
 		lowerLimit = meanOfMeans - A2 * meanRange;
 
@@ -605,12 +606,10 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		center = meanRange;
 
 		// upper and lower limits
-		const double d2 = nsl_pcm_d2(subgroupSize);
-		const double d3 = nsl_pcm_d3(subgroupSize);
-		const double D3 = 1 + 3 * d3 / d2;
-		const double D4 = 1 - 3 * d3 / d2;
-		upperLimit = D3 * meanRange;
-		lowerLimit = D4 * meanRange;
+		const double D3 = nsl_pcm_D3(subgroupSize);
+		const double D4 = nsl_pcm_D4(subgroupSize);
+		upperLimit = D4 * meanRange;
+		lowerLimit = D3 * meanRange;
 
 		// plotted data - subroup ranges
 		dataCurve->setYColumn(yDataColumn);
@@ -647,8 +646,7 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 
 		// upper and lower limits
 		const double meanStdDev = gsl_stats_mean(subgroupStdDevs.data(), 1, subgroupStdDevs.size());
-		const double c4 = nsl_pcm_c4(subgroupSize);
-		const double A3 = 3. / c4 / std::sqrt(subgroupSize);
+		const double A3 = nsl_pcm_A3(subgroupSize);
 		upperLimit = meanOfMeans + A3 * meanStdDev;
 		lowerLimit = meanOfMeans - A3 * meanStdDev;
 
@@ -677,10 +675,10 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		center = meanStdDev;
 
 		// upper and lower limits
-		const double c4 = nsl_pcm_c4(subgroupSize);
-		const double weight = 3 / c4 * std::sqrt(1 - std::pow(c4, 2));
-		upperLimit = meanStdDev + meanStdDev * weight;
-		lowerLimit = meanStdDev - meanStdDev * weight;
+		const double B3 = nsl_pcm_B3(subgroupSize);
+		const double B4 = nsl_pcm_B4(subgroupSize);
+		upperLimit = B4 * meanStdDev;
+		lowerLimit = B3 * meanStdDev;
 
 		// plotted data - subroup standard deviations
 		dataCurve->setYColumn(yColumn);

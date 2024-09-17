@@ -15,6 +15,16 @@
 /*!
  *
  */
+double nsl_pcm_D3(unsigned int n);
+
+/*!
+ *
+ */
+double nsl_pcm_D4(unsigned int n);
+
+/*!
+ *
+ */
 double nsl_pcm_d2(unsigned int n);
 
 /*!
@@ -26,5 +36,30 @@ double nsl_pcm_d3(unsigned int n);
  *
  */
 double nsl_pcm_c4(unsigned int n);
+
+
+
+// averages
+
+/*!
+ *
+ */
+double nsl_pcm_A2(unsigned int n);
+
+/*!
+ *
+ */
+double nsl_pcm_A3(unsigned int n);
+
+
+/*!
+ *
+ */
+double nsl_pcm_B3(unsigned int n);
+
+/*!
+ *
+ */
+double nsl_pcm_B4(unsigned int n);
 
 #endif /* NSL_PCM_H */
