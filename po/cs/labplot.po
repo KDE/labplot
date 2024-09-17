@@ -2313,10 +2313,9 @@ msgid "Invalid region specified."
 msgstr ""
 
 #: src/backend/datasources/LiveDataSource.cpp:711
-#, fuzzy, kde-format
-#| msgid "File does not exist."
+#, kde-format
 msgid "Device doesn't exist."
-msgstr "Soubor neexistuje."
+msgstr ""
 
 #: src/backend/datasources/LiveDataSource.cpp:714
 #, kde-format
@@ -2329,10 +2328,9 @@ msgid "Device already opened."
 msgstr ""
 
 #: src/backend/datasources/LiveDataSource.cpp:720
-#, fuzzy, kde-format
-#| msgid "dvips not found"
+#, kde-format
 msgid "Device is not opened."
-msgstr "dvips nebyl nalezen"
+msgstr ""
 
 #: src/backend/datasources/LiveDataSource.cpp:723
 #, kde-format
@@ -2340,16 +2338,14 @@ msgid "Failed to read data."
 msgstr "Čtení dat selhalo."
 
 #: src/backend/datasources/LiveDataSource.cpp:726
-#, fuzzy, kde-format
-#| msgid "Delete variable"
+#, kde-format
 msgid "Device not available."
-msgstr "Smazat proměnnou"
+msgstr ""
 
 #: src/backend/datasources/LiveDataSource.cpp:729
-#, fuzzy, kde-format
-#| msgid "An error occurred."
+#, kde-format
 msgid "Timeout occured."
-msgstr "Vyskytla se chyba."
+msgstr ""
 
 #: src/backend/datasources/LiveDataSource.cpp:734
 #, kde-format
@@ -23610,10 +23606,3 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Nelze otevřít soubor:"
-
-#~ msgid ""
-#~ "Couldn't find the dynamic library 'cantorpart'. Please check your "
-#~ "installation."
-#~ msgstr ""
-#~ "Nelze najít dynamickou knihovnu 'cantorpart'. Prosím, zkontrolujte vaši "
-#~ "instalaci."
