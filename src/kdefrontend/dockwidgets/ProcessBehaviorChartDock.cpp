@@ -197,8 +197,6 @@ void ProcessBehaviorChartDock::retranslateUi() {
 		"</ul>");
 	ui.lType->setToolTip(info);
 	ui.cbType->setToolTip(info);
-
-
 }
 
 /*

@@ -176,10 +176,10 @@
        <item row="6" column="2">
         <widget class="QSpinBox" name="sbSubgroupSize">
          <property name="minimum">
-          <number>1</number>
+          <number>2</number>
          </property>
          <property name="maximum">
-          <number>999999999</number>
+          <number>9999</number>
          </property>
         </widget>
        </item>
