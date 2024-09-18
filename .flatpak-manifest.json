@@ -121,7 +121,13 @@
         {
             "name": "analitza",
             "buildsystem": "cmake-ninja",
-            "sources": [ { "type": "git", "url": "https://invent.kde.org/kde/analitza.git", "tag": "v23.08.1" } ]
+            "sources": [
+		    {
+			    "type": "archive",
+			    "url": "https://github.com/KDE/analitza/archive/v24.08.1.tar.gz",
+			    "sha256": "ccd18151c49937c606f5446eb3f821d46066be76e6a9d01e96f6494e59c08c81"
+		    }
+	    ]
         },
         {
             "name": "gsl",
