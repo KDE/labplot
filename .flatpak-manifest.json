@@ -56,6 +56,7 @@
                 "-DENABLE_GLIB=OFF",
                 "-DENABLE_GOBJECT_INTROSPECTION=OFF",
                 "-DENABLE_UTILS=OFF",
+                "-DENABLE_QT5=OFF",
                 "-DENABLE_QT6=ON"
             ],
             "buildsystem": "cmake-ninja",
