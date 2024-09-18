@@ -348,8 +348,9 @@ bool CantorWorksheet::exportView() const {
 	if (action) {
 		action->trigger();
 		return true;
-	} else
-		return false;
+	}
+
+	return false;
 }
 
 bool CantorWorksheet::printView() {

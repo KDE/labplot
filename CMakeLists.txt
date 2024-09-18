@@ -77,7 +77,7 @@ OPTIONAL_COMPONENTS
 
 # TODO: make NewStuff optional?
 if(KF${KF_MAJOR_VERSION}NewStuff_FOUND)
-    add_definitions(-DHAVE_KF5_NEW_STUFF)
+    add_definitions(-DHAVE_KF_NEW_STUFF)
 else()
     message(STATUS "KF NewStuff not found")
 endif()
@@ -95,7 +95,7 @@ if(KF${KF_MAJOR_VERSION}Purpose_FOUND)
 endif()
 
 if(KF${KF_MAJOR_VERSION}SyntaxHighlighting_FOUND)
-    add_definitions(-DHAVE_KF5_SYNTAX_HIGHLIGHTING)
+    add_definitions(-DHAVE_KF_SYNTAX_HIGHLIGHTING)
 else()
     message(STATUS "KF SyntaxHighlighting not found")
 endif()
