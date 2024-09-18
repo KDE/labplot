@@ -379,23 +379,6 @@
             ]
         },
         {
-            "name": "cantor",
-            "buildsystem": "cmake-ninja",
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "https://download.kde.org/stable/release-service/24.08.0/src/cantor-24.08.0.tar.xz",
-                    "sha256": "5292977d1a96e30d62011532aa642d3071b751f3c9656371401e0ee8d9e7092f",
-                    "x-checker-data": {
-                        "type": "anitya",
-                        "project-id": 236341,
-                        "stable-only": true,
-                        "url-template": "https://download.kde.org/stable/release-service/$version/src/cantor-$version.tar.xz"
-                    }
-                }
-            ]
-        },
-        {
             "name": "labplot",
             "buildsystem": "cmake-ninja",
             "config-opts": [ "-DQt5Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt5Mqtt", "-DLOCAL_QT_ADVANCED_DOCK_COPY=OFF", "-DENABLE_TESTS=OFF"],
