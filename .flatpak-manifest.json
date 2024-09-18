@@ -211,7 +211,7 @@
 	    "buildsystem": "qmake",
 	    "builddir": true,
 	    "make-install-args": ["INSTALL_ROOT=/app/qtmqtt"],
-	    "sources": [ { "type": "git", "url": "https://github.com/qt/qtmqtt.git", "tag": "v5.15.2" } ]
+	    "sources": [ { "type": "git", "url": "https://github.com/qt/qtmqtt.git", "tag": "v6.7.2" } ]
 	},
         {
             "name": "kuserfeedback",
@@ -388,7 +388,7 @@
         {
             "name": "labplot",
             "buildsystem": "cmake-ninja",
-            "config-opts": [ "-DQt5Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt5Mqtt", "-DLOCAL_QT_ADVANCED_DOCK_COPY=OFF", "-DENABLE_TESTS=OFF"],
+            "config-opts": [ "-DQt6Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt6Mqtt", "-DLOCAL_QT_ADVANCED_DOCK_COPY=OFF", "-DENABLE_TESTS=OFF"],
 	    "sources": [
                 {
                     "type": "dir",
