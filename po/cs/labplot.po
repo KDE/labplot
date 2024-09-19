@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-11 01:43+0000\n"
-"PO-Revision-Date: 2024-08-20 15:08+0200\n"
+"PO-Revision-Date: 2024-09-18 09:44+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 24.08.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2315,12 +2315,12 @@ msgstr ""
 #: src/backend/datasources/LiveDataSource.cpp:711
 #, kde-format
 msgid "Device doesn't exist."
-msgstr ""
+msgstr "Zařízení neexistuje."
 
 #: src/backend/datasources/LiveDataSource.cpp:714
 #, kde-format
 msgid "User doesn't have enough permissions to open the device."
-msgstr ""
+msgstr "Uživatel nemá dostatečná oprávnění k otevření zařízení."
 
 #: src/backend/datasources/LiveDataSource.cpp:717
 #, kde-format
@@ -2330,7 +2330,7 @@ msgstr ""
 #: src/backend/datasources/LiveDataSource.cpp:720
 #, kde-format
 msgid "Device is not opened."
-msgstr ""
+msgstr "Zařízení není otevřeno."
 
 #: src/backend/datasources/LiveDataSource.cpp:723
 #, kde-format
@@ -2340,12 +2340,12 @@ msgstr "Čtení dat selhalo."
 #: src/backend/datasources/LiveDataSource.cpp:726
 #, kde-format
 msgid "Device not available."
-msgstr ""
+msgstr "Zařízení není dostupné."
 
 #: src/backend/datasources/LiveDataSource.cpp:729
 #, kde-format
 msgid "Timeout occured."
-msgstr ""
+msgstr "Vypršel časový limit."
 
 #: src/backend/datasources/LiveDataSource.cpp:734
 #, kde-format
