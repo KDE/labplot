@@ -215,17 +215,12 @@
         {
             "name": "kuserfeedback",
 	    "buildsystem": "cmake-ninja",
+	    "config-opts": [ "-DBUILD_TESTING=OFF", "-DENABLE_DOCS=OFF" ],
             "sources": [
                 {
-                    "type": "archive",
-                    "url": "https://download.kde.org/stable/kuserfeedback/kuserfeedback-1.3.0.tar.xz",
-                    "sha256": "252308b822dd4690ea85ab1688c9b0da5512978ac6b435f77a5979fc1d2ffd13",
-                    "x-checker-data": {
-                        "type": "anitya",
-                        "project-id": 138221,
-                        "stable-only": true,
-                        "url-template": "https://download.kde.org/stable/kuserfeedback/kuserfeedback-$version.tar.xz"
-                    }
+                    "type": "git",
+                    "url": "https://github.com/KDE/kuserfeedback.git",
+                    "tag": "v6.6.0"
                 }
             ]
         },
