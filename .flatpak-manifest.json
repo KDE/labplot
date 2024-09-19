@@ -243,7 +243,7 @@
             "buildsystem": "cmake-ninja",
             "config-opts": [
                 "-DADS_VERSION=4.0.3",
-                "-DQT_VERSION_MAJOR=5"
+                "-DQT_VERSION_MAJOR=6"
             ],
             "sources": [
                 {
