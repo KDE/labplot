@@ -335,15 +335,9 @@
             "name": "mdds",
             "sources": [
                 {
-                    "type": "archive",
-                    "url": "https://gitlab.com/api/v4/projects/mdds%2Fmdds/packages/generic/source/2.1.1/mdds-2.1.1.tar.xz",
-                    "sha256": "1483d90cefb8aa4563c4d0a85cb7b243aa95217d235d422e9ca6722fd5b97e56",
-                    "x-checker-data": {
-                        "type": "anitya",
-                        "project-id": 1962,
-                        "stable-only": true,
-                        "url-template": "https://gitlab.com/api/v4/projects/mdds%2Fmdds/packages/generic/source/$version/mdds-$version.tar.xz"
-                    }
+                    "type": "git",
+                    "url": "https://gitlab.com/mdds/mdds.git",
+                    "sha256": "da6f15665f7af4d7ad6c6dc3417b57890c502681"
                 }
             ]
         },
