@@ -1194,8 +1194,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	for (auto* plot : pbPlots) {
 		if (!plot)
 			continue;
-		RESTORE_COLUMN_POINTER(plot, xDataColumn, XDataColumn);
-		RESTORE_COLUMN_POINTER(plot, yDataColumn, YDataColumn);
+		RESTORE_COLUMN_POINTER(plot, dataColumn, DataColumn);
 	}
 
 	// data picker curves

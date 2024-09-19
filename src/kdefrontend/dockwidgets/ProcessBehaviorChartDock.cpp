@@ -31,8 +31,7 @@
 */
 ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	: BaseDock(parent)
-	, cbXDataColumn(new TreeViewComboBox)
-	, cbYDataColumn(new TreeViewComboBox) {
+	, cbDataColumn(new TreeViewComboBox) {
 	ui.setupUi(this);
 	setPlotRangeCombobox(ui.cbPlotRanges);
 	setBaseWidgets(ui.leName, ui.teComment);
@@ -40,15 +39,7 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 
 	// Tab "General"
 	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
-	gridLayout->addWidget(cbXDataColumn, 3, 2, 1, 1);
-	gridLayout->addWidget(cbYDataColumn, 4, 2, 1, 1);
-
-	ui.cbType->addItem(QStringLiteral("XmR"), static_cast<int>(ProcessBehaviorChart::Type::XmR));
-	ui.cbType->addItem(QStringLiteral("mR"), static_cast<int>(ProcessBehaviorChart::Type::mR));
-	ui.cbType->addItem(QStringLiteral("X̅R"), static_cast<int>(ProcessBehaviorChart::Type::XbarR));
-	ui.cbType->addItem(QStringLiteral("R"), static_cast<int>(ProcessBehaviorChart::Type::R));
-	ui.cbType->addItem(QStringLiteral("X̅S"), static_cast<int>(ProcessBehaviorChart::Type::XbarS));
-	ui.cbType->addItem(QStringLiteral("S"), static_cast<int>(ProcessBehaviorChart::Type::S));
+	gridLayout->addWidget(cbDataColumn, 3, 2, 1, 1);
 
 	// Tab "Data Line"
 	auto* hBoxLayout = static_cast<QHBoxLayout*>(ui.tabDataLine->layout());
@@ -80,9 +71,9 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 
 	// Slots
 	// General
-	connect(cbXDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &ProcessBehaviorChartDock::xDataColumnChanged);
-	connect(cbYDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &ProcessBehaviorChartDock::yDataColumnChanged);
+	connect(cbDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &ProcessBehaviorChartDock::dataColumnChanged);
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ProcessBehaviorChartDock::typeChanged);
+	connect(ui.sbSubgroupSize, &QSpinBox::valueChanged, this, &ProcessBehaviorChartDock::subgroupSizeChanged);
 
 	// template handler
 	auto* frame = new QFrame(this);
@@ -108,10 +99,8 @@ void ProcessBehaviorChartDock::setModel() {
 	model->enablePlottableColumnsOnly(true);
 	model->enableShowPlotDesignation(true);
 	model->setSelectableAspects({AspectType::Column});
-	cbXDataColumn->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
-	cbXDataColumn->setModel(model);
-	cbYDataColumn->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
-	cbYDataColumn->setModel(model);
+	cbDataColumn->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
+	cbDataColumn->setModel(model);
 }
 
 void ProcessBehaviorChartDock::setPlots(QList<ProcessBehaviorChart*> list) {
@@ -143,15 +132,11 @@ void ProcessBehaviorChartDock::setPlots(QList<ProcessBehaviorChart*> list) {
 
 	// if there are more then one curve in the list, disable the content in the tab "general"
 	if (m_plots.size() == 1) {
-		cbXDataColumn->setEnabled(true);
-		cbXDataColumn->setColumn(m_plot->xDataColumn(), m_plot->xDataColumnPath());
-		cbYDataColumn->setEnabled(true);
-		cbYDataColumn->setColumn(m_plot->yDataColumn(), m_plot->yDataColumnPath());
+		cbDataColumn->setEnabled(true);
+		cbDataColumn->setColumn(m_plot->dataColumn(), m_plot->dataColumnPath());
 	} else {
-		cbXDataColumn->setEnabled(false);
-		cbXDataColumn->setCurrentModelIndex(QModelIndex());
-		cbYDataColumn->setEnabled(false);
-		cbYDataColumn->setCurrentModelIndex(QModelIndex());
+		cbDataColumn->setEnabled(false);
+		cbDataColumn->setCurrentModelIndex(QModelIndex());
 	}
 
 	ui.chkLegendVisible->setChecked(m_plot->legendVisible());
@@ -164,21 +149,21 @@ void ProcessBehaviorChartDock::setPlots(QList<ProcessBehaviorChart*> list) {
 
 	// Slots
 	// General-tab
-	connect(m_plot, &ProcessBehaviorChart::xDataColumnChanged, this, &ProcessBehaviorChartDock::plotXDataColumnChanged);
-	connect(m_plot, &ProcessBehaviorChart::yDataColumnChanged, this, &ProcessBehaviorChartDock::plotYDataColumnChanged);
+	connect(m_plot, &ProcessBehaviorChart::dataColumnChanged, this, &ProcessBehaviorChartDock::plotDataColumnChanged);
 	connect(m_plot, &ProcessBehaviorChart::typeChanged, this, &ProcessBehaviorChartDock::plotTypeChanged);
+	connect(m_plot, &ProcessBehaviorChart::subgroupSizeChanged, this, &ProcessBehaviorChartDock::plotSubgroupSizeChanged);
 }
 
 void ProcessBehaviorChartDock::retranslateUi() {
-	// tooltips
-
-	ui.cbType->addItem(QStringLiteral("XmR"), static_cast<int>(ProcessBehaviorChart::Type::XmR));
-	ui.cbType->addItem(QStringLiteral("mR"), static_cast<int>(ProcessBehaviorChart::Type::mR));
-	ui.cbType->addItem(QStringLiteral("X̅R"), static_cast<int>(ProcessBehaviorChart::Type::XbarR));
+	ui.cbType->clear();
+	ui.cbType->addItem(QStringLiteral("X̅ (XmR)"), static_cast<int>(ProcessBehaviorChart::Type::XmR));
+	ui.cbType->addItem(QStringLiteral("mR (XmR)"), static_cast<int>(ProcessBehaviorChart::Type::mR));
+	ui.cbType->addItem(QStringLiteral("X̅  (X̅R)"), static_cast<int>(ProcessBehaviorChart::Type::XbarR));
 	ui.cbType->addItem(QStringLiteral("R"), static_cast<int>(ProcessBehaviorChart::Type::R));
-	ui.cbType->addItem(QStringLiteral("X̅S"), static_cast<int>(ProcessBehaviorChart::Type::XbarS));
+	ui.cbType->addItem(QStringLiteral("X̅ (X̅S)"), static_cast<int>(ProcessBehaviorChart::Type::XbarS));
 	ui.cbType->addItem(QStringLiteral("S"), static_cast<int>(ProcessBehaviorChart::Type::S));
 
+	// tooltips
 	QString info = i18n(
 		"Individual Value and Moving Range Charts:"
 		"<ul>"
@@ -215,7 +200,7 @@ void ProcessBehaviorChartDock::updateLocale() {
 //*************************************************************
 
 // "General"-tab
-void ProcessBehaviorChartDock::xDataColumnChanged(const QModelIndex& index) {
+void ProcessBehaviorChartDock::dataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
@@ -227,22 +212,7 @@ void ProcessBehaviorChartDock::xDataColumnChanged(const QModelIndex& index) {
 	}
 
 	for (auto* plot : m_plots)
-		plot->setXDataColumn(column);
-}
-
-void ProcessBehaviorChartDock::yDataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
-
-	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column(nullptr);
-	if (aspect) {
-		column = dynamic_cast<AbstractColumn*>(aspect);
-		Q_ASSERT(column);
-	}
-
-	for (auto* plot : m_plots)
-		plot->setYDataColumn(column);
+		plot->setDataColumn(column);
 }
 
 void ProcessBehaviorChartDock::typeChanged(int index) {
@@ -259,18 +229,20 @@ void ProcessBehaviorChartDock::typeChanged(int index) {
 		plot->setType(type);
 }
 
+void ProcessBehaviorChartDock::subgroupSizeChanged(int value) {
+	CONDITIONAL_LOCK_RETURN;
+
+	for (auto* plot : m_plots)
+		plot->setSubgroupSize(value);
+}
+
 //*************************************************************
 //*********** SLOTs for changes triggered in ProcessBehaviorChart *******
 //*************************************************************
 // General-Tab
-void ProcessBehaviorChartDock::plotXDataColumnChanged(const AbstractColumn* column) {
+void ProcessBehaviorChartDock::plotDataColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbXDataColumn->setColumn(column, m_plot->xDataColumnPath());
-}
-
-void ProcessBehaviorChartDock::plotYDataColumnChanged(const AbstractColumn* column) {
-	CONDITIONAL_LOCK_RETURN;
-	cbYDataColumn->setColumn(column, m_plot->yDataColumnPath());
+	cbDataColumn->setColumn(column, m_plot->dataColumnPath());
 }
 
 void ProcessBehaviorChartDock::plotTypeChanged(ProcessBehaviorChart::Type type) {
@@ -279,13 +251,19 @@ void ProcessBehaviorChartDock::plotTypeChanged(ProcessBehaviorChart::Type type) 
 	ui.cbType->setCurrentIndex(index);
 }
 
+void ProcessBehaviorChartDock::plotSubgroupSizeChanged(int value) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.sbSubgroupSize->setValue(value);
+}
+
 //*************************************************************
 //************************* Settings **************************
 //*************************************************************
 void ProcessBehaviorChartDock::load() {
-	// distribution
+	// type and subgroup size
 	int index = ui.cbType->findData(static_cast<int>(m_plot->type()));
 	ui.cbType->setCurrentIndex(index);
+	ui.sbSubgroupSize->setValue(static_cast<int>(m_plot->subgroupSize()));
 }
 
 void ProcessBehaviorChartDock::loadConfig(KConfig& config) {

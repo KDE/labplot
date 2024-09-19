@@ -32,11 +32,9 @@ public:
 	XYCurve* upperLimitCurve{nullptr};
 	XYCurve* lowerLimitCurve{nullptr};
 
-	// columns for the source data
-	const AbstractColumn* xDataColumn{nullptr};
-	QString xDataColumnPath;
-	const AbstractColumn* yDataColumn{nullptr};
-	QString yDataColumnPath;
+	// column for the source data
+	const AbstractColumn* dataColumn{nullptr};
+	QString dataColumnPath;
 
 	// columns used for the data curve in case other statistics is being plotted
 	// and not the original data provided by the user in xDataColumn and yDataColumn above

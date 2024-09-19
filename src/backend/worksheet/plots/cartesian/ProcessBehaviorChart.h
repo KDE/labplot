@@ -26,8 +26,7 @@ class ProcessBehaviorChart : public Plot {
 	Q_OBJECT
 
 public:
-	friend class ProcessBehaviorChartSetXDataColumnCmd;
-	friend class ProcessBehaviorChartSetYDataColumnCmd;
+	friend class ProcessBehaviorChartSetDataColumnCmd;
 
 	enum class Type {XmR, mR, XbarR, R, XbarS, S};
 
@@ -45,10 +44,8 @@ public:
 	void saveThemeConfig(const KConfig&) override;
 
 	BASIC_D_ACCESSOR_DECL(ProcessBehaviorChart::Type, type, Type)
-	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
-	CLASS_D_ACCESSOR_DECL(QString, xDataColumnPath, XDataColumnPath)
-	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)
-	CLASS_D_ACCESSOR_DECL(QString, yDataColumnPath, YDataColumnPath)
+	POINTER_D_ACCESSOR_DECL(const AbstractColumn, dataColumn, DataColumn)
+	CLASS_D_ACCESSOR_DECL(QString, dataColumnPath, DataColumnPath)
 	BASIC_D_ACCESSOR_DECL(int, subgroupSize, SubgroupSize)
 
 	Symbol* dataSymbol() const;
@@ -73,8 +70,7 @@ public:
 	typedef ProcessBehaviorChartPrivate Private;
 
 private Q_SLOTS:
-	void xDataColumnAboutToBeRemoved(const AbstractAspect*);
-	void yDataColumnAboutToBeRemoved(const AbstractAspect*);
+	void dataColumnAboutToBeRemoved(const AbstractAspect*);
 	void renameInternalCurves();
 
 protected:
@@ -83,8 +79,7 @@ protected:
 private:
 	Q_DECLARE_PRIVATE(ProcessBehaviorChart)
 	void init();
-	void connectXDataColumn(const AbstractColumn*);
-	void connectYDataColumn(const AbstractColumn*);
+	void connectDataColumn(const AbstractColumn*);
 
 	QAction* navigateToAction{nullptr};
 	bool m_menusInitialized{false};
@@ -94,10 +89,8 @@ Q_SIGNALS:
 
 	// General-Tab
 	void typeChanged(ProcessBehaviorChart::Type);
-	void xDataDataChanged();
-	void yDataDataChanged();
-	void xDataColumnChanged(const AbstractColumn*);
-	void yDataColumnChanged(const AbstractColumn*);
+	void dataDataChanged();
+	void dataColumnChanged(const AbstractColumn*);
 	void subgroupSizeChanged(int);
 };
 

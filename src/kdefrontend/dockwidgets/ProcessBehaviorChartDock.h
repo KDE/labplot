@@ -31,8 +31,7 @@ public:
 	void updateLocale() override;
 
 private:
-	TreeViewComboBox* cbXDataColumn;
-	TreeViewComboBox* cbYDataColumn;
+	TreeViewComboBox* cbDataColumn;
 
 	void load();
 	void loadConfig(KConfig&);
@@ -56,15 +55,15 @@ private Q_SLOTS:
 	// SLOTs for changes triggered in ProcessBehaviorChartDock
 
 	// General-Tab
-	void xDataColumnChanged(const QModelIndex&);
-	void yDataColumnChanged(const QModelIndex&);
+	void dataColumnChanged(const QModelIndex&);
 	void typeChanged(int);
+	void subgroupSizeChanged(int);
 
 	// SLOTs for changes triggered in ProcessBehaviorChart
 	// General-Tab
-	void plotXDataColumnChanged(const AbstractColumn*);
-	void plotYDataColumnChanged(const AbstractColumn*);
+	void plotDataColumnChanged(const AbstractColumn*);
 	void plotTypeChanged(ProcessBehaviorChart::Type);
+	void plotSubgroupSizeChanged(int);
 
 	// load and save
 	void loadConfigFromTemplate(KConfig&);

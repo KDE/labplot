@@ -37,8 +37,7 @@ extern "C" {
 
 #include <gsl/gsl_statistics.h>
 
-CURVE_COLUMN_CONNECT(ProcessBehaviorChart, XData, xData, recalc)
-CURVE_COLUMN_CONNECT(ProcessBehaviorChart, YData, yData, recalc)
+CURVE_COLUMN_CONNECT(ProcessBehaviorChart, Data, data, recalc)
 
 ProcessBehaviorChart::ProcessBehaviorChart(const QString& name)
 	: Plot(name, new ProcessBehaviorChartPrivate(this), AspectType::ProcessBehaviorChart) {
@@ -198,10 +197,8 @@ void ProcessBehaviorChart::setVisible(bool on) {
 //  general
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, ProcessBehaviorChart::Type, type, type)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, int, subgroupSize, subgroupSize)
-BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, const AbstractColumn*, xDataColumn, xDataColumn)
-BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, QString, xDataColumnPath, xDataColumnPath)
-BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, const AbstractColumn*, yDataColumn, yDataColumn)
-BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, QString, yDataColumnPath, yDataColumnPath)
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, const AbstractColumn*, dataColumn, dataColumn)
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, QString, dataColumnPath, dataColumnPath)
 
 // lines
 Line* ProcessBehaviorChart::dataLine() const {
@@ -280,12 +277,12 @@ double ProcessBehaviorChart::maximum(const Dimension dim) const {
 
 bool ProcessBehaviorChart::hasData() const {
 	Q_D(const ProcessBehaviorChart);
-	return (d->yDataColumn != nullptr);
+	return (d->dataColumn != nullptr);
 }
 
 bool ProcessBehaviorChart::usingColumn(const Column* column) const {
 	Q_D(const ProcessBehaviorChart);
-	return (d->xDataColumn == column || d->yDataColumn == column);
+	return (d->dataColumn == column);
 }
 
 void ProcessBehaviorChart::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* aspect) {
@@ -295,19 +292,11 @@ void ProcessBehaviorChart::handleAspectUpdated(const QString& aspectPath, const 
 	if (!column)
 		return;
 
-	if (d->xDataColumn == column) // the column is the same and was just renamed -> update the column path
-		d->xDataColumnPath = aspectPath;
-	else if (d->xDataColumnPath == aspectPath) { // another column was renamed to the current path -> set and connect to the new column
+	if (d->dataColumn == column) // the column is the same and was just renamed -> update the column path
+		d->dataColumnPath = aspectPath;
+	else if (d->dataColumnPath == aspectPath) { // another column was renamed to the current path -> set and connect to the new column
 		setUndoAware(false);
-		setXDataColumn(column);
-		setUndoAware(true);
-	}
-
-	if (d->yDataColumn == column) // the column is the same and was just renamed -> update the column path
-		d->yDataColumnPath = aspectPath;
-	else if (d->yDataColumnPath == aspectPath) { // another column was renamed to the current path -> set and connect to the new column
-		setUndoAware(false);
-		setYDataColumn(column);
+		setDataColumn(column);
 		setUndoAware(true);
 	}
 }
@@ -322,28 +311,16 @@ QColor ProcessBehaviorChart::color() const {
 // ##############################################################################
 
 // General
-CURVE_COLUMN_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, XData, xData, recalc)
-void ProcessBehaviorChart::setXDataColumn(const AbstractColumn* column) {
+CURVE_COLUMN_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, Data, data, recalc)
+void ProcessBehaviorChart::setDataColumn(const AbstractColumn* column) {
 	Q_D(ProcessBehaviorChart);
-	if (column != d->xDataColumn)
-		exec(new ProcessBehaviorChartSetXDataColumnCmd(d, column, ki18n("%1: set x data column")));
+	if (column != d->dataColumn)
+		exec(new ProcessBehaviorChartSetDataColumnCmd(d, column, ki18n("%1: set data column")));
 }
 
-void ProcessBehaviorChart::setXDataColumnPath(const QString& path) {
+void ProcessBehaviorChart::setDataColumnPath(const QString& path) {
 	Q_D(ProcessBehaviorChart);
-	d->xDataColumnPath = path;
-}
-
-CURVE_COLUMN_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, YData, yData, recalc)
-void ProcessBehaviorChart::setYDataColumn(const AbstractColumn* column) {
-	Q_D(ProcessBehaviorChart);
-	if (column != d->yDataColumn)
-		exec(new ProcessBehaviorChartSetYDataColumnCmd(d, column, ki18n("%1: set y data column")));
-}
-
-void ProcessBehaviorChart::setYDataColumnPath(const QString& path) {
-	Q_D(ProcessBehaviorChart);
-	d->yDataColumnPath = path;
+	d->dataColumnPath = path;
 }
 
 STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetType, ProcessBehaviorChart::Type, type, recalc)
@@ -373,19 +350,11 @@ void ProcessBehaviorChart::recalc() {
 	d->recalc();
 }
 
-void ProcessBehaviorChart::xDataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
+void ProcessBehaviorChart::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(ProcessBehaviorChart);
-	if (aspect == d->xDataColumn) {
-		d->xDataColumn = nullptr;
-		CURVE_COLUMN_REMOVED(xData);
-	}
-}
-
-void ProcessBehaviorChart::yDataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
-	Q_D(ProcessBehaviorChart);
-	if (aspect == d->yDataColumn) {
-		d->yDataColumn = nullptr;
-		CURVE_COLUMN_REMOVED(yData);
+	if (aspect == d->dataColumn) {
+		d->dataColumn = nullptr;
+		CURVE_COLUMN_REMOVED(data);
 	}
 }
 
@@ -429,7 +398,7 @@ void ProcessBehaviorChartPrivate::retransform() {
 void ProcessBehaviorChartPrivate::recalc() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
-	if (!yDataColumn) {
+	if (!dataColumn) {
 		xCenterColumn->clear();
 		yCenterColumn->clear();
 		xUpperLimitColumn->clear();
@@ -440,24 +409,20 @@ void ProcessBehaviorChartPrivate::recalc() {
 		return;
 	}
 
-	double xMin = 0.;
-	double xMax = 0.;
-	if (xDataColumn) {
-		dataCurve->setXColumn(xDataColumn);
-		const auto& statistics = static_cast<const Column*>(xDataColumn)->statistics();
-		xMin = statistics.minimum;
-		xMax = statistics.maximum;
-	} else {
-		const int count = yDataColumn->rowCount();
-		xMin = 1.;
-		xMax = count;
-		xColumn->clear();
-		xColumn->resizeTo(count);
-		for (int i = 0; i < count; ++i)
-			xColumn->setValueAt(i, i + 1);
+	int count = 0;
+	if (type == ProcessBehaviorChart::Type::XmR || type == ProcessBehaviorChart::Type::mR)
+		count = dataColumn->rowCount();
+	else
+		count = dataColumn->rowCount() / subgroupSize;
 
-		dataCurve->setXColumn(xColumn);
-	}
+	const double xMin = 1.;
+	const double xMax = count;
+	xColumn->clear();
+	xColumn->resizeTo(count);
+	for (int i = 0; i < count; ++i)
+		xColumn->setValueAt(i, i + 1);
+
+	dataCurve->setXColumn(xColumn);
 
 	// min and max values for x
 	xCenterColumn->setValueAt(0, xMin);
@@ -481,43 +446,41 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 	double center = 0.;
 	double upperLimit = 0.;
 	double lowerLimit = 0.;
-
-	for (int n = 2; n < 20; ++n)
-		qDebug()<< n << "  " << nsl_pcm_d2(n);
+	const int count = dataColumn->rowCount();
 
 	switch (type) {
 	case ProcessBehaviorChart::Type::XmR: {
 		// calculate the mean moving range
 		std::vector<double> movingRange;
-		for (int i = 1; i < yDataColumn->rowCount(); ++i) {
-			if (yDataColumn->isValid(i) && !yDataColumn->isMasked(i) && yDataColumn->isValid(i - 1) && !yDataColumn->isMasked(i - 1))
-				movingRange.push_back(std::abs(yDataColumn->valueAt(i) - yDataColumn->valueAt(i - 1)));
+		for (int i = 1; i < count; ++i) {
+			if (dataColumn->isValid(i) && !dataColumn->isMasked(i) && dataColumn->isValid(i - 1) && !dataColumn->isMasked(i - 1))
+				movingRange.push_back(std::abs(dataColumn->valueAt(i) - dataColumn->valueAt(i - 1)));
 		}
 
 		// center line at the mean of the data
-		const double mean = static_cast<const Column*>(yDataColumn)->statistics().arithmeticMean;
+		const double mean = static_cast<const Column*>(dataColumn)->statistics().arithmeticMean;
 		center = mean;
 
 		// upper and lower limits
 		const double meanMovingRange = gsl_stats_mean(movingRange.data(), 1, movingRange.size());
-		const double d2 = nsl_pcm_d2(subgroupSize);
+		const double d2 = nsl_pcm_d2(count);
 		const double E2 = 3 / d2;
 		upperLimit = mean + E2 * meanMovingRange;
 		lowerLimit = mean - E2 * meanMovingRange;
 
 		// plotted data - original data
-		dataCurve->setYColumn(yDataColumn);
+		dataCurve->setYColumn(dataColumn);
 
 		break;
 	}
 	case ProcessBehaviorChart::Type::mR: {
 		yColumn->clear();
-		yColumn->resizeTo(yDataColumn->rowCount());
+		yColumn->resizeTo(count);
 
 		// calculate the mean moving ranges
-		for (int i = 1; i < yDataColumn->rowCount(); ++i) {
-			if (yDataColumn->isValid(i) && !yDataColumn->isMasked(i) && yDataColumn->isValid(i - 1) && !yDataColumn->isMasked(i - 1))
-				yColumn->setValueAt(i - 1, std::abs(yDataColumn->valueAt(i) - yDataColumn->valueAt(i - 1)));
+		for (int i = 1; i < count; ++i) {
+			if (dataColumn->isValid(i) && !dataColumn->isMasked(i) && dataColumn->isValid(i - 1) && !dataColumn->isMasked(i - 1))
+				yColumn->setValueAt(i - 1, std::abs(dataColumn->valueAt(i) - dataColumn->valueAt(i - 1)));
 		}
 
 		// center line
@@ -525,8 +488,8 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		center = meanMovingRange;
 
 		// upper and lower limits
-		upperLimit = nsl_pcm_D4(subgroupSize) * meanMovingRange;
-		lowerLimit = nsl_pcm_D3(subgroupSize) * meanMovingRange;
+		upperLimit = nsl_pcm_D4(count) * meanMovingRange;
+		lowerLimit = nsl_pcm_D3(count) * meanMovingRange;
 
 		// plotted data - moving ranges
 		dataCurve->setYColumn(yColumn);
@@ -538,25 +501,27 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		yColumn->resizeTo(subgroupSize);
 
 		// calculate the mean for each subgroup
-		for (int i = 0; i < yDataColumn->rowCount(); i += subgroupSize) {
+		int groupIndex = 0;
+		for (int i = 0; i < count; i += subgroupSize) {
 			double sum = 0.0;
 			int j = 0;
-			for (; j < subgroupSize && (i + j) < yDataColumn->rowCount(); ++j) {
-				if (yDataColumn->isValid(i + j) && !yDataColumn->isMasked(i + j))
-					sum += yDataColumn->valueAt(i + j);
+			for (; j < subgroupSize && (i + j) < count; ++j) {
+				if (dataColumn->isValid(i + j) && !dataColumn->isMasked(i + j))
+					sum += dataColumn->valueAt(i + j);
 			}
 
-			yColumn->setValueAt(i, sum / subgroupSize);
+			yColumn->setValueAt(groupIndex, sum / subgroupSize);
+			++groupIndex;
 		}
 
 		// Calculate the range for each subgroups
 		std::vector<double> subgroupRanges;
-		for (int i = 0; i < yDataColumn->rowCount(); i += subgroupSize) {
-			double minVal = yDataColumn->valueAt(i);
-			double maxVal = yDataColumn->valueAt(i);
-			for (int j = 1; j < subgroupSize && (i + j) < yDataColumn->rowCount(); ++j) {
-				if (yDataColumn->isValid(i) && !yDataColumn->isMasked(i)) {
-					double val = yDataColumn->valueAt(i + j);
+		for (int i = 0; i < count; i += subgroupSize) {
+			double minVal = dataColumn->valueAt(i);
+			double maxVal = dataColumn->valueAt(i);
+			for (int j = 1; j < subgroupSize && (i + j) < count; ++j) {
+				if (dataColumn->isValid(i) && !dataColumn->isMasked(i)) {
+					double val = dataColumn->valueAt(i + j);
 					if (val < minVal)
 						minVal = val;
 					if (val > maxVal)
@@ -586,19 +551,23 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		yColumn->resizeTo(subgroupSize);
 
 		// Calculate the range of subgroups
-		for (int i = 0; i < yDataColumn->rowCount(); i += subgroupSize) {
-			double minVal = yDataColumn->valueAt(i);
-			double maxVal = yDataColumn->valueAt(i);
-			for (int j = 1; j < subgroupSize && (i + j) < yDataColumn->rowCount(); ++j) {
-				if (yDataColumn->isValid(i) && !yDataColumn->isMasked(i)) {
-					double val = yDataColumn->valueAt(i + j);
+		int groupIndex = 0;
+		for (int i = 0; i < count; i += subgroupSize) {
+			double minVal = dataColumn->valueAt(i);
+			double maxVal = dataColumn->valueAt(i);
+			for (int j = 1; j < subgroupSize && (i + j) < count; ++j) {
+				if (dataColumn->isValid(i) && !dataColumn->isMasked(i)) {
+					double val = dataColumn->valueAt(i + j);
 					if (val < minVal)
 						minVal = val;
 					if (val > maxVal)
 						maxVal = val;
 				}
 			}
-			yColumn->setValueAt(i, maxVal - minVal);
+
+			qDebug()<< groupIndex << "  " << maxVal - minVal;
+			yColumn->setValueAt(groupIndex, maxVal - minVal);
+			++groupIndex;
 		}
 
 		// center line at the average range
@@ -608,33 +577,37 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		// upper and lower limits
 		const double D3 = nsl_pcm_D3(subgroupSize);
 		const double D4 = nsl_pcm_D4(subgroupSize);
+		// qDebug()<<"mean range " << meanRange << "  " << D3 << "  " << D4;
 		upperLimit = D4 * meanRange;
 		lowerLimit = D3 * meanRange;
 
 		// plotted data - subroup ranges
-		dataCurve->setYColumn(yDataColumn);
+		dataCurve->setYColumn(yColumn);
 
 		break;
 	}
 	case ProcessBehaviorChart::Type::XbarS: { // chart based on the means and standard deviations for each subgroup
 		// Calculate the mean of subgroups
-		for (int i = 0; i < yDataColumn->rowCount(); i += subgroupSize) {
+		int groupIndex = 0;
+		for (int i = 0; i < count; i += subgroupSize) {
 			double sum = 0.0;
-			for (int j = 0; j < subgroupSize && (i + j) < yDataColumn->rowCount(); ++j) {
-				if (yDataColumn->isValid(i) && !yDataColumn->isMasked(i))
-					sum += yDataColumn->valueAt(i + j);
+			for (int j = 0; j < subgroupSize && (i + j) < count; ++j) {
+				if (dataColumn->isValid(i) && !dataColumn->isMasked(i))
+					sum += dataColumn->valueAt(i + j);
 			}
 
-			yColumn->setValueAt(i, sum / subgroupSize);
+			qDebug()<< groupIndex << "  " << sum/subgroupSize;
+			yColumn->setValueAt(groupIndex, sum / subgroupSize);
+			++groupIndex;
 		}
 
 		// Calculate the standard deviations of subgroups
 		std::vector<double> subgroupStdDevs;
-		for (int i = 0; i < yDataColumn->rowCount(); i += subgroupSize) {
+		for (int i = 0; i < count; i += subgroupSize) {
 			std::vector<double> subgroup;
-			for (int j = 0; j < subgroupSize && (i + j) < yDataColumn->rowCount(); ++j) {
-				if (yDataColumn->isValid(i) && !yDataColumn->isMasked(i))
-					subgroup.push_back(yDataColumn->valueAt(i + j));
+			for (int j = 0; j < subgroupSize && (i + j) < count; ++j) {
+				if (dataColumn->isValid(i) && !dataColumn->isMasked(i))
+					subgroup.push_back(dataColumn->valueAt(i + j));
 			}
 			const double stddev = gsl_stats_sd(subgroup.data(), 1, subgroup.size());
 			subgroupStdDevs.push_back(stddev);
@@ -660,14 +633,16 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		yColumn->resizeTo(subgroupSize);
 
 		// Calculate the standard deviation for each subgroup
-		for (int i = 0; i < yDataColumn->rowCount(); i += subgroupSize) {
+		int groupIndex = 0;
+		for (int i = 0; i < count; i += subgroupSize) {
 			std::vector<double> subgroup;
-			for (int j = 0; j < subgroupSize && (i + j) < yDataColumn->rowCount(); ++j) {
-				if (yDataColumn->isValid(i + j) && !yDataColumn->isMasked(i + j))
-					subgroup.push_back(yDataColumn->valueAt(i + j));
+			for (int j = 0; j < subgroupSize && (i + j) < count; ++j) {
+				if (dataColumn->isValid(i + j) && !dataColumn->isMasked(i + j))
+					subgroup.push_back(dataColumn->valueAt(i + j));
 			}
 			const double stddev = gsl_stats_sd(subgroup.data(), 1, subgroup.size());
-			yColumn->setValueAt(i, stddev);
+			yColumn->setValueAt(groupIndex, stddev);
+			++groupIndex;
 		}
 
 		// center line
@@ -725,8 +700,7 @@ void ProcessBehaviorChart::save(QXmlStreamWriter* writer) const {
 
 	// general
 	writer->writeStartElement(QStringLiteral("general"));
-	WRITE_COLUMN(d->xDataColumn, xDataColumn);
-	WRITE_COLUMN(d->yDataColumn, yDataColumn);
+	WRITE_COLUMN(d->dataColumn, dataColumn);
 	WRITE_COLUMN(d->xColumn, xColumn);
 	WRITE_COLUMN(d->yColumn, yColumn);
 	WRITE_COLUMN(d->xCenterColumn, xCenterColumn);
@@ -790,8 +764,7 @@ bool ProcessBehaviorChart::load(XmlStreamReader* reader, bool preview) {
 				return false;
 		} else if (!preview && reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
-			READ_COLUMN(xDataColumn);
-			READ_COLUMN(yDataColumn);
+			READ_COLUMN(dataColumn);
 			READ_COLUMN(xColumn);
 			READ_COLUMN(yColumn);
 			READ_COLUMN(xCenterColumn);
