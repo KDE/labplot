@@ -218,8 +218,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://download.kde.org/stable/kuserfeedback/kuserfeedback-1.2.0.tar.xz",
-                    "sha256": "76aac922b153249b274680a6f4c72c238ef14e3df04bad00cb64158b1063f264",
+                    "url": "https://download.kde.org/stable/kuserfeedback/kuserfeedback-1.3.0.tar.xz",
+                    "sha256": "252308b822dd4690ea85ab1688c9b0da5512978ac6b435f77a5979fc1d2ffd13",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 138221,
