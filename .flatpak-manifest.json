@@ -360,6 +360,10 @@
                         "stable-only": true,
                         "url-template": "https://gitlab.com/api/v4/projects/ixion%2Fixion/packages/generic/source/$version/libixion-$version.tar.xz"
                     }
+                },
+		{
+                    "type": "patch",
+                    "path": "admin/patches/libixion-0.19.0_win32.patch"
                 }
             ]
         },
