@@ -17,11 +17,11 @@
 class MainWin;
 class ImportFileWidget;
 
+class QStatusBar;
+
 #ifdef HAVE_MQTT
 class MQTTClient;
 #endif
-
-class QStatusBar;
 
 class ImportFileDialog : public ImportDialog {
 	Q_OBJECT
