@@ -22,6 +22,7 @@ Bug fixes:
 
 Internal:
 	* use name LabPlot/labplot consistenly (renamed Labplot2/labplot2)
+	* switch to Qt6 only
 
 
 -----2.11.1 (16.07.2024) -----
