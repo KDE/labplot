@@ -201,7 +201,7 @@ void ProcessBehaviorChartDock::updateLocale() {
 }
 
 //*************************************************************
-//**** SLOTs for changes triggered in ProcessBehaviorChartDock *****
+//** SLOTs for changes triggered in ProcessBehaviorChartDock **
 //*************************************************************
 
 // "General"-tab
@@ -249,7 +249,7 @@ void ProcessBehaviorChartDock::subgroupSizeChanged(int value) {
 }
 
 //*************************************************************
-//*********** SLOTs for changes triggered in ProcessBehaviorChart *******
+//**** SLOTs for changes triggered in ProcessBehaviorChart ****
 //*************************************************************
 // General-Tab
 void ProcessBehaviorChartDock::plotDataColumnChanged(const AbstractColumn* column) {

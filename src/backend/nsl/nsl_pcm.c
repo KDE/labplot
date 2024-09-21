@@ -13,6 +13,80 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_sf_gamma.h>
 
+//*************************************************************
+//*********** Scaling factors for charts for Ranges ***********
+//*************************************************************
+
+double nsl_pcm_D3(unsigned int n) {
+	const double d2 = nsl_pcm_d2(n);
+	const double d3 = nsl_pcm_d3(n);
+	return GSL_MAX_DBL(0., 1 - 3 * d3 / d2);
+}
+
+double nsl_pcm_D4(unsigned int n) {
+	const double d2 = nsl_pcm_d2(n);
+	const double d3 = nsl_pcm_d3(n);
+	return 1 + 3 * d3 / d2;
+}
+
+double nsl_pcm_D5(unsigned int n) {
+	const double d2 = nsl_pcm_d2(n);
+	const double d3 = nsl_pcm_d3(n);
+	const double d4 = nsl_pcm_d4(n);
+	return GSL_MAX_DBL(0., (d2 - 3 * d3) / d4);
+}
+
+double nsl_pcm_D6(unsigned int n) {
+	const double d2 = nsl_pcm_d2(n);
+	const double d3 = nsl_pcm_d3(n);
+	const double d4 = nsl_pcm_d4(n);
+	return (d2 + 3 * d3) / d4;
+}
+
+//*************************************************************
+//********* Scaling factors for charts for Averages ***********
+//*************************************************************
+double nsl_pcm_A2(unsigned int n) {
+	const double d2 = nsl_pcm_d2(n);
+	return 3 / d2 / sqrt(n);
+}
+
+double nsl_pcm_A3(unsigned int n) {
+	const double c4 = nsl_pcm_c4(n);
+	return 3. / c4 / sqrt(n);
+}
+
+double nsl_pcm_A4(unsigned int n) {
+	const double d4 = nsl_pcm_d4(n);
+	return 3. / d4 / sqrt(n);
+}
+
+//*************************************************************
+//**** Scaling factors for charts for Standard Deviations *****
+//*************************************************************
+double nsl_pcm_B3(unsigned int n) {
+	const double c4 = nsl_pcm_c4(n);
+	return GSL_MAX_DBL(0., 1 -  3 / c4 * sqrt(1 - pow(c4, 2)));
+}
+
+double nsl_pcm_B4(unsigned int n) {
+	const double c4 = nsl_pcm_c4(n);
+	return 1 +  3 / c4 * sqrt(1 - pow(c4, 2));
+}
+
+double nsl_pcm_B5(unsigned int n) {
+	const double c4 = nsl_pcm_c4(n);
+	return GSL_MAX_DBL(0., c4 -  3  * sqrt(1 - pow(c4, 2)));
+}
+
+double nsl_pcm_B6(unsigned int n) {
+	const double c4 = nsl_pcm_c4(n);
+	return c4 +  3 * sqrt(1 - pow(c4, 2));
+}
+
+//*************************************************************
+//*********************** Conversion factors ******************
+//*************************************************************
 // Precomputed d2 values for subgroup sizes from 2 to 100
 static const double d2_values[] = {
 	0.0,    // Placeholder for index 0 (not used)
@@ -224,32 +298,6 @@ static const double d3_values[] = {
 	0.597   // d3 for n = 100
 };
 
-double nsl_pcm_D3(unsigned int n) {
-	const double d2 = nsl_pcm_d2(n);
-	const double d3 = nsl_pcm_d3(n);
-	return GSL_MAX_DBL(0., 1 - 3 * d3 / d2);
-}
-
-double nsl_pcm_D4(unsigned int n) {
-	const double d2 = nsl_pcm_d2(n);
-	const double d3 = nsl_pcm_d3(n);
-	return 1 + 3 * d3 / d2;
-}
-
-double nsl_pcm_D5(unsigned int n) {
-	const double d2 = nsl_pcm_d2(n);
-	const double d3 = nsl_pcm_d3(n);
-	const double d4 = nsl_pcm_d4(n);
-	return GSL_MAX_DBL(0., (d2 - 3 * d3) / d4);
-}
-
-double nsl_pcm_D6(unsigned int n) {
-	const double d2 = nsl_pcm_d2(n);
-	const double d3 = nsl_pcm_d3(n);
-	const double d4 = nsl_pcm_d4(n);
-	return (d2 + 3 * d3) / d4;
-}
-
 double nsl_pcm_d2(unsigned int n) {
 	if (n < 2 || n > 100) {
 		// For n outside the precomputed range, calculate using the formula
@@ -274,32 +322,4 @@ double nsl_pcm_d4(unsigned int n) {
 
 double nsl_pcm_c4(unsigned int n) {
 	return sqrt(2. / (n - 1)) * gsl_sf_gamma((n - 2.) / 2. + 1) / gsl_sf_gamma((n - 3.) / 2. + 1);
-}
-
-
-// averages
-double nsl_pcm_A2(unsigned int n) {
-	const double d2 = nsl_pcm_d2(n);
-	return 3 / d2 / sqrt(n);
-}
-
-double nsl_pcm_A3(unsigned int n) {
-	const double c4 = nsl_pcm_c4(n);
-	return 3. / c4 / sqrt(n);
-}
-
-double nsl_pcm_A4(unsigned int n) {
-	const double d4 = nsl_pcm_d4(n);
-	return 3. / d4 / sqrt(n);
-}
-
-// lower limit
-double nsl_pcm_B3(unsigned int n) {
-	const double c4 = nsl_pcm_c4(n);
-	return GSL_MAX_DBL(0., 1 -  3 / c4 * sqrt(1 - pow(c4, 2)));
-}
-
-double nsl_pcm_B4(unsigned int n) {
-	const double c4 = nsl_pcm_c4(n);
-	return 1 +  3 / c4 * sqrt(1 - pow(c4, 2));
 }
