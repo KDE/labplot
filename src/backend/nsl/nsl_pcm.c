@@ -1,7 +1,7 @@
 /*
 	File                 : nsl_pcm.c
 	Project              : LabPlot
-	Description          : NSL constants for process monitoring and control
+	Description          : Constants for process monitoring and control
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -236,6 +236,20 @@ double nsl_pcm_D4(unsigned int n) {
 	return 1 + 3 * d3 / d2;
 }
 
+double nsl_pcm_D5(unsigned int n) {
+	const double d2 = nsl_pcm_d2(n);
+	const double d3 = nsl_pcm_d3(n);
+	const double d4 = nsl_pcm_d4(n);
+	return GSL_MAX_DBL(0., (d2 - 3 * d3) / d4);
+}
+
+double nsl_pcm_D6(unsigned int n) {
+	const double d2 = nsl_pcm_d2(n);
+	const double d3 = nsl_pcm_d3(n);
+	const double d4 = nsl_pcm_d4(n);
+	return (d2 + 3 * d3) / d4;
+}
+
 double nsl_pcm_d2(unsigned int n) {
 	if (n < 2 || n > 100) {
 		// For n outside the precomputed range, calculate using the formula
@@ -254,6 +268,10 @@ double nsl_pcm_d3(unsigned int n) {
 	return d3_values[n];
 }
 
+double nsl_pcm_d4(unsigned int n) {
+	return d3_values[n];
+}
+
 double nsl_pcm_c4(unsigned int n) {
 	return sqrt(2. / (n - 1)) * gsl_sf_gamma((n - 2.) / 2. + 1) / gsl_sf_gamma((n - 3.) / 2. + 1);
 }
@@ -268,6 +286,11 @@ double nsl_pcm_A2(unsigned int n) {
 double nsl_pcm_A3(unsigned int n) {
 	const double c4 = nsl_pcm_c4(n);
 	return 3. / c4 / sqrt(n);
+}
+
+double nsl_pcm_A4(unsigned int n) {
+	const double d4 = nsl_pcm_d4(n);
+	return 3. / d4 / sqrt(n);
 }
 
 // lower limit

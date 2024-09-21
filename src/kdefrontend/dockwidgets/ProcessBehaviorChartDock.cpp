@@ -8,16 +8,14 @@
 */
 
 #include "ProcessBehaviorChartDock.h"
-#include "backend/core/AspectTreeModel.h"
 #include "backend/core/column/Column.h"
-#include "backend/nsl/nsl_sf_stats.h"
 #include "backend/worksheet/plots/cartesian/ProcessBehaviorChart.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
-#include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/widgets/LineWidget.h"
 #include "kdefrontend/widgets/SymbolWidget.h"
+
 #include <QFrame>
 
 #include <KConfig>
@@ -73,6 +71,7 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	// General
 	connect(cbDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &ProcessBehaviorChartDock::dataColumnChanged);
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ProcessBehaviorChartDock::typeChanged);
+	connect(ui.cbLimitsMetric, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ProcessBehaviorChartDock::limitsMetricChanged);
 	connect(ui.sbSubgroupSize, &QSpinBox::valueChanged, this, &ProcessBehaviorChartDock::subgroupSizeChanged);
 
 	// template handler
@@ -151,34 +150,40 @@ void ProcessBehaviorChartDock::setPlots(QList<ProcessBehaviorChart*> list) {
 	// General-tab
 	connect(m_plot, &ProcessBehaviorChart::dataColumnChanged, this, &ProcessBehaviorChartDock::plotDataColumnChanged);
 	connect(m_plot, &ProcessBehaviorChart::typeChanged, this, &ProcessBehaviorChartDock::plotTypeChanged);
+	connect(m_plot, &ProcessBehaviorChart::limitsMetricChanged, this, &ProcessBehaviorChartDock::plotLimitsMetricChanged);
 	connect(m_plot, &ProcessBehaviorChart::subgroupSizeChanged, this, &ProcessBehaviorChartDock::plotSubgroupSizeChanged);
 }
 
 void ProcessBehaviorChartDock::retranslateUi() {
+	ui.cbLimitsMetric->clear();
+	ui.cbLimitsMetric->addItem(i18n("Average"), static_cast<int>(ProcessBehaviorChart::LimitsMetric::Average));
+	ui.cbLimitsMetric->addItem(i18n("Median"), static_cast<int>(ProcessBehaviorChart::LimitsMetric::Median));
+
 	ui.cbType->clear();
-	ui.cbType->addItem(QStringLiteral("X̅ (XmR)"), static_cast<int>(ProcessBehaviorChart::Type::XmR));
-	ui.cbType->addItem(QStringLiteral("mR (XmR)"), static_cast<int>(ProcessBehaviorChart::Type::mR));
+	ui.cbType->addItem(QStringLiteral("X"), static_cast<int>(ProcessBehaviorChart::Type::XmR));
+	ui.cbType->addItem(QStringLiteral("mR"), static_cast<int>(ProcessBehaviorChart::Type::mR));
 	ui.cbType->addItem(QStringLiteral("X̅  (X̅R)"), static_cast<int>(ProcessBehaviorChart::Type::XbarR));
 	ui.cbType->addItem(QStringLiteral("R"), static_cast<int>(ProcessBehaviorChart::Type::R));
-	ui.cbType->addItem(QStringLiteral("X̅ (X̅S)"), static_cast<int>(ProcessBehaviorChart::Type::XbarS));
+	ui.cbType->addItem(QStringLiteral("X̅  (X̅S)"), static_cast<int>(ProcessBehaviorChart::Type::XbarS));
 	ui.cbType->addItem(QStringLiteral("S"), static_cast<int>(ProcessBehaviorChart::Type::S));
 
 	// tooltips
 	QString info = i18n(
-		"Individual Value and Moving Range Charts:"
+		"The supported chart types are grouped according to the plotted statistics and to the metric defining the limits.<br><br>"
+		"Individual Values and Moving Ranges, Limits Based on the Average or Median Moving Range:"
 		"<ul>"
-		"<li>XmR.</li>"
-		"<li>mR.</li>"
+		"<li>X (XmR) - plot the <b>indidual values</b>.</li>"
+		"<li>mR - plot the <b>moving ranges</b>.</li>"
 		"</ul>"
-		"Average and Range Charts:"
+		"Averages and Ranges, Limits Based on the Average or Median Range:"
 		"<ul>"
-		"<li>X̅R.</li>"
-		"<li>R.</li>"
+		"<li>X̅  (X̅R) - plot the <b>averages for each subgroup</b> .</li>"
+		"<li>R (X̅R) - plot the <b>ranges for each subgroup</b>.</li>"
 		"</ul>"
-		"Standard Deviation Charts:"
+		"Averages and Standard Deviations, Limits Based on the Standard Deviations:"
 		"<ul>"
-		"<li>X̅S.</li>"
-		"<li>S.</li>"
+		"<li>X̅  (X̅S) - plot the <b>averages for each subgroup</b>.</li>"
+		"<li>S (X̅S) - plot the <b>standard deviations for each subgroup</b>.</li>"
 		"</ul>");
 	ui.lType->setToolTip(info);
 	ui.cbType->setToolTip(info);
@@ -229,6 +234,13 @@ void ProcessBehaviorChartDock::typeChanged(int index) {
 		plot->setType(type);
 }
 
+void ProcessBehaviorChartDock::limitsMetricChanged(int index) {
+	CONDITIONAL_LOCK_RETURN;
+	const auto limitsMetric  = static_cast<ProcessBehaviorChart::LimitsMetric>(ui.cbType->itemData(index).toInt());
+	for (auto* plot : m_plots)
+		plot->setLimitsMetric(limitsMetric);
+}
+
 void ProcessBehaviorChartDock::subgroupSizeChanged(int value) {
 	CONDITIONAL_LOCK_RETURN;
 
@@ -247,8 +259,14 @@ void ProcessBehaviorChartDock::plotDataColumnChanged(const AbstractColumn* colum
 
 void ProcessBehaviorChartDock::plotTypeChanged(ProcessBehaviorChart::Type type) {
 	CONDITIONAL_LOCK_RETURN;
-	int index = ui.cbType->findData(static_cast<int>(type));
+	const int index = ui.cbType->findData(static_cast<int>(type));
 	ui.cbType->setCurrentIndex(index);
+}
+
+void ProcessBehaviorChartDock::plotLimitsMetricChanged(ProcessBehaviorChart::LimitsMetric limitsMetric) {
+	CONDITIONAL_LOCK_RETURN;
+	const int index = ui.cbLimitsMetric->findData(static_cast<int>(limitsMetric));
+	ui.cbLimitsMetric->setCurrentIndex(index);
 }
 
 void ProcessBehaviorChartDock::plotSubgroupSizeChanged(int value) {
@@ -260,9 +278,15 @@ void ProcessBehaviorChartDock::plotSubgroupSizeChanged(int value) {
 //************************* Settings **************************
 //*************************************************************
 void ProcessBehaviorChartDock::load() {
-	// type and subgroup size
+	// type
 	int index = ui.cbType->findData(static_cast<int>(m_plot->type()));
 	ui.cbType->setCurrentIndex(index);
+
+	// limits metric
+	index = ui.cbLimitsMetric->findData(static_cast<int>(m_plot->limitsMetric()));
+	ui.cbLimitsMetric->setCurrentIndex(index);
+
+	// subgroup size
 	ui.sbSubgroupSize->setValue(static_cast<int>(m_plot->subgroupSize()));
 }
 
@@ -270,9 +294,14 @@ void ProcessBehaviorChartDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group(QStringLiteral("ProcessBehaviorChart"));
 
 	// type
-	auto dist = group.readEntry(QStringLiteral("type"), static_cast<int>(m_plot->type()));
-	const int index = ui.cbType->findData(static_cast<int>(dist));
+	auto type = group.readEntry(QStringLiteral("type"), static_cast<int>(m_plot->type()));
+	int index = ui.cbType->findData(static_cast<int>(type));
 	ui.cbType->setCurrentIndex(index);
+
+	// limits metric
+	auto limitsMetric = group.readEntry(QStringLiteral("limitsMetric"), static_cast<int>(m_plot->limitsMetric()));
+	index = ui.cbLimitsMetric->findData(static_cast<int>(limitsMetric));
+	ui.cbLimitsMetric->setCurrentIndex(index);
 
 	// subgroup size
 	const int size = group.readEntry(QStringLiteral("subgroupSize"), static_cast<int>(m_plot->subgroupSize()));
@@ -302,8 +331,9 @@ void ProcessBehaviorChartDock::loadConfigFromTemplate(KConfig& config) {
 void ProcessBehaviorChartDock::saveConfigAsTemplate(KConfig& config) {
 	KConfigGroup group = config.group(QStringLiteral("ProcessBehaviorChart"));
 
-	// distribution
+	// general
 	group.writeEntry(QStringLiteral("type"), static_cast<int>(m_plot->type()));
+	group.writeEntry(QStringLiteral("limitsMetric"), static_cast<int>(m_plot->limitsMetric()));
 	group.writeEntry(QStringLiteral("subgroupSize"), m_plot->subgroupSize());
 
 	// properties of the reference and percentile curves

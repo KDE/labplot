@@ -154,10 +154,10 @@ void ProcessBehaviorChart::init() {
 void ProcessBehaviorChart::finalizeAdd() {
 	Q_D(ProcessBehaviorChart);
 	WorksheetElement::finalizeAdd();
-	addChildFast(d->dataCurve);
 	addChildFast(d->centerCurve);
 	addChildFast(d->upperLimitCurve);
 	addChildFast(d->lowerLimitCurve);
+	addChildFast(d->dataCurve);
 }
 
 void ProcessBehaviorChart::renameInternalCurves() {
@@ -166,8 +166,8 @@ void ProcessBehaviorChart::renameInternalCurves() {
 	d->centerCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->upperLimitCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->lowerLimitCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
-
 }
+
 /*!
   Returns an icon to be used in the project explorer.
   */
@@ -196,6 +196,7 @@ void ProcessBehaviorChart::setVisible(bool on) {
 // ##############################################################################
 //  general
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, ProcessBehaviorChart::Type, type, type)
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, ProcessBehaviorChart::LimitsMetric, limitsMetric, limitsMetric)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, int, subgroupSize, subgroupSize)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, const AbstractColumn*, dataColumn, dataColumn)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, QString, dataColumnPath, dataColumnPath)
@@ -235,17 +236,23 @@ bool ProcessBehaviorChart::minMax(const Dimension dim, const Range<int>& indexRa
 		return d->dataCurve->minMax(dim, indexRange, r, false);
 	case Dimension::Y: {
 		Range upperLimitRange(r);
-		Range lowerLimitRange(r);
 		bool rc = d->upperLimitCurve->minMax(dim, indexRange, upperLimitRange, false);
 		if (!rc)
 			return false;
 
+		Range lowerLimitRange(r);
 		rc = d->lowerLimitCurve->minMax(dim, indexRange, lowerLimitRange, false);
 		if (!rc)
 			return false;
 
-		r.setStart(std::min(upperLimitRange.start(), lowerLimitRange.start()));
-		r.setEnd(std::max(upperLimitRange.end(), lowerLimitRange.end()));
+		Range dataRange(r);
+		rc = d->dataCurve->minMax(dim, indexRange, dataRange, false);
+		if (!rc)
+			return false;
+
+
+		r.setStart(std::min(dataRange.start(), lowerLimitRange.start()));
+		r.setEnd(std::max(dataRange.end(), upperLimitRange.end()));
 
 		return true;
 	}
@@ -270,7 +277,7 @@ double ProcessBehaviorChart::maximum(const Dimension dim) const {
 	case Dimension::X:
 		return d->dataCurve->maximum(dim);
 	case Dimension::Y:
-		return d->upperLimitCurve->minimum(dim);
+		return std::max(d->dataCurve->maximum(dim), d->upperLimitCurve->maximum(dim));
 	}
 	return NAN;
 }
@@ -328,6 +335,13 @@ void ProcessBehaviorChart::setType(ProcessBehaviorChart::Type type) {
 	Q_D(ProcessBehaviorChart);
 	if (type != d->type)
 		exec(new ProcessBehaviorChartSetTypeCmd(d, type, ki18n("%1: set type")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetLimitsMetric, ProcessBehaviorChart::LimitsMetric, limitsMetric, recalc)
+void ProcessBehaviorChart::setLimitsMetric(ProcessBehaviorChart::LimitsMetric limitsMetric) {
+	Q_D(ProcessBehaviorChart);
+	if (limitsMetric != d->limitsMetric)
+		exec(new ProcessBehaviorChartSetLimitsMetricCmd(d, limitsMetric, ki18n("%1: set limits metric")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetSubgroupSize, int, subgroupSize, recalc)
@@ -457,16 +471,30 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 				movingRange.push_back(std::abs(dataColumn->valueAt(i) - dataColumn->valueAt(i - 1)));
 		}
 
-		// center line at the mean of the data
-		const double mean = static_cast<const Column*>(dataColumn)->statistics().arithmeticMean;
-		center = mean;
+		if (limitsMetric == ProcessBehaviorChart::LimitsMetric::Average) {
+			// center line at the mean of the data
+			const double mean = static_cast<const Column*>(dataColumn)->statistics().arithmeticMean;
+			center = mean;
 
-		// upper and lower limits
-		const double meanMovingRange = gsl_stats_mean(movingRange.data(), 1, movingRange.size());
-		const double d2 = nsl_pcm_d2(count);
-		const double E2 = 3 / d2;
-		upperLimit = mean + E2 * meanMovingRange;
-		lowerLimit = mean - E2 * meanMovingRange;
+			// upper and lower limits
+			const double meanMovingRange = gsl_stats_mean(movingRange.data(), 1, movingRange.size());
+			const double E2 = 2.66; // 2.66 is 3 / d2 for n = 2 (two values used to calculate the ranges)
+			upperLimit = mean + E2 * meanMovingRange;
+			lowerLimit = mean - E2 * meanMovingRange;
+		} else {
+			// center line at the median of the data
+			const double median = static_cast<const Column*>(dataColumn)->statistics().median;
+			center = median;
+
+			// upper and lower limits
+			const double medianMovingRange = gsl_stats_median(movingRange.data(), 1, movingRange.size());
+			const double E5 = 3.145; // 3.145 is 3 / d4 for n = 2 (two values used to calculate the ranges)
+			upperLimit = median + E5 * medianMovingRange;
+			lowerLimit = median - E5 * medianMovingRange;
+		}
+
+		if (lowerLimit < 0.)
+			lowerLimit = 0.;
 
 		// plotted data - original data
 		dataCurve->setYColumn(dataColumn);
@@ -483,13 +511,23 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 				yColumn->setValueAt(i - 1, std::abs(dataColumn->valueAt(i) - dataColumn->valueAt(i - 1)));
 		}
 
-		// center line
-		const double meanMovingRange = yColumn->statistics().arithmeticMean;
-		center = meanMovingRange;
+		if (limitsMetric == ProcessBehaviorChart::LimitsMetric::Average) {
+			// center line
+			const double meanMovingRange = yColumn->statistics().arithmeticMean;
+			center = meanMovingRange;
 
-		// upper and lower limits
-		upperLimit = nsl_pcm_D4(count) * meanMovingRange;
-		lowerLimit = nsl_pcm_D3(count) * meanMovingRange;
+			// upper and lower limits
+			upperLimit = 3.268 * meanMovingRange; // D4 = 3.268 for n = 2 // TODO: 267(page) or 268(appendix)?
+			lowerLimit = 0.; // D3 = 0 for n = 2
+		} else { // median
+			// center line
+			const double medianMovingRange = yColumn->statistics().median;
+			center = medianMovingRange;
+
+			// upper and lower limits
+			upperLimit = 3.866 * medianMovingRange; // D6 = 3.866 for n = 2
+			lowerLimit = 0.; // D5 = 0 for n = 2
+		}
 
 		// plotted data - moving ranges
 		dataCurve->setYColumn(yColumn);
@@ -536,10 +574,17 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		center = meanOfMeans;
 
 		// upper and lower limits - the mean of means plus/minus normalized mean range
-		const double meanRange = gsl_stats_mean(subgroupRanges.data(), 1, subgroupRanges.size());
-		const double A2 = nsl_pcm_A2(subgroupSize);
-		upperLimit = meanOfMeans + A2 * meanRange;
-		lowerLimit = meanOfMeans - A2 * meanRange;
+		if (limitsMetric == ProcessBehaviorChart::LimitsMetric::Average) {
+			const double meanRange = gsl_stats_mean(subgroupRanges.data(), 1, subgroupRanges.size());
+			const double A2 = nsl_pcm_A2(subgroupSize);
+			upperLimit = meanOfMeans + A2 * meanRange;
+			lowerLimit = meanOfMeans - A2 * meanRange;
+		} else { // median
+			const double medianRange = gsl_stats_median(subgroupRanges.data(), 1, subgroupRanges.size());
+			const double A4 = nsl_pcm_A4(subgroupSize);
+			upperLimit = meanOfMeans + A4 * medianRange;
+			lowerLimit = meanOfMeans - A4 * medianRange;
+		}
 
 		// plotted data - means of subroups
 		dataCurve->setYColumn(yColumn);
@@ -565,21 +610,31 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 				}
 			}
 
-			qDebug()<< groupIndex << "  " << maxVal - minVal;
 			yColumn->setValueAt(groupIndex, maxVal - minVal);
 			++groupIndex;
 		}
 
-		// center line at the average range
-		const double meanRange = yColumn->statistics().arithmeticMean;
-		center = meanRange;
+		if (limitsMetric == ProcessBehaviorChart::LimitsMetric::Average) {
+			// center line at the average range
+			const double meanRange = yColumn->statistics().arithmeticMean;
+			center = meanRange;
 
-		// upper and lower limits
-		const double D3 = nsl_pcm_D3(subgroupSize);
-		const double D4 = nsl_pcm_D4(subgroupSize);
-		// qDebug()<<"mean range " << meanRange << "  " << D3 << "  " << D4;
-		upperLimit = D4 * meanRange;
-		lowerLimit = D3 * meanRange;
+			// upper and lower limits
+			const double D3 = nsl_pcm_D3(subgroupSize);
+			const double D4 = nsl_pcm_D4(subgroupSize);
+			upperLimit = D4 * meanRange;
+			lowerLimit = D3 * meanRange;
+		} else { // median
+			// center line at the median range
+			const double medianRange = yColumn->statistics().median;
+			center = medianRange;
+
+			// upper and lower limits
+			const double D5 = nsl_pcm_D5(subgroupSize);
+			const double D6 = nsl_pcm_D6(subgroupSize);
+			upperLimit = D6 * medianRange;
+			lowerLimit = D5 * medianRange;
+		}
 
 		// plotted data - subroup ranges
 		dataCurve->setYColumn(yColumn);
@@ -596,7 +651,6 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 					sum += dataColumn->valueAt(i + j);
 			}
 
-			qDebug()<< groupIndex << "  " << sum/subgroupSize;
 			yColumn->setValueAt(groupIndex, sum / subgroupSize);
 			++groupIndex;
 		}
@@ -710,6 +764,7 @@ void ProcessBehaviorChart::save(QXmlStreamWriter* writer) const {
 	WRITE_COLUMN(d->xLowerLimitColumn, xLowerLimitColumn);
 	WRITE_COLUMN(d->yLowerLimitColumn, yLowerLimitColumn);
 	writer->writeAttribute(QStringLiteral("type"), QString::number(static_cast<int>(d->type)));
+	writer->writeAttribute(QStringLiteral("limitsMetric"), QString::number(static_cast<int>(d->limitsMetric)));
 	writer->writeAttribute(QStringLiteral("subgroupSize"), QString::number(d->subgroupSize));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
@@ -774,6 +829,7 @@ bool ProcessBehaviorChart::load(XmlStreamReader* reader, bool preview) {
 			READ_COLUMN(xLowerLimitColumn);
 			READ_COLUMN(yLowerLimitColumn);
 			READ_INT_VALUE("type", type, ProcessBehaviorChart::Type);
+			READ_INT_VALUE("limitsMetric", limitsMetric, ProcessBehaviorChart::LimitsMetric);
 			READ_INT_VALUE("subgroupSize", subgroupSize, int);
 			READ_INT_VALUE("legendVisible", legendVisible, bool);
 

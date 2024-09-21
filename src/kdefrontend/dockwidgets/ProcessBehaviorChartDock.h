@@ -57,12 +57,14 @@ private Q_SLOTS:
 	// General-Tab
 	void dataColumnChanged(const QModelIndex&);
 	void typeChanged(int);
+	void limitsMetricChanged(int);
 	void subgroupSizeChanged(int);
 
 	// SLOTs for changes triggered in ProcessBehaviorChart
 	// General-Tab
 	void plotDataColumnChanged(const AbstractColumn*);
 	void plotTypeChanged(ProcessBehaviorChart::Type);
+	void plotLimitsMetricChanged(ProcessBehaviorChart::LimitsMetric);
 	void plotSubgroupSizeChanged(int);
 
 	// load and save

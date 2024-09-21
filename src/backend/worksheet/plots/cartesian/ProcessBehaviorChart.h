@@ -29,6 +29,7 @@ public:
 	friend class ProcessBehaviorChartSetDataColumnCmd;
 
 	enum class Type {XmR, mR, XbarR, R, XbarS, S};
+	enum class LimitsMetric {Average, Median};
 
 	explicit ProcessBehaviorChart(const QString& name);
 	~ProcessBehaviorChart() override;
@@ -44,6 +45,7 @@ public:
 	void saveThemeConfig(const KConfig&) override;
 
 	BASIC_D_ACCESSOR_DECL(ProcessBehaviorChart::Type, type, Type)
+	BASIC_D_ACCESSOR_DECL(ProcessBehaviorChart::LimitsMetric, limitsMetric, LimitsMetric)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, dataColumn, DataColumn)
 	CLASS_D_ACCESSOR_DECL(QString, dataColumnPath, DataColumnPath)
 	BASIC_D_ACCESSOR_DECL(int, subgroupSize, SubgroupSize)
@@ -89,6 +91,7 @@ Q_SIGNALS:
 
 	// General-Tab
 	void typeChanged(ProcessBehaviorChart::Type);
+	void limitsMetricChanged(ProcessBehaviorChart::LimitsMetric);
 	void dataDataChanged();
 	void dataColumnChanged(const AbstractColumn*);
 	void subgroupSizeChanged(int);

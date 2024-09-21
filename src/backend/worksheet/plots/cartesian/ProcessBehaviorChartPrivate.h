@@ -26,6 +26,7 @@ public:
 	void updateControlLimits();
 
 	ProcessBehaviorChart::Type type{ProcessBehaviorChart::Type::XmR};
+	ProcessBehaviorChart::LimitsMetric limitsMetric{ProcessBehaviorChart::LimitsMetric::Average};
 
 	XYCurve* dataCurve{nullptr};
 	XYCurve* centerCurve{nullptr};
