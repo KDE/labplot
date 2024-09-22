@@ -222,14 +222,19 @@ void ProcessBehaviorChartDock::dataColumnChanged(const QModelIndex& index) {
 
 void ProcessBehaviorChartDock::typeChanged(int index) {
 	const auto type = static_cast<ProcessBehaviorChart::Type>(ui.cbType->itemData(index).toInt());
+
+	// depending on the current type, show/hide the settings for the subgroup type
 	bool visible = (type == ProcessBehaviorChart::Type::XbarR || type == ProcessBehaviorChart::Type::R || type == ProcessBehaviorChart::Type::XbarS
 					|| type == ProcessBehaviorChart::Type::S);
-
 	ui.lSubgroupSize->setVisible(visible);
 	ui.sbSubgroupSize->setVisible(visible);
 
-	CONDITIONAL_LOCK_RETURN;
+	// depending on the current type, show/hide the settings for the metric used to define the limits
+	visible = (type != ProcessBehaviorChart::Type::XbarS && type != ProcessBehaviorChart::Type::S);
+	ui.lLimitsMetric->setVisible(visible);
+	ui.cbLimitsMetric->setVisible(visible);
 
+	CONDITIONAL_LOCK_RETURN;
 	for (auto* plot : m_plots)
 		plot->setType(type);
 }

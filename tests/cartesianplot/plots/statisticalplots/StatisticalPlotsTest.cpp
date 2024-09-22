@@ -16,6 +16,7 @@
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
+#include "backend/worksheet/plots/cartesian/ProcessBehaviorChart.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
 
 #include <gsl/gsl_randist.h>
@@ -64,7 +65,7 @@ void StatisticalPlotsTest::testHistogramDuplicate() {
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
 	ws->addChild(p);
 
-	auto* histogram = new Histogram(QStringLiteral("kdeplot"));
+	auto* histogram = new Histogram(QStringLiteral("histogram"));
 	p->addChild(histogram);
 
 	histogram->duplicate();
@@ -91,7 +92,7 @@ void StatisticalPlotsTest::testHistogramRangeBinningTypeChanged() {
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
 	ws->addChild(p);
 
-	auto* histogram = new Histogram(QStringLiteral("kdeplot"));
+	auto* histogram = new Histogram(QStringLiteral("histogram"));
 	histogram->setBinningMethod(Histogram::BinningMethod::ByNumber);
 	histogram->setBinCount(3);
 	histogram->setDataColumn(column);
@@ -137,7 +138,7 @@ void StatisticalPlotsTest::testHistogramRangeRowsChanged() {
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
 	ws->addChild(p);
 
-	auto* histogram = new Histogram(QStringLiteral("kdeplot"));
+	auto* histogram = new Histogram(QStringLiteral("histogram"));
 	histogram->setBinningMethod(Histogram::BinningMethod::ByNumber);
 	histogram->setBinCount(3);
 	histogram->setDataColumn(column);
@@ -500,6 +501,57 @@ void StatisticalPlotsTest::testBarPlotRange() {
 
 	QCOMPARE(rangeY.start(), 0);
 	QCOMPARE(rangeY.end(), 20);
+}
+
+// ##############################################################################
+// ################### Process Behavior Chart ###################################
+// ##############################################################################
+/*!
+ * \brief create and add a new process behavior chart, undo and redo this step
+ */
+void StatisticalPlotsTest::testPBChartInit() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
+	p->addChild(pbc);
+
+	auto children = p->children<ProcessBehaviorChart>();
+
+	QCOMPARE(children.size(), 1);
+
+	project.undoStack()->undo();
+	children = p->children<ProcessBehaviorChart>();
+	QCOMPARE(children.size(), 0);
+
+	// TODO: crash!!!
+	// project.undoStack()->redo();
+	// children = p->children<ProcessBehaviorChart>();
+	// QCOMPARE(children.size(), 1);
+}
+
+/*!
+ * \brief create and add a new process behavior chart, duplicate it and check the number of children
+ */
+void StatisticalPlotsTest::testPBChartDuplicate() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
+	p->addChild(pbc);
+
+	pbc->duplicate();
+
+	auto children = p->children<ProcessBehaviorChart>();
+	QCOMPARE(children.size(), 2);
 }
 
 QTEST_MAIN(StatisticalPlotsTest)

@@ -75,7 +75,7 @@ double nsl_pcm_B4(unsigned int n) {
 
 double nsl_pcm_B5(unsigned int n) {
 	const double c4 = nsl_pcm_c4(n);
-	return GSL_MAX_DBL(0., c4 - 3  * sqrt(1 - pow(c4, 2)));
+	return GSL_MAX_DBL(0., c4 - 3 * sqrt(1 - pow(c4, 2)));
 }
 
 double nsl_pcm_B6(unsigned int n) {
@@ -188,7 +188,7 @@ static const double d2_values[] = {
 	5.285, // d2 for n = 97
 	5.296, // d2 for n = 98
 	5.307, // d2 for n = 99
-	5.318   // d2 for n = 100
+	5.318 // d2 for n = 100
 };
 
 // Precomputed d3 values for subgroup sizes from 2 to 100
@@ -293,30 +293,58 @@ static const double d3_values[] = {
 	0.600, // d3 for n = 97
 	0.599, // d3 for n = 98
 	0.598, // d3 for n = 99
-	0.597   // d3 for n = 100
+	0.597 // d3 for n = 100
+};
+
+// Precomputed d4 values for subgroup sizes from 2 to 25
+static const double d4_values[] = {
+	0.0, // Placeholder for index 0 (not used)
+	0.0, // Placeholder for index 1 (not used)
+	0.954, // d4 for n = 2
+	1.588, // d4 for n = 3
+	1.978, // d4 for n = 4
+	2.257, // d4 for n = 5
+	2.472, // d4 for n = 6
+	2.645, // d4 for n = 7
+	2.791, // d4 for n = 8
+	2.915, // d4 for n = 9
+	3.024, // d4 for n = 10
+	3.121, // d4 for n = 11
+	3.207, // d4 for n = 12
+	3.285, // d4 for n = 13
+	3.356, // d4 for n = 14
+	3.422, // d4 for n = 15
+	3.482, // d4 for n = 16
+	3.538, // d3 for n = 17
+	3.591, // d4 for n = 18
+	3.640, // d4 for n = 19
+	3.686, // d4 for n = 20
+	3.730, // d4 for n = 21
+	3.771, // d4 for n = 22
+	3.811, // d4 for n = 23
+	3.847, // d4 for n = 24
+	3.883 // d4 for n = 25
 };
 
 double nsl_pcm_d2(unsigned int n) {
-	if (n < 2 || n > 100) {
-		// For n outside the precomputed range, calculate using the formula
-		return gsl_sf_gamma(n / 2.0) * sqrt(2.0) / gsl_sf_gamma((n - 1) / 2.0);
-	}
+	if (n < 0 || n > 100) // outside the precomputed range
+		return 0.0;
 
 	return d2_values[n];
 }
 
 double nsl_pcm_d3(unsigned int n) {
-	if (n < 2 || n > 100) {
-		// For n outside the precomputed range, calculate using the formula
-		return gsl_sf_gamma(n / 2.0) * sqrt(2.0) / gsl_sf_gamma((n - 1) / 2.0);
-	}
+	if (n < 0 || n > 100) // outside the precomputed range
+		return 0.0;
 
 	return d3_values[n];
 }
 
 double nsl_pcm_d4(unsigned int n) {
-	// TODO
-	return d3_values[n];
+	if (n < 0 || n > 25) // outside the precomputed range
+		return 0.0;
+
+	return d4_values[n];
 }
 
 double nsl_pcm_c4(unsigned int n) {

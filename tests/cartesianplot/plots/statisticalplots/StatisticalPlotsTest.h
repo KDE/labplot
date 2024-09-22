@@ -38,6 +38,10 @@ private Q_SLOTS:
 	void testBarPlotInit();
 	void testBarPlotDuplicate();
 	void testBarPlotRange();
+
+	// process behavior chart
+	void testPBChartInit();
+	void testPBChartDuplicate();
 };
 
 #endif
