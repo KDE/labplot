@@ -163,6 +163,7 @@ set(NSL_SOURCES
     ${BACKEND_DIR}/nsl/nsl_interp.c
     ${BACKEND_DIR}/nsl/nsl_kde.c
     ${BACKEND_DIR}/nsl/nsl_math.c
+    ${BACKEND_DIR}/nsl/nsl_pcm.c
     ${BACKEND_DIR}/nsl/nsl_peak.cpp
     ${BACKEND_DIR}/nsl/nsl_randist.c
     ${BACKEND_DIR}/nsl/nsl_sf_basic.c
