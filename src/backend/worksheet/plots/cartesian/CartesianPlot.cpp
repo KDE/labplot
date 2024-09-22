@@ -849,6 +849,45 @@ QVector<AspectType> CartesianPlot::pasteTypes() const {
 	return types;
 }
 
+class NavigateUndoCmd: public QUndoCommand {
+public:
+    NavigateUndoCmd(CartesianPlotPrivate* p): m_private(p) {
+        setText(i18n("Navigate"));
+    }
+
+    void redo() override {
+        QUndoCommand::redo();
+        m_private->q->WorksheetElementContainer::retransform();
+    }
+
+    void undo() override {
+        QUndoCommand::redo();
+        m_private->q->WorksheetElementContainer::retransform();
+    }
+private:
+    CartesianPlotPrivate* m_private;
+};
+
+
+class NavigateUndoCmdSingleDim: public QUndoCommand {
+public:
+    NavigateUndoCmdSingleDim(CartesianPlotPrivate* p): m_private(p) {
+        setText(i18n("Navigate"));
+    }
+
+    void redo() override {
+        QUndoCommand::redo();
+        m_private->q->WorksheetElementContainer::retransform();
+    }
+
+    void undo() override {
+        QUndoCommand::redo();
+        m_private->q->WorksheetElementContainer::retransform();
+    }
+private:
+    CartesianPlotPrivate* m_private;
+};
+
 void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	const auto* cSystem = coordinateSystem(cSystemIndex);
@@ -859,6 +898,7 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 	}
 
 	if (op == NavigationOperation::ScaleAuto) {
+        auto* navigateUndoCmd = new NavigateUndoCmd(d);
 		if (!cSystem) { // all csystems
 			for (int i = 0; i < coordinateSystemCount(); i++) {
 				auto* cSystem = coordinateSystem(i);
@@ -866,46 +906,45 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 				auto yDirty = rangeDirty(Dimension::Y, cSystem->index(Dimension::Y));
 
 				if (xDirty || yDirty || !autoScale(Dimension::X, cSystem->index(Dimension::X)) || !autoScale(Dimension::Y, cSystem->index(Dimension::Y))) {
-					setRangeDirty(Dimension::X, cSystem->index(Dimension::X), true);
-					setRangeDirty(Dimension::Y, cSystem->index(Dimension::Y), true);
+                    setRangeDirty(Dimension::X, cSystem->index(Dimension::X), true, navigateUndoCmd);
+                    setRangeDirty(Dimension::Y, cSystem->index(Dimension::Y), true, navigateUndoCmd);
 				}
 				if (!autoScale(Dimension::X, cSystem->index(Dimension::X)))
-					enableAutoScale(Dimension::X, cSystem->index(Dimension::X), true, true);
+                    enableAutoScale(Dimension::X, cSystem->index(Dimension::X), true, true, navigateUndoCmd);
 				else // if already autoscale set, scaleAutoX will not be called anymore, so force it to do
-					scaleAuto(Dimension::X, cSystem->index(Dimension::X));
+                    scaleAuto(Dimension::X, cSystem->index(Dimension::X), navigateUndoCmd);
 
 				if (!autoScale(Dimension::Y, cSystem->index(Dimension::Y)))
-					enableAutoScale(Dimension::Y, cSystem->index(Dimension::Y), true, true);
+                    enableAutoScale(Dimension::Y, cSystem->index(Dimension::Y), true, true, navigateUndoCmd);
 				else
-					scaleAuto(Dimension::Y, cSystem->index(Dimension::Y));
+                    scaleAuto(Dimension::Y, cSystem->index(Dimension::Y), navigateUndoCmd);
 			}
-			WorksheetElementContainer::retransform();
 		} else {
 			auto xDirty = rangeDirty(Dimension::X, xIndex);
 			auto yDirty = rangeDirty(Dimension::Y, yIndex);
 
 			if (xDirty || yDirty || !autoScale(Dimension::X, xIndex) || !autoScale(Dimension::Y, yIndex)) {
-				setRangeDirty(Dimension::X, xIndex, true);
-				setRangeDirty(Dimension::Y, yIndex, true);
+                setRangeDirty(Dimension::X, xIndex, true, navigateUndoCmd);
+                setRangeDirty(Dimension::Y, yIndex, true, navigateUndoCmd);
 			}
 			if (!autoScale(Dimension::X, cSystem->index(Dimension::X)))
-				enableAutoScale(Dimension::X, cSystem->index(Dimension::X), true, true);
+                enableAutoScale(Dimension::X, cSystem->index(Dimension::X), true, true, navigateUndoCmd);
 			else
-				scaleAuto(Dimension::X, cSystem->index(Dimension::X), true);
+                scaleAuto(Dimension::X, cSystem->index(Dimension::X), true, navigateUndoCmd);
 
 			if (!autoScale(Dimension::Y, cSystem->index(Dimension::Y)))
-				enableAutoScale(Dimension::Y, cSystem->index(Dimension::Y), true, true);
+                enableAutoScale(Dimension::Y, cSystem->index(Dimension::Y), true, true, navigateUndoCmd);
 			else
-				scaleAuto(Dimension::Y, cSystem->index(Dimension::Y), true);
-			WorksheetElementContainer::retransform();
+                scaleAuto(Dimension::Y, cSystem->index(Dimension::Y), true, navigateUndoCmd);
 		}
+        exec(navigateUndoCmd);
 	} else if (op == NavigationOperation::ScaleAutoX) {
-		bool update = rangeDirty(Dimension::X, xIndex);
+        bool update = rangeDirty(Dimension::X, xIndex); // TODO: why is this required?
 		if (!autoScale(Dimension::X, xIndex)) {
-			enableAutoScale(Dimension::X, xIndex, true, true);
+            enableAutoScale(Dimension::X, xIndex, true, true, navigateUndoCmd);
 			update = true;
 		} else
-			update |= scaleAuto(Dimension::X, xIndex);
+            update |= scaleAuto(Dimension::X, xIndex, navigateUndoCmd);
 		if (update) {
 			for (int i = 0; i < m_coordinateSystems.count(); i++) {
 				auto cs = coordinateSystem(i);
@@ -915,7 +954,7 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 			WorksheetElementContainer::retransform();
 		}
 	} else if (op == NavigationOperation::ScaleAutoY) {
-		bool update = rangeDirty(Dimension::Y, yIndex);
+        bool update = rangeDirty(Dimension::Y, yIndex); // TODO: why is this needed?
 		if (!autoScale(Dimension::Y, yIndex)) {
 			enableAutoScale(Dimension::Y, yIndex, true, true);
 			update = true;
@@ -3083,6 +3122,53 @@ void CartesianPlot::zoom(int index, const Dimension dim, bool zoom_in, const dou
         //d->setRange(dim, index, range);
 }
 
+class ShiftCmd: public QUndoCommand {
+public:
+    ShiftCmd(CartesianPlotPrivate* c, Dimension dim, int index, QUndoCommand* parent = nullptr): QUndoCommand(parent), m_private(c), m_dim(dim), m_index(index) {
+        setText(i18n("%1: Shifting", m_private->name()));
+    }
+
+    void redo() override {
+        QUndoCommand::redo();
+        finalize();
+    }
+
+    void undo() override {
+        QUndoCommand::undo();
+        finalize();
+    }
+
+    void finalize() {
+        Dimension dim_other = Dimension::Y;
+        if (m_dim == Dimension::Y)
+            dim_other = Dimension::X;
+
+        m_private->retransformScale(m_dim, m_index);
+
+        auto* p = m_private->q;
+
+        bool retrans = false;
+        for (const auto cSystem : m_coordinateSystems) {
+            const auto cs = static_cast<CartesianCoordinateSystem*>(cSystem);
+            if ((m_index == -1 || m_index == cs->index(m_dim))) {
+                if (p->autoScale(dim_other, cs->index(dim_other))) {
+                    setRangeDirty(dim_other, cs->index(dim_other), true);
+                    scaleAuto(dim_other, cs->index(dim_other), false);
+                }
+                retrans = true;
+            }
+        }
+
+        if (retrans)
+            WorksheetElementContainer::retransform();
+    }
+
+private:
+    CartesianPlotPrivate* m_private;
+    Dimension m_dim;
+    int m_index;
+};
+
 /*!
  * helper function called in other shift*() functions
  * and doing the actual change of the data ranges.
@@ -3110,84 +3196,17 @@ void CartesianPlot::shift(int index, const Dimension dim, bool leftOrDown) {
 	}
 	range = d->range(dim, index);
 
-	double offset = 0.0, factor = 0.1;
+    double factor = 0.1;
 
 	if (!leftOrDown)
 		factor *= -1.;
 
-	const double start{range.start()}, end{range.end()};
-	switch (range.scale()) {
-	case RangeT::Scale::Linear: {
-		offset = range.size() * factor;
-		range += offset;
-		break;
-	}
-	case RangeT::Scale::Log10: {
-		if (start == 0 || end / start <= 0)
-			break;
-		offset = log10(end / start) * factor;
-		range *= pow(10, offset);
-		break;
-	}
-	case RangeT::Scale::Log2: {
-		if (start == 0 || end / start <= 0)
-			break;
-		offset = log2(end / start) * factor;
-		range *= exp2(offset);
-		break;
-	}
-	case RangeT::Scale::Ln: {
-		if (start == 0 || end / start <= 0)
-			break;
-		offset = log(end / start) * factor;
-		range *= exp(offset);
-		break;
-	}
-	case RangeT::Scale::Sqrt:
-		if (start < 0 || end < 0)
-			break;
-		offset = (sqrt(end) - sqrt(start)) * factor;
-		range += offset * offset;
-		break;
-	case RangeT::Scale::Square:
-		offset = (end * end - start * start) * factor;
-		range += sqrt(std::abs(offset));
-		break;
-	case RangeT::Scale::Inverse:
-		offset = (1. / start - 1. / end) * factor;
-		range += 1. / std::abs(offset);
-		break;
-	}
+    range.shift(factor);
 
 	if (range.finite())
-		d->setRange(dim, index, range);
+        setRange(dim, index, range, undoCommand);
 
-	d->retransformScale(dim, index);
-
-	auto dim_other = Dimension::X;
-	switch (dim) {
-	case Dimension::X:
-		dim_other = Dimension::Y;
-		break;
-	case Dimension::Y:
-		dim_other = Dimension::X;
-		break;
-	}
-
-	bool retrans = false;
-	for (const auto cSystem : m_coordinateSystems) {
-		const auto cs = static_cast<CartesianCoordinateSystem*>(cSystem);
-		if ((index == -1 || index == cs->index(dim))) {
-			if (autoScale(dim_other, cs->index(dim_other))) {
-				setRangeDirty(dim_other, cs->index(dim_other), true);
-				scaleAuto(dim_other, cs->index(dim_other), false);
-			}
-			retrans = true;
-		}
-	}
-
-	if (retrans)
-		WorksheetElementContainer::retransform();
+    exec(shiftCmd);
 }
 
 void CartesianPlot::shiftLeftX(int index) {

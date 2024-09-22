@@ -170,6 +170,54 @@ public:
 		}
 		return T();
 	}
+
+	void shift(double factor) {
+		double offset = 0.0;
+		const double start{this->start()}, end{this->end()};
+		switch (scale()) {
+		case RangeT::Scale::Linear: {
+			offset = size() * factor;
+			*this += offset;
+			break;
+		}
+		case RangeT::Scale::Log10: {
+			if (start == 0 || end / start <= 0)
+				break;
+			offset = log10(end / start) * factor;
+			*this *= pow(10, offset);
+			break;
+		}
+		case RangeT::Scale::Log2: {
+			if (start == 0 || end / start <= 0)
+				break;
+			offset = log2(end / start) * factor;
+			*this *= exp2(offset);
+			break;
+		}
+		case RangeT::Scale::Ln: {
+			if (start == 0 || end / start <= 0)
+				break;
+			offset = log(end / start) * factor;
+			*this *= exp(offset);
+			break;
+		}
+		case RangeT::Scale::Sqrt:
+			if (start < 0 || end < 0)
+				break;
+			offset = (sqrt(end) - sqrt(start)) * factor;
+			*this += offset * offset;
+			break;
+		case RangeT::Scale::Square:
+			offset = (end * end - start * start) * factor;
+			*this += sqrt(std::abs(offset));
+			break;
+		case RangeT::Scale::Inverse:
+			offset = (1. / start - 1. / end) * factor;
+			*this += 1. / std::abs(offset);
+			break;
+		}
+	}
+
 	// calculate step size from number of steps
 	T stepSize(const int steps) const {
 		return (steps > 1) ? size() / static_cast<T>(steps - 1) : 0;
