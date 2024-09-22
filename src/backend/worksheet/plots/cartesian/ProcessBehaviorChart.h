@@ -28,8 +28,8 @@ class ProcessBehaviorChart : public Plot {
 public:
 	friend class ProcessBehaviorChartSetDataColumnCmd;
 
-	enum class Type {XmR, mR, XbarR, R, XbarS, S};
-	enum class LimitsMetric {Average, Median};
+	enum class Type { XmR, mR, XbarR, R, XbarS, S };
+	enum class LimitsMetric { Average, Median };
 
 	explicit ProcessBehaviorChart(const QString& name);
 	~ProcessBehaviorChart() override;

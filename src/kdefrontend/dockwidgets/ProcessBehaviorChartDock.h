@@ -11,8 +11,8 @@
 #ifndef PROCESSBEHAVIORCHARTDOCK_H
 #define PROCESSBEHAVIORCHARTDOCK_H
 
-#include "kdefrontend/dockwidgets/BaseDock.h"
 #include "backend/worksheet/plots/cartesian/ProcessBehaviorChart.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_processbehaviorchartdock.h"
 
 class LineWidget;
@@ -53,7 +53,6 @@ private Q_SLOTS:
 	void retranslateUi();
 
 	// SLOTs for changes triggered in ProcessBehaviorChartDock
-
 	// General-Tab
 	void dataColumnChanged(const QModelIndex&);
 	void typeChanged(int);

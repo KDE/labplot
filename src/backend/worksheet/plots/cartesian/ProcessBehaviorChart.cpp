@@ -250,7 +250,6 @@ bool ProcessBehaviorChart::minMax(const Dimension dim, const Range<int>& indexRa
 		if (!rc)
 			return false;
 
-
 		r.setStart(std::min(dataRange.start(), lowerLimitRange.start()));
 		r.setEnd(std::max(dataRange.end(), upperLimitRange.end()));
 
@@ -872,7 +871,7 @@ bool ProcessBehaviorChart::load(XmlStreamReader* reader, bool preview) {
 				rc = d->upperLimitCurve->load(reader, preview);
 			else if (attribs.value(QStringLiteral("name")) == QLatin1String("lowerLimit"))
 				rc = d->lowerLimitCurve->load(reader, preview);
-		
+
 			if (!rc)
 				return false;
 		} else { // unknown element

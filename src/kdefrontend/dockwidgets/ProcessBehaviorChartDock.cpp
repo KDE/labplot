@@ -221,10 +221,10 @@ void ProcessBehaviorChartDock::dataColumnChanged(const QModelIndex& index) {
 }
 
 void ProcessBehaviorChartDock::typeChanged(int index) {
-	const auto type  = static_cast<ProcessBehaviorChart::Type>(ui.cbType->itemData(index).toInt());
+	const auto type = static_cast<ProcessBehaviorChart::Type>(ui.cbType->itemData(index).toInt());
+	bool visible = (type == ProcessBehaviorChart::Type::XbarR || type == ProcessBehaviorChart::Type::R || type == ProcessBehaviorChart::Type::XbarS
+					|| type == ProcessBehaviorChart::Type::S);
 
-	bool visible = (type == ProcessBehaviorChart::Type::XbarR || type == ProcessBehaviorChart::Type::R
-				|| type == ProcessBehaviorChart::Type::XbarS || type == ProcessBehaviorChart::Type::S);
 	ui.lSubgroupSize->setVisible(visible);
 	ui.sbSubgroupSize->setVisible(visible);
 
@@ -236,7 +236,7 @@ void ProcessBehaviorChartDock::typeChanged(int index) {
 
 void ProcessBehaviorChartDock::limitsMetricChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
-	const auto limitsMetric  = static_cast<ProcessBehaviorChart::LimitsMetric>(ui.cbType->itemData(index).toInt());
+	const auto limitsMetric = static_cast<ProcessBehaviorChart::LimitsMetric>(ui.cbType->itemData(index).toInt());
 	for (auto* plot : m_plots)
 		plot->setLimitsMetric(limitsMetric);
 }
