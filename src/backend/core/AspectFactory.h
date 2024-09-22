@@ -1,11 +1,9 @@
 /*
-	File                 : AbstractAspect.h
+	File                 : AspectFactory.h
 	Project              : LabPlot
-	Description          : Base class for all objects in a Project.
+	Description          : Factory to create an object instance from its type
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
-	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 

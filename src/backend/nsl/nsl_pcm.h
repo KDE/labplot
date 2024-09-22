@@ -75,7 +75,7 @@ double nsl_pcm_A4(unsigned int n);
 double nsl_pcm_B3(unsigned int n);
 
 /*!
- * scaling factor B3 used to define the upper limit in the S chart for the subgroup size \c n,
+ * scaling factor B4 used to define the upper limit in the S chart for the subgroup size \c n,
  * obtained by multiplying the mean standard deviation with this factor.
  */
 double nsl_pcm_B4(unsigned int n);
