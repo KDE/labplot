@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-21 01:49+0000\n"
-"PO-Revision-Date: 2024-09-04 17:39+0200\n"
+"PO-Revision-Date: 2024-09-21 07:54+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -12405,13 +12405,14 @@ msgstr "DBC-fil (*.dbc)"
 #, kde-format
 msgid ""
 "Origin Project files need to be opened with \"Import -> Origin Project\"!"
-msgstr ""
+msgstr "Origin-projektfiler måste öppnas med \"Importera -> Origin-projekt\"."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1061
 #, kde-format
 msgid ""
 "LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"
 msgstr ""
+"Labplot-projektfiler måste öppnas med \"Importera -> Labplot-projekt\"."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1188

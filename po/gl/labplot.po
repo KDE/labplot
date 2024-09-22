@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-21 01:49+0000\n"
-"PO-Revision-Date: 2024-09-04 17:30+0200\n"
+"PO-Revision-Date: 2024-09-21 16:01+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -12439,12 +12439,16 @@ msgstr "Ficheiro DBC (*.dbc)"
 msgid ""
 "Origin Project files need to be opened with \"Import -> Origin Project\"!"
 msgstr ""
+"Ten que abrir os ficheiros de proxecto de Origin con «Importar → Proxecto de "
+"Origin»."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1061
 #, kde-format
 msgid ""
 "LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"
 msgstr ""
+"Ten que abrir os ficheiros de proxecto de LabPlot con «Importar → Proxecto "
+"de LabPlot»."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1188

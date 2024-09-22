@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-21 01:49+0000\n"
-"PO-Revision-Date: 2024-09-04 11:45+0300\n"
+"PO-Revision-Date: 2024-09-21 09:28+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -12505,12 +12505,16 @@ msgstr "файл DBC (*.dbc)"
 msgid ""
 "Origin Project files need to be opened with \"Import -> Origin Project\"!"
 msgstr ""
+"Файли проєктів Origin слід відкривати за допомогою пункту меню «Імпорт -> "
+"Проєкт Origin»!"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1061
 #, kde-format
 msgid ""
 "LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"
 msgstr ""
+"Файли проєктів LabPlot слід відкривати за допомогою пункту меню «Імпорт -> "
+"Проєкт LabPlot»!"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1188

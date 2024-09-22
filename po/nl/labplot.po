@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-21 01:49+0000\n"
-"PO-Revision-Date: 2024-09-04 13:58+0200\n"
+"PO-Revision-Date: 2024-09-21 10:55+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.08.0\n"
+"X-Generator: Lokalize 24.08.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -12414,12 +12414,16 @@ msgstr "DBC-bestand (*.dbc)"
 msgid ""
 "Origin Project files need to be opened with \"Import -> Origin Project\"!"
 msgstr ""
+"Bestanden van oorspronkelijk project moeten geopend worden met \"Importeren -"
+"> Oorspronkelijk project\"!"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1061
 #, kde-format
 msgid ""
 "LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"
 msgstr ""
+"Projectbestanden van LabPlot moeten geopend worden met \"Importeren -> "
+"LabPlot-project\"!"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1188

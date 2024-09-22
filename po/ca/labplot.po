@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-21 01:49+0000\n"
-"PO-Revision-Date: 2024-09-04 18:39+0200\n"
+"PO-Revision-Date: 2024-09-21 12:13+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -12532,12 +12532,16 @@ msgstr "Fitxer DBC (*.dbc)"
 msgid ""
 "Origin Project files need to be opened with \"Import -> Origin Project\"!"
 msgstr ""
+"Els fitxers dels projectes Origin cal que s'obrin amb «Importa -> Projecte "
+"de l'Origin»!"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1061
 #, kde-format
 msgid ""
 "LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"
 msgstr ""
+"Els fitxers dels projectes LabPlot cal que s'obrin amb «Importa -> Projecte "
+"del LabPlot»!"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1188
