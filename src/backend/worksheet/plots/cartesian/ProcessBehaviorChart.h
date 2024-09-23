@@ -14,8 +14,9 @@
 
 class AbstractColumn;
 class Line;
-class Symbol;
 class ProcessBehaviorChartPrivate;
+class Symbol;
+class XYCurve;
 
 #ifdef SDK
 #include "labplot_export.h"
@@ -85,6 +86,13 @@ private:
 
 	QAction* navigateToAction{nullptr};
 	bool m_menusInitialized{false};
+
+	// private methods used in tests
+	friend class StatisticalPlotsTest;
+	double center() const;
+	double upperLimit() const;
+	double lowerLimit() const;
+	XYCurve* dataCurve() const;
 
 Q_SIGNALS:
 	void linesUpdated(const ProcessBehaviorChart*, const QVector<QLineF>&);

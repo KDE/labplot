@@ -63,6 +63,10 @@ public:
 	int subgroupSize{5};
 
 	ProcessBehaviorChart* const q;
+
+	double center{0.};
+	double upperLimit{0.};
+	double lowerLimit{0.};
 };
 
 #endif

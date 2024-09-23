@@ -18,6 +18,7 @@
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/ProcessBehaviorChart.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
 
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
@@ -552,6 +553,98 @@ void StatisticalPlotsTest::testPBChartDuplicate() {
 
 	auto children = p->children<ProcessBehaviorChart>();
 	QCOMPARE(children.size(), 2);
+}
+
+/*!
+ * test the X (XmR) chart, the example is taken from Wheeler "Making Sense of Data", chapter seven.
+ */
+void StatisticalPlotsTest::testPBChartXmRAverage() {
+	// prepare the data
+	auto* column = new Column(QLatin1String("data"), AbstractColumn::ColumnMode::Integer);
+	column->setIntegers({11, 4, 6, 4, 5, 7, 5, 4, 7, 12, 4, 2, 4, 5, 6, 4, 2, 2, 5, 9, 5, 6, 5, 9});
+
+	// prepare the worksheet + plot
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
+	pbc->setDataColumn(column);
+	pbc->setType(ProcessBehaviorChart::Type::XmR);
+	pbc->setLimitsMetric(ProcessBehaviorChart::LimitsMetric::Average);
+	p->addChild(pbc);
+
+	// check the limits
+	QCOMPARE(pbc->center(), 5.54);
+	QCOMPARE(pbc->upperLimit(), 12.48);
+	QCOMPARE(pbc->lowerLimit(), 0.0);
+
+	// check the plotted data ("statistics")
+	auto* xColumn = pbc->dataCurve()->xColumn();
+	auto* yColumn = pbc->dataCurve()->yColumn();
+
+	// the original data is plotted
+	QCOMPARE(yColumn, column);
+	QCOMPARE(yColumn->rowCount(), 24);
+
+	// index from 1 to 24 is used for x
+	QCOMPARE(xColumn->rowCount(), 24);
+	for (int i = 0; i < 24; ++i)
+		QCOMPARE(xColumn->valueAt(i), i + 1);
+}
+
+/*!
+ * test the mR (XmR) chart, the example is taken from Wheeler "Making Sense of Data", chapter seven.
+ */
+void StatisticalPlotsTest::testPBChartmRAverage() {
+	// prepare the data
+	auto* column = new Column(QLatin1String("data"), AbstractColumn::ColumnMode::Integer);
+	column->setIntegers({11, 4, 6, 4, 5, 7, 5, 4, 7, 12, 4, 2, 4, 5, 6, 4, 2, 2, 5, 9, 5, 6, 5, 9});
+
+	// prepare the worksheet + plot
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
+	pbc->setDataColumn(column);
+	pbc->setType(ProcessBehaviorChart::Type::mR);
+	pbc->setLimitsMetric(ProcessBehaviorChart::LimitsMetric::Average);
+	p->addChild(pbc);
+
+	// check the limits
+	QCOMPARE(pbc->center(), 2.61);
+	QCOMPARE(pbc->upperLimit(), 8.5);
+	QCOMPARE(pbc->lowerLimit(), 0.0);
+
+	// check the plotted data ("statistics")
+	auto* xColumn = pbc->dataCurve()->xColumn();
+	auto* yColumn = pbc->dataCurve()->yColumn();
+
+	// the original data is plotted
+	QCOMPARE(yColumn, column);
+	QCOMPARE(yColumn->rowCount(), 24);
+
+	// index from 1 to 24 is used for x
+	QCOMPARE(xColumn->rowCount(), 24);
+	for (int i = 0; i < 24; ++i)
+		QCOMPARE(xColumn->valueAt(i), i + 1);
+}
+
+void StatisticalPlotsTest::testPBChartXmRMedian() {
+
+}
+
+void StatisticalPlotsTest::testPBChartmRMedian() {
+
+}
+
+void StatisticalPlotsTest::testPBChartXBarRAverage() {
+
+}
+
+void StatisticalPlotsTest::testPBChartXBarRMedian() {
+
 }
 
 QTEST_MAIN(StatisticalPlotsTest)

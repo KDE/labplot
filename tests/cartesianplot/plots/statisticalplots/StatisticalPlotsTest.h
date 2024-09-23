@@ -42,6 +42,15 @@ private Q_SLOTS:
 	// process behavior chart
 	void testPBChartInit();
 	void testPBChartDuplicate();
+
+	void testPBChartXmRAverage();
+	void testPBChartmRAverage();
+
+	void testPBChartXmRMedian();
+	void testPBChartmRMedian();
+
+	void testPBChartXBarRAverage();
+	void testPBChartXBarRMedian();
 };
 
 #endif

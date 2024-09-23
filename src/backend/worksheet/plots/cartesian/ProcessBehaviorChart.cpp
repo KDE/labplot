@@ -312,6 +312,26 @@ QColor ProcessBehaviorChart::color() const {
 	return d->dataCurve->color();
 }
 
+double ProcessBehaviorChart::center() const {
+	Q_D(const ProcessBehaviorChart);
+	return d->center;
+}
+
+double ProcessBehaviorChart::upperLimit() const {
+	Q_D(const ProcessBehaviorChart);
+	return d->upperLimit;
+}
+
+double ProcessBehaviorChart::lowerLimit() const {
+	Q_D(const ProcessBehaviorChart);
+	return d->lowerLimit;
+}
+
+XYCurve* ProcessBehaviorChart::dataCurve() const {
+	Q_D(const ProcessBehaviorChart);
+	return d->dataCurve;
+}
+
 // ##############################################################################
 // #################  setter methods and undo commands ##########################
 // ##############################################################################
@@ -412,6 +432,9 @@ void ProcessBehaviorChartPrivate::recalc() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	if (!dataColumn) {
+		center = 0.;
+		upperLimit = 0.;
+		lowerLimit = 0.;
 		xCenterColumn->clear();
 		yCenterColumn->clear();
 		xUpperLimitColumn->clear();
@@ -456,9 +479,9 @@ void ProcessBehaviorChartPrivate::recalc() {
  */
 void ProcessBehaviorChartPrivate::updateControlLimits() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
-	double center = 0.;
-	double upperLimit = 0.;
-	double lowerLimit = 0.;
+	center = 0.;
+	upperLimit = 0.;
+	lowerLimit = 0.;
 	const int count = dataColumn->rowCount();
 
 	switch (type) {
