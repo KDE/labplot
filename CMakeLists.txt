@@ -321,10 +321,9 @@ endif()
 find_package(GSL REQUIRED)
 
 find_package(Poppler "0.62.0" COMPONENTS Qt${QT_MAJOR_VERSION})
-# TODO: support Poppler-Qt6
-if(Poppler_FOUND AND (QT_MAJOR_VERSION LESS 6))
+if(Poppler_FOUND)
     include_directories(${Poppler_INCLUDE_DIRS})
-    # message(STATUS "Poppler libraries: ${Poppler_LIBRARIES}")
+    message(STATUS "Poppler libraries: ${Poppler_LIBRARIES}")
     add_definitions(-DHAVE_POPPLER)
 endif()
 

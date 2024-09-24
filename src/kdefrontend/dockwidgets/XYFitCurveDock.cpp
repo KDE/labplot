@@ -31,10 +31,6 @@
 #include <QStandardPaths>
 #include <QWidgetAction>
 
-#ifdef HAVE_POPPLER
-#include <poppler-qt5.h>
-#endif
-
 /*!
   \class XYFitCurveDock
   \brief  Provides a widget for editing the properties of the XYFitCurves
@@ -1033,6 +1029,7 @@ void XYFitCurveDock::updateModelEquation() {
 		}
 
 		if (image.isNull()) {
+			DEBUG(Q_FUNC_INFO << ", WARNING: model image is null!")
 			uiGeneralTab.lEquation->hide();
 			uiGeneralTab.lFuncPic->hide();
 		} else {
