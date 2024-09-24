@@ -61,6 +61,18 @@ void XYFunctionCurve::handleAspectUpdated(const QString& aspectPath, const Abstr
 	d->handleAspectUpdated(aspectPath, element);
 }
 
+bool XYFunctionCurve::usingColumn(const Column* column) const {
+	for (const auto& d : functionData()) {
+		const auto* curve = d.curve();
+		if (curve) {
+			if (curve->xColumn() == column || curve->yColumn() == column)
+				return true;
+		}
+	}
+
+	return false;
+}
+
 // ##############################################################################
 // #################  setter methods and undo commands ##########################
 // ##############################################################################
