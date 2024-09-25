@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-21 01:49+0000\n"
+"POT-Creation-Date: 2024-09-25 01:48+0000\n"
 "PO-Revision-Date: 2024-09-21 09:28+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -1137,7 +1137,7 @@ msgstr "Не вдалося відкрити пристрій або файл а
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2538
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2556
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2573
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:145
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:188
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:182
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:65
@@ -6572,7 +6572,7 @@ msgstr "Статистика (розподіли)"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:242
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:171
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:277
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:788
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:784
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:81
 #, kde-format
 msgid "Custom"
@@ -8083,7 +8083,7 @@ msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:442
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:498
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:77
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:73
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:239
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:143
 #, kde-format
@@ -9478,7 +9478,7 @@ msgid "PARAMETERS"
 msgstr "ПАРАМЕТРИ"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:145
 #, kde-format
 msgid "Uncertainty"
 msgstr "Невизначеність"
@@ -9494,13 +9494,13 @@ msgid "t Statistic"
 msgstr "t-статистика"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1886
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:150
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:146
 #, kde-format
 msgid "Lower"
 msgstr "Нижній"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1886
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:150
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:146
 #, kde-format
 msgid "Upper"
 msgstr "Верхній"
@@ -9544,7 +9544,7 @@ msgstr "Кор. коефіцієнт визначеності"
 #. i18n: ectx: property (text), widget (QPushButton, bTest)
 #. i18n: ectx: property (text), widget (QPushButton, bTestConnection)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1909
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:181
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:177
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:263
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:168
 #, kde-format
@@ -9582,7 +9582,7 @@ msgid "Not sufficient weight data points provided!"
 msgstr "Надано недостатню кількість точок даних для зважування!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2335
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:374
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:370
 #, kde-format
 msgid "No X data available!"
 msgstr "Немає доступних даних X!"
@@ -9618,47 +9618,47 @@ msgstr "Немає доступних точок даних."
 msgid "%1: set transform options and perform the Fourier transform"
 msgstr "%1: встановити параметри перетворення та виконати перетворення Фур'є"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:80
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:92
 #, kde-format
 msgid "%1: set function"
 msgstr "%1: встановити функцію"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:304
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:316
 #, kde-format
 msgid "First curve not valid"
 msgstr "Перша крива є некоректною"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:306
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:318
 #, kde-format
 msgid "xColumn of first curve not valid"
 msgstr "Стовпчик x першої кривої не некоректним"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:308
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:320
 #, kde-format
 msgid "yColumn of first curve not valid"
 msgstr "Стовпчик y першої кривої не некоректним"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:310
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:322
 #, kde-format
 msgid "Number of x and y values do not match for the first curve"
 msgstr "Кількості значень x та y для першої кривої не збігаються"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:323
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:335
 #, kde-format
 msgid "Curve '%1' not valid"
 msgstr "Крива «%1» є некоректною"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:325
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:337
 #, kde-format
 msgid "xColumn of curve '%1' not valid"
 msgstr "Стовпчик x кривої «%1» є некоректним"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:327
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:339
 #, kde-format
 msgid "yColumn of curve '%1' not valid"
 msgstr "Стовпчик y кривої «%1» є некоректним"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:329
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:341
 #, kde-format
 msgid "Number of x and y values do not match for curve '%1'"
 msgstr "Кількості точок даних x та y для кривої «%1» не збігаються"
@@ -11333,7 +11333,7 @@ msgstr ""
 #: src/commonfrontend/workbook/WorkbookView.cpp:165
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:116
 #: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:57
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:75
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:71
 #: src/kdefrontend/MainWin.cpp:613 src/kdefrontend/MainWin.cpp:1909
 #: src/kdefrontend/SettingsDialog.cpp:68
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:122
@@ -14334,7 +14334,7 @@ msgid "calculation time: %1 ms"
 msgstr "тривалість обчислення: %1 мс"
 
 #: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:58
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:76
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:72
 #, kde-format
 msgid "XY-Curve"
 msgstr "XY-крива"
@@ -14577,38 +14577,38 @@ msgstr "t, мін."
 msgid "t, max"
 msgstr "t, макс."
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:145
 #, kde-format
 msgid "Uncertainty, %"
 msgstr "Невизначеність, %"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:145
 #, kde-format
 msgid "t statistic"
 msgstr "t-статистика"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:368
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:364
 #, kde-format
 msgid "No X and Y column specified!"
 msgstr "Не вказано стовпчиків X та Y!"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:370
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:366
 #, kde-format
 msgid "No X column specified!"
 msgstr "Не вказано стовпчика X!"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:372
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:368
 #, kde-format
 msgid "No Y column specified!"
 msgstr "Не вказано стовпчика Y!"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:376
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:372
 #, kde-format
 msgid "No Y data available!"
 msgstr "Немає доступних даних Y!"
 
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceCurve)
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:431
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:427
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:217
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:359
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:452
@@ -14622,19 +14622,19 @@ msgstr "Немає доступних даних Y!"
 msgid "Curve:"
 msgstr "Крива:"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:452
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:448
 #, kde-format
 msgid "Histogram:"
 msgstr "Гістограма:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:836
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:832
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:517
 #, kde-format
 msgid "Degree:"
 msgstr "Порядок:"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:896
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:895
 #, kde-format
 msgid "Number of peaks:"
 msgstr "Кількість піків:"
