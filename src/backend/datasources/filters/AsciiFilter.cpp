@@ -222,7 +222,7 @@ size_t AsciiFilter::lineNumber(const QString& fileName, const size_t maxLines) {
 			size_t lineCount = 0;
 			while (cmd.waitForReadyRead()) {
 				QString line = QLatin1String(cmd.readLine());
-				QDEBUG("line count command output: " << line)
+				QDEBUG(Q_FUNC_INFO << ", line count command output: " << line)
 				// wc on macOS has leading spaces: use SkipEmptyParts
 				lineCount = line.split(QLatin1Char(' '), Qt::SkipEmptyParts).at(0).toInt();
 			}
@@ -434,19 +434,19 @@ QString AsciiFilterPrivate::separator() const {
 // ############################# Read ##################################
 // #####################################################################
 /*!
- * returns -1 if the device couldn't be opened, 1 if the current read position in the device is at the end and 0 otherwise.
+ * Prepare device for reading data
  */
-int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device, const size_t maxLines) {
+AsciiFilterPrivate::PrepareDeviceStatus AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device, const size_t maxLines) {
 	DEBUG(Q_FUNC_INFO << ", is sequential = " << device.isSequential() << ", can readLine = " << device.canReadLine());
 
 	if (!device.open(QIODevice::ReadOnly)) {
 		DEBUG(Q_FUNC_INFO << ", ERROR: could not open file for reading!")
-		return -1;
+		return PrepareDeviceStatus::OPEN_FAIL;
 	}
 
 	if (device.atEnd() && !device.isSequential()) { // empty file
 		DEBUG(Q_FUNC_INFO << ", ERROR: file is empty!")
-		return 1;
+		return PrepareDeviceStatus::EMPTY_FILE;
 	}
 
 	// NEW method
@@ -682,9 +682,9 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device, const size_t maxL
 	DEBUG("actual cols/rows (w/o header): " << m_actualCols << ' ' << m_actualRows);
 
 	if (m_actualRows == 0 && !device.isSequential())
-		return 1;
+		return PrepareDeviceStatus::EMPTY_FILE;
 
-	return 0;
+	return PrepareDeviceStatus::OK;
 }
 
 /*!
@@ -726,10 +726,15 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 		switch (sourceType) {
 		case LiveDataSource::SourceType::FileOrPipe: {
-			const int deviceError = prepareDeviceToRead(device);
-			if (deviceError != 0) {
-				DEBUG(Q_FUNC_INFO << ", Device ERROR: " << deviceError);
-				q->setLastError(i18n("Failed to open the device/file or it's empty."));
+			const auto deviceError = prepareDeviceToRead(device);
+			switch (deviceError) {
+			case PrepareDeviceStatus::OK:
+				break;
+			case PrepareDeviceStatus::OPEN_FAIL:
+				q->setLastError(i18n("Failed to open the device/file."));
+				return 0;
+			case PrepareDeviceStatus::EMPTY_FILE:
+				q->setLastError(i18n("device/file seems to be empty."));
 				return 0;
 			}
 			break;
@@ -1242,10 +1247,15 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 	DEBUG(Q_FUNC_INFO << ", start row: " << startRow)
 
 	if (!m_prepared) {
-		const int deviceError = prepareDeviceToRead(device);
-		if (deviceError) {
-			DEBUG(Q_FUNC_INFO << ", DEVICE ERROR = " << deviceError);
-			q->setLastError(i18n("Failed to open the device/file or it's empty."));
+		const auto deviceError = prepareDeviceToRead(device);
+		switch (deviceError) {
+		case PrepareDeviceStatus::OK:
+			break;
+		case PrepareDeviceStatus::OPEN_FAIL:
+			q->setLastError(i18n("Failed to open the device/file."));
+			return;
+		case PrepareDeviceStatus::EMPTY_FILE:
+			q->setLastError(i18n("device/file seems to be empty."));
 			return;
 		}
 
@@ -1564,11 +1574,16 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	DEBUG(Q_FUNC_INFO)
 
 	KCompressionDevice device(fileName);
-	const int deviceError = prepareDeviceToRead(device, lines);
+	const auto deviceError = prepareDeviceToRead(device, lines);
 
-	if (deviceError != 0) {
-		DEBUG("Device error = " << deviceError);
-		q->setLastError(i18n("Failed to open the device/file or it's empty."));
+	switch (deviceError) {
+	case PrepareDeviceStatus::OK:
+		break;
+	case PrepareDeviceStatus::OPEN_FAIL:
+		q->setLastError(i18n("Failed to open the device/file."));
+		return {};
+	case PrepareDeviceStatus::EMPTY_FILE:
+		q->setLastError(i18n("device/file seems to be empty."));
 		return {};
 	}
 
