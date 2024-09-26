@@ -14,8 +14,10 @@
         "--share=ipc",
         "--socket=wayland",
         "--socket=fallback-x11",
+        "--device=dri",
         "--filesystem=host",
-        "--filesystem=/tmp"
+        "--filesystem=/tmp",
+        "--filesystem=xdg-documents"
     ],
     "cleanup": [
         "/include",
