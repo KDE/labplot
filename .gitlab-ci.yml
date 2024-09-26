@@ -11,10 +11,10 @@ include:
       - /gitlab-templates/clang-format.yml
 #      - /gitlab-templates/linux.yml
 #      - /gitlab-templates/windows.yml
-#      - /gitlab-templates/linux-qt6.yml
-#      - /gitlab-templates/windows-qt6.yml
+      - /gitlab-templates/linux-qt6.yml
+      - /gitlab-templates/windows-qt6.yml
 #      - /gitlab-templates/freebsd.yml
-#      - /gitlab-templates/freebsd-qt6.yml
+      - /gitlab-templates/freebsd-qt6.yml
 ### DEPLOY
 #      - /gitlab-templates/craft-appimage.yml
       - /gitlab-templates/craft-appimage-qt6.yml
