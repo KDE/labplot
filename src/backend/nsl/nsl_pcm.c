@@ -335,21 +335,21 @@ static const double d4_values[] = {
 };
 
 double nsl_pcm_d2(unsigned int n) {
-	if (n < 0 || n > 100) // outside the precomputed range
+	if (n > 100) // outside the precomputed range
 		return 0.0;
 
 	return d2_values[n];
 }
 
 double nsl_pcm_d3(unsigned int n) {
-	if (n < 0 || n > 100) // outside the precomputed range
+	if (n > 100) // outside the precomputed range
 		return 0.0;
 
 	return d3_values[n];
 }
 
 double nsl_pcm_d4(unsigned int n) {
-	if (n < 0 || n > 25) // outside the precomputed range
+	if (n > 25) // outside the precomputed range
 		return 0.0;
 
 	return d4_values[n];

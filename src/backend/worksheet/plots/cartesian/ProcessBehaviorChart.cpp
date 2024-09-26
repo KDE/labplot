@@ -71,7 +71,7 @@ void ProcessBehaviorChart::init() {
 	d->dataCurve->symbol()->setStyle(Symbol::Style::Circle);
 	d->dataCurve->background()->setPosition(Background::Position::No);
 
-	d->xColumn = new Column(QStringLiteral("x"));
+	d->xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	d->xColumn->setHidden(true);
 	d->xColumn->setUndoAware(false);
 	addChildFast(d->xColumn);
@@ -91,7 +91,7 @@ void ProcessBehaviorChart::init() {
 	d->centerCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 	d->centerCurve->background()->setPosition(Background::Position::No);
 
-	d->xCenterColumn = new Column(QStringLiteral("xCenter"));
+	d->xCenterColumn = new Column(QStringLiteral("xCenter"), AbstractColumn::ColumnMode::Integer);
 	d->xCenterColumn->setHidden(true);
 	d->xCenterColumn->setUndoAware(false);
 	addChildFast(d->xCenterColumn);
@@ -113,7 +113,7 @@ void ProcessBehaviorChart::init() {
 	d->upperLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 	d->upperLimitCurve->background()->setPosition(Background::Position::No);
 
-	d->xUpperLimitColumn = new Column(QStringLiteral("xUpperLimit"));
+	d->xUpperLimitColumn = new Column(QStringLiteral("xUpperLimit"), AbstractColumn::ColumnMode::Integer);
 	d->xUpperLimitColumn->setHidden(true);
 	d->xUpperLimitColumn->setUndoAware(false);
 	addChildFast(d->xUpperLimitColumn);
@@ -134,7 +134,7 @@ void ProcessBehaviorChart::init() {
 	d->lowerLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 	d->lowerLimitCurve->background()->setPosition(Background::Position::No);
 
-	d->xLowerLimitColumn = new Column(QStringLiteral("xLowerLimit"));
+	d->xLowerLimitColumn = new Column(QStringLiteral("xLowerLimit"), AbstractColumn::ColumnMode::Integer);
 	d->xLowerLimitColumn->setHidden(true);
 	d->xLowerLimitColumn->setUndoAware(false);
 	addChildFast(d->xLowerLimitColumn);
@@ -451,22 +451,22 @@ void ProcessBehaviorChartPrivate::recalc() {
 	else
 		count = dataColumn->rowCount() / subgroupSize;
 
-	const double xMin = 1.;
-	const double xMax = count;
+	const int xMin = 1;
+	const int xMax = count;
 	xColumn->clear();
 	xColumn->resizeTo(count);
 	for (int i = 0; i < count; ++i)
-		xColumn->setValueAt(i, i + 1);
+		xColumn->setIntegerAt(i, i + 1);
 
 	dataCurve->setXColumn(xColumn);
 
 	// min and max values for x
-	xCenterColumn->setValueAt(0, xMin);
-	xCenterColumn->setValueAt(1, xMax);
-	xUpperLimitColumn->setValueAt(0, xMin);
-	xUpperLimitColumn->setValueAt(1, xMax);
-	xLowerLimitColumn->setValueAt(0, xMin);
-	xLowerLimitColumn->setValueAt(1, xMax);
+	xCenterColumn->setIntegerAt(0, xMin);
+	xCenterColumn->setIntegerAt(1, xMax);
+	xUpperLimitColumn->setIntegerAt(0, xMin);
+	xUpperLimitColumn->setIntegerAt(1, xMax);
+	xLowerLimitColumn->setIntegerAt(0, xMin);
+	xLowerLimitColumn->setIntegerAt(1, xMax);
 
 	updateControlLimits();
 
@@ -484,6 +484,9 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 	lowerLimit = 0.;
 	const int count = dataColumn->rowCount();
 
+	yColumn->clear();
+	yColumn->resizeTo(xColumn->rowCount());
+
 	switch (type) {
 	case ProcessBehaviorChart::Type::XmR: {
 		// calculate the mean moving range
@@ -500,7 +503,8 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 
 			// upper and lower limits
 			const double meanMovingRange = gsl_stats_mean(movingRange.data(), 1, movingRange.size());
-			const double E2 = 2.66; // 2.66 is 3 / d2 for n = 2 (two values used to calculate the ranges)
+			const double d2 = nsl_pcm_d2(2);  // n = 2, two values used to calculate the ranges
+			const double E2 = 3 / d2;
 			upperLimit = mean + E2 * meanMovingRange;
 			lowerLimit = mean - E2 * meanMovingRange;
 		} else {
@@ -510,7 +514,8 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 
 			// upper and lower limits
 			const double medianMovingRange = gsl_stats_median(movingRange.data(), 1, movingRange.size());
-			const double E5 = 3.145; // 3.145 is 3 / d4 for n = 2 (two values used to calculate the ranges)
+			const double d4 = nsl_pcm_d4(2);  // n = 2, two values used to calculate the ranges
+			const double E5 = 3 / d4;
 			upperLimit = median + E5 * medianMovingRange;
 			lowerLimit = median - E5 * medianMovingRange;
 		}
@@ -524,13 +529,10 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		break;
 	}
 	case ProcessBehaviorChart::Type::mR: {
-		yColumn->clear();
-		yColumn->resizeTo(count);
-
 		// calculate the mean moving ranges
 		for (int i = 1; i < count; ++i) {
 			if (dataColumn->isValid(i) && !dataColumn->isMasked(i) && dataColumn->isValid(i - 1) && !dataColumn->isMasked(i - 1))
-				yColumn->setValueAt(i - 1, std::abs(dataColumn->valueAt(i) - dataColumn->valueAt(i - 1)));
+				yColumn->setValueAt(i, std::abs(dataColumn->valueAt(i) - dataColumn->valueAt(i - 1)));
 		}
 
 		if (limitsMetric == ProcessBehaviorChart::LimitsMetric::Average) {
@@ -539,16 +541,20 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 			center = meanMovingRange;
 
 			// upper and lower limits
-			upperLimit = 3.268 * meanMovingRange; // D4 = 3.268 for n = 2 // TODO: 267(page) or 268(appendix)?
-			lowerLimit = 0.; // D3 = 0 for n = 2
+			const double D3 = nsl_pcm_D3(2);
+			const double D4 = nsl_pcm_D4(2);
+			upperLimit = D4 * meanMovingRange;
+			lowerLimit = D3 * meanMovingRange;
 		} else { // median
 			// center line
 			const double medianMovingRange = yColumn->statistics().median;
 			center = medianMovingRange;
 
 			// upper and lower limits
-			upperLimit = 3.866 * medianMovingRange; // D6 = 3.866 for n = 2
-			lowerLimit = 0.; // D5 = 0 for n = 2
+			const double D5 = nsl_pcm_D5(2);
+			const double D6 = nsl_pcm_D6(2);
+			upperLimit = D6 * medianMovingRange;
+			lowerLimit = D5 * medianMovingRange;
 		}
 
 		// plotted data - moving ranges
@@ -557,9 +563,6 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		break;
 	}
 	case ProcessBehaviorChart::Type::XbarR: {
-		yColumn->clear();
-		yColumn->resizeTo(subgroupSize);
-
 		// calculate the mean for each subgroup
 		int groupIndex = 0;
 		for (int i = 0; i < count; i += subgroupSize) {
@@ -614,9 +617,6 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		break;
 	}
 	case ProcessBehaviorChart::Type::R: {
-		yColumn->clear();
-		yColumn->resizeTo(subgroupSize);
-
 		// Calculate the range of subgroups
 		int groupIndex = 0;
 		for (int i = 0; i < count; i += subgroupSize) {
@@ -705,9 +705,6 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		break;
 	}
 	case ProcessBehaviorChart::Type::S: {
-		yColumn->clear();
-		yColumn->resizeTo(subgroupSize);
-
 		// Calculate the standard deviation for each subgroup
 		int groupIndex = 0;
 		for (int i = 0; i < count; i += subgroupSize) {

@@ -556,7 +556,7 @@ void StatisticalPlotsTest::testPBChartDuplicate() {
 }
 
 /*!
- * test the X (XmR) chart, the example is taken from Wheeler "Making Sense of Data", chapter seven.
+ * test the X (XmR) chart using Average for the limits, the example is taken from Wheeler "Making Sense of Data", chapter seven.
  */
 void StatisticalPlotsTest::testPBChartXmRAverage() {
 	// prepare the data
@@ -574,27 +574,26 @@ void StatisticalPlotsTest::testPBChartXmRAverage() {
 	pbc->setLimitsMetric(ProcessBehaviorChart::LimitsMetric::Average);
 	p->addChild(pbc);
 
-	// check the limits
-	QCOMPARE(pbc->center(), 5.54);
-	QCOMPARE(pbc->upperLimit(), 12.48);
-	QCOMPARE(pbc->lowerLimit(), 0.0);
+	// check the limits, two digit comparison with the values from the book
+	QCOMPARE(std::round(pbc->center() * 100) / 100, 5.54);
+	QCOMPARE(std::round(pbc->upperLimit() * 100) / 100, 12.48);
+	QCOMPARE(pbc->lowerLimit(), 0);
 
-	// check the plotted data ("statistics")
-	auto* xColumn = pbc->dataCurve()->xColumn();
+	// check the plotted data ("statistics") - the original data is plotted
+	const int rowCount = column->rowCount();
 	auto* yColumn = pbc->dataCurve()->yColumn();
-
-	// the original data is plotted
 	QCOMPARE(yColumn, column);
-	QCOMPARE(yColumn->rowCount(), 24);
+	QCOMPARE(yColumn->rowCount(), rowCount);
 
 	// index from 1 to 24 is used for x
-	QCOMPARE(xColumn->rowCount(), 24);
-	for (int i = 0; i < 24; ++i)
+	auto* xColumn = pbc->dataCurve()->xColumn();
+	QCOMPARE(xColumn->rowCount(), rowCount);
+	for (int i = 0; i < rowCount; ++i)
 		QCOMPARE(xColumn->valueAt(i), i + 1);
 }
 
 /*!
- * test the mR (XmR) chart, the example is taken from Wheeler "Making Sense of Data", chapter seven.
+ * test the mR (XmR) chart using Average for the limits, the example is taken from Wheeler "Making Sense of Data", chapter seven.
  */
 void StatisticalPlotsTest::testPBChartmRAverage() {
 	// prepare the data
@@ -612,31 +611,100 @@ void StatisticalPlotsTest::testPBChartmRAverage() {
 	pbc->setLimitsMetric(ProcessBehaviorChart::LimitsMetric::Average);
 	p->addChild(pbc);
 
-	// check the limits
-	QCOMPARE(pbc->center(), 2.61);
-	QCOMPARE(pbc->upperLimit(), 8.5);
-	QCOMPARE(pbc->lowerLimit(), 0.0);
+	// check the limits, two digit comparison with the values from the book
+	QCOMPARE(std::round(pbc->center() * 100) / 100, 2.61);
+	QCOMPARE(std::round(pbc->upperLimit() * 100) / 100, 8.52); // in the book 3.27*2.61 \ approx 8.52 is used which is less precise than 3.26653*2.6087 \approx 8.52
+	QCOMPARE(pbc->lowerLimit(), 0);
 
-	// check the plotted data ("statistics")
-	auto* xColumn = pbc->dataCurve()->xColumn();
+	// check the plotted data ("statistics") - 23 moving ranges are plotted
+	const int rowCount = 24; // total count 24, first value not available/used/plotted
 	auto* yColumn = pbc->dataCurve()->yColumn();
-
-	// the original data is plotted
-	QCOMPARE(yColumn, column);
-	QCOMPARE(yColumn->rowCount(), 24);
+	QCOMPARE(yColumn->rowCount(), rowCount);
+	const QVector<double> ref = {7, 2, 2, 1, 2, 2, 1, 3, 5, 8, 2, 2, 1, 1, 2, 2, 0, 3, 4, 4, 1, 1, 4};
+	for (int i = 0; i < rowCount - 1; ++i)
+		QCOMPARE(yColumn->valueAt(i + 1), ref.at(i));
 
 	// index from 1 to 24 is used for x
-	QCOMPARE(xColumn->rowCount(), 24);
-	for (int i = 0; i < 24; ++i)
+	auto* xColumn = pbc->dataCurve()->xColumn();
+	QCOMPARE(xColumn->rowCount(), rowCount);
+	for (int i = 0; i < rowCount; ++i)
+		QCOMPARE(xColumn->valueAt(i), i +  1);
+}
+
+/*!
+ * test the X (XmR) chart using Median for the limits, the example is taken from Wheeler "Making Sense of Data", chapter ten.
+ */
+void StatisticalPlotsTest::testPBChartXmRMedian() {
+	// prepare the data
+	auto* column = new Column(QLatin1String("data"), AbstractColumn::ColumnMode::Integer);
+	column->setIntegers({260, 130, 189, 1080, 175, 200, 193, 120, 33, 293, 195, 571, 55698, 209, 1825, 239, 290, 254, 93, 278, 185, 123, 9434, 408, 570, 118, 238, 207, 153, 209, 243, 110, 306, 343, 244});
+
+	// prepare the worksheet + plot
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
+	pbc->setDataColumn(column);
+	pbc->setType(ProcessBehaviorChart::Type::XmR);
+	pbc->setLimitsMetric(ProcessBehaviorChart::LimitsMetric::Median);
+	p->addChild(pbc);
+
+	// check the limits, two digit comparison with the values from the book
+	QCOMPARE(std::round(pbc->center() * 100) / 100, 238);
+	QCOMPARE(std::round(pbc->upperLimit() * 100) / 100, 631.08); // in the book 630 is shown for 238 + 3.14 * 125 = 630.5, the more precise value is 238 + 3.14465 * 125 \approx 631.08
+	QCOMPARE(pbc->lowerLimit(), 0);
+
+	// check the plotted data ("statistics") - the original data is plotted
+	const int rowCount = column->rowCount();
+	auto* yColumn = pbc->dataCurve()->yColumn();
+	QCOMPARE(yColumn, column);
+	QCOMPARE(yColumn->rowCount(), rowCount);
+
+	// index from 1 to 35 is used for x
+	auto* xColumn = pbc->dataCurve()->xColumn();
+	QCOMPARE(xColumn->rowCount(), rowCount);
+	for (int i = 0; i < rowCount; ++i)
 		QCOMPARE(xColumn->valueAt(i), i + 1);
 }
 
-void StatisticalPlotsTest::testPBChartXmRMedian() {
-
-}
-
+/*!
+ * test the mR (XmR) chart using Median for the limits, the example is taken from Wheeler "Making Sense of Data", chapter ten.
+ */
 void StatisticalPlotsTest::testPBChartmRMedian() {
+	// prepare the data
+	auto* column = new Column(QLatin1String("data"), AbstractColumn::ColumnMode::Integer);
+		column->setIntegers({260, 130, 189, 1080, 175, 200, 193, 120, 33, 293, 195, 571, 55698, 209, 1825, 239, 290, 254, 93, 278, 185, 123, 9434, 408, 570, 118, 238, 207, 153, 209, 243, 110, 306, 343, 244});
 
+	// prepare the worksheet + plot
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
+	pbc->setDataColumn(column);
+	pbc->setType(ProcessBehaviorChart::Type::mR);
+	pbc->setLimitsMetric(ProcessBehaviorChart::LimitsMetric::Median);
+	p->addChild(pbc);
+
+	// check the limits, two digit comparison with the values from the book
+	QCOMPARE(std::round(pbc->center() * 100) / 100, 125);
+	QCOMPARE(std::round(pbc->upperLimit() * 100) / 100, 482.95); // in the book 482 is shown for 3.86 * 125 = 482.5, the more precise value is 3.86361*125 \ approx 482.95
+	QCOMPARE(pbc->lowerLimit(), 0);
+
+	// check the plotted data ("statistics") - 34 moving ranges are plotted
+	const int rowCount = 35; // total count 35, first value not available/used/plotted
+	auto* yColumn = pbc->dataCurve()->yColumn();
+	QCOMPARE(yColumn->rowCount(), rowCount);
+	const QVector<double> ref = {130, 59, 891, 905, 25, 7, 73, 87, 260, 98, 376, 55127, 55489, 1616, 1586, 51, 36, 161, 185, 93, 62, 9311, 9026, 162, 452, 120, 31, 54, 56, 34, 133, 196, 37, 99};
+	for (int i = 0; i < rowCount - 1; ++i)
+		QCOMPARE(yColumn->valueAt(i + 1), ref.at(i));
+
+	// index from 1 to 24 is used for x
+	auto* xColumn = pbc->dataCurve()->xColumn();
+	QCOMPARE(xColumn->rowCount(), rowCount);
+	for (int i = 0; i < rowCount; ++i)
+		QCOMPARE(xColumn->valueAt(i), i +  1);
 }
 
 void StatisticalPlotsTest::testPBChartXBarRAverage() {
