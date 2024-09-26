@@ -433,6 +433,21 @@ QString AsciiFilterPrivate::separator() const {
 // #####################################################################
 // ############################# Read ##################################
 // #####################################################################
+
+QString AsciiFilterPrivate::prepareDeviceStatusToString(PrepareDeviceStatus e) {
+	switch (e) {
+	case PrepareDeviceStatus::Success:
+		return i18n("Success");
+	case PrepareDeviceStatus::DeviceAtEnd:
+		return i18n("Device at end");
+	case PrepareDeviceStatus::NotEnoughRowsSelected:
+		return i18n("Not enough rows selected. Increase number of rows.");
+	case PrepareDeviceStatus::UnableToOpenDevice:
+		return i18n("Unable to open device");
+	}
+	return i18n("Unhandled case");
+}
+
 /*!
  * Prepare device for reading data
  */
@@ -441,12 +456,12 @@ AsciiFilterPrivate::PrepareDeviceStatus AsciiFilterPrivate::prepareDeviceToRead(
 
 	if (!device.open(QIODevice::ReadOnly)) {
 		DEBUG(Q_FUNC_INFO << ", ERROR: could not open file for reading!")
-		return PrepareDeviceStatus::OPEN_FAIL;
+		return PrepareDeviceStatus::UnableToOpenDevice;
 	}
 
 	if (device.atEnd() && !device.isSequential()) { // empty file
 		DEBUG(Q_FUNC_INFO << ", ERROR: file is empty!")
-		return PrepareDeviceStatus::EMPTY_FILE;
+		return PrepareDeviceStatus::DeviceAtEnd;
 	}
 
 	// NEW method
@@ -682,9 +697,9 @@ AsciiFilterPrivate::PrepareDeviceStatus AsciiFilterPrivate::prepareDeviceToRead(
 	DEBUG("actual cols/rows (w/o header): " << m_actualCols << ' ' << m_actualRows);
 
 	if (m_actualRows == 0 && !device.isSequential())
-		return PrepareDeviceStatus::EMPTY_FILE;
+		return PrepareDeviceStatus::NotEnoughRowsSelected;
 
-	return PrepareDeviceStatus::OK;
+	return PrepareDeviceStatus::Success;
 }
 
 /*!
@@ -727,14 +742,8 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		switch (sourceType) {
 		case LiveDataSource::SourceType::FileOrPipe: {
 			const auto deviceError = prepareDeviceToRead(device);
-			switch (deviceError) {
-			case PrepareDeviceStatus::OK:
-				break;
-			case PrepareDeviceStatus::OPEN_FAIL:
-				q->setLastError(i18n("Failed to open the device/file."));
-				return 0;
-			case PrepareDeviceStatus::EMPTY_FILE:
-				q->setLastError(i18n("device/file seems to be empty."));
+			if (deviceError != PrepareDeviceStatus::Success) {
+				setLastError(deviceError);
 				return 0;
 			}
 			break;
@@ -1239,6 +1248,11 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	return bytesread;
 }
 
+void AsciiFilterPrivate::setLastError(PrepareDeviceStatus e) {
+	DEBUG(Q_FUNC_INFO << ", DEVICE ERROR = " << prepareDeviceStatusToString(e).toStdString());
+	q->setLastError(i18n("Failed to prepare device/file: %1", prepareDeviceStatusToString(e)));
+}
+
 /*!
 	reads the content of device \c device to the data source \c dataSource. Uses the settings defined in the data source.
 */
@@ -1248,14 +1262,8 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 
 	if (!m_prepared) {
 		const auto deviceError = prepareDeviceToRead(device);
-		switch (deviceError) {
-		case PrepareDeviceStatus::OK:
-			break;
-		case PrepareDeviceStatus::OPEN_FAIL:
-			q->setLastError(i18n("Failed to open the device/file."));
-			return;
-		case PrepareDeviceStatus::EMPTY_FILE:
-			q->setLastError(i18n("device/file seems to be empty."));
+		if (deviceError != AsciiFilterPrivate::PrepareDeviceStatus::Success) {
+			setLastError(deviceError);
 			return;
 		}
 
@@ -1574,16 +1582,10 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	DEBUG(Q_FUNC_INFO)
 
 	KCompressionDevice device(fileName);
-	const auto deviceError = prepareDeviceToRead(device, lines);
 
-	switch (deviceError) {
-	case PrepareDeviceStatus::OK:
-		break;
-	case PrepareDeviceStatus::OPEN_FAIL:
-		q->setLastError(i18n("Failed to open the device/file."));
-		return {};
-	case PrepareDeviceStatus::EMPTY_FILE:
-		q->setLastError(i18n("device/file seems to be empty."));
+	const auto deviceError = prepareDeviceToRead(device, lines);
+	if (deviceError != PrepareDeviceStatus::Success) {
+		setLastError(deviceError);
 		return {};
 	}
 

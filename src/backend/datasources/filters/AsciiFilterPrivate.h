@@ -19,7 +19,7 @@ class MQTTTopic;
 
 class AsciiFilterPrivate {
 public:
-	enum class PrepareDeviceStatus { OK, OPEN_FAIL, EMPTY_FILE };
+	enum class PrepareDeviceStatus { Success, UnableToOpenDevice, DeviceAtEnd, NotEnoughRowsSelected };
 
 	explicit AsciiFilterPrivate(AsciiFilter*);
 
@@ -42,6 +42,9 @@ public:
 
 	// helpers
 	AsciiFilterPrivate::PrepareDeviceStatus prepareDeviceToRead(QIODevice&, size_t maxLines = std::numeric_limits<std::size_t>::max());
+	static QString prepareDeviceStatusToString(PrepareDeviceStatus);
+	void setLastError(PrepareDeviceStatus);
+
 	void initDataContainer(Spreadsheet*);
 	QString previewValue(const QString&, AbstractColumn::ColumnMode);
 	void setValue(int col, int row, QStringView value);
