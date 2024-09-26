@@ -652,7 +652,7 @@ void StatisticalPlotsTest::testPBChartXmRMedian() {
 
 	// check the limits, two digit comparison with the values from the book
 	QCOMPARE(std::round(pbc->center() * 100) / 100, 238);
-	QCOMPARE(std::round(pbc->upperLimit() * 100) / 100, 631.08); // in the book 630 is shown for 238 + 3.14 * 125 = 630.5, the more precise value is 238 + 3.14465 * 125 \approx 631.08
+	QCOMPARE(std::round(pbc->upperLimit() * 100) / 100, 631.13); // in the book 630 is shown for 238 + 3.14 * 125 = 630.5, the more precise value is 238 + 3.14507 * 125 \approx 631.13
 	QCOMPARE(pbc->lowerLimit(), 0);
 
 	// check the plotted data ("statistics") - the original data is plotted
@@ -674,7 +674,7 @@ void StatisticalPlotsTest::testPBChartXmRMedian() {
 void StatisticalPlotsTest::testPBChartmRMedian() {
 	// prepare the data
 	auto* column = new Column(QLatin1String("data"), AbstractColumn::ColumnMode::Integer);
-		column->setIntegers({260, 130, 189, 1080, 175, 200, 193, 120, 33, 293, 195, 571, 55698, 209, 1825, 239, 290, 254, 93, 278, 185, 123, 9434, 408, 570, 118, 238, 207, 153, 209, 243, 110, 306, 343, 244});
+	column->setIntegers({260, 130, 189, 1080, 175, 200, 193, 120, 33, 293, 195, 571, 55698, 209, 1825, 239, 290, 254, 93, 278, 185, 123, 9434, 408, 570, 118, 238, 207, 153, 209, 243, 110, 306, 343, 244});
 
 	// prepare the worksheet + plot
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
@@ -713,6 +713,90 @@ void StatisticalPlotsTest::testPBChartXBarRAverage() {
 
 void StatisticalPlotsTest::testPBChartXBarRMedian() {
 
+}
+
+/*!
+ * test the XBar (XBarS) chart, the example is taken from Montgomery "Statistical Quality Control", chapter 6.3.
+ */
+void StatisticalPlotsTest::testPBChartXBarS() {
+	// prepare the data
+	auto* column = new Column(QLatin1String("data"), AbstractColumn::ColumnMode::Double);
+	column->setValues({74.03, 74.002, 74.019, 73.992, 74.008, 73.995, 73.992, 74.001, 74.011, 74.004, 73.988, 74.024, 74.021, 74.005, 74.002, 74.002, 73.996, 73.993, 74.015, 74.009, 73.992, 74.007, 74.015,
+		73.989, 74.014, 74.009, 73.994, 73.997, 73.985, 73.993, 73.995, 74.006, 73.994, 74, 74.005, 73.985, 74.003, 73.993, 74.015, 73.988, 74.008, 73.995, 74.009, 74.005, 74.004, 73.998, 74, 73.99, 74.007,
+		73.995, 73.994, 73.998, 73.994, 73.995, 73.99, 74.004, 74, 74.007, 74, 73.996, 73.983, 74.002, 73.998, 73.997, 74.012, 74.006, 73.967, 73.994, 74, 73.984, 74.012, 74.014, 73.998, 73.999, 74.007,
+		74, 73.984, 74.005, 73.998, 73.996, 73.994, 74.012, 73.986, 74.005, 74.007, 74.006, 74.01, 74.018, 74.003, 74, 73.984, 74.002, 74.003, 74.005, 73.997, 74, 74.01, 74.013, 74.02, 74.003, 73.982, 74.001,
+		74.015, 74.005, 73.996, 74.004, 73.999, 73.99, 74.006, 74.009, 74.01, 73.989,  73.99, 74.009, 74.014, 74.015, 74.008, 73.993, 74, 74.01, 73.982, 73.984, 73.995, 74.017, 74.013});
+
+	// prepare the worksheet + plot
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
+	pbc->setDataColumn(column);
+	pbc->setType(ProcessBehaviorChart::Type::XbarS);
+	p->addChild(pbc);
+
+	// check the limits, three digit comparison with the values from the book
+	QCOMPARE(std::round(pbc->center() * 1000) / 1000, 74.001);
+	QCOMPARE(std::round(pbc->upperLimit() * 1000) / 1000, 74.015); // in the book 74.001 + 1.427*0.0094 = 74.014 is used, the more precise rounded value is 74.0012 + 1.4273*0.00939948 = 74.0146 \ approx = 74.015
+	QCOMPARE(std::round(pbc->lowerLimit() * 1000) / 1000, 73.988);
+
+	// check the plotted data ("statistics") - mean values for every subgroup/sample are plotted
+	const int rowCount = 25; // 25 samples
+	auto* yColumn = pbc->dataCurve()->yColumn();
+	QCOMPARE(yColumn->rowCount(), rowCount);
+	const QVector<double> ref = {74.010, 74.001, 74.008, 74.003, 74.003, 73.996, 74., 73.997, 74.004, 73.998, 73.994, 74.001, 73.998, 73.990, 74.006, 73.997, 74.001, 74.007, 73.998, 74.009, 74., 74.002, 74.002, 74.005, 73.998};
+	for (int i = 0; i < rowCount - 1; ++i)
+		QCOMPARE(std::round(yColumn->valueAt(i) * 1000) / 1000, ref.at(i)); // compare three digits
+
+	// index from 1 to 25 is used for x
+	auto* xColumn = pbc->dataCurve()->xColumn();
+	QCOMPARE(xColumn->rowCount(), rowCount);
+	for (int i = 0; i < rowCount; ++i)
+		QCOMPARE(xColumn->valueAt(i), i +  1);
+}
+
+/*!
+ * test the S chart, the example is taken from Montgomery "Statistical Quality Control", chapter 6.3.
+ */
+void StatisticalPlotsTest::testPBChartS() {
+	// prepare the data
+	auto* column = new Column(QLatin1String("data"), AbstractColumn::ColumnMode::Double);
+	column->setValues({74.03, 74.002, 74.019, 73.992, 74.008, 73.995, 73.992, 74.001, 74.011, 74.004, 73.988, 74.024, 74.021, 74.005, 74.002, 74.002, 73.996, 73.993, 74.015, 74.009, 73.992, 74.007, 74.015,
+		73.989, 74.014, 74.009, 73.994, 73.997, 73.985, 73.993, 73.995, 74.006, 73.994, 74, 74.005, 73.985, 74.003, 73.993, 74.015, 73.988, 74.008, 73.995, 74.009, 74.005, 74.004, 73.998, 74, 73.99, 74.007,
+		73.995, 73.994, 73.998, 73.994, 73.995, 73.99, 74.004, 74, 74.007, 74, 73.996, 73.983, 74.002, 73.998, 73.997, 74.012, 74.006, 73.967, 73.994, 74, 73.984, 74.012, 74.014, 73.998, 73.999, 74.007,
+		74, 73.984, 74.005, 73.998, 73.996, 73.994, 74.012, 73.986, 74.005, 74.007, 74.006, 74.01, 74.018, 74.003, 74, 73.984, 74.002, 74.003, 74.005, 73.997, 74, 74.01, 74.013, 74.02, 74.003, 73.982, 74.001,
+		74.015, 74.005, 73.996, 74.004, 73.999, 73.99, 74.006, 74.009, 74.01, 73.989,  73.99, 74.009, 74.014, 74.015, 74.008, 73.993, 74, 74.01, 73.982, 73.984, 73.995, 74.017, 74.013});
+
+	// prepare the worksheet + plot
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
+	pbc->setDataColumn(column);
+	pbc->setType(ProcessBehaviorChart::Type::S);
+	p->addChild(pbc);
+
+	// check the limits, four digit comparison with the values from the book
+	QCOMPARE(std::round(pbc->center() * 10000) / 10000, 0.0094);
+	QCOMPARE(std::round(pbc->upperLimit() * 10000) / 10000, 0.0196);
+	QCOMPARE(pbc->lowerLimit(), 0.);
+
+	// check the plotted data ("statistics") - standard deviations for every subgroup/sample are plotted
+	const int rowCount = 25; // 25 samples
+	auto* yColumn = pbc->dataCurve()->yColumn();
+	QCOMPARE(yColumn->rowCount(), rowCount);
+	const QVector<double> ref = {0.0148, 0.0075, 0.0147, 0.0091, 0.0122, 0.0087, 0.0055, 0.0123, 0.0055, 0.0063, 0.0029, 0.0042, 0.0105, 0.0153, 0.0073, 0.0078, 0.0106, 0.0070, 0.0085, 0.0080, 0.0122, 0.0074, 0.0119, 0.0087, 0.0162};
+	for (int i = 0; i < rowCount - 1; ++i)
+		QCOMPARE(std::round(yColumn->valueAt(i) * 10000) / 10000, ref.at(i)); // compare four digits
+
+	// index from 1 to 25 is used for x
+	auto* xColumn = pbc->dataCurve()->xColumn();
+	QCOMPARE(xColumn->rowCount(), rowCount);
+	for (int i = 0; i < rowCount; ++i)
+		QCOMPARE(xColumn->valueAt(i), i +  1);
 }
 
 QTEST_MAIN(StatisticalPlotsTest)

@@ -45,12 +45,14 @@ private Q_SLOTS:
 
 	void testPBChartXmRAverage();
 	void testPBChartmRAverage();
-
 	void testPBChartXmRMedian();
 	void testPBChartmRMedian();
 
 	void testPBChartXBarRAverage();
 	void testPBChartXBarRMedian();
+
+	void testPBChartXBarS();
+	void testPBChartS();
 };
 
 #endif
