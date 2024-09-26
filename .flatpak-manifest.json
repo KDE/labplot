@@ -14,10 +14,14 @@
         "--share=ipc",
         "--socket=wayland",
         "--socket=fallback-x11",
+	"--socket=cups",
+	"--socket=session-bus",
         "--device=dri",
         "--filesystem=host",
         "--filesystem=/tmp",
-        "--filesystem=xdg-documents"
+        "--filesystem=xdg-documents",
+        "--system-talk-name=org.freedesktop.UDisks2",
+        "--talk-name=org.freedesktop.Flatpak"
     ],
     "cleanup": [
         "/include",
