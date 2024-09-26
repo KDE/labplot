@@ -202,13 +202,12 @@ size_t AsciiFilter::lineNumber(const QString& fileName, const size_t maxLines) {
 	// 	if (!device.canReadLine())
 	// 		return -1;
 
-	size_t lineCount = 0;
 #if defined(Q_OS_LINUX) || defined(Q_OS_BSD4)
 	if (maxLines == std::numeric_limits<std::size_t>::max()) { // only when reading all lines
 		// on Linux and BSD use grep, if available, which is much faster than counting lines in the file
 		// wc -l does not count last line when not ending in line break!
 		DEBUG(Q_FUNC_INFO << ", using 'grep' or 'sed' to count lines")
-		QString cmdFullPath = safeExecutableName(QStringLiteral("grepxx"));
+		QString cmdFullPath = safeExecutableName(QStringLiteral("grep"));
 		QStringList options;
 		options << QStringLiteral("-e") << QStringLiteral("^") << QStringLiteral("-c") << fileName;
 		if (cmdFullPath.isEmpty()) { // alternative: sed -n '$='
@@ -223,7 +222,7 @@ size_t AsciiFilter::lineNumber(const QString& fileName, const size_t maxLines) {
 			size_t lineCount = 0;
 			while (cmd.waitForReadyRead()) {
 				QString line = QLatin1String(cmd.readLine());
-				// QDEBUG("OUTPUT: " << line)
+				QDEBUG("line count command output: " << line)
 				// wc on macOS has leading spaces: use SkipEmptyParts
 				lineCount = line.split(QLatin1Char(' '), Qt::SkipEmptyParts).at(0).toInt();
 			}
@@ -234,6 +233,7 @@ size_t AsciiFilter::lineNumber(const QString& fileName, const size_t maxLines) {
 	}
 #endif
 
+	size_t lineCount = 0;
 	while (!device.atEnd()) {
 		if (lineCount >= maxLines) // stop when maxLines available
 			return lineCount;
@@ -439,11 +439,15 @@ QString AsciiFilterPrivate::separator() const {
 int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device, const size_t maxLines) {
 	DEBUG(Q_FUNC_INFO << ", is sequential = " << device.isSequential() << ", can readLine = " << device.canReadLine());
 
-	if (!device.open(QIODevice::ReadOnly))
+	if (!device.open(QIODevice::ReadOnly)) {
+		DEBUG(Q_FUNC_INFO << ", ERROR: could not open file for reading!")
 		return -1;
+	}
 
-	if (device.atEnd() && !device.isSequential()) // empty file
+	if (device.atEnd() && !device.isSequential()) { // empty file
+		DEBUG(Q_FUNC_INFO << ", ERROR: file is empty!")
 		return 1;
+	}
 
 	// NEW method
 	// 1. First read header (vector names) at given headerLine (counting comment lines)
@@ -661,7 +665,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device, const size_t maxL
 
 	// ATTENTION: This resets the position in the device to 0
 	m_actualRows = (int)q->lineNumber(device, maxLines);
-	DEBUG(Q_FUNC_INFO << ", m_actualRows: " << m_actualRows << ", startRow (after header): " << startRow << ", endRow: " << endRow)
+	DEBUG(Q_FUNC_INFO << ", number of lines found: " << m_actualRows << ", startRow (after header): " << startRow << ", endRow: " << endRow)
 
 	DEBUG(Q_FUNC_INFO << ", headerEnabled = " << headerEnabled << ", headerLine = " << headerLine << ", m_actualStartRow = " << m_actualStartRow)
 	if ((!headerEnabled || headerLine < 1) && startRow <= 2 && m_actualStartRow > 1) // take header line
