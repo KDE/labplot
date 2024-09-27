@@ -128,7 +128,7 @@ void OriginProjectParser::setGraphLayerAsPlotArea(bool value) {
 }
 
 QString OriginProjectParser::supportedExtensions() {
-	// TODO add opju later when liborigin supports it
+	// TODO: add opju later when liborigin ever supports it
 	static const QString extensions = QStringLiteral("*.opj *.OPJ");
 	return extensions;
 }

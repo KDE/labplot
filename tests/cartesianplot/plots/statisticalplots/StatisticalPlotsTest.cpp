@@ -637,8 +637,10 @@ void StatisticalPlotsTest::testPBChartmRAverage() {
 void StatisticalPlotsTest::testPBChartXmRMedian() {
 	// prepare the data
 	auto* column = new Column(QLatin1String("data"), AbstractColumn::ColumnMode::Integer);
-	column->setIntegers({260, 130, 189, 1080, 175,	200, 193, 120, 33,	293, 195, 571, 55698, 209, 1825, 239, 290, 254,
-						 93,  278, 185, 123,  9434, 408, 570, 118, 238, 207, 153, 209, 243,	  110, 306,	 343, 244});
+	// clang-format off
+	column->setIntegers({260, 130, 189, 1080, 175, 200, 193, 120, 33, 293, 195, 571, 55698, 209, 1825, 239, 290, 254,
+				93, 278, 185, 123, 9434, 408, 570, 118, 238, 207, 153, 209, 243, 110, 306, 343, 244});
+	// clang-format on
 
 	// prepare the worksheet + plot
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
@@ -676,8 +678,10 @@ void StatisticalPlotsTest::testPBChartXmRMedian() {
 void StatisticalPlotsTest::testPBChartmRMedian() {
 	// prepare the data
 	auto* column = new Column(QLatin1String("data"), AbstractColumn::ColumnMode::Integer);
-	column->setIntegers({260, 130, 189, 1080, 175,	200, 193, 120, 33,	293, 195, 571, 55698, 209, 1825, 239, 290, 254,
-						 93,  278, 185, 123,  9434, 408, 570, 118, 238, 207, 153, 209, 243,	  110, 306,	 343, 244});
+	// clang-format off
+	column->setIntegers({260, 130, 189, 1080, 175,	200, 193, 120, 33, 293, 195, 571, 55698, 209, 1825, 239, 290, 254,
+				93, 278, 185, 123, 9434, 408, 570, 118, 238, 207, 153, 209, 243, 110, 306, 343, 244});
+	// clang-format on
 
 	// prepare the worksheet + plot
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
@@ -699,8 +703,10 @@ void StatisticalPlotsTest::testPBChartmRMedian() {
 	const int rowCount = 35; // total count 35, first value not available/used/plotted
 	auto* yColumn = pbc->dataCurve()->yColumn();
 	QCOMPARE(yColumn->rowCount(), rowCount);
-	const QVector<double> ref = {130, 59,  891, 905, 25,   7,	 73,  87,  260, 98, 376, 55127, 55489, 1616, 1586, 51, 36,
-								 161, 185, 93,	62,	 9311, 9026, 162, 452, 120, 31, 54,	 56,	34,	   133,	 196,  37, 99};
+	// clang-format off
+	const QVector<double> ref = {130, 59, 891, 905, 25, 7, 73, 87, 260, 98, 376, 55127, 55489, 1616, 1586, 51, 36,
+					161, 185, 93, 62, 9311, 9026, 162, 452, 120, 31, 54, 56, 34, 133, 196, 37, 99};
+	// clang-format on
 	for (int i = 0; i < rowCount - 1; ++i)
 		QCOMPARE(yColumn->valueAt(i + 1), ref.at(i));
 
@@ -826,8 +832,8 @@ void StatisticalPlotsTest::testPBChartXBarS() {
 	const int rowCount = 25; // 25 samples
 	auto* yColumn = pbc->dataCurve()->yColumn();
 	QCOMPARE(yColumn->rowCount(), rowCount);
-	const QVector<double> ref = {74.010, 74.001, 74.008, 74.003, 74.003, 73.996, 74.,	 73.997, 74.004, 73.998, 73.994, 74.001, 73.998,
-								 73.990, 74.006, 73.997, 74.001, 74.007, 73.998, 74.009, 74.,	 74.002, 74.002, 74.005, 73.998};
+	const QVector<double> ref = {74.010, 74.001, 74.008, 74.003, 74.003, 73.996, 74.000, 73.997, 74.004, 73.998, 73.994, 74.001, 73.998,
+								 73.990, 74.006, 73.997, 74.001, 74.007, 73.998, 74.009, 74.000, 74.002, 74.002, 74.005, 73.998};
 	for (int i = 0; i < rowCount - 1; ++i)
 		QCOMPARE(std::round(yColumn->valueAt(i) * 1000) / 1000, ref.at(i)); // compare three digits
 
