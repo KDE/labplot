@@ -503,8 +503,7 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 
 			// upper and lower limits
 			const double meanMovingRange = gsl_stats_mean(movingRange.data(), 1, movingRange.size());
-			const double d2 = nsl_pcm_d2(2);  // n = 2, two values used to calculate the ranges
-			const double E2 = 3 / d2;
+			const double E2 = 3 / nsl_pcm_d2(2); // n = 2, two values used to calculate the ranges
 			upperLimit = mean + E2 * meanMovingRange;
 			lowerLimit = mean - E2 * meanMovingRange;
 		} else {
@@ -514,8 +513,7 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 
 			// upper and lower limits
 			const double medianMovingRange = gsl_stats_median(movingRange.data(), 1, movingRange.size());
-			const double d4 = nsl_pcm_d4(2);  // n = 2, two values used to calculate the ranges
-			const double E5 = 3 / d4;
+			const double E5 = 3 / nsl_pcm_d4(2); // n = 2, two values used to calculate the ranges
 			upperLimit = median + E5 * medianMovingRange;
 			lowerLimit = median - E5 * medianMovingRange;
 		}
