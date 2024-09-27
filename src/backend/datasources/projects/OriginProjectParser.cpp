@@ -1490,7 +1490,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		legend->setLabelFont(labelFont);
 
 		// Origin's legend uses "\l(...)" or "\L(...)" string to format the legend symbol
-		//  and "%(...) to format the legend text for each curve
+		//  and "%(...)" to format the legend text for each curve
 		// s. a. https://www.originlab.com/doc/Origin-Help/Legend-ManualControl
 		// the text before these formatting tags, if available, is interpreted as the legend title
 
