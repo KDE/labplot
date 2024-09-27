@@ -123,7 +123,7 @@ public:
 		else if (type == AspectType::LollipopPlot)
 			return new LollipopPlot(QString());
 
-		/* continious improvement pltos */
+		/* continuous improvement plots */
 		else if (type == AspectType::ProcessBehaviorChart)
 			return new ProcessBehaviorChart(QString());
 

@@ -23,7 +23,7 @@
 
 /*!
   \class ProcessBehaviorChartDock
-  \brief  Provides a widget for editing the properties of QQ-plots.
+  \brief  Provides a widget for editing the properties of process behavior charts.
 
   \ingroup kdefrontend
 */
@@ -172,10 +172,10 @@ void ProcessBehaviorChartDock::retranslateUi() {
 		"The supported chart types are grouped according to the plotted statistics and to the metric defining the limits.<br><br>"
 		"Individual Values and Moving Ranges, Limits Based on the Average or Median Moving Range:"
 		"<ul>"
-		"<li>X (XmR) - plot the <b>indidual values</b>.</li>"
+		"<li>X (XmR) - plot the <b>individual values</b>.</li>"
 		"<li>mR - plot the <b>moving ranges</b>.</li>"
 		"</ul>"
-		"Averages and Ranges, Limits Based on the Average or Median Range:"
+		"Averages and Ranges, Limits based on the Average or Median Range:"
 		"<ul>"
 		"<li>X̅  (X̅R) - plot the <b>averages for each subgroup</b> .</li>"
 		"<li>R (X̅R) - plot the <b>ranges for each subgroup</b>.</li>"

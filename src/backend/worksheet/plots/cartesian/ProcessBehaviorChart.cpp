@@ -726,7 +726,7 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		upperLimit = B4 * meanStdDev;
 		lowerLimit = B3 * meanStdDev;
 
-		// plotted data - subroup standard deviations
+		// plotted data - subgroup standard deviations
 		dataCurve->setYColumn(yColumn);
 
 		break;

@@ -646,7 +646,7 @@ void CartesianPlot::initMenus() {
 	addNewBarPlotsMenu->addAction(addLollipopPlotAction);
 	m_addNewMenu->addMenu(addNewBarPlotsMenu);
 
-	// continious improvement plots
+	// continuous improvement plots
 	auto* addNewCIPlotsMenu = new QMenu(i18n("Continual Improvement Plots"), m_addNewMenu);
 	addNewCIPlotsMenu->addAction(addProcessBehaviorChartAction);
 	m_addNewMenu->addMenu(addNewCIPlotsMenu);
@@ -2162,7 +2162,7 @@ int CartesianPlot::curveChildIndex(const WorksheetElement* curve) const {
 
 		++index;
 
-		// for the process behavior chart two colors are used - for the data and for the control linex
+		// for the process behavior chart two colors are used - for the data and for the control index
 		if (plot->type() == AspectType::ProcessBehaviorChart)
 			++index;
 	}

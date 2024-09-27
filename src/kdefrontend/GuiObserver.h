@@ -112,7 +112,7 @@ private:
 	KDEPlotDock* m_kdePlotDock{nullptr};
 	QQPlotDock* m_qqPlotDock{nullptr};
 
-	// continious improvement plots
+	// continuous improvement plots
 	ProcessBehaviorChartDock* m_processBehaviorChartDock{nullptr};
 
 	// analysis plots

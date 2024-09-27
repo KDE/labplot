@@ -391,7 +391,7 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		raiseDock(m_qqPlotDock, m_mainWindow->stackedWidget);
 		m_qqPlotDock->setPlots(castList<QQPlot>(selectedAspects));
 		break;
-	// continious improvement plots
+	// continuous improvement plots
 	case AspectType::ProcessBehaviorChart:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Process Behavior Chart"));
 		raiseDock(m_processBehaviorChartDock, m_mainWindow->stackedWidget);
