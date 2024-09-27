@@ -5,6 +5,8 @@ New features:
 		* Support MCAP file import
 		* show error messages for the serial port in when creating a live data source to notify directly about missing device permissions, etc.
 		* add warning when importing projects in file import dialog
+		* improve error messages for data import
+		* fix preview of data with header
 	* [analysis]
 		* Add possibility to do calculations on curves
 	* [spreadsheet]
