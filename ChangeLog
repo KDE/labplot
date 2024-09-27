@@ -1,4 +1,4 @@
------2.12 -----
+-----2.12.0 (XX) -----
 New features:
 	* [import]
 		* Download datasets from kaggle.com
@@ -24,7 +24,7 @@ Bug fixes:
 	* Show Ticks on inverted axes (BUG 491502 & 492475)
 
 Internal:
-	* use name LabPlot/labplot consistenly (renamed Labplot2/labplot2)
+	* use name LabPlot/labplot consistenly (renamed LabPlot2/labplot2)
 	* switch to Qt6 only
 
 
