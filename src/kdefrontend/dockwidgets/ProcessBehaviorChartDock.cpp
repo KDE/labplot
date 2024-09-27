@@ -160,7 +160,7 @@ void ProcessBehaviorChartDock::retranslateUi() {
 	ui.cbLimitsMetric->addItem(i18n("Median"), static_cast<int>(ProcessBehaviorChart::LimitsMetric::Median));
 
 	ui.cbType->clear();
-	ui.cbType->addItem(QStringLiteral("X"), static_cast<int>(ProcessBehaviorChart::Type::XmR));
+	ui.cbType->addItem(QStringLiteral("X (XmR)"), static_cast<int>(ProcessBehaviorChart::Type::XmR));
 	ui.cbType->addItem(QStringLiteral("mR"), static_cast<int>(ProcessBehaviorChart::Type::mR));
 	ui.cbType->addItem(QStringLiteral("X̅  (X̅R)"), static_cast<int>(ProcessBehaviorChart::Type::XbarR));
 	ui.cbType->addItem(QStringLiteral("R"), static_cast<int>(ProcessBehaviorChart::Type::R));

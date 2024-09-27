@@ -689,7 +689,7 @@ void StatisticalPlotsTest::testPBChartmRMedian() {
 
 	// check the limits, two digit comparison with the values from the book
 	QCOMPARE(std::round(pbc->center() * 100) / 100, 125);
-	QCOMPARE(std::round(pbc->upperLimit() * 100) / 100, 482.95); // in the book 482 is shown for 3.86 * 125 = 482.5, the more precise value is 3.86361*125 \ approx 482.95
+	QCOMPARE(std::round(pbc->upperLimit() * 100) / 100, 483.02); // in the book 482 is shown for 3.86 * 125 = 482.5, the more precise value is 3.86413*125 \ approx 483.02
 	QCOMPARE(pbc->lowerLimit(), 0);
 
 	// check the plotted data ("statistics") - 34 moving ranges are plotted
@@ -707,11 +707,17 @@ void StatisticalPlotsTest::testPBChartmRMedian() {
 		QCOMPARE(xColumn->valueAt(i), i +  1);
 }
 
+/*!
+ * test the XBar (XBarR) chart using Average for the limits, the example is taken from Wheeler "Making Sense of Data", chapter 16.
+ */
 void StatisticalPlotsTest::testPBChartXBarRAverage() {
 
 }
 
-void StatisticalPlotsTest::testPBChartXBarRMedian() {
+/*!
+ * test the R chart using Average for the limits, the example is taken from Wheeler "Making Sense of Data", chapter 16.
+ */
+void StatisticalPlotsTest::testPBChartRAverage() {
 
 }
 

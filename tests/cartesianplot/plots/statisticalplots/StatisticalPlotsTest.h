@@ -49,7 +49,7 @@ private Q_SLOTS:
 	void testPBChartmRMedian();
 
 	void testPBChartXBarRAverage();
-	void testPBChartXBarRMedian();
+	void testPBChartRAverage();
 
 	void testPBChartXBarS();
 	void testPBChartS();
