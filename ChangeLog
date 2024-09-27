@@ -3,6 +3,10 @@ New features:
 	* [import]
 		* Download datasets from kaggle.com
 		* Support MCAP file import
+		* show error messages for the serial port in when creating a live data source to notify directly about missing device permissions, etc.
+		* add warning when importing projects in file import dialog
+		* improve error messages for data import
+		* fix preview of data with header
 	* [analysis]
 		* Add possibility to do calculations on curves
 	* [spreadsheet]
@@ -13,15 +17,15 @@ New features:
 		* new visualization type "Process Behavior Chart"
 		* more space for plots and less "ink" - no layout spacings, no minor grid lines, not plot borders, no ticks on secondary axes on default
 		* allow to provide names for plot ranges for easier lookup and assignemnt in the plot elements
-	* [import]
-		* show error messages for the serial port when creating a live data source to notify directly about missing device permissions, etc.
 
 Bug fixes:
 	* Fix crash selecting "cell" from function list in function dialog
 	* Properly draw the border line of the symbol in the legend (BUG 491310)
+	* Show Ticks on inverted axes (BUG 491502 & 492475)
 
 Internal:
 	* use name LabPlot/labplot consistenly (renamed Labplot2/labplot2)
+	* switch to Qt6 only
 
 
 -----2.11.1 (16.07.2024) -----

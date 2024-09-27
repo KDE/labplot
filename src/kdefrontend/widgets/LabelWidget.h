@@ -16,7 +16,7 @@
 #include "ui_labelwidget.h"
 #include <KConfigGroup>
 
-#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
+#ifdef HAVE_KF_SYNTAX_HIGHLIGHTING
 #include <KSyntaxHighlighting/repository.h>
 namespace KSyntaxHighlighting {
 class SyntaxHighlighter;
@@ -59,7 +59,7 @@ private:
 	bool m_teXEnabled{false};
 	BaseDock::Units m_units{BaseDock::Units::Metric};
 	Worksheet::Unit m_worksheetUnit{Worksheet::Unit::Centimeter};
-#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
+#ifdef HAVE_KF_SYNTAX_HIGHLIGHTING
 	KSyntaxHighlighting::SyntaxHighlighter* m_highlighter;
 	KSyntaxHighlighting::Repository m_repository;
 #endif

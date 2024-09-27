@@ -12,7 +12,7 @@
 
 #include "ui_databasemanagerwidget.h"
 
-#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
+#ifdef HAVE_KF_SYNTAX_HIGHLIGHTING
 #include <KSyntaxHighlighting/repository.h>
 namespace KSyntaxHighlighting {
 class SyntaxHighlighter;
@@ -50,7 +50,7 @@ private:
 	bool m_initializing{false};
 	QString m_configPath;
 	QString m_initConnName;
-#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
+#ifdef HAVE_KF_SYNTAX_HIGHLIGHTING
 	KSyntaxHighlighting::SyntaxHighlighter* m_highlighter{nullptr};
 	KSyntaxHighlighting::Repository m_repository;
 #endif

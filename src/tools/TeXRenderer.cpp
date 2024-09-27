@@ -27,7 +27,7 @@
 #include <QTextStream>
 
 #ifdef HAVE_POPPLER
-#include <poppler-qt5.h>
+#include <poppler-qt6.h>
 #endif
 
 /*!

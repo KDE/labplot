@@ -2,15 +2,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Burkhard Lück <lueck@hube-lueck.de>, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021.
 # Frederik Schwarzer <schwarzer@kde.org>, 2014, 2016, 2020, 2022, 2023.
-# Stefan Gerlach <stefan.gerlach@uni.kn>, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
+# SPDX-FileCopyrightText: 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 # Frank Steinmetzger <dev-kde@felsenfleischer.de>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-11 01:43+0000\n"
-"PO-Revision-Date: 2024-08-02 18:12+0200\n"
+"POT-Creation-Date: 2024-09-27 01:51+0000\n"
+"PO-Revision-Date: 2024-09-26 00:31+0200\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni.kn>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -508,7 +508,7 @@ msgid "%1   (no values)"
 msgstr "%1  (Keine Werte)"
 
 #: src/backend/core/AspectTreeModel.cpp:235
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1547
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1566
 #, kde-format
 msgid "Size: %1"
 msgstr "Größe: %1"
@@ -1095,20 +1095,51 @@ msgstr "Anzahl der Spalten: %1"
 msgid "Number of lines: %1"
 msgstr "Anzahl der Zeilen: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:539
-#: src/backend/datasources/filters/AsciiFilter.cpp:748
-#: src/backend/datasources/filters/AsciiFilter.cpp:946
-#: src/backend/datasources/filters/AsciiFilter.cpp:1482
-#: src/backend/datasources/filters/AsciiFilter.cpp:2027
+#: src/backend/datasources/filters/AsciiFilter.cpp:440
+#: src/backend/gsl/errors.h:20
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2065
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1224
+#, kde-format
+msgid "Success"
+msgstr "Erfolg"
+
+#: src/backend/datasources/filters/AsciiFilter.cpp:442
+#, fuzzy, kde-format
+#| msgid "Device is not opened."
+msgid "Device at end"
+msgstr "Das Gerät ist nicht geöffnet."
+
+#: src/backend/datasources/filters/AsciiFilter.cpp:444
+#, kde-format
+msgid "Not enough rows selected. Increase number of rows."
+msgstr ""
+
+#: src/backend/datasources/filters/AsciiFilter.cpp:446
+#, fuzzy, kde-format
+#| msgid "Unable to open file:"
+msgid "Unable to open device"
+msgstr "Fehler beim Öffnen der Datei:"
+
+#: src/backend/datasources/filters/AsciiFilter.cpp:448
+#, fuzzy, kde-format
+#| msgid "Unhandled error"
+msgid "Unhandled case"
+msgstr "Unbehandelter Fehler"
+
+#: src/backend/datasources/filters/AsciiFilter.cpp:558
+#: src/backend/datasources/filters/AsciiFilter.cpp:766
+#: src/backend/datasources/filters/AsciiFilter.cpp:964
+#: src/backend/datasources/filters/AsciiFilter.cpp:1504
+#: src/backend/datasources/filters/AsciiFilter.cpp:2048
 #, kde-format
 msgid "Timestamp"
 msgstr "Zeitstempel"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:543
-#: src/backend/datasources/filters/AsciiFilter.cpp:742
-#: src/backend/datasources/filters/AsciiFilter.cpp:944
-#: src/backend/datasources/filters/AsciiFilter.cpp:1477
-#: src/backend/datasources/filters/AsciiFilter.cpp:2021
+#: src/backend/datasources/filters/AsciiFilter.cpp:562
+#: src/backend/datasources/filters/AsciiFilter.cpp:760
+#: src/backend/datasources/filters/AsciiFilter.cpp:962
+#: src/backend/datasources/filters/AsciiFilter.cpp:1499
+#: src/backend/datasources/filters/AsciiFilter.cpp:2042
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1116,20 +1147,11 @@ msgstr "Zeitstempel"
 msgid "Index"
 msgstr "Index"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:728
-#: src/backend/datasources/filters/AsciiFilter.cpp:1244
-#: src/backend/datasources/filters/AsciiFilter.cpp:1567
-#: src/backend/datasources/filters/BinaryFilter.cpp:404
-#: src/backend/datasources/filters/McapFilter.cpp:188
-#, kde-format
-msgid "Failed to open the device/file or it's empty."
-msgstr "Fehler beim Öffnen des Geräts/der Datei oder leer."
-
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
-#: src/backend/datasources/filters/AsciiFilter.cpp:754
-#: src/backend/datasources/filters/AsciiFilter.cpp:951
-#: src/backend/datasources/filters/AsciiFilter.cpp:1497
-#: src/backend/datasources/filters/AsciiFilter.cpp:2040
+#: src/backend/datasources/filters/AsciiFilter.cpp:772
+#: src/backend/datasources/filters/AsciiFilter.cpp:969
+#: src/backend/datasources/filters/AsciiFilter.cpp:1519
+#: src/backend/datasources/filters/AsciiFilter.cpp:2061
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
 #: src/commonfrontend/matrix/MatrixView.cpp:619
@@ -1137,7 +1159,7 @@ msgstr "Fehler beim Öffnen des Geräts/der Datei oder leer."
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2538
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2556
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2573
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:145
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:188
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:182
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:65
@@ -1145,14 +1167,20 @@ msgstr "Fehler beim Öffnen des Geräts/der Datei oder leer."
 msgid "Value"
 msgstr "Wert"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:953
-#: src/backend/datasources/filters/AsciiFilter.cpp:1499
-#: src/backend/datasources/filters/AsciiFilter.cpp:2042
+#: src/backend/datasources/filters/AsciiFilter.cpp:971
+#: src/backend/datasources/filters/AsciiFilter.cpp:1521
+#: src/backend/datasources/filters/AsciiFilter.cpp:2063
 #, kde-format
 msgid "Value %1"
 msgstr "Wert %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:1263
+#: src/backend/datasources/filters/AsciiFilter.cpp:1253
+#, fuzzy, kde-format
+#| msgid "Failed to open the device/file."
+msgid "Failed to prepare device/file: %1"
+msgstr "Fehler beim Öffnen des Geräts/der Datei."
+
+#: src/backend/datasources/filters/AsciiFilter.cpp:1285
 #: src/backend/datasources/filters/BinaryFilter.cpp:444
 #: src/backend/datasources/filters/CANFilter.cpp:301
 #: src/backend/datasources/filters/FITSFilter.cpp:329
@@ -1191,6 +1219,12 @@ msgstr "Fehler beim Öffnen des Geräts/der Datei."
 #, kde-format
 msgid "Data selection empty."
 msgstr "Leere Datenauswahl."
+
+#: src/backend/datasources/filters/BinaryFilter.cpp:404
+#: src/backend/datasources/filters/McapFilter.cpp:188
+#, kde-format
+msgid "Failed to open the device/file or it's empty."
+msgstr "Fehler beim Öffnen des Geräts/der Datei oder leer."
 
 #: src/backend/datasources/filters/CANFilter.cpp:220
 #: src/backend/datasources/filters/SpiceFilter.cpp:131
@@ -1490,7 +1524,7 @@ msgstr "h5dump Kommando nicht gefunden."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:358
 #: src/backend/datasources/filters/NetCDFFilter.cpp:268
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1522
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1541
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr "Leasen aus Datei %1 fehlgeschlagen."
@@ -2336,19 +2370,14 @@ msgid "Invalid region specified."
 msgstr "Ungültiger Bereich angegeben."
 
 #: src/backend/datasources/LiveDataSource.cpp:711
-#, fuzzy, kde-format
-#| msgid "File does not exist."
+#, kde-format
 msgid "Device doesn't exist."
-msgstr "Datei existiert nicht."
+msgstr "Gerät existiert nicht."
 
 #: src/backend/datasources/LiveDataSource.cpp:714
-#, fuzzy, kde-format
-#| msgid ""
-#| "Failed to open the device. Please check your permissions on this device."
+#, kde-format
 msgid "User doesn't have enough permissions to open the device."
-msgstr ""
-"Öffnen des Gerätes fehlgeschlagen. Bitte überprüfen Sie die Zugriffsrechte "
-"des Gerätes."
+msgstr "Dem Nutzer fehlen die  Zugriffsrechte zum Öffnen des Gerätes."
 
 #: src/backend/datasources/LiveDataSource.cpp:717
 #, kde-format
@@ -2356,8 +2385,7 @@ msgid "Device already opened."
 msgstr "Das Gerät ist bereits geöffnet."
 
 #: src/backend/datasources/LiveDataSource.cpp:720
-#, fuzzy, kde-format
-#| msgid "The device is not opened."
+#, kde-format
 msgid "Device is not opened."
 msgstr "Das Gerät ist nicht geöffnet."
 
@@ -2367,16 +2395,14 @@ msgid "Failed to read data."
 msgstr "Einlesen der Daten nicht möglich"
 
 #: src/backend/datasources/LiveDataSource.cpp:726
-#, fuzzy, kde-format
-#| msgid "Server unavailable"
+#, kde-format
 msgid "Device not available."
-msgstr "Server nicht verfügbar"
+msgstr "Gerät nicht verfügbar."
 
 #: src/backend/datasources/LiveDataSource.cpp:729
-#, fuzzy, kde-format
-#| msgid "An error occurred."
+#, kde-format
 msgid "Timeout occured."
-msgstr "Ein Fehler ist aufgetreten."
+msgstr "Zeitüberschreitung aufgetreten."
 
 #: src/backend/datasources/LiveDataSource.cpp:734
 #, kde-format
@@ -3026,13 +3052,6 @@ msgstr "SI-Einheit der Energie"
 #, kde-format
 msgid "Energy 1 erg"
 msgstr "Energie 1 erg"
-
-#: src/backend/gsl/errors.h:20
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2065
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1224
-#, kde-format
-msgid "Success"
-msgstr "Erfolg"
 
 #: src/backend/gsl/errors.h:22
 #, kde-format
@@ -6544,11 +6563,11 @@ msgstr "Statistik (Verteilungen)"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:588
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1871
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:549
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1263
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1282
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:242
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:171
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:277
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:788
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:784
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:81
 #, kde-format
 msgid "Custom"
@@ -8029,6 +8048,8 @@ msgstr "XY-Kurve aus einer Formel"
 #, kde-format
 msgid "Add a new xy-curve that is defined via a mathematical expression."
 msgstr ""
+"Eine neue XY-Kurve hinzufügen, die durch einen mathematischen Ausdruck "
+"definiert ist. "
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:439
 #, kde-format
@@ -8036,10 +8057,12 @@ msgid ""
 "Add a new xy-curve that is defined as a function of other xy-curves (scaled, "
 "shifted, etc.)"
 msgstr ""
+"Eine neue XY-Kurve hinzufügen, die von einer anderen XY-Kurve abhängt "
+"(skaliert, verschoben, etc.)"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:442
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:498
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:77
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:73
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:239
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:143
 #, kde-format
@@ -8214,7 +8237,7 @@ msgstr "Senkrechte Achse"
 #: src/commonfrontend/matrix/MatrixView.cpp:133
 #: src/commonfrontend/worksheet/WorksheetView.cpp:221
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1355
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:105
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:106
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:123
 #, kde-format
 msgid "Image"
@@ -8565,22 +8588,19 @@ msgid "%1: add Fourier filter curve"
 msgstr "%1: Neue Fourier-Filterkurve hinzufügen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1978
-#, fuzzy, kde-format
-#| msgid "Reduction of '%1'"
+#, kde-format
 msgid "%1: add function of '%2'"
-msgstr "Reduzierung von '%1'"
+msgstr "%1: Funktion von '%2' hinzufügen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1979
-#, fuzzy, kde-format
-#| msgid "Reduction of '%1'"
+#, kde-format
 msgid "Function of '%1'"
-msgstr "Reduzierung von '%1'"
+msgstr "Funktion von '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1982
-#, fuzzy, kde-format
-#| msgid "%1: add fit curve"
+#, kde-format
 msgid "%1: add function curve"
-msgstr "%1: Anpassungskurve hinzufügen"
+msgstr "%1: Funktionenkurve hinzufügen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2031
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1351
@@ -9437,7 +9457,7 @@ msgid "PARAMETERS"
 msgstr "PARAMETER"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:145
 #, kde-format
 msgid "Uncertainty"
 msgstr "Unsicherheit"
@@ -9453,13 +9473,13 @@ msgid "t Statistic"
 msgstr "t-Statistik"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1886
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:150
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:146
 #, kde-format
 msgid "Lower"
 msgstr "Unten"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1886
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:150
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:146
 #, kde-format
 msgid "Upper"
 msgstr "Oben"
@@ -9503,7 +9523,7 @@ msgstr "Korrigiertes Bestimmtheitsmaß"
 #. i18n: ectx: property (text), widget (QPushButton, bTest)
 #. i18n: ectx: property (text), widget (QPushButton, bTestConnection)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1909
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:181
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:177
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:263
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:168
 #, kde-format
@@ -9541,7 +9561,7 @@ msgid "Not sufficient weight data points provided!"
 msgstr "Nicht genügend Punkte für die Gewichtung angegeben!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2335
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:374
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:370
 #, kde-format
 msgid "No X data available!"
 msgstr "Keine X Daten verfügbar!"
@@ -9577,54 +9597,51 @@ msgstr "Keine Datenpunkte verfügbar."
 msgid "%1: set transform options and perform the Fourier transform"
 msgstr "%1: Einstellungen festlegen und die Fourier-Transformation durchführen"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:80
-#, fuzzy, kde-format
-#| msgid "%1: set equation"
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:92
+#, kde-format
 msgid "%1: set function"
-msgstr "%1: Gleichung festlegen"
+msgstr "%1: Funktion festlegen"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:304
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:316
 #, kde-format
 msgid "First curve not valid"
-msgstr ""
+msgstr "Erste Kurve ist nicht gültig"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:306
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:318
 #, kde-format
 msgid "xColumn of first curve not valid"
-msgstr ""
+msgstr "x Spalte der ersten Kurve ist nicht gültig"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:308
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:320
 #, kde-format
 msgid "yColumn of first curve not valid"
-msgstr ""
+msgstr "y Spalte der ersten Kurve ist nicht gültig"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:310
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:322
 #, kde-format
 msgid "Number of x and y values do not match for the first curve"
-msgstr ""
+msgstr "Anzahl der x und y Werte der ersten Kurve passen nicht zusammen"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:323
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:335
 #, kde-format
 msgid "Curve '%1' not valid"
-msgstr ""
+msgstr "Kurve '%1' ist nicht gültig"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:325
-#, fuzzy, kde-format
-#| msgid "column mode invalid"
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:337
+#, kde-format
 msgid "xColumn of curve '%1' not valid"
-msgstr "Spaltenmodus ungültig"
+msgstr "x Spalte der Kurve '%1' ist nicht gültig"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:327
-#, fuzzy, kde-format
-#| msgid "column mode invalid"
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:339
+#, kde-format
 msgid "yColumn of curve '%1' not valid"
-msgstr "Spaltenmodus ungültig"
+msgstr "y Spalte der Kurve '%1' ist nicht gültig"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:329
-#, fuzzy, kde-format
-#| msgid "Number of x and y data points must be equal."
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:341
+#, kde-format
 msgid "Number of x and y values do not match for curve '%1'"
-msgstr "Die Anzahl der X- und Y-Datenpunkte muss gleich sein."
+msgstr ""
+"Die Anzahl der X- und Y-Datenpunkte ist unterschiedlich für Kurve '%1'."
 
 #: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:72
 #, kde-format
@@ -10855,10 +10872,9 @@ msgid "Reduce Data"
 msgstr "Daten reduzieren"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:566
-#, fuzzy, kde-format
-#| msgid "Log-Normal (Galton)"
+#, kde-format
 msgid "Log-normal"
-msgstr "Log-Normal (Galton)"
+msgstr "Log-Normal"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:616
 #, kde-format
@@ -10866,10 +10882,9 @@ msgid "Conditional Formatting"
 msgstr "Bedingte Formatierung"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:645
-#, fuzzy, kde-format
-#| msgid "Beta Distribution"
+#, kde-format
 msgid "Fit Distribution"
-msgstr "Beta-Verteilung"
+msgstr "Anpassung an Verteilung"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:659
 #, kde-format
@@ -11280,7 +11295,7 @@ msgstr ""
 #: src/commonfrontend/workbook/WorkbookView.cpp:165
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:116
 #: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:57
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:75
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:71
 #: src/kdefrontend/MainWin.cpp:613 src/kdefrontend/MainWin.cpp:1909
 #: src/kdefrontend/SettingsDialog.cpp:68
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:122
@@ -12199,89 +12214,89 @@ msgstr ""
 "Entweder gibt es keine Verbindung oder es wurde keine Abonnierung gemacht "
 "oder der Filter ist nicht ASCII."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:103
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:104
 #, kde-format
 msgid "ASCII data"
 msgstr "ASCII-Daten"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:104
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:105
 #, kde-format
 msgid "Binary data"
 msgstr "Binärdaten"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:107
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:108
 #, kde-format
 msgid "Excel 2007+ (XSLX)"
 msgstr "Excel 2007+ (XSLX)"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:110
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:111
 #, kde-format
 msgid "OpenDocument Spreadsheet (ODS)"
 msgstr "OpenDocument Tabelle (ODS)"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:113
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:114
 #, kde-format
 msgid "Hierarchical Data Format 5 (HDF5)"
 msgstr "Hierarchical Data Format 5 (HDF5)"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:116
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:117
 #, kde-format
 msgid "Network Common Data Format (NetCDF)"
 msgstr "Network Common Data Format (NetCDF)"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:119
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:120
 #, kde-format
 msgid "Vector Binary Logfile (BLF)"
 msgstr "Vektor Binär Logdatei (BLF)"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:122
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:123
 #, kde-format
 msgid "Flexible Image Transport System Data Format (FITS)"
 msgstr "Flexible Image Transport System Data Format (FITS)"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:124
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:125
 #, kde-format
 msgid "JSON Data"
 msgstr "JSON-Daten"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:126
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:148
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:127
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:149
 #, kde-format
 msgid "ROOT (CERN)"
 msgstr "ROOT (CERN)"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:128
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:150
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:129
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:151
 #, kde-format
 msgid "Spice"
 msgstr "Spice"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:130
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:131
 #, kde-format
 msgid "SAS, Stata or SPSS"
 msgstr "SAS, Stata oder SPSS"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:133
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:134
 #, kde-format
 msgid "MATLAB MAT file"
 msgstr "MATLAB MAT Datei"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:136
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:137
 #, kde-format
 msgid "MCAP Data"
 msgstr "MCAP Daten"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:145
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:146
 #, kde-format
 msgid "ASCII Data"
 msgstr "ASCII-Daten"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:146
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:147
 #, kde-format
 msgid "Binary Data"
 msgstr "Binärdaten"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:158
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:159
 #, kde-format
 msgid ""
 "If this option is checked, only the link to the file is stored in the "
@@ -12290,7 +12305,7 @@ msgstr ""
 "Ist dies aktiviert, wird nur die Verknüpfung zur Datei, nicht aber ihr "
 "Inhalt in der Projektdatei gespeichert."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:159
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:160
 #, kde-format
 msgid ""
 "If this option is checked, the relative path of the file (relative to "
@@ -12300,30 +12315,30 @@ msgstr ""
 "gespeichert."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:167
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:173
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:348
 #, kde-format
 msgid "Continuously Fixed"
 msgstr "Dauernd fest"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:168
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:174
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:353
 #, kde-format
 msgid "From End"
 msgstr "Vom Ende"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:169
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:175
 #, kde-format
 msgid "Till End"
 msgstr "Bis zum Ende"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:170
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:176
 #, kde-format
 msgid "Whole File"
 msgstr "Ganze Datei"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:205
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:211
 #, kde-format
 msgid ""
 "Specify how the data source has to be processed on every read:"
@@ -12342,7 +12357,7 @@ msgstr ""
 "wird neu eingelesen und verarbeitet. Nur verfügbar für \"Datei oder Pipe\" "
 "Datenquellen.</li></ul>"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:216
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:222
 #, kde-format
 msgid ""
 "Number of samples (lines) to be processed on every read.\n"
@@ -12352,7 +12367,7 @@ msgstr ""
 "Anzahl an Samples (Zeilen), die beim Lesen verarbeitet werden sollen.\n"
 "Nur relevant für die Lesemodi \"Ständig Fest\" und \"Von Ende\"."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:222
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:228
 #, kde-format
 msgid ""
 "Specify when and how frequently the data source needs to be read:"
@@ -12365,12 +12380,12 @@ msgstr ""
 "angegeben Intervall gelesen.</li><li>Bei neuen Daten - die Datenquelle wird "
 "bei Eintreffen neuer Daten gelesen.</li></ul>"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:230
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:236
 #, kde-format
 msgid "Specify how frequently the data source has to be read."
 msgstr "Wählen Sie, wie oft die Datenquelle gelesen werden sollen."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:235
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:241
 #, kde-format
 msgid ""
 "Specify how many samples need to be kept in memory after reading.\n"
@@ -12380,7 +12395,7 @@ msgstr ""
 "soll.\n"
 "Verwenden Sie \"Alle\", wenn alle Daten gespeichert werden sollen."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:240
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:246
 #, kde-format
 msgid ""
 "Enable to use the first row of the selected data region for the column names "
@@ -12389,12 +12404,12 @@ msgstr ""
 "Wenn aktiv wird die erste Reihe der ausgewählten Daten als Spaltennamen für "
 "die Tabelle verwendet."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:255
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:261
 #, kde-format
 msgid "Manage MQTT connections"
 msgstr "MQTT-Verbindungen verwalten"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:257
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:263
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:63
 #, kde-format
 msgid ""
@@ -12404,32 +12419,48 @@ msgstr ""
 "Die 'Letzer Wille'-Nachricht angeben. Mindestens ein Thema muss abonniert "
 "sein."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:934
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:940
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr "Datenquellendatei auswählen"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:964
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:970
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr "Wählen Sie die DBC Datei"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:964
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:970
 #, kde-format
 msgid "DBC file (*.dbc)"
 msgstr "DBC-Datei (*.dbc)"
 
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1057
+#, kde-format
+msgid ""
+"Origin Project files need to be opened with \"Import -> Origin Project\"!"
+msgstr ""
+"Origin Projektdateien müssen mittels \"Import -> Origin Projekt\" geöffnet "
+"werden!"
+
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1061
+#, kde-format
+msgid ""
+"LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"
+msgstr ""
+"LabPlot Projektdateien müssen mittels \"Import -> LabPlot Projekt\" geöffnet "
+"werden!"
+
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1169
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1188
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:416
 #, kde-format
 msgid "Data Format"
 msgstr "Datenformat"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1170
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1189
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:470
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:158
 #, kde-format
@@ -12437,183 +12468,183 @@ msgid "Preview"
 msgstr "Vorschau"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1172
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1191
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:549
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
 msgstr "Zu lesender Datenbereich"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1215
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1234
 #, kde-format
 msgid "Data format && preview"
 msgstr "Datenformat && Vorschau"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1262
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1281
 #: src/kdefrontend/SettingsGeneralPage.cpp:252
 #, kde-format
 msgid "Automatic"
 msgstr "Automatisch"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1514
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1533
 #, kde-format
 msgid "file command not found"
 msgstr "file-Kommando nicht gefunden"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1525
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1544
 #, kde-format
 msgid "cannot open"
 msgstr "Fehlschlag beim Öffnen"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1530
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1549
 #, kde-format
 msgid "<b>File type:</b> %1"
 msgstr "<b>Dateityp:</b> %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1535
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1554
 #, kde-format
 msgid "General:"
 msgstr "Allgemein:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1537
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1538
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1539
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1556
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1557
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1558
 #, kde-format
 msgid "yes"
 msgstr "Ja"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1537
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1538
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1539
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1556
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1557
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1558
 #, kde-format
 msgid "no"
 msgstr "Nein"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1537
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1556
 #, kde-format
 msgid "Readable: %1"
 msgstr "Lesbar: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1538
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1557
 #, kde-format
 msgid "Writable: %1"
 msgstr "Schreibbar: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1539
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1558
 #, kde-format
 msgid "Executable: %1"
 msgstr "Ausführbar: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1541
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1560
 #, kde-format
 msgid "Birth time: %1"
 msgstr "Geburtszeit: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1542
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1561
 #, kde-format
 msgid "Last metadata changed: %1"
 msgstr "Letzte Metadatenänderung: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1543
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1562
 #, kde-format
 msgid "Last modified: %1"
 msgstr "Zuletzt geändert: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1544
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1563
 #, kde-format
 msgid "Last read: %1"
 msgstr "Letzter Lesezugriff: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1545
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1564
 #, kde-format
 msgid "Owner: %1"
 msgstr "Eigentümer: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1546
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1565
 #, kde-format
 msgid "Group: %1"
 msgstr "Gruppe: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1547
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1566
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
 msgstr[0] "%1 cByte"
 msgstr[1] "%1 cBytes"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1550
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1569
 #, kde-format
 msgid "Summary:"
 msgstr "Zusammenfassung:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1573
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1578
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1592
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1597
 #, kde-format
 msgid "Content:"
 msgstr "Inhalt:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1609
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1628
 #, kde-format
 msgid "Could not open file %1 for reading."
 msgstr "Die Datei <i>%1</i> kann nicht zum Lesen geöffnet werden."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1779
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1798
 #, kde-format
 msgid "No data arrived yet for the selected topic"
 msgstr "Bisher keine Daten für das ausgewählte Thema angekommen"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2031
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2050
 #, kde-format
 msgid "Not a HDF5 file: %1"
 msgstr "Keine HDF5 Datei: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2493
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2512
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
 msgstr "Abonnieren aller verfügbaren Themen ist nicht möglich."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2523
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2542
 #, kde-format
 msgid "Disconnected from '%1'."
 msgstr "Verbindung mit %1 beendet."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2592
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2611
 #, kde-format
 msgid "Available (%1)"
 msgstr "Verfügbar (%1)"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2696
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2715
 #, kde-format
 msgid "Wrong username or password"
 msgstr "Falscher Benutzername oder Passwort"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2699
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2718
 #, kde-format
 msgid "The client ID wasn't accepted"
 msgstr "Die Client-ID wurde nicht akzeptiert"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2703
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2722
 #, kde-format
 msgid "The broker %1 couldn't be reached."
 msgstr "Der Broker %1 kann nicht erreicht werden."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2706
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2725
 #, kde-format
 msgid "The client is not authorized to connect."
 msgstr "Der Client ist nicht zum Verbinden authorisiert."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2709
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2728
 #, kde-format
 msgid "An unknown error occurred."
 msgstr "Ein unbekannter Fehler ist aufgetreten."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2715
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2718
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2734
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2737
 #, kde-format
 msgid "An error occurred."
 msgstr "Ein Fehler ist aufgetreten."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2732
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2751
 #, kde-format
 msgid "Connecting to '%1:%2' timed out."
 msgstr "Zeitüberschreitung bei der Verbindung zu „%1:%2“."
@@ -14208,7 +14239,7 @@ msgid "calculation time: %1 ms"
 msgstr "Berechnungszeit: %1 ms"
 
 #: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:58
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:76
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:72
 #, kde-format
 msgid "XY-Curve"
 msgstr "XY-Kurve"
@@ -14450,38 +14481,38 @@ msgstr "t, min"
 msgid "t, max"
 msgstr "t, max"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:145
 #, kde-format
 msgid "Uncertainty, %"
 msgstr "Unischerheit, %"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:145
 #, kde-format
 msgid "t statistic"
 msgstr "t-Statistik"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:368
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:364
 #, kde-format
 msgid "No X and Y column specified!"
 msgstr "Keine X und Y Spalte angegeben!"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:370
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:366
 #, kde-format
 msgid "No X column specified!"
 msgstr "Keine X Spalte angegeben!"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:372
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:368
 #, kde-format
 msgid "No Y column specified!"
 msgstr "Keine Y Spalte angegeben!"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:376
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:372
 #, kde-format
 msgid "No Y data available!"
 msgstr "Keine Y Daten verfügbar!"
 
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceCurve)
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:431
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:427
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:217
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:359
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:452
@@ -14495,19 +14526,19 @@ msgstr "Keine Y Daten verfügbar!"
 msgid "Curve:"
 msgstr "Kurve:"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:452
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:448
 #, kde-format
 msgid "Histogram:"
 msgstr "Histogramm:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:836
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:832
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:517
 #, kde-format
 msgid "Degree:"
 msgstr "Grad:"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:896
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:895
 #, kde-format
 msgid "Number of peaks:"
 msgstr "Anzahl der Peaks:"
@@ -14574,17 +14605,13 @@ msgid "Fourier transformation status: %1"
 msgstr "Fourier-Transformationsstatus: %1"
 
 #: src/kdefrontend/dockwidgets/XYFunctionCurveDock.cpp:130
-#, fuzzy, kde-format
-#| msgid ""
-#| "The column \"%1\"\n"
-#| "is not available anymore. It will be automatically used once it is "
-#| "created again."
+#, kde-format
 msgid ""
 "The curve \"%1\"\n"
 "is not available anymore. It will be automatically used once it is created "
 "again."
 msgstr ""
-"Die Spalte \"%1\"\n"
+"Die Kurve \"%1\"\n"
 "ist nicht mehr verfügbar. Sie wird automatisch verwendet, wenn sie "
 "wiederhergestellt ist."
 
@@ -14745,12 +14772,10 @@ msgid "Properties: XY-Equation"
 msgstr "Eigenschaften: XY-Gleichung"
 
 #: src/kdefrontend/GuiObserver.cpp:291
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Datapicker Curve"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Function Curve"
-msgstr "Eigenschaften: Digitalisierte Kurve"
+msgstr "Eigenschaften: Funktionenkurve"
 
 #: src/kdefrontend/GuiObserver.cpp:296
 #, kde-format
@@ -15397,12 +15422,10 @@ msgid "Garvit Khatri"
 msgstr "Garvit Khatri"
 
 #: src/kdefrontend/LabPlot.cpp:108
-#, fuzzy, kde-format
-#| msgctxt "@info:credit"
-#| msgid "Porting LabPlot2 to KF5 and Integration with Cantor"
+#, kde-format
 msgctxt "@info:credit"
 msgid "Porting LabPlot to KF5 and Integration with Cantor"
-msgstr "Portierung von LabPlot2 auf KF5 und Cantor-Integration"
+msgstr "Portierung von LabPlot auf KF5 und Cantor-Integration"
 
 #: src/kdefrontend/LabPlot.cpp:111
 #, kde-format
@@ -17227,10 +17250,9 @@ msgid "Fourier Filter of '%1'"
 msgstr "Fourier-Filter von '%1'"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:766
-#, fuzzy, kde-format
-#| msgid "Probability Density"
+#, kde-format
 msgid "Probability Density of '%1'"
-msgstr "Wahrscheinlichkeitsdichte"
+msgstr "Wahrscheinlichkeitsdichte von '%1'"
 
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:966

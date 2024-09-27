@@ -192,23 +192,22 @@ int AsciiFilter::columnNumber(const QString& fileName, const QString& separator)
 }
 
 size_t AsciiFilter::lineNumber(const QString& fileName, const size_t maxLines) {
+	DEBUG(Q_FUNC_INFO << ", max lines = " << maxLines)
 	KCompressionDevice device(fileName);
 
 	if (!device.open(QIODevice::ReadOnly)) {
 		DEBUG(Q_FUNC_INFO << ", Could not open file " << STDSTRING(fileName) << " to determine number of lines");
-
 		return 0;
 	}
 	// 	if (!device.canReadLine())
 	// 		return -1;
 
-	size_t lineCount = 0;
 #if defined(Q_OS_LINUX) || defined(Q_OS_BSD4)
 	if (maxLines == std::numeric_limits<std::size_t>::max()) { // only when reading all lines
 		// on Linux and BSD use grep, if available, which is much faster than counting lines in the file
 		// wc -l does not count last line when not ending in line break!
 		DEBUG(Q_FUNC_INFO << ", using 'grep' or 'sed' to count lines")
-		QString cmdFullPath = safeExecutableName(QStringLiteral("grepxx"));
+		QString cmdFullPath = safeExecutableName(QStringLiteral("grep"));
 		QStringList options;
 		options << QStringLiteral("-e") << QStringLiteral("^") << QStringLiteral("-c") << fileName;
 		if (cmdFullPath.isEmpty()) { // alternative: sed -n '$='
@@ -223,7 +222,7 @@ size_t AsciiFilter::lineNumber(const QString& fileName, const size_t maxLines) {
 			size_t lineCount = 0;
 			while (cmd.waitForReadyRead()) {
 				QString line = QLatin1String(cmd.readLine());
-				// QDEBUG("OUTPUT: " << line)
+				QDEBUG(Q_FUNC_INFO << ", line count command output: " << line)
 				// wc on macOS has leading spaces: use SkipEmptyParts
 				lineCount = line.split(QLatin1Char(' '), Qt::SkipEmptyParts).at(0).toInt();
 			}
@@ -234,6 +233,7 @@ size_t AsciiFilter::lineNumber(const QString& fileName, const size_t maxLines) {
 	}
 #endif
 
+	size_t lineCount = 0;
 	while (!device.atEnd()) {
 		if (lineCount >= maxLines) // stop when maxLines available
 			return lineCount;
@@ -249,6 +249,7 @@ size_t AsciiFilter::lineNumber(const QString& fileName, const size_t maxLines) {
   resets the position to 0!
 */
 size_t AsciiFilter::lineNumber(QIODevice& device, const size_t maxLines) const {
+	DEBUG(Q_FUNC_INFO << ", max lines = " << maxLines)
 	if (device.isSequential())
 		return 0;
 	// 	if (!device.canReadLine())
@@ -268,6 +269,7 @@ size_t AsciiFilter::lineNumber(QIODevice& device, const size_t maxLines) const {
 	}
 	device.seek(0);
 
+	DEBUG(Q_FUNC_INFO << ", line count = " << lineCount)
 	return lineCount;
 }
 
@@ -433,17 +435,36 @@ QString AsciiFilterPrivate::separator() const {
 // #####################################################################
 // ############################# Read ##################################
 // #####################################################################
+
+QString AsciiFilterPrivate::prepareDeviceStatusToString(PrepareDeviceStatus e) {
+	switch (e) {
+	case PrepareDeviceStatus::Success:
+		return i18n("Success");
+	case PrepareDeviceStatus::DeviceAtEnd:
+		return i18n("Device at end");
+	case PrepareDeviceStatus::NotEnoughRowsSelected:
+		return i18n("Not enough rows selected. Increase number of rows.");
+	case PrepareDeviceStatus::UnableToOpenDevice:
+		return i18n("Unable to open device");
+	}
+	return i18n("Unhandled case");
+}
+
 /*!
- * returns -1 if the device couldn't be opened, 1 if the current read position in the device is at the end and 0 otherwise.
+ * Prepare device for reading data
  */
-int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device, const size_t maxLines) {
-	DEBUG(Q_FUNC_INFO << ", is sequential = " << device.isSequential() << ", can readLine = " << device.canReadLine());
+AsciiFilterPrivate::PrepareDeviceStatus AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device, const size_t maxLines) {
+	DEBUG(Q_FUNC_INFO << ", is sequential = " << device.isSequential() << ", can readLine = " << device.canReadLine() << ", max lines = " << maxLines);
 
-	if (!device.open(QIODevice::ReadOnly))
-		return -1;
+	if (!device.open(QIODevice::ReadOnly)) {
+		DEBUG(Q_FUNC_INFO << ", ERROR: could not open file for reading!")
+		return PrepareDeviceStatus::UnableToOpenDevice;
+	}
 
-	if (device.atEnd() && !device.isSequential()) // empty file
-		return 1;
+	if (device.atEnd() && !device.isSequential()) { // empty file
+		DEBUG(Q_FUNC_INFO << ", ERROR: file is empty!")
+		return PrepareDeviceStatus::DeviceAtEnd;
+	}
 
 	// NEW method
 	// 1. First read header (vector names) at given headerLine (counting comment lines)
@@ -659,9 +680,13 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device, const size_t maxL
 		DEBUG(Q_FUNC_INFO << ", column mode (after checking more lines) = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, mode));
 #endif
 
+	// if header enabled: increase max lines (not if size_t::max())
+	size_t maxLinesToRead = maxLines;
+	if (headerEnabled && maxLines < std::numeric_limits<std::size_t>::max())
+		maxLinesToRead++;
 	// ATTENTION: This resets the position in the device to 0
-	m_actualRows = (int)q->lineNumber(device, maxLines);
-	DEBUG(Q_FUNC_INFO << ", m_actualRows: " << m_actualRows << ", startRow (after header): " << startRow << ", endRow: " << endRow)
+	m_actualRows = (int)q->lineNumber(device, maxLinesToRead);
+	DEBUG(Q_FUNC_INFO << ", number of lines found: " << m_actualRows << ", startRow (after header): " << startRow << ", endRow: " << endRow)
 
 	DEBUG(Q_FUNC_INFO << ", headerEnabled = " << headerEnabled << ", headerLine = " << headerLine << ", m_actualStartRow = " << m_actualStartRow)
 	if ((!headerEnabled || headerLine < 1) && startRow <= 2 && m_actualStartRow > 1) // take header line
@@ -678,9 +703,9 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device, const size_t maxL
 	DEBUG("actual cols/rows (w/o header): " << m_actualCols << ' ' << m_actualRows);
 
 	if (m_actualRows == 0 && !device.isSequential())
-		return 1;
+		return PrepareDeviceStatus::NotEnoughRowsSelected;
 
-	return 0;
+	return PrepareDeviceStatus::Success;
 }
 
 /*!
@@ -722,10 +747,9 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 		switch (sourceType) {
 		case LiveDataSource::SourceType::FileOrPipe: {
-			const int deviceError = prepareDeviceToRead(device);
-			if (deviceError != 0) {
-				DEBUG(Q_FUNC_INFO << ", Device ERROR: " << deviceError);
-				q->setLastError(i18n("Failed to open the device/file or it's empty."));
+			const auto deviceError = prepareDeviceToRead(device);
+			if (deviceError != PrepareDeviceStatus::Success) {
+				setLastError(deviceError);
 				return 0;
 			}
 			break;
@@ -1230,6 +1254,11 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	return bytesread;
 }
 
+void AsciiFilterPrivate::setLastError(PrepareDeviceStatus e) {
+	DEBUG(Q_FUNC_INFO << ", DEVICE ERROR = " << prepareDeviceStatusToString(e).toStdString());
+	q->setLastError(i18n("Failed to prepare device/file: %1", prepareDeviceStatusToString(e)));
+}
+
 /*!
 	reads the content of device \c device to the data source \c dataSource. Uses the settings defined in the data source.
 */
@@ -1238,10 +1267,9 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 	DEBUG(Q_FUNC_INFO << ", start row: " << startRow)
 
 	if (!m_prepared) {
-		const int deviceError = prepareDeviceToRead(device);
-		if (deviceError) {
-			DEBUG(Q_FUNC_INFO << ", DEVICE ERROR = " << deviceError);
-			q->setLastError(i18n("Failed to open the device/file or it's empty."));
+		const auto deviceError = prepareDeviceToRead(device);
+		if (deviceError != AsciiFilterPrivate::PrepareDeviceStatus::Success) {
+			setLastError(deviceError);
 			return;
 		}
 
@@ -1560,11 +1588,10 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	DEBUG(Q_FUNC_INFO)
 
 	KCompressionDevice device(fileName);
-	const int deviceError = prepareDeviceToRead(device, lines);
 
-	if (deviceError != 0) {
-		DEBUG("Device error = " << deviceError);
-		q->setLastError(i18n("Failed to open the device/file or it's empty."));
+	const auto deviceError = prepareDeviceToRead(device, lines);
+	if (deviceError != PrepareDeviceStatus::Success) {
+		setLastError(deviceError);
 		return {};
 	}
 
@@ -1586,8 +1613,8 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	QDEBUG(Q_FUNC_INFO << ", column names = " << columnNames);
 
 	// skip data lines, if required
-	DEBUG("m_actualStartRow = " << m_actualStartRow)
-	DEBUG("m_actualRows = " << m_actualRows)
+	DEBUG(Q_FUNC_INFO << ", actual start row = " << m_actualStartRow)
+	DEBUG(Q_FUNC_INFO << ", actual rows = " << m_actualRows)
 	int skipLines = m_actualStartRow - 1;
 	if (!headerEnabled || headerLine < 1) { // read header as normal line
 		skipLines--;

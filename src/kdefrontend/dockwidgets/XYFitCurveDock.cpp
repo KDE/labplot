@@ -31,10 +31,6 @@
 #include <QStandardPaths>
 #include <QWidgetAction>
 
-#ifdef HAVE_POPPLER
-#include <poppler-qt5.h>
-#endif
-
 /*!
   \class XYFitCurveDock
   \brief  Provides a widget for editing the properties of the XYFitCurves
@@ -862,7 +858,10 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 		case nsl_fit_model_polynomial:
 			uiGeneralTab.lDegree->setVisible(true);
 			uiGeneralTab.sbDegree->setVisible(true);
-			uiGeneralTab.sbDegree->setMaximum(std::min(availableRowCount - 1, 10));
+			if (availableRowCount > 1)
+				uiGeneralTab.sbDegree->setMaximum(std::min(availableRowCount - 1, 10));
+			else
+				uiGeneralTab.sbDegree->setMaximum(1);
 			break;
 		case nsl_fit_model_fourier:
 			if (availableRowCount < 4) { // too few data points
@@ -1033,6 +1032,7 @@ void XYFitCurveDock::updateModelEquation() {
 		}
 
 		if (image.isNull()) {
+			DEBUG(Q_FUNC_INFO << ", WARNING: model image is null!")
 			uiGeneralTab.lEquation->hide();
 			uiGeneralTab.lFuncPic->hide();
 		} else {

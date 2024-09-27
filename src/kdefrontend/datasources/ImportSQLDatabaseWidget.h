@@ -16,7 +16,7 @@
 #include "ui_importsqldatabasewidget.h"
 #include <QSqlDatabase>
 
-#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
+#ifdef HAVE_KF_SYNTAX_HIGHLIGHTING
 #include <KSyntaxHighlighting/repository.h>
 namespace KSyntaxHighlighting {
 class SyntaxHighlighter;
@@ -61,7 +61,7 @@ private:
 	bool m_initializing{false};
 	bool m_valid{false};
 	bool m_numeric{false};
-#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
+#ifdef HAVE_KF_SYNTAX_HIGHLIGHTING
 	KSyntaxHighlighting::SyntaxHighlighter* m_highlighter;
 	KSyntaxHighlighting::Repository m_repository;
 #endif

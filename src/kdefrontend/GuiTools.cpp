@@ -297,17 +297,15 @@ QString GuiTools::openImageFile(const QString& className) {
 QImage GuiTools::importPDFFile(const QString& fileName) {
 	// DEBUG(Q_FUNC_INFO << ", PDF file name = " << STDSTRING(fileName));
 #ifdef HAVE_POPPLER
-	auto* document = Poppler::Document::load(fileName);
+	auto document = Poppler::Document::load(fileName);
 	if (!document) {
 		WARN("Failed to process PDF file" << STDSTRING(fileName));
-		delete document;
 		return {};
 	}
 
-	auto* page = document->page(0);
+	auto page = document->page(0);
 	if (!page) {
 		WARN("Failed to process the first page in the PDF file.")
-		delete document;
 		return {};
 	}
 
@@ -318,31 +316,27 @@ QImage GuiTools::importPDFFile(const QString& fileName) {
 	document->setRenderHint(Poppler::Document::ThinLineSolid);
 
 	const static int dpi = QGuiApplication::primaryScreen()->logicalDotsPerInchX();
-	QImage image = page->renderToImage(dpi, dpi);
-
-	delete page;
-	delete document;
+	auto image = page->renderToImage(dpi, dpi);
 
 	return image;
 #else
 	Q_UNUSED(fileName)
+	DEBUG(Q_FUNC_INFO << ", POPPLER not available!")
 	return {};
 #endif
 }
 
 QImage GuiTools::imageFromPDFData(const QByteArray& data, double zoomFactor) {
 #ifdef HAVE_POPPLER
-	auto* document = Poppler::Document::loadFromData(data);
+	auto document = Poppler::Document::loadFromData(data);
 	if (!document) {
 		WARN("Failed to process the byte array");
-		delete document;
 		return {};
 	}
 
-	auto* page = document->page(0);
+	auto page = document->page(0);
 	if (!page) {
 		WARN("Failed to process the first page in the PDF file.")
-		delete document;
 		return {};
 	}
 
@@ -353,10 +347,7 @@ QImage GuiTools::imageFromPDFData(const QByteArray& data, double zoomFactor) {
 	document->setRenderHint(Poppler::Document::ThinLineSolid);
 
 	const static int dpi = QGuiApplication::primaryScreen()->logicalDotsPerInchX();
-	QImage image = page->renderToImage(zoomFactor * dpi, zoomFactor * dpi);
-
-	delete page;
-	delete document;
+	auto image = page->renderToImage(zoomFactor * dpi, zoomFactor * dpi);
 
 	return image;
 #else

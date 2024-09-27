@@ -2,9 +2,9 @@
     "id": "org.kde.labplot2",
     "branch": "master",
     "runtime": "org.kde.Platform",
-    "runtime-version": "5.15-23.08",
+    "runtime-version": "6.7",
     "base": "io.qt.qtwebengine.BaseApp",
-    "base-version": "5.15-23.08",
+    "base-version": "6.7",
     "sdk": "org.kde.Sdk",
     "command": "labplot",
     "tags": ["nightly"],
@@ -14,8 +14,14 @@
         "--share=ipc",
         "--socket=wayland",
         "--socket=fallback-x11",
+	"--socket=cups",
+	"--socket=session-bus",
+        "--device=dri",
         "--filesystem=host",
-        "--filesystem=/tmp"
+        "--filesystem=/tmp",
+        "--filesystem=xdg-documents",
+        "--system-talk-name=org.freedesktop.UDisks2",
+        "--talk-name=org.freedesktop.Flatpak"
     ],
     "cleanup": [
         "/include",
@@ -56,7 +62,8 @@
                 "-DENABLE_GLIB=OFF",
                 "-DENABLE_GOBJECT_INTROSPECTION=OFF",
                 "-DENABLE_UTILS=OFF",
-                "-DENABLE_QT6=OFF"
+                "-DENABLE_QT5=OFF",
+                "-DENABLE_QT6=ON"
             ],
             "buildsystem": "cmake-ninja",
             "builddir": true,
@@ -120,7 +127,13 @@
         {
             "name": "analitza",
             "buildsystem": "cmake-ninja",
-            "sources": [ { "type": "git", "url": "https://invent.kde.org/kde/analitza.git", "tag": "v23.08.1" } ]
+            "sources": [
+		    {
+			    "type": "archive",
+			    "url": "https://github.com/KDE/analitza/archive/v24.08.1.tar.gz",
+			    "sha256": "ccd18151c49937c606f5446eb3f821d46066be76e6a9d01e96f6494e59c08c81"
+		    }
+	    ]
         },
         {
             "name": "gsl",
@@ -201,25 +214,19 @@
         },
         {
             "name": "qtmqtt",
-	    "buildsystem": "qmake",
+	    "buildsystem": "cmake-ninja",
 	    "builddir": true,
-	    "make-install-args": ["INSTALL_ROOT=/app/qtmqtt"],
-	    "sources": [ { "type": "git", "url": "https://github.com/qt/qtmqtt.git", "tag": "v5.15.2" } ]
+	    "sources": [ { "type": "git", "url": "https://github.com/qt/qtmqtt.git", "tag": "v6.7.2" } ]
 	},
         {
             "name": "kuserfeedback",
 	    "buildsystem": "cmake-ninja",
+	    "config-opts": [ "-DBUILD_TESTING=OFF", "-DENABLE_DOCS=OFF" ],
             "sources": [
                 {
-                    "type": "archive",
-                    "url": "https://download.kde.org/stable/kuserfeedback/kuserfeedback-1.2.0.tar.xz",
-                    "sha256": "76aac922b153249b274680a6f4c72c238ef14e3df04bad00cb64158b1063f264",
-                    "x-checker-data": {
-                        "type": "anitya",
-                        "project-id": 138221,
-                        "stable-only": true,
-                        "url-template": "https://download.kde.org/stable/kuserfeedback/kuserfeedback-$version.tar.xz"
-                    }
+                    "type": "git",
+                    "url": "https://github.com/KDE/kuserfeedback.git",
+                    "tag": "v6.6.0"
                 }
             ]
         },
@@ -242,7 +249,7 @@
             "buildsystem": "cmake-ninja",
             "config-opts": [
                 "-DADS_VERSION=4.0.3",
-                "-DQT_VERSION_MAJOR=5"
+                "-DQT_VERSION_MAJOR=6"
             ],
             "sources": [
                 {
@@ -359,6 +366,10 @@
                         "stable-only": true,
                         "url-template": "https://gitlab.com/api/v4/projects/ixion%2Fixion/packages/generic/source/$version/libixion-$version.tar.xz"
                     }
+                },
+		{
+                    "type": "patch",
+                    "path": "admin/patches/libixion-0.19.0_win32.patch"
                 }
             ]
         },
@@ -379,26 +390,9 @@
             ]
         },
         {
-            "name": "cantor",
-            "buildsystem": "cmake-ninja",
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "https://download.kde.org/stable/release-service/24.08.0/src/cantor-24.08.0.tar.xz",
-                    "sha256": "5292977d1a96e30d62011532aa642d3071b751f3c9656371401e0ee8d9e7092f",
-                    "x-checker-data": {
-                        "type": "anitya",
-                        "project-id": 236341,
-                        "stable-only": true,
-                        "url-template": "https://download.kde.org/stable/release-service/$version/src/cantor-$version.tar.xz"
-                    }
-                }
-            ]
-        },
-        {
             "name": "labplot",
             "buildsystem": "cmake-ninja",
-            "config-opts": [ "-DQt5Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt5Mqtt", "-DLOCAL_QT_ADVANCED_DOCK_COPY=OFF", "-DENABLE_TESTS=OFF"],
+            "config-opts": [ "-DQt6Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt6Mqtt", "-DLOCAL_QT_ADVANCED_DOCK_COPY=OFF", "-DENABLE_TESTS=OFF"],
 	    "sources": [
                 {
                     "type": "dir",

@@ -41,13 +41,14 @@ class ROOTOptionsWidget;
 class TemplateHandler;
 class ImportKaggleDatasetWidget;
 
+class KConfig;
+class KMessageWidget;
+class KUrlComboBox;
+
 class QTableWidget;
 class QCompleter;
 class QTimer;
 class QTreeWidgetItem;
-
-class KConfig;
-class KUrlComboBox;
 
 class ImportFileWidget : public QWidget {
 	Q_OBJECT
@@ -128,6 +129,7 @@ private:
 	bool m_embedded{false};
 	TemplateHandler* m_templateHandler{nullptr};
 	bool mcapTopicsInitialized{false};
+	KMessageWidget* m_messageWidget{nullptr};
 
 Q_SIGNALS:
 	void enableImportToMatrix(bool enable);
