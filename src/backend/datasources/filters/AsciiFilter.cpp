@@ -192,11 +192,11 @@ int AsciiFilter::columnNumber(const QString& fileName, const QString& separator)
 }
 
 size_t AsciiFilter::lineNumber(const QString& fileName, const size_t maxLines) {
+	DEBUG(Q_FUNC_INFO << ", max lines = " << maxLines)
 	KCompressionDevice device(fileName);
 
 	if (!device.open(QIODevice::ReadOnly)) {
 		DEBUG(Q_FUNC_INFO << ", Could not open file " << STDSTRING(fileName) << " to determine number of lines");
-
 		return 0;
 	}
 	// 	if (!device.canReadLine())
@@ -249,6 +249,7 @@ size_t AsciiFilter::lineNumber(const QString& fileName, const size_t maxLines) {
   resets the position to 0!
 */
 size_t AsciiFilter::lineNumber(QIODevice& device, const size_t maxLines) const {
+	DEBUG(Q_FUNC_INFO << ", max lines = " << maxLines)
 	if (device.isSequential())
 		return 0;
 	// 	if (!device.canReadLine())
@@ -268,6 +269,7 @@ size_t AsciiFilter::lineNumber(QIODevice& device, const size_t maxLines) const {
 	}
 	device.seek(0);
 
+	DEBUG(Q_FUNC_INFO << ", line count = " << lineCount)
 	return lineCount;
 }
 
@@ -452,7 +454,7 @@ QString AsciiFilterPrivate::prepareDeviceStatusToString(PrepareDeviceStatus e) {
  * Prepare device for reading data
  */
 AsciiFilterPrivate::PrepareDeviceStatus AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device, const size_t maxLines) {
-	DEBUG(Q_FUNC_INFO << ", is sequential = " << device.isSequential() << ", can readLine = " << device.canReadLine());
+	DEBUG(Q_FUNC_INFO << ", is sequential = " << device.isSequential() << ", can readLine = " << device.canReadLine() << ", max lines = " << maxLines);
 
 	if (!device.open(QIODevice::ReadOnly)) {
 		DEBUG(Q_FUNC_INFO << ", ERROR: could not open file for reading!")
@@ -678,8 +680,12 @@ AsciiFilterPrivate::PrepareDeviceStatus AsciiFilterPrivate::prepareDeviceToRead(
 		DEBUG(Q_FUNC_INFO << ", column mode (after checking more lines) = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, mode));
 #endif
 
+	// if header enabled: increase max lines (not if size_t::max())
+	size_t maxLinesToRead = maxLines;
+	if (headerEnabled && maxLines < std::numeric_limits<std::size_t>::max())
+		maxLinesToRead++;
 	// ATTENTION: This resets the position in the device to 0
-	m_actualRows = (int)q->lineNumber(device, maxLines);
+	m_actualRows = (int)q->lineNumber(device, maxLinesToRead);
 	DEBUG(Q_FUNC_INFO << ", number of lines found: " << m_actualRows << ", startRow (after header): " << startRow << ", endRow: " << endRow)
 
 	DEBUG(Q_FUNC_INFO << ", headerEnabled = " << headerEnabled << ", headerLine = " << headerLine << ", m_actualStartRow = " << m_actualStartRow)
@@ -1607,8 +1613,8 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	QDEBUG(Q_FUNC_INFO << ", column names = " << columnNames);
 
 	// skip data lines, if required
-	DEBUG("m_actualStartRow = " << m_actualStartRow)
-	DEBUG("m_actualRows = " << m_actualRows)
+	DEBUG(Q_FUNC_INFO << ", actual start row = " << m_actualStartRow)
+	DEBUG(Q_FUNC_INFO << ", actual rows = " << m_actualRows)
 	int skipLines = m_actualStartRow - 1;
 	if (!headerEnabled || headerLine < 1) { // read header as normal line
 		skipLines--;
