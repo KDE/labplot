@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-25 01:48+0000\n"
+"POT-Creation-Date: 2024-09-27 01:51+0000\n"
 "PO-Revision-Date: 2014-03-19 20:12+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -1074,20 +1074,48 @@ msgstr ""
 msgid "Number of lines: %1"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:539
-#: src/backend/datasources/filters/AsciiFilter.cpp:748
-#: src/backend/datasources/filters/AsciiFilter.cpp:946
-#: src/backend/datasources/filters/AsciiFilter.cpp:1482
-#: src/backend/datasources/filters/AsciiFilter.cpp:2027
+#: src/backend/datasources/filters/AsciiFilter.cpp:440
+#: src/backend/gsl/errors.h:20
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2065
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1224
+#, kde-format
+msgid "Success"
+msgstr ""
+
+#: src/backend/datasources/filters/AsciiFilter.cpp:442
+#, kde-format
+msgid "Device at end"
+msgstr ""
+
+#: src/backend/datasources/filters/AsciiFilter.cpp:444
+#, kde-format
+msgid "Not enough rows selected. Increase number of rows."
+msgstr ""
+
+#: src/backend/datasources/filters/AsciiFilter.cpp:446
+#, kde-format
+msgid "Unable to open device"
+msgstr ""
+
+#: src/backend/datasources/filters/AsciiFilter.cpp:448
+#, kde-format
+msgid "Unhandled case"
+msgstr ""
+
+#: src/backend/datasources/filters/AsciiFilter.cpp:558
+#: src/backend/datasources/filters/AsciiFilter.cpp:766
+#: src/backend/datasources/filters/AsciiFilter.cpp:964
+#: src/backend/datasources/filters/AsciiFilter.cpp:1504
+#: src/backend/datasources/filters/AsciiFilter.cpp:2048
 #, kde-format
 msgid "Timestamp"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:543
-#: src/backend/datasources/filters/AsciiFilter.cpp:742
-#: src/backend/datasources/filters/AsciiFilter.cpp:944
-#: src/backend/datasources/filters/AsciiFilter.cpp:1477
-#: src/backend/datasources/filters/AsciiFilter.cpp:2021
+#: src/backend/datasources/filters/AsciiFilter.cpp:562
+#: src/backend/datasources/filters/AsciiFilter.cpp:760
+#: src/backend/datasources/filters/AsciiFilter.cpp:962
+#: src/backend/datasources/filters/AsciiFilter.cpp:1499
+#: src/backend/datasources/filters/AsciiFilter.cpp:2042
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1095,20 +1123,11 @@ msgstr ""
 msgid "Index"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:728
-#: src/backend/datasources/filters/AsciiFilter.cpp:1244
-#: src/backend/datasources/filters/AsciiFilter.cpp:1567
-#: src/backend/datasources/filters/BinaryFilter.cpp:404
-#: src/backend/datasources/filters/McapFilter.cpp:188
-#, kde-format
-msgid "Failed to open the device/file or it's empty."
-msgstr ""
-
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
-#: src/backend/datasources/filters/AsciiFilter.cpp:754
-#: src/backend/datasources/filters/AsciiFilter.cpp:951
-#: src/backend/datasources/filters/AsciiFilter.cpp:1497
-#: src/backend/datasources/filters/AsciiFilter.cpp:2040
+#: src/backend/datasources/filters/AsciiFilter.cpp:772
+#: src/backend/datasources/filters/AsciiFilter.cpp:969
+#: src/backend/datasources/filters/AsciiFilter.cpp:1519
+#: src/backend/datasources/filters/AsciiFilter.cpp:2061
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
 #: src/commonfrontend/matrix/MatrixView.cpp:619
@@ -1124,14 +1143,20 @@ msgstr ""
 msgid "Value"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:953
-#: src/backend/datasources/filters/AsciiFilter.cpp:1499
-#: src/backend/datasources/filters/AsciiFilter.cpp:2042
+#: src/backend/datasources/filters/AsciiFilter.cpp:971
+#: src/backend/datasources/filters/AsciiFilter.cpp:1521
+#: src/backend/datasources/filters/AsciiFilter.cpp:2063
 #, kde-format
 msgid "Value %1"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:1263
+#: src/backend/datasources/filters/AsciiFilter.cpp:1253
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Failed to prepare device/file: %1"
+msgstr "Statistik"
+
+#: src/backend/datasources/filters/AsciiFilter.cpp:1285
 #: src/backend/datasources/filters/BinaryFilter.cpp:444
 #: src/backend/datasources/filters/CANFilter.cpp:301
 #: src/backend/datasources/filters/FITSFilter.cpp:329
@@ -1171,6 +1196,12 @@ msgstr ""
 #: src/backend/datasources/filters/BinaryFilter.cpp:283
 #, kde-format
 msgid "Data selection empty."
+msgstr ""
+
+#: src/backend/datasources/filters/BinaryFilter.cpp:404
+#: src/backend/datasources/filters/McapFilter.cpp:188
+#, kde-format
+msgid "Failed to open the device/file or it's empty."
 msgstr ""
 
 #: src/backend/datasources/filters/CANFilter.cpp:220
@@ -3018,13 +3049,6 @@ msgstr ""
 #: src/backend/gsl/constants.cpp:189
 #, kde-format
 msgid "Energy 1 erg"
-msgstr ""
-
-#: src/backend/gsl/errors.h:20
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2065
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1224
-#, kde-format
-msgid "Success"
 msgstr ""
 
 #: src/backend/gsl/errors.h:22
