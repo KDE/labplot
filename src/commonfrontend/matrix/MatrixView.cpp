@@ -1569,8 +1569,8 @@ void MatrixView::showColumnStatistics() {
 
 void MatrixView::modifyValues() {
 #ifndef SDK
-	const QAction* action = dynamic_cast<const QAction*>(QObject::sender());
-	auto op = (AddSubtractValueDialog::Operation)action->data().toInt();
+	const auto* action = static_cast<const QAction*>(QObject::sender());
+	const auto op = (AddSubtractValueDialog::Operation)action->data().toInt();
 	auto* dlg = new AddSubtractValueDialog(m_matrix, op);
 	dlg->exec();
 #endif

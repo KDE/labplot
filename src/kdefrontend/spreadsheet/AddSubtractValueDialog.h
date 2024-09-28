@@ -35,7 +35,8 @@ public:
 
 private:
 	void init();
-	void processColumns();
+	void initValuesSpreadsheet();
+	void initValuesMatrix();
 	void generateForColumns();
 	void generateForColumn(Column* col, int colIndex);
 	void generateForMatrices();

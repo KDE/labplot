@@ -56,8 +56,6 @@ AddSubtractValueDialog::AddSubtractValueDialog(Spreadsheet* s, const QVector<Col
 	Q_ASSERT(s != nullptr);
 
 	ui.setupUi(this);
-
-	processColumns();
 	init();
 }
 
@@ -68,35 +66,32 @@ AddSubtractValueDialog::AddSubtractValueDialog(Matrix* m, Operation op, QWidget*
 	Q_ASSERT(m != nullptr);
 
 	ui.setupUi(this);
-
-	switch (m_matrix->mode()) {
-	case AbstractColumn::ColumnMode::Integer:
-		m_numeric = true;
-		ui.leValue->setValidator(new QIntValidator(ui.leValue));
-		ui.leValue->setText(QLocale().toString(m_matrix->cell<int>(0, 0)));
-		break;
-	case AbstractColumn::ColumnMode::BigInt:
-		m_numeric = true;
-		// TODO: QLongLongValidator
-		ui.leValue->setValidator(new QIntValidator(ui.leValue));
-		ui.leValue->setText(QLocale().toString(m_matrix->cell<qint64>(0, 0)));
-		break;
-	case AbstractColumn::ColumnMode::Double:
-		m_numeric = true;
-		ui.leValue->setValidator(new QDoubleValidator(ui.leValue));
-		ui.leValue->setText(QLocale().toString(m_matrix->cell<double>(0, 0)));
-		break;
-	case AbstractColumn::ColumnMode::DateTime:
-	case AbstractColumn::ColumnMode::Day:
-	case AbstractColumn::ColumnMode::Month:
-	case AbstractColumn::ColumnMode::Text:
-		m_numeric = false;
-	}
-
 	init();
 }
 
+AddSubtractValueDialog::~AddSubtractValueDialog() {
+	delete m_project;
+
+	KConfigGroup conf = Settings::group(QStringLiteral("AddSubtractValueDialog"));
+	conf.writeEntry(QStringLiteral("Type"), ui.cbType->currentData().toInt());
+	conf.writeEntry(QStringLiteral("Preview"), ui.chbPreview->isChecked());
+
+	// baseline subtraction specific parameters
+	const auto numberLocale = QLocale();
+	conf.writeEntry(QStringLiteral("BaselineParameter1"), ui.sbBaselineParameter1->value());
+	conf.writeEntry(QStringLiteral("BaselineParameter2"), numberLocale.toDouble(ui.leBaselineParameter2->text()));
+	conf.writeEntry(QStringLiteral("BaselineParameter3"), ui.sbBaselineParameter3->value());
+
+	KWindowConfig::saveWindowSize(windowHandle(), conf);
+}
+
 void AddSubtractValueDialog::init() {
+	// initilize the line edits with the values based on the values in the data container
+	if (m_spreadsheet)
+		initValuesSpreadsheet();
+	else
+		initValuesMatrix();
+
 	setAttribute(Qt::WA_DeleteOnClose);
 
 	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
@@ -110,10 +105,12 @@ void AddSubtractValueDialog::init() {
 		break;
 	case Subtract:
 		setWindowTitle(i18nc("@title:window", "Subtract Value"));
-		[[fallthrough]];
+		ui.lType->setText(i18n("Subtract:"));
+		m_okButton->setText(i18n("&Subtract"));
+		break;
 	case SubtractBaseline:
 		setWindowTitle(i18nc("@title:window", "Subtract Baseline"));
-		ui.lType->setText(i18n("Subtract:")); // only relevant for Add and for Subtract, Add is set in the ui file
+		ui.lType->setText(i18n("Subtract:"));
 		m_okButton->setText(i18n("&Subtract"));
 		break;
 	case Multiply:
@@ -134,7 +131,7 @@ void AddSubtractValueDialog::init() {
 	ui.sbBaselineParameter3->hide();
 
 	if (m_operation == Add || m_operation == Subtract) {
-		if (m_operation == Subtract && m_numeric) {
+		if (m_spreadsheet && m_operation == Subtract && m_numeric) {
 			ui.cbType->addItem(i18n("Minimum"), static_cast<int>(ValueType::Minimum));
 			ui.cbType->addItem(i18n("Maximum"), static_cast<int>(ValueType::Maximum));
 			ui.cbType->addItem(i18n("Median"), static_cast<int>(ValueType::Median));
@@ -225,11 +222,19 @@ void AddSubtractValueDialog::init() {
 	else
 		ui.cbType->setCurrentIndex(0);
 
-	if (m_operation == Add || m_operation == Subtract || m_operation == SubtractBaseline) {
-		ui.chbPreview->setChecked(conf.readEntry("Preview", false));
-		ui.framePreview->setVisible(ui.chbPreview->isChecked());
-		updateSpacer(!ui.chbPreview->isChecked());
+	if (m_spreadsheet) {
+		if (m_operation == Add || m_operation == Subtract || m_operation == SubtractBaseline) {
+			ui.chbPreview->setChecked(conf.readEntry("Preview", false));
+			ui.framePreview->setVisible(ui.chbPreview->isChecked());
+			updateSpacer(!ui.chbPreview->isChecked());
+		} else {
+			ui.framePreview->hide();
+			updateSpacer(true);
+		}
 	} else {
+		// no preview available for Matrix
+		ui.lPreview->hide();
+		ui.chbPreview->hide();
 		ui.framePreview->hide();
 		updateSpacer(true);
 	}
@@ -283,25 +288,11 @@ void AddSubtractValueDialog::init() {
 	});
 }
 
-AddSubtractValueDialog::~AddSubtractValueDialog() {
-	delete m_project;
-
-	KConfigGroup conf = Settings::group(QStringLiteral("AddSubtractValueDialog"));
-	conf.writeEntry(QStringLiteral("Type"), ui.cbType->currentData().toInt());
-	conf.writeEntry(QStringLiteral("Preview"), ui.chbPreview->isChecked());
-
-	// baseline subtraction specific parameters
-	const auto numberLocale = QLocale();
-	conf.writeEntry(QStringLiteral("BaselineParameter1"), ui.sbBaselineParameter1->value());
-	conf.writeEntry(QStringLiteral("BaselineParameter2"), numberLocale.toDouble(ui.leBaselineParameter2->text()));
-	conf.writeEntry(QStringLiteral("BaselineParameter3"), ui.sbBaselineParameter3->value());
-
-	KWindowConfig::saveWindowSize(windowHandle(), conf);
-}
-
-void AddSubtractValueDialog::processColumns() {
-	// depending on the current column mode, activate/deactivate the corresponding widgets
-	// and show the first valid value in the first selected column as the value to add/subtract
+/*!
+ * When a spreadsheet is being modified, show the first valid value
+ * in the first selected column as the value to add/subtract.
+ */
+void AddSubtractValueDialog::initValuesSpreadsheet() {
 	const auto* column = m_columns.first();
 
 	switch (column->columnMode()) {
@@ -368,6 +359,50 @@ void AddSubtractValueDialog::processColumns() {
 		break;
 	}
 	}
+}
+
+/*!
+ * When a matrix is being modified, show the value of the first cell in the matrix
+ * as the value to add/subtract.
+ */
+void AddSubtractValueDialog::initValuesMatrix() {
+	QString str;
+	switch (m_matrix->mode()) {
+	case AbstractColumn::ColumnMode::Integer: {
+		m_numeric = true;
+		str = QLocale().toString(m_matrix->cell<int>(0, 0));
+		ui.leValue->setValidator(new QIntValidator(ui.leValue));
+		ui.leValueStart->setValidator(new QIntValidator(ui.leValueStart));
+		ui.leValueEnd->setValidator(new QIntValidator(ui.leValueEnd));
+		break;
+	}
+	case AbstractColumn::ColumnMode::BigInt: {
+		m_numeric = true;
+		// TODO: QLongLongValidator
+		const auto str = QLocale().toString(m_matrix->cell<qint64>(0, 0));
+		ui.leValue->setValidator(new QIntValidator(ui.leValue));
+		ui.leValueStart->setValidator(new QIntValidator(ui.leValueStart));
+		ui.leValueEnd->setValidator(new QIntValidator(ui.leValueEnd));
+		break;
+	}
+	case AbstractColumn::ColumnMode::Double: {
+		m_numeric = true;
+		const auto str = QLocale().toString(m_matrix->cell<double>(0, 0));
+		ui.leValue->setValidator(new QDoubleValidator(ui.leValue));
+		ui.leValueStart->setValidator(new QDoubleValidator(ui.leValueStart));
+		ui.leValueEnd->setValidator(new QDoubleValidator(ui.leValueEnd));
+		break;
+	}
+	case AbstractColumn::ColumnMode::DateTime:
+	case AbstractColumn::ColumnMode::Day:
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Text:
+		m_numeric = false;
+	}
+
+	ui.leValue->setText(str);
+	ui.leValueStart->setText(str);
+	ui.leValueEnd->setText(str);
 }
 
 // ##############################################################################
@@ -1132,7 +1167,7 @@ bool AddSubtractValueDialog::setBigIntValue(qint64& value, int columnIndex) cons
 }
 
 bool AddSubtractValueDialog::setDoubleValue(double& value, int columnIndex) const {
-	if (columnIndex < 0 || columnIndex >= m_columns.count()) // should never happen...
+	if (m_spreadsheet && (columnIndex < 0 || columnIndex >= m_columns.count())) // should never happen...
 		return false;
 
 	bool ok = true;
