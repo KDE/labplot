@@ -379,7 +379,7 @@ void AddSubtractValueDialog::initValuesMatrix() {
 	case AbstractColumn::ColumnMode::BigInt: {
 		m_numeric = true;
 		// TODO: QLongLongValidator
-		const auto str = QLocale().toString(m_matrix->cell<qint64>(0, 0));
+		str = QLocale().toString(m_matrix->cell<qint64>(0, 0));
 		ui.leValue->setValidator(new QIntValidator(ui.leValue));
 		ui.leValueStart->setValidator(new QIntValidator(ui.leValueStart));
 		ui.leValueEnd->setValidator(new QIntValidator(ui.leValueEnd));
@@ -387,7 +387,7 @@ void AddSubtractValueDialog::initValuesMatrix() {
 	}
 	case AbstractColumn::ColumnMode::Double: {
 		m_numeric = true;
-		const auto str = QLocale().toString(m_matrix->cell<double>(0, 0));
+		str = QLocale().toString(m_matrix->cell<double>(0, 0));
 		ui.leValue->setValidator(new QDoubleValidator(ui.leValue));
 		ui.leValueStart->setValidator(new QDoubleValidator(ui.leValueStart));
 		ui.leValueEnd->setValidator(new QDoubleValidator(ui.leValueEnd));
