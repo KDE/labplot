@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget showing the available color maps
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -23,6 +23,8 @@ public:
 	explicit ColorMapsWidget(QWidget*);
 	~ColorMapsWidget() override;
 
+	enum class ViewMode { IconView, ListView, ListDetailsView };
+
 	QPixmap previewPixmap();
 	QString name() const;
 	QVector<QColor> colors() const;
@@ -34,17 +36,22 @@ private:
 	QVector<QColor> m_colormap;
 	QStandardItemModel* m_model{nullptr};
 	ColorMapsManager* m_manager{nullptr};
+	ViewMode m_viewMode{ViewMode::IconView};
 
 	void loadCollections();
 	void activateIconViewItem(const QString& name);
 	void activateListViewItem(const QString& name);
+	void activateListDetailsViewItem(const QString& name);
+	void switchViewMode();
+	QString colorMapName() const;
 
 private Q_SLOTS:
 	void collectionChanged(int);
 	void colorMapChanged();
+	void colorMapDetailsChanged();
 	void showInfo();
-	void toggleIconView();
-	void viewModeChanged(int);
+	void showViewModeMenu();
+	void viewModeChanged();
 	void activated(const QString&);
 
 Q_SIGNALS:
