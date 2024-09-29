@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-28 01:47+0000\n"
-"PO-Revision-Date: 2024-09-27 17:34+0200\n"
+"POT-Creation-Date: 2024-09-29 01:45+0000\n"
+"PO-Revision-Date: 2024-09-28 07:25+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -3569,7 +3569,7 @@ msgstr "Storlek"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMinimum)
 #: src/backend/gsl/functions.cpp:249
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:62
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:138
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:135
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:65
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:103
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:43
@@ -3582,7 +3582,7 @@ msgstr "Minimum"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMaximum)
 #: src/backend/gsl/functions.cpp:250 src/backend/nsl/nsl_conv.c:23
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:63
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:139
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:136
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:66
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:104
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:53
@@ -3607,7 +3607,7 @@ msgstr "Aritmetiskt medelvärde"
 #: src/backend/gsl/functions.cpp:252
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:70
 #: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:160
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:140
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:137
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:73
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:536
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:108
@@ -8250,7 +8250,7 @@ msgstr "Referensintervall"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:511
 #, kde-format
 msgid "Process Behavior Chart"
-msgstr ""
+msgstr "Processbeteendediagram"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:529
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:609
@@ -8337,7 +8337,7 @@ msgstr "Stapeldiagram"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:650
 #, kde-format
 msgid "Continual Improvement Plots"
-msgstr ""
+msgstr "Kontinuerlig förbättringsdiagram"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:656
 #, kde-format
@@ -8846,16 +8846,14 @@ msgid "%1: legend visibility changed"
 msgstr "%1: förklaringens synlighet ändrad"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:363
-#, fuzzy, kde-format
-#| msgid "%1: set axis start"
+#, kde-format
 msgid "%1: set limits metric"
-msgstr "%1: ställ in axelstart"
+msgstr "%1: ställ in begränsningsmått"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:370
-#, fuzzy, kde-format
-#| msgid "%1: set symbol size"
+#, kde-format
 msgid "%1: set subgroup size"
-msgstr "%1: ställ in symbolstorlek"
+msgstr "%1: ställ in delgruppstorlek"
 
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:264
 #, kde-format
@@ -14182,10 +14180,9 @@ msgid "%1 matrices: template \"%2\" loaded"
 msgstr "%1 matriser: mall \"%2\" inläst"
 
 #: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:159
-#, fuzzy, kde-format
-#| msgid "Moving Average"
+#, kde-format
 msgid "Average"
-msgstr "Rörligt medelvärde"
+msgstr "Medelvärde"
 
 #: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:172
 #, kde-format
@@ -14201,6 +14198,17 @@ msgid ""
 "(X̅S) - plot the <b>averages for each subgroup</b>.</li><li>S (X̅S) - plot the "
 "<b>standard deviations for each subgroup</b>.</li></ul>"
 msgstr ""
+"De diagramtyper som stöds är grupperade enligt den uppritade statistiken och "
+"det mått som definierar gränserna.<br><br>Individuella värden och rörliga "
+"intervall, gränser baserade på genomsnittligt eller median rörligt intervall:"
+"<ul><li>X (XmR ): rita upp de <b>individuella värdena</b>.</li><li>mR: rita "
+"upp de <b>rörliga intervallen</b>.</li></ul>Genomsnitt och intervall, "
+"gränser baserat på medel- eller medianintervallet:<ul><li>X̅ (X̅R): rita upp "
+"<b>medelvärdena för varje undergrupp</b> .</li><li>R (X̅R): rita upp "
+"<b>intervallen för varje undergrupp</b>.</li></ul>Genomsnitt och "
+"standardavvikelser, gränser baserade på standardavvikelser:<ul><li>X̅ (X̅S): "
+"rita upp <b>medelvärden för varje undergrupp</b >.</li><li>S (X̅S): rita upp "
+"<b>standardavvikelserna för varje undergrupp</b>.</li></ul>"
 
 #: src/kdefrontend/dockwidgets/ProjectDock.cpp:28
 #, kde-format
@@ -14938,7 +14946,7 @@ msgstr "Q-Q-diagram"
 #, kde-format
 msgctxt "@title:window"
 msgid "Process Behavior Chart"
-msgstr ""
+msgstr "Processbeteendediagram"
 
 #: src/kdefrontend/GuiObserver.cpp:401
 #, kde-format
@@ -16573,85 +16581,87 @@ msgstr "Hittade inte 'dvips'. Typsättning med Latex är inte tillgänglig."
 msgid "No Ghostscript found. LaTeX typesetting not possible."
 msgstr "Hittade inte Ghostscript. Typsättning med Latex är inte tillgänglig."
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:108
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:103
 #, kde-format
 msgctxt "@title:window"
 msgid "Add Value"
 msgstr "Addera värde"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:109
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:104
 #: src/kdefrontend/widgets/FITSHeaderEditAddUnitDialog.cpp:28
 #, kde-format
 msgid "&Add"
 msgstr "&Addera"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:112
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:107
 #, kde-format
 msgctxt "@title:window"
 msgid "Subtract Value"
 msgstr "Subtrahera värde"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:115
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:108
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:113
+#, kde-format
+msgid "Subtract:"
+msgstr "Subtrahera:"
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:109
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:114
+#, kde-format
+msgid "&Subtract"
+msgstr "&Subtrahera"
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:112
 #, kde-format
 msgctxt "@title:window"
 msgid "Subtract Baseline"
 msgstr "Subtrahera baslinje"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:116
-#, kde-format
-msgid "Subtract:"
-msgstr "Subtrahera:"
-
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:117
-#, kde-format
-msgid "&Subtract"
-msgstr "&Subtrahera"
-
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:120
 #, kde-format
 msgctxt "@title:window"
 msgid "Multiply by Value"
 msgstr "Multiplicera med värde"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:121
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:118
 #, kde-format
 msgid "&Multiply"
 msgstr "&Multiplicera"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:124
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:121
 #, kde-format
 msgctxt "@title:window"
 msgid "Divide by Value"
 msgstr "Dividera med värde"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:125
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:122
 #, kde-format
 msgid "&Divide"
 msgstr "&Dividera"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:141
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:138
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:526
 #, kde-format
 msgid "Mean"
 msgstr "Medelvärde"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:144
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:141
 #, kde-format
 msgid "Custom Value"
 msgstr "Eget värde"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:145
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:142
 #, kde-format
 msgid "Difference"
 msgstr "Skillnad"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:161
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:158
 #, kde-format
 msgid "Baseline (arPLS Algorithm)"
 msgstr "Baslinje (arPLS-algoritm)"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:168
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:165
 #, kde-format
 msgid ""
 "Smoothness parameter - the larger the value the smoother the resulting "
@@ -16660,7 +16670,7 @@ msgstr ""
 "Utjämningsparameter - ju större värdet är desto jämnare är den resulterande "
 "bakgrunden."
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:172
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:169
 #, kde-format
 msgid ""
 "Weighting termination ratio - value between 0 and 1, smaller values allow "
@@ -16669,64 +16679,64 @@ msgstr ""
 "Viktad termineringsförhållande - värde mellan 0 och 1, mindre värden "
 "tillåter mindre negativa värden."
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:176
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:173
 #, kde-format
 msgid "Number of iterations to perform."
 msgstr "Antal iterationer att utföra."
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:532
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:567
 #, kde-format
 msgid "raw data"
 msgstr "rådata"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:538
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:573
 #, kde-format
 msgid "baseline"
 msgstr "baslinje"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:546
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:581
 #, kde-format
 msgid "result"
 msgstr "resultat"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:626
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:661
 #, kde-format
 msgid "Ratio: %1"
 msgstr "Förhållande: %1"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:670
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:677
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:684
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:691
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:899
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:943
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:987
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1031
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:705
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:712
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:719
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:726
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:934
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:978
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1022
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1066
 #, kde-format
 msgid "Wrong numeric value provided."
 msgstr "Fel numeriskt värde angivet."
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1218
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1253
 #, kde-format
 msgid "%1: add %2 to column values"
 msgstr "%1: lägg till %2 till kolumnvärden"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1221
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1256
 #, kde-format
 msgid "%1: subtract %2 from column values"
 msgstr "%1: subtrahera %2 från kolumnvärden"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1224
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1259
 #, kde-format
 msgid "%1: subtract baseline from column values"
 msgstr "%1: subtrahera baslinje från kolumnvärden"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1227
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1262
 #, kde-format
 msgid "%1: multiply column values by %2"
 msgstr "%1: multiplicera kolumnvärden med %2"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1230
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1265
 #, kde-format
 msgid "%1: divide column values by %2"
 msgstr "%1: dividera kolumnvärden med %2"
@@ -21015,42 +21025,37 @@ msgstr "Textfärg:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSubgroupSize)
 #: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:96
-#, fuzzy, kde-format
-#| msgid "Sample Size:"
+#, kde-format
 msgid "Subgroup Size:"
-msgstr "Samplingsstorlek:"
+msgstr "Delgruppstorlek:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLimitsMetric)
 #: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:182
 #, kde-format
 msgid "Limits based on:"
-msgstr ""
+msgstr "Begränsningar baserade på:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataLine)
 #: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:193
-#, fuzzy, kde-format
-#| msgid "Dot Line"
+#, kde-format
 msgid "Data Line"
-msgstr "Punktlinje"
+msgstr "Datalinje"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabControlLimitLines)
 #: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:257
-#, fuzzy, kde-format
-#| msgid "Crossing Lines"
+#, kde-format
 msgid "Control Limit Lines"
-msgstr "Korsande linjer"
+msgstr "Kontrollbegränsningslinjer"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpperLimit)
 #: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:312
-#, fuzzy, kde-format
-#| msgid "Upper limit"
+#, kde-format
 msgid "Upper Limit"
 msgstr "Övre gräns"
 
 #. i18n: ectx: property (text), widget (QLabel, lLowerLimit)
 #: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:356
-#, fuzzy, kde-format
-#| msgid "Lower limit"
+#, kde-format
 msgid "Lower Limit"
 msgstr "Undre gräns"
 
