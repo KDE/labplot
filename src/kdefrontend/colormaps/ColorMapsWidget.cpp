@@ -13,8 +13,8 @@
 #include "tools/ColorMapsManager.h"
 
 #include <QCompleter>
-#include <QMessageBox>
 #include <QMenu>
+#include <QMessageBox>
 #include <QPainter>
 #include <QStandardItemModel>
 #include <QWhatsThis>
