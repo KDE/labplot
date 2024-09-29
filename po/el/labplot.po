@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-28 01:47+0000\n"
+"POT-Creation-Date: 2024-09-29 01:45+0000\n"
 "PO-Revision-Date: 2017-04-20 14:04+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -3712,7 +3712,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, cbMinimum)
 #: src/backend/gsl/functions.cpp:249
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:62
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:138
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:135
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:65
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:103
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:43
@@ -3725,7 +3725,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, cbMaximum)
 #: src/backend/gsl/functions.cpp:250 src/backend/nsl/nsl_conv.c:23
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:63
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:139
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:136
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:66
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:104
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:53
@@ -3750,7 +3750,7 @@ msgstr ""
 #: src/backend/gsl/functions.cpp:252
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:70
 #: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:160
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:140
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:137
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:73
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:536
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:108
@@ -17164,7 +17164,7 @@ msgstr ""
 msgid "No Ghostscript found. LaTeX typesetting not possible."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:108
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:103
 #, fuzzy, kde-format
 #| msgid "%1 value"
 #| msgid_plural "%1 values"
@@ -17172,168 +17172,170 @@ msgctxt "@title:window"
 msgid "Add Value"
 msgstr "%1 τιμή"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:109
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:104
 #: src/kdefrontend/widgets/FITSHeaderEditAddUnitDialog.cpp:28
 #, kde-format
 msgid "&Add"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:112
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:107
 #, fuzzy, kde-format
 #| msgid "Function values"
 msgctxt "@title:window"
 msgid "Subtract Value"
 msgstr "Τιμές συνάρτησης"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:115
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:108
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:113
+#, fuzzy, kde-format
+#| msgid "Function values"
+msgid "Subtract:"
+msgstr "Τιμές συνάρτησης"
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:109
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:114
+#, kde-format
+msgid "&Subtract"
+msgstr ""
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:112
 #, fuzzy, kde-format
 #| msgid "Function values"
 msgctxt "@title:window"
 msgid "Subtract Baseline"
 msgstr "Τιμές συνάρτησης"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:116
-#, fuzzy, kde-format
-#| msgid "Function values"
-msgid "Subtract:"
-msgstr "Τιμές συνάρτησης"
-
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:117
-#, kde-format
-msgid "&Subtract"
-msgstr ""
-
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:120
 #, kde-format
 msgctxt "@title:window"
 msgid "Multiply by Value"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:121
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:118
 #, kde-format
 msgid "&Multiply"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:124
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:121
 #, fuzzy, kde-format
 #| msgid "invalid row value"
 msgctxt "@title:window"
 msgid "Divide by Value"
 msgstr "μη έγκυρη τιμή γραμμής"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:125
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:122
 #, kde-format
 msgid "&Divide"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:141
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:138
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:526
 #, fuzzy, kde-format
 #| msgid "Mean"
 msgid "Mean"
 msgstr "Μέσος"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:144
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:141
 #, fuzzy, kde-format
 #| msgid "Start column:"
 msgid "Custom Value"
 msgstr "Στήλη έναρξης:"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:145
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:142
 #, fuzzy, kde-format
 #| msgid "Differentiation:"
 msgid "Difference"
 msgstr "Διαφορισμός:"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:161
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:158
 #, kde-format
 msgid "Baseline (arPLS Algorithm)"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:168
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:165
 #, kde-format
 msgid ""
 "Smoothness parameter - the larger the value the smoother the resulting "
 "background."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:172
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:169
 #, kde-format
 msgid ""
 "Weighting termination ratio - value between 0 and 1, smaller values allow "
 "less negative values."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:176
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:173
 #, fuzzy, kde-format
 #| msgid "Number of levels"
 msgid "Number of iterations to perform."
 msgstr "Πλήθος επιπέδων"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:532
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:567
 #, kde-format
 msgid "raw data"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:538
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:573
 #, fuzzy, kde-format
 #| msgid "%1 value"
 #| msgid_plural "%1 values"
 msgid "baseline"
 msgstr "%1 τιμή"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:546
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:581
 #, fuzzy, kde-format
 #| msgid "Results:"
 msgid "result"
 msgstr "Αποτελέσματα:"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:626
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:661
 #, fuzzy, kde-format
 #| msgid "Max. iterations"
 msgid "Ratio: %1"
 msgstr "Max. επαναλήψεις"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:670
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:677
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:684
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:691
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:899
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:943
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:987
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1031
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:705
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:712
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:719
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:726
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:934
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:978
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1022
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1066
 #, fuzzy, kde-format
 #| msgid "invalid row value"
 msgid "Wrong numeric value provided."
 msgstr "μη έγκυρη τιμή γραμμής"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1218
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1253
 #, fuzzy, kde-format
 #| msgid "%1: clear column"
 msgid "%1: add %2 to column values"
 msgstr "%1: καθαρισμός στήλης"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1221
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1256
 #, fuzzy, kde-format
 #| msgid "%1: insert 1 row"
 #| msgid_plural "%1: insert %2 rows"
 msgid "%1: subtract %2 from column values"
 msgstr "%1: εισαγωγή 1 γραμμής"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1224
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1259
 #, fuzzy, kde-format
 #| msgid "%1: insert 1 row"
 #| msgid_plural "%1: insert %2 rows"
 msgid "%1: subtract baseline from column values"
 msgstr "%1: εισαγωγή 1 γραμμής"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1227
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1262
 #, kde-format
 msgid "%1: multiply column values by %2"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1230
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1265
 #, kde-format
 msgid "%1: divide column values by %2"
 msgstr ""

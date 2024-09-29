@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-28 01:47+0000\n"
-"PO-Revision-Date: 2024-09-27 20:23+0300\n"
+"POT-Creation-Date: 2024-09-29 01:45+0000\n"
+"PO-Revision-Date: 2024-09-28 09:22+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -3593,7 +3593,7 @@ msgstr "Розмір"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMinimum)
 #: src/backend/gsl/functions.cpp:249
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:62
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:138
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:135
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:65
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:103
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:43
@@ -3606,7 +3606,7 @@ msgstr "Мінімум"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMaximum)
 #: src/backend/gsl/functions.cpp:250 src/backend/nsl/nsl_conv.c:23
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:63
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:139
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:136
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:66
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:104
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:53
@@ -3631,7 +3631,7 @@ msgstr "Арифметичне середнє"
 #: src/backend/gsl/functions.cpp:252
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:70
 #: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:160
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:140
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:137
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:73
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:536
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:108
@@ -8323,7 +8323,7 @@ msgstr "Еталонний діапазон"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:511
 #, kde-format
 msgid "Process Behavior Chart"
-msgstr ""
+msgstr "Діаграма поведінки процесу"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:529
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:609
@@ -8410,7 +8410,7 @@ msgstr "Блокові графіки"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:650
 #, kde-format
 msgid "Continual Improvement Plots"
-msgstr ""
+msgstr "Графіки неперервного удосконалення"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:656
 #, kde-format
@@ -8919,16 +8919,14 @@ msgid "%1: legend visibility changed"
 msgstr "%1: змінено видимість панелі умовних позначень"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:363
-#, fuzzy, kde-format
-#| msgid "%1: set axis start"
+#, kde-format
 msgid "%1: set limits metric"
-msgstr "%1: встановити початок вісі"
+msgstr "%1: встановити метрику обмежень"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:370
-#, fuzzy, kde-format
-#| msgid "%1: set symbol size"
+#, kde-format
 msgid "%1: set subgroup size"
-msgstr "%1: встановити розмір позначки"
+msgstr "%1: встановити розмір підгрупи"
 
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:264
 #, kde-format
@@ -14298,10 +14296,9 @@ msgid "%1 matrices: template \"%2\" loaded"
 msgstr "Матриці %1: завантажено шаблон «%2»"
 
 #: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:159
-#, fuzzy, kde-format
-#| msgid "Moving Average"
+#, kde-format
 msgid "Average"
-msgstr "Рухоме середнє"
+msgstr "Середнє"
 
 #: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:172
 #, kde-format
@@ -14317,6 +14314,17 @@ msgid ""
 "(X̅S) - plot the <b>averages for each subgroup</b>.</li><li>S (X̅S) - plot the "
 "<b>standard deviations for each subgroup</b>.</li></ul>"
 msgstr ""
+"Типи підтримуваних діаграм згруповано відповідно до статистики на графіку та "
+"метричного визначення обмежень.<br><br>Окремі значення та рухомі діапазони, "
+"обмеження на основі усередненого або рухомого середнього діапазону:<ul><li>X "
+"(XmR) — накреслити <b>окремі значення</b>.</li><li>mR — накреслити <b>рухомі "
+"діапазони</b>.</li></ul>Усереднення і діапазони, обмеження на основі "
+"середнього або медіанного діапазону:<ul><li>X̅  (X̅R) — накреслити <b>середні "
+"для кожної підгрупи</b>.</li><li>R (X̅R) — накреслити <b>діапазони для кожної "
+"підгрупи</b>.</li></ul>Усереднення та стандартні відхилення, обмеження на "
+"основі стандартних відхилень:<ul><li>X̅  (X̅S) — накреслити <b>усереднення для "
+"кожної підгрупи</b>.</li><li>S (X̅S) — накреслити <b>стандартні відхилення "
+"для кожної підгрупи</b>.</li></ul>"
 
 #: src/kdefrontend/dockwidgets/ProjectDock.cpp:28
 #, kde-format
@@ -15058,7 +15066,7 @@ msgstr "Діаграма Q-Q"
 #, kde-format
 msgctxt "@title:window"
 msgid "Process Behavior Chart"
-msgstr ""
+msgstr "Діаграма поведінки процесу"
 
 #: src/kdefrontend/GuiObserver.cpp:401
 #, kde-format
@@ -16697,85 +16705,87 @@ msgstr "Не знайдено програми «dvips». Верстання ф�
 msgid "No Ghostscript found. LaTeX typesetting not possible."
 msgstr "Не знайдено комплексу Ghostscript. Верстання формул у LaTeX неможливе."
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:108
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:103
 #, kde-format
 msgctxt "@title:window"
 msgid "Add Value"
 msgstr "Додати значення"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:109
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:104
 #: src/kdefrontend/widgets/FITSHeaderEditAddUnitDialog.cpp:28
 #, kde-format
 msgid "&Add"
 msgstr "&Додати"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:112
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:107
 #, kde-format
 msgctxt "@title:window"
 msgid "Subtract Value"
 msgstr "Відняти значення"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:115
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:108
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:113
+#, kde-format
+msgid "Subtract:"
+msgstr "Відняти:"
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:109
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:114
+#, kde-format
+msgid "&Subtract"
+msgstr "&Відняти"
+
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:112
 #, kde-format
 msgctxt "@title:window"
 msgid "Subtract Baseline"
 msgstr "Відняти базову лінію"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:116
-#, kde-format
-msgid "Subtract:"
-msgstr "Відняти:"
-
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:117
-#, kde-format
-msgid "&Subtract"
-msgstr "&Відняти"
-
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:120
 #, kde-format
 msgctxt "@title:window"
 msgid "Multiply by Value"
 msgstr "Помножити на значення"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:121
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:118
 #, kde-format
 msgid "&Multiply"
 msgstr "По&множити"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:124
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:121
 #, kde-format
 msgctxt "@title:window"
 msgid "Divide by Value"
 msgstr "Поділити на значення"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:125
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:122
 #, kde-format
 msgid "&Divide"
 msgstr "По&ділити"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:141
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:138
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:526
 #, kde-format
 msgid "Mean"
 msgstr "Середнє"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:144
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:141
 #, kde-format
 msgid "Custom Value"
 msgstr "Нетипове значення"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:145
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:142
 #, kde-format
 msgid "Difference"
 msgstr "Різниця"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:161
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:158
 #, kde-format
 msgid "Baseline (arPLS Algorithm)"
 msgstr "Базова лінія (алгоритм arPLS)"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:168
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:165
 #, kde-format
 msgid ""
 "Smoothness parameter - the larger the value the smoother the resulting "
@@ -16784,7 +16794,7 @@ msgstr ""
 "Параметр згладжування — чим більшим є його значення, тим плавнішою буде "
 "основа результату."
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:172
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:169
 #, kde-format
 msgid ""
 "Weighting termination ratio - value between 0 and 1, smaller values allow "
@@ -16793,64 +16803,64 @@ msgstr ""
 "Коефіцієнт припинення зважування — значення від 0 до 1, менші значення "
 "призводять до меншої кількості від'ємних значень."
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:176
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:173
 #, kde-format
 msgid "Number of iterations to perform."
 msgstr "Кількість ітерацій, які слід виконати."
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:532
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:567
 #, kde-format
 msgid "raw data"
 msgstr "необроблені дані"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:538
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:573
 #, kde-format
 msgid "baseline"
 msgstr "основна лінія"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:546
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:581
 #, kde-format
 msgid "result"
 msgstr "результат"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:626
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:661
 #, kde-format
 msgid "Ratio: %1"
 msgstr "Коефіцієнт: %1"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:670
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:677
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:684
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:691
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:899
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:943
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:987
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1031
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:705
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:712
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:719
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:726
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:934
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:978
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1022
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1066
 #, kde-format
 msgid "Wrong numeric value provided."
 msgstr "Надано помилкове числове значення."
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1218
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1253
 #, kde-format
 msgid "%1: add %2 to column values"
 msgstr "%1: додавання %2 до значень у стовпчику"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1221
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1256
 #, kde-format
 msgid "%1: subtract %2 from column values"
 msgstr "%1: віднімання %2 від значень у стовпчику"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1224
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1259
 #, kde-format
 msgid "%1: subtract baseline from column values"
 msgstr "%1: віднімання базової лінії від значень у стовпчику"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1227
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1262
 #, kde-format
 msgid "%1: multiply column values by %2"
 msgstr "%1: множення значень у стовпчику на %2"
 
-#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1230
+#: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:1265
 #, kde-format
 msgid "%1: divide column values by %2"
 msgstr "%1: ділення значень у стовпчику на %2"
@@ -21157,42 +21167,37 @@ msgstr "Колір тексту:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSubgroupSize)
 #: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:96
-#, fuzzy, kde-format
-#| msgid "Sample Size:"
+#, kde-format
 msgid "Subgroup Size:"
-msgstr "Розмір вибірки:"
+msgstr "Розмір підгрупи:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLimitsMetric)
 #: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:182
 #, kde-format
 msgid "Limits based on:"
-msgstr ""
+msgstr "Обмеження засновано на:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataLine)
 #: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:193
-#, fuzzy, kde-format
-#| msgid "Dot Line"
+#, kde-format
 msgid "Data Line"
-msgstr "пунктир"
+msgstr "Лінія даних"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabControlLimitLines)
 #: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:257
-#, fuzzy, kde-format
-#| msgid "Crossing Lines"
+#, kde-format
 msgid "Control Limit Lines"
-msgstr "перехресні лінії"
+msgstr "Лінії обмежень керування"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpperLimit)
 #: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:312
-#, fuzzy, kde-format
-#| msgid "Upper limit"
+#, kde-format
 msgid "Upper Limit"
 msgstr "Верхня межа"
 
 #. i18n: ectx: property (text), widget (QLabel, lLowerLimit)
 #: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:356
-#, fuzzy, kde-format
-#| msgid "Lower limit"
+#, kde-format
 msgid "Lower Limit"
 msgstr "Нижня межа"
 
