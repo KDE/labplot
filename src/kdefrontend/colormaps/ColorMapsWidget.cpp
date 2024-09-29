@@ -169,7 +169,8 @@ void ColorMapsWidget::colorMapDetailsChanged() {
 	const auto& colors = m_manager->colors();
 
 	ui.twColorMapDetails->clear();
-	static QStringList columnNames{i18n("Color"), QLatin1String("Hex"), i18n("Red"), i18n("Green"), i18n("Blue"), i18n("Hue"), i18n("Saturation"), i18n("Value")};
+	static QStringList
+		columnNames{i18n("Color"), QLatin1String("Hex"), i18n("Red"), i18n("Green"), i18n("Blue"), i18n("Hue"), i18n("Saturation"), i18n("Value")};
 	ui.twColorMapDetails->setHorizontalHeaderLabels(columnNames);
 	ui.twColorMapDetails->setRowCount(colors.count());
 
@@ -284,12 +285,10 @@ QString ColorMapsWidget::colorMapName() const {
 	if (ui.stackedWidget->currentIndex() == 0) {
 		if (ui.lvColorMaps->currentIndex().isValid())
 			name = ui.lvColorMaps->currentIndex().data(Qt::DisplayRole).toString();
-	}
-	else if (ui.stackedWidget->currentIndex() == 1) {
+	} else if (ui.stackedWidget->currentIndex() == 1) {
 		if (ui.lwColorMaps->currentItem())
 			name = ui.lwColorMaps->currentItem()->text();
-	}
-	else {
+	} else {
 		if (ui.lwColorMapsDetails->currentIndex().isValid())
 			name = ui.lwColorMapsDetails->currentItem()->text();
 	}
