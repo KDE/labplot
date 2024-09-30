@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-29 01:45+0000\n"
+"POT-Creation-Date: 2024-09-30 01:48+0000\n"
 "PO-Revision-Date: 2023-11-13 14:41+0300\n"
 "Last-Translator: Sergey Kazorin <translation-team@basealt.ru>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -1167,6 +1167,7 @@ msgstr "Индекс"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2538
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2556
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2573
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:173
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:145
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:188
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:182
@@ -7890,6 +7891,7 @@ msgstr "Стиль"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:322
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:135
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:153
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:173
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:318
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:122
 #, kde-format
@@ -10734,7 +10736,9 @@ msgstr "Сгенерировать данные"
 msgid "Manipulate Data"
 msgstr "Операции с данными"
 
+#. i18n: ectx: property (text), widget (QToolButton, bViewMode)
 #: src/commonfrontend/matrix/MatrixView.cpp:284
+#: src/kdefrontend/ui/colormapswidget.ui:60
 #, kde-format
 msgid "View"
 msgstr "Вид"
@@ -12013,13 +12017,13 @@ msgctxt "@title:window"
 msgid "Color Maps Browser"
 msgstr "Карта цветов"
 
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:35
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:36
 #: src/kdefrontend/examples/ExamplesWidget.cpp:34
 #, kde-format
 msgid "Switch between icon and list views"
 msgstr "Переключение между преставлением в виде значков или списка"
 
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:49
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:50
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:51
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:124
 #: src/kdefrontend/examples/ExamplesWidget.cpp:51
@@ -12027,13 +12031,61 @@ msgstr "Переключение между преставлением в вид
 msgid "Enter the keyword you want to search for"
 msgstr "Введите ключевое слово для поиска"
 
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:52
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:53
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:54
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:127
 #: src/kdefrontend/examples/ExamplesWidget.cpp:54
 #, kde-format
 msgid "Search..."
 msgstr "Поиск…"
+
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:173
+#: src/kdefrontend/GuiTools.cpp:184
+#, kde-format
+msgid "Red"
+msgstr "Красный"
+
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:173
+#: src/kdefrontend/GuiTools.cpp:184
+#, kde-format
+msgid "Green"
+msgstr "Зелёный"
+
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:173
+#: src/kdefrontend/GuiTools.cpp:185
+#, kde-format
+msgid "Blue"
+msgstr "Синий"
+
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:173
+#, fuzzy, kde-format
+#| msgid "Hue:"
+msgid "Hue"
+msgstr "Оттенок:"
+
+# BUGME: please add colon; please split --aspotashev
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:173
+#, fuzzy, kde-format
+#| msgid "Saturation:"
+msgid "Saturation"
+msgstr "Насыщенность:"
+
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:225
+#, fuzzy, kde-format
+#| msgid "Zoom View"
+msgid "Icon View"
+msgstr "Масштабирование"
+
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:233
+#, fuzzy, kde-format
+#| msgid "View"
+msgid "List View"
+msgstr "Вид"
+
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:241
+#, kde-format
+msgid "List View with Details"
+msgstr ""
 
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:32
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:49
@@ -15670,11 +15722,6 @@ msgstr "Тёмно-красный"
 
 #: src/kdefrontend/GuiTools.cpp:184
 #, kde-format
-msgid "Red"
-msgstr "Красный"
-
-#: src/kdefrontend/GuiTools.cpp:184
-#, kde-format
 msgid "Light Red"
 msgstr "Светло-красный"
 
@@ -15682,11 +15729,6 @@ msgstr "Светло-красный"
 #, kde-format
 msgid "Dark Green"
 msgstr "Тёмно-зелёный"
-
-#: src/kdefrontend/GuiTools.cpp:184
-#, kde-format
-msgid "Green"
-msgstr "Зелёный"
 
 #: src/kdefrontend/GuiTools.cpp:185
 #, kde-format
@@ -15697,11 +15739,6 @@ msgstr "Светло-зелёный"
 #, kde-format
 msgid "Dark Blue"
 msgstr "Тёмно-синий"
-
-#: src/kdefrontend/GuiTools.cpp:185
-#, kde-format
-msgid "Blue"
-msgstr "Синий"
 
 #: src/kdefrontend/GuiTools.cpp:185
 #, kde-format

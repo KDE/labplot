@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-29 01:45+0000\n"
-"PO-Revision-Date: 2024-09-28 12:39+0200\n"
+"POT-Creation-Date: 2024-09-30 01:48+0000\n"
+"PO-Revision-Date: 2024-09-30 03:10+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -1150,6 +1150,7 @@ msgstr "Índice"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2538
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2556
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2573
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:173
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:145
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:188
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:182
@@ -7600,6 +7601,7 @@ msgstr "Estilo"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:322
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:135
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:153
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:173
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:318
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:122
 #, kde-format
@@ -10369,7 +10371,9 @@ msgstr "Generar datos"
 msgid "Manipulate Data"
 msgstr "Manipular datos"
 
+#. i18n: ectx: property (text), widget (QToolButton, bViewMode)
 #: src/commonfrontend/matrix/MatrixView.cpp:284
+#: src/kdefrontend/ui/colormapswidget.ui:60
 #, kde-format
 msgid "View"
 msgstr "Ver"
@@ -11610,13 +11614,13 @@ msgctxt "@title:window"
 msgid "Color Maps Browser"
 msgstr "Explorador de mapas de color"
 
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:35
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:36
 #: src/kdefrontend/examples/ExamplesWidget.cpp:34
 #, kde-format
 msgid "Switch between icon and list views"
 msgstr "Cambiar entre las vistas de iconos y de lista"
 
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:49
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:50
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:51
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:124
 #: src/kdefrontend/examples/ExamplesWidget.cpp:51
@@ -11624,13 +11628,59 @@ msgstr "Cambiar entre las vistas de iconos y de lista"
 msgid "Enter the keyword you want to search for"
 msgstr "Introduzca la palabra clave que desea buscar"
 
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:52
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:53
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:54
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:127
 #: src/kdefrontend/examples/ExamplesWidget.cpp:54
 #, kde-format
 msgid "Search..."
 msgstr "Buscar..."
+
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:173
+#: src/kdefrontend/GuiTools.cpp:184
+#, kde-format
+msgid "Red"
+msgstr "Rojo"
+
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:173
+#: src/kdefrontend/GuiTools.cpp:184
+#, kde-format
+msgid "Green"
+msgstr "Verde"
+
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:173
+#: src/kdefrontend/GuiTools.cpp:185
+#, kde-format
+msgid "Blue"
+msgstr "Azul"
+
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:173
+#, kde-format
+msgid "Hue"
+msgstr "Tono"
+
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:173
+#, fuzzy, kde-format
+#| msgid "Saturation:"
+msgid "Saturation"
+msgstr "Saturación:"
+
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:225
+#, fuzzy, kde-format
+#| msgid "Zoom View"
+msgid "Icon View"
+msgstr "Ampliar vista"
+
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:233
+#, fuzzy, kde-format
+#| msgid "View"
+msgid "List View"
+msgstr "Ver"
+
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:241
+#, kde-format
+msgid "List View with Details"
+msgstr ""
 
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:32
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:49
@@ -14250,6 +14300,17 @@ msgid ""
 "(X̅S) - plot the <b>averages for each subgroup</b>.</li><li>S (X̅S) - plot the "
 "<b>standard deviations for each subgroup</b>.</li></ul>"
 msgstr ""
+"Los tipos de gráficos permitidos están agrupados según las estadísticas que "
+"dibujan y la métrica que define los límites.<br><br>Valores individuales e "
+"intervalos móviles, límites basados en el promedio o en el intervalo media "
+"móvil:<ul><li>X (XmR): dibuja los <b>valores individuales</b>.</li><li>mR: "
+"dibuja los <b>intervalos móviles</b>.</li></ul>Promedios e intervalos, "
+"límites basados en la media o en el intervalo media:<ul><li>X̅  (X̅R): dibuja "
+"los <b>promedios de cada subgrupo</b>.</li><li>R (X̅R): dibuja los "
+"<b>intervalos de cada subgrupo</b>.</li></ul>Promedios y desviaciones "
+"estándares, límites basados en las desviaciones estándares:<ul><li>X̅ (X̅S): "
+"dibuja los <p>promedios de cada subgrupo</b>.</li><li>S (X̅S): dibuja las "
+"<b>desviaciones estándares de cada subgrupo</b>.</li></ul>"
 
 #: src/kdefrontend/dockwidgets/ProjectDock.cpp:28
 #, kde-format
@@ -15209,11 +15270,6 @@ msgstr "Rojo oscuro"
 
 #: src/kdefrontend/GuiTools.cpp:184
 #, kde-format
-msgid "Red"
-msgstr "Rojo"
-
-#: src/kdefrontend/GuiTools.cpp:184
-#, kde-format
 msgid "Light Red"
 msgstr "Rojo claro"
 
@@ -15221,11 +15277,6 @@ msgstr "Rojo claro"
 #, kde-format
 msgid "Dark Green"
 msgstr "Verde oscuro"
-
-#: src/kdefrontend/GuiTools.cpp:184
-#, kde-format
-msgid "Green"
-msgstr "Verde"
 
 #: src/kdefrontend/GuiTools.cpp:185
 #, kde-format
@@ -15236,11 +15287,6 @@ msgstr "Verde claro"
 #, kde-format
 msgid "Dark Blue"
 msgstr "Azul oscuro"
-
-#: src/kdefrontend/GuiTools.cpp:185
-#, kde-format
-msgid "Blue"
-msgstr "Azul"
 
 #: src/kdefrontend/GuiTools.cpp:185
 #, kde-format
@@ -21114,10 +21160,9 @@ msgstr "Línea de datos"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabControlLimitLines)
 #: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:257
-#, fuzzy, kde-format
-#| msgid "Crossing Lines"
+#, kde-format
 msgid "Control Limit Lines"
-msgstr "Líneas cruzadas"
+msgstr "Control de líneas de límite"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpperLimit)
 #: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:312
@@ -26048,9 +26093,6 @@ msgstr "No se puede abrir el archivo:"
 
 #~ msgid "Plot:"
 #~ msgstr "Gráfico:"
-
-#~ msgid "Hue"
-#~ msgstr "Tono"
 
 #~ msgid "Update interval"
 #~ msgstr "Intervalo de actualización"
