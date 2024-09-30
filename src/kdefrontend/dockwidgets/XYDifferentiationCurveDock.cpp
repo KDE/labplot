@@ -336,31 +336,40 @@ void XYDifferentiationCurveDock::derivOrderChanged(int index) {
 		uiGeneralTab.sbAccOrder->setMinimum(2);
 		uiGeneralTab.sbAccOrder->setMaximum(4);
 		uiGeneralTab.sbAccOrder->setSingleStep(2);
-		uiGeneralTab.sbAccOrder->setValue(4);
+		if (m_differentiationData.accOrder != 2 && m_differentiationData.accOrder != 4)
+			uiGeneralTab.sbAccOrder->setValue(4);
 		break;
 	case nsl_diff_deriv_order_second:
 		uiGeneralTab.sbAccOrder->setMinimum(1);
 		uiGeneralTab.sbAccOrder->setMaximum(3);
 		uiGeneralTab.sbAccOrder->setSingleStep(1);
-		uiGeneralTab.sbAccOrder->setValue(3);
+		if (m_differentiationData.accOrder != 1 && m_differentiationData.accOrder != 2 && m_differentiationData.accOrder != 3)
+			uiGeneralTab.sbAccOrder->setValue(3);
 		break;
 	case nsl_diff_deriv_order_third:
 		uiGeneralTab.sbAccOrder->setMinimum(2);
 		uiGeneralTab.sbAccOrder->setMaximum(2);
+		if (m_differentiationData.accOrder != 2)
+			uiGeneralTab.sbAccOrder->setValue(2);
 		break;
 	case nsl_diff_deriv_order_fourth:
 		uiGeneralTab.sbAccOrder->setMinimum(1);
 		uiGeneralTab.sbAccOrder->setMaximum(3);
 		uiGeneralTab.sbAccOrder->setSingleStep(2);
-		uiGeneralTab.sbAccOrder->setValue(3);
+		if (m_differentiationData.accOrder != 1 && m_differentiationData.accOrder != 3)
+			uiGeneralTab.sbAccOrder->setValue(3);
 		break;
 	case nsl_diff_deriv_order_fifth:
 		uiGeneralTab.sbAccOrder->setMinimum(2);
 		uiGeneralTab.sbAccOrder->setMaximum(2);
+		if (m_differentiationData.accOrder != 2)
+			uiGeneralTab.sbAccOrder->setValue(2);
 		break;
 	case nsl_diff_deriv_order_sixth:
 		uiGeneralTab.sbAccOrder->setMinimum(1);
 		uiGeneralTab.sbAccOrder->setMaximum(1);
+		if (m_differentiationData.accOrder != 1)
+			uiGeneralTab.sbAccOrder->setValue(1);
 		break;
 	}
 
