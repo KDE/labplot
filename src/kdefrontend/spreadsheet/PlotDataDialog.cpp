@@ -723,7 +723,7 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 		case XYAnalysisCurve::AnalysisAction::FitTanh:
 		case XYAnalysisCurve::AnalysisAction::FitErrFunc:
 		case XYAnalysisCurve::AnalysisAction::FitCustom:
-			analysisCurve = new XYFitCurve(i18n("Fit to '%1'", name));
+			analysisCurve = new XYFitCurve(i18nc("Curve fitting", "Fit to '%1'", name));
 			static_cast<XYFitCurve*>(analysisCurve)->initFitData(m_analysisAction);
 			static_cast<XYFitCurve*>(analysisCurve)->initStartValues(curve);
 			break;
@@ -769,7 +769,7 @@ void PlotDataDialog::addSingleSourceColumnPlot(const Column* column, CartesianPl
 		plotArea->addChild(histogram);
 
 		// set fit model category and type and initialize fit
-		auto* fitCurve = new XYFitCurve(i18n("Distribution Fit to '%1'", name));
+		auto* fitCurve = new XYFitCurve(i18nc("Curve fitting", "Distribution Fit to '%1'", name));
 		fitCurve->setDataSourceType(XYAnalysisCurve::DataSourceType::Histogram);
 		fitCurve->setDataSourceHistogram(histogram);
 

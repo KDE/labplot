@@ -1820,7 +1820,7 @@ void XYFitCurvePrivate::prepareResultColumns() {
 	}
 
 	if (!resultsNote) {
-		resultsNote = new Note(i18n("Fit Results"));
+		resultsNote = new Note(i18nc("Curve fitting", "Fit Results"));
 		resultsNote->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
 		q->addChild(resultsNote);
 	}
@@ -3089,7 +3089,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 	XYFitCurve::initFitData(d->fitData);
 
 	// add result note (not saved in projects)
-	d->resultsNote = new Note(i18n("Fit Results"));
+	d->resultsNote = new Note(i18nc("Curve Fitting", "Fit Results"));
 	d->resultsNote->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
 	addChild(d->resultsNote);
 

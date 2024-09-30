@@ -586,7 +586,7 @@ void Column::clearFormulas() {
 
 STD_SETTER_CMD_IMPL(Column, SetRandomValuesData, Column::RandomValuesData, randomValuesData)
 void Column::setRandomValuesData(const RandomValuesData& data) {
-	exec(new ColumnSetRandomValuesDataCmd(d, data, ki18n("%1: set fit options and perform the fit")));
+	exec(new ColumnSetRandomValuesDataCmd(d, data, ki18n("%1: set random values")));
 }
 
 Column::RandomValuesData Column::randomValuesData() const {

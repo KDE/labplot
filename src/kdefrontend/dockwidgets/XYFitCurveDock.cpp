@@ -1222,7 +1222,7 @@ void XYFitCurveDock::recalculateClicked() {
 	const auto& fitResult = m_fitCurve->fitResult();
 	const QString& status = fitResult.status;
 	if (status != i18n("Success")) {
-		Q_EMIT info(i18n("Fit status: %1", fitResult.status));
+		Q_EMIT info(i18nc("Curve fitting", "Fit status: %1", fitResult.status));
 		checkDataColumns();
 
 		if (!fitResult.valid)

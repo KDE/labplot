@@ -455,7 +455,7 @@ void CartesianPlot::initActions() {
 	addIntegrationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Integration"), this);
 	addInterpolationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-interpolation-curve")), i18n("Interpolation"), this);
 	addSmoothCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-smoothing-curve")), i18n("Smooth"), this);
-	addFitCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit"), this);
+	addFitCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18nc("Curve fitting", "Fit"), this);
 	addFourierFilterCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-filter-curve")), i18n("Fourier Filter"), this);
 	addFourierTransformCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-transform-curve")), i18n("Fourier Transform"), this);
 	addHilbertTransformCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Hilbert Transform"), this);
@@ -697,7 +697,7 @@ void CartesianPlot::initMenus() {
 	// analysis menu
 	dataAnalysisMenu = new QMenu(i18n("Analysis"));
 
-	QMenu* dataFitMenu = new QMenu(i18n("Fit"), dataAnalysisMenu);
+	QMenu* dataFitMenu = new QMenu(i18nc("Curve fitting", "Fit"), dataAnalysisMenu);
 	dataFitMenu->setIcon(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")));
 	dataFitMenu->addAction(addFitActions.at(0));
 	dataFitMenu->addAction(addFitActions.at(1));
@@ -1930,11 +1930,11 @@ void CartesianPlot::addSmoothCurve() {
 }
 
 void CartesianPlot::addFitCurve() {
-	auto* curve = new XYFitCurve(i18n("Fit"));
+	auto* curve = new XYFitCurve(i18nc("Curve fitting", "Fit"));
 	const auto* curCurve = currentCurve();
 	if (curCurve) {
 		beginMacro(i18n("%1: fit to '%2'", name(), curCurve->name()));
-		curve->setName(i18n("Fit to '%1'", curCurve->name()));
+		curve->setName(i18nc("Curve fitting", "Fit to '%1'", curCurve->name()));
 		curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 		curve->setDataSourceCurve(curCurve);
 
