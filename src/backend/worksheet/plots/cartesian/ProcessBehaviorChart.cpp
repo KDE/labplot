@@ -61,6 +61,11 @@ void ProcessBehaviorChart::init() {
 	KConfig config;
 	KConfigGroup group = config.group(QStringLiteral("ProcessBehaviorChart"));
 
+	d->type = static_cast<ProcessBehaviorChart::Type>(group.readEntry(QStringLiteral("Type"), static_cast<int>(ProcessBehaviorChart::Type::XmR)));
+	d->subgroupSize = group.readEntry(QStringLiteral("SubgroupSize"), 5);
+	d->limitsMetric = static_cast<ProcessBehaviorChart::LimitsMetric>(group.readEntry(QStringLiteral("LimitsMetric"), static_cast<int>(ProcessBehaviorChart::LimitsMetric::Average)));
+	d->negativeLowerLimitEnabled = group.readEntry(QStringLiteral("NegativeLowerLimitEnabled"), false);
+
 	// curve and columns for the data points
 	d->dataCurve = new XYCurve(QStringLiteral("data"));
 	d->dataCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
@@ -198,6 +203,7 @@ void ProcessBehaviorChart::setVisible(bool on) {
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, ProcessBehaviorChart::Type, type, type)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, ProcessBehaviorChart::LimitsMetric, limitsMetric, limitsMetric)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, int, subgroupSize, subgroupSize)
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, bool, negativeLowerLimitEnabled, negativeLowerLimitEnabled)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, const AbstractColumn*, dataColumn, dataColumn)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, QString, dataColumnPath, dataColumnPath)
 
@@ -370,6 +376,13 @@ void ProcessBehaviorChart::setSubgroupSize(int subgroupSize) {
 		exec(new ProcessBehaviorChartSetSubgroupSizeCmd(d, subgroupSize, ki18n("%1: set subgroup size")));
 }
 
+STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetNegativeLowerLimitEnabled, bool, negativeLowerLimitEnabled, recalc)
+void ProcessBehaviorChart::setNegativeLowerLimitEnabled(bool enabled) {
+	Q_D(ProcessBehaviorChart);
+	if (enabled != d->negativeLowerLimitEnabled)
+		exec(new ProcessBehaviorChartSetNegativeLowerLimitEnabledCmd(d, enabled, ki18n("%1: change negative lower limit")));
+}
+
 // ##############################################################################
 // #################################  SLOTS  ####################################
 // ##############################################################################
@@ -430,7 +443,6 @@ void ProcessBehaviorChartPrivate::retransform() {
  */
 void ProcessBehaviorChartPrivate::recalc() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
-
 	if (!dataColumn) {
 		center = 0.;
 		upperLimit = 0.;
@@ -517,9 +529,6 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 			upperLimit = median + E5 * medianMovingRange;
 			lowerLimit = median - E5 * medianMovingRange;
 		}
-
-		if (lowerLimit < 0.)
-			lowerLimit = 0.;
 
 		// plotted data - original data
 		dataCurve->setYColumn(dataColumn);
@@ -733,6 +742,9 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 	}
 	}
 
+	if (lowerLimit < 0. && !negativeLowerLimitEnabled)
+		lowerLimit = 0.;
+
 	yCenterColumn->setValueAt(0, center);
 	yCenterColumn->setValueAt(1, center);
 	yUpperLimitColumn->setValueAt(0, upperLimit);
@@ -783,6 +795,7 @@ void ProcessBehaviorChart::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("type"), QString::number(static_cast<int>(d->type)));
 	writer->writeAttribute(QStringLiteral("limitsMetric"), QString::number(static_cast<int>(d->limitsMetric)));
 	writer->writeAttribute(QStringLiteral("subgroupSize"), QString::number(d->subgroupSize));
+	writer->writeAttribute(QStringLiteral("negativeLowerLimitEnabled"), QString::number(d->negativeLowerLimitEnabled));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
 	writer->writeEndElement();
@@ -848,6 +861,7 @@ bool ProcessBehaviorChart::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("type", type, ProcessBehaviorChart::Type);
 			READ_INT_VALUE("limitsMetric", limitsMetric, ProcessBehaviorChart::LimitsMetric);
 			READ_INT_VALUE("subgroupSize", subgroupSize, int);
+			READ_INT_VALUE("negativeLowerLimitEnabled", negativeLowerLimitEnabled, bool);
 			READ_INT_VALUE("legendVisible", legendVisible, bool);
 
 			str = attribs.value(QStringLiteral("visible")).toString();

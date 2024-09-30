@@ -61,6 +61,7 @@ public:
 	QString yLowerLimitColumnPath;
 
 	int subgroupSize{5};
+	bool negativeLowerLimitEnabled{false};
 
 	ProcessBehaviorChart* const q;
 

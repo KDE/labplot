@@ -19,7 +19,7 @@
 double nsl_pcm_D3(unsigned int n) {
 	const double d2 = nsl_pcm_d2(n);
 	const double d3 = nsl_pcm_d3(n);
-	return GSL_MAX_DBL(0., 1 - 3 * d3 / d2);
+	return 1 - 3 * d3 / d2;
 }
 
 double nsl_pcm_D4(unsigned int n) {
@@ -32,7 +32,7 @@ double nsl_pcm_D5(unsigned int n) {
 	const double d2 = nsl_pcm_d2(n);
 	const double d3 = nsl_pcm_d3(n);
 	const double d4 = nsl_pcm_d4(n);
-	return GSL_MAX_DBL(0., (d2 - 3 * d3) / d4);
+	return (d2 - 3 * d3) / d4;
 }
 
 double nsl_pcm_D6(unsigned int n) {
@@ -65,7 +65,7 @@ double nsl_pcm_A4(unsigned int n) {
 //*************************************************************
 double nsl_pcm_B3(unsigned int n) {
 	const double c4 = nsl_pcm_c4(n);
-	return GSL_MAX_DBL(0., 1 - 3 / c4 * sqrt(1 - pow(c4, 2)));
+	return 1 - 3 / c4 * sqrt(1 - pow(c4, 2));
 }
 
 double nsl_pcm_B4(unsigned int n) {
@@ -75,7 +75,7 @@ double nsl_pcm_B4(unsigned int n) {
 
 double nsl_pcm_B5(unsigned int n) {
 	const double c4 = nsl_pcm_c4(n);
-	return GSL_MAX_DBL(0., c4 - 3 * sqrt(1 - pow(c4, 2)));
+	return c4 - 3 * sqrt(1 - pow(c4, 2));
 }
 
 double nsl_pcm_B6(unsigned int n) {

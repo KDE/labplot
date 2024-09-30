@@ -58,6 +58,7 @@ private Q_SLOTS:
 	void typeChanged(int);
 	void limitsMetricChanged(int);
 	void subgroupSizeChanged(int);
+	void negativeLowerLimitEnabledChanged(bool);
 
 	// SLOTs for changes triggered in ProcessBehaviorChart
 	// General-Tab
@@ -65,6 +66,7 @@ private Q_SLOTS:
 	void plotTypeChanged(ProcessBehaviorChart::Type);
 	void plotLimitsMetricChanged(ProcessBehaviorChart::LimitsMetric);
 	void plotSubgroupSizeChanged(int);
+	void plotNegativeLowerLimitEnabledChanged(bool);
 
 	// load and save
 	void loadConfigFromTemplate(KConfig&);

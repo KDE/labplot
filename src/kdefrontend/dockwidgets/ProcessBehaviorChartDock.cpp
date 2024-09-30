@@ -73,6 +73,7 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ProcessBehaviorChartDock::typeChanged);
 	connect(ui.cbLimitsMetric, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ProcessBehaviorChartDock::limitsMetricChanged);
 	connect(ui.sbSubgroupSize, &QSpinBox::valueChanged, this, &ProcessBehaviorChartDock::subgroupSizeChanged);
+	connect(ui.chbNegativeLowerLimit, &QCheckBox::clicked, this, &ProcessBehaviorChartDock::negativeLowerLimitEnabledChanged);
 
 	// template handler
 	auto* frame = new QFrame(this);
@@ -187,6 +188,10 @@ void ProcessBehaviorChartDock::retranslateUi() {
 		"</ul>");
 	ui.lType->setToolTip(info);
 	ui.cbType->setToolTip(info);
+
+	info = i18n("Allow negative values for the lower limit.");
+	ui.lNegativeLowerLimit->setToolTip(info);
+	ui.chbNegativeLowerLimit->setToolTip(info);
 }
 
 /*
@@ -234,6 +239,11 @@ void ProcessBehaviorChartDock::typeChanged(int index) {
 	ui.lLimitsMetric->setVisible(visible);
 	ui.cbLimitsMetric->setVisible(visible);
 
+	visible = (type == ProcessBehaviorChart::Type::XmR || type == ProcessBehaviorChart::Type::mR ||type == ProcessBehaviorChart::Type::R
+					|| type == ProcessBehaviorChart::Type::S);
+	ui.lNegativeLowerLimit->setVisible(visible);
+	ui.chbNegativeLowerLimit->setVisible(visible);
+
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* plot : m_plots)
 		plot->setType(type);
@@ -248,9 +258,14 @@ void ProcessBehaviorChartDock::limitsMetricChanged(int index) {
 
 void ProcessBehaviorChartDock::subgroupSizeChanged(int value) {
 	CONDITIONAL_LOCK_RETURN;
-
 	for (auto* plot : m_plots)
 		plot->setSubgroupSize(value);
+}
+
+void ProcessBehaviorChartDock::negativeLowerLimitEnabledChanged(bool enabled) {
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* plot : m_plots)
+		plot->setNegativeLowerLimitEnabled(enabled);
 }
 
 //*************************************************************
@@ -279,6 +294,11 @@ void ProcessBehaviorChartDock::plotSubgroupSizeChanged(int value) {
 	ui.sbSubgroupSize->setValue(value);
 }
 
+void ProcessBehaviorChartDock::plotNegativeLowerLimitEnabledChanged(bool enabled) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.chbNegativeLowerLimit->setChecked(enabled);
+}
+
 //*************************************************************
 //************************* Settings **************************
 //*************************************************************
@@ -293,24 +313,30 @@ void ProcessBehaviorChartDock::load() {
 
 	// subgroup size
 	ui.sbSubgroupSize->setValue(static_cast<int>(m_plot->subgroupSize()));
+
+	// allow negative values for the lower limit
+	ui.chbNegativeLowerLimit->setChecked(m_plot->negativeLowerLimitEnabled());
 }
 
 void ProcessBehaviorChartDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group(QStringLiteral("ProcessBehaviorChart"));
 
 	// type
-	auto type = group.readEntry(QStringLiteral("type"), static_cast<int>(m_plot->type()));
+	auto type = group.readEntry(QStringLiteral("Type"), static_cast<int>(m_plot->type()));
 	int index = ui.cbType->findData(static_cast<int>(type));
 	ui.cbType->setCurrentIndex(index);
 
 	// limits metric
-	auto limitsMetric = group.readEntry(QStringLiteral("limitsMetric"), static_cast<int>(m_plot->limitsMetric()));
+	auto limitsMetric = group.readEntry(QStringLiteral("LimitsMetric"), static_cast<int>(m_plot->limitsMetric()));
 	index = ui.cbLimitsMetric->findData(static_cast<int>(limitsMetric));
 	ui.cbLimitsMetric->setCurrentIndex(index);
 
 	// subgroup size
-	const int size = group.readEntry(QStringLiteral("subgroupSize"), static_cast<int>(m_plot->subgroupSize()));
+	const int size = group.readEntry(QStringLiteral("SubgroupSize"), static_cast<int>(m_plot->subgroupSize()));
 	ui.sbSubgroupSize->setValue(size);
+
+	// allow negative values for the lower limit
+	ui.chbNegativeLowerLimit->setChecked(group.readEntry(QStringLiteral("NegativeLowerLimitEnabled"), false));
 
 	// properties of the reference and percentile curves
 	dataLineWidget->loadConfig(group);
@@ -337,9 +363,10 @@ void ProcessBehaviorChartDock::saveConfigAsTemplate(KConfig& config) {
 	KConfigGroup group = config.group(QStringLiteral("ProcessBehaviorChart"));
 
 	// general
-	group.writeEntry(QStringLiteral("type"), static_cast<int>(m_plot->type()));
-	group.writeEntry(QStringLiteral("limitsMetric"), static_cast<int>(m_plot->limitsMetric()));
-	group.writeEntry(QStringLiteral("subgroupSize"), m_plot->subgroupSize());
+	group.writeEntry(QStringLiteral("Type"), static_cast<int>(m_plot->type()));
+	group.writeEntry(QStringLiteral("LimitsMetric"), static_cast<int>(m_plot->limitsMetric()));
+	group.writeEntry(QStringLiteral("SubgroupSize"), m_plot->subgroupSize());
+	group.writeEntry(QStringLiteral("NegativeLowerLimitEnabled"), m_plot->negativeLowerLimitEnabled());
 
 	// properties of the reference and percentile curves
 	dataLineWidget->saveConfig(group);

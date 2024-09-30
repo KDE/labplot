@@ -50,6 +50,7 @@ public:
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, dataColumn, DataColumn)
 	CLASS_D_ACCESSOR_DECL(QString, dataColumnPath, DataColumnPath)
 	BASIC_D_ACCESSOR_DECL(int, subgroupSize, SubgroupSize)
+	BASIC_D_ACCESSOR_DECL(bool, negativeLowerLimitEnabled, NegativeLowerLimitEnabled)
 
 	Symbol* dataSymbol() const;
 	Line* dataLine() const;
@@ -103,6 +104,7 @@ Q_SIGNALS:
 	void dataDataChanged();
 	void dataColumnChanged(const AbstractColumn*);
 	void subgroupSizeChanged(int);
+	void negativeLowerLimitEnabledChanged(bool);
 };
 
 #endif
