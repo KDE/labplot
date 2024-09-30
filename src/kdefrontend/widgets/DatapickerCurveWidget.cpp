@@ -84,7 +84,6 @@ void DatapickerCurveWidget::setCurves(QList<DatapickerCurve*> list) {
 
 	symbolWidget->setSymbols(symbols);
 
-	connect(m_curve, &AbstractAspect::aspectDescriptionChanged, this, &DatapickerCurveWidget::aspectDescriptionChanged);
 	connect(m_curve, &AbstractAspect::childAspectRemoved, this, &DatapickerCurveWidget::updateSymbolWidgets);
 	connect(m_curve, &AbstractAspect::childAspectAdded, this, &DatapickerCurveWidget::updateSymbolWidgets);
 	connect(m_curve, &DatapickerCurve::curveErrorTypesChanged, this, &DatapickerCurveWidget::curveErrorsChanged);

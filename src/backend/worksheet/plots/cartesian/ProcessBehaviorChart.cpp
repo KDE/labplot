@@ -63,7 +63,8 @@ void ProcessBehaviorChart::init() {
 
 	d->type = static_cast<ProcessBehaviorChart::Type>(group.readEntry(QStringLiteral("Type"), static_cast<int>(ProcessBehaviorChart::Type::XmR)));
 	d->subgroupSize = group.readEntry(QStringLiteral("SubgroupSize"), 5);
-	d->limitsMetric = static_cast<ProcessBehaviorChart::LimitsMetric>(group.readEntry(QStringLiteral("LimitsMetric"), static_cast<int>(ProcessBehaviorChart::LimitsMetric::Average)));
+	d->limitsMetric = static_cast<ProcessBehaviorChart::LimitsMetric>(
+		group.readEntry(QStringLiteral("LimitsMetric"), static_cast<int>(ProcessBehaviorChart::LimitsMetric::Average)));
 	d->negativeLowerLimitEnabled = group.readEntry(QStringLiteral("NegativeLowerLimitEnabled"), false);
 
 	// curve and columns for the data points

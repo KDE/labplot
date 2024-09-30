@@ -123,10 +123,7 @@ AxisDock::AxisDock(QWidget* parent)
 	//**********************************  Slots **********************************************
 
 	//"General"-tab
-	connect(ui.chkVisible, &QCheckBox::clicked, this, &AxisDock::visibilityChanged);
-
 	connect(ui.kcbAxisColor, &KColorButton::changed, this, &AxisDock::colorChanged);
-
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::orientationChanged);
 	connect(ui.cbPosition, QOverload<int>::of(&QComboBox::currentIndexChanged), this, QOverload<int>::of(&AxisDock::positionChanged));
 	connect(ui.sbPosition, QOverload<double>::of(&NumberSpinBox::valueChanged), this, QOverload<double>::of(&AxisDock::positionChanged));
@@ -441,8 +438,6 @@ void AxisDock::initConnections() {
 	connect(m_axis, &Axis::labelsPrefixChanged, this, &AxisDock::axisLabelsPrefixChanged);
 	connect(m_axis, &Axis::labelsSuffixChanged, this, &AxisDock::axisLabelsSuffixChanged);
 	connect(m_axis, &Axis::labelsOpacityChanged, this, &AxisDock::axisLabelsOpacityChanged);
-
-	connect(m_axis, &Axis::visibleChanged, this, &AxisDock::axisVisibilityChanged);
 }
 
 /*
@@ -550,13 +545,6 @@ void AxisDock::updateLabelsPosition(Axis::LabelsPosition position) {
 //********** SLOTs for changes triggered in AxisDock **********
 //*************************************************************
 //"General"-tab
-void AxisDock::visibilityChanged(bool state) {
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* axis : m_axesList)
-		axis->setVisible(state);
-}
-
 /*!
  * \brief AxisDock::colorChanged
  * The general color of the axis changes (Title, line, ticks, labels, ...)
@@ -1831,11 +1819,6 @@ void AxisDock::updateMajorTicksStartType(bool visible) {
 	ui.lMajorTickStartValue->setVisible(visible && absoluteValue && numeric);
 	ui.lMajorTickStartDateTime->setVisible(visible && absoluteValue && !numeric);
 	ui.sbMajorTickStartDateTime->setVisible(visible && absoluteValue && !numeric);
-}
-
-void AxisDock::axisVisibilityChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.chkVisible->setChecked(on);
 }
 
 //*************************************************************

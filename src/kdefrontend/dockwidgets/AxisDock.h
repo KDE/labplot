@@ -78,7 +78,6 @@ private Q_SLOTS:
 
 	// SLOTs for changes triggered in AxisDock
 	//"General"-tab
-	void visibilityChanged(bool);
 	void colorChanged(const QColor&);
 	void orientationChanged(int);
 	void positionChanged(int);
@@ -213,8 +212,6 @@ private Q_SLOTS:
 	void axisLabelsPrefixChanged(const QString&);
 	void axisLabelsSuffixChanged(const QString&);
 	void axisLabelsOpacityChanged(qreal);
-
-	void axisVisibilityChanged(bool);
 
 	// save/load template
 	void loadConfigFromTemplate(KConfig&);

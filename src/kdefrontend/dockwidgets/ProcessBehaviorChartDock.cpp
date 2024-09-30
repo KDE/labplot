@@ -239,8 +239,8 @@ void ProcessBehaviorChartDock::typeChanged(int index) {
 	ui.lLimitsMetric->setVisible(visible);
 	ui.cbLimitsMetric->setVisible(visible);
 
-	visible = (type == ProcessBehaviorChart::Type::XmR || type == ProcessBehaviorChart::Type::mR ||type == ProcessBehaviorChart::Type::R
-					|| type == ProcessBehaviorChart::Type::S);
+	visible = (type == ProcessBehaviorChart::Type::XmR || type == ProcessBehaviorChart::Type::mR || type == ProcessBehaviorChart::Type::R
+			   || type == ProcessBehaviorChart::Type::S);
 	ui.lNegativeLowerLimit->setVisible(visible);
 	ui.chbNegativeLowerLimit->setVisible(visible);
 
