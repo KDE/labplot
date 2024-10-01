@@ -38,6 +38,7 @@ private:
 	ColorMapsManager* m_manager{nullptr};
 	ViewMode m_viewMode{ViewMode::IconView};
 
+	bool eventFilter(QObject*, QEvent*) override;
 	void loadCollections();
 	void activateIconViewItem(const QString& name);
 	void activateListViewItem(const QString& name);
@@ -53,6 +54,10 @@ private Q_SLOTS:
 	void showViewModeMenu();
 	void viewModeChanged();
 	void activated(const QString&);
+
+	void detailsContextMenuRequest(QPoint);
+	void detailsCopy(bool copyAll = false);
+	void detailsCopyAll();
 
 Q_SIGNALS:
 	void doubleClicked();

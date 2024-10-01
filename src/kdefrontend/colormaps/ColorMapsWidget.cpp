@@ -8,11 +8,14 @@
 */
 
 #include "kdefrontend/colormaps/ColorMapsWidget.h"
+#include "kdefrontend/GuiTools.h"
 #include "backend/core/Settings.h"
 #include "backend/lib/macros.h"
 #include "tools/ColorMapsManager.h"
 
+#include <QClipboard>
 #include <QCompleter>
+#include <QKeyEvent>
 #include <QMenu>
 #include <QMessageBox>
 #include <QPainter>
@@ -62,6 +65,14 @@ ColorMapsWidget::ColorMapsWidget(QWidget* parent)
 	connect(ui.lwColorMaps, &QListWidget::itemSelectionChanged, this, &ColorMapsWidget::colorMapChanged);
 	connect(ui.lwColorMapsDetails, &QListWidget::itemSelectionChanged, this, &ColorMapsWidget::colorMapDetailsChanged);
 
+	ui.twColorMapDetails->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	ui.twColorMapDetails->setContextMenuPolicy(Qt::CustomContextMenu);
+	connect(ui.twColorMapDetails, &QTableWidget::customContextMenuRequested, this, &ColorMapsWidget::detailsContextMenuRequest);
+
+	// CTRL+C copies only the last cell in the selection, we want to copy the whole selection.
+	// install event filters to handle CTRL+C key events.
+	ui.twColorMapDetails->installEventFilter(this);
+
 	// select the last used collection
 	KConfigGroup conf = Settings::group(QStringLiteral("ColorMapsWidget"));
 	m_viewMode = static_cast<ViewMode>(conf.readEntry("ViewMode", static_cast<int>(ViewMode::IconView)));
@@ -103,6 +114,17 @@ ColorMapsWidget::~ColorMapsWidget() {
 	conf.writeEntry("ViewMode", static_cast<int>(m_viewMode));
 	conf.writeEntry("Collection", ui.cbCollections->currentText());
 	conf.writeEntry("ColorMap", colorMapName());
+}
+
+bool ColorMapsWidget::eventFilter(QObject* obj, QEvent* event) {
+	if (event->type() == QEvent::KeyPress && (obj == ui.twColorMapDetails)) {
+		auto* key_event = static_cast<QKeyEvent*>(event);
+		if (key_event->matches(QKeySequence::Copy)) {
+			detailsCopy();
+			return true;
+		}
+	}
+	return QWidget::eventFilter(obj, event);
 }
 
 /**
@@ -178,37 +200,14 @@ void ColorMapsWidget::colorMapDetailsChanged() {
 	for (const auto& color : colors) {
 		auto* item = new QTableWidgetItem();
 		item->setBackground(color);
-		item->setFlags(item->flags() ^ Qt::ItemIsEditable);
 		ui.twColorMapDetails->setItem(row, 0, item);
-
-		item = new QTableWidgetItem(color.name(QColor::HexRgb));
-		item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-		ui.twColorMapDetails->setItem(row, 1, item);
-
-		item = new QTableWidgetItem(QString::number(color.red()));
-		item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-		ui.twColorMapDetails->setItem(row, 2, item);
-
-		item = new QTableWidgetItem(QString::number(color.green()));
-		item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-		ui.twColorMapDetails->setItem(row, 3, item);
-
-		item = new QTableWidgetItem(QString::number(color.blue()));
-		item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-		ui.twColorMapDetails->setItem(row, 4, item);
-
-		item = new QTableWidgetItem(QString::number(color.hue()));
-		item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-		ui.twColorMapDetails->setItem(row, 5, item);
-
-		item = new QTableWidgetItem(QString::number(color.saturation()));
-		item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-		ui.twColorMapDetails->setItem(row, 6, item);
-
-		item = new QTableWidgetItem(QString::number(color.value()));
-		item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-		ui.twColorMapDetails->setItem(row, 7, item);
-
+		ui.twColorMapDetails->setItem(row, 1, new QTableWidgetItem(color.name(QColor::HexRgb)));
+		ui.twColorMapDetails->setItem(row, 2, new QTableWidgetItem(QString::number(color.red())));
+		ui.twColorMapDetails->setItem(row, 3, new QTableWidgetItem(QString::number(color.green())));
+		ui.twColorMapDetails->setItem(row, 4, new QTableWidgetItem(QString::number(color.blue())));
+		ui.twColorMapDetails->setItem(row, 5, new QTableWidgetItem(QString::number(color.hue())));
+		ui.twColorMapDetails->setItem(row, 6, new QTableWidgetItem(QString::number(color.saturation())));
+		ui.twColorMapDetails->setItem(row, 7, new QTableWidgetItem(QString::number(color.value())));
 		++row;
 	}
 }
@@ -308,6 +307,55 @@ void ColorMapsWidget::activated(const QString& name) {
 		activateListDetailsViewItem(name);
 		break;
 	}
+}
+
+void ColorMapsWidget::detailsContextMenuRequest(QPoint pos) {
+	auto* menu = new QMenu(this);
+	menu->addAction(QIcon::fromTheme(QLatin1String("copy-edit")), i18n("Copy Selection"), this, &ColorMapsWidget::detailsCopy, QKeySequence::Copy);
+	menu->addAction(i18n("Copy All"), this, &ColorMapsWidget::detailsCopyAll);
+	menu->exec(ui.twColorMapDetails->mapToGlobal(pos));
+}
+
+void ColorMapsWidget::detailsCopy(bool copyAll) {
+	auto* tw = ui.twColorMapDetails;
+	QString str;
+	QString rowStr;
+
+	if (copyAll) {
+		for (int i = 1; i < tw->columnCount(); ++i) {
+			if (!str.isEmpty())
+				str += QLatin1Char('\t');
+			str += tw->horizontalHeaderItem(i)->text();
+		}
+	}
+
+	// copy the content of the table
+	for (int i = 0; i < tw->rowCount(); ++i) {
+		for (int j = 0; j < tw->columnCount(); ++j) {
+			if (!tw->item(i, j))
+				continue;
+			if (!copyAll && !tw->item(i, j)->isSelected())
+				continue;
+
+			if (!rowStr.isEmpty())
+				rowStr += QLatin1Char('\t');
+
+			rowStr += tw->item(i, j)->text();
+		}
+		if (!rowStr.isEmpty()) {
+			if (!str.isEmpty())
+				str += QLatin1Char('\n');
+			str += rowStr;
+			rowStr.clear();
+		}
+	}
+
+	QApplication::clipboard()->setText(str);
+	DEBUG(STDSTRING(QApplication::clipboard()->text()));
+}
+
+void ColorMapsWidget::detailsCopyAll() {
+	detailsCopy(true);
 }
 
 void ColorMapsWidget::activateIconViewItem(const QString& name) {
