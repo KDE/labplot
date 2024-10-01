@@ -8,9 +8,9 @@
 */
 
 #include "kdefrontend/colormaps/ColorMapsWidget.h"
-#include "kdefrontend/GuiTools.h"
 #include "backend/core/Settings.h"
 #include "backend/lib/macros.h"
+#include "kdefrontend/GuiTools.h"
 #include "tools/ColorMapsManager.h"
 
 #include <QClipboard>
