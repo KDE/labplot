@@ -208,6 +208,23 @@ BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, bool, negativeLowerLimitEnabled
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, const AbstractColumn*, dataColumn, dataColumn)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, QString, dataColumnPath, dataColumnPath)
 
+/*!
+ * returns the number of index values used for x.
+ */
+int ProcessBehaviorChart::xIndexCount() const {
+	Q_D(const ProcessBehaviorChart);
+	if (!d->dataColumn)
+		return 0;
+
+	int count = 0;
+	if (d->type == ProcessBehaviorChart::Type::XmR || d->type == ProcessBehaviorChart::Type::mR)
+		count = d->dataColumn->rowCount();
+	else
+		count = d->dataColumn->rowCount() / d->subgroupSize;
+
+	return count;
+}
+
 // lines
 Line* ProcessBehaviorChart::dataLine() const {
 	Q_D(const ProcessBehaviorChart);
@@ -458,12 +475,14 @@ void ProcessBehaviorChartPrivate::recalc() {
 		return;
 	}
 
-	int count = 0;
-	if (type == ProcessBehaviorChart::Type::XmR || type == ProcessBehaviorChart::Type::mR)
-		count = dataColumn->rowCount();
-	else
-		count = dataColumn->rowCount() / subgroupSize;
+	// supress retransforms in all internal curves while modifying the data,
+	// everything will be retransformend at the very end
+	dataCurve->setSuppressRetransform(true);
+	centerCurve->setSuppressRetransform(true);
+	upperLimitCurve->setSuppressRetransform(true);
+	lowerLimitCurve->setSuppressRetransform(true);
 
+	const int count = q->xIndexCount();
 	const int xMin = 1;
 	const int xMax = count;
 	xColumn->clear();
@@ -482,6 +501,11 @@ void ProcessBehaviorChartPrivate::recalc() {
 	xLowerLimitColumn->setIntegerAt(1, xMax);
 
 	updateControlLimits();
+
+	dataCurve->setSuppressRetransform(false);
+	centerCurve->setSuppressRetransform(false);
+	upperLimitCurve->setSuppressRetransform(false);
+	lowerLimitCurve->setSuppressRetransform(false);
 
 	// emit dataChanged() in order to retransform everything with the new size/shape of the plot
 	Q_EMIT q->dataChanged();

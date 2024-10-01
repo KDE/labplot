@@ -2868,7 +2868,8 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 			Range<int> indexRange{0, 99}; // 100 percentile values are calculated, max index is 99
 			plot->minMax(dim, indexRange, range, true);
 		} else if (plot->type() == AspectType::ProcessBehaviorChart) {
-			Range<int> indexRange{0, 100}; // TODO
+			const int maxIndex = static_cast<const ProcessBehaviorChart*>(plot)->xIndexCount() - 1;
+			Range<int> indexRange{0, maxIndex};
 			plot->minMax(dim, indexRange, range, true);
 		} else {
 			range.setStart(plot->minimum(dim));
