@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-30 01:48+0000\n"
+"POT-Creation-Date: 2024-10-01 01:48+0000\n"
 "PO-Revision-Date: 2024-04-17 05:07+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -196,8 +196,8 @@ msgstr "日"
 #. i18n: ectx: property (text), widget (QRadioButton, rbNone)
 #: src/backend/core/AbstractColumn.cpp:159 src/backend/nsl/nsl_conv.c:22
 #: src/backend/nsl/nsl_conv.c:23 src/backend/nsl/nsl_corr.c:19
-#: src/backend/nsl/nsl_smooth.c:22 src/kdefrontend/dockwidgets/AxisDock.cpp:275
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:288
+#: src/backend/nsl/nsl_smooth.c:22 src/kdefrontend/dockwidgets/AxisDock.cpp:272
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:285
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:55
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:195
 #: src/kdefrontend/GuiTools.cpp:152
@@ -601,10 +601,9 @@ msgid "%1: clear column"
 msgstr ""
 
 #: src/backend/core/column/Column.cpp:589
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:977
-#, kde-format
-msgid "%1: set fit options and perform the fit"
-msgstr ""
+#, fuzzy, kde-format
+msgid "%1: set random values"
+msgstr "設定字型"
 
 #: src/backend/core/column/Column.cpp:1621
 #, kde-format
@@ -954,7 +953,7 @@ msgstr "設定佈局"
 #: src/backend/datapicker/DatapickerImage.cpp:415
 #: src/backend/worksheet/InfoElement.cpp:871
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:185
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:191
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/WorksheetElement.cpp:162
 #: src/backend/worksheet/WorksheetElementContainer.cpp:65
@@ -967,7 +966,7 @@ msgstr ""
 #: src/backend/datapicker/DatapickerImage.cpp:415
 #: src/backend/worksheet/InfoElement.cpp:871
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:185
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:191
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/WorksheetElement.cpp:162
 #: src/backend/worksheet/WorksheetElement.cpp:795
@@ -3735,7 +3734,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
 #: src/backend/gsl/functions.cpp:252
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:70
-#: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:160
+#: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:161
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:137
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:73
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:536
@@ -6415,7 +6414,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoBinRanges)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAuto2)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAuto)
-#: src/backend/nsl/nsl_conv.c:21 src/kdefrontend/dockwidgets/AxisDock.cpp:240
+#: src/backend/nsl/nsl_conv.c:21 src/kdefrontend/dockwidgets/AxisDock.cpp:237
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:130
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:276
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:473
@@ -6727,7 +6726,7 @@ msgstr "方向"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1871
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:549
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1282
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:242
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:239
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:171
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:277
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:784
@@ -7731,7 +7730,7 @@ msgstr "設定不透明度"
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:102
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:102
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:120
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:258
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:255
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:56
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:52
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:159
@@ -7751,7 +7750,7 @@ msgstr "水平"
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:105
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:105
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:123
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:259
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:256
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:57
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:53
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:904
@@ -7789,7 +7788,7 @@ msgstr "方向"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1442
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:235
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:233
-#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:204
+#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:218
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:248
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:26
 #: src/kdefrontend/widgets/SymbolWidget.cpp:137
@@ -7808,7 +7807,7 @@ msgstr "樣式"
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:135
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:153
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:173
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:318
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:315
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:122
 #, kde-format
 msgid "Color"
@@ -7820,7 +7819,7 @@ msgid "%1: set axis range type"
 msgstr "設定字型"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:572
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:621
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:609
 #, kde-format
 msgid "%1: set axis orientation"
 msgstr ""
@@ -8089,7 +8088,7 @@ msgid "%1: set data columns"
 msgstr "%1：插入 %2 欄"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:312
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:356
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:363
 #, fuzzy, kde-format
 msgid "%1: set type"
 msgstr "設定佈局"
@@ -8367,9 +8366,9 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:700
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1933
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:626
-#: src/commonfrontend/worksheet/WorksheetView.cpp:178
 #, fuzzy, kde-format
 #| msgid "int"
+msgctxt "Curve fitting"
 msgid "Fit"
 msgstr "整數"
 
@@ -8420,7 +8419,7 @@ msgstr "連線"
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:385
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:203
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:225
-#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:103
+#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:155
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:168
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:444
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:398
@@ -8721,7 +8720,6 @@ msgid "%1: distribution fit to '%2'"
 msgstr "方向"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1795
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:772
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "Distribution Fit to '%1'"
@@ -8825,6 +8823,7 @@ msgstr "方向"
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:726
 #, fuzzy, kde-format
 #| msgid "Orientation"
+msgctxt "Curve fitting"
 msgid "Fit to '%1'"
 msgstr "方向"
 
@@ -9053,7 +9052,7 @@ msgstr "方向"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:404
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:227
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:344
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:351
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:252
 #, fuzzy, kde-format
 #| msgid "%1: insert 1 column"
@@ -9136,16 +9135,22 @@ msgstr "設定字型"
 msgid "%1: legend visibility changed"
 msgstr "設定背景影像..."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:363
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:370
 #, fuzzy, kde-format
 msgid "%1: set limits metric"
 msgstr "設定背景影像..."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:370
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:377
 #, fuzzy, kde-format
 #| msgid "%1: set creation time"
 msgid "%1: set subgroup size"
 msgstr "%1：設定建立時間"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:384
+#, fuzzy, kde-format
+#| msgid "%1: change comment"
+msgid "%1: change negative lower limit"
+msgstr "%1：變更註解"
 
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:264
 #, fuzzy, kde-format
@@ -9726,9 +9731,14 @@ msgstr "設定佈局"
 msgid "%1: assign y-error"
 msgstr "設定佈局"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1823
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3092
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:977
 #, kde-format
+msgid "%1: set fit options and perform the fit"
+msgstr ""
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1823
+#, kde-format
+msgctxt "Curve fitting"
 msgid "Fit Results"
 msgstr ""
 
@@ -9883,6 +9893,12 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2349
 #, kde-format
 msgid "Fit model not specified!"
+msgstr ""
+
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3092
+#, kde-format
+msgctxt "Curve Fitting"
+msgid "Fit Results"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:85
@@ -10096,7 +10112,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:113
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:76
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:84
-#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:149
+#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:132
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:62
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:213
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:95
@@ -10345,6 +10361,7 @@ msgstr "初始大小"
 #: src/commonfrontend/worksheet/WorksheetView.cpp:169
 #, fuzzy, kde-format
 #| msgid "Fit to height"
+msgctxt "Zoom"
 msgid "Fit to Height"
 msgstr "適合高度"
 
@@ -10352,6 +10369,7 @@ msgstr "適合高度"
 #: src/commonfrontend/worksheet/WorksheetView.cpp:172
 #, fuzzy, kde-format
 #| msgid "Fit to width"
+msgctxt "Zoom"
 msgid "Fit to Width"
 msgstr "適合寬度"
 
@@ -11237,6 +11255,7 @@ msgstr "連線"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:645
 #, fuzzy, kde-format
 #| msgid "Direction"
+msgctxt "Curve fitting"
 msgid "Fit Distribution"
 msgstr "方向"
 
@@ -11673,13 +11692,22 @@ msgstr "試算表"
 #: src/commonfrontend/worksheet/WorksheetView.cpp:165
 #, fuzzy, kde-format
 #| msgid "Auto Fit"
+msgctxt "Zoom"
 msgid "No fit"
 msgstr "自動調適"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:175
 #, fuzzy, kde-format
+msgctxt "Zoom"
 msgid "Fit to Selection"
 msgstr "符合選擇區域"
+
+#: src/commonfrontend/worksheet/WorksheetView.cpp:178
+#, fuzzy, kde-format
+#| msgid "int"
+msgctxt "Zoom"
+msgid "Fit"
+msgstr "整數"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:183
 #: src/commonfrontend/worksheet/WorksheetView.cpp:334
@@ -13535,10 +13563,10 @@ msgid "Data regions"
 msgstr "方向"
 
 #. i18n("Center") ); // must not updated
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:234
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:300
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:481
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:484
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:231
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:297
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:476
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:479
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:255
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:264
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:51
@@ -13550,10 +13578,10 @@ msgstr "方向"
 msgid "Top"
 msgstr "頂端"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:235
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:301
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:482
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:485
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:232
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:298
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:477
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:480
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:257
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:266
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:53
@@ -13565,7 +13593,7 @@ msgstr "頂端"
 msgid "Bottom"
 msgstr "底端"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:236
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:233
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:138
 #, fuzzy, kde-format
 #| msgid "centered"
@@ -13573,18 +13601,18 @@ msgid "Centered"
 msgstr "置中"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twContent)
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:237
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:234
 #: src/kdefrontend/ui/datasources/matiooptionswidget.ui:57
 #, kde-format
 msgid "Logical"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:241
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:238
 #, fuzzy, kde-format
 msgid "Auto Data"
 msgstr "資料"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:245
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:242
 #, kde-format
 msgid ""
 "Axis range:<ul><li>Auto - automatically set the start and end points of the "
@@ -13594,37 +13622,37 @@ msgid ""
 "points of the axis</li></ul>"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:263
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:260
 #, kde-format
 msgid "No arrow"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:264
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:261
 #, kde-format
 msgid "Simple, Small"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:265
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:262
 #, kde-format
 msgid "Simple, Big"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:266
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:263
 #, kde-format
 msgid "Filled, Small"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:267
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:264
 #, kde-format
 msgid "Filled, Big"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:268
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:265
 #, kde-format
 msgid "Semi-filled, Small"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:269
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:266
 #, kde-format
 msgid "Semi-filled, Big"
 msgstr ""
@@ -13632,9 +13660,9 @@ msgstr ""
 #. i18n("Original"));
 #. i18n("Custom"));
 #. Positioning and alignment
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:271
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:489
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:493
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:268
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:484
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:488
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:250
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:260
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:47
@@ -13650,9 +13678,9 @@ msgid "Left"
 msgstr "左"
 
 #. i18n("Center") ); // must not updated
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:272
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:490
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:492
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:269
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:485
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:487
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:252
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:262
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:49
@@ -13667,41 +13695,41 @@ msgstr "左"
 msgid "Right"
 msgstr "右"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:273
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:270
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:98
 #, kde-format
 msgid "Both"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:276
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:289
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:273
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:286
 #, fuzzy, kde-format
 msgid "In"
 msgstr "於："
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:277
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:290
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:274
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:287
 #, fuzzy, kde-format
 #| msgid "out"
 msgid "Out"
 msgstr "out"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:278
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:291
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:275
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:288
 #, kde-format
 msgid "In and Out"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:280
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:293
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:277
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:290
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:58
 #, fuzzy, kde-format
 msgid "Number"
 msgstr "數字"
 
 #. i18n: ectx: property (text), widget (QLabel, lSpacing)
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:281
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:294
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:278
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:291
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:651
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:454
 #, fuzzy, kde-format
@@ -13709,24 +13737,24 @@ msgstr "數字"
 msgid "Spacing"
 msgstr "間隔："
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:282
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:295
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:304
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:279
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:292
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:301
 #, kde-format
 msgid "Custom column"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:283
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:280
 #, fuzzy, kde-format
 msgid "Column labels"
 msgstr "沒有標籤"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:285
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:282
 #, fuzzy, kde-format
 msgid "Absolute Value"
 msgstr "數值"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:286
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:283
 #, fuzzy, kde-format
 #| msgid "Offset"
 msgid "Offset"
@@ -13734,86 +13762,86 @@ msgstr "位移"
 
 #. i18n("Column labels"));
 #. labels
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:299
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:296
 #, fuzzy, kde-format
 msgid "No labels"
 msgstr "沒有標籤"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:303
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:300
 #, fuzzy, kde-format
 msgid "Position values"
 msgstr "位置"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:307
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:304
 #, kde-format
 msgid "Decimal notation"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:308
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:305
 #, kde-format
 msgid "Scientific notation"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:309
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:306
 #, fuzzy, kde-format
 #| msgid "implicit"
 msgid "Scientific E notation"
 msgstr "隱式繪圖"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:310
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:307
 #, kde-format
 msgid "Powers of 10"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:311
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:308
 #, kde-format
 msgid "Powers of 2"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:312
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:309
 #, kde-format
 msgid "Powers of e"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:313
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:310
 #, fuzzy, kde-format
 #| msgid "Number of points"
 msgid "Multiples of π"
 msgstr "點數"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:317
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:314
 #, fuzzy, kde-format
 msgid "Transparent"
 msgstr "移項"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:576
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:564
 #, fuzzy, kde-format
 msgid "%1: set axis color"
 msgstr "設定字型"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:578
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:566
 #, fuzzy, kde-format
 #| msgid "%1: insert 1 column"
 #| msgid_plural "%1: insert %2 columns"
 msgid "%1 axes: set color"
 msgstr "%1：插入 %2 欄"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:1585
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:1573
 #, kde-format
 msgid "Scale is in sync with the plot scale"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:1588
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:1576
 #, kde-format
 msgid "Scale is async with the plot"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:2045
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:2028
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:2047
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:2030
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:523
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:728
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1839
@@ -13823,7 +13851,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:353
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:446
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:266
-#: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:329
+#: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:355
 #: src/kdefrontend/dockwidgets/QQPlotDock.cpp:278
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:229
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:233
@@ -14228,7 +14256,7 @@ msgstr "欄"
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:55
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:59
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:63
-#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:268
+#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:282
 #: src/kdefrontend/widgets/LabelWidget.cpp:146
 #: src/kdefrontend/widgets/LabelWidget.cpp:154
 #: src/kdefrontend/widgets/LabelWidget.cpp:159
@@ -14424,7 +14452,7 @@ msgid "Silverman"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:351
-#: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:327
+#: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:353
 #: src/kdefrontend/dockwidgets/QQPlotDock.cpp:276
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1036
 #, kde-format
@@ -14491,12 +14519,12 @@ msgstr ""
 msgid "%1 matrices: template \"%2\" loaded"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:159
+#: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:160
 #, fuzzy, kde-format
 msgid "Average"
 msgstr "圓心"
 
-#: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:172
+#: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:173
 #, kde-format
 msgid ""
 "The supported chart types are grouped according to the plotted statistics "
@@ -14509,6 +14537,11 @@ msgid ""
 "and Standard Deviations, Limits Based on the Standard Deviations:<ul><li>X̅  "
 "(X̅S) - plot the <b>averages for each subgroup</b>.</li><li>S (X̅S) - plot the "
 "<b>standard deviations for each subgroup</b>.</li></ul>"
+msgstr ""
+
+#: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:192
+#, kde-format
+msgid "Allow negative values for the lower limit."
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/ProjectDock.cpp:28
@@ -14926,6 +14959,7 @@ msgstr "點數"
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1225
 #, fuzzy, kde-format
 #| msgid "Statistics"
+msgctxt "Curve fitting"
 msgid "Fit status: %1"
 msgstr "統計"
 
@@ -17631,6 +17665,13 @@ msgstr "新增過濾器"
 msgid "Probability Density of '%1'"
 msgstr "方向"
 
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:772
+#, fuzzy, kde-format
+#| msgid "Direction"
+msgctxt "Curve fitting"
+msgid "Distribution Fit to '%1'"
+msgstr "方向"
+
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:966
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:350
@@ -18251,7 +18292,7 @@ msgstr "格式"
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:92
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:43
 #: src/kdefrontend/ui/dockwidgets/notedock.ui:43
-#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:37
+#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:112
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:243
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:99
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:119
@@ -18303,7 +18344,7 @@ msgstr "註解："
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:112
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:17
 #: src/kdefrontend/ui/dockwidgets/notedock.ui:17
-#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:156
+#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:30
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:107
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:55
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:190
@@ -18857,7 +18898,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:85
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:154
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:268
-#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:47
+#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:142
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:48
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:303
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:298
@@ -20362,7 +20403,7 @@ msgstr "x"
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:122
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:153
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:43
-#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:142
+#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:56
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:85
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:220
 #, fuzzy, kde-format
@@ -21290,7 +21331,7 @@ msgstr "線寬："
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:160
-#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:30
+#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:79
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:116
 #: src/kdefrontend/ui/dockwidgets/referencerangedock.ui:135
 #, fuzzy, kde-format
@@ -21408,37 +21449,43 @@ msgid "Text color:"
 msgstr "文字色彩："
 
 #. i18n: ectx: property (text), widget (QLabel, lSubgroupSize)
-#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:96
+#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:86
 #, kde-format
 msgid "Subgroup Size:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lLimitsMetric)
-#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:182
+#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:162
 #, kde-format
 msgid "Limits based on:"
 msgstr ""
 
+#. i18n: ectx: property (text), widget (QLabel, lNegativeLowerLimit)
+#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:199
+#, fuzzy, kde-format
+msgid "Lower Limit < 0:"
+msgstr "功能"
+
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataLine)
-#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:193
+#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:207
 #, fuzzy, kde-format
 msgid "Data Line"
 msgstr "線條"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabControlLimitLines)
-#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:257
+#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:271
 #, kde-format
-msgid "Control Limit Lines"
+msgid "Center/Limits Lines"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lUpperLimit)
-#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:312
+#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:326
 #, fuzzy, kde-format
 msgid "Upper Limit"
 msgstr "功能"
 
 #. i18n: ectx: property (text), widget (QLabel, lLowerLimit)
-#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:356
+#: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:370
 #, fuzzy, kde-format
 msgid "Lower Limit"
 msgstr "功能"
