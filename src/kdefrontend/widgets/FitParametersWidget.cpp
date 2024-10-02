@@ -32,7 +32,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent)
 	ui.tableWidget->setColumnCount(5);
 
 	auto* headerItem = new QTableWidgetItem();
-	headerItem->setText(i18n("Name"));
+	headerItem->setText(QString());
 	ui.tableWidget->setHorizontalHeaderItem(0, headerItem);
 
 	headerItem = new QTableWidgetItem();

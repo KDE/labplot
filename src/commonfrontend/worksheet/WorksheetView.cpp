@@ -162,20 +162,20 @@ void WorksheetView::initActions() {
 
 	auto* fitActionGroup = new QActionGroup(zoomActionGroup);
 	fitActionGroup->setExclusive(true);
-	zoomFitNoneAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-none")), i18n("No fit"), fitActionGroup);
+	zoomFitNoneAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-none")), i18nc("Zoom", "No fit"), fitActionGroup);
 	zoomFitNoneAction->setCheckable(true);
 	zoomFitNoneAction->setChecked(true);
 	zoomFitNoneAction->setData((int)Worksheet::ZoomFit::None);
-	zoomFitPageHeightAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-height")), i18n("Fit to Height"), fitActionGroup);
+	zoomFitPageHeightAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-height")), i18nc("Zoom", "Fit to Height"), fitActionGroup);
 	zoomFitPageHeightAction->setCheckable(true);
 	zoomFitPageHeightAction->setData((int)Worksheet::ZoomFit::FitToHeight);
-	zoomFitPageWidthAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-width")), i18n("Fit to Width"), fitActionGroup);
+	zoomFitPageWidthAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-width")), i18nc("Zoom", "Fit to Width"), fitActionGroup);
 	zoomFitPageWidthAction->setCheckable(true);
 	zoomFitPageWidthAction->setData((int)Worksheet::ZoomFit::FitToWidth);
-	zoomFitSelectionAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-selection")), i18n("Fit to Selection"), fitActionGroup);
+	zoomFitSelectionAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-selection")), i18nc("Zoom", "Fit to Selection"), fitActionGroup);
 	zoomFitSelectionAction->setCheckable(true);
 	zoomFitSelectionAction->setData((int)Worksheet::ZoomFit::FitToSelection);
-	zoomFitAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit")), i18n("Fit"), fitActionGroup);
+	zoomFitAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit")), i18nc("Zoom", "Fit"), fitActionGroup);
 	zoomFitAction->setCheckable(true);
 	zoomFitAction->setData((int)Worksheet::ZoomFit::Fit);
 

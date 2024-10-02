@@ -623,7 +623,7 @@ void SpreadsheetView::initMenus() {
 	m_columnMenu->addMenu(m_plotDataMenu);
 
 	// Data fit sub-menu
-	QMenu* dataFitMenu = new QMenu(i18n("Fit"), this);
+	QMenu* dataFitMenu = new QMenu(i18nc("Curve fitting", "Fit"), this);
 	dataFitMenu->setIcon(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")));
 	const auto& addFitActions = addFitActionGroup->actions();
 	dataFitMenu->addAction(addFitActions.at(0));
@@ -642,7 +642,7 @@ void SpreadsheetView::initMenus() {
 	dataFitMenu->addAction(addFitActions.at(10));
 
 	// distribution fit sub-menu
-	QMenu* distributionFitMenu = new QMenu(i18n("Fit Distribution"), this);
+	QMenu* distributionFitMenu = new QMenu(i18nc("Curve fitting", "Fit Distribution"), this);
 	distributionFitMenu->setIcon(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")));
 	const auto& addDistributionFitActions = addDistributionFitActionGroup->actions();
 	distributionFitMenu->addAction(addDistributionFitActions.at(0));
