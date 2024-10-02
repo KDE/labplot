@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-01 01:48+0000\n"
+"POT-Creation-Date: 2024-10-02 01:48+0000\n"
 "PO-Revision-Date: 2014-03-19 20:12+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -1136,7 +1136,7 @@ msgstr ""
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2538
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2556
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2573
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:173
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:195
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:145
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:188
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:182
@@ -7581,7 +7581,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:322
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:135
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:153
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:173
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:195
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:315
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:122
 #, kde-format
@@ -7853,7 +7853,7 @@ msgid "%1: set data columns"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:312
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:363
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:380
 #, kde-format
 msgid "%1: set type"
 msgstr ""
@@ -7992,7 +7992,7 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:167
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5098
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5099
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:483
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:548
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:466
@@ -8439,7 +8439,7 @@ msgid "%1: load default theme"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1744
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5417
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5418
 #: src/backend/worksheet/Worksheet.cpp:848
 #, kde-format
 msgid "%1: set theme"
@@ -8590,24 +8590,24 @@ msgstr ""
 msgid "Text Label"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3791
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3792
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4015
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4036
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4016
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4037
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4023
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4049
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4024
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4050
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4068
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4069
 #, kde-format
 msgid "x=%1"
 msgstr ""
@@ -8758,7 +8758,7 @@ msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:404
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:227
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:351
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:368
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:252
 #, kde-format
 msgid "%1: set data column"
@@ -8836,17 +8836,17 @@ msgstr ""
 msgid "%1: legend visibility changed"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:370
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:387
 #, kde-format
 msgid "%1: set limits metric"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:377
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:394
 #, kde-format
 msgid "%1: set subgroup size"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:384
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:401
 #, kde-format
 msgid "%1: change negative lower limit"
 msgstr ""
@@ -11638,13 +11638,13 @@ msgctxt "@title:window"
 msgid "Color Maps Browser"
 msgstr ""
 
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:36
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:39
 #: src/kdefrontend/examples/ExamplesWidget.cpp:34
 #, kde-format
 msgid "Switch between icon and list views"
 msgstr ""
 
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:50
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:53
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:51
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:124
 #: src/kdefrontend/examples/ExamplesWidget.cpp:51
@@ -11654,7 +11654,7 @@ msgstr ""
 msgid "Enter the keyword you want to search for"
 msgstr "Manfred Wiese"
 
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:53
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:56
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:54
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:127
 #: src/kdefrontend/examples/ExamplesWidget.cpp:54
@@ -11662,48 +11662,66 @@ msgstr "Manfred Wiese"
 msgid "Search..."
 msgstr ""
 
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:173
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:195
 #: src/kdefrontend/GuiTools.cpp:184
 #, kde-format
 msgid "Red"
 msgstr ""
 
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:173
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:195
 #: src/kdefrontend/GuiTools.cpp:184
 #, kde-format
 msgid "Green"
 msgstr ""
 
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:173
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:195
 #: src/kdefrontend/GuiTools.cpp:185
 #, kde-format
 msgid "Blue"
 msgstr ""
 
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:173
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:195
 #, kde-format
 msgid "Hue"
 msgstr ""
 
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:173
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:195
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "Saturation"
 msgstr "Statistik"
 
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:225
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:224
 #, kde-format
 msgid "Icon View"
 msgstr ""
 
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:233
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:232
 #, kde-format
 msgid "List View"
 msgstr ""
 
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:241
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:240
 #, kde-format
 msgid "List View with Details"
+msgstr ""
+
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:314
+#: src/kdefrontend/dockwidgets/CursorDock.cpp:148
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1359
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1365
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1371
+#, kde-format
+msgid "Copy Selection"
+msgstr ""
+
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:315
+#: src/kdefrontend/dockwidgets/CursorDock.cpp:149
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1360
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1366
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1372
+#, kde-format
+msgid "Copy All"
 msgstr ""
 
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:32
@@ -13935,22 +13953,6 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:33
 #, kde-format
 msgid "Expand all curves"
-msgstr ""
-
-#: src/kdefrontend/dockwidgets/CursorDock.cpp:148
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1359
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1365
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1371
-#, kde-format
-msgid "Copy Selection"
-msgstr ""
-
-#: src/kdefrontend/dockwidgets/CursorDock.cpp:149
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1360
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1366
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1372
-#, kde-format
-msgid "Copy All"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:376

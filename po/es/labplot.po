@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-01 01:48+0000\n"
-"PO-Revision-Date: 2024-09-30 03:10+0200\n"
+"POT-Creation-Date: 2024-10-02 01:48+0000\n"
+"PO-Revision-Date: 2024-10-01 12:42+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -592,10 +592,9 @@ msgid "%1: clear column"
 msgstr "%1: borrar columna"
 
 #: src/backend/core/column/Column.cpp:589
-#, fuzzy, kde-format
-#| msgid "%1: set cell values"
+#, kde-format
 msgid "%1: set random values"
-msgstr "%1: definir valores de celdas"
+msgstr "%1: definir valores aleatorios"
 
 #: src/backend/core/column/Column.cpp:1621
 #, kde-format
@@ -1150,7 +1149,7 @@ msgstr "Índice"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2538
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2556
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2573
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:173
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:195
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:145
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:188
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:182
@@ -7601,7 +7600,7 @@ msgstr "Estilo"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:322
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:135
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:153
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:173
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:195
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:315
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:122
 #, kde-format
@@ -7873,7 +7872,7 @@ msgid "%1: set data columns"
 msgstr "%1: definir columnas de datos"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:312
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:363
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:380
 #, kde-format
 msgid "%1: set type"
 msgstr "%1: definir tipo"
@@ -8011,7 +8010,7 @@ msgstr "no hay información disponible"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:167
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5098
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5099
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:483
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:548
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:466
@@ -8135,8 +8134,7 @@ msgstr "Suavizado"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:700
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1933
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:626
-#, fuzzy, kde-format
-#| msgid "Fit"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit"
 msgstr "Ajuste"
@@ -8457,7 +8455,7 @@ msgid "%1: load default theme"
 msgstr "%1: Cargar tema predeterminado"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1744
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5417
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5418
 #: src/backend/worksheet/Worksheet.cpp:848
 #, kde-format
 msgid "%1: set theme"
@@ -8560,8 +8558,7 @@ msgstr "%1: ajustar a «%2»"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1937
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:726
-#, fuzzy, kde-format
-#| msgid "Fit to '%1'"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit to '%1'"
 msgstr "Ajustar a «%1»"
@@ -8608,24 +8605,24 @@ msgstr "%1: añadir curva de función"
 msgid "Text Label"
 msgstr "Etiqueta de texto"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3791
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3792
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "No está dentro de la recta límite"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4015
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4036
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4016
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4037
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "desde x=%1 hasta x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4023
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4049
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4024
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4050
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "desde y=%1 hasta y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4068
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4069
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
@@ -8776,7 +8773,7 @@ msgstr "Ajustar distribución binomial"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:404
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:227
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:351
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:368
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:252
 #, kde-format
 msgid "%1: set data column"
@@ -8856,21 +8853,20 @@ msgstr "%1: definir ancho de banda"
 msgid "%1: legend visibility changed"
 msgstr "%1: visibilidad de la leyenda cambiada"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:370
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:387
 #, kde-format
 msgid "%1: set limits metric"
 msgstr "%1: definir métrica de límites"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:377
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:394
 #, kde-format
 msgid "%1: set subgroup size"
 msgstr "%1: definir tamaño de subgrupo"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:384
-#, fuzzy, kde-format
-#| msgid "%1: change geometry rect"
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:401
+#, kde-format
 msgid "%1: change negative lower limit"
-msgstr "%1: cambiar la geometría del rectángulo"
+msgstr "%1: cambiar el límite inferior negativo"
 
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:264
 #, kde-format
@@ -9448,11 +9444,10 @@ msgid "%1: set fit options and perform the fit"
 msgstr "%1: definir las opciones de ajuste y realizar el ajuste"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1823
-#, fuzzy, kde-format
-#| msgid "Fit Results"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit Results"
-msgstr "Resultados del ajuste"
+msgstr "Resultado del ajuste"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1847
 #, kde-format
@@ -9604,11 +9599,10 @@ msgid "Fit model not specified!"
 msgstr "Modelo de ajuste no especificado."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3092
-#, fuzzy, kde-format
-#| msgid "Fit Results"
+#, kde-format
 msgctxt "Curve Fitting"
 msgid "Fit Results"
-msgstr "Resultados del ajuste"
+msgstr "Resultado del ajuste"
 
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:85
 #, kde-format
@@ -10056,16 +10050,14 @@ msgstr "Tamaño original"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:129
 #: src/commonfrontend/worksheet/WorksheetView.cpp:169
-#, fuzzy, kde-format
-#| msgid "Fit to Height"
+#, kde-format
 msgctxt "Zoom"
 msgid "Fit to Height"
 msgstr "Ajustar a la altura"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:130
 #: src/commonfrontend/worksheet/WorksheetView.cpp:172
-#, fuzzy, kde-format
-#| msgid "Fit to Width"
+#, kde-format
 msgctxt "Zoom"
 msgid "Fit to Width"
 msgstr "Ajustar a la anchura"
@@ -10926,11 +10918,10 @@ msgid "Conditional Formatting"
 msgstr "Formato condicional"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:645
-#, fuzzy, kde-format
-#| msgid "Fit Distribution"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit Distribution"
-msgstr "Ajustar distribución"
+msgstr "Ajustar a la distribución"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:659
 #, kde-format
@@ -11350,22 +11341,19 @@ msgid "Spreadsheet"
 msgstr "Hoja de cálculo"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:165
-#, fuzzy, kde-format
-#| msgid "No fit"
+#, kde-format
 msgctxt "Zoom"
 msgid "No fit"
 msgstr "Sin ajuste"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:175
-#, fuzzy, kde-format
-#| msgid "Fit to Selection"
+#, kde-format
 msgctxt "Zoom"
 msgid "Fit to Selection"
 msgstr "Ajustar a la selección"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:178
-#, fuzzy, kde-format
-#| msgid "Fit"
+#, kde-format
 msgctxt "Zoom"
 msgid "Fit"
 msgstr "Ajuste"
@@ -11652,13 +11640,13 @@ msgctxt "@title:window"
 msgid "Color Maps Browser"
 msgstr "Explorador de mapas de color"
 
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:36
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:39
 #: src/kdefrontend/examples/ExamplesWidget.cpp:34
 #, kde-format
 msgid "Switch between icon and list views"
 msgstr "Cambiar entre las vistas de iconos y de lista"
 
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:50
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:53
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:51
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:124
 #: src/kdefrontend/examples/ExamplesWidget.cpp:51
@@ -11666,7 +11654,7 @@ msgstr "Cambiar entre las vistas de iconos y de lista"
 msgid "Enter the keyword you want to search for"
 msgstr "Introduzca la palabra clave que desea buscar"
 
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:53
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:56
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:54
 #: src/kdefrontend/datasources/ImportKaggleDatasetWidget.cpp:127
 #: src/kdefrontend/examples/ExamplesWidget.cpp:54
@@ -11674,51 +11662,66 @@ msgstr "Introduzca la palabra clave que desea buscar"
 msgid "Search..."
 msgstr "Buscar..."
 
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:173
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:195
 #: src/kdefrontend/GuiTools.cpp:184
 #, kde-format
 msgid "Red"
 msgstr "Rojo"
 
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:173
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:195
 #: src/kdefrontend/GuiTools.cpp:184
 #, kde-format
 msgid "Green"
 msgstr "Verde"
 
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:173
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:195
 #: src/kdefrontend/GuiTools.cpp:185
 #, kde-format
 msgid "Blue"
 msgstr "Azul"
 
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:173
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:195
 #, kde-format
 msgid "Hue"
 msgstr "Tono"
 
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:173
-#, fuzzy, kde-format
-#| msgid "Saturation:"
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:195
+#, kde-format
 msgid "Saturation"
-msgstr "Saturación:"
+msgstr "Saturación"
 
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:225
-#, fuzzy, kde-format
-#| msgid "Zoom View"
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:224
+#, kde-format
 msgid "Icon View"
-msgstr "Ampliar vista"
+msgstr "Vista de iconos"
 
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:233
-#, fuzzy, kde-format
-#| msgid "View"
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:232
+#, kde-format
 msgid "List View"
-msgstr "Ver"
+msgstr "Vista de lista"
 
-#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:241
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:240
 #, kde-format
 msgid "List View with Details"
-msgstr ""
+msgstr "Vista de lista con detalles"
+
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:314
+#: src/kdefrontend/dockwidgets/CursorDock.cpp:148
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1359
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1365
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1371
+#, kde-format
+msgid "Copy Selection"
+msgstr "Copiar selección"
+
+#: src/kdefrontend/colormaps/ColorMapsWidget.cpp:315
+#: src/kdefrontend/dockwidgets/CursorDock.cpp:149
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1360
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1366
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1372
+#, kde-format
+msgid "Copy All"
+msgstr "Copiar todo"
 
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:32
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:49
@@ -14149,22 +14152,6 @@ msgstr "Contraer todas las curvas"
 msgid "Expand all curves"
 msgstr "Expandir todas las curvas"
 
-#: src/kdefrontend/dockwidgets/CursorDock.cpp:148
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1359
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1365
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1371
-#, kde-format
-msgid "Copy Selection"
-msgstr "Copiar selección"
-
-#: src/kdefrontend/dockwidgets/CursorDock.cpp:149
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1360
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1366
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1372
-#, kde-format
-msgid "Copy All"
-msgstr "Copiar todo"
-
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:376
 #, kde-format
 msgid "%1 custom points: template \"%2\" loaded"
@@ -14353,7 +14340,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:192
 #, kde-format
 msgid "Allow negative values for the lower limit."
-msgstr ""
+msgstr "Permitir valores negativos para el límite inferior."
 
 #: src/kdefrontend/dockwidgets/ProjectDock.cpp:28
 #, kde-format
@@ -14758,8 +14745,7 @@ msgid "Number of peaks:"
 msgstr "Número de picos:"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1225
-#, fuzzy, kde-format
-#| msgid "Fit status: %1"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit status: %1"
 msgstr "Estado de ajuste: %1"
@@ -17486,11 +17472,10 @@ msgid "Probability Density of '%1'"
 msgstr "Densidad de probabilidad de «%1»"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:772
-#, fuzzy, kde-format
-#| msgid "Distribution Fit to '%1'"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Distribution Fit to '%1'"
-msgstr "Distribución ajustada a «%1»"
+msgstr "Ajuste de distribución a «%1»"
 
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:966
@@ -21206,10 +21191,9 @@ msgstr "Límites basados en:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNegativeLowerLimit)
 #: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:199
-#, fuzzy, kde-format
-#| msgid "Lower Limit"
+#, kde-format
 msgid "Lower Limit < 0:"
-msgstr "Límite inferior"
+msgstr "Límite inferior < 0:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataLine)
 #: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:207
@@ -21219,10 +21203,9 @@ msgstr "Línea de datos"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabControlLimitLines)
 #: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:271
-#, fuzzy, kde-format
-#| msgid "Control Limit Lines"
+#, kde-format
 msgid "Center/Limits Lines"
-msgstr "Control de líneas de límite"
+msgstr "Líneas de centrado/límite"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpperLimit)
 #: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:326
