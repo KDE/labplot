@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-02 01:48+0000\n"
+"POT-Creation-Date: 2024-10-03 01:46+0000\n"
 "PO-Revision-Date: 2024-04-17 05:07+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -464,7 +464,6 @@ msgstr "%1：重新命名為  %2"
 #: src/kdefrontend/datasources/HDF5OptionsWidget.cpp:27
 #: src/kdefrontend/datasources/NetCDFOptionsWidget.cpp:29
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:104
-#: src/kdefrontend/widgets/FitParametersWidget.cpp:35
 #, kde-format
 msgid "Name"
 msgstr "名稱"
@@ -14835,7 +14834,7 @@ msgstr ""
 msgid "area error: %1"
 msgstr "建立時間：%1"
 
-#: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:382
+#: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:391
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgid "Differentiation status: %1"

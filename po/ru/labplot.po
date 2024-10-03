@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-02 01:48+0000\n"
+"POT-Creation-Date: 2024-10-03 01:46+0000\n"
 "PO-Revision-Date: 2023-11-13 14:41+0300\n"
 "Last-Translator: Sergey Kazorin <translation-team@basealt.ru>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -473,7 +473,6 @@ msgstr "%1: переименование в %2"
 #: src/kdefrontend/datasources/HDF5OptionsWidget.cpp:27
 #: src/kdefrontend/datasources/NetCDFOptionsWidget.cpp:29
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:104
-#: src/kdefrontend/widgets/FitParametersWidget.cpp:35
 #, kde-format
 msgid "Name"
 msgstr "Имя"
@@ -15074,7 +15073,7 @@ msgid "area error: %1"
 msgstr "площадь погрешности: %1"
 
 # BUGME: please split --aspotashev
-#: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:382
+#: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:391
 #, kde-format
 msgid "Differentiation status: %1"
 msgstr "Состояние дифференцирования: %1"

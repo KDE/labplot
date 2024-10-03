@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-02 01:48+0000\n"
+"POT-Creation-Date: 2024-10-03 01:46+0000\n"
 "PO-Revision-Date: 2024-10-01 20:53+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -469,7 +469,6 @@ msgstr "%1: перейменувати на %2"
 #: src/kdefrontend/datasources/HDF5OptionsWidget.cpp:27
 #: src/kdefrontend/datasources/NetCDFOptionsWidget.cpp:29
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:104
-#: src/kdefrontend/widgets/FitParametersWidget.cpp:35
 #, kde-format
 msgid "Name"
 msgstr "Назва"
@@ -14690,7 +14689,7 @@ msgstr "позиційна квадратична похибка: %1"
 msgid "area error: %1"
 msgstr "похибка за площею: %1"
 
-#: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:382
+#: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:391
 #, kde-format
 msgid "Differentiation status: %1"
 msgstr "Стан диференціювання: %1"

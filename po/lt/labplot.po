@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-02 01:48+0000\n"
+"POT-Creation-Date: 2024-10-03 01:46+0000\n"
 "PO-Revision-Date: 2014-06-30 02:02+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: lt\n"
@@ -457,7 +457,6 @@ msgstr ""
 #: src/kdefrontend/datasources/HDF5OptionsWidget.cpp:27
 #: src/kdefrontend/datasources/NetCDFOptionsWidget.cpp:29
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:104
-#: src/kdefrontend/widgets/FitParametersWidget.cpp:35
 #, kde-format
 msgid "Name"
 msgstr ""
@@ -14353,7 +14352,7 @@ msgstr ""
 msgid "area error: %1"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:382
+#: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:391
 #, kde-format
 msgid "Differentiation status: %1"
 msgstr ""

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-02 01:48+0000\n"
+"POT-Creation-Date: 2024-10-03 01:46+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -529,7 +529,6 @@ msgstr "%1: mudar o nome para %2"
 #: src/kdefrontend/datasources/HDF5OptionsWidget.cpp:27
 #: src/kdefrontend/datasources/NetCDFOptionsWidget.cpp:29
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:104
-#: src/kdefrontend/widgets/FitParametersWidget.cpp:35
 #, kde-format
 msgid "Name"
 msgstr "Nome"
@@ -14956,7 +14955,7 @@ msgstr "erro ao quadrado da posição: %1"
 msgid "area error: %1"
 msgstr "erro da área: %1"
 
-#: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:382
+#: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:391
 #, kde-format
 msgid "Differentiation status: %1"
 msgstr "Estado da derivada: %1"

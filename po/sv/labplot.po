@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-02 01:48+0000\n"
-"PO-Revision-Date: 2024-09-30 19:53+0200\n"
+"POT-Creation-Date: 2024-10-03 01:46+0000\n"
+"PO-Revision-Date: 2024-10-02 22:06+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -455,7 +455,6 @@ msgstr "%1: byt namn på %2"
 #: src/kdefrontend/datasources/HDF5OptionsWidget.cpp:27
 #: src/kdefrontend/datasources/NetCDFOptionsWidget.cpp:29
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:104
-#: src/kdefrontend/widgets/FitParametersWidget.cpp:35
 #, kde-format
 msgid "Name"
 msgstr "Namn"
@@ -588,10 +587,9 @@ msgid "%1: clear column"
 msgstr "%1: rensa kolumn"
 
 #: src/backend/core/column/Column.cpp:589
-#, fuzzy, kde-format
-#| msgid "%1: set cell values"
+#, kde-format
 msgid "%1: set random values"
-msgstr "%1: ställ in cellvärden"
+msgstr "%1: ställ in slumpvärden"
 
 #: src/backend/core/column/Column.cpp:1621
 #, kde-format
@@ -8128,8 +8126,7 @@ msgstr "Utjämna"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:700
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1933
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:626
-#, fuzzy, kde-format
-#| msgid "Fit"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit"
 msgstr "Anpassa"
@@ -8553,8 +8550,7 @@ msgstr "%1: anpassa till '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1937
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:726
-#, fuzzy, kde-format
-#| msgid "Fit to '%1'"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit to '%1'"
 msgstr "Anpassa till '%1'"
@@ -8860,10 +8856,9 @@ msgid "%1: set subgroup size"
 msgstr "%1: ställ in delgruppstorlek"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:401
-#, fuzzy, kde-format
-#| msgid "%1: change geometry rect"
+#, kde-format
 msgid "%1: change negative lower limit"
-msgstr "%1: ända geometrirektangel"
+msgstr "%1: ända negativ undre gräns"
 
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:264
 #, kde-format
@@ -9440,8 +9435,7 @@ msgid "%1: set fit options and perform the fit"
 msgstr "%1: ställ in anpassningsalternativ och utför anpassningen"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1823
-#, fuzzy, kde-format
-#| msgid "Fit Results"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit Results"
 msgstr "Anpassa resultat"
@@ -9596,8 +9590,7 @@ msgid "Fit model not specified!"
 msgstr "Anpassningsmodell ej angiven."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3092
-#, fuzzy, kde-format
-#| msgid "Fit Results"
+#, kde-format
 msgctxt "Curve Fitting"
 msgid "Fit Results"
 msgstr "Anpassa resultat"
@@ -10043,16 +10036,14 @@ msgstr "Ursprunglig storlek"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:129
 #: src/commonfrontend/worksheet/WorksheetView.cpp:169
-#, fuzzy, kde-format
-#| msgid "Fit to Height"
+#, kde-format
 msgctxt "Zoom"
 msgid "Fit to Height"
 msgstr "Fyll höjd"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:130
 #: src/commonfrontend/worksheet/WorksheetView.cpp:172
-#, fuzzy, kde-format
-#| msgid "Fit to Width"
+#, kde-format
 msgctxt "Zoom"
 msgid "Fit to Width"
 msgstr "Fyll bredd"
@@ -10911,8 +10902,7 @@ msgid "Conditional Formatting"
 msgstr "Villkorlig formatering"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:645
-#, fuzzy, kde-format
-#| msgid "Fit Distribution"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit Distribution"
 msgstr "Anpassa fördelning"
@@ -11334,22 +11324,19 @@ msgid "Spreadsheet"
 msgstr "Kalkylark"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:165
-#, fuzzy, kde-format
-#| msgid "No fit"
+#, kde-format
 msgctxt "Zoom"
 msgid "No fit"
 msgstr "Ingen anpassning"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:175
-#, fuzzy, kde-format
-#| msgid "Fit to Selection"
+#, kde-format
 msgctxt "Zoom"
 msgid "Fit to Selection"
 msgstr "Anpassa till markering"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:178
-#, fuzzy, kde-format
-#| msgid "Fit"
+#, kde-format
 msgctxt "Zoom"
 msgid "Fit"
 msgstr "Anpassa"
@@ -14300,7 +14287,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:192
 #, kde-format
 msgid "Allow negative values for the lower limit."
-msgstr ""
+msgstr "Tillåt negativa värden för den undre gränsen."
 
 #: src/kdefrontend/dockwidgets/ProjectDock.cpp:28
 #, kde-format
@@ -14584,7 +14571,7 @@ msgstr "kvadratiskt positionsfel: %1"
 msgid "area error: %1"
 msgstr "areafel: %1"
 
-#: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:382
+#: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:391
 #, kde-format
 msgid "Differentiation status: %1"
 msgstr "Deriveringsstatus: %1"
@@ -14701,8 +14688,7 @@ msgid "Number of peaks:"
 msgstr "Antal toppar:"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1225
-#, fuzzy, kde-format
-#| msgid "Fit status: %1"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit status: %1"
 msgstr "Anpassningsstatus: %1"
@@ -17406,8 +17392,7 @@ msgid "Probability Density of '%1'"
 msgstr "Sannolikhetstäthet för '%1'"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:772
-#, fuzzy, kde-format
-#| msgid "Distribution Fit to '%1'"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Distribution Fit to '%1'"
 msgstr "Anpassa fördelning till '%1'"
@@ -21123,10 +21108,9 @@ msgstr "Begränsningar baserade på:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNegativeLowerLimit)
 #: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:199
-#, fuzzy, kde-format
-#| msgid "Lower Limit"
+#, kde-format
 msgid "Lower Limit < 0:"
-msgstr "Undre gräns"
+msgstr "Undre gräns < 0:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataLine)
 #: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:207
@@ -21136,10 +21120,9 @@ msgstr "Datalinje"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabControlLimitLines)
 #: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:271
-#, fuzzy, kde-format
-#| msgid "Control Limit Lines"
+#, kde-format
 msgid "Center/Limits Lines"
-msgstr "Kontrollbegränsningslinjer"
+msgstr "Centrera/begränsa linjer"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpperLimit)
 #: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:326

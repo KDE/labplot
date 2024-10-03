@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-02 01:48+0000\n"
+"POT-Creation-Date: 2024-10-03 01:46+0000\n"
 "PO-Revision-Date: 2024-08-16 09:55+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -463,7 +463,6 @@ msgstr "%1: rinomina in %2"
 #: src/kdefrontend/datasources/HDF5OptionsWidget.cpp:27
 #: src/kdefrontend/datasources/NetCDFOptionsWidget.cpp:29
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:104
-#: src/kdefrontend/widgets/FitParametersWidget.cpp:35
 #, kde-format
 msgid "Name"
 msgstr "Nome"
@@ -11750,10 +11749,9 @@ msgid "Hue"
 msgstr "Tonalità"
 
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:195
-#, fuzzy, kde-format
-#| msgid "Saturation:"
+#, kde-format
 msgid "Saturation"
-msgstr "Saturazione:"
+msgstr "Saturazione"
 
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:224
 #, fuzzy, kde-format
@@ -14659,7 +14657,7 @@ msgstr "errore di posizione quadratico: %1"
 msgid "area error: %1"
 msgstr "area di errore: %1"
 
-#: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:382
+#: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:391
 #, kde-format
 msgid "Differentiation status: %1"
 msgstr "Stato della derivazione: %1"
