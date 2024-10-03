@@ -20,8 +20,6 @@
 #include "commonfrontend/cantorWorksheet/CantorWorksheetView.h"
 #endif
 
-#include <cantor/cantorlibs_part.h>
-#include <cantor/cantorlibs_version.h>
 #include <cantor/panelplugin.h>
 #include <cantor/panelpluginhandler.h>
 #include <cantor/worksheetaccess.h>
@@ -249,20 +247,11 @@ void CantorWorksheet::rowsAboutToBeRemoved(const QModelIndex& /*parent*/, int fi
 
 QList<Cantor::PanelPlugin*> CantorWorksheet::getPlugins() {
 	if (!m_pluginsLoaded) {
-#ifdef HAVE_NEW_CANTOR_LIBS
 		auto* handler = new Cantor::PanelPluginHandler(this);
 		handler->loadPlugins();
 		m_plugins = handler->activePluginsForSession(m_session, Cantor::PanelPluginHandler::PanelStates());
 		for (auto* plugin : m_plugins)
 			plugin->connectToShell(m_part);
-#else
-		auto* handler = m_part->findChild<Cantor::PanelPluginHandler*>(QLatin1String("PanelPluginHandler"));
-		if (!handler) {
-			m_error = i18n("Couldn't find panel plugins. Please check your installation.");
-			return false;
-		}
-		m_plugins = handler->plugins();
-#endif
 
 		m_pluginsLoaded = true;
 	}

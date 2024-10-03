@@ -65,7 +65,6 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonParseError>
-#include <cantor/backend.h>
 #endif
 
 namespace {

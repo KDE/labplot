@@ -12,7 +12,7 @@
 #include "CantorWorksheetDock.h"
 #include "backend/cantorWorksheet/CantorWorksheet.h"
 
-#include <3rdparty/cantor/panelplugin.h>
+#include <cantor/panelplugin.h>
 
 #include <QAction>
 

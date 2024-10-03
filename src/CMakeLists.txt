@@ -514,7 +514,7 @@ set(COMMONFRONTEND_SOURCES
     ${COMMONFRONTEND_DIR}/datapicker/DatapickerImageView.cpp
 )
 
-if(RECENT_CANTOR)
+if(Cantor_FOUND)
     set(CANTOR_SOURCES
         ${KDEFRONTEND_DIR}/dockwidgets/CantorWorksheetDock.cpp
         ${BACKEND_DIR}/cantorWorksheet/VariableParser.cpp
@@ -523,8 +523,6 @@ if(RECENT_CANTOR)
     )
     set(CANTOR_UI_SOURCES ${KDEFRONTEND_DIR}/ui/dockwidgets/cantorworksheetdock.ui)
     set(UI_SOURCES ${UI_SOURCES} ${CANTOR_UI_SOURCES})
-else()
-    set(CANTOR_SOURCES "")
 endif()
 
 set(BACKEND_TOOLS_SOURCES
@@ -655,7 +653,7 @@ if(ZSTD_FOUND)
         target_link_libraries(labplotbackendlib ${ZSTD_LIBRARIES})
 endif()
 
-if(RECENT_CANTOR)
+if(Cantor_FOUND)
     # KFX::Service, KFX::Parts is optional but probably required by Cantor
     target_link_libraries(labplotbackendlib Cantor::cantorlibs KF${KF_MAJOR_VERSION}::Service KF${KF_MAJOR_VERSION}::Parts)
     target_link_libraries(labplotlib Cantor::cantorlibs KF${KF_MAJOR_VERSION}::Service KF${KF_MAJOR_VERSION}::Parts)
