@@ -341,26 +341,16 @@ endif()
 
 ### Cantorlibs (optional) ###############################
 if(ENABLE_CANTOR)
-    find_package(Cantor)
-
+    find_package(Cantor "24.11.70")
     if(Cantor_FOUND)
         message(STATUS "Found Cantor Library ${Cantor_VERSION}")
-
-        if(${Cantor_VERSION} VERSION_GREATER "19.11")
-            add_definitions(-DHAVE_CANTOR_LIBS)
-            set(RECENT_CANTOR TRUE)
-        else()
-            message(STATUS "Cantor Library ${Cantor_VERSION} TOO OLD. Minimum usable version is 19.12")
-        endif()
-        if(${Cantor_VERSION} VERSION_GREATER "20.08.9")
-            add_definitions(-DHAVE_NEW_CANTOR_LIBS)
-        endif()
+         add_definitions(-DHAVE_CANTOR_LIBS)
     else()
         message(STATUS "Cantor Library NOT FOUND")
     endif()
 else()
-        add_definitions(-DCANTOR_DISABLED)
-        message(STATUS "Cantor Library DISABLED")
+    add_definitions(-DCANTOR_DISABLED)
+    message(STATUS "Cantor Library DISABLED")
 endif()
 
 ### FFTW (optional) #####################################

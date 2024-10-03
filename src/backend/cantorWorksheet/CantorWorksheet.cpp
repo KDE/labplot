@@ -4,7 +4,7 @@
 	Description          : Aspect providing a Cantor Worksheets for Multiple backends
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
-	SPDX-FileCopyrightText: 2016-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -20,17 +20,11 @@
 #include "commonfrontend/cantorWorksheet/CantorWorksheetView.h"
 #endif
 
-#include "3rdparty/cantor/cantor_part.h"
+#include <cantor/cantorlibs_part.h>
 #include <cantor/cantorlibs_version.h>
-#include <cantor/worksheetaccess.h>
-
-#ifdef HAVE_NEW_CANTOR_LIBS
 #include <cantor/panelplugin.h>
 #include <cantor/panelpluginhandler.h>
-#else
-#include "3rdparty/cantor/panelplugin.h"
-#include "3rdparty/cantor/panelpluginhandler.h"
-#endif
+#include <cantor/worksheetaccess.h>
 
 #include <KConfigGroup>
 #include <KLocalizedString>

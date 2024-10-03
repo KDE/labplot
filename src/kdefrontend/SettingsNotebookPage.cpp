@@ -17,9 +17,9 @@
 #include <KPageWidgetItem>
 
 #ifdef HAVE_CANTOR_LIBS
-#include <cantor/backend.h>
 #include <KConfigSkeleton>
 #include <KCoreConfigSkeleton>
+#include <cantor/backend.h>
 #endif
 
 /**
