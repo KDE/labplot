@@ -1,37 +1,40 @@
 /*
-    SPDX-License-Identifier: GPL-2.0-or-later
-
-    SPDX-FileCopyrightText: 2010 Alexander Rieder <alexanderrieder@gmail.com>
-*/
+ *    SPDX-License-Identifier: GPL-2.0-or-later
+ *    SPDX-FileCopyrightText: 2010 Alexander Rieder <alexanderrieder@gmail.com>
+ */
 
 #ifndef _PANEL_PLUGIN_H
 #define _PANEL_PLUGIN_H
 
-#include <KXMLGUIClient>
 #include <QObject>
-#include <KService/KPluginInfo>
+class KPluginMetaData;
 
-#include <cantor/backend.h>
+#include "cantor/backend.h"
 
-#include <cantor/cantor_export.h>
+#include "cantor/cantor_export.h"
 
-namespace Cantor
-{
-class Session;
-class PanelPluginPrivate;
+namespace Cantor {
+  class Session;
+  class PanelPluginPrivate;
 
-/**
- * A plugin provides some additional features for the worksheet
- */
-class CANTOR_EXPORT PanelPlugin : public QObject /*, public KXMLGUIClient*/
-{
-  Q_OBJECT
+  /**
+   * A plugin provides some additional features for the worksheet
+   */
+  class CANTOR_EXPORT PanelPlugin : public QObject
+  {
+    Q_OBJECT
   public:
+    struct State {
+      Session* session{nullptr};
+      QVector<QVariant> inners;
+    };
+
+
     /**
      * Create a new PanelPlugin
      * @param parent the parent Object @see QObject
      **/
-    explicit PanelPlugin( QObject* parent );
+    PanelPlugin( QObject* parent );
     /**
      * Destructor
      */
@@ -39,17 +42,17 @@ class CANTOR_EXPORT PanelPlugin : public QObject /*, public KXMLGUIClient*/
 
     /**
      * Sets the properties of this PanelPlugin
-     * according to KPluginInfo
-     * @param info KPluginInfo
+     * according to KPluginMetaData
+     * @param info KPluginMetaData
      */
-    void setPluginInfo(KPluginInfo info);
+    void setPluginInfo(const KPluginMetaData&);
 
     /**
      * Returns a list of all extensions, the current backend
      * must provide to make this PanelPlugin work. If it doesn't
      * this PanelPlugin won't be enabled
      * @return list of required extensions
-    */
+     */
     QStringList requiredExtensions();
 
 
@@ -58,7 +61,7 @@ class CANTOR_EXPORT PanelPlugin : public QObject /*, public KXMLGUIClient*/
      * must provide to make this PanelPlugin work. If it doesn't
      * this PanelPlugin won't be enabled
      * @return the required capabilities
-    */
+     */
     virtual Backend::Capabilities requiredCapabilities();
 
 
@@ -78,25 +81,38 @@ class CANTOR_EXPORT PanelPlugin : public QObject /*, public KXMLGUIClient*/
     QWidget* parentWidget();
 
     /**
-     * sets the session this plugin operates on
+     * Save state of panel to storable form
+     *
      **/
-    void setSession(Session* session);
+    virtual State saveState();
 
     /**
-     * returns the session
+     * Restore state
+     * Can contains only session - this is init state from Cantor shell
      */
+    virtual void restoreState(const State& state);
+
+    /**
+     * For proper connection to Cantor shell. All connections should be done here
+     */
+    virtual void connectToShell(QObject* cantorShell);
+
+    /**
+     * Show on worksheet startup or not
+     * Default returns true
+     */
+    virtual bool showOnStartup();
+
+  protected:
     Session* session();
 
   Q_SIGNALS:
     void requestRunCommand(const QString& cmd);
     void visibilityRequested();
 
-  protected:
-    virtual void onSessionChanged();
-
   private:
     PanelPluginPrivate* d;
-};
+  };
 
 }
 

@@ -56,7 +56,7 @@ CantorWorksheet::CantorWorksheet(const QString& name, bool loading)
 bool CantorWorksheet::init(QByteArray* content) {
 	DEBUG(Q_FUNC_INFO)
 
-	const auto result = KPluginFactory::instantiatePlugin<KParts::ReadWritePart>(KPluginMetaData(QStringLiteral("kf5/parts/cantorpart")),
+	const auto result = KPluginFactory::instantiatePlugin<KParts::ReadWritePart>(KPluginMetaData(QStringLiteral("kf6/parts/cantorpart")),
 																				 this,
 																				 QVariantList() << m_backendName << QLatin1String("--noprogress"));
 

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Settings page for Notebook
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -18,6 +18,8 @@
 
 #ifdef HAVE_CANTOR_LIBS
 #include <cantor/backend.h>
+#include <KConfigSkeleton>
+#include <KCoreConfigSkeleton>
 #endif
 
 /**
@@ -118,7 +120,7 @@ void SettingsNotebookPage::addSubPages(KPageWidgetItem* rootFrame, KPageDialog* 
 			item->setHeader(backend->name());
 			item->setIcon(QIcon::fromTheme(backend->icon()));
 
-			auto* manager = new KConfigDialogManager(widget, backend->config());
+			auto* manager = new KConfigDialogManager(widget, static_cast<KCoreConfigSkeleton*>(backend->config()));
 			connect(manager, &KConfigDialogManager::widgetModified, this, &SettingsNotebookPage::changed);
 			m_cantorBackendConfigManagers.append(manager);
 		}

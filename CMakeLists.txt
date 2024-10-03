@@ -260,12 +260,7 @@ add_definitions(-DGIT_COMMIT=\"${GIT_COMMIT}\")
 
 
 ### Options ######################################
-# Cantor does not support Qt6 yet
-if(QT_MAJOR_VERSION GREATER_EQUAL 6)
-    option(ENABLE_CANTOR "Build with Cantor support" OFF)
-else()
-    option(ENABLE_CANTOR "Build with Cantor support" ON)
-endif()
+option(ENABLE_CANTOR "Build with Cantor support" ON)
 option(ENABLE_FFTW "Build with FFTW support" ON)
 option(ENABLE_HDF5 "Build with HDF5 support" ON)
 option(ENABLE_NETCDF "Build with NetCDF support" ON)
