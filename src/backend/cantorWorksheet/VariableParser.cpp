@@ -95,8 +95,8 @@ void VariableParser::parsePythonValues() {
 
 		QRegularExpressionMatch match;
 		auto numpyDatatypeRegex = QStringLiteral("\\s*,\\s*dtype='{0,1}[a-zA-Z0-9\\[\\]]*'{0,1}");
-		m_string.indexOf(QRegularExpression(numpyDatatypeRegex), 0, &match);
-		if (match.isValid() && match.captured() != QString())
+		auto status = m_string.indexOf(QRegularExpression(numpyDatatypeRegex), 0, &match);
+		if (status >= 0 && match.isValid() && match.captured() != QString())
 			type = match.captured().remove(QLatin1Char('\'')).remove(QRegularExpression(QStringLiteral(",\\s*dtype=")));
 		m_string = m_string.replace(QStringLiteral("array(["), QString());
 		m_string = m_string.replace(QRegularExpression(numpyDatatypeRegex), QString());

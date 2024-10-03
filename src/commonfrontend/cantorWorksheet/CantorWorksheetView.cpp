@@ -52,19 +52,19 @@ void CantorWorksheetView::initActions() {
 	// general notebook specific actions
 	m_zoomIn = new QAction(QIcon::fromTheme(QLatin1String("zoom-in")), i18n("Zoom In"), m_actionGroup);
 	m_zoomIn->setData(QStringLiteral("view_zoom_in"));
-	m_zoomIn->setShortcut(Qt::CTRL + Qt::Key_Plus);
+	m_zoomIn->setShortcut(Qt::CTRL | Qt::Key_Plus);
 
 	m_zoomOut = new QAction(QIcon::fromTheme(QLatin1String("zoom-out")), i18n("Zoom Out"), m_actionGroup);
 	m_zoomOut->setData(QStringLiteral("view_zoom_out"));
-	m_zoomOut->setShortcut(Qt::CTRL + Qt::Key_Minus);
+	m_zoomOut->setShortcut(Qt::CTRL | Qt::Key_Minus);
 
 	m_find = new QAction(QIcon::fromTheme(QLatin1String("edit-find")), i18n("Find"), m_actionGroup);
 	m_find->setData(QStringLiteral("edit_find"));
-	m_find->setShortcut(Qt::CTRL + Qt::Key_F);
+	m_find->setShortcut(Qt::CTRL | Qt::Key_F);
 
 	m_replace = new QAction(QIcon::fromTheme(QLatin1String("edit-find-replace")), i18n("Replace"), m_actionGroup);
 	m_replace->setData(QStringLiteral("edit_replace"));
-	m_replace->setShortcut(Qt::CTRL + Qt::Key_R);
+	m_replace->setShortcut(Qt::CTRL | Qt::Key_R);
 
 	m_restartBackendAction = new QAction(QIcon::fromTheme(QLatin1String("system-reboot")), i18n("Restart Backend"), m_actionGroup);
 	m_restartBackendAction->setData(QStringLiteral("restart_backend"));
@@ -82,7 +82,7 @@ void CantorWorksheetView::initMenus() {
 
 	// entry specific actions
 	m_evaluateEntryAction = new QAction(QIcon::fromTheme(QLatin1String("media-playback-start")), i18n("Evaluate Entry"), m_actionGroup);
-	m_evaluateEntryAction->setShortcut(Qt::SHIFT + Qt::Key_Return);
+	m_evaluateEntryAction->setShortcut(Qt::SHIFT | Qt::Key_Return);
 	m_evaluateEntryAction->setData(QStringLiteral("evaluate_current"));
 
 	m_removeCurrentEntryAction = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Remove Current Entry"), m_actionGroup);
@@ -91,7 +91,7 @@ void CantorWorksheetView::initMenus() {
 	// actions for the "Add New" menu
 	auto* insertCommandEntryAction = new QAction(QIcon::fromTheme(QLatin1String("run-build")), i18n("Command"), m_actionGroup);
 	insertCommandEntryAction->setData(QStringLiteral("insert_command_entry"));
-	insertCommandEntryAction->setShortcut(Qt::CTRL + Qt::Key_Return);
+	insertCommandEntryAction->setShortcut(Qt::CTRL | Qt::Key_Return);
 
 	auto* insertTextEntryAction = new QAction(QIcon::fromTheme(QLatin1String("draw-text")), i18n("Text"), m_actionGroup);
 	insertTextEntryAction->setData(QStringLiteral("insert_text_entry"));
