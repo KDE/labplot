@@ -259,7 +259,7 @@ void Axis::init(Orientation orientation, bool loading) {
 	d->labelsRotationAngle = group.readEntry(QStringLiteral("LabelsRotation"), 0);
 	d->labelsTextType = (LabelsTextType)group.readEntry(QStringLiteral("LabelsTextType"), static_cast<int>(LabelsTextType::PositionValues));
 	d->labelsFont = group.readEntry(QStringLiteral("LabelsFont"), QFont());
-	d->labelsFont.setPixelSize(Worksheet::convertToSceneUnits(10.0, Worksheet::Unit::Point));
+	d->labelsFont.setPointSizeF(Worksheet::convertToSceneUnits(10.0, Worksheet::Unit::Point));
 	d->labelsColor = group.readEntry(QStringLiteral("LabelsFontColor"), QColor(Qt::black));
 	d->labelsBackgroundType =
 		(LabelsBackgroundType)group.readEntry(QStringLiteral("LabelsBackgroundType"), static_cast<int>(LabelsBackgroundType::Transparent));
@@ -419,7 +419,7 @@ void Axis::handleResize(double horizontalRatio, double verticalRatio, bool pageR
 
 	d->majorTicksLength *= ratio; // ticks are perpendicular to axis line -> verticalRatio relevant
 	d->minorTicksLength *= ratio;
-	d->labelsFont.setPixelSize(d->labelsFont.pixelSize() * ratio); // TODO: take into account rotated labels
+	d->labelsFont.setPointSizeF(d->labelsFont.pointSizeF() * ratio); // TODO: take into account rotated labels
 	d->labelsOffset *= ratio;
 	d->title->handleResize(horizontalRatio, verticalRatio, pageResize);
 }

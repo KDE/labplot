@@ -70,7 +70,7 @@ void CartesianPlotLegend::init() {
 	KConfigGroup group = config.group(QStringLiteral("CartesianPlotLegend"));
 
 	d->labelFont = group.readEntry(QStringLiteral("LabelsFont"), QFont());
-	d->labelFont.setPixelSize(Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
+	d->labelFont.setPointSizeF(Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
 
 	d->labelColor = group.readEntry(QStringLiteral("FontColor"), QColor(Qt::black));
 	d->labelColumnMajor = true;

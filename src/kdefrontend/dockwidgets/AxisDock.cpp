@@ -1480,7 +1480,7 @@ void AxisDock::labelsFontChanged(const QFont& font) {
 	CONDITIONAL_LOCK_RETURN;
 
 	QFont labelsFont = font;
-	labelsFont.setPixelSize(Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Unit::Point));
+	labelsFont.setPointSizeF(Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Unit::Point));
 	for (auto* axis : m_axesList)
 		axis->setLabelsFont(labelsFont);
 }
@@ -1776,7 +1776,7 @@ void AxisDock::axisLabelsFontChanged(const QFont& font) {
 	CONDITIONAL_LOCK_RETURN;
 	// we need to set the font size in points for KFontRequester
 	QFont newFont(font);
-	newFont.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)));
+	newFont.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Unit::Point)));
 	ui.kfrLabelsFont->setFont(newFont);
 }
 void AxisDock::axisLabelsFontColorChanged(const QColor& color) {
@@ -1984,7 +1984,7 @@ void AxisDock::load() {
 
 	// we need to set the font size in points for KFontRequester
 	QFont font = m_axis->labelsFont();
-	font.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)));
+	font.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Unit::Point)));
 	ui.kfrLabelsFont->setFont(font);
 	ui.kcbLabelsFontColor->setColor(m_axis->labelsColor());
 	ui.cbLabelsBackgroundType->setCurrentIndex((int)m_axis->labelsBackgroundType());
@@ -2121,7 +2121,7 @@ void AxisDock::loadConfig(KConfig& config) {
 
 	// we need to set the font size in points for KFontRequester
 	QFont font = m_axis->labelsFont();
-	font.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)));
+	font.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Unit::Point)));
 	ui.kfrLabelsFont->setFont(group.readEntry(QStringLiteral("LabelsFont"), font));
 
 	ui.kcbLabelsFontColor->setColor(group.readEntry(QStringLiteral("LabelsFontColor"), m_axis->labelsColor()));
