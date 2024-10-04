@@ -25,6 +25,7 @@ Bug fixes:
 	* Properly draw the border line of the symbol in the legend (BUG 491310)
 	* Show Ticks on inverted axes (BUG 491502 & 492475)
 	* Fixed add/subtract value functionality in Matrix (BUG 493523)
+	* Fixed wrong font size in the plot legend (BUG 493017)
 
 Internal:
 	* use name LabPlot/labplot consistenly (renamed LabPlot2/labplot2)
