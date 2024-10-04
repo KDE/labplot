@@ -319,7 +319,7 @@ QMenu* AbstractAspect::createContextMenu() {
 	// 	menu->addAction( KStandardAction::cut(this) );
 
 	QAction* actionDuplicate = nullptr;
-	if (!isFixed() && m_type != AspectType::Project && m_type != AspectType::CantorWorksheet) {
+	if (!isFixed() && m_type != AspectType::Project && m_type != AspectType::Notebook) {
 		// copy action:
 		// don't allow to copy fixed aspects
 		auto* action = KStandardAction::copy(this);
@@ -1111,7 +1111,7 @@ void AbstractAspect::childSelected(const AbstractAspect* aspect) {
 	//* CantorWorksheet with the child columns for CAS variables
 	AbstractAspect* parent = this->parentAspect();
 	if (parent && !parent->inherits(AspectType::Folder) && !parent->inherits(AspectType::XYFitCurve) && !parent->inherits(AspectType::XYSmoothCurve)
-		&& !parent->inherits(AspectType::CantorWorksheet))
+		&& !parent->inherits(AspectType::Notebook))
 		Q_EMIT this->selected(aspect);
 }
 
@@ -1125,7 +1125,7 @@ void AbstractAspect::childDeselected(const AbstractAspect* aspect) {
 	//* CantorWorksheet with the child columns for CAS variables
 	AbstractAspect* parent = this->parentAspect();
 	if (parent && !parent->inherits(AspectType::Folder) && !parent->inherits(AspectType::XYFitCurve) && !parent->inherits(AspectType::XYSmoothCurve)
-		&& !parent->inherits(AspectType::CantorWorksheet))
+		&& !parent->inherits(AspectType::Notebook))
 		Q_EMIT this->deselected(aspect);
 }
 

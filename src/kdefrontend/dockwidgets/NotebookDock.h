@@ -1,10 +1,10 @@
 /*
-	File                 : CantorWorksheetDock.h
+	File                 : NotebookDock.h
 	Project              : LabPlot
-	Description          : widget for CantorWorksheet properties
+	Description          : widget for Notebook properties
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
-	SPDX-FileCopyrightText: 2015-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -13,21 +13,21 @@
 #define CANTORWORKSHEETDOCK_H
 
 #include "kdefrontend/dockwidgets/BaseDock.h"
-#include "ui_cantorworksheetdock.h"
+#include "ui_notebookdock.h"
 
-class CantorWorksheet;
+class Notebook;
 
-class CantorWorksheetDock : public BaseDock {
+class NotebookDock : public BaseDock {
 	Q_OBJECT
 
 public:
-	explicit CantorWorksheetDock(QWidget*);
-	void setCantorWorksheets(QList<CantorWorksheet*>);
+	explicit NotebookDock(QWidget*);
+	void setNotebooks(QList<Notebook*>);
 
 private:
-	Ui::CantorWorksheetDock ui;
-	QList<CantorWorksheet*> m_cantorworksheetlist;
-	CantorWorksheet* m_worksheet{nullptr};
+	Ui::NotebookDock ui;
+	QList<Notebook*> m_notebooks;
+	Notebook* m_notebook{nullptr};
 	QList<int> index;
 
 	// in the old Cantor the help panel plugin is coming as second
@@ -39,9 +39,9 @@ private:
 	int m_documentationPanelIndex{0};
 
 private Q_SLOTS:
-	// SLOTs for changes triggered in WorksheetDock
+	// SLOTs for changes triggered in NotebookDock
 	//"General"-tab
-	void evaluateWorksheet();
+	void evaluate();
 	void restartBackend();
 	void visibilityRequested();
 

@@ -105,7 +105,7 @@ void ValueWidget::setValues(const QList<Value*>& values) {
 						   AspectType::CartesianPlot,
 						   AspectType::XYFitCurve,
 						   AspectType::XYSmoothCurve,
-						   AspectType::CantorWorksheet};
+						   AspectType::Notebook};
 
 	cbColumn->setTopLevelClasses(list);
 	m_aspectModel->setSelectableAspects({AspectType::Column});

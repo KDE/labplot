@@ -1,22 +1,22 @@
 /*
-	File                 : CantorWorksheetDock.cpp
+	File                 : NotebookDock.cpp
 	Project              : LabPlot
-	Description          : widget for CantorWorksheet properties
+	Description          : widget for Notebook properties
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
-	SPDX-FileCopyrightText: 2015-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "CantorWorksheetDock.h"
-#include "backend/cantorWorksheet/CantorWorksheet.h"
+#include "NotebookDock.h"
+#include "backend/notebook/Notebook.h"
 
 #include <cantor/panelplugin.h>
 
 #include <QAction>
 
-CantorWorksheetDock::CantorWorksheetDock(QWidget* parent)
+NotebookDock::NotebookDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
 	// 	ui.tabWidget->setMovable(true); //don't allow to move tabs until we properly keep track of the help panel's position
@@ -24,14 +24,14 @@ CantorWorksheetDock::CantorWorksheetDock(QWidget* parent)
 
 	// SLOTs
 	// General
-	connect(ui.bEvaluate, &QPushButton::pressed, this, &CantorWorksheetDock::evaluateWorksheet);
-	connect(ui.bRestart, &QPushButton::pressed, this, &CantorWorksheetDock::restartBackend);
+	connect(ui.bEvaluate, &QPushButton::pressed, this, &NotebookDock::evaluate);
+	connect(ui.bRestart, &QPushButton::pressed, this, &NotebookDock::restartBackend);
 }
 
-void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
+void NotebookDock::setNotebooks(QList<Notebook*> list) {
 	CONDITIONAL_LOCK_RETURN;
-	m_cantorworksheetlist = list;
-	m_worksheet = list.first();
+	m_notebooks = list;
+	m_notebook = list.first();
 	setAspects(list);
 
 	// remove the available panel plugins first
@@ -45,13 +45,13 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 	ui.leName->setStyleSheet(QString());
 	ui.leName->setToolTip(QString());
 
-	if (m_cantorworksheetlist.size() == 1) {
+	if (m_notebooks.size() == 1) {
 		// show name/comment
-		ui.leName->setText(m_worksheet->name());
-		ui.teComment->setText(m_worksheet->comment());
+		ui.leName->setText(m_notebook->name());
+		ui.teComment->setText(m_notebook->comment());
 
 		// add available panel plugins
-		const auto& plugins = m_cantorworksheetlist.first()->getPlugins();
+		const auto& plugins = m_notebooks.first()->getPlugins();
 		index.clear();
 		for (auto* plugin : plugins) {
 			// skip the "File Browser" plugin
@@ -61,7 +61,7 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 			if (plugin->objectName() == QLatin1String("FileBrowserPanel") || plugin->name() == i18n("File Browser"))
 				continue;
 
-			connect(plugin, &Cantor::PanelPlugin::visibilityRequested, this, &CantorWorksheetDock::visibilityRequested);
+			connect(plugin, &Cantor::PanelPlugin::visibilityRequested, this, &NotebookDock::visibilityRequested);
 			int i = ui.tabWidget->addTab(plugin->widget(), plugin->name());
 			index.append(i);
 
@@ -78,7 +78,7 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 
 	ui.tabWidget->setCurrentIndex(prev_index);
 
-	if (m_worksheet->part()) {
+	if (m_notebook->part()) {
 		ui.bEvaluate->show();
 		ui.bRestart->show();
 	} else {
@@ -88,16 +88,16 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 }
 
 //*************************************************************
-//**** SLOTs for changes triggered in CantorWorksheetDock *****
+//**** SLOTs for changes triggered in NotebookDock *****
 //*************************************************************
 // "General"-tab
-void CantorWorksheetDock::evaluateWorksheet() {
-	for (auto* nb : m_cantorworksheetlist)
+void NotebookDock::evaluate() {
+	for (auto* nb : m_notebooks)
 		nb->evaluate();
 }
 
-void CantorWorksheetDock::restartBackend() {
-	for (auto* nb : m_cantorworksheetlist)
+void NotebookDock::restartBackend() {
+	for (auto* nb : m_notebooks)
 		nb->restart();
 }
 
@@ -106,7 +106,7 @@ void CantorWorksheetDock::restartBackend() {
  * At the moment this can only happen for the integrated help in Maxima and in R and
  * for the integrated documentation.
  */
-void CantorWorksheetDock::visibilityRequested() {
+void NotebookDock::visibilityRequested() {
 	const auto& name = QObject::sender()->objectName();
 	if (name == QLatin1String("HelpPanel"))
 		ui.tabWidget->setCurrentIndex(m_helpPanelIndex);

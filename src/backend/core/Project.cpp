@@ -59,7 +59,7 @@
 
 // required to parse Cantor and Jupyter files
 #ifdef HAVE_CANTOR_LIBS
-#include "backend/cantorWorksheet/CantorWorksheet.h"
+#include "backend/notebook/Notebook.h"
 #include <KZip>
 #include <QDomDocument>
 #include <QJsonDocument>
@@ -72,7 +72,7 @@ namespace {
 // the project version will be compared with this.
 // if you make any imcompatible changes to the xmlfile
 // or the function in labplot, increase this number.
-int buildXmlVersion = 13;
+int buildXmlVersion = 14;
 }
 
 /**
@@ -748,19 +748,19 @@ bool Project::loadNotebook(const QString& filename) {
 				QString backendName = doc.documentElement().attribute(QLatin1String("backend"));
 
 				if (!backendName.isEmpty()) {
-					// create new Cantor worksheet and load the data
-					auto* worksheet = new CantorWorksheet(backendName);
-					worksheet->setName(QFileInfo(filename).fileName());
-					worksheet->setComment(filename);
+					// create new notebook and load the data
+					auto* notebook = new Notebook(backendName);
+					notebook->setName(QFileInfo(filename).fileName());
+					notebook->setComment(filename);
 
 					rc = file.open(QIODevice::ReadOnly);
 					if (rc) {
 						QByteArray content = file.readAll();
-						rc = worksheet->init(&content);
+						rc = notebook->init(&content);
 						if (rc)
-							addChild(worksheet);
+							addChild(notebook);
 						else
-							delete worksheet;
+							delete notebook;
 					} else
 						errorMessage = i18n("Failed to open the file '%1'.", filename);
 				} else
@@ -803,15 +803,15 @@ bool Project::loadNotebook(const QString& filename) {
 						backendName = doc[QLatin1String("metadata")].toObject()[QLatin1String("kernelspec")].toObject()[QLatin1String("language")].toString();
 
 					if (!backendName.isEmpty()) {
-						// create new Cantor worksheet and load the data
-						auto* worksheet = new CantorWorksheet(backendName);
-						worksheet->setName(QFileInfo(filename).fileName());
-						worksheet->setComment(filename);
-						rc = worksheet->init(&content);
+						// create new notebook and load the data
+						auto* notebook = new Notebook(backendName);
+						notebook->setName(QFileInfo(filename).fileName());
+						notebook->setComment(filename);
+						rc = notebook->init(&content);
 						if (rc)
-							addChild(worksheet);
+							addChild(notebook);
 						else
-							delete worksheet;
+							delete notebook;
 					} else
 						rc = false;
 				} else

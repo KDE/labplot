@@ -33,7 +33,7 @@
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #ifdef HAVE_CANTOR_LIBS
-#include "backend/cantorWorksheet/CantorWorksheet.h"
+#include "backend/notebook/Notebook.h"
 #endif
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTClient.h"
@@ -86,7 +86,7 @@
 #include "kdefrontend/dockwidgets/XYInterpolationCurveDock.h"
 #include "kdefrontend/dockwidgets/XYSmoothCurveDock.h"
 #ifdef HAVE_CANTOR_LIBS
-#include "kdefrontend/dockwidgets/CantorWorksheetDock.h"
+#include "kdefrontend/dockwidgets/NotebookDock.h"
 #endif
 #include "kdefrontend/widgets/DatapickerCurveWidget.h"
 #include "kdefrontend/widgets/DatapickerImageWidget.h"
@@ -236,12 +236,12 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		break;
 	case AspectType::Column: {
 #ifdef HAVE_CANTOR_LIBS
-		auto* casParent = dynamic_cast<CantorWorksheet*>(selectedAspects.first()->parentAspect());
+		auto* casParent = dynamic_cast<Notebook*>(selectedAspects.first()->parentAspect());
 		if (casParent) {
 			// a column from a CAS-worksheets was selected, show the dock widget for the CAS worksheet
-			raiseDockConnect(m_cantorWorksheetDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+			raiseDockConnect(m_notebookDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 			m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window %1 is a Cantor backend", "%1 Worksheet", casParent->backendName()));
-			m_cantorWorksheetDock->setCantorWorksheets(QList<CantorWorksheet*>{casParent});
+			m_notebookDock->setNotebooks(QList<Notebook*>{casParent});
 		} else
 #endif
 		{
@@ -442,16 +442,16 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		raiseDock(m_projectDock, m_mainWindow->stackedWidget);
 		m_projectDock->setProject(m_mainWindow->m_project);
 		break;
-	case AspectType::CantorWorksheet:
+	case AspectType::Notebook:
 #ifdef HAVE_CANTOR_LIBS
-		raiseDockConnect(m_cantorWorksheetDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		raiseDockConnect(m_notebookDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		{
-			auto list = castList<CantorWorksheet>(selectedAspects);
+			auto list = castList<Notebook>(selectedAspects);
 			if (list.size() == 1)
 				m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window %1 is a Cantor backend", "%1 Notebook", list.first()->backendName()));
 			else
 				m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Notebook"));
-			m_cantorWorksheetDock->setCantorWorksheets(list);
+			m_notebookDock->setNotebooks(list);
 		}
 #endif
 		break;

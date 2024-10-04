@@ -93,7 +93,7 @@ enum class AspectType : quint64 {
 	LiveDataSource = 0x0412001,
 	MQTTTopic = 0x0412002,
 	StatisticsSpreadsheet = 0x0412004,
-	CantorWorksheet = 0x0420001,
+	Notebook = 0x0420001,
 	Datapicker = 0x0420002,
 	DatapickerImage = 0x0420004,
 	Note = 0x0420008,
@@ -234,8 +234,8 @@ public:
 			return QStringLiteral("LiveDataSource");
 		case AspectType::MQTTTopic:
 			return QStringLiteral("MQTTTopic");
-		case AspectType::CantorWorksheet:
-			return QStringLiteral("CantorWorksheet");
+		case AspectType::Notebook:
+			return QStringLiteral("Notebook");
 		case AspectType::Datapicker:
 			return QStringLiteral("Datapicker");
 		case AspectType::DatapickerImage:

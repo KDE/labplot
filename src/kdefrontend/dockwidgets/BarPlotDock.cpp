@@ -323,7 +323,7 @@ void BarPlotDock::addDataColumn() {
 										AspectType::CartesianPlot,
 										AspectType::XYFitCurve,
 										AspectType::XYSmoothCurve,
-										AspectType::CantorWorksheet};
+										AspectType::Notebook};
 	cb->setTopLevelClasses(list);
 	cb->setModel(aspectModel());
 	connect(cb, &TreeViewComboBox::currentModelIndexChanged, this, &BarPlotDock::dataColumnChanged);

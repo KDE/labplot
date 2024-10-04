@@ -212,7 +212,7 @@ QList<AspectType> TreeViewComboBox::plotColumnTopLevelClasses() {
 			AspectType::CartesianPlot,
 			AspectType::XYFitCurve,
 			AspectType::XYSmoothCurve,
-			AspectType::CantorWorksheet};
+			AspectType::Notebook};
 }
 
 /*!

@@ -11,7 +11,7 @@
 
 #include "backend/core/column/Column.h"
 #ifndef SDK
-#include "backend/cantorWorksheet/CantorWorksheet.h"
+#include "backend/notebook/Notebook.h"
 #endif
 #include "backend/core/AbstractSimpleFilter.h"
 #include "backend/core/Project.h"
@@ -149,10 +149,10 @@ QMenu* Column::createContextMenu() {
 		if (parentAspect()->type() == AspectType::Spreadsheet) {
 			auto* spreadsheet = static_cast<Spreadsheet*>(parentAspect());
 			spreadsheet->fillColumnContextMenu(menu, this);
-		} else if (parentAspect()->type() == AspectType::CantorWorksheet) {
+		} else if (parentAspect()->type() == AspectType::Notebook) {
 #if defined(HAVE_CANTOR_LIBS) && !defined(SDK)
-			auto* worksheet = static_cast<CantorWorksheet*>(parentAspect());
-			worksheet->fillColumnContextMenu(menu, this);
+			auto* notebook = static_cast<Notebook*>(parentAspect());
+			notebook->fillColumnContextMenu(menu, this);
 #endif
 		}
 	}

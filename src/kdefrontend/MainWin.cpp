@@ -120,8 +120,8 @@
 #include <kxmlguifactory.h>
 
 #ifdef HAVE_CANTOR_LIBS
-#include "backend/cantorWorksheet/CantorWorksheet.h"
-#include "commonfrontend/cantorWorksheet/CantorWorksheetView.h"
+#include "backend/notebook/Notebook.h"
+#include "commonfrontend/notebook/NotebookView.h"
 #include <cantor/backend.h>
 #endif
 
@@ -1200,11 +1200,11 @@ void MainWin::updateGUI() {
 		factory->container(QLatin1String("matrix"), this)->setEnabled(false);
 
 #ifdef HAVE_CANTOR_LIBS
-	const auto* cantorworksheet = dynamic_cast<CantorWorksheet*>(m_currentAspect);
-	if (!cantorworksheet)
-		cantorworksheet = dynamic_cast<CantorWorksheet*>(m_currentAspect->parent(AspectType::CantorWorksheet));
-	if (cantorworksheet) {
-		auto* view = qobject_cast<CantorWorksheetView*>(cantorworksheet->view());
+	const auto* notebook = dynamic_cast<Notebook*>(m_currentAspect);
+	if (!notebook)
+		notebook = dynamic_cast<Notebook*>(m_currentAspect->parent(AspectType::Notebook));
+	if (notebook) {
+		auto* view = qobject_cast<NotebookView*>(notebook->view());
 		auto* menu = qobject_cast<QMenu*>(factory->container(QLatin1String("notebook"), this));
 		menu->clear();
 		view->createContextMenu(menu);
@@ -1319,7 +1319,7 @@ bool MainWin::newProject(bool createInitialContent) {
 #ifdef HAVE_CANTOR_LIBS
 			const auto& backend = group.readEntry(QLatin1String("LoadOnStartNotebook"), QString());
 			if (Cantor::Backend::listAvailableBackends().indexOf(backend) != -1)
-				addAspectToProject(new CantorWorksheet(backend));
+				addAspectToProject(new Notebook(backend));
 #endif
 			break;
 		}
@@ -2002,8 +2002,8 @@ Spreadsheet* MainWin::activeSpreadsheet() const {
 */
 void MainWin::newNotebook() {
 	auto* action = static_cast<QAction*>(QObject::sender());
-	auto* cantorworksheet = new CantorWorksheet(action->data().toString());
-	this->addAspectToProject(cantorworksheet);
+	auto* notebook = new Notebook(action->data().toString());
+	this->addAspectToProject(notebook);
 }
 
 /********************************************************************************/

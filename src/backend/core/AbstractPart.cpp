@@ -123,7 +123,7 @@ QMenu* AbstractPart::createContextMenu() {
 	}
 
 	// export/print actions
-	if (type != AspectType::CantorWorksheet)
+	if (type != AspectType::Notebook)
 		menu->addAction(QIcon::fromTheme(QLatin1String("document-export-database")), i18n("Export"), this, &AbstractPart::exportRequested);
 	menu->addAction(QIcon::fromTheme(QLatin1String("document-print")), i18n("Print"), this, &AbstractPart::printRequested);
 	menu->addAction(QIcon::fromTheme(QLatin1String("document-print-preview")), i18n("Print Preview"), this, &AbstractPart::printPreviewRequested);

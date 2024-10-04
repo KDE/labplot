@@ -1,15 +1,15 @@
 /*
-	File                 : CantorWorksheet.h
+	File                 : Notebook.h
 	Project              : LabPlot
-	Description          : Aspect providing a Cantor Worksheets for Multiple backends
+	Description          : Aspect providing a notebook interface for CAS
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
-	SPDX-FileCopyrightText: 2016-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef CANTORWORKSHEET_H
-#define CANTORWORKSHEET_H
+#ifndef NOTEBOOK_H
+#define NOTEBOOK_H
 
 #include <backend/core/AbstractPart.h>
 #ifdef HAVE_CANTOR_LIBS
@@ -26,14 +26,14 @@ class ReadWritePart;
 }
 
 class QAbstractItemModel;
-class CantorWorksheetView;
+class NotebookView;
 class Column;
 
-class CantorWorksheet : public AbstractPart {
+class Notebook : public AbstractPart {
 	Q_OBJECT
 
 public:
-	explicit CantorWorksheet(const QString& name, bool loading = false);
+	explicit Notebook(const QString& name, bool loading = false);
 
 	bool init(QByteArray* content = nullptr);
 	const QString& error() const;
@@ -58,7 +58,7 @@ public:
 	QList<Cantor::PanelPlugin*> getPlugins();
 
 private:
-	mutable CantorWorksheetView* m_view{nullptr};
+	mutable NotebookView* m_view{nullptr};
 	QString m_backendName;
 	QString m_error;
 #ifdef HAVE_CANTOR_LIBS
@@ -86,4 +86,4 @@ Q_SIGNALS:
 #endif
 };
 
-#endif // CANTORWORKSHEET_H
+#endif // NOTEBOOK_H

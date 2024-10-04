@@ -1,5 +1,5 @@
 /*
-	File                 : CantorWorksheet.cpp
+	File                 : Notebook.cpp
 	Project              : LabPlot
 	Description          : Aspect providing a Cantor Worksheets for Multiple backends
 	--------------------------------------------------------------------
@@ -9,7 +9,7 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "CantorWorksheet.h"
+#include "Notebook.h"
 #include "VariableParser.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
@@ -17,7 +17,7 @@
 #include "backend/core/column/ColumnPrivate.h"
 #include "backend/lib/XmlStreamReader.h"
 #ifndef SDK
-#include "commonfrontend/cantorWorksheet/CantorWorksheetView.h"
+#include "commonfrontend/notebook/NotebookView.h"
 #endif
 
 #include <cantor/panelplugin.h>
@@ -35,8 +35,8 @@
 #include <QFileInfo>
 #include <QModelIndex>
 
-CantorWorksheet::CantorWorksheet(const QString& name, bool loading)
-	: AbstractPart(name, AspectType::CantorWorksheet)
+Notebook::Notebook(const QString& name, bool loading)
+	: AbstractPart(name, AspectType::Notebook)
 	, m_backendName(name) {
 	if (!loading)
 		init();
@@ -45,7 +45,7 @@ CantorWorksheet::CantorWorksheet(const QString& name, bool loading)
 /*!
 	initializes Cantor's part and plugins
 */
-bool CantorWorksheet::init(QByteArray* content) {
+bool Notebook::init(QByteArray* content) {
 	DEBUG(Q_FUNC_INFO)
 
 	const auto result = KPluginFactory::instantiatePlugin<KParts::ReadWritePart>(KPluginMetaData(QStringLiteral("kf6/parts/cantorpart")),
@@ -82,14 +82,14 @@ bool CantorWorksheet::init(QByteArray* content) {
 			return false;
 		}
 
-		connect(m_session, &Cantor::Session::statusChanged, this, &CantorWorksheet::statusChanged);
+		connect(m_session, &Cantor::Session::statusChanged, this, &Notebook::statusChanged);
 
 		// variable model
 		m_variableModel = m_session->variableDataModel();
-		connect(m_variableModel, &QAbstractItemModel::dataChanged, this, &CantorWorksheet::dataChanged);
-		connect(m_variableModel, &QAbstractItemModel::rowsInserted, this, &CantorWorksheet::rowsInserted);
-		connect(m_variableModel, &QAbstractItemModel::rowsAboutToBeRemoved, this, &CantorWorksheet::rowsAboutToBeRemoved);
-		connect(m_variableModel, &QAbstractItemModel::modelReset, this, &CantorWorksheet::modelReset);
+		connect(m_variableModel, &QAbstractItemModel::dataChanged, this, &Notebook::dataChanged);
+		connect(m_variableModel, &QAbstractItemModel::rowsInserted, this, &Notebook::rowsInserted);
+		connect(m_variableModel, &QAbstractItemModel::rowsAboutToBeRemoved, this, &Notebook::rowsAboutToBeRemoved);
+		connect(m_variableModel, &QAbstractItemModel::modelReset, this, &Notebook::modelReset);
 
 		// default settings
 		const KConfigGroup group = Settings::group(QStringLiteral("Settings_Notebook"));
@@ -135,23 +135,23 @@ bool CantorWorksheet::init(QByteArray* content) {
 	return true;
 }
 
-const QString& CantorWorksheet::error() const {
+const QString& Notebook::error() const {
 	return m_error;
 }
 
 // SLots
-void CantorWorksheet::dataChanged(const QModelIndex& index) {
+void Notebook::dataChanged(const QModelIndex& index) {
 	parseData(index.row());
 }
 
-void CantorWorksheet::rowsInserted(const QModelIndex& /*parent*/, int first, int last) {
+void Notebook::rowsInserted(const QModelIndex& /*parent*/, int first, int last) {
 	for (int i = first; i <= last; ++i)
 		parseData(i);
 
 	setProjectChanged(true);
 }
 
-void CantorWorksheet::parseData(int row) {
+void Notebook::parseData(int row) {
 	const QString& name = m_variableModel->data(m_variableModel->index(row, 0)).toString();
 	QVariant dataValue = m_variableModel->data(m_variableModel->index(row, 1), 257);
 	if (dataValue.isNull())
@@ -227,16 +227,16 @@ void CantorWorksheet::parseData(int row) {
 	}
 }
 
-void CantorWorksheet::modified() {
+void Notebook::modified() {
 	setProjectChanged(true);
 }
 
-void CantorWorksheet::modelReset() {
+void Notebook::modelReset() {
 	for (auto* column : children<Column>())
 		column->remove();
 }
 
-void CantorWorksheet::rowsAboutToBeRemoved(const QModelIndex& /*parent*/, int first, int last) {
+void Notebook::rowsAboutToBeRemoved(const QModelIndex& /*parent*/, int first, int last) {
 	for (int i = first; i <= last; ++i) {
 		const QString& name = m_variableModel->data(m_variableModel->index(first, 0)).toString();
 		Column* column = child<Column>(name);
@@ -245,7 +245,7 @@ void CantorWorksheet::rowsAboutToBeRemoved(const QModelIndex& /*parent*/, int fi
 	}
 }
 
-QList<Cantor::PanelPlugin*> CantorWorksheet::getPlugins() {
+QList<Cantor::PanelPlugin*> Notebook::getPlugins() {
 	if (!m_pluginsLoaded) {
 		auto* handler = new Cantor::PanelPluginHandler(this);
 		handler->loadPlugins();
@@ -259,11 +259,11 @@ QList<Cantor::PanelPlugin*> CantorWorksheet::getPlugins() {
 	return m_plugins;
 }
 
-KParts::ReadWritePart* CantorWorksheet::part() {
+KParts::ReadWritePart* Notebook::part() {
 	return m_part;
 }
 
-QIcon CantorWorksheet::icon() const {
+QIcon Notebook::icon() const {
 #ifdef HAVE_CANTOR_LIBS
 	if (m_session)
 		return QIcon::fromTheme(m_session->backend()->icon());
@@ -271,13 +271,13 @@ QIcon CantorWorksheet::icon() const {
 	return {};
 }
 
-QWidget* CantorWorksheet::view() const {
+QWidget* Notebook::view() const {
 #ifndef SDK
 	if (!m_partView) {
-		m_view = new CantorWorksheetView(const_cast<CantorWorksheet*>(this));
+		m_view = new NotebookView(const_cast<Notebook*>(this));
 		m_view->setBaseSize(1500, 1500);
 		m_partView = m_view;
-		connect(this, &CantorWorksheet::viewAboutToBeDeleted, [this]() {
+		connect(this, &Notebook::viewAboutToBeDeleted, [this]() {
 			m_view = nullptr;
 		});
 		// 	connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
@@ -285,7 +285,7 @@ QWidget* CantorWorksheet::view() const {
 		// set the current path in the session to the path of the project file
 #ifdef HAVE_CANTOR_LIBS
 		if (m_session) {
-			const Project* project = const_cast<CantorWorksheet*>(this)->project();
+			const Project* project = const_cast<Notebook*>(this)->project();
 			const QString& fileName = project->fileName();
 			if (!fileName.isEmpty()) {
 				QFileInfo fi(fileName);
@@ -302,14 +302,14 @@ QWidget* CantorWorksheet::view() const {
 /**
  * The caller takes ownership of the menu.
  */
-QMenu* CantorWorksheet::createContextMenu() {
+QMenu* Notebook::createContextMenu() {
 	QMenu* menu = AbstractPart::createContextMenu();
 	Q_ASSERT(menu);
 	Q_EMIT requestProjectContextMenu(menu);
 	return menu;
 }
 
-void CantorWorksheet::fillColumnContextMenu(QMenu* menu, Column* column) {
+void Notebook::fillColumnContextMenu(QMenu* menu, Column* column) {
 #ifndef SDK
 	if (m_view)
 		m_view->fillColumnContextMenu(menu, column);
@@ -319,11 +319,11 @@ void CantorWorksheet::fillColumnContextMenu(QMenu* menu, Column* column) {
 #endif
 }
 
-QString CantorWorksheet::backendName() {
+QString Notebook::backendName() {
 	return this->m_backendName;
 }
 
-bool CantorWorksheet::exportView() const {
+bool Notebook::exportView() const {
 	// TODO: file_export_pdf exists starting with Cantor 23.12,
 	// remove this check later once 23.12 is the minimal
 	// supported version of Cantor.
@@ -336,21 +336,21 @@ bool CantorWorksheet::exportView() const {
 	return false;
 }
 
-bool CantorWorksheet::printView() {
+bool Notebook::printView() {
 	m_part->action(QStringLiteral("file_print"))->trigger();
 	return true;
 }
 
-bool CantorWorksheet::printPreview() const {
+bool Notebook::printPreview() const {
 	m_part->action(QStringLiteral("file_print_preview"))->trigger();
 	return true;
 }
 
-void CantorWorksheet::evaluate() {
+void Notebook::evaluate() {
 	m_part->action(QStringLiteral("evaluate_worksheet"))->trigger();
 }
 
-void CantorWorksheet::restart() {
+void Notebook::restart() {
 	m_part->action(QStringLiteral("restart_backend"))->trigger();
 }
 
@@ -359,8 +359,8 @@ void CantorWorksheet::restart() {
 // ##############################################################################
 
 //! Save as XML
-void CantorWorksheet::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement(QStringLiteral("cantorWorksheet"));
+void Notebook::save(QXmlStreamWriter* writer) const {
+	writer->writeStartElement(QStringLiteral("notebook"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
@@ -380,11 +380,11 @@ void CantorWorksheet::save(QXmlStreamWriter* writer) const {
 	for (auto* col : children<Column>(ChildIndexFlag::IncludeHidden))
 		col->save(writer);
 
-	writer->writeEndElement(); // close "cantorWorksheet" section
+	writer->writeEndElement(); // close "notebook" section
 }
 
 //! Load from XML
-bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
+bool Notebook::load(XmlStreamReader* reader, bool preview) {
 	// reset the status of the reader differentiating between
 	//"failed because of the missing CAS" and "failed because of the broken XML"
 	reader->setFailedCASMissing(false);
@@ -395,9 +395,15 @@ bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
 	QXmlStreamAttributes attribs;
 	bool rc = false;
 
+	QString name;
+	if (Project::xmlVersion() < 14)
+		name = QLatin1String("cantorWorksheet");
+	else
+		name = QLatin1String("notebook");
+
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == QLatin1String("cantorWorksheet"))
+		if (reader->isEndElement() && reader->name() == name)
 			break;
 
 		if (!reader->isStartElement())

@@ -516,12 +516,12 @@ set(COMMONFRONTEND_SOURCES
 
 if(Cantor_FOUND)
     set(CANTOR_SOURCES
-        ${KDEFRONTEND_DIR}/dockwidgets/CantorWorksheetDock.cpp
-        ${BACKEND_DIR}/cantorWorksheet/VariableParser.cpp
-        ${BACKEND_DIR}/cantorWorksheet/CantorWorksheet.cpp
-        ${COMMONFRONTEND_DIR}/cantorWorksheet/CantorWorksheetView.cpp
+        ${KDEFRONTEND_DIR}/dockwidgets/NotebookDock.cpp
+        ${BACKEND_DIR}/notebook/VariableParser.cpp
+        ${BACKEND_DIR}/notebook/Notebook.cpp
+        ${COMMONFRONTEND_DIR}/notebook/NotebookView.cpp
     )
-    set(CANTOR_UI_SOURCES ${KDEFRONTEND_DIR}/ui/dockwidgets/cantorworksheetdock.ui)
+    set(CANTOR_UI_SOURCES ${KDEFRONTEND_DIR}/ui/dockwidgets/notebookdock.ui)
     set(UI_SOURCES ${UI_SOURCES} ${CANTOR_UI_SOURCES})
 endif()
 

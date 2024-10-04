@@ -59,7 +59,7 @@ class DatapickerImageWidget;
 class DatapickerCurveWidget;
 
 #ifdef HAVE_CANTOR_LIBS
-class CantorWorksheetDock;
+class NotebookDock;
 #endif
 
 class GuiObserver : public QObject {
@@ -129,7 +129,7 @@ private:
 	XYCorrelationCurveDock* m_xyCorrelationCurveDock{nullptr};
 
 #ifdef HAVE_CANTOR_LIBS
-	CantorWorksheetDock* m_cantorWorksheetDock{nullptr};
+	NotebookDock* m_notebookDock{nullptr};
 #endif
 
 private Q_SLOTS:
