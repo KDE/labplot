@@ -145,7 +145,7 @@ if(ENABLE_LIBORIGIN)
         list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/projects/OriginProjectParser.cpp)
 endif()
 if(Cantor_FOUND)
-        list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/cantorWorksheet/CantorWorksheet.cpp ${BACKEND_DIR}/cantorWorksheet/VariableParser.cpp)
+	list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/notebook/Notebook.cpp ${BACKEND_DIR}/notebook/VariableParser.cpp)
 endif()
 
 set(NSL_SOURCES
