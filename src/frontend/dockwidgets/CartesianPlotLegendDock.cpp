@@ -296,7 +296,7 @@ void CartesianPlotLegendDock::labelFontChanged(const QFont& font) {
 	CONDITIONAL_LOCK_RETURN;
 
 	QFont labelsFont = font;
-	labelsFont.setPixelSize(Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Unit::Point));
+	labelsFont.setPointSizeF(Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Unit::Point));
 	for (auto* legend : m_legendList)
 		legend->setLabelFont(labelsFont);
 }
@@ -550,7 +550,7 @@ void CartesianPlotLegendDock::legendLabelFontChanged(QFont& font) {
 	CONDITIONAL_LOCK_RETURN;
 	// we need to set the font size in points for KFontRequester
 	QFont f(font);
-	f.setPointSizeF(round(Worksheet::convertFromSceneUnits(f.pixelSize(), Worksheet::Unit::Point)));
+	f.setPointSizeF(round(Worksheet::convertFromSceneUnits(f.pointSizeF(), Worksheet::Unit::Point)));
 	ui.kfrLabelFont->setFont(f);
 }
 
@@ -671,7 +671,7 @@ void CartesianPlotLegendDock::load() {
 	// Format
 	// we need to set the font size in points for KFontRequester
 	QFont font = m_legend->labelFont();
-	font.setPointSizeF(std::round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)));
+	font.setPointSizeF(std::round(Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Unit::Point)));
 	ui.kfrLabelFont->setFont(font);
 
 	ui.kcbLabelColor->setColor(m_legend->labelColor());
@@ -793,7 +793,7 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 	// Format
 	// we need to set the font size in points for KFontRequester
 	QFont font = m_legend->labelFont();
-	font.setPointSizeF(std::round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)));
+	font.setPointSizeF(std::round(Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Unit::Point)));
 	ui.kfrLabelFont->setFont(group.readEntry(QStringLiteral("LabelFont"), font));
 
 	ui.kcbLabelColor->setColor(group.readEntry(QStringLiteral("LabelColor"), m_legend->labelColor()));

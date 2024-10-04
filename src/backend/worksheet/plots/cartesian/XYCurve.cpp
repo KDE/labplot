@@ -172,7 +172,7 @@ void XYCurve::init(bool loading) {
 	d->valuesPrefix = group.readEntry(QStringLiteral("ValuesPrefix"), QStringLiteral(""));
 	d->valuesSuffix = group.readEntry(QStringLiteral("ValuesSuffix"), QStringLiteral(""));
 	d->valuesFont = group.readEntry(QStringLiteral("ValuesFont"), QFont());
-	d->valuesFont.setPixelSize(Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
+	d->valuesFont.setPointSizeF(Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
 	d->valuesColor = group.readEntry(QStringLiteral("ValuesColor"), QColor(Qt::black));
 
 	// marginal plots (rug, histogram, boxplot)

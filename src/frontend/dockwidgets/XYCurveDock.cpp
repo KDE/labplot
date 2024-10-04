@@ -815,7 +815,7 @@ void XYCurveDock::valuesFontChanged(const QFont& font) {
 	CONDITIONAL_LOCK_RETURN;
 
 	QFont valuesFont = font;
-	valuesFont.setPixelSize(Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Unit::Point));
+	valuesFont.setPointSizeF(Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Unit::Point));
 	for (auto* curve : m_curvesList)
 		curve->setValuesFont(valuesFont);
 }
@@ -959,7 +959,7 @@ void XYCurveDock::curveValuesSuffixChanged(const QString& suffix) {
 }
 void XYCurveDock::curveValuesFontChanged(QFont font) {
 	CONDITIONAL_LOCK_RETURN;
-	font.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)));
+	font.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Unit::Point)));
 	ui.kfrValuesFont->setFont(font);
 }
 void XYCurveDock::curveValuesColorChanged(QColor color) {
@@ -1016,7 +1016,7 @@ void XYCurveDock::load() {
 	ui.leValuesPrefix->setText(m_curve->valuesPrefix());
 	ui.leValuesSuffix->setText(m_curve->valuesSuffix());
 	QFont valuesFont = m_curve->valuesFont();
-	valuesFont.setPointSizeF(round(Worksheet::convertFromSceneUnits(valuesFont.pixelSize(), Worksheet::Unit::Point)));
+	valuesFont.setPointSizeF(round(Worksheet::convertFromSceneUnits(valuesFont.pointSizeF(), Worksheet::Unit::Point)));
 	ui.kfrValuesFont->setFont(valuesFont);
 	ui.kcbValuesColor->setColor(m_curve->valuesColor());
 	this->updateValuesWidgets();
@@ -1073,7 +1073,7 @@ void XYCurveDock::loadConfig(KConfig& config) {
 	ui.leValuesPrefix->setText(group.readEntry(QStringLiteral("ValuesPrefix"), m_curve->valuesPrefix()));
 	ui.leValuesSuffix->setText(group.readEntry(QStringLiteral("ValuesSuffix"), m_curve->valuesSuffix()));
 	QFont valuesFont = m_curve->valuesFont();
-	valuesFont.setPointSizeF(round(Worksheet::convertFromSceneUnits(valuesFont.pixelSize(), Worksheet::Unit::Point)));
+	valuesFont.setPointSizeF(round(Worksheet::convertFromSceneUnits(valuesFont.pointSizeF(), Worksheet::Unit::Point)));
 	ui.kfrValuesFont->setFont(group.readEntry(QStringLiteral("ValuesFont"), valuesFont));
 	ui.kcbValuesColor->setColor(group.readEntry(QStringLiteral("ValuesColor"), m_curve->valuesColor()));
 
