@@ -4,7 +4,7 @@
 	Description          : widget for managing MQTT connections
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2018 Ferencz Kovacs <kferike98@gmail.com>
-	SPDX-FileCopyrightText: 2018-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -19,8 +19,6 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
-
-#include <kcoreaddons_version.h>
 
 /*!
    \class MQTTConnectionManagerWidget
@@ -258,7 +256,6 @@ void MQTTConnectionManagerWidget::authenticationChecked(bool state) {
 			if (!m_initializing)
 				m_currentConnection->useAuthentication = true;
 		}
-
 	} else {
 		ui.lPassword->hide();
 		ui.lePassword->hide();
@@ -267,9 +264,8 @@ void MQTTConnectionManagerWidget::authenticationChecked(bool state) {
 		ui.leUserName->hide();
 		ui.leUserName->clear();
 
-		if (m_currentConnection && !m_initializing) {
+		if (m_currentConnection && !m_initializing)
 			m_currentConnection->useAuthentication = false;
-		}
 	}
 
 	if (!m_initializing)
@@ -382,10 +378,9 @@ void MQTTConnectionManagerWidget::clientIdChanged(const QString& clientID) {
 }
 
 /*!
-		adds a new sample connection to the end of the list.
+	adds a new sample connection to the end of the list.
  */
 void MQTTConnectionManagerWidget::addConnection() {
-	qDebug() << "Adding new connection";
 	MQTTConnection conn;
 	conn.name = uniqueName();
 	conn.hostName = QStringLiteral("localhost");
@@ -407,7 +402,7 @@ void MQTTConnectionManagerWidget::addConnection() {
 }
 
 /*!
-		removes the current selected connection.
+	removes the current selected connection.
  */
 void MQTTConnectionManagerWidget::deleteConnection() {
 	auto status = KMessageBox::questionTwoActions(this,
@@ -449,7 +444,7 @@ void MQTTConnectionManagerWidget::deleteConnection() {
 }
 
 /*!
-		Loads the saved connections.
+	Loads the saved connections.
  */
 void MQTTConnectionManagerWidget::loadConnections() {
 	qDebug() << "Loading connections from " << m_configPath;
@@ -491,9 +486,8 @@ void MQTTConnectionManagerWidget::loadConnections() {
 		} else {
 			ui.lwConnections->setCurrentRow(ui.lwConnections->count() - 1);
 		}
-	} else {
+	} else
 		addConnection();
-	}
 
 	m_initializing = false;
 
@@ -505,7 +499,6 @@ void MQTTConnectionManagerWidget::loadConnections() {
  * \brief Saves the connections present in the list widget.
  */
 void MQTTConnectionManagerWidget::saveConnections() {
-	qDebug() << "Saving connections to " << m_configPath;
 	// delete saved connections
 	KConfig config(m_configPath, KConfig::SimpleConfig);
 	for (const auto& group : config.groupList())
@@ -538,7 +531,7 @@ bool MQTTConnectionManagerWidget::checkConnections() {
 
 	for (int i = 0; i < m_connections.size(); ++i) {
 		auto& c1 = m_connections[i];
-		QList<QListWidgetItem*> equalNames = ui.lwConnections->findItems(c1.name, Qt::MatchExactly);
+		auto equalNames = ui.lwConnections->findItems(c1.name, Qt::MatchExactly);
 		bool nameOK = (!c1.name.isEmpty()) && (equalNames.size() == 1);
 
 		bool authenticationUsed = c1.useAuthentication;
@@ -645,7 +638,7 @@ void MQTTConnectionManagerWidget::onConnect() {
 	m_testTimer->stop();
 
 	KMessageBox::information(this,
-							 i18n("Connection to the broker '%1:%2' was successful.", m_currentConnection->hostName, m_currentConnection->port),
+							 i18n("Connection to the broker '%1:%2' was successful.", m_currentConnection->hostName, QString::number(m_currentConnection->port)),
 							 i18n("Connection Successful"));
 
 	m_client->disconnectFromHost();

@@ -2412,7 +2412,6 @@ void ImportFileWidget::changeMcapTopic() {
 }
 
 #ifdef HAVE_MQTT
-
 /*!
  *\brief called when a different MQTT connection is selected in the connection ComboBox.
  * connects to the MQTT broker according to the connection settings.
@@ -2431,16 +2430,16 @@ void ImportFileWidget::mqttConnectionChanged() {
 	// disconnected from the broker that was selected before
 	disconnectMqttConnection();
 
-	// determine the connection settings for the new broker and initialize the mqtt client
-	KConfig config(m_configPath, KConfig::SimpleConfig);
-	KConfigGroup group = config.group(ui.cbConnection->currentText());
-
+	delete m_client;
 	m_client = new QMqttClient;
 	connect(m_client, &QMqttClient::connected, this, &ImportFileWidget::onMqttConnect);
 	connect(m_client, &QMqttClient::disconnected, this, &ImportFileWidget::onMqttDisconnect);
 	connect(m_client, &QMqttClient::messageReceived, this, &ImportFileWidget::mqttMessageReceived);
 	connect(m_client, &QMqttClient::errorChanged, this, &ImportFileWidget::mqttErrorChanged);
 
+	// determine the connection settings for the new broker and initialize the mqtt client
+	KConfig config(m_configPath, KConfig::SimpleConfig);
+	KConfigGroup group = config.group(ui.cbConnection->currentText());
 	m_client->setHostname(group.readEntry("Host"));
 	m_client->setPort(group.readEntry("Port").toUInt());
 
@@ -2483,14 +2482,14 @@ void ImportFileWidget::disconnectMqttConnection() {
 bool ImportFileWidget::isMqttValid() {
 	if (!m_client)
 		return false;
+	if (m_client->state() != QMqttClient::ClientState::Connected)
+		return false;
+	if (!m_subscriptionWidget->subscriptionCount())
+		return false;
+	if (this->currentFileType() != AbstractFileFilter::FileType::Ascii)
+		return false;
 
-	bool connected = (m_client->state() == QMqttClient::ClientState::Connected);
-	bool subscribed = (m_subscriptionWidget->subscriptionCount() > 0);
-	bool fileTypeOk = false;
-	if (this->currentFileType() == AbstractFileFilter::FileType::Ascii)
-		fileTypeOk = true;
-
-	return connected && subscribed && fileTypeOk;
+	return true;
 }
 
 /*!
@@ -2513,7 +2512,7 @@ void ImportFileWidget::onMqttConnect() {
 			ui.lMqttTopics->show();
 		}
 	} else
-		Q_EMIT error(QStringLiteral("on mqtt connect error ") + QString::number(m_client->error()));
+		Q_EMIT error(i18n("Failed to connect to '%1'. Error %2.", m_client->hostname(), QString::number(m_client->error())));
 
 	Q_EMIT subscriptionsChanged();
 	RESET_CURSOR;
@@ -2544,9 +2543,7 @@ void ImportFileWidget::onMqttDisconnect() {
  * subscribes to the topic represented by the current item of twTopics
  */
 void ImportFileWidget::subscribeTopic(const QString& name, uint QoS) {
-	const QMqttTopicFilter filter{name};
-	QMqttSubscription* tempSubscription = m_client->subscribe(filter, static_cast<quint8>(QoS));
-
+	auto* tempSubscription = m_client->subscribe(QMqttTopicFilter(name), static_cast<quint8>(QoS));
 	if (tempSubscription) {
 		m_mqttSubscriptions.push_back(tempSubscription);
 		connect(tempSubscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
@@ -2572,8 +2569,7 @@ void ImportFileWidget::unsubscribeTopic(const QString& topicName, QVector<QTreeW
 		}
 	}
 
-	QMqttTopicFilter filter{topicName};
-	m_client->unsubscribe(filter);
+	m_client->unsubscribe(QMqttTopicFilter(topicName));
 
 	QMapIterator<QMqttTopicName, QMqttMessage> j(m_lastMessage);
 	while (j.hasNext()) {
@@ -2826,11 +2822,7 @@ void ImportFileWidget::showWillSettings() {
 }
 
 void ImportFileWidget::enableWill(bool enable) {
-	if (enable) {
-		if (!ui.bLWT->isEnabled())
-			ui.bLWT->setEnabled(enable);
-	} else
-		ui.bLWT->setEnabled(enable);
+	ui.bLWT->setEnabled(enable);
 }
 
 /*!
