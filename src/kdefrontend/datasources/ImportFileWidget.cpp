@@ -33,7 +33,6 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KMessageWidget>
 #include <KUrlComboBox>
 
 #include <QCompleter>
@@ -158,11 +157,6 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 
 		ui.chbLinkFile->setToolTip(i18n("If this option is checked, only the link to the file is stored in the project file but not its content."));
 		ui.chbRelativePath->setToolTip(i18n("If this option is checked, the relative path of the file (relative to project's folder) will be saved."));
-	}
-
-	if (!m_messageWidget) {
-		m_messageWidget = new KMessageWidget(this);
-		ui.gridLayout->addWidget(m_messageWidget, 8, 2);
 	}
 
 	// hide options that will be activated on demand
@@ -1052,16 +1046,18 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	}
 
 	// warn about files with special extensions
-	if (name.endsWith(QLatin1String(".opj")) || name.endsWith(QLatin1String(".OPJ"))) {
-		DEBUG(Q_FUNC_INFO << ", WARNING: Origin Project file detected!")
-		m_messageWidget->setText(i18n("Origin Project files need to be opened with \"Import -> Origin Project\"!"));
-		m_messageWidget->animatedShow();
-	} else if (name.endsWith(QLatin1String(".lml")) || name.endsWith(QLatin1String(".LML"))) {
-		DEBUG(Q_FUNC_INFO << ", WARNING: LabPlot Project file detected!")
-		m_messageWidget->setText(i18n("LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"));
-		m_messageWidget->animatedShow();
-	} else {
-		m_messageWidget->animatedHide();
+	if (name.toLower().endsWith(QLatin1String(".opj"))) {
+		Q_EMIT error(i18n("Origin Project files need to be opened with \"Import -> Origin Project\"!"));
+		ui.tePreview->clear();
+		m_twPreview->clear();
+		Q_EMIT fileNameChanged();
+		return;
+	} else if (name.toLower().endsWith(QLatin1String(".lml"))) {
+		Q_EMIT error(i18n("LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"));
+		ui.tePreview->clear();
+		m_twPreview->clear();
+		Q_EMIT fileNameChanged();
+		return;
 	}
 
 	if (currentSourceType() == LiveDataSource::SourceType::FileOrPipe) {

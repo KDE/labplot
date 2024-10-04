@@ -42,7 +42,6 @@ class TemplateHandler;
 class ImportKaggleDatasetWidget;
 
 class KConfig;
-class KMessageWidget;
 class KUrlComboBox;
 
 class QTableWidget;
@@ -129,7 +128,6 @@ private:
 	bool m_embedded{false};
 	TemplateHandler* m_templateHandler{nullptr};
 	bool mcapTopicsInitialized{false};
-	KMessageWidget* m_messageWidget{nullptr};
 
 Q_SIGNALS:
 	void enableImportToMatrix(bool enable);
