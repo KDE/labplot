@@ -556,7 +556,6 @@ void MainWin::dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now) {
 	} else
 		m_currentDock = view;
 
-	updateGUI();
 	if (!m_suppressCurrentSubWindowChangedEvent)
 		m_projectExplorer->setCurrentAspect(view->part());
 }
@@ -1020,6 +1019,14 @@ void MainWin::updateGUIOnProjectChanges() {
 	m_redoAction->setEnabled(false);
 }
 
+bool hasAction(const QList<QAction*>& actions) {
+	for (const auto* action : actions) {
+		if (!action->isSeparator())
+			return true;
+	}
+	return false;
+}
+
 /*
  * updates the state of actions, menus and toolbars (enabled or disabled)
  * depending on the currently active window (worksheet or spreadsheet).
@@ -1072,14 +1079,18 @@ void MainWin::updateGUI() {
 #endif
 
 	Q_ASSERT(m_currentAspect);
+
 	// Handle the Worksheet-object
 	const auto* w = dynamic_cast<Worksheet*>(m_currentAspect);
 	if (!w)
 		w = dynamic_cast<Worksheet*>(m_currentAspect->parent(AspectType::Worksheet));
 
 	if (w) {
-		bool update = (w != m_lastWorksheet);
-		m_lastWorksheet = w;
+		bool update = false;
+		if (w != m_lastWorksheet) {
+			m_lastWorksheet = w;
+			update = true;
+		}
 
 		// populate worksheet menu
 		auto* view = qobject_cast<WorksheetView*>(w->view());
@@ -1087,15 +1098,17 @@ void MainWin::updateGUI() {
 		if (update) {
 			menu->clear();
 			view->createContextMenu(menu);
-		}
+		} else if (!hasAction(menu->actions()))
+			view->createContextMenu(menu);
 		menu->setEnabled(true);
 
 		// populate worksheet-toolbar
 		auto* toolbar = qobject_cast<QToolBar*>(factory->container(QLatin1String("worksheet_toolbar"), this));
-		if (update) {
+		if (update) { // update because the aspect has changed
 			toolbar->clear();
 			view->fillToolBar(toolbar);
-		}
+		} else if (!hasAction(toolbar->actions())) // update because the view was closed and the actions deleted
+			view->fillToolBar(toolbar);
 		toolbar->setVisible(true);
 		toolbar->setEnabled(true);
 
@@ -1104,7 +1117,8 @@ void MainWin::updateGUI() {
 		if (update) {
 			toolbar->clear();
 			view->fillCartesianPlotToolBar(toolbar);
-		}
+		} else if (!hasAction(toolbar->actions()))
+			view->fillCartesianPlotToolBar(toolbar);
 		toolbar->setVisible(true);
 		toolbar->setEnabled(true);
 
@@ -1117,18 +1131,18 @@ void MainWin::updateGUI() {
 	} else {
 		factory->container(QLatin1String("worksheet"), this)->setEnabled(false);
 		factory->container(QLatin1String("worksheet_toolbar"), this)->setVisible(false);
-		//		factory->container(QLatin1String("drawing"), this)->setEnabled(false);
 		factory->container(QLatin1String("worksheet_toolbar"), this)->setEnabled(false);
 		factory->container(QLatin1String("cartesian_plot_toolbar"), this)->setEnabled(false);
 	}
 
 	// Handle the Spreadsheet-object
 	const auto* spreadsheet = this->activeSpreadsheet();
-	if (!spreadsheet)
-		spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect->parent(AspectType::Spreadsheet));
 	if (spreadsheet) {
-		bool update = (spreadsheet != m_lastSpreadsheet);
-		m_lastSpreadsheet = spreadsheet;
+		bool update = false;
+		if (spreadsheet != m_lastSpreadsheet) {
+			update = true;
+			m_lastSpreadsheet = spreadsheet;
+		}
 
 		// populate spreadsheet-menu
 		auto* view = qobject_cast<SpreadsheetView*>(spreadsheet->view());
@@ -1136,7 +1150,8 @@ void MainWin::updateGUI() {
 		if (update) {
 			menu->clear();
 			view->createContextMenu(menu);
-		}
+		} else if (!hasAction(menu->actions()))
+			view->createContextMenu(menu);
 		menu->setEnabled(true);
 
 		// populate spreadsheet-toolbar
@@ -1144,7 +1159,9 @@ void MainWin::updateGUI() {
 		if (update) {
 			toolbar->clear();
 			view->fillToolBar(toolbar);
-		}
+		} else if (!hasAction(toolbar->actions()))
+			view->fillToolBar(toolbar);
+
 		toolbar->setVisible(true);
 		toolbar->setEnabled(true);
 
