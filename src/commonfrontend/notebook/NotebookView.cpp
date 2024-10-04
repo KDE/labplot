@@ -9,8 +9,8 @@
 */
 
 #include "NotebookView.h"
-#include "backend/notebook/Notebook.h"
 #include "backend/core/column/Column.h"
+#include "backend/notebook/Notebook.h"
 #include "kdefrontend/spreadsheet/PlotDataDialog.h"
 #include "kdefrontend/spreadsheet/StatisticsDialog.h"
 
