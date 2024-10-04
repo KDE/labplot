@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-03 01:46+0000\n"
+"POT-Creation-Date: 2024-10-04 01:48+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -93,26 +93,19 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "zepires@gmail.com"
 
-#: src/backend/cantorWorksheet/CantorWorksheet.cpp:70
+#: src/backend/cantorWorksheet/CantorWorksheet.cpp:62
 #, kde-format
 msgid "Couldn't find the plugin for %1. Please check your installation."
 msgstr ""
 "Não foi possível encontrar o 'plugin' do %1. Verifique por favor a sua "
 "instalação."
 
-#: src/backend/cantorWorksheet/CantorWorksheet.cpp:89
+#: src/backend/cantorWorksheet/CantorWorksheet.cpp:81
 #, fuzzy, kde-format
 #| msgid "Couldn't find the plugin for %1. Please check your installation."
 msgid "Couldn't create the sessions for %1. Please check your installation."
 msgstr ""
 "Não foi possível encontrar o 'plugin' do %1. Verifique por favor a sua "
-"instalação."
-
-#: src/backend/cantorWorksheet/CantorWorksheet.cpp:267
-#, kde-format
-msgid "Couldn't find panel plugins. Please check your installation."
-msgstr ""
-"Não foi possível encontrar os 'plugins' do painel. Verifique por favor a sua "
 "instalação."
 
 #: src/backend/core/AbstractAspect.cpp:232
@@ -499,7 +492,7 @@ msgid "incompatible filter type"
 msgstr "tipo de filtro incompatível"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:708
+#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:707
 #: src/backend/datasources/MQTTClient.cpp:1366
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:313
@@ -768,59 +761,59 @@ msgid "Not yet loaded."
 msgstr "Ainda não carregado."
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbProject)
-#: src/backend/core/Project.cpp:183
+#: src/backend/core/Project.cpp:182
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:17
 #, kde-format
 msgid "Project"
 msgstr "Projecto"
 
-#: src/backend/core/Project.cpp:264
+#: src/backend/core/Project.cpp:263
 #, kde-format
 msgid "Close"
 msgstr "Fechar"
 
-#: src/backend/core/Project.cpp:301
+#: src/backend/core/Project.cpp:300
 #, kde-format
 msgid "%1: set author"
 msgstr "%1: mudar o autor"
 
-#: src/backend/core/Project.cpp:308
+#: src/backend/core/Project.cpp:307
 #, fuzzy, kde-format
 #| msgid "%1: save calculation changed"
 msgid "%1: save dock state changed"
 msgstr "%1: a gravação do cálculo foi modificada"
 
-#: src/backend/core/Project.cpp:315
+#: src/backend/core/Project.cpp:314
 #, kde-format
 msgid "%1: save calculation changed"
 msgstr "%1: a gravação do cálculo foi modificada"
 
-#: src/backend/core/Project.cpp:552 src/backend/core/Project.cpp:582
+#: src/backend/core/Project.cpp:551 src/backend/core/Project.cpp:581
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "Infelizmente, não é possível aceder ao ficheiro para leitura."
 
-#: src/backend/core/Project.cpp:563 src/backend/core/Project.cpp:589
+#: src/backend/core/Project.cpp:562 src/backend/core/Project.cpp:588
 #, kde-format
 msgid "The project file is empty."
 msgstr "O ficheiro do projecto está vazio."
 
-#: src/backend/core/Project.cpp:563 src/backend/core/Project.cpp:589
+#: src/backend/core/Project.cpp:562 src/backend/core/Project.cpp:588
 #, kde-format
 msgid "Error opening project"
 msgstr "Erro ao abrir o projecto"
 
-#: src/backend/core/Project.cpp:608
+#: src/backend/core/Project.cpp:607
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr "Ocorreu um erro desconhecido ao abrir o projecto %1."
 
-#: src/backend/core/Project.cpp:609
+#: src/backend/core/Project.cpp:608
 #, kde-format
 msgid "Error when opening the project"
 msgstr "Erro ao abrir o projecto"
 
-#: src/backend/core/Project.cpp:629
+#: src/backend/core/Project.cpp:628
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -839,43 +832,43 @@ msgstr ""
 "\n"
 "Deseja continuar?"
 
-#: src/backend/core/Project.cpp:635
+#: src/backend/core/Project.cpp:634
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr "Falta o Suporte para o CAS"
 
-#: src/backend/core/Project.cpp:665
+#: src/backend/core/Project.cpp:664
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr "Falta o atributo 'version'."
 
-#: src/backend/core/Project.cpp:715
+#: src/backend/core/Project.cpp:714
 #, kde-format
 msgid "no project element found"
 msgstr "não foi encontrado o elemento do projecto"
 
-#: src/backend/core/Project.cpp:717
+#: src/backend/core/Project.cpp:716
 #, kde-format
 msgid "no valid XML document found"
 msgstr "não foi encontrado nenhum documento em XML válido"
 
-#: src/backend/core/Project.cpp:766 src/backend/core/Project.cpp:772
-#: src/backend/core/Project.cpp:823
+#: src/backend/core/Project.cpp:765 src/backend/core/Project.cpp:771
+#: src/backend/core/Project.cpp:822
 #, kde-format
 msgid "Failed to open the file '%1'."
 msgstr "Não foi possível abrir o ficheiro '%1'."
 
-#: src/backend/core/Project.cpp:829
+#: src/backend/core/Project.cpp:828
 #, kde-format
 msgid "Failed to process the content of the file '%1'."
 msgstr "Não foi possível processar o conteúdo do ficheiro '%1'."
 
-#: src/backend/core/Project.cpp:832
+#: src/backend/core/Project.cpp:831
 #, kde-format
 msgid "Failed to open project"
 msgstr "Não foi possível abrir o projecto"
 
-#: src/backend/core/Project.cpp:1274
+#: src/backend/core/Project.cpp:1273
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "A hora de modificação do projecto é inválida. A usar a hora actual."
@@ -17015,22 +17008,22 @@ msgid ""
 "bottlenecks."
 msgstr ""
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:30
+#: src/kdefrontend/SettingsNotebookPage.cpp:32
 #, kde-format
 msgid "Enable syntax highlighting"
 msgstr "Activar o realce de sintaxe"
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:31
+#: src/kdefrontend/SettingsNotebookPage.cpp:33
 #, kde-format
 msgid "Enable syntax completion"
 msgstr "Activar a completação da sintaxe"
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:32
+#: src/kdefrontend/SettingsNotebookPage.cpp:34
 #, kde-format
 msgid "Show line numbers"
 msgstr "Mostrar os números de linha"
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:33
+#: src/kdefrontend/SettingsNotebookPage.cpp:35
 #, kde-format
 msgid ""
 "Use LaTeX typesetting for the results of calculations, if supported by the "
@@ -17039,17 +17032,17 @@ msgstr ""
 "Usar a formatação em LaTeX para os resultados dos cálculos, caso seja "
 "suportada pelo sistema da infra-estrutura."
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:34
+#: src/kdefrontend/SettingsNotebookPage.cpp:36
 #, kde-format
 msgid "Animate transitions"
 msgstr "Animar as transições"
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:36
+#: src/kdefrontend/SettingsNotebookPage.cpp:38
 #, kde-format
 msgid "Automatically re-evaluate all entries below the current one."
 msgstr "Avaliar de novo automaticamente todos os itens abaixo do actual."
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:37
+#: src/kdefrontend/SettingsNotebookPage.cpp:39
 #, kde-format
 msgid "Ask for confirmation when restarting the backend system."
 msgstr "Pedir a confirmação ao reiniciar o sistema da infra-estrutura."
@@ -24679,6 +24672,11 @@ msgstr "o processo de conversão falhou com o código de saída ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Não foi possível aceder ao ficheiro:"
+
+#~ msgid "Couldn't find panel plugins. Please check your installation."
+#~ msgstr ""
+#~ "Não foi possível encontrar os 'plugins' do painel. Verifique por favor a "
+#~ "sua instalação."
 
 #~ msgid ""
 #~ "Couldn't find the dynamic library 'cantorpart'. Please check your "

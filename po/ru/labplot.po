@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-03 01:46+0000\n"
+"POT-Creation-Date: 2024-10-04 01:48+0000\n"
 "PO-Revision-Date: 2023-11-13 14:41+0300\n"
 "Last-Translator: Sergey Kazorin <translation-team@basealt.ru>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -30,26 +30,19 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "aspotashev@gmail.com, translation-team@basealt.ru"
 
-#: src/backend/cantorWorksheet/CantorWorksheet.cpp:70
+#: src/backend/cantorWorksheet/CantorWorksheet.cpp:62
 #, kde-format
 msgid "Couldn't find the plugin for %1. Please check your installation."
 msgstr ""
 "Не удалось найти подключаемый модуль для %1. Проверьте правильность "
 "установки."
 
-#: src/backend/cantorWorksheet/CantorWorksheet.cpp:89
+#: src/backend/cantorWorksheet/CantorWorksheet.cpp:81
 #, fuzzy, kde-format
 #| msgid "Couldn't find the plugin for %1. Please check your installation."
 msgid "Couldn't create the sessions for %1. Please check your installation."
 msgstr ""
 "Не удалось найти подключаемый модуль для %1. Проверьте правильность "
-"установки."
-
-#: src/backend/cantorWorksheet/CantorWorksheet.cpp:267
-#, kde-format
-msgid "Couldn't find panel plugins. Please check your installation."
-msgstr ""
-"Не удалось найти подключаемые модули панели. Проверьте правильность "
 "установки."
 
 #: src/backend/core/AbstractAspect.cpp:232
@@ -442,7 +435,7 @@ msgid "incompatible filter type"
 msgstr "несовместимый тип фильтра"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:708
+#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:707
 #: src/backend/datasources/MQTTClient.cpp:1366
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:313
@@ -715,59 +708,59 @@ msgid "Not yet loaded."
 msgstr "Ещё не загружен."
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbProject)
-#: src/backend/core/Project.cpp:183
+#: src/backend/core/Project.cpp:182
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:17
 #, kde-format
 msgid "Project"
 msgstr "Проект"
 
-#: src/backend/core/Project.cpp:264
+#: src/backend/core/Project.cpp:263
 #, kde-format
 msgid "Close"
 msgstr "Закрыть"
 
-#: src/backend/core/Project.cpp:301
+#: src/backend/core/Project.cpp:300
 #, kde-format
 msgid "%1: set author"
 msgstr "%1: задать автора"
 
-#: src/backend/core/Project.cpp:308
+#: src/backend/core/Project.cpp:307
 #, fuzzy, kde-format
 #| msgid "%1: save calculation changed"
 msgid "%1: save dock state changed"
 msgstr "%1: сохранить изменения вычислений"
 
-#: src/backend/core/Project.cpp:315
+#: src/backend/core/Project.cpp:314
 #, kde-format
 msgid "%1: save calculation changed"
 msgstr "%1: сохранить изменения вычислений"
 
-#: src/backend/core/Project.cpp:552 src/backend/core/Project.cpp:582
+#: src/backend/core/Project.cpp:551 src/backend/core/Project.cpp:581
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "Не удалось открыть файл для чтения."
 
-#: src/backend/core/Project.cpp:563 src/backend/core/Project.cpp:589
+#: src/backend/core/Project.cpp:562 src/backend/core/Project.cpp:588
 #, kde-format
 msgid "The project file is empty."
 msgstr "Файл проекта пуст."
 
-#: src/backend/core/Project.cpp:563 src/backend/core/Project.cpp:589
+#: src/backend/core/Project.cpp:562 src/backend/core/Project.cpp:588
 #, kde-format
 msgid "Error opening project"
 msgstr "Ошибка открытия проекта"
 
-#: src/backend/core/Project.cpp:608
+#: src/backend/core/Project.cpp:607
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr "Неизвестная ошибка при открытии проекта %1."
 
-#: src/backend/core/Project.cpp:609
+#: src/backend/core/Project.cpp:608
 #, kde-format
 msgid "Error when opening the project"
 msgstr "Не удалось открыть проект."
 
-#: src/backend/core/Project.cpp:629
+#: src/backend/core/Project.cpp:628
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -786,43 +779,43 @@ msgstr ""
 "\n"
 "Продолжить?"
 
-#: src/backend/core/Project.cpp:635
+#: src/backend/core/Project.cpp:634
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr "Отсутствие поддержки СКА"
 
-#: src/backend/core/Project.cpp:665
+#: src/backend/core/Project.cpp:664
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr "Отсутствует атрибут «версия»."
 
-#: src/backend/core/Project.cpp:715
+#: src/backend/core/Project.cpp:714
 #, kde-format
 msgid "no project element found"
 msgstr "Не найден элемент «project»."
 
-#: src/backend/core/Project.cpp:717
+#: src/backend/core/Project.cpp:716
 #, kde-format
 msgid "no valid XML document found"
 msgstr "Не найден допустимый XML-документ"
 
-#: src/backend/core/Project.cpp:766 src/backend/core/Project.cpp:772
-#: src/backend/core/Project.cpp:823
+#: src/backend/core/Project.cpp:765 src/backend/core/Project.cpp:771
+#: src/backend/core/Project.cpp:822
 #, kde-format
 msgid "Failed to open the file '%1'."
 msgstr "Не удалось открыть файл «%1»."
 
-#: src/backend/core/Project.cpp:829
+#: src/backend/core/Project.cpp:828
 #, kde-format
 msgid "Failed to process the content of the file '%1'."
 msgstr "Не удалось обработать содержимое файла «%1»."
 
-#: src/backend/core/Project.cpp:832
+#: src/backend/core/Project.cpp:831
 #, kde-format
 msgid "Failed to open project"
 msgstr "Не удалось открыть проект"
 
-#: src/backend/core/Project.cpp:1274
+#: src/backend/core/Project.cpp:1273
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Недопустимое время изменения проекта. Используется текущее время."
@@ -17156,23 +17149,23 @@ msgid ""
 "bottlenecks."
 msgstr ""
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:30
+#: src/kdefrontend/SettingsNotebookPage.cpp:32
 #, kde-format
 msgid "Enable syntax highlighting"
 msgstr "Включить подсветку синтаксиса"
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:31
+#: src/kdefrontend/SettingsNotebookPage.cpp:33
 #, kde-format
 msgid "Enable syntax completion"
 msgstr "Включить завершение синтаксиса"
 
 # BUGME: please add context --aspotashev
-#: src/kdefrontend/SettingsNotebookPage.cpp:32
+#: src/kdefrontend/SettingsNotebookPage.cpp:34
 #, kde-format
 msgid "Show line numbers"
 msgstr "Показывать номера строк"
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:33
+#: src/kdefrontend/SettingsNotebookPage.cpp:35
 #, kde-format
 msgid ""
 "Use LaTeX typesetting for the results of calculations, if supported by the "
@@ -17181,18 +17174,18 @@ msgstr ""
 "Использовать вёрстку LaTeX для результата вычислений в случае поддержки "
 "такого отображения базовой системой."
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:34
+#: src/kdefrontend/SettingsNotebookPage.cpp:36
 #, kde-format
 msgid "Animate transitions"
 msgstr "Анимированные переходы"
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:36
+#: src/kdefrontend/SettingsNotebookPage.cpp:38
 #, kde-format
 msgid "Automatically re-evaluate all entries below the current one."
 msgstr ""
 "Автоматически проводить повторное вычисление всех элементов ниже текущего."
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:37
+#: src/kdefrontend/SettingsNotebookPage.cpp:39
 #, kde-format
 msgid "Ask for confirmation when restarting the backend system."
 msgstr "Запрашивать подтверждение при перезапуске базовой системы."
@@ -24971,6 +24964,11 @@ msgstr "сбой процесса convert, код выхода ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Не удалось открыть файл:"
+
+#~ msgid "Couldn't find panel plugins. Please check your installation."
+#~ msgstr ""
+#~ "Не удалось найти подключаемые модули панели. Проверьте правильность "
+#~ "установки."
 
 #~ msgid ""
 #~ "Couldn't find the dynamic library 'cantorpart'. Please check your "

@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-03 01:46+0000\n"
-"PO-Revision-Date: 2024-09-29 08:57+0200\n"
+"POT-Creation-Date: 2024-10-04 01:48+0000\n"
+"PO-Revision-Date: 2024-10-02 18:43+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -39,26 +39,19 @@ msgstr ""
 "vincent.pinon@laposte.net, mcorteel@gmail.com, thomas.vergnaud@mailo.eu, "
 "xavier.besnard@kde.org"
 
-#: src/backend/cantorWorksheet/CantorWorksheet.cpp:70
+#: src/backend/cantorWorksheet/CantorWorksheet.cpp:62
 #, kde-format
 msgid "Couldn't find the plugin for %1. Please check your installation."
 msgstr ""
 "Impossible de trouver le module externe pour %1. Veuillez vérifier votre "
 "installation."
 
-#: src/backend/cantorWorksheet/CantorWorksheet.cpp:89
+#: src/backend/cantorWorksheet/CantorWorksheet.cpp:81
 #, kde-format
 msgid "Couldn't create the sessions for %1. Please check your installation."
 msgstr ""
 "Impossible de créer les sessions pour %1. Veuillez vérifier votre "
 "installation."
-
-#: src/backend/cantorWorksheet/CantorWorksheet.cpp:267
-#, kde-format
-msgid "Couldn't find panel plugins. Please check your installation."
-msgstr ""
-"Impossible de trouver les modules externes du panneau. Veuillez vérifier "
-"votre installation."
 
 #: src/backend/core/AbstractAspect.cpp:232
 #, kde-format
@@ -444,7 +437,7 @@ msgid "incompatible filter type"
 msgstr "Type de filtre incompatible"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:708
+#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:707
 #: src/backend/datasources/MQTTClient.cpp:1366
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:313
@@ -608,10 +601,9 @@ msgid "%1: clear column"
 msgstr "%1 : effacer la colonne"
 
 #: src/backend/core/column/Column.cpp:589
-#, fuzzy, kde-format
-#| msgid "%1: set cell values"
+#, kde-format
 msgid "%1: set random values"
-msgstr "%1 : définir les valeurs des cellules"
+msgstr "%1 : définir avec des valeurs aléatoires"
 
 #: src/backend/core/column/Column.cpp:1621
 #, kde-format
@@ -714,58 +706,58 @@ msgid "Not yet loaded."
 msgstr "Pas encore chargé"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbProject)
-#: src/backend/core/Project.cpp:183
+#: src/backend/core/Project.cpp:182
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:17
 #, kde-format
 msgid "Project"
 msgstr "Projet"
 
-#: src/backend/core/Project.cpp:264
+#: src/backend/core/Project.cpp:263
 #, kde-format
 msgid "Close"
 msgstr "Fermer"
 
-#: src/backend/core/Project.cpp:301
+#: src/backend/core/Project.cpp:300
 #, kde-format
 msgid "%1: set author"
 msgstr "%1 : définir l'auteur"
 
-#: src/backend/core/Project.cpp:308
+#: src/backend/core/Project.cpp:307
 #, kde-format
 msgid "%1: save dock state changed"
 msgstr "%1 : enregistrer les modifications de l'état des panneaux"
 
-#: src/backend/core/Project.cpp:315
+#: src/backend/core/Project.cpp:314
 #, kde-format
 msgid "%1: save calculation changed"
 msgstr "%1 : le calcul enregistré a été modifié"
 
-#: src/backend/core/Project.cpp:552 src/backend/core/Project.cpp:582
+#: src/backend/core/Project.cpp:551 src/backend/core/Project.cpp:581
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "Impossible d'ouvrir le fichier en lecture."
 
-#: src/backend/core/Project.cpp:563 src/backend/core/Project.cpp:589
+#: src/backend/core/Project.cpp:562 src/backend/core/Project.cpp:588
 #, kde-format
 msgid "The project file is empty."
 msgstr "Le fichier projet est vide."
 
-#: src/backend/core/Project.cpp:563 src/backend/core/Project.cpp:589
+#: src/backend/core/Project.cpp:562 src/backend/core/Project.cpp:588
 #, kde-format
 msgid "Error opening project"
 msgstr "Erreur à l'ouverture du projet"
 
-#: src/backend/core/Project.cpp:608
+#: src/backend/core/Project.cpp:607
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr "Erreur inconnue lors de l'ouverture du projet %1."
 
-#: src/backend/core/Project.cpp:609
+#: src/backend/core/Project.cpp:608
 #, kde-format
 msgid "Error when opening the project"
 msgstr "Erreur à l'ouverture du projet"
 
-#: src/backend/core/Project.cpp:629
+#: src/backend/core/Project.cpp:628
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -783,43 +775,43 @@ msgstr ""
 "\n"
 "Voulez-vous vraiment continuer ?"
 
-#: src/backend/core/Project.cpp:635
+#: src/backend/core/Project.cpp:634
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr "Absence de prise en charge de « CAS »"
 
-#: src/backend/core/Project.cpp:665
+#: src/backend/core/Project.cpp:664
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr "L'attribut « version » manque."
 
-#: src/backend/core/Project.cpp:715
+#: src/backend/core/Project.cpp:714
 #, kde-format
 msgid "no project element found"
 msgstr "Aucun élément projet trouvé"
 
-#: src/backend/core/Project.cpp:717
+#: src/backend/core/Project.cpp:716
 #, kde-format
 msgid "no valid XML document found"
 msgstr "aucun document XML valable trouvé"
 
-#: src/backend/core/Project.cpp:766 src/backend/core/Project.cpp:772
-#: src/backend/core/Project.cpp:823
+#: src/backend/core/Project.cpp:765 src/backend/core/Project.cpp:771
+#: src/backend/core/Project.cpp:822
 #, kde-format
 msgid "Failed to open the file '%1'."
 msgstr "Impossible d'ouvrir le fichier « %1 »."
 
-#: src/backend/core/Project.cpp:829
+#: src/backend/core/Project.cpp:828
 #, kde-format
 msgid "Failed to process the content of the file '%1'."
 msgstr "Impossible de traiter le contenu du fichier « %1 »."
 
-#: src/backend/core/Project.cpp:832
+#: src/backend/core/Project.cpp:831
 #, kde-format
 msgid "Failed to open project"
 msgstr "Impossible d'ouvrir le projet"
 
-#: src/backend/core/Project.cpp:1274
+#: src/backend/core/Project.cpp:1273
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr ""
@@ -8191,11 +8183,10 @@ msgstr "Lissage"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:700
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1933
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:626
-#, fuzzy, kde-format
-#| msgid "Fit"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit"
-msgstr "Adapter"
+msgstr "Ajuster"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:459
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:599
@@ -8617,11 +8608,10 @@ msgstr "%1 : ajuster à « %2 »"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1937
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:726
-#, fuzzy, kde-format
-#| msgid "Fit to '%1'"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit to '%1'"
-msgstr "Adapter à « %1 »"
+msgstr "Ajuster à « %1 »"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1966
 #, kde-format
@@ -8924,10 +8914,9 @@ msgid "%1: set subgroup size"
 msgstr "%1 : définir la taille du sous-groupe"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:401
-#, fuzzy, kde-format
-#| msgid "%1: change geometry rect"
+#, kde-format
 msgid "%1: change negative lower limit"
-msgstr "%1 : modifier le rectangle de géométrie"
+msgstr "%1 : modifier la limite inférieure négative"
 
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:264
 #, kde-format
@@ -9505,11 +9494,10 @@ msgid "%1: set fit options and perform the fit"
 msgstr "%1 : définir les options d'adaptation et adapter"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1823
-#, fuzzy, kde-format
-#| msgid "Fit Results"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit Results"
-msgstr "Ajuster les résultats"
+msgstr "Ajuster aux résultats"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1847
 #, kde-format
@@ -9661,11 +9649,10 @@ msgid "Fit model not specified!"
 msgstr "Modèle d'ajustement non spécifié !"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3092
-#, fuzzy, kde-format
-#| msgid "Fit Results"
+#, kde-format
 msgctxt "Curve Fitting"
 msgid "Fit Results"
-msgstr "Ajuster les résultats"
+msgstr "Ajuster aux résultats"
 
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:85
 #, kde-format
@@ -10116,19 +10103,17 @@ msgstr "Taille originale"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:129
 #: src/commonfrontend/worksheet/WorksheetView.cpp:169
-#, fuzzy, kde-format
-#| msgid "Fit to Height"
+#, kde-format
 msgctxt "Zoom"
 msgid "Fit to Height"
-msgstr "Adapter à la hauteur"
+msgstr "Ajuster à la hauteur"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:130
 #: src/commonfrontend/worksheet/WorksheetView.cpp:172
-#, fuzzy, kde-format
-#| msgid "Fit to Width"
+#, kde-format
 msgctxt "Zoom"
 msgid "Fit to Width"
-msgstr "Ajuster à la hauteur"
+msgstr "Ajuster à la largeur"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:133
 #: src/commonfrontend/worksheet/WorksheetView.cpp:186
@@ -10988,8 +10973,7 @@ msgid "Conditional Formatting"
 msgstr "Formatage conditionnel"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:645
-#, fuzzy, kde-format
-#| msgid "Fit Distribution"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit Distribution"
 msgstr "Ajuster à la distribution"
@@ -11412,25 +11396,22 @@ msgid "Spreadsheet"
 msgstr "Feuille de calcul"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:165
-#, fuzzy, kde-format
-#| msgid "No fit"
+#, kde-format
 msgctxt "Zoom"
 msgid "No fit"
-msgstr "Aucun ajustement"
+msgstr "Ne pas ajuster"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:175
-#, fuzzy, kde-format
-#| msgid "Fit to Selection"
+#, kde-format
 msgctxt "Zoom"
 msgid "Fit to Selection"
-msgstr "Adapter à la sélection"
+msgstr "Ajuster à la sélection"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:178
-#, fuzzy, kde-format
-#| msgid "Fit"
+#, kde-format
 msgctxt "Zoom"
 msgid "Fit"
-msgstr "Adapter"
+msgstr "Ajuster"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:183
 #: src/commonfrontend/worksheet/WorksheetView.cpp:334
@@ -11760,27 +11741,24 @@ msgid "Hue"
 msgstr "Teinte"
 
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:195
-#, fuzzy, kde-format
-#| msgid "Saturation:"
+#, kde-format
 msgid "Saturation"
-msgstr "Saturation :"
+msgstr "Saturation"
 
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:224
-#, fuzzy, kde-format
-#| msgid "Zoom View"
+#, kde-format
 msgid "Icon View"
-msgstr "Affichage en zoom"
+msgstr "Affichage avec icônes"
 
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:232
-#, fuzzy, kde-format
-#| msgid "View"
+#, kde-format
 msgid "List View"
-msgstr "Affichage"
+msgstr "Affichage en liste"
 
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:240
 #, kde-format
 msgid "List View with Details"
-msgstr ""
+msgstr "Vue en liste avec détails"
 
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:314
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:148
@@ -14420,7 +14398,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:192
 #, kde-format
 msgid "Allow negative values for the lower limit."
-msgstr ""
+msgstr "Autoriser les valeurs négatives pour la limite inférieure."
 
 #: src/kdefrontend/dockwidgets/ProjectDock.cpp:28
 #, kde-format
@@ -14826,11 +14804,10 @@ msgid "Number of peaks:"
 msgstr "Nombre de pics :"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1225
-#, fuzzy, kde-format
-#| msgid "Fit status: %1"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit status: %1"
-msgstr "État de ajustement : %1"
+msgstr "État d'ajustement : %1"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1236
 #, kde-format
@@ -16735,22 +16712,22 @@ msgstr ""
 "Suivi des performances - Utile pour analyser les caractéristiques et les "
 "goulots d'étranglement pertinents concernant les performances."
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:30
+#: src/kdefrontend/SettingsNotebookPage.cpp:32
 #, kde-format
 msgid "Enable syntax highlighting"
 msgstr "Activer la coloration syntaxique"
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:31
+#: src/kdefrontend/SettingsNotebookPage.cpp:33
 #, kde-format
 msgid "Enable syntax completion"
 msgstr "Activer le complètement syntaxique"
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:32
+#: src/kdefrontend/SettingsNotebookPage.cpp:34
 #, kde-format
 msgid "Show line numbers"
 msgstr "Afficher les numéros de ligne"
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:33
+#: src/kdefrontend/SettingsNotebookPage.cpp:35
 #, kde-format
 msgid ""
 "Use LaTeX typesetting for the results of calculations, if supported by the "
@@ -16759,17 +16736,17 @@ msgstr ""
 "Utiliser la configuration des types LaTeX pour les résultats des calculs, si "
 "pris en charge par le système de moteurs."
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:34
+#: src/kdefrontend/SettingsNotebookPage.cpp:36
 #, kde-format
 msgid "Animate transitions"
 msgstr "Animer les transitions"
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:36
+#: src/kdefrontend/SettingsNotebookPage.cpp:38
 #, kde-format
 msgid "Automatically re-evaluate all entries below the current one."
 msgstr "Ré-évaluer automatiquement toutes les entrées après l'entrée courante."
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:37
+#: src/kdefrontend/SettingsNotebookPage.cpp:39
 #, kde-format
 msgid "Ask for confirmation when restarting the backend system."
 msgstr "Demander une confirmation lors du redémarrage du système de moteurs."
@@ -17564,8 +17541,7 @@ msgstr "Densité de probabilité de « %1 »"
 
 # unreviewed-context
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:772
-#, fuzzy, kde-format
-#| msgid "Distribution Fit to '%1'"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Distribution Fit to '%1'"
 msgstr "Distribution ajustée à « %1 »"
@@ -21294,10 +21270,9 @@ msgstr "Limites reposant sur :"
 
 #. i18n: ectx: property (text), widget (QLabel, lNegativeLowerLimit)
 #: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:199
-#, fuzzy, kde-format
-#| msgid "Lower Limit"
+#, kde-format
 msgid "Lower Limit < 0:"
-msgstr "Limite inférieure"
+msgstr "Limite inférieure < 0 :"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataLine)
 #: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:207
@@ -21307,10 +21282,9 @@ msgstr "Ligne de données"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabControlLimitLines)
 #: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:271
-#, fuzzy, kde-format
-#| msgid "Control Limit Lines"
+#, kde-format
 msgid "Center/Limits Lines"
-msgstr "Contrôler les lignes de limites"
+msgstr "Lignes centrale et de limites"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpperLimit)
 #: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:326
@@ -24385,6 +24359,11 @@ msgstr "Le processus « conversion » a échoué avec le code de sortie ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Impossible d'ouvrir un fichier :"
+
+#~ msgid "Couldn't find panel plugins. Please check your installation."
+#~ msgstr ""
+#~ "Impossible de trouver les modules externes du panneau. Veuillez vérifier "
+#~ "votre installation."
 
 #~ msgid ""
 #~ "Couldn't find the dynamic library 'cantorpart'. Please check your "

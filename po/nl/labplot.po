@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-03 01:46+0000\n"
+"POT-Creation-Date: 2024-10-04 01:48+0000\n"
 "PO-Revision-Date: 2024-10-01 18:33+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -28,20 +28,15 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "jjhwoldringh@kde.nl,freekdekruijf@kde.nl"
 
-#: src/backend/cantorWorksheet/CantorWorksheet.cpp:70
+#: src/backend/cantorWorksheet/CantorWorksheet.cpp:62
 #, kde-format
 msgid "Couldn't find the plugin for %1. Please check your installation."
 msgstr "Kon de plugin voor %1 niet vinden.  Controleer uw installatie."
 
-#: src/backend/cantorWorksheet/CantorWorksheet.cpp:89
+#: src/backend/cantorWorksheet/CantorWorksheet.cpp:81
 #, kde-format
 msgid "Couldn't create the sessions for %1. Please check your installation."
 msgstr "Kon de sessie voor %1 niet aanmaken.  Controleer uw installatie."
-
-#: src/backend/cantorWorksheet/CantorWorksheet.cpp:267
-#, kde-format
-msgid "Couldn't find panel plugins. Please check your installation."
-msgstr "Kon paneelplugins niet vinden. Controleer uw installatie."
 
 #: src/backend/core/AbstractAspect.cpp:232
 #, kde-format
@@ -425,7 +420,7 @@ msgid "incompatible filter type"
 msgstr "incompatibel filtertype"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:708
+#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:707
 #: src/backend/datasources/MQTTClient.cpp:1366
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:313
@@ -692,58 +687,58 @@ msgid "Not yet loaded."
 msgstr "Nog niet ingelezen"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbProject)
-#: src/backend/core/Project.cpp:183
+#: src/backend/core/Project.cpp:182
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:17
 #, kde-format
 msgid "Project"
 msgstr "Project"
 
-#: src/backend/core/Project.cpp:264
+#: src/backend/core/Project.cpp:263
 #, kde-format
 msgid "Close"
 msgstr "Sluiten"
 
-#: src/backend/core/Project.cpp:301
+#: src/backend/core/Project.cpp:300
 #, kde-format
 msgid "%1: set author"
 msgstr "%1: auteur instellen"
 
-#: src/backend/core/Project.cpp:308
+#: src/backend/core/Project.cpp:307
 #, kde-format
 msgid "%1: save dock state changed"
 msgstr "%1: gewijzigde vastzetstatus opslaan"
 
-#: src/backend/core/Project.cpp:315
+#: src/backend/core/Project.cpp:314
 #, kde-format
 msgid "%1: save calculation changed"
 msgstr "%1: berekening opslaan gewijzigd"
 
-#: src/backend/core/Project.cpp:552 src/backend/core/Project.cpp:582
+#: src/backend/core/Project.cpp:551 src/backend/core/Project.cpp:581
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "Jammer. Kon bestand niet openen voor lezen."
 
-#: src/backend/core/Project.cpp:563 src/backend/core/Project.cpp:589
+#: src/backend/core/Project.cpp:562 src/backend/core/Project.cpp:588
 #, kde-format
 msgid "The project file is empty."
 msgstr "Het projectbestand is leeg."
 
-#: src/backend/core/Project.cpp:563 src/backend/core/Project.cpp:589
+#: src/backend/core/Project.cpp:562 src/backend/core/Project.cpp:588
 #, kde-format
 msgid "Error opening project"
 msgstr "Fout bij openen project"
 
-#: src/backend/core/Project.cpp:608
+#: src/backend/core/Project.cpp:607
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr "Onbekende fout bij openen project %1."
 
-#: src/backend/core/Project.cpp:609
+#: src/backend/core/Project.cpp:608
 #, kde-format
 msgid "Error when opening the project"
 msgstr "Fout bij openen project"
 
-#: src/backend/core/Project.cpp:629
+#: src/backend/core/Project.cpp:628
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -762,43 +757,43 @@ msgstr ""
 "\n"
 "Wilt u verder gaan?"
 
-#: src/backend/core/Project.cpp:635
+#: src/backend/core/Project.cpp:634
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr "Ondersteuning voor CAS ontbreekt"
 
-#: src/backend/core/Project.cpp:665
+#: src/backend/core/Project.cpp:664
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr "Attribuut 'versie' ontbreekt."
 
-#: src/backend/core/Project.cpp:715
+#: src/backend/core/Project.cpp:714
 #, kde-format
 msgid "no project element found"
 msgstr "geen projectelement gevonden"
 
-#: src/backend/core/Project.cpp:717
+#: src/backend/core/Project.cpp:716
 #, kde-format
 msgid "no valid XML document found"
 msgstr "geen geldig XML-document gevonden"
 
-#: src/backend/core/Project.cpp:766 src/backend/core/Project.cpp:772
-#: src/backend/core/Project.cpp:823
+#: src/backend/core/Project.cpp:765 src/backend/core/Project.cpp:771
+#: src/backend/core/Project.cpp:822
 #, kde-format
 msgid "Failed to open the file '%1'."
 msgstr "Openen bestand '%1' is mislukt."
 
-#: src/backend/core/Project.cpp:829
+#: src/backend/core/Project.cpp:828
 #, kde-format
 msgid "Failed to process the content of the file '%1'."
 msgstr "Verwerken inhoud bestand '%1' is mislukt."
 
-#: src/backend/core/Project.cpp:832
+#: src/backend/core/Project.cpp:831
 #, kde-format
 msgid "Failed to open project"
 msgstr "Project openen is mislukt"
 
-#: src/backend/core/Project.cpp:1274
+#: src/backend/core/Project.cpp:1273
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Tijd van wijziging project is ongeldig. Huidige tijd wordt gebruikt."
@@ -16609,22 +16604,22 @@ msgstr ""
 "Prestatie-trace - behulpzaam bij het analyseren van relevante aspecten van "
 "prestatie en bottlenecks."
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:30
+#: src/kdefrontend/SettingsNotebookPage.cpp:32
 #, kde-format
 msgid "Enable syntax highlighting"
 msgstr "Syntaxis markeren aanzetten"
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:31
+#: src/kdefrontend/SettingsNotebookPage.cpp:33
 #, kde-format
 msgid "Enable syntax completion"
 msgstr "Syntaxis-voltooiing aanzetten"
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:32
+#: src/kdefrontend/SettingsNotebookPage.cpp:34
 #, kde-format
 msgid "Show line numbers"
 msgstr "Regelnummers tonen"
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:33
+#: src/kdefrontend/SettingsNotebookPage.cpp:35
 #, kde-format
 msgid ""
 "Use LaTeX typesetting for the results of calculations, if supported by the "
@@ -16633,17 +16628,17 @@ msgstr ""
 "Gebruik LaTeX-lettertypen voor de rekenresultaten, indien de backend dit "
 "mogelijk maakt."
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:34
+#: src/kdefrontend/SettingsNotebookPage.cpp:36
 #, kde-format
 msgid "Animate transitions"
 msgstr "Overgangen animeren"
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:36
+#: src/kdefrontend/SettingsNotebookPage.cpp:38
 #, kde-format
 msgid "Automatically re-evaluate all entries below the current one."
 msgstr "Alle invoer onder de huidige automatisch herberekenen."
 
-#: src/kdefrontend/SettingsNotebookPage.cpp:37
+#: src/kdefrontend/SettingsNotebookPage.cpp:39
 #, kde-format
 msgid "Ask for confirmation when restarting the backend system."
 msgstr "Bevestiging vragen bij herstarten van de backend."
@@ -24210,6 +24205,9 @@ msgstr "conversie is mislukt, exitcode ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Kon bestand niet openen:"
+
+#~ msgid "Couldn't find panel plugins. Please check your installation."
+#~ msgstr "Kon paneelplugins niet vinden. Controleer uw installatie."
 
 #~ msgid ""
 #~ "Couldn't find the dynamic library 'cantorpart'. Please check your "
