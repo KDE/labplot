@@ -637,9 +637,10 @@ void MQTTConnectionManagerWidget::onConnect() {
 	RESET_CURSOR;
 	m_testTimer->stop();
 
-	KMessageBox::information(this,
-							 i18n("Connection to the broker '%1:%2' was successful.", m_currentConnection->hostName, QString::number(m_currentConnection->port)),
-							 i18n("Connection Successful"));
+	KMessageBox::information(
+		this,
+		i18n("Connection to the broker '%1:%2' was successful.", m_currentConnection->hostName, QString::number(m_currentConnection->port)),
+		i18n("Connection Successful"));
 
 	m_client->disconnectFromHost();
 }
