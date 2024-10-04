@@ -136,6 +136,17 @@
 	    ]
         },
         {
+            "name": "cantor",
+            "buildsystem": "cmake-ninja",
+            "sources": [
+		    {
+			    "type": "git",
+			    "url": "https://github.com/KDE/cantor.git",
+			    "tag": "67ea69d7bde79beffb8ebc2e47312c60356ea869"
+		    }
+	    ]
+        },
+        {
             "name": "gsl",
             "sources": [
                 {
