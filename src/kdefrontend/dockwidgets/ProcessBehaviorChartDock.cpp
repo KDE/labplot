@@ -122,13 +122,15 @@ void ProcessBehaviorChartDock::setPlots(QList<ProcessBehaviorChart*> list) {
 		dataSymbols << plot->dataSymbol();
 		centerLines << plot->centerLine();
 		upperLimitLines << plot->upperLimitLine();
-		lowerLimitLines << plot->lowerLimitLine();
+		if (m_plot->lowerLimitAvailable())
+			lowerLimitLines << plot->lowerLimitLine();
 	}
 	dataLineWidget->setLines(dataLines);
 	dataSymbolWidget->setSymbols(dataSymbols);
 	centerLineWidget->setLines(centerLines);
 	upperLimitLineWidget->setLines(upperLimitLines);
-	lowerLimitLineWidget->setLines(lowerLimitLines);
+	if (m_plot->lowerLimitAvailable())
+		lowerLimitLineWidget->setLines(lowerLimitLines);
 
 	// if there are more then one curve in the list, disable the content in the tab "general"
 	if (m_plots.size() == 1) {
@@ -141,6 +143,11 @@ void ProcessBehaviorChartDock::setPlots(QList<ProcessBehaviorChart*> list) {
 
 	ui.chkLegendVisible->setChecked(m_plot->legendVisible());
 	ui.chkVisible->setChecked(m_plot->isVisible());
+
+	// hide the properties for the lower limit line if the lower limit is not available for the current plot
+	bool visible = m_plot->lowerLimitAvailable();
+	ui.lLowerLimit->setVisible(visible);
+	lowerLimitLineWidget->setVisible(visible);
 
 	// load the remaining properties
 	load();
@@ -239,8 +246,7 @@ void ProcessBehaviorChartDock::typeChanged(int index) {
 	ui.lLimitsMetric->setVisible(visible);
 	ui.cbLimitsMetric->setVisible(visible);
 
-	visible = (type == ProcessBehaviorChart::Type::XmR || type == ProcessBehaviorChart::Type::mR || type == ProcessBehaviorChart::Type::R
-			   || type == ProcessBehaviorChart::Type::S);
+	visible = (type == ProcessBehaviorChart::Type::XmR || type == ProcessBehaviorChart::Type::XbarR || type == ProcessBehaviorChart::Type::XbarS);
 	ui.lNegativeLowerLimit->setVisible(visible);
 	ui.chbNegativeLowerLimit->setVisible(visible);
 
@@ -343,7 +349,8 @@ void ProcessBehaviorChartDock::loadConfig(KConfig& config) {
 	dataSymbolWidget->loadConfig(group);
 	centerLineWidget->loadConfig(group);
 	upperLimitLineWidget->loadConfig(group);
-	lowerLimitLineWidget->loadConfig(group);
+	if (m_plot->lowerLimitAvailable())
+		lowerLimitLineWidget->loadConfig(group);
 }
 
 void ProcessBehaviorChartDock::loadConfigFromTemplate(KConfig& config) {
@@ -373,6 +380,7 @@ void ProcessBehaviorChartDock::saveConfigAsTemplate(KConfig& config) {
 	dataSymbolWidget->saveConfig(group);
 	centerLineWidget->saveConfig(group);
 	upperLimitLineWidget->saveConfig(group);
-	lowerLimitLineWidget->saveConfig(group);
+	if (m_plot->lowerLimitAvailable())
+		lowerLimitLineWidget->saveConfig(group);
 	config.sync();
 }

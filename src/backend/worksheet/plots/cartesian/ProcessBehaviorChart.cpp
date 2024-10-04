@@ -56,8 +56,6 @@ ProcessBehaviorChart::~ProcessBehaviorChart() = default;
 void ProcessBehaviorChart::init() {
 	Q_D(ProcessBehaviorChart);
 
-	// setUndoAware(false);
-
 	KConfig config;
 	KConfigGroup group = config.group(QStringLiteral("ProcessBehaviorChart"));
 
@@ -354,6 +352,11 @@ double ProcessBehaviorChart::lowerLimit() const {
 XYCurve* ProcessBehaviorChart::dataCurve() const {
 	Q_D(const ProcessBehaviorChart);
 	return d->dataCurve;
+}
+
+bool ProcessBehaviorChart::lowerLimitAvailable() const {
+	Q_D(const ProcessBehaviorChart);
+	return d->lowerLimitCurve->isVisible();
 }
 
 // ##############################################################################
@@ -767,8 +770,21 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 	}
 	}
 
-	if (lowerLimit < 0. && !negativeLowerLimitEnabled)
-		lowerLimit = 0.;
+	// further restrict the lower limit if it becomes negative
+	if (type == ProcessBehaviorChart::Type::XmR || type == ProcessBehaviorChart::Type::XbarR || type == ProcessBehaviorChart::Type::XbarS) {
+		// restrict the lower limit to 0, the curve for the lower limit line is always visible
+		if (lowerLimit < 0. && !negativeLowerLimitEnabled)
+			lowerLimit = 0.;
+
+		lowerLimitCurve->setVisible(true);
+	} else if (type == ProcessBehaviorChart::Type::mR || type == ProcessBehaviorChart::Type::R || type == ProcessBehaviorChart::Type::S) {
+		// restrict the lower limit to 0, hide the curve for the lower limit line
+		if (lowerLimit < 0.) {
+			lowerLimit = 0.;
+			lowerLimitCurve->setVisible(false);
+		} else
+			lowerLimitCurve->setVisible(true);
+	}
 
 	yCenterColumn->setValueAt(0, center);
 	yCenterColumn->setValueAt(1, center);

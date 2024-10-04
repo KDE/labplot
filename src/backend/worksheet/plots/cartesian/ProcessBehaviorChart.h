@@ -57,6 +57,7 @@ public:
 	Line* centerLine() const;
 	Line* upperLimitLine() const;
 	Line* lowerLimitLine() const;
+	bool lowerLimitAvailable() const;
 
 	void retransform() override;
 	void recalc() override;
