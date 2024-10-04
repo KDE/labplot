@@ -144,7 +144,7 @@ set(BACKEND_SOURCES
 if(ENABLE_LIBORIGIN)
         list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/projects/OriginProjectParser.cpp)
 endif()
-if(RECENT_CANTOR)
+if(Cantor_FOUND)
         list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/cantorWorksheet/CantorWorksheet.cpp ${BACKEND_DIR}/cantorWorksheet/VariableParser.cpp)
 endif()
 
@@ -260,7 +260,7 @@ if(ENABLE_LIBORIGIN)
     endif()
 endif()
 
-if(RECENT_CANTOR)
+if(Cantor_FOUND)
     # KFX::Service, KFX::Parts is optional but probably required by Cantor
     target_link_libraries(liblabplot Cantor::cantorlibs KF${KF_MAJOR_VERSION}::Service KF${KF_MAJOR_VERSION}::Parts)
 endif()
