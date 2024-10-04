@@ -33,11 +33,9 @@ ColorMapsDialog::ColorMapsDialog(QWidget* parent)
 	layout->addWidget(m_colorMapsWidget);
 
 	// dialog buttons
-	auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+	auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
 	layout->addWidget(buttonBox);
-
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
 	setWindowTitle(i18nc("@title:window", "Color Maps Browser"));
 	setWindowIcon(QIcon::fromTheme(QLatin1String("color-management")));
