@@ -9,8 +9,8 @@
 */
 
 #include "NotebookTest.h"
-#include "backend/notebook/VariableParser.h"
 #include "backend/core/AbstractColumn.h"
+#include "backend/notebook/VariableParser.h"
 
 #include <gsl/gsl_math.h>
 
