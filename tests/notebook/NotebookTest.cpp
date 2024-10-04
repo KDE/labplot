@@ -9,7 +9,7 @@
 */
 
 #include "NotebookTest.h"
-#include "backend/cantorWorksheet/VariableParser.h"
+#include "backend/notebook/VariableParser.h"
 #include "backend/core/AbstractColumn.h"
 
 #include <gsl/gsl_math.h>
