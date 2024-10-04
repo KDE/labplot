@@ -1115,6 +1115,9 @@ void MainWin::updateGUI() {
 		// hide the spreadsheet toolbar
 		factory->container(QLatin1String("spreadsheet_toolbar"), this)->setVisible(false);
 	} else {
+		// reset, because if another object gets selected which does not have
+		// a worksheet as parent it changes the toolbar as well (like the spreaddsheet)
+		m_lastWorksheet = nullptr;
 		factory->container(QLatin1String("worksheet"), this)->setEnabled(false);
 		factory->container(QLatin1String("worksheet_toolbar"), this)->setVisible(false);
 		//		factory->container(QLatin1String("drawing"), this)->setEnabled(false);
