@@ -159,7 +159,6 @@ void Background::draw(QPainter* painter, const QPolygonF& polygon, double radius
 	painter->setOpacity(d->opacity);
 	painter->setPen(Qt::NoPen);
 
-
 	if (qFuzzyIsNull(radius))
 		painter->drawPolygon(polygon);
 	else
