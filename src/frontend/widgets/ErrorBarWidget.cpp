@@ -166,21 +166,9 @@ void ErrorBarWidget::setErrorBars(const QList<ErrorBar*>& errorBars) {
 }
 
 void ErrorBarWidget::setModel(AspectTreeModel* model) {
-	QList<AspectType> list{AspectType::Folder,
-						   AspectType::Workbook,
-						   AspectType::Datapicker,
-						   AspectType::DatapickerCurve,
-						   AspectType::Spreadsheet,
-						   AspectType::LiveDataSource,
-						   AspectType::Column,
-						   AspectType::Worksheet,
-						   AspectType::CartesianPlot,
-						   AspectType::XYFitCurve,
-						   AspectType::XYSmoothCurve,
-						   AspectType::Notebook};
-
 	cbXPlusColumn->setModel(model);
 	cbXMinusColumn->setModel(model);
+	const auto& list = TreeViewComboBox::plotColumnTopLevelClasses();
 	cbXPlusColumn->setTopLevelClasses(list);
 	cbXMinusColumn->setTopLevelClasses(list);
 

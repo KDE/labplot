@@ -311,24 +311,11 @@ void BarPlotDock::removeXColumn() {
 
 void BarPlotDock::addDataColumn() {
 	auto* cb = new TreeViewComboBox(this);
-
-	static const QList<AspectType> list{AspectType::Folder,
-										AspectType::Workbook,
-										AspectType::Datapicker,
-										AspectType::DatapickerCurve,
-										AspectType::Spreadsheet,
-										AspectType::LiveDataSource,
-										AspectType::Column,
-										AspectType::Worksheet,
-										AspectType::CartesianPlot,
-										AspectType::XYFitCurve,
-										AspectType::XYSmoothCurve,
-										AspectType::Notebook};
-	cb->setTopLevelClasses(list);
+	cb->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
 	cb->setModel(aspectModel());
 	connect(cb, &TreeViewComboBox::currentModelIndexChanged, this, &BarPlotDock::dataColumnChanged);
 
-	int index = m_dataComboBoxes.size();
+	const int index = m_dataComboBoxes.size();
 
 	if (index == 0) {
 		QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Preferred);
@@ -373,11 +360,10 @@ void BarPlotDock::removeDataColumn() {
 	}
 
 	// TODO
-	if (!m_removeButtons.isEmpty()) {
+	if (!m_removeButtons.isEmpty())
 		ui.lDataColumn->setText(i18n("Columns:"));
-	} else {
+	else
 		ui.lDataColumn->setText(i18n("Column:"));
-	}
 
 	if (!m_initializing)
 		setDataColumns();
@@ -385,7 +371,6 @@ void BarPlotDock::removeDataColumn() {
 
 void BarPlotDock::dataColumnChanged(const QModelIndex&) {
 	CONDITIONAL_LOCK_RETURN;
-
 	setDataColumns();
 }
 
