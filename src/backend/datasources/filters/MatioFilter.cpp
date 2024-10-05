@@ -964,7 +964,7 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 								}
 								if (i == 0) { // first line
 									if (cell->data_type == MAT_T_UINT16 || cell->data_type == MAT_T_INT16) // valgrind: invalid read of size 2
-										static_cast<QVector<QString>*>(dataContainer[j])->operator[](0) = QString::fromUtf16((const mat_uint16_t*)cell->data);
+										static_cast<QVector<QString>*>(dataContainer[j])->operator[](0) = QString::fromUtf16((const char16_t*)cell->data);
 									else if (cell->data_type == MAT_T_UTF8)
 										static_cast<QVector<QString>*>(dataContainer[j])->operator[](0) = QString::fromUtf8((const char*)cell->data);
 									else
@@ -973,7 +973,7 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 							} else { // preview
 								if (i == 0) { // first line
 									if (cell->data_type == MAT_T_UINT16 || cell->data_type == MAT_T_INT16)
-										row << QString::fromUtf16((const mat_uint16_t*)cell->data);
+										row << QString::fromUtf16((const char16_t*)cell->data);
 									else if (cell->data_type == MAT_T_UTF8)
 										row << QString::fromUtf8((const char*)cell->data);
 									else
@@ -1169,7 +1169,7 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 					}
 
 					if (fields[i]->data_type == MAT_T_UINT16 || fields[i]->data_type == MAT_T_INT16) {
-						auto* data = (mat_uint16_t*)fields[i]->data;
+						auto* data = (char16_t*)fields[i]->data;
 
 						QString s = QString::fromUtf16(data);
 						DEBUG(Q_FUNC_INFO << ", UTF16 data: \"" << STDSTRING(s) << "\"")
