@@ -52,7 +52,7 @@ class CDockWidget;
 }
 
 #ifdef HAVE_KUSERFEEDBACK
-#include <KUserFeedbackQt6/Provider>
+#include <KUserFeedback/Provider>
 #endif
 
 #ifdef HAVE_PURPOSE
