@@ -15,9 +15,9 @@
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "kdefrontend/DatasetModel.h"
-#include "kdefrontend/datasources/DatasetMetadataManagerDialog.h"
-#include "kdefrontend/datasources/ImportDatasetWidget.h"
+#include "frontend/DatasetModel.h"
+#include "frontend/datasources/DatasetMetadataManagerDialog.h"
+#include "frontend/datasources/ImportDatasetWidget.h"
 
 #include <QDebug>
 #include <QEventLoop>

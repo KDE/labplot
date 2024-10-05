@@ -13,7 +13,7 @@
 #include "backend/lib/trace.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/TextLabelPrivate.h"
-#include "kdefrontend/widgets/LabelWidget.h"
+#include "frontend/widgets/LabelWidget.h"
 
 struct TextProperties {
 	QColor fontColor;

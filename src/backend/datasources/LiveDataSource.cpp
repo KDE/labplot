@@ -20,8 +20,8 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "frontend/spreadsheet/SpreadsheetView.h"
 #include "frontend/spreadsheet/PlotDataDialog.h"
+#include "frontend/spreadsheet/SpreadsheetView.h"
 
 #include <QAction>
 #include <QDateTime>

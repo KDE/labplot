@@ -10,7 +10,7 @@
 
 #include "SpreadsheetGenerateDataTest.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "kdefrontend/spreadsheet/EquidistantValuesDialog.h"
+#include "frontend/spreadsheet/EquidistantValuesDialog.h"
 
 void SpreadsheetGenerateDataTest::initTestCase() {
 	CommonTest::initTestCase();

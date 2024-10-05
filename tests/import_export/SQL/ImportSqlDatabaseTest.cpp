@@ -9,7 +9,7 @@
 
 #include "ImportSqlDatabaseTest.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "kdefrontend/datasources/ImportSQLDatabaseWidget.h"
+#include "frontend/datasources/ImportSQLDatabaseWidget.h"
 
 #include <KConfig>
 #include <KConfigGroup>

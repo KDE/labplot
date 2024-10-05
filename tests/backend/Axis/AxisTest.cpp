@@ -19,9 +19,9 @@
 #include "src/backend/worksheet/WorksheetElement.h"
 #include "src/backend/worksheet/plots/cartesian/Axis.h" // already included in CartesianPlot
 #include "src/backend/worksheet/plots/cartesian/AxisPrivate.h"
-#include "src/kdefrontend/dockwidgets/AxisDock.h" // access ui elements
-#include "src/kdefrontend/widgets/LabelWidget.h"
-#include "src/kdefrontend/widgets/LineWidget.h"
+#include "src/frontend/dockwidgets/AxisDock.h" // access ui elements
+#include "src/frontend/widgets/LabelWidget.h"
+#include "src/frontend/widgets/LineWidget.h"
 
 #include <QUndoStack>
 

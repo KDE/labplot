@@ -23,8 +23,8 @@
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
-#include "commonfrontend/worksheet/WorksheetView.h"
-#include "kdefrontend/dockwidgets/XYFitCurveDock.h"
+#include "frontend/dockwidgets/XYFitCurveDock.h"
+#include "frontend/worksheet/WorksheetView.h"
 
 #include <QAction>
 #include <QUndoStack>

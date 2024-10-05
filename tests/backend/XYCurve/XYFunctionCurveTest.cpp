@@ -19,7 +19,7 @@
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFunctionCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFunctionCurvePrivate.h"
-#include "kdefrontend/dockwidgets/XYFunctionCurveDock.h"
+#include "frontend/dockwidgets/XYFunctionCurveDock.h"
 
 #include <QUndoStack>
 

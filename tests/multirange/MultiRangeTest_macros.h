@@ -23,9 +23,9 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlotPrivate.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
-#include "commonfrontend/worksheet/WorksheetView.h"
-#include "kdefrontend/dockwidgets/BaseDock.h"
-#include "kdefrontend/dockwidgets/XYCurveDock.h"
+#include "frontend/dockwidgets/BaseDock.h"
+#include "frontend/dockwidgets/XYCurveDock.h"
+#include "frontend/worksheet/WorksheetView.h"
 
 #include <QAction>
 #include <QComboBox>
