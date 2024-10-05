@@ -32,6 +32,7 @@ class CartesianPlotLegendDock;
 class CustomPointDock;
 class ReferenceLineDock;
 class ReferenceRangeDock;
+class RunChartDock;
 class ColumnDock;
 class LiveDataDock;
 class MatrixDock;
@@ -114,6 +115,7 @@ private:
 
 	// continuous improvement plots
 	ProcessBehaviorChartDock* m_processBehaviorChartDock{nullptr};
+	RunChartDock* m_runChartDock{nullptr};
 
 	// analysis plots
 	XYDataReductionCurveDock* m_xyDataReductionCurveDock{nullptr};

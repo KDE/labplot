@@ -92,6 +92,7 @@ set(GUI_SOURCES
     ${KDEFRONTEND_DIR}/dockwidgets/ProjectDock.cpp
     ${KDEFRONTEND_DIR}/dockwidgets/ReferenceLineDock.cpp
     ${KDEFRONTEND_DIR}/dockwidgets/ReferenceRangeDock.cpp
+    ${KDEFRONTEND_DIR}/dockwidgets/RunChartDock.cpp
     ${KDEFRONTEND_DIR}/dockwidgets/SpreadsheetDock.cpp
     ${KDEFRONTEND_DIR}/dockwidgets/StatisticsSpreadsheetDock.cpp
     ${KDEFRONTEND_DIR}/dockwidgets/QQPlotDock.cpp
@@ -235,6 +236,7 @@ set(UI_SOURCES
     ${KDEFRONTEND_DIR}/ui/dockwidgets/projectdock.ui
     ${KDEFRONTEND_DIR}/ui/dockwidgets/referencelinedock.ui
     ${KDEFRONTEND_DIR}/ui/dockwidgets/referencerangedock.ui
+    ${KDEFRONTEND_DIR}/ui/dockwidgets/runchartdock.ui
     ${KDEFRONTEND_DIR}/ui/dockwidgets/spreadsheetdock.ui
     ${KDEFRONTEND_DIR}/ui/dockwidgets/statisticsspreadsheetdock.ui
     ${KDEFRONTEND_DIR}/ui/dockwidgets/qqplotdock.ui
@@ -419,6 +421,7 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/ProcessBehaviorChart.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/ReferenceLine.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/ReferenceRange.cpp
+    ${BACKEND_DIR}/worksheet/plots/cartesian/RunChart.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/Symbol.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/QQPlot.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYAnalysisCurve.cpp

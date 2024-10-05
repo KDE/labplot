@@ -257,7 +257,7 @@ void ProcessBehaviorChartDock::typeChanged(int index) {
 
 void ProcessBehaviorChartDock::limitsMetricChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
-	const auto limitsMetric = static_cast<ProcessBehaviorChart::LimitsMetric>(ui.cbType->itemData(index).toInt());
+	const auto limitsMetric = static_cast<ProcessBehaviorChart::LimitsMetric>(ui.cbLimitsMetric->itemData(index).toInt());
 	for (auto* plot : m_plots)
 		plot->setLimitsMetric(limitsMetric);
 }
@@ -328,12 +328,12 @@ void ProcessBehaviorChartDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group(QStringLiteral("ProcessBehaviorChart"));
 
 	// type
-	auto type = group.readEntry(QStringLiteral("Type"), static_cast<int>(m_plot->type()));
+	const auto type = group.readEntry(QStringLiteral("Type"), static_cast<int>(m_plot->type()));
 	int index = ui.cbType->findData(static_cast<int>(type));
 	ui.cbType->setCurrentIndex(index);
 
 	// limits metric
-	auto limitsMetric = group.readEntry(QStringLiteral("LimitsMetric"), static_cast<int>(m_plot->limitsMetric()));
+	const auto limitsMetric = group.readEntry(QStringLiteral("LimitsMetric"), static_cast<int>(m_plot->limitsMetric()));
 	index = ui.cbLimitsMetric->findData(static_cast<int>(limitsMetric));
 	ui.cbLimitsMetric->setCurrentIndex(index);
 
@@ -344,7 +344,7 @@ void ProcessBehaviorChartDock::loadConfig(KConfig& config) {
 	// allow negative values for the lower limit
 	ui.chbNegativeLowerLimit->setChecked(group.readEntry(QStringLiteral("NegativeLowerLimitEnabled"), false));
 
-	// properties of the reference and percentile curves
+	// properties of the data and limit curves
 	dataLineWidget->loadConfig(group);
 	dataSymbolWidget->loadConfig(group);
 	centerLineWidget->loadConfig(group);
@@ -375,7 +375,7 @@ void ProcessBehaviorChartDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry(QStringLiteral("SubgroupSize"), m_plot->subgroupSize());
 	group.writeEntry(QStringLiteral("NegativeLowerLimitEnabled"), m_plot->negativeLowerLimitEnabled());
 
-	// properties of the reference and percentile curves
+	// properties of the data and limit curves
 	dataLineWidget->saveConfig(group);
 	dataSymbolWidget->saveConfig(group);
 	centerLineWidget->saveConfig(group);

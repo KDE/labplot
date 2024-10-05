@@ -51,6 +51,7 @@
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/cartesian/ReferenceRange.h"
+#include "backend/worksheet/plots/cartesian/RunChart.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "kdefrontend/ThemeHandler.h"
 #include "kdefrontend/widgets/ThemesWidget.h"
@@ -511,6 +512,11 @@ void CartesianPlot::initActions() {
 		addChild(new ProcessBehaviorChart(i18n("Process Behavior Chart")));
 	});
 
+	addRunChartAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Run Chart"), this);
+	connect(addRunChartAction, &QAction::triggered, this, [=]() {
+		addChild(new RunChart(i18n("Run Chart")));
+	});
+
 	// analysis curves
 	connect(addDataReductionCurveAction, &QAction::triggered, this, &CartesianPlot::addDataReductionCurve);
 	connect(addDifferentiationCurveAction, &QAction::triggered, this, &CartesianPlot::addDifferentiationCurve);
@@ -649,6 +655,7 @@ void CartesianPlot::initMenus() {
 	// continuous improvement plots
 	auto* addNewCIPlotsMenu = new QMenu(i18n("Continual Improvement Plots"), m_addNewMenu);
 	addNewCIPlotsMenu->addAction(addProcessBehaviorChartAction);
+	addNewCIPlotsMenu->addAction(addRunChartAction);
 	m_addNewMenu->addMenu(addNewCIPlotsMenu);
 
 	m_addNewMenu->addSeparator();
@@ -2162,8 +2169,8 @@ int CartesianPlot::curveChildIndex(const WorksheetElement* curve) const {
 
 		++index;
 
-		// for the process behavior chart two colors are used - for the data and for the control index
-		if (plot->type() == AspectType::ProcessBehaviorChart)
+		// for the process behavior and run charts two colors are used - for the data and for the control line(s)
+		if (plot->type() == AspectType::ProcessBehaviorChart || plot->type() == AspectType::RunChart)
 			++index;
 	}
 
@@ -2869,6 +2876,10 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 			plot->minMax(dim, indexRange, range, true);
 		} else if (plot->type() == AspectType::ProcessBehaviorChart) {
 			const int maxIndex = static_cast<const ProcessBehaviorChart*>(plot)->xIndexCount() - 1;
+			Range<int> indexRange{0, maxIndex};
+			plot->minMax(dim, indexRange, range, true);
+		} else if (plot->type() == AspectType::RunChart) {
+			const int maxIndex = static_cast<const RunChart*>(plot)->xIndexCount() - 1;
 			Range<int> indexRange{0, maxIndex};
 			plot->minMax(dim, indexRange, range, true);
 		} else {
@@ -5355,6 +5366,13 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 		} else if (reader->name() == QLatin1String("ProcessBehaviorChart")) {
 			auto* plot = new ProcessBehaviorChart(QStringLiteral("Process Behavior Chart"));
+			plot->setIsLoading(true);
+			if (plot->load(reader, preview))
+				addChildFast(plot);
+			else
+				return false;
+		} else if (reader->name() == QLatin1String("RunChart")) {
+			auto* plot = new RunChart(QStringLiteral("Run Chart"));
 			plot->setIsLoading(true);
 			if (plot->load(reader, preview))
 				addChildFast(plot);

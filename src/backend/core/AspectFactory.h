@@ -27,6 +27,7 @@
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/cartesian/ReferenceRange.h"
+#include "backend/worksheet/plots/cartesian/RunChart.h"
 #include "backend/worksheet/plots/cartesian/XYConvolutionCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCorrelationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYDataReductionCurve.h"
@@ -126,6 +127,8 @@ public:
 		/* continuous improvement plots */
 		else if (type == AspectType::ProcessBehaviorChart)
 			return new ProcessBehaviorChart(QString());
+		else if (type == AspectType::RunChart)
+			return new RunChart(QString());
 
 		/* data containers */
 		else if (type == AspectType::Spreadsheet)

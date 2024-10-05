@@ -16,7 +16,9 @@ New features:
 		* save the properties used to generate random values in the column for later re-use
 		* allow to perform the distribution fit to the data directly from the spreadsheet
 	* [worksheet] 
-		* new visualization type "Process Behavior Chart"
+		* new visualization types:
+			* Process Behavior Chart
+			* Run Chart
 		* more space for plots and less "ink" - no layout spacings, no minor grid lines, not plot borders, no ticks on secondary axes on default
 		* allow to provide names for plot ranges for easier lookup and assignemnt in the plot elements
 

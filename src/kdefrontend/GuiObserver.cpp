@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description 	     : GUI observer
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2015-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-FileCopyrightText: 2016 Garvit Khatri <garvitdelhi@gmail.com>
 
@@ -68,6 +68,7 @@
 #include "kdefrontend/dockwidgets/QQPlotDock.h"
 #include "kdefrontend/dockwidgets/ReferenceLineDock.h"
 #include "kdefrontend/dockwidgets/ReferenceRangeDock.h"
+#include "kdefrontend/dockwidgets/RunChartDock.h"
 #include "kdefrontend/dockwidgets/SpreadsheetDock.h"
 #include "kdefrontend/dockwidgets/StatisticsSpreadsheetDock.h"
 #include "kdefrontend/dockwidgets/WorksheetDock.h"
@@ -396,6 +397,11 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Process Behavior Chart"));
 		raiseDock(m_processBehaviorChartDock, m_mainWindow->stackedWidget);
 		m_processBehaviorChartDock->setPlots(castList<ProcessBehaviorChart>(selectedAspects));
+		break;
+	case AspectType::RunChart:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Run Chart"));
+		raiseDock(m_runChartDock, m_mainWindow->stackedWidget);
+		m_runChartDock->setPlots(castList<RunChart>(selectedAspects));
 		break;
 	case AspectType::TextLabel:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Text Label"));

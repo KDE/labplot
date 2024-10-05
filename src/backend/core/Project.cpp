@@ -26,6 +26,7 @@
 #include "backend/worksheet/plots/cartesian/LollipopPlot.h"
 #include "backend/worksheet/plots/cartesian/ProcessBehaviorChart.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
+#include "backend/worksheet/plots/cartesian/RunChart.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFunctionCurve.h"
@@ -1191,6 +1192,19 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		pbPlots << static_cast<ProcessBehaviorChart*>(aspect);
 
 	for (auto* plot : pbPlots) {
+		if (!plot)
+			continue;
+		RESTORE_COLUMN_POINTER(plot, dataColumn, DataColumn);
+	}
+
+	// run charts/plots
+	QVector<RunChart*> runPlots;
+	if (hasChildren)
+		runPlots = aspect->children<RunChart>(ChildIndexFlag::Recursive);
+	else if (aspect->type() == AspectType::RunChart)
+		runPlots << static_cast<RunChart*>(aspect);
+
+	for (auto* plot : runPlots) {
 		if (!plot)
 			continue;
 		RESTORE_COLUMN_POINTER(plot, dataColumn, DataColumn);

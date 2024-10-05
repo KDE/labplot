@@ -121,6 +121,7 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/Plot.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/ProcessBehaviorChart.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/ReferenceRange.cpp
+    ${BACKEND_DIR}/worksheet/plots/cartesian/RunChart.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/Symbol.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/QQPlot.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYAnalysisCurve.cpp
