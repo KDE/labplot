@@ -30,7 +30,7 @@
 #include <kcoreaddons_version.h>
 
 #ifdef HAVE_KUSERFEEDBACK
-#include <KUserFeedbackQt6/FeedbackConfigWidget>
+#include <KUserFeedback/FeedbackConfigWidget>
 #endif
 
 #include <QDialogButtonBox>
