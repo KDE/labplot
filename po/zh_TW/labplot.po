@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-04 01:48+0000\n"
+"POT-Creation-Date: 2024-10-05 01:46+0000\n"
 "PO-Revision-Date: 2024-04-17 05:07+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -27,19 +27,6 @@ msgstr "Franklin Weng"
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "franklin@nospam.goodhorse.idv.tw"
-
-#: src/backend/cantorWorksheet/CantorWorksheet.cpp:62
-#, kde-format
-msgid "Couldn't find the plugin for %1. Please check your installation."
-msgstr ""
-
-#: src/backend/cantorWorksheet/CantorWorksheet.cpp:81
-#, fuzzy, kde-format
-#| msgid ""
-#| "Couldn't open the color map collections file %1. Please check your "
-#| "installation."
-msgid "Couldn't create the sessions for %1. Please check your installation."
-msgstr "無法開啟色彩映射集合檔 %1。請檢查您的安裝。"
 
 #: src/backend/core/AbstractAspect.cpp:232
 #, fuzzy, kde-format
@@ -289,7 +276,7 @@ msgstr "方向"
 #. i18n: ectx: property (text), widget (QLabel, lValuesText)
 #: src/backend/core/AbstractColumn.cpp:229
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:471
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:96
+#: src/commonfrontend/notebook/NotebookView.cpp:96
 #: src/commonfrontend/worksheet/WorksheetView.cpp:220
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:208
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1524
@@ -382,13 +369,13 @@ msgstr "於："
 msgid "Import Data"
 msgstr "匯入"
 
-#: src/backend/core/AbstractPart.cpp:116 src/kdefrontend/MainWin.cpp:648
-#: src/kdefrontend/MainWin.cpp:657
+#: src/backend/core/AbstractPart.cpp:116 src/kdefrontend/MainWin.cpp:647
+#: src/kdefrontend/MainWin.cpp:656
 #, fuzzy, kde-format
 msgid "From File..."
 msgstr "image"
 
-#: src/backend/core/AbstractPart.cpp:118 src/kdefrontend/MainWin.cpp:669
+#: src/backend/core/AbstractPart.cpp:118 src/kdefrontend/MainWin.cpp:668
 #, kde-format
 msgid "From SQL Database..."
 msgstr ""
@@ -413,7 +400,7 @@ msgstr "列印"
 msgid "Print Preview"
 msgstr "預覽列印"
 
-#: src/backend/core/AbstractPart.cpp:137 src/kdefrontend/MainWin.cpp:741
+#: src/backend/core/AbstractPart.cpp:137 src/kdefrontend/MainWin.cpp:740
 #, fuzzy, kde-format
 msgid "&Close"
 msgstr "全部關閉"
@@ -498,39 +485,39 @@ msgstr ""
 msgid "%1   (no values)"
 msgstr "數值"
 
-#: src/backend/core/AspectTreeModel.cpp:235
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1566
+#: src/backend/core/AspectTreeModel.cpp:233
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1562
 #, fuzzy, kde-format
 msgid "Size: %1"
 msgstr "大小"
 
 #. i18n("Values: %1", col->availableRowCount());
-#: src/backend/core/AspectTreeModel.cpp:238
+#: src/backend/core/AspectTreeModel.cpp:236
 #, fuzzy, kde-format
 msgid "Type: %1"
 msgstr "類型"
 
-#: src/backend/core/AspectTreeModel.cpp:239
+#: src/backend/core/AspectTreeModel.cpp:237
 #, fuzzy, kde-format
 msgid "Plot Designation: %1"
 msgstr "位置："
 
-#: src/backend/core/AspectTreeModel.cpp:244
+#: src/backend/core/AspectTreeModel.cpp:242
 #, fuzzy, kde-format
 msgid "Formula:"
 msgstr "格式："
 
-#: src/backend/core/AspectTreeModel.cpp:266
+#: src/backend/core/AspectTreeModel.cpp:264
 #, kde-format
 msgid "auto update: true"
 msgstr ""
 
-#: src/backend/core/AspectTreeModel.cpp:268
+#: src/backend/core/AspectTreeModel.cpp:266
 #, kde-format
 msgid "auto update: false"
 msgstr ""
 
-#: src/backend/core/AspectTreeModel.cpp:439
+#: src/backend/core/AspectTreeModel.cpp:437
 #, kde-format
 msgid "The name \"%1\" is already in use. Choose another name."
 msgstr ""
@@ -688,7 +675,7 @@ msgstr ""
 msgid "set decimal digits to %1"
 msgstr ""
 
-#: src/backend/core/Folder.cpp:352
+#: src/backend/core/Folder.cpp:358
 #, kde-format
 msgid "unknown element '%1' found"
 msgstr ""
@@ -947,7 +934,7 @@ msgstr "設定佈局"
 #: src/backend/datapicker/DatapickerImage.cpp:415
 #: src/backend/worksheet/InfoElement.cpp:871
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:191
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:189
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/WorksheetElement.cpp:162
 #: src/backend/worksheet/WorksheetElementContainer.cpp:65
@@ -960,7 +947,7 @@ msgstr ""
 #: src/backend/datapicker/DatapickerImage.cpp:415
 #: src/backend/worksheet/InfoElement.cpp:871
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:191
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:189
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/WorksheetElement.cpp:162
 #: src/backend/worksheet/WorksheetElement.cpp:795
@@ -1542,7 +1529,7 @@ msgstr "檔案資訊"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:358
 #: src/backend/datasources/filters/NetCDFFilter.cpp:268
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1541
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1537
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr ""
@@ -1891,7 +1878,7 @@ msgstr "未知"
 #: src/backend/datasources/filters/MatioFilter.cpp:434
 #: src/commonfrontend/workbook/WorkbookView.cpp:53
 #: src/commonfrontend/workbook/WorkbookView.cpp:160
-#: src/kdefrontend/MainWin.cpp:619 src/kdefrontend/MainWin.cpp:1927
+#: src/kdefrontend/MainWin.cpp:618 src/kdefrontend/MainWin.cpp:1944
 #, kde-format
 msgid "Matrix"
 msgstr "矩陣"
@@ -3728,7 +3715,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
 #: src/backend/gsl/functions.cpp:252
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:70
-#: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:161
+#: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:168
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:137
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:73
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:536
@@ -6375,6 +6362,19 @@ msgstr "無法開啟檔案 %1 以讀取"
 msgid "no note element found"
 msgstr ""
 
+#: src/backend/notebook/Notebook.cpp:62
+#, kde-format
+msgid "Couldn't find the plugin for %1. Please check your installation."
+msgstr ""
+
+#: src/backend/notebook/Notebook.cpp:81
+#, fuzzy, kde-format
+#| msgid ""
+#| "Couldn't open the color map collections file %1. Please check your "
+#| "installation."
+msgid "Couldn't create the sessions for %1. Please check your installation."
+msgstr "無法開啟色彩映射集合檔 %1。請檢查您的安裝。"
+
 #: src/backend/nsl/nsl_conv.c:19
 #, fuzzy, kde-format
 msgid "Forward (Convolution)"
@@ -6719,7 +6719,7 @@ msgstr "方向"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:595
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1871
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:549
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1282
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1278
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:239
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:171
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:277
@@ -8082,7 +8082,7 @@ msgid "%1: set data columns"
 msgstr "%1：插入 %2 欄"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:312
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:380
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:383
 #, fuzzy, kde-format
 msgid "%1: set type"
 msgstr "設定佈局"
@@ -8329,7 +8329,7 @@ msgstr "方向"
 #. i18n: ectx: property (text), widget (QLabel, lDifferentiation)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:454
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1857
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:148
+#: src/commonfrontend/notebook/NotebookView.cpp:148
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:269
 #, fuzzy, kde-format
 #| msgid "Orientation"
@@ -8339,7 +8339,7 @@ msgstr "方向"
 #. i18n: ectx: property (text), widget (QLabel, lIntegration)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:455
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1876
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:154
+#: src/commonfrontend/notebook/NotebookView.cpp:154
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:157
 #, fuzzy, kde-format
 #| msgid "Orientation"
@@ -8445,11 +8445,11 @@ msgstr "垂直軸："
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:472
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2063
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:109
 #: src/commonfrontend/matrix/MatrixView.cpp:133
+#: src/commonfrontend/notebook/NotebookView.cpp:109
 #: src/commonfrontend/worksheet/WorksheetView.cpp:221
 #: src/commonfrontend/worksheet/WorksheetView.cpp:1355
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:106
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:105
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:123
 #, fuzzy, kde-format
 #| msgid "Images"
@@ -8557,11 +8557,11 @@ msgid "Error Function"
 msgstr "函式"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:628
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:167
+#: src/commonfrontend/notebook/NotebookView.cpp:167
 #: src/commonfrontend/workbook/WorkbookView.cpp:135
 #: src/commonfrontend/worksheet/WorksheetView.cpp:291
 #: src/commonfrontend/worksheet/WorksheetView.cpp:430
-#: src/kdefrontend/MainWin.cpp:868
+#: src/kdefrontend/MainWin.cpp:867
 #, fuzzy, kde-format
 #| msgid "Add new"
 msgid "Add New"
@@ -9046,7 +9046,7 @@ msgstr "方向"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:404
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:227
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:368
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:371
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:252
 #, fuzzy, kde-format
 #| msgid "%1: insert 1 column"
@@ -9129,18 +9129,18 @@ msgstr "設定字型"
 msgid "%1: legend visibility changed"
 msgstr "設定背景影像..."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:387
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:390
 #, fuzzy, kde-format
 msgid "%1: set limits metric"
 msgstr "設定背景影像..."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:394
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:397
 #, fuzzy, kde-format
 #| msgid "%1: set creation time"
 msgid "%1: set subgroup size"
 msgstr "%1：設定建立時間"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:401
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:404
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: change negative lower limit"
@@ -9833,7 +9833,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1909
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:177
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:263
-#: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:168
+#: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:208
 #, kde-format
 msgid "Test"
 msgstr ""
@@ -10174,15 +10174,9 @@ msgstr "設定不透明度"
 msgid "%1: set logical position"
 msgstr "設定不透明度"
 
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:40
-#, fuzzy, kde-format
-#| msgid "Failed to open"
-msgid "Failed to initialize %1."
-msgstr "開啟失敗"
-
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:53
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:120
 #: src/commonfrontend/matrix/MatrixView.cpp:192
+#: src/commonfrontend/notebook/NotebookView.cpp:53
 #: src/commonfrontend/worksheet/WorksheetView.cpp:145
 #: src/commonfrontend/worksheet/WorksheetView.cpp:378
 #, fuzzy, kde-format
@@ -10190,158 +10184,15 @@ msgstr "開啟失敗"
 msgid "Zoom In"
 msgstr "放大"
 
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:57
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:123
 #: src/commonfrontend/matrix/MatrixView.cpp:193
+#: src/commonfrontend/notebook/NotebookView.cpp:57
 #: src/commonfrontend/worksheet/WorksheetView.cpp:146
 #: src/commonfrontend/worksheet/WorksheetView.cpp:382
 #, fuzzy, kde-format
 #| msgid "Zoom out"
 msgid "Zoom Out"
 msgstr "縮小"
-
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:61
-#, kde-format
-msgid "Find"
-msgstr ""
-
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:65
-#: src/kdefrontend/datasources/ImportDialog.cpp:110
-#, kde-format
-msgid "Replace"
-msgstr "取代"
-
-#. i18n: ectx: property (text), widget (QPushButton, bRestart)
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:69
-#: src/kdefrontend/ui/dockwidgets/cantorworksheetdock.ui:111
-#, kde-format
-msgid "Restart Backend"
-msgstr ""
-
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:72
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:343
-#, fuzzy, kde-format
-msgid "Evaluate Notebook"
-msgstr "值"
-
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:84
-#, fuzzy, kde-format
-msgid "Evaluate Entry"
-msgstr "值"
-
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:88
-#, kde-format
-msgid "Remove Current Entry"
-msgstr ""
-
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:92
-#, fuzzy, kde-format
-msgid "Command"
-msgstr "註解"
-
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:102
-#: src/kdefrontend/widgets/LabelWidget.cpp:211
-#, kde-format
-msgid "Markdown"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lTex)
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:106
-#: src/kdefrontend/ui/settingsworksheetpage.ui:147
-#: src/kdefrontend/widgets/LabelWidget.cpp:209
-#, kde-format
-msgid "LaTeX"
-msgstr ""
-
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:112
-#, kde-format
-msgid "Page Break"
-msgstr ""
-
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:124
-#, kde-format
-msgid "Compute Eigenvectors"
-msgstr ""
-
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:130
-#, fuzzy, kde-format
-#| msgid "Matrix"
-msgid "Create Matrix"
-msgstr "矩陣"
-
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:136
-#, fuzzy, kde-format
-msgid "Compute Eigenvalues"
-msgstr "數值"
-
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:142
-#, fuzzy, kde-format
-#| msgid "Matrix"
-msgid "Invert Matrix"
-msgstr "矩陣"
-
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:160
-#, fuzzy, kde-format
-msgid "Solve Equations"
-msgstr "分頁列位置："
-
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:183
-#, fuzzy, kde-format
-#| msgid "linear"
-msgid "Linear Algebra"
-msgstr "線性"
-
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:195
-#, fuzzy, kde-format
-#| msgid "Recalculate"
-msgid "Calculate"
-msgstr "重新計算"
-
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:205
-#, kde-format
-msgid "Settings"
-msgstr ""
-
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:254
-#, fuzzy, kde-format
-#| msgid "Constants"
-msgid "Assistants"
-msgstr "常數"
-
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:289
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:612
-#, fuzzy, kde-format
-#| msgid "Plot Area"
-msgid "Plot Data"
-msgstr "繪製區域"
-
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:292
-#, fuzzy, kde-format
-#| msgid "Statistics"
-msgid "Variable Statistics..."
-msgstr "統計"
-
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:339
-#, fuzzy, kde-format
-#| msgid "Orientation"
-msgid "Interrupt"
-msgstr "方向"
-
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:341
-#, kde-format
-msgid "Calculating..."
-msgstr ""
-
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:345
-#, kde-format
-msgid "Ready"
-msgstr ""
-
-#: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:363
-#, fuzzy, kde-format
-#| msgid "Statistics"
-msgid "%1: variable statistics"
-msgstr "統計"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:126
 #: src/commonfrontend/matrix/MatrixView.cpp:194
@@ -10785,6 +10636,153 @@ msgstr ""
 #, kde-format
 msgid "%1: clear selected rows(s)"
 msgstr ""
+
+#: src/commonfrontend/notebook/NotebookView.cpp:40
+#, fuzzy, kde-format
+#| msgid "Failed to open"
+msgid "Failed to initialize %1."
+msgstr "開啟失敗"
+
+#: src/commonfrontend/notebook/NotebookView.cpp:61
+#, kde-format
+msgid "Find"
+msgstr ""
+
+#: src/commonfrontend/notebook/NotebookView.cpp:65
+#: src/kdefrontend/datasources/ImportDialog.cpp:110
+#, kde-format
+msgid "Replace"
+msgstr "取代"
+
+#: src/commonfrontend/notebook/NotebookView.cpp:69
+#, kde-format
+msgid "Restart Backend"
+msgstr ""
+
+#: src/commonfrontend/notebook/NotebookView.cpp:72
+#: src/commonfrontend/notebook/NotebookView.cpp:343
+#, fuzzy, kde-format
+msgid "Evaluate Notebook"
+msgstr "值"
+
+#: src/commonfrontend/notebook/NotebookView.cpp:84
+#, fuzzy, kde-format
+msgid "Evaluate Entry"
+msgstr "值"
+
+#: src/commonfrontend/notebook/NotebookView.cpp:88
+#, kde-format
+msgid "Remove Current Entry"
+msgstr ""
+
+#: src/commonfrontend/notebook/NotebookView.cpp:92
+#, fuzzy, kde-format
+msgid "Command"
+msgstr "註解"
+
+#: src/commonfrontend/notebook/NotebookView.cpp:102
+#: src/kdefrontend/widgets/LabelWidget.cpp:211
+#, kde-format
+msgid "Markdown"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lTex)
+#: src/commonfrontend/notebook/NotebookView.cpp:106
+#: src/kdefrontend/ui/settingsworksheetpage.ui:147
+#: src/kdefrontend/widgets/LabelWidget.cpp:209
+#, kde-format
+msgid "LaTeX"
+msgstr ""
+
+#: src/commonfrontend/notebook/NotebookView.cpp:112
+#, kde-format
+msgid "Page Break"
+msgstr ""
+
+#: src/commonfrontend/notebook/NotebookView.cpp:124
+#, kde-format
+msgid "Compute Eigenvectors"
+msgstr ""
+
+#: src/commonfrontend/notebook/NotebookView.cpp:130
+#, fuzzy, kde-format
+#| msgid "Matrix"
+msgid "Create Matrix"
+msgstr "矩陣"
+
+#: src/commonfrontend/notebook/NotebookView.cpp:136
+#, fuzzy, kde-format
+msgid "Compute Eigenvalues"
+msgstr "數值"
+
+#: src/commonfrontend/notebook/NotebookView.cpp:142
+#, fuzzy, kde-format
+#| msgid "Matrix"
+msgid "Invert Matrix"
+msgstr "矩陣"
+
+#: src/commonfrontend/notebook/NotebookView.cpp:160
+#, fuzzy, kde-format
+msgid "Solve Equations"
+msgstr "分頁列位置："
+
+#: src/commonfrontend/notebook/NotebookView.cpp:183
+#, fuzzy, kde-format
+#| msgid "linear"
+msgid "Linear Algebra"
+msgstr "線性"
+
+#: src/commonfrontend/notebook/NotebookView.cpp:195
+#, fuzzy, kde-format
+#| msgid "Recalculate"
+msgid "Calculate"
+msgstr "重新計算"
+
+#: src/commonfrontend/notebook/NotebookView.cpp:205
+#, kde-format
+msgid "Settings"
+msgstr ""
+
+#: src/commonfrontend/notebook/NotebookView.cpp:254
+#, fuzzy, kde-format
+#| msgid "Constants"
+msgid "Assistants"
+msgstr "常數"
+
+#: src/commonfrontend/notebook/NotebookView.cpp:289
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:612
+#, fuzzy, kde-format
+#| msgid "Plot Area"
+msgid "Plot Data"
+msgstr "繪製區域"
+
+#: src/commonfrontend/notebook/NotebookView.cpp:292
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Variable Statistics..."
+msgstr "統計"
+
+#: src/commonfrontend/notebook/NotebookView.cpp:339
+#, fuzzy, kde-format
+#| msgid "Orientation"
+msgid "Interrupt"
+msgstr "方向"
+
+#: src/commonfrontend/notebook/NotebookView.cpp:341
+#, kde-format
+msgid "Calculating..."
+msgstr ""
+
+#: src/commonfrontend/notebook/NotebookView.cpp:345
+#, kde-format
+msgid "Ready"
+msgstr ""
+
+#: src/commonfrontend/notebook/NotebookView.cpp:363
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "%1: variable statistics"
+msgstr "統計"
 
 #: src/commonfrontend/ProjectExplorer.cpp:68
 #, fuzzy, kde-format
@@ -11676,7 +11674,7 @@ msgstr ""
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:116
 #: src/kdefrontend/dockwidgets/XYAnalysisCurveDock.cpp:57
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:71
-#: src/kdefrontend/MainWin.cpp:613 src/kdefrontend/MainWin.cpp:1909
+#: src/kdefrontend/MainWin.cpp:612 src/kdefrontend/MainWin.cpp:1926
 #: src/kdefrontend/SettingsDialog.cpp:68
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:122
 #, kde-format
@@ -11867,7 +11865,7 @@ msgstr "全部選取"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:359
-#: src/kdefrontend/MainWin.cpp:2394
+#: src/kdefrontend/MainWin.cpp:2411
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1431
 #, kde-format
 msgid "Cursor"
@@ -11989,7 +11987,7 @@ msgstr[0] ""
 msgid "%1: Remove selected worksheet elements."
 msgstr ""
 
-#: src/kdefrontend/colormaps/ColorMapsDialog.cpp:42
+#: src/kdefrontend/colormaps/ColorMapsDialog.cpp:40
 #, kde-format
 msgctxt "@title:window"
 msgid "Color Maps Browser"
@@ -12281,21 +12279,21 @@ msgid "Select the Database File"
 msgstr "全部選取"
 
 #: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:351
-#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:414
+#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:409
 #, kde-format
 msgid "Do you really want to delete the connection '%1'?"
 msgstr ""
 
 #: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:352
-#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:415
+#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:410
 #, fuzzy, kde-format
 msgid "Delete Connection"
 msgstr "連線"
 
 #: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:493
 #: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:530
-#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:663
-#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:677
+#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:657
+#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:671
 #, fuzzy, kde-format
 msgid "Connection Failed"
 msgstr "連線"
@@ -12307,7 +12305,7 @@ msgid "Failed to connect to the database '%1'."
 msgstr ""
 
 #: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:524
-#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:649
+#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:643
 #, fuzzy, kde-format
 msgid "Connection Successful"
 msgstr "連線"
@@ -12318,7 +12316,7 @@ msgid "Connection to the database '%1' was successful."
 msgstr ""
 
 #: src/kdefrontend/datasources/DatabaseManagerWidget.cpp:551
-#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:579
+#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:572
 #, fuzzy, kde-format
 msgid "New connection"
 msgstr "連線"
@@ -12656,96 +12654,96 @@ msgid ""
 "filter is not ASCII."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:104
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:103
 #, kde-format
 msgid "ASCII data"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:105
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:104
 #, kde-format
 msgid "Binary data"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:108
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:107
 #, kde-format
 msgid "Excel 2007+ (XSLX)"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:111
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:110
 #, kde-format
 msgid "OpenDocument Spreadsheet (ODS)"
 msgstr "OpenDocument 試算表 (ODS)"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:114
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:113
 #, kde-format
 msgid "Hierarchical Data Format 5 (HDF5)"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:117
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:116
 #, kde-format
 msgid "Network Common Data Format (NetCDF)"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:120
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:119
 #, kde-format
 msgid "Vector Binary Logfile (BLF)"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:123
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:122
 #, kde-format
 msgid "Flexible Image Transport System Data Format (FITS)"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:125
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:124
 #, fuzzy, kde-format
 msgid "JSON Data"
 msgstr "資料"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:127
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:149
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:126
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:148
 #, kde-format
 msgid "ROOT (CERN)"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:129
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:151
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:128
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:150
 #, kde-format
 msgid "Spice"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:131
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:130
 #, kde-format
 msgid "SAS, Stata or SPSS"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:134
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:133
 #, kde-format
 msgid "MATLAB MAT file"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:137
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:136
 #, fuzzy, kde-format
 msgid "MCAP Data"
 msgstr "資料"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:146
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:145
 #, fuzzy, kde-format
 msgid "ASCII Data"
 msgstr "資料"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:147
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:146
 #, fuzzy, kde-format
 msgid "Binary Data"
 msgstr "資料"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:159
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:158
 #, kde-format
 msgid ""
 "If this option is checked, only the link to the file is stored in the "
 "project file but not its content."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:160
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:159
 #, kde-format
 msgid ""
 "If this option is checked, the relative path of the file (relative to "
@@ -12753,31 +12751,31 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:173
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:167
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:348
 #, kde-format
 msgid "Continuously Fixed"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:174
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:168
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:353
 #, fuzzy, kde-format
 msgid "From End"
 msgstr "image"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:175
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:169
 #, kde-format
 msgid "Till End"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:176
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:170
 #, fuzzy, kde-format
 #| msgid "Export to file"
 msgid "Whole File"
 msgstr "匯出到檔案"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:211
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:205
 #, kde-format
 msgid ""
 "Specify how the data source has to be processed on every read:"
@@ -12789,7 +12787,7 @@ msgid ""
 "processed. Only available for \"File Or Named Pipe\" data sources.</li></ul>"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:222
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:216
 #, kde-format
 msgid ""
 "Number of samples (lines) to be processed on every read.\n"
@@ -12797,7 +12795,7 @@ msgid ""
 "\"From End\"."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:228
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:222
 #, kde-format
 msgid ""
 "Specify when and how frequently the data source needs to be read:"
@@ -12806,31 +12804,31 @@ msgid ""
 "new data arrives.</li></ul>"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:236
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:230
 #, kde-format
 msgid "Specify how frequently the data source has to be read."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:241
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:235
 #, kde-format
 msgid ""
 "Specify how many samples need to be kept in memory after reading.\n"
 "Use \"All\" if all data has to be kept."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:246
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:240
 #, kde-format
 msgid ""
 "Enable to use the first row of the selected data region for the column names "
 "of the spreadsheet."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:261
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:255
 #, fuzzy, kde-format
 msgid "Manage MQTT connections"
 msgstr "連線"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:263
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:257
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:63
 #, kde-format
 msgid ""
@@ -12838,44 +12836,44 @@ msgid ""
 "to be subscribed."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:940
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:934
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr "選擇檔案資料來源"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:970
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:964
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr "選擇 DBC 檔案"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:970
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:964
 #, kde-format
 msgid "DBC file (*.dbc)"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1057
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1050
 #, kde-format
 msgid ""
 "Origin Project files need to be opened with \"Import -> Origin Project\"!"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1061
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1056
 #, kde-format
 msgid ""
 "LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1188
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1184
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:416
 #, fuzzy, kde-format
 msgid "Data Format"
 msgstr "資料格式"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1189
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1185
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:470
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:158
 #, fuzzy, kde-format
@@ -12883,184 +12881,190 @@ msgid "Preview"
 msgstr "預覽"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1191
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1187
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:549
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1234
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1230
 #, fuzzy, kde-format
 msgid "Data format && preview"
 msgstr "資料格式"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1281
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1277
 #: src/kdefrontend/SettingsGeneralPage.cpp:252
 #, kde-format
 msgid "Automatic"
 msgstr "自動"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1533
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1529
 #, fuzzy, kde-format
 msgid "file command not found"
 msgstr "檔案資訊"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1544
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1540
 #, fuzzy, kde-format
 msgid "cannot open"
 msgstr "無法開啟 %1：%2"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1549
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1545
 #, fuzzy, kde-format
 msgid "<b>File type:</b> %1"
 msgstr "檔案型態"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1554
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1550
 #, fuzzy, kde-format
 msgid "General:"
 msgstr "一般"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1556
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1557
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1558
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1552
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1553
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1554
 #, kde-format
 msgid "yes"
 msgstr "是"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1556
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1557
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1558
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1552
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1553
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1554
 #, kde-format
 msgid "no"
 msgstr "否"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1556
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1552
 #, fuzzy, kde-format
 msgid "Readable: %1"
 msgstr "可讀取："
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1557
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1553
 #, fuzzy, kde-format
 msgid "Writable: %1"
 msgstr "可寫入："
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1558
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1554
 #, fuzzy, kde-format
 msgid "Executable: %1"
 msgstr "執行檔："
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1560
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1556
 #, kde-format
 msgid "Birth time: %1"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1561
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1557
 #, fuzzy, kde-format
 #| msgid "Last modified: %1"
 msgid "Last metadata changed: %1"
 msgstr "最後變更：%1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1562
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1558
 #, kde-format
 msgid "Last modified: %1"
 msgstr "最後變更：%1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1563
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1559
 #, kde-format
 msgid "Last read: %1"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1564
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1560
 #, kde-format
 msgid "Owner: %1"
 msgstr "擁有者：%1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1565
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1561
 #, kde-format
 msgid "Group: %1"
 msgstr "群組：%1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1566
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1562
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
 msgstr[0] ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1569
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1565
 #, kde-format
 msgid "Summary:"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1592
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1597
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1588
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1593
 #, fuzzy, kde-format
 msgid "Content:"
 msgstr "密度"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1628
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1624
 #, fuzzy, kde-format
 msgid "Could not open file %1 for reading."
 msgstr "無法開啟檔案 %1 以讀取"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1798
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1794
 #, fuzzy, kde-format
 msgid "No data arrived yet for the selected topic"
 msgstr "清除選擇"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2050
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2046
 #, kde-format
 msgid "Not a HDF5 file: %1"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2512
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2507
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2542
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2515
+#, fuzzy, kde-format
+#| msgid "Failed to open"
+msgid "Failed to connect to '%1'. Error %2."
+msgstr "開啟失敗"
+
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2537
 #, kde-format
 msgid "Disconnected from '%1'."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2611
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2603
 #, fuzzy, kde-format
 #| msgid "Variance"
 msgid "Available (%1)"
 msgstr "變異數"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2715
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2707
 #, kde-format
 msgid "Wrong username or password"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2718
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2710
 #, kde-format
 msgid "The client ID wasn't accepted"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2722
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2714
 #, kde-format
 msgid "The broker %1 couldn't be reached."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2725
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2717
 #, kde-format
 msgid "The client is not authorized to connect."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2728
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2720
 #, kde-format
 msgid "An unknown error occurred."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2734
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2737
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2726
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2729
 #, kde-format
 msgid "An error occurred."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2751
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2743
 #, fuzzy, kde-format
 msgid "Connecting to '%1:%2' timed out."
 msgstr "連線"
@@ -13231,7 +13235,7 @@ msgid "Open LabPlot Project"
 msgstr "開啟 LabPlot 專案"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:439
-#: src/kdefrontend/MainWin.cpp:1446
+#: src/kdefrontend/MainWin.cpp:1463
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "LabPlot Projects (%1)"
@@ -13381,77 +13385,77 @@ msgctxt "@title:window"
 msgid "MQTT Connections  [Changed]"
 msgstr "連線"
 
-#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:41
+#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:39
 #, fuzzy, kde-format
 msgid "Add new MQTT connection"
 msgstr "連線"
 
-#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:42
+#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:40
 #, fuzzy, kde-format
 #| msgid "Delete selected objects"
 msgid "Remove selected MQTT connection"
 msgstr "刪除選取的物件"
 
-#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:62
-#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:351
+#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:60
+#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:347
 #, kde-format
 msgid "Please set a password."
 msgstr ""
 
-#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:65
-#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:331
+#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:63
+#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:327
 #, kde-format
 msgid "Please set a username."
 msgstr ""
 
-#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:68
-#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:371
+#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:66
+#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:367
 #, kde-format
 msgid "Please set a client ID."
 msgstr ""
 
-#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:69
-#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:171
+#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:67
+#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:169
 #, kde-format
 msgid "Please set a valid host name."
 msgstr ""
 
-#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:70
-#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:134
+#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:68
+#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:132
 #, kde-format
 msgid "Please set a valid name."
 msgstr ""
 
-#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:159
+#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:157
 #, kde-format
 msgid "Please provide a unique name."
 msgstr ""
 
-#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:189
-#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:190
-#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:228
-#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:229
+#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:187
+#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:188
+#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:226
+#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:227
 #, kde-format
 msgid "Host name and port must be unique."
 msgstr ""
 
-#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:210
+#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:208
 #, kde-format
 msgid "Please set a valid port."
 msgstr ""
 
-#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:648
+#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:642
 #, fuzzy, kde-format
 msgid "Connection to the broker '%1:%2' was successful."
 msgstr "連線"
 
-#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:662
+#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:656
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to connect to the broker '%1:%2'."
 msgstr "開啟失敗"
 
-#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:676
+#: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:670
 #, fuzzy, kde-format
 msgid ""
 "Disconnected from the broker '%1:%2' before the connection was successful."
@@ -13488,7 +13492,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:826
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:828
-#: src/kdefrontend/MainWin.cpp:2726
+#: src/kdefrontend/MainWin.cpp:2743
 #, kde-format
 msgid "Warning"
 msgstr ""
@@ -13863,7 +13867,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:353
 #: src/kdefrontend/dockwidgets/LollipopPlotDock.cpp:446
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:266
-#: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:355
+#: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:362
 #: src/kdefrontend/dockwidgets/QQPlotDock.cpp:278
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:229
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:233
@@ -14064,11 +14068,6 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:726
 #, kde-format
 msgid "%1 box plots: template \"%2\" loaded"
-msgstr ""
-
-#: src/kdefrontend/dockwidgets/CantorWorksheetDock.cpp:61
-#, kde-format
-msgid "File Browser"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:229
@@ -14448,7 +14447,7 @@ msgid "Silverman"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/KDEPlotDock.cpp:351
-#: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:353
+#: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:360
 #: src/kdefrontend/dockwidgets/QQPlotDock.cpp:276
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1036
 #, kde-format
@@ -14515,12 +14514,17 @@ msgstr ""
 msgid "%1 matrices: template \"%2\" loaded"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:160
+#: src/kdefrontend/dockwidgets/NotebookDock.cpp:61
+#, kde-format
+msgid "File Browser"
+msgstr ""
+
+#: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:167
 #, fuzzy, kde-format
 msgid "Average"
 msgstr "圓心"
 
-#: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:173
+#: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:180
 #, kde-format
 msgid ""
 "The supported chart types are grouped according to the plotted statistics "
@@ -14535,7 +14539,7 @@ msgid ""
 "<b>standard deviations for each subgroup</b>.</li></ul>"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:192
+#: src/kdefrontend/dockwidgets/ProcessBehaviorChartDock.cpp:199
 #, kde-format
 msgid "Allow negative values for the lower limit."
 msgstr ""
@@ -15105,7 +15109,7 @@ msgid ""
 "installation."
 msgstr ""
 
-#: src/kdefrontend/GuiObserver.cpp:192 src/kdefrontend/MainWin.cpp:1353
+#: src/kdefrontend/GuiObserver.cpp:192 src/kdefrontend/MainWin.cpp:1370
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -16006,468 +16010,468 @@ msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:582
+#: src/kdefrontend/MainWin.cpp:581
 #, kde-format
 msgid "&Open Example"
 msgstr "開啟範例(&O)"
 
-#: src/kdefrontend/MainWin.cpp:603 src/kdefrontend/MainWin.cpp:1893
+#: src/kdefrontend/MainWin.cpp:602 src/kdefrontend/MainWin.cpp:1910
 #, kde-format
 msgid "Workbook"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:605
+#: src/kdefrontend/MainWin.cpp:604
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:608 src/kdefrontend/MainWin.cpp:1901
+#: src/kdefrontend/MainWin.cpp:607 src/kdefrontend/MainWin.cpp:1918
 #, fuzzy, kde-format
 msgid "Data Extractor"
 msgstr "資料格式"
 
-#: src/kdefrontend/MainWin.cpp:609
+#: src/kdefrontend/MainWin.cpp:608
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:615
+#: src/kdefrontend/MainWin.cpp:614
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:621
+#: src/kdefrontend/MainWin.cpp:620
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:625 src/kdefrontend/MainWin.cpp:1945
+#: src/kdefrontend/MainWin.cpp:624 src/kdefrontend/MainWin.cpp:1962
 #: src/kdefrontend/SettingsDialog.cpp:63
 #, kde-format
 msgid "Worksheet"
 msgstr "工作表"
 
-#: src/kdefrontend/MainWin.cpp:627
+#: src/kdefrontend/MainWin.cpp:626
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:631 src/kdefrontend/MainWin.cpp:1953
+#: src/kdefrontend/MainWin.cpp:630 src/kdefrontend/MainWin.cpp:1970
 #, fuzzy, kde-format
 msgid "Note"
 msgstr "備忘"
 
-#: src/kdefrontend/MainWin.cpp:632
+#: src/kdefrontend/MainWin.cpp:631
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:636 src/kdefrontend/MainWin.cpp:1885
+#: src/kdefrontend/MainWin.cpp:635 src/kdefrontend/MainWin.cpp:1902
 #, kde-format
 msgid "Folder"
 msgstr "資料夾"
 
-#: src/kdefrontend/MainWin.cpp:637
+#: src/kdefrontend/MainWin.cpp:636
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:642
+#: src/kdefrontend/MainWin.cpp:641
 #, kde-format
 msgid "Live Data Source..."
 msgstr "即時資料來源..."
 
-#: src/kdefrontend/MainWin.cpp:643
+#: src/kdefrontend/MainWin.cpp:642
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:650 src/kdefrontend/MainWin.cpp:659
+#: src/kdefrontend/MainWin.cpp:649 src/kdefrontend/MainWin.cpp:658
 #, kde-format
 msgid "Import data from a regular file"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:664
+#: src/kdefrontend/MainWin.cpp:663
 #, fuzzy, kde-format
 msgid "From kaggle.com..."
 msgstr "image"
 
-#: src/kdefrontend/MainWin.cpp:665
+#: src/kdefrontend/MainWin.cpp:664
 #, fuzzy, kde-format
 msgid "Import data from kaggle.com"
 msgstr "匯入"
 
-#: src/kdefrontend/MainWin.cpp:670
+#: src/kdefrontend/MainWin.cpp:669
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:674
+#: src/kdefrontend/MainWin.cpp:673
 #, fuzzy, kde-format
 msgid "From Dataset Collection..."
 msgstr "連線"
 
-#: src/kdefrontend/MainWin.cpp:675
+#: src/kdefrontend/MainWin.cpp:674
 #, fuzzy, kde-format
 msgid "Import data from an online dataset"
 msgstr "匯入"
 
-#: src/kdefrontend/MainWin.cpp:679
+#: src/kdefrontend/MainWin.cpp:678
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "LabPlot Project..."
 msgstr "關閉專案"
 
-#: src/kdefrontend/MainWin.cpp:680
+#: src/kdefrontend/MainWin.cpp:679
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:685
+#: src/kdefrontend/MainWin.cpp:684
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Origin Project (OPJ)..."
 msgstr "開啟專案"
 
-#: src/kdefrontend/MainWin.cpp:686
+#: src/kdefrontend/MainWin.cpp:685
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:691
+#: src/kdefrontend/MainWin.cpp:690
 #, fuzzy, kde-format
 #| msgid "Export"
 msgid "Export..."
 msgstr "匯出"
 
-#: src/kdefrontend/MainWin.cpp:692
+#: src/kdefrontend/MainWin.cpp:691
 #, fuzzy, kde-format
 msgid "Export selected element"
 msgstr "符合選擇區域"
 
-#: src/kdefrontend/MainWin.cpp:698 src/kdefrontend/MainWin.cpp:2430
-#: src/kdefrontend/MainWin.cpp:2438
+#: src/kdefrontend/MainWin.cpp:697 src/kdefrontend/MainWin.cpp:2447
+#: src/kdefrontend/MainWin.cpp:2455
 #, kde-format
 msgid "Share"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:703
+#: src/kdefrontend/MainWin.cpp:702
 #, kde-format
 msgid "Color Maps Browser"
 msgstr "色彩映射瀏覽器"
 
-#: src/kdefrontend/MainWin.cpp:704
+#: src/kdefrontend/MainWin.cpp:703
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr "開啟對話框來瀏覽可用的色彩映射。"
 
-#: src/kdefrontend/MainWin.cpp:713
+#: src/kdefrontend/MainWin.cpp:712
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:714
+#: src/kdefrontend/MainWin.cpp:713
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:723
+#: src/kdefrontend/MainWin.cpp:722
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:743
+#: src/kdefrontend/MainWin.cpp:742
 #, kde-format
 msgid "Close the active window"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:746
+#: src/kdefrontend/MainWin.cpp:745
 #, fuzzy, kde-format
 msgid "Close &All"
 msgstr "全部關閉"
 
-#: src/kdefrontend/MainWin.cpp:747
+#: src/kdefrontend/MainWin.cpp:746
 #, kde-format
 msgid "Close all the windows"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:750
+#: src/kdefrontend/MainWin.cpp:749
 #, fuzzy, kde-format
 msgid "Ne&xt"
 msgstr "下一個"
 
-#: src/kdefrontend/MainWin.cpp:752
+#: src/kdefrontend/MainWin.cpp:751
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:755
+#: src/kdefrontend/MainWin.cpp:754
 #, fuzzy, kde-format
 msgid "Pre&vious"
 msgstr "前一個"
 
-#: src/kdefrontend/MainWin.cpp:757
+#: src/kdefrontend/MainWin.cpp:756
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:764
+#: src/kdefrontend/MainWin.cpp:763
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "僅目前資料夾(&F)"
 
-#: src/kdefrontend/MainWin.cpp:769
+#: src/kdefrontend/MainWin.cpp:768
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:773
+#: src/kdefrontend/MainWin.cpp:772
 #, kde-format
 msgid "&All"
 msgstr "全部(&A)"
 
-#: src/kdefrontend/MainWin.cpp:795
+#: src/kdefrontend/MainWin.cpp:794
 #, kde-format
 msgid "Show Memory Usage"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:803
+#: src/kdefrontend/MainWin.cpp:802
 #, kde-format
 msgid "Project Explorer"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:808
+#: src/kdefrontend/MainWin.cpp:807
 #, fuzzy, kde-format
 msgid "Properties Explorer"
 msgstr "屬性"
 
-#: src/kdefrontend/MainWin.cpp:813
+#: src/kdefrontend/MainWin.cpp:812
 #, kde-format
 msgid "Worksheet Preview"
 msgstr "工作表預覽"
 
-#: src/kdefrontend/MainWin.cpp:836
+#: src/kdefrontend/MainWin.cpp:835
 #, kde-format
 msgid "Configure CAS..."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:837
+#: src/kdefrontend/MainWin.cpp:836
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
 "systems or to enable new ones"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:898
+#: src/kdefrontend/MainWin.cpp:897
 #, kde-format
 msgid "Window Visibility"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:915
+#: src/kdefrontend/MainWin.cpp:914
 #, fuzzy, kde-format
 msgid "Color Scheme"
 msgstr "色彩映射"
 
-#: src/kdefrontend/MainWin.cpp:974
+#: src/kdefrontend/MainWin.cpp:973
 #, kde-format
 msgid "The current project %1 has been modified. Do you want to save it?"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:975
+#: src/kdefrontend/MainWin.cpp:974
 #, kde-format
 msgid "Save Project"
 msgstr "儲存專案"
 
-#: src/kdefrontend/MainWin.cpp:1314
+#: src/kdefrontend/MainWin.cpp:1331
 #, fuzzy, kde-format
 #| msgid "%1: clear"
 msgid "%1: created"
 msgstr "%1：清除"
 
-#: src/kdefrontend/MainWin.cpp:1340
+#: src/kdefrontend/MainWin.cpp:1357
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "專案屬性"
 
-#: src/kdefrontend/MainWin.cpp:1365
+#: src/kdefrontend/MainWin.cpp:1382
 #, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "工作表預覽"
 
-#: src/kdefrontend/MainWin.cpp:1374
+#: src/kdefrontend/MainWin.cpp:1391
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Content"
 msgstr "密度"
 
-#: src/kdefrontend/MainWin.cpp:1451
+#: src/kdefrontend/MainWin.cpp:1468
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Origin Projects (%1)"
 msgstr "開啟專案"
 
-#: src/kdefrontend/MainWin.cpp:1457
+#: src/kdefrontend/MainWin.cpp:1474
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "Cantor Projects (*.cws)"
 msgstr "關閉專案"
 
-#: src/kdefrontend/MainWin.cpp:1458
+#: src/kdefrontend/MainWin.cpp:1475
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1465
+#: src/kdefrontend/MainWin.cpp:1482
 #, kde-format
 msgid "All supported files (%1)"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1469
+#: src/kdefrontend/MainWin.cpp:1486
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "開啟專案"
 
-#: src/kdefrontend/MainWin.cpp:1486
+#: src/kdefrontend/MainWin.cpp:1503
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1486 src/kdefrontend/MainWin.cpp:1494
-#: src/kdefrontend/MainWin.cpp:1499
+#: src/kdefrontend/MainWin.cpp:1503 src/kdefrontend/MainWin.cpp:1511
+#: src/kdefrontend/MainWin.cpp:1516
 #, kde-format
 msgid "Open Project"
 msgstr "開啟專案"
 
-#: src/kdefrontend/MainWin.cpp:1494
+#: src/kdefrontend/MainWin.cpp:1511
 #, kde-format
 msgid "The project file %1 doesn't exist."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1499
+#: src/kdefrontend/MainWin.cpp:1516
 #, fuzzy, kde-format
 msgid "Couldn't read the project file %1."
 msgstr "無法開啟檔案 %1 以讀取"
 
-#: src/kdefrontend/MainWin.cpp:1508
+#: src/kdefrontend/MainWin.cpp:1525
 #, kde-format
 msgid "Loading %1..."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1541
+#: src/kdefrontend/MainWin.cpp:1558
 #, kde-format
 msgid "%1: opened"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1576
+#: src/kdefrontend/MainWin.cpp:1593
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1666
+#: src/kdefrontend/MainWin.cpp:1683
 #, fuzzy, kde-format
 #| msgid "Save Project"
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "儲存專案"
 
-#: src/kdefrontend/MainWin.cpp:1668
+#: src/kdefrontend/MainWin.cpp:1685
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1694
+#: src/kdefrontend/MainWin.cpp:1711
 #, fuzzy, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "無法開啟檔案 %1 以讀取"
 
-#: src/kdefrontend/MainWin.cpp:1774
+#: src/kdefrontend/MainWin.cpp:1791
 #, kde-format
 msgid "Project saved"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1790
+#: src/kdefrontend/MainWin.cpp:1807
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1795
+#: src/kdefrontend/MainWin.cpp:1812
 #, fuzzy, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "無法開啟檔案 %1 以讀取"
 
-#: src/kdefrontend/MainWin.cpp:1845
+#: src/kdefrontend/MainWin.cpp:1862
 #, fuzzy, kde-format
 msgid "Changed"
 msgstr "（已改變）"
 
-#: src/kdefrontend/MainWin.cpp:1860 src/kdefrontend/MainWin.cpp:1872
+#: src/kdefrontend/MainWin.cpp:1877 src/kdefrontend/MainWin.cpp:1889
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1862 src/kdefrontend/MainWin.cpp:1874
+#: src/kdefrontend/MainWin.cpp:1879 src/kdefrontend/MainWin.cpp:1891
 #, kde-format
 msgid "%1 printed"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2430
+#: src/kdefrontend/MainWin.cpp:2447
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2434
+#: src/kdefrontend/MainWin.cpp:2451
 #, kde-format
 msgid "Project shared successfully"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2437
+#: src/kdefrontend/MainWin.cpp:2454
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2625
+#: src/kdefrontend/MainWin.cpp:2642
 #, kde-format
 msgid "Running Kaggle CLI tool failed"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2626
+#: src/kdefrontend/MainWin.cpp:2643
 #, kde-format
 msgid ""
 "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
 "\">\"How to Use Kaggle\"</a> to setup the Kaggle CLI tool."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2689
+#: src/kdefrontend/MainWin.cpp:2706
 #, kde-format
 msgid "%1 exported"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2696
+#: src/kdefrontend/MainWin.cpp:2713
 #, kde-format
 msgid "FITS files saved"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2708
+#: src/kdefrontend/MainWin.cpp:2725
 #, kde-format
 msgid "MQTT Client%1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2726
+#: src/kdefrontend/MainWin.cpp:2743
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2730
+#: src/kdefrontend/MainWin.cpp:2747
 #, kde-format
 msgid "Live data source%1"
 msgstr "即時資料來源%1"
 
-#: src/kdefrontend/MainWin.cpp:2775
+#: src/kdefrontend/MainWin.cpp:2792
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr ""
@@ -16628,9 +16632,9 @@ msgid "Preferences"
 msgstr "喜好設定"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabGeneral)
+#. i18n: ectx: attribute (title), widget (QWidget, general)
 #. i18n: ectx: property (text), widget (QLabel, lGeneral)
 #. i18n: ectx: property (text), widget (QLabel, lValuesGeneral)
-#. i18n: ectx: attribute (title), widget (QWidget, general)
 #. i18n: ectx: attribute (title), widget (QWidget, tGeneral)
 #: src/kdefrontend/SettingsDialog.cpp:58
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:95
@@ -16640,7 +16644,6 @@ msgstr "喜好設定"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:36
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:21
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:24
-#: src/kdefrontend/ui/dockwidgets/cantorworksheetdock.ui:21
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:33
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:24
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:21
@@ -16649,6 +16652,7 @@ msgstr "喜好設定"
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:21
 #: src/kdefrontend/ui/dockwidgets/kdeplotdock.ui:30
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:21
+#: src/kdefrontend/ui/dockwidgets/notebookdock.ui:21
 #: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:24
 #: src/kdefrontend/ui/dockwidgets/qqplotdock.ui:24
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:24
@@ -18275,7 +18279,6 @@ msgstr "格式"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:181
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:157
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:185
-#: src/kdefrontend/ui/dockwidgets/cantorworksheetdock.ui:65
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:442
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:288
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:17
@@ -18287,6 +18290,7 @@ msgstr "格式"
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:371
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:92
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:43
+#: src/kdefrontend/ui/dockwidgets/notebookdock.ui:65
 #: src/kdefrontend/ui/dockwidgets/notedock.ui:43
 #: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:112
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:243
@@ -18322,12 +18326,11 @@ msgstr "註解："
 #: src/kdefrontend/ui/datapickerimagewidget.ui:81
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:56
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:147
-#: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:116
+#: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:136
 #: src/kdefrontend/ui/dockwidgets/aspectdock.ui:17
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:341
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:101
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:67
-#: src/kdefrontend/ui/dockwidgets/cantorworksheetdock.ui:33
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:452
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:117
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:50
@@ -18339,6 +18342,7 @@ msgstr "註解："
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:147
 #: src/kdefrontend/ui/dockwidgets/lollipopplotdock.ui:112
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:17
+#: src/kdefrontend/ui/dockwidgets/notebookdock.ui:33
 #: src/kdefrontend/ui/dockwidgets/notedock.ui:17
 #: src/kdefrontend/ui/dockwidgets/processbehaviorchartdock.ui:30
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:107
@@ -19206,7 +19210,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lHost)
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:76
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:64
-#: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:58
+#: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:66
 #, kde-format
 msgid "Host:"
 msgstr ""
@@ -19216,7 +19220,7 @@ msgstr ""
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:90
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:168
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:204
-#: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:72
+#: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:80
 #, fuzzy, kde-format
 #| msgid "portrait"
 msgid "Port:"
@@ -19489,7 +19493,7 @@ msgid " Select the file to import"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bFileInfo)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:272
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:256
 #, kde-format
 msgid "Show file info"
 msgstr ""
@@ -19497,7 +19501,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lSourceInfo)
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceType)
 #. i18n: ectx: property (text), widget (QLabel, lSourceType)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:289
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:273
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:47
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:188
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:216
@@ -19514,27 +19518,27 @@ msgid "Source:"
 msgstr "來源名稱"
 
 #. i18n: ectx: property (text), widget (QLabel, lRelativePath)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:303
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:287
 #, kde-format
 msgid "Relative Path:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lFilter)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:326
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:310
 #, fuzzy, kde-format
 msgid "Filter:"
 msgstr "過濾器"
 
 #. i18n: ectx: property (text), widget (QLabel, lWillTopic)
 #. i18n: ectx: property (text), widget (QLabel, lMcapTopics)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:356
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:340
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:339
 #, kde-format
 msgid "Topic:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMqttTopics)
-#: src/kdefrontend/ui/datasources/importfilewidget.ui:363
+#: src/kdefrontend/ui/datasources/importfilewidget.ui:347
 #, kde-format
 msgid "Topics:"
 msgstr ""
@@ -19792,34 +19796,34 @@ msgstr "連線"
 
 #. i18n: ectx: property (text), widget (QLabel, lID)
 #. i18n: ectx: property (text), widget (QLabel, lId)
-#: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:65
+#: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:73
 #: src/kdefrontend/ui/datasources/mqtterrorwidget.ui:67
 #, kde-format
 msgid "Client ID:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lUsername)
-#: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:88
+#: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:108
 #, fuzzy, kde-format
 #| msgid "Filter name:"
 msgid "Username:"
 msgstr "過濾器名稱："
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbID)
-#: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:95
+#: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:115
 #, kde-format
 msgid "Set client ID"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbAuthentication)
-#: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:102
+#: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:122
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgid "Use authentication"
 msgstr "方向"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbRetain)
-#: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:109
+#: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:129
 #, kde-format
 msgid "Interpret retain messages"
 msgstr ""
@@ -20607,12 +20611,6 @@ msgstr "LabPlot2"
 #| msgid "Width"
 msgid "Width:"
 msgstr "寬度"
-
-#. i18n: ectx: property (text), widget (QPushButton, bEvaluate)
-#: src/kdefrontend/ui/dockwidgets/cantorworksheetdock.ui:100
-#, kde-format
-msgid "Evaluate Worksheet"
-msgstr "計算工作表"
 
 #. i18n: ectx: property (toolTip), widget (QTableWidget, twPlotRanges)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:73
@@ -21431,6 +21429,18 @@ msgstr ""
 #, fuzzy, kde-format
 msgid "Header:"
 msgstr "資料格式"
+
+#. i18n: ectx: property (text), widget (QPushButton, bEvaluate)
+#: src/kdefrontend/ui/dockwidgets/notebookdock.ui:100
+#, fuzzy, kde-format
+msgid "Evaluate"
+msgstr "值"
+
+#. i18n: ectx: property (text), widget (QPushButton, bRestart)
+#: src/kdefrontend/ui/dockwidgets/notebookdock.ui:110
+#, fuzzy, kde-format
+msgid "Restart"
+msgstr "開始"
 
 #. i18n: ectx: property (text), widget (QLabel, bgcolor)
 #: src/kdefrontend/ui/dockwidgets/notedock.ui:72
@@ -24559,6 +24569,9 @@ msgstr ""
 #| msgid "Failed to open"
 msgid "Unable to open file:"
 msgstr "開啟失敗"
+
+#~ msgid "Evaluate Worksheet"
+#~ msgstr "計算工作表"
 
 #, fuzzy
 #~| msgid "Failed to open"
