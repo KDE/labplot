@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for statistical plots like Q-Q plot, KDE plot, etc.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -18,6 +18,7 @@
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/ProcessBehaviorChart.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
+#include "backend/worksheet/plots/cartesian/RunChart.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 
 #include <gsl/gsl_randist.h>
@@ -889,5 +890,115 @@ void StatisticalPlotsTest::testPBChartS() {
 	for (int i = 0; i < rowCount; ++i)
 		QCOMPARE(xColumn->valueAt(i), i + 1);
 }
+
+// ##############################################################################
+// ############################ Run Chart #######################################
+// ##############################################################################
+/*!
+ * \brief create and add a new run chart, undo and redo this step
+ */
+void StatisticalPlotsTest::testRunChartInit() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* pbc = new RunChart(QStringLiteral("chart"));
+	p->addChild(pbc);
+
+	auto children = p->children<RunChart>();
+
+	QCOMPARE(children.size(), 1);
+
+	project.undoStack()->undo();
+	children = p->children<RunChart>();
+	QCOMPARE(children.size(), 0);
+
+	// TODO: crash!!!
+	// project.undoStack()->redo();
+	// children = p->children<ProcessBehaviorChart>();
+	// QCOMPARE(children.size(), 1);
+}
+
+/*!
+ * \brief create and add a new run chart, duplicate it and check the number of children
+ */
+void StatisticalPlotsTest::testRunChartDuplicate() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* pbc = new RunChart(QStringLiteral("chart"));
+	p->addChild(pbc);
+
+	pbc->duplicate();
+
+	auto children = p->children<RunChart>();
+	QCOMPARE(children.size(), 2);
+}
+
+/*!
+ * test the run chart using Average for center line, data from from Wheeler "Making Sense of Data", chapter seven.
+ */
+void StatisticalPlotsTest::testRunChartCenterAverage() {
+	// prepare the data
+	auto* column = new Column(QLatin1String("data"), AbstractColumn::ColumnMode::Integer);
+	column->setIntegers({11, 4, 6, 4, 5, 7, 5, 4, 7, 12, 4, 2, 4, 5, 6, 4, 2, 2, 5, 9, 5, 6, 5, 9});
+
+	// prepare the worksheet + plot
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* chart = new RunChart(QStringLiteral("chart"));
+	chart->setDataColumn(column);
+	chart->setCenterMetric(RunChart::CenterMetric::Average);
+	p->addChild(chart);
+
+	// check the limits, two digit comparison with the values from the book
+	QCOMPARE(std::round(chart->center() * 100) / 100, 5.54);
+
+	// index from 1 to 24 is used for x
+	const int rowCount = 24;
+	auto* xColumn = chart->dataCurve()->xColumn();
+	QCOMPARE(xColumn->rowCount(), rowCount);
+	for (int i = 0; i < rowCount; ++i)
+		QCOMPARE(xColumn->valueAt(i), i + 1);
+}
+
+/*!
+ * test the run chart using Median for center line, data from from Wheeler "Making Sense of Data", chapter seven.
+ */
+void StatisticalPlotsTest::testRunChartCenterMedian() {
+	// prepare the data
+	auto* column = new Column(QLatin1String("data"), AbstractColumn::ColumnMode::Integer);
+	column->setIntegers({11, 4, 6, 4, 5, 7, 5, 4, 7, 12, 4, 2, 4, 5, 6, 4, 2, 2, 5, 9, 5, 6, 5, 9});
+
+	// prepare the worksheet + plot
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* chart = new RunChart(QStringLiteral("chart"));
+	chart->setDataColumn(column);
+	chart->setCenterMetric(RunChart::CenterMetric::Median);
+	p->addChild(chart);
+
+	// check the limits, two digit comparison with the values from the book
+	QCOMPARE(std::round(chart->center() * 100) / 100, 5.0);
+
+	// index from 1 to 24 is used for x
+	const int rowCount = 24;
+	auto* xColumn = chart->dataCurve()->xColumn();
+	QCOMPARE(xColumn->rowCount(), rowCount);
+	for (int i = 0; i < rowCount; ++i)
+		QCOMPARE(xColumn->valueAt(i), i + 1);
+}
+
 
 QTEST_MAIN(StatisticalPlotsTest)

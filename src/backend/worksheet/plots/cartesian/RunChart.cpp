@@ -224,6 +224,11 @@ double RunChart::center() const {
 	return d->center;
 }
 
+XYCurve* RunChart::dataCurve() const {
+	Q_D(const RunChart);
+	return d->dataCurve;
+}
+
 // ##############################################################################
 // #################  setter methods and undo commands ##########################
 // ##############################################################################
