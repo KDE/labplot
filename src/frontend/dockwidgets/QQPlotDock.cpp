@@ -28,7 +28,7 @@
   \class QQPlotDock
   \brief  Provides a widget for editing the properties of QQ-plots.
 
-  \ingroup kdefrontend
+  \ingroup frontend
 */
 QQPlotDock::QQPlotDock(QWidget* parent)
 	: BaseDock(parent)

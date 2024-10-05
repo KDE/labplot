@@ -32,7 +32,7 @@ ExamplesManager* ExamplesManager::m_instance{nullptr};
 	\class ExamplesManager
 	\brief Widget for importing data from a dataset.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 ExamplesManager::ExamplesManager() {
 	m_jsonDir = QStandardPaths::locate(QStandardPaths::AppDataLocation, QLatin1String("examples"), QStandardPaths::LocateDirectory);

@@ -39,7 +39,7 @@
   If more than one curves are set, the properties of the first column are shown. The changes of the properties are applied to all curves.
   The exclusions are the name, the comment and the datasets (columns) of the curves  - these properties can only be changed if there is only one single curve.
 
-  \ingroup kdefrontend
+  \ingroup frontend
 */
 HistogramDock::HistogramDock(QWidget* parent)
 	: BaseDock(parent) {

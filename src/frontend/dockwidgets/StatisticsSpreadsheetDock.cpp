@@ -20,7 +20,7 @@
  \class StatisticsSpreadsheetDock
  \brief Provides a widget for editing which statistical metrics of the parent spreadsheet should be shown in the statistics spreadsheet.
 
- \ingroup kdefrontend
+ \ingroup frontend
 */
 
 StatisticsSpreadsheetDock::StatisticsSpreadsheetDock(QWidget* parent)

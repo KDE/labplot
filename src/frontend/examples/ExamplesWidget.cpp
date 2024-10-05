@@ -24,7 +24,7 @@
 	\class ExamplesWidget
 	\brief Widget showing all available example projects.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 ExamplesWidget::ExamplesWidget(QWidget* parent)
 	: QWidget(parent) {

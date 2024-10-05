@@ -28,7 +28,7 @@
 	\class GoToDialog
 	\brief Dialog to provide the cell coordinates to navigate to
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 GoToDialog::GoToDialog(QWidget* parent)
 	: QDialog(parent) {

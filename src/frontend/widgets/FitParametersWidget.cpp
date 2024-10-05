@@ -23,7 +23,7 @@
 	their names and default values are given - the user can change the start values.
 	For custom models the user has to define here the parameter names and their start values.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 FitParametersWidget::FitParametersWidget(QWidget* parent)
 	: QWidget(parent) {

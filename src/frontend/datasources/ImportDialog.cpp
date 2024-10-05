@@ -37,7 +37,7 @@
 	\class ImportDialog
 	\brief Base class for other import dialogs. Provides the "Import to" section of those dialogs.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 ImportDialog::ImportDialog(MainWin* parent)
 	: QDialog(parent)

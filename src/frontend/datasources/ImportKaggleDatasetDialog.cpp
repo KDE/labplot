@@ -24,7 +24,7 @@
 	\class ImportKaggleDatasetDialog
 	\brief Dialog for importing dataset from kaggle.com. Embeds \c ImportKaggleDatasetWidget and provides the standard buttons.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 ImportKaggleDatasetDialog::ImportKaggleDatasetDialog(MainWin* parent)
 	: ImportDialog(parent)

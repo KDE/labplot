@@ -25,7 +25,7 @@
   \class KDEPlotDock
   \brief  Provides a widget for editing the properties of KDE-plots.
 
-  \ingroup kdefrontend
+  \ingroup frontend
 */
 KDEPlotDock::KDEPlotDock(QWidget* parent)
 	: BaseDock(parent)

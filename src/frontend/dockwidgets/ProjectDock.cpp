@@ -17,7 +17,7 @@
   \class ProjectDock
   \brief Provides a widget for editing the properties of a project
 
-  \ingroup kdefrontend
+  \ingroup frontend
 */
 
 ProjectDock::ProjectDock(QWidget* parent)

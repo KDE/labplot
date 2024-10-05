@@ -34,7 +34,7 @@
    \class DatabaseManagerWidget
    \brief widget for managing database connections, embedded in \c DatabaseManagerDialog.
 
-   \ingroup kdefrontend
+   \ingroup frontend
 */
 DatabaseManagerWidget::DatabaseManagerWidget(QWidget* parent, QString conn)
 	: QWidget(parent)

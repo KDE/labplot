@@ -19,7 +19,7 @@
 	\brief Widget for editing the properties of a
    Value object, mostly used in an appropriate dock widget.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 ValueWidget::ValueWidget(QWidget* parent)
 	: QWidget(parent) {

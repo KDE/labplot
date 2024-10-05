@@ -36,7 +36,7 @@
 	\class MatrixFunctionDialog
 	\brief Dialog for generating matrix values from a mathematical function.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 MatrixFunctionDialog::MatrixFunctionDialog(Matrix* m, QWidget* parent)
 	: QDialog(parent)

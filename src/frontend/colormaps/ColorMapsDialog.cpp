@@ -22,7 +22,7 @@
 	\class ColorMapsDialog
 	\brief Dialog showing the available color maps. Embeds \c ColorMapsWidget and provides the standard buttons.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 ColorMapsDialog::ColorMapsDialog(QWidget* parent)
 	: QDialog(parent)

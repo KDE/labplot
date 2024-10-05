@@ -26,7 +26,7 @@ controlled by a SpreadsheetDoubleHeaderView object and thus has
 a master-slave relationship to it. This would be an inner class
 of SpreadsheetDoubleHeaderView if Qt allowed this.
 
-\ingroup commonfrontend
+\ingroup frontend
 */
 
 SpreadsheetCommentsHeaderView::SpreadsheetCommentsHeaderView(QWidget* parent)
@@ -56,7 +56,7 @@ controlled by a SpreadsheetDoubleHeaderView object and thus has
 a master-slave relationship to it. This would be an inner class
 of SpreadsheetDoubleHeaderView if Qt allowed this.
 
-\ingroup commonfrontend
+\ingroup frontend
 */
 
 SpreadsheetSparkLineHeaderView::SpreadsheetSparkLineHeaderView(QWidget* parent)
@@ -97,7 +97,7 @@ which displays the column sparkline and third header showing column comments.
 \sa SpreadsheetSparklineHeaderView
 \sa QHeaderView
 
-\ingroup commonfrontend
+\ingroup frontend
 */
 
 SpreadsheetHeaderView::SpreadsheetHeaderView(QWidget* parent)

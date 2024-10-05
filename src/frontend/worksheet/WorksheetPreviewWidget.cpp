@@ -24,7 +24,7 @@
   \class WorksheetPreviewWidget
   \brief A widget showing the preview of all worksheets in the project.
 
-  \ingroup kdefrontend
+  \ingroup frontend
 */
 WorksheetPreviewWidget::WorksheetPreviewWidget(QWidget* parent)
 	: QWidget(parent) {

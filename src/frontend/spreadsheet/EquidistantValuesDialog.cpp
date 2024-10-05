@@ -28,7 +28,7 @@
 	\class EquidistantValuesDialog
 	\brief Dialog for equidistant values.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 
 EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent)

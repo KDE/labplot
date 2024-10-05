@@ -22,7 +22,7 @@
 Overides QItemDelegate::paint() and provides shaded representation
 of masked cells used in SpreadsheetView.
 
-\ingroup commonfrontend
+\ingroup frontend
 */
 
 SpreadsheetItemDelegate::SpreadsheetItemDelegate(QObject* parent)

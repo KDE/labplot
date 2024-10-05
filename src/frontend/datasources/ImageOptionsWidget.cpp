@@ -16,7 +16,7 @@
    \class ImageOptionsWidget
    \brief Widget providing options for the import of image data
 
-   \ingroup kdefrontend
+   \ingroup frontend
 */
 
 ImageOptionsWidget::ImageOptionsWidget(QWidget* parent)

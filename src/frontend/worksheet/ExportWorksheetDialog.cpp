@@ -31,7 +31,7 @@
 	\class ExportWorksheetDialog
 	\brief Dialog for exporting a worksheet to a file.
 
-	\ingroup kdefrontend
+	\ingroup frontend
 */
 
 ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent)

@@ -40,7 +40,7 @@
 	\class ImportProjectDialog
 	\brief Dialog for importing project files.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type)
 	: QDialog(parent)

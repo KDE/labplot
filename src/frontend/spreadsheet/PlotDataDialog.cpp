@@ -72,7 +72,7 @@ enum class PlotPlacement {
 	\class PlotDataDialog
 	\brief Dialog for generating plots for the spreadsheet data.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 PlotDataDialog::PlotDataDialog(AbstractAspect* parentAspect, PlotType type, QWidget* parent)
 	: QDialog(parent)

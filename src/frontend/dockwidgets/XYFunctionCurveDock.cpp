@@ -28,7 +28,7 @@
 		(2D-curves defined by a mathematical function) currently selected in
 		the project explorer.
 
-  \ingroup kdefrontend
+  \ingroup frontend
 */
 
 XYFunctionCurveDock::XYFunctionCurveDock(QWidget* parent)

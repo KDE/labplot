@@ -34,7 +34,7 @@
 	\class FunctionValuesDialog
 	\brief Dialog for generating values from a mathematical function.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent)
 	: QDialog(parent)

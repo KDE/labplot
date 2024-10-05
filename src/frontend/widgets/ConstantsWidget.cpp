@@ -16,7 +16,7 @@
 	\brief Widget for selecting supported mathematical and physical constants
 	that can be used in expressions in \c ExpressionTextEdit.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 ConstantsWidget::ConstantsWidget(QWidget* parent)
 	: QWidget(parent) {

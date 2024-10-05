@@ -50,7 +50,7 @@
   and propagates the item selection in the view to the model.
   Furthermore, features for searching and filtering in the model are provided.
 
-  \ingroup commonfrontend
+  \ingroup frontend
 */
 
 ProjectExplorer::ProjectExplorer(QWidget* parent)

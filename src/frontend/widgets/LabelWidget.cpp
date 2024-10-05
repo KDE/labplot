@@ -91,7 +91,7 @@
 	In order the properties of the label to be shown, \c loadConfig() has to be called with the corresponding KConfigGroup
 	(settings for a label in *Plot, Axis etc. or for an independent label on the worksheet).
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 LabelWidget::LabelWidget(QWidget* parent)
 	: BaseDock(parent)

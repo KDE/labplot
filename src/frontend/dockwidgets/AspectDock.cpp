@@ -16,7 +16,7 @@
   \brief Provides a widget for editing the properties of the aspects where only the name and comments need to be modified.
   Example objects are Folder, Workbook, etc.
 
-  \ingroup kdefrontend
+  \ingroup frontend
 */
 
 AspectDock::AspectDock(QWidget* parent)

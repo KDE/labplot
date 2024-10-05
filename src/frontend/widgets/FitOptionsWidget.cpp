@@ -18,7 +18,7 @@
 	\class FitOptionsWidget
 	\brief Widget for editing advanced fit options.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData, XYFitCurve* fitCurve)
 	: QWidget(parent)

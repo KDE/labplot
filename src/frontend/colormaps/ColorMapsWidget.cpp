@@ -29,7 +29,7 @@
 	\class ColorMapsWidget
 	\brief Widget for importing data from a dataset.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 ColorMapsWidget::ColorMapsWidget(QWidget* parent)
 	: QWidget(parent) {

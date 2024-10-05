@@ -12,7 +12,7 @@
  \class SpreadsheetCommentsHeaderModel
  \brief Model class wrapping a SpreadsheetModel to display column comments in a SpreadsheetCommentsHeaderView
 
-\ingroup commonfrontend
+\ingroup frontend
 */
 
 SpreadsheetCommentsHeaderModel::SpreadsheetCommentsHeaderModel(SpreadsheetModel* spreadsheet_model, QObject* parent)

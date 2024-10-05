@@ -14,7 +14,7 @@
 	\class MQTTWillSettingsWidget
 	\brief Widget for managing MQTT connection's will settings
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 MQTTWillSettingsWidget::MQTTWillSettingsWidget(QWidget* parent, const MQTTClient::MQTTWill& will, const QVector<QString>& topics)
 	: QWidget(parent)

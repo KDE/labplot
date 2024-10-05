@@ -9,8 +9,8 @@
 */
 #include "WelcomeScreenHelper.h"
 #include "backend/datasources/DatasetHandler.h"
-#include "kdefrontend/DatasetModel.h"
-#include "kdefrontend/datasources/ImportDatasetWidget.h"
+#include "frontend/DatasetModel.h"
+#include "frontend/datasources/ImportDatasetWidget.h"
 
 #include <QBuffer>
 #include <QDebug>
@@ -31,7 +31,7 @@
 \class WelcomeScreenHelper
 \brief Helper class for the welcome screen
 
-\ingroup kdefrontend
+\ingroup frontend
 */
 WelcomeScreenHelper::WelcomeScreenHelper()
 	: m_datasetWidget(new ImportDatasetWidget(0)) {

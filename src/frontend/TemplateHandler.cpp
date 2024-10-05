@@ -39,7 +39,7 @@ static QVector<TemplateHandler*> templateHandlers;
  Emits \c loadConfig() and \c saveConfig() signals that have to be connected
  to the appropriate slots in the ui (mostly in the dock widgets)
 
- \ingroup kdefrontend
+ \ingroup frontend
 */
 
 TemplateHandler::TemplateHandler(QWidget* parent, const QString& className, bool alignRight)

@@ -43,7 +43,7 @@ enum class ValueType { CustomValue, Difference, Minimum, Maximum, Median, Mean, 
 	\class AddSubtractValueDialog
 	\brief Dialog for adding/subtracting a value from column values.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 
 AddSubtractValueDialog::AddSubtractValueDialog(Spreadsheet* s, const QVector<Column*>& columns, Operation op, QWidget* parent)

@@ -31,7 +31,7 @@
   \class ImageDock
   \brief  Provides a widget for editing the properties of the worksheets image element.
 
-  \ingroup kdefrontend
+  \ingroup frontend
 */
 
 ImageDock::ImageDock(QWidget* parent)

@@ -85,7 +85,7 @@ QString ImportFileWidget::absolutePath(const QString& fileName) {
    \class ImportFileWidget
    \brief Widget for importing data from a file.
 
-   \ingroup kdefrontend
+   \ingroup frontend
 */
 ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const QString& fileName, bool embedded)
 	: QWidget(parent)

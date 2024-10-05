@@ -17,7 +17,7 @@
    \class MatioOptionsWidget
    \brief Widget providing options for the import of Matio data
 
-   \ingroup kdefrontend
+   \ingroup frontend
 */
 MatioOptionsWidget::MatioOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget)
 	: QWidget(parent)

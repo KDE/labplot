@@ -25,7 +25,7 @@
 \class McapOptionsWidget
 \brief Widget providing options for the import of json data
 
-\ingroup kdefrontend
+\ingroup frontend
 */
 McapOptionsWidget::McapOptionsWidget(QWidget* parent)
 	: QWidget(parent) {

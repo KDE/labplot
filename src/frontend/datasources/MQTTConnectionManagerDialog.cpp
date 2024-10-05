@@ -22,7 +22,7 @@
 	\class MQTTConnectionManagerDialog
 	\brief dialog for managing MQTT connections
 
-	\ingroup kdefrontend
+	\ingroup frontend
 */
 MQTTConnectionManagerDialog::MQTTConnectionManagerDialog(QWidget* parent, const QString& conn, bool changed)
 	: QDialog(parent)

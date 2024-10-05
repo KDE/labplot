@@ -29,7 +29,7 @@ public:
 	 controlled by a SpreadsheetDoubleHeaderView object and thus has
 	 a master-slave relationship to it. This would be an inner class
 	 of SpreadsheetDoubleHeaderView if Qt allowed this.
-		 \ingroup commonfrontend
+		 \ingroup frontend
 	*/
 	explicit SpreadsheetCommentsHeaderView(QWidget* parent = nullptr);
 	~SpreadsheetCommentsHeaderView() override;

@@ -18,7 +18,7 @@
    \class NetCDFOptionsWidget
    \brief Widget providing options for the import of NetCDF data
 
-   \ingroup kdefrontend
+   \ingroup frontend
 */
 NetCDFOptionsWidget::NetCDFOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget)
 	: QWidget(parent)

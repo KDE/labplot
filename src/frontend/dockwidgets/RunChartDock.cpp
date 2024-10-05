@@ -25,7 +25,7 @@
   \class RunChartDock
   \brief  Provides a widget for editing the properties of run charts.
 
-  \ingroup kdefrontend
+  \ingroup frontend
 */
 RunChartDock::RunChartDock(QWidget* parent)
 	: BaseDock(parent)

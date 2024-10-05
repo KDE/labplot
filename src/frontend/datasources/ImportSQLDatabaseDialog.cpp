@@ -32,7 +32,7 @@
 	\class ImportSQLDatabaseDialog
 	\brief Dialog for importing data from a SQL database. Embeds \c ImportSQLDatabaseWidget and provides the standard buttons.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 ImportSQLDatabaseDialog::ImportSQLDatabaseDialog(MainWin* parent)
 	: ImportDialog(parent)

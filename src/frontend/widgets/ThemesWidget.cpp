@@ -31,7 +31,7 @@
 	\class ThemesWidget
 	\brief Widget for showing theme previews and for selecting a theme.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 ThemesWidget::ThemesWidget(QWidget* parent)
 	: QListView(parent) {

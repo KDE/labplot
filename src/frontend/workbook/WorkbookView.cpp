@@ -26,7 +26,7 @@
 	\class WorkbookView
 	\brief View class for Workbook
 
-	\ingroup commonfrontend
+	\ingroup frontend
  */
 WorkbookView::WorkbookView(Workbook* workbook)
 	: QWidget()

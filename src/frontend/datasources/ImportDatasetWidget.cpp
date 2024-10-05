@@ -32,7 +32,7 @@
 	\class ImportDatasetWidget
 	\brief Widget for importing data from a dataset.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 ImportDatasetWidget::ImportDatasetWidget(QWidget* parent)
 	: QWidget(parent)

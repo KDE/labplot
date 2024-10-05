@@ -29,7 +29,7 @@
 
 /**
  * @brief Provides a dialog for editing the grid properties for the worksheet view
- * \ingroup kdefrontend
+ * \ingroup frontend
  */
 GridDialog::GridDialog(QWidget* parent)
 	: QDialog(parent) {

@@ -19,7 +19,7 @@
 	\class LineWidget
 	\brief Widget for editing the properties of a Line object, mostly used in an appropriate dock widget.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 LineWidget::LineWidget(QWidget* parent)
 	: QWidget(parent) {

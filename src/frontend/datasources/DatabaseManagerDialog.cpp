@@ -22,7 +22,7 @@
 	\class DatabaseManagerDialog
 	\brief dialog for managing database connections
 
-	\ingroup kdefrontend
+	\ingroup frontend
 */
 DatabaseManagerDialog::DatabaseManagerDialog(QWidget* parent, const QString& conn)
 	: QDialog(parent)

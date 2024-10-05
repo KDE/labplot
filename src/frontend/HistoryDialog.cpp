@@ -27,7 +27,7 @@
 	\class HistoryDialog
 	\brief Display the content of project's undo stack.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& emptyLabel)
 	: QDialog(parent)

@@ -21,7 +21,7 @@
 \class AsciiOptionsWidget
 \brief Widget providing options for the import of ascii data
 
-\ingroup kdefrontend
+\ingroup frontend
 */
 AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent)
 	: QWidget(parent) {

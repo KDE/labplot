@@ -29,7 +29,7 @@
 /*! \class FITSHeaderEditWidget
  * \brief Widget for listing/editing FITS header keywords
  * \since 2.4.0
- * \ingroup kdefrontend/widgets
+ * \ingroup frontend/widgets
  */
 FITSHeaderEditWidget::FITSHeaderEditWidget(QWidget* parent)
 	: QWidget(parent)

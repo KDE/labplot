@@ -23,7 +23,7 @@
 	\class DatasetMetadataManagerDialog
 	\brief Dialog for adding a new dataset to LabPlot's current collection. Embeds \c DatasetMetadataManagerWidget and provides the standard buttons.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 DatasetMetadataManagerDialog::DatasetMetadataManagerDialog(QWidget* parent, const QMap<QString, QMap<QString, QMap<QString, QVector<QString>>>>& datasetMap)
 	: QDialog(parent)

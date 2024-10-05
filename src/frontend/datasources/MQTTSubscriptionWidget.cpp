@@ -24,7 +24,7 @@
    \class MQTTSubscriptionWidget
    \brief Widget for managing topics and subscribing.
 
-   \ingroup kdefrontend
+   \ingroup frontend
 */
 MQTTSubscriptionWidget::MQTTSubscriptionWidget(QWidget* parent)
 	: QWidget(parent)

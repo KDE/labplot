@@ -32,7 +32,7 @@ enum class OperatorText { EqualTo, NotEqualTo, StartsWith, EndsWith, Contain, No
 	\class DropValuesDialog
 	\brief Dialog for generating values from a mathematical function.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent)
 	: QDialog(parent)

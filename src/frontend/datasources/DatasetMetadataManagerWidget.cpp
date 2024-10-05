@@ -34,7 +34,7 @@
 	\class DatasetMetadataManagerWidget
 	\brief Widget for adding a new dataset to LabPlot's current collection.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 DatasetMetadataManagerWidget::DatasetMetadataManagerWidget(QWidget* parent, const QMap<QString, QMap<QString, QMap<QString, QVector<QString>>>>& datasetMap)
 	: QWidget(parent) {

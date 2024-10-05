@@ -28,7 +28,7 @@
 	\class BatchEditValueLabelsDialog
 	\brief Dialog to add a new the value label
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 BatchEditValueLabelsDialog::BatchEditValueLabelsDialog(QWidget* parent)
 	: QDialog(parent)

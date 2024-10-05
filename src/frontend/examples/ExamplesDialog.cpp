@@ -22,7 +22,7 @@
 	\class ExamplesDialog
 	\brief Dialog showing the available example projects.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 ExamplesDialog::ExamplesDialog(QWidget* parent)
 	: QDialog(parent)

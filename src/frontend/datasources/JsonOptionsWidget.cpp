@@ -24,7 +24,7 @@
 \class JsonOptionsWidget
 \brief Widget providing options for the import of json data
 
-\ingroup kdefrontend
+\ingroup frontend
 */
 JsonOptionsWidget::JsonOptionsWidget(QWidget* parent)
 	: QWidget(parent)

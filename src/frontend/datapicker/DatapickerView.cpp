@@ -29,7 +29,7 @@
 	\class DatapickerView
 	\brief View class for Datapicker
 
-	\ingroup commonfrontend
+	\ingroup frontend
  */
 DatapickerView::DatapickerView(Datapicker* datapicker)
 	: QWidget()

@@ -16,7 +16,7 @@
 \class DatasetModel
 \brief Wrapper class for datasets, and also for their categories and subcategories
 
-\ingroup kdefrontend
+\ingroup frontend
 */
 DatasetModel::DatasetModel(const QMap<QString, QMap<QString, QMap<QString, QVector<QString>>>>& datasetsMap) {
 	initCollections(datasetsMap);

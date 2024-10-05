@@ -26,7 +26,7 @@
  \class SpreadsheetDock
  \brief Provides a widget for editing the properties of the spreadsheets currently selected in the project explorer.
 
- \ingroup kdefrontend
+ \ingroup frontend
 */
 
 SpreadsheetDock::SpreadsheetDock(QWidget* parent)

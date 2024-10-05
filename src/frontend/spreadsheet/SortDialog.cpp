@@ -21,7 +21,7 @@
 	\class SortDialog
 	\brief Dialog for sorting the columns in a spreadsheet.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 SortDialog::SortDialog(QWidget* parent, bool sortAll)
 	: QDialog(parent) {

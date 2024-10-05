@@ -28,7 +28,7 @@
   The exclusions are the name, the comment and the datasets (columns) of
   the curves  - these properties can only be changed if there is only one single curve.
 
-  \ingroup kdefrontend
+  \ingroup frontend
 */
 
 XYFourierFilterCurveDock::XYFourierFilterCurveDock(QWidget* parent)

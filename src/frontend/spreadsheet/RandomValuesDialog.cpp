@@ -35,7 +35,7 @@
 	\class RandomValuesDialog
 	\brief Dialog for generating non-uniform random numbers.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 
 RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent)

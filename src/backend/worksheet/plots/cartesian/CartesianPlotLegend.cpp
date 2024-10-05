@@ -12,7 +12,7 @@
   \class CartesianPlotLegend
   \brief Legend for the cartesian plot.
 
-  \ingroup kdefrontend
+  \ingroup frontend
 */
 #include "CartesianPlotLegend.h"
 #include "backend/core/AbstractColumn.h"

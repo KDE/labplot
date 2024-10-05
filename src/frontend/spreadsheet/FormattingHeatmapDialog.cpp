@@ -29,7 +29,7 @@
 	\class FormattingHeatmapDialog
 	\brief Dialog for generating non-uniform random numbers.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 
 FormattingHeatmapDialog::FormattingHeatmapDialog(Spreadsheet* s, QWidget* parent)

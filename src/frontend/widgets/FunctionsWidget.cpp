@@ -16,7 +16,7 @@
 	\brief Widget for selecting supported mathematical functions
 	that can be used in expressions in \c ExpressionTextEdit.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 FunctionsWidget::FunctionsWidget(QWidget* parent)
 	: QWidget(parent) {

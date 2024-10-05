@@ -33,7 +33,7 @@ enum class Method { Periodic, Random };
 	\class SampleValuesDialog
 	\brief Dialog for generating values from a mathematical function.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 SampleValuesDialog::SampleValuesDialog(Spreadsheet* s, QWidget* parent)
 	: QDialog(parent)

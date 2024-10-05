@@ -36,7 +36,7 @@
 	\class ExportSpreadsheetDialog
 	\brief Dialog for exporting a spreadsheet to a file.
 
-	\ingroup kdefrontend
+	\ingroup frontend
 */
 ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 	: QDialog(parent)

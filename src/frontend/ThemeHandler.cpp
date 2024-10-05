@@ -35,7 +35,7 @@
   Emits \c loadConfig() signal that have to be connected
   to the appropriate slots in the backend (plot widgets)
 
-  \ingroup kdefrontend
+  \ingroup frontend
 */
 
 ThemeHandler::ThemeHandler(QWidget* parent)

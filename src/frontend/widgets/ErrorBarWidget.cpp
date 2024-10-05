@@ -21,7 +21,7 @@
 	\class ErrorBarWidget
 	\brief Widget for editing the properties of a Line object, mostly used in an appropriate dock widget.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 ErrorBarWidget::ErrorBarWidget(QWidget* parent, bool poissonAvailable)
 	: QWidget(parent) {

@@ -18,7 +18,7 @@
 	\class BinaryOptionsWidget
 	\brief Widget providing options for the import of binary data
 
-	\ingroup kdefrontend
+	\ingroup frontend
 */
 
 BinaryOptionsWidget::BinaryOptionsWidget(QWidget* parent)

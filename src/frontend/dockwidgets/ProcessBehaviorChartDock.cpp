@@ -25,7 +25,7 @@
   \class ProcessBehaviorChartDock
   \brief  Provides a widget for editing the properties of process behavior charts.
 
-  \ingroup kdefrontend
+  \ingroup frontend
 */
 ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	: BaseDock(parent)

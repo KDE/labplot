@@ -16,7 +16,7 @@
    \class HDF5OptionsWidget
    \brief Widget providing options for the import of HDF5 data
 
-   \ingroup kdefrontend
+   \ingroup frontend
 */
 HDF5OptionsWidget::HDF5OptionsWidget(QWidget* parent, ImportFileWidget* fileWidget)
 	: QWidget(parent)

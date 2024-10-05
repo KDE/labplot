@@ -27,7 +27,7 @@
 
 		  Modified version of https://doc.qt.io/qt-5/qtwidgets-tools-customcompleter-example.html
 
-  \ingroup kdefrontend
+  \ingroup frontend
 */
 ExpressionTextEdit::ExpressionTextEdit(QWidget* parent)
 	: KTextEdit(parent)

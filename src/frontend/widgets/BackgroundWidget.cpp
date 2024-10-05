@@ -19,7 +19,7 @@
 	\class BackgroundWidget
 	\brief Widget for editing the properties of a Background object, mostly used in an appropriate dock widget.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 BackgroundWidget::BackgroundWidget(QWidget* parent)
 	: QWidget(parent) {

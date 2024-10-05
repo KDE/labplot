@@ -27,7 +27,7 @@
   \class CartesianPlotLegendDock
   \brief  Provides a widget for editing the properties of the cartesian plot legend currently selected in the project explorer.
 
-  \ingroup kdefrontend
+  \ingroup frontend
 */
 CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent)
 	: BaseDock(parent) {

@@ -26,7 +26,7 @@
 	\class FlattenColumnsDialog
 	\brief Dialog for flattening of the selected columns in the spreadsheet.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 FlattenColumnsDialog::FlattenColumnsDialog(Spreadsheet* s, QWidget* parent)
 	: QDialog(parent)

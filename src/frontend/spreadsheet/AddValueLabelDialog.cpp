@@ -30,7 +30,7 @@
 	\class AddValueLabelDialog
 	\brief Dialog to add a new the value label
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 AddValueLabelDialog::AddValueLabelDialog(QWidget* parent, const Column* column)
 	: QDialog(parent) {

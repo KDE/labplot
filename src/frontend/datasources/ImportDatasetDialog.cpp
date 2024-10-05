@@ -30,7 +30,7 @@
 	\class ImportDatasetDialog
 	\brief Dialog for importing data from a dataset. Embeds \c ImportDatasetWidget and provides the standard buttons.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 ImportDatasetDialog::ImportDatasetDialog(MainWin* parent)
 	: ImportDialog(parent)

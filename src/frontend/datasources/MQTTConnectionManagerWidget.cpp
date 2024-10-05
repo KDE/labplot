@@ -24,7 +24,7 @@
    \class MQTTConnectionManagerWidget
    \brief widget for managing MQTT connections, embedded in \c MQTTConnectionManagerDialog.
 
-   \ingroup kdefrontend
+   \ingroup frontend
 */
 MQTTConnectionManagerWidget::MQTTConnectionManagerWidget(QWidget* parent, const QString& conn)
 	: QWidget(parent)

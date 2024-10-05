@@ -110,7 +110,7 @@ enum TukeyLadderPower { InverseSquared, Inverse, InverseSquareRoot, Log, SquareR
 	\class SpreadsheetView
 	\brief View class for Spreadsheet
 
- \ingroup commonfrontend
+ \ingroup frontend
 */
 SpreadsheetView::SpreadsheetView(Spreadsheet* spreadsheet, bool readOnly)
 	: QWidget()

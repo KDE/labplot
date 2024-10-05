@@ -21,7 +21,7 @@
  \class MatrixDock
  \brief Provides a widget for editing the properties of the matrices currently selected in the project explorer.
 
- \ingroup kdefrontend
+ \ingroup frontend
 */
 MatrixDock::MatrixDock(QWidget* parent)
 	: BaseDock(parent) {

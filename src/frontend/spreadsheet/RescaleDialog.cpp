@@ -23,7 +23,7 @@
 	\class RescaleDialog
 	\brief Dialog to provide the rescale interval for the select columns in the spreadsheet.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 RescaleDialog::RescaleDialog(QWidget* parent)
 	: QDialog(parent) {
