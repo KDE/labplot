@@ -14,7 +14,6 @@
 #include "frontend/dockwidgets/BaseDock.h"
 #include "ui_barplotdock.h"
 
-class AbstractAspect;
 class BackgroundWidget;
 class BarPlot;
 class ErrorBarWidget;

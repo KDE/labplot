@@ -10,7 +10,6 @@
 */
 
 #include "ColumnDock.h"
-
 #include "backend/core/AbstractFilter.h"
 #include "backend/core/Project.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
@@ -21,10 +20,6 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "frontend/spreadsheet/AddValueLabelDialog.h"
 #include "frontend/spreadsheet/BatchEditValueLabelsDialog.h"
-
-#include <KLocalizedString>
-
-#include <QInputDialog>
 
 /*!
   \class ColumnDock

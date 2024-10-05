@@ -17,8 +17,6 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 
-#include <kcoreaddons_version.h>
-
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 #include <KSyntaxHighlighting/Definition>
 #include <KSyntaxHighlighting/SyntaxHighlighter>

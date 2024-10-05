@@ -11,27 +11,15 @@
 #ifndef LIVEDATADOCK_H
 #define LIVEDATADOCK_H
 
-#ifdef HAVE_MQTT
-#include "backend/datasources/MQTTClient.h"
-#include "backend/datasources/filters/AsciiFilter.h"
-#include <QMap>
-#include <QStringList>
-#include <QtMqtt>
-
-class MQTTSubscriptionWidget;
-#endif
-
-#include <QList>
-#include <QWidget>
-
 #include "backend/datasources/LiveDataSource.h"
 #include "frontend/dockwidgets/BaseDock.h"
 #include "ui_livedatadock.h"
 
-class QTimer;
-class QTreeWidgetItem;
-class QString;
-class QCompleter;
+#ifdef HAVE_MQTT
+class MQTTSubscriptionWidget;
+#include "backend/datasources/MQTTClient.h"
+#include <QtMqtt>
+#endif
 
 class LiveDataDock : public BaseDock {
 	Q_OBJECT
@@ -44,7 +32,6 @@ public:
 private:
 	Ui::LiveDataDock ui;
 	LiveDataSource* m_liveDataSource{nullptr};
-
 	bool m_paused{false};
 
 	void pauseReading();
@@ -94,7 +81,7 @@ private:
 
 	struct MQTTHost {
 		int count;
-		QMqttClient* client;
+		QMqttClient* client{nullptr};
 		QStringList topicList;
 		QVector<QString> addedTopics;
 	};

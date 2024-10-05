@@ -9,7 +9,6 @@
 */
 
 #include "backend/core/AbstractPart.h"
-#include "backend/worksheet/Worksheet.h"
 #include "frontend/core/ContentDockWidget.h"
 
 #include <QUuid>

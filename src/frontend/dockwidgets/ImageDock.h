@@ -14,7 +14,6 @@
 #include "frontend/dockwidgets/BaseDock.h"
 #include "ui_imagedock.h"
 
-class AbstractAspect;
 class Image;
 class LineWidget;
 class KConfig;

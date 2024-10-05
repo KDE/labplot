@@ -23,7 +23,6 @@
 #include <KMessageBox>
 #include <KUrlComboBox>
 #include <KWindowConfig>
-#include <kcoreaddons_version.h>
 
 #include <QDialogButtonBox>
 #include <QDir>

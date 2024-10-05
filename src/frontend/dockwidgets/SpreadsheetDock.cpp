@@ -10,7 +10,6 @@
 */
 
 #include "SpreadsheetDock.h"
-#include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/datapicker/DatapickerCurve.h"
 #include "backend/spreadsheet/Spreadsheet.h"

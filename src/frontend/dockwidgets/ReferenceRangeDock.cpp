@@ -8,14 +8,11 @@
 */
 
 #include "ReferenceRangeDock.h"
-#include "backend/worksheet/plots/cartesian/ReferenceRange.h"
-
 #include "frontend/widgets/BackgroundWidget.h"
 #include "frontend/widgets/LineWidget.h"
 
 #include <KConfig>
 #include <KLocalizedString>
-#include <QFile>
 
 ReferenceRangeDock::ReferenceRangeDock(QWidget* parent)
 	: BaseDock(parent) {

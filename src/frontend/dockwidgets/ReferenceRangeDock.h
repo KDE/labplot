@@ -14,10 +14,8 @@
 #include "frontend/dockwidgets/BaseDock.h"
 #include "ui_referencerangedock.h"
 
-class AbstractAspect;
 class BackgroundWidget;
 class LineWidget;
-class ReferenceRange;
 class KConfig;
 
 class ReferenceRangeDock : public BaseDock {

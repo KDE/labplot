@@ -12,7 +12,6 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "frontend/spreadsheet/ExportSpreadsheetDialog.h"
 #include "frontend/workbook/WorkbookView.h"
 
 #include <KLocalizedString>

@@ -16,7 +16,6 @@
 
 #include <KWindowConfig>
 #include <QDialogButtonBox>
-#include <QPushButton>
 #include <QWindow>
 
 /*!

@@ -11,17 +11,14 @@
 #ifndef AXISDOCK_H
 #define AXISDOCK_H
 
-#include "frontend/widgets/NumberSpinBox.h"
 #include "frontend/dockwidgets/BaseDock.h"
 #include "ui_axisdock.h"
 
-class AbstractAspect;
 class LineWidget;
 class LabelWidget;
 class TreeViewComboBox;
 class AbstractColumn;
 class DateTimeSpinBox;
-class NumberSpinBox;
 class KConfig;
 
 class AxisDock : public BaseDock {

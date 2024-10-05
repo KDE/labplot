@@ -76,8 +76,6 @@ void XYCorrelationCurveDock::setupGeneral() {
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
 
-	DEBUG("XYCorrelationCurveDock::setupGeneral() DONE");
-
 	// Slots
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCorrelationCurveDock::dataSourceTypeChanged);
 	connect(uiGeneralTab.sbSamplingInterval, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYCorrelationCurveDock::samplingIntervalChanged);

@@ -17,7 +17,6 @@
 #include "backend/nsl/nsl_kde.h"
 #include "backend/nsl/nsl_sf_kernel.h"
 
-class AspectTreeModel;
 class BackgroundWidget;
 class KDEPlot;
 class LineWidget;

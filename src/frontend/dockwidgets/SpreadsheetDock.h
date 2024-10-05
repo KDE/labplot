@@ -11,14 +11,12 @@
 
 #ifndef SPREADSHEETDOCK_H
 #define SPREADSHEETDOCK_H
-#include "backend/core/AspectTreeModel.h"
+
 #include "frontend/dockwidgets/BaseDock.h"
 #include "ui_spreadsheetdock.h"
 
 class KConfig;
 class Spreadsheet;
-class AbstractAspect;
-class AspectTreeModel;
 
 class SpreadsheetDock : public BaseDock {
 	Q_OBJECT
@@ -42,7 +40,7 @@ private Q_SLOTS:
 	void commentsShownChanged(bool);
 	void sparklinesShownChanged(bool);
 	void linkingChanged(bool);
-	void linkedSpreadsheetChanged(const QModelIndex& index);
+	void linkedSpreadsheetChanged(const QModelIndex&);
 
 	// SLOTs for changes triggered in Spreadsheet
 	void spreadsheetRowCountChanged(int);

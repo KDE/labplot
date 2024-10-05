@@ -12,12 +12,11 @@
 #ifndef COLUMNDOCK_H
 #define COLUMNDOCK_H
 
-#include "backend/core/column/Column.h"
+#include "backend/core/AbstractColumn.h"
 #include "frontend/dockwidgets/BaseDock.h"
 #include "ui_columndock.h"
 
-template<class T>
-class QList;
+class Column;
 
 class ColumnDock : public BaseDock {
 	Q_OBJECT

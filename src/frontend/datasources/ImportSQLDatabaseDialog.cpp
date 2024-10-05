@@ -9,7 +9,6 @@
 
 #include "ImportSQLDatabaseDialog.h"
 #include "ImportSQLDatabaseWidget.h"
-#include "backend/core/AspectTreeModel.h"
 #include "backend/core/Settings.h"
 #include "backend/core/Workbook.h"
 #include "backend/lib/macros.h"
@@ -25,7 +24,6 @@
 #include <QWindow>
 
 #include <KLocalizedString>
-
 #include <KWindowConfig>
 
 /*!
