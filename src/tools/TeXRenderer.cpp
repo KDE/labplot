@@ -12,7 +12,7 @@
 #include "backend/core/Settings.h"
 #include "backend/lib/hostprocess.h"
 #include "backend/lib/macros.h"
-#include "kdefrontend/GuiTools.h"
+#include "frontend/GuiTools.h"
 
 #include <KConfigGroup>
 #include <KLocalizedString>

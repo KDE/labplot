@@ -53,8 +53,8 @@
 #include "backend/worksheet/plots/cartesian/ReferenceRange.h"
 #include "backend/worksheet/plots/cartesian/RunChart.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
-#include "kdefrontend/ThemeHandler.h"
-#include "kdefrontend/widgets/ThemesWidget.h"
+#include "frontend/ThemeHandler.h"
+#include "frontend/widgets/ThemesWidget.h"
 
 #include <KConfig>
 #include <KConfigGroup>

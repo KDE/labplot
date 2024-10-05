@@ -27,7 +27,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Plot.h"
-#include "commonfrontend/spreadsheet/SpreadsheetView.h"
+#include "frontend/spreadsheet/SpreadsheetView.h"
 
 #include <KLocalizedString>
 

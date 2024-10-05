@@ -24,7 +24,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
-#include "kdefrontend/GuiTools.h"
+#include "frontend/GuiTools.h"
 #include "tools/ImageTools.h"
 
 #include <QActionGroup>

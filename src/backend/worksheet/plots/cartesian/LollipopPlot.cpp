@@ -19,7 +19,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
-#include "kdefrontend/GuiTools.h"
+#include "frontend/GuiTools.h"
 #include "tools/ImageTools.h"
 
 #include <KConfig>

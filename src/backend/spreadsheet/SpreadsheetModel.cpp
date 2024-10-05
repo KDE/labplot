@@ -15,6 +15,7 @@
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "frontend/spreadsheet/SpreadsheetSparkLineHeaderModel.h"
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -22,8 +23,6 @@
 #include <QBrush>
 #include <QIcon>
 #include <QPalette>
-
-#include <commonfrontend/spreadsheet/SpreadsheetSparkLineHeaderModel.h>
 
 /*!
 	\class SpreadsheetModel

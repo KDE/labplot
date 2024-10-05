@@ -49,7 +49,7 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_spline.h>
 
-#include <kdefrontend/GuiTools.h>
+#include <frontend/GuiTools.h>
 
 using Dimension = CartesianCoordinateSystem::Dimension;
 

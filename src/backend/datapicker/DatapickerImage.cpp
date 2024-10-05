@@ -20,8 +20,8 @@
 #include "backend/lib/trace.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
-#include "commonfrontend/datapicker/DatapickerImageView.h"
-#include "kdefrontend/worksheet/ExportWorksheetDialog.h"
+#include "frontend/datapicker/DatapickerImageView.h"
+#include "frontend/worksheet/ExportWorksheetDialog.h"
 
 #include <QBuffer>
 #include <QDir>

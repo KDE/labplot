@@ -20,7 +20,7 @@
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
-#include "kdefrontend/GuiTools.h"
+#include "frontend/GuiTools.h"
 
 #include "backend/nsl/nsl_math.h"
 #include "backend/nsl/nsl_sf_basic.h"

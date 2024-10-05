@@ -17,7 +17,7 @@
 #include "backend/core/column/ColumnPrivate.h"
 #include "backend/lib/XmlStreamReader.h"
 #ifndef SDK
-#include "commonfrontend/notebook/NotebookView.h"
+#include "frontend/notebook/NotebookView.h"
 #endif
 
 #include <cantor/panelplugin.h>

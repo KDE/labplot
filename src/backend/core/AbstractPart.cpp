@@ -10,7 +10,7 @@
 
 #include "backend/core/AbstractPart.h"
 #include "backend/core/Settings.h"
-#include "commonfrontend/core/ContentDockWidget.h"
+#include "frontend/core/ContentDockWidget.h"
 
 #include <DockManager.h>
 #include <QMenu>

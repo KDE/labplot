@@ -1,8 +1,7 @@
 cmake_policy(SET CMP0079 NEW)
 
-set(KDEFRONTEND_DIR ../src/kdefrontend)
+set(FRONTEND_DIR ../src/frontend)
 set(BACKEND_DIR ../src/backend)
-set(COMMONFRONTEND_DIR ../src/commonfrontend)
 set(TOOLS_DIR ../src/tools)
 set(CMAKE_AUTOMOC ON)
 set(SRC_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
@@ -14,8 +13,13 @@ include(GenerateExportHeader)
 set_property(SOURCE gsl_parser.hpp gsl_parser.cpp PROPERTY SKIP_AUTOMOC ON)
 
 set(GUI_SOURCES
-    ${KDEFRONTEND_DIR}/GuiTools.cpp
-    ${KDEFRONTEND_DIR}/ThemeHandler.cpp)
+    ${FRONTEND_DIR}/GuiTools.cpp
+    ${FRONTEND_DIR}/ThemeHandler.cpp
+    ${FRONTEND_DIR}/matrix/MatrixView.cpp
+    ${FRONTEND_DIR}/note/NoteView.cpp
+    ${FRONTEND_DIR}/workbook/WorkbookView.cpp
+    ${FRONTEND_DIR}/worksheet/WorksheetView.cpp
+)
 
 set(BACKEND_SOURCES
     ${BACKEND_DIR}/core/Time.cpp
@@ -182,7 +186,6 @@ set(TOOLS_SOURCES
     ${TOOLS_DIR}/TeXRenderer.cpp
 )
 
-
 if(NOT MSVC_FOUND)
 if(NOT LIBCERF_FOUND)
     list(APPEND NSL_SOURCES
@@ -190,14 +193,6 @@ if(NOT LIBCERF_FOUND)
    )
 endif()
 endif()
-
-set(COMMONFRONTEND_SOURCES
-    ${COMMONFRONTEND_DIR}/matrix/MatrixView.cpp
-    ${COMMONFRONTEND_DIR}/note/NoteView.cpp
-    #    ${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetView.cpp
-    ${COMMONFRONTEND_DIR}/workbook/WorkbookView.cpp
-    ${COMMONFRONTEND_DIR}/worksheet/WorksheetView.cpp
-)
 
 bison_target(GslParser
     ${BACKEND_DIR}/gsl/parser.ypp
@@ -223,7 +218,7 @@ add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50500)
 #endif ()
 
 # dynamic library
-add_library(liblabplot ${GUI_SOURCES} ${BACKEND_SOURCES} ${NSL_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${GENERATED_SOURCES} ${QTMOC_HDRS})
+add_library(liblabplot ${GUI_SOURCES} ${BACKEND_SOURCES} ${NSL_SOURCES} ${TOOLS_SOURCES} ${GENERATED_SOURCES} ${QTMOC_HDRS})
 # name it liblabplot, not libliblabplot
 set_property(TARGET liblabplot PROPERTY OUTPUT_NAME labplot)
 # generate labplot_export.h + LABPLOT_EXPORT

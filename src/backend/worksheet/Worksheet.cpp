@@ -23,9 +23,9 @@
 #include "backend/worksheet/TreeModel.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
-#include "commonfrontend/worksheet/WorksheetView.h"
-#include "kdefrontend/ThemeHandler.h"
-#include "kdefrontend/worksheet/ExportWorksheetDialog.h"
+#include "frontend/ThemeHandler.h"
+#include "frontend/worksheet/ExportWorksheetDialog.h"
+#include "frontend/worksheet/WorksheetView.h"
 
 #ifndef SDK
 #include <QPrintDialog>

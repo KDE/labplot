@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>NoteDock</class>
+ <widget class="QWidget" name="NoteDock">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>326</width>
+    <height>386</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0" colspan="2">
+    <widget class="QLabel" name="lName">
+     <property name="text">
+      <string>Name:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <spacer name="horizontalSpacer_5">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>10</width>
+       <height>23</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="0" column="3">
+    <widget class="TimedLineEdit" name="leName"/>
+   </item>
+   <item row="1" column="0" colspan="2">
+    <widget class="QLabel" name="lComment">
+     <property name="text">
+      <string>Comment:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3">
+    <widget class="ResizableTextEdit" name="teComment"/>
+   </item>
+   <item row="2" column="1">
+    <spacer name="verticalSpacer_8">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>18</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="3" column="0" colspan="2">
+    <widget class="QLabel" name="bgcolor">
+     <property name="text">
+      <string>Background color:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="3">
+    <widget class="KColorButton" name="kcbBgColor"/>
+   </item>
+   <item row="4" column="0" colspan="2">
+    <widget class="QLabel" name="textcolor">
+     <property name="text">
+      <string>Text color:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="3">
+    <widget class="KColorButton" name="kcbTextColor"/>
+   </item>
+   <item row="5" column="0" colspan="2">
+    <widget class="QLabel" name="lLabelsFont">
+     <property name="text">
+      <string>Font:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="3">
+    <widget class="KFontRequester" name="kfrTextFont"/>
+   </item>
+   <item row="6" column="0">
+    <spacer name="verticalSpacerGeneral">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::MinimumExpanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>24</width>
+       <height>18</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kcolorbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KFontRequester</class>
+   <extends>QWidget</extends>
+   <header>kfontrequester.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ResizableTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>frontend/widgets/ResizableTextEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TimedLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>frontend/widgets/TimedLineEdit.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

@@ -12,7 +12,7 @@
 #include "backend/datasources/MQTTTopic.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/lib/XmlStreamReader.h"
-#include "kdefrontend/datasources/MQTTErrorWidget.h"
+#include "frontend/datasources/MQTTErrorWidget.h"
 
 #include <QTimer>
 
