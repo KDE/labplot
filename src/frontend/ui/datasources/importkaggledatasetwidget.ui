@@ -203,7 +203,7 @@
   <customwidget>
    <class>TimedLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>src/kdefrontend/widgets/TimedLineEdit.h</header>
+   <header>src/frontend/widgets/TimedLineEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
