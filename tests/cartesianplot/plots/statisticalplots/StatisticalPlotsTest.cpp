@@ -943,7 +943,7 @@ void StatisticalPlotsTest::testRunChartDuplicate() {
 }
 
 /*!
- * test the run chart using Average for center line, data from from Wheeler "Making Sense of Data", chapter seven.
+ * test the run chart using Average for the center line, data from from Wheeler "Making Sense of Data", chapter seven.
  */
 void StatisticalPlotsTest::testRunChartCenterAverage() {
 	// prepare the data
@@ -972,7 +972,7 @@ void StatisticalPlotsTest::testRunChartCenterAverage() {
 }
 
 /*!
- * test the run chart using Median for center line, data from from Wheeler "Making Sense of Data", chapter seven.
+ * test the run chart using Median for the center line, data from from Wheeler "Making Sense of Data", chapter seven.
  */
 void StatisticalPlotsTest::testRunChartCenterMedian() {
 	// prepare the data
@@ -999,6 +999,5 @@ void StatisticalPlotsTest::testRunChartCenterMedian() {
 	for (int i = 0; i < rowCount; ++i)
 		QCOMPARE(xColumn->valueAt(i), i + 1);
 }
-
 
 QTEST_MAIN(StatisticalPlotsTest)

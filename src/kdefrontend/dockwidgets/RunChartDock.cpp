@@ -201,10 +201,6 @@ void RunChartDock::plotCenterMetricChanged(RunChart::CenterMetric metric) {
 //*************************************************************
 //************************* Settings **************************
 //*************************************************************
-void RunChartDock::load() {
-
-}
-
 void RunChartDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group(QStringLiteral("RunChart"));
 

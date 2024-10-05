@@ -32,8 +32,6 @@ public:
 
 private:
 	TreeViewComboBox* cbDataColumn;
-
-	void load();
 	void loadConfig(KConfig&);
 
 protected:
