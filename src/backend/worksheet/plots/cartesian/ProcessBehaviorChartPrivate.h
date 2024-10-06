@@ -60,7 +60,7 @@ public:
 	Column* yLowerLimitColumn{nullptr};
 	QString yLowerLimitColumnPath;
 
-	int subgroupSize{5};
+	int sampleSize{5};
 	bool negativeLowerLimitEnabled{false};
 
 	ProcessBehaviorChart* const q;

@@ -72,7 +72,7 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	connect(cbDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &ProcessBehaviorChartDock::dataColumnChanged);
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ProcessBehaviorChartDock::typeChanged);
 	connect(ui.cbLimitsMetric, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ProcessBehaviorChartDock::limitsMetricChanged);
-	connect(ui.sbSubgroupSize, &QSpinBox::valueChanged, this, &ProcessBehaviorChartDock::subgroupSizeChanged);
+	connect(ui.sbSampleSize, &QSpinBox::valueChanged, this, &ProcessBehaviorChartDock::sampleSizeChanged);
 	connect(ui.chbNegativeLowerLimit, &QCheckBox::clicked, this, &ProcessBehaviorChartDock::negativeLowerLimitEnabledChanged);
 
 	// template handler
@@ -159,7 +159,7 @@ void ProcessBehaviorChartDock::setPlots(QList<ProcessBehaviorChart*> list) {
 	connect(m_plot, &ProcessBehaviorChart::dataColumnChanged, this, &ProcessBehaviorChartDock::plotDataColumnChanged);
 	connect(m_plot, &ProcessBehaviorChart::typeChanged, this, &ProcessBehaviorChartDock::plotTypeChanged);
 	connect(m_plot, &ProcessBehaviorChart::limitsMetricChanged, this, &ProcessBehaviorChartDock::plotLimitsMetricChanged);
-	connect(m_plot, &ProcessBehaviorChart::subgroupSizeChanged, this, &ProcessBehaviorChartDock::plotSubgroupSizeChanged);
+	connect(m_plot, &ProcessBehaviorChart::sampleSizeChanged, this, &ProcessBehaviorChartDock::plotSampleSizeChanged);
 }
 
 void ProcessBehaviorChartDock::retranslateUi() {
@@ -174,6 +174,10 @@ void ProcessBehaviorChartDock::retranslateUi() {
 	ui.cbType->addItem(QStringLiteral("R"), static_cast<int>(ProcessBehaviorChart::Type::R));
 	ui.cbType->addItem(QStringLiteral("X̅  (X̅S)"), static_cast<int>(ProcessBehaviorChart::Type::XbarS));
 	ui.cbType->addItem(QStringLiteral("S"), static_cast<int>(ProcessBehaviorChart::Type::S));
+	ui.cbType->addItem(QStringLiteral("P"), static_cast<int>(ProcessBehaviorChart::Type::P));
+	ui.cbType->addItem(QStringLiteral("NP"), static_cast<int>(ProcessBehaviorChart::Type::NP));
+	ui.cbType->addItem(QStringLiteral("C"), static_cast<int>(ProcessBehaviorChart::Type::C));
+	ui.cbType->addItem(QStringLiteral("U"), static_cast<int>(ProcessBehaviorChart::Type::U));
 
 	// tooltips
 	QString info = i18n(
@@ -185,13 +189,13 @@ void ProcessBehaviorChartDock::retranslateUi() {
 		"</ul>"
 		"Averages and Ranges, Limits based on the Average or Median Range:"
 		"<ul>"
-		"<li>X̅  (X̅R) - plot the <b>averages for each subgroup</b> .</li>"
-		"<li>R (X̅R) - plot the <b>ranges for each subgroup</b>.</li>"
+		"<li>X̅  (X̅R) - plot the <b>averages for each sample</b> .</li>"
+		"<li>R (X̅R) - plot the <b>ranges for each sample</b>.</li>"
 		"</ul>"
 		"Averages and Standard Deviations, Limits Based on the Standard Deviations:"
 		"<ul>"
-		"<li>X̅  (X̅S) - plot the <b>averages for each subgroup</b>.</li>"
-		"<li>S (X̅S) - plot the <b>standard deviations for each subgroup</b>.</li>"
+		"<li>X̅  (X̅S) - plot the <b>averages for each sample</b>.</li>"
+		"<li>S (X̅S) - plot the <b>standard deviations for each sample</b>.</li>"
 		"</ul>");
 	ui.lType->setToolTip(info);
 	ui.cbType->setToolTip(info);
@@ -235,14 +239,15 @@ void ProcessBehaviorChartDock::dataColumnChanged(const QModelIndex& index) {
 void ProcessBehaviorChartDock::typeChanged(int index) {
 	const auto type = static_cast<ProcessBehaviorChart::Type>(ui.cbType->itemData(index).toInt());
 
-	// depending on the current type, show/hide the settings for the subgroup type
+	// depending on the current type, show/hide the settings for the sample type
 	bool visible = (type == ProcessBehaviorChart::Type::XbarR || type == ProcessBehaviorChart::Type::R || type == ProcessBehaviorChart::Type::XbarS
-					|| type == ProcessBehaviorChart::Type::S);
-	ui.lSubgroupSize->setVisible(visible);
-	ui.sbSubgroupSize->setVisible(visible);
+					|| type == ProcessBehaviorChart::Type::S || type == ProcessBehaviorChart::Type::NP);
+	ui.lSampleSize->setVisible(visible);
+	ui.sbSampleSize->setVisible(visible);
 
 	// depending on the current type, show/hide the settings for the metric used to define the limits
-	visible = (type != ProcessBehaviorChart::Type::XbarS && type != ProcessBehaviorChart::Type::S);
+	visible = (type == ProcessBehaviorChart::Type::XmR || type == ProcessBehaviorChart::Type::mR || type == ProcessBehaviorChart::Type::XbarR
+				|| type == ProcessBehaviorChart::Type::R);
 	ui.lLimitsMetric->setVisible(visible);
 	ui.cbLimitsMetric->setVisible(visible);
 
@@ -262,10 +267,10 @@ void ProcessBehaviorChartDock::limitsMetricChanged(int index) {
 		plot->setLimitsMetric(limitsMetric);
 }
 
-void ProcessBehaviorChartDock::subgroupSizeChanged(int value) {
+void ProcessBehaviorChartDock::sampleSizeChanged(int value) {
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* plot : m_plots)
-		plot->setSubgroupSize(value);
+		plot->setSampleSize(value);
 }
 
 void ProcessBehaviorChartDock::negativeLowerLimitEnabledChanged(bool enabled) {
@@ -295,9 +300,9 @@ void ProcessBehaviorChartDock::plotLimitsMetricChanged(ProcessBehaviorChart::Lim
 	ui.cbLimitsMetric->setCurrentIndex(index);
 }
 
-void ProcessBehaviorChartDock::plotSubgroupSizeChanged(int value) {
+void ProcessBehaviorChartDock::plotSampleSizeChanged(int value) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.sbSubgroupSize->setValue(value);
+	ui.sbSampleSize->setValue(value);
 }
 
 void ProcessBehaviorChartDock::plotNegativeLowerLimitEnabledChanged(bool enabled) {
@@ -317,8 +322,8 @@ void ProcessBehaviorChartDock::load() {
 	index = ui.cbLimitsMetric->findData(static_cast<int>(m_plot->limitsMetric()));
 	ui.cbLimitsMetric->setCurrentIndex(index);
 
-	// subgroup size
-	ui.sbSubgroupSize->setValue(static_cast<int>(m_plot->subgroupSize()));
+	// sample size
+	ui.sbSampleSize->setValue(static_cast<int>(m_plot->sampleSize()));
 
 	// allow negative values for the lower limit
 	ui.chbNegativeLowerLimit->setChecked(m_plot->negativeLowerLimitEnabled());
@@ -337,9 +342,9 @@ void ProcessBehaviorChartDock::loadConfig(KConfig& config) {
 	index = ui.cbLimitsMetric->findData(static_cast<int>(limitsMetric));
 	ui.cbLimitsMetric->setCurrentIndex(index);
 
-	// subgroup size
-	const int size = group.readEntry(QStringLiteral("SubgroupSize"), static_cast<int>(m_plot->subgroupSize()));
-	ui.sbSubgroupSize->setValue(size);
+	// sample size
+	const int size = group.readEntry(QStringLiteral("SampleSize"), static_cast<int>(m_plot->sampleSize()));
+	ui.sbSampleSize->setValue(size);
 
 	// allow negative values for the lower limit
 	ui.chbNegativeLowerLimit->setChecked(group.readEntry(QStringLiteral("NegativeLowerLimitEnabled"), false));
@@ -372,7 +377,7 @@ void ProcessBehaviorChartDock::saveConfigAsTemplate(KConfig& config) {
 	// general
 	group.writeEntry(QStringLiteral("Type"), static_cast<int>(m_plot->type()));
 	group.writeEntry(QStringLiteral("LimitsMetric"), static_cast<int>(m_plot->limitsMetric()));
-	group.writeEntry(QStringLiteral("SubgroupSize"), m_plot->subgroupSize());
+	group.writeEntry(QStringLiteral("SampleSize"), m_plot->sampleSize());
 	group.writeEntry(QStringLiteral("NegativeLowerLimitEnabled"), m_plot->negativeLowerLimitEnabled());
 
 	// properties of the data and limit curves

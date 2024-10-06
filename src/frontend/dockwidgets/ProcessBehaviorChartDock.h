@@ -57,7 +57,7 @@ private Q_SLOTS:
 	void dataColumnChanged(const QModelIndex&);
 	void typeChanged(int);
 	void limitsMetricChanged(int);
-	void subgroupSizeChanged(int);
+	void sampleSizeChanged(int);
 	void negativeLowerLimitEnabledChanged(bool);
 
 	// SLOTs for changes triggered in ProcessBehaviorChart
@@ -65,7 +65,7 @@ private Q_SLOTS:
 	void plotDataColumnChanged(const AbstractColumn*);
 	void plotTypeChanged(ProcessBehaviorChart::Type);
 	void plotLimitsMetricChanged(ProcessBehaviorChart::LimitsMetric);
-	void plotSubgroupSizeChanged(int);
+	void plotSampleSizeChanged(int);
 	void plotNegativeLowerLimitEnabledChanged(bool);
 
 	// load and save

@@ -29,7 +29,7 @@ class ProcessBehaviorChart : public Plot {
 public:
 	friend class ProcessBehaviorChartSetDataColumnCmd;
 
-	enum class Type { XmR, mR, XbarR, R, XbarS, S };
+	enum class Type { XmR, mR, XbarR, R, XbarS, S, P, NP, C, U };
 	enum class LimitsMetric { Average, Median };
 
 	explicit ProcessBehaviorChart(const QString& name);
@@ -49,7 +49,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(ProcessBehaviorChart::LimitsMetric, limitsMetric, LimitsMetric)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, dataColumn, DataColumn)
 	CLASS_D_ACCESSOR_DECL(QString, dataColumnPath, DataColumnPath)
-	BASIC_D_ACCESSOR_DECL(int, subgroupSize, SubgroupSize)
+	BASIC_D_ACCESSOR_DECL(int, sampleSize, SampleSize)
 	BASIC_D_ACCESSOR_DECL(bool, negativeLowerLimitEnabled, NegativeLowerLimitEnabled)
 
 	Symbol* dataSymbol() const;
@@ -105,7 +105,7 @@ Q_SIGNALS:
 	void limitsMetricChanged(ProcessBehaviorChart::LimitsMetric);
 	void dataDataChanged();
 	void dataColumnChanged(const AbstractColumn*);
-	void subgroupSizeChanged(int);
+	void sampleSizeChanged(int);
 	void negativeLowerLimitEnabledChanged(bool);
 };
 

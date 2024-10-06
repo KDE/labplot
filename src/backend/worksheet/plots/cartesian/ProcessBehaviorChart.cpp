@@ -60,7 +60,7 @@ void ProcessBehaviorChart::init() {
 	KConfigGroup group = config.group(QStringLiteral("ProcessBehaviorChart"));
 
 	d->type = static_cast<ProcessBehaviorChart::Type>(group.readEntry(QStringLiteral("Type"), static_cast<int>(ProcessBehaviorChart::Type::XmR)));
-	d->subgroupSize = group.readEntry(QStringLiteral("SubgroupSize"), 5);
+	d->sampleSize = group.readEntry(QStringLiteral("SampleSize"), 5);
 	d->limitsMetric = static_cast<ProcessBehaviorChart::LimitsMetric>(
 		group.readEntry(QStringLiteral("LimitsMetric"), static_cast<int>(ProcessBehaviorChart::LimitsMetric::Average)));
 	d->negativeLowerLimitEnabled = group.readEntry(QStringLiteral("NegativeLowerLimitEnabled"), false);
@@ -201,7 +201,7 @@ void ProcessBehaviorChart::setVisible(bool on) {
 //  general
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, ProcessBehaviorChart::Type, type, type)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, ProcessBehaviorChart::LimitsMetric, limitsMetric, limitsMetric)
-BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, int, subgroupSize, subgroupSize)
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, int, sampleSize, sampleSize)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, bool, negativeLowerLimitEnabled, negativeLowerLimitEnabled)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, const AbstractColumn*, dataColumn, dataColumn)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, QString, dataColumnPath, dataColumnPath)
@@ -215,10 +215,10 @@ int ProcessBehaviorChart::xIndexCount() const {
 		return 0;
 
 	int count = 0;
-	if (d->type == ProcessBehaviorChart::Type::XmR || d->type == ProcessBehaviorChart::Type::mR)
+	if (d->type == ProcessBehaviorChart::Type::XmR || d->type == ProcessBehaviorChart::Type::mR || d->type == ProcessBehaviorChart::Type::NP)
 		count = d->dataColumn->rowCount();
 	else
-		count = d->dataColumn->rowCount() / d->subgroupSize;
+		count = d->dataColumn->rowCount() / d->sampleSize;
 
 	return count;
 }
@@ -390,11 +390,11 @@ void ProcessBehaviorChart::setLimitsMetric(ProcessBehaviorChart::LimitsMetric li
 		exec(new ProcessBehaviorChartSetLimitsMetricCmd(d, limitsMetric, ki18n("%1: set limits metric")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetSubgroupSize, int, subgroupSize, recalc)
-void ProcessBehaviorChart::setSubgroupSize(int subgroupSize) {
+STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetSampleSize, int, sampleSize, recalc)
+void ProcessBehaviorChart::setSampleSize(int sampleSize) {
 	Q_D(ProcessBehaviorChart);
-	if (subgroupSize != d->subgroupSize)
-		exec(new ProcessBehaviorChartSetSubgroupSizeCmd(d, subgroupSize, ki18n("%1: set subgroup size")));
+	if (sampleSize != d->sampleSize)
+		exec(new ProcessBehaviorChartSetSampleSizeCmd(d, sampleSize, ki18n("%1: set sample size")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetNegativeLowerLimitEnabled, bool, negativeLowerLimitEnabled, recalc)
@@ -598,26 +598,26 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		break;
 	}
 	case ProcessBehaviorChart::Type::XbarR: {
-		// calculate the mean for each subgroup
+		// calculate the mean for each sample
 		int groupIndex = 0;
-		for (int i = 0; i < count; i += subgroupSize) {
+		for (int i = 0; i < count; i += sampleSize) {
 			double sum = 0.0;
 			int j = 0;
-			for (; j < subgroupSize && (i + j) < count; ++j) {
+			for (; j < sampleSize && (i + j) < count; ++j) {
 				if (dataColumn->isValid(i + j) && !dataColumn->isMasked(i + j))
 					sum += dataColumn->valueAt(i + j);
 			}
 
-			yColumn->setValueAt(groupIndex, sum / subgroupSize);
+			yColumn->setValueAt(groupIndex, sum / sampleSize);
 			++groupIndex;
 		}
 
-		// Calculate the range for each subgroups
-		std::vector<double> subgroupRanges;
-		for (int i = 0; i < count; i += subgroupSize) {
+		// Calculate the range for each sample
+		std::vector<double> sampleRanges;
+		for (int i = 0; i < count; i += sampleSize) {
 			double minVal = dataColumn->valueAt(i);
 			double maxVal = dataColumn->valueAt(i);
-			for (int j = 1; j < subgroupSize && (i + j) < count; ++j) {
+			for (int j = 1; j < sampleSize && (i + j) < count; ++j) {
 				if (dataColumn->isValid(i) && !dataColumn->isMasked(i)) {
 					double val = dataColumn->valueAt(i + j);
 					if (val < minVal)
@@ -626,22 +626,22 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 						maxVal = val;
 				}
 			}
-			subgroupRanges.push_back(maxVal - minVal);
+			sampleRanges.push_back(maxVal - minVal);
 		}
 
-		// center line at the mean of subgroup means ("grand average")
+		// center line at the mean of sample means ("grand average")
 		const double meanOfMeans = yColumn->statistics().arithmeticMean;
 		center = meanOfMeans;
 
 		// upper and lower limits - the mean of means plus/minus normalized mean range
 		if (limitsMetric == ProcessBehaviorChart::LimitsMetric::Average) {
-			const double meanRange = gsl_stats_mean(subgroupRanges.data(), 1, subgroupRanges.size());
-			const double A2 = nsl_pcm_A2(subgroupSize);
+			const double meanRange = gsl_stats_mean(sampleRanges.data(), 1, sampleRanges.size());
+			const double A2 = nsl_pcm_A2(sampleSize);
 			upperLimit = meanOfMeans + A2 * meanRange;
 			lowerLimit = meanOfMeans - A2 * meanRange;
 		} else { // median
-			const double medianRange = gsl_stats_median(subgroupRanges.data(), 1, subgroupRanges.size());
-			const double A4 = nsl_pcm_A4(subgroupSize);
+			const double medianRange = gsl_stats_median(sampleRanges.data(), 1, sampleRanges.size());
+			const double A4 = nsl_pcm_A4(sampleSize);
 			upperLimit = meanOfMeans + A4 * medianRange;
 			lowerLimit = meanOfMeans - A4 * medianRange;
 		}
@@ -652,12 +652,12 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		break;
 	}
 	case ProcessBehaviorChart::Type::R: {
-		// Calculate the range of subgroups
+		// Calculate the range of samples
 		int groupIndex = 0;
-		for (int i = 0; i < count; i += subgroupSize) {
+		for (int i = 0; i < count; i += sampleSize) {
 			double minVal = dataColumn->valueAt(i);
 			double maxVal = dataColumn->valueAt(i);
-			for (int j = 1; j < subgroupSize && (i + j) < count; ++j) {
+			for (int j = 1; j < sampleSize && (i + j) < count; ++j) {
 				if (dataColumn->isValid(i) && !dataColumn->isMasked(i)) {
 					double val = dataColumn->valueAt(i + j);
 					if (val < minVal)
@@ -677,8 +677,8 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 			center = meanRange;
 
 			// upper and lower limits
-			const double D3 = nsl_pcm_D3(subgroupSize);
-			const double D4 = nsl_pcm_D4(subgroupSize);
+			const double D3 = nsl_pcm_D3(sampleSize);
+			const double D4 = nsl_pcm_D4(sampleSize);
 			upperLimit = D4 * meanRange;
 			lowerLimit = D3 * meanRange;
 		} else { // median
@@ -687,8 +687,8 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 			center = medianRange;
 
 			// upper and lower limits
-			const double D5 = nsl_pcm_D5(subgroupSize);
-			const double D6 = nsl_pcm_D6(subgroupSize);
+			const double D5 = nsl_pcm_D5(sampleSize);
+			const double D6 = nsl_pcm_D6(sampleSize);
 			upperLimit = D6 * medianRange;
 			lowerLimit = D5 * medianRange;
 		}
@@ -698,30 +698,30 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 
 		break;
 	}
-	case ProcessBehaviorChart::Type::XbarS: { // chart based on the means and standard deviations for each subgroup
-		// Calculate the mean of subgroups
+	case ProcessBehaviorChart::Type::XbarS: { // chart based on the means and standard deviations for each sample
+		// Calculate the mean of samples
 		int groupIndex = 0;
-		for (int i = 0; i < count; i += subgroupSize) {
+		for (int i = 0; i < count; i += sampleSize) {
 			double sum = 0.0;
-			for (int j = 0; j < subgroupSize && (i + j) < count; ++j) {
+			for (int j = 0; j < sampleSize && (i + j) < count; ++j) {
 				if (dataColumn->isValid(i) && !dataColumn->isMasked(i))
 					sum += dataColumn->valueAt(i + j);
 			}
 
-			yColumn->setValueAt(groupIndex, sum / subgroupSize);
+			yColumn->setValueAt(groupIndex, sum / sampleSize);
 			++groupIndex;
 		}
 
-		// Calculate the standard deviations of subgroups
-		std::vector<double> subgroupStdDevs;
-		for (int i = 0; i < count; i += subgroupSize) {
-			std::vector<double> subgroup;
-			for (int j = 0; j < subgroupSize && (i + j) < count; ++j) {
+		// Calculate the standard deviations of samples
+		std::vector<double> sampleStdDevs;
+		for (int i = 0; i < count; i += sampleSize) {
+			std::vector<double> sample;
+			for (int j = 0; j < sampleSize && (i + j) < count; ++j) {
 				if (dataColumn->isValid(i) && !dataColumn->isMasked(i))
-					subgroup.push_back(dataColumn->valueAt(i + j));
+					sample.push_back(dataColumn->valueAt(i + j));
 			}
-			const double stddev = gsl_stats_sd(subgroup.data(), 1, subgroup.size());
-			subgroupStdDevs.push_back(stddev);
+			const double stddev = gsl_stats_sd(sample.data(), 1, sample.size());
+			sampleStdDevs.push_back(stddev);
 		}
 
 		// center line at the mean of means
@@ -729,8 +729,8 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		center = meanOfMeans;
 
 		// upper and lower limits
-		const double meanStdDev = gsl_stats_mean(subgroupStdDevs.data(), 1, subgroupStdDevs.size());
-		const double A3 = nsl_pcm_A3(subgroupSize);
+		const double meanStdDev = gsl_stats_mean(sampleStdDevs.data(), 1, sampleStdDevs.size());
+		const double A3 = nsl_pcm_A3(sampleSize);
 		upperLimit = meanOfMeans + A3 * meanStdDev;
 		lowerLimit = meanOfMeans - A3 * meanStdDev;
 
@@ -740,15 +740,15 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		break;
 	}
 	case ProcessBehaviorChart::Type::S: {
-		// Calculate the standard deviation for each subgroup
+		// Calculate the standard deviation for each sample
 		int groupIndex = 0;
-		for (int i = 0; i < count; i += subgroupSize) {
-			std::vector<double> subgroup;
-			for (int j = 0; j < subgroupSize && (i + j) < count; ++j) {
+		for (int i = 0; i < count; i += sampleSize) {
+			std::vector<double> sample;
+			for (int j = 0; j < sampleSize && (i + j) < count; ++j) {
 				if (dataColumn->isValid(i + j) && !dataColumn->isMasked(i + j))
-					subgroup.push_back(dataColumn->valueAt(i + j));
+					sample.push_back(dataColumn->valueAt(i + j));
 			}
-			const double stddev = gsl_stats_sd(subgroup.data(), 1, subgroup.size());
+			const double stddev = gsl_stats_sd(sample.data(), 1, sample.size());
 			yColumn->setValueAt(groupIndex, stddev);
 			++groupIndex;
 		}
@@ -758,15 +758,47 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		center = meanStdDev;
 
 		// upper and lower limits
-		const double B3 = nsl_pcm_B3(subgroupSize);
-		const double B4 = nsl_pcm_B4(subgroupSize);
+		const double B3 = nsl_pcm_B3(sampleSize);
+		const double B4 = nsl_pcm_B4(sampleSize);
 		upperLimit = B4 * meanStdDev;
 		lowerLimit = B3 * meanStdDev;
 
-		// plotted data - subgroup standard deviations
+		// plotted data - sample standard deviations
 		dataCurve->setYColumn(yColumn);
 
 		break;
+	}
+	case ProcessBehaviorChart::Type::P: {
+		break;
+	}
+	case ProcessBehaviorChart::Type::NP: {
+		//Calculate the total number of defectives
+		double totalDefectivesCount = 0.0;
+		for (int i = 0; i < count; ++i) {
+			if (dataColumn->isValid(i) && !dataColumn->isMasked(i))
+				totalDefectivesCount += dataColumn->valueAt(i);
+		}
+
+		// center
+		const double size = static_cast<const Column*>(dataColumn)->statistics().size;
+		const double pBar = totalDefectivesCount / (sampleSize * size);
+		const double npBar = sampleSize * pBar;
+		center = npBar;
+
+		// upper and lower limits
+		const double distance = 3. * std::sqrt(npBar * (1 - pBar));
+		upperLimit = npBar + distance;
+		lowerLimit = npBar - distance;
+
+		// plotted data - original data
+		dataCurve->setYColumn(dataColumn);
+
+		break;
+	}
+	case ProcessBehaviorChart::Type::C: {
+		break;
+	}
+	case ProcessBehaviorChart::Type::U: {
 	}
 	}
 
@@ -835,7 +867,7 @@ void ProcessBehaviorChart::save(QXmlStreamWriter* writer) const {
 	WRITE_COLUMN(d->yLowerLimitColumn, yLowerLimitColumn);
 	writer->writeAttribute(QStringLiteral("type"), QString::number(static_cast<int>(d->type)));
 	writer->writeAttribute(QStringLiteral("limitsMetric"), QString::number(static_cast<int>(d->limitsMetric)));
-	writer->writeAttribute(QStringLiteral("subgroupSize"), QString::number(d->subgroupSize));
+	writer->writeAttribute(QStringLiteral("sampleSize"), QString::number(d->sampleSize));
 	writer->writeAttribute(QStringLiteral("negativeLowerLimitEnabled"), QString::number(d->negativeLowerLimitEnabled));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
@@ -901,7 +933,7 @@ bool ProcessBehaviorChart::load(XmlStreamReader* reader, bool preview) {
 			READ_COLUMN(yLowerLimitColumn);
 			READ_INT_VALUE("type", type, ProcessBehaviorChart::Type);
 			READ_INT_VALUE("limitsMetric", limitsMetric, ProcessBehaviorChart::LimitsMetric);
-			READ_INT_VALUE("subgroupSize", subgroupSize, int);
+			READ_INT_VALUE("sampleSize", sampleSize, int);
 			READ_INT_VALUE("negativeLowerLimitEnabled", negativeLowerLimitEnabled, bool);
 			READ_INT_VALUE("legendVisible", legendVisible, bool);
 

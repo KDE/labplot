@@ -101,7 +101,7 @@
         <widget class="QComboBox" name="cbPlotRanges"/>
        </item>
        <item row="6" column="2">
-        <widget class="QSpinBox" name="sbSubgroupSize">
+        <widget class="QSpinBox" name="sbSampleSize">
          <property name="minimum">
           <number>2</number>
          </property>
@@ -111,9 +111,9 @@
         </widget>
        </item>
        <item row="6" column="0">
-        <widget class="QLabel" name="lSubgroupSize">
+        <widget class="QLabel" name="lSampleSize">
          <property name="text">
-          <string>Subgroup Size:</string>
+          <string>Sample Size:</string>
          </property>
         </widget>
        </item>
