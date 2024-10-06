@@ -772,7 +772,7 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		break;
 	}
 	case ProcessBehaviorChart::Type::NP: {
-		//Calculate the total number of defectives
+		// Calculate the total number of defectives
 		double totalDefectivesCount = 0.0;
 		for (int i = 0; i < count; ++i) {
 			if (dataColumn->isValid(i) && !dataColumn->isMasked(i))
