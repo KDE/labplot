@@ -87,9 +87,6 @@ private:
 	void init();
 	void connectDataColumn(const AbstractColumn*);
 
-	QAction* navigateToAction{nullptr};
-	bool m_menusInitialized{false};
-
 	// private methods used in tests
 	friend class StatisticalPlotsTest;
 	double center() const;
