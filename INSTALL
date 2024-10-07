@@ -1,4 +1,4 @@
-To compile LabPlot from source following packages are required:
+To compile LabPlot from source following packages are required (for Fedora see section below):
 	* CMake version 3.17.0 or higher
 	* Qt version 5.12 or higher (including the devel-package, libqt5-devel or similar)
 	* KDE Frameworks 5.32.0 or higher (including the devel-package)
@@ -98,3 +98,10 @@ To uninstall LabPlot execute
 To remove all build files in the base directory execute
 
 # rm -rf build
+
+================================================================================
+Fedora dependencies:
+sudo dnf install extra-cmake-modules qt6-qtsvg-devel
+sudo dnf install kf6-kcoreaddons-devel kf6-kcrash-devel kf6-kdoctools-devel kf6-kiconthemes-devel kf6-ktextwidgets-devel kf6-kwidgetsaddons-devel kf6-kxmlgui-devel kf6-karchive-devel kf6-kcompletion-devel kf6-kio-devel kf6-knewstuff-devel kf6-kuserfeedback-devel qt6-qtbase-private-devel
+sudo dnf install bison gsl-devel eigen3-devel
+
