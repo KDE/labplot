@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-06 01:46+0000\n"
-"PO-Revision-Date: 2024-10-05 16:09+0300\n"
+"POT-Creation-Date: 2024-10-07 01:44+0000\n"
+"PO-Revision-Date: 2024-10-06 09:55+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -8318,10 +8318,9 @@ msgstr "Діаграма поведінки процесу"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:515
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:517
-#, fuzzy, kde-format
-#| msgid "Run fit"
+#, kde-format
 msgid "Run Chart"
-msgstr "Виконати апроксимацію"
+msgstr "Рухома діаграма"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:535
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:615
@@ -8922,9 +8921,10 @@ msgid "%1: set limits metric"
 msgstr "%1: встановити метрику обмежень"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:397
-#, kde-format
-msgid "%1: set subgroup size"
-msgstr "%1: встановити розмір підгрупи"
+#, fuzzy, kde-format
+#| msgid "%1: set symbol size"
+msgid "%1: set sample size"
+msgstr "%1: встановити розмір позначки"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:404
 #, kde-format
@@ -8952,10 +8952,9 @@ msgid "%1: set end logical position"
 msgstr "%1: встановлення кінцевої логічної позиції"
 
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:253
-#, fuzzy, kde-format
-#| msgid "%1: set limits metric"
+#, kde-format
 msgid "%1: set center metric"
-msgstr "%1: встановити метрику обмежень"
+msgstr "%1: встановити метрику центра"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:150
 #, kde-format
@@ -12163,7 +12162,7 @@ msgstr "Вісі %1: завантажено шаблон «%2»"
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:352
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:446
 #: src/frontend/dockwidgets/MatrixDock.cpp:266
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:362
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:367
 #: src/frontend/dockwidgets/QQPlotDock.cpp:279
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:229
 #: src/frontend/dockwidgets/RunChartDock.cpp:224
@@ -12750,7 +12749,7 @@ msgid "Silverman"
 msgstr "Silverman"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:350
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:360
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:365
 #: src/frontend/dockwidgets/QQPlotDock.cpp:277
 #: src/frontend/dockwidgets/RunChartDock.cpp:222
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1036
@@ -12846,19 +12845,31 @@ msgstr "Навігатор файловою системою"
 msgid "Average"
 msgstr "Середнє"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:180
-#, kde-format
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:184
+#, fuzzy, kde-format
+#| msgid ""
+#| "The supported chart types are grouped according to the plotted statistics "
+#| "and to the metric defining the limits.<br><br>Individual Values and "
+#| "Moving Ranges, Limits Based on the Average or Median Moving Range:"
+#| "<ul><li>X (XmR) - plot the <b>individual values</b>.</li><li>mR - plot "
+#| "the <b>moving ranges</b>.</li></ul>Averages and Ranges, Limits based on "
+#| "the Average or Median Range:<ul><li>X̅  (X̅R) - plot the <b>averages for "
+#| "each subgroup</b> .</li><li>R (X̅R) - plot the <b>ranges for each "
+#| "subgroup</b>.</li></ul>Averages and Standard Deviations, Limits Based on "
+#| "the Standard Deviations:<ul><li>X̅  (X̅S) - plot the <b>averages for each "
+#| "subgroup</b>.</li><li>S (X̅S) - plot the <b>standard deviations for each "
+#| "subgroup</b>.</li></ul>"
 msgid ""
 "The supported chart types are grouped according to the plotted statistics "
 "and to the metric defining the limits.<br><br>Individual Values and Moving "
 "Ranges, Limits Based on the Average or Median Moving Range:<ul><li>X (XmR) - "
 "plot the <b>individual values</b>.</li><li>mR - plot the <b>moving ranges</"
 "b>.</li></ul>Averages and Ranges, Limits based on the Average or Median "
-"Range:<ul><li>X̅  (X̅R) - plot the <b>averages for each subgroup</b> .</"
-"li><li>R (X̅R) - plot the <b>ranges for each subgroup</b>.</li></ul>Averages "
-"and Standard Deviations, Limits Based on the Standard Deviations:<ul><li>X̅  "
-"(X̅S) - plot the <b>averages for each subgroup</b>.</li><li>S (X̅S) - plot the "
-"<b>standard deviations for each subgroup</b>.</li></ul>"
+"Range:<ul><li>X̅  (X̅R) - plot the <b>averages for each sample</b> .</li><li>R "
+"(X̅R) - plot the <b>ranges for each sample</b>.</li></ul>Averages and "
+"Standard Deviations, Limits Based on the Standard Deviations:<ul><li>X̅  (X̅S) "
+"- plot the <b>averages for each sample</b>.</li><li>S (X̅S) - plot the "
+"<b>standard deviations for each sample</b>.</li></ul>"
 msgstr ""
 "Типи підтримуваних діаграм згруповано відповідно до статистики на графіку та "
 "метричного визначення обмежень.<br><br>Окремі значення та рухомі діапазони, "
@@ -12872,7 +12883,7 @@ msgstr ""
 "кожної підгрупи</b>.</li><li>S (X̅S) — накреслити <b>стандартні відхилення "
 "для кожної підгрупи</b>.</li></ul>"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:199
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:203
 #, kde-format
 msgid "Allow negative values for the lower limit."
 msgstr "Дозволити від'ємні значення для нижньої границі."
@@ -13645,11 +13656,10 @@ msgid "Process Behavior Chart"
 msgstr "Діаграма поведінки процесу"
 
 #: src/frontend/GuiObserver.cpp:404
-#, fuzzy, kde-format
-#| msgid "Run fit"
+#, kde-format
 msgctxt "@title:window"
 msgid "Run Chart"
-msgstr "Виконати апроксимацію"
+msgstr "Рухома діаграма"
 
 #: src/frontend/GuiObserver.cpp:409
 #, kde-format
@@ -16694,7 +16704,9 @@ msgstr "Значення вибірки"
 msgid "Period:"
 msgstr "Період:"
 
+#. i18n: ectx: property (text), widget (QLabel, lSampleSize)
 #: src/frontend/spreadsheet/SampleValuesDialog.cpp:105
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:116
 #, kde-format
 msgid "Sample Size:"
 msgstr "Розмір вибірки:"
@@ -20985,12 +20997,6 @@ msgstr "Колір тексту:"
 msgid "Lower Limit < 0:"
 msgstr "Нижня межа < 0:"
 
-#. i18n: ectx: property (text), widget (QLabel, lSubgroupSize)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:116
-#, kde-format
-msgid "Subgroup Size:"
-msgstr "Розмір підгрупи:"
-
 #. i18n: ectx: property (text), widget (QLabel, lLimitsMetric)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:192
 #, kde-format
@@ -21110,17 +21116,15 @@ msgstr "X початку:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCenterMetric)
 #: src/frontend/ui/dockwidgets/runchartdock.ui:148
-#, fuzzy, kde-format
-#| msgid "Center"
+#, kde-format
 msgid "Center:"
-msgstr "за центром"
+msgstr "Центр:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCenterLine)
 #: src/frontend/ui/dockwidgets/runchartdock.ui:223
-#, fuzzy, kde-format
-#| msgid "Center Tiled"
+#, kde-format
 msgid "Center Line"
-msgstr "Плиткою за центром"
+msgstr "Центрувати лінію"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
@@ -24356,6 +24360,12 @@ msgstr "Не вдалося обробити convert, код виходу ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Не вдалося відкрити файл:"
+
+#~ msgid "%1: set subgroup size"
+#~ msgstr "%1: встановити розмір підгрупи"
+
+#~ msgid "Subgroup Size:"
+#~ msgstr "Розмір підгрупи:"
 
 #~ msgid "Evaluate Worksheet"
 #~ msgstr "Виконати обчислення на аркуші"

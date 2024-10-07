@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-06 01:46+0000\n"
-"PO-Revision-Date: 2024-10-05 10:14+0300\n"
+"POT-Creation-Date: 2024-10-07 01:44+0000\n"
+"PO-Revision-Date: 2024-10-07 00:08+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -8243,10 +8243,9 @@ msgstr "Süreç Davranış Grafiği"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:515
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:517
-#, fuzzy, kde-format
-#| msgid "Run fit"
+#, kde-format
 msgid "Run Chart"
-msgstr "Uyum çalıştır"
+msgstr "Grafiği Çalıştır"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:535
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:615
@@ -8847,9 +8846,10 @@ msgid "%1: set limits metric"
 msgstr "%1: Sınırlar ölçüsünü ayarla"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:397
-#, kde-format
-msgid "%1: set subgroup size"
-msgstr "%1: Alt grup boyutunu ayarla"
+#, fuzzy, kde-format
+#| msgid "%1: set symbol size"
+msgid "%1: set sample size"
+msgstr "%1: Sembol boyutunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:404
 #, kde-format
@@ -8877,10 +8877,9 @@ msgid "%1: set end logical position"
 msgstr "%1: Mantıksal konum bitişi ayarla"
 
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:253
-#, fuzzy, kde-format
-#| msgid "%1: set limits metric"
+#, kde-format
 msgid "%1: set center metric"
-msgstr "%1: Sınırlar ölçüsünü ayarla"
+msgstr "%1: Merkez metriğini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:150
 #, kde-format
@@ -12068,7 +12067,7 @@ msgstr "%1 eksenleri: “%2” şablonu yüklendi"
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:352
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:446
 #: src/frontend/dockwidgets/MatrixDock.cpp:266
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:362
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:367
 #: src/frontend/dockwidgets/QQPlotDock.cpp:279
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:229
 #: src/frontend/dockwidgets/RunChartDock.cpp:224
@@ -12647,7 +12646,7 @@ msgid "Silverman"
 msgstr "Silverman"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:350
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:360
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:365
 #: src/frontend/dockwidgets/QQPlotDock.cpp:277
 #: src/frontend/dockwidgets/RunChartDock.cpp:222
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1036
@@ -12743,19 +12742,31 @@ msgstr "Dosya Tarayıcısı"
 msgid "Average"
 msgstr "Ortalama"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:180
-#, kde-format
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:184
+#, fuzzy, kde-format
+#| msgid ""
+#| "The supported chart types are grouped according to the plotted statistics "
+#| "and to the metric defining the limits.<br><br>Individual Values and "
+#| "Moving Ranges, Limits Based on the Average or Median Moving Range:"
+#| "<ul><li>X (XmR) - plot the <b>individual values</b>.</li><li>mR - plot "
+#| "the <b>moving ranges</b>.</li></ul>Averages and Ranges, Limits based on "
+#| "the Average or Median Range:<ul><li>X̅  (X̅R) - plot the <b>averages for "
+#| "each subgroup</b> .</li><li>R (X̅R) - plot the <b>ranges for each "
+#| "subgroup</b>.</li></ul>Averages and Standard Deviations, Limits Based on "
+#| "the Standard Deviations:<ul><li>X̅  (X̅S) - plot the <b>averages for each "
+#| "subgroup</b>.</li><li>S (X̅S) - plot the <b>standard deviations for each "
+#| "subgroup</b>.</li></ul>"
 msgid ""
 "The supported chart types are grouped according to the plotted statistics "
 "and to the metric defining the limits.<br><br>Individual Values and Moving "
 "Ranges, Limits Based on the Average or Median Moving Range:<ul><li>X (XmR) - "
 "plot the <b>individual values</b>.</li><li>mR - plot the <b>moving ranges</"
 "b>.</li></ul>Averages and Ranges, Limits based on the Average or Median "
-"Range:<ul><li>X̅  (X̅R) - plot the <b>averages for each subgroup</b> .</"
-"li><li>R (X̅R) - plot the <b>ranges for each subgroup</b>.</li></ul>Averages "
-"and Standard Deviations, Limits Based on the Standard Deviations:<ul><li>X̅  "
-"(X̅S) - plot the <b>averages for each subgroup</b>.</li><li>S (X̅S) - plot the "
-"<b>standard deviations for each subgroup</b>.</li></ul>"
+"Range:<ul><li>X̅  (X̅R) - plot the <b>averages for each sample</b> .</li><li>R "
+"(X̅R) - plot the <b>ranges for each sample</b>.</li></ul>Averages and "
+"Standard Deviations, Limits Based on the Standard Deviations:<ul><li>X̅  (X̅S) "
+"- plot the <b>averages for each sample</b>.</li><li>S (X̅S) - plot the "
+"<b>standard deviations for each sample</b>.</li></ul>"
 msgstr ""
 "Desteklenen grafik türleri, çizilen istatistiklere ve sınırları tanımlayan "
 "ölçülere göre gruplanır.<br><br>Bireysel değerler ve hareket eden erimler, "
@@ -12769,7 +12780,7 @@ msgstr ""
 "li><li>S (X̅S) — <b>her bir alt grup için standart sapmayı</b> çizin.</li></"
 "ul>"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:199
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:203
 #, kde-format
 msgid "Allow negative values for the lower limit."
 msgstr "Alt sınır için negatif değerlere izin verin."
@@ -13539,11 +13550,10 @@ msgid "Process Behavior Chart"
 msgstr "Süreç Davranış Grafiği"
 
 #: src/frontend/GuiObserver.cpp:404
-#, fuzzy, kde-format
-#| msgid "Run fit"
+#, kde-format
 msgctxt "@title:window"
 msgid "Run Chart"
-msgstr "Uyum çalıştır"
+msgstr "Grafiği Çalıştır"
 
 #: src/frontend/GuiObserver.cpp:409
 #, kde-format
@@ -16568,7 +16578,9 @@ msgstr "Örnek Değerler"
 msgid "Period:"
 msgstr "Periyod:"
 
+#. i18n: ectx: property (text), widget (QLabel, lSampleSize)
 #: src/frontend/spreadsheet/SampleValuesDialog.cpp:105
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:116
 #, kde-format
 msgid "Sample Size:"
 msgstr "Örnek Boyut:"
@@ -20838,12 +20850,6 @@ msgstr "Metin rengi:"
 msgid "Lower Limit < 0:"
 msgstr "Alt sınır < 0:"
 
-#. i18n: ectx: property (text), widget (QLabel, lSubgroupSize)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:116
-#, kde-format
-msgid "Subgroup Size:"
-msgstr "Alt grup boyutu:"
-
 #. i18n: ectx: property (text), widget (QLabel, lLimitsMetric)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:192
 #, kde-format
@@ -20963,17 +20969,15 @@ msgstr "X başlangıcı:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCenterMetric)
 #: src/frontend/ui/dockwidgets/runchartdock.ui:148
-#, fuzzy, kde-format
-#| msgid "Center"
+#, kde-format
 msgid "Center:"
-msgstr "Merkez"
+msgstr "Merkez:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCenterLine)
 #: src/frontend/ui/dockwidgets/runchartdock.ui:223
-#, fuzzy, kde-format
-#| msgid "Center Tiled"
+#, kde-format
 msgid "Center Line"
-msgstr "Merkeze Döşenmiş"
+msgstr "Merkeze Çizgi"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
@@ -24208,6 +24212,12 @@ msgstr "dönüştürme süreci başarısız, çıkış kodu ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Dosya açılamadı:"
+
+#~ msgid "%1: set subgroup size"
+#~ msgstr "%1: Alt grup boyutunu ayarla"
+
+#~ msgid "Subgroup Size:"
+#~ msgstr "Alt grup boyutu:"
 
 #~ msgid "Evaluate Worksheet"
 #~ msgstr "Çalışma Sayfasını Değerlendir"

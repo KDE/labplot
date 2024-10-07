@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-06 01:46+0000\n"
+"POT-Creation-Date: 2024-10-07 01:44+0000\n"
 "PO-Revision-Date: 2024-10-01 06:39+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -8892,9 +8892,10 @@ msgid "%1: set limits metric"
 msgstr "%1: nastavite metriko omejitev"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:397
-#, kde-format
-msgid "%1: set subgroup size"
-msgstr "%1: določite velikost podgrupe"
+#, fuzzy, kde-format
+#| msgid "%1: set symbol size"
+msgid "%1: set sample size"
+msgstr "%1: določite velikost simbola"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:404
 #, kde-format
@@ -12121,7 +12122,7 @@ msgstr "%1 osi: naložena predloga »%2«"
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:352
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:446
 #: src/frontend/dockwidgets/MatrixDock.cpp:266
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:362
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:367
 #: src/frontend/dockwidgets/QQPlotDock.cpp:279
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:229
 #: src/frontend/dockwidgets/RunChartDock.cpp:224
@@ -12704,7 +12705,7 @@ msgid "Silverman"
 msgstr "Silverman"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:350
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:360
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:365
 #: src/frontend/dockwidgets/QQPlotDock.cpp:277
 #: src/frontend/dockwidgets/RunChartDock.cpp:222
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1036
@@ -12800,19 +12801,31 @@ msgstr "Brskalnik datotek"
 msgid "Average"
 msgstr "Povprečje"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:180
-#, kde-format
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:184
+#, fuzzy, kde-format
+#| msgid ""
+#| "The supported chart types are grouped according to the plotted statistics "
+#| "and to the metric defining the limits.<br><br>Individual Values and "
+#| "Moving Ranges, Limits Based on the Average or Median Moving Range:"
+#| "<ul><li>X (XmR) - plot the <b>individual values</b>.</li><li>mR - plot "
+#| "the <b>moving ranges</b>.</li></ul>Averages and Ranges, Limits based on "
+#| "the Average or Median Range:<ul><li>X̅  (X̅R) - plot the <b>averages for "
+#| "each subgroup</b> .</li><li>R (X̅R) - plot the <b>ranges for each "
+#| "subgroup</b>.</li></ul>Averages and Standard Deviations, Limits Based on "
+#| "the Standard Deviations:<ul><li>X̅  (X̅S) - plot the <b>averages for each "
+#| "subgroup</b>.</li><li>S (X̅S) - plot the <b>standard deviations for each "
+#| "subgroup</b>.</li></ul>"
 msgid ""
 "The supported chart types are grouped according to the plotted statistics "
 "and to the metric defining the limits.<br><br>Individual Values and Moving "
 "Ranges, Limits Based on the Average or Median Moving Range:<ul><li>X (XmR) - "
 "plot the <b>individual values</b>.</li><li>mR - plot the <b>moving ranges</"
 "b>.</li></ul>Averages and Ranges, Limits based on the Average or Median "
-"Range:<ul><li>X̅  (X̅R) - plot the <b>averages for each subgroup</b> .</"
-"li><li>R (X̅R) - plot the <b>ranges for each subgroup</b>.</li></ul>Averages "
-"and Standard Deviations, Limits Based on the Standard Deviations:<ul><li>X̅  "
-"(X̅S) - plot the <b>averages for each subgroup</b>.</li><li>S (X̅S) - plot the "
-"<b>standard deviations for each subgroup</b>.</li></ul>"
+"Range:<ul><li>X̅  (X̅R) - plot the <b>averages for each sample</b> .</li><li>R "
+"(X̅R) - plot the <b>ranges for each sample</b>.</li></ul>Averages and "
+"Standard Deviations, Limits Based on the Standard Deviations:<ul><li>X̅  (X̅S) "
+"- plot the <b>averages for each sample</b>.</li><li>S (X̅S) - plot the "
+"<b>standard deviations for each sample</b>.</li></ul>"
 msgstr ""
 "Podprte vrste grafikonov so razvrščene glede na izrisano statistiko in "
 "metriko, ki določa omejitve.<br><br>Posamezne vrednosti in gibljivi razponi, "
@@ -12826,7 +12839,7 @@ msgstr ""
 "podskupino</b >.</li><li>S (X̅S) - narišite <b>standardna odstopanja za vsako "
 "podskupino</b>.</li></ul>"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:199
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:203
 #, kde-format
 msgid "Allow negative values for the lower limit."
 msgstr "Dovolite negativne vrednosti za spodnjo mejo."
@@ -16632,7 +16645,9 @@ msgstr "Vrednosti vzorca"
 msgid "Period:"
 msgstr "Perioda:"
 
+#. i18n: ectx: property (text), widget (QLabel, lSampleSize)
 #: src/frontend/spreadsheet/SampleValuesDialog.cpp:105
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:116
 #, kde-format
 msgid "Sample Size:"
 msgstr "Velikost vzorca:"
@@ -20920,12 +20935,6 @@ msgstr "Barva besedila:"
 msgid "Lower Limit < 0:"
 msgstr "Spodnja omejitev < 0:"
 
-#. i18n: ectx: property (text), widget (QLabel, lSubgroupSize)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:116
-#, kde-format
-msgid "Subgroup Size:"
-msgstr "Velikost podgrupe:"
-
 #. i18n: ectx: property (text), widget (QLabel, lLimitsMetric)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:192
 #, kde-format
@@ -24287,6 +24296,12 @@ msgstr "proces convert je izpadel, izhodna koda ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ni mogoče odpreti datoteke:"
+
+#~ msgid "%1: set subgroup size"
+#~ msgstr "%1: določite velikost podgrupe"
+
+#~ msgid "Subgroup Size:"
+#~ msgstr "Velikost podgrupe:"
 
 #~ msgid "Evaluate Worksheet"
 #~ msgstr "Ovrednoti delovni list"

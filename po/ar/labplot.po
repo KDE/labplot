@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-06 01:46+0000\n"
+"POT-Creation-Date: 2024-10-07 01:44+0000\n"
 "PO-Revision-Date: 2022-09-05 22:28+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -9090,7 +9090,7 @@ msgstr "%1: اضبط نمط الخط"
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:397
 #, fuzzy, kde-format
 #| msgid "%1: set background image"
-msgid "%1: set subgroup size"
+msgid "%1: set sample size"
 msgstr "%1: عيّن صورة الخلفية"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:404
@@ -12196,7 +12196,7 @@ msgstr ""
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:352
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:446
 #: src/frontend/dockwidgets/MatrixDock.cpp:266
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:362
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:367
 #: src/frontend/dockwidgets/QQPlotDock.cpp:279
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:229
 #: src/frontend/dockwidgets/RunChartDock.cpp:224
@@ -12763,7 +12763,7 @@ msgid "Silverman"
 msgstr ""
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:350
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:360
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:365
 #: src/frontend/dockwidgets/QQPlotDock.cpp:277
 #: src/frontend/dockwidgets/RunChartDock.cpp:222
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1036
@@ -12860,7 +12860,7 @@ msgstr "مُتصفح الملفات"
 msgid "Average"
 msgstr "نطاق الرسم:"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:180
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:184
 #, kde-format
 msgid ""
 "The supported chart types are grouped according to the plotted statistics "
@@ -12868,14 +12868,14 @@ msgid ""
 "Ranges, Limits Based on the Average or Median Moving Range:<ul><li>X (XmR) - "
 "plot the <b>individual values</b>.</li><li>mR - plot the <b>moving ranges</"
 "b>.</li></ul>Averages and Ranges, Limits based on the Average or Median "
-"Range:<ul><li>X̅  (X̅R) - plot the <b>averages for each subgroup</b> .</"
-"li><li>R (X̅R) - plot the <b>ranges for each subgroup</b>.</li></ul>Averages "
-"and Standard Deviations, Limits Based on the Standard Deviations:<ul><li>X̅  "
-"(X̅S) - plot the <b>averages for each subgroup</b>.</li><li>S (X̅S) - plot the "
-"<b>standard deviations for each subgroup</b>.</li></ul>"
+"Range:<ul><li>X̅  (X̅R) - plot the <b>averages for each sample</b> .</li><li>R "
+"(X̅R) - plot the <b>ranges for each sample</b>.</li></ul>Averages and "
+"Standard Deviations, Limits Based on the Standard Deviations:<ul><li>X̅  (X̅S) "
+"- plot the <b>averages for each sample</b>.</li><li>S (X̅S) - plot the "
+"<b>standard deviations for each sample</b>.</li></ul>"
 msgstr ""
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:199
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:203
 #, kde-format
 msgid "Allow negative values for the lower limit."
 msgstr ""
@@ -16695,7 +16695,9 @@ msgstr "حجم العينة:"
 msgid "Period:"
 msgstr "الدورة"
 
+#. i18n: ectx: property (text), widget (QLabel, lSampleSize)
 #: src/frontend/spreadsheet/SampleValuesDialog.cpp:105
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:116
 #, fuzzy, kde-format
 #| msgid "Sample size:"
 msgid "Sample Size:"
@@ -21077,13 +21079,6 @@ msgstr "لون النّصّ:"
 msgid "Lower Limit < 0:"
 msgstr "النهاية الصغرى"
 
-#. i18n: ectx: property (text), widget (QLabel, lSubgroupSize)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:116
-#, fuzzy, kde-format
-#| msgid "Sample size:"
-msgid "Subgroup Size:"
-msgstr "حجم العينة:"
-
 #. i18n: ectx: property (text), widget (QLabel, lLimitsMetric)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:192
 #, kde-format
@@ -24478,6 +24473,11 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr "غير قادر على حذف الملف:"
+
+#, fuzzy
+#~| msgid "Sample size:"
+#~ msgid "Subgroup Size:"
+#~ msgstr "حجم العينة:"
 
 #, fuzzy
 #~| msgctxt "@title:window"
