@@ -30,7 +30,7 @@ public:
 	void setFunctionVariableCurve(const XYCurve*);
 	void setFunction(const QString& function, const QVector<XYFunctionCurve::FunctionData>& functionData);
 	void setFunction(const QString& function, const QStringList& variableNames, const QStringList& variableCurvePaths);
-	void connectFunctionCurve(const XYCurve*);
+	void connectCurve(const XYCurve*) override;
 
 	void functionVariableCurveRemoved(const AbstractAspect*);
 	void functionVariableCurveAdded(const AbstractAspect*);
@@ -48,7 +48,6 @@ public:
 private:
 	QString m_function;
 	QVector<XYFunctionCurve::FunctionData> m_functionData;
-	QVector<QMetaObject::Connection> m_connectionsUpdateFunction;
 
 	friend class XYFunctionCurveTest;
 };

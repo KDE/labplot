@@ -373,4 +373,57 @@ void DifferentiationTest::testLinearDuplicateX() {
 	QCOMPARE(resultYDataColumn->valueAt(4), -1.5);
 }
 
+void DifferentiationTest::testRecalculation() {
+	// data
+	QVector<int> xData = {1, 2, 3, 4};
+	QVector<double> yData = {1., 2., 3., 4.};
+
+		   // data source columns
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
+	xDataColumn.replaceInteger(0, xData);
+
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
+	yDataColumn.replaceValues(0, yData);
+
+	XYDifferentiationCurve differentiationCurve(QStringLiteral("differentiation"));
+	differentiationCurve.setXDataColumn(&xDataColumn);
+	differentiationCurve.setYDataColumn(&yDataColumn);
+
+		   // prepare the differentiation
+	XYDifferentiationCurve::DifferentiationData differentiationData = differentiationCurve.differentiationData();
+	differentiationCurve.setDifferentiationData(differentiationData);
+
+	// perform the differentiation
+	//differentiationCurve.recalculate();
+	const XYDifferentiationCurve::DifferentiationResult& differentiationResult = differentiationCurve.differentiationResult();
+
+		   // check the results
+	QCOMPARE(differentiationResult.available, true);
+	QCOMPARE(differentiationResult.valid, true);
+
+	const AbstractColumn* resultXDataColumn = differentiationCurve.xColumn();
+	const AbstractColumn* resultYDataColumn = differentiationCurve.yColumn();
+
+	const int np = resultXDataColumn->rowCount();
+	QCOMPARE(np, 4);
+
+	for (int i = 0; i < np; i++)
+		QCOMPARE(resultXDataColumn->valueAt(i), (double)i + 1);
+
+	QCOMPARE(resultYDataColumn->valueAt(0), 1.);
+	QCOMPARE(resultYDataColumn->valueAt(1), 1.);
+	QCOMPARE(resultYDataColumn->valueAt(2), 1.);
+	QCOMPARE(resultYDataColumn->valueAt(3), 1.);
+
+	yDataColumn.replaceValues(0, {4, 3, 2, 1});
+	// Automatic recalculation done
+
+	for (int i = 0; i < np; i++)
+		QCOMPARE(resultXDataColumn->valueAt(i), (double)i + 1);
+	QCOMPARE(resultYDataColumn->valueAt(0), -1.);
+	QCOMPARE(resultYDataColumn->valueAt(1), -1.);
+	QCOMPARE(resultYDataColumn->valueAt(2), -1.);
+	QCOMPARE(resultYDataColumn->valueAt(3), -1.);
+}
+
 QTEST_MAIN(DifferentiationTest)

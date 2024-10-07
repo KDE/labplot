@@ -71,7 +71,7 @@ public:
 
 	BASIC_D_ACCESSOR_DECL(DataSourceType, dataSourceType, DataSourceType)
 	POINTER_D_ACCESSOR_DECL(const XYCurve, dataSourceCurve, DataSourceCurve)
-	const QString& dataSourceCurvePath() const;
+	CLASS_D_ACCESSOR_DECL(QString, dataSourceCurvePath, DataSourceCurvePath)
 
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)
