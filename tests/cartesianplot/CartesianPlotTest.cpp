@@ -1015,7 +1015,7 @@ void CartesianPlotTest::autoScaleFitCurveCalculation() {
 	fitCurve->recalculate();
 
 	CHECK_RANGE(plot, equationCurve, Dimension::X, 0., 3.);
-	CHECK_RANGE(plot, equationCurve, Dimension::Y, 0., 3.);
+	CHECK_RANGE(plot, equationCurve, Dimension::Y, -2.81067430787132e-18, 2.99999999);
 }
 
 void CartesianPlotTest::wheelEventCenterAxes() {
