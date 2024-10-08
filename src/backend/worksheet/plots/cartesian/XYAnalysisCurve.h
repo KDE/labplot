@@ -104,6 +104,9 @@ private Q_SLOTS:
 	void yDataColumnNameChanged();
 	void y2DataColumnNameChanged();
 
+	void dataSourceCurveAboutToBeRemoved(const AbstractAspect*);
+	void dataSourceCurveNameChanged();
+
 Q_SIGNALS:
 	void sourceDataChanged(); // emitted when the source data used in the analysis curves was changed to enable the recalculation in the dock widgets
 	void dataSourceTypeChanged(XYAnalysisCurve::DataSourceType);

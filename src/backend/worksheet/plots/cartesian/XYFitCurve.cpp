@@ -1923,14 +1923,20 @@ void XYFitCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColu
 	DEBUG(Q_FUNC_INFO << ", data source: " << ENUM_TO_STRING(XYAnalysisCurve, DataSourceType, dataSourceType))
 	switch (dataSourceType) {
 	case XYAnalysisCurve::DataSourceType::Spreadsheet:
+		if (!xDataColumn || !yDataColumn)
+			break;
 		*tmpXDataColumn = xDataColumn;
 		*tmpYDataColumn = yDataColumn;
 		break;
 	case XYAnalysisCurve::DataSourceType::Curve:
+		if (!dataSourceCurve)
+			break;
 		*tmpXDataColumn = dataSourceCurve->xColumn();
 		*tmpYDataColumn = dataSourceCurve->yColumn();
 		break;
 	case XYAnalysisCurve::DataSourceType::Histogram:
+		if (!dataSourceHistogram)
+			break;
 		switch (fitData.algorithm) {
 		case nsl_fit_algorithm_lm:
 			*tmpXDataColumn = dataSourceHistogram->bins(); // bins
@@ -1947,6 +1953,7 @@ void XYFitCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColu
 		case nsl_fit_algorithm_ml:
 			*tmpXDataColumn = dataSourceHistogram->dataColumn(); // data
 			*tmpYDataColumn = dataSourceHistogram->binPDValues(); // normalized values
+			break;
 		}
 		// debug
 		/*for (int i = 0; i < dataSourceHistogram->bins()->rowCount(); i++)
@@ -1956,6 +1963,7 @@ void XYFitCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColu
 		for (int i = 0; i < dataSourceHistogram->binPDValues()->rowCount(); i++)
 			DEBUG("BINPDValues @ " << i << ": " << dataSourceHistogram->binPDValues()->valueAt(i))
 		*/
+		break;
 	}
 }
 
