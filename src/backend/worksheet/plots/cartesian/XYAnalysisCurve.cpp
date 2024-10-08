@@ -520,8 +520,8 @@ void XYAnalysisCurvePrivate::recalculate() {
 		q->addChild(yColumn);
 
 		q->setUndoAware(false);
-		q->setXColumn(xColumn);
-		q->setYColumn(yColumn);
+		q->setXColumn(xColumn); // pass the column to the xycurve
+		q->setYColumn(yColumn); // pass the column to the xycurve
 		q->setUndoAware(true);
 	} else {
 		xColumn->invalidateProperties();

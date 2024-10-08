@@ -43,8 +43,8 @@ public:
 	QString yDataColumnPath;
 	QString y2DataColumnPath;
 
-	Column* xColumn{nullptr}; //<! column used internally for storing the x-values of the result analysis curve
-	Column* yColumn{nullptr}; //<! column used internally for storing the y-values of the result analysis curve
+	Column* xColumn{nullptr}; //<! column used internally for storing the x-values of the result analysis curve. This column is also equal to the column of xycurve
+	Column* yColumn{nullptr}; //<! column used internally for storing the y-values of the result analysis curve. This column is also equal to the column of xycurve
 	QVector<double>* xVector{nullptr};
 	QVector<double>* yVector{nullptr};
 
