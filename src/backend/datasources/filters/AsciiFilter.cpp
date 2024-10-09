@@ -169,7 +169,7 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 		else if (properties.columnModes.isEmpty())
 			return Status::SequentialDeviceNoColumnModes;
 
-		properties.columnNames = determineColumns(properties.columnNamesRaw, properties.separator, removeQuotes, simplifyWhiteSpace, skipEmptyParts);
+		properties.columnNames = determineColumns(properties.columnNamesRaw, properties.separator, removeQuotes, simplifyWhiteSpace, skipEmptyParts, properties.startColumn, properties.numberColumns);
 
 		return Status::Success;
 	}
@@ -184,38 +184,22 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 	properties.columnNames.clear();
 
 	// Determine header line
-	QString header;
 	QString line;
-	if (properties.headerEnabled && properties.headerLine > 0) {
-		int validRowCounter = 0;
-		do {
-			const auto status = getLine(device, line);
-			if (status != Status::Success)
-				return status;
+	int validRowCounter = 0;
+	do {
+		const auto status = getLine(device, line);
+		if (status != Status::Success)
+			return status;
 
-			if (!properties.commentCharacter.isEmpty() && line.startsWith(properties.commentCharacter))
-				continue;
+		if (line.isEmpty() || (!properties.commentCharacter.isEmpty() && line.startsWith(properties.commentCharacter)))
+			continue;
 
-			validRowCounter++;
-			if (validRowCounter != properties.headerLine)
-				continue;
+		validRowCounter++;
+		if (properties.headerEnabled && properties.headerLine > 0 && validRowCounter != properties.headerLine)
+			continue;
 
-			header = line;
-			break;
-		} while (true);
-	} else {
-		// Use first line
-		do {
-			const auto status = getLine(device, line);
-			if (status != Status::Success)
-				return status;
-
-			if (!properties.commentCharacter.isEmpty() && line.startsWith(properties.commentCharacter))
-				continue;
-
-			break; // First valid line found
-		} while (true);
-	}
+		break;
+	} while (true);
 
 	// Determine separator
 	if (properties.automaticSeparatorDetection) {
@@ -238,15 +222,16 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 
 	// Determine column names
 	if (properties.headerEnabled)
-		properties.columnNames = determineColumns(line, properties.separator, removeQuotes, simplifyWhiteSpace, skipEmptyParts);
+		properties.columnNames = determineColumns(line, properties.separator, removeQuotes, simplifyWhiteSpace, skipEmptyParts, properties.startColumn, properties.numberColumns);
 	else {
 		if (properties.columnNamesRaw.isEmpty())
 			return Status::HeaderEmpty;
 		// Determine column names from the names specified in the dialog
-		properties.columnNames = determineColumns(properties.columnNamesRaw, QStringLiteral(","), removeQuotes, true, skipEmptyParts);
+		// StartColumn is always one. Because otherwise I would need to specify column names for not required columns
+		properties.columnNames = determineColumns(properties.columnNamesRaw, QStringLiteral(","), removeQuotes, true, skipEmptyParts, 1, properties.numberColumns);
 		if (properties.columnNames.isEmpty())
 			return Status::UnableParsingHeader;
-		//properties.columnNames = determineColumns(properties.columnNamesRaw, separator, removeQuotes, simplifyWhiteSpace, skipEmptyParts);
+		//properties.columnNames = determineColumns(properties.columnNamesRaw, separator, removeQuotes, simplifyWhiteSpace, skipEmptyParts, properties.startColumn, properties.numberColumns);
 
 	}
 
@@ -275,7 +260,7 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 	QVector<QStringList> rows;
 	size_t i = 0;
 	if (!properties.headerEnabled) {
-		rows.append(determineColumns(line, properties.separator, removeQuotes, simplifyWhiteSpace, skipEmptyParts));
+		rows.append(determineColumns(line, properties.separator, removeQuotes, simplifyWhiteSpace, skipEmptyParts, properties.startColumn, properties.numberColumns));
 		if (rows.last().count() != properties.numberColumns)
 			return Status::InvalidNumberDataColumns;
 		i++;
@@ -289,7 +274,7 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 			if (status != Status::Success)
 				return status;
 
-			if (line.startsWith(properties.commentCharacter))
+			if (line.isEmpty() || (!properties.commentCharacter.isEmpty() && line.startsWith(properties.commentCharacter)))
 				continue;
 
 			j--;
@@ -301,9 +286,9 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 			break; // No more data to read. So we determine from the others
 		if (status != Status::Success)
 			return status;
-		if (line.startsWith(properties.commentCharacter))
+		if (line.isEmpty() || (!properties.commentCharacter.isEmpty() && line.startsWith(properties.commentCharacter)))
 			continue;
-		rows.append(determineColumns(line, properties.separator, removeQuotes, simplifyWhiteSpace, skipEmptyParts));
+		rows.append(determineColumns(line, properties.separator, removeQuotes, simplifyWhiteSpace, skipEmptyParts, properties.startColumn, properties.numberColumns));
 		if (rows.last().count() != properties.numberColumns)
 			return Status::InvalidNumberDataColumns;
 		i++;
@@ -359,12 +344,14 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 		return Status::DeviceAtEnd;
 
 	if (!device.isSequential()) {
+		device.reset(); // Seek to the start
 		// TODO: Seeking
 
 		QString line;
 		int counter = 0;
 		int startDataRow = 1;
 		int rowIndex = dataContainerStartIndex;
+		// Iterate over all rows
 		do {
 			const auto status = getLine(device, line);
 			if (status == Status::DeviceAtEnd)
@@ -372,7 +359,7 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 			else if (status != Status::Success)
 				return status;
 
-			if (line.startsWith(properties.commentCharacter))
+			if (line.isEmpty() || (!properties.commentCharacter.isEmpty() && line.startsWith(properties.commentCharacter)))
 				continue;
 
 			counter ++;
@@ -388,7 +375,8 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 				continue;
 
 			// Now we get to the data rows
-			const auto& values = line.split(properties.separator);
+			const auto& values = determineColumns(line, properties.separator, properties.removeQuotesEnabled, properties.simplifyWhitespacesEnabled, properties.skipEmptyParts, properties.startColumn, properties.numberColumns);
+			assert(values.size() == m_DataContainer.size() - properties.createIndexEnabled - properties.createTimestampEnabled);
 
 			if (properties.createIndexEnabled)
 				m_DataContainer.setData(0, rowIndex, rowIndex - dataContainerStartIndex + 1);
@@ -398,6 +386,7 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 			}
 
 			int columnIndex = 0 + properties.createIndexEnabled + properties.createTimestampEnabled;
+			// Iterate over all columns
 			for (const auto& value: values) {
 				bool conversionOk = false;
 				switch (properties.columnModes[columnIndex]) {
@@ -509,7 +498,7 @@ QVector<AbstractColumn::ColumnMode> AsciiFilterPrivate::determineColumnModes(con
 	return modes;
 }
 
-QStringList AsciiFilterPrivate::determineColumns(const QString& line, const QString& separator, bool removeQuotesEnabled, bool simplifyWhiteSpaces, bool skipEmptyParts) {
+QStringList AsciiFilterPrivate::determineColumns(const QString& line, const QString& separator, bool removeQuotesEnabled, bool simplifyWhiteSpaces, bool skipEmptyParts, int startColumn, int numberColumns) {
 	enum class State {
 		Column,
 		QuotedText,
@@ -518,6 +507,7 @@ QStringList AsciiFilterPrivate::determineColumns(const QString& line, const QStr
 
 	QStringList columnNames;
 	QString columnName;
+	int columnCount = 1;
 	for (auto c: line) {
 		if (c == QLatin1Char('\n') || c == QLatin1Char('\r'))
 			break;
@@ -542,8 +532,11 @@ QStringList AsciiFilterPrivate::determineColumns(const QString& line, const QStr
 		case State::Column: {
 			if (columnName.endsWith(separator)) {
 				columnName.remove(columnName.length() - separator.length(), separator.length());
-				if (!skipEmptyParts || !columnName.isEmpty())
-					columnNames << columnName;
+				if (!skipEmptyParts || !columnName.isEmpty()) {
+					if (columnCount >= startColumn && (columnCount < startColumn + numberColumns || numberColumns < 0))
+						columnNames << columnName;
+					columnCount ++;
+				}
 				columnName.clear();
 			}
 			break;
@@ -552,7 +545,7 @@ QStringList AsciiFilterPrivate::determineColumns(const QString& line, const QStr
 			continue;
 		}
 	}
-	if (!columnName.isEmpty())
+	if (!columnName.isEmpty() && columnCount >= startColumn && (columnCount < startColumn + numberColumns || numberColumns < 0))
 		columnNames.append(columnName);
 	return columnNames;
 }

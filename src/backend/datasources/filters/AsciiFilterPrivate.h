@@ -27,7 +27,7 @@ public:
 	bool initialized{true}; // false if an initialization with the current properties was done, otherwise true
 
 private:
-	static QStringList determineColumns(const QString& line, const QString& separator, bool removeQuotesEnabled, bool simplifyWhiteSpaces, bool skipEmptyParts);
+	static QStringList determineColumns(const QString& line, const QString& separator, bool removeQuotesEnabled, bool simplifyWhiteSpaces, bool skipEmptyParts, int startColumn, int numberColumns);
 	static AsciiFilter::Status determineSeparator(const QString &line, bool removeQuotesEnabled, bool simplifyWhiteSpaces, QString &separator);
 	static QVector<AbstractColumn::ColumnMode> determineColumnModes(const QVector<QStringList>& values, const QString &dateTimeFormat, bool intAsDouble, bool simplifyWhitespace, bool removeQuotes, QLocale::Language numberFormat);
 	AsciiFilter::Status getLine(QIODevice& device, QString& line);
