@@ -35,25 +35,25 @@ private Q_SLOTS:
 	void intAsDouble();
 	void testFirstLineHeader();
 	void testImportSingleColumn();
-	void testHeader04();
-	void testHeader05();
-	void testHeader06();
-	void testHeader07();
-	void testHeader07a();
-	void testHeader08();
-	void testHeader09();
-	void testHeader10();
-	void testHeader11();
+	void commaSeparatedWhiteSpace();
+	void tooManyHeaders();
+	void testHeaderLine2DataLine4();
+	void testHeaderLine2DataLine4_CommentLine();
+	// void testHeader08();
+	void testHeaderDuplicateNames_HeaderDisabled();
+	void testHeaderDuplicateNames_HeaderEnabled();
+	void testHeaderTwoImportsReverseColumnNames();
 	void testHeader11a();
 	void testHeader12();
 
 	// read ranges
 	void testColumnRange00();
-	void testColumnRange01();
-	void testColumnRange02();
-	void testColumnRange03();
-	void testColumnRange04();
-	void testColumnRange05();
+	void testCreateIndex();
+	void testCreateIndexAndTimestamp();
+	void testStartColumn();
+	void testStartColumn_IndexColumn();
+	void testLastColumnOnly();
+	void testWrongColumnRange();
 	void testColumnRange06();
 
 	void testRowRange00();
