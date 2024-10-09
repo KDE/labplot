@@ -9,10 +9,12 @@
 
 #include "LiveDataTest.h"
 #include "backend/datasources/LiveDataSource.h"
-#include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/datasources/filters/AsciiFilterOld.h"
 
 #include <QEventLoop>
 #include <QTimer>
+
+using namespace Old;
 
 // ##############################################################################
 // Conti. fixed - read fixed number of samples from the beginning of the new data

@@ -11,11 +11,13 @@
 #include "AsciiOptionsWidget.h"
 #include "backend/core/Settings.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
-#include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/datasources/filters/AsciiFilterOld.h"
 #include "backend/lib/macros.h"
 
 #include <KConfigGroup>
 #include <KLocalizedString>
+
+using namespace Old;
 
 /*!
 \class AsciiOptionsWidget

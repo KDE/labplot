@@ -11,7 +11,7 @@
 #include "ExportSpreadsheetDialog.h"
 #include "backend/core/Settings.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
-#include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/datasources/filters/AsciiFilterOld.h"
 #include "frontend/GuiTools.h"
 #include "ui_exportspreadsheetwidget.h"
 
@@ -31,6 +31,8 @@
 #include <QSqlDatabase>
 #include <QStandardItemModel>
 #include <QWindow>
+
+using namespace Old;
 
 /*!
 	\class ExportSpreadsheetDialog

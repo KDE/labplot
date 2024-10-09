@@ -67,6 +67,8 @@
 #include <QWidgetAction>
 #endif
 
+using namespace Old;
+
 QString ImportFileWidget::absolutePath(const QString& fileName) {
 	if (fileName.isEmpty())
 		return fileName;

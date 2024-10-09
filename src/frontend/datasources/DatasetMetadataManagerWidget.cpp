@@ -8,7 +8,7 @@
 */
 
 #include "backend/core/Settings.h"
-#include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/datasources/filters/AsciiFilterOld.h"
 #include "backend/lib/macros.h"
 #include "frontend/datasources/DatasetMetadataManagerWidget.h"
 #include "frontend/DatasetModel.h"
@@ -29,6 +29,8 @@
 #include <QStringList>
 #include <QTcpSocket>
 #include <QUrl>
+
+using namespace Old;
 
 /*!
 	\class DatasetMetadataManagerWidget

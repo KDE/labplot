@@ -10,7 +10,7 @@
 */
 
 #include "backend/datasources/DatasetHandler.h"
-#include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/datasources/filters/AsciiFilterOld.h"
 #include "backend/lib/macros.h"
 
 #include <QDir>
@@ -23,6 +23,8 @@
 #include <QtNetwork/QNetworkReply>
 
 #include <KLocalizedString>
+
+using namespace Old;
 
 /*!
   \class DatasetHandler

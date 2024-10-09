@@ -14,7 +14,7 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
-#include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/datasources/filters/AsciiFilterOld.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
@@ -22,6 +22,9 @@
 
 #include "backend/nsl/nsl_sf_stats.h"
 #include "backend/nsl/nsl_stats.h"
+
+
+using namespace Old;
 
 // ##############################################################################
 // #################  linear regression with NIST datasets ######################

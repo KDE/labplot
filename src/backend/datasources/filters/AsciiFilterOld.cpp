@@ -8,11 +8,11 @@
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
-#include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/datasources/filters/AsciiFilterOld.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/datasources/LiveDataSource.h"
-#include "backend/datasources/filters/AsciiFilterPrivate.h"
+#include "backend/datasources/filters/AsciiFilterOldPrivate.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/hostprocess.h"
 #include "backend/lib/macros.h"
@@ -36,6 +36,8 @@
 #endif
 
 #include <QRegularExpression>
+
+namespace Old {
 
 /*!
 \class AsciiFilter
@@ -2654,3 +2656,5 @@ void AsciiFilterPrivate::setPreparedForMQTT(bool prepared, MQTTTopic* topic, con
 	}
 }
 #endif
+
+} // namespace old
