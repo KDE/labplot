@@ -46,6 +46,11 @@ public:
 	static QString convertFromNumberToColumn(int n);
 
 	virtual void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) = 0;
+	/*!
+	 * Writing the content of the datasource to the file with filename \p fileName
+	 * \brief write
+	 * \param fileName
+	 */
 	virtual void write(const QString& fileName, AbstractDataSource*) = 0;
 
 	QString lastError() const;
