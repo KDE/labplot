@@ -10,23 +10,28 @@
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include <memory>
 
-#ifndef ASCIIFILTERNEW_H
-#define ASCIIFILTERNEW_H
+#ifndef ASCIIFILTER_H
+#define ASCIIFILTER_H
 
-class AsciiFilterNewPrivate;
+class AsciiFilterPrivate;
 
-class AsciiFilterNew: public AbstractFileFilter {
+class AsciiFilter: public AbstractFileFilter {
 public:
-	AsciiFilterNew();
+	AsciiFilter();
 
-	enum class Status { Success, UnableToOpenDevice, DeviceAtEnd, NotEnoughRowsSelected, UnableToReadLine };
+	enum class Status { Success, UnableToOpenDevice, DeviceAtEnd, NotEnoughRowsSelected, UnableToReadLine, SeparatorDeterminationFailed,
+						SequentialDeviceHeaderEnabled, SequentialDeviceAutomaticSeparatorDetection, SequentialDeviceNoColumnModes, InvalidNumberDataColumns,
+						NotEnoughMemory, UnsupportedDataSource };
 
-	void initialize(QIODevice &device);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) override;
 	qint64 readFromDevice(QIODevice& device, AbstractDataSource* dataSource, ImportMode importMode, int lines);
 	void write(const QString& fileName, AbstractDataSource*) override;
 	QVector<QStringList> preview(const QString& fileName, int lines);
 	static QString statusToString(Status e);
+
+	// save/load in the project XML
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*) override;
 
 	// static QString fileInfoString(const QString&);
 	// static int columnNumber(const QString& fileName, const QString& separator = QString());
@@ -39,21 +44,28 @@ public:
 		QString dateTimeFormat;
 		QLocale::Language numberFormat{QLocale::C};
 		QLocale locale{QLocale::C};
-		bool headerEnabled{true}; // read header from file
-		int headerLine{1}; // line to read header from (ignoring comment lines). The data starts below this line
 		bool skipEmptyParts{false};
 		bool simplifyWhitespacesEnabled{false};
 		double nanValue{qQNaN()};
 		bool removeQuotesEnabled{false};
 		bool createIndexEnabled{false};
 		bool createTimestampEnabled{false};
+
+		bool headerEnabled{true}; // read header from file
+		int headerLine{1}; // line to read header from (ignoring comment lines). The data starts below this line
+		QString columnNamesRaw; // String from the input dialog. From those columnNames is retrieved
 		QStringList columnNames;
 		QVector<AbstractColumn::ColumnMode> columnModes;
+
 		int startRow{1}; // Start row. If headerEnabled, it is the offset from that line
 		int numberRows{-1}; // number of rows to read. A negative value means the complete file, ...
 		int startColumn{1}; // Start Column to read
-		int numberColumns{-1}; // number of columns to read. A negative value means the complete file, ...
+		// number of columns to read. A negative value means the complete file, ...
+		// The index and timestamp columns are not included in this number!
+		int numberColumns{-1};
 		int mqttPreviewFirstEmptyColCount{0};
+
+		bool intAsDouble{true}; // Interpret all integer values as doubles
 
 		bool automaticSeparatorDetection{true};
 		QString separator{QStringLiteral(",")};
@@ -76,11 +88,11 @@ public:
 
 
 private:
-	typedef AsciiFilterNewPrivate Private;
+	typedef AsciiFilterPrivate Private;
 
-	Q_DECLARE_PRIVATE(AsciiFilterNew)
+	Q_DECLARE_PRIVATE(AsciiFilter)
 	const std::unique_ptr<Private> d_ptr;
 
 };
 
-#endif // ASCIIFILTERNEW_H
+#endif // ASCIIFILTER_H

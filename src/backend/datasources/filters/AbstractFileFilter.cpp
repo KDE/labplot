@@ -44,7 +44,7 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
  * return the column mode for the given value string and settings \c dateTimeFormat and \c locale.
  * in case \c dateTimeFormat is empty, all possible datetime formats are tried out to determine the valid datetime object.
  */
-AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueString, QString& dateTimeFormat, const QLocale& locale) {
+AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueString, QString& dateTimeFormat, const QLocale& locale, bool intAsDouble) {
 	// TODO: use BigInt as default integer?
 	auto mode = AbstractColumn::ColumnMode::Integer;
 	if (valueString.size() == 0) // empty string treated as integer (meaning the non-empty strings will determine the data type)
@@ -92,6 +92,8 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
 
 			mode = ok ? AbstractColumn::ColumnMode::Double : AbstractColumn::ColumnMode::Text;
 		}
+	} else if (intAsDouble) {
+		mode = AbstractColumn::ColumnMode::Double;
 	}
 
 	return mode;

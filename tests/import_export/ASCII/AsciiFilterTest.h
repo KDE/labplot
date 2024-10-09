@@ -104,6 +104,9 @@ private Q_SLOTS:
 	void benchDoubleImport();
 	void benchDoubleImport_cleanup(); // delete data
 
+	void determineSeparator();
+	void determineColumns();
+
 private:
 	QString benchDataFileName;
 	const size_t lines = 1e5;

@@ -376,7 +376,7 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/datasources/LiveDataSource.cpp
     ${BACKEND_DIR}/datasources/filters/AbstractFileFilter.cpp
     ${BACKEND_DIR}/datasources/filters/AsciiFilterOld.cpp
-    ${BACKEND_DIR}/datasources/filters/AsciiFilterNew.cpp
+    ${BACKEND_DIR}/datasources/filters/AsciiFilter.cpp
     ${BACKEND_DIR}/datasources/filters/BinaryFilter.cpp
     ${BACKEND_DIR}/datasources/filters/XLSXFilter.cpp
     ${BACKEND_DIR}/datasources/filters/FITSFilter.cpp
