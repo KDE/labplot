@@ -274,21 +274,39 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 	// Determine column modes
 	QVector<QStringList> rows;
 	size_t i = 0;
-	if (startDataRow == 1) {
+	if (!properties.headerEnabled) {
 		rows.append(determineColumns(line, properties.separator, removeQuotes, simplifyWhiteSpace, skipEmptyParts));
 		if (rows.last().count() != properties.numberColumns)
 			return Status::InvalidNumberDataColumns;
 		i++;
+	} else {
+		// Skip all lines until startRow line
+		int j = properties.startRow - 1;
+		while (j > 0) {
+			const auto status = getLine(device, line);
+			if (status == Status::DeviceAtEnd)
+				break; // No more data to read. So we determine from the others
+			if (status != Status::Success)
+				return status;
+
+			if (line.startsWith(properties.commentCharacter))
+				continue;
+
+			j--;
+		}
 	}
-	for (i; i < m_dataTypeLines; i++) {
+	while (i < m_dataTypeLines) {
 		const auto status = getLine(device, line);
 		if (status == Status::DeviceAtEnd)
 			break; // No more data to read. So we determine from the others
 		if (status != Status::Success)
 			return status;
+		if (line.startsWith(properties.commentCharacter))
+			continue;
 		rows.append(determineColumns(line, properties.separator, removeQuotes, simplifyWhiteSpace, skipEmptyParts));
 		if (rows.last().count() != properties.numberColumns)
 			return Status::InvalidNumberDataColumns;
+		i++;
 	}
 	properties.columnModes.append(determineColumnModes(rows, properties.dateTimeFormat, properties.intAsDouble, simplifyWhiteSpace, removeQuotes, properties.numberFormat));
 
@@ -337,8 +355,7 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 
 	if (!device.open(QIODevice::ReadOnly))
 		return Status::UnableToOpenDevice;
-
-	if (device.atEnd() && !device.isSequential())
+	else if (device.atEnd() && !device.isSequential())
 		return Status::DeviceAtEnd;
 
 	if (!device.isSequential()) {
@@ -373,7 +390,14 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 			// Now we get to the data rows
 			const auto& values = line.split(properties.separator);
 
-			int columnIndex = 0;
+			if (properties.createIndexEnabled)
+				m_DataContainer.setData(0, rowIndex, rowIndex - dataContainerStartIndex + 1);
+			if (properties.createTimestampEnabled) {
+				// If create index is enabled +1 the timestamp is in the second column
+				m_DataContainer.setData(properties.createIndexEnabled, rowIndex, QDateTime::currentDateTime());
+			}
+
+			int columnIndex = 0 + properties.createIndexEnabled + properties.createTimestampEnabled;
 			for (const auto& value: values) {
 				bool conversionOk = false;
 				switch (properties.columnModes[columnIndex]) {
