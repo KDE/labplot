@@ -346,7 +346,7 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 
 		QString line;
 		int counter = 0;
-		int startDataRow = 0;
+		int startDataRow = 1;
 		int rowIndex = dataContainerStartIndex;
 		do {
 			const auto status = getLine(device, line);
@@ -359,11 +359,12 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 				continue;
 
 			counter ++;
-			if (properties.headerEnabled && properties.headerLine > 0 && counter < properties.headerLine)
-				continue;
-			else if (counter == properties.headerLine) {
-				startDataRow = counter + 1;
-				continue;
+			if (properties.headerEnabled && properties.headerLine > 0) {
+				if (counter <= properties.headerLine) {
+					if (counter == properties.headerLine)
+						startDataRow = counter + 1;
+					continue;
+				}
 			}
 
 			if ((counter - startDataRow + 1) < properties.startRow)
@@ -599,6 +600,12 @@ AsciiFilter::Status AsciiFilterPrivate::getLine(QIODevice& device, QString& line
 	}
 
 	line = QString::fromUtf8(device.readLine());
+	if (line.endsWith(QStringLiteral("\n")))
+		line.removeLast();
+	else if (line.endsWith(QStringLiteral("\r\n"))) {
+		line.removeLast();
+		line.removeLast();
+	}
 	return Status::Success;
 }
 
@@ -670,7 +677,6 @@ bool AsciiFilterPrivate::DataContainer::resize(uint32_t s) const {
 			break;
 		case AbstractColumn::ColumnMode::Integer: {
 			static_cast<QVector<qint32>*>(m_dataContainer[i])->resize(s);
-			const auto v = static_cast<QVector<qint32>*>(m_dataContainer[i]);
 			break;
 		}
 		case AbstractColumn::ColumnMode::Double:
