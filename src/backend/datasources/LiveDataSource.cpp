@@ -12,7 +12,7 @@
 
 #include "backend/datasources/LiveDataSource.h"
 #include "backend/core/Project.h"
-#include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/datasources/filters/AsciiFilterOld.h"
 #include "backend/datasources/filters/BinaryFilter.h"
 #include "backend/datasources/filters/FITSFilter.h"
 #include "backend/datasources/filters/ROOTFilter.h"
@@ -39,6 +39,8 @@
 #endif
 
 #include <KLocalizedString>
+
+using namespace Old;
 
 /*!
   \class LiveDataSource

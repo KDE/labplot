@@ -7,11 +7,13 @@
 	SPDX-FileCopyrightText: 2017-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
-#ifndef ASCIIFILTER_H
-#define ASCIIFILTER_H
+#ifndef ASCIIFILTEROLD_H
+#define ASCIIFILTEROLD_H
 
 #include "backend/core/AbstractColumn.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
+
+namespace Old {
 
 class Spreadsheet;
 class QIODevice;
@@ -107,4 +109,6 @@ private:
 	friend class AsciiFilterPrivate;
 };
 
-#endif
+} // namespace old
+
+#endif // ASCIIFILTEROLD_H

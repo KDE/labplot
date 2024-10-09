@@ -12,7 +12,7 @@
 
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
-#include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/datasources/filters/AsciiFilterOld.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/AxisPrivate.h"
@@ -30,6 +30,8 @@
 #include "frontend/worksheet/WorksheetView.h"
 
 #include <QAction>
+
+using namespace Old;
 
 #define COMPARE(actual, expected, message)                                                                                                                     \
 	do {                                                                                                                                                       \

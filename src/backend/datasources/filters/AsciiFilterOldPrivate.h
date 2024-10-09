@@ -8,8 +8,10 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef ASCIIFILTERPRIVATE_H
-#define ASCIIFILTERPRIVATE_H
+#ifndef ASCIIFILTEROLDPRIVATE_H
+#define ASCIIFILTEROLDPRIVATE_H
+
+namespace Old {
 
 class AbstractDataSource;
 class AbstractColumn;
@@ -103,4 +105,6 @@ private:
 	QDateTime parseDateTime(const QString& string, const QString& format);
 };
 
-#endif
+} // namespace old
+
+#endif // ASCIIFILTEROLDPRIVATE_H
