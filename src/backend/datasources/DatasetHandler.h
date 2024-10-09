@@ -14,7 +14,9 @@
 #include <QString>
 
 class QJsonObject;
-class AsciiFilter;
+namespace Old {
+	class AsciiFilter;
+}
 class QIODevice;
 class QNetworkAccessManager;
 class QNetworkReply;
@@ -29,7 +31,7 @@ public:
 
 private:
 	Spreadsheet* m_spreadsheet{nullptr};
-	AsciiFilter* m_filter{nullptr};
+	Old::AsciiFilter* m_filter{nullptr};
 	QJsonObject* m_object{nullptr};
 	QNetworkAccessManager* m_downloadManager{nullptr};
 	QNetworkReply* m_currentDownload{nullptr};

@@ -13,14 +13,15 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
-namespace Old {
-
 class Spreadsheet;
 class QIODevice;
-class AsciiFilterPrivate;
 class QAbstractSocket;
 class MQTTTopic;
 class MQTTClient;
+
+namespace Old {
+
+class AsciiFilterPrivate;
 
 class AsciiFilter : public AbstractFileFilter {
 	Q_OBJECT

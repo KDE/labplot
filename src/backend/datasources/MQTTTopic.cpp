@@ -11,7 +11,7 @@
 
 #include "backend/datasources/MQTTClient.h"
 #include "backend/datasources/MQTTSubscription.h"
-#include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/datasources/filters/AsciiFilterOld.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
