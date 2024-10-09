@@ -34,6 +34,8 @@ private Q_SLOTS:
 	void testHeaderDisabled();
 	void intAsDouble();
 	void testFirstLineHeader();
+	void testMissingParts();
+	void testMissingPartsSkip();
 	void testImportSingleColumn();
 	void commaSeparatedWhiteSpace();
 	void tooManyHeaders();
@@ -54,10 +56,10 @@ private Q_SLOTS:
 	void testStartColumn_IndexColumn();
 	void testLastColumnOnly();
 	void testWrongColumnRange();
-	void testColumnRange06();
+	void testWrongColumnRange_IndexColumn();
 
 	void testRowRange00();
-	void testRowRange01();
+	void testRowRange_EndRowLargerThanContent();
 	void testRowRange02();
 
 	void testRowColumnRange00();
@@ -70,7 +72,7 @@ private Q_SLOTS:
 	void testQuotedStrings02();
 	void testQuotedStrings03();
 	void testQuotedStrings04();
-	void testQuotedStrings05();
+	void testIvalidFile_Json();
 
 	// different locales
 	void testUtf8Cyrillic();
@@ -78,7 +80,7 @@ private Q_SLOTS:
 	// handling of NANs
 
 	// automatically skip comments
-	void testComments00();
+	void testMultilineComment();
 	void testComments01();
 	void testComments02();
 
