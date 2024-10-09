@@ -11,13 +11,13 @@
 #ifndef ASCIIFILTEROLDPRIVATE_H
 #define ASCIIFILTEROLDPRIVATE_H
 
-namespace Old {
-
 class AbstractDataSource;
 class AbstractColumn;
 class AbstractAspect;
 class Spreadsheet;
 class MQTTTopic;
+
+namespace Old {
 
 class AsciiFilterPrivate {
 public:

@@ -16,7 +16,9 @@
 #include <QtMqtt/QMqttMessage>
 #include <QtMqtt/QMqttTopicFilter>
 
+namespace Old {
 class AsciiFilter;
+}
 class MQTTSubscription;
 class MQTTTopic;
 class QTimer;
@@ -107,8 +109,8 @@ public:
 	void pauseReading();
 	void continueReading();
 
-	void setFilter(AsciiFilter*);
-	AsciiFilter* filter() const;
+	void setFilter(Old::AsciiFilter*);
+	Old::AsciiFilter* filter() const;
 
 	QIcon icon() const override;
 

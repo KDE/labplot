@@ -10,7 +10,7 @@
 #include "backend/datasources/MQTTClient.h"
 #include "backend/datasources/MQTTSubscription.h"
 #include "backend/datasources/MQTTTopic.h"
-#include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/datasources/filters/AsciiFilterOld.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "frontend/datasources/MQTTErrorWidget.h"
 

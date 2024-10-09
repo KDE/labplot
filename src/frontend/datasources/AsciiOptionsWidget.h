@@ -13,7 +13,9 @@
 
 #include "ui_asciioptionswidget.h"
 
+namespace Old {
 class AsciiFilter;
+}
 class KConfig;
 
 class AsciiOptionsWidget : public QWidget {
@@ -23,7 +25,7 @@ public:
 	explicit AsciiOptionsWidget(QWidget*);
 	void showAsciiHeaderOptions(bool);
 	void showTimestampOptions(bool);
-	void applyFilterSettings(AsciiFilter*) const;
+	void applyFilterSettings(Old::AsciiFilter*) const;
 	void setSeparatingCharacter(QLatin1Char);
 
 	void loadSettings() const;
