@@ -110,7 +110,7 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent)
 	info = i18n("Line in the file that should be used to determine the column names.");
 	ui.sbHeaderLine->setToolTip(info);
 
-	info = i18n("Custom column names, space separated. E.g. \"x y\"");
+	info = i18n("Custom column names, comma separated. E.g. \"x, y\"");
 	ui.lVectorNames->setToolTip(info);
 	ui.kleVectorNames->setToolTip(info);
 

@@ -31,9 +31,10 @@ private Q_SLOTS:
 	void testFileEndingWithoutLinebreak();
 
 	// header handling
-	void testHeader01();
-	void testHeader02();
-	void testHeader03();
+	void testHeaderDisabled();
+	void intAsDouble();
+	void testFirstLineHeader();
+	void testImportSingleColumn();
 	void testHeader04();
 	void testHeader05();
 	void testHeader06();

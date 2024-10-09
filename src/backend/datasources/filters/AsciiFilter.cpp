@@ -36,6 +36,11 @@ AsciiFilter::AsciiFilter(): AbstractFileFilter(FileType::Ascii), d_ptr(std::make
 
 }
 
+AsciiFilter::Properties AsciiFilter::properties() const {
+	Q_D(const AsciiFilter);
+	return d->properties;
+}
+
 void AsciiFilter::setProperties(Properties& properties) {
 	Q_D(AsciiFilter);
 	d->initialized = false;
@@ -44,7 +49,7 @@ void AsciiFilter::setProperties(Properties& properties) {
 
 void AsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode) {
 	KCompressionDevice file(fileName);
-	//readFromDevice(file, dataSource, importMode);
+	readFromDevice(file, dataSource, importMode, -1);
 }
 
 qint64 AsciiFilter::readFromDevice(QIODevice& device, AbstractDataSource* dataSource, ImportMode importMode, int lines) {
@@ -213,11 +218,12 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 	}
 
 	// Determine separator
-	QString separator;
 	if (properties.automaticSeparatorDetection) {
+		QString separator;
 		const auto status = determineSeparator(line, removeQuotes, simplifyWhiteSpace, separator);
 		if (status != Status::Success)
 			return status;
+		properties.separator = separator;
 	} else {
 		DEBUG(Q_FUNC_INFO << ", using GIVEN separator: " << STDSTRING(properties.separator));
 		// replace symbolic "TAB" with '\t'
@@ -232,10 +238,16 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 
 	// Determine column names
 	if (properties.headerEnabled)
-		properties.columnNames = determineColumns(line, separator, removeQuotes, simplifyWhiteSpace, skipEmptyParts);
+		properties.columnNames = determineColumns(line, properties.separator, removeQuotes, simplifyWhiteSpace, skipEmptyParts);
 	else {
+		if (properties.columnNamesRaw.isEmpty())
+			return Status::HeaderEmpty;
 		// Determine column names from the names specified in the dialog
-		properties.columnNames = determineColumns(properties.columnNamesRaw, separator, removeQuotes, simplifyWhiteSpace, skipEmptyParts);
+		properties.columnNames = determineColumns(properties.columnNamesRaw, QStringLiteral(","), removeQuotes, true, skipEmptyParts);
+		if (properties.columnNames.isEmpty())
+			return Status::UnableParsingHeader;
+		//properties.columnNames = determineColumns(properties.columnNamesRaw, separator, removeQuotes, simplifyWhiteSpace, skipEmptyParts);
+
 	}
 
 	// Determine number of columns
@@ -263,16 +275,18 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 	QVector<QStringList> rows;
 	size_t i = 0;
 	if (startDataRow == 1) {
-		if (line.count() != properties.numberColumns)
+		rows.append(determineColumns(line, properties.separator, removeQuotes, simplifyWhiteSpace, skipEmptyParts));
+		if (rows.last().count() != properties.numberColumns)
 			return Status::InvalidNumberDataColumns;
-		rows.append(determineColumns(line, separator, removeQuotes, simplifyWhiteSpace, skipEmptyParts));
 		i++;
 	}
 	for (i; i < m_dataTypeLines; i++) {
 		const auto status = getLine(device, line);
+		if (status == Status::DeviceAtEnd)
+			break; // No more data to read. So we determine from the others
 		if (status != Status::Success)
 			return status;
-		rows.append(determineColumns(line, separator, removeQuotes, simplifyWhiteSpace, skipEmptyParts));
+		rows.append(determineColumns(line, properties.separator, removeQuotes, simplifyWhiteSpace, skipEmptyParts));
 		if (rows.last().count() != properties.numberColumns)
 			return Status::InvalidNumberDataColumns;
 	}
@@ -308,10 +322,10 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 		}
 		try {
 			if (importMode == AbstractFileFilter::ImportMode::Replace) {
-				m_DataContainer.reserve(10000); // reserve to not having to reallocate all the time
+				m_DataContainer.resize(10000); // reserve to not having to reallocate all the time
 				dataContainerStartIndex = 0;
 			} else {
-				m_DataContainer.reserve(m_DataContainer.elementCount() * 2); // Reserve the double as right now is allocated
+				m_DataContainer.resize(m_DataContainer.elementCount() * 2); // Reserve the double as right now is allocated
 				dataContainerStartIndex = m_DataContainer.elementCount();
 			}
 		} catch (std::bad_alloc&) {
@@ -345,10 +359,12 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 				continue;
 
 			counter ++;
-			if (properties.headerEnabled && properties.headerLine > 0 && counter != properties.headerLine)
+			if (properties.headerEnabled && properties.headerLine > 0 && counter < properties.headerLine)
 				continue;
-			else
-				startDataRow = counter;
+			else if (counter == properties.headerLine) {
+				startDataRow = counter + 1;
+				continue;
+			}
 
 			if ((counter - startDataRow + 1) < properties.startRow)
 				continue;
@@ -392,12 +408,15 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 			rowIndex ++;
 			if (rowIndex >= m_DataContainer.elementCount()) {
 				try {
-					m_DataContainer.reserve(2 * m_DataContainer.elementCount()); // Always double
+					m_DataContainer.resize(2 * m_DataContainer.elementCount()); // Always double
 				} catch (std::bad_alloc&) {
 					//q->setLastError(i18n("Not enough memory."));
 					return Status::NotEnoughMemory;
 				}
 			}
+
+			if (lines >= 0 && (rowIndex - dataContainerStartIndex) > lines)
+				break;
 
 			// ask to update the progress bar only if we have more than 1000 lines
 			// only in 1% steps
@@ -416,7 +435,7 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 	}
 	m_DataContainer = DataContainer(); // Reset datacontainer. The data is already stored in the columns, so no freeing of memory is required
 
-	dataSource->finalizeImport(0, 0, properties.columnNames.size(), properties.dateTimeFormat, importMode);
+	dataSource->finalizeImport(0, 0, properties.columnNames.size() - 1, properties.dateTimeFormat, importMode);
 	return Status::Success;
 }
 
@@ -452,13 +471,13 @@ QVector<AbstractColumn::ColumnMode> AsciiFilterPrivate::determineColumnModes(con
 
 			// numeric: integer -> numeric
 			if (mode == Mode::Double && modes[columnIndex] == Mode::Integer)
-				modes << mode;
+				modes[columnIndex] = mode;
 			// text: non text -> text
 			if (mode == Mode::Text && modes[columnIndex] != Mode::Text)
-				modes << mode;
+				modes[columnIndex] = mode;
 			// numeric: text -> numeric/integer
 			if (mode != Mode::Text && modes[columnIndex] == Mode::Text)
-				modes << mode;
+				modes[columnIndex] = mode;
 			columnIndex ++;
 		}
 	}
@@ -571,11 +590,13 @@ AsciiFilter::Status AsciiFilterPrivate::determineSeparator(const QString& line, 
 AsciiFilter::Status AsciiFilterPrivate::getLine(QIODevice& device, QString& line) {
 	using Status = AsciiFilter::Status;
 
-	if (!device.canReadLine())
-		return Status::UnableToReadLine;
-
 	if (device.atEnd())
 		return Status::DeviceAtEnd;
+
+	if (!device.canReadLine()) {
+		DEBUG(Q_FUNC_INFO << ", WARNING: device cannot 'readLine()' but using it anyway.");
+		// return Status::UnableToReadLine;
+	}
 
 	line = QString::fromUtf8(device.readLine());
 	return Status::Success;
@@ -647,9 +668,11 @@ bool AsciiFilterPrivate::DataContainer::resize(uint32_t s) const {
 		case AbstractColumn::ColumnMode::BigInt:
 			static_cast<QVector<qint64>*>(m_dataContainer[i])->resize(s);
 			break;
-		case AbstractColumn::ColumnMode::Integer:
+		case AbstractColumn::ColumnMode::Integer: {
 			static_cast<QVector<qint32>*>(m_dataContainer[i])->resize(s);
+			const auto v = static_cast<QVector<qint32>*>(m_dataContainer[i]);
 			break;
+		}
 		case AbstractColumn::ColumnMode::Double:
 			static_cast<QVector<double>*>(m_dataContainer[i])->resize(s);
 			break;
