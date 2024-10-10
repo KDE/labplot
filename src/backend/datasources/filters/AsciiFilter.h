@@ -95,6 +95,7 @@ public:
 		bool m_dirty{true};
 	};
 	Properties properties() const;
+	Properties defaultProperties() const;
 	void setProperties(Properties& p);
 	QStringList columnNames() const;
 	QVector<AbstractColumn::ColumnMode> columnModes() const;

@@ -51,6 +51,10 @@ AsciiFilter::Properties AsciiFilter::properties() const {
 	return d->properties;
 }
 
+AsciiFilter::Properties AsciiFilter::defaultProperties() const {
+	return Properties();
+}
+
 void AsciiFilter::setProperties(Properties& properties) {
 	Q_D(AsciiFilter);
 	d->initialized = false;
