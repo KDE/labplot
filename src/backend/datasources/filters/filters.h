@@ -11,6 +11,7 @@
 #define FILTERS_H
 
 #include "backend/datasources/filters/AsciiFilterOld.h"
+#include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/datasources/filters/BinaryFilter.h"
 #include "backend/datasources/filters/FITSFilter.h"
 #include "backend/datasources/filters/HDF5Filter.h"

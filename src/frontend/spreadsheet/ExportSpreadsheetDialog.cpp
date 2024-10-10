@@ -11,7 +11,7 @@
 #include "ExportSpreadsheetDialog.h"
 #include "backend/core/Settings.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
-#include "backend/datasources/filters/AsciiFilterOld.h"
+#include "backend/datasources/filters/AsciiFilter.h"
 #include "frontend/GuiTools.h"
 #include "ui_exportspreadsheetwidget.h"
 
@@ -71,7 +71,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 #ifdef HAVE_MCAP
 	ui->cbFormat->addItem(QStringLiteral("MCAP"), static_cast<int>(Format::MCAP));
 #endif
-	QStringList separators = Old::AsciiFilter::separatorCharacters();
+	QStringList separators = AsciiFilter::separatorCharacters();
 	separators.takeAt(0); // remove the first entry "auto"
 	ui->cbSeparator->addItems(separators);
 

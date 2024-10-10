@@ -683,24 +683,26 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 	case AbstractFileFilter::FileType::Ascii: {
 		DEBUG(Q_FUNC_INFO << ", ASCII");
 		if (!m_currentFilter)
-			m_currentFilter.reset(new Old::AsciiFilter);
-		auto filter = static_cast<Old::AsciiFilter*>(m_currentFilter.get());
+			m_currentFilter.reset(new AsciiFilter);
+		auto filter = static_cast<AsciiFilter*>(m_currentFilter.get());
+		auto properties = filter->properties();
 
 		if (ui.cbFilter->currentIndex() == 0) //"automatic"
-			filter->setAutoModeEnabled(true);
+			properties.automaticSeparatorDetection = true;
 		else { //"custom" and templates
-			filter->setAutoModeEnabled(false);
+			properties.automaticSeparatorDetection = false;
 
 			// set the data portion to import
-			filter->setStartRow(ui.sbStartRow->value());
-			filter->setEndRow(ui.sbEndRow->value());
-			filter->setStartColumn(ui.sbStartColumn->value());
-			filter->setEndColumn(ui.sbEndColumn->value());
+			properties.startRow = ui.sbStartRow->value();
+			// properties.endRow = ui.sbEndRow->value(); // TODO: turn on again
+			properties.startColumn = ui.sbStartColumn->value();
+			// properties.endColumn = ui.sbEndColumn->value(); // TODO: turn on again
 
 			// set the remaining filter settings
 			if (m_asciiOptionsWidget)
 				m_asciiOptionsWidget->applyFilterSettings(filter);
 		}
+		filter->setProperties(properties);
 
 		break;
 	}
@@ -1569,7 +1571,7 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
 		// instead of this big switch-case.
 		switch (AbstractFileFilter::fileType(fileName)) {
 		case AbstractFileFilter::FileType::Ascii:
-			infoStrings << Old::AsciiFilter::fileInfoString(fileName);
+			infoStrings << AsciiFilter::fileInfoString(fileName);
 			break;
 		case AbstractFileFilter::FileType::Binary:
 			infoStrings << BinaryFilter::fileInfoString(fileName);
@@ -1697,7 +1699,7 @@ void ImportFileWidget::refreshPreview() {
 	case AbstractFileFilter::FileType::Ascii: {
 		ui.tePreview->clear();
 
-		auto filter = static_cast<Old::AsciiFilter*>(currentFilter);
+		auto filter = static_cast<AsciiFilter*>(currentFilter);
 
 		DEBUG(Q_FUNC_INFO << ", Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, sourceType));
 		switch (sourceType) {
@@ -1712,8 +1714,8 @@ void ImportFileWidget::refreshPreview() {
 			lsocket.connectToServer(file, QLocalSocket::ReadOnly);
 			if (lsocket.waitForConnected()) {
 				DEBUG("connected to local socket " << STDSTRING(file));
-				if (lsocket.waitForReadyRead())
-					importedStrings = filter->preview(lsocket);
+				// if (lsocket.waitForReadyRead())
+				// 	importedStrings = filter->preview(lsocket); // TODO: turn on again
 				DEBUG("Local socket: DISCONNECT PREVIEW");
 				lsocket.disconnectFromServer();
 				// read-only socket is disconnected immediately (no waitForDisconnected())
@@ -1727,8 +1729,8 @@ void ImportFileWidget::refreshPreview() {
 			tcpSocket.connectToHost(host(), port().toInt(), QTcpSocket::ReadOnly);
 			if (tcpSocket.waitForConnected()) {
 				DEBUG("connected to TCP socket");
-				if (tcpSocket.waitForReadyRead())
-					importedStrings = filter->preview(tcpSocket);
+				// if (tcpSocket.waitForReadyRead())
+				// 	importedStrings = filter->preview(tcpSocket); // TODO: turn on again
 
 				tcpSocket.disconnectFromHost();
 			} else
@@ -1751,7 +1753,7 @@ void ImportFileWidget::refreshPreview() {
 				} else {
 					DEBUG("	has no pending data");
 				}
-				importedStrings = filter->preview(udpSocket);
+				//importedStrings = filter->preview(udpSocket); // TODO: turn on again
 
 				DEBUG("UDP Socket: DISCONNECT PREVIEW, state = " << udpSocket.state());
 				udpSocket.disconnectFromHost();
@@ -1798,7 +1800,7 @@ void ImportFileWidget::refreshPreview() {
 		}
 		}
 
-		vectorNameList = filter->vectorNames();
+		vectorNameList = filter->columnNames();
 		columnModes = filter->columnModes();
 		break;
 	}
@@ -2834,7 +2836,7 @@ void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
 	auto readingType = static_cast<MQTTClient::ReadingType>(ui.cbReadingType->currentIndex());
 
 	currentFileFilter();
-	client->setFilter(static_cast<Old::AsciiFilter*>(m_currentFilter.release())); // pass ownership of the filter to MQTTClient
+	client->setFilter(static_cast<AsciiFilter*>(m_currentFilter.release())); // pass ownership of the filter to MQTTClient
 
 	client->setReadingType(readingType);
 
