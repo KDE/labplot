@@ -417,7 +417,7 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 				case AbstractColumn::ColumnMode::Month:
 				case AbstractColumn::ColumnMode::Day:
 				case AbstractColumn::ColumnMode::DateTime:
-					m_DataContainer.setData(columnIndex, rowIndex, QDateTime::fromString(value, properties.dateTimeFormat));
+					m_DataContainer.setData(columnIndex, rowIndex, QDateTime::fromString(value, properties.dateTimeFormat, properties.baseYear));
 					break;
 				}
 				columnIndex ++;
