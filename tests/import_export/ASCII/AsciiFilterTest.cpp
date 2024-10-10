@@ -2650,6 +2650,32 @@ void AsciiFilterTest::determineColumns() {
 
 	expectedHeader = QStringList{QStringLiteral("header 1"),QStringLiteral("header 2"),QStringLiteral("header 3")};
 	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("\"header 1\",\"header 2\",\"header 3\"\n"), p), expectedHeader);
+
+	// No whitespace simplifying! High performance parser
+	p.simplifyWhitespacesEnabled = false;
+
+	p.removeQuotesEnabled = false;
+	expectedHeader = QStringList{QStringLiteral("header1"),QStringLiteral("header2"),QStringLiteral("header3")};
+	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("header1,header2,header3\n"), p), expectedHeader);
+
+	p.removeQuotesEnabled = true;
+	expectedHeader = QStringList{QStringLiteral("header 1"),QStringLiteral("header 2"),QStringLiteral("header 3")};
+	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("\"header 1\",\"header 2\",\"header 3\"\n"), p), expectedHeader);
+
+	// Without \n at the end
+	p.removeQuotesEnabled = true;
+	expectedHeader = QStringList{QStringLiteral("header 1"),QStringLiteral("header 2"),QStringLiteral("header 3")};
+	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("\"header 1\",\"header 2\",\"header 3"), p), expectedHeader);
+
+	// Quotes still inside
+	p.removeQuotesEnabled = false;
+	expectedHeader = QStringList{QStringLiteral("\"header 1\""),QStringLiteral("\"header 2\""),QStringLiteral("\"header 3\"")};
+	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("\"header 1\",\"header 2\",\"header 3\"\n"), p), expectedHeader);
+
+	p.removeQuotesEnabled = true;
+	expectedHeader = QStringList{QStringLiteral("header 1"),QStringLiteral("header2"),QStringLiteral("header 3")};
+	// Second header has no quotes
+	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("\"header 1\",header2,\"header 3\"\n"), p), expectedHeader);
 }
 
 QTEST_MAIN(AsciiFilterTest)
