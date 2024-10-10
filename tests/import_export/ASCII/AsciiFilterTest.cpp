@@ -554,7 +554,7 @@ void AsciiFilterTest::commaSeparatedWhiteSpace() {
 void AsciiFilterTest::tooManyHeaders() {
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	const auto spreadSheetRowCount = spreadsheet.rowCount();
-	const aut spreadsheetColumnCount = spreadsheet.columnCount();
+	const auto spreadsheetColumnCount = spreadsheet.columnCount();
 	AsciiFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon.txt"));
 
@@ -1191,7 +1191,7 @@ void AsciiFilterTest::testWrongColumnRange() {
 void AsciiFilterTest::testWrongColumnRange_IndexColumn() {
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	const auto spreadSheetRowCount = spreadsheet.rowCount();
-	const aut spreadsheetColumnCount = spreadsheet.columnCount();
+	const auto spreadsheetColumnCount = spreadsheet.columnCount();
 	AsciiFilter filter;
 	auto p = filter.properties();
 	p.automaticSeparatorDetection = true;
