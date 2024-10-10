@@ -13,11 +13,17 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/hostprocess.h"
 #include "backend/core/Project.h"
 #include <KCompressionDevice>
 #include <KLocalizedString>
 
 #include <QDateTime>
+
+#if defined(Q_OS_LINUX) || defined(Q_OS_BSD4)
+#include <QProcess>
+#include <QStandardPaths>
+#endif
 
 namespace {
 // Simple object to automatically closing a device when this object
@@ -47,6 +53,16 @@ void AsciiFilter::setProperties(Properties& properties) {
 	Q_D(AsciiFilter);
 	d->initialized = false;
 	d->properties = properties;
+}
+
+QStringList AsciiFilter::columnNames() const {
+	Q_D(const AsciiFilter);
+	return d->properties.columnNames;
+}
+
+QVector<AbstractColumn::ColumnMode> AsciiFilter::columnModes() const {
+	Q_D(const AsciiFilter);
+	return d->properties.columnModes;
 }
 
 void AsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode) {
@@ -84,6 +100,92 @@ QString AsciiFilter::statusToString(Status e) {
 	return i18n("Unhandled case");
 }
 
+QString AsciiFilter::autoSeparatorDetectionString() {
+	return QStringLiteral("auto");
+}
+
+/*!
+  returns the list of all predefined separator characters.
+*/
+QStringList AsciiFilter::separatorCharacters() {
+	return (QStringList() << autoSeparatorDetectionString() << QStringLiteral("TAB") << QStringLiteral("SPACE") << QStringLiteral(",") << QStringLiteral(";")
+						  << QStringLiteral(":") << QStringLiteral(",TAB") << QStringLiteral(";TAB") << QStringLiteral(":TAB") << QStringLiteral(",SPACE")
+						  << QStringLiteral(";SPACE") << QStringLiteral(":SPACE") << QStringLiteral("2xSPACE") << QStringLiteral("3xSPACE")
+						  << QStringLiteral("4xSPACE") << QStringLiteral("2xTAB"));
+}
+
+/*!
+returns the list of all predefined comment characters.
+*/
+QStringList AsciiFilter::commentCharacters() {
+	return (QStringList() << QStringLiteral("#") << QStringLiteral("!") << QStringLiteral("//") << QStringLiteral("+") << QStringLiteral("c")
+						  << QStringLiteral(":") << QStringLiteral(";"));
+}
+
+QString AsciiFilter::fileInfoString(const QString& fileName) {
+	QString info(i18n("Number of columns: %1", AsciiFilter::columnNumber(fileName)));
+	info += QStringLiteral("<br>");
+	info += i18n("Number of lines: %1", AsciiFilter::lineNumber(fileName));
+	return info;
+}
+
+int AsciiFilter::columnNumber(const QString& fileName, const QString& separator) {
+	return -1; // TODO: implement
+}
+
+size_t AsciiFilter::lineNumber(const QString& fileName, const size_t maxLines) {
+	DEBUG(Q_FUNC_INFO << ", max lines = " << maxLines)
+	KCompressionDevice device(fileName);
+
+	if (!device.open(QIODevice::ReadOnly)) {
+		DEBUG(Q_FUNC_INFO << ", Could not open file " << STDSTRING(fileName) << " to determine number of lines");
+		return 0;
+	}
+	// 	if (!device.canReadLine()) // Returns always false
+	// 		return -1;
+
+#if defined(Q_OS_LINUX) || defined(Q_OS_BSD4)
+	if (maxLines == std::numeric_limits<std::size_t>::max()) { // only when reading all lines
+		// on Linux and BSD use grep, if available, which is much faster than counting lines in the file
+		// wc -l does not count last line when not ending in line break!
+		DEBUG(Q_FUNC_INFO << ", using 'grep' or 'sed' to count lines")
+		QString cmdFullPath = safeExecutableName(QStringLiteral("grep"));
+		QStringList options;
+		options << QStringLiteral("-e") << QStringLiteral("^") << QStringLiteral("-c") << fileName;
+		if (cmdFullPath.isEmpty()) { // alternative: sed -n '$='
+			DEBUG(Q_FUNC_INFO << ", 'grep' not found using 'sed' instead")
+			cmdFullPath = safeExecutableName(QStringLiteral("sed"));
+			options.clear();
+			options << QStringLiteral("-n") << QStringLiteral("$=") << fileName;
+		}
+		if (device.compressionType() == KCompressionDevice::None && !cmdFullPath.isEmpty()) {
+			QProcess cmd;
+			startHostProcess(cmd, cmdFullPath, options);
+			size_t lineCount = 0;
+			while (cmd.waitForReadyRead()) {
+				QString line = QLatin1String(cmd.readLine());
+				QDEBUG(Q_FUNC_INFO << ", line count command output: " << line)
+				// wc on macOS has leading spaces: use SkipEmptyParts
+				lineCount = line.split(QLatin1Char(' '), Qt::SkipEmptyParts).at(0).toInt();
+			}
+			return lineCount;
+		} else {
+			DEBUG(Q_FUNC_INFO << ", 'grep' or 'sed' not found using readLine()")
+		}
+	}
+#endif
+
+	size_t lineCount = 0;
+	while (!device.atEnd()) {
+		if (lineCount >= maxLines) // stop when maxLines available
+			return lineCount;
+		device.readLine();
+		lineCount++;
+	}
+
+	return lineCount;
+}
+
 void AsciiFilter::save(QXmlStreamWriter* writer) const {
 	Q_D(const AsciiFilter);
 	const auto& p = d->properties;
@@ -99,7 +201,7 @@ void AsciiFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("vectorNames"), p.columnNamesRaw); // Changed!
 	writer->writeAttribute(QStringLiteral("skipEmptyParts"), QString::number(p.skipEmptyParts));
 	writer->writeAttribute(QStringLiteral("simplifyWhitespaces"), QString::number(p.simplifyWhitespacesEnabled));
-	writer->writeAttribute(QStringLiteral("nanValue"), QString::number(p.nanValue)); // TODO: not yet handled
+	writer->writeAttribute(QStringLiteral("nanValue"), QString::number(p.nanValue));
 	writer->writeAttribute(QStringLiteral("removeQuotes"), QString::number(p.removeQuotesEnabled));
 	writer->writeAttribute(QStringLiteral("startRow"), QString::number(p.startRow));
 	//writer->writeAttribute(QStringLiteral("endRow"), QString::number(p.endRow));

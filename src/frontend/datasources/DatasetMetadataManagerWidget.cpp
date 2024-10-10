@@ -8,7 +8,7 @@
 */
 
 #include "backend/core/Settings.h"
-#include "backend/datasources/filters/AsciiFilterOld.h"
+#include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/lib/macros.h"
 #include "frontend/datasources/DatasetMetadataManagerWidget.h"
 #include "frontend/DatasetModel.h"
@@ -48,8 +48,8 @@ DatasetMetadataManagerWidget::DatasetMetadataManagerWidget(QWidget* parent, cons
 	ui.cbCategory->addItems(m_datasetModel->categories(ui.cbCollection->currentText()));
 	ui.cbSubcategory->addItems(m_datasetModel->subcategories(ui.cbCollection->currentText(), ui.cbCategory->currentText()));
 
-	ui.cbSeparatingCharacter->addItems(Old::AsciiFilter::separatorCharacters());
-	ui.cbCommentCharacter->addItems(Old::AsciiFilter::commentCharacters());
+	ui.cbSeparatingCharacter->addItems(AsciiFilter::separatorCharacters());
+	ui.cbCommentCharacter->addItems(AsciiFilter::commentCharacters());
 	ui.cbNumberFormat->addItems(AbstractFileFilter::numberFormats());
 	ui.cbDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
 

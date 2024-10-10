@@ -29,6 +29,15 @@ public:
 	QVector<QStringList> preview(const QString& fileName, int lines);
 	static QString statusToString(Status e);
 
+	static QString autoSeparatorDetectionString();
+	static QStringList separatorCharacters();
+	static QStringList commentCharacters();
+
+	static QString fileInfoString(const QString&);
+	static int columnNumber(const QString& fileName, const QString& separator = QString());
+	static size_t lineNumber(const QString& fileName, size_t maxLines = std::numeric_limits<std::size_t>::max());
+
+
 	// save/load in the project XML
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*) override;
@@ -86,6 +95,8 @@ public:
 	};
 	Properties properties() const;
 	void setProperties(Properties& p);
+	QStringList columnNames() const;
+	QVector<AbstractColumn::ColumnMode> columnModes() const;
 
 
 

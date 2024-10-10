@@ -11,7 +11,7 @@
 #include "AsciiOptionsWidget.h"
 #include "backend/core/Settings.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
-#include "backend/datasources/filters/AsciiFilterOld.h"
+#include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/lib/macros.h"
 
 #include <KConfigGroup>
@@ -27,8 +27,8 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent)
 	: QWidget(parent) {
 	ui.setupUi(parent);
 
-	ui.cbSeparatingCharacter->addItems(Old::AsciiFilter::separatorCharacters());
-	ui.cbCommentCharacter->addItems(Old::AsciiFilter::commentCharacters());
+	ui.cbSeparatingCharacter->addItems(AsciiFilter::separatorCharacters());
+	ui.cbCommentCharacter->addItems(AsciiFilter::commentCharacters());
 	ui.cbDecimalSeparator->addItem(i18n("Point '.'"));
 	ui.cbDecimalSeparator->addItem(i18n("Comma ','"));
 	ui.cbDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
@@ -144,34 +144,34 @@ void AsciiOptionsWidget::headerChanged(bool state) const {
 	ui.lVectorNames->setVisible(!state);
 }
 
-void AsciiOptionsWidget::applyFilterSettings(Old::AsciiFilter* filter) const {
+void AsciiOptionsWidget::applyFilterSettings(AsciiFilter* filter) const {
 	DEBUG(Q_FUNC_INFO)
 	Q_ASSERT(filter);
-	filter->setCommentCharacter(ui.cbCommentCharacter->currentText());
-	filter->setSeparatingCharacter(ui.cbSeparatingCharacter->currentText());
 
+	auto properties = filter->properties();
+
+	properties.commentCharacter = ui.cbCommentCharacter->currentText();
+	properties.separator = ui.cbSeparatingCharacter->currentText();
 	// TODO: use general setting for decimal separator?
-	QLocale::Language lang;
-	if (ui.cbDecimalSeparator->currentIndex() == 0)
-		lang = QLocale::Language::C;
-	else
-		lang = QLocale::Language::German;
-	filter->setNumberFormat(lang);
-	filter->setDateTimeFormat(ui.cbDateTimeFormat->currentText());
-	filter->setCreateIndexEnabled(ui.chbCreateIndex->isChecked());
+	const auto lang = ui.cbDecimalSeparator->currentIndex() == 0 ? QLocale::Language::C : QLocale::Language::German;
+	properties.numberFormat = lang;
+	properties.dateTimeFormat = ui.cbDateTimeFormat->currentText();
+	properties.createIndexEnabled = ui.chbCreateIndex->isChecked();
 
 	// save the timestamp option only if it's visible, i.e. live source is used.
 	// use the default setting in the filter (false) otherwise for non-live source
 	if (m_createTimeStampAvailable)
-		filter->setCreateTimestampEnabled(ui.chbCreateTimestamp->isChecked());
+		properties.createTimestampEnabled = ui.chbCreateTimestamp->isChecked();
 
-	filter->setSimplifyWhitespacesEnabled(ui.chbSimplifyWhitespaces->isChecked());
-	filter->setNaNValueToZero(ui.chbConvertNaNToZero->isChecked());
-	filter->setRemoveQuotesEnabled(ui.chbRemoveQuotes->isChecked());
-	filter->setSkipEmptyParts(ui.chbSkipEmptyParts->isChecked());
-	filter->setVectorNames(ui.kleVectorNames->text());
-	filter->setHeaderEnabled(ui.chbHeader->isChecked());
-	filter->setHeaderLine(ui.sbHeaderLine->value());
+	properties.simplifyWhitespacesEnabled = ui.chbSimplifyWhitespaces->isChecked();
+	properties.nanValue = ui.chbConvertNaNToZero->isChecked() ? 0.0 : std::numeric_limits<double>::quiet_NaN();
+	properties.removeQuotesEnabled = ui.chbRemoveQuotes->isChecked();
+	properties.skipEmptyParts = ui.chbSkipEmptyParts->isChecked();
+	properties.columnNamesRaw = ui.kleVectorNames->text();
+	properties.headerEnabled = ui.chbHeader->isChecked();
+	properties.headerLine = ui.sbHeaderLine->value();
+
+	filter->setProperties(properties);
 }
 
 void AsciiOptionsWidget::setSeparatingCharacter(QLatin1Char character) {
