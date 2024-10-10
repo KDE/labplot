@@ -413,9 +413,6 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
 	using Status = AsciiFilter::Status;
 
-	// TODO: check. How to check that m_DataContainer matched dataSource? Maybe doing it in an initialization step?
-	initialized = false;
-
 	int dataContainerStartIndex = importMode == AbstractFileFilter::ImportMode::Replace ? 0 : m_DataContainer.elementCount();
 	if (!initialized) {
 		const auto status = initialize(device);
@@ -428,29 +425,31 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 				if (c != AbstractColumn::ColumnMode::Double)
 					return Status::MatrixUnsupportedColumnMode;
 		}
-
-		// Update
-		// Initialize m_DataContainer. So m_DataContainer must not free up the data afterwards
-		std::vector<void*> dataContainer;
-		bool ok;
-		dataSource->prepareImport(dataContainer, importMode, 0, properties.columnModes.size(), properties.columnNames, properties.columnModes, ok, true);
-		m_DataContainer.clear();
-		for (size_t i=0; i < dataContainer.size(); i++) {
-			m_DataContainer.appendVector(dataContainer.at(i), properties.columnModes.at(i));
-		}
-		try {
-			if (importMode == AbstractFileFilter::ImportMode::Replace) {
-				m_DataContainer.resize(10000); // reserve to not having to reallocate all the time
-				dataContainerStartIndex = 0;
-			} else {
-				m_DataContainer.resize(m_DataContainer.elementCount() * 2); // Reserve the double as right now is allocated
-				dataContainerStartIndex = m_DataContainer.elementCount();
-			}
-		} catch (std::bad_alloc&) {
-			//q->setLastError(i18n("Not enough memory."));
-			return Status::NotEnoughMemory;
-		}
 		initialized = true;
+	}
+
+	// This must be done all the time, because it could be that the datacontainer of the datasource changed and then the datacontainer points to
+	// wrong data locations.
+   // Update
+   // Initialize m_DataContainer. So m_DataContainer must not free up the data afterwards
+	std::vector<void*> dataContainer;
+	bool ok;
+	dataSource->prepareImport(dataContainer, importMode, 0, properties.columnModes.size(), properties.columnNames, properties.columnModes, ok, true);
+	m_DataContainer.clear();
+	for (size_t i=0; i < dataContainer.size(); i++) {
+		m_DataContainer.appendVector(dataContainer.at(i), properties.columnModes.at(i));
+	}
+	try {
+		if (importMode == AbstractFileFilter::ImportMode::Replace) {
+			m_DataContainer.resize(10000); // reserve to not having to reallocate all the time
+			dataContainerStartIndex = 0;
+		} else {
+			m_DataContainer.resize(m_DataContainer.elementCount() * 2); // Reserve the double as right now is allocated
+			dataContainerStartIndex = m_DataContainer.elementCount();
+		}
+	} catch (std::bad_alloc&) {
+		//q->setLastError(i18n("Not enough memory."));
+		return Status::NotEnoughMemory;
 	}
 
 	if (!device.open(QIODevice::ReadOnly))
