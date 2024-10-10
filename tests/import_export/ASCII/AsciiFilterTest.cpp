@@ -104,6 +104,10 @@ void AsciiFilterTest::testEmptyLines01() {
 	QCOMPARE(spreadsheet.column(2)->integerAt(2), 90);
 }
 
+// void AsciiFilterTest::testAppend() {
+
+// }
+
 void AsciiFilterTest::testSparseFile01() {
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;

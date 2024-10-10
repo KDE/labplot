@@ -18,9 +18,9 @@
 class AsciiFilterPrivate {
 public:
 	AsciiFilterPrivate(AsciiFilter *owner);
-
+	AsciiFilter::Status initialize(const AsciiFilter::Properties& p);
 	AsciiFilter::Status initialize(QIODevice& device);
-	AsciiFilter::Status readFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines);
+	AsciiFilter::Status readFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, qint64 from, qint64 lines);
 	QVector<QStringList> preview(const QString& fileName, int lines);
 
 	AsciiFilter::Properties properties;
@@ -40,7 +40,7 @@ private:
 	struct DataContainer {
 		void clear();
 		void appendVector(AbstractColumn::ColumnMode cm);
-		size_t elementCount(size_t index = 0) const;
+		int elementCount(size_t index = 0) const;
 
 		template<class T>
 		void appendVector(QVector<T>* data, AbstractColumn::ColumnMode cm) {

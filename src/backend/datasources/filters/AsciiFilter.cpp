@@ -46,6 +46,11 @@ AsciiFilter::AsciiFilter(): AbstractFileFilter(FileType::Ascii), d_ptr(std::make
 
 AsciiFilter::~AsciiFilter() = default;
 
+AsciiFilter::Status AsciiFilter::initialize(AsciiFilter::Properties& p) {
+	Q_D(AsciiFilter);
+	return d->initialize(p);
+}
+
 AsciiFilter::Properties AsciiFilter::properties() const {
 	Q_D(const AsciiFilter);
 	return d->properties;
@@ -73,12 +78,12 @@ QVector<AbstractColumn::ColumnMode> AsciiFilter::columnModes() const {
 
 void AsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode) {
 	KCompressionDevice file(fileName);
-	readFromDevice(file, dataSource, importMode, -1);
+	readFromDevice(file, dataSource, importMode, 0, -1);
 }
 
-qint64 AsciiFilter::readFromDevice(QIODevice& device, AbstractDataSource* dataSource, ImportMode importMode, int lines) {
+qint64 AsciiFilter::readFromDevice(QIODevice& device, AbstractDataSource* dataSource, ImportMode importMode, qint64 from, qint64 lines) {
 	Q_D(AsciiFilter);
-	const auto status = d->readFromDevice(device, dataSource, importMode, lines);
+	const auto status = d->readFromDevice(device, dataSource, importMode, from, lines); // return number lines here
 	// TODO: do something with it!
 	return 0;
 }
@@ -123,6 +128,14 @@ QString AsciiFilter::statusToString(Status e) {
 		return i18n("Live: No column separator selected");
 	case Status::SequentialDeviceNoColumnModes:
 		return i18n("Live: No column modes selected");
+	case Status::NoDateTimeFormat:
+		return i18n("Datetime column found, but no Datetime format provided");
+	case Status::HeaderDetectionNotAllowed:
+		return i18n("Header reading from device not allowed");
+	case Status::SeparatorDetectionNotAllowed:
+		return i18n("Separator detection not allowed");
+	case Status::InvalidSeparator:
+		return i18n("Invalid separator");
 	}
 	return i18n("Unhandled case");
 }
@@ -301,6 +314,7 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 
 		properties.columnNames = determineColumns(properties.columnNamesRaw, properties);
 
+		initialized = true;
 		return Status::Success;
 	}
 
@@ -432,10 +446,11 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 	if (properties.dateTimeFormat.isEmpty())
 		properties.dateTimeFormat = dateTimeFormat;
 
+	initialized = true;
 	return Status::Success;
 }
 
-AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, qint64 from, qint64 lines) {
 	using Status = AsciiFilter::Status;
 
 	int dataContainerStartIndex = importMode == AbstractFileFilter::ImportMode::Replace ? 0 : m_DataContainer.elementCount();
@@ -450,7 +465,6 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 				if (c != AbstractColumn::ColumnMode::Double)
 					return Status::MatrixUnsupportedColumnMode;
 		}
-		initialized = true;
 	}
 
 	// This must be done all the time, because it could be that the datacontainer of the datasource changed and then the datacontainer points to
@@ -482,112 +496,112 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 	else if (device.atEnd() && !device.isSequential())
 		return Status::DeviceAtEnd;
 
-	if (!device.isSequential()) {
-		// TODO: Seeking
+	if (!device.isSequential())
+		device.seek(from);
 
-		QString line;
-		int counter = 0;
-		int startDataRow = 1;
-		int rowIndex = dataContainerStartIndex;
-		// Iterate over all rows
-		do {
-			const auto status = getLine(device, line);
-			if (status == Status::DeviceAtEnd)
-				break;
-			else if (status != Status::Success)
-				return status;
+	QString line;
+	int counter = 0;
+	int startDataRow = 1;
+	int rowIndex = dataContainerStartIndex;
+	// Iterate over all rows
+	do {
+		const auto status = getLine(device, line);
+		if (status == Status::DeviceAtEnd)
+			break;
+		else if (status != Status::Success)
+			return status;
 
-			if (line.isEmpty() || (!properties.commentCharacter.isEmpty() && line.startsWith(properties.commentCharacter)))
+		if (line.isEmpty() || (!properties.commentCharacter.isEmpty() && line.startsWith(properties.commentCharacter)))
+			continue;
+
+		counter ++;
+		if (properties.headerEnabled && properties.headerLine > 0) {
+			if (counter <= properties.headerLine) {
+				if (counter == properties.headerLine)
+					startDataRow = counter + 1;
 				continue;
-
-			counter ++;
-			if (properties.headerEnabled && properties.headerLine > 0) {
-				if (counter <= properties.headerLine) {
-					if (counter == properties.headerLine)
-						startDataRow = counter + 1;
-					continue;
-				}
 			}
+		}
 
-			if ((counter - startDataRow + 1) < properties.startRow)
-				continue;
+		if ((counter - startDataRow + 1) < properties.startRow)
+			continue;
 
-			// Now we get to the data rows
-			const auto& values = determineColumns(line, properties);
-			assert(values.size() == m_DataContainer.size() - properties.createIndex - properties.createTimestamp);
+			   // Now we get to the data rows
+		const auto& values = determineColumns(line, properties);
+		assert(values.size() == m_DataContainer.size() - properties.createIndex - properties.createTimestamp);
 
-			if (properties.createIndex)
-				m_DataContainer.setData(0, rowIndex, rowIndex - dataContainerStartIndex + 1);
-			if (properties.createTimestamp) {
-				// If create index is enabled +1 the timestamp is in the second column
-				m_DataContainer.setData(properties.createIndex, rowIndex, QDateTime::currentDateTime());
-			}
+		if (properties.createIndex)
+			m_DataContainer.setData(0, rowIndex, rowIndex - dataContainerStartIndex + 1);
+		if (properties.createTimestamp) {
+			// If create index is enabled +1 the timestamp is in the second column
+			m_DataContainer.setData(properties.createIndex, rowIndex, QDateTime::currentDateTime());
+		}
 
-			int columnIndex = 0 + properties.createIndex + properties.createTimestamp;
-			// Iterate over all columns
-			for (const auto& value: values) {
-				bool conversionOk = false;
-				switch (properties.columnModes[columnIndex]) {
-				case AbstractColumn::ColumnMode::Double: {
-					double d = properties.locale.toDouble(value, &conversionOk);
-					if (!conversionOk) {d = properties.nanValue;}
-					m_DataContainer.setData(columnIndex, rowIndex, d);
-					break;
-				}
-				case AbstractColumn::ColumnMode::Integer: {
-					int i = properties.locale.toInt(value, &conversionOk);
-					if (!conversionOk) {i = 0;}
-					m_DataContainer.setData(columnIndex, rowIndex, i);
-					break;
-				}
-				case AbstractColumn::ColumnMode::BigInt: {
-					qint64 i = properties.locale.toLongLong(value, &conversionOk);
-					if (!conversionOk) {i = 0;}
-					m_DataContainer.setData(columnIndex, rowIndex, i);
-					break;
-				}
-				case AbstractColumn::ColumnMode::Text:
-					m_DataContainer.setData(columnIndex, rowIndex, value);
-					break;
-				case AbstractColumn::ColumnMode::Month:
-				case AbstractColumn::ColumnMode::Day:
-				case AbstractColumn::ColumnMode::DateTime: {
-					auto dt = QDateTime::fromString(value, properties.dateTimeFormat, properties.baseYear);
-					dt.setTimeSpec(Qt::UTC);
-					m_DataContainer.setData(columnIndex, rowIndex, dt);
-					break;
-				}
-				}
-				columnIndex ++;
-			}
-			rowIndex ++;
-			if (rowIndex >= m_DataContainer.elementCount()) {
-				try {
-					m_DataContainer.resize(2 * m_DataContainer.elementCount()); // Always double
-				} catch (std::bad_alloc&) {
-					//q->setLastError(i18n("Not enough memory."));
-					return Status::NotEnoughMemory;
-				}
-			}
-
-			if (lines >= 0 && (rowIndex - dataContainerStartIndex) > lines)
+		int columnIndex = 0 + properties.createIndex + properties.createTimestamp;
+		// Iterate over all columns
+		for (const auto& value: values) {
+			bool conversionOk = false;
+			switch (properties.columnModes[columnIndex]) {
+			case AbstractColumn::ColumnMode::Double: {
+				double d = properties.locale.toDouble(value, &conversionOk);
+				if (!conversionOk) {d = properties.nanValue;}
+				m_DataContainer.setData(columnIndex, rowIndex, d);
 				break;
+			}
+			case AbstractColumn::ColumnMode::Integer: {
+				int i = properties.locale.toInt(value, &conversionOk);
+				if (!conversionOk) {i = 0;}
+				m_DataContainer.setData(columnIndex, rowIndex, i);
+				break;
+			}
+			case AbstractColumn::ColumnMode::BigInt: {
+				qint64 i = properties.locale.toLongLong(value, &conversionOk);
+				if (!conversionOk) {i = 0;}
+				m_DataContainer.setData(columnIndex, rowIndex, i);
+				break;
+			}
+			case AbstractColumn::ColumnMode::Text:
+				m_DataContainer.setData(columnIndex, rowIndex, value);
+				break;
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
+			case AbstractColumn::ColumnMode::DateTime: {
+				auto dt = QDateTime::fromString(value, properties.dateTimeFormat, properties.baseYear);
+				dt.setTimeSpec(Qt::UTC);
+				m_DataContainer.setData(columnIndex, rowIndex, dt);
+				break;
+			}
+			}
+			columnIndex ++;
+		}
+		rowIndex ++;
+		if (rowIndex >= m_DataContainer.elementCount()) {
+			try {
+				m_DataContainer.resize(2 * m_DataContainer.elementCount()); // Always double
+			} catch (std::bad_alloc&) {
+				//q->setLastError(i18n("Not enough memory."));
+				return Status::NotEnoughMemory;
+			}
+		}
 
-			// ask to update the progress bar only if we have more than 1000 lines
-			// only in 1% steps
-			// progressIndex++;
-			// if (lines > 1000 && progressIndex > progressInterval) {
-			// 	double value = 100. * currentRow / lines;
-			// 	Q_EMIT q->completed(static_cast<int>(value));
-			// 	progressIndex = 0;
-			// 	QApplication::processEvents(QEventLoop::AllEvents, 0);
-			// }
+		if (lines >= 0 && (rowIndex - dataContainerStartIndex) > lines)
+			break;
 
-		} while (true);
+			   // ask to update the progress bar only if we have more than 1000 lines
+			   // only in 1% steps
+			   // progressIndex++;
+			   // if (lines > 1000 && progressIndex > progressInterval) {
+			   // 	double value = 100. * currentRow / lines;
+			   // 	Q_EMIT q->completed(static_cast<int>(value));
+			   // 	progressIndex = 0;
+			   // 	QApplication::processEvents(QEventLoop::AllEvents, 0);
+			   // }
 
-		// Shrink, because some data might got skipped
-		m_DataContainer.resize(rowIndex);
-	}
+	} while (true);
+
+	// Shrink, because some data might got skipped
+	m_DataContainer.resize(rowIndex);
+
 	m_DataContainer = DataContainer(); // Reset datacontainer. The data is already stored in the columns, so no freeing of memory is required
 
 	dataSource->finalizeImport(0, 0, properties.columnNames.size() - 1, properties.dateTimeFormat, importMode);
@@ -850,15 +864,56 @@ AsciiFilter::Status AsciiFilterPrivate::getLine(QIODevice& device, QString& line
 	return Status::Success;
 }
 
+/*!
+ * \brief AsciiFilterPrivate::initialize
+ * Initialize the Asciifilter so that it can be parsed without any further knowledge
+ * This is used for the live data because there everything must be specified prior
+ * starting the parsing
+ * \param p
+ * \return
+ */
+AsciiFilter::Status AsciiFilterPrivate::initialize(const AsciiFilter::Properties& p) {
+	using Status = AsciiFilter::Status;
+	using ColumnMode = AbstractColumn::ColumnMode;
+
+	if (p.automaticSeparatorDetection)
+		return Status::SeparatorDetectionNotAllowed;
+
+	if (p.separator.isEmpty())
+		return Status::InvalidSeparator;
+
+	if (p.columnNamesRaw.isEmpty())
+		return Status::UnableParsingHeader;
+
+	properties.columnNames = determineColumns(properties.columnNamesRaw, QStringLiteral(","), properties.removeQuotes, true, properties.skipEmptyParts, 1, properties.numberColumns);
+	if (properties.columnNames.isEmpty())
+		return Status::UnableParsingHeader;
+
+	if (p.columnModes.isEmpty() || p.columnModes.count() != properties.columnNames.count())
+		return Status::SequentialDeviceNoColumnModes;
+
+	if (p.headerEnabled)
+		return Status::HeaderDetectionNotAllowed;
+
+	if (p.dateTimeFormat.isEmpty()) {
+		for (const auto m: p.columnModes) {
+			if (m == ColumnMode::DateTime || m == ColumnMode::Month || m == ColumnMode::Day)
+				return Status::NoDateTimeFormat;
+		}
+	}
+	initialized = true;
+	return Status::Success;
+}
+
 QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int lines) {
 	KCompressionDevice file(fileName);
 	Spreadsheet spreadsheet(QStringLiteral("AsciiFilterPreviewSpreadsheet"));
 	initialized = false;
 	q->clearLastError();
-	const auto status = readFromDevice(file, &spreadsheet, AbstractFileFilter::ImportMode::Replace, lines);
+	const auto status = readFromDevice(file, &spreadsheet, AbstractFileFilter::ImportMode::Replace, 0, lines);
 	QVector<QStringList> p;
 	if (status != AsciiFilter::Status::Success) {
-		q->setLastError(statusToString(status));
+		q->setLastError(AsciiFilter::statusToString(status));
 		return p;
 	}
 
@@ -947,7 +1002,7 @@ bool AsciiFilterPrivate::DataContainer::resize(uint32_t s) const {
 	if (size == -1)
 		return false;
 
-	for (uint32_t i = 1; i < m_dataContainer.size(); i++) {
+	for (size_t i = 1; i < m_dataContainer.size(); i++) {
 		if (size != elementCount(i))
 			return false;
 	}
@@ -1018,7 +1073,7 @@ void AsciiFilterPrivate::DataContainer::appendVector(AbstractColumn::ColumnMode 
 	m_columnModes.append(cm);
 }
 
-size_t AsciiFilterPrivate::DataContainer::elementCount(size_t index) const {
+int AsciiFilterPrivate::DataContainer::elementCount(size_t index) const {
 	if (index >= m_dataContainer.size())
 		return -1;
 
