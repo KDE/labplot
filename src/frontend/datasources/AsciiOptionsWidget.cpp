@@ -144,11 +144,8 @@ void AsciiOptionsWidget::headerChanged(bool state) const {
 	ui.lVectorNames->setVisible(!state);
 }
 
-void AsciiOptionsWidget::applyFilterSettings(AsciiFilter* filter) const {
+void AsciiOptionsWidget::applyFilterSettings(AsciiFilter::Properties& properties) const {
 	DEBUG(Q_FUNC_INFO)
-	Q_ASSERT(filter);
-
-	auto properties = filter->properties();
 
 	properties.commentCharacter = ui.cbCommentCharacter->currentText();
 	properties.separator = ui.cbSeparatingCharacter->currentText();
@@ -170,8 +167,6 @@ void AsciiOptionsWidget::applyFilterSettings(AsciiFilter* filter) const {
 	properties.columnNamesRaw = ui.kleVectorNames->text();
 	properties.headerEnabled = ui.chbHeader->isChecked();
 	properties.headerLine = ui.sbHeaderLine->value();
-
-	filter->setProperties(properties);
 }
 
 void AsciiOptionsWidget::setSeparatingCharacter(QLatin1Char character) {

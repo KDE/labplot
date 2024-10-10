@@ -694,13 +694,22 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 
 			// set the data portion to import
 			properties.startRow = ui.sbStartRow->value();
-			// properties.endRow = ui.sbEndRow->value(); // TODO: turn on again
+			auto v = ui.sbEndRow->value();
+			if (v < 0)
+				properties.numberRows = -1;
+			else
+				properties.numberRows = v - properties.startRow + 1;
+
 			properties.startColumn = ui.sbStartColumn->value();
-			// properties.endColumn = ui.sbEndColumn->value(); // TODO: turn on again
+			v = ui.sbEndColumn->value();
+			if (v < 0)
+				properties.numberColumns = -1;
+			else
+				properties.numberColumns = v - properties.startColumn + 1;
 
 			// set the remaining filter settings
 			if (m_asciiOptionsWidget)
-				m_asciiOptionsWidget->applyFilterSettings(filter);
+				m_asciiOptionsWidget->applyFilterSettings(properties);
 		}
 		filter->setProperties(properties);
 
