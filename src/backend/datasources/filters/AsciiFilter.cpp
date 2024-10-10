@@ -11,6 +11,7 @@
 #include "AsciiFilter.h"
 #include "AsciiFilterPrivate.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/matrix/Matrix.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/core/Project.h"
 #include <KCompressionDevice>
@@ -224,16 +225,20 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 	// Determine column names
 	if (properties.headerEnabled)
 		properties.columnNames = determineColumns(line, properties);
-	else {
-		if (properties.columnNamesRaw.isEmpty())
-			return Status::HeaderEmpty;
+	else if (!properties.columnNamesRaw.isEmpty()){
 		// Determine column names from the names specified in the dialog
 		// StartColumn is always one. Because otherwise I would need to specify column names for not required columns
 		properties.columnNames = determineColumns(properties.columnNamesRaw, QStringLiteral(","), removeQuotes, true, skipEmptyParts, 1, properties.numberColumns);
 		if (properties.columnNames.isEmpty())
 			return Status::UnableParsingHeader;
 		//properties.columnNames = determineColumns(properties.columnNamesRaw, separator, removeQuotes, simplifyWhiteSpace, skipEmptyParts, properties.startColumn, properties.numberColumns);
-
+	} else {
+		// Create default column names
+		properties.columnNames.clear();
+		const auto& values = determineColumns(line, properties);
+		for (int i=0; i < values.length(); i++) {
+			properties.columnNames.append(i18n("Column %1").arg(QString::number(i + 1)));
+		}
 	}
 
 	// Determine number of columns
@@ -305,11 +310,7 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
 	using Status = AsciiFilter::Status;
 
-	auto* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
-	if (!spreadsheet)
-		return Status::UnsupportedDataSource;
-
-	// TODO: check. How to check that m_DataContainer
+	// TODO: check. How to check that m_DataContainer matched dataSource? Maybe doing it in an initialization step?
 	initialized = false;
 
 	int dataContainerStartIndex = importMode == AbstractFileFilter::ImportMode::Replace ? 0 : m_DataContainer.elementCount();
@@ -318,11 +319,18 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 		if (status != Status::Success)
 			return status;
 
+		// matrix data has only one column mode
+		if (dynamic_cast<Matrix*>(dataSource)) {
+			for (auto& c : properties.columnModes)
+				if (c != AbstractColumn::ColumnMode::Double)
+					return Status::MatrixUnsupportedColumnMode;
+		}
+
 		// Update
 		// Initialize m_DataContainer. So m_DataContainer must not free up the data afterwards
 		std::vector<void*> dataContainer;
 		bool ok;
-		spreadsheet->prepareImport(dataContainer, importMode, 0, properties.columnModes.size(), properties.columnNames, properties.columnModes, ok, true);
+		dataSource->prepareImport(dataContainer, importMode, 0, properties.columnModes.size(), properties.columnNames, properties.columnModes, ok, true);
 		m_DataContainer.clear();
 		for (size_t i=0; i < dataContainer.size(); i++) {
 			m_DataContainer.appendVector(dataContainer.at(i), properties.columnModes.at(i));

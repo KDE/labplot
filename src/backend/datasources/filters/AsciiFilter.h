@@ -21,7 +21,7 @@ public:
 
 	enum class Status { Success, UnableToOpenDevice, DeviceAtEnd, NotEnoughRowsSelected, UnableToReadLine, SeparatorDeterminationFailed,
 						SequentialDeviceHeaderEnabled, SequentialDeviceAutomaticSeparatorDetection, SequentialDeviceNoColumnModes, InvalidNumberDataColumns,
-						NotEnoughMemory, UnsupportedDataSource, HeaderEmpty, UnableParsingHeader };
+						NotEnoughMemory, UnsupportedDataSource, UnableParsingHeader, MatrixUnsupportedColumnMode };
 
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) override;
 	qint64 readFromDevice(QIODevice& device, AbstractDataSource* dataSource, ImportMode importMode, int lines);

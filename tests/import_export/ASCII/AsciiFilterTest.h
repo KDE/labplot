@@ -106,6 +106,7 @@ private Q_SLOTS:
 	// see https://stackoverflow.com/questions/36916962/qtest-executes-test-case-twic
 	void benchDoubleImport();
 	void benchDoubleImport_cleanup(); // delete data
+	void benchMark2();
 
 	void determineSeparator();
 	void determineColumns();
