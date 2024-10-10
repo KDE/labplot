@@ -44,6 +44,8 @@ AsciiFilter::AsciiFilter(): AbstractFileFilter(FileType::Ascii), d_ptr(std::make
 
 }
 
+AsciiFilter::~AsciiFilter() = default;
+
 AsciiFilter::Properties AsciiFilter::properties() const {
 	Q_D(const AsciiFilter);
 	return d->properties;
