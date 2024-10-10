@@ -828,10 +828,12 @@ AsciiFilter::Status AsciiFilterPrivate::getLine(QIODevice& device, QString& line
 QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int lines) {
 	KCompressionDevice file(fileName);
 	Spreadsheet spreadsheet(QStringLiteral("AsciiFilterPreviewSpreadsheet"));
-	const auto read_lines = readFromDevice(file, &spreadsheet, AbstractFileFilter::ImportMode::Replace, lines);
-	// TODO: handle if not enough lines can be read
-
+	initialized = false;
+	const auto status = readFromDevice(file, &spreadsheet, AbstractFileFilter::ImportMode::Replace, lines);
 	QVector<QStringList> p;
+	if (status != AsciiFilter::Status::Success)
+		return p;
+
 	for (int row = 0; row < spreadsheet.rowCount(); row++) {
 		QStringList line;
 		for (int column = 0; column < spreadsheet.columnCount(); column++) {
