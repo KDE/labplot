@@ -131,6 +131,10 @@ void AbstractFileFilter::setLastError(const QString& error) {
 	m_lastError = error;
 }
 
+void AbstractFileFilter::clearLastError() {
+	m_lastError.clear();
+}
+
 /*!
  * Returns the list of warnings that occured during the last parse step.
  */

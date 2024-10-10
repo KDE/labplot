@@ -1715,6 +1715,8 @@ void ImportFileWidget::refreshPreview() {
 		case LiveDataSource::SourceType::FileOrPipe: {
 			DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(file));
 			importedStrings = filter->preview(file, lines);
+			if (!filter->lastError().isEmpty())
+				Q_EMIT error(filter->lastError());
 			break;
 		}
 		case LiveDataSource::SourceType::LocalSocket: {
