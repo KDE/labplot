@@ -685,7 +685,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		if (!m_currentFilter)
 			m_currentFilter.reset(new AsciiFilter);
 		auto filter = static_cast<AsciiFilter*>(m_currentFilter.get());
-		auto properties = filter->properties();
+		auto properties = filter->defaultProperties();
 
 		if (ui.cbFilter->currentIndex() == 0) //"automatic"
 			properties.automaticSeparatorDetection = true;

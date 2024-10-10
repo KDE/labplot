@@ -148,7 +148,15 @@ void AsciiOptionsWidget::applyFilterSettings(AsciiFilter::Properties& properties
 	DEBUG(Q_FUNC_INFO)
 
 	properties.commentCharacter = ui.cbCommentCharacter->currentText();
-	properties.separator = ui.cbSeparatingCharacter->currentText();
+	const auto v = ui.cbSeparatingCharacter->currentText();
+	if (v.compare(AsciiFilter::autoSeparatorDetectionString(), Qt::CaseInsensitive) == 0) {
+		properties.automaticSeparatorDetection = true;
+		properties.separator.clear();
+	} else {
+		properties.automaticSeparatorDetection = false;
+		properties.separator = v;
+	}
+
 	// TODO: use general setting for decimal separator?
 	const auto lang = ui.cbDecimalSeparator->currentIndex() == 0 ? QLocale::Language::C : QLocale::Language::German;
 	properties.numberFormat = lang;
