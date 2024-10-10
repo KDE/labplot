@@ -57,6 +57,8 @@ public:
 	void redo() override {
 		if (m_backups.isEmpty()) {
 			int last_row = m_private_obj->rowCount() - 1;
+			if (last_row < 0)
+				return;
 			for (int i = 0; i < m_count; i++)
 				m_backups.append(m_private_obj->columnCells<T>(m_first + i, 0, last_row));
 		}
@@ -66,6 +68,8 @@ public:
 	void undo() override {
 		m_private_obj->insertColumns(m_first, m_count);
 		int last_row = m_private_obj->rowCount() - 1;
+		if (last_row < 0)
+			return;
 		// TODO: use memcopy to copy from the backup vector
 		for (int i = 0; i < m_count; i++)
 			m_private_obj->setColumnCells(m_first + i, 0, last_row, m_backups.at(i));

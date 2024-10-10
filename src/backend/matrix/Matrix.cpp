@@ -882,9 +882,13 @@ void MatrixPrivate::insertColumns(int before, int count) {
 	Remove \c count columns starting with column index \c first
 */
 void MatrixPrivate::removeColumns(int first, int count) {
-	Q_EMIT q->columnsAboutToBeRemoved(first, count);
+	const auto columnCount = this->columnCount();
+	int rowCount = this->rowCount();
+	if (first == 0 && count == columnCount && rowCount > 0)
+		Q_EMIT q->rowsAboutToBeRemoved(0, rowCount);
 	Q_ASSERT(first >= 0);
-	Q_ASSERT(first + count <= columnCount());
+	Q_ASSERT(first + count <= columnCount);
+	Q_EMIT q->columnsAboutToBeRemoved(first, count);
 
 	switch (mode) {
 	case AbstractColumn::ColumnMode::Double:
@@ -909,6 +913,9 @@ void MatrixPrivate::removeColumns(int first, int count) {
 	for (int i = 0; i < count; i++)
 		columnWidths.remove(first);
 	Q_EMIT q->columnsRemoved(first, count);
+	if (columnCount == 0 && rowCount > 0) {
+		Q_EMIT q->rowsRemoved(0, rowCount);
+	}
 }
 
 int MatrixPrivate::columnCount() const {
@@ -989,10 +996,14 @@ void MatrixPrivate::insertRows(int before, int count) {
 				(static_cast<QVector<QVector<QDateTime>>*>(data))->operator[](col).insert(before + i, QDateTime());
 	}
 
-	for (int i = 0; i < count; i++)
-		rowHeights.insert(before + i, 0);
-
-	Q_EMIT q->rowsInserted(before, count);
+	if (columnCount == 0) {
+		rowHeights.clear();
+		Q_EMIT q->rowsInserted(0, 0);
+	}else {
+		for (int i = 0; i < count; i++)
+			rowHeights.insert(before + i, 0);
+		Q_EMIT q->rowsInserted(before, count);
+	}
 }
 
 /*!
@@ -1030,10 +1041,14 @@ void MatrixPrivate::removeRows(int first, int count) {
 		break;
 	}
 
-	for (int i = 0; i < count; i++)
-		rowHeights.remove(first);
-
-	Q_EMIT q->rowsRemoved(first, count);
+	if (columnCount == 0) {
+		rowHeights.clear();
+		Q_EMIT q->rowsRemoved(0, 0);
+	}else {
+		for (int i = 0; i < count; i++)
+			rowHeights.remove(first);
+		Q_EMIT q->rowsRemoved(first, count);
+	}
 }
 
 //! Fill column with zeroes
