@@ -563,7 +563,7 @@ void AsciiFilterTest::tooManyHeaders() {
 	p.headerEnabled = false;
 	p.intAsDouble = false;
 	p.simplifyWhitespacesEnabled = true;
-	p.columnNamesRaw = QStringLiteral("x y z"); // To many
+	p.columnNamesRaw = QStringLiteral("x, y, z"); // Too many
 	filter.setProperties(p);
 
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
