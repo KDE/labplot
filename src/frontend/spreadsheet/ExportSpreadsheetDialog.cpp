@@ -32,8 +32,6 @@
 #include <QStandardItemModel>
 #include <QWindow>
 
-using namespace Old;
-
 /*!
 	\class ExportSpreadsheetDialog
 	\brief Dialog for exporting a spreadsheet to a file.
@@ -73,7 +71,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 #ifdef HAVE_MCAP
 	ui->cbFormat->addItem(QStringLiteral("MCAP"), static_cast<int>(Format::MCAP));
 #endif
-	QStringList separators = AsciiFilter::separatorCharacters();
+	QStringList separators = Old::AsciiFilter::separatorCharacters();
 	separators.takeAt(0); // remove the first entry "auto"
 	ui->cbSeparator->addItems(separators);
 

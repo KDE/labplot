@@ -30,8 +30,6 @@
 #include <QTcpSocket>
 #include <QUrl>
 
-using namespace Old;
-
 /*!
 	\class DatasetMetadataManagerWidget
 	\brief Widget for adding a new dataset to LabPlot's current collection.
@@ -50,8 +48,8 @@ DatasetMetadataManagerWidget::DatasetMetadataManagerWidget(QWidget* parent, cons
 	ui.cbCategory->addItems(m_datasetModel->categories(ui.cbCollection->currentText()));
 	ui.cbSubcategory->addItems(m_datasetModel->subcategories(ui.cbCollection->currentText(), ui.cbCategory->currentText()));
 
-	ui.cbSeparatingCharacter->addItems(AsciiFilter::separatorCharacters());
-	ui.cbCommentCharacter->addItems(AsciiFilter::commentCharacters());
+	ui.cbSeparatingCharacter->addItems(Old::AsciiFilter::separatorCharacters());
+	ui.cbCommentCharacter->addItems(Old::AsciiFilter::commentCharacters());
 	ui.cbNumberFormat->addItems(AbstractFileFilter::numberFormats());
 	ui.cbDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
 

@@ -24,8 +24,6 @@
 
 #include <KLocalizedString>
 
-using namespace Old;
-
 /*!
   \class DatasetHandler
   \brief Provides  functionality to process a metadata file of a dataset, configure a spreadsheet and filter based on it, download the dataset
@@ -35,7 +33,7 @@ using namespace Old;
 */
 DatasetHandler::DatasetHandler(Spreadsheet* spreadsheet)
 	: m_spreadsheet(spreadsheet)
-	, m_filter(new AsciiFilter)
+	, m_filter(new Old::AsciiFilter)
 	, m_downloadManager(new QNetworkAccessManager) {
 	connect(m_downloadManager, &QNetworkAccessManager::finished, this, &DatasetHandler::downloadFinished);
 	connect(this, &DatasetHandler::downloadCompleted, this, &DatasetHandler::processDataset);

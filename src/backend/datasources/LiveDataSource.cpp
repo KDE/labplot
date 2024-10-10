@@ -40,8 +40,6 @@
 
 #include <KLocalizedString>
 
-using namespace Old;
-
 /*!
   \class LiveDataSource
   \brief Represents data stored in a file. Reading and writing is done with the help of appropriate I/O-filters.
@@ -542,9 +540,9 @@ void LiveDataSource::read() {
 		switch (m_fileType) {
 		case AbstractFileFilter::FileType::Ascii:
 			if (m_readingType == LiveDataSource::ReadingType::WholeFile) {
-				static_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_device, this, 0);
+				static_cast<Old::AsciiFilter*>(m_filter)->readFromLiveDevice(*m_device, this, 0);
 			} else {
-				qint64 bytes = static_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_device, this, m_bytesRead);
+				qint64 bytes = static_cast<Old::AsciiFilter*>(m_filter)->readFromLiveDevice(*m_device, this, m_bytesRead);
 				m_bytesRead += bytes;
 				DEBUG("Read " << bytes << " bytes, in total: " << m_bytesRead);
 			}
@@ -584,7 +582,7 @@ void LiveDataSource::read() {
 
 		// reading data here
 		if (m_fileType == AbstractFileFilter::FileType::Ascii)
-			static_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
+			static_cast<Old::AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 		break;
 	case SourceType::LocalSocket:
 		DEBUG("	Reading from local socket. state before abort = " << m_localSocket->state());
@@ -601,7 +599,7 @@ void LiveDataSource::read() {
 
 		// reading data here
 		if (m_fileType == AbstractFileFilter::FileType::Ascii)
-			static_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
+			static_cast<Old::AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 #endif
 		break;
 	case SourceType::MQTT:
@@ -650,7 +648,7 @@ void LiveDataSource::readyRead() {
 	DEBUG("	REMAINING TIME = " << m_updateTimer->remainingTime());
 
 	if (m_fileType == AbstractFileFilter::FileType::Ascii)
-		static_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
+		static_cast<Old::AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
 
 	// TODO: not implemented yet
 	//	else if (m_fileType == AbstractFileFilter::FileType::Binary)
@@ -945,7 +943,7 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 			}
 
 		} else if (reader->name() == QLatin1String("asciiFilter")) {
-			setFilter(new AsciiFilter);
+			setFilter(new Old::AsciiFilter);
 			if (!m_filter->load(reader))
 				return false;
 		} else if (reader->name() == QLatin1String("rootFilter")) {
