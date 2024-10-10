@@ -12,8 +12,8 @@
 #define ASCIIOPTIONSWIDGET_H
 
 #include "ui_asciioptionswidget.h"
+#include "backend/datasources/filters/AsciiFilter.h"
 
-class AsciiFilter;
 class KConfig;
 
 class AsciiOptionsWidget : public QWidget {
