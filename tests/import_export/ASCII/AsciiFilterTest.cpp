@@ -2430,17 +2430,19 @@ void AsciiFilterTest::determineSeparator() {
 }
 
 void AsciiFilterTest::determineColumns() {
-	bool removeQuotes = true;
-	bool simplifyWhiteSpaces = true;
-	bool skipEmptyParts = true;
-	int startColumn = 1;
-	int numberColumns = -1;
+	AsciiFilter::Properties p;
+	p.removeQuotesEnabled = true;
+	p.simplifyWhitespacesEnabled = true;
+	p.skipEmptyParts = true;
+	p.startColumn = 1;
+	p.numberColumns = -1;
+	p.separator = QStringLiteral(",");
 
 	auto expectedHeader = QStringList{QStringLiteral("header1"),QStringLiteral("header2"),QStringLiteral("header3")};
-	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("header1,header2,header3\n"), QStringLiteral(","), removeQuotes, simplifyWhiteSpaces, skipEmptyParts, startColumn, numberColumns), expectedHeader);
+	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("header1,header2,header3\n"), p), expectedHeader);
 
 	expectedHeader = QStringList{QStringLiteral("header 1"),QStringLiteral("header 2"),QStringLiteral("header 3")};
-	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("\"header 1\",\"header 2\",\"header 3\"\n"), QStringLiteral(","), removeQuotes, simplifyWhiteSpaces, skipEmptyParts, startColumn, numberColumns), expectedHeader);
+	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("\"header 1\",\"header 2\",\"header 3\"\n"), p), expectedHeader);
 }
 
 QTEST_MAIN(AsciiFilterTest)

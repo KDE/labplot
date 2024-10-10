@@ -41,6 +41,7 @@ public:
 
 	struct Properties {
 		QString commentCharacter{QStringLiteral("#")};
+		int baseYear{1900}; // Base year when parsing datetime with only 2 year digits
 		QString dateTimeFormat;
 		QLocale::Language numberFormat{QLocale::C};
 		QLocale locale{QLocale::C};

@@ -38,7 +38,7 @@ public:
 
 	static bool isNan(const QString&);
 	static AbstractColumn::ColumnMode columnMode(const QString& valueString, QString& dateTimeFormat, QLocale::Language);
-	static AbstractColumn::ColumnMode columnMode(const QString& valueString, QString& dateTimeFormat, const QLocale& = QLocale(), bool intAsDouble = false);
+	static AbstractColumn::ColumnMode columnMode(const QString& valueString, QString& dateTimeFormat, const QLocale& = QLocale(), bool intAsDouble = false, int baseYear = QLocale::DefaultTwoDigitBaseYear);
 	static QString dateTimeFormat(const QString& valueString);
 	static QStringList numberFormats();
 	static FileType fileType(const QString&);
