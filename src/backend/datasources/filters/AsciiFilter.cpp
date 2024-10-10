@@ -487,6 +487,7 @@ QVector<AbstractColumn::ColumnMode> AsciiFilterPrivate::determineColumnModes(con
 	for (int i=0; i < columnCount; i++)
 		modes.append(Mode::Integer);
 
+	bool first = true;
 	for (const auto& row : rows) {
 		int columnIndex = 0;
 		for (auto column: row) {
@@ -504,19 +505,23 @@ QVector<AbstractColumn::ColumnMode> AsciiFilterPrivate::determineColumnModes(con
 					mode = Mode::Double;
 			}
 
-			if (mode == Mode::Double && modes[columnIndex] == Mode::Integer) {
+			if (first)
+				modes[columnIndex] = mode;
+			else if (mode == Mode::Double && modes[columnIndex] == Mode::Integer) {
 				// numeric: integer -> numeric
 				modes[columnIndex] = mode;
 			} else if (mode == Mode::Text && modes[columnIndex] != Mode::Text) {
 				// text: non text -> text
 				modes[columnIndex] = mode;
-			} else if (mode != Mode::Text && modes[columnIndex] == Mode::Text) {
+			} else if (mode == Mode::BigInt && modes[columnIndex] == Mode::Integer)
+				modes[columnIndex] = mode;
+			/* else if (mode != Mode::Text && modes[columnIndex] == Mode::Text) {
 				// numeric: text -> numeric/integer
 				modes[columnIndex] = mode;
-			} else
-				modes[columnIndex] = mode;
+			}*/
 			columnIndex ++;
 		}
+		first = false;
 	}
 	return modes;
 }
