@@ -2676,6 +2676,16 @@ void AsciiFilterTest::determineColumns() {
 	expectedHeader = QStringList{QStringLiteral("header 1"),QStringLiteral("header2"),QStringLiteral("header 3")};
 	// Second header has no quotes
 	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("\"header 1\",header2,\"header 3\"\n"), p), expectedHeader);
+
+	expectedHeader = QStringList{QStringLiteral("header1"),QStringLiteral("header2"),QStringLiteral("header3")};
+	p.simplifyWhitespacesEnabled = false;
+	QBENCHMARK {
+		QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("header1,header2,header3\n"), p), expectedHeader);
+	}
+	p.simplifyWhitespacesEnabled = true;
+	QBENCHMARK {
+		QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("header1,header2,header3\n"), p), expectedHeader);
+	}
 }
 
 QTEST_MAIN(AsciiFilterTest)
