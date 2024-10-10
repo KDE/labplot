@@ -540,6 +540,7 @@ QStringList AsciiFilterPrivate::determineColumns(const QString& line, const QStr
 	QStringList columnNames;
 	QString columnName;
 	int columnCount = 1;
+	bool separatorLast = false;
 	for (auto c: line) {
 		if (c == QLatin1Char('\n') || c == QLatin1Char('\r'))
 			break;
@@ -563,6 +564,7 @@ QStringList AsciiFilterPrivate::determineColumns(const QString& line, const QStr
 		switch (state) {
 		case State::Column: {
 			if (columnName.endsWith(separator)) {
+				separatorLast = true;
 				columnName.remove(columnName.length() - separator.length(), separator.length());
 				if (!skipEmptyParts || !columnName.isEmpty()) {
 					if (columnCount >= startColumn && (columnCount < startColumn + numberColumns || numberColumns < 0))
@@ -570,15 +572,19 @@ QStringList AsciiFilterPrivate::determineColumns(const QString& line, const QStr
 					columnCount ++;
 				}
 				columnName.clear();
-			}
+			} else
+				separatorLast = false;
 			break;
 		}
 		case State::QuotedText:
 			continue;
 		}
 	}
-	if (!columnName.isEmpty() && columnCount >= startColumn && (columnCount < startColumn + numberColumns || numberColumns < 0))
-		columnNames.append(columnName);
+	if (columnCount >= startColumn && (columnCount < startColumn + numberColumns || numberColumns < 0)) {
+		// If columnName is empty(): After the separator the line was finished, but there should be a value so add a placeholder (invalid value)
+		if (!columnName.isEmpty() || (!skipEmptyParts && separatorLast))
+			columnNames.append(columnName);
+	}
 	return columnNames;
 }
 
