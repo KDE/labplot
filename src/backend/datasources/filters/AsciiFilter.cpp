@@ -416,9 +416,12 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 					break;
 				case AbstractColumn::ColumnMode::Month:
 				case AbstractColumn::ColumnMode::Day:
-				case AbstractColumn::ColumnMode::DateTime:
-					m_DataContainer.setData(columnIndex, rowIndex, QDateTime::fromString(value, properties.dateTimeFormat, properties.baseYear));
+				case AbstractColumn::ColumnMode::DateTime: {
+					auto dt = QDateTime::fromString(value, properties.dateTimeFormat, properties.baseYear);
+					dt.setTimeSpec(Qt::UTC);
+					m_DataContainer.setData(columnIndex, rowIndex, dt);
 					break;
+				}
 				}
 				columnIndex ++;
 			}
