@@ -18,6 +18,7 @@ class AsciiFilterPrivate;
 class AsciiFilter: public AbstractFileFilter {
 public:
 	AsciiFilter();
+	~AsciiFilter();
 
 	enum class Status { Success, UnableToOpenDevice, DeviceAtEnd, NotEnoughRowsSelected, UnableToReadLine, SeparatorDeterminationFailed,
 						SequentialDeviceHeaderEnabled, SequentialDeviceAutomaticSeparatorDetection, SequentialDeviceNoColumnModes, InvalidNumberDataColumns,
