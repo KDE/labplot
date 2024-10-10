@@ -22,10 +22,10 @@ public:
 
 	enum class Status { Success, UnableToOpenDevice, DeviceAtEnd, NotEnoughRowsSelected, UnableToReadLine, SeparatorDeterminationFailed,
 						SequentialDeviceHeaderEnabled, SequentialDeviceAutomaticSeparatorDetection, SequentialDeviceNoColumnModes, InvalidNumberDataColumns,
-						NotEnoughMemory, UnsupportedDataSource, UnableParsingHeader, MatrixUnsupportedColumnMode };
+						NotEnoughMemory, UnsupportedDataSource, UnableParsingHeader, MatrixUnsupportedColumnMode, NoDateTimeFormat, HeaderDetectionNotAllowed, SeparatorDetectionNotAllowed, InvalidSeparator };
 
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) override;
-	qint64 readFromDevice(QIODevice& device, AbstractDataSource* dataSource, ImportMode importMode, int lines);
+	qint64 readFromDevice(QIODevice& device, AbstractDataSource* dataSource, ImportMode importMode, qint64 from, qint64 lines);
 	void write(const QString& fileName, AbstractDataSource*) override;
 	QVector<QStringList> preview(const QString& fileName, int lines);
 	static QString statusToString(Status e);
@@ -94,6 +94,7 @@ public:
 	private:
 		bool m_dirty{true};
 	};
+	Status initialize(Properties& p);
 	Properties properties() const;
 	Properties defaultProperties() const;
 	void setProperties(Properties& p);
