@@ -93,15 +93,36 @@ QVector<QStringList> AsciiFilter::preview(const QString& fileName, int lines) {
 }
 
 QString AsciiFilter::statusToString(Status e) {
+	using Status = AsciiFilter::Status;
 	switch (e) {
-	case AsciiFilter::Status::Success:
+	case Status::Success:
 		return i18n("Success");
-	case AsciiFilter::Status::DeviceAtEnd:
+	case Status::DeviceAtEnd:
 		return i18n("Device at end");
-	case AsciiFilter::Status::NotEnoughRowsSelected:
+	case Status::NotEnoughRowsSelected:
 		return i18n("Not enough rows selected. Increase number of rows.");
-	case AsciiFilter::Status::UnableToOpenDevice:
+	case Status::UnableToOpenDevice:
 		return i18n("Unable to open device");
+	case Status::UnableToReadLine:
+		return i18n("");
+	case Status::SeparatorDeterminationFailed:
+		return i18n("Unable to determine the separator");
+	case Status::InvalidNumberDataColumns:
+		return i18n("Invalid number of data columns");
+	case Status::MatrixUnsupportedColumnMode:
+		return i18n("Matrix: Unsupported Column Mode");
+	case Status::NotEnoughMemory:
+		return i18n("Insufficient memory (RAM)");
+	case Status::UnableParsingHeader:
+		return i18n("Unable to parse header");
+	case Status::UnsupportedDataSource:
+		return i18n("Unsupported datasource");
+	case Status::SequentialDeviceHeaderEnabled:
+		return i18n("");
+	case Status::SequentialDeviceAutomaticSeparatorDetection:
+		return i18n("Live: No column separator selected");
+	case Status::SequentialDeviceNoColumnModes:
+		return i18n("Live: No column modes selected");
 	}
 	return i18n("Unhandled case");
 }
@@ -833,10 +854,13 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	KCompressionDevice file(fileName);
 	Spreadsheet spreadsheet(QStringLiteral("AsciiFilterPreviewSpreadsheet"));
 	initialized = false;
+	q->clearLastError();
 	const auto status = readFromDevice(file, &spreadsheet, AbstractFileFilter::ImportMode::Replace, lines);
 	QVector<QStringList> p;
-	if (status != AsciiFilter::Status::Success)
+	if (status != AsciiFilter::Status::Success) {
+		q->setLastError(statusToString(status));
 		return p;
+	}
 
 	for (int row = 0; row < spreadsheet.rowCount(); row++) {
 		QStringList line;

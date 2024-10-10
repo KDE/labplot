@@ -32,7 +32,7 @@ private:
 	static AsciiFilter::Status determineSeparator(const QString &line, bool removeQuotes, bool simplifyWhiteSpaces, QString &separator);
 	static QVector<AbstractColumn::ColumnMode> determineColumnModes(const QVector<QStringList>& values, const AsciiFilter::Properties& properties, QString &dateTimeFormat);
 	AsciiFilter::Status getLine(QIODevice& device, QString& line);
-	static QString deviceStatusToString(AsciiFilter::Status);
+	static QString statusToString(AsciiFilter::Status);
 	void setLastError(AsciiFilter::Status);
 
 	// Copied from CANFilterPrivate

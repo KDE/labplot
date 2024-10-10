@@ -55,6 +55,7 @@ public:
 
 	QString lastError() const;
 	void setLastError(const QString&);
+	void clearLastError();
 
 	QStringList lastWarnings() const;
 	void addWarning(const QString&);
