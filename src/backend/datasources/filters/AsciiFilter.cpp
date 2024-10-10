@@ -170,7 +170,7 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 		else if (properties.columnModes.isEmpty())
 			return Status::SequentialDeviceNoColumnModes;
 
-		properties.columnNames = determineColumns(properties.columnNamesRaw, properties.separator, removeQuotes, simplifyWhiteSpace, skipEmptyParts, properties.startColumn, properties.numberColumns);
+		properties.columnNames = determineColumns(properties.columnNamesRaw, properties);
 
 		return Status::Success;
 	}
@@ -223,7 +223,7 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 
 	// Determine column names
 	if (properties.headerEnabled)
-		properties.columnNames = determineColumns(line, properties.separator, removeQuotes, simplifyWhiteSpace, skipEmptyParts, properties.startColumn, properties.numberColumns);
+		properties.columnNames = determineColumns(line, properties);
 	else {
 		if (properties.columnNamesRaw.isEmpty())
 			return Status::HeaderEmpty;
@@ -261,7 +261,7 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 	QVector<QStringList> rows;
 	size_t i = 0;
 	if (!properties.headerEnabled) {
-		rows.append(determineColumns(line, properties.separator, removeQuotes, simplifyWhiteSpace, skipEmptyParts, properties.startColumn, properties.numberColumns));
+		rows.append(determineColumns(line, properties));
 		if (rows.last().count() != properties.numberColumns)
 			return Status::InvalidNumberDataColumns;
 		i++;
@@ -289,7 +289,7 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 			return status;
 		if (line.isEmpty() || (!properties.commentCharacter.isEmpty() && line.startsWith(properties.commentCharacter)))
 			continue;
-		rows.append(determineColumns(line, properties.separator, removeQuotes, simplifyWhiteSpace, skipEmptyParts, properties.startColumn, properties.numberColumns));
+		rows.append(determineColumns(line, properties));
 		if (rows.last().count() != properties.numberColumns)
 			return Status::InvalidNumberDataColumns;
 		i++;
@@ -378,7 +378,7 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 				continue;
 
 			// Now we get to the data rows
-			const auto& values = determineColumns(line, properties.separator, properties.removeQuotesEnabled, properties.simplifyWhitespacesEnabled, properties.skipEmptyParts, properties.startColumn, properties.numberColumns);
+			const auto& values = determineColumns(line, properties);
 			assert(values.size() == m_DataContainer.size() - properties.createIndexEnabled - properties.createTimestampEnabled);
 
 			if (properties.createIndexEnabled)
@@ -508,6 +508,10 @@ QVector<AbstractColumn::ColumnMode> AsciiFilterPrivate::determineColumnModes(con
 		}
 	}
 	return modes;
+}
+
+QStringList AsciiFilterPrivate::determineColumns(const QString& line, const AsciiFilter::Properties& properties) {
+	return determineColumns(line, properties.separator, properties.removeQuotesEnabled, properties.simplifyWhitespacesEnabled, properties.skipEmptyParts, properties.startColumn, properties.numberColumns);
 }
 
 QStringList AsciiFilterPrivate::determineColumns(const QString& line, const QString& separator, bool removeQuotesEnabled, bool simplifyWhiteSpaces, bool skipEmptyParts, int startColumn, int numberColumns) {
