@@ -488,7 +488,7 @@ QVector<AbstractColumn::ColumnMode> AsciiFilterPrivate::determineColumnModes(con
 				column.remove(QLatin1Char('"'));
 			auto mode = AbstractFileFilter::columnMode(column, dateTimeFormat, properties.numberFormat, properties.baseYear);
 
-			if (intAsDouble) {
+			if (properties.intAsDouble) {
 				if (mode == Mode::Integer || mode == Mode::BigInt)
 					mode = Mode::Double;
 			}
