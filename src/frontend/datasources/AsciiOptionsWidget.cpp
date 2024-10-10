@@ -17,8 +17,6 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
-using namespace Old;
-
 /*!
 \class AsciiOptionsWidget
 \brief Widget providing options for the import of ascii data
@@ -29,8 +27,8 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent)
 	: QWidget(parent) {
 	ui.setupUi(parent);
 
-	ui.cbSeparatingCharacter->addItems(AsciiFilter::separatorCharacters());
-	ui.cbCommentCharacter->addItems(AsciiFilter::commentCharacters());
+	ui.cbSeparatingCharacter->addItems(Old::AsciiFilter::separatorCharacters());
+	ui.cbCommentCharacter->addItems(Old::AsciiFilter::commentCharacters());
 	ui.cbDecimalSeparator->addItem(i18n("Point '.'"));
 	ui.cbDecimalSeparator->addItem(i18n("Comma ','"));
 	ui.cbDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
@@ -146,7 +144,7 @@ void AsciiOptionsWidget::headerChanged(bool state) const {
 	ui.lVectorNames->setVisible(!state);
 }
 
-void AsciiOptionsWidget::applyFilterSettings(AsciiFilter* filter) const {
+void AsciiOptionsWidget::applyFilterSettings(Old::AsciiFilter* filter) const {
 	DEBUG(Q_FUNC_INFO)
 	Q_ASSERT(filter);
 	filter->setCommentCharacter(ui.cbCommentCharacter->currentText());

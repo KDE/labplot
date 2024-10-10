@@ -67,8 +67,6 @@
 #include <QWidgetAction>
 #endif
 
-using namespace Old;
-
 QString ImportFileWidget::absolutePath(const QString& fileName) {
 	if (fileName.isEmpty())
 		return fileName;
@@ -685,8 +683,8 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 	case AbstractFileFilter::FileType::Ascii: {
 		DEBUG(Q_FUNC_INFO << ", ASCII");
 		if (!m_currentFilter)
-			m_currentFilter.reset(new AsciiFilter);
-		auto filter = static_cast<AsciiFilter*>(m_currentFilter.get());
+			m_currentFilter.reset(new Old::AsciiFilter);
+		auto filter = static_cast<Old::AsciiFilter*>(m_currentFilter.get());
 
 		if (ui.cbFilter->currentIndex() == 0) //"automatic"
 			filter->setAutoModeEnabled(true);
@@ -1571,7 +1569,7 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
 		// instead of this big switch-case.
 		switch (AbstractFileFilter::fileType(fileName)) {
 		case AbstractFileFilter::FileType::Ascii:
-			infoStrings << AsciiFilter::fileInfoString(fileName);
+			infoStrings << Old::AsciiFilter::fileInfoString(fileName);
 			break;
 		case AbstractFileFilter::FileType::Binary:
 			infoStrings << BinaryFilter::fileInfoString(fileName);
@@ -1699,7 +1697,7 @@ void ImportFileWidget::refreshPreview() {
 	case AbstractFileFilter::FileType::Ascii: {
 		ui.tePreview->clear();
 
-		auto filter = static_cast<AsciiFilter*>(currentFilter);
+		auto filter = static_cast<Old::AsciiFilter*>(currentFilter);
 
 		DEBUG(Q_FUNC_INFO << ", Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, sourceType));
 		switch (sourceType) {
@@ -2836,7 +2834,7 @@ void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
 	auto readingType = static_cast<MQTTClient::ReadingType>(ui.cbReadingType->currentIndex());
 
 	currentFileFilter();
-	client->setFilter(static_cast<AsciiFilter*>(m_currentFilter.release())); // pass ownership of the filter to MQTTClient
+	client->setFilter(static_cast<Old::AsciiFilter*>(m_currentFilter.release())); // pass ownership of the filter to MQTTClient
 
 	client->setReadingType(readingType);
 

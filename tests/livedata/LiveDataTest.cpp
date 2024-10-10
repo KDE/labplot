@@ -14,8 +14,6 @@
 #include <QEventLoop>
 #include <QTimer>
 
-using namespace Old;
-
 // ##############################################################################
 // Conti. fixed - read fixed number of samples from the beginning of the new data
 // ##############################################################################
@@ -45,7 +43,7 @@ void LiveDataTest::testReadContinuousFixed00() {
 	dataSource.setUpdateType(LiveDataSource::UpdateType::NewData);
 
 	// initialize the ASCII filter
-	auto* filter = new AsciiFilter();
+	auto* filter = new Old::AsciiFilter();
 	filter->setSeparatingCharacter(QStringLiteral(","));
 	filter->setHeaderEnabled(false);
 	dataSource.setFilter(filter);
@@ -120,7 +118,7 @@ void LiveDataTest::testReadContinuousFixed01() {
 	dataSource.setUpdateType(LiveDataSource::UpdateType::NewData);
 
 	// initialize the ASCII filter
-	auto* filter = new AsciiFilter();
+	auto* filter = new Old::AsciiFilter();
 	filter->setSeparatingCharacter(QStringLiteral(","));
 	filter->setHeaderEnabled(false);
 	dataSource.setFilter(filter);
@@ -193,7 +191,7 @@ void LiveDataTest::testReadContinuousFixed02() {
 	dataSource.setUpdateType(LiveDataSource::UpdateType::NewData);
 
 	// initialize the ASCII filter
-	auto* filter = new AsciiFilter();
+	auto* filter = new Old::AsciiFilter();
 	filter->setSeparatingCharacter(QStringLiteral(","));
 	filter->setHeaderEnabled(false);
 	dataSource.setFilter(filter);
@@ -262,7 +260,7 @@ void LiveDataTest::testReadContinuousFixedWithIndex() {
 	dataSource.setUpdateType(LiveDataSource::UpdateType::NewData);
 
 	// initialize the ASCII filter
-	auto* filter = new AsciiFilter();
+	auto* filter = new Old::AsciiFilter();
 	filter->setSeparatingCharacter(QStringLiteral(","));
 	filter->setHeaderEnabled(false);
 	filter->setCreateIndexEnabled(true);
@@ -346,7 +344,7 @@ void LiveDataTest::testReadContinuousFixedWithTimestamp() {
 	dataSource.setUpdateType(LiveDataSource::UpdateType::NewData);
 
 	// initialize the ASCII filter
-	auto* filter = new AsciiFilter();
+	auto* filter = new Old::AsciiFilter();
 	filter->setSeparatingCharacter(QStringLiteral(","));
 	filter->setHeaderEnabled(false);
 	filter->setCreateTimestampEnabled(true);
@@ -430,7 +428,7 @@ void LiveDataTest::testReadContinuousFixedWithIndexTimestamp() {
 	dataSource.setUpdateType(LiveDataSource::UpdateType::NewData);
 
 	// initialize the ASCII filter
-	auto* filter = new AsciiFilter();
+	auto* filter = new Old::AsciiFilter();
 	filter->setSeparatingCharacter(QStringLiteral(","));
 	filter->setHeaderEnabled(false);
 	filter->setCreateIndexEnabled(true);
@@ -527,7 +525,7 @@ void LiveDataTest::testReadFromEnd00() {
 	dataSource.setSampleSize(100); // big number of samples, more then the new data has, meaning we read all new data
 
 	// initialize the ASCII filter
-	auto* filter = new AsciiFilter();
+	auto* filter = new Old::AsciiFilter();
 	filter->setSeparatingCharacter(QStringLiteral(","));
 	filter->setHeaderEnabled(false);
 	dataSource.setFilter(filter);
@@ -602,7 +600,7 @@ void LiveDataTest::testReadFromEnd01() {
 	dataSource.setUpdateType(LiveDataSource::UpdateType::NewData);
 
 	// initialize the ASCII filter
-	auto* filter = new AsciiFilter();
+	auto* filter = new Old::AsciiFilter();
 	filter->setSeparatingCharacter(QStringLiteral(","));
 	filter->setHeaderEnabled(false);
 	dataSource.setFilter(filter);
@@ -675,7 +673,7 @@ void LiveDataTest::testReadFromEnd02() {
 	dataSource.setUpdateType(LiveDataSource::UpdateType::NewData);
 
 	// initialize the ASCII filter
-	auto* filter = new AsciiFilter();
+	auto* filter = new Old::AsciiFilter();
 	filter->setSeparatingCharacter(QStringLiteral(","));
 	filter->setHeaderEnabled(false);
 	dataSource.setFilter(filter);
@@ -746,7 +744,7 @@ void LiveDataTest::testReadTillEnd00() {
 	dataSource.setUpdateType(LiveDataSource::UpdateType::NewData);
 
 	// initialize the ASCII filter
-	auto* filter = new AsciiFilter();
+	auto* filter = new Old::AsciiFilter();
 	filter->setSeparatingCharacter(QStringLiteral(","));
 	filter->setHeaderEnabled(false);
 	dataSource.setFilter(filter);
@@ -821,7 +819,7 @@ void LiveDataTest::testReadTillEnd01() {
 	dataSource.setUpdateType(LiveDataSource::UpdateType::NewData);
 
 	// initialize the ASCII filter
-	auto* filter = new AsciiFilter();
+	auto* filter = new Old::AsciiFilter();
 	filter->setSeparatingCharacter(QStringLiteral(","));
 	filter->setHeaderEnabled(false);
 	dataSource.setFilter(filter);
@@ -893,7 +891,7 @@ void LiveDataTest::testReadWholeFile00() {
 	dataSource.setUpdateType(LiveDataSource::UpdateType::NewData);
 
 	// initialize the ASCII filter
-	auto* filter = new AsciiFilter();
+	auto* filter = new Old::AsciiFilter();
 	filter->setSeparatingCharacter(QStringLiteral(","));
 	filter->setHeaderEnabled(false);
 	dataSource.setFilter(filter);
@@ -958,7 +956,7 @@ void LiveDataTest::testReadWholeFile01() {
 	dataSource.setUpdateType(LiveDataSource::UpdateType::NewData);
 
 	// initialize the ASCII filter
-	auto* filter = new AsciiFilter();
+	auto* filter = new Old::AsciiFilter();
 	filter->setSeparatingCharacter(QStringLiteral(","));
 	filter->setHeaderEnabled(false);
 	dataSource.setFilter(filter);
@@ -1026,7 +1024,7 @@ void LiveDataTest::testReadWholeFile02() {
 	dataSource.setUpdateType(LiveDataSource::UpdateType::NewData);
 
 	// initialize the ASCII filter
-	auto* filter = new AsciiFilter();
+	auto* filter = new Old::AsciiFilter();
 	filter->setSeparatingCharacter(QStringLiteral(","));
 	filter->setHeaderEnabled(true);
 	filter->setHeaderLine(1);
@@ -1098,7 +1096,7 @@ void LiveDataTest::testReadWholeFile03() {
 	dataSource.setUpdateType(LiveDataSource::UpdateType::NewData);
 
 	// initialize the ASCII filter
-	auto* filter = new AsciiFilter();
+	auto* filter = new Old::AsciiFilter();
 	filter->setSeparatingCharacter(QStringLiteral(","));
 	filter->setHeaderEnabled(true);
 	filter->setHeaderLine(2);
