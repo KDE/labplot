@@ -2505,6 +2505,71 @@ void AsciiFilterTest::benchDoubleImport_cleanup() {
 	QFile::remove(benchDataFileName);
 }
 
+void AsciiFilterTest::benchMark2() {
+	const int numberColumns = 20;
+	const int numberRows = 10000;
+
+	QStringList content;
+
+	// Header
+	QString line;
+	for (int column = 0; column < numberColumns - 1; column++) {
+		line.append(QStringLiteral("c%1,").arg(QString::number(column + 1)));
+	}
+	line.append(QStringLiteral("c%1").arg(QString::number(numberColumns)));
+	content.append(line);
+
+	// Create data
+	for (int row = 0; row < numberRows; row++) {
+		QString line;
+		for (int column = 0; column < numberColumns - 1; column++) {
+			line.append(QStringLiteral("0.123234234,"));
+		}
+		line.append(QStringLiteral("0.123234234"));
+		content.append(line);
+	}
+
+	QString savePath;
+	SAVE_FILE("testfile", content);
+
+	QBENCHMARK {
+		Spreadsheet spreadsheet(QStringLiteral("test"), false);
+		AsciiFilter filter;
+		auto properties = filter.properties();
+		properties.automaticSeparatorDetection = true;
+		properties.separator = QStringLiteral(" ");
+		properties.headerEnabled = true;
+		properties.headerLine = 1;
+		properties.intAsDouble = false;
+		filter.setProperties(properties);
+		filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+		QCOMPARE(spreadsheet.columnCount(), numberColumns);
+		QCOMPARE(spreadsheet.rowCount(), numberRows);
+
+		QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
+		VALUES_EQUAL(spreadsheet.column(0)->valueAt(0), 0.123234234);
+		VALUES_EQUAL(spreadsheet.column(1)->valueAt(0), 0.123234234);
+		VALUES_EQUAL(spreadsheet.column(2)->valueAt(0), 0.123234234);
+	}
+
+	QBENCHMARK {
+		Spreadsheet spreadsheet(QStringLiteral("test"), false);
+		Old::AsciiFilter filter;
+		filter.setHeaderEnabled(true);
+		filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+		QCOMPARE(spreadsheet.columnCount(), numberColumns);
+		QCOMPARE(spreadsheet.rowCount(), numberRows);
+
+		QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
+		VALUES_EQUAL(spreadsheet.column(0)->valueAt(0), 0.123234234);
+		VALUES_EQUAL(spreadsheet.column(1)->valueAt(0), 0.123234234);
+		VALUES_EQUAL(spreadsheet.column(2)->valueAt(0), 0.123234234);
+	}
+
+}
+
 void AsciiFilterTest::determineSeparator() {
 	QString separator;
 	bool removeQuotes = true;
