@@ -1765,6 +1765,14 @@ void AsciiFilterTest::testComments02() {
 // ##############################################################################
 // #########################  handling of datetime data #########################
 // ##############################################################################
+namespace {
+const QStringList dateTime01Content = {
+	QStringLiteral("Date,Water Pressure"),
+	QStringLiteral("01/01/19 00:00:00,14.7982"),
+	QStringLiteral("01/01/19 00:30:00,14.8026"),
+};
+}
+
 /*!
  * read data containing only two characters for the year - 'yy'. The default year in
  * QDateTime is 1900 . When reading such two-characters DateTime values we want
@@ -1772,14 +1780,21 @@ void AsciiFilterTest::testComments02() {
  */
 void AsciiFilterTest::testDateTime00() {
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
-	Old::AsciiFilter filter;
-	const QString& fileName = QFINDTESTDATA(QLatin1String("data/datetime_01.csv"));
 
-	filter.setSeparatingCharacter(QStringLiteral(","));
-	filter.setHeaderEnabled(true);
-	filter.setHeaderLine(1);
-	filter.setDateTimeFormat(QLatin1String("dd/MM/yy hh:mm:ss"));
-	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	AsciiFilter filter;
+	auto p = filter.properties();
+	p.automaticSeparatorDetection = false;
+	p.separator = QStringLiteral(",");
+	p.headerEnabled = true;
+	p.headerLine = 1;
+	p.intAsDouble = false;
+	p.dateTimeFormat = QLatin1String("dd/MM/yy hh:mm:ss");
+	p.baseYear = 2000;
+	filter.setProperties(p);
+
+	QString savePath;
+	SAVE_FILE("testfile", dateTime01Content);
+	filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	// spreadsheet size
 	QCOMPARE(spreadsheet.columnCount(), 2);
@@ -1808,16 +1823,23 @@ void AsciiFilterTest::testDateTime00() {
 /*!
  * same as in the previous test, but with the auto-detection of the datetime format
  */
-void AsciiFilterTest::testDateTime01() {
+void AsciiFilterTest::testDateTimeAutodetect() {
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
-	Old::AsciiFilter filter;
-	const QString& fileName = QFINDTESTDATA(QLatin1String("data/datetime_01.csv"));
 
-	filter.setSeparatingCharacter(QStringLiteral(","));
-	filter.setHeaderEnabled(true);
-	filter.setHeaderLine(1);
-	filter.setDateTimeFormat(QLatin1String()); // auto detect the format
-	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	AsciiFilter filter;
+	auto p = filter.properties();
+	p.automaticSeparatorDetection = false;
+	p.separator = QStringLiteral(",");
+	p.headerEnabled = true;
+	p.headerLine = 1;
+	p.intAsDouble = false;
+	p.dateTimeFormat = QLatin1String(); // auto detect the format
+	p.baseYear = 2000;
+	filter.setProperties(p);
+
+	QString savePath;
+	SAVE_FILE("testfile", dateTime01Content);
+	filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	// spreadsheet size
 	QCOMPARE(spreadsheet.columnCount(), 2);
@@ -1848,13 +1870,24 @@ void AsciiFilterTest::testDateTime01() {
  */
 void AsciiFilterTest::testDateTimeHex() {
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
-	Old::AsciiFilter filter;
-	const QString& fileName = QFINDTESTDATA(QLatin1String("data/datetime-hex.dat"));
+	const QStringList content = {
+		QStringLiteral("20191218023608|F|1000|000|000|3190|0528|3269|15|09|1.29|0934|-0105|G 03935| 94.09|9680|5AD17"),
+	};
 
-	filter.setHeaderEnabled(false);
-	filter.setSeparatingCharacter(QStringLiteral("|"));
-	filter.setDateTimeFormat(QLatin1String("yyyyMMddhhmmss"));
-	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	AsciiFilter filter;
+	auto p = filter.properties();
+	p.automaticSeparatorDetection = false;
+	p.separator = QStringLiteral("|");
+	p.headerEnabled = false;
+	p.headerLine = 1;
+	p.intAsDouble = false;
+	p.columnNamesRaw = QStringLiteral("c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17");
+	p.dateTimeFormat = QLatin1String("yyyyMMddhhmmss");
+	filter.setProperties(p);
+
+	QString savePath;
+	SAVE_FILE("testfile", content);
+	filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	// spreadsheet size
 	QCOMPARE(spreadsheet.columnCount(), 17);
@@ -1902,12 +1935,19 @@ void AsciiFilterTest::testDateTimeHex() {
 
 void AsciiFilterTest::testMatrixHeader() {
 	Matrix matrix(QStringLiteral("test"), false);
-	Old::AsciiFilter filter;
-	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
 
-	filter.setSeparatingCharacter(QStringLiteral("auto"));
-	filter.setHeaderEnabled(false);
-	filter.readDataFromFile(fileName, &matrix, AbstractFileFilter::ImportMode::Replace);
+	AsciiFilter filter;
+	auto p = filter.properties();
+	p.automaticSeparatorDetection = true;
+	p.separator = QStringLiteral(" ");
+	p.headerEnabled = false;
+	p.headerLine = 1;
+	p.intAsDouble = false;
+	filter.setProperties(p);
+
+	QString savePath;
+	SAVE_FILE("testfile", numeric_data);
+	filter.readDataFromFile(savePath, &matrix, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(matrix.rowCount(), 5);
 	QCOMPARE(matrix.columnCount(), 3);
@@ -1980,13 +2020,24 @@ void AsciiFilterTest::spreadsheetFormulaUpdateAfterImport() {
 	QCOMPARE(col->valueAt(2), 60.);
 
 	// import the data into the source spreadsheet
-	Old::AsciiFilter filter;
-	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon_with_header.txt"));
-	filter.setCommentCharacter(QString());
-	filter.setSeparatingCharacter(QStringLiteral(";"));
-	filter.setHeaderEnabled(true);
-	filter.setHeaderLine(1);
-	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	const QStringList content = {
+		QStringLiteral("c1;c2"),
+		QStringLiteral("1;1"),
+		QStringLiteral("2;2"),
+		QStringLiteral("3;3"),
+	};
+	AsciiFilter filter;
+	auto p = filter.properties();
+	p.automaticSeparatorDetection = true;
+	p.separator = QStringLiteral(" ");
+	p.headerEnabled = true;
+	p.headerLine = 1;
+	p.intAsDouble = false;
+	filter.setProperties(p);
+
+	QString savePath;
+	SAVE_FILE("testfile", content);
+	filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	// re-check the results of the calculation
 	QCOMPARE(spreadsheetFormula.columnCount(), 1);
@@ -2048,13 +2099,24 @@ void AsciiFilterTest::spreadsheetFormulaUpdateAfterImportWithColumnRestore() {
 	QCOMPARE((bool)std::isnan(col->valueAt(2)), true);
 
 	// import the data into the source spreadsheet, the deleted column with the name "c1" is re-created again
-	Old::AsciiFilter filter;
-	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon_with_header.txt"));
-	filter.setCommentCharacter(QString());
-	filter.setSeparatingCharacter(QStringLiteral(";"));
-	filter.setHeaderEnabled(true);
-	filter.setHeaderLine(1);
-	filter.readDataFromFile(fileName, spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	const QStringList content = {
+		QStringLiteral("c1;c2"),
+		QStringLiteral("1;1"),
+		QStringLiteral("2;2"),
+		QStringLiteral("3;3"),
+	};
+	AsciiFilter filter;
+	auto p = filter.properties();
+	p.automaticSeparatorDetection = true;
+	p.separator = QStringLiteral(" ");
+	p.headerEnabled = true;
+	p.headerLine = 1;
+	p.intAsDouble = false;
+	filter.setProperties(p);
+
+	QString savePath;
+	SAVE_FILE("testfile", content);
+	filter.readDataFromFile(savePath, spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	// re-check the results of the calculation after one of the source columns was re-created and the values were changed
 	QCOMPARE(spreadsheetFormula->columnCount(), 1);
@@ -2105,13 +2167,24 @@ void AsciiFilterTest::plotUpdateAfterImport() {
 	QCOMPARE(rangeY.end(), 30);
 
 	// import the data into the source spreadsheet
-	Old::AsciiFilter filter;
-	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon_with_header.txt"));
-	filter.setCommentCharacter(QString());
-	filter.setSeparatingCharacter(QStringLiteral(";"));
-	filter.setHeaderEnabled(true);
-	filter.setHeaderLine(1);
-	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	const QStringList content = {
+		QStringLiteral("c1;c2"),
+		QStringLiteral("1;1"),
+		QStringLiteral("2;2"),
+		QStringLiteral("3;3"),
+	};
+	AsciiFilter filter;
+	auto properties = filter.properties();
+	properties.automaticSeparatorDetection = true;
+	properties.separator = QStringLiteral(" ");
+	properties.headerEnabled = true;
+	properties.headerLine = 1;
+	properties.intAsDouble = false;
+	filter.setProperties(properties);
+
+	QString savePath;
+	SAVE_FILE("testfile", content);
+	filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	// re-check the plot ranges with the new data
 	rangeX = p.range(Dimension::X);
@@ -2170,13 +2243,24 @@ void AsciiFilterTest::plotUpdateAfterImportWithColumnRestore() {
 	spreadsheet->removeChild(spreadsheet->column(0));
 
 	// import the data into the source spreadsheet, the deleted column with the name "c1" is re-created again
-	Old::AsciiFilter filter;
-	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon_with_header.txt"));
-	filter.setCommentCharacter(QString());
-	filter.setSeparatingCharacter(QStringLiteral(";"));
-	filter.setHeaderEnabled(true);
-	filter.setHeaderLine(1);
-	filter.readDataFromFile(fileName, spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	const QStringList content = {
+		QStringLiteral("c1;c2"),
+		QStringLiteral("1;1"),
+		QStringLiteral("2;2"),
+		QStringLiteral("3;3"),
+	};
+	AsciiFilter filter;
+	auto properties = filter.properties();
+	properties.automaticSeparatorDetection = true;
+	properties.separator = QStringLiteral(" ");
+	properties.headerEnabled = true;
+	properties.headerLine = 1;
+	properties.intAsDouble = false;
+	filter.setProperties(properties);
+
+	QString savePath;
+	SAVE_FILE("testfile", content);
+	filter.readDataFromFile(savePath, spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	// re-check the plot ranges with the new data
 	rangeX = p->range(Dimension::X);
@@ -2238,13 +2322,24 @@ void AsciiFilterTest::plotUpdateAfterImportWithColumnRenaming() {
 	// import the data into the source spreadsheet:
 	// the columns "c0", "c1" and "c2" are renamed to "c1", "c2" and "c3" and xy-curve should still be using "c1" and "c2"
 	// event hough their positions in the spreadsheet have changed
-	Old::AsciiFilter filter;
-	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon_with_header.txt"));
-	filter.setCommentCharacter(QString());
-	filter.setSeparatingCharacter(QStringLiteral(";"));
-	filter.setHeaderEnabled(true);
-	filter.setHeaderLine(1);
-	filter.readDataFromFile(fileName, spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	const QStringList content = {
+		QStringLiteral("c1;c2"),
+		QStringLiteral("1;1"),
+		QStringLiteral("2;2"),
+		QStringLiteral("3;3"),
+	};
+	AsciiFilter filter;
+	auto properties = filter.properties();
+	properties.automaticSeparatorDetection = true;
+	properties.separator = QStringLiteral(" ");
+	properties.headerEnabled = true;
+	properties.headerLine = 1;
+	properties.intAsDouble = false;
+	filter.setProperties(properties);
+
+	QString savePath;
+	SAVE_FILE("testfile", content);
+	filter.readDataFromFile(savePath, spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	// check the connection to the new columns
 	QCOMPARE(curve->xColumn(), spreadsheet->column(0)); // "c1" for x
@@ -2304,13 +2399,24 @@ void AsciiFilterTest::plotUpdateAfterImportWithColumnRemove() {
 	QCOMPARE(rangeY.end(), 30);
 
 	// import the data into the source spreadsheet, the columns are renamed to "c1" and "c2"
-	Old::AsciiFilter filter;
-	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon_with_header.txt"));
-	filter.setCommentCharacter(QString());
-	filter.setSeparatingCharacter(QStringLiteral(";"));
-	filter.setHeaderEnabled(true);
-	filter.setHeaderLine(1);
-	filter.readDataFromFile(fileName, spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	const QStringList content = {
+		QStringLiteral("c1;c2"),
+		QStringLiteral("1;1"),
+		QStringLiteral("2;2"),
+		QStringLiteral("3;3"),
+	};
+	AsciiFilter filter;
+	auto properties = filter.properties();
+	properties.automaticSeparatorDetection = true;
+	properties.separator = QStringLiteral(" ");
+	properties.headerEnabled = true;
+	properties.headerLine = 1;
+	properties.intAsDouble = false;
+	filter.setProperties(properties);
+
+	QString savePath;
+	SAVE_FILE("testfile", content);
+	filter.readDataFromFile(savePath, spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	// the assignment to the data columns got lost since the columns were renamed
 	QCOMPARE(curve->xColumn(), nullptr);
@@ -2370,8 +2476,16 @@ void AsciiFilterTest::benchDoubleImport_data() {
 
 void AsciiFilterTest::benchDoubleImport() {
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
-	Old::AsciiFilter filter;
-	filter.setHeaderEnabled(false);
+
+	AsciiFilter filter;
+	auto properties = filter.properties();
+	properties.automaticSeparatorDetection = true;
+	properties.separator = QStringLiteral(" ");
+	properties.headerEnabled = false;
+	properties.headerLine = 1;
+	properties.intAsDouble = false;
+	filter.setProperties(properties);
+	filter.readDataFromFile(benchDataFileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	const int p = paths; // need local variable
 	QBENCHMARK {
