@@ -25,6 +25,7 @@ struct IODeviceHandler {
 	IODeviceHandler(QIODevice& d): device(d) {}
 
 	~IODeviceHandler() {
+		device.reset(); // Seek to the start
 		device.close();
 	}
 private:
@@ -344,7 +345,6 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 		return Status::DeviceAtEnd;
 
 	if (!device.isSequential()) {
-		device.reset(); // Seek to the start
 		// TODO: Seeking
 
 		QString line;
