@@ -294,7 +294,10 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 			return Status::InvalidNumberDataColumns;
 		i++;
 	}
-	properties.columnModes.append(determineColumnModes(rows, properties.dateTimeFormat, properties.intAsDouble, simplifyWhiteSpace, removeQuotes, properties.numberFormat));
+	QString dateTimeFormat;
+	properties.columnModes.append(determineColumnModes(rows, properties, dateTimeFormat));
+	if (properties.dateTimeFormat.isEmpty())
+		properties.dateTimeFormat = dateTimeFormat;
 
 	return Status::Success;
 }
@@ -453,11 +456,19 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 	return Status::Success;
 }
 
-QVector<AbstractColumn::ColumnMode> AsciiFilterPrivate::determineColumnModes(const QVector<QStringList>& rows, const QString& dateTimeFormat, bool intAsDouble, bool simplifyWhitespace, bool removeQuotes, QLocale::Language numberFormat) {
+/*!
+ * Determines the column modes from the provided rows
+ *
+ * \brief AsciiFilterPrivate::determineColumnModes
+ * \param dateTimeFormat The datetime format will be updated if it is empty by the detected format
+ * \return
+ */
+QVector<AbstractColumn::ColumnMode> AsciiFilterPrivate::determineColumnModes(const QVector<QStringList>& rows, const AsciiFilter::Properties& properties, QString& dateTimeFormat) {
 	using Mode = AbstractColumn::ColumnMode;
 
-	QVector<Mode> modes;
+	dateTimeFormat = properties.dateTimeFormat;
 
+	QVector<Mode> modes;
 	if (rows.length() == 0)
 		return modes;
 
@@ -471,26 +482,27 @@ QVector<AbstractColumn::ColumnMode> AsciiFilterPrivate::determineColumnModes(con
 			if (columnIndex >= columnCount)
 				break;
 
-			if (simplifyWhitespace)
+			if (properties.simplifyWhitespacesEnabled)
 				column = column.simplified();
-			if (removeQuotes)
+			if (properties.removeQuotesEnabled)
 				column.remove(QLatin1Char('"'));
-			auto dtf = dateTimeFormat; // TODO
-			auto mode = AbstractFileFilter::columnMode(column, dtf, numberFormat);
+			auto mode = AbstractFileFilter::columnMode(column, dateTimeFormat, properties.numberFormat, properties.baseYear);
 
 			if (intAsDouble) {
 				if (mode == Mode::Integer || mode == Mode::BigInt)
 					mode = Mode::Double;
 			}
 
-			// numeric: integer -> numeric
-			if (mode == Mode::Double && modes[columnIndex] == Mode::Integer)
+			if (mode == Mode::Double && modes[columnIndex] == Mode::Integer) {
+				// numeric: integer -> numeric
 				modes[columnIndex] = mode;
-			// text: non text -> text
-			if (mode == Mode::Text && modes[columnIndex] != Mode::Text)
+			} else if (mode == Mode::Text && modes[columnIndex] != Mode::Text) {
+				// text: non text -> text
 				modes[columnIndex] = mode;
-			// numeric: text -> numeric/integer
-			if (mode != Mode::Text && modes[columnIndex] == Mode::Text)
+			} else if (mode != Mode::Text && modes[columnIndex] == Mode::Text) {
+				// numeric: text -> numeric/integer
+				modes[columnIndex] = mode;
+			} else
 				modes[columnIndex] = mode;
 			columnIndex ++;
 		}
