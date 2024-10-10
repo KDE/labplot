@@ -78,7 +78,7 @@ void DatasetHandler::configureFilter() {
 	properties.numberFormat = QLocale::C;
 	properties.skipEmptyParts = false;
 	properties.headerEnabled = false;
-	properties.removeQuotesEnabled = true;
+	properties.removeQuotes = true;
 
 	// read properties specified in the dataset description
 	if (!m_object->isEmpty()) {
@@ -97,16 +97,16 @@ void DatasetHandler::configureFilter() {
 			properties.commentCharacter = m_object->value(QStringLiteral("comment_character")).toString();
 
 		if (m_object->contains(QLatin1String("create_index_column")))
-			properties.createIndexEnabled = m_object->value(QStringLiteral("create_index_column")).toBool();
+			properties.createIndex = m_object->value(QStringLiteral("create_index_column")).toBool();
 
 		if (m_object->contains(QLatin1String("skip_empty_parts")))
 			properties.skipEmptyParts = m_object->value(QStringLiteral("skip_empty_parts")).toBool();
 
 		if (m_object->contains(QLatin1String("simplify_whitespaces")))
-			properties.simplifyWhitespacesEnabled = m_object->value(QStringLiteral("simplify_whitespaces")).toBool();
+			properties.simplifyWhitespaces = m_object->value(QStringLiteral("simplify_whitespaces")).toBool();
 
 		if (m_object->contains(QLatin1String("remove_quotes")))
-			properties.removeQuotesEnabled = m_object->value(QStringLiteral("remove_quotes")).toBool();
+			properties.removeQuotes = m_object->value(QStringLiteral("remove_quotes")).toBool();
 
 		if (m_object->contains(QLatin1String("use_first_row_for_vectorname"))) {
 			properties.headerEnabled = m_object->value(QStringLiteral("use_first_row_for_vectorname")).toBool();

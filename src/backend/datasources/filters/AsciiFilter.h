@@ -56,11 +56,11 @@ public:
 		QLocale::Language numberFormat{QLocale::C};
 		QLocale locale{QLocale::C};
 		bool skipEmptyParts{false};
-		bool simplifyWhitespacesEnabled{false};
+		bool simplifyWhitespaces{false};
 		double nanValue{qQNaN()};
-		bool removeQuotesEnabled{false};
-		bool createIndexEnabled{false};
-		bool createTimestampEnabled{false};
+		bool removeQuotes{false};
+		bool createIndex{false};
+		bool createTimestamp{false};
 
 		bool headerEnabled{true}; // read header from file
 		int headerLine{1}; // line to read header from (ignoring comment lines). The data starts below this line

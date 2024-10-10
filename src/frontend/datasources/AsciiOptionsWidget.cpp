@@ -153,16 +153,16 @@ void AsciiOptionsWidget::applyFilterSettings(AsciiFilter::Properties& properties
 	const auto lang = ui.cbDecimalSeparator->currentIndex() == 0 ? QLocale::Language::C : QLocale::Language::German;
 	properties.numberFormat = lang;
 	properties.dateTimeFormat = ui.cbDateTimeFormat->currentText();
-	properties.createIndexEnabled = ui.chbCreateIndex->isChecked();
+	properties.createIndex = ui.chbCreateIndex->isChecked();
 
 	// save the timestamp option only if it's visible, i.e. live source is used.
 	// use the default setting in the filter (false) otherwise for non-live source
 	if (m_createTimeStampAvailable)
-		properties.createTimestampEnabled = ui.chbCreateTimestamp->isChecked();
+		properties.createTimestamp = ui.chbCreateTimestamp->isChecked();
 
-	properties.simplifyWhitespacesEnabled = ui.chbSimplifyWhitespaces->isChecked();
+	properties.simplifyWhitespaces = ui.chbSimplifyWhitespaces->isChecked();
 	properties.nanValue = ui.chbConvertNaNToZero->isChecked() ? 0.0 : std::numeric_limits<double>::quiet_NaN();
-	properties.removeQuotesEnabled = ui.chbRemoveQuotes->isChecked();
+	properties.removeQuotes = ui.chbRemoveQuotes->isChecked();
 	properties.skipEmptyParts = ui.chbSkipEmptyParts->isChecked();
 	properties.columnNamesRaw = ui.kleVectorNames->text();
 	properties.headerEnabled = ui.chbHeader->isChecked();

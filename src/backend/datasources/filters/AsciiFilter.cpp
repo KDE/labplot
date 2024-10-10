@@ -196,15 +196,14 @@ void AsciiFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("commentCharacter"), p.commentCharacter);
 	writer->writeAttribute(QStringLiteral("separatingCharacterDetection"), QString::number(p.automaticSeparatorDetection)); // NEW
 	writer->writeAttribute(QStringLiteral("separatingCharacter"), p.separator);
-	// writer->writeAttribute(QStringLiteral("autoMode"), QString::number(d->autoModeEnabled));
-	writer->writeAttribute(QStringLiteral("createIndex"), QString::number(p.createIndexEnabled));
-	writer->writeAttribute(QStringLiteral("createTimestamp"), QString::number(p.createTimestampEnabled));
+	writer->writeAttribute(QStringLiteral("createIndex"), QString::number(p.createIndex));
+	writer->writeAttribute(QStringLiteral("createTimestamp"), QString::number(p.createTimestamp));
 	writer->writeAttribute(QStringLiteral("header"), QString::number(p.headerEnabled));
 	writer->writeAttribute(QStringLiteral("vectorNames"), p.columnNamesRaw); // Changed!
 	writer->writeAttribute(QStringLiteral("skipEmptyParts"), QString::number(p.skipEmptyParts));
-	writer->writeAttribute(QStringLiteral("simplifyWhitespaces"), QString::number(p.simplifyWhitespacesEnabled));
+	writer->writeAttribute(QStringLiteral("simplifyWhitespaces"), QString::number(p.simplifyWhitespaces));
 	writer->writeAttribute(QStringLiteral("nanValue"), QString::number(p.nanValue));
-	writer->writeAttribute(QStringLiteral("removeQuotes"), QString::number(p.removeQuotesEnabled));
+	writer->writeAttribute(QStringLiteral("removeQuotes"), QString::number(p.removeQuotes));
 	writer->writeAttribute(QStringLiteral("startRow"), QString::number(p.startRow));
 	//writer->writeAttribute(QStringLiteral("endRow"), QString::number(p.endRow));
 	writer->writeAttribute(QStringLiteral("numberRows"), QString::number(p.numberRows)); // NEW
@@ -222,8 +221,8 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
 	READ_STRING_VALUE("commentCharacter", properties.commentCharacter);
 	READ_STRING_VALUE("separatingCharacter", properties.separator);
 
-	READ_INT_VALUE("createIndex", properties.createIndexEnabled, bool);
-	READ_INT_VALUE("createTimestamp", properties.createTimestampEnabled, bool);
+	READ_INT_VALUE("createIndex", properties.createIndex, bool);
+	READ_INT_VALUE("createTimestamp", properties.createTimestamp, bool);
 	// READ_INT_VALUE("autoMode", autoModeEnabled, bool);
 	READ_INT_VALUE("header", properties.headerEnabled, bool);
 
@@ -231,9 +230,9 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
 	if (Project::xmlVersion() < 15)
 		d->properties.columnNamesRaw = str.split(QLatin1Char(' ')).join(d->properties.separator); // may be empty
 
-	READ_INT_VALUE("simplifyWhitespaces", properties.simplifyWhitespacesEnabled, bool);
+	READ_INT_VALUE("simplifyWhitespaces", properties.simplifyWhitespaces, bool);
 	READ_DOUBLE_VALUE("nanValue", properties.nanValue);
-	READ_INT_VALUE("removeQuotes", properties.removeQuotesEnabled, bool);
+	READ_INT_VALUE("removeQuotes", properties.removeQuotes, bool);
 	READ_INT_VALUE("skipEmptyParts", properties.skipEmptyParts, bool);
 	READ_INT_VALUE("startRow", properties.startRow, int);
 	// READ_INT_VALUE("endRow", endRow, int);
@@ -260,8 +259,8 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 	if (!properties.automaticSeparatorDetection && properties.numberColumns > 0 && properties.columnModes.size() == properties.numberColumns)
 		return Status::Success; // Nothing to do since all unknows are determined
 
-	bool removeQuotes = properties.removeQuotesEnabled;
-	bool simplifyWhiteSpace = properties.simplifyWhitespacesEnabled;
+	bool removeQuotes = properties.removeQuotes;
+	bool simplifyWhiteSpace = properties.simplifyWhitespaces;
 	bool skipEmptyParts = properties.skipEmptyParts;
 
 	if (device.isSequential()) {
@@ -353,11 +352,11 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 	}
 
 	// add time stamp and index column
-	if (properties.createTimestampEnabled) {
+	if (properties.createTimestamp) {
 		properties.columnNames.prepend(i18n("Timestamp"));
 		properties.columnModes.prepend(AbstractColumn::ColumnMode::DateTime);
 	}
-	if (properties.createIndexEnabled) {
+	if (properties.createIndex) {
 		properties.columnNames.prepend(i18n("Index"));
 		properties.columnModes.prepend(AbstractColumn::ColumnMode::Integer);
 	}
@@ -491,16 +490,16 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 
 			// Now we get to the data rows
 			const auto& values = determineColumns(line, properties);
-			assert(values.size() == m_DataContainer.size() - properties.createIndexEnabled - properties.createTimestampEnabled);
+			assert(values.size() == m_DataContainer.size() - properties.createIndex - properties.createTimestamp);
 
-			if (properties.createIndexEnabled)
+			if (properties.createIndex)
 				m_DataContainer.setData(0, rowIndex, rowIndex - dataContainerStartIndex + 1);
-			if (properties.createTimestampEnabled) {
+			if (properties.createTimestamp) {
 				// If create index is enabled +1 the timestamp is in the second column
-				m_DataContainer.setData(properties.createIndexEnabled, rowIndex, QDateTime::currentDateTime());
+				m_DataContainer.setData(properties.createIndex, rowIndex, QDateTime::currentDateTime());
 			}
 
-			int columnIndex = 0 + properties.createIndexEnabled + properties.createTimestampEnabled;
+			int columnIndex = 0 + properties.createIndex + properties.createTimestamp;
 			// Iterate over all columns
 			for (const auto& value: values) {
 				bool conversionOk = false;
@@ -598,9 +597,9 @@ QVector<AbstractColumn::ColumnMode> AsciiFilterPrivate::determineColumnModes(con
 			if (columnIndex >= columnCount)
 				break;
 
-			if (properties.simplifyWhitespacesEnabled)
+			if (properties.simplifyWhitespaces)
 				column = column.simplified();
-			if (properties.removeQuotesEnabled)
+			if (properties.removeQuotes)
 				column.remove(QLatin1Char('"'));
 			auto mode = AbstractFileFilter::columnMode(column, dateTimeFormat, properties.numberFormat, properties.intAsDouble, properties.baseYear);
 
@@ -631,10 +630,10 @@ QVector<AbstractColumn::ColumnMode> AsciiFilterPrivate::determineColumnModes(con
 }
 
 QStringList AsciiFilterPrivate::determineColumns(const QStringView &line, const AsciiFilter::Properties& properties) {
-	return determineColumns(line, properties.separator, properties.removeQuotesEnabled, properties.simplifyWhitespacesEnabled, properties.skipEmptyParts, properties.startColumn, properties.numberColumns);
+	return determineColumns(line, properties.separator, properties.removeQuotes, properties.simplifyWhitespaces, properties.skipEmptyParts, properties.startColumn, properties.numberColumns);
 }
 
-QStringList AsciiFilterPrivate::determineColumns(const QStringView& line, const QStringView& separator, bool removeQuotesEnabled, bool simplifyWhiteSpaces, bool skipEmptyParts, int startColumn, int numberColumns) {
+QStringList AsciiFilterPrivate::determineColumns(const QStringView& line, const QStringView& separator, bool removeQuotes, bool simplifyWhiteSpaces, bool skipEmptyParts, int startColumn, int numberColumns) {
 	enum class State {
 		Column,
 		QuotedText,
@@ -650,7 +649,7 @@ QStringList AsciiFilterPrivate::determineColumns(const QStringView& line, const 
 		for (auto c: line) {
 			if (c == QLatin1Char('\n') || c == QLatin1Char('\r'))
 				break;
-			if (removeQuotesEnabled && c == QLatin1Char('"')) {
+			if (removeQuotes && c == QLatin1Char('"')) {
 				switch (state) {
 				case State::Column:
 					state = State::QuotedText;
@@ -701,7 +700,7 @@ QStringList AsciiFilterPrivate::determineColumns(const QStringView& line, const 
 			counter ++;
 			if (c == QLatin1Char('\n') || c == QLatin1Char('\r'))
 				break;
-			if (removeQuotesEnabled && c == QLatin1Char('"')) {
+			if (removeQuotes && c == QLatin1Char('"')) {
 				switch (state) {
 				case State::Column:
 					state = State::QuotedText;
@@ -751,7 +750,7 @@ QStringList AsciiFilterPrivate::determineColumns(const QStringView& line, const 
 	return columnNames;
 }
 
-AsciiFilter::Status AsciiFilterPrivate::determineSeparator(const QString& line, bool removeQuotesEnabled, bool simplifyWhiteSpaces, QString& separator) {
+AsciiFilter::Status AsciiFilterPrivate::determineSeparator(const QString& line, bool removeQuotes, bool simplifyWhiteSpaces, QString& separator) {
 	using Status = AsciiFilter::Status;
 
 	enum class State {
@@ -765,7 +764,7 @@ AsciiFilter::Status AsciiFilterPrivate::determineSeparator(const QString& line, 
 	auto state = State::Column;
 	QString separatorSequence;
 	for (auto c: line) {
-		if (removeQuotesEnabled && c == QLatin1Char('"')) {
+		if (removeQuotes && c == QLatin1Char('"')) {
 			switch (state) {
 				case State::Column:
 					state = State::QuotedText;
