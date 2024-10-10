@@ -115,7 +115,7 @@ void AsciiFilterTest::testSparseFile01() {
 	p.headerEnabled = true;
 	p.headerLine = 1;
 	p.intAsDouble = false;
-	p.simplifyWhitespacesEnabled = true;
+	p.simplifyWhitespaces = true;
 	filter.setProperties(p);
 
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
@@ -155,7 +155,7 @@ void AsciiFilterTest::testSparseFile02() {
 	p.headerEnabled = true;
 	p.headerLine = 1;
 	p.intAsDouble = false;
-	p.simplifyWhitespacesEnabled = true;
+	p.simplifyWhitespaces = true;
 	p.nanValue = NAN;
 	p.skipEmptyParts = false;
 	filter.setProperties(p);
@@ -197,7 +197,7 @@ void AsciiFilterTest::testSparseFile03() {
 	p.headerEnabled = true;
 	p.headerLine = 1;
 	p.intAsDouble = false;
-	p.simplifyWhitespacesEnabled = true;
+	p.simplifyWhitespaces = true;
 	p.nanValue = 0; // Nan value to zero
 	p.skipEmptyParts = false;
 	filter.setProperties(p);
@@ -530,7 +530,7 @@ void AsciiFilterTest::commaSeparatedWhiteSpace() {
 	p.headerEnabled = false;
 	p.columnNamesRaw = QStringLiteral("x,y");
 	p.intAsDouble = false;
-	p.simplifyWhitespacesEnabled = true;
+	p.simplifyWhitespaces = true;
 	filter.setProperties(p);
 
 	filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
@@ -562,7 +562,7 @@ void AsciiFilterTest::tooManyHeaders() {
 	p.automaticSeparatorDetection = true;
 	p.headerEnabled = false;
 	p.intAsDouble = false;
-	p.simplifyWhitespacesEnabled = true;
+	p.simplifyWhitespaces = true;
 	p.columnNamesRaw = QStringLiteral("x, y, z"); // Too many
 	filter.setProperties(p);
 
@@ -998,7 +998,7 @@ void AsciiFilterTest::testCreateIndex() {
 	p.headerEnabled = false;
 	p.headerLine = 1;
 	p.intAsDouble = false;
-	p.createIndexEnabled = true;
+	p.createIndex = true;
 	p.columnNamesRaw = QStringLiteral("x,y,z");
 	filter.setProperties(p);
 
@@ -1036,8 +1036,8 @@ void AsciiFilterTest::testCreateIndexAndTimestamp() {
 	p.headerEnabled = false;
 	p.headerLine = 1;
 	p.intAsDouble = false;
-	p.createIndexEnabled = true;
-	p.createTimestampEnabled = true;
+	p.createIndex = true;
+	p.createTimestamp = true;
 	p.columnNamesRaw = QStringLiteral("x,y,z");
 	filter.setProperties(p);
 
@@ -1084,7 +1084,7 @@ void AsciiFilterTest::testStartColumn() {
 	p.headerEnabled = false;
 	p.headerLine = 1;
 	p.intAsDouble = false;
-	p.createIndexEnabled = false;
+	p.createIndex = false;
 	p.startColumn = 2;
 	p.numberColumns = 2;
 	p.columnNamesRaw = QStringLiteral("x,y");
@@ -1114,7 +1114,7 @@ void AsciiFilterTest::testStartColumn_IndexColumn() {
 	p.separator = QStringLiteral(",");
 	p.headerEnabled = false;
 	p.intAsDouble = false;
-	p.createIndexEnabled = true;
+	p.createIndex = true;
 	p.startColumn = 2;
 	p.numberColumns = 2;
 	p.columnNamesRaw = QStringLiteral("x,y");
@@ -1198,7 +1198,7 @@ void AsciiFilterTest::testWrongColumnRange_IndexColumn() {
 	p.separator = QStringLiteral(",");
 	p.headerEnabled = false;
 	p.intAsDouble = false;
-	p.createIndexEnabled = true; // Index enabled
+	p.createIndex = true; // Index enabled
 	p.startColumn = 3;
 	p.numberColumns = 2; // There is only one column left, so ignoring!
 	filter.setProperties(p);
@@ -1363,8 +1363,8 @@ void AsciiFilterTest::testQuotedStrings00() {
 	p.separator = QStringLiteral(",");
 	p.headerEnabled = false;
 	p.intAsDouble = false;
-	p.removeQuotesEnabled = true;
-	p.simplifyWhitespacesEnabled = true;
+	p.removeQuotes = true;
+	p.simplifyWhitespaces = true;
 	p.columnNamesRaw = QStringLiteral("w,x,y,z");
 	filter.setProperties(p);
 
@@ -1412,8 +1412,8 @@ void AsciiFilterTest::testQuotedStrings01() {
 	p.headerEnabled = true;
 	p.headerLine = 1;
 	p.intAsDouble = false;
-	p.removeQuotesEnabled = true;
-	p.simplifyWhitespacesEnabled = true;
+	p.removeQuotes = true;
+	p.simplifyWhitespaces = true;
 	p.columnNamesRaw = QStringLiteral("w,x,y,z");
 	filter.setProperties(p);
 
@@ -1467,8 +1467,8 @@ void AsciiFilterTest::testQuotedStrings02() {
 	p.headerEnabled = false;
 	p.headerLine = 1;
 	p.intAsDouble = false;
-	p.removeQuotesEnabled = true;
-	p.simplifyWhitespacesEnabled = true;
+	p.removeQuotes = true;
+	p.simplifyWhitespaces = true;
 	p.columnNamesRaw = QStringLiteral("w,x,y,z");
 	filter.setProperties(p);
 
@@ -1500,8 +1500,8 @@ void AsciiFilterTest::testQuotedStrings03() {
 	// filter.setSeparatingCharacter(QStringLiteral(","));
 	// filter.setHeaderEnabled(true);
 	// filter.setHeaderLine(1);
-	// filter.setSimplifyWhitespacesEnabled(true);
-	// filter.setRemoveQuotesEnabled(true);
+	// filter.setsimplifyWhitespaces(true);
+	// filter.setremoveQuotes(true);
 	// filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	// // three rows and two columns to read
@@ -1546,8 +1546,8 @@ void AsciiFilterTest::testQuotedStrings04() {
 	p.headerEnabled = true;
 	p.headerLine = 1;
 	p.intAsDouble = false;
-	p.removeQuotesEnabled = true;
-	p.simplifyWhitespacesEnabled = true;
+	p.removeQuotes = true;
+	p.simplifyWhitespaces = true;
 	p.columnNamesRaw = QStringLiteral("w,x,y,z");
 	filter.setProperties(p);
 
@@ -1592,8 +1592,8 @@ void AsciiFilterTest::testIvalidFile_Json() {
 	p.headerEnabled = true;
 	p.headerLine = 1;
 	p.intAsDouble = false;
-	p.removeQuotesEnabled = true;
-	p.simplifyWhitespacesEnabled = true;
+	p.removeQuotes = true;
+	p.simplifyWhitespaces = true;
 	p.columnNamesRaw = QStringLiteral("w,x,y,z");
 	filter.setProperties(p);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
@@ -1618,8 +1618,8 @@ void AsciiFilterTest::testUtf8Cyrillic() {
 	p.headerEnabled = true;
 	p.headerLine = 1;
 	p.intAsDouble = false;
-	p.removeQuotesEnabled = true;
-	p.simplifyWhitespacesEnabled = false;
+	p.removeQuotes = true;
+	p.simplifyWhitespaces = false;
 	p.columnNamesRaw = QStringLiteral("w,x,y,z");
 	filter.setProperties(p);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
@@ -1665,8 +1665,8 @@ void AsciiFilterTest::testMultilineComment() {
 	p.headerEnabled = false;
 	p.headerLine = 1;
 	p.intAsDouble = false;
-	p.removeQuotesEnabled = true;
-	p.simplifyWhitespacesEnabled = true;
+	p.removeQuotes = true;
+	p.simplifyWhitespaces = true;
 	p.skipEmptyParts = true; // Skipping empty lines
 	p.startRow = 1;
 	p.columnNamesRaw = QStringLiteral("w,x");
@@ -1714,8 +1714,8 @@ void AsciiFilterTest::testComments01() {
 	p.headerEnabled = false;
 	p.headerLine = 1;
 	p.intAsDouble = false;
-	p.removeQuotesEnabled = true;
-	p.simplifyWhitespacesEnabled = true;
+	p.removeQuotes = true;
+	p.simplifyWhitespaces = true;
 	p.columnNamesRaw = QStringLiteral("w,x");
 	filter.setProperties(p);
 
@@ -1757,8 +1757,8 @@ void AsciiFilterTest::testComments02() {
 	p.headerEnabled = true;
 	p.headerLine = 1;
 	p.intAsDouble = false;
-	p.removeQuotesEnabled = true;
-	p.simplifyWhitespacesEnabled = true;
+	p.removeQuotes = true;
+	p.simplifyWhitespaces = true;
 	p.commentCharacter = QStringLiteral();
 	p.columnNamesRaw = QStringLiteral("w,x");
 	filter.setProperties(p);
@@ -2535,7 +2535,7 @@ void AsciiFilterTest::benchDoubleImport_cleanup() {
 
 void AsciiFilterTest::benchMark2() {
 	const int numberColumns = 20;
-	const int numberRows = 10;
+	const int numberRows = 10000;
 
 	QStringList content;
 
@@ -2638,8 +2638,8 @@ void AsciiFilterTest::determineSeparator() {
 
 void AsciiFilterTest::determineColumns() {
 	AsciiFilter::Properties p;
-	p.removeQuotesEnabled = true;
-	p.simplifyWhitespacesEnabled = true;
+	p.removeQuotes = true;
+	p.simplifyWhitespaces = true;
 	p.skipEmptyParts = true;
 	p.startColumn = 1;
 	p.numberColumns = -1;
@@ -2652,37 +2652,37 @@ void AsciiFilterTest::determineColumns() {
 	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("\"header 1\",\"header 2\",\"header 3\"\n"), p), expectedHeader);
 
 	// No whitespace simplifying! High performance parser
-	p.simplifyWhitespacesEnabled = false;
+	p.simplifyWhitespaces = false;
 
-	p.removeQuotesEnabled = false;
+	p.removeQuotes = false;
 	expectedHeader = QStringList{QStringLiteral("header1"),QStringLiteral("header2"),QStringLiteral("header3")};
 	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("header1,header2,header3\n"), p), expectedHeader);
 
-	p.removeQuotesEnabled = true;
+	p.removeQuotes = true;
 	expectedHeader = QStringList{QStringLiteral("header 1"),QStringLiteral("header 2"),QStringLiteral("header 3")};
 	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("\"header 1\",\"header 2\",\"header 3\"\n"), p), expectedHeader);
 
 	// Without \n at the end
-	p.removeQuotesEnabled = true;
+	p.removeQuotes = true;
 	expectedHeader = QStringList{QStringLiteral("header 1"),QStringLiteral("header 2"),QStringLiteral("header 3")};
 	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("\"header 1\",\"header 2\",\"header 3"), p), expectedHeader);
 
 	// Quotes still inside
-	p.removeQuotesEnabled = false;
+	p.removeQuotes = false;
 	expectedHeader = QStringList{QStringLiteral("\"header 1\""),QStringLiteral("\"header 2\""),QStringLiteral("\"header 3\"")};
 	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("\"header 1\",\"header 2\",\"header 3\"\n"), p), expectedHeader);
 
-	p.removeQuotesEnabled = true;
+	p.removeQuotes = true;
 	expectedHeader = QStringList{QStringLiteral("header 1"),QStringLiteral("header2"),QStringLiteral("header 3")};
 	// Second header has no quotes
 	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("\"header 1\",header2,\"header 3\"\n"), p), expectedHeader);
 
 	expectedHeader = QStringList{QStringLiteral("header1"),QStringLiteral("header2"),QStringLiteral("header3")};
-	p.simplifyWhitespacesEnabled = false;
+	p.simplifyWhitespaces = false;
 	QBENCHMARK {
 		QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("header1,header2,header3\n"), p), expectedHeader);
 	}
-	p.simplifyWhitespacesEnabled = true;
+	p.simplifyWhitespaces = true;
 	QBENCHMARK {
 		QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("header1,header2,header3\n"), p), expectedHeader);
 	}

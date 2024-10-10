@@ -28,8 +28,8 @@ public:
 
 private:
 	static QStringList determineColumns(const QStringView& line, const AsciiFilter::Properties& properties);
-	static QStringList determineColumns(const QStringView &line, const QStringView &separator, bool removeQuotesEnabled, bool simplifyWhiteSpaces, bool skipEmptyParts, int startColumn, int numberColumns);
-	static AsciiFilter::Status determineSeparator(const QString &line, bool removeQuotesEnabled, bool simplifyWhiteSpaces, QString &separator);
+	static QStringList determineColumns(const QStringView &line, const QStringView &separator, bool removeQuotes, bool simplifyWhiteSpaces, bool skipEmptyParts, int startColumn, int numberColumns);
+	static AsciiFilter::Status determineSeparator(const QString &line, bool removeQuotes, bool simplifyWhiteSpaces, QString &separator);
 	static QVector<AbstractColumn::ColumnMode> determineColumnModes(const QVector<QStringList>& values, const AsciiFilter::Properties& properties, QString &dateTimeFormat);
 	AsciiFilter::Status getLine(QIODevice& device, QString& line);
 	static QString deviceStatusToString(AsciiFilter::Status);
