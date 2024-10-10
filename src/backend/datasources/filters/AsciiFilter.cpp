@@ -526,64 +526,123 @@ QVector<AbstractColumn::ColumnMode> AsciiFilterPrivate::determineColumnModes(con
 	return modes;
 }
 
-QStringList AsciiFilterPrivate::determineColumns(const QString& line, const AsciiFilter::Properties& properties) {
+QStringList AsciiFilterPrivate::determineColumns(const QStringView &line, const AsciiFilter::Properties& properties) {
 	return determineColumns(line, properties.separator, properties.removeQuotesEnabled, properties.simplifyWhitespacesEnabled, properties.skipEmptyParts, properties.startColumn, properties.numberColumns);
 }
 
-QStringList AsciiFilterPrivate::determineColumns(const QString& line, const QString& separator, bool removeQuotesEnabled, bool simplifyWhiteSpaces, bool skipEmptyParts, int startColumn, int numberColumns) {
+QStringList AsciiFilterPrivate::determineColumns(const QStringView& line, const QStringView& separator, bool removeQuotesEnabled, bool simplifyWhiteSpaces, bool skipEmptyParts, int startColumn, int numberColumns) {
 	enum class State {
 		Column,
 		QuotedText,
 	};
-	auto state = State::Column;
 
 	QStringList columnNames;
-	QString columnName;
-	int columnCount = 1;
-	bool separatorLast = false;
-	for (auto c: line) {
-		if (c == QLatin1Char('\n') || c == QLatin1Char('\r'))
-			break;
-		if (removeQuotesEnabled && c == QLatin1Char('"')) {
-			switch (state) {
-			case State::Column:
-				state = State::QuotedText;
+	auto state = State::Column;
+	if (simplifyWhiteSpaces) {
+		// More complicated algorithm because whitespaces and quotes are removed
+		QString columnName;
+		int columnCount = 1;
+		bool separatorLast = false;
+		for (auto c: line) {
+			if (c == QLatin1Char('\n') || c == QLatin1Char('\r'))
 				break;
-			case State::QuotedText:
-				state = State::Column;
+			if (removeQuotesEnabled && c == QLatin1Char('"')) {
+				switch (state) {
+				case State::Column:
+					state = State::QuotedText;
+					break;
+				case State::QuotedText:
+					state = State::Column;
+					break;
+				}
+				continue;
+			}
+
+			if (simplifyWhiteSpaces && state != State::QuotedText && (c == QLatin1Char(' ') || c == QLatin1Char('\t')))
+				continue;
+			else
+				columnName.append(c);
+
+			switch (state) {
+			case State::Column: {
+				if (columnName.endsWith(separator)) {
+					separatorLast = true;
+					columnName.remove(columnName.length() - separator.length(), separator.length());
+					if (!skipEmptyParts || !columnName.isEmpty()) {
+						if (columnCount >= startColumn && (columnCount < startColumn + numberColumns || numberColumns < 0))
+							columnNames << columnName;
+						columnCount ++;
+					}
+					columnName.clear();
+				} else
+					separatorLast = false;
 				break;
 			}
-			continue;
+			case State::QuotedText:
+				continue;
+			}
 		}
-
-		if (simplifyWhiteSpaces && state != State::QuotedText && (c == QLatin1Char(' ') || c == QLatin1Char('\t')))
-			continue;
-		else
-			columnName.append(c);
-
-		switch (state) {
-		case State::Column: {
-			if (columnName.endsWith(separator)) {
-				separatorLast = true;
-				columnName.remove(columnName.length() - separator.length(), separator.length());
-				if (!skipEmptyParts || !columnName.isEmpty()) {
-					if (columnCount >= startColumn && (columnCount < startColumn + numberColumns || numberColumns < 0))
-						columnNames << columnName;
-					columnCount ++;
+		if (columnCount >= startColumn && (columnCount < startColumn + numberColumns || numberColumns < 0)) {
+			// If columnName is empty(): After the separator the line was finished, but there should be a value so add a placeholder (invalid value)
+			if (!columnName.isEmpty() || (!skipEmptyParts && separatorLast))
+				columnNames.append(columnName);
+		}
+	} else {
+		int columnCount = 1;
+		bool separatorLast = false;
+		size_t counter = 0;
+		size_t startColumnIndex = 0; // Start of the column name
+		size_t numberCharacters = 0; // Number of characters of the column name
+		for (auto c: line) {
+			counter ++;
+			if (c == QLatin1Char('\n') || c == QLatin1Char('\r'))
+				break;
+			if (removeQuotesEnabled && c == QLatin1Char('"')) {
+				switch (state) {
+				case State::Column:
+					state = State::QuotedText;
+					startColumnIndex = counter;
+					numberCharacters = 0;
+					continue;
+				case State::QuotedText:
+					state = State::Column;
+					// Do not increase numberCharacters
+					continue;
 				}
-				columnName.clear();
-			} else
-				separatorLast = false;
-			break;
+			}
+
+			switch (state) {
+			case State::Column: {
+				const auto s = line.sliced(startColumnIndex, counter - startColumnIndex);
+				const auto c_ = s.endsWith(separator);
+				if (c_) {
+					separatorLast = true;
+					const auto columnName = s.sliced(0, numberCharacters);
+					//columnName.remove(columnName.length() - separator.length(), separator.length());
+					if (!skipEmptyParts || !columnName.isEmpty()) {
+						if (columnCount >= startColumn && (columnCount < startColumn + numberColumns || numberColumns < 0))
+							columnNames << columnName.toString();
+						columnCount ++;
+					}
+					//columnName.clear();
+					startColumnIndex = counter;
+					numberCharacters = 0;
+				} else {
+					separatorLast = false;
+					numberCharacters ++;
+				}
+				break;
+			}
+			case State::QuotedText:
+				numberCharacters ++;
+				break;
+			}
 		}
-		case State::QuotedText:
-			continue;
+		if (columnCount >= startColumn && (columnCount < startColumn + numberColumns || numberColumns < 0)) {
+			// If columnName is empty(): After the separator the line was finished, but there should be a value so add a placeholder (invalid value)
+			 if (numberCharacters != 0 || (!skipEmptyParts && separatorLast))
+				columnNames.append(line.sliced(startColumnIndex, numberCharacters).toString());
 		}
-	}
-	if (columnCount >= startColumn && (columnCount < startColumn + numberColumns || numberColumns < 0)) {
-		// If columnName is empty(): After the separator the line was finished, but there should be a value so add a placeholder (invalid value)
-		if (!columnName.isEmpty() || (!skipEmptyParts && separatorLast))
-			columnNames.append(columnName);
 	}
 	return columnNames;
 }
