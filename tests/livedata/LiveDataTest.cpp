@@ -10,6 +10,7 @@
 #include "LiveDataTest.h"
 #include "backend/datasources/LiveDataSource.h"
 #include "backend/datasources/filters/AsciiFilterOld.h"
+#include "backend/datasources/filters/AsciiFilter.h"
 
 #include <QEventLoop>
 #include <QTimer>
@@ -43,9 +44,13 @@ void LiveDataTest::testReadContinuousFixed00() {
 	dataSource.setUpdateType(LiveDataSource::UpdateType::NewData);
 
 	// initialize the ASCII filter
-	auto* filter = new Old::AsciiFilter();
-	filter->setSeparatingCharacter(QStringLiteral(","));
-	filter->setHeaderEnabled(false);
+	auto* filter = new AsciiFilter();
+	auto properties = filter->defaultProperties();
+	properties.headerEnabled = false;
+	properties.intAsDouble = false;
+	filter->setProperties(properties);
+
+	//QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks, after the initial read all data is read

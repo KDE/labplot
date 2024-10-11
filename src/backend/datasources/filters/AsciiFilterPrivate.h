@@ -18,15 +18,16 @@
 class AsciiFilterPrivate {
 public:
 	AsciiFilterPrivate(AsciiFilter *owner);
-	AsciiFilter::Status initialize(const AsciiFilter::Properties& p);
+	AsciiFilter::Status initialize(AsciiFilter::Properties p);
 	AsciiFilter::Status initialize(QIODevice& device);
-	AsciiFilter::Status readFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, qint64 from, qint64 lines);
+	AsciiFilter::Status readFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, qint64 from, qint64 lines, qint64 &bytes_read);
 	QVector<QStringList> preview(const QString& fileName, int lines);
 
 	AsciiFilter::Properties properties;
-	bool initialized{true}; // false if an initialization with the current properties was done, otherwise true
+	bool initialized{false};
 
 private:
+	static bool ignoringLine(QStringView line, const AsciiFilter::Properties& p);
 	static QStringList determineColumns(const QStringView& line, const AsciiFilter::Properties& properties);
 	static QStringList determineColumns(const QStringView &line, const QStringView &separator, bool removeQuotes, bool simplifyWhiteSpaces, bool skipEmptyParts, int startColumn, int numberColumns);
 	static AsciiFilter::Status determineSeparator(const QString &line, bool removeQuotes, bool simplifyWhiteSpaces, QString &separator);
@@ -40,7 +41,7 @@ private:
 	struct DataContainer {
 		void clear();
 		void appendVector(AbstractColumn::ColumnMode cm);
-		int elementCount(size_t index = 0) const;
+		int rowCount(size_t index = 0) const;
 
 		template<class T>
 		void appendVector(QVector<T>* data, AbstractColumn::ColumnMode cm) {
