@@ -29,14 +29,16 @@ namespace {
 // Simple object to automatically closing a device when this object
 // goes out of scope
 struct IODeviceHandler {
-	IODeviceHandler(QIODevice& d): device(d) {}
+	IODeviceHandler(QIODevice& d, bool reset): device(d), reset(reset) {}
 
 	~IODeviceHandler() {
-		device.reset(); // Seek to the start
+		if (reset)
+			device.reset(); // Seek to the start
 		device.close();
 	}
 private:
 	QIODevice& device;
+	const bool reset;
 };
 }
 
@@ -292,7 +294,7 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner): q(owner) {
 AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 	using Status = AsciiFilter::Status;
 
-	IODeviceHandler d(device); // closes device automatically. TODO: check that it gets not optimized out
+	IODeviceHandler d(device, true); // closes device automatically. TODO: check that it gets not optimized out
 
 	if (!properties.automaticSeparatorDetection && properties.numberColumns > 0 && properties.columnModes.size() == properties.numberColumns)
 		return Status::Success; // Nothing to do since all unknows are determined
@@ -467,6 +469,15 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 		}
 	}
 
+	if (!device.open(QIODevice::ReadOnly))
+		return Status::UnableToOpenDevice;
+	IODeviceHandler dev(device, false); // TODO: check that it gets not optimized out!
+	if (device.atEnd() && !device.isSequential())
+		return Status::DeviceAtEnd; // File empty
+
+	if (!device.isSequential())
+		device.seek(from);
+
 	// This must be done all the time, because it could be that the datacontainer of the datasource changed and then the datacontainer points to
 	// wrong data locations.
    // Update
@@ -490,14 +501,6 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 		//q->setLastError(i18n("Not enough memory."));
 		return Status::NotEnoughMemory;
 	}
-
-	if (!device.open(QIODevice::ReadOnly))
-		return Status::UnableToOpenDevice;
-	else if (device.atEnd() && !device.isSequential())
-		return Status::DeviceAtEnd;
-
-	if (!device.isSequential())
-		device.seek(from);
 
 	QString line;
 	int counter = 0;
