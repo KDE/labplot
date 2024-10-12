@@ -78,15 +78,15 @@ QVector<AbstractColumn::ColumnMode> AsciiFilter::columnModes() const {
 	return d->properties.columnModes;
 }
 
-void AsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode) {
+void AsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode columnImportMode) {
 	KCompressionDevice file(fileName);
-	readFromDevice(file, dataSource, importMode, 0, -1);
+	readFromDevice(file, dataSource, columnImportMode, 0, -1, 0);
 }
 
-qint64 AsciiFilter::readFromDevice(QIODevice& device, AbstractDataSource* dataSource, ImportMode importMode, qint64 from, qint64 lines) {
+qint64 AsciiFilter::readFromDevice(QIODevice& device, AbstractDataSource* dataSource, ImportMode columnImportMode, qint64 from, qint64 lines, qint64 keepNRows) {
 	Q_D(AsciiFilter);
 	qint64 bytes_read;
-	const auto status = d->readFromDevice(device, dataSource, importMode, from, lines, bytes_read);
+	const auto status = d->readFromDevice(device, dataSource, columnImportMode, from, lines, keepNRows, bytes_read);
 	// TODO: do something with it!
 	return bytes_read;
 }
@@ -452,11 +452,13 @@ bool AsciiFilterPrivate::ignoringLine(QStringView line, const AsciiFilter::Prope
 		(line.size() == 2 && line.at(0) == QLatin1Char('\r') && line.at(1) == QLatin1Char('\n'));
 }
 
-AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, qint64 from, qint64 lines, qint64& bytes_read) {
+AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode columnImportMode, qint64 from, qint64 lines, qint64 keepNRows, qint64& bytes_read) {
 	using Status = AsciiFilter::Status;
 	bytes_read = 0;
 
+	bool ok;
 	if (!initialized) {
+		m_DataContainer.clear();
 		const auto status = initialize(device);
 		if (status != Status::Success)
 			return status;
@@ -467,6 +469,45 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 				if (c != AbstractColumn::ColumnMode::Double)
 					return Status::MatrixUnsupportedColumnMode;
 		}
+	} else {
+		auto columnCount = properties.columnModes.size();
+		if (columnImportMode != AbstractFileFilter::ImportMode::Replace)
+			columnCount = 0; // Column count to zero, otherwise also this number of columns will be appended/prepended
+	}
+
+	// TODO: This is dangerous, because it could that now a different dataContainer is used than before.
+	if (m_DataContainer.size() == 0) {
+		std::vector<void*> dataContainer;
+		int columnOffset = dataSource->prepareImport(dataContainer, columnImportMode, 0, properties.columnModes.size(), properties.columnNames, properties.columnModes, ok, true);
+
+		if (dataContainer.size() == 0)
+			return Status::NoColumns;
+
+		// This must be done all the time, because it could be that the datacontainer of the datasource changed and then the datacontainer points to
+		// wrong data locations.
+		// Update
+		// Initialize m_DataContainer. So m_DataContainer must not free up the data afterwards
+		for (size_t i=0; i < dataContainer.size(); i++) {
+			m_DataContainer.appendVector(dataContainer.at(i), properties.columnModes.at(i));
+		}
+	}
+
+	int dataContainerStartIndex = 0;
+	if (keepNRows > 0) {
+		// Just keep the last n rows
+		m_DataContainer.removeFirst(m_DataContainer.rowCount() - keepNRows);
+		dataContainerStartIndex = m_DataContainer.rowCount(); // New rowcount is the startIndex
+	} else if (keepNRows < 0)
+		dataContainerStartIndex = m_DataContainer.rowCount(); // Keep all data
+
+	try {
+		int newRowCount = numberRowsReallocation;
+		if (keepNRows != 0)
+			newRowCount = qMax(dataContainerStartIndex * 2, numberRowsReallocation);
+		m_DataContainer.resize(newRowCount); // reserve to not having to reallocate all the time
+	} catch (std::bad_alloc&) {
+		//q->setLastError(i18n("Not enough memory."));
+		return Status::NotEnoughMemory;
 	}
 
 	if (!device.open(QIODevice::ReadOnly))
@@ -477,47 +518,6 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 
 	if (!device.isSequential())
 		device.seek(from);
-
-	// This must be done all the time, because it could be that the datacontainer of the datasource changed and then the datacontainer points to
-	// wrong data locations.
-   // Update
-   // Initialize m_DataContainer. So m_DataContainer must not free up the data afterwards
-	std::vector<void*> dataContainer;
-	bool ok;
-	dataSource->prepareImport(dataContainer, importMode, 0, properties.columnModes.size(), properties.columnNames, properties.columnModes, ok, true);
-	m_DataContainer.clear();
-	for (size_t i=0; i < dataContainer.size(); i++) {
-		m_DataContainer.appendVector(dataContainer.at(i), properties.columnModes.at(i));
-	}
-	int dataContainerStartIndex = 0;
-	try {
-		switch (importMode) {
-		case AbstractFileFilter::ImportMode::Replace: {
-			m_DataContainer.resize(10000); // reserve to not having to reallocate all the time
-			dataContainerStartIndex = 0;
-			break;
-		}
-		case AbstractFileFilter::ImportMode::Append: {
-			dataContainerStartIndex = m_DataContainer.rowCount();
-			m_DataContainer.resize(m_DataContainer.rowCount() * 2); // Reserve the double as right now is allocated
-			break;
-		}
-			// TODO: not so easy to achive
-		// case AbstractFileFilter::ImportMode::Prepend: {
-		// 	dataContainerStartIndex = 0;
-		// 	m_DataContainer.resize(m_DataContainer.rowCount() * 2); // Reserve the double as right now is allocated
-		// }
-		}
-
-		if (importMode == AbstractFileFilter::ImportMode::Replace) {
-
-		} else {
-
-		}
-	} catch (std::bad_alloc&) {
-		//q->setLastError(i18n("Not enough memory."));
-		return Status::NotEnoughMemory;
-	}
 
 	QString line;
 	int counter = 0;
@@ -625,7 +625,7 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 
 	m_DataContainer = DataContainer(); // Reset datacontainer. The data is already stored in the columns, so no freeing of memory is required
 
-	dataSource->finalizeImport(0, 0, properties.columnNames.size() - 1, properties.dateTimeFormat, importMode);
+	dataSource->finalizeImport(0, 0, properties.columnNames.size() - 1, properties.dateTimeFormat, columnImportMode);
 	return Status::Success;
 }
 
@@ -927,7 +927,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	initialized = false;
 	q->clearLastError();
 	qint64 bytes_read;
-	const auto status = readFromDevice(file, &spreadsheet, AbstractFileFilter::ImportMode::Replace, 0, lines, bytes_read);
+	const auto status = readFromDevice(file, &spreadsheet, AbstractFileFilter::ImportMode::Replace, 0, lines, 0, bytes_read);
 	QVector<QStringList> p;
 	if (status != AsciiFilter::Status::Success) {
 		q->setLastError(AsciiFilter::statusToString(status));
@@ -985,6 +985,34 @@ const void* AsciiFilterPrivate::DataContainer::datas(size_t index) const {
 	if (index < size())
 		return m_dataContainer.at(index);
 	return nullptr;
+}
+
+void AsciiFilterPrivate::DataContainer::removeFirst(int n) {
+	n = qMin(n, rowCount());
+	if (n <= 0)
+		return;
+	for (uint32_t i = 0; i < m_dataContainer.size(); i++) {
+		switch (m_columnModes.at(i)) {
+		case AbstractColumn::ColumnMode::BigInt:
+			static_cast<QVector<qint64>*>(m_dataContainer[i])->remove(0, n);
+			break;
+		case AbstractColumn::ColumnMode::Integer: {
+			static_cast<QVector<qint32>*>(m_dataContainer[i])->remove(0, n);
+			break;
+		}
+		case AbstractColumn::ColumnMode::Double:
+			static_cast<QVector<double>*>(m_dataContainer[i])->remove(0, n);
+			break;
+		case AbstractColumn::ColumnMode::Text:
+			static_cast<QVector<QString>*>(m_dataContainer[i])->remove(0, n);
+			break;
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::DateTime:
+			static_cast<QVector<QDateTime>*>(m_dataContainer[i])->remove(0, n);
+			break;
+		}
+	}
 }
 
 bool AsciiFilterPrivate::DataContainer::resize(uint32_t s) const {

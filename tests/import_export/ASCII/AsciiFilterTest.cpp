@@ -20,6 +20,8 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 
+#include <KCompressionDevice>
+
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
 
@@ -1961,7 +1963,152 @@ void AsciiFilterTest::testDateTimeHex() {
 	QCOMPARE(spreadsheet.column(16)->textAt(0), QLatin1String("5AD17"));
 }
 
-void AsciiFilterTest::testAppend() {
+// Keep all values
+void AsciiFilterTest::testAppendRows() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+
+	auto p = filter.properties();
+	p.automaticSeparatorDetection = false;
+	p.separator = QStringLiteral(";");
+	p.headerEnabled = false;
+	p.columnNamesRaw = QStringLiteral("x, y");
+	p.intAsDouble = false;
+	filter.setProperties(p);
+
+	{
+		QStringList fileContent = {
+			QStringLiteral("1;5"),
+			QStringLiteral("2;6"),
+			QStringLiteral("3;7"),
+		};
+
+		QString savePath;
+		SAVE_FILE("testfile", fileContent);
+		filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	}
+
+	QCOMPARE(spreadsheet.rowCount(), 3);
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("x"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("y"));
+
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
+	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
+	QCOMPARE(spreadsheet.column(0)->integerAt(2), 3);
+
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->integerAt(0), 5);
+	QCOMPARE(spreadsheet.column(1)->integerAt(1), 6);
+	QCOMPARE(spreadsheet.column(1)->integerAt(2), 7);
+
+	{
+		QStringList fileContent2 = {
+			QStringLiteral("11;12"),
+			QStringLiteral("13;14"),
+			QStringLiteral("15;16"),
+		};
+
+		QString savePath;
+		SAVE_FILE("testfile", fileContent2);
+		KCompressionDevice file(savePath);
+		filter.readFromDevice(file, &spreadsheet, AbstractFileFilter::ImportMode::Replace, 0, -1, -1);
+	}
+
+	QCOMPARE(spreadsheet.rowCount(), 6);
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("x"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("y"));
+
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
+	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
+	QCOMPARE(spreadsheet.column(0)->integerAt(2), 3);
+	QCOMPARE(spreadsheet.column(0)->integerAt(3), 11);
+	QCOMPARE(spreadsheet.column(0)->integerAt(4), 13);
+	QCOMPARE(spreadsheet.column(0)->integerAt(5), 15);
+
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->integerAt(0), 5);
+	QCOMPARE(spreadsheet.column(1)->integerAt(1), 6);
+	QCOMPARE(spreadsheet.column(1)->integerAt(2), 7);
+	QCOMPARE(spreadsheet.column(0)->integerAt(3), 12);
+	QCOMPARE(spreadsheet.column(0)->integerAt(4), 14);
+	QCOMPARE(spreadsheet.column(0)->integerAt(5), 16);
+}
+
+void AsciiFilterTest::keepLast() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+
+	auto p = filter.properties();
+	p.automaticSeparatorDetection = false;
+	p.separator = QStringLiteral(";");
+	p.headerEnabled = false;
+	p.columnNamesRaw = QStringLiteral("x, y");
+	p.intAsDouble = false;
+	filter.setProperties(p);
+
+	{
+		QStringList fileContent = {
+			QStringLiteral("1;5"),
+			QStringLiteral("2;6"),
+			QStringLiteral("3;7"),
+		};
+
+		QString savePath;
+		SAVE_FILE("testfile", fileContent);
+		filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	}
+
+	QCOMPARE(spreadsheet.rowCount(), 3);
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("x"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("y"));
+
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
+	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
+	QCOMPARE(spreadsheet.column(0)->integerAt(2), 3);
+
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->integerAt(0), 5);
+	QCOMPARE(spreadsheet.column(1)->integerAt(1), 6);
+	QCOMPARE(spreadsheet.column(1)->integerAt(2), 7);
+
+	{
+		QStringList fileContent2 = {
+			QStringLiteral("11;12"),
+			QStringLiteral("13;14"),
+			QStringLiteral("15;16"),
+		};
+
+		QString savePath;
+		SAVE_FILE("testfile", fileContent2);
+		KCompressionDevice file(savePath);
+		filter.readFromDevice(file, &spreadsheet, AbstractFileFilter::ImportMode::Replace, 0, -1, 1);
+	}
+
+	QCOMPARE(spreadsheet.rowCount(), 6);
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("x"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("y"));
+
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(0)->integerAt(0), 3);
+	QCOMPARE(spreadsheet.column(0)->integerAt(1), 11);
+	QCOMPARE(spreadsheet.column(0)->integerAt(2), 13);
+	QCOMPARE(spreadsheet.column(0)->integerAt(3), 15);
+
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->integerAt(0), 7);
+	QCOMPARE(spreadsheet.column(0)->integerAt(1), 12);
+	QCOMPARE(spreadsheet.column(0)->integerAt(2), 14);
+	QCOMPARE(spreadsheet.column(0)->integerAt(3), 16);
+}
+
+void AsciiFilterTest::testAppendColumns() {
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
 
@@ -2012,7 +2159,55 @@ void AsciiFilterTest::testAppend() {
 		filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Append);
 	}
 
-	QCOMPARE(spreadsheet.rowCount(), 6);
+	QCOMPARE(spreadsheet.rowCount(), 3);
+	QCOMPARE(spreadsheet.columnCount(), 4);
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("x"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("y"));
+	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("x"));
+	QCOMPARE(spreadsheet.column(3)->name(), QLatin1String("y"));
+
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(0)->integerAt(0), 3);
+	QCOMPARE(spreadsheet.column(0)->integerAt(1), 11);
+
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->integerAt(0), 7);
+	QCOMPARE(spreadsheet.column(1)->integerAt(1), 12);
+
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(2)->integerAt(2), 13);
+	QCOMPARE(spreadsheet.column(2)->integerAt(3), 15);
+
+	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(3)->integerAt(2), 14);
+	QCOMPARE(spreadsheet.column(3)->integerAt(3), 16);
+}
+
+void AsciiFilterTest::testPrependColumns() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+
+	auto p = filter.properties();
+	p.automaticSeparatorDetection = false;
+	p.separator = QStringLiteral(";");
+	p.headerEnabled = false;
+	p.columnNamesRaw = QStringLiteral("x, y");
+	p.intAsDouble = false;
+	filter.setProperties(p);
+
+	{
+		QStringList fileContent = {
+			QStringLiteral("1;5"),
+			QStringLiteral("2;6"),
+			QStringLiteral("3;7"),
+		};
+
+		QString savePath;
+		SAVE_FILE("testfile", fileContent);
+		filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	}
+
+	QCOMPARE(spreadsheet.rowCount(), 3);
 	QCOMPARE(spreadsheet.columnCount(), 2);
 	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("x"));
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("y"));
@@ -2021,91 +2216,47 @@ void AsciiFilterTest::testAppend() {
 	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
 	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
 	QCOMPARE(spreadsheet.column(0)->integerAt(2), 3);
-	QCOMPARE(spreadsheet.column(0)->integerAt(3), 11);
-	QCOMPARE(spreadsheet.column(0)->integerAt(4), 13);
-	QCOMPARE(spreadsheet.column(0)->integerAt(5), 15);
 
 	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
 	QCOMPARE(spreadsheet.column(1)->integerAt(0), 5);
 	QCOMPARE(spreadsheet.column(1)->integerAt(1), 6);
 	QCOMPARE(spreadsheet.column(1)->integerAt(2), 7);
-	QCOMPARE(spreadsheet.column(0)->integerAt(3), 12);
-	QCOMPARE(spreadsheet.column(0)->integerAt(4), 14);
-	QCOMPARE(spreadsheet.column(0)->integerAt(5), 16);
+
+	{
+		QStringList fileContent2 = {
+			QStringLiteral("11;12"),
+			QStringLiteral("13;14"),
+			QStringLiteral("15;16"),
+		};
+
+		QString savePath;
+		SAVE_FILE("testfile", fileContent2);
+		filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Append);
+	}
+
+	QCOMPARE(spreadsheet.rowCount(), 3);
+	QCOMPARE(spreadsheet.columnCount(), 4);
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("x"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("y"));
+	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("x"));
+	QCOMPARE(spreadsheet.column(3)->name(), QLatin1String("y"));
+
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(0)->integerAt(2), 13);
+	QCOMPARE(spreadsheet.column(0)->integerAt(3), 15);
+
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->integerAt(2), 14);
+	QCOMPARE(spreadsheet.column(1)->integerAt(3), 16);
+
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(2)->integerAt(0), 3);
+	QCOMPARE(spreadsheet.column(2)->integerAt(1), 11);
+
+	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(3)->integerAt(0), 7);
+	QCOMPARE(spreadsheet.column(3)->integerAt(1), 12);
 }
-
-// void AsciiFilterTest::testPrepend() {
-// 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
-// 	AsciiFilter filter;
-
-// 	auto p = filter.properties();
-// 	p.automaticSeparatorDetection = false;
-// 	p.separator = QStringLiteral(";");
-// 	p.headerEnabled = false;
-// 	p.columnNamesRaw = QStringLiteral("x, y");
-// 	p.intAsDouble = false;
-// 	filter.setProperties(p);
-
-// 	{
-// 		QStringList fileContent = {
-// 			QStringLiteral("1;5"),
-// 			QStringLiteral("2;6"),
-// 			QStringLiteral("3;7"),
-// 		};
-
-// 		QString savePath;
-// 		SAVE_FILE("testfile", fileContent);
-// 		filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
-// 	}
-
-// 	QCOMPARE(spreadsheet.rowCount(), 3);
-// 	QCOMPARE(spreadsheet.columnCount(), 2);
-// 	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("x"));
-// 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("y"));
-
-// 	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
-// 	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
-// 	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
-// 	QCOMPARE(spreadsheet.column(0)->integerAt(2), 3);
-
-// 	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
-// 	QCOMPARE(spreadsheet.column(1)->integerAt(0), 5);
-// 	QCOMPARE(spreadsheet.column(1)->integerAt(1), 6);
-// 	QCOMPARE(spreadsheet.column(1)->integerAt(2), 7);
-
-// 	{
-// 		QStringList fileContent2 = {
-// 			QStringLiteral("11;12"),
-// 			QStringLiteral("13;14"),
-// 			QStringLiteral("15;16"),
-// 		};
-
-// 		QString savePath;
-// 		SAVE_FILE("testfile", fileContent2);
-// 		filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Prepend);
-// 	}
-
-// 	QCOMPARE(spreadsheet.rowCount(), 6);
-// 	QCOMPARE(spreadsheet.columnCount(), 2);
-// 	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("x"));
-// 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("y"));
-
-// 	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
-// 	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
-// 	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
-// 	QCOMPARE(spreadsheet.column(0)->integerAt(2), 3);
-// 	QCOMPARE(spreadsheet.column(0)->integerAt(3), 11);
-// 	QCOMPARE(spreadsheet.column(0)->integerAt(4), 13);
-// 	QCOMPARE(spreadsheet.column(0)->integerAt(5), 15);
-
-// 	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
-// 	QCOMPARE(spreadsheet.column(1)->integerAt(0), 5);
-// 	QCOMPARE(spreadsheet.column(1)->integerAt(1), 6);
-// 	QCOMPARE(spreadsheet.column(1)->integerAt(2), 7);
-// 	QCOMPARE(spreadsheet.column(0)->integerAt(3), 12);
-// 	QCOMPARE(spreadsheet.column(0)->integerAt(4), 14);
-// 	QCOMPARE(spreadsheet.column(0)->integerAt(5), 16);
-// }
 
 void AsciiFilterTest::testMatrixHeader() {
 	Matrix matrix(QStringLiteral("test"), false);
