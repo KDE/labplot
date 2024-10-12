@@ -244,6 +244,7 @@ private:
 	// continious improvement
 	QAction* addProcessBehaviorChartAction{nullptr};
 	QAction* addRunChartAction{nullptr};
+	QAction* addParetoChartAction{nullptr};
 
 	// analysis curves
 	QAction* addDataReductionCurveAction{nullptr};

@@ -89,6 +89,7 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/dockwidgets/LiveDataDock.cpp
     ${FRONTEND_DIR}/dockwidgets/LollipopPlotDock.cpp
     ${FRONTEND_DIR}/dockwidgets/MatrixDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/ParetoChartDock.cpp
     ${FRONTEND_DIR}/dockwidgets/ProcessBehaviorChartDock.cpp
     ${FRONTEND_DIR}/dockwidgets/ProjectDock.cpp
     ${FRONTEND_DIR}/dockwidgets/ReferenceLineDock.cpp
@@ -250,6 +251,7 @@ set(UI_SOURCES
     ${FRONTEND_DIR}/ui/dockwidgets/lollipopplotdock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/notedock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/matrixdock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/paretochartdock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/processbehaviorchartdock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/projectdock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/referencelinedock.ui
@@ -435,6 +437,7 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/CustomPoint.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/KDEPlot.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/LollipopPlot.cpp
+    ${BACKEND_DIR}/worksheet/plots/cartesian/ParetoChart.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/Plot.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/ProcessBehaviorChart.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/ReferenceLine.cpp

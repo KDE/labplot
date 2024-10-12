@@ -64,6 +64,7 @@ enum class AspectType : quint64 {
 	// continious improvement plots
 	ProcessBehaviorChart = 0x0211000,
 	RunChart = 0x0211001,
+	ParetoChart = 0x0211002,
 
 	WorksheetElementContainer = 0x0220000,
 	AbstractPlot = 0x0221000,
@@ -219,6 +220,8 @@ public:
 			return QStringLiteral("KDEPlot");
 		case AspectType::LollipopPlot:
 			return QStringLiteral("LollipopPlot");
+		case AspectType::ParetoChart:
+			return QStringLiteral("ParetoChart");
 		case AspectType::ProcessBehaviorChart:
 			return QStringLiteral("ProcessBehaviorChart");
 		case AspectType::RunChart:

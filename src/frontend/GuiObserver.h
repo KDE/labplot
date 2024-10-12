@@ -27,6 +27,7 @@ class LollipopPlotDock;
 class BoxPlotDock;
 class KDEPlotDock;
 class QQPlotDock;
+class ParetoChartDock;
 class ProcessBehaviorChartDock;
 class CartesianPlotLegendDock;
 class CustomPointDock;
@@ -116,6 +117,7 @@ private:
 	// continuous improvement plots
 	ProcessBehaviorChartDock* m_processBehaviorChartDock{nullptr};
 	RunChartDock* m_runChartDock{nullptr};
+	ParetoChartDock* m_paretoChartDock{nullptr};
 
 	// analysis plots
 	XYDataReductionCurveDock* m_xyDataReductionCurveDock{nullptr};

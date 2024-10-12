@@ -47,6 +47,7 @@
 #include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/LollipopPlot.h"
+#include "backend/worksheet/plots/cartesian/ParetoChart.h"
 #include "backend/worksheet/plots/cartesian/ProcessBehaviorChart.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
@@ -517,6 +518,11 @@ void CartesianPlot::initActions() {
 		addChild(new RunChart(i18n("Run Chart")));
 	});
 
+	addParetoChartAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Pareto Chart"), this);
+	connect(addParetoChartAction, &QAction::triggered, this, [=]() {
+		addChild(new ParetoChart(i18n("Pareto Chart")));
+	});
+
 	// analysis curves
 	connect(addDataReductionCurveAction, &QAction::triggered, this, &CartesianPlot::addDataReductionCurve);
 	connect(addDifferentiationCurveAction, &QAction::triggered, this, &CartesianPlot::addDifferentiationCurve);
@@ -656,6 +662,7 @@ void CartesianPlot::initMenus() {
 	auto* addNewCIPlotsMenu = new QMenu(i18n("Continual Improvement Plots"), m_addNewMenu);
 	addNewCIPlotsMenu->addAction(addProcessBehaviorChartAction);
 	addNewCIPlotsMenu->addAction(addRunChartAction);
+	addNewCIPlotsMenu->addAction(addParetoChartAction);
 	m_addNewMenu->addMenu(addNewCIPlotsMenu);
 
 	m_addNewMenu->addSeparator();
@@ -2170,7 +2177,7 @@ int CartesianPlot::curveChildIndex(const WorksheetElement* curve) const {
 		++index;
 
 		// for the process behavior and run charts two colors are used - for the data and for the control line(s)
-		if (plot->type() == AspectType::ProcessBehaviorChart || plot->type() == AspectType::RunChart)
+		if (plot->type() == AspectType::ProcessBehaviorChart || plot->type() == AspectType::RunChart || plot->type() == AspectType::ParetoChart)
 			++index;
 	}
 
@@ -2880,6 +2887,10 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 			plot->minMax(dim, indexRange, range, true);
 		} else if (plot->type() == AspectType::RunChart) {
 			const int maxIndex = static_cast<const RunChart*>(plot)->xIndexCount() - 1;
+			Range<int> indexRange{0, maxIndex};
+			plot->minMax(dim, indexRange, range, true);
+		} else if (plot->type() == AspectType::ParetoChart) {
+			const int maxIndex = static_cast<const ParetoChart*>(plot)->xIndexCount() - 1;
 			Range<int> indexRange{0, maxIndex};
 			plot->minMax(dim, indexRange, range, true);
 		} else {
