@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-08 01:46+0000\n"
-"PO-Revision-Date: 2024-10-01 06:39+0200\n"
+"PO-Revision-Date: 2024-10-11 18:47+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -8288,10 +8288,9 @@ msgstr "Grafikon obnašanja procesa"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:515
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:517
-#, fuzzy, kde-format
-#| msgid "Run fit"
+#, kde-format
 msgid "Run Chart"
-msgstr "Zaženi prileganje"
+msgstr "Zaženi diagram"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:535
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:615
@@ -8892,10 +8891,9 @@ msgid "%1: set limits metric"
 msgstr "%1: nastavite metriko omejitev"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:397
-#, fuzzy, kde-format
-#| msgid "%1: set symbol size"
+#, kde-format
 msgid "%1: set sample size"
-msgstr "%1: določite velikost simbola"
+msgstr "%1: določi velikost vzorca"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:404
 #, kde-format
@@ -8923,10 +8921,9 @@ msgid "%1: set end logical position"
 msgstr "%1: nastavi končni logični položaj"
 
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:253
-#, fuzzy, kde-format
-#| msgid "%1: set limits metric"
+#, kde-format
 msgid "%1: set center metric"
-msgstr "%1: nastavite metriko omejitev"
+msgstr "%1: nastavi center metrike"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:150
 #, kde-format
@@ -11210,15 +11207,14 @@ msgid "Couldn't subscribe to all available topics."
 msgstr "Ni se možno naročiti na vse teme, ki so na voljo."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2515
-#, fuzzy, kde-format
-#| msgid "Failed to connect to the broker '%1:%2'."
+#, kde-format
 msgid "Failed to connect to '%1'. Error %2."
-msgstr "Povezava s posrednikom »%1:%2« ni uspela."
+msgstr "Neuspela povezava z '%1'. Napaka %2."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2537
 #, kde-format
 msgid "Disconnected from '%1'."
-msgstr "Povezava z »%1« je prekinjena."
+msgstr "Prekinjena povezava z '%1'."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2603
 #, kde-format
@@ -12802,19 +12798,7 @@ msgid "Average"
 msgstr "Povprečje"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:184
-#, fuzzy, kde-format
-#| msgid ""
-#| "The supported chart types are grouped according to the plotted statistics "
-#| "and to the metric defining the limits.<br><br>Individual Values and "
-#| "Moving Ranges, Limits Based on the Average or Median Moving Range:"
-#| "<ul><li>X (XmR) - plot the <b>individual values</b>.</li><li>mR - plot "
-#| "the <b>moving ranges</b>.</li></ul>Averages and Ranges, Limits based on "
-#| "the Average or Median Range:<ul><li>X̅  (X̅R) - plot the <b>averages for "
-#| "each subgroup</b> .</li><li>R (X̅R) - plot the <b>ranges for each "
-#| "subgroup</b>.</li></ul>Averages and Standard Deviations, Limits Based on "
-#| "the Standard Deviations:<ul><li>X̅  (X̅S) - plot the <b>averages for each "
-#| "subgroup</b>.</li><li>S (X̅S) - plot the <b>standard deviations for each "
-#| "subgroup</b>.</li></ul>"
+#, kde-format
 msgid ""
 "The supported chart types are grouped according to the plotted statistics "
 "and to the metric defining the limits.<br><br>Individual Values and Moving "
@@ -12829,15 +12813,14 @@ msgid ""
 msgstr ""
 "Podprte vrste grafikonov so razvrščene glede na izrisano statistiko in "
 "metriko, ki določa omejitve.<br><br>Posamezne vrednosti in gibljivi razponi, "
-"omejitev na podlagi povprečja ali srednjega gibljivega razpona:<ul><li>X "
-"(XmR ) - narišite <b>posamezne vrednosti</b>.</li><li>mR - narišite "
+"omejitve na podlagi drsečega povprečja ali razpona glede na drsečo mediano:"
+"<ul><li>X (XmR ) - nariši <b>posamezne vrednosti</b>.</li><li>mR - nariši "
 "<b>gibljive razpone</b>.</li></ul>Povprečja in razponi, omejitve na podlagi "
-"povprečja ali srednjega obsega:<ul><li>X̅  (X̅R) - narišite <b>povprečja za "
-"vsako podskupino</b>.</li><li>R (X̅R) - narišite <b>razpone za vsako "
-"podskupino</b>.</li></ul>Povprečja in standardni odkloni, omejitve na "
-"podlagi standardnih odklonov:<ul><li>X̅ (X̅S) - narišite <b>povprečja za vsako "
-"podskupino</b >.</li><li>S (X̅S) - narišite <b>standardna odstopanja za vsako "
-"podskupino</b>.</li></ul>"
+"povprečja ali obsega mediane:<ul><li>X̅  (X̅R) - nariši <b>povprečja za vsak "
+"vzorec</b>.</li><li>R (X̅R) - nariši <b>razpone za vsak vzorec</b>.</li></"
+"ul>Povprečja in standardne deviacije, omejitve na podlagi standardnih "
+"deviacij:<ul><li>X̅  (X̅S) - nariši <b>povprečja za vsak vzorec</b >.</"
+"li><li>S (X̅S) - nariši <b>standardne deviacije za vsak vzorec</b>.</li></ul>"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:203
 #, kde-format
@@ -13610,11 +13593,10 @@ msgid "Process Behavior Chart"
 msgstr "Grafikon obnašanja procesa"
 
 #: src/frontend/GuiObserver.cpp:404
-#, fuzzy, kde-format
-#| msgid "Run fit"
+#, kde-format
 msgctxt "@title:window"
 msgid "Run Chart"
-msgstr "Zaženi prileganje"
+msgstr "Zaženi diagram"
 
 #: src/frontend/GuiObserver.cpp:409
 #, kde-format
@@ -20905,17 +20887,15 @@ msgstr "Glava:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bEvaluate)
 #: src/frontend/ui/dockwidgets/notebookdock.ui:100
-#, fuzzy, kde-format
-#| msgid "Evaluate:"
+#, kde-format
 msgid "Evaluate"
-msgstr "Oceni:"
+msgstr "Ovrednoti"
 
 #. i18n: ectx: property (text), widget (QPushButton, bRestart)
 #: src/frontend/ui/dockwidgets/notebookdock.ui:110
-#, fuzzy, kde-format
-#| msgid "star"
+#, kde-format
 msgid "Restart"
-msgstr "zvezda"
+msgstr "Ponovno zaženi"
 
 #. i18n: ectx: property (text), widget (QLabel, bgcolor)
 #: src/frontend/ui/dockwidgets/notedock.ui:72
@@ -21054,17 +21034,15 @@ msgstr "Začetek x:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCenterMetric)
 #: src/frontend/ui/dockwidgets/runchartdock.ui:148
-#, fuzzy, kde-format
-#| msgid "Center"
+#, kde-format
 msgid "Center:"
-msgstr "Na sredini"
+msgstr "Sredina:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCenterLine)
 #: src/frontend/ui/dockwidgets/runchartdock.ui:223
-#, fuzzy, kde-format
-#| msgid "Center Tiled"
+#, kde-format
 msgid "Center Line"
-msgstr "Sredinsko tlakovano"
+msgstr "Osrednja črta"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
