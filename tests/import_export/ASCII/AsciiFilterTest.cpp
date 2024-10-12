@@ -2033,9 +2033,9 @@ void AsciiFilterTest::testAppendRows() {
 	QCOMPARE(spreadsheet.column(1)->integerAt(0), 5);
 	QCOMPARE(spreadsheet.column(1)->integerAt(1), 6);
 	QCOMPARE(spreadsheet.column(1)->integerAt(2), 7);
-	QCOMPARE(spreadsheet.column(0)->integerAt(3), 12);
-	QCOMPARE(spreadsheet.column(0)->integerAt(4), 14);
-	QCOMPARE(spreadsheet.column(0)->integerAt(5), 16);
+	QCOMPARE(spreadsheet.column(1)->integerAt(3), 12);
+	QCOMPARE(spreadsheet.column(1)->integerAt(4), 14);
+	QCOMPARE(spreadsheet.column(1)->integerAt(5), 16);
 }
 
 void AsciiFilterTest::keepLast() {
