@@ -25,8 +25,6 @@ class QTimeLine;
 class AbstractAspect;
 class WorksheetElement;
 
-class RetransformTest;
-
 #ifdef HAVE_TOUCHBAR
 class KDMacTouchBar;
 #endif
@@ -78,7 +76,6 @@ private:
 	void drawForeground(QPainter*, const QRectF&) override;
 	void drawBackground(QPainter*, const QRectF&) override;
 	void drawBackgroundItems(QPainter*, const QRectF&);
-	bool isPlotAtPos(QPoint) const;
 	CartesianPlot* plotAt(QPoint) const;
 	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool background, const bool selection = false);
 	void cartesianPlotAdd(CartesianPlot*, QAction*);

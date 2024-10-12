@@ -18,8 +18,7 @@
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/TextLabel.h"
-#include "backend/worksheet/plots/cartesian/Axis.h"
-#include "backend/worksheet/plots/cartesian/AxisPrivate.h"
+#include "backend/worksheet/plots/cartesian/AxisPrivate.h" // TODO: redesign, don't depend on the private class
 #include "backend/worksheet/plots/cartesian/BoxPlot.h" //TODO: needed for the icon only, remove later once we have a breeze icon
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/cartesian/ReferenceRange.h"
@@ -37,7 +36,6 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <kcoreaddons_version.h>
 
 #include <QActionGroup>
 #include <QApplication>
@@ -56,7 +54,7 @@
 #include <QWheelEvent>
 #include <QWidgetAction>
 
-#include <DockManager.h>
+#include <QGraphicsPixmapItem>
 
 #include <limits>
 
@@ -797,20 +795,6 @@ void WorksheetView::drawBackground(QPainter* painter, const QRectF& rect) {
 	painter->restore();
 }
 
-bool WorksheetView::isPlotAtPos(QPoint pos) const {
-	QGraphicsItem* item = itemAt(pos);
-	if (item) {
-		// Not every element is a WorksheetElementPrivate, for example the
-		// ScaledTextItem of the Textlabel. Therefore it must be checked
-		// it it is a WorksheetElementPrivate or not
-		const auto* w = dynamic_cast<WorksheetElementPrivate*>(item);
-		if (w && ((w->q->type() == AspectType::CartesianPlot) || w->q->parent(AspectType::CartesianPlot)))
-			return true;
-	}
-
-	return false;
-}
-
 CartesianPlot* WorksheetView::plotAt(QPoint pos) const {
 	QGraphicsItem* item = itemAt(pos);
 	if (!item)
@@ -954,7 +938,7 @@ void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
 	if (m_mouseMode == MouseMode::Selection && m_cartesianPlotMouseMode != CartesianPlot::MouseMode::Selection) {
 		// check whether there is a cartesian plot under the cursor
 		// and set the cursor appearance according to the current mouse mode for the cartesian plots
-		if (isPlotAtPos(event->pos())) {
+		if (plotAt(event->pos())) {
 			if (m_cartesianPlotMouseMode == CartesianPlot::MouseMode::ZoomSelection)
 				setCursor(Qt::CrossCursor);
 			else if (m_cartesianPlotMouseMode == CartesianPlot::MouseMode::ZoomXSelection)
@@ -1126,10 +1110,6 @@ void WorksheetView::dragEnterEvent(QDragEnterEvent* event) {
 		return;
 	}
 
-	// select the worksheet in the project explorer and bring the view to the foreground
-	m_worksheet->setSelectedInView(true);
-	m_worksheet->dockWidget()->dockManager()->setDockWidgetFocused(m_worksheet->dockWidget());
-
 	event->setAccepted(true);
 #else
 	Q_UNUSED(event)
@@ -1138,7 +1118,7 @@ void WorksheetView::dragEnterEvent(QDragEnterEvent* event) {
 
 void WorksheetView::dragMoveEvent(QDragMoveEvent* event) {
 	// only accept drop events if we have a plot under the cursor where we can drop columns onto
-	bool plot = isPlotAtPos(event->position().toPoint());
+	bool plot = (plotAt(event->position().toPoint()) != nullptr);
 	event->setAccepted(plot);
 }
 
@@ -1149,6 +1129,9 @@ void WorksheetView::dropEvent(QDropEvent* event) {
 
 	const auto* mimeData = event->mimeData();
 	plot->processDropEvent(plot->project()->droppedAspects(mimeData));
+
+	// select the worksheet in the project explorer and bring the view to the foreground
+	m_worksheet->setSelectedInView(true); // FIXME: doesn't work
 }
 
 // ##############################################################################
