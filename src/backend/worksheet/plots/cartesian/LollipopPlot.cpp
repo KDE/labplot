@@ -1099,11 +1099,11 @@ void LollipopPlot::loadThemeConfig(const KConfig& config) {
 	else
 		group = config.group(QStringLiteral("LollipopPlot"));
 
-	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
+	Q_D(LollipopPlot);
+	const auto* plot = d->m_plot;
 	int index = plot->curveChildIndex(this);
 	const QColor themeColor = plot->themeColorPalette(index);
 
-	Q_D(LollipopPlot);
 	d->suppressRecalc = true;
 
 	for (int i = 0; i < d->dataColumns.count(); ++i) {

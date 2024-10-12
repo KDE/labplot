@@ -485,11 +485,11 @@ void RunChart::loadThemeConfig(const KConfig& config) {
 	else
 		group = config.group(QStringLiteral("RunChart"));
 
-	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
+	Q_D(RunChart);
+	const auto* plot = d->m_plot;
 	int index = plot->curveChildIndex(this);
 	QColor themeColor = plot->themeColorPalette(index);
 
-	Q_D(RunChart);
 	d->suppressRecalc = true;
 
 	d->dataCurve->line()->loadThemeConfig(group, themeColor);

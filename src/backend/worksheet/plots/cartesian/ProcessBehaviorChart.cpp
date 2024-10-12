@@ -998,11 +998,11 @@ void ProcessBehaviorChart::loadThemeConfig(const KConfig& config) {
 	else
 		group = config.group(QStringLiteral("ProcessBehaviorChart"));
 
-	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
+	Q_D(ProcessBehaviorChart);
+	const auto* plot = d->m_plot;
 	int index = plot->curveChildIndex(this);
 	QColor themeColor = plot->themeColorPalette(index);
 
-	Q_D(ProcessBehaviorChart);
 	d->suppressRecalc = true;
 
 	d->dataCurve->line()->loadThemeConfig(group, themeColor);

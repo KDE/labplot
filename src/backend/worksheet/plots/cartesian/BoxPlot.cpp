@@ -1960,11 +1960,11 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	else
 		group = config.group(QStringLiteral("BoxPlot"));
 
-	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
+	Q_D(BoxPlot);
+	const auto* plot = d->m_plot;
 	int index = plot->curveChildIndex(this);
 	const QColor themeColor = plot->themeColorPalette(index);
 
-	Q_D(BoxPlot);
 	d->suppressRecalc = true;
 
 	for (int i = 0; i < d->dataColumns.count(); ++i) {

@@ -1785,13 +1785,12 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	else
 		group = config.group(QStringLiteral("Histogram"));
 
-	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
+	Q_D(Histogram);
+	const auto* plot = d->m_plot;
 	int index = plot->curveChildIndex(this);
 	const QColor themeColor = plot->themeColorPalette(index);
 
 	QPen p;
-
-	Q_D(Histogram);
 	d->suppressRecalc = true;
 
 	d->line->loadThemeConfig(group, themeColor);
