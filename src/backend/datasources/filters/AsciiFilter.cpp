@@ -623,8 +623,6 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 	// Shrink, because some data might got skipped
 	m_DataContainer.resize(rowIndex);
 
-	m_DataContainer = DataContainer(); // Reset datacontainer. The data is already stored in the columns, so no freeing of memory is required
-
 	dataSource->finalizeImport(0, 0, properties.columnNames.size() - 1, properties.dateTimeFormat, columnImportMode);
 	return Status::Success;
 }
