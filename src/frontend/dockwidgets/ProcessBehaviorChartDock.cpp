@@ -20,6 +20,7 @@
 
 #include <KConfig>
 #include <KLocalizedString>
+#include <KMessageWidget>
 
 /*!
   \class ProcessBehaviorChartDock
@@ -160,6 +161,7 @@ void ProcessBehaviorChartDock::setPlots(QList<ProcessBehaviorChart*> list) {
 	connect(m_plot, &ProcessBehaviorChart::typeChanged, this, &ProcessBehaviorChartDock::plotTypeChanged);
 	connect(m_plot, &ProcessBehaviorChart::limitsMetricChanged, this, &ProcessBehaviorChartDock::plotLimitsMetricChanged);
 	connect(m_plot, &ProcessBehaviorChart::sampleSizeChanged, this, &ProcessBehaviorChartDock::plotSampleSizeChanged);
+	connect(m_plot, &ProcessBehaviorChart::statusInfo, this, &ProcessBehaviorChartDock::showStatusInfo);
 }
 
 void ProcessBehaviorChartDock::retranslateUi() {
@@ -196,6 +198,13 @@ void ProcessBehaviorChartDock::retranslateUi() {
 		"<ul>"
 		"<li>X̅  (X̅S) - plot the <b>averages for each sample</b>.</li>"
 		"<li>S (X̅S) - plot the <b>standard deviations for each sample</b>.</li>"
+		"</ul>"
+		"Counts:"
+		"<ul>"
+		"<li>P - plot <b>binomial proportions</b>.</li>"
+		"<li>NP - plot <b>binomial counts</b>.</li>"
+		"<li>C - plot <b>Poisson counts</b>.</li>"
+		"<li>U - plot <b>Poisson raits</b>.</li>"
 		"</ul>");
 	ui.lType->setToolTip(info);
 	ui.cbType->setToolTip(info);
@@ -308,6 +317,22 @@ void ProcessBehaviorChartDock::plotSampleSizeChanged(int value) {
 void ProcessBehaviorChartDock::plotNegativeLowerLimitEnabledChanged(bool enabled) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.chbNegativeLowerLimit->setChecked(enabled);
+}
+
+void ProcessBehaviorChartDock::showStatusInfo(const QString& info) {
+	if (info.isEmpty()) {
+		if (m_messageWidget && m_messageWidget->isVisible())
+			m_messageWidget->close();
+	} else {
+		if (!m_messageWidget) {
+			m_messageWidget = new KMessageWidget(this);
+			m_messageWidget->setMessageType(KMessageWidget::Warning);
+			static_cast<QGridLayout*>(ui.tabGeneral->layout())->addWidget(m_messageWidget, 13, 0, 1, 3);
+		}
+		m_messageWidget->setText(info);
+		m_messageWidget->animatedShow();
+		QDEBUG(info);
+	}
 }
 
 //*************************************************************
