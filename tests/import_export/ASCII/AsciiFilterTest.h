@@ -92,8 +92,11 @@ private Q_SLOTS:
 	// matrix import
 	void testMatrixHeader();
 
-	void testAppend();
-	// void testPrepend();
+	void testAppendRows();
+	void keepLast();
+
+	void testAppendColumns();
+	void testPrependColumns();
 
 	// check updates in the dependent objects after the data was modified by the import
 	void spreadsheetFormulaUpdateAfterImport();

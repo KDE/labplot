@@ -20,7 +20,7 @@ public:
 	AsciiFilterPrivate(AsciiFilter *owner);
 	AsciiFilter::Status initialize(AsciiFilter::Properties p);
 	AsciiFilter::Status initialize(QIODevice& device);
-	AsciiFilter::Status readFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, qint64 from, qint64 lines, qint64 &bytes_read);
+	AsciiFilter::Status readFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode columnImportMode, qint64 from, qint64 lines, qint64 keepNRows, qint64 &bytes_read);
 	QVector<QStringList> preview(const QString& fileName, int lines);
 
 	AsciiFilter::Properties properties;
@@ -53,6 +53,9 @@ private:
 			m_dataContainer.push_back(data);
 			m_columnModes.append(cm);
 		}
+
+		// Removes the first n elements
+		void removeFirst(int n);
 
 		template<class T>
 		void setData(int indexDataContainer, int indexData, T value) {
@@ -88,6 +91,7 @@ private:
 private:
 	AsciiFilter* const q;
 	static const size_t m_dataTypeLines = 10; // maximum lines to read for determining data types
+	int numberRowsReallocation = 10000; // When importing new data reallocate that amount of rows. So not for every row it must be reallocated
 
 	friend class AsciiFilterTest;
 };
