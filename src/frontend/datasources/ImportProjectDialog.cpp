@@ -167,13 +167,13 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type)
 
 		info = i18n(
 			"Multiple layers are used in Origin to either implement multiple plots or multiple axes on the same plot "
-			"(see <a href=\"https://www.originlab.com/doc/Origin-Help/MultiLayer-Graph\">Origin's Documentation</a> for more details)."
+			"(see <a href=\"https://www.originlab.com/doc/Origin-Help/MultiLayer-Graph\">Origin's Documentation</a> for more details).<br>"
 			"LabPlot can process only one type at the same time."
 			"<br><br>"
 			"Specify how to import multi-layered graphs in the selected project:"
 			"<ul>"
 			"<li>As Plot Area - a new plot area is created for every layer.</li>"
-			"<li>As Coordinate System - a new coordinate system (data range) on the same plot area is created for every layer</li>"
+			"<li>As Coordinate System - a new coordinate system (data range) on the same plot area is created for every layer.</li>"
 			"</ul>");
 
 		ui.lGraphLayer->setWhatsThis(info);
