@@ -204,7 +204,7 @@ void ProcessBehaviorChartDock::retranslateUi() {
 		"<li>P - plot <b>binomial proportions</b>.</li>"
 		"<li>NP - plot <b>binomial counts</b>.</li>"
 		"<li>C - plot <b>Poisson counts</b>.</li>"
-		"<li>U - plot <b>Poisson raits</b>.</li>"
+		"<li>U - plot <b>Poisson rates</b>.</li>"
 		"</ul>");
 	ui.lType->setToolTip(info);
 	ui.cbType->setToolTip(info);
