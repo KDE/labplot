@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-08 01:46+0000\n"
-"PO-Revision-Date: 2024-08-24 11:41+0200\n"
+"POT-Creation-Date: 2024-10-13 01:45+0000\n"
+"PO-Revision-Date: 2024-10-12 10:39+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -64,7 +64,7 @@ msgstr "Zmień nazwę"
 #: src/backend/spreadsheet/Spreadsheet.cpp:652
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:487
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:273
-#: src/frontend/worksheet/WorksheetView.cpp:136
+#: src/frontend/worksheet/WorksheetView.cpp:134
 #, kde-format
 msgid "Delete"
 msgstr "Usuń"
@@ -276,7 +276,7 @@ msgstr "Duża liczba całkowita"
 #: src/frontend/ui/dockwidgets/valuewidget.ui:269
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:280
 #: src/frontend/widgets/LabelWidget.cpp:208
-#: src/frontend/worksheet/WorksheetView.cpp:220
+#: src/frontend/worksheet/WorksheetView.cpp:218
 #, kde-format
 msgid "Text"
 msgstr "Tekstowy"
@@ -574,10 +574,9 @@ msgid "%1: clear column"
 msgstr "%1: wyczyść kolumnę"
 
 #: src/backend/core/column/Column.cpp:589
-#, fuzzy, kde-format
-#| msgid "%1: set cell values"
+#, kde-format
 msgid "%1: set random values"
-msgstr "%1: ustaw wartości komórek"
+msgstr "%1: ustaw losowe wartości"
 
 #: src/backend/core/column/Column.cpp:1621
 #, kde-format
@@ -1080,27 +1079,24 @@ msgid "Success"
 msgstr "Powodzenie"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:444
-#, fuzzy, kde-format
-#| msgid "The device is not opened."
+#, kde-format
 msgid "Device at end"
-msgstr "Urządzenie nie jest otwarte."
+msgstr "Urządzenie na końcu"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:446
 #, kde-format
 msgid "Not enough rows selected. Increase number of rows."
-msgstr ""
+msgstr "Zaznaczono niewystarczająco wierszy. Zaznacz ich więcej."
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:448
-#, fuzzy, kde-format
-#| msgid "Unable to open file:"
+#, kde-format
 msgid "Unable to open device"
-msgstr "Nie można otworzyć pliku:"
+msgstr "Nie można otworzyć urządzenia"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:450
-#, fuzzy, kde-format
-#| msgid "Unhandled error"
+#, kde-format
 msgid "Unhandled case"
-msgstr "Nieobsługiwany błąd"
+msgstr "Nieobsługiwany przypadek"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:560
 #: src/backend/datasources/filters/AsciiFilter.cpp:772
@@ -1152,10 +1148,9 @@ msgid "Value %1"
 msgstr "Wartość %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:1259
-#, fuzzy, kde-format
-#| msgid "Failed to open the device/file."
+#, kde-format
 msgid "Failed to prepare device/file: %1"
-msgstr "Nie udało się otworzyć urządzenia/pliku."
+msgstr "Nie udało się przygotować urządzenia/pliku: %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:1291
 #: src/backend/datasources/filters/BinaryFilter.cpp:444
@@ -2352,18 +2347,14 @@ msgid "Invalid region specified."
 msgstr "Wskazano nieprawidłowy obszar."
 
 #: src/backend/datasources/LiveDataSource.cpp:711
-#, fuzzy, kde-format
-#| msgid "File does not exist."
+#, kde-format
 msgid "Device doesn't exist."
-msgstr "Plik nie istnieje."
+msgstr "Urządzenie nie istnieje."
 
 #: src/backend/datasources/LiveDataSource.cpp:714
-#, fuzzy, kde-format
-#| msgid ""
-#| "Failed to open the device. Please check your permissions on this device."
+#, kde-format
 msgid "User doesn't have enough permissions to open the device."
-msgstr ""
-"Nie udało się otworzyć urządzenia. Sprawdź swoje uprawnienia do urządzenia."
+msgstr "Użytkownik nie ma wystarczających uprawnień do otwarcia urządzenia."
 
 #: src/backend/datasources/LiveDataSource.cpp:717
 #, kde-format
@@ -2371,8 +2362,7 @@ msgid "Device already opened."
 msgstr "Urządzenie jest już otwarte."
 
 #: src/backend/datasources/LiveDataSource.cpp:720
-#, fuzzy, kde-format
-#| msgid "The device is not opened."
+#, kde-format
 msgid "Device is not opened."
 msgstr "Urządzenie nie jest otwarte."
 
@@ -2382,16 +2372,14 @@ msgid "Failed to read data."
 msgstr "Nie udało się odczytać danych."
 
 #: src/backend/datasources/LiveDataSource.cpp:726
-#, fuzzy, kde-format
-#| msgid "Server unavailable"
+#, kde-format
 msgid "Device not available."
-msgstr "Serwer niedostępny"
+msgstr "Urządzenie nie jest dostępne."
 
 #: src/backend/datasources/LiveDataSource.cpp:729
-#, fuzzy, kde-format
-#| msgid "An error occurred."
+#, kde-format
 msgid "Timeout occured."
-msgstr "Wystąpił błąd."
+msgstr "Upłynął czas oczekiwania."
 
 #: src/backend/datasources/LiveDataSource.cpp:734
 #, kde-format
@@ -3611,7 +3599,7 @@ msgstr "Średnia arytmetyczna"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
 #: src/backend/gsl/functions.cpp:252
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:70
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:168
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:170
 #: src/frontend/dockwidgets/RunChartDock.cpp:147
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:135
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:73
@@ -7904,7 +7892,7 @@ msgid "%1: set data columns"
 msgstr "%1: ustaw kolumny danych"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:311
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:383
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:389
 #, kde-format
 msgid "%1: set type"
 msgstr "%1: ustaw rodzaj"
@@ -8166,8 +8154,7 @@ msgstr "Wygładź"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:707
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1940
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:626
-#, fuzzy, kde-format
-#| msgid "Fit"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit"
 msgstr "Dopasuj"
@@ -8256,8 +8243,8 @@ msgstr "Oś pionowa"
 #: src/frontend/matrix/MatrixView.cpp:133
 #: src/frontend/notebook/NotebookView.cpp:109
 #: src/frontend/widgets/BackgroundWidget.cpp:123
-#: src/frontend/worksheet/WorksheetView.cpp:221
-#: src/frontend/worksheet/WorksheetView.cpp:1355
+#: src/frontend/worksheet/WorksheetView.cpp:219
+#: src/frontend/worksheet/WorksheetView.cpp:1338
 #, kde-format
 msgid "Image"
 msgstr "Obraz"
@@ -8292,14 +8279,13 @@ msgstr "Zakres odniesienia"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:512
 #, kde-format
 msgid "Process Behavior Chart"
-msgstr ""
+msgstr "Wykres zachowania procesu"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:515
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:517
-#, fuzzy, kde-format
-#| msgid "Run fit"
+#, kde-format
 msgid "Run Chart"
-msgstr "Wykonaj wpasowanie"
+msgstr "Wykonaj wykres"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:535
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:615
@@ -8364,8 +8350,8 @@ msgstr "Funkcja błędu"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:634
 #: src/frontend/MainWin.cpp:865 src/frontend/notebook/NotebookView.cpp:167
 #: src/frontend/workbook/WorkbookView.cpp:135
-#: src/frontend/worksheet/WorksheetView.cpp:291
-#: src/frontend/worksheet/WorksheetView.cpp:430
+#: src/frontend/worksheet/WorksheetView.cpp:289
+#: src/frontend/worksheet/WorksheetView.cpp:428
 #, kde-format
 msgid "Add New"
 msgstr "Dodaj nowy"
@@ -8385,7 +8371,7 @@ msgstr "Wykresy słupkowe"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:656
 #, kde-format
 msgid "Continual Improvement Plots"
-msgstr ""
+msgstr "Wykresy ciągłego ulepszania"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:663
 #, kde-format
@@ -8405,7 +8391,7 @@ msgstr "Analiza"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:747
 #: src/frontend/ThemeHandler.cpp:49 src/frontend/ThemeHandler.cpp:144
-#: src/frontend/worksheet/WorksheetView.cpp:541
+#: src/frontend/worksheet/WorksheetView.cpp:539
 #, kde-format
 msgid "Theme"
 msgstr "Wygląd"
@@ -8598,8 +8584,7 @@ msgstr "%1: dopasowanie do '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1944
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:726
-#, fuzzy, kde-format
-#| msgid "Fit to '%1'"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit to '%1'"
 msgstr "Dopasowanie do '%1'"
@@ -8640,8 +8625,8 @@ msgid "%1: add function curve"
 msgstr "%1: dodaj krzywą funkcji"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2053
-#: src/frontend/worksheet/WorksheetView.cpp:1351
-#: src/frontend/worksheet/WorksheetView.cpp:1352
+#: src/frontend/worksheet/WorksheetView.cpp:1334
+#: src/frontend/worksheet/WorksheetView.cpp:1335
 #, kde-format
 msgid "Text Label"
 msgstr "Etykieta tekstowa"
@@ -8814,7 +8799,7 @@ msgstr "Dopasuj do rozkładu dwumianowego"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:404
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:227
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:371
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:377
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:252
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:241
 #, kde-format
@@ -8895,23 +8880,25 @@ msgstr "%1: ustaw szerokość pasma"
 msgid "%1: legend visibility changed"
 msgstr "%1: widoczność legendy uległa zmianie"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:390
-#, fuzzy, kde-format
-#| msgid "%1: set axis start"
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:396
+#, kde-format
 msgid "%1: set limits metric"
-msgstr "%1: ustaw początek osi"
+msgstr "%1: ustaw metrykę granic"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:397
-#, fuzzy, kde-format
-#| msgid "%1: set symbol size"
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:403
+#, kde-format
 msgid "%1: set sample size"
-msgstr "%1: ustaw rozmiar symbolu"
+msgstr "%1: ustaw rozmiar próbki"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:404
-#, fuzzy, kde-format
-#| msgid "%1: change geometry rect"
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:410
+#, kde-format
 msgid "%1: change negative lower limit"
-msgstr "%1: zmień prostokąt geometrii"
+msgstr "%1: zmień ujemną niższą granicę"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:541
+#, kde-format
+msgid "The last sample is incomplete and was omitted."
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:264
 #, kde-format
@@ -8934,10 +8921,9 @@ msgid "%1: set end logical position"
 msgstr "%1: ustaw końcowe położenie logiczne"
 
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:253
-#, fuzzy, kde-format
-#| msgid "%1: set axis start"
+#, kde-format
 msgid "%1: set center metric"
-msgstr "%1: ustaw początek osi"
+msgstr "%1: ustaw metrykę środka"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:150
 #, kde-format
@@ -9494,8 +9480,7 @@ msgid "%1: set fit options and perform the fit"
 msgstr "%1: określ ustawienia dopasowania i wykonaj dopasowanie"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1823
-#, fuzzy, kde-format
-#| msgid "Fit Results"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit Results"
 msgstr "Dopasuj wyniki"
@@ -9650,8 +9635,7 @@ msgid "Fit model not specified!"
 msgstr "Nie podano modelu wpasowywania!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3092
-#, fuzzy, kde-format
-#| msgid "Fit Results"
+#, kde-format
 msgctxt "Curve Fitting"
 msgid "Fit Results"
 msgstr "Dopasuj wyniki"
@@ -9976,33 +9960,29 @@ msgid "Blue"
 msgstr "Niebieski"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:195
-#, fuzzy, kde-format
-#| msgid "Hue"
+#, kde-format
 msgid "Hue"
 msgstr "Odcień"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:195
-#, fuzzy, kde-format
-#| msgid "Saturation:"
+#, kde-format
 msgid "Saturation"
-msgstr "Nasycenie:"
+msgstr "Nasycenie"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:224
-#, fuzzy, kde-format
-#| msgid "Zoom View"
+#, kde-format
 msgid "Icon View"
-msgstr "Zbliż"
+msgstr "Widok ikon"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:232
-#, fuzzy, kde-format
-#| msgid "View"
+#, kde-format
 msgid "List View"
-msgstr "Widok"
+msgstr "Widok listy"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:240
 #, kde-format
 msgid "List View with Details"
-msgstr ""
+msgstr "Widok listy ze szczegółami"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:314
 #: src/frontend/dockwidgets/CursorDock.cpp:148
@@ -10025,8 +10005,8 @@ msgstr "Skopiuj wszystko"
 #: src/frontend/datapicker/DatapickerImageView.cpp:120
 #: src/frontend/matrix/MatrixView.cpp:192
 #: src/frontend/notebook/NotebookView.cpp:53
-#: src/frontend/worksheet/WorksheetView.cpp:145
-#: src/frontend/worksheet/WorksheetView.cpp:378
+#: src/frontend/worksheet/WorksheetView.cpp:143
+#: src/frontend/worksheet/WorksheetView.cpp:376
 #, kde-format
 msgid "Zoom In"
 msgstr "Powiększ"
@@ -10034,43 +10014,41 @@ msgstr "Powiększ"
 #: src/frontend/datapicker/DatapickerImageView.cpp:123
 #: src/frontend/matrix/MatrixView.cpp:193
 #: src/frontend/notebook/NotebookView.cpp:57
-#: src/frontend/worksheet/WorksheetView.cpp:146
-#: src/frontend/worksheet/WorksheetView.cpp:382
+#: src/frontend/worksheet/WorksheetView.cpp:144
+#: src/frontend/worksheet/WorksheetView.cpp:380
 #, kde-format
 msgid "Zoom Out"
 msgstr "Pomniejsz"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:126
 #: src/frontend/matrix/MatrixView.cpp:194
-#: src/frontend/worksheet/WorksheetView.cpp:147
+#: src/frontend/worksheet/WorksheetView.cpp:145
 #, kde-format
 msgid "Original Size"
 msgstr "Rozmiar pierwotny"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:129
-#: src/frontend/worksheet/WorksheetView.cpp:169
-#, fuzzy, kde-format
-#| msgid "Fit to Height"
+#: src/frontend/worksheet/WorksheetView.cpp:167
+#, kde-format
 msgctxt "Zoom"
 msgid "Fit to Height"
-msgstr "Dopasuj do wysokości"
+msgstr "Zmieść na wysokości"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:130
-#: src/frontend/worksheet/WorksheetView.cpp:172
-#, fuzzy, kde-format
-#| msgid "Fit to Width"
+#: src/frontend/worksheet/WorksheetView.cpp:170
+#, kde-format
 msgctxt "Zoom"
 msgid "Fit to Width"
-msgstr "Dopasuj do szerokości"
+msgstr "Zmieść na szerokości"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:133
-#: src/frontend/worksheet/WorksheetView.cpp:186
+#: src/frontend/worksheet/WorksheetView.cpp:184
 #, kde-format
 msgid "Navigate"
 msgstr "Poruszaj się"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:137
-#: src/frontend/worksheet/WorksheetView.cpp:189
+#: src/frontend/worksheet/WorksheetView.cpp:187
 #, kde-format
 msgid "Select and Zoom"
 msgstr "Zaznacz i zbliż"
@@ -10116,38 +10094,38 @@ msgid "Shift Down"
 msgstr "Przesuń w dół"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:167
-#: src/frontend/worksheet/WorksheetView.cpp:193
+#: src/frontend/worksheet/WorksheetView.cpp:191
 #, kde-format
 msgid "No Magnification"
 msgstr "Bez wzmocnienia"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:171
-#: src/frontend/worksheet/WorksheetView.cpp:197
+#: src/frontend/worksheet/WorksheetView.cpp:195
 #, kde-format
 msgid "2x Magnification"
 msgstr "2x wzmocnienie"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:174
-#: src/frontend/worksheet/WorksheetView.cpp:200
+#: src/frontend/worksheet/WorksheetView.cpp:198
 #, kde-format
 msgid "3x Magnification"
 msgstr "3x wzmocnienie"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:177
-#: src/frontend/worksheet/WorksheetView.cpp:203
+#: src/frontend/worksheet/WorksheetView.cpp:201
 #, kde-format
 msgid "4x Magnification"
 msgstr "4x wzmocnienie"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:180
-#: src/frontend/worksheet/WorksheetView.cpp:206
+#: src/frontend/worksheet/WorksheetView.cpp:204
 #, kde-format
 msgid "5x Magnification"
 msgstr "5x wzmocnienie"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:213
-#: src/frontend/worksheet/WorksheetView.cpp:438
-#: src/frontend/worksheet/WorksheetView.cpp:489
+#: src/frontend/worksheet/WorksheetView.cpp:436
+#: src/frontend/worksheet/WorksheetView.cpp:487
 #, kde-format
 msgid "Mouse Mode"
 msgstr "Tryb myszy"
@@ -10163,7 +10141,7 @@ msgid "Move Last Point"
 msgstr "Ustaw punkty osi"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:236
-#: src/frontend/worksheet/WorksheetView.cpp:455
+#: src/frontend/worksheet/WorksheetView.cpp:453
 #, kde-format
 msgid "Magnification"
 msgstr "Wzmocnienie"
@@ -10204,7 +10182,7 @@ msgstr "Krzywa"
 #: src/frontend/datapicker/DatapickerImageView.cpp:870
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4068
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4122
-#: src/frontend/worksheet/WorksheetView.cpp:2196
+#: src/frontend/worksheet/WorksheetView.cpp:2179
 #, kde-format
 msgid "Failed to export"
 msgstr "Nie udało się wyeksportować"
@@ -10212,7 +10190,7 @@ msgstr "Nie udało się wyeksportować"
 #: src/frontend/datapicker/DatapickerImageView.cpp:870
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4068
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4122
-#: src/frontend/worksheet/WorksheetView.cpp:2196
+#: src/frontend/worksheet/WorksheetView.cpp:2179
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "Nie udało się zapisać do '%1'. Sprawdź ścieżkę."
@@ -11061,12 +11039,16 @@ msgstr "Plik DBC (*.dbc)"
 msgid ""
 "Origin Project files need to be opened with \"Import -> Origin Project\"!"
 msgstr ""
+"Pliki projektów Origin należy otwierać poprzez \"Zaimportuj -> Projekt Origin"
+"\"!"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1056
 #, kde-format
 msgid ""
 "LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"
 msgstr ""
+"Pliki projektów LabPlot należy otwierać poprzez \"Zaimportuj -> Projekt "
+"LabPlot\"!"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
 #: src/frontend/datasources/ImportFileWidget.cpp:1184
@@ -11221,10 +11203,9 @@ msgid "Couldn't subscribe to all available topics."
 msgstr "Nie można zapisać się na wszystkie dostępne tematy."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2515
-#, fuzzy, kde-format
-#| msgid "Failed to connect to the broker '%1:%2'."
+#, kde-format
 msgid "Failed to connect to '%1'. Error %2."
-msgstr "Nie udało się połączyć z brokerem '%1:%2'."
+msgstr "Nie udało się połączyć z '%1'. Błąd %2."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2537
 #, kde-format
@@ -12135,7 +12116,7 @@ msgstr "%1 osi: wczytano wzorzec \"%2\""
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:352
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:446
 #: src/frontend/dockwidgets/MatrixDock.cpp:266
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:367
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:392
 #: src/frontend/dockwidgets/QQPlotDock.cpp:279
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:229
 #: src/frontend/dockwidgets/RunChartDock.cpp:224
@@ -12717,7 +12698,7 @@ msgid "Silverman"
 msgstr "Silverman"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:350
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:365
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:390
 #: src/frontend/dockwidgets/QQPlotDock.cpp:277
 #: src/frontend/dockwidgets/RunChartDock.cpp:222
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1036
@@ -12807,15 +12788,26 @@ msgstr "%1 macierzy: wczytano wzorzec \"%2\""
 msgid "File Browser"
 msgstr "Przeglądarka plików"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:167
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:169
 #: src/frontend/dockwidgets/RunChartDock.cpp:146
-#, fuzzy, kde-format
-#| msgid "Moving Average"
-msgid "Average"
-msgstr "Średnia ruchoma"
-
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:184
 #, kde-format
+msgid "Average"
+msgstr "Średnia"
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:186
+#, fuzzy, kde-format
+#| msgid ""
+#| "The supported chart types are grouped according to the plotted statistics "
+#| "and to the metric defining the limits.<br><br>Individual Values and "
+#| "Moving Ranges, Limits Based on the Average or Median Moving Range:"
+#| "<ul><li>X (XmR) - plot the <b>individual values</b>.</li><li>mR - plot "
+#| "the <b>moving ranges</b>.</li></ul>Averages and Ranges, Limits based on "
+#| "the Average or Median Range:<ul><li>X̅  (X̅R) - plot the <b>averages for "
+#| "each sample</b> .</li><li>R (X̅R) - plot the <b>ranges for each sample</b>."
+#| "</li></ul>Averages and Standard Deviations, Limits Based on the Standard "
+#| "Deviations:<ul><li>X̅  (X̅S) - plot the <b>averages for each sample</b>.</"
+#| "li><li>S (X̅S) - plot the <b>standard deviations for each sample</b>.</"
+#| "li></ul>"
 msgid ""
 "The supported chart types are grouped according to the plotted statistics "
 "and to the metric defining the limits.<br><br>Individual Values and Moving "
@@ -12826,13 +12818,27 @@ msgid ""
 "(X̅R) - plot the <b>ranges for each sample</b>.</li></ul>Averages and "
 "Standard Deviations, Limits Based on the Standard Deviations:<ul><li>X̅  (X̅S) "
 "- plot the <b>averages for each sample</b>.</li><li>S (X̅S) - plot the "
-"<b>standard deviations for each sample</b>.</li></ul>"
+"<b>standard deviations for each sample</b>.</li></ul>Counts:<ul><li>P - plot "
+"<b>binomial proportions</b>.</li><li>NP - plot <b>binomial counts</b>.</"
+"li><li>C - plot <b>Poisson counts</b>.</li><li>U - plot <b>Poisson raits</b>."
+"</li></ul>"
 msgstr ""
+"Obsługiwane rodzaje wykresów są pogrupowane zgodnie z narysowanymi "
+"statystykami i metrykami określającymi granice.<br><br>Wartości indywidualne "
+"oraz kroczące zakresy, granice oparte na średniej lub medianie kroczących "
+"zakresów:<ul><li>X (XmR) - narysuj <b>wartości indywidualne</b>.</li><li>mR "
+"- narysuj <b>kroczące zakresy</b>.</li></ul>Średnie i zakresy, granice "
+"oparte na średniej lub medianie kroczących:<ul><li>X̅  (X̅R) - narysuj "
+"<b>średnie dla każdej próbki</b> .</li><li>R (X̅R) - narysuj <b>zakresy dla "
+"każdej próbki</b>.</li></ul> Średnie i odchylenia standardowe, granice "
+"oparte na odchyleniach standardowych:<ul><li>X̅  (X̅S) - narysuj  <b>średnie "
+"dla każdej próbki</b>.</li><li>S (X̅S) - narysuj  <b>odchylenia standardowe "
+"dla każdej próbki</b>.</li></ul>"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:203
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:212
 #, kde-format
 msgid "Allow negative values for the lower limit."
-msgstr ""
+msgstr "Zezwól na wartości ujemne dla dolnej granicy."
 
 #: src/frontend/dockwidgets/ProjectDock.cpp:28
 #, kde-format
@@ -12889,25 +12895,25 @@ msgstr ""
 "rozmiaru. W przeciwnym przypadku przeskaluj tylko płótno."
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:46
-#: src/frontend/worksheet/WorksheetView.cpp:238
+#: src/frontend/worksheet/WorksheetView.cpp:236
 #, kde-format
 msgid "No Layout"
 msgstr "Bez układu"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:47
-#: src/frontend/worksheet/WorksheetView.cpp:229
+#: src/frontend/worksheet/WorksheetView.cpp:227
 #, kde-format
 msgid "Vertical Layout"
 msgstr "Układ pionowy"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:48
-#: src/frontend/worksheet/WorksheetView.cpp:232
+#: src/frontend/worksheet/WorksheetView.cpp:230
 #, kde-format
 msgid "Horizontal Layout"
 msgstr "Układ poziomy"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:49
-#: src/frontend/worksheet/WorksheetView.cpp:235
+#: src/frontend/worksheet/WorksheetView.cpp:233
 #, kde-format
 msgid "Grid Layout"
 msgstr "Układ w siatce"
@@ -13260,8 +13266,7 @@ msgid "Number of peaks:"
 msgstr "Liczba szczytów:"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1225
-#, fuzzy, kde-format
-#| msgid "Fit status: %1"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit status: %1"
 msgstr "Stan dopasowania: %1"
@@ -13600,14 +13605,13 @@ msgstr "Wykres Q-Q"
 #, kde-format
 msgctxt "@title:window"
 msgid "Process Behavior Chart"
-msgstr ""
+msgstr "Wykres zachowania procesu"
 
 #: src/frontend/GuiObserver.cpp:404
-#, fuzzy, kde-format
-#| msgid "Run fit"
+#, kde-format
 msgctxt "@title:window"
 msgid "Run Chart"
-msgstr "Wykonaj wpasowanie"
+msgstr "Wykonaj wykres"
 
 #: src/frontend/GuiObserver.cpp:409
 #, kde-format
@@ -14297,7 +14301,7 @@ msgstr "&Okna"
 
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode)
 #: src/frontend/MainWin.cpp:197 src/frontend/ui/settingsworksheetpage.ui:75
-#: src/frontend/worksheet/WorksheetView.cpp:265
+#: src/frontend/worksheet/WorksheetView.cpp:263
 #, kde-format
 msgid "Presenter Mode"
 msgstr "Tryb przedstawiania"
@@ -14730,7 +14734,7 @@ msgstr "Wydrukowano %1"
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/frontend/MainWin.cpp:2409
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1431
-#: src/frontend/worksheet/WorksheetView.cpp:359
+#: src/frontend/worksheet/WorksheetView.cpp:357
 #, kde-format
 msgid "Cursor"
 msgstr "Kursor"
@@ -14857,7 +14861,7 @@ msgstr "Wyczyść wybó&r"
 #: src/frontend/matrix/MatrixView.cpp:125
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:311
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:288
-#: src/frontend/worksheet/WorksheetView.cpp:132
+#: src/frontend/worksheet/WorksheetView.cpp:130
 #, kde-format
 msgid "Select All"
 msgstr "Zaznacz wszystko"
@@ -14997,7 +15001,7 @@ msgid "Header Format"
 msgstr "Format nagłówka"
 
 #: src/frontend/matrix/MatrixView.cpp:295
-#: src/frontend/worksheet/WorksheetView.cpp:444
+#: src/frontend/worksheet/WorksheetView.cpp:442
 #, kde-format
 msgid "Zoom"
 msgstr "Powiększenie"
@@ -15363,7 +15367,7 @@ msgid "Do you really want to delete %1?"
 msgstr "Czy na pewno usunąć %1?"
 
 #: src/frontend/ProjectExplorer.cpp:919
-#: src/frontend/worksheet/WorksheetView.cpp:1446
+#: src/frontend/worksheet/WorksheetView.cpp:1429
 #, kde-format
 msgid "Delete selected object"
 msgid_plural "Delete selected objects"
@@ -16485,8 +16489,7 @@ msgid "Probability Density of '%1'"
 msgstr "Gęstość prawdopodobieństwa '%1'"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:772
-#, fuzzy, kde-format
-#| msgid "Distribution Fit to '%1'"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Distribution Fit to '%1'"
 msgstr "Dostosuj do rozkładu '%1'"
@@ -17185,8 +17188,7 @@ msgid "Conditional Formatting"
 msgstr "Formatowanie warunkowe"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:645
-#, fuzzy, kde-format
-#| msgid "Fit Distribution"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit Distribution"
 msgstr "Dopasuj rozkład"
@@ -19807,7 +19809,7 @@ msgstr "Kolor czcionki:"
 #. i18n: ectx: property (text), widget (QLabel, lGrid)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1620
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:441
-#: src/frontend/worksheet/WorksheetView.cpp:471
+#: src/frontend/worksheet/WorksheetView.cpp:469
 #, kde-format
 msgid "Grid"
 msgstr "Siatka"
@@ -20242,7 +20244,7 @@ msgstr "Rozszerz:"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:553
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:610
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:265
-#: src/frontend/worksheet/WorksheetView.cpp:463
+#: src/frontend/worksheet/WorksheetView.cpp:461
 #, kde-format
 msgid "Layout"
 msgstr "Układ"
@@ -20895,17 +20897,15 @@ msgstr "Nagłówek:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bEvaluate)
 #: src/frontend/ui/dockwidgets/notebookdock.ui:100
-#, fuzzy, kde-format
-#| msgid "Evaluate:"
+#, kde-format
 msgid "Evaluate"
-msgstr "Oblicz:"
+msgstr "Oblicz"
 
 #. i18n: ectx: property (text), widget (QPushButton, bRestart)
 #: src/frontend/ui/dockwidgets/notebookdock.ui:110
-#, fuzzy, kde-format
-#| msgid "star"
+#, kde-format
 msgid "Restart"
-msgstr "gwiazda"
+msgstr "Uruchom ponownie"
 
 #. i18n: ectx: property (text), widget (QLabel, bgcolor)
 #: src/frontend/ui/dockwidgets/notedock.ui:72
@@ -20921,45 +20921,40 @@ msgstr "Kolor tekstu:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNegativeLowerLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:76
-#, fuzzy, kde-format
-#| msgid "Lower limit"
+#, kde-format
 msgid "Lower Limit < 0:"
-msgstr "Granica dolna"
+msgstr "Granica dolna < 0:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLimitsMetric)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:192
 #, kde-format
 msgid "Limits based on:"
-msgstr ""
+msgstr "Granice oparte na:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataLine)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:200
 #: src/frontend/ui/dockwidgets/runchartdock.ui:159
-#, fuzzy, kde-format
-#| msgid "Dot Line"
+#, kde-format
 msgid "Data Line"
-msgstr "Linia kropkowana"
+msgstr "Linia danych"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabControlLimitLines)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:264
-#, fuzzy, kde-format
-#| msgid "Crossing Lines"
+#, kde-format
 msgid "Center/Limits Lines"
-msgstr "Krzyżujące się linie"
+msgstr "Linie środkowe/graniczne"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpperLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:319
-#, fuzzy, kde-format
-#| msgid "Upper limit"
+#, kde-format
 msgid "Upper Limit"
-msgstr "Granica górna"
+msgstr "Górna granica"
 
 #. i18n: ectx: property (text), widget (QLabel, lLowerLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:363
-#, fuzzy, kde-format
-#| msgid "Lower limit"
+#, kde-format
 msgid "Lower Limit"
-msgstr "Granica dolna"
+msgstr "Dolna granica"
 
 #. i18n: ectx: property (text), widget (QLabel, lVersion_2)
 #: src/frontend/ui/dockwidgets/projectdock.ui:66
@@ -21049,17 +21044,15 @@ msgstr "Początek X:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCenterMetric)
 #: src/frontend/ui/dockwidgets/runchartdock.ui:148
-#, fuzzy, kde-format
-#| msgid "Center"
+#, kde-format
 msgid "Center:"
-msgstr "Środek"
+msgstr "Środek:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCenterLine)
 #: src/frontend/ui/dockwidgets/runchartdock.ui:223
-#, fuzzy, kde-format
-#| msgid "Center Tiled"
+#, kde-format
 msgid "Center Line"
-msgstr "Kafelkowi wyśrodkowane"
+msgstr "Linia środkowa"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
@@ -23998,29 +23991,26 @@ msgstr "Zakończ prezentację"
 msgid "Pin the navigation panel"
 msgstr "Przypnij do paska przemieszczania się"
 
-#: src/frontend/worksheet/WorksheetView.cpp:165
-#, fuzzy, kde-format
-#| msgid "No fit"
+#: src/frontend/worksheet/WorksheetView.cpp:163
+#, kde-format
 msgctxt "Zoom"
 msgid "No fit"
 msgstr "Bez wpasowania"
 
-#: src/frontend/worksheet/WorksheetView.cpp:175
-#, fuzzy, kde-format
-#| msgid "Fit to Selection"
+#: src/frontend/worksheet/WorksheetView.cpp:173
+#, kde-format
 msgctxt "Zoom"
 msgid "Fit to Selection"
 msgstr "Dopasuj do zaznaczenia"
 
-#: src/frontend/worksheet/WorksheetView.cpp:178
-#, fuzzy, kde-format
-#| msgid "Fit"
+#: src/frontend/worksheet/WorksheetView.cpp:176
+#, kde-format
 msgctxt "Zoom"
 msgid "Fit"
 msgstr "Dopasuj"
 
-#: src/frontend/worksheet/WorksheetView.cpp:183
-#: src/frontend/worksheet/WorksheetView.cpp:334
+#: src/frontend/worksheet/WorksheetView.cpp:181
+#: src/frontend/worksheet/WorksheetView.cpp:332
 #, kde-format
 msgid "Select and Edit"
 msgstr "Zaznacz i edytuj"
@@ -24028,72 +24018,72 @@ msgstr "Zaznacz i edytuj"
 #. i18n("Selection"), mouseModeActionGroup);
 #. selectionModeAction->setCheckable(true);
 #. "Add new" related actions
-#: src/frontend/worksheet/WorksheetView.cpp:214
+#: src/frontend/worksheet/WorksheetView.cpp:212
 #, kde-format
 msgid "Four Axes"
 msgstr "Cztery osie"
 
-#: src/frontend/worksheet/WorksheetView.cpp:215
+#: src/frontend/worksheet/WorksheetView.cpp:213
 #, kde-format
 msgid "Two Axes"
 msgstr "Dwie osie"
 
-#: src/frontend/worksheet/WorksheetView.cpp:216
+#: src/frontend/worksheet/WorksheetView.cpp:214
 #, kde-format
 msgid "Two Axes, Centered"
 msgstr "Dwie osie, wyśrodkowane"
 
-#: src/frontend/worksheet/WorksheetView.cpp:218
+#: src/frontend/worksheet/WorksheetView.cpp:216
 #, kde-format
 msgid "Two Axes, Crossing at Origin"
 msgstr "Dwie osie, przecinające się w początku"
 
-#: src/frontend/worksheet/WorksheetView.cpp:219
+#: src/frontend/worksheet/WorksheetView.cpp:217
 #, kde-format
 msgid "Load from Template"
 msgstr "Wczytaj ze wzorca"
 
-#: src/frontend/worksheet/WorksheetView.cpp:242
+#: src/frontend/worksheet/WorksheetView.cpp:240
 #, kde-format
 msgid "No Grid"
 msgstr "Brak siatki"
 
-#: src/frontend/worksheet/WorksheetView.cpp:247
+#: src/frontend/worksheet/WorksheetView.cpp:245
 #, kde-format
 msgid "Dense Line Grid"
 msgstr "Gęsta siatka linii"
 
-#: src/frontend/worksheet/WorksheetView.cpp:250
+#: src/frontend/worksheet/WorksheetView.cpp:248
 #, kde-format
 msgid "Sparse Line Grid"
 msgstr "Rzadka siatka linii"
 
-#: src/frontend/worksheet/WorksheetView.cpp:253
+#: src/frontend/worksheet/WorksheetView.cpp:251
 #, kde-format
 msgid "Dense Dot Grid"
 msgstr "Gęsta siatka kropek"
 
-#: src/frontend/worksheet/WorksheetView.cpp:256
+#: src/frontend/worksheet/WorksheetView.cpp:254
 #, kde-format
 msgid "Sparse Dot Grid"
 msgstr "Rzadka siatka kropek"
 
-#: src/frontend/worksheet/WorksheetView.cpp:259
+#: src/frontend/worksheet/WorksheetView.cpp:257
 #, kde-format
 msgid "Custom Grid"
 msgstr "Własna siatka"
 
-#: src/frontend/worksheet/WorksheetView.cpp:262
+#: src/frontend/worksheet/WorksheetView.cpp:260
 #, kde-format
 msgid "Snap to Grid"
 msgstr "Przyciągaj do siatki"
 
-#: src/frontend/worksheet/WorksheetView.cpp:282
+#: src/frontend/worksheet/WorksheetView.cpp:280
 #, kde-format
 msgid "Interactive Plots"
 msgstr "Interaktywne wykresy"
 
-#: src/frontend/worksheet/WorksheetView.cpp:283
+#: src/frontend/worksheet/WorksheetView.cpp:281
 #, kde-format
 msgid ""
 "If not activated, plots on the worksheet don't react on drag and mouse wheel "
@@ -24102,129 +24092,129 @@ msgstr ""
 "Po wyłączeniu, wykresy na arkuszu pracy nie reagują na zdarzenia "
 "przeciągania i rolki myszy."
 
-#: src/frontend/worksheet/WorksheetView.cpp:300
-#: src/frontend/worksheet/WorksheetView.cpp:314
+#: src/frontend/worksheet/WorksheetView.cpp:298
+#: src/frontend/worksheet/WorksheetView.cpp:312
 #, kde-format
 msgid "Selected Plot Areas"
 msgstr "Zaznaczone obszary wykresów"
 
-#: src/frontend/worksheet/WorksheetView.cpp:302
-#: src/frontend/worksheet/WorksheetView.cpp:316
+#: src/frontend/worksheet/WorksheetView.cpp:300
+#: src/frontend/worksheet/WorksheetView.cpp:314
 #, kde-format
 msgid "All Plot Areas"
 msgstr "Wszystkie obszary wykresu"
 
-#: src/frontend/worksheet/WorksheetView.cpp:304
+#: src/frontend/worksheet/WorksheetView.cpp:302
 #, kde-format
 msgid "All Plot Areas X"
 msgstr "Wszystkie X obszarów wykresów"
 
-#: src/frontend/worksheet/WorksheetView.cpp:306
+#: src/frontend/worksheet/WorksheetView.cpp:304
 #, kde-format
 msgid "All Plot Areas Y"
 msgstr "Wszystkie Y obszarów wykresów"
 
-#: src/frontend/worksheet/WorksheetView.cpp:339
+#: src/frontend/worksheet/WorksheetView.cpp:337
 #, kde-format
 msgid "Crosshair"
 msgstr "Krzyżyk"
 
-#: src/frontend/worksheet/WorksheetView.cpp:344
+#: src/frontend/worksheet/WorksheetView.cpp:342
 #, kde-format
 msgid "Select Region and Zoom In"
 msgstr "Wybierz obszar i powiększ go"
 
-#: src/frontend/worksheet/WorksheetView.cpp:349
+#: src/frontend/worksheet/WorksheetView.cpp:347
 #, kde-format
 msgid "Select X-Region and Zoom In"
 msgstr "Zaznacz obszar X i powiększ go"
 
-#: src/frontend/worksheet/WorksheetView.cpp:354
+#: src/frontend/worksheet/WorksheetView.cpp:352
 #, kde-format
 msgid "Select Y-Region and Zoom In"
 msgstr "Zaznacz obszar Y i powiększ go"
 
-#: src/frontend/worksheet/WorksheetView.cpp:366
+#: src/frontend/worksheet/WorksheetView.cpp:364
 #, kde-format
 msgid "Auto Scale"
 msgstr "Auto-skala"
 
-#: src/frontend/worksheet/WorksheetView.cpp:370
+#: src/frontend/worksheet/WorksheetView.cpp:368
 #, kde-format
 msgid "Auto Scale X"
 msgstr "Samoskalowanie X"
 
-#: src/frontend/worksheet/WorksheetView.cpp:374
+#: src/frontend/worksheet/WorksheetView.cpp:372
 #, kde-format
 msgid "Auto Scale Y"
 msgstr "Samoskalowanie Y"
 
-#: src/frontend/worksheet/WorksheetView.cpp:386
+#: src/frontend/worksheet/WorksheetView.cpp:384
 #, kde-format
 msgid "Zoom In X"
 msgstr "Powiększ w X"
 
-#: src/frontend/worksheet/WorksheetView.cpp:390
+#: src/frontend/worksheet/WorksheetView.cpp:388
 #, kde-format
 msgid "Zoom Out X"
 msgstr "Pomniejsz w X"
 
-#: src/frontend/worksheet/WorksheetView.cpp:394
+#: src/frontend/worksheet/WorksheetView.cpp:392
 #, kde-format
 msgid "Zoom In Y"
 msgstr "Powiększ w Y"
 
-#: src/frontend/worksheet/WorksheetView.cpp:398
+#: src/frontend/worksheet/WorksheetView.cpp:396
 #, kde-format
 msgid "Zoom Out Y"
 msgstr "Pomniejsz w Y"
 
-#: src/frontend/worksheet/WorksheetView.cpp:402
+#: src/frontend/worksheet/WorksheetView.cpp:400
 #, kde-format
 msgid "Shift Left X"
 msgstr "Przesuń w lewo X"
 
-#: src/frontend/worksheet/WorksheetView.cpp:404
+#: src/frontend/worksheet/WorksheetView.cpp:402
 #, kde-format
 msgid "Shift Right X"
 msgstr "Przesuń w prawo X"
 
-#: src/frontend/worksheet/WorksheetView.cpp:406
+#: src/frontend/worksheet/WorksheetView.cpp:404
 #, kde-format
 msgid "Shift Up Y"
 msgstr "Przesuń w górę Y"
 
-#: src/frontend/worksheet/WorksheetView.cpp:408
+#: src/frontend/worksheet/WorksheetView.cpp:406
 #, kde-format
 msgid "Shift Down Y"
 msgstr "Przesuń w dół Y"
 
-#: src/frontend/worksheet/WorksheetView.cpp:422
-#: src/frontend/worksheet/WorksheetView.cpp:486
-#: src/frontend/worksheet/WorksheetView.cpp:1307
-#: src/frontend/worksheet/WorksheetView.cpp:1314
-#: src/frontend/worksheet/WorksheetView.cpp:1321
-#: src/frontend/worksheet/WorksheetView.cpp:1328
+#: src/frontend/worksheet/WorksheetView.cpp:420
+#: src/frontend/worksheet/WorksheetView.cpp:484
+#: src/frontend/worksheet/WorksheetView.cpp:1290
+#: src/frontend/worksheet/WorksheetView.cpp:1297
+#: src/frontend/worksheet/WorksheetView.cpp:1304
+#: src/frontend/worksheet/WorksheetView.cpp:1311
 #, kde-format
 msgid "Plot Area"
 msgstr "Obszar wykresu"
 
-#: src/frontend/worksheet/WorksheetView.cpp:499
+#: src/frontend/worksheet/WorksheetView.cpp:497
 #, kde-format
 msgid "Zoom/Navigate"
 msgstr "Przybliżanie/Przemieszczanie"
 
-#: src/frontend/worksheet/WorksheetView.cpp:520
+#: src/frontend/worksheet/WorksheetView.cpp:518
 #, kde-format
 msgid "Apply Actions to"
 msgstr "Zastosuj działania dla"
 
-#: src/frontend/worksheet/WorksheetView.cpp:527
+#: src/frontend/worksheet/WorksheetView.cpp:525
 #, kde-format
 msgid "Apply Cursor to"
 msgstr "Zastosuj kursor do"
 
-#: src/frontend/worksheet/WorksheetView.cpp:1445
+#: src/frontend/worksheet/WorksheetView.cpp:1428
 #, kde-format
 msgid "Do you really want to delete the selected object?"
 msgid_plural "Do you really want to delete the selected %1 objects?"
@@ -24232,7 +24222,7 @@ msgstr[0] "Czy na pewno chcesz usunąć wybrany obiekt?"
 msgstr[1] "Czy na pewno chcesz usunąć wybrane %1 obiekty?"
 msgstr[2] "Czy na pewno chcesz usunąć wybrane %1 obiektów?"
 
-#: src/frontend/worksheet/WorksheetView.cpp:1453
+#: src/frontend/worksheet/WorksheetView.cpp:1436
 #, kde-format
 msgid "%1: Remove selected worksheet elements."
 msgstr "%1: Usuń wybrane elementy arkusza kalkulacyjnego."
