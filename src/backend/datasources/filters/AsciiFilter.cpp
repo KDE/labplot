@@ -285,6 +285,19 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
 	return true;
 }
 
+QStringList AsciiFilter::dataTypesString() {
+	QStringList list;
+	const auto& map = AsciiFilterPrivate::modeMap();
+	for (auto i = map.cbegin(), end = map.cend(); i != end; ++i) {
+		list.append(i.key());
+	}
+	return list;
+}
+
+bool AsciiFilter::determineColumnModes(const QStringView& s, QVector<AbstractColumn::ColumnMode>& modes, QString& invalidString) {
+	return AsciiFilterPrivate::determineColumnModes(s, modes, invalidString);
+}
+
 //########################################################################################################################
 //##  PRIVATE IMPLEMENTATIONS  ###########################################################################################
 //########################################################################################################################
@@ -449,28 +462,29 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 QMap<QString, AbstractColumn::ColumnMode> AsciiFilterPrivate::modeMap() {
 	using Mode = AbstractColumn::ColumnMode;
 	return QMap<QString, Mode> {
-		{"Double", Mode::Double},
-
-						   "Text": Mode::Text,
-									"DateTime": Mode::DateTime,
-		"Int": Mode::Integer,
-												 "Int64": Mode::BigInt
-	}
+		{i18n("Double"), Mode::Double},
+		{i18n("Text"), Mode::Text},
+		{i18n("DateTime"), Mode::DateTime},
+		{i18n("Int"), Mode::Integer},
+		{i18n("Int64"), Mode::BigInt},
+		};
 }
 
-bool AsciiFilterPrivate::determineColumnModes(const QStringView& s) {
+bool AsciiFilterPrivate::determineColumnModes(const QStringView& s, QVector<AbstractColumn::ColumnMode>& modes, QString& invalidString) {
 	const auto& modes_string = determineColumns(s, QStringLiteral(","), false, true, false, 1, -1);
 
-	QMap<QString, AbstractColumn::ColumnMode> modes;
-
-	QVector<AbstractColumn::ColumnMode> modes;
+	const auto& modeMap = AsciiFilterPrivate::modeMap();
 
 	for (const auto& m: modes_string) {
-		const auto it = modes.find(m);
-		if (it != modes_string.end()) {
-			it.value();
+		const auto it = modeMap.find(m);
+		if (it != modeMap.end()) {
+			modes << it.value();
+		} else {
+			invalidString = m;
+			return false;
 		}
 	}
+	return true;
 }
 
 bool AsciiFilterPrivate::ignoringLine(QStringView line, const AsciiFilter::Properties& p) {

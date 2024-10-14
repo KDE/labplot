@@ -38,6 +38,9 @@ public:
 	static int columnNumber(const QString& fileName, const QString& separator = QString());
 	static size_t lineNumber(const QString& fileName, size_t maxLines = std::numeric_limits<std::size_t>::max());
 
+	static QStringList dataTypesString();
+	static bool determineColumnModes(const QStringView& s, QVector<AbstractColumn::ColumnMode>& modes, QString &invalidString);
+
 
 	// save/load in the project XML
 	void save(QXmlStreamWriter*) const override;
