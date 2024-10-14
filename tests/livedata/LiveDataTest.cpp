@@ -48,7 +48,9 @@ void LiveDataTest::testReadContinuousFixed00() {
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
 	properties.intAsDouble = false;
-	filter->setProperties(properties);
+	properties.columnNamesRaw = QStringLiteral("x, y");
+	properties.columnModes = QVector<AbstractColumn::ColumnMode::Double>{};
+	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
 
 	//QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
 	dataSource.setFilter(filter);

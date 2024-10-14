@@ -79,8 +79,11 @@ QVector<AbstractColumn::ColumnMode> AsciiFilter::columnModes() const {
 }
 
 void AsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode columnImportMode) {
+	Q_D(const AsciiFilter);
 	KCompressionDevice file(fileName);
-	readFromDevice(file, dataSource, columnImportMode, 0, -1, 0);
+
+	const int lines = d->properties.endRow < 0 ? -1 : d->properties.endRow - d->properties.startRow + 1;
+	readFromDevice(file, dataSource, columnImportMode, 0, lines, 0);
 }
 
 qint64 AsciiFilter::readFromDevice(QIODevice& device, AbstractDataSource* dataSource, ImportMode columnImportMode, qint64 from, qint64 lines, qint64 keepNRows) {
@@ -441,6 +444,33 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 
 	initialized = true;
 	return Status::Success;
+}
+
+QMap<QString, AbstractColumn::ColumnMode> AsciiFilterPrivate::modeMap() {
+	using Mode = AbstractColumn::ColumnMode;
+	return QMap<QString, Mode> {
+		{"Double", Mode::Double},
+
+						   "Text": Mode::Text,
+									"DateTime": Mode::DateTime,
+		"Int": Mode::Integer,
+												 "Int64": Mode::BigInt
+	}
+}
+
+bool AsciiFilterPrivate::determineColumnModes(const QStringView& s) {
+	const auto& modes_string = determineColumns(s, QStringLiteral(","), false, true, false, 1, -1);
+
+	QMap<QString, AbstractColumn::ColumnMode> modes;
+
+	QVector<AbstractColumn::ColumnMode> modes;
+
+	for (const auto& m: modes_string) {
+		const auto it = modes.find(m);
+		if (it != modes_string.end()) {
+			it.value();
+		}
+	}
 }
 
 bool AsciiFilterPrivate::ignoringLine(QStringView line, const AsciiFilter::Properties& p) {
