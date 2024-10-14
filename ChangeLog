@@ -9,6 +9,7 @@ New features:
 		* add warning when importing projects in file import dialog
 		* improve error messages for data import
 		* fix preview of data with header
+		* Ask how to treat multiplayer graphs wen opening OPJ project 
 	* [analysis]
 		* Add possibility to do calculations on curves
 	* [spreadsheet]
