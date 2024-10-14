@@ -891,6 +891,46 @@ void StatisticalPlotsTest::testPBChartS() {
 		QCOMPARE(xColumn->valueAt(i), i + 1);
 }
 
+/*!
+ * test the NP chart, the example is taken from Wheeler "Making Sense of Data", chapter 14.
+ */
+void StatisticalPlotsTest::testPBChartNP() {
+	// prepare the data
+	auto* column = new Column(QLatin1String("data"), AbstractColumn::ColumnMode::Integer);
+	// clang-format off
+	column->setIntegers({27, 19, 18, 16, 16, 12, 15, 13, 16, 16, 9, 17, 21, 15, 39, 21, 14, 23, 19, 29, 30});
+	// clang-format on
+
+	// prepare the worksheet + plot
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
+	pbc->setDataColumn(column);
+	pbc->setType(ProcessBehaviorChart::Type::NP);
+	pbc->setSampleSize(100);
+	p->addChild(pbc);
+
+	// check the limits, two digit comparison with the values from the book
+	// Wheeler has pbar=404 which should be actually 405 which explains the slightly different results
+	QCOMPARE(std::round(pbc->center() * 100) / 100, 19.29);
+	QCOMPARE(std::round(pbc->upperLimit() * 100) / 100, 31.12);
+	QCOMPARE(std::round(pbc->lowerLimit() * 100) / 100, 7.45);
+
+	// check the plotted data ("statistics") - the original data is plotted
+	const int rowCount = column->rowCount();
+	auto* yColumn = pbc->dataCurve()->yColumn();
+	QCOMPARE(yColumn, column);
+	QCOMPARE(yColumn->rowCount(), rowCount);
+
+	// index from 1 to 21 is used for x
+	auto* xColumn = pbc->dataCurve()->xColumn();
+	QCOMPARE(xColumn->rowCount(), rowCount);
+	for (int i = 0; i < rowCount; ++i)
+		QCOMPARE(xColumn->valueAt(i), i + 1);
+}
+
 // ##############################################################################
 // ############################ Run Chart #######################################
 // ##############################################################################

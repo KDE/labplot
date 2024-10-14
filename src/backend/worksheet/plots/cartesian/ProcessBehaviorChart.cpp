@@ -214,11 +214,17 @@ int ProcessBehaviorChart::xIndexCount() const {
 	if (!d->dataColumn)
 		return 0;
 
-	int count = 0;
-	if (d->type == ProcessBehaviorChart::Type::XmR || d->type == ProcessBehaviorChart::Type::mR || d->type == ProcessBehaviorChart::Type::NP)
-		count = d->dataColumn->rowCount();
-	else
-		count = d->dataColumn->rowCount() / d->sampleSize;
+	int count = d->dataColumn->rowCount();
+
+	// for XmR, mR and NP sub-types one point is plotted for every value in the source data,
+	// for all other sub-types one point is plotted for each sample
+	if (d->type != ProcessBehaviorChart::Type::XmR && d->type != ProcessBehaviorChart::Type::mR && d->type != ProcessBehaviorChart::Type::NP) {
+		const int remainder = count % d->sampleSize;
+		if (remainder > 0)
+			count -= remainder; // subract the remainder to handle complete samples only
+
+		count = count / d->sampleSize;
+	}
 
 	return count;
 }
@@ -515,17 +521,26 @@ void ProcessBehaviorChartPrivate::recalc() {
 }
 
 /*!
- * conventions and definitions taken from Wheeler's "Making Use of Data"
+ * conventions and definitions taken from Wheeler's book "Making Sense of Data"
  */
 void ProcessBehaviorChartPrivate::updateControlLimits() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 	center = 0.;
 	upperLimit = 0.;
 	lowerLimit = 0.;
-	const int count = dataColumn->rowCount();
-
 	yColumn->clear();
 	yColumn->resizeTo(xColumn->rowCount());
+	Q_EMIT q->statusInfo(QString()); // reset the previous info message
+
+	// determine the number of values in the source data to be taken into account
+	int count = dataColumn->rowCount();
+	if (type != ProcessBehaviorChart::Type::XmR && type != ProcessBehaviorChart::Type::mR && type != ProcessBehaviorChart::Type::NP) {
+		const int remainder = count % sampleSize;
+		if (remainder > 0) {
+			count -= remainder; // subract the remainder to handle complete samples only
+			Q_EMIT q->statusInfo(i18n("The last sample is incomplete and was omitted."));
+		}
+	}
 
 	switch (type) {
 	case ProcessBehaviorChart::Type::XmR: {
@@ -801,6 +816,8 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 	case ProcessBehaviorChart::Type::U: {
 	}
 	}
+
+	QDEBUG(Q_FUNC_INFO << ", center: " << center << " , upper limit: " << upperLimit << ", lower limit: " << lowerLimit);
 
 	// further restrict the lower limit if it becomes negative
 	if (type == ProcessBehaviorChart::Type::XmR || type == ProcessBehaviorChart::Type::XbarR || type == ProcessBehaviorChart::Type::XbarS) {

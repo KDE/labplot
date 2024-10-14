@@ -15,6 +15,7 @@
 #include "frontend/dockwidgets/BaseDock.h"
 #include "ui_processbehaviorchartdock.h"
 
+class KMessageWidget;
 class LineWidget;
 class ProcessBehaviorChart;
 class SymbolWidget;
@@ -43,6 +44,7 @@ protected:
 	LineWidget* centerLineWidget{nullptr};
 	LineWidget* upperLimitLineWidget{nullptr};
 	LineWidget* lowerLimitLineWidget{nullptr};
+	KMessageWidget* m_messageWidget{nullptr};
 
 	QList<ProcessBehaviorChart*> m_plots;
 	ProcessBehaviorChart* m_plot{nullptr};
@@ -67,6 +69,8 @@ private Q_SLOTS:
 	void plotLimitsMetricChanged(ProcessBehaviorChart::LimitsMetric);
 	void plotSampleSizeChanged(int);
 	void plotNegativeLowerLimitEnabledChanged(bool);
+
+	void showStatusInfo(const QString&);
 
 	// load and save
 	void loadConfigFromTemplate(KConfig&);
