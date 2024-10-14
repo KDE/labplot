@@ -18,7 +18,6 @@ ImportOriginLayersDialog::ImportOriginLayersDialog(QWidget* parent)
 	: QDialog(parent)
 	, ui(new Ui::ImportOriginLayersDialog) {
 	ui->setupUi(this);
-	setAttribute(Qt::WA_DeleteOnClose);
 
 	setWindowTitle(i18nc("@title:window", "Import Origin Multi-Layer Graphs"));
 	setWindowIcon(QIcon::fromTheme(QStringLiteral("document-import")));

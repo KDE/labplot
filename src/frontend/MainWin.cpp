@@ -1542,6 +1542,7 @@ void MainWin::openProject(const QString& filename) {
 		bool graphLayersAsPlotArea = true;
 		if (dlg->exec() == QDialog::Accepted)
 			graphLayersAsPlotArea = dlg->graphLayersAsPlotArea();
+		delete dlg;
 
 		parser.setGraphLayerAsPlotArea(graphLayersAsPlotArea);
 
@@ -2592,6 +2593,8 @@ void MainWin::handleSettingsChanges(QList<SettingsDialog::SettingsType> changes)
 #ifdef HAVE_CANTOR_LIBS
 	if (changes.contains(SettingsDialog::SettingsType::Notebook))
 		updateNotebookActions();
+#else
+	Q_UNUSED(changes)
 #endif
 }
 
