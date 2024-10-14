@@ -69,11 +69,11 @@ public:
 		QVector<AbstractColumn::ColumnMode> columnModes;
 
 		int startRow{1}; // Start row. If headerEnabled, it is the offset from that line
-		int numberRows{-1}; // number of rows to read. A negative value means the complete file, ...
+		int endRow{-1}; // Last row to read. A negative value means the complete file
 		int startColumn{1}; // Start Column to read
 		// number of columns to read. A negative value means the complete file, ...
 		// The index and timestamp columns are not included in this number!
-		int numberColumns{-1};
+		int endColumn{-1}; // Last column to read. If negative all available shall be read
 		int mqttPreviewFirstEmptyColCount{0};
 
 		bool intAsDouble{true}; // Interpret all integer values as doubles

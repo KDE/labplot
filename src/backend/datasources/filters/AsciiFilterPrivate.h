@@ -29,7 +29,7 @@ public:
 private:
 	static bool ignoringLine(QStringView line, const AsciiFilter::Properties& p);
 	static QStringList determineColumns(const QStringView& line, const AsciiFilter::Properties& properties);
-	static QStringList determineColumns(const QStringView &line, const QStringView &separator, bool removeQuotes, bool simplifyWhiteSpaces, bool skipEmptyParts, int startColumn, int numberColumns);
+	static QStringList determineColumns(const QStringView &line, const QStringView &separator, bool removeQuotes, bool simplifyWhiteSpaces, bool skipEmptyParts, int startColumn, int endColumn);
 	static AsciiFilter::Status determineSeparator(const QString &line, bool removeQuotes, bool simplifyWhiteSpaces, QString &separator);
 	static QVector<AbstractColumn::ColumnMode> determineColumnModes(const QVector<QStringList>& values, const AsciiFilter::Properties& properties, QString &dateTimeFormat);
 	AsciiFilter::Status getLine(QIODevice& device, QString& line);
