@@ -471,8 +471,10 @@ void ImportFileWidget::initSlots() {
 	connect(ui.cbFilter, QOverload<int>::of(&KComboBox::activated), this, &ImportFileWidget::filterChanged);
 	connect(ui.bRefreshPreview, &QPushButton::clicked, this, &ImportFileWidget::refreshPreview);
 
-	if (m_asciiOptionsWidget)
+	if (m_asciiOptionsWidget) {
 		connect(m_asciiOptionsWidget.get(), &AsciiOptionsWidget::headerLineChanged, this, &ImportFileWidget::updateStartRow);
+		connect(m_asciiOptionsWidget.get(), &AsciiOptionsWidget::columnModesChanged, this, &ImportFileWidget::checkValid);
+	}
 
 	connect(ui.cbMcapTopics, QOverload<int>::of(&KComboBox::activated), this, &ImportFileWidget::changeMcapTopic);
 
@@ -606,6 +608,10 @@ QString ImportFileWidget::serialPort() const {
 
 int ImportFileWidget::baudRate() const {
 	return ui.cbBaudRate->currentText().toInt();
+}
+
+bool ImportFileWidget::importValid() const {
+	return false;
 }
 
 /*!
@@ -1325,8 +1331,9 @@ void ImportFileWidget::initOptionsWidget() {
 			m_asciiOptionsWidget->loadSettings();
 
 			// allow to add timestamp column for live data sources
-			if (m_liveDataSource)
+			if (m_liveDataSource) {
 				m_asciiOptionsWidget->showTimestampOptions(true);
+			}
 			ui.swOptions->addWidget(asciiw);
 		}
 
@@ -1775,7 +1782,7 @@ void ImportFileWidget::refreshPreview() {
 
 			if (sPort.open(QIODevice::ReadOnly)) {
 				if (sPort.waitForReadyRead(2000))
-					importedStrings = filter->preview(sPort);
+					// importedStrings = filter->preview(sPort); // TODO: turn on again
 				else
 					DEBUG("	ERROR: not ready for read after 2 sec");
 
@@ -2030,6 +2037,13 @@ void ImportFileWidget::refreshPreview() {
 void ImportFileWidget::updateStartRow(int line) {
 	if (line >= ui.sbStartRow->value())
 		ui.sbStartRow->setValue(line + 1);
+}
+
+void ImportFileWidget::checkValid() {
+	QString errorMessage;
+	if (m_asciiOptionsWidget && !m_asciiOptionsWidget->isValid(errorMessage)) {
+		Q_EMIT error(errorMessage);
+	}
 }
 
 void ImportFileWidget::updateContent(const QString& fileName) {

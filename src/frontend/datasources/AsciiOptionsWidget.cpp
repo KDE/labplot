@@ -114,6 +114,7 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent)
 
 	connect(ui.chbHeader, &QCheckBox::toggled, this, &AsciiOptionsWidget::headerChanged);
 	connect(ui.sbHeaderLine, QOverload<int>::of(&QSpinBox::valueChanged), this, &AsciiOptionsWidget::headerLineChanged);
+	connect(ui.kleColumnMode, &QLineEdit::textChanged, this, &AsciiOptionsWidget::columnModesChanged);
 }
 
 void AsciiOptionsWidget::showAsciiHeaderOptions(bool visible) {
@@ -179,6 +180,16 @@ void AsciiOptionsWidget::applyFilterSettings(AsciiFilter::Properties& properties
 
 void AsciiOptionsWidget::setSeparatingCharacter(QLatin1Char character) {
 	ui.cbSeparatingCharacter->setCurrentItem(QString(character));
+}
+
+bool AsciiOptionsWidget::isValid(QString& errorMessage) {
+	QString invalidString;
+	QVector<AbstractColumn::ColumnMode> s;
+	if (!AsciiFilter::determineColumnModes(ui.kleColumnMode->text(), s, invalidString)) {
+		errorMessage = i18n("Datatype not found: %1").arg(invalidString);
+		return false;
+	}
+	return true;
 }
 
 // ##############################################################################

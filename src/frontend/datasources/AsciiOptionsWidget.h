@@ -26,6 +26,8 @@ public:
 	void applyFilterSettings(AsciiFilter::Properties &properties) const;
 	void setSeparatingCharacter(QLatin1Char);
 
+	bool isValid(QString& errorMessage);
+
 	void loadSettings() const;
 	void saveSettings() const;
 
@@ -35,6 +37,7 @@ public:
 
 public Q_SLOTS:
 	void headerChanged(bool) const;
+	void columnModesChanged(const QStringView s);
 
 Q_SIGNALS:
 	void headerLineChanged(int);
