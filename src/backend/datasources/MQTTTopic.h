@@ -15,10 +15,7 @@
 
 class MQTTSubscription;
 class MQTTClient;
-
-namespace Old {
 class AsciiFilter;
-}
 
 class MQTTTopic : public Spreadsheet {
 	Q_OBJECT
@@ -27,8 +24,8 @@ public:
 	MQTTTopic(const QString& name, MQTTSubscription* subscription, bool loading = false);
 	~MQTTTopic() override;
 
-	void setFilter(Old::AsciiFilter*);
-	Old::AsciiFilter* filter() const;
+	void setFilter(AsciiFilter*);
+	AsciiFilter* filter() const;
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;

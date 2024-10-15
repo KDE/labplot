@@ -37,10 +37,10 @@ public:
 
 public Q_SLOTS:
 	void headerChanged(bool) const;
-	void columnModesChanged(const QStringView s);
 
 Q_SIGNALS:
 	void headerLineChanged(int);
+	void columnModesChanged(const QString& s);
 
 private:
 	Ui::AsciiOptionsWidget ui;

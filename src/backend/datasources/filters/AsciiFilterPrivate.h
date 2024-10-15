@@ -21,6 +21,7 @@ public:
 	AsciiFilter::Status initialize(AsciiFilter::Properties p);
 	AsciiFilter::Status initialize(QIODevice& device);
 	AsciiFilter::Status readFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode columnImportMode, qint64 from, qint64 lines, qint64 keepNRows, qint64 &bytes_read);
+	QVector<QStringList> preview(QIODevice& device, int lines);
 	QVector<QStringList> preview(const QString& fileName, int lines);
 
 	static QMap<QString, AbstractColumn::ColumnMode> modeMap();

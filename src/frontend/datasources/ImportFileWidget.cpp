@@ -1782,7 +1782,7 @@ void ImportFileWidget::refreshPreview() {
 
 			if (sPort.open(QIODevice::ReadOnly)) {
 				if (sPort.waitForReadyRead(2000))
-					// importedStrings = filter->preview(sPort); // TODO: turn on again
+					importedStrings = filter->preview(sPort, lines);
 				else
 					DEBUG("	ERROR: not ready for read after 2 sec");
 
@@ -1800,7 +1800,7 @@ void ImportFileWidget::refreshPreview() {
 				const QString& topicName = item->text(0);
 				auto i = m_lastMessage.find(topicName);
 				if (i != m_lastMessage.end())
-					importedStrings = filter->preview(QLatin1String(i.value().payload().data()));
+					importedStrings = filter->preview(QLatin1String(i.value().payload().data()), lines);
 				else
 					importedStrings << QStringList{i18n("No data arrived yet for the selected topic")};
 			}
