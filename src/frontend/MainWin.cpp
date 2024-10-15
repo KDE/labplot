@@ -1536,15 +1536,20 @@ void MainWin::openProject(const QString& filename) {
 		OriginProjectParser parser;
 		parser.setProjectFileName(filename);
 
-		// aks how to import Origin's graph layers
-		// TODO: only ask if there are really multiple layers?
-		auto* dlg = new ImportOriginLayersDialog(this);
-		bool graphLayersAsPlotArea = true;
-		if (dlg->exec() == QDialog::Accepted)
-			graphLayersAsPlotArea = dlg->graphLayersAsPlotArea();
-		delete dlg;
+		// check if graphs have multiple layer
+		bool hasUnusedObjects, hasMultiLayerGraphs;
+		parser.checkContent(hasUnusedObjects, hasMultiLayerGraphs);
+		DEBUG(Q_FUNC_INFO << ", project has multilayer graphs: " << hasMultiLayerGraphs)
+		// ask how to import OPJ graph layers if graphs have multiple layer
+		if (hasMultiLayerGraphs) {
+			auto* dlg = new ImportOriginLayersDialog(this);
+			bool graphLayersAsPlotArea = true;
+			if (dlg->exec() == QDialog::Accepted)
+				graphLayersAsPlotArea = dlg->graphLayersAsPlotArea();
+			delete dlg;
 
-		parser.setGraphLayerAsPlotArea(graphLayersAsPlotArea);
+			parser.setGraphLayerAsPlotArea(graphLayersAsPlotArea);
+		}
 
 		WAIT_CURSOR;
 		parser.importTo(m_project, QStringList()); // TODO: add return code
