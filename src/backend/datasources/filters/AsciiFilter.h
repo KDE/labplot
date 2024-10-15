@@ -22,11 +22,12 @@ public:
 
 	enum class Status { Success, UnableToOpenDevice, DeviceAtEnd, NotEnoughRowsSelected, UnableToReadLine, SeparatorDeterminationFailed,
 						SequentialDeviceHeaderEnabled, SequentialDeviceAutomaticSeparatorDetection, SequentialDeviceNoColumnModes, InvalidNumberDataColumns,
-						NotEnoughMemory, UnsupportedDataSource, UnableParsingHeader, MatrixUnsupportedColumnMode, NoDateTimeFormat, HeaderDetectionNotAllowed, SeparatorDetectionNotAllowed, InvalidSeparator, SequentialDeviceUninitialized, NoColumns };
+						NotEnoughMemory, UnsupportedDataSource, UnableParsingHeader, MatrixUnsupportedColumnMode, NoDateTimeFormat, HeaderDetectionNotAllowed, SeparatorDetectionNotAllowed, InvalidSeparator, SequentialDeviceUninitialized, NoColumns, ColumnModeDeterminationFailed };
 
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode columnImportMode = ImportMode::Replace) override;
 	qint64 readFromDevice(QIODevice& device, AbstractDataSource* dataSource, ImportMode columnImportMode, qint64 from, qint64 lines, qint64 keepNRows = 0);
 	void write(const QString& fileName, AbstractDataSource*) override;
+	QVector<QStringList> preview(QIODevice& device, int lines);
 	QVector<QStringList> preview(const QString& fileName, int lines);
 	static QString statusToString(Status e);
 
@@ -70,6 +71,7 @@ public:
 		QString columnNamesRaw; // String from the input dialog. From those columnNames is retrieved
 		QStringList columnNames;
 		QVector<AbstractColumn::ColumnMode> columnModes;
+		QString columnModesString;
 
 		int startRow{1}; // Start row. If headerEnabled, it is the offset from that line
 		int endRow{-1}; // Last row to read. A negative value means the complete file
@@ -98,6 +100,7 @@ public:
 		bool m_dirty{true};
 	};
 	Status initialize(Properties& p);
+	bool initialized() const;
 	Properties properties() const;
 	Properties defaultProperties() const;
 	void setProperties(Properties& p);

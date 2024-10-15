@@ -1088,7 +1088,7 @@ void AsciiFilterTest::testStartColumn() {
 	p.intAsDouble = false;
 	p.createIndex = false;
 	p.startColumn = 2;
-	p.numberColumns = 2;
+	p.endColumn = 4;
 	p.columnNamesRaw = QStringLiteral("x,y");
 	filter.setProperties(p);
 
@@ -1118,7 +1118,7 @@ void AsciiFilterTest::testStartColumn_IndexColumn() {
 	p.intAsDouble = false;
 	p.createIndex = true;
 	p.startColumn = 2;
-	p.numberColumns = 2;
+	p.endColumn = 4;
 	p.columnNamesRaw = QStringLiteral("x,y");
 	filter.setProperties(p);
 
@@ -1149,7 +1149,7 @@ void AsciiFilterTest::testLastColumnOnly() {
 	p.headerEnabled = false;
 	p.intAsDouble = false;
 	p.startColumn = 3;
-	p.numberColumns = 1;
+	p.endColumn = 3;
 	p.columnNamesRaw = QStringLiteral("z");
 	filter.setProperties(p);
 
@@ -1178,7 +1178,7 @@ void AsciiFilterTest::testWrongColumnRange() {
 	p.headerEnabled = false;
 	p.intAsDouble = false;
 	p.startColumn = 3;
-	p.numberColumns = 2; // There is only one column left, so ignoring!
+	p.endColumn = 4; // There is only one column left, so ignoring!
 	filter.setProperties(p);
 
 	QString savePath;
@@ -1202,7 +1202,7 @@ void AsciiFilterTest::testWrongColumnRange_IndexColumn() {
 	p.intAsDouble = false;
 	p.createIndex = true; // Index enabled
 	p.startColumn = 3;
-	p.numberColumns = 2; // There is only one column left, so ignoring!
+	p.endColumn = 4; // There is only one column left, so ignoring!
 	filter.setProperties(p);
 
 	QString savePath;
@@ -1223,7 +1223,7 @@ void AsciiFilterTest::testRowRange00() {
 	p.headerEnabled = false;
 	p.intAsDouble = false;
 	p.startRow = 3;
-	p.numberRows = 2;
+	p.endRow = 4;
 	p.columnNamesRaw = QStringLiteral("x,y,z");
 	filter.setProperties(p);
 
@@ -1261,7 +1261,7 @@ void AsciiFilterTest::testRowRange_EndRowLargerThanContent() {
 	p.headerEnabled = false;
 	p.intAsDouble = false;
 	p.startRow = 3;
-	p.numberRows = 10;
+	p.endRow = 10;
 	p.columnNamesRaw = QStringLiteral("x,y,z");
 	filter.setProperties(p);
 
@@ -1316,9 +1316,9 @@ void AsciiFilterTest::testRowColumnRange00() {
 	p.headerEnabled = false;
 	p.intAsDouble = false;
 	p.startRow = 3;
-	p.numberRows = 10;
+	p.endRow = 10;
 	p.startColumn = 2;
-	p.numberColumns = 2;
+	p.endColumn = 3;
 	p.columnNamesRaw = QStringLiteral("x,y,z");
 	filter.setProperties(p);
 
@@ -2939,7 +2939,7 @@ void AsciiFilterTest::determineColumns() {
 	p.simplifyWhitespaces = true;
 	p.skipEmptyParts = true;
 	p.startColumn = 1;
-	p.numberColumns = -1;
+	p.endColumn = -1;
 	p.separator = QStringLiteral(",");
 
 	auto expectedHeader = QStringList{QStringLiteral("header1"),QStringLiteral("header2"),QStringLiteral("header3")};

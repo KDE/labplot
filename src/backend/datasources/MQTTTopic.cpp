@@ -11,7 +11,7 @@
 
 #include "backend/datasources/MQTTClient.h"
 #include "backend/datasources/MQTTSubscription.h"
-#include "backend/datasources/filters/AsciiFilterOld.h"
+#include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -34,34 +34,42 @@ MQTTTopic::MQTTTopic(const QString& name, MQTTSubscription* subscription, bool l
 	, m_topicName(name)
 	, m_MQTTClient(subscription->mqttClient())
 	, m_filter(new AsciiFilter) {
-	auto mainFilter = m_MQTTClient->filter();
+	auto mainFilter = m_MQTTClient->filter()->defaultProperties();
 
-	m_filter->setAutoModeEnabled(mainFilter->isAutoModeEnabled());
-	if (!mainFilter->isAutoModeEnabled()) {
-		m_filter->setCommentCharacter(mainFilter->commentCharacter());
-		m_filter->setSeparatingCharacter(mainFilter->separatingCharacter());
-		m_filter->setDateTimeFormat(mainFilter->dateTimeFormat());
-		m_filter->setCreateIndexEnabled(mainFilter->createIndexEnabled());
-		m_filter->setCreateTimestampEnabled(mainFilter->createTimestampEnabled());
-		m_filter->setSimplifyWhitespacesEnabled(mainFilter->simplifyWhitespacesEnabled());
-		m_filter->setNaNValueToZero(mainFilter->NaNValueToZeroEnabled());
-		m_filter->setRemoveQuotesEnabled(mainFilter->removeQuotesEnabled());
-		m_filter->setSkipEmptyParts(mainFilter->skipEmptyParts());
-		m_filter->setHeaderEnabled(mainFilter->isHeaderEnabled());
-		QString vectorNames;
-		const QStringList& filterVectorNames = mainFilter->vectorNames();
-		for (int i = 0; i < filterVectorNames.size(); ++i) {
-			vectorNames.append(filterVectorNames.at(i));
-			if (i != vectorNames.size() - 1)
-				vectorNames.append(QLatin1String(" "));
-		}
+	// TODO: old code did not make any sense
 
-		m_filter->setVectorNames(vectorNames);
-		m_filter->setStartRow(mainFilter->startRow());
-		m_filter->setEndRow(mainFilter->endRow());
-		m_filter->setStartColumn(mainFilter->startColumn());
-		m_filter->setEndColumn(mainFilter->endColumn());
-	}
+
+	// auto properties = m_filter->defaultProperties();
+	// if (!mainFilter->isAutoModeEnabled()) {
+	// 	properties.automaticSeparatorDetection = false;
+	// 	properties.separator = mainFilter->separatingCharacter();
+	// 	properties.commentCharacter = mainFilter->commentCharacter();
+	// 	properties.dateTimeFormat = mainFilter->dateTimeFormat();
+	// 	properties.createIndex = mainFilter->createIndexEnabled();
+	// 	properties.createTimestamp = mainFilter->createTimestampEnabled();
+	// 	properties.simplifyWhitespaces = mainFilter->simplifyWhitespacesEnabled();
+	// 	properties.removeQuotes = mainFilter->removeQuotesEnabled();
+	// 	properties.skipEmptyParts = mainFilter->skipEmptyParts();
+	// 	properties.headerEnabled = mainFilter->isHeaderEnabled();
+	// 	properties.nanValue = mainFilter->NaNValueToZeroEnabled() ? 0 : std::numeric_limits<double>::quiet_NaN();
+
+	// 	QString vectorNames;
+	// 	const QStringList& filterVectorNames = mainFilter->vectorNames();
+	// 	for (int i = 0; i < filterVectorNames.size(); ++i) {
+	// 		vectorNames.append(filterVectorNames.at(i));
+	// 		if (i != vectorNames.size() - 1)
+	// 			vectorNames.append(QLatin1String(" "));
+	// 	}
+
+	// 	properties.columnNamesRaw = vectorNames;
+	// 	properties.startRow = mainFilter->startRow();
+	// 	properties.endRow = mainFilter->endRow();
+	// 	properties.startColumn = mainFilter->startColumn();
+	// 	properties.endColumn = mainFilter->endColumn();
+	// }
+
+	// const auto status = m_filter->initialize(properties);
+	// assert(status == AsciiFilter::Status::Success);
 
 	connect(m_MQTTClient, &MQTTClient::readFromTopics, this, &MQTTTopic::read);
 	qDebug() << "New MqttTopic: " << m_topicName;
@@ -164,14 +172,64 @@ void MQTTTopic::plotData() {
 	dlg->exec();
 }
 
+namespace {
+	class BufferReader: public QIODevice {
+	public:
+		BufferReader(const QStringView& buffer): m_message(buffer), m_lines(buffer.split(QLatin1Char('\n'))) {
+
+		}
+
+		bool isSequential() const {
+			return true;
+		}
+
+		bool atEnd() const {
+			return !canReadLine();
+		}
+
+		bool open(QIODevice::OpenModeFlag mode) {
+			return mode == QIODevice::OpenModeFlag::ReadOnly;
+		}
+
+		bool canReadLine() const {
+			return m_lineIndex < m_lines.count();
+		}
+
+		QByteArray readLine(qint64 maxlen = 0) {
+			assert(maxlen == 0);
+			m_lineIndex ++;
+			return m_lines.at(m_lineIndex - 1).toLocal8Bit();
+		}
+
+		// Not required functions yet, so ignore them until they are required
+		qint64 readData(char *, qint64) override {
+			assert(false);
+			return 0;
+		}
+		qint64 readLineData(char *, qint64) override {
+			assert(false);
+			return 0;
+		}
+		qint64 writeData(const char *, qint64) {
+			assert(false);
+			return 0;
+		}
+
+	private:
+		const QStringView m_message;
+		const QList<QStringView> m_lines;
+		int m_lineIndex{0};
+	};
+}
+
 /*!
  *\brief Reads every message from the message puffer
  */
 void MQTTTopic::read() {
 	while (!m_messagePuffer.isEmpty()) {
 		qDebug() << "Reading from topic " << m_topicName;
-		const QString tempMessage = m_messagePuffer.takeFirst();
-		m_filter->readMQTTTopic(tempMessage, this);
+		BufferReader reader(m_messagePuffer.takeFirst());
+		m_filter->readFromDevice(reader, this, AbstractFileFilter::ImportMode::Replace, 0, -1, this->mqttClient()->keepNValues());
 		finalizeRead();
 	}
 }
@@ -217,8 +275,8 @@ void MQTTTopic::save(QXmlStreamWriter* writer) const {
 	// general
 	writer->writeStartElement(QStringLiteral("general"));
 	writer->writeAttribute(QStringLiteral("topicName"), m_topicName);
-	writer->writeAttribute(QStringLiteral("filterPrepared"), QString::number(m_filter->isPrepared()));
-	writer->writeAttribute(QStringLiteral("filterSeparator"), m_filter->separator());
+	writer->writeAttribute(QStringLiteral("filterPrepared"), QString::number(m_filter->initialized()));
+	writer->writeAttribute(QStringLiteral("filterSeparator"), m_filter->properties().separator);
 	writer->writeAttribute(QStringLiteral("messagePufferSize"), QString::number(m_messagePuffer.size()));
 	for (int i = 0; i < m_messagePuffer.count(); ++i)
 		writer->writeAttribute(QStringLiteral("message") + QString::number(i), m_messagePuffer[i]);
@@ -317,7 +375,33 @@ bool MQTTTopic::load(XmlStreamReader* reader, bool preview) {
 	}
 
 	// prepare filter for reading
-	m_filter->setPreparedForMQTT(isFilterPrepared, this, separator);
+	if (isFilterPrepared) {
+		auto p = m_filter->defaultProperties();
+
+		p.separator = separator;
+		p.columnModes.resize(columnCount());
+		for (int i = 0; i < columnCount(); ++i)
+			p.columnModes[i] = column(i)->columnMode();
+		p.endRow = rowCount(); // TODO: correct?
+
+		// if (prepared) {
+		// 	m_separator = separator;
+		// 	m_actualCols = endColumn - startColumn + 1;
+		// 	m_actualRows = this->rowCount();
+		// 	// set the column modes
+		// 	columnModes.resize(this->columnCount());
+		// 	for (int i = 0; i < this->columnCount(); ++i)
+		// 		columnModes[i] = this->column(i)->columnMode();
+
+		// 		   // set the data containers
+		// 	m_dataContainer.resize(m_actualCols);
+		// 	initDataContainer(this);
+		// }
+		m_filter->initialize(p);
+		//m_filter->setPreparedForMQTT(isFilterPrepared, this, separator);
+	}
+
+
 
 	return !reader->hasError();
 }
