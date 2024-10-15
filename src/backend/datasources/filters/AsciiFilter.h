@@ -22,7 +22,7 @@ public:
 
 	enum class Status { Success, UnableToOpenDevice, DeviceAtEnd, NotEnoughRowsSelected, UnableToReadLine, SeparatorDeterminationFailed,
 						SequentialDeviceHeaderEnabled, SequentialDeviceAutomaticSeparatorDetection, SequentialDeviceNoColumnModes, InvalidNumberDataColumns,
-						NotEnoughMemory, UnsupportedDataSource, UnableParsingHeader, MatrixUnsupportedColumnMode, NoDateTimeFormat, HeaderDetectionNotAllowed, SeparatorDetectionNotAllowed, InvalidSeparator, SequentialDeviceUninitialized, NoColumns, ColumnModeDeterminationFailed };
+						NotEnoughMemory, UnsupportedDataSource, UnableParsingHeader, MatrixUnsupportedColumnMode, NoDateTimeFormat, HeaderDetectionNotAllowed, SeparatorDetectionNotAllowed, InvalidSeparator, SequentialDeviceUninitialized, NoColumns, ColumnModeDeterminationFailed, WrongEndColumn, WrongEndRow };
 
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode columnImportMode = ImportMode::Replace) override;
 	qint64 readFromDevice(QIODevice& device, AbstractDataSource* dataSource, ImportMode columnImportMode, qint64 from, qint64 lines, qint64 keepNRows = 0);

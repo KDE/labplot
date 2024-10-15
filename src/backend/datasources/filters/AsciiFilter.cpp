@@ -154,6 +154,10 @@ QString AsciiFilter::statusToString(Status e) {
 		return i18n("Invalid separator");
 	case Status::SequentialDeviceUninitialized:
 		return i18n("Filter not initialized");
+	case Status::WrongEndColumn:
+		return i18n("Wrong end column. Is it smaller than start column?");
+	case Status::WrongEndRow:
+		return i18n("Wrong end row. Is it smaller than start row?");
 	}
 	return i18n("Unhandled case");
 }
@@ -343,6 +347,12 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 	if (device.atEnd())
 		return Status::DeviceAtEnd;
 
+	if (properties.endColumn > 0 && properties.endColumn < properties.startColumn)
+		return Status::WrongEndColumn;
+
+	if (properties.endRow > 0 && properties.endRow < properties.startRow)
+		return Status::WrongEndRow;
+
 	properties.columnModes.clear();
 	properties.columnNames.clear();
 
@@ -397,6 +407,8 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 		properties.columnNames.clear();
 		const auto& values = determineColumns(line, properties);
 		for (int i=0; i < values.length(); i++) {
+			if (properties.endColumn > 0 && i >= (properties.endColumn - properties.startColumn + 1))
+				break;
 			properties.columnNames.append(i18n("Column %1").arg(QString::number(i + 1)));
 		}
 	}
@@ -946,6 +958,12 @@ AsciiFilter::Status AsciiFilterPrivate::getLine(QIODevice& device, QString& line
 AsciiFilter::Status AsciiFilterPrivate::initialize(AsciiFilter::Properties p) {
 	using Status = AsciiFilter::Status;
 	using ColumnMode = AbstractColumn::ColumnMode;
+
+	if (properties.endColumn > 0 && properties.endColumn < properties.startColumn)
+		return Status::WrongEndColumn;
+
+	if (properties.endRow > 0 && properties.endRow < properties.startRow)
+		return Status::WrongEndRow;
 
 	if (p.automaticSeparatorDetection)
 		return Status::SeparatorDetectionNotAllowed;

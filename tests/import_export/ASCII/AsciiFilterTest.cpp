@@ -1178,10 +1178,31 @@ void AsciiFilterTest::testLastColumnOnly() {
 	QCOMPARE(spreadsheet.column(0)->valueAt(0), -0.288690);
 }
 
+void AsciiFilterTest::testWrongColumnRange_StartLargerEnd() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	const auto spreadsheetRowCount = spreadsheet.rowCount();
+	const auto spreadsheetColumnCount = spreadsheet.columnCount();
+	AsciiFilter filter;
+	auto p = filter.properties();
+	p.automaticSeparatorDetection = true;
+	p.separator = QStringLiteral(",");
+	p.headerEnabled = false;
+	p.intAsDouble = false;
+	p.startColumn = 3;
+	p.endColumn = 1; // Smaller than startColumn
+	filter.setProperties(p);
+
+	QString savePath;
+	SAVE_FILE("testfile", numeric_data);
+	filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	// Nothing changed
+	QCOMPARE(spreadsheet.columnCount(), spreadsheetColumnCount);
+	QCOMPARE(spreadsheet.rowCount(), spreadsheetRowCount);
+}
+
 void AsciiFilterTest::testWrongColumnRange() {
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
-	const auto spreadSheetRowCount = spreadsheet.rowCount();
-	const auto spreadsheetColumnCount = spreadsheet.columnCount();
 	AsciiFilter filter;
 	auto p = filter.properties();
 	p.automaticSeparatorDetection = true;
@@ -1196,15 +1217,20 @@ void AsciiFilterTest::testWrongColumnRange() {
 	SAVE_FILE("testfile", numeric_data);
 	filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
-	// Wrong column range, so nothing changed
-	QCOMPARE(spreadsheet.rowCount(), spreadSheetRowCount);
-	QCOMPARE(spreadsheet.columnCount(), spreadsheetColumnCount);
+	// Reading only the third column, because 4 does not exist
+	QCOMPARE(spreadsheet.columnCount(), 1);
+	QCOMPARE(spreadsheet.rowCount(), 5);
+
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), -0.288690);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), -0.274957);
+	QCOMPARE(spreadsheet.column(0)->valueAt(2), -0.293267);
+	QCOMPARE(spreadsheet.column(0)->valueAt(3), -0.293267);
+	QCOMPARE(spreadsheet.column(0)->valueAt(4), -0.284112);
 }
 
 void AsciiFilterTest::testWrongColumnRange_IndexColumn() {
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
-	const auto spreadSheetRowCount = spreadsheet.rowCount();
-	const auto spreadsheetColumnCount = spreadsheet.columnCount();
 	AsciiFilter filter;
 	auto p = filter.properties();
 	p.automaticSeparatorDetection = true;
@@ -1221,8 +1247,22 @@ void AsciiFilterTest::testWrongColumnRange_IndexColumn() {
 	filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 		   // Wrong column range, so nothing changed
-	QCOMPARE(spreadsheet.rowCount(), spreadSheetRowCount);
-	QCOMPARE(spreadsheet.columnCount(), spreadsheetColumnCount);
+	QCOMPARE(spreadsheet.rowCount(), 5);
+	QCOMPARE(spreadsheet.columnCount(), 2);
+
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 1);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 2);
+	QCOMPARE(spreadsheet.column(0)->valueAt(2), 3);
+	QCOMPARE(spreadsheet.column(0)->valueAt(3), 4);
+	QCOMPARE(spreadsheet.column(0)->valueAt(4), 5);
+
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), -0.288690);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), -0.274957);
+	QCOMPARE(spreadsheet.column(1)->valueAt(2), -0.293267);
+	QCOMPARE(spreadsheet.column(1)->valueAt(3), -0.293267);
+	QCOMPARE(spreadsheet.column(1)->valueAt(4), -0.284112);
 }
 
 void AsciiFilterTest::testRowRange00() {
@@ -1329,7 +1369,6 @@ void AsciiFilterTest::testRowColumnRange00() {
 	p.endRow = 10;
 	p.startColumn = 2;
 	p.endColumn = 3;
-	p.columnNamesRaw = QStringLiteral("x,y,z");
 	filter.setProperties(p);
 
 	QString savePath;
@@ -1600,7 +1639,7 @@ void AsciiFilterTest::testIvalidFile_Json() {
 	AsciiFilter filter;
 	auto p = filter.properties();
 	p.automaticSeparatorDetection = false;
-	p.separator = QStringLiteral(",");
+	p.separator = QStringLiteral("NotAvailable"); // Sure that this is not available
 	p.headerEnabled = true;
 	p.headerLine = 1;
 	p.intAsDouble = false;
@@ -2100,7 +2139,7 @@ void AsciiFilterTest::keepLast() {
 		filter.readFromDevice(file, &spreadsheet, AbstractFileFilter::ImportMode::Replace, 0, -1, 1);
 	}
 
-	QCOMPARE(spreadsheet.rowCount(), 6);
+	QCOMPARE(spreadsheet.rowCount(), 4);
 	QCOMPARE(spreadsheet.columnCount(), 2);
 	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("x"));
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("y"));
@@ -2113,9 +2152,9 @@ void AsciiFilterTest::keepLast() {
 
 	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
 	QCOMPARE(spreadsheet.column(1)->integerAt(0), 7);
-	QCOMPARE(spreadsheet.column(0)->integerAt(1), 12);
-	QCOMPARE(spreadsheet.column(0)->integerAt(2), 14);
-	QCOMPARE(spreadsheet.column(0)->integerAt(3), 16);
+	QCOMPARE(spreadsheet.column(1)->integerAt(1), 12);
+	QCOMPARE(spreadsheet.column(1)->integerAt(2), 14);
+	QCOMPARE(spreadsheet.column(1)->integerAt(3), 16);
 }
 
 void AsciiFilterTest::testAppendColumns() {

@@ -55,6 +55,7 @@ private Q_SLOTS:
 	void testStartColumn();
 	void testStartColumn_IndexColumn();
 	void testLastColumnOnly();
+	void testWrongColumnRange_StartLargerEnd();
 	void testWrongColumnRange();
 	void testWrongColumnRange_IndexColumn();
 
