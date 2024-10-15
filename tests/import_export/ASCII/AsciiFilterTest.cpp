@@ -482,27 +482,27 @@ void AsciiFilterTest::testMissingPartsSkip() {
 }
 
 void AsciiFilterTest::testImportSingleColumn() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+
+	QStringList fileContent = {
+		QStringLiteral("1;5"),
+		QStringLiteral("2;6"),
+		QStringLiteral("3;7"),
+	};
+	QString savePath;
+	SAVE_FILE("testfile", fileContent);
+
+	auto p = filter.properties();
+	p.automaticSeparatorDetection = false;
+	p.separator = QStringLiteral(";");
+	p.headerEnabled = false;
+	p.columnNamesRaw = QStringLiteral("x");
+	filter.setProperties(p);
+
+	filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
 	// New Asciifilter returns an error when the number of columns for the header do not match the content
-
-	// Spreadsheet spreadsheet(QStringLiteral("test"), false);
-	// AsciiFilter filter;
-
-	// QStringList fileContent = {
-	// 	QStringLiteral("1;5"),
-	// 	QStringLiteral("2;6"),
-	// 	QStringLiteral("3;7"),
-	// };
-	// QString savePath;
-	// SAVE_FILE("testfile", fileContent);
-
-	// auto p = filter.properties();
-	// p.automaticSeparatorDetection = false;
-	// p.separator = QStringLiteral(";");
-	// p.headerEnabled = false;
-	// p.columnNamesRaw = QStringLiteral("x");
-	// filter.setProperties(p);
-
-	// filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	// QCOMPARE(spreadsheet.rowCount(), 3);
 	// QCOMPARE(spreadsheet.columnCount(), 1); // one column name was specified, we import only one column
@@ -695,15 +695,26 @@ void AsciiFilterTest::testHeaderLine2DataLine4_CommentLine() {
 	QCOMPARE(spreadsheet.column(2)->valueAt(2), 0.3433);
 }
 
-// /*!
-//  * the header contains spaces in the column names, values are tab separated.
-//  * when using "auto" for the separator characters, the tab character has to
-//  * be properly recognized and used.
-//  */
+/*!
+ * the header contains spaces in the column names, values are tab separated.
+ * when using "auto" for the separator characters, the tab character has to
+ * be properly recognized and used.
+ */
+// This is anymore possible, because the space will be used as separator. The user has to set the settings manually
 // void AsciiFilterTest::testHeader08() {
 // 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
-// 	Old::AsciiFilter filter;
+// 	AsciiFilter filter;
 // 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_tab_with_header_with_spaces.txt"));
+
+// 	auto p = filter.properties();
+// 	p.automaticSeparatorDetection = false;
+// 	p.separator = QStringLiteral("TAB");
+// 	p.headerEnabled = true;
+// 	p.headerLine = 2;
+// 	p.startRow = 1;
+// 	p.commentCharacter = QStringLiteral("Start"); // Instead of setting startRow to 2, use the Start keyword as "commentCharacter"
+// 	p.intAsDouble = false;
+// 	filter.setProperties(p);
 
 // 	filter.setHeaderEnabled(true);
 // 	filter.setHeaderLine(1);
@@ -1288,23 +1299,22 @@ void AsciiFilterTest::testRowRange_EndRowLargerThanContent() {
 }
 
 void AsciiFilterTest::testRowRange02() {
-	// Not relevant anymore, because we specify the number of rows instead of the end!
-	// Spreadsheet spreadsheet(QStringLiteral("test"), false);
-	// Old::AsciiFilter filter;
-	// const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	Old::AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
 
-	// filter.setSeparatingCharacter(QStringLiteral("auto"));
-	// filter.setHeaderEnabled(false);
-	// filter.setStartRow(3);
-	// filter.setEndRow(1);
-	// filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	filter.setSeparatingCharacter(QStringLiteral("auto"));
+	filter.setHeaderEnabled(false);
+	filter.setStartRow(3);
+	filter.setEndRow(1);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
-	// // start bigger than end, no rows to read
-	// // wrong row range specified (start>end), nothing to read,
-	// // spreadsheet is not touched, default number of rows and columns
-	// // TODO: this is inconsistent with the handling for columns, see testColumnRange05()
-	// QCOMPARE(spreadsheet.rowCount(), 100);
-	// QCOMPARE(spreadsheet.columnCount(), 2);
+	// start bigger than end, no rows to read
+	// wrong row range specified (start>end), nothing to read,
+	// spreadsheet is not touched, default number of rows and columns
+	// TODO: this is inconsistent with the handling for columns, see testColumnRange05()
+	QCOMPARE(spreadsheet.rowCount(), 100);
+	QCOMPARE(spreadsheet.columnCount(), 2);
 }
 
 void AsciiFilterTest::testRowColumnRange00() {
@@ -2831,68 +2841,67 @@ void AsciiFilterTest::benchDoubleImport_cleanup() {
 }
 
 void AsciiFilterTest::benchMark2() {
-	const int numberColumns = 20;
-	const int numberRows = 10000;
+	// const int numberColumns = 20;
+	// const int numberRows = 10000;
 
-	QStringList content;
+	// QStringList content;
 
-	// Header
-	QString line;
-	for (int column = 0; column < numberColumns - 1; column++) {
-		line.append(QStringLiteral("c%1,").arg(QString::number(column + 1)));
-	}
-	line.append(QStringLiteral("c%1").arg(QString::number(numberColumns)));
-	content.append(line);
+	// // Header
+	// QString line;
+	// for (int column = 0; column < numberColumns - 1; column++) {
+	// 	line.append(QStringLiteral("c%1,").arg(QString::number(column + 1)));
+	// }
+	// line.append(QStringLiteral("c%1").arg(QString::number(numberColumns)));
+	// content.append(line);
 
-	// Create data
-	for (int row = 0; row < numberRows; row++) {
-		QString line;
-		for (int column = 0; column < numberColumns - 1; column++) {
-			line.append(QStringLiteral("0.123234234,"));
-		}
-		line.append(QStringLiteral("0.123234234"));
-		content.append(line);
-	}
+	// // Create data
+	// for (int row = 0; row < numberRows; row++) {
+	// 	QString line;
+	// 	for (int column = 0; column < numberColumns - 1; column++) {
+	// 		line.append(QStringLiteral("0.123234234,"));
+	// 	}
+	// 	line.append(QStringLiteral("0.123234234"));
+	// 	content.append(line);
+	// }
 
-	QString savePath;
-	SAVE_FILE("testfile", content);
+	// QString savePath;
+	// SAVE_FILE("testfile", content);
 
-	QBENCHMARK {
-		Spreadsheet spreadsheet(QStringLiteral("test"), false);
-		AsciiFilter filter;
-		auto properties = filter.properties();
-		properties.automaticSeparatorDetection = true;
-		properties.separator = QStringLiteral(" ");
-		properties.headerEnabled = true;
-		properties.headerLine = 1;
-		properties.intAsDouble = false;
-		filter.setProperties(properties);
-		filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	// QBENCHMARK {
+	// 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	// 	AsciiFilter filter;
+	// 	auto properties = filter.properties();
+	// 	properties.automaticSeparatorDetection = true;
+	// 	properties.separator = QStringLiteral(" ");
+	// 	properties.headerEnabled = true;
+	// 	properties.headerLine = 1;
+	// 	properties.intAsDouble = false;
+	// 	filter.setProperties(properties);
+	// 	filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
-		QCOMPARE(spreadsheet.columnCount(), numberColumns);
-		QCOMPARE(spreadsheet.rowCount(), numberRows);
+	// 	QCOMPARE(spreadsheet.columnCount(), numberColumns);
+	// 	QCOMPARE(spreadsheet.rowCount(), numberRows);
 
-		QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
-		VALUES_EQUAL(spreadsheet.column(0)->valueAt(0), 0.123234234);
-		VALUES_EQUAL(spreadsheet.column(1)->valueAt(0), 0.123234234);
-		VALUES_EQUAL(spreadsheet.column(2)->valueAt(0), 0.123234234);
-	}
+	// 	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
+	// 	VALUES_EQUAL(spreadsheet.column(0)->valueAt(0), 0.123234234);
+	// 	VALUES_EQUAL(spreadsheet.column(1)->valueAt(0), 0.123234234);
+	// 	VALUES_EQUAL(spreadsheet.column(2)->valueAt(0), 0.123234234);
+	// }
 
-	QBENCHMARK {
-		Spreadsheet spreadsheet(QStringLiteral("test"), false);
-		Old::AsciiFilter filter;
-		filter.setHeaderEnabled(true);
-		filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	// QBENCHMARK {
+	// 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	// 	Old::AsciiFilter filter;
+	// 	filter.setHeaderEnabled(true);
+	// 	filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
-		QCOMPARE(spreadsheet.columnCount(), numberColumns);
-		QCOMPARE(spreadsheet.rowCount(), numberRows);
+	// 	QCOMPARE(spreadsheet.columnCount(), numberColumns);
+	// 	QCOMPARE(spreadsheet.rowCount(), numberRows);
 
-		QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
-		VALUES_EQUAL(spreadsheet.column(0)->valueAt(0), 0.123234234);
-		VALUES_EQUAL(spreadsheet.column(1)->valueAt(0), 0.123234234);
-		VALUES_EQUAL(spreadsheet.column(2)->valueAt(0), 0.123234234);
-	}
-
+	// 	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
+	// 	VALUES_EQUAL(spreadsheet.column(0)->valueAt(0), 0.123234234);
+	// 	VALUES_EQUAL(spreadsheet.column(1)->valueAt(0), 0.123234234);
+	// 	VALUES_EQUAL(spreadsheet.column(2)->valueAt(0), 0.123234234);
+	// }
 }
 
 void AsciiFilterTest::determineSeparator() {
