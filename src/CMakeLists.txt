@@ -62,6 +62,7 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/datasources/ImportFileDialog.cpp
     ${FRONTEND_DIR}/datasources/ImportKaggleDatasetWidget.cpp
     ${FRONTEND_DIR}/datasources/ImportKaggleDatasetDialog.cpp
+    ${FRONTEND_DIR}/datasources/ImportOriginLayersDialog.cpp
     ${FRONTEND_DIR}/datasources/ImportProjectDialog.cpp
     ${FRONTEND_DIR}/datasources/ImportSQLDatabaseDialog.cpp
     ${FRONTEND_DIR}/datasources/ImportSQLDatabaseWidget.cpp
@@ -219,6 +220,7 @@ set(UI_SOURCES
     ${FRONTEND_DIR}/ui/datasources/importdatasetwidget.ui
     ${FRONTEND_DIR}/ui/datasources/importkaggledatasetwidget.ui
     ${FRONTEND_DIR}/ui/datasources/importfilewidget.ui
+    ${FRONTEND_DIR}/ui/datasources/importoriginlayersdialog.ui
     ${FRONTEND_DIR}/ui/datasources/importwarningsdialog.ui
     ${FRONTEND_DIR}/ui/datasources/importprojectwidget.ui
     ${FRONTEND_DIR}/ui/datasources/importsqldatabasewidget.ui

@@ -891,6 +891,133 @@ void StatisticalPlotsTest::testPBChartS() {
 		QCOMPARE(xColumn->valueAt(i), i + 1);
 }
 
+/*!
+ * test the NP chart, the example is taken from Wheeler "Making Sense of Data", chapter 14.
+ */
+void StatisticalPlotsTest::testPBChartNP() {
+	// prepare the data
+	auto* column = new Column(QLatin1String("data"), AbstractColumn::ColumnMode::Integer);
+	// clang-format off
+	column->setIntegers({27, 19, 18, 16, 16, 12, 15, 13, 16, 16, 9, 17, 21, 15, 39, 21, 14, 23, 19, 29, 30});
+	// clang-format on
+
+	// prepare the worksheet + plot
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
+	pbc->setDataColumn(column);
+	pbc->setType(ProcessBehaviorChart::Type::NP);
+	pbc->setSampleSize(100);
+	p->addChild(pbc);
+
+	// check the limits, two digit comparison with the values from the book
+	QCOMPARE(std::round(pbc->center() * 100) / 100, 19.29);
+	QCOMPARE(std::round(pbc->upperLimit() * 100) / 100, 31.12);
+	QCOMPARE(std::round(pbc->lowerLimit() * 100) / 100, 7.45);
+
+	// check the plotted data ("statistics") - the original data is plotted
+	const int rowCount = column->rowCount();
+	auto* yColumn = pbc->dataCurve()->yColumn();
+	QCOMPARE(yColumn, column);
+	QCOMPARE(yColumn->rowCount(), rowCount);
+
+	// index from 1 to 21 is used for x
+	auto* xColumn = pbc->dataCurve()->xColumn();
+	QCOMPARE(xColumn->rowCount(), rowCount);
+	for (int i = 0; i < rowCount; ++i)
+		QCOMPARE(xColumn->valueAt(i), i + 1);
+}
+
+/*!
+ * test the P chart, the example is taken from Wheeler "Making Sense of Data", chapter 14.
+ */
+void StatisticalPlotsTest::testPBChartP() {
+	// prepare the data
+	auto* column = new Column(QLatin1String("data"), AbstractColumn::ColumnMode::Integer);
+	auto* column2 = new Column(QLatin1String("data2"), AbstractColumn::ColumnMode::Integer);
+	// clang-format off
+	column->setIntegers({27, 31, 70, 54, 69, 101, 28, 37, 47, 46, 70, 105, 19, 33, 68, 44, 74, 124, 21, 32, 65, 46, 75, 117});
+	column2->setIntegers({102, 146, 280, 207, 322, 410, 99, 143, 235, 185, 271, 469, 101, 140, 292, 207, 257, 511, 94, 139, 229, 170, 290, 407});
+	// clang-format on
+
+	// prepare the worksheet + plot
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
+	pbc->setDataColumn(column);
+	pbc->setData2Column(column2);
+	pbc->setType(ProcessBehaviorChart::Type::P);
+	p->addChild(pbc);
+
+	// check the limits, two digit comparison with the values from the book
+	QCOMPARE(std::round(pbc->center() * 100) / 100, 0.25);
+	QCOMPARE(std::round(pbc->upperLimit() * 100) / 100, 0.33);
+	QCOMPARE(std::round(pbc->lowerLimit() * 100) / 100, 0.16);
+
+	// check the plotted data ("statistics") - proportions are plotted
+	const int rowCount = 24; // 24 values
+	auto* yColumn = pbc->dataCurve()->yColumn();
+	QCOMPARE(yColumn->rowCount(), rowCount);
+	const QVector<double> ref = {0.265, 0.212, 0.250, 0.261, 0.214, 0.246, 0.283, 0.259, 0.200, 0.249, 0.258, 0.224,
+								 0.188, 0.236, 0.233, 0.213, 0.288, 0.243, 0.223, 0.230, 0.284, 0.271, 0.259, 0.287};
+	for (int i = 0; i < rowCount - 1; ++i)
+		QCOMPARE(std::round(yColumn->valueAt(i) * 1000) / 1000, ref.at(i)); // compare three digits
+
+	// index from 1 to 24 is used for x
+	auto* xColumn = pbc->dataCurve()->xColumn();
+	QCOMPARE(xColumn->rowCount(), rowCount);
+	for (int i = 0; i < rowCount; ++i)
+		QCOMPARE(xColumn->valueAt(i), i + 1);
+}
+
+/*!
+ * test the C chart, the example is taken from Wheeler "Making Sense of Data", chapter 14.
+ */
+void StatisticalPlotsTest::testPBChartC() {
+	// prepare the data
+	auto* column = new Column(QLatin1String("data"), AbstractColumn::ColumnMode::Integer);
+	// clang-format off
+	column->setIntegers({0, 2, 3, 2, 0, 1, 3, 1, 1, 0, 1, 4, 0, 2, 0, 1, 4, 2, 0, 1, 3, 3, 2, 0, 1, 0, 1, 3, 1, 2, 5});
+	// clang-format on
+
+	// prepare the worksheet + plot
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
+	pbc->setDataColumn(column);
+	pbc->setType(ProcessBehaviorChart::Type::C);
+	p->addChild(pbc);
+
+	// check the limits, two digit comparison with the values from the book
+	QCOMPARE(std::round(pbc->center() * 100) / 100, 1.58);
+	QCOMPARE(std::round(pbc->upperLimit() * 100) / 100, 5.35);
+	QCOMPARE(std::round(pbc->lowerLimit() * 100) / 100, 0.);
+
+	// check the plotted data ("statistics") - the original data is plotted
+	const int rowCount = column->rowCount();
+	auto* yColumn = pbc->dataCurve()->yColumn();
+	QCOMPARE(yColumn, column);
+	QCOMPARE(yColumn->rowCount(), rowCount);
+
+	// index from 1 to 31 is used for x
+	auto* xColumn = pbc->dataCurve()->xColumn();
+	QCOMPARE(xColumn->rowCount(), rowCount);
+	for (int i = 0; i < rowCount; ++i)
+		QCOMPARE(xColumn->valueAt(i), i + 1);
+}
+
+/*!
+ * test the U chart, the example is taken from Wheeler "Making Sense of Data", chapter 14.
+ */
+void StatisticalPlotsTest::testPBChartU() {
+}
+
 // ##############################################################################
 // ############################ Run Chart #######################################
 // ##############################################################################

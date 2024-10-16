@@ -15,6 +15,7 @@
 #include "frontend/dockwidgets/BaseDock.h"
 #include "ui_processbehaviorchartdock.h"
 
+class KMessageWidget;
 class LineWidget;
 class ProcessBehaviorChart;
 class SymbolWidget;
@@ -31,7 +32,8 @@ public:
 	void updateLocale() override;
 
 private:
-	TreeViewComboBox* cbDataColumn;
+	TreeViewComboBox* cbDataColumn{nullptr};
+	TreeViewComboBox* cbData2Column{nullptr};
 
 	void load();
 	void loadConfig(KConfig&);
@@ -43,6 +45,7 @@ protected:
 	LineWidget* centerLineWidget{nullptr};
 	LineWidget* upperLimitLineWidget{nullptr};
 	LineWidget* lowerLimitLineWidget{nullptr};
+	KMessageWidget* m_messageWidget{nullptr};
 
 	QList<ProcessBehaviorChart*> m_plots;
 	ProcessBehaviorChart* m_plot{nullptr};
@@ -55,6 +58,7 @@ private Q_SLOTS:
 	// SLOTs for changes triggered in ProcessBehaviorChartDock
 	// General-Tab
 	void dataColumnChanged(const QModelIndex&);
+	void data2ColumnChanged(const QModelIndex&);
 	void typeChanged(int);
 	void limitsMetricChanged(int);
 	void sampleSizeChanged(int);
@@ -63,10 +67,13 @@ private Q_SLOTS:
 	// SLOTs for changes triggered in ProcessBehaviorChart
 	// General-Tab
 	void plotDataColumnChanged(const AbstractColumn*);
+	void plotData2ColumnChanged(const AbstractColumn*);
 	void plotTypeChanged(ProcessBehaviorChart::Type);
 	void plotLimitsMetricChanged(ProcessBehaviorChart::LimitsMetric);
 	void plotSampleSizeChanged(int);
 	void plotNegativeLowerLimitEnabledChanged(bool);
+
+	void showStatusInfo(const QString&);
 
 	// load and save
 	void loadConfigFromTemplate(KConfig&);

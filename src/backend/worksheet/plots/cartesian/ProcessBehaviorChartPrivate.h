@@ -33,9 +33,12 @@ public:
 	XYCurve* upperLimitCurve{nullptr};
 	XYCurve* lowerLimitCurve{nullptr};
 
-	// column for the source data
-	const AbstractColumn* dataColumn{nullptr};
+	// columns for the source data
+	const AbstractColumn* dataColumn{nullptr}; // column with the data containing the actual variables/measures/attributes
 	QString dataColumnPath;
+
+	const AbstractColumn* data2Column{nullptr}; // additional input like the sample sizes for the P chart
+	QString data2ColumnPath;
 
 	// columns used for the data curve in case other statistics is being plotted
 	// and not the original data provided by the user in xDataColumn and yDataColumn above

@@ -3013,13 +3013,11 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 void XYCurve::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group(QStringLiteral("XYCurve"));
 
-	const auto* plot = dynamic_cast<const CartesianPlot*>(parentAspect());
-	if (!plot)
-		return;
+	Q_D(XYCurve);
+	const auto* plot = d->m_plot;
 	const int index = plot->curveChildIndex(this);
 	const QColor themeColor = plot->themeColorPalette(index);
 
-	Q_D(XYCurve);
 	d->suppressRecalc = true;
 
 	d->line->loadThemeConfig(group, themeColor);

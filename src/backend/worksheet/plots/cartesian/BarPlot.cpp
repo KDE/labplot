@@ -1530,11 +1530,11 @@ void BarPlot::loadThemeConfig(const KConfig& config) {
 	else
 		group = config.group(QStringLiteral("BarPlot"));
 
-	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
-	int index = plot->curveChildIndex(this);
-	const QColor themeColor = plot->themeColorPalette(index);
-
 	Q_D(BarPlot);
+	const auto* plot = d->m_plot;
+	int index = plot->curveChildIndex(this);
+	const QColor themeColor = d->m_plot->themeColorPalette(index);
+
 	d->suppressRecalc = true;
 
 	for (int i = 0; i < d->dataColumns.count(); ++i) {

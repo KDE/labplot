@@ -21,6 +21,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #ifdef HAVE_LIBORIGIN
+#include "frontend/datasources/ImportOriginLayersDialog.h"
 #include "backend/datasources/projects/OriginProjectParser.h"
 #endif
 #include "backend/datapicker/Datapicker.h"
@@ -1519,7 +1520,6 @@ void MainWin::openProject(const QString& filename) {
 	if (!newProject(false))
 		return;
 
-	WAIT_CURSOR;
 	statusBar()->showMessage(i18n("Loading %1...", filename));
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 	m_project->setFileName(filename);
@@ -1527,20 +1527,42 @@ void MainWin::openProject(const QString& filename) {
 	timer.start();
 	bool rc = false;
 	if (Project::isLabPlotProject(filename)) {
+		WAIT_CURSOR;
 		rc = m_project->load(filename);
+		RESET_CURSOR;
 	}
 #ifdef HAVE_LIBORIGIN
 	else if (OriginProjectParser::isOriginProject(filename)) {
 		OriginProjectParser parser;
 		parser.setProjectFileName(filename);
+
+		// check if graphs have multiple layer
+		bool hasUnusedObjects, hasMultiLayerGraphs;
+		parser.checkContent(hasUnusedObjects, hasMultiLayerGraphs);
+		DEBUG(Q_FUNC_INFO << ", project has multilayer graphs: " << hasMultiLayerGraphs)
+		// ask how to import OPJ graph layers if graphs have multiple layer
+		if (hasMultiLayerGraphs) {
+			auto* dlg = new ImportOriginLayersDialog(this);
+			bool graphLayersAsPlotArea = true;
+			if (dlg->exec() == QDialog::Accepted)
+				graphLayersAsPlotArea = dlg->graphLayersAsPlotArea();
+			delete dlg;
+
+			parser.setGraphLayerAsPlotArea(graphLayersAsPlotArea);
+		}
+
+		WAIT_CURSOR;
 		parser.importTo(m_project, QStringList()); // TODO: add return code
+		RESET_CURSOR;
 		rc = true;
 	}
 #endif
 
 #ifdef HAVE_CANTOR_LIBS
 	else if (filename.endsWith(QLatin1String(".cws"), Qt::CaseInsensitive) || filename.endsWith(QLatin1String(".ipynb"), Qt::CaseInsensitive)) {
+		WAIT_CURSOR;
 		rc = m_project->loadNotebook(filename);
+		RESET_CURSOR;
 	}
 #endif
 
@@ -1548,7 +1570,6 @@ void MainWin::openProject(const QString& filename) {
 
 	if (!rc) {
 		closeProject();
-		RESET_CURSOR;
 		return;
 	}
 
@@ -1595,8 +1616,6 @@ void MainWin::openProject(const QString& filename) {
 
 	if (m_autoSaveActive)
 		m_autoSaveTimer.start();
-
-	RESET_CURSOR;
 }
 
 void MainWin::openRecentProject(const QUrl& url) {
@@ -2579,6 +2598,8 @@ void MainWin::handleSettingsChanges(QList<SettingsDialog::SettingsType> changes)
 #ifdef HAVE_CANTOR_LIBS
 	if (changes.contains(SettingsDialog::SettingsType::Notebook))
 		updateNotebookActions();
+#else
+	Q_UNUSED(changes)
 #endif
 }
 

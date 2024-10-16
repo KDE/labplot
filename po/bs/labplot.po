@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-07 01:44+0000\n"
+"POT-Creation-Date: 2024-10-16 01:49+0000\n"
 "PO-Revision-Date: 2015-02-25 20:16+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -71,7 +71,7 @@ msgstr "Preimenuj"
 #: src/backend/spreadsheet/Spreadsheet.cpp:652
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:487
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:273
-#: src/frontend/worksheet/WorksheetView.cpp:136
+#: src/frontend/worksheet/WorksheetView.cpp:134
 #, kde-format
 msgid "Delete"
 msgstr "Obriši"
@@ -300,7 +300,7 @@ msgstr "iteracije"
 #: src/frontend/ui/dockwidgets/valuewidget.ui:269
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:280
 #: src/frontend/widgets/LabelWidget.cpp:208
-#: src/frontend/worksheet/WorksheetView.cpp:220
+#: src/frontend/worksheet/WorksheetView.cpp:218
 #, kde-format
 msgid "Text"
 msgstr "Tekst"
@@ -395,14 +395,14 @@ msgstr "U %1"
 msgid "Import Data"
 msgstr "Uvezi u"
 
-#: src/backend/core/AbstractPart.cpp:116 src/frontend/MainWin.cpp:645
-#: src/frontend/MainWin.cpp:654
+#: src/backend/core/AbstractPart.cpp:116 src/frontend/MainWin.cpp:646
+#: src/frontend/MainWin.cpp:655
 #, fuzzy, kde-format
 #| msgid "image"
 msgid "From File..."
 msgstr "slika"
 
-#: src/backend/core/AbstractPart.cpp:118 src/frontend/MainWin.cpp:666
+#: src/backend/core/AbstractPart.cpp:118 src/frontend/MainWin.cpp:667
 #, kde-format
 msgid "From SQL Database..."
 msgstr ""
@@ -427,7 +427,7 @@ msgstr "Štampaj"
 msgid "Print Preview"
 msgstr "Pregled pred štampanje"
 
-#: src/backend/core/AbstractPart.cpp:137 src/frontend/MainWin.cpp:738
+#: src/backend/core/AbstractPart.cpp:137 src/frontend/MainWin.cpp:739
 #, fuzzy, kde-format
 #| msgid "Close &All"
 msgid "&Close"
@@ -1978,7 +1978,7 @@ msgid "Unknown"
 msgstr "nepoznato"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/MainWin.cpp:616 src/frontend/MainWin.cpp:1942
+#: src/frontend/MainWin.cpp:617 src/frontend/MainWin.cpp:1961
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -3880,7 +3880,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
 #: src/backend/gsl/functions.cpp:252
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:70
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:168
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:170
 #: src/frontend/dockwidgets/RunChartDock.cpp:147
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:135
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:73
@@ -7874,8 +7874,8 @@ msgstr "srednja apsolutna greška"
 #. i18n: ectx: property (text), widget (QLabel, lNumber)
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarsNumber)
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:172
-#: src/frontend/ui/dockwidgets/barplotdock.ui:285
-#: src/frontend/ui/dockwidgets/barplotdock.ui:397
+#: src/frontend/ui/dockwidgets/barplotdock.ui:296
+#: src/frontend/ui/dockwidgets/barplotdock.ui:456
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:378
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:294
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:363
@@ -8438,7 +8438,7 @@ msgid "%1: set data columns"
 msgstr "%1: postavi kolonu vrijednosti"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:311
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:383
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:389
 #, fuzzy, kde-format
 #| msgid "%1: set arrow type"
 msgid "%1: set type"
@@ -8827,8 +8827,8 @@ msgstr "vertikalna oa"
 #: src/frontend/matrix/MatrixView.cpp:133
 #: src/frontend/notebook/NotebookView.cpp:109
 #: src/frontend/widgets/BackgroundWidget.cpp:123
-#: src/frontend/worksheet/WorksheetView.cpp:221
-#: src/frontend/worksheet/WorksheetView.cpp:1355
+#: src/frontend/worksheet/WorksheetView.cpp:219
+#: src/frontend/worksheet/WorksheetView.cpp:1338
 #, fuzzy, kde-format
 #| msgid "Images"
 msgid "Image"
@@ -8948,10 +8948,10 @@ msgid "Error Function"
 msgstr "Funkcije"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:634
-#: src/frontend/MainWin.cpp:865 src/frontend/notebook/NotebookView.cpp:167
+#: src/frontend/MainWin.cpp:866 src/frontend/notebook/NotebookView.cpp:167
 #: src/frontend/workbook/WorkbookView.cpp:135
-#: src/frontend/worksheet/WorksheetView.cpp:291
-#: src/frontend/worksheet/WorksheetView.cpp:430
+#: src/frontend/worksheet/WorksheetView.cpp:289
+#: src/frontend/worksheet/WorksheetView.cpp:428
 #, fuzzy, kde-format
 #| msgid "Add new"
 msgid "Add New"
@@ -8996,7 +8996,7 @@ msgstr "&Analiza"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:747
 #: src/frontend/ThemeHandler.cpp:49 src/frontend/ThemeHandler.cpp:144
-#: src/frontend/worksheet/WorksheetView.cpp:541
+#: src/frontend/worksheet/WorksheetView.cpp:539
 #, fuzzy, kde-format
 #| msgid "Apply"
 msgid "Theme"
@@ -9278,8 +9278,8 @@ msgid "%1: add function curve"
 msgstr "%1: dodaj %2 kolonu"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2053
-#: src/frontend/worksheet/WorksheetView.cpp:1351
-#: src/frontend/worksheet/WorksheetView.cpp:1352
+#: src/frontend/worksheet/WorksheetView.cpp:1334
+#: src/frontend/worksheet/WorksheetView.cpp:1335
 #, fuzzy, kde-format
 #| msgid "text label"
 msgid "Text Label"
@@ -9465,7 +9465,7 @@ msgstr "Binomna Distribucija"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:404
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:227
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:371
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:377
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:252
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:241
 #, fuzzy, kde-format
@@ -9558,23 +9558,28 @@ msgstr "%1: postavi širinu"
 msgid "%1: legend visibility changed"
 msgstr "%1: pozadinski tip promijenjen"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:390
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:396
 #, fuzzy, kde-format
 #| msgid "%1: set axis start"
 msgid "%1: set limits metric"
 msgstr "%1: postavi osni start"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:397
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:403
 #, fuzzy, kde-format
 #| msgid "%1: set symbol size"
 msgid "%1: set sample size"
 msgstr "%1: postavi veličinu simbola"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:404
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:410
 #, fuzzy, kde-format
 #| msgid "%1: set geometry rect"
 msgid "%1: change negative lower limit"
 msgstr "%1: postavi geometrijski rect"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:541
+#, kde-format
+msgid "The last sample is incomplete and was omitted."
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:264
 #, fuzzy, kde-format
@@ -10776,8 +10781,8 @@ msgstr "zatvori sve"
 #: src/frontend/datapicker/DatapickerImageView.cpp:120
 #: src/frontend/matrix/MatrixView.cpp:192
 #: src/frontend/notebook/NotebookView.cpp:53
-#: src/frontend/worksheet/WorksheetView.cpp:145
-#: src/frontend/worksheet/WorksheetView.cpp:378
+#: src/frontend/worksheet/WorksheetView.cpp:143
+#: src/frontend/worksheet/WorksheetView.cpp:376
 #, fuzzy, kde-format
 #| msgid "Zoom in"
 msgid "Zoom In"
@@ -10786,8 +10791,8 @@ msgstr "Uvećaj"
 #: src/frontend/datapicker/DatapickerImageView.cpp:123
 #: src/frontend/matrix/MatrixView.cpp:193
 #: src/frontend/notebook/NotebookView.cpp:57
-#: src/frontend/worksheet/WorksheetView.cpp:146
-#: src/frontend/worksheet/WorksheetView.cpp:382
+#: src/frontend/worksheet/WorksheetView.cpp:144
+#: src/frontend/worksheet/WorksheetView.cpp:380
 #, fuzzy, kde-format
 #| msgid "Zoom out"
 msgid "Zoom Out"
@@ -10795,14 +10800,14 @@ msgstr "Umanji"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:126
 #: src/frontend/matrix/MatrixView.cpp:194
-#: src/frontend/worksheet/WorksheetView.cpp:147
+#: src/frontend/worksheet/WorksheetView.cpp:145
 #, fuzzy, kde-format
 #| msgid "Original size"
 msgid "Original Size"
 msgstr "Originalna veličina"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:129
-#: src/frontend/worksheet/WorksheetView.cpp:169
+#: src/frontend/worksheet/WorksheetView.cpp:167
 #, fuzzy, kde-format
 #| msgid "Fit to height"
 msgctxt "Zoom"
@@ -10810,7 +10815,7 @@ msgid "Fit to Height"
 msgstr "Uklopi u visinu"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:130
-#: src/frontend/worksheet/WorksheetView.cpp:172
+#: src/frontend/worksheet/WorksheetView.cpp:170
 #, fuzzy, kde-format
 #| msgid "Fit to width"
 msgctxt "Zoom"
@@ -10818,13 +10823,13 @@ msgid "Fit to Width"
 msgstr "Uklopi u širinu"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:133
-#: src/frontend/worksheet/WorksheetView.cpp:186
+#: src/frontend/worksheet/WorksheetView.cpp:184
 #, kde-format
 msgid "Navigate"
 msgstr "Navigacija"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:137
-#: src/frontend/worksheet/WorksheetView.cpp:189
+#: src/frontend/worksheet/WorksheetView.cpp:187
 #, kde-format
 msgid "Select and Zoom"
 msgstr "Odaberi i uvećaj"
@@ -10876,38 +10881,38 @@ msgid "Shift Down"
 msgstr "pomjeri > na dolje"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:167
-#: src/frontend/worksheet/WorksheetView.cpp:193
+#: src/frontend/worksheet/WorksheetView.cpp:191
 #, kde-format
 msgid "No Magnification"
 msgstr ""
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:171
-#: src/frontend/worksheet/WorksheetView.cpp:197
+#: src/frontend/worksheet/WorksheetView.cpp:195
 #, kde-format
 msgid "2x Magnification"
 msgstr ""
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:174
-#: src/frontend/worksheet/WorksheetView.cpp:200
+#: src/frontend/worksheet/WorksheetView.cpp:198
 #, kde-format
 msgid "3x Magnification"
 msgstr ""
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:177
-#: src/frontend/worksheet/WorksheetView.cpp:203
+#: src/frontend/worksheet/WorksheetView.cpp:201
 #, kde-format
 msgid "4x Magnification"
 msgstr ""
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:180
-#: src/frontend/worksheet/WorksheetView.cpp:206
+#: src/frontend/worksheet/WorksheetView.cpp:204
 #, kde-format
 msgid "5x Magnification"
 msgstr ""
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:213
-#: src/frontend/worksheet/WorksheetView.cpp:438
-#: src/frontend/worksheet/WorksheetView.cpp:489
+#: src/frontend/worksheet/WorksheetView.cpp:436
+#: src/frontend/worksheet/WorksheetView.cpp:487
 #, kde-format
 msgid "Mouse Mode"
 msgstr "Režim miša"
@@ -10924,7 +10929,7 @@ msgid "Move Last Point"
 msgstr ""
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:236
-#: src/frontend/worksheet/WorksheetView.cpp:455
+#: src/frontend/worksheet/WorksheetView.cpp:453
 #, fuzzy, kde-format
 #| msgid "Scientific notation"
 msgid "Magnification"
@@ -10969,7 +10974,7 @@ msgstr "xy-kriva"
 #: src/frontend/datapicker/DatapickerImageView.cpp:870
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4068
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4122
-#: src/frontend/worksheet/WorksheetView.cpp:2196
+#: src/frontend/worksheet/WorksheetView.cpp:2179
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to export"
@@ -10978,7 +10983,7 @@ msgstr "Otvaranje neuspješno"
 #: src/frontend/datapicker/DatapickerImageView.cpp:870
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4068
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4122
-#: src/frontend/worksheet/WorksheetView.cpp:2196
+#: src/frontend/worksheet/WorksheetView.cpp:2179
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr ""
@@ -12094,6 +12099,40 @@ msgstr "Veza:"
 msgid "Could not find .csv files in %1"
 msgstr ""
 
+#: src/frontend/datasources/ImportOriginLayersDialog.cpp:22
+#, kde-format
+msgctxt "@title:window"
+msgid "Import Origin Multi-Layer Graphs"
+msgstr ""
+
+#: src/frontend/datasources/ImportOriginLayersDialog.cpp:26
+#: src/frontend/datasources/ImportProjectDialog.cpp:169
+#, kde-format
+msgid ""
+"Multiple layers are used in Origin to either implement multiple plots or "
+"multiple axes on the same plot (see <a href=\"https://www.originlab.com/doc/"
+"Origin-Help/MultiLayer-Graph\">Origin's Documentation</a> for more details)."
+"<br>LabPlot can process only one type at the same time.<br><br>Specify how "
+"to import multi-layered graphs in the selected project:<ul><li>As Plot Area "
+"- a new plot area is created for every layer.</li><li>As Coordinate System - "
+"a new coordinate system (data range) on the same plot area is created for "
+"every layer.</li></ul>"
+msgstr ""
+
+#: src/frontend/datasources/ImportOriginLayersDialog.cpp:38
+#: src/frontend/datasources/ImportProjectDialog.cpp:159
+#, fuzzy, kde-format
+#| msgid "Plot Area"
+msgid "As Plot Area"
+msgstr "Prostor za Crtanje"
+
+#: src/frontend/datasources/ImportOriginLayersDialog.cpp:39
+#: src/frontend/datasources/ImportProjectDialog.cpp:160
+#, fuzzy, kde-format
+#| msgid "%1: set matrix coordinates"
+msgid "As Coordinate System"
+msgstr "%1: postavi koordinate matrice"
+
 #: src/frontend/datasources/ImportProjectDialog.cpp:83
 #: src/frontend/datasources/ImportProjectDialog.cpp:512
 #, fuzzy, kde-format
@@ -12136,34 +12175,9 @@ msgid ""
 "have to be imported into."
 msgstr ""
 
-#: src/frontend/datasources/ImportProjectDialog.cpp:159
-#, fuzzy, kde-format
-#| msgid "Plot Area"
-msgid "As Plot Area"
-msgstr "Prostor za Crtanje"
-
-#: src/frontend/datasources/ImportProjectDialog.cpp:160
-#, fuzzy, kde-format
-#| msgid "%1: set matrix coordinates"
-msgid "As Coordinate System"
-msgstr "%1: postavi koordinate matrice"
-
 #: src/frontend/datasources/ImportProjectDialog.cpp:164
 #, kde-format
 msgid "Specify how to import multi-layered graphs."
-msgstr ""
-
-#: src/frontend/datasources/ImportProjectDialog.cpp:169
-#, kde-format
-msgid ""
-"Multiple layers are used in Origin to either implement multiple plots or "
-"multiple axes on the same plot (see <a href=\"https://www.originlab.com/doc/"
-"Origin-Help/MultiLayer-Graph\">Origin's Documentation</a> for more details)."
-"LabPlot can process only one type at the same time.<br><br>Specify how to "
-"import multi-layered graphs in the selected project:<ul><li>As Plot Area - a "
-"new plot area is created for every layer.</li><li>As Coordinate System - a "
-"new coordinate system (data range) on the same plot area is created for "
-"every layer</li></ul>"
 msgstr ""
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:271
@@ -12215,7 +12229,7 @@ msgid "Open LabPlot Project"
 msgstr "Otvori projekat"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:438
-#: src/frontend/MainWin.cpp:1461
+#: src/frontend/MainWin.cpp:1462
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "LabPlot Projects (%1)"
@@ -12243,8 +12257,8 @@ msgstr "Ime filtera:"
 #. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:71 src/frontend/MainWin.cpp:610
-#: src/frontend/MainWin.cpp:1924 src/frontend/SettingsDialog.cpp:68
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:71 src/frontend/MainWin.cpp:611
+#: src/frontend/MainWin.cpp:1943 src/frontend/SettingsDialog.cpp:68
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:122
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -12495,7 +12509,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2741
+#: src/frontend/MainWin.cpp:2762
 #, kde-format
 msgid "Warning"
 msgstr ""
@@ -12520,7 +12534,7 @@ msgstr "Varijanca"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabValues)
 #: src/frontend/datasources/NetCDFOptionsWidget.cpp:29
-#: src/frontend/ui/dockwidgets/barplotdock.ui:370
+#: src/frontend/ui/dockwidgets/barplotdock.ui:429
 #: src/frontend/ui/dockwidgets/histogramdock.ui:418
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:403
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:225
@@ -12882,7 +12896,7 @@ msgid "%1 axes: template \"%2\" loaded"
 msgstr "%1: ose: predložak \"%2\" učitan"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:2030
-#: src/frontend/dockwidgets/BarPlotDock.cpp:508
+#: src/frontend/dockwidgets/BarPlotDock.cpp:503
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:728
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1839
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:781
@@ -12891,7 +12905,7 @@ msgstr "%1: ose: predložak \"%2\" učitan"
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:352
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:446
 #: src/frontend/dockwidgets/MatrixDock.cpp:266
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:367
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:392
 #: src/frontend/dockwidgets/QQPlotDock.cpp:279
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:229
 #: src/frontend/dockwidgets/RunChartDock.cpp:224
@@ -12933,7 +12947,7 @@ msgid ""
 "its default value, applying to all bars"
 msgstr ""
 
-#: src/frontend/dockwidgets/BarPlotDock.cpp:94
+#: src/frontend/dockwidgets/BarPlotDock.cpp:89
 #: src/frontend/dockwidgets/HistogramDock.cpp:83
 #: src/frontend/dockwidgets/XYCurveDock.cpp:89
 #, kde-format
@@ -12941,8 +12955,8 @@ msgid "Uncertainty Bars"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
-#: src/frontend/dockwidgets/BarPlotDock.cpp:338
-#: src/frontend/dockwidgets/BarPlotDock.cpp:364
+#: src/frontend/dockwidgets/BarPlotDock.cpp:333
+#: src/frontend/dockwidgets/BarPlotDock.cpp:359
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:361
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:386
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:315
@@ -12961,7 +12975,7 @@ msgstr "Kolone"
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksColumn)
 #. i18n: ectx: property (text), widget (QLabel, lColumn)
 #. i18n: ectx: property (text), widget (QLabel, lValuesColumn)
-#: src/frontend/dockwidgets/BarPlotDock.cpp:366
+#: src/frontend/dockwidgets/BarPlotDock.cpp:361
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:390
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:343
 #: src/frontend/spreadsheet/GoToDialog.cpp:49
@@ -12975,7 +12989,7 @@ msgstr "Kolone"
 msgid "Column:"
 msgstr "Kolona"
 
-#: src/frontend/dockwidgets/BarPlotDock.cpp:506
+#: src/frontend/dockwidgets/BarPlotDock.cpp:501
 #, fuzzy, kde-format
 #| msgid "%1 cartesian plots: template \"%2\" loaded"
 msgid "%1 bar plots: template \"%2\" loaded"
@@ -13495,7 +13509,7 @@ msgid "Silverman"
 msgstr ""
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:350
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:365
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:390
 #: src/frontend/dockwidgets/QQPlotDock.cpp:277
 #: src/frontend/dockwidgets/RunChartDock.cpp:222
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1036
@@ -13591,14 +13605,14 @@ msgstr "%1: ose: predložak \"%2\" učitan"
 msgid "File Browser"
 msgstr ""
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:167
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:169
 #: src/frontend/dockwidgets/RunChartDock.cpp:146
 #, fuzzy, kde-format
 #| msgid "center"
 msgid "Average"
 msgstr "centar"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:184
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:186
 #, kde-format
 msgid ""
 "The supported chart types are grouped according to the plotted statistics "
@@ -13610,10 +13624,13 @@ msgid ""
 "(X̅R) - plot the <b>ranges for each sample</b>.</li></ul>Averages and "
 "Standard Deviations, Limits Based on the Standard Deviations:<ul><li>X̅  (X̅S) "
 "- plot the <b>averages for each sample</b>.</li><li>S (X̅S) - plot the "
-"<b>standard deviations for each sample</b>.</li></ul>"
+"<b>standard deviations for each sample</b>.</li></ul>Counts:<ul><li>P - plot "
+"<b>binomial proportions</b>.</li><li>NP - plot <b>binomial counts</b>.</"
+"li><li>C - plot <b>Poisson counts</b>.</li><li>U - plot <b>Poisson rates</b>."
+"</li></ul>"
 msgstr ""
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:203
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:212
 #, kde-format
 msgid "Allow negative values for the lower limit."
 msgstr ""
@@ -13671,28 +13688,28 @@ msgstr ""
 "Bilješka, sadržaj je automatski reskaliran ako je projekat aktivan."
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:46
-#: src/frontend/worksheet/WorksheetView.cpp:238
+#: src/frontend/worksheet/WorksheetView.cpp:236
 #, fuzzy, kde-format
 #| msgid "Layout"
 msgid "No Layout"
 msgstr "Raspored"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:47
-#: src/frontend/worksheet/WorksheetView.cpp:229
+#: src/frontend/worksheet/WorksheetView.cpp:227
 #, fuzzy, kde-format
 #| msgid "Vertical layout"
 msgid "Vertical Layout"
 msgstr "Vertikalni raspored"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:48
-#: src/frontend/worksheet/WorksheetView.cpp:232
+#: src/frontend/worksheet/WorksheetView.cpp:230
 #, fuzzy, kde-format
 #| msgid "Horizontal layout"
 msgid "Horizontal Layout"
 msgstr "Horizontalni raspored"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:49
-#: src/frontend/worksheet/WorksheetView.cpp:235
+#: src/frontend/worksheet/WorksheetView.cpp:233
 #, fuzzy, kde-format
 #| msgid "Grid layout"
 msgid "Grid Layout"
@@ -14248,7 +14265,7 @@ msgid ""
 "installation."
 msgstr ""
 
-#: src/frontend/GuiObserver.cpp:195 src/frontend/MainWin.cpp:1368
+#: src/frontend/GuiObserver.cpp:195 src/frontend/MainWin.cpp:1369
 #, fuzzy, kde-format
 #| msgid "Properties"
 msgctxt "@title:window"
@@ -15239,387 +15256,387 @@ msgid "&Windows"
 msgstr "&Prozori"
 
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode)
-#: src/frontend/MainWin.cpp:197 src/frontend/ui/settingsworksheetpage.ui:75
-#: src/frontend/worksheet/WorksheetView.cpp:265
+#: src/frontend/MainWin.cpp:198 src/frontend/ui/settingsworksheetpage.ui:75
+#: src/frontend/worksheet/WorksheetView.cpp:263
 #, kde-format
 msgid "Presenter Mode"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:197
+#: src/frontend/MainWin.cpp:198
 #, kde-format
 msgid ""
 "No worksheets are available in the project. The presenter mode will not be "
 "started."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:211
+#: src/frontend/MainWin.cpp:212
 #, kde-format
 msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr "Dobro došli u LabPlot %1"
 
-#: src/frontend/MainWin.cpp:579
+#: src/frontend/MainWin.cpp:580
 #, fuzzy, kde-format
 #| msgid "new filter"
 msgid "&Open Example"
 msgstr "novi filter"
 
-#: src/frontend/MainWin.cpp:600 src/frontend/MainWin.cpp:1908
+#: src/frontend/MainWin.cpp:601 src/frontend/MainWin.cpp:1927
 #, kde-format
 msgid "Workbook"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:602
+#: src/frontend/MainWin.cpp:603
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:605 src/frontend/MainWin.cpp:1916
+#: src/frontend/MainWin.cpp:606 src/frontend/MainWin.cpp:1935
 #, fuzzy, kde-format
 #| msgid "Data format"
 msgid "Data Extractor"
 msgstr "Format podataka"
 
-#: src/frontend/MainWin.cpp:606
+#: src/frontend/MainWin.cpp:607
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:612
+#: src/frontend/MainWin.cpp:613
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:618
+#: src/frontend/MainWin.cpp:619
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:622 src/frontend/MainWin.cpp:1960
+#: src/frontend/MainWin.cpp:623 src/frontend/MainWin.cpp:1979
 #: src/frontend/SettingsDialog.cpp:63
 #, kde-format
 msgid "Worksheet"
 msgstr "Radni list"
 
-#: src/frontend/MainWin.cpp:624
+#: src/frontend/MainWin.cpp:625
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:628 src/frontend/MainWin.cpp:1968
+#: src/frontend/MainWin.cpp:629 src/frontend/MainWin.cpp:1987
 #, fuzzy, kde-format
 #| msgid "Notes"
 msgid "Note"
 msgstr "Bilješke"
 
-#: src/frontend/MainWin.cpp:629
+#: src/frontend/MainWin.cpp:630
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:633 src/frontend/MainWin.cpp:1900
+#: src/frontend/MainWin.cpp:634 src/frontend/MainWin.cpp:1919
 #, kde-format
 msgid "Folder"
 msgstr "Direktorij"
 
-#: src/frontend/MainWin.cpp:634
+#: src/frontend/MainWin.cpp:635
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:639
+#: src/frontend/MainWin.cpp:640
 #, fuzzy, kde-format
 #| msgid "File Data Source"
 msgid "Live Data Source..."
 msgstr "Datoteka Podatak Izvor"
 
-#: src/frontend/MainWin.cpp:640
+#: src/frontend/MainWin.cpp:641
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:647 src/frontend/MainWin.cpp:656
+#: src/frontend/MainWin.cpp:648 src/frontend/MainWin.cpp:657
 #, kde-format
 msgid "Import data from a regular file"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:661
+#: src/frontend/MainWin.cpp:662
 #, fuzzy, kde-format
 #| msgid "image"
 msgid "From kaggle.com..."
 msgstr "slika"
 
-#: src/frontend/MainWin.cpp:662
+#: src/frontend/MainWin.cpp:663
 #, fuzzy, kde-format
 #| msgid "Import To"
 msgid "Import data from kaggle.com"
 msgstr "Uvezi u"
 
-#: src/frontend/MainWin.cpp:667
+#: src/frontend/MainWin.cpp:668
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:671
+#: src/frontend/MainWin.cpp:672
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgid "From Dataset Collection..."
 msgstr "Veza:"
 
-#: src/frontend/MainWin.cpp:672
+#: src/frontend/MainWin.cpp:673
 #, fuzzy, kde-format
 #| msgid "Import To"
 msgid "Import data from an online dataset"
 msgstr "Uvezi u"
 
-#: src/frontend/MainWin.cpp:676
+#: src/frontend/MainWin.cpp:677
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "LabPlot Project..."
 msgstr "Zatvori projekat"
 
-#: src/frontend/MainWin.cpp:677
+#: src/frontend/MainWin.cpp:678
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:682
+#: src/frontend/MainWin.cpp:683
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Origin Project (OPJ)..."
 msgstr "Otvori projekat"
 
-#: src/frontend/MainWin.cpp:683
+#: src/frontend/MainWin.cpp:684
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:688
+#: src/frontend/MainWin.cpp:689
 #, fuzzy, kde-format
 #| msgid "Export"
 msgid "Export..."
 msgstr "Izvoz"
 
-#: src/frontend/MainWin.cpp:689
+#: src/frontend/MainWin.cpp:690
 #, fuzzy, kde-format
 #| msgid "Fit to selection"
 msgid "Export selected element"
 msgstr "Uklopi u selektovano"
 
-#: src/frontend/MainWin.cpp:695 src/frontend/MainWin.cpp:2445
-#: src/frontend/MainWin.cpp:2453
+#: src/frontend/MainWin.cpp:696 src/frontend/MainWin.cpp:2464
+#: src/frontend/MainWin.cpp:2472
 #, kde-format
 msgid "Share"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:700
+#: src/frontend/MainWin.cpp:701
 #, kde-format
 msgid "Color Maps Browser"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:701
+#: src/frontend/MainWin.cpp:702
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:710
+#: src/frontend/MainWin.cpp:711
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:711
+#: src/frontend/MainWin.cpp:712
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:720
+#: src/frontend/MainWin.cpp:721
 #, fuzzy, kde-format
 #| msgid "Undo/Redo History"
 msgid "Undo/Redo History..."
 msgstr "Vrati na staro/Idi na novo historija"
 
-#: src/frontend/MainWin.cpp:740
+#: src/frontend/MainWin.cpp:741
 #, kde-format
 msgid "Close the active window"
 msgstr "Zatvori aktivni prozor"
 
-#: src/frontend/MainWin.cpp:743
+#: src/frontend/MainWin.cpp:744
 #, kde-format
 msgid "Close &All"
 msgstr "Zatvori &sve"
 
-#: src/frontend/MainWin.cpp:744
+#: src/frontend/MainWin.cpp:745
 #, kde-format
 msgid "Close all the windows"
 msgstr "Zatvori sve prozore"
 
-#: src/frontend/MainWin.cpp:747
+#: src/frontend/MainWin.cpp:748
 #, kde-format
 msgid "Ne&xt"
 msgstr "Slj&edeći"
 
-#: src/frontend/MainWin.cpp:749
+#: src/frontend/MainWin.cpp:750
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "Pomjeri fokus na slijedeći prozor"
 
-#: src/frontend/MainWin.cpp:752
+#: src/frontend/MainWin.cpp:753
 #, kde-format
 msgid "Pre&vious"
 msgstr "&Prethodna"
 
-#: src/frontend/MainWin.cpp:754
+#: src/frontend/MainWin.cpp:755
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "Pomjeri fokus na prethodni prozor"
 
-#: src/frontend/MainWin.cpp:761
+#: src/frontend/MainWin.cpp:762
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "Trenutni &Direktorij samo"
 
-#: src/frontend/MainWin.cpp:766
+#: src/frontend/MainWin.cpp:767
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "Trenutni direktoriji i &Poddirektoriji"
 
-#: src/frontend/MainWin.cpp:770
+#: src/frontend/MainWin.cpp:771
 #, kde-format
 msgid "&All"
 msgstr "&Sve"
 
-#: src/frontend/MainWin.cpp:792
+#: src/frontend/MainWin.cpp:793
 #, fuzzy, kde-format
 #| msgid "Show file info"
 msgid "Show Memory Usage"
 msgstr "Prikaži podatke o datoteci"
 
-#: src/frontend/MainWin.cpp:800
+#: src/frontend/MainWin.cpp:801
 #, kde-format
 msgid "Project Explorer"
 msgstr "Pretraživač Projekata"
 
-#: src/frontend/MainWin.cpp:805
+#: src/frontend/MainWin.cpp:806
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgid "Properties Explorer"
 msgstr "Pretražvač svojstava"
 
-#: src/frontend/MainWin.cpp:810
+#: src/frontend/MainWin.cpp:811
 #, fuzzy, kde-format
 #| msgid "Worksheet printed"
 msgid "Worksheet Preview"
 msgstr "Radni list ispisan"
 
-#: src/frontend/MainWin.cpp:833
+#: src/frontend/MainWin.cpp:834
 #, kde-format
 msgid "Configure CAS..."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:834
+#: src/frontend/MainWin.cpp:835
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
 "systems or to enable new ones"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:895
+#: src/frontend/MainWin.cpp:896
 #, fuzzy, kde-format
 #| msgid "Window visibility policy"
 msgid "Window Visibility"
 msgstr "Polisa vidljivost prozora"
 
-#: src/frontend/MainWin.cpp:912
+#: src/frontend/MainWin.cpp:913
 #, fuzzy, kde-format
 #| msgid "Color map"
 msgid "Color Scheme"
 msgstr "Mapa boja"
 
-#: src/frontend/MainWin.cpp:971
+#: src/frontend/MainWin.cpp:972
 #, kde-format
 msgid "The current project %1 has been modified. Do you want to save it?"
 msgstr "Trenutni projekat %1 je modificiran. Da li želite da ga spasite?"
 
-#: src/frontend/MainWin.cpp:972
+#: src/frontend/MainWin.cpp:973
 #, kde-format
 msgid "Save Project"
 msgstr "Spasi projekat"
 
-#: src/frontend/MainWin.cpp:1329
+#: src/frontend/MainWin.cpp:1330
 #, fuzzy, kde-format
 #| msgid "%1: clear"
 msgid "%1: created"
 msgstr "%1: obriši"
 
-#: src/frontend/MainWin.cpp:1355
+#: src/frontend/MainWin.cpp:1356
 #, fuzzy, kde-format
 #| msgid "Project Explorer"
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Pretraživač Projekata"
 
-#: src/frontend/MainWin.cpp:1380
+#: src/frontend/MainWin.cpp:1381
 #, fuzzy, kde-format
 #| msgid "Worksheet printed"
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "Radni list ispisan"
 
-#: src/frontend/MainWin.cpp:1389
+#: src/frontend/MainWin.cpp:1390
 #, fuzzy, kde-format
 #| msgid "Density"
 msgctxt "@title:window"
 msgid "Content"
 msgstr "Gustina"
 
-#: src/frontend/MainWin.cpp:1466
+#: src/frontend/MainWin.cpp:1467
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Origin Projects (%1)"
 msgstr "Otvori projekat"
 
-#: src/frontend/MainWin.cpp:1472
+#: src/frontend/MainWin.cpp:1473
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "Cantor Projects (*.cws)"
 msgstr "Zatvori projekat"
 
-#: src/frontend/MainWin.cpp:1473
+#: src/frontend/MainWin.cpp:1474
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1480
+#: src/frontend/MainWin.cpp:1481
 #, kde-format
 msgid "All supported files (%1)"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1484
+#: src/frontend/MainWin.cpp:1485
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Otvori projekat"
 
-#: src/frontend/MainWin.cpp:1501
+#: src/frontend/MainWin.cpp:1502
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "Projektna datoteka %1 je već otvorena."
 
-#: src/frontend/MainWin.cpp:1501 src/frontend/MainWin.cpp:1509
-#: src/frontend/MainWin.cpp:1514
+#: src/frontend/MainWin.cpp:1502 src/frontend/MainWin.cpp:1510
+#: src/frontend/MainWin.cpp:1515
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Open Project"
 msgstr "Otvori projekat"
 
-#: src/frontend/MainWin.cpp:1509
+#: src/frontend/MainWin.cpp:1510
 #, fuzzy, kde-format
 #| msgid "The project file %1 is already opened."
 msgid "The project file %1 doesn't exist."
 msgstr "Projektna datoteka %1 je već otvorena."
 
-#: src/frontend/MainWin.cpp:1514
+#: src/frontend/MainWin.cpp:1515
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Couldn't read the project file %1."
@@ -15630,25 +15647,25 @@ msgstr "Ne može se otvoriti fajl %1 za čitanje."
 msgid "Loading %1..."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1556
+#: src/frontend/MainWin.cpp:1577
 #, fuzzy, kde-format
 #| msgid "Project %1 opened"
 msgid "%1: opened"
 msgstr "Projekat %1 otvoren"
 
-#: src/frontend/MainWin.cpp:1591
+#: src/frontend/MainWin.cpp:1612
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Projekat uspješno otvoren (u %1 sekundi)."
 
-#: src/frontend/MainWin.cpp:1681
+#: src/frontend/MainWin.cpp:1700
 #, fuzzy, kde-format
 #| msgid "Save Project"
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Spasi projekat"
 
-#: src/frontend/MainWin.cpp:1683
+#: src/frontend/MainWin.cpp:1702
 #, fuzzy, kde-format
 #| msgid "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.LML *.LML.GZ *.LML.BZ2)"
 msgid ""
@@ -15656,107 +15673,107 @@ msgid ""
 "*.LML.XZ)"
 msgstr "LabPlot Projekti (*.lml *.lml.gz *.lml.bz2 *.LML *.LML.GZ *.LML.BZ2)"
 
-#: src/frontend/MainWin.cpp:1709
+#: src/frontend/MainWin.cpp:1728
 #, fuzzy, kde-format
 #| msgid "Sorry. Could not open file for writing."
 msgid "Couldn't open the temporary file for writing."
 msgstr "Žao nam je. Datoteka ne može biti otvorena za pisanje."
 
-#: src/frontend/MainWin.cpp:1789
+#: src/frontend/MainWin.cpp:1808
 #, kde-format
 msgid "Project saved"
 msgstr "Projekat spašen"
 
-#: src/frontend/MainWin.cpp:1805
+#: src/frontend/MainWin.cpp:1824
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1810
+#: src/frontend/MainWin.cpp:1829
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Ne može se otvoriti fajl %1 za čitanje."
 
-#: src/frontend/MainWin.cpp:1860
+#: src/frontend/MainWin.cpp:1879
 #, fuzzy, kde-format
 #| msgid "%1    [Changed]"
 msgid "Changed"
 msgstr "%1 [Promijenjen]"
 
-#: src/frontend/MainWin.cpp:1875 src/frontend/MainWin.cpp:1887
+#: src/frontend/MainWin.cpp:1894 src/frontend/MainWin.cpp:1906
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1877 src/frontend/MainWin.cpp:1889
+#: src/frontend/MainWin.cpp:1896 src/frontend/MainWin.cpp:1908
 #, kde-format
 msgid "%1 printed"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/MainWin.cpp:2409
+#: src/frontend/MainWin.cpp:2428
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1431
-#: src/frontend/worksheet/WorksheetView.cpp:359
+#: src/frontend/worksheet/WorksheetView.cpp:357
 #, kde-format
 msgid "Cursor"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2445
+#: src/frontend/MainWin.cpp:2464
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2449
+#: src/frontend/MainWin.cpp:2468
 #, fuzzy, kde-format
 #| msgid "Project saved"
 msgid "Project shared successfully"
 msgstr "Projekat spašen"
 
-#: src/frontend/MainWin.cpp:2452
+#: src/frontend/MainWin.cpp:2471
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2640
+#: src/frontend/MainWin.cpp:2661
 #, kde-format
 msgid "Running Kaggle CLI tool failed"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2641
+#: src/frontend/MainWin.cpp:2662
 #, kde-format
 msgid ""
 "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
 "\">\"How to Use Kaggle\"</a> to setup the Kaggle CLI tool."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2704
+#: src/frontend/MainWin.cpp:2725
 #, kde-format
 msgid "%1 exported"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2711
+#: src/frontend/MainWin.cpp:2732
 #, kde-format
 msgid "FITS files saved"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2723
+#: src/frontend/MainWin.cpp:2744
 #, kde-format
 msgid "MQTT Client%1"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2741
+#: src/frontend/MainWin.cpp:2762
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2745
+#: src/frontend/MainWin.cpp:2766
 #, fuzzy, kde-format
 #| msgid "File data source"
 msgid "Live data source%1"
 msgstr "Datoteka podatak izvor"
 
-#: src/frontend/MainWin.cpp:2790
+#: src/frontend/MainWin.cpp:2811
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr ""
@@ -15827,7 +15844,7 @@ msgstr "Uklon&i Selektovano"
 #: src/frontend/matrix/MatrixView.cpp:125
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:311
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:288
-#: src/frontend/worksheet/WorksheetView.cpp:132
+#: src/frontend/worksheet/WorksheetView.cpp:130
 #, kde-format
 msgid "Select All"
 msgstr "Označi sve"
@@ -15976,7 +15993,7 @@ msgid "Header Format"
 msgstr "Format podataka"
 
 #: src/frontend/matrix/MatrixView.cpp:295
-#: src/frontend/worksheet/WorksheetView.cpp:444
+#: src/frontend/worksheet/WorksheetView.cpp:442
 #, kde-format
 msgid "Zoom"
 msgstr "Uvećaj"
@@ -16382,7 +16399,7 @@ msgid "Do you really want to delete %1?"
 msgstr "Da li zaista želite da obrišete odabrani %1 objekat?"
 
 #: src/frontend/ProjectExplorer.cpp:919
-#: src/frontend/worksheet/WorksheetView.cpp:1446
+#: src/frontend/worksheet/WorksheetView.cpp:1429
 #, fuzzy, kde-format
 #| msgid "Delete selected objects"
 msgid "Delete selected object"
@@ -19101,7 +19118,7 @@ msgstr "Simbol"
 #. i18n: ectx: attribute (title), widget (QWidget, tabErrorBars_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tabErrorBars)
 #: src/frontend/ui/datapickercurvewidget.ui:191
-#: src/frontend/ui/dockwidgets/barplotdock.ui:375
+#: src/frontend/ui/dockwidgets/barplotdock.ui:434
 #: src/frontend/ui/dockwidgets/histogramdock.ui:443
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:586
 #, fuzzy, kde-format
@@ -20443,6 +20460,21 @@ msgstr " cm"
 msgid "Link the file"
 msgstr "Poveži fajl"
 
+#. i18n: ectx: property (windowTitle), widget (QDialog, PlotTemplateDialog)
+#. i18n: ectx: property (windowTitle), widget (QDialog, ImportOriginLayersDialog)
+#: src/frontend/ui/datasources/importoriginlayersdialog.ui:14
+#: src/frontend/ui/PlotTemplateDialog.ui:14
+#, kde-format
+msgid "Dialog"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lGraphLayer)
+#: src/frontend/ui/datasources/importoriginlayersdialog.ui:27
+#, fuzzy, kde-format
+#| msgid "Import"
+msgid "Import As"
+msgstr "Uvezi"
+
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #: src/frontend/ui/datasources/importprojectwidget.ui:23
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:92
@@ -21122,7 +21154,7 @@ msgstr "Prva Boja"
 #. i18n: ectx: property (text), widget (QLabel, lGrid)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1620
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:441
-#: src/frontend/worksheet/WorksheetView.cpp:471
+#: src/frontend/worksheet/WorksheetView.cpp:469
 #, kde-format
 msgid "Grid"
 msgstr "Meža"
@@ -21248,7 +21280,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lBorder)
 #. i18n: ectx: attribute (title), widget (QWidget, tabBorder)
-#: src/frontend/ui/dockwidgets/barplotdock.ui:271
+#: src/frontend/ui/dockwidgets/barplotdock.ui:264
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:449
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1334
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:586
@@ -21260,18 +21292,10 @@ msgstr ""
 msgid "Border"
 msgstr "Ivica"
 
-#. i18n: ectx: property (text), widget (QLabel, lWidthFactor)
-#: src/frontend/ui/dockwidgets/barplotdock.ui:278
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:398
-#, fuzzy, kde-format
-#| msgid "Width"
-msgid "Width"
-msgstr "Širina"
-
 #. i18n: ectx: property (text), widget (QLabel, lFilling)
 #. i18n: ectx: property (text), widget (QLabel, lEstimationFilling)
 #. i18n: ectx: attribute (title), widget (QWidget, tabAreaFilling)
-#: src/frontend/ui/dockwidgets/barplotdock.ui:308
+#: src/frontend/ui/dockwidgets/barplotdock.ui:276
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:391
 #: src/frontend/ui/dockwidgets/histogramdock.ui:423
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:280
@@ -21282,8 +21306,16 @@ msgstr "Širina"
 msgid "Filling"
 msgstr "Ispunjavanje (Bojenje):"
 
+#. i18n: ectx: property (text), widget (QLabel, lWidthFactor)
+#: src/frontend/ui/dockwidgets/barplotdock.ui:303
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:398
+#, fuzzy, kde-format
+#| msgid "Width"
+msgid "Width"
+msgstr "Širina"
+
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbWidthFactor)
-#: src/frontend/ui/dockwidgets/barplotdock.ui:353
+#: src/frontend/ui/dockwidgets/barplotdock.ui:348
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:411
 #, no-c-format, kde-format
 msgid "%"
@@ -21589,7 +21621,7 @@ msgstr "Podaci:"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:553
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:610
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:265
-#: src/frontend/worksheet/WorksheetView.cpp:463
+#: src/frontend/worksheet/WorksheetView.cpp:461
 #, kde-format
 msgid "Layout"
 msgstr "Raspored"
@@ -23828,12 +23860,6 @@ msgstr "Boja linije"
 msgid "Multicoloring"
 msgstr "Multibojenje"
 
-#. i18n: ectx: property (windowTitle), widget (QDialog, PlotTemplateDialog)
-#: src/frontend/ui/PlotTemplateDialog.ui:14
-#, kde-format
-msgid "Dialog"
-msgstr ""
-
 #. i18n: ectx: property (text), widget (QLabel, lInstalledTemplates)
 #: src/frontend/ui/PlotTemplateDialog.ui:33
 #, fuzzy, kde-format
@@ -25653,29 +25679,29 @@ msgstr "Orijentacija"
 msgid "Pin the navigation panel"
 msgstr ""
 
-#: src/frontend/worksheet/WorksheetView.cpp:165
+#: src/frontend/worksheet/WorksheetView.cpp:163
 #, fuzzy, kde-format
 #| msgid "Auto Fit"
 msgctxt "Zoom"
 msgid "No fit"
 msgstr "Automatsko uklapanje"
 
-#: src/frontend/worksheet/WorksheetView.cpp:175
+#: src/frontend/worksheet/WorksheetView.cpp:173
 #, fuzzy, kde-format
 #| msgid "Fit to selection"
 msgctxt "Zoom"
 msgid "Fit to Selection"
 msgstr "Uklopi u selektovano"
 
-#: src/frontend/worksheet/WorksheetView.cpp:178
+#: src/frontend/worksheet/WorksheetView.cpp:176
 #, fuzzy, kde-format
 #| msgid "Fit:"
 msgctxt "Zoom"
 msgid "Fit"
 msgstr "Podesiti:"
 
-#: src/frontend/worksheet/WorksheetView.cpp:183
-#: src/frontend/worksheet/WorksheetView.cpp:334
+#: src/frontend/worksheet/WorksheetView.cpp:181
+#: src/frontend/worksheet/WorksheetView.cpp:332
 #, kde-format
 msgid "Select and Edit"
 msgstr "Označi i uredi"
@@ -25683,234 +25709,234 @@ msgstr "Označi i uredi"
 #. i18n("Selection"), mouseModeActionGroup);
 #. selectionModeAction->setCheckable(true);
 #. "Add new" related actions
-#: src/frontend/worksheet/WorksheetView.cpp:214
+#: src/frontend/worksheet/WorksheetView.cpp:212
 #, fuzzy, kde-format
 #| msgid "box plot, four axes"
 msgid "Four Axes"
 msgstr "crtež, četiri ose"
 
-#: src/frontend/worksheet/WorksheetView.cpp:215
+#: src/frontend/worksheet/WorksheetView.cpp:213
 #, fuzzy, kde-format
 #| msgid "box plot, two axes"
 msgid "Two Axes"
 msgstr "crtež, dvije ose"
 
-#: src/frontend/worksheet/WorksheetView.cpp:216
+#: src/frontend/worksheet/WorksheetView.cpp:214
 #, fuzzy, kde-format
 #| msgid "two axes, centered"
 msgid "Two Axes, Centered"
 msgstr "dvije ose, centrirane"
 
-#: src/frontend/worksheet/WorksheetView.cpp:218
+#: src/frontend/worksheet/WorksheetView.cpp:216
 #, fuzzy, kde-format
 #| msgid "two axes, crossing at origin"
 msgid "Two Axes, Crossing at Origin"
 msgstr "dvije ose, sijeku se u ishodištu"
 
-#: src/frontend/worksheet/WorksheetView.cpp:219
+#: src/frontend/worksheet/WorksheetView.cpp:217
 #, fuzzy, kde-format
 #| msgid "Load from"
 msgid "Load from Template"
 msgstr "Učitaj iz"
 
-#: src/frontend/worksheet/WorksheetView.cpp:242
+#: src/frontend/worksheet/WorksheetView.cpp:240
 #, fuzzy, kde-format
 #| msgid "Grid"
 msgid "No Grid"
 msgstr "Meža"
 
-#: src/frontend/worksheet/WorksheetView.cpp:247
+#: src/frontend/worksheet/WorksheetView.cpp:245
 #, fuzzy, kde-format
 #| msgid "dense line grid"
 msgid "Dense Line Grid"
 msgstr "mreža sa gustim linikjama"
 
-#: src/frontend/worksheet/WorksheetView.cpp:250
+#: src/frontend/worksheet/WorksheetView.cpp:248
 #, fuzzy, kde-format
 #| msgid "sparse line grid"
 msgid "Sparse Line Grid"
 msgstr "mreža sa rijetkim linijama"
 
-#: src/frontend/worksheet/WorksheetView.cpp:253
+#: src/frontend/worksheet/WorksheetView.cpp:251
 #, fuzzy, kde-format
 #| msgid "dense dot grid"
 msgid "Dense Dot Grid"
 msgstr "gusta tačkasta mreža"
 
-#: src/frontend/worksheet/WorksheetView.cpp:256
+#: src/frontend/worksheet/WorksheetView.cpp:254
 #, fuzzy, kde-format
 #| msgid "sparse dot grid"
 msgid "Sparse Dot Grid"
 msgstr "rijetka tačkasta mreža"
 
-#: src/frontend/worksheet/WorksheetView.cpp:259
+#: src/frontend/worksheet/WorksheetView.cpp:257
 #, fuzzy, kde-format
 #| msgid "Custom grid"
 msgid "Custom Grid"
 msgstr "Podesi meržu"
 
-#: src/frontend/worksheet/WorksheetView.cpp:262
+#: src/frontend/worksheet/WorksheetView.cpp:260
 #, fuzzy, kde-format
 #| msgid "snap to grid"
 msgid "Snap to Grid"
 msgstr "namjesti na mrežu"
 
-#: src/frontend/worksheet/WorksheetView.cpp:282
+#: src/frontend/worksheet/WorksheetView.cpp:280
 #, fuzzy, kde-format
 #| msgid "Interface"
 msgid "Interactive Plots"
 msgstr "Interfejs"
 
-#: src/frontend/worksheet/WorksheetView.cpp:283
+#: src/frontend/worksheet/WorksheetView.cpp:281
 #, kde-format
 msgid ""
 "If not activated, plots on the worksheet don't react on drag and mouse wheel "
 "events."
 msgstr ""
 
-#: src/frontend/worksheet/WorksheetView.cpp:300
-#: src/frontend/worksheet/WorksheetView.cpp:314
+#: src/frontend/worksheet/WorksheetView.cpp:298
+#: src/frontend/worksheet/WorksheetView.cpp:312
 #, fuzzy, kde-format
 #| msgid "selected plots"
 msgid "Selected Plot Areas"
 msgstr "Odabrana crtanja"
 
-#: src/frontend/worksheet/WorksheetView.cpp:302
-#: src/frontend/worksheet/WorksheetView.cpp:316
+#: src/frontend/worksheet/WorksheetView.cpp:300
+#: src/frontend/worksheet/WorksheetView.cpp:314
 #, fuzzy, kde-format
 #| msgid "Plot Area"
 msgid "All Plot Areas"
 msgstr "Prostor za Crtanje"
 
-#: src/frontend/worksheet/WorksheetView.cpp:304
+#: src/frontend/worksheet/WorksheetView.cpp:302
 #, fuzzy, kde-format
 #| msgid "all plots"
 msgid "All Plot Areas X"
 msgstr "sva crtanja"
 
-#: src/frontend/worksheet/WorksheetView.cpp:306
+#: src/frontend/worksheet/WorksheetView.cpp:304
 #, fuzzy, kde-format
 #| msgid "all plots"
 msgid "All Plot Areas Y"
 msgstr "sva crtanja"
 
-#: src/frontend/worksheet/WorksheetView.cpp:339
+#: src/frontend/worksheet/WorksheetView.cpp:337
 #, kde-format
 msgid "Crosshair"
 msgstr ""
 
-#: src/frontend/worksheet/WorksheetView.cpp:344
+#: src/frontend/worksheet/WorksheetView.cpp:342
 #, fuzzy, kde-format
 #| msgid "Select region and zoom in"
 msgid "Select Region and Zoom In"
 msgstr "Označi područje i uvećaj"
 
-#: src/frontend/worksheet/WorksheetView.cpp:349
+#: src/frontend/worksheet/WorksheetView.cpp:347
 #, fuzzy, kde-format
 #| msgid "Select x-region and zoom in"
 msgid "Select X-Region and Zoom In"
 msgstr "Označi x-područje i uvećaj"
 
-#: src/frontend/worksheet/WorksheetView.cpp:354
+#: src/frontend/worksheet/WorksheetView.cpp:352
 #, fuzzy, kde-format
 #| msgid "Select x-region and zoom in"
 msgid "Select Y-Region and Zoom In"
 msgstr "Označi x-područje i uvećaj"
 
-#: src/frontend/worksheet/WorksheetView.cpp:366
+#: src/frontend/worksheet/WorksheetView.cpp:364
 #, fuzzy, kde-format
 #| msgid "auto scale"
 msgid "Auto Scale"
 msgstr "auto skaliraj"
 
-#: src/frontend/worksheet/WorksheetView.cpp:370
+#: src/frontend/worksheet/WorksheetView.cpp:368
 #, fuzzy, kde-format
 #| msgid "auto scale X"
 msgid "Auto Scale X"
 msgstr "auto skaliraj X"
 
-#: src/frontend/worksheet/WorksheetView.cpp:374
+#: src/frontend/worksheet/WorksheetView.cpp:372
 #, fuzzy, kde-format
 #| msgid "auto scale Y"
 msgid "Auto Scale Y"
 msgstr "auto skaliraj Y"
 
-#: src/frontend/worksheet/WorksheetView.cpp:386
+#: src/frontend/worksheet/WorksheetView.cpp:384
 #, fuzzy, kde-format
 #| msgid "zoom in X"
 msgid "Zoom In X"
 msgstr "uvećaj X"
 
-#: src/frontend/worksheet/WorksheetView.cpp:390
+#: src/frontend/worksheet/WorksheetView.cpp:388
 #, fuzzy, kde-format
 #| msgid "zoom out X"
 msgid "Zoom Out X"
 msgstr "umanji x"
 
-#: src/frontend/worksheet/WorksheetView.cpp:394
+#: src/frontend/worksheet/WorksheetView.cpp:392
 #, fuzzy, kde-format
 #| msgid "zoom in Y"
 msgid "Zoom In Y"
 msgstr "uvećaj y"
 
-#: src/frontend/worksheet/WorksheetView.cpp:398
+#: src/frontend/worksheet/WorksheetView.cpp:396
 #, fuzzy, kde-format
 #| msgid "zoom out Y"
 msgid "Zoom Out Y"
 msgstr "umanji y"
 
-#: src/frontend/worksheet/WorksheetView.cpp:402
+#: src/frontend/worksheet/WorksheetView.cpp:400
 #, fuzzy, kde-format
 #| msgid "shift left X"
 msgid "Shift Left X"
 msgstr "pomjeri X ulijevo"
 
-#: src/frontend/worksheet/WorksheetView.cpp:404
+#: src/frontend/worksheet/WorksheetView.cpp:402
 #, fuzzy, kde-format
 #| msgid "shift right X"
 msgid "Shift Right X"
 msgstr "pomjeri X udesno"
 
-#: src/frontend/worksheet/WorksheetView.cpp:406
+#: src/frontend/worksheet/WorksheetView.cpp:404
 #, fuzzy, kde-format
 #| msgid "shift up Y"
 msgid "Shift Up Y"
 msgstr "pomjeri Y na gore"
 
-#: src/frontend/worksheet/WorksheetView.cpp:408
+#: src/frontend/worksheet/WorksheetView.cpp:406
 #, fuzzy, kde-format
 #| msgid "shift down Y"
 msgid "Shift Down Y"
 msgstr "pomjeri > na dolje"
 
-#: src/frontend/worksheet/WorksheetView.cpp:422
-#: src/frontend/worksheet/WorksheetView.cpp:486
-#: src/frontend/worksheet/WorksheetView.cpp:1307
-#: src/frontend/worksheet/WorksheetView.cpp:1314
-#: src/frontend/worksheet/WorksheetView.cpp:1321
-#: src/frontend/worksheet/WorksheetView.cpp:1328
+#: src/frontend/worksheet/WorksheetView.cpp:420
+#: src/frontend/worksheet/WorksheetView.cpp:484
+#: src/frontend/worksheet/WorksheetView.cpp:1290
+#: src/frontend/worksheet/WorksheetView.cpp:1297
+#: src/frontend/worksheet/WorksheetView.cpp:1304
+#: src/frontend/worksheet/WorksheetView.cpp:1311
 #, kde-format
 msgid "Plot Area"
 msgstr "Prostor za Crtanje"
 
-#: src/frontend/worksheet/WorksheetView.cpp:499
+#: src/frontend/worksheet/WorksheetView.cpp:497
 #, kde-format
 msgid "Zoom/Navigate"
 msgstr "Uvećanje/Navigacija"
 
-#: src/frontend/worksheet/WorksheetView.cpp:520
+#: src/frontend/worksheet/WorksheetView.cpp:518
 #, fuzzy, kde-format
 #| msgid "Apply actions to"
 msgid "Apply Actions to"
 msgstr "Primijeni akcije na"
 
-#: src/frontend/worksheet/WorksheetView.cpp:527
+#: src/frontend/worksheet/WorksheetView.cpp:525
 #, fuzzy, kde-format
 #| msgid "Apply actions to"
 msgid "Apply Cursor to"
 msgstr "Primijeni akcije na"
 
-#: src/frontend/worksheet/WorksheetView.cpp:1445
+#: src/frontend/worksheet/WorksheetView.cpp:1428
 #, kde-format
 msgid "Do you really want to delete the selected object?"
 msgid_plural "Do you really want to delete the selected %1 objects?"
@@ -25918,7 +25944,7 @@ msgstr[0] "Da li zaista želite da obrišete odabrani %1 objekat?"
 msgstr[1] "Da li zaista želite da obrišete odabrana %1 objekta?"
 msgstr[2] "Da li zaista želite da obrišete odabranih %1 objekata?"
 
-#: src/frontend/worksheet/WorksheetView.cpp:1453
+#: src/frontend/worksheet/WorksheetView.cpp:1436
 #, kde-format
 msgid "%1: Remove selected worksheet elements."
 msgstr "%1: Uklonik odabrane radne elmente."

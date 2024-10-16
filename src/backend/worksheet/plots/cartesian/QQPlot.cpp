@@ -689,11 +689,11 @@ void QQPlot::loadThemeConfig(const KConfig& config) {
 	else
 		group = config.group(QStringLiteral("QQPlot"));
 
-	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
+	Q_D(QQPlot);
+	const auto* plot = d->m_plot;
 	int index = plot->curveChildIndex(this);
 	const QColor themeColor = plot->themeColorPalette(index);
 
-	Q_D(QQPlot);
 	d->suppressRecalc = true;
 
 	d->referenceCurve->line()->loadThemeConfig(group, themeColor);

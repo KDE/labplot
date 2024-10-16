@@ -29,7 +29,7 @@
 <refmeta>
 <refentrytitle
 ><command
->labplot2</command
+>labplot</command
 ></refentrytitle>
 <manvolnum
 >1</manvolnum>
@@ -37,7 +37,7 @@
 
 <refnamediv>
 <refname
->labplot2</refname>
+>labplot</refname>
 <refpurpose
 >un'applicazione di KDE per i grafici interattivi e per l'analisi di dati scientifici.</refpurpose>
 </refnamediv>
@@ -45,7 +45,7 @@
 <refsynopsisdiv id='synopsis'>
 <cmdsynopsis
 ><command
->labplot2</command
+>labplot</command
 > <arg choice="opt"
 ><replaceable
 >Opzioni di LabPlot</replaceable
@@ -67,7 +67,7 @@
 >Le sue funzionalità includono il tracciamento di funzioni e di dati in 2D e in 3D, la modifica semplice dei grafici, analisi di dati e funzioni, il supporto per vari fogli di lavoro tramite finestre multiple (MDI) e per file di progetto Labplot. </para>
 <para
 >Nota che LabPlot viene avviato con <command
->labplot2</command
+>labplot</command
 >. </para>
 
 </refsect1>
@@ -76,9 +76,9 @@
 ><title
 >Opzioni di LabPlot</title>
 <para
->Per un riassunto delle opzioni generiche esegui <userinput
+>Per un riassunto delle opzioni generiche, esegui <userinput
 ><command
->labplot2</command
+>labplot</command
 > <parameter
 >--help</parameter
 ></userinput
@@ -142,14 +142,14 @@
 <simplelist>
 <member
 >La documentazione completa è disponibile dal Centro documentazione di KDE. Puoi anche inserire l'URL <ulink url="help:/labplot2"
->help:/labplot2</ulink
+>help:/labplot</ulink
 > (inserisci anche questo <acronym
 >URL</acronym
 > in &dolphin;, oppure esegui <userinput
 ><command
 >khelpcenter</command
 > <parameter
->help:/labplot2</parameter
+>help:/labplot</parameter
 ></userinput
 >).</member>
 <member
@@ -167,7 +167,7 @@
 ><title
 >Autori</title>
 <para
->LabPlot2 è stato scritto da </para>
+>LabPlot è stato scritto da </para>
 <simplelist>
     <member
 >Stefan Gerlach &lt;stefan.gerlach@uni.kn&gt;,</member>

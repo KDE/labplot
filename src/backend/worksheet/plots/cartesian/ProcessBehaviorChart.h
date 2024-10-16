@@ -28,6 +28,7 @@ class ProcessBehaviorChart : public Plot {
 
 public:
 	friend class ProcessBehaviorChartSetDataColumnCmd;
+	friend class ProcessBehaviorChartSetData2ColumnCmd;
 
 	enum class Type { XmR, mR, XbarR, R, XbarS, S, P, NP, C, U };
 	enum class LimitsMetric { Average, Median };
@@ -48,7 +49,9 @@ public:
 	BASIC_D_ACCESSOR_DECL(ProcessBehaviorChart::Type, type, Type)
 	BASIC_D_ACCESSOR_DECL(ProcessBehaviorChart::LimitsMetric, limitsMetric, LimitsMetric)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, dataColumn, DataColumn)
+	POINTER_D_ACCESSOR_DECL(const AbstractColumn, data2Column, Data2Column)
 	CLASS_D_ACCESSOR_DECL(QString, dataColumnPath, DataColumnPath)
+	CLASS_D_ACCESSOR_DECL(QString, data2ColumnPath, Data2ColumnPath)
 	BASIC_D_ACCESSOR_DECL(int, sampleSize, SampleSize)
 	BASIC_D_ACCESSOR_DECL(bool, negativeLowerLimitEnabled, NegativeLowerLimitEnabled)
 
@@ -77,6 +80,7 @@ public:
 
 private Q_SLOTS:
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
+	void data2ColumnAboutToBeRemoved(const AbstractAspect*);
 	void renameInternalCurves();
 
 protected:
@@ -86,6 +90,7 @@ private:
 	Q_DECLARE_PRIVATE(ProcessBehaviorChart)
 	void init();
 	void connectDataColumn(const AbstractColumn*);
+	void connectData2Column(const AbstractColumn*);
 
 	// private methods used in tests
 	friend class StatisticalPlotsTest;
@@ -101,7 +106,9 @@ Q_SIGNALS:
 	void typeChanged(ProcessBehaviorChart::Type);
 	void limitsMetricChanged(ProcessBehaviorChart::LimitsMetric);
 	void dataDataChanged();
+	void data2DataChanged();
 	void dataColumnChanged(const AbstractColumn*);
+	void data2ColumnChanged(const AbstractColumn*);
 	void sampleSizeChanged(int);
 	void negativeLowerLimitEnabledChanged(bool);
 };
