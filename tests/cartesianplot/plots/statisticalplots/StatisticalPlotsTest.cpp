@@ -962,8 +962,8 @@ void StatisticalPlotsTest::testPBChartP() {
 	const int rowCount = 24; // 24 values
 	auto* yColumn = pbc->dataCurve()->yColumn();
 	QCOMPARE(yColumn->rowCount(), rowCount);
-	const QVector<double> ref = {0.265, 0.212, 0.250, 0.261, 0.214, 0.246, 0.283, 0.259, 0.200, 0.249, 0.258, 0.224, 0.188, 0.236, 0.233, 0.213,
-		0.288, 0.243, 0.223, 0.230, 0.284, 0.271, 0.259, 0.287};
+	const QVector<double> ref = {0.265, 0.212, 0.250, 0.261, 0.214, 0.246, 0.283, 0.259, 0.200, 0.249, 0.258, 0.224,
+								 0.188, 0.236, 0.233, 0.213, 0.288, 0.243, 0.223, 0.230, 0.284, 0.271, 0.259, 0.287};
 	for (int i = 0; i < rowCount - 1; ++i)
 		QCOMPARE(std::round(yColumn->valueAt(i) * 1000) / 1000, ref.at(i)); // compare three digits
 
@@ -1016,7 +1016,6 @@ void StatisticalPlotsTest::testPBChartC() {
  * test the U chart, the example is taken from Wheeler "Making Sense of Data", chapter 14.
  */
 void StatisticalPlotsTest::testPBChartU() {
-
 }
 
 // ##############################################################################

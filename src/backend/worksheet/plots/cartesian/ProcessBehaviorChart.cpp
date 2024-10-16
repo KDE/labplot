@@ -220,7 +220,7 @@ int ProcessBehaviorChart::xIndexCount() const {
 	int count = d->dataColumn->rowCount();
 	// subract the remainder to handle complete samples only for chart types where one point per sample is plotted
 	if (d->type == ProcessBehaviorChart::Type::XbarR || d->type == ProcessBehaviorChart::Type::R || d->type == ProcessBehaviorChart::Type::XbarS
-			|| d->type == ProcessBehaviorChart::Type::S) {
+		|| d->type == ProcessBehaviorChart::Type::S) {
 		const int remainder = count % d->sampleSize;
 		if (remainder > 0)
 			count -= remainder;
@@ -557,7 +557,7 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 	// determine the number of values in the source data to be taken into account
 	int count = dataColumn->rowCount();
 	if (type == ProcessBehaviorChart::Type::XbarR || type == ProcessBehaviorChart::Type::R || type == ProcessBehaviorChart::Type::XbarS
-			|| type == ProcessBehaviorChart::Type::S) {
+		|| type == ProcessBehaviorChart::Type::S) {
 		const int remainder = count % sampleSize;
 		if (remainder > 0) {
 			count -= remainder; // subract the remainder to handle complete samples only
@@ -882,7 +882,8 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 			lowerLimit = 0.;
 
 		lowerLimitCurve->setVisible(true);
-	} else if (type == ProcessBehaviorChart::Type::mR || type == ProcessBehaviorChart::Type::R || type == ProcessBehaviorChart::Type::S || type == ProcessBehaviorChart::Type::C) {
+	} else if (type == ProcessBehaviorChart::Type::mR || type == ProcessBehaviorChart::Type::R || type == ProcessBehaviorChart::Type::S
+			   || type == ProcessBehaviorChart::Type::C) {
 		// restrict the lower limit to 0, hide the curve for the lower limit line
 		if (lowerLimit < 0.) {
 			lowerLimit = 0.;
