@@ -12,6 +12,7 @@ New features:
 		* Ask how to treat multilayer graphs when opening OPJ project
 	* [analysis]
 		* Add possibility to do calculations on curves
+		* Automatically recalculate analysis curves on data change
 	* [spreadsheet]
 		* support periodic and random sampling as function: psample(n;x), rsample(x)
 		* save the properties used to generate random values in the column for later re-use
