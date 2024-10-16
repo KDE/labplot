@@ -270,7 +270,6 @@ void XYAnalysisCurve::handleSourceDataChanged() {
 	else
 		setDataSourceCurvePath(QString());
 
-
 	d->sourceDataChangedSinceLastRecalc = true;
 	Q_EMIT sourceDataChanged();
 }
@@ -382,7 +381,7 @@ void XYAnalysisCurve::handleAspectUpdated(const QString& aspectPath, const Abstr
 		if (y2DataColumnPath() == aspectPath)
 			setY2DataColumn(column);
 
-			   // From XYCurve
+		// From XYCurve
 		if (valuesColumnPath() == aspectPath)
 			setValuesColumn(column);
 	} else if (curve) {
@@ -408,10 +407,10 @@ void XYAnalysisCurvePrivate::connectCurve(const XYCurve* curve) {
 	if (!curve)
 		return;
 
-		   // avoid circular dependencies - the current curve cannot be part of the variable curve.
-		   // this should't actually happen because of the checks done when the function is defined,
-		   // but in case we have bugs somewhere or somebody manipulated the project xml file we add
-		   // a sanity check to avoid recursive calls here and crash because of the stack overflow.
+	// avoid circular dependencies - the current curve cannot be part of the variable curve.
+	// this should't actually happen because of the checks done when the function is defined,
+	// but in case we have bugs somewhere or somebody manipulated the project xml file we add
+	// a sanity check to avoid recursive calls here and crash because of the stack overflow.
 	if (curve == q || dataSourceType != XYAnalysisCurve::DataSourceType::Curve)
 		return;
 
@@ -438,35 +437,35 @@ void XYAnalysisCurvePrivate::connectColumn(const AbstractColumn* column, Dimensi
 	if (!column || dataSourceType != XYAnalysisCurve::DataSourceType::Spreadsheet)
 		return;
 
-
 	m_connections << q->connect(column, &AbstractColumn::dataChanged, q, &XYAnalysisCurve::recalculate);
 	if (!second) {
 		switch (dim) {
-			case Dimension::X: {
-				m_connections << q->connect(column, &AbstractAspect::aspectDescriptionChanged, q, &XYAnalysisCurve::xDataColumnNameChanged);
-				m_connections << q->connect(column, &AbstractAspect::aspectAboutToBeRemoved, q, &XYAnalysisCurve::xDataColumnAboutToBeRemoved);
-				break;
-			}
-			case Dimension::Y: {
-				m_connections << q->connect(column, &AbstractAspect::aspectDescriptionChanged, q, &XYAnalysisCurve::yDataColumnNameChanged);
-				m_connections << q->connect(column, &AbstractAspect::aspectAboutToBeRemoved, q, &XYAnalysisCurve::yDataColumnAboutToBeRemoved);
-				break;
-			}
+		case Dimension::X: {
+			m_connections << q->connect(column, &AbstractAspect::aspectDescriptionChanged, q, &XYAnalysisCurve::xDataColumnNameChanged);
+			m_connections << q->connect(column, &AbstractAspect::aspectAboutToBeRemoved, q, &XYAnalysisCurve::xDataColumnAboutToBeRemoved);
+			break;
+		}
+		case Dimension::Y: {
+			m_connections << q->connect(column, &AbstractAspect::aspectDescriptionChanged, q, &XYAnalysisCurve::yDataColumnNameChanged);
+			m_connections << q->connect(column, &AbstractAspect::aspectAboutToBeRemoved, q, &XYAnalysisCurve::yDataColumnAboutToBeRemoved);
+			break;
+		}
 		}
 	} else {
 		switch (dim) {
-			case Dimension::X: break;
-			case Dimension::Y: {
-				m_connections << q->connect(column, &AbstractAspect::aspectDescriptionChanged, q, &XYAnalysisCurve::y2DataColumnNameChanged);
-				m_connections << q->connect(column, &AbstractAspect::aspectAboutToBeRemoved, q, &XYAnalysisCurve::y2DataColumnAboutToBeRemoved);
-				break;
-			}
+		case Dimension::X:
+			break;
+		case Dimension::Y: {
+			m_connections << q->connect(column, &AbstractAspect::aspectDescriptionChanged, q, &XYAnalysisCurve::y2DataColumnNameChanged);
+			m_connections << q->connect(column, &AbstractAspect::aspectAboutToBeRemoved, q, &XYAnalysisCurve::y2DataColumnAboutToBeRemoved);
+			break;
+		}
 		}
 	}
 }
 
 void XYAnalysisCurvePrivate::updateConnections() {
-	for (auto c: m_connections)
+	for (auto c : m_connections)
 		q->disconnect(c);
 
 	switch (q->dataSourceType()) {

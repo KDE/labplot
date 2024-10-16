@@ -378,7 +378,7 @@ void DifferentiationTest::testRecalculation() {
 	QVector<int> xData = {1, 2, 3, 4};
 	QVector<double> yData = {1., 2., 3., 4.};
 
-		   // data source columns
+	// data source columns
 	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
@@ -389,15 +389,15 @@ void DifferentiationTest::testRecalculation() {
 	differentiationCurve.setXDataColumn(&xDataColumn);
 	differentiationCurve.setYDataColumn(&yDataColumn);
 
-		   // prepare the differentiation
+	// prepare the differentiation
 	XYDifferentiationCurve::DifferentiationData differentiationData = differentiationCurve.differentiationData();
 	differentiationCurve.setDifferentiationData(differentiationData);
 
 	// perform the differentiation
-	//differentiationCurve.recalculate();
+	// differentiationCurve.recalculate();
 	const XYDifferentiationCurve::DifferentiationResult& differentiationResult = differentiationCurve.differentiationResult();
 
-		   // check the results
+	// check the results
 	QCOMPARE(differentiationResult.available, true);
 	QCOMPARE(differentiationResult.valid, true);
 
