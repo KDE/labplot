@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-15 01:45+0000\n"
-"PO-Revision-Date: 2024-10-14 07:14+0200\n"
+"POT-Creation-Date: 2024-10-16 01:49+0000\n"
+"PO-Revision-Date: 2024-10-15 07:01+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -1842,7 +1842,7 @@ msgid "Unknown"
 msgstr "Neznano"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/MainWin.cpp:617 src/frontend/MainWin.cpp:1956
+#: src/frontend/MainWin.cpp:617 src/frontend/MainWin.cpp:1961
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -11319,20 +11319,11 @@ msgstr "Ni bilo mogoče najti datotek .csv v %1"
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Origin Multi-Layer Graphs"
-msgstr ""
+msgstr "Uvozi večplastne grafikone Origin"
 
 #: src/frontend/datasources/ImportOriginLayersDialog.cpp:26
 #: src/frontend/datasources/ImportProjectDialog.cpp:169
-#, fuzzy, kde-format
-#| msgid ""
-#| "Multiple layers are used in Origin to either implement multiple plots or "
-#| "multiple axes on the same plot (see <a href=\"https://www.originlab.com/"
-#| "doc/Origin-Help/MultiLayer-Graph\">Origin's Documentation</a> for more "
-#| "details).LabPlot can process only one type at the same time."
-#| "<br><br>Specify how to import multi-layered graphs in the selected "
-#| "project:<ul><li>As Plot Area - a new plot area is created for every layer."
-#| "</li><li>As Coordinate System - a new coordinate system (data range) on "
-#| "the same plot area is created for every layer</li></ul>"
+#, kde-format
 msgid ""
 "Multiple layers are used in Origin to either implement multiple plots or "
 "multiple axes on the same plot (see <a href=\"https://www.originlab.com/doc/"
@@ -11343,14 +11334,14 @@ msgid ""
 "a new coordinate system (data range) on the same plot area is created for "
 "every layer.</li></ul>"
 msgstr ""
-"V izhodišču se uporablja več plasti bodisi za izvajanje več grafov oz. več "
-"osi na istem grafu (glejte <a href=\"https://www.originlab.com/doc/Origin-"
-"Help/MultiLayer-Graph\">Dokumentacija izhodišča</a> za več podrobnosti). "
-"LabPlot lahko obdeluje samo eno vrsto hkrati.<br><br>Določite, kakouvozite "
-"večplastne grafe v izbrani projekt:<ul><li>Kot območje izrisa - anovo "
-"območje grafa je ustvarjeno za vsako plast.</li><li>Kot koordinatni sistem - "
-"se ustvari nov koordinatni sistem (obseg podatkov) na istem območju ploskve "
-"vsako plast</li></ul>"
+"Več plasti se uporablja v Originu za izvajanje več grafikonov ali več osi ​​na "
+"istem grafikonu (glejte <a href=\"https://www.originlab.com/doc/Origin-Help/"
+"MultiLayer-Graph\">Dokumentacija Origin</ a> za več podrobnosti).<br>LabPlot "
+"lahko obdeluje samo eno vrsto hkrati.<br><br>Določite, kako uvoziti "
+"večplastne grafikone v izbranem projektu:<ul><li>Kot območje grafikona - "
+"novo območje grafikona je ustvarjeno za vsako plast.</li><li>Kot koordinatni "
+"sistem – za vsako plast se ustvari nov koordinatni sistem (obseg podatkov) "
+"na istem območju grafikona.</li></ul>"
 
 #: src/frontend/datasources/ImportOriginLayersDialog.cpp:38
 #: src/frontend/datasources/ImportProjectDialog.cpp:159
@@ -11488,7 +11479,7 @@ msgstr "Ime mape:"
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:71 src/frontend/MainWin.cpp:611
-#: src/frontend/MainWin.cpp:1938 src/frontend/SettingsDialog.cpp:68
+#: src/frontend/MainWin.cpp:1943 src/frontend/SettingsDialog.cpp:68
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:122
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -11773,7 +11764,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2757
+#: src/frontend/MainWin.cpp:2762
 #, kde-format
 msgid "Warning"
 msgstr "Opozorilo"
@@ -14340,7 +14331,7 @@ msgstr "Dobrodošli v LabPlot %1"
 msgid "&Open Example"
 msgstr "&Odpri primer"
 
-#: src/frontend/MainWin.cpp:601 src/frontend/MainWin.cpp:1922
+#: src/frontend/MainWin.cpp:601 src/frontend/MainWin.cpp:1927
 #, kde-format
 msgid "Workbook"
 msgstr "Delovni zvezek"
@@ -14350,7 +14341,7 @@ msgstr "Delovni zvezek"
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr "Ustvari nov delovni zvezek za preglednice, matrike in grafikone zbirke"
 
-#: src/frontend/MainWin.cpp:606 src/frontend/MainWin.cpp:1930
+#: src/frontend/MainWin.cpp:606 src/frontend/MainWin.cpp:1935
 #, kde-format
 msgid "Data Extractor"
 msgstr "Izvlečnik podatkov"
@@ -14370,7 +14361,7 @@ msgstr "Ustvari novo preglednico za urejanje podatkov"
 msgid "Creates a new matrix for data editing"
 msgstr "Ustvari novo matriko za urejanje podatkov"
 
-#: src/frontend/MainWin.cpp:623 src/frontend/MainWin.cpp:1974
+#: src/frontend/MainWin.cpp:623 src/frontend/MainWin.cpp:1979
 #: src/frontend/SettingsDialog.cpp:63
 #, kde-format
 msgid "Worksheet"
@@ -14381,7 +14372,7 @@ msgstr "Delovni list"
 msgid "Creates a new worksheet for data plotting"
 msgstr "Ustvari nov delovni list za urejanje podatkov"
 
-#: src/frontend/MainWin.cpp:629 src/frontend/MainWin.cpp:1982
+#: src/frontend/MainWin.cpp:629 src/frontend/MainWin.cpp:1987
 #, kde-format
 msgid "Note"
 msgstr "Opomba"
@@ -14391,7 +14382,7 @@ msgstr "Opomba"
 msgid "Creates a new note for arbitrary text"
 msgstr "Ustvari novo opombo za poljubno besedilo"
 
-#: src/frontend/MainWin.cpp:634 src/frontend/MainWin.cpp:1914
+#: src/frontend/MainWin.cpp:634 src/frontend/MainWin.cpp:1919
 #, kde-format
 msgid "Folder"
 msgstr "Mapa"
@@ -14472,8 +14463,8 @@ msgstr "Izvozi ..."
 msgid "Export selected element"
 msgstr "Izvozi izbrani element"
 
-#: src/frontend/MainWin.cpp:696 src/frontend/MainWin.cpp:2459
-#: src/frontend/MainWin.cpp:2467
+#: src/frontend/MainWin.cpp:696 src/frontend/MainWin.cpp:2464
+#: src/frontend/MainWin.cpp:2472
 #, kde-format
 msgid "Share"
 msgstr "Deli"
@@ -14682,23 +14673,23 @@ msgstr "Ni bilo mogoče prebrati projektne datoteka %1."
 msgid "Loading %1..."
 msgstr "Nalaganje %1 ..."
 
-#: src/frontend/MainWin.cpp:1572
+#: src/frontend/MainWin.cpp:1577
 #, kde-format
 msgid "%1: opened"
 msgstr "%1: odprto"
 
-#: src/frontend/MainWin.cpp:1607
+#: src/frontend/MainWin.cpp:1612
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Projekt se je uspešno odprl (v %1 s)."
 
-#: src/frontend/MainWin.cpp:1695
+#: src/frontend/MainWin.cpp:1700
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Shrani projekt kot"
 
-#: src/frontend/MainWin.cpp:1697
+#: src/frontend/MainWin.cpp:1702
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -14707,70 +14698,70 @@ msgstr ""
 "Projekti LabPlot (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 
-#: src/frontend/MainWin.cpp:1723
+#: src/frontend/MainWin.cpp:1728
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "Začasne datoteke za pisanje ni bilo mogoče odpreti."
 
-#: src/frontend/MainWin.cpp:1803
+#: src/frontend/MainWin.cpp:1808
 #, kde-format
 msgid "Project saved"
 msgstr "Projekt shranjen"
 
-#: src/frontend/MainWin.cpp:1819
+#: src/frontend/MainWin.cpp:1824
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "Datoteke »%1« ni bilo mogoče shraniti."
 
-#: src/frontend/MainWin.cpp:1824
+#: src/frontend/MainWin.cpp:1829
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Datoteke »%1« ni bilo mogoče odpreti za pisanje."
 
-#: src/frontend/MainWin.cpp:1874
+#: src/frontend/MainWin.cpp:1879
 #, kde-format
 msgid "Changed"
 msgstr "Spremenjeno"
 
-#: src/frontend/MainWin.cpp:1889 src/frontend/MainWin.cpp:1901
+#: src/frontend/MainWin.cpp:1894 src/frontend/MainWin.cpp:1906
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Priprava tiskanja %1"
 
-#: src/frontend/MainWin.cpp:1891 src/frontend/MainWin.cpp:1903
+#: src/frontend/MainWin.cpp:1896 src/frontend/MainWin.cpp:1908
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 natisnjeno"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/MainWin.cpp:2423
+#: src/frontend/MainWin.cpp:2428
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1431
 #: src/frontend/worksheet/WorksheetView.cpp:357
 #, kde-format
 msgid "Cursor"
 msgstr "Kazalec"
 
-#: src/frontend/MainWin.cpp:2459
+#: src/frontend/MainWin.cpp:2464
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "Pri souporabi projekta je prišlo do težave: %1"
 
-#: src/frontend/MainWin.cpp:2463
+#: src/frontend/MainWin.cpp:2468
 #, kde-format
 msgid "Project shared successfully"
 msgstr "Projekt je uspešno deljen"
 
-#: src/frontend/MainWin.cpp:2466
+#: src/frontend/MainWin.cpp:2471
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "Skupni projekt najdete na: <a href=\"%1\">%1</a>"
 
-#: src/frontend/MainWin.cpp:2656
+#: src/frontend/MainWin.cpp:2661
 #, kde-format
 msgid "Running Kaggle CLI tool failed"
 msgstr "Poganjanje orodja Kaggle CLI ni uspelo"
 
-#: src/frontend/MainWin.cpp:2657
+#: src/frontend/MainWin.cpp:2662
 #, kde-format
 msgid ""
 "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
@@ -14779,32 +14770,32 @@ msgstr ""
 "Sledite navodilom v <a href=\"https://www.kaggle.com/docs/api\">\"Kako "
 "uporabljati Kaggle - How to Use Kaggle\"</a> za nastavitev orodja Kaggle CLI."
 
-#: src/frontend/MainWin.cpp:2720
+#: src/frontend/MainWin.cpp:2725
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 izvoženo"
 
-#: src/frontend/MainWin.cpp:2727
+#: src/frontend/MainWin.cpp:2732
 #, kde-format
 msgid "FITS files saved"
 msgstr "Datoteke FITS shranjene"
 
-#: src/frontend/MainWin.cpp:2739
+#: src/frontend/MainWin.cpp:2744
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "Odjemalec MQTT%1"
 
-#: src/frontend/MainWin.cpp:2757
+#: src/frontend/MainWin.cpp:2762
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "S tem gostiteljem že obstaja MQTTClient!"
 
-#: src/frontend/MainWin.cpp:2761
+#: src/frontend/MainWin.cpp:2766
 #, kde-format
 msgid "Live data source%1"
 msgstr "Vir podatkov v živo%1"
 
-#: src/frontend/MainWin.cpp:2806
+#: src/frontend/MainWin.cpp:2811
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Ustvari novo %1 zvezek"
@@ -19202,10 +19193,9 @@ msgstr "Dialog"
 
 #. i18n: ectx: property (text), widget (QLabel, lGraphLayer)
 #: src/frontend/ui/datasources/importoriginlayersdialog.ui:27
-#, fuzzy, kde-format
-#| msgid "Import as:"
+#, kde-format
 msgid "Import As"
-msgstr "Uvozi kot:"
+msgstr "Uvozi kot"
 
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #: src/frontend/ui/datasources/importprojectwidget.ui:23
