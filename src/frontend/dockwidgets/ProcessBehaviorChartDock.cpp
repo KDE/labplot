@@ -30,7 +30,8 @@
 */
 ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	: BaseDock(parent)
-	, cbDataColumn(new TreeViewComboBox) {
+	, cbDataColumn(new TreeViewComboBox)
+	, cbData2Column(new TreeViewComboBox) {
 	ui.setupUi(this);
 	setPlotRangeCombobox(ui.cbPlotRanges);
 	setBaseWidgets(ui.leName, ui.teComment);
@@ -38,7 +39,8 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 
 	// Tab "General"
 	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
-	gridLayout->addWidget(cbDataColumn, 3, 2, 1, 1);
+	gridLayout->addWidget(cbDataColumn, 4, 2, 1, 1);
+	gridLayout->addWidget(cbData2Column, 5, 2, 1, 1);
 
 	// Tab "Data Line"
 	auto* hBoxLayout = static_cast<QHBoxLayout*>(ui.tabDataLine->layout());
@@ -71,6 +73,7 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	// Slots
 	// General
 	connect(cbDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &ProcessBehaviorChartDock::dataColumnChanged);
+	connect(cbData2Column, &TreeViewComboBox::currentModelIndexChanged, this, &ProcessBehaviorChartDock::data2ColumnChanged);
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ProcessBehaviorChartDock::typeChanged);
 	connect(ui.cbLimitsMetric, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ProcessBehaviorChartDock::limitsMetricChanged);
 	connect(ui.sbSampleSize, &QSpinBox::valueChanged, this, &ProcessBehaviorChartDock::sampleSizeChanged);
@@ -102,6 +105,8 @@ void ProcessBehaviorChartDock::setModel() {
 	model->setSelectableAspects({AspectType::Column});
 	cbDataColumn->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
 	cbDataColumn->setModel(model);
+	cbData2Column->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
+	cbData2Column->setModel(model);
 }
 
 void ProcessBehaviorChartDock::setPlots(QList<ProcessBehaviorChart*> list) {
@@ -137,9 +142,13 @@ void ProcessBehaviorChartDock::setPlots(QList<ProcessBehaviorChart*> list) {
 	if (m_plots.size() == 1) {
 		cbDataColumn->setEnabled(true);
 		cbDataColumn->setColumn(m_plot->dataColumn(), m_plot->dataColumnPath());
+		cbData2Column->setEnabled(true);
+		cbData2Column->setColumn(m_plot->data2Column(), m_plot->data2ColumnPath());
 	} else {
 		cbDataColumn->setEnabled(false);
 		cbDataColumn->setCurrentModelIndex(QModelIndex());
+		cbData2Column->setEnabled(false);
+		cbData2Column->setCurrentModelIndex(QModelIndex());
 	}
 
 	ui.chkLegendVisible->setChecked(m_plot->legendVisible());
@@ -158,6 +167,7 @@ void ProcessBehaviorChartDock::setPlots(QList<ProcessBehaviorChart*> list) {
 	// Slots
 	// General-tab
 	connect(m_plot, &ProcessBehaviorChart::dataColumnChanged, this, &ProcessBehaviorChartDock::plotDataColumnChanged);
+	connect(m_plot, &ProcessBehaviorChart::data2ColumnChanged, this, &ProcessBehaviorChartDock::plotData2ColumnChanged);
 	connect(m_plot, &ProcessBehaviorChart::typeChanged, this, &ProcessBehaviorChartDock::plotTypeChanged);
 	connect(m_plot, &ProcessBehaviorChart::limitsMetricChanged, this, &ProcessBehaviorChartDock::plotLimitsMetricChanged);
 	connect(m_plot, &ProcessBehaviorChart::sampleSizeChanged, this, &ProcessBehaviorChartDock::plotSampleSizeChanged);
@@ -199,7 +209,7 @@ void ProcessBehaviorChartDock::retranslateUi() {
 		"<li>X̅  (X̅S) - plot the <b>averages for each sample</b>.</li>"
 		"<li>S (X̅S) - plot the <b>standard deviations for each sample</b>.</li>"
 		"</ul>"
-		"Counts:"
+		"Attributes:"
 		"<ul>"
 		"<li>P - plot <b>binomial proportions</b>.</li>"
 		"<li>NP - plot <b>binomial counts</b>.</li>"
@@ -245,6 +255,21 @@ void ProcessBehaviorChartDock::dataColumnChanged(const QModelIndex& index) {
 		plot->setDataColumn(column);
 }
 
+void ProcessBehaviorChartDock::data2ColumnChanged(const QModelIndex& index) {
+	if (m_initializing)
+		return;
+
+	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	AbstractColumn* column(nullptr);
+	if (aspect) {
+		column = dynamic_cast<AbstractColumn*>(aspect);
+		Q_ASSERT(column);
+	}
+
+	for (auto* plot : m_plots)
+		plot->setData2Column(column);
+}
+
 void ProcessBehaviorChartDock::typeChanged(int index) {
 	const auto type = static_cast<ProcessBehaviorChart::Type>(ui.cbType->itemData(index).toInt());
 
@@ -260,9 +285,15 @@ void ProcessBehaviorChartDock::typeChanged(int index) {
 	ui.lLimitsMetric->setVisible(visible);
 	ui.cbLimitsMetric->setVisible(visible);
 
+	// allow negative value
 	visible = (type == ProcessBehaviorChart::Type::XmR || type == ProcessBehaviorChart::Type::XbarR || type == ProcessBehaviorChart::Type::XbarS);
 	ui.lNegativeLowerLimit->setVisible(visible);
 	ui.chbNegativeLowerLimit->setVisible(visible);
+
+	// second data column
+	visible = (type == ProcessBehaviorChart::Type::P);
+	ui.lData2Column->setVisible(visible);
+	cbData2Column->setVisible(visible);
 
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* plot : m_plots)
@@ -295,6 +326,11 @@ void ProcessBehaviorChartDock::negativeLowerLimitEnabledChanged(bool enabled) {
 void ProcessBehaviorChartDock::plotDataColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
 	cbDataColumn->setColumn(column, m_plot->dataColumnPath());
+}
+
+void ProcessBehaviorChartDock::plotData2ColumnChanged(const AbstractColumn* column) {
+	CONDITIONAL_LOCK_RETURN;
+	cbData2Column->setColumn(column, m_plot->data2ColumnPath());
 }
 
 void ProcessBehaviorChartDock::plotTypeChanged(ProcessBehaviorChart::Type type) {

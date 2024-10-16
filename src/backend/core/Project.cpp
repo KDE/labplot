@@ -1195,6 +1195,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		if (!plot)
 			continue;
 		RESTORE_COLUMN_POINTER(plot, dataColumn, DataColumn);
+		RESTORE_COLUMN_POINTER(plot, data2Column, Data2Column);
 	}
 
 	// run charts/plots

@@ -55,6 +55,9 @@ private Q_SLOTS:
 	void testPBChartS();
 
 	void testPBChartNP();
+	void testPBChartP();
+	void testPBChartC();
+	void testPBChartU();
 
 	// run chart
 	void testRunChartInit();

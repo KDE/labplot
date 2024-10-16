@@ -38,6 +38,7 @@ extern "C" {
 #include <gsl/gsl_statistics.h>
 
 CURVE_COLUMN_CONNECT(ProcessBehaviorChart, Data, data, recalc)
+CURVE_COLUMN_CONNECT(ProcessBehaviorChart, Data2, data2, recalc)
 
 ProcessBehaviorChart::ProcessBehaviorChart(const QString& name)
 	: Plot(name, new ProcessBehaviorChartPrivate(this), AspectType::ProcessBehaviorChart) {
@@ -205,6 +206,8 @@ BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, int, sampleSize, sampleSize)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, bool, negativeLowerLimitEnabled, negativeLowerLimitEnabled)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, const AbstractColumn*, dataColumn, dataColumn)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, QString, dataColumnPath, dataColumnPath)
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, const AbstractColumn*, data2Column, data2Column)
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, QString, data2ColumnPath, data2ColumnPath)
 
 /*!
  * returns the number of index values used for x.
@@ -215,13 +218,12 @@ int ProcessBehaviorChart::xIndexCount() const {
 		return 0;
 
 	int count = d->dataColumn->rowCount();
-
-	// for XmR, mR and NP sub-types one point is plotted for every value in the source data,
-	// for all other sub-types one point is plotted for each sample
-	if (d->type != ProcessBehaviorChart::Type::XmR && d->type != ProcessBehaviorChart::Type::mR && d->type != ProcessBehaviorChart::Type::NP) {
+	// subract the remainder to handle complete samples only for chart types where one point per sample is plotted
+	if (d->type == ProcessBehaviorChart::Type::XbarR || d->type == ProcessBehaviorChart::Type::R || d->type == ProcessBehaviorChart::Type::XbarS
+			|| d->type == ProcessBehaviorChart::Type::S) {
 		const int remainder = count % d->sampleSize;
 		if (remainder > 0)
-			count -= remainder; // subract the remainder to handle complete samples only
+			count -= remainder;
 
 		count = count / d->sampleSize;
 	}
@@ -316,7 +318,7 @@ bool ProcessBehaviorChart::hasData() const {
 
 bool ProcessBehaviorChart::usingColumn(const Column* column) const {
 	Q_D(const ProcessBehaviorChart);
-	return (d->dataColumn == column);
+	return (d->dataColumn == column || d->data2Column == column);
 }
 
 void ProcessBehaviorChart::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* aspect) {
@@ -382,6 +384,18 @@ void ProcessBehaviorChart::setDataColumnPath(const QString& path) {
 	d->dataColumnPath = path;
 }
 
+CURVE_COLUMN_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, Data2, data2, recalc)
+void ProcessBehaviorChart::setData2Column(const AbstractColumn* column) {
+	Q_D(ProcessBehaviorChart);
+	if (column != d->data2Column)
+		exec(new ProcessBehaviorChartSetData2ColumnCmd(d, column, ki18n("%1: set data column")));
+}
+
+void ProcessBehaviorChart::setData2ColumnPath(const QString& path) {
+	Q_D(ProcessBehaviorChart);
+	d->data2ColumnPath = path;
+}
+
 STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetType, ProcessBehaviorChart::Type, type, recalc)
 void ProcessBehaviorChart::setType(ProcessBehaviorChart::Type type) {
 	Q_D(ProcessBehaviorChart);
@@ -431,6 +445,14 @@ void ProcessBehaviorChart::dataColumnAboutToBeRemoved(const AbstractAspect* aspe
 	}
 }
 
+void ProcessBehaviorChart::data2ColumnAboutToBeRemoved(const AbstractAspect* aspect) {
+	Q_D(ProcessBehaviorChart);
+	if (aspect == d->data2Column) {
+		d->data2Column = nullptr;
+		CURVE_COLUMN_REMOVED(data2);
+	}
+}
+
 // ##############################################################################
 // ######################### Private implementation #############################
 // ##############################################################################
@@ -470,7 +492,7 @@ void ProcessBehaviorChartPrivate::retransform() {
  */
 void ProcessBehaviorChartPrivate::recalc() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
-	if (!dataColumn) {
+	if (!dataColumn || (type == ProcessBehaviorChart::Type::P && !data2Column)) {
 		center = 0.;
 		upperLimit = 0.;
 		lowerLimit = 0.;
@@ -534,7 +556,8 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 
 	// determine the number of values in the source data to be taken into account
 	int count = dataColumn->rowCount();
-	if (type != ProcessBehaviorChart::Type::XmR && type != ProcessBehaviorChart::Type::mR && type != ProcessBehaviorChart::Type::NP) {
+	if (type == ProcessBehaviorChart::Type::XbarR || type == ProcessBehaviorChart::Type::R || type == ProcessBehaviorChart::Type::XbarS
+			|| type == ProcessBehaviorChart::Type::S) {
 		const int remainder = count % sampleSize;
 		if (remainder > 0) {
 			count -= remainder; // subract the remainder to handle complete samples only
@@ -784,6 +807,30 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		break;
 	}
 	case ProcessBehaviorChart::Type::P: {
+		// calculate the proportions
+		double total = 0.;
+		double totalSampleSize = 0.;
+		for (int i = 0; i < count; ++i) {
+			if (dataColumn->isValid(i) && !dataColumn->isMasked(i) && data2Column->isValid(i) && !data2Column->isMasked(i)) {
+				yColumn->setValueAt(i, dataColumn->valueAt(i) / data2Column->valueAt(i));
+				total += dataColumn->valueAt(i);
+				totalSampleSize += data2Column->valueAt(i);
+			}
+		}
+
+		// center line
+		const double pbar = (totalSampleSize) ? total / totalSampleSize : 0;
+		center = pbar;
+
+		// upper and lower limits
+		double nMean = static_cast<const Column*>(data2Column)->statistics().arithmeticMean;
+		const double distance = 3. * std::sqrt(pbar * (1 - pbar) / nMean);
+		upperLimit = pbar + distance;
+		lowerLimit = pbar - distance;
+
+		// plotted data - proportions
+		dataCurve->setYColumn(yColumn);
+
 		break;
 	}
 	case ProcessBehaviorChart::Type::NP: {
@@ -811,6 +858,15 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		break;
 	}
 	case ProcessBehaviorChart::Type::C: {
+		// center
+		center = static_cast<const Column*>(dataColumn)->statistics().arithmeticMean;
+
+		// upper and lower limits
+		upperLimit = center + 3 * std::sqrt(center);
+		lowerLimit = center - 3 * std::sqrt(center);
+
+		// plotted data - original data
+		dataCurve->setYColumn(dataColumn);
 		break;
 	}
 	case ProcessBehaviorChart::Type::U: {
@@ -826,7 +882,7 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 			lowerLimit = 0.;
 
 		lowerLimitCurve->setVisible(true);
-	} else if (type == ProcessBehaviorChart::Type::mR || type == ProcessBehaviorChart::Type::R || type == ProcessBehaviorChart::Type::S) {
+	} else if (type == ProcessBehaviorChart::Type::mR || type == ProcessBehaviorChart::Type::R || type == ProcessBehaviorChart::Type::S || type == ProcessBehaviorChart::Type::C) {
 		// restrict the lower limit to 0, hide the curve for the lower limit line
 		if (lowerLimit < 0.) {
 			lowerLimit = 0.;
@@ -874,6 +930,7 @@ void ProcessBehaviorChart::save(QXmlStreamWriter* writer) const {
 	// general
 	writer->writeStartElement(QStringLiteral("general"));
 	WRITE_COLUMN(d->dataColumn, dataColumn);
+	WRITE_COLUMN(d->data2Column, data2Column);
 	WRITE_COLUMN(d->xColumn, xColumn);
 	WRITE_COLUMN(d->yColumn, yColumn);
 	WRITE_COLUMN(d->xCenterColumn, xCenterColumn);
@@ -940,6 +997,7 @@ bool ProcessBehaviorChart::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
 			READ_COLUMN(dataColumn);
+			READ_COLUMN(data2Column);
 			READ_COLUMN(xColumn);
 			READ_COLUMN(yColumn);
 			READ_COLUMN(xCenterColumn);
