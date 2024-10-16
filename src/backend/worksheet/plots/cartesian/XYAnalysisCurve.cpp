@@ -440,26 +440,23 @@ void XYAnalysisCurvePrivate::connectColumn(const AbstractColumn* column, Dimensi
 	m_connections << q->connect(column, &AbstractColumn::dataChanged, q, &XYAnalysisCurve::recalculate);
 	if (!second) {
 		switch (dim) {
-		case Dimension::X: {
+		case Dimension::X:
 			m_connections << q->connect(column, &AbstractAspect::aspectDescriptionChanged, q, &XYAnalysisCurve::xDataColumnNameChanged);
 			m_connections << q->connect(column, &AbstractAspect::aspectAboutToBeRemoved, q, &XYAnalysisCurve::xDataColumnAboutToBeRemoved);
 			break;
-		}
-		case Dimension::Y: {
+		case Dimension::Y:
 			m_connections << q->connect(column, &AbstractAspect::aspectDescriptionChanged, q, &XYAnalysisCurve::yDataColumnNameChanged);
 			m_connections << q->connect(column, &AbstractAspect::aspectAboutToBeRemoved, q, &XYAnalysisCurve::yDataColumnAboutToBeRemoved);
 			break;
-		}
 		}
 	} else {
 		switch (dim) {
 		case Dimension::X:
 			break;
-		case Dimension::Y: {
+		case Dimension::Y:
 			m_connections << q->connect(column, &AbstractAspect::aspectDescriptionChanged, q, &XYAnalysisCurve::y2DataColumnNameChanged);
 			m_connections << q->connect(column, &AbstractAspect::aspectAboutToBeRemoved, q, &XYAnalysisCurve::y2DataColumnAboutToBeRemoved);
 			break;
-		}
 		}
 	}
 }
@@ -469,12 +466,11 @@ void XYAnalysisCurvePrivate::updateConnections() {
 		q->disconnect(c);
 
 	switch (q->dataSourceType()) {
-	case XYAnalysisCurve::DataSourceType::Curve: {
+	case XYAnalysisCurve::DataSourceType::Curve:
 		if (dataSourceCurve)
 			connectCurve(dataSourceCurve);
 		break;
-	}
-	case XYAnalysisCurve::DataSourceType::Spreadsheet: {
+	case XYAnalysisCurve::DataSourceType::Spreadsheet:
 		if (xDataColumn)
 			connectColumn(xDataColumn, Dimension::X, false);
 		if (yDataColumn)
@@ -482,7 +478,9 @@ void XYAnalysisCurvePrivate::updateConnections() {
 		if (y2DataColumn)
 			connectColumn(y2DataColumn, Dimension::Y, true);
 		break;
-	}
+	case XYAnalysisCurve::DataSourceType::Histogram:
+		// TODO
+		break;
 	}
 }
 
