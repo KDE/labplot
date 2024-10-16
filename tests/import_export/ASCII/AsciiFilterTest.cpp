@@ -2159,22 +2159,21 @@ void AsciiFilterTest::keepLast() {
 
 void AsciiFilterTest::testAppendColumns() {
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
-	AsciiFilter filter;
-
-	auto p = filter.properties();
-	p.automaticSeparatorDetection = false;
-	p.separator = QStringLiteral(";");
-	p.headerEnabled = false;
-	p.columnNamesRaw = QStringLiteral("x, y");
-	p.intAsDouble = false;
-	filter.setProperties(p);
-
 	{
 		QStringList fileContent = {
 			QStringLiteral("1;5"),
 			QStringLiteral("2;6"),
 			QStringLiteral("3;7"),
 		};
+		AsciiFilter filter;
+
+		auto p = filter.properties();
+		p.automaticSeparatorDetection = false;
+		p.separator = QStringLiteral(";");
+		p.headerEnabled = false;
+		p.columnNamesRaw = QStringLiteral("x, y");
+		p.intAsDouble = false;
+		filter.setProperties(p);
 
 		QString savePath;
 		SAVE_FILE("testfile", fileContent);
@@ -2197,6 +2196,16 @@ void AsciiFilterTest::testAppendColumns() {
 	QCOMPARE(spreadsheet.column(1)->integerAt(2), 7);
 
 	{
+		AsciiFilter filter;
+
+		auto p = filter.properties();
+		p.automaticSeparatorDetection = false;
+		p.separator = QStringLiteral(";");
+		p.headerEnabled = false;
+		p.columnNamesRaw = QStringLiteral("x, y");
+		p.intAsDouble = false;
+		filter.setProperties(p);
+
 		QStringList fileContent2 = {
 			QStringLiteral("11;12"),
 			QStringLiteral("13;14"),
@@ -2212,39 +2221,43 @@ void AsciiFilterTest::testAppendColumns() {
 	QCOMPARE(spreadsheet.columnCount(), 4);
 	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("x"));
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("y"));
-	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("x"));
-	QCOMPARE(spreadsheet.column(3)->name(), QLatin1String("y"));
+	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("x 1"));
+	QCOMPARE(spreadsheet.column(3)->name(), QLatin1String("y 1"));
 
 	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
-	QCOMPARE(spreadsheet.column(0)->integerAt(0), 3);
-	QCOMPARE(spreadsheet.column(0)->integerAt(1), 11);
+	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
+	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
+	QCOMPARE(spreadsheet.column(0)->integerAt(2), 3);
 
 	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
-	QCOMPARE(spreadsheet.column(1)->integerAt(0), 7);
-	QCOMPARE(spreadsheet.column(1)->integerAt(1), 12);
+	QCOMPARE(spreadsheet.column(1)->integerAt(0), 5);
+	QCOMPARE(spreadsheet.column(1)->integerAt(1), 6);
+	QCOMPARE(spreadsheet.column(1)->integerAt(2), 7);
 
 	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Integer);
-	QCOMPARE(spreadsheet.column(2)->integerAt(2), 13);
-	QCOMPARE(spreadsheet.column(2)->integerAt(3), 15);
+	QCOMPARE(spreadsheet.column(2)->integerAt(0), 11);
+	QCOMPARE(spreadsheet.column(2)->integerAt(1), 13);
+	QCOMPARE(spreadsheet.column(2)->integerAt(2), 15);
 
 	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Integer);
-	QCOMPARE(spreadsheet.column(3)->integerAt(2), 14);
-	QCOMPARE(spreadsheet.column(3)->integerAt(3), 16);
+	QCOMPARE(spreadsheet.column(3)->integerAt(0), 12);
+	QCOMPARE(spreadsheet.column(3)->integerAt(1), 14);
+	QCOMPARE(spreadsheet.column(3)->integerAt(2), 16);
 }
 
 void AsciiFilterTest::testPrependColumns() {
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
-	AsciiFilter filter;
-
-	auto p = filter.properties();
-	p.automaticSeparatorDetection = false;
-	p.separator = QStringLiteral(";");
-	p.headerEnabled = false;
-	p.columnNamesRaw = QStringLiteral("x, y");
-	p.intAsDouble = false;
-	filter.setProperties(p);
 
 	{
+		AsciiFilter filter;
+
+		auto p = filter.properties();
+		p.automaticSeparatorDetection = false;
+		p.separator = QStringLiteral(";");
+		p.headerEnabled = false;
+		p.columnNamesRaw = QStringLiteral("x, y");
+		p.intAsDouble = false;
+		filter.setProperties(p);
 		QStringList fileContent = {
 			QStringLiteral("1;5"),
 			QStringLiteral("2;6"),
@@ -2272,6 +2285,15 @@ void AsciiFilterTest::testPrependColumns() {
 	QCOMPARE(spreadsheet.column(1)->integerAt(2), 7);
 
 	{
+		AsciiFilter filter;
+
+		auto p = filter.properties();
+		p.automaticSeparatorDetection = false;
+		p.separator = QStringLiteral(";");
+		p.headerEnabled = false;
+		p.columnNamesRaw = QStringLiteral("x, y");
+		p.intAsDouble = false;
+		filter.setProperties(p);
 		QStringList fileContent2 = {
 			QStringLiteral("11;12"),
 			QStringLiteral("13;14"),
@@ -2280,31 +2302,35 @@ void AsciiFilterTest::testPrependColumns() {
 
 		QString savePath;
 		SAVE_FILE("testfile", fileContent2);
-		filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Append);
+		filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Prepend);
 	}
 
 	QCOMPARE(spreadsheet.rowCount(), 3);
 	QCOMPARE(spreadsheet.columnCount(), 4);
-	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("x"));
-	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("y"));
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("x 1"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("y 1"));
 	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("x"));
 	QCOMPARE(spreadsheet.column(3)->name(), QLatin1String("y"));
 
 	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
-	QCOMPARE(spreadsheet.column(0)->integerAt(2), 13);
-	QCOMPARE(spreadsheet.column(0)->integerAt(3), 15);
+	QCOMPARE(spreadsheet.column(0)->integerAt(0), 11);
+	QCOMPARE(spreadsheet.column(0)->integerAt(1), 13);
+	QCOMPARE(spreadsheet.column(0)->integerAt(2), 15);
 
 	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
-	QCOMPARE(spreadsheet.column(1)->integerAt(2), 14);
-	QCOMPARE(spreadsheet.column(1)->integerAt(3), 16);
+	QCOMPARE(spreadsheet.column(1)->integerAt(0), 12);
+	QCOMPARE(spreadsheet.column(1)->integerAt(1), 14);
+	QCOMPARE(spreadsheet.column(1)->integerAt(2), 16);
 
 	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Integer);
-	QCOMPARE(spreadsheet.column(2)->integerAt(0), 3);
-	QCOMPARE(spreadsheet.column(2)->integerAt(1), 11);
+	QCOMPARE(spreadsheet.column(2)->integerAt(0), 1);
+	QCOMPARE(spreadsheet.column(2)->integerAt(1), 2);
+	QCOMPARE(spreadsheet.column(2)->integerAt(2), 3);
 
 	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Integer);
-	QCOMPARE(spreadsheet.column(3)->integerAt(0), 7);
-	QCOMPARE(spreadsheet.column(3)->integerAt(1), 12);
+	QCOMPARE(spreadsheet.column(3)->integerAt(0), 5);
+	QCOMPARE(spreadsheet.column(3)->integerAt(1), 6);
+	QCOMPARE(spreadsheet.column(3)->integerAt(2), 7);
 }
 
 void AsciiFilterTest::testMatrixHeader() {
