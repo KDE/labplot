@@ -1799,9 +1799,11 @@ void ImportFileWidget::refreshPreview() {
 			if (item && item->childCount() == 0) { // only preview if the lowest level (i.e. a topic) is selected
 				const QString& topicName = item->text(0);
 				auto i = m_lastMessage.find(topicName);
-				if (i != m_lastMessage.end())
-					importedStrings = filter->preview(QLatin1String(i.value().payload().data()), lines);
-				else
+				if (i != m_lastMessage.end()) {
+					auto s = QLatin1String(i.value().payload().data());
+					BufferReader reader(s.toString()); // TODO: inefficient?
+					importedStrings = filter->preview(reader, lines);
+				} else
 					importedStrings << QStringList{i18n("No data arrived yet for the selected topic")};
 			}
 #endif
