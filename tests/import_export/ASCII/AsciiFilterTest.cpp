@@ -15,12 +15,14 @@
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/datasources/filters/AsciiFilterPrivate.h"
 #include "backend/lib/macros.h"
+#include "backend/lib/XmlStreamReader.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 
 #include <KCompressionDevice>
+#include <QXmlStreamWriter>
 
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
@@ -3079,6 +3081,75 @@ void AsciiFilterTest::deleteSpreadsheet() {
 	filter.preview(savePath, -1);
 	// Should not crash just because the previous spreadsheet is anymore available
 	filter.preview(savePath, -1);
+}
+
+void AsciiFilterTest::saveLoad() {
+	QString s;
+	{
+		AsciiFilter filter;
+		auto p = filter.properties();
+		p.automaticSeparatorDetection = false;
+		p.baseYear = 1200;
+		p.columnModesString = QStringLiteral("Int, Int, Double");
+		p.columnNamesRaw = QStringLiteral("Column1, Column2, Column3");
+		p.commentCharacter = QStringLiteral("ACommenCharacter");
+		p.createIndex = true;
+		p.createTimestamp = false;
+		p.dateTimeFormat = QStringLiteral("ADateTimeFormat");
+		p.startColumn = 5;
+		p.endColumn = 6;
+		p.startRow = 22;
+		p.endRow = 28;
+		p.headerEnabled = false;
+		p.headerLine = 3829;
+		p.intAsDouble = true;
+		p.nanValue = 29304;
+		p.removeQuotes = true;
+		p.skipEmptyParts = true;
+		filter.setProperties(p);
+		QXmlStreamWriter writer(&s);
+		filter.save(&writer);
+	}
+
+	{
+		XmlStreamReader reader(s);
+		AsciiFilter filter;
+		while (!reader.atEnd()) {
+			reader.readNext();
+			if (reader.isEndElement())
+				break;
+
+			if (!reader.isStartElement())
+				continue;
+
+			if (reader.name() == QLatin1String("asciiFilter")) {
+				QVERIFY(filter.load(&reader));
+				break;
+			}
+		}
+		const auto& s = reader.warningStrings();
+		QVERIFY(s.isEmpty());
+
+		const auto p = filter.properties();
+		QCOMPARE(p.automaticSeparatorDetection, false);
+		QCOMPARE(p.baseYear, 1200);
+		QCOMPARE(p.columnModesString, QStringLiteral("Int,Int,Double"));
+		QCOMPARE(p.columnNamesRaw, QStringLiteral("Column1, Column2, Column3"));
+		QCOMPARE(p.commentCharacter, QStringLiteral("ACommenCharacter"));
+		QCOMPARE(p.createIndex, true);
+		QCOMPARE(p.createTimestamp, false);
+		QCOMPARE(p.dateTimeFormat, QStringLiteral("ADateTimeFormat"));
+		QCOMPARE(p.startColumn, 5);
+		QCOMPARE(p.endColumn, 6);
+		QCOMPARE(p.startRow, 22);
+		QCOMPARE(p.endRow, 28);
+		QCOMPARE(p.headerEnabled, false);
+		QCOMPARE(p.headerLine, 3829);
+		QCOMPARE(p.intAsDouble, true);
+		QCOMPARE(p.nanValue, 29304);
+		QCOMPARE(p.removeQuotes, true);
+		QCOMPARE(p.skipEmptyParts, true);
+	}
 }
 
 QTEST_MAIN(AsciiFilterTest)

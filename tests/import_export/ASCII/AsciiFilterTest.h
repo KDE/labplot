@@ -119,6 +119,7 @@ private Q_SLOTS:
 	void determineColumns();
 
 	void deleteSpreadsheet();
+	void saveLoad();
 
 private:
 	QString benchDataFileName;
