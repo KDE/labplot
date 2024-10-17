@@ -118,6 +118,8 @@ private Q_SLOTS:
 	void determineSeparator();
 	void determineColumns();
 
+	void deleteSpreadsheet();
+
 private:
 	QString benchDataFileName;
 	const size_t lines = 1e5;
