@@ -172,56 +172,6 @@ void MQTTTopic::plotData() {
 	dlg->exec();
 }
 
-namespace {
-	class BufferReader: public QIODevice {
-	public:
-		BufferReader(const QStringView& buffer): m_message(buffer), m_lines(buffer.split(QLatin1Char('\n'))) {
-
-		}
-
-		bool isSequential() const {
-			return true;
-		}
-
-		bool atEnd() const {
-			return !canReadLine();
-		}
-
-		bool open(QIODevice::OpenModeFlag mode) {
-			return mode == QIODevice::OpenModeFlag::ReadOnly;
-		}
-
-		bool canReadLine() const {
-			return m_lineIndex < m_lines.count();
-		}
-
-		QByteArray readLine(qint64 maxlen = 0) {
-			assert(maxlen == 0);
-			m_lineIndex ++;
-			return m_lines.at(m_lineIndex - 1).toLocal8Bit();
-		}
-
-		// Not required functions yet, so ignore them until they are required
-		qint64 readData(char *, qint64) override {
-			assert(false);
-			return 0;
-		}
-		qint64 readLineData(char *, qint64) override {
-			assert(false);
-			return 0;
-		}
-		qint64 writeData(const char *, qint64) {
-			assert(false);
-			return 0;
-		}
-
-	private:
-		const QStringView m_message;
-		const QList<QStringView> m_lines;
-		int m_lineIndex{0};
-	};
-}
-
 /*!
  *\brief Reads every message from the message puffer
  */

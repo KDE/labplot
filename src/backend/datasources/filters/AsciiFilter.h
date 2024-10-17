@@ -9,11 +9,35 @@
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include <memory>
+#include <QIODevice>
 
 #ifndef ASCIIFILTER_H
 #define ASCIIFILTER_H
 
 class AsciiFilterPrivate;
+
+/*!
+ * \brief The BufferReader class
+ * Simulate a qiodevice to expose a string to the filter
+ */
+class BufferReader: public QIODevice {
+public:
+	BufferReader(const QStringView& buffer);
+
+	bool isSequential() const;
+	bool atEnd() const;
+	bool open(QIODevice::OpenModeFlag mode);
+	bool canReadLine() const;
+	QByteArray readLine(qint64 maxlen = 0);
+	qint64 readData(char *, qint64) override;
+	qint64 readLineData(char *, qint64) override;
+	qint64 writeData(const char *, qint64);
+
+private:
+	const QStringView m_message;
+	const QList<QStringView> m_lines;
+	int m_lineIndex{0};
+};
 
 class AsciiFilter: public AbstractFileFilter {
 public:
