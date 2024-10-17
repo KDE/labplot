@@ -274,6 +274,7 @@ void AsciiFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("startColumn"), QString::number(p.startColumn));
 	writer->writeAttribute(QStringLiteral("endColumn"), QString::number(p.endColumn));
 	writer->writeAttribute(QStringLiteral("columnModes"), AsciiFilterPrivate::convertTranslatedColumnModesToNative(p.columnModesString)); // Manually specified column modes
+	writer->writeAttribute(QStringLiteral("baseYear"), QString::number(p.baseYear));
 	writer->writeEndElement();
 }
 
@@ -305,6 +306,7 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
 	READ_INT_VALUE("startColumn", properties.startColumn, int);
 	READ_INT_VALUE("endColumn", properties.endColumn, int);
 	READ_STRING_VALUE("columnModes", properties.columnModesString);
+	READ_INT_VALUE("baseYear", properties.baseYear, int);
 	return true;
 }
 
@@ -1110,6 +1112,9 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice& device, int lines) {
 			case AbstractColumn::ColumnMode::Month:
 			case AbstractColumn::ColumnMode::DateTime:
 				line << c->dateTimeAt(row).toString(properties.dateTimeFormat);
+				break;
+			case AbstractColumn::ColumnMode::Text:
+				line << c->textAt(row);
 				break;
 			}
 		}

@@ -221,6 +221,29 @@
    <item row="7" column="2" colspan="5">
     <widget class="QLineEdit" name="kleColumnMode"/>
    </item>
+   <item row="3" column="4" colspan="2">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Year Base:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="6">
+    <widget class="QSpinBox" name="sbYearBase">
+     <property name="toolTip">
+      <string>Base year when only 2 digits are provided for the year</string>
+     </property>
+     <property name="minimum">
+      <number>0</number>
+     </property>
+     <property name="maximum">
+      <number>999999999</number>
+     </property>
+     <property name="value">
+      <number>1900</number>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>

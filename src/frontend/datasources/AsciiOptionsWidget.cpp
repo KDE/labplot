@@ -112,6 +112,9 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent)
 	ui.lVectorNames->setToolTip(info);
 	ui.kleVectorNames->setToolTip(info);
 
+	info = i18n("Custom column modes, comma separated. Valid types: %1").arg(AsciiFilter::dataTypesString().join(QStringLiteral(", ")));
+	ui.kleColumnMode->setToolTip(info);
+
 	connect(ui.chbHeader, &QCheckBox::toggled, this, &AsciiOptionsWidget::headerChanged);
 	connect(ui.sbHeaderLine, QOverload<int>::of(&QSpinBox::valueChanged), this, &AsciiOptionsWidget::headerLineChanged);
 	connect(ui.kleColumnMode, &QLineEdit::textChanged, this, &AsciiOptionsWidget::columnModesChanged);
@@ -176,6 +179,8 @@ void AsciiOptionsWidget::applyFilterSettings(AsciiFilter::Properties& properties
 	properties.columnNamesRaw = ui.kleVectorNames->text();
 	properties.headerEnabled = ui.chbHeader->isChecked();
 	properties.headerLine = ui.sbHeaderLine->value();
+	properties.baseYear = ui.sbYearBase->value();
+	properties.columnNamesRaw = ui.kleColumnMode->text();
 }
 
 void AsciiOptionsWidget::setSeparatingCharacter(QLatin1Char character) {
