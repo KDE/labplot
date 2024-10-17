@@ -1274,7 +1274,7 @@ void AsciiFilterTest::testRowRange00() {
 	p.headerEnabled = false;
 	p.intAsDouble = false;
 	p.startRow = 3;
-	p.endRow = 4;
+	p.endRow = 5;
 	p.columnNamesRaw = QStringLiteral("x,y,z");
 	filter.setProperties(p);
 
@@ -2062,7 +2062,7 @@ void AsciiFilterTest::testAppendRows() {
 		QString savePath;
 		SAVE_FILE("testfile", fileContent2);
 		KCompressionDevice file(savePath);
-		filter.readFromDevice(file, &spreadsheet, AbstractFileFilter::ImportMode::Replace, 0, -1, -1);
+		filter.readFromDevice(file, &spreadsheet, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, 0, -1, -1);
 	}
 
 	QCOMPARE(spreadsheet.rowCount(), 6);
@@ -2136,7 +2136,7 @@ void AsciiFilterTest::keepLast() {
 		QString savePath;
 		SAVE_FILE("testfile", fileContent2);
 		KCompressionDevice file(savePath);
-		filter.readFromDevice(file, &spreadsheet, AbstractFileFilter::ImportMode::Replace, 0, -1, 1);
+		filter.readFromDevice(file, &spreadsheet, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, 0, -1, 4);
 	}
 
 	QCOMPARE(spreadsheet.rowCount(), 4);
@@ -2885,7 +2885,6 @@ void AsciiFilterTest::benchDoubleImport() {
 	properties.headerLine = 1;
 	properties.intAsDouble = false;
 	filter.setProperties(properties);
-	filter.readDataFromFile(benchDataFileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	const int p = paths; // need local variable
 	QBENCHMARK {
