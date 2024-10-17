@@ -259,11 +259,12 @@ void AsciiFilter::save(QXmlStreamWriter* writer) const {
 
 	writer->writeStartElement(QStringLiteral("asciiFilter"));
 	writer->writeAttribute(QStringLiteral("commentCharacter"), p.commentCharacter);
-	writer->writeAttribute(QStringLiteral("separatingCharacterDetection"), QString::number(p.automaticSeparatorDetection)); // NEW
+	writer->writeAttribute(QStringLiteral("separatingCharacterDetection"), QString::number(p.automaticSeparatorDetection));
 	writer->writeAttribute(QStringLiteral("separatingCharacter"), p.separator);
 	writer->writeAttribute(QStringLiteral("createIndex"), QString::number(p.createIndex));
 	writer->writeAttribute(QStringLiteral("createTimestamp"), QString::number(p.createTimestamp));
 	writer->writeAttribute(QStringLiteral("header"), QString::number(p.headerEnabled));
+	writer->writeAttribute(QStringLiteral("headerLine"), QString::number(p.headerLine));
 	writer->writeAttribute(QStringLiteral("vectorNames"), p.columnNamesRaw);
 	writer->writeAttribute(QStringLiteral("skipEmptyParts"), QString::number(p.skipEmptyParts));
 	writer->writeAttribute(QStringLiteral("simplifyWhitespaces"), QString::number(p.simplifyWhitespaces));
@@ -275,6 +276,8 @@ void AsciiFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("endColumn"), QString::number(p.endColumn));
 	writer->writeAttribute(QStringLiteral("columnModes"), AsciiFilterPrivate::convertTranslatedColumnModesToNative(p.columnModesString)); // Manually specified column modes
 	writer->writeAttribute(QStringLiteral("baseYear"), QString::number(p.baseYear));
+	writer->writeAttribute(QStringLiteral("dateTimeFormat"), p.dateTimeFormat);
+	writer->writeAttribute(QStringLiteral("intAsDouble"), QString::number(p.intAsDouble));
 	writer->writeEndElement();
 }
 
@@ -284,12 +287,14 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
 	QString str;
 
 	READ_STRING_VALUE("commentCharacter", properties.commentCharacter);
+	READ_INT_VALUE("separatingCharacterDetection", properties.automaticSeparatorDetection, bool);
 	READ_STRING_VALUE("separatingCharacter", properties.separator);
 
 	READ_INT_VALUE("createIndex", properties.createIndex, bool);
 	READ_INT_VALUE("createTimestamp", properties.createTimestamp, bool);
 	// READ_INT_VALUE("autoMode", autoModeEnabled, bool);
 	READ_INT_VALUE("header", properties.headerEnabled, bool);
+	READ_INT_VALUE("headerLine", properties.headerLine, int);
 
 	str = attribs.value(QStringLiteral("vectorNames")).toString();
 	if (Project::xmlVersion() < 15)
@@ -307,6 +312,8 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
 	READ_INT_VALUE("endColumn", properties.endColumn, int);
 	READ_STRING_VALUE("columnModes", properties.columnModesString);
 	READ_INT_VALUE("baseYear", properties.baseYear, int);
+	READ_STRING_VALUE("dateTimeFormat", properties.dateTimeFormat);
+	READ_INT_VALUE("intAsDouble", properties.intAsDouble, bool);
 	return true;
 }
 
