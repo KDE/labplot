@@ -570,9 +570,9 @@ void StatisticalPlotsTest::testPBChartXmRAverage() {
 	ws->addChild(p);
 
 	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
-	pbc->setDataColumn(column);
 	pbc->setType(ProcessBehaviorChart::Type::XmR);
 	pbc->setLimitsMetric(ProcessBehaviorChart::LimitsMetric::Average);
+	pbc->setDataColumn(column);
 	p->addChild(pbc);
 
 	// check the limits, two digit comparison with the values from the book
@@ -607,9 +607,9 @@ void StatisticalPlotsTest::testPBChartmRAverage() {
 	ws->addChild(p);
 
 	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
-	pbc->setDataColumn(column);
 	pbc->setType(ProcessBehaviorChart::Type::mR);
 	pbc->setLimitsMetric(ProcessBehaviorChart::LimitsMetric::Average);
+	pbc->setDataColumn(column);
 	p->addChild(pbc);
 
 	// check the limits, two digit comparison with the values from the book
@@ -649,9 +649,9 @@ void StatisticalPlotsTest::testPBChartXmRMedian() {
 	ws->addChild(p);
 
 	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
-	pbc->setDataColumn(column);
 	pbc->setType(ProcessBehaviorChart::Type::XmR);
 	pbc->setLimitsMetric(ProcessBehaviorChart::LimitsMetric::Median);
+	pbc->setDataColumn(column);
 	p->addChild(pbc);
 
 	// check the limits, two digit comparison with the values from the book
@@ -690,9 +690,9 @@ void StatisticalPlotsTest::testPBChartmRMedian() {
 	ws->addChild(p);
 
 	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
-	pbc->setDataColumn(column);
 	pbc->setType(ProcessBehaviorChart::Type::mR);
 	pbc->setLimitsMetric(ProcessBehaviorChart::LimitsMetric::Median);
+	pbc->setDataColumn(column);
 	p->addChild(pbc);
 
 	// check the limits, two digit comparison with the values from the book
@@ -733,9 +733,9 @@ void StatisticalPlotsTest::testPBChartXBarRAverage() {
 	ws->addChild(p);
 
 	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
-	pbc->setDataColumn(column);
 	pbc->setType(ProcessBehaviorChart::Type::XbarR);
 	pbc->setLimitsMetric(ProcessBehaviorChart::LimitsMetric::Average);
+	pbc->setDataColumn(column);
 	p->addChild(pbc);
 
 	// check the limits, two digit comparison with the values from the book
@@ -773,9 +773,9 @@ void StatisticalPlotsTest::testPBChartRAverage() {
 	ws->addChild(p);
 
 	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
-	pbc->setDataColumn(column);
 	pbc->setType(ProcessBehaviorChart::Type::R);
 	pbc->setLimitsMetric(ProcessBehaviorChart::LimitsMetric::Average);
+	pbc->setDataColumn(column);
 	p->addChild(pbc);
 
 	// check the limits, two digit comparison with the values from the book
@@ -819,8 +819,8 @@ void StatisticalPlotsTest::testPBChartXBarS() {
 	ws->addChild(p);
 
 	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
-	pbc->setDataColumn(column);
 	pbc->setType(ProcessBehaviorChart::Type::XbarS);
+	pbc->setDataColumn(column);
 	p->addChild(pbc);
 
 	// check the limits, three digit comparison with the values from the book
@@ -866,8 +866,8 @@ void StatisticalPlotsTest::testPBChartS() {
 	ws->addChild(p);
 
 	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
-	pbc->setDataColumn(column);
 	pbc->setType(ProcessBehaviorChart::Type::S);
+	pbc->setDataColumn(column);
 	p->addChild(pbc);
 
 	// check the limits, four digit comparison with the values from the book
@@ -907,9 +907,9 @@ void StatisticalPlotsTest::testPBChartNP() {
 	ws->addChild(p);
 
 	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
-	pbc->setDataColumn(column);
 	pbc->setType(ProcessBehaviorChart::Type::NP);
 	pbc->setSampleSize(100);
+	pbc->setDataColumn(column);
 	p->addChild(pbc);
 
 	// check the limits, two digit comparison with the values from the book
@@ -948,9 +948,10 @@ void StatisticalPlotsTest::testPBChartP() {
 	ws->addChild(p);
 
 	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
+	pbc->setType(ProcessBehaviorChart::Type::P);
+	pbc->setExactLimitsEnabled(false);
 	pbc->setDataColumn(column);
 	pbc->setData2Column(column2);
-	pbc->setType(ProcessBehaviorChart::Type::P);
 	p->addChild(pbc);
 
 	// check the limits, two digit comparison with the values from the book
@@ -990,8 +991,8 @@ void StatisticalPlotsTest::testPBChartC() {
 	ws->addChild(p);
 
 	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
-	pbc->setDataColumn(column);
 	pbc->setType(ProcessBehaviorChart::Type::C);
+	pbc->setDataColumn(column);
 	p->addChild(pbc);
 
 	// check the limits, two digit comparison with the values from the book
@@ -1016,6 +1017,49 @@ void StatisticalPlotsTest::testPBChartC() {
  * test the U chart, the example is taken from Wheeler "Making Sense of Data", chapter 14.
  */
 void StatisticalPlotsTest::testPBChartU() {
+	// prepare the data
+	auto* column = new Column(QLatin1String("data"), AbstractColumn::ColumnMode::Integer);
+	auto* column2 = new Column(QLatin1String("data2"), AbstractColumn::ColumnMode::Double);
+	// clang-format off
+	column->setIntegers({656, 620, 681, 681, 660, 731, 694, 695, 683, 729, 715, 743, 762, 735, 780, 737, 770, 727, 784, 839, 779, 853, 804, 832});
+	column2->setValues({2.86, 2.72, 2.97, 3.00, 3.10, 3.13, 3.37, 3.38, 3.36, 3.41, 3.48, 3.66, 3.59, 3.37, 3.83, 3.67, 3.92, 3.77, 4.01, 4.12, 3.98, 4.18, 4.14, 4.36});
+	// clang-format on
+
+	// prepare the worksheet + plot
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
+	pbc->setType(ProcessBehaviorChart::Type::U);
+	pbc->setExactLimitsEnabled(false);
+	pbc->setDataColumn(column);
+	pbc->setData2Column(column2);
+	p->addChild(pbc);
+
+	// check the limits, one digit comparison with the value for the center taken from the book,
+	// approximated upper and lower limits are "self-calculated"
+	QCOMPARE(std::round(pbc->center() * 10) / 10, 207.2);
+	QCOMPARE(std::round(pbc->upperLimit() * 10) / 10, 230.1);
+	QCOMPARE(std::round(pbc->lowerLimit() * 10) / 10, 184.3);
+
+	// check the plotted data ("statistics") - rates are plotted
+	const int rowCount = 24; // 24 values
+	auto* yColumn = pbc->dataCurve()->yColumn();
+	QCOMPARE(yColumn->rowCount(), rowCount);
+	// clang-format off
+	const QVector<int> ref = {229, 228, 229, 227, 213, 234, 206, 206, 203, 214, 205, 203,
+							212, 218, 204 /* Wheeler uses 203 for 203.5 */, 201, 196 /* 770/3.92 \approx 196 */, 193,
+							196, 204 /* Wheeler uses 203 for 203.5 */, 196, 204, 194, 191};
+	// clang-format on
+	for (int i = 0; i < rowCount - 1; ++i)
+		QCOMPARE(std::round(yColumn->valueAt(i)), ref.at(i)); // compare zero digits
+
+	// index from 1 to 24 is used for x
+	auto* xColumn = pbc->dataCurve()->xColumn();
+	QCOMPARE(xColumn->rowCount(), rowCount);
+	for (int i = 0; i < rowCount; ++i)
+		QCOMPARE(xColumn->valueAt(i), i + 1);
 }
 
 // ##############################################################################

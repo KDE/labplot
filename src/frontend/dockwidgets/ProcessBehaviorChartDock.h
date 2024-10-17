@@ -63,6 +63,7 @@ private Q_SLOTS:
 	void limitsMetricChanged(int);
 	void sampleSizeChanged(int);
 	void negativeLowerLimitEnabledChanged(bool);
+	void exactLimitsEnabledChanged(bool);
 
 	// SLOTs for changes triggered in ProcessBehaviorChart
 	// General-Tab
@@ -72,6 +73,7 @@ private Q_SLOTS:
 	void plotLimitsMetricChanged(ProcessBehaviorChart::LimitsMetric);
 	void plotSampleSizeChanged(int);
 	void plotNegativeLowerLimitEnabledChanged(bool);
+	void plotExactLimitsEnabledChanged(bool);
 
 	void showStatusInfo(const QString&);
 

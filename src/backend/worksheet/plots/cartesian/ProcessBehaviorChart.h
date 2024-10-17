@@ -54,6 +54,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, data2ColumnPath, Data2ColumnPath)
 	BASIC_D_ACCESSOR_DECL(int, sampleSize, SampleSize)
 	BASIC_D_ACCESSOR_DECL(bool, negativeLowerLimitEnabled, NegativeLowerLimitEnabled)
+	BASIC_D_ACCESSOR_DECL(bool, exactLimitsEnabled, ExactLimitsEnabled)
 
 	Symbol* dataSymbol() const;
 	Line* dataLine() const;
@@ -111,6 +112,7 @@ Q_SIGNALS:
 	void data2ColumnChanged(const AbstractColumn*);
 	void sampleSizeChanged(int);
 	void negativeLowerLimitEnabledChanged(bool);
+	void exactLimitsEnabledChanged(bool);
 };
 
 #endif

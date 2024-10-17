@@ -65,6 +65,7 @@ void ProcessBehaviorChart::init() {
 	d->limitsMetric = static_cast<ProcessBehaviorChart::LimitsMetric>(
 		group.readEntry(QStringLiteral("LimitsMetric"), static_cast<int>(ProcessBehaviorChart::LimitsMetric::Average)));
 	d->negativeLowerLimitEnabled = group.readEntry(QStringLiteral("NegativeLowerLimitEnabled"), false);
+	d->exactLimitsEnabled = group.readEntry(QStringLiteral("ExactLimitsEnabled"), true);
 
 	// curve and columns for the data points
 	d->dataCurve = new XYCurve(QStringLiteral("data"));
@@ -117,6 +118,7 @@ void ProcessBehaviorChart::init() {
 	d->upperLimitCurve->line()->setStyle(Qt::SolidLine);
 	d->upperLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 	d->upperLimitCurve->background()->setPosition(Background::Position::No);
+	d->upperLimitCurve->setLineType(XYCurve::LineType::MidpointHorizontal); // required for stair-step lines for P and U charts
 
 	d->xUpperLimitColumn = new Column(QStringLiteral("xUpperLimit"), AbstractColumn::ColumnMode::Integer);
 	d->xUpperLimitColumn->setHidden(true);
@@ -138,6 +140,7 @@ void ProcessBehaviorChart::init() {
 	d->lowerLimitCurve->line()->setStyle(Qt::SolidLine);
 	d->lowerLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 	d->lowerLimitCurve->background()->setPosition(Background::Position::No);
+	d->lowerLimitCurve->setLineType(XYCurve::LineType::MidpointHorizontal);
 
 	d->xLowerLimitColumn = new Column(QStringLiteral("xLowerLimit"), AbstractColumn::ColumnMode::Integer);
 	d->xLowerLimitColumn->setHidden(true);
@@ -204,6 +207,7 @@ BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, ProcessBehaviorChart::Type, typ
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, ProcessBehaviorChart::LimitsMetric, limitsMetric, limitsMetric)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, int, sampleSize, sampleSize)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, bool, negativeLowerLimitEnabled, negativeLowerLimitEnabled)
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, bool, exactLimitsEnabled, exactLimitsEnabled)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, const AbstractColumn*, dataColumn, dataColumn)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, QString, dataColumnPath, dataColumnPath)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, const AbstractColumn*, data2Column, data2Column)
@@ -424,6 +428,13 @@ void ProcessBehaviorChart::setNegativeLowerLimitEnabled(bool enabled) {
 		exec(new ProcessBehaviorChartSetNegativeLowerLimitEnabledCmd(d, enabled, ki18n("%1: change negative lower limit")));
 }
 
+STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetExactLimitsEnabled, bool, exactLimitsEnabled, recalc)
+void ProcessBehaviorChart::setExactLimitsEnabled(bool enabled) {
+	Q_D(ProcessBehaviorChart);
+	if (enabled != d->exactLimitsEnabled)
+		exec(new ProcessBehaviorChartSetExactLimitsEnabledCmd(d, enabled, ki18n("%1: change exact limtis")));
+}
+
 // ##############################################################################
 // #################################  SLOTS  ####################################
 // ##############################################################################
@@ -492,7 +503,7 @@ void ProcessBehaviorChartPrivate::retransform() {
  */
 void ProcessBehaviorChartPrivate::recalc() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
-	if (!dataColumn || (type == ProcessBehaviorChart::Type::P && !data2Column)) {
+	if (!dataColumn || ((type == ProcessBehaviorChart::Type::P || type == ProcessBehaviorChart::Type::U) && !data2Column)) {
 		center = 0.;
 		upperLimit = 0.;
 		lowerLimit = 0.;
@@ -526,10 +537,22 @@ void ProcessBehaviorChartPrivate::recalc() {
 	// min and max values for x
 	xCenterColumn->setIntegerAt(0, xMin);
 	xCenterColumn->setIntegerAt(1, xMax);
-	xUpperLimitColumn->setIntegerAt(0, xMin);
-	xUpperLimitColumn->setIntegerAt(1, xMax);
-	xLowerLimitColumn->setIntegerAt(0, xMin);
-	xLowerLimitColumn->setIntegerAt(1, xMax);
+
+	// for P and U chart exact limits are calculated for every individual point ("stair-step limits"),
+	// if exactLimits is true. Straight lines are drawn for limits otherwise.
+	if ((type == ProcessBehaviorChart::Type::P || type == ProcessBehaviorChart::Type::U) && exactLimitsEnabled) {
+		for (int i = 0; i < count; ++i) {
+			xUpperLimitColumn->setIntegerAt(i, i + 1);
+			xLowerLimitColumn->setIntegerAt(i, i + 1);
+		}
+	} else {
+		xUpperLimitColumn->resizeTo(2);
+		xLowerLimitColumn->resizeTo(2);
+		xUpperLimitColumn->setIntegerAt(0, xMin);
+		xUpperLimitColumn->setIntegerAt(1, xMax);
+		xLowerLimitColumn->setIntegerAt(0, xMin);
+		xLowerLimitColumn->setIntegerAt(1, xMax);
+	}
 
 	updateControlLimits();
 
@@ -823,10 +846,20 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		center = pbar;
 
 		// upper and lower limits
-		double nMean = static_cast<const Column*>(data2Column)->statistics().arithmeticMean;
-		const double distance = 3. * std::sqrt(pbar * (1 - pbar) / nMean);
-		upperLimit = pbar + distance;
-		lowerLimit = pbar - distance;
+		if (exactLimitsEnabled) {
+			for (int i = 0; i < count; ++i) {
+				if (dataColumn->isValid(i) && !dataColumn->isMasked(i) && data2Column->isValid(i) && !data2Column->isMasked(i)) {
+					const double distance = 3. * std::sqrt(pbar * (1 - pbar) / data2Column->valueAt(i));
+					yUpperLimitColumn->setValueAt(i, pbar + distance);
+					yLowerLimitColumn->setValueAt(i, pbar - distance);
+				}
+			}
+		} else {
+			double nMean = static_cast<const Column*>(data2Column)->statistics().arithmeticMean;
+			const double distance = 3. * std::sqrt(pbar * (1 - pbar) / nMean);
+			upperLimit = pbar + distance;
+			lowerLimit = pbar - distance;
+		}
 
 		// plotted data - proportions
 		dataCurve->setYColumn(yColumn);
@@ -870,6 +903,39 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		break;
 	}
 	case ProcessBehaviorChart::Type::U: {
+		// calculate the ratios
+		double total = 0.;
+		double totalSampleSize = 0.;
+		for (int i = 0; i < count; ++i) {
+			if (dataColumn->isValid(i) && !dataColumn->isMasked(i) && data2Column->isValid(i) && !data2Column->isMasked(i)) {
+				yColumn->setValueAt(i, dataColumn->valueAt(i) / data2Column->valueAt(i));
+				total += dataColumn->valueAt(i);
+				totalSampleSize += data2Column->valueAt(i);
+			}
+		}
+
+		// center line
+		const double ubar = (totalSampleSize) ? total / totalSampleSize : 0;
+		center = ubar;
+
+		// upper and lower limits
+		if (exactLimitsEnabled) {
+			for (int i = 0; i < count; ++i) {
+				if (dataColumn->isValid(i) && !dataColumn->isMasked(i) && data2Column->isValid(i) && !data2Column->isMasked(i)) {
+					const double distance = 3. * std::sqrt(ubar / data2Column->valueAt(i));
+					yUpperLimitColumn->setValueAt(i, ubar + distance);
+					yLowerLimitColumn->setValueAt(i, ubar - distance);
+				}
+			}
+		} else {
+			double nMean = static_cast<const Column*>(data2Column)->statistics().arithmeticMean;
+			const double distance = 3. * std::sqrt(ubar / nMean);
+			upperLimit = ubar + distance;
+			lowerLimit = ubar - distance;
+		}
+
+		// plotted data - proportions
+		dataCurve->setYColumn(yColumn);
 	}
 	}
 
@@ -894,10 +960,18 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 
 	yCenterColumn->setValueAt(0, center);
 	yCenterColumn->setValueAt(1, center);
-	yUpperLimitColumn->setValueAt(0, upperLimit);
-	yUpperLimitColumn->setValueAt(1, upperLimit);
-	yLowerLimitColumn->setValueAt(0, lowerLimit);
-	yLowerLimitColumn->setValueAt(1, lowerLimit);
+
+	// for P and U chart limits are calculated for every individual point ("stair-step limits"),
+	// for other charts straight lines are drawn
+	if ((type == ProcessBehaviorChart::Type::P || type == ProcessBehaviorChart::Type::U) && exactLimitsEnabled) {
+		upperLimitCurve->setLineType(XYCurve::LineType::MidpointHorizontal); // required for stair-step lines for P and U charts
+		lowerLimitCurve->setLineType(XYCurve::LineType::MidpointHorizontal); // required for stair-step lines for P and U charts
+	} else {
+		yUpperLimitColumn->setValueAt(0, upperLimit);
+		yUpperLimitColumn->setValueAt(1, upperLimit);
+		yLowerLimitColumn->setValueAt(0, lowerLimit);
+		yLowerLimitColumn->setValueAt(1, lowerLimit);
+	}
 }
 
 /*!
@@ -944,6 +1018,7 @@ void ProcessBehaviorChart::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("limitsMetric"), QString::number(static_cast<int>(d->limitsMetric)));
 	writer->writeAttribute(QStringLiteral("sampleSize"), QString::number(d->sampleSize));
 	writer->writeAttribute(QStringLiteral("negativeLowerLimitEnabled"), QString::number(d->negativeLowerLimitEnabled));
+	writer->writeAttribute(QStringLiteral("exactLimitsEnabled"), QString::number(d->exactLimitsEnabled));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
 	writer->writeEndElement();
@@ -1011,6 +1086,7 @@ bool ProcessBehaviorChart::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("limitsMetric", limitsMetric, ProcessBehaviorChart::LimitsMetric);
 			READ_INT_VALUE("sampleSize", sampleSize, int);
 			READ_INT_VALUE("negativeLowerLimitEnabled", negativeLowerLimitEnabled, bool);
+			READ_INT_VALUE("exactLimitsEnabled", exactLimitsEnabled, bool);
 			READ_INT_VALUE("legendVisible", legendVisible, bool);
 
 			str = attribs.value(QStringLiteral("visible")).toString();

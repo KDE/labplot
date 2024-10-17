@@ -65,6 +65,7 @@ public:
 
 	int sampleSize{5};
 	bool negativeLowerLimitEnabled{false};
+	bool exactLimitsEnabled{true};
 
 	ProcessBehaviorChart* const q;
 

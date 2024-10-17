@@ -78,6 +78,7 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	connect(ui.cbLimitsMetric, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ProcessBehaviorChartDock::limitsMetricChanged);
 	connect(ui.sbSampleSize, &QSpinBox::valueChanged, this, &ProcessBehaviorChartDock::sampleSizeChanged);
 	connect(ui.chbNegativeLowerLimit, &QCheckBox::clicked, this, &ProcessBehaviorChartDock::negativeLowerLimitEnabledChanged);
+	connect(ui.chbExactLimits, &QCheckBox::clicked, this, &ProcessBehaviorChartDock::exactLimitsEnabledChanged);
 
 	// template handler
 	auto* frame = new QFrame(this);
@@ -171,6 +172,8 @@ void ProcessBehaviorChartDock::setPlots(QList<ProcessBehaviorChart*> list) {
 	connect(m_plot, &ProcessBehaviorChart::typeChanged, this, &ProcessBehaviorChartDock::plotTypeChanged);
 	connect(m_plot, &ProcessBehaviorChart::limitsMetricChanged, this, &ProcessBehaviorChartDock::plotLimitsMetricChanged);
 	connect(m_plot, &ProcessBehaviorChart::sampleSizeChanged, this, &ProcessBehaviorChartDock::plotSampleSizeChanged);
+	connect(m_plot, &ProcessBehaviorChart::negativeLowerLimitEnabledChanged, this, &ProcessBehaviorChartDock::plotNegativeLowerLimitEnabledChanged);
+	connect(m_plot, &ProcessBehaviorChart::exactLimitsEnabledChanged, this, &ProcessBehaviorChartDock::plotExactLimitsEnabledChanged);
 	connect(m_plot, &ProcessBehaviorChart::statusInfo, this, &ProcessBehaviorChartDock::showStatusInfo);
 }
 
@@ -291,7 +294,7 @@ void ProcessBehaviorChartDock::typeChanged(int index) {
 	ui.chbNegativeLowerLimit->setVisible(visible);
 
 	// second data column
-	visible = (type == ProcessBehaviorChart::Type::P);
+	visible = (type == ProcessBehaviorChart::Type::P || type == ProcessBehaviorChart::Type::U);
 	ui.lData2Column->setVisible(visible);
 	cbData2Column->setVisible(visible);
 
@@ -317,6 +320,12 @@ void ProcessBehaviorChartDock::negativeLowerLimitEnabledChanged(bool enabled) {
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* plot : m_plots)
 		plot->setNegativeLowerLimitEnabled(enabled);
+}
+
+void ProcessBehaviorChartDock::exactLimitsEnabledChanged(bool enabled) {
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* plot : m_plots)
+		plot->setExactLimitsEnabled(enabled);
 }
 
 //*************************************************************
@@ -355,6 +364,11 @@ void ProcessBehaviorChartDock::plotNegativeLowerLimitEnabledChanged(bool enabled
 	ui.chbNegativeLowerLimit->setChecked(enabled);
 }
 
+void ProcessBehaviorChartDock::plotExactLimitsEnabledChanged(bool enabled) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.chbExactLimits->setChecked(enabled);
+}
+
 void ProcessBehaviorChartDock::showStatusInfo(const QString& info) {
 	if (info.isEmpty()) {
 		if (m_messageWidget && m_messageWidget->isVisible())
@@ -388,6 +402,9 @@ void ProcessBehaviorChartDock::load() {
 
 	// allow negative values for the lower limit
 	ui.chbNegativeLowerLimit->setChecked(m_plot->negativeLowerLimitEnabled());
+
+	// user exact/individual limits, relevant for P and U charts only
+	ui.chbExactLimits->setChecked(m_plot->exactLimitsEnabled());
 }
 
 void ProcessBehaviorChartDock::loadConfig(KConfig& config) {
@@ -409,6 +426,9 @@ void ProcessBehaviorChartDock::loadConfig(KConfig& config) {
 
 	// allow negative values for the lower limit
 	ui.chbNegativeLowerLimit->setChecked(group.readEntry(QStringLiteral("NegativeLowerLimitEnabled"), false));
+
+	// user exact/individual limits, relevant for P and U charts only
+	ui.chbExactLimits->setChecked(group.readEntry(QStringLiteral("ExactLimitsEnabled"), false));
 
 	// properties of the data and limit curves
 	dataLineWidget->loadConfig(group);
@@ -440,6 +460,7 @@ void ProcessBehaviorChartDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry(QStringLiteral("LimitsMetric"), static_cast<int>(m_plot->limitsMetric()));
 	group.writeEntry(QStringLiteral("SampleSize"), m_plot->sampleSize());
 	group.writeEntry(QStringLiteral("NegativeLowerLimitEnabled"), m_plot->negativeLowerLimitEnabled());
+	group.writeEntry(QStringLiteral("ExactLimitsEnabled"), m_plot->exactLimitsEnabled());
 
 	// properties of the data and limit curves
 	dataLineWidget->saveConfig(group);

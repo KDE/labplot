@@ -24,7 +24,7 @@
        <string>General</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="9" column="0" rowspan="2">
+       <item row="10" column="0" rowspan="2">
         <spacer name="verticalSpacer_4">
          <property name="orientation">
           <enum>Qt::Orientation::Vertical</enum>
@@ -45,6 +45,9 @@
        </item>
        <item row="0" column="2">
         <widget class="TimedLineEdit" name="leName"/>
+       </item>
+       <item row="3" column="2">
+        <widget class="QComboBox" name="cbType"/>
        </item>
        <item row="1" column="2">
         <widget class="ResizableTextEdit" name="teComment"/>
@@ -72,7 +75,14 @@
          </property>
         </spacer>
        </item>
-       <item row="13" column="0">
+       <item row="5" column="0">
+        <widget class="QLabel" name="lData2Column">
+         <property name="text">
+          <string>Sample Sizes:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="0">
         <widget class="QCheckBox" name="chkLegendVisible">
          <property name="text">
           <string>Legend</string>
@@ -86,7 +96,7 @@
          </property>
         </widget>
        </item>
-       <item row="11" column="0">
+       <item row="12" column="0">
         <widget class="QLabel" name="lPlotRange">
          <property name="text">
           <string>Plot range:</string>
@@ -109,6 +119,13 @@
          </property>
         </spacer>
        </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="lType">
+         <property name="text">
+          <string>Type:</string>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="lName">
          <property name="text">
@@ -123,7 +140,7 @@
          </property>
         </widget>
        </item>
-       <item row="11" column="2">
+       <item row="12" column="2">
         <widget class="QComboBox" name="cbPlotRanges"/>
        </item>
        <item row="1" column="0">
@@ -153,7 +170,7 @@
          </property>
         </widget>
        </item>
-       <item row="12" column="0">
+       <item row="13" column="0">
         <spacer name="verticalSpacerGeneral">
          <property name="orientation">
           <enum>Qt::Orientation::Vertical</enum>
@@ -169,7 +186,7 @@
          </property>
         </spacer>
        </item>
-       <item row="14" column="0">
+       <item row="15" column="0">
         <widget class="QCheckBox" name="chkVisible">
          <property name="text">
           <string>Visible</string>
@@ -183,20 +200,17 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="lType">
+       <item row="9" column="0">
+        <widget class="QLabel" name="lExactLimits">
          <property name="text">
-          <string>Type:</string>
+          <string>Exact Limits:</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="2">
-        <widget class="QComboBox" name="cbType"/>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="lData2Column">
+       <item row="9" column="2">
+        <widget class="QCheckBox" name="chbExactLimits">
          <property name="text">
-          <string>Sample Sizes:</string>
+          <string/>
          </property>
         </widget>
        </item>
