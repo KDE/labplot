@@ -579,7 +579,7 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 
 	bool ok;
 	if (!initialized) {
-		m_DataContainer.clear();
+		m_DataContainer = DataContainer();
 		const auto status = initialize(device);
 		if (status != Status::Success)
 			return status;

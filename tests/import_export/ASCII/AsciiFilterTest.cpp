@@ -3058,4 +3058,27 @@ void AsciiFilterTest::determineColumns() {
 	}
 }
 
+void AsciiFilterTest::deleteSpreadsheet() {
+	QStringList fileContent = {
+		QStringLiteral("1;5"),
+		QStringLiteral("2;6"),
+		QStringLiteral("3;7"),
+	};
+	QString savePath;
+	SAVE_FILE("testfile", fileContent);
+
+	AsciiFilter filter;
+	auto p = filter.properties();
+	p.automaticSeparatorDetection = false;
+	p.separator = QStringLiteral(";");
+	p.headerEnabled = false;
+	p.columnNamesRaw = QStringLiteral("x, y");
+	p.intAsDouble = false;
+	filter.setProperties(p);
+
+	filter.preview(savePath, -1);
+	// Should not crash just because the previous spreadsheet is anymore available
+	filter.preview(savePath, -1);
+}
+
 QTEST_MAIN(AsciiFilterTest)
