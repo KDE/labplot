@@ -86,8 +86,6 @@ public:
 		bool automaticSeparatorDetection{true};
 		QString separator{QStringLiteral(",")};
 
-		int m_columnOffset{0}; // indexes the "start column" in the datasource. Data will be imported starting from this column.
-
 		void set_invalid() {
 			m_dirty = true;
 		}
