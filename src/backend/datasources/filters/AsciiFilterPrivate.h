@@ -20,12 +20,13 @@ public:
 	AsciiFilterPrivate(AsciiFilter *owner);
 	AsciiFilter::Status initialize(AsciiFilter::Properties p);
 	AsciiFilter::Status initialize(QIODevice& device);
-	AsciiFilter::Status readFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode columnImportMode, qint64 from, qint64 lines, qint64 keepNRows, qint64 &bytes_read);
+	AsciiFilter::Status readFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode columnImportMode, AbstractFileFilter::ImportMode rowImportMode, qint64 from, qint64 lines, qint64 keepNRows, qint64 &bytes_read);
 	QVector<QStringList> preview(QIODevice& device, int lines);
 	QVector<QStringList> preview(const QString& fileName, int lines);
 
-	static QMap<QString, AbstractColumn::ColumnMode> modeMap();
+	static QMap<QString, QPair<QString, AbstractColumn::ColumnMode> > modeMap();
 	static bool determineColumnModes(const QStringView& s, QVector<AbstractColumn::ColumnMode> &modes, QString &invalidString);
+	static QString convertTranslatedColumnModesToNative(const QStringView s);
 
 	AsciiFilter::Properties properties;
 	bool initialized{false};
@@ -33,7 +34,7 @@ public:
 private:
 	static bool ignoringLine(QStringView line, const AsciiFilter::Properties& p);
 	static QStringList determineColumns(const QStringView& line, const AsciiFilter::Properties& properties);
-	static QStringList determineColumns(const QStringView &line, const QStringView &separator, bool removeQuotes, bool simplifyWhiteSpaces, bool skipEmptyParts, int startColumn, int endColumn);
+	static QStringList determineColumns(const QStringView &line, const QString &separator, bool removeQuotes, bool simplifyWhiteSpaces, bool skipEmptyParts, int startColumn, int endColumn);
 	static AsciiFilter::Status determineSeparator(const QString &line, bool removeQuotes, bool simplifyWhiteSpaces, QString &separator);
 	static QVector<AbstractColumn::ColumnMode> determineColumnModes(const QVector<QStringList>& values, const AsciiFilter::Properties& properties, QString &dateTimeFormat);
 	AsciiFilter::Status getLine(QIODevice& device, QString& line);
@@ -91,6 +92,7 @@ private:
 	};
 
 	DataContainer m_DataContainer;
+	int m_index{1}; // Index counter used when a index column was prepended
 
 private:
 	AsciiFilter* const q;

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>515</width>
+    <width>530</width>
     <height>1249</height>
    </rect>
   </property>
@@ -751,8 +751,14 @@
         <property name="specialValueText">
          <string>All</string>
         </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
         <property name="maximum">
          <number>999999</number>
+        </property>
+        <property name="value">
+         <number>0</number>
         </property>
        </widget>
       </item>

@@ -79,6 +79,7 @@ void LiveDataTest::testReadContinuousFixed00() {
 	// write out more data to the file
 	file.write("5,6\n7,8\n");
 	file.close();
+	// Watch timer of the LiveDataSource triggered
 	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
 
 	// all new data (2 new lines) was added, check
@@ -142,6 +143,17 @@ void LiveDataTest::testReadContinuousFixed01() {
 	dataSource.read();
 
 	QCOMPARE(dataSource.columnCount(), 2);
+	QCOMPARE(dataSource.rowCount(), 1);
+
+	QCOMPARE(dataSource.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(dataSource.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	QCOMPARE(dataSource.column(0)->integerAt(0), 1);
+	QCOMPARE(dataSource.column(1)->integerAt(0), 2);
+
+	dataSource.read();
+
+	QCOMPARE(dataSource.columnCount(), 2);
 	QCOMPARE(dataSource.rowCount(), 2);
 
 	QCOMPARE(dataSource.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
@@ -156,6 +168,7 @@ void LiveDataTest::testReadContinuousFixed01() {
 	// write out more data to the file
 	file.write("5,6\n7,8\n");
 	file.close();
+	// Watch timer of the LiveDataSource triggered
 	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
 
 // currently fails on Windows (waitForSignal()?)
@@ -218,6 +231,17 @@ void LiveDataTest::testReadContinuousFixed02() {
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks, after the initial read all data is read
+	dataSource.read();
+
+	QCOMPARE(dataSource.columnCount(), 2);
+	QCOMPARE(dataSource.rowCount(), 1);
+
+	QCOMPARE(dataSource.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(dataSource.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	QCOMPARE(dataSource.column(0)->integerAt(0), 1);
+	QCOMPARE(dataSource.column(1)->integerAt(0), 2);
+
 	dataSource.read();
 
 	QCOMPARE(dataSource.columnCount(), 2);
@@ -289,6 +313,7 @@ void LiveDataTest::testReadContinuousFixedWithIndex() {
 	properties.columnModesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
+	properties.createIndex = true;
 	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
 	dataSource.setFilter(filter);
 
@@ -378,6 +403,7 @@ void LiveDataTest::testReadContinuousFixedWithTimestamp() {
 	properties.columnModesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
+	properties.createTimestamp = true;
 	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
 	dataSource.setFilter(filter);
 
@@ -467,6 +493,8 @@ void LiveDataTest::testReadContinuousFixedWithIndexTimestamp() {
 	properties.columnModesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
+	properties.createIndex = true;
+	properties.createTimestamp = true;
 	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
 	dataSource.setFilter(filter);
 
@@ -656,6 +684,17 @@ void LiveDataTest::testReadFromEnd01() {
 	dataSource.read();
 
 	QCOMPARE(dataSource.columnCount(), 2);
+	QCOMPARE(dataSource.rowCount(), 1);
+
+	QCOMPARE(dataSource.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(dataSource.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	QCOMPARE(dataSource.column(0)->integerAt(0), 1);
+	QCOMPARE(dataSource.column(1)->integerAt(0), 2);
+
+	dataSource.read();
+
+	QCOMPARE(dataSource.columnCount(), 2);
 	QCOMPARE(dataSource.rowCount(), 2);
 
 	QCOMPARE(dataSource.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
@@ -689,8 +728,29 @@ void LiveDataTest::testReadFromEnd01() {
 	QCOMPARE(dataSource.column(0)->integerAt(1), 3);
 	QCOMPARE(dataSource.column(1)->integerAt(1), 4);
 
-	QCOMPARE(dataSource.column(0)->integerAt(2), 7);
-	QCOMPARE(dataSource.column(1)->integerAt(2), 8);
+	QCOMPARE(dataSource.column(0)->integerAt(2), 5);
+	QCOMPARE(dataSource.column(1)->integerAt(2), 6);
+
+	// read last data
+	dataSource.read();
+
+	QCOMPARE(dataSource.columnCount(), 2);
+	QCOMPARE(dataSource.rowCount(), 4);
+
+	QCOMPARE(dataSource.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(dataSource.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	QCOMPARE(dataSource.column(0)->integerAt(0), 1);
+	QCOMPARE(dataSource.column(1)->integerAt(0), 2);
+
+	QCOMPARE(dataSource.column(0)->integerAt(1), 3);
+	QCOMPARE(dataSource.column(1)->integerAt(1), 4);
+
+	QCOMPARE(dataSource.column(0)->integerAt(2), 5);
+	QCOMPARE(dataSource.column(1)->integerAt(2), 6);
+
+	QCOMPARE(dataSource.column(0)->integerAt(3), 7);
+	QCOMPARE(dataSource.column(1)->integerAt(3), 8);
 }
 
 /*!
@@ -735,6 +795,17 @@ void LiveDataTest::testReadFromEnd02() {
 	dataSource.read();
 
 	QCOMPARE(dataSource.columnCount(), 2);
+	QCOMPARE(dataSource.rowCount(), 1);
+
+	QCOMPARE(dataSource.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(dataSource.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	QCOMPARE(dataSource.column(0)->integerAt(0), 1);
+	QCOMPARE(dataSource.column(1)->integerAt(0), 2);
+
+	dataSource.read();
+
+	QCOMPARE(dataSource.columnCount(), 2);
 	QCOMPARE(dataSource.rowCount(), 2);
 
 	QCOMPARE(dataSource.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
@@ -764,6 +835,14 @@ void LiveDataTest::testReadFromEnd02() {
 
 	QCOMPARE(dataSource.column(0)->integerAt(0), 3);
 	QCOMPARE(dataSource.column(1)->integerAt(0), 4);
+
+	QCOMPARE(dataSource.column(0)->integerAt(1), 5);
+	QCOMPARE(dataSource.column(1)->integerAt(1), 6);
+
+	dataSource.read();
+
+	QCOMPARE(dataSource.column(0)->integerAt(0), 5);
+	QCOMPARE(dataSource.column(1)->integerAt(0), 6);
 
 	QCOMPARE(dataSource.column(0)->integerAt(1), 7);
 	QCOMPARE(dataSource.column(1)->integerAt(1), 8);
@@ -1079,7 +1158,7 @@ void LiveDataTest::testReadWholeFile01() {
 /*!
  * comma separated ASCII data, read whole file on changes, with header in the first line, append new data
  */
-// Anymore possible
+// Anymore possible, because Header Enabled is anymore allowed
 // void LiveDataTest::testReadWholeFile02() {
 // 	// create a temp file and write some data into it
 // 	QTemporaryFile tempFile;
@@ -1152,7 +1231,7 @@ void LiveDataTest::testReadWholeFile01() {
 /*!
  * comma separated ASCII data, read whole file on changes, with header in the second line, append new data
  */
-// Anymore possible
+// Anymore possible, because Header Enabled is anymore allowed
 // void LiveDataTest::testReadWholeFile03() {
 // 	// create a temp file and write some data into it
 // 	QTemporaryFile tempFile;

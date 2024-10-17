@@ -540,9 +540,9 @@ void LiveDataSource::read() {
 		switch (m_fileType) {
 		case AbstractFileFilter::FileType::Ascii:
 			if (m_readingType == LiveDataSource::ReadingType::WholeFile) {
-				static_cast<AsciiFilter*>(m_filter)->readFromDevice(*m_device, this, AbstractFileFilter::ImportMode::Replace, 0, -1);
+				static_cast<AsciiFilter*>(m_filter)->readFromDevice(*m_device, this, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Replace, 0, -1, 0);
 			} else {
-				qint64 bytes = static_cast<AsciiFilter*>(m_filter)->readFromDevice(*m_device, this, AbstractFileFilter::ImportMode::Append, m_bytesRead, sampleSize());
+				qint64 bytes = static_cast<AsciiFilter*>(m_filter)->readFromDevice(*m_device, this, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, m_bytesRead, sampleSize(), m_keepNValues);
 				m_bytesRead += bytes;
 				// DEBUG("Read " << bytes << " bytes, in total: " << m_bytesRead);
 			}
