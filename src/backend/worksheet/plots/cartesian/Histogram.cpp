@@ -1229,11 +1229,7 @@ void HistogramPrivate::updateValues() {
 			return;
 		}
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 		const int endRow = std::min(pointsLogical.size(), static_cast<qsizetype>(valuesColumn->rowCount()));
-#else
-		const int endRow = std::min(pointsLogical.size(), valuesColumn->rowCount());
-#endif
 		const auto xColMode = valuesColumn->columnMode();
 		for (int i = 0; i < endRow; ++i) {
 			if (!visiblePoints.at(i))
@@ -1789,13 +1785,12 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	else
 		group = config.group(QStringLiteral("Histogram"));
 
-	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
+	Q_D(Histogram);
+	const auto* plot = d->m_plot;
 	int index = plot->curveChildIndex(this);
 	const QColor themeColor = plot->themeColorPalette(index);
 
 	QPen p;
-
-	Q_D(Histogram);
 	d->suppressRecalc = true;
 
 	d->line->loadThemeConfig(group, themeColor);

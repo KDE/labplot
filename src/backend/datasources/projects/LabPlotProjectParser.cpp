@@ -25,7 +25,7 @@ LabPlotProjectParser::LabPlotProjectParser()
 						 AspectType::Spreadsheet,
 						 AspectType::Matrix,
 						 AspectType::Worksheet,
-						 AspectType::CantorWorksheet,
+						 AspectType::Notebook,
 						 AspectType::Datapicker,
 						 AspectType::LiveDataSource};
 }

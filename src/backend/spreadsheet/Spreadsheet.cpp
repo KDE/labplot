@@ -23,9 +23,7 @@
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "commonfrontend/spreadsheet/SpreadsheetView.h"
-
-#include "backend/lib/commandtemplates.h"
+#include "frontend/spreadsheet/SpreadsheetView.h"
 
 #include <KConfig>
 #include <KConfigGroup>

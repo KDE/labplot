@@ -20,7 +20,7 @@
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
-#include "kdefrontend/GuiTools.h"
+#include "frontend/GuiTools.h"
 
 #include "backend/nsl/nsl_math.h"
 #include "backend/nsl/nsl_sf_basic.h"
@@ -609,7 +609,7 @@ void Axis::setStart(double min) {
 	Q_D(Axis);
 	Range<double> range = d->range;
 	const auto scale = range.scale();
-	if (!(((RangeT::isLogScale(scale)) && min <= 0) || (scale == RangeT::Scale::Sqrt && min < 0))) {
+	if (!((RangeT::isLogScale(scale) && min <= 0) || (scale == RangeT::Scale::Sqrt && min < 0))) {
 		range.setStart(min);
 		setRange(range);
 	}
@@ -1513,7 +1513,6 @@ void AxisPrivate::retransformTicks() {
 	double start{range.start()}, end{range.end()};
 	if (majorTicksStartType == Axis::TicksStartType::Absolute) {
 		start = majorTickStartValue;
-
 	} else if (majorTicksStartType == Axis::TicksStartType::Offset) {
 		if (q->isNumeric())
 			start += majorTickStartOffset;
@@ -1687,6 +1686,8 @@ void AxisPrivate::retransformTicks() {
 	const bool dateTimeSpacing = !q->isNumeric() && q->scale() == RangeT::Scale::Linear && majorTicksType == Axis::TicksType::Spacing;
 	DateTime::DateTime dt;
 	QDateTime majorTickPosDateTime;
+	QDateTime nextMajorTickPosDateTime;
+	qreal nextMajorTickPos = 0.0;
 	if (dateTimeSpacing) {
 		dt = DateTime::dateTime(majorTicksSpacing);
 		majorTickPosDateTime = QDateTime::fromMSecsSinceEpoch(start, Qt::UTC);
@@ -1694,15 +1695,14 @@ void AxisPrivate::retransformTicks() {
 	const auto dtValid = majorTickPosDateTime.isValid();
 
 	for (int iMajor = 0; iMajor < tmpMajorTicksNumber || (dateTimeSpacing && dtValid); iMajor++) {
-		//		DEBUG(Q_FUNC_INFO << ", major tick " << iMajor)
+		// DEBUG(Q_FUNC_INFO << ", major tick " << iMajor)
 		qreal majorTickPos = 0.0;
-		qreal nextMajorTickPos = 0.0;
 		// calculate major tick's position
 
 		if (!dateTimeSpacing) {
 			switch (q->scale()) {
 			case RangeT::Scale::Linear:
-				//				DEBUG(Q_FUNC_INFO << ", start = " << start << ", incr = " << majorTicksIncrement << ", i = " << iMajor)
+				// DEBUG(Q_FUNC_INFO << ", start = " << start << ", incr = " << majorTicksIncrement << ", i = " << iMajor)
 				majorTickPos = start + majorTicksIncrement * iMajor;
 				if (std::abs(majorTickPos) < 1.e-15 * majorTicksIncrement) // avoid rounding errors when close to zero
 					majorTickPos = 0;
@@ -1738,15 +1738,23 @@ void AxisPrivate::retransformTicks() {
 			if (iMajor == 0)
 				majorTickPos = start;
 			else {
-				majorTickPosDateTime = majorTickPosDateTime.addYears(dt.year);
-				majorTickPosDateTime = majorTickPosDateTime.addMonths(dt.month);
-				majorTickPosDateTime = majorTickPosDateTime.addDays(dt.day);
-				majorTickPosDateTime = majorTickPosDateTime.addMSecs(DateTime::milliseconds(dt.hour, dt.minute, dt.second, dt.millisecond));
-				majorTickPos = majorTickPosDateTime.toMSecsSinceEpoch();
+				majorTickPosDateTime = nextMajorTickPosDateTime;
+				majorTickPos = nextMajorTickPos;
 			}
+
+			nextMajorTickPosDateTime = majorTickPosDateTime;
+			nextMajorTickPosDateTime = nextMajorTickPosDateTime.addYears(dt.year);
+			nextMajorTickPosDateTime = nextMajorTickPosDateTime.addMonths(dt.month);
+			nextMajorTickPosDateTime = nextMajorTickPosDateTime.addDays(dt.day);
+			nextMajorTickPosDateTime = nextMajorTickPosDateTime.addMSecs(DateTime::milliseconds(dt.hour, dt.minute, dt.second, dt.millisecond));
+			nextMajorTickPos = nextMajorTickPosDateTime.toMSecsSinceEpoch();
 		}
-		if (majorTickPos > end || iMajor > maxNumberMajorTicks)
-			break; // Finish
+
+		// finish here when out of range
+		if (iMajor > maxNumberMajorTicks)
+			break;
+		if ((majorTicksIncrement > 0 && majorTickPos > end) || (majorTicksIncrement < 0 && majorTickPos < end))
+			break;
 
 		int columnIndex = iMajor; // iMajor used if for the labels a custom column is used.
 		if ((majorTicksType == Axis::TicksType::CustomColumn || majorTicksType == Axis::TicksType::CustomValues)
@@ -1814,7 +1822,7 @@ void AxisPrivate::retransformTicks() {
 			}
 
 			const qreal value = scalingFactor * majorTickPos + zeroOffset;
-			//			DEBUG(Q_FUNC_INFO << ", value = " << value << " " << scalingFactor << " " << majorTickPos << " " << zeroOffset)
+			// DEBUG(Q_FUNC_INFO << ", value = " << value << " " << scalingFactor << " " << majorTickPos << " " << zeroOffset)
 
 			// if custom column is used, we can have duplicated values in it and we need only unique values
 			if ((majorTicksType == Axis::TicksType::CustomColumn || majorTicksType == Axis::TicksType::ColumnLabels) && tickLabelValues.indexOf(value) != -1)
@@ -1865,8 +1873,8 @@ void AxisPrivate::retransformTicks() {
 
 		// minor ticks
 		// DEBUG("	tmpMinorTicksNumber = " << tmpMinorTicksNumber)
-		if (Axis::noTicks != minorTicksDirection && tmpMajorTicksNumber > 1 && tmpMinorTicksNumber > 0 && iMajor < tmpMajorTicksNumber - 1
-			&& nextMajorTickPos != majorTickPos) {
+		if (Axis::noTicks != minorTicksDirection && tmpMinorTicksNumber > 0
+			&& ((tmpMajorTicksNumber > 1 && iMajor < tmpMajorTicksNumber - 1) || (dateTimeSpacing && dtValid)) && nextMajorTickPos != majorTickPos) {
 			// minor ticks are placed at equidistant positions independent of the selected scaling for the major ticks positions
 			double minorTicksIncrement = (nextMajorTickPos - majorTickPos) / (tmpMinorTicksNumber + 1);
 			// DEBUG("	nextMajorTickPos = " << nextMajorTickPos)

@@ -47,12 +47,14 @@
 #include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/LollipopPlot.h"
+#include "backend/worksheet/plots/cartesian/ProcessBehaviorChart.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/cartesian/ReferenceRange.h"
+#include "backend/worksheet/plots/cartesian/RunChart.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
-#include "kdefrontend/ThemeHandler.h"
-#include "kdefrontend/widgets/ThemesWidget.h"
+#include "frontend/ThemeHandler.h"
+#include "frontend/widgets/ThemesWidget.h"
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -454,7 +456,7 @@ void CartesianPlot::initActions() {
 	addIntegrationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Integration"), this);
 	addInterpolationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-interpolation-curve")), i18n("Interpolation"), this);
 	addSmoothCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-smoothing-curve")), i18n("Smooth"), this);
-	addFitCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit"), this);
+	addFitCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18nc("Curve fitting", "Fit"), this);
 	addFourierFilterCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-filter-curve")), i18n("Fourier Filter"), this);
 	addFourierTransformCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-transform-curve")), i18n("Fourier Transform"), this);
 	addHilbertTransformCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Hilbert Transform"), this);
@@ -521,6 +523,17 @@ void CartesianPlot::initActions() {
 	});
 	connect(addKDEPlotAction, &QAction::triggered, this, [=]() {
 		addChild(new KDEPlot(i18n("KDE Plot")));
+	});
+
+	// continious improvement plots
+	addProcessBehaviorChartAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Process Behavior Chart"), this);
+	connect(addProcessBehaviorChartAction, &QAction::triggered, this, [=]() {
+		addChild(new ProcessBehaviorChart(i18n("Process Behavior Chart")));
+	});
+
+	addRunChartAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Run Chart"), this);
+	connect(addRunChartAction, &QAction::triggered, this, [=]() {
+		addChild(new RunChart(i18n("Run Chart")));
 	});
 
 	// analysis curves
@@ -640,10 +653,12 @@ void CartesianPlot::initMenus() {
 
 	m_addNewMenu = new QMenu(i18n("Add New"));
 	m_addNewMenu->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
+
 	m_addNewMenu->addAction(addCurveAction);
 	m_addNewMenu->addAction(addEquationCurveAction);
 	m_addNewMenu->addSeparator();
 
+	// statistical plots
 	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"), m_addNewMenu);
 	addNewStatisticalPlotsMenu->addAction(addHistogramAction);
 	addNewStatisticalPlotsMenu->addAction(addBoxPlotAction);
@@ -651,10 +666,17 @@ void CartesianPlot::initMenus() {
 	addNewStatisticalPlotsMenu->addAction(addQQPlotAction);
 	m_addNewMenu->addMenu(addNewStatisticalPlotsMenu);
 
+	// bar plots
 	auto* addNewBarPlotsMenu = new QMenu(i18n("Bar Plots"), m_addNewMenu);
 	addNewBarPlotsMenu->addAction(addBarPlotAction);
 	addNewBarPlotsMenu->addAction(addLollipopPlotAction);
 	m_addNewMenu->addMenu(addNewBarPlotsMenu);
+
+	// continuous improvement plots
+	auto* addNewCIPlotsMenu = new QMenu(i18n("Continual Improvement Plots"), m_addNewMenu);
+	addNewCIPlotsMenu->addAction(addProcessBehaviorChartAction);
+	addNewCIPlotsMenu->addAction(addRunChartAction);
+	m_addNewMenu->addMenu(addNewCIPlotsMenu);
 
 	m_addNewMenu->addSeparator();
 
@@ -704,7 +726,7 @@ void CartesianPlot::initMenus() {
 	// analysis menu
 	dataAnalysisMenu = new QMenu(i18n("Analysis"));
 
-	QMenu* dataFitMenu = new QMenu(i18n("Fit"), dataAnalysisMenu);
+	QMenu* dataFitMenu = new QMenu(i18nc("Curve fitting", "Fit"), dataAnalysisMenu);
 	dataFitMenu->setIcon(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")));
 	dataFitMenu->addAction(addFitActions.at(0));
 	dataFitMenu->addAction(addFitActions.at(1));
@@ -1683,7 +1705,7 @@ void CartesianPlot::setXRangeBreakingEnabled(bool enabled) {
 	if (enabled != d->xRangeBreakingEnabled) {
 		exec(new CartesianPlotSetXRangeBreakingEnabledCmd(d, enabled, ki18n("%1: x-range breaking enabled")));
 		retransformScales(); // TODO: replace by retransformScale(Dimension::X, ) with the corresponding index!
-		WorksheetElementContainer::retransform(); // retransformScales does not contain any retransfrom() anymore
+		WorksheetElementContainer::retransform(); // retransformScales does not contain any retransform() anymore
 	}
 }
 
@@ -1692,7 +1714,7 @@ void CartesianPlot::setXRangeBreaks(const RangeBreaks& breakings) {
 	Q_D(CartesianPlot);
 	exec(new CartesianPlotSetXRangeBreaksCmd(d, breakings, ki18n("%1: x-range breaks changed")));
 	retransformScales(); // TODO: replace by retransformScale(Dimension::X, ) with the corresponding index!
-	WorksheetElementContainer::retransform(); // retransformScales does not contain any retransfrom() anymore
+	WorksheetElementContainer::retransform(); // retransformScales does not contain any retransform() anymore
 }
 
 STD_SETTER_CMD_IMPL_S(CartesianPlot, SetYRangeBreakingEnabled, bool, yRangeBreakingEnabled)
@@ -1701,7 +1723,7 @@ void CartesianPlot::setYRangeBreakingEnabled(bool enabled) {
 	if (enabled != d->yRangeBreakingEnabled) {
 		exec(new CartesianPlotSetYRangeBreakingEnabledCmd(d, enabled, ki18n("%1: y-range breaking enabled")));
 		retransformScales(); // TODO: replace by retransformScale(Dimension::Y, ) with the corresponding index!
-		WorksheetElementContainer::retransform(); // retransformScales does not contain any retransfrom() anymore
+		WorksheetElementContainer::retransform(); // retransformScales does not contain any retransform() anymore
 	}
 }
 
@@ -1710,7 +1732,7 @@ void CartesianPlot::setYRangeBreaks(const RangeBreaks& breaks) {
 	Q_D(CartesianPlot);
 	exec(new CartesianPlotSetYRangeBreaksCmd(d, breaks, ki18n("%1: y-range breaks changed")));
 	retransformScales(); // TODO: replace by retransformScale(Dimension::Y, ) with the corresponding index!
-	WorksheetElementContainer::retransform(); // retransformScales does not contain any retransfrom() anymore
+	WorksheetElementContainer::retransform(); // retransformScales does not contain any retransform() anymore
 }
 
 // cursor
@@ -1938,11 +1960,11 @@ void CartesianPlot::addSmoothCurve() {
 }
 
 void CartesianPlot::addFitCurve() {
-	auto* curve = new XYFitCurve(i18n("Fit"));
+	auto* curve = new XYFitCurve(i18nc("Curve fitting", "Fit"));
 	const auto* curCurve = currentCurve();
 	if (curCurve) {
 		beginMacro(i18n("%1: fit to '%2'", name(), curCurve->name()));
-		curve->setName(i18n("Fit to '%1'", curCurve->name()));
+		curve->setName(i18nc("Curve fitting", "Fit to '%1'", curCurve->name()));
 		curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 		curve->setDataSourceCurve(curCurve);
 
@@ -2190,12 +2212,15 @@ double CartesianPlot::cursorPos(int cursorNumber) {
  */
 int CartesianPlot::curveChildIndex(const WorksheetElement* curve) const {
 	int index = 0;
-	const auto& children = this->children<WorksheetElement>();
-	for (auto* child : children) {
-		if (child == curve)
+	const auto& plots = this->children<Plot>();
+	for (auto* plot : plots) {
+		if (plot == curve)
 			break;
 
-		if (dynamic_cast<const Plot*>(child))
+		++index;
+
+		// for the process behavior and run charts two colors are used - for the data and for the control line(s)
+		if (plot->type() == AspectType::ProcessBehaviorChart || plot->type() == AspectType::RunChart)
 			++index;
 	}
 
@@ -2898,6 +2923,14 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 			plot->minMax(dim, indexRange, range, true);
 		} else if (plot->type() == AspectType::QQPlot) {
 			Range<int> indexRange{0, 99}; // 100 percentile values are calculated, max index is 99
+			plot->minMax(dim, indexRange, range, true);
+		} else if (plot->type() == AspectType::ProcessBehaviorChart) {
+			const int maxIndex = static_cast<const ProcessBehaviorChart*>(plot)->xIndexCount() - 1;
+			Range<int> indexRange{0, maxIndex};
+			plot->minMax(dim, indexRange, range, true);
+		} else if (plot->type() == AspectType::RunChart) {
+			const int maxIndex = static_cast<const RunChart*>(plot)->xIndexCount() - 1;
+			Range<int> indexRange{0, maxIndex};
 			plot->minMax(dim, indexRange, range, true);
 		} else {
 			range.setStart(plot->minimum(dim));
@@ -5372,6 +5405,20 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == QLatin1String("KDEPlot")) {
 			auto* plot = new KDEPlot(QStringLiteral("KDE Plot"));
+			plot->setIsLoading(true);
+			if (plot->load(reader, preview))
+				addChildFast(plot);
+			else
+				return false;
+		} else if (reader->name() == QLatin1String("ProcessBehaviorChart")) {
+			auto* plot = new ProcessBehaviorChart(QStringLiteral("Process Behavior Chart"));
+			plot->setIsLoading(true);
+			if (plot->load(reader, preview))
+				addChildFast(plot);
+			else
+				return false;
+		} else if (reader->name() == QLatin1String("RunChart")) {
+			auto* plot = new RunChart(QStringLiteral("Run Chart"));
 			plot->setIsLoading(true);
 			if (plot->load(reader, preview))
 				addChildFast(plot);

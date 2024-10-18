@@ -19,7 +19,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
-#include "kdefrontend/GuiTools.h"
+#include "frontend/GuiTools.h"
 #include "tools/ImageTools.h"
 
 #include <KConfig>
@@ -697,11 +697,7 @@ void LollipopPlotPrivate::updateValues() {
 			return;
 		}
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 		const int endRow = std::min(m_valuesPointsLogical.size(), static_cast<qsizetype>(valuesColumn->rowCount()));
-#else
-		const int endRow = std::min(m_valuesPointsLogical.size(), valuesColumn->rowCount());
-#endif
 		const auto xColMode = valuesColumn->columnMode();
 		for (int i = 0; i < endRow; ++i) {
 			if (!valuesColumn->isValid(i) || valuesColumn->isMasked(i))
@@ -1103,11 +1099,11 @@ void LollipopPlot::loadThemeConfig(const KConfig& config) {
 	else
 		group = config.group(QStringLiteral("LollipopPlot"));
 
-	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
+	Q_D(LollipopPlot);
+	const auto* plot = d->m_plot;
 	int index = plot->curveChildIndex(this);
 	const QColor themeColor = plot->themeColorPalette(index);
 
-	Q_D(LollipopPlot);
 	d->suppressRecalc = true;
 
 	for (int i = 0; i < d->dataColumns.count(); ++i) {

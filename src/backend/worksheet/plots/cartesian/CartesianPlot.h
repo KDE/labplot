@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Cartesian plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -242,6 +242,10 @@ private:
 	// bar plots
 	QAction* addBarPlotAction{nullptr};
 	QAction* addLollipopPlotAction{nullptr};
+
+	// continious improvement
+	QAction* addProcessBehaviorChartAction{nullptr};
+	QAction* addRunChartAction{nullptr};
 
 	// analysis curves
 	QAction* addDataReductionCurveAction{nullptr};

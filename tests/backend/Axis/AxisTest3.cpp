@@ -19,9 +19,9 @@
 #include "src/backend/worksheet/WorksheetElement.h"
 #include "src/backend/worksheet/plots/cartesian/Axis.h" // already included in CartesianPlot
 #include "src/backend/worksheet/plots/cartesian/AxisPrivate.h"
-#include "src/kdefrontend/dockwidgets/AxisDock.h" // access ui elements
-#include "src/kdefrontend/widgets/LabelWidget.h"
-#include "src/kdefrontend/widgets/LineWidget.h"
+#include "src/frontend/dockwidgets/AxisDock.h" // access ui elements
+#include "src/frontend/widgets/LabelWidget.h"
+#include "src/frontend/widgets/LineWidget.h"
 
 #include <QUndoStack>
 
@@ -150,6 +150,10 @@ void AxisTest3::dateTimeSpacing() {
 			QStringLiteral("2017-12-24 00:00:00"),
 		};
 		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
+
+		QCOMPARE(xAxis->minorTicksAutoNumber(), true);
+		QCOMPARE(xAxis->minorTicksNumber(), 1);
+		QCOMPARE(xAxis->d_func()->minorTickPoints.size(), 5); // Between every major tick
 	}
 }
 

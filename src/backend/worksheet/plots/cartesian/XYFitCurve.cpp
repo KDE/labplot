@@ -1820,7 +1820,7 @@ void XYFitCurvePrivate::prepareResultColumns() {
 	}
 
 	if (!resultsNote) {
-		resultsNote = new Note(i18n("Fit Results"));
+		resultsNote = new Note(i18nc("Curve fitting", "Fit Results"));
 		resultsNote->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
 		q->addChild(resultsNote);
 	}
@@ -1923,14 +1923,20 @@ void XYFitCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColu
 	DEBUG(Q_FUNC_INFO << ", data source: " << ENUM_TO_STRING(XYAnalysisCurve, DataSourceType, dataSourceType))
 	switch (dataSourceType) {
 	case XYAnalysisCurve::DataSourceType::Spreadsheet:
+		if (!xDataColumn || !yDataColumn)
+			break;
 		*tmpXDataColumn = xDataColumn;
 		*tmpYDataColumn = yDataColumn;
 		break;
 	case XYAnalysisCurve::DataSourceType::Curve:
+		if (!dataSourceCurve)
+			break;
 		*tmpXDataColumn = dataSourceCurve->xColumn();
 		*tmpYDataColumn = dataSourceCurve->yColumn();
 		break;
 	case XYAnalysisCurve::DataSourceType::Histogram:
+		if (!dataSourceHistogram)
+			break;
 		switch (fitData.algorithm) {
 		case nsl_fit_algorithm_lm:
 			*tmpXDataColumn = dataSourceHistogram->bins(); // bins
@@ -1947,6 +1953,7 @@ void XYFitCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColu
 		case nsl_fit_algorithm_ml:
 			*tmpXDataColumn = dataSourceHistogram->dataColumn(); // data
 			*tmpYDataColumn = dataSourceHistogram->binPDValues(); // normalized values
+			break;
 		}
 		// debug
 		/*for (int i = 0; i < dataSourceHistogram->bins()->rowCount(); i++)
@@ -1956,6 +1963,7 @@ void XYFitCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColu
 		for (int i = 0; i < dataSourceHistogram->binPDValues()->rowCount(); i++)
 			DEBUG("BINPDValues @ " << i << ": " << dataSourceHistogram->binPDValues()->valueAt(i))
 		*/
+		break;
 	}
 }
 
@@ -3089,7 +3097,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 	XYFitCurve::initFitData(d->fitData);
 
 	// add result note (not saved in projects)
-	d->resultsNote = new Note(i18n("Fit Results"));
+	d->resultsNote = new Note(i18nc("Curve Fitting", "Fit Results"));
 	d->resultsNote->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
 	addChild(d->resultsNote);
 

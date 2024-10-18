@@ -84,7 +84,6 @@ Q_SIGNALS:
 	void linesUpdated(const KDEPlot*, const QVector<QLineF>&);
 
 	// General-Tab
-	void dataChanged(); // emitted when the actual curve data to be plotted was changed to re-adjust the plot
 	void dataDataChanged();
 	void dataColumnChanged(const AbstractColumn*);
 	void kernelTypeChanged(nsl_kernel_type);

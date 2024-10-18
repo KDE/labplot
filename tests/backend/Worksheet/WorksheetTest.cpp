@@ -17,7 +17,7 @@
 #include "backend/worksheet/WorksheetPrivate.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
-#include "kdefrontend/GuiTools.h"
+#include "frontend/GuiTools.h"
 
 #include <QGraphicsItem>
 #include <QPen>

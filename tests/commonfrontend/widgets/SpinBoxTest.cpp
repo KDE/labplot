@@ -13,8 +13,8 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
-#include "commonfrontend/widgets/NumberSpinBox.h"
-#include "src/kdefrontend/dockwidgets/CartesianPlotDock.h"
+#include "frontend/dockwidgets/CartesianPlotDock.h"
+#include "frontend/widgets/NumberSpinBox.h"
 
 #include <QLineEdit>
 #include <QLocale>

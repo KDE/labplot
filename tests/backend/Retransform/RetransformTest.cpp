@@ -24,10 +24,10 @@
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFunctionCurve.h"
-#include "commonfrontend/worksheet/WorksheetView.h"
-#include "kdefrontend/dockwidgets/AxisDock.h"
-#include "kdefrontend/dockwidgets/CartesianPlotDock.h"
-#include "kdefrontend/dockwidgets/XYCurveDock.h"
+#include "frontend/dockwidgets/AxisDock.h"
+#include "frontend/dockwidgets/CartesianPlotDock.h"
+#include "frontend/dockwidgets/XYCurveDock.h"
+#include "frontend/worksheet/WorksheetView.h"
 
 #include <QAction>
 

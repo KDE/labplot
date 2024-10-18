@@ -16,11 +16,11 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/spreadsheet/SpreadsheetModel.h"
 #include "backend/spreadsheet/StatisticsSpreadsheet.h"
-#include "commonfrontend/ProjectExplorer.h"
-#include "commonfrontend/spreadsheet/SpreadsheetView.h"
-#include "kdefrontend/dockwidgets/SpreadsheetDock.h"
-#include "kdefrontend/spreadsheet/FlattenColumnsDialog.h"
-#include "kdefrontend/spreadsheet/SearchReplaceWidget.h"
+#include "frontend/ProjectExplorer.h"
+#include "frontend/dockwidgets/SpreadsheetDock.h"
+#include "frontend/spreadsheet/FlattenColumnsDialog.h"
+#include "frontend/spreadsheet/SearchReplaceWidget.h"
+#include "frontend/spreadsheet/SpreadsheetView.h"
 
 #ifdef HAVE_VECTOR_BLF
 #include <Vector/BLF.h>
@@ -74,9 +74,7 @@ void SpreadsheetTest::testCopyPasteColumnMode00() {
 */
 void SpreadsheetTest::testCopyPasteColumnMode01() {
 #ifdef __FreeBSD__
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 	return;
-#endif
 #endif
 	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
@@ -1742,10 +1740,8 @@ void SpreadsheetTest::testSearchSimple00() {
  */
 void SpreadsheetTest::testSearchExtended00() {
 #ifdef __FreeBSD__
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 	// ASSERT failure in QBoxLayout::insert: "index out of range"
 	return;
-#endif
 #endif
 	Project project;
 	auto* sheet = createSearchReplaceSpreadsheet();
@@ -1829,10 +1825,8 @@ void SpreadsheetTest::testSearchExtended00() {
  */
 void SpreadsheetTest::testSearchExtended01() {
 #ifdef __FreeBSD__
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 	// ASSERT failure in QBoxLayout::insert: "index out of range"
 	return;
-#endif
 #endif
 	Project project;
 	auto* sheet = createSearchReplaceSpreadsheet();
@@ -1916,10 +1910,8 @@ void SpreadsheetTest::testSearchExtended01() {
  */
 void SpreadsheetTest::testSearchExtended02() {
 #ifdef __FreeBSD__
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 	// ASSERT failure in QBoxLayout::insert: "index out of range"
 	return;
-#endif
 #endif
 	Project project;
 	auto* sheet = createSearchReplaceSpreadsheet();
@@ -2003,10 +1995,8 @@ void SpreadsheetTest::testSearchExtended02() {
  */
 void SpreadsheetTest::testSearchExtended03() {
 #ifdef __FreeBSD__
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 	// ASSERT failure in QBoxLayout::insert: "index out of range"
 	return;
-#endif
 #endif
 	Project project;
 	auto* sheet = createSearchReplaceSpreadsheet();
@@ -2087,10 +2077,8 @@ void SpreadsheetTest::testSearchExtended03() {
 
 void SpreadsheetTest::testSearchFindAll() {
 #ifdef __FreeBSD__
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 	// ASSERT failure in QBoxLayout::insert: "index out of range"
 	return;
-#endif
 #endif
 	Project project;
 	auto* sheet = createSearchReplaceSpreadsheet();
@@ -2122,10 +2110,8 @@ void SpreadsheetTest::testSearchFindAll() {
  */
 void SpreadsheetTest::testSearchReplaceNumeric() {
 #ifdef __FreeBSD__
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 	// ASSERT failure in QBoxLayout::insert: "index out of range"
 	return;
-#endif
 #endif
 	Project project;
 	auto* sheet = createSearchReplaceSpreadsheet();
@@ -2190,10 +2176,8 @@ void SpreadsheetTest::testSearchReplaceNumeric() {
  */
 void SpreadsheetTest::testSearchReplaceText() {
 #ifdef __FreeBSD__
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 	// ASSERT failure in QBoxLayout::insert: "index out of range"
 	return;
-#endif
 #endif
 	Project project;
 	auto* sheet = createSearchReplaceSpreadsheet();
@@ -2255,10 +2239,8 @@ void SpreadsheetTest::testSearchReplaceText() {
 
 void SpreadsheetTest::testSearchReplaceAll() {
 #ifdef __FreeBSD__
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 	// ASSERT failure in QBoxLayout::insert: "index out of range"
 	return;
-#endif
 #endif
 	Project project;
 	auto* sheet = createSearchReplaceSpreadsheet();

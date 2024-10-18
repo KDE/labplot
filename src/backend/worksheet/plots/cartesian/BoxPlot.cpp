@@ -24,7 +24,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
-#include "kdefrontend/GuiTools.h"
+#include "frontend/GuiTools.h"
 #include "tools/ImageTools.h"
 
 #include <QActionGroup>
@@ -1293,11 +1293,7 @@ void BoxPlotPrivate::updateRug() {
 
 	for (int i = 0; i < q->dataColumns().count(); ++i) {
 		const auto* column = static_cast<const Column*>(q->dataColumns().at(i));
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
 		rugPath.clear();
-#else
-		rugPath = QPainterPath();
-#endif
 		points.clear();
 
 		if (orientation == BoxPlot::Orientation::Horizontal) {
@@ -1964,11 +1960,11 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	else
 		group = config.group(QStringLiteral("BoxPlot"));
 
-	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
+	Q_D(BoxPlot);
+	const auto* plot = d->m_plot;
 	int index = plot->curveChildIndex(this);
 	const QColor themeColor = plot->themeColorPalette(index);
 
-	Q_D(BoxPlot);
 	d->suppressRecalc = true;
 
 	for (int i = 0; i < d->dataColumns.count(); ++i) {

@@ -224,8 +224,7 @@ void PlotAreaPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /
 	if (!isVisible())
 		return;
 
-	// draw the background
-	QRectF rect = boundingRect();
+	// draw the background area
 	background->draw(painter, rect, borderCornerRadius);
 
 	// draw the border

@@ -68,7 +68,7 @@ void Background::init(const KConfigGroup& group) {
 		d->position = (Position)group.readEntry(d->prefix + QStringLiteral("Position"), static_cast<int>(Position::No));
 }
 
-void Background::draw(QPainter* painter, const QPolygonF& polygon, double cornerRadius) const {
+void Background::draw(QPainter* painter, const QPolygonF& polygon, double radius) const {
 	Q_D(const Background);
 	const QRectF& rect = polygon.boundingRect();
 
@@ -159,10 +159,10 @@ void Background::draw(QPainter* painter, const QPolygonF& polygon, double corner
 	painter->setOpacity(d->opacity);
 	painter->setPen(Qt::NoPen);
 
-	if (cornerRadius > 0.) // rounded corners are possible for rects only
-		painter->drawRoundedRect(rect, cornerRadius, cornerRadius);
-	else
+	if (qFuzzyIsNull(radius))
 		painter->drawPolygon(polygon);
+	else
+		painter->drawRoundedRect(rect, radius, radius);
 }
 
 // ##############################################################################

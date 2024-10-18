@@ -171,8 +171,7 @@ bool QQPlot::minMax(const Dimension dim, const Range<int>& indexRange, Range<dou
 	case Dimension::Y: {
 		Range referenceRange(r);
 		Range percentilesRange(r);
-		bool rc = true;
-		rc = d->referenceCurve->minMax(dim, indexRange, referenceRange, false);
+		bool rc = d->referenceCurve->minMax(dim, indexRange, referenceRange, false);
 		if (!rc)
 			return false;
 
@@ -352,7 +351,7 @@ void QQPlotPrivate::recalc() {
 	yReferenceColumn->setValueAt(0, y1);
 	yReferenceColumn->setValueAt(1, y2);
 
-	// Q_EMIT dataChanged() in order to retransform everything with the new size/shape of the plot
+	// emit dataChanged() in order to retransform everything with the new size/shape of the plot
 	Q_EMIT q->dataChanged();
 }
 
@@ -690,11 +689,11 @@ void QQPlot::loadThemeConfig(const KConfig& config) {
 	else
 		group = config.group(QStringLiteral("QQPlot"));
 
-	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
+	Q_D(QQPlot);
+	const auto* plot = d->m_plot;
 	int index = plot->curveChildIndex(this);
 	const QColor themeColor = plot->themeColorPalette(index);
 
-	Q_D(QQPlot);
 	d->suppressRecalc = true;
 
 	d->referenceCurve->line()->loadThemeConfig(group, themeColor);

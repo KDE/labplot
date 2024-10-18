@@ -19,8 +19,8 @@
 #include "backend/datapicker/DatapickerPoint.h"
 #include "backend/datapicker/DatapickerPointPrivate.h"
 #include "backend/datapicker/Transform.h"
-#include "commonfrontend/datapicker/DatapickerImageView.h"
-#include "kdefrontend/widgets/DatapickerImageWidget.h"
+#include "frontend/datapicker/DatapickerImageView.h"
+#include "frontend/widgets/DatapickerImageWidget.h"
 
 #include <QAction>
 #include <QUndoStack>

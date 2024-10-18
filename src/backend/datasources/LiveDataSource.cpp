@@ -20,8 +20,8 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "commonfrontend/spreadsheet/SpreadsheetView.h"
-#include "kdefrontend/spreadsheet/PlotDataDialog.h"
+#include "frontend/spreadsheet/PlotDataDialog.h"
+#include "frontend/spreadsheet/SpreadsheetView.h"
 
 #include <QAction>
 #include <QDateTime>
@@ -483,15 +483,10 @@ void LiveDataSource::read() {
 			m_tcpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
 
 			connect(m_tcpSocket, &QTcpSocket::readyRead, this, &LiveDataSource::readyRead);
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
 			connect(m_tcpSocket,
 					static_cast<void (QTcpSocket::*)(QAbstractSocket::SocketError)>(&QTcpSocket::errorOccurred),
 					this,
 					&LiveDataSource::tcpSocketError);
-#else
-			connect(m_tcpSocket, static_cast<void (QTcpSocket::*)(QAbstractSocket::SocketError)>(&QTcpSocket::error), this, &LiveDataSource::tcpSocketError);
-#endif
-
 			break;
 		case SourceType::NetworkUDPSocket:
 			m_udpSocket = new QUdpSocket(this);
@@ -502,15 +497,10 @@ void LiveDataSource::read() {
 			// only connect to readyRead when update is on new data
 			if (m_updateType == UpdateType::NewData)
 				connect(m_udpSocket, &QUdpSocket::readyRead, this, &LiveDataSource::readyRead);
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
 			connect(m_udpSocket,
 					static_cast<void (QUdpSocket::*)(QAbstractSocket::SocketError)>(&QUdpSocket::errorOccurred),
 					this,
 					&LiveDataSource::tcpSocketError);
-#else
-			connect(m_udpSocket, static_cast<void (QUdpSocket::*)(QAbstractSocket::SocketError)>(&QUdpSocket::error), this, &LiveDataSource::tcpSocketError);
-#endif
-
 			break;
 		case SourceType::LocalSocket:
 			m_localSocket = new QLocalSocket(this);
@@ -518,18 +508,10 @@ void LiveDataSource::read() {
 			m_localSocket->connectToServer(m_localSocketName, QLocalSocket::ReadOnly);
 
 			connect(m_localSocket, &QLocalSocket::readyRead, this, &LiveDataSource::readyRead);
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
 			connect(m_localSocket,
 					static_cast<void (QLocalSocket::*)(QLocalSocket::LocalSocketError)>(&QLocalSocket::errorOccurred),
 					this,
 					&LiveDataSource::localSocketError);
-#else
-			connect(m_localSocket,
-					static_cast<void (QLocalSocket::*)(QLocalSocket::LocalSocketError)>(&QLocalSocket::error),
-					this,
-					&LiveDataSource::localSocketError);
-#endif
-
 			break;
 		case SourceType::SerialPort:
 #ifdef HAVE_QTSERIALPORT
@@ -722,42 +704,44 @@ void LiveDataSource::tcpSocketError(QAbstractSocket::SocketError /*socketError*/
 }
 
 #ifdef HAVE_QTSERIALPORT
-void LiveDataSource::serialPortError(QSerialPort::SerialPortError error) {
+QString LiveDataSource::serialPortErrorEnumToString(QSerialPort::SerialPortError error, const QString errorString) {
+	QString msg;
 	switch (error) {
 	case QSerialPort::DeviceNotFoundError:
-		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("Failed to open the device."));
+		msg = i18n("Device doesn't exist.");
 		break;
 	case QSerialPort::PermissionError:
-		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("Failed to open the device. Please check your permissions on this device."));
+		msg = i18n("User doesn't have enough permissions to open the device.");
 		break;
 	case QSerialPort::OpenError:
-		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("Device already opened."));
+		msg = i18n("Device already opened.");
 		break;
 	case QSerialPort::NotOpenError:
-		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("The device is not opened."));
+		msg = i18n("Device is not opened.");
 		break;
 	case QSerialPort::ReadError:
-		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("Failed to read data."));
+		msg = i18n("Failed to read data.");
 		break;
 	case QSerialPort::ResourceError:
-		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("Failed to read data. The device is removed."));
+		msg = i18n("Device not available.");
 		break;
 	case QSerialPort::TimeoutError:
-		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("The device timed out."));
+		msg = i18n("Timeout occured.");
 		break;
 	case QSerialPort::WriteError:
 	case QSerialPort::UnsupportedOperationError:
-#if QT_VERSION <= QT_VERSION_CHECK(6, 0, 0)
-	case QSerialPort::ParityError:
-	case QSerialPort::FramingError:
-	case QSerialPort::BreakConditionError:
-#endif
 	case QSerialPort::UnknownError:
-		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("The following error occurred: %1.", m_serialPort->errorString()));
+		msg = i18n("The following error occurred: %1.", errorString);
 		break;
 	case QSerialPort::NoError:
 		break;
 	}
+
+	return msg;
+}
+
+void LiveDataSource::serialPortError(QSerialPort::SerialPortError error) {
+	QMessageBox::critical(nullptr, i18n("Serial Port Error"), serialPortErrorEnumToString(error, m_serialPort->errorString()));
 }
 #endif
 

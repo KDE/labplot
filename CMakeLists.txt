@@ -9,27 +9,13 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
-message(STATUS "Found Qt version ${QT_VERSION_MAJOR}")
-# see also -DQT_DISABLE_DEPRECATED_BEFORE in src/CMakeLists.txt
-set(QT_MIN_VERSION "5.12.0")
-set(KF_MAJOR_VERSION "5")
-set(KF_MIN_VERSION "5.32.0")
-#set(QT_VERSION_MAJOR "6")
-if(QT_VERSION_MAJOR GREATER_EQUAL 6)
-    set(KF_MIN_VERSION "5.240.0")
-    find_package(ECM ${KF_MIN_VERSION} NO_MODULE)
-    if(ECM_FOUND)
-        set(KF_MAJOR_VERSION "6")
-        set(QT_MIN_VERSION "6.2.2")		# openSUSE 15.4 version
-    else()
-        message(STATUS "KF6 not found! Trying Qt5")
-    find_package(QT NAMES Qt5 REQUIRED COMPONENTS Core)
-    message(STATUS "Found Qt version ${QT_VERSION_MAJOR}")
-        set(KF_MIN_VERSION "5.32.0")
-    endif()
-endif()
+find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core)
+message(STATUS "Found Qt version ${QT_VERSION}")
 set(QT_MAJOR_VERSION ${QT_VERSION_MAJOR})
+# see also -DQT_DISABLE_DEPRECATED_BEFORE in src/CMakeLists.txt
+set(QT_MIN_VERSION "6.5.0")
+set(KF_MAJOR_VERSION "6")
+set(KF_MIN_VERSION "5.240.0")
 
 set(APPLE_SUPPRESS_X11_WARNING ON)
 
@@ -91,7 +77,7 @@ OPTIONAL_COMPONENTS
 
 # TODO: make NewStuff optional?
 if(KF${KF_MAJOR_VERSION}NewStuff_FOUND)
-    add_definitions(-DHAVE_KF5_NEW_STUFF)
+    add_definitions(-DHAVE_KF_NEW_STUFF)
 else()
     message(STATUS "KF NewStuff not found")
 endif()
@@ -109,21 +95,17 @@ if(KF${KF_MAJOR_VERSION}Purpose_FOUND)
 endif()
 
 if(KF${KF_MAJOR_VERSION}SyntaxHighlighting_FOUND)
-    add_definitions(-DHAVE_KF5_SYNTAX_HIGHLIGHTING)
+    add_definitions(-DHAVE_KF_SYNTAX_HIGHLIGHTING)
 else()
     message(STATUS "KF SyntaxHighlighting not found")
 endif()
 
-if(QT_MAJOR_VERSION GREATER_EQUAL 6)
-    find_package(KUserFeedbackQt6)
-else()
-    find_package(KUserFeedback)
-endif()
-if(KUserFeedback_FOUND OR KUserFeedbackQt6_FOUND)
-    message(STATUS "Found KUserFeedback")
+find_package(KF${KF_MAJOR_VERSION}UserFeedback)
+if(KF${KF_MAJOR_VERSION}UserFeedback_FOUND)
+    message(STATUS "Found KF${KF_MAJOR_VERSION}UserFeedback")
     add_definitions(-DHAVE_KUSERFEEDBACK)
 else()
-    message(STATUS "KUserFeedback not found")
+    message(STATUS "KF${KF_MAJOR_VERSION}UserFeedback not found")
 endif()
 
 find_package(BISON REQUIRED)
@@ -173,8 +155,13 @@ else()
 endif()
 
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
-    message(STATUS "GNU C++ compiler ${CMAKE_CXX_COMPILER_VERSION} detected, adding compile flags")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS} ${GENERIC_GNU_FLAGS} -Wzero-as-null-pointer-constant") # -Wzero-as-null-pointer-constant since version 5
+    if(QT_VERSION VERSION_GREATER_EQUAL 5.7.0 AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "9")
+	# see Qt supported compiler
+        message(FATAL_ERROR "Insufficient GNU C++ version ${CMAKE_CXX_COMPILER_VERSION} (Qt 6.7+ requires at least GNU g++ 9)")
+    else()
+        message(STATUS "GNU C++ compiler ${CMAKE_CXX_COMPILER_VERSION} detected, adding compile flags")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS} ${GENERIC_GNU_FLAGS} -Wzero-as-null-pointer-constant") # -Wzero-as-null-pointer-constant since version 5
+    endif()
 elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
     message(STATUS "Clang C++ compiler ${CMAKE_CXX_COMPILER_VERSION} detected, adding compile flags")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GNU_SOURCE ${GENERIC_CXX_FLAGS} ${GENERIC_GNU_FLAGS} -Wzero-as-null-pointer-constant") # -Wzero-as-null-pointer-constant since version 5
@@ -269,12 +256,7 @@ add_definitions(-DGIT_COMMIT=\"${GIT_COMMIT}\")
 
 
 ### Options ######################################
-# Cantor does not support Qt6 yet
-if(QT_MAJOR_VERSION GREATER_EQUAL 6)
-    option(ENABLE_CANTOR "Build with Cantor support" OFF)
-else()
-    option(ENABLE_CANTOR "Build with Cantor support" ON)
-endif()
+option(ENABLE_CANTOR "Build with Cantor support" ON)
 option(ENABLE_FFTW "Build with FFTW support" ON)
 option(ENABLE_HDF5 "Build with HDF5 support" ON)
 option(ENABLE_NETCDF "Build with NetCDF support" ON)
@@ -330,10 +312,9 @@ endif()
 find_package(GSL REQUIRED)
 
 find_package(Poppler "0.62.0" COMPONENTS Qt${QT_MAJOR_VERSION})
-# TODO: support Poppler-Qt6
-if(Poppler_FOUND AND (QT_MAJOR_VERSION LESS 6))
+if(Poppler_FOUND)
     include_directories(${Poppler_INCLUDE_DIRS})
-    # message(STATUS "Poppler libraries: ${Poppler_LIBRARIES}")
+    message(STATUS "Poppler libraries: ${Poppler_LIBRARIES}")
     add_definitions(-DHAVE_POPPLER)
 endif()
 
@@ -356,26 +337,16 @@ endif()
 
 ### Cantorlibs (optional) ###############################
 if(ENABLE_CANTOR)
-    find_package(Cantor)
-
+    find_package(Cantor "24.11.70")
     if(Cantor_FOUND)
         message(STATUS "Found Cantor Library ${Cantor_VERSION}")
-
-        if(${Cantor_VERSION} VERSION_GREATER "19.11")
-            add_definitions(-DHAVE_CANTOR_LIBS)
-            set(RECENT_CANTOR TRUE)
-        else()
-            message(STATUS "Cantor Library ${Cantor_VERSION} TOO OLD. Minimum usable version is 19.12")
-        endif()
-        if(${Cantor_VERSION} VERSION_GREATER "20.08.9")
-            add_definitions(-DHAVE_NEW_CANTOR_LIBS)
-        endif()
+         add_definitions(-DHAVE_CANTOR_LIBS)
     else()
         message(STATUS "Cantor Library NOT FOUND")
     endif()
 else()
-        add_definitions(-DCANTOR_DISABLED)
-        message(STATUS "Cantor Library DISABLED")
+    add_definitions(-DCANTOR_DISABLED)
+    message(STATUS "Cantor Library DISABLED")
 endif()
 
 ### FFTW (optional) #####################################

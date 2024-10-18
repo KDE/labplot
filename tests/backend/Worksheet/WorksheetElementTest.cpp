@@ -21,10 +21,10 @@
 #include "backend/worksheet/plots/cartesian/ReferenceLinePrivate.h"
 #include "backend/worksheet/plots/cartesian/ReferenceRange.h"
 #include "backend/worksheet/plots/cartesian/ReferenceRangePrivate.h"
-#include "commonfrontend/ProjectExplorer.h"
-#include "kdefrontend/dockwidgets/CustomPointDock.h"
-#include "kdefrontend/dockwidgets/ImageDock.h"
-#include "kdefrontend/widgets/LabelWidget.h"
+#include "frontend/ProjectExplorer.h"
+#include "frontend/dockwidgets/CustomPointDock.h"
+#include "frontend/dockwidgets/ImageDock.h"
+#include "frontend/widgets/LabelWidget.h"
 
 #include <QAction>
 #include <QItemSelectionModel>
@@ -84,6 +84,57 @@
 ALL_WORKSHEETELEMENT_TESTS(CustomPoint, CustomPointDock, setPoints)
 ALL_WORKSHEETELEMENT_TESTS2(TextLabel, LabelWidget, setLabels)
 ALL_WORKSHEETELEMENT_TESTS2(Image, ImageDock, setImages)
+
+/*!
+ * \brief create and add a new ReferenceRange, undo and redo this step
+ */
+void WorksheetElementTest::testReferenceRangeInit() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(plot);
+
+	auto* range = new ReferenceRange(plot, QStringLiteral("range"));
+	plot->addChild(range);
+
+	auto children = plot->children<ReferenceRange>();
+
+	QCOMPARE(children.size(), 1);
+
+	project.undoStack()->undo();
+	children = plot->children<ReferenceRange>();
+	QCOMPARE(children.size(), 0);
+
+	project.undoStack()->redo();
+	children = plot->children<ReferenceRange>();
+	QCOMPARE(children.size(), 1);
+}
+
+/*!
+ * \brief create and add a new ReferenceRange, duplicate it and check the number of children
+ */
+void WorksheetElementTest::testReferenceRangeDuplicate() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(plot);
+
+	auto* range = new ReferenceRange(plot, QStringLiteral("range"));
+	plot->addChild(range);
+
+	range->duplicate();
+
+	auto children = plot->children<ReferenceRange>();
+	QCOMPARE(children.size(), 2);
+
+	project.undoStack()->undo();
+	children = plot->children<ReferenceRange>();
+	QCOMPARE(children.size(), 1);
+}
 
 void WorksheetElementTest::referenceRangeXMouseMove() {
 	SETUP_PROJECT
@@ -377,6 +428,57 @@ void WorksheetElementTest::referenceRangeSaveLoad() {
 		QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.55);
 		CHECK_REFERENCERANGE_RECT(referenceRange, 0., 0.55, 1., 0.45);
 	}
+}
+
+/*!
+ * \brief create and add a new ReferenceLine, undo and redo this step
+ */
+void WorksheetElementTest::testReferenceLineInit() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(plot);
+
+	auto* line = new ReferenceLine(plot, QStringLiteral("line"));
+	plot->addChild(line);
+
+	auto children = plot->children<ReferenceLine>();
+
+	QCOMPARE(children.size(), 1);
+
+	project.undoStack()->undo();
+	children = plot->children<ReferenceLine>();
+	QCOMPARE(children.size(), 0);
+
+	project.undoStack()->redo();
+	children = plot->children<ReferenceLine>();
+	QCOMPARE(children.size(), 1);
+}
+
+/*!
+ * \brief create and add a new ReferenceLine, duplicate it and check the number of children
+ */
+void WorksheetElementTest::testReferenceLineDuplicate() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(plot);
+
+	auto* line = new ReferenceLine(plot, QStringLiteral("line"));
+	plot->addChild(line);
+
+	line->duplicate();
+
+	auto children = plot->children<ReferenceLine>();
+	QCOMPARE(children.size(), 2);
+
+	project.undoStack()->undo();
+	children = plot->children<ReferenceLine>();
+	QCOMPARE(children.size(), 1);
 }
 
 void WorksheetElementTest::referenceLineLinearScaling() {

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Background
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -39,7 +39,7 @@ public:
 	const QString& prefix() const;
 	void init(const KConfigGroup&);
 
-	void draw(QPainter*, const QPolygonF&, double cornerRadius = 0.) const;
+	void draw(QPainter*, const QPolygonF&, double radius = 0) const;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

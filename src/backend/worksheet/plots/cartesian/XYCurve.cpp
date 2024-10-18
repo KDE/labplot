@@ -49,7 +49,7 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_spline.h>
 
-#include <kdefrontend/GuiTools.h>
+#include <frontend/GuiTools.h>
 
 using Dimension = CartesianCoordinateSystem::Dimension;
 
@@ -2284,6 +2284,9 @@ bool XYCurve::minMax(const AbstractColumn* column1,
 #ifdef PERFTRACE_AUTOSCALE
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 #endif
+	if (!column1)
+		return false;
+
 	// when property is increasing or decreasing there is a benefit in finding minimum and maximum
 	// for property == AbstractColumn::Properties::No it must be iterated over all values so it does not matter if this function or the below one is used
 	// if the property of the second column is not AbstractColumn::Properties::No means, that all values are valid and not masked
@@ -3010,13 +3013,11 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 void XYCurve::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group(QStringLiteral("XYCurve"));
 
-	const auto* plot = dynamic_cast<const CartesianPlot*>(parentAspect());
-	if (!plot)
-		return;
+	Q_D(XYCurve);
+	const auto* plot = d->m_plot;
 	const int index = plot->curveChildIndex(this);
 	const QColor themeColor = plot->themeColorPalette(index);
 
-	Q_D(XYCurve);
 	d->suppressRecalc = true;
 
 	d->line->loadThemeConfig(group, themeColor);

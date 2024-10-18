@@ -16,8 +16,8 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/matrix/MatrixModel.h"
-#include "commonfrontend/matrix/MatrixView.h"
-#include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
+#include "frontend/matrix/MatrixView.h"
+#include "frontend/spreadsheet/ExportSpreadsheetDialog.h"
 #include "matrixcommands.h"
 
 #include <KConfig>

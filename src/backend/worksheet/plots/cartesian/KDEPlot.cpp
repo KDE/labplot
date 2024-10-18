@@ -368,7 +368,7 @@ void KDEPlotPrivate::recalc() {
 	xEstimationColumn->setValues(xData);
 	yEstimationColumn->setValues(yData);
 
-	// Q_EMIT dataChanged() in order to retransform everything with the new size/shape of the plot
+	// emit dataChanged() in order to retransform everything with the new size/shape of the plot
 	Q_EMIT q->dataChanged();
 }
 
@@ -542,11 +542,11 @@ void KDEPlot::loadThemeConfig(const KConfig& config) {
 	else
 		group = config.group(QStringLiteral("KDEPlot"));
 
-	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
+	Q_D(KDEPlot);
+	const auto* plot = d->m_plot;
 	int index = plot->curveChildIndex(this);
 	const QColor themeColor = plot->themeColorPalette(index);
 
-	Q_D(KDEPlot);
 	d->suppressRecalc = true;
 
 	d->estimationCurve->line()->loadThemeConfig(group, themeColor);

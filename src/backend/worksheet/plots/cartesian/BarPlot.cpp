@@ -21,6 +21,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
+#include "frontend/GuiTools.h"
 #include "tools/ImageTools.h"
 
 #include <QActionGroup>
@@ -32,8 +33,6 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
-
-#include <kdefrontend/GuiTools.h>
 
 /**
  * \class BarPlot
@@ -1092,11 +1091,7 @@ void BarPlotPrivate::updateValues() {
 			return;
 		}
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 		const int endRow = std::min(valuesPointsLogical.size(), static_cast<qsizetype>(valuesColumn->rowCount()));
-#else
-		const int endRow = std::min(valuesPointsLogical.size(), valuesColumn->rowCount());
-#endif
 		const auto xColMode = valuesColumn->columnMode();
 		for (int i = 0; i < endRow; ++i) {
 			if (!valuesColumn->isValid(i) || valuesColumn->isMasked(i))
@@ -1535,11 +1530,11 @@ void BarPlot::loadThemeConfig(const KConfig& config) {
 	else
 		group = config.group(QStringLiteral("BarPlot"));
 
-	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
-	int index = plot->curveChildIndex(this);
-	const QColor themeColor = plot->themeColorPalette(index);
-
 	Q_D(BarPlot);
+	const auto* plot = d->m_plot;
+	int index = plot->curveChildIndex(this);
+	const QColor themeColor = d->m_plot->themeColorPalette(index);
+
 	d->suppressRecalc = true;
 
 	for (int i = 0; i < d->dataColumns.count(); ++i) {

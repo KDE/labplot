@@ -11,7 +11,7 @@
 
 #include "backend/core/column/Column.h"
 #ifndef SDK
-#include "backend/cantorWorksheet/CantorWorksheet.h"
+#include "backend/notebook/Notebook.h"
 #endif
 #include "backend/core/AbstractSimpleFilter.h"
 #include "backend/core/Project.h"
@@ -27,7 +27,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Plot.h"
-#include "commonfrontend/spreadsheet/SpreadsheetView.h"
+#include "frontend/spreadsheet/SpreadsheetView.h"
 
 #include <KLocalizedString>
 
@@ -149,10 +149,10 @@ QMenu* Column::createContextMenu() {
 		if (parentAspect()->type() == AspectType::Spreadsheet) {
 			auto* spreadsheet = static_cast<Spreadsheet*>(parentAspect());
 			spreadsheet->fillColumnContextMenu(menu, this);
-		} else if (parentAspect()->type() == AspectType::CantorWorksheet) {
+		} else if (parentAspect()->type() == AspectType::Notebook) {
 #if defined(HAVE_CANTOR_LIBS) && !defined(SDK)
-			auto* worksheet = static_cast<CantorWorksheet*>(parentAspect());
-			worksheet->fillColumnContextMenu(menu, this);
+			auto* notebook = static_cast<Notebook*>(parentAspect());
+			notebook->fillColumnContextMenu(menu, this);
 #endif
 		}
 	}
@@ -586,7 +586,7 @@ void Column::clearFormulas() {
 
 STD_SETTER_CMD_IMPL(Column, SetRandomValuesData, Column::RandomValuesData, randomValuesData)
 void Column::setRandomValuesData(const RandomValuesData& data) {
-	exec(new ColumnSetRandomValuesDataCmd(d, data, ki18n("%1: set fit options and perform the fit")));
+	exec(new ColumnSetRandomValuesDataCmd(d, data, ki18n("%1: set random values")));
 }
 
 Column::RandomValuesData Column::randomValuesData() const {

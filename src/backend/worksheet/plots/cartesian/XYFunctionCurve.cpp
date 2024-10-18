@@ -61,6 +61,18 @@ void XYFunctionCurve::handleAspectUpdated(const QString& aspectPath, const Abstr
 	d->handleAspectUpdated(aspectPath, element);
 }
 
+bool XYFunctionCurve::usingColumn(const Column* column) const {
+	for (const auto& d : functionData()) {
+		const auto* curve = d.curve();
+		if (curve) {
+			if (curve->xColumn() == column || curve->yColumn() == column)
+				return true;
+		}
+	}
+
+	return false;
+}
+
 // ##############################################################################
 // #################  setter methods and undo commands ##########################
 // ##############################################################################
@@ -195,7 +207,7 @@ void XYFunctionCurvePrivate::setFunctionVariableCurve(int index, const XYCurve* 
 	if (m_functionData.at(index).curve()) // if there exists already a valid curve, disconnect it first
 		q->disconnect(m_functionData.at(index).m_curve, nullptr, q, nullptr);
 	m_functionData[index].setCurve(curve);
-	connectFunctionCurve(curve);
+	connectCurve(curve);
 }
 
 void XYFunctionCurvePrivate::setFunctionVariableCurve(const XYCurve* c) {
@@ -207,7 +219,7 @@ void XYFunctionCurvePrivate::setFunctionVariableCurve(const XYCurve* c) {
 	}
 }
 
-void XYFunctionCurvePrivate::connectFunctionCurve(const XYCurve* curve) {
+void XYFunctionCurvePrivate::connectCurve(const XYCurve* curve) {
 	if (!curve)
 		return;
 
@@ -219,10 +231,10 @@ void XYFunctionCurvePrivate::connectFunctionCurve(const XYCurve* curve) {
 		return;
 
 	DEBUG(Q_FUNC_INFO)
-	m_connectionsUpdateFunction << q->connect(curve, &XYCurve::dataChanged, q, &XYFunctionCurve::recalculate);
-	m_connectionsUpdateFunction << q->connect(curve, &XYCurve::xDataChanged, q, &XYFunctionCurve::recalculate);
-	m_connectionsUpdateFunction << q->connect(curve, &XYCurve::yDataChanged, q, &XYFunctionCurve::recalculate);
-	m_connectionsUpdateFunction << q->connect(curve, &AbstractAspect::aspectAboutToBeRemoved, q, &XYFunctionCurve::functionVariableCurveRemoved);
+	m_connections << q->connect(curve, &XYCurve::dataChanged, q, &XYFunctionCurve::recalculate);
+	m_connections << q->connect(curve, &XYCurve::xDataChanged, q, &XYFunctionCurve::recalculate);
+	m_connections << q->connect(curve, &XYCurve::yDataChanged, q, &XYFunctionCurve::recalculate);
+	m_connections << q->connect(curve, &AbstractAspect::aspectAboutToBeRemoved, q, &XYFunctionCurve::functionVariableCurveRemoved);
 	// m_connectionsUpdateFunction << q->connect(curve->parentAspect(), &AbstractAspect::childAspectAdded, q, &XYFunctionCurve::functionVariableCurveAdded);
 }
 
@@ -269,14 +281,14 @@ void XYFunctionCurvePrivate::setFunction(const QString& function, const QVector<
 	m_function = function;
 	m_functionData = functionData; // TODO: disconnecting everything?
 
-	for (auto& connection : m_connectionsUpdateFunction)
+	for (auto& connection : m_connections)
 		if (static_cast<bool>(connection))
 			q->disconnect(connection);
 
 	for (const auto& data : qAsConst(m_functionData)) {
 		const auto* curve = data.curve();
 		if (curve)
-			connectFunctionCurve(curve);
+			connectCurve(curve);
 	}
 	q->recalculate();
 }

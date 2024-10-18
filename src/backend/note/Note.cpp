@@ -13,7 +13,7 @@
 #include "backend/core/Settings.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
-#include "commonfrontend/note/NoteView.h"
+#include "frontend/note/NoteView.h"
 
 #include <QFileDialog>
 #include <QMessageBox>
