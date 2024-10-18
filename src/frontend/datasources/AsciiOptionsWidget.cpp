@@ -203,7 +203,7 @@ void AsciiOptionsWidget::applyFilterSettings(AsciiFilter::Properties& properties
 	properties.headerEnabled = ui.chbHeader->isChecked();
 	properties.headerLine = ui.sbHeaderLine->value();
 	properties.baseYear = ui.sbYearBase->value();
-	properties.columnNamesRaw = ui.kleColumnMode->text();
+	properties.columnModesString = ui.kleColumnMode->text();
 }
 
 void AsciiOptionsWidget::setSeparatingCharacter(QLatin1Char character) {
