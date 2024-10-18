@@ -432,7 +432,7 @@ STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetExactLimitsEnabled, bool, exact
 void ProcessBehaviorChart::setExactLimitsEnabled(bool enabled) {
 	Q_D(ProcessBehaviorChart);
 	if (enabled != d->exactLimitsEnabled)
-		exec(new ProcessBehaviorChartSetExactLimitsEnabledCmd(d, enabled, ki18n("%1: change exact limtis")));
+		exec(new ProcessBehaviorChartSetExactLimitsEnabledCmd(d, enabled, ki18n("%1: change exact limits")));
 }
 
 // ##############################################################################
