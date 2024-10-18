@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 01:47+0000\n"
+"POT-Creation-Date: 2024-10-18 01:45+0000\n"
 "PO-Revision-Date: 2023-09-19 23:30+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -912,7 +912,7 @@ msgstr "%1: ezarri errore barraren ingeradaren estiloa"
 #: src/backend/datapicker/DatapickerImage.cpp:415
 #: src/backend/worksheet/InfoElement.cpp:871
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:190
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:193
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:133
 #: src/backend/worksheet/WorksheetElement.cpp:162
@@ -926,7 +926,7 @@ msgstr "%1: ezarri ikusgai"
 #: src/backend/datapicker/DatapickerImage.cpp:415
 #: src/backend/worksheet/InfoElement.cpp:871
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:190
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:193
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:133
 #: src/backend/worksheet/WorksheetElement.cpp:162
@@ -1732,7 +1732,7 @@ msgstr "Aldagai kopurua: "
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:253
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:325
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:345
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:55
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:58
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:185
 #, kde-format
 msgid "Variables:"
@@ -3664,7 +3664,7 @@ msgstr "Batezbesteko aritmetikoa"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
 #: src/backend/gsl/functions.cpp:252
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:70
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:180
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:183
 #: src/frontend/dockwidgets/RunChartDock.cpp:147
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:135
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:73
@@ -7695,7 +7695,7 @@ msgstr "Orientazioa"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1442
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:235
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:233
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:218
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:232
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:248
 #: src/frontend/ui/dockwidgets/runchartdock.ui:170
 #: src/frontend/ui/dockwidgets/runchartdock.ui:234
@@ -7999,7 +7999,7 @@ msgid "%1: set data columns"
 msgstr "%1: garbitu zutabea"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:311
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:403
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:407
 #, fuzzy, kde-format
 msgid "%1: set type"
 msgstr "Ezarri letra-tipoa"
@@ -8324,7 +8324,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/histogramdock.ui:385
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:203
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:225
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:78
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:88
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:168
 #: src/frontend/ui/dockwidgets/runchartdock.ui:59
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:444
@@ -8929,8 +8929,8 @@ msgstr "Gauss-en banaketa"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:404
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:227
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:379
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:391
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:383
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:395
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:252
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:241
 #, kde-format
@@ -9015,24 +9015,30 @@ msgstr "%1: ezarri edukiontziaren zabalera"
 msgid "%1: legend visibility changed"
 msgstr "%1: txertatu %2 bukaera baino lehen"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:410
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:414
 #, fuzzy, kde-format
 msgid "%1: set limits metric"
 msgstr "Ezarri lerrokatze bertikala"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:417
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:421
 #, fuzzy, kde-format
 #| msgid "%1: set symbol size"
 msgid "%1: set sample size"
 msgstr "%1: ezarri ikur-neurria"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:424
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:428
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: change negative lower limit"
 msgstr "%1: Aldatu iruzkina"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:564
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:435
+#, fuzzy, kde-format
+#| msgid "%1: change comment"
+msgid "%1: change exact limtis"
+msgstr "%1: Aldatu iruzkina"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:587
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr ""
@@ -10005,7 +10011,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/imagedock.ui:113
 #: src/frontend/ui/dockwidgets/infoelementdock.ui:76
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:84
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:175
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:192
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:62
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:213
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:95
@@ -12155,7 +12161,7 @@ msgstr ""
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:352
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:446
 #: src/frontend/dockwidgets/MatrixDock.cpp:266
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:428
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:448
 #: src/frontend/dockwidgets/QQPlotDock.cpp:279
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:229
 #: src/frontend/dockwidgets/RunChartDock.cpp:224
@@ -12548,7 +12554,7 @@ msgstr ""
 #: src/frontend/dockwidgets/ImageDock.cpp:55
 #: src/frontend/dockwidgets/ImageDock.cpp:59
 #: src/frontend/dockwidgets/ImageDock.cpp:63
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:282
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:296
 #: src/frontend/widgets/LabelWidget.cpp:146
 #: src/frontend/widgets/LabelWidget.cpp:154
 #: src/frontend/widgets/LabelWidget.cpp:159
@@ -12725,7 +12731,7 @@ msgid "Silverman"
 msgstr ""
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:350
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:426
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:446
 #: src/frontend/dockwidgets/QQPlotDock.cpp:277
 #: src/frontend/dockwidgets/RunChartDock.cpp:222
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1036
@@ -12816,13 +12822,13 @@ msgstr "%1 matrizeak: \"%2\" txantiloia zamatuta"
 msgid "File Browser"
 msgstr "Fitxategi arakatzailea"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:179
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:182
 #: src/frontend/dockwidgets/RunChartDock.cpp:146
 #, kde-format
 msgid "Average"
 msgstr ""
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:196
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:199
 #, kde-format
 msgid ""
 "The supported chart types are grouped according to the plotted statistics "
@@ -12840,7 +12846,7 @@ msgid ""
 "</li></ul>"
 msgstr ""
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:222
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:225
 #, kde-format
 msgid "Allow negative values for the lower limit."
 msgstr ""
@@ -16674,7 +16680,7 @@ msgstr "Periodoa:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSampleSize)
 #: src/frontend/spreadsheet/SampleValuesDialog.cpp:105
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:142
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:159
 #, kde-format
 msgid "Sample Size:"
 msgstr "Laginaren neurria:"
@@ -17866,7 +17872,7 @@ msgstr "Y-errore mota:"
 #: src/frontend/ui/dockwidgets/matrixdock.ui:43
 #: src/frontend/ui/dockwidgets/notebookdock.ui:65
 #: src/frontend/ui/dockwidgets/notedock.ui:43
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:132
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:149
 #: src/frontend/ui/dockwidgets/projectdock.ui:243
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:99
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:119
@@ -17919,7 +17925,7 @@ msgstr "Iruzkina:"
 #: src/frontend/ui/dockwidgets/matrixdock.ui:17
 #: src/frontend/ui/dockwidgets/notebookdock.ui:33
 #: src/frontend/ui/dockwidgets/notedock.ui:17
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:115
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:132
 #: src/frontend/ui/dockwidgets/projectdock.ui:107
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:55
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:190
@@ -18461,7 +18467,7 @@ msgstr "Bide-izen erlatiboa"
 #: src/frontend/ui/dockwidgets/linewidget.ui:85
 #: src/frontend/ui/dockwidgets/livedatadock.ui:154
 #: src/frontend/ui/dockwidgets/matrixdock.ui:268
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:189
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:125
 #: src/frontend/ui/dockwidgets/valuewidget.ui:48
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:303
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:298
@@ -20861,7 +20867,7 @@ msgstr "Banda-zabalera:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:160
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:92
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:102
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:116
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:135
 #: src/frontend/ui/dockwidgets/runchartdock.ui:89
@@ -20990,48 +20996,54 @@ msgstr "Atzeko planoaren kolorea:"
 msgid "Text color:"
 msgstr "Testuaren kolorea:"
 
+#. i18n: ectx: property (text), widget (QLabel, lData2Column)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:81
+#, fuzzy, kde-format
+#| msgid "Sample Size:"
+msgid "Sample Sizes:"
+msgstr "Laginaren neurria:"
+
 #. i18n: ectx: property (text), widget (QLabel, lNegativeLowerLimit)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:85
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:95
 #, fuzzy, kde-format
 #| msgid "Lower limit"
 msgid "Lower Limit < 0:"
 msgstr "Beheko muga"
 
 #. i18n: ectx: property (text), widget (QLabel, lLimitsMetric)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:122
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:139
 #, kde-format
 msgid "Limits based on:"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, lData2Column)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:199
-#, fuzzy, kde-format
-#| msgid "Sample Size:"
-msgid "Sample Sizes:"
-msgstr "Laginaren neurria:"
+#. i18n: ectx: property (text), widget (QLabel, lExactLimits)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:206
+#, kde-format
+msgid "Exact Limits:"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataLine)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:207
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:221
 #: src/frontend/ui/dockwidgets/runchartdock.ui:159
 #, fuzzy, kde-format
 msgid "Data Line"
 msgstr "Puntu lerroa"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabControlLimitLines)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:271
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:285
 #, kde-format
 msgid "Center/Limits Lines"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lUpperLimit)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:326
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:340
 #, fuzzy, kde-format
 #| msgid "Upper limit"
 msgid "Upper Limit"
 msgstr "Goiko muga"
 
 #. i18n: ectx: property (text), widget (QLabel, lLowerLimit)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:370
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:384
 #, fuzzy, kde-format
 #| msgid "Lower limit"
 msgid "Lower Limit"

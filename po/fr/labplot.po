@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 01:47+0000\n"
-"PO-Revision-Date: 2024-10-14 12:31+0200\n"
+"POT-Creation-Date: 2024-10-18 01:45+0000\n"
+"PO-Revision-Date: 2024-10-16 18:07+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -921,7 +921,7 @@ msgstr "%1 : définir le style de contour de la barre d'erreur"
 #: src/backend/datapicker/DatapickerImage.cpp:415
 #: src/backend/worksheet/InfoElement.cpp:871
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:190
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:193
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:133
 #: src/backend/worksheet/WorksheetElement.cpp:162
@@ -935,7 +935,7 @@ msgstr "%1 : définir comme visible"
 #: src/backend/datapicker/DatapickerImage.cpp:415
 #: src/backend/worksheet/InfoElement.cpp:871
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:190
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:193
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:133
 #: src/backend/worksheet/WorksheetElement.cpp:162
@@ -1744,7 +1744,7 @@ msgstr "Nombre de variables :"
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:253
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:325
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:345
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:55
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:58
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:185
 #, kde-format
 msgid "Variables:"
@@ -3632,7 +3632,7 @@ msgstr "Moyenne arithmétique"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
 #: src/backend/gsl/functions.cpp:252
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:70
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:180
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:183
 #: src/frontend/dockwidgets/RunChartDock.cpp:147
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:135
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:73
@@ -7624,7 +7624,7 @@ msgstr "Orientation"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1442
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:235
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:233
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:218
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:232
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:248
 #: src/frontend/ui/dockwidgets/runchartdock.ui:170
 #: src/frontend/ui/dockwidgets/runchartdock.ui:234
@@ -7918,7 +7918,7 @@ msgid "%1: set data columns"
 msgstr "%1 : définir les colonnes de données"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:311
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:403
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:407
 #, kde-format
 msgid "%1: set type"
 msgstr "%1 : définir un type"
@@ -8234,7 +8234,7 @@ msgstr "Corrélation automatique / croisée"
 #: src/frontend/ui/dockwidgets/histogramdock.ui:385
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:203
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:225
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:78
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:88
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:168
 #: src/frontend/ui/dockwidgets/runchartdock.ui:59
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:444
@@ -8828,8 +8828,8 @@ msgstr "Ajuster vers une distribution binomiale"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:404
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:227
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:379
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:391
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:383
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:395
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:252
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:241
 #, kde-format
@@ -8910,22 +8910,28 @@ msgstr "%1 : définir la bande passante"
 msgid "%1: legend visibility changed"
 msgstr "%1 : modification de la visibilité de la légende"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:410
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:414
 #, kde-format
 msgid "%1: set limits metric"
 msgstr "%1 : définir la métrique des limites"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:417
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:421
 #, kde-format
 msgid "%1: set sample size"
 msgstr "%1 : définir la taille des échantillons"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:424
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:428
 #, kde-format
 msgid "%1: change negative lower limit"
 msgstr "%1 : modifier la limite inférieure négative"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:564
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:435
+#, fuzzy, kde-format
+#| msgid "%1: change negative lower limit"
+msgid "%1: change exact limtis"
+msgstr "%1 : modifier la limite inférieure négative"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:587
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "Le dernier échantillon est incomplet et a été omis."
@@ -9887,7 +9893,7 @@ msgstr "%1 : déverrouiller"
 #: src/frontend/ui/dockwidgets/imagedock.ui:113
 #: src/frontend/ui/dockwidgets/infoelementdock.ui:76
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:84
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:175
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:192
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:62
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:213
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:95
@@ -11373,20 +11379,11 @@ msgstr "Impossible de trouver des fichiers « .csv » dans %1"
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Origin Multi-Layer Graphs"
-msgstr ""
+msgstr "Importer des graphiques d'origine en multi-calques"
 
 #: src/frontend/datasources/ImportOriginLayersDialog.cpp:26
 #: src/frontend/datasources/ImportProjectDialog.cpp:169
-#, fuzzy, kde-format
-#| msgid ""
-#| "Multiple layers are used in Origin to either implement multiple plots or "
-#| "multiple axes on the same plot (see <a href=\"https://www.originlab.com/"
-#| "doc/Origin-Help/MultiLayer-Graph\">Origin's Documentation</a> for more "
-#| "details).LabPlot can process only one type at the same time."
-#| "<br><br>Specify how to import multi-layered graphs in the selected "
-#| "project:<ul><li>As Plot Area - a new plot area is created for every layer."
-#| "</li><li>As Coordinate System - a new coordinate system (data range) on "
-#| "the same plot area is created for every layer</li></ul>"
+#, kde-format
 msgid ""
 "Multiple layers are used in Origin to either implement multiple plots or "
 "multiple axes on the same plot (see <a href=\"https://www.originlab.com/doc/"
@@ -11397,16 +11394,16 @@ msgid ""
 "a new coordinate system (data range) on the same plot area is created for "
 "every layer.</li></ul>"
 msgstr ""
-"Plusieurs calques sont utilisées dans le logiciel « Origin » pour effectuer "
-"plusieurs tracés ou plusieurs axes sur le même tracé (Veuillez consulter la "
-"<a href=\"https://www.originlab.com/doc/Origin-Help/MultiLayer-Graph"
-"\">Documentation du logiciel « Origin »</a> pour plus de détails). LabPlot "
-"ne peut traiter qu'un seul type à la fois. <br><br>Spécifier comment "
-"importer des graphiques multi-calques dans le projet sélectionné :"
-"<ul><li>Comme zone de tracé - une nouvelle zone de tracé est créée pour "
-"chaque calque. </li><li>En tant que système de coordonnées - un nouveau "
-"système de coordonnées (plage de données) sur la même zone de tracé est créé "
-"pour chaque calque.</li></ul>"
+"Les calques multiples sont utilisées dans le logiciel « Origin » pour "
+"effectuer soit plusieurs tracés soit plusieurs axes sur le même tracé "
+"(Veuillez consulter la <a href=\"https://www.originlab.com/doc/Origin-Help/"
+"MultiLayer-Graph\">Documentation du logiciel « Origin »</a> pour plus de "
+"détails). LabPlot ne peut traiter qu'un seul type à la fois. "
+"<br><br>Veuillez définir comment importer des graphiques multi-calques dans "
+"le projet sélectionné :<ul><li>Comme zone de tracé - une nouvelle zone de "
+"tracé est créée pour chaque calque. </li><li>En tant que système de "
+"coordonnées - un nouveau système de coordonnées (Plage de données) sur la "
+"même zone de tracé est créé pour chaque calque.</li></ul>"
 
 #: src/frontend/datasources/ImportOriginLayersDialog.cpp:38
 #: src/frontend/datasources/ImportProjectDialog.cpp:159
@@ -12204,7 +12201,7 @@ msgstr "%1 axes : modèle « %2 » chargé"
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:352
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:446
 #: src/frontend/dockwidgets/MatrixDock.cpp:266
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:428
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:448
 #: src/frontend/dockwidgets/QQPlotDock.cpp:279
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:229
 #: src/frontend/dockwidgets/RunChartDock.cpp:224
@@ -12625,7 +12622,7 @@ msgstr "Ligne principale"
 #: src/frontend/dockwidgets/ImageDock.cpp:55
 #: src/frontend/dockwidgets/ImageDock.cpp:59
 #: src/frontend/dockwidgets/ImageDock.cpp:63
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:282
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:296
 #: src/frontend/widgets/LabelWidget.cpp:146
 #: src/frontend/widgets/LabelWidget.cpp:154
 #: src/frontend/widgets/LabelWidget.cpp:159
@@ -12802,7 +12799,7 @@ msgid "Silverman"
 msgstr "Silverman"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:350
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:426
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:446
 #: src/frontend/dockwidgets/QQPlotDock.cpp:277
 #: src/frontend/dockwidgets/RunChartDock.cpp:222
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1036
@@ -12894,13 +12891,13 @@ msgstr "%1 matrices : modèle « %2 » chargé"
 msgid "File Browser"
 msgstr "Navigateur de fichiers"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:179
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:182
 #: src/frontend/dockwidgets/RunChartDock.cpp:146
 #, kde-format
 msgid "Average"
 msgstr "Moyenne"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:196
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:199
 #, fuzzy, kde-format
 #| msgid ""
 #| "The supported chart types are grouped according to the plotted statistics "
@@ -12941,7 +12938,7 @@ msgstr ""
 "<b>moyennes pour chacun échantillon</b>. </li><li>S (X̅S) - tracer les "
 "<b>écarts types pour chacun échantillon</b>. </li></ul>"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:222
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:225
 #, kde-format
 msgid "Allow negative values for the lower limit."
 msgstr "Autoriser les valeurs négatives pour la limite inférieure."
@@ -16782,7 +16779,7 @@ msgstr "Période :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSampleSize)
 #: src/frontend/spreadsheet/SampleValuesDialog.cpp:105
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:142
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:159
 #, kde-format
 msgid "Sample Size:"
 msgstr "Taille de l'échantillon :"
@@ -17948,7 +17945,7 @@ msgstr "Type d'erreur en Y :"
 #: src/frontend/ui/dockwidgets/matrixdock.ui:43
 #: src/frontend/ui/dockwidgets/notebookdock.ui:65
 #: src/frontend/ui/dockwidgets/notedock.ui:43
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:132
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:149
 #: src/frontend/ui/dockwidgets/projectdock.ui:243
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:99
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:119
@@ -18001,7 +17998,7 @@ msgstr "Commentaire :"
 #: src/frontend/ui/dockwidgets/matrixdock.ui:17
 #: src/frontend/ui/dockwidgets/notebookdock.ui:33
 #: src/frontend/ui/dockwidgets/notedock.ui:17
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:115
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:132
 #: src/frontend/ui/dockwidgets/projectdock.ui:107
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:55
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:190
@@ -18542,7 +18539,7 @@ msgstr "Emplacement relatif"
 #: src/frontend/ui/dockwidgets/linewidget.ui:85
 #: src/frontend/ui/dockwidgets/livedatadock.ui:154
 #: src/frontend/ui/dockwidgets/matrixdock.ui:268
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:189
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:125
 #: src/frontend/ui/dockwidgets/valuewidget.ui:48
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:303
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:298
@@ -19318,10 +19315,9 @@ msgstr "Boîte de dialogue"
 
 #. i18n: ectx: property (text), widget (QLabel, lGraphLayer)
 #: src/frontend/ui/datasources/importoriginlayersdialog.ui:27
-#, fuzzy, kde-format
-#| msgid "Import as:"
+#, kde-format
 msgid "Import As"
-msgstr "Importer en tant que :"
+msgstr "Importer comme"
 
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #: src/frontend/ui/datasources/importprojectwidget.ui:23
@@ -20947,7 +20943,7 @@ msgstr "Bande passante :"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:160
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:92
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:102
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:116
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:135
 #: src/frontend/ui/dockwidgets/runchartdock.ui:89
@@ -21073,46 +21069,52 @@ msgstr "Couleur d'arrière plan : "
 msgid "Text color:"
 msgstr "Couleur du texte : "
 
-#. i18n: ectx: property (text), widget (QLabel, lNegativeLowerLimit)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:85
-#, kde-format
-msgid "Lower Limit < 0:"
-msgstr "Limite inférieure < 0 :"
-
-#. i18n: ectx: property (text), widget (QLabel, lLimitsMetric)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:122
-#, kde-format
-msgid "Limits based on:"
-msgstr "Limites reposant sur :"
-
 #. i18n: ectx: property (text), widget (QLabel, lData2Column)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:199
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:81
 #, fuzzy, kde-format
 #| msgid "Sample Size:"
 msgid "Sample Sizes:"
 msgstr "Taille de l'échantillon :"
 
+#. i18n: ectx: property (text), widget (QLabel, lNegativeLowerLimit)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:95
+#, kde-format
+msgid "Lower Limit < 0:"
+msgstr "Limite inférieure < 0 :"
+
+#. i18n: ectx: property (text), widget (QLabel, lLimitsMetric)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:139
+#, kde-format
+msgid "Limits based on:"
+msgstr "Limites reposant sur :"
+
+#. i18n: ectx: property (text), widget (QLabel, lExactLimits)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:206
+#, kde-format
+msgid "Exact Limits:"
+msgstr ""
+
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataLine)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:207
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:221
 #: src/frontend/ui/dockwidgets/runchartdock.ui:159
 #, kde-format
 msgid "Data Line"
 msgstr "Ligne de données"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabControlLimitLines)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:271
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:285
 #, kde-format
 msgid "Center/Limits Lines"
 msgstr "Lignes centrale et de limites"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpperLimit)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:326
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:340
 #, kde-format
 msgid "Upper Limit"
 msgstr "Limite supérieure"
 
 #. i18n: ectx: property (text), widget (QLabel, lLowerLimit)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:370
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:384
 #, kde-format
 msgid "Lower Limit"
 msgstr "Limite inférieure"
