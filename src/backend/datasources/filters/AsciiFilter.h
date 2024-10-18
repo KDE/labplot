@@ -64,6 +64,7 @@ public:
 	static size_t lineNumber(const QString& fileName, size_t maxLines = std::numeric_limits<std::size_t>::max());
 
 	static QStringList dataTypesString();
+	static QPair<QString, QString> dataTypeString(const AbstractColumn::ColumnMode mode);
 	static bool determineColumnModes(const QStringView& s, QVector<AbstractColumn::ColumnMode>& modes, QString &invalidString);
 
 
