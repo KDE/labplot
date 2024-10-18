@@ -147,7 +147,8 @@ QVector<QStringList> AsciiFilter::preview(QIODevice& device, int lines) {
 	return d->preview(device, lines);
 }
 
-QVector<QStringList> AsciiFilter::preview(const QString& fileName, int lines) {
+QVector<QStringList> AsciiFilter::
+	preview(const QString& fileName, int lines) {
 	Q_D(AsciiFilter);
 	return d->preview(fileName, lines);
 }
@@ -362,6 +363,18 @@ QStringList AsciiFilter::dataTypesString() {
 	for (const auto& m: map)
 		list.append(m.first);
 	return list;
+}
+
+QPair<QString, QString> AsciiFilter::dataTypeString(const AbstractColumn::ColumnMode mode) {
+	const auto& modeMap = AsciiFilterPrivate::modeMap();
+	for (auto it = modeMap.cbegin(), end = modeMap.cend(); it != end; it++) {
+		if (it.value().second == mode) {
+			return QPair(it.key(), it.value().first);
+		}
+	}
+	DEBUG("Mode not found");
+	assert(false); // Mode not found
+	return QPair(QStringLiteral(), QStringLiteral());
 }
 
 bool AsciiFilter::determineColumnModes(const QStringView& s, QVector<AbstractColumn::ColumnMode>& modes, QString& invalidString) {

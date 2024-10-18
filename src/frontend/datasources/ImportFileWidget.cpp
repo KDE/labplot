@@ -1707,14 +1707,14 @@ void ImportFileWidget::refreshPreview() {
 		ui.tePreview->clear();
 
 		auto filter = static_cast<AsciiFilter*>(currentFilter);
+		filter->clearLastError();
+		filter->clearLastWarnings();
 
 		DEBUG(Q_FUNC_INFO << ", Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, sourceType));
 		switch (sourceType) {
 		case LiveDataSource::SourceType::FileOrPipe: {
 			DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(file));
 			importedStrings = filter->preview(file, lines);
-			if (!filter->lastError().isEmpty())
-				Q_EMIT error(filter->lastError());
 			break;
 		}
 		case LiveDataSource::SourceType::LocalSocket: {
@@ -1723,8 +1723,8 @@ void ImportFileWidget::refreshPreview() {
 			lsocket.connectToServer(file, QLocalSocket::ReadOnly);
 			if (lsocket.waitForConnected()) {
 				DEBUG("connected to local socket " << STDSTRING(file));
-				// if (lsocket.waitForReadyRead())
-				// 	importedStrings = filter->preview(lsocket); // TODO: turn on again
+				if (lsocket.waitForReadyRead())
+					importedStrings = filter->preview(lsocket, lines);
 				DEBUG("Local socket: DISCONNECT PREVIEW");
 				lsocket.disconnectFromServer();
 				// read-only socket is disconnected immediately (no waitForDisconnected())
@@ -1738,8 +1738,8 @@ void ImportFileWidget::refreshPreview() {
 			tcpSocket.connectToHost(host(), port().toInt(), QTcpSocket::ReadOnly);
 			if (tcpSocket.waitForConnected()) {
 				DEBUG("connected to TCP socket");
-				// if (tcpSocket.waitForReadyRead())
-				// 	importedStrings = filter->preview(tcpSocket); // TODO: turn on again
+				if (tcpSocket.waitForReadyRead())
+					importedStrings = filter->preview(tcpSocket, lines);
 
 				tcpSocket.disconnectFromHost();
 			} else
@@ -1762,7 +1762,7 @@ void ImportFileWidget::refreshPreview() {
 				} else {
 					DEBUG("	has no pending data");
 				}
-				//importedStrings = filter->preview(udpSocket); // TODO: turn on again
+				importedStrings = filter->preview(udpSocket, lines);
 
 				DEBUG("UDP Socket: DISCONNECT PREVIEW, state = " << udpSocket.state());
 				udpSocket.disconnectFromHost();
@@ -1811,10 +1811,12 @@ void ImportFileWidget::refreshPreview() {
 		}
 		}
 
+		if (!filter->lastError().isEmpty())
+			Q_EMIT error(filter->lastError());
 		vectorNameList = filter->columnNames();
 		columnModes = filter->columnModes();
 		break;
-	}
+	} // AbstractFileFilter::FileType::Ascii
 	case AbstractFileFilter::FileType::Binary: {
 		ui.tePreview->clear();
 		auto filter = static_cast<BinaryFilter*>(currentFilter);
