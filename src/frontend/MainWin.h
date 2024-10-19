@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Main window of the application
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2008-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -20,6 +20,7 @@
 #include <QTimer>
 
 class AbstractAspect;
+class ActionsManager;
 class AspectTreeModel;
 class Folder;
 class ProjectExplorer;
@@ -41,10 +42,6 @@ class QToolButton;
 // class QQuickWidget;
 
 class KColorSchemeManager;
-class KHamburgerMenu;
-class KRecentFilesAction;
-class KToggleAction;
-class KToggleFullScreenAction;
 
 namespace ads {
 class CDockManager;
@@ -53,16 +50,6 @@ class CDockWidget;
 
 #ifdef HAVE_KUSERFEEDBACK
 #include <KUserFeedback/Provider>
-#endif
-
-#ifdef HAVE_PURPOSE
-namespace Purpose {
-class Menu;
-}
-#endif
-
-#ifdef HAVE_TOUCHBAR
-class KDMacTouchBar;
 #endif
 
 class MainWin : public KXmlGuiWindow {
@@ -124,93 +111,24 @@ private:
 	KUserFeedback::Provider m_userFeedbackProvider;
 #endif
 
-#ifdef Q_OS_MAC
-#ifdef HAVE_TOUCHBAR
-	KDMacTouchBar* m_touchBar;
-#endif
-	QAction* m_undoIconOnlyAction;
-	QAction* m_redoIconOnlyAction;
-#endif
-
-	KRecentFilesAction* m_recentProjectsAction;
-	QAction* m_searchAction;
-	QAction* m_saveAction;
-	QAction* m_saveAsAction;
-	QAction* m_printAction;
-	QAction* m_printPreviewAction;
-	QAction* m_importFileAction;
-	QAction* m_importFileAction_2;
-	QAction* m_importKaggleDatasetAction;
-	QAction* m_importSqlAction;
-	QAction* m_importDatasetAction;
-	QAction* m_importLabPlotAction;
-	QAction* m_importOpjAction;
-	QAction* m_exportAction;
-	// QAction* m_closeAction;
-	QAction* m_newFolderAction;
-	QAction* m_newWorkbookAction;
-	QAction* m_newSpreadsheetAction;
-	QAction* m_newMatrixAction;
-	QAction* m_newWorksheetAction;
-	QAction* m_newNotesAction;
-	QAction* m_newLiveDataSourceAction;
-	QAction* m_newProjectAction;
-	QAction* m_openProjectAction;
-	QAction* m_historyAction;
-	QAction* m_undoAction;
-	QAction* m_redoAction;
-	QAction* m_closeWindowAction;
-	QAction* m_closeAllWindowsAction;
-	QAction* m_nextWindowAction;
-	QAction* m_prevWindowAction;
-	QAction* m_newDatapickerAction;
-
-	// toggling dock widgets, status bar and full screen
-	QAction* m_projectExplorerDockAction;
-	QAction* m_propertiesDockAction;
-	QAction* m_worksheetPreviewAction;
-	KToggleAction* m_statusBarAction;
-	QAction* m_memoryInfoAction;
-	KToggleFullScreenAction* m_fullScreenAction;
-	QAction* m_configureCASAction;
-
-	// window visibility
-	QAction* m_visibilityFolderAction;
-	QAction* m_visibilitySubfolderAction;
-	QAction* m_visibilityAllAction;
-
-	// Menus
-	QMenu* m_visibilityMenu{nullptr};
-	QMenu* m_newMenu{nullptr};
-	QMenu* m_importMenu{nullptr};
-	QMenu* m_newNotebookMenu{nullptr};
-	KHamburgerMenu* m_hamburgerMenu{nullptr};
-
-#ifdef HAVE_PURPOSE
-	QAction* m_shareAction{nullptr};
-	Purpose::Menu* m_shareMenu{nullptr};
-	void fillShareMenu();
-#endif
-
 	// Docks
 	ads::CDockWidget* cursorDock{nullptr};
 
 	QStackedWidget* stackedWidget{nullptr};
 	CursorDock* cursorWidget{nullptr};
 
-	void initActions();
-	void initMenus();
 	bool warnModified();
 	void activateSubWindowForAspect(const AbstractAspect*);
 	bool save(const QString&);
-	// 	void toggleShowWidget(QWidget* widget, bool showToRight);
-	// 	void toggleHideWidget(QWidget* widget, bool hideToLeft);
 	// 	QQuickWidget* createWelcomeScreen();
 	// 	void resetWelcomeScreen();
 	void initDocks();
 	void restoreDefaultDockState() const;
 
 	Spreadsheet* activeSpreadsheet() const;
+
+	friend class ActionsManager;
+	ActionsManager* m_actionsManager{nullptr};
 
 	friend class GuiObserver;
 	GuiObserver* m_guiObserver{nullptr};
@@ -227,8 +145,6 @@ private Q_SLOTS:
 	void activatePreviousDock();
 	void dockWidgetRemoved(ads::CDockWidget*);
 	void dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now);
-	void updateGUI();
-	void updateGUIOnProjectChanges();
 	void undo();
 	void redo();
 
@@ -245,6 +161,7 @@ private Q_SLOTS:
 	void print();
 	void printPreview();
 
+	void exampleProjectsDialog();
 	void historyDialog();
 	void importFileDialog(const QString& fileName = QString());
 	void importKaggleDatasetDialog();
@@ -260,7 +177,6 @@ private Q_SLOTS:
 
 #ifdef HAVE_CANTOR_LIBS
 	void newNotebook();
-	void updateNotebookActions();
 #endif
 
 	void newFolder();
@@ -285,11 +201,6 @@ private Q_SLOTS:
 
 	void setDockVisibility(QAction*);
 	void updateDockWindowVisibility() const;
-	void toggleDockWidget(QAction*);
-	void toggleStatusBar(bool);
-	void toggleMenuBar(bool);
-	void toggleMemoryInfo();
-	void toggleFullScreen(bool);
 	void projectExplorerDockVisibilityChanged(bool);
 	void propertiesDockVisibilityChanged(bool);
 	void worksheetPreviewDockVisibilityChanged(bool);
@@ -299,10 +210,6 @@ private Q_SLOTS:
 	void focusCursorDock();
 
 	void cartesianPlotMouseModeChanged(CartesianPlot::MouseMode);
-
-#ifdef HAVE_PURPOSE
-	void shareActionFinished(const QJsonObject& output, int error, const QString& message);
-#endif
 };
 
 #endif
