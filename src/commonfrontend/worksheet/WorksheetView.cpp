@@ -116,19 +116,31 @@ WorksheetView::WorksheetView(Worksheet* worksheet)
 	// resize the view to make the complete scene visible.
 	// no need to resize the view when the project is being opened,
 	// all views will be resized to the stored values at the end
-	if (!m_worksheet->isLoading()) {
-		float w = Worksheet::convertFromSceneUnits(sceneRect().width(), Worksheet::Unit::Inch);
-		float h = Worksheet::convertFromSceneUnits(sceneRect().height(), Worksheet::Unit::Inch);
-		w *= QApplication::primaryScreen()->physicalDotsPerInchX();
-		h *= QApplication::primaryScreen()->physicalDotsPerInchY();
-		resize(w * 1.1, h * 1.1);
-	}
+	// Resize the view to make the complete scene visible.
+	const auto* win = window();
+	if (win) {
+		const auto* handle = win->windowHandle();
+		if (handle) {
+			const auto* screen = handle->screen();
+			if (!m_worksheet->isLoading()) {
+				float w = Worksheet::convertFromSceneUnits(sceneRect().width(), Worksheet::Unit::Inch);
+				float h = Worksheet::convertFromSceneUnits(sceneRect().height(), Worksheet::Unit::Inch);
+				w *= screen->physicalDotsPerInchX();
+				h *= screen->physicalDotsPerInchY();
+				resize(w * 1.1, h * 1.1);
+			}
 
-	// rescale to the original size
-	static const qreal hscale = QApplication::primaryScreen()->physicalDotsPerInchX() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
-	static const qreal vscale = QApplication::primaryScreen()->physicalDotsPerInchY() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
-	setTransform(QTransform::fromScale(hscale, vscale));
+			if (screen) {
+				// Rescale to the original size
+				static const qreal hscale = screen->physicalDotsPerInchX() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+				static const qreal vscale = screen->physicalDotsPerInchY() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+				setTransform(QTransform::fromScale(hscale, vscale));
+			}
+		} else
+			qWarning() << "Window handle is null.";
 
+	} else
+		qWarning() << "Window is null.";
 	initBasicActions();
 	installEventFilter(this);
 }
@@ -1204,31 +1216,60 @@ void WorksheetView::useViewSizeChanged(bool useViewSize) {
 }
 
 void WorksheetView::processResize() {
-	if (size() != sceneRect().size()) {
-		static const float hscale = QApplication::primaryScreen()->physicalDotsPerInchX() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
-		static const float vscale = QApplication::primaryScreen()->physicalDotsPerInchY() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
-		m_worksheet->setUndoAware(false);
-		m_worksheet->setPageRect(QRectF(0.0, 0.0, width() / hscale, height() / vscale));
-		m_worksheet->setUndoAware(true);
-	}
+	const auto* win = window();
+	if (win) {
+		const auto* handle = win->windowHandle();
+		if (handle) {
+			const auto* screen = handle->screen();
+			if (screen) {
+				if (size() != sceneRect().size()) {
+					static const float hscale = screen->physicalDotsPerInchX() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+					static const float vscale = screen->physicalDotsPerInchY() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+
+					m_worksheet->setUndoAware(false);
+					m_worksheet->setPageRect(QRectF(0.0, 0.0, width() / hscale, height() / vscale));
+					m_worksheet->setUndoAware(true);
+				}
+			} else
+				qWarning() << "Screen is null.";
+
+		} else
+			qWarning() << "Window handle is null.";
+
+	} else
+		qWarning() << "Window is null.";
 }
 
 void WorksheetView::changeZoom(QAction* action) {
 	zoomFitNoneAction->setChecked(true);
 	m_worksheet->setZoomFit(Worksheet::ZoomFit::None);
-	if (action == zoomInViewAction)
-		zoom(1);
-	else if (action == zoomOutViewAction)
-		zoom(-1);
-	else if (action == zoomOriginAction) {
-		static const float hscale = QApplication::primaryScreen()->physicalDotsPerInchX() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
-		static const float vscale = QApplication::primaryScreen()->physicalDotsPerInchY() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
-		setTransform(QTransform::fromScale(hscale, vscale));
-	}
+
+	const auto* win = window();
+	if (win) {
+		const auto* handle = win->windowHandle();
+		if (handle) {
+			const auto* screen = handle->screen();
+			if (screen) {
+				if (action == zoomInViewAction) {
+					zoom(1);
+				} else if (action == zoomOutViewAction) {
+					zoom(-1);
+				} else if (action == zoomOriginAction) {
+					static const float hscale = screen->physicalDotsPerInchX() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+					static const float vscale = screen->physicalDotsPerInchY() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+					setTransform(QTransform::fromScale(hscale, vscale));
+				}
+			} else
+				qWarning() << "Screen is null.";
+		} else
+			qWarning() << "Window handle is null.";
+	} else
+		qWarning() << "Window is null.";
 
 	currentZoomAction = action;
-	if (tbZoom)
+	if (tbZoom) {
 		tbZoom->setDefaultAction(action);
+	}
 
 	updateLabelsZoom();
 }
@@ -1281,8 +1322,23 @@ void WorksheetView::fitChanged(QAction* action) {
 
 double WorksheetView::zoomFactor() const {
 	double scale = transform().m11();
-	scale *= Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch) / QApplication::primaryScreen()->physicalDotsPerInchX();
-	return scale;
+
+	const auto* win = window();
+	if (win) {
+		const auto* handle = win->windowHandle();
+		if (handle) {
+			const auto* screen = handle->screen();
+			if (screen) {
+				scale *= Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch) / screen->physicalDotsPerInchX();
+			} else
+				qWarning() << "Screen is null.";
+		} else
+			qWarning() << "Window handle is null.";
+
+	} else
+		qWarning() << "Window is null.";
+
+	return scale; // Return the computed scale
 }
 
 void WorksheetView::updateLabelsZoom() const {
@@ -2169,23 +2225,46 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 	case ExportFormat::SVG: {
 		QSvgGenerator generator;
 		generator.setFileName(path);
-		// 		if (!generator.isValid()) {
-		// 			RESET_CURSOR;
-		// 			QMessageBox::critical(nullptr, i18n("Failed to export"), i18n("Failed to write to '%1'. Please check the path.", path));
-		// 		}
+
+		// if (!generator.isValid()) {
+		// 	RESET_CURSOR;
+		// 	QMessageBox::critical(nullptr, i18n("Failed to export"), i18n("Failed to write to '%1'. Please check the path.", path));
+		// 	break;
+		// }
+
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
 		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
-		w = w * QApplication::primaryScreen()->physicalDotsPerInchX() / 25.4;
-		h = h * QApplication::primaryScreen()->physicalDotsPerInchY() / 25.4;
 
-		generator.setSize(QSize(w, h));
-		QRectF targetRect(0, 0, w, h);
-		generator.setViewBox(targetRect);
+		const auto* win = window(); // Store the window pointer
+		if (win) {
+			const auto* handle = win->windowHandle(); // Store the window handle pointer
+			if (handle) {
+				const auto* screen = handle->screen(); // Get the screen pointer
+				if (screen) {
+					// Calculate the width and height in pixels
+					w = w * screen->physicalDotsPerInchX() / 25.4;
+					h = h * screen->physicalDotsPerInchY() / 25.4;
 
-		QPainter painter;
-		painter.begin(&generator);
-		exportPaint(&painter, targetRect, sourceRect, background);
-		painter.end();
+					generator.setSize(QSize(w, h));
+					QRectF targetRect(0, 0, w, h);
+					generator.setViewBox(targetRect);
+
+					QPainter painter;
+					painter.begin(&generator);
+					exportPaint(&painter, targetRect, sourceRect, background);
+					painter.end();
+				} else {
+					// Handle the case where screen is null
+					qWarning() << "Screen is null.";
+				}
+			} else {
+				// Handle the case where the window handle is null
+				qWarning() << "Window handle is null.";
+			}
+		} else {
+			// Handle the case where the window is null
+			qWarning() << "Window is null.";
+		}
 		break;
 	}
 	case ExportFormat::PNG:
@@ -2245,19 +2324,35 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 
 void WorksheetView::exportToPixmap(QPixmap& pixmap) {
 	const auto& sourceRect = scene()->sceneRect();
-
 	int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
 	int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
-	w = w * QApplication::primaryScreen()->physicalDotsPerInchX() / 25.4;
-	h = h * QApplication::primaryScreen()->physicalDotsPerInchX() / 25.4;
-	pixmap = pixmap.scaled(w, h);
-	QRectF targetRect(0, 0, w, h);
 
-	QPainter painter;
-	painter.begin(&pixmap);
-	painter.setRenderHint(QPainter::Antialiasing);
-	exportPaint(&painter, targetRect, sourceRect, true /* export background */, true /* export selection */);
-	painter.end();
+	const auto* win = window();
+	if (win) {
+		const auto* handle = win->windowHandle();
+		if (handle) {
+			const auto* screen = handle->screen();
+			if (screen) {
+				w = w * screen->physicalDotsPerInchX() / 25.4;
+				h = h * screen->physicalDotsPerInchY() / 25.4;
+
+				pixmap = QPixmap(w, h);
+				pixmap.fill(Qt::transparent);
+
+				QRectF targetRect(0, 0, w, h);
+				QPainter painter;
+				painter.begin(&pixmap);
+				painter.setRenderHint(QPainter::Antialiasing);
+
+				exportPaint(&painter, targetRect, sourceRect, true /* export background */, true /* export selection */);
+
+				painter.end();
+			} else
+				qWarning() << "Screen is null.";
+		} else
+			qWarning() << "Window handle is null.";
+	} else
+		qWarning() << "Window is null.";
 }
 
 bool WorksheetView::eventFilter(QObject* /*watched*/, QEvent* event) {
@@ -2301,19 +2396,37 @@ void WorksheetView::exportToClipboard() {
 
 	int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
 	int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
-	w = w * QApplication::primaryScreen()->physicalDotsPerInchX() / 25.4;
-	h = h * QApplication::primaryScreen()->physicalDotsPerInchY() / 25.4;
-	QImage image(QSize(w, h), QImage::Format_ARGB32_Premultiplied);
-	image.fill(Qt::transparent);
-	QRectF targetRect(0, 0, w, h);
+	const auto* win = window(); // Store the window pointer
+	if (win) {
+		const auto* handle = win->windowHandle(); // Store the window handle pointer
+		if (handle) {
+			const auto* screen = handle->screen(); // Get the screen pointer
+			if (screen) {
+				// Calculate the width and height in pixels
+				w = w * screen->physicalDotsPerInchX() / 25.4;
+				h = h * screen->physicalDotsPerInchY() / 25.4;
 
-	QPainter painter;
-	painter.begin(&image);
-	painter.setRenderHint(QPainter::Antialiasing);
-	exportPaint(&painter, targetRect, sourceRect, true);
-	painter.end();
+				// Create an image with the calculated size
+				QImage image(QSize(w, h), QImage::Format_ARGB32_Premultiplied);
+				image.fill(Qt::transparent);
+				QRectF targetRect(0, 0, w, h);
 
-	QApplication::clipboard()->setImage(image, QClipboard::Clipboard);
+				// Use a QPainter to draw onto the image
+				QPainter painter;
+				painter.begin(&image);
+				painter.setRenderHint(QPainter::Antialiasing);
+				exportPaint(&painter, targetRect, sourceRect, true); // Export with background
+				painter.end();
+				// Set the image to the clipboard
+				QApplication::clipboard()->setImage(image, QClipboard::Clipboard);
+			} else
+				qWarning() << "Screen is null.";
+
+		} else
+			qWarning() << "Window handle is null.";
+
+	} else
+		qWarning() << "Window is null.";
 }
 
 void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool background, const bool selection) {
