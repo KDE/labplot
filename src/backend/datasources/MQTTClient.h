@@ -12,33 +12,23 @@
 
 #include "backend/core/Folder.h"
 
-#include <QMap>
-#include <QVector>
 #include <QtMqtt/QMqttClient>
 #include <QtMqtt/QMqttMessage>
-#include <QtMqtt/QMqttSubscription>
 #include <QtMqtt/QMqttTopicFilter>
-#include <QtMqtt/QMqttTopicName>
 
 class AsciiFilter;
 class MQTTSubscription;
 class MQTTTopic;
-class QAction;
 class QTimer;
-class QString;
 
 class MQTTClient : public Folder {
 	Q_OBJECT
 
 public:
 	enum class UpdateType { TimeInterval = 0, NewData };
-
 	enum class ReadingType { ContinuousFixed = 0, FromEnd, TillEnd };
-
 	enum class WillMessageType { OwnMessage = 0, Statistics, LastMessage };
-
 	enum class WillUpdateType { TimePeriod = 0, OnClick };
-
 	enum class WillStatisticsType {
 		NoStatistics = -1,
 		Minimum,
