@@ -35,6 +35,7 @@ void AsciiFilterTest::initialization() {
 		p.automaticSeparatorDetection = false;
 		p.columnNamesRaw = QStringLiteral("Column1, Column2");
 		p.columnModesString = QStringLiteral("Int, Int");
+		p.headerEnabled = false;
 
 		QCOMPARE(filter.initialize(p), AsciiFilter::Status::Success);
 	}
@@ -47,6 +48,7 @@ void AsciiFilterTest::initialization() {
 		p.automaticSeparatorDetection = false;
 		p.columnNamesRaw = QStringLiteral("Column1, Column2");
 		p.columnModesString = QStringLiteral("Int, Int, Double");
+		p.headerEnabled = false;
 
 		QVERIFY(filter.initialize(p) != AsciiFilter::Status::Success);
 	}
@@ -59,6 +61,7 @@ void AsciiFilterTest::initialization() {
 		p.automaticSeparatorDetection = false;
 		p.columnNamesRaw = QStringLiteral("Column1, Column2, Column3");
 		p.columnModesString = QStringLiteral("Int, Int");
+		p.headerEnabled = false;
 
 		QVERIFY(filter.initialize(p) != AsciiFilter::Status::Success);
 	}
@@ -71,6 +74,7 @@ void AsciiFilterTest::initialization() {
 		p.automaticSeparatorDetection = false;
 		p.columnNamesRaw = QStringLiteral();
 		p.columnModesString = QStringLiteral("Int, Int");
+		p.headerEnabled = false;
 
 		QVERIFY(filter.initialize(p) != AsciiFilter::Status::Success);
 	}
@@ -83,6 +87,7 @@ void AsciiFilterTest::initialization() {
 		p.automaticSeparatorDetection = false;
 		p.columnNamesRaw = QStringLiteral("Column1, Column2");
 		p.columnModesString = QStringLiteral();
+		p.headerEnabled = false;
 
 		QVERIFY(filter.initialize(p) != AsciiFilter::Status::Success);
 	}
@@ -194,6 +199,29 @@ void AsciiFilterTest::read_HeaderDisabled_NotMatchingImport() {
 	p.headerEnabled = false;
 	p.columnNamesRaw = QStringLiteral("Column1, Column2, Column3"); // 2 expected
 	p.columnModesString = QStringLiteral("Int, Int, Int"); // 2 expected
+	filter.setProperties(p);
+
+	QVERIFY(filter.lastError().isEmpty());
+	filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	QVERIFY(!filter.lastError().isEmpty());
+}
+
+void AsciiFilterTest::read_HeaderDisabled_tooLessColumnNames() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+
+	QStringList fileContent = {
+		QStringLiteral("1;5"),
+		QStringLiteral("2;6"),
+		QStringLiteral("3;7"),
+	};
+	QString savePath;
+	SAVE_FILE("testfile", fileContent);
+
+	auto p = filter.properties();
+	p.headerEnabled = false;
+	p.columnNamesRaw = QStringLiteral("Column1"); // 2 expected
+	p.columnModesString = QStringLiteral("Int, Int");
 	filter.setProperties(p);
 
 	QVERIFY(filter.lastError().isEmpty());
@@ -1185,7 +1213,6 @@ void AsciiFilterTest::testCreateIndex() {
 	p.automaticSeparatorDetection = true;
 	p.separator = QStringLiteral(",");
 	p.headerEnabled = false;
-	p.headerLine = 1;
 	p.intAsDouble = false;
 	p.createIndex = true;
 	p.columnNamesRaw = QStringLiteral("x,y,z");

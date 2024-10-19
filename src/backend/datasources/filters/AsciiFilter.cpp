@@ -485,22 +485,14 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 		}
 	}
 
+	const auto& lineSplit = determineColumns(line, properties);
+	const int numberColumns = lineSplit.count();
+
 	// Determine end of columns
 	if (properties.endColumn < 0) {
 		// properties.headerEnabled = true: Determine the column count from the number of columns in the file
 		// properties.headerEnabled = false: Use number of columns specified
-		properties.endColumn = properties.startColumn + properties.columnNames.count();
-	}
-	const int numberColumns = properties.columnNames.count();
-
-	// add time stamp and index column
-	if (properties.createTimestamp) {
-		properties.columnNames.prepend(i18n("Timestamp"));
-		properties.columnModes.prepend(AbstractColumn::ColumnMode::DateTime);
-	}
-	if (properties.createIndex) {
-		properties.columnNames.prepend(i18n("Index"));
-		properties.columnModes.prepend(AbstractColumn::ColumnMode::Integer);
+		properties.endColumn = properties.startColumn + numberColumns;
 	}
 
 	int startDataRow = properties.startRow;
@@ -553,6 +545,22 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 		QString invalidString;
 		if (!determineColumnModes(properties.columnModesString, properties.columnModes, invalidString))
 			return Status::ColumnModeDeterminationFailed;
+	}
+
+	if (properties.columnModes.size() != lineSplit.size())
+		return Status::InvalidNumberDataColumns;
+
+	if (properties.columnNames.size() != lineSplit.size())
+		return Status::InvalidNumberColumnNames;
+
+	// add time stamp and index column
+	if (properties.createTimestamp) {
+		properties.columnNames.prepend(i18n("Timestamp"));
+		properties.columnModes.prepend(AbstractColumn::ColumnMode::DateTime);
+	}
+	if (properties.createIndex) {
+		properties.columnNames.prepend(i18n("Index"));
+		properties.columnModes.prepend(AbstractColumn::ColumnMode::Integer);
 	}
 
 	initialized = true;

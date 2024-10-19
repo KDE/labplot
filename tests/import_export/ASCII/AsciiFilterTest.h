@@ -25,6 +25,7 @@ private Q_SLOTS:
 	void read_HeaderDisabled_tooManyColumnModes();
 
 	void read_HeaderDisabled_NotMatchingImport();
+	void read_HeaderDisabled_tooLessColumnNames();
 
 	// empty and sparse files
 	void testEmptyFileAppend();
