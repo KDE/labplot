@@ -467,6 +467,8 @@ void LiveDataSource::read() {
 	if (m_reading)
 		return;
 
+	static bool firstRead = true;
+
 	m_reading = true;
 
 	// initialize the device (file, socket, serial port) when calling this function for the first time
@@ -581,8 +583,8 @@ void LiveDataSource::read() {
 		DEBUG("	Reading from UDP socket. state = " << m_udpSocket->state());
 
 		// reading data here
-		// if (m_fileType == AbstractFileFilter::FileType::Ascii)
-		// 	static_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this); // TODO: turn on again
+		if (m_fileType == AbstractFileFilter::FileType::Ascii)
+			static_cast<AsciiFilter*>(m_filter)->readFromDevice(*m_device, this, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, 0, sampleSize(), m_keepNValues);
 		break;
 	case SourceType::LocalSocket:
 		DEBUG("	Reading from local socket. state before abort = " << m_localSocket->state());
@@ -596,10 +598,14 @@ void LiveDataSource::read() {
 	case SourceType::SerialPort:
 		DEBUG("	Reading from serial port");
 #ifdef HAVE_QTSERIALPORT
-
+		qint64 from = 0;
+		if (firstRead) {
+			from = 1; // skip first line, because it could be that it is not complete and then parsed invalid
+			firstRead = false;
+		}
 		// reading data here
-		// if (m_fileType == AbstractFileFilter::FileType::Ascii)
-		// 	static_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this); // TODO: turn on again
+		if (m_fileType == AbstractFileFilter::FileType::Ascii)
+			static_cast<AsciiFilter*>(m_filter)->readFromDevice(*m_device, this, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, from, sampleSize(), m_keepNValues);
 #endif
 		break;
 	case SourceType::MQTT:
