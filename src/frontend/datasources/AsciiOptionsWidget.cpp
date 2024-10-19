@@ -114,29 +114,29 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent)
 
 	info = i18n("Custom column modes, comma separated");
 	ui.kleColumnMode->setToolTip(info);
-	const auto& sInt = AsciiFilter::dataTypeString(AbstractColumn::ColumnMode::Integer);
-	const auto& sInt64 = AsciiFilter::dataTypeString(AbstractColumn::ColumnMode::BigInt);
-	const auto& sDouble = AsciiFilter::dataTypeString(AbstractColumn::ColumnMode::Double);
-	const auto& sDatetime = AsciiFilter::dataTypeString(AbstractColumn::ColumnMode::DateTime);
-	const auto& sText = AsciiFilter::dataTypeString(AbstractColumn::ColumnMode::Text);
-	ui.kleColumnMode->setWhatsThis(i18n(
-		"If not empty, the number of columns must match the number of column names if provided and it must match the number of  columns in the imported file"
-		"Datatypes:"
-		"<table>"
-		"<tr><td>%1 or %2</td><td>Integer number with 32bit size (−2.147.483.648 .. 2.147.483.647).</td></tr>"
-		"<tr><td>%3 or %4</td><td>Integer number with 64bit size (−9.223.372.036.854.775.808 .. 9.223.372.036.854.775.807).</td></tr>"
-		"<tr><td>%5 or %6</td><td>Floating point number 64bit size. Resolution of around 16 digits.</td></tr>"
-		"<tr><td>%7 or %8</td><td>Datetime with the format from the datetime text box if not empty, otherwise automatically determined.</td></tr>"
-		"<tr><td>%9 or %10</td><td>A text.</td></tr>"
-		"</table>")
-			.arg(sInt.first).arg(sInt.second)
-		   .arg(sInt64.first).arg(sInt64.second)
-		   .arg(sDouble.first).arg(sDouble.second)
-		   .arg(sDatetime.first).arg(sDatetime.second)
-		   .arg(sText.first).arg(sText.second)
-			);
+
 	// https://en.wikipedia.org/wiki/Double-precision_floating-point_format
 	// 15.955 digits
+	info = i18n(
+			   "If not empty, the number of columns must match the number of column names if provided and it must match the number of  columns in the imported file"
+			   "Datatypes:"
+			   "<table>"
+			   "<tr><td>%1</td><td>Integer number with 32bit size (−2.147.483.648 .. 2.147.483.647).</td></tr>"
+			   "<tr><td>%2</td><td>Integer number with 64bit size (−9.223.372.036.854.775.808 .. 9.223.372.036.854.775.807).</td></tr>"
+			   "<tr><td>%3</td><td>Floating point number 64bit size. Resolution of around 16 digits.</td></tr>"
+			   "<tr><td>%4</td><td>Datetime with the format from the datetime text box if not empty, otherwise automatically determined.</td></tr>"
+			   "<tr><td>%5</td><td>A text.</td></tr>"
+			   "</table>");
+	using Mode = AbstractColumn::ColumnMode;
+	const QVector<Mode> vec = {Mode::Integer, Mode::BigInt, Mode::Double, Mode::DateTime, Mode::Text};
+	for (const auto m: vec) {
+		const auto& s = AsciiFilter::dataTypeString(m);
+		if (s.first == s.second)
+			info = info.arg(s.first);
+		else
+			info = info.arg(s.first + i18n("or") + s.second);
+	}
+	ui.kleColumnMode->setWhatsThis(info);
 
 	connect(ui.chbHeader, &QCheckBox::toggled, this, &AsciiOptionsWidget::headerChanged);
 	connect(ui.sbHeaderLine, QOverload<int>::of(&QSpinBox::valueChanged), this, &AsciiOptionsWidget::headerLineChanged);

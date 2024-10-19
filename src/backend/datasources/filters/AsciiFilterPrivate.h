@@ -27,6 +27,7 @@ public:
 	static QMap<QString, QPair<QString, AbstractColumn::ColumnMode> > modeMap();
 	static bool determineColumnModes(const QStringView& s, QVector<AbstractColumn::ColumnMode> &modes, QString &invalidString);
 	static QString convertTranslatedColumnModesToNative(const QStringView s);
+	void setLastError(AsciiFilter::Status);
 
 	AsciiFilter::Properties properties;
 	bool initialized{false};
@@ -39,7 +40,6 @@ private:
 	static QVector<AbstractColumn::ColumnMode> determineColumnModes(const QVector<QStringList>& values, const AsciiFilter::Properties& properties, QString &dateTimeFormat);
 	AsciiFilter::Status getLine(QIODevice& device, QString& line);
 	static QString statusToString(AsciiFilter::Status);
-	void setLastError(AsciiFilter::Status);
 
 	// Copied from CANFilterPrivate
 	// TODO: think about moving it to a common place
@@ -93,6 +93,7 @@ private:
 
 	DataContainer m_DataContainer;
 	int m_index{1}; // Index counter used when a index column was prepended
+	AsciiFilter::Status lastStatus{AsciiFilter::Status::Success};
 
 private:
 	AsciiFilter* const q;

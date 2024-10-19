@@ -134,6 +134,7 @@ qint64 AsciiFilter::readFromDevice(QIODevice& device, AbstractDataSource* dataSo
 	Q_D(AsciiFilter);
 	qint64 bytes_read;
 	const auto status = d->readFromDevice(device, dataSource, columnImportMode, rowImportMode, from, lines, keepNRows, bytes_read);
+	d->setLastError(status);
 	// TODO: do something with it!
 	return bytes_read;
 }
@@ -175,6 +176,8 @@ QString AsciiFilter::statusToString(Status e) {
 		return i18n("Unable to determine the separator");
 	case Status::InvalidNumberDataColumns:
 		return i18n("Invalid number of data columns");
+	case Status::InvalidNumberColumnNames:
+		return i18n("Invalid number of column names");
 	case Status::MatrixUnsupportedColumnMode:
 		return i18n("Matrix: Unsupported Column Mode");
 	case Status::NotEnoughMemory:
@@ -1149,7 +1152,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice& device, int lines) {
 	const auto status = readFromDevice(device, &spreadsheet, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Replace, 0, lines, 0, bytes_read);
 	QVector<QStringList> p;
 	if (status != AsciiFilter::Status::Success) {
-		q->setLastError(AsciiFilter::statusToString(status));
+		setLastError(status);
 		return p;
 	}
 
@@ -1183,6 +1186,9 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice& device, int lines) {
 }
 
 void AsciiFilterPrivate::setLastError(AsciiFilter::Status status) {
+	lastStatus = status;
+	if (status == AsciiFilter::Status::Success)
+		return;
 	const auto s = AsciiFilter::statusToString(status);
 	q->setLastError(s);
 }

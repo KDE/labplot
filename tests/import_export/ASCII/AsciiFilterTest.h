@@ -17,6 +17,15 @@ class AsciiFilterTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:
+	void initialization();
+	void read_HeaderEnabled_tooLessColumnModes();
+	void read_HeaderEnabled_tooManyColumnModes();
+
+	void read_HeaderDisabled_tooLessColumnModes();
+	void read_HeaderDisabled_tooManyColumnModes();
+
+	void read_HeaderDisabled_NotMatchingImport();
+
 	// empty and sparse files
 	void testEmptyFileAppend();
 	void testEmptyFilePrepend();

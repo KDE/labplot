@@ -24,14 +24,14 @@ class BufferReader: public QIODevice {
 public:
 	BufferReader(const QStringView& buffer);
 
-	bool isSequential() const;
-	bool atEnd() const;
+	bool isSequential() const override;
+	bool atEnd() const override;
 	bool open(QIODevice::OpenModeFlag mode);
-	bool canReadLine() const;
+	bool canReadLine() const override;
 	QByteArray readLine(qint64 maxlen = 0);
 	qint64 readData(char *, qint64) override;
 	qint64 readLineData(char *, qint64) override;
-	qint64 writeData(const char *, qint64);
+	qint64 writeData(const char *, qint64) override;
 
 private:
 	const QStringView m_message;
@@ -45,7 +45,7 @@ public:
 	~AsciiFilter();
 
 	enum class Status { Success, UnableToOpenDevice, DeviceAtEnd, NotEnoughRowsSelected, UnableToReadLine, SeparatorDeterminationFailed,
-						SequentialDeviceHeaderEnabled, SequentialDeviceAutomaticSeparatorDetection, SequentialDeviceNoColumnModes, InvalidNumberDataColumns,
+						SequentialDeviceHeaderEnabled, SequentialDeviceAutomaticSeparatorDetection, SequentialDeviceNoColumnModes, InvalidNumberDataColumns, InvalidNumberColumnNames,
 						NotEnoughMemory, UnsupportedDataSource, UnableParsingHeader, MatrixUnsupportedColumnMode, NoDateTimeFormat, HeaderDetectionNotAllowed, SeparatorDetectionNotAllowed, InvalidSeparator, SequentialDeviceUninitialized, NoColumns, ColumnModeDeterminationFailed, WrongEndColumn, WrongEndRow };
 
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode columnImportMode = ImportMode::Replace) override;

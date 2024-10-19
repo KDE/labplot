@@ -27,6 +27,180 @@
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
 
+void AsciiFilterTest::initialization() {
+	{
+		AsciiFilter filter;
+		auto p = filter.properties();
+
+		p.automaticSeparatorDetection = false;
+		p.columnNamesRaw = QStringLiteral("Column1, Column2");
+		p.columnModesString = QStringLiteral("Int, Int");
+
+		QCOMPARE(filter.initialize(p), AsciiFilter::Status::Success);
+	}
+
+	// One column mode to much
+	{
+		AsciiFilter filter;
+		auto p = filter.properties();
+
+		p.automaticSeparatorDetection = false;
+		p.columnNamesRaw = QStringLiteral("Column1, Column2");
+		p.columnModesString = QStringLiteral("Int, Int, Double");
+
+		QVERIFY(filter.initialize(p) != AsciiFilter::Status::Success);
+	}
+
+	// On column name to much
+	{
+		AsciiFilter filter;
+		auto p = filter.properties();
+
+		p.automaticSeparatorDetection = false;
+		p.columnNamesRaw = QStringLiteral("Column1, Column2, Column3");
+		p.columnModesString = QStringLiteral("Int, Int");
+
+		QVERIFY(filter.initialize(p) != AsciiFilter::Status::Success);
+	}
+
+	// No column names
+	{
+		AsciiFilter filter;
+		auto p = filter.properties();
+
+		p.automaticSeparatorDetection = false;
+		p.columnNamesRaw = QStringLiteral();
+		p.columnModesString = QStringLiteral("Int, Int");
+
+		QVERIFY(filter.initialize(p) != AsciiFilter::Status::Success);
+	}
+
+	// No column modes
+	{
+		AsciiFilter filter;
+		auto p = filter.properties();
+
+		p.automaticSeparatorDetection = false;
+		p.columnNamesRaw = QStringLiteral("Column1, Column2");
+		p.columnModesString = QStringLiteral();
+
+		QVERIFY(filter.initialize(p) != AsciiFilter::Status::Success);
+	}
+}
+
+void AsciiFilterTest::read_HeaderEnabled_tooLessColumnModes() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+
+	QStringList fileContent = {
+		QStringLiteral("1;5"),
+		QStringLiteral("2;6"),
+		QStringLiteral("3;7"),
+	};
+	QString savePath;
+	SAVE_FILE("testfile", fileContent);
+
+	auto p = filter.properties();
+	p.headerEnabled = true;
+	p.columnModesString = QStringLiteral("Int"); // Too less, 2 expected
+	filter.setProperties(p);
+
+	QVERIFY(filter.lastError().isEmpty());
+	filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	QVERIFY(!filter.lastError().isEmpty());
+}
+
+void AsciiFilterTest::read_HeaderEnabled_tooManyColumnModes() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+
+	QStringList fileContent = {
+		QStringLiteral("1;5"),
+		QStringLiteral("2;6"),
+		QStringLiteral("3;7"),
+	};
+	QString savePath;
+	SAVE_FILE("testfile", fileContent);
+
+	auto p = filter.properties();
+	p.headerEnabled = true;
+	p.columnModesString = QStringLiteral("Int, Int, Int"); // 2 expected
+	filter.setProperties(p);
+
+	QVERIFY(filter.lastError().isEmpty());
+	filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	QVERIFY(!filter.lastError().isEmpty());
+}
+
+void AsciiFilterTest::read_HeaderDisabled_tooLessColumnModes() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+
+	QStringList fileContent = {
+		QStringLiteral("1;5"),
+		QStringLiteral("2;6"),
+		QStringLiteral("3;7"),
+	};
+	QString savePath;
+	SAVE_FILE("testfile", fileContent);
+
+	auto p = filter.properties();
+	p.headerEnabled = false;
+	p.columnNamesRaw = QStringLiteral("Column1, Column2");
+	p.columnModesString = QStringLiteral("Int"); // 2 expected
+	filter.setProperties(p);
+
+	QVERIFY(filter.lastError().isEmpty());
+	filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	QVERIFY(!filter.lastError().isEmpty());
+}
+
+void AsciiFilterTest::read_HeaderDisabled_tooManyColumnModes() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+
+	QStringList fileContent = {
+		QStringLiteral("1;5"),
+		QStringLiteral("2;6"),
+		QStringLiteral("3;7"),
+	};
+	QString savePath;
+	SAVE_FILE("testfile", fileContent);
+
+	auto p = filter.properties();
+	p.headerEnabled = false;
+	p.columnNamesRaw = QStringLiteral("Column1, Column2");
+	p.columnModesString = QStringLiteral("Int, Int, Int"); // 2 expected
+	filter.setProperties(p);
+
+	QVERIFY(filter.lastError().isEmpty());
+	filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	QVERIFY(!filter.lastError().isEmpty());
+}
+
+void AsciiFilterTest::read_HeaderDisabled_NotMatchingImport() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+
+	QStringList fileContent = {
+		QStringLiteral("1;5"),
+		QStringLiteral("2;6"),
+		QStringLiteral("3;7"),
+	};
+	QString savePath;
+	SAVE_FILE("testfile", fileContent);
+
+	auto p = filter.properties();
+	p.headerEnabled = false;
+	p.columnNamesRaw = QStringLiteral("Column1, Column2, Column3"); // 2 expected
+	p.columnModesString = QStringLiteral("Int, Int, Int"); // 2 expected
+	filter.setProperties(p);
+
+	QVERIFY(filter.lastError().isEmpty());
+	filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	QVERIFY(!filter.lastError().isEmpty());
+}
+
 // ##############################################################################
 // #################  handling of empty and sparse files ########################
 // ##############################################################################
