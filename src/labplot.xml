@@ -18,6 +18,7 @@
     <comment xml:lang="sv">Labplot projektfil</comment>
     <comment xml:lang="tr">LabPlot Proje Dosyası</comment>
     <comment xml:lang="uk">файл проекту LabPlot</comment>
+    <comment xml:lang="zh_CN">LabPlot 工程文件</comment>
     <glob pattern="*.lml"/>
   </mime-type>
 </mime-info>
