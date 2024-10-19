@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-18 01:45+0000\n"
-"PO-Revision-Date: 2024-10-17 07:05+0200\n"
+"POT-Creation-Date: 2024-10-19 01:49+0000\n"
+"PO-Revision-Date: 2024-10-18 06:47+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -8905,9 +8905,9 @@ msgstr "%1: spremeni negativno spodnjo mejo"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:435
 #, fuzzy, kde-format
-#| msgid "%1: change negative lower limit"
-msgid "%1: change exact limtis"
-msgstr "%1: spremeni negativno spodnjo mejo"
+#| msgid "%1: change exact limtis"
+msgid "%1: change exact limits"
+msgstr "%1: spremeni natančne meje"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:587
 #, kde-format
@@ -20973,7 +20973,7 @@ msgstr "Omejitve osnovanje na:"
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:206
 #, kde-format
 msgid "Exact Limits:"
-msgstr ""
+msgstr "Natančne meje:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataLine)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:221

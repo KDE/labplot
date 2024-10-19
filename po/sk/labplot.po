@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-18 01:45+0000\n"
+"POT-Creation-Date: 2024-10-19 01:49+0000\n"
 "PO-Revision-Date: 2019-07-11 18:46+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -9487,7 +9487,7 @@ msgstr "%1: zmeniť komentár"
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:435
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
-msgid "%1: change exact limtis"
+msgid "%1: change exact limits"
 msgstr "%1: zmeniť komentár"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:587

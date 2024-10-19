@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-18 01:45+0000\n"
+"POT-Creation-Date: 2024-10-19 01:49+0000\n"
 "PO-Revision-Date: 2024-04-22 16:05\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -125,7 +125,7 @@ msgstr ""
 #: src/backend/core/AbstractAspect.cpp:833
 #, kde-format
 msgid "%1: duplicated '%2'"
-msgstr "%1：已创建“%2”的副本"
+msgstr "%1：创建“%2”的副本"
 
 #: src/backend/core/AbstractAspect.cpp:834
 #, kde-format
@@ -189,62 +189,62 @@ msgstr "无"
 #: src/backend/core/AbstractColumn.cpp:172
 #, kde-format
 msgid "X-Uncertainty"
-msgstr "X-不确定度"
+msgstr "X 不确定度"
 
 #: src/backend/core/AbstractColumn.cpp:174
 #, kde-format
 msgid "X-Error"
-msgstr "X-误差"
+msgstr "X 误差"
 
 #: src/backend/core/AbstractColumn.cpp:178
 #, kde-format
 msgid "X-Uncertainty +"
-msgstr "X-不确定度 +"
+msgstr "X 不确定度 +"
 
 #: src/backend/core/AbstractColumn.cpp:180
 #, kde-format
 msgid "X-Error +"
-msgstr "X-误差 +"
+msgstr "X 误差 +"
 
 #: src/backend/core/AbstractColumn.cpp:184
 #, kde-format
 msgid "X-Uncertainty -"
-msgstr "X-不确定度 −"
+msgstr "X 不确定度 −"
 
 #: src/backend/core/AbstractColumn.cpp:186
 #, kde-format
 msgid "X-Error -"
-msgstr "X-误差 −"
+msgstr "X 误差 −"
 
 #: src/backend/core/AbstractColumn.cpp:190
 #, kde-format
 msgid "Y-Uncertainty"
-msgstr "Y-不确定度"
+msgstr "Y 不确定度"
 
 #: src/backend/core/AbstractColumn.cpp:192
 #, kde-format
 msgid "Y-Error"
-msgstr "Y-误差"
+msgstr "Y 误差"
 
 #: src/backend/core/AbstractColumn.cpp:196
 #, kde-format
 msgid "Y-Uncertainty +"
-msgstr "Y-不确定度 +"
+msgstr "Y 不确定度 +"
 
 #: src/backend/core/AbstractColumn.cpp:198
 #, kde-format
 msgid "Y-Error +"
-msgstr "Y-误差 +"
+msgstr "Y 误差 +"
 
 #: src/backend/core/AbstractColumn.cpp:202
 #, kde-format
 msgid "Y-Uncertainty -"
-msgstr "Y-不确定度 −"
+msgstr "Y 不确定度 −"
 
 #: src/backend/core/AbstractColumn.cpp:204
 #, kde-format
 msgid "Y-Error -"
-msgstr "Y-误差 −"
+msgstr "Y 误差 −"
 
 #: src/backend/core/AbstractColumn.cpp:223
 #: src/backend/datasources/filters/MatioFilter.cpp:382
@@ -363,12 +363,12 @@ msgstr "导入数据"
 #: src/frontend/MainWin.cpp:655
 #, kde-format
 msgid "From File..."
-msgstr "来自文件…"
+msgstr "来自文件..."
 
 #: src/backend/core/AbstractPart.cpp:118 src/frontend/MainWin.cpp:667
 #, kde-format
 msgid "From SQL Database..."
-msgstr "来自 SQL 数据库…"
+msgstr "来自 SQL 数据库..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbExport)
 #: src/backend/core/AbstractPart.cpp:127
@@ -925,18 +925,18 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Datapicker Image"
-msgstr ""
+msgstr "打印数据采集器图像"
 
 #: src/backend/datapicker/DatapickerImage.cpp:312
 #: src/backend/datapicker/DatapickerImage.cpp:367
 #, kde-format
 msgid "%1: upload image"
-msgstr ""
+msgstr "%1：上传图像"
 
 #: src/backend/datapicker/DatapickerImage.cpp:366
 #, kde-format
 msgid "%1: upload new image"
-msgstr ""
+msgstr "%1：上传新图像"
 
 #: src/backend/datapicker/DatapickerImage.cpp:386
 #: src/backend/worksheet/WorksheetElement.cpp:836
@@ -968,7 +968,7 @@ msgstr ""
 #: src/backend/worksheet/Image.cpp:413
 #, kde-format
 msgid "Failed to read image data"
-msgstr ""
+msgstr "读取图像数据失败"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:218
 #: src/backend/worksheet/InfoElement.cpp:841
@@ -1570,12 +1570,12 @@ msgstr ""
 #: src/backend/datasources/filters/ImageFilter.cpp:36
 #, kde-format
 msgid "Matrix (grayscale)"
-msgstr "矩阵（灰度）"
+msgstr "矩阵 (灰度)"
 
 #: src/backend/datasources/filters/ImageFilter.cpp:36
 #, kde-format
 msgid "XYZ (grayscale)"
-msgstr "XYZ（灰度）"
+msgstr "XYZ (灰度)"
 
 #: src/backend/datasources/filters/ImageFilter.cpp:36
 #, kde-format
@@ -2392,57 +2392,57 @@ msgstr ""
 #: src/backend/gsl/constants.cpp:12
 #, kde-format
 msgid "Mathematical constants"
-msgstr ""
+msgstr "数学常数"
 
 #: src/backend/gsl/constants.cpp:14
 #, kde-format
 msgid "Fundamental constants"
-msgstr ""
+msgstr "基本常量"
 
 #: src/backend/gsl/constants.cpp:16
 #, kde-format
 msgid "Astronomy and Astrophysics"
-msgstr "天文学和天体物理学"
+msgstr "天文学与天体物理学"
 
 #: src/backend/gsl/constants.cpp:18
 #, kde-format
 msgid "Atomic and Nuclear Physics"
-msgstr ""
+msgstr "原子与核物理学"
 
 #: src/backend/gsl/constants.cpp:20
 #, kde-format
 msgid "Measurement of Time"
-msgstr ""
+msgstr "时间度量"
 
 #: src/backend/gsl/constants.cpp:22
 #, kde-format
 msgid "Imperial Units"
-msgstr ""
+msgstr "英制单位"
 
 #: src/backend/gsl/constants.cpp:24
 #, kde-format
 msgid "Speed and Nautical Units"
-msgstr ""
+msgstr "速度与航海单位"
 
 #: src/backend/gsl/constants.cpp:26
 #, kde-format
 msgid "Printers Units"
-msgstr ""
+msgstr "打印机单位"
 
 #: src/backend/gsl/constants.cpp:28
 #, kde-format
 msgid "Volume, Area and Length"
-msgstr ""
+msgstr "体积、面积与长度"
 
 #: src/backend/gsl/constants.cpp:30
 #, kde-format
 msgid "Mass and Weight"
-msgstr ""
+msgstr "质量与重量"
 
 #: src/backend/gsl/constants.cpp:32
 #, kde-format
 msgid "Thermal Energy and Power"
-msgstr ""
+msgstr "热量与功率"
 
 #: src/backend/gsl/constants.cpp:34
 #, kde-format
@@ -2452,48 +2452,48 @@ msgstr "压强"
 #: src/backend/gsl/constants.cpp:36
 #, kde-format
 msgid "Viscosity"
-msgstr ""
+msgstr "黏度"
 
 #: src/backend/gsl/constants.cpp:38
 #, kde-format
 msgid "Light and Illumination"
-msgstr ""
+msgstr "光学"
 
 #: src/backend/gsl/constants.cpp:40
 #, kde-format
 msgid "Radioactivity"
-msgstr ""
+msgstr "放射性"
 
 #: src/backend/gsl/constants.cpp:42
 #, kde-format
 msgid "Force and Energy"
-msgstr ""
+msgstr "力与能量"
 
 #: src/backend/gsl/constants.cpp:46
 #, kde-format
 msgid "Unknown Constant"
-msgstr ""
+msgstr "未知常量"
 
 #. i18n("Mathematical constants"));
 #: src/backend/gsl/constants.cpp:57
 #, kde-format
 msgid "Base of exponentials"
-msgstr ""
+msgstr "自然对数的底"
 
 #: src/backend/gsl/constants.cpp:58
 #, kde-format
 msgid "Pi"
-msgstr "Pi"
+msgstr "圆周率"
 
 #: src/backend/gsl/constants.cpp:59
 #, kde-format
 msgid "Euler's constant"
-msgstr ""
+msgstr "欧拉常数"
 
 #: src/backend/gsl/constants.cpp:60
 #, kde-format
 msgid "Not a number"
-msgstr ""
+msgstr "NaN"
 
 #. i18n("Fundamental constants"));
 #: src/backend/gsl/constants.cpp:63
@@ -2504,52 +2504,52 @@ msgstr "光速"
 #: src/backend/gsl/constants.cpp:64
 #, kde-format
 msgid "Vacuum permeability"
-msgstr ""
+msgstr "真空磁导率"
 
 #: src/backend/gsl/constants.cpp:65
 #, kde-format
 msgid "Vacuum permittivity"
-msgstr ""
+msgstr "真空介电常量"
 
 #: src/backend/gsl/constants.cpp:66
 #, kde-format
 msgid "Planck constant"
-msgstr ""
+msgstr "普朗克常量"
 
 #: src/backend/gsl/constants.cpp:67
 #, kde-format
 msgid "Reduced Planck constant"
-msgstr ""
+msgstr "约化普朗克常量"
 
 #: src/backend/gsl/constants.cpp:68
 #, kde-format
 msgid "Avogadro constant"
-msgstr ""
+msgstr "阿伏伽德罗常量"
 
 #: src/backend/gsl/constants.cpp:69
 #, kde-format
 msgid "Faraday"
-msgstr ""
+msgstr "法拉第常量"
 
 #: src/backend/gsl/constants.cpp:70
 #, kde-format
 msgid "Boltzmann constant"
-msgstr ""
+msgstr "玻尔兹曼常量"
 
 #: src/backend/gsl/constants.cpp:71
 #, kde-format
 msgid "Molar gas"
-msgstr ""
+msgstr "摩尔气体常量"
 
 #: src/backend/gsl/constants.cpp:72
 #, kde-format
 msgid "Standard gas volume"
-msgstr ""
+msgstr "标准状态气体摩尔体积"
 
 #: src/backend/gsl/constants.cpp:73
 #, kde-format
 msgid "Stefan-Boltzmann constant"
-msgstr ""
+msgstr "斯特藩—玻尔兹曼常量"
 
 #: src/backend/gsl/constants.cpp:74
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:581
@@ -2563,450 +2563,450 @@ msgstr "正态分布密度函数"
 #: src/backend/gsl/constants.cpp:77
 #, kde-format
 msgid "Astronomical unit"
-msgstr ""
+msgstr "天文单位"
 
 #: src/backend/gsl/constants.cpp:78
 #, kde-format
 msgid "Gravitational constant"
-msgstr ""
+msgstr "万有引力常量"
 
 #: src/backend/gsl/constants.cpp:79
 #, kde-format
 msgid "Light year"
-msgstr ""
+msgstr "光年"
 
 #: src/backend/gsl/constants.cpp:80
 #, kde-format
 msgid "Parsec"
-msgstr ""
+msgstr "秒差距"
 
 #: src/backend/gsl/constants.cpp:81
 #, kde-format
 msgid "Gravitational acceleration"
-msgstr ""
+msgstr "重力加速度"
 
 #: src/backend/gsl/constants.cpp:82
 #, kde-format
 msgid "Solar mass"
-msgstr ""
+msgstr "太阳质量"
 
 #. i18n("Atomic and Nuclear Physics"));
 #: src/backend/gsl/constants.cpp:85
 #, kde-format
 msgid "Charge of the electron"
-msgstr ""
+msgstr "电子电荷"
 
 #: src/backend/gsl/constants.cpp:86
 #, kde-format
 msgid "Energy of 1 electron volt"
-msgstr ""
+msgstr "1 电子伏能量"
 
 #: src/backend/gsl/constants.cpp:87
 #, kde-format
 msgid "Unified atomic mass"
-msgstr ""
+msgstr "统一原子质量"
 
 #: src/backend/gsl/constants.cpp:88
 #, kde-format
 msgid "Mass of the electron"
-msgstr ""
+msgstr "电子质量"
 
 #: src/backend/gsl/constants.cpp:89
 #, kde-format
 msgid "Mass of the muon"
-msgstr ""
+msgstr "μ 子质量"
 
 #: src/backend/gsl/constants.cpp:90
 #, kde-format
 msgid "Mass of the proton"
-msgstr ""
+msgstr "质子质量"
 
 #: src/backend/gsl/constants.cpp:91
 #, kde-format
 msgid "Mass of the neutron"
-msgstr ""
+msgstr "中子质量"
 
 #: src/backend/gsl/constants.cpp:92
 #, kde-format
 msgid "Electromagnetic fine structure constant"
-msgstr ""
+msgstr "电磁精细结构常数"
 
 #: src/backend/gsl/constants.cpp:93
 #, kde-format
 msgid "Rydberg constant"
-msgstr ""
+msgstr "里德堡常量"
 
 #: src/backend/gsl/constants.cpp:94
 #, kde-format
 msgid "Bohr radius"
-msgstr ""
+msgstr "玻尔半径"
 
 #: src/backend/gsl/constants.cpp:95
 #, kde-format
 msgid "Length of 1 angstrom"
-msgstr ""
+msgstr "1 埃 (Å) 长度"
 
 #: src/backend/gsl/constants.cpp:96
 #, kde-format
 msgid "Area of 1 barn"
-msgstr ""
+msgstr "1 靶恩 (b) 面积"
 
 #: src/backend/gsl/constants.cpp:97
 #, kde-format
 msgid "Bohr Magneton"
-msgstr ""
+msgstr "玻尔磁子"
 
 #: src/backend/gsl/constants.cpp:98
 #, kde-format
 msgid "Nuclear Magneton"
-msgstr ""
+msgstr "核磁矩"
 
 #: src/backend/gsl/constants.cpp:99
 #, kde-format
 msgid "Magnetic moment of the electron [absolute value]"
-msgstr ""
+msgstr "电子磁矩 [绝对值]"
 
 #: src/backend/gsl/constants.cpp:100
 #, kde-format
 msgid "Magnetic moment of the proton"
-msgstr ""
+msgstr "质子磁矩"
 
 #: src/backend/gsl/constants.cpp:101
 #, kde-format
 msgid "Thomson cross section"
-msgstr ""
+msgstr "汤姆孙散射截面"
 
 #: src/backend/gsl/constants.cpp:102
 #, kde-format
 msgid "Electric dipole moment of 1 Debye"
-msgstr ""
+msgstr "1 德拜 (D) 偶极矩"
 
 #. i18n("Measurement of Time"));
 #: src/backend/gsl/constants.cpp:105
 #, kde-format
 msgid "Number of seconds in 1 minute"
-msgstr ""
+msgstr "1 分钟内秒数"
 
 #: src/backend/gsl/constants.cpp:106
 #, kde-format
 msgid "Number of seconds in 1 hour"
-msgstr ""
+msgstr "1 小时内秒数"
 
 #: src/backend/gsl/constants.cpp:107
 #, kde-format
 msgid "Number of seconds in 1 day"
-msgstr ""
+msgstr "1 天内秒数"
 
 #: src/backend/gsl/constants.cpp:108
 #, kde-format
 msgid "Number of seconds in 1 week"
-msgstr ""
+msgstr "1 周内秒数"
 
 #. i18n("Imperial Units"));
 #: src/backend/gsl/constants.cpp:111
 #, kde-format
 msgid "Length of 1 inch"
-msgstr ""
+msgstr "1 英寸长度"
 
 #: src/backend/gsl/constants.cpp:112
 #, kde-format
 msgid "Length of 1 foot"
-msgstr ""
+msgstr "1 英尺长度"
 
 #: src/backend/gsl/constants.cpp:113
 #, kde-format
 msgid "Length of 1 yard"
-msgstr ""
+msgstr "1 码长度"
 
 #: src/backend/gsl/constants.cpp:114
 #, kde-format
 msgid "Length of 1 mile"
-msgstr ""
+msgstr "1 英里长度"
 
 #: src/backend/gsl/constants.cpp:115
 #, kde-format
 msgid "Length of 1/1000th of an inch"
-msgstr ""
+msgstr "1 密耳 (1/1000 英寸) 长度"
 
 #. i18n("Speed and Nautical Units"));
 #: src/backend/gsl/constants.cpp:118
 #, kde-format
 msgid "Speed of 1 kilometer per hour"
-msgstr ""
+msgstr "1 千米每小时速度"
 
 #: src/backend/gsl/constants.cpp:119
 #, kde-format
 msgid "Speed of 1 mile per hour"
-msgstr ""
+msgstr "1 英里每小时速度"
 
 #: src/backend/gsl/constants.cpp:120
 #, kde-format
 msgid "Length of 1 nautical mile"
-msgstr ""
+msgstr "1 海里长度"
 
 #: src/backend/gsl/constants.cpp:121
 #, kde-format
 msgid "Length of 1 fathom"
-msgstr ""
+msgstr "1 英寻长度"
 
 #: src/backend/gsl/constants.cpp:122
 #, kde-format
 msgid "Speed of 1 knot"
-msgstr ""
+msgstr "1 节速度"
 
 #. i18n("Printers Units"));
 #: src/backend/gsl/constants.cpp:125
 #, kde-format
 msgid "length of 1 printer's point [1/72 inch]"
-msgstr ""
+msgstr "1 打印机点 (1/72 英寸) 长度"
 
 #: src/backend/gsl/constants.cpp:126
 #, kde-format
 msgid "length of 1 TeX point [1/72.27 inch]"
-msgstr ""
+msgstr "1 TeX 点 (1/72.27 英寸) 长度"
 
 #. i18n("Volume, Area and Length"));
 #: src/backend/gsl/constants.cpp:129
 #, kde-format
 msgid "Length of 1 micron"
-msgstr ""
+msgstr "1 微米长度"
 
 #: src/backend/gsl/constants.cpp:130
 #, kde-format
 msgid "Area of 1 hectare"
-msgstr ""
+msgstr "1 公顷面积"
 
 #: src/backend/gsl/constants.cpp:131
 #, kde-format
 msgid "Area of 1 acre"
-msgstr ""
+msgstr "1 英亩面积"
 
 #: src/backend/gsl/constants.cpp:132
 #, kde-format
 msgid "Volume of 1 liter"
-msgstr ""
+msgstr "1 升体积"
 
 #: src/backend/gsl/constants.cpp:133
 #, kde-format
 msgid "Volume of 1 US gallon"
-msgstr ""
+msgstr "1 美制加仑体积"
 
 #: src/backend/gsl/constants.cpp:134
 #, kde-format
 msgid "Volume of 1 Canadian gallon"
-msgstr ""
+msgstr "1 加制加仑体积"
 
 #: src/backend/gsl/constants.cpp:135
 #, kde-format
 msgid "Volume of 1 UK gallon"
-msgstr ""
+msgstr "1 英制加仑体积"
 
 #: src/backend/gsl/constants.cpp:136
 #, kde-format
 msgid "Volume of 1 quart"
-msgstr ""
+msgstr "1 夸脱体积"
 
 #: src/backend/gsl/constants.cpp:137
 #, kde-format
 msgid "Volume of 1 pint"
-msgstr ""
+msgstr "1 品脱体积"
 
 #. i18n("Mass and Weight"));
 #: src/backend/gsl/constants.cpp:140
 #, kde-format
 msgid "Mass of 1 pound"
-msgstr ""
+msgstr "1 磅质量"
 
 #: src/backend/gsl/constants.cpp:141
 #, kde-format
 msgid "Mass of 1 ounce"
-msgstr ""
+msgstr "1 盎司质量"
 
 #: src/backend/gsl/constants.cpp:142
 #, kde-format
 msgid "Mass of 1 ton"
-msgstr ""
+msgstr "1 短吨 (美吨) 质量"
 
 #: src/backend/gsl/constants.cpp:143
 #, kde-format
 msgid "Mass of 1 metric ton [1000 kg]"
-msgstr ""
+msgstr "1 公吨 (1000 千克) 质量"
 
 #: src/backend/gsl/constants.cpp:144
 #, kde-format
 msgid "Mass of 1 UK ton"
-msgstr ""
+msgstr "1 长吨 (英吨) 质量"
 
 #: src/backend/gsl/constants.cpp:145
 #, kde-format
 msgid "Mass of 1 troy ounce"
-msgstr ""
+msgstr "1 金衡盎司质量"
 
 #: src/backend/gsl/constants.cpp:146
 #, kde-format
 msgid "Mass of 1 carat"
-msgstr ""
+msgstr "1 克拉质量"
 
 #: src/backend/gsl/constants.cpp:147
 #, kde-format
 msgid "Force of 1 gram weight"
-msgstr ""
+msgstr "1 克力"
 
 #: src/backend/gsl/constants.cpp:148
 #, kde-format
 msgid "Force of 1 pound weight"
-msgstr ""
+msgstr "1 磅力"
 
 #: src/backend/gsl/constants.cpp:149
 #, kde-format
 msgid "Force of 1 kilopound weight"
-msgstr ""
+msgstr "1 千磅力"
 
 #: src/backend/gsl/constants.cpp:150
 #, kde-format
 msgid "Force of 1 poundal"
-msgstr ""
+msgstr "1 磅达力"
 
 #. i18n("Thermal Energy and Power"));
 #: src/backend/gsl/constants.cpp:153
 #, kde-format
 msgid "Energy of 1 calorie"
-msgstr ""
+msgstr "1 卡路里能量"
 
 #: src/backend/gsl/constants.cpp:154
 #, kde-format
 msgid "Energy of 1 British Thermal Unit"
-msgstr ""
+msgstr "1 英热单位能量"
 
 #: src/backend/gsl/constants.cpp:155
 #, kde-format
 msgid "Energy of 1 Therm"
-msgstr ""
+msgstr "1 色姆能量"
 
 #: src/backend/gsl/constants.cpp:156
 #, kde-format
 msgid "Power of 1 horsepower"
-msgstr ""
+msgstr "1 马力功率"
 
 #. i18n("Pressure"));
 #: src/backend/gsl/constants.cpp:159
 #, kde-format
 msgid "Pressure of 1 bar"
-msgstr ""
+msgstr "1 巴压强"
 
 #: src/backend/gsl/constants.cpp:160
 #, kde-format
 msgid "Pressure of 1 standard atmosphere"
-msgstr ""
+msgstr "1 标准大气压压强"
 
 #: src/backend/gsl/constants.cpp:161
 #, kde-format
 msgid "Pressure of 1 torr"
-msgstr ""
+msgstr "1 托压强"
 
 #: src/backend/gsl/constants.cpp:162
 #, kde-format
 msgid "Pressure of 1 meter of mercury"
-msgstr ""
+msgstr "1 米汞柱压强"
 
 #: src/backend/gsl/constants.cpp:163
 #, kde-format
 msgid "Pressure of 1 inch of mercury"
-msgstr ""
+msgstr "1 英寸汞柱压强"
 
 #: src/backend/gsl/constants.cpp:164
 #, kde-format
 msgid "Pressure of 1 inch of water"
-msgstr ""
+msgstr "1 英寸水柱压强"
 
 #: src/backend/gsl/constants.cpp:165
 #, kde-format
 msgid "Pressure of 1 pound per square inch"
-msgstr ""
+msgstr "1 磅每平方英寸压强"
 
 #. i18n("Viscosity"));
 #: src/backend/gsl/constants.cpp:168
 #, kde-format
 msgid "Dynamic viscosity of 1 poise"
-msgstr ""
+msgstr "1 泊动力黏度"
 
 #: src/backend/gsl/constants.cpp:169
 #, kde-format
 msgid "Kinematic viscosity of 1 stokes"
-msgstr ""
+msgstr "1 沲 (斯托克斯) 运动黏度"
 
 #. i18n("Light and Illumination"));
 #: src/backend/gsl/constants.cpp:172
 #, kde-format
 msgid "Luminance of 1 stilb"
-msgstr ""
+msgstr "1 熙提光亮度"
 
 #: src/backend/gsl/constants.cpp:173
 #, kde-format
 msgid "Luminous flux of 1 lumen"
-msgstr ""
+msgstr "1 流明光通量"
 
 #: src/backend/gsl/constants.cpp:174
 #, kde-format
 msgid "Illuminance of 1 lux"
-msgstr ""
+msgstr "1 勒克斯光照度"
 
 #: src/backend/gsl/constants.cpp:175
 #, kde-format
 msgid "Illuminance of 1 phot"
-msgstr ""
+msgstr "1 辐透光照度"
 
 #: src/backend/gsl/constants.cpp:176
 #, kde-format
 msgid "Illuminance of 1 footcandle"
-msgstr ""
+msgstr "1 英尺烛光光照度"
 
 #: src/backend/gsl/constants.cpp:177
 #, kde-format
 msgid "Luminance of 1 lambert"
-msgstr ""
+msgstr "1 朗伯光亮度"
 
 #: src/backend/gsl/constants.cpp:178
 #, kde-format
 msgid "Luminance of 1 footlambert"
-msgstr ""
+msgstr "1 英尺朗伯光照度"
 
 #. i18n("Radioactivity"));
 #: src/backend/gsl/constants.cpp:181
 #, kde-format
 msgid "Activity of 1 curie"
-msgstr ""
+msgstr "1 居里放射性活度"
 
 #: src/backend/gsl/constants.cpp:182
 #, kde-format
 msgid "Exposure of 1 roentgen"
-msgstr ""
+msgstr "1 伦琴照射量"
 
 #: src/backend/gsl/constants.cpp:183
 #, kde-format
 msgid "Absorbed dose of 1 rad"
-msgstr ""
+msgstr "1 拉德吸收剂量"
 
 #. i18n("Force and Energy"));
 #: src/backend/gsl/constants.cpp:186
 #, kde-format
 msgid "SI unit of force"
-msgstr ""
+msgstr "力的国际单位"
 
 #: src/backend/gsl/constants.cpp:187
 #, kde-format
 msgid "Force of 1 Dyne"
-msgstr ""
+msgstr "1 达因力"
 
 #: src/backend/gsl/constants.cpp:188
 #, kde-format
 msgid "SI unit of energy"
-msgstr ""
+msgstr "能量的国际单位"
 
 #: src/backend/gsl/constants.cpp:189
 #, kde-format
 msgid "Energy 1 erg"
-msgstr ""
+msgstr "1 尔格能量"
 
 #: src/backend/gsl/errors.h:22
 #, kde-format
@@ -3181,308 +3181,308 @@ msgstr ""
 #: src/backend/gsl/functions.cpp:57
 #, kde-format
 msgid "Standard Mathematical Functions"
-msgstr ""
+msgstr "标准数学函数"
 
 #: src/backend/gsl/functions.cpp:59
 #, kde-format
 msgid "Comparison Functions"
-msgstr ""
+msgstr "比较函数"
 
 #: src/backend/gsl/functions.cpp:61
 #, kde-format
 msgid "Logical Functions"
-msgstr ""
+msgstr "逻辑函数"
 
 #: src/backend/gsl/functions.cpp:63
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:28
 #, kde-format
 msgid "Column Statistics"
-msgstr ""
+msgstr "列统计"
 
 #: src/backend/gsl/functions.cpp:65
 #, kde-format
 msgid "Moving Statistics"
-msgstr ""
+msgstr "移动统计"
 
 #: src/backend/gsl/functions.cpp:67
 #, kde-format
 msgid "Airy Functions and Derivatives"
-msgstr ""
+msgstr "艾里函数及其导数"
 
 #: src/backend/gsl/functions.cpp:69
 #, kde-format
 msgid "Bessel Functions"
-msgstr ""
+msgstr "贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:71
 #, kde-format
 msgid "Clausen Functions"
-msgstr ""
+msgstr "克劳森函数"
 
 #: src/backend/gsl/functions.cpp:73
 #, kde-format
 msgid "Coulomb Functions"
-msgstr ""
+msgstr "库仑函数"
 
 #: src/backend/gsl/functions.cpp:75
 #, kde-format
 msgid "Dawson Function"
-msgstr ""
+msgstr "道森函数"
 
 #: src/backend/gsl/functions.cpp:77
 #, kde-format
 msgid "Debye Functions"
-msgstr ""
+msgstr "德拜函数"
 
 #: src/backend/gsl/functions.cpp:79
 #, kde-format
 msgid "Dilogarithm"
-msgstr ""
+msgstr "二重对数函数"
 
 #: src/backend/gsl/functions.cpp:81
 #, kde-format
 msgid "Elliptic Integrals"
-msgstr ""
+msgstr "椭圆积分"
 
 #: src/backend/gsl/functions.cpp:85
 #, kde-format
 msgid "Error Functions and Related Functions"
-msgstr ""
+msgstr "误差函数及其相关函数"
 
 #: src/backend/gsl/functions.cpp:88
 #, kde-format
 msgid "Error Functions"
-msgstr ""
+msgstr "误差函数"
 
 #: src/backend/gsl/functions.cpp:91
 #, kde-format
 msgid "Exponential Functions"
-msgstr ""
+msgstr "指数函数"
 
 #: src/backend/gsl/functions.cpp:93
 #, kde-format
 msgid "Exponential Integrals"
-msgstr ""
+msgstr "指数积分"
 
 #: src/backend/gsl/functions.cpp:95
 #, kde-format
 msgid "Fermi-Dirac Function"
-msgstr ""
+msgstr "费米—狄拉克函数"
 
 #: src/backend/gsl/functions.cpp:97
 #, kde-format
 msgid "Gamma and Beta Functions"
-msgstr ""
+msgstr "伽马与贝塔函数"
 
 #: src/backend/gsl/functions.cpp:99
 #, kde-format
 msgid "Gegenbauer Functions"
-msgstr ""
+msgstr "盖根堡函数"
 
 #: src/backend/gsl/functions.cpp:102
 #, kde-format
 msgid "Hermite Polynomials and Functions"
-msgstr ""
+msgstr "埃尔米特多项式与函数"
 
 #: src/backend/gsl/functions.cpp:105
 #, kde-format
 msgid "Hypergeometric Functions"
-msgstr ""
+msgstr "超几何函数"
 
 #: src/backend/gsl/functions.cpp:107
 #, kde-format
 msgid "Laguerre Functions"
-msgstr ""
+msgstr "拉盖尔函数"
 
 #: src/backend/gsl/functions.cpp:109
 #, kde-format
 msgid "Lambert W Functions"
-msgstr ""
+msgstr "朗伯 W 函数"
 
 #: src/backend/gsl/functions.cpp:111
 #, kde-format
 msgid "Legendre Functions and Spherical Harmonics"
-msgstr ""
+msgstr "勒让德函数与球谐函数"
 
 #: src/backend/gsl/functions.cpp:113
 #, kde-format
 msgid "Logarithm and Related Functions"
-msgstr ""
+msgstr "对数函数及其相关函数"
 
 #: src/backend/gsl/functions.cpp:116
 #, kde-format
 msgid "Mathieu Functions"
-msgstr ""
+msgstr "马蒂厄函数"
 
 #: src/backend/gsl/functions.cpp:119
 #, kde-format
 msgid "Power Function"
-msgstr ""
+msgstr "幂函数"
 
 #: src/backend/gsl/functions.cpp:121
 #, kde-format
 msgid "Psi (Digamma) Function"
-msgstr ""
+msgstr "双伽马 (ψ) 函数"
 
 #: src/backend/gsl/functions.cpp:123
 #, kde-format
 msgid "Synchrotron Functions"
-msgstr ""
+msgstr "同步辐射函数"
 
 #: src/backend/gsl/functions.cpp:125
 #, kde-format
 msgid "Transport Functions"
-msgstr ""
+msgstr "传输函数 (最优传输理论)"
 
 #: src/backend/gsl/functions.cpp:127
 #, kde-format
 msgid "Trigonometric Functions"
-msgstr ""
+msgstr "三角函数"
 
 #: src/backend/gsl/functions.cpp:129
 #, kde-format
 msgid "Zeta Functions"
-msgstr ""
+msgstr "ζ 函数"
 
 #: src/backend/gsl/functions.cpp:131
 #, kde-format
 msgid "Random number generator"
-msgstr ""
+msgstr "随机数生成器"
 
 #: src/backend/gsl/functions.cpp:133
 #, kde-format
 msgid "Gaussian Distribution"
-msgstr ""
+msgstr "正态 (高斯) 分布"
 
 #: src/backend/gsl/functions.cpp:135
 #, kde-format
 msgid "Exponential Distribution"
-msgstr ""
+msgstr "指数分布"
 
 #: src/backend/gsl/functions.cpp:137
 #, kde-format
 msgid "Laplace Distribution"
-msgstr ""
+msgstr "拉普拉斯分布"
 
 #: src/backend/gsl/functions.cpp:139
 #, kde-format
 msgid "Exponential Power Distribution"
-msgstr ""
+msgstr "广义误差 (指数幂) 分布"
 
 #: src/backend/gsl/functions.cpp:141
 #, kde-format
 msgid "Cauchy Distribution"
-msgstr ""
+msgstr "柯西分布"
 
 #: src/backend/gsl/functions.cpp:143
 #, kde-format
 msgid "Rayleigh Distribution"
-msgstr ""
+msgstr "瑞利分布"
 
 #: src/backend/gsl/functions.cpp:145
 #, kde-format
 msgid "Landau Distribution"
-msgstr ""
+msgstr "朗道分布"
 
 #: src/backend/gsl/functions.cpp:147
 #, kde-format
 msgid "Gamma Distribution"
-msgstr ""
+msgstr "伽马分布"
 
 #: src/backend/gsl/functions.cpp:149
 #, kde-format
 msgid "Flat (Uniform) Distribution"
-msgstr ""
+msgstr "均匀分布"
 
 #: src/backend/gsl/functions.cpp:151
 #, kde-format
 msgid "Lognormal Distribution"
-msgstr ""
+msgstr "对数正态分布"
 
 #: src/backend/gsl/functions.cpp:153
 #, kde-format
 msgid "Chi-squared Distribution"
-msgstr ""
+msgstr "卡方分布"
 
 #: src/backend/gsl/functions.cpp:155
 #, kde-format
 msgid "F-distribution"
-msgstr ""
+msgstr "F 分布"
 
 #: src/backend/gsl/functions.cpp:157
 #, kde-format
 msgid "t-distribution"
-msgstr ""
+msgstr "t 分布"
 
 #: src/backend/gsl/functions.cpp:159
 #, kde-format
 msgid "Beta Distribution"
-msgstr ""
+msgstr "贝塔分布"
 
 #: src/backend/gsl/functions.cpp:161
 #, kde-format
 msgid "Logistic Distribution"
-msgstr ""
+msgstr "逻辑斯谛分布"
 
 #: src/backend/gsl/functions.cpp:163
 #, kde-format
 msgid "Pareto Distribution"
-msgstr ""
+msgstr "帕累托分布"
 
 #: src/backend/gsl/functions.cpp:165
 #, kde-format
 msgid "Weibull Distribution"
-msgstr ""
+msgstr "韦布尔分布"
 
 #: src/backend/gsl/functions.cpp:167
 #, kde-format
 msgid "Gumbel Distribution"
-msgstr ""
+msgstr "耿贝尔分布"
 
 #: src/backend/gsl/functions.cpp:169
 #, kde-format
 msgid "Poisson Distribution"
-msgstr ""
+msgstr "泊松分布"
 
 #: src/backend/gsl/functions.cpp:171
 #, kde-format
 msgid "Bernoulli Distribution"
-msgstr ""
+msgstr "伯努利分布"
 
 #: src/backend/gsl/functions.cpp:173
 #, kde-format
 msgid "Binomial Distribution"
-msgstr ""
+msgstr "二项分布"
 
 #: src/backend/gsl/functions.cpp:175
 #, kde-format
 msgid "Pascal Distribution"
-msgstr ""
+msgstr "帕斯卡 (负二项) 分布"
 
 #: src/backend/gsl/functions.cpp:177
 #, kde-format
 msgid "Geometric Distribution"
-msgstr ""
+msgstr "几何分布"
 
 #: src/backend/gsl/functions.cpp:179
 #, kde-format
 msgid "Hypergeometric Distribution"
-msgstr ""
+msgstr "超几何分布"
 
 #: src/backend/gsl/functions.cpp:181
 #, kde-format
 msgid "Logarithmic Distribution"
-msgstr ""
+msgstr "对数分布"
 
 #: src/backend/gsl/functions.cpp:183
 #, kde-format
 msgid "Triangular Distribution"
-msgstr ""
+msgstr "三角形分布"
 
 #: src/backend/gsl/functions.cpp:187
 #, kde-format
 msgid "Unknown Function"
-msgstr ""
+msgstr "未知函数"
 
 #: src/backend/gsl/functions.cpp:236
 #, kde-format
@@ -3492,49 +3492,49 @@ msgstr ""
 #: src/backend/gsl/functions.cpp:237
 #, kde-format
 msgid "Moving Average"
-msgstr ""
+msgstr "移动平均值"
 
 #: src/backend/gsl/functions.cpp:238
 #, kde-format
 msgid "Moving Range"
-msgstr ""
+msgstr "移动极差"
 
 #: src/backend/gsl/functions.cpp:239
 #, kde-format
 msgid "Simple Moving Minimum"
-msgstr ""
+msgstr "简单移动最小值"
 
 #: src/backend/gsl/functions.cpp:240
 #, kde-format
 msgid "Simple Moving Maximum"
-msgstr ""
+msgstr "简单移动最大值"
 
 #: src/backend/gsl/functions.cpp:241
 #, kde-format
 msgid "Simple Moving Average"
-msgstr ""
+msgstr "简单移动平均值"
 
 #: src/backend/gsl/functions.cpp:242
 #, kde-format
 msgid "Simple Moving Range"
-msgstr ""
+msgstr "简单移动极差"
 
 #: src/backend/gsl/functions.cpp:243
 #, kde-format
 msgid "Period sample"
-msgstr ""
+msgstr "周期采样"
 
 #: src/backend/gsl/functions.cpp:244
 #, kde-format
 msgid "Random sample"
-msgstr ""
+msgstr "随机采样"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:248
 #: src/frontend/ui/dockwidgets/imagedock.ui:490
 #, kde-format
 msgid "Size"
-msgstr ""
+msgstr "大小"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMinimum)
@@ -3547,7 +3547,7 @@ msgstr ""
 #: src/frontend/ui/mqttwillsettingswidget.ui:31
 #, kde-format
 msgid "Minimum"
-msgstr "最小"
+msgstr "最小值"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMaximum)
@@ -3560,7 +3560,7 @@ msgstr "最小"
 #: src/frontend/ui/mqttwillsettingswidget.ui:42
 #, kde-format
 msgid "Maximum"
-msgstr "最大"
+msgstr "最大值"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbArithmeticMean)
@@ -3570,7 +3570,7 @@ msgstr "最大"
 #: src/frontend/ui/mqttwillsettingswidget.ui:53
 #, kde-format
 msgid "Arithmetic mean"
-msgstr ""
+msgstr "算术平均值"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
@@ -3617,7 +3617,7 @@ msgstr "方差"
 #: src/frontend/ui/mqttwillsettingswidget.ui:64
 #, kde-format
 msgid "Geometric mean"
-msgstr ""
+msgstr "几何平均值"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbHarmonicMean)
@@ -3627,7 +3627,7 @@ msgstr ""
 #: src/frontend/ui/mqttwillsettingswidget.ui:75
 #, kde-format
 msgid "Harmonic mean"
-msgstr ""
+msgstr "调和平均值"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbContraharmonicMean)
@@ -3637,7 +3637,7 @@ msgstr ""
 #: src/frontend/ui/mqttwillsettingswidget.ui:86
 #, kde-format
 msgid "Contraharmonic mean"
-msgstr ""
+msgstr "逆调和平均值"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMode)
 #: src/backend/gsl/functions.cpp:258
@@ -3646,58 +3646,58 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:94
 #, kde-format
 msgid "Mode"
-msgstr ""
+msgstr "众数"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFirstQuartile)
 #: src/backend/gsl/functions.cpp:259
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:101
 #, kde-format
 msgid "First quartile"
-msgstr ""
+msgstr "第一四分位数"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbThirdQuartile)
 #: src/backend/gsl/functions.cpp:260
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:115
 #, kde-format
 msgid "Third quartile"
-msgstr ""
+msgstr "第三四分位数"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbIQR)
 #: src/backend/gsl/functions.cpp:261
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:206
 #, kde-format
 msgid "Interquartile range"
-msgstr ""
+msgstr "四分位距"
 
 #: src/backend/gsl/functions.cpp:262
 #, kde-format
 msgid "1st percentile"
-msgstr ""
+msgstr "第 1 百分位数"
 
 #: src/backend/gsl/functions.cpp:263
 #, kde-format
 msgid "5th percentile"
-msgstr ""
+msgstr "第 5 百分位数"
 
 #: src/backend/gsl/functions.cpp:264
 #, kde-format
 msgid "10th percentile"
-msgstr ""
+msgstr "第 10 百分位数"
 
 #: src/backend/gsl/functions.cpp:265
 #, kde-format
 msgid "90th percentile"
-msgstr ""
+msgstr "第 90 百分位数"
 
 #: src/backend/gsl/functions.cpp:266
 #, kde-format
 msgid "95th percentile"
-msgstr ""
+msgstr "第 95 百分位数"
 
 #: src/backend/gsl/functions.cpp:267
 #, kde-format
 msgid "99th percentile"
-msgstr ""
+msgstr "第 99 百分位数"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbTrimean)
 #: src/backend/gsl/functions.cpp:268
@@ -3706,12 +3706,12 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:122
 #, kde-format
 msgid "Trimean"
-msgstr ""
+msgstr "三均值"
 
 #: src/backend/gsl/functions.cpp:269
 #, kde-format
 msgid "Mean absolute deviation"
-msgstr ""
+msgstr "平均绝对偏差"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMeanDeviationAroundMedian)
 #: src/backend/gsl/functions.cpp:270
@@ -3719,7 +3719,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:192
 #, kde-format
 msgid "Mean absolute deviation around median"
-msgstr ""
+msgstr "平均绝对偏差 (围绕中位数)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedianDeviation)
 #: src/backend/gsl/functions.cpp:271
@@ -3727,7 +3727,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:199
 #, kde-format
 msgid "Median absolute deviation"
-msgstr ""
+msgstr "绝对中位差"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbSkewness)
@@ -3738,7 +3738,7 @@ msgstr ""
 #: src/frontend/ui/mqttwillsettingswidget.ui:163
 #, kde-format
 msgid "Skewness"
-msgstr ""
+msgstr "偏度"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbKurtosis)
@@ -3749,7 +3749,7 @@ msgstr ""
 #: src/frontend/ui/mqttwillsettingswidget.ui:174
 #, kde-format
 msgid "Kurtosis"
-msgstr ""
+msgstr "峰度"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbEntropy)
@@ -3760,22 +3760,22 @@ msgstr ""
 #: src/frontend/ui/mqttwillsettingswidget.ui:185
 #, kde-format
 msgid "Entropy"
-msgstr ""
+msgstr "熵"
 
 #: src/backend/gsl/functions.cpp:275
 #, kde-format
 msgid "Quantile"
-msgstr ""
+msgstr "分位数"
 
 #: src/backend/gsl/functions.cpp:276 src/backend/nsl/nsl_smooth.c:21
 #, kde-format
 msgid "Percentile"
-msgstr ""
+msgstr "百分位数"
 
 #: src/backend/gsl/functions.cpp:283
 #, kde-format
 msgid "pseudo-random integer [0, RAND_MAX]"
-msgstr ""
+msgstr "伪随机整数 [0, RAND_MAX]"
 
 #: src/backend/gsl/functions.cpp:284
 #, kde-format
@@ -3790,42 +3790,42 @@ msgstr ""
 #: src/backend/gsl/functions.cpp:286
 #, kde-format
 msgid "Smallest integral value not less"
-msgstr ""
+msgstr "向上取整 (不小于 x 的最小整数)"
 
 #: src/backend/gsl/functions.cpp:287
 #, kde-format
 msgid "Absolute value"
-msgstr ""
+msgstr "绝对值"
 
 #: src/backend/gsl/functions.cpp:289
 #, kde-format
 msgid "Base 10 logarithm"
-msgstr "常用对数(以 10 为底)"
+msgstr "常用对数 (以 10 为底)"
 
 #: src/backend/gsl/functions.cpp:290
 #, kde-format
 msgid "Power function [x^y]"
-msgstr ""
+msgstr "幂函数 [x^y]"
 
 #: src/backend/gsl/functions.cpp:291
 #, kde-format
 msgid "Nonnegative square root"
-msgstr ""
+msgstr "算术平方根"
 
 #: src/backend/gsl/functions.cpp:292
 #, kde-format
 msgid "Sign function"
-msgstr ""
+msgstr "符号函数"
 
 #: src/backend/gsl/functions.cpp:293
 #, kde-format
 msgid "Heavyside theta function"
-msgstr ""
+msgstr "单位阶跃函数"
 
 #: src/backend/gsl/functions.cpp:294
 #, kde-format
 msgid "Harmonic number function"
-msgstr ""
+msgstr "调和数"
 
 #: src/backend/gsl/functions.cpp:296
 #, kde-format
@@ -3835,77 +3835,77 @@ msgstr "立方根"
 #: src/backend/gsl/functions.cpp:297
 #, kde-format
 msgid "Extract the exponent"
-msgstr ""
+msgstr "二进制表达下的最高位编号"
 
 #: src/backend/gsl/functions.cpp:298
 #, kde-format
 msgid "Round to an integer value"
-msgstr ""
+msgstr "舍入到整数 (四舍六入五成双)"
 
 #: src/backend/gsl/functions.cpp:299 src/backend/gsl/functions.cpp:300
 #, kde-format
 msgid "Round to the nearest integer"
-msgstr ""
+msgstr "舍入到整数 (四舍五入)"
 
 #: src/backend/gsl/functions.cpp:301
 #, kde-format
 msgid "Round to y decimal places"
-msgstr ""
+msgstr "舍入到小数点后 y 位 (四舍五入)"
 
 #: src/backend/gsl/functions.cpp:315
 #, kde-format
 msgid "greaterThan"
-msgstr ""
+msgstr "是否大于"
 
 #: src/backend/gsl/functions.cpp:316
 #, kde-format
 msgid "lessThan"
-msgstr ""
+msgstr "是否小于"
 
 #: src/backend/gsl/functions.cpp:317
 #, kde-format
 msgid "greaterEqualThan"
-msgstr ""
+msgstr "是否大于或等于"
 
 #: src/backend/gsl/functions.cpp:318
 #, kde-format
 msgid "lessEqualThan"
-msgstr ""
+msgstr "是否小于或等于"
 
 #: src/backend/gsl/functions.cpp:319
 #, kde-format
 msgid "equal"
-msgstr ""
+msgstr "是否等于"
 
 #: src/backend/gsl/functions.cpp:320
 #, kde-format
 msgid "equal with epsilon"
-msgstr ""
+msgstr "是否等于 (带容差)"
 
 #: src/backend/gsl/functions.cpp:321
 #, kde-format
 msgid "between with boundaries included"
-msgstr ""
+msgstr "是否位于区间内 (包含端点)"
 
 #: src/backend/gsl/functions.cpp:322
 #, kde-format
 msgid "outside with boundaries included"
-msgstr ""
+msgstr "是否位于区间外 (包含端点)"
 
 #: src/backend/gsl/functions.cpp:323
 #, kde-format
 msgid "between with boundaries excluded"
-msgstr ""
+msgstr "是否位于区间内 (不含端点)"
 
 #: src/backend/gsl/functions.cpp:324
 #, kde-format
 msgid "outside with boundaries excluded"
-msgstr ""
+msgstr "是否位于区间外 (不含端点)"
 
 #: src/backend/gsl/functions.cpp:327
 #, kde-format
 msgid "if(condition; ifTrue; ifFalse)"
-msgstr ""
+msgstr "如果(条件; 条件为真时的值; 条件为假时的值)"
 
 #. i18n: ectx: property (text), widget (QLabel, lAnd)
 #. i18n: ectx: property (text), widget (QLabel, lAndDateTime)
@@ -3929,458 +3929,458 @@ msgstr "或"
 #: src/backend/gsl/functions.cpp:330
 #, kde-format
 msgid "xor"
-msgstr ""
+msgstr "异或"
 
 #: src/backend/gsl/functions.cpp:331
 #, kde-format
 msgid "not"
-msgstr ""
+msgstr "非"
 
 #: src/backend/gsl/functions.cpp:335
 #, kde-format
 msgid "Airy function of the first kind"
-msgstr ""
+msgstr "第一类艾里函数"
 
 #: src/backend/gsl/functions.cpp:336
 #, kde-format
 msgid "Airy function of the second kind"
-msgstr ""
+msgstr "第二类艾里函数"
 
 #: src/backend/gsl/functions.cpp:337
 #, kde-format
 msgid "Scaled Airy function of the first kind"
-msgstr ""
+msgstr "缩放第一类艾里函数"
 
 #: src/backend/gsl/functions.cpp:338
 #, kde-format
 msgid "Scaled Airy function of the second kind"
-msgstr ""
+msgstr "缩放第二类艾里函数"
 
 #: src/backend/gsl/functions.cpp:339
 #, kde-format
 msgid "Airy function derivative of the first kind"
-msgstr ""
+msgstr "第一类艾里函数的导数"
 
 #: src/backend/gsl/functions.cpp:340
 #, kde-format
 msgid "Airy function derivative of the second kind"
-msgstr ""
+msgstr "第二类艾里函数的导数"
 
 #: src/backend/gsl/functions.cpp:341
 #, kde-format
 msgid "Scaled Airy function derivative of the first kind"
-msgstr ""
+msgstr "缩放第一类艾里函数的导数"
 
 #: src/backend/gsl/functions.cpp:342
 #, kde-format
 msgid "Scaled Airy function derivative of the second kind"
-msgstr ""
+msgstr "缩放第二类艾里函数的导数"
 
 #: src/backend/gsl/functions.cpp:343
 #, kde-format
 msgid "n-th zero of the Airy function of the first kind"
-msgstr ""
+msgstr "第一类艾里函数的第 n 个零点"
 
 #: src/backend/gsl/functions.cpp:344
 #, kde-format
 msgid "n-th zero of the Airy function of the second kind"
-msgstr ""
+msgstr "第二类艾里函数的第 n 个零点"
 
 #: src/backend/gsl/functions.cpp:345
 #, kde-format
 msgid "n-th zero of the Airy function derivative of the first kind"
-msgstr ""
+msgstr "第一类艾里函数导数的第 n 个零点"
 
 #: src/backend/gsl/functions.cpp:346
 #, kde-format
 msgid "n-th zero of the Airy function derivative of the second kind"
-msgstr ""
+msgstr "第二类艾里函数导数的第 n 个零点"
 
 #: src/backend/gsl/functions.cpp:349
 #, kde-format
 msgid "Regular cylindrical Bessel function of zeroth order"
-msgstr ""
+msgstr "零阶第一类柱贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:350
 #, kde-format
 msgid "Regular cylindrical Bessel function of first order"
-msgstr ""
+msgstr "一阶第一类柱贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:351
 #, kde-format
 msgid "Regular cylindrical Bessel function of order n"
-msgstr ""
+msgstr "n 阶第一类柱贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:352
 #, kde-format
 msgid "Irregular cylindrical Bessel function of zeroth order"
-msgstr ""
+msgstr "零阶第二类柱贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:353
 #, kde-format
 msgid "Irregular cylindrical Bessel function of first order"
-msgstr ""
+msgstr "一阶第二类柱贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:354
 #, kde-format
 msgid "Irregular cylindrical Bessel function of order n"
-msgstr ""
+msgstr "n 阶第二类柱贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:355
 #, kde-format
 msgid "Regular modified cylindrical Bessel function of zeroth order"
-msgstr ""
+msgstr "零阶第一类修正柱贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:356
 #, kde-format
 msgid "Regular modified cylindrical Bessel function of first order"
-msgstr ""
+msgstr "一阶第一类修正柱贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:357
 #, kde-format
 msgid "Regular modified cylindrical Bessel function of order n"
-msgstr ""
+msgstr "n 阶第一类修正柱贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:358
 #, kde-format
 msgid ""
 "Scaled regular modified cylindrical Bessel function of zeroth order exp(-|"
 "x|) I0(x)"
-msgstr ""
+msgstr "exp(-|x|) 倍缩放零阶第一类修正柱贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:360
 #, kde-format
 msgid ""
 "Scaled regular modified cylindrical Bessel function of first order exp(-|x|) "
 "I1(x)"
-msgstr ""
+msgstr "exp(-|x|) 倍缩放一阶第一类修正柱贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:361
 #, kde-format
 msgid ""
 "Scaled regular modified cylindrical Bessel function of order n exp(-|x|) "
 "In(x)"
-msgstr ""
+msgstr "exp(-|x|) 倍缩放 n 阶第一类修正柱贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:362
 #, kde-format
 msgid "Irregular modified cylindrical Bessel function of zeroth order"
-msgstr ""
+msgstr "零阶第二类修正柱贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:363
 #, kde-format
 msgid "Irregular modified cylindrical Bessel function of first order"
-msgstr ""
+msgstr "一阶第二类修正柱贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:364
 #, kde-format
 msgid "Irregular modified cylindrical Bessel function of order n"
-msgstr ""
+msgstr "n 阶第二类修正柱贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:365
 #, kde-format
 msgid ""
 "Scaled irregular modified cylindrical Bessel function of zeroth order exp(x) "
 "K0(x)"
-msgstr ""
+msgstr "exp(x) 倍缩放零阶第二类修正柱贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:366
 #, kde-format
 msgid ""
 "Scaled irregular modified cylindrical Bessel function of first order exp(x) "
 "K1(x)"
-msgstr ""
+msgstr "exp(x) 倍缩放一阶第二类修正柱贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:367
 #, kde-format
 msgid ""
 "Scaled irregular modified cylindrical Bessel function of order n exp(x) Kn(x)"
-msgstr ""
+msgstr "exp(x) 倍缩放 n 阶第二类修正柱贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:368
 #, kde-format
 msgid "Regular spherical Bessel function of zeroth order"
-msgstr ""
+msgstr "零阶第一类球贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:369
 #, kde-format
 msgid "Regular spherical Bessel function of first order"
-msgstr ""
+msgstr "一阶第一类球贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:371
 #, kde-format
 msgid "Regular spherical Bessel function of second order"
-msgstr ""
+msgstr "二阶第一类球贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:372
 #, kde-format
 msgid "Regular spherical Bessel function of order l"
-msgstr ""
+msgstr "l 阶第一类球贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:373
 #, kde-format
 msgid "Irregular spherical Bessel function of zeroth order"
-msgstr ""
+msgstr "零阶第二类球贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:374
 #, kde-format
 msgid "Irregular spherical Bessel function of first order"
-msgstr ""
+msgstr "一阶第二类球贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:375
 #, kde-format
 msgid "Irregular spherical Bessel function of second order"
-msgstr ""
+msgstr "二阶第二类球贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:376
 #, kde-format
 msgid "Irregular spherical Bessel function of order l"
-msgstr ""
+msgstr "l 阶第二类球贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:377
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of zeroth order, exp(-|x|) "
 "i0(x)"
-msgstr ""
+msgstr "exp(-|x|) 倍缩放零阶第一类修正球贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:378
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of first order, exp(-|x|) "
 "i1(x)"
-msgstr ""
+msgstr "exp(-|x|) 倍缩放一阶第一类修正球贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:379
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of second order, exp(-|x|) "
 "i2(x)"
-msgstr ""
+msgstr "exp(-|x|) 倍缩放二阶第一类修正球贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:380
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of order l, exp(-|x|) il(x)"
-msgstr ""
+msgstr "exp(-|x|) 倍缩放 l 阶第一类修正球贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:382
 #, kde-format
 msgid ""
 "Scaled irregular modified spherical Bessel function of zeroth order, exp(x) "
 "k0(x)"
-msgstr ""
+msgstr "exp(x) 倍缩放零阶第二类修正球贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:383
 #, kde-format
 msgid ""
 "Scaled irregular modified spherical Bessel function of first order, exp(-|"
 "x|) k1(x)"
-msgstr ""
+msgstr "exp(x) 倍缩放一阶第二类修正球贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:384
 #, kde-format
 msgid ""
 "Scaled irregular modified spherical Bessel function of second order, exp(-|"
 "x|) k2(x)"
-msgstr ""
+msgstr "exp(x) 倍缩放二阶第二类修正球贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:385
 #, kde-format
 msgid ""
 "Scaled irregular modified spherical Bessel function of order l, exp(-|x|) "
 "kl(x)"
-msgstr ""
+msgstr "exp(x) 倍缩放 l 阶第二类修正球贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:386
 #, kde-format
 msgid "Regular cylindrical Bessel function of fractional order"
-msgstr ""
+msgstr "实数阶第一类柱贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:387
 #, kde-format
 msgid "Irregular cylindrical Bessel function of fractional order"
-msgstr ""
+msgstr "实数阶第二类柱贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:388
 #, kde-format
 msgid "Regular modified Bessel function of fractional order"
-msgstr ""
+msgstr "实数阶第一类修正贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:389
 #, kde-format
 msgid "Scaled regular modified Bessel function of fractional order"
-msgstr ""
+msgstr "缩放实数阶第一类修正贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:390
 #, kde-format
 msgid "Irregular modified Bessel function of fractional order"
-msgstr ""
+msgstr "实数阶第二类修正贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:391
 #, kde-format
 msgid "Logarithm of irregular modified Bessel function of fractional order"
-msgstr ""
+msgstr "实数阶第二类修正贝塞尔函数的对数"
 
 #: src/backend/gsl/functions.cpp:393
 #, kde-format
 msgid "Scaled irregular modified Bessel function of fractional order"
-msgstr ""
+msgstr "缩放实数阶第二类修正贝塞尔函数"
 
 #: src/backend/gsl/functions.cpp:394
 #, kde-format
 msgid "n-th positive zero of the Bessel function J0"
-msgstr ""
+msgstr "贝塞尔函数 J0 的第 n 个正零点"
 
 #: src/backend/gsl/functions.cpp:395
 #, kde-format
 msgid "n-th positive zero of the Bessel function J1"
-msgstr ""
+msgstr "贝塞尔函数 J1 的第 n 个正零点"
 
 #: src/backend/gsl/functions.cpp:396
 #, kde-format
 msgid "n-th positive zero of the Bessel function Jnu"
-msgstr ""
+msgstr "贝塞尔函数 Jnu 的第 n 个正零点"
 
 #: src/backend/gsl/functions.cpp:399
 #, kde-format
 msgid "Clausen function"
-msgstr ""
+msgstr "克劳森函数"
 
 #: src/backend/gsl/functions.cpp:402
 #, kde-format
 msgid "Lowest-order normalized hydrogenic bound state radial wavefunction"
-msgstr ""
+msgstr "最低阶归一化氢束缚态径向波函数"
 
 #: src/backend/gsl/functions.cpp:403
 #, kde-format
 msgid "n-th normalized hydrogenic bound state radial wavefunction"
-msgstr ""
+msgstr "第 n 阶归一化氢束缚态径向波函数"
 
 #: src/backend/gsl/functions.cpp:406 src/backend/gsl/functions.cpp:443
 #, kde-format
 msgid "Dawson's integral D(z) = sqrt(pi)/2 * exp(-z^2) * erfi(z)"
-msgstr ""
+msgstr "道森积分 D(z) = sqrt(pi)/2 * exp(-z^2) * erfi(z)"
 
 #: src/backend/gsl/functions.cpp:409
 #, kde-format
 msgid "First-order Debye function"
-msgstr ""
+msgstr "一阶德拜函数"
 
 #: src/backend/gsl/functions.cpp:410
 #, kde-format
 msgid "Second-order Debye function"
-msgstr ""
+msgstr "二阶德拜函数"
 
 #: src/backend/gsl/functions.cpp:411
 #, kde-format
 msgid "Third-order Debye function"
-msgstr ""
+msgstr "三阶德拜函数"
 
 #: src/backend/gsl/functions.cpp:412
 #, kde-format
 msgid "Fourth-order Debye function"
-msgstr ""
+msgstr "四阶德拜函数"
 
 #: src/backend/gsl/functions.cpp:413
 #, kde-format
 msgid "Fifth-order Debye function"
-msgstr ""
+msgstr "五阶德拜函数"
 
 #: src/backend/gsl/functions.cpp:414
 #, kde-format
 msgid "Sixth-order Debye function"
-msgstr ""
+msgstr "六阶德拜函数"
 
 #: src/backend/gsl/functions.cpp:417
 #, kde-format
 msgid "Dilogarithm for a real argument"
-msgstr ""
+msgstr "实数的二重对数"
 
 #: src/backend/gsl/functions.cpp:420
 #, kde-format
 msgid "Legendre form of complete elliptic integral K"
-msgstr ""
+msgstr "勒让德型完全椭圆积分 K"
 
 #: src/backend/gsl/functions.cpp:421
 #, kde-format
 msgid "Legendre form of complete elliptic integral E"
-msgstr ""
+msgstr "勒让德型完全椭圆积分 E"
 
 #: src/backend/gsl/functions.cpp:422
 #, kde-format
 msgid "Legendre form of complete elliptic integral Pi"
-msgstr ""
+msgstr "勒让德型完全椭圆积分 Pi"
 
 #: src/backend/gsl/functions.cpp:423
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral F"
-msgstr ""
+msgstr "勒让德型不完全椭圆积分 F"
 
 #: src/backend/gsl/functions.cpp:424
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral E"
-msgstr ""
+msgstr "勒让德型不完全椭圆积分 E"
 
 #: src/backend/gsl/functions.cpp:425
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral P"
-msgstr ""
+msgstr "勒让德型不完全椭圆积分 P"
 
 #: src/backend/gsl/functions.cpp:426
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral D"
-msgstr ""
+msgstr "勒让德型不完全椭圆积分 D"
 
 #: src/backend/gsl/functions.cpp:427
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RC"
-msgstr ""
+msgstr "卡尔森型不完全椭圆积分 RC"
 
 #: src/backend/gsl/functions.cpp:428
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RD"
-msgstr ""
+msgstr "卡尔森型不完全椭圆积分 RD"
 
 #: src/backend/gsl/functions.cpp:429
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RF"
-msgstr ""
+msgstr "卡尔森型不完全椭圆积分 RF"
 
 #: src/backend/gsl/functions.cpp:430
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RJ"
-msgstr ""
+msgstr "卡尔森型不完全椭圆积分 RJ"
 
 #: src/backend/gsl/functions.cpp:433
 #, kde-format
 msgid "Error function"
-msgstr ""
+msgstr "误差函数"
 
 #: src/backend/gsl/functions.cpp:434
 #, kde-format
 msgid "Complementary error function"
-msgstr ""
+msgstr "互补误差函数"
 
 #: src/backend/gsl/functions.cpp:435
 #, kde-format
 msgid "Logarithm of complementary error function"
-msgstr ""
+msgstr "对数互补误差函数"
 
 #: src/backend/gsl/functions.cpp:436
 #, kde-format
 msgid "Gaussian probability density function Z"
-msgstr ""
+msgstr "正态 (高斯) 分布概率密度函数 Z"
 
 #: src/backend/gsl/functions.cpp:437
 #, kde-format
 msgid "Upper tail of the Gaussian probability function Q"
-msgstr ""
+msgstr "正态 (高斯) 分布右尾概率分布函数 Q"
 
 #: src/backend/gsl/functions.cpp:438
 #, kde-format
 msgid "Hazard function for the normal distribution Z/Q"
-msgstr ""
+msgstr "正态 (高斯) 分布风险函数 Z/Q"
 
 #: src/backend/gsl/functions.cpp:440
 #, kde-format
@@ -5924,32 +5924,32 @@ msgstr "线性函数"
 #: src/backend/lib/Range.h:48
 #, kde-format
 msgid "Log10"
-msgstr ""
+msgstr "log10"
 
 #: src/backend/lib/Range.h:48
 #, kde-format
 msgid "Log2"
-msgstr ""
+msgstr "log2"
 
 #: src/backend/lib/Range.h:48
 #, kde-format
 msgid "Ln"
-msgstr ""
+msgstr "ln"
 
 #: src/backend/lib/Range.h:48
 #, kde-format
 msgid "Sqrt"
-msgstr ""
+msgstr "平方根"
 
 #: src/backend/lib/Range.h:48
 #, kde-format
 msgid "Square"
-msgstr ""
+msgstr "平方"
 
 #: src/backend/lib/Range.h:48
 #, kde-format
 msgid "Inverse"
-msgstr ""
+msgstr "倒数"
 
 #: src/backend/lib/XmlStreamReader.cpp:91
 #: src/backend/lib/XmlStreamReader.cpp:95
@@ -6666,12 +6666,12 @@ msgstr ""
 #: src/backend/nsl/nsl_interp.c:16 src/frontend/dockwidgets/XYCurveDock.cpp:203
 #, kde-format
 msgid "Cubic Spline (Natural)"
-msgstr "三次样条曲线（自然）"
+msgstr "三次样条曲线 (自然)"
 
 #: src/backend/nsl/nsl_interp.c:17 src/frontend/dockwidgets/XYCurveDock.cpp:204
 #, kde-format
 msgid "Cubic Spline (Periodic)"
-msgstr "三次样条曲线（封闭）"
+msgstr "三次样条曲线 (封闭)"
 
 #: src/backend/nsl/nsl_interp.c:18
 #, kde-format
@@ -7157,7 +7157,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:33
 #, kde-format
 msgid "Count"
-msgstr ""
+msgstr "数量"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:64
 #, kde-format
@@ -7231,7 +7231,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:158
 #, kde-format
 msgid "Range"
-msgstr ""
+msgstr "极差"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:82
 #, kde-format
@@ -7290,7 +7290,7 @@ msgstr ""
 #: src/backend/worksheet/Background.cpp:230
 #, kde-format
 msgid "%1: background image style changed"
-msgstr ""
+msgstr "%1：背景图像样式已更改"
 
 #: src/backend/worksheet/Background.cpp:237
 #, kde-format
@@ -7310,7 +7310,7 @@ msgstr ""
 #: src/backend/worksheet/Background.cpp:258
 #, kde-format
 msgid "%1: set background image"
-msgstr ""
+msgstr "%1：设置背景图像"
 
 #: src/backend/worksheet/Background.cpp:265
 #, kde-format
@@ -7320,12 +7320,12 @@ msgstr ""
 #: src/backend/worksheet/Image.cpp:137
 #, kde-format
 msgid "%1: set image"
-msgstr ""
+msgstr "%1：设置图像"
 
 #: src/backend/worksheet/Image.cpp:144
 #, kde-format
 msgid "%1: embed image"
-msgstr ""
+msgstr "%1：嵌入图像"
 
 #: src/backend/worksheet/Image.cpp:151 src/backend/worksheet/TextLabel.cpp:375
 #, kde-format
@@ -7413,13 +7413,13 @@ msgstr ""
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1338
 #, kde-format
 msgid "%1: set horizontal padding"
-msgstr ""
+msgstr "%1：设置水平边距"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:107
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1364
 #, kde-format
 msgid "%1: set vertical padding"
-msgstr ""
+msgstr "%1：设置垂直边距"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:114
 #, kde-format
@@ -7532,7 +7532,7 @@ msgstr ""
 #: src/frontend/dockwidgets/AxisDock.cpp:609
 #, kde-format
 msgid "%1: set axis orientation"
-msgstr ""
+msgstr "%1：设置坐标轴方向"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:579
 #, kde-format
@@ -7896,28 +7896,28 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:571
 #, kde-format
 msgid "%1: change rug enabled"
-msgstr ""
+msgstr "%1：改变轴须图启用状态"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:586
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:529
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:585
 #, kde-format
 msgid "%1: change rug width"
-msgstr ""
+msgstr "%1：更改轴须图须宽度"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:593
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:536
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:592
 #, kde-format
 msgid "%1: change rug length"
-msgstr ""
+msgstr "%1：更改轴须图须长度"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:600
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:543
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:599
 #, kde-format
 msgid "%1: change rug offset"
-msgstr ""
+msgstr "%1：更改轴须图须偏移"
 
 #: src/backend/worksheet/plots/cartesian/CartesianCoordinateSystem.cpp:57
 #, kde-format
@@ -7939,24 +7939,24 @@ msgstr "标题"
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:234
 #, kde-format
 msgid "xy-curve"
-msgstr "x-y 曲线"
+msgstr "XY 曲线"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:438
 #, kde-format
 msgid "xy-curve from a Formula"
-msgstr "基于表达式的 x-y 曲线"
+msgstr "基于表达式的 XY 曲线"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:439
 #, kde-format
 msgid "Add a new xy-curve that is defined via a mathematical expression."
-msgstr "添加一个通过数学表达式定义的 x-y 曲线。"
+msgstr "添加一个通过数学表达式定义的 XY 曲线。"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:441
 #, kde-format
 msgid ""
 "Add a new xy-curve that is defined as a function of other xy-curves (scaled, "
 "shifted, etc.)"
-msgstr "添加一个由其他 x-y 曲线的函数（缩放、平移等）定义的 x-y 曲线。"
+msgstr "添加一个由其他 XY 曲线的函数 (缩放、平移等) 定义的 XY 曲线。"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:444
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:500
@@ -8051,7 +8051,7 @@ msgstr "平滑"
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit"
-msgstr ""
+msgstr "拟合"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:460
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:605
@@ -8141,7 +8141,7 @@ msgstr "垂直坐标轴"
 #: src/frontend/worksheet/WorksheetView.cpp:1338
 #, kde-format
 msgid "Image"
-msgstr "图片"
+msgstr "图像"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:474
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2046
@@ -8216,13 +8216,13 @@ msgstr "卷积/反卷积"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:525
 #, kde-format
 msgid "Exponential (degree 1)"
-msgstr "指数函数（单项）"
+msgstr "指数函数 (单项)"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:573
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:528
 #, kde-format
 msgid "Exponential (degree 2)"
-msgstr "指数函数（两项）"
+msgstr "指数函数 (两项)"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:577
 #, kde-format
@@ -8790,8 +8790,7 @@ msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:435
 #, fuzzy, kde-format
-#| msgid "%1: change column type"
-msgid "%1: change exact limtis"
+msgid "%1: change exact limits"
 msgstr "%1：更改列类型"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:587
@@ -8942,7 +8941,7 @@ msgstr "四角星"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:326
 #, kde-format
 msgid "star5"
-msgstr "五角星（变形）"
+msgstr "五角星 (变形)"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:328
 #, kde-format
@@ -9321,7 +9320,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:578
 #, kde-format
 msgid "%1: set rug orientation"
-msgstr ""
+msgstr "%1：设置轴须图须方向"
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1418
 #, kde-format
@@ -9713,7 +9712,7 @@ msgstr ""
 #: src/frontend/dockwidgets/WorksheetDock.cpp:373
 #, kde-format
 msgid "%1: set page size"
-msgstr ""
+msgstr "%1：设置页面大小"
 
 #: src/backend/worksheet/Worksheet.cpp:1569
 #, kde-format
@@ -9838,7 +9837,7 @@ msgstr "输入您要搜索的关键字"
 #: src/frontend/examples/ExamplesWidget.cpp:54
 #, kde-format
 msgid "Search..."
-msgstr "搜索…"
+msgstr "搜索..."
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:184
 #, kde-format
@@ -9928,14 +9927,14 @@ msgstr "原始大小"
 #, kde-format
 msgctxt "Zoom"
 msgid "Fit to Height"
-msgstr ""
+msgstr "适合高度"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:130
 #: src/frontend/worksheet/WorksheetView.cpp:170
 #, kde-format
 msgctxt "Zoom"
 msgid "Fit to Width"
-msgstr ""
+msgstr "适合宽度"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:133
 #: src/frontend/worksheet/WorksheetView.cpp:184
@@ -10177,28 +10176,27 @@ msgid ""
 "Sunday</td></tr></table><br><br>In case the provided expression is empty, "
 "the format will be auto-detected."
 msgstr ""
-"可用于日期部分的格式化字符串表达式有：<table><tr><td>d</td><td>日，无前导零"
-"（1 到 31）</td></tr><tr><td>dd</td><td>日，有前导零（01 到 31）</td></"
-"tr><tr><td>ddd</td><td>星期缩写（如“一”“日”），遵循系统的语言与区域设定</"
-"td></tr><tr><td>dddd</td><td>星期全称（如“星期一”“星期日”），遵循系统的语言与"
-"区域设定</td></tr><tr><td>M</td><td>月，无前导零（1 到 12）</td></"
-"tr><tr><td>MM</td><td>月，有前导零（01 到 12）</td></tr><tr><td>MMM</td><td>"
-"月份缩写（如“一月”“十二月”），遵循系统的语言与区域设定</td></"
-"tr><tr><td>MMMM</td><td>月份全称（如“一月”“十二月”），遵循系统的语言与区域设"
-"定</td></tr><tr><td>yy</td><td>年，末两位数（00 到 99）</td></"
-"tr><tr><td>yyyy</td><td>年，四位数，支持公元前用负数表示</td></tr></"
-"table><br><br>可用于时间部分的格式化字符串表达式有：<table><tr><td>h</td><td>"
-"时，无前导零（在 24、12 小时制下分别为 0 到 23、1 到 12）</td></"
-"tr><tr><td>hh</td><td>时，有前导零（在 24、12 小时制下分别为 00 到 23、01 到 "
-"12）</td></tr><tr><td>H</td><td>时，无前导零，强制使用 24 小时制（0 到 23）</"
-"td></tr><tr><td>HH</td><td>时，有前导零，强制使用 24 小时制（00 到 23）</"
-"td></tr><tr><td>m</td><td>分，无前导零（0 到 59）</td></tr><tr><td>mm</"
-"td><td>分，有前导零（00 到 59）</td></tr><tr><td>s</td><td>秒，无前导零（0 "
-"到 59）</td></tr><tr><td>ss</td><td>秒，有前导零（00 到 59）</td></"
-"tr><tr><td>z</td><td>毫秒，无前导零（0 到 999）</td></tr><tr><td>zzz</td><td>"
-"毫秒，有前导零（000 到 999）</td></tr><tr><td>AP 或 A</td><td>上下午，大写"
-"（必须为 \"AM\" 或 \"PM\"）</td></tr><tr><td>ap 或 a</td><td>上下午，小写（必"
-"须为 \"am\" 或 \"pm\"）</td></tr></table><br><br>例如（在中文环境下）："
+"可用于日期部分的格式化字符串表达式有：<table><tr><td>d</td><td>日，无前导零 "
+"(1 到 31)</td></tr><tr><td>dd</td><td>日，有前导零 (01 到 31)</td></"
+"tr><tr><td>ddd</td><td>星期缩写 (如“一”“日”)，遵循系统的语言与区域设定</td></"
+"tr><tr><td>dddd</td><td>星期全称 (如“星期一”“星期日”)，遵循系统的语言与区域设"
+"定</td></tr><tr><td>M</td><td>月，无前导零 (1 到 12)</td></tr><tr><td>MM</"
+"td><td>月，有前导零 (01 到 12)</td></tr><tr><td>MMM</td><td>月份缩写 (如“一"
+"月”“十二月”)，遵循系统的语言与区域设定</td></tr><tr><td>MMMM</td><td>月份全"
+"称 (如“一月”“十二月”)，遵循系统的语言与区域设定</td></tr><tr><td>yy</td><td>"
+"年，末两位数 (00 到 99)</td></tr><tr><td>yyyy</td><td>年，四位数，支持公元前"
+"用负数表示</td></tr></table><br><br>可用于时间部分的格式化字符串表达式有："
+"<table><tr><td>h</td><td>时，无前导零 (在 24、12 小时制下分别为 0 到 23、1 "
+"到 12)</td></tr><tr><td>hh</td><td>时，有前导零 (在 24、12 小时制下分别为 00 "
+"到 23、01 到 12)</td></tr><tr><td>H</td><td>时，无前导零，强制使用 24 小时制 "
+"(0 到 23)</td></tr><tr><td>HH</td><td>时，有前导零，强制使用 24 小时制 (00 "
+"到 23)</td></tr><tr><td>m</td><td>分，无前导零 (0 到 59)</td></"
+"tr><tr><td>mm</td><td>分，有前导零 (00 到 59)</td></tr><tr><td>s</td><td>秒，"
+"无前导零 (0 到 59)</td></tr><tr><td>ss</td><td>秒，有前导零 (00 到 59)</td></"
+"tr><tr><td>z</td><td>毫秒，无前导零 (0 到 999)</td></tr><tr><td>zzz</td><td>"
+"毫秒，有前导零 (000 到 999)</td></tr><tr><td>AP 或 A</td><td>上下午，大写 (必"
+"须为 \"AM\" 或 \"PM\")</td></tr><tr><td>ap 或 a</td><td>上下午，小写 (必须为 "
+"\"am\" 或 \"pm\")</td></tr></table><br><br>例如 (在中文环境下)："
 "<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</"
 "td><td>日 七月 20 69</td></tr><tr><td>'The day is' dddd</td><td>The day is 星"
 "期日</td></tr></table><br><br>留空可自动检测格式。"
@@ -10776,21 +10774,21 @@ msgstr "如果选中此选项，则在工程文件中储存指向文件的链接
 msgid ""
 "If this option is checked, the relative path of the file (relative to "
 "project's folder) will be saved."
-msgstr "如果选中此选项，则会保存文件的相对路径（相对于工程文件所在文件夹）。"
+msgstr "如果选中此选项，则会保存文件的相对路径 (相对于工程文件所在文件夹)。"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
 #: src/frontend/datasources/ImportFileWidget.cpp:167
 #: src/frontend/ui/dockwidgets/livedatadock.ui:348
 #, kde-format
 msgid "Continuously Fixed"
-msgstr "固定量连续读取（正向）"
+msgstr "固定量连续读取 (正向)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
 #: src/frontend/datasources/ImportFileWidget.cpp:168
 #: src/frontend/ui/dockwidgets/livedatadock.ui:353
 #, kde-format
 msgid "From End"
-msgstr "固定量连续读取（反向）"
+msgstr "固定量连续读取 (反向)"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:169
 #, kde-format
@@ -10813,8 +10811,8 @@ msgid ""
 "li><li>Whole file - on every read the whole file is re-read completely and "
 "processed. Only available for \"File Or Named Pipe\" data sources.</li></ul>"
 msgstr ""
-"指定每次读取时如何对数据源进行处理：<ul><li>固定量连续读取（正向）- 每次从新"
-"接收的数据中读取固定数量的样本，从头向尾</li><li>固定量连续读取（反向）- 每次"
+"指定每次读取时如何对数据源进行处理：<ul><li>固定量连续读取 (正向) - 每次从新"
+"接收的数据中读取固定数量的样本，从头向尾</li><li>固定量连续读取 (反向) - 每次"
 "从新接收的数据中读取固定数量的样本，从尾向头</li><li>所有新数据 - 每次读取所"
 "有新接收的数据</li><li>整个文件 - 每次读取整个文件，仅适用于“文件或命名管"
 "道”数据源</li></ul>"
@@ -10826,7 +10824,7 @@ msgid ""
 "Only needs to be specified for the reading mode \"Continuously Fixed\" and "
 "\"From End\"."
 msgstr ""
-"每次读取时要处理的样本数（行数）。\n"
+"每次读取时要处理的样本数 (行数)。\n"
 "仅适用于固定量连续读取模式。"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:222
@@ -11664,7 +11662,7 @@ msgstr "逻辑变量"
 #: src/frontend/dockwidgets/AxisDock.cpp:238
 #, kde-format
 msgid "Auto Data"
-msgstr ""
+msgstr "自动数据"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:242
 #, kde-format
@@ -11675,41 +11673,44 @@ msgid ""
 "points, respectively</li><li>Custom - manually specify the start and end "
 "points of the axis</li></ul>"
 msgstr ""
+"坐标轴范围：<ul><li>自动 - 将坐标轴的起点和终点自动设置为当前绘图范围</"
+"li><li>自动数据 - 自动将坐标轴的起点和终点设置为绘制数据点中的最小值和最大值"
+"</li><li>自定义 - 手动指定坐标轴的起点和终点</li></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:260
 #, kde-format
 msgid "No arrow"
-msgstr ""
+msgstr "无箭头"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:261
 #, kde-format
 msgid "Simple, Small"
-msgstr ""
+msgstr "简单小型"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:262
 #, kde-format
 msgid "Simple, Big"
-msgstr ""
+msgstr "简单大型"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:263
 #, kde-format
 msgid "Filled, Small"
-msgstr ""
+msgstr "全填充小型"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:264
 #, kde-format
 msgid "Filled, Big"
-msgstr ""
+msgstr "全填充大型"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:265
 #, kde-format
 msgid "Semi-filled, Small"
-msgstr ""
+msgstr "半填充小型"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:266
 #, kde-format
 msgid "Semi-filled, Big"
-msgstr ""
+msgstr "半填充大型"
 
 #. i18n("Original"));
 #. i18n("Custom"));
@@ -11729,7 +11730,7 @@ msgstr ""
 #: src/frontend/widgets/ValueWidget.cpp:37
 #, kde-format
 msgid "Left"
-msgstr "左"
+msgstr "左侧"
 
 #. i18n("Center") ); // must not updated
 #: src/frontend/dockwidgets/AxisDock.cpp:269
@@ -11747,7 +11748,7 @@ msgstr "左"
 #: src/frontend/widgets/ValueWidget.cpp:38
 #, kde-format
 msgid "Right"
-msgstr "右"
+msgstr "右侧"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:270
 #: src/frontend/dockwidgets/XYCurveDock.cpp:98
@@ -11771,14 +11772,14 @@ msgstr "外部"
 #: src/frontend/dockwidgets/AxisDock.cpp:288
 #, kde-format
 msgid "In and Out"
-msgstr ""
+msgstr "内部和外部"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:277
 #: src/frontend/dockwidgets/AxisDock.cpp:290
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:58
 #, kde-format
 msgid "Number"
-msgstr "数字"
+msgstr "数量"
 
 #. i18n: ectx: property (text), widget (QLabel, lSpacing)
 #: src/frontend/dockwidgets/AxisDock.cpp:278
@@ -11794,7 +11795,7 @@ msgstr "间距"
 #: src/frontend/dockwidgets/AxisDock.cpp:301
 #, kde-format
 msgid "Custom column"
-msgstr ""
+msgstr "自定义列"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:280
 #, kde-format
@@ -11804,74 +11805,74 @@ msgstr ""
 #: src/frontend/dockwidgets/AxisDock.cpp:282
 #, kde-format
 msgid "Absolute Value"
-msgstr ""
+msgstr "绝对值"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:283
 #, kde-format
 msgid "Offset"
-msgstr ""
+msgstr "偏移量"
 
 #. i18n("Column labels"));
 #. labels
 #: src/frontend/dockwidgets/AxisDock.cpp:296
 #, kde-format
 msgid "No labels"
-msgstr ""
+msgstr "无标签"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:300
 #, kde-format
 msgid "Position values"
-msgstr ""
+msgstr "坐标值"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:304
 #, kde-format
 msgid "Decimal notation"
-msgstr ""
+msgstr "小数表示"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:305
 #, kde-format
 msgid "Scientific notation"
-msgstr ""
+msgstr "科学记数法"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:306
 #, kde-format
 msgid "Scientific E notation"
-msgstr ""
+msgstr "科学记数法 E 标记"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:307
 #, kde-format
 msgid "Powers of 10"
-msgstr ""
+msgstr "10 的幂"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:308
 #, kde-format
 msgid "Powers of 2"
-msgstr ""
+msgstr "2 的幂"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:309
 #, kde-format
 msgid "Powers of e"
-msgstr ""
+msgstr "e 的幂"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:310
 #, kde-format
 msgid "Multiples of π"
-msgstr ""
+msgstr "π 的倍数"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:314
 #, kde-format
 msgid "Transparent"
-msgstr ""
+msgstr "透明"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:564
 #, kde-format
 msgid "%1: set axis color"
-msgstr ""
+msgstr "%1：设置坐标轴颜色"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:566
 #, kde-format
 msgid "%1 axes: set color"
-msgstr ""
+msgstr "坐标轴 %1：设置颜色"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:1573
 #, kde-format
@@ -11886,7 +11887,7 @@ msgstr ""
 #: src/frontend/dockwidgets/AxisDock.cpp:2028
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
-msgstr ""
+msgstr "坐标轴 %1：加载模板“%2”"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:2030
 #: src/frontend/dockwidgets/BarPlotDock.cpp:503
@@ -11907,7 +11908,7 @@ msgstr ""
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1038
 #, kde-format
 msgid "%1: template \"%2\" loaded"
-msgstr ""
+msgstr "%1：加载模板“%2”"
 
 #: src/frontend/dockwidgets/BarPlotDock.cpp:52
 #, kde-format
@@ -11959,7 +11960,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:421
 #, kde-format
 msgid "Columns:"
-msgstr "栏数："
+msgstr "列数："
 
 #. i18n: ectx: property (text), widget (QLabel, lDataColumn)
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksColumn)
@@ -12099,17 +12100,17 @@ msgstr ""
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:229
 #, kde-format
 msgid "Save current plot area definition as template"
-msgstr ""
+msgstr "将当前绘图区域定义保存为模板"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:608
 #, kde-format
 msgid "%1-Ranges:"
-msgstr ""
+msgstr "%1 范围："
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:610
 #, kde-format
 msgid "%1-Range:"
-msgstr ""
+msgstr "%1 范围："
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:634
@@ -12122,7 +12123,7 @@ msgstr "数值"
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:780
 #, kde-format
 msgid "Plot Ranges:"
-msgstr ""
+msgstr "绘图范围："
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:782
@@ -12155,17 +12156,17 @@ msgstr "绘图范围："
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:884
 #, kde-format
 msgid "Free"
-msgstr ""
+msgstr "全部点"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:885
 #, kde-format
 msgid "Last Points"
-msgstr ""
+msgstr "后若干个点"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:886
 #, kde-format
 msgid "First Points"
-msgstr ""
+msgstr "前若干个点"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:889
 #, kde-format
@@ -12174,11 +12175,13 @@ msgid ""
 "specified number of last points is plotted</li><li>First Points - specified "
 "number of first points is plotted</li></ul>"
 msgstr ""
+"数据范围：<ul><li>全部点 - 绘制全部点</li><li>后若干个点 - 仅绘制指定数量的后"
+"若干个点</li><li>前若干个点 - 仅绘制指定数量的前若干个点</li></ul>"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:898
 #, kde-format
 msgid "If checked, automatically extend the plot range to nice values"
-msgstr ""
+msgstr "如果选中，自动将绘图范围扩展到比较规整的值"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:903
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:907
@@ -12195,18 +12198,18 @@ msgstr ""
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1163
 #, kde-format
 msgid "%1 range %2 is used in plot range %3. "
-msgstr ""
+msgstr "%1 范围 %2 正在被绘图范围 %3 使用。"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1164
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1217
 #, kde-format
 msgid "Really remove it?"
-msgstr ""
+msgstr "确定要删除吗？"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1217
 #, kde-format
 msgid "Plot range %1 is used by element \"%2\". "
-msgstr ""
+msgstr "绘图范围 %1 正在被元素“%2”使用。"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
@@ -12236,7 +12239,7 @@ msgstr "垂直："
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:414
 #, kde-format
 msgid "Left:"
-msgstr "剩余："
+msgstr "左："
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
@@ -12252,17 +12255,17 @@ msgstr "上："
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
-msgstr ""
+msgstr "选择模板保存文件"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1648
 #, kde-format
 msgid "Labplot Plot Templates (*%1)"
-msgstr ""
+msgstr "LabPlot 绘图模板 (*%1)"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1837
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
-msgstr ""
+msgstr "直角坐标绘图 %1：加载模板“%2”"
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:246
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:246
@@ -12297,7 +12300,7 @@ msgstr "行"
 #: src/frontend/widgets/ValueWidget.cpp:95
 #, kde-format
 msgid "Center"
-msgstr "中间对齐"
+msgstr "中间"
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:253
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:258
@@ -12305,12 +12308,12 @@ msgstr "中间对齐"
 #: src/frontend/widgets/LabelWidget.cpp:161
 #, kde-format
 msgid "Relative to plot"
-msgstr ""
+msgstr "与绘图相对位置"
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:779
 #, kde-format
 msgid "%1 cartesian plot legends: template \"%2\" loaded"
-msgstr ""
+msgstr "直角坐标绘图图例 %1：加载模板“%2”"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:37
 #: src/frontend/dockwidgets/MatrixDock.cpp:31
@@ -12517,12 +12520,12 @@ msgstr ""
 #: src/frontend/dockwidgets/MatrixDock.cpp:34
 #, kde-format
 msgid "Automatic (g)"
-msgstr ""
+msgstr "自动 (g)"
 
 #: src/frontend/dockwidgets/MatrixDock.cpp:35
 #, kde-format
 msgid "Automatic (G)"
-msgstr ""
+msgstr "自动 (G)"
 
 #: src/frontend/dockwidgets/MatrixDock.cpp:37
 #: src/frontend/matrix/MatrixView.cpp:162
@@ -12534,18 +12537,18 @@ msgstr "行与列"
 #: src/frontend/matrix/MatrixView.cpp:164
 #, kde-format
 msgid "xy-Values"
-msgstr "x-y 值"
+msgstr "XY 值"
 
 #: src/frontend/dockwidgets/MatrixDock.cpp:39
 #: src/frontend/matrix/MatrixView.cpp:166
 #, kde-format
 msgid "Rows, Columns and xy-Values"
-msgstr "行与列及 x-y 值"
+msgstr "行与列及 XY 值"
 
 #: src/frontend/dockwidgets/MatrixDock.cpp:264
 #, kde-format
 msgid "%1 matrices: template \"%2\" loaded"
-msgstr ""
+msgstr "矩阵 %1：加载模板“%2”"
 
 #: src/frontend/dockwidgets/NotebookDock.cpp:61
 #, kde-format
@@ -12587,6 +12590,8 @@ msgid ""
 "If checked, the state of the default application docks is saved in the "
 "project file and restored on project load."
 msgstr ""
+"如果选中，应用程序浮动面板默认状态将保存在工程文件中，并在工程文件加载时读"
+"取。"
 
 #: src/frontend/dockwidgets/ProjectDock.cpp:33
 #, kde-format
@@ -12596,6 +12601,8 @@ msgid ""
 "Uncheck this option to reduce the size of the project file at costs of the "
 "longer project load times."
 msgstr ""
+"如果选中，分析曲线的计算结果将保存在工程文件中。\n"
+"取消选中此选项可以减小工程文件的大小，但会使工程加载时间变长。"
 
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:227
 #, kde-format
@@ -12606,24 +12613,24 @@ msgstr ""
 #, kde-format
 msgid ""
 "Enable linking to synchronize the number of rows with another spreadsheet"
-msgstr ""
+msgstr "启用链接，将行数与其他数据表同步"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:56
 #, kde-format
 msgid "Spreadsheet to synchronize the number of rows with"
-msgstr ""
+msgstr "待同步行数的数据表"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:230
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
-msgstr ""
+msgstr "数据表 %1：加载模板“%2”"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:44
 #, kde-format
 msgid ""
 "If checked, rescale the content of the worksheet on size changes. Otherwise "
 "resize the canvas only."
-msgstr ""
+msgstr "如果选中此项，将在大小更改时缩放工作表中的内容，否则只调整画布的大小。"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:46
 #: src/frontend/worksheet/WorksheetView.cpp:236
@@ -12652,27 +12659,27 @@ msgstr "网格布局"
 #: src/frontend/dockwidgets/WorksheetDock.cpp:256
 #, kde-format
 msgid "Portrait"
-msgstr "肖像"
+msgstr "纵向"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:257
 #, kde-format
 msgid "Landscape"
-msgstr "风景"
+msgstr "横向"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:275
 #, kde-format
 msgid "View Size"
-msgstr ""
+msgstr "视图大小"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:276
 #, kde-format
 msgid "Standard Page"
-msgstr ""
+msgstr "标准纸张"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:604
 #, kde-format
 msgid "%1 worksheets: template \"%2\" loaded"
-msgstr ""
+msgstr "工作表 %1：加载模板“%2”"
 
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:20
 #, kde-format
@@ -12761,12 +12768,12 @@ msgstr "3-分段"
 #: src/frontend/dockwidgets/XYCurveDock.cpp:205
 #, kde-format
 msgid "Akima-spline (Natural)"
-msgstr "Akima 样条曲线（自然）"
+msgstr "Akima 样条曲线 (自然)"
 
 #: src/frontend/dockwidgets/XYCurveDock.cpp:206
 #, kde-format
 msgid "Akima-spline (Periodic)"
-msgstr "Akima 样条曲线（封闭）"
+msgstr "Akima 样条曲线 (封闭)"
 
 #: src/frontend/dockwidgets/XYCurveDock.cpp:331
 #: src/frontend/widgets/ValueWidget.cpp:31
@@ -12800,7 +12807,7 @@ msgstr "下"
 msgid ""
 "If checked, connect neighbour points with lines even if there are gaps "
 "(invalid or masked values) between them"
-msgstr "如果选中，即使相邻点之间存在空隙（无效值或屏蔽值），也将它们连接起来"
+msgstr "如果选中，即使相邻点之间存在空隙 (无效值或屏蔽值)，也将它们连接起来"
 
 #: src/frontend/dockwidgets/XYCurveDock.cpp:519
 #: src/frontend/dockwidgets/XYCurveDock.cpp:520
@@ -12884,51 +12891,51 @@ msgstr ""
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:71
 #, kde-format
 msgid "Cartesian"
-msgstr "笛卡尔"
+msgstr "直角坐标"
 
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:72
 #, kde-format
 msgid "Polar"
-msgstr "极点"
+msgstr "极坐标"
 
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:73
 #, kde-format
 msgid "Parametric"
-msgstr ""
+msgstr "参数方程"
 
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:154
 #, kde-format
 msgid "x, min"
-msgstr "x, 最小值"
+msgstr "x 最小值"
 
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:155
 #, kde-format
 msgid "x, max"
-msgstr "x, 最大值"
+msgstr "x 最大值"
 
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:166
 #, kde-format
 msgid "φ, min"
-msgstr ""
+msgstr "φ 最小值"
 
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:167
 #, kde-format
 msgid "φ, max"
-msgstr ""
+msgstr "φ 最大值"
 
 #. i18n: ectx: property (text), widget (QLabel, lMin)
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:179
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:179
 #, kde-format
 msgid "t, min"
-msgstr ""
+msgstr "t 最小值"
 
 #. i18n: ectx: property (text), widget (QLabel, lMax)
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:180
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:94
 #, kde-format
 msgid "t, max"
-msgstr ""
+msgstr "t 最大值"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:145
 #, kde-format
@@ -13148,175 +13155,175 @@ msgstr "属性"
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Spreadsheet"
-msgstr ""
+msgstr "属性：数据表"
 
 #: src/frontend/GuiObserver.cpp:236
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column Statistics"
-msgstr ""
+msgstr "属性：列统计数据表"
 
 #: src/frontend/GuiObserver.cpp:246
 #, kde-format
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Worksheet"
-msgstr ""
+msgstr "%1 工作表"
 
 #: src/frontend/GuiObserver.cpp:251
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column"
-msgstr ""
+msgstr "属性：列"
 
 #: src/frontend/GuiObserver.cpp:258
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Matrix"
-msgstr ""
+msgstr "属性：矩阵"
 
 #: src/frontend/GuiObserver.cpp:263
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Worksheet"
-msgstr ""
+msgstr "属性：工作表"
 
 #: src/frontend/GuiObserver.cpp:269
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Plot Area"
-msgstr ""
+msgstr "属性：绘制区域"
 
 #: src/frontend/GuiObserver.cpp:275
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Legend"
-msgstr ""
+msgstr "属性：图例"
 
 #: src/frontend/GuiObserver.cpp:280
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Axis"
-msgstr ""
+msgstr "属性：坐标轴"
 
 #: src/frontend/GuiObserver.cpp:285
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: XY-Curve"
-msgstr ""
+msgstr "属性：XY 曲线"
 
 #: src/frontend/GuiObserver.cpp:290
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: XY-Equation"
-msgstr ""
+msgstr "属性：方程 XY 曲线"
 
 #: src/frontend/GuiObserver.cpp:295
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Function Curve"
-msgstr ""
+msgstr "属性：函数曲线"
 
 #: src/frontend/GuiObserver.cpp:300
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Data Reduction"
-msgstr ""
+msgstr "属性：数据规约"
 
 #: src/frontend/GuiObserver.cpp:316
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Differentiation"
-msgstr ""
+msgstr "属性：微分"
 
 #: src/frontend/GuiObserver.cpp:321
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Integration"
-msgstr ""
+msgstr "属性：积分"
 
 #: src/frontend/GuiObserver.cpp:326
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Interpolation"
-msgstr ""
+msgstr "属性：插值"
 
 #: src/frontend/GuiObserver.cpp:331
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Smoothing"
-msgstr ""
+msgstr "属性：平滑"
 
 #: src/frontend/GuiObserver.cpp:336
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fit"
-msgstr ""
+msgstr "属性：拟合"
 
 #: src/frontend/GuiObserver.cpp:341
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Transform"
-msgstr ""
+msgstr "属性：傅立叶变换"
 
 #: src/frontend/GuiObserver.cpp:346
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Hilbert Transform"
-msgstr ""
+msgstr "属性：希尔伯特变换"
 
 #: src/frontend/GuiObserver.cpp:351
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Filter"
-msgstr ""
+msgstr "属性：傅立叶滤波"
 
 #: src/frontend/GuiObserver.cpp:356
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Convolution/Deconvolution"
-msgstr ""
+msgstr "属性：卷积/反卷积"
 
 #: src/frontend/GuiObserver.cpp:361
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Auto-/Cross-Correlation"
-msgstr ""
+msgstr "属性：自相关/互相关"
 
 #: src/frontend/GuiObserver.cpp:366
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Histogram"
-msgstr ""
+msgstr "属性：直方图"
 
 #: src/frontend/GuiObserver.cpp:372
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Bar Plot"
-msgstr ""
+msgstr "属性：柱状图"
 
 #: src/frontend/GuiObserver.cpp:377
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Lollipop Plot"
-msgstr ""
+msgstr "属性：棒棒糖图"
 
 #: src/frontend/GuiObserver.cpp:383
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Box Plot"
-msgstr ""
+msgstr "属性：箱线图"
 
 #: src/frontend/GuiObserver.cpp:388
 #, kde-format
 msgctxt "@title:window"
 msgid "KDE Plot"
-msgstr ""
+msgstr "KDE 图"
 
 #: src/frontend/GuiObserver.cpp:393
 #, kde-format
 msgctxt "@title:window"
 msgid "Q-Q Plot"
-msgstr ""
+msgstr "Q-Q 图"
 
 #: src/frontend/GuiObserver.cpp:399
 #, kde-format
@@ -13334,98 +13341,98 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Text Label"
-msgstr ""
+msgstr "属性：文本标签"
 
 #: src/frontend/GuiObserver.cpp:414
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Image"
-msgstr ""
+msgstr "属性：图像"
 
 #: src/frontend/GuiObserver.cpp:419
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Custom Point"
-msgstr ""
+msgstr "属性：自定义点"
 
 #: src/frontend/GuiObserver.cpp:424
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Reference Line"
-msgstr ""
+msgstr "属性：参考线"
 
 #: src/frontend/GuiObserver.cpp:429
 #, kde-format
 msgctxt "@title:window"
 msgid "Reference Range"
-msgstr ""
+msgstr "参照区间"
 
 #: src/frontend/GuiObserver.cpp:434
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Datapicker Curve"
-msgstr ""
+msgstr "属性：数据点提取曲线"
 
 #: src/frontend/GuiObserver.cpp:439
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Data Extractor"
-msgstr ""
+msgstr "属性：数据点提取器"
 
 #: src/frontend/GuiObserver.cpp:449
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Project"
-msgstr ""
+msgstr "属性：工程"
 
 #: src/frontend/GuiObserver.cpp:459
 #, kde-format
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Notebook"
-msgstr ""
+msgstr "%1 笔记本"
 
 #: src/frontend/GuiObserver.cpp:461
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notebook"
-msgstr ""
+msgstr "属性：笔记本"
 
 #: src/frontend/GuiObserver.cpp:467
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notes"
-msgstr ""
+msgstr "属性：备注"
 
 #: src/frontend/GuiObserver.cpp:472
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Info Element"
-msgstr ""
+msgstr "属性：数据点标注"
 
 #: src/frontend/GuiObserver.cpp:479 src/frontend/GuiObserver.cpp:486
 #: src/frontend/GuiObserver.cpp:493
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: MQTT Data Source"
-msgstr ""
+msgstr "属性：MQTT 数据源"
 
 #: src/frontend/GuiObserver.cpp:499
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Live Data Source"
-msgstr ""
+msgstr "属性：实时数据源"
 
 #: src/frontend/GuiObserver.cpp:513
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Folder"
-msgstr ""
+msgstr "属性：文件夹"
 
 #: src/frontend/GuiObserver.cpp:520
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Workbook"
-msgstr ""
+msgstr "属性：工作簿"
 
 #: src/frontend/GuiTools.cpp:68 src/frontend/GuiTools.cpp:94
 #, kde-format
@@ -13500,32 +13507,32 @@ msgstr "极度稀疏"
 #: src/frontend/GuiTools.cpp:161
 #, kde-format
 msgid "Horiz. Lines"
-msgstr ""
+msgstr "水平线"
 
 #: src/frontend/GuiTools.cpp:162
 #, kde-format
 msgid "Vert. Lines"
-msgstr ""
+msgstr "垂直线"
 
 #: src/frontend/GuiTools.cpp:163
 #, kde-format
 msgid "Crossing Lines"
-msgstr ""
+msgstr "十字线"
 
 #: src/frontend/GuiTools.cpp:164
 #, kde-format
 msgid "Backward Diag. Lines"
-msgstr ""
+msgstr "反斜对角线"
 
 #: src/frontend/GuiTools.cpp:165
 #, kde-format
 msgid "Forward Diag. Lines"
-msgstr ""
+msgstr "正斜对角线"
 
 #: src/frontend/GuiTools.cpp:166
 #, kde-format
 msgid "Crossing Diag. Lines"
-msgstr ""
+msgstr "交叉对角线"
 
 #: src/frontend/GuiTools.cpp:184
 #, kde-format
@@ -13646,7 +13653,7 @@ msgstr "浅灰色"
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image File"
-msgstr ""
+msgstr "打开图像文件"
 
 #: src/frontend/GuiTools.cpp:283
 #, kde-format
@@ -14095,7 +14102,7 @@ msgstr "创建新的文件夹，用于存放工作表等其他元素"
 #: src/frontend/MainWin.cpp:640
 #, kde-format
 msgid "Live Data Source..."
-msgstr "实时数据源…"
+msgstr "实时数据源..."
 
 #: src/frontend/MainWin.cpp:641
 #, kde-format
@@ -14110,7 +14117,7 @@ msgstr "从常规文件导入数据"
 #: src/frontend/MainWin.cpp:662
 #, kde-format
 msgid "From kaggle.com..."
-msgstr "来自 kaggle.com…"
+msgstr "来自 kaggle.com..."
 
 #: src/frontend/MainWin.cpp:663
 #, kde-format
@@ -14125,7 +14132,7 @@ msgstr "从 SQL 数据库导入数据"
 #: src/frontend/MainWin.cpp:672
 #, kde-format
 msgid "From Dataset Collection..."
-msgstr "来自数据集库…"
+msgstr "来自数据集库..."
 
 #: src/frontend/MainWin.cpp:673
 #, kde-format
@@ -14135,7 +14142,7 @@ msgstr "从在线数据集导入数据"
 #: src/frontend/MainWin.cpp:677
 #, kde-format
 msgid "LabPlot Project..."
-msgstr "LabPlot 工程文件…"
+msgstr "LabPlot 工程文件..."
 
 #: src/frontend/MainWin.cpp:678
 #, kde-format
@@ -14145,7 +14152,7 @@ msgstr "从 LabPlot 工程文件 (.lml) 导入到当前工程"
 #: src/frontend/MainWin.cpp:683
 #, kde-format
 msgid "Origin Project (OPJ)..."
-msgstr "Origin 工程文件 (OPJ)…"
+msgstr "Origin 工程文件 (OPJ)..."
 
 #: src/frontend/MainWin.cpp:684
 #, kde-format
@@ -14155,7 +14162,7 @@ msgstr "从 OriginLab Origin 工程文件 (.opj) 导入到当前工程"
 #: src/frontend/MainWin.cpp:689
 #, kde-format
 msgid "Export..."
-msgstr "导出…"
+msgstr "导出..."
 
 #: src/frontend/MainWin.cpp:690
 #, kde-format
@@ -14181,7 +14188,7 @@ msgstr "打开对话框以浏览可用的色阶。"
 #: src/frontend/MainWin.cpp:711
 #, kde-format
 msgid "FITS Metadata Editor..."
-msgstr "FITS 元数据编辑器…"
+msgstr "FITS 元数据编辑器..."
 
 #: src/frontend/MainWin.cpp:712
 #, kde-format
@@ -14191,7 +14198,7 @@ msgstr "打开 FITS 元数据编辑器"
 #: src/frontend/MainWin.cpp:721
 #, kde-format
 msgid "Undo/Redo History..."
-msgstr "撤销/重做历史…"
+msgstr "撤销/重做历史..."
 
 #: src/frontend/MainWin.cpp:741
 #, kde-format
@@ -14266,7 +14273,7 @@ msgstr "工作表预览"
 #: src/frontend/MainWin.cpp:834
 #, kde-format
 msgid "Configure CAS..."
-msgstr "配置 CAS…"
+msgstr "配置 CAS..."
 
 #: src/frontend/MainWin.cpp:835
 #, kde-format
@@ -14298,7 +14305,7 @@ msgstr "保存工程"
 #: src/frontend/MainWin.cpp:1330
 #, kde-format
 msgid "%1: created"
-msgstr "%1 已创建"
+msgstr "%1：创建"
 
 #: src/frontend/MainWin.cpp:1356
 #, kde-format
@@ -14368,12 +14375,12 @@ msgstr "无法读取工程文件 %1。"
 #: src/frontend/MainWin.cpp:1523
 #, kde-format
 msgid "Loading %1..."
-msgstr "正在加载 %1…"
+msgstr "正在加载 %1..."
 
 #: src/frontend/MainWin.cpp:1577
 #, kde-format
 msgid "%1: opened"
-msgstr "%1 已打开"
+msgstr "%1：打开"
 
 #: src/frontend/MainWin.cpp:1612
 #, kde-format
@@ -14584,7 +14591,7 @@ msgstr "清除内容"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:332
 #, kde-format
 msgid "&Go to Cell..."
-msgstr "转到单元格(&G)…"
+msgstr "转到单元格(&G)..."
 
 #: src/frontend/matrix/MatrixView.cpp:142
 #, kde-format
@@ -14878,7 +14885,7 @@ msgstr "数据绘图"
 #: src/frontend/notebook/NotebookView.cpp:292
 #, kde-format
 msgid "Variable Statistics..."
-msgstr "变量统计…"
+msgstr "变量统计..."
 
 #: src/frontend/notebook/NotebookView.cpp:339
 #, kde-format
@@ -15303,7 +15310,7 @@ msgid ""
 "The setting can be changed for every project separately in the project "
 "properties."
 msgstr ""
-"是否保存工程文件中浮动面板的状态（位置与大小）。\n"
+"是否保存工程文件中浮动面板的状态 (位置与大小)。\n"
 "此处的设置决定新工程的默认行为。\n"
 "可在工程属性中单独更改每个工程的设置。"
 
@@ -16585,7 +16592,7 @@ msgstr "替换(&R)"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:483
 #, kde-format
 msgid "Column Statistics..."
-msgstr "列统计…"
+msgstr "列统计..."
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:339
 #, kde-format
@@ -16743,7 +16750,7 @@ msgstr "映射到 [a, b]"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:477
 #, kde-format
 msgid "&Sort..."
-msgstr "排序(&S)…"
+msgstr "排序(&S)..."
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:478
 #, kde-format
@@ -17185,7 +17192,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:26
 #, kde-format
 msgid "Location Measures"
-msgstr ""
+msgstr "位置量度"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:72
 #, kde-format
@@ -17202,21 +17209,21 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:151
 #, kde-format
 msgid "Dispersion Measures"
-msgstr ""
+msgstr "离散量度"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMeanDeviation)
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:82
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:185
 #, kde-format
 msgid "Mean absolute deviation around mean"
-msgstr ""
+msgstr "平均绝对偏差 (围绕均值)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:88
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:235
 #, kde-format
 msgid "Shape Measures"
-msgstr ""
+msgstr "形状量度"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:97
 #, kde-format
@@ -17611,7 +17618,7 @@ msgstr "颜色："
 #: src/frontend/ui/labelwidget.ui:70 src/frontend/ui/symbolwidget.ui:78
 #, kde-format
 msgid "Size:"
-msgstr "尺寸:"
+msgstr "尺寸："
 
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbSize)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbBorderWidth)
@@ -17793,7 +17800,7 @@ msgstr "尺寸:"
 #: src/frontend/ui/symbolwidget.ui:293 src/frontend/ui/symbolwidget.ui:312
 #, kde-format
 msgid "Spinbox for numbers."
-msgstr ""
+msgstr "数字微调框。"
 
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbSize)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbBorderWidth)
@@ -17843,14 +17850,14 @@ msgstr " pt"
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:99
 #, kde-format
 msgid "Specify the name of the image file."
-msgstr ""
+msgstr "指定图像文件的名称。"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bOpen)
 #: src/frontend/ui/datapickerimagewidget.ui:119
 #: src/frontend/ui/dockwidgets/imagedock.ui:434
 #, kde-format
 msgid " Select the image file"
-msgstr ""
+msgstr " 选择图像文件"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbPointSeparation)
 #. i18n: ectx: property (toolTip), widget (QLabel, lPointSeparation)
@@ -17919,7 +17926,7 @@ msgstr "片断"
 #: src/frontend/ui/labelwidget.ui:205 src/frontend/ui/symbolwidget.ui:101
 #, kde-format
 msgid "°"
-msgstr ""
+msgstr "°"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbMinSegmentLength)
 #. i18n: ectx: property (toolTip), widget (QLabel, lMinSegmentLength)
@@ -17991,7 +17998,7 @@ msgstr "3."
 #: src/frontend/ui/datapickerimagewidget.ui:682
 #, kde-format
 msgid "Image:"
-msgstr "镜像："
+msgstr "图像："
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileEmbedd)
 #: src/frontend/ui/datapickerimagewidget.ui:701
@@ -18106,7 +18113,7 @@ msgstr "色相："
 #: src/frontend/ui/datapickerimagewidget.ui:937
 #, kde-format
 msgid "Current Image:"
-msgstr ""
+msgstr "当前图像："
 
 #. i18n: ectx: property (text), widget (QLabel, lSaturation)
 #: src/frontend/ui/datapickerimagewidget.ui:950
@@ -18806,10 +18813,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lGraphLayer)
 #: src/frontend/ui/datasources/importoriginlayersdialog.ui:27
-#, fuzzy, kde-format
-#| msgid "Import as:"
+#, kde-format
 msgid "Import As"
-msgstr "导入为："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #: src/frontend/ui/datasources/importprojectwidget.ui:23
@@ -19033,19 +19039,19 @@ msgstr "开始："
 #: src/frontend/ui/dockwidgets/axisdock.ui:79
 #, kde-format
 msgid "Show scale and offset beside axis"
-msgstr ""
+msgstr "在坐标轴旁边显示缩放因子和零点偏移"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowScaleOffset)
 #: src/frontend/ui/dockwidgets/axisdock.ui:82
 #, kde-format
 msgid "Show scale and offset"
-msgstr ""
+msgstr "显示缩放因子和零点偏移"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbUnityScale)
 #: src/frontend/ui/dockwidgets/axisdock.ui:126
 #, kde-format
 msgid "Set factor to unity scale"
-msgstr ""
+msgstr "设置缩放因子使总刻度为 1"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbWillQoS)
 #. i18n: ectx: property (text), widget (QToolButton, tbUnityScale)
@@ -19059,13 +19065,13 @@ msgstr "1"
 #: src/frontend/ui/dockwidgets/axisdock.ui:136
 #, kde-format
 msgid "Set factor and offset to get 0 .. 1"
-msgstr ""
+msgstr "设置缩放因子和零点偏移得到 0 .. 1"
 
 #. i18n: ectx: property (text), widget (QToolButton, tbUnityRange)
 #: src/frontend/ui/dockwidgets/axisdock.ui:139
 #, kde-format
 msgid "0 .. 1"
-msgstr ""
+msgstr "0 .. 1"
 
 #. i18n: ectx: property (text), widget (QLabel, lScale)
 #: src/frontend/ui/dockwidgets/axisdock.ui:151
@@ -19077,7 +19083,7 @@ msgstr "缩放："
 #: src/frontend/ui/dockwidgets/axisdock.ui:174
 #, kde-format
 msgid "Zero Offset:"
-msgstr ""
+msgstr "零点偏移："
 
 #. i18n: ectx: property (text), widget (QLabel, lEndDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lEnd)
@@ -19091,25 +19097,25 @@ msgstr "结束："
 #: src/frontend/ui/dockwidgets/axisdock.ui:300
 #, kde-format
 msgid "Set offset to start at zero"
-msgstr ""
+msgstr "将开始点设为 0"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbOffsetCenter)
 #: src/frontend/ui/dockwidgets/axisdock.ui:313
 #, kde-format
 msgid "Set offset to center around zero"
-msgstr ""
+msgstr "将中点设为 0"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbOffsetRight)
 #: src/frontend/ui/dockwidgets/axisdock.ui:326
 #, kde-format
 msgid "Set offset to end at zero"
-msgstr ""
+msgstr "将结束点设为 0"
 
 #. i18n: ectx: property (text), widget (QLabel, lScalingFactor)
 #: src/frontend/ui/dockwidgets/axisdock.ui:372
 #, kde-format
 msgid "Scaling Factor:"
-msgstr ""
+msgstr "缩放因子："
 
 #. i18n: ectx: property (text), widget (QLabel, lAutoScale)
 #. i18n: ectx: property (text), widget (QLabel, lRangeType)
@@ -19117,7 +19123,7 @@ msgstr ""
 #: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:101
 #, kde-format
 msgid "Range:"
-msgstr ""
+msgstr "范围："
 
 #. i18n: ectx: property (text), widget (QLabel, lOrientation)
 #. i18n: ectx: property (text), widget (QLabel, lRugOrientation)
@@ -19156,13 +19162,13 @@ msgstr "箭头"
 msgid ""
 "The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is "
 "fully opaque."
-msgstr ""
+msgstr "不透明度取值范围为 0 到 100，0 为完全透明，100 为完全不透明。"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTicks)
 #: src/frontend/ui/dockwidgets/axisdock.ui:652
 #, kde-format
 msgid "Ticks"
-msgstr "刻度"
+msgstr "刻度线"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumber)
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksNumber)
@@ -19172,7 +19178,7 @@ msgstr "刻度"
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:157
 #, kde-format
 msgid "Number:"
-msgstr "数值："
+msgstr "数量："
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTickStartValue)
 #. i18n: ectx: property (text), widget (QLabel, lMajorTickStartDateTime)
@@ -19180,7 +19186,7 @@ msgstr "数值："
 #: src/frontend/ui/dockwidgets/axisdock.ui:1148
 #, kde-format
 msgid "1st Tick Value:"
-msgstr ""
+msgstr "首条刻度线值："
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksSpacingNumeric)
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksSpacingNumeric)
@@ -19188,13 +19194,13 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/axisdock.ui:1000
 #, kde-format
 msgid "Spacing:"
-msgstr ""
+msgstr "间距："
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicks)
 #: src/frontend/ui/dockwidgets/axisdock.ui:760
 #, kde-format
 msgid "Major Ticks"
-msgstr ""
+msgstr "主刻度线"
 
 #. i18n: ectx: property (text), widget (QLabel, lIncrementDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lIncrement)
@@ -19212,13 +19218,13 @@ msgstr "增量："
 #: src/frontend/ui/dockwidgets/axisdock.ui:774
 #, kde-format
 msgid "Label Type:"
-msgstr ""
+msgstr "标签类型："
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsTextColumn)
 #: src/frontend/ui/dockwidgets/axisdock.ui:781
 #, kde-format
 msgid "Label Column:"
-msgstr ""
+msgstr "标签列："
 
 #. i18n: ectx: property (text), widget (QLabel, lPosition)
 #. i18n: ectx: property (text), widget (QLabel, lOrientation)
@@ -19241,6 +19247,7 @@ msgid ""
 "<html><head/><body><p>Set offset to start ticks at first data point</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>将首条刻度线偏移量设在第一个数据点上</p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFirstTickAuto)
 #: src/frontend/ui/dockwidgets/axisdock.ui:944
@@ -19249,6 +19256,8 @@ msgid ""
 "<html><head/><body><p>Set offset to start ticks at round value before first "
 "data point</p></body></html>"
 msgstr ""
+"<html><head/><body><p>将首条刻度线偏移量设在第一个数据点前的规整数字上</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lRugLength)
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksLength)
@@ -19267,7 +19276,7 @@ msgstr "长度："
 #: src/frontend/ui/dockwidgets/axisdock.ui:993
 #, kde-format
 msgid "Minor Ticks"
-msgstr ""
+msgstr "次刻度线"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lMajorTickStartOffset)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1033
@@ -19276,18 +19285,19 @@ msgid ""
 "<html><head/><body><p>Offset of the first tick from the start of the axis</"
 "p></body></html>"
 msgstr ""
+"<html><head/><body><p>首条刻度线相对坐标轴起始值的偏移量</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTickStartOffset)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1036
 #, kde-format
 msgid "1st Tick Offset:"
-msgstr ""
+msgstr "首条刻度线偏移量："
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksStartType)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1105
 #, kde-format
 msgid "1st Tick at:"
-msgstr ""
+msgstr "首条刻度线位于："
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLabels)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1159
@@ -19301,7 +19311,7 @@ msgstr "标签"
 #: src/frontend/ui/dockwidgets/axisdock.ui:1202
 #, kde-format
 msgid "Number of digits after the decimal point"
-msgstr ""
+msgstr "小数点后的数字位数"
 
 #. i18n: ectx: property (text), widget (QLabel, lPrecision)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsPrecision)
@@ -19320,7 +19330,7 @@ msgstr "精度："
 #, kde-format
 msgid ""
 "Automatically determine the optimal number of digits after the decimal point"
-msgstr ""
+msgstr "自动确定小数点后数字位数的最佳值"
 
 #. i18n: ectx: property (text), widget (QLabel, lPosition_2)
 #. i18n: ectx: property (text), widget (QLabel, lPosition)
@@ -19416,7 +19426,7 @@ msgstr "格式："
 #: src/frontend/worksheet/GridDialog.cpp:81
 #, no-c-format, kde-format
 msgid " %"
-msgstr ""
+msgstr " %"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsPrefix)
 #. i18n: ectx: property (text), widget (QLabel, lPrefix)
@@ -19434,7 +19444,7 @@ msgstr "前缀："
 #: src/frontend/ui/labelwidget.ui:530
 #, kde-format
 msgid "Font Color:"
-msgstr ""
+msgstr "字体颜色："
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabGrid)
 #. i18n: ectx: property (text), widget (QLabel, lGrid)
@@ -19449,13 +19459,13 @@ msgstr "网格"
 #: src/frontend/ui/dockwidgets/axisdock.ui:1663
 #, kde-format
 msgid "Minor Grid"
-msgstr ""
+msgstr "次网格"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorGrid)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1675
 #, kde-format
 msgid "Major Grid"
-msgstr ""
+msgstr "主网格"
 
 #. i18n: ectx: property (text), widget (QLabel, lEnabled)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
@@ -19479,13 +19489,13 @@ msgstr "启用状态:"
 #: src/frontend/widgets/BackgroundWidget.cpp:257
 #, kde-format
 msgid "First color:"
-msgstr "首选颜色:"
+msgstr "首选颜色："
 
 #. i18n: ectx: property (text), widget (QLabel, lSecondColor)
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:213
 #, kde-format
 msgid "Second color:"
-msgstr "次选颜色:"
+msgstr "次选颜色："
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkVisible)
 #: src/frontend/ui/dockwidgets/barplotdock.ui:61
@@ -19515,7 +19525,7 @@ msgstr "可见"
 #: src/frontend/ui/labelwidget.ui:221 src/frontend/ui/labelwidget.ui:769
 #, kde-format
 msgid "x:"
-msgstr "x："
+msgstr "X："
 
 #. i18n: ectx: property (text), widget (QLabel, lXColumn)
 #. i18n: ectx: property (text), widget (QLabel, lDataColumn)
@@ -19546,7 +19556,7 @@ msgstr "数据："
 #: src/frontend/ui/labelwidget.ui:576
 #, kde-format
 msgid "y:"
-msgstr "y："
+msgstr "Y："
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabBars)
 #: src/frontend/ui/dockwidgets/barplotdock.ui:243
@@ -19699,7 +19709,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:592
 #, kde-format
 msgid "Margins"
-msgstr ""
+msgstr "边距"
 
 #. i18n: ectx: property (text), widget (QLabel, lRug)
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:787
@@ -19708,7 +19718,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:668
 #, kde-format
 msgid "Rug Plot"
-msgstr ""
+msgstr "轴须图"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderWidth)
 #. i18n: ectx: property (text), widget (QLabel, lBottomMargin)
@@ -19731,25 +19741,25 @@ msgstr "宽度："
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:73
 #, kde-format
 msgid "List of plot ranges"
-msgstr ""
+msgstr "绘图范围列表"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:89
 #, kde-format
 msgid "X Range"
-msgstr ""
+msgstr "X 范围"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:94
 #, kde-format
 msgid "Y Range"
-msgstr ""
+msgstr "Y 范围"
 
 #. i18n: ectx: property (toolTip), widget (QTableWidget, twYRanges)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:178
 #, kde-format
 msgid "list of y ranges"
-msgstr ""
+msgstr "Y 范围列表"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twYRanges)
 #. i18n: ectx: property (text), widget (QTableWidget, twXRanges)
@@ -19774,7 +19784,7 @@ msgstr "格式"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:353
 #, kde-format
 msgid "Start"
-msgstr ""
+msgstr "开始"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twYRanges)
 #. i18n: ectx: property (text), widget (QTableWidget, twXRanges)
@@ -19782,7 +19792,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:358
 #, kde-format
 msgid "End"
-msgstr ""
+msgstr "结束"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twYRanges)
 #. i18n: ectx: property (text), widget (QTableWidget, twXRanges)
@@ -19790,7 +19800,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:363
 #, kde-format
 msgid "Scale"
-msgstr ""
+msgstr "刻度"
 
 #. i18n: ectx: property (text), widget (QLabel, lRangePoints)
 #. i18n: ectx: property (text), widget (QLabel, lPoints)
@@ -19801,19 +19811,19 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:496
 #, kde-format
 msgid "Points:"
-msgstr "目:"
+msgstr "点数："
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbAddXRange)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:272
 #, kde-format
 msgid "<html><head/><body><p>Add a new x range</p></body></html>"
-msgstr ""
+msgstr "<html><head/><body><p>添加新的 X 范围</p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbRemoveXRange)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:283
 #, kde-format
 msgid "Remove the current selected x range"
-msgstr ""
+msgstr "删除当前选中的 X 范围"
 
 #. i18n: ectx: property (text), widget (QToolButton, tbRemoveXRange)
 #. i18n: ectx: property (text), widget (QToolButton, tbAddPlotRange)
@@ -19825,49 +19835,49 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:264
 #, kde-format
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #. i18n: ectx: property (text), widget (QLabel, lRangeType)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:302
 #, kde-format
 msgid "Data Range:"
-msgstr ""
+msgstr "数据范围："
 
 #. i18n: ectx: property (toolTip), widget (QTableWidget, twXRanges)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:315
 #, kde-format
 msgid "List of x ranges"
-msgstr ""
+msgstr "X 范围列表"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbAddPlotRange)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:412
 #, kde-format
 msgid "Add new plot range"
-msgstr ""
+msgstr "添加新的绘图范围"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbRemovePlotRange)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:426
 #, kde-format
 msgid "Remove current plot range"
-msgstr ""
+msgstr "删除当前选中的绘图范围"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbAddYRange)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:493
 #, kde-format
 msgid "Add a new y range"
-msgstr ""
+msgstr "添加新的 Y 范围"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbRemoveYRange)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:504
 #, kde-format
 msgid "remove the current selected y range"
-msgstr ""
+msgstr "删除当前选中的 Y 范围"
 
 #. i18n: ectx: property (text), widget (QLabel, lNiceExtend)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:517
 #, kde-format
 msgid "Extend:"
-msgstr ""
+msgstr "扩展："
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLayout_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tabLayout)
@@ -19946,13 +19956,13 @@ msgstr "几何"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:634
 #, kde-format
 msgid "Padding"
-msgstr "空白"
+msgstr "边距"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:648
 #, kde-format
 msgid "Symmetric:"
-msgstr ""
+msgstr "对称："
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVerticalDown)
 #. i18n: ectx: property (text), widget (QLabel, lBottomMargin)
@@ -19961,7 +19971,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:349
 #, kde-format
 msgid "Bottom:"
-msgstr ""
+msgstr "下："
 
 #. i18n: ectx: property (text), widget (QLabel, lRightMargin)
 #. i18n: ectx: property (text), widget (QLabel, lHeight)
@@ -19979,7 +19989,7 @@ msgstr "高度："
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:369
 #, kde-format
 msgid "Right:"
-msgstr ""
+msgstr "右："
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabScales)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:875
@@ -20027,7 +20037,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1033
 #, kde-format
 msgid "Y-Range"
-msgstr ""
+msgstr "Y 范围"
 
 #. i18n: ectx: property (text), widget (QLabel, lFrom)
 #. i18n: ectx: property (text), widget (QLabel, lFromDateTime)
@@ -20045,19 +20055,19 @@ msgstr "来自："
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1126
 #, kde-format
 msgid "X-Range"
-msgstr ""
+msgstr "X 范围"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPlotArea)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1207
 #, kde-format
 msgid "Area"
-msgstr ""
+msgstr "区域"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderCornerRadius)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1407
 #, kde-format
 msgid "Corner Radius:"
-msgstr ""
+msgstr "圆角半径："
 
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalAlignment)
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -20065,7 +20075,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/imagedock.ui:30
 #, kde-format
 msgid "Hor. align.:"
-msgstr ""
+msgstr "水平对齐方式："
 
 #. i18n: ectx: property (text), widget (QLabel, lOrdering)
 #. i18n: ectx: property (text), widget (QLabel, lOrder)
@@ -20081,13 +20091,13 @@ msgstr "次序："
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:212
 #, kde-format
 msgid "Ver. align.:"
-msgstr ""
+msgstr "垂直对齐方式："
 
 #. i18n: ectx: property (text), widget (QLabel, lLineSymbolWidth)
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:219
 #, kde-format
 msgid "Line+Symbol Width:"
-msgstr ""
+msgstr "点+线宽度："
 
 #. i18n: ectx: property (text), widget (QLabel, lBindLogicalPos)
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:412
@@ -20105,7 +20115,7 @@ msgstr ""
 #: src/frontend/ui/labelwidget.ui:293
 #, kde-format
 msgid "Locked"
-msgstr ""
+msgstr "已锁定"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderCornerRadius)
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:541
@@ -20364,7 +20374,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/imagedock.ui:418
 #, kde-format
 msgid "Specify the name of the image file"
-msgstr ""
+msgstr "指定图像文件的名称"
 
 #. i18n: ectx: property (text), widget (QLabel, lRatio)
 #: src/frontend/ui/dockwidgets/imagedock.ui:446
@@ -20499,31 +20509,31 @@ msgstr "映射"
 #: src/frontend/ui/dockwidgets/matrixdock.ui:167
 #, kde-format
 msgid "X-Start:"
-msgstr ""
+msgstr "X 起始值："
 
 #. i18n: ectx: property (text), widget (QLabel, lXMax)
 #: src/frontend/ui/dockwidgets/matrixdock.ui:181
 #, kde-format
 msgid "X-End:"
-msgstr ""
+msgstr "X 结束值："
 
 #. i18n: ectx: property (text), widget (QLabel, lYStart)
 #: src/frontend/ui/dockwidgets/matrixdock.ui:211
 #, kde-format
 msgid "Y-Start:"
-msgstr ""
+msgstr "Y 起始值："
 
 #. i18n: ectx: property (text), widget (QLabel, lYEnd)
 #: src/frontend/ui/dockwidgets/matrixdock.ui:225
 #, kde-format
 msgid "Y-End:"
-msgstr ""
+msgstr "Y 结束值："
 
 #. i18n: ectx: property (text), widget (QLabel, lHeader)
 #: src/frontend/ui/dockwidgets/matrixdock.ui:305
 #, kde-format
 msgid "Header:"
-msgstr "报头:"
+msgstr "表头："
 
 #. i18n: ectx: property (text), widget (QPushButton, bEvaluate)
 #: src/frontend/ui/dockwidgets/notebookdock.ui:100
@@ -20551,10 +20561,9 @@ msgstr "文字颜色："
 
 #. i18n: ectx: property (text), widget (QLabel, lData2Column)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:81
-#, fuzzy, kde-format
-#| msgid "Sample size:"
+#, kde-format
 msgid "Sample Sizes:"
-msgstr "采样大小："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lNegativeLowerLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:95
@@ -20603,7 +20612,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/projectdock.ui:66
 #, kde-format
 msgid "Version:"
-msgstr ""
+msgstr "版本："
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: src/frontend/ui/dockwidgets/projectdock.ui:73
@@ -20622,7 +20631,7 @@ msgstr "保存浮动面板状态："
 #: src/frontend/ui/dockwidgets/projectdock.ui:100
 #, kde-format
 msgid "Modified:"
-msgstr ""
+msgstr "修改时间："
 
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -20636,7 +20645,7 @@ msgstr "文件名："
 #: src/frontend/ui/dockwidgets/projectdock.ui:202
 #, kde-format
 msgid "Settings:"
-msgstr ""
+msgstr "设置："
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/frontend/ui/dockwidgets/projectdock.ui:209
@@ -20648,7 +20657,7 @@ msgstr "作者："
 #: src/frontend/ui/dockwidgets/projectdock.ui:253
 #, kde-format
 msgid "Save Calculations:"
-msgstr ""
+msgstr "保存计算结果："
 
 #. i18n: ectx: property (text), widget (QLabel, lDistribution)
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:109
@@ -20713,31 +20722,31 @@ msgstr "启用"
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:175
 #, kde-format
 msgid "Sparklines:"
-msgstr ""
+msgstr "趋势线："
 
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:198
 #, kde-format
 msgid "Column Header"
-msgstr ""
+msgstr "列表头"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:222
 #, kde-format
 msgid "Comments:"
-msgstr ""
+msgstr "注释："
 
 #. i18n: ectx: property (text), widget (QLabel, lLinking)
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:235
 #, kde-format
 msgid "Linking"
-msgstr ""
+msgstr "链接"
 
 #. i18n: ectx: property (text), widget (QPushButton, bSelectNone)
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:295
 #, kde-format
 msgid "Select None"
-msgstr ""
+msgstr "全部不选"
 
 #. i18n: ectx: property (text), widget (QLabel, lDistance)
 #. i18n: ectx: property (text), widget (QLabel, lValuesDistance)
@@ -20751,13 +20760,13 @@ msgstr "距离："
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:66
 #, kde-format
 msgid "Page:"
-msgstr ""
+msgstr "纸张："
 
 #. i18n: ectx: property (text), widget (QLabel, lScaleContent)
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:164
 #, kde-format
 msgid "Scale content:"
-msgstr ""
+msgstr "缩放内容："
 
 #. i18n: ectx: property (text), widget (QLabel, lSamplingInterval)
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:62
@@ -20966,13 +20975,13 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:108
 #, kde-format
 msgid "x=f(t)"
-msgstr ""
+msgstr "x = f(t)"
 
 #. i18n: ectx: property (text), widget (QLabel, lEquation)
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:121
 #, kde-format
 msgid "Equation"
-msgstr ""
+msgstr "方程"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFunctions)
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFunctions1)
@@ -21004,7 +21013,7 @@ msgstr "常量"
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:302
 #, kde-format
 msgid "y=g(t)"
-msgstr ""
+msgstr "y = g(t)"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbOptions)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:67
@@ -21622,7 +21631,7 @@ msgstr "键："
 #: src/frontend/ui/fitsheadereditwidget.ui:56
 #, kde-format
 msgid "Open File..."
-msgstr "打开文件…"
+msgstr "打开文件..."
 
 #. i18n: ectx: property (text), widget (QPushButton, bClose)
 #: src/frontend/ui/fitsheadereditwidget.ui:63
@@ -21674,7 +21683,7 @@ msgstr ""
 #: src/frontend/ui/labelwidget.ui:231
 #, kde-format
 msgid "Background Color:"
-msgstr ""
+msgstr "背景颜色："
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lOffsetX)
 #. i18n: ectx: property (toolTip), widget (QLabel, lOffsetY)
@@ -21693,7 +21702,7 @@ msgstr "X 偏移："
 #: src/frontend/ui/labelwidget.ui:494
 #, kde-format
 msgid "Mode:"
-msgstr ""
+msgstr "模式："
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderShape)
 #: src/frontend/ui/labelwidget.ui:586
@@ -22717,37 +22726,37 @@ msgstr ""
 #: src/frontend/widgets/BackgroundWidget.cpp:124
 #, kde-format
 msgid "Pattern"
-msgstr "模式"
+msgstr "图案"
 
 #: src/frontend/widgets/BackgroundWidget.cpp:127
 #, kde-format
 msgid "Single Color"
-msgstr ""
+msgstr "纯色填充"
 
 #: src/frontend/widgets/BackgroundWidget.cpp:128
 #, kde-format
 msgid "Horizontal Gradient"
-msgstr ""
+msgstr "水平渐变"
 
 #: src/frontend/widgets/BackgroundWidget.cpp:129
 #, kde-format
 msgid "Vertical Gradient"
-msgstr ""
+msgstr "垂直渐变"
 
 #: src/frontend/widgets/BackgroundWidget.cpp:130
 #, kde-format
 msgid "Diag. Gradient (From Top Left)"
-msgstr ""
+msgstr "对角渐变 (左上到右下)"
 
 #: src/frontend/widgets/BackgroundWidget.cpp:131
 #, kde-format
 msgid "Diag. Gradient (From Bottom Left)"
-msgstr ""
+msgstr "对角渐变 (左下到右上)"
 
 #: src/frontend/widgets/BackgroundWidget.cpp:132
 #, kde-format
 msgid "Radial Gradient"
-msgstr ""
+msgstr "辐射渐变"
 
 #: src/frontend/widgets/BackgroundWidget.cpp:135
 #, kde-format
@@ -22772,12 +22781,12 @@ msgstr "平铺"
 #: src/frontend/widgets/BackgroundWidget.cpp:140
 #, kde-format
 msgid "Center Tiled"
-msgstr ""
+msgstr "居中平铺"
 
 #: src/frontend/widgets/BackgroundWidget.cpp:266
 #, kde-format
 msgid "%1 elements: background color style changed"
-msgstr ""
+msgstr "元素 %1：更改背景色样式"
 
 #: src/frontend/widgets/DatapickerCurveWidget.cpp:29
 #: src/frontend/widgets/DatapickerCurveWidget.cpp:33
@@ -22907,7 +22916,7 @@ msgstr "原始图像"
 #: src/frontend/widgets/DatapickerImageWidget.cpp:178
 #, kde-format
 msgid "Processed Image"
-msgstr ""
+msgstr "已处理图像"
 
 #: src/frontend/widgets/DatapickerImageWidget.cpp:363
 #, kde-format
@@ -22917,7 +22926,7 @@ msgstr ""
 #: src/frontend/widgets/DatapickerImageWidget.cpp:372
 #, kde-format
 msgid "Invalid image"
-msgstr ""
+msgstr "无效的图像"
 
 #: src/frontend/widgets/ErrorBarWidget.cpp:46
 #, kde-format
@@ -23168,57 +23177,57 @@ msgstr ""
 #: src/frontend/widgets/LabelWidget.cpp:139
 #, kde-format
 msgid "Bold"
-msgstr ""
+msgstr "粗体"
 
 #: src/frontend/widgets/LabelWidget.cpp:140
 #, kde-format
 msgid "Italic"
-msgstr ""
+msgstr "斜体"
 
 #: src/frontend/widgets/LabelWidget.cpp:141
 #, kde-format
 msgid "Underline"
-msgstr ""
+msgstr "下划线"
 
 #: src/frontend/widgets/LabelWidget.cpp:142
 #, kde-format
 msgid "Strike Out"
-msgstr ""
+msgstr "删除线"
 
 #: src/frontend/widgets/LabelWidget.cpp:143
 #, kde-format
 msgid "Super Script"
-msgstr ""
+msgstr "上标"
 
 #: src/frontend/widgets/LabelWidget.cpp:144
 #, kde-format
 msgid "Sub-Script"
-msgstr ""
+msgstr "下标"
 
 #: src/frontend/widgets/LabelWidget.cpp:145
 #, kde-format
 msgid "Left Align"
-msgstr ""
+msgstr "左对齐"
 
 #: src/frontend/widgets/LabelWidget.cpp:147
 #, kde-format
 msgid "Right Align"
-msgstr ""
+msgstr "右对齐"
 
 #: src/frontend/widgets/LabelWidget.cpp:148
 #, kde-format
 msgid "Justify"
-msgstr ""
+msgstr "两端对齐"
 
 #: src/frontend/widgets/LabelWidget.cpp:149
 #, kde-format
 msgid "Insert Symbol"
-msgstr ""
+msgstr "插入符号"
 
 #: src/frontend/widgets/LabelWidget.cpp:150
 #, kde-format
 msgid "Insert Date/Time"
-msgstr ""
+msgstr "插入日期/时间"
 
 #: src/frontend/widgets/LabelWidget.cpp:180
 #, kde-format
@@ -23317,6 +23326,8 @@ msgid ""
 "li><li>LaTeX - text setting using LaTeX, installation of LaTeX required</"
 "li><li>Markdown - text setting using Markdown markup language</li></ul>"
 msgstr ""
+"文本排版模式：<ul><li>文本 - 使用富文本格式排版</li><li>LaTeX - 使用 LaTeX 排"
+"版，需安装 LaTeX</li><li>Markdown - 使用 Markdown 标记语言排版</li></ul>"
 
 #: src/frontend/widgets/LabelWidget.cpp:224
 #, kde-format
@@ -23325,6 +23336,8 @@ msgid ""
 "li><li>LaTeX - text setting using LaTeX, installation of LaTeX required</"
 "li></ul>"
 msgstr ""
+"文本排版模式：<ul><li>文本 - 使用富文本格式排版</li><li>LaTeX - 使用 LaTeX 排"
+"版，需安装 LaTeX</li></ul>"
 
 #: src/frontend/widgets/LabelWidget.cpp:920
 #: src/frontend/widgets/LabelWidget.cpp:946
@@ -23386,7 +23399,7 @@ msgstr ""
 #: src/frontend/widgets/MemoryWidget.cpp:26
 #, kde-format
 msgid "Memory used %1 MB, peak %2 MB"
-msgstr ""
+msgstr "内存已使用 %1 MB，峰值 %2 MB"
 
 #: src/frontend/widgets/NumberSpinBox.cpp:53
 #, kde-format
@@ -23451,7 +23464,7 @@ msgstr "JPEG 图像 (JPG)"
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:73
 #, kde-format
 msgid "Windows Bitmap (BMP)"
-msgstr "Windows 位图（BMP）"
+msgstr "Windows 位图 (BMP)"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:75
 #, kde-format
@@ -23590,19 +23603,19 @@ msgstr ""
 #, kde-format
 msgctxt "Zoom"
 msgid "No fit"
-msgstr ""
+msgstr "关闭适合视图"
 
 #: src/frontend/worksheet/WorksheetView.cpp:173
 #, kde-format
 msgctxt "Zoom"
 msgid "Fit to Selection"
-msgstr ""
+msgstr "适合选中内容"
 
 #: src/frontend/worksheet/WorksheetView.cpp:176
 #, kde-format
 msgctxt "Zoom"
 msgid "Fit"
-msgstr ""
+msgstr "适合视图"
 
 #: src/frontend/worksheet/WorksheetView.cpp:181
 #: src/frontend/worksheet/WorksheetView.cpp:332
@@ -23626,12 +23639,12 @@ msgstr "两坐标轴"
 #: src/frontend/worksheet/WorksheetView.cpp:214
 #, kde-format
 msgid "Two Axes, Centered"
-msgstr "两坐标轴（居中）"
+msgstr "两坐标轴 (居中)"
 
 #: src/frontend/worksheet/WorksheetView.cpp:216
 #, kde-format
 msgid "Two Axes, Crossing at Origin"
-msgstr "两坐标轴（原点相交）"
+msgstr "两坐标轴 (原点相交)"
 
 #: src/frontend/worksheet/WorksheetView.cpp:217
 #, kde-format
@@ -23700,12 +23713,12 @@ msgstr "所有绘制区域"
 #: src/frontend/worksheet/WorksheetView.cpp:302
 #, kde-format
 msgid "All Plot Areas X"
-msgstr "所有绘制区域（x 方向）"
+msgstr "所有绘制区域 (X 方向)"
 
 #: src/frontend/worksheet/WorksheetView.cpp:304
 #, kde-format
 msgid "All Plot Areas Y"
-msgstr "所有绘制区域（y 方向）"
+msgstr "所有绘制区域 (Y 方向)"
 
 #: src/frontend/worksheet/WorksheetView.cpp:337
 #, kde-format
@@ -23720,12 +23733,12 @@ msgstr "缩放到选区"
 #: src/frontend/worksheet/WorksheetView.cpp:347
 #, kde-format
 msgid "Select X-Region and Zoom In"
-msgstr "缩放到 x 轴选区"
+msgstr "缩放到 X 轴选区"
 
 #: src/frontend/worksheet/WorksheetView.cpp:352
 #, kde-format
 msgid "Select Y-Region and Zoom In"
-msgstr "缩放到 y 轴选区"
+msgstr "缩放到 Y 轴选区"
 
 #: src/frontend/worksheet/WorksheetView.cpp:364
 #, kde-format
@@ -23735,52 +23748,52 @@ msgstr "自动比例"
 #: src/frontend/worksheet/WorksheetView.cpp:368
 #, kde-format
 msgid "Auto Scale X"
-msgstr "x 轴自动比例"
+msgstr "X 轴自动比例"
 
 #: src/frontend/worksheet/WorksheetView.cpp:372
 #, kde-format
 msgid "Auto Scale Y"
-msgstr "y 轴自动比例"
+msgstr "Y 轴自动比例"
 
 #: src/frontend/worksheet/WorksheetView.cpp:384
 #, kde-format
 msgid "Zoom In X"
-msgstr "x 方向放大"
+msgstr "X 方向放大"
 
 #: src/frontend/worksheet/WorksheetView.cpp:388
 #, kde-format
 msgid "Zoom Out X"
-msgstr "x 方向缩小"
+msgstr "X 方向缩小"
 
 #: src/frontend/worksheet/WorksheetView.cpp:392
 #, kde-format
 msgid "Zoom In Y"
-msgstr "y 方向放大"
+msgstr "Y 方向放大"
 
 #: src/frontend/worksheet/WorksheetView.cpp:396
 #, kde-format
 msgid "Zoom Out Y"
-msgstr "y 方向缩小"
+msgstr "Y 方向缩小"
 
 #: src/frontend/worksheet/WorksheetView.cpp:400
 #, kde-format
 msgid "Shift Left X"
-msgstr "x 方向左移"
+msgstr "X 方向左移"
 
 #: src/frontend/worksheet/WorksheetView.cpp:402
 #, kde-format
 msgid "Shift Right X"
-msgstr "x 方向右移"
+msgstr "X 方向右移"
 
 #: src/frontend/worksheet/WorksheetView.cpp:404
 #, kde-format
 msgid "Shift Up Y"
-msgstr "y 方向上移"
+msgstr "Y 方向上移"
 
 #: src/frontend/worksheet/WorksheetView.cpp:406
 #, kde-format
 msgid "Shift Down Y"
-msgstr "y 方向下移"
+msgstr "Y 方向下移"
 
 #: src/frontend/worksheet/WorksheetView.cpp:420
 #: src/frontend/worksheet/WorksheetView.cpp:484

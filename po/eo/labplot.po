@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-18 01:45+0000\n"
+"POT-Creation-Date: 2024-10-19 01:49+0000\n"
 "PO-Revision-Date: 2024-07-27 16:22+0200\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -8870,7 +8870,7 @@ msgstr "%1: ŝanĝi geometrion rekta"
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:435
 #, fuzzy, kde-format
 #| msgid "%1: change geometry rect"
-msgid "%1: change exact limtis"
+msgid "%1: change exact limits"
 msgstr "%1: ŝanĝi geometrion rekta"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:587

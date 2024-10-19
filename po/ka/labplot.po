@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-18 01:45+0000\n"
+"POT-Creation-Date: 2024-10-19 01:49+0000\n"
 "PO-Revision-Date: 2024-07-07 10:27+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -8847,7 +8847,7 @@ msgstr "%1 მართკუთხედის გეომეტრიის �
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:435
 #, fuzzy, kde-format
 #| msgid "%1: change geometry rect"
-msgid "%1: change exact limtis"
+msgid "%1: change exact limits"
 msgstr "%1 მართკუთხედის გეომეტრიის შეცვლა"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:587

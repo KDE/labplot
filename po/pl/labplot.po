@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-18 01:45+0000\n"
+"POT-Creation-Date: 2024-10-19 01:49+0000\n"
 "PO-Revision-Date: 2024-10-12 10:39+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -8901,7 +8901,7 @@ msgstr "%1: zmień ujemną niższą granicę"
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:435
 #, fuzzy, kde-format
 #| msgid "%1: change negative lower limit"
-msgid "%1: change exact limtis"
+msgid "%1: change exact limits"
 msgstr "%1: zmień ujemną niższą granicę"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:587

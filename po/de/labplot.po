@@ -9,16 +9,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-18 01:45+0000\n"
-"PO-Revision-Date: 2024-10-06 10:24+0200\n"
-"Last-Translator: Stefan Gerlach <stefan.gerlach@uni.kn>\n"
+"POT-Creation-Date: 2024-10-19 01:49+0000\n"
+"PO-Revision-Date: 2024-10-12 22:07+0200\n"
+"Last-Translator: Stefan Gerlach <stefan.gerlach@uni-konstanz.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -8272,10 +8272,9 @@ msgstr "Arbeitsablaufdiagramm"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:515
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:517
-#, fuzzy, kde-format
-#| msgid "Run fit"
+#, kde-format
 msgid "Run Chart"
-msgstr "Anpassung starten"
+msgstr "Chart starten"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:535
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:615
@@ -8877,10 +8876,9 @@ msgid "%1: set limits metric"
 msgstr "%1: Grenzmetrik festlegen"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:421
-#, fuzzy, kde-format
-#| msgid "%1: set symbol size"
+#, kde-format
 msgid "%1: set sample size"
-msgstr "%1: Symbolgröße festlegen"
+msgstr "%1: Samplegröße festlegen"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:428
 #, kde-format
@@ -8890,7 +8888,7 @@ msgstr "%1: negative untere Grenze ändern"
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:435
 #, fuzzy, kde-format
 #| msgid "%1: change negative lower limit"
-msgid "%1: change exact limtis"
+msgid "%1: change exact limits"
 msgstr "%1: negative untere Grenze ändern"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:587
@@ -8919,10 +8917,9 @@ msgid "%1: set end logical position"
 msgstr "%1: Logische Endposition festlegen"
 
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:253
-#, fuzzy, kde-format
-#| msgid "%1: set limits metric"
+#, kde-format
 msgid "%1: set center metric"
-msgstr "%1: Grenzmetrik festlegen"
+msgstr "%1: Zentralmetrik festlegen"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:150
 #, kde-format
@@ -13565,11 +13562,10 @@ msgid "Process Behavior Chart"
 msgstr "Arbeitsablaufdiagramm"
 
 #: src/frontend/GuiObserver.cpp:404
-#, fuzzy, kde-format
-#| msgid "Run fit"
+#, kde-format
 msgctxt "@title:window"
 msgid "Run Chart"
-msgstr "Anpassung starten"
+msgstr "Chart starten"
 
 #: src/frontend/GuiObserver.cpp:409
 #, kde-format
@@ -21019,17 +21015,15 @@ msgstr "Start x:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCenterMetric)
 #: src/frontend/ui/dockwidgets/runchartdock.ui:148
-#, fuzzy, kde-format
-#| msgid "Center"
+#, kde-format
 msgid "Center:"
-msgstr "Zentriert"
+msgstr "Zentrum:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCenterLine)
 #: src/frontend/ui/dockwidgets/runchartdock.ui:223
-#, fuzzy, kde-format
-#| msgid "Center Tiled"
+#, kde-format
 msgid "Center Line"
-msgstr "Zentriert gekachelt"
+msgstr "Zentrumslinie"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)

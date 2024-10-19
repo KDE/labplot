@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-18 01:45+0000\n"
+"POT-Creation-Date: 2024-10-19 01:49+0000\n"
 "PO-Revision-Date: 2024-09-28 13:27+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -8891,7 +8891,7 @@ msgstr "%1: cambiar o rectángulo da xeometría"
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:435
 #, fuzzy, kde-format
 #| msgid "%1: change geometry rect"
-msgid "%1: change exact limtis"
+msgid "%1: change exact limits"
 msgstr "%1: cambiar o rectángulo da xeometría"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:587

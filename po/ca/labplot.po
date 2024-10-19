@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-18 01:45+0000\n"
-"PO-Revision-Date: 2024-10-17 13:11+0200\n"
+"POT-Creation-Date: 2024-10-19 01:49+0000\n"
+"PO-Revision-Date: 2024-10-18 10:55+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -8961,9 +8961,9 @@ msgstr "%1: canvia el límit inferior negatiu"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:435
 #, fuzzy, kde-format
-#| msgid "%1: change negative lower limit"
-msgid "%1: change exact limtis"
-msgstr "%1: canvia el límit inferior negatiu"
+#| msgid "%1: change exact limtis"
+msgid "%1: change exact limits"
+msgstr "%1: canvia els límits exactes"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:587
 #, kde-format
@@ -21108,7 +21108,7 @@ msgstr "Límits basats en:"
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:206
 #, kde-format
 msgid "Exact Limits:"
-msgstr ""
+msgstr "Límits exactes:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataLine)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:221

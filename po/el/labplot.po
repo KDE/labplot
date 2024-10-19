@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-18 01:45+0000\n"
+"POT-Creation-Date: 2024-10-19 01:49+0000\n"
 "PO-Revision-Date: 2017-04-20 14:04+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -9225,7 +9225,7 @@ msgstr "%1: αλλαγή σχολίου"
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:435
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
-msgid "%1: change exact limtis"
+msgid "%1: change exact limits"
 msgstr "%1: αλλαγή σχολίου"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:587

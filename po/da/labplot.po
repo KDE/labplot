@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-18 01:45+0000\n"
+"POT-Creation-Date: 2024-10-19 01:49+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -9465,7 +9465,7 @@ msgstr "&Indsæt tomme rækker"
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:435
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
-msgid "%1: change exact limtis"
+msgid "%1: change exact limits"
 msgstr "&Indsæt tomme rækker"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:587

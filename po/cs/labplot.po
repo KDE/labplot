@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-18 01:45+0000\n"
-"PO-Revision-Date: 2024-09-18 09:44+0200\n"
+"POT-Creation-Date: 2024-10-19 01:49+0000\n"
+"PO-Revision-Date: 2024-10-18 15:55+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 24.08.1\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -574,10 +574,9 @@ msgid "%1: clear column"
 msgstr ""
 
 #: src/backend/core/column/Column.cpp:589
-#, fuzzy, kde-format
-#| msgid "%1: replace values"
+#, kde-format
 msgid "%1: set random values"
-msgstr "%1: nahradit hodnoty"
+msgstr ""
 
 #: src/backend/core/column/Column.cpp:1621
 #, kde-format
@@ -8086,11 +8085,10 @@ msgstr "Hladké"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:707
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1940
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:626
-#, fuzzy, kde-format
-#| msgid "Fit"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit"
-msgstr "Přizpůsobit"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:460
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:605
@@ -8216,10 +8214,9 @@ msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:515
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:517
-#, fuzzy, kde-format
-#| msgid "Char"
+#, kde-format
 msgid "Run Chart"
-msgstr "Char"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:535
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:615
@@ -8518,11 +8515,10 @@ msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1944
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:726
-#, fuzzy, kde-format
-#| msgid "Function of '%1'"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit to '%1'"
-msgstr "Funkce '%1'"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1973
 #, kde-format
@@ -8822,10 +8818,9 @@ msgid "%1: set limits metric"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:421
-#, fuzzy, kde-format
-#| msgid "%1: set arrow size"
+#, kde-format
 msgid "%1: set sample size"
-msgstr "%1: nastavit velikost šipky"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:428
 #, kde-format
@@ -8835,7 +8830,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:435
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
-msgid "%1: change exact limtis"
+msgid "%1: change exact limits"
 msgstr "%1: změnit komentář"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:587
@@ -8864,10 +8859,9 @@ msgid "%1: set end logical position"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:253
-#, fuzzy, kde-format
-#| msgid "%1: set ordering"
+#, kde-format
 msgid "%1: set center metric"
-msgstr "%1: nastavit řazení"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:150
 #, kde-format
@@ -9424,11 +9418,10 @@ msgid "%1: set fit options and perform the fit"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1823
-#, fuzzy, kde-format
-#| msgid "Results:"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit Results"
-msgstr "Výsledky:"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1847
 #, kde-format
@@ -9578,11 +9571,10 @@ msgid "Fit model not specified!"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3100
-#, fuzzy, kde-format
-#| msgid "Results:"
+#, kde-format
 msgctxt "Curve Fitting"
 msgid "Fit Results"
-msgstr "Výsledky:"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:85
 #, kde-format
@@ -9973,19 +9965,17 @@ msgstr "Původní velikost"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:129
 #: src/frontend/worksheet/WorksheetView.cpp:167
-#, fuzzy, kde-format
-#| msgid "Fit to Height"
+#, kde-format
 msgctxt "Zoom"
 msgid "Fit to Height"
-msgstr "Přizpůsobit výšce"
+msgstr ""
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:130
 #: src/frontend/worksheet/WorksheetView.cpp:170
-#, fuzzy, kde-format
-#| msgid "Fit to Width"
+#, kde-format
 msgctxt "Zoom"
 msgid "Fit to Width"
-msgstr "Přizpůsobit šířce"
+msgstr ""
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:133
 #: src/frontend/worksheet/WorksheetView.cpp:184
@@ -11064,10 +11054,9 @@ msgid "Couldn't subscribe to all available topics."
 msgstr ""
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2515
-#, fuzzy, kde-format
-#| msgid "Failed to open '%1' for writing."
+#, kde-format
 msgid "Failed to connect to '%1'. Error %2."
-msgstr "Nelze otevřít '%1' pro zápis."
+msgstr ""
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2537
 #, kde-format
@@ -13006,11 +12995,10 @@ msgid "Number of peaks:"
 msgstr ""
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1225
-#, fuzzy, kde-format
-#| msgid "status: %1"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit status: %1"
-msgstr "stav: %1"
+msgstr ""
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1236
 #, kde-format
@@ -13340,11 +13328,10 @@ msgid "Process Behavior Chart"
 msgstr ""
 
 #: src/frontend/GuiObserver.cpp:404
-#, fuzzy, kde-format
-#| msgid "Char"
+#, kde-format
 msgctxt "@title:window"
 msgid "Run Chart"
-msgstr "Char"
+msgstr ""
 
 #: src/frontend/GuiObserver.cpp:409
 #, kde-format
@@ -16159,11 +16146,10 @@ msgid "Probability Density of '%1'"
 msgstr ""
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:772
-#, fuzzy, kde-format
-#| msgid "Distribution:"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Distribution Fit to '%1'"
-msgstr "Distribuce:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:966
@@ -16849,11 +16835,10 @@ msgid "Conditional Formatting"
 msgstr "Podmíněné formátování"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:645
-#, fuzzy, kde-format
-#| msgid "Distribution:"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit Distribution"
-msgstr "Distribuce:"
+msgstr ""
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:659
 #, kde-format
@@ -18837,10 +18822,9 @@ msgstr "Dialog"
 
 #. i18n: ectx: property (text), widget (QLabel, lGraphLayer)
 #: src/frontend/ui/datasources/importoriginlayersdialog.ui:27
-#, fuzzy, kde-format
-#| msgid "Import as:"
+#, kde-format
 msgid "Import As"
-msgstr "Importovat jako:"
+msgstr "Importovat jako"
 
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #: src/frontend/ui/datasources/importprojectwidget.ui:23
@@ -20558,17 +20542,15 @@ msgstr "Hlavička:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bEvaluate)
 #: src/frontend/ui/dockwidgets/notebookdock.ui:100
-#, fuzzy, kde-format
-#| msgid "Evaluate:"
+#, kde-format
 msgid "Evaluate"
-msgstr "Vyhodnotit:"
+msgstr "Vyhodnotit"
 
 #. i18n: ectx: property (text), widget (QPushButton, bRestart)
 #: src/frontend/ui/dockwidgets/notebookdock.ui:110
-#, fuzzy, kde-format
-#| msgid "star"
+#, kde-format
 msgid "Restart"
-msgstr "hvězda"
+msgstr "Restartovat"
 
 #. i18n: ectx: property (text), widget (QLabel, bgcolor)
 #: src/frontend/ui/dockwidgets/notedock.ui:72
@@ -20584,17 +20566,15 @@ msgstr "Barva textu:"
 
 #. i18n: ectx: property (text), widget (QLabel, lData2Column)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:81
-#, fuzzy, kde-format
-#| msgid "Sample Size:"
+#, kde-format
 msgid "Sample Sizes:"
-msgstr "Velikost vzorku:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lNegativeLowerLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:95
-#, fuzzy, kde-format
-#| msgid "Lower Limit"
+#, kde-format
 msgid "Lower Limit < 0:"
-msgstr "Dolní limit"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lLimitsMetric)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:139
@@ -20721,17 +20701,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lCenterMetric)
 #: src/frontend/ui/dockwidgets/runchartdock.ui:148
-#, fuzzy, kde-format
-#| msgid "Center"
+#, kde-format
 msgid "Center:"
-msgstr "Střed"
+msgstr "Střed:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCenterLine)
 #: src/frontend/ui/dockwidgets/runchartdock.ui:223
-#, fuzzy, kde-format
-#| msgid "Center Tiled"
+#, kde-format
 msgid "Center Line"
-msgstr "Vydlážděná na střed"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
@@ -23637,18 +23615,16 @@ msgid "No fit"
 msgstr ""
 
 #: src/frontend/worksheet/WorksheetView.cpp:173
-#, fuzzy, kde-format
-#| msgid "Fit to Selection"
+#, kde-format
 msgctxt "Zoom"
 msgid "Fit to Selection"
-msgstr "Doplnit do výběru"
+msgstr ""
 
 #: src/frontend/worksheet/WorksheetView.cpp:176
-#, fuzzy, kde-format
-#| msgid "Fit"
+#, kde-format
 msgctxt "Zoom"
 msgid "Fit"
-msgstr "Přizpůsobit"
+msgstr ""
 
 #: src/frontend/worksheet/WorksheetView.cpp:181
 #: src/frontend/worksheet/WorksheetView.cpp:332
@@ -23922,9 +23898,3 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Nelze otevřít soubor:"
-
-#~ msgid "Evaluate Worksheet"
-#~ msgstr "Vyhodnotit pracovní list"
-
-#~ msgid "Couldn't find panel plugins. Please check your installation."
-#~ msgstr "Nelze najít moduly panelu. Prosím, zkontrolujte svou instalaci."
