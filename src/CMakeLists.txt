@@ -18,6 +18,7 @@ if(NOT qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
 endif()
 
 set(GUI_SOURCES
+    ${FRONTEND_DIR}/ActionsManager.cpp
     ${FRONTEND_DIR}/DatasetModel.cpp
     ${FRONTEND_DIR}/GuiObserver.cpp
     ${FRONTEND_DIR}/GuiTools.cpp
