@@ -3293,7 +3293,7 @@ void CartesianPlotPrivate::retransform() {
 	updateDataRect();
 
 	// plotArea position is always (0, 0) in parent's coordinates, don't need to update here
-	if (q->parentAspect()->type() == AspectType::CartesianPlot)
+	if (q->parentAspect() && q->parentAspect()->type() == AspectType::CartesianPlot)
 		q->plotArea()->setRect(mapRectToParent(rect));
 	else
 		q->plotArea()->setRect(mapRectFromScene(rect));
@@ -3465,7 +3465,7 @@ void CartesianPlotPrivate::updateDataRect() {
 	dataRect = mapRectFromScene(rect);
 
 	// for plot in a plot, transfer x and y coordinates
-	if (q->parentAspect()->type() == AspectType::CartesianPlot) {
+	if (q->parentAspect() && q->parentAspect()->type() == AspectType::CartesianPlot) {
 		dataRect.setX(-rect.width() / 2);
 		dataRect.setY(-rect.height() / 2);
 		dataRect.setWidth(rect.width());
