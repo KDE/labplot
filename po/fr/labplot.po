@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-19 01:49+0000\n"
-"PO-Revision-Date: 2024-10-16 18:07+0200\n"
+"POT-Creation-Date: 2024-10-20 01:47+0000\n"
+"PO-Revision-Date: 2024-10-18 11:19+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -423,7 +423,7 @@ msgstr "Type de filtre incompatible"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
 #: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:708
-#: src/backend/datasources/MQTTClient.cpp:1366
+#: src/backend/datasources/MQTTClient.cpp:1354
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:313
 #: src/backend/lib/XmlStreamReader.cpp:104
@@ -2216,7 +2216,7 @@ msgid "Failed to parse the file."
 msgstr "Impossible d'analyser le fichier."
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:113
-#: src/backend/datasources/MQTTClient.cpp:1190
+#: src/backend/datasources/MQTTClient.cpp:1178
 #: src/backend/datasources/MQTTTopic.cpp:248
 #: src/backend/lib/XmlStreamReader.cpp:99
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:469
@@ -12898,19 +12898,7 @@ msgid "Average"
 msgstr "Moyenne"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:199
-#, fuzzy, kde-format
-#| msgid ""
-#| "The supported chart types are grouped according to the plotted statistics "
-#| "and to the metric defining the limits.<br><br>Individual Values and "
-#| "Moving Ranges, Limits Based on the Average or Median Moving Range:"
-#| "<ul><li>X (XmR) - plot the <b>individual values</b>.</li><li>mR - plot "
-#| "the <b>moving ranges</b>.</li></ul>Averages and Ranges, Limits based on "
-#| "the Average or Median Range:<ul><li>X̅  (X̅R) - plot the <b>averages for "
-#| "each sample</b> .</li><li>R (X̅R) - plot the <b>ranges for each sample</b>."
-#| "</li></ul>Averages and Standard Deviations, Limits Based on the Standard "
-#| "Deviations:<ul><li>X̅  (X̅S) - plot the <b>averages for each sample</b>.</"
-#| "li><li>S (X̅S) - plot the <b>standard deviations for each sample</b>.</"
-#| "li></ul>"
+#, kde-format
 msgid ""
 "The supported chart types are grouped according to the plotted statistics "
 "and to the metric defining the limits.<br><br>Individual Values and Moving "
@@ -12928,15 +12916,18 @@ msgid ""
 msgstr ""
 "Les types de graphiques pris en charge sont regroupés selon les statistiques "
 "des tracés et à la métrique définissant les limites. <br><br>Valeurs "
-"individuelles et plages mobiles, limites reposant sur la plage mobile "
-"moyenne ou médiane :<ul><li>X (XmR) - tracer les <b>valeurs individuelles</"
-"b>. </li><li>mR - tracer les <b>plages mobiles</b>. </li></ul>Moyennes et "
-"plages, limites reposant sur la plage moyenne ou médiane :<ul><li>X̅  (X̅R) - "
+"individuelles et plages mobiles, limites reposant sur la plage enne ou de "
+"médiane mobile :<ul><li>X (XmR) - tracer les <b>valeurs individuelles</b>. </"
+"li><li>mR - tracer les <b>plages mobiles</b>. </li></ul>Moyennes et plages, "
+"limites reposant sur la plage de moyenne ou de médiane :<ul><li>X̅  (X̅R) - "
 "tracer les <b>moyennes pour chaque échantillon</b> .</li><li>R (X̅R) - tracer "
 "les <b>plages pour chaque échantillon</b>. </li></ul>Moyennes et écarts "
 "types, limites reposant sur les écarts types :<ul><li>X̅ (X̅S) - tracer les "
 "<b>moyennes pour chacun échantillon</b>. </li><li>S (X̅S) - tracer les "
-"<b>écarts types pour chacun échantillon</b>. </li></ul>"
+"<b>écarts types pour chacun échantillon</b>. </li></ul> Attributs :<ul><li>P "
+"- tracé <b>Proportions binomiales</b>.</li><li>NP - tracé <b>Compteurs "
+"binomiaux</b>.</li><li>C - tracé <b>Compteur de Poisson</b>.</li><li>U - "
+"tracé <b>Fréquences de Poisson</b>.</li></ul>"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:225
 #, kde-format
@@ -21071,10 +21062,9 @@ msgstr "Couleur du texte : "
 
 #. i18n: ectx: property (text), widget (QLabel, lData2Column)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:81
-#, fuzzy, kde-format
-#| msgid "Sample Size:"
+#, kde-format
 msgid "Sample Sizes:"
-msgstr "Taille de l'échantillon :"
+msgstr "Tailles des échantillons :"
 
 #. i18n: ectx: property (text), widget (QLabel, lNegativeLowerLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:95

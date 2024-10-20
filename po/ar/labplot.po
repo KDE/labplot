@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-19 01:49+0000\n"
+"POT-Creation-Date: 2024-10-20 01:47+0000\n"
 "PO-Revision-Date: 2022-09-05 22:28+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -431,7 +431,7 @@ msgstr ""
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
 #: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:708
-#: src/backend/datasources/MQTTClient.cpp:1366
+#: src/backend/datasources/MQTTClient.cpp:1354
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:313
 #: src/backend/lib/XmlStreamReader.cpp:104
@@ -2228,7 +2228,7 @@ msgid "Failed to parse the file."
 msgstr "فشل في فتح الملفّ '%1'."
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:113
-#: src/backend/datasources/MQTTClient.cpp:1190
+#: src/backend/datasources/MQTTClient.cpp:1178
 #: src/backend/datasources/MQTTTopic.cpp:248
 #: src/backend/lib/XmlStreamReader.cpp:99
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:469

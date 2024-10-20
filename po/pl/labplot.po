@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-19 01:49+0000\n"
-"PO-Revision-Date: 2024-10-12 10:39+0200\n"
+"POT-Creation-Date: 2024-10-20 01:47+0000\n"
+"PO-Revision-Date: 2024-10-19 13:29+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -413,7 +413,7 @@ msgstr "niezgodny rodzaj filtra"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
 #: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:708
-#: src/backend/datasources/MQTTClient.cpp:1366
+#: src/backend/datasources/MQTTClient.cpp:1354
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:313
 #: src/backend/lib/XmlStreamReader.cpp:104
@@ -2190,7 +2190,7 @@ msgid "Failed to parse the file."
 msgstr "Nie udało się przetworzyć pliku."
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:113
-#: src/backend/datasources/MQTTClient.cpp:1190
+#: src/backend/datasources/MQTTClient.cpp:1178
 #: src/backend/datasources/MQTTTopic.cpp:248
 #: src/backend/lib/XmlStreamReader.cpp:99
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:469
@@ -8899,15 +8899,14 @@ msgid "%1: change negative lower limit"
 msgstr "%1: zmień ujemną niższą granicę"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:435
-#, fuzzy, kde-format
-#| msgid "%1: change negative lower limit"
+#, kde-format
 msgid "%1: change exact limits"
-msgstr "%1: zmień ujemną niższą granicę"
+msgstr "%1: zmień dokładne granice"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:587
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
-msgstr ""
+msgstr "Ostatnia próbka jest niepełna, więc została pominięta."
 
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:264
 #, kde-format
@@ -11319,7 +11318,7 @@ msgstr "Nie można znaleźć plików .csv w %1"
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Origin Multi-Layer Graphs"
-msgstr ""
+msgstr "Importowanie wielowarstwowych grafów Origin"
 
 #: src/frontend/datasources/ImportOriginLayersDialog.cpp:26
 #: src/frontend/datasources/ImportProjectDialog.cpp:169

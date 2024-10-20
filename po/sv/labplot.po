@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-19 01:49+0000\n"
-"PO-Revision-Date: 2024-10-15 20:44+0200\n"
+"POT-Creation-Date: 2024-10-20 01:47+0000\n"
+"PO-Revision-Date: 2024-10-19 16:59+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -409,7 +409,7 @@ msgstr "Inkompatibel filtertyp"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
 #: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:708
-#: src/backend/datasources/MQTTClient.cpp:1366
+#: src/backend/datasources/MQTTClient.cpp:1354
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:313
 #: src/backend/lib/XmlStreamReader.cpp:104
@@ -2181,7 +2181,7 @@ msgid "Failed to parse the file."
 msgstr "Misslyckades tolka filen."
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:113
-#: src/backend/datasources/MQTTClient.cpp:1190
+#: src/backend/datasources/MQTTClient.cpp:1178
 #: src/backend/datasources/MQTTTopic.cpp:248
 #: src/backend/lib/XmlStreamReader.cpp:99
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:469
@@ -8366,7 +8366,7 @@ msgstr "Tema"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1139
 #, kde-format
 msgid "%1: change geometry rect"
-msgstr "%1: ända geometrirektangel"
+msgstr "%1: ändra geometrirektangel"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1174
 #, kde-format
@@ -8860,13 +8860,12 @@ msgstr "%1: ställ in samplingsstorlek"
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:428
 #, kde-format
 msgid "%1: change negative lower limit"
-msgstr "%1: ända negativ undre gräns"
+msgstr "%1: ändra negativ undre gräns"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:435
-#, fuzzy, kde-format
-#| msgid "%1: change negative lower limit"
+#, kde-format
 msgid "%1: change exact limits"
-msgstr "%1: ända negativ undre gräns"
+msgstr "%1: ändra exakta gränser"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:587
 #, kde-format
@@ -12773,21 +12772,7 @@ msgid "Average"
 msgstr "Medelvärde"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:199
-#, fuzzy, kde-format
-#| msgid ""
-#| "The supported chart types are grouped according to the plotted statistics "
-#| "and to the metric defining the limits.<br><br>Individual Values and "
-#| "Moving Ranges, Limits Based on the Average or Median Moving Range:"
-#| "<ul><li>X (XmR) - plot the <b>individual values</b>.</li><li>mR - plot "
-#| "the <b>moving ranges</b>.</li></ul>Averages and Ranges, Limits based on "
-#| "the Average or Median Range:<ul><li>X̅  (X̅R) - plot the <b>averages for "
-#| "each sample</b> .</li><li>R (X̅R) - plot the <b>ranges for each sample</b>."
-#| "</li></ul>Averages and Standard Deviations, Limits Based on the Standard "
-#| "Deviations:<ul><li>X̅  (X̅S) - plot the <b>averages for each sample</b>.</"
-#| "li><li>S (X̅S) - plot the <b>standard deviations for each sample</b>.</"
-#| "li></ul>Counts:<ul><li>P - plot <b>binomial proportions</b>.</li><li>NP - "
-#| "plot <b>binomial counts</b>.</li><li>C - plot <b>Poisson counts</b>.</"
-#| "li><li>U - plot <b>Poisson rates</b>.</li></ul>"
+#, kde-format
 msgid ""
 "The supported chart types are grouped according to the plotted statistics "
 "and to the metric defining the limits.<br><br>Individual Values and Moving "
@@ -12813,10 +12798,10 @@ msgstr ""
 "<b>intervallen för varje sampling</b>.</li></ul>Genomsnitt och "
 "standardavvikelser, gränser baserade på standardavvikelser:<ul><li>X̅ (X̅S): "
 "rita upp <b>medelvärden för varje sampling</b >.</li><li>S (X̅S): rita upp "
-"<b>standardavvikelserna för varje sampling</b>.</li></ul>.</li></ul>Antal:"
-"<ul><li>P - rita upp <b>binomial-proportioner</b>.</li><li>NP - rita upp "
-"<b>binomial-antal</b>.</li><li>C - rita upp <b>Poisson-antal</b>.</li><li>U "
-"- rita upp <b>Poisson-förhållanden</b>.</li></ul>"
+"<b>standardavvikelserna för varje sampling</b>.</li></ul>.</li></"
+"ul>Egenskaper:<ul><li>P - rita upp <b>binomial-proportioner</b>.</li><li>NP "
+"- rita upp <b>binomial-antal</b>.</li><li>C - rita upp <b>Poisson-antal</b>."
+"</li><li>U - rita upp <b>Poisson-förhållanden</b>.</li></ul>"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:225
 #, kde-format
@@ -20898,10 +20883,9 @@ msgstr "Textfärg:"
 
 #. i18n: ectx: property (text), widget (QLabel, lData2Column)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:81
-#, fuzzy, kde-format
-#| msgid "Sample Size:"
+#, kde-format
 msgid "Sample Sizes:"
-msgstr "Samplingsstorlek:"
+msgstr "Samplingsstorlekar:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNegativeLowerLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:95
@@ -20919,7 +20903,7 @@ msgstr "Begränsningar baserade på:"
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:206
 #, kde-format
 msgid "Exact Limits:"
-msgstr ""
+msgstr "Exakta gränser:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataLine)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:221
