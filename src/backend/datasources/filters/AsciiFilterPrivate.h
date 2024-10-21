@@ -71,6 +71,10 @@ private:
 			static_cast<QVector<T>*>(m_dataContainer.at(indexDataContainer))->operator[](indexData) = value;
 		}
 
+		void setData(int indexDataContainer, int indexData, const QStringView& value) {
+			static_cast<QVector<QString>*>(m_dataContainer.at(indexDataContainer))->operator[](indexData) = value.toString();
+		}
+
 		template<class T>
 		T data(int indexDataContainer, int indexData) {
 			return static_cast<QVector<T>*>(m_dataContainer.at(indexDataContainer))->at(indexData);

@@ -825,7 +825,7 @@ void AsciiFilterPrivate::setValues(const QVector<T>& values, int rowIndex, const
 			break;
 		}
 		case AbstractColumn::ColumnMode::Text:
-			m_DataContainer.setData<const QString>(columnIndex, rowIndex, value); // Because value can be QString or QStringView
+			m_DataContainer.setData(columnIndex, rowIndex, value); // Because value can be QString or QStringView
 			break;
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
