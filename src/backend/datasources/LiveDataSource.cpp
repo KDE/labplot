@@ -600,7 +600,7 @@ void LiveDataSource::read() {
 #ifdef HAVE_QTSERIALPORT
 		qint64 from = 0;
 		if (firstRead) {
-			from = 1; // skip first line, because it could be that it is not complete and then parsed invalid
+			//from = 1; // skip first line, because it could be that it is not complete and then parsed invalid
 			firstRead = false;
 		}
 		// reading data here

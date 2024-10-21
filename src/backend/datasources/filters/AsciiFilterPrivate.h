@@ -34,12 +34,16 @@ public:
 
 private:
 	static bool ignoringLine(QStringView line, const AsciiFilter::Properties& p);
-	static QStringList determineColumns(const QStringView& line, const AsciiFilter::Properties& properties);
-	static QStringList determineColumns(const QStringView &line, const QString &separator, bool removeQuotes, bool simplifyWhiteSpaces, bool skipEmptyParts, int startColumn, int endColumn);
+	static QStringList determineColumnsSimplifyWhiteSpace(const QStringView& line, const AsciiFilter::Properties& properties);
+	static QStringList determineColumnsSimplifyWhiteSpace(const QStringView &line, const QString &separator, bool removeQuotes, bool simplifyWhiteSpaces, bool skipEmptyParts, int startColumn, int endColumn);
+	static QVector<QStringView> determineColumns(const QStringView& line, const AsciiFilter::Properties& properties);
 	static AsciiFilter::Status determineSeparator(const QString &line, bool removeQuotes, bool simplifyWhiteSpaces, QString &separator);
 	static QVector<AbstractColumn::ColumnMode> determineColumnModes(const QVector<QStringList>& values, const AsciiFilter::Properties& properties, QString &dateTimeFormat);
 	AsciiFilter::Status getLine(QIODevice& device, QString& line);
 	static QString statusToString(AsciiFilter::Status);
+
+	template<typename T>
+	void setValues(const QVector<T>& values, int rowIndex, const AsciiFilter::Properties& properties);
 
 	// Copied from CANFilterPrivate
 	// TODO: think about moving it to a common place
