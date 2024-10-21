@@ -595,19 +595,18 @@ void LiveDataSource::read() {
 			m_localSocket->waitForReadyRead();
 		DEBUG("	Reading from local socket. state after reconnect = " << m_localSocket->state());
 		break;
-	case SourceType::SerialPort:
+	case SourceType::SerialPort: {
 		DEBUG("	Reading from serial port");
 #ifdef HAVE_QTSERIALPORT
-		qint64 from = 0;
-		if (firstRead) {
-			//from = 1; // skip first line, because it could be that it is not complete and then parsed invalid
-			firstRead = false;
-		}
+		// if (firstRead) {
+		// 	properties.firstLine = 2; //
+		// }
 		// reading data here
 		if (m_fileType == AbstractFileFilter::FileType::Ascii)
-			static_cast<AsciiFilter*>(m_filter)->readFromDevice(*m_device, this, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, from, sampleSize(), m_keepNValues);
+			static_cast<AsciiFilter*>(m_filter)->readFromDevice(*m_device, this, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, 0, sampleSize(), m_keepNValues);
 #endif
 		break;
+	}
 	case SourceType::MQTT:
 		break;
 	}
