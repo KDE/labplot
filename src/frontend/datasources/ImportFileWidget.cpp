@@ -621,7 +621,6 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 	// file type
 	const auto fileType = currentFileType();
 	source->setFileType(fileType);
-	currentFileFilter();
 	source->setFilter(m_currentFilter.release()); // pass ownership of the filter to the LiveDataSource
 
 	// source type
@@ -1327,7 +1326,7 @@ void ImportFileWidget::initOptionsWidget() {
 	case AbstractFileFilter::FileType::Ascii: {
 		if (!m_asciiOptionsWidget) {
 			auto* asciiw = new QWidget();
-			m_asciiOptionsWidget = std::unique_ptr<AsciiOptionsWidget>(new AsciiOptionsWidget(asciiw));
+			m_asciiOptionsWidget = std::unique_ptr<AsciiOptionsWidget>(new AsciiOptionsWidget(asciiw, m_liveDataSource));
 			m_asciiOptionsWidget->loadSettings();
 
 			// allow to add timestamp column for live data sources
@@ -1710,6 +1709,16 @@ void ImportFileWidget::refreshPreview() {
 		filter->clearLastError();
 		filter->clearLastWarnings();
 
+		// sequential
+		if (sourceType != LiveDataSource::SourceType::FileOrPipe) {
+			auto p = filter->properties();
+			filter->initialize(p);
+			if (!filter->lastError().isEmpty()) {
+				Q_EMIT error(QStringLiteral("Preview: Initialization failed: %1").arg(filter->lastError()));
+				return;
+			}
+		}
+
 		DEBUG(Q_FUNC_INFO << ", Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, sourceType));
 		switch (sourceType) {
 		case LiveDataSource::SourceType::FileOrPipe: {
@@ -1724,12 +1733,13 @@ void ImportFileWidget::refreshPreview() {
 			if (lsocket.waitForConnected()) {
 				DEBUG("connected to local socket " << STDSTRING(file));
 				if (lsocket.waitForReadyRead())
-					importedStrings = filter->preview(lsocket, lines);
+					importedStrings = filter->preview(lsocket, lines, false);
 				DEBUG("Local socket: DISCONNECT PREVIEW");
 				lsocket.disconnectFromServer();
 				// read-only socket is disconnected immediately (no waitForDisconnected())
-			} else
+			} else {
 				DEBUG("failed connect to local socket " << STDSTRING(file) << " - " << STDSTRING(lsocket.errorString()));
+			}
 
 			break;
 		}
@@ -1738,8 +1748,11 @@ void ImportFileWidget::refreshPreview() {
 			tcpSocket.connectToHost(host(), port().toInt(), QTcpSocket::ReadOnly);
 			if (tcpSocket.waitForConnected()) {
 				DEBUG("connected to TCP socket");
-				if (tcpSocket.waitForReadyRead())
-					importedStrings = filter->preview(tcpSocket, lines);
+				if (tcpSocket.waitForReadyRead()) {
+					importedStrings = filter->preview(tcpSocket, lines, false);
+					if (!filter->lastError().isEmpty())
+						Q_EMIT error(QStringLiteral("Parse Error: %1").arg(filter->lastError()));
+				}
 
 				tcpSocket.disconnectFromHost();
 			} else
@@ -1762,7 +1775,9 @@ void ImportFileWidget::refreshPreview() {
 				} else {
 					DEBUG("	has no pending data");
 				}
-				importedStrings = filter->preview(udpSocket, lines);
+				importedStrings = filter->preview(udpSocket, lines, false);
+				if (!filter->lastError().isEmpty())
+					Q_EMIT error(QStringLiteral("Parse Error: %1").arg(filter->lastError()));
 
 				DEBUG("UDP Socket: DISCONNECT PREVIEW, state = " << udpSocket.state());
 				udpSocket.disconnectFromHost();
@@ -1781,14 +1796,16 @@ void ImportFileWidget::refreshPreview() {
 			sPort.setBaudRate(baudRate());
 
 			if (sPort.open(QIODevice::ReadOnly)) {
-				if (sPort.waitForReadyRead(2000))
-					importedStrings = filter->preview(sPort, lines);
-				else
-					DEBUG("	ERROR: not ready for read after 2 sec");
+				if (sPort.waitForReadyRead(2000)) {
+					importedStrings = filter->preview(sPort, lines, false, true);
+					if (!filter->lastError().isEmpty())
+						Q_EMIT error(QStringLiteral("Parse Error: %1").arg(filter->lastError()));
+				} else
+					Q_EMIT error(QStringLiteral("ERROR: not ready for read after 2 sec"));
 
 				sPort.close();
 			} else
-				DEBUG("	ERROR: failed to open serial port. error: " << sPort.error());
+				Q_EMIT error(QStringLiteral("ERROR: failed to open serial port. error: ")); // + sPort.error());
 #endif
 			break;
 		}
@@ -1802,7 +1819,7 @@ void ImportFileWidget::refreshPreview() {
 				if (i != m_lastMessage.end()) {
 					auto s = QLatin1String(i.value().payload().data());
 					BufferReader reader(s.toString()); // TODO: inefficient?
-					importedStrings = filter->preview(reader, lines);
+					importedStrings = filter->preview(reader, lines, false);
 				} else
 					importedStrings << QStringList{i18n("No data arrived yet for the selected topic")};
 			}
@@ -2411,9 +2428,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 	// and wants to use the header to set the column names or the user provides manually the column names.
 	// TODO: adjust this logic later once we allow to import multiple columns from sockets,
 	// it should be possible to provide the names of the columns
-	bool visible = (sourceType == LiveDataSource::SourceType::FileOrPipe);
 	if (m_asciiOptionsWidget)
-		m_asciiOptionsWidget->showAsciiHeaderOptions(visible);
+		m_asciiOptionsWidget->showAsciiHeaderOptions(true);
 
 	Q_EMIT sourceTypeChanged();
 	refreshPreview();

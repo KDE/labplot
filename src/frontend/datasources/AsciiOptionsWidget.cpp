@@ -23,8 +23,8 @@
 
 \ingroup frontend
 */
-AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent)
-	: QWidget(parent) {
+AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent, bool liveData)
+	: QWidget(parent), m_liveData(liveData) {
 	ui.setupUi(parent);
 
 	ui.cbSeparatingCharacter->addItems(AsciiFilter::separatorCharacters());
@@ -138,6 +138,14 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent)
 	}
 	ui.kleColumnMode->setWhatsThis(info);
 
+	if (m_liveData) {
+		headerChanged(false);
+		ui.chbHeader->setVisible(false);
+		ui.sbHeaderLine->setVisible(false);
+		ui.lVectorNames->setVisible(true);
+		ui.kleVectorNames->setVisible(true);
+	}
+
 	connect(ui.chbHeader, &QCheckBox::toggled, this, &AsciiOptionsWidget::headerChanged);
 	connect(ui.sbHeaderLine, QOverload<int>::of(&QSpinBox::valueChanged), this, &AsciiOptionsWidget::headerLineChanged);
 	connect(ui.kleColumnMode, &QLineEdit::textChanged, this, &AsciiOptionsWidget::columnModesChanged);
@@ -145,6 +153,9 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent)
 
 void AsciiOptionsWidget::showAsciiHeaderOptions(bool visible) {
 	DEBUG(Q_FUNC_INFO);
+	if (m_liveData)
+		return;
+
 	ui.chbHeader->setVisible(visible);
 	ui.sbHeaderLine->setVisible(visible);
 	if (visible) {
@@ -243,6 +254,7 @@ void AsciiOptionsWidget::loadConfigFromTemplate(KConfig& config) const {
 	int index = (decimalSeparator == QLatin1Char('.')) ? 0 : 1;
 	ui.cbDecimalSeparator->setCurrentIndex(group.readEntry("DecimalSeparator", index));
 
+	ui.sbYearBase->setValue(group.readEntry("YearBase", 1900));
 	ui.cbDateTimeFormat->setCurrentText(group.readEntry("DateTimeFormat", "yyyy-MM-dd hh:mm:ss.zzz"));
 	ui.chbCreateIndex->setChecked(group.readEntry("CreateIndex", false));
 	ui.chbCreateTimestamp->setChecked(group.readEntry("CreateTimestamp", true));
@@ -250,10 +262,14 @@ void AsciiOptionsWidget::loadConfigFromTemplate(KConfig& config) const {
 	ui.chbConvertNaNToZero->setChecked(group.readEntry("ConvertNaNToZero", false));
 	ui.chbRemoveQuotes->setChecked(group.readEntry("RemoveQuotes", false));
 	ui.chbSkipEmptyParts->setChecked(group.readEntry("SkipEmptyParts", false));
-	ui.chbHeader->setChecked(group.readEntry("UseFirstRow", true)); // header enabled - yes/no
+	if (!m_liveData)
+		ui.chbHeader->setChecked(group.readEntry("UseFirstRow", true)); // header enabled - yes/no
+	else
+		ui.chbHeader->setChecked(false);
 	headerChanged(ui.chbHeader->isChecked()); // call this to update the status of the SpinBox for the header line
 	ui.sbHeaderLine->setValue(group.readEntry(QLatin1String("HeaderLine"), 1));
 	ui.kleVectorNames->setText(group.readEntry("Names", ""));
+	ui.kleColumnMode->setText(group.readEntry("Modes", ""));
 }
 
 void AsciiOptionsWidget::saveConfigAsTemplate(KConfig& config) const {
@@ -262,6 +278,7 @@ void AsciiOptionsWidget::saveConfigAsTemplate(KConfig& config) const {
 	group.writeEntry("CommentCharacter", ui.cbCommentCharacter->currentText());
 	group.writeEntry("SeparatingCharacter", ui.cbSeparatingCharacter->currentText());
 	group.writeEntry("DecimalSeparator", ui.cbDecimalSeparator->currentIndex());
+	group.writeEntry("YearBase", ui.sbYearBase->value());
 	group.writeEntry("DateTimeFormat", ui.cbDateTimeFormat->currentText());
 	group.writeEntry("CreateIndex", ui.chbCreateIndex->isChecked());
 	group.writeEntry("CreateTimestamp", ui.chbCreateTimestamp->isChecked());
@@ -272,4 +289,5 @@ void AsciiOptionsWidget::saveConfigAsTemplate(KConfig& config) const {
 	group.writeEntry("UseFirstRow", ui.chbHeader->isChecked()); // header enabled - yes/no
 	group.writeEntry(QLatin1String("HeaderLine"), ui.sbHeaderLine->value());
 	group.writeEntry("Names", ui.kleVectorNames->text());
+	group.writeEntry("Modes", ui.kleColumnMode->text());
 }

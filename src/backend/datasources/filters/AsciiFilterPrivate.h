@@ -20,14 +20,14 @@ public:
 	AsciiFilterPrivate(AsciiFilter *owner);
 	AsciiFilter::Status initialize(AsciiFilter::Properties p);
 	AsciiFilter::Status initialize(QIODevice& device);
-	AsciiFilter::Status readFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode columnImportMode, AbstractFileFilter::ImportMode rowImportMode, qint64 from, qint64 lines, qint64 keepNRows, qint64 &bytes_read);
-	QVector<QStringList> preview(QIODevice& device, int lines);
-	QVector<QStringList> preview(const QString& fileName, int lines);
+	AsciiFilter::Status readFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode columnImportMode, AbstractFileFilter::ImportMode rowImportMode, qint64 from, qint64 lines, qint64 keepNRows, qint64 &bytes_read, bool skipFirstLine = false);
+	QVector<QStringList> preview(QIODevice& device, int lines, bool reinit = true, bool skipFirstLine = false);
+	QVector<QStringList> preview(const QString& fileName, int lines, bool reinit = true);
 
 	static QMap<QString, QPair<QString, AbstractColumn::ColumnMode> > modeMap();
 	static bool determineColumnModes(const QStringView& s, QVector<AbstractColumn::ColumnMode> &modes, QString &invalidString);
 	static QString convertTranslatedColumnModesToNative(const QStringView s);
-	void setLastError(AsciiFilter::Status);
+	AsciiFilter::Status setLastError(AsciiFilter::Status);
 
 	AsciiFilter::Properties properties;
 	bool initialized{false};

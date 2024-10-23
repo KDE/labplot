@@ -34,7 +34,8 @@ struct IODeviceHandler {
 	~IODeviceHandler() {
 		if (reset)
 			device.reset(); // Seek to the start
-		device.close();
+		if (device.isOpen())
+			device.close();
 	}
 private:
 	QIODevice& device;
@@ -130,10 +131,10 @@ void AsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* 
 	readFromDevice(file, dataSource, columnImportMode, rowImportMode, 0, lines, 0);
 }
 
-qint64 AsciiFilter::readFromDevice(QIODevice& device, AbstractDataSource* dataSource, ImportMode columnImportMode, ImportMode rowImportMode, qint64 from, qint64 lines, qint64 keepNRows) {
+qint64 AsciiFilter::readFromDevice(QIODevice& device, AbstractDataSource* dataSource, ImportMode columnImportMode, ImportMode rowImportMode, qint64 from, qint64 lines, qint64 keepNRows, bool skipFirstLine) {
 	Q_D(AsciiFilter);
 	qint64 bytes_read;
-	const auto status = d->readFromDevice(device, dataSource, columnImportMode, rowImportMode, from, lines, keepNRows, bytes_read);
+	const auto status = d->readFromDevice(device, dataSource, columnImportMode, rowImportMode, from, lines, keepNRows, bytes_read, skipFirstLine);
 	d->setLastError(status);
 	// TODO: do something with it!
 	return bytes_read;
@@ -143,15 +144,14 @@ void AsciiFilter::write(const QString& fileName, AbstractDataSource*) {
 	// TODO
 }
 
-QVector<QStringList> AsciiFilter::preview(QIODevice& device, int lines) {
+QVector<QStringList> AsciiFilter::preview(QIODevice& device, int lines, bool reinit, bool skipFirstLine) {
 	Q_D(AsciiFilter);
-	return d->preview(device, lines);
+	return d->preview(device, lines, reinit, skipFirstLine);
 }
 
-QVector<QStringList> AsciiFilter::
-	preview(const QString& fileName, int lines) {
+QVector<QStringList> AsciiFilter::preview(const QString& fileName, int lines, bool reinit) {
 	Q_D(AsciiFilter);
-	return d->preview(fileName, lines);
+	return d->preview(fileName, lines, reinit);
 }
 
 bool AsciiFilter::initialized() const {
@@ -191,7 +191,7 @@ QString AsciiFilter::statusToString(Status e) {
 	case Status::SequentialDeviceAutomaticSeparatorDetection:
 		return i18n("Live: No column separator selected");
 	case Status::SequentialDeviceNoColumnModes:
-		return i18n("Live: No column modes selected");
+		return i18n("Live: No column modes set");
 	case Status::NoDateTimeFormat:
 		return i18n("Datetime column found, but no Datetime format provided");
 	case Status::HeaderDetectionNotAllowed:
@@ -645,13 +645,13 @@ bool AsciiFilterPrivate::ignoringLine(QStringView line, const AsciiFilter::Prope
  * \param bytes_read
  * \return
  */
-AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode columnImportMode, AbstractFileFilter::ImportMode rowImportMode,qint64 from, qint64 lines, qint64 keepNRows, qint64& bytes_read) {
+AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode columnImportMode, AbstractFileFilter::ImportMode rowImportMode, qint64 from, qint64 lines, qint64 keepNRows, qint64& bytes_read, bool skipFirstLine) {
 	using Status = AsciiFilter::Status;
 	bytes_read = 0;
 
 	bool ok;
+	m_DataContainer = DataContainer();
 	if (!initialized) {
-		m_DataContainer = DataContainer();
 		const auto status = initialize(device);
 		if (status != Status::Success)
 			return status;
@@ -703,8 +703,10 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 		return Status::NotEnoughMemory;
 	}
 
-	if (!device.open(QIODevice::ReadOnly))
-		return Status::UnableToOpenDevice;
+	if (!device.isOpen()) {
+		if (!device.open(QIODevice::ReadOnly))
+			return Status::UnableToOpenDevice;
+	}
 	IODeviceHandler dev(device, false); // TODO: check that it gets not optimized out!
 	if (device.atEnd() && !device.isSequential())
 		return Status::DeviceAtEnd; // File empty
@@ -713,6 +715,12 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 		device.seek(from);
 
 	QString line;
+	if (skipFirstLine) {
+		const auto status = getLine(device, line);
+		if (status != Status::Success)
+			return status;
+	}
+
 	int counter = 0;
 	int startDataRow = 1;
 	int rowIndex = dataContainerStartIndex;
@@ -752,12 +760,14 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 		// Now we get to the data rows
 		if (properties.simplifyWhitespaces) {
 			const auto& values = determineColumnsSimplifyWhiteSpace(line, properties);
-			assert(values.size() == m_DataContainer.size() - properties.createIndex - properties.createTimestamp);
+			if (values.size() < m_DataContainer.size() - properties.createIndex - properties.createTimestamp)
+				continue; // return Status::InvalidNumberDataColumns;
 			setValues(values, rowIndex, properties);
 		} else {
 			// Higher performance if no whitespaces are available
 			const auto& values = determineColumns(line, properties);
-			assert(values.size() == m_DataContainer.size() - properties.createIndex - properties.createTimestamp);
+			if (values.size() < m_DataContainer.size() - properties.createIndex - properties.createTimestamp)
+				continue; // return Status::InvalidNumberDataColumns;
 			setValues(values, rowIndex, properties);
 		}
 
@@ -805,6 +815,8 @@ void AsciiFilterPrivate::setValues(const QVector<T>& values, int rowIndex, const
 	// Iterate over all columns
 	for (const auto& value: values) {
 		bool conversionOk = false;
+		if (columnIndex >= properties.columnModes.length())
+			return;
 		switch (properties.columnModes[columnIndex]) {
 		case AbstractColumn::ColumnMode::Double: {
 			double d = properties.locale.toDouble(value, &conversionOk);
@@ -968,7 +980,7 @@ QVector<QStringView> AsciiFilterPrivate::determineColumns(const QStringView& lin
 	if (columnCount >= properties.startColumn && (columnCount <= properties.endColumn || properties.endColumn < 0)) {
 		// If columnName is empty(): After the separator the line was finished, but there should be a value so add a placeholder (invalid value)
 		if (numberCharacters != 0 || (!properties.skipEmptyParts && separatorLast))
-			columnNames.append(line.sliced(startColumnIndex, numberCharacters).toString());
+			columnNames.append(line.sliced(startColumnIndex, numberCharacters));
 	}
 	return columnNames;
 }
@@ -1115,43 +1127,43 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(AsciiFilter::Properties p) {
 	using ColumnMode = AbstractColumn::ColumnMode;
 
 	if (properties.endColumn > 0 && properties.endColumn < properties.startColumn)
-		return Status::WrongEndColumn;
+		return setLastError(Status::WrongEndColumn);
 
 	if (properties.endRow > 0 && properties.endRow < properties.startRow)
-		return Status::WrongEndRow;
+		return setLastError(Status::WrongEndRow);
 
 	if (p.automaticSeparatorDetection)
-		return Status::SeparatorDetectionNotAllowed;
+		return setLastError(Status::SeparatorDetectionNotAllowed);
 
 	if (p.separator.isEmpty())
-		return Status::InvalidSeparator;
+		return setLastError(Status::InvalidSeparator);
 
 	if (p.columnNamesRaw.isEmpty())
-		return Status::UnableParsingHeader;
+		return setLastError(Status::UnableParsingHeader);
 
 	p.columnNames = determineColumnsSimplifyWhiteSpace(p.columnNamesRaw, QLatin1String(INTERNAL_SEPARATOR), p.removeQuotes, true, p.skipEmptyParts, 1, p.endColumn);
 	if (p.columnNames.isEmpty())
-		return Status::UnableParsingHeader;
+		return setLastError(Status::UnableParsingHeader);
 
 	if (p.columnModes.isEmpty()) {
 		if (p.columnModesString.isEmpty())
-			return Status::SequentialDeviceNoColumnModes;
+			return setLastError(Status::SequentialDeviceNoColumnModes);
 
 		QString invalidString;
 		if (!determineColumnModes(p.columnModesString, p.columnModes, invalidString))
-			return Status::SequentialDeviceNoColumnModes;
+			return setLastError(Status::SequentialDeviceNoColumnModes);
 	}
 
 	if (p.columnModes.count() != p.columnNames.count())
-		return Status::SequentialDeviceNoColumnModes;
+		return setLastError(Status::SequentialDeviceNoColumnModes);
 
 	if (p.headerEnabled)
-		return Status::HeaderDetectionNotAllowed;
+		return setLastError(Status::HeaderDetectionNotAllowed);
 
 	if (p.dateTimeFormat.isEmpty()) {
 		for (const auto m: p.columnModes) {
 			if (m == ColumnMode::DateTime || m == ColumnMode::Month || m == ColumnMode::Day)
-				return Status::NoDateTimeFormat;
+				return setLastError(Status::NoDateTimeFormat);
 		}
 	}
 
@@ -1171,17 +1183,27 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(AsciiFilter::Properties p) {
 
 
 
-QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int lines) {
+QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int lines, bool reinit) {
 	KCompressionDevice file(fileName);
-	return preview(file, lines);
+	return preview(file, lines, reinit, false);
 }
 
-QVector<QStringList> AsciiFilterPrivate::preview(QIODevice& device, int lines) {
+/*!
+ * \brief AsciiFilterPrivate::preview
+ * \param device
+ * \param lines
+ * \param reinit
+ * \param skipFirstLine Skip first line without reading. Important for example for the Serial port where it might be that the first line does not contain a complete line
+ * \return
+ */
+QVector<QStringList> AsciiFilterPrivate::preview(QIODevice& device, int lines, bool reinit, bool skipFirstLine) {
 	Spreadsheet spreadsheet(QStringLiteral("AsciiFilterPreviewSpreadsheet"));
-	initialized = false;
+	if (reinit)
+		initialized = false;
+	m_DataContainer = DataContainer(); // Reset the datacontainer, because it points to wrong columns
 	q->clearLastError();
 	qint64 bytes_read;
-	const auto status = readFromDevice(device, &spreadsheet, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Replace, 0, lines, 0, bytes_read);
+	const auto status = readFromDevice(device, &spreadsheet, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Replace, 0, lines, 0, bytes_read, skipFirstLine);
 	QVector<QStringList> p;
 	if (status != AsciiFilter::Status::Success) {
 		setLastError(status);
@@ -1217,12 +1239,13 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice& device, int lines) {
 	return p;
 }
 
-void AsciiFilterPrivate::setLastError(AsciiFilter::Status status) {
+AsciiFilter::Status AsciiFilterPrivate::setLastError(AsciiFilter::Status status) {
 	lastStatus = status;
-	if (status == AsciiFilter::Status::Success)
-		return;
-	const auto s = AsciiFilter::statusToString(status);
-	q->setLastError(s);
+	if (status != AsciiFilter::Status::Success) {
+		const auto s = AsciiFilter::statusToString(status);
+		q->setLastError(s);
+	}
+	return status;
 }
 
 // #################################################################################################

@@ -20,7 +20,7 @@ class AsciiOptionsWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit AsciiOptionsWidget(QWidget*);
+	explicit AsciiOptionsWidget(QWidget*, bool liveData = false);
 	void showAsciiHeaderOptions(bool);
 	void showTimestampOptions(bool);
 	void applyFilterSettings(AsciiFilter::Properties &properties) const;
@@ -45,6 +45,7 @@ Q_SIGNALS:
 private:
 	Ui::AsciiOptionsWidget ui;
 	bool m_createTimeStampAvailable{false};
+	bool m_liveData{false};
 };
 
 #endif

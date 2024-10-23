@@ -522,7 +522,7 @@ void LiveDataSource::read() {
 			DEBUG("	Serial: " << STDSTRING(m_serialPortName) << ", " << m_baudRate);
 			m_serialPort->setBaudRate(m_baudRate);
 			m_serialPort->setPortName(m_serialPortName);
-			m_serialPort->open(QIODevice::ReadOnly);
+			// m_serialPort->open(QIODevice::ReadOnly); // Not required
 
 			// only connect to readyRead when update is on new data
 			if (m_updateType == UpdateType::NewData)
@@ -598,12 +598,9 @@ void LiveDataSource::read() {
 	case SourceType::SerialPort: {
 		DEBUG("	Reading from serial port");
 #ifdef HAVE_QTSERIALPORT
-		// if (firstRead) {
-		// 	properties.firstLine = 2; //
-		// }
 		// reading data here
 		if (m_fileType == AbstractFileFilter::FileType::Ascii)
-			static_cast<AsciiFilter*>(m_filter)->readFromDevice(*m_device, this, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, 0, sampleSize(), m_keepNValues);
+			static_cast<AsciiFilter*>(m_filter)->readFromDevice(*m_device, this, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, 0, sampleSize(), m_keepNValues, firstRead);
 #endif
 		break;
 	}
@@ -722,7 +719,7 @@ QString LiveDataSource::serialPortErrorEnumToString(QSerialPort::SerialPortError
 		msg = i18n("Device already opened.");
 		break;
 	case QSerialPort::NotOpenError:
-		msg = i18n("Device is not opened.");
+		msg = i18n("Device is not open.");
 		break;
 	case QSerialPort::ReadError:
 		msg = i18n("Failed to read data.");
@@ -746,7 +743,8 @@ QString LiveDataSource::serialPortErrorEnumToString(QSerialPort::SerialPortError
 }
 
 void LiveDataSource::serialPortError(QSerialPort::SerialPortError error) {
-	QMessageBox::critical(nullptr, i18n("Serial Port Error"), serialPortErrorEnumToString(error, m_serialPort->errorString()));
+	if (error != QSerialPort::SerialPortError::NoError)
+		QMessageBox::critical(nullptr, i18n("Serial Port Error"), serialPortErrorEnumToString(error, m_serialPort->errorString()));
 }
 #endif
 
