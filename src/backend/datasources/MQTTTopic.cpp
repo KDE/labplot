@@ -179,7 +179,8 @@ void MQTTTopic::read() {
 	while (!m_messagePuffer.isEmpty()) {
 		qDebug() << "Reading from topic " << m_topicName;
 		BufferReader reader(m_messagePuffer.takeFirst());
-		m_filter->readFromDevice(reader, this, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, 0, -1, this->mqttClient()->keepNValues());
+		m_filter->setDataSource(this);
+		m_filter->readFromDevice(reader, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, 0, -1, this->mqttClient()->keepNValues());
 		finalizeRead();
 	}
 }

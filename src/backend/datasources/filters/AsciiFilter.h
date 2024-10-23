@@ -46,10 +46,11 @@ public:
 
 	enum class Status { Success, UnableToOpenDevice, DeviceAtEnd, NotEnoughRowsSelected, UnableToReadLine, SeparatorDeterminationFailed,
 						SequentialDeviceHeaderEnabled, SequentialDeviceAutomaticSeparatorDetection, SequentialDeviceNoColumnModes, InvalidNumberDataColumns, InvalidNumberColumnNames,
-						NotEnoughMemory, UnsupportedDataSource, UnableParsingHeader, MatrixUnsupportedColumnMode, NoDateTimeFormat, HeaderDetectionNotAllowed, SeparatorDetectionNotAllowed, InvalidSeparator, SequentialDeviceUninitialized, NoColumns, ColumnModeDeterminationFailed, WrongEndColumn, WrongEndRow };
+						NotEnoughMemory, UnsupportedDataSource, UnableParsingHeader, MatrixUnsupportedColumnMode, NoDateTimeFormat, HeaderDetectionNotAllowed, SeparatorDetectionNotAllowed, InvalidSeparator, SequentialDeviceUninitialized, NoColumns, ColumnModeDeterminationFailed, WrongEndColumn, WrongEndRow, NoDataSource};
 
+	void setDataSource(AbstractDataSource* dataSource);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode columnImportMode = ImportMode::Replace) override;
-	qint64 readFromDevice(QIODevice& device, AbstractDataSource* dataSource, ImportMode columnImportMode, ImportMode rowImportMode, qint64 from, qint64 lines, qint64 keepNRows = 0, bool skipFirstLine = false);
+	qint64 readFromDevice(QIODevice& device, ImportMode columnImportMode, ImportMode rowImportMode, qint64 from, qint64 lines, qint64 keepNRows = 0, bool skipFirstLine = false);
 	void write(const QString& fileName, AbstractDataSource*) override;
 	QVector<QStringList> preview(QIODevice& device, int lines, bool reinit = true, bool skipFirstLine = false);
 	QVector<QStringList> preview(const QString& fileName, int lines, bool reinit = true);

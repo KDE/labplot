@@ -187,6 +187,9 @@ AbstractFileFilter::FileType LiveDataSource::fileType() const {
 
 void LiveDataSource::setFilter(AbstractFileFilter* f) {
 	delete m_filter;
+	auto* asciiFilter = dynamic_cast<AsciiFilter*>(f);
+	if (asciiFilter)
+		asciiFilter->setDataSource(this);
 	m_filter = f;
 }
 
@@ -542,9 +545,9 @@ void LiveDataSource::read() {
 		switch (m_fileType) {
 		case AbstractFileFilter::FileType::Ascii:
 			if (m_readingType == LiveDataSource::ReadingType::WholeFile) {
-				static_cast<AsciiFilter*>(m_filter)->readFromDevice(*m_device, this, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Replace, 0, -1, 0);
+				static_cast<AsciiFilter*>(m_filter)->readFromDevice(*m_device, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Replace, 0, -1, 0);
 			} else {
-				qint64 bytes = static_cast<AsciiFilter*>(m_filter)->readFromDevice(*m_device, this, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, m_bytesRead, sampleSize(), m_keepNValues);
+				qint64 bytes = static_cast<AsciiFilter*>(m_filter)->readFromDevice(*m_device, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, m_bytesRead, sampleSize(), m_keepNValues);
 				m_bytesRead += bytes;
 				// DEBUG("Read " << bytes << " bytes, in total: " << m_bytesRead);
 			}
@@ -584,7 +587,7 @@ void LiveDataSource::read() {
 
 		// reading data here
 		if (m_fileType == AbstractFileFilter::FileType::Ascii)
-			static_cast<AsciiFilter*>(m_filter)->readFromDevice(*m_device, this, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, 0, sampleSize(), m_keepNValues);
+			static_cast<AsciiFilter*>(m_filter)->readFromDevice(*m_device, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, 0, sampleSize(), m_keepNValues);
 		break;
 	case SourceType::LocalSocket:
 		DEBUG("	Reading from local socket. state before abort = " << m_localSocket->state());
@@ -600,7 +603,7 @@ void LiveDataSource::read() {
 #ifdef HAVE_QTSERIALPORT
 		// reading data here
 		if (m_fileType == AbstractFileFilter::FileType::Ascii)
-			static_cast<AsciiFilter*>(m_filter)->readFromDevice(*m_device, this, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, 0, sampleSize(), m_keepNValues, firstRead);
+			static_cast<AsciiFilter*>(m_filter)->readFromDevice(*m_device, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, 0, sampleSize(), m_keepNValues, firstRead);
 #endif
 		break;
 	}

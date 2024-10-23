@@ -20,7 +20,8 @@ public:
 	AsciiFilterPrivate(AsciiFilter *owner);
 	AsciiFilter::Status initialize(AsciiFilter::Properties p);
 	AsciiFilter::Status initialize(QIODevice& device);
-	AsciiFilter::Status readFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode columnImportMode, AbstractFileFilter::ImportMode rowImportMode, qint64 from, qint64 lines, qint64 keepNRows, qint64 &bytes_read, bool skipFirstLine = false);
+	void setDataSource(AbstractDataSource* dataSource);
+	AsciiFilter::Status readFromDevice(QIODevice& device, AbstractFileFilter::ImportMode columnImportMode, AbstractFileFilter::ImportMode rowImportMode, qint64 from, qint64 lines, qint64 keepNRows, qint64 &bytes_read, bool skipFirstLine = false);
 	QVector<QStringList> preview(QIODevice& device, int lines, bool reinit = true, bool skipFirstLine = false);
 	QVector<QStringList> preview(const QString& fileName, int lines, bool reinit = true);
 
@@ -102,6 +103,7 @@ private:
 	DataContainer m_DataContainer;
 	int m_index{1}; // Index counter used when a index column was prepended
 	AsciiFilter::Status lastStatus{AsciiFilter::Status::Success};
+	AbstractDataSource* m_dataSource{nullptr};
 
 private:
 	AsciiFilter* const q;

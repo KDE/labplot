@@ -120,6 +120,11 @@ QVector<AbstractColumn::ColumnMode> AsciiFilter::columnModes() const {
 	return d->properties.columnModes;
 }
 
+void AsciiFilter::setDataSource(AbstractDataSource* dataSource) {
+	Q_D(AsciiFilter);
+	d->setDataSource(dataSource);
+}
+
 void AsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode columnImportMode) {
 	Q_D(const AsciiFilter);
 	KCompressionDevice file(fileName);
@@ -128,13 +133,14 @@ void AsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* 
 	auto rowImportMode = ImportMode::Replace;
 	if (columnImportMode != ImportMode::Replace)
 		rowImportMode = ImportMode::Append;
-	readFromDevice(file, dataSource, columnImportMode, rowImportMode, 0, lines, 0);
+	setDataSource(dataSource);
+	readFromDevice(file, columnImportMode, rowImportMode, 0, lines, 0);
 }
 
-qint64 AsciiFilter::readFromDevice(QIODevice& device, AbstractDataSource* dataSource, ImportMode columnImportMode, ImportMode rowImportMode, qint64 from, qint64 lines, qint64 keepNRows, bool skipFirstLine) {
+qint64 AsciiFilter::readFromDevice(QIODevice& device, ImportMode columnImportMode, ImportMode rowImportMode, qint64 from, qint64 lines, qint64 keepNRows, bool skipFirstLine) {
 	Q_D(AsciiFilter);
 	qint64 bytes_read;
-	const auto status = d->readFromDevice(device, dataSource, columnImportMode, rowImportMode, from, lines, keepNRows, bytes_read, skipFirstLine);
+	const auto status = d->readFromDevice(device, columnImportMode, rowImportMode, from, lines, keepNRows, bytes_read, skipFirstLine);
 	d->setLastError(status);
 	// TODO: do something with it!
 	return bytes_read;
@@ -206,6 +212,8 @@ QString AsciiFilter::statusToString(Status e) {
 		return i18n("Wrong end column. Is it smaller than start column?");
 	case Status::WrongEndRow:
 		return i18n("Wrong end row. Is it smaller than start row?");
+	case Status::NoDataSource:
+		return i18n("No data destination set");
 	}
 	return i18n("Unhandled case");
 }
@@ -634,6 +642,11 @@ bool AsciiFilterPrivate::ignoringLine(QStringView line, const AsciiFilter::Prope
 		(line.size() == 2 && line.at(0) == QLatin1Char('\r') && line.at(1) == QLatin1Char('\n'));
 }
 
+void AsciiFilterPrivate::setDataSource(AbstractDataSource* dataSource) {
+	m_dataSource = dataSource;
+	m_DataContainer = DataContainer();
+}
+
 /*!
  * \brief AsciiFilterPrivate::readFromDevice
  * \param device
@@ -645,19 +658,18 @@ bool AsciiFilterPrivate::ignoringLine(QStringView line, const AsciiFilter::Prope
  * \param bytes_read
  * \return
  */
-AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode columnImportMode, AbstractFileFilter::ImportMode rowImportMode, qint64 from, qint64 lines, qint64 keepNRows, qint64& bytes_read, bool skipFirstLine) {
+AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, AbstractFileFilter::ImportMode columnImportMode, AbstractFileFilter::ImportMode rowImportMode, qint64 from, qint64 lines, qint64 keepNRows, qint64& bytes_read, bool skipFirstLine) {
 	using Status = AsciiFilter::Status;
 	bytes_read = 0;
 
 	bool ok;
-	m_DataContainer = DataContainer();
 	if (!initialized) {
 		const auto status = initialize(device);
 		if (status != Status::Success)
 			return status;
 
 		// matrix data has only one column mode
-		if (dynamic_cast<Matrix*>(dataSource)) {
+		if (dynamic_cast<Matrix*>(m_dataSource)) {
 			for (auto& c : properties.columnModes)
 				if (c != AbstractColumn::ColumnMode::Double)
 					return Status::MatrixUnsupportedColumnMode;
@@ -671,8 +683,12 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 	// TODO: This is dangerous, because it could that now a different dataContainer is used than before.
 	if (m_DataContainer.size() == 0) {
 		std::vector<void*> dataContainer;
+		if (!m_dataSource) {
+			assert(false);
+			return Status::NoDataSource;
+		}
 		// The column offset is already subtracted, so dataContainer contains only the new columns
-		dataSource->prepareImport(dataContainer, columnImportMode, 0, properties.columnModes.size(), properties.columnNames, properties.columnModes, ok, true);
+		m_dataSource->prepareImport(dataContainer, columnImportMode, 0, properties.columnModes.size(), properties.columnNames, properties.columnModes, ok, true);
 
 		if (dataContainer.size() == 0)
 			return Status::NoColumns;
@@ -804,7 +820,7 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 	} else
 		m_DataContainer.resize(rowIndex);
 
-	dataSource->finalizeImport(0, 0, properties.columnNames.size() - 1, properties.dateTimeFormat, columnImportMode);
+	m_dataSource->finalizeImport(0, 0, properties.columnNames.size() - 1, properties.dateTimeFormat, columnImportMode);
 	return Status::Success;
 }
 
@@ -1199,10 +1215,11 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice& device, int lines, b
 	Spreadsheet spreadsheet(QStringLiteral("AsciiFilterPreviewSpreadsheet"));
 	if (reinit)
 		initialized = false;
-	m_DataContainer = DataContainer(); // Reset the datacontainer, because it points to wrong columns
 	q->clearLastError();
 	qint64 bytes_read;
-	const auto status = readFromDevice(device, &spreadsheet, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Replace, 0, lines, 0, bytes_read, skipFirstLine);
+	setDataSource(&spreadsheet);
+	const auto status = readFromDevice(device, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Replace, 0, lines, 0, bytes_read, skipFirstLine);
+	setDataSource(nullptr);
 	QVector<QStringList> p;
 	if (status != AsciiFilter::Status::Success) {
 		setLastError(status);

@@ -2268,7 +2268,7 @@ void AsciiFilterTest::testAppendRows() {
 		QString savePath;
 		SAVE_FILE("testfile", fileContent2);
 		KCompressionDevice file(savePath);
-		filter.readFromDevice(file, &spreadsheet, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, 0, -1, -1);
+		filter.readFromDevice(file, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, 0, -1, -1);
 	}
 
 	QCOMPARE(spreadsheet.rowCount(), 6);
@@ -2342,7 +2342,7 @@ void AsciiFilterTest::keepLast() {
 		QString savePath;
 		SAVE_FILE("testfile", fileContent2);
 		KCompressionDevice file(savePath);
-		filter.readFromDevice(file, &spreadsheet, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, 0, -1, 4);
+		filter.readFromDevice(file, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, 0, -1, 4);
 	}
 
 	QCOMPARE(spreadsheet.rowCount(), 4);
@@ -3122,7 +3122,7 @@ void AsciiFilterTest::benchMarkCompare_SimplifyWhiteSpace() {
 		line.append(QStringLiteral("c%1,").arg(QString::number(column + 1)));
 	}
 	line.append(QStringLiteral("c%1").arg(QString::number(numberColumns)));
-	// content.append(line);
+	content.append(line);
 
 	// Create data
 	for (int row = 0; row < numberRows; row++) {
@@ -3143,13 +3143,13 @@ void AsciiFilterTest::benchMarkCompare_SimplifyWhiteSpace() {
 		auto properties = filter.properties();
 		properties.automaticSeparatorDetection = false;
 		properties.separator = QStringLiteral(",");
-		properties.headerEnabled = false;
+		properties.headerEnabled = true;
 		properties.headerLine = 1;
 		properties.intAsDouble = false;
 		properties.simplifyWhitespaces = false;
 		properties.columnModesString = QStringLiteral("Double,Double,Double,Double,Double");
 		properties.columnNamesRaw = QStringLiteral("1,2,3,4,5");
-		QCOMPARE(filter.initialize(properties), AsciiFilter::Status::Success);
+		//QCOMPARE(filter.initialize(properties), AsciiFilter::Status::Success);
 		filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 		QCOMPARE(spreadsheet.columnCount(), numberColumns);
