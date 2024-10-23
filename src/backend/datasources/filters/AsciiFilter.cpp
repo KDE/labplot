@@ -707,7 +707,6 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 		if (!device.open(QIODevice::ReadOnly))
 			return Status::UnableToOpenDevice;
 	}
-	IODeviceHandler dev(device, false); // TODO: check that it gets not optimized out!
 	if (device.atEnd() && !device.isSequential())
 		return Status::DeviceAtEnd; // File empty
 
