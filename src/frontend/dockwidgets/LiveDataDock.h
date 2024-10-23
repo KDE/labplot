@@ -71,6 +71,7 @@ private Q_SLOTS:
 	void showWillSettings();
 	void enableWill(bool enable);
 	void updatePlayPauseButtonText(bool pause);
+	void enableProperties(bool pause);
 
 Q_SIGNALS:
 	void newTopic(const QString&);

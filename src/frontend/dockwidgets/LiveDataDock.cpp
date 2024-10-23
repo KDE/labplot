@@ -231,6 +231,11 @@ void LiveDataDock::updatePlayPauseButtonText(bool pause) {
 		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-playback-pause")));
 	}
 }
+
+void LiveDataDock::enableProperties(bool pause) {
+	ui.sbKeepNValues->setEnabled(pause);
+}
+
 /*!
  * \brief Sets the live data source of this dock widget
  * \param source
@@ -506,6 +511,7 @@ void LiveDataDock::pauseContinueReading() {
 	m_paused = !m_paused;
 
 	updatePlayPauseButtonText(m_paused);
+	enableProperties(m_paused);
 
 	if (m_paused)
 		pauseReading();
