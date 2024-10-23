@@ -14,6 +14,7 @@
 class BrownianMotionMqttClient: public QMqttClient {
 public:
 	BrownianMotionMqttClient(QObject *parent = nullptr, int interval = 1000, const QString& hostname = QStringLiteral("test.mosquitto.org"), int port = 1883, int yPaths = 20);
+	~BrownianMotionMqttClient() = default;
 	QString subscribeBrownianTopic();
 	QString publishBrownianData();
 	void setInterval(int);
