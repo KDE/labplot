@@ -3395,10 +3395,10 @@ void AsciiFilterTest::bufferReader() {
 		QCOMPARE(out[1], QLatin1Char('a'));
 		QCOMPARE(out[2], QLatin1Char('l'));
 		QCOMPARE(out[3], QLatin1Char('l'));
-		QCOMPARE(out[4], QLatin1Char('1'));
-		QCOMPARE(out[5], QLatin1Char('2'));
-		QCOMPARE(out[6], QLatin1Char('3'));
-		QCOMPARE(out[7], QLatin1Char('4'));
+		QCOMPARE(out[4], QLatin1Char('o'));
+		QCOMPARE(out[5], QLatin1Char('1'));
+		QCOMPARE(out[6], QLatin1Char('2'));
+		QCOMPARE(out[7], QLatin1Char('3'));
 	}
 
 	{
