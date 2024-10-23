@@ -719,12 +719,18 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 		return Status::NotEnoughMemory;
 	}
 
+	auto handleError = [this] (Status status) {
+		setLastError(status);
+		m_DataContainer.resize(0);
+		return status;
+	};
+
 	if (!device.isOpen()) {
 		if (!device.open(QIODevice::ReadOnly))
-			return Status::UnableToOpenDevice;
+			return handleError(Status::UnableToOpenDevice);
 	}
 	if (device.atEnd() && !device.isSequential())
-		return Status::DeviceAtEnd; // File empty
+		return handleError(Status::DeviceAtEnd); // File empty
 
 	if (!device.isSequential())
 		device.seek(from);
@@ -733,7 +739,7 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 	if (skipFirstLine) {
 		const auto status = getLine(device, line);
 		if (status != Status::Success)
-			return status;
+			return handleError(status);
 	}
 
 	int counter = 0;
