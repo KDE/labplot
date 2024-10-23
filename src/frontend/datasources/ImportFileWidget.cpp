@@ -692,9 +692,12 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		auto filter = static_cast<AsciiFilter*>(m_currentFilter.get());
 		auto properties = filter->defaultProperties();
 
-		if (ui.cbFilter->currentIndex() == 0) //"automatic"
+		if (ui.cbFilter->currentIndex() == 0) { //"automatic"
 			properties.automaticSeparatorDetection = true;
-		else { //"custom" and templates
+			properties.simplifyWhitespaces = true;
+			properties.removeQuotes = true;
+			properties.dateTimeFormat = QStringLiteral("");
+		} else { //"custom" and templates
 			properties.automaticSeparatorDetection = false;
 
 			// set the data portion to import
