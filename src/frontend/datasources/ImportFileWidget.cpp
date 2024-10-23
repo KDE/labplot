@@ -1825,7 +1825,7 @@ void ImportFileWidget::refreshPreview() {
 				auto i = m_lastMessage.find(topicName);
 				if (i != m_lastMessage.end()) {
 					auto s = QLatin1String(i.value().payload().data());
-					BufferReader reader(s.toString()); // TODO: inefficient?
+					BufferReader reader(s); // TODO: inefficient?
 					importedStrings = filter->preview(reader, lines, false);
 				} else
 					importedStrings << QStringList{i18n("No data arrived yet for the selected topic")};

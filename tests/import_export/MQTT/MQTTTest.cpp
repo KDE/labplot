@@ -27,10 +27,26 @@
 #include <QTreeWidgetItem>
 #include <QVector>
 
+#include <iostream>
+
 namespace {
-const QLatin1String mqttHostName("https://test.mosquitto.org/");
-const int mqttPort = 1883;
+const QLatin1String mqttHostName(HOSTNAME);
+const int mqttPort = PORT;
 }
+
+void MQTTTest::init() {
+	const auto executable = QStringLiteral(EXEC);
+	m_process.setProgram(executable);
+	m_process.start();
+	QVERIFY(m_process.waitForStarted());
+	// const auto e1 = m_process.errorString();
+}
+
+void MQTTTest::cleanup() {
+	m_process.terminate();
+	QVERIFY(m_process.waitForFinished());
+}
+
 
 void MQTTTest::initTestCase() {
 	CommonTest::initTestCase();

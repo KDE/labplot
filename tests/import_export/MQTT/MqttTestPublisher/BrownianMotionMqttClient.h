@@ -18,7 +18,7 @@ private:
 	std::unique_ptr<QMqttTopicName> m_brownian_xTopic;
 	std::vector<std::unique_ptr<QMqttTopicName>> m_brownian_yTopics;
 
-	quint8 m_qos;
+	quint8 m_qos{0};
 	QVector<double> m_x;
 
 	std::unique_ptr<std::default_random_engine> m_generator;

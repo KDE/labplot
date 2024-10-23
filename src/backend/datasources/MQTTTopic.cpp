@@ -178,7 +178,8 @@ void MQTTTopic::plotData() {
 void MQTTTopic::read() {
 	while (!m_messagePuffer.isEmpty()) {
 		qDebug() << "Reading from topic " << m_topicName;
-		BufferReader reader(m_messagePuffer.takeFirst());
+		auto s = QLatin1String(m_messagePuffer.takeFirst().toLatin1().data());
+		BufferReader reader(s);
 		m_filter->setDataSource(this);
 		m_filter->readFromDevice(reader, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, 0, -1, this->mqttClient()->keepNValues());
 		finalizeRead();

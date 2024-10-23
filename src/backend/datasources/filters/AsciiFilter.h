@@ -22,21 +22,17 @@ class AsciiFilterPrivate;
  */
 class BufferReader: public QIODevice {
 public:
-	BufferReader(const QStringView& buffer);
+	BufferReader(const QLatin1String &buffer);
 
 	bool isSequential() const override;
 	bool atEnd() const override;
 	bool open(QIODevice::OpenModeFlag mode);
-	bool canReadLine() const override;
-	QByteArray readLine(qint64 maxlen = 0);
 	qint64 readData(char *, qint64) override;
-	qint64 readLineData(char *, qint64) override;
 	qint64 writeData(const char *, qint64) override;
 
 private:
-	const QStringView m_message;
-	const QList<QStringView> m_lines;
-	int m_lineIndex{0};
+	const QLatin1String m_message;
+	int m_index{0};
 };
 
 class AsciiFilter: public AbstractFileFilter {

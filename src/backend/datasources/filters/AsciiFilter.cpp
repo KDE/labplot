@@ -44,7 +44,7 @@ private:
 const QLatin1String INTERNAL_SEPARATOR(",");
 } // Anonymous namespace
 
-BufferReader::BufferReader(const QStringView& buffer): m_message(buffer), m_lines(buffer.split(QLatin1Char('\n'))) {
+BufferReader::BufferReader(const QLatin1String& buffer): m_message(buffer) {
 
 }
 
@@ -60,25 +60,21 @@ bool BufferReader::open(QIODevice::OpenModeFlag mode) {
 	return mode == QIODevice::OpenModeFlag::ReadOnly;
 }
 
-bool BufferReader::canReadLine() const {
-	return m_lineIndex < m_lines.count();
-}
-
-QByteArray BufferReader::readLine(qint64 maxlen) {
-	assert(maxlen == 0);
-	m_lineIndex ++;
-	return m_lines.at(m_lineIndex - 1).toLocal8Bit();
-}
-
 // Not required functions yet, so ignore them until they are required
-qint64 BufferReader::readData(char *, qint64) {
-	assert(false);
-	return 0;
+qint64 BufferReader::readData(char * out, qint64 maxLen) {
+	if (m_index + maxLen > m_message.length())
+		maxLen = m_message.length() - m_index;
+
+	if (maxLen < 0)
+		return 0;
+
+	for (int i=0; i < maxLen; i++) {
+		*out++ = *(const_cast<char*>(m_message.data()) + m_index + i);
+	}
+	m_index += maxLen;
+	return maxLen;
 }
-qint64 BufferReader::readLineData(char *, qint64) {
-	assert(false);
-	return 0;
-}
+
 qint64 BufferReader::writeData(const char *, qint64) {
 	assert(false);
 	return 0;

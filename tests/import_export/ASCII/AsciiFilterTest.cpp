@@ -3383,4 +3383,46 @@ void AsciiFilterTest::saveLoad() {
 	}
 }
 
+void AsciiFilterTest::bufferReader() {
+
+
+	{
+		BufferReader reader(QLatin1String("Hallo123"));
+
+		QVector<char> out(10);
+		QCOMPARE(reader.readData(out.data(), 10), 8);
+		QCOMPARE(out[0], QLatin1Char('H'));
+		QCOMPARE(out[1], QLatin1Char('a'));
+		QCOMPARE(out[2], QLatin1Char('l'));
+		QCOMPARE(out[3], QLatin1Char('l'));
+		QCOMPARE(out[4], QLatin1Char('1'));
+		QCOMPARE(out[5], QLatin1Char('2'));
+		QCOMPARE(out[6], QLatin1Char('3'));
+		QCOMPARE(out[7], QLatin1Char('4'));
+	}
+
+	{
+		BufferReader reader(QLatin1String("Hallo1234"));
+
+		QVector<char> out(10);
+		QCOMPARE(reader.readData(out.data(), 2), 2);
+		QCOMPARE(out[0], QLatin1Char('H'));
+		QCOMPARE(out[1], QLatin1Char('a'));
+
+		QCOMPARE(reader.readData(out.data(), 2), 2);
+		QCOMPARE(out[0], QLatin1Char('l'));
+		QCOMPARE(out[1], QLatin1Char('l'));
+
+		QCOMPARE(reader.readData(out.data(), 2), 2);
+		QCOMPARE(out[0], QLatin1Char('o'));
+		QCOMPARE(out[1], QLatin1Char('1'));
+
+		QCOMPARE(reader.readData(out.data(), 5), 3);
+		QCOMPARE(out[0], QLatin1Char('2'));
+		QCOMPARE(out[1], QLatin1Char('3'));
+		QCOMPARE(out[1], QLatin1Char('4'));
+		QCOMPARE(reader.canReadLine(), false);
+	}
+}
+
 QTEST_MAIN(AsciiFilterTest)

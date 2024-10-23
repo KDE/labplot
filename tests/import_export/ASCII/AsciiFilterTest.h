@@ -131,6 +131,8 @@ private Q_SLOTS:
 	void deleteSpreadsheet();
 	void saveLoad();
 
+	void bufferReader();
+
 private:
 	QString benchDataFileName;
 	const size_t lines = 1e5;

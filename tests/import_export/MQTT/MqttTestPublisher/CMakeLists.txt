@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(mqtt_test_publisher VERSION 1.0 LANGUAGES CXX)
+project(MqttTestPublisher VERSION 1.0 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOUIC ON)
@@ -18,15 +18,17 @@ find_package(Qt6 REQUIRED COMPONENTS
     Mqtt
 )
 
-add_library(${PROJECT_NAME}_lib)
+add_library(mqtt_test_publisher_lib STATIC
+    BrownianMotionMqttClient.h
+    BrownianMotionMqttClient.cpp)
+
+target_link_libraries(mqtt_test_publisher_lib Qt6::Mqtt)
 
 add_executable(${PROJECT_NAME}
     main.cpp
     MainWindow.cpp
     MainWindow.h
     MainWindow.ui
-    BrownianMotionMqttClient.h
-    BrownianMotionMqttClient.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
@@ -34,8 +36,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt6::Gui
     Qt6::Network
     Qt6::Widgets
-    Qt6::Mqtt
-    ${PROJECT_NAME}_lib
+    mqtt_test_publisher_lib
 )
 
 # Enable deprecated API warnings
