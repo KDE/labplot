@@ -5,12 +5,6 @@
 #include <QMqttClient>
 #include <random>
 
-// namespace std {
-// class default_random_engine;
-// template<class RealType = double>
-// class normal_distribution;
-// }
-
 class BrownianMotionMqttClient: public QMqttClient {
 public:
 	BrownianMotionMqttClient(QObject *parent = nullptr, int interval = 1000, const QString& hostname = QStringLiteral("test.mosquitto.org"), int port = 1883, int yPaths = 20);
