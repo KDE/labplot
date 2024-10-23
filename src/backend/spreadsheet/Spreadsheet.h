@@ -140,6 +140,7 @@ private:
 
 protected:
 	mutable SpreadsheetView* m_view{nullptr};
+	void setSuppressSetCommentFinalizeImport(bool);
 
 private Q_SLOTS:
 	void childSelected(const AbstractAspect*) override;

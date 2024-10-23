@@ -88,6 +88,11 @@ void Spreadsheet::init() {
 	setRowCount(rows);
 }
 
+void Spreadsheet::setSuppressSetCommentFinalizeImport(bool suppress) {
+	Q_D(Spreadsheet);
+	d->suppressSetCommentFinalizeImport = suppress;
+}
+
 void Spreadsheet::setModel(SpreadsheetModel* model) {
 	m_model = model;
 }
@@ -1516,44 +1521,46 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 			plot->setSuppressRetransform(true);
 	}
 
-	// set the comments for each of the columns if datasource is a spreadsheet
-	const int rows = rowCount();
-	for (size_t col = startColumn; col <= endColumn; col++) {
-		// DEBUG(Q_FUNC_INFO << ", column " << columnOffset + col - startColumn);
-		Column* column = this->column((int)(columnOffset + col - startColumn));
-		DEBUG(Q_FUNC_INFO << ", type " << ENUM_TO_STRING(AbstractColumn, ColumnMode, column->columnMode()))
+	if (!d->suppressSetCommentFinalizeImport) {
+		// set the comments for each of the columns if datasource is a spreadsheet
+		const int rows = rowCount();
+		for (size_t col = startColumn; col <= endColumn; col++) {
+			// DEBUG(Q_FUNC_INFO << ", column " << columnOffset + col - startColumn);
+			Column* column = this->column((int)(columnOffset + col - startColumn));
+			DEBUG(Q_FUNC_INFO << ", type " << ENUM_TO_STRING(AbstractColumn, ColumnMode, column->columnMode()))
 
-		QString comment;
-		switch (column->columnMode()) {
-		case AbstractColumn::ColumnMode::Double:
-			comment = i18np("double precision data, %1 element", "numerical data, %1 elements", rows);
-			break;
-		case AbstractColumn::ColumnMode::Integer:
-			comment = i18np("integer data, %1 element", "integer data, %1 elements", rows);
-			break;
-		case AbstractColumn::ColumnMode::BigInt:
-			comment = i18np("big integer data, %1 element", "big integer data, %1 elements", rows);
-			break;
-		case AbstractColumn::ColumnMode::Text:
-			comment = i18np("text data, %1 element", "text data, %1 elements", rows);
-			break;
-		case AbstractColumn::ColumnMode::Month:
-			comment = i18np("month data, %1 element", "month data, %1 elements", rows);
-			break;
-		case AbstractColumn::ColumnMode::Day:
-			comment = i18np("day data, %1 element", "day data, %1 elements", rows);
-			break;
-		case AbstractColumn::ColumnMode::DateTime:
-			comment = i18np("date and time data, %1 element", "date and time data, %1 elements", rows);
-			// set same datetime format in column
-			auto* filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
-			filter->setFormat(dateTimeFormat);
-		}
-		column->setComment(comment);
+			QString comment;
+			switch (column->columnMode()) {
+			case AbstractColumn::ColumnMode::Double:
+				comment = i18np("double precision data, %1 element", "numerical data, %1 elements", rows);
+				break;
+			case AbstractColumn::ColumnMode::Integer:
+				comment = i18np("integer data, %1 element", "integer data, %1 elements", rows);
+				break;
+			case AbstractColumn::ColumnMode::BigInt:
+				comment = i18np("big integer data, %1 element", "big integer data, %1 elements", rows);
+				break;
+			case AbstractColumn::ColumnMode::Text:
+				comment = i18np("text data, %1 element", "text data, %1 elements", rows);
+				break;
+			case AbstractColumn::ColumnMode::Month:
+				comment = i18np("month data, %1 element", "month data, %1 elements", rows);
+				break;
+			case AbstractColumn::ColumnMode::Day:
+				comment = i18np("day data, %1 element", "day data, %1 elements", rows);
+				break;
+			case AbstractColumn::ColumnMode::DateTime:
+				comment = i18np("date and time data, %1 element", "date and time data, %1 elements", rows);
+				// set same datetime format in column
+				auto* filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
+				filter->setFormat(dateTimeFormat);
+			}
+			column->setComment(comment);
 
-		if (importMode == AbstractFileFilter::ImportMode::Replace) {
-			column->setSuppressDataChangedSignal(false);
-			column->setChanged();
+			if (importMode == AbstractFileFilter::ImportMode::Replace) {
+				column->setSuppressDataChangedSignal(false);
+				column->setChanged();
+			}
 		}
 	}
 

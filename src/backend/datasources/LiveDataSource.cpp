@@ -50,6 +50,7 @@ LiveDataSource::LiveDataSource(const QString& name, bool loading)
 	: Spreadsheet(name, loading, AspectType::LiveDataSource)
 	, m_updateTimer(new QTimer(this))
 	, m_watchTimer(new QTimer(this)) {
+	setSuppressSetCommentFinalizeImport(true);
 	m_watchTimer->setSingleShot(true);
 	m_watchTimer->setInterval(100); // maximum read frequency is 1/100ms = 10Hz
 
@@ -80,6 +81,7 @@ LiveDataSource::~LiveDataSource() {
 QWidget* LiveDataSource::view() const {
 	if (!m_partView) {
 		m_view = new SpreadsheetView(const_cast<LiveDataSource*>(this), true);
+		m_view->setSuppressResizeHeader(true);
 		m_partView = m_view;
 	}
 	return m_partView;

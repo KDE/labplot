@@ -250,6 +250,8 @@ void SpreadsheetView::init() {
 	set the column sizes to the saved values or resize to content if no size was saved yet
 */
 void SpreadsheetView::resizeHeader() {
+	if (m_suppressResizeHeader)
+		return;
 	DEBUG(Q_FUNC_INFO)
 	const auto& columns = m_spreadsheet->children<Column>();
 
@@ -284,6 +286,10 @@ void SpreadsheetView::resizeHeader() {
 
 void SpreadsheetView::setFocus() {
 	m_tableView->setFocus();
+}
+
+void SpreadsheetView::setSuppressResizeHeader(bool suppress) {
+	m_suppressResizeHeader = suppress;
 }
 
 void SpreadsheetView::resizeEvent(QResizeEvent* event) {
