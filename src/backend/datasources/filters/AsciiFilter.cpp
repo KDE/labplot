@@ -382,12 +382,12 @@ QPair<QString, QString> AsciiFilter::dataTypeString(const AbstractColumn::Column
 	const auto& modeMap = AsciiFilterPrivate::modeMap();
 	for (auto it = modeMap.cbegin(), end = modeMap.cend(); it != end; it++) {
 		if (it.value().second == mode) {
-			return QPair(it.key(), it.value().first);
+			return QPair<QString, QString>(it.key(), it.value().first);
 		}
 	}
 	DEBUG("Mode not found");
 	assert(false); // Mode not found
-	return QPair(QStringLiteral(), QStringLiteral());
+	return QPair<QString, QString>(QStringLiteral(""), QStringLiteral(""));
 }
 
 bool AsciiFilter::determineColumnModes(const QStringView& s, QVector<AbstractColumn::ColumnMode>& modes, QString& invalidString) {
