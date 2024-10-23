@@ -75,7 +75,7 @@ LiveDataSource::~LiveDataSource() {
 #ifdef HAVE_QTSERIALPORT
 	delete m_serialPort;
 #endif
-	delete m_device;
+	// delete m_device; // Do not delete, because the device was already deleted above
 }
 
 QWidget* LiveDataSource::view() const {
