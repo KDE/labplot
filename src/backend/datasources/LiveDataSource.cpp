@@ -70,12 +70,13 @@ LiveDataSource::~LiveDataSource() {
 
 	delete m_filter;
 	delete m_fileSystemWatcher;
-	delete m_localSocket;
-	delete m_tcpSocket;
-#ifdef HAVE_QTSERIALPORT
-	delete m_serialPort;
-#endif
-	// delete m_device; // Do not delete, because the device was already deleted above
+// Deleting m_device is enough!
+// 	delete m_localSocket;
+// 	delete m_tcpSocket;
+// #ifdef HAVE_QTSERIALPORT
+// 	delete m_serialPort;
+// #endif
+	delete m_device;
 }
 
 QWidget* LiveDataSource::view() const {
