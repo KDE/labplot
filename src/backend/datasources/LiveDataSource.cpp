@@ -604,8 +604,13 @@ void LiveDataSource::read() {
 		DEBUG("	Reading from serial port");
 #ifdef HAVE_QTSERIALPORT
 		// reading data here
-		if (m_fileType == AbstractFileFilter::FileType::Ascii)
+		if (m_fileType == AbstractFileFilter::FileType::Ascii) {
+			if (firstRead)
+				static_cast<AsciiFilter*>(m_filter)->clearLastError();
 			static_cast<AsciiFilter*>(m_filter)->readFromDevice(*m_device, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, 0, sampleSize(), m_keepNValues, firstRead);
+			if (static_cast<AsciiFilter*>(m_filter)->lastError().isEmpty())
+				firstRead = false;
+		}
 #endif
 		break;
 	}
