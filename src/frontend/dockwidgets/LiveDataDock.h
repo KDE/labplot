@@ -70,6 +70,7 @@ private Q_SLOTS:
 	void removeClient(const QString&, quint16);
 	void showWillSettings();
 	void enableWill(bool enable);
+	void updatePlayPauseButtonText(bool pause);
 
 Q_SIGNALS:
 	void newTopic(const QString&);
