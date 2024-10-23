@@ -126,7 +126,9 @@ void AsciiFilter::setDataSource(AbstractDataSource* dataSource) {
 }
 
 void AsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode columnImportMode) {
-	Q_D(const AsciiFilter);
+	Q_D(AsciiFilter);
+	d->fileNumberLines = lineNumber(fileName);
+
 	KCompressionDevice file(fileName);
 
 	const int lines = d->properties.endRow < 0 ? -1 : d->properties.endRow - d->properties.startRow + 1;
@@ -805,15 +807,17 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device, Abstra
 		if (lines >= 0 && (rowIndex - dataContainerStartIndex) >= lines)
 			break;
 
-			   // ask to update the progress bar only if we have more than 1000 lines
-			   // only in 1% steps
-			   // progressIndex++;
-			   // if (lines > 1000 && progressIndex > progressInterval) {
-			   // 	double value = 100. * currentRow / lines;
-			   // 	Q_EMIT q->completed(static_cast<int>(value));
-			   // 	progressIndex = 0;
-			   // 	QApplication::processEvents(QEventLoop::AllEvents, 0);
-			   // }
+		if (rowIndex % 1000 == 0) {
+			// ask to update the progress bar only if we have more than 1000 lines
+			// only in 1% steps
+			if (!device.isSequential()) {
+				if (fileNumberLines > 0) {
+					const auto value = 100. * rowIndex / fileNumberLines;
+					Q_EMIT q->completed(static_cast<int>(value));
+				}
+			}
+			QApplication::processEvents(QEventLoop::AllEvents, 0);
+		}
 
 	} while (true);
 

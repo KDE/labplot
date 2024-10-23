@@ -32,6 +32,7 @@ public:
 
 	AsciiFilter::Properties properties;
 	bool initialized{false};
+	size_t fileNumberLines{0};
 
 private:
 	static bool ignoringLine(QStringView line, const AsciiFilter::Properties& p);
