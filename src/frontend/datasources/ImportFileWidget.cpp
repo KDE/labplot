@@ -67,6 +67,13 @@
 #include <QWidgetAction>
 #endif
 
+namespace {
+	enum FilterSettingsHandlingIndex {
+		Automatic = 0,
+		Manual = 1,
+	}
+}
+
 QString ImportFileWidget::absolutePath(const QString& fileName) {
 	if (fileName.isEmpty())
 		return fileName;
@@ -357,8 +364,9 @@ void ImportFileWidget::loadSettings() {
 	sourceTypeChanged(static_cast<int>(currentSourceType()));
 	fileTypeChanged(); // call it to load the filter templates for the current file type and to select the last used index in cbFilter below
 	if (!m_liveDataSource) {
-		ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", 0));
+		ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", (int)FilterSettingsHandlingIndex::Automatic));
 	} else {
+		ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", (int)FilterSettingsHandlingIndex::Manual));
 		ui.cbFilter->setVisible(false);
 		ui.lFilter->setVisible(false);
 	}
@@ -697,7 +705,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		auto filter = static_cast<AsciiFilter*>(m_currentFilter.get());
 		auto properties = filter->defaultProperties();
 
-		if (!m_liveDataSource && ui.cbFilter->currentIndex() == 0) { //"automatic"
+		if (!m_liveDataSource && ui.cbFilter->currentIndex() == FilterSettingsHandlingIndex::Automatic) {
 			properties.automaticSeparatorDetection = true;
 			properties.simplifyWhitespaces = true;
 			properties.removeQuotes = true;
@@ -724,7 +732,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 			m_currentFilter.reset(new BinaryFilter);
 		auto filter = static_cast<BinaryFilter*>(m_currentFilter.get());
 
-		if (ui.cbFilter->currentIndex() == 0) //"automatic"
+		if (ui.cbFilter->currentIndex() == FilterSettingsHandlingIndex::Automatic)
 			filter->setAutoModeEnabled(true);
 		else { //"custom" and templates
 			filter->setAutoModeEnabled(false);
