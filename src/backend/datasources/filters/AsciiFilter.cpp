@@ -32,7 +32,7 @@ struct IODeviceHandler {
 	IODeviceHandler(QIODevice& d, bool reset): device(d), reset(reset) {}
 
 	~IODeviceHandler() {
-		if (reset)
+		if (reset && !device.isSequential())
 			device.reset(); // Seek to the start
 		if (device.isOpen())
 			device.close();
@@ -52,12 +52,16 @@ bool BufferReader::isSequential() const {
 	return true;
 }
 
-bool BufferReader::atEnd() const {
-	return !canReadLine();
-}
-
 bool BufferReader::open(QIODevice::OpenModeFlag mode) {
 	return mode == QIODevice::OpenModeFlag::ReadOnly;
+}
+
+bool BufferReader::atEnd() const {
+	if (m_index >= m_message.length()) {
+		// No data available here, but maybe the qiodevice buffer has still data
+		return QIODevice::atEnd();
+	}
+	return false;
 }
 
 // Not required functions yet, so ignore them until they are required
@@ -86,7 +90,7 @@ AsciiFilter::AsciiFilter(): AbstractFileFilter(FileType::Ascii), d_ptr(std::make
 
 AsciiFilter::~AsciiFilter() = default;
 
-AsciiFilter::Status AsciiFilter::initialize(AsciiFilter::Properties& p) {
+AsciiFilter::Status AsciiFilter::initialize(AsciiFilter::Properties p) {
 	Q_D(AsciiFilter);
 	return d->initialize(p);
 }

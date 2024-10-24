@@ -25,10 +25,10 @@ public:
 	BufferReader(const QLatin1String &buffer);
 
 	bool isSequential() const override;
-	bool atEnd() const override;
 	bool open(QIODevice::OpenModeFlag mode);
 	qint64 readData(char *, qint64) override;
 	qint64 writeData(const char *, qint64) override;
+	bool atEnd() const;
 
 private:
 	const QLatin1String m_message;
@@ -119,7 +119,7 @@ public:
 	private:
 		bool m_dirty{true};
 	};
-	Status initialize(Properties& p);
+	Status initialize(Properties p);
 	bool initialized() const;
 	Properties properties() const;
 	Properties defaultProperties() const;

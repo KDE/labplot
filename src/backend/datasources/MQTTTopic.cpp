@@ -34,42 +34,9 @@ MQTTTopic::MQTTTopic(const QString& name, MQTTSubscription* subscription, bool l
 	, m_topicName(name)
 	, m_MQTTClient(subscription->mqttClient())
 	, m_filter(new AsciiFilter) {
-	auto mainFilter = m_MQTTClient->filter()->defaultProperties();
 
-	// TODO: old code did not make any sense
-
-
-	// auto properties = m_filter->defaultProperties();
-	// if (!mainFilter->isAutoModeEnabled()) {
-	// 	properties.automaticSeparatorDetection = false;
-	// 	properties.separator = mainFilter->separatingCharacter();
-	// 	properties.commentCharacter = mainFilter->commentCharacter();
-	// 	properties.dateTimeFormat = mainFilter->dateTimeFormat();
-	// 	properties.createIndex = mainFilter->createIndexEnabled();
-	// 	properties.createTimestamp = mainFilter->createTimestampEnabled();
-	// 	properties.simplifyWhitespaces = mainFilter->simplifyWhitespacesEnabled();
-	// 	properties.removeQuotes = mainFilter->removeQuotesEnabled();
-	// 	properties.skipEmptyParts = mainFilter->skipEmptyParts();
-	// 	properties.headerEnabled = mainFilter->isHeaderEnabled();
-	// 	properties.nanValue = mainFilter->NaNValueToZeroEnabled() ? 0 : std::numeric_limits<double>::quiet_NaN();
-
-	// 	QString vectorNames;
-	// 	const QStringList& filterVectorNames = mainFilter->vectorNames();
-	// 	for (int i = 0; i < filterVectorNames.size(); ++i) {
-	// 		vectorNames.append(filterVectorNames.at(i));
-	// 		if (i != vectorNames.size() - 1)
-	// 			vectorNames.append(QLatin1String(" "));
-	// 	}
-
-	// 	properties.columnNamesRaw = vectorNames;
-	// 	properties.startRow = mainFilter->startRow();
-	// 	properties.endRow = mainFilter->endRow();
-	// 	properties.startColumn = mainFilter->startColumn();
-	// 	properties.endColumn = mainFilter->endColumn();
-	// }
-
-	// const auto status = m_filter->initialize(properties);
-	// assert(status == AsciiFilter::Status::Success);
+	m_filter->initialize(m_MQTTClient->filter()->properties());
+	m_filter->setDataSource(this);
 
 	connect(m_MQTTClient, &MQTTClient::readFromTopics, this, &MQTTTopic::read);
 	qDebug() << "New MqttTopic: " << m_topicName;
@@ -180,7 +147,6 @@ void MQTTTopic::read() {
 		qDebug() << "Reading from topic " << m_topicName;
 		auto s = QLatin1String(m_messagePuffer.takeFirst().toLatin1().data());
 		BufferReader reader(s);
-		m_filter->setDataSource(this);
 		m_filter->readFromDevice(reader, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, 0, -1, this->mqttClient()->keepNValues());
 		finalizeRead();
 	}
