@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-20 01:47+0000\n"
-"PO-Revision-Date: 2024-10-19 11:45+0200\n"
+"PO-Revision-Date: 2024-10-23 20:44+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -1095,7 +1095,7 @@ msgstr "Final del dispositiu"
 #: src/backend/datasources/filters/AsciiFilter.cpp:446
 #, kde-format
 msgid "Not enough rows selected. Increase number of rows."
-msgstr "No s'han seleccionats prou files. Incrementeu el nombre de files."
+msgstr "No s'han seleccionat prou files. Incrementeu el nombre de files."
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:448
 #, kde-format
@@ -2640,7 +2640,7 @@ msgstr "Càrrega de l'electró"
 #: src/backend/gsl/constants.cpp:86
 #, kde-format
 msgid "Energy of 1 electron volt"
-msgstr "Energia d'1 electró volt"
+msgstr "Energia d'1 electró-volt"
 
 #: src/backend/gsl/constants.cpp:87
 #, kde-format
@@ -16762,8 +16762,8 @@ msgid ""
 "the uniform distribution. </li></ul>"
 msgstr ""
 "Mètode de mostreig:<ul><li>Periòdic: les mostres es creen segons l'interval "
-"especificat.</li><li>Aleatori: les mostres es creen aleatòriament en base a "
-"una distribució uniforme. </li></ul>"
+"especificat.</li><li>Aleatori: les mostres es creen aleatòriament segons una "
+"distribució uniforme. </li></ul>"
 
 #: src/frontend/spreadsheet/SampleValuesDialog.cpp:62
 #, kde-format
@@ -19111,7 +19111,7 @@ msgstr "Sòcol local"
 #: src/frontend/ui/datasources/importfilewidget.ui:109
 #, kde-format
 msgid "Serial Port"
-msgstr "Port sèrie"
+msgstr "Port en sèrie"
 
 #. i18n: ectx: property (text), widget (QLabel, lLWT)
 #: src/frontend/ui/datasources/importfilewidget.ui:154
@@ -24279,7 +24279,7 @@ msgstr ""
 #: src/frontend/worksheet/WorksheetView.cpp:312
 #, kde-format
 msgid "Selected Plot Areas"
-msgstr "Àrees del diagrames seleccionats"
+msgstr "Àrees del diagrama seleccionat"
 
 #: src/frontend/worksheet/WorksheetView.cpp:300
 #: src/frontend/worksheet/WorksheetView.cpp:314
