@@ -3420,7 +3420,7 @@ void AsciiFilterTest::bufferReader() {
 		QCOMPARE(reader.readData(out.data(), 5), 3);
 		QCOMPARE(out[0], QLatin1Char('2'));
 		QCOMPARE(out[1], QLatin1Char('3'));
-		QCOMPARE(out[1], QLatin1Char('4'));
+		QCOMPARE(out[2], QLatin1Char('4'));
 		QCOMPARE(reader.canReadLine(), false);
 	}
 }
