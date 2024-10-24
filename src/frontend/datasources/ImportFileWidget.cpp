@@ -71,7 +71,7 @@ namespace {
 	enum FilterSettingsHandlingIndex {
 		Automatic = 0,
 		Manual = 1,
-	}
+	};
 }
 
 QString ImportFileWidget::absolutePath(const QString& fileName) {
