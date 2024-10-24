@@ -70,7 +70,7 @@
 namespace {
 	enum FilterSettingsHandlingIndex {
 		Automatic = 0,
-		Manual = 1,
+		Custom = 1,
 	};
 }
 
@@ -366,9 +366,8 @@ void ImportFileWidget::loadSettings() {
 	if (!m_liveDataSource) {
 		ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", (int)FilterSettingsHandlingIndex::Automatic));
 	} else {
-		ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", (int)FilterSettingsHandlingIndex::Manual));
-		ui.cbFilter->setVisible(false);
-		ui.lFilter->setVisible(false);
+		ui.cbFilter->setCurrentIndex((int)FilterSettingsHandlingIndex::Custom);
+		ui.cbFilter->setEnabled(false);
 	}
 	filterChanged(ui.cbFilter->currentIndex());
 	updateTypeChanged(ui.cbUpdateType->currentIndex());
@@ -1663,10 +1662,10 @@ void ImportFileWidget::filterChanged(int index) {
 		return;
 	}
 
-	if (index == 0) { // "automatic"
+	if (index == FilterSettingsHandlingIndex::Automatic) {
 		ui.swOptions->setEnabled(false);
 		m_templateHandler->hide();
-	} else if (index == 1) { // custom
+	} else if (index == FilterSettingsHandlingIndex::Custom) {
 		ui.swOptions->setEnabled(true);
 		m_templateHandler->show();
 	} else { // templates
