@@ -51,7 +51,7 @@ QString BrownianMotionMqttClient::publishBrownianData() {
 		QVector<QString> brownianY;
 		brownianY.fill(QString(), m_pathes);
 
-		if (m_iterCount < m_itersTotal - m_iters - 1)
+		if (m_iterCount < m_itersTotal - m_iters - 1) {
 			for (int i = 0; i < m_iters; i++) {
 				if (!s.isEmpty())
 					s.append(QLatin1String("\n"));
@@ -65,6 +65,10 @@ QString BrownianMotionMqttClient::publishBrownianData() {
 				}
 				m_iterCount++;
 			}
+		} else {
+			// Restart again
+			m_iterCount = 0;
+		}
 
 		if (publish(*m_brownian_xTopic, s.toUtf8(), m_qos, false) == -1)
 			return QLatin1String("Could not publish message");
