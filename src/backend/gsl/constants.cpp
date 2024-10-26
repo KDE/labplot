@@ -3,11 +3,14 @@
 #include <gsl/gsl_const_mksa.h>
 #include <gsl/gsl_const_num.h>
 #include <gsl/gsl_math.h>
+#include <cstdlib>
 
 #include <KLocalizedString>
 
 QString constantGroupsToString(ConstantGroups group) {
 	switch (group) {
+	case ConstantGroups::ProgrammingConstants:
+		return i18n("Programming constants");
 	case ConstantGroups::MathematicalConstants:
 		return i18n("Mathematical constants");
 	case ConstantGroups::FundamentalConstants:
@@ -52,6 +55,7 @@ QString constantGroupsToString(ConstantGroups group) {
 struct cons _constants[] = {
 	/* Physical constants: https://www.gnu.org/software/gsl/doc/html/const.html */
 	/* Physical constants in MKSA system */
+	{[]() { return i18n("RAND_MAX");}, "RAND_MAX", RAND_MAX, "", ConstantGroups::ProgrammingConstants},
 
 	// MathematicalConstants = addConstantsGroup(i18n("Mathematical constants"));
 	{[]() { return i18n("Base of exponentials");}, "e", M_E, "", ConstantGroups::MathematicalConstants},
