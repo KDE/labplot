@@ -1,9 +1,9 @@
 #include "constants.h"
 
+#include <cstdlib>
 #include <gsl/gsl_const_mksa.h>
 #include <gsl/gsl_const_num.h>
 #include <gsl/gsl_math.h>
-#include <cstdlib>
 
 #include <KLocalizedString>
 
