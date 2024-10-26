@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-16 03:05+0000\n"
-"PO-Revision-Date: 2024-07-31 09:07+0200\n"
+"PO-Revision-Date: 2024-10-23 20:45+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 24.08.2\n"
 "X-Accelerator-Marker: &\n"
 
 #, kde-format
@@ -2572,7 +2572,7 @@ msgstr "Càrrega de l'electró"
 #: src/backend/gsl/constants.cpp:86
 #, kde-format
 msgid "Energy of 1 electron volt"
-msgstr "Energia d'1 electró volt"
+msgstr "Energia d'1 electró-volt"
 
 #: src/backend/gsl/constants.cpp:87
 #, kde-format
@@ -11342,7 +11342,7 @@ msgstr ""
 #: src/commonfrontend/worksheet/WorksheetView.cpp:314
 #, kde-format
 msgid "Selected Plot Areas"
-msgstr "Àrees del diagrames seleccionats"
+msgstr "Àrees del diagrama seleccionat"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:302
 #: src/commonfrontend/worksheet/WorksheetView.cpp:316
