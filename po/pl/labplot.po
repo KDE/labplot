@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-20 01:47+0000\n"
-"PO-Revision-Date: 2024-10-19 13:29+0200\n"
+"PO-Revision-Date: 2024-10-26 13:03+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -11322,16 +11322,7 @@ msgstr "Importowanie wielowarstwowych grafów Origin"
 
 #: src/frontend/datasources/ImportOriginLayersDialog.cpp:26
 #: src/frontend/datasources/ImportProjectDialog.cpp:169
-#, fuzzy, kde-format
-#| msgid ""
-#| "Multiple layers are used in Origin to either implement multiple plots or "
-#| "multiple axes on the same plot (see <a href=\"https://www.originlab.com/"
-#| "doc/Origin-Help/MultiLayer-Graph\">Origin's Documentation</a> for more "
-#| "details).LabPlot can process only one type at the same time."
-#| "<br><br>Specify how to import multi-layered graphs in the selected "
-#| "project:<ul><li>As Plot Area - a new plot area is created for every layer."
-#| "</li><li>As Coordinate System - a new coordinate system (data range) on "
-#| "the same plot area is created for every layer</li></ul>"
+#, kde-format
 msgid ""
 "Multiple layers are used in Origin to either implement multiple plots or "
 "multiple axes on the same plot (see <a href=\"https://www.originlab.com/doc/"
@@ -11345,7 +11336,7 @@ msgstr ""
 "Wiele warstw jest używanych w Origin do implementacji wielu wykresów albo "
 "wielu osi na tym samym wykresie (po więcej szczegółów zajrzyj do <a href="
 "\"https://www.originlab.com/doc/Origin-Help/MultiLayer-Graph\">Dokumentacji "
-"Origina</a>). LabPlot jest w stanie obsłużyć tylko jeden rodzaj na raz."
+"Origina</a>).<br> LabPlot jest w stanie obsłużyć tylko jeden rodzaj na raz."
 "<br><br>Określ jak zaimportować wielowarstwowe wykresy w zaznaczonych "
 "projektach:<ul><li>Jako obszar wykresu - nowy obszar wykresu jest tworzony "
 "dla każdej warstwy.</li><li>Jako układ współrzędnych - nowy układ "
@@ -12821,19 +12812,7 @@ msgid "Average"
 msgstr "Średnia"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:199
-#, fuzzy, kde-format
-#| msgid ""
-#| "The supported chart types are grouped according to the plotted statistics "
-#| "and to the metric defining the limits.<br><br>Individual Values and "
-#| "Moving Ranges, Limits Based on the Average or Median Moving Range:"
-#| "<ul><li>X (XmR) - plot the <b>individual values</b>.</li><li>mR - plot "
-#| "the <b>moving ranges</b>.</li></ul>Averages and Ranges, Limits based on "
-#| "the Average or Median Range:<ul><li>X̅  (X̅R) - plot the <b>averages for "
-#| "each sample</b> .</li><li>R (X̅R) - plot the <b>ranges for each sample</b>."
-#| "</li></ul>Averages and Standard Deviations, Limits Based on the Standard "
-#| "Deviations:<ul><li>X̅  (X̅S) - plot the <b>averages for each sample</b>.</"
-#| "li><li>S (X̅S) - plot the <b>standard deviations for each sample</b>.</"
-#| "li></ul>"
+#, kde-format
 msgid ""
 "The supported chart types are grouped according to the plotted statistics "
 "and to the metric defining the limits.<br><br>Individual Values and Moving "
@@ -12859,7 +12838,10 @@ msgstr ""
 "każdej próbki</b>.</li></ul> Średnie i odchylenia standardowe, granice "
 "oparte na odchyleniach standardowych:<ul><li>X̅  (X̅S) - narysuj  <b>średnie "
 "dla każdej próbki</b>.</li><li>S (X̅S) - narysuj  <b>odchylenia standardowe "
-"dla każdej próbki</b>.</li></ul>"
+"dla każdej próbki</b>.</li></ul> Atrybuty:<ul><li>P - wykres <b>dwumianowe "
+"proporcje</b>.</li><li>NP - wykres <b>dwumianowe zliczanie</b>.</li><li>C - "
+"wykres <b>zliczanie Poisson</b>.</li><li>U - wykres <b>stosunki Poisson</b>."
+"</li></ul>"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:225
 #, kde-format
@@ -19208,10 +19190,9 @@ msgstr "Okno dialogowe"
 
 #. i18n: ectx: property (text), widget (QLabel, lGraphLayer)
 #: src/frontend/ui/datasources/importoriginlayersdialog.ui:27
-#, fuzzy, kde-format
-#| msgid "Import as:"
+#, kde-format
 msgid "Import As"
-msgstr "Zaimportuj jako:"
+msgstr "Zaimportuj jako"
 
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #: src/frontend/ui/datasources/importprojectwidget.ui:23
@@ -20961,10 +20942,9 @@ msgstr "Kolor tekstu:"
 
 #. i18n: ectx: property (text), widget (QLabel, lData2Column)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:81
-#, fuzzy, kde-format
-#| msgid "Sample Size:"
+#, kde-format
 msgid "Sample Sizes:"
-msgstr "Rozmiar próbki:"
+msgstr "Rozmiary próbek:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNegativeLowerLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:95
@@ -20982,7 +20962,7 @@ msgstr "Granice oparte na:"
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:206
 #, kde-format
 msgid "Exact Limits:"
-msgstr ""
+msgstr "Dokładne granice:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataLine)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:221

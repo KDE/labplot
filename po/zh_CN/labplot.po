@@ -8789,9 +8789,9 @@ msgid "%1: change negative lower limit"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:435
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: change exact limits"
-msgstr "%1：更改列类型"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:587
 #, kde-format
