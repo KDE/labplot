@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-20 01:47+0000\n"
+"POT-Creation-Date: 2024-10-28 01:52+0000\n"
 "PO-Revision-Date: 2019-07-11 18:46+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -10855,7 +10855,7 @@ msgstr "Krivka"
 #: src/frontend/datapicker/DatapickerImageView.cpp:870
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4068
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4122
-#: src/frontend/worksheet/WorksheetView.cpp:2179
+#: src/frontend/worksheet/WorksheetView.cpp:2178
 #, fuzzy, kde-format
 #| msgid "Failed to Open"
 msgid "Failed to export"
@@ -10864,7 +10864,7 @@ msgstr "Nepodarilo sa otvoriť"
 #: src/frontend/datapicker/DatapickerImageView.cpp:870
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4068
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4122
-#: src/frontend/worksheet/WorksheetView.cpp:2179
+#: src/frontend/worksheet/WorksheetView.cpp:2178
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr ""

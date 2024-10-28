@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-20 01:47+0000\n"
+"POT-Creation-Date: 2024-10-28 01:52+0000\n"
 "PO-Revision-Date: 2023-10-30 14:32+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -10856,7 +10856,7 @@ msgstr "Kaari"
 #: src/frontend/datapicker/DatapickerImageView.cpp:870
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4068
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4122
-#: src/frontend/worksheet/WorksheetView.cpp:2179
+#: src/frontend/worksheet/WorksheetView.cpp:2178
 #, kde-format
 msgid "Failed to export"
 msgstr "Vienti epäonnistui"
@@ -10864,7 +10864,7 @@ msgstr "Vienti epäonnistui"
 #: src/frontend/datapicker/DatapickerImageView.cpp:870
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4068
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4122
-#: src/frontend/worksheet/WorksheetView.cpp:2179
+#: src/frontend/worksheet/WorksheetView.cpp:2178
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr ""

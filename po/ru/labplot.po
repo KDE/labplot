@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-20 01:47+0000\n"
+"POT-Creation-Date: 2024-10-28 01:52+0000\n"
 "PO-Revision-Date: 2023-11-13 14:41+0300\n"
 "Last-Translator: Sergey Kazorin <translation-team@basealt.ru>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -10532,7 +10532,7 @@ msgstr "Кривая"
 #: src/frontend/datapicker/DatapickerImageView.cpp:870
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4068
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4122
-#: src/frontend/worksheet/WorksheetView.cpp:2179
+#: src/frontend/worksheet/WorksheetView.cpp:2178
 #, kde-format
 msgid "Failed to export"
 msgstr "Не удалось выполнить экспортирование"
@@ -10540,7 +10540,7 @@ msgstr "Не удалось выполнить экспортирование"
 #: src/frontend/datapicker/DatapickerImageView.cpp:870
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4068
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4122
-#: src/frontend/worksheet/WorksheetView.cpp:2179
+#: src/frontend/worksheet/WorksheetView.cpp:2178
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "Не удалось выполнить запись в «%1». Проверьте путь."
