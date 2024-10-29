@@ -51,10 +51,13 @@ QString constantGroupsToString(ConstantGroups group) {
 
 // clang-format off
 
-/* sync with ExpressionParser.cpp */
+/* 
+ * All constants which are available in the expression parser. The physical constants are in the MKSA system.
+ * When adding a new physical constant, check that it is in MKSA system.
+ *
+ * Most of the physical constants come from GSL: https://www.gnu.org/software/gsl/doc/html/const.html
+ */
 struct cons _constants[] = {
-	/* Physical constants: https://www.gnu.org/software/gsl/doc/html/const.html */
-	/* Physical constants in MKSA system */
 	{[]() { return i18n("RAND_MAX");}, "RAND_MAX", RAND_MAX, "", ConstantGroups::ProgrammingConstants},
 
 	// MathematicalConstants = addConstantsGroup(i18n("Mathematical constants"));
