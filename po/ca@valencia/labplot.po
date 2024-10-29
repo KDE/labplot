@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-19 01:49+0000\n"
-"PO-Revision-Date: 2024-10-15 10:01+0200\n"
+"POT-Creation-Date: 2024-10-28 01:52+0000\n"
+"PO-Revision-Date: 2024-10-23 20:44+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.08.1\n"
+"X-Generator: Lokalize 24.08.2\n"
 "X-Accelerator-Marker: &\n"
 
 #, kde-format
@@ -419,7 +419,7 @@ msgstr "tipus de filtre incompatible"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
 #: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:708
-#: src/backend/datasources/MQTTClient.cpp:1366
+#: src/backend/datasources/MQTTClient.cpp:1354
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:313
 #: src/backend/lib/XmlStreamReader.cpp:104
@@ -1097,7 +1097,7 @@ msgstr "Final del dispositiu"
 #: src/backend/datasources/filters/AsciiFilter.cpp:446
 #, kde-format
 msgid "Not enough rows selected. Increase number of rows."
-msgstr "No s'han seleccionats prou files. Incrementeu el nombre de files."
+msgstr "No s'han seleccionat prou files. Incrementeu el nombre de files."
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:448
 #, kde-format
@@ -2208,7 +2208,7 @@ msgid "Failed to parse the file."
 msgstr "No s'ha pogut analitzar el fitxer."
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:113
-#: src/backend/datasources/MQTTClient.cpp:1190
+#: src/backend/datasources/MQTTClient.cpp:1178
 #: src/backend/datasources/MQTTTopic.cpp:248
 #: src/backend/lib/XmlStreamReader.cpp:99
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:469
@@ -2642,7 +2642,7 @@ msgstr "Càrrega de l'electró"
 #: src/backend/gsl/constants.cpp:86
 #, kde-format
 msgid "Energy of 1 electron volt"
-msgstr "Energia d'1 electró volt"
+msgstr "Energia d'1 electró-volt"
 
 #: src/backend/gsl/constants.cpp:87
 #, kde-format
@@ -8961,10 +8961,9 @@ msgid "%1: change negative lower limit"
 msgstr "%1: canvia el límit inferior negatiu"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:435
-#, fuzzy, kde-format
-#| msgid "%1: change negative lower limit"
+#, kde-format
 msgid "%1: change exact limits"
-msgstr "%1: canvia el límit inferior negatiu"
+msgstr "%1: canvia els límits exactes"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:587
 #, kde-format
@@ -10263,7 +10262,7 @@ msgstr "Corba"
 #: src/frontend/datapicker/DatapickerImageView.cpp:870
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4068
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4122
-#: src/frontend/worksheet/WorksheetView.cpp:2179
+#: src/frontend/worksheet/WorksheetView.cpp:2178
 #, kde-format
 msgid "Failed to export"
 msgstr "No s'ha pogut exportar"
@@ -10271,7 +10270,7 @@ msgstr "No s'ha pogut exportar"
 #: src/frontend/datapicker/DatapickerImageView.cpp:870
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4068
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4122
-#: src/frontend/worksheet/WorksheetView.cpp:2179
+#: src/frontend/worksheet/WorksheetView.cpp:2178
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "No s'ha pogut escriure a «%1». Comproveu el camí."
@@ -12927,21 +12926,7 @@ msgstr "Mitjana"
 
 # skip-rule: t-sc-plot
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:199
-#, fuzzy, kde-format
-#| msgid ""
-#| "The supported chart types are grouped according to the plotted statistics "
-#| "and to the metric defining the limits.<br><br>Individual Values and "
-#| "Moving Ranges, Limits Based on the Average or Median Moving Range:"
-#| "<ul><li>X (XmR) - plot the <b>individual values</b>.</li><li>mR - plot "
-#| "the <b>moving ranges</b>.</li></ul>Averages and Ranges, Limits based on "
-#| "the Average or Median Range:<ul><li>X̅  (X̅R) - plot the <b>averages for "
-#| "each sample</b> .</li><li>R (X̅R) - plot the <b>ranges for each sample</b>."
-#| "</li></ul>Averages and Standard Deviations, Limits Based on the Standard "
-#| "Deviations:<ul><li>X̅  (X̅S) - plot the <b>averages for each sample</b>.</"
-#| "li><li>S (X̅S) - plot the <b>standard deviations for each sample</b>.</"
-#| "li></ul>Counts:<ul><li>P - plot <b>binomial proportions</b>.</li><li>NP - "
-#| "plot <b>binomial counts</b>.</li><li>C - plot <b>Poisson counts</b>.</"
-#| "li><li>U - plot <b>Poisson rates</b>.</li></ul>"
+#, kde-format
 msgid ""
 "The supported chart types are grouped according to the plotted statistics "
 "and to the metric defining the limits.<br><br>Individual Values and Moving "
@@ -12967,7 +12952,7 @@ msgstr ""
 "mostra</b>.</li></ul>Mitjanes i desviacions estàndard, límits basats en les "
 "desviacions estàndard:<ul><li>X̅ (X̅S) - dibuixa les <b>mitjanes de cada "
 "mostra</b>.</li><li>S (X̅S) - dibuixa les <b>desviacions estàndard de cada "
-"mostra</b>.</li></ul>Comptadors:<ul><li>P - dibuixa les <b>proporcions "
+"mostra</b>.</li></ul>Atributs:<ul><li>P - dibuixa les <b>proporcions "
 "binomials</b>.</li><li>NP - dibuixa els <b>comptadors binomials</b>.</"
 "li><li>C - dibuixa els <b>comptadors de Poisson</b>.</li><li>U - dibuixa les "
 "<b>ràtios de Poisson</b>.</li></ul>"
@@ -16779,8 +16764,8 @@ msgid ""
 "the uniform distribution. </li></ul>"
 msgstr ""
 "Mètode de mostreig:<ul><li>Periòdic: les mostres es creen segons l'interval "
-"especificat.</li><li>Aleatori: les mostres es creen aleatòriament en base a "
-"una distribució uniforme. </li></ul>"
+"especificat.</li><li>Aleatori: les mostres es creen aleatòriament segons una "
+"distribució uniforme. </li></ul>"
 
 #: src/frontend/spreadsheet/SampleValuesDialog.cpp:62
 #, kde-format
@@ -21105,10 +21090,9 @@ msgstr "Color del text:"
 
 #. i18n: ectx: property (text), widget (QLabel, lData2Column)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:81
-#, fuzzy, kde-format
-#| msgid "Sample Size:"
+#, kde-format
 msgid "Sample Sizes:"
-msgstr "Mida de la mostra:"
+msgstr "Mides de les mostres:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNegativeLowerLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:95
@@ -21126,7 +21110,7 @@ msgstr "Límits basats en:"
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:206
 #, kde-format
 msgid "Exact Limits:"
-msgstr ""
+msgstr "Límits exactes:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataLine)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:221
@@ -24299,7 +24283,7 @@ msgstr ""
 #: src/frontend/worksheet/WorksheetView.cpp:312
 #, kde-format
 msgid "Selected Plot Areas"
-msgstr "Àrees del diagrames seleccionats"
+msgstr "Àrees del diagrama seleccionat"
 
 #: src/frontend/worksheet/WorksheetView.cpp:300
 #: src/frontend/worksheet/WorksheetView.cpp:314

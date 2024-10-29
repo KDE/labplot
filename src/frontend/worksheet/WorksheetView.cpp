@@ -2088,9 +2088,8 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 	// save
 	switch (format) {
 	case ExportFormat::PDF: {
-		QPrinter printer(QPrinter::HighResolution);
+		QPrinter printer;
 		printer.setOutputFormat(QPrinter::PdfFormat);
-
 		printer.setOutputFileName(path);
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
 		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
