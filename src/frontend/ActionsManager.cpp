@@ -578,9 +578,9 @@ void ActionsManager::initMenus() {
 		}
 	}
 #else
-	delete this->guiFactory()->container(QStringLiteral("notebook"), m_mainWindow);
-	delete this->guiFactory()->container(QStringLiteral("new_notebook"), m_mainWindow);
-	delete this->guiFactory()->container(QStringLiteral("notebook_toolbar"), m_mainWindow);
+	delete factory->container(QStringLiteral("notebook"), m_mainWindow);
+	delete factory->container(QStringLiteral("new_notebook"), m_mainWindow);
+	delete factory->container(QStringLiteral("notebook_toolbar"), m_mainWindow);
 #endif
 }
 
