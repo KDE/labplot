@@ -34,6 +34,8 @@ public:
 	static void selectColorAction(QActionGroup*, const QColor&);
 	static QColor& colorFromAction(QActionGroup*, QAction*);
 
+	static QPair<float, float> dpi(const QWidget*);
+
 	static void highlight(QWidget*, bool);
 
 	static QString openImageFile(const QString&);

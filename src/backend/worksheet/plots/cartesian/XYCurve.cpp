@@ -40,6 +40,7 @@
 #include <KLocalizedString>
 
 #include <QGraphicsSceneMouseEvent>
+#include <QGraphicsView>
 #include <QMenu>
 #include <QPainter>
 #include <QScreen>
@@ -1081,7 +1082,7 @@ void XYCurvePrivate::updateLines(bool performanceOptimization) {
 	const QRectF pageRect = plot()->dataRect();
 	if (performanceOptimization) {
 		const double widthDatarectInch = Worksheet::convertFromSceneUnits(pageRect.width(), Worksheet::Unit::Inch);
-		const auto dpi = QApplication::primaryScreen()->physicalDotsPerInchX(); // Assumption: screens have all the same dpi
+		const auto dpi = (scene() && !scene()->views().isEmpty()) ? GuiTools::dpi(scene()->views().first()).first : GuiTools::dpi(nullptr).first;
 		// multiplying by 10 because it can be zoomed into the cached pixmap and then it looks ugly
 		numberOfPixelX = ceil(widthDatarectInch * dpi) * 10;
 	}
