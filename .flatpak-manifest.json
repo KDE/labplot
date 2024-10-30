@@ -43,13 +43,7 @@
                 {
                     "type": "archive",
                     "url": "https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.bz2",
-                    "sha256": "b4c198460eba6f28d34894e3a5710998818515104d6e74e5cc331ce31e46e626",
-                    "x-checker-data": {
-                        "type": "anitya",
-                        "project-id": 666,
-                        "stable-only": true,
-                        "url-template": "https://gitlab.com/libeigen/eigen/-/archive/$version/eigen-$version.tar.bz2"
-                    }
+                    "sha256": "b4c198460eba6f28d34894e3a5710998818515104d6e74e5cc331ce31e46e626"
                 }
             ]
         },
@@ -70,14 +64,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://poppler.freedesktop.org/poppler-24.09.0.tar.xz",
-                    "sha256": "ebd857987e2395608c69fdc44009692d5906f13b612c5280beff65a0b75dc255",
-                    "x-checker-data": {
-                        "type": "anitya",
-                        "project-id": 3686,
-                        "stable-only": true,
-                        "url-template": "https://poppler.freedesktop.org/poppler-$version.tar.xz"
-                    }
+                    "url": "https://poppler.freedesktop.org/poppler-24.10.0.tar.xz",
+                    "sha256": "58ed1849810f04a10b37c7ff6f3e411845c8a57d731d599d0045acc7a7fff09d"
                 }
             ],
             "modules": [
@@ -92,13 +80,7 @@
                         {
                             "type": "archive",
                             "url": "https://boostorg.jfrog.io/artifactory/main/release/1.86.0/source/boost_1_86_0.tar.bz2",
-                            "sha256": "1bed88e40401b2cb7a1f76d4bab499e352fa4d0c5f31c0dbae64e24d34d7513b",
-                            "x-checker-data": {
-                                "type": "anitya",
-                                "project-id": 6845,
-                                "stable-only": true,
-                                "url-template": "https://boostorg.jfrog.io/artifactory/main/release/$version/source/boost_${major}_${minor}_$patch.tar.bz2"
-                            }
+                            "sha256": "1bed88e40401b2cb7a1f76d4bab499e352fa4d0c5f31c0dbae64e24d34d7513b"
                         }
                     ]
                 },
@@ -110,13 +92,7 @@
                         {
                             "type": "archive",
                             "url": "https://github.com/uclouvain/openjpeg/archive/v2.5.2.tar.gz",
-                            "sha256": "90e3896fed910c376aaf79cdd98bdfdaf98c6472efd8e1debf0a854938cbda6a",
-                            "x-checker-data": {
-                                "type": "anitya",
-                                "project-id": 2550,
-                                "stable-only": true,
-                                "url-template": "https://github.com/uclouvain/openjpeg/archive/v$version.tar.gz"
-                            }
+                            "sha256": "90e3896fed910c376aaf79cdd98bdfdaf98c6472efd8e1debf0a854938cbda6a"
                         }
                     ],
                     "cleanup": [ "/bin", "/include", "/lib/openjpeg-*", "/lib/pkgconfig" ]
@@ -151,14 +127,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "http://ftp.gnu.org/gnu/gsl/gsl-2.7.1.tar.gz",
-                    "sha256": "dcb0fbd43048832b757ff9942691a8dd70026d5da0ff85601e52687f6deeb34b",
-                    "x-checker-data": {
-                        "type": "anitya",
-                        "project-id": 1267,
-                        "stable-only": true,
-                        "url-template": "http://ftp.gnu.org/gnu/gsl/gsl-$version.tar.gz"
-                    }
+                    "url": "http://ftp.gnu.org/gnu/gsl/gsl-2.8.0.tar.gz",
+                    "sha256": "6a99eeed15632c6354895b1dd542ed5a855c0f15d9ad1326c6fe2b2c9e423190"
                 }
             ]
         },
@@ -177,14 +147,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/Unidata/netcdf-c/archive/v4.8.1.tar.gz",
-                    "sha256": "bc018cc30d5da402622bf76462480664c6668b55eb16ba205a0dfb8647161dd0",
-                    "x-checker-data": {
-                        "type": "anitya",
-                        "project-id": 10354,
-                        "stable-only": true,
-                        "url-template": "https://github.com/Unidata/netcdf-c/archive/v$version.tar.gz"
-                    }
+                    "url": "https://github.com/Unidata/netcdf-c/archive/v4.9.2.tar.gz",
+                    "sha256": "bc104d101278c68b303359b3dc4192f81592ae8640f1aee486921138f7f88cb7"
                 }
             ]
         },
@@ -195,13 +159,7 @@
                     "type": "archive",
                     "url": "https://fossies.org/linux/misc/cfitsio-4.5.0.tar.gz",
                     "sha256": "e4854fc3365c1462e493aa586bfaa2f3d0bb8c20b75a524955db64c27427ce09",
-		    "disable-http-decompression": true,
-		    "x-checker-data": {
-                        "type": "anitya",
-                        "project-id": 270,
-                        "stable-only": true,
-                        "url-template": "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-$version.tar.gz"
-                    }
+		    "disable-http-decompression": true
                 }
             ]
         },
@@ -212,14 +170,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://jugit.fz-juelich.de/mlz/libcerf/-/archive/v2.0/libcerf-v2.0.tar.gz",
-                    "sha256": "c86e8b1ea18ac7747582e83dba6f42f0faea1deb5005b7ffb2e508e36b579716",
-                    "x-checker-data": {
-                        "type": "anitya",
-                        "project-id": 20199,
-                        "stable-only": true,
-                        "url-template": "https://jugit.fz-juelich.de/mlz/libcerf/-/archive/v$version/libcerf-v$version.tar.gz"
-                    }
+                    "url": "https://jugit.fz-juelich.de/mlz/libcerf/-/archive/v2.4/libcerf-v2.4.tar.gz",
+                    "sha256": "080b30ae564c3dabe3b89264522adaf5647ec754021572bee54929697b276cdc"
                 }
             ]
         },
@@ -282,13 +234,7 @@
                 {
                     "type": "archive",
                     "url": "https://github.com/Orc/discount/archive/v2.2.7c.tar.gz",
-                    "sha256": "5c5139f1f88e83de86169bee3fde4ebd0e1b0798643dc9065b73dc19dbce07b3",
-                    "x-checker-data": {
-                        "type": "anitya",
-                        "project-id": 12139,
-                        "stable-only": true,
-                        "url-template": "https://github.com/Orc/discount/archive/v$version.tar.gz"
-                    }
+                    "sha256": "5c5139f1f88e83de86169bee3fde4ebd0e1b0798643dc9065b73dc19dbce07b3"
                 }
             ]
         },
@@ -298,13 +244,7 @@
                 {
                     "type": "archive",
                     "url": "https://github.com/tbeu/matio/archive/v1.5.27.tar.gz",
-                    "sha256": "2efe7c4a206885287c0f56128f3a36aa6e453077d03e4c2c42cdce9d332b67eb",
-                    "x-checker-data": {
-                        "type": "anitya",
-                        "project-id": 1893,
-                        "stable-only": true,
-                        "url-template": "https://github.com/tbeu/matio/archive/v$version.tar.gz"
-                    }
+                    "sha256": "2efe7c4a206885287c0f56128f3a36aa6e453077d03e4c2c42cdce9d332b67eb"
                 }
             ]
         },
@@ -354,13 +294,7 @@
                 {
                     "type": "archive",
                     "url": "https://gitlab.com/api/v4/projects/mdds%2Fmdds/packages/generic/source/2.1.1/mdds-2.1.1.tar.xz",
-                    "sha256": "1483d90cefb8aa4563c4d0a85cb7b243aa95217d235d422e9ca6722fd5b97e56",
-                    "x-checker-data": {
-                        "type": "anitya",
-                        "project-id": 1962,
-                        "stable-only": true,
-                        "url-template": "https://gitlab.com/api/v4/projects/mdds%2Fmdds/packages/generic/source/$version/mdds-$version.tar.xz"
-                    }
+                    "sha256": "1483d90cefb8aa4563c4d0a85cb7b243aa95217d235d422e9ca6722fd5b97e56"
                 }
             ]
         },
@@ -370,13 +304,7 @@
                 {
                     "type": "archive",
                     "url": "https://gitlab.com/api/v4/projects/ixion%2Fixion/packages/generic/source/0.19.0/libixion-0.19.0.tar.xz",
-                    "sha256": "b4864d7a55351a09adbe9be44e5c65b1d417e80e946c947951d0e8428b9dcd15",
-                    "x-checker-data": {
-                        "type": "anitya",
-                        "project-id": 6208,
-                        "stable-only": true,
-                        "url-template": "https://gitlab.com/api/v4/projects/ixion%2Fixion/packages/generic/source/$version/libixion-$version.tar.xz"
-                    }
+                    "sha256": "b4864d7a55351a09adbe9be44e5c65b1d417e80e946c947951d0e8428b9dcd15"
                 },
 		{
                     "type": "patch",
@@ -390,13 +318,7 @@
                 {
                     "type": "archive",
                     "url": "https://gitlab.com/api/v4/projects/orcus%2Forcus/packages/generic/source/0.19.2/liborcus-0.19.2.tar.xz",
-                    "sha256": "69ed26a00d4aaa7688e62a6e003cbc81928521a45e96605e53365aa499719e39",
-                    "x-checker-data": {
-                        "type": "anitya",
-                        "project-id": 1696,
-                        "stable-only": true,
-                        "url-template": "https://gitlab.com/api/v4/projects/orcus%2Forcus/packages/generic/source/$version/liborcus-$version.tar.xz"
-                    }
+                    "sha256": "69ed26a00d4aaa7688e62a6e003cbc81928521a45e96605e53365aa499719e39"
                 }
             ]
         },
