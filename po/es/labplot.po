@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-28 01:52+0000\n"
+"POT-Creation-Date: 2024-10-30 01:46+0000\n"
 "PO-Revision-Date: 2024-10-19 12:48+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -2415,169 +2415,180 @@ msgstr "leyenda"
 msgid "%1: Import from %2"
 msgstr "%1: Importar desde %2"
 
-#: src/backend/gsl/constants.cpp:12
+#: src/backend/gsl/constants.cpp:13
+#, fuzzy, kde-format
+#| msgid "Planck constant"
+msgid "Programming constants"
+msgstr "Constante de Planck"
+
+#: src/backend/gsl/constants.cpp:15
 #, kde-format
 msgid "Mathematical constants"
 msgstr "Constantes matemáticas"
 
-#: src/backend/gsl/constants.cpp:14
+#: src/backend/gsl/constants.cpp:17
 #, kde-format
 msgid "Fundamental constants"
 msgstr "Constantes fundamentales"
 
-#: src/backend/gsl/constants.cpp:16
+#: src/backend/gsl/constants.cpp:19
 #, kde-format
 msgid "Astronomy and Astrophysics"
 msgstr "Astronomía y Astrofísica"
 
-#: src/backend/gsl/constants.cpp:18
+#: src/backend/gsl/constants.cpp:21
 #, kde-format
 msgid "Atomic and Nuclear Physics"
 msgstr "Física atómica y nuclear"
 
-#: src/backend/gsl/constants.cpp:20
+#: src/backend/gsl/constants.cpp:23
 #, kde-format
 msgid "Measurement of Time"
 msgstr "Medida del tiempo"
 
-#: src/backend/gsl/constants.cpp:22
+#: src/backend/gsl/constants.cpp:25
 #, kde-format
 msgid "Imperial Units"
 msgstr "Unidades imperiales"
 
-#: src/backend/gsl/constants.cpp:24
+#: src/backend/gsl/constants.cpp:27
 #, kde-format
 msgid "Speed and Nautical Units"
 msgstr "Unidades de velocidad y náuticas"
 
-#: src/backend/gsl/constants.cpp:26
+#: src/backend/gsl/constants.cpp:29
 #, kde-format
 msgid "Printers Units"
 msgstr "Unidades de impresoras"
 
-#: src/backend/gsl/constants.cpp:28
+#: src/backend/gsl/constants.cpp:31
 #, kde-format
 msgid "Volume, Area and Length"
 msgstr "Volumen, área y longitud"
 
-#: src/backend/gsl/constants.cpp:30
+#: src/backend/gsl/constants.cpp:33
 #, kde-format
 msgid "Mass and Weight"
 msgstr "Masa y peso"
 
-#: src/backend/gsl/constants.cpp:32
+#: src/backend/gsl/constants.cpp:35
 #, kde-format
 msgid "Thermal Energy and Power"
 msgstr "Energía térmica y potencia"
 
-#: src/backend/gsl/constants.cpp:34
+#: src/backend/gsl/constants.cpp:37
 #, kde-format
 msgid "Pressure"
 msgstr "Presión"
 
-#: src/backend/gsl/constants.cpp:36
+#: src/backend/gsl/constants.cpp:39
 #, kde-format
 msgid "Viscosity"
 msgstr "Viscosidad"
 
-#: src/backend/gsl/constants.cpp:38
+#: src/backend/gsl/constants.cpp:41
 #, kde-format
 msgid "Light and Illumination"
 msgstr "Luz e iluminación"
 
-#: src/backend/gsl/constants.cpp:40
+#: src/backend/gsl/constants.cpp:43
 #, kde-format
 msgid "Radioactivity"
 msgstr "Radiactividad"
 
-#: src/backend/gsl/constants.cpp:42
+#: src/backend/gsl/constants.cpp:45
 #, kde-format
 msgid "Force and Energy"
 msgstr "Fuerza y energía"
 
-#: src/backend/gsl/constants.cpp:46
+#: src/backend/gsl/constants.cpp:49
 #, kde-format
 msgid "Unknown Constant"
 msgstr "Constante desconocida"
 
+#: src/backend/gsl/constants.cpp:61
+#, kde-format
+msgid "RAND_MAX"
+msgstr ""
+
 #. i18n("Mathematical constants"));
-#: src/backend/gsl/constants.cpp:57
+#: src/backend/gsl/constants.cpp:64
 #, kde-format
 msgid "Base of exponentials"
 msgstr "Base de exponenciales"
 
-#: src/backend/gsl/constants.cpp:58
+#: src/backend/gsl/constants.cpp:65
 #, kde-format
 msgid "Pi"
 msgstr "Pi"
 
-#: src/backend/gsl/constants.cpp:59
+#: src/backend/gsl/constants.cpp:66
 #, kde-format
 msgid "Euler's constant"
 msgstr "Constante de Euler"
 
-#: src/backend/gsl/constants.cpp:60
+#: src/backend/gsl/constants.cpp:67
 #, kde-format
 msgid "Not a number"
 msgstr "No es un número"
 
 #. i18n("Fundamental constants"));
-#: src/backend/gsl/constants.cpp:63
+#: src/backend/gsl/constants.cpp:70
 #, kde-format
 msgid "Speed of light"
 msgstr "Velocidad de la luz"
 
-#: src/backend/gsl/constants.cpp:64
+#: src/backend/gsl/constants.cpp:71
 #, kde-format
 msgid "Vacuum permeability"
 msgstr "Permeabilidad del vacío"
 
-#: src/backend/gsl/constants.cpp:65
+#: src/backend/gsl/constants.cpp:72
 #, kde-format
 msgid "Vacuum permittivity"
 msgstr "Permitividad del vacío"
 
-#: src/backend/gsl/constants.cpp:66
+#: src/backend/gsl/constants.cpp:73
 #, kde-format
 msgid "Planck constant"
 msgstr "Constante de Planck"
 
-#: src/backend/gsl/constants.cpp:67
+#: src/backend/gsl/constants.cpp:74
 #, kde-format
 msgid "Reduced Planck constant"
 msgstr "Constante reducida de Planck"
 
-#: src/backend/gsl/constants.cpp:68
+#: src/backend/gsl/constants.cpp:75
 #, kde-format
 msgid "Avogadro constant"
 msgstr "Constante de Avogadro"
 
-#: src/backend/gsl/constants.cpp:69
+#: src/backend/gsl/constants.cpp:76
 #, kde-format
 msgid "Faraday"
 msgstr "Faradio"
 
-#: src/backend/gsl/constants.cpp:70
+#: src/backend/gsl/constants.cpp:77
 #, kde-format
 msgid "Boltzmann constant"
 msgstr "Constante de Boltzmann"
 
-#: src/backend/gsl/constants.cpp:71
+#: src/backend/gsl/constants.cpp:78
 #, kde-format
 msgid "Molar gas"
 msgstr "Gas molar"
 
-#: src/backend/gsl/constants.cpp:72
+#: src/backend/gsl/constants.cpp:79
 #, kde-format
 msgid "Standard gas volume"
 msgstr "Volumen estándar de los gases"
 
-#: src/backend/gsl/constants.cpp:73
+#: src/backend/gsl/constants.cpp:80
 #, kde-format
 msgid "Stefan-Boltzmann constant"
 msgstr "Constante de Stefan-Boltzmann"
 
-#: src/backend/gsl/constants.cpp:74
+#: src/backend/gsl/constants.cpp:81
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:581
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:158
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:534
@@ -2586,450 +2597,450 @@ msgid "Gauss"
 msgstr "Gauss"
 
 #. i18n("Astronomy and Astrophysics"));
-#: src/backend/gsl/constants.cpp:77
+#: src/backend/gsl/constants.cpp:84
 #, kde-format
 msgid "Astronomical unit"
 msgstr "Unidad astronómica"
 
-#: src/backend/gsl/constants.cpp:78
+#: src/backend/gsl/constants.cpp:85
 #, kde-format
 msgid "Gravitational constant"
 msgstr "Constante gravitatoria"
 
-#: src/backend/gsl/constants.cpp:79
+#: src/backend/gsl/constants.cpp:86
 #, kde-format
 msgid "Light year"
 msgstr "Año luz"
 
-#: src/backend/gsl/constants.cpp:80
+#: src/backend/gsl/constants.cpp:87
 #, kde-format
 msgid "Parsec"
 msgstr "Parsec"
 
-#: src/backend/gsl/constants.cpp:81
+#: src/backend/gsl/constants.cpp:88
 #, kde-format
 msgid "Gravitational acceleration"
 msgstr "Aceleración gravitatoria"
 
-#: src/backend/gsl/constants.cpp:82
+#: src/backend/gsl/constants.cpp:89
 #, kde-format
 msgid "Solar mass"
 msgstr "Masa solar"
 
 #. i18n("Atomic and Nuclear Physics"));
-#: src/backend/gsl/constants.cpp:85
+#: src/backend/gsl/constants.cpp:92
 #, kde-format
 msgid "Charge of the electron"
 msgstr "Carga del electrón"
 
-#: src/backend/gsl/constants.cpp:86
+#: src/backend/gsl/constants.cpp:93
 #, kde-format
 msgid "Energy of 1 electron volt"
 msgstr "Energía de un electrón voltio"
 
-#: src/backend/gsl/constants.cpp:87
+#: src/backend/gsl/constants.cpp:94
 #, kde-format
 msgid "Unified atomic mass"
 msgstr "Masa atómica unificada"
 
-#: src/backend/gsl/constants.cpp:88
+#: src/backend/gsl/constants.cpp:95
 #, kde-format
 msgid "Mass of the electron"
 msgstr "Masa del electrón"
 
-#: src/backend/gsl/constants.cpp:89
+#: src/backend/gsl/constants.cpp:96
 #, kde-format
 msgid "Mass of the muon"
 msgstr "Masa del muón"
 
-#: src/backend/gsl/constants.cpp:90
+#: src/backend/gsl/constants.cpp:97
 #, kde-format
 msgid "Mass of the proton"
 msgstr "Masa del protón"
 
-#: src/backend/gsl/constants.cpp:91
+#: src/backend/gsl/constants.cpp:98
 #, kde-format
 msgid "Mass of the neutron"
 msgstr "Masa del neutrón"
 
-#: src/backend/gsl/constants.cpp:92
+#: src/backend/gsl/constants.cpp:99
 #, kde-format
 msgid "Electromagnetic fine structure constant"
 msgstr "Constante de estructura fina electromagnética"
 
-#: src/backend/gsl/constants.cpp:93
+#: src/backend/gsl/constants.cpp:100
 #, kde-format
 msgid "Rydberg constant"
 msgstr "Constante de Rydberg"
 
-#: src/backend/gsl/constants.cpp:94
+#: src/backend/gsl/constants.cpp:101
 #, kde-format
 msgid "Bohr radius"
 msgstr "Radio de Bohr"
 
-#: src/backend/gsl/constants.cpp:95
+#: src/backend/gsl/constants.cpp:102
 #, kde-format
 msgid "Length of 1 angstrom"
 msgstr "Longitud de 1 angstrom"
 
-#: src/backend/gsl/constants.cpp:96
+#: src/backend/gsl/constants.cpp:103
 #, kde-format
 msgid "Area of 1 barn"
 msgstr "Área de 1 barn"
 
-#: src/backend/gsl/constants.cpp:97
+#: src/backend/gsl/constants.cpp:104
 #, kde-format
 msgid "Bohr Magneton"
 msgstr "Magnetón de Bohr"
 
-#: src/backend/gsl/constants.cpp:98
+#: src/backend/gsl/constants.cpp:105
 #, kde-format
 msgid "Nuclear Magneton"
 msgstr "Magnetón nuclear"
 
-#: src/backend/gsl/constants.cpp:99
+#: src/backend/gsl/constants.cpp:106
 #, kde-format
 msgid "Magnetic moment of the electron [absolute value]"
 msgstr "El momento magnético del electrón [valor absoluto]"
 
-#: src/backend/gsl/constants.cpp:100
+#: src/backend/gsl/constants.cpp:107
 #, kde-format
 msgid "Magnetic moment of the proton"
 msgstr "El momento magnético del protón"
 
-#: src/backend/gsl/constants.cpp:101
+#: src/backend/gsl/constants.cpp:108
 #, kde-format
 msgid "Thomson cross section"
 msgstr "Sección cruzada de Thomson"
 
-#: src/backend/gsl/constants.cpp:102
+#: src/backend/gsl/constants.cpp:109
 #, kde-format
 msgid "Electric dipole moment of 1 Debye"
 msgstr "Momento de dipolo eléctrico de 1 Debye"
 
 #. i18n("Measurement of Time"));
-#: src/backend/gsl/constants.cpp:105
+#: src/backend/gsl/constants.cpp:112
 #, kde-format
 msgid "Number of seconds in 1 minute"
 msgstr "Número de segundos en 1 minuto"
 
-#: src/backend/gsl/constants.cpp:106
+#: src/backend/gsl/constants.cpp:113
 #, kde-format
 msgid "Number of seconds in 1 hour"
 msgstr "Número de segundos en 1 hora"
 
-#: src/backend/gsl/constants.cpp:107
+#: src/backend/gsl/constants.cpp:114
 #, kde-format
 msgid "Number of seconds in 1 day"
 msgstr "Número de segundos en 1 día"
 
-#: src/backend/gsl/constants.cpp:108
+#: src/backend/gsl/constants.cpp:115
 #, kde-format
 msgid "Number of seconds in 1 week"
 msgstr "Número de segundos en 1 semana"
 
 #. i18n("Imperial Units"));
-#: src/backend/gsl/constants.cpp:111
+#: src/backend/gsl/constants.cpp:118
 #, kde-format
 msgid "Length of 1 inch"
 msgstr "Longitud de 1 pulgada"
 
-#: src/backend/gsl/constants.cpp:112
+#: src/backend/gsl/constants.cpp:119
 #, kde-format
 msgid "Length of 1 foot"
 msgstr "Longitud de 1 pie"
 
-#: src/backend/gsl/constants.cpp:113
+#: src/backend/gsl/constants.cpp:120
 #, kde-format
 msgid "Length of 1 yard"
 msgstr "Longitud de 1 yarda"
 
-#: src/backend/gsl/constants.cpp:114
+#: src/backend/gsl/constants.cpp:121
 #, kde-format
 msgid "Length of 1 mile"
 msgstr "Longitud de 1 milla"
 
-#: src/backend/gsl/constants.cpp:115
+#: src/backend/gsl/constants.cpp:122
 #, kde-format
 msgid "Length of 1/1000th of an inch"
 msgstr "Longitud de 1/1000 de una pulgada"
 
 #. i18n("Speed and Nautical Units"));
-#: src/backend/gsl/constants.cpp:118
+#: src/backend/gsl/constants.cpp:125
 #, kde-format
 msgid "Speed of 1 kilometer per hour"
 msgstr "Velocidad de 1 kilómetro por hora"
 
-#: src/backend/gsl/constants.cpp:119
+#: src/backend/gsl/constants.cpp:126
 #, kde-format
 msgid "Speed of 1 mile per hour"
 msgstr "Velocidad de 1 milla por hora"
 
-#: src/backend/gsl/constants.cpp:120
+#: src/backend/gsl/constants.cpp:127
 #, kde-format
 msgid "Length of 1 nautical mile"
 msgstr "Longitud de 1 milla náutica"
 
-#: src/backend/gsl/constants.cpp:121
+#: src/backend/gsl/constants.cpp:128
 #, kde-format
 msgid "Length of 1 fathom"
 msgstr "Longitud de 1 fathom"
 
-#: src/backend/gsl/constants.cpp:122
+#: src/backend/gsl/constants.cpp:129
 #, kde-format
 msgid "Speed of 1 knot"
 msgstr "Velocidad de 1 nudo"
 
 #. i18n("Printers Units"));
-#: src/backend/gsl/constants.cpp:125
+#: src/backend/gsl/constants.cpp:132
 #, kde-format
 msgid "length of 1 printer's point [1/72 inch]"
 msgstr "longitud de 1 punto de impresora [1/72 pulgadas]"
 
-#: src/backend/gsl/constants.cpp:126
+#: src/backend/gsl/constants.cpp:133
 #, kde-format
 msgid "length of 1 TeX point [1/72.27 inch]"
 msgstr "longitud de 1 punto de TeX [1/72.27 pulgadas]"
 
 #. i18n("Volume, Area and Length"));
-#: src/backend/gsl/constants.cpp:129
+#: src/backend/gsl/constants.cpp:136
 #, kde-format
 msgid "Length of 1 micron"
 msgstr "Longitud de 1 micrón"
 
-#: src/backend/gsl/constants.cpp:130
+#: src/backend/gsl/constants.cpp:137
 #, kde-format
 msgid "Area of 1 hectare"
 msgstr "Área de 1 hectárea"
 
-#: src/backend/gsl/constants.cpp:131
+#: src/backend/gsl/constants.cpp:138
 #, kde-format
 msgid "Area of 1 acre"
 msgstr "Área de 1 acre"
 
-#: src/backend/gsl/constants.cpp:132
+#: src/backend/gsl/constants.cpp:139
 #, kde-format
 msgid "Volume of 1 liter"
 msgstr "Volumen de 1 liter"
 
-#: src/backend/gsl/constants.cpp:133
+#: src/backend/gsl/constants.cpp:140
 #, kde-format
 msgid "Volume of 1 US gallon"
 msgstr "Volumen de 1 galón de EE. UU."
 
-#: src/backend/gsl/constants.cpp:134
+#: src/backend/gsl/constants.cpp:141
 #, kde-format
 msgid "Volume of 1 Canadian gallon"
 msgstr "Volumen de 1 galón canadiense"
 
-#: src/backend/gsl/constants.cpp:135
+#: src/backend/gsl/constants.cpp:142
 #, kde-format
 msgid "Volume of 1 UK gallon"
 msgstr "Volumen de 1 galón del R. U."
 
-#: src/backend/gsl/constants.cpp:136
+#: src/backend/gsl/constants.cpp:143
 #, kde-format
 msgid "Volume of 1 quart"
 msgstr "Volumen de 1 cuarto de galón"
 
-#: src/backend/gsl/constants.cpp:137
+#: src/backend/gsl/constants.cpp:144
 #, kde-format
 msgid "Volume of 1 pint"
 msgstr "Volumen de 1 pinta"
 
 #. i18n("Mass and Weight"));
-#: src/backend/gsl/constants.cpp:140
+#: src/backend/gsl/constants.cpp:147
 #, kde-format
 msgid "Mass of 1 pound"
 msgstr "Masa de 1 libra"
 
-#: src/backend/gsl/constants.cpp:141
+#: src/backend/gsl/constants.cpp:148
 #, kde-format
 msgid "Mass of 1 ounce"
 msgstr "Masa de 1 onza"
 
-#: src/backend/gsl/constants.cpp:142
+#: src/backend/gsl/constants.cpp:149
 #, kde-format
 msgid "Mass of 1 ton"
 msgstr "Masa de 1 tonelada"
 
-#: src/backend/gsl/constants.cpp:143
+#: src/backend/gsl/constants.cpp:150
 #, kde-format
 msgid "Mass of 1 metric ton [1000 kg]"
 msgstr "Masa de 1 tonelada métrica [1000 kg]"
 
-#: src/backend/gsl/constants.cpp:144
+#: src/backend/gsl/constants.cpp:151
 #, kde-format
 msgid "Mass of 1 UK ton"
 msgstr "Masa de 1 tonelada de R. U."
 
-#: src/backend/gsl/constants.cpp:145
+#: src/backend/gsl/constants.cpp:152
 #, kde-format
 msgid "Mass of 1 troy ounce"
 msgstr "Masa de 1 onza troy"
 
-#: src/backend/gsl/constants.cpp:146
+#: src/backend/gsl/constants.cpp:153
 #, kde-format
 msgid "Mass of 1 carat"
 msgstr "Masa de 1 quilate"
 
-#: src/backend/gsl/constants.cpp:147
+#: src/backend/gsl/constants.cpp:154
 #, kde-format
 msgid "Force of 1 gram weight"
 msgstr "Fuerza del peso de 1 gramo"
 
-#: src/backend/gsl/constants.cpp:148
+#: src/backend/gsl/constants.cpp:155
 #, kde-format
 msgid "Force of 1 pound weight"
 msgstr "Fuerza del peso de 1 libra"
 
-#: src/backend/gsl/constants.cpp:149
+#: src/backend/gsl/constants.cpp:156
 #, kde-format
 msgid "Force of 1 kilopound weight"
 msgstr "Fuerza del peso de 1 kilopondio"
 
-#: src/backend/gsl/constants.cpp:150
+#: src/backend/gsl/constants.cpp:157
 #, kde-format
 msgid "Force of 1 poundal"
 msgstr "Fuerza de 1 poundal"
 
 #. i18n("Thermal Energy and Power"));
-#: src/backend/gsl/constants.cpp:153
+#: src/backend/gsl/constants.cpp:160
 #, kde-format
 msgid "Energy of 1 calorie"
 msgstr "Energía de 1 caloría"
 
-#: src/backend/gsl/constants.cpp:154
+#: src/backend/gsl/constants.cpp:161
 #, kde-format
 msgid "Energy of 1 British Thermal Unit"
 msgstr "Energía de 1 BTU"
 
-#: src/backend/gsl/constants.cpp:155
+#: src/backend/gsl/constants.cpp:162
 #, kde-format
 msgid "Energy of 1 Therm"
 msgstr "Energía de 1 terma"
 
-#: src/backend/gsl/constants.cpp:156
+#: src/backend/gsl/constants.cpp:163
 #, kde-format
 msgid "Power of 1 horsepower"
 msgstr "Energía de 1 caballo de vapor"
 
 #. i18n("Pressure"));
-#: src/backend/gsl/constants.cpp:159
+#: src/backend/gsl/constants.cpp:166
 #, kde-format
 msgid "Pressure of 1 bar"
 msgstr "Presión de 1 bar"
 
-#: src/backend/gsl/constants.cpp:160
+#: src/backend/gsl/constants.cpp:167
 #, kde-format
 msgid "Pressure of 1 standard atmosphere"
 msgstr "Presión de 1 atmósfera estándar"
 
-#: src/backend/gsl/constants.cpp:161
+#: src/backend/gsl/constants.cpp:168
 #, kde-format
 msgid "Pressure of 1 torr"
 msgstr "Presión de 1 torr"
 
-#: src/backend/gsl/constants.cpp:162
+#: src/backend/gsl/constants.cpp:169
 #, kde-format
 msgid "Pressure of 1 meter of mercury"
 msgstr "Presión de 1 metro de mercurio"
 
-#: src/backend/gsl/constants.cpp:163
+#: src/backend/gsl/constants.cpp:170
 #, kde-format
 msgid "Pressure of 1 inch of mercury"
 msgstr "Presión de 1 pulgada de mercurio"
 
-#: src/backend/gsl/constants.cpp:164
+#: src/backend/gsl/constants.cpp:171
 #, kde-format
 msgid "Pressure of 1 inch of water"
 msgstr "Presión de 1 pulgada de agua"
 
-#: src/backend/gsl/constants.cpp:165
+#: src/backend/gsl/constants.cpp:172
 #, kde-format
 msgid "Pressure of 1 pound per square inch"
 msgstr "Presión de 1 libra por pulgada cuadrada"
 
 #. i18n("Viscosity"));
-#: src/backend/gsl/constants.cpp:168
+#: src/backend/gsl/constants.cpp:175
 #, kde-format
 msgid "Dynamic viscosity of 1 poise"
 msgstr "Viscosidad dinámica de 1 equilibrio"
 
-#: src/backend/gsl/constants.cpp:169
+#: src/backend/gsl/constants.cpp:176
 #, kde-format
 msgid "Kinematic viscosity of 1 stokes"
 msgstr "Viscosidad cinemática de 1 stokes"
 
 #. i18n("Light and Illumination"));
-#: src/backend/gsl/constants.cpp:172
+#: src/backend/gsl/constants.cpp:179
 #, kde-format
 msgid "Luminance of 1 stilb"
 msgstr "Luminancia de 1 stilb"
 
-#: src/backend/gsl/constants.cpp:173
+#: src/backend/gsl/constants.cpp:180
 #, kde-format
 msgid "Luminous flux of 1 lumen"
 msgstr "Flujo luminoso de 1 lumen"
 
-#: src/backend/gsl/constants.cpp:174
+#: src/backend/gsl/constants.cpp:181
 #, kde-format
 msgid "Illuminance of 1 lux"
 msgstr "Luminancia de 1 lux"
 
-#: src/backend/gsl/constants.cpp:175
+#: src/backend/gsl/constants.cpp:182
 #, kde-format
 msgid "Illuminance of 1 phot"
 msgstr "Luminancia de 1 phot"
 
-#: src/backend/gsl/constants.cpp:176
+#: src/backend/gsl/constants.cpp:183
 #, kde-format
 msgid "Illuminance of 1 footcandle"
 msgstr "Luminancia de 1 vela de pie"
 
-#: src/backend/gsl/constants.cpp:177
+#: src/backend/gsl/constants.cpp:184
 #, kde-format
 msgid "Luminance of 1 lambert"
 msgstr "Luminancia de 1 lambert"
 
-#: src/backend/gsl/constants.cpp:178
+#: src/backend/gsl/constants.cpp:185
 #, kde-format
 msgid "Luminance of 1 footlambert"
 msgstr "Luminancia de 1 pie lambert"
 
 #. i18n("Radioactivity"));
-#: src/backend/gsl/constants.cpp:181
+#: src/backend/gsl/constants.cpp:188
 #, kde-format
 msgid "Activity of 1 curie"
 msgstr "Actividad de 1 curie"
 
-#: src/backend/gsl/constants.cpp:182
+#: src/backend/gsl/constants.cpp:189
 #, kde-format
 msgid "Exposure of 1 roentgen"
 msgstr "Exposición de 1 roentgen"
 
-#: src/backend/gsl/constants.cpp:183
+#: src/backend/gsl/constants.cpp:190
 #, kde-format
 msgid "Absorbed dose of 1 rad"
 msgstr "Dosis absorbida de 1 rad"
 
 #. i18n("Force and Energy"));
-#: src/backend/gsl/constants.cpp:186
+#: src/backend/gsl/constants.cpp:193
 #, kde-format
 msgid "SI unit of force"
 msgstr "Unidad de fuerza del SI"
 
-#: src/backend/gsl/constants.cpp:187
+#: src/backend/gsl/constants.cpp:194
 #, kde-format
 msgid "Force of 1 Dyne"
 msgstr "Fuerza de 1 dina"
 
-#: src/backend/gsl/constants.cpp:188
+#: src/backend/gsl/constants.cpp:195
 #, kde-format
 msgid "SI unit of energy"
 msgstr "Unidad de energía del SI"
 
-#: src/backend/gsl/constants.cpp:189
+#: src/backend/gsl/constants.cpp:196
 #, kde-format
 msgid "Energy 1 erg"
 msgstr "Energía de 1 ergio"
@@ -3555,12 +3566,11 @@ msgstr "Muestra periódica"
 msgid "Random sample"
 msgstr "Muestra aleatoria"
 
-#. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:248
-#: src/frontend/ui/dockwidgets/imagedock.ui:490
-#, kde-format
-msgid "Size"
-msgstr "Tamaño"
+#, fuzzy, kde-format
+#| msgid "Number of seconds in 1 hour"
+msgid "Number of elements in vector x"
+msgstr "Número de segundos en 1 hora"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMinimum)
@@ -20785,6 +20795,12 @@ msgstr "Indique el nombre del archivo de imagen"
 #, kde-format
 msgid "Keep Ratio:"
 msgstr "Mantener proporción:"
+
+#. i18n: ectx: property (text), widget (QLabel, lSize)
+#: src/frontend/ui/dockwidgets/imagedock.ui:490
+#, kde-format
+msgid "Size"
+msgstr "Tamaño"
 
 #. i18n: ectx: property (text), widget (QLabel, lCurves)
 #: src/frontend/ui/dockwidgets/infoelementdock.ui:32

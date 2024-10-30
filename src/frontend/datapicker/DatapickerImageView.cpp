@@ -17,6 +17,7 @@
 #include "backend/worksheet/Worksheet.h"
 #include "frontend/datapicker/DatapickerImageView.h"
 
+#include <gsl/gsl_const_cgs.h>
 #include <limits>
 
 #include <QActionGroup>
@@ -35,6 +36,8 @@
 #include <QWheelEvent>
 
 #include <KLocalizedString>
+
+#include <frontend/GuiTools.h>
 
 /**
  * \class DatapickerImageView
@@ -95,14 +98,14 @@ DatapickerImageView::DatapickerImageView(DatapickerImage* image)
 	if (!m_image->isLoading()) {
 		float w = Worksheet::convertFromSceneUnits(sceneRect().width(), Worksheet::Unit::Inch);
 		float h = Worksheet::convertFromSceneUnits(sceneRect().height(), Worksheet::Unit::Inch);
-		w *= QApplication::primaryScreen()->physicalDotsPerInchX();
-		h *= QApplication::primaryScreen()->physicalDotsPerInchY();
+		w *= GuiTools::dpi(this).first;
+		h *= GuiTools::dpi(this).second;
 		resize(w * 1.1, h * 1.1);
 	}
 
 	// rescale to the original size
-	static const float hscale = QApplication::primaryScreen()->physicalDotsPerInchX() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
-	static const float vscale = QApplication::primaryScreen()->physicalDotsPerInchY() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+	static const float hscale = GuiTools::dpi(this).first / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+	static const float vscale = GuiTools::dpi(this).second / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
 	setTransform(QTransform::fromScale(hscale, vscale));
 }
 
@@ -642,10 +645,8 @@ void DatapickerImageView::changeZoom(QAction* action) {
 	else if (action == zoomOutViewAction)
 		zoom(-1);
 	else if (action == zoomOriginAction) {
-		static const float hscale =
-			QApplication::primaryScreen()->physicalDotsPerInchX() / (25.4 * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
-		static const float vscale =
-			QApplication::primaryScreen()->physicalDotsPerInchY() / (25.4 * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
+		static const float hscale = GuiTools::dpi(this).first / (GSL_CONST_CGS_INCH * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
+		static const float vscale = GuiTools::dpi(this).second / (GSL_CONST_CGS_INCH * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
 		setTransform(QTransform::fromScale(hscale, vscale));
 		m_rotationAngle = 0;
 	} else if (action == zoomFitPageWidthAction) {
@@ -811,8 +812,8 @@ void DatapickerImageView::exportToFile(const QString& path, const WorksheetView:
 		generator.setFileName(path);
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
 		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
-		w = w * QApplication::primaryScreen()->physicalDotsPerInchX() / 25.4;
-		h = h * QApplication::primaryScreen()->physicalDotsPerInchY() / 25.4;
+		w = w * GuiTools::dpi(this).first / GSL_CONST_CGS_INCH;
+		h = h * GuiTools::dpi(this).second / GSL_CONST_CGS_INCH;
 
 		generator.setSize(QSize(w, h));
 		QRectF targetRect(0, 0, w, h);
@@ -827,8 +828,8 @@ void DatapickerImageView::exportToFile(const QString& path, const WorksheetView:
 		// TODO add all formats supported by Qt in QImage
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
 		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
-		w = w * resolution / 25.4;
-		h = h * resolution / 25.4;
+		w = w * resolution / GSL_CONST_CGS_INCH;
+		h = h * resolution / GSL_CONST_CGS_INCH;
 		QImage image(QSize(w, h), QImage::Format_ARGB32_Premultiplied);
 		image.fill(Qt::transparent);
 		QRectF targetRect(0, 0, w, h);

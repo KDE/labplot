@@ -85,7 +85,7 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent)
 	ui->cbExportArea->addItem(i18n("Complete Worksheet"), static_cast<int>(WorksheetView::ExportArea::Worksheet));
 
 	ui->cbResolution->addItem(
-		i18nc("%1 is the value of DPI of the current screen", "%1 (desktop)", QString::number(QApplication::primaryScreen()->physicalDotsPerInchX())));
+		i18nc("%1 is the value of DPI of the current screen", "%1 (desktop)", QString::number(GuiTools::dpi(this).first)));
 	ui->cbResolution->addItem(QLatin1String("100"));
 	ui->cbResolution->addItem(QLatin1String("150"));
 	ui->cbResolution->addItem(QLatin1String("200"));
@@ -188,7 +188,7 @@ bool ExportWorksheetDialog::exportBackground() const {
 
 int ExportWorksheetDialog::exportResolution() const {
 	if (ui->cbResolution->currentIndex() == 0)
-		return QApplication::primaryScreen()->physicalDotsPerInchX();
+		return GuiTools::dpi(this).first;
 	else
 		return ui->cbResolution->currentText().toInt();
 }

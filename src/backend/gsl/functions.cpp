@@ -245,7 +245,7 @@ struct funs _special_functions[] = {
 
 	// Values independent of the row index!!!
 	// Important: When adding function here, implement it somewhere. For example column functions are implemented in ColumnPrivate!
-	{[]() { return i18n("Size"); }, colfun_size, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
+	{[]() { return i18n("Number of elements in vector x"); }, colfun_size, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
 	{[]() { return i18n("Minimum"); }, colfun_min, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
 	{[]() { return i18n("Maximum"); }, colfun_max, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
 	{[]() { return i18n("Arithmetic mean"); }, colfun_mean, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},

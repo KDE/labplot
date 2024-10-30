@@ -27,6 +27,7 @@
 #include "frontend/widgets/ThemesWidget.h"
 #include "frontend/worksheet/GridDialog.h"
 #include "frontend/worksheet/PresenterWidget.h"
+#include <gsl/gsl_const_cgs.h>
 
 #ifdef Q_OS_MAC
 #include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
@@ -57,6 +58,8 @@
 #include <QGraphicsPixmapItem>
 
 #include <limits>
+
+#include <frontend/GuiTools.h>
 
 /**
  * \class WorksheetView
@@ -108,14 +111,15 @@ WorksheetView::WorksheetView(Worksheet* worksheet)
 	if (!m_worksheet->isLoading()) {
 		float w = Worksheet::convertFromSceneUnits(sceneRect().width(), Worksheet::Unit::Inch);
 		float h = Worksheet::convertFromSceneUnits(sceneRect().height(), Worksheet::Unit::Inch);
-		w *= QApplication::primaryScreen()->physicalDotsPerInchX();
-		h *= QApplication::primaryScreen()->physicalDotsPerInchY();
+		auto dpi = GuiTools::dpi(this);
+		w *= dpi.first;
+		h *= dpi.second;
 		resize(w * 1.1, h * 1.1);
 	}
 
 	// rescale to the original size
-	static const qreal hscale = QApplication::primaryScreen()->physicalDotsPerInchX() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
-	static const qreal vscale = QApplication::primaryScreen()->physicalDotsPerInchY() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+	static const qreal hscale = GuiTools::dpi(this).first / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+	static const qreal vscale = GuiTools::dpi(this).second / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
 	setTransform(QTransform::fromScale(hscale, vscale));
 
 	initBasicActions();
@@ -1160,8 +1164,8 @@ void WorksheetView::useViewSizeChanged(bool useViewSize) {
 
 void WorksheetView::processResize() {
 	if (size() != sceneRect().size()) {
-		static const float hscale = QApplication::primaryScreen()->physicalDotsPerInchX() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
-		static const float vscale = QApplication::primaryScreen()->physicalDotsPerInchY() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+		static const float hscale = GuiTools::dpi(this).first / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+		static const float vscale = GuiTools::dpi(this).second / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
 		m_worksheet->setUndoAware(false);
 		m_worksheet->setPageRect(QRectF(0.0, 0.0, width() / hscale, height() / vscale));
 		m_worksheet->setUndoAware(true);
@@ -1176,8 +1180,8 @@ void WorksheetView::changeZoom(QAction* action) {
 	else if (action == zoomOutViewAction)
 		zoom(-1);
 	else if (action == zoomOriginAction) {
-		static const float hscale = QApplication::primaryScreen()->physicalDotsPerInchX() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
-		static const float vscale = QApplication::primaryScreen()->physicalDotsPerInchY() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+		static const float hscale = GuiTools::dpi(this).first / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+		static const float vscale = GuiTools::dpi(this).second / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
 		setTransform(QTransform::fromScale(hscale, vscale));
 	}
 
@@ -1236,7 +1240,7 @@ void WorksheetView::fitChanged(QAction* action) {
 
 double WorksheetView::zoomFactor() const {
 	double scale = transform().m11();
-	scale *= Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch) / QApplication::primaryScreen()->physicalDotsPerInchX();
+	scale *= Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch) / GuiTools::dpi(this).first;
 	return scale;
 }
 
@@ -2115,8 +2119,8 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		// 		}
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
 		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
-		w = w * QApplication::primaryScreen()->physicalDotsPerInchX() / 25.4;
-		h = h * QApplication::primaryScreen()->physicalDotsPerInchY() / 25.4;
+		w = w * GuiTools::dpi(this).first / GSL_CONST_CGS_INCH;
+		h = h * GuiTools::dpi(this).second / GSL_CONST_CGS_INCH;
 
 		generator.setSize(QSize(w, h));
 		QRectF targetRect(0, 0, w, h);
@@ -2136,8 +2140,8 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 	case ExportFormat::XPM: {
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
 		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
-		w = w * resolution / 25.4;
-		h = h * resolution / 25.4;
+		w = w * resolution / GSL_CONST_CGS_INCH;
+		h = h * resolution / GSL_CONST_CGS_INCH;
 		QImage image(QSize(w, h), QImage::Format_ARGB32_Premultiplied);
 		image.fill(Qt::transparent);
 		QRectF targetRect(0, 0, w, h);
@@ -2188,8 +2192,8 @@ void WorksheetView::exportToPixmap(QPixmap& pixmap) {
 
 	int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
 	int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
-	w = w * QApplication::primaryScreen()->physicalDotsPerInchX() / 25.4;
-	h = h * QApplication::primaryScreen()->physicalDotsPerInchX() / 25.4;
+	w = w * GuiTools::dpi(this).first / GSL_CONST_CGS_INCH;
+	h = h * GuiTools::dpi(this).second / GSL_CONST_CGS_INCH;
 	pixmap = pixmap.scaled(w, h);
 	QRectF targetRect(0, 0, w, h);
 
@@ -2241,8 +2245,8 @@ void WorksheetView::exportToClipboard() {
 
 	int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
 	int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
-	w = w * QApplication::primaryScreen()->physicalDotsPerInchX() / 25.4;
-	h = h * QApplication::primaryScreen()->physicalDotsPerInchY() / 25.4;
+	w = w * GuiTools::dpi(this).first / GSL_CONST_CGS_INCH;
+	h = h * GuiTools::dpi(this).second / GSL_CONST_CGS_INCH;
 	QImage image(QSize(w, h), QImage::Format_ARGB32_Premultiplied);
 	image.fill(Qt::transparent);
 	QRectF targetRect(0, 0, w, h);

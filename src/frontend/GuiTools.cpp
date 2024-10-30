@@ -25,6 +25,8 @@
 #include <QMenu>
 #include <QPainter>
 #include <QScreen>
+#include <QWidget>
+#include <QWindow>
 
 #ifdef HAVE_POPPLER
 #include <poppler-qt6.h>
@@ -225,6 +227,29 @@ QColor& GuiTools::colorFromAction(QActionGroup* actionGroup, QAction* action) {
 		index = 0;
 
 	return colors[index];
+}
+
+// Returns current screen DPI as { physicalDotsPerInchX, physicalDotsPerInchY }
+QPair<float, float> GuiTools::dpi(const QWidget* widget) {
+	QScreen* screen = nullptr;
+
+	if (widget != nullptr) {
+		if (widget->window() && widget->window()->windowHandle() && widget->window()->windowHandle()->screen())
+			screen = widget->window()->windowHandle()->screen();
+		else
+			WARN("Widget or related window/screen is null, falling back to primary screen");
+
+	} else
+		WARN("Widget is null, falling back to primary screen");
+
+	// Fallback to the primary screen if the widget's screen is not valid
+	if (!screen)
+		screen = QApplication::primaryScreen();
+
+	// Return the DPI values
+	float dpiX = screen->physicalDotsPerInchX();
+	float dpiY = screen->physicalDotsPerInchY();
+	return {dpiX, dpiY};
 }
 
 // ComboBox with colors
