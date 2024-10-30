@@ -21,7 +21,15 @@
 </ToolBar>
 
 <ToolBar name="worksheet_toolbar">
-<text>Worksheet Toolbar</text>
+	<text>Worksheet Toolbar</text>
+	<Action name="worksheet_vertical_layout"/>
+	<Action name="worksheet_horizontal_layout"/>
+	<Action name="worksheet_grid_layout"/>
+	<Action name="worksheet_break_layout"/>
+	<Separator/>
+	<Action name="worksheet_select_mode"/>
+	<Action name="worksheet_navigate_mode"/>
+	<Action name="worksheet_zoom_select_mode"/>
 </ToolBar>
 
 <ToolBar name="datapicker_toolbar">
@@ -33,7 +41,13 @@
 </ToolBar>
 
 <ToolBar name="notebook_toolbar">
-<text>Notebook Toolbar</text>
+	<text>Notebook Toolbar</text>
+	<Action name="notebook_evaluate"/>
+	<Action name="notebook_find"/>
+	<Action name="notebook_zoom_in"/>
+	<Action name="notebook_zoom_out"/>
+	<Separator/>
+	<Action name="notebook_restart"/>
 </ToolBar>
 
 <ToolBar name="cartesian_plot_toolbar" position="left">

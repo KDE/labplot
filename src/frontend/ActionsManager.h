@@ -12,7 +12,12 @@
 
 #include <QObject>
 
+class DatapickerView;
+class NotebookView;
 class MainWin;
+class SpreadsheetView;
+class WorksheetView;
+
 class QAction;
 class QMenu;
 class KHamburgerMenu;
@@ -40,7 +45,13 @@ public:
 
 private:
 	void initActions();
+	void initToolbarActions();
 	void initMenus();
+
+	void connectWorksheetToolbarActions(const WorksheetView*);
+	void connectSpreadsheetToolbarActions(const SpreadsheetView*);
+	void connectNotebookToolbarActions(const NotebookView*);
+	void connectDataExtractorToolbarActions(const DatapickerView*);
 
 	MainWin* m_mainWindow{nullptr};
 	friend class MainWin;
@@ -67,7 +78,6 @@ private:
 	QAction* m_importLabPlotAction;
 	QAction* m_importOpjAction;
 	QAction* m_exportAction;
-	// QAction* m_closeAction;
 	QAction* m_newFolderAction;
 	QAction* m_newWorkbookAction;
 	QAction* m_newSpreadsheetAction;
@@ -99,6 +109,13 @@ private:
 	QAction* m_visibilityFolderAction;
 	QAction* m_visibilitySubfolderAction;
 	QAction* m_visibilityAllAction;
+
+	// notebook
+	QAction* m_notebookRestartAction{nullptr};
+	QAction* m_notebookEvaluateAction{nullptr};
+	QAction* m_notebookZoomInAction{nullptr};
+	QAction* m_notebookZoomOutAction{nullptr};
+	QAction* m_notebookFindAction{nullptr};
 
 	// Menus
 	QMenu* m_visibilityMenu{nullptr};

@@ -437,6 +437,34 @@ void ActionsManager::initActions() {
 	collection->addAction(QLatin1String("configure_cas"), m_configureCASAction);
 	connect(m_configureCASAction, &QAction::triggered, m_mainWindow, &MainWin::settingsDialog); // TODO: go to the Notebook page in the settings dialog directly
 #endif
+
+	initToolbarActions();
+}
+
+void ActionsManager::initToolbarActions() {
+	auto* collection = m_mainWindow->actionCollection();
+
+	// worksheet
+
+	// spreadsheet
+
+	// notebook
+	m_notebookZoomInAction = new QAction(QIcon::fromTheme(QLatin1String("zoom-in")), i18n("Zoom In"), this);
+	collection->addAction(QLatin1String("notebook_zoom_in"), m_notebookZoomInAction);
+
+	m_notebookZoomOutAction = new QAction(QIcon::fromTheme(QLatin1String("zoom-out")), i18n("Zoom Out"), this);
+	collection->addAction(QLatin1String("notebook_zoom_out"), m_notebookZoomOutAction);
+
+	m_notebookFindAction = new QAction(QIcon::fromTheme(QLatin1String("edit-find")), i18n("Find"), this);
+	collection->addAction(QLatin1String("notebook_find"), m_notebookFindAction);
+
+	m_notebookRestartAction = new QAction(QIcon::fromTheme(QLatin1String("system-reboot")), i18n("Restart"), this);
+	collection->addAction(QLatin1String("notebook_restart"), m_notebookRestartAction);
+
+	m_notebookEvaluateAction = new QAction(QIcon::fromTheme(QLatin1String("system-run")), i18n("Evaluate Notebook"), this);
+	collection->addAction(QLatin1String("notebook_evaluate"), m_notebookEvaluateAction);
+
+	// data extractor
 }
 
 void ActionsManager::initMenus() {
@@ -527,7 +555,7 @@ void ActionsManager::initMenus() {
 		settingsMenu->insertAction(actions.at(index + 1), m_memoryInfoAction);
 	}
 
-	// Cantor backends to menu and context menu
+	// add Cantor backends to menu and context menu
 #ifdef HAVE_CANTOR_LIBS
 	auto backendNames = Cantor::Backend::listAvailableBackends();
 #if !defined(NDEBUG) || defined(Q_OS_WIN) || defined(Q_OS_MACOS)
@@ -787,12 +815,11 @@ void ActionsManager::updateGUI() {
 		view->createContextMenu(menu);
 		menu->setEnabled(true);
 
-		auto* toolbar = qobject_cast<QToolBar*>(factory->container(QLatin1String("notebook_toolbar"), m_mainWindow));
-		toolbar->setVisible(true);
-		toolbar->clear();
-		view->fillToolBar(toolbar);
+		connectNotebookToolbarActions(view);
+		factory->container(QLatin1String("notebook"), m_mainWindow)->setEnabled(true);
+		factory->container(QLatin1String("notebook_toolbar"), m_mainWindow)->setVisible(true);
 	} else {
-		// no Cantor worksheet selected -> deactivate Cantor worksheet related menu and toolbar
+		// no notebook selected -> deactivate notebook related menu and toolbar
 		factory->container(QLatin1String("notebook"), m_mainWindow)->setEnabled(false);
 		factory->container(QLatin1String("notebook_toolbar"), m_mainWindow)->setVisible(false);
 	}
@@ -923,4 +950,33 @@ void ActionsManager::toggleDockWidget(QAction* action) {
 			m_mainWindow->m_propertiesDock->toggleView(true);
 	} else if (action->objectName() == QLatin1String("toggle_worksheet_preview_dock"))
 		m_mainWindow->m_worksheetPreviewDock->toggleView(!m_mainWindow->m_worksheetPreviewDock->isVisible());
+}
+
+// ##############################################################################
+// ################  Connect actions to the actual views ########################
+// ##############################################################################
+void ActionsManager::connectWorksheetToolbarActions(const WorksheetView* view) {
+
+}
+
+void ActionsManager::connectSpreadsheetToolbarActions(const SpreadsheetView* view) {
+
+}
+
+void ActionsManager::connectNotebookToolbarActions(const NotebookView* view) {
+	disconnect(m_notebookRestartAction, &QAction::triggered, nullptr, nullptr);
+	disconnect(m_notebookEvaluateAction, &QAction::triggered, nullptr, nullptr);
+	disconnect(m_notebookZoomInAction, &QAction::triggered, nullptr, nullptr);
+	disconnect(m_notebookZoomOutAction, &QAction::triggered, nullptr, nullptr);
+	disconnect(m_notebookFindAction, &QAction::triggered, nullptr, nullptr);
+
+	connect(m_notebookRestartAction, &QAction::triggered, view, &NotebookView::restart);
+	connect(m_notebookEvaluateAction, &QAction::triggered, view, &NotebookView::evaluate);
+	connect(m_notebookZoomInAction, &QAction::triggered, view, &NotebookView::zoomIn);
+	connect(m_notebookZoomOutAction, &QAction::triggered, view, &NotebookView::zoomOut);
+	connect(m_notebookFindAction, &QAction::triggered, view, &NotebookView::find);
+}
+
+void ActionsManager::connectDataExtractorToolbarActions(const DatapickerView* view) {
+
 }
