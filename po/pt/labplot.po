@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-30 01:46+0000\n"
+"POT-Creation-Date: 2024-10-31 01:48+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -130,7 +130,7 @@ msgstr "Mudar o Nome"
 #: src/backend/spreadsheet/Spreadsheet.cpp:652
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:487
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:273
-#: src/frontend/worksheet/WorksheetView.cpp:134
+#: src/frontend/worksheet/WorksheetView.cpp:138
 #, kde-format
 msgid "Delete"
 msgstr "Apagar"
@@ -246,7 +246,7 @@ msgstr "Dias"
 #: src/backend/nsl/nsl_smooth.c:22 src/frontend/dockwidgets/AxisDock.cpp:272
 #: src/frontend/dockwidgets/AxisDock.cpp:285
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:55
-#: src/frontend/dockwidgets/XYCurveDock.cpp:195 src/frontend/GuiTools.cpp:152
+#: src/frontend/dockwidgets/XYCurveDock.cpp:195 src/frontend/GuiTools.cpp:154
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
 #: src/frontend/widgets/BackgroundWidget.cpp:114
 #: src/frontend/widgets/LineWidget.cpp:48
@@ -342,7 +342,7 @@ msgstr "Inteiro Grande"
 #: src/frontend/ui/dockwidgets/valuewidget.ui:269
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:280
 #: src/frontend/widgets/LabelWidget.cpp:208
-#: src/frontend/worksheet/WorksheetView.cpp:218
+#: src/frontend/worksheet/WorksheetView.cpp:222
 #, kde-format
 msgid "Text"
 msgstr "Texto"
@@ -973,7 +973,7 @@ msgid "%1: set error bar outline style"
 msgstr "%1: mudar o estilo do contorno da barra de erros"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:392
-#: src/backend/datapicker/DatapickerImage.cpp:415
+#: src/backend/datapicker/DatapickerImage.cpp:417
 #: src/backend/worksheet/InfoElement.cpp:871
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:193
@@ -987,7 +987,7 @@ msgid "%1: set visible"
 msgstr "%1: mudar para visível"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:392
-#: src/backend/datapicker/DatapickerImage.cpp:415
+#: src/backend/datapicker/DatapickerImage.cpp:417
 #: src/backend/worksheet/InfoElement.cpp:871
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:193
@@ -1001,50 +1001,50 @@ msgstr "%1: mudar para visível"
 msgid "%1: set invisible"
 msgstr "%1: mudar para invisível"
 
-#: src/backend/datapicker/DatapickerImage.cpp:180
+#: src/backend/datapicker/DatapickerImage.cpp:182
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Datapicker Image"
 msgstr "Imprimir a Imagem do Selector de Dados"
 
-#: src/backend/datapicker/DatapickerImage.cpp:312
-#: src/backend/datapicker/DatapickerImage.cpp:367
+#: src/backend/datapicker/DatapickerImage.cpp:314
+#: src/backend/datapicker/DatapickerImage.cpp:369
 #, kde-format
 msgid "%1: upload image"
 msgstr "%1: enviar uma imagem"
 
-#: src/backend/datapicker/DatapickerImage.cpp:366
+#: src/backend/datapicker/DatapickerImage.cpp:368
 #, kde-format
 msgid "%1: upload new image"
 msgstr "%1: enviar uma nova imagem"
 
-#: src/backend/datapicker/DatapickerImage.cpp:386
+#: src/backend/datapicker/DatapickerImage.cpp:388
 #: src/backend/worksheet/WorksheetElement.cpp:836
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr "%1: mudar o ângulo da rotação"
 
-#: src/backend/datapicker/DatapickerImage.cpp:393
+#: src/backend/datapicker/DatapickerImage.cpp:395
 #, kde-format
 msgid "%1: set Axis points"
 msgstr "%1: mudar os pontos do eixo"
 
-#: src/backend/datapicker/DatapickerImage.cpp:400
+#: src/backend/datapicker/DatapickerImage.cpp:402
 #, kde-format
 msgid "%1: set editor settings"
 msgstr "%1: mudar a configuração do editor"
 
-#: src/backend/datapicker/DatapickerImage.cpp:407
+#: src/backend/datapicker/DatapickerImage.cpp:409
 #, kde-format
 msgid "%1: set minimum segment length"
 msgstr "%1: mudar o tamanho mínimo do segmento"
 
-#: src/backend/datapicker/DatapickerImage.cpp:435
+#: src/backend/datapicker/DatapickerImage.cpp:437
 #, kde-format
 msgid "%1: remove all axis points"
 msgstr "%1: remover todos os pontos do eixo"
 
-#: src/backend/datapicker/DatapickerImage.cpp:683
+#: src/backend/datapicker/DatapickerImage.cpp:686
 #: src/backend/worksheet/Image.cpp:413
 #, kde-format
 msgid "Failed to read image data"
@@ -7737,7 +7737,7 @@ msgid "%1: set connectionline curve name"
 msgstr "%1: mudar o nome da curva da linha de ligação"
 
 #: src/backend/worksheet/Line.cpp:100
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:438
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:439
 #, kde-format
 msgid "%1: line type changed"
 msgstr "%1: o tipo de linha foi modificado"
@@ -8254,28 +8254,28 @@ msgstr "%1: desvios modificados"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:579
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:522
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:571
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:572
 #, kde-format
 msgid "%1: change rug enabled"
 msgstr "%1: activação da escala em X"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:586
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:529
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:585
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:586
 #, kde-format
 msgid "%1: change rug width"
 msgstr "%1: mudar a largura das marcas"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:593
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:536
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:592
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:593
 #, kde-format
 msgid "%1: change rug length"
 msgstr "%1: mudar o comprimento das marcas"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:600
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:543
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:599
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:600
 #, kde-format
 msgid "%1: change rug offset"
 msgstr "%1: mudar a posição das marcas"
@@ -8500,8 +8500,8 @@ msgstr "Eixo Vertical"
 #: src/frontend/matrix/MatrixView.cpp:133
 #: src/frontend/notebook/NotebookView.cpp:109
 #: src/frontend/widgets/BackgroundWidget.cpp:123
-#: src/frontend/worksheet/WorksheetView.cpp:219
-#: src/frontend/worksheet/WorksheetView.cpp:1338
+#: src/frontend/worksheet/WorksheetView.cpp:223
+#: src/frontend/worksheet/WorksheetView.cpp:1342
 #, kde-format
 msgid "Image"
 msgstr "Imagem"
@@ -8608,8 +8608,8 @@ msgstr "Função de Erro"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:634
 #: src/frontend/MainWin.cpp:866 src/frontend/notebook/NotebookView.cpp:167
 #: src/frontend/workbook/WorkbookView.cpp:135
-#: src/frontend/worksheet/WorksheetView.cpp:289
-#: src/frontend/worksheet/WorksheetView.cpp:428
+#: src/frontend/worksheet/WorksheetView.cpp:293
+#: src/frontend/worksheet/WorksheetView.cpp:432
 #, kde-format
 msgid "Add New"
 msgstr "Adicionar uma Nova"
@@ -8649,7 +8649,7 @@ msgstr "Análise"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:747
 #: src/frontend/ThemeHandler.cpp:49 src/frontend/ThemeHandler.cpp:144
-#: src/frontend/worksheet/WorksheetView.cpp:539
+#: src/frontend/worksheet/WorksheetView.cpp:543
 #, kde-format
 msgid "Theme"
 msgstr "Tema"
@@ -8887,8 +8887,8 @@ msgid "%1: add function curve"
 msgstr "%1: adicionar uma curva de ajuste"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2053
-#: src/frontend/worksheet/WorksheetView.cpp:1334
-#: src/frontend/worksheet/WorksheetView.cpp:1335
+#: src/frontend/worksheet/WorksheetView.cpp:1338
+#: src/frontend/worksheet/WorksheetView.cpp:1339
 #, kde-format
 msgid "Text Label"
 msgstr "Etiqueta Textual"
@@ -9545,79 +9545,79 @@ msgid "club"
 msgstr "paus"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:114
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:467
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:468
 #, kde-format
 msgid "%1: set values type"
 msgstr "%1: mudar o tipo dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:125
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:474
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:475
 #, kde-format
 msgid "%1: set values column"
 msgstr "%1: mudar a coluna dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:137
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:493
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:494
 #, kde-format
 msgid "%1: set values position"
 msgstr "%1: mudar a posição dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:144
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:500
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:501
 #, kde-format
 msgid "%1: set values distance"
 msgstr "%1: mudar a distância dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:151
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:507
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:508
 #, kde-format
 msgid "%1: rotate values"
 msgstr "%1: rodar os valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:158
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:514
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:515
 #, kde-format
 msgid "%1: set values opacity"
 msgstr "%1: mudar a opacidade dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:165
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:521
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:522
 #, kde-format
 msgid "%1: set values numeric format"
 msgstr "%1: mudar o formato numérico dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:172
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:528
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:529
 #, kde-format
 msgid "%1: set values precision"
 msgstr "%1: mudar a precisão dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:179
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:535
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:536
 #, kde-format
 msgid "%1: set values datetime format"
 msgstr "%1: mudar o formato das datas/horas dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:186
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:542
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:543
 #, kde-format
 msgid "%1: set values prefix"
 msgstr "%1: mudar o prefixo dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:193
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:549
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:550
 #, kde-format
 msgid "%1: set values suffix"
 msgstr "%1: mudar o sufixo dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:200
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:556
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:557
 #, kde-format
 msgid "%1: set values font"
 msgstr "%1: mudar o tipo de letra dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:207
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:563
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:564
 #, kde-format
 msgid "%1: set values color"
 msgstr "%1: mudar a cor dos valores"
@@ -9668,58 +9668,58 @@ msgstr "Não tem pontos de dados suficientes."
 msgid "%1: set options and perform the correlation"
 msgstr "%1: mudar as opções e efectuar a correlação"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:213
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:214
 #, kde-format
 msgid "Navigate to \"%1\""
 msgstr "Navegar para \"%1\""
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:413
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:414
 #, kde-format
 msgid "%1: x-data source changed"
 msgstr "%1: a fonte de dados em X foi modificada"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:420
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:421
 #, kde-format
 msgid "%1: y-data source changed"
 msgstr "%1: a fonte de dados em Y foi modificada"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:445
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:446
 #, kde-format
 msgid "%1: set skip line gaps"
 msgstr "%1: definir a omissão das lacunas das linhas"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:452
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:453
 #, kde-format
 msgid "%1: set increasing X"
 msgstr "%1: definir o X ascendente"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:459
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:460
 #, kde-format
 msgid "%1: set the number of interpolation points"
 msgstr "%1: mudar o número de pontos de interpolação"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:578
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:579
 #, kde-format
 msgid "%1: set rug orientation"
 msgstr "%1: mudar a orientação das marcas"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1418
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1419
 #, kde-format
 msgid "Error: Akima spline interpolation requires a minimum of 5 points."
 msgstr ""
 "Erro: a interpolação numa curva Akima precisa de um mínimo de 5 pontos."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1420
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1421
 #, kde-format
 msgid "Error: Could not initialize the spline function."
 msgstr "Erro: Não foi possível inicializar a função da curva."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1433
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1434
 #, kde-format
 msgid "x values must be monotonically increasing."
 msgstr "Os valores em X devem ser monotonamente ascendentes."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1436
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1437
 #, kde-format
 msgid "Error: %1"
 msgstr "Erro: %1"
@@ -10248,17 +10248,17 @@ msgstr "Indique a palavra-chave que está a pesquisar"
 msgid "Search..."
 msgstr "Procurar..."
 
-#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:184
+#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:186
 #, kde-format
 msgid "Red"
 msgstr "Vermelho"
 
-#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:184
+#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:186
 #, kde-format
 msgid "Green"
 msgstr "Verde"
 
-#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:185
+#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Blue"
 msgstr "Azul"
@@ -10310,196 +10310,196 @@ msgstr "Copiar a Selecção"
 msgid "Copy All"
 msgstr "Copiar Tudo"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:120
+#: src/frontend/datapicker/DatapickerImageView.cpp:123
 #: src/frontend/matrix/MatrixView.cpp:192
 #: src/frontend/notebook/NotebookView.cpp:53
-#: src/frontend/worksheet/WorksheetView.cpp:143
-#: src/frontend/worksheet/WorksheetView.cpp:376
+#: src/frontend/worksheet/WorksheetView.cpp:147
+#: src/frontend/worksheet/WorksheetView.cpp:380
 #, kde-format
 msgid "Zoom In"
 msgstr "Ampliar"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:123
+#: src/frontend/datapicker/DatapickerImageView.cpp:126
 #: src/frontend/matrix/MatrixView.cpp:193
 #: src/frontend/notebook/NotebookView.cpp:57
-#: src/frontend/worksheet/WorksheetView.cpp:144
-#: src/frontend/worksheet/WorksheetView.cpp:380
+#: src/frontend/worksheet/WorksheetView.cpp:148
+#: src/frontend/worksheet/WorksheetView.cpp:384
 #, kde-format
 msgid "Zoom Out"
 msgstr "Reduzir"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:126
+#: src/frontend/datapicker/DatapickerImageView.cpp:129
 #: src/frontend/matrix/MatrixView.cpp:194
-#: src/frontend/worksheet/WorksheetView.cpp:145
+#: src/frontend/worksheet/WorksheetView.cpp:149
 #, kde-format
 msgid "Original Size"
 msgstr "Tamanho Original"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:129
-#: src/frontend/worksheet/WorksheetView.cpp:167
+#: src/frontend/datapicker/DatapickerImageView.cpp:132
+#: src/frontend/worksheet/WorksheetView.cpp:171
 #, fuzzy, kde-format
 #| msgid "Fit to Height"
 msgctxt "Zoom"
 msgid "Fit to Height"
 msgstr "Ajustar à Altura"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:130
-#: src/frontend/worksheet/WorksheetView.cpp:170
+#: src/frontend/datapicker/DatapickerImageView.cpp:133
+#: src/frontend/worksheet/WorksheetView.cpp:174
 #, fuzzy, kde-format
 #| msgid "Fit to Width"
 msgctxt "Zoom"
 msgid "Fit to Width"
 msgstr "Ajustar à Largura"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:133
-#: src/frontend/worksheet/WorksheetView.cpp:184
+#: src/frontend/datapicker/DatapickerImageView.cpp:136
+#: src/frontend/worksheet/WorksheetView.cpp:188
 #, kde-format
 msgid "Navigate"
 msgstr "Navegar"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:137
-#: src/frontend/worksheet/WorksheetView.cpp:187
+#: src/frontend/datapicker/DatapickerImageView.cpp:140
+#: src/frontend/worksheet/WorksheetView.cpp:191
 #, kde-format
 msgid "Select and Zoom"
 msgstr "Seleccionar e Ampliar"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:141
+#: src/frontend/datapicker/DatapickerImageView.cpp:144
 #, kde-format
 msgid "Set Axis Points"
 msgstr "Definir os Pontos do Eixo"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:145
+#: src/frontend/datapicker/DatapickerImageView.cpp:148
 #, kde-format
 msgid "Set Curve Points"
 msgstr "Definir os Pontos da Curva"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:149
+#: src/frontend/datapicker/DatapickerImageView.cpp:152
 #, kde-format
 msgid "Select Curve Segments"
 msgstr "Seleccionar os Segmentos da Curva"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:153
+#: src/frontend/datapicker/DatapickerImageView.cpp:156
 #, kde-format
 msgid "New Curve"
 msgstr "Nova Curva"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:155
+#: src/frontend/datapicker/DatapickerImageView.cpp:158
 #, kde-format
 msgid "Shift Left"
 msgstr "Desvio à Esquerda"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:158
+#: src/frontend/datapicker/DatapickerImageView.cpp:161
 #, kde-format
 msgid "Shift Right"
 msgstr "Desvio à Direita"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:161
+#: src/frontend/datapicker/DatapickerImageView.cpp:164
 #, kde-format
 msgid "Shift Up"
 msgstr "Desvio para Cima"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:164
+#: src/frontend/datapicker/DatapickerImageView.cpp:167
 #, kde-format
 msgid "Shift Down"
 msgstr "Desvio para Baixo"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:167
-#: src/frontend/worksheet/WorksheetView.cpp:191
+#: src/frontend/datapicker/DatapickerImageView.cpp:170
+#: src/frontend/worksheet/WorksheetView.cpp:195
 #, kde-format
 msgid "No Magnification"
 msgstr "Sem Ampliação"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:171
-#: src/frontend/worksheet/WorksheetView.cpp:195
+#: src/frontend/datapicker/DatapickerImageView.cpp:174
+#: src/frontend/worksheet/WorksheetView.cpp:199
 #, kde-format
 msgid "2x Magnification"
 msgstr "Ampliação 2x"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:174
-#: src/frontend/worksheet/WorksheetView.cpp:198
+#: src/frontend/datapicker/DatapickerImageView.cpp:177
+#: src/frontend/worksheet/WorksheetView.cpp:202
 #, kde-format
 msgid "3x Magnification"
 msgstr "Ampliação 3x"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:177
-#: src/frontend/worksheet/WorksheetView.cpp:201
+#: src/frontend/datapicker/DatapickerImageView.cpp:180
+#: src/frontend/worksheet/WorksheetView.cpp:205
 #, kde-format
 msgid "4x Magnification"
 msgstr "Ampliação 4x"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:180
-#: src/frontend/worksheet/WorksheetView.cpp:204
+#: src/frontend/datapicker/DatapickerImageView.cpp:183
+#: src/frontend/worksheet/WorksheetView.cpp:208
 #, kde-format
 msgid "5x Magnification"
 msgstr "Ampliação 5x"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:213
-#: src/frontend/worksheet/WorksheetView.cpp:436
-#: src/frontend/worksheet/WorksheetView.cpp:487
+#: src/frontend/datapicker/DatapickerImageView.cpp:216
+#: src/frontend/worksheet/WorksheetView.cpp:440
+#: src/frontend/worksheet/WorksheetView.cpp:491
 #, kde-format
 msgid "Mouse Mode"
 msgstr "Modo do Rato"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:222
+#: src/frontend/datapicker/DatapickerImageView.cpp:225
 #, kde-format
 msgid "Zoom View"
 msgstr "Ampliar a Área"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:230
+#: src/frontend/datapicker/DatapickerImageView.cpp:233
 #, kde-format
 msgid "Move Last Point"
 msgstr "Mover para o Último Ponto"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:236
-#: src/frontend/worksheet/WorksheetView.cpp:453
+#: src/frontend/datapicker/DatapickerImageView.cpp:239
+#: src/frontend/worksheet/WorksheetView.cpp:457
 #, kde-format
 msgid "Magnification"
 msgstr "Ampliação"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:531
+#: src/frontend/datapicker/DatapickerImageView.cpp:534
 #, kde-format
 msgid "%1, active curve \"%2\": %3=%4, %5=%6"
 msgstr "%1, curva activa \"%2\": %3=%4, %5=%6"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:620
+#: src/frontend/datapicker/DatapickerImageView.cpp:623
 #, kde-format
 msgid "Remove existing reference points?"
 msgstr "Deseja remover os pontos de referência existentes?"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:621
+#: src/frontend/datapicker/DatapickerImageView.cpp:624
 #, kde-format
 msgid ""
 "All available reference points will be removed. Do you want to continue?"
 msgstr ""
 "Todos os pontos de referência disponíveis serão removidos. Deseja continuar?"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:683
+#: src/frontend/datapicker/DatapickerImageView.cpp:684
 #, kde-format
 msgid "%1: change position of selected DatapickerPoints."
 msgstr "%1: mudar a posição dos DatapickerPoints seleccionados."
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:736
+#: src/frontend/datapicker/DatapickerImageView.cpp:737
 #, kde-format
 msgid "%1: add new curve."
 msgstr "%1: adicionar uma nova curva."
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:737
+#: src/frontend/datapicker/DatapickerImageView.cpp:738
 #, kde-format
 msgid "Curve"
 msgstr "Curva"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:870
+#: src/frontend/datapicker/DatapickerImageView.cpp:871
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4068
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4122
-#: src/frontend/worksheet/WorksheetView.cpp:2178
+#: src/frontend/worksheet/WorksheetView.cpp:2182
 #, kde-format
 msgid "Failed to export"
 msgstr "Não foi possível exportar"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:870
+#: src/frontend/datapicker/DatapickerImageView.cpp:871
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4068
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4122
-#: src/frontend/worksheet/WorksheetView.cpp:2178
+#: src/frontend/worksheet/WorksheetView.cpp:2182
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "Não foi possível gravar em '%1'. Verifique por favor a localização."
@@ -13216,25 +13216,25 @@ msgstr ""
 "desenho."
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:46
-#: src/frontend/worksheet/WorksheetView.cpp:236
+#: src/frontend/worksheet/WorksheetView.cpp:240
 #, kde-format
 msgid "No Layout"
 msgstr "Sem Disposição"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:47
-#: src/frontend/worksheet/WorksheetView.cpp:227
+#: src/frontend/worksheet/WorksheetView.cpp:231
 #, kde-format
 msgid "Vertical Layout"
 msgstr "Disposição Vertical"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:48
-#: src/frontend/worksheet/WorksheetView.cpp:230
+#: src/frontend/worksheet/WorksheetView.cpp:234
 #, kde-format
 msgid "Horizontal Layout"
 msgstr "Disposição Horizontal"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:49
-#: src/frontend/worksheet/WorksheetView.cpp:233
+#: src/frontend/worksheet/WorksheetView.cpp:237
 #, kde-format
 msgid "Grid Layout"
 msgstr "Disposição em Grelha"
@@ -14045,228 +14045,228 @@ msgctxt "@title:window"
 msgid "Properties: Workbook"
 msgstr "Propriedades: Livro de Trabalho"
 
-#: src/frontend/GuiTools.cpp:68 src/frontend/GuiTools.cpp:94
+#: src/frontend/GuiTools.cpp:70 src/frontend/GuiTools.cpp:96
 #, kde-format
 msgid "No Line"
 msgstr "Sem Linha"
 
-#: src/frontend/GuiTools.cpp:68 src/frontend/GuiTools.cpp:94
+#: src/frontend/GuiTools.cpp:70 src/frontend/GuiTools.cpp:96
 #, kde-format
 msgid "Solid Line"
 msgstr "linha Sólida"
 
-#: src/frontend/GuiTools.cpp:68 src/frontend/GuiTools.cpp:94
+#: src/frontend/GuiTools.cpp:70 src/frontend/GuiTools.cpp:96
 #, kde-format
 msgid "Dash Line"
 msgstr "Linha Tracejada"
 
-#: src/frontend/GuiTools.cpp:68 src/frontend/GuiTools.cpp:94
+#: src/frontend/GuiTools.cpp:70 src/frontend/GuiTools.cpp:96
 #, kde-format
 msgid "Dot Line"
 msgstr "Linha Pontilhada"
 
-#: src/frontend/GuiTools.cpp:68 src/frontend/GuiTools.cpp:94
+#: src/frontend/GuiTools.cpp:70 src/frontend/GuiTools.cpp:96
 #, kde-format
 msgid "Dash-dot Line"
 msgstr "Linha Traço-Ponto"
 
-#: src/frontend/GuiTools.cpp:68 src/frontend/GuiTools.cpp:94
+#: src/frontend/GuiTools.cpp:70 src/frontend/GuiTools.cpp:96
 #, kde-format
 msgid "Dash-dot-dot Line"
 msgstr "Linha Traço-Ponto-Ponto"
 
-#: src/frontend/GuiTools.cpp:153
+#: src/frontend/GuiTools.cpp:155
 #, kde-format
 msgid "Uniform"
 msgstr "Uniforme"
 
-#: src/frontend/GuiTools.cpp:154
+#: src/frontend/GuiTools.cpp:156
 #, kde-format
 msgid "Extremely Dense"
 msgstr "Extremamente Denso"
 
-#: src/frontend/GuiTools.cpp:155
+#: src/frontend/GuiTools.cpp:157
 #, kde-format
 msgid "Very Dense"
 msgstr "Muito Denso"
 
-#: src/frontend/GuiTools.cpp:156
+#: src/frontend/GuiTools.cpp:158
 #, kde-format
 msgid "Somewhat Dense"
 msgstr "Ligeiramente Denso"
 
-#: src/frontend/GuiTools.cpp:157
+#: src/frontend/GuiTools.cpp:159
 #, kde-format
 msgid "Half Dense"
 msgstr "Meio-Denso"
 
-#: src/frontend/GuiTools.cpp:158
+#: src/frontend/GuiTools.cpp:160
 #, kde-format
 msgid "Somewhat Sparse"
 msgstr "Ligeiramente esparso"
 
-#: src/frontend/GuiTools.cpp:159
+#: src/frontend/GuiTools.cpp:161
 #, kde-format
 msgid "Very Sparse"
 msgstr "Muito Esparso"
 
-#: src/frontend/GuiTools.cpp:160
+#: src/frontend/GuiTools.cpp:162
 #, kde-format
 msgid "Extremely Sparse"
 msgstr "Extremamente Esparso"
 
-#: src/frontend/GuiTools.cpp:161
+#: src/frontend/GuiTools.cpp:163
 #, kde-format
 msgid "Horiz. Lines"
 msgstr "Linhas Horizontais"
 
-#: src/frontend/GuiTools.cpp:162
+#: src/frontend/GuiTools.cpp:164
 #, kde-format
 msgid "Vert. Lines"
 msgstr "Linhas Verticais"
 
-#: src/frontend/GuiTools.cpp:163
+#: src/frontend/GuiTools.cpp:165
 #, kde-format
 msgid "Crossing Lines"
 msgstr "Linhas Cruzadas"
 
-#: src/frontend/GuiTools.cpp:164
+#: src/frontend/GuiTools.cpp:166
 #, kde-format
 msgid "Backward Diag. Lines"
 msgstr "Linhas Diagonais para Trás"
 
-#: src/frontend/GuiTools.cpp:165
+#: src/frontend/GuiTools.cpp:167
 #, kde-format
 msgid "Forward Diag. Lines"
 msgstr "Linhas Diagonais para a Frente"
 
-#: src/frontend/GuiTools.cpp:166
+#: src/frontend/GuiTools.cpp:168
 #, kde-format
 msgid "Crossing Diag. Lines"
 msgstr "Linhas Diagonais Cruzadas"
 
-#: src/frontend/GuiTools.cpp:184
+#: src/frontend/GuiTools.cpp:186
 #, kde-format
 msgid "White"
 msgstr "Branco"
 
-#: src/frontend/GuiTools.cpp:184
+#: src/frontend/GuiTools.cpp:186
 #, kde-format
 msgid "Black"
 msgstr "Preto"
 
-#: src/frontend/GuiTools.cpp:184
+#: src/frontend/GuiTools.cpp:186
 #, kde-format
 msgid "Dark Red"
 msgstr "Vermelho-Escuro"
 
-#: src/frontend/GuiTools.cpp:184
+#: src/frontend/GuiTools.cpp:186
 #, kde-format
 msgid "Light Red"
 msgstr "Vermelho Claro"
 
-#: src/frontend/GuiTools.cpp:184
+#: src/frontend/GuiTools.cpp:186
 #, kde-format
 msgid "Dark Green"
 msgstr "Verde Escuro"
 
-#: src/frontend/GuiTools.cpp:185
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Light Green"
 msgstr "Verde Claro"
 
-#: src/frontend/GuiTools.cpp:185
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Dark Blue"
 msgstr "Azul Escuro"
 
-#: src/frontend/GuiTools.cpp:185
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Light Blue"
 msgstr "Azul Claro"
 
-#: src/frontend/GuiTools.cpp:185
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Dark Yellow"
 msgstr "Amarelo Escuro"
 
-#: src/frontend/GuiTools.cpp:185
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Yellow"
 msgstr "Amarelo"
 
-#: src/frontend/GuiTools.cpp:185
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Light Yellow"
 msgstr "Amarelo Claro"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Dark Cyan"
 msgstr "Cíano Escuro"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Cyan"
 msgstr "Cíano"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Light Cyan"
 msgstr "Cíano Claro"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Dark Magenta"
 msgstr "Magenta Escuro"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Magenta"
 msgstr "Magenta"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Light Magenta"
 msgstr "Magenta Claro"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Dark Orange"
 msgstr "Laranja Escuro"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:189
 #, kde-format
 msgid "Orange"
 msgstr "Laranja"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:189
 #, kde-format
 msgid "Light Orange"
 msgstr "Laranja Claro"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:189
 #, kde-format
 msgid "Dark Grey"
 msgstr "Cinzento Escuro"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:189
 #, kde-format
 msgid "Grey"
 msgstr "Cinzento"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:189
 #, kde-format
 msgid "Light Grey"
 msgstr "Cinzento Claro"
 
-#: src/frontend/GuiTools.cpp:283
+#: src/frontend/GuiTools.cpp:308
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image File"
 msgstr "Abrir um Ficheiro de Imagem"
 
-#: src/frontend/GuiTools.cpp:283
+#: src/frontend/GuiTools.cpp:308
 #, kde-format
 msgid "Images (%1)"
 msgstr "Imagens (%1)"
@@ -14647,7 +14647,7 @@ msgstr "&Janelas"
 
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode)
 #: src/frontend/MainWin.cpp:198 src/frontend/ui/settingsworksheetpage.ui:75
-#: src/frontend/worksheet/WorksheetView.cpp:263
+#: src/frontend/worksheet/WorksheetView.cpp:267
 #, kde-format
 msgid "Presenter Mode"
 msgstr "Modo de Apresentação"
@@ -15086,7 +15086,7 @@ msgstr "%1 impresso"
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/frontend/MainWin.cpp:2428
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1431
-#: src/frontend/worksheet/WorksheetView.cpp:357
+#: src/frontend/worksheet/WorksheetView.cpp:361
 #, kde-format
 msgid "Cursor"
 msgstr "Cursor"
@@ -15211,7 +15211,7 @@ msgstr "&Limpar a Selecção"
 #: src/frontend/matrix/MatrixView.cpp:125
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:311
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:288
-#: src/frontend/worksheet/WorksheetView.cpp:130
+#: src/frontend/worksheet/WorksheetView.cpp:134
 #, kde-format
 msgid "Select All"
 msgstr "Seleccionar Tudo"
@@ -15351,7 +15351,7 @@ msgid "Header Format"
 msgstr "Formato do Cabeçalho"
 
 #: src/frontend/matrix/MatrixView.cpp:295
-#: src/frontend/worksheet/WorksheetView.cpp:442
+#: src/frontend/worksheet/WorksheetView.cpp:446
 #, kde-format
 msgid "Zoom"
 msgstr "Ampliação"
@@ -15568,7 +15568,7 @@ msgstr "Modelos da Área do Gráfico"
 #: src/frontend/SettingsWorksheetPage.cpp:73
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:99
 #: src/frontend/widgets/ThemesComboBox.cpp:72
-#: src/frontend/widgets/ThemesWidget.cpp:69
+#: src/frontend/widgets/ThemesWidget.cpp:71
 #, kde-format
 msgid "Default"
 msgstr "Predefinição"
@@ -15719,7 +15719,7 @@ msgid "Do you really want to delete %1?"
 msgstr "Deseja mesmo remover o '%1'?"
 
 #: src/frontend/ProjectExplorer.cpp:919
-#: src/frontend/worksheet/WorksheetView.cpp:1429
+#: src/frontend/worksheet/WorksheetView.cpp:1433
 #, kde-format
 msgid "Delete selected object"
 msgid_plural "Delete selected objects"
@@ -20252,7 +20252,7 @@ msgstr "Cor do Tipo de Letra:"
 #. i18n: ectx: property (text), widget (QLabel, lGrid)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1620
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:441
-#: src/frontend/worksheet/WorksheetView.cpp:469
+#: src/frontend/worksheet/WorksheetView.cpp:473
 #, kde-format
 msgid "Grid"
 msgstr "Grelha"
@@ -20687,7 +20687,7 @@ msgstr "Estender:"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:553
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:610
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:265
-#: src/frontend/worksheet/WorksheetView.cpp:461
+#: src/frontend/worksheet/WorksheetView.cpp:465
 #, kde-format
 msgid "Layout"
 msgstr "Disposição"
@@ -24475,29 +24475,29 @@ msgstr "Sair da Apresentação"
 msgid "Pin the navigation panel"
 msgstr ""
 
-#: src/frontend/worksheet/WorksheetView.cpp:163
+#: src/frontend/worksheet/WorksheetView.cpp:167
 #, fuzzy, kde-format
 #| msgid "No fit"
 msgctxt "Zoom"
 msgid "No fit"
 msgstr "Sem ajuste"
 
-#: src/frontend/worksheet/WorksheetView.cpp:173
+#: src/frontend/worksheet/WorksheetView.cpp:177
 #, fuzzy, kde-format
 #| msgid "Fit to Selection"
 msgctxt "Zoom"
 msgid "Fit to Selection"
 msgstr "Ajustar à Selecção"
 
-#: src/frontend/worksheet/WorksheetView.cpp:176
+#: src/frontend/worksheet/WorksheetView.cpp:180
 #, fuzzy, kde-format
 #| msgid "Fit"
 msgctxt "Zoom"
 msgid "Fit"
 msgstr "Ajustar"
 
-#: src/frontend/worksheet/WorksheetView.cpp:181
-#: src/frontend/worksheet/WorksheetView.cpp:332
+#: src/frontend/worksheet/WorksheetView.cpp:185
+#: src/frontend/worksheet/WorksheetView.cpp:336
 #, kde-format
 msgid "Select and Edit"
 msgstr "Seleccionar e Editar"
@@ -24505,73 +24505,73 @@ msgstr "Seleccionar e Editar"
 #. i18n("Selection"), mouseModeActionGroup);
 #. selectionModeAction->setCheckable(true);
 #. "Add new" related actions
-#: src/frontend/worksheet/WorksheetView.cpp:212
+#: src/frontend/worksheet/WorksheetView.cpp:216
 #, kde-format
 msgid "Four Axes"
 msgstr "Quatro Eixos"
 
-#: src/frontend/worksheet/WorksheetView.cpp:213
+#: src/frontend/worksheet/WorksheetView.cpp:217
 #, kde-format
 msgid "Two Axes"
 msgstr "Dois Eixos"
 
-#: src/frontend/worksheet/WorksheetView.cpp:214
+#: src/frontend/worksheet/WorksheetView.cpp:218
 #, kde-format
 msgid "Two Axes, Centered"
 msgstr "Dois Eixos, Centrado"
 
-#: src/frontend/worksheet/WorksheetView.cpp:216
+#: src/frontend/worksheet/WorksheetView.cpp:220
 #, kde-format
 msgid "Two Axes, Crossing at Origin"
 msgstr "Dois Eixos, Cruzado na Origem"
 
-#: src/frontend/worksheet/WorksheetView.cpp:217
+#: src/frontend/worksheet/WorksheetView.cpp:221
 #, kde-format
 msgid "Load from Template"
 msgstr "Carregar do Modelo"
 
-#: src/frontend/worksheet/WorksheetView.cpp:240
+#: src/frontend/worksheet/WorksheetView.cpp:244
 #, kde-format
 msgid "No Grid"
 msgstr "Sem Grelha"
 
-#: src/frontend/worksheet/WorksheetView.cpp:245
+#: src/frontend/worksheet/WorksheetView.cpp:249
 #, kde-format
 msgid "Dense Line Grid"
 msgstr "Grelha de Linhas Densas"
 
-#: src/frontend/worksheet/WorksheetView.cpp:248
+#: src/frontend/worksheet/WorksheetView.cpp:252
 #, kde-format
 msgid "Sparse Line Grid"
 msgstr "Grelha de Linhas Esparsas"
 
-#: src/frontend/worksheet/WorksheetView.cpp:251
+#: src/frontend/worksheet/WorksheetView.cpp:255
 #, kde-format
 msgid "Dense Dot Grid"
 msgstr "Grelha de Pontos Densos"
 
-#: src/frontend/worksheet/WorksheetView.cpp:254
+#: src/frontend/worksheet/WorksheetView.cpp:258
 #, kde-format
 msgid "Sparse Dot Grid"
 msgstr "Grelha de Pontos Esparsos"
 
-#: src/frontend/worksheet/WorksheetView.cpp:257
+#: src/frontend/worksheet/WorksheetView.cpp:261
 #, kde-format
 msgid "Custom Grid"
 msgstr "Grelha Personalizada"
 
-#: src/frontend/worksheet/WorksheetView.cpp:260
+#: src/frontend/worksheet/WorksheetView.cpp:264
 #, kde-format
 msgid "Snap to Grid"
 msgstr "Alinhar à Grelha"
 
-#: src/frontend/worksheet/WorksheetView.cpp:280
+#: src/frontend/worksheet/WorksheetView.cpp:284
 #, fuzzy, kde-format
 #| msgid "Non-interactive Plots"
 msgid "Interactive Plots"
 msgstr "Gráficos Não-Interactivos"
 
-#: src/frontend/worksheet/WorksheetView.cpp:281
+#: src/frontend/worksheet/WorksheetView.cpp:285
 #, fuzzy, kde-format
 #| msgid ""
 #| "If activated, plots on the worksheet don't react on drag and mouse wheel "
@@ -24583,136 +24583,136 @@ msgstr ""
 "Se estiver activada, os gráficos na área de trabalho não reagem aos eventos "
 "de arrastamento e da roda do rato."
 
-#: src/frontend/worksheet/WorksheetView.cpp:298
-#: src/frontend/worksheet/WorksheetView.cpp:312
+#: src/frontend/worksheet/WorksheetView.cpp:302
+#: src/frontend/worksheet/WorksheetView.cpp:316
 #, kde-format
 msgid "Selected Plot Areas"
 msgstr "Áreas dos Gráficos Seleccionadas"
 
-#: src/frontend/worksheet/WorksheetView.cpp:300
-#: src/frontend/worksheet/WorksheetView.cpp:314
+#: src/frontend/worksheet/WorksheetView.cpp:304
+#: src/frontend/worksheet/WorksheetView.cpp:318
 #, kde-format
 msgid "All Plot Areas"
 msgstr "Todas as Áreas dos Gráficos"
 
-#: src/frontend/worksheet/WorksheetView.cpp:302
+#: src/frontend/worksheet/WorksheetView.cpp:306
 #, kde-format
 msgid "All Plot Areas X"
 msgstr "Todas as Áreas dos Gráficos em X"
 
-#: src/frontend/worksheet/WorksheetView.cpp:304
+#: src/frontend/worksheet/WorksheetView.cpp:308
 #, kde-format
 msgid "All Plot Areas Y"
 msgstr "Todas as Áreas dos Gráficos em Y"
 
-#: src/frontend/worksheet/WorksheetView.cpp:337
+#: src/frontend/worksheet/WorksheetView.cpp:341
 #, kde-format
 msgid "Crosshair"
 msgstr "Mira"
 
-#: src/frontend/worksheet/WorksheetView.cpp:342
+#: src/frontend/worksheet/WorksheetView.cpp:346
 #, kde-format
 msgid "Select Region and Zoom In"
 msgstr "Seleccionar a Região e Ampliar"
 
-#: src/frontend/worksheet/WorksheetView.cpp:347
+#: src/frontend/worksheet/WorksheetView.cpp:351
 #, kde-format
 msgid "Select X-Region and Zoom In"
 msgstr "Seleccionar a Região em X e Ampliar"
 
-#: src/frontend/worksheet/WorksheetView.cpp:352
+#: src/frontend/worksheet/WorksheetView.cpp:356
 #, kde-format
 msgid "Select Y-Region and Zoom In"
 msgstr "Seleccionar a Região em Y e Ampliar"
 
-#: src/frontend/worksheet/WorksheetView.cpp:364
+#: src/frontend/worksheet/WorksheetView.cpp:368
 #, kde-format
 msgid "Auto Scale"
 msgstr "Escala Automática"
 
-#: src/frontend/worksheet/WorksheetView.cpp:368
+#: src/frontend/worksheet/WorksheetView.cpp:372
 #, kde-format
 msgid "Auto Scale X"
 msgstr "Escala Automática em X"
 
-#: src/frontend/worksheet/WorksheetView.cpp:372
+#: src/frontend/worksheet/WorksheetView.cpp:376
 #, kde-format
 msgid "Auto Scale Y"
 msgstr "Escala Automática em Y"
 
-#: src/frontend/worksheet/WorksheetView.cpp:384
+#: src/frontend/worksheet/WorksheetView.cpp:388
 #, kde-format
 msgid "Zoom In X"
 msgstr "Ampliação em X"
 
-#: src/frontend/worksheet/WorksheetView.cpp:388
+#: src/frontend/worksheet/WorksheetView.cpp:392
 #, kde-format
 msgid "Zoom Out X"
 msgstr "Redução em X"
 
-#: src/frontend/worksheet/WorksheetView.cpp:392
+#: src/frontend/worksheet/WorksheetView.cpp:396
 #, kde-format
 msgid "Zoom In Y"
 msgstr "Ampliação em Y"
 
-#: src/frontend/worksheet/WorksheetView.cpp:396
+#: src/frontend/worksheet/WorksheetView.cpp:400
 #, kde-format
 msgid "Zoom Out Y"
 msgstr "Redução em Y"
 
-#: src/frontend/worksheet/WorksheetView.cpp:400
+#: src/frontend/worksheet/WorksheetView.cpp:404
 #, kde-format
 msgid "Shift Left X"
 msgstr "Desvio à Esquerda em X"
 
-#: src/frontend/worksheet/WorksheetView.cpp:402
+#: src/frontend/worksheet/WorksheetView.cpp:406
 #, kde-format
 msgid "Shift Right X"
 msgstr "Desvio à Direita em X"
 
-#: src/frontend/worksheet/WorksheetView.cpp:404
+#: src/frontend/worksheet/WorksheetView.cpp:408
 #, kde-format
 msgid "Shift Up Y"
 msgstr "Desvio para Cima em Y"
 
-#: src/frontend/worksheet/WorksheetView.cpp:406
+#: src/frontend/worksheet/WorksheetView.cpp:410
 #, kde-format
 msgid "Shift Down Y"
 msgstr "Desvio para Baixo em Y"
 
-#: src/frontend/worksheet/WorksheetView.cpp:420
-#: src/frontend/worksheet/WorksheetView.cpp:484
-#: src/frontend/worksheet/WorksheetView.cpp:1290
-#: src/frontend/worksheet/WorksheetView.cpp:1297
-#: src/frontend/worksheet/WorksheetView.cpp:1304
-#: src/frontend/worksheet/WorksheetView.cpp:1311
+#: src/frontend/worksheet/WorksheetView.cpp:424
+#: src/frontend/worksheet/WorksheetView.cpp:488
+#: src/frontend/worksheet/WorksheetView.cpp:1294
+#: src/frontend/worksheet/WorksheetView.cpp:1301
+#: src/frontend/worksheet/WorksheetView.cpp:1308
+#: src/frontend/worksheet/WorksheetView.cpp:1315
 #, kde-format
 msgid "Plot Area"
 msgstr "Área do Gráfico"
 
-#: src/frontend/worksheet/WorksheetView.cpp:497
+#: src/frontend/worksheet/WorksheetView.cpp:501
 #, kde-format
 msgid "Zoom/Navigate"
 msgstr "Ampliar/Navegar"
 
-#: src/frontend/worksheet/WorksheetView.cpp:518
+#: src/frontend/worksheet/WorksheetView.cpp:522
 #, kde-format
 msgid "Apply Actions to"
 msgstr "Aplicar as Acções a"
 
-#: src/frontend/worksheet/WorksheetView.cpp:525
+#: src/frontend/worksheet/WorksheetView.cpp:529
 #, kde-format
 msgid "Apply Cursor to"
 msgstr "Aplicar o Cursor a"
 
-#: src/frontend/worksheet/WorksheetView.cpp:1428
+#: src/frontend/worksheet/WorksheetView.cpp:1432
 #, kde-format
 msgid "Do you really want to delete the selected object?"
 msgid_plural "Do you really want to delete the selected %1 objects?"
 msgstr[0] "Deseja realmente apagar o objecto seleccionado?"
 msgstr[1] "Deseja realmente apagar os %1 objectos seleccionados?"
 
-#: src/frontend/worksheet/WorksheetView.cpp:1436
+#: src/frontend/worksheet/WorksheetView.cpp:1440
 #, kde-format
 msgid "%1: Remove selected worksheet elements."
 msgstr "%1: Remover os elementos seleccionados da folha de trabalho."

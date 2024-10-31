@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-30 01:46+0000\n"
-"PO-Revision-Date: 2024-10-19 09:19+0300\n"
+"POT-Creation-Date: 2024-10-31 01:48+0000\n"
+"PO-Revision-Date: 2024-10-30 13:25+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -66,7 +66,7 @@ msgstr "Перейменувати"
 #: src/backend/spreadsheet/Spreadsheet.cpp:652
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:487
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:273
-#: src/frontend/worksheet/WorksheetView.cpp:134
+#: src/frontend/worksheet/WorksheetView.cpp:138
 #, kde-format
 msgid "Delete"
 msgstr "Вилучити"
@@ -183,7 +183,7 @@ msgstr "Дні"
 #: src/backend/nsl/nsl_smooth.c:22 src/frontend/dockwidgets/AxisDock.cpp:272
 #: src/frontend/dockwidgets/AxisDock.cpp:285
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:55
-#: src/frontend/dockwidgets/XYCurveDock.cpp:195 src/frontend/GuiTools.cpp:152
+#: src/frontend/dockwidgets/XYCurveDock.cpp:195 src/frontend/GuiTools.cpp:154
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
 #: src/frontend/widgets/BackgroundWidget.cpp:114
 #: src/frontend/widgets/LineWidget.cpp:48
@@ -279,7 +279,7 @@ msgstr "Велике ціле число"
 #: src/frontend/ui/dockwidgets/valuewidget.ui:269
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:280
 #: src/frontend/widgets/LabelWidget.cpp:208
-#: src/frontend/worksheet/WorksheetView.cpp:218
+#: src/frontend/worksheet/WorksheetView.cpp:222
 #, kde-format
 msgid "Text"
 msgstr "Текст"
@@ -911,7 +911,7 @@ msgid "%1: set error bar outline style"
 msgstr "%1: встановити стиль контурів позначок похибки"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:392
-#: src/backend/datapicker/DatapickerImage.cpp:415
+#: src/backend/datapicker/DatapickerImage.cpp:417
 #: src/backend/worksheet/InfoElement.cpp:871
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:193
@@ -925,7 +925,7 @@ msgid "%1: set visible"
 msgstr "%1: зробити видимим"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:392
-#: src/backend/datapicker/DatapickerImage.cpp:415
+#: src/backend/datapicker/DatapickerImage.cpp:417
 #: src/backend/worksheet/InfoElement.cpp:871
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:193
@@ -939,50 +939,50 @@ msgstr "%1: зробити видимим"
 msgid "%1: set invisible"
 msgstr "%1: зробити невидимим"
 
-#: src/backend/datapicker/DatapickerImage.cpp:180
+#: src/backend/datapicker/DatapickerImage.cpp:182
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Datapicker Image"
 msgstr "Друк зображення для вибору даних"
 
-#: src/backend/datapicker/DatapickerImage.cpp:312
-#: src/backend/datapicker/DatapickerImage.cpp:367
+#: src/backend/datapicker/DatapickerImage.cpp:314
+#: src/backend/datapicker/DatapickerImage.cpp:369
 #, kde-format
 msgid "%1: upload image"
 msgstr "%1: вивантажити зображення"
 
-#: src/backend/datapicker/DatapickerImage.cpp:366
+#: src/backend/datapicker/DatapickerImage.cpp:368
 #, kde-format
 msgid "%1: upload new image"
 msgstr "%1: вивантажити нове зображення"
 
-#: src/backend/datapicker/DatapickerImage.cpp:386
+#: src/backend/datapicker/DatapickerImage.cpp:388
 #: src/backend/worksheet/WorksheetElement.cpp:836
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr "%1: встановити кут обертання"
 
-#: src/backend/datapicker/DatapickerImage.cpp:393
+#: src/backend/datapicker/DatapickerImage.cpp:395
 #, kde-format
 msgid "%1: set Axis points"
 msgstr "%1: встановити точки вісі"
 
-#: src/backend/datapicker/DatapickerImage.cpp:400
+#: src/backend/datapicker/DatapickerImage.cpp:402
 #, kde-format
 msgid "%1: set editor settings"
 msgstr "%1: встановити параметри редактора"
 
-#: src/backend/datapicker/DatapickerImage.cpp:407
+#: src/backend/datapicker/DatapickerImage.cpp:409
 #, kde-format
 msgid "%1: set minimum segment length"
 msgstr "%1: встановити мінімальну довжину сегмента"
 
-#: src/backend/datapicker/DatapickerImage.cpp:435
+#: src/backend/datapicker/DatapickerImage.cpp:437
 #, kde-format
 msgid "%1: remove all axis points"
 msgstr "%1: вилучити усі точки вісі"
 
-#: src/backend/datapicker/DatapickerImage.cpp:683
+#: src/backend/datapicker/DatapickerImage.cpp:686
 #: src/backend/worksheet/Image.cpp:413
 #, kde-format
 msgid "Failed to read image data"
@@ -2424,10 +2424,9 @@ msgid "%1: Import from %2"
 msgstr "%1: імпорт з %2"
 
 #: src/backend/gsl/constants.cpp:13
-#, fuzzy, kde-format
-#| msgid "Planck constant"
+#, kde-format
 msgid "Programming constants"
-msgstr "Стала Планка"
+msgstr "Сталі програмування"
 
 #: src/backend/gsl/constants.cpp:15
 #, kde-format
@@ -2517,7 +2516,7 @@ msgstr "Невідома стала"
 #: src/backend/gsl/constants.cpp:61
 #, kde-format
 msgid "RAND_MAX"
-msgstr ""
+msgstr "RAND_MAX"
 
 #. i18n("Mathematical constants"));
 #: src/backend/gsl/constants.cpp:64
@@ -3575,10 +3574,9 @@ msgid "Random sample"
 msgstr "Випадкова вибірка"
 
 #: src/backend/gsl/functions.cpp:248
-#, fuzzy, kde-format
-#| msgid "Number of seconds in 1 hour"
+#, kde-format
 msgid "Number of elements in vector x"
-msgstr "Кількість секунд у одній годині"
+msgstr "Кількість компонентів у векторі x"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMinimum)
@@ -7529,7 +7527,7 @@ msgid "%1: set connectionline curve name"
 msgstr "%1: встановити назву кривої лінії з'єднання"
 
 #: src/backend/worksheet/Line.cpp:100
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:438
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:439
 #, kde-format
 msgid "%1: line type changed"
 msgstr "%1: змінено тип лінії"
@@ -8044,28 +8042,28 @@ msgstr "%1: змінено тремтіння"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:579
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:522
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:571
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:572
 #, kde-format
 msgid "%1: change rug enabled"
 msgstr "%1: змінити стан вмикання килимка"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:586
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:529
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:585
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:586
 #, kde-format
 msgid "%1: change rug width"
 msgstr "%1: змінити ширину килимка"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:593
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:536
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:592
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:593
 #, kde-format
 msgid "%1: change rug length"
 msgstr "%1: змінити довжину килимка"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:600
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:543
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:599
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:600
 #, kde-format
 msgid "%1: change rug offset"
 msgstr "%1: змінити зсув килимка"
@@ -8290,8 +8288,8 @@ msgstr "Вертикальної вісі"
 #: src/frontend/matrix/MatrixView.cpp:133
 #: src/frontend/notebook/NotebookView.cpp:109
 #: src/frontend/widgets/BackgroundWidget.cpp:123
-#: src/frontend/worksheet/WorksheetView.cpp:219
-#: src/frontend/worksheet/WorksheetView.cpp:1338
+#: src/frontend/worksheet/WorksheetView.cpp:223
+#: src/frontend/worksheet/WorksheetView.cpp:1342
 #, kde-format
 msgid "Image"
 msgstr "Зображення"
@@ -8397,8 +8395,8 @@ msgstr "функція помилки"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:634
 #: src/frontend/MainWin.cpp:866 src/frontend/notebook/NotebookView.cpp:167
 #: src/frontend/workbook/WorkbookView.cpp:135
-#: src/frontend/worksheet/WorksheetView.cpp:289
-#: src/frontend/worksheet/WorksheetView.cpp:428
+#: src/frontend/worksheet/WorksheetView.cpp:293
+#: src/frontend/worksheet/WorksheetView.cpp:432
 #, kde-format
 msgid "Add New"
 msgstr "Додати"
@@ -8438,7 +8436,7 @@ msgstr "Аналіз"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:747
 #: src/frontend/ThemeHandler.cpp:49 src/frontend/ThemeHandler.cpp:144
-#: src/frontend/worksheet/WorksheetView.cpp:539
+#: src/frontend/worksheet/WorksheetView.cpp:543
 #, kde-format
 msgid "Theme"
 msgstr "Тема"
@@ -8672,8 +8670,8 @@ msgid "%1: add function curve"
 msgstr "%1: додати криву функції"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2053
-#: src/frontend/worksheet/WorksheetView.cpp:1334
-#: src/frontend/worksheet/WorksheetView.cpp:1335
+#: src/frontend/worksheet/WorksheetView.cpp:1338
+#: src/frontend/worksheet/WorksheetView.cpp:1339
 #, kde-format
 msgid "Text Label"
 msgstr "Текстова мітка"
@@ -9319,79 +9317,79 @@ msgid "club"
 msgstr "палиця"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:114
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:467
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:468
 #, kde-format
 msgid "%1: set values type"
 msgstr "%1: встановити тип значень"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:125
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:474
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:475
 #, kde-format
 msgid "%1: set values column"
 msgstr "%1: встановити стовпчик значень"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:137
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:493
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:494
 #, kde-format
 msgid "%1: set values position"
 msgstr "%1: встановити розташування значень"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:144
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:500
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:501
 #, kde-format
 msgid "%1: set values distance"
 msgstr "%1: встановлення значення відстані"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:151
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:507
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:508
 #, kde-format
 msgid "%1: rotate values"
 msgstr "%1: значення обертань"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:158
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:514
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:515
 #, kde-format
 msgid "%1: set values opacity"
 msgstr "%1: встановлення значення непрозорості"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:165
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:521
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:522
 #, kde-format
 msgid "%1: set values numeric format"
 msgstr "%1: встановлення числового формату значень"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:172
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:528
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:529
 #, kde-format
 msgid "%1: set values precision"
 msgstr "%1: встановлення точності значень"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:179
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:535
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:536
 #, kde-format
 msgid "%1: set values datetime format"
 msgstr "%1: встановити формат дати і часу значень"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:186
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:542
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:543
 #, kde-format
 msgid "%1: set values prefix"
 msgstr "%1: встановлення значення префікса"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:193
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:549
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:550
 #, kde-format
 msgid "%1: set values suffix"
 msgstr "%1: встановлення значення суфікса"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:200
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:556
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:557
 #, kde-format
 msgid "%1: set values font"
 msgstr "%1: встановлення значення шрифту"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:207
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:563
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:564
 #, kde-format
 msgid "%1: set values color"
 msgstr "%1: встановлення значення кольору"
@@ -9442,57 +9440,57 @@ msgstr "Недостатньо точок даних."
 msgid "%1: set options and perform the correlation"
 msgstr "%1: встановити параметри і виконати кореляцію"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:213
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:214
 #, kde-format
 msgid "Navigate to \"%1\""
 msgstr "Перейти до «%1»"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:413
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:414
 #, kde-format
 msgid "%1: x-data source changed"
 msgstr "%1: змінено джерело даних x"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:420
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:421
 #, kde-format
 msgid "%1: y-data source changed"
 msgstr "%1: змінено джерело даних y"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:445
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:446
 #, kde-format
 msgid "%1: set skip line gaps"
 msgstr "%1: встановити пропуск прогалин у лінії"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:452
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:453
 #, kde-format
 msgid "%1: set increasing X"
 msgstr "%1: встановити зростання X"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:459
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:460
 #, kde-format
 msgid "%1: set the number of interpolation points"
 msgstr "%1: встановлення кількості точок інтерполяції"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:578
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:579
 #, kde-format
 msgid "%1: set rug orientation"
 msgstr "%1: встановити орієнтацію килимка"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1418
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1419
 #, kde-format
 msgid "Error: Akima spline interpolation requires a minimum of 5 points."
 msgstr "Помилка: для сплайнового наближення Акіми потрібно принаймні 5 точок."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1420
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1421
 #, kde-format
 msgid "Error: Could not initialize the spline function."
 msgstr "Помилка: не вдалося ініціалізувати сплайнову функцію."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1433
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1434
 #, kde-format
 msgid "x values must be monotonically increasing."
 msgstr "Значення x мають бути монотонно зростаючими."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1436
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1437
 #, kde-format
 msgid "Error: %1"
 msgstr "Помилка: %1"
@@ -9999,17 +9997,17 @@ msgstr "Вкажіть ключове слово, за яким слід вик�
 msgid "Search..."
 msgstr "Шукати…"
 
-#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:184
+#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:186
 #, kde-format
 msgid "Red"
 msgstr "червоний"
 
-#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:184
+#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:186
 #, kde-format
 msgid "Green"
 msgstr "зелений"
 
-#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:185
+#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Blue"
 msgstr "синій"
@@ -10057,193 +10055,193 @@ msgstr "Копіювати позначене"
 msgid "Copy All"
 msgstr "Копіювати все"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:120
+#: src/frontend/datapicker/DatapickerImageView.cpp:123
 #: src/frontend/matrix/MatrixView.cpp:192
 #: src/frontend/notebook/NotebookView.cpp:53
-#: src/frontend/worksheet/WorksheetView.cpp:143
-#: src/frontend/worksheet/WorksheetView.cpp:376
+#: src/frontend/worksheet/WorksheetView.cpp:147
+#: src/frontend/worksheet/WorksheetView.cpp:380
 #, kde-format
 msgid "Zoom In"
 msgstr "збільшити"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:123
+#: src/frontend/datapicker/DatapickerImageView.cpp:126
 #: src/frontend/matrix/MatrixView.cpp:193
 #: src/frontend/notebook/NotebookView.cpp:57
-#: src/frontend/worksheet/WorksheetView.cpp:144
-#: src/frontend/worksheet/WorksheetView.cpp:380
+#: src/frontend/worksheet/WorksheetView.cpp:148
+#: src/frontend/worksheet/WorksheetView.cpp:384
 #, kde-format
 msgid "Zoom Out"
 msgstr "зменшити"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:126
+#: src/frontend/datapicker/DatapickerImageView.cpp:129
 #: src/frontend/matrix/MatrixView.cpp:194
-#: src/frontend/worksheet/WorksheetView.cpp:145
+#: src/frontend/worksheet/WorksheetView.cpp:149
 #, kde-format
 msgid "Original Size"
 msgstr "Початковий розмір"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:129
-#: src/frontend/worksheet/WorksheetView.cpp:167
+#: src/frontend/datapicker/DatapickerImageView.cpp:132
+#: src/frontend/worksheet/WorksheetView.cpp:171
 #, kde-format
 msgctxt "Zoom"
 msgid "Fit to Height"
 msgstr "За висотою"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:130
-#: src/frontend/worksheet/WorksheetView.cpp:170
+#: src/frontend/datapicker/DatapickerImageView.cpp:133
+#: src/frontend/worksheet/WorksheetView.cpp:174
 #, kde-format
 msgctxt "Zoom"
 msgid "Fit to Width"
 msgstr "За шириною"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:133
-#: src/frontend/worksheet/WorksheetView.cpp:184
+#: src/frontend/datapicker/DatapickerImageView.cpp:136
+#: src/frontend/worksheet/WorksheetView.cpp:188
 #, kde-format
 msgid "Navigate"
 msgstr "Навігація"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:137
-#: src/frontend/worksheet/WorksheetView.cpp:187
+#: src/frontend/datapicker/DatapickerImageView.cpp:140
+#: src/frontend/worksheet/WorksheetView.cpp:191
 #, kde-format
 msgid "Select and Zoom"
 msgstr "Позначити і масштабувати"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:141
+#: src/frontend/datapicker/DatapickerImageView.cpp:144
 #, kde-format
 msgid "Set Axis Points"
 msgstr "Встановити точки осі"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:145
+#: src/frontend/datapicker/DatapickerImageView.cpp:148
 #, kde-format
 msgid "Set Curve Points"
 msgstr "Встановити точки кривої"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:149
+#: src/frontend/datapicker/DatapickerImageView.cpp:152
 #, kde-format
 msgid "Select Curve Segments"
 msgstr "Позначити сегменти кривої"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:153
+#: src/frontend/datapicker/DatapickerImageView.cpp:156
 #, kde-format
 msgid "New Curve"
 msgstr "Нова крива"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:155
+#: src/frontend/datapicker/DatapickerImageView.cpp:158
 #, kde-format
 msgid "Shift Left"
 msgstr "Зсунути ліворуч"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:158
+#: src/frontend/datapicker/DatapickerImageView.cpp:161
 #, kde-format
 msgid "Shift Right"
 msgstr "Зсунути праворуч"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:161
+#: src/frontend/datapicker/DatapickerImageView.cpp:164
 #, kde-format
 msgid "Shift Up"
 msgstr "Зсунути вгору"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:164
+#: src/frontend/datapicker/DatapickerImageView.cpp:167
 #, kde-format
 msgid "Shift Down"
 msgstr "Зсунути вниз"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:167
-#: src/frontend/worksheet/WorksheetView.cpp:191
+#: src/frontend/datapicker/DatapickerImageView.cpp:170
+#: src/frontend/worksheet/WorksheetView.cpp:195
 #, kde-format
 msgid "No Magnification"
 msgstr "Без збільшення"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:171
-#: src/frontend/worksheet/WorksheetView.cpp:195
+#: src/frontend/datapicker/DatapickerImageView.cpp:174
+#: src/frontend/worksheet/WorksheetView.cpp:199
 #, kde-format
 msgid "2x Magnification"
 msgstr "Збільшення у 2 рази"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:174
-#: src/frontend/worksheet/WorksheetView.cpp:198
+#: src/frontend/datapicker/DatapickerImageView.cpp:177
+#: src/frontend/worksheet/WorksheetView.cpp:202
 #, kde-format
 msgid "3x Magnification"
 msgstr "Збільшення у 3 рази"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:177
-#: src/frontend/worksheet/WorksheetView.cpp:201
+#: src/frontend/datapicker/DatapickerImageView.cpp:180
+#: src/frontend/worksheet/WorksheetView.cpp:205
 #, kde-format
 msgid "4x Magnification"
 msgstr "Збільшення у 4 рази"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:180
-#: src/frontend/worksheet/WorksheetView.cpp:204
+#: src/frontend/datapicker/DatapickerImageView.cpp:183
+#: src/frontend/worksheet/WorksheetView.cpp:208
 #, kde-format
 msgid "5x Magnification"
 msgstr "Збільшення у 5 разів"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:213
-#: src/frontend/worksheet/WorksheetView.cpp:436
-#: src/frontend/worksheet/WorksheetView.cpp:487
+#: src/frontend/datapicker/DatapickerImageView.cpp:216
+#: src/frontend/worksheet/WorksheetView.cpp:440
+#: src/frontend/worksheet/WorksheetView.cpp:491
 #, kde-format
 msgid "Mouse Mode"
 msgstr "Режим миші"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:222
+#: src/frontend/datapicker/DatapickerImageView.cpp:225
 #, kde-format
 msgid "Zoom View"
 msgstr "Масштабувати область перегляду"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:230
+#: src/frontend/datapicker/DatapickerImageView.cpp:233
 #, kde-format
 msgid "Move Last Point"
 msgstr "Пересунути останню точку"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:236
-#: src/frontend/worksheet/WorksheetView.cpp:453
+#: src/frontend/datapicker/DatapickerImageView.cpp:239
+#: src/frontend/worksheet/WorksheetView.cpp:457
 #, kde-format
 msgid "Magnification"
 msgstr "Збільшення"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:531
+#: src/frontend/datapicker/DatapickerImageView.cpp:534
 #, kde-format
 msgid "%1, active curve \"%2\": %3=%4, %5=%6"
 msgstr "%1, активна крива «%2»: %3=%4, %5=%6"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:620
+#: src/frontend/datapicker/DatapickerImageView.cpp:623
 #, kde-format
 msgid "Remove existing reference points?"
 msgstr "Вилучити наявні еталонні точки?"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:621
+#: src/frontend/datapicker/DatapickerImageView.cpp:624
 #, kde-format
 msgid ""
 "All available reference points will be removed. Do you want to continue?"
 msgstr "Буде вилучено усі доступні еталонні точки. Виконати цю дію?"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:683
+#: src/frontend/datapicker/DatapickerImageView.cpp:684
 #, kde-format
 msgid "%1: change position of selected DatapickerPoints."
 msgstr "%1: змінити розташування позначених точок вибору даних."
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:736
+#: src/frontend/datapicker/DatapickerImageView.cpp:737
 #, kde-format
 msgid "%1: add new curve."
 msgstr "%1: додати нову криву."
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:737
+#: src/frontend/datapicker/DatapickerImageView.cpp:738
 #, kde-format
 msgid "Curve"
 msgstr "Крива"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:870
+#: src/frontend/datapicker/DatapickerImageView.cpp:871
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4068
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4122
-#: src/frontend/worksheet/WorksheetView.cpp:2178
+#: src/frontend/worksheet/WorksheetView.cpp:2182
 #, kde-format
 msgid "Failed to export"
 msgstr "Не вдалося експортувати"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:870
+#: src/frontend/datapicker/DatapickerImageView.cpp:871
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4068
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4122
-#: src/frontend/worksheet/WorksheetView.cpp:2178
+#: src/frontend/worksheet/WorksheetView.cpp:2182
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "Не вдалося виконати запис до «%1». Будь ласка, перевірте шлях."
@@ -12968,25 +12966,25 @@ msgstr ""
 "зміни розмірів. Якщо пункт не буде позначено, змінювати лише розміри полотна."
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:46
-#: src/frontend/worksheet/WorksheetView.cpp:236
+#: src/frontend/worksheet/WorksheetView.cpp:240
 #, kde-format
 msgid "No Layout"
 msgstr "Немає компонування"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:47
-#: src/frontend/worksheet/WorksheetView.cpp:227
+#: src/frontend/worksheet/WorksheetView.cpp:231
 #, kde-format
 msgid "Vertical Layout"
 msgstr "Вертикальне компонування"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:48
-#: src/frontend/worksheet/WorksheetView.cpp:230
+#: src/frontend/worksheet/WorksheetView.cpp:234
 #, kde-format
 msgid "Horizontal Layout"
 msgstr "Горизонтальне компонування"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:49
-#: src/frontend/worksheet/WorksheetView.cpp:233
+#: src/frontend/worksheet/WorksheetView.cpp:237
 #, kde-format
 msgid "Grid Layout"
 msgstr "Компонування сітки"
@@ -13783,228 +13781,228 @@ msgctxt "@title:window"
 msgid "Properties: Workbook"
 msgstr "Властивості: Робоча книга"
 
-#: src/frontend/GuiTools.cpp:68 src/frontend/GuiTools.cpp:94
+#: src/frontend/GuiTools.cpp:70 src/frontend/GuiTools.cpp:96
 #, kde-format
 msgid "No Line"
 msgstr "без лінії"
 
-#: src/frontend/GuiTools.cpp:68 src/frontend/GuiTools.cpp:94
+#: src/frontend/GuiTools.cpp:70 src/frontend/GuiTools.cpp:96
 #, kde-format
 msgid "Solid Line"
 msgstr "суцільна лінія"
 
-#: src/frontend/GuiTools.cpp:68 src/frontend/GuiTools.cpp:94
+#: src/frontend/GuiTools.cpp:70 src/frontend/GuiTools.cpp:96
 #, kde-format
 msgid "Dash Line"
 msgstr "штрихова лінія"
 
-#: src/frontend/GuiTools.cpp:68 src/frontend/GuiTools.cpp:94
+#: src/frontend/GuiTools.cpp:70 src/frontend/GuiTools.cpp:96
 #, kde-format
 msgid "Dot Line"
 msgstr "пунктир"
 
-#: src/frontend/GuiTools.cpp:68 src/frontend/GuiTools.cpp:94
+#: src/frontend/GuiTools.cpp:70 src/frontend/GuiTools.cpp:96
 #, kde-format
 msgid "Dash-dot Line"
 msgstr "штрих-пунктир"
 
-#: src/frontend/GuiTools.cpp:68 src/frontend/GuiTools.cpp:94
+#: src/frontend/GuiTools.cpp:70 src/frontend/GuiTools.cpp:96
 #, kde-format
 msgid "Dash-dot-dot Line"
 msgstr "штрих-подвійний пунктир"
 
-#: src/frontend/GuiTools.cpp:153
+#: src/frontend/GuiTools.cpp:155
 #, kde-format
 msgid "Uniform"
 msgstr "рівномірно"
 
-#: src/frontend/GuiTools.cpp:154
+#: src/frontend/GuiTools.cpp:156
 #, kde-format
 msgid "Extremely Dense"
 msgstr "надзвичайно щільно"
 
-#: src/frontend/GuiTools.cpp:155
+#: src/frontend/GuiTools.cpp:157
 #, kde-format
 msgid "Very Dense"
 msgstr "дуже щільно"
 
-#: src/frontend/GuiTools.cpp:156
+#: src/frontend/GuiTools.cpp:158
 #, kde-format
 msgid "Somewhat Dense"
 msgstr "щільнувато"
 
-#: src/frontend/GuiTools.cpp:157
+#: src/frontend/GuiTools.cpp:159
 #, kde-format
 msgid "Half Dense"
 msgstr "напівщільно"
 
-#: src/frontend/GuiTools.cpp:158
+#: src/frontend/GuiTools.cpp:160
 #, kde-format
 msgid "Somewhat Sparse"
 msgstr "дещо щільно"
 
-#: src/frontend/GuiTools.cpp:159
+#: src/frontend/GuiTools.cpp:161
 #, kde-format
 msgid "Very Sparse"
 msgstr "дуже розріджено"
 
-#: src/frontend/GuiTools.cpp:160
+#: src/frontend/GuiTools.cpp:162
 #, kde-format
 msgid "Extremely Sparse"
 msgstr "надзвичайно розріджено"
 
-#: src/frontend/GuiTools.cpp:161
+#: src/frontend/GuiTools.cpp:163
 #, kde-format
 msgid "Horiz. Lines"
 msgstr "гор. лінії"
 
-#: src/frontend/GuiTools.cpp:162
+#: src/frontend/GuiTools.cpp:164
 #, kde-format
 msgid "Vert. Lines"
 msgstr "верт. лінії"
 
-#: src/frontend/GuiTools.cpp:163
+#: src/frontend/GuiTools.cpp:165
 #, kde-format
 msgid "Crossing Lines"
 msgstr "перехресні лінії"
 
-#: src/frontend/GuiTools.cpp:164
+#: src/frontend/GuiTools.cpp:166
 #, kde-format
 msgid "Backward Diag. Lines"
 msgstr "зворотні діаг. лінії"
 
-#: src/frontend/GuiTools.cpp:165
+#: src/frontend/GuiTools.cpp:167
 #, kde-format
 msgid "Forward Diag. Lines"
 msgstr "прямі діаг. лінії"
 
-#: src/frontend/GuiTools.cpp:166
+#: src/frontend/GuiTools.cpp:168
 #, kde-format
 msgid "Crossing Diag. Lines"
 msgstr "перехресні діаг. лінії"
 
-#: src/frontend/GuiTools.cpp:184
+#: src/frontend/GuiTools.cpp:186
 #, kde-format
 msgid "White"
 msgstr "білий"
 
-#: src/frontend/GuiTools.cpp:184
+#: src/frontend/GuiTools.cpp:186
 #, kde-format
 msgid "Black"
 msgstr "чорний"
 
-#: src/frontend/GuiTools.cpp:184
+#: src/frontend/GuiTools.cpp:186
 #, kde-format
 msgid "Dark Red"
 msgstr "темно-червоний"
 
-#: src/frontend/GuiTools.cpp:184
+#: src/frontend/GuiTools.cpp:186
 #, kde-format
 msgid "Light Red"
 msgstr "світло-червоний"
 
-#: src/frontend/GuiTools.cpp:184
+#: src/frontend/GuiTools.cpp:186
 #, kde-format
 msgid "Dark Green"
 msgstr "темно-зелений"
 
-#: src/frontend/GuiTools.cpp:185
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Light Green"
 msgstr "світло-зелений"
 
-#: src/frontend/GuiTools.cpp:185
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Dark Blue"
 msgstr "Темно-синій"
 
-#: src/frontend/GuiTools.cpp:185
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Light Blue"
 msgstr "світло-синій"
 
-#: src/frontend/GuiTools.cpp:185
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Dark Yellow"
 msgstr "темно-жовтий"
 
-#: src/frontend/GuiTools.cpp:185
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Yellow"
 msgstr "жовтий"
 
-#: src/frontend/GuiTools.cpp:185
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Light Yellow"
 msgstr "світло-жовтий"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Dark Cyan"
 msgstr "Темно-бірюзовий"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Cyan"
 msgstr "блакитний"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Light Cyan"
 msgstr "світло-бірюзовий"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Dark Magenta"
 msgstr "темно-бузковий"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Magenta"
 msgstr "бузковий"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Light Magenta"
 msgstr "світло-бузковий"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Dark Orange"
 msgstr "темно-жовтогарячий"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:189
 #, kde-format
 msgid "Orange"
 msgstr "жовтогарячий"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:189
 #, kde-format
 msgid "Light Orange"
 msgstr "світло-жовтогарячий"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:189
 #, kde-format
 msgid "Dark Grey"
 msgstr "темно-сірий"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:189
 #, kde-format
 msgid "Grey"
 msgstr "сірий"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:189
 #, kde-format
 msgid "Light Grey"
 msgstr "світло-сірий"
 
-#: src/frontend/GuiTools.cpp:283
+#: src/frontend/GuiTools.cpp:308
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image File"
 msgstr "Відкриття файла зображення"
 
-#: src/frontend/GuiTools.cpp:283
+#: src/frontend/GuiTools.cpp:308
 #, kde-format
 msgid "Images (%1)"
 msgstr "Зображення (%1)"
@@ -14373,7 +14371,7 @@ msgstr "&Вікна"
 
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode)
 #: src/frontend/MainWin.cpp:198 src/frontend/ui/settingsworksheetpage.ui:75
-#: src/frontend/worksheet/WorksheetView.cpp:263
+#: src/frontend/worksheet/WorksheetView.cpp:267
 #, kde-format
 msgid "Presenter Mode"
 msgstr "Режим презентації"
@@ -14803,7 +14801,7 @@ msgstr "Надруковано %1"
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/frontend/MainWin.cpp:2428
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1431
-#: src/frontend/worksheet/WorksheetView.cpp:357
+#: src/frontend/worksheet/WorksheetView.cpp:361
 #, kde-format
 msgid "Cursor"
 msgstr "Курсор"
@@ -14931,7 +14929,7 @@ msgstr "Зн&яти позначення"
 #: src/frontend/matrix/MatrixView.cpp:125
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:311
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:288
-#: src/frontend/worksheet/WorksheetView.cpp:130
+#: src/frontend/worksheet/WorksheetView.cpp:134
 #, kde-format
 msgid "Select All"
 msgstr "Позначити все"
@@ -15071,7 +15069,7 @@ msgid "Header Format"
 msgstr "Формат заголовків"
 
 #: src/frontend/matrix/MatrixView.cpp:295
-#: src/frontend/worksheet/WorksheetView.cpp:442
+#: src/frontend/worksheet/WorksheetView.cpp:446
 #, kde-format
 msgid "Zoom"
 msgstr "Масштабування"
@@ -15286,7 +15284,7 @@ msgstr "Шаблони області креслень"
 #: src/frontend/SettingsWorksheetPage.cpp:73
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:99
 #: src/frontend/widgets/ThemesComboBox.cpp:72
-#: src/frontend/widgets/ThemesWidget.cpp:69
+#: src/frontend/widgets/ThemesWidget.cpp:71
 #, kde-format
 msgid "Default"
 msgstr "Типова"
@@ -15437,7 +15435,7 @@ msgid "Do you really want to delete %1?"
 msgstr "Ви справді хочете вилучити %1?"
 
 #: src/frontend/ProjectExplorer.cpp:919
-#: src/frontend/worksheet/WorksheetView.cpp:1429
+#: src/frontend/worksheet/WorksheetView.cpp:1433
 #, kde-format
 msgid "Delete selected object"
 msgid_plural "Delete selected objects"
@@ -19920,7 +19918,7 @@ msgstr "Колір шрифту:"
 #. i18n: ectx: property (text), widget (QLabel, lGrid)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1620
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:441
-#: src/frontend/worksheet/WorksheetView.cpp:469
+#: src/frontend/worksheet/WorksheetView.cpp:473
 #, kde-format
 msgid "Grid"
 msgstr "Сітка"
@@ -20354,7 +20352,7 @@ msgstr "Розширення:"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:553
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:610
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:265
-#: src/frontend/worksheet/WorksheetView.cpp:461
+#: src/frontend/worksheet/WorksheetView.cpp:465
 #, kde-format
 msgid "Layout"
 msgstr "Компонування"
@@ -24115,26 +24113,26 @@ msgstr "Вийти з режиму презентації"
 msgid "Pin the navigation panel"
 msgstr "Пришпилити панель навігації"
 
-#: src/frontend/worksheet/WorksheetView.cpp:163
+#: src/frontend/worksheet/WorksheetView.cpp:167
 #, kde-format
 msgctxt "Zoom"
 msgid "No fit"
 msgstr "Без апроксимації"
 
-#: src/frontend/worksheet/WorksheetView.cpp:173
+#: src/frontend/worksheet/WorksheetView.cpp:177
 #, kde-format
 msgctxt "Zoom"
 msgid "Fit to Selection"
 msgstr "Вмістити позначене"
 
-#: src/frontend/worksheet/WorksheetView.cpp:176
+#: src/frontend/worksheet/WorksheetView.cpp:180
 #, kde-format
 msgctxt "Zoom"
 msgid "Fit"
 msgstr "Оптимально"
 
-#: src/frontend/worksheet/WorksheetView.cpp:181
-#: src/frontend/worksheet/WorksheetView.cpp:332
+#: src/frontend/worksheet/WorksheetView.cpp:185
+#: src/frontend/worksheet/WorksheetView.cpp:336
 #, kde-format
 msgid "Select and Edit"
 msgstr "Позначити і редагувати"
@@ -24142,72 +24140,72 @@ msgstr "Позначити і редагувати"
 #. i18n("Selection"), mouseModeActionGroup);
 #. selectionModeAction->setCheckable(true);
 #. "Add new" related actions
-#: src/frontend/worksheet/WorksheetView.cpp:212
+#: src/frontend/worksheet/WorksheetView.cpp:216
 #, kde-format
 msgid "Four Axes"
 msgstr "Чотири вісі"
 
-#: src/frontend/worksheet/WorksheetView.cpp:213
+#: src/frontend/worksheet/WorksheetView.cpp:217
 #, kde-format
 msgid "Two Axes"
 msgstr "Дві вісі"
 
-#: src/frontend/worksheet/WorksheetView.cpp:214
+#: src/frontend/worksheet/WorksheetView.cpp:218
 #, kde-format
 msgid "Two Axes, Centered"
 msgstr "дві вісі, центровано"
 
-#: src/frontend/worksheet/WorksheetView.cpp:216
+#: src/frontend/worksheet/WorksheetView.cpp:220
 #, kde-format
 msgid "Two Axes, Crossing at Origin"
 msgstr "дві вісі, перетин у початку координат"
 
-#: src/frontend/worksheet/WorksheetView.cpp:217
+#: src/frontend/worksheet/WorksheetView.cpp:221
 #, kde-format
 msgid "Load from Template"
 msgstr "Завантажити з шаблона"
 
-#: src/frontend/worksheet/WorksheetView.cpp:240
+#: src/frontend/worksheet/WorksheetView.cpp:244
 #, kde-format
 msgid "No Grid"
 msgstr "Немає сітки"
 
-#: src/frontend/worksheet/WorksheetView.cpp:245
+#: src/frontend/worksheet/WorksheetView.cpp:249
 #, kde-format
 msgid "Dense Line Grid"
 msgstr "Щільна сітка з ліній"
 
-#: src/frontend/worksheet/WorksheetView.cpp:248
+#: src/frontend/worksheet/WorksheetView.cpp:252
 #, kde-format
 msgid "Sparse Line Grid"
 msgstr "Розріджена сітка з ліній"
 
-#: src/frontend/worksheet/WorksheetView.cpp:251
+#: src/frontend/worksheet/WorksheetView.cpp:255
 #, kde-format
 msgid "Dense Dot Grid"
 msgstr "Щільна сітка з крапок"
 
-#: src/frontend/worksheet/WorksheetView.cpp:254
+#: src/frontend/worksheet/WorksheetView.cpp:258
 #, kde-format
 msgid "Sparse Dot Grid"
 msgstr "Розріджена сітка з крапок"
 
-#: src/frontend/worksheet/WorksheetView.cpp:257
+#: src/frontend/worksheet/WorksheetView.cpp:261
 #, kde-format
 msgid "Custom Grid"
 msgstr "Нетипова сітка"
 
-#: src/frontend/worksheet/WorksheetView.cpp:260
+#: src/frontend/worksheet/WorksheetView.cpp:264
 #, kde-format
 msgid "Snap to Grid"
 msgstr "Прилипання до сітки"
 
-#: src/frontend/worksheet/WorksheetView.cpp:280
+#: src/frontend/worksheet/WorksheetView.cpp:284
 #, kde-format
 msgid "Interactive Plots"
 msgstr "Інтерактивні графіки"
 
-#: src/frontend/worksheet/WorksheetView.cpp:281
+#: src/frontend/worksheet/WorksheetView.cpp:285
 #, kde-format
 msgid ""
 "If not activated, plots on the worksheet don't react on drag and mouse wheel "
@@ -24216,129 +24214,129 @@ msgstr ""
 "Якщо позначено, графіки на робочому аркуші реагуватимуть на перетягування зі "
 "скиданням та прокручування коліщатка миші."
 
-#: src/frontend/worksheet/WorksheetView.cpp:298
-#: src/frontend/worksheet/WorksheetView.cpp:312
+#: src/frontend/worksheet/WorksheetView.cpp:302
+#: src/frontend/worksheet/WorksheetView.cpp:316
 #, kde-format
 msgid "Selected Plot Areas"
 msgstr "Позначені області креслення"
 
-#: src/frontend/worksheet/WorksheetView.cpp:300
-#: src/frontend/worksheet/WorksheetView.cpp:314
+#: src/frontend/worksheet/WorksheetView.cpp:304
+#: src/frontend/worksheet/WorksheetView.cpp:318
 #, kde-format
 msgid "All Plot Areas"
 msgstr "Усі області креслення"
 
-#: src/frontend/worksheet/WorksheetView.cpp:302
+#: src/frontend/worksheet/WorksheetView.cpp:306
 #, kde-format
 msgid "All Plot Areas X"
 msgstr "Усі області креслення за X"
 
-#: src/frontend/worksheet/WorksheetView.cpp:304
+#: src/frontend/worksheet/WorksheetView.cpp:308
 #, kde-format
 msgid "All Plot Areas Y"
 msgstr "Усі області креслення за Y"
 
-#: src/frontend/worksheet/WorksheetView.cpp:337
+#: src/frontend/worksheet/WorksheetView.cpp:341
 #, kde-format
 msgid "Crosshair"
 msgstr "Перехрестя"
 
-#: src/frontend/worksheet/WorksheetView.cpp:342
+#: src/frontend/worksheet/WorksheetView.cpp:346
 #, kde-format
 msgid "Select Region and Zoom In"
 msgstr "Позначити і збільшити область"
 
-#: src/frontend/worksheet/WorksheetView.cpp:347
+#: src/frontend/worksheet/WorksheetView.cpp:351
 #, kde-format
 msgid "Select X-Region and Zoom In"
 msgstr "Позначити і збільшити область за x"
 
-#: src/frontend/worksheet/WorksheetView.cpp:352
+#: src/frontend/worksheet/WorksheetView.cpp:356
 #, kde-format
 msgid "Select Y-Region and Zoom In"
 msgstr "Позначити і збільшити область за x"
 
-#: src/frontend/worksheet/WorksheetView.cpp:364
+#: src/frontend/worksheet/WorksheetView.cpp:368
 #, kde-format
 msgid "Auto Scale"
 msgstr "Автомасштаб"
 
-#: src/frontend/worksheet/WorksheetView.cpp:368
+#: src/frontend/worksheet/WorksheetView.cpp:372
 #, kde-format
 msgid "Auto Scale X"
 msgstr "автомасштаб за X"
 
-#: src/frontend/worksheet/WorksheetView.cpp:372
+#: src/frontend/worksheet/WorksheetView.cpp:376
 #, kde-format
 msgid "Auto Scale Y"
 msgstr "автомасштаб за Y"
 
-#: src/frontend/worksheet/WorksheetView.cpp:384
+#: src/frontend/worksheet/WorksheetView.cpp:388
 #, kde-format
 msgid "Zoom In X"
 msgstr "збільшити за X"
 
-#: src/frontend/worksheet/WorksheetView.cpp:388
+#: src/frontend/worksheet/WorksheetView.cpp:392
 #, kde-format
 msgid "Zoom Out X"
 msgstr "зменшити за X"
 
-#: src/frontend/worksheet/WorksheetView.cpp:392
+#: src/frontend/worksheet/WorksheetView.cpp:396
 #, kde-format
 msgid "Zoom In Y"
 msgstr "збільшити за Y"
 
-#: src/frontend/worksheet/WorksheetView.cpp:396
+#: src/frontend/worksheet/WorksheetView.cpp:400
 #, kde-format
 msgid "Zoom Out Y"
 msgstr "зменшити за Y"
 
-#: src/frontend/worksheet/WorksheetView.cpp:400
+#: src/frontend/worksheet/WorksheetView.cpp:404
 #, kde-format
 msgid "Shift Left X"
 msgstr "посунути ліворуч X"
 
-#: src/frontend/worksheet/WorksheetView.cpp:402
+#: src/frontend/worksheet/WorksheetView.cpp:406
 #, kde-format
 msgid "Shift Right X"
 msgstr "посунути праворуч X"
 
-#: src/frontend/worksheet/WorksheetView.cpp:404
+#: src/frontend/worksheet/WorksheetView.cpp:408
 #, kde-format
 msgid "Shift Up Y"
 msgstr "посунути вище Y"
 
-#: src/frontend/worksheet/WorksheetView.cpp:406
+#: src/frontend/worksheet/WorksheetView.cpp:410
 #, kde-format
 msgid "Shift Down Y"
 msgstr "посунути нижче Y"
 
-#: src/frontend/worksheet/WorksheetView.cpp:420
-#: src/frontend/worksheet/WorksheetView.cpp:484
-#: src/frontend/worksheet/WorksheetView.cpp:1290
-#: src/frontend/worksheet/WorksheetView.cpp:1297
-#: src/frontend/worksheet/WorksheetView.cpp:1304
-#: src/frontend/worksheet/WorksheetView.cpp:1311
+#: src/frontend/worksheet/WorksheetView.cpp:424
+#: src/frontend/worksheet/WorksheetView.cpp:488
+#: src/frontend/worksheet/WorksheetView.cpp:1294
+#: src/frontend/worksheet/WorksheetView.cpp:1301
+#: src/frontend/worksheet/WorksheetView.cpp:1308
+#: src/frontend/worksheet/WorksheetView.cpp:1315
 #, kde-format
 msgid "Plot Area"
 msgstr "Область графіка"
 
-#: src/frontend/worksheet/WorksheetView.cpp:497
+#: src/frontend/worksheet/WorksheetView.cpp:501
 #, kde-format
 msgid "Zoom/Navigate"
 msgstr "Масштабування/Навігація"
 
-#: src/frontend/worksheet/WorksheetView.cpp:518
+#: src/frontend/worksheet/WorksheetView.cpp:522
 #, kde-format
 msgid "Apply Actions to"
 msgstr "Застосувати дії до"
 
-#: src/frontend/worksheet/WorksheetView.cpp:525
+#: src/frontend/worksheet/WorksheetView.cpp:529
 #, kde-format
 msgid "Apply Cursor to"
 msgstr "Застосувати курсор до"
 
-#: src/frontend/worksheet/WorksheetView.cpp:1428
+#: src/frontend/worksheet/WorksheetView.cpp:1432
 #, kde-format
 msgid "Do you really want to delete the selected object?"
 msgid_plural "Do you really want to delete the selected %1 objects?"
@@ -24347,7 +24345,7 @@ msgstr[1] "Ви справді хочете вилучити позначені 
 msgstr[2] "Ви справді хочете вилучити позначені %1 об'єктів?"
 msgstr[3] "Ви справді хочете вилучити позначений об'єкт?"
 
-#: src/frontend/worksheet/WorksheetView.cpp:1436
+#: src/frontend/worksheet/WorksheetView.cpp:1440
 #, kde-format
 msgid "%1: Remove selected worksheet elements."
 msgstr "%1: вилучити позначені елементи робочого аркуша."
