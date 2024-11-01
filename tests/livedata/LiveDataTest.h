@@ -39,6 +39,7 @@ private Q_SLOTS:
 	// Whole file - on every read the whole file is re-read completely and processed
 	void testReadWholeFile00();
 	void testReadWholeFile01();
+	void testReadWholeFileSameContentSize();
 
 	void testPlotting();
 };

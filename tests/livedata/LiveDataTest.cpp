@@ -1158,6 +1158,74 @@ void LiveDataTest::testReadWholeFile01() {
 	QCOMPARE(dataSource.column(1)->integerAt(1), 6);
 }
 
+void LiveDataTest::testReadWholeFileSameContentSize() {
+	// create a temp file and write some data into it
+	QTemporaryFile tempFile;
+	if (!tempFile.open())
+		QFAIL("failed to create the temp file for writing");
+
+	QFile file(tempFile.fileName());
+	if (!file.open(QIODevice::ReadWrite))
+		QFAIL("failed to open the temp file for writing");
+
+	file.write("1,2\n");
+	file.flush();
+
+		   // initialize the live data source
+	LiveDataSource dataSource(QStringLiteral("test"), false);
+	dataSource.setSourceType(LiveDataSource::SourceType::FileOrPipe);
+	dataSource.setFileType(AbstractFileFilter::FileType::Ascii);
+	dataSource.setFileName(file.fileName());
+	dataSource.setReadingType(LiveDataSource::ReadingType::WholeFile);
+	dataSource.setUpdateType(LiveDataSource::UpdateType::NewData);
+
+		   // initialize the ASCII filter
+	auto* filter = new AsciiFilter();
+	auto properties = filter->defaultProperties();
+	properties.headerEnabled = false;
+	properties.intAsDouble = false;
+	properties.columnNamesRaw = QStringLiteral("x, y");
+	properties.columnModesString = QStringLiteral("Int, Int");
+	properties.automaticSeparatorDetection = false;
+	properties.separator = QStringLiteral(",");
+	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
+	dataSource.setFilter(filter);
+
+		   // read the data and perform checks
+	dataSource.read();
+
+	QCOMPARE(dataSource.columnCount(), 2);
+	QCOMPARE(dataSource.rowCount(), 1);
+
+	QCOMPARE(dataSource.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(dataSource.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	QCOMPARE(dataSource.column(0)->integerAt(0), 1);
+	QCOMPARE(dataSource.column(1)->integerAt(0), 2);
+
+// currently fails on Windows (waitForSignal()?)
+#ifdef HAVE_WINDOWS
+	return;
+#endif
+	// close the file, open it again and replace the previous content with the new one
+	file.close();
+	if (!file.open(QIODevice::ReadWrite))
+		QFAIL("failed to open the temp file for writing");
+	file.write("3,4\n"); // The exact same number of lines are used!
+	file.close();
+	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
+
+		   // checks
+	QCOMPARE(dataSource.columnCount(), 2);
+	QCOMPARE(dataSource.rowCount(), 1);
+
+	QCOMPARE(dataSource.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(dataSource.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	QCOMPARE(dataSource.column(0)->integerAt(0), 3);
+	QCOMPARE(dataSource.column(1)->integerAt(0), 4);
+}
+
 void LiveDataTest::testPlotting() {
 	Project project;
 	auto* worksheet = new Worksheet(QStringLiteral("worksheet"));

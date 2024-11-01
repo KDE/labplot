@@ -751,11 +751,12 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device,
 		if (!device.open(QIODevice::ReadOnly))
 			return handleError(Status::UnableToOpenDevice);
 	}
-	if (device.atEnd() && !device.isSequential())
-		return handleError(Status::DeviceAtEnd); // File empty
 
 	if (!device.isSequential())
 		device.seek(from);
+
+	if (device.atEnd() && !device.isSequential())
+		return handleError(Status::DeviceAtEnd); // File empty
 
 	QString line;
 	if (skipFirstLine) {
