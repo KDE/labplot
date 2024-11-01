@@ -10,6 +10,9 @@ New features:
 		* improve error messages for data import
 		* fix preview of data with header
 		* Ask how to treat multilayer graphs when opening OPJ project
+		* Improved error message handling
+		* Improved livedata import
+		* Add possibility to specify custom column datatypes (mandatory for livedata)
 	* [analysis]
 		* Add possibility to do calculations on curves
 		* Automatically recalculate analysis curves on data change

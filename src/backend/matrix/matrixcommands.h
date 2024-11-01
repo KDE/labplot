@@ -55,22 +55,27 @@ public:
 		setText(i18np("%1: remove %2 column", "%1: remove %2 columns", m_private_obj->name(), m_count));
 	}
 	void redo() override {
-		if (m_backups.isEmpty()) {
-			int last_row = m_private_obj->rowCount - 1;
-			for (int i = 0; i < m_count; i++)
-				m_backups.append(m_private_obj->columnCells<T>(m_first + i, 0, last_row));
+		int last_row = m_private_obj->rowCount() - 1;
+		if (last_row >= 0) {
+			if (m_backups.isEmpty()) {
+				for (int i = 0; i < m_count; i++)
+					m_backups.append(m_private_obj->columnCells<T>(m_first + i, 0, last_row));
+			}
 		}
 		m_private_obj->removeColumns(m_first, m_count);
-		Q_EMIT m_private_obj->q->columnCountChanged(m_private_obj->columnCount);
+		Q_EMIT m_private_obj->q->columnCountChanged(m_private_obj->columnCount());
 	}
 	void undo() override {
+		int last_row = m_private_obj->rowCount() - 1;
 		m_private_obj->insertColumns(m_first, m_count);
-		int last_row = m_private_obj->rowCount - 1;
-		// TODO: use memcopy to copy from the backup vector
-		for (int i = 0; i < m_count; i++)
-			m_private_obj->setColumnCells(m_first + i, 0, last_row, m_backups.at(i));
 
-		Q_EMIT m_private_obj->q->columnCountChanged(m_private_obj->columnCount);
+		if (last_row >= 0) {
+			// TODO: use memcopy to copy from the backup vector
+			for (int i = 0; i < m_count; i++)
+				m_private_obj->setColumnCells(m_first + i, 0, last_row, m_backups.at(i));
+		}
+
+		Q_EMIT m_private_obj->q->columnCountChanged(m_private_obj->columnCount());
 	}
 
 private:
@@ -95,18 +100,18 @@ public:
 	void redo() override {
 		if (m_backups.isEmpty()) {
 			int last_row = m_first + m_count - 1;
-			for (int col = 0; col < m_private_obj->columnCount; col++)
+			for (int col = 0; col < m_private_obj->columnCount(); col++)
 				m_backups.append(m_private_obj->columnCells<T>(col, m_first, last_row));
 		}
 		m_private_obj->removeRows(m_first, m_count);
-		Q_EMIT m_private_obj->q->rowCountChanged(m_private_obj->rowCount);
+		Q_EMIT m_private_obj->q->rowCountChanged(m_private_obj->rowCount());
 	}
 	void undo() override {
 		m_private_obj->insertRows(m_first, m_count);
 		int last_row = m_first + m_count - 1;
-		for (int col = 0; col < m_private_obj->columnCount; col++)
+		for (int col = 0; col < m_private_obj->columnCount(); col++)
 			m_private_obj->setColumnCells(col, m_first, last_row, m_backups.at(col));
-		Q_EMIT m_private_obj->q->rowCountChanged(m_private_obj->rowCount);
+		Q_EMIT m_private_obj->q->rowCountChanged(m_private_obj->rowCount());
 	}
 
 private:
@@ -126,19 +131,24 @@ public:
 		setText(i18n("%1: clear", m_private_obj->name()));
 	}
 	void redo() override {
+		const auto cCount = m_private_obj->columnCount();
 		if (m_backups.isEmpty()) {
-			int last_row = m_private_obj->rowCount - 1;
+			int last_row = m_private_obj->rowCount() - 1;
+			if (last_row < 0)
+				return;
 
-			for (int i = 0; i < m_private_obj->columnCount; i++)
+			for (int i = 0; i < cCount; i++)
 				m_backups.append(m_private_obj->columnCells<T>(i, 0, last_row));
 		}
 
-		for (int i = 0; i < m_private_obj->columnCount; i++)
+		for (int i = 0; i < cCount; i++)
 			m_private_obj->clearColumn(i);
 	}
 	void undo() override {
-		int last_row = m_private_obj->rowCount - 1;
-		for (int i = 0; i < m_private_obj->columnCount; i++)
+		int last_row = m_private_obj->rowCount() - 1;
+		if (last_row < 0)
+			return;
+		for (int i = 0; i < m_private_obj->columnCount(); i++)
 			m_private_obj->setColumnCells(i, 0, last_row, m_backups.at(i));
 	}
 
@@ -159,11 +169,11 @@ public:
 	}
 	void redo() override {
 		if (m_backup.isEmpty())
-			m_backup = m_private_obj->columnCells<T>(m_col, 0, m_private_obj->rowCount - 1);
+			m_backup = m_private_obj->columnCells<T>(m_col, 0, m_private_obj->rowCount() - 1);
 		m_private_obj->clearColumn(m_col);
 	}
 	void undo() override {
-		m_private_obj->setColumnCells(m_col, 0, m_private_obj->rowCount - 1, m_backup);
+		m_private_obj->setColumnCells(m_col, 0, m_private_obj->rowCount() - 1, m_backup);
 	}
 
 private:
@@ -306,8 +316,8 @@ public:
 		setText(i18n("%1: transpose", m_private_obj->name()));
 	}
 	void redo() override {
-		int rows = m_private_obj->rowCount;
-		int cols = m_private_obj->columnCount;
+		int rows = m_private_obj->rowCount();
+		int cols = m_private_obj->columnCount();
 		int temp_size = qMax(rows, cols);
 		m_private_obj->suppressDataChange = true;
 		if (cols < rows)
@@ -327,7 +337,7 @@ public:
 		else if (cols > rows)
 			m_private_obj->removeColumns(rows, temp_size - rows);
 		m_private_obj->suppressDataChange = false;
-		m_private_obj->emitDataChanged(0, 0, m_private_obj->rowCount - 1, m_private_obj->columnCount - 1);
+		m_private_obj->emitDataChanged(0, 0, m_private_obj->rowCount() - 1, m_private_obj->columnCount() - 1);
 	}
 	void undo() override {
 		redo();
@@ -347,8 +357,8 @@ public:
 		setText(i18n("%1: mirror horizontally", m_private_obj->name()));
 	}
 	void redo() override {
-		int rows = m_private_obj->rowCount;
-		int cols = m_private_obj->columnCount;
+		int rows = m_private_obj->rowCount();
+		int cols = m_private_obj->columnCount();
 		int middle = cols / 2;
 		m_private_obj->suppressDataChange = true;
 
@@ -378,8 +388,8 @@ public:
 		setText(i18n("%1: mirror vertically", m_private_obj->name()));
 	}
 	void redo() override {
-		int rows = m_private_obj->rowCount;
-		int cols = m_private_obj->columnCount;
+		int rows = m_private_obj->rowCount();
+		int cols = m_private_obj->columnCount();
 		int middle = rows / 2;
 		m_private_obj->suppressDataChange = true;
 

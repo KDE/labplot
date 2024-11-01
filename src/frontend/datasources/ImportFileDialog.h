@@ -44,6 +44,7 @@ private:
 	QPushButton* m_optionsButton;
 
 protected Q_SLOTS:
+	void disableOkButton();
 	void checkOkButton() override;
 
 private Q_SLOTS:

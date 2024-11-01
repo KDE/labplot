@@ -30,11 +30,11 @@ MQTTClient::MQTTClient(const QString& name)
 	, m_updateTimer(new QTimer(this))
 	, m_client(new QMqttClient(this))
 	, m_willTimer(new QTimer(this)) {
-	connect(this, &AbstractAspect::childAspectAboutToBeRemoved, this, &MQTTClient::pauseReading);
 	connect(m_updateTimer, &QTimer::timeout, this, &MQTTClient::read);
 	connect(m_client, &QMqttClient::connected, this, &MQTTClient::onMQTTConnect);
 	connect(m_willTimer, &QTimer::timeout, this, &MQTTClient::updateWillMessage);
 	connect(m_client, &QMqttClient::errorChanged, this, &MQTTClient::MQTTErrorChanged);
+	connect(m_client, &QMqttClient::disconnected, this, &MQTTClient::disconnected);
 }
 
 MQTTClient::~MQTTClient() {
@@ -93,6 +93,9 @@ void MQTTClient::pauseReading() {
  */
 void MQTTClient::setFilter(AsciiFilter* f) {
 	delete m_filter;
+	auto* asciiFilter = dynamic_cast<AsciiFilter*>(f);
+	if (asciiFilter)
+		asciiFilter->setDataSource(nullptr); // MQTTClient does not have a dataSource
 	m_filter = f;
 }
 
@@ -1053,7 +1056,7 @@ void MQTTClient::MQTTSubscriptionMessageReceived(const QMqttMessage& msg) {
 		// Pass the message and the topic name to the MQTTSubscription which contains the topic
 		for (auto* subscription : m_MQTTSubscriptions) {
 			if (checkTopicContains(subscription->subscriptionName(), msg.topic().name())) {
-				subscription->messageArrived(QLatin1String(msg.payload()), msg.topic().name());
+				subscription->messageArrived(msg);
 				break;
 			}
 		}
@@ -1072,6 +1075,14 @@ void MQTTClient::MQTTSubscriptionMessageReceived(const QMqttMessage& msg) {
 void MQTTClient::MQTTErrorChanged(QMqttClient::ClientError clientError) {
 	if (clientError != QMqttClient::ClientError::NoError) {
 		auto* errorWidget = new MQTTErrorWidget(clientError, this);
+		errorWidget->show();
+	}
+}
+
+void MQTTClient::disconnected() {
+	auto error = m_client->error();
+	if (error != QMqttClient::ClientError::NoError) {
+		auto* errorWidget = new MQTTErrorWidget(error, this);
 		errorWidget->show();
 	}
 }

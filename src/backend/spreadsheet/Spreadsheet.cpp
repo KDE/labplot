@@ -88,6 +88,11 @@ void Spreadsheet::init() {
 	setRowCount(rows);
 }
 
+void Spreadsheet::setSuppressSetCommentFinalizeImport(bool suppress) {
+	Q_D(Spreadsheet);
+	d->suppressSetCommentFinalizeImport = suppress;
+}
+
 void Spreadsheet::setModel(SpreadsheetModel* model) {
 	m_model = model;
 }
@@ -1523,37 +1528,40 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 		Column* column = this->column((int)(columnOffset + col - startColumn));
 		DEBUG(Q_FUNC_INFO << ", type " << ENUM_TO_STRING(AbstractColumn, ColumnMode, column->columnMode()))
 
-		QString comment;
-		switch (column->columnMode()) {
-		case AbstractColumn::ColumnMode::Double:
-			comment = i18np("double precision data, %1 element", "numerical data, %1 elements", rows);
-			break;
-		case AbstractColumn::ColumnMode::Integer:
-			comment = i18np("integer data, %1 element", "integer data, %1 elements", rows);
-			break;
-		case AbstractColumn::ColumnMode::BigInt:
-			comment = i18np("big integer data, %1 element", "big integer data, %1 elements", rows);
-			break;
-		case AbstractColumn::ColumnMode::Text:
-			comment = i18np("text data, %1 element", "text data, %1 elements", rows);
-			break;
-		case AbstractColumn::ColumnMode::Month:
-			comment = i18np("month data, %1 element", "month data, %1 elements", rows);
-			break;
-		case AbstractColumn::ColumnMode::Day:
-			comment = i18np("day data, %1 element", "day data, %1 elements", rows);
-			break;
-		case AbstractColumn::ColumnMode::DateTime:
-			comment = i18np("date and time data, %1 element", "date and time data, %1 elements", rows);
-			// set same datetime format in column
-			auto* filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
-			filter->setFormat(dateTimeFormat);
+		if (!d->suppressSetCommentFinalizeImport) {
+			QString comment;
+			switch (column->columnMode()) {
+			case AbstractColumn::ColumnMode::Double:
+				comment = i18np("double precision data, %1 element", "numerical data, %1 elements", rows);
+				break;
+			case AbstractColumn::ColumnMode::Integer:
+				comment = i18np("integer data, %1 element", "integer data, %1 elements", rows);
+				break;
+			case AbstractColumn::ColumnMode::BigInt:
+				comment = i18np("big integer data, %1 element", "big integer data, %1 elements", rows);
+				break;
+			case AbstractColumn::ColumnMode::Text:
+				comment = i18np("text data, %1 element", "text data, %1 elements", rows);
+				break;
+			case AbstractColumn::ColumnMode::Month:
+				comment = i18np("month data, %1 element", "month data, %1 elements", rows);
+				break;
+			case AbstractColumn::ColumnMode::Day:
+				comment = i18np("day data, %1 element", "day data, %1 elements", rows);
+				break;
+			case AbstractColumn::ColumnMode::DateTime:
+				comment = i18np("date and time data, %1 element", "date and time data, %1 elements", rows);
+				// set same datetime format in column
+				auto* filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
+				filter->setFormat(dateTimeFormat);
+			}
+			column->setComment(comment);
 		}
-		column->setComment(comment);
 
 		if (importMode == AbstractFileFilter::ImportMode::Replace) {
-			column->setSuppressDataChangedSignal(false);
-			column->setChanged();
+			column->setSuppressDataChangedSignal(
+				false); // TODO: evaluate this (with setChanged), because this could lead to a lot of changes which are not controllable.
+			column->setChanged(); // Invalidate properties
 		}
 	}
 

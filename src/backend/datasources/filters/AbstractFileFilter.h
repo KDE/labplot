@@ -38,18 +38,30 @@ public:
 
 	static bool isNan(const QString&);
 	static AbstractColumn::ColumnMode columnMode(const QString& valueString, QString& dateTimeFormat, QLocale::Language);
-	static AbstractColumn::ColumnMode columnMode(const QString& valueString, QString& dateTimeFormat, const QLocale& = QLocale());
+	static AbstractColumn::ColumnMode columnMode(const QString& valueString,
+												 QString& dateTimeFormat,
+												 const QLocale& = QLocale(),
+												 bool intAsDouble = false,
+												 int baseYear = QLocale::DefaultTwoDigitBaseYear);
 	static QString dateTimeFormat(const QString& valueString);
 	static QStringList numberFormats();
 	static FileType fileType(const QString&);
 	// static QStringList fileTypes();
 	static QString convertFromNumberToColumn(int n);
+	int previewPrecision() const;
+	void setPreviewPrecision(int);
 
 	virtual void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) = 0;
+	/*!
+	 * Writing the content of the datasource to the file with filename \p fileName
+	 * \brief write
+	 * \param fileName
+	 */
 	virtual void write(const QString& fileName, AbstractDataSource*) = 0;
 
 	QString lastError() const;
 	void setLastError(const QString&);
+	void clearLastError();
 
 	QStringList lastWarnings() const;
 	void addWarning(const QString&);
@@ -70,6 +82,7 @@ protected:
 	const FileType m_type;
 	QString m_lastError;
 	QStringList m_lastWarnings;
+	int m_previewPrecision{6};
 };
 
 #endif

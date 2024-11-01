@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>515</width>
+    <width>530</width>
     <height>1249</height>
    </rect>
   </property>
@@ -516,6 +516,19 @@
             </property>
            </widget>
           </item>
+          <item row="0" column="2">
+           <widget class="QSpinBox" name="sbPreviewPrecision">
+            <property name="minimum">
+             <number>0</number>
+            </property>
+            <property name="maximum">
+             <number>100</number>
+            </property>
+            <property name="value">
+             <number>6</number>
+            </property>
+           </widget>
+          </item>
           <item row="2" column="0" colspan="4">
            <widget class="QTextEdit" name="tePreview">
             <property name="undoRedoEnabled">
@@ -751,8 +764,14 @@
         <property name="specialValueText">
          <string>All</string>
         </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
         <property name="maximum">
          <number>999999</number>
+        </property>
+        <property name="value">
+         <number>0</number>
         </property>
        </widget>
       </item>

@@ -69,6 +69,7 @@ public:
 	QString selectedObject() const;
 	bool importValid() const;
 	bool useFirstRowAsColNames() const; // use by XLSX and ODS
+	void checkValid();
 
 	const QStringList selectedXLSXRegionNames() const;
 	const QStringList selectedOdsSheetNames() const;

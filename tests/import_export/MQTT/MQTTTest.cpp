@@ -27,6 +27,27 @@
 #include <QTreeWidgetItem>
 #include <QVector>
 
+#include <iostream>
+
+namespace {
+const QLatin1String mqttHostName(HOSTNAME);
+const int mqttPort = PORT;
+}
+
+// This is not yet required. Can be used to start an external process which publishes mqtt messages
+// void MQTTTest::init() {
+// 	const auto executable = QStringLiteral(EXEC);
+// 	m_process.setProgram(executable);
+// 	m_process.start();
+// 	QVERIFY(m_process.waitForStarted());
+// 	// const auto e1 = m_process.errorString();
+// }
+
+// void MQTTTest::cleanup() {
+// 	m_process.terminate();
+// 	QVERIFY(m_process.waitForFinished());
+// }
+
 void MQTTTest::initTestCase() {
 	CommonTest::initTestCase();
 
@@ -120,9 +141,8 @@ void MQTTTest::testCommonFalse() {
 // #################  test handling of data received by messages  ###############
 // ##############################################################################
 void MQTTTest::testIntegerMessage() {
-	QSKIP("broker.hivemq.com is not available anymore.");
 	AsciiFilter* filter = new AsciiFilter();
-	filter->setAutoModeEnabled(true);
+	// filter->setAutoModeEnabled(true);
 
 	Project* project = new Project();
 
@@ -132,7 +152,7 @@ void MQTTTest::testIntegerMessage() {
 	mqttClient->setReadingType(MQTTClient::ReadingType::TillEnd);
 	mqttClient->setKeepNValues(0);
 	mqttClient->setUpdateType(MQTTClient::UpdateType::NewData);
-	mqttClient->setMQTTClientHostPort(QStringLiteral("broker.hivemq.com"), 1883);
+	mqttClient->setMQTTClientHostPort(mqttHostName, mqttPort);
 	mqttClient->setMQTTUseAuthentication(false);
 	mqttClient->setMQTTUseID(false);
 	QMqttTopicFilter topicFilter{QStringLiteral("labplot/mqttUnitTest")};
@@ -141,8 +161,8 @@ void MQTTTest::testIntegerMessage() {
 	mqttClient->ready();
 
 	QMqttClient* client = new QMqttClient();
-	client->setHostname(QStringLiteral("broker.hivemq.com"));
-	client->setPort(1883);
+	client->setHostname(mqttHostName);
+	client->setPort(mqttPort);
 	client->connectToHost();
 
 	bool wait = QTest::qWaitFor(
@@ -215,9 +235,13 @@ void MQTTTest::testIntegerMessage() {
 }
 
 void MQTTTest::testNumericMessage() {
-	QSKIP("broker.hivemq.com is not available anymore.");
 	AsciiFilter* filter = new AsciiFilter();
-	filter->setAutoModeEnabled(true);
+	auto p = filter->properties();
+	// p.automaticSeparatorDetection = false;
+	// p.columnModesString = QStringLiteral("Double, Double, Double");
+	// p.columnNamesRaw = QStringLiteral("Column1, Column2, Column3");
+
+	// QCOMPARE(filter->initialize(p), true);
 
 	Project* project = new Project();
 
@@ -227,7 +251,7 @@ void MQTTTest::testNumericMessage() {
 	mqttClient->setReadingType(MQTTClient::ReadingType::TillEnd);
 	mqttClient->setKeepNValues(0);
 	mqttClient->setUpdateType(MQTTClient::UpdateType::NewData);
-	mqttClient->setMQTTClientHostPort(QStringLiteral("broker.hivemq.com"), 1883);
+	mqttClient->setMQTTClientHostPort(mqttHostName, mqttPort);
 	mqttClient->setMQTTUseAuthentication(false);
 	mqttClient->setMQTTUseID(false);
 	QMqttTopicFilter topicFilter{QStringLiteral("labplot/mqttUnitTest")};
@@ -236,8 +260,8 @@ void MQTTTest::testNumericMessage() {
 	mqttClient->ready();
 
 	QMqttClient* client = new QMqttClient();
-	client->setHostname(QStringLiteral("broker.hivemq.com"));
-	client->setPort(1883);
+	client->setHostname(mqttHostName);
+	client->setPort(mqttPort);
 	client->connectToHost();
 
 	bool wait = QTest::qWaitFor(
@@ -310,9 +334,8 @@ void MQTTTest::testNumericMessage() {
 }
 
 void MQTTTest::testTextMessage() {
-	QSKIP("broker.hivemq.com is not available anymore.");
 	AsciiFilter* filter = new AsciiFilter();
-	filter->setAutoModeEnabled(true);
+	// filter->setAutoModeEnabled(true);
 
 	Project* project = new Project();
 
@@ -322,7 +345,7 @@ void MQTTTest::testTextMessage() {
 	mqttClient->setReadingType(MQTTClient::ReadingType::TillEnd);
 	mqttClient->setKeepNValues(0);
 	mqttClient->setUpdateType(MQTTClient::UpdateType::NewData);
-	mqttClient->setMQTTClientHostPort(QStringLiteral("broker.hivemq.com"), 1883);
+	mqttClient->setMQTTClientHostPort(mqttHostName, mqttPort);
 	mqttClient->setMQTTUseAuthentication(false);
 	mqttClient->setMQTTUseID(false);
 	QMqttTopicFilter topicFilter{QStringLiteral("labplot/mqttUnitTest")};
@@ -331,8 +354,8 @@ void MQTTTest::testTextMessage() {
 	mqttClient->ready();
 
 	QMqttClient* client = new QMqttClient();
-	client->setHostname(QStringLiteral("broker.hivemq.com"));
-	client->setPort(1883);
+	client->setHostname(mqttHostName);
+	client->setPort(mqttPort);
 	client->connectToHost();
 
 	bool wait = QTest::qWaitFor(
@@ -402,7 +425,7 @@ void MQTTTest::testTextMessage() {
 	mqttClient->setReadingType(MQTTClient::ReadingType::TillEnd);
 	mqttClient->setKeepNValues(0);
 	mqttClient->setUpdateType(MQTTClient::UpdateType::NewData);
-	mqttClient->setMQTTClientHostPort(QStringLiteral("broker.hivemq.com"), 1883);
+	mqttClient->setMQTTClientHostPort(mqttHostName, mqttPort);
 	mqttClient->setMQTTUseAuthentication(false);
 	mqttClient->setMQTTUseID(false);
 	mqttClient->setMQTTWillUse(false);
@@ -426,8 +449,8 @@ void MQTTTest::testTextMessage() {
 	if(timer.isActive()) {
 		delete loop;
 		QMqttClient* client = new QMqttClient();
-		client->setHostname(QStringLiteral("broker.hivemq.com"));
-		client->setPort(1883);
+		client->setHostname(mqttHostName);
+		client->setPort(mqttPort);
 		client->connectToHost();
 
 		bool wait = QTest::qWaitFor([&]() {

@@ -12,19 +12,22 @@
 #define ASCIIOPTIONSWIDGET_H
 
 #include "ui_asciioptionswidget.h"
+#include "backend/datasources/filters/AsciiFilter.h"
 
-class AsciiFilter;
 class KConfig;
 
 class AsciiOptionsWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit AsciiOptionsWidget(QWidget*);
+	explicit AsciiOptionsWidget(QWidget*, bool liveData = false);
 	void showAsciiHeaderOptions(bool);
 	void showTimestampOptions(bool);
-	void applyFilterSettings(AsciiFilter*) const;
+	void applyFilterSettings(AsciiFilter::Properties &properties) const;
+	void updateWidgets(const AsciiFilter::Properties& properties);
 	void setSeparatingCharacter(QLatin1Char);
+
+	bool isValid(QString& errorMessage);
 
 	void loadSettings() const;
 	void saveSettings() const;
@@ -38,10 +41,12 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 	void headerLineChanged(int);
+	void columnModesChanged(const QString& s);
 
 private:
 	Ui::AsciiOptionsWidget ui;
 	bool m_createTimeStampAvailable{false};
+	bool m_liveData{false};
 };
 
 #endif

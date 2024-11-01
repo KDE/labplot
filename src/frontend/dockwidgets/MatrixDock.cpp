@@ -182,6 +182,11 @@ void MatrixDock::columnCountChanged(int columns) {
 
 	for (auto* matrix : m_matrixList)
 		matrix->setColumnCount(columns);
+
+	if (columns == 0) {
+		// Rowcount changed, because of the internal structure of the matrix
+		ui.sbRowCount->setValue(0);
+	}
 }
 
 //*************************************************************

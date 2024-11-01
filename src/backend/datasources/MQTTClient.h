@@ -204,6 +204,7 @@ private Q_SLOTS:
 	void onMQTTConnect();
 	void MQTTSubscriptionMessageReceived(const QMqttMessage&);
 	void MQTTErrorChanged(QMqttClient::ClientError);
+	void disconnected();
 	void subscriptionLoaded(const QString&);
 
 Q_SIGNALS:

@@ -453,9 +453,6 @@ void XYFunctionCurveTest::importData() {
 	SAVE_FILE("testStartRowSkipRow", fileContent);
 
 	AsciiFilter filter;
-	filter.setHeaderEnabled(true);
-	filter.setHeaderLine(1);
-	filter.setStartRow(1);
 	filter.readDataFromFile(savePath, sheet, AbstractFileFilter::ImportMode::Replace);
 
 	{

@@ -67,6 +67,13 @@
 #include <QWidgetAction>
 #endif
 
+namespace {
+	enum FilterSettingsHandlingIndex {
+		Automatic = 0,
+		Custom = 1,
+	};
+}
+
 QString ImportFileWidget::absolutePath(const QString& fileName) {
 	if (fileName.isEmpty())
 		return fileName;
@@ -268,6 +275,19 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	m_templateHandler->setToolButtonStyle(Qt::ToolButtonStyle::ToolButtonIconOnly);
 	ui.hLayoutFilter->addWidget(m_templateHandler);
 	connect(m_templateHandler, &TemplateHandler::saveConfigRequested, this, &ImportFileWidget::saveConfigAsTemplate);
+	connect(ui.sbEndRow, &QSpinBox::valueChanged, [this] (int value) {
+		if (value > 0) {
+			ui.sbPreviewLines->setEnabled(false);
+			ui.sbPreviewLines->setToolTip(i18n("The number of rows is calculated from the values of the data portion tab"));
+		} else {
+			ui.sbPreviewLines->setEnabled(true);
+			ui.sbPreviewLines->setToolTip(QStringLiteral(""));
+		}
+	});
+	connect(ui.sbPreviewPrecision, &QSpinBox::valueChanged, [this] (int value) {
+		if (m_currentFilter)
+			m_currentFilter->setPreviewPrecision(value);
+	});
 }
 
 void ImportFileWidget::loadSettings() {
@@ -356,7 +376,12 @@ void ImportFileWidget::loadSettings() {
 	// update the status of the widgets
 	sourceTypeChanged(static_cast<int>(currentSourceType()));
 	fileTypeChanged(); // call it to load the filter templates for the current file type and to select the last used index in cbFilter below
-	ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", 0));
+	if (!m_liveDataSource) {
+		ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", (int)FilterSettingsHandlingIndex::Automatic));
+	} else {
+		ui.cbFilter->setCurrentIndex((int)FilterSettingsHandlingIndex::Custom);
+		ui.cbFilter->setEnabled(false);
+	}
 	filterChanged(ui.cbFilter->currentIndex());
 	updateTypeChanged(ui.cbUpdateType->currentIndex());
 	readingTypeChanged(ui.cbReadingType->currentIndex());
@@ -364,7 +389,7 @@ void ImportFileWidget::loadSettings() {
 	// all set now, refresh the content of the file and the preview for the selected dataset
 	m_suppressRefresh = false;
 	QTimer::singleShot(100, this, [=]() {
-		WAIT_CURSOR;
+		WAIT_CURSOR_AUTO_RESET;
 		if (currentSourceType() == LiveDataSource::SourceType::FileOrPipe) {
 			const QString& file = absolutePath(fileName());
 			if (QFile::exists(file))
@@ -372,7 +397,6 @@ void ImportFileWidget::loadSettings() {
 		}
 
 		refreshPreview();
-		RESET_CURSOR;
 	});
 }
 
@@ -471,8 +495,10 @@ void ImportFileWidget::initSlots() {
 	connect(ui.cbFilter, QOverload<int>::of(&KComboBox::activated), this, &ImportFileWidget::filterChanged);
 	connect(ui.bRefreshPreview, &QPushButton::clicked, this, &ImportFileWidget::refreshPreview);
 
-	if (m_asciiOptionsWidget)
+	if (m_asciiOptionsWidget) {
 		connect(m_asciiOptionsWidget.get(), &AsciiOptionsWidget::headerLineChanged, this, &ImportFileWidget::updateStartRow);
+		connect(m_asciiOptionsWidget.get(), &AsciiOptionsWidget::columnModesChanged, this, &ImportFileWidget::checkValid);
+	}
 
 	connect(ui.cbMcapTopics, QOverload<int>::of(&KComboBox::activated), this, &ImportFileWidget::changeMcapTopic);
 
@@ -608,6 +634,10 @@ int ImportFileWidget::baudRate() const {
 	return ui.cbBaudRate->currentText().toInt();
 }
 
+bool ImportFileWidget::importValid() const {
+	return false;
+}
+
 /*!
 	saves the settings to the data source \c source.
 */
@@ -615,7 +645,6 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 	// file type
 	const auto fileType = currentFileType();
 	source->setFileType(fileType);
-	currentFileFilter();
 	source->setFilter(m_currentFilter.release()); // pass ownership of the filter to the LiveDataSource
 
 	// source type
@@ -685,22 +714,31 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		if (!m_currentFilter)
 			m_currentFilter.reset(new AsciiFilter);
 		auto filter = static_cast<AsciiFilter*>(m_currentFilter.get());
+		auto properties = filter->defaultProperties();
 
-		if (ui.cbFilter->currentIndex() == 0) //"automatic"
-			filter->setAutoModeEnabled(true);
-		else { //"custom" and templates
-			filter->setAutoModeEnabled(false);
+		// set the data portion to import
+		properties.startRow = ui.sbStartRow->value();
+		properties.endRow = ui.sbEndRow->value();
+		properties.startColumn = ui.sbStartColumn->value();
+		properties.endColumn = ui.sbEndColumn->value();
 
-			// set the data portion to import
-			filter->setStartRow(ui.sbStartRow->value());
-			filter->setEndRow(ui.sbEndRow->value());
-			filter->setStartColumn(ui.sbStartColumn->value());
-			filter->setEndColumn(ui.sbEndColumn->value());
+		const bool automatic = ui.cbFilter->currentIndex() == FilterSettingsHandlingIndex::Automatic;
+		if (!m_liveDataSource && automatic) {
+			properties.automaticSeparatorDetection = true;
+			properties.removeQuotes = true;
+			if (m_asciiOptionsWidget)
+				m_asciiOptionsWidget->updateWidgets(properties);
+		} else { //"custom" and templates
+			properties.automaticSeparatorDetection = false;
 
 			// set the remaining filter settings
-			if (m_asciiOptionsWidget)
-				m_asciiOptionsWidget->applyFilterSettings(filter);
+			if (m_asciiOptionsWidget && !automatic)
+				m_asciiOptionsWidget->applyFilterSettings(properties);
 		}
+		// Both required, because initialize might fail and then no properties are set
+		// Initialize is required for livedata (sequential devices)
+		filter->setProperties(properties);
+		filter->initialize(properties);
 
 		break;
 	}
@@ -710,7 +748,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 			m_currentFilter.reset(new BinaryFilter);
 		auto filter = static_cast<BinaryFilter*>(m_currentFilter.get());
 
-		if (ui.cbFilter->currentIndex() == 0) //"automatic"
+		if (ui.cbFilter->currentIndex() == FilterSettingsHandlingIndex::Automatic)
 			filter->setAutoModeEnabled(true);
 		else { //"custom" and templates
 			filter->setAutoModeEnabled(false);
@@ -920,7 +958,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		break;
 	}
 	}
-
+	ui.sbPreviewPrecision->setValue(m_currentFilter->previewPrecision());
 	return m_currentFilter.get();
 }
 
@@ -1319,12 +1357,13 @@ void ImportFileWidget::initOptionsWidget() {
 	case AbstractFileFilter::FileType::Ascii: {
 		if (!m_asciiOptionsWidget) {
 			auto* asciiw = new QWidget();
-			m_asciiOptionsWidget = std::unique_ptr<AsciiOptionsWidget>(new AsciiOptionsWidget(asciiw));
+			m_asciiOptionsWidget = std::unique_ptr<AsciiOptionsWidget>(new AsciiOptionsWidget(asciiw, m_liveDataSource));
 			m_asciiOptionsWidget->loadSettings();
 
 			// allow to add timestamp column for live data sources
-			if (m_liveDataSource)
+			if (m_liveDataSource) {
 				m_asciiOptionsWidget->showTimestampOptions(true);
+			}
 			ui.swOptions->addWidget(asciiw);
 		}
 
@@ -1640,10 +1679,10 @@ void ImportFileWidget::filterChanged(int index) {
 		return;
 	}
 
-	if (index == 0) { // "automatic"
+	if (index == FilterSettingsHandlingIndex::Automatic) {
 		ui.swOptions->setEnabled(false);
 		m_templateHandler->hide();
-	} else if (index == 1) { // custom
+	} else if (index == FilterSettingsHandlingIndex::Custom) {
 		ui.swOptions->setEnabled(true);
 		m_templateHandler->show();
 	} else { // templates
@@ -1674,6 +1713,7 @@ void ImportFileWidget::refreshPreview() {
 	DEBUG(Q_FUNC_INFO << ", Data File Type: " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
 	const auto& dbcFile = dbcFileName();
 	int lines = ui.sbPreviewLines->value();
+	currentFilter->setPreviewPrecision(ui.sbPreviewPrecision->value());
 
 	// default preview widget
 	if (fileType == AbstractFileFilter::FileType::Ascii || fileType == AbstractFileFilter::FileType::Binary || fileType == AbstractFileFilter::FileType::JSON
@@ -1691,13 +1731,34 @@ void ImportFileWidget::refreshPreview() {
 
 	DEBUG(Q_FUNC_INFO << ", Data File Type: " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
+
+	QString errorMessage;
 
 	switch (fileType) {
 	case AbstractFileFilter::FileType::Ascii: {
 		ui.tePreview->clear();
 
 		auto filter = static_cast<AsciiFilter*>(currentFilter);
+		const auto& properties = filter->properties();
+		if (properties.endRow > 0)
+			lines = properties.endRow - properties.startRow + 1;
+		if (lines <= 0) {
+			Q_EMIT error(i18n("Invalid number rows. Please check 'End Row' and 'Start Row'. 'End Row' must be larger than 'Start Row' or -1"));
+			return;
+		}
+		filter->clearLastError();
+		filter->clearLastWarnings();
+
+		// sequential
+		if (sourceType != LiveDataSource::SourceType::FileOrPipe) {
+			auto p = filter->properties();
+			filter->initialize(p);
+			if (!filter->lastError().isEmpty()) {
+				Q_EMIT error(i18n("Preview: Initialization failed: %1", filter->lastError()));
+				return;
+			}
+		}
 
 		DEBUG(Q_FUNC_INFO << ", Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, sourceType));
 		switch (sourceType) {
@@ -1713,12 +1774,15 @@ void ImportFileWidget::refreshPreview() {
 			if (lsocket.waitForConnected()) {
 				DEBUG("connected to local socket " << STDSTRING(file));
 				if (lsocket.waitForReadyRead())
-					importedStrings = filter->preview(lsocket);
+					importedStrings = filter->preview(lsocket, lines, false);
 				DEBUG("Local socket: DISCONNECT PREVIEW");
 				lsocket.disconnectFromServer();
 				// read-only socket is disconnected immediately (no waitForDisconnected())
-			} else
+			} else {
 				DEBUG("failed connect to local socket " << STDSTRING(file) << " - " << STDSTRING(lsocket.errorString()));
+				Q_EMIT error(i18n("Preview: Failed to connect to local socket %1 - %2", file, lsocket.errorString()));
+				return;
+			}
 
 			break;
 		}
@@ -1728,8 +1792,11 @@ void ImportFileWidget::refreshPreview() {
 			if (tcpSocket.waitForConnected()) {
 				DEBUG("connected to TCP socket");
 				if (tcpSocket.waitForReadyRead())
-					importedStrings = filter->preview(tcpSocket);
-
+					importedStrings = filter->preview(tcpSocket, lines, false);
+				else {
+					DEBUG("failed connect to tcp socket " << STDSTRING(tcpSocket.errorString()));
+					errorMessage = i18n("Preview: Failed to connect to tcp socket - %1", tcpSocket.errorString());
+				}
 				tcpSocket.disconnectFromHost();
 			} else
 				DEBUG("failed to connect to TCP socket "
@@ -1751,7 +1818,7 @@ void ImportFileWidget::refreshPreview() {
 				} else {
 					DEBUG("	has no pending data");
 				}
-				importedStrings = filter->preview(udpSocket);
+				importedStrings = filter->preview(udpSocket, lines, false);
 
 				DEBUG("UDP Socket: DISCONNECT PREVIEW, state = " << udpSocket.state());
 				udpSocket.disconnectFromHost();
@@ -1770,14 +1837,16 @@ void ImportFileWidget::refreshPreview() {
 			sPort.setBaudRate(baudRate());
 
 			if (sPort.open(QIODevice::ReadOnly)) {
-				if (sPort.waitForReadyRead(2000))
-					importedStrings = filter->preview(sPort);
-				else
-					DEBUG("	ERROR: not ready for read after 2 sec");
+				if (sPort.waitForReadyRead(2000)) {
+					importedStrings = filter->preview(sPort, lines, false, true);
+					if (!filter->lastError().isEmpty())
+						errorMessage = i18n("Parse Error: %1", filter->lastError());
+				} else
+					errorMessage = i18n("ERROR: not ready for read after 2 sec");
 
 				sPort.close();
 			} else
-				DEBUG("	ERROR: failed to open serial port. error: " << sPort.error());
+				errorMessage = i18n("ERROR: failed to open serial port. error: %1", sPort.error());
 #endif
 			break;
 		}
@@ -1785,12 +1854,17 @@ void ImportFileWidget::refreshPreview() {
 #ifdef HAVE_MQTT
 			// show the preview for the currently selected topic
 			auto* item = m_subscriptionWidget->currentItem();
-			if (item && item->childCount() == 0) { // only preview if the lowest level (i.e. a topic) is selected
+			if (!item)
+				errorMessage = QStringLiteral("Please select a topic.");
+			else if (item->childCount() != 0)
+				errorMessage = QStringLiteral("Please select lowest level of the topic.");
+			else { // only preview if the lowest level (i.e. a topic) is selected
 				const QString& topicName = item->text(0);
 				auto i = m_lastMessage.find(topicName);
-				if (i != m_lastMessage.end())
-					importedStrings = filter->preview(QLatin1String(i.value().payload().data()));
-				else
+				if (i != m_lastMessage.end()) {
+					BufferReader reader(i.value().payload());
+					importedStrings = filter->preview(reader, lines, false);
+				} else
 					importedStrings << QStringList{i18n("No data arrived yet for the selected topic")};
 			}
 #endif
@@ -1798,10 +1872,10 @@ void ImportFileWidget::refreshPreview() {
 		}
 		}
 
-		vectorNameList = filter->vectorNames();
+		vectorNameList = filter->columnNames();
 		columnModes = filter->columnModes();
 		break;
-	}
+	} // AbstractFileFilter::FileType::Ascii
 	case AbstractFileFilter::FileType::Binary: {
 		ui.tePreview->clear();
 		auto filter = static_cast<BinaryFilter*>(currentFilter);
@@ -1826,7 +1900,6 @@ void ImportFileWidget::refreshPreview() {
 		QImage image(file);
 		auto cursor = ui.tePreview->textCursor();
 		cursor.insertImage(image);
-		RESET_CURSOR;
 		error(currentFilter->lastError());
 		return;
 	}
@@ -2016,16 +2089,26 @@ void ImportFileWidget::refreshPreview() {
 		tmpTableWidget->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 	}
 
-	error(currentFilter->lastError());
+	if (!errorMessage.isEmpty()) {
+		Q_EMIT error(errorMessage);
+	} else if (!currentFilter->lastError().isEmpty())
+		Q_EMIT error(currentFilter->lastError());
 
-	RESET_CURSOR;
-	if (currentFilter->lastError().isEmpty())
+	if (currentFilter->lastError().isEmpty() && errorMessage.isEmpty())
 		Q_EMIT previewReady();
 }
 
 void ImportFileWidget::updateStartRow(int line) {
 	if (line >= ui.sbStartRow->value())
 		ui.sbStartRow->setValue(line + 1);
+}
+
+void ImportFileWidget::checkValid() {
+	QString errorMessage;
+	if (m_asciiOptionsWidget && !m_asciiOptionsWidget->isValid(errorMessage))
+		Q_EMIT error(errorMessage);
+	else
+		Q_EMIT error({});
 }
 
 void ImportFileWidget::updateContent(const QString& fileName) {
@@ -2036,6 +2119,9 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 	WAIT_CURSOR;
+	CleanupNoArguments cleanup([] () {
+		RESET_CURSOR;
+	});
 
 	if (auto filter = currentFileFilter()) {
 		switch (filter->type()) {
@@ -2106,7 +2192,6 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 			break;
 		}
 	}
-	RESET_CURSOR;
 }
 
 void ImportFileWidget::updateTypeChanged(int idx) {
@@ -2389,9 +2474,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 	// and wants to use the header to set the column names or the user provides manually the column names.
 	// TODO: adjust this logic later once we allow to import multiple columns from sockets,
 	// it should be possible to provide the names of the columns
-	bool visible = (sourceType == LiveDataSource::SourceType::FileOrPipe);
 	if (m_asciiOptionsWidget)
-		m_asciiOptionsWidget->showAsciiHeaderOptions(visible);
+		m_asciiOptionsWidget->showAsciiHeaderOptions(true);
 
 	Q_EMIT sourceTypeChanged();
 	refreshPreview();
@@ -2425,6 +2509,9 @@ void ImportFileWidget::mqttConnectionChanged() {
 	}
 
 	WAIT_CURSOR;
+	CleanupNoArguments cleanup([] () {
+		RESET_CURSOR;
+	});
 	Q_EMIT error(QString());
 
 	// disconnected from the broker that was selected before
@@ -2833,7 +2920,6 @@ void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
 	auto updateType = static_cast<MQTTClient::UpdateType>(ui.cbUpdateType->currentIndex());
 	auto readingType = static_cast<MQTTClient::ReadingType>(ui.cbReadingType->currentIndex());
 
-	currentFileFilter();
 	client->setFilter(static_cast<AsciiFilter*>(m_currentFilter.release())); // pass ownership of the filter to MQTTClient
 
 	client->setReadingType(readingType);

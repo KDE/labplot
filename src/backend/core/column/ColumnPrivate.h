@@ -142,12 +142,7 @@ public:
 
 	struct CachedValuesAvailable {
 		void setUnavailable() {
-			statistics = false;
-			min = false;
-			max = false;
-			hasValues = false;
-			dictionary = false;
-			properties = false;
+			*this = CachedValuesAvailable();
 		}
 		bool statistics{false}; // is 'statistics' already available or needs to be (re-)calculated?
 		// are minMax already calculated or needs to be (re-)calculated?
