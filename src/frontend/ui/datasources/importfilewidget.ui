@@ -403,7 +403,7 @@
       <item>
        <widget class="QTabWidget" name="tabWidget">
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="tabDataFormat">
          <property name="sizePolicy">
@@ -471,6 +471,13 @@
          </attribute>
          <layout class="QGridLayout" name="gridLayout_3">
           <item row="0" column="2">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Precision:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
            <spacer name="horizontalSpacer">
             <property name="orientation">
              <enum>Qt::Orientation::Horizontal</enum>
@@ -496,10 +503,43 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="3">
+          <item row="2" column="0" colspan="6">
+           <widget class="QTextEdit" name="tePreview">
+            <property name="undoRedoEnabled">
+             <bool>true</bool>
+            </property>
+            <property name="lineWrapMode">
+             <enum>QTextEdit::LineWrapMode::NoWrap</enum>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="5">
            <widget class="QPushButton" name="bRefreshPreview">
             <property name="text">
              <string>Refresh</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="6">
+           <widget class="QLabel" name="lWarningLimitedMessages">
+            <property name="text">
+             <string>Not all variables might be visible, because of limited number of messages</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QSpinBox" name="sbPreviewPrecision">
+            <property name="minimum">
+             <number>0</number>
+            </property>
+            <property name="maximum">
+             <number>100</number>
+            </property>
+            <property name="value">
+             <number>6</number>
             </property>
            </widget>
           </item>
@@ -516,38 +556,18 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="2">
-           <widget class="QSpinBox" name="sbPreviewPrecision">
-            <property name="minimum">
-             <number>0</number>
+          <item row="0" column="4">
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
             </property>
-            <property name="maximum">
-             <number>100</number>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
             </property>
-            <property name="value">
-             <number>6</number>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0" colspan="4">
-           <widget class="QTextEdit" name="tePreview">
-            <property name="undoRedoEnabled">
-             <bool>true</bool>
-            </property>
-            <property name="lineWrapMode">
-             <enum>QTextEdit::LineWrapMode::NoWrap</enum>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0" colspan="4">
-           <widget class="QLabel" name="lWarningLimitedMessages">
-            <property name="text">
-             <string>Not all variables might be visible, because of limited number of messages</string>
-            </property>
-           </widget>
+           </spacer>
           </item>
          </layout>
         </widget>
