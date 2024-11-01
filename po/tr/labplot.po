@@ -2408,10 +2408,9 @@ msgid "%1: Import from %2"
 msgstr "%1: %2 konumundan içe aktar"
 
 #: src/backend/gsl/constants.cpp:13
-#, fuzzy, kde-format
-#| msgid "Planck constant"
+#, kde-format
 msgid "Programming constants"
-msgstr "Plank sabiti"
+msgstr "Programlama sabitleri"
 
 #: src/backend/gsl/constants.cpp:15
 #, kde-format
@@ -2501,7 +2500,7 @@ msgstr "Bilinmeyen Sabit"
 #: src/backend/gsl/constants.cpp:61
 #, kde-format
 msgid "RAND_MAX"
-msgstr ""
+msgstr "RAND_MAX"
 
 #. i18n("Mathematical constants"));
 #: src/backend/gsl/constants.cpp:64
@@ -3559,10 +3558,9 @@ msgid "Random sample"
 msgstr "Rastgele örneklem"
 
 #: src/backend/gsl/functions.cpp:248
-#, fuzzy, kde-format
-#| msgid "Number of seconds in 1 hour"
+#, kde-format
 msgid "Number of elements in vector x"
-msgstr "1 saatteki saniyelerin sayısı"
+msgstr "x vektöründeki ögelerin sayısı"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMinimum)
@@ -24261,115 +24259,3 @@ msgstr "dönüştürme süreci başarısız, çıkış kodu ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Dosya açılamadı:"
-
-#~ msgid "%1: set subgroup size"
-#~ msgstr "%1: Alt grup boyutunu ayarla"
-
-#~ msgid "Subgroup Size:"
-#~ msgstr "Alt grup boyutu:"
-
-#~ msgid "Evaluate Worksheet"
-#~ msgstr "Çalışma Sayfasını Değerlendir"
-
-#~ msgid "Couldn't find panel plugins. Please check your installation."
-#~ msgstr "Panel eklentileri bulunamadı. Lütfen kurulumunuzu denetleyin."
-
-#~ msgid ""
-#~ "Couldn't find the dynamic library 'cantorpart'. Please check your "
-#~ "installation."
-#~ msgstr ""
-#~ "“contorpart” devingen kitaplığı bulunamadı. Lütfen kurulumunuzu "
-#~ "denetleyin."
-
-#~ msgid "Failed to open the device."
-#~ msgstr "Aygıt açılamadı."
-
-#~ msgid "Failed to read data. The device is removed."
-#~ msgstr "Veri okunamadı. Aygıt kaldırılmış."
-
-#~ msgid "The device timed out."
-#~ msgstr "Aygıt zaman aşımına uğradı."
-
-#~ msgid "Could not connect to the provided serial port."
-#~ msgstr "Sağlanan seri kapıya bağlanılamadı."
-
-#~ msgctxt "@title:window"
-#~ msgid "CAS Preferences"
-#~ msgstr "CAS Tercihleri"
-
-#~ msgid "No Cantor backends found. Please install the ones you want to use."
-#~ msgstr ""
-#~ "Bir Cantor arka ucu bulunamadı. Lütfen kullanmak istediklerinizi kurun."
-
-#~ msgid "Excel"
-#~ msgstr "Excel"
-
-#~ msgid "ROOT (CERN) Histograms"
-#~ msgstr "ROOT (CERN) Histogramları"
-
-#~ msgid "Add %1"
-#~ msgstr "%1 Ekle"
-
-#~ msgid "%1 name:"
-#~ msgstr "%1 adı:"
-
-#~ msgid "Fit not possible. Please check if data is given."
-#~ msgstr "Uyum olanaklı değil. Verinin verilip verilmediğini denetleyin."
-
-#~ msgid "CartesianPlot"
-#~ msgstr "KartezyenÇizim"
-
-#~ msgid "cumulative distribution function P"
-#~ msgstr "kümalatif dağılım işlevi P"
-
-#~| msgid "1st quartile"
-#~ msgid "p-th quantile"
-#~ msgstr "p. dağılım dilimi"
-
-#~ msgid "%1: copy %2"
-#~ msgstr "%1: Kopyala: %2"
-
-#~ msgid "Column Format"
-#~ msgstr "Sütun Biçimi"
-
-#~ msgid "test"
-#~ msgstr "sınama"
-
-#~ msgid "Debug Output:"
-#~ msgstr "Hata ayıklama çıktısı:"
-
-#~ msgid "Specify the name of the file to import."
-#~ msgstr "İçe aktarılacak dosyanın adını belirtin."
-
-#~ msgid "%1: move down"
-#~ msgstr "%1: Aşağı taşı"
-
-#~ msgid "%1: move behind %2."
-#~ msgstr "%1: %2 ögesinin arkasına taşı."
-
-#~ msgid "%1: move in front of %2."
-#~ msgstr "%1: %2 ögesinin önüne taşı."
-
-#~ msgid "Invalid metadata file"
-#~ msgstr "Geçersiz üst veri dosyası"
-
-#~ msgid "Failed to download the dataset"
-#~ msgstr "Veri kümesi indirilemedi"
-
-#~ msgid "Failed to save the dataset"
-#~ msgstr "Veri kümesi kaydedilemedi"
-
-#~ msgid "Variable contains no data"
-#~ msgstr "Değişken veri içermiyor"
-
-#~ msgid "Not implemented yet"
-#~ msgstr "Henüz gerçeklenmedi"
-
-#~ msgid "Invalid dbc file"
-#~ msgstr "Geçersiz dbc dosyası"
-
-#~ msgid "No data to import."
-#~ msgstr "İçe aktarılacak veri yok."
-
-#~ msgid "Parse Errors"
-#~ msgstr "Ayrıştırma Hataları"
