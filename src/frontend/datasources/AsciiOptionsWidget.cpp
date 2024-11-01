@@ -155,8 +155,6 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent, bool liveData)
 
 void AsciiOptionsWidget::showAsciiHeaderOptions(bool visible) {
 	DEBUG(Q_FUNC_INFO);
-	if (m_liveData)
-		return;
 
 	ui.chbHeader->setVisible(visible);
 	ui.sbHeaderLine->setVisible(visible);

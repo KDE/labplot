@@ -100,6 +100,7 @@ private:
 	void showJsonModel(bool);
 	void enableFirstRowAsColNames(bool enable); // used by XLSX and Ods
 	void updateHeaderOptions();
+	void updateFilterHandlingSettings(LiveDataSource::SourceType);
 
 	std::unique_ptr<AsciiOptionsWidget> m_asciiOptionsWidget;
 	std::unique_ptr<BinaryOptionsWidget> m_binaryOptionsWidget;

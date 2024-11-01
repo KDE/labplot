@@ -376,7 +376,7 @@ void ImportFileWidget::loadSettings() {
 	// update the status of the widgets
 	sourceTypeChanged(static_cast<int>(currentSourceType()));
 	fileTypeChanged(); // call it to load the filter templates for the current file type and to select the last used index in cbFilter below
-	if (!m_liveDataSource) {
+	if (!m_liveDataSource || currentSourceType() == LiveDataSource::SourceType::FileOrPipe) {
 		ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", (int)FilterSettingsHandlingIndex::Automatic));
 	} else {
 		ui.cbFilter->setCurrentIndex((int)FilterSettingsHandlingIndex::Custom);
@@ -398,6 +398,16 @@ void ImportFileWidget::loadSettings() {
 
 		refreshPreview();
 	});
+}
+
+void ImportFileWidget::updateFilterHandlingSettings(LiveDataSource::SourceType sourceType) {
+	if (!m_liveDataSource || sourceType == LiveDataSource::SourceType::FileOrPipe) {
+		// No need to change
+		ui.cbFilter->setEnabled(true);
+	} else {
+		ui.cbFilter->setCurrentIndex((int)FilterSettingsHandlingIndex::Custom);
+		ui.cbFilter->setEnabled(false);
+	}
 }
 
 ImportFileWidget::~ImportFileWidget() {
@@ -723,7 +733,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		properties.endColumn = ui.sbEndColumn->value();
 
 		const bool automatic = ui.cbFilter->currentIndex() == FilterSettingsHandlingIndex::Automatic;
-		if (!m_liveDataSource && automatic) {
+		if ((!m_liveDataSource || currentSourceType() == LiveDataSource::SourceType::FileOrPipe) && automatic) {
 			properties.automaticSeparatorDetection = true;
 			properties.removeQuotes = true;
 			if (m_asciiOptionsWidget)
@@ -2466,6 +2476,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		auto* item = typeModel->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 	}
+
+	updateFilterHandlingSettings(sourceType);
 
 	// disable the header options for non-file sources because:
 	//* for sockets we allow to import one single value only at the moment
