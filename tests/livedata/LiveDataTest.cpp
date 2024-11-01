@@ -1171,7 +1171,7 @@ void LiveDataTest::testReadWholeFileSameContentSize() {
 	file.write("1,2\n");
 	file.flush();
 
-		   // initialize the live data source
+	// initialize the live data source
 	LiveDataSource dataSource(QStringLiteral("test"), false);
 	dataSource.setSourceType(LiveDataSource::SourceType::FileOrPipe);
 	dataSource.setFileType(AbstractFileFilter::FileType::Ascii);
@@ -1179,7 +1179,7 @@ void LiveDataTest::testReadWholeFileSameContentSize() {
 	dataSource.setReadingType(LiveDataSource::ReadingType::WholeFile);
 	dataSource.setUpdateType(LiveDataSource::UpdateType::NewData);
 
-		   // initialize the ASCII filter
+	// initialize the ASCII filter
 	auto* filter = new AsciiFilter();
 	auto properties = filter->defaultProperties();
 	properties.headerEnabled = false;
@@ -1191,7 +1191,7 @@ void LiveDataTest::testReadWholeFileSameContentSize() {
 	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
 	dataSource.setFilter(filter);
 
-		   // read the data and perform checks
+	// read the data and perform checks
 	dataSource.read();
 
 	QCOMPARE(dataSource.columnCount(), 2);
@@ -1215,7 +1215,7 @@ void LiveDataTest::testReadWholeFileSameContentSize() {
 	file.close();
 	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
 
-		   // checks
+	// checks
 	QCOMPARE(dataSource.columnCount(), 2);
 	QCOMPARE(dataSource.rowCount(), 1);
 
