@@ -1214,7 +1214,7 @@ AsciiFilter::Status AsciiFilterPrivate::getLine(QIODevice& device, QString& line
 	// even if it is not a complete line. So without we would get partly lines which get parsed wrongly
 	if (!device.canReadLine()) {
 		// Seems to be that KCompressionDevice has problems with this function
-		if (!dynamic_cast<KCompressionDevice*>(&device) && !dynamic_cast<QFile*>(&device))
+		if (!dynamic_cast<KCompressionDevice*>(&device) && !dynamic_cast<QFile*>(&device) && !dynamic_cast<BufferReader*>(&device))
 			return Status::NoNewLine;
 	}
 
