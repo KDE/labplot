@@ -58,7 +58,10 @@ bool BufferReader::isSequential() const {
 }
 
 bool BufferReader::open(OpenMode mode) {
-	return mode == QIODevice::OpenModeFlag::ReadOnly;
+	if (mode == QIODevice::OpenModeFlag::ReadOnly) {
+		return QIODevice::open(mode);
+	}
+	return false;
 }
 
 bool BufferReader::atEnd() const {
