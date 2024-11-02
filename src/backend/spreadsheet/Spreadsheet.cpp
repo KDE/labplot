@@ -1574,8 +1574,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 		if (columnImportMode == AbstractFileFilter::ImportMode::Replace) {
 			column->setSuppressDataChangedSignal(true);
 			column->setChanged(); // Invalidate properties
-			column->setSuppressDataChangedSignal(
-				false);
+			column->setSuppressDataChangedSignal(false);
 		}
 	}
 
