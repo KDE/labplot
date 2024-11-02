@@ -1575,7 +1575,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 			column->setSuppressDataChangedSignal(true);
 			column->setChanged(); // Invalidate properties
 			column->setSuppressDataChangedSignal(
-				false); // TODO: evaluate this (with setChanged), because this could lead to a lot of changes which are not controllable.
+				false);
 		}
 	}
 
