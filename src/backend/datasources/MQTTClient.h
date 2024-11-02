@@ -212,5 +212,8 @@ Q_SIGNALS:
 	void MQTTTopicsChanged();
 	void readFromTopics();
 	void clientAboutToBeDeleted(const QString&, quint16);
+	void messagedReceived();
+
+	friend class MQTTTest;
 };
 #endif // MQTTCLIENT_H

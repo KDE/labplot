@@ -142,7 +142,13 @@ void MQTTTest::testCommonFalse() {
 // ##############################################################################
 void MQTTTest::testIntegerMessage() {
 	AsciiFilter* filter = new AsciiFilter();
-	// filter->setAutoModeEnabled(true);
+
+	auto properties = filter->properties();
+	properties.automaticSeparatorDetection = false;
+	properties.headerEnabled = false;
+	properties.columnModesString = QStringLiteral("Int");
+	properties.intAsDouble = false;
+	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success); // Livedata must be initialized!
 
 	Project* project = new Project();
 
@@ -150,7 +156,7 @@ void MQTTTest::testIntegerMessage() {
 	project->addChild(mqttClient);
 	mqttClient->setFilter(filter);
 	mqttClient->setReadingType(MQTTClient::ReadingType::TillEnd);
-	mqttClient->setKeepNValues(0);
+	mqttClient->setKeepNValues(100); // At least 8!
 	mqttClient->setUpdateType(MQTTClient::UpdateType::NewData);
 	mqttClient->setMQTTClientHostPort(mqttHostName, mqttPort);
 	mqttClient->setMQTTUseAuthentication(false);
@@ -174,74 +180,92 @@ void MQTTTest::testIntegerMessage() {
 
 	QMqttSubscription* subscription = client->subscribe(topicFilter, 0);
 	if (subscription) {
-		const QString fileName = m_dataDir + QStringLiteral("integer_message_1.txt");
-		QFile file(fileName);
+		{
+			const QStringList data = {
+				QStringLiteral("1"),
+				QStringLiteral("2"),
+				QStringLiteral("3"),
+			};
+			QString savePath;
+			SAVE_FILE("testfile", data);
+			QFile file(savePath);
 
-		if (file.open(QIODevice::ReadOnly)) {
-			QTextStream in(&file);
-			QString message = in.readAll();
-			client->publish(topicFilter.filter(), message.toUtf8(), 0);
+			if (file.open(QIODevice::ReadOnly)) {
+				QTextStream in(&file);
+				QString message = in.readAll();
+				client->publish(topicFilter.filter(), message.toUtf8(), 0);
+			}
+			file.close();
 		}
-		file.close();
 
 		QTimer timer;
 		timer.setSingleShot(true);
 		QEventLoop* loop = new QEventLoop();
-		connect(mqttClient, &MQTTClient::MQTTTopicsChanged, loop, &QEventLoop::quit);
+		connect(mqttClient, &MQTTClient::messagedReceived, loop, &QEventLoop::quit);
 		connect((&timer), &QTimer::timeout, loop, &QEventLoop::quit);
 		timer.start(5000);
 		loop->exec();
 
 		const MQTTTopic* testTopic = nullptr;
 
-		if (timer.isActive()) {
-			QVector<const MQTTTopic*> topic = mqttClient->children<const MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
-			for (const auto& top : topic) {
-				if (top->topicName() == QLatin1String("labplot/mqttUnitTest")) {
-					testTopic = top;
-					break;
-				}
-			}
-
-			if (testTopic) {
-				Column* value = testTopic->column(testTopic->columnCount() - 1);
-				QCOMPARE(value->columnMode(), Column::ColumnMode::Integer);
-				QCOMPARE(value->rowCount(), 3);
-				QCOMPARE(value->valueAt(0), 1);
-				QCOMPARE(value->valueAt(1), 2);
-				QCOMPARE(value->valueAt(2), 3);
-
-				const QString fileName2 = m_dataDir + QStringLiteral("integer_message_2.txt");
-				QFile file2(fileName2);
-
-				if (file2.open(QIODevice::ReadOnly)) {
-					QTextStream in2(&file2);
-					QString message = in2.readAll();
-					client->publish(topicFilter.filter(), message.toUtf8(), 0);
-				}
-				file2.close();
-
-				QTest::qWait(1000);
-
-				QCOMPARE(value->rowCount(), 8);
-				QCOMPARE(value->valueAt(3), 6);
-				QCOMPARE(value->valueAt(4), 0);
-				QCOMPARE(value->valueAt(5), 0);
-				QCOMPARE(value->valueAt(6), 0);
-				QCOMPARE(value->valueAt(7), 3);
+		QVERIFY(timer.isActive());
+		QVector<const MQTTTopic*> topic = mqttClient->children<const MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
+		for (const auto& top : topic) {
+			if (top->topicName() == QLatin1String("labplot/mqttUnitTest")) {
+				testTopic = top;
+				break;
 			}
 		}
+		QVERIFY(testTopic);
+
+		Column* value = testTopic->column(testTopic->columnCount() - 1);
+		QCOMPARE(value->columnMode(), Column::ColumnMode::Integer);
+		QCOMPARE(value->rowCount(), 3);
+		QCOMPARE(value->integerAt(0), 1);
+		QCOMPARE(value->integerAt(1), 2);
+		QCOMPARE(value->integerAt(2), 3);
+
+		{
+			const QStringList data = {
+				QStringLiteral("5"),
+				QStringLiteral("6"),
+				QStringLiteral("7"),
+				QStringLiteral("8"),
+			};
+			QString savePath;
+			SAVE_FILE("testfile2", data);
+			QFile file2(savePath);
+
+			if (file2.open(QIODevice::ReadOnly)) {
+				QTextStream in2(&file2);
+				QString message = in2.readAll();
+				client->publish(topicFilter.filter(), message.toUtf8(), 0);
+			}
+			file2.close();
+		}
+
+		QTest::qWait(1000);
+
+		QCOMPARE(value->rowCount(), 7);
+		QCOMPARE(value->integerAt(0), 1);
+		QCOMPARE(value->integerAt(1), 2);
+		QCOMPARE(value->integerAt(2), 3);
+		QCOMPARE(value->integerAt(3), 5);
+		QCOMPARE(value->integerAt(4), 6);
+		QCOMPARE(value->integerAt(5), 7);
+		QCOMPARE(value->integerAt(6), 8);
 	}
 }
 
 void MQTTTest::testNumericMessage() {
 	AsciiFilter* filter = new AsciiFilter();
-	auto p = filter->properties();
-	// p.automaticSeparatorDetection = false;
-	// p.columnModesString = QStringLiteral("Double, Double, Double");
-	// p.columnNamesRaw = QStringLiteral("Column1, Column2, Column3");
 
-	// QCOMPARE(filter->initialize(p), true);
+	auto properties = filter->properties();
+	properties.automaticSeparatorDetection = false;
+	properties.headerEnabled = false;
+	properties.columnModesString = QStringLiteral("Double");
+	properties.intAsDouble = false;
+	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success); // Livedata must be initialized!
 
 	Project* project = new Project();
 
@@ -249,7 +273,7 @@ void MQTTTest::testNumericMessage() {
 	project->addChild(mqttClient);
 	mqttClient->setFilter(filter);
 	mqttClient->setReadingType(MQTTClient::ReadingType::TillEnd);
-	mqttClient->setKeepNValues(0);
+	mqttClient->setKeepNValues(100); // At least 8!
 	mqttClient->setUpdateType(MQTTClient::UpdateType::NewData);
 	mqttClient->setMQTTClientHostPort(mqttHostName, mqttPort);
 	mqttClient->setMQTTUseAuthentication(false);
@@ -273,69 +297,105 @@ void MQTTTest::testNumericMessage() {
 
 	QMqttSubscription* subscription = client->subscribe(topicFilter, 0);
 	if (subscription) {
-		const QString fileName = m_dataDir + QStringLiteral("numeric_message_1.txt");
-		QFile file(fileName);
+		{
+			const QStringList data = {
+				QStringLiteral("1.5"),
+				QStringLiteral(""),
+				QStringLiteral(""),
+				QStringLiteral("2.7"),
+				QStringLiteral(""),
+				QStringLiteral(""),
+				QStringLiteral("3.9"),
+			};
+			QString savePath;
+			SAVE_FILE("testfile", data);
+			QFile file(savePath);
 
-		if (file.open(QIODevice::ReadOnly)) {
-			QTextStream in(&file);
-			QString message = in.readAll();
-			client->publish(topicFilter.filter(), message.toUtf8(), 0);
+			if (file.open(QIODevice::ReadOnly)) {
+				QTextStream in(&file);
+				QString message = in.readAll();
+				client->publish(topicFilter.filter(), message.toUtf8(), 0);
+			}
+			file.close();
 		}
-		file.close();
 
 		QTimer timer;
 		timer.setSingleShot(true);
 		QEventLoop* loop = new QEventLoop();
-		connect(mqttClient, &MQTTClient::MQTTTopicsChanged, loop, &QEventLoop::quit);
+		connect(mqttClient, &MQTTClient::messagedReceived, loop, &QEventLoop::quit);
 		connect((&timer), &QTimer::timeout, loop, &QEventLoop::quit);
 		timer.start(5000);
 		loop->exec();
 
 		const MQTTTopic* testTopic = nullptr;
 
-		if (timer.isActive()) {
-			QVector<const MQTTTopic*> topic = mqttClient->children<const MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
-			for (const auto& top : topic) {
-				if (top->topicName() == QLatin1String("labplot/mqttUnitTest")) {
-					testTopic = top;
-					break;
-				}
-			}
-
-			if (testTopic) {
-				Column* value = testTopic->column(testTopic->columnCount() - 1);
-				QCOMPARE(value->columnMode(), Column::ColumnMode::Double);
-				QCOMPARE(value->rowCount(), 3);
-				QCOMPARE(value->valueAt(0), 1.5);
-				QCOMPARE(value->valueAt(1), 2.7);
-				QCOMPARE(value->valueAt(2), 3.9);
-
-				const QString fileName2 = m_dataDir + QStringLiteral("numeric_message_2.txt");
-				QFile file2(fileName2);
-
-				if (file2.open(QIODevice::ReadOnly)) {
-					QTextStream in2(&file2);
-					QString message = in2.readAll();
-					client->publish(topicFilter.filter(), message.toUtf8(), 0);
-				}
-				file2.close();
-
-				QTest::qWait(1000);
-
-				QCOMPARE(value->rowCount(), 8);
-				QCOMPARE(value->valueAt(3), 6);
-				QCOMPARE((bool)std::isnan(value->valueAt(4)), true);
-				QCOMPARE((bool)std::isnan(value->valueAt(5)), true);
-				QCOMPARE((bool)std::isnan(value->valueAt(6)), true);
-				QCOMPARE(value->valueAt(7), 0.0098);
+		QVERIFY(timer.isActive());
+		QVector<const MQTTTopic*> topic = mqttClient->children<const MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
+		for (const auto& top : topic) {
+			if (top->topicName() == QLatin1String("labplot/mqttUnitTest")) {
+				testTopic = top;
+				break;
 			}
 		}
+		QVERIFY(testTopic);
+
+		Column* value = testTopic->column(testTopic->columnCount() - 1);
+		QCOMPARE(value->columnMode(), Column::ColumnMode::Double);
+		QCOMPARE(value->rowCount(), 3);
+		QCOMPARE(value->valueAt(0), 1.5);
+		QCOMPARE(value->valueAt(1), 2.7);
+		QCOMPARE(value->valueAt(2), 3.9);
+
+		{
+			const QStringList data = {
+				QStringLiteral("6"),
+				QStringLiteral(""), // Invalid
+				QStringLiteral(""), // Invalid
+				QStringLiteral("house     ball"), // Invalid
+				QStringLiteral(""), // Invalid
+				QStringLiteral(""), // Invalid
+				QStringLiteral("car"), // Invalid
+				QStringLiteral("0.0098"),
+				QStringLiteral("1.0"),
+				QStringLiteral("12.42"),
+			};
+			QString savePath;
+			SAVE_FILE("testfile2", data);
+			QFile file2(savePath);
+
+			if (file2.open(QIODevice::ReadOnly)) {
+				QTextStream in2(&file2);
+				QString message = in2.readAll();
+				client->publish(topicFilter.filter(), message.toUtf8(), 0);
+			}
+			file2.close();
+		}
+
+		QTest::qWait(1000);
+
+		QCOMPARE(value->rowCount(), 9);
+		QCOMPARE(value->valueAt(0), 1.5);
+		QCOMPARE(value->valueAt(1), 2.7);
+		QCOMPARE(value->valueAt(2), 3.9);
+		QCOMPARE(value->valueAt(3), 6.);
+		QCOMPARE((bool)std::isnan(value->valueAt(4)), true);
+		QCOMPARE((bool)std::isnan(value->valueAt(5)), true);
+		QCOMPARE(value->valueAt(6), 0.0098);
+		QCOMPARE(value->valueAt(7), 1.0);
+		QCOMPARE(value->valueAt(8), 12.42);
 	}
 }
 
 void MQTTTest::testTextMessage() {
 	AsciiFilter* filter = new AsciiFilter();
-	// filter->setAutoModeEnabled(true);
+
+	auto properties = filter->properties();
+	properties.automaticSeparatorDetection = false;
+	properties.headerEnabled = false;
+	properties.columnModesString = QStringLiteral("Text");
+	properties.intAsDouble = false;
+	properties.commentCharacter = QStringLiteral("#");
+	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success); // Livedata must be initialized!
 
 	Project* project = new Project();
 
@@ -343,7 +403,7 @@ void MQTTTest::testTextMessage() {
 	project->addChild(mqttClient);
 	mqttClient->setFilter(filter);
 	mqttClient->setReadingType(MQTTClient::ReadingType::TillEnd);
-	mqttClient->setKeepNValues(0);
+	mqttClient->setKeepNValues(100); // At least 8!
 	mqttClient->setUpdateType(MQTTClient::UpdateType::NewData);
 	mqttClient->setMQTTClientHostPort(mqttHostName, mqttPort);
 	mqttClient->setMQTTUseAuthentication(false);
@@ -367,46 +427,57 @@ void MQTTTest::testTextMessage() {
 
 	QMqttSubscription* subscription = client->subscribe(topicFilter, 0);
 	if (subscription) {
-		const QString fileName = m_dataDir + QStringLiteral("text_message.txt");
-		QFile file(fileName);
+		{
+			const QStringList data = {
+				QStringLiteral("ball"),
+				QStringLiteral("cat"),
+				QStringLiteral("#comment"),
+				QStringLiteral("dog"),
+				QStringLiteral("#comment something"),
+				QStringLiteral("#comment something new"),
+				QStringLiteral("house"),
+				QStringLiteral("Barcelona"),
+			};
+			QString savePath;
+			SAVE_FILE("testfile", data);
+			QFile file(savePath);
 
-		if (file.open(QIODevice::ReadOnly)) {
-			QTextStream in(&file);
-			QString message = in.readAll();
-			client->publish(topicFilter.filter(), message.toUtf8(), 0);
+			if (file.open(QIODevice::ReadOnly)) {
+				QTextStream in(&file);
+				QString message = in.readAll();
+				client->publish(topicFilter.filter(), message.toUtf8(), 0);
+			}
+			file.close();
 		}
-		file.close();
 
 		QTimer timer;
 		timer.setSingleShot(true);
 		QEventLoop* loop = new QEventLoop();
-		connect(mqttClient, &MQTTClient::MQTTTopicsChanged, loop, &QEventLoop::quit);
+		connect(mqttClient, &MQTTClient::messagedReceived, loop, &QEventLoop::quit);
 		connect((&timer), &QTimer::timeout, loop, &QEventLoop::quit);
 		timer.start(5000);
 		loop->exec();
 
 		const MQTTTopic* testTopic = nullptr;
 
-		if (timer.isActive()) {
-			QVector<const MQTTTopic*> topic = mqttClient->children<const MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
-			for (const auto& top : topic) {
-				if (top->topicName() == QLatin1String("labplot/mqttUnitTest")) {
-					testTopic = top;
-					break;
-				}
-			}
-
-			if (testTopic) {
-				Column* value = testTopic->column(testTopic->columnCount() - 1);
-				QCOMPARE(value->columnMode(), Column::ColumnMode::Text);
-				QCOMPARE(value->rowCount(), 5);
-				QCOMPARE(value->textAt(0), QStringLiteral("ball"));
-				QCOMPARE(value->textAt(1), QStringLiteral("cat"));
-				QCOMPARE(value->textAt(2), QStringLiteral("dog"));
-				QCOMPARE(value->textAt(3), QStringLiteral("house"));
-				QCOMPARE(value->textAt(4), QStringLiteral("Barcelona"));
+		QVERIFY(timer.isActive());
+		QVector<const MQTTTopic*> topic = mqttClient->children<const MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
+		for (const auto& top : topic) {
+			if (top->topicName() == QLatin1String("labplot/mqttUnitTest")) {
+				testTopic = top;
+				break;
 			}
 		}
+		QVERIFY(testTopic);
+
+		Column* value = testTopic->column(testTopic->columnCount() - 1);
+		QCOMPARE(value->columnMode(), Column::ColumnMode::Text);
+		QCOMPARE(value->rowCount(), 5);
+		QCOMPARE(value->textAt(0), QStringLiteral("ball"));
+		QCOMPARE(value->textAt(1), QStringLiteral("cat"));
+		QCOMPARE(value->textAt(2), QStringLiteral("dog"));
+		QCOMPARE(value->textAt(3), QStringLiteral("house"));
+		QCOMPARE(value->textAt(4), QStringLiteral("Barcelona"));
 	}
 }
 

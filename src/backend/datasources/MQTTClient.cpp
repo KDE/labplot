@@ -1057,6 +1057,7 @@ void MQTTClient::MQTTSubscriptionMessageReceived(const QMqttMessage& msg) {
 		for (auto* subscription : m_MQTTSubscriptions) {
 			if (checkTopicContains(subscription->subscriptionName(), msg.topic().name())) {
 				subscription->messageArrived(msg);
+				Q_EMIT messagedReceived();
 				break;
 			}
 		}
