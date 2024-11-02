@@ -1502,20 +1502,6 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, const QStringList& 
 	return columnOffset;
 }
 
-template<typename T>
-class Cleanup {
-public:
-	Cleanup(T cleanupFunction)
-		: m_cleanupFunction(cleanupFunction) {
-	}
-	~Cleanup() {
-		m_cleanupFunction();
-	}
-
-private:
-	T m_cleanupFunction;
-};
-
 void Spreadsheet::finalizeImport(size_t columnOffset,
 								 size_t startColumn,
 								 size_t endColumn,
@@ -1525,7 +1511,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 	Q_D(Spreadsheet);
 	// DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " / " << endColumn);
 
-	Cleanup cleanup([d]() {
+	CleanupNoArguments cleanup([d]() {
 		d->m_usedInPlots.clear();
 		d->m_involvedColumns.clear();
 	});
