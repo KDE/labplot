@@ -3497,30 +3497,37 @@ void AsciiFilterTest::determineColumns() {
 
 	p.removeQuotes = false;
 	auto expectedHeaderNoWhiteSpace = QVector<QStringView>{QStringLiteral("header1"), QStringLiteral("header2"), QStringLiteral("header3")};
-	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("header1,header2,header3\n"), p), expectedHeaderNoWhiteSpace);
+	QVector<QStringView> columnNames(3);
+	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("header1,header2,header3\n"), p, columnNames), 3);
+	QCOMPARE(columnNames, expectedHeaderNoWhiteSpace);
 
 	p.removeQuotes = true;
 	expectedHeaderNoWhiteSpace = QVector<QStringView>{QStringLiteral("header 1"), QStringLiteral("header 2"), QStringLiteral("header 3")};
-	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("\"header 1\",\"header 2\",\"header 3\"\n"), p), expectedHeaderNoWhiteSpace);
+	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("\"header 1\",\"header 2\",\"header 3\"\n"), p, columnNames), 3);
+	QCOMPARE(columnNames, expectedHeaderNoWhiteSpace);
 
 	// Without \n at the end
 	p.removeQuotes = true;
 	expectedHeaderNoWhiteSpace = QVector<QStringView>{QStringLiteral("header 1"), QStringLiteral("header 2"), QStringLiteral("header 3")};
-	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("\"header 1\",\"header 2\",\"header 3"), p), expectedHeaderNoWhiteSpace);
+	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("\"header 1\",\"header 2\",\"header 3"), p, columnNames), 3);
+	QCOMPARE(columnNames, expectedHeaderNoWhiteSpace);
 
 	// Quotes still inside
 	p.removeQuotes = false;
 	expectedHeaderNoWhiteSpace = QVector<QStringView>{QStringLiteral("\"header 1\""), QStringLiteral("\"header 2\""), QStringLiteral("\"header 3\"")};
-	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("\"header 1\",\"header 2\",\"header 3\"\n"), p), expectedHeaderNoWhiteSpace);
+	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("\"header 1\",\"header 2\",\"header 3\"\n"), p, columnNames), 3);
+	QCOMPARE(columnNames, expectedHeaderNoWhiteSpace);
 
 	p.removeQuotes = true;
 	expectedHeaderNoWhiteSpace = QVector<QStringView>{QStringLiteral("header 1"), QStringLiteral("header2"), QStringLiteral("header 3")};
 	// Second header has no quotes
-	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("\"header 1\",header2,\"header 3\"\n"), p), expectedHeaderNoWhiteSpace);
+	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("\"header 1\",header2,\"header 3\"\n"), p, columnNames), 3);
+	QCOMPARE(columnNames, expectedHeaderNoWhiteSpace);
 
 	expectedHeaderNoWhiteSpace = QVector<QStringView>{QStringLiteral("header1"), QStringLiteral("header2"), QStringLiteral("header3")};
 	p.simplifyWhitespaces = false;
-	QBENCHMARK { QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("header1,header2,header3\n"), p), expectedHeaderNoWhiteSpace); }
+	QBENCHMARK { QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("header1,header2,header3\n"), p, columnNames), 3); }
+	QCOMPARE(columnNames, expectedHeaderNoWhiteSpace);
 
 	expectedHeader = QStringList{QStringLiteral("header1"), QStringLiteral("header2"), QStringLiteral("header3")};
 	p.simplifyWhitespaces = true;

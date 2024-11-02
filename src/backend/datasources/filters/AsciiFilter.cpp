@@ -771,6 +771,8 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device,
 	int counter = 0;
 	int startDataRow = 1;
 	int rowIndex = dataContainerStartIndex;
+	const auto columnCountExpected = m_DataContainer.size() - properties.createIndex - properties.createTimestamp;
+	QVector<QStringView> columnValues(columnCountExpected);
 	// Iterate over all rows
 	do {
 		const auto status = getLine(device, line);
@@ -807,15 +809,15 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device,
 		// Now we get to the data rows
 		if (properties.simplifyWhitespaces) {
 			const auto& values = determineColumnsSimplifyWhiteSpace(line, properties);
-			if (values.size() < m_DataContainer.size() - properties.createIndex - properties.createTimestamp)
+			if (values.size() < columnCountExpected)
 				continue; // return Status::InvalidNumberDataColumns;
 			setValues(values, rowIndex, properties);
 		} else {
 			// Higher performance if no whitespaces are available
-			const auto& values = determineColumns(line, properties);
-			if (values.size() < m_DataContainer.size() - properties.createIndex - properties.createTimestamp)
+			const auto columnCount = determineColumns(line, properties, columnValues);
+			if (columnCount < columnCountExpected)
 				continue; // return Status::InvalidNumberDataColumns;
-			setValues(values, rowIndex, properties);
+			setValues(columnValues, rowIndex, properties);
 		}
 
 		rowIndex++;
@@ -976,28 +978,37 @@ QStringList AsciiFilterPrivate::determineColumnsSimplifyWhiteSpace(const QString
 											  properties.endColumn);
 }
 
-QVector<QStringView> AsciiFilterPrivate::determineColumns(const QStringView& line, const AsciiFilter::Properties& properties) {
+namespace {
+	const QLatin1Char newlineChar('\n');
+	const QLatin1Char carriageReturnChar('\r');
+	const QLatin1Char quoteChar('"');
+	const QLatin1Char spaceChar(' ');
+	const QLatin1Char tabChar('\t');
+}
+
+size_t AsciiFilterPrivate::determineColumns(const QStringView& line, const AsciiFilter::Properties& properties, QVector<QStringView>& columnValues) {
 	// Simlified
 	if (properties.simplifyWhitespaces)
-		return QVector<QStringView>();
+		return 0;
 
 	enum class State {
 		Column,
 		QuotedText,
 	};
 
-	QVector<QStringView> columnNames;
+	const auto maxColumnCount = columnValues.size();
 	auto state = State::Column;
 	int columnCount = 1;
 	bool separatorLast = false;
 	size_t counter = 0;
 	size_t startColumnIndex = 0; // Start of the column name
 	size_t numberCharacters = 0; // Number of characters of the column name
+	int columnIndex = 0;
 	for (auto c : line) {
 		counter++;
-		if (c == QLatin1Char('\n') || c == QLatin1Char('\r'))
+		if (c == newlineChar || c == carriageReturnChar)
 			break;
-		if (properties.removeQuotes && c == QLatin1Char('"')) {
+		if (properties.removeQuotes && c == quoteChar) {
 			switch (state) {
 			case State::Column:
 				state = State::QuotedText;
@@ -1013,15 +1024,16 @@ QVector<QStringView> AsciiFilterPrivate::determineColumns(const QStringView& lin
 
 		switch (state) {
 		case State::Column: {
-			const auto s = line.sliced(startColumnIndex, counter - startColumnIndex);
-			const auto c_ = !properties.separator.isEmpty() && s.endsWith(properties.separator);
+			const auto c_ = !properties.separator.isEmpty() && line.sliced(startColumnIndex, counter - startColumnIndex).endsWith(properties.separator);
 			if (c_) {
 				separatorLast = true;
-				const auto columnName = s.sliced(0, numberCharacters);
+				const auto columnName = line.sliced(startColumnIndex, numberCharacters);
 				// columnName.remove(columnName.length() - separator.length(), separator.length());
 				if (!properties.skipEmptyParts || !columnName.isEmpty()) {
-					if (columnCount >= properties.startColumn && (columnCount <= properties.endColumn || properties.endColumn < 0))
-						columnNames << columnName;
+					if (columnCount >= properties.startColumn && (columnCount <= properties.endColumn || properties.endColumn < 0) && columnIndex < maxColumnCount) {
+						columnValues[columnIndex] = columnName;
+						columnIndex++;
+					}
 					columnCount++;
 				}
 				// columnName.clear();
@@ -1040,10 +1052,12 @@ QVector<QStringView> AsciiFilterPrivate::determineColumns(const QStringView& lin
 	}
 	if (columnCount >= properties.startColumn && (columnCount <= properties.endColumn || properties.endColumn < 0)) {
 		// If columnName is empty(): After the separator the line was finished, but there should be a value so add a placeholder (invalid value)
-		if (numberCharacters != 0 || (!properties.skipEmptyParts && separatorLast))
-			columnNames.append(line.sliced(startColumnIndex, numberCharacters));
+		if ((numberCharacters != 0 || (!properties.skipEmptyParts && separatorLast)) && columnIndex < maxColumnCount) {
+			columnValues[columnIndex] = line.sliced(startColumnIndex, numberCharacters);
+			return columnIndex + 1;
+		}
 	}
-	return columnNames;
+	return columnIndex;
 }
 
 QStringList AsciiFilterPrivate::determineColumnsSimplifyWhiteSpace(QStringView line,
@@ -1067,9 +1081,9 @@ QStringList AsciiFilterPrivate::determineColumnsSimplifyWhiteSpace(QStringView l
 	QChar lastCharacter;
 
 	for (auto c : line) {
-		if (c == QLatin1Char('\n') || c == QLatin1Char('\r'))
+		if (c == newlineChar|| c == carriageReturnChar)
 			break;
-		if (removeQuotes && c == QLatin1Char('"')) {
+		if (removeQuotes && c == quoteChar) {
 			switch (state) {
 			case State::Column:
 				state = State::QuotedText;
@@ -1081,11 +1095,11 @@ QStringList AsciiFilterPrivate::determineColumnsSimplifyWhiteSpace(QStringView l
 			continue;
 		}
 
-		if (simplifyWhiteSpaces && state != State::QuotedText && (c == QLatin1Char(' ') || c == QLatin1Char('\t'))) {
-			if (lastCharacter == QLatin1Char(' '))
+		if (simplifyWhiteSpaces && state != State::QuotedText && (c == spaceChar || c == tabChar)) {
+			if (lastCharacter == spaceChar)
 				continue;
 			else
-				c = QLatin1Char(' '); // Replace by whitespace
+				c = spaceChar; // Replace by whitespace
 		}
 		columnName.append(c);
 
@@ -1114,7 +1128,7 @@ QStringList AsciiFilterPrivate::determineColumnsSimplifyWhiteSpace(QStringView l
 		}
 	}
 	if (columnCount >= startColumn && (columnCount <= endColumn || endColumn < 0)) {
-		while (simplifyWhiteSpaces && columnName.size() > 0 && (columnName.last(1) == QLatin1Char(' ') || columnName.last(1) == QLatin1Char('\t')))
+		while (simplifyWhiteSpaces && columnName.size() > 0 && (columnName.last(1) == spaceChar || columnName.last(1) == tabChar))
 			columnName.removeLast();
 		// If columnName is empty(): After the separator the line was finished, but there should be a value so add a placeholder (invalid value)
 		if (!columnName.isEmpty() || (!skipEmptyParts && separatorLast)) {
