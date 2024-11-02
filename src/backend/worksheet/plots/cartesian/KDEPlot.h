@@ -61,7 +61,7 @@ public:
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	int gridPointsCount() const;
 	bool hasData() const override;
-	bool usingColumn(const Column*) const override;
+	bool usingColumn(const AbstractColumn*) const override;
 	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) override;
 	QColor color() const override;
 

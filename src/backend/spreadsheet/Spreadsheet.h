@@ -86,7 +86,11 @@ public:
 					  const QVector<AbstractColumn::ColumnMode>&,
 					  bool& ok,
 					  bool initializeContainer) override;
-	void finalizeImport(size_t columnOffset, size_t startColumn, size_t endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode) override;
+	void finalizeImport(size_t columnOffset,
+						size_t startColumn,
+						size_t endColumn,
+						const QString& dateTimeFormat,
+						AbstractFileFilter::ImportMode columnImportMode) override;
 	int resize(AbstractFileFilter::ImportMode, const QStringList& colNameList, int cols);
 
 	struct Linking {

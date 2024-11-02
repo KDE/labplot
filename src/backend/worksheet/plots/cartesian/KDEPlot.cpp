@@ -182,7 +182,7 @@ bool KDEPlot::hasData() const {
 	return (d->dataColumn != nullptr);
 }
 
-bool KDEPlot::usingColumn(const Column* column) const {
+bool KDEPlot::usingColumn(const AbstractColumn* column) const {
 	Q_D(const KDEPlot);
 	return (d->dataColumn == column);
 }

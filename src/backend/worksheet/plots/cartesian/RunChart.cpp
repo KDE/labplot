@@ -193,7 +193,7 @@ bool RunChart::hasData() const {
 	return (d->dataColumn != nullptr);
 }
 
-bool RunChart::usingColumn(const Column* column) const {
+bool RunChart::usingColumn(const AbstractColumn* column) const {
 	Q_D(const RunChart);
 	return (d->dataColumn == column);
 }

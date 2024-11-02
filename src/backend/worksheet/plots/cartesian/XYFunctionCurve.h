@@ -100,7 +100,8 @@ private:
 	void init();
 	void setFunctionVariableCurve(const XYCurve*);
 	bool XmlReadFunction(XmlStreamReader*, bool preview);
-	bool usingColumn(const Column*) const override;
+	bool usingColumn(const AbstractColumn*) const override;
+	QVector<const Plot*> dependingPlots() const override;
 
 private Q_SLOTS:
 	void functionVariableCurveRemoved(const AbstractAspect*);

@@ -320,7 +320,7 @@ bool ProcessBehaviorChart::hasData() const {
 	return (d->dataColumn != nullptr);
 }
 
-bool ProcessBehaviorChart::usingColumn(const Column* column) const {
+bool ProcessBehaviorChart::usingColumn(const AbstractColumn* column) const {
 	Q_D(const ProcessBehaviorChart);
 	return (d->dataColumn == column || d->data2Column == column);
 }

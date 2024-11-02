@@ -440,7 +440,7 @@ bool BoxPlot::hasData() const {
 	return !d->dataColumns.isEmpty();
 }
 
-bool BoxPlot::usingColumn(const Column* column) const {
+bool BoxPlot::usingColumn(const AbstractColumn* column) const {
 	Q_D(const BoxPlot);
 
 	for (auto* c : d->dataColumns) {

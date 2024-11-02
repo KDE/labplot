@@ -330,7 +330,7 @@ bool XYCurve::hasData() const {
 	return (d->xColumn != nullptr || d->yColumn != nullptr);
 }
 
-bool XYCurve::usingColumn(const Column* column) const {
+bool XYCurve::usingColumn(const AbstractColumn* column) const {
 	Q_D(const XYCurve);
 	return (d->xColumn == column || d->yColumn == column
 			|| (d->errorBar->xErrorType() == ErrorBar::ErrorType::Symmetric && d->errorBar->xPlusColumn() == column)

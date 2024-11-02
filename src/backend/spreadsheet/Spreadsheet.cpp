@@ -16,6 +16,7 @@
 #include "StatisticsSpreadsheet.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AspectPrivate.h"
+#include "backend/core/Project.h"
 #include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -23,6 +24,8 @@
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/Plot.h"
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 #include "frontend/spreadsheet/SpreadsheetView.h"
 
 #include <KConfig>
@@ -1484,6 +1487,8 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, const QStringList& 
 			const auto& newName = uniqueNames.at(index);
 			if (column->name() != newName) {
 				column->addUsedInPlots(d->m_usedInPlots);
+				if (!d->m_involvedColumns.contains(column))
+					d->m_involvedColumns.append(column);
 				column->reset();
 				column->setName(newName, AbstractAspect::NameHandling::UniqueNotRequired);
 				column->aspectDescriptionChanged(column);
@@ -1497,25 +1502,47 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, const QStringList& 
 	return columnOffset;
 }
 
+template<typename T>
+class Cleanup {
+public:
+	Cleanup(T cleanupFunction)
+		: m_cleanupFunction(cleanupFunction) {
+	}
+	~Cleanup() {
+		m_cleanupFunction();
+	}
+
+private:
+	T m_cleanupFunction;
+};
+
 void Spreadsheet::finalizeImport(size_t columnOffset,
 								 size_t startColumn,
 								 size_t endColumn,
 								 const QString& dateTimeFormat,
-								 AbstractFileFilter::ImportMode importMode) {
+								 AbstractFileFilter::ImportMode columnImportMode) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	Q_D(Spreadsheet);
 	// DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " / " << endColumn);
 
+	Cleanup cleanup([d]() {
+		d->m_usedInPlots.clear();
+		d->m_involvedColumns.clear();
+	});
+
 	// determine the dependent plots
-	if (importMode == AbstractFileFilter::ImportMode::Replace) {
+	if (columnImportMode == AbstractFileFilter::ImportMode::Replace) {
 		for (size_t n = startColumn; n <= endColumn; n++) {
 			auto* column = this->column((int)(columnOffset + n - startColumn));
-			if (column)
+			if (column) {
 				column->addUsedInPlots(d->m_usedInPlots);
+				if (!d->m_involvedColumns.contains(column))
+					d->m_involvedColumns.append(column);
+			}
 		}
 	}
 
-	if (importMode == AbstractFileFilter::ImportMode::Replace) {
+	if (columnImportMode == AbstractFileFilter::ImportMode::Replace) {
 		// suppress retransform in the dependent plots
 		for (auto* plot : d->m_usedInPlots)
 			plot->setSuppressRetransform(true);
@@ -1558,21 +1585,121 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 			column->setComment(comment);
 		}
 
-		if (importMode == AbstractFileFilter::ImportMode::Replace) {
+		if (columnImportMode == AbstractFileFilter::ImportMode::Replace) {
+			column->setSuppressDataChangedSignal(true);
+			column->setChanged(); // Invalidate properties
 			column->setSuppressDataChangedSignal(
 				false); // TODO: evaluate this (with setChanged), because this could lead to a lot of changes which are not controllable.
-			column->setChanged(); // Invalidate properties
 		}
 	}
 
-	if (importMode == AbstractFileFilter::ImportMode::Replace) {
+	if (columnImportMode == AbstractFileFilter::ImportMode::Replace) {
+		QVector<AbstractColumn*> children;
+		if (project())
+			children = project()->children<AbstractColumn>();
+		else
+			children = this->children<AbstractColumn>();
+
+		// Update all columns with formulas
+		bool allColumnsRecalculated = true;
+		QHash<Column*, bool> columnMap;
+		for (auto* c : std::as_const(children)) {
+			auto* column = static_cast<Column*>(c);
+			if (d->m_involvedColumns.contains(c) || column->formula().isEmpty())
+				columnMap[column] = true; // no recalculation required
+			else {
+				columnMap[column] = false;
+				allColumnsRecalculated = false;
+			}
+		}
+
+		// Solve all dependencies in the column formulas
+		for (int i = 0; i < 2 && !allColumnsRecalculated; i++) { // Make 2 rounds to solve also complex dependencies
+			allColumnsRecalculated = true;
+			for (auto it = columnMap.begin(), end = columnMap.end(); it != end; ++it) {
+				if (it.value() == true)
+					continue;
+
+				bool allDependenciesRecalculated = true;
+				const auto& formulaDatas = it.key()->formulaData();
+				for (const auto& formulaData : formulaDatas) {
+					auto depColumn = formulaData.column();
+					const auto foundColumn = columnMap.constFind(const_cast<Column*>(depColumn));
+					if (foundColumn != columnMap.end()) {
+						if (foundColumn.value() == false) {
+							allDependenciesRecalculated = false;
+							break;
+						}
+					}
+				}
+				// All dependencies are already recalculated, so this can be recalculated as well
+				if (allDependenciesRecalculated) {
+					it.key()->updateFormula();
+					*it = true;
+				} else
+					allColumnsRecalculated = false;
+			}
+		}
+
+		// recalculate all curves
+		QHash<Plot*, bool> curveMap; // second parameter determines if the curve was already recalculated or not
+		for (auto* plot : std::as_const(d->m_usedInPlots)) {
+			for (auto* curve : plot->children<Plot>())
+				curveMap[curve] = false;
+		}
+
+		bool allCurvesRecalculated = true;
+		for (const auto* c : std::as_const(d->m_involvedColumns)) {
+			for (auto i = curveMap.begin(), end = curveMap.end(); i != end; ++i) {
+				if (i.value() == true)
+					continue;
+
+				if (i.key()->usingColumn(c)) {
+					i.key()->recalc();
+					*i = true;
+				} else
+					allCurvesRecalculated = false;
+			}
+			if (allCurvesRecalculated)
+				break;
+		}
+
+		// Solve all dependencies and recalculate all analysis curves which depend on other curves
+		for (int i = 0; i < 2 && !allCurvesRecalculated; i++) { // Make 2 rounds to solve also complex dependencies
+			allCurvesRecalculated = true;
+			for (auto it = curveMap.begin(), end = curveMap.end(); it != end; ++it) {
+				if (it.value() == true)
+					continue;
+
+				auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(it.key());
+				if (analysisCurve) {
+					bool allDependenciesRecalculated = true;
+					const auto& depPlots = analysisCurve->dependingPlots();
+					for (const auto* depPlot : depPlots) {
+						const auto foundPlot = curveMap.constFind(const_cast<Plot*>(depPlot));
+						if (foundPlot != curveMap.end()) {
+							if (foundPlot.value() == false) {
+								allDependenciesRecalculated = false;
+								break;
+							}
+						}
+					}
+					// All dependencies are already recalculated, so this can be recalculated as well
+					if (allDependenciesRecalculated) {
+						analysisCurve->recalculate();
+						*it = true;
+					} else
+						allCurvesRecalculated = false;
+				}
+			}
+		}
+
 		// retransform the dependent plots
 		for (auto* plot : d->m_usedInPlots) {
 			plot->setSuppressRetransform(false);
 			plot->dataChanged(-1, -1); // TODO: check if all ranges must be updated
 		}
 	}
-	d->m_usedInPlots.clear();
 
 	// make the spreadsheet and all its children undo aware again
 	setUndoAware(true);

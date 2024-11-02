@@ -49,13 +49,28 @@ bool XYAnalysisCurve::resultAvailable() const {
 	return result().available;
 }
 
-bool XYAnalysisCurve::usingColumn(const Column* column) const {
+bool XYAnalysisCurve::usingColumn(const AbstractColumn* column) const {
 	Q_D(const XYAnalysisCurve);
 
 	if (d->dataSourceType == DataSourceType::Spreadsheet)
 		return (d->xDataColumn == column || d->yDataColumn == column || d->y2DataColumn == column);
-	else
-		return (d->dataSourceCurve->xColumn() == column || d->dataSourceCurve->yColumn() == column);
+	return false;
+}
+
+QVector<const Plot*> XYAnalysisCurve::dependingPlots() const {
+	Q_D(const XYAnalysisCurve);
+	switch (d->dataSourceType) {
+	case DataSourceType::Curve: {
+		if (d->dataSourceCurve)
+			return {d->dataSourceCurve};
+	}
+	case DataSourceType::Spreadsheet:
+		return {};
+	case DataSourceType::Histogram:
+		return {}; // TODO: Histograms not yet implemented
+	}
+	assert(false);
+	return {};
 }
 
 // copy valid data from x/y data columns to x/y data vectors
@@ -491,7 +506,7 @@ void XYAnalysisCurvePrivate::sourceChanged() {
 		recalculate();
 }
 
-void XYAnalysisCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) {
+void XYAnalysisCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) const {
 	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		// spreadsheet columns as data source
 		*tmpXDataColumn = xDataColumn;
@@ -501,6 +516,13 @@ void XYAnalysisCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDat
 		*tmpXDataColumn = dataSourceCurve->xColumn();
 		*tmpYDataColumn = dataSourceCurve->yColumn();
 	}
+}
+
+QVector<const AbstractColumn*> XYAnalysisCurvePrivate::dataColumns() const {
+	const AbstractColumn* x;
+	const AbstractColumn* y;
+	prepareTmpDataColumn(&x, &y);
+	return {x, y};
 }
 
 void XYAnalysisCurvePrivate::recalculate() {
