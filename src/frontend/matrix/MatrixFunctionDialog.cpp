@@ -163,12 +163,12 @@ public:
 		double y = m_yStart;
 		DEBUG("FILL col" << m_startCol << "-" << m_endCol << " x/y =" << x << '/' << y << " steps =" << m_xStep << '/' << m_yStep << " rows =" << rows)
 
-		parser_var vars[] = {{"x", x}, {"y", y}};
+		Parser::parser_var vars[] = {{"x", x}, {"y", y}};
 		for (int col = m_startCol; col < m_endCol; ++col) {
 			vars[0].value = x;
 			for (int row = 0; row < rows; ++row) {
 				vars[1].value = y;
-				double z = parse_with_vars(m_func, vars, 2, qPrintable(QLocale().name()));
+				double z = Parser::parse_with_vars(m_func, vars, 2, qPrintable(QLocale().name()));
 				// DEBUG(" z =" << z);
 				m_matrixData[col][row] = z;
 				y += m_yStep;
@@ -237,12 +237,12 @@ void MatrixFunctionDialog::generate() {
 	*/
 	double x = m_matrix->xStart();
 	double y = m_matrix->yStart();
-	parser_var vars[] = {{"x", x}, {"y", y}};
+	Parser::parser_var vars[] = {{"x", x}, {"y", y}};
 	for (int col = 0; col < m_matrix->columnCount(); ++col) {
 		vars[0].value = x;
 		for (int row = 0; row < m_matrix->rowCount(); ++row) {
 			vars[1].value = y;
-			(*new_data)[col][row] = parse_with_vars(qPrintable(ui.teEquation->toPlainText()), vars, 2, qPrintable(QLocale().name()));
+			(*new_data)[col][row] = Parser::parse_with_vars(qPrintable(ui.teEquation->toPlainText()), vars, 2, qPrintable(QLocale().name()));
 			y += yStep;
 		}
 		y = m_matrix->yStart();
