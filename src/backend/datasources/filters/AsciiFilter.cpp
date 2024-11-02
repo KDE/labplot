@@ -194,7 +194,7 @@ QString AsciiFilter::statusToString(Status e) {
 	case Status::UnableToOpenDevice:
 		return i18n("Unable to open device");
 	case Status::NoNewLine:
-		return i18n("");
+		return QString();
 	case Status::SeparatorDeterminationFailed:
 		return i18n("Unable to determine the separator");
 	case Status::InvalidNumberDataColumns:
@@ -210,7 +210,7 @@ QString AsciiFilter::statusToString(Status e) {
 	case Status::UnsupportedDataSource:
 		return i18n("Unsupported datasource");
 	case Status::SequentialDeviceHeaderEnabled:
-		return i18n("");
+		return QString();
 	case Status::SequentialDeviceAutomaticSeparatorDetection:
 		return i18n("Live: No column separator selected");
 	case Status::SequentialDeviceNoColumnModes:
