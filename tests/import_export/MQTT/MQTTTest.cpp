@@ -59,7 +59,7 @@ void MQTTTest::initTestCase() {
 // ###################  check superior and inferior relations  ##################
 // ##############################################################################
 void MQTTTest::testContainFalse() {
-	MQTTClient* client = new MQTTClient(QStringLiteral("test"));
+	auto* client = new MQTTClient(QStringLiteral("test"));
 	const QString fileName = m_dataDir + QStringLiteral("contain_false.txt");
 	QFile file(fileName);
 
@@ -68,7 +68,7 @@ void MQTTTest::testContainFalse() {
 
 		while (!in.atEnd()) {
 			QString line = in.readLine();
-			QStringList topics = line.split(QLatin1Char(' '), Qt::SkipEmptyParts);
+			auto topics = line.split(QLatin1Char(' '), Qt::SkipEmptyParts);
 			QCOMPARE(client->checkTopicContains(topics[0], topics[1]), false);
 		}
 
@@ -78,7 +78,7 @@ void MQTTTest::testContainFalse() {
 }
 
 void MQTTTest::testContainTrue() {
-	MQTTClient* client = new MQTTClient(QStringLiteral("test"));
+	auto* client = new MQTTClient(QStringLiteral("test"));
 	const QString fileName = m_dataDir + QStringLiteral("contain_true.txt");
 	QFile file(fileName);
 
@@ -87,7 +87,7 @@ void MQTTTest::testContainTrue() {
 
 		while (!in.atEnd()) {
 			QString line = in.readLine();
-			QStringList topics = line.split(QLatin1Char(' '), Qt::SkipEmptyParts);
+			auto topics = line.split(QLatin1Char(' '), Qt::SkipEmptyParts);
 			QCOMPARE(client->checkTopicContains(topics[0], topics[1]), true);
 		}
 
@@ -100,7 +100,7 @@ void MQTTTest::testContainTrue() {
 // ############################  check common topics  ###########################
 // ##############################################################################
 void MQTTTest::testCommonTrue() {
-	MQTTClient* client = new MQTTClient(QStringLiteral("test"));
+	auto* client = new MQTTClient(QStringLiteral("test"));
 	const QString fileName = m_dataDir + QStringLiteral("common_true.txt");
 	QFile file(fileName);
 
@@ -109,7 +109,7 @@ void MQTTTest::testCommonTrue() {
 
 		while (!in.atEnd()) {
 			QString line = in.readLine();
-			QStringList topics = line.split(QLatin1Char(' '), Qt::SkipEmptyParts);
+			auto topics = line.split(QLatin1Char(' '), Qt::SkipEmptyParts);
 			QCOMPARE(client->checkCommonLevel(topics[0], topics[1]), topics[2]);
 		}
 
@@ -119,7 +119,7 @@ void MQTTTest::testCommonTrue() {
 }
 
 void MQTTTest::testCommonFalse() {
-	MQTTClient* client = new MQTTClient(QStringLiteral("test"));
+	auto* client = new MQTTClient(QStringLiteral("test"));
 	const QString fileName = m_dataDir + QStringLiteral("common_false.txt");
 	QFile file(fileName);
 
@@ -128,7 +128,7 @@ void MQTTTest::testCommonFalse() {
 
 		while (!in.atEnd()) {
 			QString line = in.readLine();
-			QStringList topics = line.split(QLatin1Char(' '), Qt::SkipEmptyParts);
+			auto topics = line.split(QLatin1Char(' '), Qt::SkipEmptyParts);
 			QCOMPARE(client->checkCommonLevel(topics[0], topics[1]), QString());
 		}
 
@@ -141,7 +141,7 @@ void MQTTTest::testCommonFalse() {
 // #################  test handling of data received by messages  ###############
 // ##############################################################################
 void MQTTTest::testIntegerMessage() {
-	AsciiFilter* filter = new AsciiFilter();
+	auto* filter = new AsciiFilter();
 
 	auto properties = filter->properties();
 	properties.automaticSeparatorDetection = false;
@@ -150,9 +150,9 @@ void MQTTTest::testIntegerMessage() {
 	properties.intAsDouble = false;
 	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success); // Livedata must be initialized!
 
-	Project* project = new Project();
+	auto* project = new Project();
 
-	MQTTClient* mqttClient = new MQTTClient(QStringLiteral("test"));
+	auto* mqttClient = new MQTTClient(QStringLiteral("test"));
 	project->addChild(mqttClient);
 	mqttClient->setFilter(filter);
 	mqttClient->setReadingType(MQTTClient::ReadingType::TillEnd);
@@ -166,7 +166,7 @@ void MQTTTest::testIntegerMessage() {
 	mqttClient->read();
 	mqttClient->ready();
 
-	QMqttClient* client = new QMqttClient();
+	auto* client = new QMqttClient();
 	client->setHostname(mqttHostName);
 	client->setPort(mqttPort);
 	client->connectToHost();
@@ -178,7 +178,7 @@ void MQTTTest::testIntegerMessage() {
 		5000);
 	QCOMPARE(wait, true);
 
-	QMqttSubscription* subscription = client->subscribe(topicFilter, 0);
+	auto* subscription = client->subscribe(topicFilter, 0);
 	if (subscription) {
 		{
 			const QStringList data = {
@@ -200,7 +200,7 @@ void MQTTTest::testIntegerMessage() {
 
 		QTimer timer;
 		timer.setSingleShot(true);
-		QEventLoop* loop = new QEventLoop();
+		auto* loop = new QEventLoop();
 		connect(mqttClient, &MQTTClient::messagedReceived, loop, &QEventLoop::quit);
 		connect((&timer), &QTimer::timeout, loop, &QEventLoop::quit);
 		timer.start(5000);
@@ -209,7 +209,7 @@ void MQTTTest::testIntegerMessage() {
 		const MQTTTopic* testTopic = nullptr;
 
 		QVERIFY(timer.isActive());
-		QVector<const MQTTTopic*> topic = mqttClient->children<const MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
+		auto topic = mqttClient->children<const MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
 		for (const auto& top : topic) {
 			if (top->topicName() == QLatin1String("labplot/mqttUnitTest")) {
 				testTopic = top;
@@ -269,7 +269,7 @@ void MQTTTest::testNumericMessage() {
 
 	Project* project = new Project();
 
-	MQTTClient* mqttClient = new MQTTClient(QStringLiteral("test"));
+	auto* mqttClient = new MQTTClient(QStringLiteral("test"));
 	project->addChild(mqttClient);
 	mqttClient->setFilter(filter);
 	mqttClient->setReadingType(MQTTClient::ReadingType::TillEnd);
@@ -283,7 +283,7 @@ void MQTTTest::testNumericMessage() {
 	mqttClient->read();
 	mqttClient->ready();
 
-	QMqttClient* client = new QMqttClient();
+	auto* client = new QMqttClient();
 	client->setHostname(mqttHostName);
 	client->setPort(mqttPort);
 	client->connectToHost();
@@ -295,7 +295,7 @@ void MQTTTest::testNumericMessage() {
 		5000);
 	QCOMPARE(wait, true);
 
-	QMqttSubscription* subscription = client->subscribe(topicFilter, 0);
+	auto* subscription = client->subscribe(topicFilter, 0);
 	if (subscription) {
 		{
 			const QStringList data = {
@@ -321,7 +321,7 @@ void MQTTTest::testNumericMessage() {
 
 		QTimer timer;
 		timer.setSingleShot(true);
-		QEventLoop* loop = new QEventLoop();
+		auto* loop = new QEventLoop();
 		connect(mqttClient, &MQTTClient::messagedReceived, loop, &QEventLoop::quit);
 		connect((&timer), &QTimer::timeout, loop, &QEventLoop::quit);
 		timer.start(5000);
@@ -330,7 +330,7 @@ void MQTTTest::testNumericMessage() {
 		const MQTTTopic* testTopic = nullptr;
 
 		QVERIFY(timer.isActive());
-		QVector<const MQTTTopic*> topic = mqttClient->children<const MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
+		auto topic = mqttClient->children<const MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
 		for (const auto& top : topic) {
 			if (top->topicName() == QLatin1String("labplot/mqttUnitTest")) {
 				testTopic = top;
@@ -399,7 +399,7 @@ void MQTTTest::testTextMessage() {
 
 	Project* project = new Project();
 
-	MQTTClient* mqttClient = new MQTTClient(QStringLiteral("test"));
+	auto* mqttClient = new MQTTClient(QStringLiteral("test"));
 	project->addChild(mqttClient);
 	mqttClient->setFilter(filter);
 	mqttClient->setReadingType(MQTTClient::ReadingType::TillEnd);
@@ -413,7 +413,7 @@ void MQTTTest::testTextMessage() {
 	mqttClient->read();
 	mqttClient->ready();
 
-	QMqttClient* client = new QMqttClient();
+	auto* client = new QMqttClient();
 	client->setHostname(mqttHostName);
 	client->setPort(mqttPort);
 	client->connectToHost();
@@ -425,7 +425,7 @@ void MQTTTest::testTextMessage() {
 		5000);
 	QCOMPARE(wait, true);
 
-	QMqttSubscription* subscription = client->subscribe(topicFilter, 0);
+	auto* subscription = client->subscribe(topicFilter, 0);
 	if (subscription) {
 		{
 			const QStringList data = {
@@ -452,7 +452,7 @@ void MQTTTest::testTextMessage() {
 
 		QTimer timer;
 		timer.setSingleShot(true);
-		QEventLoop* loop = new QEventLoop();
+		auto* loop = new QEventLoop();
 		connect(mqttClient, &MQTTClient::messagedReceived, loop, &QEventLoop::quit);
 		connect((&timer), &QTimer::timeout, loop, &QEventLoop::quit);
 		timer.start(5000);
@@ -461,7 +461,7 @@ void MQTTTest::testTextMessage() {
 		const MQTTTopic* testTopic = nullptr;
 
 		QVERIFY(timer.isActive());
-		QVector<const MQTTTopic*> topic = mqttClient->children<const MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
+		auto topic = mqttClient->children<const MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
 		for (const auto& top : topic) {
 			if (top->topicName() == QLatin1String("labplot/mqttUnitTest")) {
 				testTopic = top;
@@ -485,12 +485,12 @@ void MQTTTest::testTextMessage() {
 // #####################  test subscribing and unsubscribing  ###################
 // ##############################################################################
 /*void MQTTTest::testSubscriptions() {
-	AsciiFilter* filter = new AsciiFilter();
+	auto* filter = new AsciiFilter();
 	filter->setAutoModeEnabled(true);
 
-	Project* project = new Project();
+	auto* project = new Project();
 
-	MQTTClient* mqttClient = new MQTTClient(QStringLiteral("test"));
+	auto* mqttClient = new MQTTClient(QStringLiteral("test"));
 	project->addChild(mqttClient);
 	mqttClient->setFilter(filter);
 	mqttClient->setReadingType(MQTTClient::ReadingType::TillEnd);
@@ -503,7 +503,7 @@ void MQTTTest::testTextMessage() {
 	QMqttTopicFilter topicFilter {QStringLiteral("labplot/mqttUnitTest")};
 	mqttClient->addInitialMQTTSubscriptions(topicFilter, 0);
 
-	LiveDataDock* liveDock = new LiveDataDock();
+	auto* liveDock = new LiveDataDock();
 	liveDock->setMQTTClient(mqttClient);
 
 	mqttClient->read();
@@ -511,7 +511,7 @@ void MQTTTest::testTextMessage() {
 
 	QTimer timer;
 	timer.setSingleShot(true);
-	QEventLoop* loop = new QEventLoop();
+	auto* loop = new QEventLoop();
 	connect(mqttClient, &MQTTClient::MQTTSubscribed, loop, &QEventLoop::quit);
 	connect( (&timer), &QTimer::timeout, loop, &QEventLoop::quit);
 	timer.start(5000);
@@ -519,7 +519,7 @@ void MQTTTest::testTextMessage() {
 
 	if(timer.isActive()) {
 		delete loop;
-		QMqttClient* client = new QMqttClient();
+		auto* client = new QMqttClient();
 		client->setHostname(mqttHostName);
 		client->setPort(mqttPort);
 		client->connectToHost();
@@ -585,7 +585,7 @@ void MQTTTest::testTextMessage() {
 
 			while(!in.atEnd()) {
 				QString topic = in.readLine();
-				QVector<QString> subscriptions = mqttClient->MQTTSubscriptions();
+				auto subscriptions = mqttClient->MQTTSubscriptions();
 				QCOMPARE(subscriptions.contains(topic), true);
 			}
 		}
@@ -614,7 +614,7 @@ void MQTTTest::testTextMessage() {
 
 			while(!in.atEnd()) {
 				QString topic = in.readLine();
-				QVector<QString> subscriptions = mqttClient->MQTTSubscriptions();
+				auto subscriptions = mqttClient->MQTTSubscriptions();
 				QCOMPARE(subscriptions.contains(topic), true);
 			}
 		}
@@ -643,7 +643,7 @@ void MQTTTest::testTextMessage() {
 
 			while(!in.atEnd()) {
 				QString topic = in.readLine();
-				QVector<QString> subscriptions = mqttClient->MQTTSubscriptions();
+				auto subscriptions = mqttClient->MQTTSubscriptions();
 				QCOMPARE(subscriptions.contains(topic), true);
 			}
 		}
