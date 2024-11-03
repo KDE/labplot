@@ -242,7 +242,7 @@ void CartesianPlotLegendDock::updateUnits() {
 void CartesianPlotLegendDock::retranslateUi() {
 	CONDITIONAL_LOCK_RETURN;
 
-	QString info = i18n("Use the main color of the plot (line, symbol, etc.) for the color of the name in the leged.");
+	QString info = i18n("Use the main color of the plot (line, symbol, etc.) for the color of the name in the legend.");
 	ui.lUsePlotColor->setToolTip(info);
 	ui.chkUsePlotColor->setToolTip(info);
 
