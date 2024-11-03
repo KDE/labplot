@@ -3524,9 +3524,17 @@ void AsciiFilterTest::determineColumns() {
 	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("\"header 1\",header2,\"header 3\"\n"), p, columnNames), 3);
 	QCOMPARE(columnNames, expectedHeaderNoWhiteSpace);
 
+	// Benchmark
+	p.removeQuotes = false;
+
 	expectedHeaderNoWhiteSpace = QVector<QStringView>{QStringLiteral("header1"), QStringLiteral("header2"), QStringLiteral("header3")};
 	p.simplifyWhitespaces = false;
 	QBENCHMARK { QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("header1,header2,header3\n"), p, columnNames), 3); }
+	QCOMPARE(columnNames, expectedHeaderNoWhiteSpace);
+
+	expectedHeaderNoWhiteSpace = QVector<QStringView>{QStringLiteral("header1"), QStringLiteral("header2"), QStringLiteral("header3")};
+	p.simplifyWhitespaces = false;
+	QBENCHMARK { QCOMPARE(AsciiFilterPrivate::determineColumnsNoQuotes(QStringLiteral("header1,header2,header3\n"), p, columnNames), 3); }
 	QCOMPARE(columnNames, expectedHeaderNoWhiteSpace);
 
 	expectedHeader = QStringList{QStringLiteral("header1"), QStringLiteral("header2"), QStringLiteral("header3")};
