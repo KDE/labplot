@@ -997,6 +997,12 @@ size_t AsciiFilterPrivate::determineColumns(const QStringView& line, const Ascii
 		QuotedText,
 	};
 
+	const auto separatorLength = properties.separator.size();
+	bool separatorSingleCharacter = separatorLength == 1;
+	QChar separatorCharacter;
+	if (separatorLength)
+		separatorCharacter = properties.separator[separatorLength - 1];
+
 	const auto maxColumnCount = columnValues.size();
 	auto state = State::Column;
 	int columnCount = 1;
@@ -1025,7 +1031,11 @@ size_t AsciiFilterPrivate::determineColumns(const QStringView& line, const Ascii
 
 		switch (state) {
 		case State::Column: {
-			const auto c_ = !properties.separator.isEmpty() && line.sliced(startColumnIndex, counter - startColumnIndex).endsWith(properties.separator);
+			bool c_;
+			if (separatorSingleCharacter)
+				c_ = c == separatorCharacter;
+			else
+				c_ = !properties.separator.isEmpty() && line.sliced(startColumnIndex, counter - startColumnIndex).endsWith(properties.separator);
 			if (c_) {
 				separatorLast = true;
 				const auto columnName = line.sliced(startColumnIndex, numberCharacters);
