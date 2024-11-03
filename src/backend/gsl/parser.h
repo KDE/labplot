@@ -18,12 +18,12 @@
 #include <memory>
 #include <variant>
 
-/* uncomment to enable parser specific debugging */
-/* #define PDEBUG 1 */
+// uncomment to enable parser specific debugging
+// #define PDEBUG 1
 
 namespace Parser {
 
-/* variables to pass to parser */
+// variables to pass to parser
 #define MAX_VARNAME_LENGTH 10
 typedef struct parser_var {
 	char name[MAX_VARNAME_LENGTH];
@@ -49,12 +49,12 @@ struct special_function_def {
 };
 
 struct BaseSymbol {
-	std::string_view name; /* name of symbol */
-	int type; /* type of symbol: either VAR or FNCT */
+	std::string_view name; // name of symbol
+	int type; // type of symbol: either VAR or FNCT
 	std::variant<double, funs*, special_function_def> value;
 };
 
-/* structure for list of symbols */
+// structure for list of symbols
 struct Symbol : public BaseSymbol {
 	Symbol(const char* symbol_name, int len, int _type) {
 		type = _type;
@@ -75,7 +75,7 @@ private:
 		strcpy(nameAlloc, symbol_name);
 		name = std::string_view(nameAlloc);
 	}
-	char* nameAlloc; /* name of symbol */
+	char* nameAlloc; // name of symbol
 };
 
 struct StaticSymbol : public BaseSymbol {
@@ -100,8 +100,8 @@ enum class UsedSymbols {
 
 int variablesCounter();
 
-void init_table(void); /* initialize symbol table */
-void delete_table(void); /* delete symbol table */
+void init_table(void); // initialize symbol table
+void delete_table(void); // delete symbol table
 int parse_errors(void);
 BaseSymbol* assign_symbol(const char* symbol_name, double value, UsedSymbols usedSymbols = UsedSymbols::No);
 int remove_symbol(const char* symbol_name);
