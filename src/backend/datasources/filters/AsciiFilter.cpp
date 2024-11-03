@@ -979,11 +979,11 @@ QStringList AsciiFilterPrivate::determineColumnsSimplifyWhiteSpace(const QString
 }
 
 namespace {
-	const QLatin1Char newlineChar('\n');
-	const QLatin1Char carriageReturnChar('\r');
-	const QLatin1Char quoteChar('"');
-	const QLatin1Char spaceChar(' ');
-	const QLatin1Char tabChar('\t');
+const QLatin1Char newlineChar('\n');
+const QLatin1Char carriageReturnChar('\r');
+const QLatin1Char quoteChar('"');
+const QLatin1Char spaceChar(' ');
+const QLatin1Char tabChar('\t');
 }
 
 size_t AsciiFilterPrivate::determineColumns(const QStringView& line, const AsciiFilter::Properties& properties, QVector<QStringView>& columnValues) {
@@ -1030,7 +1030,8 @@ size_t AsciiFilterPrivate::determineColumns(const QStringView& line, const Ascii
 				const auto columnName = line.sliced(startColumnIndex, numberCharacters);
 				// columnName.remove(columnName.length() - separator.length(), separator.length());
 				if (!properties.skipEmptyParts || !columnName.isEmpty()) {
-					if (columnCount >= properties.startColumn && (columnCount <= properties.endColumn || properties.endColumn < 0) && columnIndex < maxColumnCount) {
+					if (columnCount >= properties.startColumn && (columnCount <= properties.endColumn || properties.endColumn < 0)
+						&& columnIndex < maxColumnCount) {
 						columnValues[columnIndex] = columnName;
 						columnIndex++;
 					}
