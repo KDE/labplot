@@ -1034,12 +1034,12 @@ size_t AsciiFilterPrivate::determineColumns(const QStringView& line,
 
 		switch (state) {
 		case State::Column: {
-			bool c_;
+			bool separatorFound;
 			if (separatorSingleCharacter)
-				c_ = c == separatorCharacter;
+				separatorFound = c == separatorCharacter;
 			else
-				c_ = !properties.separator.isEmpty() && line.sliced(startColumnIndex, counter - startColumnIndex).endsWith(properties.separator);
-			if (c_) {
+				separatorFound = !properties.separator.isEmpty() && line.sliced(startColumnIndex, counter - startColumnIndex).endsWith(properties.separator);
+			if (separatorFound) {
 				separatorLast = true;
 				const auto columnName = line.sliced(startColumnIndex, numberCharacters);
 				// columnName.remove(columnName.length() - separator.length(), separator.length());
