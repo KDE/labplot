@@ -59,6 +59,7 @@ public:
 	bool usingColumn(const Column*) const override;
 	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) override;
 	QColor color() const override;
+	QColor colorAt(int) const;
 
 	typedef LollipopPlotPrivate Private;
 

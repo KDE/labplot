@@ -24,20 +24,26 @@
        <string>General</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="5" column="0">
-        <widget class="QLabel" name="lFontColor">
-         <property name="text">
-          <string>Color:</string>
+       <item row="0" column="1">
+        <spacer name="horizontalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
-        </widget>
+         <property name="sizeType">
+          <enum>QSizePolicy::Policy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>10</width>
+           <height>23</height>
+          </size>
+         </property>
+        </spacer>
        </item>
-       <item row="20" column="2" colspan="3">
-        <widget class="QComboBox" name="cbHorizontalAlignment"/>
-       </item>
-       <item row="22" column="0">
+       <item row="23" column="0">
         <spacer name="verticalSpacer">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -47,259 +53,7 @@
          </property>
         </spacer>
        </item>
-       <item row="15" column="2" colspan="2">
-        <widget class="NumberSpinBox" name="sbPositionXLogical">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Spinbox for numbers.</string>
-         </property>
-         <property name="feedback" stdset="0">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="lFormat">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Format</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="2" colspan="3">
-        <widget class="QSpinBox" name="sbLayoutColumnCount">
-         <property name="minimum">
-          <number>1</number>
-         </property>
-        </widget>
-       </item>
-       <item row="16" column="2" colspan="2">
-        <widget class="NumberSpinBox" name="sbPositionYLogical">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Spinbox for numbers.</string>
-         </property>
-         <property name="feedback" stdset="0">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="lName">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Name:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2" colspan="3">
-        <widget class="KFontRequester" name="kfrLabelFont"/>
-       </item>
-       <item row="17" column="0">
-        <widget class="QLabel" name="lPositionXLogicalDateTime">
-         <property name="text">
-          <string>x:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="24" column="0">
-        <widget class="QCheckBox" name="chkVisible">
-         <property name="text">
-          <string>Visible</string>
-         </property>
-        </widget>
-       </item>
-       <item row="14" column="2">
-        <widget class="KComboBox" name="cbPositionY"/>
-       </item>
-       <item row="14" column="3">
-        <widget class="NumberSpinBox" name="sbPositionY">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Spinbox for numbers.</string>
-         </property>
-         <property name="suffix">
-          <string> cm</string>
-         </property>
-         <property name="feedback" stdset="0">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="20" column="0">
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Hor. align.:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="0">
-        <spacer name="verticalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>58</width>
-           <height>13</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="9" column="2" colspan="2">
-        <widget class="NumberSpinBox" name="sbLineSymbolWidth">
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Spinbox for numbers.</string>
-         </property>
-         <property name="suffix">
-          <string> cm</string>
-         </property>
-         <property name="feedback" stdset="0">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0">
-        <widget class="QLabel" name="lOrder">
-         <property name="text">
-          <string>Order:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="21" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Ver. align.:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="0">
-        <widget class="QLabel" name="lLineSymbolWidth">
-         <property name="text">
-          <string>Line+Symbol Width:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="16" column="0">
-        <widget class="QLabel" name="lPositionYLogical">
-         <property name="text">
-          <string>y:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="lColumnCount">
-         <property name="text">
-          <string>Columns:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="13" column="3">
-        <widget class="NumberSpinBox" name="sbPositionX">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string>Spinbox for numbers.</string>
-         </property>
-         <property name="suffix">
-          <string> cm</string>
-         </property>
-         <property name="feedback" stdset="0">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2" colspan="3">
-        <widget class="TimedLineEdit" name="leName"/>
-       </item>
-       <item row="13" column="0">
-        <widget class="QLabel" name="lPositionX">
-         <property name="text">
-          <string>x:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="2" colspan="3">
-        <widget class="KColorButton" name="kcbLabelColor">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="lComment">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Comment:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="12" column="2">
-        <widget class="QCheckBox" name="chbBindLogicalPos">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="19" column="2" colspan="3">
+       <item row="20" column="2" colspan="3">
         <widget class="QSpinBox" name="sbRotation">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -327,69 +81,56 @@
          </property>
         </widget>
        </item>
-       <item row="15" column="0">
+       <item row="22" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Ver. align.:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="16" column="0">
         <widget class="QLabel" name="lPositionXLogical">
          <property name="text">
           <string>x:</string>
          </property>
         </widget>
        </item>
-       <item row="14" column="0">
-        <widget class="QLabel" name="lPositionY">
-         <property name="text">
-          <string>y:</string>
+       <item row="4" column="2" colspan="3">
+        <widget class="KFontRequester" name="kfrLabelFont"/>
+       </item>
+       <item row="14" column="3">
+        <widget class="NumberSpinBox" name="sbPositionX">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="suffix">
+          <string> cm</string>
+         </property>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <spacer name="horizontalSpacer_5">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>10</width>
-           <height>23</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="19" column="0">
-        <widget class="QLabel" name="lRotation">
+       <item row="4" column="0">
+        <widget class="QLabel" name="lFont">
          <property name="text">
-          <string>Rotation:</string>
+          <string>Font:</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <spacer name="verticalSpacer_8">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>58</width>
-           <height>13</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="11" column="0">
-        <widget class="QLabel" name="lPosition">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
+       <item row="18" column="0">
+        <widget class="QLabel" name="lPositionXLogicalDateTime">
          <property name="text">
-          <string>Geometry</string>
+          <string>x:</string>
          </property>
         </widget>
        </item>
@@ -403,43 +144,231 @@
          </property>
         </widget>
        </item>
-       <item row="8" column="2" colspan="3">
-        <widget class="KComboBox" name="cbOrder"/>
-       </item>
-       <item row="12" column="0">
-        <widget class="QLabel" name="lBindLogicalPos">
-         <property name="text">
-          <string>Logical coordinates</string>
+       <item row="11" column="0">
+        <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="lFont">
-         <property name="text">
-          <string>Font:</string>
+         <property name="sizeType">
+          <enum>QSizePolicy::Policy::Fixed</enum>
          </property>
-        </widget>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>58</width>
+           <height>13</height>
+          </size>
+         </property>
+        </spacer>
        </item>
-       <item row="21" column="2" colspan="3">
-        <widget class="QComboBox" name="cbVerticalAlignment"/>
-       </item>
-       <item row="13" column="2">
-        <widget class="KComboBox" name="cbPositionX">
+       <item row="15" column="3">
+        <widget class="NumberSpinBox" name="sbPositionY">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="suffix">
+          <string> cm</string>
+         </property>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="lFormat">
+         <property name="font">
+          <font>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Format</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="2" colspan="3">
+        <widget class="QSpinBox" name="sbLayoutColumnCount">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="0">
+        <widget class="QLabel" name="lPosition">
+         <property name="font">
+          <font>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Geometry</string>
+         </property>
+        </widget>
+       </item>
+       <item row="17" column="0">
+        <widget class="QLabel" name="lPositionYLogical">
+         <property name="text">
+          <string>y:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="16" column="2" colspan="2">
+        <widget class="NumberSpinBox" name="sbPositionXLogical">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="17" column="2" colspan="2">
+        <widget class="NumberSpinBox" name="sbPositionYLogical">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="0">
+        <widget class="QLabel" name="lBindLogicalPos">
+         <property name="text">
+          <string>Logical coordinates</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2" colspan="3">
+        <widget class="TimedLineEdit" name="leName"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="lComment">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Comment:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="22" column="2" colspan="3">
+        <widget class="QComboBox" name="cbVerticalAlignment"/>
+       </item>
+       <item row="25" column="0">
+        <widget class="QCheckBox" name="chkVisible">
+         <property name="text">
+          <string>Visible</string>
+         </property>
         </widget>
        </item>
        <item row="6" column="0">
+        <widget class="QLabel" name="lFontColor">
+         <property name="text">
+          <string>Color:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="0">
+        <widget class="QLabel" name="lLineSymbolWidth">
+         <property name="text">
+          <string>Line+Symbol Width:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="2">
+        <widget class="KComboBox" name="cbPositionY"/>
+       </item>
+       <item row="13" column="2">
+        <widget class="QCheckBox" name="chbBindLogicalPos">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="2" colspan="3">
+        <widget class="KComboBox" name="cbOrder"/>
+       </item>
+       <item row="6" column="2" colspan="3">
+        <widget class="KColorButton" name="kcbLabelColor">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="0">
+        <widget class="QLabel" name="lPositionY">
+         <property name="text">
+          <string>y:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="21" column="2" colspan="3">
+        <widget class="QComboBox" name="cbHorizontalAlignment"/>
+       </item>
+       <item row="9" column="0">
+        <widget class="QLabel" name="lOrder">
+         <property name="text">
+          <string>Order:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="20" column="0">
+        <widget class="QLabel" name="lRotation">
+         <property name="text">
+          <string>Rotation:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="24" column="0">
+        <widget class="QCheckBox" name="chbLock">
+         <property name="text">
+          <string>Locked</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
         <spacer name="verticalSpacer_9">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Policy::Fixed</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -449,13 +378,96 @@
          </property>
         </spacer>
        </item>
-       <item row="17" column="2" colspan="3">
+       <item row="10" column="2" colspan="2">
+        <widget class="NumberSpinBox" name="sbLineSymbolWidth">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="suffix">
+          <string> cm</string>
+         </property>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="18" column="2" colspan="3">
         <widget class="UTCDateTimeEdit" name="dtePositionXLogical"/>
        </item>
-       <item row="23" column="0">
-        <widget class="QCheckBox" name="chbLock">
+       <item row="21" column="0">
+        <widget class="QLabel" name="label">
          <property name="text">
-          <string>Locked</string>
+          <string>Hor. align.:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="2">
+        <widget class="KComboBox" name="cbPositionX">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="lColumnCount">
+         <property name="text">
+          <string>Columns:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <spacer name="verticalSpacer_8">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Policy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>58</width>
+           <height>13</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="lName">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Name:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="0">
+        <widget class="QLabel" name="lPositionX">
+         <property name="text">
+          <string>x:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="lUsePlotColor">
+         <property name="text">
+          <string>Plot's Color:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="2">
+        <widget class="QCheckBox" name="chkUsePlotColor">
+         <property name="text">
+          <string/>
          </property>
         </widget>
        </item>
@@ -475,7 +487,6 @@
         <widget class="QLabel" name="lBackground">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -509,7 +520,7 @@
        <item row="6" column="0">
         <spacer name="verticalSpacer_2">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -522,10 +533,10 @@
        <item row="4" column="0">
         <spacer name="verticalSpacer_7">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Policy::Fixed</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -545,10 +556,10 @@
        <item row="1" column="0">
         <spacer name="verticalSpacer_5">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Policy::Fixed</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -561,10 +572,10 @@
        <item row="5" column="1">
         <spacer name="horizontalSpacer_3">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Policy::Fixed</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -578,7 +589,6 @@
         <widget class="QLabel" name="lBorder">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -590,10 +600,10 @@
        <item row="2" column="0">
         <spacer name="verticalSpacer_10">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Policy::Fixed</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -613,10 +623,10 @@
        <item row="5" column="0">
         <spacer name="verticalSpacer_6">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Policy::Fixed</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -630,7 +640,6 @@
         <widget class="QLabel" name="lMargin">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -643,7 +652,6 @@
         <widget class="QLabel" name="lSpacing">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -742,10 +750,10 @@
        <item row="1" column="2">
         <spacer name="horizontalSpacer_4">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Policy::Fixed</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -816,7 +824,7 @@
        <item row="9" column="0">
         <spacer name="verticalSpacer_4">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>

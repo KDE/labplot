@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for cartesian plot legend properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2013-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -11,9 +11,6 @@
 
 #include "CartesianPlotLegendDock.h"
 #include "backend/core/Settings.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/PlotArea.h"
-#include "frontend/GuiTools.h"
 #include "frontend/TemplateHandler.h"
 #include "frontend/widgets/BackgroundWidget.h"
 #include "frontend/widgets/LabelWidget.h"
@@ -70,6 +67,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent)
 	// General
 	connect(ui.chbLock, &QCheckBox::clicked, this, &CartesianPlotLegendDock::lockChanged);
 	connect(ui.kfrLabelFont, &KFontRequester::fontSelected, this, &CartesianPlotLegendDock::labelFontChanged);
+	connect(ui.chkUsePlotColor, &QCheckBox::clicked, this, &CartesianPlotLegendDock::usePlotColorChanged);
 	connect(ui.kcbLabelColor, &KColorButton::changed, this, &CartesianPlotLegendDock::labelColorChanged);
 	connect(ui.cbOrder, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotLegendDock::labelOrderChanged);
 	connect(ui.sbLineSymbolWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotLegendDock::lineSymbolWidthChanged);
@@ -134,6 +132,7 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 	// SIGNALs/SLOTs
 	// General
 	connect(m_legend, &CartesianPlotLegend::labelFontChanged, this, &CartesianPlotLegendDock::legendLabelFontChanged);
+	connect(m_legend, &CartesianPlotLegend::usePlotColorChanged, this, &CartesianPlotLegendDock::legendUsePlotColorChanged);
 	connect(m_legend, &CartesianPlotLegend::labelColorChanged, this, &CartesianPlotLegendDock::legendLabelColorChanged);
 	connect(m_legend, &CartesianPlotLegend::labelColumnMajorChanged, this, &CartesianPlotLegendDock::legendLabelOrderChanged);
 	connect(m_legend, &CartesianPlotLegend::positionChanged, this, &CartesianPlotLegendDock::legendPositionChanged);
@@ -243,6 +242,10 @@ void CartesianPlotLegendDock::updateUnits() {
 void CartesianPlotLegendDock::retranslateUi() {
 	CONDITIONAL_LOCK_RETURN;
 
+	QString info = i18n("Use the main color of the plot (line, symbol, etc.) for the color of the name in the leged.");
+	ui.lUsePlotColor->setToolTip(info);
+	ui.chkUsePlotColor->setToolTip(info);
+
 	ui.cbOrder->addItem(i18n("Column Major"));
 	ui.cbOrder->addItem(i18n("Row Major"));
 
@@ -299,6 +302,16 @@ void CartesianPlotLegendDock::labelFontChanged(const QFont& font) {
 	labelsFont.setPointSizeF(Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Unit::Point));
 	for (auto* legend : m_legendList)
 		legend->setLabelFont(labelsFont);
+}
+
+void CartesianPlotLegendDock::usePlotColorChanged(bool checked) {
+	ui.lFontColor->setVisible(!checked);
+	ui.kcbLabelColor->setVisible(!checked);
+
+	CONDITIONAL_LOCK_RETURN;
+
+	for (auto* legend : m_legendList)
+		legend->setUsePlotColor(checked);
 }
 
 void CartesianPlotLegendDock::labelColorChanged(const QColor& color) {
@@ -554,6 +567,11 @@ void CartesianPlotLegendDock::legendLabelFontChanged(QFont& font) {
 	ui.kfrLabelFont->setFont(f);
 }
 
+void CartesianPlotLegendDock::legendUsePlotColorChanged(bool usePlotColor) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.chkUsePlotColor->setChecked(usePlotColor);
+}
+
 void CartesianPlotLegendDock::legendLabelColorChanged(QColor& color) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.kcbLabelColor->setColor(color);
@@ -674,6 +692,8 @@ void CartesianPlotLegendDock::load() {
 	font.setPointSizeF(std::round(Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Unit::Point)));
 	ui.kfrLabelFont->setFont(font);
 
+	ui.chkUsePlotColor->setChecked(m_legend->usePlotColor());
+	usePlotColorChanged(ui.chkUsePlotColor->isChecked());
 	ui.kcbLabelColor->setColor(m_legend->labelColor());
 	bool columnMajor = m_legend->labelColumnMajor();
 	if (columnMajor)
@@ -796,6 +816,8 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 	font.setPointSizeF(std::round(Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Unit::Point)));
 	ui.kfrLabelFont->setFont(group.readEntry(QStringLiteral("LabelFont"), font));
 
+	ui.chkUsePlotColor->setChecked(group.readEntry(QStringLiteral("UsePlotColor"), m_legend->usePlotColor()));
+	usePlotColorChanged(ui.chkUsePlotColor->isChecked());
 	ui.kcbLabelColor->setColor(group.readEntry(QStringLiteral("LabelColor"), m_legend->labelColor()));
 
 	bool columnMajor = group.readEntry(QStringLiteral("LabelColumMajor"), m_legend->labelColumnMajor());
