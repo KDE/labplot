@@ -2683,6 +2683,92 @@ void AsciiFilterTest::testPrependColumns() {
 	QCOMPARE(spreadsheet.column(3)->integerAt(2), 7);
 }
 
+void AsciiFilterTest::testCommaAsDecimalSeparator() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+
+	auto p = filter.properties();
+	p.automaticSeparatorDetection = false;
+	p.separator = QStringLiteral(",");
+	p.headerEnabled = true;
+	p.headerLine = 1;
+	p.removeQuotes = true;
+	p.intAsDouble = false;
+	p.simplifyWhitespaces = false;
+	p.locale = QLocale::Language::German;
+
+	filter.setProperties(p);
+
+	{
+		QStringList fileContent = {
+			QStringLiteral("Commit Id,Description,Measurement 1,Measurement2,Measurement3,Measurement 4"),
+			QStringLiteral("9b1cdd5607eaaa521fe74d632ce43f9a37302bf8,master,\"2,908\",\"2,926\",\"2,886\",\"3,043\""),
+			QStringLiteral("41e0de50ee42ed464533af85e5e8b8c949509384,optimize determine Columns (Do not allocate all the time "
+						   "columnNames),\"2,749\",\"2,727\",\"2,792\",\"2,757\""),
+			QStringLiteral("fec3a75c04f4a60571e92ceb1997a4be5311e94b,Make constants Qchar instead of QLatin1String,\"2,77\",\"2,761\",\"2,767\",\"2,762\""),
+			QStringLiteral("bd1a1b252a88e4bb78889d68ef42f185b8a737e7,Simplified check for the separator if only a single "
+						   "character,\"2,24\",\"2,274\",\"2,148\",\"2,215\""),
+			QStringLiteral("f584f71c6bfb4777bd01c13d2c912c5436f726d3,Determine separatorCharacter outside of the loop,\"2,2\",\"2,219\",\"2,201\",\"2,211\""),
+		};
+
+		QString savePath;
+		SAVE_FILE("testfile", fileContent);
+		filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	}
+
+	QCOMPARE(spreadsheet.rowCount(), 5);
+	QCOMPARE(spreadsheet.columnCount(), 6);
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("Commit Id"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("Description"));
+	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("Measurement 1"));
+	QCOMPARE(spreadsheet.column(3)->name(), QLatin1String("Measurement2"));
+	QCOMPARE(spreadsheet.column(4)->name(), QLatin1String("Measurement3"));
+	QCOMPARE(spreadsheet.column(5)->name(), QLatin1String("Measurement 4"));
+
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet.column(4)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet.column(5)->columnMode(), AbstractColumn::ColumnMode::Double);
+
+	QCOMPARE(spreadsheet.column(0)->textAt(0), QStringLiteral("9b1cdd5607eaaa521fe74d632ce43f9a37302bf8"));
+	QCOMPARE(spreadsheet.column(0)->textAt(1), QStringLiteral("41e0de50ee42ed464533af85e5e8b8c949509384"));
+	QCOMPARE(spreadsheet.column(0)->textAt(2), QStringLiteral("fec3a75c04f4a60571e92ceb1997a4be5311e94b"));
+	QCOMPARE(spreadsheet.column(0)->textAt(3), QStringLiteral("bd1a1b252a88e4bb78889d68ef42f185b8a737e7"));
+	QCOMPARE(spreadsheet.column(0)->textAt(4), QStringLiteral("f584f71c6bfb4777bd01c13d2c912c5436f726d3"));
+
+	QCOMPARE(spreadsheet.column(1)->textAt(0), QStringLiteral("master"));
+	QCOMPARE(spreadsheet.column(1)->textAt(1), QStringLiteral("optimize determine Columns (Do not allocate all the time columnNames)"));
+	QCOMPARE(spreadsheet.column(1)->textAt(2), QStringLiteral("Make constants Qchar instead of QLatin1String"));
+	QCOMPARE(spreadsheet.column(1)->textAt(3), QStringLiteral("Simplified check for the separator if only a single character"));
+	QCOMPARE(spreadsheet.column(1)->textAt(4), QStringLiteral("Determine separatorCharacter outside of the loop"));
+
+	VALUES_EQUAL(spreadsheet.column(2)->valueAt(0), 2.908);
+	VALUES_EQUAL(spreadsheet.column(2)->valueAt(1), 2.749);
+	VALUES_EQUAL(spreadsheet.column(2)->valueAt(2), 2.77);
+	VALUES_EQUAL(spreadsheet.column(2)->valueAt(3), 2.24);
+	VALUES_EQUAL(spreadsheet.column(2)->valueAt(4), 2.2);
+
+	VALUES_EQUAL(spreadsheet.column(3)->valueAt(0), 2.926);
+	VALUES_EQUAL(spreadsheet.column(3)->valueAt(1), 2.727);
+	VALUES_EQUAL(spreadsheet.column(3)->valueAt(2), 2.761);
+	VALUES_EQUAL(spreadsheet.column(3)->valueAt(3), 2.274);
+	VALUES_EQUAL(spreadsheet.column(3)->valueAt(4), 2.219);
+
+	VALUES_EQUAL(spreadsheet.column(4)->valueAt(0), 2.886);
+	VALUES_EQUAL(spreadsheet.column(4)->valueAt(1), 2.792);
+	VALUES_EQUAL(spreadsheet.column(4)->valueAt(2), 2.767);
+	VALUES_EQUAL(spreadsheet.column(4)->valueAt(3), 2.148);
+	VALUES_EQUAL(spreadsheet.column(4)->valueAt(4), 2.201);
+
+	VALUES_EQUAL(spreadsheet.column(5)->valueAt(0), 3.043);
+	VALUES_EQUAL(spreadsheet.column(5)->valueAt(1), 2.757);
+	VALUES_EQUAL(spreadsheet.column(5)->valueAt(2), 2.762);
+	VALUES_EQUAL(spreadsheet.column(5)->valueAt(3), 2.215);
+	VALUES_EQUAL(spreadsheet.column(5)->valueAt(4), 2.211);
+}
+
 void AsciiFilterTest::testMatrixHeader() {
 	Matrix matrix(QStringLiteral("test"), false);
 

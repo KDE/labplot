@@ -109,7 +109,6 @@ public:
 		int baseYear{1900}; // Base year when parsing datetime with only 2 year digits
 		QString dateTimeFormat{
 			QStringLiteral("YYYY-MM-DD hh:mm:ss")}; // ISO 8601 do not let it empty, because in automatic mode the initialization is really slow
-		QLocale::Language numberFormat{QLocale::C};
 		QLocale locale{QLocale::C};
 		bool skipEmptyParts{false};
 		bool simplifyWhitespaces{false};

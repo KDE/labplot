@@ -220,7 +220,7 @@ void AsciiOptionsWidget::applyFilterSettings(AsciiFilter::Properties& properties
 
 	// TODO: use general setting for decimal separator?
 	const auto lang = ui.cbDecimalSeparator->currentIndex() == 0 ? QLocale::Language::C : QLocale::Language::German;
-	properties.numberFormat = lang;
+	properties.locale = lang;
 	properties.dateTimeFormat = ui.cbDateTimeFormat->currentText();
 	properties.createIndex = ui.chbCreateIndex->isChecked();
 

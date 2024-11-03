@@ -114,6 +114,8 @@ private Q_SLOTS:
 	void testAppendColumns();
 	void testPrependColumns();
 
+	void testCommaAsDecimalSeparator();
+
 	// check updates in the dependent objects after the data was modified by the import
 	void spreadsheetFormulaUpdateAfterImport();
 	void spreadsheetFormulaUpdateAfterImportWithColumnRestore();

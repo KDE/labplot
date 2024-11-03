@@ -938,7 +938,7 @@ AsciiFilterPrivate::determineColumnModes(const QVector<QStringList>& rows, const
 				column = column.simplified();
 			if (properties.removeQuotes)
 				column.remove(QLatin1Char('"'));
-			auto mode = AbstractFileFilter::columnMode(column, dateTimeFormat, properties.numberFormat, properties.intAsDouble, properties.baseYear);
+			auto mode = AbstractFileFilter::columnMode(column, dateTimeFormat, properties.locale, properties.intAsDouble, properties.baseYear);
 
 			if (properties.intAsDouble) {
 				if (mode == Mode::Integer || mode == Mode::BigInt)
