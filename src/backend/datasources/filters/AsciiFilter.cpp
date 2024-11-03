@@ -1082,7 +1082,7 @@ QStringList AsciiFilterPrivate::determineColumnsSimplifyWhiteSpace(QStringView l
 	QChar lastCharacter;
 
 	for (auto c : line) {
-		if (c == newlineChar|| c == carriageReturnChar)
+		if (c == newlineChar || c == carriageReturnChar)
 			break;
 		if (removeQuotes && c == quoteChar) {
 			switch (state) {
