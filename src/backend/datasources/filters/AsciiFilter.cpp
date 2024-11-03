@@ -773,6 +773,11 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device,
 	int rowIndex = dataContainerStartIndex;
 	const auto columnCountExpected = m_DataContainer.size() - properties.createIndex - properties.createTimestamp;
 	QVector<QStringView> columnValues(columnCountExpected);
+	const auto separatorLength = properties.separator.size();
+	bool separatorSingleCharacter = separatorLength == 1;
+	QChar separatorCharacter;
+	if (separatorLength)
+		separatorCharacter = properties.separator[separatorLength - 1];
 	// Iterate over all rows
 	do {
 		const auto status = getLine(device, line);
@@ -814,7 +819,7 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device,
 			setValues(values, rowIndex, properties);
 		} else {
 			// Higher performance if no whitespaces are available
-			const auto columnCount = determineColumns(line, properties, columnValues);
+			const auto columnCount = determineColumns(line, properties, separatorSingleCharacter, separatorCharacter, columnValues);
 			if (columnCount < columnCountExpected)
 				continue; // return Status::InvalidNumberDataColumns;
 			setValues(columnValues, rowIndex, properties);
@@ -987,7 +992,11 @@ const QChar spaceChar(QLatin1Char(' '));
 const QChar tabChar(QLatin1Char('\t'));
 }
 
-size_t AsciiFilterPrivate::determineColumns(const QStringView& line, const AsciiFilter::Properties& properties, QVector<QStringView>& columnValues) {
+size_t AsciiFilterPrivate::determineColumns(const QStringView& line,
+											const AsciiFilter::Properties& properties,
+											bool separatorSingleCharacter,
+											const QChar separatorCharacter,
+											QVector<QStringView>& columnValues) {
 	// Simlified
 	if (properties.simplifyWhitespaces)
 		return 0;
@@ -996,12 +1005,6 @@ size_t AsciiFilterPrivate::determineColumns(const QStringView& line, const Ascii
 		Column,
 		QuotedText,
 	};
-
-	const auto separatorLength = properties.separator.size();
-	bool separatorSingleCharacter = separatorLength == 1;
-	QChar separatorCharacter;
-	if (separatorLength)
-		separatorCharacter = properties.separator[separatorLength - 1];
 
 	const auto maxColumnCount = columnValues.size();
 	auto state = State::Column;
