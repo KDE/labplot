@@ -262,7 +262,6 @@ QColor BarPlot::colorAt(int index) const {
 	}
 }
 
-
 // values
 Value* BarPlot::value() const {
 	Q_D(const BarPlot);

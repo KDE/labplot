@@ -216,7 +216,6 @@ void CartesianPlotLegend::setUsePlotColor(bool usePlotColor) {
 		exec(new CartesianPlotLegendSetUsePlotColorCmd(d, usePlotColor, ki18n("%1: use plot's color")));
 }
 
-
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLabelColor, QColor, labelColor, update)
 void CartesianPlotLegend::setLabelColor(const QColor& color) {
 	Q_D(CartesianPlotLegend);
