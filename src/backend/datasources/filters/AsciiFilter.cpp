@@ -979,11 +979,12 @@ QStringList AsciiFilterPrivate::determineColumnsSimplifyWhiteSpace(const QString
 }
 
 namespace {
-const QLatin1Char newlineChar('\n');
-const QLatin1Char carriageReturnChar('\r');
-const QLatin1Char quoteChar('"');
-const QLatin1Char spaceChar(' ');
-const QLatin1Char tabChar('\t');
+// Have them already in QChar leads that below any conversion must be done
+const QChar newlineChar(QLatin1Char('\n'));
+const QChar carriageReturnChar(QLatin1Char('\r'));
+const QChar quoteChar(QLatin1Char('"'));
+const QChar spaceChar(QLatin1Char(' '));
+const QChar tabChar(QLatin1Char('\t'));
 }
 
 size_t AsciiFilterPrivate::determineColumns(const QStringView& line, const AsciiFilter::Properties& properties, QVector<QStringView>& columnValues) {
