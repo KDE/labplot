@@ -4,15 +4,15 @@
 #
 # Martin Srebotnjak <miles@filmsi.net>, 2021,2022.
 # SPDX-FileCopyrightText: 2021, 2022, 2023, 2024 Matjaž Jeran <matjaz.jeran@amis.net>
-#: src/backend/datasources/filters/AsciiFilter.cpp:194
-#: src/backend/datasources/filters/AsciiFilter.cpp:210
+#: src/backend/datasources/filters/AsciiFilter.cpp:197
+#: src/backend/datasources/filters/AsciiFilter.cpp:213
 #, fuzzy, kde-format
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-02 01:47+0000\n"
-"PO-Revision-Date: 2024-10-30 05:44+0100\n"
+"POT-Creation-Date: 2024-11-03 01:42+0000\n"
+"PO-Revision-Date: 2024-11-02 07:09+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -256,7 +256,7 @@ msgid "Y-Error -"
 msgstr "Napaka Y -"
 
 #: src/backend/core/AbstractColumn.cpp:227
-#: src/backend/datasources/filters/AsciiFilter.cpp:604
+#: src/backend/datasources/filters/AsciiFilter.cpp:607
 #: src/backend/datasources/filters/MatioFilter.cpp:382
 #: src/backend/datasources/filters/MatioFilter.cpp:428
 #, kde-format
@@ -277,7 +277,7 @@ msgstr "Dolgo celo število"
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #. i18n: ectx: property (text), widget (QLabel, lValuesText)
 #: src/backend/core/AbstractColumn.cpp:233
-#: src/backend/datasources/filters/AsciiFilter.cpp:605
+#: src/backend/datasources/filters/AsciiFilter.cpp:608
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:472
 #: src/frontend/notebook/NotebookView.cpp:96
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:208
@@ -424,7 +424,7 @@ msgstr "nezdružljiva vrsta filtra"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
 #: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:708
-#: src/backend/datasources/MQTTClient.cpp:1365
+#: src/backend/datasources/MQTTClient.cpp:1366
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:272
 #: src/backend/lib/XmlStreamReader.cpp:104
@@ -1071,7 +1071,7 @@ msgstr ""
 "Ni bilo mogoče odpreti datoteke %1 za pisanje.\n"
 "%2"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:186
+#: src/backend/datasources/filters/AsciiFilter.cpp:189
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2073
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1224
@@ -1079,157 +1079,147 @@ msgstr ""
 msgid "Success"
 msgstr "Uspešno"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:188
+#: src/backend/datasources/filters/AsciiFilter.cpp:191
 #, kde-format
 msgid "Device at end"
 msgstr "Naprava na koncu"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:190
+#: src/backend/datasources/filters/AsciiFilter.cpp:193
 #, kde-format
 msgid "Not enough rows selected. Increase number of rows."
 msgstr "Ni izbranih dovolj vrstic. Povečajte število vrstic."
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:192
+#: src/backend/datasources/filters/AsciiFilter.cpp:195
 #, kde-format
 msgid "Unable to open device"
 msgstr "Ni mogoče odpreti naprave"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:196
-#, fuzzy, kde-format
-#| msgid "Unable to read the file"
+#: src/backend/datasources/filters/AsciiFilter.cpp:199
+#, kde-format
 msgid "Unable to determine the separator"
-msgstr "Datoteke ni mogoče brati"
+msgstr "Ni mogoče določiti ločilnika"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:198
-#, fuzzy, kde-format
-#| msgid "Invalid numeric value."
+#: src/backend/datasources/filters/AsciiFilter.cpp:201
+#, kde-format
 msgid "Invalid number of data columns"
-msgstr "Neveljavna številska vrednost."
+msgstr "Neveljavno število stolpcev podatkov"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:200
-#, fuzzy, kde-format
-#| msgid "Invalid numeric value."
+#: src/backend/datasources/filters/AsciiFilter.cpp:203
+#, kde-format
 msgid "Invalid number of column names"
-msgstr "Neveljavna številska vrednost."
+msgstr "Neveljavno število imen stolpcev"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:202
+#: src/backend/datasources/filters/AsciiFilter.cpp:205
 #, kde-format
 msgid "Matrix: Unsupported Column Mode"
-msgstr ""
+msgstr "Matrika: Nepodprt način stolpca"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:204
+#: src/backend/datasources/filters/AsciiFilter.cpp:207
 #, kde-format
 msgid "Insufficient memory (RAM)"
-msgstr ""
+msgstr "Premalo pomnilnika (RAM)"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:206
-#, fuzzy, kde-format
-#| msgid "Unable to read the file"
+#: src/backend/datasources/filters/AsciiFilter.cpp:209
+#, kde-format
 msgid "Unable to parse header"
-msgstr "Datoteke ni mogoče brati"
+msgstr "Glave ni mogoče razčleniti"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:208
-#, fuzzy, kde-format
-#| msgid "Type of data source"
+#: src/backend/datasources/filters/AsciiFilter.cpp:211
+#, kde-format
 msgid "Unsupported datasource"
-msgstr "Vrsta vira podatkov"
+msgstr "Nepodprt vir podatkov"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:212
+#: src/backend/datasources/filters/AsciiFilter.cpp:215
 #, kde-format
 msgid "Live: No column separator selected"
-msgstr ""
+msgstr "V živo: Ni izbranega ločilnika stopca"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:214
+#: src/backend/datasources/filters/AsciiFilter.cpp:217
 #, kde-format
 msgid "Live: No column modes set"
-msgstr ""
+msgstr "V živo: Ni nastavljenih načinov stolpca"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:216
+#: src/backend/datasources/filters/AsciiFilter.cpp:219
 #, kde-format
 msgid "Datetime column found, but no Datetime format provided"
 msgstr ""
+"Najden je stolpec z datumom in časom, a ni podanega formata datuma in časa"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:218
-#, fuzzy, kde-format
-#| msgid "Reading from file %1 failed."
+#: src/backend/datasources/filters/AsciiFilter.cpp:221
+#, kde-format
 msgid "Header reading from device not allowed"
-msgstr "Branje iz datoteke %1 ni uspelo."
+msgstr "Branje glave iz naprave ni dovoljeno"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:220
+#: src/backend/datasources/filters/AsciiFilter.cpp:223
 #, kde-format
 msgid "Separator detection not allowed"
-msgstr ""
+msgstr "Zaznavanje ločilnika ni dovoljeno"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:222
-#, fuzzy, kde-format
-#| msgid "Invalid sheet."
+#: src/backend/datasources/filters/AsciiFilter.cpp:225
+#, kde-format
 msgid "Invalid separator"
-msgstr "Neveljavna preglednica."
+msgstr "Neveljaven ločilnik"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:224
-#, fuzzy, kde-format
-#| msgid "Failed to initialize %1."
+#: src/backend/datasources/filters/AsciiFilter.cpp:227
+#, kde-format
 msgid "Filter not initialized"
-msgstr "Inicializacija %1 ni uspela."
+msgstr "Filter ni inicializiran"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:226
+#: src/backend/datasources/filters/AsciiFilter.cpp:229
 #, kde-format
 msgid "Wrong end column. Is it smaller than start column?"
-msgstr ""
+msgstr "Napačni končni stolpec. Ali je manjši kot začetni stolpec?"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:228
+#: src/backend/datasources/filters/AsciiFilter.cpp:231
 #, kde-format
 msgid "Wrong end row. Is it smaller than start row?"
-msgstr ""
+msgstr "Napačna končna vrstica. Ali je manjša kot začetna vrstica?"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:230
-#, fuzzy, kde-format
-#| msgid "No data set selected."
+#: src/backend/datasources/filters/AsciiFilter.cpp:233
+#, kde-format
 msgid "No data destination set"
-msgstr "Ni izbrane množice podatkov."
+msgstr "Ni nastavljenega cilja podatkov"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:232
-#, fuzzy, kde-format
-#| msgid "column"
-#| msgid_plural "columns"
+#: src/backend/datasources/filters/AsciiFilter.cpp:235
+#, kde-format
 msgid "No columns"
-msgstr "stolpec"
+msgstr "Ni stolpcev"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:234
+#: src/backend/datasources/filters/AsciiFilter.cpp:237
 #, kde-format
 msgid "Unable to determine column modes. Check if they are correctly written"
-msgstr ""
+msgstr "Ni mogoče določiti načinov stolpca. Preverite ali so pravilno napisani"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:236
+#: src/backend/datasources/filters/AsciiFilter.cpp:239
 #, kde-format
 msgid "Unhandled case"
 msgstr "Neobdelan primer"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:262
+#: src/backend/datasources/filters/AsciiFilter.cpp:265
 #, kde-format
 msgid "Number of columns: %1"
 msgstr "Število stolpcev: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:264
+#: src/backend/datasources/filters/AsciiFilter.cpp:267
 #, kde-format
 msgid "Number of lines: %1"
 msgstr "Število vrstic: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:519
-#: src/backend/datasources/filters/AsciiFilter.cpp:1261
+#: src/backend/datasources/filters/AsciiFilter.cpp:522
+#: src/backend/datasources/filters/AsciiFilter.cpp:1264
 #: src/backend/datasources/filters/JsonFilter.cpp:284
 #, kde-format
 msgid "Column %1"
 msgstr "Stolpec %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:589
-#: src/backend/datasources/filters/AsciiFilter.cpp:1284
+#: src/backend/datasources/filters/AsciiFilter.cpp:592
+#: src/backend/datasources/filters/AsciiFilter.cpp:1287
 #, kde-format
 msgid "Timestamp"
 msgstr "Časovni žig"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:593
-#: src/backend/datasources/filters/AsciiFilter.cpp:1288
+#: src/backend/datasources/filters/AsciiFilter.cpp:596
+#: src/backend/datasources/filters/AsciiFilter.cpp:1291
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1237,19 +1227,17 @@ msgstr "Časovni žig"
 msgid "Index"
 msgstr "Kazalo"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:606
-#, fuzzy, kde-format
-#| msgid "DateTime:"
+#: src/backend/datasources/filters/AsciiFilter.cpp:609
+#, kde-format
 msgid "DateTime"
-msgstr "Datum s časom:"
+msgstr "Datum in čas"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:607
-#, fuzzy, kde-format
-#| msgid "Int8"
+#: src/backend/datasources/filters/AsciiFilter.cpp:610
+#, kde-format
 msgid "Int"
-msgstr "Int8"
+msgstr "Int"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:608
+#: src/backend/datasources/filters/AsciiFilter.cpp:611
 #: src/backend/datasources/filters/MatioFilter.cpp:398
 #: src/backend/datasources/filters/MatioFilter.cpp:430
 #, kde-format
@@ -2295,7 +2283,7 @@ msgid "Failed to parse the file."
 msgstr "Razčlenjevanje datoteke ni uspelo."
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:113
-#: src/backend/datasources/MQTTClient.cpp:1189
+#: src/backend/datasources/MQTTClient.cpp:1190
 #: src/backend/datasources/MQTTTopic.cpp:207
 #: src/backend/lib/XmlStreamReader.cpp:99
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:469
@@ -2469,8 +2457,7 @@ msgid "Device already opened."
 msgstr "Naprava je že odprta."
 
 #: src/backend/datasources/LiveDataSource.cpp:717
-#, fuzzy, kde-format
-#| msgid "Device is not opened."
+#, kde-format
 msgid "Device is not open."
 msgstr "Naprava ni odprta."
 
@@ -2502,7 +2489,7 @@ msgstr "Napaka zaporednih vrat"
 #: src/backend/datasources/MQTTTopic.cpp:44
 #, kde-format
 msgid "%1 %2"
-msgstr ""
+msgstr "%1 %2"
 
 #: src/backend/datasources/MQTTTopic.cpp:129
 #, kde-format
@@ -10470,16 +10457,14 @@ msgid "Line in the file that should be used to determine the column names."
 msgstr "Vrstica v datoteki, ki naj se uporablja za določitev imen stolpcev."
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:111
-#, fuzzy, kde-format
-#| msgid "Custom column names, space separated. E.g. \"x y\""
+#, kde-format
 msgid "Custom column names, comma separated. E.g. \"x, y\""
-msgstr "Imena stolpcev po meri, ločena s presledki. Npr. »x y«"
+msgstr "Imena stolpcev po meri, ločena z vejico. Npr. »x, y«"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:115
-#, fuzzy, kde-format
-#| msgid "Custom column names, space separated. E.g. \"x y\""
+#, kde-format
 msgid "Custom column modes, comma separated"
-msgstr "Imena stolpcev po meri, ločena s presledki. Npr. »x y«"
+msgstr "Načini stolpcev po meri, ločeni z vejico"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:122
 #, kde-format
@@ -10495,22 +10480,31 @@ msgid ""
 "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
 "td></tr></table>"
 msgstr ""
+"Če ni prazno, se mora število stolpcev ujemati s številom imen stolpcev, če "
+"so navedena, in se mora ujemati s številom stolpcev v uvoženi datoteki z "
+"vrstami podatkov:<table><tr><td>%1</td><td>Celo število z 32-bitno "
+"velikostjo (−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</"
+"td><td>Celo število s 64-bitno velikostjo (−9.223.372.036.854.775 .808 .. "
+"9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Število s plavajočo "
+"vejico 64-bitna velikost. Ločljivost približno 16 števk.</td></tr><tr><td>"
+"%4</td><td>Datum in čas z obliko iz besedilnega polja za datum in čas, če ni "
+"prazno, se določi samodejno.</td> </tr><tr><td>%5</td><td>Besedilo.</td></"
+"tr></table>"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:252
-#, fuzzy, kde-format
-#| msgid "Data type not supported yet."
+#, kde-format
 msgid "Datatype not found: %1"
-msgstr "Vrsta podatkov še ni podprta."
+msgstr "Vrste podatkov ni najdene: %1."
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:29
 #, kde-format
 msgid "Little endian"
-msgstr "Najmanjše na koncu"
+msgstr "Little endian"
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:30
 #, kde-format
 msgid "Big endian"
-msgstr "Največje na koncu"
+msgstr "Big endian"
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:32
 #, kde-format
@@ -10929,10 +10923,9 @@ msgid "Select a data container where the data has to be imported into."
 msgstr "Izberite vsebnik podatkov, v katerega je potrebno uvoziti podatke."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:406
-#, fuzzy, kde-format
-#| msgid "No data to import."
+#, kde-format
 msgid "No file provided for import."
-msgstr "Ni podatkov za uvoz."
+msgstr "Ni podane datoteke za uvoz."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:428
 #, kde-format
@@ -11191,7 +11184,7 @@ msgstr ""
 #, kde-format
 msgid ""
 "The number of rows is calculated from the values of the data portion tab"
-msgstr ""
+msgstr "Število vrstic je izračunano iz vrednosti zavihka podatkovnega dela"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:982
 #, kde-format
@@ -11368,39 +11361,38 @@ msgid ""
 "Invalid number rows. Please check 'End Row' and 'Start Row'. 'End Row' must "
 "be larger than 'Start Row' or -1"
 msgstr ""
+"Neveljavne številske vrstice. Preverite 'Končno vrstico' in 'Začetno "
+"vrstico'. 'Končna vrstica' mora biti večja od 'Začetna vrstica' ali -1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1768
 #, kde-format
 msgid "Preview: Initialization failed: %1"
-msgstr ""
+msgstr "Predogled: Inicializacija ni uspela: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1793
-#, fuzzy, kde-format
-#| msgid "Failed to connect to the broker '%1:%2'."
+#, kde-format
 msgid "Preview: Failed to connect to local socket %1 - %2"
-msgstr "Povezava s posrednikom »%1:%2« ni uspela."
+msgstr "Predogled: Neuspela povezava z lokalno vtičnico %1 - %2"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1808
-#, fuzzy, kde-format
-#| msgid "Failed to connect to the broker '%1:%2'."
+#, kde-format
 msgid "Preview: Failed to connect to tcp socket - %1"
-msgstr "Povezava s posrednikom »%1:%2« ni uspela."
+msgstr "Predogled: Neuspela povezava z vtičnico tcp - %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1853
-#, fuzzy, kde-format
-#| msgid "area error: %1"
+#, kde-format
 msgid "Parse Error: %1"
-msgstr "napaka področja: %1"
+msgstr "Napaka pri razčlenjevanju: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1855
 #, kde-format
 msgid "ERROR: not ready for read after 2 sec"
-msgstr ""
+msgstr "NAPAKA: ni pripravljeno za branje po 2 sekundah"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1859
 #, kde-format
 msgid "ERROR: failed to open serial port. error: %1"
-msgstr ""
+msgstr "NAPAKA: serijskih vrat ni bilo mogoče odpreti. napaka: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1878
 #, kde-format
@@ -18707,8 +18699,7 @@ msgstr "Oblika datuma in časa:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbSkipEmptyParts)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:43
-#, fuzzy, kde-format
-#| msgid "Skip empty parts"
+#, kde-format
 msgid "Skip empty Parts"
 msgstr "Preskoči prazne dele"
 
@@ -18722,10 +18713,9 @@ msgstr "Pretvori naN v 0"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnMode)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:73
-#, fuzzy, kde-format
-#| msgid "Column labels"
+#, kde-format
 msgid "Column Datatypes:"
-msgstr "Oznake stolpcev"
+msgstr "Vrste podatkov stolpca"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:80
@@ -18766,14 +18756,13 @@ msgstr "Ločilo stolpcev:"
 #: src/frontend/ui/datasources/asciioptionswidget.ui:143
 #, kde-format
 msgid "Base year when only 2 digits are provided for the year"
-msgstr ""
+msgstr "Osnovno leto, ko sta za leto na voljo samo 2 števki"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:194
-#, fuzzy, kde-format
-#| msgid "Years"
+#, kde-format
 msgid "Year Base:"
-msgstr "Let"
+msgstr "Osnovno leto:"
 
 #. i18n: ectx: property (text), widget (QLabel, lVectorNames)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:201
@@ -18809,7 +18798,7 @@ msgstr "Ustvari indeks"
 #: src/frontend/ui/datasources/asciioptionswidget.ui:253
 #, kde-format
 msgid "Import Integer as Double"
-msgstr ""
+msgstr "Uvozi celo število kot Double"
 
 #. i18n: ectx: property (text), widget (QLabel, lSkipBytes)
 #: src/frontend/ui/datasources/binaryoptionswidget.ui:17

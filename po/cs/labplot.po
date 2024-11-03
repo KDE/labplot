@@ -3,14 +3,14 @@
 # SPDX-FileCopyrightText: 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2024 Vít Pelčák <vit@pelcak.org>
 # SPDX-FileCopyrightText: 2021, 2022, 2023, 2024 Vit Pelcak <vit@pelcak.org>
 #
-#: src/backend/datasources/filters/AsciiFilter.cpp:194
-#: src/backend/datasources/filters/AsciiFilter.cpp:210
+#: src/backend/datasources/filters/AsciiFilter.cpp:197
+#: src/backend/datasources/filters/AsciiFilter.cpp:213
 #, kde-format
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-02 01:47+0000\n"
+"POT-Creation-Date: 2024-11-03 01:42+0000\n"
 "PO-Revision-Date: 2024-10-18 15:55+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -252,7 +252,7 @@ msgid "Y-Error -"
 msgstr ""
 
 #: src/backend/core/AbstractColumn.cpp:227
-#: src/backend/datasources/filters/AsciiFilter.cpp:604
+#: src/backend/datasources/filters/AsciiFilter.cpp:607
 #: src/backend/datasources/filters/MatioFilter.cpp:382
 #: src/backend/datasources/filters/MatioFilter.cpp:428
 #, kde-format
@@ -273,7 +273,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #. i18n: ectx: property (text), widget (QLabel, lValuesText)
 #: src/backend/core/AbstractColumn.cpp:233
-#: src/backend/datasources/filters/AsciiFilter.cpp:605
+#: src/backend/datasources/filters/AsciiFilter.cpp:608
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:472
 #: src/frontend/notebook/NotebookView.cpp:96
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:208
@@ -418,7 +418,7 @@ msgstr "nekompatibilní typ filtru"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
 #: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:708
-#: src/backend/datasources/MQTTClient.cpp:1365
+#: src/backend/datasources/MQTTClient.cpp:1366
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:272
 #: src/backend/lib/XmlStreamReader.cpp:104
@@ -1054,7 +1054,7 @@ msgid ""
 "%2"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:186
+#: src/backend/datasources/filters/AsciiFilter.cpp:189
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2073
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1224
@@ -1062,154 +1062,154 @@ msgstr ""
 msgid "Success"
 msgstr "Úspěch"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:188
+#: src/backend/datasources/filters/AsciiFilter.cpp:191
 #, kde-format
 msgid "Device at end"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:190
+#: src/backend/datasources/filters/AsciiFilter.cpp:193
 #, kde-format
 msgid "Not enough rows selected. Increase number of rows."
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:192
+#: src/backend/datasources/filters/AsciiFilter.cpp:195
 #, kde-format
 msgid "Unable to open device"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:196
+#: src/backend/datasources/filters/AsciiFilter.cpp:199
 #, kde-format
 msgid "Unable to determine the separator"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:198
+#: src/backend/datasources/filters/AsciiFilter.cpp:201
 #, fuzzy, kde-format
 #| msgid "Number of columns: %1"
 msgid "Invalid number of data columns"
 msgstr "Počet sloupců: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:200
+#: src/backend/datasources/filters/AsciiFilter.cpp:203
 #, fuzzy, kde-format
 #| msgid "Number of columns: %1"
 msgid "Invalid number of column names"
 msgstr "Počet sloupců: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:202
+#: src/backend/datasources/filters/AsciiFilter.cpp:205
 #, kde-format
 msgid "Matrix: Unsupported Column Mode"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:204
+#: src/backend/datasources/filters/AsciiFilter.cpp:207
 #, kde-format
 msgid "Insufficient memory (RAM)"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:206
+#: src/backend/datasources/filters/AsciiFilter.cpp:209
 #, fuzzy, kde-format
 #| msgid "Unable to open file:"
 msgid "Unable to parse header"
 msgstr "Nelze otevřít soubor:"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:208
+#: src/backend/datasources/filters/AsciiFilter.cpp:211
 #, fuzzy, kde-format
 #| msgid "Live data source%1"
 msgid "Unsupported datasource"
 msgstr "Zdroj měnících se dat %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:212
+#: src/backend/datasources/filters/AsciiFilter.cpp:215
 #, kde-format
 msgid "Live: No column separator selected"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:214
+#: src/backend/datasources/filters/AsciiFilter.cpp:217
 #, kde-format
 msgid "Live: No column modes set"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:216
+#: src/backend/datasources/filters/AsciiFilter.cpp:219
 #, kde-format
 msgid "Datetime column found, but no Datetime format provided"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:218
+#: src/backend/datasources/filters/AsciiFilter.cpp:221
 #, kde-format
 msgid "Header reading from device not allowed"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:220
+#: src/backend/datasources/filters/AsciiFilter.cpp:223
 #, kde-format
 msgid "Separator detection not allowed"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:222
+#: src/backend/datasources/filters/AsciiFilter.cpp:225
 #, fuzzy, kde-format
 #| msgid "Decimal separator:"
 msgid "Invalid separator"
 msgstr "Oddělovač desetinných míst:"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:224
+#: src/backend/datasources/filters/AsciiFilter.cpp:227
 #, fuzzy, kde-format
 #| msgid "Failed to initialize %1."
 msgid "Filter not initialized"
 msgstr "Selhala inicializace %1."
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:226
+#: src/backend/datasources/filters/AsciiFilter.cpp:229
 #, kde-format
 msgid "Wrong end column. Is it smaller than start column?"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:228
+#: src/backend/datasources/filters/AsciiFilter.cpp:231
 #, kde-format
 msgid "Wrong end row. Is it smaller than start row?"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:230
+#: src/backend/datasources/filters/AsciiFilter.cpp:233
 #, kde-format
 msgid "No data destination set"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:232
+#: src/backend/datasources/filters/AsciiFilter.cpp:235
 #, fuzzy, kde-format
 #| msgid "column"
 #| msgid_plural "columns"
 msgid "No columns"
 msgstr "sloupec"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:234
+#: src/backend/datasources/filters/AsciiFilter.cpp:237
 #, kde-format
 msgid "Unable to determine column modes. Check if they are correctly written"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:236
+#: src/backend/datasources/filters/AsciiFilter.cpp:239
 #, kde-format
 msgid "Unhandled case"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:262
+#: src/backend/datasources/filters/AsciiFilter.cpp:265
 #, kde-format
 msgid "Number of columns: %1"
 msgstr "Počet sloupců: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:264
+#: src/backend/datasources/filters/AsciiFilter.cpp:267
 #, kde-format
 msgid "Number of lines: %1"
 msgstr "Počet řádků: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:519
-#: src/backend/datasources/filters/AsciiFilter.cpp:1261
+#: src/backend/datasources/filters/AsciiFilter.cpp:522
+#: src/backend/datasources/filters/AsciiFilter.cpp:1264
 #: src/backend/datasources/filters/JsonFilter.cpp:284
 #, kde-format
 msgid "Column %1"
 msgstr "Sloupec %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:589
-#: src/backend/datasources/filters/AsciiFilter.cpp:1284
+#: src/backend/datasources/filters/AsciiFilter.cpp:592
+#: src/backend/datasources/filters/AsciiFilter.cpp:1287
 #, kde-format
 msgid "Timestamp"
 msgstr "Časové razítko"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:593
-#: src/backend/datasources/filters/AsciiFilter.cpp:1288
+#: src/backend/datasources/filters/AsciiFilter.cpp:596
+#: src/backend/datasources/filters/AsciiFilter.cpp:1291
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1217,19 +1217,19 @@ msgstr "Časové razítko"
 msgid "Index"
 msgstr "Rejstřík"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:606
+#: src/backend/datasources/filters/AsciiFilter.cpp:609
 #, fuzzy, kde-format
 #| msgid "DateTime:"
 msgid "DateTime"
 msgstr "Datum/čas:"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:607
+#: src/backend/datasources/filters/AsciiFilter.cpp:610
 #, fuzzy, kde-format
 #| msgid "Int8"
 msgid "Int"
 msgstr "Int8"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:608
+#: src/backend/datasources/filters/AsciiFilter.cpp:611
 #: src/backend/datasources/filters/MatioFilter.cpp:398
 #: src/backend/datasources/filters/MatioFilter.cpp:430
 #, kde-format
@@ -2273,7 +2273,7 @@ msgid "Failed to parse the file."
 msgstr ""
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:113
-#: src/backend/datasources/MQTTClient.cpp:1189
+#: src/backend/datasources/MQTTClient.cpp:1190
 #: src/backend/datasources/MQTTTopic.cpp:207
 #: src/backend/lib/XmlStreamReader.cpp:99
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:469

@@ -4,15 +4,15 @@
 #
 # SPDX-FileCopyrightText: 2014, 2015, 2017, 2019, 2020, 2021, 2022, 2023, 2024 Eloy Cuadra <ecuadra@eloihr.net>
 # SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019 Javier Vinal <fjvinal@gmail.com>
-#: src/backend/datasources/filters/AsciiFilter.cpp:194
-#: src/backend/datasources/filters/AsciiFilter.cpp:210
+#: src/backend/datasources/filters/AsciiFilter.cpp:197
+#: src/backend/datasources/filters/AsciiFilter.cpp:213
 #, kde-format
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-02 01:47+0000\n"
-"PO-Revision-Date: 2024-10-30 19:58+0100\n"
+"POT-Creation-Date: 2024-11-03 01:42+0000\n"
+"PO-Revision-Date: 2024-11-02 11:47+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -254,7 +254,7 @@ msgid "Y-Error -"
 msgstr "Error en Y -"
 
 #: src/backend/core/AbstractColumn.cpp:227
-#: src/backend/datasources/filters/AsciiFilter.cpp:604
+#: src/backend/datasources/filters/AsciiFilter.cpp:607
 #: src/backend/datasources/filters/MatioFilter.cpp:382
 #: src/backend/datasources/filters/MatioFilter.cpp:428
 #, kde-format
@@ -275,7 +275,7 @@ msgstr "Entero grande"
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #. i18n: ectx: property (text), widget (QLabel, lValuesText)
 #: src/backend/core/AbstractColumn.cpp:233
-#: src/backend/datasources/filters/AsciiFilter.cpp:605
+#: src/backend/datasources/filters/AsciiFilter.cpp:608
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:472
 #: src/frontend/notebook/NotebookView.cpp:96
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:208
@@ -418,7 +418,7 @@ msgstr "tipo de filtro incompatible"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
 #: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:708
-#: src/backend/datasources/MQTTClient.cpp:1365
+#: src/backend/datasources/MQTTClient.cpp:1366
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:272
 #: src/backend/lib/XmlStreamReader.cpp:104
@@ -1067,7 +1067,7 @@ msgstr ""
 "No se ha podido abrir el archivo %1 para escritura.\n"
 "%2"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:186
+#: src/backend/datasources/filters/AsciiFilter.cpp:189
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2073
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1224
@@ -1075,156 +1075,150 @@ msgstr ""
 msgid "Success"
 msgstr "Éxito"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:188
+#: src/backend/datasources/filters/AsciiFilter.cpp:191
 #, kde-format
 msgid "Device at end"
 msgstr "Dispositivo al final"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:190
+#: src/backend/datasources/filters/AsciiFilter.cpp:193
 #, kde-format
 msgid "Not enough rows selected. Increase number of rows."
 msgstr "No se han seleccionado suficientes filas. Aumente el número de filas."
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:192
+#: src/backend/datasources/filters/AsciiFilter.cpp:195
 #, kde-format
 msgid "Unable to open device"
 msgstr "No se ha podido abrir el dispositivo"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:196
-#, fuzzy, kde-format
-#| msgid "Unable to read the file"
+#: src/backend/datasources/filters/AsciiFilter.cpp:199
+#, kde-format
 msgid "Unable to determine the separator"
-msgstr "No se puede leer el archivo"
+msgstr "No se puede determinar el separador"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:198
-#, fuzzy, kde-format
-#| msgid "Invalid numeric value."
+#: src/backend/datasources/filters/AsciiFilter.cpp:201
+#, kde-format
 msgid "Invalid number of data columns"
-msgstr "Valor numérico no válido."
+msgstr "Número no válido de columnas de datos"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:200
-#, fuzzy, kde-format
-#| msgid "Invalid numeric value."
+#: src/backend/datasources/filters/AsciiFilter.cpp:203
+#, kde-format
 msgid "Invalid number of column names"
-msgstr "Valor numérico no válido."
+msgstr "Número no válido de nombres de columnas"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:202
+#: src/backend/datasources/filters/AsciiFilter.cpp:205
 #, kde-format
 msgid "Matrix: Unsupported Column Mode"
-msgstr ""
+msgstr "Matriz: modo de columnas no permitido"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:204
+#: src/backend/datasources/filters/AsciiFilter.cpp:207
 #, kde-format
 msgid "Insufficient memory (RAM)"
-msgstr ""
+msgstr "Memoria insuficiente (RAM)"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:206
-#, fuzzy, kde-format
-#| msgid "Unable to read the file"
+#: src/backend/datasources/filters/AsciiFilter.cpp:209
+#, kde-format
 msgid "Unable to parse header"
-msgstr "No se puede leer el archivo"
+msgstr "No se puede analizar la cabecera"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:208
-#, fuzzy, kde-format
-#| msgid "Type of data source"
+#: src/backend/datasources/filters/AsciiFilter.cpp:211
+#, kde-format
 msgid "Unsupported datasource"
-msgstr "Tipo de fuente de datos"
+msgstr "Fuente de datos no permitida"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:212
+#: src/backend/datasources/filters/AsciiFilter.cpp:215
 #, kde-format
 msgid "Live: No column separator selected"
-msgstr ""
+msgstr "En vivo: No se ha seleccionado ningún separador de columnas"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:214
+#: src/backend/datasources/filters/AsciiFilter.cpp:217
 #, kde-format
 msgid "Live: No column modes set"
-msgstr ""
+msgstr "En vivo: No se ha definido ningún modo de columna"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:216
+#: src/backend/datasources/filters/AsciiFilter.cpp:219
 #, kde-format
 msgid "Datetime column found, but no Datetime format provided"
 msgstr ""
+"Columna de fecha y hora encontrada, pero no se ha indicado ningún formato de "
+"fecha y hora"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:218
-#, fuzzy, kde-format
-#| msgid "Reading from file %1 failed."
+#: src/backend/datasources/filters/AsciiFilter.cpp:221
+#, kde-format
 msgid "Header reading from device not allowed"
-msgstr "Ha fallado la lectura desde el archivo %1."
+msgstr "No se permite leer la cabecera del dispositivo"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:220
+#: src/backend/datasources/filters/AsciiFilter.cpp:223
 #, kde-format
 msgid "Separator detection not allowed"
-msgstr ""
+msgstr "No se permite la detección del separador"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:222
-#, fuzzy, kde-format
-#| msgid "Invalid sheet."
+#: src/backend/datasources/filters/AsciiFilter.cpp:225
+#, kde-format
 msgid "Invalid separator"
-msgstr "Hoja no válida."
+msgstr "Separador no válido"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:224
-#, fuzzy, kde-format
-#| msgid "Failed to initialize %1."
+#: src/backend/datasources/filters/AsciiFilter.cpp:227
+#, kde-format
 msgid "Filter not initialized"
-msgstr "No se ha podido inicializar %1."
+msgstr "Filtro no inicializado"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:226
+#: src/backend/datasources/filters/AsciiFilter.cpp:229
 #, kde-format
 msgid "Wrong end column. Is it smaller than start column?"
-msgstr ""
+msgstr "Columna final incorrecta. ¿Es menor que la columna inicial?"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:228
+#: src/backend/datasources/filters/AsciiFilter.cpp:231
 #, kde-format
 msgid "Wrong end row. Is it smaller than start row?"
-msgstr ""
+msgstr "Fila final incorrecta. ¿Es menor que la fila inicial?"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:230
-#, fuzzy, kde-format
-#| msgid "No data set selected."
+#: src/backend/datasources/filters/AsciiFilter.cpp:233
+#, kde-format
 msgid "No data destination set"
-msgstr "No se ha seleccionado ningún conjunto de datos."
+msgstr "No se ha definido ningún destino de datos"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:232
-#, fuzzy, kde-format
-#| msgid "Sort columns:"
+#: src/backend/datasources/filters/AsciiFilter.cpp:235
+#, kde-format
 msgid "No columns"
-msgstr "Ordenar columnas:"
+msgstr "No hay columnas"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:234
+#: src/backend/datasources/filters/AsciiFilter.cpp:237
 #, kde-format
 msgid "Unable to determine column modes. Check if they are correctly written"
 msgstr ""
+"No se han podido determinar los modos de las columnas. Compruebe que se han "
+"escrito correctamente."
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:236
+#: src/backend/datasources/filters/AsciiFilter.cpp:239
 #, kde-format
 msgid "Unhandled case"
 msgstr "Caso no contemplado"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:262
+#: src/backend/datasources/filters/AsciiFilter.cpp:265
 #, kde-format
 msgid "Number of columns: %1"
 msgstr "Número de columnas: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:264
+#: src/backend/datasources/filters/AsciiFilter.cpp:267
 #, kde-format
 msgid "Number of lines: %1"
 msgstr "Número de líneas: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:519
-#: src/backend/datasources/filters/AsciiFilter.cpp:1261
+#: src/backend/datasources/filters/AsciiFilter.cpp:522
+#: src/backend/datasources/filters/AsciiFilter.cpp:1264
 #: src/backend/datasources/filters/JsonFilter.cpp:284
 #, kde-format
 msgid "Column %1"
 msgstr "Columna %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:589
-#: src/backend/datasources/filters/AsciiFilter.cpp:1284
+#: src/backend/datasources/filters/AsciiFilter.cpp:592
+#: src/backend/datasources/filters/AsciiFilter.cpp:1287
 #, kde-format
 msgid "Timestamp"
 msgstr "Marca de tiempo"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:593
-#: src/backend/datasources/filters/AsciiFilter.cpp:1288
+#: src/backend/datasources/filters/AsciiFilter.cpp:596
+#: src/backend/datasources/filters/AsciiFilter.cpp:1291
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1232,18 +1226,17 @@ msgstr "Marca de tiempo"
 msgid "Index"
 msgstr "Índice"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:606
+#: src/backend/datasources/filters/AsciiFilter.cpp:609
 #, kde-format
 msgid "DateTime"
 msgstr "Fecha y hora"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:607
-#, fuzzy, kde-format
-#| msgid "Int8"
+#: src/backend/datasources/filters/AsciiFilter.cpp:610
+#, kde-format
 msgid "Int"
-msgstr "Int8"
+msgstr "Int"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:608
+#: src/backend/datasources/filters/AsciiFilter.cpp:611
 #: src/backend/datasources/filters/MatioFilter.cpp:398
 #: src/backend/datasources/filters/MatioFilter.cpp:430
 #, kde-format
@@ -2293,7 +2286,7 @@ msgid "Failed to parse the file."
 msgstr "El análisis del archivo ha fallado."
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:113
-#: src/backend/datasources/MQTTClient.cpp:1189
+#: src/backend/datasources/MQTTClient.cpp:1190
 #: src/backend/datasources/MQTTTopic.cpp:207
 #: src/backend/lib/XmlStreamReader.cpp:99
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:469
@@ -2467,8 +2460,7 @@ msgid "Device already opened."
 msgstr "Dispositivo ya abierto."
 
 #: src/backend/datasources/LiveDataSource.cpp:717
-#, fuzzy, kde-format
-#| msgid "Device is not opened."
+#, kde-format
 msgid "Device is not open."
 msgstr "El dispositivo no está abierto."
 
@@ -2500,7 +2492,7 @@ msgstr "Error de puerto serie"
 #: src/backend/datasources/MQTTTopic.cpp:44
 #, kde-format
 msgid "%1 %2"
-msgstr ""
+msgstr "%1 %2"
 
 #: src/backend/datasources/MQTTTopic.cpp:129
 #, kde-format
@@ -10445,20 +10437,15 @@ msgstr ""
 "columnas."
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:111
-#, fuzzy, kde-format
-#| msgid "Custom column names, space separated. E.g. \"x y\""
+#, kde-format
 msgid "Custom column names, comma separated. E.g. \"x, y\""
 msgstr ""
-"Nombres de columnas personalizados, separados por un espacio. Por ejemplo, "
-"«x y»"
+"Nombres de columnas personalizados, separados por comas. Por ejemplo, «x, y»"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:115
-#, fuzzy, kde-format
-#| msgid "Custom column names, space separated. E.g. \"x y\""
+#, kde-format
 msgid "Custom column modes, comma separated"
-msgstr ""
-"Nombres de columnas personalizados, separados por un espacio. Por ejemplo, "
-"«x y»"
+msgstr "Modos de columnas personalizados, separados por comas"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:122
 #, kde-format
@@ -10474,12 +10461,22 @@ msgid ""
 "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
 "td></tr></table>"
 msgstr ""
+"Si no está vacío, el número de columnas debe coincidir con el número de "
+"nombres de columnas, si se indica, y también con el número de columnas del "
+"archivo de tipos de datos importado:<table><tr><td>%1</td><td>Número entero "
+"con un tamaño de 32 bits (entre −2.147.483.648 y 2.147.483.647).</td></"
+"tr><tr><td>%2</td><td>Número entero con un tamaño de 64 bits (entre "
+"−9.223.372.036.854.775.808 y 9.223.372.036.854.775.807).</td></tr><tr><td>"
+"%3</td><td>Número en coma flotante con un tamaño de 64 bits. Con resolución "
+"de unos 16 dígitos.</td></tr><tr><td>%4</td><td>Fecha y hora con el formato "
+"del cuadro de texto «Fecha y hora», si no está vacío; en caso contrario, se "
+"detectará automáticamente.</td></tr><tr><td>%5</td><td>Un texto.</td></tr></"
+"table>"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:252
-#, fuzzy, kde-format
-#| msgid "Data type not supported yet."
+#, kde-format
 msgid "Datatype not found: %1"
-msgstr "Tipo de datos no permitido todavía."
+msgstr "Tipo de datos no encontrado: %1"
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:29
 #, kde-format
@@ -10910,10 +10907,9 @@ msgstr ""
 "Seleccione un contenedor de datos en el que se van a importar los datos."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:406
-#, fuzzy, kde-format
-#| msgid "No data to import."
+#, kde-format
 msgid "No file provided for import."
-msgstr "Ningún dato que importar."
+msgstr "No se ha indicado ningún archivo para importar."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:428
 #, kde-format
@@ -11174,6 +11170,8 @@ msgstr ""
 msgid ""
 "The number of rows is calculated from the values of the data portion tab"
 msgstr ""
+"El número de filas se calcula a partir de los valores de la pestaña de "
+"porción de datos"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:982
 #, kde-format
@@ -11350,39 +11348,38 @@ msgid ""
 "Invalid number rows. Please check 'End Row' and 'Start Row'. 'End Row' must "
 "be larger than 'Start Row' or -1"
 msgstr ""
+"Número de filas no válido. Compruebe «Fila inicial» y «Fila final». La fila "
+"final debe ser mayor que la fila inicial o -1."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1768
 #, kde-format
 msgid "Preview: Initialization failed: %1"
-msgstr ""
+msgstr "Vista previa: La inicialización ha fallado: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1793
-#, fuzzy, kde-format
-#| msgid "Failed to connect to the broker '%1:%2'."
+#, kde-format
 msgid "Preview: Failed to connect to local socket %1 - %2"
-msgstr "Ha fallado al conectarse al broker ''%1:%2'."
+msgstr "Vista previa: No se ha podido conectar al conector local %1 - %2"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1808
-#, fuzzy, kde-format
-#| msgid "Failed to connect to the broker '%1:%2'."
+#, kde-format
 msgid "Preview: Failed to connect to tcp socket - %1"
-msgstr "Ha fallado al conectarse al broker ''%1:%2'."
+msgstr "Vista previa: No se ha podido conectar al conector TCP - %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1853
-#, fuzzy, kde-format
-#| msgid "area error: %1"
+#, kde-format
 msgid "Parse Error: %1"
-msgstr "error de área: %1"
+msgstr "Error de análisis: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1855
 #, kde-format
 msgid "ERROR: not ready for read after 2 sec"
-msgstr ""
+msgstr "ERROR: No preparado para leer tras 2 segundos"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1859
 #, kde-format
 msgid "ERROR: failed to open serial port. error: %1"
-msgstr ""
+msgstr "ERROR: No se ha podido abrir el puerto serie. Error: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1878
 #, kde-format
@@ -18716,8 +18713,7 @@ msgstr "Formato de fecha y hora:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbSkipEmptyParts)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:43
-#, fuzzy, kde-format
-#| msgid "Skip empty parts"
+#, kde-format
 msgid "Skip empty Parts"
 msgstr "Omitir partes vacías"
 
@@ -18731,10 +18727,9 @@ msgstr "Convertir NaN a 0"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnMode)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:73
-#, fuzzy, kde-format
-#| msgid "Column labels"
+#, kde-format
 msgid "Column Datatypes:"
-msgstr "Etiquetas de las columnas"
+msgstr "Tipos de datos de las columnas:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:80
@@ -18775,14 +18770,13 @@ msgstr "Separador de columnas:"
 #: src/frontend/ui/datasources/asciioptionswidget.ui:143
 #, kde-format
 msgid "Base year when only 2 digits are provided for the year"
-msgstr ""
+msgstr "Año base cuando solo se usan 2 dígitos para el año"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:194
-#, fuzzy, kde-format
-#| msgid "Years"
+#, kde-format
 msgid "Year Base:"
-msgstr "Años"
+msgstr "Año base:"
 
 #. i18n: ectx: property (text), widget (QLabel, lVectorNames)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:201
@@ -18818,7 +18812,7 @@ msgstr "Crear índice"
 #: src/frontend/ui/datasources/asciioptionswidget.ui:253
 #, kde-format
 msgid "Import Integer as Double"
-msgstr ""
+msgstr "Importar entero como doble"
 
 #. i18n: ectx: property (text), widget (QLabel, lSkipBytes)
 #: src/frontend/ui/datasources/binaryoptionswidget.ui:17
@@ -22889,7 +22883,7 @@ msgstr "Interactivo"
 #: src/frontend/ui/settingsworksheetpage.ui:118
 #, kde-format
 msgid "Enable double buffering"
-msgstr "Activar doble-búfer"
+msgstr "Activar doble búfer"
 
 #. i18n: ectx: property (text), widget (QLabel, lTexEngine)
 #: src/frontend/ui/settingsworksheetpage.ui:154

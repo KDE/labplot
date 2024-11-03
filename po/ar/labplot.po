@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the labplot package.
 #
 # Zayed Al-Saidi <zayed.alsaidi@gmail.com>, 2022.
-#: src/backend/datasources/filters/AsciiFilter.cpp:194
-#: src/backend/datasources/filters/AsciiFilter.cpp:210
+#: src/backend/datasources/filters/AsciiFilter.cpp:197
+#: src/backend/datasources/filters/AsciiFilter.cpp:213
 #, fuzzy, kde-format
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-02 01:47+0000\n"
+"POT-Creation-Date: 2024-11-03 01:42+0000\n"
 "PO-Revision-Date: 2022-09-05 22:28+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -264,7 +264,7 @@ msgid "Y-Error -"
 msgstr "خطأ"
 
 #: src/backend/core/AbstractColumn.cpp:227
-#: src/backend/datasources/filters/AsciiFilter.cpp:604
+#: src/backend/datasources/filters/AsciiFilter.cpp:607
 #: src/backend/datasources/filters/MatioFilter.cpp:382
 #: src/backend/datasources/filters/MatioFilter.cpp:428
 #, kde-format
@@ -285,7 +285,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #. i18n: ectx: property (text), widget (QLabel, lValuesText)
 #: src/backend/core/AbstractColumn.cpp:233
-#: src/backend/datasources/filters/AsciiFilter.cpp:605
+#: src/backend/datasources/filters/AsciiFilter.cpp:608
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:472
 #: src/frontend/notebook/NotebookView.cpp:96
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:208
@@ -436,7 +436,7 @@ msgstr ""
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
 #: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:708
-#: src/backend/datasources/MQTTClient.cpp:1365
+#: src/backend/datasources/MQTTClient.cpp:1366
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:272
 #: src/backend/lib/XmlStreamReader.cpp:104
@@ -1079,7 +1079,7 @@ msgid ""
 "%2"
 msgstr "ذّر فتح الملف %1 للقراءة."
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:186
+#: src/backend/datasources/filters/AsciiFilter.cpp:189
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2073
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1224
@@ -1087,156 +1087,156 @@ msgstr "ذّر فتح الملف %1 للقراءة."
 msgid "Success"
 msgstr "اكتمل"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:188
+#: src/backend/datasources/filters/AsciiFilter.cpp:191
 #, fuzzy, kde-format
 #| msgid "File not found"
 msgid "Device at end"
 msgstr "الملف غير موجود"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:190
+#: src/backend/datasources/filters/AsciiFilter.cpp:193
 #, kde-format
 msgid "Not enough rows selected. Increase number of rows."
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:192
+#: src/backend/datasources/filters/AsciiFilter.cpp:195
 #, fuzzy, kde-format
 #| msgid "Unable to open file:"
 msgid "Unable to open device"
 msgstr "غير قادر على حذف الملف:"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:196
+#: src/backend/datasources/filters/AsciiFilter.cpp:199
 #, fuzzy, kde-format
 #| msgid "Failed to open the file '%1'."
 msgid "Unable to determine the separator"
 msgstr "فشل في فتح الملفّ '%1'."
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:198
+#: src/backend/datasources/filters/AsciiFilter.cpp:201
 #, fuzzy, kde-format
 #| msgid "Number of columns: %1"
 msgid "Invalid number of data columns"
 msgstr "عدد الأعمدة: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:200
+#: src/backend/datasources/filters/AsciiFilter.cpp:203
 #, fuzzy, kde-format
 #| msgid "Number of columns: %1"
 msgid "Invalid number of column names"
 msgstr "عدد الأعمدة: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:202
+#: src/backend/datasources/filters/AsciiFilter.cpp:205
 #, kde-format
 msgid "Matrix: Unsupported Column Mode"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:204
+#: src/backend/datasources/filters/AsciiFilter.cpp:207
 #, kde-format
 msgid "Insufficient memory (RAM)"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:206
+#: src/backend/datasources/filters/AsciiFilter.cpp:209
 #, fuzzy, kde-format
 #| msgid "Failed to open the file '%1'."
 msgid "Unable to parse header"
 msgstr "فشل في فتح الملفّ '%1'."
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:208
+#: src/backend/datasources/filters/AsciiFilter.cpp:211
 #, kde-format
 msgid "Unsupported datasource"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:212
+#: src/backend/datasources/filters/AsciiFilter.cpp:215
 #, kde-format
 msgid "Live: No column separator selected"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:214
+#: src/backend/datasources/filters/AsciiFilter.cpp:217
 #, kde-format
 msgid "Live: No column modes set"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:216
+#: src/backend/datasources/filters/AsciiFilter.cpp:219
 #, kde-format
 msgid "Datetime column found, but no Datetime format provided"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:218
+#: src/backend/datasources/filters/AsciiFilter.cpp:221
 #, kde-format
 msgid "Header reading from device not allowed"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:220
+#: src/backend/datasources/filters/AsciiFilter.cpp:223
 #, kde-format
 msgid "Separator detection not allowed"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:222
+#: src/backend/datasources/filters/AsciiFilter.cpp:225
 #, fuzzy, kde-format
 #| msgid "Start value"
 msgid "Invalid separator"
 msgstr "قيمة البداية"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:224
+#: src/backend/datasources/filters/AsciiFilter.cpp:227
 #, fuzzy, kde-format
 #| msgid "Failed to initialize %1."
 msgid "Filter not initialized"
 msgstr "فشل التّمهيد %1."
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:226
+#: src/backend/datasources/filters/AsciiFilter.cpp:229
 #, kde-format
 msgid "Wrong end column. Is it smaller than start column?"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:228
+#: src/backend/datasources/filters/AsciiFilter.cpp:231
 #, kde-format
 msgid "Wrong end row. Is it smaller than start row?"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:230
+#: src/backend/datasources/filters/AsciiFilter.cpp:233
 #, fuzzy, kde-format
 #| msgid "Position:"
 msgid "No data destination set"
 msgstr "الموقع:"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:232
+#: src/backend/datasources/filters/AsciiFilter.cpp:235
 #, fuzzy, kde-format
 #| msgid "Column"
 msgid "No columns"
 msgstr "العمود"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:234
+#: src/backend/datasources/filters/AsciiFilter.cpp:237
 #, kde-format
 msgid "Unable to determine column modes. Check if they are correctly written"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:236
+#: src/backend/datasources/filters/AsciiFilter.cpp:239
 #, kde-format
 msgid "Unhandled case"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:262
+#: src/backend/datasources/filters/AsciiFilter.cpp:265
 #, kde-format
 msgid "Number of columns: %1"
 msgstr "عدد الأعمدة: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:264
+#: src/backend/datasources/filters/AsciiFilter.cpp:267
 #, kde-format
 msgid "Number of lines: %1"
 msgstr "عدد الأسطر: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:519
-#: src/backend/datasources/filters/AsciiFilter.cpp:1261
+#: src/backend/datasources/filters/AsciiFilter.cpp:522
+#: src/backend/datasources/filters/AsciiFilter.cpp:1264
 #: src/backend/datasources/filters/JsonFilter.cpp:284
 #, kde-format
 msgid "Column %1"
 msgstr "العمود %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:589
-#: src/backend/datasources/filters/AsciiFilter.cpp:1284
+#: src/backend/datasources/filters/AsciiFilter.cpp:592
+#: src/backend/datasources/filters/AsciiFilter.cpp:1287
 #, kde-format
 msgid "Timestamp"
 msgstr "الختم الزمني"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:593
-#: src/backend/datasources/filters/AsciiFilter.cpp:1288
+#: src/backend/datasources/filters/AsciiFilter.cpp:596
+#: src/backend/datasources/filters/AsciiFilter.cpp:1291
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1244,19 +1244,19 @@ msgstr "الختم الزمني"
 msgid "Index"
 msgstr "المؤشر"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:606
+#: src/backend/datasources/filters/AsciiFilter.cpp:609
 #, fuzzy, kde-format
 #| msgid "DateTime:"
 msgid "DateTime"
 msgstr "التاريخ والوقت:"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:607
+#: src/backend/datasources/filters/AsciiFilter.cpp:610
 #, fuzzy, kde-format
 #| msgid "Int8"
 msgid "Int"
 msgstr "صحيح8"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:608
+#: src/backend/datasources/filters/AsciiFilter.cpp:611
 #: src/backend/datasources/filters/MatioFilter.cpp:398
 #: src/backend/datasources/filters/MatioFilter.cpp:430
 #, kde-format
@@ -2327,7 +2327,7 @@ msgid "Failed to parse the file."
 msgstr "فشل في فتح الملفّ '%1'."
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:113
-#: src/backend/datasources/MQTTClient.cpp:1189
+#: src/backend/datasources/MQTTClient.cpp:1190
 #: src/backend/datasources/MQTTTopic.cpp:207
 #: src/backend/lib/XmlStreamReader.cpp:99
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:469
