@@ -3759,35 +3759,54 @@ void SpreadsheetView::selectionChanged(const QItemSelection& /*selected*/, const
 	if (m_suppressSelectionChangedEvent)
 		return;
 
-	auto* selModel = m_tableView->selectionModel();
-	for (int i = 0; i < m_spreadsheet->columnCount(); i++)
-		m_spreadsheet->setColumnSelectedInView(i, selModel->isColumnSelected(i));
+	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 
-	// determine the number of selected cells, columns, missing values and masked values in the current selection and show this information in the status
-	// bar.
-	const auto& indexes = m_tableView->selectionModel()->selectedIndexes();
-	QString resultString = QString();
-	if (indexes.empty() || indexes.count() == 1) {
-		Q_EMIT m_spreadsheet->statusInfo(resultString);
+	// determine the columns that were fully selected or deselected in the spreadsheet to also select/deselect them in the project explorer
+	const auto* selModel = m_tableView->selectionModel();
+	int fullySelectedCount = 0; // the number of fully selected columns
+	bool notFullySelected = false; // check if we have columns that are not fully selected (some cells selected only)
+	for (int col = 0; col < m_spreadsheet->columnCount(); ++col) {
+		const bool selected = selModel->isColumnSelected(col);
+		m_spreadsheet->setColumnSelectedInView(col, selected);
+		if (selected)
+			++fullySelectedCount;
+		else if (!notFullySelected) //
+			notFullySelected = selModel->columnIntersectsSelection(col);
+	}
+
+	// determine the number of selected cells, columns, missing and masked values in the current selection and show this information in the status bar.
+	// Note, calling selModel->selectedIndexes() is very expensive for a high number of rows/cells in the spreadsheet and when whole columns are being
+	// selected by clicking on the spreadsheet header. To avoid calling this expensive functions, handle the case when only full columns were selected:
+	if (fullySelectedCount > 0 && !notFullySelected && m_spreadsheet->rowCount() > 10000) {
+		Q_EMIT m_spreadsheet->statusInfo(i18n("Selected 1: %1 rows, %2 columns", m_spreadsheet->rowCount(), fullySelectedCount));
 		return;
 	}
 
-	QPair<int, int> selectedRowCol = qMakePair(selectedRowCount(false), selectedColumnCount(false));
+	const auto& indexes = selModel->selectedIndexes();
+	if (indexes.empty() || indexes.count() == 1) {
+		Q_EMIT m_spreadsheet->statusInfo(QString());
+		return;
+	}
+	else if (indexes.count() > 10000) { // more than 10k selected cells, skip the expensive logic below to check for maskes values, etc.
+		Q_EMIT m_spreadsheet->statusInfo(i18n("Selected: %1 cells", indexes.count()));
+		return;
+	}
+
 	const auto& columns = m_spreadsheet->children<Column>();
 	int maskedValuesCount = 0;
 	int missingValuesCount = 0;
-	int selectedCellsCount = 0;
 	for (const auto& index : indexes) {
 		const int col = index.column();
 		const int row = index.row();
-		selectedCellsCount++;
-		auto& column = columns.at(col);
+		const auto& column = columns.at(col);
 		if (!column->isValid(row))
 			missingValuesCount++;
 		if (column->isMasked(row))
 			maskedValuesCount++;
 	}
 
+	const int selectedCellsCount = indexes.count();
+	const QPair<int, int> selectedRowCol = qMakePair(selectedRowCount(false), selectedColumnCount(false));
 	QString selectedRowsText = i18np("row", "rows", selectedRowCol.first);
 	QString selectedColumnsText = i18np("column", "columns", selectedRowCol.second);
 	QString selectedCellsText = i18n("cells");
@@ -3795,9 +3814,10 @@ void SpreadsheetView::selectionChanged(const QItemSelection& /*selected*/, const
 	QString missingValuesText = (missingValuesCount == 1) ? i18n("missing value") : (!missingValuesCount) ? QString() : i18n("missing values");
 	QString maskedValuesCountText = (!maskedValuesCount) ? QString() : i18n(" , ") + i18n("%1", maskedValuesCount);
 	QString missingValuesCountText = (!missingValuesCount) ? QString() : i18n(", ") + i18n("%1", missingValuesCount);
+	QString resultString;
 
 	if (selectedCellsCount == selectedRowCol.first * selectedRowCol.second)
-		resultString = i18n("Selected: %1 %2 , %3 %4%5 %6 %7 %8",
+		resultString = i18n("Selected: %1 %2, %3 %4%5 %6 %7 %8",
 							selectedRowCol.first,
 							selectedRowsText,
 							selectedRowCol.second,
