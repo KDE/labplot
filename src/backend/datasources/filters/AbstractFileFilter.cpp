@@ -44,7 +44,8 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
  * return the column mode for the given value string and settings \c dateTimeFormat and \c locale.
  * in case \c dateTimeFormat is empty, all possible datetime formats are tried out to determine the valid datetime object.
  */
-AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueString, QString& dateTimeFormat, const QLocale& locale) {
+AbstractColumn::ColumnMode
+AbstractFileFilter::columnMode(const QString& valueString, QString& dateTimeFormat, const QLocale& locale, bool intAsDouble, int baseYear) {
 	// TODO: use BigInt as default integer?
 	auto mode = AbstractColumn::ColumnMode::Integer;
 	if (valueString.size() == 0) // empty string treated as integer (meaning the non-empty strings will determine the data type)
@@ -63,7 +64,7 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
 		QDateTime valueDateTime;
 		if (dateTimeFormat.isEmpty()) {
 			for (const auto& format : AbstractColumn::dateTimeFormats()) {
-				valueDateTime = QDateTime::fromString(valueString, format);
+				valueDateTime = QDateTime::fromString(valueString, format, baseYear);
 				if (valueDateTime.isValid()) {
 					DEBUG(Q_FUNC_INFO << ", " << STDSTRING(valueString) << " : valid DateTime format - " << STDSTRING(format));
 					dateTimeFormat = format;
@@ -92,6 +93,8 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
 
 			mode = ok ? AbstractColumn::ColumnMode::Double : AbstractColumn::ColumnMode::Text;
 		}
+	} else if (intAsDouble) {
+		mode = AbstractColumn::ColumnMode::Double;
 	}
 
 	return mode;
@@ -127,6 +130,10 @@ QString AbstractFileFilter::lastError() const {
 
 void AbstractFileFilter::setLastError(const QString& error) {
 	m_lastError = error;
+}
+
+void AbstractFileFilter::clearLastError() {
+	m_lastError.clear();
 }
 
 /*!
@@ -276,4 +283,12 @@ QString AbstractFileFilter::convertFromNumberToColumn(int n) {
 	std::reverse(str, str + strlen(str));
 
 	return QLatin1String(str);
+}
+
+int AbstractFileFilter::previewPrecision() const {
+	return m_previewPrecision;
+}
+
+void AbstractFileFilter::setPreviewPrecision(int precision) {
+	m_previewPrecision = precision;
 }

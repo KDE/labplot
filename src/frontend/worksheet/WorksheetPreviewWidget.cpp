@@ -20,6 +20,8 @@
 
 #include <gsl/gsl_const_cgs.h>
 
+#include <frontend/GuiTools.h>
+
 /*!
   \class WorksheetPreviewWidget
   \brief A widget showing the preview of all worksheets in the project.
@@ -41,7 +43,7 @@ WorksheetPreviewWidget::WorksheetPreviewWidget(QWidget* parent)
 	connect(ui.lwPreview, &QListWidget::currentRowChanged, this, &WorksheetPreviewWidget::currentChanged);
 
 	// make the icon 5x5cm big
-	const int iconSize = std::ceil(5.0 / GSL_CONST_CGS_INCH * QApplication::primaryScreen()->physicalDotsPerInchX());
+	const int iconSize = std::ceil(5.0 / GSL_CONST_CGS_INCH * GuiTools::dpi(this).first);
 	ui.lwPreview->setIconSize(QSize(iconSize, iconSize));
 }
 
@@ -93,7 +95,7 @@ void WorksheetPreviewWidget::addPreview(const Worksheet* w, int row) const {
 	if (!rc) {
 		// the view is not available yet, show the placeholder preview
 		const auto icon = QIcon::fromTheme(QLatin1String("view-preview"));
-		const int iconSize = std::ceil(5.0 / GSL_CONST_CGS_INCH * QApplication::primaryScreen()->physicalDotsPerInchX());
+		const int iconSize = std::ceil(5.0 / GSL_CONST_CGS_INCH * GuiTools::dpi(this).first);
 		pix = icon.pixmap(iconSize, iconSize);
 	}
 	ui.lwPreview->insertItem(row, new QListWidgetItem(QIcon(pix), w->name()));

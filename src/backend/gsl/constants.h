@@ -30,6 +30,7 @@ extern struct cons _constants[];
 extern const int _number_constants;
 
 enum class ConstantGroups : int {
+	ProgrammingConstants,
 	MathematicalConstants,
 	FundamentalConstants,
 	AstronomyAndAstrophysics,

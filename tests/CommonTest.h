@@ -131,7 +131,7 @@
 		QFile file(savePath);                                                                                                                                  \
 		QCOMPARE(file.open(QIODevice::WriteOnly), true);                                                                                                       \
                                                                                                                                                                \
-		for (const auto& d : fileContent) {                                                                                                                    \
+		for (const auto& d : content) {                                                                                                                        \
 			file.write(d.toLatin1() + "\n");                                                                                                                   \
 		}                                                                                                                                                      \
 		file.close();                                                                                                                                          \

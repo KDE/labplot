@@ -204,6 +204,7 @@ private Q_SLOTS:
 	void onMQTTConnect();
 	void MQTTSubscriptionMessageReceived(const QMqttMessage&);
 	void MQTTErrorChanged(QMqttClient::ClientError);
+	void disconnected();
 	void subscriptionLoaded(const QString&);
 
 Q_SIGNALS:
@@ -211,5 +212,8 @@ Q_SIGNALS:
 	void MQTTTopicsChanged();
 	void readFromTopics();
 	void clientAboutToBeDeleted(const QString&, quint16);
+	void messagedReceived();
+
+	friend class MQTTTest;
 };
 #endif // MQTTCLIENT_H

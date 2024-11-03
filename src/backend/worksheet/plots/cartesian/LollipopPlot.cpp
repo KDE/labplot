@@ -247,12 +247,24 @@ void LollipopPlot::handleAspectUpdated(const QString& aspectPath, const Abstract
 }
 
 QColor LollipopPlot::color() const {
+	return colorAt(0);
+}
+
+QColor LollipopPlot::colorAt(int index) const {
 	Q_D(const LollipopPlot);
-	if (d->lines.size() > 0 && d->lines.at(0)->style() != Qt::PenStyle::NoPen)
-		return d->lines.at(0)->pen().color();
-	else if (d->symbols.size() > 0 && d->symbols.at(0)->style() != Symbol::Style::NoSymbols)
-		return d->symbols.at(0)->pen().color();
-	return QColor();
+	if (index >= d->lines.size())
+		return QColor();
+
+	const auto* line = d->lines.at(index);
+	if (line->style() != Qt::PenStyle::NoPen)
+		return line->pen().color();
+	else {
+		const auto* symbol = d->symbols.at(index);
+		if (symbol->style() != Symbol::Style::NoSymbols)
+			return symbol->pen().color();
+		else
+			return QColor();
+	}
 }
 
 // values

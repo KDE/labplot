@@ -86,6 +86,7 @@ public:
 	bool hasData() const override;
 	bool usingColumn(const Column*) const override;
 	QColor color() const override;
+	QColor colorAt(int) const;
 
 	typedef BoxPlotPrivate Private;
 
