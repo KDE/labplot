@@ -1638,7 +1638,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 				if (i.value() == true)
 					continue;
 
-				if (i.key()->usingColumn(c)) {
+				if (i.key()->usingColumn(c, false)) {
 					auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(i.key());
 					if (analysisCurve)
 						analysisCurve->recalculate(); // Will call recalc() of the XYCurve at the end

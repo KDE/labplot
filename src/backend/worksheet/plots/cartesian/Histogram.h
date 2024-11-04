@@ -81,7 +81,7 @@ public:
 	double minimum(CartesianCoordinateSystem::Dimension) const override;
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	bool hasData() const override;
-	bool usingColumn(const AbstractColumn*) const override;
+	bool usingColumn(const AbstractColumn*, bool indirect) const override;
 	QColor color() const override;
 
 	const AbstractColumn* bins() const;

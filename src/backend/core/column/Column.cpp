@@ -172,7 +172,7 @@ QMenu* Column::createContextMenu() {
 	bool sectionAdded = false;
 	const auto& plots = project->children<Plot>(AbstractAspect::ChildIndexFlag::Recursive);
 	for (const auto* plot : plots) {
-		const bool used = plot->usingColumn(this);
+		const bool used = plot->usingColumn(this, true);
 		if (used) {
 			if (!sectionAdded) {
 				usedInMenu->addSection(i18n("Plots"));

@@ -64,7 +64,7 @@ public:
 	virtual void recalculate() = 0;
 	bool resultAvailable() const;
 	virtual const Result& result() const = 0;
-	bool usingColumn(const AbstractColumn*) const override;
+	bool usingColumn(const AbstractColumn*, bool indirect = true) const override;
 	virtual QVector<const Plot*> dependingPlots() const;
 
 	void save(QXmlStreamWriter*) const override;

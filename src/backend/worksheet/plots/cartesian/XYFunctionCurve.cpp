@@ -61,7 +61,16 @@ void XYFunctionCurve::handleAspectUpdated(const QString& aspectPath, const Abstr
 	d->handleAspectUpdated(aspectPath, element);
 }
 
-bool XYFunctionCurve::usingColumn(const AbstractColumn*) const {
+bool XYFunctionCurve::usingColumn(const AbstractColumn* column, bool indirect) const {
+	if (indirect) {
+		for (const auto& d : functionData()) {
+			const auto* curve = d.curve();
+			if (curve) {
+				if (curve->usingColumn(column, indirect))
+					return true;
+			}
+		}
+	}
 	return false; // Does not directly use the curves
 }
 

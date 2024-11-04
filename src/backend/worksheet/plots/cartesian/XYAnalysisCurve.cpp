@@ -49,11 +49,13 @@ bool XYAnalysisCurve::resultAvailable() const {
 	return result().available;
 }
 
-bool XYAnalysisCurve::usingColumn(const AbstractColumn* column) const {
+bool XYAnalysisCurve::usingColumn(const AbstractColumn* column, bool indirect) const {
 	Q_D(const XYAnalysisCurve);
 
 	if (d->dataSourceType == DataSourceType::Spreadsheet)
 		return (d->xDataColumn == column || d->yDataColumn == column || d->y2DataColumn == column);
+	else if (indirect)
+		return (d->dataSourceCurve->usingColumn(column, indirect) || d->dataSourceCurve->usingColumn(column, indirect));
 	return false;
 }
 

@@ -214,7 +214,7 @@ bool QQPlot::hasData() const {
 	return (d->dataColumn != nullptr);
 }
 
-bool QQPlot::usingColumn(const AbstractColumn* column) const {
+bool QQPlot::usingColumn(const AbstractColumn* column, bool) const {
 	Q_D(const QQPlot);
 	return (d->dataColumn == column);
 }
