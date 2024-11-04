@@ -17,6 +17,7 @@
 #include <gsl/gsl_version.h>
 #include <variant>
 
+namespace Parser {
 enum class FunctionGroups;
 
 struct funs {
@@ -30,27 +31,27 @@ struct funs {
 
 struct funs0Payload {
 	const char* name;
-	func_tPayload fnct;
+	Parser::func_tPayload fnct;
 };
 
 struct funs1Payload {
 	const char* name;
-	func_t1Payload fnct;
+	Parser::func_t1Payload fnct;
 };
 
 struct funs2Payload {
 	const char* name;
-	func_t2Payload fnct;
+	Parser::func_t2Payload fnct;
 };
 
 struct funs3Payload {
 	const char* name;
-	func_t3Payload fnct;
+	Parser::func_t3Payload fnct;
 };
 
 struct funs4Payload {
 	const char* name;
-	func_t4Payload fnct;
+	Parser::func_t4Payload fnct;
 };
 
 extern struct funs _functions[];
@@ -179,5 +180,7 @@ double greaterThan(const double v1, const double v2);
 double greaterEqualThan(const double v1, const double v2);
 double lessThan(const double v1, const double v2);
 double lessEqualThan(const double v1, const double v2);
+
+} // namespace Parser
 
 #endif /*FUNCTIONS_H*/

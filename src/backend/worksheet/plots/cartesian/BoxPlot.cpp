@@ -440,7 +440,7 @@ bool BoxPlot::hasData() const {
 	return !d->dataColumns.isEmpty();
 }
 
-bool BoxPlot::usingColumn(const Column* column) const {
+bool BoxPlot::usingColumn(const AbstractColumn* column, bool) const {
 	Q_D(const BoxPlot);
 
 	for (auto* c : d->dataColumns) {
@@ -478,8 +478,24 @@ void BoxPlot::handleAspectUpdated(const QString& aspectPath, const AbstractAspec
 }
 
 QColor BoxPlot::color() const {
-	// Q_D(const BoxPlot);
-	return QColor();
+	return colorAt(0);
+}
+
+QColor BoxPlot::colorAt(int index) const {
+	Q_D(const BoxPlot);
+	if (index >= d->backgrounds.size())
+		return QColor();
+
+	const auto* background = d->backgrounds.at(index);
+	if (background->enabled())
+		return background->firstColor();
+	else {
+		const auto* borderLine = d->borderLines.at(index);
+		if (borderLine->style() != Qt::PenStyle::NoPen)
+			return borderLine->pen().color();
+		else
+			return QColor();
+	}
 }
 
 /* ============================ setter methods and undo commands ================= */

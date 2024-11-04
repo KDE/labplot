@@ -330,7 +330,7 @@ bool Histogram::hasData() const {
 	return (d->dataColumn != nullptr);
 }
 
-bool Histogram::usingColumn(const Column* column) const {
+bool Histogram::usingColumn(const AbstractColumn* column, bool) const {
 	Q_D(const Histogram);
 	return (
 		d->dataColumn == column || (d->errorBar->yErrorType() == ErrorBar::ErrorType::Symmetric && d->errorBar->yPlusColumn() == column)

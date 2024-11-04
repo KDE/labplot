@@ -14,6 +14,9 @@
 #include <cstdlib>
 #include <clocale>
 #include <cmath>
+#include <vector>
+#include <memory>
+#include <sstream>
 #ifdef HAVE_XLOCALE
 #include <xlocale.h>
 #endif
@@ -37,59 +40,58 @@
 
 #define YYERROR_VERBOSE 1
 
-/* params passed to yylex (and yyerror) */
-typedef struct param {
-	size_t pos;		/* current position in string */
-	char* string;		/* the string to parse */
-	const char* locale;	/* name of locale to convert numbers */
-} param;
+namespace Parser {
+	struct param;
+	int yyerror(param *p, const char *err);
+	int yylex(param *p);
 
-int yyerror(param *p, const char *err);
-int yylex(param *p);
-int _variablesCounter = 0;
-bool skipSpecialFunctionEvaluation = false;
+        std::string _lastErrorMessage;
+	bool skipSpecialFunctionEvaluation = false;
+} // Parser
 
-int variablesCounter() {
-	return _variablesCounter;
-}
+namespace {
+	double res;
+	int _variablesCounter = 0;
 
-double res;
-char _lastErrorMessage[256] = "";
+	static void wrongArgumentNumberMessage(const std::string_view& function_name, int provided, int expected) {
+                std::stringstream ss;
+                ss << "Internal parsing Error: Wrong argument count for '" << function_name << "'. Provided: " << provided << ", Expected: " << expected;
+                Parser::_lastErrorMessage = ss.str();
+	}
 
-const char* lastErrorMessage() {
-	return _lastErrorMessage;
-}
+	static void wrongArgumentInternalErrorMessage(const std::string_view& function_name, int expected) {
+                std::stringstream ss;
+                ss << "Internal parsing Error: Wrong argument count for '" << function_name << "'. Expected: " << expected << ", but function does not have this number of arguments";
+                Parser::_lastErrorMessage = ss.str();
+        }
 
-static void wrongArgumentNumberMessage(const char* function_name, int provided, int expected) {
-	snprintf(_lastErrorMessage, sizeof(_lastErrorMessage), "Parsing Error: Wrong argument count for %s. Provided: %d, Expected: %d", function_name, provided, expected);
-}
+	static void notImplementedError(const std::string_view& function_name) {
+                std::stringstream ss;
+                ss << "Parsing Error: '" << function_name << "' not implemented.";
+                Parser::_lastErrorMessage = ss.str();
+	}
 
-static void wrongArgumentInternalErrorMessage(const char* function_name, int expected) {
-	snprintf(_lastErrorMessage, sizeof(_lastErrorMessage), "Internal parsing Error: Wrong argument count for %s. Expected: %d , but function does not have this number of arguments", function_name, expected);
-}
+	static void yyerrorFunction(const std::string_view& function_name, const char* msg) {
+                std::stringstream ss;
+                ss << "Parsing Error: In function '" << function_name << "': " << msg;
+                Parser::_lastErrorMessage = ss.str();
+	}
 
-static void notImplementedError(const char* function_name) {
-	snprintf(_lastErrorMessage, sizeof(_lastErrorMessage), "Parsing Error: '%s' not implemented.", function_name);
-}
-
-static void yyerrorFunction(const char* function_name, const char* msg) {
-	snprintf(_lastErrorMessage, sizeof(_lastErrorMessage), "Parsing Error: In function '%s': %s", function_name, msg);
-}
-
-static void yyerror(const char* msg) {
-	snprintf(_lastErrorMessage, sizeof(_lastErrorMessage), "Parsing Error: %s", msg);
-}
-
-
+	static void yyerror(const char* msg) {
+                std::stringstream ss;
+                ss << "Parsing Error: " << msg;
+                Parser::_lastErrorMessage = ss.str();
+	}
+} // anonymous namespace
 
 %}
 
-%lex-param {param *p}
-%parse-param {param *p}
+%lex-param {Parser::param *p}
+%parse-param {Parser::param *p}
 
 %union {
 double dval;	/* For returning numbers */
-symbol *tptr;   /* For returning symbol-table pointers */
+Parser::BaseSymbol* tptr;   /* For returning symbol-table pointers */
 }
 
 %token <dval>  NUM 	/* Simple double precision number */
@@ -121,18 +123,18 @@ expr:      NUM       { $$ = $1;                            }
 | VAR                { $$ = std::get<double>($1->value); _variablesCounter++;}
 | VAR '=' expr       { $$ = std::get<double>($1->value) = $3; _variablesCounter++;       }
 | SPECFNCT '(' ')'       {
-							const auto& special_function = std::get<special_function_def>($1->value);
+							const auto& special_function = std::get<Parser::special_function_def>($1->value);
 							if (!special_function.payload.expired() && !special_function.payload.lock()->constant)
 								_variablesCounter++;
 							const int argc = special_function.funsptr->argc;
 							if (argc != 0) {
-								wrongArgumentNumberMessage($1->name, 0, argc);
+                                                                wrongArgumentNumberMessage($1->name, argc, 0);
 								yynerrs++;
 								return 1;
 							}
 							try {
-								const auto function = std::get<func_tPayload>(special_function.funsptr->fnct);
-								if (!skipSpecialFunctionEvaluation) {
+								const auto function = std::get<Parser::func_tPayload>(special_function.funsptr->fnct);
+								if (!Parser::skipSpecialFunctionEvaluation) {
 									if (function == nullptr) {
 										notImplementedError($1->name);
 										yynerrs++;
@@ -148,18 +150,18 @@ expr:      NUM       { $$ = $1;                            }
 							}
 						}
 | SPECFNCT '(' VAR ')'  {
-							const auto& special_function = std::get<special_function_def>($1->value);
+							const auto& special_function = std::get<Parser::special_function_def>($1->value);
 							if (!special_function.payload.expired() && !special_function.payload.lock()->constant)
 								_variablesCounter++;
 							const int argc = special_function.funsptr->argc;
 							if (argc != 1) {
-								wrongArgumentNumberMessage($1->name, 1, argc);
+                                                                wrongArgumentNumberMessage($1->name, argc, 1);
 								yynerrs++;
 								return 1;
 							}
 							try {
-								const auto function = std::get<func_t1Payload>(special_function.funsptr->fnct);
-								if (!skipSpecialFunctionEvaluation) {
+								const auto function = std::get<Parser::func_t1Payload>(special_function.funsptr->fnct);
+                                                                if (!Parser::skipSpecialFunctionEvaluation) {
 									if (function == nullptr) {
 										notImplementedError($1->name);
 										yynerrs++;
@@ -175,18 +177,18 @@ expr:      NUM       { $$ = $1;                            }
 							}
 						}
 | SPECFNCT '(' expr ';' VAR ')'  {
-									const auto& special_function = std::get<special_function_def>($1->value);
+									const auto& special_function = std::get<Parser::special_function_def>($1->value);
 									if (!special_function.payload.expired() && !special_function.payload.lock()->constant)
 										_variablesCounter++;
 									const int argc = special_function.funsptr->argc;
 									if (argc != 2) {
-										wrongArgumentNumberMessage($1->name, 2, argc);
+                                                                                wrongArgumentNumberMessage($1->name, argc, 2);
 										yynerrs++;
 										return 1;
 									}
 									try {
-										const auto function = std::get<func_t2Payload>(special_function.funsptr->fnct);
-										if (!skipSpecialFunctionEvaluation) {
+										const auto function = std::get<Parser::func_t2Payload>(special_function.funsptr->fnct);
+                                                                                if (!Parser::skipSpecialFunctionEvaluation) {
 											if (function == nullptr) {
 												notImplementedError($1->name);
 												yynerrs++;
@@ -202,18 +204,18 @@ expr:      NUM       { $$ = $1;                            }
 									}
 								  }
 | SPECFNCT '(' expr ';' expr ';' VAR ')'  {
-											const auto& special_function = std::get<special_function_def>($1->value);
+											const auto& special_function = std::get<Parser::special_function_def>($1->value);
 											if (!special_function.payload.expired() && !special_function.payload.lock()->constant)
 												_variablesCounter++;
 											const int argc = special_function.funsptr->argc;
 											if (argc != 3) {
-												wrongArgumentNumberMessage($1->name, 3, argc);
+                                                                                                wrongArgumentNumberMessage($1->name, argc, 3);
 												yynerrs++;
 												return 1;
 											}
 											try {
-												const auto function = std::get<func_t3Payload>(special_function.funsptr->fnct);
-												if (!skipSpecialFunctionEvaluation) {
+												const auto function = std::get<Parser::func_t3Payload>(special_function.funsptr->fnct);
+                                                                                                if (!Parser::skipSpecialFunctionEvaluation) {
 													if (function == nullptr) {
 														notImplementedError($1->name);
 														yynerrs++;
@@ -229,18 +231,18 @@ expr:      NUM       { $$ = $1;                            }
 											}
 										  }
 | SPECFNCT '(' expr ';' expr ';' expr ';' VAR ')'  {
-													const auto& special_function = std::get<special_function_def>($1->value);
+													const auto& special_function = std::get<Parser::special_function_def>($1->value);
 													if (!special_function.payload.expired() && !special_function.payload.lock()->constant)
 														_variablesCounter++;
 													const int argc = special_function.funsptr->argc;
 													if (argc != 4) {
-														wrongArgumentNumberMessage($1->name, 4, argc);
+                                                                                                                wrongArgumentNumberMessage($1->name, argc, 4);
 														yynerrs++;
 														return 1;
 													}
 													try {
-														const auto function = std::get<func_t4Payload>(special_function.funsptr->fnct);
-														if (!skipSpecialFunctionEvaluation) {
+														const auto function = std::get<Parser::func_t4Payload>(special_function.funsptr->fnct);
+                                                                                                                if (!Parser::skipSpecialFunctionEvaluation) {
 															if (function == nullptr) {
 																notImplementedError($1->name);
 																yynerrs++;
@@ -262,15 +264,15 @@ expr:      NUM       { $$ = $1;                            }
 | SPECFNCT '(' expr ';' expr ';' expr ')'  { yynerrs++; yyerrorFunction($1->name, "Last argument must be a variable not an expression");}
 | SPECFNCT '(' expr ';' expr ';' expr ';' expr ')'  { yynerrs++; yyerrorFunction($1->name, "Last argument must be a variable not an expression");}
 | FNCT '(' ')'       {
-						const funs* function = std::get<funs*>($1->value);
+						const auto* function = std::get<Parser::funs*>($1->value);
 						const int argc = function->argc;
 						if (argc != 0) {
-							wrongArgumentNumberMessage($1->name, 0, argc);
+                                                        wrongArgumentNumberMessage($1->name, argc, 0);
 							yynerrs++;
 							return 1;
 						} else {
 							try {
-								const auto fnct_ptr = std::get<func_t>(function->fnct);
+								const auto fnct_ptr = std::get<Parser::func_t>(function->fnct);
 								$$ = fnct_ptr();
 							} catch (const std::bad_variant_access& ex) {
 								wrongArgumentInternalErrorMessage($1->name, 0);
@@ -280,15 +282,15 @@ expr:      NUM       { $$ = $1;                            }
 						}
 					}
 | FNCT '(' expr ')'  {
-						const funs* function = std::get<funs*>($1->value);
+						const auto* function = std::get<Parser::funs*>($1->value);
 						const int argc = function->argc;
 						if (argc != 1) {
-							wrongArgumentNumberMessage($1->name, 1, argc);
+                                                        wrongArgumentNumberMessage($1->name, argc, 1);
 							yynerrs++;
 							return 1;
 						} else {
 							try {
-								const auto fnct_ptr = std::get<func_t1>(function->fnct);
+								const auto fnct_ptr = std::get<Parser::func_t1>(function->fnct);
 								$$ = fnct_ptr($3);
 							} catch (const std::bad_variant_access& ex) {
 								wrongArgumentInternalErrorMessage($1->name, 1);
@@ -298,15 +300,15 @@ expr:      NUM       { $$ = $1;                            }
 						}
 					}
 | FNCT '(' expr ',' expr ')'  {
-								const funs* function = std::get<funs*>($1->value);
+								const auto* function = std::get<Parser::funs*>($1->value);
 								const int argc = function->argc;
 								if (argc != 2) {
-									wrongArgumentNumberMessage($1->name, 2, argc);
+                                                                        wrongArgumentNumberMessage($1->name, argc, 2);
 									yynerrs++;
 									return 1;
 								} else {
 									try {
-										const auto fnct_ptr = std::get<func_t2>(function->fnct);
+										const auto fnct_ptr = std::get<Parser::func_t2>(function->fnct);
 										$$ = fnct_ptr($3,$5);
 									} catch (const std::bad_variant_access& ex) {
 										wrongArgumentInternalErrorMessage($1->name, 2);
@@ -316,15 +318,15 @@ expr:      NUM       { $$ = $1;                            }
 								}
 							}
 | FNCT '(' expr ',' expr ',' expr ')'  {
-										const funs* function = std::get<funs*>($1->value);
+										const auto* function = std::get<Parser::funs*>($1->value);
 										const int argc = function->argc;
 										if (argc != 3) {
-											wrongArgumentNumberMessage($1->name, 3, argc);
+                                                                                        wrongArgumentNumberMessage($1->name, argc, 3);
 											yynerrs++;
 											return 1;
 										} else {
 											try {
-												const auto fnct_ptr = std::get<func_t3>(function->fnct);
+												const auto fnct_ptr = std::get<Parser::func_t3>(function->fnct);
 												$$ = fnct_ptr($3,$5,$7);
 											} catch (const std::bad_variant_access& ex) {
 												wrongArgumentInternalErrorMessage($1->name, 3);
@@ -334,15 +336,15 @@ expr:      NUM       { $$ = $1;                            }
 										}
 									}
 | FNCT '(' expr ',' expr ',' expr ',' expr ')'  {
-													const funs* function = std::get<funs*>($1->value);
+													const auto* function = std::get<Parser::funs*>($1->value);
 													const int argc = function->argc;
 													if (argc != 4) {
-														wrongArgumentNumberMessage($1->name, 4, argc);
+                                                                                                                wrongArgumentNumberMessage($1->name, argc, 4);
 														yynerrs++;
 														return 1;
 													} else {
 														try {
-															const auto fnct_ptr = std::get<func_t4>(function->fnct);
+															const auto fnct_ptr = std::get<Parser::func_t4>(function->fnct);
 															$$ = fnct_ptr($3,$5,$7,$9);
 														} catch (const std::bad_variant_access& ex) {
 															wrongArgumentInternalErrorMessage($1->name, 4);
@@ -352,15 +354,15 @@ expr:      NUM       { $$ = $1;                            }
 													}
 												}
 | FNCT '(' expr ';' expr ')'  {
-								const funs* function = std::get<funs*>($1->value);
+								const auto* function = std::get<Parser::funs*>($1->value);
 								const int argc = function->argc;
 								if (argc != 2) {
-									wrongArgumentNumberMessage($1->name, 2, argc);
+                                                                        wrongArgumentNumberMessage($1->name, argc, 2);
 									yynerrs++;
 									return 1;
 								} else {
 									try {
-										const auto fnct_ptr = std::get<func_t2>(function->fnct);
+										const auto fnct_ptr = std::get<Parser::func_t2>(function->fnct);
 										$$ = fnct_ptr($3,$5);
 									} catch (const std::bad_variant_access& ex) {
 										wrongArgumentInternalErrorMessage($1->name, 2);
@@ -370,15 +372,15 @@ expr:      NUM       { $$ = $1;                            }
 								}
 							}
 | FNCT '(' expr ';' expr ';' expr ')'  {
-										const funs* function = std::get<funs*>($1->value);
+										const auto* function = std::get<Parser::funs*>($1->value);
 										const int argc = function->argc;
 										if (argc != 3) {
-											wrongArgumentNumberMessage($1->name, 3, argc);
+                                                                                        wrongArgumentNumberMessage($1->name, argc, 3);
 											yynerrs++;
 											return 1;
 										} else {
 											try {
-												const auto fnct_ptr = std::get<func_t3>(function->fnct);
+												const auto fnct_ptr = std::get<Parser::func_t3>(function->fnct);
 												$$ = fnct_ptr($3,$5,$7);
 											} catch (const std::bad_variant_access& ex) {
 												wrongArgumentInternalErrorMessage($1->name, 3);
@@ -388,15 +390,15 @@ expr:      NUM       { $$ = $1;                            }
 										}
 									}
 | FNCT '(' expr ';' expr ';' expr ';' expr ')'  {
-													const funs* function = std::get<funs*>($1->value);
+													const auto* function = std::get<Parser::funs*>($1->value);
 													const int argc = function->argc;
 													if (argc != 4) {
-														wrongArgumentNumberMessage($1->name, 4, argc);
+                                                                                                                wrongArgumentNumberMessage($1->name, argc, 4);
 														yynerrs++;
 														return 1;
 													} else {
 														try {
-															const auto fnct_ptr = std::get<func_t4>(function->fnct);
+															const auto fnct_ptr = std::get<Parser::func_t4>(function->fnct);
 															$$ = fnct_ptr($3,$5,$7,$9);
 														} catch (const std::bad_variant_access& ex) {
 															wrongArgumentInternalErrorMessage($1->name, 4);
@@ -406,15 +408,15 @@ expr:      NUM       { $$ = $1;                            }
 													}
 												}
 | FNCT '(' expr ';' expr ';' expr ';' expr ';' expr ')'  {
-													const funs* function = std::get<funs*>($1->value);
+													const auto* function = std::get<Parser::funs*>($1->value);
 													const int argc = function->argc;
 													if (argc != 5) {
-														wrongArgumentNumberMessage($1->name, 5, argc);
+                                                                                                                wrongArgumentNumberMessage($1->name, argc, 5);
 														yynerrs++;
 														return 1;
 													} else {
 														try {
-															const auto fnct_ptr = std::get<func_t5>(function->fnct);
+															const auto fnct_ptr = std::get<Parser::func_t5>(function->fnct);
 															$$ = fnct_ptr($3,$5,$7,$9,$11);
 														} catch (const std::bad_variant_access& ex) {
 															wrongArgumentInternalErrorMessage($1->name, 5);
@@ -423,467 +425,556 @@ expr:      NUM       { $$ = $1;                            }
 														}
 													}
 }
-| expr '+' expr      { $$ = $1 + $3;                       }
-| expr '-' expr      { $$ = $1 - $3;                       }
-| expr OR expr       { $$ = orFunction($1, $3);            }
-| expr '*' expr      { $$ = $1 * $3;                       }
-| expr '/' expr      { $$ = $1 / $3;                       }
-| expr '%' expr      { $$ = (int)($1) % (int)($3);         }
-| expr AND expr      { $$ = andFunction($1, $3);           }
-| '!' expr           { $$ = notFunction($2);               }
-| expr GE expr       { $$ = greaterEqualThan($1, $3);      }
-| expr LE expr       { $$ = lessEqualThan($1, $3);         }
-| expr '>' expr      { $$ = greaterThan($1, $3);           }
-| expr '<' expr      { $$ = lessThan($1, $3);              }
-| '-' expr  %prec NEG{ $$ = -$2;                           }
-| expr '^' expr      { $$ = std::pow($1, $3);              }
-| expr '*' '*' expr  { $$ = std::pow($1, $4);              }
-| '(' expr ')'       { $$ = $2;                            }
-| '|' expr '|'       { $$ = std::abs($2);                  }
-| expr '!'           { $$ = gsl_sf_fact((unsigned int)$1); }
+| expr '+' expr      { $$ = $1 + $3;                          }
+| expr '-' expr      { $$ = $1 - $3;                          }
+| expr OR expr       { $$ = Parser::orFunction($1, $3);       }
+| expr '*' expr      { $$ = $1 * $3;                          }
+| expr '/' expr      { $$ = $1 / $3;                          }
+| expr '%' expr      { $$ = (int)($1) % (int)($3);            }
+| expr AND expr      { $$ = Parser::andFunction($1, $3);      }
+| '!' expr           { $$ = Parser::notFunction($2);          }
+| expr GE expr       { $$ = Parser::greaterEqualThan($1, $3); }
+| expr LE expr       { $$ = Parser::lessEqualThan($1, $3);    }
+| expr '>' expr      { $$ = Parser::greaterThan($1, $3);      }
+| expr '<' expr      { $$ = Parser::lessThan($1, $3);         }
+| '-' expr  %prec NEG{ $$ = -$2;                              }
+| expr '^' expr      { $$ = std::pow($1, $3);                 }
+| expr '*' '*' expr  { $$ = std::pow($1, $4);                 }
+| '(' expr ')'       { $$ = $2;                               }
+| '|' expr '|'       { $$ = std::abs($2);                     }
+| expr '!'           { $$ = gsl_sf_fact((unsigned int)$1);    }
 ;
 
 %%
 
-/* global symbol table (as linked list) */
-symbol *symbol_table = nullptr;
+namespace Parser {
+	/* params passed to yylex (and yyerror) */
+	typedef struct param {
+		size_t pos;		/* current position in string */
+		char* string;		/* the string to parse */
+		const char* locale;	/* name of locale to convert numbers */
+                UsedSymbols usedSymbols; /* if true, ony the symbols in the "used_symbols" are used (performance reason) */
+	} param;
 
-int parse_errors(void) {
-	return yynerrs;
-}
-
-int yyerror(param *p, const char *s) {
-	/* remove trailing newline */
-	p->string[strcspn(p->string, "\n")] = 0;
-	printf("PARSER ERROR: %s @ position %d of string '%s'\n", s, (int)(p->pos), p->string);
-
-	return 0;
-}
-
-/* save symbol in symbol table (at start of linked list) */
-symbol* put_symbol(const char *symbol_name, int symbol_type) {
-/*	pdebug("PARSER: put_symbol(): symbol_name = '%s'\n", symbol_name); */
-
-	symbol *ptr = new symbol;
-	assert(ptr);
-	ptr->name = (char *)malloc(strlen(symbol_name) + 1);
-	strcpy(ptr->name, symbol_name);
-	ptr->type = symbol_type;
-	switch (symbol_type) {
-	case VAR: ptr->value = 0.; break;
-	case FNCT: ptr->value = nullptr; break;
-	case SPECFNCT: {
-		special_function_def sfp;
-		ptr->value = sfp;
-		break;
-	}
+	int variablesCounter() {
+		return _variablesCounter;
 	}
 
-	ptr->next = (symbol *)symbol_table;
-	symbol_table = ptr;
+        std::string lastErrorMessage() {
+		return _lastErrorMessage;
+	}
 
-/*	pdebug("PARSER: put_symbol() DONE\n"); */
-	return ptr;
-}
+	/* global symbol table (as linked list) */
 
-/* remove symbol of name symbol_name from symbol table
-   removes only variables of value 0
-   returns 0 on success */
-int remove_symbol(const char *symbol_name) {
-	symbol* ptr = symbol_table;
+	/* Static symbols like the functions ans variables in functions.cpp and constants.cpp */
+	std::vector<StaticSymbol*> static_symbols;
+	/* Special functions and others */
+	std::vector<Symbol*> variable_symbols;
+        std::vector<BaseSymbol*> used_symbols;
 
-	/* check if head contains symbol */
-	if (ptr && (strcmp(ptr->name, symbol_name) == 0)) {
-		if (ptr->type == VAR && std::get<double>(ptr->value) == 0) {
-			pdebug("PARSER: REMOVING symbol '%s'\n", symbol_name);
-			symbol_table = ptr->next;
-			free(ptr->name);
-			delete ptr;
-		}
+	int parse_errors(void) {
+		return yynerrs;
+	}
+
+	int yyerror(param *p, const char *s) {
+		/* remove trailing newline */
+		p->string[strcspn(p->string, "\n")] = 0;
+		printf("PARSER ERROR: %s @ position %d of string '%s'\n", s, (int)(p->pos), p->string);
+
 		return 0;
 	}
 
-	/* search for symbol to be deleted */
-	symbol* prev;
-	while (ptr && (strcmp(ptr->name, symbol_name) != 0)) {
-		prev = ptr;
-		ptr = ptr->next;
+	/* save symbol in symbol table (at start of linked list) */
+	Symbol* put_symbol(const char *symbol_name, int symbol_type) {
+	/*	pdebug("PARSER: put_symbol(): symbol_name = '%s'\n", symbol_name); */
+
+		auto* ptr = new Symbol(symbol_name, strlen(symbol_name), symbol_type);
+		assert(ptr);
+		switch (symbol_type) {
+		case VAR: ptr->value = 0.; break;
+		case FNCT: ptr->value = nullptr; break;
+		case SPECFNCT: {
+			special_function_def sfp;
+			ptr->value = sfp;
+			break;
+		}
+		}
+
+		variable_symbols.push_back(ptr);
+
+	/*	pdebug("PARSER: put_symbol() DONE\n"); */
+		return ptr;
 	}
 
-	/* symbol not found or is not a variable or is not 0 */
-	if (!ptr || ptr->type != VAR || std::get<double>(ptr->value) != 0)
+	/* remove symbol of name symbol_name from symbol table
+	removes only variables of value 0
+	returns 0 on success */
+	int remove_symbol(const char *symbol_name) {
+
+		// Only possible on variable symbols
+		for (auto it = variable_symbols.begin(); it < variable_symbols.end(); it++) {
+			auto* symbol = *it;
+                        if (symbol->name == symbol_name) {
+				if (symbol->type == VAR && std::get<double>(symbol->value) == 0) {
+					pdebug("PARSER: REMOVING symbol '%s'\n", symbol_name);
+					variable_symbols.erase(it);
+					delete symbol;
+					return 0;
+				} else
+					return 1;
+			}
+		}
 		return 1;
+	}
 
-	/* remove symbol */
-	pdebug("PARSER: REMOVING symbol '%s'\n", symbol_name);
-	prev->next = ptr->next;
-	free(ptr->name);
-	delete ptr;
+	Symbol* get_variable_symbol(const char* symbol_name) {
+		for (auto* s: variable_symbols) {
+			if (s->name == symbol_name) {
+				pdebug("PARSER:		SYMBOL FOUND\n");
+				return s;
+			}
+		}
+		pdebug("PARSER:		SYMBOL NOT FOUND\n");
+		return nullptr;
+	}
 
-	return 0;
-}
+	StaticSymbol* get_static_symbol(const char* symbol_name) {
+		for (auto* s: static_symbols) {
+			if (s->name == symbol_name) {
+				pdebug("PARSER:		SYMBOL FOUND\n");
+				return s;
+			}
+		}
+		pdebug("PARSER:		SYMBOL NOT FOUND\n");
+		return nullptr;	
+	}
 
-/* get symbol from symbol table
-   returns 0 if symbol not found */
-symbol* get_symbol(const char *symbol_name) {
-	pdebug("PARSER: get_symbol(): symbol_name = '%s'\n", symbol_name);
+	BaseSymbol* get_used_symbol(const char* symbol_name) {
+		for (auto* s: used_symbols) {
+			if (s->name == symbol_name) {
+				pdebug("PARSER:		USED SYMBOL FOUND\n");
+				return s;
+			}
+		}
+		pdebug("PARSER:		USED_SYMBOL NOT FOUND\n");
+		return nullptr;	
+	}
 
-	symbol *ptr;
-	for (ptr = symbol_table; ptr != nullptr; ptr = (symbol *)ptr->next) {
-		/* pdebug("%s ", ptr->name); */
-		if (strcmp(ptr->name, symbol_name) == 0) {
-			pdebug("PARSER:		SYMBOL FOUND\n");
-			return ptr;
+	void clear_static_symbols() {
+		StaticSymbol* s;
+		while (!static_symbols.empty()) {
+			s = static_symbols.back();
+			static_symbols.pop_back();
+			delete s;
 		}
 	}
 
-	pdebug("PARSER:		SYMBOL NOT FOUND\n");
-	return nullptr;
-}
+	void init_static_symbols() {
+		clear_static_symbols();
+		static_symbols.reserve(_number_functions + _number_constants);
+                for (int i = 0; i < _number_functions; i++) {
+                        static_symbols.push_back(new StaticSymbol(_functions[i].name, FNCT, &_functions[i]));
+		}
 
-/* initialize symbol table with all known functions and constants */
-void init_table(void) {
-	pdebug("PARSER: init_table()\n");
-
-	symbol *ptr = nullptr;
-	int i;
-	/* add functions */
-	for (i = 0; i < _number_functions; i++) {
-		ptr = put_symbol(_functions[i].name, FNCT);
-		ptr->value = &_functions[i];
-	}
-	/* add special functions */
-	for (i = 0; i < _number_specialfunctions; i++) {
-		ptr = put_symbol(_special_functions[i].name, SPECFNCT);
-
-		special_function_def sfd;
-		sfd.funsptr = &_special_functions[i];
-		ptr->value = sfd;
-	}
-	/* add constants */
-	for (i = 0; i < _number_constants; i++) {
-		ptr = put_symbol(_constants[i].name, VAR);
-		ptr->value = _constants[i].value;
+		/* add constants */
+                for (int i = 0; i < _number_constants; i++) {
+                        static_symbols.push_back(new StaticSymbol(_constants[i].name, VAR, _constants[i].value));
+		}
 	}
 
-	pdebug("PARSER: init_table() DONE. sym_table = %p\n", ptr);
-}
-
-bool set_specialfunction0(const char* function_name, func_tPayload function, std::weak_ptr<Payload> payload) {
-	pdebug("PARSER: set_SpecialFunction0()\n");
-
-
-	symbol *ptr = get_symbol(function_name);
-	if (!ptr) // function name not found
-		return false;
-
-	assert(std::get<special_function_def>(ptr->value).funsptr->argc == 0);
-	std::get<special_function_def>(ptr->value).funsptr->fnct = function;
-	std::get<special_function_def>(ptr->value).funsptr->name = function_name;
-	std::get<special_function_def>(ptr->value).payload = payload;
-	return true;
-}
-
-bool set_specialfunction1(const char* function_name, func_t1Payload function, std::shared_ptr<Payload> payload) {
-	pdebug("PARSER: set_SpecialFunction1()\n");
-
-
-	symbol *ptr = get_symbol(function_name);
-	if (!ptr) // function name not found
-		return false;
-	assert(std::get<special_function_def>(ptr->value).funsptr->argc == 1);
-	std::get<special_function_def>(ptr->value).funsptr->fnct = function;
-	std::get<special_function_def>(ptr->value).funsptr->name = function_name;
-	std::get<special_function_def>(ptr->value).payload = payload;
-	return true;
-}
-
-bool set_specialfunction2(const char* function_name, func_t2Payload function, std::shared_ptr<Payload> payload) {
-	pdebug("PARSER: set_SpecialFunction2()\n");
-
-
-	symbol *ptr = get_symbol(function_name);
-	if (!ptr) // function name not found
-		return false;
-
-	assert(std::get<special_function_def>(ptr->value).funsptr->argc == 2);
-	std::get<special_function_def>(ptr->value).funsptr->fnct = function;
-	std::get<special_function_def>(ptr->value).funsptr->name = function_name;
-	std::get<special_function_def>(ptr->value).payload = payload;
-	return true;
-}
-
-bool set_specialfunction3(const char* function_name, func_t3Payload function, std::shared_ptr<Payload> payload) {
-	pdebug("PARSER: set_SpecialFunction3()\n");
-
-
-	symbol *ptr = get_symbol(function_name);
-	if (!ptr) // function name not found
-		return false;
-
-	assert(std::get<special_function_def>(ptr->value).funsptr->argc == 3);
-	std::get<special_function_def>(ptr->value).funsptr->fnct = function;
-	std::get<special_function_def>(ptr->value).funsptr->name = function_name;
-	std::get<special_function_def>(ptr->value).payload = payload;
-	return true;
-}
-
-bool set_specialfunction4(const char* function_name, func_t4Payload function, std::shared_ptr<Payload> payload) {
-	pdebug("PARSER: set_SpecialFunction4()\n");
-
-
-	symbol *ptr = get_symbol(function_name);
-	if (!ptr) // function name not found
-		return false;
-
-	assert(std::get<special_function_def>(ptr->value).funsptr->argc == 4);
-	std::get<special_function_def>(ptr->value).funsptr->fnct = function;
-	std::get<special_function_def>(ptr->value).funsptr->name = function_name;
-	std::get<special_function_def>(ptr->value).payload = payload;
-	return true;
-}
-
-void delete_table(void) {
-	pdebug("PARSER: delete_table()\n");
-	while(symbol_table) {
-		symbol *tmp = symbol_table;
-		symbol_table = symbol_table->next;
-		free(tmp->name);
-		free(tmp);
-	}
-}
-
-/* add new symbol with value or just set value if symbol is a variable */
-symbol* assign_symbol(const char* symbol_name, double value) {
-	pdebug("PARSER: assign_symbol() : symbol_name = '%s', value = %g\n", symbol_name, value);
-
-	/* be sure that the symbol table has been initialized */
-	if (!symbol_table)
-		init_table();
-
-	symbol* ptr = get_symbol(symbol_name);
-	if (!ptr) {
-		pdebug("PARSER: calling putsymbol(): symbol_name = '%s'\n", symbol_name);
-		ptr = put_symbol(symbol_name, VAR);
-	} else {
-		pdebug("PARSER: Symbol already assigned\n");
+	void clear_variable_symbols() {
+		Symbol* s;
+		while (!variable_symbols.empty()) {
+			s = variable_symbols.back();
+			variable_symbols.pop_back();
+			delete s;
+		}
 	}
 
-	/* do not assign value if symbol already exits as function */
-	if (ptr->type == VAR)
-		ptr->value = value;
+	/* initialize symbol table with all known functions and constants */
+	void init_table(void) {
+		pdebug("PARSER: init_table()\n");
 
-	return ptr;
-}
+                used_symbols.clear(); // They get invalid now
 
-static int getcharstr(param *p) {
-	pdebug(" getcharstr() pos = %d\n", (int)(p->pos));
+		if (static_symbols.empty()) {
+			// Only once neccessary
+			init_static_symbols();
+		}
 
-	if (p->string[p->pos] == '\0')
-		return EOF;
-	/* pdebug("PARSER: 	char is %c\n", p->string[p->pos]); */
-	return p->string[(p->pos)++];
-}
+		// Must be done every time to reinit
+		clear_variable_symbols();
+		variable_symbols.reserve(_number_specialfunctions);
 
-static void ungetcstr(size_t *pos) {
-	/* pdebug("PARSER: ungetcstr()\n"); */
-	if (*pos > 0)
-		(*pos)--;
-}
+		/* add special functions */
+                for (int i = 0; i < _number_specialfunctions; i++) {
+			special_function_def sfd;
+			sfd.funsptr = &_special_functions[i];
+                        variable_symbols.push_back(new Symbol(_special_functions[i].name, strlen(_special_functions[i].name), SPECFNCT, sfd));
+		}
 
-double parse(const char* string, const char* locale) {
-	pdebug("\nPARSER: parse('%s') len = %d\n********************************\n", string, (int)strlen(string));
-
-	/* be sure that the symbol table has been initialized */
-	if (!symbol_table)
-		init_table();
-
-	_variablesCounter = 0;
-	_lastErrorMessage[0] = 0;
-
-	param p;
-	p.pos = 0;
-	p.locale = locale;
-
-	/* leave space to terminate string by "\n\0" */
-	const size_t slen = strlen(string) + 2;
-	p.string = (char *) malloc(slen * sizeof(char));
-	if (p.string == nullptr) {
-		printf("PARSER ERROR: Out of memory for parsing string\n");
-		return 0.;
+		pdebug("PARSER: init_table() DONE. sym_table = %p\n", ptr);
 	}
 
-	strcpy(p.string, string);
-	p.string[strlen(string)] = '\n';	// end for parsing
-	p.string[strlen(string)+1] = '\0';	// end of string
-	/* pdebug("PARSER: Call yyparse() for \"%s\" (len = %d)\n", p.string, (int)strlen(p.string)); */
+	bool set_specialfunction0(const char* function_name, func_tPayload function, std::weak_ptr<Payload> payload) {
+		pdebug("PARSER: set_SpecialFunction0()\n");
 
-	/* parameter for yylex */
-	res = NAN;	/* default value */
-	yynerrs = 0;	/* reset error count */
-	yyparse(&p);
 
-	pdebug("PARSER: parse() DONE (result = %g, errors = %d)\n*******************************\n", res, parse_errors());
-	free(p.string);
-	p.string = nullptr;
+		auto* ptr = get_variable_symbol(function_name);
+		if (!ptr) // function name not found
+			return false;
 
-	return res;
-}
-
-double parse_with_vars(const char *str, const parser_var *vars, int nvars, const char* locale) {
-	pdebug("\nPARSER: parse_with_var(\"%s\") len = %d\n", str, (int)strlen(str));
-
-	int i;
-	for(i = 0; i < nvars; i++) {	/*assign vars */
-		pdebug("PARSER: Assign '%s' the value %g\n", vars[i].name, vars[i].value);
-		assign_symbol(vars[i].name, vars[i].value);
+		assert(std::get<special_function_def>(ptr->value).funsptr->argc == 0);
+		std::get<special_function_def>(ptr->value).funsptr->fnct = function;
+		std::get<special_function_def>(ptr->value).funsptr->name = function_name;
+		std::get<special_function_def>(ptr->value).payload = payload;
+		return true;
 	}
 
-	return parse(str, locale);
-}
+	bool set_specialfunction1(const char* function_name, func_t1Payload function, std::shared_ptr<Payload> payload) {
+		pdebug("PARSER: set_SpecialFunction1()\n");
 
-int yylex(param *p) {
-	pdebug("PARSER: YYLEX()");
 
-	/* get char and skip white space */
-	int c;
-	while ((c = getcharstr(p)) == ' ' || c == '\t');
-
-	/* finish if reached EOF */
-	if (c == EOF) {
-		pdebug("PARSER: FINISHED\n");
-		return 0;
+		auto* ptr = get_variable_symbol(function_name);
+		if (!ptr) // function name not found
+			return false;
+		assert(std::get<special_function_def>(ptr->value).funsptr->argc == 1);
+		std::get<special_function_def>(ptr->value).funsptr->fnct = function;
+		std::get<special_function_def>(ptr->value).funsptr->name = function_name;
+		std::get<special_function_def>(ptr->value).payload = payload;
+		return true;
 	}
-	/* check for non-ASCII chars */
-	if (!isascii(c)) {
-		pdebug(" non-ASCII character found. Giving up\n");
-		yynerrs++;
-		return 0;
+
+	bool set_specialfunction2(const char* function_name, func_t2Payload function, std::shared_ptr<Payload> payload) {
+		pdebug("PARSER: set_SpecialFunction2()\n");
+
+
+		auto* ptr = get_variable_symbol(function_name);
+		if (!ptr) // function name not found
+			return false;
+
+		assert(std::get<special_function_def>(ptr->value).funsptr->argc == 2);
+		std::get<special_function_def>(ptr->value).funsptr->fnct = function;
+		std::get<special_function_def>(ptr->value).funsptr->name = function_name;
+		std::get<special_function_def>(ptr->value).payload = payload;
+		return true;
 	}
-	if (c == '\n') {
-		pdebug("PARSER: Reached EOL\n");
+
+	bool set_specialfunction3(const char* function_name, func_t3Payload function, std::shared_ptr<Payload> payload) {
+		pdebug("PARSER: set_SpecialFunction3()\n");
+
+
+		auto* ptr = get_variable_symbol(function_name);
+		if (!ptr) // function name not found
+			return false;
+
+		assert(std::get<special_function_def>(ptr->value).funsptr->argc == 3);
+		std::get<special_function_def>(ptr->value).funsptr->fnct = function;
+		std::get<special_function_def>(ptr->value).funsptr->name = function_name;
+		std::get<special_function_def>(ptr->value).payload = payload;
+		return true;
+	}
+
+	bool set_specialfunction4(const char* function_name, func_t4Payload function, std::shared_ptr<Payload> payload) {
+		pdebug("PARSER: set_SpecialFunction4()\n");
+
+
+		auto* ptr = get_variable_symbol(function_name);
+		if (!ptr) // function name not found
+			return false;
+
+		assert(std::get<special_function_def>(ptr->value).funsptr->argc == 4);
+		std::get<special_function_def>(ptr->value).funsptr->fnct = function;
+		std::get<special_function_def>(ptr->value).funsptr->name = function_name;
+		std::get<special_function_def>(ptr->value).payload = payload;
+		return true;
+	}
+
+	void delete_table(void) {
+		pdebug("PARSER: delete_table()\n");
+                used_symbols.clear();
+		clear_static_symbols();
+		clear_variable_symbols();
+	}
+
+	/* add new symbol with value or just set value if symbol is a variable */
+        BaseSymbol* assign_symbol(const char* symbol_name, double value, UsedSymbols usedSymbols) {
+            pdebug("PARSER: assign_symbol() : symbol_name = '%s', value = %g\n", symbol_name, value);
+
+            BaseSymbol* ptr = nullptr;
+            if (usedSymbols == UsedSymbols::No || usedSymbols == UsedSymbols::Initialize) {
+                /* be sure that the symbol table has been initialized */
+                if (variable_symbols.empty() || static_symbols.empty()) {
+                    init_table();
+                }
+
+                ptr = get_variable_symbol(symbol_name);
+                if (!ptr) {
+                    pdebug("PARSER: calling putsymbol(): symbol_name = '%s'\n", symbol_name);
+                    ptr = put_symbol(symbol_name, VAR);
+                } else {
+                    pdebug("PARSER: Symbol already assigned\n");
+                }
+            } else {
+                ptr = get_used_symbol(symbol_name);
+                if (!ptr) {
+                    // The symbol was not used in the initialize phase, so we don't need it now
+                    return nullptr;
+                }
+            }
+
+            /* do not assign value if symbol already exits as function */
+            if (ptr->type == VAR)
+                ptr->value = value;
+
+            return ptr;
+	}
+
+	static int getcharstr(param *p) {
+		pdebug(" getcharstr() pos = %d\n", (int)(p->pos));
+
+		if (p->string[p->pos] == '\0')
+				return EOF;
+		/* pdebug("PARSER: 	char is %c\n", p->string[p->pos]); */
+		return p->string[(p->pos)++];
+	}
+
+	static void ungetcstr(size_t *pos) {
+		/* pdebug("PARSER: ungetcstr()\n"); */
+		if (*pos > 0)
+			(*pos)--;
+	}
+
+    double parse(const char* string, const char* locale, UsedSymbols usedSymbols) {
+		pdebug("\nPARSER: parse('%s') len = %d\n********************************\n", string, (int)strlen(string));
+
+		/* be sure that the symbol table has been initialized */
+                if (variable_symbols.empty() || static_symbols.empty()) {
+                    init_table();
+                }
+
+		_variablesCounter = 0;
+		_lastErrorMessage[0] = 0;
+
+		param p;
+		p.pos = 0;
+		p.locale = locale;
+                p.usedSymbols = usedSymbols;
+
+		/* leave space to terminate string by "\n\0" */
+		const size_t slen = strlen(string) + 2;
+		p.string = (char *) malloc(slen * sizeof(char));
+		if (p.string == nullptr) {
+			printf("PARSER ERROR: Out of memory for parsing string\n");
+			return 0.;
+		}
+
+		strcpy(p.string, string);
+		p.string[strlen(string)] = '\n';	// end for parsing
+		p.string[strlen(string)+1] = '\0';	// end of string
+		/* pdebug("PARSER: Call yyparse() for \"%s\" (len = %d)\n", p.string, (int)strlen(p.string)); */
+
+		/* parameter for yylex */
+		res = NAN;	/* default value */
+		yynerrs = 0;	/* reset error count */
+                yyparse(&p);
+
+		pdebug("PARSER: parse() DONE (result = %g, errors = %d)\n*******************************\n", res, parse_errors());
+		free(p.string);
+		p.string = nullptr;
+
+		return res;
+	}
+
+	double parse_with_vars(const char *str, const parser_var *vars, int nvars, const char* locale) {
+		pdebug("\nPARSER: parse_with_var(\"%s\") len = %d\n", str, (int)strlen(str));
+
+		int i;
+		for(i = 0; i < nvars; i++) {	/*assign vars */
+			pdebug("PARSER: Assign '%s' the value %g\n", vars[i].name, vars[i].value);
+			assign_symbol(vars[i].name, vars[i].value);
+		}
+
+                return parse(str, locale);
+	}
+
+	int yylex(param *p) {
+		pdebug("PARSER: YYLEX()");
+
+		/* get char and skip white space */
+		int c;
+		while ((c = getcharstr(p)) == ' ' || c == '\t');
+
+		/* finish if reached EOF */
+		if (c == EOF) {
+			pdebug("PARSER: FINISHED\n");
+			return 0;
+		}
+		/* check for non-ASCII chars */
+		if (!isascii(c)) {
+			pdebug(" non-ASCII character found. Giving up\n");
+			yynerrs++;
+			return 0;
+		}
+		if (c == '\n') {
+			pdebug("PARSER: Reached EOL\n");
+			return c;
+		}
+
+		if (c == '&') {
+			// Check if the next is also an &, because then it is the AND operator
+			if (getcharstr(p) == '&') {
+				return AND;
+			}
+			ungetcstr(&(p->pos));
+		} else if (c == '|') {
+			if (getcharstr(p) == '|') {
+				return OR;
+			}
+			ungetcstr(&(p->pos));
+		} else if (c == '>') {
+			if (getcharstr(p) == '=') {	// >=
+				return GE;
+			}
+			ungetcstr(&(p->pos));
+		} else if (c == '<') {
+			if (getcharstr(p) == '=') {	// <=
+				return LE;
+			}
+			ungetcstr(&(p->pos));
+		}
+
+		pdebug("PARSER: PROCESSING character '%c'\n", c);
+
+		/* process numbers */
+		if (isdigit(c)) {
+			pdebug("PARSER: Found NUMBER (starts with digit)\n");
+			ungetcstr(&(p->pos));
+			char *s = &(p->string[p->pos]);
+
+			/* convert to double */
+			char *remain;
+	#if defined(_WIN32)
+			locale_t locale = _create_locale(LC_NUMERIC, p->locale);
+			if (locale == NULL) {
+				pdebug("PARSER ERROR in newlocale(%s): %s. Trying system locale.\n", p->locale, strerror(errno));
+				locale = _create_locale(LC_NUMERIC, "");
+			}
+	#else
+			locale_t locale = newlocale(LC_NUMERIC_MASK, p->locale, (locale_t)nullptr);
+			if (locale == (locale_t)nullptr) {
+				pdebug("PARSER ERROR in newlocale(%s): %s. Trying system locale.\n", p->locale, strerror(errno));
+				locale = newlocale(LC_NUMERIC_MASK, "", (locale_t)nullptr);
+				pdebug("PARSER:		Reading: '%s' with system locale\n", s);
+			} else {
+				pdebug("PARSER:		Reading: '%s' with locale %s\n", s, p->locale);
+			}
+	#endif
+			double result;
+			if (locale != nullptr) {
+	#if defined(__OpenBSD__) || defined(__HAIKU__)
+				result = strtod(s, &remain);
+	#else
+				result = strtod_l(s, &remain, locale);
+	#endif
+				freelocale(locale);
+			} else // use C locale
+				result = strtod(s, &remain);
+
+			pdebug("PARSER:		Remain: '%s'\n", remain);
+
+			/* check conversion */
+			if(strlen(s) == strlen(remain))
+				return 0;
+
+			pdebug("PARSER:		Result = %g\n", result);
+			yylval.dval = result;
+
+					p->pos += strlen(s) - strlen(remain);
+
+			return NUM;
+		}
+
+		/* process symbol */
+		if (isalpha (c) || c == '.') {
+			pdebug("PARSER: Found SYMBOL (starts with alpha)\n");
+			static char *symbol_name = nullptr;
+			static int length = 0;
+			int i = 0;
+
+			/* Initially make the buffer long enough for a 10-character symbol name */
+			if (length == 0) {
+				length = 10;
+				symbol_name = (char *) malloc(length + 1);
+			}
+
+			do {
+				pdebug("PARSER: Reading symbol .. ");
+				/* If buffer is full, make it bigger */
+				if (i == length) {
+					length *= 2;
+					symbol_name = (char *) realloc(symbol_name, length + 1);
+				}
+				symbol_name[i++] = c;
+				c = getcharstr(p);
+				pdebug("PARSER:		got '%c'\n", c);
+			}
+			while (c != EOF && (isalnum(c) || c == '_' || c == '.'));
+			pdebug("PARSER: Reading SYMBOL DONE\n");
+
+			if (c != EOF)
+				ungetcstr(&(p->pos));
+			symbol_name[i] = '\0';
+
+			BaseSymbol* s = nullptr;
+			if (p->usedSymbols == UsedSymbols::Only) {
+				s = get_used_symbol(symbol_name);
+				if (s == nullptr) {
+					pdebug("PARSER ERROR: Used Symbol '%s' UNKNOWN\n", symbol_name);
+					yynerrs++;
+					return 0;
+				}
+			} else {
+				s = get_static_symbol(symbol_name);
+				if(s == nullptr) {	/* symbol unknown */
+					s = get_variable_symbol(symbol_name);
+					if (s == nullptr) {
+						pdebug("PARSER ERROR: Symbol '%s' UNKNOWN\n", symbol_name);
+						yynerrs++;
+						return 0;
+					}
+					/* old behavior: add symbol */
+					/* s = put_symbol(symbol_name, VAR); */
+				}
+
+				if (p->usedSymbols == UsedSymbols::Initialize) {
+					bool found = false;
+					for (const auto* s: used_symbols) {
+							if (s->name == symbol_name) {
+								found = true;
+								break;
+							}
+					}
+					if (!found)
+						used_symbols.push_back(s);
+				}
+			}
+			assert(s);
+
+			yylval.tptr = s;
+			return s->type;
+		}
+
+		/* else: single operator */
+		pdebug("PARSER: Found single operator '%c'\n", c);
 		return c;
 	}
 
-	if (c == '&') {
-		// Check if the next is also an &, because then it is the AND operator
-		if (getcharstr(p) == '&') {
-			return AND;
+        std::vector<std::string> get_used_symbols() {
+		std::vector<std::string> names;
+		for (const auto* s: used_symbols) {
+                        names.push_back(std::string(s->name));
 		}
-		ungetcstr(&(p->pos));
-	} else if (c == '|') {
-		if (getcharstr(p) == '|') {
-			return OR;
-		}
-		ungetcstr(&(p->pos));
-	} else if (c == '>') {
-		if (getcharstr(p) == '=') {	// >=
-			return GE;
-		}
-		ungetcstr(&(p->pos));
-	} else if (c == '<') {
-		if (getcharstr(p) == '=') {	// <=
-			return LE;
-		}
-		ungetcstr(&(p->pos));
+		return names;
 	}
-
-	pdebug("PARSER: PROCESSING character '%c'\n", c);
-
-	/* process numbers */
-	if (isdigit(c)) {
-		pdebug("PARSER: Found NUMBER (starts with digit)\n");
-                ungetcstr(&(p->pos));
-                char *s = &(p->string[p->pos]);
-
-		/* convert to double */
-		char *remain;
-#if defined(_WIN32)
-		locale_t locale = _create_locale(LC_NUMERIC, p->locale);
-		if (locale == NULL) {
-			pdebug("PARSER ERROR in newlocale(%s): %s. Trying system locale.\n", p->locale, strerror(errno));
-			locale = _create_locale(LC_NUMERIC, "");
-		}
-#else
-		locale_t locale = newlocale(LC_NUMERIC_MASK, p->locale, (locale_t)nullptr);
-		if (locale == (locale_t)nullptr) {
-			pdebug("PARSER ERROR in newlocale(%s): %s. Trying system locale.\n", p->locale, strerror(errno));
-			locale = newlocale(LC_NUMERIC_MASK, "", (locale_t)nullptr);
-			pdebug("PARSER:		Reading: '%s' with system locale\n", s);
-		} else {
-			pdebug("PARSER:		Reading: '%s' with locale %s\n", s, p->locale);
-		}
-#endif
-		double result;
-		if (locale != nullptr) {
-#if defined(__OpenBSD__) || defined(__HAIKU__)
-			result = strtod(s, &remain);
-#else
-			result = strtod_l(s, &remain, locale);
-#endif
-			freelocale(locale);
-		} else // use C locale
-			result = strtod(s, &remain);
-
-		pdebug("PARSER:		Remain: '%s'\n", remain);
-
-		/* check conversion */
-		if(strlen(s) == strlen(remain))
-			return 0;
-
-		pdebug("PARSER:		Result = %g\n", result);
-		yylval.dval = result;
-
-                p->pos += strlen(s) - strlen(remain);
-
-		return NUM;
-	}
-
-	/* process symbol */
-	if (isalpha (c) || c == '.') {
-		pdebug("PARSER: Found SYMBOL (starts with alpha)\n");
-		static char *symbol_name = nullptr;
-		static int length = 0;
-		int i = 0;
-
-		/* Initially make the buffer long enough for a 10-character symbol name */
-		if (length == 0) {
-			length = 10;
-			symbol_name = (char *) malloc(length + 1);
-		}
-
-		do {
-			pdebug("PARSER: Reading symbol .. ");
-			/* If buffer is full, make it bigger */
-			if (i == length) {
-				length *= 2;
-				symbol_name = (char *) realloc(symbol_name, length + 1);
-			}
-			symbol_name[i++] = c;
-			c = getcharstr(p);
-			pdebug("PARSER:		got '%c'\n", c);
-		}
-		while (c != EOF && (isalnum(c) || c == '_' || c == '.'));
-		pdebug("PARSER: Reading SYMBOL DONE\n");
-
-		if (c != EOF)
-			ungetcstr(&(p->pos));
-		symbol_name[i] = '\0';
-
-		symbol *s = get_symbol(symbol_name);
-		if(s == nullptr) {	/* symbol unknown */
-			pdebug("PARSER ERROR: Symbol '%s' UNKNOWN\n", symbol_name);
-			yynerrs++;
-			return 0;
-			/* old behavior: add symbol */
-			/* s = put_symbol(symbol_name, VAR); */
-		}
-
-		yylval.tptr = s;
-		return s->type;
-	}
-
-	/* else: single operator */
-	pdebug("PARSER: Found single operator '%c'\n", c);
-	return c;
-}
+} // namespace parser

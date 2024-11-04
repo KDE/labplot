@@ -2,6 +2,8 @@
 #include "backend/gsl/ExpressionParser.h"
 #include "backend/gsl/functions.h"
 
+using namespace Parser;
+
 namespace {
 func_t1 getFunction1(const QString& s) {
 	const QString functionName(s);
@@ -542,6 +544,75 @@ void ExpressionParserTest::testevaluateGreaterEqualThan() {
 	QCOMPARE(yVector.at(6), 0.);
 	QCOMPARE(yVector.at(7), 1.);
 	QCOMPARE(yVector.at(8), 1.);
+}
+
+void ExpressionParserTest::testBenchmark() {
+	const QString expr = QStringLiteral("atan2(x;y) + sqrt(x)");
+	const QStringList vars = {QStringLiteral("x"), QStringLiteral("y")};
+
+	const int values = 3000;
+
+	{
+		QVector<QVector<double>*> xVectors;
+
+		auto* x = new QVector<double>(values);
+		auto* y = new QVector<double>(values);
+		for (int i = 0; i < values; i++) {
+			if (i % 2 == 0) {
+				x->operator[](i) = 5.;
+				y->operator[](i) = 2.;
+			} else {
+				x->operator[](i) = 24.;
+				y->operator[](i) = 22.;
+			}
+		}
+
+		xVectors << x; // x
+		xVectors << y; // y
+		QVector<double> yVector(values); // random value
+		QBENCHMARK { ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector, true); }
+		QCOMPARE(QLatin1String(Parser::lastErrorMessage()), QStringLiteral(""));
+
+		QCOMPARE(yVector.size(), values);
+		for (int i = 0; i < values; i++) {
+			if (i % 2 == 0) {
+				VALUES_EQUAL(yVector.at(i), 3.42635792718232);
+			} else {
+				VALUES_EQUAL(yVector.at(i), 5.72782854435533);
+			}
+		}
+	}
+
+	{
+		QVector<QVector<double>*> xVectors;
+
+		auto* x = new QVector<double>(values);
+		auto* y = new QVector<double>(values);
+		for (int i = 0; i < values; i++) {
+			if (i % 2 == 0) {
+				x->operator[](i) = 5.;
+				y->operator[](i) = 2.;
+			} else {
+				x->operator[](i) = 24.;
+				y->operator[](i) = 22.;
+			}
+		}
+
+		xVectors << x; // x
+		xVectors << y; // y
+		QVector<double> yVector(values); // random value
+		QBENCHMARK { ExpressionParser::evaluateCartesian(expr, vars, xVectors, &yVector, false); }
+		QCOMPARE(QLatin1String(Parser::lastErrorMessage()), QStringLiteral(""));
+
+		QCOMPARE(yVector.size(), values);
+		for (int i = 0; i < values; i++) {
+			if (i % 2 == 0) {
+				VALUES_EQUAL(yVector.at(i), 3.42635792718232);
+			} else {
+				VALUES_EQUAL(yVector.at(i), 5.72782854435533);
+			}
+		}
+	}
 }
 
 // This is not implemented. It uses always the smallest rowCount

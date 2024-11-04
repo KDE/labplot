@@ -17,6 +17,7 @@ public:
 	Spreadsheet* q{nullptr};
 	StatisticsSpreadsheet* statisticsSpreadsheet{nullptr};
 	QVector<CartesianPlot*> m_usedInPlots; // plots using the columns prior to and after the import in replace mode, to be updated after the import
+	QVector<const AbstractColumn*> m_involvedColumns; // columns which changed
 };
 
 #endif // SPREADSHEET_PRIVATE

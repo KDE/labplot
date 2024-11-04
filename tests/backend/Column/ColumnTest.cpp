@@ -1467,7 +1467,7 @@ void ColumnTest::testFormularsample() {
 void ColumnTest::testFormulasMinColumnInvalid() {
 	const QVector<double> c1Vector = {1., -1., 5., 5., 3., 8., 10., -5}, c2Vector = {11., 12., 13., 14., 15., 16., 17., 18.};
 	SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)
-	COLUMN2_SET_FORMULA_AND_EVALUATE("min()", NAN) // All invalid
+	COLUMN2_SET_FORMULA_AND_EVALUATE("min()", NAN) // All invalid, because no column variable provided
 }
 
 /////////////////////////////////////////////////////

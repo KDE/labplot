@@ -50,6 +50,7 @@ private Q_SLOTS:
 	//"General"-tab
 	void lockChanged(bool);
 	void labelFontChanged(const QFont&);
+	void usePlotColorChanged(bool);
 	void labelColorChanged(const QColor&);
 	void labelOrderChanged(int);
 	void lineSymbolWidthChanged(double);
@@ -76,6 +77,7 @@ private Q_SLOTS:
 
 	// SLOTs for changes triggered in CartesianPlotLegend
 	void legendLabelFontChanged(QFont&);
+	void legendUsePlotColorChanged(bool);
 	void legendLabelColorChanged(QColor&);
 	void legendLabelOrderChanged(bool);
 	void legendLineSymbolWidthChanged(float);

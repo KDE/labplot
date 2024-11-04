@@ -201,7 +201,7 @@ bool BarPlot::hasData() const {
 	return !d->dataColumns.isEmpty();
 }
 
-bool BarPlot::usingColumn(const Column* column) const {
+bool BarPlot::usingColumn(const AbstractColumn* column, bool) const {
 	Q_D(const BarPlot);
 
 	if (d->xColumn == column)
@@ -242,12 +242,24 @@ void BarPlot::handleAspectUpdated(const QString& aspectPath, const AbstractAspec
 }
 
 QColor BarPlot::color() const {
+	return colorAt(0);
+}
+
+QColor BarPlot::colorAt(int index) const {
 	Q_D(const BarPlot);
-	if (d->backgrounds.size() > 0 && d->backgrounds.at(0)->enabled())
-		return d->backgrounds.at(0)->firstColor();
-	else if (d->borderLines.size() > 0 && d->borderLines.at(0)->style() != Qt::PenStyle::NoPen)
-		return d->borderLines.at(0)->pen().color();
-	return QColor();
+	if (index >= d->backgrounds.size())
+		return QColor();
+
+	const auto* background = d->backgrounds.at(index);
+	if (background->enabled())
+		return background->firstColor();
+	else {
+		const auto* borderLine = d->borderLines.at(index);
+		if (borderLine->style() != Qt::PenStyle::NoPen)
+			return borderLine->pen().color();
+		else
+			return QColor();
+	}
 }
 
 // values

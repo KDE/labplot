@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Private members of CartesianPlotLegend
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2013-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -17,11 +17,6 @@
 class Background;
 class CartesianPlotLegend;
 class Line;
-class XYCurve;
-
-class QBrush;
-class QGraphicsSceneContextMenuEvent;
-class QKeyEvent;
 
 class CartesianPlotLegendPrivate : public WorksheetElementPrivate {
 public:
@@ -38,6 +33,7 @@ public:
 	virtual void recalcShapeAndBoundingRect() override;
 
 	QFont labelFont;
+	bool usePlotColor{true};
 	QColor labelColor;
 	bool labelColumnMajor{true};
 	qreal lineSymbolWidth{Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)}; // the width of line+symbol
