@@ -24,7 +24,6 @@
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "backend/worksheet/plots/cartesian/Plot.h"
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 #include "frontend/spreadsheet/SpreadsheetView.h"
 
