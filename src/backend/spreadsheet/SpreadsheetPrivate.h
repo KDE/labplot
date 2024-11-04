@@ -12,6 +12,7 @@ public:
 	QString name() const;
 
 public:
+	bool suppressSetCommentFinalizeImport{false};
 	Spreadsheet::Linking linking;
 	Spreadsheet* q{nullptr};
 	StatisticsSpreadsheet* statisticsSpreadsheet{nullptr};

@@ -79,9 +79,6 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	// restore saved settings if available
 	create(); // ensure there's a window created
 
-	QApplication::processEvents(QEventLoop::AllEvents, 0);
-	m_importFileWidget->loadSettings();
-
 	KConfigGroup conf = Settings::group(QStringLiteral("ImportFileDialog"));
 	if (conf.exists()) {
 		m_showOptions = conf.readEntry("ShowOptions", false);
@@ -99,6 +96,8 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	connect(m_importFileWidget, &ImportFileWidget::hostChanged, this, &ImportFileDialog::checkOkButton);
 	connect(m_importFileWidget, &ImportFileWidget::portChanged, this, &ImportFileDialog::checkOkButton);
 	connect(m_importFileWidget, &ImportFileWidget::error, this, &ImportFileDialog::showErrorMessage);
+	connect(m_importFileWidget, &ImportFileWidget::error, this, &ImportFileDialog::disableOkButton);
+	connect(m_importFileWidget, &ImportFileWidget::previewReady, this, &ImportFileDialog::checkOkButton);
 	connect(this, &ImportDialog::dataContainerChanged, m_importFileWidget, &ImportFileWidget::dataContainerChanged);
 #ifdef HAVE_MQTT
 	connect(m_importFileWidget, &ImportFileWidget::subscriptionsChanged, this, &ImportFileDialog::checkOkButton);
@@ -107,6 +106,10 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 
 	m_showOptions ? m_optionsButton->setText(i18n("Hide Options")) : m_optionsButton->setText(i18n("Show Options"));
 	connect(m_optionsButton, &QPushButton::clicked, this, &ImportFileDialog::toggleOptions);
+
+	// Must be after connect, to send an error message if loading failed
+	QApplication::processEvents(QEventLoop::AllEvents, 0);
+	m_importFileWidget->loadSettings();
 
 	ImportFileDialog::checkOkButton();
 }
@@ -369,6 +372,10 @@ void ImportFileDialog::enableImportToMatrix(const bool enable) {
 	}
 }
 
+void ImportFileDialog::disableOkButton() {
+	okButton->setEnabled(false);
+}
+
 void ImportFileDialog::checkOkButton() {
 	DEBUG(Q_FUNC_INFO);
 	if (cbAddTo) { // only check for the target container when no file data source is being added
@@ -387,12 +394,29 @@ void ImportFileDialog::checkOkButton() {
 		}
 	}
 
-	QString fileName = ImportFileWidget::absolutePath(m_importFileWidget->fileName());
-	if (fileName.isEmpty())
-		return;
+	//m_importFileWidget->isValid()
 
-	DEBUG(Q_FUNC_INFO << ", Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, m_importFileWidget->currentSourceType()));
-	switch (m_importFileWidget->currentSourceType()) {
+	QString fileName = ImportFileWidget::absolutePath(m_importFileWidget->fileName());
+	const auto sourceType = m_importFileWidget->currentSourceType();
+	switch (sourceType) {
+		case LiveDataSource::SourceType::FileOrPipe: // fall through
+		case LiveDataSource::SourceType::LocalSocket: {
+			if (fileName.isEmpty()) {
+				okButton->setEnabled(false);
+				okButton->setToolTip(i18n("No file provided for import."));
+				return;
+			}
+			break;
+		}
+		case LiveDataSource::SourceType::NetworkTCPSocket: // fall through
+		case LiveDataSource::SourceType::NetworkUDPSocket: // fall through
+		case LiveDataSource::SourceType::SerialPort: // fall through
+		case LiveDataSource::SourceType::MQTT: // fall through
+			break;
+	}
+
+	DEBUG(Q_FUNC_INFO << ", Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, sourceType));
+	switch (sourceType) {
 	case LiveDataSource::SourceType::FileOrPipe: {
 		DEBUG(Q_FUNC_INFO << ", fileName = " << qPrintable(fileName));
 		const bool enable = QFile::exists(fileName);

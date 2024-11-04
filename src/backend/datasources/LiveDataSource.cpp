@@ -50,6 +50,7 @@ LiveDataSource::LiveDataSource(const QString& name, bool loading)
 	: Spreadsheet(name, loading, AspectType::LiveDataSource)
 	, m_updateTimer(new QTimer(this))
 	, m_watchTimer(new QTimer(this)) {
+	setSuppressSetCommentFinalizeImport(true);
 	m_watchTimer->setSingleShot(true);
 	m_watchTimer->setInterval(100); // maximum read frequency is 1/100ms = 10Hz
 
@@ -69,17 +70,19 @@ LiveDataSource::~LiveDataSource() {
 
 	delete m_filter;
 	delete m_fileSystemWatcher;
-	delete m_localSocket;
-	delete m_tcpSocket;
-#ifdef HAVE_QTSERIALPORT
-	delete m_serialPort;
-#endif
+	// Deleting m_device is enough!
+	// 	delete m_localSocket;
+	// 	delete m_tcpSocket;
+	// #ifdef HAVE_QTSERIALPORT
+	// 	delete m_serialPort;
+	// #endif
 	delete m_device;
 }
 
 QWidget* LiveDataSource::view() const {
 	if (!m_partView) {
 		m_view = new SpreadsheetView(const_cast<LiveDataSource*>(this), true);
+		m_view->setSuppressResizeHeader(true);
 		m_partView = m_view;
 	}
 	return m_partView;
@@ -187,6 +190,9 @@ AbstractFileFilter::FileType LiveDataSource::fileType() const {
 
 void LiveDataSource::setFilter(AbstractFileFilter* f) {
 	delete m_filter;
+	auto* asciiFilter = dynamic_cast<AsciiFilter*>(f);
+	if (asciiFilter)
+		asciiFilter->setDataSource(this);
 	m_filter = f;
 }
 
@@ -467,6 +473,8 @@ void LiveDataSource::read() {
 	if (m_reading)
 		return;
 
+	static bool firstRead = true;
+
 	m_reading = true;
 
 	// initialize the device (file, socket, serial port) when calling this function for the first time
@@ -520,7 +528,7 @@ void LiveDataSource::read() {
 			DEBUG("	Serial: " << STDSTRING(m_serialPortName) << ", " << m_baudRate);
 			m_serialPort->setBaudRate(m_baudRate);
 			m_serialPort->setPortName(m_serialPortName);
-			m_serialPort->open(QIODevice::ReadOnly);
+			// m_serialPort->open(QIODevice::ReadOnly); // Not required
 
 			// only connect to readyRead when update is on new data
 			if (m_updateType == UpdateType::NewData)
@@ -540,11 +548,17 @@ void LiveDataSource::read() {
 		switch (m_fileType) {
 		case AbstractFileFilter::FileType::Ascii:
 			if (m_readingType == LiveDataSource::ReadingType::WholeFile) {
-				static_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_device, this, 0);
+				static_cast<AsciiFilter*>(m_filter)
+					->readFromDevice(*m_device, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Replace, 0, -1, 0);
 			} else {
-				qint64 bytes = static_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_device, this, m_bytesRead);
+				qint64 bytes = static_cast<AsciiFilter*>(m_filter)->readFromDevice(*m_device,
+																				   AbstractFileFilter::ImportMode::Replace,
+																				   AbstractFileFilter::ImportMode::Append,
+																				   m_bytesRead,
+																				   sampleSize(),
+																				   m_keepNValues);
 				m_bytesRead += bytes;
-				DEBUG("Read " << bytes << " bytes, in total: " << m_bytesRead);
+				// DEBUG("Read " << bytes << " bytes, in total: " << m_bytesRead);
 			}
 			break;
 		case AbstractFileFilter::FileType::Binary:
@@ -582,7 +596,8 @@ void LiveDataSource::read() {
 
 		// reading data here
 		if (m_fileType == AbstractFileFilter::FileType::Ascii)
-			static_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
+			static_cast<AsciiFilter*>(m_filter)
+				->readFromDevice(*m_device, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, 0, sampleSize(), m_keepNValues);
 		break;
 	case SourceType::LocalSocket:
 		DEBUG("	Reading from local socket. state before abort = " << m_localSocket->state());
@@ -593,49 +608,31 @@ void LiveDataSource::read() {
 			m_localSocket->waitForReadyRead();
 		DEBUG("	Reading from local socket. state after reconnect = " << m_localSocket->state());
 		break;
-	case SourceType::SerialPort:
+	case SourceType::SerialPort: {
 		DEBUG("	Reading from serial port");
 #ifdef HAVE_QTSERIALPORT
-
 		// reading data here
-		if (m_fileType == AbstractFileFilter::FileType::Ascii)
-			static_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
+		if (m_fileType == AbstractFileFilter::FileType::Ascii) {
+			if (firstRead)
+				static_cast<AsciiFilter*>(m_filter)->clearLastError();
+			static_cast<AsciiFilter*>(m_filter)->readFromDevice(*m_device,
+																AbstractFileFilter::ImportMode::Replace,
+																AbstractFileFilter::ImportMode::Append,
+																0,
+																sampleSize(),
+																m_keepNValues,
+																firstRead);
+			if (static_cast<AsciiFilter*>(m_filter)->lastError().isEmpty())
+				firstRead = false;
+		}
 #endif
 		break;
+	}
 	case SourceType::MQTT:
 		break;
 	}
 
-	finalizeRead();
-
 	m_reading = false;
-}
-
-/*!
- * notify all affected columns and plots about the changes.
- * this is simililar to \sa Spreadsheet::finalizeImport().
- */
-void LiveDataSource::finalizeRead() {
-	PERFTRACE(QLatin1String("AsciiLiveDataImport, notify affected columns and plots"));
-
-	// determine the dependent plots
-	QVector<CartesianPlot*> plots;
-	const auto& columns = children<Column>();
-	for (auto* column : columns)
-		column->addUsedInPlots(plots);
-
-	// suppress retransform in the dependent plots
-	for (auto* plot : plots)
-		plot->setSuppressRetransform(true);
-
-	for (auto* column : columns)
-		column->setChanged();
-
-	// retransform the dependent plots
-	for (auto* plot : plots) {
-		plot->setSuppressRetransform(false);
-		plot->dataChanged(-1, -1); // TODO: check if all ranges must be updated!
-	}
 }
 
 /*!
@@ -647,8 +644,8 @@ void LiveDataSource::readyRead() {
 	DEBUG(Q_FUNC_INFO << ", update type = " << ENUM_TO_STRING(LiveDataSource, UpdateType, m_updateType));
 	DEBUG("	REMAINING TIME = " << m_updateTimer->remainingTime());
 
-	if (m_fileType == AbstractFileFilter::FileType::Ascii)
-		static_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
+	// if (m_fileType == AbstractFileFilter::FileType::Ascii)
+	// 	static_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this); // TODO: turn on again
 
 	// TODO: not implemented yet
 	//	else if (m_fileType == AbstractFileFilter::FileType::Binary)
@@ -717,7 +714,7 @@ QString LiveDataSource::serialPortErrorEnumToString(QSerialPort::SerialPortError
 		msg = i18n("Device already opened.");
 		break;
 	case QSerialPort::NotOpenError:
-		msg = i18n("Device is not opened.");
+		msg = i18n("Device is not open.");
 		break;
 	case QSerialPort::ReadError:
 		msg = i18n("Failed to read data.");
@@ -741,7 +738,8 @@ QString LiveDataSource::serialPortErrorEnumToString(QSerialPort::SerialPortError
 }
 
 void LiveDataSource::serialPortError(QSerialPort::SerialPortError error) {
-	QMessageBox::critical(nullptr, i18n("Serial Port Error"), serialPortErrorEnumToString(error, m_serialPort->errorString()));
+	if (error != QSerialPort::SerialPortError::NoError)
+		QMessageBox::critical(nullptr, i18n("Serial Port Error"), serialPortErrorEnumToString(error, m_serialPort->errorString()));
 }
 #endif
 

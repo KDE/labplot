@@ -212,7 +212,11 @@ QList<AspectType> TreeViewComboBox::plotColumnTopLevelClasses() {
 			AspectType::CartesianPlot,
 			AspectType::XYFitCurve,
 			AspectType::XYSmoothCurve,
-			AspectType::Notebook};
+			AspectType::Notebook,
+			AspectType::MQTTClient, // All three must be listed, because they are parents of the column
+			AspectType::MQTTSubscription,
+			AspectType::MQTTTopic,
+			};
 }
 
 /*!

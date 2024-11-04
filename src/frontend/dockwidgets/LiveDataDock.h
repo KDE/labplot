@@ -36,6 +36,8 @@ private:
 
 	void pauseReading();
 	void continueReading();
+	void updatePlayPauseButtonText(bool pause);
+	void enableProperties(bool pause);
 
 private Q_SLOTS:
 	void updateTypeChanged(int);

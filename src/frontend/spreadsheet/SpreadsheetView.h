@@ -53,6 +53,7 @@ public:
 
 	void resizeHeader();
 	void setFocus();
+	void setSuppressResizeHeader(bool);
 
 	void showComments(bool on = true);
 	bool areCommentsShown() const;
@@ -120,6 +121,7 @@ private:
 #endif
 	bool m_suppressSelectionChangedEvent{false};
 	bool m_readOnly;
+	bool m_suppressResizeHeader{false};
 	bool eventFilter(QObject*, QEvent*) override;
 	void checkSpreadsheetMenu();
 	void checkSpreadsheetSelectionMenu();

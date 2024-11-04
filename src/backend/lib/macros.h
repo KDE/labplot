@@ -37,6 +37,27 @@ private:
 	bool& variable;
 };
 
+/*
+ * Cleanup class which can be used to automatically cleaning up after desctruction using a lambda
+ * Example:
+ *    CleanupNoArguments cleanup([](){
+ *        // Cleanup code
+ *	  })
+ */
+template<typename T>
+class CleanupNoArguments {
+public:
+	CleanupNoArguments(T cleanupFunction)
+		: m_cleanupFunction(cleanupFunction) {
+	}
+	~CleanupNoArguments() {
+		m_cleanupFunction();
+	}
+
+private:
+	T m_cleanupFunction;
+};
+
 /*!
  * Used for example for connections with NumberSpinbox because those are using
  * a feedback and so breaking the connection dock -> element -> dock is not desired
@@ -52,6 +73,13 @@ private:
 #define CONDITIONAL_LOCK_RETURN                                                                                                                                \
 	CONDITIONAL_RETURN_NO_LOCK                                                                                                                                 \
 	const Lock lock(m_initializing);
+
+// Automatically reset cursor when going out of scope
+#define WAIT_CURSOR_AUTO_RESET                                                                                                                                 \
+	WAIT_CURSOR;                                                                                                                                               \
+	CleanupNoArguments cleanup([]() {                                                                                                                          \
+		RESET_CURSOR;                                                                                                                                          \
+	});
 
 #define WAIT_CURSOR QApplication::setOverrideCursor(QCursor(Qt::WaitCursor))
 #define RESET_CURSOR QApplication::restoreOverrideCursor()

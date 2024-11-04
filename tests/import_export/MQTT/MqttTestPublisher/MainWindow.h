@@ -7,15 +7,13 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef MQTT_TEST_H
-#define MQTT_TEST_H
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
+#include <BrownianMotionMqttClient.h>
 #include <QMainWindow>
-#include <QMqttClient>
-#include <QMqttTopicName>
 #include <QTimer>
 #include <QVector>
-#include <random>
 
 namespace Ui {
 class MainWindow;
@@ -25,7 +23,7 @@ class MainWindow : public QMainWindow {
 	Q_OBJECT
 
 public:
-	explicit MainWindow(QWidget* parent = 0);
+	explicit MainWindow(int interval = 1000, QWidget* parent = nullptr);
 	~MainWindow();
 
 public Q_SLOTS:
@@ -36,30 +34,15 @@ private Q_SLOTS:
 	void on_buttonQuit_clicked();
 	void brokerDisconnected();
 	void on_buttonSubscribe_clicked();
-	void onTimeout();
+	void publish();
 	void intervalChanged(const QString&);
 	void onConnect();
 
 private:
+	std::unique_ptr<BrownianMotionMqttClient> m_client;
 	Ui::MainWindow* ui;
-	QMqttClient* m_client;
 	bool m_run;
-	QMqttTopicName* m_brownianX;
-	quint8 m_qos;
 	QTimer* m_timer;
-	unsigned int m_seed;
-	std::default_random_engine* m_generator;
-	std::normal_distribution<double>* m_distribution;
-	double m_delta;
-	double m_dt;
-	int m_pathes;
-	int m_iters;
-	int m_iterCount;
-	int m_itersTotal;
-	int m_interval;
-
-	QVector<QMqttTopicName*> m_brownianTopics;
-	QVector<double> m_x;
 };
 
-#endif // MQTT_TEST_H
+#endif // MAINWINDOW_H

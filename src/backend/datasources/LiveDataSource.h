@@ -153,8 +153,8 @@ private:
 	bool m_reading{false};
 	bool m_pending{false};
 
-	int m_sampleSize{1};
-	int m_keepNValues{0}; // number of values to keep (0 - all)
+	int m_sampleSize{1000}; // Samples to read during a simple read trigger
+	int m_keepNValues{0}; // number of values to keep (0 -> all)
 	int m_updateInterval{1000};
 	quint16 m_port{1027};
 	int m_baudRate{9600};
@@ -175,8 +175,6 @@ private:
 #endif
 	QIODevice* m_device{nullptr};
 	QAction* m_plotDataAction{nullptr};
-
-	void finalizeRead();
 
 public Q_SLOTS:
 	void read();

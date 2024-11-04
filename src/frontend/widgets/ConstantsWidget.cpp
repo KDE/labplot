@@ -25,8 +25,8 @@ ConstantsWidget::ConstantsWidget(QWidget* parent)
 	ui.bCancel->setIcon(QIcon::fromTheme(QStringLiteral("dialog-cancel")));
 	m_expressionParser = ExpressionParser::getInstance();
 
-	for (int i = 0; i < (int)ConstantGroups::END; i++)
-		ui.cbGroup->addItem(constantGroupsToString(static_cast<ConstantGroups>(i)), i);
+	for (int i = 0; i < (int)Parser::ConstantGroups::END; i++)
+		ui.cbGroup->addItem(Parser::constantGroupsToString(static_cast<Parser::ConstantGroups>(i)), i);
 
 	// SLOTS
 	connect(ui.leFilter, &QLineEdit::textChanged, this, &ConstantsWidget::filterChanged);
@@ -67,9 +67,9 @@ ConstantsWidget::ConstantsWidget(QWidget* parent)
 void ConstantsWidget::groupChanged(int index) {
 	static const QStringList& constants = m_expressionParser->constants();
 	static const QStringList& names = m_expressionParser->constantsNames();
-	static const QVector<ConstantGroups>& indices = m_expressionParser->constantsGroupIndices();
+	static const QVector<Parser::ConstantGroups>& indices = m_expressionParser->constantsGroupIndices();
 
-	const auto group = static_cast<ConstantGroups>(ui.cbGroup->itemData(index).toInt());
+	const auto group = static_cast<Parser::ConstantGroups>(ui.cbGroup->itemData(index).toInt());
 
 	ui.lwConstants->clear();
 	for (int i = 0; i < names.size(); ++i) {

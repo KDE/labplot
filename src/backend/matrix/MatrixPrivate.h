@@ -29,8 +29,8 @@ public:
 	// get value of cell at row/col (must be defined in header)
 	template<typename T>
 	T cell(int row, int col) const {
-		Q_ASSERT(row >= 0 && row < rowCount);
-		Q_ASSERT(col >= 0 && col < columnCount);
+		Q_ASSERT(row >= 0 && row < rowCount());
+		Q_ASSERT(col >= 0 && col < columnCount());
 
 		return (static_cast<QVector<QVector<T>>*>(data))->at(col).at(row);
 	}
@@ -38,8 +38,8 @@ public:
 	// Set value of cell at row/col (must be defined in header)
 	template<typename T>
 	void setCell(int row, int col, T value) {
-		Q_ASSERT(row >= 0 && row < rowCount);
-		Q_ASSERT(col >= 0 && col < columnCount);
+		Q_ASSERT(row >= 0 && row < rowCount());
+		Q_ASSERT(col >= 0 && col < columnCount());
 
 		static_cast<QVector<QVector<T>>*>(data)->operator[](col)[row] = value;
 
@@ -49,10 +49,11 @@ public:
 	// get column cells (must be defined in header)
 	template<typename T>
 	QVector<T> columnCells(int col, int first_row, int last_row) const {
-		Q_ASSERT(first_row >= 0 && first_row < rowCount);
-		Q_ASSERT(last_row >= 0 && last_row < rowCount);
+		const auto currRowCount = rowCount();
+		Q_ASSERT(first_row >= 0 && first_row < currRowCount);
+		Q_ASSERT(last_row >= 0 && last_row < currRowCount);
 
-		if (first_row == 0 && last_row == rowCount - 1)
+		if (first_row == 0 && last_row == currRowCount - 1)
 			return (static_cast<QVector<QVector<T>>*>(data))->at(col);
 
 		QVector<T> result;
@@ -63,13 +64,14 @@ public:
 	// set column cells (must be defined in header)
 	template<typename T>
 	void setColumnCells(int col, int first_row, int last_row, const QVector<T>& values) {
-		Q_ASSERT(first_row >= 0 && first_row < rowCount);
-		Q_ASSERT(last_row >= 0 && last_row < rowCount);
+		const auto currRowCount = rowCount();
+		Q_ASSERT(first_row >= 0 && first_row < currRowCount);
+		Q_ASSERT(last_row >= 0 && last_row < currRowCount);
 		Q_ASSERT(values.count() > last_row - first_row);
 
-		if (first_row == 0 && last_row == rowCount - 1) {
+		if (first_row == 0 && last_row == currRowCount - 1) {
 			static_cast<QVector<QVector<T>>*>(data)->operator[](col) = values;
-			static_cast<QVector<QVector<T>>*>(data)->operator[](col).resize(rowCount); // values may be larger
+			static_cast<QVector<QVector<T>>*>(data)->operator[](col).resize(currRowCount); // values may be larger
 			if (!suppressDataChange)
 				Q_EMIT q->dataChanged(first_row, col, last_row, col);
 			return;
@@ -84,8 +86,8 @@ public:
 	// get row cells (must be defined in header)
 	template<typename T>
 	QVector<T> rowCells(int row, int first_column, int last_column) const {
-		Q_ASSERT(first_column >= 0 && first_column < columnCount);
-		Q_ASSERT(last_column >= 0 && last_column < columnCount);
+		Q_ASSERT(first_column >= 0 && first_column < columnCount());
+		Q_ASSERT(last_column >= 0 && last_column < columnCount());
 
 		QVector<T> result;
 		for (int i = first_column; i <= last_column; i++)
@@ -95,8 +97,8 @@ public:
 	// set row cells (must be defined in header)
 	template<typename T>
 	void setRowCells(int row, int first_column, int last_column, const QVector<T>& values) {
-		Q_ASSERT(first_column >= 0 && first_column < columnCount);
-		Q_ASSERT(last_column >= 0 && last_column < columnCount);
+		Q_ASSERT(first_column >= 0 && first_column < columnCount());
+		Q_ASSERT(last_column >= 0 && last_column < columnCount());
 		Q_ASSERT(values.count() > last_column - first_column);
 
 		for (int i = first_column; i <= last_column; i++)
@@ -120,6 +122,8 @@ public:
 		return columnWidths.at(col);
 	}
 
+	int rowCount() const;
+	int columnCount() const;
 	void updateViewHeader();
 	void emitDataChanged(int top, int left, int bottom, int right) {
 		Q_EMIT q->dataChanged(top, left, bottom, right);
@@ -129,8 +133,6 @@ public:
 	void* data;
 	AbstractColumn::ColumnMode mode; // mode (data type) of values
 
-	int rowCount;
-	int columnCount;
 	QVector<int> rowHeights; //!< Row widths
 	QVector<int> columnWidths; //!< Columns widths
 	Matrix::HeaderFormat headerFormat{Matrix::HeaderFormat::HeaderRowsColumns};

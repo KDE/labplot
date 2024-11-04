@@ -10,6 +10,9 @@ New features:
 		* improve error messages for data import
 		* fix preview of data with header
 		* Ask how to treat multilayer graphs when opening OPJ project
+		* Improved error message handling
+		* Improved livedata import
+		* Add possibility to specify custom column datatypes (mandatory for livedata)
 	* [analysis]
 		* Add possibility to do calculations on curves
 		* Automatically recalculate analysis curves on data change
@@ -23,6 +26,10 @@ New features:
 			* Run Chart
 		* more space for plots and less "ink" - no layout spacings, no minor grid lines, not plot borders, no ticks on secondary axes on default
 		* allow to provide names for plot ranges for easier lookup and assignemnt in the plot elements
+		* new option to use plot's main color (line, symbol, etc.) for the color of the name text shown in the legend
+
+Performance improvements:
+	* Made big spreadsheet (millions of cells) more responsive when selecting columns via the spreadsheet header
 
 Bug fixes:
 	* Fix crash selecting "cell" from function list in function dialog
@@ -30,6 +37,7 @@ Bug fixes:
 	* Show Ticks on inverted axes (BUG 491502 & 492475)
 	* Fixed add/subtract value functionality in Matrix (BUG 493523)
 	* Fixed wrong font size in the plot legend (BUG 493017)
+	* Fixed wrong font size in the axis title (BUG 472982)
 
 Internal:
 	* use name LabPlot/labplot consistenly (renamed LabPlot2/labplot2)

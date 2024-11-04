@@ -14,6 +14,8 @@
 #include <QString>
 #include <functional>
 
+namespace Parser {
+
 enum class ConstantGroups;
 
 struct cons {
@@ -51,5 +53,7 @@ enum class ConstantGroups : int {
 };
 
 QString constantGroupsToString(ConstantGroups group);
+
+} // namespace Parser
 
 #endif /* CONSTANTS_H */
