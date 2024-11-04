@@ -518,13 +518,6 @@ void XYAnalysisCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDat
 	}
 }
 
-QVector<const AbstractColumn*> XYAnalysisCurvePrivate::dataColumns() const {
-	const AbstractColumn* x;
-	const AbstractColumn* y;
-	prepareTmpDataColumn(&x, &y);
-	return {x, y};
-}
-
 void XYAnalysisCurvePrivate::recalculate() {
 	// create filter result columns if not available yet, clear them otherwise
 	if (!xColumn) {
