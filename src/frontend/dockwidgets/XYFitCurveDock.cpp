@@ -505,7 +505,6 @@ void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	// update model limits depending on number of points
 	modelTypeChanged(uiGeneralTab.cbModel->currentIndex());
 
-	cbXDataColumn->useCurrentIndexText(true);
 	cbXDataColumn->setInvalid(false);
 }
 
@@ -526,7 +525,6 @@ void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	enableRecalculate(); // update preview
 	showFitResult(); // show result of preview
 
-	cbYDataColumn->useCurrentIndexText(true);
 	cbYDataColumn->setInvalid(false);
 }
 
@@ -539,7 +537,6 @@ void XYFitCurveDock::xErrorColumnChanged(const QModelIndex& index) {
 	for (auto* curve : m_curvesList)
 		static_cast<XYFitCurve*>(curve)->setXErrorColumn(column);
 
-	cbXErrorColumn->useCurrentIndexText(true);
 	cbXErrorColumn->setInvalid(false);
 }
 
@@ -552,7 +549,6 @@ void XYFitCurveDock::yErrorColumnChanged(const QModelIndex& index) {
 	for (auto* curve : m_curvesList)
 		static_cast<XYFitCurve*>(curve)->setYErrorColumn(column);
 
-	cbYErrorColumn->useCurrentIndexText(true);
 	cbYErrorColumn->setInvalid(false);
 }
 
@@ -1270,14 +1266,10 @@ void XYFitCurveDock::enableRecalculate() {
 		auto* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		auto* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectX && aspectY);
-		if (aspectX) {
-			cbXDataColumn->useCurrentIndexText(true);
+		if (aspectX)
 			cbXDataColumn->setInvalid(false);
-		}
-		if (aspectY) {
-			cbYDataColumn->useCurrentIndexText(true);
+		if (aspectY)
 			cbYDataColumn->setInvalid(false);
-		}
 		break;
 	}
 	case XYAnalysisCurve::DataSourceType::Curve:

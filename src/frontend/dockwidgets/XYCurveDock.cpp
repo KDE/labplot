@@ -176,11 +176,9 @@ void XYCurveDock::setupGeneral() {
 	auto* gridLayout = qobject_cast<QGridLayout*>(generalTab->layout());
 
 	cbXColumn = new TreeViewComboBox(generalTab);
-	cbXColumn->useCurrentIndexText(false);
 	gridLayout->addWidget(cbXColumn, 4, 2, 1, 1);
 
 	cbYColumn = new TreeViewComboBox(generalTab);
-	cbYColumn->useCurrentIndexText(false);
 	gridLayout->addWidget(cbYColumn, 5, 2, 1, 1);
 
 	// General

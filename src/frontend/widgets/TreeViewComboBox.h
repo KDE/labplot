@@ -42,8 +42,6 @@ public:
 	void hidePopup() override;
 	void setInvalid(bool invalid, const QString& tooltip = QString());
 
-	void useCurrentIndexText(const bool set);
-
 	QString currentText() const;
 	void setText(const QString& text);
 
@@ -54,8 +52,7 @@ private:
 	QTreeView* m_treeView;
 	QGroupBox* m_groupBox;
 	QLineEdit* m_lineEdit;
-	QString m_lineEditText{QLatin1String("")};
-	bool m_useCurrentIndexText{true};
+	QString m_currentText{QLatin1String("")};
 
 	QList<AspectType> m_topLevelClasses;
 	QList<const char*> m_selectableClasses;
