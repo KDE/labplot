@@ -325,13 +325,13 @@ QStringList ExpressionParser::getParameter(const QString& expr, const QStringLis
  * Evaluate cartesian expression returning true on success and false if parsing fails
  * using given range
  */
-bool ExpressionParser::evaluateCartesian(const QString& expr,
-										 const Range<double> range,
-										 int count,
-										 QVector<double>* xVector,
-										 QVector<double>* yVector,
-										 const QStringList& paramNames,
-										 const QVector<double>& paramValues) {
+bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
+											const Range<double> range,
+											int count,
+											QVector<double>* xVector,
+											QVector<double>* yVector,
+											const QStringList& paramNames,
+											const QVector<double>& paramValues) {
 	DEBUG(Q_FUNC_INFO << ", v0: range = " << range.toStdString())
 	const double step = range.stepSize(count);
 	DEBUG(Q_FUNC_INFO << ", range = " << range.toStdString() << ", step = " << step)
@@ -364,26 +364,26 @@ bool ExpressionParser::evaluateCartesian(const QString& expr,
  * Evaluate cartesian expression returning true on success and false if parsing fails
  * min and max are localized strings which are parsed to support expressions like "pi + 1.5"
  */
-bool ExpressionParser::evaluateCartesian(const QString& expr,
-										 const QString& min,
-										 const QString& max,
-										 int count,
-										 QVector<double>* xVector,
-										 QVector<double>* yVector,
-										 const QStringList& paramNames,
-										 const QVector<double>& paramValues) {
+bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
+											const QString& min,
+											const QString& max,
+											int count,
+											QVector<double>* xVector,
+											QVector<double>* yVector,
+											const QStringList& paramNames,
+											const QVector<double>& paramValues) {
 	DEBUG(Q_FUNC_INFO << ", v1: range = " << STDSTRING(min) << " .. " << STDSTRING(max))
 
 	const Range<double> range{min, max};
-	return evaluateCartesian(expr, range, count, xVector, yVector, paramNames, paramValues);
+	return tryEvaluateCartesian(expr, range, count, xVector, yVector, paramNames, paramValues);
 }
 
-bool ExpressionParser::evaluateCartesian(const QString& expr,
-										 const QString& min,
-										 const QString& max,
-										 int count,
-										 QVector<double>* xVector,
-										 QVector<double>* yVector) {
+bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
+											const QString& min,
+											const QString& max,
+											int count,
+											QVector<double>* xVector,
+											QVector<double>* yVector) {
 	DEBUG(Q_FUNC_INFO << ", v2")
 	gsl_set_error_handler_off();
 
@@ -413,7 +413,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr,
 	return true;
 }
 
-bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* xVector, QVector<double>* yVector) {
+bool ExpressionParser::tryEvaluateCartesian(const QString& expr, QVector<double>* xVector, QVector<double>* yVector) {
 	DEBUG(Q_FUNC_INFO << ", v3")
 	gsl_set_error_handler_off();
 
@@ -435,11 +435,11 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 	return true;
 }
 
-bool ExpressionParser::evaluateCartesian(const QString& expr,
-										 const QVector<double>* xVector,
-										 QVector<double>* yVector,
-										 const QStringList& paramNames,
-										 const QVector<double>& paramValues) {
+bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
+											const QVector<double>* xVector,
+											QVector<double>* yVector,
+											const QStringList& paramNames,
+											const QVector<double>& paramValues) {
 	DEBUG(Q_FUNC_INFO << ", v4")
 	gsl_set_error_handler_off();
 
@@ -644,11 +644,11 @@ void ExpressionParser::setSpecialFunction2(const char* function_name, func_t2Pay
 	Variable names (x_1, x_2, ...) are stored in \c vars.
 	Data is stored in \c xVectors.
  */
-bool ExpressionParser::evaluateCartesian(const QString& expr,
-										 const QStringList& vars,
-										 const QVector<QVector<double>*>& xVectors,
-										 QVector<double>* yVector,
-										 bool perforanceOptimization) {
+bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
+											const QStringList& vars,
+											const QVector<QVector<double>*>& xVectors,
+											QVector<double>* yVector,
+											bool perforanceOptimization) {
 #if PERFTRACE_EXPRESSION_PARSER
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 #endif
@@ -727,12 +727,12 @@ bool ExpressionParser::evaluateCartesian(const QString& expr,
 	return true;
 }
 
-bool ExpressionParser::evaluatePolar(const QString& expr,
-									 const QString& min,
-									 const QString& max,
-									 int count,
-									 QVector<double>* xVector,
-									 QVector<double>* yVector) {
+bool ExpressionParser::tryEvaluatePolar(const QString& expr,
+										const QString& min,
+										const QString& max,
+										int count,
+										QVector<double>* xVector,
+										QVector<double>* yVector) {
 	gsl_set_error_handler_off();
 
 	const Range<double> range{min, max};
@@ -759,13 +759,13 @@ bool ExpressionParser::evaluatePolar(const QString& expr,
 	return true;
 }
 
-bool ExpressionParser::evaluateParametric(const QString& xexpr,
-										  const QString& yexpr,
-										  const QString& min,
-										  const QString& max,
-										  int count,
-										  QVector<double>* xVector,
-										  QVector<double>* yVector) {
+bool ExpressionParser::tryEvaluateParametric(const QString& xexpr,
+											 const QString& yexpr,
+											 const QString& min,
+											 const QString& max,
+											 int count,
+											 QVector<double>* xVector,
+											 QVector<double>* yVector) {
 	gsl_set_error_handler_off();
 
 	const Range<double> range{min, max};

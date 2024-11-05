@@ -2352,7 +2352,9 @@ void ColumnPrivate::updateFormula() {
 		parser->setSpecialFunction2(Parser::colfun_quantile, columnQuantile, payload);
 
 		QDEBUG(Q_FUNC_INFO << ", Calling evaluateCartesian(). formula: " << m_formula << ", var names: " << formulaVariableNames)
-		parser->evaluateCartesian(m_formula, formulaVariableNames, xVectors, &new_data);
+		bool valid = parser->tryEvaluateCartesian(m_formula, formulaVariableNames, xVectors, &new_data);
+		if (!valid)
+			DEBUG(Q_FUNC_INFO << ", Failed parsing formula!")
 		DEBUG(Q_FUNC_INFO << ", Calling replaceValues()")
 		replaceValues(-1, new_data);
 

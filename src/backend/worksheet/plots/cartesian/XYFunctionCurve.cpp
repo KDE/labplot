@@ -391,7 +391,9 @@ bool XYFunctionCurvePrivate::recalculateSpecific(const AbstractColumn*, const Ab
 
 		// evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.
 		auto* parser = ExpressionParser::getInstance();
-		parser->evaluateCartesian(m_function, functionVariableNames, xVectors, yVector);
+		bool valid = parser->tryEvaluateCartesian(m_function, functionVariableNames, xVectors, yVector);
+		if (!valid)
+			DEBUG(Q_FUNC_INFO << ", WARNING: failed parsing function!")
 	}
 	m_result.available = true;
 	m_result.valid = valid;
