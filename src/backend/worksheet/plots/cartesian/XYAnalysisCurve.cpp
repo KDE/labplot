@@ -65,6 +65,7 @@ QVector<const Plot*> XYAnalysisCurve::dependingPlots() const {
 	case DataSourceType::Curve: {
 		if (d->dataSourceCurve)
 			return {d->dataSourceCurve};
+		return {};
 	}
 	case DataSourceType::Spreadsheet:
 		return {};

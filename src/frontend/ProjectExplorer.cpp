@@ -553,7 +553,7 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect) {
 		return;
 
 	// don't do anything if hidden aspects were added
-	if (aspect->hidden())
+	if (aspect->isHidden())
 		return;
 
 	// don't do anything for newly added data spreadsheets of data picker curves

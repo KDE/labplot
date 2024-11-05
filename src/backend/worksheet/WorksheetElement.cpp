@@ -317,7 +317,7 @@ void WorksheetElement::prepareDrawingOrderMenu() {
 	m_moveBehindMenu->clear();
 	for (int i = 0; i < index; ++i) {
 		const auto* elem = children.at(i);
-		if (elem->hidden())
+		if (elem->isHidden())
 			continue;
 		// axes and legends are always drawn on top of other elements, don't add them to the menu
 		if (elem->type() != AspectType::Axis && elem->type() != AspectType::CartesianPlotLegend) {
@@ -330,7 +330,7 @@ void WorksheetElement::prepareDrawingOrderMenu() {
 	m_moveInFrontOfMenu->clear();
 	for (int i = index + 1; i < children.size(); ++i) {
 		const auto* elem = children.at(i);
-		if (elem->hidden())
+		if (elem->isHidden())
 			continue;
 		// axes and legends are always drawn on top of other elements, don't add them to the menu
 		if (elem->type() != AspectType::Axis && elem->type() != AspectType::CartesianPlotLegend) {
@@ -1085,7 +1085,7 @@ void WorksheetElementPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* e
 	// don't show any context menu if the element is hidden which is the case
 	// for example for axis and plot title labels. For such objects the context menu
 	// of their parents, i.e. of axis and plot, is used.
-	if (!q->hidden()) {
+	if (!q->isHidden()) {
 		auto* menu = q->createContextMenu();
 		if (menu)
 			menu->exec(event->screenPos());

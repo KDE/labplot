@@ -336,7 +336,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 		child->graphicsItem()->setZValue(zVal++);
 
 	// if a theme was selected in the worksheet, apply this theme for newly added children
-	if (!d->theme.isEmpty() && !isLoading() && !pasted() && !aspect->pasted()) {
+	if (!d->theme.isEmpty() && !isLoading() && !isPasted() && !aspect->isPasted()) {
 		KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
 		const_cast<WorksheetElement*>(addedElement)->loadThemeConfig(config);
 	}

@@ -2317,7 +2317,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			WorksheetElementContainer::retransform();
 	}
 
-	if (!isLoading() && !pasted() && !child->pasted() && !child->isMoved()) {
+	if (!isLoading() && !isPasted() && !child->isPasted() && !child->isMoved()) {
 		// new child was added which might change the ranges and the axis tick labels.
 		// adjust the plot area padding if the axis label is outside of the plot area
 		if (rangeChanged) {

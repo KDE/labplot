@@ -257,7 +257,7 @@ QDateTime AbstractAspect::creationTime() const {
 	return d->m_creation_time;
 }
 
-bool AbstractAspect::hidden() const {
+bool AbstractAspect::isHidden() const {
 	return d->m_hidden;
 }
 
@@ -679,7 +679,7 @@ void AbstractAspect::reparent(AbstractAspect* newParent, int newIndex) {
 QVector<AbstractAspect*> AbstractAspect::children(AspectType type, ChildIndexFlags flags) const {
 	QVector<AbstractAspect*> result;
 	for (auto* child : children()) {
-		if (flags & ChildIndexFlag::IncludeHidden || !child->hidden()) {
+		if (flags & ChildIndexFlag::IncludeHidden || !child->isHidden()) {
 			if (child->inherits(type))
 				result << child;
 
@@ -744,7 +744,7 @@ void AbstractAspect::setPasted(bool pasted) {
 	d->m_pasted = pasted;
 }
 
-bool AbstractAspect::pasted() const {
+bool AbstractAspect::isPasted() const {
 	return d->m_pasted;
 }
 
