@@ -2,14 +2,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Martin Schlander <mschlander@opensuse.org>, 2014.
-#: src/backend/datasources/filters/AsciiFilter.cpp:197
-#: src/backend/datasources/filters/AsciiFilter.cpp:213
-#, kde-format
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-04 01:44+0000\n"
+"POT-Creation-Date: 2024-11-05 00:37+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -65,7 +62,7 @@ msgid "Rename"
 msgstr "Omdøb"
 
 #: src/backend/core/AbstractAspect.cpp:407
-#: src/backend/spreadsheet/Spreadsheet.cpp:657
+#: src/backend/spreadsheet/Spreadsheet.cpp:659
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:493
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:273
 #: src/frontend/worksheet/WorksheetView.cpp:138
@@ -192,7 +189,7 @@ msgstr ""
 #: src/backend/nsl/nsl_smooth.c:22 src/frontend/dockwidgets/AxisDock.cpp:272
 #: src/frontend/dockwidgets/AxisDock.cpp:285
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:55
-#: src/frontend/dockwidgets/XYCurveDock.cpp:195 src/frontend/GuiTools.cpp:154
+#: src/frontend/dockwidgets/XYCurveDock.cpp:193 src/frontend/GuiTools.cpp:154
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
 #: src/frontend/widgets/BackgroundWidget.cpp:114
 #: src/frontend/widgets/LineWidget.cpp:48
@@ -330,7 +327,7 @@ msgid "UNDEFINED"
 msgstr ""
 
 #: src/backend/core/AbstractColumn.cpp:332
-#: src/backend/spreadsheet/Spreadsheet.cpp:212
+#: src/backend/spreadsheet/Spreadsheet.cpp:214
 #, kde-format
 msgid "%1: insert 1 row"
 msgid_plural "%1: insert %2 rows"
@@ -338,7 +335,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: src/backend/core/AbstractColumn.cpp:334
-#: src/backend/spreadsheet/Spreadsheet.cpp:214
+#: src/backend/spreadsheet/Spreadsheet.cpp:216
 #, kde-format
 msgid "%1: remove 1 row"
 msgid_plural "%1: remove %2 rows"
@@ -1136,7 +1133,7 @@ msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 #: src/backend/datasources/filters/AsciiFilter.cpp:189
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2073
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1224
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1220
 #, kde-format
 msgid "Success"
 msgstr ""
@@ -1921,9 +1918,9 @@ msgstr "Antal linjer"
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
 #. i18n: ectx: property (text), widget (QLabel, lDataColumn)
 #: src/backend/datasources/filters/MatioFilter.cpp:335
-#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:253
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:325
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:345
+#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:251
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:323
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:343
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:58
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:185
 #, fuzzy, kde-format
@@ -6570,7 +6567,7 @@ msgstr[0] "%1: Tilføj %2 kolonner"
 msgstr[1] "%1: Tilføj %2 kolonner"
 
 #: src/backend/matrix/Matrix.cpp:676 src/backend/matrix/matrixcommands.h:131
-#: src/backend/spreadsheet/Spreadsheet.cpp:608
+#: src/backend/spreadsheet/Spreadsheet.cpp:610
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: Ryd"
@@ -7049,7 +7046,7 @@ msgstr "Retning"
 #: src/frontend/dockwidgets/AxisDock.cpp:239
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:170
 #: src/frontend/dockwidgets/WorksheetDock.cpp:277
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:784
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:780
 #: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:81
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:555
 #, kde-format
@@ -7244,12 +7241,12 @@ msgstr ""
 msgid "Simpson's 3/8 (4-point)"
 msgstr ""
 
-#: src/backend/nsl/nsl_interp.c:16 src/frontend/dockwidgets/XYCurveDock.cpp:203
+#: src/backend/nsl/nsl_interp.c:16 src/frontend/dockwidgets/XYCurveDock.cpp:201
 #, kde-format
 msgid "Cubic Spline (Natural)"
 msgstr ""
 
-#: src/backend/nsl/nsl_interp.c:17 src/frontend/dockwidgets/XYCurveDock.cpp:204
+#: src/backend/nsl/nsl_interp.c:17 src/frontend/dockwidgets/XYCurveDock.cpp:202
 #, kde-format
 msgid "Cubic Spline (Periodic)"
 msgstr ""
@@ -7637,30 +7634,30 @@ msgstr "Højde"
 msgid "Tricube"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:300
+#: src/backend/spreadsheet/Spreadsheet.cpp:302
 #, kde-format
 msgid "%1: remove rows with missing values"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:318
+#: src/backend/spreadsheet/Spreadsheet.cpp:320
 #, fuzzy, kde-format
 #| msgid "%1: cut selected cell(s)"
 msgid "%1: mask rows with missing values"
 msgstr "%1: Klip markerede celler"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:430
+#: src/backend/spreadsheet/Spreadsheet.cpp:432
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set linking"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:450
+#: src/backend/spreadsheet/Spreadsheet.cpp:452
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set linked spreadsheet"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:505
+#: src/backend/spreadsheet/Spreadsheet.cpp:507
 #, fuzzy, kde-format
 #| msgid "Enter column"
 msgid "%1: insert 1 column"
@@ -7668,7 +7665,7 @@ msgid_plural "%1: insert %2 columns"
 msgstr[0] "Gå ind i kolonne"
 msgstr[1] "Gå ind i kolonne"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:507
+#: src/backend/spreadsheet/Spreadsheet.cpp:509
 #, fuzzy, kde-format
 #| msgid "Remo&ve Columns"
 msgid "%1: remove 1 column"
@@ -7676,76 +7673,76 @@ msgid_plural "%1: remove %2 columns"
 msgstr[0] "Fjer&n kolonner"
 msgstr[1] "Fjer&n kolonner"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:616
+#: src/backend/spreadsheet/Spreadsheet.cpp:618
 #, fuzzy, kde-format
 #| msgid "%1: cut selected cell(s)"
 msgid "%1: clear selected columns"
 msgstr "%1: Klip markerede celler"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:640
+#: src/backend/spreadsheet/Spreadsheet.cpp:642
 #, kde-format
 msgid "%1: clear all masks"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:680
+#: src/backend/spreadsheet/Spreadsheet.cpp:682
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:780
+#: src/backend/spreadsheet/Spreadsheet.cpp:782
 #, fuzzy, kde-format
 #| msgid "%1: add %2 column(s)"
 msgid "%1: sort columns"
 msgstr "%1: Tilføj %2 kolonner"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1145
+#: src/backend/spreadsheet/Spreadsheet.cpp:1147
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1535
+#: src/backend/spreadsheet/Spreadsheet.cpp:1547
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1538
+#: src/backend/spreadsheet/Spreadsheet.cpp:1550
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1541
+#: src/backend/spreadsheet/Spreadsheet.cpp:1553
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1544
+#: src/backend/spreadsheet/Spreadsheet.cpp:1556
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1547
+#: src/backend/spreadsheet/Spreadsheet.cpp:1559
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1550
+#: src/backend/spreadsheet/Spreadsheet.cpp:1562
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1553
+#: src/backend/spreadsheet/Spreadsheet.cpp:1565
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -8137,7 +8134,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersFormat)
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:315
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:128
-#: src/frontend/dockwidgets/XYCurveDock.cpp:196
+#: src/frontend/dockwidgets/XYCurveDock.cpp:194
 #: src/frontend/ui/dockwidgets/axisdock.ui:488
 #: src/frontend/ui/dockwidgets/axisdock.ui:628
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:687
@@ -8480,7 +8477,7 @@ msgstr "Ændret"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:299
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:170
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:337
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:354
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:112
 #, fuzzy, kde-format
 #| msgid "Data, -"
@@ -10067,29 +10064,29 @@ msgstr ""
 msgid "%1: set values color"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:189
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:206
 #, fuzzy, kde-format
 #| msgid "Changed"
 msgid "%1: data source type changed"
 msgstr "Ændret"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:196
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:213
 #, fuzzy, kde-format
 #| msgid "Changed"
 msgid "%1: data source curve changed"
 msgstr "Ændret"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:205
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:222
 #, kde-format
 msgid "%1: assign x-data"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:214
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:231
 #, kde-format
 msgid "%1: assign y-data"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:223
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:240
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: assign second y-data"
@@ -10388,7 +10385,7 @@ msgid "%1: set filter options and perform the Fourier filter"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:175
-#: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:125
+#: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:129
 #: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:132
 #, kde-format
 msgid "No data points available."
@@ -10399,48 +10396,48 @@ msgstr ""
 msgid "%1: set transform options and perform the Fourier transform"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:92
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:105
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "%1: set function"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:316
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:329
 #, kde-format
 msgid "First curve not valid"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:318
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:331
 #, kde-format
 msgid "xColumn of first curve not valid"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:320
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:333
 #, kde-format
 msgid "yColumn of first curve not valid"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:322
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:335
 #, kde-format
 msgid "Number of x and y values do not match for the first curve"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:335
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:348
 #, kde-format
 msgid "Curve '%1' not valid"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:337
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:350
 #, kde-format
 msgid "xColumn of curve '%1' not valid"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:339
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:352
 #, kde-format
 msgid "yColumn of curve '%1' not valid"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:341
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:354
 #, kde-format
 msgid "Number of x and y values do not match for curve '%1'"
 msgstr ""
@@ -10743,9 +10740,9 @@ msgstr ""
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:314
 #: src/frontend/dockwidgets/CursorDock.cpp:148
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1359
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1365
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1371
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1351
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1357
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1363
 #, fuzzy, kde-format
 #| msgid "Clea&r Columns"
 msgid "Copy Selection"
@@ -10753,9 +10750,9 @@ msgstr "&Ryd kolonner"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:315
 #: src/frontend/dockwidgets/CursorDock.cpp:149
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1360
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1366
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1372
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1352
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1358
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1364
 #, fuzzy, kde-format
 #| msgid "%1: cut selected cell(s)"
 msgid "Copy All"
@@ -12012,66 +12009,66 @@ msgstr ""
 msgid "No data arrived yet for the selected topic"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2142
+#: src/frontend/datasources/ImportFileWidget.cpp:2144
 #, kde-format
 msgid "Not a HDF5 file: %1"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2606
+#: src/frontend/datasources/ImportFileWidget.cpp:2608
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2614
+#: src/frontend/datasources/ImportFileWidget.cpp:2616
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Failed to connect to '%1'. Error %2."
 msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2636
+#: src/frontend/datasources/ImportFileWidget.cpp:2638
 #, kde-format
 msgid "Disconnected from '%1'."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2702
+#: src/frontend/datasources/ImportFileWidget.cpp:2704
 #, fuzzy, kde-format
 #| msgid "Variance"
 msgid "Available (%1)"
 msgstr "Varians"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2806
+#: src/frontend/datasources/ImportFileWidget.cpp:2808
 #, kde-format
 msgid "Wrong username or password"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2809
+#: src/frontend/datasources/ImportFileWidget.cpp:2811
 #, kde-format
 msgid "The client ID wasn't accepted"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2813
+#: src/frontend/datasources/ImportFileWidget.cpp:2815
 #, kde-format
 msgid "The broker %1 couldn't be reached."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2816
+#: src/frontend/datasources/ImportFileWidget.cpp:2818
 #, fuzzy, kde-format
 #| msgid "%1: cut selected cell(s)"
 msgid "The client is not authorized to connect."
 msgstr "%1: Klip markerede celler"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2819
+#: src/frontend/datasources/ImportFileWidget.cpp:2821
 #, kde-format
 msgid "An unknown error occurred."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2825
-#: src/frontend/datasources/ImportFileWidget.cpp:2828
+#: src/frontend/datasources/ImportFileWidget.cpp:2827
+#: src/frontend/datasources/ImportFileWidget.cpp:2830
 #, kde-format
 msgid "An error occurred."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2842
+#: src/frontend/datasources/ImportFileWidget.cpp:2844
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgid "Connecting to '%1:%2' timed out."
@@ -12734,7 +12731,7 @@ msgstr ""
 #: src/frontend/dockwidgets/CustomPointDock.cpp:47
 #: src/frontend/dockwidgets/ImageDock.cpp:50
 #: src/frontend/dockwidgets/ImageDock.cpp:58
-#: src/frontend/dockwidgets/XYCurveDock.cpp:340
+#: src/frontend/dockwidgets/XYCurveDock.cpp:338
 #: src/frontend/widgets/BackgroundWidget.cpp:118
 #: src/frontend/widgets/LabelWidget.cpp:153
 #: src/frontend/widgets/LabelWidget.cpp:172
@@ -12752,7 +12749,7 @@ msgstr "Venstre"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:49
 #: src/frontend/dockwidgets/ImageDock.cpp:52
 #: src/frontend/dockwidgets/ImageDock.cpp:60
-#: src/frontend/dockwidgets/XYCurveDock.cpp:341
+#: src/frontend/dockwidgets/XYCurveDock.cpp:339
 #: src/frontend/widgets/BackgroundWidget.cpp:119
 #: src/frontend/widgets/LabelWidget.cpp:155
 #: src/frontend/widgets/LabelWidget.cpp:174
@@ -12926,7 +12923,7 @@ msgstr ""
 #: src/frontend/dockwidgets/RunChartDock.cpp:224
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:232
 #: src/frontend/dockwidgets/WorksheetDock.cpp:606
-#: src/frontend/dockwidgets/XYCurveDock.cpp:1038
+#: src/frontend/dockwidgets/XYCurveDock.cpp:1036
 #, kde-format
 msgid "%1: template \"%2\" loaded"
 msgstr ""
@@ -13522,7 +13519,7 @@ msgstr ""
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:446
 #: src/frontend/dockwidgets/QQPlotDock.cpp:277
 #: src/frontend/dockwidgets/RunChartDock.cpp:222
-#: src/frontend/dockwidgets/XYCurveDock.cpp:1036
+#: src/frontend/dockwidgets/XYCurveDock.cpp:1034
 #, kde-format
 msgid "%1 xy-curves: template \"%2\" loaded"
 msgstr ""
@@ -13787,88 +13784,88 @@ msgstr "Rotation"
 msgid "Correlation status: %1"
 msgstr "Rotation"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:197
+#: src/frontend/dockwidgets/XYCurveDock.cpp:195
 #, fuzzy, kde-format
 #| msgid "Horizontal"
 msgid "Horiz. Start"
 msgstr "Vandret"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:198
+#: src/frontend/dockwidgets/XYCurveDock.cpp:196
 #, fuzzy, kde-format
 #| msgid "Start"
 msgid "Vert. Start"
 msgstr "Start"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:199
+#: src/frontend/dockwidgets/XYCurveDock.cpp:197
 #, fuzzy, kde-format
 #| msgid "Horizontal"
 msgid "Horiz. Midpoint"
 msgstr "Vandret"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:200
+#: src/frontend/dockwidgets/XYCurveDock.cpp:198
 #, fuzzy, kde-format
 #| msgid "Rotation"
 msgid "Vert. Midpoint"
 msgstr "Rotation"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:201
+#: src/frontend/dockwidgets/XYCurveDock.cpp:199
 #, kde-format
 msgid "2-segments"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:202
+#: src/frontend/dockwidgets/XYCurveDock.cpp:200
 #, kde-format
 msgid "3-segments"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:205
+#: src/frontend/dockwidgets/XYCurveDock.cpp:203
 #, kde-format
 msgid "Akima-spline (Natural)"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:206
+#: src/frontend/dockwidgets/XYCurveDock.cpp:204
 #, kde-format
 msgid "Akima-spline (Periodic)"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:331
+#: src/frontend/dockwidgets/XYCurveDock.cpp:329
 #: src/frontend/widgets/ValueWidget.cpp:31
 #, fuzzy, kde-format
 #| msgid "Values"
 msgid "No Values"
 msgstr "Værdier"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:336
+#: src/frontend/dockwidgets/XYCurveDock.cpp:334
 #: src/frontend/widgets/ValueWidget.cpp:33
 #, fuzzy, kde-format
 #| msgid "Custom grid"
 msgid "Custom Column"
 msgstr "Brugertilpasset gitter"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:338
+#: src/frontend/dockwidgets/XYCurveDock.cpp:336
 #: src/frontend/widgets/BackgroundWidget.cpp:115
 #: src/frontend/widgets/ValueWidget.cpp:35
 #, kde-format
 msgid "Above"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:339
+#: src/frontend/dockwidgets/XYCurveDock.cpp:337
 #: src/frontend/widgets/BackgroundWidget.cpp:116
 #: src/frontend/widgets/ValueWidget.cpp:36
 #, kde-format
 msgid "Below"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:517
-#: src/frontend/dockwidgets/XYCurveDock.cpp:518
+#: src/frontend/dockwidgets/XYCurveDock.cpp:515
+#: src/frontend/dockwidgets/XYCurveDock.cpp:516
 #, kde-format
 msgid ""
 "If checked, connect neighbour points with lines even if there are gaps "
 "(invalid or masked values) between them"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:519
-#: src/frontend/dockwidgets/XYCurveDock.cpp:520
+#: src/frontend/dockwidgets/XYCurveDock.cpp:517
+#: src/frontend/dockwidgets/XYCurveDock.cpp:518
 #, kde-format
 msgid ""
 "If checked, connect data points only for strictly increasing values of X"
@@ -14060,37 +14057,37 @@ msgid "Histogram:"
 msgstr "Data, -"
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:832
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:828
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:517
 #, kde-format
 msgid "Degree:"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:895
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:891
 #, fuzzy, kde-format
 #| msgid "Number of points"
 msgid "Number of peaks:"
 msgstr "Antal punkter"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1225
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1221
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgctxt "Curve fitting"
 msgid "Fit status: %1"
 msgstr "Statistik"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1236
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1232
 #, fuzzy, kde-format
 #| msgid "%1: cut selected cell(s)"
 msgid "No data source available!"
 msgstr "%1: Klip markerede celler"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1411
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1403
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1412
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1404
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr ""
@@ -14139,7 +14136,7 @@ msgstr "Filter"
 msgid "Fourier transformation status: %1"
 msgstr "Filter"
 
-#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:130
+#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:128
 #, kde-format
 msgid ""
 "The curve \"%1\"\n"
@@ -14147,25 +14144,25 @@ msgid ""
 "again."
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:185
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:221
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:275
+#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:183
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:219
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:273
 #, kde-format
 msgid ""
 "Variable name can contain letters, digits and '_' only and should start with "
 "a letter"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:221
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:319
+#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:219
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:317
 #, fuzzy, kde-format
 #| msgid "%1: cut selected cell(s)"
 msgid "Delete variable"
 msgstr "%1: Klip markerede celler"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
-#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:253
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:345
+#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:251
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:343
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:23
 #, fuzzy, kde-format
 #| msgid "Variance"
@@ -15732,7 +15729,7 @@ msgid "&Generate"
 msgstr "Generelt"
 
 #: src/frontend/matrix/MatrixFunctionDialog.cpp:77
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:228
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:226
 #, kde-format
 msgid "Generate function values"
 msgstr ""
@@ -17330,8 +17327,8 @@ msgid ""
 "columns"
 msgstr ""
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:140
-#: src/frontend/widgets/TreeViewComboBox.cpp:367
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:138
+#: src/frontend/widgets/TreeViewComboBox.cpp:358
 #, kde-format
 msgid ""
 "The column \"%1\"\n"
@@ -17339,55 +17336,55 @@ msgid ""
 "again."
 msgstr ""
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:158
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:156
 #, kde-format
 msgid ""
 "Spreadsheet linking is active. The size of the target spreadsheet is "
 "controlled by the linked spreadsheet."
 msgstr ""
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:168
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:166
 #, kde-format
 msgid ""
 "Provided variable name is already reserved for a name of a constant. Please "
 "use another name."
 msgstr ""
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:171
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:169
 #, kde-format
 msgid ""
 "Provided variable name is already reserved for a name of a function. Please "
 "use another name."
 msgstr ""
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:174
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:172
 #, kde-format
 msgid "The variable name 'i' is reserved for the index of the column row."
 msgstr ""
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:177
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:175
 #, kde-format
 msgid ""
 "Provided variable name starts with a digit or contains special character."
 msgstr ""
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:188
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:186
 #, kde-format
 msgid "Empty formula expression"
 msgstr ""
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:195
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:193
 #, kde-format
 msgid "Incorrect formula syntax: "
 msgstr ""
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:214
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:212
 #, fuzzy, kde-format
 #| msgid "&Add Columns"
 msgid "Select a valid column"
 msgstr "&Tilføj kolonner"
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:391
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:389
 #, kde-format
 msgid "%1: fill column with function values"
 msgid_plural "%1: fill columns with function values"

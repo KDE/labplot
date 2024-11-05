@@ -4,15 +4,13 @@
 #
 # Martin Srebotnjak <miles@filmsi.net>, 2021,2022.
 # SPDX-FileCopyrightText: 2021, 2022, 2023, 2024 Matjaž Jeran <matjaz.jeran@amis.net>
-#: src/backend/datasources/filters/AsciiFilter.cpp:197
-#: src/backend/datasources/filters/AsciiFilter.cpp:213
-#, fuzzy, kde-format
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-04 01:44+0000\n"
-"PO-Revision-Date: 2024-11-02 07:09+0100\n"
+"POT-Creation-Date: 2024-11-05 00:37+0000\n"
+"PO-Revision-Date: 2024-11-04 06:31+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -68,7 +66,7 @@ msgid "Rename"
 msgstr "Preimenuj"
 
 #: src/backend/core/AbstractAspect.cpp:407
-#: src/backend/spreadsheet/Spreadsheet.cpp:657
+#: src/backend/spreadsheet/Spreadsheet.cpp:659
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:493
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:273
 #: src/frontend/worksheet/WorksheetView.cpp:138
@@ -187,7 +185,7 @@ msgstr "Dni"
 #: src/backend/nsl/nsl_smooth.c:22 src/frontend/dockwidgets/AxisDock.cpp:272
 #: src/frontend/dockwidgets/AxisDock.cpp:285
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:55
-#: src/frontend/dockwidgets/XYCurveDock.cpp:195 src/frontend/GuiTools.cpp:154
+#: src/frontend/dockwidgets/XYCurveDock.cpp:193 src/frontend/GuiTools.cpp:154
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
 #: src/frontend/widgets/BackgroundWidget.cpp:114
 #: src/frontend/widgets/LineWidget.cpp:48
@@ -314,7 +312,7 @@ msgid "UNDEFINED"
 msgstr "NEDOLOČENO"
 
 #: src/backend/core/AbstractColumn.cpp:332
-#: src/backend/spreadsheet/Spreadsheet.cpp:212
+#: src/backend/spreadsheet/Spreadsheet.cpp:214
 #, kde-format
 msgid "%1: insert 1 row"
 msgid_plural "%1: insert %2 rows"
@@ -324,7 +322,7 @@ msgstr[2] "%1: vstavi %2 vrstice"
 msgstr[3] "%1: vstavi %2 vrstic"
 
 #: src/backend/core/AbstractColumn.cpp:334
-#: src/backend/spreadsheet/Spreadsheet.cpp:214
+#: src/backend/spreadsheet/Spreadsheet.cpp:216
 #, kde-format
 msgid "%1: remove 1 row"
 msgid_plural "%1: remove %2 rows"
@@ -1074,7 +1072,7 @@ msgstr ""
 #: src/backend/datasources/filters/AsciiFilter.cpp:189
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2073
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1224
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1220
 #, kde-format
 msgid "Success"
 msgstr "Uspešno"
@@ -1801,9 +1799,9 @@ msgstr "Število spremenljivk: "
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
 #. i18n: ectx: property (text), widget (QLabel, lDataColumn)
 #: src/backend/datasources/filters/MatioFilter.cpp:335
-#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:253
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:325
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:345
+#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:251
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:323
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:343
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:58
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:185
 #, kde-format
@@ -6212,7 +6210,7 @@ msgstr[2] "%1: dodaj %2 stolpce"
 msgstr[3] "%1: dodaj %2 stolpcev"
 
 #: src/backend/matrix/Matrix.cpp:676 src/backend/matrix/matrixcommands.h:131
-#: src/backend/spreadsheet/Spreadsheet.cpp:608
+#: src/backend/spreadsheet/Spreadsheet.cpp:610
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: počisti"
@@ -6670,7 +6668,7 @@ msgstr "Statistika (porazdelitve)"
 #: src/frontend/dockwidgets/AxisDock.cpp:239
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:170
 #: src/frontend/dockwidgets/WorksheetDock.cpp:277
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:784
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:780
 #: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:81
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:555
 #, kde-format
@@ -6854,12 +6852,12 @@ msgstr "Simpsonova (3 točke)"
 msgid "Simpson's 3/8 (4-point)"
 msgstr "Simpsonova 3/8 (4 točke)"
 
-#: src/backend/nsl/nsl_interp.c:16 src/frontend/dockwidgets/XYCurveDock.cpp:203
+#: src/backend/nsl/nsl_interp.c:16 src/frontend/dockwidgets/XYCurveDock.cpp:201
 #, kde-format
 msgid "Cubic Spline (Natural)"
 msgstr "Kubični zlepek (naravno)"
 
-#: src/backend/nsl/nsl_interp.c:17 src/frontend/dockwidgets/XYCurveDock.cpp:204
+#: src/backend/nsl/nsl_interp.c:17 src/frontend/dockwidgets/XYCurveDock.cpp:202
 #, kde-format
 msgid "Cubic Spline (Periodic)"
 msgstr "Kubični zlepek (periodično)"
@@ -7225,27 +7223,27 @@ msgstr "Tritežno"
 msgid "Tricube"
 msgstr "Trikubično"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:300
+#: src/backend/spreadsheet/Spreadsheet.cpp:302
 #, kde-format
 msgid "%1: remove rows with missing values"
 msgstr "%1: odstrani vrstice z manjkajočimi vrednostmi"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:318
+#: src/backend/spreadsheet/Spreadsheet.cpp:320
 #, kde-format
 msgid "%1: mask rows with missing values"
 msgstr "%1: maskiraj vrstice z manjkajočimi vrednostmi"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:430
+#: src/backend/spreadsheet/Spreadsheet.cpp:432
 #, kde-format
 msgid "%1: set linking"
 msgstr "%1: nastavi povezovanje"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:450
+#: src/backend/spreadsheet/Spreadsheet.cpp:452
 #, kde-format
 msgid "%1: set linked spreadsheet"
 msgstr "%1: nastavi povezano preglednico"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:505
+#: src/backend/spreadsheet/Spreadsheet.cpp:507
 #, kde-format
 msgid "%1: insert 1 column"
 msgid_plural "%1: insert %2 columns"
@@ -7254,7 +7252,7 @@ msgstr[1] "%1: vstavi %2 stolpca"
 msgstr[2] "%1: vstavi %2 stolpce"
 msgstr[3] "%1: vstavi %2 stolpcev"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:507
+#: src/backend/spreadsheet/Spreadsheet.cpp:509
 #, kde-format
 msgid "%1: remove 1 column"
 msgid_plural "%1: remove %2 columns"
@@ -7263,32 +7261,32 @@ msgstr[1] "%1: odstrani %2 stolpca"
 msgstr[2] "%1: odstrani %2 stolpce"
 msgstr[3] "%1: odstrani %2 stolpcev"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:616
+#: src/backend/spreadsheet/Spreadsheet.cpp:618
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr "%1: počisti izbrane stolpce"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:640
+#: src/backend/spreadsheet/Spreadsheet.cpp:642
 #, kde-format
 msgid "%1: clear all masks"
 msgstr "%1: počisti vse maske"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:680
+#: src/backend/spreadsheet/Spreadsheet.cpp:682
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: premaknite stolpec %2 iz položaja %3 na %4."
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:780
+#: src/backend/spreadsheet/Spreadsheet.cpp:782
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: razvrščanje stolpcev"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1145
+#: src/backend/spreadsheet/Spreadsheet.cpp:1147
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr "%1: povezana preglednica odstranjena"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1535
+#: src/backend/spreadsheet/Spreadsheet.cpp:1547
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
@@ -7297,7 +7295,7 @@ msgstr[1] "dvojni številski podatki, %1 elementa"
 msgstr[2] "dvojni številski podatki, %1 elementi"
 msgstr[3] "dvojni številski podatki, %1 elementov"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1538
+#: src/backend/spreadsheet/Spreadsheet.cpp:1550
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
@@ -7306,7 +7304,7 @@ msgstr[1] "celoštevilska podatka, %1 elementa"
 msgstr[2] "celoštevilski podatki, %1 elementi"
 msgstr[3] "celoštevilski podatki, %1 elementov"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1541
+#: src/backend/spreadsheet/Spreadsheet.cpp:1553
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
@@ -7315,7 +7313,7 @@ msgstr[1] "dolga celoštevilska podatka, %1 elementa"
 msgstr[2] "dolgi celoštevilski podatki, %1 elementi"
 msgstr[3] "dolgi celoštevilski podatki, %1 elementov"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1544
+#: src/backend/spreadsheet/Spreadsheet.cpp:1556
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
@@ -7324,7 +7322,7 @@ msgstr[1] "tekstovna podatka, %1 elementa"
 msgstr[2] "tekstovni podatki, %1 elementi"
 msgstr[3] "tekstovni podatki, %1 elementov"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1547
+#: src/backend/spreadsheet/Spreadsheet.cpp:1559
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
@@ -7333,7 +7331,7 @@ msgstr[1] "podatka o mesecu, %1 elementa"
 msgstr[2] "podatki o mesecu, %1 elementi"
 msgstr[3] "podatki o mesecu, %1 elementov"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1550
+#: src/backend/spreadsheet/Spreadsheet.cpp:1562
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
@@ -7342,7 +7340,7 @@ msgstr[1] "podatka o dnevu, %1 elementa"
 msgstr[2] "podatki o dnevu, %1 elementi"
 msgstr[3] "podatki o dnevu, %1 elementov"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1553
+#: src/backend/spreadsheet/Spreadsheet.cpp:1565
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -7707,7 +7705,7 @@ msgstr "Usmerjenost"
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersFormat)
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:315
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:128
-#: src/frontend/dockwidgets/XYCurveDock.cpp:196
+#: src/frontend/dockwidgets/XYCurveDock.cpp:194
 #: src/frontend/ui/dockwidgets/axisdock.ui:488
 #: src/frontend/ui/dockwidgets/axisdock.ui:628
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:687
@@ -8028,7 +8026,7 @@ msgstr "%1: faktor širine spremenjen"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:299
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:170
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:337
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:354
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:112
 #, kde-format
 msgid "%1 - Data"
@@ -8770,48 +8768,47 @@ msgstr "x=%1"
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:209
 #, kde-format
 msgid "%1: set font"
-msgstr "%1: določite pisavo"
+msgstr "%1: nastavi pisavo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:216
-#, fuzzy, kde-format
-#| msgid "%1: set font color"
+#, kde-format
 msgid "%1: use plot's color"
-msgstr "%1: določite barvo pisave"
+msgstr "%1: uporabi barvo risbe"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:223
 #: src/backend/worksheet/TextLabel.cpp:353
 #, kde-format
 msgid "%1: set font color"
-msgstr "%1: določite barvo pisave"
+msgstr "%1: nastavi barvo pisave"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:230
 #, kde-format
 msgid "%1: change column order"
-msgstr "%1: spremenite vrstni red stolpcev"
+msgstr "%1: spremeni vrstni red stolpcev"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:237
 #, kde-format
 msgid "%1: change line+symbol width"
-msgstr "%1: spremenite širino črte+simbola"
+msgstr "%1: spremeni širino črte+simbola"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:245
 #, kde-format
 msgid "%1: set border corner radius"
-msgstr "%1: nastavite polmer kota obrobe"
+msgstr "%1: nastavi polmer kota obrobe"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:253
 #: src/backend/worksheet/Worksheet.cpp:721
 #: src/backend/worksheet/Worksheet.cpp:722
 #, kde-format
 msgid "%1: set layout top margin"
-msgstr "%1: nastavite zgornji rob postavitve"
+msgstr "%1: nastavi zgornji rob postavitve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:260
 #: src/backend/worksheet/Worksheet.cpp:731
 #: src/backend/worksheet/Worksheet.cpp:732
 #, kde-format
 msgid "%1: set layout bottom margin"
-msgstr "%1: nastavite spodnji rob postavitve"
+msgstr "%1: nastavi spodnji rob postavitve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:267
 #: src/backend/worksheet/Worksheet.cpp:741
@@ -8825,28 +8822,28 @@ msgstr "%1: nastavi levi rob postavitve"
 #: src/backend/worksheet/Worksheet.cpp:752
 #, kde-format
 msgid "%1: set layout right margin"
-msgstr "%1: nastavite desni rob postavitve"
+msgstr "%1: nastavi desni rob postavitve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:281
 #: src/backend/worksheet/Worksheet.cpp:761
 #: src/backend/worksheet/Worksheet.cpp:762
 #, kde-format
 msgid "%1: set layout vertical spacing"
-msgstr "%1: nastavite navpični razmik postavitve"
+msgstr "%1: nastavi navpični razmik postavitve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:288
 #: src/backend/worksheet/Worksheet.cpp:771
 #: src/backend/worksheet/Worksheet.cpp:772
 #, kde-format
 msgid "%1: set layout horizontal spacing"
-msgstr "%1: nastavite vodoravni razmik postavitve"
+msgstr "%1: nastavi vodoravni razmik postavitve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:295
 #: src/backend/worksheet/Worksheet.cpp:791
 #: src/backend/worksheet/Worksheet.cpp:792
 #, kde-format
 msgid "%1: set layout column count"
-msgstr "%1: nastavite število stolpcev postavitve"
+msgstr "%1: nastavi število stolpcev postavitve"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:140
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:188
@@ -8860,7 +8857,7 @@ msgstr "%1: spremenjena vrsta napake"
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:207
 #, kde-format
 msgid "%1: set error column"
-msgstr "%1: določite stolpec napake"
+msgstr "%1: nastavi stolpec napake"
 
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:235
 #, kde-format
@@ -8870,7 +8867,7 @@ msgstr "%1: spremenjena vrsta označevanja napake"
 #: src/backend/worksheet/plots/cartesian/ErrorBar.cpp:242
 #, kde-format
 msgid "%1: set error bar cap size"
-msgstr "%1: nastavite velikost konca vrstice z napakami"
+msgstr "%1: nastavi velikost konca vrstice z napakami"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:176
 #, kde-format
@@ -9469,27 +9466,27 @@ msgstr "%1: določite pisave vrednosti"
 msgid "%1: set values color"
 msgstr "%1: določite barve vrednosti"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:189
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:206
 #, kde-format
 msgid "%1: data source type changed"
 msgstr "%1: spremenjena vrsta vira podatkov"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:196
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:213
 #, kde-format
 msgid "%1: data source curve changed"
 msgstr "%1: spremenjena krivulja vira podatkov"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:205
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:222
 #, kde-format
 msgid "%1: assign x-data"
 msgstr "%1: dodelite x-podatke"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:214
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:231
 #, kde-format
 msgid "%1: assign y-data"
 msgstr "%1: dodelite y-podatke"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:223
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:240
 #, kde-format
 msgid "%1: assign second y-data"
 msgstr "%1: dodelite drugotne y-podatke"
@@ -9772,7 +9769,7 @@ msgid "%1: set filter options and perform the Fourier filter"
 msgstr "%1: nastavite možnosti filtra in izvedite Fourierjev filter"
 
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:175
-#: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:125
+#: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:129
 #: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:132
 #, kde-format
 msgid "No data points available."
@@ -9785,47 +9782,47 @@ msgstr ""
 "%1: nastavitev možnosti transformacije in izvajanje Fourierjeve "
 "transformacije"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:92
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:105
 #, kde-format
 msgid "%1: set function"
 msgstr "%1: nastavi funkcijo"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:316
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:329
 #, kde-format
 msgid "First curve not valid"
 msgstr "Prva krivulja ni veljavna"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:318
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:331
 #, kde-format
 msgid "xColumn of first curve not valid"
 msgstr "Stolpec x prve krivulje ni veljaven"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:320
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:333
 #, kde-format
 msgid "yColumn of first curve not valid"
 msgstr "Stolpec y prve krivulje ni veljaven"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:322
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:335
 #, kde-format
 msgid "Number of x and y values do not match for the first curve"
 msgstr "Število vrednosti x in y se ne ujema za prvo krivuljo"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:335
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:348
 #, kde-format
 msgid "Curve '%1' not valid"
 msgstr "Krivulja '%1' ni veljavna"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:337
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:350
 #, kde-format
 msgid "xColumn of curve '%1' not valid"
 msgstr "Stolpec x krivulje '%1' ni veljaven"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:339
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:352
 #, kde-format
 msgid "yColumn of curve '%1' not valid"
 msgstr "Stolpec y krivulje '%1' ni veljaven"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:341
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:354
 #, kde-format
 msgid "Number of x and y values do not match for curve '%1'"
 msgstr "Število vrednosti x in y se ne ujema za krivuljo '%1'"
@@ -10115,18 +10112,18 @@ msgstr "Pogled seznama s podrobnostmi"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:314
 #: src/frontend/dockwidgets/CursorDock.cpp:148
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1359
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1365
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1371
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1351
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1357
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1363
 #, kde-format
 msgid "Copy Selection"
 msgstr "Kopiraj izbor"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:315
 #: src/frontend/dockwidgets/CursorDock.cpp:149
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1360
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1366
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1372
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1352
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1358
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1364
 #, kde-format
 msgid "Copy All"
 msgstr "Kopiraj vse"
@@ -10502,7 +10499,7 @@ msgstr ""
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:252
 #, kde-format
 msgid "Datatype not found: %1"
-msgstr "Vrste podatkov ni najdene: %1."
+msgstr "Vrste podatkov ni najdene: %1"
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:29
 #, kde-format
@@ -11407,63 +11404,63 @@ msgstr "NAPAKA: serijskih vrat ni bilo mogoče odpreti. napaka: %1"
 msgid "No data arrived yet for the selected topic"
 msgstr "Za izbrano temo podatki še niso prispeli"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2142
+#: src/frontend/datasources/ImportFileWidget.cpp:2144
 #, kde-format
 msgid "Not a HDF5 file: %1"
 msgstr "Ni datoteka HDF5: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2606
+#: src/frontend/datasources/ImportFileWidget.cpp:2608
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
 msgstr "Ni se možno naročiti na vse teme, ki so na voljo."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2614
+#: src/frontend/datasources/ImportFileWidget.cpp:2616
 #, kde-format
 msgid "Failed to connect to '%1'. Error %2."
 msgstr "Neuspela povezava z '%1'. Napaka %2."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2636
+#: src/frontend/datasources/ImportFileWidget.cpp:2638
 #, kde-format
 msgid "Disconnected from '%1'."
 msgstr "Prekinjena povezava z '%1'."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2702
+#: src/frontend/datasources/ImportFileWidget.cpp:2704
 #, kde-format
 msgid "Available (%1)"
 msgstr "Na voljo (%1)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2806
+#: src/frontend/datasources/ImportFileWidget.cpp:2808
 #, kde-format
 msgid "Wrong username or password"
 msgstr "Napačno uporabniško ime ali geslo"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2809
+#: src/frontend/datasources/ImportFileWidget.cpp:2811
 #, kde-format
 msgid "The client ID wasn't accepted"
 msgstr "ID odjemalca ni bil sprejet"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2813
+#: src/frontend/datasources/ImportFileWidget.cpp:2815
 #, kde-format
 msgid "The broker %1 couldn't be reached."
 msgstr "Posrednika %1 ni mogoče doseči."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2816
+#: src/frontend/datasources/ImportFileWidget.cpp:2818
 #, kde-format
 msgid "The client is not authorized to connect."
 msgstr "Odjemalec ni pooblaščen za povezavo."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2819
+#: src/frontend/datasources/ImportFileWidget.cpp:2821
 #, kde-format
 msgid "An unknown error occurred."
 msgstr "Prišlo je do neznane napake."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2825
-#: src/frontend/datasources/ImportFileWidget.cpp:2828
+#: src/frontend/datasources/ImportFileWidget.cpp:2827
+#: src/frontend/datasources/ImportFileWidget.cpp:2830
 #, kde-format
 msgid "An error occurred."
 msgstr "Prišlo je do napake."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2842
+#: src/frontend/datasources/ImportFileWidget.cpp:2844
 #, kde-format
 msgid "Connecting to '%1:%2' timed out."
 msgstr "Povezava z »%1:%2« je potekla."
@@ -12162,7 +12159,7 @@ msgstr "Polzapolnjena, velika"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:47
 #: src/frontend/dockwidgets/ImageDock.cpp:50
 #: src/frontend/dockwidgets/ImageDock.cpp:58
-#: src/frontend/dockwidgets/XYCurveDock.cpp:340
+#: src/frontend/dockwidgets/XYCurveDock.cpp:338
 #: src/frontend/widgets/BackgroundWidget.cpp:118
 #: src/frontend/widgets/LabelWidget.cpp:153
 #: src/frontend/widgets/LabelWidget.cpp:172
@@ -12180,7 +12177,7 @@ msgstr "Levo"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:49
 #: src/frontend/dockwidgets/ImageDock.cpp:52
 #: src/frontend/dockwidgets/ImageDock.cpp:60
-#: src/frontend/dockwidgets/XYCurveDock.cpp:341
+#: src/frontend/dockwidgets/XYCurveDock.cpp:339
 #: src/frontend/widgets/BackgroundWidget.cpp:119
 #: src/frontend/widgets/LabelWidget.cpp:155
 #: src/frontend/widgets/LabelWidget.cpp:174
@@ -12344,7 +12341,7 @@ msgstr "%1 osi: naložena predloga »%2«"
 #: src/frontend/dockwidgets/RunChartDock.cpp:224
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:232
 #: src/frontend/dockwidgets/WorksheetDock.cpp:606
-#: src/frontend/dockwidgets/XYCurveDock.cpp:1038
+#: src/frontend/dockwidgets/XYCurveDock.cpp:1036
 #, kde-format
 msgid "%1: template \"%2\" loaded"
 msgstr "%1: predloga »%2« naložena"
@@ -12729,6 +12726,7 @@ msgid ""
 "Use the main color of the plot (line, symbol, etc.) for the color of the "
 "name in the legend."
 msgstr ""
+"Uporabi glavno barvo risbe (črta, simbol itd.) za barvo imena v legendi."
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:249
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:246
@@ -12931,7 +12929,7 @@ msgstr "Silverman"
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:446
 #: src/frontend/dockwidgets/QQPlotDock.cpp:277
 #: src/frontend/dockwidgets/RunChartDock.cpp:222
-#: src/frontend/dockwidgets/XYCurveDock.cpp:1036
+#: src/frontend/dockwidgets/XYCurveDock.cpp:1034
 #, kde-format
 msgid "%1 xy-curves: template \"%2\" loaded"
 msgstr "%1 xy-krivulje: naložena predloga »%2«"
@@ -12999,7 +12997,7 @@ msgstr "Vrstice, stolpci in vrednosti xy"
 #: src/frontend/dockwidgets/MatrixDock.cpp:269
 #, kde-format
 msgid "%1 matrices: template \"%2\" loaded"
-msgstr "%1 matrik: naložena predloga »%2«"
+msgstr "%1 matrike: naložena predloga \"%2\""
 
 #: src/frontend/dockwidgets/NotebookDock.cpp:61
 #, kde-format
@@ -13204,74 +13202,74 @@ msgstr "Stanje dekonvolucije: %1"
 msgid "Correlation status: %1"
 msgstr "Stanje korelacije: %1"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:197
+#: src/frontend/dockwidgets/XYCurveDock.cpp:195
 #, kde-format
 msgid "Horiz. Start"
 msgstr "Vod. začetek"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:198
+#: src/frontend/dockwidgets/XYCurveDock.cpp:196
 #, kde-format
 msgid "Vert. Start"
 msgstr "Navp. začetek"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:199
+#: src/frontend/dockwidgets/XYCurveDock.cpp:197
 #, kde-format
 msgid "Horiz. Midpoint"
 msgstr "Vod. srednja točka"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:200
+#: src/frontend/dockwidgets/XYCurveDock.cpp:198
 #, kde-format
 msgid "Vert. Midpoint"
 msgstr "Navp. srednja točka"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:201
+#: src/frontend/dockwidgets/XYCurveDock.cpp:199
 #, kde-format
 msgid "2-segments"
 msgstr "2-segmentno"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:202
+#: src/frontend/dockwidgets/XYCurveDock.cpp:200
 #, kde-format
 msgid "3-segments"
 msgstr "3-segmentno"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:205
+#: src/frontend/dockwidgets/XYCurveDock.cpp:203
 #, kde-format
 msgid "Akima-spline (Natural)"
 msgstr "Akima-zlepek (naravno)"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:206
+#: src/frontend/dockwidgets/XYCurveDock.cpp:204
 #, kde-format
 msgid "Akima-spline (Periodic)"
 msgstr "Akima-zlepek (periodično)"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:331
+#: src/frontend/dockwidgets/XYCurveDock.cpp:329
 #: src/frontend/widgets/ValueWidget.cpp:31
 #, kde-format
 msgid "No Values"
 msgstr "Brez vrednosti"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:336
+#: src/frontend/dockwidgets/XYCurveDock.cpp:334
 #: src/frontend/widgets/ValueWidget.cpp:33
 #, kde-format
 msgid "Custom Column"
 msgstr "Stolpec po meri"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:338
+#: src/frontend/dockwidgets/XYCurveDock.cpp:336
 #: src/frontend/widgets/BackgroundWidget.cpp:115
 #: src/frontend/widgets/ValueWidget.cpp:35
 #, kde-format
 msgid "Above"
 msgstr "Nad"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:339
+#: src/frontend/dockwidgets/XYCurveDock.cpp:337
 #: src/frontend/widgets/BackgroundWidget.cpp:116
 #: src/frontend/widgets/ValueWidget.cpp:36
 #, kde-format
 msgid "Below"
 msgstr "Pod"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:517
-#: src/frontend/dockwidgets/XYCurveDock.cpp:518
+#: src/frontend/dockwidgets/XYCurveDock.cpp:515
+#: src/frontend/dockwidgets/XYCurveDock.cpp:516
 #, kde-format
 msgid ""
 "If checked, connect neighbour points with lines even if there are gaps "
@@ -13280,8 +13278,8 @@ msgstr ""
 "Če je potrjeno, povežite sosednje točke s črtami, tudi če med njimi "
 "obstajajo vrzeli (neveljavne ali zamaskirane vrednosti)"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:519
-#: src/frontend/dockwidgets/XYCurveDock.cpp:520
+#: src/frontend/dockwidgets/XYCurveDock.cpp:517
+#: src/frontend/dockwidgets/XYCurveDock.cpp:518
 #, kde-format
 msgid ""
 "If checked, connect data points only for strictly increasing values of X"
@@ -13461,34 +13459,34 @@ msgid "Histogram:"
 msgstr "Histogram:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:832
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:828
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:517
 #, kde-format
 msgid "Degree:"
 msgstr "Stopinja:"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:895
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:891
 #, kde-format
 msgid "Number of peaks:"
 msgstr "Število vrhov:"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1225
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1221
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit status: %1"
 msgstr "Stanje prileganja: %1"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1236
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1232
 #, kde-format
 msgid "No data source available!"
 msgstr "Vira podatkov ni na voljo!"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1411
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1403
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr "%1 % nižja raven zaupanja"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1412
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1404
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr "%1 % višja raven zaupanja"
@@ -13534,7 +13532,7 @@ msgstr "Stanje Fourier-filtra: %1"
 msgid "Fourier transformation status: %1"
 msgstr "Stanje Fourierjeve transformacije: %1"
 
-#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:130
+#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:128
 #, kde-format
 msgid ""
 "The curve \"%1\"\n"
@@ -13544,9 +13542,9 @@ msgstr ""
 "Krivulja \"%1\"\n"
 "ni več na voljo. Samodejno se bo uporabljala, ko bo znova ustvarjena."
 
-#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:185
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:221
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:275
+#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:183
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:219
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:273
 #, kde-format
 msgid ""
 "Variable name can contain letters, digits and '_' only and should start with "
@@ -13555,15 +13553,15 @@ msgstr ""
 "Ime spremenljivke lahko vsebuje črke, števke in samo '_' in se mora začeti s "
 "črko"
 
-#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:221
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:319
+#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:219
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:317
 #, kde-format
 msgid "Delete variable"
 msgstr "Izbriši spremenljivko"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
-#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:253
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:345
+#: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:251
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:343
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:23
 #, kde-format
 msgid "Variable:"
@@ -15027,7 +15025,7 @@ msgid "&Generate"
 msgstr "&Generiraj"
 
 #: src/frontend/matrix/MatrixFunctionDialog.cpp:77
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:228
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:226
 #, kde-format
 msgid "Generate function values"
 msgstr "Tvori vrednosti funkcij"
@@ -16542,8 +16540,8 @@ msgstr ""
 "Samodejno spremeni velikost ciljnega stolpca, da bo ustrezal velikosti "
 "spremenljivih stolpcev"
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:140
-#: src/frontend/widgets/TreeViewComboBox.cpp:367
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:138
+#: src/frontend/widgets/TreeViewComboBox.cpp:358
 #, kde-format
 msgid ""
 "The column \"%1\"\n"
@@ -16553,7 +16551,7 @@ msgstr ""
 "Stolpec \"%1\"\n"
 "ni več na voljo. Samodejno se bo uporabljal, ko bo znova ustvarjen."
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:158
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:156
 #, kde-format
 msgid ""
 "Spreadsheet linking is active. The size of the target spreadsheet is "
@@ -16562,7 +16560,7 @@ msgstr ""
 "Povezovanje preglednic je aktivno. Velikost ciljne preglednice nadzira "
 "povezana preglednica."
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:168
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:166
 #, kde-format
 msgid ""
 "Provided variable name is already reserved for a name of a constant. Please "
@@ -16571,7 +16569,7 @@ msgstr ""
 "Podano ime spremenljivke je že rezervirano za ime konstante. Uporabite drugo "
 "ime."
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:171
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:169
 #, kde-format
 msgid ""
 "Provided variable name is already reserved for a name of a function. Please "
@@ -16580,33 +16578,33 @@ msgstr ""
 "Podano ime spremenljivke je že rezervirano za ime funkcije. Uporabite drugo "
 "ime."
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:174
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:172
 #, kde-format
 msgid "The variable name 'i' is reserved for the index of the column row."
 msgstr "Ime spremenljivke 'i' je rezervirano za indeks vrstice stolpca."
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:177
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:175
 #, kde-format
 msgid ""
 "Provided variable name starts with a digit or contains special character."
 msgstr "Podano ime spremenljivke se začne s števko ali vsebuje posebni znak."
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:188
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:186
 #, kde-format
 msgid "Empty formula expression"
 msgstr "Prazen izraz formule"
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:195
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:193
 #, kde-format
 msgid "Incorrect formula syntax: "
 msgstr "Nepravilna skladnja formule: "
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:214
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:212
 #, kde-format
 msgid "Select a valid column"
 msgstr "Izberite veljavni stolpec"
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:391
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:389
 #, kde-format
 msgid "%1: fill column with function values"
 msgid_plural "%1: fill columns with function values"
@@ -17679,13 +17677,12 @@ msgstr "%1: počisti izbrane celice"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3781
 #, kde-format
 msgid "Selected 1: %1 rows, %2 columns"
-msgstr ""
+msgstr "Izbrano: %1 vrstic, %2 stolpcev"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3791
-#, fuzzy, kde-format
-#| msgid "%1: cut selected cells"
+#, kde-format
 msgid "Selected: %1 cells"
-msgstr "%1: izreže izbrane celice"
+msgstr "Izbrano: %1 celic"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3810
 #, kde-format
@@ -17747,10 +17744,9 @@ msgid ", "
 msgstr ", "
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3820
-#, fuzzy, kde-format
-#| msgid "Selected: %1 %2 , %3 %4%5 %6 %7 %8"
+#, kde-format
 msgid "Selected: %1 %2, %3 %4%5 %6 %7 %8"
-msgstr "Izbrano: %1 %2 , %3 %4%5 %6 %7 %8"
+msgstr "Izbrano: %1 %2, %3 %4%5 %6 %7 %8"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3830
 #, kde-format
@@ -18742,7 +18738,7 @@ msgstr "Pretvori naN v 0"
 #: src/frontend/ui/datasources/asciioptionswidget.ui:73
 #, kde-format
 msgid "Column Datatypes:"
-msgstr "Vrste podatkov stolpca"
+msgstr "Vrste podatkov stolpca:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:80
@@ -20746,10 +20742,9 @@ msgstr "Vodor. poravnava:"
 
 #. i18n: ectx: property (text), widget (QLabel, lUsePlotColor)
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:463
-#, fuzzy, kde-format
-#| msgid "Font Color:"
+#, kde-format
 msgid "Plot's Color:"
-msgstr "Barva pisave:"
+msgstr "Barva risbe:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderCornerRadius)
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:552
