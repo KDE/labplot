@@ -1,6 +1,7 @@
 option(ENABLE_TEST_ANALYSIS "Enable Analysis Tests" ON)
 
 if(ENABLE_TEST_ANALYSIS)
+    add_subdirectory(common)
     add_subdirectory(convolution)
     add_subdirectory(correlation)
     add_subdirectory(differentiation)

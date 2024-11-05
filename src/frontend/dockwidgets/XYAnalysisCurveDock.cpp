@@ -189,20 +189,14 @@ void XYAnalysisCurveDock::enableRecalculate() const {
 		}
 		}
 
-		if (aspectX) {
-			cbXDataColumn->useCurrentIndexText(true);
+		if (aspectX)
 			cbXDataColumn->setInvalid(false);
-		}
 
-		if (aspectY) {
-			cbYDataColumn->useCurrentIndexText(true);
+		if (aspectY)
 			cbYDataColumn->setInvalid(false);
-		}
 
-		if (aspectY2) {
-			cbY2DataColumn->useCurrentIndexText(true);
+		if (aspectY2)
 			cbY2DataColumn->setInvalid(false);
-		}
 	} else
 		hasSourceData = (m_analysisCurve->dataSourceCurve() != nullptr);
 

@@ -1918,7 +1918,7 @@ void XYFitCurvePrivate::updateResultsNote() {
 	DEBUG("NOTE TEXT: " << resultsNote->text().toStdString())
 }
 
-void XYFitCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) {
+void XYFitCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) const {
 	// prepare source data columns
 	DEBUG(Q_FUNC_INFO << ", data source: " << ENUM_TO_STRING(XYAnalysisCurve, DataSourceType, dataSourceType))
 	switch (dataSourceType) {

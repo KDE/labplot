@@ -2099,10 +2099,12 @@ void ImportFileWidget::refreshPreview() {
 		tmpTableWidget->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 	}
 
-	if (!errorMessage.isEmpty()) {
+	if (!errorMessage.isEmpty())
 		Q_EMIT error(errorMessage);
-	} else if (!currentFilter->lastError().isEmpty())
+	else if (!currentFilter->lastError().isEmpty())
 		Q_EMIT error(currentFilter->lastError());
+	else
+		Q_EMIT error(QStringLiteral(""));
 
 	if (currentFilter->lastError().isEmpty() && errorMessage.isEmpty())
 		Q_EMIT previewReady();

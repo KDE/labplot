@@ -59,7 +59,7 @@ TreeViewComboBox::TreeViewComboBox(QWidget* parent)
 
 	addItem(QString());
 	setCurrentIndex(0);
-	setEditText(m_lineEditText);
+	setEditText(m_currentText);
 
 	// signal activated() is platform dependent
 	connect(m_treeView, &QTreeView::pressed, this, &TreeViewComboBox::treeViewIndexActivated);
@@ -88,7 +88,7 @@ void TreeViewComboBox::setModel(AspectTreeModel* model) {
 	// Expand the complete tree in order to see everything in the first popup.
 	m_treeView->expandAll();
 
-	setEditText(m_lineEditText);
+	setEditText(m_currentText);
 }
 
 /*!
@@ -125,7 +125,7 @@ void TreeViewComboBox::showPopup() {
 	m_groupBox->resize(this->width(), 250);
 	m_groupBox->move(mapToGlobal(this->rect().topLeft()));
 
-	setEditText(m_lineEditText);
+	setEditText(m_currentText);
 	m_lineEdit->setText(QString()); // delete the previous search string
 	m_lineEdit->setFocus();
 }
@@ -151,10 +151,6 @@ void TreeViewComboBox::hidePopup() {
 	m_groupBox->hide();
 }
 
-void TreeViewComboBox::useCurrentIndexText(const bool set) {
-	m_useCurrentIndexText = set;
-}
-
 /*!
 	\property QComboBox::currentText
 	\brief the current text
@@ -171,16 +167,13 @@ void TreeViewComboBox::useCurrentIndexText(const bool set) {
 QString TreeViewComboBox::currentText() const {
 	if (lineEdit())
 		return lineEdit()->text();
-	else if (currentModelIndex().isValid() && m_useCurrentIndexText)
+	else if (currentModelIndex().isValid())
 		return itemText(currentIndex());
-	else if (!m_useCurrentIndexText)
-		return m_lineEditText;
-
-	return {};
+	return m_currentText;
 }
 
 void TreeViewComboBox::setText(const QString& text) {
-	m_lineEditText = text;
+	m_currentText = text;
 }
 
 void TreeViewComboBox::setInvalid(bool invalid, const QString& tooltip) {
@@ -359,12 +352,9 @@ void TreeViewComboBox::setColumn(const AbstractColumn* column, const QString& pa
 		return;
 	}
 
-	if (column) {
-		useCurrentIndexText(true);
+	if (column)
 		setInvalid(false);
-	} else {
-		useCurrentIndexText(false);
+	else
 		setInvalid(true, i18n("The column \"%1\"\nis not available anymore. It will be automatically used once it is created again.", path));
-	}
 	setText(path.split(QLatin1Char('/')).last());
 }

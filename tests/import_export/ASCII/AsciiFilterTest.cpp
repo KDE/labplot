@@ -17,6 +17,7 @@
 #include "backend/lib/macros.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 
@@ -2683,6 +2684,92 @@ void AsciiFilterTest::testPrependColumns() {
 	QCOMPARE(spreadsheet.column(3)->integerAt(2), 7);
 }
 
+void AsciiFilterTest::testCommaAsDecimalSeparator() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+
+	auto p = filter.properties();
+	p.automaticSeparatorDetection = false;
+	p.separator = QStringLiteral(",");
+	p.headerEnabled = true;
+	p.headerLine = 1;
+	p.removeQuotes = true;
+	p.intAsDouble = false;
+	p.simplifyWhitespaces = false;
+	p.locale = QLocale::Language::German;
+
+	filter.setProperties(p);
+
+	{
+		QStringList fileContent = {
+			QStringLiteral("Commit Id,Description,Measurement 1,Measurement2,Measurement3,Measurement 4"),
+			QStringLiteral("9b1cdd5607eaaa521fe74d632ce43f9a37302bf8,master,\"2,908\",\"2,926\",\"2,886\",\"3,043\""),
+			QStringLiteral("41e0de50ee42ed464533af85e5e8b8c949509384,optimize determine Columns (Do not allocate all the time "
+						   "columnNames),\"2,749\",\"2,727\",\"2,792\",\"2,757\""),
+			QStringLiteral("fec3a75c04f4a60571e92ceb1997a4be5311e94b,Make constants Qchar instead of QLatin1String,\"2,77\",\"2,761\",\"2,767\",\"2,762\""),
+			QStringLiteral("bd1a1b252a88e4bb78889d68ef42f185b8a737e7,Simplified check for the separator if only a single "
+						   "character,\"2,24\",\"2,274\",\"2,148\",\"2,215\""),
+			QStringLiteral("f584f71c6bfb4777bd01c13d2c912c5436f726d3,Determine separatorCharacter outside of the loop,\"2,2\",\"2,219\",\"2,201\",\"2,211\""),
+		};
+
+		QString savePath;
+		SAVE_FILE("testfile", fileContent);
+		filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	}
+
+	QCOMPARE(spreadsheet.rowCount(), 5);
+	QCOMPARE(spreadsheet.columnCount(), 6);
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("Commit Id"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("Description"));
+	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("Measurement 1"));
+	QCOMPARE(spreadsheet.column(3)->name(), QLatin1String("Measurement2"));
+	QCOMPARE(spreadsheet.column(4)->name(), QLatin1String("Measurement3"));
+	QCOMPARE(spreadsheet.column(5)->name(), QLatin1String("Measurement 4"));
+
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet.column(4)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet.column(5)->columnMode(), AbstractColumn::ColumnMode::Double);
+
+	QCOMPARE(spreadsheet.column(0)->textAt(0), QStringLiteral("9b1cdd5607eaaa521fe74d632ce43f9a37302bf8"));
+	QCOMPARE(spreadsheet.column(0)->textAt(1), QStringLiteral("41e0de50ee42ed464533af85e5e8b8c949509384"));
+	QCOMPARE(spreadsheet.column(0)->textAt(2), QStringLiteral("fec3a75c04f4a60571e92ceb1997a4be5311e94b"));
+	QCOMPARE(spreadsheet.column(0)->textAt(3), QStringLiteral("bd1a1b252a88e4bb78889d68ef42f185b8a737e7"));
+	QCOMPARE(spreadsheet.column(0)->textAt(4), QStringLiteral("f584f71c6bfb4777bd01c13d2c912c5436f726d3"));
+
+	QCOMPARE(spreadsheet.column(1)->textAt(0), QStringLiteral("master"));
+	QCOMPARE(spreadsheet.column(1)->textAt(1), QStringLiteral("optimize determine Columns (Do not allocate all the time columnNames)"));
+	QCOMPARE(spreadsheet.column(1)->textAt(2), QStringLiteral("Make constants Qchar instead of QLatin1String"));
+	QCOMPARE(spreadsheet.column(1)->textAt(3), QStringLiteral("Simplified check for the separator if only a single character"));
+	QCOMPARE(spreadsheet.column(1)->textAt(4), QStringLiteral("Determine separatorCharacter outside of the loop"));
+
+	VALUES_EQUAL(spreadsheet.column(2)->valueAt(0), 2.908);
+	VALUES_EQUAL(spreadsheet.column(2)->valueAt(1), 2.749);
+	VALUES_EQUAL(spreadsheet.column(2)->valueAt(2), 2.77);
+	VALUES_EQUAL(spreadsheet.column(2)->valueAt(3), 2.24);
+	VALUES_EQUAL(spreadsheet.column(2)->valueAt(4), 2.2);
+
+	VALUES_EQUAL(spreadsheet.column(3)->valueAt(0), 2.926);
+	VALUES_EQUAL(spreadsheet.column(3)->valueAt(1), 2.727);
+	VALUES_EQUAL(spreadsheet.column(3)->valueAt(2), 2.761);
+	VALUES_EQUAL(spreadsheet.column(3)->valueAt(3), 2.274);
+	VALUES_EQUAL(spreadsheet.column(3)->valueAt(4), 2.219);
+
+	VALUES_EQUAL(spreadsheet.column(4)->valueAt(0), 2.886);
+	VALUES_EQUAL(spreadsheet.column(4)->valueAt(1), 2.792);
+	VALUES_EQUAL(spreadsheet.column(4)->valueAt(2), 2.767);
+	VALUES_EQUAL(spreadsheet.column(4)->valueAt(3), 2.148);
+	VALUES_EQUAL(spreadsheet.column(4)->valueAt(4), 2.201);
+
+	VALUES_EQUAL(spreadsheet.column(5)->valueAt(0), 3.043);
+	VALUES_EQUAL(spreadsheet.column(5)->valueAt(1), 2.757);
+	VALUES_EQUAL(spreadsheet.column(5)->valueAt(2), 2.762);
+	VALUES_EQUAL(spreadsheet.column(5)->valueAt(3), 2.215);
+	VALUES_EQUAL(spreadsheet.column(5)->valueAt(4), 2.211);
+}
+
 void AsciiFilterTest::testMatrixHeader() {
 	Matrix matrix(QStringLiteral("test"), false);
 
@@ -2730,19 +2817,22 @@ void AsciiFilterTest::testMatrixHeader() {
  * in the source spreadsheet were modified by the import.
  */
 void AsciiFilterTest::spreadsheetFormulaUpdateAfterImport() {
-	// create the first spreadsheet with the source data
-	Spreadsheet spreadsheet(QStringLiteral("test"), false);
-	spreadsheet.setColumnCount(2);
-	spreadsheet.setRowCount(3);
+	Project project;
 
-	auto* col = spreadsheet.column(0);
+	// create the first spreadsheet with the source data
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("test"), false);
+	spreadsheet->setColumnCount(2);
+	spreadsheet->setRowCount(3);
+	project.addChild(spreadsheet);
+
+	auto* col = spreadsheet->column(0);
 	col->setColumnMode(AbstractColumn::ColumnMode::Double);
 	col->setName(QStringLiteral("c1"));
 	col->setValueAt(0, 10.);
 	col->setValueAt(1, 20.);
 	col->setValueAt(2, 30.);
 
-	col = spreadsheet.column(1);
+	col = spreadsheet->column(1);
 	col->setColumnMode(AbstractColumn::ColumnMode::Double);
 	col->setName(QStringLiteral("c2"));
 	col->setValueAt(0, 10.);
@@ -2750,20 +2840,21 @@ void AsciiFilterTest::spreadsheetFormulaUpdateAfterImport() {
 	col->setValueAt(2, 30.);
 
 	// create the second spreadsheet with one single column calculated via a formula from the first spreadsheet
-	Spreadsheet spreadsheetFormula(QStringLiteral("formula"), false);
-	spreadsheetFormula.setColumnCount(1);
-	spreadsheetFormula.setRowCount(3);
-	col = spreadsheetFormula.column(0);
+	auto* spreadsheetFormula = new Spreadsheet(QStringLiteral("formula"), false);
+	spreadsheetFormula->setColumnCount(1);
+	spreadsheetFormula->setRowCount(3);
+	project.addChild(spreadsheetFormula);
+	col = spreadsheetFormula->column(0);
 	col->setColumnMode(AbstractColumn::ColumnMode::Double);
 
 	QStringList variableNames{QLatin1String("x"), QLatin1String("y")};
-	QVector<Column*> variableColumns{spreadsheet.column(0), spreadsheet.column(1)};
+	QVector<Column*> variableColumns{spreadsheet->column(0), spreadsheet->column(1)};
 	col->setFormula(QLatin1String("x+y"), variableNames, variableColumns, true);
 	col->updateFormula();
 
 	// check the results of the calculation first
-	QCOMPARE(spreadsheetFormula.columnCount(), 1);
-	QCOMPARE(spreadsheetFormula.rowCount(), 3);
+	QCOMPARE(spreadsheetFormula->columnCount(), 1);
+	QCOMPARE(spreadsheetFormula->rowCount(), 3);
 	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
 	QCOMPARE(col->valueAt(0), 20.);
 	QCOMPARE(col->valueAt(1), 40.);
@@ -2787,11 +2878,11 @@ void AsciiFilterTest::spreadsheetFormulaUpdateAfterImport() {
 
 	QString savePath;
 	SAVE_FILE("testfile", content);
-	filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	filter.readDataFromFile(savePath, spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	// re-check the results of the calculation
-	QCOMPARE(spreadsheetFormula.columnCount(), 1);
-	QCOMPARE(spreadsheetFormula.rowCount(), 3);
+	QCOMPARE(spreadsheetFormula->columnCount(), 1);
+	QCOMPARE(spreadsheetFormula->rowCount(), 3);
 	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
 	QCOMPARE(col->valueAt(0), 2.); // c1 + c2
 	QCOMPARE(col->valueAt(1), 4.); // c1 + c2
@@ -2882,19 +2973,25 @@ void AsciiFilterTest::spreadsheetFormulaUpdateAfterImportWithColumnRestore() {
  * in the source columns were modified by the import.
  */
 void AsciiFilterTest::plotUpdateAfterImport() {
-	// create the spreadsheet with the source data
-	Spreadsheet spreadsheet(QStringLiteral("test"), false);
-	spreadsheet.setColumnCount(2);
-	spreadsheet.setRowCount(3);
+	Project project;
 
-	auto* col = spreadsheet.column(0);
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	// create the spreadsheet with the source data
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("test"), false);
+	spreadsheet->setColumnCount(2);
+	spreadsheet->setRowCount(3);
+	project.addChild(spreadsheet);
+
+	auto* col = spreadsheet->column(0);
 	col->setColumnMode(AbstractColumn::ColumnMode::Double);
 	col->setName(QStringLiteral("c1"));
 	col->setValueAt(0, 10.);
 	col->setValueAt(1, 20.);
 	col->setValueAt(2, 30.);
 
-	col = spreadsheet.column(1);
+	col = spreadsheet->column(1);
 	col->setColumnMode(AbstractColumn::ColumnMode::Double);
 	col->setName(QStringLiteral("c2"));
 	col->setValueAt(0, 10.);
@@ -2902,17 +2999,18 @@ void AsciiFilterTest::plotUpdateAfterImport() {
 	col->setValueAt(2, 30.);
 
 	// create a xy-curve with the both columns in the source spreadsheet and check the ranges
-	CartesianPlot p(QStringLiteral("plot"));
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(p);
 	auto* curve = new XYCurve(QStringLiteral("curve"));
-	p.addChild(curve);
-	curve->setXColumn(spreadsheet.column(0));
-	curve->setYColumn(spreadsheet.column(1));
+	p->addChild(curve);
+	curve->setXColumn(spreadsheet->column(0));
+	curve->setYColumn(spreadsheet->column(1));
 
-	auto rangeX = p.range(Dimension::X);
+	auto rangeX = p->range(Dimension::X);
 	QCOMPARE(rangeX.start(), 10);
 	QCOMPARE(rangeX.end(), 30);
 
-	auto rangeY = p.range(Dimension::Y);
+	auto rangeY = p->range(Dimension::Y);
 	QCOMPARE(rangeY.start(), 10);
 	QCOMPARE(rangeY.end(), 30);
 
@@ -2934,14 +3032,14 @@ void AsciiFilterTest::plotUpdateAfterImport() {
 
 	QString savePath;
 	SAVE_FILE("testfile", content);
-	filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	filter.readDataFromFile(savePath, spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	// re-check the plot ranges with the new data
-	rangeX = p.range(Dimension::X);
+	rangeX = p->range(Dimension::X);
 	QCOMPARE(rangeX.start(), 1);
 	QCOMPARE(rangeX.end(), 3);
 
-	rangeY = p.range(Dimension::Y);
+	rangeY = p->range(Dimension::Y);
 	QCOMPARE(rangeY.start(), 1);
 	QCOMPARE(rangeY.end(), 3);
 }
@@ -3397,32 +3495,73 @@ void AsciiFilterTest::determineColumns() {
 	// No whitespace simplifying! High performance parser
 	p.simplifyWhitespaces = false;
 
+	const auto separatorLength = p.separator.size();
+	bool separatorSingleCharacter = separatorLength == 1;
+	QChar separatorCharacter;
+	if (separatorLength)
+		separatorCharacter = p.separator[separatorLength - 1];
+
 	p.removeQuotes = false;
 	auto expectedHeaderNoWhiteSpace = QVector<QStringView>{QStringLiteral("header1"), QStringLiteral("header2"), QStringLiteral("header3")};
-	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("header1,header2,header3\n"), p), expectedHeaderNoWhiteSpace);
+	QVector<QStringView> columnNames(3);
+	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("header1,header2,header3\n"), p, separatorSingleCharacter, separatorCharacter, columnNames),
+			 3);
+	QCOMPARE(columnNames, expectedHeaderNoWhiteSpace);
 
 	p.removeQuotes = true;
 	expectedHeaderNoWhiteSpace = QVector<QStringView>{QStringLiteral("header 1"), QStringLiteral("header 2"), QStringLiteral("header 3")};
-	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("\"header 1\",\"header 2\",\"header 3\"\n"), p), expectedHeaderNoWhiteSpace);
+	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("\"header 1\",\"header 2\",\"header 3\"\n"),
+												  p,
+												  separatorSingleCharacter,
+												  separatorCharacter,
+												  columnNames),
+			 3);
+	QCOMPARE(columnNames, expectedHeaderNoWhiteSpace);
 
 	// Without \n at the end
 	p.removeQuotes = true;
 	expectedHeaderNoWhiteSpace = QVector<QStringView>{QStringLiteral("header 1"), QStringLiteral("header 2"), QStringLiteral("header 3")};
-	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("\"header 1\",\"header 2\",\"header 3"), p), expectedHeaderNoWhiteSpace);
+	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("\"header 1\",\"header 2\",\"header 3"),
+												  p,
+												  separatorSingleCharacter,
+												  separatorCharacter,
+												  columnNames),
+			 3);
+	QCOMPARE(columnNames, expectedHeaderNoWhiteSpace);
 
 	// Quotes still inside
 	p.removeQuotes = false;
 	expectedHeaderNoWhiteSpace = QVector<QStringView>{QStringLiteral("\"header 1\""), QStringLiteral("\"header 2\""), QStringLiteral("\"header 3\"")};
-	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("\"header 1\",\"header 2\",\"header 3\"\n"), p), expectedHeaderNoWhiteSpace);
+	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("\"header 1\",\"header 2\",\"header 3\"\n"),
+												  p,
+												  separatorSingleCharacter,
+												  separatorCharacter,
+												  columnNames),
+			 3);
+	QCOMPARE(columnNames, expectedHeaderNoWhiteSpace);
 
 	p.removeQuotes = true;
 	expectedHeaderNoWhiteSpace = QVector<QStringView>{QStringLiteral("header 1"), QStringLiteral("header2"), QStringLiteral("header 3")};
 	// Second header has no quotes
-	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("\"header 1\",header2,\"header 3\"\n"), p), expectedHeaderNoWhiteSpace);
+	QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("\"header 1\",header2,\"header 3\"\n"),
+												  p,
+												  separatorSingleCharacter,
+												  separatorCharacter,
+												  columnNames),
+			 3);
+	QCOMPARE(columnNames, expectedHeaderNoWhiteSpace);
+
+	// Benchmark
+	p.removeQuotes = false;
 
 	expectedHeaderNoWhiteSpace = QVector<QStringView>{QStringLiteral("header1"), QStringLiteral("header2"), QStringLiteral("header3")};
 	p.simplifyWhitespaces = false;
-	QBENCHMARK { QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("header1,header2,header3\n"), p), expectedHeaderNoWhiteSpace); }
+	QBENCHMARK {
+		QCOMPARE(
+			AsciiFilterPrivate::determineColumns(QStringLiteral("header1,header2,header3\n"), p, separatorSingleCharacter, separatorCharacter, columnNames),
+			3);
+	}
+	QCOMPARE(columnNames, expectedHeaderNoWhiteSpace);
 
 	expectedHeader = QStringList{QStringLiteral("header1"), QStringLiteral("header2"), QStringLiteral("header3")};
 	p.simplifyWhitespaces = true;

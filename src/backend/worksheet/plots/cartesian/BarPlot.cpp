@@ -201,7 +201,7 @@ bool BarPlot::hasData() const {
 	return !d->dataColumns.isEmpty();
 }
 
-bool BarPlot::usingColumn(const Column* column) const {
+bool BarPlot::usingColumn(const AbstractColumn* column, bool) const {
 	Q_D(const BarPlot);
 
 	if (d->xColumn == column)

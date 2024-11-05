@@ -207,7 +207,7 @@ bool LollipopPlot::hasData() const {
 	return !d->dataColumns.isEmpty();
 }
 
-bool LollipopPlot::usingColumn(const Column* column) const {
+bool LollipopPlot::usingColumn(const AbstractColumn* column, bool) const {
 	Q_D(const LollipopPlot);
 
 	if (d->xColumn == column)

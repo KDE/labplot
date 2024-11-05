@@ -75,7 +75,7 @@ void DatasetHandler::markMetadataAsInvalid() {
 void DatasetHandler::configureFilter() {
 	// set some default values common to many datasets
 	auto properties = m_filter->properties();
-	properties.numberFormat = QLocale::C;
+	properties.locale = QLocale::C;
 	properties.skipEmptyParts = false;
 	properties.headerEnabled = false;
 	properties.removeQuotes = true;
@@ -114,7 +114,7 @@ void DatasetHandler::configureFilter() {
 		}
 
 		if (m_object->contains(QLatin1String("number_format")))
-			properties.numberFormat = QLocale::Language(m_object->value(QStringLiteral("number_format")).toInt());
+			properties.locale = QLocale::Language(m_object->value(QStringLiteral("number_format")).toInt());
 
 		if (m_object->contains(QLatin1String("DateTime_format")))
 			properties.dateTimeFormat = m_object->value(QStringLiteral("DateTime_format")).toString();

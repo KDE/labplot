@@ -61,16 +61,29 @@ void XYFunctionCurve::handleAspectUpdated(const QString& aspectPath, const Abstr
 	d->handleAspectUpdated(aspectPath, element);
 }
 
-bool XYFunctionCurve::usingColumn(const Column* column) const {
+bool XYFunctionCurve::usingColumn(const AbstractColumn* column, bool indirect) const {
+	if (indirect) {
+		for (const auto& d : functionData()) {
+			const auto* curve = d.curve();
+			if (curve) {
+				if (curve->usingColumn(column, indirect))
+					return true;
+			}
+		}
+	}
+	return false; // Does not directly use the curves
+}
+
+QVector<const Plot*> XYFunctionCurve::dependingPlots() const {
+	Q_D(const XYFunctionCurve);
+	QVector<const Plot*> plots;
 	for (const auto& d : functionData()) {
 		const auto* curve = d.curve();
 		if (curve) {
-			if (curve->xColumn() == column || curve->yColumn() == column)
-				return true;
+			plots.append(curve);
 		}
 	}
-
-	return false;
+	return plots;
 }
 
 // ##############################################################################
@@ -391,8 +404,8 @@ bool XYFunctionCurvePrivate::preparationValid(const AbstractColumn*, const Abstr
 	return true;
 }
 
-void XYFunctionCurvePrivate::prepareTmpDataColumn(const AbstractColumn**, const AbstractColumn**) {
-	// Nothing to do
+void XYFunctionCurvePrivate::prepareTmpDataColumn(const AbstractColumn**, const AbstractColumn**) const {
+	// Nothing to do, because we have more than two columns
 }
 
 void XYFunctionCurvePrivate::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) {

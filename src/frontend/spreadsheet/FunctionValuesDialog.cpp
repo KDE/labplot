@@ -123,7 +123,6 @@ void FunctionValuesDialog::setColumns(const QVector<Column*>& columns) {
 				else
 					m_variableDataColumns[i]->setCurrentModelIndex(QModelIndex());
 
-				m_variableDataColumns[i]->useCurrentIndexText(true);
 				m_variableDataColumns[i]->setInvalid(false);
 
 				found = true;
@@ -134,7 +133,6 @@ void FunctionValuesDialog::setColumns(const QVector<Column*>& columns) {
 			//->highlight the combobox red
 			if (!found) {
 				m_variableDataColumns[i]->setCurrentModelIndex(QModelIndex());
-				m_variableDataColumns[i]->useCurrentIndexText(false);
 				m_variableDataColumns[i]->setInvalid(
 					true,
 					i18n("The column \"%1\"\nis not available anymore. It will be automatically used once it is created again.",
