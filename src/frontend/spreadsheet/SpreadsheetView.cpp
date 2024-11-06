@@ -246,6 +246,10 @@ void SpreadsheetView::init() {
 	connect(m_spreadsheet, &Spreadsheet::columnDeselected, this, &SpreadsheetView::deselectColumn);
 }
 
+bool SpreadsheetView::isReadOnly() const {
+	return m_readOnly;
+}
+
 /*!
 	set the column sizes to the saved values or resize to content if no size was saved yet
 */
@@ -941,30 +945,6 @@ void SpreadsheetView::connectActions() {
 	connect(addAnalysisActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::plotAnalysisData);
 	connect(addFitActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::plotAnalysisData);
 	connect(addDistributionFitActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::plotDataDistributionFit);
-}
-
-void SpreadsheetView::fillToolBar(QToolBar* toolBar) {
-	if (!m_readOnly) {
-		toolBar->addAction(action_insert_row_above);
-		toolBar->addAction(action_insert_row_below);
-		toolBar->addAction(action_remove_rows);
-	}
-	// toolBar->addAction(action_statistics_rows); // TODO: the status enabled or not needs to be synchronized with the current selection (has valid numeric
-	// values?)
-	toolBar->addSeparator();
-	if (!m_readOnly) {
-		toolBar->addAction(action_insert_column_left);
-		toolBar->addAction(action_insert_column_right);
-		toolBar->addAction(action_remove_columns);
-	}
-
-	// toolBar->addAction(action_statistics_columns);
-	if (!m_readOnly) {
-		toolBar->addSeparator();
-		toolBar->addAction(action_sort);
-		toolBar->addAction(action_sort_asc);
-		toolBar->addAction(action_sort_desc);
-	}
 }
 
 #ifdef HAVE_TOUCHBAR

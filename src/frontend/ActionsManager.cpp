@@ -316,8 +316,8 @@ void ActionsManager::initActions() {
 
 	// Edit
 	// Undo/Redo-stuff
-	m_undoAction = KStandardAction::undo(this, SLOT(undo()), collection);
-	m_redoAction = KStandardAction::redo(this, SLOT(redo()), collection);
+	m_undoAction = KStandardAction::undo(m_mainWindow, SLOT(undo()), collection);
+	m_redoAction = KStandardAction::redo(m_mainWindow, SLOT(redo()), collection);
 	m_historyAction = new QAction(QIcon::fromTheme(QLatin1String("view-history")), i18n("Undo/Redo History..."), this);
 	collection->addAction(QLatin1String("history"), m_historyAction);
 	connect(m_historyAction, &QAction::triggered, m_mainWindow, &MainWin::historyDialog);
@@ -437,18 +437,62 @@ void ActionsManager::initActions() {
 	collection->addAction(QLatin1String("configure_cas"), m_configureCASAction);
 	connect(m_configureCASAction, &QAction::triggered, m_mainWindow, &MainWin::settingsDialog); // TODO: go to the Notebook page in the settings dialog directly
 #endif
-
-	initToolbarActions();
 }
 
-void ActionsManager::initToolbarActions() {
+/*!
+ * initializes worksheet related actions shown in the toolbar, called when a worksheet is selected for the first time.
+ */
+void ActionsManager::initWorksheetToolbarActions() {
+	// auto* collection = m_mainWindow->actionCollection();
+
+}
+
+/*!
+ * initializes spreadsheet related actions shown in the toolbar, called when a spreadsheet is selected for the first time.
+ */
+void ActionsManager::initSpreadsheetToolbarActions() {
 	auto* collection = m_mainWindow->actionCollection();
 
-	// worksheet
+	// rows
+	m_spreadsheetInsertRowAboveAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-row-above")), i18n("Insert Row Above"), this);
+	collection->addAction(QLatin1String("spreadsheet_insert_row_above"), m_spreadsheetInsertRowAboveAction);
 
-	// spreadsheet
+	m_spreadsheetInsertRowBelowAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-row-below")), i18n("Insert Row Below"), this);
+	collection->addAction(QLatin1String("spreadsheet_insert_row_below"), m_spreadsheetInsertRowBelowAction);
 
-	// notebook
+	m_spreadsheetRemoveRowsAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-delete-row")), i18n("Remo&ve Selected Row(s)"), this);
+	collection->addAction(QLatin1String("spreadsheet_remove_rows"), m_spreadsheetRemoveRowsAction);
+
+	// columns
+	m_spreadsheetInsertColumnLeftAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-left")), i18n("Insert Column Left"), this);
+	collection->addAction(QLatin1String("spreadsheet_insert_column_left"), m_spreadsheetInsertColumnLeftAction);
+
+	m_spreadsheetInsertColumnRightAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-right")), i18n("Insert Column Right"), this);
+	collection->addAction(QLatin1String("spreadsheet_insert_column_right"), m_spreadsheetInsertColumnRightAction);
+
+	m_spreadsheetRemoveColumnsAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-delete-column")), i18n("Delete Selected Column(s)"), this);
+	collection->addAction(QLatin1String("spreadsheet_remove_columns"), m_spreadsheetRemoveColumnsAction);
+
+	// sort
+	m_spreadsheetSortAction = new QAction(QIcon::fromTheme(QStringLiteral("view-sort")), i18n("&Sort..."), this);
+	m_spreadsheetSortAction->setToolTip(i18n("Sort multiple columns together"));
+	collection->addAction(QLatin1String("spreadsheet_sort"), m_spreadsheetSortAction);
+
+	m_spreadsheetSortAscAction = new QAction(QIcon::fromTheme(QStringLiteral("view-sort-ascending")), i18n("Sort &Ascending"), this);
+	m_spreadsheetSortAscAction->setToolTip(i18n("Sort the selected columns separately in ascending order"));
+	collection->addAction(QLatin1String("spreadsheet_sort_asc"), m_spreadsheetSortAscAction);
+
+	m_spreadsheetSortDescAction = new QAction(QIcon::fromTheme(QStringLiteral("view-sort-descending")), i18n("Sort &Descending"), this);
+	m_spreadsheetSortDescAction->setToolTip(i18n("Sort the selected columns separately in descending order"));
+	collection->addAction(QLatin1String("spreadsheet_sort_desc"), m_spreadsheetSortDescAction);
+}
+
+/*!
+ * initializes notebook related actions shown in the toolbar, called when a notebook is selected for the first time.
+ */
+void ActionsManager::initNotebookToolbarActions() {
+	auto* collection = m_mainWindow->actionCollection();
+
 	m_notebookZoomInAction = new QAction(QIcon::fromTheme(QLatin1String("zoom-in")), i18n("Zoom In"), this);
 	collection->addAction(QLatin1String("notebook_zoom_in"), m_notebookZoomInAction);
 
@@ -463,8 +507,13 @@ void ActionsManager::initToolbarActions() {
 
 	m_notebookEvaluateAction = new QAction(QIcon::fromTheme(QLatin1String("system-run")), i18n("Evaluate Notebook"), this);
 	collection->addAction(QLatin1String("notebook_evaluate"), m_notebookEvaluateAction);
+}
 
-	// data extractor
+/*!
+ * initializes data extractor related actions shown in the toolbar, called when a data extractor is selected for the first time.
+ */
+void ActionsManager::initDataExtractorToolbarActions() {
+	// auto* collection = m_mainWindow->actionCollection();
 }
 
 void ActionsManager::initMenus() {
@@ -623,7 +672,6 @@ void ActionsManager::updateGUIOnProjectChanges() {
 	m_redoAction->setEnabled(false);
 }
 
-
 bool hasAction(const QList<QAction*>& actions) {
 	for (const auto* action : actions) {
 		if (!action->isSeparator())
@@ -708,12 +756,9 @@ void ActionsManager::updateGUI() {
 		menu->setEnabled(true);
 
 		// populate worksheet-toolbar
+		if (update)
+			connectWorksheetToolbarActions(view);
 		auto* toolbar = qobject_cast<QToolBar*>(factory->container(QLatin1String("worksheet_toolbar"), m_mainWindow));
-		if (update) { // update because the aspect has changed
-			toolbar->clear();
-			view->fillToolBar(toolbar);
-		} else if (!hasAction(toolbar->actions())) // update because the view was closed and the actions deleted
-			view->fillToolBar(toolbar);
 		toolbar->setVisible(true);
 		toolbar->setEnabled(true);
 
@@ -759,16 +804,15 @@ void ActionsManager::updateGUI() {
 			view->createContextMenu(menu);
 		menu->setEnabled(true);
 
-		// populate spreadsheet-toolbar
+		// spreadsheet-toolbar
 		auto* toolbar = qobject_cast<QToolBar*>(factory->container(QLatin1String("spreadsheet_toolbar"), m_mainWindow));
-		if (update) {
-			toolbar->clear();
-			view->fillToolBar(toolbar);
-		} else if (!hasAction(toolbar->actions()))
-			view->fillToolBar(toolbar);
-
-		toolbar->setVisible(true);
-		toolbar->setEnabled(true);
+		if (!view->isReadOnly()) {
+			if (update)
+				connectSpreadsheetToolbarActions(view);
+			toolbar->setVisible(true);
+			toolbar->setEnabled(true);
+		} else
+			toolbar->setVisible(false);
 
 		// populate the touchbar on Mac
 #ifdef HAVE_TOUCHBAR
@@ -776,7 +820,7 @@ void ActionsManager::updateGUI() {
 		view->fillTouchBar(m_touchBar);
 #endif
 
-		// spreadsheet has it's own search, unregister the shortcut for the global search here
+		// spreadsheet has its own search, unregister the shortcut for the global search here
 		m_searchAction->setShortcut(QKeySequence());
 	} else {
 		factory->container(QLatin1String("spreadsheet"), m_mainWindow)->setEnabled(false);
@@ -960,15 +1004,41 @@ void ActionsManager::connectWorksheetToolbarActions(const WorksheetView* view) {
 }
 
 void ActionsManager::connectSpreadsheetToolbarActions(const SpreadsheetView* view) {
+	if (!m_spreadsheetInsertRowAboveAction)
+		initSpreadsheetToolbarActions();
+	else {
+		disconnect(m_spreadsheetInsertRowAboveAction, &QAction::triggered, nullptr, nullptr);
+		disconnect(m_spreadsheetInsertRowBelowAction, &QAction::triggered, nullptr, nullptr);
+		disconnect(m_spreadsheetRemoveRowsAction, &QAction::triggered, nullptr, nullptr);
+		disconnect(m_spreadsheetInsertColumnLeftAction, &QAction::triggered, nullptr, nullptr);
+		disconnect(m_spreadsheetInsertColumnRightAction, &QAction::triggered, nullptr, nullptr);
+		disconnect(m_spreadsheetRemoveColumnsAction, &QAction::triggered, nullptr, nullptr);
+		disconnect(m_spreadsheetSortAction, &QAction::triggered, nullptr, nullptr);
+		disconnect(m_spreadsheetSortAscAction, &QAction::triggered, nullptr, nullptr);
+		disconnect(m_spreadsheetSortDescAction, &QAction::triggered, nullptr, nullptr);
+	}
 
+	connect(m_spreadsheetInsertRowAboveAction, &QAction::triggered, view, &SpreadsheetView::insertRowAbove);
+	connect(m_spreadsheetInsertRowBelowAction, &QAction::triggered, view, &SpreadsheetView::insertRowBelow);
+	connect(m_spreadsheetRemoveRowsAction, &QAction::triggered, view, &SpreadsheetView::removeSelectedRows);
+	connect(m_spreadsheetInsertColumnLeftAction, &QAction::triggered, view, &SpreadsheetView::insertColumnLeft);
+	connect(m_spreadsheetInsertColumnRightAction, &QAction::triggered, view, &SpreadsheetView::insertColumnRight);
+	connect(m_spreadsheetRemoveColumnsAction, &QAction::triggered, view, &SpreadsheetView::removeSelectedColumns);
+	connect(m_spreadsheetSortAction, &QAction::triggered, view, &SpreadsheetView::sortCustom);
+	connect(m_spreadsheetSortAscAction, &QAction::triggered, view, &SpreadsheetView::sortAscending);
+	connect(m_spreadsheetSortDescAction, &QAction::triggered, view, &SpreadsheetView::sortDescending);
 }
 
 void ActionsManager::connectNotebookToolbarActions(const NotebookView* view) {
-	disconnect(m_notebookRestartAction, &QAction::triggered, nullptr, nullptr);
-	disconnect(m_notebookEvaluateAction, &QAction::triggered, nullptr, nullptr);
-	disconnect(m_notebookZoomInAction, &QAction::triggered, nullptr, nullptr);
-	disconnect(m_notebookZoomOutAction, &QAction::triggered, nullptr, nullptr);
-	disconnect(m_notebookFindAction, &QAction::triggered, nullptr, nullptr);
+	if (!m_notebookRestartAction)
+		initNotebookToolbarActions();
+	else {
+		disconnect(m_notebookRestartAction, &QAction::triggered, nullptr, nullptr);
+		disconnect(m_notebookEvaluateAction, &QAction::triggered, nullptr, nullptr);
+		disconnect(m_notebookZoomInAction, &QAction::triggered, nullptr, nullptr);
+		disconnect(m_notebookZoomOutAction, &QAction::triggered, nullptr, nullptr);
+		disconnect(m_notebookFindAction, &QAction::triggered, nullptr, nullptr);
+	}
 
 	connect(m_notebookRestartAction, &QAction::triggered, view, &NotebookView::restart);
 	connect(m_notebookEvaluateAction, &QAction::triggered, view, &NotebookView::evaluate);

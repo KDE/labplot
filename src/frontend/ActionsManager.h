@@ -45,8 +45,12 @@ public:
 
 private:
 	void initActions();
-	void initToolbarActions();
 	void initMenus();
+
+	void initWorksheetToolbarActions();
+	void initSpreadsheetToolbarActions();
+	void initNotebookToolbarActions();
+	void initDataExtractorToolbarActions();
 
 	void connectWorksheetToolbarActions(const WorksheetView*);
 	void connectSpreadsheetToolbarActions(const SpreadsheetView*);
@@ -109,6 +113,17 @@ private:
 	QAction* m_visibilityFolderAction;
 	QAction* m_visibilitySubfolderAction;
 	QAction* m_visibilityAllAction;
+
+	// spreadsheet
+	QAction* m_spreadsheetInsertRowAboveAction{nullptr};
+	QAction* m_spreadsheetInsertRowBelowAction{nullptr};
+	QAction* m_spreadsheetRemoveRowsAction{nullptr};
+	QAction* m_spreadsheetInsertColumnLeftAction{nullptr};
+	QAction* m_spreadsheetInsertColumnRightAction{nullptr};
+	QAction* m_spreadsheetRemoveColumnsAction{nullptr};
+	QAction* m_spreadsheetSortAction{nullptr};
+	QAction* m_spreadsheetSortAscAction{nullptr};
+	QAction* m_spreadsheetSortDescAction{nullptr};
 
 	// notebook
 	QAction* m_notebookRestartAction{nullptr};

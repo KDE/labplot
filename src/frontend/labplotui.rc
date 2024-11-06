@@ -37,7 +37,18 @@
 </ToolBar>
 
 <ToolBar name="spreadsheet_toolbar">
-<text>Spreadsheet Toolbar</text>
+	<text>Spreadsheet Toolbar</text>
+	<Action name="spreadsheet_insert_row_above"/>
+	<Action name="spreadsheet_insert_row_below"/>
+	<Action name="spreadsheet_remove_rows"/>
+	<Separator/>
+	<Action name="spreadsheet_insert_column_left"/>
+	<Action name="spreadsheet_insert_column_right"/>
+	<Action name="spreadsheet_remove_columns"/>
+	<Separator/>
+	<Action name="spreadsheet_sort"/>
+	<Action name="spreadsheet_sort_asc"/>
+	<Action name="spreadsheet_sort_desc"/>
 </ToolBar>
 
 <ToolBar name="notebook_toolbar">
