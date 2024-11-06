@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-05 00:37+0000\n"
-"PO-Revision-Date: 2024-11-04 11:09+0100\n"
+"POT-Creation-Date: 2024-11-06 00:37+0000\n"
+"PO-Revision-Date: 2024-11-05 10:41+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -1208,20 +1208,20 @@ msgid "Number of lines: %1"
 msgstr "Nombre de línies: %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:522
-#: src/backend/datasources/filters/AsciiFilter.cpp:1264
+#: src/backend/datasources/filters/AsciiFilter.cpp:1293
 #: src/backend/datasources/filters/JsonFilter.cpp:284
 #, kde-format
 msgid "Column %1"
 msgstr "Columna %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:592
-#: src/backend/datasources/filters/AsciiFilter.cpp:1287
+#: src/backend/datasources/filters/AsciiFilter.cpp:1316
 #, kde-format
 msgid "Timestamp"
 msgstr "Marca horària"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:596
-#: src/backend/datasources/filters/AsciiFilter.cpp:1291
+#: src/backend/datasources/filters/AsciiFilter.cpp:1320
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -8010,7 +8010,7 @@ msgstr "%1: estableix el color de les etiquetes"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:1009
 #, kde-format
 msgid "%1: set label font"
-msgstr "%1: estableix el tipus de lletra de les etiquetes"
+msgstr "%1: estableix la lletra de les etiquetes"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:1016
 #, kde-format
@@ -8073,7 +8073,7 @@ msgstr "%1: s'ha canviat el factor d'amplada"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:299
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:170
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:354
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:355
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:112
 #, kde-format
 msgid "%1 - Data"
@@ -8825,7 +8825,7 @@ msgstr "x=%1"
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:209
 #, kde-format
 msgid "%1: set font"
-msgstr "%1: estableix el tipus de lletra"
+msgstr "%1: estableix la lletra"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:216
 #, kde-format
@@ -8836,7 +8836,7 @@ msgstr "%1: usa el color del diagrama"
 #: src/backend/worksheet/TextLabel.cpp:353
 #, kde-format
 msgid "%1: set font color"
-msgstr "%1: estableix el color del tipus de lletra"
+msgstr "%1: estableix el color de la lletra"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:230
 #, kde-format
@@ -9517,7 +9517,7 @@ msgstr "%1: estableix el sufix dels valors"
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:557
 #, kde-format
 msgid "%1: set values font"
-msgstr "%1: estableix el tipus de lletra dels valors"
+msgstr "%1: estableix la lletra dels valors"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:207
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:564
@@ -9525,27 +9525,27 @@ msgstr "%1: estableix el tipus de lletra dels valors"
 msgid "%1: set values color"
 msgstr "%1: estableix el color dels valors"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:206
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:207
 #, kde-format
 msgid "%1: data source type changed"
 msgstr "%1: s'ha canviat el tipus de l'origen de les dades"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:213
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:214
 #, kde-format
 msgid "%1: data source curve changed"
 msgstr "%1: s'ha canviat la corba de l'origen de les dades"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:222
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:223
 #, kde-format
 msgid "%1: assign x-data"
 msgstr "%1: assigna les dades de X"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:231
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:232
 #, kde-format
 msgid "%1: assign y-data"
 msgstr "%1: assigna les dades de Y"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:240
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:241
 #, kde-format
 msgid "%1: assign second y-data"
 msgstr "%1: assigna les segones dades de Y"
@@ -9962,7 +9962,7 @@ msgstr "%1: estableix l'etiqueta amb un text d'espai reservat"
 #: src/backend/worksheet/TextLabel.cpp:346
 #, kde-format
 msgid "%1: set TeX main font"
-msgstr "%1: estableix el tipus de lletra principal del TeX"
+msgstr "%1: estableix la lletra principal del TeX"
 
 #: src/backend/worksheet/TextLabel.cpp:361
 #, kde-format
@@ -16641,7 +16641,7 @@ msgstr "Fons"
 #: src/frontend/spreadsheet/FormattingHeatmapDialog.cpp:62
 #, kde-format
 msgid "Font Color"
-msgstr "Color del tipus de lletra"
+msgstr "Color de la lletra"
 
 #: src/frontend/spreadsheet/FormattingHeatmapDialog.cpp:63
 #, kde-format
@@ -20115,7 +20115,7 @@ msgstr "Posició"
 #: src/frontend/ui/labelwidget.ui:652
 #, kde-format
 msgid "Font:"
-msgstr "Tipus de lletra:"
+msgstr "Lletra:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsSuffix)
 #. i18n: ectx: property (text), widget (QLabel, lSuffix)
@@ -20202,7 +20202,7 @@ msgstr "Prefix:"
 #: src/frontend/ui/labelwidget.ui:530
 #, kde-format
 msgid "Font Color:"
-msgstr "Color del tipus de lletra:"
+msgstr "Color de la lletra:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabGrid)
 #. i18n: ectx: property (text), widget (QLabel, lGrid)
@@ -22439,7 +22439,7 @@ msgstr "Alineació vert.:"
 #: src/frontend/ui/labelwidget.ui:111
 #, kde-format
 msgid "Main font:"
-msgstr "Tipus de lletra principal:"
+msgstr "Lletra principal:"
 
 #. i18n: ectx: property (html), widget (ResizableTextEdit, teLabel)
 #: src/frontend/ui/labelwidget.ui:160
