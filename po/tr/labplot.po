@@ -8725,10 +8725,9 @@ msgid "%1: set font"
 msgstr "%1: Yazıtipini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:216
-#, fuzzy, kde-format
-#| msgid "%1: set font color"
+#, kde-format
 msgid "%1: use plot's color"
-msgstr "%1: Yazıtipi rengini ayarla"
+msgstr "%1: Çizimin rengini kullan"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:223
 #: src/backend/worksheet/TextLabel.cpp:353
@@ -12670,6 +12669,8 @@ msgid ""
 "Use the main color of the plot (line, symbol, etc.) for the color of the "
 "name in the legend."
 msgstr ""
+"Göstergedeki adın rengi için çizimin ana rengini kullanın (çizgi, sembol "
+"vb.)."
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:249
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:246
@@ -17600,13 +17601,12 @@ msgstr "%1: Seçili hücreleri temizle"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3781
 #, kde-format
 msgid "Selected 1: %1 rows, %2 columns"
-msgstr ""
+msgstr "Seçili 1: %1 satır, %2 sütun"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3791
-#, fuzzy, kde-format
-#| msgid "%1: cut selected cells"
+#, kde-format
 msgid "Selected: %1 cells"
-msgstr "%1: Seçili hücreleri kes"
+msgstr "Seçili: %1 hücre"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3810
 #, kde-format
@@ -17664,10 +17664,9 @@ msgid ", "
 msgstr ", "
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3820
-#, fuzzy, kde-format
-#| msgid "Selected: %1 %2 , %3 %4%5 %6 %7 %8"
+#, kde-format
 msgid "Selected: %1 %2, %3 %4%5 %6 %7 %8"
-msgstr "Seçili: %1 %2 , %3 %4%5 %6 %7 %8"
+msgstr "Seçili: %1 %2, %3 %4%5 %6 %7 %8"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3830
 #, kde-format
@@ -20664,10 +20663,9 @@ msgstr "Yat. hiza.:"
 
 #. i18n: ectx: property (text), widget (QLabel, lUsePlotColor)
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:463
-#, fuzzy, kde-format
-#| msgid "Font Color:"
+#, kde-format
 msgid "Plot's Color:"
-msgstr "Yazıtipi rengi:"
+msgstr "Çizimin rengi:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderCornerRadius)
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:552
