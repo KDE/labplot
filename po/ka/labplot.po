@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-06 00:37+0000\n"
-"PO-Revision-Date: 2024-11-06 12:11+0100\n"
+"PO-Revision-Date: 2024-11-07 05:47+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -4173,6 +4173,8 @@ msgid ""
 "Scaled regular modified cylindrical Bessel function of zeroth order exp(-|"
 "x|) I0(x)"
 msgstr ""
+"დამასშტაბებული რეგულარული შეცვლილი ცილინფრული ბესელის ფუნქცია მენულე რიგით "
+"exp(-|x|) I0(x)"
 
 #: src/backend/gsl/functions.cpp:362
 #, kde-format
@@ -4180,6 +4182,8 @@ msgid ""
 "Scaled regular modified cylindrical Bessel function of first order exp(-|x|) "
 "I1(x)"
 msgstr ""
+"დამასშტაბებული რეგულარული შეცვლილი ცილინფრული ბესელის ფუნქცია პირველი რიგით "
+"exp(-|x|) I1(x)"
 
 #: src/backend/gsl/functions.cpp:363
 #, kde-format
@@ -4187,21 +4191,23 @@ msgid ""
 "Scaled regular modified cylindrical Bessel function of order n exp(-|x|) "
 "In(x)"
 msgstr ""
+"დამასშტაბებული რეგულარული შეცვლილი ცილინფრული ბესელის ფუნქცია მე-n რიგით "
+"exp(-|x|) In(x)"
 
 #: src/backend/gsl/functions.cpp:364
 #, kde-format
 msgid "Irregular modified cylindrical Bessel function of zeroth order"
-msgstr ""
+msgstr "არარეგულარული შეცვლილი ცილინდრული ბესელის ფუნქცია მენულე რიგით"
 
 #: src/backend/gsl/functions.cpp:365
 #, kde-format
 msgid "Irregular modified cylindrical Bessel function of first order"
-msgstr ""
+msgstr "არარეგულარული შეცვლილი ცილინდრული ბესელის ფუნქცია პირველი რიგით"
 
 #: src/backend/gsl/functions.cpp:366
 #, kde-format
 msgid "Irregular modified cylindrical Bessel function of order n"
-msgstr ""
+msgstr "არარეგულარული შეცვლილი ცილინდრული ბესელის ფუნქცია მე-n რიგით"
 
 #: src/backend/gsl/functions.cpp:367
 #, kde-format
@@ -4209,6 +4215,8 @@ msgid ""
 "Scaled irregular modified cylindrical Bessel function of zeroth order exp(x) "
 "K0(x)"
 msgstr ""
+"დამასშტაბებული არარეგულარული შეცვლილი ცილინდრული ბესელის ფუნქცია მენულე "
+"რიგით exp(x) K0(x)"
 
 #: src/backend/gsl/functions.cpp:368
 #, kde-format
@@ -4216,52 +4224,56 @@ msgid ""
 "Scaled irregular modified cylindrical Bessel function of first order exp(x) "
 "K1(x)"
 msgstr ""
+"დამასშტაბებული არარეგულარული შეცვლილი ცილინდრული ბესელის ფუნქცია პირველი "
+"რიგით exp(x) K1(x)"
 
 #: src/backend/gsl/functions.cpp:369
 #, kde-format
 msgid ""
 "Scaled irregular modified cylindrical Bessel function of order n exp(x) Kn(x)"
 msgstr ""
+"დამასშტაბებული არარეგულარული შეცვლილი ცილინდრული ბესელის ფუნქცია მე-n რიგით "
+"exp(x) Kn(x)"
 
 #: src/backend/gsl/functions.cpp:370
 #, kde-format
 msgid "Regular spherical Bessel function of zeroth order"
-msgstr ""
+msgstr "რეგულარული სფერული ბესელის ფუნქცია მენულე რიგით"
 
 #: src/backend/gsl/functions.cpp:371
 #, kde-format
 msgid "Regular spherical Bessel function of first order"
-msgstr ""
+msgstr "რეგულარული სფერული ბესელის ფუნქცია პირველი რიგით"
 
 #: src/backend/gsl/functions.cpp:373
 #, kde-format
 msgid "Regular spherical Bessel function of second order"
-msgstr ""
+msgstr "რეგულარული სფერული ბესელის ფუნქცია მეორე რიგით"
 
 #: src/backend/gsl/functions.cpp:374
 #, kde-format
 msgid "Regular spherical Bessel function of order l"
-msgstr ""
+msgstr "რეგულარული სფერული ბესელის ფუნქცია რიგით l"
 
 #: src/backend/gsl/functions.cpp:375
 #, kde-format
 msgid "Irregular spherical Bessel function of zeroth order"
-msgstr ""
+msgstr "არარეგულარული სფერული ბესელის ფუნქცია მენულე რიგით"
 
 #: src/backend/gsl/functions.cpp:376
 #, kde-format
 msgid "Irregular spherical Bessel function of first order"
-msgstr ""
+msgstr "არარეგულარული სფერული ბესელის ფუნქცია პირველი რიგით"
 
 #: src/backend/gsl/functions.cpp:377
 #, kde-format
 msgid "Irregular spherical Bessel function of second order"
-msgstr ""
+msgstr "არარეგულარული სფერული ბესელის ფუნქცია მეორე რიგით"
 
 #: src/backend/gsl/functions.cpp:378
 #, kde-format
 msgid "Irregular spherical Bessel function of order l"
-msgstr ""
+msgstr "არარეგულარული სფერული ბესელის ფუნქცია რიგით l"
 
 #: src/backend/gsl/functions.cpp:379
 #, kde-format
@@ -4269,6 +4281,8 @@ msgid ""
 "Scaled regular modified spherical Bessel function of zeroth order, exp(-|x|) "
 "i0(x)"
 msgstr ""
+"დამასშტაბებული რეგულარული შეცვლილი სფერული ბესელის ფუნქცია მენულე რიგით. "
+"exp(-|x|) i0(x)"
 
 #: src/backend/gsl/functions.cpp:380
 #, kde-format
@@ -4276,6 +4290,8 @@ msgid ""
 "Scaled regular modified spherical Bessel function of first order, exp(-|x|) "
 "i1(x)"
 msgstr ""
+"დამასშტაბებული რეგულარული შეცვლილი სფერული ბესელის ფუნქცია პირველი რიგით. "
+"exp(-|x|) i1(x)"
 
 #: src/backend/gsl/functions.cpp:381
 #, kde-format
@@ -4283,12 +4299,16 @@ msgid ""
 "Scaled regular modified spherical Bessel function of second order, exp(-|x|) "
 "i2(x)"
 msgstr ""
+"დამასშტაბებული რეგულარული შეცვლილი სფერული ბესელის ფუნქცია მეორე რიგით. "
+"exp(-|x|) i2(x)"
 
 #: src/backend/gsl/functions.cpp:382
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of order l, exp(-|x|) il(x)"
 msgstr ""
+"დამასშტაბებული რეგულარული შეცვლილი სფერული ბესელის ფუნქცია რიგით l. exp(-|"
+"x|) il(x)"
 
 #: src/backend/gsl/functions.cpp:384
 #, kde-format
@@ -4296,6 +4316,8 @@ msgid ""
 "Scaled irregular modified spherical Bessel function of zeroth order, exp(x) "
 "k0(x)"
 msgstr ""
+"დამასშტაბებული არარეგულარული შეცვლილი სფერული ბესელის ფუნქცია მენულე რიგით. "
+"exp(x) k0(x)"
 
 #: src/backend/gsl/functions.cpp:385
 #, kde-format
@@ -4303,6 +4325,8 @@ msgid ""
 "Scaled irregular modified spherical Bessel function of first order, exp(-|"
 "x|) k1(x)"
 msgstr ""
+"დამასშტაბებული არარეგულარული შეცვლილი სფერული ბესელის ფუნქცია პირველი რიგით. "
+"exp(-|x|) k1(x)"
 
 #: src/backend/gsl/functions.cpp:386
 #, kde-format
@@ -4310,6 +4334,8 @@ msgid ""
 "Scaled irregular modified spherical Bessel function of second order, exp(-|"
 "x|) k2(x)"
 msgstr ""
+"დამასშტაბებული არარეგულარული შეცვლილი სფერული ბესელის ფუნქცია მეორე რიგით. "
+"exp(-|x|) k2(x)"
 
 #: src/backend/gsl/functions.cpp:387
 #, kde-format
@@ -4317,56 +4343,59 @@ msgid ""
 "Scaled irregular modified spherical Bessel function of order l, exp(-|x|) "
 "kl(x)"
 msgstr ""
+"დამასშტაბებული არარეგულარული შეცვლილი სფერული ბესელის ფუნქცია რიგით l. exp(-|"
+"x|) kl(x)"
 
 #: src/backend/gsl/functions.cpp:388
 #, kde-format
 msgid "Regular cylindrical Bessel function of fractional order"
-msgstr ""
+msgstr "რეგულარული ცილინდრული ბესელის ფუნქცია ნაწილობრივი რიგით"
 
 #: src/backend/gsl/functions.cpp:389
 #, kde-format
 msgid "Irregular cylindrical Bessel function of fractional order"
-msgstr ""
+msgstr "არარეგულარული ცილინდრული ბესელის ფუნქცია ნაწილობრივი რიგით"
 
 #: src/backend/gsl/functions.cpp:390
 #, kde-format
 msgid "Regular modified Bessel function of fractional order"
-msgstr ""
+msgstr "რეგულარული შეცვლილი ბესელის ფუნქცია ნაწილობრივი რიგით"
 
 #: src/backend/gsl/functions.cpp:391
 #, kde-format
 msgid "Scaled regular modified Bessel function of fractional order"
-msgstr ""
+msgstr "დამასშტაბებული რეგულარული შეცვლილი ბესელის ფუნქცია ნაწილობრივი რიგით"
 
 #: src/backend/gsl/functions.cpp:392
 #, kde-format
 msgid "Irregular modified Bessel function of fractional order"
-msgstr ""
+msgstr "არარეგულარული შეცვლილი ბესელის ფუნქცია ნაწილობრივი რიგით"
 
 #: src/backend/gsl/functions.cpp:393
 #, kde-format
 msgid "Logarithm of irregular modified Bessel function of fractional order"
-msgstr ""
+msgstr "ნაწილობრივი რიგის არარეგულარული შეცვლილი ბესელის ფუნქციის ლოგარითმი"
 
 #: src/backend/gsl/functions.cpp:395
 #, kde-format
 msgid "Scaled irregular modified Bessel function of fractional order"
 msgstr ""
+"დამასშტაბებული არარეგულარული შეცვლილი ბესელის ფუნქცია ნაწილობრივი რიგით"
 
 #: src/backend/gsl/functions.cpp:396
 #, kde-format
 msgid "n-th positive zero of the Bessel function J0"
-msgstr ""
+msgstr "ბესელის ფუნქცია J0-ის მე-n დადებითი ნული"
 
 #: src/backend/gsl/functions.cpp:397
 #, kde-format
 msgid "n-th positive zero of the Bessel function J1"
-msgstr ""
+msgstr "ბესელის ფუნქცია J1-ის მე-n დადებითი ნული"
 
 #: src/backend/gsl/functions.cpp:398
 #, kde-format
 msgid "n-th positive zero of the Bessel function Jnu"
-msgstr ""
+msgstr "ბესელის ფუნქცია Jnu-ის მე-n დადებითი ნული"
 
 #: src/backend/gsl/functions.cpp:401
 #, kde-format
@@ -4377,16 +4406,17 @@ msgstr "კლაუზენის ფუნქცია"
 #, kde-format
 msgid "Lowest-order normalized hydrogenic bound state radial wavefunction"
 msgstr ""
+"წყალბადის ძირითადი მდგომარეობის ნორმალიზებული რადიალური ტალღური ფუნქცია"
 
 #: src/backend/gsl/functions.cpp:405
 #, kde-format
 msgid "n-th normalized hydrogenic bound state radial wavefunction"
-msgstr ""
+msgstr "წყალბადის მე-n მდგომარეობის ნორმალიზებული რადიალური ტალღური ფუნქცია"
 
 #: src/backend/gsl/functions.cpp:408 src/backend/gsl/functions.cpp:445
 #, kde-format
 msgid "Dawson's integral D(z) = sqrt(pi)/2 * exp(-z^2) * erfi(z)"
-msgstr ""
+msgstr "დოუსონის ინტეგრალი D(z) = sqrt(pi)/2 * exp(-z^2) * erfi(z)"
 
 #: src/backend/gsl/functions.cpp:411
 #, kde-format
@@ -4486,37 +4516,37 @@ msgstr "შეცდომის ფუნქცია"
 #: src/backend/gsl/functions.cpp:436
 #, kde-format
 msgid "Complementary error function"
-msgstr ""
+msgstr "დამატებითი შეცდომის ფუნქცია"
 
 #: src/backend/gsl/functions.cpp:437
 #, kde-format
 msgid "Logarithm of complementary error function"
-msgstr ""
+msgstr "დამატებითი შეცდომის ფუნქციის ლოგარითმი"
 
 #: src/backend/gsl/functions.cpp:438
 #, kde-format
 msgid "Gaussian probability density function Z"
-msgstr ""
+msgstr "გაუსის ალბათობის სიმკვრივის ფუნქცია Z"
 
 #: src/backend/gsl/functions.cpp:439
 #, kde-format
 msgid "Upper tail of the Gaussian probability function Q"
-msgstr ""
+msgstr "გაუსის ალბათობის ფუნქციის ზედა კუდი Q"
 
 #: src/backend/gsl/functions.cpp:440
 #, kde-format
 msgid "Hazard function for the normal distribution Z/Q"
-msgstr ""
+msgstr "საფრთხის ფუნქცია ნორმალური განაწილებისთვის Z / Q"
 
 #: src/backend/gsl/functions.cpp:442
 #, kde-format
 msgid "Underflow-compensating function exp(x^2) erfc(x) for real x"
-msgstr ""
+msgstr "არშევსების კომპენსაციის ფუნქცია exp(x^2) erfc(x) ნამდვილი x-სთვის"
 
 #: src/backend/gsl/functions.cpp:443
 #, kde-format
 msgid "Imaginary error function erfi(x) = -i erf(ix) for real x"
-msgstr ""
+msgstr "წარმოსახვითი შეცდომს ფუნქცია erfi(x) = -i erf(ix) რეალური x-სთვის"
 
 #: src/backend/gsl/functions.cpp:444
 #, kde-format
@@ -4524,6 +4554,8 @@ msgid ""
 "Imaginary part of Faddeeva's scaled complex error function w(x) = exp(-x^2) "
 "erfc(-ix) for real x"
 msgstr ""
+"ფადეევას დამასშტაბებული კომპლექსური შეცდომის ფუნქციის w(x) = exp(-x^2) erfc(-"
+"ix) წარმოსახვითი ნაწილი რეალური x-სთვის"
 
 #: src/backend/gsl/functions.cpp:446
 #, kde-format
@@ -4533,7 +4565,7 @@ msgstr "ფოიგტის პროფილი"
 #: src/backend/gsl/functions.cpp:448
 #, kde-format
 msgid "Pseudo-Voigt profile (same width)"
-msgstr ""
+msgstr "ფსევდო-ვოიგტის პროფილი (იგივე სიგანე)"
 
 #: src/backend/gsl/functions.cpp:451
 #, kde-format
@@ -4543,12 +4575,12 @@ msgstr "ექსპონენტური ფუნქცია"
 #: src/backend/gsl/functions.cpp:452
 #, kde-format
 msgid "exponentiate x and multiply by y"
-msgstr ""
+msgstr "x ხარისხში აყვანა და y-ზე გამრავლება"
 
 #: src/backend/gsl/functions.cpp:456
 #, kde-format
 msgid "n-relative exponential"
-msgstr ""
+msgstr "ექსპონენტური ფუნქცია მე-n შედარებითი აცდენით"
 
 #: src/backend/gsl/functions.cpp:459
 #, kde-format
@@ -4558,17 +4590,17 @@ msgstr "ექსპონენტური ინტეგრალ"
 #: src/backend/gsl/functions.cpp:460
 #, kde-format
 msgid "Second order exponential integral"
-msgstr ""
+msgstr "მეორე რიგის ხარისხის ინტეგრალი"
 
 #: src/backend/gsl/functions.cpp:461
 #, kde-format
 msgid "Exponential integral of order n"
-msgstr ""
+msgstr "მე-n რიგის ხარისხის ინტეგრალი"
 
 #: src/backend/gsl/functions.cpp:462
 #, kde-format
 msgid "Exponential integral Ei"
-msgstr ""
+msgstr "Ei-ის ხარისხის ინტეგრალი"
 
 #: src/backend/gsl/functions.cpp:463
 #, kde-format
@@ -4623,7 +4655,7 @@ msgstr "სრული ფერმი-დირაკის ინტეგრ
 #: src/backend/gsl/functions.cpp:475
 #, kde-format
 msgid "Complete Fermi-Dirac integral with integer index j"
-msgstr ""
+msgstr "ფერმი-დირაკის სრული ინტეგრალი მთელრიცხვიანი ინდექსით j"
 
 #: src/backend/gsl/functions.cpp:476
 #, kde-format
@@ -4643,7 +4675,7 @@ msgstr "სრული ფერმი-დირაკის ინტეგრ
 #: src/backend/gsl/functions.cpp:479
 #, kde-format
 msgid "Incomplete Fermi-Dirac integral with index zero"
-msgstr ""
+msgstr "ფერმი დირაკლი არასრული ინტეგრალი ნულოვანი ინდექსით"
 
 #: src/backend/gsl/functions.cpp:482 src/backend/gsl/functions.cpp:483
 #, kde-format
@@ -4668,7 +4700,7 @@ msgstr "რეგულირებული გამა ფუნქცია"
 #: src/backend/gsl/functions.cpp:487
 #, kde-format
 msgid "Reciprocal of the gamma function"
-msgstr ""
+msgstr "შებრუნებული გამა ფუნქცია"
 
 #: src/backend/gsl/functions.cpp:488
 #, kde-format
@@ -4698,7 +4730,7 @@ msgstr "კომბინატორული ფაქტორი"
 #: src/backend/gsl/functions.cpp:494
 #, kde-format
 msgid "Logarithm of the combinatorial factor"
-msgstr ""
+msgstr "კომბინატორული ფაქტორის ლოგარითმი"
 
 #: src/backend/gsl/functions.cpp:495
 #, kde-format
@@ -4733,7 +4765,7 @@ msgstr "ნორმალიზებული არასრული გა�
 #: src/backend/gsl/functions.cpp:501
 #, kde-format
 msgid "Complementary normalized incomplete gamma function"
-msgstr ""
+msgstr "დამატებითი ნორმალიზებული არასრული გამა ფუნქცია"
 
 #: src/backend/gsl/functions.cpp:502
 #, kde-format
@@ -4748,37 +4780,37 @@ msgstr "ბეტა ფუნქციის ლოგარითმი"
 #: src/backend/gsl/functions.cpp:505
 #, kde-format
 msgid "Normalized incomplete beta function"
-msgstr ""
+msgstr "ნორმალიზებული არასრული ბეტა ფუნქცია"
 
 #: src/backend/gsl/functions.cpp:508
 #, kde-format
 msgid "Gegenbauer polynomial C_1"
-msgstr ""
+msgstr "გეგენბაუერის მრავალწევრი C_1"
 
 #: src/backend/gsl/functions.cpp:509
 #, kde-format
 msgid "Gegenbauer polynomial C_2"
-msgstr ""
+msgstr "გეგენბაუერის მრავალწევრი C_2"
 
 #: src/backend/gsl/functions.cpp:510
 #, kde-format
 msgid "Gegenbauer polynomial C_3"
-msgstr ""
+msgstr "გეგენბაუერის მრავალწევრი C_3"
 
 #: src/backend/gsl/functions.cpp:511
 #, kde-format
 msgid "Gegenbauer polynomial C_n"
-msgstr ""
+msgstr "გეგენბაუერის მრავალწევრი C_n"
 
 #: src/backend/gsl/functions.cpp:515
 #, kde-format
 msgid "Hermite polynomials physicists version"
-msgstr ""
+msgstr "ჰერმიტი მრავალწევრები ფიზიკოსებისთვის"
 
 #: src/backend/gsl/functions.cpp:516
 #, kde-format
 msgid "Hermite polynomials probabilists version"
-msgstr ""
+msgstr "ჰერმიტის მრავალწევრები ალბათობის თეორიიდან"
 
 #: src/backend/gsl/functions.cpp:517
 #, kde-format
@@ -4793,17 +4825,17 @@ msgstr "ჰერმიტის ფუნქციები (სწრაფი
 #: src/backend/gsl/functions.cpp:521
 #, kde-format
 msgid "Derivatives of Hermite polynomials physicists version"
-msgstr ""
+msgstr "ჰერმიტი მრავალწევრების წარმოებული ფიზიკოსებისთვის"
 
 #: src/backend/gsl/functions.cpp:522
 #, kde-format
 msgid "Derivatives of Hermite polynomials probabilists version"
-msgstr ""
+msgstr "ჰერმიტის მრავალწევრების წარმოებული ალბათობის თეორიიდან"
 
 #: src/backend/gsl/functions.cpp:523
 #, kde-format
 msgid "Derivatives of Hermite functions"
-msgstr ""
+msgstr "ჰერმიტის ფუნქციების წარმოებულები"
 
 #: src/backend/gsl/functions.cpp:527
 #, kde-format
@@ -5049,27 +5081,27 @@ msgstr ""
 #: src/backend/gsl/functions.cpp:593
 #, kde-format
 msgid "Trigamma function psi' for positive integer n"
-msgstr ""
+msgstr "ტრიგამა ფუნქცია psi' დადებითი მთელი n-სთვის"
 
 #: src/backend/gsl/functions.cpp:594
 #, kde-format
 msgid "Trigamma function psi'"
-msgstr ""
+msgstr "ტრიგამა ფუნქცია psi'"
 
 #: src/backend/gsl/functions.cpp:595
 #, kde-format
 msgid "Polygamma function psi^(n)"
-msgstr ""
+msgstr "პოლიგამა ფუნქცია psi^(n)"
 
 #: src/backend/gsl/functions.cpp:598
 #, kde-format
 msgid "First synchrotron function"
-msgstr ""
+msgstr "სინქროტრონის პირველი ფუნქცია"
 
 #: src/backend/gsl/functions.cpp:599
 #, kde-format
 msgid "Second synchrotron function"
-msgstr ""
+msgstr "სინქროტრონის მეორე ფუნქცია"
 
 #: src/backend/gsl/functions.cpp:602
 #, kde-format
@@ -5126,7 +5158,7 @@ msgstr "ინვერსიული ტანგენსი"
 #: src/backend/gsl/functions.cpp:614
 #, kde-format
 msgid "Inverse tangent using sign"
-msgstr ""
+msgstr "არკტანგენსი ნიშნის გათვალისწინებით"
 
 #: src/backend/gsl/functions.cpp:615
 #, kde-format
@@ -5221,7 +5253,7 @@ msgstr "ინვერსიული ჰიპერბოლური კო�
 #: src/backend/gsl/functions.cpp:633
 #, kde-format
 msgid "Sinc function sin(x)/x"
-msgstr ""
+msgstr "Sinc ფუნქცია sin(x)/x"
 
 #: src/backend/gsl/functions.cpp:636
 #, kde-format
@@ -5366,57 +5398,57 @@ msgstr "სამკუთხედი შემთხვევითი რი�
 #: src/backend/gsl/functions.cpp:675
 #, kde-format
 msgid "Probability density for a Gaussian distribution"
-msgstr ""
+msgstr "ალბათობის სიმკვრივე გაუსის განაწილებისთვის"
 
 #: src/backend/gsl/functions.cpp:676
 #, kde-format
 msgid "Probability density for a unit Gaussian distribution"
-msgstr ""
+msgstr "ალბათობის სიმკვრივე გაუსის ნორმირებული განაწილებისთვის"
 
 #: src/backend/gsl/functions.cpp:677
 #, kde-format
 msgid "Cumulative distribution function P"
-msgstr ""
+msgstr "P განაწილების ინტეგრალური ფუნქცია"
 
 #: src/backend/gsl/functions.cpp:678
 #, kde-format
 msgid "Cumulative distribution function Q"
-msgstr ""
+msgstr "Q განაწილების ინტეგრალური ფუნქცია"
 
 #: src/backend/gsl/functions.cpp:679
 #, kde-format
 msgid "Inverse cumulative distribution function P"
-msgstr ""
+msgstr "P განაწილების ინტეგრალური ინვერსიული ფუნქცია"
 
 #: src/backend/gsl/functions.cpp:680
 #, kde-format
 msgid "Inverse cumulative distribution function Q"
-msgstr ""
+msgstr "Q განაწილების ინტეგრალური ინვერსიული ფუნქცია"
 
 #: src/backend/gsl/functions.cpp:681
 #, kde-format
 msgid "Cumulative unit distribution function P"
-msgstr ""
+msgstr "ნორმალიზებული P განაწილების ინტეგრალური ფუნქცია"
 
 #: src/backend/gsl/functions.cpp:682
 #, kde-format
 msgid "Cumulative unit distribution function Q"
-msgstr ""
+msgstr "ნორმალიზებული Q განაწილების ინტეგრალური ფუნქცია"
 
 #: src/backend/gsl/functions.cpp:683
 #, kde-format
 msgid "Inverse cumulative unit distribution function P"
-msgstr ""
+msgstr "ნორმალიზებული P განაწილების ინტეგრალური ინვერსიული ფუნქცია"
 
 #: src/backend/gsl/functions.cpp:684
 #, kde-format
 msgid "Inverse cumulative unit distribution function Q"
-msgstr ""
+msgstr "ნორმალიზებული Q განაწილების ინტეგრალური ინვერსიული ფუნქცია"
 
 #: src/backend/gsl/functions.cpp:686
 #, kde-format
 msgid "Probability density for Gaussian tail distribution"
-msgstr ""
+msgstr "ალბათობის სიმკვრივე გაუსის კუდის განაწილებისთვის"
 
 #: src/backend/gsl/functions.cpp:687
 #, kde-format
@@ -5871,12 +5903,12 @@ msgstr "კუმულატიური პუასონის განა�
 #: src/backend/gsl/functions.cpp:815
 #, kde-format
 msgid "Probability density for a Bernoulli distribution"
-msgstr ""
+msgstr "ალბათობის სიმკვრივე ბერნულის განაწილებსთვის"
 
 #: src/backend/gsl/functions.cpp:818
 #, kde-format
 msgid "Probability density for a binomial distribution"
-msgstr ""
+msgstr "ალბათობის სიმკვრივე ბინომური განაწილებისთვის"
 
 #: src/backend/gsl/functions.cpp:819
 #, kde-format
@@ -5891,7 +5923,7 @@ msgstr "კუმულატიური ბინომური განა�
 #: src/backend/gsl/functions.cpp:821
 #, kde-format
 msgid "Probability density for a negative binomial distribution"
-msgstr ""
+msgstr "ალბათობის სიმკვრივე უარყოფითი ბინომური განაწილებისთვის"
 
 #: src/backend/gsl/functions.cpp:822
 #, kde-format
@@ -6911,7 +6943,7 @@ msgstr "ლევის ალფა-სტაბილური"
 #: src/backend/nsl/nsl_sf_stats.c:23
 #, kde-format
 msgid "Levy Skew Alpha-stable"
-msgstr ""
+msgstr "ლევის ასიმეტრიული ალფა-სტაბილური განაწილება"
 
 #: src/backend/nsl/nsl_sf_stats.c:24
 #, kde-format
@@ -6936,12 +6968,12 @@ msgstr "ხი-კვადრატი"
 #: src/backend/nsl/nsl_sf_stats.c:28
 #, kde-format
 msgid "F (Fisher-Snedecor)"
-msgstr ""
+msgstr "F (ფიშერ-სნედეკორი)"
 
 #: src/backend/nsl/nsl_sf_stats.c:29
 #, kde-format
 msgid "Student's t"
-msgstr ""
+msgstr "სტიუდენტის განაწილება"
 
 #: src/backend/nsl/nsl_sf_stats.c:30
 #, kde-format
@@ -6951,7 +6983,7 @@ msgstr "ბეტა"
 #: src/backend/nsl/nsl_sf_stats.c:31
 #, kde-format
 msgid "Logistic (Sech-Squared)"
-msgstr ""
+msgstr "ლოგისტიკური (ჰიპერბოლური სეკანსის კვადრატი)"
 
 #: src/backend/nsl/nsl_sf_stats.c:32
 #, kde-format
@@ -6967,11 +6999,13 @@ msgstr "ვეიბული"
 #, kde-format
 msgid "Gumbel Type-1 (Maximum Value; log-Weibull)"
 msgstr ""
+"გამბელი განაწილება ტიპი 1 (მაქსიმალური მნიშვნელობა, ვეიბულის ლოგარითმული "
+"განაწილება)"
 
 #: src/backend/nsl/nsl_sf_stats.c:35
 #, kde-format
 msgid "Gumbel Type-2"
-msgstr ""
+msgstr "გამბელის განაწილების ტიპი 2"
 
 #: src/backend/nsl/nsl_sf_stats.c:36
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:575
@@ -7028,7 +7062,7 @@ msgstr "ლევი"
 #: src/backend/nsl/nsl_sf_stats.c:47
 #, kde-format
 msgid "Frechet (Inverse Weibull)"
-msgstr ""
+msgstr "ფრეშეს განაწილება (ინვერსიული ვეიბულის განაწილება)"
 
 #: src/backend/nsl/nsl_sf_stats.c:48 src/backend/nsl/nsl_sf_window.c:16
 #: src/backend/nsl/nsl_smooth.c:24 src/frontend/dockwidgets/KDEPlotDock.cpp:160
@@ -7079,7 +7113,7 @@ msgstr "ნუტალი"
 #: src/backend/nsl/nsl_sf_window.c:24
 #, kde-format
 msgid "Blackman-Nuttall"
-msgstr ""
+msgstr "ბექმან-ნუტალის"
 
 #: src/backend/nsl/nsl_sf_window.c:25
 #, kde-format
@@ -7089,12 +7123,12 @@ msgstr "ბლექმან-ჰარისის"
 #: src/backend/nsl/nsl_sf_window.c:26
 #, kde-format
 msgid "Flat Top"
-msgstr ""
+msgstr "ბტყელი ზედა ადგილით"
 
 #: src/backend/nsl/nsl_sf_window.c:28
 #, kde-format
 msgid "Bartlett-Hann"
-msgstr ""
+msgstr "ბარტლეტი-ჰანის"
 
 #: src/backend/nsl/nsl_sf_window.c:29
 #, kde-format
@@ -7114,7 +7148,7 @@ msgstr "მცოცავი საშუალო (ჩამორჩენი
 #: src/backend/nsl/nsl_smooth.c:21
 #, kde-format
 msgid "Savitzky-Golay"
-msgstr ""
+msgstr "სავიცკი-გოლეის"
 
 #: src/backend/nsl/nsl_smooth.c:22
 #, kde-format
@@ -7145,12 +7179,12 @@ msgstr "პერიოდული"
 #: src/backend/nsl/nsl_smooth.c:23 src/frontend/dockwidgets/KDEPlotDock.cpp:159
 #, kde-format
 msgid "Uniform (Rectangular)"
-msgstr ""
+msgstr "ერთგვაროვანი (მართკუთხა)"
 
 #: src/backend/nsl/nsl_smooth.c:26 src/frontend/dockwidgets/KDEPlotDock.cpp:161
 #, kde-format
 msgid "Parabolic (Epanechnikov)"
-msgstr ""
+msgstr "პარაბოლური (ეპანეჩნიკოვი)"
 
 #: src/backend/nsl/nsl_smooth.c:27 src/frontend/dockwidgets/KDEPlotDock.cpp:162
 #, kde-format
@@ -9437,7 +9471,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:214
 #, kde-format
 msgid "Navigate to \"%1\""
-msgstr ""
+msgstr "\"%1\"-ზე გადასვლა"
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:414
 #, kde-format
@@ -11436,28 +11470,28 @@ msgstr "გნებავთ, გააგრძელოთ?"
 #: src/frontend/datasources/ImportProjectDialog.cpp:280
 #, kde-format
 msgid "Override existing objects?"
-msgstr ""
+msgstr "გადაიფაროს არსებული ობიექტები?"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:312
 #, kde-format
 msgid "Project data imported in %1 seconds."
-msgstr ""
+msgstr "პროექტის მონაცემები შემოტანილია %1 წამში."
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:406
 #, kde-format
 msgid "Close the dialog and import the selected objects."
-msgstr ""
+msgstr "დიალოგის დახურვა და მონიშნული ობიექტების შემოტანა"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:408
 #, kde-format
 msgid "Select object(s) to be imported."
-msgstr ""
+msgstr "აირჩიეთ შემოსატანი ობიექტები."
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:436
 #, kde-format
 msgctxt "@title:window"
 msgid "Open LabPlot Project"
-msgstr ""
+msgstr "LabPlot-ის პროექტის გახსნა"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:438
 #: src/frontend/MainWin.cpp:1462
@@ -11496,7 +11530,7 @@ msgstr "ელექტრონული ცხრილი"
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:119
 #, kde-format
 msgid "Data imported in %1 seconds."
-msgstr ""
+msgstr "მონაცემები შემოტანილია %1 წამში."
 
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:144
 #, kde-format
@@ -11504,6 +11538,8 @@ msgid ""
 "Select a valid database object (table or query result set) that has to be "
 "imported."
 msgstr ""
+"აირჩიეთ სწორი მონაცემთა ბაზის ობიექტი (ცხრილი ან მოთხოვნის შედეგების "
+"ნაკრები), რომლის შემოტანაც გნებავთ."
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:42
 #, kde-format
@@ -11513,7 +11549,7 @@ msgstr "ცხრილი"
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:43
 #, kde-format
 msgid "Custom Query"
-msgstr ""
+msgstr "მორგებული მოთხოვნა"
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:46
 #, kde-format
@@ -11525,28 +11561,30 @@ msgstr "შეერთებების მართვა"
 msgid ""
 "Couldn't find the database file '%1'. Please check the connection settings."
 msgstr ""
+"მონაცემთა ბაზის ფაილი '%1' აღმოჩენილი არაა. შეამოწმეთ კავშირის პარამეტრები."
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:272
 #, kde-format
 msgid ""
 "Failed to connect to the database '%1'. Please check the connection settings."
 msgstr ""
+"ჩავარდა მიერთება მონაცემთა ბაზასთან '%1'. შეამოწმეთ კავშირის პარამეტრები."
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:330
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:332
 #, kde-format
 msgid "Failed to execute the query for the preview"
-msgstr ""
+msgstr "მინიატურისთვის საჭირო მოთხოვნის შესრულება ჩავარდა"
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:406
 #, kde-format
 msgid "Refresh the data preview of the selected table"
-msgstr ""
+msgstr "მონიშნული ცხრილის მონაცემების მინიატურის განახლება"
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:412
 #, kde-format
 msgid "Execute the query and preview its result"
-msgstr ""
+msgstr "მოთხოვნის შესრულება და შედეგის მინიატურის ჩვენება"
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:533
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:535
@@ -11775,12 +11813,12 @@ msgstr "ჰისტოგრამის მონაცემები"
 #: src/frontend/datasources/ROOTOptionsWidget.cpp:91
 #, kde-format
 msgid "Bin Center"
-msgstr ""
+msgstr "შუალედის ცენტრი"
 
 #: src/frontend/datasources/ROOTOptionsWidget.cpp:95
 #, kde-format
 msgid "Low Edge"
-msgstr ""
+msgstr "ქვედა საზღვარი"
 
 #: src/frontend/datasources/ROOTOptionsWidget.cpp:102
 #, kde-format
@@ -11790,7 +11828,7 @@ msgstr "Error"
 #: src/frontend/datasources/ROOTOptionsWidget.cpp:115
 #, kde-format
 msgid "Branch/Leaf"
-msgstr ""
+msgstr "ტოტი/ფოთოლი"
 
 #: src/frontend/datasources/ROOTOptionsWidget.cpp:115
 #, kde-format
@@ -11849,7 +11887,7 @@ msgstr "ლოგიკური"
 #: src/frontend/dockwidgets/AxisDock.cpp:238
 #, kde-format
 msgid "Auto Data"
-msgstr ""
+msgstr "ავტომატურად, მონაცემებით"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:242
 #, kde-format
@@ -11944,7 +11982,7 @@ msgstr "ორივე"
 #: src/frontend/dockwidgets/AxisDock.cpp:286
 #, kde-format
 msgid "In"
-msgstr ""
+msgstr "შიგნით"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:274
 #: src/frontend/dockwidgets/AxisDock.cpp:287
@@ -11956,7 +11994,7 @@ msgstr "გარე"
 #: src/frontend/dockwidgets/AxisDock.cpp:288
 #, kde-format
 msgid "In and Out"
-msgstr ""
+msgstr "შიგნით და გარეთ"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:277
 #: src/frontend/dockwidgets/AxisDock.cpp:290
@@ -12011,17 +12049,17 @@ msgstr "მდებარეობის მნიშვნელობებ�
 #: src/frontend/dockwidgets/AxisDock.cpp:304
 #, kde-format
 msgid "Decimal notation"
-msgstr ""
+msgstr "ათობითი ჩანაწერი"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:305
 #, kde-format
 msgid "Scientific notation"
-msgstr ""
+msgstr "სამეცნიერო ჩანაწერი"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:306
 #, kde-format
 msgid "Scientific E notation"
-msgstr ""
+msgstr "სამეცნიერო E ჩანაწერი"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:307
 #, kde-format
@@ -12071,7 +12109,7 @@ msgstr ""
 #: src/frontend/dockwidgets/AxisDock.cpp:2028
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
-msgstr ""
+msgstr "%1 ღერძები: ნიმუში \"%2\" ჩაიტვირთა"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:2030
 #: src/frontend/dockwidgets/BarPlotDock.cpp:503
@@ -12092,7 +12130,7 @@ msgstr ""
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1036
 #, kde-format
 msgid "%1: template \"%2\" loaded"
-msgstr ""
+msgstr "%1: ნიმუში \"%2\" ჩაიტვირთა"
 
 #: src/frontend/dockwidgets/BarPlotDock.cpp:52
 #, kde-format
@@ -12107,7 +12145,7 @@ msgstr "ჩალაგებული"
 #: src/frontend/dockwidgets/BarPlotDock.cpp:54
 #, kde-format
 msgid "Stacked 100%"
-msgstr ""
+msgstr "ნორმირებული დაგროვებით"
 
 #: src/frontend/dockwidgets/BarPlotDock.cpp:60
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:74
@@ -12172,42 +12210,42 @@ msgstr ""
 #: src/frontend/dockwidgets/BaseDock.cpp:212
 #, kde-format
 msgid "Please choose another name, because this is already in use."
-msgstr ""
+msgstr "გთხოვთ აირჩიოთ სხვა სახელი, რადგან ეს უკვე გამოიყენება."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:48
 #, kde-format
 msgid "10/90 percentiles"
-msgstr ""
+msgstr "10/90 პროცენტილი"
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:49
 #, kde-format
 msgid "5/95 percentiles"
-msgstr ""
+msgstr "5/95 პროცენტილი"
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:50
 #, kde-format
 msgid "1/99 percentiles"
-msgstr ""
+msgstr "1/99 პროცენტილი"
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:56
 #, kde-format
 msgid "By Median, Ascending"
-msgstr ""
+msgstr "მედიანით, აღმავალი"
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:57
 #, kde-format
 msgid "By Median, Descending"
-msgstr ""
+msgstr "მედიანით, დაღმავალი"
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:58
 #, kde-format
 msgid "By Mean, Ascending"
-msgstr ""
+msgstr "საშუალოთი, აღმავალი"
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:59
 #, kde-format
 msgid "By Mean, Descending"
-msgstr ""
+msgstr "საშუალოთი, დაღმავალი"
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:61
 #, kde-format
@@ -12307,7 +12345,7 @@ msgstr "რიცხვობრივი"
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:780
 #, kde-format
 msgid "Plot Ranges:"
-msgstr ""
+msgstr "გრაფიკის დიაპაზონები:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:782
@@ -12335,7 +12373,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:106
 #, kde-format
 msgid "Plot Range:"
-msgstr ""
+msgstr "გრაფიკის დიაპაზონი:"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:884
 #, kde-format
@@ -12345,12 +12383,12 @@ msgstr "თავისუფალი"
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:885
 #, kde-format
 msgid "Last Points"
-msgstr ""
+msgstr "ბოლო წერტილები"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:886
 #, kde-format
 msgid "First Points"
-msgstr ""
+msgstr "პირველი წერტილები"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:889
 #, kde-format
@@ -12375,7 +12413,7 @@ msgstr "მარტივი"
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:909
 #, kde-format
 msgid "Sloped"
-msgstr ""
+msgstr "დახრილი"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1163
 #, kde-format
@@ -12386,7 +12424,7 @@ msgstr ""
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1217
 #, kde-format
 msgid "Really remove it?"
-msgstr ""
+msgstr "მართლა წავშალო?"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1217
 #, kde-format
@@ -12437,7 +12475,7 @@ msgstr "ზედა:"
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
-msgstr ""
+msgstr "აირჩიეთ ნიმუშის შესანახი ფაილი"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1648
 #, kde-format
@@ -12466,7 +12504,7 @@ msgstr "ძირითადი სვეტი"
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:247
 #, kde-format
 msgid "Row Major"
-msgstr ""
+msgstr "მწკრივებით"
 
 #. i18n: ectx: property (text), widget (QLabel, lCenter)
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:254
@@ -12560,12 +12598,12 @@ msgstr ""
 #: src/frontend/dockwidgets/CursorDock.cpp:32
 #, kde-format
 msgid "Collapse all curves"
-msgstr ""
+msgstr "ყველა მრუდის აკეცვა"
 
 #: src/frontend/dockwidgets/CursorDock.cpp:33
 #, kde-format
 msgid "Expand all curves"
-msgstr ""
+msgstr "ყველა მრუდის ჩამოშლა"
 
 #: src/frontend/dockwidgets/CustomPointDock.cpp:376
 #, kde-format
@@ -12626,12 +12664,12 @@ msgstr "ალბათობა"
 #: src/frontend/dockwidgets/HistogramDock.cpp:164
 #, kde-format
 msgid "Count Density"
-msgstr ""
+msgstr "მოხვედრის სიხშირის სიმკვრივე"
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:165
 #, kde-format
 msgid "Probability Density"
-msgstr ""
+msgstr "ალბათობის სიმკვრივე"
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:560
 #, kde-format
@@ -12646,12 +12684,12 @@ msgstr ""
 #: src/frontend/dockwidgets/InfoElementDock.cpp:220
 #, kde-format
 msgid "%1: curve \"%2\" removed"
-msgstr ""
+msgstr "%1: მრუდი \"%2\" წაიშალა"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:168
 #, kde-format
 msgid "Silverman"
-msgstr ""
+msgstr "Silverman"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:350
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:446
@@ -12880,12 +12918,12 @@ msgstr "XY-მრუდი"
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:20
 #, kde-format
 msgid "or Kernel/Size:"
-msgstr ""
+msgstr "ან ბირთვი/ზომა:"
 
 #: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:203
 #, kde-format
 msgid "with Kernel/Size:"
-msgstr ""
+msgstr "ბირთვით/ზომით:"
 
 #: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:343
 #: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:346
@@ -12999,7 +13037,7 @@ msgstr ""
 #: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:434
 #, kde-format
 msgid "Tolerance (distance):"
-msgstr ""
+msgstr "დასაშვები გადახრა (მანძილი):"
 
 #: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:368
 #, kde-format
@@ -13019,27 +13057,27 @@ msgstr "გამეორება:"
 #: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:406
 #, kde-format
 msgid "Tolerance (area):"
-msgstr ""
+msgstr "დასაშვები გადახრა (ფართობი):"
 
 #: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:417
 #, kde-format
 msgid "Minimum tolerance:"
-msgstr ""
+msgstr "მინიმალური დასაშვები გადახრა:"
 
 #: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:421
 #, kde-format
 msgid "Maximum tolerance:"
-msgstr ""
+msgstr "მაქსიმალური დასაშვები გადახრა:"
 
 #: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:438
 #, kde-format
 msgid "Search region:"
-msgstr ""
+msgstr "ძებნის რეგიონი:"
 
 #: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:504
 #, kde-format
 msgid "Data reduction status: %1"
-msgstr ""
+msgstr "მონაცემების შემცირების მდგომარეობა: %1"
 
 #: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:519
 #, kde-format
@@ -13054,7 +13092,7 @@ msgstr ""
 #: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:521
 #, kde-format
 msgid "area error: %1"
-msgstr ""
+msgstr "შეცდომის ფართობი: %1"
 
 #: src/frontend/dockwidgets/XYDifferentiationCurveDock.cpp:391
 #, kde-format
@@ -13113,12 +13151,12 @@ msgstr "t, მაქს"
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:145
 #, kde-format
 msgid "Uncertainty, %"
-msgstr ""
+msgstr "გაურკვევლობა, %"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:145
 #, kde-format
 msgid "t statistic"
-msgstr ""
+msgstr "t-სტატისტიკა"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:364
 #, kde-format
@@ -13153,7 +13191,7 @@ msgstr "Y მონაცემები ხელმიუწვდომელ
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:510
 #, kde-format
 msgid "Curve:"
-msgstr ""
+msgstr "მრუდი:"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:448
 #, kde-format
@@ -13309,7 +13347,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Example Projects"
-msgstr ""
+msgstr "მაგალითი პროექტები"
 
 #: src/frontend/examples/ExamplesManager.cpp:176
 #, kde-format
@@ -13317,6 +13355,7 @@ msgid ""
 "Couldn't open the examples collections file %1. Please check your "
 "installation."
 msgstr ""
+"ვერ გავხსენი მაგალითი კოლექციის ფაილი %1. შეამოწმეთ თქვენი პროგრამის ფაილები."
 
 #: src/frontend/GuiObserver.cpp:195 src/frontend/MainWin.cpp:1369
 #, kde-format
@@ -13340,7 +13379,7 @@ msgstr "თვისებები: სვეტის სტატისტი
 #, kde-format
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Worksheet"
-msgstr ""
+msgstr "%1 სამუშაო ფურცელი"
 
 #: src/frontend/GuiObserver.cpp:251
 #, kde-format
@@ -13562,7 +13601,7 @@ msgstr "თვისებები: პროექტი"
 #, kde-format
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Notebook"
-msgstr ""
+msgstr "%1 ბლოკნოტი"
 
 #: src/frontend/GuiObserver.cpp:461
 #, kde-format
@@ -13593,7 +13632,7 @@ msgstr "თვისებები: MQTT მონაცემების წ�
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Live Data Source"
-msgstr ""
+msgstr "თვისებები: ცოცხალი მონაცემთა წყარო"
 
 #: src/frontend/GuiObserver.cpp:513
 #, kde-format
@@ -13680,32 +13719,32 @@ msgstr ""
 #: src/frontend/GuiTools.cpp:163
 #, kde-format
 msgid "Horiz. Lines"
-msgstr ""
+msgstr "ჰორიზ. ხაზები"
 
 #: src/frontend/GuiTools.cpp:164
 #, kde-format
 msgid "Vert. Lines"
-msgstr ""
+msgstr "ვერტ. ხაზები"
 
 #: src/frontend/GuiTools.cpp:165
 #, kde-format
 msgid "Crossing Lines"
-msgstr ""
+msgstr "კვეთადი ხაზები"
 
 #: src/frontend/GuiTools.cpp:166
 #, kde-format
 msgid "Backward Diag. Lines"
-msgstr ""
+msgstr "უკუ დიაგონ. ხაზები"
 
 #: src/frontend/GuiTools.cpp:167
 #, kde-format
 msgid "Forward Diag. Lines"
-msgstr ""
+msgstr "წინ დიაგონ. ხაზები"
 
 #: src/frontend/GuiTools.cpp:168
 #, kde-format
 msgid "Crossing Diag. Lines"
-msgstr ""
+msgstr "კვეთადი დიაგონ. ხაზები"
 
 #: src/frontend/GuiTools.cpp:186
 #, kde-format
@@ -13844,7 +13883,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Undo/Redo History"
-msgstr ""
+msgstr "გაუქმება/გამეორების ისტორია"
 
 #: src/frontend/HistoryDialog.cpp:56
 #, kde-format
@@ -13906,7 +13945,7 @@ msgstr "პროცენტი "
 #: src/frontend/LabPlot.cpp:56
 #, kde-format
 msgid "Positive/Negative sign "
-msgstr ""
+msgstr "დადებით/უარყოფითი ნიშანი "
 
 #: src/frontend/LabPlot.cpp:73
 #, kde-format
@@ -13921,12 +13960,12 @@ msgstr "ენა: "
 #: src/frontend/LabPlot.cpp:74
 #, kde-format
 msgid "Number settings:"
-msgstr ""
+msgstr "რიცხვის პარამეტრები:"
 
 #: src/frontend/LabPlot.cpp:74
 #, kde-format
 msgid "Updated on restart"
-msgstr ""
+msgstr "განახლებულია გადატვირთვისას"
 
 #: src/frontend/LabPlot.cpp:75
 #, kde-format
@@ -14049,12 +14088,12 @@ msgstr ""
 #: src/frontend/LabPlot.cpp:128
 #, kde-format
 msgid "Disable splash screen"
-msgstr ""
+msgstr "გაშვების ეკრანის გათიშვა"
 
 #: src/frontend/LabPlot.cpp:131
 #, kde-format
 msgid "Start in the presenter mode"
-msgstr ""
+msgstr "გაშვება პრეზენტაციის რეჟიმში"
 
 #: src/frontend/LabPlot.cpp:134
 #, kde-format
@@ -14193,7 +14232,7 @@ msgstr "&ფანჯრები"
 #: src/frontend/worksheet/WorksheetView.cpp:267
 #, kde-format
 msgid "Presenter Mode"
-msgstr ""
+msgstr "პრეზენტაციის რეჟიმი"
 
 #: src/frontend/MainWin.cpp:198
 #, kde-format
@@ -14216,7 +14255,7 @@ msgstr "&მაგალითის გახსნა"
 #: src/frontend/MainWin.cpp:601 src/frontend/MainWin.cpp:1927
 #, kde-format
 msgid "Workbook"
-msgstr ""
+msgstr "სამუშაო წიგნი"
 
 #: src/frontend/MainWin.cpp:603
 #, kde-format
@@ -14342,7 +14381,7 @@ msgstr "გატანა..."
 #: src/frontend/MainWin.cpp:690
 #, kde-format
 msgid "Export selected element"
-msgstr ""
+msgstr "შერჩეული ელემენტის გატანა"
 
 #: src/frontend/MainWin.cpp:696 src/frontend/MainWin.cpp:2464
 #: src/frontend/MainWin.cpp:2472
@@ -14428,17 +14467,17 @@ msgstr "&ყველა"
 #: src/frontend/MainWin.cpp:793
 #, kde-format
 msgid "Show Memory Usage"
-msgstr ""
+msgstr "მეხსიერების გამოყენების ჩვენება"
 
 #: src/frontend/MainWin.cpp:801
 #, kde-format
 msgid "Project Explorer"
-msgstr ""
+msgstr "პროექტის დამთვალიერებელი"
 
 #: src/frontend/MainWin.cpp:806
 #, kde-format
 msgid "Properties Explorer"
-msgstr ""
+msgstr "თვისებების დამთვალიერებელი"
 
 #: src/frontend/MainWin.cpp:811
 #, kde-format
@@ -14486,7 +14525,7 @@ msgstr "%1 შეიქმნა"
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
-msgstr ""
+msgstr "პროექტის დამთვალიერებელი"
 
 #: src/frontend/MainWin.cpp:1381
 #, kde-format
@@ -18043,7 +18082,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/imagedock.ui:434
 #, kde-format
 msgid " Select the image file"
-msgstr "აირჩიეთ გამოსახულების ფაილი"
+msgstr " აირჩიეთ გამოსახულების ფაილი"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbPointSeparation)
 #. i18n: ectx: property (toolTip), widget (QLabel, lPointSeparation)
@@ -18836,7 +18875,7 @@ msgstr "DBC მონაცემთა ბაზა"
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:29
 #, kde-format
 msgid " Select the file to import"
-msgstr "აირჩიეთ შემოსატანი ფაილი"
+msgstr " აირჩიეთ შემოსატანი ფაილი"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bFileInfo)
 #: src/frontend/ui/datasources/importfilewidget.ui:256
