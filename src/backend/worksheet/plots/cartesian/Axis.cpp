@@ -43,7 +43,7 @@ namespace {
 constexpr int maxNumberMajorTicks = 100;
 constexpr int _maxNumberMajorTicksCustomColumn = 21; // Use one more because one will be subtracted below
 constexpr int hoverSelectionEffectPenWidth = 2;
-} // Anounymous namespace
+} // Anonymous namespace
 
 /**
  * \class AxisGrid
@@ -1594,6 +1594,7 @@ void AxisPrivate::retransformTicks() {
 	case Axis::TicksType::CustomValues:
 		switch (q->scale()) {
 		case RangeT::Scale::Linear:
+		case RangeT::Scale::Inverse:
 			majorTicksIncrement = end - start;
 			break;
 		case RangeT::Scale::Log10:
@@ -1614,10 +1615,6 @@ void AxisPrivate::retransformTicks() {
 			break;
 		case RangeT::Scale::Square:
 			majorTicksIncrement = end * end - start * start;
-			break;
-		case RangeT::Scale::Inverse:
-			if (start != 0. && end != 0.)
-				majorTicksIncrement = 1. / start - 1. / end;
 			break;
 		}
 		if (tmpMajorTicksNumber > 1)
@@ -1653,6 +1650,7 @@ void AxisPrivate::retransformTicks() {
 				tmpMajorTicksNumber = std::round((end * end - start * start) / majorTicksIncrement + 1);
 				break;
 			case RangeT::Scale::Inverse:
+				//TODO
 				if (start != 0. && end != 0.)
 					tmpMajorTicksNumber = std::round((1. / start - 1. / end) / majorTicksIncrement + 1);
 				break;
@@ -1698,11 +1696,11 @@ void AxisPrivate::retransformTicks() {
 		// DEBUG(Q_FUNC_INFO << ", major tick " << iMajor)
 		qreal majorTickPos = 0.0;
 		// calculate major tick's position
-
 		if (!dateTimeSpacing) {
+			// DEBUG(Q_FUNC_INFO << ", start = " << start << ", incr = " << majorTicksIncrement << ", i = " << iMajor)
 			switch (q->scale()) {
 			case RangeT::Scale::Linear:
-				// DEBUG(Q_FUNC_INFO << ", start = " << start << ", incr = " << majorTicksIncrement << ", i = " << iMajor)
+			case RangeT::Scale::Inverse:
 				majorTickPos = start + majorTicksIncrement * iMajor;
 				if (std::abs(majorTickPos) < 1.e-15 * majorTicksIncrement) // avoid rounding errors when close to zero
 					majorTickPos = 0;
@@ -1728,11 +1726,8 @@ void AxisPrivate::retransformTicks() {
 				majorTickPos = std::sqrt(start * start + majorTicksIncrement * iMajor);
 				nextMajorTickPos = std::sqrt(start * start + majorTicksIncrement * (iMajor + 1));
 				break;
-			case RangeT::Scale::Inverse:
-				majorTickPos = 1. / (1. / start + majorTicksIncrement * iMajor);
-				nextMajorTickPos = 1. / (1. / start + majorTicksIncrement * (iMajor + 1));
-				break;
 			}
+			// DEBUG(majorTickPos << " " << nextMajorTickPos)
 		} else {
 			// Datetime Linear
 			if (iMajor == 0)
