@@ -27,6 +27,7 @@ New features:
 		* more space for plots and less "ink" - no layout spacings, no minor grid lines, not plot borders, no ticks on secondary axes on default
 		* allow to provide names for plot ranges for easier lookup and assignemnt in the plot elements
 		* new option to use plot's main color (line, symbol, etc.) for the color of the name text shown in the legend
+		* fix inverse axis scale for Arrhenius plots
 
 Performance improvements:
 	* Made big spreadsheet (millions of cells) more responsive when selecting columns via the spreadsheet header
