@@ -1628,6 +1628,7 @@ void AxisPrivate::retransformTicks() {
 		if (q->isNumeric() || (!q->isNumeric() && q->scale() != RangeT::Scale::Linear)) {
 			switch (q->scale()) {
 			case RangeT::Scale::Linear:
+			case RangeT::Scale::Inverse:
 				tmpMajorTicksNumber = std::round((end - start) / majorTicksIncrement + 1);
 				break;
 			case RangeT::Scale::Log10:
@@ -1648,11 +1649,6 @@ void AxisPrivate::retransformTicks() {
 				break;
 			case RangeT::Scale::Square:
 				tmpMajorTicksNumber = std::round((end * end - start * start) / majorTicksIncrement + 1);
-				break;
-			case RangeT::Scale::Inverse:
-				//TODO
-				if (start != 0. && end != 0.)
-					tmpMajorTicksNumber = std::round((1. / start - 1. / end) / majorTicksIncrement + 1);
 				break;
 			}
 		} else {
