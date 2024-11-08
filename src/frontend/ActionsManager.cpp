@@ -15,15 +15,11 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "frontend/ActionsManager.h"
 #include "frontend/MainWin.h"
-#include "frontend/note/NoteView.h"
+#include "frontend/datapicker/DatapickerView.h"
 #include "frontend/matrix/MatrixView.h"
 #include "frontend/spreadsheet/SpreadsheetView.h"
-#include "frontend/widgets/FITSHeaderEditDialog.h"
-#include "frontend/widgets/LabelWidget.h"
 #include "frontend/widgets/MemoryWidget.h"
-#include "frontend/worksheet/WorksheetPreviewWidget.h"
 #include "frontend/worksheet/WorksheetView.h"
-#include "frontend/datapicker/DatapickerView.h"
 
 #ifdef HAVE_CANTOR_LIBS
 #include "backend/notebook/Notebook.h"
@@ -34,16 +30,13 @@
 #include <QActionGroup>
 #include <QJsonArray>
 #include <QMenuBar>
-#include <QStackedWidget>
 #include <QStatusBar>
-#include <QToolBar>
 
 #include <KActionCollection>
 #include <KActionMenu>
 #include <KColorScheme>
 #include <KColorSchemeManager>
 #include <KColorSchemeMenu>
-#include <KCompressionDevice>
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
@@ -69,11 +62,9 @@
 #include <DockAreaWidget.h>
 #include <DockManager.h>
 
-
 /*!
  *  \class ActionsManager
- *  \brief The GUI observer looks for the selection changes in the main window
- *  and shows/hides the correspondings dock widgets, toolbars etc.
+ *  \brief Class managing all actions and their containers (menus and toolbars) in MainWin.
  *  This class is intended to simplify (or not to overload) the code in MainWin.
  *
  *  \ingroup frontend
@@ -444,7 +435,6 @@ void ActionsManager::initActions() {
  */
 void ActionsManager::initWorksheetToolbarActions() {
 	// auto* collection = m_mainWindow->actionCollection();
-
 }
 
 /*!
@@ -454,35 +444,35 @@ void ActionsManager::initSpreadsheetToolbarActions() {
 	auto* collection = m_mainWindow->actionCollection();
 
 	// rows
-	m_spreadsheetInsertRowAboveAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-row-above")), i18n("Insert Row Above"), this);
+	m_spreadsheetInsertRowAboveAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-row-above")), i18n("Insert Row Above"), m_mainWindow);
 	collection->addAction(QLatin1String("spreadsheet_insert_row_above"), m_spreadsheetInsertRowAboveAction);
 
-	m_spreadsheetInsertRowBelowAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-row-below")), i18n("Insert Row Below"), this);
+	m_spreadsheetInsertRowBelowAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-row-below")), i18n("Insert Row Below"), m_mainWindow);
 	collection->addAction(QLatin1String("spreadsheet_insert_row_below"), m_spreadsheetInsertRowBelowAction);
 
-	m_spreadsheetRemoveRowsAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-delete-row")), i18n("Remo&ve Selected Row(s)"), this);
+	m_spreadsheetRemoveRowsAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-delete-row")), i18n("Remo&ve Selected Row(s)"), m_mainWindow);
 	collection->addAction(QLatin1String("spreadsheet_remove_rows"), m_spreadsheetRemoveRowsAction);
 
 	// columns
-	m_spreadsheetInsertColumnLeftAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-left")), i18n("Insert Column Left"), this);
+	m_spreadsheetInsertColumnLeftAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-left")), i18n("Insert Column Left"), m_mainWindow);
 	collection->addAction(QLatin1String("spreadsheet_insert_column_left"), m_spreadsheetInsertColumnLeftAction);
 
-	m_spreadsheetInsertColumnRightAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-right")), i18n("Insert Column Right"), this);
+	m_spreadsheetInsertColumnRightAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-right")), i18n("Insert Column Right"), m_mainWindow);
 	collection->addAction(QLatin1String("spreadsheet_insert_column_right"), m_spreadsheetInsertColumnRightAction);
 
-	m_spreadsheetRemoveColumnsAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-delete-column")), i18n("Delete Selected Column(s)"), this);
+	m_spreadsheetRemoveColumnsAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-delete-column")), i18n("Delete Selected Column(s)"), m_mainWindow);
 	collection->addAction(QLatin1String("spreadsheet_remove_columns"), m_spreadsheetRemoveColumnsAction);
 
 	// sort
-	m_spreadsheetSortAction = new QAction(QIcon::fromTheme(QStringLiteral("view-sort")), i18n("&Sort..."), this);
+	m_spreadsheetSortAction = new QAction(QIcon::fromTheme(QStringLiteral("view-sort")), i18n("&Sort..."), m_mainWindow);
 	m_spreadsheetSortAction->setToolTip(i18n("Sort multiple columns together"));
 	collection->addAction(QLatin1String("spreadsheet_sort"), m_spreadsheetSortAction);
 
-	m_spreadsheetSortAscAction = new QAction(QIcon::fromTheme(QStringLiteral("view-sort-ascending")), i18n("Sort &Ascending"), this);
+	m_spreadsheetSortAscAction = new QAction(QIcon::fromTheme(QStringLiteral("view-sort-ascending")), i18n("Sort &Ascending"), m_mainWindow);
 	m_spreadsheetSortAscAction->setToolTip(i18n("Sort the selected columns separately in ascending order"));
 	collection->addAction(QLatin1String("spreadsheet_sort_asc"), m_spreadsheetSortAscAction);
 
-	m_spreadsheetSortDescAction = new QAction(QIcon::fromTheme(QStringLiteral("view-sort-descending")), i18n("Sort &Descending"), this);
+	m_spreadsheetSortDescAction = new QAction(QIcon::fromTheme(QStringLiteral("view-sort-descending")), i18n("Sort &Descending"), m_mainWindow);
 	m_spreadsheetSortDescAction->setToolTip(i18n("Sort the selected columns separately in descending order"));
 	collection->addAction(QLatin1String("spreadsheet_sort_desc"), m_spreadsheetSortDescAction);
 }
@@ -493,19 +483,19 @@ void ActionsManager::initSpreadsheetToolbarActions() {
 void ActionsManager::initNotebookToolbarActions() {
 	auto* collection = m_mainWindow->actionCollection();
 
-	m_notebookZoomInAction = new QAction(QIcon::fromTheme(QLatin1String("zoom-in")), i18n("Zoom In"), this);
+	m_notebookZoomInAction = new QAction(QIcon::fromTheme(QLatin1String("zoom-in")), i18n("Zoom In"), m_mainWindow);
 	collection->addAction(QLatin1String("notebook_zoom_in"), m_notebookZoomInAction);
 
-	m_notebookZoomOutAction = new QAction(QIcon::fromTheme(QLatin1String("zoom-out")), i18n("Zoom Out"), this);
+	m_notebookZoomOutAction = new QAction(QIcon::fromTheme(QLatin1String("zoom-out")), i18n("Zoom Out"), m_mainWindow);
 	collection->addAction(QLatin1String("notebook_zoom_out"), m_notebookZoomOutAction);
 
-	m_notebookFindAction = new QAction(QIcon::fromTheme(QLatin1String("edit-find")), i18n("Find"), this);
+	m_notebookFindAction = new QAction(QIcon::fromTheme(QLatin1String("edit-find")), i18n("Find"), m_mainWindow);
 	collection->addAction(QLatin1String("notebook_find"), m_notebookFindAction);
 
-	m_notebookRestartAction = new QAction(QIcon::fromTheme(QLatin1String("system-reboot")), i18n("Restart"), this);
+	m_notebookRestartAction = new QAction(QIcon::fromTheme(QLatin1String("system-reboot")), i18n("Restart"), m_mainWindow);
 	collection->addAction(QLatin1String("notebook_restart"), m_notebookRestartAction);
 
-	m_notebookEvaluateAction = new QAction(QIcon::fromTheme(QLatin1String("system-run")), i18n("Evaluate Notebook"), this);
+	m_notebookEvaluateAction = new QAction(QIcon::fromTheme(QLatin1String("system-run")), i18n("Evaluate Notebook"), m_mainWindow);
 	collection->addAction(QLatin1String("notebook_evaluate"), m_notebookEvaluateAction);
 }
 
@@ -1029,6 +1019,7 @@ void ActionsManager::connectSpreadsheetToolbarActions(const SpreadsheetView* vie
 	connect(m_spreadsheetSortDescAction, &QAction::triggered, view, &SpreadsheetView::sortDescending);
 }
 
+#ifdef HAVE_CANTOR_LIBS
 void ActionsManager::connectNotebookToolbarActions(const NotebookView* view) {
 	if (!m_notebookRestartAction)
 		initNotebookToolbarActions();
@@ -1046,6 +1037,7 @@ void ActionsManager::connectNotebookToolbarActions(const NotebookView* view) {
 	connect(m_notebookZoomOutAction, &QAction::triggered, view, &NotebookView::zoomOut);
 	connect(m_notebookFindAction, &QAction::triggered, view, &NotebookView::find);
 }
+#endif
 
 void ActionsManager::connectDataExtractorToolbarActions(const DatapickerView* view) {
 

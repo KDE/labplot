@@ -28,7 +28,6 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
 #include "backend/note/Note.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTClient.h"
 #endif
@@ -73,7 +72,6 @@
 #include <QMenu>
 
 #include <QMimeData>
-#include <QProcess>
 #include <QStackedWidget>
 #include <QStatusBar>
 #include <QTemporaryFile>
@@ -85,9 +83,7 @@
 // #include <QQmlApplicationEngine>
 // #include <QQmlContext>
 
-#include <KColorScheme>
 #include <KColorSchemeManager>
-#include <KColorSchemeMenu>
 #include <KCompressionDevice>
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -144,17 +140,15 @@ MainWin::~MainWin() {
 	group.writeEntry(QLatin1String("ShowMemoryInfo"), (m_memoryInfoWidget != nullptr));
 	Settings::sync();
 
-	if (m_project) {
-		delete m_guiObserver;
-		delete m_aspectTreeModel;
-		disconnect(m_project, nullptr, this, nullptr);
-		delete m_project;
-	}
+	delete m_guiObserver;
+	delete m_actionsManager;
+	delete m_aspectTreeModel;
+	disconnect(m_project, nullptr, this, nullptr);
+	delete m_project;
 
 	// if welcome screen is shown, save its settings prior to deleting it
 	// 	if (dynamic_cast<QQuickWidget*>(centralWidget()))
 	// 		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
-
 	//	delete m_welcomeScreenHelper;
 }
 

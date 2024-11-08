@@ -49,7 +49,9 @@ private:
 
 	void initWorksheetToolbarActions();
 	void initSpreadsheetToolbarActions();
+#ifdef HAVE_CANTOR_LIBS
 	void initNotebookToolbarActions();
+#endif
 	void initDataExtractorToolbarActions();
 
 	void connectWorksheetToolbarActions(const WorksheetView*);
