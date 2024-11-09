@@ -1571,7 +1571,7 @@ void SpreadsheetView::checkSpreadsheetSelectionMenu() {
 	const QModelIndexList& indexes = m_tableView->selectionModel()->selectedIndexes();
 	bool hasMasked = false;
 	bool hasUnmasked = false;
-	for (auto& index : qAsConst(indexes)) {
+	for (auto& index : std::as_const(indexes)) {
 		int row = index.row();
 		int col = index.column();
 		const auto* column = m_spreadsheet->column(col);

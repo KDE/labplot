@@ -961,7 +961,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		// list of curves to be retransformed
 		curves << static_cast<XYCurve*>(aspect);
 
-	for (auto* curve : qAsConst(curves)) {
+	for (auto* curve : std::as_const(curves)) {
 		if (!curve)
 			continue;
 		curve->setSuppressRetransform(true);
@@ -1010,7 +1010,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		functionCurves = aspect->children<XYFunctionCurve>(ChildIndexFlag::Recursive);
 
 	for (auto* functionCurve : functionCurves) {
-		for (const auto* curve : qAsConst(curves))
+		for (const auto* curve : std::as_const(curves))
 			functionCurve->setFunctionVariableCurve(curve);
 	}
 

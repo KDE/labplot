@@ -1433,7 +1433,7 @@ void HistogramPrivate::updateRug() {
 		points = q->cSystem->mapLogicalToScene(points);
 
 		// path for the vertical rug lines
-		for (const auto& point : qAsConst(points)) {
+		for (const auto& point : std::as_const(points)) {
 			rugPath.moveTo(point.x(), point.y() - rugOffset);
 			rugPath.lineTo(point.x(), point.y() - rugOffset - rugLength);
 		}
@@ -1447,7 +1447,7 @@ void HistogramPrivate::updateRug() {
 		points = q->cSystem->mapLogicalToScene(points);
 
 		// path for the horizontal rug lines
-		for (const auto& point : qAsConst(points)) {
+		for (const auto& point : std::as_const(points)) {
 			rugPath.moveTo(point.x() + rugOffset, point.y());
 			rugPath.lineTo(point.x() + rugOffset + rugLength, point.y());
 		}

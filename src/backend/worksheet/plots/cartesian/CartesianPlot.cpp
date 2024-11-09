@@ -991,7 +991,7 @@ void CartesianPlot::processDropEvent(const QVector<quintptr>& vec) {
 
 	// determine the first column with "x plot designation" as the x-data column for all curves to be created
 	const AbstractColumn* xColumn = nullptr;
-	for (const auto* column : qAsConst(columns)) {
+	for (const auto* column : std::as_const(columns)) {
 		if (column->plotDesignation() == AbstractColumn::PlotDesignation::X) {
 			xColumn = column;
 			break;
@@ -1011,7 +1011,7 @@ void CartesianPlot::processDropEvent(const QVector<quintptr>& vec) {
 
 	// create curves
 	bool curvesAdded = false;
-	for (const auto* column : qAsConst(columns)) {
+	for (const auto* column : std::as_const(columns)) {
 		if (column == xColumn)
 			continue;
 
@@ -3305,7 +3305,7 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 			double sceneEndLast = plotSceneRange.start();
 			double logicalEndLast = r.start();
 			auto rbs = rangeBreaks(dim);
-			for (const auto& rb : qAsConst(rbs.list)) {
+			for (const auto& rb : std::as_const(rbs.list)) {
 				if (!rb.isValid())
 					break;
 

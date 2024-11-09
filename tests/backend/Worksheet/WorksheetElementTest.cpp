@@ -664,7 +664,7 @@ void WorksheetElementTest::referenceLineInverseScaling() {
 #define DEBUG_ELEMENT_NAMES(aspectVector)                                                                                                                      \
 	do {                                                                                                                                                       \
 		int index = 0;                                                                                                                                         \
-		for (const auto& a : qAsConst(aspectVector)) {                                                                                                         \
+		for (const auto& a : std::as_const(aspectVector)) {                                                                                                    \
 			DEBUG(std::string("Index: ") << index << " , name: " << a->name().toStdString());                                                                  \
 			index++;                                                                                                                                           \
 		}                                                                                                                                                      \

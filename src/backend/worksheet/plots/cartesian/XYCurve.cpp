@@ -1502,7 +1502,7 @@ void XYCurvePrivate::updateLines(bool performanceOptimization) {
 		if (!m_lines.isEmpty()) {
 			linePath.moveTo(m_lines.constFirst().p1());
 			QPointF prevP2;
-			for (const auto& line : qAsConst(m_lines)) {
+			for (const auto& line : std::as_const(m_lines)) {
 				if (prevP2 != line.p1())
 					linePath.moveTo(line.p1());
 				linePath.lineTo(line.p2());
@@ -1540,21 +1540,21 @@ void XYCurvePrivate::updateDropLines() {
 	case XYCurve::DropLineType::NoDropLine:
 		break;
 	case XYCurve::DropLineType::X:
-		for (const auto& point : qAsConst(m_logicalPoints)) {
+		for (const auto& point : std::as_const(m_logicalPoints)) {
 			if (!m_pointVisible.at(i++))
 				continue;
 			dlines.append(QLineF(point, QPointF(point.x(), yMin)));
 		}
 		break;
 	case XYCurve::DropLineType::Y:
-		for (const auto& point : qAsConst(m_logicalPoints)) {
+		for (const auto& point : std::as_const(m_logicalPoints)) {
 			if (!m_pointVisible.at(i++))
 				continue;
 			dlines.append(QLineF(point, QPointF(xMin, point.y())));
 		}
 		break;
 	case XYCurve::DropLineType::XY:
-		for (const auto& point : qAsConst(m_logicalPoints)) {
+		for (const auto& point : std::as_const(m_logicalPoints)) {
 			if (!m_pointVisible.at(i++))
 				continue;
 			dlines.append(QLineF(point, QPointF(point.x(), yMin)));
@@ -1562,21 +1562,21 @@ void XYCurvePrivate::updateDropLines() {
 		}
 		break;
 	case XYCurve::DropLineType::XZeroBaseline:
-		for (const auto& point : qAsConst(m_logicalPoints)) {
+		for (const auto& point : std::as_const(m_logicalPoints)) {
 			if (!m_pointVisible.at(i++))
 				continue;
 			dlines.append(QLineF(point, QPointF(point.x(), 0)));
 		}
 		break;
 	case XYCurve::DropLineType::XMinBaseline:
-		for (const auto& point : qAsConst(m_logicalPoints)) {
+		for (const auto& point : std::as_const(m_logicalPoints)) {
 			if (!m_pointVisible.at(i++))
 				continue;
 			dlines.append(QLineF(point, QPointF(point.x(), yColumn->minimum())));
 		}
 		break;
 	case XYCurve::DropLineType::XMaxBaseline:
-		for (const auto& point : qAsConst(m_logicalPoints)) {
+		for (const auto& point : std::as_const(m_logicalPoints)) {
 			if (!m_pointVisible.at(i++))
 				continue;
 			dlines.append(QLineF(point, QPointF(point.x(), yColumn->maximum())));
@@ -1588,7 +1588,7 @@ void XYCurvePrivate::updateDropLines() {
 	dlines = q->cSystem->mapLogicalToScene(dlines);
 
 	// new painter path for the drop lines
-	for (const auto& line : qAsConst(dlines)) {
+	for (const auto& line : std::as_const(dlines)) {
 		dropLinePath.moveTo(line.p1());
 		dropLinePath.lineTo(line.p2());
 	}
@@ -1613,7 +1613,7 @@ void XYCurvePrivate::updateSymbols() {
 			path = trafo.map(path);
 		}
 		calculateScenePoints();
-		for (const auto& point : qAsConst(m_scenePoints)) {
+		for (const auto& point : std::as_const(m_scenePoints)) {
 			trafo.reset();
 			trafo.translate(point.x(), point.y());
 			symbolsPath.addPath(trafo.map(path));
@@ -1638,14 +1638,14 @@ void XYCurvePrivate::updateRug() {
 
 	// vertical rug
 	if (rugOrientation == WorksheetElement::Orientation::Vertical || rugOrientation == WorksheetElement::Orientation::Both) {
-		for (const auto& point : qAsConst(m_logicalPoints))
+		for (const auto& point : std::as_const(m_logicalPoints))
 			points << QPointF(xMin, point.y());
 
 		// map the points to scene coordinates
 		points = q->cSystem->mapLogicalToScene(points);
 
 		// path for the vertical rug lines
-		for (const auto& point : qAsConst(points)) {
+		for (const auto& point : std::as_const(points)) {
 			rugPath.moveTo(point.x() + rugOffset, point.y());
 			rugPath.lineTo(point.x() + rugOffset + rugLength, point.y());
 		}
@@ -1654,14 +1654,14 @@ void XYCurvePrivate::updateRug() {
 	// horizontal rug
 	if (rugOrientation == WorksheetElement::Orientation::Horizontal || rugOrientation == WorksheetElement::Orientation::Both) {
 		points.clear();
-		for (const auto& point : qAsConst(m_logicalPoints))
+		for (const auto& point : std::as_const(m_logicalPoints))
 			points << QPointF(point.x(), yMin);
 
 		// map the points to scene coordinates
 		points = q->cSystem->mapLogicalToScene(points);
 
 		// path for the horizontal rug lines
-		for (const auto& point : qAsConst(points)) {
+		for (const auto& point : std::as_const(points)) {
 			rugPath.moveTo(point.x(), point.y() - rugOffset);
 			rugPath.lineTo(point.x(), point.y() - rugOffset - rugLength);
 		}
@@ -1702,7 +1702,7 @@ void XYCurvePrivate::updateValues() {
 		int precision = valuesPrecision;
 		if (xColumn->columnMode() == AbstractColumn::ColumnMode::Integer || xColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
 			precision = 0;
-		for (const auto& point : qAsConst(m_logicalPoints)) {
+		for (const auto& point : std::as_const(m_logicalPoints)) {
 			if (!m_pointVisible.at(i++))
 				continue;
 			QString value;
@@ -1719,7 +1719,7 @@ void XYCurvePrivate::updateValues() {
 		int precision = valuesPrecision;
 		if (yColumn->columnMode() == AbstractColumn::ColumnMode::Integer || yColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
 			precision = 0;
-		for (const auto& point : qAsConst(m_logicalPoints)) {
+		for (const auto& point : std::as_const(m_logicalPoints)) {
 			if (!m_pointVisible.at(i++))
 				continue;
 			QString value;
@@ -1744,7 +1744,7 @@ void XYCurvePrivate::updateValues() {
 		if (yColumn->columnMode() == AbstractColumn::ColumnMode::Integer || yColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
 			yPrecision = 0;
 
-		for (const auto& point : qAsConst(m_logicalPoints)) {
+		for (const auto& point : std::as_const(m_logicalPoints)) {
 			if (!m_pointVisible.at(i++))
 				continue;
 			QString value;
@@ -1841,7 +1841,7 @@ void XYCurvePrivate::updateValues() {
 	const int h{fm.ascent()};
 
 	i = 0;
-	for (const auto& string : qAsConst(m_valueStrings)) {
+	for (const auto& string : std::as_const(m_valueStrings)) {
 		// catch case with more label strings than scene points (should not happen even with custom column)
 		if (i >= m_scenePoints.size())
 			break;
@@ -1871,7 +1871,7 @@ void XYCurvePrivate::updateValues() {
 	QTransform trafo;
 	QPainterPath path;
 	i = 0;
-	for (const auto& point : qAsConst(m_valuePoints)) {
+	for (const auto& point : std::as_const(m_valuePoints)) {
 		path = QPainterPath();
 		path.addText(QPoint(0, 0), valuesFont, m_valueStrings.at(i++));
 
@@ -2633,7 +2633,7 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 
 	m_boundingRectangle = m_shape.boundingRect();
 
-	for (const auto& pol : qAsConst(m_fillPolygons))
+	for (const auto& pol : std::as_const(m_fillPolygons))
 		m_boundingRectangle = m_boundingRectangle.united(pol.boundingRect());
 
 	// TODO: when the selection is painted, line intersections are visible.
@@ -2651,7 +2651,7 @@ void XYCurvePrivate::draw(QPainter* painter) {
 
 	// draw filling
 	if (background->position() != Background::Position::No)
-		for (const auto& polygon : qAsConst(m_fillPolygons))
+		for (const auto& polygon : std::as_const(m_fillPolygons))
 			background->draw(painter, polygon);
 
 	// draw lines
@@ -2796,7 +2796,7 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 void XYCurvePrivate::drawValues(QPainter* painter) {
 	// QDEBUG(Q_FUNC_INFO << ", value strings = " << m_valueStrings)
 	int i = 0;
-	for (const auto& point : qAsConst(m_valuePoints)) {
+	for (const auto& point : std::as_const(m_valuePoints)) {
 		painter->translate(point);
 		if (valuesRotationAngle != 0.)
 			painter->rotate(-valuesRotationAngle);

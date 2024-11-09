@@ -829,7 +829,7 @@ void XYCurveDock::valuesColorChanged(const QColor& color) {
 void XYCurveDock::rugEnabledChanged(bool state) {
 	CONDITIONAL_LOCK_RETURN;
 
-	for (auto* curve : qAsConst(m_curvesList))
+	for (auto* curve : std::as_const(m_curvesList))
 		curve->setRugEnabled(state);
 }
 
@@ -837,7 +837,7 @@ void XYCurveDock::rugOrientationChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
 	auto orientation = static_cast<WorksheetElement::Orientation>(index);
-	for (auto* curve : qAsConst(m_curvesList))
+	for (auto* curve : std::as_const(m_curvesList))
 		curve->setRugOrientation(orientation);
 }
 
@@ -845,7 +845,7 @@ void XYCurveDock::rugLengthChanged(double value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	const double length = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
-	for (auto* curve : qAsConst(m_curvesList))
+	for (auto* curve : std::as_const(m_curvesList))
 		curve->setRugLength(length);
 }
 
@@ -853,7 +853,7 @@ void XYCurveDock::rugWidthChanged(double value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	const double width = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
-	for (auto* curve : qAsConst(m_curvesList))
+	for (auto* curve : std::as_const(m_curvesList))
 		curve->setRugWidth(width);
 }
 
@@ -861,7 +861,7 @@ void XYCurveDock::rugOffsetChanged(double value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	const double offset = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
-	for (auto* curve : qAsConst(m_curvesList))
+	for (auto* curve : std::as_const(m_curvesList))
 		curve->setRugOffset(offset);
 }
 

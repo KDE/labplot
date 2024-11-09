@@ -405,7 +405,7 @@ void ColumnDock::numericFormatChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
 	char format = ui.cbNumericFormat->itemData(index).toChar().toLatin1();
-	for (auto* col : qAsConst(m_columnsList)) {
+	for (auto* col : std::as_const(m_columnsList)) {
 		auto* filter = static_cast<Double2StringFilter*>(col->outputFilter());
 		filter->setNumericFormat(format);
 	}
@@ -414,7 +414,7 @@ void ColumnDock::numericFormatChanged(int index) {
 void ColumnDock::precisionChanged(int digits) {
 	CONDITIONAL_LOCK_RETURN;
 
-	for (auto* col : qAsConst(m_columnsList)) {
+	for (auto* col : std::as_const(m_columnsList)) {
 		auto* filter = static_cast<Double2StringFilter*>(col->outputFilter());
 		filter->setNumDigits(digits);
 	}
@@ -423,7 +423,7 @@ void ColumnDock::precisionChanged(int digits) {
 void ColumnDock::dateTimeFormatChanged(const QString& format) {
 	CONDITIONAL_LOCK_RETURN;
 
-	for (auto* col : qAsConst(m_columnsList)) {
+	for (auto* col : std::as_const(m_columnsList)) {
 		auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 		filter->setFormat(format);
 	}
@@ -433,7 +433,7 @@ void ColumnDock::plotDesignationChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
 	auto pd = AbstractColumn::PlotDesignation(index);
-	for (auto* col : qAsConst(m_columnsList))
+	for (auto* col : std::as_const(m_columnsList))
 		col->setPlotDesignation(pd);
 }
 
@@ -504,7 +504,7 @@ void ColumnDock::removeLabel() {
 
 	int row = ui.twLabels->currentRow();
 	const auto& value = ui.twLabels->itemAt(row, 0)->text();
-	for (auto* col : qAsConst(m_columnsList))
+	for (auto* col : std::as_const(m_columnsList))
 		col->removeValueLabel(value);
 
 	ui.twLabels->removeRow(ui.twLabels->currentRow());

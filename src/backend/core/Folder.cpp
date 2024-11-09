@@ -222,7 +222,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 
 			// remove the path of the current child folder
 			QStringList pathesToLoadNew;
-			for (const auto& path : qAsConst(m_pathesToLoad)) {
+			for (const auto& path : std::as_const(m_pathesToLoad)) {
 				if (path.startsWith(curFolderPath))
 					pathesToLoadNew << path.right(path.length() - curFolderPath.length());
 			}

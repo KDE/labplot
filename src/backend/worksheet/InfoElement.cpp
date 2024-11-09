@@ -495,7 +495,7 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 		text.replace(QStringLiteral("&(x)"), xValueStr);
 
 	// replace the placeholders for curve's y-values
-	for (const auto& markerpoint : qAsConst(markerpoints)) {
+	for (const auto& markerpoint : std::as_const(markerpoints)) {
 		QString replace;
 		if (wrapper.mode == TextLabel::Mode::Text)
 			replace = QStringLiteral("&amp;(");

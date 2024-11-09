@@ -197,7 +197,7 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent* event) {
 			QMenu* columnsMenu = menu->addMenu(i18n("Columns"));
 			columnsMenu->addAction(showAllColumnsAction);
 			columnsMenu->addSeparator();
-			for (auto* action : qAsConst(list_showColumnActions))
+			for (auto* action : std::as_const(list_showColumnActions))
 				columnsMenu->addAction(action);
 
 			// TODO
@@ -346,7 +346,7 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 		columnsMenu->addSection(i18n("Columns"));
 		columnsMenu->addAction(showAllColumnsAction);
 		columnsMenu->addSeparator();
-		for (auto* action : qAsConst(list_showColumnActions))
+		for (auto* action : std::as_const(list_showColumnActions))
 			columnsMenu->addAction(action);
 
 		auto* e = static_cast<QContextMenuEvent*>(event);
@@ -596,7 +596,7 @@ void ProjectExplorer::navigateTo(const QString& path) {
 void ProjectExplorer::toggleColumn(int index) {
 	// determine the total number of checked column actions
 	int checked = 0;
-	for (const auto* action : qAsConst(list_showColumnActions)) {
+	for (const auto* action : std::as_const(list_showColumnActions)) {
 		if (action->isChecked())
 			checked++;
 	}
@@ -606,7 +606,7 @@ void ProjectExplorer::toggleColumn(int index) {
 		m_treeView->header()->resizeSection(0, 0);
 		m_treeView->header()->resizeSections(QHeaderView::ResizeToContents);
 
-		for (auto* action : qAsConst(list_showColumnActions))
+		for (auto* action : std::as_const(list_showColumnActions))
 			action->setEnabled(true);
 
 		// deactivate the "show all column"-action, if all actions are checked
@@ -639,7 +639,7 @@ void ProjectExplorer::showAllColumns() {
 	}
 	showAllColumnsAction->setEnabled(false);
 
-	for (auto* action : qAsConst(list_showColumnActions)) {
+	for (auto* action : std::as_const(list_showColumnActions)) {
 		action->setEnabled(true);
 		action->setChecked(true);
 	}

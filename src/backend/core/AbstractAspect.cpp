@@ -1213,7 +1213,7 @@ AbstractAspectPrivate::AbstractAspectPrivate(AbstractAspect* owner, const QStrin
 }
 
 AbstractAspectPrivate::~AbstractAspectPrivate() {
-	for (auto* child : qAsConst(m_children))
+	for (auto* child : std::as_const(m_children))
 		delete child;
 }
 
