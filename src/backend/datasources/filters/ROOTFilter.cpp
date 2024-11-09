@@ -111,7 +111,7 @@ void ROOTFilter::save(QXmlStreamWriter* writer) const {
 
 bool ROOTFilter::load(XmlStreamReader* reader) {
 	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
-	QXmlStreamAttributes attribs = reader->attributes();
+	auto attribs = reader->attributes();
 
 	// read attributes
 	d->currentObject = attribs.value(QStringLiteral("object")).toString();
@@ -158,7 +158,7 @@ ROOTFilterPrivate::ROOTFilterPrivate(ROOTFilter* owner)
 }
 
 ROOTFilterPrivate::FileType ROOTFilterPrivate::currentObjectPosition(const QString& fileName, long int& pos) {
-	QStringList typeobject = currentObject.split(QLatin1Char(':'));
+	auto typeobject = currentObject.split(QLatin1Char(':'));
 	if (typeobject.size() < 2) {
 		q->setLastError(i18n("Unsupported file type, neither histogram no tree."));
 		return FileType::Invalid;
@@ -173,9 +173,9 @@ ROOTFilterPrivate::FileType ROOTFilterPrivate::currentObjectPosition(const QStri
 		return FileType::Invalid;
 
 	typeobject.removeFirst();
-	QStringList path = typeobject.join(QLatin1Char(':')).split(QLatin1Char('/'));
-	ROOTFilter::Directory dir = type == FileType::Hist ? listHistograms(fileName) : listTrees(fileName);
-	const ROOTFilter::Directory* node = &dir;
+	auto path = typeobject.join(QLatin1Char(':')).split(QLatin1Char('/'));
+	auto dir = type == FileType::Hist ? listHistograms(fileName) : listTrees(fileName);
+	const auto* node = &dir;
 	while (path.size() > 1) {
 		bool next = false;
 		for (const auto& child : node->children) {
@@ -219,9 +219,8 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 		DEBUG("first/last = " << first << " " << last)
 
 		QStringList headers;
-		for (const auto& l : columns) {
+		for (const auto& l : columns)
 			headers << l.last();
-		}
 
 		std::vector<void*> dataContainer;
 		bool ok = false;
@@ -322,7 +321,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 			} else if (l.count() > 1)
 				leaf = l.at(1);
 
-			QVector<double>& container = *static_cast<QVector<double>*>(dataContainer[c++]);
+			auto& container = *static_cast<QVector<double>*>(dataContainer[c++]);
 			auto data = readTree(pos, l.first(), leaf, (int)element, last);
 			// QDEBUG("DATA = " << data)
 			for (int i = first; i <= last; ++i)
@@ -343,7 +342,7 @@ ROOTFilter::Directory ROOTFilterPrivate::listContent(const std::map<long int, RO
 		if (!path.second.content.empty()) {
 			QStack<decltype(filledDirs)::key_type> addpath;
 			auto pos = &path;
-			ROOTFilter::Directory* currentdir = &dirs;
+			auto* currentdir = &dirs;
 			while (true) {
 				auto it = filledDirs.find(pos);
 				if (it != filledDirs.end()) {
@@ -381,14 +380,14 @@ ROOTFilter::Directory ROOTFilterPrivate::listHistograms(const QString& fileName)
 	if (setFile(fileName))
 		return listContent(currentROOTData->listHistograms(), &ROOTData::histogramName);
 	else
-		return ROOTFilter::Directory{};
+		return {};
 }
 
 ROOTFilter::Directory ROOTFilterPrivate::listTrees(const QString& fileName) {
 	if (setFile(fileName))
 		return listContent(currentROOTData->listTrees(), &ROOTData::treeName);
 	else
-		return ROOTFilter::Directory{};
+		return {};
 }
 
 QVector<QStringList> ROOTFilterPrivate::listLeaves(const QString& fileName, quint64 pos) {
@@ -681,7 +680,7 @@ ROOTData::ROOTData(const std::string& filename)
 		std::string title(read<unsigned char>(is), 0);
 		is.read(&title[0], title.size());
 
-		ContentType type = ContentType::Invalid;
+		auto type = ContentType::Invalid;
 		if (cname.size() == 4 && cname.substr(0, 3) == "TH1") {
 			type = histType(cname[3]);
 		} else if (cname == "TTree")
@@ -866,7 +865,7 @@ ROOTData::ROOTData(const std::string& filename)
 }
 
 void ROOTData::readNBins(ROOTData::KeyBuffer& kbuffer) {
-	std::string buffer = data(kbuffer);
+	auto buffer = data(kbuffer);
 	if (!buffer.empty()) {
 		auto search = streamerInfo.find("TH1");
 		if (search == streamerInfo.end())
@@ -1010,7 +1009,7 @@ std::vector<ROOTData::LeafInfo> ROOTData::listLeaves(long int pos) const {
 		return leaves;
 
 	std::ifstream is(filename, std::ifstream::binary);
-	std::string datastring = data(it->second, is);
+	auto datastring = data(it->second, is);
 	if (datastring.empty())
 		return leaves;
 
@@ -1041,7 +1040,7 @@ std::vector<ROOTData::LeafInfo> ROOTData::listLeaves(long int pos) const {
 	const size_t lowb = read<int>(buf);
 	std::map<size_t, std::string> tags;
 	for (size_t i = 0; i < nbranches; ++i) {
-		std::string clname = readObject(buf, buf0, tags);
+		auto clname = readObject(buf, buf0, tags);
 		size_t count;
 		Version(buf, count); // TBranch or TBranchElement
 		char* const nbuf = buf + count;
@@ -1052,7 +1051,7 @@ std::vector<ROOTData::LeafInfo> ROOTData::listLeaves(long int pos) const {
 			advanceTo(buf, streamerTBranch, std::string(), "TNamed", counts);
 			Version(buf); // TNamed
 			SkipObject(buf);
-			const std::string branch = String(buf);
+			const auto branch = String(buf);
 			String(buf);
 			// TODO add reading of nested branches (fBranches)
 			advanceTo(buf, streamerTBranch, "TNamed", "fLeaves", counts);
@@ -1064,14 +1063,14 @@ std::vector<ROOTData::LeafInfo> ROOTData::listLeaves(long int pos) const {
 			const size_t nleaves = read<int>(buf);
 			const size_t lowb = read<int>(buf);
 			for (size_t i = 0; i < nleaves; ++i) {
-				std::string clname = readObject(buf, buf0, tags);
+				auto clname = readObject(buf, buf0, tags);
 				Version(buf, count); // TLeaf(D/F/B/S/I/L/C/O)
 				char* nbuf = buf + count;
 				if (i >= lowb && clname.size() == 6 && clname.compare(0, 5, "TLeaf") == 0) {
 					Version(buf); // TLeaf
 					Version(buf); // TNamed
 					SkipObject(buf);
-					const std::string leafname = String(buf);
+					const auto leafname = String(buf);
 					String(buf); // title
 					size_t elements = read<int>(buf);
 					int bytes = read<int>(buf);
@@ -1100,7 +1099,7 @@ ROOTData::listEntries(long int pos, const std::string& branchname, const std::st
 		return entries;
 
 	std::ifstream is(filename, std::ifstream::binary);
-	std::string datastring = data(it->second, is);
+	auto datastring = data(it->second, is);
 	if (datastring.empty())
 		return entries;
 
@@ -1133,7 +1132,7 @@ ROOTData::listEntries(long int pos, const std::string& branchname, const std::st
 	const size_t lowb = read<int>(buf);
 	std::map<size_t, std::string> tags;
 	for (size_t i = 0; i < nbranches; ++i) {
-		std::string clname = readObject(buf, buf0, tags);
+		auto clname = readObject(buf, buf0, tags);
 		size_t count;
 		Version(buf, count); // TBranch or TBranchElement
 		char* const nbuf = buf + count;
@@ -1143,7 +1142,7 @@ ROOTData::listEntries(long int pos, const std::string& branchname, const std::st
 			}
 			Version(buf); // TNamed
 			SkipObject(buf);
-			const std::string currentbranch = String(buf);
+			const auto currentbranch = String(buf);
 			String(buf);
 
 			advanceTo(buf, streamerTBranch, "TNamed", "fWriteBasket", counts);
@@ -1159,9 +1158,9 @@ ROOTData::listEntries(long int pos, const std::string& branchname, const std::st
 			const size_t lowb = read<int>(buf);
 			int leafoffset = 0, leafcount = 0, leafcontent = 0, leafsize = 0;
 			bool leafsign = false;
-			ContentType leaftype = ContentType::Invalid;
+			auto leaftype = ContentType::Invalid;
 			for (size_t i = 0; i < nleaves; ++i) {
-				std::string clname = readObject(buf, buf0, tags);
+				auto clname = readObject(buf, buf0, tags);
 				Version(buf, count); // TLeaf(D/F/L/I/S/B/O/C/Element)
 				char* nbuf = buf + count;
 				if (currentbranch == branchname) {
@@ -1218,7 +1217,7 @@ ROOTData::listEntries(long int pos, const std::string& branchname, const std::st
 				long int pos = read<long int>(buf);
 				auto it = basketkeys.find(pos);
 				if (it != basketkeys.end()) {
-					std::string basketbuffer = data(it->second);
+					auto basketbuffer = data(it->second);
 					if (!basketbuffer.empty()) {
 						char* bbuf = &basketbuffer[0];
 						char* const bufend = bbuf + basketbuffer.size();
@@ -1341,7 +1340,7 @@ std::string ROOTData::data(const ROOTData::KeyBuffer& buffer, std::ifstream& is)
 
 void ROOTData::readStreamerInfo(const ROOTData::KeyBuffer& buffer) {
 	std::ifstream is(filename, std::ifstream::binary);
-	std::string datastring = data(buffer, is);
+	auto datastring = data(buffer, is);
 	if (!datastring.empty()) {
 		char* buf = &datastring[0];
 		char* const buf0 = buf - buffer.keylength;
@@ -1351,7 +1350,7 @@ void ROOTData::readStreamerInfo(const ROOTData::KeyBuffer& buffer) {
 		const int nobj = read<int>(buf);
 		std::map<size_t, std::string> tags;
 		for (int i = 0; i < nobj; ++i) {
-			std::string clname = readObject(buf, buf0, tags);
+			auto clname = readObject(buf, buf0, tags);
 			size_t count;
 			Version(buf, count);
 			char* const nbuf = buf + count;
@@ -1374,7 +1373,7 @@ void ROOTData::readStreamerInfo(const ROOTData::KeyBuffer& buffer) {
 				const int nobj = read<int>(buf);
 				const int lowb = read<int>(buf);
 				for (int i = 0; i < nobj; ++i) {
-					std::string clname = readObject(buf, buf0, tags);
+					auto clname = readObject(buf, buf0, tags);
 					Version(buf, count);
 					char* const nbuf = buf + count;
 
@@ -1490,7 +1489,7 @@ bool ROOTData::advanceTo(char*& buf,
 // needs to be after ROOTDataHelpers namespace declaration
 
 QString ROOTFilter::fileInfoString(const QString& fileName) {
-	DEBUG("ROOTFilter::fileInfoString()");
+	DEBUG(Q_FUNC_INFO);
 	QString info;
 
 	// The file structure is described in root/io/io/src/TFile.cxx
@@ -1498,7 +1497,7 @@ QString ROOTFilter::fileInfoString(const QString& fileName) {
 	std::string root(4, 0);
 	is.read(const_cast<char*>(root.data()), 4);
 	if (root != "root") {
-		DEBUG("	Not a ROOT file. root = " << root);
+		DEBUG(Q_FUNC_INFO << ", Not a ROOT file. root = " << root);
 		return i18n("Not a ROOT file");
 	}
 
