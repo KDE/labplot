@@ -124,5 +124,8 @@ void SettingsNotebookPage::addSubPages(KPageWidgetItem* rootFrame, KPageDialog* 
 			connect(manager, &KConfigDialogManager::widgetModified, this, &SettingsNotebookPage::changed);
 			m_cantorBackendConfigManagers.append(manager);
 		}
+#else
+	Q_UNUSED(rootFrame)
+	Q_UNUSED(settingsDialog)
 #endif
 }

@@ -28,7 +28,7 @@ void SpiceFileReader::init() {
 
 	// Determine if ltspice or ngspice or none of both
 	QByteArray l = mFile.readLine();
-	int pos = l.count();
+	int pos = l.length();
 	if (!QLatin1String(l).startsWith(QLatin1String("Title:"))) {
 		if (!convertLTSpiceBinary(l).startsWith(QLatin1String("Title:")))
 			return;

@@ -1517,7 +1517,7 @@ void AxisPrivate::retransformTicks() {
 		if (q->isNumeric())
 			start += majorTickStartOffset;
 		else {
-			auto startDt = QDateTime::fromMSecsSinceEpoch(start, Qt::UTC);
+			auto startDt = QDateTime::fromMSecsSinceEpoch(start, QTimeZone::UTC);
 			startDt.setTimeSpec(Qt::TimeSpec::UTC);
 			const auto& dt = DateTime::dateTime(majorTickStartOffset);
 			startDt = startDt.addYears(dt.year);
@@ -1684,7 +1684,7 @@ void AxisPrivate::retransformTicks() {
 	qreal nextMajorTickPos = 0.0;
 	if (dateTimeSpacing) {
 		dt = DateTime::dateTime(majorTicksSpacing);
-		majorTickPosDateTime = QDateTime::fromMSecsSinceEpoch(start, Qt::UTC);
+		majorTickPosDateTime = QDateTime::fromMSecsSinceEpoch(start, QTimeZone::UTC);
 	}
 	const auto dtValid = majorTickPosDateTime.isValid();
 
@@ -2142,7 +2142,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 	} else if (datetime) {
 		for (const auto value : std::as_const(tickLabelValues)) {
 			QDateTime dateTime;
-			dateTime.setTimeSpec(Qt::UTC);
+			dateTime.setTimeZone(QTimeZone::UTC);
 			dateTime.setMSecsSinceEpoch(value);
 			str = dateTime.toString(labelsDateTimeFormat);
 			str = labelsPrefix + str + labelsSuffix;
@@ -2564,7 +2564,7 @@ void AxisPrivate::retransformMajorGrid() {
 	// Currently, grid lines disappear sometimes without this flag
 	QVector<QPointF> logicalMajorTickPoints = q->cSystem->mapSceneToLogical(majorTickPoints, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	// for (auto p : logicalMajorTickPoints)
-	//	QDEBUG(Q_FUNC_INFO << ", logical major tick: " << QString::number(p.x(), 'g', 12) << " = " << QDateTime::fromMSecsSinceEpoch(p.x(), Qt::UTC))
+	//	QDEBUG(Q_FUNC_INFO << ", logical major tick: " << QString::number(p.x(), 'g', 12) << " = " << QDateTime::fromMSecsSinceEpoch(p.x(), QTimeZone::UTC))
 
 	if (logicalMajorTickPoints.isEmpty())
 		return;
