@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-06 00:37+0000\n"
+"POT-Creation-Date: 2024-11-09 00:37+0000\n"
 "PO-Revision-Date: 2024-07-27 16:22+0200\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -1106,7 +1106,7 @@ msgstr "Nevalida nombra valoro."
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:205
 #, kde-format
-msgid "Matrix: Unsupported Column Mode"
+msgid "Matrix: Unsupported column mode"
 msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:207
@@ -1123,7 +1123,7 @@ msgstr "Ne eblas legi la dosieron"
 #: src/backend/datasources/filters/AsciiFilter.cpp:211
 #, fuzzy, kde-format
 #| msgid "Type of data source"
-msgid "Unsupported datasource"
+msgid "Unsupported data source"
 msgstr "Tipo de datumfonto"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:215

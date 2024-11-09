@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-06 00:37+0000\n"
+"POT-Creation-Date: 2024-11-09 00:37+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -1173,7 +1173,7 @@ msgstr "Valor numérico inválido."
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:205
 #, kde-format
-msgid "Matrix: Unsupported Column Mode"
+msgid "Matrix: Unsupported column mode"
 msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:207
@@ -1190,7 +1190,7 @@ msgstr "Não foi possível ler o ficheiro"
 #: src/backend/datasources/filters/AsciiFilter.cpp:211
 #, fuzzy, kde-format
 #| msgid "Type of data source"
-msgid "Unsupported datasource"
+msgid "Unsupported data source"
 msgstr "Tipo da fonte de dados"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:215

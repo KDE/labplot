@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-06 00:37+0000\n"
+"POT-Creation-Date: 2024-11-09 00:37+0000\n"
 "PO-Revision-Date: 2023-11-13 14:41+0300\n"
 "Last-Translator: Sergey Kazorin <translation-team@basealt.ru>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -1118,7 +1118,7 @@ msgstr "Недопустимое числовое значение."
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:205
 #, kde-format
-msgid "Matrix: Unsupported Column Mode"
+msgid "Matrix: Unsupported column mode"
 msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:207
@@ -1135,7 +1135,7 @@ msgstr "Не удалось прочитать файл"
 #: src/backend/datasources/filters/AsciiFilter.cpp:211
 #, fuzzy, kde-format
 #| msgid "Type of data source"
-msgid "Unsupported datasource"
+msgid "Unsupported data source"
 msgstr "Тип источника данных"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:215

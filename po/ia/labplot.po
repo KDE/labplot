@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-06 00:37+0000\n"
+"POT-Creation-Date: 2024-11-09 00:37+0000\n"
 "PO-Revision-Date: 2024-11-06 16:06+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -1102,7 +1102,7 @@ msgstr "Numero invalide de nomines de columna"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:205
 #, kde-format
-msgid "Matrix: Unsupported Column Mode"
+msgid "Matrix: Unsupported column mode"
 msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:207
@@ -1117,7 +1117,7 @@ msgstr "Incapace a analysar capite"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:211
 #, kde-format
-msgid "Unsupported datasource"
+msgid "Unsupported data source"
 msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:215

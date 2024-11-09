@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-06 00:37+0000\n"
+"POT-Creation-Date: 2024-11-09 00:37+0000\n"
 "PO-Revision-Date: 2024-11-04 11:51+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -1099,8 +1099,9 @@ msgid "Invalid number of column names"
 msgstr "Ongeldig aantal kolomnamen"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:205
-#, kde-format
-msgid "Matrix: Unsupported Column Mode"
+#, fuzzy, kde-format
+#| msgid "Matrix: Unsupported Column Mode"
+msgid "Matrix: Unsupported column mode"
 msgstr "Matrix: niet ondersteunde kolommodus"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:207
@@ -1114,8 +1115,9 @@ msgid "Unable to parse header"
 msgstr "Kon kop niet ontleden"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:211
-#, kde-format
-msgid "Unsupported datasource"
+#, fuzzy, kde-format
+#| msgid "Unsupported datasource"
+msgid "Unsupported data source"
 msgstr "Niet ondersteunde gegevensbron"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:215

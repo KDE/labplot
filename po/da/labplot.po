@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-06 00:37+0000\n"
+"POT-Creation-Date: 2024-11-09 00:37+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -1175,7 +1175,7 @@ msgstr "Antal kolonner"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:205
 #, kde-format
-msgid "Matrix: Unsupported Column Mode"
+msgid "Matrix: Unsupported column mode"
 msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:207
@@ -1192,7 +1192,7 @@ msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 #: src/backend/datasources/filters/AsciiFilter.cpp:211
 #, fuzzy, kde-format
 #| msgid "File data source"
-msgid "Unsupported datasource"
+msgid "Unsupported data source"
 msgstr "Kilde til fildata"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:215

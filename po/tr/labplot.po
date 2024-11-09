@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-06 00:37+0000\n"
+"POT-Creation-Date: 2024-11-09 00:37+0000\n"
 "PO-Revision-Date: 2024-11-03 17:15+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -1100,8 +1100,9 @@ msgid "Invalid number of column names"
 msgstr "Geçersiz sütun adları sayısı"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:205
-#, kde-format
-msgid "Matrix: Unsupported Column Mode"
+#, fuzzy, kde-format
+#| msgid "Matrix: Unsupported Column Mode"
+msgid "Matrix: Unsupported column mode"
 msgstr "Matris: Desteklenmeyen sütun kipi"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:207
@@ -1115,8 +1116,9 @@ msgid "Unable to parse header"
 msgstr "Üstbilgi ayrıştırılamıyor"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:211
-#, kde-format
-msgid "Unsupported datasource"
+#, fuzzy, kde-format
+#| msgid "Unsupported datasource"
+msgid "Unsupported data source"
 msgstr "Desteklenmeyen veri kaynağı"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:215

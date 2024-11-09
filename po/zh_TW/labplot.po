@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-06 00:37+0000\n"
+"POT-Creation-Date: 2024-11-09 00:37+0000\n"
 "PO-Revision-Date: 2024-04-17 05:07+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -1128,7 +1128,7 @@ msgstr "數值"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:205
 #, kde-format
-msgid "Matrix: Unsupported Column Mode"
+msgid "Matrix: Unsupported column mode"
 msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:207
@@ -1145,7 +1145,7 @@ msgstr "開啟失敗"
 #: src/backend/datasources/filters/AsciiFilter.cpp:211
 #, fuzzy, kde-format
 #| msgid "Type of data source"
-msgid "Unsupported datasource"
+msgid "Unsupported data source"
 msgstr "資料來源類型"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:215
