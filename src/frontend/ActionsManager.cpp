@@ -428,6 +428,8 @@ void ActionsManager::initActions() {
 	collection->addAction(QLatin1String("configure_cas"), m_configureCASAction);
 	connect(m_configureCASAction, &QAction::triggered, m_mainWindow, &MainWin::settingsDialog); // TODO: go to the Notebook page in the settings dialog directly
 #endif
+
+	// initNotebookToolbarActions();
 }
 
 /*!
@@ -480,6 +482,7 @@ void ActionsManager::initSpreadsheetToolbarActions() {
 /*!
  * initializes notebook related actions shown in the toolbar, called when a notebook is selected for the first time.
  */
+#ifdef HAVE_CANTOR_LIBS
 void ActionsManager::initNotebookToolbarActions() {
 	auto* collection = m_mainWindow->actionCollection();
 
@@ -498,6 +501,7 @@ void ActionsManager::initNotebookToolbarActions() {
 	m_notebookEvaluateAction = new QAction(QIcon::fromTheme(QLatin1String("system-run")), i18n("Evaluate Notebook"), m_mainWindow);
 	collection->addAction(QLatin1String("notebook_evaluate"), m_notebookEvaluateAction);
 }
+#endif
 
 /*!
  * initializes data extractor related actions shown in the toolbar, called when a data extractor is selected for the first time.
@@ -994,6 +998,7 @@ void ActionsManager::connectWorksheetToolbarActions(const WorksheetView* view) {
 }
 
 void ActionsManager::connectSpreadsheetToolbarActions(const SpreadsheetView* view) {
+	return;
 	if (!m_spreadsheetInsertRowAboveAction)
 		initSpreadsheetToolbarActions();
 	else {

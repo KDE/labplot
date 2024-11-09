@@ -48,16 +48,18 @@ private:
 	void initMenus();
 
 	void initWorksheetToolbarActions();
+	void connectWorksheetToolbarActions(const WorksheetView*);
+
 	void initSpreadsheetToolbarActions();
+	void connectSpreadsheetToolbarActions(const SpreadsheetView*);
+
+	void initDataExtractorToolbarActions();
+	void connectDataExtractorToolbarActions(const DatapickerView*);
+
 #ifdef HAVE_CANTOR_LIBS
 	void initNotebookToolbarActions();
-#endif
-	void initDataExtractorToolbarActions();
-
-	void connectWorksheetToolbarActions(const WorksheetView*);
-	void connectSpreadsheetToolbarActions(const SpreadsheetView*);
 	void connectNotebookToolbarActions(const NotebookView*);
-	void connectDataExtractorToolbarActions(const DatapickerView*);
+#endif
 
 	MainWin* m_mainWindow{nullptr};
 	friend class MainWin;
@@ -128,11 +130,13 @@ private:
 	QAction* m_spreadsheetSortDescAction{nullptr};
 
 	// notebook
+#ifdef HAVE_CANTOR_LIBS
 	QAction* m_notebookRestartAction{nullptr};
 	QAction* m_notebookEvaluateAction{nullptr};
 	QAction* m_notebookZoomInAction{nullptr};
 	QAction* m_notebookZoomOutAction{nullptr};
 	QAction* m_notebookFindAction{nullptr};
+#endif
 
 	// Menus
 	QMenu* m_visibilityMenu{nullptr};
