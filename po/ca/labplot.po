@@ -3,23 +3,23 @@
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
-# SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Antoni Bella Pérez <antonibella5@yahoo.com>
+# SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Antoni Bella Pérez <antonibella5@yahoo.com>
 # SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Josep M. Ferrer <txemaq@gmail.com>
 # Orestes Mas <orestes@tsc.upc.edu>, 2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-09 00:37+0000\n"
-"PO-Revision-Date: 2024-11-05 10:41+0100\n"
-"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"POT-Creation-Date: 2024-11-10 00:37+0000\n"
+"PO-Revision-Date: 2024-11-09 22:24+0100\n"
+"Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 "X-Accelerator-Marker: &\n"
 
 #, kde-format
@@ -644,13 +644,13 @@ msgid "%1: replace the values for rows %2 to %3"
 msgstr "%1: substitueix els valors de les columnes %2 a %3"
 
 #: src/backend/core/datatypes/DateTime2StringFilter.cpp:55
-#: src/backend/core/datatypes/String2DateTimeFilter.cpp:131
+#: src/backend/core/datatypes/String2DateTimeFilter.cpp:132
 #, kde-format
 msgid "%1: set date-time format to %2"
 msgstr "%1: estableix el format de la data i hora a %2"
 
 #: src/backend/core/datatypes/DateTime2StringFilter.cpp:57
-#: src/backend/core/datatypes/String2DateTimeFilter.cpp:133
+#: src/backend/core/datatypes/String2DateTimeFilter.cpp:134
 #, kde-format
 msgid "set date-time format to %1"
 msgstr "estableix el format de la data i hora a %1"
@@ -1109,8 +1109,7 @@ msgid "Invalid number of column names"
 msgstr "Nombre no vàlid de noms de columnes"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:205
-#, fuzzy, kde-format
-#| msgid "Matrix: Unsupported Column Mode"
+#, kde-format
 msgid "Matrix: Unsupported column mode"
 msgstr "Matriu: Mode de columnes no admès"
 
@@ -1125,8 +1124,7 @@ msgid "Unable to parse header"
 msgstr "No s'ha pogut analitzar la capçalera"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:211
-#, fuzzy, kde-format
-#| msgid "Unsupported datasource"
+#, kde-format
 msgid "Unsupported data source"
 msgstr "Origen de les dades no admès"
 
@@ -1175,7 +1173,7 @@ msgstr "Columna final incorrecta. És més petita que la columna inicial?"
 #: src/backend/datasources/filters/AsciiFilter.cpp:231
 #, kde-format
 msgid "Wrong end row. Is it smaller than start row?"
-msgstr "Fila final incorrecta És més petita que la fila inicial?"
+msgstr "Fila final incorrecta. És més petita que la fila inicial?"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:233
 #, kde-format
@@ -1191,7 +1189,7 @@ msgstr "Sense columnes"
 #, kde-format
 msgid "Unable to determine column modes. Check if they are correctly written"
 msgstr ""
-"No s'ha pogut determinar els modes de les columnes. Comproveu que estiguin "
+"No s'han pogut determinar els modes de les columnes. Comproveu que estiguin "
 "escrits correctament"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:239
@@ -1284,8 +1282,8 @@ msgstr "Ha fallat en obrir el dispositiu/fitxer o està buit."
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1001
 #: src/backend/datasources/filters/OdsFilter.cpp:388
 #: src/backend/datasources/filters/ReadStatFilter.cpp:528
-#: src/backend/datasources/filters/ROOTFilter.cpp:236
-#: src/backend/datasources/filters/ROOTFilter.cpp:306
+#: src/backend/datasources/filters/ROOTFilter.cpp:235
+#: src/backend/datasources/filters/ROOTFilter.cpp:305
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:332
 #: src/backend/datasources/filters/XLSXFilter.cpp:515
@@ -2316,42 +2314,42 @@ msgstr "No hi ha cap columna disponible"
 msgid "Unsupported file type, neither histogram no tree."
 msgstr "Tipus de fitxer no admès, ni l'histograma ni l'arbre."
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1502
+#: src/backend/datasources/filters/ROOTFilter.cpp:1501
 #, kde-format
 msgid "Not a ROOT file"
 msgstr "No és cap fitxer ROOT"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1507
+#: src/backend/datasources/filters/ROOTFilter.cpp:1506
 #, kde-format
 msgid "File format version: %1"
 msgstr "Versió del format de fitxer: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1515
+#: src/backend/datasources/filters/ROOTFilter.cpp:1514
 #, kde-format
 msgid "FREE data record size: %1 bytes"
 msgstr "Mida de l'enregistrament de les dades LLIURES: %1 bytes"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1517
+#: src/backend/datasources/filters/ROOTFilter.cpp:1516
 #, kde-format
 msgid "Number of free data records: %1"
 msgstr "Nombre dels enregistraments de dades lliures: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1519
+#: src/backend/datasources/filters/ROOTFilter.cpp:1518
 #, kde-format
 msgid "TNamed size: %1 bytes"
 msgstr "Mida del «TNamed»: %1 bytes"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1521
+#: src/backend/datasources/filters/ROOTFilter.cpp:1520
 #, kde-format
 msgid "Size of file pointers: %1 bytes"
 msgstr "Mida de la memòria en punters: %1 bytes"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1526
+#: src/backend/datasources/filters/ROOTFilter.cpp:1525
 #, kde-format
 msgid "Compression level and algorithm: %1"
 msgstr "Nivell i algorisme de compressió: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1531
+#: src/backend/datasources/filters/ROOTFilter.cpp:1530
 #, kde-format
 msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr "Mida de l'enregistrament «TStreamerInfo»: %1 bytes"
@@ -6153,39 +6151,39 @@ msgstr "v2"
 msgid "ep"
 msgstr "ep"
 
-#: src/backend/lib/Range.h:48 src/backend/nsl/nsl_interp.c:14
+#: src/backend/lib/Range.h:49 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:561
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:525
 #, kde-format
 msgid "Linear"
 msgstr "Lineal"
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Log10"
 msgstr "Log10"
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Log2"
 msgstr "Log2"
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Ln"
 msgstr "Ln"
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Sqrt"
 msgstr "Arrel"
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Square"
 msgstr "Quadrat"
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Inverse"
 msgstr "Invers"
@@ -9846,47 +9844,47 @@ msgstr ""
 "%1: estableix les opcions de la transformació i porta a terme la "
 "transformada de Fourier"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:105
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:101
 #, kde-format
 msgid "%1: set function"
 msgstr "%1: estableix una funció"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:329
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:325
 #, kde-format
 msgid "First curve not valid"
 msgstr "La primera corba no és vàlida"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:331
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:327
 #, kde-format
 msgid "xColumn of first curve not valid"
 msgstr "La columna X de la primera corba no és vàlida"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:333
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:329
 #, kde-format
 msgid "yColumn of first curve not valid"
 msgstr "La columna Y de la primera corba no és vàlida"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:335
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:331
 #, kde-format
 msgid "Number of x and y values do not match for the first curve"
 msgstr "El nombre de valors X i Y no coincideixen a la primera corba"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:348
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:344
 #, kde-format
 msgid "Curve '%1' not valid"
 msgstr "La corba «%1» no és vàlida"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:350
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:346
 #, kde-format
 msgid "xColumn of curve '%1' not valid"
 msgstr "La columna X de la corba «%1» no és vàlida"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:352
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:348
 #, kde-format
 msgid "yColumn of curve '%1' not valid"
 msgstr "La columna Y de la corba «%1» no és vàlida"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:354
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:350
 #, kde-format
 msgid "Number of x and y values do not match for curve '%1'"
 msgstr "El nombre de valors X i Y no coincideixen a la corba «%1»"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-09 00:37+0000\n"
+"POT-Creation-Date: 2024-11-10 00:37+0000\n"
 "PO-Revision-Date: 2014-02-22 22:22-0800\n"
 "Last-Translator: Japanese KDE translation team <kde-jp@kde.org>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -629,13 +629,13 @@ msgid "%1: replace the values for rows %2 to %3"
 msgstr ""
 
 #: src/backend/core/datatypes/DateTime2StringFilter.cpp:55
-#: src/backend/core/datatypes/String2DateTimeFilter.cpp:131
+#: src/backend/core/datatypes/String2DateTimeFilter.cpp:132
 #, kde-format
 msgid "%1: set date-time format to %2"
 msgstr ""
 
 #: src/backend/core/datatypes/DateTime2StringFilter.cpp:57
-#: src/backend/core/datatypes/String2DateTimeFilter.cpp:133
+#: src/backend/core/datatypes/String2DateTimeFilter.cpp:134
 #, kde-format
 msgid "set date-time format to %1"
 msgstr ""
@@ -1250,8 +1250,8 @@ msgstr ""
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1001
 #: src/backend/datasources/filters/OdsFilter.cpp:388
 #: src/backend/datasources/filters/ReadStatFilter.cpp:528
-#: src/backend/datasources/filters/ROOTFilter.cpp:236
-#: src/backend/datasources/filters/ROOTFilter.cpp:306
+#: src/backend/datasources/filters/ROOTFilter.cpp:235
+#: src/backend/datasources/filters/ROOTFilter.cpp:305
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:332
 #: src/backend/datasources/filters/XLSXFilter.cpp:515
@@ -2268,42 +2268,42 @@ msgstr ""
 msgid "Unsupported file type, neither histogram no tree."
 msgstr ""
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1502
+#: src/backend/datasources/filters/ROOTFilter.cpp:1501
 #, kde-format
 msgid "Not a ROOT file"
 msgstr ""
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1507
+#: src/backend/datasources/filters/ROOTFilter.cpp:1506
 #, kde-format
 msgid "File format version: %1"
 msgstr ""
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1515
+#: src/backend/datasources/filters/ROOTFilter.cpp:1514
 #, kde-format
 msgid "FREE data record size: %1 bytes"
 msgstr ""
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1517
+#: src/backend/datasources/filters/ROOTFilter.cpp:1516
 #, kde-format
 msgid "Number of free data records: %1"
 msgstr ""
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1519
+#: src/backend/datasources/filters/ROOTFilter.cpp:1518
 #, kde-format
 msgid "TNamed size: %1 bytes"
 msgstr ""
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1521
+#: src/backend/datasources/filters/ROOTFilter.cpp:1520
 #, kde-format
 msgid "Size of file pointers: %1 bytes"
 msgstr ""
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1526
+#: src/backend/datasources/filters/ROOTFilter.cpp:1525
 #, kde-format
 msgid "Compression level and algorithm: %1"
 msgstr ""
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1531
+#: src/backend/datasources/filters/ROOTFilter.cpp:1530
 #, kde-format
 msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr ""
@@ -6014,39 +6014,39 @@ msgstr ""
 msgid "ep"
 msgstr ""
 
-#: src/backend/lib/Range.h:48 src/backend/nsl/nsl_interp.c:14
+#: src/backend/lib/Range.h:49 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:561
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:525
 #, kde-format
 msgid "Linear"
 msgstr ""
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Log10"
 msgstr ""
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Log2"
 msgstr ""
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Ln"
 msgstr ""
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Sqrt"
 msgstr ""
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Square"
 msgstr ""
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Inverse"
 msgstr ""
@@ -9658,47 +9658,47 @@ msgstr ""
 msgid "%1: set transform options and perform the Fourier transform"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:105
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:101
 #, kde-format
 msgid "%1: set function"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:329
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:325
 #, kde-format
 msgid "First curve not valid"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:331
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:327
 #, kde-format
 msgid "xColumn of first curve not valid"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:333
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:329
 #, kde-format
 msgid "yColumn of first curve not valid"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:335
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:331
 #, kde-format
 msgid "Number of x and y values do not match for the first curve"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:348
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:344
 #, kde-format
 msgid "Curve '%1' not valid"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:350
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:346
 #, kde-format
 msgid "xColumn of curve '%1' not valid"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:352
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:348
 #, kde-format
 msgid "yColumn of curve '%1' not valid"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:354
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:350
 #, kde-format
 msgid "Number of x and y values do not match for curve '%1'"
 msgstr ""
