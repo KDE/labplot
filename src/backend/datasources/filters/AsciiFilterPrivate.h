@@ -51,7 +51,14 @@ private:
 														  bool skipEmptyParts,
 														  int startColumn,
 														  int endColumn);
+	// No whitespace option allowed. Will not be checked!
 	static size_t determineColumns(const QStringView& line,
+								   const AsciiFilter::Properties& properties,
+								   bool separatorSingleCharacter,
+								   const QChar separatorCharacter,
+								   QVector<QStringView>& columnValues);
+	// No whitespace and no quote removal
+	static size_t determineColumnsHighPerformance(const QStringView& line,
 								   const AsciiFilter::Properties& properties,
 								   bool separatorSingleCharacter,
 								   const QChar separatorCharacter,

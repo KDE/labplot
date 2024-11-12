@@ -3557,15 +3557,30 @@ void AsciiFilterTest::determineColumns() {
 	expectedHeaderNoWhiteSpace = QVector<QStringView>{QStringLiteral("header1"), QStringLiteral("header2"), QStringLiteral("header3")};
 	p.simplifyWhitespaces = false;
 	QBENCHMARK {
+		for (int i=0; i < 10000; i++) {
+			QCOMPARE(AsciiFilterPrivate::determineColumns(QStringLiteral("header1,header2,header3\n"), p, separatorSingleCharacter, separatorCharacter, columnNames), 3);
+		}
+	}
+	QCOMPARE(columnNames, expectedHeaderNoWhiteSpace);
+
+	p.simplifyWhitespaces = false;
+	QCOMPARE(p.removeQuotes, false);
+	QBENCHMARK {
+		for (int i=0; i < 10000; i++) {
 		QCOMPARE(
-			AsciiFilterPrivate::determineColumns(QStringLiteral("header1,header2,header3\n"), p, separatorSingleCharacter, separatorCharacter, columnNames),
+			AsciiFilterPrivate::determineColumnsHighPerformance(QStringLiteral("header1,header2,header3\n"), p, separatorSingleCharacter, separatorCharacter, columnNames),
 			3);
+		}
 	}
 	QCOMPARE(columnNames, expectedHeaderNoWhiteSpace);
 
 	expectedHeader = QStringList{QStringLiteral("header1"), QStringLiteral("header2"), QStringLiteral("header3")};
 	p.simplifyWhitespaces = true;
-	QBENCHMARK { QCOMPARE(AsciiFilterPrivate::determineColumnsSimplifyWhiteSpace(QStringLiteral("header1,header2,header3\n"), p), expectedHeader); }
+	// QBENCHMARK {
+	// 	for (int i=0; i < 10000; i++) {
+	// 		QCOMPARE(AsciiFilterPrivate::determineColumnsSimplifyWhiteSpace(QStringLiteral("header1,header2,header3\n"), p), expectedHeader);
+	// 	}
+	// }
 }
 
 void AsciiFilterTest::determineColumnsWhiteSpaces() {

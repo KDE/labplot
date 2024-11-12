@@ -812,13 +812,19 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device,
 		}
 
 		// Now we get to the data rows
-		if (properties.simplifyWhitespaces) {
+		if (!properties.simplifyWhitespaces && !properties.removeQuotes) {
+			// Higher performance if no whitespaces are available
+			const auto columnCount = determineColumnsHighPerformance(line, properties, separatorSingleCharacter, separatorCharacter, columnValues);
+			if (columnCount < columnCountExpected)
+				continue; // return Status::InvalidNumberDataColumns;
+			setValues(columnValues, rowIndex, properties);
+		} else if (properties.simplifyWhitespaces) {
 			const auto& values = determineColumnsSimplifyWhiteSpace(line, properties);
 			if (values.size() < columnCountExpected)
 				continue; // return Status::InvalidNumberDataColumns;
 			setValues(values, rowIndex, properties);
 		} else {
-			// Higher performance if no whitespaces are available
+			// Higher performance if no whitespaces are available, but slower than the first one
 			const auto columnCount = determineColumns(line, properties, separatorSingleCharacter, separatorCharacter, columnValues);
 			if (columnCount < columnCountExpected)
 				continue; // return Status::InvalidNumberDataColumns;
@@ -997,9 +1003,6 @@ size_t AsciiFilterPrivate::determineColumns(const QStringView& line,
 											bool separatorSingleCharacter,
 											const QChar separatorCharacter,
 											QVector<QStringView>& columnValues) {
-	// Simlified
-	if (properties.simplifyWhitespaces)
-		return 0;
 
 	enum class State {
 		Column,
@@ -1063,6 +1066,59 @@ size_t AsciiFilterPrivate::determineColumns(const QStringView& line,
 		case State::QuotedText:
 			numberCharacters++;
 			break;
+		}
+	}
+	if (columnCount >= properties.startColumn && (columnCount <= properties.endColumn || properties.endColumn < 0)) {
+		// If columnName is empty(): After the separator the line was finished, but there should be a value so add a placeholder (invalid value)
+		if ((numberCharacters != 0 || (!properties.skipEmptyParts && separatorLast)) && columnIndex < maxColumnCount) {
+			columnValues[columnIndex] = line.sliced(startColumnIndex, numberCharacters);
+			return columnIndex + 1;
+		}
+	}
+	return columnIndex;
+}
+
+size_t AsciiFilterPrivate::determineColumnsHighPerformance(const QStringView& line,
+											const AsciiFilter::Properties& properties,
+											bool separatorSingleCharacter,
+											const QChar separatorCharacter,
+											QVector<QStringView>& columnValues) {
+
+	const auto maxColumnCount = columnValues.size();
+	int columnCount = 1;
+	bool separatorLast = false;
+	size_t counter = 0;
+	size_t startColumnIndex = 0; // Start of the column name
+	size_t numberCharacters = 0; // Number of characters of the column name
+	int columnIndex = 0;
+	for (auto c : line) {
+		counter++;
+		if (c == newlineChar || c == carriageReturnChar)
+			break;
+
+		bool separatorFound;
+		if (separatorSingleCharacter)
+			separatorFound = c == separatorCharacter;
+		else
+			separatorFound = !properties.separator.isEmpty() && line.sliced(startColumnIndex, counter - startColumnIndex).endsWith(properties.separator);
+		if (separatorFound) {
+			separatorLast = true;
+			const auto columnName = line.sliced(startColumnIndex, numberCharacters);
+			// columnName.remove(columnName.length() - separator.length(), separator.length());
+			if (!properties.skipEmptyParts || !columnName.isEmpty()) {
+				if (columnCount >= properties.startColumn && (columnCount <= properties.endColumn || properties.endColumn < 0)
+					&& columnIndex < maxColumnCount) {
+					columnValues[columnIndex] = columnName;
+					columnIndex++;
+				}
+				columnCount++;
+			}
+			// columnName.clear();
+			startColumnIndex = counter;
+			numberCharacters = 0;
+		} else {
+			separatorLast = false;
+			numberCharacters++;
 		}
 	}
 	if (columnCount >= properties.startColumn && (columnCount <= properties.endColumn || properties.endColumn < 0)) {
