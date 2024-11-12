@@ -1804,8 +1804,8 @@ void ImportFileWidget::refreshPreview() {
 				if (tcpSocket.waitForReadyRead())
 					importedStrings = filter->preview(tcpSocket, lines, false);
 				else {
-					DEBUG("failed connect to tcp socket " << STDSTRING(tcpSocket.errorString()));
-					errorMessage = i18n("Preview: Failed to connect to tcp socket - %1", tcpSocket.errorString());
+					DEBUG("failed connect to TCP socket " << STDSTRING(tcpSocket.errorString()));
+					errorMessage = i18n("Preview: Failed to connect to TCP socket - %1", tcpSocket.errorString());
 				}
 				tcpSocket.disconnectFromHost();
 			} else
