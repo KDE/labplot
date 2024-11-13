@@ -60,7 +60,7 @@ void SparkLineRunnable::run() {
 		}
 
 		QVector<int> data;
-		for (const auto& pair : qAsConst(pairs))
+		for (const auto& pair : std::as_const(pairs))
 			data << pair.second;
 		dataColumn->replaceInteger(0, data);
 		const QVector<const AbstractColumn*> columns{dataColumn};

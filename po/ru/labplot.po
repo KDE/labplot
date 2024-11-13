@@ -4,12 +4,11 @@
 # Alexander Potashev <aspotashev@gmail.com>, 2015, 2016, 2017, 2018.
 # Alexander Yavorsky <kekcuha@gmail.com>, 2022.
 # Sergey Kazorin <translation-team@basealt.ru>, 2022, 2023.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-05 00:37+0000\n"
+"POT-Creation-Date: 2024-11-13 00:37+0000\n"
 "PO-Revision-Date: 2023-11-13 14:41+0300\n"
 "Last-Translator: Sergey Kazorin <translation-team@basealt.ru>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -652,13 +651,13 @@ msgid "%1: replace the values for rows %2 to %3"
 msgstr "%1: замена значений для строк с %2 по %3"
 
 #: src/backend/core/datatypes/DateTime2StringFilter.cpp:55
-#: src/backend/core/datatypes/String2DateTimeFilter.cpp:131
+#: src/backend/core/datatypes/String2DateTimeFilter.cpp:132
 #, kde-format
 msgid "%1: set date-time format to %2"
 msgstr "%1: задание формата даты и времени %2"
 
 #: src/backend/core/datatypes/DateTime2StringFilter.cpp:57
-#: src/backend/core/datatypes/String2DateTimeFilter.cpp:133
+#: src/backend/core/datatypes/String2DateTimeFilter.cpp:134
 #, kde-format
 msgid "set date-time format to %1"
 msgstr "задание формата даты и времени %1"
@@ -1119,7 +1118,7 @@ msgstr "Недопустимое числовое значение."
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:205
 #, kde-format
-msgid "Matrix: Unsupported Column Mode"
+msgid "Matrix: Unsupported column mode"
 msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:207
@@ -1136,7 +1135,7 @@ msgstr "Не удалось прочитать файл"
 #: src/backend/datasources/filters/AsciiFilter.cpp:211
 #, fuzzy, kde-format
 #| msgid "Type of data source"
-msgid "Unsupported datasource"
+msgid "Unsupported data source"
 msgstr "Тип источника данных"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:215
@@ -1221,20 +1220,20 @@ msgid "Number of lines: %1"
 msgstr "Число строк: %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:522
-#: src/backend/datasources/filters/AsciiFilter.cpp:1264
+#: src/backend/datasources/filters/AsciiFilter.cpp:1293
 #: src/backend/datasources/filters/JsonFilter.cpp:284
 #, kde-format
 msgid "Column %1"
 msgstr "Столбец %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:592
-#: src/backend/datasources/filters/AsciiFilter.cpp:1287
+#: src/backend/datasources/filters/AsciiFilter.cpp:1316
 #, kde-format
 msgid "Timestamp"
 msgstr "Метка времени"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:596
-#: src/backend/datasources/filters/AsciiFilter.cpp:1291
+#: src/backend/datasources/filters/AsciiFilter.cpp:1320
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1299,8 +1298,8 @@ msgstr "Не удалось открыть устройство."
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1001
 #: src/backend/datasources/filters/OdsFilter.cpp:388
 #: src/backend/datasources/filters/ReadStatFilter.cpp:528
-#: src/backend/datasources/filters/ROOTFilter.cpp:236
-#: src/backend/datasources/filters/ROOTFilter.cpp:306
+#: src/backend/datasources/filters/ROOTFilter.cpp:235
+#: src/backend/datasources/filters/ROOTFilter.cpp:305
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:332
 #: src/backend/datasources/filters/XLSXFilter.cpp:515
@@ -2365,42 +2364,42 @@ msgstr "Нет доступных столбцов"
 msgid "Unsupported file type, neither histogram no tree."
 msgstr "неподдерживаемый тип числа с плавающей точкой для ранга 1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1502
+#: src/backend/datasources/filters/ROOTFilter.cpp:1501
 #, kde-format
 msgid "Not a ROOT file"
 msgstr "Файл не соответствует формату ROOT"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1507
+#: src/backend/datasources/filters/ROOTFilter.cpp:1506
 #, kde-format
 msgid "File format version: %1"
 msgstr "Версия формата файла: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1515
+#: src/backend/datasources/filters/ROOTFilter.cpp:1514
 #, kde-format
 msgid "FREE data record size: %1 bytes"
 msgstr "Размер записи сегмента свободного пространства: %1 байт"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1517
+#: src/backend/datasources/filters/ROOTFilter.cpp:1516
 #, kde-format
 msgid "Number of free data records: %1"
 msgstr "Число записей сегментов свободного пространства: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1519
+#: src/backend/datasources/filters/ROOTFilter.cpp:1518
 #, kde-format
 msgid "TNamed size: %1 bytes"
 msgstr "Размер TNamed: %1 байт"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1521
+#: src/backend/datasources/filters/ROOTFilter.cpp:1520
 #, kde-format
 msgid "Size of file pointers: %1 bytes"
 msgstr "Размер указателей файла: %1 байт"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1526
+#: src/backend/datasources/filters/ROOTFilter.cpp:1525
 #, kde-format
 msgid "Compression level and algorithm: %1"
 msgstr "Степень и алгоритм сжатия: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1531
+#: src/backend/datasources/filters/ROOTFilter.cpp:1530
 #, kde-format
 msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr "Размер записи TStreamerInfo: %1 байт"
@@ -6324,40 +6323,40 @@ msgid "ep"
 msgstr ""
 
 # "Тип шкалы: [...]" --aspotashev
-#: src/backend/lib/Range.h:48 src/backend/nsl/nsl_interp.c:14
+#: src/backend/lib/Range.h:49 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:561
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:525
 #, kde-format
 msgid "Linear"
 msgstr "Линейная"
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Log10"
 msgstr "Логарифмическая (Log10)"
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Log2"
 msgstr "Логарифмическая (Log2)"
 
 # BUGME: please split --aspotashev
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Ln"
 msgstr "Логарифмическая (Ln)"
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Sqrt"
 msgstr "Квадратного корня"
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Square"
 msgstr "Квадратичная"
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Inverse"
 msgstr "Обратных величин"
@@ -8294,7 +8293,7 @@ msgstr "%1: изменение коэффициента ширины"
 # BUGME: please add ctxt --aspotashev
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:299
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:170
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:354
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:355
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:112
 #, kde-format
 msgid "%1 - Data"
@@ -9784,27 +9783,27 @@ msgstr "%1: задание шрифта значений"
 msgid "%1: set values color"
 msgstr "%1: задание цвета значений"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:206
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:207
 #, kde-format
 msgid "%1: data source type changed"
 msgstr "%1: изменение типа источника данных"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:213
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:214
 #, kde-format
 msgid "%1: data source curve changed"
 msgstr "%1: изменение кривой источника данных"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:222
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:223
 #, kde-format
 msgid "%1: assign x-data"
 msgstr "%1: присваивание данных по X"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:231
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:232
 #, kde-format
 msgid "%1: assign y-data"
 msgstr "%1: присваивание данных по Y"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:240
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:241
 #, kde-format
 msgid "%1: assign second y-data"
 msgstr "%1: присваивание вторых данных по Y"
@@ -10116,48 +10115,48 @@ msgstr "Точки данных недоступны."
 msgid "%1: set transform options and perform the Fourier transform"
 msgstr "%1: задание параметров трансформации и выполнение трансформации Фурье"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:105
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:101
 #, fuzzy, kde-format
 #| msgid "%1: set equation"
 msgid "%1: set function"
 msgstr "%1: задание формулы"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:329
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:325
 #, kde-format
 msgid "First curve not valid"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:331
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:327
 #, kde-format
 msgid "xColumn of first curve not valid"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:333
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:329
 #, kde-format
 msgid "yColumn of first curve not valid"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:335
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:331
 #, kde-format
 msgid "Number of x and y values do not match for the first curve"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:348
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:344
 #, kde-format
 msgid "Curve '%1' not valid"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:350
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:346
 #, kde-format
 msgid "xColumn of curve '%1' not valid"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:352
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:348
 #, kde-format
 msgid "yColumn of curve '%1' not valid"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:354
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:350
 #, fuzzy, kde-format
 #| msgid "Number of x and y data points must be equal."
 msgid "Number of x and y values do not match for curve '%1'"
@@ -11760,7 +11759,7 @@ msgstr "Не удалось установить соединение с бро�
 #: src/frontend/datasources/ImportFileWidget.cpp:1808
 #, fuzzy, kde-format
 #| msgid "Failed to connect to the broker '%1:%2'."
-msgid "Preview: Failed to connect to tcp socket - %1"
+msgid "Preview: Failed to connect to TCP socket - %1"
 msgstr "Не удалось установить соединение с брокером «%1:%2»."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1853

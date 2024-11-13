@@ -30,41 +30,41 @@ public:
 
 	static bool isValid(const QString& expr, const QStringList& vars = QStringList());
 	QStringList getParameter(const QString& expr, const QStringList& vars);
-	bool evaluateCartesian(const QString& expr,
-						   Range<double> range,
-						   int count,
-						   QVector<double>* xVector,
-						   QVector<double>* yVector,
-						   const QStringList& paramNames,
-						   const QVector<double>& paramValues);
-	bool evaluateCartesian(const QString& expr,
-						   const QString& min,
-						   const QString& max,
-						   int count,
-						   QVector<double>* xVector,
-						   QVector<double>* yVector,
-						   const QStringList& paramNames,
-						   const QVector<double>& paramValues);
-	bool evaluateCartesian(const QString& expr, const QString& min, const QString& max, int count, QVector<double>* xVector, QVector<double>* yVector);
-	bool evaluateCartesian(const QString& expr, QVector<double>* xVector, QVector<double>* yVector);
-	bool evaluateCartesian(const QString& expr,
-						   const QVector<double>* xVector,
-						   QVector<double>* yVector,
-						   const QStringList& paramNames,
-						   const QVector<double>& paramValues);
-	static bool evaluateCartesian(const QString& expr,
-								  const QStringList& vars,
-								  const QVector<QVector<double>*>& xVectors,
-								  QVector<double>* yVector,
-								  bool perforanceOptimization = true);
-	bool evaluatePolar(const QString& expr, const QString& min, const QString& max, int count, QVector<double>* xVector, QVector<double>* yVector);
-	bool evaluateParametric(const QString& expr1,
-							const QString& expr2,
-							const QString& min,
-							const QString& max,
-							int count,
-							QVector<double>* xVector,
-							QVector<double>* yVector);
+	bool tryEvaluateCartesian(const QString& expr,
+							  Range<double> range,
+							  int count,
+							  QVector<double>* xVector,
+							  QVector<double>* yVector,
+							  const QStringList& paramNames,
+							  const QVector<double>& paramValues);
+	bool tryEvaluateCartesian(const QString& expr,
+							  const QString& min,
+							  const QString& max,
+							  int count,
+							  QVector<double>* xVector,
+							  QVector<double>* yVector,
+							  const QStringList& paramNames,
+							  const QVector<double>& paramValues);
+	bool tryEvaluateCartesian(const QString& expr, const QString& min, const QString& max, int count, QVector<double>* xVector, QVector<double>* yVector);
+	bool tryEvaluateCartesian(const QString& expr, QVector<double>* xVector, QVector<double>* yVector);
+	bool tryEvaluateCartesian(const QString& expr,
+							  const QVector<double>* xVector,
+							  QVector<double>* yVector,
+							  const QStringList& paramNames,
+							  const QVector<double>& paramValues);
+	static bool tryEvaluateCartesian(const QString& expr,
+									 const QStringList& vars,
+									 const QVector<QVector<double>*>& xVectors,
+									 QVector<double>* yVector,
+									 bool perforanceOptimization = true);
+	bool tryEvaluatePolar(const QString& expr, const QString& min, const QString& max, int count, QVector<double>* xVector, QVector<double>* yVector);
+	bool tryEvaluateParametric(const QString& expr1,
+							   const QString& expr2,
+							   const QString& min,
+							   const QString& max,
+							   int count,
+							   QVector<double>* xVector,
+							   QVector<double>* yVector);
 	QString errorMessage() const;
 
 	const QStringList& functions();

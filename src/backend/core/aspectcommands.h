@@ -67,7 +67,7 @@ public:
 		if (newIndex != origIndex) {
 			int nonHiddenIndex = 0;
 			for (int i = 0; i < newIndex; i++) {
-				if (!m_target->m_children.at(i)->hidden())
+				if (!m_target->m_children.at(i)->isHidden())
 					nonHiddenIndex++;
 			}
 
@@ -133,13 +133,13 @@ public:
 		// will most probably trigger again crashes in the debug build of Qt if the datapicker is involved but we
 		// rather accept this "edge case" than having no undo/redo for position changes for datapicker points until
 		// we have a better solution.
-		if (!m_child->hidden() || m_child->type() == AspectType::DatapickerPoint)
+		if (!m_child->isHidden() || m_child->type() == AspectType::DatapickerPoint)
 			Q_EMIT m_target->q->childAspectAboutToBeRemoved(m_child);
 		Q_EMIT m_child->aspectAboutToBeRemoved(m_child);
 
 		m_index = removeChild(m_target, m_child);
 
-		if (!m_child->hidden() || m_child->type() == AspectType::DatapickerPoint)
+		if (!m_child->isHidden() || m_child->type() == AspectType::DatapickerPoint)
 			Q_EMIT m_target->q->childAspectRemoved(m_target->q, nextSibling, m_child);
 	}
 

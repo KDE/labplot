@@ -1177,7 +1177,7 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 	lines << QLineF(x, m_yMaxBox.at(index), x, m_whiskerMax.at(index)); // upper whisker
 	lines << QLineF(x, m_yMinBox.at(index), x, m_whiskerMin.at(index)); // lower whisker
 	lines = q->cSystem->mapLogicalToScene(lines);
-	for (const auto& line : qAsConst(lines)) {
+	for (const auto& line : std::as_const(lines)) {
 		m_whiskersPath[index].moveTo(line.p1());
 		m_whiskersPath[index].lineTo(line.p2());
 	}
@@ -1265,7 +1265,7 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 	lines << QLineF(m_xMaxBox.at(index), y, m_whiskerMax.at(index), y); // upper whisker
 	lines << QLineF(m_xMinBox.at(index), y, m_whiskerMin.at(index), y); // lower whisker
 	lines = q->cSystem->mapLogicalToScene(lines);
-	for (const auto& line : qAsConst(lines)) {
+	for (const auto& line : std::as_const(lines)) {
 		m_whiskersPath[index].moveTo(line.p1());
 		m_whiskersPath[index].lineTo(line.p2());
 	}
@@ -1322,7 +1322,7 @@ void BoxPlotPrivate::updateRug() {
 			points = q->cSystem->mapLogicalToScene(points);
 
 			// path for the vertical rug lines
-			for (const auto& point : qAsConst(points)) {
+			for (const auto& point : std::as_const(points)) {
 				rugPath.moveTo(point.x(), point.y() - rugOffset);
 				rugPath.lineTo(point.x(), point.y() - rugOffset - rugLength);
 			}
@@ -1336,7 +1336,7 @@ void BoxPlotPrivate::updateRug() {
 			points = q->cSystem->mapLogicalToScene(points);
 
 			// path for the horizontal rug lines
-			for (const auto& point : qAsConst(points)) {
+			for (const auto& point : std::as_const(points)) {
 				rugPath.moveTo(point.x() + rugOffset, point.y());
 				rugPath.lineTo(point.x() + rugOffset + rugLength, point.y());
 			}
@@ -1473,7 +1473,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 			continue;
 
 		QPainterPath boxPath;
-		for (const auto& line : qAsConst(m_boxRect.at(i))) {
+		for (const auto& line : std::as_const(m_boxRect.at(i))) {
 			boxPath.moveTo(line.p1());
 			boxPath.lineTo(line.p2());
 		}
@@ -1500,7 +1500,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 				path = trafo.map(path);
 			}
 
-			for (const auto& point : qAsConst(m_outlierPoints.at(i))) {
+			for (const auto& point : std::as_const(m_outlierPoints.at(i))) {
 				trafo.reset();
 				trafo.translate(point.x(), point.y());
 				symbolsPath.addPath(trafo.map(path));
@@ -1520,7 +1520,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 				path = trafo.map(path);
 			}
 
-			for (const auto& point : qAsConst(m_dataPoints.at(i))) {
+			for (const auto& point : std::as_const(m_dataPoints.at(i))) {
 				trafo.reset();
 				trafo.translate(point.x(), point.y());
 				symbolsPath.addPath(trafo.map(path));
@@ -1540,7 +1540,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 				path = trafo.map(path);
 			}
 
-			for (const auto& point : qAsConst(m_farOutPoints.at(i))) {
+			for (const auto& point : std::as_const(m_farOutPoints.at(i))) {
 				trafo.reset();
 				trafo.translate(point.x(), point.y());
 				symbolsPath.addPath(trafo.map(path));
@@ -1560,7 +1560,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 				path = trafo.map(path);
 			}
 
-			for (const auto& point : qAsConst(m_whiskerEndPoints.at(i))) {
+			for (const auto& point : std::as_const(m_whiskerEndPoints.at(i))) {
 				trafo.reset();
 				trafo.translate(point.x(), point.y());
 				symbolsPath.addPath(trafo.map(path));

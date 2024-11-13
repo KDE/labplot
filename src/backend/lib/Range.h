@@ -18,6 +18,7 @@
 
 #include <QDateTime>
 #include <QStringList>
+#include <QTimeZone>
 
 #include <cmath>
 
@@ -231,8 +232,8 @@ public:
 		if (m_format == Format::Numeric)
 			return locale.toString(m_start) + QStringLiteral(" .. ") + locale.toString(m_end);
 		else
-			return QDateTime::fromMSecsSinceEpoch(m_start, Qt::UTC).toString(m_dateTimeFormat) + QStringLiteral(" .. ")
-				+ QDateTime::fromMSecsSinceEpoch(m_end, Qt::UTC).toString(m_dateTimeFormat);
+			return QDateTime::fromMSecsSinceEpoch(m_start, QTimeZone::UTC).toString(m_dateTimeFormat) + QStringLiteral(" .. ")
+				+ QDateTime::fromMSecsSinceEpoch(m_end, QTimeZone::UTC).toString(m_dateTimeFormat);
 	}
 	std::string toStdString(bool round = true) const {
 		return STDSTRING(toString(round));
@@ -589,8 +590,8 @@ inline QString Range<double>::toString(bool round, QLocale locale) const {
 		} else
 			return locale.toString(m_start, 'g', 12) + QLatin1String(" .. ") + locale.toString(m_end, 'g', 12);
 	} else
-		return QDateTime::fromMSecsSinceEpoch(m_start, Qt::UTC).toString(m_dateTimeFormat) + QLatin1String(" .. ")
-			+ QDateTime::fromMSecsSinceEpoch(m_end, Qt::UTC).toString(m_dateTimeFormat);
+		return QDateTime::fromMSecsSinceEpoch(m_start, QTimeZone::UTC).toString(m_dateTimeFormat) + QLatin1String(" .. ")
+			+ QDateTime::fromMSecsSinceEpoch(m_end, QTimeZone::UTC).toString(m_dateTimeFormat);
 }
 
 #endif

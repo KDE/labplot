@@ -509,7 +509,7 @@ void LollipopPlotPrivate::recalc() {
 	// values in the provided datasets
 	int barGroupsCount = 0;
 	int columnIndex = 0;
-	for (auto* column : qAsConst(dataColumns)) {
+	for (auto* column : std::as_const(dataColumns)) {
 		int size = static_cast<const Column*>(column)->statistics().size;
 		m_barLines[columnIndex].resize(size);
 		m_symbolPoints[columnIndex].resize(size);

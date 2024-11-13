@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-05 00:37+0000\n"
-"PO-Revision-Date: 2024-11-01 14:16+0000\n"
+"POT-Creation-Date: 2024-11-13 00:37+0000\n"
+"PO-Revision-Date: 2024-11-08 14:50+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
 "Language: en_GB\n"
@@ -635,13 +635,13 @@ msgid "%1: replace the values for rows %2 to %3"
 msgstr "%1: replace the values for rows %2 to %3"
 
 #: src/backend/core/datatypes/DateTime2StringFilter.cpp:55
-#: src/backend/core/datatypes/String2DateTimeFilter.cpp:131
+#: src/backend/core/datatypes/String2DateTimeFilter.cpp:132
 #, kde-format
 msgid "%1: set date-time format to %2"
 msgstr "%1: set date-time format to %2"
 
 #: src/backend/core/datatypes/DateTime2StringFilter.cpp:57
-#: src/backend/core/datatypes/String2DateTimeFilter.cpp:133
+#: src/backend/core/datatypes/String2DateTimeFilter.cpp:134
 #, kde-format
 msgid "set date-time format to %1"
 msgstr "set date-time format to %1"
@@ -1083,109 +1083,101 @@ msgid "Unable to open device"
 msgstr "Unable to open device"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:199
-#, fuzzy, kde-format
-#| msgid "Unable to read the file"
+#, kde-format
 msgid "Unable to determine the separator"
-msgstr "Unable to read the file"
+msgstr "Unable to determine the separator"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:201
-#, fuzzy, kde-format
-#| msgid "Number of columns:"
+#, kde-format
 msgid "Invalid number of data columns"
-msgstr "Number of columns:"
+msgstr "Invalid number of data columns"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:203
-#, fuzzy, kde-format
-#| msgid "Number of columns:"
+#, kde-format
 msgid "Invalid number of column names"
-msgstr "Number of columns:"
+msgstr "Invalid number of column names"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:205
-#, kde-format
-msgid "Matrix: Unsupported Column Mode"
-msgstr ""
+#, fuzzy, kde-format
+#| msgid "Matrix: Unsupported Column Mode"
+msgid "Matrix: Unsupported column mode"
+msgstr "Matrix: Unsupported Column Mode"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:207
 #, kde-format
 msgid "Insufficient memory (RAM)"
-msgstr ""
+msgstr "Insufficient memory (RAM)"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:209
-#, fuzzy, kde-format
-#| msgid "Unable to read the file"
+#, kde-format
 msgid "Unable to parse header"
-msgstr "Unable to read the file"
+msgstr "Unable to parse header"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:211
 #, fuzzy, kde-format
-#| msgid "Type of data source"
-msgid "Unsupported datasource"
-msgstr "Type of data source"
+#| msgid "Unsupported datasource"
+msgid "Unsupported data source"
+msgstr "Unsupported data source"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:215
 #, kde-format
 msgid "Live: No column separator selected"
-msgstr ""
+msgstr "Live: No column separator selected"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:217
 #, kde-format
 msgid "Live: No column modes set"
-msgstr ""
+msgstr "Live: No column modes set"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:219
 #, kde-format
 msgid "Datetime column found, but no Datetime format provided"
-msgstr ""
+msgstr "Datetime column found, but no Datetime format provided"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:221
-#, fuzzy, kde-format
-#| msgid "Reading from file %1 failed."
+#, kde-format
 msgid "Header reading from device not allowed"
-msgstr "Reading from file %1 failed."
+msgstr "Header reading from device not allowed"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:223
 #, kde-format
 msgid "Separator detection not allowed"
-msgstr ""
+msgstr "Separator detection not allowed"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:225
-#, fuzzy, kde-format
-#| msgid "Invalid sheet."
+#, kde-format
 msgid "Invalid separator"
-msgstr "Invalid sheet."
+msgstr "Invalid separator"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:227
-#, fuzzy, kde-format
-#| msgid "Failed to initialize %1."
+#, kde-format
 msgid "Filter not initialized"
-msgstr "Failed to initialise %1."
+msgstr "Filter not initialised"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:229
 #, kde-format
 msgid "Wrong end column. Is it smaller than start column?"
-msgstr ""
+msgstr "Wrong end column. Is it smaller than start column?"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:231
 #, kde-format
 msgid "Wrong end row. Is it smaller than start row?"
-msgstr ""
+msgstr "Wrong end row. Is it smaller than start row?"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:233
-#, fuzzy, kde-format
-#| msgid "No data set selected."
+#, kde-format
 msgid "No data destination set"
-msgstr "No data set selected."
+msgstr "No data destination set"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:235
-#, fuzzy, kde-format
-#| msgid "Sort columns:"
+#, kde-format
 msgid "No columns"
-msgstr "Sort columns:"
+msgstr "No columns"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:237
 #, kde-format
 msgid "Unable to determine column modes. Check if they are correctly written"
-msgstr ""
+msgstr "Unable to determine column modes. Check if they are correctly written"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:239
 #, kde-format
@@ -1203,20 +1195,20 @@ msgid "Number of lines: %1"
 msgstr "Number of lines: %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:522
-#: src/backend/datasources/filters/AsciiFilter.cpp:1264
+#: src/backend/datasources/filters/AsciiFilter.cpp:1293
 #: src/backend/datasources/filters/JsonFilter.cpp:284
 #, kde-format
 msgid "Column %1"
 msgstr "Column %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:592
-#: src/backend/datasources/filters/AsciiFilter.cpp:1287
+#: src/backend/datasources/filters/AsciiFilter.cpp:1316
 #, kde-format
 msgid "Timestamp"
 msgstr "Timestamp"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:596
-#: src/backend/datasources/filters/AsciiFilter.cpp:1291
+#: src/backend/datasources/filters/AsciiFilter.cpp:1320
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1230,10 +1222,9 @@ msgid "DateTime"
 msgstr "DateTime"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:610
-#, fuzzy, kde-format
-#| msgid "Int8"
+#, kde-format
 msgid "Int"
-msgstr "Int8"
+msgstr "Int"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:611
 #: src/backend/datasources/filters/MatioFilter.cpp:398
@@ -1278,8 +1269,8 @@ msgstr "Failed to open the device/file or it's empty."
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1001
 #: src/backend/datasources/filters/OdsFilter.cpp:388
 #: src/backend/datasources/filters/ReadStatFilter.cpp:528
-#: src/backend/datasources/filters/ROOTFilter.cpp:236
-#: src/backend/datasources/filters/ROOTFilter.cpp:306
+#: src/backend/datasources/filters/ROOTFilter.cpp:235
+#: src/backend/datasources/filters/ROOTFilter.cpp:305
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:332
 #: src/backend/datasources/filters/XLSXFilter.cpp:515
@@ -2297,42 +2288,42 @@ msgstr "No column available"
 msgid "Unsupported file type, neither histogram no tree."
 msgstr "Unsupported file type, neither histogram no tree."
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1502
+#: src/backend/datasources/filters/ROOTFilter.cpp:1501
 #, kde-format
 msgid "Not a ROOT file"
 msgstr "Not a ROOT file"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1507
+#: src/backend/datasources/filters/ROOTFilter.cpp:1506
 #, kde-format
 msgid "File format version: %1"
 msgstr "File format version: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1515
+#: src/backend/datasources/filters/ROOTFilter.cpp:1514
 #, kde-format
 msgid "FREE data record size: %1 bytes"
 msgstr "FREE data record size: %1 bytes"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1517
+#: src/backend/datasources/filters/ROOTFilter.cpp:1516
 #, kde-format
 msgid "Number of free data records: %1"
 msgstr "Number of free data records: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1519
+#: src/backend/datasources/filters/ROOTFilter.cpp:1518
 #, kde-format
 msgid "TNamed size: %1 bytes"
 msgstr "TNamed size: %1 bytes"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1521
+#: src/backend/datasources/filters/ROOTFilter.cpp:1520
 #, kde-format
 msgid "Size of file pointers: %1 bytes"
 msgstr "Size of file pointers: %1 bytes"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1526
+#: src/backend/datasources/filters/ROOTFilter.cpp:1525
 #, kde-format
 msgid "Compression level and algorithm: %1"
 msgstr "Compression level and algorithm: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1531
+#: src/backend/datasources/filters/ROOTFilter.cpp:1530
 #, kde-format
 msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr "Size of TStreamerInfo record: %1 bytes"
@@ -2453,10 +2444,9 @@ msgid "Device already opened."
 msgstr "Device already opened."
 
 #: src/backend/datasources/LiveDataSource.cpp:717
-#, fuzzy, kde-format
-#| msgid "Device is not opened."
+#, kde-format
 msgid "Device is not open."
-msgstr "Device is not opened."
+msgstr "Device is not open."
 
 #: src/backend/datasources/LiveDataSource.cpp:720
 #, kde-format
@@ -2486,7 +2476,7 @@ msgstr "Serial Port Error"
 #: src/backend/datasources/MQTTTopic.cpp:44
 #, kde-format
 msgid "%1 %2"
-msgstr ""
+msgstr "%1 %2"
 
 #: src/backend/datasources/MQTTTopic.cpp:129
 #, kde-format
@@ -6078,39 +6068,39 @@ msgstr "v2"
 msgid "ep"
 msgstr "ep"
 
-#: src/backend/lib/Range.h:48 src/backend/nsl/nsl_interp.c:14
+#: src/backend/lib/Range.h:49 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:561
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:525
 #, kde-format
 msgid "Linear"
 msgstr "Linear"
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Log10"
 msgstr "Log10"
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Log2"
 msgstr "Log2"
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Ln"
 msgstr "Ln"
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Sqrt"
 msgstr "Sqrt"
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Square"
 msgstr "Square"
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Inverse"
 msgstr "Inverse"
@@ -7989,7 +7979,7 @@ msgstr "%1: width factor changed"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:299
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:170
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:354
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:355
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:112
 #, kde-format
 msgid "%1 - Data"
@@ -8734,10 +8724,9 @@ msgid "%1: set font"
 msgstr "%1: set font"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:216
-#, fuzzy, kde-format
-#| msgid "%1: set font color"
+#, kde-format
 msgid "%1: use plot's color"
-msgstr "%1: set font colour"
+msgstr "%1: use plot's colour"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:223
 #: src/backend/worksheet/TextLabel.cpp:353
@@ -9430,27 +9419,27 @@ msgstr "%1: set values font"
 msgid "%1: set values color"
 msgstr "%1: set values colour"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:206
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:207
 #, kde-format
 msgid "%1: data source type changed"
 msgstr "%1: data source type changed"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:213
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:214
 #, kde-format
 msgid "%1: data source curve changed"
 msgstr "%1: data source curve changed"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:222
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:223
 #, kde-format
 msgid "%1: assign x-data"
 msgstr "%1: assign x-data"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:231
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:232
 #, kde-format
 msgid "%1: assign y-data"
 msgstr "%1: assign y-data"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:240
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:241
 #, kde-format
 msgid "%1: assign second y-data"
 msgstr "%1: assign second y-data"
@@ -9744,47 +9733,47 @@ msgstr "No data points available."
 msgid "%1: set transform options and perform the Fourier transform"
 msgstr "%1: set transform options and perform the Fourier transform"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:105
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:101
 #, kde-format
 msgid "%1: set function"
 msgstr "%1: set function"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:329
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:325
 #, kde-format
 msgid "First curve not valid"
 msgstr "First curve not valid"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:331
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:327
 #, kde-format
 msgid "xColumn of first curve not valid"
 msgstr "xColumn of first curve not valid"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:333
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:329
 #, kde-format
 msgid "yColumn of first curve not valid"
 msgstr "yColumn of first curve not valid"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:335
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:331
 #, kde-format
 msgid "Number of x and y values do not match for the first curve"
 msgstr "Number of x and y values do not match for the first curve"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:348
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:344
 #, kde-format
 msgid "Curve '%1' not valid"
 msgstr "Curve '%1' not valid"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:350
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:346
 #, kde-format
 msgid "xColumn of curve '%1' not valid"
 msgstr "xColumn of curve '%1' not valid"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:352
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:348
 #, kde-format
 msgid "yColumn of curve '%1' not valid"
 msgstr "yColumn of curve '%1' not valid"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:354
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:350
 #, kde-format
 msgid "Number of x and y values do not match for curve '%1'"
 msgstr "Number of x and y values do not match for curve '%1'"
@@ -10426,16 +10415,14 @@ msgid "Line in the file that should be used to determine the column names."
 msgstr "Line in the file that should be used to determine the column names."
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:111
-#, fuzzy, kde-format
-#| msgid "Custom column names, space separated. E.g. \"x y\""
+#, kde-format
 msgid "Custom column names, comma separated. E.g. \"x, y\""
-msgstr "Custom column names, space separated. E.g. \"x y\""
+msgstr "Custom column names, comma separated. E.g. \"x, y\""
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:115
-#, fuzzy, kde-format
-#| msgid "Custom column names, space separated. E.g. \"x y\""
+#, kde-format
 msgid "Custom column modes, comma separated"
-msgstr "Custom column names, space separated. E.g. \"x y\""
+msgstr "Custom column modes, comma separated"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:122
 #, kde-format
@@ -10451,12 +10438,21 @@ msgid ""
 "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
 "td></tr></table>"
 msgstr ""
+"If not empty, the number of columns must match the number of column names if "
+"provided and it must match the number of  columns in the imported "
+"fileDatatypes:<table><tr><td>%1</td><td>Integer number with 32bit size "
+"(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
+"number with 64bit size (−9.223.372.036.854.775.808 .. "
+"9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
+"number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
+"td><td>Datetime with the format from the datetime text box if not empty, "
+"otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
+"td></tr></table>"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:252
-#, fuzzy, kde-format
-#| msgid "Data type not supported yet."
+#, kde-format
 msgid "Datatype not found: %1"
-msgstr "Data type not supported yet."
+msgstr "Datatype not found: %1"
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:29
 #, kde-format
@@ -10884,10 +10880,9 @@ msgid "Select a data container where the data has to be imported into."
 msgstr "Select a data container where the data has to be imported into."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:406
-#, fuzzy, kde-format
-#| msgid "No data to import."
+#, kde-format
 msgid "No file provided for import."
-msgstr "No data to import."
+msgstr "No file provided for import."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:428
 #, kde-format
@@ -11146,6 +11141,7 @@ msgstr ""
 msgid ""
 "The number of rows is calculated from the values of the data portion tab"
 msgstr ""
+"The number of rows is calculated from the values of the data portion tab"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:982
 #, kde-format
@@ -11320,39 +11316,39 @@ msgid ""
 "Invalid number rows. Please check 'End Row' and 'Start Row'. 'End Row' must "
 "be larger than 'Start Row' or -1"
 msgstr ""
+"Invalid number rows. Please check 'End Row' and 'Start Row'. 'End Row' must "
+"be larger than 'Start Row' or -1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1768
 #, kde-format
 msgid "Preview: Initialization failed: %1"
-msgstr ""
+msgstr "Preview: Initialisation failed: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1793
-#, fuzzy, kde-format
-#| msgid "Failed to connect to the broker '%1:%2'."
+#, kde-format
 msgid "Preview: Failed to connect to local socket %1 - %2"
-msgstr "Failed to connect to the broker '%1:%2'."
+msgstr "Preview: Failed to connect to local socket %1 - %2"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1808
 #, fuzzy, kde-format
-#| msgid "Failed to connect to the broker '%1:%2'."
-msgid "Preview: Failed to connect to tcp socket - %1"
-msgstr "Failed to connect to the broker '%1:%2'."
+#| msgid "Preview: Failed to connect to tcp socket - %1"
+msgid "Preview: Failed to connect to TCP socket - %1"
+msgstr "Preview: Failed to connect to TCP socket - %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1853
-#, fuzzy, kde-format
-#| msgid "area error: %1"
+#, kde-format
 msgid "Parse Error: %1"
-msgstr "area error: %1"
+msgstr "Parse Error: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1855
 #, kde-format
 msgid "ERROR: not ready for read after 2 sec"
-msgstr ""
+msgstr "ERROR: not ready for read after 2 sec"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1859
 #, kde-format
 msgid "ERROR: failed to open serial port. error: %1"
-msgstr ""
+msgstr "ERROR: failed to open serial port. error: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1878
 #, kde-format
@@ -12676,6 +12672,8 @@ msgid ""
 "Use the main color of the plot (line, symbol, etc.) for the color of the "
 "name in the legend."
 msgstr ""
+"Use the main colour of the plot (line, symbol, etc.) for the colour of the "
+"name in the legend."
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:249
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:246
@@ -17608,13 +17606,12 @@ msgstr "%1: clear selected cells"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3781
 #, kde-format
 msgid "Selected 1: %1 rows, %2 columns"
-msgstr ""
+msgstr "Selected 1: %1 rows, %2 columns"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3791
-#, fuzzy, kde-format
-#| msgid "Selected curve:"
+#, kde-format
 msgid "Selected: %1 cells"
-msgstr "Selected curve:"
+msgstr "Selected: %1 cells"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3810
 #, kde-format
@@ -17672,10 +17669,9 @@ msgid ", "
 msgstr ", "
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3820
-#, fuzzy, kde-format
-#| msgid "Selected: %1 %2 , %3 %4%5 %6 %7 %8"
+#, kde-format
 msgid "Selected: %1 %2, %3 %4%5 %6 %7 %8"
-msgstr "Selected: %1 %2 , %3 %4%5 %6 %7 %8"
+msgstr "Selected: %1 %2, %3 %4%5 %6 %7 %8"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3830
 #, kde-format
@@ -18651,10 +18647,9 @@ msgstr "DateTime Format:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbSkipEmptyParts)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:43
-#, fuzzy, kde-format
-#| msgid "Skip empty parts"
+#, kde-format
 msgid "Skip empty Parts"
-msgstr "Skip empty parts"
+msgstr "Skip empty Parts"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbConvertNaNToZero)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:50
@@ -18666,10 +18661,9 @@ msgstr "Convert NaN to 0"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnMode)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:73
-#, fuzzy, kde-format
-#| msgid "Column labels"
+#, kde-format
 msgid "Column Datatypes:"
-msgstr "Column labels"
+msgstr "Column Data types:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:80
@@ -18710,14 +18704,13 @@ msgstr "Column Separator:"
 #: src/frontend/ui/datasources/asciioptionswidget.ui:143
 #, kde-format
 msgid "Base year when only 2 digits are provided for the year"
-msgstr ""
+msgstr "Base year when only 2 digits are provided for the year"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:194
-#, fuzzy, kde-format
-#| msgid "Years"
+#, kde-format
 msgid "Year Base:"
-msgstr "Years"
+msgstr "Year Base:"
 
 #. i18n: ectx: property (text), widget (QLabel, lVectorNames)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:201
@@ -18753,7 +18746,7 @@ msgstr "Create Index"
 #: src/frontend/ui/datasources/asciioptionswidget.ui:253
 #, kde-format
 msgid "Import Integer as Double"
-msgstr ""
+msgstr "Import Integer as Double"
 
 #. i18n: ectx: property (text), widget (QLabel, lSkipBytes)
 #: src/frontend/ui/datasources/binaryoptionswidget.ui:17
@@ -20677,10 +20670,9 @@ msgstr "Hor. align.:"
 
 #. i18n: ectx: property (text), widget (QLabel, lUsePlotColor)
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:463
-#, fuzzy, kde-format
-#| msgid "Font Color:"
+#, kde-format
 msgid "Plot's Color:"
-msgstr "Font Colour:"
+msgstr "Plot's Colour:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderCornerRadius)
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:552

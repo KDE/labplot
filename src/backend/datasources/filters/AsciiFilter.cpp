@@ -202,13 +202,13 @@ QString AsciiFilter::statusToString(Status e) {
 	case Status::InvalidNumberColumnNames:
 		return i18n("Invalid number of column names");
 	case Status::MatrixUnsupportedColumnMode:
-		return i18n("Matrix: Unsupported Column Mode");
+		return i18n("Matrix: Unsupported column mode");
 	case Status::NotEnoughMemory:
 		return i18n("Insufficient memory (RAM)");
 	case Status::UnableParsingHeader:
 		return i18n("Unable to parse header");
 	case Status::UnsupportedDataSource:
-		return i18n("Unsupported datasource");
+		return i18n("Unsupported data source");
 	case Status::SequentialDeviceHeaderEnabled:
 		return QString();
 	case Status::SequentialDeviceAutomaticSeparatorDetection:

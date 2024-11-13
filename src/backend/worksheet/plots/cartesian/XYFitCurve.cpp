@@ -2035,9 +2035,9 @@ bool XYFitCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn
 		auto* parser = ExpressionParser::getInstance();
 		// fill residualsVector with model values
 		// QDEBUG("xVector: " << v)
-		bool rc = parser->evaluateCartesian(fitData.model, &v, residualsVector, fitData.paramNames, fitResult.paramValues);
+		bool valid = parser->tryEvaluateCartesian(fitData.model, &v, residualsVector, fitData.paramNames, fitResult.paramValues);
 		// QDEBUG("residualsVector: " << *residualsVector)
-		if (rc) {
+		if (valid) {
 			switch (fitData.algorithm) {
 			case nsl_fit_algorithm_lm:
 				for (size_t i = 0; i < rowCount; i++)
@@ -2755,9 +2755,9 @@ bool XYFitCurvePrivate::evaluate(bool preview) {
 	if (preview) // results not available yet
 		paramValues = fitData.paramStartValues;
 
-	bool rc = parser->evaluateCartesian(fitData.model, xRange, nrPoints, xVector, yVector, fitData.paramNames, paramValues);
+	bool valid = parser->tryEvaluateCartesian(fitData.model, xRange, nrPoints, xVector, yVector, fitData.paramNames, paramValues);
 
-	if (!rc) {
+	if (!valid) {
 		DEBUG(Q_FUNC_INFO << ", ERROR: Parsing fit function failed")
 		xVector->clear();
 		yVector->clear();

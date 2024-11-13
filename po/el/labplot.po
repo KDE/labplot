@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-05 00:37+0000\n"
+"POT-Creation-Date: 2024-11-13 00:37+0000\n"
 "PO-Revision-Date: 2017-04-20 14:04+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -100,10 +100,9 @@ msgstr ""
 "Μετονομασία του \"%1\" σε \"%2\" για την απαοφυγή επικάλυψης μεταξύ όρων."
 
 #: src/backend/core/AbstractAspect.cpp:568
-#, fuzzy, kde-format
-#| msgid "%1: insert %2 before %3."
+#, kde-format
 msgid "%1: insert %2 before %3"
-msgstr "%1: εισαγωγή του %2 πριν από το %3."
+msgstr "%1: εισαγωγή του %2 πριν από το %3"
 
 #: src/backend/core/AbstractAspect.cpp:568
 #, fuzzy, kde-format
@@ -118,10 +117,9 @@ msgid "%1: remove %2"
 msgstr "%1: αφαίρεση του %2"
 
 #: src/backend/core/AbstractAspect.cpp:632
-#, fuzzy, kde-format
-#| msgid "%1: remove all children."
+#, kde-format
 msgid "%1: remove all children"
-msgstr "%1: αφαίρεση όλων των απογόνων."
+msgstr "%1: αφαίρεση όλων των απογόνων"
 
 #: src/backend/core/AbstractAspect.cpp:831
 #, fuzzy, kde-format
@@ -226,10 +224,9 @@ msgid "X-Uncertainty -"
 msgstr ""
 
 #: src/backend/core/AbstractColumn.cpp:190
-#, fuzzy, kde-format
-#| msgid "x-error:"
+#, kde-format
 msgid "X-Error -"
-msgstr "x-error"
+msgstr "X-Error -"
 
 #: src/backend/core/AbstractColumn.cpp:194
 #, kde-format
@@ -248,10 +245,9 @@ msgid "Y-Uncertainty +"
 msgstr ""
 
 #: src/backend/core/AbstractColumn.cpp:202
-#, fuzzy, kde-format
-#| msgid "x-error:"
+#, kde-format
 msgid "Y-Error +"
-msgstr "x-error"
+msgstr "Y-Error +"
 
 #: src/backend/core/AbstractColumn.cpp:206
 #, kde-format
@@ -259,10 +255,9 @@ msgid "Y-Uncertainty -"
 msgstr ""
 
 #: src/backend/core/AbstractColumn.cpp:208
-#, fuzzy, kde-format
-#| msgid "x-error:"
+#, kde-format
 msgid "Y-Error -"
-msgstr "x-error"
+msgstr "Y-Error -"
 
 #: src/backend/core/AbstractColumn.cpp:227
 #: src/backend/datasources/filters/AsciiFilter.cpp:607
@@ -673,13 +668,13 @@ msgid "%1: replace the values for rows %2 to %3"
 msgstr "%1: αντικατάσταση τιμών στις γραμμές %2 έως %3"
 
 #: src/backend/core/datatypes/DateTime2StringFilter.cpp:55
-#: src/backend/core/datatypes/String2DateTimeFilter.cpp:131
+#: src/backend/core/datatypes/String2DateTimeFilter.cpp:132
 #, kde-format
 msgid "%1: set date-time format to %2"
 msgstr "%1: ορισμός μορφής ημερομηνίας-ώρας σε %2"
 
 #: src/backend/core/datatypes/DateTime2StringFilter.cpp:57
-#: src/backend/core/datatypes/String2DateTimeFilter.cpp:133
+#: src/backend/core/datatypes/String2DateTimeFilter.cpp:134
 #, kde-format
 msgid "set date-time format to %1"
 msgstr "ορισμός μορφής ημερομηνίας-ώρας σε %1"
@@ -723,10 +718,9 @@ msgid "Project"
 msgstr ""
 
 #: src/backend/core/Project.cpp:264
-#, fuzzy, kde-format
-#| msgid "&Close"
+#, kde-format
 msgid "Close"
-msgstr "&Κλείσιμο"
+msgstr "Κλείσιμο"
 
 #: src/backend/core/Project.cpp:301
 #, fuzzy, kde-format
@@ -1144,7 +1138,7 @@ msgstr "μη έγκυρη τιμή γραμμής"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:205
 #, kde-format
-msgid "Matrix: Unsupported Column Mode"
+msgid "Matrix: Unsupported column mode"
 msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:207
@@ -1161,7 +1155,7 @@ msgstr "Σύνδεση:"
 #: src/backend/datasources/filters/AsciiFilter.cpp:211
 #, fuzzy, kde-format
 #| msgid "x-Range"
-msgid "Unsupported datasource"
+msgid "Unsupported data source"
 msgstr "x-Range"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:215
@@ -1244,7 +1238,7 @@ msgid "Number of lines: %1"
 msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:522
-#: src/backend/datasources/filters/AsciiFilter.cpp:1264
+#: src/backend/datasources/filters/AsciiFilter.cpp:1293
 #: src/backend/datasources/filters/JsonFilter.cpp:284
 #, fuzzy, kde-format
 #| msgid "Start column:"
@@ -1252,13 +1246,13 @@ msgid "Column %1"
 msgstr "Στήλη έναρξης:"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:592
-#: src/backend/datasources/filters/AsciiFilter.cpp:1287
+#: src/backend/datasources/filters/AsciiFilter.cpp:1316
 #, kde-format
 msgid "Timestamp"
 msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:596
-#: src/backend/datasources/filters/AsciiFilter.cpp:1291
+#: src/backend/datasources/filters/AsciiFilter.cpp:1320
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1325,8 +1319,8 @@ msgstr "Σύνδεση:"
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1001
 #: src/backend/datasources/filters/OdsFilter.cpp:388
 #: src/backend/datasources/filters/ReadStatFilter.cpp:528
-#: src/backend/datasources/filters/ROOTFilter.cpp:236
-#: src/backend/datasources/filters/ROOTFilter.cpp:306
+#: src/backend/datasources/filters/ROOTFilter.cpp:235
+#: src/backend/datasources/filters/ROOTFilter.cpp:305
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:332
 #: src/backend/datasources/filters/XLSXFilter.cpp:515
@@ -2405,44 +2399,44 @@ msgstr ""
 msgid "Unsupported file type, neither histogram no tree."
 msgstr ""
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1502
+#: src/backend/datasources/filters/ROOTFilter.cpp:1501
 #, kde-format
 msgid "Not a ROOT file"
 msgstr ""
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1507
+#: src/backend/datasources/filters/ROOTFilter.cpp:1506
 #, fuzzy, kde-format
 #| msgid "Format Type"
 msgid "File format version: %1"
 msgstr "Τύπος αποθήκευσης"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1515
+#: src/backend/datasources/filters/ROOTFilter.cpp:1514
 #, kde-format
 msgid "FREE data record size: %1 bytes"
 msgstr ""
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1517
+#: src/backend/datasources/filters/ROOTFilter.cpp:1516
 #, fuzzy, kde-format
 #| msgid "Number of levels"
 msgid "Number of free data records: %1"
 msgstr "Πλήθος επιπέδων"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1519
+#: src/backend/datasources/filters/ROOTFilter.cpp:1518
 #, kde-format
 msgid "TNamed size: %1 bytes"
 msgstr ""
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1521
+#: src/backend/datasources/filters/ROOTFilter.cpp:1520
 #, kde-format
 msgid "Size of file pointers: %1 bytes"
 msgstr ""
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1526
+#: src/backend/datasources/filters/ROOTFilter.cpp:1525
 #, kde-format
 msgid "Compression level and algorithm: %1"
 msgstr ""
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1531
+#: src/backend/datasources/filters/ROOTFilter.cpp:1530
 #, kde-format
 msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr ""
@@ -4051,8 +4045,7 @@ msgid "Quantile"
 msgstr "Παράγωγος"
 
 #: src/backend/gsl/functions.cpp:278 src/backend/nsl/nsl_smooth.c:21
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile"
 msgstr "Εκατοστημόριο"
 
@@ -6204,22 +6197,19 @@ msgid "q"
 msgstr ""
 
 #: src/backend/gsl/functions.cpp:978 src/backend/gsl/functions.cpp:986
-#, fuzzy, kde-format
-#| msgid "x"
+#, kde-format
 msgid "x"
 msgstr "x"
 
 #: src/backend/gsl/functions.cpp:988
-#, fuzzy, kde-format
-#| msgid "min."
+#, kde-format
 msgid "min"
-msgstr "min."
+msgstr "min"
 
 #: src/backend/gsl/functions.cpp:990
-#, fuzzy, kde-format
-#| msgid "max."
+#, kde-format
 msgid "max"
-msgstr "max."
+msgstr "max"
 
 #: src/backend/gsl/functions.cpp:998
 #, fuzzy, kde-format
@@ -6238,7 +6228,7 @@ msgstr "2"
 msgid "ep"
 msgstr ""
 
-#: src/backend/lib/Range.h:48 src/backend/nsl/nsl_interp.c:14
+#: src/backend/lib/Range.h:49 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:561
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:525
 #, fuzzy, kde-format
@@ -6246,32 +6236,32 @@ msgstr ""
 msgid "Linear"
 msgstr "Γραμμή:"
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Log10"
 msgstr ""
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Log2"
 msgstr ""
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Ln"
 msgstr ""
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Sqrt"
 msgstr ""
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Square"
 msgstr ""
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Inverse"
 msgstr ""
@@ -6555,8 +6545,7 @@ msgid "FFT"
 msgstr ""
 
 #: src/backend/nsl/nsl_conv.c:22
-#, fuzzy, kde-format
-#| msgid "Sum"
+#, kde-format
 msgid "Sum"
 msgstr "Άθροισμα"
 
@@ -7080,8 +7069,7 @@ msgid "Kochanek-Bartels (TCB)"
 msgstr ""
 
 #: src/backend/nsl/nsl_interp.c:26
-#, fuzzy, kde-format
-#| msgid "Derivative"
+#, kde-format
 msgid "Derivative"
 msgstr "Παράγωγος"
 
@@ -8245,7 +8233,7 @@ msgstr "%1: ορισμός τύπου"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:299
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:170
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:354
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:355
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:112
 #, fuzzy, kde-format
 #| msgid "Data:"
@@ -8506,11 +8494,10 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:707
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1940
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:632
-#, fuzzy, kde-format
-#| msgid "Fit:"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit"
-msgstr "Προσαρμογή:"
+msgstr "Προσαρμογή"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:460
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:605
@@ -8754,10 +8741,9 @@ msgstr "&Ανάλυση"
 #. analysis menu
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:705
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:196
-#, fuzzy, kde-format
-#| msgid "&Analysis"
+#, kde-format
 msgid "Analysis"
-msgstr "&Ανάλυση"
+msgstr "Ανάλυση"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:747
 #: src/frontend/ThemeHandler.cpp:49 src/frontend/ThemeHandler.cpp:144
@@ -9808,27 +9794,27 @@ msgstr ""
 msgid "%1: set values color"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:206
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:207
 #, kde-format
 msgid "%1: data source type changed"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:213
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:214
 #, kde-format
 msgid "%1: data source curve changed"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:222
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:223
 #, kde-format
 msgid "%1: assign x-data"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:231
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:232
 #, kde-format
 msgid "%1: assign y-data"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:240
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:241
 #, fuzzy, kde-format
 #| msgid "%1: change cell values"
 msgid "%1: assign second y-data"
@@ -10133,48 +10119,48 @@ msgstr ""
 msgid "%1: set transform options and perform the Fourier transform"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:105
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:101
 #, fuzzy, kde-format
 #| msgid "%1: set plot designation"
 msgid "%1: set function"
 msgstr "%1: ορισμός τίτλου γραφικής παράστασης"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:329
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:325
 #, kde-format
 msgid "First curve not valid"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:331
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:327
 #, kde-format
 msgid "xColumn of first curve not valid"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:333
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:329
 #, kde-format
 msgid "yColumn of first curve not valid"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:335
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:331
 #, kde-format
 msgid "Number of x and y values do not match for the first curve"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:348
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:344
 #, kde-format
 msgid "Curve '%1' not valid"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:350
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:346
 #, kde-format
 msgid "xColumn of curve '%1' not valid"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:352
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:348
 #, kde-format
 msgid "yColumn of curve '%1' not valid"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:354
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:350
 #, kde-format
 msgid "Number of x and y values do not match for curve '%1'"
 msgstr ""
@@ -11035,10 +11021,9 @@ msgstr "Τμήμα δεδομένων για ανάγνωση"
 #: src/frontend/datasources/ImportDatasetWidget.cpp:230
 #: src/frontend/ui/datasources/importfilewidget.ui:785
 #: src/frontend/ui/dockwidgets/livedatadock.ui:189
-#, fuzzy, kde-format
-#| msgid "&All"
+#, kde-format
 msgid "All"
-msgstr "Όλ&α"
+msgstr "Όλα"
 
 #: src/frontend/datasources/ImportDatasetWidget.cpp:168
 #: src/frontend/examples/ExamplesManager.cpp:175
@@ -11108,10 +11093,9 @@ msgid "Data container where the data has to be imported into"
 msgstr ""
 
 #: src/frontend/datasources/ImportDialog.cpp:96
-#, fuzzy, kde-format
-#| msgid "&New"
+#, kde-format
 msgid "New"
-msgstr "&Νέο"
+msgstr "Νέο"
 
 #: src/frontend/datasources/ImportDialog.cpp:99
 #, kde-format
@@ -11574,8 +11558,7 @@ msgstr ""
 #: src/frontend/datasources/ImportFileWidget.cpp:1235
 #: src/frontend/ui/datasources/importfilewidget.ui:582
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:239
-#, fuzzy, kde-format
-#| msgid "Data portion to read"
+#, kde-format
 msgid "Data Portion to Read"
 msgstr "Τμήμα δεδομένων για ανάγνωση"
 
@@ -11607,10 +11590,9 @@ msgid "<b>File type:</b> %1"
 msgstr ""
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1599
-#, fuzzy, kde-format
-#| msgid "General"
+#, kde-format
 msgid "General:"
-msgstr "Γενικά"
+msgstr "Γενικά:"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1601
 #: src/frontend/datasources/ImportFileWidget.cpp:1602
@@ -11716,7 +11698,7 @@ msgstr "Σύνδεση:"
 #: src/frontend/datasources/ImportFileWidget.cpp:1808
 #, fuzzy, kde-format
 #| msgid "Connection:"
-msgid "Preview: Failed to connect to tcp socket - %1"
+msgid "Preview: Failed to connect to TCP socket - %1"
 msgstr "Σύνδεση:"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1853
@@ -12527,10 +12509,9 @@ msgstr ""
 #: src/frontend/dockwidgets/AxisDock.cpp:291
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:659
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:454
-#, fuzzy, kde-format
-#| msgid "Spacing:"
+#, kde-format
 msgid "Spacing"
-msgstr "Απόσταση:"
+msgstr "Απόσταση"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:279
 #: src/frontend/dockwidgets/AxisDock.cpp:292
@@ -12553,8 +12534,7 @@ msgid "Absolute Value"
 msgstr "%1 τιμή"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:283
-#, fuzzy, kde-format
-#| msgid "Offset"
+#, kde-format
 msgid "Offset"
 msgstr "Μετατόπιση"
 
@@ -12978,10 +12958,9 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:566
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:769
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:342
-#, fuzzy, kde-format
-#| msgid "Horizontal"
+#, kde-format
 msgid "Horizontal:"
-msgstr "Οριζόντια"
+msgstr "Οριζόντια:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVertical)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalSpacing)
@@ -12989,10 +12968,9 @@ msgstr "Οριζόντια"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:867
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:724
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:428
-#, fuzzy, kde-format
-#| msgid "Vertical"
+#, kde-format
 msgid "Vertical:"
-msgstr "Κατακόρυφα"
+msgstr "Κατακόρυφα:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
@@ -13000,10 +12978,9 @@ msgstr "Κατακόρυφα"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:802
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:717
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:414
-#, fuzzy, kde-format
-#| msgid "Left"
+#, kde-format
 msgid "Left:"
-msgstr "Αριστερά"
+msgstr "Αριστερά:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
@@ -14533,17 +14510,15 @@ msgid ""
 msgstr ""
 
 #: src/frontend/HistoryDialog.cpp:44
-#, fuzzy, kde-format
-#| msgid "Undo/Redo History"
+#, kde-format
 msgctxt "@title:window"
 msgid "Undo/Redo History"
 msgstr "Αναίρεση/Επαναφορά ιστορικού"
 
 #: src/frontend/HistoryDialog.cpp:56
-#, fuzzy, kde-format
-#| msgid "Clear"
+#, kde-format
 msgid "&Clear"
-msgstr "Καθαρισμός"
+msgstr "Κ&αθαρισμός"
 
 #: src/frontend/HistoryDialog.cpp:57
 #, kde-format
@@ -14558,8 +14533,7 @@ msgid "Do you really want to clear the undo history?"
 msgstr ""
 
 #: src/frontend/HistoryDialog.cpp:93
-#, fuzzy, kde-format
-#| msgid "Clear history"
+#, kde-format
 msgid "Clear History"
 msgstr "Καθαρισμός ιστορικού"
 
@@ -14670,11 +14644,10 @@ msgstr "Stefan Gerlach"
 
 #: src/frontend/LabPlot.cpp:94 src/frontend/LabPlot.cpp:95
 #: src/frontend/LabPlot.cpp:96 src/frontend/LabPlot.cpp:97
-#, fuzzy, kde-format
-#| msgid "developer"
+#, kde-format
 msgctxt "@info:credit"
 msgid "Developer"
-msgstr "προγραματιστής"
+msgstr "Προγραματιστής"
 
 #: src/frontend/LabPlot.cpp:95
 #, kde-format
@@ -14708,11 +14681,10 @@ msgid "Andreas Kainz"
 msgstr "Andreas Kainz"
 
 #: src/frontend/LabPlot.cpp:102
-#, fuzzy, kde-format
-#| msgid "icon designer"
+#, kde-format
 msgctxt "@info:credit"
 msgid "Icon designer"
-msgstr "σχεδιαστής εικονιδίων"
+msgstr "Σχεδιαστής εικονιδίων"
 
 #: src/frontend/LabPlot.cpp:103
 #, kde-format
@@ -14720,10 +14692,7 @@ msgid "Yuri Chornoivan"
 msgstr "Yuri Chornoivan"
 
 #: src/frontend/LabPlot.cpp:104
-#, fuzzy, kde-format
-#| msgid ""
-#| "Help on many questions about the KDE-infrastructure and translation "
-#| "related topics"
+#, kde-format
 msgctxt "@info:credit"
 msgid ""
 "Help on many questions about the KDE-infrastructure and translation related "
@@ -15060,10 +15029,9 @@ msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr ""
 
 #: src/frontend/MainWin.cpp:689
-#, fuzzy, kde-format
-#| msgid "Export"
+#, kde-format
 msgid "Export..."
-msgstr "Εξαγωγή"
+msgstr "Εξαγωγή..."
 
 #: src/frontend/MainWin.cpp:690
 #, fuzzy, kde-format
@@ -15088,10 +15056,9 @@ msgid "Open dialog to browse through the available color maps."
 msgstr ""
 
 #: src/frontend/MainWin.cpp:711
-#, fuzzy, kde-format
-#| msgid "FITS Metadata Editor"
+#, kde-format
 msgid "FITS Metadata Editor..."
-msgstr "Επεξεργαστής μεταδεδομένων FITS"
+msgstr "Επεξεργαστής μεταδεδομένων FITS..."
 
 #: src/frontend/MainWin.cpp:712
 #, kde-format
@@ -15099,10 +15066,9 @@ msgid "Open editor to edit FITS meta data"
 msgstr ""
 
 #: src/frontend/MainWin.cpp:721
-#, fuzzy, kde-format
-#| msgid "Undo/Redo History"
+#, kde-format
 msgid "Undo/Redo History..."
-msgstr "Αναίρεση/Επαναφορά ιστορικού"
+msgstr "Αναίρεση/Επαναφορά ιστορικού..."
 
 #: src/frontend/MainWin.cpp:741
 #, kde-format
@@ -15166,8 +15132,7 @@ msgid "Project Explorer"
 msgstr "Εξερευνητής Έργων"
 
 #: src/frontend/MainWin.cpp:806
-#, fuzzy, kde-format
-#| msgid "Properties explorer"
+#, kde-format
 msgid "Properties Explorer"
 msgstr "Εξερευνητής ιδιοτήτων"
 
@@ -15218,8 +15183,7 @@ msgid "%1: created"
 msgstr "Το έργο %1 δημιουργήθηκε"
 
 #: src/frontend/MainWin.cpp:1356
-#, fuzzy, kde-format
-#| msgid "Project Explorer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Εξερευνητής Έργων"
@@ -15261,8 +15225,7 @@ msgid "All supported files (%1)"
 msgstr ""
 
 #: src/frontend/MainWin.cpp:1485
-#, fuzzy, kde-format
-#| msgid "Open project"
+#, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Άνοιγμα έργου"
@@ -15274,8 +15237,7 @@ msgstr "το αρχείο %1 του έργου είναι ήδη ανοιχτό.
 
 #: src/frontend/MainWin.cpp:1502 src/frontend/MainWin.cpp:1510
 #: src/frontend/MainWin.cpp:1515
-#, fuzzy, kde-format
-#| msgid "Open project"
+#, kde-format
 msgid "Open Project"
 msgstr "Άνοιγμα έργου"
 
@@ -15431,8 +15393,7 @@ msgstr ""
 
 #: src/frontend/matrix/MatrixFunctionDialog.cpp:45
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:43
-#, fuzzy, kde-format
-#| msgid "Function values"
+#, kde-format
 msgctxt "@title:window"
 msgid "Function Values"
 msgstr "Τιμές συνάρτησης"
@@ -16083,8 +16044,7 @@ msgstr ""
 
 #: src/frontend/SettingsDialog.cpp:49 src/frontend/SettingsDialog.cpp:119
 #: src/frontend/SettingsDialog.cpp:126
-#, fuzzy, kde-format
-#| msgid "Preferences"
+#, kde-format
 msgctxt "@title:window"
 msgid "Preferences"
 msgstr "Προτιμήσεις"
@@ -16171,8 +16131,7 @@ msgid "Create New Project"
 msgstr "Δημιουργία νέου κενού έργου"
 
 #: src/frontend/SettingsGeneralPage.cpp:219
-#, fuzzy, kde-format
-#| msgid "Load last used project"
+#, kde-format
 msgid "Load Last Used Project"
 msgstr "Φόρτωση τελευταίου έργου"
 
@@ -16450,8 +16409,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:136
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:526
-#, fuzzy, kde-format
-#| msgid "Mean"
+#, kde-format
 msgid "Mean"
 msgstr "Μέσος"
 
@@ -16971,8 +16929,7 @@ msgstr ""
 #: src/frontend/spreadsheet/FlattenColumnsDialog.cpp:183
 #: src/frontend/ui/datasources/datasetmetadatamanagerwidget.ui:24
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:501
-#, fuzzy, kde-format
-#| msgid "Category"
+#, kde-format
 msgid "Category"
 msgstr "Κατηγορία"
 
@@ -16988,10 +16945,9 @@ msgid "Format the cells according the level and color settings"
 msgstr ""
 
 #: src/frontend/spreadsheet/FormattingHeatmapDialog.cpp:48
-#, fuzzy, kde-format
-#| msgid "Format"
+#, kde-format
 msgid "&Format"
-msgstr "Τύπος"
+msgstr "Τύ&πος"
 
 #. i18n: ectx: property (text), widget (QLabel, lBackground)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsBackground)
@@ -19223,10 +19179,9 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:33
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:534
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:538
-#, fuzzy, kde-format
-#| msgid "Type"
+#, kde-format
 msgid "Type:"
-msgstr "Τύπος"
+msgstr "Τύπος:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPointSeparation)
 #: src/frontend/ui/datapickerimagewidget.ui:782
@@ -19508,8 +19463,7 @@ msgstr "Δημιουργία νέου χρωματικού χάρτη"
 #: src/frontend/ui/spreadsheet/samplevalueswidget.ui:14
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:14
 #: src/frontend/ui/worksheet/worksheetpreviewwidget.ui:14
-#, fuzzy, kde-format
-#| msgid "Form"
+#, kde-format
 msgid "Form"
 msgstr "Φόρμα"
 
@@ -19753,10 +19707,9 @@ msgstr "Εμφανίζει το περιεχόμενο ενός NetCDF αρχε�
 
 #. i18n: ectx: property (text), widget (QLabel, lImportFormat)
 #: src/frontend/ui/datasources/imageoptionswidget.ui:30
-#, fuzzy, kde-format
-#| msgid "Import as: "
+#, kde-format
 msgid "Import as:"
-msgstr "Εισαγωγή ως: "
+msgstr "Εισαγωγή ως:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbImportFormat)
 #: src/frontend/ui/datasources/imageoptionswidget.ui:50
@@ -19921,10 +19874,9 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/matrixdock.ui:285
 #: src/frontend/ui/dockwidgets/valuewidget.ui:211
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:238
-#, fuzzy, kde-format
-#| msgid "Precision"
+#, kde-format
 msgid "Precision:"
-msgstr "Ακρίβεια"
+msgstr "Ακρίβεια:"
 
 #. i18n: ectx: property (text), widget (QLabel, lWarningLimitedMessages)
 #: src/frontend/ui/datasources/importfilewidget.ui:529
@@ -20073,20 +20025,18 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lGraphLayer)
 #: src/frontend/ui/datasources/importoriginlayersdialog.ui:27
-#, fuzzy, kde-format
-#| msgid "Import as: "
+#, kde-format
 msgid "Import As"
-msgstr "Εισαγωγή ως: "
+msgstr "Εισαγωγή ως"
 
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #: src/frontend/ui/datasources/importprojectwidget.ui:23
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:92
 #: src/frontend/ui/dockwidgets/imagedock.ui:140
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:29
-#, fuzzy, kde-format
-#| msgid "File name"
+#, kde-format
 msgid "File name:"
-msgstr "Όνομα αρχείου"
+msgstr "Όνομα αρχείου:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbObjects)
 #: src/frontend/ui/datasources/importprojectwidget.ui:49
@@ -20112,10 +20062,9 @@ msgstr "Φόρτωση τελευταίου έργου"
 #. i18n: ectx: property (text), widget (QLabel, lFolder)
 #: src/frontend/ui/datasources/importprojectwidget.ui:114
 #: src/frontend/ui/PlotTemplateDialog.ui:115
-#, fuzzy, kde-format
-#| msgid "Folder"
+#, kde-format
 msgid "Folder:"
-msgstr "Φάκελος"
+msgstr "Φάκελος:"
 
 #. i18n: ectx: property (text), widget (QLabel, lImportFrom)
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:65
@@ -20311,10 +20260,9 @@ msgstr "Γραμμή έναρξης:"
 #. i18n: ectx: property (text), widget (QLabel, lStart)
 #: src/frontend/ui/dockwidgets/axisdock.ui:72
 #: src/frontend/ui/dockwidgets/axisdock.ui:269
-#, fuzzy, kde-format
-#| msgid "Start"
+#, kde-format
 msgid "Start:"
-msgstr "Έναρξη"
+msgstr "Έναρξη:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkShowScaleOffset)
 #: src/frontend/ui/dockwidgets/axisdock.ui:79
@@ -20358,10 +20306,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lScale)
 #: src/frontend/ui/dockwidgets/axisdock.ui:151
-#, fuzzy, kde-format
-#| msgid "Scale"
+#, kde-format
 msgid "Scale:"
-msgstr "Κλίμακα"
+msgstr "Κλίμακα:"
 
 #. i18n: ectx: property (text), widget (QLabel, lZeroOffset)
 #: src/frontend/ui/dockwidgets/axisdock.ui:174
@@ -20398,10 +20345,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lScalingFactor)
 #: src/frontend/ui/dockwidgets/axisdock.ui:372
-#, fuzzy, kde-format
-#| msgid "Scaling factor"
+#, kde-format
 msgid "Scaling Factor:"
-msgstr "Παράγοντας κλιμάκωσης"
+msgstr "Παράγοντας κλιμάκωσης:"
 
 #. i18n: ectx: property (text), widget (QLabel, lAutoScale)
 #. i18n: ectx: property (text), widget (QLabel, lRangeType)
@@ -20429,10 +20375,9 @@ msgstr "Διαφορισμός:"
 
 #. i18n: ectx: property (text), widget (QLabel, lArrow)
 #: src/frontend/ui/dockwidgets/axisdock.ui:512
-#, fuzzy, kde-format
-#| msgid "Arrow:"
+#, kde-format
 msgid "Arrow"
-msgstr "Βέλος:"
+msgstr "Βέλος"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbOpacity)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbBorderOpacity)
@@ -20483,8 +20428,7 @@ msgstr "Χρώμα κειμένου"
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksSpacingNumeric)
 #: src/frontend/ui/dockwidgets/axisdock.ui:732
 #: src/frontend/ui/dockwidgets/axisdock.ui:1000
-#, fuzzy, kde-format
-#| msgid "Spacing:"
+#, kde-format
 msgid "Spacing:"
 msgstr "Απόσταση:"
 
@@ -20530,10 +20474,9 @@ msgstr "Στήλη έναρξης:"
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:35
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:130
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:124
-#, fuzzy, kde-format
-#| msgid "Direction"
+#, kde-format
 msgid "Direction:"
-msgstr "Κατεύυνση"
+msgstr "Κατεύυνση:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFirstTickData)
 #: src/frontend/ui/dockwidgets/axisdock.ui:934
@@ -20636,10 +20579,9 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/valuewidget.ui:310
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:301
 #: src/frontend/ui/labelwidget.ui:652
-#, fuzzy, kde-format
-#| msgid "Font"
+#, kde-format
 msgid "Font:"
-msgstr "Γραμματοσειρά"
+msgstr "Γραμματοσειρά:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsSuffix)
 #. i18n: ectx: property (text), widget (QLabel, lSuffix)
@@ -20647,10 +20589,9 @@ msgstr "Γραμματοσειρά"
 #: src/frontend/ui/dockwidgets/axisdock.ui:1312
 #: src/frontend/ui/dockwidgets/valuewidget.ui:293
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:287
-#, fuzzy, kde-format
-#| msgid "Suffix"
+#, kde-format
 msgid "Suffix:"
-msgstr "Κατάληξη"
+msgstr "Κατάληξη:"
 
 #. i18n: ectx: property (text), widget (QLabel, lRugOffset)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsOffset)
@@ -20659,10 +20600,9 @@ msgstr "Κατάληξη"
 #: src/frontend/ui/dockwidgets/histogramdock.ui:518
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:436
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:641
-#, fuzzy, kde-format
-#| msgid "Offset"
+#, kde-format
 msgid "Offset:"
-msgstr "Μετατόπιση"
+msgstr "Μετατόπιση:"
 
 #. i18n: ectx: property (text), widget (QLabel, lOpacity)
 #. i18n: ectx: property (text), widget (QLabel, lBorderOpacity)
@@ -20719,10 +20659,9 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/axisdock.ui:1505
 #: src/frontend/ui/dockwidgets/valuewidget.ui:276
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:428
-#, fuzzy, kde-format
-#| msgid "Prefix"
+#, kde-format
 msgid "Prefix:"
-msgstr "Πρόθεμα"
+msgstr "Πρόθεμα:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFontColor)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsColor)
@@ -20766,10 +20705,9 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:336
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:611
 #: src/frontend/ui/mqttwillsettingswidget.ui:346
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgid "Enabled:"
-msgstr "Ενεργό"
+msgstr "Ενεργό:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFirstColor)
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:155
@@ -20782,10 +20720,9 @@ msgstr "Χρώμα κειμένου"
 
 #. i18n: ectx: property (text), widget (QLabel, lSecondColor)
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:213
-#, fuzzy, kde-format
-#| msgid "Second color"
+#, kde-format
 msgid "Second color:"
-msgstr "Δεύτερο χρώμα"
+msgstr "Δεύτερο χρώμα:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkVisible)
 #: src/frontend/ui/dockwidgets/barplotdock.ui:61
@@ -20813,10 +20750,9 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:99
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:220
 #: src/frontend/ui/labelwidget.ui:221 src/frontend/ui/labelwidget.ui:769
-#, fuzzy, kde-format
-#| msgid "x"
+#, kde-format
 msgid "x:"
-msgstr "x"
+msgstr "x:"
 
 #. i18n: ectx: property (text), widget (QLabel, lXColumn)
 #. i18n: ectx: property (text), widget (QLabel, lDataColumn)
@@ -20846,10 +20782,9 @@ msgstr "x-Data"
 #: src/frontend/ui/dockwidgets/custompointdock.ui:293
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:50
 #: src/frontend/ui/labelwidget.ui:576
-#, fuzzy, kde-format
-#| msgid "y"
+#, kde-format
 msgid "y:"
-msgstr "y"
+msgstr "y:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabBars)
 #: src/frontend/ui/dockwidgets/barplotdock.ui:243
@@ -21086,8 +21021,7 @@ msgstr "Τύπος"
 #. i18n: ectx: property (text), widget (QTableWidget, twXRanges)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:213
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:353
-#, fuzzy, kde-format
-#| msgid "Start"
+#, kde-format
 msgid "Start"
 msgstr "Έναρξη"
 
@@ -21103,8 +21037,7 @@ msgstr "Τέλος"
 #. i18n: ectx: property (text), widget (QTableWidget, twXRanges)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:223
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:363
-#, fuzzy, kde-format
-#| msgid "Scale"
+#, kde-format
 msgid "Scale"
 msgstr "Κλίμακα"
 
@@ -21115,10 +21048,9 @@ msgstr "Κλίμακα"
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:17
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:424
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:496
-#, fuzzy, kde-format
-#| msgid "Points"
+#, kde-format
 msgid "Points:"
-msgstr "Σημεία"
+msgstr "Σημεία:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbAddXRange)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:272
@@ -21260,17 +21192,15 @@ msgstr " cm"
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:212
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:59
 #: src/frontend/ui/labelwidget.ui:645
-#, fuzzy, kde-format
-#| msgid "Geometry:"
+#, kde-format
 msgid "Geometry"
 msgstr "Γεωμετρία"
 
 #. i18n: ectx: property (text), widget (QLabel, lPadding)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:634
-#, fuzzy, kde-format
-#| msgid "Padding:"
+#, kde-format
 msgid "Padding"
-msgstr "Γέμιση:"
+msgstr "Γέμιση"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:648
@@ -21284,30 +21214,27 @@ msgstr "Παράμετρος"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:655
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:840
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:349
-#, fuzzy, kde-format
-#| msgid "Bottom"
+#, kde-format
 msgid "Bottom:"
-msgstr "Βάση"
+msgstr "Βάση:"
 
 #. i18n: ectx: property (text), widget (QLabel, lRightMargin)
 #. i18n: ectx: property (text), widget (QLabel, lHeight)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:757
 #: src/frontend/ui/dockwidgets/imagedock.ui:523
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:33
-#, fuzzy, kde-format
-#| msgid "Height"
+#, kde-format
 msgid "Height:"
-msgstr "Ύψος"
+msgstr "Ύψος:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontalRight)
 #. i18n: ectx: property (text), widget (QLabel, lRightMargin)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:816
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:776
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:369
-#, fuzzy, kde-format
-#| msgid "Right"
+#, kde-format
 msgid "Right:"
-msgstr "Δεξιά"
+msgstr "Δεξιά:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabScales)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:875
@@ -21323,10 +21250,9 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:917
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:27
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:144
-#, fuzzy, kde-format
-#| msgid "To"
+#, kde-format
 msgid "To:"
-msgstr "Έως"
+msgstr "Έως:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bAddXBreak)
 #. i18n: ectx: property (toolTip), widget (QPushButton, bAddYBreak)
@@ -21367,10 +21293,9 @@ msgstr "x-Range"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1170
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:60
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:107
-#, fuzzy, kde-format
-#| msgid "From"
+#, kde-format
 msgid "From:"
-msgstr "Από"
+msgstr "Από:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1126
@@ -21468,10 +21393,9 @@ msgstr "ορισμός μορφής ημερομηνίας-ώρας σε %1"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabels)
 #: src/frontend/ui/dockwidgets/columndock.ui:153
-#, fuzzy, kde-format
-#| msgid "Labels"
+#, kde-format
 msgid "Labels:"
-msgstr "Ετικέτες"
+msgstr "Ετικέτες:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumericFormat)
 #. i18n: ectx: property (text), widget (QLabel, lValuesNumericFormat)
@@ -21484,10 +21408,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lType)
 #: src/frontend/ui/dockwidgets/columndock.ui:241
-#, fuzzy, kde-format
-#| msgid "Data Type"
+#, kde-format
 msgid "Data Type:"
-msgstr "τύπος δεδομένων"
+msgstr "τύπος δεδομένων:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotDesignation)
 #: src/frontend/ui/dockwidgets/columndock.ui:315
@@ -21547,10 +21470,9 @@ msgstr "Δεδομένα, -"
 #. i18n: ectx: property (text), widget (QLabel, lYDataMinus)
 #: src/frontend/ui/dockwidgets/errorbarwidget.ui:117
 #: src/frontend/ui/dockwidgets/errorbarwidget.ui:183
-#, fuzzy, kde-format
-#| msgid "Data, -"
+#, kde-format
 msgid "Data, -:"
-msgstr "Δεδομένα, -"
+msgstr "Δεδομένα, -:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCapSize)
 #: src/frontend/ui/dockwidgets/errorbarwidget.ui:150
@@ -21604,10 +21526,9 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/histogramdock.ui:174
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:137
 #: src/frontend/ui/spreadsheet/samplevalueswidget.ui:47
-#, fuzzy, kde-format
-#| msgid "Method"
+#, kde-format
 msgid "Method:"
-msgstr "Μέθοδος"
+msgstr "Μέθοδος:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMaximum)
 #. i18n: ectx: property (text), widget (QLabel, lMax)
@@ -21858,10 +21779,9 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/matrixdock.ui:92
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:215
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:400
-#, fuzzy, kde-format
-#| msgid "Rows"
+#, kde-format
 msgid "Rows:"
-msgstr "Γραμμές"
+msgstr "Γραμμές:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMapping)
 #: src/frontend/ui/dockwidgets/matrixdock.ui:160
@@ -21871,17 +21791,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lXStart)
 #: src/frontend/ui/dockwidgets/matrixdock.ui:167
-#, fuzzy, kde-format
-#| msgid "x-Start"
+#, kde-format
 msgid "X-Start:"
-msgstr "x-Start"
+msgstr "x-Start:"
 
 #. i18n: ectx: property (text), widget (QLabel, lXMax)
 #: src/frontend/ui/dockwidgets/matrixdock.ui:181
-#, fuzzy, kde-format
-#| msgid "x-End"
+#, kde-format
 msgid "X-End:"
-msgstr "x-End"
+msgstr "x-End:"
 
 #. i18n: ectx: property (text), widget (QLabel, lYStart)
 #: src/frontend/ui/dockwidgets/matrixdock.ui:211
@@ -21899,15 +21817,13 @@ msgstr "x-End"
 
 #. i18n: ectx: property (text), widget (QLabel, lHeader)
 #: src/frontend/ui/dockwidgets/matrixdock.ui:305
-#, fuzzy, kde-format
-#| msgid "Header"
+#, kde-format
 msgid "Header:"
-msgstr "Κεφαλίδα"
+msgstr "Κεφαλίδα:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bEvaluate)
 #: src/frontend/ui/dockwidgets/notebookdock.ui:100
-#, fuzzy, kde-format
-#| msgid "Evaluate"
+#, kde-format
 msgid "Evaluate"
 msgstr "Αξιολόγηση"
 
@@ -21920,17 +21836,15 @@ msgstr "Έναρξη"
 
 #. i18n: ectx: property (text), widget (QLabel, bgcolor)
 #: src/frontend/ui/dockwidgets/notedock.ui:72
-#, fuzzy, kde-format
-#| msgid "Background Color"
+#, kde-format
 msgid "Background color:"
-msgstr "Χρώμα παρασκηνίου"
+msgstr "Χρώμα παρασκηνίου:"
 
 #. i18n: ectx: property (text), widget (QLabel, textcolor)
 #: src/frontend/ui/dockwidgets/notedock.ui:82
-#, fuzzy, kde-format
-#| msgid "Text Color"
+#, kde-format
 msgid "Text color:"
-msgstr "Χρώμα κειμένου"
+msgstr "Χρώμα κειμένου:"
 
 #. i18n: ectx: property (text), widget (QLabel, lData2Column)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:81
@@ -21993,10 +21907,9 @@ msgstr "Διαστάσεις:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: src/frontend/ui/dockwidgets/projectdock.ui:73
-#, fuzzy, kde-format
-#| msgid "Created"
+#, kde-format
 msgid "Created:"
-msgstr "Δημιουργήθηκε"
+msgstr "Δημιουργήθηκε:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveDockStates)
 #: src/frontend/ui/dockwidgets/projectdock.ui:80
@@ -22017,10 +21930,9 @@ msgstr "Τελευταία αλλαγή"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/dockwidgets/projectdock.ui:114
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:49
-#, fuzzy, kde-format
-#| msgid "File name"
+#, kde-format
 msgid "File Name:"
-msgstr "Όνομα αρχείου"
+msgstr "Όνομα αρχείου:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSettings)
 #: src/frontend/ui/dockwidgets/projectdock.ui:202
@@ -22031,10 +21943,9 @@ msgstr "Πλήθος επιπέδων"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/frontend/ui/dockwidgets/projectdock.ui:209
-#, fuzzy, kde-format
-#| msgid "Author"
+#, kde-format
 msgid "Author:"
-msgstr "Συγγραφέας"
+msgstr "Συγγραφέας:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
 #: src/frontend/ui/dockwidgets/projectdock.ui:253
@@ -22046,10 +21957,9 @@ msgstr "Θέση καρτέλας"
 #. i18n: ectx: property (text), widget (QLabel, lDistribution)
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:109
 #: src/frontend/ui/spreadsheet/randomvalueswidget.ui:97
-#, fuzzy, kde-format
-#| msgid "Distribution"
+#, kde-format
 msgid "Distribution:"
-msgstr "Κατανομή"
+msgstr "Κατανομή:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunc)
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:123
@@ -22147,10 +22057,9 @@ msgstr "Εξαγωγή σε"
 #. i18n: ectx: property (text), widget (QLabel, lValuesDistance)
 #: src/frontend/ui/dockwidgets/valuewidget.ui:98
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:378
-#, fuzzy, kde-format
-#| msgid "Distance"
+#, kde-format
 msgid "Distance:"
-msgstr "Απόσταση"
+msgstr "Απόσταση:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPage)
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:66
@@ -22193,10 +22102,9 @@ msgstr "y-Data"
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:431
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:517
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:74
-#, fuzzy, kde-format
-#| msgid "x-Data"
+#, kde-format
 msgid "X-Data:"
-msgstr "x-Data"
+msgstr "X-Data:"
 
 #. i18n: ectx: property (text), widget (QLabel, lXRange)
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:138
@@ -22209,10 +22117,9 @@ msgstr "x-Data"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:57
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:410
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:463
-#, fuzzy, kde-format
-#| msgid "y-Range:"
+#, kde-format
 msgid "X-Range:"
-msgstr "y-Range"
+msgstr "X-Range"
 
 #. i18n: ectx: property (text), widget (QLabel, lY2Column)
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:145
@@ -22315,10 +22222,9 @@ msgstr "%1 τιμή"
 
 #. i18n: ectx: property (text), widget (QLabel, lLineInterpolationPointsCount)
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:133
-#, fuzzy, kde-format
-#| msgid "Interm. points"
+#, kde-format
 msgid "Interm. points:"
-msgstr "Ενδιάμ. σημεία"
+msgstr "Ενδιάμ. σημεία:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLineSkipGaps)
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:140
@@ -22328,10 +22234,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lValuesGeneral_2)
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:153
-#, fuzzy, kde-format
-#| msgid "Connection:"
+#, kde-format
 msgid "Connection"
-msgstr "Σύνδεση:"
+msgstr "Σύνδεση"
 
 #. i18n: ectx: property (text), widget (QLabel, lLineIncreasingXOnly)
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:160
@@ -22351,17 +22256,15 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:152
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:503
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:114
-#, fuzzy, kde-format
-#| msgid "x-Data"
+#, kde-format
 msgid "Y-Data:"
-msgstr "x-Data"
+msgstr "Y-Data"
 
 #. i18n: ectx: property (text), widget (QLabel, lSimplification)
 #: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:30
-#, fuzzy, kde-format
-#| msgid "Simplification:"
+#, kde-format
 msgid "Simplification"
-msgstr "Απλοποίηση:"
+msgstr "Απλοποίηση"
 
 #. i18n: ectx: property (text), widget (QLabel, lOption2)
 #. i18n: ectx: property (text), widget (QLabel, lOption)
@@ -22374,17 +22277,15 @@ msgstr "Επιλογές:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDerivative)
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:292
-#, fuzzy, kde-format
-#| msgid "Derivative"
+#, kde-format
 msgid "Derivative:"
-msgstr "Παράγωγος"
+msgstr "Παράγωγος:"
 
 #. i18n: ectx: property (text), widget (QLabel, lAccuracyOrder)
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:384
-#, fuzzy, kde-format
-#| msgid "Accuracy order"
+#, kde-format
 msgid "Accuracy Order:"
-msgstr "Τάξη ακρίβειας"
+msgstr "Τάξη ακρίβειας:"
 
 #. i18n: ectx: property (text), widget (QLabel, lEquation1)
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:108
@@ -22503,10 +22404,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lCategory)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:198
-#, fuzzy, kde-format
-#| msgid "Category"
+#, kde-format
 msgid "Category:"
-msgstr "Κατηγορία"
+msgstr "Κατηγορία:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, lData)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:217
@@ -22556,8 +22456,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, lWeights)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:404
-#, fuzzy, kde-format
-#| msgid "Weights"
+#, kde-format
 msgid "Weights:"
 msgstr "Βάρη:"
 
@@ -22640,10 +22539,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lModel)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:791
-#, fuzzy, kde-format
-#| msgid "Model"
+#, kde-format
 msgid "Model:"
-msgstr "Μοντέλο"
+msgstr "Μοντέλο:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lEquation)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:847
@@ -22775,17 +22673,15 @@ msgstr "x-Range"
 
 #. i18n: ectx: property (text), widget (QLabel, lForm)
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:31
-#, fuzzy, kde-format
-#| msgid "Form"
+#, kde-format
 msgid "Form:"
-msgstr "Φόρμα"
+msgstr "Φόρμα:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCutoff2)
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:297
-#, fuzzy, kde-format
-#| msgid "Cutoff2"
+#, kde-format
 msgid "Cutoff2:"
-msgstr "Cutoff2"
+msgstr "Cutoff2:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFilter)
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:423
@@ -22821,10 +22717,9 @@ msgstr "Κλίμακα"
 
 #. i18n: ectx: property (text), widget (QLabel, lWindow)
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:193
-#, fuzzy, kde-format
-#| msgid "Window"
+#, kde-format
 msgid "Window:"
-msgstr "Παράθυρο"
+msgstr "Παράθυρο:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunc)
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:136
@@ -22837,8 +22732,7 @@ msgstr "Συναρτήσεις"
 #. i18n: ectx: property (text), widget (QLabel, lFunction)
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:197
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:122
-#, fuzzy, kde-format
-#| msgid "f(x) ="
+#, kde-format
 msgid "f(x) = "
 msgstr "f(x) ="
 
@@ -22857,17 +22751,15 @@ msgstr "Διακύμανση"
 
 #. i18n: ectx: property (text), widget (QLabel, lParameter)
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:159
-#, fuzzy, kde-format
-#| msgid "Parameter"
+#, kde-format
 msgid "Parameter:"
-msgstr "Παράμετρος"
+msgstr "Παράμετρος:"
 
 #. i18n: ectx: property (text), widget (QLabel, lEval)
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:189
-#, fuzzy, kde-format
-#| msgid "Evaluate"
+#, kde-format
 msgid "Evaluate:"
-msgstr "Αξιολόγηση"
+msgstr "Αξιολόγηση:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTension)
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:440
@@ -22878,8 +22770,7 @@ msgstr "Διαστάσεις:"
 
 #. i18n: ectx: property (text), widget (QLabel, lContinuity)
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:469
-#, fuzzy, kde-format
-#| msgid "Continuity"
+#, kde-format
 msgid "Continuity:"
 msgstr "Συνέχεια:"
 
@@ -22891,10 +22782,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lPercentile)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:17
-#, fuzzy, kde-format
-#| msgid "Percentile"
+#, kde-format
 msgid "Percentile:"
-msgstr "Εκατοστημόριο"
+msgstr "Εκατοστημόριο:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMode)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:50
@@ -22905,17 +22795,15 @@ msgstr "Γέμιση:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftValue)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:180
-#, fuzzy, kde-format
-#| msgid "Left value"
+#, kde-format
 msgid "Left value:"
-msgstr "Αριστερή τιμή"
+msgstr "Αριστερή τιμή:"
 
 #. i18n: ectx: property (text), widget (QLabel, lRightValue)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:187
-#, fuzzy, kde-format
-#| msgid "Right value"
+#, kde-format
 msgid "Right value:"
-msgstr "Δεξιά τιμή"
+msgstr "Δεξιά τιμή:"
 
 #. i18n: ectx: property (text), widget (QLabel, lWeight)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:233
@@ -22966,10 +22854,9 @@ msgstr "Ορίζει το όνομα του αρχείου προς εισαγω
 
 #. i18n: ectx: property (text), widget (QLabel, lEps)
 #: src/frontend/ui/fitoptionswidget.ui:69
-#, fuzzy, kde-format
-#| msgid "Tolerance"
+#, kde-format
 msgid "Tolerance:"
-msgstr "Ανοχή"
+msgstr "Ανοχή:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbUseDataErrors)
 #: src/frontend/ui/fitoptionswidget.ui:76
@@ -23018,10 +22905,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMaxIterations)
 #: src/frontend/ui/fitoptionswidget.ui:115
-#, fuzzy, kde-format
-#| msgid "Max. iterations"
+#, kde-format
 msgid "Max. iterations:"
-msgstr "Max. επαναλήψεις"
+msgstr "Max. επαναλήψεις:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbAutoRange)
 #: src/frontend/ui/fitoptionswidget.ui:141
@@ -23075,10 +22961,9 @@ msgstr "Χρονικό διάστημα"
 
 #. i18n: ectx: property (text), widget (QLabel, lUnit)
 #: src/frontend/ui/fitsheadereditaddunitwidget.ui:17
-#, fuzzy, kde-format
-#| msgid "Unit"
+#, kde-format
 msgid "Unit:"
-msgstr "Μονάδα"
+msgstr "Μονάδα:"
 
 #. i18n: ectx: property (text), widget (QLabel, lKey)
 #: src/frontend/ui/fitsheadereditnewkeywordwidget.ui:61
@@ -23088,10 +22973,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bOpen)
 #: src/frontend/ui/fitsheadereditwidget.ui:56
-#, fuzzy, kde-format
-#| msgid "Open File"
+#, kde-format
 msgid "Open File..."
-msgstr "Άνοιγμα αρχείου"
+msgstr "Άνοιγμα αρχείου..."
 
 #. i18n: ectx: property (text), widget (QPushButton, bClose)
 #: src/frontend/ui/fitsheadereditwidget.ui:63
@@ -23121,10 +23005,9 @@ msgstr "Οριζ. απόσταση"
 
 #. i18n: ectx: property (text), widget (QLabel, lFontTeX)
 #: src/frontend/ui/labelwidget.ui:111
-#, fuzzy, kde-format
-#| msgid "Main Font"
+#, kde-format
 msgid "Main font:"
-msgstr "Κύρια γραμματοσειρά"
+msgstr "Κύρια γραμματοσειρά:"
 
 #. i18n: ectx: property (html), widget (ResizableTextEdit, teLabel)
 #: src/frontend/ui/labelwidget.ui:160
@@ -23144,10 +23027,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lBackgroundColor)
 #: src/frontend/ui/labelwidget.ui:231
-#, fuzzy, kde-format
-#| msgid "Background Color"
+#, kde-format
 msgid "Background Color:"
-msgstr "Χρώμα παρασκηνίου"
+msgstr "Χρώμα παρασκηνίου:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lOffsetX)
 #. i18n: ectx: property (toolTip), widget (QLabel, lOffsetY)
@@ -23158,10 +23040,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lOffsetX)
 #: src/frontend/ui/labelwidget.ui:487
-#, fuzzy, kde-format
-#| msgid "Offset X"
+#, kde-format
 msgid "Offset X:"
-msgstr "Μετατόπιση X"
+msgstr "Μετατόπιση X:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/labelwidget.ui:494
@@ -23178,10 +23059,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lOffsetY)
 #: src/frontend/ui/labelwidget.ui:707
-#, fuzzy, kde-format
-#| msgid "Offset Y"
+#, kde-format
 msgid "Offset Y:"
-msgstr "Μετατόπιση Y"
+msgstr "Μετατόπιση Y:"
 
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #: src/frontend/ui/labelwidget.ui:785
@@ -23241,8 +23121,7 @@ msgstr "10"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbWillQoS)
 #: src/frontend/ui/mqttwillsettingswidget.ui:216
-#, fuzzy, kde-format
-#| msgid "2"
+#, kde-format
 msgid "2"
 msgstr "2"
 
@@ -23261,8 +23140,7 @@ msgstr "τύπος εξίσωσης"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbWillUpdate)
 #: src/frontend/ui/mqttwillsettingswidget.ui:239
-#, fuzzy, kde-format
-#| msgid "Time interval"
+#, kde-format
 msgid "Time Interval"
 msgstr "Χρονικό διάστημα"
 
@@ -23274,10 +23152,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lWillUpdateInterval)
 #: src/frontend/ui/mqttwillsettingswidget.ui:255
-#, fuzzy, kde-format
-#| msgid "Time interval"
+#, kde-format
 msgid "Time interval:"
-msgstr "Χρονικό διάστημα"
+msgstr "Χρονικό διάστημα:"
 
 #. i18n: ectx: property (text), widget (QLineEdit, leWillUpdateInterval)
 #: src/frontend/ui/mqttwillsettingswidget.ui:262
@@ -23328,17 +23205,15 @@ msgstr "τύπος δεδομένων"
 #. i18n: ectx: property (text), widget (QCheckBox, chbLevelsEnabled)
 #: src/frontend/ui/plotsurfacestylewidget.ui:30
 #: src/frontend/ui/plotsurfacestylewidget.ui:304
-#, fuzzy, kde-format
-#| msgid "activate"
+#, kde-format
 msgid "Activate"
-msgstr "ενεργοποίηση"
+msgstr "Ενεργοποίηση"
 
 #. i18n: ectx: property (text), widget (QLabel, lColorMap)
 #: src/frontend/ui/plotsurfacestylewidget.ui:40
-#, fuzzy, kde-format
-#| msgid "Color map"
+#, kde-format
 msgid "Color map:"
-msgstr "Χρωματικός χάρτης"
+msgstr "Χρωματικός χάρτης:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bCreateColorMap)
 #: src/frontend/ui/plotsurfacestylewidget.ui:86
@@ -23354,17 +23229,15 @@ msgstr "Άνοιγμα υφιστάμενου χρωματικού χάρτη"
 
 #. i18n: ectx: property (text), widget (QLabel, lFillBrushStyle)
 #: src/frontend/ui/plotsurfacestylewidget.ui:211
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgid "Pattern:"
-msgstr "Μοτίβο"
+msgstr "Μοτίβο:"
 
 #. i18n: ectx: property (text), widget (QLabel, lThreshold)
 #: src/frontend/ui/plotsurfacestylewidget.ui:221
-#, fuzzy, kde-format
-#| msgid "Threshold"
+#, kde-format
 msgid "Threshold:"
-msgstr "Κατώφλι"
+msgstr "Κατώφλι:"
 
 #. i18n: ectx: property (text), widget (QLineEdit, leThreshold)
 #. i18n: ectx: property (text), widget (QLineEdit, leLevelsNumber)
@@ -23396,24 +23269,21 @@ msgstr "Επίπεδα"
 
 #. i18n: ectx: property (text), widget (QLabel, lLevelsNumber)
 #: src/frontend/ui/plotsurfacestylewidget.ui:284
-#, fuzzy, kde-format
-#| msgid "Number of levels"
+#, kde-format
 msgid "Number of levels:"
-msgstr "Πλήθος επιπέδων"
+msgstr "Πλήθος επιπέδων:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLevelsLineWidth)
 #: src/frontend/ui/plotsurfacestylewidget.ui:314
-#, fuzzy, kde-format
-#| msgid "Line width"
+#, kde-format
 msgid "Line width:"
-msgstr "Πλάτος γραμμής"
+msgstr "Πλάτος γραμμής:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLevelsLineColor)
 #: src/frontend/ui/plotsurfacestylewidget.ui:331
-#, fuzzy, kde-format
-#| msgid "Line color"
+#, kde-format
 msgid "Line color:"
-msgstr "Χρώμα γραμμής"
+msgstr "Χρώμα γραμμής:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbLevelsMultiColoring)
 #: src/frontend/ui/plotsurfacestylewidget.ui:341
@@ -23476,8 +23346,7 @@ msgstr "&Αρχείο"
 
 #. i18n: ectx: property (text), widget (QPushButton, bClearCache)
 #: src/frontend/ui/settingsdatasetspage.ui:93
-#, fuzzy, kde-format
-#| msgid "Clear"
+#, kde-format
 msgid "Clear"
 msgstr "Καθαρισμός"
 
@@ -23704,8 +23573,7 @@ msgstr "TODO"
 
 #. i18n: ectx: property (text), widget (QLabel, lAppearance)
 #: src/frontend/ui/settingsspreadsheetpage.ui:23
-#, fuzzy, kde-format
-#| msgid "Header"
+#, kde-format
 msgid "Header"
 msgstr "Κεφαλίδα"
 
@@ -23738,10 +23606,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPresenterModeInteractive)
 #: src/frontend/ui/settingsworksheetpage.ui:82
-#, fuzzy, kde-format
-#| msgid "interactive"
+#, kde-format
 msgid "Interactive"
-msgstr "διαδραστικό"
+msgstr "Διαδραστικό"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDoubleBuffering)
 #: src/frontend/ui/settingsworksheetpage.ui:118
@@ -23751,10 +23618,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lTexEngine)
 #: src/frontend/ui/settingsworksheetpage.ui:154
-#, fuzzy, kde-format
-#| msgid "Typesetting engine"
+#, kde-format
 msgid "Typesetting engine:"
-msgstr "Μηχανή στοιχειοθεσίας"
+msgstr "Μηχανή στοιχειοθεσίας:"
 
 #. i18n: ectx: property (text), widget (QLabel, lType)
 #: src/frontend/ui/spreadsheet/addsubtractvaluewidget.ui:42
@@ -23873,17 +23739,15 @@ msgstr "Ορίζει το όνομα του αρχείου προς εισαγω
 
 #. i18n: ectx: property (text), widget (QLabel, lExportArea)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:135
-#, fuzzy, kde-format
-#| msgid "Area to export"
+#, kde-format
 msgid "Area to export:"
-msgstr "Περιοχή προς εξαγωγή"
+msgstr "Περιοχή προς εξαγωγή:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMatrixHHeader)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:142
-#, fuzzy, kde-format
-#| msgid "Export horizontal header"
+#, kde-format
 msgid "Export horizontal header:"
-msgstr "Εξαγωγή οριζόντιας επικεφαλίδας"
+msgstr "Εξαγωγή οριζόντιας επικεφαλίδας:"
 
 #. i18n: ectx: property (text), widget (QLabel, lEmptyRows)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:149
@@ -23893,10 +23757,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMatrixVHeader)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:156
-#, fuzzy, kde-format
-#| msgid "Export vertical header"
+#, kde-format
 msgid "Export vertical header:"
-msgstr "Εξαγωγή κατακόρυφης επικεφαλίδας"
+msgstr "Εξαγωγή κατακόρυφης επικεφαλίδας:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, compressionGroup)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:192
@@ -23926,10 +23789,9 @@ msgstr "Τύπος αποθήκευσης"
 
 #. i18n: ectx: property (text), widget (QLabel, lExportToFITS)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:232
-#, fuzzy, kde-format
-#| msgid "Export to"
+#, kde-format
 msgid "Export to:"
-msgstr "Εξαγωγή σε"
+msgstr "Εξαγωγή σε:"
 
 #. i18n: ectx: property (text), widget (QLabel, lGridLines)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:253
@@ -23939,10 +23801,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lHeader)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:270
-#, fuzzy, kde-format
-#| msgid "Headers"
+#, kde-format
 msgid "Headers:"
-msgstr "Επικεφαλίδες"
+msgstr "Επικεφαλίδες:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCaptions)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:277
@@ -23953,10 +23814,9 @@ msgstr "Θέση καρτέλας"
 
 #. i18n: ectx: property (text), widget (QLabel, lExportHeader)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:284
-#, fuzzy, kde-format
-#| msgid "Export header"
+#, kde-format
 msgid "Export header:"
-msgstr "Εξαγωγή επικεφαλίδας"
+msgstr "Εξαγωγή επικεφαλίδας:"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnAsUnits)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:307
@@ -23979,10 +23839,9 @@ msgstr "Ύψος"
 
 #. i18n: ectx: property (text), widget (QLabel, lColorMap)
 #: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:38
-#, fuzzy, kde-format
-#| msgid "Color map"
+#, kde-format
 msgid "Color Map:"
-msgstr "Χρωματικός χάρτης"
+msgstr "Χρωματικός χάρτης:"
 
 #. i18n: ectx: property (text), widget (QLabel, lColors)
 #: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:117
@@ -24055,10 +23914,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lParameter2)
 #: src/frontend/ui/spreadsheet/randomvalueswidget.ui:41
-#, fuzzy, kde-format
-#| msgid "2"
+#, kde-format
 msgid "2:"
-msgstr "2"
+msgstr "2:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunc)
 #: src/frontend/ui/spreadsheet/randomvalueswidget.ui:56
@@ -24068,17 +23926,15 @@ msgstr "p(x)"
 
 #. i18n: ectx: property (text), widget (QLabel, lParameter1)
 #: src/frontend/ui/spreadsheet/randomvalueswidget.ui:87
-#, fuzzy, kde-format
-#| msgid "1"
+#, kde-format
 msgid "1:"
-msgstr "1"
+msgstr "1:"
 
 #. i18n: ectx: property (text), widget (QLabel, lParameter3)
 #: src/frontend/ui/spreadsheet/randomvalueswidget.ui:109
-#, fuzzy, kde-format
-#| msgid "3"
+#, kde-format
 msgid "3:"
-msgstr "3"
+msgstr "3:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbDistribution)
 #: src/frontend/ui/spreadsheet/randomvalueswidget.ui:145
@@ -24241,10 +24097,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lExportArea)
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:99
-#, fuzzy, kde-format
-#| msgid "Area to export"
+#, kde-format
 msgid "Area to Export:"
-msgstr "Περιοχή προς εξαγωγή"
+msgstr "Περιοχή προς εξαγωγή:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lExportBackground)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkExportBackground)
@@ -24256,17 +24111,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lExportBackground)
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:119
-#, fuzzy, kde-format
-#| msgid "Export background"
+#, kde-format
 msgid "Export Background:"
-msgstr "Εξαγωγή παρασκηνίου"
+msgstr "Εξαγωγή παρασκηνίου:"
 
 #. i18n: ectx: property (text), widget (QLabel, lResolution)
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:139
-#, fuzzy, kde-format
-#| msgid "Resolution"
+#, kde-format
 msgid "Resolution:"
-msgstr "Ευκρίνεια"
+msgstr "Ευκρίνεια:"
 
 #: src/frontend/widgets/BackgroundWidget.cpp:117
 #, kde-format
@@ -24590,8 +24443,7 @@ msgstr ""
 
 #: src/frontend/widgets/FITSHeaderEditDialog.cpp:45
 #: src/frontend/widgets/FITSHeaderEditDialog.cpp:77
-#, fuzzy, kde-format
-#| msgid "FITS Metadata Editor"
+#, kde-format
 msgctxt "@title:window"
 msgid "FITS Metadata Editor"
 msgstr "Επεξεργαστής μεταδεδομένων FITS"
@@ -25063,10 +24915,9 @@ msgid "X11 Bitmap (XPM)"
 msgstr ""
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:80
-#, fuzzy, kde-format
-#| msgid "&File"
+#, kde-format
 msgid "File"
-msgstr "&Αρχείο"
+msgstr "Αρχείο"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:81
 #, kde-format
@@ -25202,11 +25053,10 @@ msgid "Fit to Selection"
 msgstr "Εξαγωγή σε"
 
 #: src/frontend/worksheet/WorksheetView.cpp:180
-#, fuzzy, kde-format
-#| msgid "Fit:"
+#, kde-format
 msgctxt "Zoom"
 msgid "Fit"
-msgstr "Προσαρμογή:"
+msgstr "Προσαρμογή"
 
 #: src/frontend/worksheet/WorksheetView.cpp:185
 #: src/frontend/worksheet/WorksheetView.cpp:336

@@ -1316,7 +1316,7 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 	// the same will be done for new columns in this->resize().
 	{
 		const auto& columns = children<Column>();
-		for (auto* column : qAsConst(columns))
+		for (auto* column : std::as_const(columns))
 			column->setUndoAware(false);
 	}
 

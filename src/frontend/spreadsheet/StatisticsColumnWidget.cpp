@@ -266,7 +266,7 @@ void StatisticsColumnWidget::showOverviewPlot() {
 
 	// set the axes labels
 	auto axes = plot->children<Axis>();
-	for (auto* axis : qAsConst(axes)) {
+	for (auto* axis : std::as_const(axes)) {
 		axis->setSuppressRetransform(true);
 		if (axis->orientation() == Axis::Orientation::Vertical)
 			axis->title()->setText(QString());
@@ -318,7 +318,7 @@ void StatisticsColumnWidget::showHistogram() {
 	auto* plot = addPlot(&m_histogramWidget);
 
 	auto axes = plot->children<Axis>();
-	for (auto* axis : qAsConst(axes)) {
+	for (auto* axis : std::as_const(axes)) {
 		if (axis->orientation() == Axis::Orientation::Horizontal) {
 			axis->title()->setText(m_column->name());
 			axis->majorGridLine()->setStyle(Qt::NoPen);
@@ -343,7 +343,7 @@ void StatisticsColumnWidget::showKDEPlot() {
 
 	// set the axes labels
 	auto axes = plot->children<Axis>();
-	for (auto* axis : qAsConst(axes)) {
+	for (auto* axis : std::as_const(axes)) {
 		if (axis->orientation() == Axis::Orientation::Horizontal)
 			axis->title()->setText(m_column->name());
 		else
@@ -376,7 +376,7 @@ void StatisticsColumnWidget::showQQPlot() {
 	auto* plot = addPlot(&m_qqPlotWidget);
 
 	auto axes = plot->children<Axis>();
-	for (auto* axis : qAsConst(axes)) {
+	for (auto* axis : std::as_const(axes)) {
 		if (axis->orientation() == Axis::Orientation::Horizontal)
 			axis->title()->setText(i18n("Theoretical Quantiles"));
 		else
@@ -399,7 +399,7 @@ void StatisticsColumnWidget::showBoxPlot() {
 	auto* plot = addPlot(&m_boxPlotWidget);
 
 	auto axes = plot->children<Axis>();
-	for (auto* axis : qAsConst(axes)) {
+	for (auto* axis : std::as_const(axes)) {
 		if (axis->orientation() == Axis::Orientation::Horizontal) {
 			axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
 			axis->setMajorTicksDirection(Axis::noTicks);
@@ -475,7 +475,7 @@ void StatisticsColumnWidget::showBarPlot() {
 
 	// axes properties
 	auto axes = plot->children<Axis>();
-	for (auto* axis : qAsConst(axes)) {
+	for (auto* axis : std::as_const(axes)) {
 		if (axis->orientation() == Axis::Orientation::Horizontal) {
 			axis->title()->setText(QString());
 			axis->majorGridLine()->setStyle(Qt::NoPen);
@@ -613,7 +613,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 	// axes properties
 	auto axes = plot->children<Axis>();
 	bool firstYAxis = false;
-	for (auto* axis : qAsConst(axes)) {
+	for (auto* axis : std::as_const(axes)) {
 		if (axis->orientation() == Axis::Orientation::Horizontal) {
 			axis->title()->setText(QString());
 			axis->majorGridLine()->setStyle(Qt::NoPen);

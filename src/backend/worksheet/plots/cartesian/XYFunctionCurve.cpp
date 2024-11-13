@@ -65,23 +65,19 @@ bool XYFunctionCurve::usingColumn(const AbstractColumn* column, bool indirect) c
 	if (indirect) {
 		for (const auto& d : functionData()) {
 			const auto* curve = d.curve();
-			if (curve) {
-				if (curve->usingColumn(column, indirect))
-					return true;
-			}
+			if (curve && curve->usingColumn(column, indirect))
+				return true;
 		}
 	}
 	return false; // Does not directly use the curves
 }
 
 QVector<const Plot*> XYFunctionCurve::dependingPlots() const {
-	Q_D(const XYFunctionCurve);
 	QVector<const Plot*> plots;
 	for (const auto& d : functionData()) {
 		const auto* curve = d.curve();
-		if (curve) {
+		if (curve)
 			plots.append(curve);
-		}
 	}
 	return plots;
 }
@@ -298,7 +294,7 @@ void XYFunctionCurvePrivate::setFunction(const QString& function, const QVector<
 		if (static_cast<bool>(connection))
 			q->disconnect(connection);
 
-	for (const auto& data : qAsConst(m_functionData)) {
+	for (const auto& data : std::as_const(m_functionData)) {
 		const auto* curve = data.curve();
 		if (curve)
 			connectCurve(curve);
@@ -339,7 +335,7 @@ bool XYFunctionCurvePrivate::recalculateSpecific(const AbstractColumn*, const Ab
 	}
 
 	if (valid) {
-		for (const auto& ed : qAsConst(m_functionData)) {
+		for (const auto& ed : std::as_const(m_functionData)) {
 			const auto* curve = ed.curve();
 			if (!curve || !curve->xColumn() || !curve->yColumn() || curve->xColumn()->rowCount() != numberElements
 				|| curve->yColumn()->rowCount() != numberElements) {
@@ -369,7 +365,7 @@ bool XYFunctionCurvePrivate::recalculateSpecific(const AbstractColumn*, const Ab
 
 		QVector<QVector<double>*> xVectors;
 		QStringList functionVariableNames;
-		for (const auto& functionData : qAsConst(m_functionData)) {
+		for (const auto& functionData : std::as_const(m_functionData)) {
 			const auto* curve = functionData.curve();
 			const auto& varName = functionData.variableName();
 			const auto* column = dynamic_cast<const Column*>(curve->yColumn());
@@ -391,7 +387,9 @@ bool XYFunctionCurvePrivate::recalculateSpecific(const AbstractColumn*, const Ab
 
 		// evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.
 		auto* parser = ExpressionParser::getInstance();
-		parser->evaluateCartesian(m_function, functionVariableNames, xVectors, yVector);
+		bool valid = parser->tryEvaluateCartesian(m_function, functionVariableNames, xVectors, yVector);
+		if (!valid)
+			DEBUG(Q_FUNC_INFO << ", WARNING: failed parsing function!")
 	}
 	m_result.available = true;
 	m_result.valid = valid;

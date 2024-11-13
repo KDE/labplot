@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-05 00:37+0000\n"
-"PO-Revision-Date: 2024-11-03 17:15+0300\n"
+"POT-Creation-Date: 2024-11-13 00:37+0000\n"
+"PO-Revision-Date: 2024-11-09 08:38+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.08.2\n"
+"X-Generator: Lokalize 24.11.70\n"
 "X-POOTLE-MTIME: 1502201241.000000\n"
 
 #, kde-format
@@ -637,13 +637,13 @@ msgid "%1: replace the values for rows %2 to %3"
 msgstr "%1: %2 ile %3 arasındaki satırların değerlerini değiştir"
 
 #: src/backend/core/datatypes/DateTime2StringFilter.cpp:55
-#: src/backend/core/datatypes/String2DateTimeFilter.cpp:131
+#: src/backend/core/datatypes/String2DateTimeFilter.cpp:132
 #, kde-format
 msgid "%1: set date-time format to %2"
 msgstr "%1: Tarih–zaman biçimini %2 olarak ayarla"
 
 #: src/backend/core/datatypes/DateTime2StringFilter.cpp:57
-#: src/backend/core/datatypes/String2DateTimeFilter.cpp:133
+#: src/backend/core/datatypes/String2DateTimeFilter.cpp:134
 #, kde-format
 msgid "set date-time format to %1"
 msgstr "tarih–zaman biçimini %1 olarak ayarla"
@@ -1101,7 +1101,7 @@ msgstr "Geçersiz sütun adları sayısı"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:205
 #, kde-format
-msgid "Matrix: Unsupported Column Mode"
+msgid "Matrix: Unsupported column mode"
 msgstr "Matris: Desteklenmeyen sütun kipi"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:207
@@ -1116,7 +1116,7 @@ msgstr "Üstbilgi ayrıştırılamıyor"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:211
 #, kde-format
-msgid "Unsupported datasource"
+msgid "Unsupported data source"
 msgstr "Desteklenmeyen veri kaynağı"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:215
@@ -1196,20 +1196,20 @@ msgid "Number of lines: %1"
 msgstr "Satır sayısı: %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:522
-#: src/backend/datasources/filters/AsciiFilter.cpp:1264
+#: src/backend/datasources/filters/AsciiFilter.cpp:1293
 #: src/backend/datasources/filters/JsonFilter.cpp:284
 #, kde-format
 msgid "Column %1"
 msgstr "Sütun %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:592
-#: src/backend/datasources/filters/AsciiFilter.cpp:1287
+#: src/backend/datasources/filters/AsciiFilter.cpp:1316
 #, kde-format
 msgid "Timestamp"
 msgstr "Zaman Damgası"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:596
-#: src/backend/datasources/filters/AsciiFilter.cpp:1291
+#: src/backend/datasources/filters/AsciiFilter.cpp:1320
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1270,8 +1270,8 @@ msgstr "Aygıt/dosya açılamadı veya boş."
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1001
 #: src/backend/datasources/filters/OdsFilter.cpp:388
 #: src/backend/datasources/filters/ReadStatFilter.cpp:528
-#: src/backend/datasources/filters/ROOTFilter.cpp:236
-#: src/backend/datasources/filters/ROOTFilter.cpp:306
+#: src/backend/datasources/filters/ROOTFilter.cpp:235
+#: src/backend/datasources/filters/ROOTFilter.cpp:305
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:332
 #: src/backend/datasources/filters/XLSXFilter.cpp:515
@@ -2290,42 +2290,42 @@ msgstr "Kullanılabilir sütun yok"
 msgid "Unsupported file type, neither histogram no tree."
 msgstr "Desteklenmeyen dosya türü; ne histogram ne de ağaç."
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1502
+#: src/backend/datasources/filters/ROOTFilter.cpp:1501
 #, kde-format
 msgid "Not a ROOT file"
 msgstr "Bir ROOT dosyası değil"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1507
+#: src/backend/datasources/filters/ROOTFilter.cpp:1506
 #, kde-format
 msgid "File format version: %1"
 msgstr "Dosya biçimi sürümü: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1515
+#: src/backend/datasources/filters/ROOTFilter.cpp:1514
 #, kde-format
 msgid "FREE data record size: %1 bytes"
 msgstr "FREE veri kayıt boyutu: %1 bayt"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1517
+#: src/backend/datasources/filters/ROOTFilter.cpp:1516
 #, kde-format
 msgid "Number of free data records: %1"
 msgstr "Boş veri kayıt sayısı: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1519
+#: src/backend/datasources/filters/ROOTFilter.cpp:1518
 #, kde-format
 msgid "TNamed size: %1 bytes"
 msgstr "TNamed boyutu: %1 bayt"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1521
+#: src/backend/datasources/filters/ROOTFilter.cpp:1520
 #, kde-format
 msgid "Size of file pointers: %1 bytes"
 msgstr "Dosya işaretçilerinin boyutu: %1 bayt"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1526
+#: src/backend/datasources/filters/ROOTFilter.cpp:1525
 #, kde-format
 msgid "Compression level and algorithm: %1"
 msgstr "Sıkıştırma düzeyi ve algoritması: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1531
+#: src/backend/datasources/filters/ROOTFilter.cpp:1530
 #, kde-format
 msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr "TStreamerInfo kaydı boyutu: %1 bayt"
@@ -6069,39 +6069,39 @@ msgstr "v2"
 msgid "ep"
 msgstr "ep"
 
-#: src/backend/lib/Range.h:48 src/backend/nsl/nsl_interp.c:14
+#: src/backend/lib/Range.h:49 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:561
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:525
 #, kde-format
 msgid "Linear"
 msgstr "Doğrusal"
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Log10"
 msgstr "Log10"
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Log2"
 msgstr "Log2"
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Ln"
 msgstr "Ln"
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Sqrt"
 msgstr "Sqrt"
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Square"
 msgstr "Kare"
 
-#: src/backend/lib/Range.h:48
+#: src/backend/lib/Range.h:49
 #, kde-format
 msgid "Inverse"
 msgstr "Ters"
@@ -7980,7 +7980,7 @@ msgstr "%1: Genişlik çarpanı değişti"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:299
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:170
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:354
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:355
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:112
 #, kde-format
 msgid "%1 - Data"
@@ -8725,10 +8725,9 @@ msgid "%1: set font"
 msgstr "%1: Yazıtipini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:216
-#, fuzzy, kde-format
-#| msgid "%1: set font color"
+#, kde-format
 msgid "%1: use plot's color"
-msgstr "%1: Yazıtipi rengini ayarla"
+msgstr "%1: Çizimin rengini kullan"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:223
 #: src/backend/worksheet/TextLabel.cpp:353
@@ -9421,27 +9420,27 @@ msgstr "%1: Değerlerin yazıtipini ayarla"
 msgid "%1: set values color"
 msgstr "%1: Değerlerin rengini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:206
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:207
 #, kde-format
 msgid "%1: data source type changed"
 msgstr "%1: Veri kaynağı türü değişti"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:213
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:214
 #, kde-format
 msgid "%1: data source curve changed"
 msgstr "%1: Veri kaynağı eğrisi değişti"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:222
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:223
 #, kde-format
 msgid "%1: assign x-data"
 msgstr "%1: x verisi ata"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:231
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:232
 #, kde-format
 msgid "%1: assign y-data"
 msgstr "%1: y verisi ata"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:240
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:241
 #, kde-format
 msgid "%1: assign second y-data"
 msgstr "%1: y verisi ata"
@@ -9735,47 +9734,47 @@ msgstr "Kullanılabilir veri noktaları yok."
 msgid "%1: set transform options and perform the Fourier transform"
 msgstr "%1: Dönüşüm seçeneklerini ayarla ve Fourier dönüşümünü uygula"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:105
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:101
 #, kde-format
 msgid "%1: set function"
 msgstr "%1: İşlev ayarla"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:329
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:325
 #, kde-format
 msgid "First curve not valid"
 msgstr "İlk eğri geçerli değil"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:331
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:327
 #, kde-format
 msgid "xColumn of first curve not valid"
 msgstr "İlk eğrinin X sütunu geçerli değil"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:333
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:329
 #, kde-format
 msgid "yColumn of first curve not valid"
 msgstr "İlk eğrinin Y sütunu geçerli değil"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:335
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:331
 #, kde-format
 msgid "Number of x and y values do not match for the first curve"
 msgstr "İlk eğri için X ve Y değerlerinin sayısı eşleşmiyor"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:348
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:344
 #, kde-format
 msgid "Curve '%1' not valid"
 msgstr "“%1” eğrisi geçerli değil"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:350
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:346
 #, kde-format
 msgid "xColumn of curve '%1' not valid"
 msgstr "“%1” eğrisinin X sütunu geçerli değil"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:352
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:348
 #, kde-format
 msgid "yColumn of curve '%1' not valid"
 msgstr "“%1” eğrisinin Y sütunu geçerli değil"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:354
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:350
 #, kde-format
 msgid "Number of x and y values do not match for curve '%1'"
 msgstr "“%1” eğrisi için X ve Y değerlerinin sayısı eşleşmiyor"
@@ -11335,8 +11334,9 @@ msgid "Preview: Failed to connect to local socket %1 - %2"
 msgstr "Önizleme: Yerel %1 yuvasına bağlanılamadı — %2"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1808
-#, kde-format
-msgid "Preview: Failed to connect to tcp socket - %1"
+#, fuzzy, kde-format
+#| msgid "Preview: Failed to connect to tcp socket - %1"
+msgid "Preview: Failed to connect to TCP socket - %1"
 msgstr "Önizleme: TCP yuvasına bağlanılamadı — %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1853
@@ -12670,6 +12670,8 @@ msgid ""
 "Use the main color of the plot (line, symbol, etc.) for the color of the "
 "name in the legend."
 msgstr ""
+"Göstergedeki adın rengi için çizimin ana rengini kullanın (çizgi, sembol "
+"vb.)."
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:249
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:246
@@ -17600,13 +17602,12 @@ msgstr "%1: Seçili hücreleri temizle"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3781
 #, kde-format
 msgid "Selected 1: %1 rows, %2 columns"
-msgstr ""
+msgstr "Seçili 1: %1 satır, %2 sütun"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3791
-#, fuzzy, kde-format
-#| msgid "%1: cut selected cells"
+#, kde-format
 msgid "Selected: %1 cells"
-msgstr "%1: Seçili hücreleri kes"
+msgstr "Seçili: %1 hücre"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3810
 #, kde-format
@@ -17664,10 +17665,9 @@ msgid ", "
 msgstr ", "
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3820
-#, fuzzy, kde-format
-#| msgid "Selected: %1 %2 , %3 %4%5 %6 %7 %8"
+#, kde-format
 msgid "Selected: %1 %2, %3 %4%5 %6 %7 %8"
-msgstr "Seçili: %1 %2 , %3 %4%5 %6 %7 %8"
+msgstr "Seçili: %1 %2, %3 %4%5 %6 %7 %8"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3830
 #, kde-format
@@ -20664,10 +20664,9 @@ msgstr "Yat. hiza.:"
 
 #. i18n: ectx: property (text), widget (QLabel, lUsePlotColor)
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:463
-#, fuzzy, kde-format
-#| msgid "Font Color:"
+#, kde-format
 msgid "Plot's Color:"
-msgstr "Yazıtipi rengi:"
+msgstr "Çizimin rengi:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderCornerRadius)
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:552

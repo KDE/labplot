@@ -374,7 +374,7 @@ void AspectTreeModel::aspectAdded(const AbstractAspect* aspect) {
 }
 
 void AspectTreeModel::aspectAboutToBeRemoved(const AbstractAspect* aspect) {
-	AbstractAspect* parent = aspect->parentAspect();
+	auto* parent = aspect->parentAspect();
 	int index = parent->indexOfChild<AbstractAspect>(aspect);
 	m_aspectAboutToBeRemovedCalled = true;
 	beginRemoveRows(modelIndexOfAspect(parent), index, index);
@@ -392,7 +392,7 @@ void AspectTreeModel::aspectRemoved() {
 }
 
 void AspectTreeModel::aspectAboutToBeMoved(const AbstractAspect* aspect, int destinationRow) {
-	AbstractAspect* parent = aspect->parentAspect();
+	auto* parent = aspect->parentAspect();
 	int index = parent->indexOfChild<AbstractAspect>(aspect);
 	const auto& parentIndex = modelIndexOfAspect(parent);
 	m_aspectAboutToBeMovedCalled = true;
@@ -408,20 +408,20 @@ void AspectTreeModel::aspectMoved() {
 }
 
 void AspectTreeModel::aspectHiddenAboutToChange(const AbstractAspect* aspect) {
-	for (AbstractAspect* i = aspect->parentAspect(); i; i = i->parentAspect())
-		if (i->hidden())
+	for (auto* a = aspect->parentAspect(); a; a = a->parentAspect())
+		if (a->isHidden())
 			return;
-	if (aspect->hidden())
+	if (aspect->isHidden())
 		aspectAboutToBeAdded(aspect->parentAspect(), aspect, aspect);
 	else
 		aspectAboutToBeRemoved(aspect);
 }
 
 void AspectTreeModel::aspectHiddenChanged(const AbstractAspect* aspect) {
-	for (AbstractAspect* i = aspect->parentAspect(); i; i = i->parentAspect())
-		if (i->hidden())
+	for (auto* a = aspect->parentAspect(); a; a = a->parentAspect())
+		if (a->isHidden())
 			return;
-	if (aspect->hidden())
+	if (aspect->isHidden())
 		aspectRemoved();
 	else
 		aspectAdded(aspect);
@@ -530,10 +530,10 @@ void AspectTreeModel::renameRequestedSlot() {
 }
 
 void AspectTreeModel::aspectSelectedInView(const AbstractAspect* aspect) {
-	if (aspect->hidden()) {
+	if (aspect->isHidden()) {
 		// a hidden aspect was selected in the view (e.g. plot title in WorksheetView)
 		// select the parent aspect first, if available
-		AbstractAspect* parent = aspect->parentAspect();
+		auto* parent = aspect->parentAspect();
 		if (parent)
 			Q_EMIT indexSelected(modelIndexOfAspect(parent));
 
@@ -548,8 +548,8 @@ void AspectTreeModel::aspectSelectedInView(const AbstractAspect* aspect) {
 }
 
 void AspectTreeModel::aspectDeselectedInView(const AbstractAspect* aspect) {
-	if (aspect->hidden()) {
-		AbstractAspect* parent = aspect->parentAspect();
+	if (aspect->isHidden()) {
+		auto* parent = aspect->parentAspect();
 		if (parent)
 			Q_EMIT indexDeselected(modelIndexOfAspect(parent));
 	} else

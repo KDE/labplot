@@ -103,7 +103,7 @@ void FormattingHeatmapDialog::setColumns(const QVector<Column*>& columns) {
 	double max = -INFINITY;
 	bool formatShown = false;
 	bool hasNumeric = false;
-	for (const auto* col : qAsConst(m_columns)) {
+	for (const auto* col : std::as_const(m_columns)) {
 		if (!col->isNumeric() && col->columnMode() != AbstractColumn::ColumnMode::Text)
 			continue;
 

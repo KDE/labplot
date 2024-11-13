@@ -1633,16 +1633,22 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 	}
 
 	// axes
-	DEBUG(Q_FUNC_INFO << ", layer.curves.size() = " << layer.curves.size())
+	DEBUG(Q_FUNC_INFO << ", number of curves in layer = " << layer.curves.size())
 	if (layer.curves.empty()) // no curves, just axes
 		loadAxes(layer, plot, layerIndex, QLatin1String("X Axis Title"), QLatin1String("Y Axis Title"));
 	else {
 		const auto& originCurve = layer.curves.at(0);
 		// see loadCurves()
 		QString dataName(QString::fromStdString(originCurve.dataName));
-		DEBUG(Q_FUNC_INFO << ", curve data name " << STDSTRING(dataName))
+		DEBUG(Q_FUNC_INFO << ", curve data name: " << STDSTRING(dataName))
 		QString containerName = dataName.right(dataName.length() - 2); // strip "E_" or "T_"
 		auto sheet = getSpreadsheetByName(containerName);
+
+		DEBUG("number of columns = " << sheet.columns.size())
+		if (sheet.columns.size() == 0) {
+			DEBUG(Q_FUNC_INFO << ", WARNING: no columns in sheet")
+			return;
+		}
 
 		QString xColumnName;
 		if (m_originFile->version() < 9.5) // <= 2017 : pre-Unicode
@@ -1696,10 +1702,11 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 	}
 
 	// TODO: range breaks
+	DEBUG(Q_FUNC_INFO << ", DONE")
 }
 
 void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianPlot* plot, int layerIndex, bool preview) {
-	DEBUG(Q_FUNC_INFO)
+	DEBUG(Q_FUNC_INFO << "layer " << layerIndex)
 
 	int curveIndex = 1;
 	for (const auto& originCurve : layer.curves) {
@@ -1845,6 +1852,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 				DEBUG(Q_FUNC_INFO << ", curve name = \"" << curveName.toStdString() << "\", in legend = " << enableCurveInLegend)
 
 				if (type == Origin::GraphCurve::Line || type == Origin::GraphCurve::Scatter || type == Origin::GraphCurve::LineSymbol) {
+					DEBUG(Q_FUNC_INFO << ", line(symbol) or scatter curve")
 					auto* curve = new XYCurve(curveName);
 					childPlot = curve;
 					curve->setXColumnPath(xColumnPath);
@@ -1856,10 +1864,10 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 						curve->setLegendVisible(enableCurveInLegend);
 					}
 				} else { // error "curves"
-					// DEBUG(Q_FUNC_INFO << ", ERROR CURVE. curve index = " << curveIndex)
+					DEBUG(Q_FUNC_INFO << ", ERROR CURVE. curve index = " << curveIndex)
 					// find corresponing curve to add error column
 					// we use the previous curve if it has the same y column
-					if (!preview) { // curves not available in preview
+					if (!preview && plot->childCount<XYCurve>() > 0) { // curves not available in preview
 						auto childIndex = plot->childCount<XYCurve>() - 1; // last curve
 						auto curve = plot->children<XYCurve>().at(childIndex);
 						if (xColumnPath == curve->yColumnPath()) { // TODO: only for reversed plots?
@@ -2072,6 +2080,8 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 
 		++curveIndex;
 	}
+
+	DEBUG(Q_FUNC_INFO << ", DONE")
 }
 
 void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,

@@ -175,7 +175,7 @@ bool TeXRenderer::executeLatexProcess(const QString engine,
 			// really slow, but texrenderer is running asynchronous so it is not a problem
 			while (!logFile.atEnd()) {
 				const auto line = logFile.readLine();
-				if (line.count() > 0 && line.at(0) == '!') {
+				if (line.length() > 0 && line.at(0) == '!') {
 					errorLogs += QLatin1String(line);
 					break; // only first error message is enough
 				}

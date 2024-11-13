@@ -80,8 +80,8 @@ void McapFilter::writeWithOptions(const QString& fileName, AbstractDataSource* d
 returns the list of all predefined data types.
 */
 QStringList McapFilter::dataTypes() {
-	const QMetaObject& mo = AbstractColumn::staticMetaObject;
-	const QMetaEnum& me = mo.enumerator(mo.indexOfEnumerator("ColumnMode"));
+	const auto& mo = AbstractColumn::staticMetaObject;
+	const auto& me = mo.enumerator(mo.indexOfEnumerator("ColumnMode"));
 	QStringList list;
 	for (int i = 0; i <= 100; ++i) // me.keyCount() does not work because we have holes in enum
 		if (me.valueToKey(i))
@@ -221,7 +221,7 @@ QString McapFilter::fileInfoString(const QString& fileName) {
 
 	int maxNoOfTopics = 5;
 	int topicCount = 0;
-	std::unordered_map<mcap::ChannelId, mcap::ChannelPtr> channel_map = reader.channels();
+	auto channel_map = reader.channels();
 	std::for_each(channel_map.begin(), channel_map.end(), [&](std::pair<mcap::ChannelId, mcap::ChannelPtr> entry) {
 		if (entry.second->messageEncoding == "json") {
 			info += QString::fromStdString((entry.second->topic));
@@ -251,14 +251,14 @@ int McapFilterPrivate::checkRow(QJsonValueRef value, int& countCols) {
 	switch (rowType) {
 	// TODO: implement other value types
 	case QJsonValue::Array: {
-		QJsonArray row = value.toArray();
+		auto row = value.toArray();
 		if (row.isEmpty())
 			return 1;
 		countCols = (countCols == -1 || countCols > row.count()) ? row.count() : countCols;
 		break;
 	}
 	case QJsonValue::Object: {
-		QJsonObject row = value.toObject();
+		auto row = value.toObject();
 		if (row.isEmpty())
 			return 1;
 		countCols = (countCols == -1 || countCols > row.count()) ? row.count() : countCols;
@@ -408,7 +408,7 @@ bool McapFilterPrivate::prepareDocumentToRead() {
 
 	switch (containerType) {
 	case McapFilter::DataContainerType::Array: {
-		QJsonArray arr = m_preparedDoc.array();
+		auto arr = m_preparedDoc.array();
 		int count = arr.count();
 		if (count < startRow)
 			return false;
@@ -423,7 +423,7 @@ bool McapFilterPrivate::prepareDocumentToRead() {
 		break;
 	}
 	case McapFilter::DataContainerType::Object: {
-		QJsonObject obj = m_preparedDoc.object();
+		auto obj = m_preparedDoc.object();
 		if (obj.count() < startRow)
 			return false;
 
@@ -472,7 +472,7 @@ int McapFilterPrivate::mcapToJson(const QString& fileName, int lines) {
 	}
 
 	if (current_topic == QLatin1String("")) {
-		QVector<QString> topics = getValidTopics(fileName); // Todo: make this more efficient. Only open file once.
+		auto topics = getValidTopics(fileName); // Todo: make this more efficient. Only open file once.
 		if (topics.size() == 0) {
 			const_cast<McapFilter*>(q)->setLastError(i18n("No JSON encoded topics found."));
 			return 0;
@@ -514,9 +514,9 @@ int McapFilterPrivate::mcapToJson(const QString& fileName, int lines) {
 
 			QString asString = QString::fromStdString(std::string(a));
 			QJsonParseError error;
-			QJsonDocument jsonDocument = QJsonDocument::fromJson(asString.toUtf8(), &error);
+			auto jsonDocument = QJsonDocument::fromJson(asString.toUtf8(), &error);
 
-			QJsonObject obj = flattenJson(jsonDocument.object());
+			auto obj = flattenJson(jsonDocument.object());
 
 			// TODO: handle seqeunce, and times as longs instead of strings
 			obj.insert(QLatin1String("sequence"), QJsonValue::fromVariant(QString::number(it->message.sequence)));
@@ -751,7 +751,7 @@ void McapFilterPrivate::writeWithOptions(const QString& fileName, AbstractDataSo
 	opts.compression = static_cast<mcap::Compression>(compression_mode);
 
 	DEBUG(Q_FUNC_INFO << fileName.toStdString());
-	std::string outputFilename = fileName.toStdString();
+	auto outputFilename = fileName.toStdString();
 
 	static const char* SCHEMA_NAME = "labplot.Spreadsheet";
 	static const char* SCHEMA_TEXT = R"({
@@ -781,10 +781,10 @@ void McapFilterPrivate::writeWithOptions(const QString& fileName, AbstractDataSo
 		writer.addChannel(channel);
 		channelId = channel.id;
 	}
-	mcap::Timestamp startTime = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+	auto startTime = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	// TODO: use startTime
 	Q_UNUSED(startTime)
-	QJsonArray jsonArray = m_preparedDoc.array();
+	auto jsonArray = m_preparedDoc.array();
 
 	int numRows = spreadsheet->rowCount();
 	int numCols = spreadsheet->columnCount();
@@ -796,7 +796,7 @@ void McapFilterPrivate::writeWithOptions(const QString& fileName, AbstractDataSo
 		for (int col = 0; col < numCols; ++col) {
 			QString columnName = spreadsheet->column(col)->name();
 			QVariant value = spreadsheet->column(col)->valueAt(row);
-			QJsonValue jsonValue = QJsonValue::fromVariant(value);
+			auto jsonValue = QJsonValue::fromVariant(value);
 			if (columnName == QLatin1String("logTime")) { // Special field in MCAP
 				msg.logTime = mcap::Timestamp(value.toLongLong() * 1000000);
 				continue;
@@ -813,7 +813,7 @@ void McapFilterPrivate::writeWithOptions(const QString& fileName, AbstractDataSo
 		}
 
 		QJsonDocument doc(obj); // TODO: Unflatten json?
-		QByteArray data = doc.toJson(QJsonDocument::Compact);
+		auto data = doc.toJson(QJsonDocument::Compact);
 
 		msg.data = reinterpret_cast<const std::byte*>(data.constData());
 		msg.dataSize = data.size();
@@ -859,7 +859,7 @@ void McapFilter::save(QXmlStreamWriter* writer) const {
 Loads from XML.
 */
 bool McapFilter::load(XmlStreamReader* reader) {
-	QXmlStreamAttributes attribs = reader->attributes();
+	auto attribs = reader->attributes();
 	QString str;
 
 	READ_INT_VALUE("rowType", rowType, QJsonValue::Type);
@@ -872,7 +872,7 @@ bool McapFilter::load(XmlStreamReader* reader) {
 	READ_INT_VALUE("startColumn", startColumn, int);
 	READ_INT_VALUE("endColumn", endColumn, int);
 
-	QStringList list = attribs.value(QStringLiteral("modelRows")).toString().split(QLatin1Char(';'));
+	auto list = attribs.value(QStringLiteral("modelRows")).toString().split(QLatin1Char(';'));
 	if (list.isEmpty())
 		reader->raiseMissingAttributeWarning(QStringLiteral("'modelRows'"));
 	else {
@@ -943,7 +943,7 @@ QJsonObject McapFilterPrivate::unflattenJson(const QJsonObject& obj, QString /*s
 }
 
 QJsonObject McapFilterPrivate::mergeJsonObjects(const QJsonObject& obj1, const QJsonObject& obj2) {
-	QJsonObject mergedObj = obj1;
+	auto mergedObj = obj1;
 	for (auto it = obj2.constBegin(); it != obj2.constEnd(); ++it) {
 		mergedObj.insert(it.key(), it.value());
 	}
@@ -967,7 +967,7 @@ QVector<QString> McapFilterPrivate::getValidTopics(const QString& fileName) {
 	auto status = reader.readSummary(mcap::ReadSummaryMethod::NoFallbackScan);
 	// TODO: check status
 	Q_UNUSED(status)
-	std::unordered_map<mcap::ChannelId, mcap::ChannelPtr> channel_map = reader.channels();
+	auto channel_map = reader.channels();
 	std::for_each(channel_map.begin(), channel_map.end(), [&](std::pair<mcap::ChannelId, mcap::ChannelPtr> entry) {
 		if (entry.second->messageEncoding == "json") {
 			DEBUG("Found valid topic:" << entry.second->topic);
@@ -984,9 +984,9 @@ QVector<QString> McapFilter::getValidTopics(const QString& fileName) {
 
 void McapFilterPrivate::setCurrentTopic(QString topic) {
 	DEBUG(Q_FUNC_INFO);
-	if (current_topic != topic) {
+	if (current_topic != topic)
 		m_prepared = false;
-	}
+
 	current_topic = topic;
 }
 

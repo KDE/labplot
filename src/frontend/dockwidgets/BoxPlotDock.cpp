@@ -543,7 +543,7 @@ void BoxPlotDock::whiskersCapSizeChanged(double value) const {
 void BoxPlotDock::rugEnabledChanged(bool state) {
 	CONDITIONAL_LOCK_RETURN;
 
-	for (auto* curve : qAsConst(m_boxPlots))
+	for (auto* curve : std::as_const(m_boxPlots))
 		curve->setRugEnabled(state);
 }
 
@@ -551,7 +551,7 @@ void BoxPlotDock::rugLengthChanged(double value) const {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	const double length = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
-	for (auto* curve : qAsConst(m_boxPlots))
+	for (auto* curve : std::as_const(m_boxPlots))
 		curve->setRugLength(length);
 }
 
@@ -559,7 +559,7 @@ void BoxPlotDock::rugWidthChanged(double value) const {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	const double width = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
-	for (auto* curve : qAsConst(m_boxPlots))
+	for (auto* curve : std::as_const(m_boxPlots))
 		curve->setRugWidth(width);
 }
 
@@ -567,7 +567,7 @@ void BoxPlotDock::rugOffsetChanged(double value) const {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	const double offset = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
-	for (auto* curve : qAsConst(m_boxPlots))
+	for (auto* curve : std::as_const(m_boxPlots))
 		curve->setRugOffset(offset);
 }
 

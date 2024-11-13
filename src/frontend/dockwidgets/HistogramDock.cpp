@@ -414,7 +414,7 @@ void HistogramDock::binRangesMaxDateTimeChanged(qint64 value) {
 void HistogramDock::rugEnabledChanged(bool state) {
 	CONDITIONAL_LOCK_RETURN;
 
-	for (auto* curve : qAsConst(m_curvesList))
+	for (auto* curve : std::as_const(m_curvesList))
 		curve->setRugEnabled(state);
 }
 
@@ -422,7 +422,7 @@ void HistogramDock::rugLengthChanged(double value) const {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	const double length = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
-	for (auto* curve : qAsConst(m_curvesList))
+	for (auto* curve : std::as_const(m_curvesList))
 		curve->setRugLength(length);
 }
 
@@ -430,7 +430,7 @@ void HistogramDock::rugWidthChanged(double value) const {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	const double width = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
-	for (auto* curve : qAsConst(m_curvesList))
+	for (auto* curve : std::as_const(m_curvesList))
 		curve->setRugWidth(width);
 }
 
@@ -438,7 +438,7 @@ void HistogramDock::rugOffsetChanged(double value) const {
 	CONDITIONAL_RETURN_NO_LOCK;
 
 	const double offset = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
-	for (auto* curve : qAsConst(m_curvesList))
+	for (auto* curve : std::as_const(m_curvesList))
 		curve->setRugOffset(offset);
 }
 

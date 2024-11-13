@@ -322,7 +322,7 @@ void LabelWidget::setLabels(QList<TextLabel*> labels) {
 	ui.sbOffsetY->hide();
 
 	// show the text fields for name and comment if the label is not hidden (i.e. not a plot title, etc.)
-	bool visible = !m_label->hidden();
+	bool visible = !m_label->isHidden();
 	ui.lName->setVisible(visible);
 	ui.leName->setVisible(visible);
 	ui.lComment->setVisible(visible);

@@ -484,7 +484,7 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 		xValueStr = QString::number(d->positionLogical);
 	else if (columnMode == AbstractColumn::ColumnMode::Day || columnMode == AbstractColumn::ColumnMode::Month
 			 || columnMode == AbstractColumn::ColumnMode::DateTime) {
-		const auto& dateTime = QDateTime::fromMSecsSinceEpoch(d->positionLogical, Qt::UTC);
+		const auto& dateTime = QDateTime::fromMSecsSinceEpoch(d->positionLogical, QTimeZone::UTC);
 		xValueStr = dateTime.toString(d->m_plot->rangeDateTimeFormat(Dimension::X));
 	}
 
@@ -495,7 +495,7 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 		text.replace(QStringLiteral("&(x)"), xValueStr);
 
 	// replace the placeholders for curve's y-values
-	for (const auto& markerpoint : qAsConst(markerpoints)) {
+	for (const auto& markerpoint : std::as_const(markerpoints)) {
 		QString replace;
 		if (wrapper.mode == TextLabel::Mode::Text)
 			replace = QStringLiteral("&amp;(");

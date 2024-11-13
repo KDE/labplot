@@ -146,9 +146,9 @@ private:
 template<>
 class IntervalAttribute<bool> {
 public:
-	IntervalAttribute<bool>() {
+	IntervalAttribute() {
 	}
-	IntervalAttribute<bool>(const QVector<Interval<int>>& intervals)
+	IntervalAttribute(const QVector<Interval<int>>& intervals)
 		: m_intervals(intervals) {
 	}
 
