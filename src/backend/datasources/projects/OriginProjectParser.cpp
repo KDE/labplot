@@ -1262,6 +1262,11 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	elementScalingFactor = fixedHeight / (graph.height * GSL_CONST_CGS_INCH / dpi);
 	// not using the full value for scaling text is better in most cases
 	textScalingFactor = 1. + (elementScalingFactor - 1.) / 2.;
+#if defined(HAVE_WINDOWS)
+	// factor is generally about a factor 2 too big on Windows
+	// TODO: debug on Windows to see what's different
+	textScalingFactor /= 2.;
+#endif
 	DEBUG(Q_FUNC_INFO << ", ELEMENT SCALING FACTOR = " << elementScalingFactor)
 	DEBUG(Q_FUNC_INFO << ", TEXT SCALING FACTOR = " << textScalingFactor)
 	// default values (1000/1000)
@@ -1346,10 +1351,11 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			plot->setRightPadding(Worksheet::convertToSceneUnits(rightPadding, Worksheet::Unit::Centimeter));
 			plot->setBottomPadding(Worksheet::convertToSceneUnits(bottomPadding, Worksheet::Unit::Centimeter));
 		} else {
-			plot->setHorizontalPadding(plot->horizontalPadding() * elementScalingFactor);
-			plot->setVerticalPadding(plot->verticalPadding() * elementScalingFactor);
-			plot->setRightPadding(plot->rightPadding() * elementScalingFactor);
-			plot->setBottomPadding(plot->bottomPadding() * elementScalingFactor);
+			DEBUG(Q_FUNC_INFO << ", using fixed padding")
+			plot->setHorizontalPadding(100. + 1.5 * plot->horizontalPadding() * std::max(elementScalingFactor, 1.));
+			plot->setVerticalPadding(100. + 1.5 * plot->verticalPadding() * std::max(elementScalingFactor, 1.));
+			plot->setRightPadding(100. + 1.5 * plot->rightPadding() * std::max(elementScalingFactor, 1.));
+			plot->setBottomPadding(100. + 1.5 * plot->bottomPadding() * std::max(elementScalingFactor, 1.));
 		}
 		DEBUG(Q_FUNC_INFO << ", PADDING (H/V) = " << plot->horizontalPadding() << ", " << plot->verticalPadding())
 		DEBUG(Q_FUNC_INFO << ", PADDING (R/B) = " << plot->rightPadding() << ", " << plot->bottomPadding())
