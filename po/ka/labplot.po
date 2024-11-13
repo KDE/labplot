@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-10 00:37+0000\n"
-"PO-Revision-Date: 2024-11-11 07:59+0100\n"
+"POT-Creation-Date: 2024-11-13 00:37+0000\n"
+"PO-Revision-Date: 2024-11-12 03:40+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -8510,7 +8510,7 @@ msgstr "%1: %2-დიაპაზონის %3 ავტომასშტა�
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1537
 #, kde-format
 msgid "%1: change x-range %2 scale"
-msgstr ""
+msgstr "%1: x-დიაპაზონის %2 მასშტაბის შეცვლა"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1665
 #, kde-format
@@ -8520,22 +8520,22 @@ msgstr "%1: ნაგულისხმევი გრაფიკის ინ
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1683
 #, kde-format
 msgid "%1: x-range breaking enabled"
-msgstr ""
+msgstr "%1: მასშტაბის დარღვევის ჩართვა X-ის მიხედვით"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1692
 #, kde-format
 msgid "%1: x-range breaks changed"
-msgstr ""
+msgstr "%1: X-ის მიხედვით დიაპაზონის დარღვევა შეიცვალა"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1701
 #, kde-format
 msgid "%1: y-range breaking enabled"
-msgstr ""
+msgstr "%1: მასშტაბის დარღვევის ჩართვა Y-ის მიხედვით"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1710
 #, kde-format
 msgid "%1: y-range breaks changed"
-msgstr ""
+msgstr "%1: Y-ის მიხედვით დიაპაზონის დარღვევა შეიცვალა"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1724
 #, kde-format
@@ -8606,7 +8606,7 @@ msgstr "'%1'-ის წარმოებული"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1875
 #, kde-format
 msgid "%1: add differentiation curve"
-msgstr ""
+msgstr "%1: დიფერენციაციის მრუდის დამატება"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1886
 #, kde-format
@@ -9446,22 +9446,22 @@ msgstr "%1: მონაცემების წყაროს მრუდი
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:223
 #, kde-format
 msgid "%1: assign x-data"
-msgstr ""
+msgstr "%1: X-მონაცემების მინიჭება"
 
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:232
 #, kde-format
 msgid "%1: assign y-data"
-msgstr ""
+msgstr "%1: Y-მონაცემების მინიჭება"
 
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:241
 #, kde-format
 msgid "%1: assign second y-data"
-msgstr ""
+msgstr "%1: მეორე Y მონაცემების მინიჭება"
 
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:77
 #, kde-format
 msgid "%1: set options and perform the convolution"
-msgstr ""
+msgstr "%1: პარამეტრების დაყენება და კონვოლუციის შესრულება"
 
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:166
 #: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:159
@@ -9477,7 +9477,7 @@ msgstr "ხელმისაწვდომი მონაცემის წ�
 #: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:77
 #, kde-format
 msgid "%1: set options and perform the correlation"
-msgstr ""
+msgstr "%1: პარამეტრები დაყენება და კორელაციის შესრულება"
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:214
 #, kde-format
@@ -9487,22 +9487,22 @@ msgstr "\"%1\"-ზე გადასვლა"
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:414
 #, kde-format
 msgid "%1: x-data source changed"
-msgstr ""
+msgstr "%1: X-მონაცემების წყარო შეიცვალა"
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:421
 #, kde-format
 msgid "%1: y-data source changed"
-msgstr ""
+msgstr "%1: Y-მონაცემების წყარო შეიცვალა"
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:446
 #, kde-format
 msgid "%1: set skip line gaps"
-msgstr ""
+msgstr "%1: ხაზებს შორის შევსების გამოტოვების დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:453
 #, kde-format
 msgid "%1: set increasing X"
-msgstr ""
+msgstr "%1: ზრდადი X-ის დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:460
 #, kde-format
@@ -9552,7 +9552,7 @@ msgstr "%1: განტოლების დაყენება"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:934
 #, kde-format
 msgid "%1: data source histogram changed"
-msgstr ""
+msgstr "%1: მონაცემთა წყარო ჰისტოგრამა შეიცვალა"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:946
 #, kde-format
@@ -10381,12 +10381,12 @@ msgstr ""
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:111
 #, kde-format
 msgid "Custom column names, comma separated. E.g. \"x, y\""
-msgstr ""
+msgstr "მორგებული სვეტის სახელები, მძიმით გამოყოფილი. მაგალითად, \"x, y\""
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:115
 #, kde-format
 msgid "Custom column modes, comma separated"
-msgstr ""
+msgstr "მორგებული სვეტის რეჟიმები, მძიმით გამოყოფილი"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:122
 #, kde-format
@@ -11246,8 +11246,9 @@ msgid "Preview: Failed to connect to local socket %1 - %2"
 msgstr "მინიატურა: ჩავარდა მიერთება ლოკალურ სოკეტთან %1 - %2"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1808
-#, kde-format
-msgid "Preview: Failed to connect to tcp socket - %1"
+#, fuzzy, kde-format
+#| msgid "Preview: Failed to connect to tcp socket - %1"
+msgid "Preview: Failed to connect to TCP socket - %1"
 msgstr "მინიატურა: ჩავარდა მიერთება TCP სოკეტთან - %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1853
@@ -12808,7 +12809,7 @@ msgstr ""
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:225
 #, kde-format
 msgid "Allow negative values for the lower limit."
-msgstr ""
+msgstr "უარყოფითი მნიშვნელობის დაშვება ქვედა ზღვრისთვის."
 
 #: src/frontend/dockwidgets/ProjectDock.cpp:28
 #, kde-format
@@ -12829,7 +12830,7 @@ msgstr ""
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:227
 #, kde-format
 msgid "%1 reference lines: template \"%2\" loaded"
-msgstr ""
+msgstr "%1 მიმართვის ხაზი: ნიმუში \"%2\" ჩაიტვირთა"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:52
 #, kde-format
@@ -12840,12 +12841,12 @@ msgstr ""
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:56
 #, kde-format
 msgid "Spreadsheet to synchronize the number of rows with"
-msgstr ""
+msgstr "ელცხრილი, რომელთანაც მწკრივების რაოდენობის სინქრონიზაცია მოხდება"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:230
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
-msgstr ""
+msgstr "%1 ელცხრილი: ნიმუში \"%2\" ჩაიტვირთა"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:44
 #, kde-format
@@ -14324,7 +14325,7 @@ msgstr "საქაღალდე"
 #: src/frontend/MainWin.cpp:635
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
-msgstr ""
+msgstr "ქმნის ახალ საქაღალდეს ფურცლების და სხვა ელემენტების შესაგროვებლად"
 
 #: src/frontend/MainWin.cpp:640
 #, kde-format

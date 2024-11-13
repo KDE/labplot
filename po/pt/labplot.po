@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-10 00:37+0000\n"
+"POT-Creation-Date: 2024-11-13 00:37+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -11685,7 +11685,7 @@ msgstr "Não foi possível ligar-se ao mediador '%1:%2'."
 #: src/frontend/datasources/ImportFileWidget.cpp:1808
 #, fuzzy, kde-format
 #| msgid "Failed to connect to the broker '%1:%2'."
-msgid "Preview: Failed to connect to tcp socket - %1"
+msgid "Preview: Failed to connect to TCP socket - %1"
 msgstr "Não foi possível ligar-se ao mediador '%1:%2'."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1853

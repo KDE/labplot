@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-10 00:37+0000\n"
+"POT-Creation-Date: 2024-11-13 00:37+0000\n"
 "PO-Revision-Date: 2024-11-09 06:57+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -11379,8 +11379,9 @@ msgid "Preview: Failed to connect to local socket %1 - %2"
 msgstr "Predogled: Neuspela povezava z lokalno vtičnico %1 - %2"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1808
-#, kde-format
-msgid "Preview: Failed to connect to tcp socket - %1"
+#, fuzzy, kde-format
+#| msgid "Preview: Failed to connect to tcp socket - %1"
+msgid "Preview: Failed to connect to TCP socket - %1"
 msgstr "Predogled: Neuspela povezava z vtičnico tcp - %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1853

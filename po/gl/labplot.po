@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-10 00:37+0000\n"
+"POT-Creation-Date: 2024-11-13 00:37+0000\n"
 "PO-Revision-Date: 2024-09-28 13:27+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -11395,7 +11395,7 @@ msgstr "Non foi posíbel conectar ao repartidor «%1:%2»."
 #: src/frontend/datasources/ImportFileWidget.cpp:1808
 #, fuzzy, kde-format
 #| msgid "Failed to connect to the broker '%1:%2'."
-msgid "Preview: Failed to connect to tcp socket - %1"
+msgid "Preview: Failed to connect to TCP socket - %1"
 msgstr "Non foi posíbel conectar ao repartidor «%1:%2»."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1853

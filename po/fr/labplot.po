@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-10 00:37+0000\n"
+"POT-Creation-Date: 2024-11-13 00:37+0000\n"
 "PO-Revision-Date: 2024-11-10 10:43+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -11434,8 +11434,9 @@ msgid "Preview: Failed to connect to local socket %1 - %2"
 msgstr "Aperçu : impossible de se connecter au socket local %1 - %2"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1808
-#, kde-format
-msgid "Preview: Failed to connect to tcp socket - %1"
+#, fuzzy, kde-format
+#| msgid "Preview: Failed to connect to tcp socket - %1"
+msgid "Preview: Failed to connect to TCP socket - %1"
 msgstr "Aperçu : impossible de se connecter au socket « TCP » - %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1853
