@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-13 00:37+0000\n"
-"PO-Revision-Date: 2024-11-09 19:17+0100\n"
+"POT-Creation-Date: 2024-11-14 00:37+0000\n"
+"PO-Revision-Date: 2024-11-13 14:14+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -2496,12 +2496,12 @@ msgstr "%1 %2"
 msgid "Plot data"
 msgstr "Trazar datos"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1322
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1327
 #, kde-format
 msgid "Plot%1"
 msgstr "Trazar%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1482
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1488
 #, kde-format
 msgid "legend"
 msgstr "leyenda"
@@ -11366,8 +11366,7 @@ msgid "Preview: Failed to connect to local socket %1 - %2"
 msgstr "Vista previa: No se ha podido conectar al conector local %1 - %2"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1808
-#, fuzzy, kde-format
-#| msgid "Preview: Failed to connect to tcp socket - %1"
+#, kde-format
 msgid "Preview: Failed to connect to TCP socket - %1"
 msgstr "Vista previa: No se ha podido conectar al conector TCP - %1"
 

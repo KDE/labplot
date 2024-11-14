@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-13 00:37+0000\n"
+"POT-Creation-Date: 2024-11-14 00:37+0000\n"
 "PO-Revision-Date: 2023-10-30 14:32+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -2710,13 +2710,13 @@ msgstr "Kaavion alue"
 
 # pmap: =/gen=LabPlot2:n/
 # pmap: =/elat=LabPlot2:sta/
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1322
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1327
 #, fuzzy, kde-format
 #| msgid "LabPlot2"
 msgid "Plot%1"
 msgstr "LabPlot2"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1482
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1488
 #, kde-format
 msgid "legend"
 msgstr "selite"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-13 00:37+0000\n"
+"POT-Creation-Date: 2024-11-14 00:37+0000\n"
 "PO-Revision-Date: 2024-10-26 13:03+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -2503,12 +2503,12 @@ msgstr ""
 msgid "Plot data"
 msgstr "Wykreśl dane"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1322
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1327
 #, kde-format
 msgid "Plot%1"
 msgstr "Wykres%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1482
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1488
 #, kde-format
 msgid "legend"
 msgstr "legenda"
