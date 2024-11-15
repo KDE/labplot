@@ -1250,12 +1250,12 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	// 	worksheet->setPageRect(size);
 	graphSize.rwidth() = graph.width;
 	graphSize.rheight() = graph.height;
-	DEBUG(Q_FUNC_INFO << ", GRAPH width/height (px) = " << graphSize.width() << "/" << graphSize.height())
+	WARN(Q_FUNC_INFO << ", GRAPH width/height (px) = " << graphSize.width() << "/" << graphSize.height())
 	// Graphic elements in Origin are scaled relative to the dimensions of the page (Format->Page) with 600 DPI (>=9.6), 300 DPI (<9.6)
 	double dpi = 600.;
 	if (m_originFile->version() < 9.6)
 		dpi = 300.;
-	DEBUG(Q_FUNC_INFO << ", GRAPH width/height (cm) = " << graphSize.width() * GSL_CONST_CGS_INCH / dpi << "/" << graphSize.height() * GSL_CONST_CGS_INCH / dpi)
+	WARN(Q_FUNC_INFO << ", GRAPH width/height (cm) = " << graphSize.width() * GSL_CONST_CGS_INCH / dpi << "/" << graphSize.height() * GSL_CONST_CGS_INCH / dpi)
 	// Origin scales text and plots with the size of the layer when no fixed size is used (Layer properties->Size)
 	// so we scale all text and plots with a scaling factor to the whole view height (29.5 cm) used as default
 	const double fixedHeight = 29.5; // full height [cm]
@@ -1267,8 +1267,8 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	// TODO: debug on Windows to see what's different
 	textScalingFactor /= 2.;
 #endif
-	DEBUG(Q_FUNC_INFO << ", ELEMENT SCALING FACTOR = " << elementScalingFactor)
-	DEBUG(Q_FUNC_INFO << ", TEXT SCALING FACTOR = " << textScalingFactor)
+	WARN(Q_FUNC_INFO << ", ELEMENT SCALING FACTOR = " << elementScalingFactor)
+	WARN(Q_FUNC_INFO << ", TEXT SCALING FACTOR = " << textScalingFactor)
 	// default values (1000/1000)
 	//	DEBUG(Q_FUNC_INFO << ", WORKSHEET width/height = " << worksheet->pageRect().width() << "/" << worksheet->pageRect().height())
 
@@ -1352,20 +1352,15 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			plot->setBottomPadding(Worksheet::convertToSceneUnits(bottomPadding, Worksheet::Unit::Centimeter));
 		} else {
 			DEBUG(Q_FUNC_INFO << ", using fixed padding")
-#if defined(HAVE_WINDOWS)
-			plot->setHorizontalPadding(0.5 * plot->horizontalPadding() * elementScalingFactor);
-			plot->setVerticalPadding(0.5 * plot->verticalPadding() * elementScalingFactor);
-			plot->setRightPadding(0.5 * plot->rightPadding() * elementScalingFactor);
-			plot->setBottomPadding(0.5 * plot->bottomPadding() * elementScalingFactor);
-#else
+#if !defined(HAVE_WINDOWS)
 			plot->setHorizontalPadding(100. + 1.5 * plot->horizontalPadding() * std::max(elementScalingFactor, 1.));
 			plot->setVerticalPadding(100. + 1.5 * plot->verticalPadding() * std::max(elementScalingFactor, 1.));
 			plot->setRightPadding(100. + 1.5 * plot->rightPadding() * std::max(elementScalingFactor, 1.));
 			plot->setBottomPadding(100. + 1.5 * plot->bottomPadding() * std::max(elementScalingFactor, 1.));
 #endif
 		}
-		DEBUG(Q_FUNC_INFO << ", PADDING (H/V) = " << plot->horizontalPadding() << ", " << plot->verticalPadding())
-		DEBUG(Q_FUNC_INFO << ", PADDING (R/B) = " << plot->rightPadding() << ", " << plot->bottomPadding())
+		WARN(Q_FUNC_INFO << ", PADDING (H/V) = " << plot->horizontalPadding() << ", " << plot->verticalPadding())
+		WARN(Q_FUNC_INFO << ", PADDING (R/B) = " << plot->rightPadding() << ", " << plot->bottomPadding())
 	}
 
 	if (!preview) {
