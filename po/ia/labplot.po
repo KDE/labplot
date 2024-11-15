@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-14 00:37+0000\n"
-"PO-Revision-Date: 2024-11-06 16:06+0100\n"
+"PO-Revision-Date: 2024-11-14 09:42+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -11193,10 +11193,9 @@ msgid "Preview: Failed to connect to local socket %1 - %2"
 msgstr "Vista preliminar: Il falleva a connecter a socket local  %1 - %2"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1808
-#, fuzzy, kde-format
-#| msgid "Preview: Failed to connect to tcp socket - %1"
+#, kde-format
 msgid "Preview: Failed to connect to TCP socket - %1"
-msgstr "Vista preliminar: Il falleva a connecter a socket  tcp   - %1"
+msgstr "Vista preliminar: Il falleva a connecter a socket TCP   - %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1853
 #, kde-format
