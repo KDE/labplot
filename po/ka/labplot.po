@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-14 00:37+0000\n"
-"PO-Revision-Date: 2024-11-14 02:50+0100\n"
+"POT-Creation-Date: 2024-11-16 00:37+0000\n"
+"PO-Revision-Date: 2024-11-15 07:08+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -2494,7 +2494,7 @@ msgstr "გრაფიკის მონაცემები"
 msgid "Plot%1"
 msgstr "გრაფიკი%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1488
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1490
 #, kde-format
 msgid "legend"
 msgstr "შინაარსი"
@@ -10377,11 +10377,13 @@ msgid ""
 "If checked, the specified line in the file will be used to determine the "
 "column names."
 msgstr ""
+"თუ ჩართულია, ფაილის მითითებული ხაზი სვეტის სახელების დასადგენად იქნება "
+"გამოყენებული."
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:108
 #, kde-format
 msgid "Line in the file that should be used to determine the column names."
-msgstr ""
+msgstr "ხაზი ფაილში, რომელიც სვეტის სახელების დასადგენად იქნება გამოყენებული."
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:111
 #, kde-format

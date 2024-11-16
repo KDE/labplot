@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-14 00:37+0000\n"
+"POT-Creation-Date: 2024-11-16 00:37+0000\n"
 "PO-Revision-Date: 2024-04-22 16:05\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -2471,7 +2471,7 @@ msgstr ""
 msgid "Plot%1"
 msgstr ""
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1488
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1490
 #, kde-format
 msgid "legend"
 msgstr "图例"
@@ -11198,10 +11198,9 @@ msgid "Preview: Failed to connect to local socket %1 - %2"
 msgstr ""
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1808
-#, fuzzy, kde-format
-#| msgid "Failed to connect to the broker '%1:%2'."
+#, kde-format
 msgid "Preview: Failed to connect to TCP socket - %1"
-msgstr "无法连接到代理“%1:%2”。"
+msgstr ""
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1853
 #, kde-format

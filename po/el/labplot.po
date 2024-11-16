@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-14 00:37+0000\n"
+"POT-Creation-Date: 2024-11-16 00:37+0000\n"
 "PO-Revision-Date: 2017-04-20 14:04+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -2617,7 +2617,7 @@ msgstr "Περιοχή σχεδίασης"
 msgid "Plot%1"
 msgstr "LabPlot2"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1488
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1490
 #, kde-format
 msgid "legend"
 msgstr ""
