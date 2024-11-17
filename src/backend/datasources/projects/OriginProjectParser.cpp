@@ -1337,9 +1337,9 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	if (plot) {
 		plot->setSymmetricPadding(false);
 		int numberOfLayer = layerIndex + 1;
-		DEBUG(Q_FUNC_INFO << ", number of layer = " << numberOfLayer)
+		WARN(Q_FUNC_INFO << ", number of layer = " << numberOfLayer)
 		if (numberOfLayer == 1 || !m_graphLayerAsPlotArea) { // use layer clientRect for padding
-			DEBUG(Q_FUNC_INFO << ", using layer rect for padding")
+			WARN(Q_FUNC_INFO << ", using layer rect for padding")
 			double aspectRatio = (double)graphSize.width() / graphSize.height();
 
 			const double leftPadding = layerRect.left / (double)graphSize.width() * aspectRatio * fixedHeight;
@@ -1351,7 +1351,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			plot->setRightPadding(Worksheet::convertToSceneUnits(rightPadding, Worksheet::Unit::Centimeter));
 			plot->setBottomPadding(Worksheet::convertToSceneUnits(bottomPadding, Worksheet::Unit::Centimeter));
 		} else {
-			DEBUG(Q_FUNC_INFO << ", using fixed padding")
+			WARN(Q_FUNC_INFO << ", using fixed padding")
 #if !defined(HAVE_WINDOWS)
 			plot->setHorizontalPadding(100. + 1.5 * plot->horizontalPadding() * std::max(elementScalingFactor, 1.));
 			plot->setVerticalPadding(100. + 1.5 * plot->verticalPadding() * std::max(elementScalingFactor, 1.));

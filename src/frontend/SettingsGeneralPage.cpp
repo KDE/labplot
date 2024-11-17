@@ -48,6 +48,7 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent)
 	connect(ui.chkSaveDockStates, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkSaveCalculations, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkCompatible, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
+	connect(ui.chkInfoTrace, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkDebugTrace, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkPerfTrace, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 
@@ -132,6 +133,9 @@ bool SettingsGeneralPage::applySettings() {
 	group.writeEntry(QLatin1String("SaveDockStates"), ui.chkSaveDockStates->isChecked());
 	group.writeEntry(QLatin1String("SaveCalculations"), ui.chkSaveCalculations->isChecked());
 	group.writeEntry(QLatin1String("CompatibleSave"), ui.chkCompatible->isChecked());
+	const bool infoTraceEnabled = ui.chkInfoTrace->isChecked();
+	group.writeEntry(QLatin1String("InfoTrace"), infoTraceEnabled);
+	enableInfoTrace(infoTraceEnabled);
 	const bool debugTraceEnabled = ui.chkDebugTrace->isChecked();
 	group.writeEntry(QLatin1String("DebugTrace"), debugTraceEnabled);
 	enableDebugTrace(debugTraceEnabled);
@@ -158,6 +162,7 @@ void SettingsGeneralPage::restoreDefaults() {
 	ui.chkSaveDockStates->setChecked(false);
 	ui.chkSaveCalculations->setChecked(true);
 	ui.chkCompatible->setChecked(false);
+	ui.chkInfoTrace->setChecked(false);
 	ui.chkDebugTrace->setChecked(false);
 	ui.chkPerfTrace->setChecked(false);
 	ui.cbDockWindowPositionReopen->setCurrentIndex(ui.cbDockWindowPositionReopen->findData(static_cast<int>(Settings::DockPosBehavior::AboveLastActive)));
@@ -209,6 +214,7 @@ void SettingsGeneralPage::loadSettings() {
 	ui.chkSaveDockStates->setChecked(group.readEntry<bool>(QLatin1String("SaveDockStates"), false));
 	ui.chkSaveCalculations->setChecked(group.readEntry<bool>(QLatin1String("SaveCalculations"), true));
 	ui.chkCompatible->setChecked(group.readEntry<bool>(QLatin1String("CompatibleSave"), false));
+	ui.chkInfoTrace->setChecked(group.readEntry<bool>(QLatin1String("InfoTrace"), false));
 	ui.chkDebugTrace->setChecked(group.readEntry<bool>(QLatin1String("DebugTrace"), false));
 	ui.chkPerfTrace->setChecked(group.readEntry<bool>(QLatin1String("PerfTrace"), false));
 }
@@ -272,6 +278,7 @@ void SettingsGeneralPage::retranslateUi() {
 	ui.chkSaveCalculations->setToolTip(msg);
 
 	ui.lTracing->setToolTip(i18n("Activates additional tracing output in the terminal."));
+	ui.chkInfoTrace->setToolTip(i18n("Info trace - helpful to get information and warnings when running the application."));
 	ui.chkDebugTrace->setToolTip(i18n("Debug trace - helpful to diagnose the application, can have a negative impact on the performance."));
 	ui.chkPerfTrace->setToolTip(i18n("Performance trace - helpful to analyze performance relevant aspects and bottlenecks."));
 }
