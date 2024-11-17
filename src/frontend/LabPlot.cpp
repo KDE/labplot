@@ -118,6 +118,7 @@ int main(int argc, char* argv[]) {
 	KCrash::initialize();
 
 	const auto& group = Settings::settingsGeneral();
+	enableInfoTrace(group.readEntry<bool>(QLatin1String("InfoTrace"), false));
 	enableDebugTrace(group.readEntry<bool>(QLatin1String("DebugTrace"), false));
 	enablePerfTrace(group.readEntry<bool>(QLatin1String("PerfTrace"), false));
 
