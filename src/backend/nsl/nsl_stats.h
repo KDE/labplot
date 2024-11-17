@@ -98,7 +98,32 @@ double nsl_stats_aicc(double sse, size_t n, size_t np, int version);
 
 /* Schwarz Bayesian information criterion (BIC, SBC, SBIC) */
 double nsl_stats_bic(double sse, size_t n, size_t np, int version);
+/* Mann-Whitney U test */
+int compare_values(const void* a, const void* b);
+double nsl_stats_mannwhitney_u(const double sample1[], size_t n1, const double sample2[], size_t n2);
+double nsl_stats_mannwhitney_p(double U, size_t n1, size_t n2);
+/* One Way Annova test */
+double nsl_stats_anova_oneway_f(double** groups, size_t* sizes, size_t n_groups);
+double nsl_stats_anova_oneway_p(double** groups, size_t* sizes, size_t n_groups);
 
+// Function prototypes for Kruskal-Wallis Test
+int compare_rank(const void*, const void*);
+double nsl_stats_kruskal_wallis_h(double** groups, size_t* sizes, size_t n_groups);
+double nsl_stats_kruskal_wallis_p(double** groups, size_t* sizes, size_t n_groups);
+// Structure used for ranking in the Kruskal-Wallis test
+typedef struct {
+	double value;
+	size_t group;
+} Rank;
+
+// Function prototypes for Log-Rank Test
+double nsl_stats_log_rank_test_statistic(const double* time,
+										 const int* status,
+										 const size_t* group1_indices,
+										 size_t size1,
+										 const size_t* group2_indices,
+										 size_t size2);
+double nsl_stats_log_rank_test_p(const double* time, const int* status, const size_t* group1_indices, size_t size1, const size_t* group2_indices, size_t size2);
 __END_DECLS
 
 #endif /* NSL_STATS_H */

@@ -204,9 +204,9 @@ bool TeXRenderer::executeLatexProcess(const QString engine,
 
 		res->successful = false;
 		res->errorMessage = std::move(err);
-		QFile::remove(baseName + QStringLiteral(".aux"));
-		QFile::remove(logFile.fileName());
-		QFile::remove(baseName + QStringLiteral(".%1").arg(resultFileExtension)); // in some cases the file was also created
+		// QFile::remove(baseName + QStringLiteral(".aux"));
+		// QFile::remove(logFile.fileName());
+		// QFile::remove(baseName + QStringLiteral(".%1").arg(resultFileExtension)); // in some cases the file was also created
 		return false;
 	}
 	res->successful = true;
@@ -224,19 +224,19 @@ QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const QString& 
 		return {};
 
 	// Can we move this into executeLatexProcess?
-	QFile::remove(baseName + QStringLiteral(".aux"));
-	QFile::remove(baseName + QStringLiteral(".log"));
+	// QFile::remove(baseName + QStringLiteral(".aux"));
+	// QFile::remove(baseName + QStringLiteral(".log"));
 
 	// read PDF file
 	QFile pdfFile(baseName + QStringLiteral(".pdf"));
 	if (!pdfFile.open(QIODevice::ReadOnly)) {
-		QFile::remove(baseName + QStringLiteral(".pdf"));
+		// QFile::remove(baseName + QStringLiteral(".pdf"));
 		return {};
 	}
 
 	auto ba = pdfFile.readAll();
 	pdfFile.close();
-	QFile::remove(baseName + QStringLiteral(".pdf"));
+	// QFile::remove(baseName + QStringLiteral(".pdf"));
 	res->successful = true;
 	res->errorMessage = QString();
 
@@ -266,9 +266,9 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 		WARN(err.toStdString());
 		res->successful = false;
 		res->errorMessage = std::move(err);
-		QFile::remove(baseName + QStringLiteral(".aux"));
-		QFile::remove(baseName + QStringLiteral(".log"));
-		QFile::remove(baseName + QStringLiteral(".dvi"));
+		// QFile::remove(baseName + QStringLiteral(".aux"));
+		// QFile::remove(baseName + QStringLiteral(".log"));
+		// QFile::remove(baseName + QStringLiteral(".dvi"));
 		return {};
 	}
 
@@ -296,30 +296,30 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 		WARN(err.toStdString());
 		res->successful = false;
 		res->errorMessage = std::move(err);
-		QFile::remove(baseName + QStringLiteral(".aux"));
-		QFile::remove(baseName + QStringLiteral(".log"));
-		QFile::remove(baseName + QStringLiteral(".dvi"));
-		QFile::remove(baseName + QStringLiteral(".ps"));
+		// QFile::remove(baseName + QStringLiteral(".aux"));
+		// QFile::remove(baseName + QStringLiteral(".log"));
+		// QFile::remove(baseName + QStringLiteral(".dvi"));
+		// QFile::remove(baseName + QStringLiteral(".ps"));
 		return {};
 	}
 
 	// final clean up
-	QFile::remove(baseName + QStringLiteral(".aux"));
-	QFile::remove(baseName + QStringLiteral(".log"));
-	QFile::remove(baseName + QStringLiteral(".dvi"));
-	QFile::remove(baseName + QStringLiteral(".ps"));
+	// QFile::remove(baseName + QStringLiteral(".aux"));
+	// QFile::remove(baseName + QStringLiteral(".log"));
+	// QFile::remove(baseName + QStringLiteral(".dvi"));
+	// QFile::remove(baseName + QStringLiteral(".ps"));
 
 	// read PDF file
 	QFile pdfFile(baseName + QLatin1String(".pdf"));
 	if (!pdfFile.open(QIODevice::ReadOnly)) {
-		QFile::remove(baseName + QStringLiteral(".pdf"));
+		// QFile::remove(baseName + QStringLiteral(".pdf"));
 		res->successful = false;
 		res->errorMessage = i18n("Unable to open file:") + pdfFile.fileName();
 		return {};
 	}
 
 	auto ba = pdfFile.readAll();
-	QFile::remove(baseName + QStringLiteral(".pdf"));
+	// QFile::remove(baseName + QStringLiteral(".pdf"));
 	res->successful = true;
 	res->errorMessage = QString();
 
