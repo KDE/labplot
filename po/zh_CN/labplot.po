@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-16 00:37+0000\n"
+"POT-Creation-Date: 2024-11-18 00:37+0000\n"
 "PO-Revision-Date: 2024-04-22 16:05\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -11074,7 +11074,7 @@ msgid "Data format && preview"
 msgstr "数据格式与预览"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1325
-#: src/frontend/SettingsGeneralPage.cpp:252
+#: src/frontend/SettingsGeneralPage.cpp:258
 #, kde-format
 msgid "Automatic"
 msgstr "自动"
@@ -14047,29 +14047,29 @@ msgctxt "@info:credit"
 msgid "Support import of ROOT (CERN) TH1 histograms"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:128
+#: src/frontend/LabPlot.cpp:129
 #, kde-format
 msgid "Disable splash screen"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:131
+#: src/frontend/LabPlot.cpp:132
 #, kde-format
 msgid "Start in the presenter mode"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:134
+#: src/frontend/LabPlot.cpp:135
 #, kde-format
 msgid "Open a project file."
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:153
+#: src/frontend/LabPlot.cpp:154
 #, kde-format
 msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
 "to exit the application."
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:154
+#: src/frontend/LabPlot.cpp:155
 #, kde-format
 msgid "Failed to Open"
 msgstr ""
@@ -15375,99 +15375,99 @@ msgstr "首选项 [已修改]"
 msgid "min."
 msgstr " 分钟"
 
-#: src/frontend/SettingsGeneralPage.cpp:218
+#: src/frontend/SettingsGeneralPage.cpp:224
 #, kde-format
 msgid "Create New Project"
 msgstr "创建新工程"
 
-#: src/frontend/SettingsGeneralPage.cpp:219
+#: src/frontend/SettingsGeneralPage.cpp:225
 #, kde-format
 msgid "Load Last Used Project"
 msgstr "加载上次使用的工程"
 
-#: src/frontend/SettingsGeneralPage.cpp:223
+#: src/frontend/SettingsGeneralPage.cpp:229
 #, kde-format
 msgid "With Spreadsheet"
 msgstr "数据表"
 
-#: src/frontend/SettingsGeneralPage.cpp:224
+#: src/frontend/SettingsGeneralPage.cpp:230
 #, kde-format
 msgid "With Worksheet"
 msgstr "工作表"
 
-#: src/frontend/SettingsGeneralPage.cpp:225
+#: src/frontend/SettingsGeneralPage.cpp:231
 #, kde-format
 msgid "With Spreadsheet and Worksheet"
 msgstr "数据表与工作表"
 
-#: src/frontend/SettingsGeneralPage.cpp:227
+#: src/frontend/SettingsGeneralPage.cpp:233
 #, kde-format
 msgid "With Notebook"
 msgstr "笔记本"
 
-#: src/frontend/SettingsGeneralPage.cpp:230
+#: src/frontend/SettingsGeneralPage.cpp:236
 #, kde-format
 msgid "Notebook type to create automatically on startup"
 msgstr "启动时自动创建的笔记本类型"
 
-#: src/frontend/SettingsGeneralPage.cpp:234
+#: src/frontend/SettingsGeneralPage.cpp:240
 #, kde-format
 msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
 "opened"
 msgstr "将浮动面板关闭后，重新打开时显示在什么位置"
 
-#: src/frontend/SettingsGeneralPage.cpp:238
+#: src/frontend/SettingsGeneralPage.cpp:244
 #, kde-format
 msgid "Original Position"
 msgstr "保持原来的位置"
 
-#: src/frontend/SettingsGeneralPage.cpp:239
+#: src/frontend/SettingsGeneralPage.cpp:245
 #, kde-format
 msgid "On top of the last active Dock Widget"
 msgstr "与上一个打开的浮动面板合并"
 
-#: src/frontend/SettingsGeneralPage.cpp:242
+#: src/frontend/SettingsGeneralPage.cpp:248
 #, kde-format
 msgid "Show File Path"
 msgstr "文件路径"
 
-#: src/frontend/SettingsGeneralPage.cpp:243
+#: src/frontend/SettingsGeneralPage.cpp:249
 #, kde-format
 msgid "Show File Name"
 msgstr "文件名称"
 
-#: src/frontend/SettingsGeneralPage.cpp:244
+#: src/frontend/SettingsGeneralPage.cpp:250
 #, kde-format
 msgid "Show Project Name"
 msgstr "工程名称"
 
-#: src/frontend/SettingsGeneralPage.cpp:246
+#: src/frontend/SettingsGeneralPage.cpp:252
 #, kde-format
 msgid "Metric"
 msgstr "公制"
 
-#: src/frontend/SettingsGeneralPage.cpp:247
+#: src/frontend/SettingsGeneralPage.cpp:253
 #, kde-format
 msgid "Imperial"
 msgstr "英制"
 
-#: src/frontend/SettingsGeneralPage.cpp:249
+#: src/frontend/SettingsGeneralPage.cpp:255
 #, kde-format
 msgid "Dot (.)"
 msgstr "圆点 (.)"
 
-#: src/frontend/SettingsGeneralPage.cpp:250
+#: src/frontend/SettingsGeneralPage.cpp:256
 #, kde-format
 msgid "Comma (,)"
 msgstr "逗号 (,)"
 
-#: src/frontend/SettingsGeneralPage.cpp:251
+#: src/frontend/SettingsGeneralPage.cpp:257
 #, kde-format
 msgid "Arabic (٫)"
 msgstr "阿拉伯语 (٫)"
 
-#: src/frontend/SettingsGeneralPage.cpp:255
+#: src/frontend/SettingsGeneralPage.cpp:261
 #, kde-format
 msgid ""
 "Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/"
@@ -15478,7 +15478,7 @@ msgstr ""
 "JCGM_100_2008_E.pdf\">《测量不确定度表达指南》(Guide to the Expression of "
 "Uncertainty in Measurement, GUM)</a>的术语"
 
-#: src/frontend/SettingsGeneralPage.cpp:260
+#: src/frontend/SettingsGeneralPage.cpp:266
 #, kde-format
 msgid ""
 "Save the state (position and geometry) of the docks in the project file. \n"
@@ -15490,7 +15490,7 @@ msgstr ""
 "此处的设置决定新工程的默认行为。\n"
 "可在工程属性中单独更改每个工程的设置。"
 
-#: src/frontend/SettingsGeneralPage.cpp:267
+#: src/frontend/SettingsGeneralPage.cpp:273
 #, kde-format
 msgid ""
 "Save the results of the calculations in the analysis curves in the project "
@@ -15506,19 +15506,26 @@ msgstr ""
 "此处的设置决定新工程的默认行为。\n"
 "可在工程属性中单独更改每个工程的设置。"
 
-#: src/frontend/SettingsGeneralPage.cpp:274
+#: src/frontend/SettingsGeneralPage.cpp:280
 #, kde-format
 msgid "Activates additional tracing output in the terminal."
 msgstr "在终端输出更详细的日志信息。"
 
-#: src/frontend/SettingsGeneralPage.cpp:275
+#: src/frontend/SettingsGeneralPage.cpp:281
+#, kde-format
+msgid ""
+"Info trace - helpful to get information and warnings when running the "
+"application."
+msgstr ""
+
+#: src/frontend/SettingsGeneralPage.cpp:282
 #, kde-format
 msgid ""
 "Debug trace - helpful to diagnose the application, can have a negative "
 "impact on the performance."
 msgstr "调试日志 - 可用于诊断应用程序的问题，但会对性能产生负面影响。"
 
-#: src/frontend/SettingsGeneralPage.cpp:276
+#: src/frontend/SettingsGeneralPage.cpp:283
 #, kde-format
 msgid ""
 "Performance trace - helpful to analyze performance relevant aspects and "
@@ -22343,16 +22350,22 @@ msgstr "以兼容格式保存"
 msgid "Tracing:"
 msgstr "日志输出："
 
+#. i18n: ectx: property (text), widget (QCheckBox, chkInfoTrace)
+#: src/frontend/ui/settingsgeneralpage.ui:360
+#, kde-format
+msgid "Info"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QCheckBox, chkPerfTrace)
 #. i18n: ectx: property (text), widget (QLabel, lPerformance)
-#: src/frontend/ui/settingsgeneralpage.ui:360
+#: src/frontend/ui/settingsgeneralpage.ui:396
 #: src/frontend/ui/settingsworksheetpage.ui:111
 #, kde-format
 msgid "Performance"
 msgstr "性能"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDebugTrace)
-#: src/frontend/ui/settingsgeneralpage.ui:383
+#: src/frontend/ui/settingsgeneralpage.ui:416
 #, kde-format
 msgid "Debug"
 msgstr "调试"

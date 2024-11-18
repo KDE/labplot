@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-16 00:37+0000\n"
-"PO-Revision-Date: 2024-11-03 23:57+0100\n"
+"POT-Creation-Date: 2024-11-18 00:37+0000\n"
+"PO-Revision-Date: 2024-11-12 22:59+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni-konstanz.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -1091,54 +1091,49 @@ msgid "Unable to open device"
 msgstr "Öffnen des Gerätes nicht möglich"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:199
-#, fuzzy, kde-format
-#| msgid "Unable to read the file"
+#, kde-format
 msgid "Unable to determine the separator"
-msgstr "Fehler beim Lesen der Datei"
+msgstr "Fehler beim Bestimmen des Trennzeichens"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:201
-#, fuzzy, kde-format
-#| msgid "Number of columns:"
+#, kde-format
 msgid "Invalid number of data columns"
-msgstr "Anzahl der Spalten:"
+msgstr "Ungültige Anzahl an Datenspalten"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:203
-#, fuzzy, kde-format
-#| msgid "Number of columns:"
+#, kde-format
 msgid "Invalid number of column names"
-msgstr "Anzahl der Spalten:"
+msgstr "Ungültige Anzahl an Spaltennamen"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:205
 #, kde-format
 msgid "Matrix: Unsupported column mode"
-msgstr ""
+msgstr "Matrix: Nichtunterstützter Spaltentyp"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:207
 #, kde-format
 msgid "Insufficient memory (RAM)"
-msgstr ""
+msgstr "Unzureichender Speicher (RAM)"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:209
-#, fuzzy, kde-format
-#| msgid "Unable to read the file"
+#, kde-format
 msgid "Unable to parse header"
-msgstr "Fehler beim Lesen der Datei"
+msgstr "Fehler beim Lesen der Kopfzeilen"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:211
-#, fuzzy, kde-format
-#| msgid "Type of data source"
+#, kde-format
 msgid "Unsupported data source"
-msgstr "Typ der Live-Datenquelle"
+msgstr "Nicht unterstützte Datenquelle"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:215
 #, kde-format
 msgid "Live: No column separator selected"
-msgstr ""
+msgstr "Live: Kein Spaltentrenner ausgewählt"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:217
 #, kde-format
 msgid "Live: No column modes set"
-msgstr ""
+msgstr "Live: Kein Spaltentyp gesetzt"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:219
 #, kde-format
@@ -1146,54 +1141,49 @@ msgid "Datetime column found, but no Datetime format provided"
 msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:221
-#, fuzzy, kde-format
-#| msgid "Reading from file %1 failed."
+#, kde-format
 msgid "Header reading from device not allowed"
-msgstr "Leasen aus Datei %1 fehlgeschlagen."
+msgstr "Lesen der Kopfzeilen vom Gerät nicht erlaubt"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:223
 #, kde-format
 msgid "Separator detection not allowed"
-msgstr ""
+msgstr "Trennzeichenerkennung nicht erlaubt"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:225
-#, fuzzy, kde-format
-#| msgid "Invalid sheet."
+#, kde-format
 msgid "Invalid separator"
-msgstr "Ungültiges Blatt."
+msgstr "Ungültiges Trennzeichen"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:227
-#, fuzzy, kde-format
-#| msgid "Failed to initialize %1."
+#, kde-format
 msgid "Filter not initialized"
-msgstr "Initialisierung von %1 fehlgeschlagen."
+msgstr "Filter nicht initialisiert"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:229
 #, kde-format
 msgid "Wrong end column. Is it smaller than start column?"
-msgstr ""
+msgstr "Falsche Endspalte. Ist sie kleiner als die Startspalte?"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:231
 #, kde-format
 msgid "Wrong end row. Is it smaller than start row?"
-msgstr ""
+msgstr "Falsche Endreihe. Ist sie kleiner als die Startreihe?"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:233
-#, fuzzy, kde-format
-#| msgid "No data set selected."
+#, kde-format
 msgid "No data destination set"
-msgstr "Kein Datensatz ausgewählt."
+msgstr "Kein Datenziel ausgewählt"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:235
-#, fuzzy, kde-format
-#| msgid "Sort columns:"
+#, kde-format
 msgid "No columns"
-msgstr "Spalten sortieren:"
+msgstr "Keine Spalten"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:237
 #, kde-format
 msgid "Unable to determine column modes. Check if they are correctly written"
-msgstr ""
+msgstr "Spaltentyperkennung nicht möglich. Bitte Schreibung kontrollieren"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:239
 #, kde-format
@@ -1238,10 +1228,9 @@ msgid "DateTime"
 msgstr "Datum und Zeit"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:610
-#, fuzzy, kde-format
-#| msgid "Int8"
+#, kde-format
 msgid "Int"
-msgstr "Int8"
+msgstr "Int"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:611
 #: src/backend/datasources/filters/MatioFilter.cpp:398
@@ -2462,10 +2451,9 @@ msgid "Device already opened."
 msgstr "Das Gerät ist bereits geöffnet."
 
 #: src/backend/datasources/LiveDataSource.cpp:717
-#, fuzzy, kde-format
-#| msgid "Device is not opened."
+#, kde-format
 msgid "Device is not open."
-msgstr "Das Gerät ist nicht geöffnet."
+msgstr "Gerät ist nicht geöffnet."
 
 #: src/backend/datasources/LiveDataSource.cpp:720
 #, kde-format
@@ -2495,7 +2483,7 @@ msgstr "Fehler des Seriellen Ports"
 #: src/backend/datasources/MQTTTopic.cpp:44
 #, kde-format
 msgid "%1 %2"
-msgstr ""
+msgstr "%1 %2"
 
 #: src/backend/datasources/MQTTTopic.cpp:129
 #, kde-format
@@ -8763,10 +8751,9 @@ msgid "%1: set font"
 msgstr "%1: Schriftart festlegen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:216
-#, fuzzy, kde-format
-#| msgid "%1: set font color"
+#, kde-format
 msgid "%1: use plot's color"
-msgstr "%1: Schriftfarbe festlegen"
+msgstr "%1: Plotfarbe nutzen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:223
 #: src/backend/worksheet/TextLabel.cpp:353
@@ -10433,16 +10420,14 @@ msgid "Line in the file that should be used to determine the column names."
 msgstr "Zeile in der Datei, die die Namen der Spalten enthält."
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:111
-#, fuzzy, kde-format
-#| msgid "Custom column names, space separated. E.g. \"x y\""
+#, kde-format
 msgid "Custom column names, comma separated. E.g. \"x, y\""
-msgstr "Eigene Spaltennamen durch Leerzeichen getrennt. Zum Beispiel \"x y\""
+msgstr "Eigene Spaltennamen durch Komma getrennt. Zum Beispiel \"x, y\""
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:115
-#, fuzzy, kde-format
-#| msgid "Custom column names, space separated. E.g. \"x y\""
+#, kde-format
 msgid "Custom column modes, comma separated"
-msgstr "Eigene Spaltennamen durch Leerzeichen getrennt. Zum Beispiel \"x y\""
+msgstr "Eigene Spaltennamen durch Komma getrennt."
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:122
 #, kde-format
@@ -10460,10 +10445,9 @@ msgid ""
 msgstr ""
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:252
-#, fuzzy, kde-format
-#| msgid "Data type not supported yet."
+#, kde-format
 msgid "Datatype not found: %1"
-msgstr "Datentyp noch nicht unterstützt."
+msgstr "Datentyp nicht gefunden: %1"
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:29
 #, kde-format
@@ -10893,10 +10877,9 @@ msgid "Select a data container where the data has to be imported into."
 msgstr "Wähle einen Datenkontainer in dem die Daten importiert werden sollen."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:406
-#, fuzzy, kde-format
-#| msgid "No data to import."
+#, kde-format
 msgid "No file provided for import."
-msgstr "Keine Daten zu Importieren."
+msgstr "Keine Datei zum Importieren angegeben."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:428
 #, kde-format
@@ -11157,6 +11140,7 @@ msgstr ""
 msgid ""
 "The number of rows is calculated from the values of the data portion tab"
 msgstr ""
+"Die Anzahl der Reihen wird aus den Werten des Datenbereichsreiters berechnet"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:982
 #, kde-format
@@ -11220,7 +11204,7 @@ msgid "Data format && preview"
 msgstr "Datenformat && Vorschau"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1325
-#: src/frontend/SettingsGeneralPage.cpp:252
+#: src/frontend/SettingsGeneralPage.cpp:258
 #, kde-format
 msgid "Automatic"
 msgstr "Automatisch"
@@ -11337,13 +11321,12 @@ msgstr ""
 #: src/frontend/datasources/ImportFileWidget.cpp:1768
 #, kde-format
 msgid "Preview: Initialization failed: %1"
-msgstr ""
+msgstr "Vorschau: Initialisierung fehlgeschlagen: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1793
-#, fuzzy, kde-format
-#| msgid "Failed to connect to the broker '%1:%2'."
+#, kde-format
 msgid "Preview: Failed to connect to local socket %1 - %2"
-msgstr "Verbindung zum Broker '%1:%2' fehlgeschlagen."
+msgstr "Vorschau: Keine Verbindung zum lokalen Socket %1 - %2"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1808
 #, fuzzy, kde-format
@@ -11352,20 +11335,19 @@ msgid "Preview: Failed to connect to TCP socket - %1"
 msgstr "Verbindung zum Broker '%1:%2' fehlgeschlagen."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1853
-#, fuzzy, kde-format
-#| msgid "area error: %1"
+#, kde-format
 msgid "Parse Error: %1"
-msgstr "Flächenfehler: %1"
+msgstr "Parserfehler: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1855
 #, kde-format
 msgid "ERROR: not ready for read after 2 sec"
-msgstr ""
+msgstr "FEHLER: Nicht bereit fürs Lesen nach 2 Sekunden"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1859
 #, kde-format
 msgid "ERROR: failed to open serial port. error: %1"
-msgstr ""
+msgstr "FEHLER: Öffnen des Seriellen Ports fehlgeschlagen. Fehler: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1878
 #, kde-format
@@ -14312,22 +14294,22 @@ msgctxt "@info:credit"
 msgid "Support import of ROOT (CERN) TH1 histograms"
 msgstr "Unterstützung beim Import vom ROOT (CERN) TH1 Histogrammen"
 
-#: src/frontend/LabPlot.cpp:128
+#: src/frontend/LabPlot.cpp:129
 #, kde-format
 msgid "Disable splash screen"
 msgstr "Startbildschirm deaktivieren"
 
-#: src/frontend/LabPlot.cpp:131
+#: src/frontend/LabPlot.cpp:132
 #, kde-format
 msgid "Start in the presenter mode"
 msgstr "Im Präsentationsmodus starten"
 
-#: src/frontend/LabPlot.cpp:134
+#: src/frontend/LabPlot.cpp:135
 #, kde-format
 msgid "Open a project file."
 msgstr "Eine Projektdatei Öffnen."
 
-#: src/frontend/LabPlot.cpp:153
+#: src/frontend/LabPlot.cpp:154
 #, kde-format
 msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
@@ -14336,7 +14318,7 @@ msgstr ""
 "Die Datei „%1“ kann nicht geöffnet werden. Klicken Sie auf „Fortsetzen“ um "
 "weiter zu machen, oder auf „Abbrechen“, um die Anwendung zu beenden."
 
-#: src/frontend/LabPlot.cpp:154
+#: src/frontend/LabPlot.cpp:155
 #, kde-format
 msgid "Failed to Open"
 msgstr "Fehler beim Öffnen"
@@ -15655,42 +15637,42 @@ msgstr "Einstellungen    [Geändert]"
 msgid "min."
 msgstr "Min."
 
-#: src/frontend/SettingsGeneralPage.cpp:218
+#: src/frontend/SettingsGeneralPage.cpp:224
 #, kde-format
 msgid "Create New Project"
 msgstr "Neues Projekt erstellen"
 
-#: src/frontend/SettingsGeneralPage.cpp:219
+#: src/frontend/SettingsGeneralPage.cpp:225
 #, kde-format
 msgid "Load Last Used Project"
 msgstr "Zuletzt verwendetes Projekt laden"
 
-#: src/frontend/SettingsGeneralPage.cpp:223
+#: src/frontend/SettingsGeneralPage.cpp:229
 #, kde-format
 msgid "With Spreadsheet"
 msgstr "Mit Tabelle"
 
-#: src/frontend/SettingsGeneralPage.cpp:224
+#: src/frontend/SettingsGeneralPage.cpp:230
 #, kde-format
 msgid "With Worksheet"
 msgstr "Mit Arbeitsblatt"
 
-#: src/frontend/SettingsGeneralPage.cpp:225
+#: src/frontend/SettingsGeneralPage.cpp:231
 #, kde-format
 msgid "With Spreadsheet and Worksheet"
 msgstr "Mit Tabelle und Arbeitsblatt"
 
-#: src/frontend/SettingsGeneralPage.cpp:227
+#: src/frontend/SettingsGeneralPage.cpp:233
 #, kde-format
 msgid "With Notebook"
 msgstr "Mit Notebook"
 
-#: src/frontend/SettingsGeneralPage.cpp:230
+#: src/frontend/SettingsGeneralPage.cpp:236
 #, kde-format
 msgid "Notebook type to create automatically on startup"
 msgstr "Typ des Notebooks, welches bei Starten automatisch erzeugt wird"
 
-#: src/frontend/SettingsGeneralPage.cpp:234
+#: src/frontend/SettingsGeneralPage.cpp:240
 #, kde-format
 msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
@@ -15699,57 +15681,57 @@ msgstr ""
 "Verwaltet das Verhalten an welcher Stelle Dock Widgets nach dem erneuten "
 "Öffnen platziert werden"
 
-#: src/frontend/SettingsGeneralPage.cpp:238
+#: src/frontend/SettingsGeneralPage.cpp:244
 #, kde-format
 msgid "Original Position"
 msgstr "Originale Position"
 
-#: src/frontend/SettingsGeneralPage.cpp:239
+#: src/frontend/SettingsGeneralPage.cpp:245
 #, kde-format
 msgid "On top of the last active Dock Widget"
 msgstr "Über dem zuletzt aktivem Dock Widget"
 
-#: src/frontend/SettingsGeneralPage.cpp:242
+#: src/frontend/SettingsGeneralPage.cpp:248
 #, kde-format
 msgid "Show File Path"
 msgstr "Dateipfad anzeigen"
 
-#: src/frontend/SettingsGeneralPage.cpp:243
+#: src/frontend/SettingsGeneralPage.cpp:249
 #, kde-format
 msgid "Show File Name"
 msgstr "Dateinamen anzeigen"
 
-#: src/frontend/SettingsGeneralPage.cpp:244
+#: src/frontend/SettingsGeneralPage.cpp:250
 #, kde-format
 msgid "Show Project Name"
 msgstr "Projektnamen anzeigen"
 
-#: src/frontend/SettingsGeneralPage.cpp:246
+#: src/frontend/SettingsGeneralPage.cpp:252
 #, kde-format
 msgid "Metric"
 msgstr "Metrisch"
 
-#: src/frontend/SettingsGeneralPage.cpp:247
+#: src/frontend/SettingsGeneralPage.cpp:253
 #, kde-format
 msgid "Imperial"
 msgstr "Angloamerikanisch"
 
-#: src/frontend/SettingsGeneralPage.cpp:249
+#: src/frontend/SettingsGeneralPage.cpp:255
 #, kde-format
 msgid "Dot (.)"
 msgstr "Punkt (.)"
 
-#: src/frontend/SettingsGeneralPage.cpp:250
+#: src/frontend/SettingsGeneralPage.cpp:256
 #, kde-format
 msgid "Comma (,)"
 msgstr "Komma (,)"
 
-#: src/frontend/SettingsGeneralPage.cpp:251
+#: src/frontend/SettingsGeneralPage.cpp:257
 #, kde-format
 msgid "Arabic (٫)"
 msgstr "Arabisch (٫)"
 
-#: src/frontend/SettingsGeneralPage.cpp:255
+#: src/frontend/SettingsGeneralPage.cpp:261
 #, kde-format
 msgid ""
 "Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/"
@@ -15760,7 +15742,7 @@ msgstr ""
 "common/documents/jcgm/JCGM_100_2008_E.pdf\">Guide to the Expression of "
 "Uncertainty in Measurement (GUM)</a>"
 
-#: src/frontend/SettingsGeneralPage.cpp:260
+#: src/frontend/SettingsGeneralPage.cpp:266
 #, kde-format
 msgid ""
 "Save the state (position and geometry) of the docks in the project file. \n"
@@ -15773,7 +15755,7 @@ msgstr ""
 "Die Einstellung kann für jedes Projekt einzeln in den Projekteigenschaften "
 "geändert werden."
 
-#: src/frontend/SettingsGeneralPage.cpp:267
+#: src/frontend/SettingsGeneralPage.cpp:273
 #, kde-format
 msgid ""
 "Save the results of the calculations in the analysis curves in the project "
@@ -15791,12 +15773,19 @@ msgstr ""
 "Die Einstellung kann für jedes Projekt einzeln in den Projekteigenschaften "
 "geändert werden."
 
-#: src/frontend/SettingsGeneralPage.cpp:274
+#: src/frontend/SettingsGeneralPage.cpp:280
 #, kde-format
 msgid "Activates additional tracing output in the terminal."
 msgstr "Aktiviert zusätzliche Ausgabe im Terminal zur Nachverfolgung."
 
-#: src/frontend/SettingsGeneralPage.cpp:275
+#: src/frontend/SettingsGeneralPage.cpp:281
+#, kde-format
+msgid ""
+"Info trace - helpful to get information and warnings when running the "
+"application."
+msgstr ""
+
+#: src/frontend/SettingsGeneralPage.cpp:282
 #, kde-format
 msgid ""
 "Debug trace - helpful to diagnose the application, can have a negative "
@@ -15805,7 +15794,7 @@ msgstr ""
 "Fehlernachverfolgung - Hilfreich zur Diagnose der Anwendung. Kann sich "
 "negativeauf die Performance auswirken."
 
-#: src/frontend/SettingsGeneralPage.cpp:276
+#: src/frontend/SettingsGeneralPage.cpp:283
 #, kde-format
 msgid ""
 "Performance trace - helpful to analyze performance relevant aspects and "
@@ -17610,13 +17599,12 @@ msgstr "%1: Ausgewählte Zellen löschen"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3781
 #, kde-format
 msgid "Selected 1: %1 rows, %2 columns"
-msgstr ""
+msgstr "Ausgewählt 1: %1 Reihen, %2 Spalten"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3791
-#, fuzzy, kde-format
-#| msgid "Source curve"
+#, kde-format
 msgid "Selected: %1 cells"
-msgstr "Quellkurve"
+msgstr "Ausgewählt: %1 Zellen"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3810
 #, kde-format
@@ -17674,8 +17662,7 @@ msgid ", "
 msgstr ", "
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3820
-#, fuzzy, kde-format
-#| msgid "Selected: %1 %2 , %3 %4%5 %6 %7 %8"
+#, kde-format
 msgid "Selected: %1 %2, %3 %4%5 %6 %7 %8"
 msgstr "Ausgewählt: %1 %2, %3 %4%5 %6 %7 %8"
 
@@ -18654,8 +18641,7 @@ msgstr "Datum-Zeit-Format:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbSkipEmptyParts)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:43
-#, fuzzy, kde-format
-#| msgid "Skip empty parts"
+#, kde-format
 msgid "Skip empty Parts"
 msgstr "Leere Teile überspringen"
 
@@ -18669,10 +18655,9 @@ msgstr "NaN zu 0 konvertieren"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnMode)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:73
-#, fuzzy, kde-format
-#| msgid "Column labels"
+#, kde-format
 msgid "Column Datatypes:"
-msgstr "Spaltenbeschriftung"
+msgstr "Spaltendatentypen:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:80
@@ -18713,14 +18698,13 @@ msgstr "Spaltentrenner:"
 #: src/frontend/ui/datasources/asciioptionswidget.ui:143
 #, kde-format
 msgid "Base year when only 2 digits are provided for the year"
-msgstr ""
+msgstr "Basisjahr, falls nur 2 Ziffern für Jahre angegeben wird"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:194
-#, fuzzy, kde-format
-#| msgid "Years"
+#, kde-format
 msgid "Year Base:"
-msgstr "Jahre"
+msgstr "Jahrbasis:"
 
 #. i18n: ectx: property (text), widget (QLabel, lVectorNames)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:201
@@ -18756,7 +18740,7 @@ msgstr "Index erstellen"
 #: src/frontend/ui/datasources/asciioptionswidget.ui:253
 #, kde-format
 msgid "Import Integer as Double"
-msgstr ""
+msgstr "Integer als Double importieren"
 
 #. i18n: ectx: property (text), widget (QLabel, lSkipBytes)
 #: src/frontend/ui/datasources/binaryoptionswidget.ui:17
@@ -20682,10 +20666,9 @@ msgstr "Waagerechte Ausrichtung:"
 
 #. i18n: ectx: property (text), widget (QLabel, lUsePlotColor)
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:463
-#, fuzzy, kde-format
-#| msgid "Font Color:"
+#, kde-format
 msgid "Plot's Color:"
-msgstr "Schriftfarbe:"
+msgstr "Plotfarbe:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderCornerRadius)
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:552
@@ -22703,16 +22686,22 @@ msgstr "In kompatiblem Format speichern"
 msgid "Tracing:"
 msgstr "Verfolgung:"
 
+#. i18n: ectx: property (text), widget (QCheckBox, chkInfoTrace)
+#: src/frontend/ui/settingsgeneralpage.ui:360
+#, kde-format
+msgid "Info"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QCheckBox, chkPerfTrace)
 #. i18n: ectx: property (text), widget (QLabel, lPerformance)
-#: src/frontend/ui/settingsgeneralpage.ui:360
+#: src/frontend/ui/settingsgeneralpage.ui:396
 #: src/frontend/ui/settingsworksheetpage.ui:111
 #, kde-format
 msgid "Performance"
 msgstr "Leistungsfähigkeit"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDebugTrace)
-#: src/frontend/ui/settingsgeneralpage.ui:383
+#: src/frontend/ui/settingsgeneralpage.ui:416
 #, kde-format
 msgid "Debug"
 msgstr "Fehlerbeseitigung"

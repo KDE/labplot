@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-16 00:37+0000\n"
+"POT-Creation-Date: 2024-11-18 00:37+0000\n"
 "PO-Revision-Date: 2024-07-27 16:22+0200\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -11226,7 +11226,7 @@ msgid "Data format && preview"
 msgstr "Formato de datumoj && antaŭrigardo"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1325
-#: src/frontend/SettingsGeneralPage.cpp:252
+#: src/frontend/SettingsGeneralPage.cpp:258
 #, kde-format
 msgid "Automatic"
 msgstr "Aŭtomata"
@@ -14333,22 +14333,22 @@ msgctxt "@info:credit"
 msgid "Support import of ROOT (CERN) TH1 histograms"
 msgstr "Subteni importadon de Histogramoj ROOT (CERN) TH1"
 
-#: src/frontend/LabPlot.cpp:128
+#: src/frontend/LabPlot.cpp:129
 #, kde-format
 msgid "Disable splash screen"
 msgstr "Malebligi plaŭdan ekranon"
 
-#: src/frontend/LabPlot.cpp:131
+#: src/frontend/LabPlot.cpp:132
 #, kde-format
 msgid "Start in the presenter mode"
 msgstr "Komenci en la prezentisto-reĝimo"
 
-#: src/frontend/LabPlot.cpp:134
+#: src/frontend/LabPlot.cpp:135
 #, kde-format
 msgid "Open a project file."
 msgstr "Malfermi projektdosieron."
 
-#: src/frontend/LabPlot.cpp:153
+#: src/frontend/LabPlot.cpp:154
 #, kde-format
 msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
@@ -14357,7 +14357,7 @@ msgstr ""
 "Ne eblis malfermi dosieron '%1'. Alklaku 'Daŭrigu' por komenci komenci aŭ "
 "'Nuligi' por eliri la aplikaĵon."
 
-#: src/frontend/LabPlot.cpp:154
+#: src/frontend/LabPlot.cpp:155
 #, kde-format
 msgid "Failed to Open"
 msgstr "Malsukcesis malfermi"
@@ -15675,42 +15675,42 @@ msgstr "Preferoj [Ŝanĝitaj]"
 msgid "min."
 msgstr "min."
 
-#: src/frontend/SettingsGeneralPage.cpp:218
+#: src/frontend/SettingsGeneralPage.cpp:224
 #, kde-format
 msgid "Create New Project"
 msgstr "Krei Novan Projekton"
 
-#: src/frontend/SettingsGeneralPage.cpp:219
+#: src/frontend/SettingsGeneralPage.cpp:225
 #, kde-format
 msgid "Load Last Used Project"
 msgstr "Ŝargi Laste Uzitan Projekton"
 
-#: src/frontend/SettingsGeneralPage.cpp:223
+#: src/frontend/SettingsGeneralPage.cpp:229
 #, kde-format
 msgid "With Spreadsheet"
 msgstr "Kun Tabelfolio"
 
-#: src/frontend/SettingsGeneralPage.cpp:224
+#: src/frontend/SettingsGeneralPage.cpp:230
 #, kde-format
 msgid "With Worksheet"
 msgstr "Kun Laborfolio"
 
-#: src/frontend/SettingsGeneralPage.cpp:225
+#: src/frontend/SettingsGeneralPage.cpp:231
 #, kde-format
 msgid "With Spreadsheet and Worksheet"
 msgstr "Kun Tabelfolio kaj Laborfolio"
 
-#: src/frontend/SettingsGeneralPage.cpp:227
+#: src/frontend/SettingsGeneralPage.cpp:233
 #, kde-format
 msgid "With Notebook"
 msgstr "Kun Kajero"
 
-#: src/frontend/SettingsGeneralPage.cpp:230
+#: src/frontend/SettingsGeneralPage.cpp:236
 #, kde-format
 msgid "Notebook type to create automatically on startup"
 msgstr "Notlibra tipo kreenda aŭtomate je lanĉo"
 
-#: src/frontend/SettingsGeneralPage.cpp:234
+#: src/frontend/SettingsGeneralPage.cpp:240
 #, kde-format
 msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
@@ -15719,57 +15719,57 @@ msgstr ""
 "Regas la konduton de kie la dokaj fenestraĵoj estas metitaj post ilia "
 "remalfermiĝo"
 
-#: src/frontend/SettingsGeneralPage.cpp:238
+#: src/frontend/SettingsGeneralPage.cpp:244
 #, kde-format
 msgid "Original Position"
 msgstr "Origina Pozicio"
 
-#: src/frontend/SettingsGeneralPage.cpp:239
+#: src/frontend/SettingsGeneralPage.cpp:245
 #, kde-format
 msgid "On top of the last active Dock Widget"
 msgstr "Super la lasta aktiva Dokfenestraĵo"
 
-#: src/frontend/SettingsGeneralPage.cpp:242
+#: src/frontend/SettingsGeneralPage.cpp:248
 #, kde-format
 msgid "Show File Path"
 msgstr "Montri Dosieran Vojon"
 
-#: src/frontend/SettingsGeneralPage.cpp:243
+#: src/frontend/SettingsGeneralPage.cpp:249
 #, kde-format
 msgid "Show File Name"
 msgstr "Montri Dosiernomon"
 
-#: src/frontend/SettingsGeneralPage.cpp:244
+#: src/frontend/SettingsGeneralPage.cpp:250
 #, kde-format
 msgid "Show Project Name"
 msgstr "Montri Projektan Nomon"
 
-#: src/frontend/SettingsGeneralPage.cpp:246
+#: src/frontend/SettingsGeneralPage.cpp:252
 #, kde-format
 msgid "Metric"
 msgstr "Metriko"
 
-#: src/frontend/SettingsGeneralPage.cpp:247
+#: src/frontend/SettingsGeneralPage.cpp:253
 #, kde-format
 msgid "Imperial"
 msgstr "Imperia"
 
-#: src/frontend/SettingsGeneralPage.cpp:249
+#: src/frontend/SettingsGeneralPage.cpp:255
 #, kde-format
 msgid "Dot (.)"
 msgstr "Punkto (.)"
 
-#: src/frontend/SettingsGeneralPage.cpp:250
+#: src/frontend/SettingsGeneralPage.cpp:256
 #, kde-format
 msgid "Comma (,)"
 msgstr "Komo (,)"
 
-#: src/frontend/SettingsGeneralPage.cpp:251
+#: src/frontend/SettingsGeneralPage.cpp:257
 #, kde-format
 msgid "Arabic (٫)"
 msgstr "La araba (.)"
 
-#: src/frontend/SettingsGeneralPage.cpp:255
+#: src/frontend/SettingsGeneralPage.cpp:261
 #, kde-format
 msgid ""
 "Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/"
@@ -15780,7 +15780,7 @@ msgstr ""
 "documents/jcgm/JCGM_100_2008_E.pdf\">Gvidilo al la Esprimo de Necerteco en "
 "Mezurado (GUM)</a>"
 
-#: src/frontend/SettingsGeneralPage.cpp:260
+#: src/frontend/SettingsGeneralPage.cpp:266
 #, kde-format
 msgid ""
 "Save the state (position and geometry) of the docks in the project file. \n"
@@ -15794,7 +15794,7 @@ msgstr ""
 "La agordo povas esti ŝanĝita por ĉiu projekto aparte en la projektaj "
 "proprecoj."
 
-#: src/frontend/SettingsGeneralPage.cpp:267
+#: src/frontend/SettingsGeneralPage.cpp:273
 #, kde-format
 msgid ""
 "Save the results of the calculations in the analysis curves in the project "
@@ -15813,12 +15813,19 @@ msgstr ""
 "La agordo povas esti ŝanĝata aparte por ĉiu projekto en la projektaj "
 "proprecoj."
 
-#: src/frontend/SettingsGeneralPage.cpp:274
+#: src/frontend/SettingsGeneralPage.cpp:280
 #, kde-format
 msgid "Activates additional tracing output in the terminal."
 msgstr "Aktivigas plian spuran eligon en la terminalo."
 
-#: src/frontend/SettingsGeneralPage.cpp:275
+#: src/frontend/SettingsGeneralPage.cpp:281
+#, kde-format
+msgid ""
+"Info trace - helpful to get information and warnings when running the "
+"application."
+msgstr ""
+
+#: src/frontend/SettingsGeneralPage.cpp:282
 #, kde-format
 msgid ""
 "Debug trace - helpful to diagnose the application, can have a negative "
@@ -15827,7 +15834,7 @@ msgstr ""
 "Sencimiga spuro - helpema por diagnozi la aplikaĵon, povas havi negativan "
 "efikon sur la agado."
 
-#: src/frontend/SettingsGeneralPage.cpp:276
+#: src/frontend/SettingsGeneralPage.cpp:283
 #, kde-format
 msgid ""
 "Performance trace - helpful to analyze performance relevant aspects and "
@@ -22739,16 +22746,22 @@ msgstr "Konservi en kongrua formato"
 msgid "Tracing:"
 msgstr "Spurado:"
 
+#. i18n: ectx: property (text), widget (QCheckBox, chkInfoTrace)
+#: src/frontend/ui/settingsgeneralpage.ui:360
+#, kde-format
+msgid "Info"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QCheckBox, chkPerfTrace)
 #. i18n: ectx: property (text), widget (QLabel, lPerformance)
-#: src/frontend/ui/settingsgeneralpage.ui:360
+#: src/frontend/ui/settingsgeneralpage.ui:396
 #: src/frontend/ui/settingsworksheetpage.ui:111
 #, kde-format
 msgid "Performance"
 msgstr "Agado"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDebugTrace)
-#: src/frontend/ui/settingsgeneralpage.ui:383
+#: src/frontend/ui/settingsgeneralpage.ui:416
 #, kde-format
 msgid "Debug"
 msgstr "Sencimigo"

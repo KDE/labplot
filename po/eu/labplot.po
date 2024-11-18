@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-16 00:37+0000\n"
+"POT-Creation-Date: 2024-11-18 00:37+0000\n"
 "PO-Revision-Date: 2023-09-19 23:30+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -11334,7 +11334,7 @@ msgid "Data format && preview"
 msgstr ""
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1325
-#: src/frontend/SettingsGeneralPage.cpp:252
+#: src/frontend/SettingsGeneralPage.cpp:258
 #, fuzzy, kde-format
 msgid "Automatic"
 msgstr "Automatikoa"
@@ -14363,22 +14363,22 @@ msgctxt "@info:credit"
 msgid "Support import of ROOT (CERN) TH1 histograms"
 msgstr "ROOT (CERN) TH1 histogramak inportatzeko euskarria"
 
-#: src/frontend/LabPlot.cpp:128
+#: src/frontend/LabPlot.cpp:129
 #, kde-format
 msgid "Disable splash screen"
 msgstr "Plasta pantaila ezgaitzea"
 
-#: src/frontend/LabPlot.cpp:131
+#: src/frontend/LabPlot.cpp:132
 #, kde-format
 msgid "Start in the presenter mode"
 msgstr "Aurkezle moduan hastea"
 
-#: src/frontend/LabPlot.cpp:134
+#: src/frontend/LabPlot.cpp:135
 #, kde-format
 msgid "Open a project file."
 msgstr "Ireki proiektu-fitxategi bat."
 
-#: src/frontend/LabPlot.cpp:153
+#: src/frontend/LabPlot.cpp:154
 #, kde-format
 msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
@@ -14387,7 +14387,7 @@ msgstr ""
 "Ezin izan du '%1' fitxategia ireki. Egin klik 'Jarraitu' botoian abioarekin "
 "jarraitzeko edo 'Utzi' botoian aplikaziotik irteteko."
 
-#: src/frontend/LabPlot.cpp:154
+#: src/frontend/LabPlot.cpp:155
 #, kde-format
 msgid "Failed to Open"
 msgstr "Irekitzea huts egin du"
@@ -15727,102 +15727,102 @@ msgstr "Hobespenak    [Aldatuta]"
 msgid "min."
 msgstr "min."
 
-#: src/frontend/SettingsGeneralPage.cpp:218
+#: src/frontend/SettingsGeneralPage.cpp:224
 #, fuzzy, kde-format
 #| msgid "Create New Empty Project"
 msgid "Create New Project"
 msgstr "Sortu proiektu huts berria"
 
-#: src/frontend/SettingsGeneralPage.cpp:219
+#: src/frontend/SettingsGeneralPage.cpp:225
 #, kde-format
 msgid "Load Last Used Project"
 msgstr "Zamatu erabilitako azken proiektua"
 
-#: src/frontend/SettingsGeneralPage.cpp:223
+#: src/frontend/SettingsGeneralPage.cpp:229
 #, fuzzy, kde-format
 msgid "With Spreadsheet"
 msgstr "Kalkulu-orria"
 
-#: src/frontend/SettingsGeneralPage.cpp:224
+#: src/frontend/SettingsGeneralPage.cpp:230
 #, fuzzy, kde-format
 #| msgid "Worksheet"
 msgid "With Worksheet"
 msgstr "Lan-orria"
 
-#: src/frontend/SettingsGeneralPage.cpp:225
+#: src/frontend/SettingsGeneralPage.cpp:231
 #, fuzzy, kde-format
 msgid "With Spreadsheet and Worksheet"
 msgstr "Ezarri lerrokatze bertikala"
 
-#: src/frontend/SettingsGeneralPage.cpp:227
+#: src/frontend/SettingsGeneralPage.cpp:233
 #, fuzzy, kde-format
 #| msgid "Notebook"
 msgid "With Notebook"
 msgstr "Koadernoa"
 
-#: src/frontend/SettingsGeneralPage.cpp:230
+#: src/frontend/SettingsGeneralPage.cpp:236
 #, kde-format
 msgid "Notebook type to create automatically on startup"
 msgstr ""
 
-#: src/frontend/SettingsGeneralPage.cpp:234
+#: src/frontend/SettingsGeneralPage.cpp:240
 #, kde-format
 msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
 "opened"
 msgstr ""
 
-#: src/frontend/SettingsGeneralPage.cpp:238
+#: src/frontend/SettingsGeneralPage.cpp:244
 #, fuzzy, kde-format
 msgid "Original Position"
 msgstr "Jatorrizko neurria"
 
-#: src/frontend/SettingsGeneralPage.cpp:239
+#: src/frontend/SettingsGeneralPage.cpp:245
 #, kde-format
 msgid "On top of the last active Dock Widget"
 msgstr ""
 
-#: src/frontend/SettingsGeneralPage.cpp:242
+#: src/frontend/SettingsGeneralPage.cpp:248
 #, kde-format
 msgid "Show File Path"
 msgstr "Erakutsi fitxategiaren bide-izena"
 
-#: src/frontend/SettingsGeneralPage.cpp:243
+#: src/frontend/SettingsGeneralPage.cpp:249
 #, kde-format
 msgid "Show File Name"
 msgstr "Erakutsi fitxategiaren izena"
 
-#: src/frontend/SettingsGeneralPage.cpp:244
+#: src/frontend/SettingsGeneralPage.cpp:250
 #, kde-format
 msgid "Show Project Name"
 msgstr "Erakutsi proiektuaren izena"
 
-#: src/frontend/SettingsGeneralPage.cpp:246
+#: src/frontend/SettingsGeneralPage.cpp:252
 #, kde-format
 msgid "Metric"
 msgstr "Metrikoa"
 
-#: src/frontend/SettingsGeneralPage.cpp:247
+#: src/frontend/SettingsGeneralPage.cpp:253
 #, kde-format
 msgid "Imperial"
 msgstr "Inperiala"
 
-#: src/frontend/SettingsGeneralPage.cpp:249
+#: src/frontend/SettingsGeneralPage.cpp:255
 #, kde-format
 msgid "Dot (.)"
 msgstr "Puntua (.)"
 
-#: src/frontend/SettingsGeneralPage.cpp:250
+#: src/frontend/SettingsGeneralPage.cpp:256
 #, kde-format
 msgid "Comma (,)"
 msgstr "Koma (,)"
 
-#: src/frontend/SettingsGeneralPage.cpp:251
+#: src/frontend/SettingsGeneralPage.cpp:257
 #, kde-format
 msgid "Arabic (٫)"
 msgstr "Arabiera (,)"
 
-#: src/frontend/SettingsGeneralPage.cpp:255
+#: src/frontend/SettingsGeneralPage.cpp:261
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p>Use terms compliant with the <a href=\"http://www."
@@ -15840,7 +15840,7 @@ msgstr ""
 "(GUM: «Guide to the Expression of Uncertainty in Measurement»)</span> "
 "etorkorrak diren terminoak</a></p></body></html>"
 
-#: src/frontend/SettingsGeneralPage.cpp:260
+#: src/frontend/SettingsGeneralPage.cpp:266
 #, kde-format
 msgid ""
 "Save the state (position and geometry) of the docks in the project file. \n"
@@ -15849,7 +15849,7 @@ msgid ""
 "properties."
 msgstr ""
 
-#: src/frontend/SettingsGeneralPage.cpp:267
+#: src/frontend/SettingsGeneralPage.cpp:273
 #, kde-format
 msgid ""
 "Save the results of the calculations in the analysis curves in the project "
@@ -15861,19 +15861,26 @@ msgid ""
 "properties."
 msgstr ""
 
-#: src/frontend/SettingsGeneralPage.cpp:274
+#: src/frontend/SettingsGeneralPage.cpp:280
 #, kde-format
 msgid "Activates additional tracing output in the terminal."
 msgstr ""
 
-#: src/frontend/SettingsGeneralPage.cpp:275
+#: src/frontend/SettingsGeneralPage.cpp:281
+#, kde-format
+msgid ""
+"Info trace - helpful to get information and warnings when running the "
+"application."
+msgstr ""
+
+#: src/frontend/SettingsGeneralPage.cpp:282
 #, kde-format
 msgid ""
 "Debug trace - helpful to diagnose the application, can have a negative "
 "impact on the performance."
 msgstr ""
 
-#: src/frontend/SettingsGeneralPage.cpp:276
+#: src/frontend/SettingsGeneralPage.cpp:283
 #, kde-format
 msgid ""
 "Performance trace - helpful to analyze performance relevant aspects and "
@@ -22816,16 +22823,22 @@ msgstr "Gorde formatu bateragarrian"
 msgid "Tracing:"
 msgstr "Tartea:"
 
+#. i18n: ectx: property (text), widget (QCheckBox, chkInfoTrace)
+#: src/frontend/ui/settingsgeneralpage.ui:360
+#, kde-format
+msgid "Info"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QCheckBox, chkPerfTrace)
 #. i18n: ectx: property (text), widget (QLabel, lPerformance)
-#: src/frontend/ui/settingsgeneralpage.ui:360
+#: src/frontend/ui/settingsgeneralpage.ui:396
 #: src/frontend/ui/settingsworksheetpage.ui:111
 #, kde-format
 msgid "Performance"
 msgstr "Errendimendua"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDebugTrace)
-#: src/frontend/ui/settingsgeneralpage.ui:383
+#: src/frontend/ui/settingsgeneralpage.ui:416
 #, kde-format
 msgid "Debug"
 msgstr ""

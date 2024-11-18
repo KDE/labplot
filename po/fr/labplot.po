@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-16 00:37+0000\n"
+"POT-Creation-Date: 2024-11-18 00:37+0000\n"
 "PO-Revision-Date: 2024-11-14 13:03+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -11306,7 +11306,7 @@ msgid "Data format && preview"
 msgstr "Format de données && aperçu"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1325
-#: src/frontend/SettingsGeneralPage.cpp:252
+#: src/frontend/SettingsGeneralPage.cpp:258
 #, kde-format
 msgid "Automatic"
 msgstr "Automatique"
@@ -14450,22 +14450,22 @@ msgctxt "@info:credit"
 msgid "Support import of ROOT (CERN) TH1 histograms"
 msgstr "Prise en charge de l'importation des histogrammes « ROOT (CERN) TH1 »."
 
-#: src/frontend/LabPlot.cpp:128
+#: src/frontend/LabPlot.cpp:129
 #, kde-format
 msgid "Disable splash screen"
 msgstr "Désactiver l'écran de démarrage"
 
-#: src/frontend/LabPlot.cpp:131
+#: src/frontend/LabPlot.cpp:132
 #, kde-format
 msgid "Start in the presenter mode"
 msgstr "Démarrer dans le mode « Présentation »"
 
-#: src/frontend/LabPlot.cpp:134
+#: src/frontend/LabPlot.cpp:135
 #, kde-format
 msgid "Open a project file."
 msgstr "Ouvrir un fichier de projet."
 
-#: src/frontend/LabPlot.cpp:153
+#: src/frontend/LabPlot.cpp:154
 #, kde-format
 msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
@@ -14474,7 +14474,7 @@ msgstr ""
 "Impossible d'ouvrir le fichier « %1 ». Cliquer sur « Continuer » pour "
 "procéder au démarrage ou « Annuler » pour quitter l'application."
 
-#: src/frontend/LabPlot.cpp:154
+#: src/frontend/LabPlot.cpp:155
 #, kde-format
 msgid "Failed to Open"
 msgstr "Impossible d'ouvrir"
@@ -15801,42 +15801,42 @@ msgstr "Préférences [Modifié]"
 msgid "min."
 msgstr "min."
 
-#: src/frontend/SettingsGeneralPage.cpp:218
+#: src/frontend/SettingsGeneralPage.cpp:224
 #, kde-format
 msgid "Create New Project"
 msgstr "Créer un nouveau projet"
 
-#: src/frontend/SettingsGeneralPage.cpp:219
+#: src/frontend/SettingsGeneralPage.cpp:225
 #, kde-format
 msgid "Load Last Used Project"
 msgstr "Charger le dernier projet utilisé"
 
-#: src/frontend/SettingsGeneralPage.cpp:223
+#: src/frontend/SettingsGeneralPage.cpp:229
 #, kde-format
 msgid "With Spreadsheet"
 msgstr "Avec une feuille de calcul"
 
-#: src/frontend/SettingsGeneralPage.cpp:224
+#: src/frontend/SettingsGeneralPage.cpp:230
 #, kde-format
 msgid "With Worksheet"
 msgstr "Avec une feuille de travail"
 
-#: src/frontend/SettingsGeneralPage.cpp:225
+#: src/frontend/SettingsGeneralPage.cpp:231
 #, kde-format
 msgid "With Spreadsheet and Worksheet"
 msgstr "Avec une feuille de calcul et une feuille de travail"
 
-#: src/frontend/SettingsGeneralPage.cpp:227
+#: src/frontend/SettingsGeneralPage.cpp:233
 #, kde-format
 msgid "With Notebook"
 msgstr "Avec un cahier de notes"
 
-#: src/frontend/SettingsGeneralPage.cpp:230
+#: src/frontend/SettingsGeneralPage.cpp:236
 #, kde-format
 msgid "Notebook type to create automatically on startup"
 msgstr "Type « Notebook » à créer automatiquement au démarrage"
 
-#: src/frontend/SettingsGeneralPage.cpp:234
+#: src/frontend/SettingsGeneralPage.cpp:240
 #, kde-format
 msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
@@ -15845,57 +15845,57 @@ msgstr ""
 "Contrôle le comportement de l'emplacement des composants graphiques du dock "
 "après sa ré-ouverture"
 
-#: src/frontend/SettingsGeneralPage.cpp:238
+#: src/frontend/SettingsGeneralPage.cpp:244
 #, kde-format
 msgid "Original Position"
 msgstr "Position initiale"
 
-#: src/frontend/SettingsGeneralPage.cpp:239
+#: src/frontend/SettingsGeneralPage.cpp:245
 #, kde-format
 msgid "On top of the last active Dock Widget"
 msgstr "Au dessus du dernier composant graphique du dock actif"
 
-#: src/frontend/SettingsGeneralPage.cpp:242
+#: src/frontend/SettingsGeneralPage.cpp:248
 #, kde-format
 msgid "Show File Path"
 msgstr "Afficher l'emplacement du fichier"
 
-#: src/frontend/SettingsGeneralPage.cpp:243
+#: src/frontend/SettingsGeneralPage.cpp:249
 #, kde-format
 msgid "Show File Name"
 msgstr "Afficher le nom de fichier"
 
-#: src/frontend/SettingsGeneralPage.cpp:244
+#: src/frontend/SettingsGeneralPage.cpp:250
 #, kde-format
 msgid "Show Project Name"
 msgstr "Afficher le nom du projet"
 
-#: src/frontend/SettingsGeneralPage.cpp:246
+#: src/frontend/SettingsGeneralPage.cpp:252
 #, kde-format
 msgid "Metric"
 msgstr "Métrique"
 
-#: src/frontend/SettingsGeneralPage.cpp:247
+#: src/frontend/SettingsGeneralPage.cpp:253
 #, kde-format
 msgid "Imperial"
 msgstr "Impérial"
 
-#: src/frontend/SettingsGeneralPage.cpp:249
+#: src/frontend/SettingsGeneralPage.cpp:255
 #, kde-format
 msgid "Dot (.)"
 msgstr "Point (.)"
 
-#: src/frontend/SettingsGeneralPage.cpp:250
+#: src/frontend/SettingsGeneralPage.cpp:256
 #, kde-format
 msgid "Comma (,)"
 msgstr "Virgule (,)"
 
-#: src/frontend/SettingsGeneralPage.cpp:251
+#: src/frontend/SettingsGeneralPage.cpp:257
 #, kde-format
 msgid "Arabic (٫)"
 msgstr "Arabe (٫)"
 
-#: src/frontend/SettingsGeneralPage.cpp:255
+#: src/frontend/SettingsGeneralPage.cpp:261
 #, kde-format
 msgid ""
 "Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/"
@@ -15907,7 +15907,7 @@ msgstr ""
 "l'incertitude dans les mesures (« GUM », Guide to the Expression of "
 "Uncertainty in Measurement)</a>"
 
-#: src/frontend/SettingsGeneralPage.cpp:260
+#: src/frontend/SettingsGeneralPage.cpp:266
 #, kde-format
 msgid ""
 "Save the state (position and geometry) of the docks in the project file. \n"
@@ -15921,7 +15921,7 @@ msgstr ""
 "Le paramètre peut être modifié séparément pour chaque projet dans les "
 "propriétés du projet."
 
-#: src/frontend/SettingsGeneralPage.cpp:267
+#: src/frontend/SettingsGeneralPage.cpp:273
 #, kde-format
 msgid ""
 "Save the results of the calculations in the analysis curves in the project "
@@ -15940,12 +15940,19 @@ msgstr ""
 "Le paramètre peut être modifié séparément pour chaque projet dans les "
 "propriétés du projet."
 
-#: src/frontend/SettingsGeneralPage.cpp:274
+#: src/frontend/SettingsGeneralPage.cpp:280
 #, kde-format
 msgid "Activates additional tracing output in the terminal."
 msgstr "Active la sortie de traçage supplémentaire dans le terminal."
 
-#: src/frontend/SettingsGeneralPage.cpp:275
+#: src/frontend/SettingsGeneralPage.cpp:281
+#, kde-format
+msgid ""
+"Info trace - helpful to get information and warnings when running the "
+"application."
+msgstr ""
+
+#: src/frontend/SettingsGeneralPage.cpp:282
 #, kde-format
 msgid ""
 "Debug trace - helpful to diagnose the application, can have a negative "
@@ -15954,7 +15961,7 @@ msgstr ""
 "Trace de débogage - Utile pour faire un diagnostic de l'application. Cela "
 "peut avoir un impact négatif sur les performances."
 
-#: src/frontend/SettingsGeneralPage.cpp:276
+#: src/frontend/SettingsGeneralPage.cpp:283
 #, kde-format
 msgid ""
 "Performance trace - helpful to analyze performance relevant aspects and "
@@ -22889,16 +22896,22 @@ msgstr "Enregistrer dans un format compatible"
 msgid "Tracing:"
 msgstr "Traçage :"
 
+#. i18n: ectx: property (text), widget (QCheckBox, chkInfoTrace)
+#: src/frontend/ui/settingsgeneralpage.ui:360
+#, kde-format
+msgid "Info"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QCheckBox, chkPerfTrace)
 #. i18n: ectx: property (text), widget (QLabel, lPerformance)
-#: src/frontend/ui/settingsgeneralpage.ui:360
+#: src/frontend/ui/settingsgeneralpage.ui:396
 #: src/frontend/ui/settingsworksheetpage.ui:111
 #, kde-format
 msgid "Performance"
 msgstr "Performance"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDebugTrace)
-#: src/frontend/ui/settingsgeneralpage.ui:383
+#: src/frontend/ui/settingsgeneralpage.ui:416
 #, kde-format
 msgid "Debug"
 msgstr "Déboguer"
