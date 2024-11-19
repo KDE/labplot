@@ -1336,6 +1336,12 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	// padding
 	if (plot) {
 		plot->setSymmetricPadding(false);
+#if defined(HAVE_WINDOWS) // always fixed padding
+		plot->setHorizontalPadding(100. + 1.5 * plot->horizontalPadding() * std::min(elementScalingFactor, 1.));
+		plot->setVerticalPadding(100. + 1.5 * plot->verticalPadding() * std::min(elementScalingFactor, 1.));
+		plot->setRightPadding(100. + 1.5 * plot->rightPadding() * std::min(elementScalingFactor, 1.));
+		plot->setBottomPadding(100. + 1.5 * plot->bottomPadding() * std::min(elementScalingFactor, 1.));
+#endif
 		int numberOfLayer = layerIndex + 1;
 		WARN(Q_FUNC_INFO << ", number of layer = " << numberOfLayer)
 		if (numberOfLayer == 1 || !m_graphLayerAsPlotArea) { // use layer clientRect for padding
@@ -1352,12 +1358,10 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			plot->setBottomPadding(Worksheet::convertToSceneUnits(bottomPadding, Worksheet::Unit::Centimeter));
 		} else {
 			WARN(Q_FUNC_INFO << ", using fixed padding")
-#if !defined(HAVE_WINDOWS)
 			plot->setHorizontalPadding(100. + 1.5 * plot->horizontalPadding() * std::max(elementScalingFactor, 1.));
 			plot->setVerticalPadding(100. + 1.5 * plot->verticalPadding() * std::max(elementScalingFactor, 1.));
 			plot->setRightPadding(100. + 1.5 * plot->rightPadding() * std::max(elementScalingFactor, 1.));
 			plot->setBottomPadding(100. + 1.5 * plot->bottomPadding() * std::max(elementScalingFactor, 1.));
-#endif
 		}
 		WARN(Q_FUNC_INFO << ", PADDING (H/V) = " << plot->horizontalPadding() << ", " << plot->verticalPadding())
 		WARN(Q_FUNC_INFO << ", PADDING (R/B) = " << plot->rightPadding() << ", " << plot->bottomPadding())
