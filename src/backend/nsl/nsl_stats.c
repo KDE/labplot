@@ -302,22 +302,21 @@ double nsl_stats_mannwhitney_u(const double sample1[], size_t n1, const double s
 	size_t i = 0;
 	while (i < n) {
 		size_t j = i;
-		while (j < n && combined[j].value == combined[i].value) {
+		while (j < n && combined[j].value == combined[i].value)
 			j++;
-		}
+
 		double rank = (i + j + 1) / 2.0; // Average rank for tied values
-		for (size_t k = i; k < j; k++) {
+		for (size_t k = i; k < j; k++)
 			ranks[k] = rank;
-		}
+
 		i = j;
 	}
 
 	// Step 4: Calculate rank sums for each sample
 	double rank_sum1 = 0.0;
 	for (size_t i = 0; i < n; i++) {
-		if (combined[i].group == 0) { // Sum ranks for sample1
+		if (combined[i].group == 0) // Sum ranks for sample1
 			rank_sum1 += ranks[i];
-		}
 	}
 
 	// Step 5: Compute U statistic for sample1
@@ -347,9 +346,9 @@ double nsl_stats_anova_oneway_f(double** groups, size_t* sizes, size_t n_groups)
 	double grand_total = 0.0;
 	size_t total_samples = 0;
 	for (size_t i = 0; i < n_groups; i++) {
-		for (size_t j = 0; j < sizes[i]; j++) {
+		for (size_t j = 0; j < sizes[i]; j++)
 			grand_total += groups[i][j];
-		}
+
 		total_samples += sizes[i];
 	}
 	double grand_mean = grand_total / total_samples;
@@ -380,9 +379,9 @@ double nsl_stats_anova_oneway_p(double** groups, size_t* sizes, size_t n_groups)
 	// Step 5: Calculate and return the p-value using the F-distribution
 	size_t df_between = n_groups - 1;
 	size_t df_within = 0;
-	for (size_t i = 0; i < n_groups; i++) {
+	for (size_t i = 0; i < n_groups; i++)
 		df_within += sizes[i];
-	}
+
 	df_within -= n_groups;
 
 	return nsl_stats_fdist_p(F, df_between, df_within);
@@ -402,18 +401,16 @@ int compare_rank(const void* a, const void* b) {
 // Calculate the Kruskal-Wallis H statistic
 double nsl_stats_kruskal_wallis_h(double** groups, size_t* sizes, size_t n_groups) {
 	size_t total_samples = 0;
-	for (size_t i = 0; i < n_groups; i++) {
+	for (size_t i = 0; i < n_groups; i++)
 		total_samples += sizes[i];
-	}
 
 	Rank* ranks = (Rank*)malloc(total_samples * sizeof(Rank));
 	size_t idx = 0;
 
 	// Step 1: Collect all data
 	for (size_t i = 0; i < n_groups; i++) {
-		for (size_t j = 0; j < sizes[i]; j++) {
+		for (size_t j = 0; j < sizes[i]; j++)
 			ranks[idx++] = (Rank){groups[i][j], i};
-		}
 	}
 
 	// Step 2: Sort by value
@@ -433,16 +430,15 @@ double nsl_stats_kruskal_wallis_h(double** groups, size_t* sizes, size_t n_group
 		rank_avg /= (i - start + 1);
 
 		// Assign the average rank to each tied value
-		for (size_t j = start; j <= i; j++) {
+		for (size_t j = start; j <= i; j++)
 			rank_sum[ranks[j].group] += rank_avg;
-		}
 	}
 
 	// Step 4: Calculate H statistic
 	double H = 0.0;
-	for (size_t i = 0; i < n_groups; i++) {
+	for (size_t i = 0; i < n_groups; i++)
 		H += (rank_sum[i] * rank_sum[i]) / sizes[i];
-	}
+
 	H = (12.0 / (total_samples * (total_samples + 1))) * H - 3 * (total_samples + 1);
 
 	// Cleanup
@@ -457,6 +453,7 @@ double nsl_stats_kruskal_wallis_p(double** groups, size_t* sizes, size_t n_group
 	double H = nsl_stats_kruskal_wallis_h(groups, sizes, n_groups);
 	return 1.0 - gsl_cdf_chisq_P(H, n_groups - 1);
 }
+
 // Compare function for sorting indices by time
 int compare_time(const void* a, const void* b, void* times) {
 	double* time = (double*)times;
@@ -496,19 +493,18 @@ double nsl_stats_log_rank_test_statistic(const double* time,
 			double event_rate_1 = (double)n_risk_1 / n_risk_total;
 			double event_rate_2 = (double)n_risk_2 / n_risk_total;
 
-			if (idx < size1) { // Belongs to group 1
+			if (idx < size1) // Belongs to group 1
 				observed_events_1++;
-			}
 
 			expected_events_1 += event_rate_1;
 			variance += event_rate_1 * event_rate_2 * (n_risk_total - 1.0) / n_risk_total;
 
 			// Decrease the risk sets
-			if (idx < size1) {
+			if (idx < size1)
 				n_risk_1--;
-			} else {
+			else
 				n_risk_2--;
-			}
+
 			n_risk_total--;
 		}
 	}
