@@ -2042,6 +2042,21 @@ void AsciiFilterTest::testUtf8Cyrillic() {
 	QCOMPARE(spreadsheet.column(1)->integerAt(1), 2);
 }
 
+void AsciiFilterTest::testUtf16NotSupported() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/utf16.txt"));
+
+	AsciiFilter filter;
+
+	// preview
+	filter.preview(fileName, 100);
+	QCOMPARE(filter.lastError(), AsciiFilter::statusToString(AsciiFilter::Status::UTF16NotSupported));
+
+	// read
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	QCOMPARE(filter.lastError(), AsciiFilter::statusToString(AsciiFilter::Status::UTF16NotSupported));
+}
+
 // ##############################################################################
 // ###############################  skip comments ###############################
 // ##############################################################################

@@ -90,8 +90,9 @@ private Q_SLOTS:
 	void testQuotedStrings04();
 	void testIvalidFile_Json();
 
-	// different locales
+	// different locales and encodings
 	void testUtf8Cyrillic();
+	void testUtf16NotSupported();
 
 	// handling of NANs
 

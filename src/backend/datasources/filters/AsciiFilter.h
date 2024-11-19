@@ -65,6 +65,7 @@ public:
 		ColumnModeDeterminationFailed,
 		WrongEndColumn,
 		WrongEndRow,
+		UTF16NotSupported,
 		NoDataSource
 	};
 

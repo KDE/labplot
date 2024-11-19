@@ -36,6 +36,7 @@ public:
 	static bool determineColumnModes(const QStringView& s, QVector<AbstractColumn::ColumnMode>& modes, QString& invalidString);
 	static QString convertTranslatedColumnModesToNative(const QStringView s);
 	AsciiFilter::Status setLastError(AsciiFilter::Status);
+	bool isUTF16(QIODevice&);
 
 	AsciiFilter::Properties properties;
 	bool initialized{false};
