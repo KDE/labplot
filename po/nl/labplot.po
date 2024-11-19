@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-18 00:37+0000\n"
-"PO-Revision-Date: 2024-11-13 11:48+0100\n"
+"PO-Revision-Date: 2024-11-18 12:08+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -15826,6 +15826,8 @@ msgid ""
 "Info trace - helpful to get information and warnings when running the "
 "application."
 msgstr ""
+"Pad dat informatie volgt - behulpzaam om informatie en waarschuwingen te "
+"krijgen bij uitvoeren van de toepassing."
 
 #: src/frontend/SettingsGeneralPage.cpp:282
 #, kde-format
@@ -22739,7 +22741,7 @@ msgstr "Tracing:"
 #: src/frontend/ui/settingsgeneralpage.ui:360
 #, kde-format
 msgid "Info"
-msgstr ""
+msgstr "Informatie"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPerfTrace)
 #. i18n: ectx: property (text), widget (QLabel, lPerformance)

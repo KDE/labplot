@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-18 00:37+0000\n"
-"PO-Revision-Date: 2024-11-14 00:02+0100\n"
+"PO-Revision-Date: 2024-11-18 08:47+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -15850,6 +15850,8 @@ msgid ""
 "Info trace - helpful to get information and warnings when running the "
 "application."
 msgstr ""
+"Info trace - koristno za pridobivanje informacij in opozoril med izvajanjem "
+"aplikacije."
 
 #: src/frontend/SettingsGeneralPage.cpp:282
 #, kde-format
@@ -22775,7 +22777,7 @@ msgstr "Sledenje:"
 #: src/frontend/ui/settingsgeneralpage.ui:360
 #, kde-format
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPerfTrace)
 #. i18n: ectx: property (text), widget (QLabel, lPerformance)

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-18 00:37+0000\n"
-"PO-Revision-Date: 2024-11-16 06:24+0100\n"
+"PO-Revision-Date: 2024-11-18 03:59+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -11465,7 +11465,7 @@ msgstr "Origin-ის პროექტის შემოტანა"
 #: src/frontend/datasources/ImportProjectDialog.cpp:121
 #, kde-format
 msgid "Specify the file where the project content has to be imported from."
-msgstr ""
+msgstr "მიუთითეთ ფაილი, საიდანაც პროექტის შემცველობის შემოტანა უნდა მოხდეს."
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:125
 #, kde-format
@@ -15491,7 +15491,7 @@ msgstr "ნოუთბუქით"
 #: src/frontend/SettingsGeneralPage.cpp:236
 #, kde-format
 msgid "Notebook type to create automatically on startup"
-msgstr ""
+msgstr "ბლოკნოტის ტიპი, რომელიც გაშვებისას ავტომატურად შეიქმნება"
 
 #: src/frontend/SettingsGeneralPage.cpp:240
 #, kde-format
