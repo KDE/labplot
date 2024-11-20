@@ -135,7 +135,7 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent, bool liveData)
 		if (s.first == s.second)
 			info = info.arg(s.first);
 		else
-			info = info.arg(s.first + QStringLiteral(" ") + i18n("or") + QStringLiteral(" ") + s.second);
+			info = info.arg(i18n("%1 or %2, s.first, s.second));
 	}
 	ui.lColumnMode->setWhatsThis(info);
 	ui.kleColumnMode->setWhatsThis(info);
