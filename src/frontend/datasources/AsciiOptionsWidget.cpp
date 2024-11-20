@@ -119,7 +119,7 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent, bool liveData)
 	// https://en.wikipedia.org/wiki/Double-precision_floating-point_format
 	// 15.955 digits
 	info = i18n(
-			   "If not empty, the number of columns must match the number of column names if provided and it must match the number of  columns in the imported file"
+			   "If not empty, the number of columns must match the number of column names if provided and it must match the number of columns in the imported file"
 			   "Datatypes:"
 			   "<table>"
 			   "<tr><td>%1</td><td>Integer number with 32bit size (−2.147.483.648 .. 2.147.483.647).</td></tr>"
@@ -135,7 +135,7 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent, bool liveData)
 		if (s.first == s.second)
 			info = info.arg(s.first);
 		else
-			info = info.arg(i18n("%1 or %2, s.first, s.second));
+			info = info.arg(i18n("%1 or %2", s.first, s.second));
 	}
 	ui.lColumnMode->setWhatsThis(info);
 	ui.kleColumnMode->setWhatsThis(info);
