@@ -26,6 +26,7 @@
 #include <QDir>
 #include <QFile>
 #include <QModelIndex>
+#include <QProcessEnvironment>
 #include <QSettings>
 #include <QSplashScreen>
 #include <QStandardPaths>
@@ -65,16 +66,18 @@ const QString getSystemInfo() {
 	if (!usedLocale.isEmpty())
 		locale = QLocale(usedLocale);
 	QString usedLanguage = QLocale::languageToString(locale.language()) + QStringLiteral(",") + QLocale::countryToString(locale.country());
+	QString path = QProcessEnvironment::systemEnvironment().value(QLatin1String("PATH"));
 
 	return buildType + QLatin1Char('\n')
 #ifndef REPRODUCIBLE_BUILD
 		+ QStringLiteral("%1, %2").arg(QLatin1String(__DATE__), QLatin1String(__TIME__)) + QLatin1Char('\n')
 #endif
 		+ i18n("System: ") + QSysInfo::prettyProductName() + QLatin1Char('\n') + i18n("Locale: ") + usedLanguage + QLatin1Char(' ') + numberSystemInfo
-		+ QLatin1Char('\n') + i18n("Number settings:") + numberLocaleInfo + QLatin1String(" (") + i18n("Updated on restart") + QLatin1Char(')')
+		+ QLatin1Char('\n') + i18n("Number Settings:") + numberLocaleInfo + QLatin1String(" (") + i18n("Updated on restart") + QLatin1Char(')')
 		+ QLatin1Char('\n') + i18n("Architecture: ") + QSysInfo::buildAbi() + QLatin1Char('\n') + i18n("Kernel: ") + QSysInfo::kernelType() + QLatin1Char(' ')
 		+ QSysInfo::kernelVersion() + QLatin1Char('\n') + i18n("C++ Compiler: ") + QLatin1String(CXX_COMPILER) + QLatin1Char('\n')
-		+ i18n("C++ Compiler Flags: ") + QLatin1String(CXX_COMPILER_FLAGS);
+		+ i18n("C++ Compiler Flags: ") + QLatin1String(CXX_COMPILER_FLAGS) + QLatin1Char('\n')
+		+ i18n("Executable Path: ") + path;
 }
 
 int main(int argc, char* argv[]) {
