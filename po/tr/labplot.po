@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-18 00:37+0000\n"
-"PO-Revision-Date: 2024-11-15 21:34+0300\n"
+"POT-Creation-Date: 2024-11-20 00:37+0000\n"
+"PO-Revision-Date: 2024-11-19 20:29+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -2490,7 +2490,7 @@ msgstr "Veriyi çiz"
 msgid "Plot%1"
 msgstr "%1 çiz"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1490
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1494
 #, kde-format
 msgid "legend"
 msgstr "gösterge"
@@ -15790,6 +15790,8 @@ msgid ""
 "Info trace - helpful to get information and warnings when running the "
 "application."
 msgstr ""
+"Bilgi izi — uygulamayı çalıştırırken ek bilgi ve uyarılar almak için "
+"kullanılır."
 
 #: src/frontend/SettingsGeneralPage.cpp:282
 #, kde-format
@@ -22695,7 +22697,7 @@ msgstr "İzleme:"
 #: src/frontend/ui/settingsgeneralpage.ui:360
 #, kde-format
 msgid "Info"
-msgstr ""
+msgstr "Bilgi"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPerfTrace)
 #. i18n: ectx: property (text), widget (QLabel, lPerformance)

@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-18 00:37+0000\n"
-"PO-Revision-Date: 2024-11-13 10:33+0100\n"
+"POT-Creation-Date: 2024-11-20 00:37+0000\n"
+"PO-Revision-Date: 2024-11-18 09:01+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -2517,7 +2517,7 @@ msgstr "Dibuixa el diagrama de les dades"
 msgid "Plot%1"
 msgstr "Diagrama%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1490
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1494
 #, kde-format
 msgid "legend"
 msgstr "llegenda"
@@ -15977,6 +15977,8 @@ msgid ""
 "Info trace - helpful to get information and warnings when running the "
 "application."
 msgstr ""
+"Traça d'informació: útil per a obtindre informació i avisos quan s'executa "
+"l'aplicació."
 
 #: src/frontend/SettingsGeneralPage.cpp:282
 #, kde-format
@@ -22925,7 +22927,7 @@ msgstr "Traçat:"
 #: src/frontend/ui/settingsgeneralpage.ui:360
 #, kde-format
 msgid "Info"
-msgstr ""
+msgstr "Informació"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPerfTrace)
 #. i18n: ectx: property (text), widget (QLabel, lPerformance)
