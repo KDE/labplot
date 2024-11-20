@@ -1357,7 +1357,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 		} else {
 			WARN(Q_FUNC_INFO << ", using fixed padding")
 #if defined(HAVE_WINDOWS)
-			  // TODO: test if min instead of max is relevant
+			// TODO: test if min instead of max is relevant
 			plot->setHorizontalPadding(100. + 1.5 * plot->horizontalPadding() * std::min(elementScalingFactor, 1.));
 			plot->setVerticalPadding(100. + 1.5 * plot->verticalPadding() * std::min(elementScalingFactor, 1.));
 			plot->setRightPadding(100. + 1.5 * plot->rightPadding() * std::min(elementScalingFactor, 1.));
