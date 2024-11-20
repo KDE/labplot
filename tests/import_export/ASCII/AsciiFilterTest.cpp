@@ -2310,7 +2310,7 @@ void AsciiFilterTest::testDateTimeDefaultDateTimeFormat() {
 	value = QDateTime::fromString(QLatin1String("01/01/2020 00:30:00"), QLatin1String("dd/MM/yyyy hh:mm:ss"));
 	value.setTimeSpec(Qt::UTC);
 	QCOMPARE(spreadsheet.column(0)->dateTimeAt(1), value);
-	QCOMPARE(spreadsheet.column(1)->valueAt(1), 14.8026);	
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 14.8026);
 }
 
 /*!
