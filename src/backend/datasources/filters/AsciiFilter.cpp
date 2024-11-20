@@ -142,7 +142,7 @@ void AsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* 
 
 	if (d->isUTF16(file)) {
 		d->setLastError(AsciiFilter::Status::UTF16NotSupported);
-		return ;
+		return;
 	}
 
 	const int lines = d->properties.endRow < 0 ? -1 : d->properties.endRow - d->properties.startRow + 1;
