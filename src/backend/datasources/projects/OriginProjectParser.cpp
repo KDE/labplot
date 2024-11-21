@@ -1257,20 +1257,15 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 		dpi = 300.;
 	WARN(Q_FUNC_INFO << ", GRAPH width/height (cm) = " << graphSize.width() * GSL_CONST_CGS_INCH / dpi << "/" << graphSize.height() * GSL_CONST_CGS_INCH / dpi)
 	// Origin scales text and plots with the size of the layer when no fixed size is used (Layer properties->Size)
-	// so we scale all text and plots with a scaling factor to the whole view height (29.5 cm, 10 cm) used as default
+	// so we scale all text and plots with a scaling factor to the whole view height used as default
 #if defined(HAVE_WINDOWS)
-	const double fixedHeight = 10.0; // full height [cm]
+	const double fixedHeight = 14.75; // full height/2 [cm]
 #else
 	const double fixedHeight = 29.5; // full height [cm]
 #endif
 	elementScalingFactor = fixedHeight / (graph.height * GSL_CONST_CGS_INCH / dpi);
 	// not using the full value for scaling text is better in most cases
 	textScalingFactor = 1. + (elementScalingFactor - 1.) / 2.;
-#if defined(HAVE_WINDOWS)
-	// factor is generally about a factor 2 too big on Windows
-	// TODO: debug on Windows to see what's different
-//	textScalingFactor /= 2.;
-#endif
 	WARN(Q_FUNC_INFO << ", ELEMENT SCALING FACTOR = " << elementScalingFactor)
 	WARN(Q_FUNC_INFO << ", TEXT SCALING FACTOR = " << textScalingFactor)
 	// default values (1000/1000)

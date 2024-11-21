@@ -469,7 +469,7 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 	QVERIFY(symbol != nullptr);
 	QCOMPARE(symbol->style(), Symbol::Style::SquareHalf);
 #if defined(HAVE_WINDOWS)
-	QCOMPARE(symbol->size(), 30.46922608166);
+	QCOMPARE(symbol->size(), 44.94210847045);
 #else
 	QCOMPARE(symbol->size(), 89.8842169409);
 #endif
@@ -529,7 +529,7 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 	QVERIFY(symbol != nullptr);
 	QCOMPARE(symbol->style(), Symbol::Style::Hexagon);
 #if defined(HAVE_WINDOWS)
-	QCOMPARE(symbol->size(), 30.46922608166);
+	QCOMPARE(symbol->size(), 44.94210847045);
 #else
 	QCOMPARE(symbol->size(), 89.8842169409);
 #endif
@@ -603,7 +603,7 @@ void ProjectImportTest::testOrigin_2graphs() {
 	QCOMPARE(symbol->style(), Symbol::Style::Hexagon);
 #if defined(HAVE_WINDOWS)
 	WARN(std::setprecision(15) << symbol->size())
-	QCOMPARE(symbol->size(), 30.46922608166);
+	QCOMPARE(symbol->size(), 44.94210847045);
 #else
 	QCOMPARE(symbol->size(), 89.8842169409);
 #endif
@@ -652,7 +652,7 @@ void ProjectImportTest::testOrigin_2graphs() {
 	QVERIFY(symbol != nullptr);
 	QCOMPARE(symbol->style(), Symbol::Style::SquareHalf);
 #if defined(HAVE_WINDOWS)
-	QCOMPARE(symbol->size(), 30.46922608166);
+	QCOMPARE(symbol->size(), 44.94210847045);
 #else
 	QCOMPARE(symbol->size(), 89.8842169409);
 #endif
