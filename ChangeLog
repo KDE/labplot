@@ -13,7 +13,7 @@ New features:
 		* Improved error message handling
 		* Improved livedata import
 		* Add possibility to specify custom column datatypes (mandatory for livedata)
-		* Notify about the unsupported UTF16 encoding
+		* Notify about the unsupported UTF16 encoding (BUG 496215)
 	* [analysis]
 		* Add possibility to do calculations on curves
 		* Automatically recalculate analysis curves on data change

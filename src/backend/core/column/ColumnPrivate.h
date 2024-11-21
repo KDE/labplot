@@ -262,7 +262,7 @@ private:
 	AbstractSimpleFilter* m_outputFilter{nullptr}; // output filter for data type -> string conversion
 	QString m_formula;
 	QVector<Column::FormulaData> m_formulaData;
-	bool m_formulaAutoUpdate{false};
+	bool m_formulaAutoUpdate{true};
 	bool m_formulaAutoResize{true};
 	IntervalAttribute<QString> m_formulas;
 	AbstractColumn::PlotDesignation m_plotDesignation{AbstractColumn::PlotDesignation::NoDesignation};
