@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-20 00:37+0000\n"
+"POT-Creation-Date: 2024-11-21 00:38+0000\n"
 "PO-Revision-Date: 2024-11-18 09:01+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -254,7 +254,7 @@ msgid "Y-Error -"
 msgstr "Error de Y -"
 
 #: src/backend/core/AbstractColumn.cpp:227
-#: src/backend/datasources/filters/AsciiFilter.cpp:607
+#: src/backend/datasources/filters/AsciiFilter.cpp:614
 #: src/backend/datasources/filters/MatioFilter.cpp:382
 #: src/backend/datasources/filters/MatioFilter.cpp:428
 #, kde-format
@@ -277,7 +277,7 @@ msgstr "Enter gran"
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #. i18n: ectx: property (text), widget (QLabel, lValuesText)
 #: src/backend/core/AbstractColumn.cpp:233
-#: src/backend/datasources/filters/AsciiFilter.cpp:608
+#: src/backend/datasources/filters/AsciiFilter.cpp:615
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:472
 #: src/frontend/notebook/NotebookView.cpp:96
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:208
@@ -1070,7 +1070,7 @@ msgstr ""
 "No s'ha pogut obrir el fitxer %1 per a escriptura.\n"
 "%2"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:189
+#: src/backend/datasources/filters/AsciiFilter.cpp:194
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2073
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1220
@@ -1078,150 +1078,155 @@ msgstr ""
 msgid "Success"
 msgstr "Correcte"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:191
+#: src/backend/datasources/filters/AsciiFilter.cpp:196
 #, kde-format
 msgid "Device at end"
 msgstr "Final del dispositiu"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:193
+#: src/backend/datasources/filters/AsciiFilter.cpp:198
 #, kde-format
 msgid "Not enough rows selected. Increase number of rows."
 msgstr "No s'han seleccionat prou files. Incrementeu el nombre de files."
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:195
+#: src/backend/datasources/filters/AsciiFilter.cpp:200
 #, kde-format
 msgid "Unable to open device"
 msgstr "No s'ha pogut obrir el dispositiu"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:199
+#: src/backend/datasources/filters/AsciiFilter.cpp:204
 #, kde-format
 msgid "Unable to determine the separator"
 msgstr "No s'ha pogut determinar el separador"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:201
+#: src/backend/datasources/filters/AsciiFilter.cpp:206
 #, kde-format
 msgid "Invalid number of data columns"
 msgstr "Nombre no vàlid de columnes de dades"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:203
+#: src/backend/datasources/filters/AsciiFilter.cpp:208
 #, kde-format
 msgid "Invalid number of column names"
 msgstr "Nombre no vàlid de noms de columnes"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:205
+#: src/backend/datasources/filters/AsciiFilter.cpp:210
 #, kde-format
 msgid "Matrix: Unsupported column mode"
 msgstr "Matriu: Mode de columnes no admès"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:207
+#: src/backend/datasources/filters/AsciiFilter.cpp:212
 #, kde-format
 msgid "Insufficient memory (RAM)"
 msgstr "Memòria insuficient (RAM)"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:209
+#: src/backend/datasources/filters/AsciiFilter.cpp:214
 #, kde-format
 msgid "Unable to parse header"
 msgstr "No s'ha pogut analitzar la capçalera"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:211
+#: src/backend/datasources/filters/AsciiFilter.cpp:216
 #, kde-format
 msgid "Unsupported data source"
 msgstr "Origen de les dades no admès"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:215
+#: src/backend/datasources/filters/AsciiFilter.cpp:220
 #, kde-format
 msgid "Live: No column separator selected"
 msgstr "En viu: No s'ha seleccionat cap separador de columnes"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:217
+#: src/backend/datasources/filters/AsciiFilter.cpp:222
 #, kde-format
 msgid "Live: No column modes set"
 msgstr "En viu: No s'ha definit cap mode de columna"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:219
+#: src/backend/datasources/filters/AsciiFilter.cpp:224
 #, kde-format
 msgid "Datetime column found, but no Datetime format provided"
 msgstr ""
 "S'ha trobat una columna Datahora, però no s'ha proporcionat cap format "
 "Datahora"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:221
+#: src/backend/datasources/filters/AsciiFilter.cpp:226
 #, kde-format
 msgid "Header reading from device not allowed"
 msgstr "No es permet la lectura de la capçalera des del dispositiu"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:223
+#: src/backend/datasources/filters/AsciiFilter.cpp:228
 #, kde-format
 msgid "Separator detection not allowed"
 msgstr "No es permet la detecció de separador"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:225
+#: src/backend/datasources/filters/AsciiFilter.cpp:230
 #, kde-format
 msgid "Invalid separator"
 msgstr "Separador no vàlid"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:227
+#: src/backend/datasources/filters/AsciiFilter.cpp:232
 #, kde-format
 msgid "Filter not initialized"
 msgstr "Filtre no inicialitzat"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:229
+#: src/backend/datasources/filters/AsciiFilter.cpp:234
 #, kde-format
 msgid "Wrong end column. Is it smaller than start column?"
 msgstr "Columna final incorrecta. És més petita que la columna inicial?"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:231
+#: src/backend/datasources/filters/AsciiFilter.cpp:236
 #, kde-format
 msgid "Wrong end row. Is it smaller than start row?"
 msgstr "Fila final incorrecta. És més petita que la fila inicial?"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:233
+#: src/backend/datasources/filters/AsciiFilter.cpp:238
 #, kde-format
 msgid "No data destination set"
 msgstr "No s'ha definit cap destinació de dades"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:235
+#: src/backend/datasources/filters/AsciiFilter.cpp:240
 #, kde-format
 msgid "No columns"
 msgstr "Sense columnes"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:237
+#: src/backend/datasources/filters/AsciiFilter.cpp:242
 #, kde-format
 msgid "Unable to determine column modes. Check if they are correctly written"
 msgstr ""
 "No s'han pogut determinar els modes de les columnes. Comproveu que estiguin "
 "escrits correctament"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:239
+#: src/backend/datasources/filters/AsciiFilter.cpp:244
+#, kde-format
+msgid "UTF16 encoding is not supported"
+msgstr ""
+
+#: src/backend/datasources/filters/AsciiFilter.cpp:246
 #, kde-format
 msgid "Unhandled case"
 msgstr "Cas no gestionat"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:265
+#: src/backend/datasources/filters/AsciiFilter.cpp:272
 #, kde-format
 msgid "Number of columns: %1"
 msgstr "Nombre de columnes: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:267
+#: src/backend/datasources/filters/AsciiFilter.cpp:274
 #, kde-format
 msgid "Number of lines: %1"
 msgstr "Nombre de línies: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:522
-#: src/backend/datasources/filters/AsciiFilter.cpp:1293
+#: src/backend/datasources/filters/AsciiFilter.cpp:529
+#: src/backend/datasources/filters/AsciiFilter.cpp:1300
 #: src/backend/datasources/filters/JsonFilter.cpp:284
 #, kde-format
 msgid "Column %1"
 msgstr "Columna %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:592
-#: src/backend/datasources/filters/AsciiFilter.cpp:1316
+#: src/backend/datasources/filters/AsciiFilter.cpp:599
+#: src/backend/datasources/filters/AsciiFilter.cpp:1323
 #, kde-format
 msgid "Timestamp"
 msgstr "Marca horària"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:596
-#: src/backend/datasources/filters/AsciiFilter.cpp:1320
+#: src/backend/datasources/filters/AsciiFilter.cpp:603
+#: src/backend/datasources/filters/AsciiFilter.cpp:1327
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1229,17 +1234,17 @@ msgstr "Marca horària"
 msgid "Index"
 msgstr "Índex"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:609
+#: src/backend/datasources/filters/AsciiFilter.cpp:616
 #, kde-format
 msgid "DateTime"
 msgstr "DataHora"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:610
+#: src/backend/datasources/filters/AsciiFilter.cpp:617
 #, kde-format
 msgid "Int"
 msgstr "Int"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:611
+#: src/backend/datasources/filters/AsciiFilter.cpp:618
 #: src/backend/datasources/filters/MatioFilter.cpp:398
 #: src/backend/datasources/filters/MatioFilter.cpp:430
 #, kde-format
@@ -2510,12 +2515,12 @@ msgstr "%1 %2"
 msgid "Plot data"
 msgstr "Dibuixa el diagrama de les dades"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1327
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1331
 #, kde-format
 msgid "Plot%1"
 msgstr "Diagrama%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1494
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1500
 #, kde-format
 msgid "legend"
 msgstr "llegenda"
@@ -4095,7 +4100,6 @@ msgstr "i"
 
 #. i18n: ectx: property (text), widget (QLabel, l2SamplingInterval)
 #: src/backend/gsl/functions.cpp:331
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:138
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:265
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:24
 #, kde-format
@@ -10546,10 +10550,21 @@ msgid "Custom column modes, comma separated"
 msgstr "Noms de columna personalitzats, separats per comes"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:122
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "If not empty, the number of columns must match the number of column names "
+#| "if provided and it must match the number of  columns in the imported "
+#| "fileDatatypes:<table><tr><td>%1</td><td>Integer number with 32bit size "
+#| "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
+#| "number with 64bit size (−9.223.372.036.854.775.808 .. "
+#| "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
+#| "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
+#| "td><td>Datetime with the format from the datetime text box if not empty, "
+#| "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
+#| "td></tr></table>"
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
-"provided and it must match the number of  columns in the imported "
+"provided and it must match the number of columns in the imported "
 "fileDatatypes:<table><tr><td>%1</td><td>Integer number with 32bit size "
 "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
 "number with 64bit size (−9.223.372.036.854.775.808 .. "
@@ -10569,6 +10584,11 @@ msgstr ""
 "digits.</td></tr><tr><td>%4</td><td>Datahora amb el format a partir del "
 "quadre de text de la datahora si no està buit, en cas contrari, es determina "
 "automàticament.</td></tr><tr><td>%5</td><td>Un text.</td></tr></table>"
+
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:138
+#, kde-format
+msgid "%1 or %2"
+msgstr ""
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:252
 #, kde-format
@@ -14294,87 +14314,94 @@ msgstr "De veres voleu netejar l'historial de desfer?"
 msgid "Clear History"
 msgstr "Neteja l'historial"
 
-#: src/frontend/LabPlot.cpp:44
+#: src/frontend/LabPlot.cpp:45
 #, kde-format
 msgid "Release build "
 msgstr "Compilació de llançament "
 
-#: src/frontend/LabPlot.cpp:46
+#: src/frontend/LabPlot.cpp:47
 #, kde-format
 msgid "Debug build "
 msgstr "Compilació de depuració "
 
-#: src/frontend/LabPlot.cpp:49 src/frontend/LabPlot.cpp:52
+#: src/frontend/LabPlot.cpp:50 src/frontend/LabPlot.cpp:53
 #, kde-format
 msgid "Decimal point "
 msgstr "Coma decimal"
 
-#: src/frontend/LabPlot.cpp:50 src/frontend/LabPlot.cpp:53
+#: src/frontend/LabPlot.cpp:51 src/frontend/LabPlot.cpp:54
 #, kde-format
 msgid "Group separator "
 msgstr "Separador de grups"
 
-#: src/frontend/LabPlot.cpp:54
+#: src/frontend/LabPlot.cpp:55
 #, kde-format
 msgid "Exponential "
 msgstr "Exponencial "
 
-#: src/frontend/LabPlot.cpp:54
+#: src/frontend/LabPlot.cpp:55
 #, kde-format
 msgid "Zero digit "
 msgstr "Dígit zero "
 
-#: src/frontend/LabPlot.cpp:55
+#: src/frontend/LabPlot.cpp:56
 #, kde-format
 msgid "Percent "
 msgstr "Percentatge "
 
-#: src/frontend/LabPlot.cpp:56
+#: src/frontend/LabPlot.cpp:57
 #, kde-format
 msgid "Positive/Negative sign "
 msgstr "Signe positiu/negatiu "
 
-#: src/frontend/LabPlot.cpp:73
+#: src/frontend/LabPlot.cpp:75
 #, kde-format
 msgid "System: "
 msgstr "Sistema: "
 
-#: src/frontend/LabPlot.cpp:73
+#: src/frontend/LabPlot.cpp:75
 #, kde-format
 msgid "Locale: "
 msgstr "Configuració regional: "
 
-#: src/frontend/LabPlot.cpp:74
-#, kde-format
-msgid "Number settings:"
+#: src/frontend/LabPlot.cpp:76
+#, fuzzy, kde-format
+#| msgid "Number settings:"
+msgid "Number Settings:"
 msgstr "Configuració dels nombres:"
 
-#: src/frontend/LabPlot.cpp:74
+#: src/frontend/LabPlot.cpp:76
 #, kde-format
 msgid "Updated on restart"
 msgstr "Actualitzat en reiniciar"
 
-#: src/frontend/LabPlot.cpp:75
+#: src/frontend/LabPlot.cpp:77
 #, kde-format
 msgid "Architecture: "
 msgstr "Arquitectura: "
 
-#: src/frontend/LabPlot.cpp:75
+#: src/frontend/LabPlot.cpp:77
 #, kde-format
 msgid "Kernel: "
 msgstr "Nucli: "
 
-#: src/frontend/LabPlot.cpp:76
+#: src/frontend/LabPlot.cpp:78
 #, kde-format
 msgid "C++ Compiler: "
 msgstr "Compilador C++: "
 
-#: src/frontend/LabPlot.cpp:77
+#: src/frontend/LabPlot.cpp:79
 #, kde-format
 msgid "C++ Compiler Flags: "
 msgstr "Indicadors del compilador C++: "
 
-#: src/frontend/LabPlot.cpp:89
+#: src/frontend/LabPlot.cpp:80
+#, fuzzy, kde-format
+#| msgid "Executable: %1"
+msgid "Executable Path: "
+msgstr "Executable: %1"
+
+#: src/frontend/LabPlot.cpp:92
 #, kde-format
 msgid ""
 "LabPlot is a FREE, open-source and cross-platform Data Visualization and "
@@ -14383,66 +14410,66 @@ msgstr ""
 "El LabPlot és un programari de visualització i anàlisi de dades LLIURE, de "
 "codi obert i multiplataforma, accessible a tothom."
 
-#: src/frontend/LabPlot.cpp:91
+#: src/frontend/LabPlot.cpp:94
 #, kde-format
 msgid "(c) 2007-2024"
 msgstr "(c) 2007-2024"
 
-#: src/frontend/LabPlot.cpp:94
+#: src/frontend/LabPlot.cpp:97
 #, kde-format
 msgid "Stefan Gerlach"
 msgstr "Stefan Gerlach"
 
-#: src/frontend/LabPlot.cpp:94 src/frontend/LabPlot.cpp:95
-#: src/frontend/LabPlot.cpp:96 src/frontend/LabPlot.cpp:97
+#: src/frontend/LabPlot.cpp:97 src/frontend/LabPlot.cpp:98
+#: src/frontend/LabPlot.cpp:99 src/frontend/LabPlot.cpp:100
 #, kde-format
 msgctxt "@info:credit"
 msgid "Developer"
 msgstr "Desenvolupador"
 
-#: src/frontend/LabPlot.cpp:95
+#: src/frontend/LabPlot.cpp:98
 #, kde-format
 msgid "Alexander Semke"
 msgstr "Alexander Semke"
 
-#: src/frontend/LabPlot.cpp:96
+#: src/frontend/LabPlot.cpp:99
 #, kde-format
 msgid "Fábián Kristóf-Szabolcs"
 msgstr "Fábián Kristóf-Szabolcs"
 
-#: src/frontend/LabPlot.cpp:97
+#: src/frontend/LabPlot.cpp:100
 #, kde-format
 msgid "Martin Marmsoler"
 msgstr "Martin Marmsoler"
 
-#: src/frontend/LabPlot.cpp:98
+#: src/frontend/LabPlot.cpp:101
 #, kde-format
 msgid "Dariusz Laska"
 msgstr "Dariusz Laska"
 
-#: src/frontend/LabPlot.cpp:99
+#: src/frontend/LabPlot.cpp:102
 #, kde-format
 msgctxt "@info:credit"
 msgid "Conceptual work, documentation, example projects"
 msgstr "Feina conceptual, documentació, projectes d'exemple"
 
-#: src/frontend/LabPlot.cpp:102
+#: src/frontend/LabPlot.cpp:105
 #, kde-format
 msgid "Andreas Kainz"
 msgstr "Andreas Kainz"
 
-#: src/frontend/LabPlot.cpp:102
+#: src/frontend/LabPlot.cpp:105
 #, kde-format
 msgctxt "@info:credit"
 msgid "Icon designer"
 msgstr "Dissenyador de les icones"
 
-#: src/frontend/LabPlot.cpp:103
+#: src/frontend/LabPlot.cpp:106
 #, kde-format
 msgid "Yuri Chornoivan"
 msgstr "Yuri Chornoivan"
 
-#: src/frontend/LabPlot.cpp:104
+#: src/frontend/LabPlot.cpp:107
 #, kde-format
 msgctxt "@info:credit"
 msgid ""
@@ -14452,44 +14479,44 @@ msgstr ""
 "Ajuda amb moltes preguntes sobre la infraestructura del KDE i en temes "
 "relacionats amb la traducció"
 
-#: src/frontend/LabPlot.cpp:107
+#: src/frontend/LabPlot.cpp:110
 #, kde-format
 msgid "Garvit Khatri"
 msgstr "Garvit Khatri"
 
-#: src/frontend/LabPlot.cpp:108
+#: src/frontend/LabPlot.cpp:111
 #, kde-format
 msgctxt "@info:credit"
 msgid "Porting LabPlot to KF5 and Integration with Cantor"
 msgstr "Adaptació del LabPlot al KF5 i integració amb el Cantor"
 
-#: src/frontend/LabPlot.cpp:111
+#: src/frontend/LabPlot.cpp:114
 #, kde-format
 msgid "Christoph Roick"
 msgstr "Christoph Roick"
 
-#: src/frontend/LabPlot.cpp:112
+#: src/frontend/LabPlot.cpp:115
 #, kde-format
 msgctxt "@info:credit"
 msgid "Support import of ROOT (CERN) TH1 histograms"
 msgstr "Implementació per a importar els histogrames TH1 del ROOT (CERN)"
 
-#: src/frontend/LabPlot.cpp:129
+#: src/frontend/LabPlot.cpp:132
 #, kde-format
 msgid "Disable splash screen"
 msgstr "Desactiva la pantalla de presentació"
 
-#: src/frontend/LabPlot.cpp:132
+#: src/frontend/LabPlot.cpp:135
 #, kde-format
 msgid "Start in the presenter mode"
 msgstr "Inicia en el mode de presentació"
 
-#: src/frontend/LabPlot.cpp:135
+#: src/frontend/LabPlot.cpp:138
 #, kde-format
 msgid "Open a project file."
 msgstr "Obre un fitxer de projecte."
 
-#: src/frontend/LabPlot.cpp:154
+#: src/frontend/LabPlot.cpp:157
 #, kde-format
 msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
@@ -14498,7 +14525,7 @@ msgstr ""
 "No s'ha pogut obrir el fitxer «%1». Feu clic a «Continua» per a seguir amb "
 "l'inici o «Cancel·la» per a sortir de l'aplicació."
 
-#: src/frontend/LabPlot.cpp:155
+#: src/frontend/LabPlot.cpp:158
 #, kde-format
 msgid "Failed to Open"
 msgstr "Ha fallat en obrir"
