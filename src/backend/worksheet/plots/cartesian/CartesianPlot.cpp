@@ -4410,7 +4410,7 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 			bool hovered = false;
 			const auto& curves = q->children<Plot>();
 			for (int i = curves.count() - 1; i >= 0; i--) { // because the last curve is above the other curves
-				auto* curve = curves[i];
+				auto* curve = curves.at(i);
 				if (hovered) { // if a curve is already hovered, disable hover for the rest
 					curve->setHover(false);
 					continue;
@@ -4463,8 +4463,8 @@ void CartesianPlotPrivate::mouseHoverOutsideDataRect() {
 }
 
 void CartesianPlotPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent* event) {
-	for (auto* curve : q->children<XYCurve>())
-		curve->setHover(false);
+	for (auto* plot : q->children<Plot>())
+		plot->setHover(false);
 
 	m_hovered = false;
 	QGraphicsItem::hoverLeaveEvent(event);
