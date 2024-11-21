@@ -41,8 +41,9 @@ public:
 
 	/*!
 	 * returns \c true if the column is used internally in the plot for the visualisation, returns \c false otherwise.
+	 * If \p indirect is true it returns true also if a depending curve uses that column
 	 */
-	virtual bool usingColumn(const Column*) const = 0;
+	virtual bool usingColumn(const AbstractColumn*, bool indirect = true) const = 0;
 
 	/*!
 	 * recalculates the internal structures (additional data containers, drawing primitives, etc.) on data changes in the source data colums.

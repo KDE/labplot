@@ -3,99 +3,134 @@
 	Project              : LabPlot
 	Description          : Private implementation class for AsciiFilter.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2020 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2017-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2024 Martin Marmsoler <martin.marmsoler@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef ASCIIFILTERPRIVATE_H
 #define ASCIIFILTERPRIVATE_H
 
-class AbstractDataSource;
-class AbstractColumn;
-class AbstractAspect;
-class Spreadsheet;
-class MQTTTopic;
+#include <QLocale>
+#include <QString>
+
+#include "AsciiFilter.h"
 
 class AsciiFilterPrivate {
 public:
-	explicit AsciiFilterPrivate(AsciiFilter*);
+	AsciiFilterPrivate(AsciiFilter* owner);
+	AsciiFilter::Status initialize(AsciiFilter::Properties p);
+	AsciiFilter::Status initialize(QIODevice& device);
+	void setDataSource(AbstractDataSource* dataSource);
+	AsciiFilter::Status readFromDevice(QIODevice& device,
+									   AbstractFileFilter::ImportMode columnImportMode,
+									   AbstractFileFilter::ImportMode rowImportMode,
+									   qint64 from,
+									   qint64 lines,
+									   qint64 keepNRows,
+									   qint64& bytes_read,
+									   bool skipFirstLine = false);
+	QVector<QStringList> preview(QIODevice& device, int lines, bool reinit = true, bool skipFirstLine = false);
+	QVector<QStringList> preview(const QString& fileName, int lines, bool reinit = true);
 
-	int isPrepared();
-	QString separator() const;
+	static QMap<QString, QPair<QString, AbstractColumn::ColumnMode>> modeMap();
+	static bool determineColumnModes(const QStringView& s, QVector<AbstractColumn::ColumnMode>& modes, QString& invalidString);
+	static QString convertTranslatedColumnModesToNative(const QStringView s);
+	AsciiFilter::Status setLastError(AsciiFilter::Status);
+	bool isUTF16(QIODevice&);
 
-	// preview
-	QVector<QStringList> preview(const QString& fileName, int lines);
-	QVector<QStringList> preview(QIODevice&);
-
-	// read
-	void
-	readDataFromDevice(QIODevice&, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
-	void readFromLiveDeviceNotFile(QIODevice&, AbstractDataSource*, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
-	qint64 readFromLiveDevice(QIODevice&, AbstractDataSource*, qint64 from = -1);
-	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
-
-	// write
-	void write(const QString& fileName, AbstractDataSource*);
-
-	// helpers
-	int prepareDeviceToRead(QIODevice&, size_t maxLines = std::numeric_limits<std::size_t>::max());
-	void initDataContainer(Spreadsheet*);
-	QString previewValue(const QString&, AbstractColumn::ColumnMode);
-	void setValue(int col, int row, QStringView value);
-	QString getLine(QIODevice&);
-	QStringList getLineString(QIODevice&);
-
-#ifdef HAVE_MQTT
-	int prepareToRead(const QString&);
-	QVector<QStringList> preview(const QString& message);
-	AbstractColumn::ColumnMode MQTTColumnMode() const;
-	QString MQTTColumnStatistics(const MQTTTopic*) const;
-	void readMQTTTopic(const QString& message, AbstractDataSource*);
-	void setPreparedForMQTT(bool, MQTTTopic*, const QString&);
-#endif
-
-	AsciiFilter* const q;
-
-	QString commentCharacter{QStringLiteral("#")};
-	QString separatingCharacter{QStringLiteral("auto")};
-	QString dateTimeFormat;
-	QLocale::Language numberFormat{QLocale::C};
-	QLocale locale{QLocale::C};
-	bool autoModeEnabled{true};
-	bool headerEnabled{true}; // read header from file
-	int headerLine{1}; // line to read header from
-	bool skipEmptyParts{false};
-	bool simplifyWhitespacesEnabled{false};
-	double nanValue{qQNaN()};
-	bool removeQuotesEnabled{false};
-	bool createIndexEnabled{false};
-	bool createTimestampEnabled{false};
-	QStringList columnNames;
-	QVector<AbstractColumn::ColumnMode> columnModes;
-	int startRow{1};
-	int endRow{-1};
-	int startColumn{1};
-	int endColumn{-1};
-	int mqttPreviewFirstEmptyColCount{0};
-
-	// TODO: redesign and remove this later
-	bool readingFile{false};
-	QString readingFileName;
+	AsciiFilter::Properties properties;
+	bool initialized{false};
+	size_t fileNumberLines{0};
 
 private:
-	static const unsigned int m_dataTypeLines = 10; // maximum lines to read for determining data types
-	QString m_separator;
-	int m_actualStartRow{1};
-	int m_actualRows{0};
-	int m_actualCols{0};
-	bool m_prepared{false};
-	bool m_firstRead{true};
-	int m_columnOffset{0}; // indexes the "start column" in the datasource. Data will be imported starting from this column.
-	std::vector<void*> m_dataContainer; // pointers to the actual data containers
+	static bool ignoringLine(QStringView line, const AsciiFilter::Properties& p);
+	static QStringList determineColumnsSimplifyWhiteSpace(const QStringView& line, const AsciiFilter::Properties& properties);
+	static QStringList determineColumnsSimplifyWhiteSpace(QStringView line,
+														  const QString& separator,
+														  bool removeQuotes,
+														  bool simplifyWhiteSpaces,
+														  bool skipEmptyParts,
+														  int startColumn,
+														  int endColumn);
+	static size_t determineColumns(const QStringView& line,
+								   const AsciiFilter::Properties& properties,
+								   bool separatorSingleCharacter,
+								   const QChar separatorCharacter,
+								   QVector<QStringView>& columnValues);
+	static AsciiFilter::Status determineSeparator(const QString& line, bool removeQuotes, bool simplifyWhiteSpaces, QString& separator);
+	static QVector<AbstractColumn::ColumnMode>
+	determineColumnModes(const QVector<QStringList>& values, const AsciiFilter::Properties& properties, QString& dateTimeFormat);
+	AsciiFilter::Status getLine(QIODevice& device, QString& line);
+	static QString statusToString(AsciiFilter::Status);
 
-	QStringList split(const QString&, bool autoSeparator = true);
-	QDateTime parseDateTime(const QString& string, const QString& format);
+	template<typename T>
+	void setValues(const QVector<T>& values, int rowIndex, const AsciiFilter::Properties& properties);
+
+	// Copied from CANFilterPrivate
+	// TODO: think about moving it to a common place
+	struct DataContainer {
+		void clear();
+		void appendVector(AbstractColumn::ColumnMode cm);
+		int rowCount(unsigned long index = 0) const;
+
+		template<class T>
+		void appendVector(QVector<T>* data, AbstractColumn::ColumnMode cm) {
+			m_dataContainer.push_back(data);
+			m_columnModes.append(cm);
+		}
+
+		void appendVector(void* data, AbstractColumn::ColumnMode cm) {
+			m_dataContainer.push_back(data);
+			m_columnModes.append(cm);
+		}
+
+		// Removes the first n elements
+		void removeFirst(int n);
+
+		template<class T>
+		void setData(int indexDataContainer, int indexData, T value) {
+			static_cast<QVector<T>*>(m_dataContainer.at(indexDataContainer))->operator[](indexData) = value;
+		}
+
+		void setData(int indexDataContainer, int indexData, const QStringView& value) {
+			static_cast<QVector<QString>*>(m_dataContainer.at(indexDataContainer))->operator[](indexData) = value.toString();
+		}
+
+		template<class T>
+		T data(int indexDataContainer, int indexData) {
+			return static_cast<QVector<T>*>(m_dataContainer.at(indexDataContainer))->at(indexData);
+		}
+
+		qsizetype size() const;
+		const QVector<AbstractColumn::ColumnMode> columnModes() const;
+
+		/*!
+		 * \brief dataContainer
+		 * Do not modify outside as long as DataContainer exists!
+		 * \return
+		 */
+		std::vector<void*>& dataContainer();
+		AbstractColumn::ColumnMode columnMode(int index) const;
+		const void* datas(qsizetype index) const;
+		bool resize(qsizetype) const;
+		bool reserve(qsizetype) const;
+
+	private:
+		QVector<AbstractColumn::ColumnMode> m_columnModes;
+		std::vector<void*> m_dataContainer; // pointers to the actual data containers
+	};
+
+	DataContainer m_DataContainer;
+	qint64 m_index{1}; // Index counter used when a index column was prepended
+	AsciiFilter::Status lastStatus{AsciiFilter::Status::Success};
+	AbstractDataSource* m_dataSource{nullptr};
+
+private:
+	AsciiFilter* const q;
+	static const qsizetype m_dataTypeLines = 10; // maximum lines to read for determining data types
+	qsizetype numberRowsReallocation = 10000; // When importing new data reallocate that amount of rows. So not for every row it must be reallocated
+
+	friend class AsciiFilterTest;
 };
 
-#endif
+#endif // ASCIIFILTERPRIVATE_H

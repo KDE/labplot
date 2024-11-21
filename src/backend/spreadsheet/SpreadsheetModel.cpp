@@ -15,6 +15,7 @@
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "frontend/spreadsheet/SpreadsheetSparkLineHeaderModel.h"
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -22,8 +23,6 @@
 #include <QBrush>
 #include <QIcon>
 #include <QPalette>
-
-#include <commonfrontend/spreadsheet/SpreadsheetSparkLineHeaderModel.h>
 
 /*!
 	\class SpreadsheetModel
@@ -49,7 +48,7 @@ SpreadsheetModel::SpreadsheetModel(Spreadsheet* spreadsheet)
 	updateHorizontalHeader(false);
 	connect(m_spreadsheet, &Spreadsheet::aspectDescriptionChanged, this, &SpreadsheetModel::handleDescriptionChange);
 
-	// Used when single columns get deleted or added
+	// Used when single column gets deleted or added
 	connect(m_spreadsheet,
 			QOverload<const AbstractAspect*, int, const AbstractAspect*>::of(&Spreadsheet::childAspectAboutToBeAdded),
 			this,
@@ -211,6 +210,11 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 
 QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, int role) const {
 	if ((orientation == Qt::Horizontal && section > m_columnCount - 1) || (orientation == Qt::Vertical && section > m_rowCount - 1))
+		return {};
+
+	// If a column in the spreadsheet gets remove, because of an import. It can happen, that MainWindow activates a different dockwidget, which
+	// leads to a redraw of the Spreadsheetview. During this import, the spreadsheetmodel m_columnCount and the spreadsheet column count are not in sync
+	if (m_suppressSignals)
 		return {};
 
 	switch (orientation) {

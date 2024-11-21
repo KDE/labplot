@@ -140,7 +140,7 @@ QJsonModel::QJsonModel(QObject* parent)
 	QFont font;
 	font.setPixelSize(60);
 
-	const QColor& color = qApp->palette().color(QPalette::Text);
+	const auto color = qApp->palette().color(QPalette::Text);
 	painter.setPen(QPen(color));
 
 	// draw the icon for JSON array

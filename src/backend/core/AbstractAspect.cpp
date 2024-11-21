@@ -257,7 +257,7 @@ QDateTime AbstractAspect::creationTime() const {
 	return d->m_creation_time;
 }
 
-bool AbstractAspect::hidden() const {
+bool AbstractAspect::isHidden() const {
 	return d->m_hidden;
 }
 
@@ -319,7 +319,7 @@ QMenu* AbstractAspect::createContextMenu() {
 	// 	menu->addAction( KStandardAction::cut(this) );
 
 	QAction* actionDuplicate = nullptr;
-	if (!isFixed() && m_type != AspectType::Project && m_type != AspectType::CantorWorksheet) {
+	if (!isFixed() && m_type != AspectType::Project && m_type != AspectType::Notebook) {
 		// copy action:
 		// don't allow to copy fixed aspects
 		auto* action = KStandardAction::copy(this);
@@ -679,7 +679,7 @@ void AbstractAspect::reparent(AbstractAspect* newParent, int newIndex) {
 QVector<AbstractAspect*> AbstractAspect::children(AspectType type, ChildIndexFlags flags) const {
 	QVector<AbstractAspect*> result;
 	for (auto* child : children()) {
-		if (flags & ChildIndexFlag::IncludeHidden || !child->hidden()) {
+		if (flags & ChildIndexFlag::IncludeHidden || !child->isHidden()) {
 			if (child->inherits(type))
 				result << child;
 
@@ -744,7 +744,7 @@ void AbstractAspect::setPasted(bool pasted) {
 	d->m_pasted = pasted;
 }
 
-bool AbstractAspect::pasted() const {
+bool AbstractAspect::isPasted() const {
 	return d->m_pasted;
 }
 
@@ -1111,7 +1111,7 @@ void AbstractAspect::childSelected(const AbstractAspect* aspect) {
 	//* CantorWorksheet with the child columns for CAS variables
 	AbstractAspect* parent = this->parentAspect();
 	if (parent && !parent->inherits(AspectType::Folder) && !parent->inherits(AspectType::XYFitCurve) && !parent->inherits(AspectType::XYSmoothCurve)
-		&& !parent->inherits(AspectType::CantorWorksheet))
+		&& !parent->inherits(AspectType::Notebook))
 		Q_EMIT this->selected(aspect);
 }
 
@@ -1125,7 +1125,7 @@ void AbstractAspect::childDeselected(const AbstractAspect* aspect) {
 	//* CantorWorksheet with the child columns for CAS variables
 	AbstractAspect* parent = this->parentAspect();
 	if (parent && !parent->inherits(AspectType::Folder) && !parent->inherits(AspectType::XYFitCurve) && !parent->inherits(AspectType::XYSmoothCurve)
-		&& !parent->inherits(AspectType::CantorWorksheet))
+		&& !parent->inherits(AspectType::Notebook))
 		Q_EMIT this->deselected(aspect);
 }
 
@@ -1213,7 +1213,7 @@ AbstractAspectPrivate::AbstractAspectPrivate(AbstractAspect* owner, const QStrin
 }
 
 AbstractAspectPrivate::~AbstractAspectPrivate() {
-	for (auto* child : qAsConst(m_children))
+	for (auto* child : std::as_const(m_children))
 		delete child;
 }
 

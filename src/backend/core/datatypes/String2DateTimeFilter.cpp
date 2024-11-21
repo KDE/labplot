@@ -15,6 +15,7 @@
 #include <QDateTime>
 #include <QStringList>
 #include <QTime>
+#include <QTimeZone>
 #include <QUndoCommand>
 
 #include <KLocalizedString>
@@ -44,7 +45,7 @@ QDateTime String2DateTimeFilter::dateTimeAt(int row) const {
 
 	// first try the selected format string m_format
 	QDateTime result = QDateTime::fromString(input_value, m_format);
-	result.setTimeSpec(Qt::UTC);
+	result.setTimeZone(QTimeZone::UTC);
 	if (result.isValid())
 		return result;
 

@@ -142,12 +142,7 @@ public:
 
 	struct CachedValuesAvailable {
 		void setUnavailable() {
-			statistics = false;
-			min = false;
-			max = false;
-			hasValues = false;
-			dictionary = false;
-			properties = false;
+			*this = CachedValuesAvailable();
 		}
 		bool statistics{false}; // is 'statistics' already available or needs to be (re-)calculated?
 		// are minMax already calculated or needs to be (re-)calculated?
@@ -267,7 +262,7 @@ private:
 	AbstractSimpleFilter* m_outputFilter{nullptr}; // output filter for data type -> string conversion
 	QString m_formula;
 	QVector<Column::FormulaData> m_formulaData;
-	bool m_formulaAutoUpdate{false};
+	bool m_formulaAutoUpdate{true};
 	bool m_formulaAutoResize{true};
 	IntervalAttribute<QString> m_formulas;
 	AbstractColumn::PlotDesignation m_plotDesignation{AbstractColumn::PlotDesignation::NoDesignation};

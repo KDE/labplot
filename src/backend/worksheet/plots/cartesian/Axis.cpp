@@ -20,7 +20,7 @@
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
-#include "kdefrontend/GuiTools.h"
+#include "frontend/GuiTools.h"
 
 #include "backend/nsl/nsl_math.h"
 #include "backend/nsl/nsl_sf_basic.h"
@@ -43,7 +43,7 @@ namespace {
 constexpr int maxNumberMajorTicks = 100;
 constexpr int _maxNumberMajorTicksCustomColumn = 21; // Use one more because one will be subtracted below
 constexpr int hoverSelectionEffectPenWidth = 2;
-} // Anounymous namespace
+} // Anonymous namespace
 
 /**
  * \class AxisGrid
@@ -259,7 +259,7 @@ void Axis::init(Orientation orientation, bool loading) {
 	d->labelsRotationAngle = group.readEntry(QStringLiteral("LabelsRotation"), 0);
 	d->labelsTextType = (LabelsTextType)group.readEntry(QStringLiteral("LabelsTextType"), static_cast<int>(LabelsTextType::PositionValues));
 	d->labelsFont = group.readEntry(QStringLiteral("LabelsFont"), QFont());
-	d->labelsFont.setPixelSize(Worksheet::convertToSceneUnits(10.0, Worksheet::Unit::Point));
+	d->labelsFont.setPointSizeF(Worksheet::convertToSceneUnits(10.0, Worksheet::Unit::Point));
 	d->labelsColor = group.readEntry(QStringLiteral("LabelsFontColor"), QColor(Qt::black));
 	d->labelsBackgroundType =
 		(LabelsBackgroundType)group.readEntry(QStringLiteral("LabelsBackgroundType"), static_cast<int>(LabelsBackgroundType::Transparent));
@@ -419,7 +419,7 @@ void Axis::handleResize(double horizontalRatio, double verticalRatio, bool pageR
 
 	d->majorTicksLength *= ratio; // ticks are perpendicular to axis line -> verticalRatio relevant
 	d->minorTicksLength *= ratio;
-	d->labelsFont.setPixelSize(d->labelsFont.pixelSize() * ratio); // TODO: take into account rotated labels
+	d->labelsFont.setPointSizeF(d->labelsFont.pointSizeF() * ratio); // TODO: take into account rotated labels
 	d->labelsOffset *= ratio;
 	d->title->handleResize(horizontalRatio, verticalRatio, pageResize);
 }
@@ -1255,7 +1255,7 @@ void AxisPrivate::retransformLine() {
 		}
 	}
 
-	for (const auto& line : qAsConst(lines)) {
+	for (const auto& line : std::as_const(lines)) {
 		linePath.moveTo(line.p1());
 		linePath.lineTo(line.p2());
 	}
@@ -1517,7 +1517,7 @@ void AxisPrivate::retransformTicks() {
 		if (q->isNumeric())
 			start += majorTickStartOffset;
 		else {
-			auto startDt = QDateTime::fromMSecsSinceEpoch(start, Qt::UTC);
+			auto startDt = QDateTime::fromMSecsSinceEpoch(start, QTimeZone::UTC);
 			startDt.setTimeSpec(Qt::TimeSpec::UTC);
 			const auto& dt = DateTime::dateTime(majorTickStartOffset);
 			startDt = startDt.addYears(dt.year);
@@ -1594,6 +1594,7 @@ void AxisPrivate::retransformTicks() {
 	case Axis::TicksType::CustomValues:
 		switch (q->scale()) {
 		case RangeT::Scale::Linear:
+		case RangeT::Scale::Inverse:
 			majorTicksIncrement = end - start;
 			break;
 		case RangeT::Scale::Log10:
@@ -1615,10 +1616,6 @@ void AxisPrivate::retransformTicks() {
 		case RangeT::Scale::Square:
 			majorTicksIncrement = end * end - start * start;
 			break;
-		case RangeT::Scale::Inverse:
-			if (start != 0. && end != 0.)
-				majorTicksIncrement = 1. / start - 1. / end;
-			break;
 		}
 		if (tmpMajorTicksNumber > 1)
 			majorTicksIncrement /= tmpMajorTicksNumber - 1;
@@ -1631,6 +1628,7 @@ void AxisPrivate::retransformTicks() {
 		if (q->isNumeric() || (!q->isNumeric() && q->scale() != RangeT::Scale::Linear)) {
 			switch (q->scale()) {
 			case RangeT::Scale::Linear:
+			case RangeT::Scale::Inverse:
 				tmpMajorTicksNumber = std::round((end - start) / majorTicksIncrement + 1);
 				break;
 			case RangeT::Scale::Log10:
@@ -1651,10 +1649,6 @@ void AxisPrivate::retransformTicks() {
 				break;
 			case RangeT::Scale::Square:
 				tmpMajorTicksNumber = std::round((end * end - start * start) / majorTicksIncrement + 1);
-				break;
-			case RangeT::Scale::Inverse:
-				if (start != 0. && end != 0.)
-					tmpMajorTicksNumber = std::round((1. / start - 1. / end) / majorTicksIncrement + 1);
 				break;
 			}
 		} else {
@@ -1686,22 +1680,23 @@ void AxisPrivate::retransformTicks() {
 	const bool dateTimeSpacing = !q->isNumeric() && q->scale() == RangeT::Scale::Linear && majorTicksType == Axis::TicksType::Spacing;
 	DateTime::DateTime dt;
 	QDateTime majorTickPosDateTime;
+	QDateTime nextMajorTickPosDateTime;
+	qreal nextMajorTickPos = 0.0;
 	if (dateTimeSpacing) {
 		dt = DateTime::dateTime(majorTicksSpacing);
-		majorTickPosDateTime = QDateTime::fromMSecsSinceEpoch(start, Qt::UTC);
+		majorTickPosDateTime = QDateTime::fromMSecsSinceEpoch(start, QTimeZone::UTC);
 	}
 	const auto dtValid = majorTickPosDateTime.isValid();
 
 	for (int iMajor = 0; iMajor < tmpMajorTicksNumber || (dateTimeSpacing && dtValid); iMajor++) {
 		// DEBUG(Q_FUNC_INFO << ", major tick " << iMajor)
 		qreal majorTickPos = 0.0;
-		qreal nextMajorTickPos = 0.0;
 		// calculate major tick's position
-
 		if (!dateTimeSpacing) {
+			// DEBUG(Q_FUNC_INFO << ", start = " << start << ", incr = " << majorTicksIncrement << ", i = " << iMajor)
 			switch (q->scale()) {
 			case RangeT::Scale::Linear:
-				// DEBUG(Q_FUNC_INFO << ", start = " << start << ", incr = " << majorTicksIncrement << ", i = " << iMajor)
+			case RangeT::Scale::Inverse:
 				majorTickPos = start + majorTicksIncrement * iMajor;
 				if (std::abs(majorTickPos) < 1.e-15 * majorTicksIncrement) // avoid rounding errors when close to zero
 					majorTickPos = 0;
@@ -1727,22 +1722,23 @@ void AxisPrivate::retransformTicks() {
 				majorTickPos = std::sqrt(start * start + majorTicksIncrement * iMajor);
 				nextMajorTickPos = std::sqrt(start * start + majorTicksIncrement * (iMajor + 1));
 				break;
-			case RangeT::Scale::Inverse:
-				majorTickPos = 1. / (1. / start + majorTicksIncrement * iMajor);
-				nextMajorTickPos = 1. / (1. / start + majorTicksIncrement * (iMajor + 1));
-				break;
 			}
+			// DEBUG(majorTickPos << " " << nextMajorTickPos)
 		} else {
 			// Datetime Linear
 			if (iMajor == 0)
 				majorTickPos = start;
 			else {
-				majorTickPosDateTime = majorTickPosDateTime.addYears(dt.year);
-				majorTickPosDateTime = majorTickPosDateTime.addMonths(dt.month);
-				majorTickPosDateTime = majorTickPosDateTime.addDays(dt.day);
-				majorTickPosDateTime = majorTickPosDateTime.addMSecs(DateTime::milliseconds(dt.hour, dt.minute, dt.second, dt.millisecond));
-				majorTickPos = majorTickPosDateTime.toMSecsSinceEpoch();
+				majorTickPosDateTime = nextMajorTickPosDateTime;
+				majorTickPos = nextMajorTickPos;
 			}
+
+			nextMajorTickPosDateTime = majorTickPosDateTime;
+			nextMajorTickPosDateTime = nextMajorTickPosDateTime.addYears(dt.year);
+			nextMajorTickPosDateTime = nextMajorTickPosDateTime.addMonths(dt.month);
+			nextMajorTickPosDateTime = nextMajorTickPosDateTime.addDays(dt.day);
+			nextMajorTickPosDateTime = nextMajorTickPosDateTime.addMSecs(DateTime::milliseconds(dt.hour, dt.minute, dt.second, dt.millisecond));
+			nextMajorTickPos = nextMajorTickPosDateTime.toMSecsSinceEpoch();
 		}
 
 		// finish here when out of range
@@ -1868,8 +1864,8 @@ void AxisPrivate::retransformTicks() {
 
 		// minor ticks
 		// DEBUG("	tmpMinorTicksNumber = " << tmpMinorTicksNumber)
-		if (Axis::noTicks != minorTicksDirection && tmpMajorTicksNumber > 1 && tmpMinorTicksNumber > 0 && iMajor < tmpMajorTicksNumber - 1
-			&& nextMajorTickPos != majorTickPos) {
+		if (Axis::noTicks != minorTicksDirection && tmpMinorTicksNumber > 0
+			&& ((tmpMajorTicksNumber > 1 && iMajor < tmpMajorTicksNumber - 1) || (dateTimeSpacing && dtValid)) && nextMajorTickPos != majorTickPos) {
 			// minor ticks are placed at equidistant positions independent of the selected scaling for the major ticks positions
 			double minorTicksIncrement = (nextMajorTickPos - majorTickPos) / (tmpMinorTicksNumber + 1);
 			// DEBUG("	nextMajorTickPos = " << nextMajorTickPos)
@@ -2026,7 +2022,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 		switch (labelsFormat) {
 		case Axis::LabelsFormat::Decimal: {
 			QString nullStr = numberLocale.toString(0., 'f', labelsPrecision);
-			for (const auto value : qAsConst(tickLabelValues)) {
+			for (const auto value : std::as_const(tickLabelValues)) {
 				// toString() does not round: use NSL function
 				if (RangeT::isLogScale(q->scale())) { // don't use same precision for all label on log scales
 					const int precision = labelsAutoPrecision ? std::max(labelsPrecision, nsl_math_decimal_places(value) + 1) : labelsPrecision;
@@ -2042,7 +2038,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 		}
 		case Axis::LabelsFormat::ScientificE: {
 			QString nullStr = numberLocale.toString(0., 'e', labelsPrecision);
-			for (const auto value : qAsConst(tickLabelValues)) {
+			for (const auto value : std::as_const(tickLabelValues)) {
 				if (value == 0) // just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else {
@@ -2059,7 +2055,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			break;
 		}
 		case Axis::LabelsFormat::Powers10: {
-			for (const auto value : qAsConst(tickLabelValues)) {
+			for (const auto value : std::as_const(tickLabelValues)) {
 				if (value == 0) // just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else {
@@ -2075,7 +2071,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			break;
 		}
 		case Axis::LabelsFormat::Powers2: {
-			for (const auto value : qAsConst(tickLabelValues)) {
+			for (const auto value : std::as_const(tickLabelValues)) {
 				if (value == 0) // just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else {
@@ -2091,7 +2087,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			break;
 		}
 		case Axis::LabelsFormat::PowersE: {
-			for (const auto value : qAsConst(tickLabelValues)) {
+			for (const auto value : std::as_const(tickLabelValues)) {
 				if (value == 0) // just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else {
@@ -2106,7 +2102,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			break;
 		}
 		case Axis::LabelsFormat::MultipliesPi: {
-			for (const auto value : qAsConst(tickLabelValues)) {
+			for (const auto value : std::as_const(tickLabelValues)) {
 				if (value == 0) // just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else if (nsl_math_approximately_equal_eps(value, M_PI, 1.e-3))
@@ -2120,7 +2116,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			break;
 		}
 		case Axis::LabelsFormat::Scientific: {
-			for (const auto value : qAsConst(tickLabelValues)) {
+			for (const auto value : std::as_const(tickLabelValues)) {
 				// DEBUG(Q_FUNC_INFO << ", value = " << value << ", precision = " << labelsPrecision)
 				if (value == 0) // just show "0"
 					str = numberLocale.toString(value, 'f', 0);
@@ -2144,9 +2140,9 @@ void AxisPrivate::retransformTickLabelStrings() {
 			DEBUG(Q_FUNC_INFO << ", tick label = " << STDSTRING(str))
 		}
 	} else if (datetime) {
-		for (const auto value : qAsConst(tickLabelValues)) {
+		for (const auto value : std::as_const(tickLabelValues)) {
 			QDateTime dateTime;
-			dateTime.setTimeSpec(Qt::UTC);
+			dateTime.setTimeZone(QTimeZone::UTC);
 			dateTime.setMSecsSinceEpoch(value);
 			str = dateTime.toString(labelsDateTimeFormat);
 			str = labelsPrefix + str + labelsSuffix;
@@ -2568,7 +2564,7 @@ void AxisPrivate::retransformMajorGrid() {
 	// Currently, grid lines disappear sometimes without this flag
 	QVector<QPointF> logicalMajorTickPoints = q->cSystem->mapSceneToLogical(majorTickPoints, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	// for (auto p : logicalMajorTickPoints)
-	//	QDEBUG(Q_FUNC_INFO << ", logical major tick: " << QString::number(p.x(), 'g', 12) << " = " << QDateTime::fromMSecsSinceEpoch(p.x(), Qt::UTC))
+	//	QDEBUG(Q_FUNC_INFO << ", logical major tick: " << QString::number(p.x(), 'g', 12) << " = " << QDateTime::fromMSecsSinceEpoch(p.x(), QTimeZone::UTC))
 
 	if (logicalMajorTickPoints.isEmpty())
 		return;

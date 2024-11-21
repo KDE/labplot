@@ -56,9 +56,10 @@ public:
 	double minimum(CartesianCoordinateSystem::Dimension) const override;
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	bool hasData() const override;
-	bool usingColumn(const Column*) const override;
+	bool usingColumn(const AbstractColumn*, bool indirect) const override;
 	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) override;
 	QColor color() const override;
+	QColor colorAt(int) const;
 
 	typedef LollipopPlotPrivate Private;
 

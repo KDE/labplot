@@ -3063,7 +3063,9 @@ void FitTest::testHistogramGaussianML() {
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/Gaussian.dat"));
 
-	filter.setHeaderEnabled(false);
+	auto properties = filter.properties();
+	properties.headerEnabled = false;
+	filter.setProperties(properties);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet.rowCount(), 1000);
@@ -3117,7 +3119,9 @@ void FitTest::testHistogramExponentialML() {
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/Exponential.dat"));
 
-	filter.setHeaderEnabled(false);
+	auto properties = filter.properties();
+	properties.headerEnabled = false;
+	filter.setProperties(properties);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet.rowCount(), 100);
@@ -3164,7 +3168,9 @@ void FitTest::testHistogramLaplaceML() {
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/Laplace.dat"));
 
-	filter.setHeaderEnabled(false);
+	auto properties = filter.properties();
+	properties.headerEnabled = false;
+	filter.setProperties(properties);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet.rowCount(), 100);
@@ -3205,7 +3211,9 @@ void FitTest::testHistogramCauchyML() {
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/Cauchy.dat"));
 
-	filter.setHeaderEnabled(false);
+	auto properties = filter.properties();
+	properties.headerEnabled = false;
+	filter.setProperties(properties);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet.rowCount(), 1000);
@@ -3246,7 +3254,9 @@ void FitTest::testHistogramLognormalML() {
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/Lognormal.dat"));
 
-	filter.setHeaderEnabled(false);
+	auto properties = filter.properties();
+	properties.headerEnabled = false;
+	filter.setProperties(properties);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet.rowCount(), 1000);
@@ -3287,7 +3297,9 @@ void FitTest::testHistogramPoissonML() {
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/Poisson.dat"));
 
-	filter.setHeaderEnabled(false);
+	auto properties = filter.properties();
+	properties.headerEnabled = false;
+	filter.setProperties(properties);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet.rowCount(), 100);
@@ -3332,7 +3344,9 @@ void FitTest::testHistogramBinomialML() {
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/Binomial.dat"));
 
-	filter.setHeaderEnabled(false);
+	auto properties = filter.properties();
+	properties.headerEnabled = false;
+	filter.setProperties(properties);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet.rowCount(), 100);

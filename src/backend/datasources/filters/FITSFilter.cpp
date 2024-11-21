@@ -18,7 +18,7 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/matrix/MatrixModel.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "commonfrontend/matrix/MatrixView.h"
+#include "frontend/matrix/MatrixView.h"
 
 #include <QDebug>
 #include <QFile>

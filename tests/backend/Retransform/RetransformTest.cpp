@@ -24,10 +24,10 @@
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFunctionCurve.h"
-#include "commonfrontend/worksheet/WorksheetView.h"
-#include "kdefrontend/dockwidgets/AxisDock.h"
-#include "kdefrontend/dockwidgets/CartesianPlotDock.h"
-#include "kdefrontend/dockwidgets/XYCurveDock.h"
+#include "frontend/dockwidgets/AxisDock.h"
+#include "frontend/dockwidgets/CartesianPlotDock.h"
+#include "frontend/dockwidgets/XYCurveDock.h"
+#include "frontend/worksheet/WorksheetView.h"
 
 #include <QAction>
 
@@ -886,7 +886,10 @@ void RetransformTest::TestImportCSV() {
 	file.close();
 
 	AsciiFilter filter;
-	filter.setHeaderLine(1);
+	auto properties = filter.properties();
+	properties.headerEnabled = true;
+	properties.headerLine = 1;
+	filter.setProperties(properties);
 	filter.readDataFromFile(file.fileName(), spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet->rowCount(), 3);
@@ -996,10 +999,6 @@ void RetransformTest::TestImportCSVInvalidateCurve() {
 	QString savePath;
 	SAVE_FILE("testfile", fileContent);
 
-	filter.setCommentCharacter(QString());
-	filter.setSeparatingCharacter(QStringLiteral(";"));
-	filter.setHeaderEnabled(true);
-	filter.setHeaderLine(1);
 	filter.readDataFromFile(savePath, spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	// the assignment to the data columns got lost since the columns were renamed

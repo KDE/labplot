@@ -1,8 +1,6 @@
 find_package(SharedMimeInfo REQUIRED)
-set(KDE_FRONTEND true)
-set(KDEFRONTEND_DIR kdefrontend)
+set(FRONTEND_DIR frontend)
 set(BACKEND_DIR backend)
-set(COMMONFRONTEND_DIR commonfrontend)
 set(CANTOR_DIR cantor)
 set(TOOLS_DIR tools)
 set(CMAKE_AUTOMOC ON)
@@ -20,268 +18,294 @@ if(NOT qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
 endif()
 
 set(GUI_SOURCES
-    ${KDEFRONTEND_DIR}/DatasetModel.cpp
-    ${KDEFRONTEND_DIR}/GuiObserver.cpp
-    ${KDEFRONTEND_DIR}/PlotTemplateDialog.cpp
-    ${KDEFRONTEND_DIR}/GuiTools.cpp
-    ${KDEFRONTEND_DIR}/HistoryDialog.cpp
-    ${KDEFRONTEND_DIR}/MainWin.cpp
-    ${KDEFRONTEND_DIR}/SettingsDialog.cpp
-    ${KDEFRONTEND_DIR}/SettingsGeneralPage.cpp
-    ${KDEFRONTEND_DIR}/SettingsNotebookPage.cpp
-    ${KDEFRONTEND_DIR}/SettingsSpreadsheetPage.cpp
-    ${KDEFRONTEND_DIR}/SettingsWorksheetPage.cpp
-#     ${KDEFRONTEND_DIR}/SettingsWelcomePage.cpp
-    ${KDEFRONTEND_DIR}/SettingsDatasetsPage.cpp
-    ${KDEFRONTEND_DIR}/SettingsPage.h
-    ${KDEFRONTEND_DIR}/TemplateHandler.cpp
-    ${KDEFRONTEND_DIR}/ThemeHandler.cpp
-    ${KDEFRONTEND_DIR}/examples/ExamplesDialog.cpp
-    ${KDEFRONTEND_DIR}/examples/ExamplesManager.cpp
-    ${KDEFRONTEND_DIR}/examples/ExamplesWidget.cpp
-#     ${KDEFRONTEND_DIR}/welcomescreen/WelcomeScreenHelper.cpp
-    ${KDEFRONTEND_DIR}/colormaps/ColorMapsWidget.cpp
-    ${KDEFRONTEND_DIR}/colormaps/ColorMapsDialog.cpp
-    ${KDEFRONTEND_DIR}/datasources/AsciiOptionsWidget.cpp
-    ${KDEFRONTEND_DIR}/datasources/CANOptionsWidget.cpp
-    ${KDEFRONTEND_DIR}/datasources/BinaryOptionsWidget.cpp
-    ${KDEFRONTEND_DIR}/datasources/DatabaseManagerDialog.cpp
-    ${KDEFRONTEND_DIR}/datasources/DatabaseManagerWidget.cpp
-    ${KDEFRONTEND_DIR}/datasources/DatasetMetadataManagerDialog.cpp
-    ${KDEFRONTEND_DIR}/datasources/DatasetMetadataManagerWidget.cpp
-    ${KDEFRONTEND_DIR}/datasources/OdsOptionsWidget.cpp
-    ${KDEFRONTEND_DIR}/datasources/XLSXOptionsWidget.cpp
-    ${KDEFRONTEND_DIR}/datasources/HDF5OptionsWidget.cpp
-    ${KDEFRONTEND_DIR}/datasources/ImageOptionsWidget.cpp
-    ${KDEFRONTEND_DIR}/datasources/ImportDatasetWidget.cpp
-    ${KDEFRONTEND_DIR}/datasources/ImportDatasetDialog.cpp
-    ${KDEFRONTEND_DIR}/datasources/ImportDialog.cpp
-    ${KDEFRONTEND_DIR}/datasources/ImportWarningsDialog.cpp
-    ${KDEFRONTEND_DIR}/datasources/ImportFileWidget.cpp
-    ${KDEFRONTEND_DIR}/datasources/ImportFileDialog.cpp
-    ${KDEFRONTEND_DIR}/datasources/ImportKaggleDatasetWidget.cpp
-    ${KDEFRONTEND_DIR}/datasources/ImportKaggleDatasetDialog.cpp
-    ${KDEFRONTEND_DIR}/datasources/ImportProjectDialog.cpp
-    ${KDEFRONTEND_DIR}/datasources/ImportSQLDatabaseDialog.cpp
-    ${KDEFRONTEND_DIR}/datasources/ImportSQLDatabaseWidget.cpp
-    ${KDEFRONTEND_DIR}/datasources/MatioOptionsWidget.cpp
-    ${KDEFRONTEND_DIR}/datasources/NetCDFOptionsWidget.cpp
-    ${KDEFRONTEND_DIR}/datasources/ROOTOptionsWidget.cpp
-    ${KDEFRONTEND_DIR}/datasources/FITSOptionsWidget.cpp
-    ${KDEFRONTEND_DIR}/datasources/JsonOptionsWidget.cpp
-    ${KDEFRONTEND_DIR}/datasources/McapOptionsWidget.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/BaseDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/AspectDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/CursorDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/ImageDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/InfoElementDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/NoteDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotLegendDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/HistogramDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/BarPlotDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/BoxPlotDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/CustomPointDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/ColumnDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/KDEPlotDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/LiveDataDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/LollipopPlotDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/MatrixDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/ProjectDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/ReferenceLineDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/ReferenceRangeDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/SpreadsheetDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/StatisticsSpreadsheetDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/QQPlotDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/XYCurveDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/XYAnalysisCurveDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/XYEquationCurveDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/XYFunctionCurveDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/XYDataReductionCurveDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/XYDifferentiationCurveDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/XYIntegrationCurveDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/XYInterpolationCurveDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/XYSmoothCurveDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/XYFitCurveDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/XYFourierFilterCurveDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/XYFourierTransformCurveDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/XYHilbertTransformCurveDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/XYConvolutionCurveDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/XYCorrelationCurveDock.cpp
-    ${KDEFRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
-    ${KDEFRONTEND_DIR}/matrix/MatrixFunctionDialog.cpp
-    ${KDEFRONTEND_DIR}/spreadsheet/PlotDataDialog.cpp
-    ${KDEFRONTEND_DIR}/spreadsheet/EquidistantValuesDialog.cpp
-    ${KDEFRONTEND_DIR}/spreadsheet/ExportSpreadsheetDialog.cpp
-    ${KDEFRONTEND_DIR}/spreadsheet/AddSubtractValueDialog.cpp
-    ${KDEFRONTEND_DIR}/spreadsheet/AddValueLabelDialog.cpp
-    ${KDEFRONTEND_DIR}/spreadsheet/BatchEditValueLabelsDialog.cpp
-    ${KDEFRONTEND_DIR}/spreadsheet/DropValuesDialog.cpp
-    ${KDEFRONTEND_DIR}/spreadsheet/FlattenColumnsDialog.cpp
-    ${KDEFRONTEND_DIR}/spreadsheet/FormattingHeatmapDialog.cpp
-    ${KDEFRONTEND_DIR}/spreadsheet/GoToDialog.cpp
-    ${KDEFRONTEND_DIR}/spreadsheet/FunctionValuesDialog.cpp
-    ${KDEFRONTEND_DIR}/spreadsheet/RandomValuesDialog.cpp
-    ${KDEFRONTEND_DIR}/spreadsheet/RescaleDialog.cpp
-    ${KDEFRONTEND_DIR}/spreadsheet/SampleValuesDialog.cpp
-    ${KDEFRONTEND_DIR}/spreadsheet/SearchReplaceWidget.cpp
-    ${KDEFRONTEND_DIR}/spreadsheet/SortDialog.cpp
-    ${KDEFRONTEND_DIR}/spreadsheet/StatisticsColumnWidget.cpp
-    ${KDEFRONTEND_DIR}/spreadsheet/StatisticsDialog.cpp
-    ${KDEFRONTEND_DIR}/worksheet/ExportWorksheetDialog.cpp
-    ${KDEFRONTEND_DIR}/worksheet/GridDialog.cpp
-    ${KDEFRONTEND_DIR}/worksheet/PresenterWidget.cpp
-    ${KDEFRONTEND_DIR}/worksheet/SlidingPanel.cpp
-    ${KDEFRONTEND_DIR}/worksheet/WorksheetPreviewWidget.cpp
-    ${KDEFRONTEND_DIR}/widgets/BackgroundWidget.cpp
-    ${KDEFRONTEND_DIR}/widgets/ConstantsWidget.cpp
-    ${KDEFRONTEND_DIR}/widgets/ThemesComboBox.cpp
-    ${KDEFRONTEND_DIR}/widgets/ThemesWidget.cpp
-    ${KDEFRONTEND_DIR}/widgets/ExpressionTextEdit.cpp
-    ${KDEFRONTEND_DIR}/widgets/FitOptionsWidget.cpp
-    ${KDEFRONTEND_DIR}/widgets/FitParametersWidget.cpp
-    ${KDEFRONTEND_DIR}/widgets/FunctionsWidget.cpp
-    ${KDEFRONTEND_DIR}/widgets/LabelWidget.cpp
-    ${KDEFRONTEND_DIR}/widgets/ErrorBarWidget.cpp
-    ${KDEFRONTEND_DIR}/widgets/LineWidget.cpp
-    ${KDEFRONTEND_DIR}/widgets/SymbolWidget.cpp
-    ${KDEFRONTEND_DIR}/widgets/ValueWidget.cpp
-    ${KDEFRONTEND_DIR}/widgets/DatapickerImageWidget.cpp
-    ${KDEFRONTEND_DIR}/widgets/DatapickerCurveWidget.cpp
-    ${KDEFRONTEND_DIR}/widgets/FITSHeaderEditWidget.cpp
-    ${KDEFRONTEND_DIR}/widgets/FITSHeaderEditNewKeywordDialog.cpp
-    ${KDEFRONTEND_DIR}/widgets/FITSHeaderEditAddUnitDialog.cpp
-    ${KDEFRONTEND_DIR}/widgets/FITSHeaderEditDialog.cpp
-    ${KDEFRONTEND_DIR}/widgets/ResizableTextEdit.cpp
-    ${KDEFRONTEND_DIR}/widgets/TimedLineEdit.cpp
+    ${FRONTEND_DIR}/DatasetModel.cpp
+    ${FRONTEND_DIR}/GuiObserver.cpp
+    ${FRONTEND_DIR}/GuiTools.cpp
+    ${FRONTEND_DIR}/HistoryDialog.cpp
+    ${FRONTEND_DIR}/MainWin.cpp
+    ${FRONTEND_DIR}/PlotTemplateDialog.cpp
+    ${FRONTEND_DIR}/ProjectExplorer.cpp
+    ${FRONTEND_DIR}/SettingsDialog.cpp
+    ${FRONTEND_DIR}/SettingsGeneralPage.cpp
+    ${FRONTEND_DIR}/SettingsNotebookPage.cpp
+    ${FRONTEND_DIR}/SettingsSpreadsheetPage.cpp
+    ${FRONTEND_DIR}/SettingsWorksheetPage.cpp
+    ${FRONTEND_DIR}/SettingsDatasetsPage.cpp
+    ${FRONTEND_DIR}/SettingsPage.h
+    ${FRONTEND_DIR}/TemplateHandler.cpp
+    ${FRONTEND_DIR}/ThemeHandler.cpp
+    ${FRONTEND_DIR}/examples/ExamplesDialog.cpp
+    ${FRONTEND_DIR}/examples/ExamplesManager.cpp
+    ${FRONTEND_DIR}/examples/ExamplesWidget.cpp
+#     ${FRONTEND_DIR}/welcomescreen/WelcomeScreenHelper.cpp
+    ${FRONTEND_DIR}/colormaps/ColorMapsWidget.cpp
+    ${FRONTEND_DIR}/colormaps/ColorMapsDialog.cpp
+    ${FRONTEND_DIR}/core/ContentDockWidget.cpp
+    ${FRONTEND_DIR}/datapicker/DatapickerView.cpp
+    ${FRONTEND_DIR}/datapicker/DatapickerImageView.cpp
+    ${FRONTEND_DIR}/datasources/AsciiOptionsWidget.cpp
+    ${FRONTEND_DIR}/datasources/CANOptionsWidget.cpp
+    ${FRONTEND_DIR}/datasources/BinaryOptionsWidget.cpp
+    ${FRONTEND_DIR}/datasources/DatabaseManagerDialog.cpp
+    ${FRONTEND_DIR}/datasources/DatabaseManagerWidget.cpp
+    ${FRONTEND_DIR}/datasources/DatasetMetadataManagerDialog.cpp
+    ${FRONTEND_DIR}/datasources/DatasetMetadataManagerWidget.cpp
+    ${FRONTEND_DIR}/datasources/OdsOptionsWidget.cpp
+    ${FRONTEND_DIR}/datasources/XLSXOptionsWidget.cpp
+    ${FRONTEND_DIR}/datasources/HDF5OptionsWidget.cpp
+    ${FRONTEND_DIR}/datasources/ImageOptionsWidget.cpp
+    ${FRONTEND_DIR}/datasources/ImportDatasetWidget.cpp
+    ${FRONTEND_DIR}/datasources/ImportDatasetDialog.cpp
+    ${FRONTEND_DIR}/datasources/ImportDialog.cpp
+    ${FRONTEND_DIR}/datasources/ImportWarningsDialog.cpp
+    ${FRONTEND_DIR}/datasources/ImportFileWidget.cpp
+    ${FRONTEND_DIR}/datasources/ImportFileDialog.cpp
+    ${FRONTEND_DIR}/datasources/ImportKaggleDatasetWidget.cpp
+    ${FRONTEND_DIR}/datasources/ImportKaggleDatasetDialog.cpp
+    ${FRONTEND_DIR}/datasources/ImportOriginLayersDialog.cpp
+    ${FRONTEND_DIR}/datasources/ImportProjectDialog.cpp
+    ${FRONTEND_DIR}/datasources/ImportSQLDatabaseDialog.cpp
+    ${FRONTEND_DIR}/datasources/ImportSQLDatabaseWidget.cpp
+    ${FRONTEND_DIR}/datasources/MatioOptionsWidget.cpp
+    ${FRONTEND_DIR}/datasources/NetCDFOptionsWidget.cpp
+    ${FRONTEND_DIR}/datasources/ROOTOptionsWidget.cpp
+    ${FRONTEND_DIR}/datasources/FITSOptionsWidget.cpp
+    ${FRONTEND_DIR}/datasources/JsonOptionsWidget.cpp
+    ${FRONTEND_DIR}/datasources/McapOptionsWidget.cpp
+    ${FRONTEND_DIR}/dockwidgets/BaseDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/AspectDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/AxisDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/CursorDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/ImageDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/InfoElementDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/NoteDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/CartesianPlotDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/CartesianPlotLegendDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/HistogramDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/BarPlotDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/BoxPlotDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/CustomPointDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/ColumnDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/KDEPlotDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/LiveDataDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/LollipopPlotDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/MatrixDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/ProcessBehaviorChartDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/ProjectDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/ReferenceLineDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/ReferenceRangeDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/RunChartDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/SpreadsheetDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/StatisticsSpreadsheetDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/QQPlotDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/XYCurveDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/XYAnalysisCurveDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/XYEquationCurveDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/XYFunctionCurveDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/XYDataReductionCurveDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/XYDifferentiationCurveDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/XYIntegrationCurveDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/XYInterpolationCurveDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/XYSmoothCurveDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/XYFitCurveDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/XYFourierFilterCurveDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/XYFourierTransformCurveDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/XYHilbertTransformCurveDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/XYConvolutionCurveDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/XYCorrelationCurveDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
+    ${FRONTEND_DIR}/matrix/MatrixFunctionDialog.cpp
+    ${FRONTEND_DIR}/matrix/MatrixView.cpp
+    ${FRONTEND_DIR}/note/NoteView.cpp
+    ${FRONTEND_DIR}/spreadsheet/PlotDataDialog.cpp
+    ${FRONTEND_DIR}/spreadsheet/EquidistantValuesDialog.cpp
+    ${FRONTEND_DIR}/spreadsheet/ExportSpreadsheetDialog.cpp
+    ${FRONTEND_DIR}/spreadsheet/AddSubtractValueDialog.cpp
+    ${FRONTEND_DIR}/spreadsheet/AddValueLabelDialog.cpp
+    ${FRONTEND_DIR}/spreadsheet/BatchEditValueLabelsDialog.cpp
+    ${FRONTEND_DIR}/spreadsheet/DropValuesDialog.cpp
+    ${FRONTEND_DIR}/spreadsheet/FlattenColumnsDialog.cpp
+    ${FRONTEND_DIR}/spreadsheet/FormattingHeatmapDialog.cpp
+    ${FRONTEND_DIR}/spreadsheet/GoToDialog.cpp
+    ${FRONTEND_DIR}/spreadsheet/FunctionValuesDialog.cpp
+    ${FRONTEND_DIR}/spreadsheet/RandomValuesDialog.cpp
+    ${FRONTEND_DIR}/spreadsheet/RescaleDialog.cpp
+    ${FRONTEND_DIR}/spreadsheet/SampleValuesDialog.cpp
+    ${FRONTEND_DIR}/spreadsheet/SearchReplaceWidget.cpp
+    ${FRONTEND_DIR}/spreadsheet/SpreadsheetCommentsHeaderModel.cpp
+    ${FRONTEND_DIR}/spreadsheet/SpreadsheetHeaderView.cpp
+    ${FRONTEND_DIR}/spreadsheet/SpreadsheetSparkLineHeaderModel.cpp
+    ${FRONTEND_DIR}/spreadsheet/SpreadsheetItemDelegate.cpp
+    ${FRONTEND_DIR}/spreadsheet/SparklineRunnable.h
+    ${FRONTEND_DIR}/spreadsheet/SparklineRunnable.cpp
+    ${FRONTEND_DIR}/spreadsheet/SpreadsheetView.cpp
+    ${FRONTEND_DIR}/spreadsheet/SortDialog.cpp
+    ${FRONTEND_DIR}/spreadsheet/StatisticsColumnWidget.cpp
+    ${FRONTEND_DIR}/spreadsheet/StatisticsDialog.cpp
+    ${FRONTEND_DIR}/worksheet/ExportWorksheetDialog.cpp
+    ${FRONTEND_DIR}/worksheet/GridDialog.cpp
+    ${FRONTEND_DIR}/worksheet/PresenterWidget.cpp
+    ${FRONTEND_DIR}/worksheet/SlidingPanel.cpp
+    ${FRONTEND_DIR}/worksheet/WorksheetPreviewWidget.cpp
+    ${FRONTEND_DIR}/worksheet/WorksheetView.cpp
+    ${FRONTEND_DIR}/widgets/BackgroundWidget.cpp
+    ${FRONTEND_DIR}/widgets/ConstantsWidget.cpp
+    ${FRONTEND_DIR}/widgets/ThemesComboBox.cpp
+    ${FRONTEND_DIR}/widgets/ThemesWidget.cpp
+    ${FRONTEND_DIR}/widgets/ExpressionTextEdit.cpp
+    ${FRONTEND_DIR}/widgets/FitOptionsWidget.cpp
+    ${FRONTEND_DIR}/widgets/FitParametersWidget.cpp
+    ${FRONTEND_DIR}/widgets/FunctionsWidget.cpp
+    ${FRONTEND_DIR}/widgets/LabelWidget.cpp
+    ${FRONTEND_DIR}/widgets/ErrorBarWidget.cpp
+    ${FRONTEND_DIR}/widgets/LineWidget.cpp
+    ${FRONTEND_DIR}/widgets/SymbolWidget.cpp
+    ${FRONTEND_DIR}/widgets/ValueWidget.cpp
+    ${FRONTEND_DIR}/widgets/DatapickerImageWidget.cpp
+    ${FRONTEND_DIR}/widgets/DatapickerCurveWidget.cpp
+    ${FRONTEND_DIR}/widgets/FITSHeaderEditWidget.cpp
+    ${FRONTEND_DIR}/widgets/FITSHeaderEditNewKeywordDialog.cpp
+    ${FRONTEND_DIR}/widgets/FITSHeaderEditAddUnitDialog.cpp
+    ${FRONTEND_DIR}/widgets/FITSHeaderEditDialog.cpp
+    ${FRONTEND_DIR}/widgets/ResizableTextEdit.cpp
+    ${FRONTEND_DIR}/widgets/TimedLineEdit.cpp
+    ${FRONTEND_DIR}/widgets/TreeViewComboBox.cpp
+    ${FRONTEND_DIR}/widgets/qxtspanslider.cpp
+    ${FRONTEND_DIR}/widgets/MemoryWidget.cpp
+    ${FRONTEND_DIR}/widgets/DateTimeSpinBox.cpp
+    ${FRONTEND_DIR}/widgets/NumberSpinBox.cpp
+    ${FRONTEND_DIR}/widgets/UTCDateTimeEdit.cpp
+    ${FRONTEND_DIR}/workbook/WorkbookView.cpp
 )
 
 if(Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
-    list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/datasources/MQTTConnectionManagerWidget.cpp)
-    list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/datasources/MQTTConnectionManagerDialog.cpp)
-    list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/datasources/MQTTErrorWidget.cpp)
-    list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/datasources/MQTTSubscriptionWidget.cpp)
+    list(APPEND GUI_SOURCES ${FRONTEND_DIR}/datasources/MQTTConnectionManagerWidget.cpp)
+    list(APPEND GUI_SOURCES ${FRONTEND_DIR}/datasources/MQTTConnectionManagerDialog.cpp)
+    list(APPEND GUI_SOURCES ${FRONTEND_DIR}/datasources/MQTTErrorWidget.cpp)
+    list(APPEND GUI_SOURCES ${FRONTEND_DIR}/datasources/MQTTSubscriptionWidget.cpp)
 endif()
 
 if(APPLE)
-  list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/worksheet/PresenterWidget_mac.mm)
+  list(APPEND GUI_SOURCES ${FRONTEND_DIR}/worksheet/PresenterWidget_mac.mm)
 endif()
 
 set(GUI_QRC
-    ${KDEFRONTEND_DIR}/labplot.qrc
+    ${FRONTEND_DIR}/labplot.qrc
 )
 
 set(UI_SOURCES
-    ${KDEFRONTEND_DIR}/ui/colormapswidget.ui
-    ${KDEFRONTEND_DIR}/ui/constantswidget.ui
-    ${KDEFRONTEND_DIR}/ui/PlotTemplateDialog.ui
-    ${KDEFRONTEND_DIR}/ui/exampleswidget.ui
-    ${KDEFRONTEND_DIR}/ui/functionswidget.ui
-    ${KDEFRONTEND_DIR}/ui/fitoptionswidget.ui
-    ${KDEFRONTEND_DIR}/ui/fitparameterswidget.ui
-    ${KDEFRONTEND_DIR}/ui/labelwidget.ui
-    ${KDEFRONTEND_DIR}/ui/symbolwidget.ui
-    ${KDEFRONTEND_DIR}/ui/settingsnotebookpage.ui
-    ${KDEFRONTEND_DIR}/ui/settingsgeneralpage.ui
-    ${KDEFRONTEND_DIR}/ui/settingsspreadsheetpage.ui
-    ${KDEFRONTEND_DIR}/ui/settingsworksheetpage.ui
-#     ${KDEFRONTEND_DIR}/ui/settingswelcomepage.ui
-    ${KDEFRONTEND_DIR}/ui/settingsdatasetspage.ui
-    ${KDEFRONTEND_DIR}/ui/settingsprintingpage.ui
-    ${KDEFRONTEND_DIR}/ui/datasources/asciioptionswidget.ui
-    ${KDEFRONTEND_DIR}/ui/datasources/CANOptionsWidget.ui
-    ${KDEFRONTEND_DIR}/ui/datasources/binaryoptionswidget.ui
-    ${KDEFRONTEND_DIR}/ui/datasources/databasemanagerwidget.ui
-    ${KDEFRONTEND_DIR}/ui/datasources/datasetmetadatamanagerwidget.ui
-    ${KDEFRONTEND_DIR}/ui/datasources/hdf5optionswidget.ui
-    ${KDEFRONTEND_DIR}/ui/datasources/imageoptionswidget.ui
-    ${KDEFRONTEND_DIR}/ui/datasources/importdatasetwidget.ui
-    ${KDEFRONTEND_DIR}/ui/datasources/importkaggledatasetwidget.ui
-    ${KDEFRONTEND_DIR}/ui/datasources/importfilewidget.ui
-    ${KDEFRONTEND_DIR}/ui/datasources/importwarningsdialog.ui
-    ${KDEFRONTEND_DIR}/ui/datasources/importprojectwidget.ui
-    ${KDEFRONTEND_DIR}/ui/datasources/importsqldatabasewidget.ui
-    ${KDEFRONTEND_DIR}/ui/datasources/matiooptionswidget.ui
-    ${KDEFRONTEND_DIR}/ui/datasources/netcdfoptionswidget.ui
-    ${KDEFRONTEND_DIR}/ui/datasources/rootoptionswidget.ui
-    ${KDEFRONTEND_DIR}/ui/datasources/fitsoptionswidget.ui
-    ${KDEFRONTEND_DIR}/ui/datasources/jsonoptionswidget.ui
-    ${KDEFRONTEND_DIR}/ui/datasources/mcapoptionswidget.ui
-    ${KDEFRONTEND_DIR}/ui/datasources/odsoptionswidget.ui
-    ${KDEFRONTEND_DIR}/ui/datasources/xlsxoptionswidget.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/aspectdock.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/axisdock.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/backgroundwidget.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/cursordock.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/infoelementdock.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotdock.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotlegenddock.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/histogramdock.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/barplotdock.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/boxplotdock.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/columndock.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/custompointdock.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/errorbarwidget.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/imagedock.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/kdeplotdock.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/linewidget.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/livedatadock.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/lollipopplotdock.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/notedock.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/matrixdock.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/projectdock.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/referencelinedock.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/referencerangedock.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/spreadsheetdock.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/statisticsspreadsheetdock.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/qqplotdock.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/xycurvedock.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/xycurvedockgeneraltab.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/xyfitcurvedockgeneraltab.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/xyequationcurvedockgeneraltab.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/valuewidget.ui
-    ${KDEFRONTEND_DIR}/ui/dockwidgets/worksheetdock.ui
-    ${KDEFRONTEND_DIR}/ui/matrix/matrixfunctionwidget.ui
-    ${KDEFRONTEND_DIR}/ui/spreadsheet/plotdatawidget.ui
-    ${KDEFRONTEND_DIR}/ui/spreadsheet/equidistantvalueswidget.ui
-    ${KDEFRONTEND_DIR}/ui/spreadsheet/exportspreadsheetwidget.ui
-    ${KDEFRONTEND_DIR}/ui/spreadsheet/addsubtractvaluewidget.ui
-    ${KDEFRONTEND_DIR}/ui/spreadsheet/dropvalueswidget.ui
-    ${KDEFRONTEND_DIR}/ui/spreadsheet/flattencolumnswidget.ui
-    ${KDEFRONTEND_DIR}/ui/spreadsheet/formattingheatmapwidget.ui
-    ${KDEFRONTEND_DIR}/ui/spreadsheet/functionvalueswidget.ui
-    ${KDEFRONTEND_DIR}/ui/spreadsheet/randomvalueswidget.ui
-    ${KDEFRONTEND_DIR}/ui/spreadsheet/rescalewidget.ui
-    ${KDEFRONTEND_DIR}/ui/spreadsheet/samplevalueswidget.ui
-    ${KDEFRONTEND_DIR}/ui/spreadsheet/searchwidget.ui
-    ${KDEFRONTEND_DIR}/ui/spreadsheet/searchreplacewidget.ui
-    ${KDEFRONTEND_DIR}/ui/spreadsheet/sortdialogwidget.ui
-    ${KDEFRONTEND_DIR}/ui/worksheet/exportworksheetwidget.ui
-    ${KDEFRONTEND_DIR}/ui/worksheet/worksheetpreviewwidget.ui
-    ${KDEFRONTEND_DIR}/ui/datapickerimagewidget.ui
-    ${KDEFRONTEND_DIR}/ui/datapickercurvewidget.ui
-    ${KDEFRONTEND_DIR}/ui/fitsheadereditwidget.ui
-    ${KDEFRONTEND_DIR}/ui/fitsheadereditnewkeywordwidget.ui
-    ${KDEFRONTEND_DIR}/ui/fitsheadereditaddunitwidget.ui
+    ${FRONTEND_DIR}/ui/colormapswidget.ui
+    ${FRONTEND_DIR}/ui/constantswidget.ui
+    ${FRONTEND_DIR}/ui/PlotTemplateDialog.ui
+    ${FRONTEND_DIR}/ui/exampleswidget.ui
+    ${FRONTEND_DIR}/ui/functionswidget.ui
+    ${FRONTEND_DIR}/ui/fitoptionswidget.ui
+    ${FRONTEND_DIR}/ui/fitparameterswidget.ui
+    ${FRONTEND_DIR}/ui/labelwidget.ui
+    ${FRONTEND_DIR}/ui/symbolwidget.ui
+    ${FRONTEND_DIR}/ui/settingsnotebookpage.ui
+    ${FRONTEND_DIR}/ui/settingsgeneralpage.ui
+    ${FRONTEND_DIR}/ui/settingsspreadsheetpage.ui
+    ${FRONTEND_DIR}/ui/settingsworksheetpage.ui
+#     ${FRONTEND_DIR}/ui/settingswelcomepage.ui
+    ${FRONTEND_DIR}/ui/settingsdatasetspage.ui
+    ${FRONTEND_DIR}/ui/settingsprintingpage.ui
+    ${FRONTEND_DIR}/ui/datasources/asciioptionswidget.ui
+    ${FRONTEND_DIR}/ui/datasources/CANOptionsWidget.ui
+    ${FRONTEND_DIR}/ui/datasources/binaryoptionswidget.ui
+    ${FRONTEND_DIR}/ui/datasources/databasemanagerwidget.ui
+    ${FRONTEND_DIR}/ui/datasources/datasetmetadatamanagerwidget.ui
+    ${FRONTEND_DIR}/ui/datasources/hdf5optionswidget.ui
+    ${FRONTEND_DIR}/ui/datasources/imageoptionswidget.ui
+    ${FRONTEND_DIR}/ui/datasources/importdatasetwidget.ui
+    ${FRONTEND_DIR}/ui/datasources/importkaggledatasetwidget.ui
+    ${FRONTEND_DIR}/ui/datasources/importfilewidget.ui
+    ${FRONTEND_DIR}/ui/datasources/importoriginlayersdialog.ui
+    ${FRONTEND_DIR}/ui/datasources/importwarningsdialog.ui
+    ${FRONTEND_DIR}/ui/datasources/importprojectwidget.ui
+    ${FRONTEND_DIR}/ui/datasources/importsqldatabasewidget.ui
+    ${FRONTEND_DIR}/ui/datasources/matiooptionswidget.ui
+    ${FRONTEND_DIR}/ui/datasources/netcdfoptionswidget.ui
+    ${FRONTEND_DIR}/ui/datasources/rootoptionswidget.ui
+    ${FRONTEND_DIR}/ui/datasources/fitsoptionswidget.ui
+    ${FRONTEND_DIR}/ui/datasources/jsonoptionswidget.ui
+    ${FRONTEND_DIR}/ui/datasources/mcapoptionswidget.ui
+    ${FRONTEND_DIR}/ui/datasources/odsoptionswidget.ui
+    ${FRONTEND_DIR}/ui/datasources/xlsxoptionswidget.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/aspectdock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/axisdock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/backgroundwidget.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/cursordock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/infoelementdock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/cartesianplotdock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/cartesianplotlegenddock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/histogramdock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/barplotdock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/boxplotdock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/columndock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/custompointdock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/errorbarwidget.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/imagedock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/kdeplotdock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/linewidget.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/livedatadock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/lollipopplotdock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/notedock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/matrixdock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/processbehaviorchartdock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/projectdock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/referencelinedock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/referencerangedock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/runchartdock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/spreadsheetdock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/statisticsspreadsheetdock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/qqplotdock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/xycurvedock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/xycurvedockgeneraltab.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/xyfitcurvedockgeneraltab.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/xyequationcurvedockgeneraltab.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/valuewidget.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/worksheetdock.ui
+    ${FRONTEND_DIR}/ui/matrix/matrixfunctionwidget.ui
+    ${FRONTEND_DIR}/ui/spreadsheet/plotdatawidget.ui
+    ${FRONTEND_DIR}/ui/spreadsheet/equidistantvalueswidget.ui
+    ${FRONTEND_DIR}/ui/spreadsheet/exportspreadsheetwidget.ui
+    ${FRONTEND_DIR}/ui/spreadsheet/addsubtractvaluewidget.ui
+    ${FRONTEND_DIR}/ui/spreadsheet/dropvalueswidget.ui
+    ${FRONTEND_DIR}/ui/spreadsheet/flattencolumnswidget.ui
+    ${FRONTEND_DIR}/ui/spreadsheet/formattingheatmapwidget.ui
+    ${FRONTEND_DIR}/ui/spreadsheet/functionvalueswidget.ui
+    ${FRONTEND_DIR}/ui/spreadsheet/randomvalueswidget.ui
+    ${FRONTEND_DIR}/ui/spreadsheet/rescalewidget.ui
+    ${FRONTEND_DIR}/ui/spreadsheet/samplevalueswidget.ui
+    ${FRONTEND_DIR}/ui/spreadsheet/searchwidget.ui
+    ${FRONTEND_DIR}/ui/spreadsheet/searchreplacewidget.ui
+    ${FRONTEND_DIR}/ui/spreadsheet/sortdialogwidget.ui
+    ${FRONTEND_DIR}/ui/worksheet/exportworksheetwidget.ui
+    ${FRONTEND_DIR}/ui/worksheet/worksheetpreviewwidget.ui
+    ${FRONTEND_DIR}/ui/datapickerimagewidget.ui
+    ${FRONTEND_DIR}/ui/datapickercurvewidget.ui
+    ${FRONTEND_DIR}/ui/fitsheadereditwidget.ui
+    ${FRONTEND_DIR}/ui/fitsheadereditnewkeywordwidget.ui
+    ${FRONTEND_DIR}/ui/fitsheadereditaddunitwidget.ui
 )
 
 if(Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
-    list(APPEND UI_SOURCES ${KDEFRONTEND_DIR}/ui/datasources/mqttconnectionmanagerwidget.ui)
-    list(APPEND UI_SOURCES ${KDEFRONTEND_DIR}/ui/datasources/mqtterrorwidget.ui)
-    list(APPEND UI_SOURCES ${KDEFRONTEND_DIR}/ui/datasources/mqttsubscriptionwidget.ui)
-    list(APPEND UI_SOURCES ${KDEFRONTEND_DIR}/ui/mqttwillsettingswidget.ui)
+    list(APPEND UI_SOURCES ${FRONTEND_DIR}/ui/datasources/mqttconnectionmanagerwidget.ui)
+    list(APPEND UI_SOURCES ${FRONTEND_DIR}/ui/datasources/mqtterrorwidget.ui)
+    list(APPEND UI_SOURCES ${FRONTEND_DIR}/ui/datasources/mqttsubscriptionwidget.ui)
+    list(APPEND UI_SOURCES ${FRONTEND_DIR}/ui/mqttwillsettingswidget.ui)
 endif()
 
 set(BACKEND_SOURCES
@@ -414,8 +438,10 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/KDEPlot.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/LollipopPlot.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/Plot.cpp
+    ${BACKEND_DIR}/worksheet/plots/cartesian/ProcessBehaviorChart.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/ReferenceLine.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/ReferenceRange.cpp
+    ${BACKEND_DIR}/worksheet/plots/cartesian/RunChart.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/Symbol.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/QQPlot.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYAnalysisCurve.cpp
@@ -437,14 +463,14 @@ set(BACKEND_SOURCES
 )
 
 if(Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
-    list(APPEND BACKEND_SOURCES ${KDEFRONTEND_DIR}/widgets/MQTTWillSettingsWidget.cpp)
+    list(APPEND BACKEND_SOURCES ${FRONTEND_DIR}/widgets/MQTTWillSettingsWidget.cpp)
     list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/MQTTClient.cpp)
     list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/MQTTSubscription.cpp)
     list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/MQTTTopic.cpp)
 endif()
 
 # add the qml.qrc file
-# qt5_add_resources(qml_QRC ${KDEFRONTEND_DIR}/welcomescreen/qml.qrc)
+# qt5_add_resources(qml_QRC ${FRONTEND_DIR}/welcomescreen/qml.qrc)
 # better: enable AUTORCC
 
 if(ENABLE_LIBORIGIN)
@@ -466,6 +492,7 @@ set(NSL_SOURCES
     ${BACKEND_DIR}/nsl/nsl_interp.c
     ${BACKEND_DIR}/nsl/nsl_kde.c
     ${BACKEND_DIR}/nsl/nsl_math.c
+    ${BACKEND_DIR}/nsl/nsl_pcm.c
     ${BACKEND_DIR}/nsl/nsl_peak.cpp
     ${BACKEND_DIR}/nsl/nsl_randist.c
     ${BACKEND_DIR}/nsl/nsl_sf_basic.c
@@ -486,41 +513,15 @@ if(NOT LIBCERF_FOUND)
 endif()
 endif()
 
-set(COMMONFRONTEND_SOURCES
-    ${COMMONFRONTEND_DIR}/matrix/MatrixView.cpp
-    ${COMMONFRONTEND_DIR}/note/NoteView.cpp
-    ${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetCommentsHeaderModel.cpp
-    ${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetHeaderView.cpp
-    ${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetSparkLineHeaderModel.cpp
-    ${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetItemDelegate.cpp
-    ${COMMONFRONTEND_DIR}/spreadsheet/SparklineRunnable.h
-    ${COMMONFRONTEND_DIR}/spreadsheet/SparklineRunnable.cpp
-    ${COMMONFRONTEND_DIR}/spreadsheet/SpreadsheetView.cpp
-    ${COMMONFRONTEND_DIR}/workbook/WorkbookView.cpp
-    ${COMMONFRONTEND_DIR}/worksheet/WorksheetView.cpp
-    ${COMMONFRONTEND_DIR}/ProjectExplorer.cpp
-    ${COMMONFRONTEND_DIR}/core/ContentDockWidget.cpp
-    ${COMMONFRONTEND_DIR}/widgets/TreeViewComboBox.cpp
-    ${COMMONFRONTEND_DIR}/widgets/qxtspanslider.cpp
-    ${COMMONFRONTEND_DIR}/widgets/MemoryWidget.cpp
-    ${COMMONFRONTEND_DIR}/widgets/DateTimeSpinBox.cpp
-    ${COMMONFRONTEND_DIR}/widgets/NumberSpinBox.cpp
-    ${COMMONFRONTEND_DIR}/widgets/UTCDateTimeEdit.cpp
-    ${COMMONFRONTEND_DIR}/datapicker/DatapickerView.cpp
-    ${COMMONFRONTEND_DIR}/datapicker/DatapickerImageView.cpp
-)
-
-if(RECENT_CANTOR)
+if(Cantor_FOUND)
     set(CANTOR_SOURCES
-        ${KDEFRONTEND_DIR}/dockwidgets/CantorWorksheetDock.cpp
-        ${BACKEND_DIR}/cantorWorksheet/VariableParser.cpp
-        ${BACKEND_DIR}/cantorWorksheet/CantorWorksheet.cpp
-        ${COMMONFRONTEND_DIR}/cantorWorksheet/CantorWorksheetView.cpp
+        ${FRONTEND_DIR}/dockwidgets/NotebookDock.cpp
+        ${BACKEND_DIR}/notebook/VariableParser.cpp
+        ${BACKEND_DIR}/notebook/Notebook.cpp
+        ${FRONTEND_DIR}/notebook/NotebookView.cpp
     )
-    set(CANTOR_UI_SOURCES ${KDEFRONTEND_DIR}/ui/dockwidgets/cantorworksheetdock.ui)
+    set(CANTOR_UI_SOURCES ${FRONTEND_DIR}/ui/dockwidgets/notebookdock.ui)
     set(UI_SOURCES ${UI_SOURCES} ${CANTOR_UI_SOURCES})
-else()
-    set(CANTOR_SOURCES "")
 endif()
 
 set(BACKEND_TOOLS_SOURCES
@@ -550,10 +551,10 @@ add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50F00)
 # static library
 add_library(labplotnsllib STATIC ${NSL_SOURCES})
 add_library(labplotbackendlib STATIC ${BACKEND_SOURCES} ${UI_SOURCES} ${BACKEND_TOOLS_SOURCES} ${GENERATED_SOURCES})
-add_library(labplotlib STATIC ${LABPLOT_SRCS} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${QTMOC_HDRS})
+add_library(labplotlib STATIC ${LABPLOT_SRCS} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${FRONTEND_SOURCES} ${TOOLS_SOURCES} ${QTMOC_HDRS})
 # set_property(TARGET ${objlib} PROPERTY POSITION_INDEPENDENT_CODE 1)
-target_include_directories(labplotbackendlib PUBLIC ${COMMONFRONTEND_DIR}/widgets) # so that the MOC finds numberSpinbox.h
-target_include_directories(labplotlib PUBLIC ${COMMONFRONTEND_DIR}/widgets) # so that the MOC finds numberSpinbox.h
+target_include_directories(labplotbackendlib PUBLIC ${FRONTEND_DIR}/widgets) # so that the MOC finds numberSpinbox.h
+target_include_directories(labplotlib PUBLIC ${FRONTEND_DIR}/widgets) # so that the MOC finds numberSpinbox.h
 
 # add system QADS include path
 if(qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
@@ -629,11 +630,8 @@ endif()
 if(KF${KF_MAJOR_VERSION}SyntaxHighlighting_FOUND)
     target_link_libraries(labplotlib KF${KF_MAJOR_VERSION}::SyntaxHighlighting)
 endif()
-if(KUserFeedback_FOUND)
-    target_link_libraries(labplotlib KUserFeedbackWidgets)
-endif()
-if(KUserFeedbackQt6_FOUND)
-    target_link_libraries(labplotlib KUserFeedbackCoreQt6 KUserFeedbackWidgetsQt6)
+if(KF${KF_MAJOR_VERSION}UserFeedback_FOUND)
+    target_link_libraries(labplotlib KF${KF_MAJOR_VERSION}::UserFeedbackCore KF${KF_MAJOR_VERSION}::UserFeedbackWidgets)
 endif()
 if(Discount_FOUND)
     target_link_libraries(labplotlib Discount::Lib)
@@ -641,9 +639,8 @@ endif()
 if(Orcus_FOUND)
     target_link_libraries(labplotlib ${Orcus_LIBRARIES} ${Ixion_LIBRARY})
 endif()
-# TODO: KF6::NewStuff not found even though KF6NewStuff_FOUND
-if(KF5NewStuff_FOUND)
-    target_link_libraries(labplotlib KF5::NewStuff)
+if(KF${KF_MAJOR_VERSION}NewStuff_FOUND)
+	target_link_libraries(labplotlib KF${KF_MAJOR_VERSION}::NewStuffWidgets)
 endif()
 if(KF${KF_MAJOR_VERSION}Purpose_FOUND)
     target_link_libraries(labplotlib KF${KF_MAJOR_VERSION}::PurposeWidgets)
@@ -652,7 +649,7 @@ if(ZSTD_FOUND)
         target_link_libraries(labplotbackendlib ${ZSTD_LIBRARIES})
 endif()
 
-if(RECENT_CANTOR)
+if(Cantor_FOUND)
     # KFX::Service, KFX::Parts is optional but probably required by Cantor
     target_link_libraries(labplotbackendlib Cantor::cantorlibs KF${KF_MAJOR_VERSION}::Service KF${KF_MAJOR_VERSION}::Parts)
     target_link_libraries(labplotlib Cantor::cantorlibs KF${KF_MAJOR_VERSION}::Service KF${KF_MAJOR_VERSION}::Parts)
@@ -742,7 +739,7 @@ set(LML_ICONS
 add_subdirectory(3rdparty)
 
 # main executable
-set(LABPLOT_SOURCE ${KDEFRONTEND_DIR}/LabPlot.cpp)
+set(LABPLOT_SOURCE ${FRONTEND_DIR}/LabPlot.cpp)
 
 # create icon files on WIN/MAC and add icons to the executable
 if(${ECM_VERSION} VERSION_GREATER "5.48.0")
@@ -777,7 +774,7 @@ endif()
 
 ############## installation ################################
 install(TARGETS labplot ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
-install(FILES ${KDEFRONTEND_DIR}/splash.png ${KDEFRONTEND_DIR}/labplot.ico ${CMAKE_CURRENT_SOURCE_DIR}/../icons/application-x-labplot.ico DESTINATION ${KDE_INSTALL_DATADIR}/${PROJECT_NAME})
+install(FILES ${FRONTEND_DIR}/splash.png ${FRONTEND_DIR}/labplot.ico ${CMAKE_CURRENT_SOURCE_DIR}/../icons/application-x-labplot.ico DESTINATION ${KDE_INSTALL_DATADIR}/${PROJECT_NAME})
 install(FILES org.kde.labplot.desktop DESTINATION ${KDE_INSTALL_APPDIR})
 # Flatpak still uses this one
 install(FILES org.kde.labplot2.desktop DESTINATION ${KDE_INSTALL_APPDIR})

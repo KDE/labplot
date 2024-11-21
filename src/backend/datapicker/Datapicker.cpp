@@ -16,7 +16,7 @@
 #include "backend/datapicker/Transform.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "commonfrontend/datapicker/DatapickerView.h"
+#include "frontend/datapicker/DatapickerView.h"
 
 #include "QIcon"
 #include <KLocalizedString>

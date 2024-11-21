@@ -23,9 +23,9 @@
 #include "backend/worksheet/TreeModel.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
-#include "commonfrontend/worksheet/WorksheetView.h"
-#include "kdefrontend/ThemeHandler.h"
-#include "kdefrontend/worksheet/ExportWorksheetDialog.h"
+#include "frontend/ThemeHandler.h"
+#include "frontend/worksheet/ExportWorksheetDialog.h"
+#include "frontend/worksheet/WorksheetView.h"
 
 #ifndef SDK
 #include <QPrintDialog>
@@ -336,7 +336,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 		child->graphicsItem()->setZValue(zVal++);
 
 	// if a theme was selected in the worksheet, apply this theme for newly added children
-	if (!d->theme.isEmpty() && !isLoading() && !pasted() && !aspect->pasted()) {
+	if (!d->theme.isEmpty() && !isLoading() && !isPasted() && !aspect->isPasted()) {
 		KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
 		const_cast<WorksheetElement*>(addedElement)->loadThemeConfig(config);
 	}
@@ -1185,7 +1185,7 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 			QVariant data;
 			valueCursor[i] = sender->cursorPos(i);
 			if (isDatetime) {
-				datetime[i] = QDateTime::fromMSecsSinceEpoch(valueCursor[i], Qt::UTC);
+				datetime[i] = QDateTime::fromMSecsSinceEpoch(valueCursor[i], QTimeZone::UTC);
 				data = datetime[i].toString(sender->rangeDateTimeFormat(Dimension::X));
 			} else
 				data = QVariant(valueCursor[i]);

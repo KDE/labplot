@@ -1026,7 +1026,7 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 	for (int i = 0; i < paramNames->size(); i++) {
 		double v = gsl_vector_get(paramValues, (size_t)i);
 		// bound values if limits are set
-		assign_symbol(qPrintable(paramNames->at(i)), nsl_fit_map_bound(v, min[i], max[i]));
+		Parser::assign_symbol(qPrintable(paramNames->at(i)), nsl_fit_map_bound(v, min[i], max[i]));
 		QDEBUG(Q_FUNC_INFO << ", Parameter" << i << " (' " << paramNames->at(i) << "')" << '[' << min[i] << ',' << max[i]
 						   << "] free/bound:" << QString::number(v, 'g', 15) << ' ' << QString::number(nsl_fit_map_bound(v, min[i], max[i]), 'g', 15));
 	}
@@ -1043,14 +1043,14 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 				x[i] = 0;
 		}
 
-		assign_symbol("x", x[i]);
+		Parser::assign_symbol("x", x[i]);
 		// DEBUG("evaluate function \"" << STDSTRING(func) << "\" @ x = " << x[i] << ":");
-		double Yi = parse(qPrintable(func), qPrintable(QLocale().name()));
-		if (parse_errors() > 0) // fallback to default locale
-			Yi = parse(qPrintable(func), "en_US");
+		double Yi = Parser::parse(qPrintable(func), qPrintable(QLocale().name()));
+		if (Parser::parse_errors() > 0) // fallback to default locale
+			Yi = Parser::parse(qPrintable(func), "en_US");
 		// DEBUG("	f(x["<< i <<"]) = " << Yi);
 
-		if (parse_errors() > 0)
+		if (Parser::parse_errors() > 0)
 			return GSL_EINVAL;
 
 		// DEBUG("	weight["<< i <<"]) = " << weight[i]);
@@ -1733,30 +1733,30 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		const auto numberLocale = QLocale();
 		for (size_t i = 0; i < n; i++) {
 			x = xVector[i];
-			assign_symbol("x", x);
+			Parser::assign_symbol("x", x);
 
 			for (auto j = 0; j < np; j++) {
 				for (auto k = 0; k < np; k++) {
 					if (k != j) {
 						value = nsl_fit_map_bound(gsl_vector_get(paramValues, k), min[k], max[k]);
-						assign_symbol(qPrintable(paramNames->at(k)), value);
+						Parser::assign_symbol(qPrintable(paramNames->at(k)), value);
 					}
 				}
 
 				value = nsl_fit_map_bound(gsl_vector_get(paramValues, j), min[j], max[j]);
-				assign_symbol(qPrintable(paramNames->at(j)), value);
-				double f_p = parse(qPrintable(func), qPrintable(numberLocale.name()));
-				if (parse_errors() > 0) // fallback to default locale
-					f_p = parse(qPrintable(func), "en_US");
+				Parser::assign_symbol(qPrintable(paramNames->at(j)), value);
+				double f_p = Parser::parse(qPrintable(func), qPrintable(numberLocale.name()));
+				if (Parser::parse_errors() > 0) // fallback to default locale
+					f_p = Parser::parse(qPrintable(func), "en_US");
 
 				double eps = 1.e-9;
 				if (std::abs(f_p) > 0)
 					eps *= std::abs(f_p); // scale step size with function value
 				value += eps;
-				assign_symbol(qPrintable(paramNames->at(j)), value);
-				double f_pdp = parse(qPrintable(func), qPrintable(numberLocale.name()));
-				if (parse_errors() > 0) // fallback to default locale
-					f_pdp = parse(qPrintable(func), "en_US");
+				Parser::assign_symbol(qPrintable(paramNames->at(j)), value);
+				double f_pdp = Parser::parse(qPrintable(func), qPrintable(numberLocale.name()));
+				if (Parser::parse_errors() > 0) // fallback to default locale
+					f_pdp = Parser::parse(qPrintable(func), "en_US");
 
 				//				DEBUG("evaluate deriv"<<func<<": f(x["<<i<<"]) ="<<QString::number(f_p, 'g', 15));
 				//				DEBUG("evaluate deriv"<<func<<": f(x["<<i<<"]+dx) ="<<QString::number(f_pdp, 'g', 15));
@@ -1820,7 +1820,7 @@ void XYFitCurvePrivate::prepareResultColumns() {
 	}
 
 	if (!resultsNote) {
-		resultsNote = new Note(i18n("Fit Results"));
+		resultsNote = new Note(i18nc("Curve fitting", "Fit Results"));
 		resultsNote->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
 		q->addChild(resultsNote);
 	}
@@ -1918,19 +1918,25 @@ void XYFitCurvePrivate::updateResultsNote() {
 	DEBUG("NOTE TEXT: " << resultsNote->text().toStdString())
 }
 
-void XYFitCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) {
+void XYFitCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) const {
 	// prepare source data columns
 	DEBUG(Q_FUNC_INFO << ", data source: " << ENUM_TO_STRING(XYAnalysisCurve, DataSourceType, dataSourceType))
 	switch (dataSourceType) {
 	case XYAnalysisCurve::DataSourceType::Spreadsheet:
+		if (!xDataColumn || !yDataColumn)
+			break;
 		*tmpXDataColumn = xDataColumn;
 		*tmpYDataColumn = yDataColumn;
 		break;
 	case XYAnalysisCurve::DataSourceType::Curve:
+		if (!dataSourceCurve)
+			break;
 		*tmpXDataColumn = dataSourceCurve->xColumn();
 		*tmpYDataColumn = dataSourceCurve->yColumn();
 		break;
 	case XYAnalysisCurve::DataSourceType::Histogram:
+		if (!dataSourceHistogram)
+			break;
 		switch (fitData.algorithm) {
 		case nsl_fit_algorithm_lm:
 			*tmpXDataColumn = dataSourceHistogram->bins(); // bins
@@ -1947,6 +1953,7 @@ void XYFitCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColu
 		case nsl_fit_algorithm_ml:
 			*tmpXDataColumn = dataSourceHistogram->dataColumn(); // data
 			*tmpYDataColumn = dataSourceHistogram->binPDValues(); // normalized values
+			break;
 		}
 		// debug
 		/*for (int i = 0; i < dataSourceHistogram->bins()->rowCount(); i++)
@@ -1956,6 +1963,7 @@ void XYFitCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColu
 		for (int i = 0; i < dataSourceHistogram->binPDValues()->rowCount(); i++)
 			DEBUG("BINPDValues @ " << i << ": " << dataSourceHistogram->binPDValues()->valueAt(i))
 		*/
+		break;
 	}
 }
 
@@ -2027,9 +2035,9 @@ bool XYFitCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataColumn
 		auto* parser = ExpressionParser::getInstance();
 		// fill residualsVector with model values
 		// QDEBUG("xVector: " << v)
-		bool rc = parser->evaluateCartesian(fitData.model, &v, residualsVector, fitData.paramNames, fitResult.paramValues);
+		bool valid = parser->tryEvaluateCartesian(fitData.model, &v, residualsVector, fitData.paramNames, fitResult.paramValues);
 		// QDEBUG("residualsVector: " << *residualsVector)
-		if (rc) {
+		if (valid) {
 			switch (fitData.algorithm) {
 			case nsl_fit_algorithm_lm:
 				for (size_t i = 0; i < rowCount; i++)
@@ -2747,9 +2755,9 @@ bool XYFitCurvePrivate::evaluate(bool preview) {
 	if (preview) // results not available yet
 		paramValues = fitData.paramStartValues;
 
-	bool rc = parser->evaluateCartesian(fitData.model, xRange, nrPoints, xVector, yVector, fitData.paramNames, paramValues);
+	bool valid = parser->tryEvaluateCartesian(fitData.model, xRange, nrPoints, xVector, yVector, fitData.paramNames, paramValues);
 
-	if (!rc) {
+	if (!valid) {
 		DEBUG(Q_FUNC_INFO << ", ERROR: Parsing fit function failed")
 		xVector->clear();
 		yVector->clear();
@@ -3089,7 +3097,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 	XYFitCurve::initFitData(d->fitData);
 
 	// add result note (not saved in projects)
-	d->resultsNote = new Note(i18n("Fit Results"));
+	d->resultsNote = new Note(i18nc("Curve Fitting", "Fit Results"));
 	d->resultsNote->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
 	addChild(d->resultsNote);
 

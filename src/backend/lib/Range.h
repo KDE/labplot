@@ -18,6 +18,7 @@
 
 #include <QDateTime>
 #include <QStringList>
+#include <QTimeZone>
 
 #include <cmath>
 
@@ -65,17 +66,17 @@ public:
 	Range(const QString& start, const QString& end, const Format format = Format::Numeric, const Scale scale = Scale::Linear) {
 		const auto numberLocale = QLocale();
 		// min
-		double min = parse(qPrintable(start.simplified()), qPrintable(numberLocale.name()));
-		if (parse_errors() > 0) // if parsing fails, try default locale
-			min = parse(qPrintable(start.simplified()), "en_US");
-		if (parse_errors() > 0)
+		double min = Parser::parse(qPrintable(start.simplified()), qPrintable(numberLocale.name()));
+		if (Parser::parse_errors() > 0) // if parsing fails, try default locale
+			min = Parser::parse(qPrintable(start.simplified()), "en_US");
+		if (Parser::parse_errors() > 0)
 			min = 0;
 
 		// max
-		double max = parse(qPrintable(end.simplified()), qPrintable(numberLocale.name()));
-		if (parse_errors() > 0) // if parsing fails, try default locale
-			max = parse(qPrintable(end.simplified()), "en_US");
-		if (parse_errors() > 0)
+		double max = Parser::parse(qPrintable(end.simplified()), qPrintable(numberLocale.name()));
+		if (Parser::parse_errors() > 0) // if parsing fails, try default locale
+			max = Parser::parse(qPrintable(end.simplified()), "en_US");
+		if (Parser::parse_errors() > 0)
 			max = 1.;
 
 		// TODO: check for NAN, INF?
@@ -231,8 +232,8 @@ public:
 		if (m_format == Format::Numeric)
 			return locale.toString(m_start) + QStringLiteral(" .. ") + locale.toString(m_end);
 		else
-			return QDateTime::fromMSecsSinceEpoch(m_start, Qt::UTC).toString(m_dateTimeFormat) + QStringLiteral(" .. ")
-				+ QDateTime::fromMSecsSinceEpoch(m_end, Qt::UTC).toString(m_dateTimeFormat);
+			return QDateTime::fromMSecsSinceEpoch(m_start, QTimeZone::UTC).toString(m_dateTimeFormat) + QStringLiteral(" .. ")
+				+ QDateTime::fromMSecsSinceEpoch(m_end, QTimeZone::UTC).toString(m_dateTimeFormat);
 	}
 	std::string toStdString(bool round = true) const {
 		return STDSTRING(toString(round));
@@ -589,8 +590,8 @@ inline QString Range<double>::toString(bool round, QLocale locale) const {
 		} else
 			return locale.toString(m_start, 'g', 12) + QLatin1String(" .. ") + locale.toString(m_end, 'g', 12);
 	} else
-		return QDateTime::fromMSecsSinceEpoch(m_start, Qt::UTC).toString(m_dateTimeFormat) + QLatin1String(" .. ")
-			+ QDateTime::fromMSecsSinceEpoch(m_end, Qt::UTC).toString(m_dateTimeFormat);
+		return QDateTime::fromMSecsSinceEpoch(m_start, QTimeZone::UTC).toString(m_dateTimeFormat) + QLatin1String(" .. ")
+			+ QDateTime::fromMSecsSinceEpoch(m_end, QTimeZone::UTC).toString(m_dateTimeFormat);
 }
 
 #endif

@@ -12,7 +12,7 @@
 #include "backend/core/Settings.h"
 #include "backend/lib/hostprocess.h"
 #include "backend/lib/macros.h"
-#include "kdefrontend/GuiTools.h"
+#include "frontend/GuiTools.h"
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -27,7 +27,7 @@
 #include <QTextStream>
 
 #ifdef HAVE_POPPLER
-#include <poppler-qt5.h>
+#include <poppler-qt6.h>
 #endif
 
 /*!
@@ -175,7 +175,7 @@ bool TeXRenderer::executeLatexProcess(const QString engine,
 			// really slow, but texrenderer is running asynchronous so it is not a problem
 			while (!logFile.atEnd()) {
 				const auto line = logFile.readLine();
-				if (line.count() > 0 && line.at(0) == '!') {
+				if (line.length() > 0 && line.at(0) == '!') {
 					errorLogs += QLatin1String(line);
 					break; // only first error message is enough
 				}

@@ -24,7 +24,9 @@
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/LollipopPlot.h"
+#include "backend/worksheet/plots/cartesian/ProcessBehaviorChart.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
+#include "backend/worksheet/plots/cartesian/RunChart.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFunctionCurve.h"
@@ -58,13 +60,12 @@
 
 // required to parse Cantor and Jupyter files
 #ifdef HAVE_CANTOR_LIBS
-#include "backend/cantorWorksheet/CantorWorksheet.h"
+#include "backend/notebook/Notebook.h"
 #include <KZip>
 #include <QDomDocument>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonParseError>
-#include <cantor/backend.h>
 #endif
 
 namespace {
@@ -72,7 +73,7 @@ namespace {
 // the project version will be compared with this.
 // if you make any imcompatible changes to the xmlfile
 // or the function in labplot, increase this number.
-int buildXmlVersion = 13;
+int buildXmlVersion = 15;
 }
 
 /**
@@ -748,19 +749,19 @@ bool Project::loadNotebook(const QString& filename) {
 				QString backendName = doc.documentElement().attribute(QLatin1String("backend"));
 
 				if (!backendName.isEmpty()) {
-					// create new Cantor worksheet and load the data
-					auto* worksheet = new CantorWorksheet(backendName);
-					worksheet->setName(QFileInfo(filename).fileName());
-					worksheet->setComment(filename);
+					// create new notebook and load the data
+					auto* notebook = new Notebook(backendName);
+					notebook->setName(QFileInfo(filename).fileName());
+					notebook->setComment(filename);
 
 					rc = file.open(QIODevice::ReadOnly);
 					if (rc) {
 						QByteArray content = file.readAll();
-						rc = worksheet->init(&content);
+						rc = notebook->init(&content);
 						if (rc)
-							addChild(worksheet);
+							addChild(notebook);
 						else
-							delete worksheet;
+							delete notebook;
 					} else
 						errorMessage = i18n("Failed to open the file '%1'.", filename);
 				} else
@@ -803,15 +804,15 @@ bool Project::loadNotebook(const QString& filename) {
 						backendName = doc[QLatin1String("metadata")].toObject()[QLatin1String("kernelspec")].toObject()[QLatin1String("language")].toString();
 
 					if (!backendName.isEmpty()) {
-						// create new Cantor worksheet and load the data
-						auto* worksheet = new CantorWorksheet(backendName);
-						worksheet->setName(QFileInfo(filename).fileName());
-						worksheet->setComment(filename);
-						rc = worksheet->init(&content);
+						// create new notebook and load the data
+						auto* notebook = new Notebook(backendName);
+						notebook->setName(QFileInfo(filename).fileName());
+						notebook->setComment(filename);
+						rc = notebook->init(&content);
 						if (rc)
-							addChild(worksheet);
+							addChild(notebook);
 						else
-							delete worksheet;
+							delete notebook;
 					} else
 						rc = false;
 				} else
@@ -960,7 +961,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		// list of curves to be retransformed
 		curves << static_cast<XYCurve*>(aspect);
 
-	for (auto* curve : qAsConst(curves)) {
+	for (auto* curve : std::as_const(curves)) {
 		if (!curve)
 			continue;
 		curve->setSuppressRetransform(true);
@@ -1009,7 +1010,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		functionCurves = aspect->children<XYFunctionCurve>(ChildIndexFlag::Recursive);
 
 	for (auto* functionCurve : functionCurves) {
-		for (const auto* curve : qAsConst(curves))
+		for (const auto* curve : std::as_const(curves))
 			functionCurve->setFunctionVariableCurve(curve);
 	}
 
@@ -1181,6 +1182,33 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		lollipopPlot->setDataColumns(std::move(dataColumns));
 
 		RESTORE_COLUMN_POINTER(lollipopPlot, xColumn, XColumn);
+	}
+
+	// process behavior charts/plots
+	QVector<ProcessBehaviorChart*> pbPlots;
+	if (hasChildren)
+		pbPlots = aspect->children<ProcessBehaviorChart>(ChildIndexFlag::Recursive);
+	else if (aspect->type() == AspectType::ProcessBehaviorChart)
+		pbPlots << static_cast<ProcessBehaviorChart*>(aspect);
+
+	for (auto* plot : pbPlots) {
+		if (!plot)
+			continue;
+		RESTORE_COLUMN_POINTER(plot, dataColumn, DataColumn);
+		RESTORE_COLUMN_POINTER(plot, data2Column, Data2Column);
+	}
+
+	// run charts/plots
+	QVector<RunChart*> runPlots;
+	if (hasChildren)
+		runPlots = aspect->children<RunChart>(ChildIndexFlag::Recursive);
+	else if (aspect->type() == AspectType::RunChart)
+		runPlots << static_cast<RunChart*>(aspect);
+
+	for (auto* plot : runPlots) {
+		if (!plot)
+			continue;
+		RESTORE_COLUMN_POINTER(plot, dataColumn, DataColumn);
 	}
 
 	// data picker curves

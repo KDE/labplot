@@ -330,7 +330,7 @@ bool Histogram::hasData() const {
 	return (d->dataColumn != nullptr);
 }
 
-bool Histogram::usingColumn(const Column* column) const {
+bool Histogram::usingColumn(const AbstractColumn* column, bool) const {
 	Q_D(const Histogram);
 	return (
 		d->dataColumn == column || (d->errorBar->yErrorType() == ErrorBar::ErrorType::Symmetric && d->errorBar->yPlusColumn() == column)
@@ -1433,7 +1433,7 @@ void HistogramPrivate::updateRug() {
 		points = q->cSystem->mapLogicalToScene(points);
 
 		// path for the vertical rug lines
-		for (const auto& point : qAsConst(points)) {
+		for (const auto& point : std::as_const(points)) {
 			rugPath.moveTo(point.x(), point.y() - rugOffset);
 			rugPath.lineTo(point.x(), point.y() - rugOffset - rugLength);
 		}
@@ -1447,7 +1447,7 @@ void HistogramPrivate::updateRug() {
 		points = q->cSystem->mapLogicalToScene(points);
 
 		// path for the horizontal rug lines
-		for (const auto& point : qAsConst(points)) {
+		for (const auto& point : std::as_const(points)) {
 			rugPath.moveTo(point.x() + rugOffset, point.y());
 			rugPath.lineTo(point.x() + rugOffset + rugLength, point.y());
 		}
@@ -1595,19 +1595,6 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 
 		painter->drawImage(m_boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
 		return;
-	}
-}
-
-void HistogramPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
-	if (plot->mouseMode() == CartesianPlot::MouseMode::Selection && !isSelected())
-		setHover(true);
-}
-
-void HistogramPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
-	if (plot->mouseMode() == CartesianPlot::MouseMode::Selection && m_hovered) {
-		setHover(false);
 	}
 }
 
@@ -1785,13 +1772,12 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	else
 		group = config.group(QStringLiteral("Histogram"));
 
-	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
+	Q_D(Histogram);
+	const auto* plot = d->m_plot;
 	int index = plot->curveChildIndex(this);
 	const QColor themeColor = plot->themeColorPalette(index);
 
 	QPen p;
-
-	Q_D(Histogram);
 	d->suppressRecalc = true;
 
 	d->line->loadThemeConfig(group, themeColor);

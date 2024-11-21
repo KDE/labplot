@@ -19,7 +19,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
-#include "kdefrontend/GuiTools.h"
+#include "frontend/GuiTools.h"
 #include "tools/ImageTools.h"
 
 #include <KConfig>
@@ -207,7 +207,7 @@ bool LollipopPlot::hasData() const {
 	return !d->dataColumns.isEmpty();
 }
 
-bool LollipopPlot::usingColumn(const Column* column) const {
+bool LollipopPlot::usingColumn(const AbstractColumn* column, bool) const {
 	Q_D(const LollipopPlot);
 
 	if (d->xColumn == column)
@@ -247,12 +247,24 @@ void LollipopPlot::handleAspectUpdated(const QString& aspectPath, const Abstract
 }
 
 QColor LollipopPlot::color() const {
+	return colorAt(0);
+}
+
+QColor LollipopPlot::colorAt(int index) const {
 	Q_D(const LollipopPlot);
-	if (d->lines.size() > 0 && d->lines.at(0)->style() != Qt::PenStyle::NoPen)
-		return d->lines.at(0)->pen().color();
-	else if (d->symbols.size() > 0 && d->symbols.at(0)->style() != Symbol::Style::NoSymbols)
-		return d->symbols.at(0)->pen().color();
-	return QColor();
+	if (index >= d->lines.size())
+		return QColor();
+
+	const auto* line = d->lines.at(index);
+	if (line->style() != Qt::PenStyle::NoPen)
+		return line->pen().color();
+	else {
+		const auto* symbol = d->symbols.at(index);
+		if (symbol->style() != Symbol::Style::NoSymbols)
+			return symbol->pen().color();
+		else
+			return QColor();
+	}
 }
 
 // values
@@ -497,7 +509,7 @@ void LollipopPlotPrivate::recalc() {
 	// values in the provided datasets
 	int barGroupsCount = 0;
 	int columnIndex = 0;
-	for (auto* column : qAsConst(dataColumns)) {
+	for (auto* column : std::as_const(dataColumns)) {
 		int size = static_cast<const Column*>(column)->statistics().size;
 		m_barLines[columnIndex].resize(size);
 		m_symbolPoints[columnIndex].resize(size);
@@ -1099,11 +1111,11 @@ void LollipopPlot::loadThemeConfig(const KConfig& config) {
 	else
 		group = config.group(QStringLiteral("LollipopPlot"));
 
-	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
+	Q_D(LollipopPlot);
+	const auto* plot = d->m_plot;
 	int index = plot->curveChildIndex(this);
 	const QColor themeColor = plot->themeColorPalette(index);
 
-	Q_D(LollipopPlot);
 	d->suppressRecalc = true;
 
 	for (int i = 0; i < d->dataColumns.count(); ++i) {

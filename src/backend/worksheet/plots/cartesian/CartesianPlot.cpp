@@ -47,12 +47,14 @@
 #include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/LollipopPlot.h"
+#include "backend/worksheet/plots/cartesian/ProcessBehaviorChart.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/cartesian/ReferenceRange.h"
+#include "backend/worksheet/plots/cartesian/RunChart.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
-#include "kdefrontend/ThemeHandler.h"
-#include "kdefrontend/widgets/ThemesWidget.h"
+#include "frontend/ThemeHandler.h"
+#include "frontend/widgets/ThemesWidget.h"
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -454,7 +456,7 @@ void CartesianPlot::initActions() {
 	addIntegrationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Integration"), this);
 	addInterpolationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-interpolation-curve")), i18n("Interpolation"), this);
 	addSmoothCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-smoothing-curve")), i18n("Smooth"), this);
-	addFitCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit"), this);
+	addFitCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18nc("Curve fitting", "Fit"), this);
 	addFourierFilterCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-filter-curve")), i18n("Fourier Filter"), this);
 	addFourierTransformCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-transform-curve")), i18n("Fourier Transform"), this);
 	addHilbertTransformCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Hilbert Transform"), this);
@@ -502,6 +504,17 @@ void CartesianPlot::initActions() {
 	});
 	connect(addKDEPlotAction, &QAction::triggered, this, [=]() {
 		addChild(new KDEPlot(i18n("KDE Plot")));
+	});
+
+	// continious improvement plots
+	addProcessBehaviorChartAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Process Behavior Chart"), this);
+	connect(addProcessBehaviorChartAction, &QAction::triggered, this, [=]() {
+		addChild(new ProcessBehaviorChart(i18n("Process Behavior Chart")));
+	});
+
+	addRunChartAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Run Chart"), this);
+	connect(addRunChartAction, &QAction::triggered, this, [=]() {
+		addChild(new RunChart(i18n("Run Chart")));
 	});
 
 	// analysis curves
@@ -620,10 +633,12 @@ void CartesianPlot::initMenus() {
 
 	m_addNewMenu = new QMenu(i18n("Add New"));
 	m_addNewMenu->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
+
 	m_addNewMenu->addAction(addCurveAction);
 	m_addNewMenu->addAction(addEquationCurveAction);
 	m_addNewMenu->addSeparator();
 
+	// statistical plots
 	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"), m_addNewMenu);
 	addNewStatisticalPlotsMenu->addAction(addHistogramAction);
 	addNewStatisticalPlotsMenu->addAction(addBoxPlotAction);
@@ -631,10 +646,17 @@ void CartesianPlot::initMenus() {
 	addNewStatisticalPlotsMenu->addAction(addQQPlotAction);
 	m_addNewMenu->addMenu(addNewStatisticalPlotsMenu);
 
+	// bar plots
 	auto* addNewBarPlotsMenu = new QMenu(i18n("Bar Plots"), m_addNewMenu);
 	addNewBarPlotsMenu->addAction(addBarPlotAction);
 	addNewBarPlotsMenu->addAction(addLollipopPlotAction);
 	m_addNewMenu->addMenu(addNewBarPlotsMenu);
+
+	// continuous improvement plots
+	auto* addNewCIPlotsMenu = new QMenu(i18n("Continual Improvement Plots"), m_addNewMenu);
+	addNewCIPlotsMenu->addAction(addProcessBehaviorChartAction);
+	addNewCIPlotsMenu->addAction(addRunChartAction);
+	m_addNewMenu->addMenu(addNewCIPlotsMenu);
 
 	m_addNewMenu->addSeparator();
 
@@ -682,7 +704,7 @@ void CartesianPlot::initMenus() {
 	// analysis menu
 	dataAnalysisMenu = new QMenu(i18n("Analysis"));
 
-	QMenu* dataFitMenu = new QMenu(i18n("Fit"), dataAnalysisMenu);
+	QMenu* dataFitMenu = new QMenu(i18nc("Curve fitting", "Fit"), dataAnalysisMenu);
 	dataFitMenu->setIcon(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")));
 	dataFitMenu->addAction(addFitActions.at(0));
 	dataFitMenu->addAction(addFitActions.at(1));
@@ -969,7 +991,7 @@ void CartesianPlot::processDropEvent(const QVector<quintptr>& vec) {
 
 	// determine the first column with "x plot designation" as the x-data column for all curves to be created
 	const AbstractColumn* xColumn = nullptr;
-	for (const auto* column : qAsConst(columns)) {
+	for (const auto* column : std::as_const(columns)) {
 		if (column->plotDesignation() == AbstractColumn::PlotDesignation::X) {
 			xColumn = column;
 			break;
@@ -989,7 +1011,7 @@ void CartesianPlot::processDropEvent(const QVector<quintptr>& vec) {
 
 	// create curves
 	bool curvesAdded = false;
-	for (const auto* column : qAsConst(columns)) {
+	for (const auto* column : std::as_const(columns)) {
 		if (column == xColumn)
 			continue;
 
@@ -1915,11 +1937,11 @@ void CartesianPlot::addSmoothCurve() {
 }
 
 void CartesianPlot::addFitCurve() {
-	auto* curve = new XYFitCurve(i18n("Fit"));
+	auto* curve = new XYFitCurve(i18nc("Curve fitting", "Fit"));
 	const auto* curCurve = currentCurve();
 	if (curCurve) {
 		beginMacro(i18n("%1: fit to '%2'", name(), curCurve->name()));
-		curve->setName(i18n("Fit to '%1'", curCurve->name()));
+		curve->setName(i18nc("Curve fitting", "Fit to '%1'", curCurve->name()));
 		curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 		curve->setDataSourceCurve(curCurve);
 
@@ -2140,12 +2162,15 @@ double CartesianPlot::cursorPos(int cursorNumber) {
  */
 int CartesianPlot::curveChildIndex(const WorksheetElement* curve) const {
 	int index = 0;
-	const auto& children = this->children<WorksheetElement>();
-	for (auto* child : children) {
-		if (child == curve)
+	const auto& plots = this->children<Plot>();
+	for (auto* plot : plots) {
+		if (plot == curve)
 			break;
 
-		if (dynamic_cast<const Plot*>(child))
+		++index;
+
+		// for the process behavior and run charts two colors are used - for the data and for the control line(s)
+		if (plot->type() == AspectType::ProcessBehaviorChart || plot->type() == AspectType::RunChart)
 			++index;
 	}
 
@@ -2183,6 +2208,15 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			checkRanges = true;
 			updateLegend();
 		}
+	} else {
+		// hover events for plots are handled here in CartesianPlot, for other elements in WorksheetElement.
+		// in case a non-plot element like axis, etc. was hovered, unhover the plots
+		connect(elem, &WorksheetElement::hoveredChanged, [=](bool on) {
+			if (on) {
+				for (auto* plot : children<Plot>())
+					plot->setHover(false);
+			}
+		});
 	}
 
 	const auto* curve = dynamic_cast<const XYCurve*>(child);
@@ -2292,7 +2326,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			WorksheetElementContainer::retransform();
 	}
 
-	if (!isLoading() && !pasted() && !child->pasted() && !child->isMoved()) {
+	if (!isLoading() && !isPasted() && !child->isPasted() && !child->isMoved()) {
 		// new child was added which might change the ranges and the axis tick labels.
 		// adjust the plot area padding if the axis label is outside of the plot area
 		if (rangeChanged) {
@@ -2849,6 +2883,14 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 		} else if (plot->type() == AspectType::QQPlot) {
 			Range<int> indexRange{0, 99}; // 100 percentile values are calculated, max index is 99
 			plot->minMax(dim, indexRange, range, true);
+		} else if (plot->type() == AspectType::ProcessBehaviorChart) {
+			const int maxIndex = static_cast<const ProcessBehaviorChart*>(plot)->xIndexCount() - 1;
+			Range<int> indexRange{0, maxIndex};
+			plot->minMax(dim, indexRange, range, true);
+		} else if (plot->type() == AspectType::RunChart) {
+			const int maxIndex = static_cast<const RunChart*>(plot)->xIndexCount() - 1;
+			Range<int> indexRange{0, maxIndex};
+			plot->minMax(dim, indexRange, range, true);
 		} else {
 			range.setStart(plot->minimum(dim));
 			range.setEnd(plot->maximum(dim));
@@ -3272,7 +3314,7 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 			double sceneEndLast = plotSceneRange.start();
 			double logicalEndLast = r.start();
 			auto rbs = rangeBreaks(dim);
-			for (const auto& rb : qAsConst(rbs.list)) {
+			for (const auto& rb : std::as_const(rbs.list)) {
 				if (!rb.isValid())
 					break;
 
@@ -3992,16 +4034,16 @@ void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos, int cS
 			info = QString::fromUtf8("Δx=") + QString::number(logicalEnd.x() - logicalStart.x());
 		else
 			info = i18n("from x=%1 to x=%2",
-						QDateTime::fromMSecsSinceEpoch(logicalStart.x(), Qt::UTC).toString(xRangeDateTimeFormat),
-						QDateTime::fromMSecsSinceEpoch(logicalEnd.x(), Qt::UTC).toString(xRangeDateTimeFormat));
+						QDateTime::fromMSecsSinceEpoch(logicalStart.x(), QTimeZone::UTC).toString(xRangeDateTimeFormat),
+						QDateTime::fromMSecsSinceEpoch(logicalEnd.x(), QTimeZone::UTC).toString(xRangeDateTimeFormat));
 
 		info += QLatin1String(", ");
 		if (yRangeFormat == RangeT::Format::Numeric)
 			info += QString::fromUtf8("Δy=") + QString::number(logicalEnd.y() - logicalStart.y());
 		else
 			info += i18n("from y=%1 to y=%2",
-						 QDateTime::fromMSecsSinceEpoch(logicalStart.y(), Qt::UTC).toString(xRangeDateTimeFormat),
-						 QDateTime::fromMSecsSinceEpoch(logicalEnd.y(), Qt::UTC).toString(xRangeDateTimeFormat));
+						 QDateTime::fromMSecsSinceEpoch(logicalStart.y(), QTimeZone::UTC).toString(xRangeDateTimeFormat),
+						 QDateTime::fromMSecsSinceEpoch(logicalEnd.y(), QTimeZone::UTC).toString(xRangeDateTimeFormat));
 	} else if (mouseMode == CartesianPlot::MouseMode::ZoomXSelection) {
 		logicalPos.setY(range(Dimension::Y, yIndex).start()); // must be done, because the other plots can have other ranges, value must be in the scenes
 		bool visible;
@@ -4013,8 +4055,8 @@ void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos, int cS
 			info = QString::fromUtf8("Δx=") + QString::number(logicalEnd.x() - logicalStart.x());
 		else
 			info = i18n("from x=%1 to x=%2",
-						QDateTime::fromMSecsSinceEpoch(logicalStart.x(), Qt::UTC).toString(xRangeDateTimeFormat),
-						QDateTime::fromMSecsSinceEpoch(logicalEnd.x(), Qt::UTC).toString(xRangeDateTimeFormat));
+						QDateTime::fromMSecsSinceEpoch(logicalStart.x(), QTimeZone::UTC).toString(xRangeDateTimeFormat),
+						QDateTime::fromMSecsSinceEpoch(logicalEnd.x(), QTimeZone::UTC).toString(xRangeDateTimeFormat));
 	} else if (mouseMode == CartesianPlot::MouseMode::ZoomYSelection) {
 		m_selectionEnd.setX(dataRect.right());
 		logicalPos.setX(range(Dimension::X, xIndex).start()); // must be done, because the other plots can have other ranges, value must be in the scenes
@@ -4026,8 +4068,8 @@ void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos, int cS
 			info = QString::fromUtf8("Δy=") + QString::number(logicalEnd.y() - logicalStart.y());
 		else
 			info = i18n("from y=%1 to y=%2",
-						QDateTime::fromMSecsSinceEpoch(logicalStart.y(), Qt::UTC).toString(xRangeDateTimeFormat),
-						QDateTime::fromMSecsSinceEpoch(logicalEnd.y(), Qt::UTC).toString(xRangeDateTimeFormat));
+						QDateTime::fromMSecsSinceEpoch(logicalStart.y(), QTimeZone::UTC).toString(xRangeDateTimeFormat),
+						QDateTime::fromMSecsSinceEpoch(logicalEnd.y(), QTimeZone::UTC).toString(xRangeDateTimeFormat));
 	}
 	q->info(info);
 	update();
@@ -4044,7 +4086,7 @@ void CartesianPlotPrivate::mouseMoveCursorMode(int cursorNumber, QPointF logical
 	if (xRangeFormat == RangeT::Format::Numeric)
 		info = QString::fromUtf8("x=") + QString::number(logicalPos.x());
 	else
-		info = i18n("x=%1", QDateTime::fromMSecsSinceEpoch(logicalPos.x(), Qt::UTC).toString(xRangeDateTimeFormat));
+		info = i18n("x=%1", QDateTime::fromMSecsSinceEpoch(logicalPos.x(), QTimeZone::UTC).toString(xRangeDateTimeFormat));
 	q->info(info);
 	update();
 }
@@ -4345,13 +4387,13 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 			if (xRangeFormat == RangeT::Format::Numeric)
 				info += QString::number(logicalPoint.x());
 			else
-				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.x(), Qt::UTC).toString(xRangeDateTimeFormat);
+				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.x(), QTimeZone::UTC).toString(xRangeDateTimeFormat);
 
 			info += QStringLiteral(", y=");
 			if (yRangeFormat == RangeT::Format::Numeric)
 				info += QString::number(logicalPoint.y());
 			else
-				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.y(), Qt::UTC).toString(yRangeDateTimeFormat);
+				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.y(), QTimeZone::UTC).toString(yRangeDateTimeFormat);
 		}
 
 		if (mouseMode == CartesianPlot::MouseMode::ZoomSelection && !m_selectionBandIsShown) {
@@ -4361,14 +4403,14 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 			if (xRangeFormat == RangeT::Format::Numeric)
 				info += QString::number(logicalPoint.x());
 			else
-				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.x(), Qt::UTC).toString(xRangeDateTimeFormat);
+				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.x(), QTimeZone::UTC).toString(xRangeDateTimeFormat);
 			Q_EMIT q->mouseHoverZoomSelectionModeSignal(logicalPoint);
 		} else if (mouseMode == CartesianPlot::MouseMode::ZoomYSelection && !m_selectionBandIsShown) {
 			info = QStringLiteral("y=");
 			if (yRangeFormat == RangeT::Format::Numeric)
 				info += QString::number(logicalPoint.y());
 			else
-				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.y(), Qt::UTC).toString(yRangeDateTimeFormat);
+				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.y(), QTimeZone::UTC).toString(yRangeDateTimeFormat);
 			Q_EMIT q->mouseHoverZoomSelectionModeSignal(logicalPoint);
 		} else if (mouseMode == CartesianPlot::MouseMode::Selection) {
 			// hover the nearest curve to the mousepointer
@@ -4377,7 +4419,7 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 			bool hovered = false;
 			const auto& curves = q->children<Plot>();
 			for (int i = curves.count() - 1; i >= 0; i--) { // because the last curve is above the other curves
-				auto* curve = curves[i];
+				auto* curve = curves.at(i);
 				if (hovered) { // if a curve is already hovered, disable hover for the rest
 					curve->setHover(false);
 					continue;
@@ -4397,7 +4439,7 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 			if (yRangeFormat == RangeT::Format::Numeric)
 				info += QString::number(logicalPoint.x());
 			else
-				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.x(), Qt::UTC).toString(xRangeDateTimeFormat);
+				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.x(), QTimeZone::UTC).toString(xRangeDateTimeFormat);
 
 			double cursorPenWidth2 = cursorLine->pen().width() / 2.;
 			if (cursorPenWidth2 < 10.)
@@ -4430,8 +4472,8 @@ void CartesianPlotPrivate::mouseHoverOutsideDataRect() {
 }
 
 void CartesianPlotPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent* event) {
-	for (auto* curve : q->children<XYCurve>())
-		curve->setHover(false);
+	for (auto* plot : q->children<Plot>())
+		plot->setHover(false);
 
 	m_hovered = false;
 	QGraphicsItem::hoverLeaveEvent(event);
@@ -5326,6 +5368,20 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == QLatin1String("KDEPlot")) {
 			auto* plot = new KDEPlot(QStringLiteral("KDE Plot"));
+			plot->setIsLoading(true);
+			if (plot->load(reader, preview))
+				addChildFast(plot);
+			else
+				return false;
+		} else if (reader->name() == QLatin1String("ProcessBehaviorChart")) {
+			auto* plot = new ProcessBehaviorChart(QStringLiteral("Process Behavior Chart"));
+			plot->setIsLoading(true);
+			if (plot->load(reader, preview))
+				addChildFast(plot);
+			else
+				return false;
+		} else if (reader->name() == QLatin1String("RunChart")) {
+			auto* plot = new RunChart(QStringLiteral("Run Chart"));
 			plot->setIsLoading(true);
 			if (plot->load(reader, preview))
 				addChildFast(plot);

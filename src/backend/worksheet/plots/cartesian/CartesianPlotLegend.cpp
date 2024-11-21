@@ -12,7 +12,7 @@
   \class CartesianPlotLegend
   \brief Legend for the cartesian plot.
 
-  \ingroup kdefrontend
+  \ingroup frontend
 */
 #include "CartesianPlotLegend.h"
 #include "backend/core/AbstractColumn.h"
@@ -70,8 +70,8 @@ void CartesianPlotLegend::init() {
 	KConfigGroup group = config.group(QStringLiteral("CartesianPlotLegend"));
 
 	d->labelFont = group.readEntry(QStringLiteral("LabelsFont"), QFont());
-	d->labelFont.setPixelSize(Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
-
+	d->labelFont.setPointSizeF(Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
+	d->usePlotColor = group.readEntry(QStringLiteral("UsePlotColor"), true);
 	d->labelColor = group.readEntry(QStringLiteral("FontColor"), QColor(Qt::black));
 	d->labelColumnMajor = true;
 	d->lineSymbolWidth = group.readEntry(QStringLiteral("LineSymbolWidth"), Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter));
@@ -165,6 +165,7 @@ void CartesianPlotLegend::handleResize(double /*horizontalRatio*/, double /*vert
 // ################################  getter methods  ############################
 // ##############################################################################
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, QFont, labelFont, labelFont)
+BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, bool, usePlotColor, usePlotColor)
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, QColor, labelColor, labelColor)
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, bool, labelColumnMajor, labelColumnMajor)
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, qreal, lineSymbolWidth, lineSymbolWidth)
@@ -206,6 +207,13 @@ void CartesianPlotLegend::setLabelFont(const QFont& font) {
 	Q_D(CartesianPlotLegend);
 	if (font != d->labelFont)
 		exec(new CartesianPlotLegendSetLabelFontCmd(d, font, ki18n("%1: set font")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetUsePlotColor, bool, usePlotColor, retransform)
+void CartesianPlotLegend::setUsePlotColor(bool usePlotColor) {
+	Q_D(CartesianPlotLegend);
+	if (usePlotColor != d->usePlotColor)
+		exec(new CartesianPlotLegendSetUsePlotColorCmd(d, usePlotColor, ki18n("%1: use plot's color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLabelColor, QColor, labelColor, update)
@@ -463,87 +471,8 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 
 	painter->save();
 
-	// draw the area
-	painter->setOpacity(background->opacity());
-	painter->setPen(Qt::NoPen);
-	if (background->type() == Background::Type::Color) {
-		switch (background->colorStyle()) {
-		case Background::ColorStyle::SingleColor: {
-			painter->setBrush(QBrush(background->firstColor()));
-			break;
-		}
-		case Background::ColorStyle::HorizontalLinearGradient: {
-			QLinearGradient linearGrad(m_boundingRectangle.topLeft(), m_boundingRectangle.topRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::VerticalLinearGradient: {
-			QLinearGradient linearGrad(m_boundingRectangle.topLeft(), m_boundingRectangle.bottomLeft());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::TopLeftDiagonalLinearGradient: {
-			QLinearGradient linearGrad(m_boundingRectangle.topLeft(), m_boundingRectangle.bottomRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::BottomLeftDiagonalLinearGradient: {
-			QLinearGradient linearGrad(m_boundingRectangle.bottomLeft(), m_boundingRectangle.topRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::RadialGradient: {
-			QRadialGradient radialGrad(m_boundingRectangle.center(), m_boundingRectangle.width() / 2);
-			radialGrad.setColorAt(0, background->firstColor());
-			radialGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(radialGrad));
-			break;
-		}
-		}
-	} else if (background->type() == Background::Type::Image) {
-		if (!background->fileName().trimmed().isEmpty()) {
-			QPixmap pix(background->fileName());
-			switch (background->imageStyle()) {
-			case Background::ImageStyle::ScaledCropped:
-				pix = pix.scaled(m_boundingRectangle.size().toSize(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
-				painter->drawPixmap(m_boundingRectangle.topLeft(), pix);
-				break;
-			case Background::ImageStyle::Scaled:
-				pix = pix.scaled(m_boundingRectangle.size().toSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-				painter->drawPixmap(m_boundingRectangle.topLeft(), pix);
-				break;
-			case Background::ImageStyle::ScaledAspectRatio:
-				pix = pix.scaled(m_boundingRectangle.size().toSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-				painter->drawPixmap(m_boundingRectangle.topLeft(), pix);
-				break;
-			case Background::ImageStyle::Centered:
-				painter->drawPixmap(
-					QPointF(m_boundingRectangle.center().x() - pix.size().width() / 2, m_boundingRectangle.center().y() - pix.size().height() / 2),
-					pix);
-				break;
-			case Background::ImageStyle::Tiled:
-				painter->drawTiledPixmap(m_boundingRectangle, pix);
-				break;
-			case Background::ImageStyle::CenterTiled:
-				painter->drawTiledPixmap(m_boundingRectangle, pix, QPoint(m_boundingRectangle.size().width() / 2, m_boundingRectangle.size().height() / 2));
-			}
-		}
-	} else if (background->type() == Background::Type::Pattern) {
-		painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
-	}
-
-	if (qFuzzyIsNull(borderCornerRadius))
-		painter->drawRect(m_boundingRectangle);
-	else
-		painter->drawRoundedRect(m_boundingRectangle, borderCornerRadius, borderCornerRadius);
+	// draw the background area
+	background->draw(painter, m_boundingRectangle, borderCornerRadius);
 
 	// draw the border
 	if (borderLine->style() != Qt::NoPen) {
@@ -654,7 +583,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			}
 
 			// curve's name
-			painter->setPen(QPen(labelColor));
+			usePlotColor ? painter->setPen(QPen(curve->color())) : painter->setPen(QPen(labelColor));
 			painter->setOpacity(1.0);
 			painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, h), curve->name());
 
@@ -680,7 +609,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			painter->translate(-QPointF(lineSymbolWidth / 2, h / 2));
 
 			// curve's name
-			painter->setPen(QPen(labelColor));
+			usePlotColor ? painter->setPen(QPen(hist->color())) : painter->setPen(QPen(labelColor));
 			painter->setOpacity(1.0);
 			painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, h), hist->name());
 
@@ -714,10 +643,11 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				painter->translate(-QPointF(lineSymbolWidth / 2, h / 2));
 
 				// draw the name text
-				painter->setPen(QPen(labelColor));
+				usePlotColor ? painter->setPen(QPen(boxPlot->colorAt(index))) : painter->setPen(QPen(labelColor));
 				painter->setOpacity(1.0);
 				painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, h), column->name());
 				++index;
+
 				if (!translatePainter(painter, row, col, h))
 					break;
 			}
@@ -745,10 +675,11 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				painter->translate(-QPointF(lineSymbolWidth / 2, h / 2));
 
 				// draw the name text
-				painter->setPen(QPen(labelColor));
+				usePlotColor ? painter->setPen(QPen(barPlot->colorAt(index))) : painter->setPen(QPen(labelColor));
 				painter->setOpacity(1.0);
 				painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, h), column->name());
 				++index;
+
 				if (!translatePainter(painter, row, col, h))
 					break;
 			}
@@ -772,7 +703,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				}
 
 				// draw the name text
-				painter->setPen(QPen(labelColor));
+				usePlotColor ? painter->setPen(QPen(lollipopPlot->colorAt(index))) : painter->setPen(QPen(labelColor));
 				painter->setOpacity(1.0);
 				painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, h), column->name());
 				++index;
@@ -787,7 +718,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			painter->drawLine(0, h / 2, lineSymbolWidth, h / 2);
 
 			// name
-			painter->setPen(QPen(labelColor));
+			usePlotColor ? painter->setPen(QPen(kdePlot->color())) : painter->setPen(QPen(labelColor));
 			painter->setOpacity(1.0);
 			painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, h), kdePlot->name());
 
@@ -809,7 +740,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			}
 
 			// name
-			painter->setPen(QPen(labelColor));
+			usePlotColor ? painter->setPen(QPen(qqPlot->color())) : painter->setPen(QPen(labelColor));
 			painter->setOpacity(1.0);
 			painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, h), qqPlot->name());
 
@@ -888,6 +819,7 @@ void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
 
 	// general
 	writer->writeStartElement(QStringLiteral("general"));
+	writer->writeAttribute(QStringLiteral("usePlotColor"), QString::number(d->usePlotColor));
 	WRITE_QCOLOR(d->labelColor);
 	WRITE_QFONT(d->labelFont);
 	writer->writeAttribute(QStringLiteral("columnMajor"), QString::number(d->labelColumnMajor));
@@ -950,6 +882,7 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
 
+			READ_INT_VALUE("usePlotColor", usePlotColor, bool);
 			READ_QCOLOR(d->labelColor);
 			READ_QFONT(d->labelFont);
 			READ_INT_VALUE("columnMajor", labelColumnMajor, int);

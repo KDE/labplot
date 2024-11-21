@@ -28,7 +28,7 @@ ColorMapsManager* ColorMapsManager::m_instance{nullptr};
 	\class ColorMapsManager
 	\brief color maps manager. singleton class holding the information about the data and metadata of the available color maps.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 ColorMapsManager::ColorMapsManager() {
 	m_jsonDir = QStandardPaths::locate(QStandardPaths::AppDataLocation, QLatin1String("colormaps"), QStandardPaths::LocateDirectory);

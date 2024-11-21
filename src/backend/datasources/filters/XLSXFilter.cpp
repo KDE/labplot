@@ -675,9 +675,9 @@ QVector<QStringList> XLSXFilterPrivate::previewForDataRegion(const QString& shee
 				// OO: can always convert to Double
 
 				// correctly read values and show with locale
-				if (val.type() == QVariant::Double)
+				if (val.userType() == QMetaType::Double)
 					line << QLocale().toString(val.toDouble());
-				else if (val.type() == QVariant::String) {
+				else if (val.userType() == QMetaType::QString) {
 					QString valueString = val.toString();
 
 					bool ok; // check if double value
@@ -686,14 +686,14 @@ QVector<QStringList> XLSXFilterPrivate::previewForDataRegion(const QString& shee
 						line << QLocale().toString(value);
 					else
 						line << valueString;
-				} else if (val.canConvert(QMetaType::QDateTime)) {
+				} else if (val.canConvert<QDateTime>()) {
 					QDateTime dt = val.toDateTime();
 					// TODO: use certain date/datetime format?
 					if (dt.time() == QTime(0, 0)) // just a date
 						line << val.toDate().toString();
 					else
 						line << dt.toString();
-				} else if (val.canConvert(QMetaType::QTime)) {
+				} else if (val.canConvert<QTime>()) {
 					QTime t = val.toTime();
 					// TODO: use certain time format?
 					line << t.toString();

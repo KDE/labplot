@@ -166,23 +166,23 @@ void XYEquationCurvePrivate::recalculate() {
 			return;
 	}
 
-	ExpressionParser* parser = ExpressionParser::getInstance();
-	bool rc = false;
+	auto* parser = ExpressionParser::getInstance();
+	bool valid = false;
 	if (equationData.type == XYEquationCurve::EquationType::Cartesian) {
-		rc = parser->evaluateCartesian(equationData.expression1, equationData.min, equationData.max, equationData.count, xVector, yVector);
+		valid = parser->tryEvaluateCartesian(equationData.expression1, equationData.min, equationData.max, equationData.count, xVector, yVector);
 	} else if (equationData.type == XYEquationCurve::EquationType::Polar) {
-		rc = parser->evaluatePolar(equationData.expression1, equationData.min, equationData.max, equationData.count, xVector, yVector);
+		valid = parser->tryEvaluatePolar(equationData.expression1, equationData.min, equationData.max, equationData.count, xVector, yVector);
 	} else if (equationData.type == XYEquationCurve::EquationType::Parametric) {
-		rc = parser->evaluateParametric(equationData.expression1,
-										equationData.expression2,
-										equationData.min,
-										equationData.max,
-										equationData.count,
-										xVector,
-										yVector);
+		valid = parser->tryEvaluateParametric(equationData.expression1,
+											  equationData.expression2,
+											  equationData.min,
+											  equationData.max,
+											  equationData.count,
+											  xVector,
+											  yVector);
 	}
 
-	if (!rc) {
+	if (!valid) {
 		xVector->clear();
 		yVector->clear();
 	}

@@ -34,6 +34,7 @@ private Q_SLOTS:
 	void testevaluateLessThan();
 	void testevaluateLessEqualThan();
 	void testevaluateGreaterEqualThan();
+	void testBenchmark();
 
 	void testEvaluateAnd();
 	void testEvaluateOr();

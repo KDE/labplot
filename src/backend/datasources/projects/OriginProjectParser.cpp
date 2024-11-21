@@ -128,7 +128,7 @@ void OriginProjectParser::setGraphLayerAsPlotArea(bool value) {
 }
 
 QString OriginProjectParser::supportedExtensions() {
-	// TODO add opju later when liborigin supports it
+	// TODO: add opju later when liborigin ever supports it
 	static const QString extensions = QStringLiteral("*.opj *.OPJ");
 	return extensions;
 }
@@ -1250,20 +1250,24 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	// 	worksheet->setPageRect(size);
 	graphSize.rwidth() = graph.width;
 	graphSize.rheight() = graph.height;
-	DEBUG(Q_FUNC_INFO << ", GRAPH width/height (px) = " << graphSize.width() << "/" << graphSize.height())
+	WARN(Q_FUNC_INFO << ", GRAPH width/height (px) = " << graphSize.width() << "/" << graphSize.height())
 	// Graphic elements in Origin are scaled relative to the dimensions of the page (Format->Page) with 600 DPI (>=9.6), 300 DPI (<9.6)
 	double dpi = 600.;
 	if (m_originFile->version() < 9.6)
 		dpi = 300.;
-	DEBUG(Q_FUNC_INFO << ", GRAPH width/height (cm) = " << graphSize.width() * GSL_CONST_CGS_INCH / dpi << "/" << graphSize.height() * GSL_CONST_CGS_INCH / dpi)
+	WARN(Q_FUNC_INFO << ", GRAPH width/height (cm) = " << graphSize.width() * GSL_CONST_CGS_INCH / dpi << "/" << graphSize.height() * GSL_CONST_CGS_INCH / dpi)
 	// Origin scales text and plots with the size of the layer when no fixed size is used (Layer properties->Size)
-	// so we scale all text and plots with a scaling factor to the whole view height (29.5 cm) used as default
+	// so we scale all text and plots with a scaling factor to the whole view height used as default
+#if defined(HAVE_WINDOWS)
+	const double fixedHeight = 14.75; // full height/2 [cm]
+#else
 	const double fixedHeight = 29.5; // full height [cm]
+#endif
 	elementScalingFactor = fixedHeight / (graph.height * GSL_CONST_CGS_INCH / dpi);
 	// not using the full value for scaling text is better in most cases
 	textScalingFactor = 1. + (elementScalingFactor - 1.) / 2.;
-	DEBUG(Q_FUNC_INFO << ", ELEMENT SCALING FACTOR = " << elementScalingFactor)
-	DEBUG(Q_FUNC_INFO << ", TEXT SCALING FACTOR = " << textScalingFactor)
+	WARN(Q_FUNC_INFO << ", ELEMENT SCALING FACTOR = " << elementScalingFactor)
+	WARN(Q_FUNC_INFO << ", TEXT SCALING FACTOR = " << textScalingFactor)
 	// default values (1000/1000)
 	//	DEBUG(Q_FUNC_INFO << ", WORKSHEET width/height = " << worksheet->pageRect().width() << "/" << worksheet->pageRect().height())
 
@@ -1332,9 +1336,9 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	if (plot) {
 		plot->setSymmetricPadding(false);
 		int numberOfLayer = layerIndex + 1;
-		DEBUG(Q_FUNC_INFO << ", number of layer = " << numberOfLayer)
+		WARN(Q_FUNC_INFO << ", number of layer = " << numberOfLayer)
 		if (numberOfLayer == 1 || !m_graphLayerAsPlotArea) { // use layer clientRect for padding
-			DEBUG(Q_FUNC_INFO << ", using layer rect for padding")
+			WARN(Q_FUNC_INFO << ", using layer rect for padding")
 			double aspectRatio = (double)graphSize.width() / graphSize.height();
 
 			const double leftPadding = layerRect.left / (double)graphSize.width() * aspectRatio * fixedHeight;
@@ -1346,13 +1350,22 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			plot->setRightPadding(Worksheet::convertToSceneUnits(rightPadding, Worksheet::Unit::Centimeter));
 			plot->setBottomPadding(Worksheet::convertToSceneUnits(bottomPadding, Worksheet::Unit::Centimeter));
 		} else {
-			plot->setHorizontalPadding(plot->horizontalPadding() * elementScalingFactor);
-			plot->setVerticalPadding(plot->verticalPadding() * elementScalingFactor);
-			plot->setRightPadding(plot->rightPadding() * elementScalingFactor);
-			plot->setBottomPadding(plot->bottomPadding() * elementScalingFactor);
+			WARN(Q_FUNC_INFO << ", using fixed padding")
+#if defined(HAVE_WINDOWS)
+			// TODO: test if min instead of max is relevant
+			plot->setHorizontalPadding(100. + 1.5 * plot->horizontalPadding() * std::min(elementScalingFactor, 1.));
+			plot->setVerticalPadding(100. + 1.5 * plot->verticalPadding() * std::min(elementScalingFactor, 1.));
+			plot->setRightPadding(100. + 1.5 * plot->rightPadding() * std::min(elementScalingFactor, 1.));
+			plot->setBottomPadding(100. + 1.5 * plot->bottomPadding() * std::min(elementScalingFactor, 1.));
+#else
+			plot->setHorizontalPadding(100. + 1.5 * plot->horizontalPadding() * std::max(elementScalingFactor, 1.));
+			plot->setVerticalPadding(100. + 1.5 * plot->verticalPadding() * std::max(elementScalingFactor, 1.));
+			plot->setRightPadding(100. + 1.5 * plot->rightPadding() * std::max(elementScalingFactor, 1.));
+			plot->setBottomPadding(100. + 1.5 * plot->bottomPadding() * std::max(elementScalingFactor, 1.));
+#endif
 		}
-		DEBUG(Q_FUNC_INFO << ", PADDING (H/V) = " << plot->horizontalPadding() << ", " << plot->verticalPadding())
-		DEBUG(Q_FUNC_INFO << ", PADDING (R/B) = " << plot->rightPadding() << ", " << plot->bottomPadding())
+		WARN(Q_FUNC_INFO << ", PADDING (H/V) = " << plot->horizontalPadding() << ", " << plot->verticalPadding())
+		WARN(Q_FUNC_INFO << ", PADDING (R/B) = " << plot->rightPadding() << ", " << plot->bottomPadding())
 	}
 
 	if (!preview) {
@@ -1490,7 +1503,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		legend->setLabelFont(labelFont);
 
 		// Origin's legend uses "\l(...)" or "\L(...)" string to format the legend symbol
-		//  and "%(...) to format the legend text for each curve
+		//  and "%(...)" to format the legend text for each curve
 		// s. a. https://www.originlab.com/doc/Origin-Help/Legend-ManualControl
 		// the text before these formatting tags, if available, is interpreted as the legend title
 
@@ -1633,16 +1646,22 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 	}
 
 	// axes
-	DEBUG(Q_FUNC_INFO << ", layer.curves.size() = " << layer.curves.size())
+	DEBUG(Q_FUNC_INFO << ", number of curves in layer = " << layer.curves.size())
 	if (layer.curves.empty()) // no curves, just axes
 		loadAxes(layer, plot, layerIndex, QLatin1String("X Axis Title"), QLatin1String("Y Axis Title"));
 	else {
 		const auto& originCurve = layer.curves.at(0);
 		// see loadCurves()
 		QString dataName(QString::fromStdString(originCurve.dataName));
-		DEBUG(Q_FUNC_INFO << ", curve data name " << STDSTRING(dataName))
+		DEBUG(Q_FUNC_INFO << ", curve data name: " << STDSTRING(dataName))
 		QString containerName = dataName.right(dataName.length() - 2); // strip "E_" or "T_"
 		auto sheet = getSpreadsheetByName(containerName);
+
+		DEBUG("number of columns = " << sheet.columns.size())
+		if (sheet.columns.size() == 0) {
+			DEBUG(Q_FUNC_INFO << ", WARNING: no columns in sheet")
+			return;
+		}
 
 		QString xColumnName;
 		if (m_originFile->version() < 9.5) // <= 2017 : pre-Unicode
@@ -1696,10 +1715,11 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 	}
 
 	// TODO: range breaks
+	DEBUG(Q_FUNC_INFO << ", DONE")
 }
 
 void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianPlot* plot, int layerIndex, bool preview) {
-	DEBUG(Q_FUNC_INFO)
+	DEBUG(Q_FUNC_INFO << "layer " << layerIndex)
 
 	int curveIndex = 1;
 	for (const auto& originCurve : layer.curves) {
@@ -1845,6 +1865,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 				DEBUG(Q_FUNC_INFO << ", curve name = \"" << curveName.toStdString() << "\", in legend = " << enableCurveInLegend)
 
 				if (type == Origin::GraphCurve::Line || type == Origin::GraphCurve::Scatter || type == Origin::GraphCurve::LineSymbol) {
+					DEBUG(Q_FUNC_INFO << ", line(symbol) or scatter curve")
 					auto* curve = new XYCurve(curveName);
 					childPlot = curve;
 					curve->setXColumnPath(xColumnPath);
@@ -1856,10 +1877,10 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 						curve->setLegendVisible(enableCurveInLegend);
 					}
 				} else { // error "curves"
-					// DEBUG(Q_FUNC_INFO << ", ERROR CURVE. curve index = " << curveIndex)
+					DEBUG(Q_FUNC_INFO << ", ERROR CURVE. curve index = " << curveIndex)
 					// find corresponing curve to add error column
 					// we use the previous curve if it has the same y column
-					if (!preview) { // curves not available in preview
+					if (!preview && plot->childCount<XYCurve>() > 0) { // curves not available in preview
 						auto childIndex = plot->childCount<XYCurve>() - 1; // last curve
 						auto curve = plot->children<XYCurve>().at(childIndex);
 						if (xColumnPath == curve->yColumnPath()) { // TODO: only for reversed plots?
@@ -2072,6 +2093,8 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 
 		++curveIndex;
 	}
+
+	DEBUG(Q_FUNC_INFO << ", DONE")
 }
 
 void OriginProjectParser::loadAxes(const Origin::GraphLayer& layer,

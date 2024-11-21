@@ -64,14 +64,15 @@ public:
 	virtual void recalculate() = 0;
 	bool resultAvailable() const;
 	virtual const Result& result() const = 0;
-	bool usingColumn(const Column*) const override;
+	bool usingColumn(const AbstractColumn*, bool indirect = true) const override;
+	virtual QVector<const Plot*> dependingPlots() const;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
 	BASIC_D_ACCESSOR_DECL(DataSourceType, dataSourceType, DataSourceType)
 	POINTER_D_ACCESSOR_DECL(const XYCurve, dataSourceCurve, DataSourceCurve)
-	const QString& dataSourceCurvePath() const;
+	CLASS_D_ACCESSOR_DECL(QString, dataSourceCurvePath, DataSourceCurvePath)
 
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)
@@ -103,6 +104,9 @@ private Q_SLOTS:
 	void xDataColumnNameChanged();
 	void yDataColumnNameChanged();
 	void y2DataColumnNameChanged();
+
+	void dataSourceCurveAboutToBeRemoved(const AbstractAspect*);
+	void dataSourceCurveNameChanged();
 
 Q_SIGNALS:
 	void sourceDataChanged(); // emitted when the source data used in the analysis curves was changed to enable the recalculation in the dock widgets

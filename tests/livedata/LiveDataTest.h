@@ -39,8 +39,9 @@ private Q_SLOTS:
 	// Whole file - on every read the whole file is re-read completely and processed
 	void testReadWholeFile00();
 	void testReadWholeFile01();
-	void testReadWholeFile02();
-	void testReadWholeFile03();
+	void testReadWholeFileSameContentSize();
+
+	void testPlotting();
 };
 
 #endif // LIVEDATATEST_H

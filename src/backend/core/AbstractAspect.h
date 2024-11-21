@@ -61,6 +61,10 @@ enum class AspectType : quint64 {
 	QQPlot = 0x0210800,
 	KDEPlot = 0x0210802,
 
+	// continious improvement plots
+	ProcessBehaviorChart = 0x0211000,
+	RunChart = 0x0211001,
+
 	WorksheetElementContainer = 0x0220000,
 	AbstractPlot = 0x0221000,
 	CartesianPlot = 0x0221001,
@@ -90,7 +94,7 @@ enum class AspectType : quint64 {
 	LiveDataSource = 0x0412001,
 	MQTTTopic = 0x0412002,
 	StatisticsSpreadsheet = 0x0412004,
-	CantorWorksheet = 0x0420001,
+	Notebook = 0x0420001,
 	Datapicker = 0x0420002,
 	DatapickerImage = 0x0420004,
 	Note = 0x0420008,
@@ -215,6 +219,10 @@ public:
 			return QStringLiteral("KDEPlot");
 		case AspectType::LollipopPlot:
 			return QStringLiteral("LollipopPlot");
+		case AspectType::ProcessBehaviorChart:
+			return QStringLiteral("ProcessBehaviorChart");
+		case AspectType::RunChart:
+			return QStringLiteral("RunChart");
 		case AspectType::AbstractPart:
 			return QStringLiteral("AbstractPart");
 		case AspectType::AbstractDataSource:
@@ -229,8 +237,8 @@ public:
 			return QStringLiteral("LiveDataSource");
 		case AspectType::MQTTTopic:
 			return QStringLiteral("MQTTTopic");
-		case AspectType::CantorWorksheet:
-			return QStringLiteral("CantorWorksheet");
+		case AspectType::Notebook:
+			return QStringLiteral("Notebook");
 		case AspectType::Datapicker:
 			return QStringLiteral("Datapicker");
 		case AspectType::DatapickerImage:
@@ -271,7 +279,7 @@ public:
 	virtual Project* project();
 	virtual QString path() const;
 	void setHidden(bool);
-	bool hidden() const;
+	bool isHidden() const;
 	void setFixed(bool);
 	bool isFixed() const;
 	void setSelected(bool);
@@ -288,14 +296,14 @@ public:
 
 	// functions related to the handling of the tree-like project structure
 	AbstractAspect* parentAspect() const;
-	AbstractAspect* parent(AspectType type) const;
+	AbstractAspect* parent(AspectType) const;
 	void setParentAspect(AbstractAspect*);
 	Folder* folder();
 	bool isDescendantOf(AbstractAspect* other);
 	void addChild(AbstractAspect*, QUndoCommand* parent = nullptr);
 	void addChildFast(AbstractAspect*);
 	virtual void finalizeAdd(){};
-	QVector<AbstractAspect*> children(AspectType type, ChildIndexFlags flags = {}) const;
+	QVector<AbstractAspect*> children(AspectType, ChildIndexFlags = {}) const;
 	void insertChild(AbstractAspect* child, int index, QUndoCommand* parent = nullptr);
 	void insertChildBefore(AbstractAspect* child, AbstractAspect* before, QUndoCommand* parent = nullptr);
 	void insertChildBeforeFast(AbstractAspect* child, AbstractAspect* before);
@@ -332,7 +340,7 @@ public:
 	QVector<T*> children(ChildIndexFlags flags = {}) const {
 		QVector<T*> result;
 		for (auto* child : children()) {
-			if (flags & ChildIndexFlag::IncludeHidden || !child->hidden()) {
+			if (flags & ChildIndexFlag::IncludeHidden || !child->isHidden()) {
 				T* i = dynamic_cast<T*>(child);
 				if (i)
 					result << i;
@@ -349,7 +357,7 @@ public:
 		int i = 0;
 		for (auto* child : children()) {
 			T* c = dynamic_cast<T*>(child);
-			if (c && (flags & ChildIndexFlag::IncludeHidden || !child->hidden()) && index == i++)
+			if (c && (flags & ChildIndexFlag::IncludeHidden || !child->isHidden()) && index == i++)
 				return c;
 		}
 		return nullptr;
@@ -370,7 +378,7 @@ public:
 		int result = 0;
 		for (auto* child : children()) {
 			T* i = dynamic_cast<T*>(child);
-			if (i && (flags & ChildIndexFlag::IncludeHidden || !child->hidden()))
+			if (i && (flags & ChildIndexFlag::IncludeHidden || !child->isHidden()))
 				result++;
 		}
 		return result;
@@ -383,7 +391,7 @@ public:
 			if (child == c)
 				return index;
 			T* i = dynamic_cast<T*>(c);
-			if (i && (flags & ChildIndexFlag::IncludeHidden || !c->hidden()))
+			if (i && (flags & ChildIndexFlag::IncludeHidden || !c->isHidden()))
 				index++;
 		}
 		return -1;
@@ -407,7 +415,7 @@ public:
 	virtual void save(QXmlStreamWriter*) const = 0;
 	virtual bool load(XmlStreamReader*, bool preview) = 0;
 	void setPasted(bool);
-	bool pasted() const;
+	bool isPasted() const;
 
 	static AspectType clipboardAspectType(QString&);
 	static QString uniqueNameFor(const QString& name, const QStringList& names);

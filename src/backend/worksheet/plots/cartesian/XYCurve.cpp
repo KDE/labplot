@@ -40,6 +40,7 @@
 #include <KLocalizedString>
 
 #include <QGraphicsSceneMouseEvent>
+#include <QGraphicsView>
 #include <QMenu>
 #include <QPainter>
 #include <QScreen>
@@ -49,7 +50,7 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_spline.h>
 
-#include <kdefrontend/GuiTools.h>
+#include <frontend/GuiTools.h>
 
 using Dimension = CartesianCoordinateSystem::Dimension;
 
@@ -172,7 +173,7 @@ void XYCurve::init(bool loading) {
 	d->valuesPrefix = group.readEntry(QStringLiteral("ValuesPrefix"), QStringLiteral(""));
 	d->valuesSuffix = group.readEntry(QStringLiteral("ValuesSuffix"), QStringLiteral(""));
 	d->valuesFont = group.readEntry(QStringLiteral("ValuesFont"), QFont());
-	d->valuesFont.setPixelSize(Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
+	d->valuesFont.setPointSizeF(Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
 	d->valuesColor = group.readEntry(QStringLiteral("ValuesColor"), QColor(Qt::black));
 
 	// marginal plots (rug, histogram, boxplot)
@@ -329,7 +330,7 @@ bool XYCurve::hasData() const {
 	return (d->xColumn != nullptr || d->yColumn != nullptr);
 }
 
-bool XYCurve::usingColumn(const Column* column) const {
+bool XYCurve::usingColumn(const AbstractColumn* column, bool) const {
 	Q_D(const XYCurve);
 	return (d->xColumn == column || d->yColumn == column
 			|| (d->errorBar->xErrorType() == ErrorBar::ErrorType::Symmetric && d->errorBar->xPlusColumn() == column)
@@ -756,7 +757,7 @@ void XYCurvePrivate::calculateScenePoints() {
 		const int numberOfPoints = m_logicalPoints.size();
 		DEBUG(Q_FUNC_INFO << ", number of logical points = " << numberOfPoints)
 		// for (auto p : m_logicalPoints)
-		//	QDEBUG(Q_FUNC_INFO << ", logical points: " << QString::number(p.x(), 'g', 12) << " = " << QDateTime::fromMSecsSinceEpoch(p.x(), Qt::UTC))
+		//	QDEBUG(Q_FUNC_INFO << ", logical points: " << QString::number(p.x(), 'g', 12) << " = " << QDateTime::fromMSecsSinceEpoch(p.x(), QTimeZone::UTC))
 
 		if (numberOfPoints > 0) {
 			const auto dataRect{plot()->dataRect()};
@@ -815,7 +816,7 @@ void XYCurvePrivate::calculateScenePoints() {
 			m_pointVisible.resize(numberOfPoints);
 			q->cSystem->mapLogicalToScene(startIndex, endIndex, m_logicalPoints, m_scenePoints, m_pointVisible);
 			// for (auto p : m_logicalPoints)
-			//	QDEBUG(Q_FUNC_INFO << ", logical points: " << QString::number(p.x(), 'g', 12) << " = " << QDateTime::fromMSecsSinceEpoch(p.x(), Qt::UTC))
+			//	QDEBUG(Q_FUNC_INFO << ", logical points: " << QString::number(p.x(), 'g', 12) << " = " << QDateTime::fromMSecsSinceEpoch(p.x(), QTimeZone::UTC))
 		}
 	}
 	//} // (symbolsStyle != Symbol::Style::NoSymbols || valuesType != XYCurve::NoValues )
@@ -1081,7 +1082,7 @@ void XYCurvePrivate::updateLines(bool performanceOptimization) {
 	const QRectF pageRect = plot()->dataRect();
 	if (performanceOptimization) {
 		const double widthDatarectInch = Worksheet::convertFromSceneUnits(pageRect.width(), Worksheet::Unit::Inch);
-		const auto dpi = QApplication::primaryScreen()->physicalDotsPerInchX(); // Assumption: screens have all the same dpi
+		const auto dpi = (scene() && !scene()->views().isEmpty()) ? GuiTools::dpi(scene()->views().first()).first : GuiTools::dpi(nullptr).first;
 		// multiplying by 10 because it can be zoomed into the cached pixmap and then it looks ugly
 		numberOfPixelX = ceil(widthDatarectInch * dpi) * 10;
 	}
@@ -1501,7 +1502,7 @@ void XYCurvePrivate::updateLines(bool performanceOptimization) {
 		if (!m_lines.isEmpty()) {
 			linePath.moveTo(m_lines.constFirst().p1());
 			QPointF prevP2;
-			for (const auto& line : qAsConst(m_lines)) {
+			for (const auto& line : std::as_const(m_lines)) {
 				if (prevP2 != line.p1())
 					linePath.moveTo(line.p1());
 				linePath.lineTo(line.p2());
@@ -1539,21 +1540,21 @@ void XYCurvePrivate::updateDropLines() {
 	case XYCurve::DropLineType::NoDropLine:
 		break;
 	case XYCurve::DropLineType::X:
-		for (const auto& point : qAsConst(m_logicalPoints)) {
+		for (const auto& point : std::as_const(m_logicalPoints)) {
 			if (!m_pointVisible.at(i++))
 				continue;
 			dlines.append(QLineF(point, QPointF(point.x(), yMin)));
 		}
 		break;
 	case XYCurve::DropLineType::Y:
-		for (const auto& point : qAsConst(m_logicalPoints)) {
+		for (const auto& point : std::as_const(m_logicalPoints)) {
 			if (!m_pointVisible.at(i++))
 				continue;
 			dlines.append(QLineF(point, QPointF(xMin, point.y())));
 		}
 		break;
 	case XYCurve::DropLineType::XY:
-		for (const auto& point : qAsConst(m_logicalPoints)) {
+		for (const auto& point : std::as_const(m_logicalPoints)) {
 			if (!m_pointVisible.at(i++))
 				continue;
 			dlines.append(QLineF(point, QPointF(point.x(), yMin)));
@@ -1561,21 +1562,21 @@ void XYCurvePrivate::updateDropLines() {
 		}
 		break;
 	case XYCurve::DropLineType::XZeroBaseline:
-		for (const auto& point : qAsConst(m_logicalPoints)) {
+		for (const auto& point : std::as_const(m_logicalPoints)) {
 			if (!m_pointVisible.at(i++))
 				continue;
 			dlines.append(QLineF(point, QPointF(point.x(), 0)));
 		}
 		break;
 	case XYCurve::DropLineType::XMinBaseline:
-		for (const auto& point : qAsConst(m_logicalPoints)) {
+		for (const auto& point : std::as_const(m_logicalPoints)) {
 			if (!m_pointVisible.at(i++))
 				continue;
 			dlines.append(QLineF(point, QPointF(point.x(), yColumn->minimum())));
 		}
 		break;
 	case XYCurve::DropLineType::XMaxBaseline:
-		for (const auto& point : qAsConst(m_logicalPoints)) {
+		for (const auto& point : std::as_const(m_logicalPoints)) {
 			if (!m_pointVisible.at(i++))
 				continue;
 			dlines.append(QLineF(point, QPointF(point.x(), yColumn->maximum())));
@@ -1587,7 +1588,7 @@ void XYCurvePrivate::updateDropLines() {
 	dlines = q->cSystem->mapLogicalToScene(dlines);
 
 	// new painter path for the drop lines
-	for (const auto& line : qAsConst(dlines)) {
+	for (const auto& line : std::as_const(dlines)) {
 		dropLinePath.moveTo(line.p1());
 		dropLinePath.lineTo(line.p2());
 	}
@@ -1612,7 +1613,7 @@ void XYCurvePrivate::updateSymbols() {
 			path = trafo.map(path);
 		}
 		calculateScenePoints();
-		for (const auto& point : qAsConst(m_scenePoints)) {
+		for (const auto& point : std::as_const(m_scenePoints)) {
 			trafo.reset();
 			trafo.translate(point.x(), point.y());
 			symbolsPath.addPath(trafo.map(path));
@@ -1637,14 +1638,14 @@ void XYCurvePrivate::updateRug() {
 
 	// vertical rug
 	if (rugOrientation == WorksheetElement::Orientation::Vertical || rugOrientation == WorksheetElement::Orientation::Both) {
-		for (const auto& point : qAsConst(m_logicalPoints))
+		for (const auto& point : std::as_const(m_logicalPoints))
 			points << QPointF(xMin, point.y());
 
 		// map the points to scene coordinates
 		points = q->cSystem->mapLogicalToScene(points);
 
 		// path for the vertical rug lines
-		for (const auto& point : qAsConst(points)) {
+		for (const auto& point : std::as_const(points)) {
 			rugPath.moveTo(point.x() + rugOffset, point.y());
 			rugPath.lineTo(point.x() + rugOffset + rugLength, point.y());
 		}
@@ -1653,14 +1654,14 @@ void XYCurvePrivate::updateRug() {
 	// horizontal rug
 	if (rugOrientation == WorksheetElement::Orientation::Horizontal || rugOrientation == WorksheetElement::Orientation::Both) {
 		points.clear();
-		for (const auto& point : qAsConst(m_logicalPoints))
+		for (const auto& point : std::as_const(m_logicalPoints))
 			points << QPointF(point.x(), yMin);
 
 		// map the points to scene coordinates
 		points = q->cSystem->mapLogicalToScene(points);
 
 		// path for the horizontal rug lines
-		for (const auto& point : qAsConst(points)) {
+		for (const auto& point : std::as_const(points)) {
 			rugPath.moveTo(point.x(), point.y() - rugOffset);
 			rugPath.lineTo(point.x(), point.y() - rugOffset - rugLength);
 		}
@@ -1701,14 +1702,14 @@ void XYCurvePrivate::updateValues() {
 		int precision = valuesPrecision;
 		if (xColumn->columnMode() == AbstractColumn::ColumnMode::Integer || xColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
 			precision = 0;
-		for (const auto& point : qAsConst(m_logicalPoints)) {
+		for (const auto& point : std::as_const(m_logicalPoints)) {
 			if (!m_pointVisible.at(i++))
 				continue;
 			QString value;
 			if (xRangeFormat == RangeT::Format::Numeric)
 				value = numberLocale.toString(point.x(), valuesNumericFormat, precision);
 			else
-				value = QDateTime::fromMSecsSinceEpoch(point.x(), Qt::UTC).toString(valuesDateTimeFormat);
+				value = QDateTime::fromMSecsSinceEpoch(point.x(), QTimeZone::UTC).toString(valuesDateTimeFormat);
 			m_valueStrings << valuesPrefix + value + valuesSuffix;
 		}
 		break;
@@ -1718,14 +1719,14 @@ void XYCurvePrivate::updateValues() {
 		int precision = valuesPrecision;
 		if (yColumn->columnMode() == AbstractColumn::ColumnMode::Integer || yColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
 			precision = 0;
-		for (const auto& point : qAsConst(m_logicalPoints)) {
+		for (const auto& point : std::as_const(m_logicalPoints)) {
 			if (!m_pointVisible.at(i++))
 				continue;
 			QString value;
 			if (rangeFormat == RangeT::Format::Numeric)
 				value = numberLocale.toString(point.y(), valuesNumericFormat, precision);
 			else
-				value = QDateTime::fromMSecsSinceEpoch(point.y(), Qt::UTC).toString(valuesDateTimeFormat);
+				value = QDateTime::fromMSecsSinceEpoch(point.y(), QTimeZone::UTC).toString(valuesDateTimeFormat);
 			m_valueStrings << valuesPrefix + value + valuesSuffix;
 		}
 		break;
@@ -1743,7 +1744,7 @@ void XYCurvePrivate::updateValues() {
 		if (yColumn->columnMode() == AbstractColumn::ColumnMode::Integer || yColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
 			yPrecision = 0;
 
-		for (const auto& point : qAsConst(m_logicalPoints)) {
+		for (const auto& point : std::as_const(m_logicalPoints)) {
 			if (!m_pointVisible.at(i++))
 				continue;
 			QString value;
@@ -1752,12 +1753,12 @@ void XYCurvePrivate::updateValues() {
 			if (xRangeFormat == RangeT::Format::Numeric)
 				value += numberLocale.toString(point.x(), valuesNumericFormat, xPrecision);
 			else
-				value += QDateTime::fromMSecsSinceEpoch(point.x(), Qt::UTC).toString(valuesDateTimeFormat);
+				value += QDateTime::fromMSecsSinceEpoch(point.x(), QTimeZone::UTC).toString(valuesDateTimeFormat);
 
 			if (yRangeFormat == RangeT::Format::Numeric)
 				value += QLatin1Char(',') + numberLocale.toString(point.y(), valuesNumericFormat, yPrecision);
 			else
-				value += QLatin1Char(',') + QDateTime::fromMSecsSinceEpoch(point.y(), Qt::UTC).toString(valuesDateTimeFormat);
+				value += QLatin1Char(',') + QDateTime::fromMSecsSinceEpoch(point.y(), QTimeZone::UTC).toString(valuesDateTimeFormat);
 
 			if (valuesType == XYCurve::ValuesType::XYBracketed)
 				value += QLatin1Char(')');
@@ -1803,8 +1804,8 @@ void XYCurvePrivate::updateValues() {
 			case AbstractColumn::ColumnMode::DateTime:
 			case AbstractColumn::ColumnMode::Month:
 			case AbstractColumn::ColumnMode::Day:
-				if (xColumn->dateTimeAt(i) < QDateTime::fromMSecsSinceEpoch(xRange.start(), Qt::UTC)
-					|| xColumn->dateTimeAt(i) > QDateTime::fromMSecsSinceEpoch(xRange.end(), Qt::UTC))
+				if (xColumn->dateTimeAt(i) < QDateTime::fromMSecsSinceEpoch(xRange.start(), QTimeZone::UTC)
+					|| xColumn->dateTimeAt(i) > QDateTime::fromMSecsSinceEpoch(xRange.end(), QTimeZone::UTC))
 					continue;
 				break;
 			case AbstractColumn::ColumnMode::Text:
@@ -1840,7 +1841,7 @@ void XYCurvePrivate::updateValues() {
 	const int h{fm.ascent()};
 
 	i = 0;
-	for (const auto& string : qAsConst(m_valueStrings)) {
+	for (const auto& string : std::as_const(m_valueStrings)) {
 		// catch case with more label strings than scene points (should not happen even with custom column)
 		if (i >= m_scenePoints.size())
 			break;
@@ -1870,7 +1871,7 @@ void XYCurvePrivate::updateValues() {
 	QTransform trafo;
 	QPainterPath path;
 	i = 0;
-	for (const auto& point : qAsConst(m_valuePoints)) {
+	for (const auto& point : std::as_const(m_valuePoints)) {
 		path = QPainterPath();
 		path.addText(QPoint(0, 0), valuesFont, m_valueStrings.at(i++));
 
@@ -2284,6 +2285,9 @@ bool XYCurve::minMax(const AbstractColumn* column1,
 #ifdef PERFTRACE_AUTOSCALE
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 #endif
+	if (!column1)
+		return false;
+
 	// when property is increasing or decreasing there is a benefit in finding minimum and maximum
 	// for property == AbstractColumn::Properties::No it must be iterated over all values so it does not matter if this function or the below one is used
 	// if the property of the second column is not AbstractColumn::Properties::No means, that all values are valid and not masked
@@ -2629,7 +2633,7 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 
 	m_boundingRectangle = m_shape.boundingRect();
 
-	for (const auto& pol : qAsConst(m_fillPolygons))
+	for (const auto& pol : std::as_const(m_fillPolygons))
 		m_boundingRectangle = m_boundingRectangle.united(pol.boundingRect());
 
 	// TODO: when the selection is painted, line intersections are visible.
@@ -2647,7 +2651,7 @@ void XYCurvePrivate::draw(QPainter* painter) {
 
 	// draw filling
 	if (background->position() != Background::Position::No)
-		for (const auto& polygon : qAsConst(m_fillPolygons))
+		for (const auto& polygon : std::as_const(m_fillPolygons))
 			background->draw(painter, polygon);
 
 	// draw lines
@@ -2792,7 +2796,7 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 void XYCurvePrivate::drawValues(QPainter* painter) {
 	// QDEBUG(Q_FUNC_INFO << ", value strings = " << m_valueStrings)
 	int i = 0;
-	for (const auto& point : qAsConst(m_valuePoints)) {
+	for (const auto& point : std::as_const(m_valuePoints)) {
 		painter->translate(point);
 		if (valuesRotationAngle != 0.)
 			painter->rotate(-valuesRotationAngle);
@@ -3010,13 +3014,11 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 void XYCurve::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group(QStringLiteral("XYCurve"));
 
-	const auto* plot = dynamic_cast<const CartesianPlot*>(parentAspect());
-	if (!plot)
-		return;
+	Q_D(XYCurve);
+	const auto* plot = d->m_plot;
 	const int index = plot->curveChildIndex(this);
 	const QColor themeColor = plot->themeColorPalette(index);
 
-	Q_D(XYCurve);
 	d->suppressRecalc = true;
 
 	d->line->loadThemeConfig(group, themeColor);

@@ -24,7 +24,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
-#include "kdefrontend/GuiTools.h"
+#include "frontend/GuiTools.h"
 #include "tools/ImageTools.h"
 
 #include <QActionGroup>
@@ -440,7 +440,7 @@ bool BoxPlot::hasData() const {
 	return !d->dataColumns.isEmpty();
 }
 
-bool BoxPlot::usingColumn(const Column* column) const {
+bool BoxPlot::usingColumn(const AbstractColumn* column, bool) const {
 	Q_D(const BoxPlot);
 
 	for (auto* c : d->dataColumns) {
@@ -478,8 +478,24 @@ void BoxPlot::handleAspectUpdated(const QString& aspectPath, const AbstractAspec
 }
 
 QColor BoxPlot::color() const {
-	// Q_D(const BoxPlot);
-	return QColor();
+	return colorAt(0);
+}
+
+QColor BoxPlot::colorAt(int index) const {
+	Q_D(const BoxPlot);
+	if (index >= d->backgrounds.size())
+		return QColor();
+
+	const auto* background = d->backgrounds.at(index);
+	if (background->enabled())
+		return background->firstColor();
+	else {
+		const auto* borderLine = d->borderLines.at(index);
+		if (borderLine->style() != Qt::PenStyle::NoPen)
+			return borderLine->pen().color();
+		else
+			return QColor();
+	}
 }
 
 /* ============================ setter methods and undo commands ================= */
@@ -1161,7 +1177,7 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 	lines << QLineF(x, m_yMaxBox.at(index), x, m_whiskerMax.at(index)); // upper whisker
 	lines << QLineF(x, m_yMinBox.at(index), x, m_whiskerMin.at(index)); // lower whisker
 	lines = q->cSystem->mapLogicalToScene(lines);
-	for (const auto& line : qAsConst(lines)) {
+	for (const auto& line : std::as_const(lines)) {
 		m_whiskersPath[index].moveTo(line.p1());
 		m_whiskersPath[index].lineTo(line.p2());
 	}
@@ -1249,7 +1265,7 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 	lines << QLineF(m_xMaxBox.at(index), y, m_whiskerMax.at(index), y); // upper whisker
 	lines << QLineF(m_xMinBox.at(index), y, m_whiskerMin.at(index), y); // lower whisker
 	lines = q->cSystem->mapLogicalToScene(lines);
-	for (const auto& line : qAsConst(lines)) {
+	for (const auto& line : std::as_const(lines)) {
 		m_whiskersPath[index].moveTo(line.p1());
 		m_whiskersPath[index].lineTo(line.p2());
 	}
@@ -1306,7 +1322,7 @@ void BoxPlotPrivate::updateRug() {
 			points = q->cSystem->mapLogicalToScene(points);
 
 			// path for the vertical rug lines
-			for (const auto& point : qAsConst(points)) {
+			for (const auto& point : std::as_const(points)) {
 				rugPath.moveTo(point.x(), point.y() - rugOffset);
 				rugPath.lineTo(point.x(), point.y() - rugOffset - rugLength);
 			}
@@ -1320,7 +1336,7 @@ void BoxPlotPrivate::updateRug() {
 			points = q->cSystem->mapLogicalToScene(points);
 
 			// path for the horizontal rug lines
-			for (const auto& point : qAsConst(points)) {
+			for (const auto& point : std::as_const(points)) {
 				rugPath.moveTo(point.x() + rugOffset, point.y());
 				rugPath.lineTo(point.x() + rugOffset + rugLength, point.y());
 			}
@@ -1457,7 +1473,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 			continue;
 
 		QPainterPath boxPath;
-		for (const auto& line : qAsConst(m_boxRect.at(i))) {
+		for (const auto& line : std::as_const(m_boxRect.at(i))) {
 			boxPath.moveTo(line.p1());
 			boxPath.lineTo(line.p2());
 		}
@@ -1484,7 +1500,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 				path = trafo.map(path);
 			}
 
-			for (const auto& point : qAsConst(m_outlierPoints.at(i))) {
+			for (const auto& point : std::as_const(m_outlierPoints.at(i))) {
 				trafo.reset();
 				trafo.translate(point.x(), point.y());
 				symbolsPath.addPath(trafo.map(path));
@@ -1504,7 +1520,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 				path = trafo.map(path);
 			}
 
-			for (const auto& point : qAsConst(m_dataPoints.at(i))) {
+			for (const auto& point : std::as_const(m_dataPoints.at(i))) {
 				trafo.reset();
 				trafo.translate(point.x(), point.y());
 				symbolsPath.addPath(trafo.map(path));
@@ -1524,7 +1540,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 				path = trafo.map(path);
 			}
 
-			for (const auto& point : qAsConst(m_farOutPoints.at(i))) {
+			for (const auto& point : std::as_const(m_farOutPoints.at(i))) {
 				trafo.reset();
 				trafo.translate(point.x(), point.y());
 				symbolsPath.addPath(trafo.map(path));
@@ -1544,7 +1560,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 				path = trafo.map(path);
 			}
 
-			for (const auto& point : qAsConst(m_whiskerEndPoints.at(i))) {
+			for (const auto& point : std::as_const(m_whiskerEndPoints.at(i))) {
 				trafo.reset();
 				trafo.translate(point.x(), point.y());
 				symbolsPath.addPath(trafo.map(path));
@@ -1960,11 +1976,11 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	else
 		group = config.group(QStringLiteral("BoxPlot"));
 
-	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
+	Q_D(BoxPlot);
+	const auto* plot = d->m_plot;
 	int index = plot->curveChildIndex(this);
 	const QColor themeColor = plot->themeColorPalette(index);
 
-	Q_D(BoxPlot);
 	d->suppressRecalc = true;
 
 	for (int i = 0; i < d->dataColumns.count(); ++i) {

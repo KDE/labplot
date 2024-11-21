@@ -22,6 +22,8 @@ private Q_SLOTS:
 	void removeColumnFromCurve();
 	void removeCurveRenameAutomaticAdd();
 	void saveLoad();
+	void importData();
+	void importDataComplexDependency();
 };
 
 #endif // XYFUNCTIONCURVETEST_H

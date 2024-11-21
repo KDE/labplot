@@ -100,8 +100,12 @@ bool XYFourierTransformCurvePrivate::recalculateSpecific(const AbstractColumn* t
 	// copy all valid data point for the transform to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
-	const double xmin = transformData.xRange.first();
-	const double xmax = transformData.xRange.last();
+	double xmin = transformData.xRange.first();
+	double xmax = transformData.xRange.last();
+	if (transformData.autoRange) {
+		xmin = q->xDataColumn()->minimum();
+		xmax = q->xDataColumn()->maximum();
+	}
 
 	int rowCount = std::min(tmpXDataColumn->rowCount(), tmpYDataColumn->rowCount());
 	for (int row = 0; row < rowCount; ++row) {

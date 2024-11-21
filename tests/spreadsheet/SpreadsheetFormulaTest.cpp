@@ -11,7 +11,7 @@
 #include "SpreadsheetFormulaTest.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "commonfrontend/spreadsheet/SpreadsheetView.h"
+#include "frontend/spreadsheet/SpreadsheetView.h"
 
 #include <QClipboard>
 

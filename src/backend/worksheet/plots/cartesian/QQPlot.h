@@ -59,7 +59,7 @@ public:
 	double minimum(CartesianCoordinateSystem::Dimension) const override;
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	bool hasData() const override;
-	bool usingColumn(const Column*) const override;
+	bool usingColumn(const AbstractColumn*, bool indirect) const override;
 	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) override;
 	QColor color() const override;
 
@@ -83,7 +83,6 @@ Q_SIGNALS:
 	void linesUpdated(const QQPlot*, const QVector<QLineF>&);
 
 	// General-Tab
-	void dataChanged(); // emitted when the actual curve data to be plotted was changed to re-adjust the plot
 	void dataDataChanged();
 	void dataColumnChanged(const AbstractColumn*);
 	void distributionChanged(nsl_sf_stats_distribution);

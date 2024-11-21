@@ -1,11 +1,9 @@
 /*
-	File                 : AbstractAspect.h
+	File                 : AspectFactory.h
 	Project              : LabPlot
-	Description          : Base class for all objects in a Project.
+	Description          : Factory to create an object instance from its type
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
-	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -25,9 +23,11 @@
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/LollipopPlot.h"
+#include "backend/worksheet/plots/cartesian/ProcessBehaviorChart.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/cartesian/ReferenceRange.h"
+#include "backend/worksheet/plots/cartesian/RunChart.h"
 #include "backend/worksheet/plots/cartesian/XYConvolutionCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCorrelationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYDataReductionCurve.h"
@@ -123,6 +123,12 @@ public:
 			return new BarPlot(QString());
 		else if (type == AspectType::LollipopPlot)
 			return new LollipopPlot(QString());
+
+		/* continuous improvement plots */
+		else if (type == AspectType::ProcessBehaviorChart)
+			return new ProcessBehaviorChart(QString());
+		else if (type == AspectType::RunChart)
+			return new RunChart(QString());
 
 		/* data containers */
 		else if (type == AspectType::Spreadsheet)

@@ -16,11 +16,11 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/spreadsheet/SpreadsheetModel.h"
 #include "backend/spreadsheet/StatisticsSpreadsheet.h"
-#include "commonfrontend/ProjectExplorer.h"
-#include "commonfrontend/spreadsheet/SpreadsheetView.h"
-#include "kdefrontend/dockwidgets/SpreadsheetDock.h"
-#include "kdefrontend/spreadsheet/FlattenColumnsDialog.h"
-#include "kdefrontend/spreadsheet/SearchReplaceWidget.h"
+#include "frontend/ProjectExplorer.h"
+#include "frontend/dockwidgets/SpreadsheetDock.h"
+#include "frontend/spreadsheet/FlattenColumnsDialog.h"
+#include "frontend/spreadsheet/SearchReplaceWidget.h"
+#include "frontend/spreadsheet/SpreadsheetView.h"
 
 #ifdef HAVE_VECTOR_BLF
 #include <Vector/BLF.h>

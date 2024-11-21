@@ -21,6 +21,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
+#include "frontend/GuiTools.h"
 #include "tools/ImageTools.h"
 
 #include <QActionGroup>
@@ -32,8 +33,6 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
-
-#include <kdefrontend/GuiTools.h>
 
 /**
  * \class BarPlot
@@ -202,7 +201,7 @@ bool BarPlot::hasData() const {
 	return !d->dataColumns.isEmpty();
 }
 
-bool BarPlot::usingColumn(const Column* column) const {
+bool BarPlot::usingColumn(const AbstractColumn* column, bool) const {
 	Q_D(const BarPlot);
 
 	if (d->xColumn == column)
@@ -243,12 +242,24 @@ void BarPlot::handleAspectUpdated(const QString& aspectPath, const AbstractAspec
 }
 
 QColor BarPlot::color() const {
+	return colorAt(0);
+}
+
+QColor BarPlot::colorAt(int index) const {
 	Q_D(const BarPlot);
-	if (d->backgrounds.size() > 0 && d->backgrounds.at(0)->enabled())
-		return d->backgrounds.at(0)->firstColor();
-	else if (d->borderLines.size() > 0 && d->borderLines.at(0)->style() != Qt::PenStyle::NoPen)
-		return d->borderLines.at(0)->pen().color();
-	return QColor();
+	if (index >= d->backgrounds.size())
+		return QColor();
+
+	const auto* background = d->backgrounds.at(index);
+	if (background->enabled())
+		return background->firstColor();
+	else {
+		const auto* borderLine = d->borderLines.at(index);
+		if (borderLine->style() != Qt::PenStyle::NoPen)
+			return borderLine->pen().color();
+		else
+			return QColor();
+	}
 }
 
 // values
@@ -548,7 +559,7 @@ void BarPlotPrivate::recalc() {
 	// values in the provided datasets
 	int barGroupsCount = 0;
 	int columnIndex = 0;
-	for (auto* column : qAsConst(dataColumns)) {
+	for (auto* column : std::as_const(dataColumns)) {
 		if (!column)
 			continue;
 		int size = static_cast<const Column*>(column)->statistics().size;
@@ -1531,11 +1542,11 @@ void BarPlot::loadThemeConfig(const KConfig& config) {
 	else
 		group = config.group(QStringLiteral("BarPlot"));
 
-	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
-	int index = plot->curveChildIndex(this);
-	const QColor themeColor = plot->themeColorPalette(index);
-
 	Q_D(BarPlot);
+	const auto* plot = d->m_plot;
+	int index = plot->curveChildIndex(this);
+	const QColor themeColor = d->m_plot->themeColorPalette(index);
+
 	d->suppressRecalc = true;
 
 	for (int i = 0; i < d->dataColumns.count(); ++i) {

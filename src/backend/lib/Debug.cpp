@@ -4,14 +4,23 @@
 	Description          : Debug utilities
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2024 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-FileCopyrightText: 2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "Debug.h"
 
 namespace {
+bool _infoTraceEnabled = false;
 bool _debugTraceEnabled = false;
 bool _perfTraceEnabled = false;
+}
+
+bool infoTraceEnabled() {
+	return _infoTraceEnabled;
+}
+void enableInfoTrace(bool enabled) {
+	_infoTraceEnabled = enabled;
 }
 
 bool debugTraceEnabled() {
@@ -24,7 +33,6 @@ void enableDebugTrace(bool enabled) {
 bool perfTraceEnabled() {
 	return _perfTraceEnabled;
 }
-
 void enablePerfTrace(bool enabled) {
 	_perfTraceEnabled = enabled;
 }

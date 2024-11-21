@@ -20,8 +20,8 @@
 #include "backend/lib/trace.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
-#include "commonfrontend/datapicker/DatapickerImageView.h"
-#include "kdefrontend/worksheet/ExportWorksheetDialog.h"
+#include "frontend/datapicker/DatapickerImageView.h"
+#include "frontend/worksheet/ExportWorksheetDialog.h"
 
 #include <QBuffer>
 #include <QDir>
@@ -36,6 +36,8 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
+
+#include <frontend/GuiTools.h>
 
 /**
  * \class DatapickerImage
@@ -516,8 +518,9 @@ bool DatapickerImagePrivate::uploadImage() {
 		discretize();
 
 		// resize the screen
-		double w = Worksheet::convertToSceneUnits(q->originalPlotImage.width(), Worksheet::Unit::Inch) / QApplication::primaryScreen()->physicalDotsPerInchX();
-		double h = Worksheet::convertToSceneUnits(q->originalPlotImage.height(), Worksheet::Unit::Inch) / QApplication::primaryScreen()->physicalDotsPerInchY();
+		const auto dpi = (m_scene && !m_scene->views().isEmpty()) ? GuiTools::dpi(m_scene->views().first()) : GuiTools::dpi(nullptr);
+		double w = Worksheet::convertToSceneUnits(q->originalPlotImage.width(), Worksheet::Unit::Inch) / dpi.first;
+		double h = Worksheet::convertToSceneUnits(q->originalPlotImage.height(), Worksheet::Unit::Inch) / dpi.second;
 		m_scene->setSceneRect(0, 0, w, h);
 		q->isLoaded = true;
 	}
