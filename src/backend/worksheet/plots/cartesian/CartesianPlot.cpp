@@ -2211,14 +2211,13 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	} else {
 		// hover events for plots are handled here in CartesianPlot, for other elements in WorksheetElement.
 		// in case a non-plot element like axis, etc. was hovered, unhover the plots
-		connect(elem, &WorksheetElement::hoveredChanged, [=] (bool on) {
+		connect(elem, &WorksheetElement::hoveredChanged, [=](bool on) {
 			if (on) {
 				for (auto* plot : children<Plot>())
 					plot->setHover(false);
 			}
 		});
 	}
-
 
 	const auto* curve = dynamic_cast<const XYCurve*>(child);
 	const auto* hist = dynamic_cast<const Histogram*>(child);
