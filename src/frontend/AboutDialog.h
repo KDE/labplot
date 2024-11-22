@@ -11,11 +11,25 @@
 #ifndef ABOUTDIALOG_H
 #define ABOUTDIALOG_H
 
-#include <KAboutApplicationDialog>
+#include <KAboutData>
 
-class AboutDialog: public KAboutApplicationDialog {
+#include <QDialog>
+
+class AboutDialog: public QDialog {
 public:
 	explicit AboutDialog(const KAboutData&, QWidget*);
+
+private:
+	void init();
+	QWidget* createTitleWidget(const QIcon&, const QString &displayName, const QString &version, QWidget *parent);
+	QWidget* createAboutWidget(const QString &shortDescription,
+                                                        const QString &otherText,
+                                                        const QString &copyrightStatement,
+                                                        const QString &homepage,
+                                                        const QList<KAboutLicense> &licenses,
+                                                        QWidget *parent);
+
+	KAboutData aboutData;
 };
 
 #endif

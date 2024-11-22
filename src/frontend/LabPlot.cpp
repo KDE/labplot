@@ -117,6 +117,7 @@ int main(int argc, char* argv[]) {
 						QString());
 	aboutData.setOrganizationDomain(QByteArray("kde.org"));
 	aboutData.setDesktopFileName(QStringLiteral("org.kde.labplot"));
+	aboutData.setProgramLogo(QIcon::fromTheme(QStringLiteral("labplot")));
 	KAboutData::setApplicationData(aboutData);
 
 	KCrash::initialize();
