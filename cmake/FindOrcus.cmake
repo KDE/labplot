@@ -50,11 +50,14 @@ else ()
         PATH_SUFFIXES ixion
     )
 
+    set(LIBORCUS_VERSION ${PC_ORCUS_VERSION})
+    set(LIBIXION_VERSION ${PC_IXION_VERSION})
+
     include (FindPackageHandleStandardArgs)
-    find_package_handle_standard_args (Orcus DEFAULT_MSG Orcus_LIBRARIES Orcus_INCLUDE_DIR Ixion_INCLUDE_DIR)
+    find_package_handle_standard_args (Orcus DEFAULT_MSG Orcus_LIBRARIES Orcus_INCLUDE_DIR Ixion_INCLUDE_DIR LIBORCUS_VERSION)
 endif ()
 
-mark_as_advanced(Orcus_INCLUDE_DIR Ixion_INCLUDE_DIR Orcus_LIBRARY Orcus_parser_LIBRARY Orcus_spreadsheet_LIBRARY Orcus_LIBRARIES Ixion_LIBRARY)
+mark_as_advanced(Orcus_INCLUDE_DIR Ixion_INCLUDE_DIR Orcus_LIBRARY Orcus_parser_LIBRARY Orcus_spreadsheet_LIBRARY Orcus_LIBRARIES Ixion_LIBRARY LIBORCUS_VERSION LIBIXION_VERSION)
 
 if (Orcus_FOUND)
    add_library(Orcus UNKNOWN IMPORTED)

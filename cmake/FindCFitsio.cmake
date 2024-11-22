@@ -14,7 +14,7 @@ if (CFITSIO_INCLUDE_DIR AND CFITSIO_LIBRARIES)
 
     # in cache already
     set(CFITSIO_FOUND TRUE)
-    message(STATUS "Found CFITSIO: ${CFITSIO_LIBRARIES}")
+    message(STATUS "Found CFITSIO ${CFITSIO_VERSION}: ${CFITSIO_LIBRARIES}")
 
 
 else (CFITSIO_INCLUDE_DIR AND CFITSIO_LIBRARIES)
@@ -23,7 +23,7 @@ else (CFITSIO_INCLUDE_DIR AND CFITSIO_LIBRARIES)
 	    find_package(PkgConfig QUIET)
         if (PKG_CONFIG_FOUND)
 		pkg_check_modules(PC_CFITSIO cfitsio QUIET)
-        endif (PKG_CONFIG_FOUND)
+        endif ()
     endif (NOT WIN32)
 
     find_path(CFITSIO_INCLUDE_DIR fitsio.h
@@ -45,9 +45,11 @@ else (CFITSIO_INCLUDE_DIR AND CFITSIO_LIBRARIES)
         set(CFITSIO_FOUND FALSE)
     endif(CFITSIO_INCLUDE_DIR AND CFITSIO_LIBRARIES)
 
+    set(CFITSIO_VERSION ${PC_CFITSIO_VERSION})
+
     if (CFITSIO_FOUND)
         if (NOT CFitsio_FIND_QUIETLY)
-		message(STATUS "Found CFITSIO: ${CFITSIO_LIBRARIES} (found version \"${PC_CFITSIO_VERSION}\")")
+		message(STATUS "Found CFITSIO: ${CFITSIO_LIBRARIES} (version \"${CFITSIO_VERSION}\")")
         endif (NOT CFitsio_FIND_QUIETLY)
     else ()
         if (CFitsio_FIND_REQUIRED)
@@ -56,6 +58,7 @@ else (CFITSIO_INCLUDE_DIR AND CFITSIO_LIBRARIES)
         set(CFITSIO_LIBRARIES "")
     endif ()
 
-    mark_as_advanced(CFITSIO_INCLUDE_DIR CFITSIO_LIBRARIES)
+
+    mark_as_advanced(CFITSIO_INCLUDE_DIR CFITSIO_LIBRARIES CFITSIO_VERSION)
 
 endif (CFITSIO_INCLUDE_DIR AND CFITSIO_LIBRARIES)
