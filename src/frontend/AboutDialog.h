@@ -12,15 +12,18 @@
 #define ABOUTDIALOG_H
 
 #include <KAboutData>
+#include <KAboutApplicationDialog>
 
 #include <QDialog>
 
-class AboutDialog: public QDialog {
+//class AboutDialog: public QDialog {
+class AboutDialog: public KAboutApplicationDialog {
 public:
 	explicit AboutDialog(const KAboutData&, QWidget*);
 
 private:
-	void init();
+// used when deriving from QDialog
+/*	void init();
 	QWidget* createTitleWidget(const QIcon&, const QString &displayName, const QString &version, QWidget *parent);
 	QWidget* createAboutWidget(const QString &shortDescription,
                                                         const QString &otherText,
@@ -31,6 +34,7 @@ private:
 	QWidget* createComponentWidget(const QList<KAboutComponent>&, QWidget *parent);
 
 	KAboutData aboutData;
+*/
 };
 
 #endif

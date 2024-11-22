@@ -26,15 +26,22 @@
 
 	\ingroup kdefrontend
  */
-AboutDialog::AboutDialog(const KAboutData& aboutData, QWidget* parent) : QDialog(parent), aboutData(aboutData) {
+//AboutDialog::AboutDialog(const KAboutData& aboutData, QWidget* parent) : QDialog(parent), aboutData(aboutData) {
+AboutDialog::AboutDialog(const KAboutData& aboutData, QWidget* parent) : KAboutApplicationDialog(aboutData, parent) {
 
-	// test
-	//QLabel* customLabel = new QLabel(i18n("Additional custom information here."), this);
-        //layout()->addWidget(customLabel);
+	// const auto homepage = aboutData.homepage();
+	const auto homepage = QStringLiteral("https://labplot.kde.org");
+	if (!homepage.isEmpty()) {
+		auto text = QStringLiteral("<a href=\"%1\">%1</a>").arg(homepage);
+		auto* customLabel = new QLabel(text, this);
+		layout()->addWidget(customLabel);
+	}
 
-	init();
+	// when deriving from QDialog
+	//init();
 }
 
+/*
 // see KAboutApplicationDialogPrivate::init()
 void AboutDialog::init() {
 	setWindowTitle(i18nc("@title:window", "About %1", aboutData.displayName()));
@@ -150,20 +157,20 @@ QWidget* AboutDialog::createAboutWidget(const QString &shortDescription,
 
 	//TODO: KLicenseDialog
 	Q_UNUSED(licenses)
-	/*const int licenseCount = licenses.count();
-	for (int i = 0; i < licenseCount; ++i) {
-		const KAboutLicense &license = licenses.at(i);
-		QLabel *showLicenseLabel = new QLabel;
-		showLicenseLabel->setText(QStringLiteral("<a href=\"%1\">%2</a>").arg(
-					QString::number(i), i18n("License: %1", license.name(KAboutLicense::FullName))));
-		showLicenseLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
-		QObject::connect(showLicenseLabel, &QLabel::linkActivated, parent,
-				[license, parent]() {
-				auto *dialog = new KLicenseDialog(license, parent);
-				dialog->show();
-				});
-		aboutLayout->addWidget(showLicenseLabel);
-	} */
+//	const int licenseCount = licenses.count();
+//	for (int i = 0; i < licenseCount; ++i) {
+//		const KAboutLicense &license = licenses.at(i);
+//		QLabel *showLicenseLabel = new QLabel;
+//		showLicenseLabel->setText(QStringLiteral("<a href=\"%1\">%2</a>").arg(
+//					QString::number(i), i18n("License: %1", license.name(KAboutLicense::FullName))));
+//		showLicenseLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
+//		QObject::connect(showLicenseLabel, &QLabel::linkActivated, parent,
+//				[license, parent]() {
+//				auto *dialog = new KLicenseDialog(license, parent);
+//				dialog->show();
+//				});
+//		aboutLayout->addWidget(showLicenseLabel);
+//	}
 
 	aboutLayout->addStretch();
 	return aboutWidget;
@@ -193,4 +200,4 @@ QWidget* AboutDialog::createComponentWidget(const QList<KAboutComponent> &compon
 	//    componentView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	//    componentLayout->addWidget(componentView);
     return componentWidget;
-}
+}*/
