@@ -31,11 +31,17 @@ AboutDialog::AboutDialog(const KAboutData& aboutData, QWidget* parent) : KAboutA
 
 	// const auto homepage = aboutData.homepage();
 	const auto homepage = QStringLiteral("https://labplot.kde.org");
-	if (!homepage.isEmpty()) {
-		auto text = QStringLiteral("<a href=\"%1\">%1</a>").arg(homepage);
-		auto* customLabel = new QLabel(text, this);
-		layout()->addWidget(customLabel);
-	}
+	const auto social = QStringLiteral("https://floss.social/@LabPlot");
+	const auto tube = QStringLiteral("https://tube.kockatoo.org/c/labplot");
+	const auto twitter = QStringLiteral("https://twitter.com/LabPlot");
+	
+	auto text = QStringLiteral("<a href=\"%1\">%1</a>").arg(homepage)
+			+ QStringLiteral(", ") + QStringLiteral("<a href=\"%1\">%1</a>").arg(social)
+			+ QStringLiteral(", ") + QStringLiteral("<a href=\"%1\">%1</a>").arg(tube)
+			+ QStringLiteral(", ") + QStringLiteral("<a href=\"%1\">%1</a>").arg(twitter);
+	auto* linkLabel = new QLabel(text, this);
+	linkLabel->setWordWrap(true);
+	layout()->addWidget(linkLabel);
 
 	// when deriving from QDialog
 	//init();
