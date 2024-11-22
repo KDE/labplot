@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : main function
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2008-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-FileCopyrightText: 2008-2016 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -118,14 +118,13 @@ int main(int argc, char* argv[]) {
 	aboutData.setOrganizationDomain(QByteArray("kde.org"));
 	aboutData.setDesktopFileName(QStringLiteral("org.kde.labplot"));
 	KAboutData::setApplicationData(aboutData);
+
 	KCrash::initialize();
 
 	const auto& group = Settings::settingsGeneral();
 	enableInfoTrace(group.readEntry<bool>(QLatin1String("InfoTrace"), false));
 	enableDebugTrace(group.readEntry<bool>(QLatin1String("DebugTrace"), false));
 	enablePerfTrace(group.readEntry<bool>(QLatin1String("PerfTrace"), false));
-
-	// TODO: add library information (GSL version, etc.) in about dialog
 
 	QCommandLineParser parser;
 
@@ -141,7 +140,7 @@ int main(int argc, char* argv[]) {
 	parser.process(app);
 	aboutData.processCommandLine(&parser);
 
-	const QStringList args = parser.positionalArguments();
+	const auto args = parser.positionalArguments();
 	QString filename;
 	if (args.count() > 0)
 		filename = args[0];

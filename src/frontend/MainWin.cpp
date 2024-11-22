@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Main window of the application
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2008-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-FileCopyrightText: 2009-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -101,6 +101,8 @@
 // #include <QQmlApplicationEngine>
 // #include <QQmlContext>
 
+#include <KAboutData>
+#include <KAboutApplicationDialog>
 #include <KActionCollection>
 #include <KActionMenu>
 #include <KColorScheme>
@@ -379,7 +381,7 @@ void MainWin::initGUI(const QString& fileName) {
 	}
 
 	// read the settings of MainWin
-	const KConfigGroup& groupMainWin = Settings::group(QStringLiteral("MainWin"));
+	const auto& groupMainWin = Settings::group(QStringLiteral("MainWin"));
 
 	// show memory info
 	m_memoryInfoAction->setEnabled(statusBar()->isEnabled()); // disable/enable menu with statusbar
@@ -389,20 +391,36 @@ void MainWin::initGUI(const QString& fileName) {
 	if (memoryInfoShown)
 		toggleMemoryInfo();
 
+	// custom help menu with custom actions
+	//	auto* helpMenu = new KHelpMenu(this, i18n("Help me"), this);
+	//	menuBar()->addMenu(helpMenu->menu());
+	//	connect(helpMenu, &KHelpMenu::showAboutApplication, this, &MainWin::customAboutDialog);
+
+	// custom about dialog
+        auto* aboutAction = actionCollection()->action(QStringLiteral("help_about_app"));
+        if (aboutAction) {
+		// disconnect default slot
+		disconnect(aboutAction, nullptr, nullptr, nullptr);
+		connect(aboutAction, &QAction::triggered, this, &MainWin::customAboutDialog);
+        }
+
 	// restore the geometry
 	if (groupMainWin.hasKey(QStringLiteral("geometry")))
 		restoreGeometry(groupMainWin.readEntry("geometry", QByteArray()));
 
 	m_lastOpenFileFilter = groupMainWin.readEntry(QLatin1String("lastOpenFileFilter"), QString());
 
-	// cutom about dialog
-	// KHelpMenu *helpMenu = new KHelpMenu(this);
-	auto* menu = parent()->helpMenu();
-	connect(menu, &KHelpMenu::showAboutApplication, this, &MainWin::customAboutDialog);
 }
 
 void MainWin::customAboutDialog() {
 	DEBUG(Q_FUNC_INFO)
+
+	// standard dialog
+        KAboutApplicationDialog aboutDialog(KAboutData::applicationData(), this);
+        aboutDialog.exec();
+
+	// TODO: add library information (GSL version, etc.) in about dialog
+
 }
 
 /**
