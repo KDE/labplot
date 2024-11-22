@@ -33,6 +33,7 @@
 #include "backend/datasources/MQTTClient.h"
 #endif
 
+#include "frontend/AboutDialog.h"
 #include "frontend/GuiObserver.h"
 #include "frontend/HistoryDialog.h"
 #include "frontend/ProjectExplorer.h"
@@ -102,7 +103,6 @@
 // #include <QQmlContext>
 
 #include <KAboutData>
-#include <KAboutApplicationDialog>
 #include <KActionCollection>
 #include <KActionMenu>
 #include <KColorScheme>
@@ -415,12 +415,8 @@ void MainWin::initGUI(const QString& fileName) {
 void MainWin::customAboutDialog() {
 	DEBUG(Q_FUNC_INFO)
 
-	// standard dialog
-        KAboutApplicationDialog aboutDialog(KAboutData::applicationData(), this);
+        AboutDialog aboutDialog(KAboutData::applicationData(), this);
         aboutDialog.exec();
-
-	// TODO: add library information (GSL version, etc.) in about dialog
-
 }
 
 /**
