@@ -28,6 +28,7 @@ private:
                                                         const QString &homepage,
                                                         const QList<KAboutLicense> &licenses,
                                                         QWidget *parent);
+	QWidget* createComponentWidget(const QList<KAboutComponent>&, QWidget *parent);
 
 	KAboutData aboutData;
 };

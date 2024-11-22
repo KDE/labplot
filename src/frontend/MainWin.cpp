@@ -102,8 +102,7 @@
 // #include <QQmlApplicationEngine>
 // #include <QQmlContext>
 
-#include <KAboutData>
-//#include <KAboutApplicationDialog>
+#include <KAboutApplicationDialog>
 #include <KActionCollection>
 #include <KActionMenu>
 #include <KColorScheme>
@@ -414,11 +413,11 @@ void MainWin::initGUI(const QString& fileName) {
 }
 
 void MainWin::customAboutDialog() {
-	DEBUG(Q_FUNC_INFO)
+	// default dialog
+        KAboutApplicationDialog aboutDialog(KAboutData::applicationData(), this);
+	// custom about dialog (not used)
+        // AboutDialog aboutDialog(KAboutData::applicationData(), this);
 
-        AboutDialog aboutDialog(KAboutData::applicationData(), this);
-	// default about dialog
-        //KAboutApplicationDialog aboutDialog(KAboutData::applicationData(), this);
         aboutDialog.exec();
 }
 

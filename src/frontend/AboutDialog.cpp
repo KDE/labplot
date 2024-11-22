@@ -10,18 +10,19 @@
 
 #include "AboutDialog.h"
 
-#include <klocalizedstring.h>
-
+#include <KLocalizedString>
 #include <KTitleWidget>
+#include <kxmlgui_version.h>
 
 #include <QDialogButtonBox>
+#include <QGuiApplication>
 #include <QLabel>
 #include <QLayout>
 #include <QTabWidget>
 
 /*!
 	\class AboutDialog
-	\brief Custom about dialog
+	\brief Custom about dialog (not used at the moment)
 
 	\ingroup kdefrontend
  */
@@ -32,9 +33,6 @@ AboutDialog::AboutDialog(const KAboutData& aboutData, QWidget* parent) : QDialog
         //layout()->addWidget(customLabel);
 
 	init();
-
-	// TODO: add library information (GSL version, etc.) in about dialog
-	// TODO: custom stuff
 }
 
 // see KAboutApplicationDialogPrivate::init()
@@ -68,6 +66,35 @@ void AboutDialog::init() {
 			this);
 	tabWidget->addTab(aboutWidget, i18nc("@title:tab", "About"));
 
+	// Components page
+	auto* componentWidget = createComponentWidget(aboutData.components(), this);
+        const QString componentPageTitle = i18nc("@title:tab", "Components");
+        tabWidget->addTab( componentWidget, componentPageTitle);
+
+	// And here we go, authors page...
+	const int authorCount = aboutData.authors().count();
+	if (authorCount) {
+		//TODO
+//		auto* authorWidget = createAuthorsWidget(aboutData.authors(), aboutData.customAuthorTextEnabled(), aboutData.customAuthorRichText(), aboutData.bugAddress(),
+//					this);
+//		const QString authorPageTitle = i18ncp("@title:tab", "Author", "Authors", authorCount);
+//		tabWidget->addTab(authorWidget, authorPageTitle);
+	}
+
+	//
+	// And credits page...
+	if (!aboutData.credits().isEmpty()) {
+		//TODO
+		//auto* creditWidget = createCreditWidget(aboutData.credits(), this);
+		//tabWidget->addTab(creditWidget, i18nc("@title:tab", "Thanks To"));
+	}
+	// Finally, the optional translators page...
+	if (!aboutData.translators().isEmpty()) {
+		//TODO
+		//auto* translatorWidget = createTranslatorsWidget(aboutData.translators(), this);
+		//tabWidget->addTab(translatorWidget, i18nc("@title:tab", "Translation"));
+	}
+
 	auto* buttonBox = new QDialogButtonBox(this);
 	buttonBox->setStandardButtons(QDialogButtonBox::Close);
 	QObject::connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
@@ -79,6 +106,7 @@ void AboutDialog::init() {
 	layout->addWidget(buttonBox);
 }
 
+// see KAbstractAboutDialogPrivate::createTitleWidget()
 QWidget* AboutDialog::createTitleWidget(const QIcon &icon, const QString &displayName, const QString &version, QWidget *parent) {
 	auto* titleWidget = new KTitleWidget(parent);
 	titleWidget->setIconSize(QSize(48, 48));
@@ -90,14 +118,15 @@ QWidget* AboutDialog::createTitleWidget(const QIcon &icon, const QString &displa
 	return titleWidget;
 }
 
+// see KAbstractAboutDialogPrivate::createAboutWidget()
 QWidget* AboutDialog::createAboutWidget(const QString &shortDescription,
                                                         const QString &otherText,
                                                         const QString &copyrightStatement,
                                                         const QString &homepage,
                                                         const QList<KAboutLicense> &licenses,
                                                         QWidget *parent) {
-	QWidget *aboutWidget = new QWidget(parent);
-	QVBoxLayout *aboutLayout = new QVBoxLayout(aboutWidget);
+	auto* aboutWidget = new QWidget(parent);
+	auto* aboutLayout = new QVBoxLayout(aboutWidget);
 	QString aboutPageText = shortDescription + QLatin1Char('\n');
 	if (!otherText.isEmpty()) {
 		aboutPageText += QLatin1Char('\n') + otherText + QLatin1Char('\n');
@@ -110,7 +139,7 @@ QWidget* AboutDialog::createAboutWidget(const QString &shortDescription,
 				homepage) + QLatin1Char('\n');
 	}
 	aboutPageText = aboutPageText.trimmed();
-	QLabel *aboutLabel = new QLabel;
+	auto* aboutLabel = new QLabel;
 	aboutLabel->setWordWrap(true);
 	aboutLabel->setOpenExternalLinks(true);
 	aboutLabel->setText(aboutPageText.replace(
@@ -118,6 +147,9 @@ QWidget* AboutDialog::createAboutWidget(const QString &shortDescription,
 	aboutLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
 	aboutLayout->addStretch();
 	aboutLayout->addWidget(aboutLabel);
+
+	//TODO: KLicenseDialog
+	Q_UNUSED(licenses)
 	/*const int licenseCount = licenses.count();
 	for (int i = 0; i < licenseCount; ++i) {
 		const KAboutLicense &license = licenses.at(i);
@@ -135,4 +167,30 @@ QWidget* AboutDialog::createAboutWidget(const QString &shortDescription,
 
 	aboutLayout->addStretch();
 	return aboutWidget;
+}
+
+// see KAbstractAboutDialogPrivate::createComponentWidget()
+QWidget* AboutDialog::createComponentWidget(const QList<KAboutComponent> &components, QWidget *parent) {
+	auto* componentWidget = new QWidget(parent);
+	auto* componentLayout = new QVBoxLayout(componentWidget);
+	componentLayout->setContentsMargins(0, 0, 0, 0);
+	auto allComponents = components;
+	allComponents.prepend(KAboutComponent(i18n("The <em>%1</em> windowing system", QGuiApplication::platformName())));
+	allComponents.prepend(KAboutComponent(i18n("Qt"), QString(),
+			i18n("%1 (built against %2)", QString::fromLocal8Bit(qVersion()), QStringLiteral(QT_VERSION_STR)),
+			QStringLiteral("https://www.qt.io/")));
+	allComponents.prepend(KAboutComponent(i18n("KDE Frameworks"),
+                                          QString(),
+                                          QStringLiteral(KXMLGUI_VERSION_STRING),
+                                          QStringLiteral("https://develop.kde.org/products/frameworks/")));
+
+	//TODO
+	//    auto* componentModel = new KDEPrivate::KAboutApplicationComponentModel(allComponents, componentWidget);
+	//    auto* componentView = new KDEPrivate::KAboutApplicationListView(componentWidget);
+	//    auto* componentDelegate = new KDEPrivate::KAboutApplicationComponentListDelegate(componentView, componentView);
+	//    componentView->setModel(componentModel);
+	//    componentView->setItemDelegate(componentDelegate);
+	//    componentView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	//    componentLayout->addWidget(componentView);
+    return componentWidget;
 }
