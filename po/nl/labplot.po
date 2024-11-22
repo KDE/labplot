@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-21 00:38+0000\n"
-"PO-Revision-Date: 2024-11-18 12:08+0100\n"
+"POT-Creation-Date: 2024-11-22 00:37+0000\n"
+"PO-Revision-Date: 2024-11-21 10:26+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -977,7 +977,7 @@ msgid "%1: remove all axis points"
 msgstr "%1: As-punten verwijderen"
 
 #: src/backend/datapicker/DatapickerImage.cpp:686
-#: src/backend/worksheet/Image.cpp:413
+#: src/backend/worksheet/Image.cpp:409
 #, kde-format
 msgid "Failed to read image data"
 msgstr "Gegevens van afbeelding inlezen mislukt"
@@ -1179,10 +1179,9 @@ msgid "Unable to determine column modes. Check if they are correctly written"
 msgstr "Kan de kolommodi niet bepalen. Controleer of ze juist zijn geschreven"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:244
-#, fuzzy, kde-format
-#| msgid "data class not supported"
+#, kde-format
 msgid "UTF16 encoding is not supported"
-msgstr "gegevensklasse niet ondersteund"
+msgstr "UTF16-codering wordt niet ondersteund"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:246
 #, kde-format
@@ -2488,12 +2487,12 @@ msgstr "%1 %2"
 msgid "Plot data"
 msgstr "Plotgegevens"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1331
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1326
 #, kde-format
 msgid "Plot%1"
 msgstr "Plot%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1500
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1495
 #, kde-format
 msgid "legend"
 msgstr "legenda"
@@ -7517,12 +7516,12 @@ msgstr "%1: doorzichtigheid rand instellen"
 msgid "%1: set width"
 msgstr "%1: breedte instellen"
 
-#: src/backend/worksheet/Image.cpp:167
+#: src/backend/worksheet/Image.cpp:165
 #, kde-format
 msgid "%1: set height"
 msgstr "%1: hoogte instellen"
 
-#: src/backend/worksheet/Image.cpp:176
+#: src/backend/worksheet/Image.cpp:172
 #, kde-format
 msgid "%1: change keep ratio"
 msgstr "%1: wijzig verhoudingsbehoud"
@@ -8106,7 +8105,7 @@ msgstr "geen informatie beschikbaar."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:168
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5110
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5119
 #: src/frontend/ui/dockwidgets/axisdock.ui:483
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:548
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:478
@@ -8559,7 +8558,7 @@ msgid "%1: load default theme"
 msgstr "%1: standaard thema inlezen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1751
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5436
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5445
 #: src/backend/worksheet/Worksheet.cpp:848
 #, kde-format
 msgid "%1: set theme"
@@ -8709,24 +8708,24 @@ msgstr "%1: functiekromme toevoegen"
 msgid "Text Label"
 msgstr "Tekstlabel"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3803
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3812
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "Niet binnen rechthoek"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4027
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4048
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4036
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4057
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "van x=%1 tot x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4035
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4061
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4044
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4070
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "van y=%1 tot y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4080
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4089
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
@@ -10437,18 +10436,7 @@ msgid "Custom column modes, comma separated"
 msgstr "Aangepaste kolommodi, gescheiden door komma's"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:122
-#, fuzzy, kde-format
-#| msgid ""
-#| "If not empty, the number of columns must match the number of column names "
-#| "if provided and it must match the number of  columns in the imported "
-#| "fileDatatypes:<table><tr><td>%1</td><td>Integer number with 32bit size "
-#| "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
-#| "number with 64bit size (−9.223.372.036.854.775.808 .. "
-#| "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
-#| "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
-#| "td><td>Datetime with the format from the datetime text box if not empty, "
-#| "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
-#| "td></tr></table>"
+#, kde-format
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
 "provided and it must match the number of columns in the imported "
@@ -10475,7 +10463,7 @@ msgstr ""
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:138
 #, kde-format
 msgid "%1 or %2"
-msgstr ""
+msgstr "%1 of %2"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:252
 #, kde-format
@@ -13557,7 +13545,7 @@ msgstr "Variabele wissen"
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:251
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:343
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:23
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:22
 #, kde-format
 msgid "Variable:"
 msgstr "Variabele:"
@@ -14224,8 +14212,7 @@ msgid "Locale: "
 msgstr "Lokaliteit:"
 
 #: src/frontend/LabPlot.cpp:76
-#, fuzzy, kde-format
-#| msgid "Number settings:"
+#, kde-format
 msgid "Number Settings:"
 msgstr "Aantal instellingen:"
 
@@ -14255,10 +14242,9 @@ msgid "C++ Compiler Flags: "
 msgstr "Vlaggen C++ compiler: "
 
 #: src/frontend/LabPlot.cpp:80
-#, fuzzy, kde-format
-#| msgid "Executable: %1"
+#, kde-format
 msgid "Executable Path: "
-msgstr "Uitvoerbaar: %1"
+msgstr "Pad naar uitvoerbaar bestand: "
 
 #: src/frontend/LabPlot.cpp:92
 #, kde-format
@@ -21622,7 +21608,7 @@ msgstr "Vergelijking"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:589
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:70
 #: src/frontend/ui/matrix/matrixfunctionwidget.ui:74
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:142
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:139
 #, kde-format
 msgid "Functions"
 msgstr "Functies"
@@ -21635,7 +21621,7 @@ msgstr "Functies"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:602
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:60
 #: src/frontend/ui/matrix/matrixfunctionwidget.ui:84
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:132
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:129
 #, kde-format
 msgid "Constants"
 msgstr "Constanten"
@@ -22020,14 +22006,14 @@ msgstr "Venster:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunc)
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:136
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:63
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:61
 #, kde-format
 msgid "Function:"
 msgstr "Functie:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunction)
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:197
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:122
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:119
 #, kde-format
 msgid "f(x) = "
 msgstr "f(x) = "
@@ -23109,7 +23095,7 @@ msgid "Colors"
 msgstr "Kleuren"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoUpdate)
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:155
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:152
 #, kde-format
 msgid "auto update the values"
 msgstr "de waarden automatisch bijwerken"

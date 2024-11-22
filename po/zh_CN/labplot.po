@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-21 00:38+0000\n"
+"POT-Creation-Date: 2024-11-22 00:37+0000\n"
 "PO-Revision-Date: 2024-04-22 16:05\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -967,7 +967,7 @@ msgid "%1: remove all axis points"
 msgstr ""
 
 #: src/backend/datapicker/DatapickerImage.cpp:686
-#: src/backend/worksheet/Image.cpp:413
+#: src/backend/worksheet/Image.cpp:409
 #, kde-format
 msgid "Failed to read image data"
 msgstr "读取图像数据失败"
@@ -2471,12 +2471,12 @@ msgstr ""
 msgid "Plot data"
 msgstr ""
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1331
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1326
 #, kde-format
 msgid "Plot%1"
 msgstr ""
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1500
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1495
 #, kde-format
 msgid "legend"
 msgstr "图例"
@@ -7444,12 +7444,12 @@ msgstr ""
 msgid "%1: set width"
 msgstr ""
 
-#: src/backend/worksheet/Image.cpp:167
+#: src/backend/worksheet/Image.cpp:165
 #, kde-format
 msgid "%1: set height"
 msgstr ""
 
-#: src/backend/worksheet/Image.cpp:176
+#: src/backend/worksheet/Image.cpp:172
 #, kde-format
 msgid "%1: change keep ratio"
 msgstr ""
@@ -8033,7 +8033,7 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:168
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5110
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5119
 #: src/frontend/ui/dockwidgets/axisdock.ui:483
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:548
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:478
@@ -8482,7 +8482,7 @@ msgid "%1: load default theme"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1751
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5436
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5445
 #: src/backend/worksheet/Worksheet.cpp:848
 #, kde-format
 msgid "%1: set theme"
@@ -8632,24 +8632,24 @@ msgstr ""
 msgid "Text Label"
 msgstr "文本标签"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3803
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3812
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4027
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4048
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4036
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4057
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4035
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4061
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4044
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4070
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4080
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4089
 #, kde-format
 msgid "x=%1"
 msgstr ""
@@ -13270,7 +13270,7 @@ msgstr "删除变量"
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:251
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:343
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:23
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:22
 #, kde-format
 msgid "Variable:"
 msgstr "变量："
@@ -13931,10 +13931,9 @@ msgid "Locale: "
 msgstr ""
 
 #: src/frontend/LabPlot.cpp:76
-#, fuzzy, kde-format
-#| msgid "Number options:"
+#, kde-format
 msgid "Number Settings:"
-msgstr "数字选项："
+msgstr ""
 
 #: src/frontend/LabPlot.cpp:76
 #, kde-format
@@ -13962,10 +13961,9 @@ msgid "C++ Compiler Flags: "
 msgstr ""
 
 #: src/frontend/LabPlot.cpp:80
-#, fuzzy, kde-format
-#| msgid "Executable: %1"
+#, kde-format
 msgid "Executable Path: "
-msgstr "可执行：%1"
+msgstr ""
 
 #: src/frontend/LabPlot.cpp:92
 #, kde-format
@@ -21237,7 +21235,7 @@ msgstr "方程"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:589
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:70
 #: src/frontend/ui/matrix/matrixfunctionwidget.ui:74
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:142
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:139
 #, kde-format
 msgid "Functions"
 msgstr "函数"
@@ -21250,7 +21248,7 @@ msgstr "函数"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:602
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:60
 #: src/frontend/ui/matrix/matrixfunctionwidget.ui:84
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:132
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:129
 #, kde-format
 msgid "Constants"
 msgstr "常量"
@@ -21635,14 +21633,14 @@ msgstr "窗口:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunc)
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:136
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:63
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:61
 #, kde-format
 msgid "Function:"
 msgstr "函数："
 
 #. i18n: ectx: property (text), widget (QLabel, lFunction)
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:197
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:122
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:119
 #, kde-format
 msgid "f(x) = "
 msgstr ""
@@ -22710,7 +22708,7 @@ msgid "Colors"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoUpdate)
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:155
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:152
 #, kde-format
 msgid "auto update the values"
 msgstr ""

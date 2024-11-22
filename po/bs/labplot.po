@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-21 00:38+0000\n"
+"POT-Creation-Date: 2024-11-22 00:37+0000\n"
 "PO-Revision-Date: 2015-02-25 20:16+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -1054,7 +1054,7 @@ msgid "%1: remove all axis points"
 msgstr "%1: postavi osnu poziciju"
 
 #: src/backend/datapicker/DatapickerImage.cpp:686
-#: src/backend/worksheet/Image.cpp:413
+#: src/backend/worksheet/Image.cpp:409
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to read image data"
@@ -2720,13 +2720,13 @@ msgstr ""
 msgid "Plot data"
 msgstr "Prostor za Crtanje"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1331
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1326
 #, fuzzy, kde-format
 #| msgid "LabPlot2"
 msgid "Plot%1"
 msgstr "LabPlot2"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1500
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1495
 #, kde-format
 msgid "legend"
 msgstr "legenda"
@@ -8080,13 +8080,13 @@ msgstr "%1: postavi prozirnost linije"
 msgid "%1: set width"
 msgstr "%1: postavi širinu"
 
-#: src/backend/worksheet/Image.cpp:167
+#: src/backend/worksheet/Image.cpp:165
 #, fuzzy, kde-format
 #| msgid "%1: set rotation angle"
 msgid "%1: set height"
 msgstr "%1: postavi ugao rotacije"
 
-#: src/backend/worksheet/Image.cpp:176
+#: src/backend/worksheet/Image.cpp:172
 #, fuzzy, kde-format
 #| msgid "%1: set geometry rect"
 msgid "%1: change keep ratio"
@@ -8719,7 +8719,7 @@ msgstr "Nisu dostupne tačke podataka."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:168
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5110
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5119
 #: src/frontend/ui/dockwidgets/axisdock.ui:483
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:548
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:478
@@ -9224,7 +9224,7 @@ msgid "%1: load default theme"
 msgstr "%1: dodaj %2."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1751
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5436
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5445
 #: src/backend/worksheet/Worksheet.cpp:848
 #, fuzzy, kde-format
 #| msgid "%1: set cell value"
@@ -9406,24 +9406,24 @@ msgstr "%1: dodaj %2 kolonu"
 msgid "Text Label"
 msgstr "tekstualna oznaka"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3803
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3812
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4027
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4048
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4036
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4057
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4035
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4061
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4044
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4070
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4080
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4089
 #, kde-format
 msgid "x=%1"
 msgstr ""
@@ -14408,7 +14408,7 @@ msgstr "Označi i uredi"
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:251
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:343
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:23
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:22
 #, fuzzy, kde-format
 #| msgid "Variance"
 msgid "Variable:"
@@ -23118,7 +23118,7 @@ msgstr "Tip jednačine"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:589
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:70
 #: src/frontend/ui/matrix/matrixfunctionwidget.ui:74
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:142
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:139
 #, kde-format
 msgid "Functions"
 msgstr "Funkcije"
@@ -23131,7 +23131,7 @@ msgstr "Funkcije"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:602
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:60
 #: src/frontend/ui/matrix/matrixfunctionwidget.ui:84
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:132
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:129
 #, kde-format
 msgid "Constants"
 msgstr "Konstante"
@@ -23549,7 +23549,7 @@ msgstr "&Prozori"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunc)
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:136
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:63
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:61
 #, fuzzy, kde-format
 #| msgid "Functions"
 msgid "Function:"
@@ -23557,7 +23557,7 @@ msgstr "Funkcije"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunction)
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:197
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:122
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:119
 #, fuzzy, kde-format
 #| msgid "f(x)"
 msgid "f(x) = "
@@ -24729,7 +24729,7 @@ msgid "Colors"
 msgstr "Boja"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoUpdate)
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:155
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:152
 #, fuzzy, kde-format
 #| msgid "auto-save"
 msgid "auto update the values"
