@@ -33,11 +33,26 @@
 #include <QStandardPaths>
 #include <QSysInfo>
 
-#ifdef HAVE_FFTW3
-#include <fftw3.h>
-#endif
 #ifdef HAVE_POPPLER
 #include <poppler-version.h>
+#endif
+#ifdef HAVE_KUSERFEEDBACK
+#include <kuserfeedback_version.h>
+#endif
+#ifdef HAVE_KF_SYNTAX_HIGHLIGHTING
+#include <ksyntaxhighlighting_version.h>
+#endif
+#ifdef HAVE_PURPOSE
+#include <purpose_version.h>
+#endif
+#ifdef HAVE_QTSERIALPORT
+#include <QtSerialPort/qtserialportversion.h>
+#endif
+#ifdef HAVE_MQTT
+#include <QtMqtt/qtmqttversion.h>
+#endif
+#ifdef HAVE_FFTW3
+#include <fftw3.h>
 #endif
 #ifdef HAVE_HDF5
 #include <H5public.h>
@@ -55,10 +70,13 @@
 #include <matio_pubconf.h>
 #endif
 #ifdef HAVE_MCAP
-//#include "mcap/types.hpp"
+#include "mcap/types.hpp"
 #endif
 #ifdef HAVE_LIBORIGIN
 #include <OriginFile.h>
+#endif
+#ifdef HAVE_QXLSX
+#include <xlsxglobal.h>
 #endif
 
 #ifdef _WIN32
@@ -122,7 +140,7 @@ int main(int argc, char* argv[]) {
 						 KAboutLicense::GPL,
 						 i18n("(c) 2007-2024"),
 						 systemInfo,
-						 QStringLiteral("https://labplot.kde.org"));
+						 QStringLiteral()); // homepage used in AboutDialog
 	aboutData.addAuthor(i18n("Stefan Gerlach"), i18nc("@info:credit", "Developer"), QStringLiteral("stefan.gerlach@uni.kn"), QString());
 	aboutData.addAuthor(i18n("Alexander Semke"), i18nc("@info:credit", "Developer"), QStringLiteral("alexander.semke@web.de"), QString());
 	aboutData.addAuthor(i18n("Fábián Kristóf-Szabolcs"), i18nc("@info:credit", "Developer"), QStringLiteral("f-kristof@hotmail.com"), QString());
@@ -147,12 +165,10 @@ int main(int argc, char* argv[]) {
 	aboutData.setOrganizationDomain(QByteArray("kde.org"));
 	aboutData.setDesktopFileName(QStringLiteral("org.kde.labplot"));
 	aboutData.setProgramLogo(QIcon::fromTheme(QStringLiteral("labplot")));
+
 	// components
 	aboutData.addComponent(i18n("QADS"), i18n("Qt Advanced Docking System"),
 			QString(), QStringLiteral("https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System"));
-	aboutData.addComponent(i18n("GSL"), i18n("GNU Scientific Library"),
-			QStringLiteral(GSL_VERSION), QStringLiteral("https://www.gnu.org/software/gsl"));
-	// optional components
 #ifdef HAVE_CANTOR_LIBS
 	aboutData.addComponent(i18n("Cantor"), i18n("Frontend to Mathematical Applications"),
 			QLatin1String(CANTOR_VERSION_STRING), QStringLiteral("https://cantor.kde.org/"));
@@ -163,32 +179,42 @@ int main(int argc, char* argv[]) {
 #endif
 #ifdef HAVE_DISCOUNT
 	aboutData.addComponent(i18n("Discount"), i18n("Markdown markup language support"),
-			QLatin1String(), QStringLiteral("http://www.pell.portland.or.us/~orc/Code/discount/"));
+			QLatin1String(DISCOUNT_VERSION_STRING), QStringLiteral("http://www.pell.portland.or.us/~orc/Code/discount/"));
 #endif
 #ifdef HAVE_KUSERFEEDBACK
 	aboutData.addComponent(i18n("KUserfeedback"), i18n("Support collecting feedback from users"),
-			QLatin1String(), QStringLiteral("https://github.com/KDE/kuserfeedback"));
+			QLatin1String(KUSERFEEDBACK_VERSION_STRING), QStringLiteral("https://github.com/KDE/kuserfeedback"));
+#endif
+#ifdef HAVE_KF_SYNTAX_HIGHLIGHTING
+	aboutData.addComponent(i18n("KSyntaxHighlighting"), i18n("Syntax highlighting engine"),
+			QLatin1String(KSYNTAXHIGHLIGHTING_VERSION_STRING), QStringLiteral("https://api.kde.org/frameworks/syntax-highlighting/html/index.html"));
+#endif
+#ifdef HAVE_PURPOSE
+	aboutData.addComponent(i18n("Purpose"), i18n("Offers available actions for a specific purpose"),
+			QLatin1String(PURPOSE_VERSION_STRING), QStringLiteral("https://api.kde.org/frameworks/purpose/html/index.html"));
 #endif
 #ifdef HAVE_QTSERIALPORT
 	aboutData.addComponent(i18n("Qt SerialPort"), i18n("Serial port functionality support"),
-			QLatin1String(), QStringLiteral("https://doc.qt.io/qt-6/qtserialport-index.html"));
+			QLatin1String(QTSERIALPORT_VERSION_STR), QStringLiteral("https://doc.qt.io/qt-6/qtserialport-index.html"));
 #endif
 #ifdef HAVE_MQTT
 	aboutData.addComponent(i18n("Qt MQTT"), i18n("Support data from MQTT brokers"),
-			QLatin1String(), QStringLiteral("https://doc.qt.io/qt-6/qtmqtt-index.html"));
+			QLatin1String(QTMQTT_VERSION_STR), QStringLiteral("https://doc.qt.io/qt-6/qtmqtt-index.html"));
 #endif
 // numerical libraries
+	aboutData.addComponent(i18n("GSL"), i18n("GNU Scientific Library"),
+			QStringLiteral(GSL_VERSION), QStringLiteral("https://www.gnu.org/software/gsl"));
 #ifdef HAVE_FFTW3
 	aboutData.addComponent(i18n("FFTW3"), i18n("Fastest Fourier Transform in the West"),
 			QLatin1String(fftw_version), QStringLiteral("http://fftw.org/"));
 #endif
 #ifdef HAVE_LIBCERF
 	aboutData.addComponent(i18n("libcerf"), i18n("Complex error and related functions"),
-			QLatin1String(), QStringLiteral("https://jugit.fz-juelich.de/mlz/libcerf"));
+			QLatin1String(LIBCERF_VERSION_STRING), QStringLiteral("https://jugit.fz-juelich.de/mlz/libcerf"));
 #endif
 #ifdef HAVE_EIGEN3
 	aboutData.addComponent(i18n("Eigen3"), i18n("C++ library for linear algebra"),
-			QLatin1String(), QStringLiteral("https://eigen.tuxfamily.org/index.php?title=Main_Page"));
+			QLatin1String(EIGEN3_VERSION_STRING), QStringLiteral("https://eigen.tuxfamily.org/index.php?title=Main_Page"));
 #endif
 // data formats
 #ifdef HAVE_LIBORIGIN
@@ -205,9 +231,10 @@ int main(int argc, char* argv[]) {
 #endif
 #ifdef HAVE_FITS
 	aboutData.addComponent(i18n("CFITSIO"), i18n("Support data files in FITS (Flexible Image Transport System) data format"),
-			QLatin1String(STRING(CFITSIO_VERSION)), QStringLiteral("https://heasarc.gsfc.nasa.gov/fitsio"));
+			QLatin1String(CFITSIO_VERSION_STRING), QStringLiteral("https://heasarc.gsfc.nasa.gov/fitsio"));
 #endif
 #ifdef HAVE_READSTAT
+	// TODO: version
 	aboutData.addComponent(i18n("ReadStat"), i18n("Read (and write) data sets from SAS, Stata, and SPSS"),
 			QLatin1String(), QStringLiteral("https://github.com/WizardMac/ReadStat"));
 #endif
@@ -221,13 +248,17 @@ int main(int argc, char* argv[]) {
 #endif
 #ifdef HAVE_ORCUS
 	aboutData.addComponent(i18n("ORCUS"), i18n("Import ODS (Open Document Spreadsheet) files"),
-			QLatin1String(), QStringLiteral("https://orcus.readthedocs.io/en/stable/index.html"));
+			QLatin1String(ORCUS_VERSION_STRING), QStringLiteral("https://orcus.readthedocs.io/en/stable/index.html"));
 #endif
 #ifdef HAVE_MCAP
-//	aboutData.addComponent(i18n("MCAP"), i18n("MCAP file support"),
-//			QLatin1String(MCAP_LIBRARY_VERSION), QStringLiteral("https://mcap.dev"));
+	aboutData.addComponent(i18n("MCAP"), i18n("MCAP file support"),
+			QLatin1String(MCAP_LIBRARY_VERSION), QStringLiteral("https://mcap.dev"));
 #endif
-	//TODO: fast_float, dbc_parser_cpp and vector_blf
+#ifdef HAVE_VECTOR_BLF
+	aboutData.addComponent(i18n("Vector BLF"), i18n("Binary Log File (BLF) file support"),
+			QLatin1String(), QStringLiteral("https://github.com/Technica-Engineering/vector_blf"));
+#endif
+	KAboutData::setApplicationData(aboutData);
 	KAboutData::setApplicationData(aboutData);
 
 	KCrash::initialize();
