@@ -33,6 +33,10 @@
 #include <QStandardPaths>
 #include <QSysInfo>
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 #ifdef HAVE_POPPLER
 #include <poppler-version.h>
 #endif
@@ -77,10 +81,6 @@
 #endif
 #ifdef HAVE_QXLSX
 #include <xlsxglobal.h>
-#endif
-
-#ifdef _WIN32
-#include <windows.h>
 #endif
 
 /*
