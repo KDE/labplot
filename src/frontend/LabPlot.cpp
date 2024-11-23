@@ -61,7 +61,7 @@
 #include <netcdf_meta.h>
 #endif
 #ifdef HAVE_FITS
-#include <cfitsio/fitsio.h>
+#include <fitsio.h>
 #endif
 #ifdef HAVE_LIBCERF
 #include <cerf.h>

@@ -49,7 +49,7 @@ else (CFITSIO_INCLUDE_DIR AND CFITSIO_LIBRARIES)
 
     if (CFITSIO_FOUND)
         if (NOT CFitsio_FIND_QUIETLY)
-		message(STATUS "Found CFITSIO: ${CFITSIO_LIBRARIES} (version \"${CFITSIO_VERSION}\")")
+		message(STATUS "Found CFITSIO ${CFITSIO_VERSION}: ${CFITSIO_LIBRARIES} ${CFITSIO_INCLUDE_DIR}")
         endif (NOT CFitsio_FIND_QUIETLY)
     else ()
         if (CFitsio_FIND_REQUIRED)
