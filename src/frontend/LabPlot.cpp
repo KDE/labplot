@@ -140,7 +140,7 @@ int main(int argc, char* argv[]) {
 						 KAboutLicense::GPL,
 						 i18n("(c) 2007-2024"),
 						 systemInfo,
-						 QStringLiteral()); // homepage used in AboutDialog
+						 QString()); // homepage used in AboutDialog
 	aboutData.addAuthor(i18n("Stefan Gerlach"), i18nc("@info:credit", "Developer"), QStringLiteral("stefan.gerlach@uni.kn"), QString());
 	aboutData.addAuthor(i18n("Alexander Semke"), i18nc("@info:credit", "Developer"), QStringLiteral("alexander.semke@web.de"), QString());
 	aboutData.addAuthor(i18n("Fábián Kristóf-Szabolcs"), i18nc("@info:credit", "Developer"), QStringLiteral("f-kristof@hotmail.com"), QString());
@@ -236,7 +236,7 @@ int main(int argc, char* argv[]) {
 #ifdef HAVE_READSTAT
 	// TODO: version
 	aboutData.addComponent(i18n("ReadStat"), i18n("Read (and write) data sets from SAS, Stata, and SPSS"),
-			QLatin1String(), QStringLiteral("https://github.com/WizardMac/ReadStat"));
+			QString(), QStringLiteral("https://github.com/WizardMac/ReadStat"));
 #endif
 #ifdef HAVE_MATIO
 	aboutData.addComponent(i18n("Matio"), i18n("Import binary MATLAB MAT files"),
@@ -244,7 +244,7 @@ int main(int argc, char* argv[]) {
 #endif
 #ifdef HAVE_QXLSX
 	aboutData.addComponent(i18n("QXlsx"), i18n("Import Excel xlsx files"),
-			QLatin1String(), QStringLiteral("https://github.com/QtExcel/QXlsx"));
+			QString(), QStringLiteral("https://github.com/QtExcel/QXlsx"));
 #endif
 #ifdef HAVE_ORCUS
 	aboutData.addComponent(i18n("ORCUS"), i18n("Import ODS (Open Document Spreadsheet) files"),
@@ -256,7 +256,7 @@ int main(int argc, char* argv[]) {
 #endif
 #ifdef HAVE_VECTOR_BLF
 	aboutData.addComponent(i18n("Vector BLF"), i18n("Binary Log File (BLF) file support"),
-			QLatin1String(), QStringLiteral("https://github.com/Technica-Engineering/vector_blf"));
+			QString(), QStringLiteral("https://github.com/Technica-Engineering/vector_blf"));
 #endif
 	KAboutData::setApplicationData(aboutData);
 	KAboutData::setApplicationData(aboutData);
