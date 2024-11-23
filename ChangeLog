@@ -2,7 +2,7 @@
 New features:
 	* [general]
 		* Detail info view mode in the Color Maps Browser
-		* Extended About dialog (with library versions)
+		* Add links and show used external libraries in the About Dialog
 	* [import]
 		* Download datasets from kaggle.com
 		* Support MCAP file import
