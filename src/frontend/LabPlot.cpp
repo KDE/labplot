@@ -55,9 +55,6 @@
 #ifdef HAVE_MQTT
 #include <QtMqtt/qtmqttversion.h>
 #endif
-#ifdef HAVE_FFTW3
-#include <fftw3.h>
-#endif
 #ifdef HAVE_HDF5
 #include <H5public.h>
 #endif
@@ -205,7 +202,7 @@ int main(int argc, char* argv[]) {
 			QStringLiteral(GSL_VERSION), QStringLiteral("https://www.gnu.org/software/gsl"));
 #ifdef HAVE_FFTW3
 	aboutData.addComponent(i18n("FFTW3"), i18n("Fastest Fourier Transform in the West"),
-			QLatin1String(fftw_version), QStringLiteral("http://fftw.org/"));
+			QLatin1String(FFTW3_VERSION_STRING), QStringLiteral("http://fftw.org/"));
 #endif
 #ifdef HAVE_LIBCERF
 	aboutData.addComponent(i18n("libcerf"), i18n("Complex error and related functions"),
