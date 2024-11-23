@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-22 00:37+0000\n"
-"PO-Revision-Date: 2024-11-14 09:42+0100\n"
+"PO-Revision-Date: 2024-11-22 17:19+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -13918,10 +13918,9 @@ msgid "Locale: "
 msgstr "Local: "
 
 #: src/frontend/LabPlot.cpp:76
-#, fuzzy, kde-format
-#| msgid "Number options:"
+#, kde-format
 msgid "Number Settings:"
-msgstr "Optiones de numero:"
+msgstr "Preferentias de numero:"
 
 #: src/frontend/LabPlot.cpp:76
 #, kde-format
@@ -13949,10 +13948,9 @@ msgid "C++ Compiler Flags: "
 msgstr ""
 
 #: src/frontend/LabPlot.cpp:80
-#, fuzzy, kde-format
-#| msgid "Executable: %1"
+#, kde-format
 msgid "Executable Path: "
-msgstr "Executabile: %1"
+msgstr "Percurso de Executabile: "
 
 #: src/frontend/LabPlot.cpp:92
 #, kde-format
