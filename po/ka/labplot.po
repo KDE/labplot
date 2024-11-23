@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-22 00:37+0000\n"
-"PO-Revision-Date: 2024-11-21 05:14+0100\n"
+"PO-Revision-Date: 2024-11-22 04:39+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -11074,6 +11074,8 @@ msgid ""
 "Enable to use the first row of the selected data region for the column names "
 "of the spreadsheet."
 msgstr ""
+"ჩართეთ, რომ მონიშნული მონაცემების რეგიონის პირველი მწკრივი ელცხრილის სვეტის "
+"სახელებად იქნეს გამოყენებული."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:262
 #, kde-format
@@ -11093,6 +11095,8 @@ msgstr ""
 msgid ""
 "The number of rows is calculated from the values of the data portion tab"
 msgstr ""
+"მწკრივების რაოდენობა გამოითვლება მონაცემების ნაწილის ჩანართის "
+"მნიშვნელობებიდან"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:982
 #, kde-format
@@ -11506,7 +11510,11 @@ msgid_plural ""
 "The objects listed below already exist in target folder and will be "
 "overwritten:"
 msgstr[0] ""
+"ქვემოთ ჩამოთვლილი ობიექტი უკვე არსებობს სამიზნე საქაღალდეში და მას თავზე "
+"გადაეწერება:"
 msgstr[1] ""
+"ქვემოთ ჩამოთვლილი ობიექტები უკვე არსებობს სამიზნე საქაღალდეში და მათ თავზე "
+"გადაეწერება:"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:277
 #, kde-format
@@ -12200,6 +12208,8 @@ msgstr "ნორმირებული დაგროვებით"
 msgid ""
 "Select the data column for which the properties should be shown and edited"
 msgstr ""
+"მონიშნეთ მონაცემების სვეტი, რომლის თვისებებიც ნაჩვენები და ჩასწორებული უნდა "
+"იყოს"
 
 #: src/frontend/dockwidgets/BarPlotDock.cpp:66
 #, kde-format
