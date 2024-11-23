@@ -16,6 +16,9 @@
 
 #include <QDialog>
 
+// subclassed from KAboutApplicationDialog to add custom label (links)
+// changing title or tabs needs subclassing from QDialog, but this needs reimplementing all widgets
+
 //class AboutDialog: public QDialog {
 class AboutDialog: public KAboutApplicationDialog {
 public:
