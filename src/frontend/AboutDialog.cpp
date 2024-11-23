@@ -35,13 +35,15 @@ AboutDialog::AboutDialog(const KAboutData& aboutData, QWidget* parent) : KAboutA
 	const auto tube = QStringLiteral("https://tube.kockatoo.org/c/labplot");
 	const auto twitter = QStringLiteral("https://twitter.com/LabPlot");
 	
-	auto text = QStringLiteral("<a href=\"%1\">%1</a>").arg(homepage)
-			+ QStringLiteral(", ") + QStringLiteral("<a href=\"%1\">%1</a>").arg(social)
-			+ QStringLiteral(", ") + QStringLiteral("<a href=\"%1\">%1</a>").arg(tube)
-			+ QStringLiteral(", ") + QStringLiteral("<a href=\"%1\">%1</a>").arg(twitter);
-	auto* linkLabel = new QLabel(text, this);
+	QString text = QStringLiteral("<a href=\"%1\">%1</a>").arg(homepage)
+			+ QLatin1Char('\n') + QStringLiteral("<a href=\"%1\">%1</a>").arg(social)
+			+ QLatin1Char('\n')  + QStringLiteral("<a href=\"%1\">%1</a>").arg(tube)
+			+ QLatin1Char('\n')  + QStringLiteral("<a href=\"%1\">%1</a>").arg(twitter);
+	auto* linkLabel = new QLabel();
 	linkLabel->setWordWrap(true);
-	layout()->addWidget(linkLabel);
+	linkLabel->setOpenExternalLinks(true);
+	linkLabel->setText(text.replace(QLatin1Char('\n'), QStringLiteral("<br />")));
+	((QVBoxLayout *)layout())->insertWidget(1, linkLabel);
 
 	// when deriving from QDialog
 	//init();
