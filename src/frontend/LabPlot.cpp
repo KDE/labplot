@@ -31,9 +31,9 @@
 #include <QSplashScreen>
 #include <QSysInfo>
 
-//#ifdef _WIN32
-//#include <windows.h>
-//#endif
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 int main(int argc, char* argv[]) {
 	QApplication app(argc, argv);
