@@ -391,11 +391,6 @@ void MainWin::initGUI(const QString& fileName) {
 	if (memoryInfoShown)
 		toggleMemoryInfo();
 
-	// custom help menu with custom actions
-	//	auto* helpMenu = new KHelpMenu(this, i18n("Help me"), this);
-	//	menuBar()->addMenu(helpMenu->menu());
-	//	connect(helpMenu, &KHelpMenu::showAboutApplication, this, &MainWin::customAboutDialog);
-
 	// custom about dialog
         auto* aboutAction = actionCollection()->action(QStringLiteral("help_about_app"));
         if (aboutAction) {

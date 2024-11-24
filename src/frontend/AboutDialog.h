@@ -21,11 +21,16 @@
 
 //class AboutDialog: public QDialog {
 class AboutDialog: public KAboutApplicationDialog {
+	Q_OBJECT
 public:
+	static QString systemInfo();
+	static QVector<QStringList> components();	// list of additional components
 	explicit AboutDialog(const KAboutData&, QWidget*);
 
-private:
-// used when deriving from QDialog
+private Q_SLOTS:
+	void copyConfig();
+
+// used only when deriving from QDialog
 /*	void init();
 	QWidget* createTitleWidget(const QIcon&, const QString &displayName, const QString &version, QWidget *parent);
 	QWidget* createAboutWidget(const QString &shortDescription,
