@@ -116,12 +116,14 @@ const QString getSystemInfo() {
 #ifndef REPRODUCIBLE_BUILD
 		+ QStringLiteral("%1, %2").arg(QLatin1String(__DATE__), QLatin1String(__TIME__)) + QLatin1Char('\n')
 #endif
-		+ i18n("System: ") + QSysInfo::prettyProductName() + QLatin1Char('\n') + i18n("Locale: ") + usedLanguage + QLatin1Char(' ') + numberSystemInfo
-		+ QLatin1Char('\n') + i18n("Number Settings:") + numberLocaleInfo + QLatin1String(" (") + i18n("Updated on restart") + QLatin1Char(')')
-		+ QLatin1Char('\n') + i18n("Architecture: ") + QSysInfo::buildAbi() + QLatin1Char('\n') + i18n("Kernel: ") + QSysInfo::kernelType() + QLatin1Char(' ')
-		+ QSysInfo::kernelVersion() + QLatin1Char('\n') + i18n("C++ Compiler: ") + QLatin1String(CXX_COMPILER) + QLatin1Char('\n')
-		+ i18n("C++ Compiler Flags: ") + QLatin1String(CXX_COMPILER_FLAGS) + QLatin1Char('\n')
-		+ i18n("Executable Path: ") + path;
+		+ QLatin1String("<table>")
+		+ QLatin1String("<tr><td>") + i18n("System:") + QLatin1String("</td><td>") + QSysInfo::prettyProductName() + QLatin1String("</td></tr>")
+		+ QLatin1String("<tr><td>") + i18n("Locale:") + QLatin1String("</td><td>") + usedLanguage + QLatin1Char(' ') + numberSystemInfo + QLatin1String("</td></tr>")
+		+ QLatin1String("<tr><td>") + i18n("Number Settings:") + QLatin1String("</td><td>") + numberLocaleInfo + QLatin1String(" (") + i18n("Updated on restart") + QLatin1Char(')') + QLatin1String("</td></tr>")
+		+ QLatin1String("<tr><td>") + i18n("Architecture:") + QLatin1String("</td><td>") + QSysInfo::buildAbi() + QLatin1String("</td></tr>")
+		+ QLatin1String("<tr><td>") + i18n("Kernel: ") + QLatin1String("</td><td>") + QSysInfo::kernelType() + QLatin1Char(' ') + QSysInfo::kernelVersion() + QLatin1String("</td></tr>")
+		+ QLatin1String("<tr><td>") +i18n("Executable Path:") + QLatin1String("</td><td>") + path + QLatin1String("</td></tr>")
+		+ QLatin1String("</table>");
 }
 
 int main(int argc, char* argv[]) {
@@ -130,13 +132,18 @@ int main(int argc, char* argv[]) {
 	MainWin::updateLocale();
 
 	QString systemInfo{getSystemInfo()};
+	QString links = i18n("Visit website:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("labplot.kde.org")) + QLatin1Char('\n')
+		// Release notes: LINK ?
+		+ i18n("Mastodon:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("floss.social/@LabPlot")) + QLatin1Char('\n')
+		+ i18n("Watch video tutorials:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("tube.kockatoo.org/c/labplot")) + QLatin1Char('\n')
+		+ i18n("Please report bugs to:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("bugs.kde.org"));
 	KAboutData aboutData(QStringLiteral("labplot"),
 						 QStringLiteral("LabPlot"),
 						 QLatin1String(LVERSION),
 						 i18n("LabPlot is a FREE, open-source and cross-platform Data Visualization and Analysis software accessible to everyone."),
 						 KAboutLicense::GPL,
-						 i18n("(c) 2007-2024"),
-						 systemInfo); // homepage set in AboutDialog
+						 i18n("(c) 2007-2024 LabPlot authors"),
+						 systemInfo + QLatin1Char('\n') + links);
 	aboutData.addAuthor(i18n("Stefan Gerlach"), i18nc("@info:credit", "Developer"), QStringLiteral("stefan.gerlach@uni.kn"), QString());
 	aboutData.addAuthor(i18n("Alexander Semke"), i18nc("@info:credit", "Developer"), QStringLiteral("alexander.semke@web.de"), QString());
 	aboutData.addAuthor(i18n("Fábián Kristóf-Szabolcs"), i18nc("@info:credit", "Developer"), QStringLiteral("f-kristof@hotmail.com"), QString());
@@ -146,6 +153,9 @@ int main(int argc, char* argv[]) {
 						QStringLiteral("dariuszlaska@gmail.com"),
 						QString());
 	aboutData.addAuthor(i18n("Andreas Kainz"), i18nc("@info:credit", "Icon designer"), QStringLiteral("kainz.a@gmail.com"), QString());
+	// no text (link to bugs.kde.org) before authors list
+	aboutData.setCustomAuthorText(QString(), QString());
+
 	aboutData.addCredit(i18n("Yuri Chornoivan"),
 						i18nc("@info:credit", "Help on many questions about the KDE-infrastructure and translation related topics"),
 						QStringLiteral("yurchor@ukr.net"),
@@ -162,40 +172,66 @@ int main(int argc, char* argv[]) {
 	aboutData.setDesktopFileName(QStringLiteral("org.kde.labplot"));
 	aboutData.setProgramLogo(QIcon::fromTheme(QStringLiteral("labplot")));
 
+	// compiler info
+	aboutData.addComponent(i18n("C++ Compiler: ") + QLatin1String(CXX_COMPILER), i18n("C++ Compiler Flags: ") + QLatin1String(CXX_COMPILER_FLAGS));
 	// components
 	aboutData.addComponent(i18n("QADS"), i18n("Qt Advanced Docking System"),
 			QString(), QStringLiteral("https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System"));
 #ifdef HAVE_CANTOR_LIBS
 	aboutData.addComponent(i18n("Cantor"), i18n("Frontend to Mathematical Applications"),
 			QLatin1String(CANTOR_VERSION_STRING), QStringLiteral("https://cantor.kde.org/"));
+#else
+	aboutData.addComponent(QLatin1String("<em>") + i18n("Cantor") + QLatin1String("</em>"), i18n("missing"),
+			QString(), QStringLiteral("https://cantor.kde.org/"));
 #endif
 #ifdef HAVE_POPPLER
 	aboutData.addComponent(i18n("Poppler"), i18n("PDF rendering library"),
 			QLatin1String(POPPLER_VERSION), QStringLiteral("https://poppler.freedesktop.org/"));
+#else
+	aboutData.addComponent(QLatin1String("<em>") + i18n("Poppler") + QLatin1String("</em>"), i18n("missing"),
+			QString(), QStringLiteral("https://poppler.freedesktop.org/"));
 #endif
 #ifdef HAVE_DISCOUNT
 	aboutData.addComponent(i18n("Discount"), i18n("Markdown markup language support"),
 			QLatin1String(DISCOUNT_VERSION_STRING), QStringLiteral("http://www.pell.portland.or.us/~orc/Code/discount/"));
+#else
+	aboutData.addComponent(QLatin1String("<em>") + i18n("Discount") + QLatin1String("</em>"), i18n("missing"),
+			QString(), QStringLiteral("http://www.pell.portland.or.us/~orc/Code/discount/"));
 #endif
 #ifdef HAVE_KUSERFEEDBACK
 	aboutData.addComponent(i18n("KUserfeedback"), i18n("Support collecting feedback from users"),
 			QLatin1String(KUSERFEEDBACK_VERSION_STRING), QStringLiteral("https://github.com/KDE/kuserfeedback"));
+#else
+	aboutData.addComponent(QLatin1String("<em>") + i18n("KUserfeedback") + QLatin1String("</em>"), i18n("missing"),
+			QString(), QStringLiteral("https://github.com/KDE/kuserfeedback"));
 #endif
 #ifdef HAVE_KF_SYNTAX_HIGHLIGHTING
 	aboutData.addComponent(i18n("KSyntaxHighlighting"), i18n("Syntax highlighting engine"),
 			QLatin1String(KSYNTAXHIGHLIGHTING_VERSION_STRING), QStringLiteral("https://api.kde.org/frameworks/syntax-highlighting/html/index.html"));
+#else
+	aboutData.addComponent(QLatin1String("<em>") + i18n("KSyntaxHighlighting") + QLatin1String("</em>"), i18n("missing"),
+			QString(), QStringLiteral("https://api.kde.org/frameworks/syntax-highlighting/html/index.html"));
 #endif
 #ifdef HAVE_PURPOSE
 	aboutData.addComponent(i18n("Purpose"), i18n("Offers available actions for a specific purpose"),
 			QLatin1String(PURPOSE_VERSION_STRING), QStringLiteral("https://api.kde.org/frameworks/purpose/html/index.html"));
+#else
+	aboutData.addComponent(QLatin1String("<em>") + i18n("Purpose") + QLatin1String("</em>"), i18n("missing"),
+			QString(), QStringLiteral("https://api.kde.org/frameworks/purpose/html/index.html"));
 #endif
 #ifdef HAVE_QTSERIALPORT
 	aboutData.addComponent(i18n("Qt SerialPort"), i18n("Serial port functionality support"),
 			QLatin1String(QTSERIALPORT_VERSION_STR), QStringLiteral("https://doc.qt.io/qt-6/qtserialport-index.html"));
+#else
+	aboutData.addComponent(QLatin1String("<em>") + i18n("Qt SerialPort") + QLatin1String("</em>"), i18n("missing"),
+			QString(), QStringLiteral("https://doc.qt.io/qt-6/qtserialport-index.html"));
 #endif
 #ifdef HAVE_MQTT
 	aboutData.addComponent(i18n("Qt MQTT"), i18n("Support data from MQTT brokers"),
 			QLatin1String(QTMQTT_VERSION_STR), QStringLiteral("https://doc.qt.io/qt-6/qtmqtt-index.html"));
+#else
+	aboutData.addComponent(QLatin1String("<em>") + i18n("Qt MQTT") + QLatin1String("</em>"), i18n("missing"),
+			QString(), QStringLiteral("https://doc.qt.io/qt-6/qtmqtt-index.html"));
 #endif
 // numerical libraries
 	aboutData.addComponent(i18n("GSL"), i18n("GNU Scientific Library"),
@@ -203,58 +239,97 @@ int main(int argc, char* argv[]) {
 #ifdef HAVE_FFTW3
 	aboutData.addComponent(i18n("FFTW3"), i18n("Fastest Fourier Transform in the West"),
 			QLatin1String(FFTW3_VERSION_STRING), QStringLiteral("http://fftw.org/"));
+#else
+	aboutData.addComponent(QLatin1String("<em>") + i18n("FFTW3") + QLatin1String("</em>"), i18n("missing"),
+			QString(), QStringLiteral("http://fftw.org/"));
 #endif
 #ifdef HAVE_LIBCERF
 	aboutData.addComponent(i18n("libcerf"), i18n("Complex error and related functions"),
 			QLatin1String(LIBCERF_VERSION_STRING), QStringLiteral("https://jugit.fz-juelich.de/mlz/libcerf"));
+#else
+	aboutData.addComponent(QLatin1String("<em>") + i18n("libcerf") + QLatin1String("</em>"), i18n("missing"),
+			QString(), QStringLiteral("https://jugit.fz-juelich.de/mlz/libcerf"));
 #endif
 #ifdef HAVE_EIGEN3
 	aboutData.addComponent(i18n("Eigen3"), i18n("C++ library for linear algebra"),
 			QLatin1String(EIGEN3_VERSION_STRING), QStringLiteral("https://eigen.tuxfamily.org/index.php?title=Main_Page"));
+#else
+	aboutData.addComponent(QLatin1String("<em>") + i18n("Eigen3") + QLatin1String("</em>"), i18n("missing"),
+			QString(), QStringLiteral("https://eigen.tuxfamily.org/index.php?title=Main_Page"));
 #endif
 // data formats
 #ifdef HAVE_LIBORIGIN
 	aboutData.addComponent(i18n("liborigin"), i18n("importing Origin OPJ project files"),
 			QLatin1String(liboriginVersionString()), QStringLiteral("https://sourceforge.net/projects/liborigin"));
+#else
+	aboutData.addComponent(QLatin1String("<em>") + i18n("liborigin") + QLatin1String("</em>"), i18n("missing"),
+			QString(), QStringLiteral("https://sourceforge.net/projects/liborigin"));
 #endif
 #ifdef HAVE_HDF5
 	aboutData.addComponent(i18n("HDF5"), i18n("High-performance data management and storage suite"),
 			QLatin1String(H5_VERS_INFO), QStringLiteral("https://www.hdfgroup.org/solutions/hdf5"));
+#else
+	aboutData.addComponent(QLatin1String("<em>") + i18n("HDF5") + QLatin1String("</em>"), i18n("missing"),
+			QString(), QStringLiteral("https://www.hdfgroup.org/solutions/hdf5"));
 #endif
 #ifdef HAVE_NETCDF
 	aboutData.addComponent(i18n("NetCDF"), i18n("Network Common Data Form"),
 			QLatin1String(NC_VERSION), QStringLiteral("https://www.unidata.ucar.edu/software/netcdf"));
+#else
+	aboutData.addComponent(QLatin1String("<em>") + i18n("NetCDF") + QLatin1String("</em>"), i18n("missing"),
+			QString(), QStringLiteral("https://www.unidata.ucar.edu/software/netcdf"));
 #endif
 #ifdef HAVE_FITS
 	aboutData.addComponent(i18n("CFITSIO"), i18n("Support data files in FITS (Flexible Image Transport System) data format"),
 			QLatin1String(CFITSIO_VERSION_STRING), QStringLiteral("https://heasarc.gsfc.nasa.gov/fitsio"));
+#else
+	aboutData.addComponent(QLatin1String("<em>") + i18n("CFITSIO") + QLatin1String("</em>"), i18n("missing"),
+			QString(), QStringLiteral("https://heasarc.gsfc.nasa.gov/fitsio"));
 #endif
 #ifdef HAVE_READSTAT
 	// TODO: version
 	aboutData.addComponent(i18n("ReadStat"), i18n("Read (and write) data sets from SAS, Stata, and SPSS"),
 			QString(), QStringLiteral("https://github.com/WizardMac/ReadStat"));
+#else
+	aboutData.addComponent(QLatin1String("<em>") + i18n("ReadStat") + QLatin1String("</em>"), i18n("missing"),
+			QString(), QStringLiteral("https://github.com/WizardMac/ReadStat"));
 #endif
 #ifdef HAVE_MATIO
 	aboutData.addComponent(i18n("Matio"), i18n("Import binary MATLAB MAT files"),
 			QLatin1String(MATIO_VERSION_STR), QStringLiteral("https://github.com/tbeu/matio"));
+#else
+	aboutData.addComponent(QLatin1String("<em>") + i18n("Matio") + QLatin1String("</em>"), i18n("missing"),
+			QString(), QStringLiteral("https://github.com/tbeu/matio"));
 #endif
 #ifdef HAVE_QXLSX
 	aboutData.addComponent(i18n("QXlsx"), i18n("Import Excel xlsx files"),
+			QString(), QStringLiteral("https://github.com/QtExcel/QXlsx"));
+#else
+	aboutData.addComponent(QLatin1String("<em>") + i18n("QXlsx") + QLatin1String("</em>"), i18n("missing"),
 			QString(), QStringLiteral("https://github.com/QtExcel/QXlsx"));
 #endif
 #ifdef HAVE_ORCUS
 	aboutData.addComponent(i18n("ORCUS"), i18n("Import ODS (Open Document Spreadsheet) files"),
 			QLatin1String(ORCUS_VERSION_STRING), QStringLiteral("https://orcus.readthedocs.io/en/stable/index.html"));
+#else
+	aboutData.addComponent(QLatin1String("<em>") + i18n("ORCUS") + QLatin1String("</em>"), i18n("missing"),
+			QString(), QStringLiteral("https://orcus.readthedocs.io/en/stable/index.html"));
 #endif
 #ifdef HAVE_MCAP
 	aboutData.addComponent(i18n("MCAP"), i18n("MCAP file support"),
 			QLatin1String(MCAP_LIBRARY_VERSION), QStringLiteral("https://mcap.dev"));
+#else
+	aboutData.addComponent(QLatin1String("<em>") + i18n("MCAP") + QLatin1String("</em>"), i18n("missing"),
+			QString(), QStringLiteral("https://mcap.dev"));
 #endif
 #ifdef HAVE_VECTOR_BLF
 	aboutData.addComponent(i18n("Vector BLF"), i18n("Binary Log File (BLF) file support"),
 			QString(), QStringLiteral("https://github.com/Technica-Engineering/vector_blf"));
+#else
+	aboutData.addComponent(QLatin1String("<em>") + i18n("Vector BLF") + QLatin1String("</em>"), i18n("missing"),
+			QString(), QStringLiteral("https://github.com/Technica-Engineering/vector_blf"));
 #endif
-	KAboutData::setApplicationData(aboutData);
+	// no translators set (too many to mention)
 	KAboutData::setApplicationData(aboutData);
 
 	KCrash::initialize();

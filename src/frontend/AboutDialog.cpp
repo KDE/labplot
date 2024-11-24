@@ -29,16 +29,10 @@
 //AboutDialog::AboutDialog(const KAboutData& aboutData, QWidget* parent) : QDialog(parent), aboutData(aboutData) {
 AboutDialog::AboutDialog(const KAboutData& aboutData, QWidget* parent) : KAboutApplicationDialog(aboutData, parent) {
 
-	// const auto homepage = aboutData.homepage();
+	//const auto homepage = aboutData.homepage();
 	const auto homepage = QStringLiteral("https://labplot.kde.org");
-	const auto social = QStringLiteral("https://floss.social/@LabPlot");
-	const auto tube = QStringLiteral("https://tube.kockatoo.org/c/labplot");
-	const auto twitter = QStringLiteral("https://twitter.com/LabPlot");
 	
-	QString text = QStringLiteral("<a href=\"%1\">%1</a>").arg(homepage)
-			+ QLatin1Char('\n') + QStringLiteral("<a href=\"%1\">%1</a>").arg(social)
-			+ QLatin1Char('\n')  + QStringLiteral("<a href=\"%1\">%1</a>").arg(tube)
-			+ QLatin1Char('\n')  + QStringLiteral("<a href=\"%1\">%1</a>").arg(twitter);
+	QString text = QStringLiteral("<a href=\"%1\">%1</a>").arg(homepage);
 	auto* linkLabel = new QLabel();
 	linkLabel->setWordWrap(true);
 	linkLabel->setOpenExternalLinks(true);
