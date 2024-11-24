@@ -151,7 +151,7 @@ QVector<QStringList> AboutDialog::components() {
 #ifdef HAVE_CANTOR_LIBS
 	components << (QStringList() << i18n("Cantor") << i18n("Frontend to Mathematical Applications") << QLatin1String(CANTOR_VERSION_STRING) << QStringLiteral("https://cantor.kde.org/"));
 #else
-	components << (QStringList() << QLatin1String("<em>") + i18n("Cantor") + QLatin1String("</em>") << i18n("missing") < QString() << QStringLiteral("https://cantor.kde.org/"));
+	components << (QStringList() << QLatin1String("<em>") + i18n("Cantor") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://cantor.kde.org/"));
 #endif
 #ifdef HAVE_POPPLER
 	components << (QStringList() << i18n("Poppler") << i18n("PDF rendering library") << QLatin1String(POPPLER_VERSION) << QStringLiteral("https://poppler.freedesktop.org/"));
