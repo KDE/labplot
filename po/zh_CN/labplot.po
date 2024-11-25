@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-24 00:37+0000\n"
+"POT-Creation-Date: 2024-11-25 00:37+0000\n"
 "PO-Revision-Date: 2024-04-22 16:05\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -361,13 +361,13 @@ msgstr "输入%1"
 msgid "Import Data"
 msgstr "导入数据"
 
-#: src/backend/core/AbstractPart.cpp:116 src/frontend/MainWin.cpp:672
-#: src/frontend/MainWin.cpp:681
+#: src/backend/core/AbstractPart.cpp:116 src/frontend/MainWin.cpp:667
+#: src/frontend/MainWin.cpp:676
 #, kde-format
 msgid "From File..."
 msgstr "来自文件..."
 
-#: src/backend/core/AbstractPart.cpp:118 src/frontend/MainWin.cpp:693
+#: src/backend/core/AbstractPart.cpp:118 src/frontend/MainWin.cpp:688
 #, kde-format
 msgid "From SQL Database..."
 msgstr "来自 SQL 数据库..."
@@ -392,7 +392,7 @@ msgstr "打印"
 msgid "Print Preview"
 msgstr "打印预览"
 
-#: src/backend/core/AbstractPart.cpp:137 src/frontend/MainWin.cpp:765
+#: src/backend/core/AbstractPart.cpp:137 src/frontend/MainWin.cpp:760
 #, kde-format
 msgid "&Close"
 msgstr "关闭(&C)"
@@ -487,12 +487,12 @@ msgstr "大小：%1"
 #: src/backend/core/AspectTreeModel.cpp:236
 #, kde-format
 msgid "Type: %1"
-msgstr ""
+msgstr "类型：%1"
 
 #: src/backend/core/AspectTreeModel.cpp:237
 #, kde-format
 msgid "Plot Designation: %1"
-msgstr ""
+msgstr "绘图设定：%1"
 
 #: src/backend/core/AspectTreeModel.cpp:242
 #, kde-format
@@ -596,7 +596,7 @@ msgstr ""
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2846
 #, kde-format
 msgid "%1: set plot designation"
-msgstr ""
+msgstr "%1：显示绘图设定"
 
 #: src/backend/core/column/columncommands.cpp:707
 #: src/backend/matrix/matrixcommands.cpp:86
@@ -1893,7 +1893,7 @@ msgid "Unknown"
 msgstr ""
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/MainWin.cpp:643 src/frontend/MainWin.cpp:1987
+#: src/frontend/MainWin.cpp:638 src/frontend/MainWin.cpp:1982
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -2489,7 +2489,7 @@ msgstr ""
 #: src/backend/gsl/constants.cpp:15
 #, kde-format
 msgid "Programming constants"
-msgstr ""
+msgstr "编程常数"
 
 #: src/backend/gsl/constants.cpp:17
 #, kde-format
@@ -2656,7 +2656,7 @@ msgstr "标准状态气体摩尔体积"
 #: src/backend/gsl/constants.cpp:82
 #, kde-format
 msgid "Stefan-Boltzmann constant"
-msgstr "斯特藩—玻尔兹曼常量"
+msgstr "斯特藩-玻尔兹曼常量"
 
 #: src/backend/gsl/constants.cpp:83
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:581
@@ -3163,7 +3163,7 @@ msgstr ""
 #: src/frontend/spreadsheet/RandomValuesDialog.cpp:464
 #, kde-format
 msgid "Failed to allocate memory"
-msgstr ""
+msgstr "内存分配失败"
 
 #: src/backend/gsl/errors.h:40
 #, kde-format
@@ -3374,7 +3374,7 @@ msgstr "指数积分"
 #: src/backend/gsl/functions.cpp:97
 #, kde-format
 msgid "Fermi-Dirac Function"
-msgstr "费米—狄拉克函数"
+msgstr "费米-狄拉克函数"
 
 #: src/backend/gsl/functions.cpp:99
 #, kde-format
@@ -6627,7 +6627,7 @@ msgstr ""
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:569
 #, kde-format
 msgid "Cauchy-Lorentz"
-msgstr "柯西—洛伦兹分布密度函数"
+msgstr "柯西-洛伦兹分布密度函数"
 
 #: src/backend/nsl/nsl_fit.c:32 src/backend/nsl/nsl_sf_stats.c:45
 #, kde-format
@@ -6839,7 +6839,7 @@ msgstr ""
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:560
 #, kde-format
 msgid "Gaussian (Normal)"
-msgstr ""
+msgstr "高斯 (正态) 分布"
 
 #: src/backend/nsl/nsl_sf_stats.c:14
 #, kde-format
@@ -6860,7 +6860,7 @@ msgstr "广义误差分布"
 #: src/backend/nsl/nsl_sf_stats.c:18
 #, kde-format
 msgid "Cauchy-Lorentz (Breit-Wigner)"
-msgstr ""
+msgstr "柯西-洛伦兹 (布莱特-维格纳) 分布"
 
 #: src/backend/nsl/nsl_sf_stats.c:19
 #, kde-format
@@ -6875,7 +6875,7 @@ msgstr "Rayleigh 尾分布"
 #: src/backend/nsl/nsl_sf_stats.c:21
 #, kde-format
 msgid "Landau"
-msgstr "Landau 分布"
+msgstr "朗道分布"
 
 #: src/backend/nsl/nsl_sf_stats.c:22
 #, kde-format
@@ -6890,12 +6890,12 @@ msgstr ""
 #: src/backend/nsl/nsl_sf_stats.c:24
 #, kde-format
 msgid "Gamma"
-msgstr "Gamma 分布"
+msgstr "伽马分布"
 
 #: src/backend/nsl/nsl_sf_stats.c:25
 #, kde-format
 msgid "Flat (Uniform)"
-msgstr ""
+msgstr "均匀分布"
 
 #: src/backend/nsl/nsl_sf_stats.c:26
 #, kde-format
@@ -6905,12 +6905,12 @@ msgstr ""
 #: src/backend/nsl/nsl_sf_stats.c:27
 #, kde-format
 msgid "Chi-Squared"
-msgstr ""
+msgstr "卡方分布"
 
 #: src/backend/nsl/nsl_sf_stats.c:28
 #, kde-format
 msgid "F (Fisher-Snedecor)"
-msgstr ""
+msgstr "F (费希尔-斯内德克) 分布"
 
 #: src/backend/nsl/nsl_sf_stats.c:29
 #, kde-format
@@ -6920,7 +6920,7 @@ msgstr ""
 #: src/backend/nsl/nsl_sf_stats.c:30
 #, kde-format
 msgid "Beta"
-msgstr "Beta 分布"
+msgstr "贝塔分布"
 
 #: src/backend/nsl/nsl_sf_stats.c:31
 #, kde-format
@@ -6940,12 +6940,12 @@ msgstr "Weibull 分布"
 #: src/backend/nsl/nsl_sf_stats.c:34
 #, kde-format
 msgid "Gumbel Type-1 (Maximum Value; log-Weibull)"
-msgstr ""
+msgstr "第一类耿贝尔分布 (最大值；对数韦布尔分布)"
 
 #: src/backend/nsl/nsl_sf_stats.c:35
 #, kde-format
 msgid "Gumbel Type-2"
-msgstr ""
+msgstr "第二类耿贝尔分布"
 
 #: src/backend/nsl/nsl_sf_stats.c:36
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:575
@@ -7300,7 +7300,7 @@ msgstr ""
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:85
 #, kde-format
 msgid "Interquartile Range"
-msgstr ""
+msgstr "四分位距"
 
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:73
 #, kde-format
@@ -8096,7 +8096,7 @@ msgstr "核密度估计 (KDE) 图"
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:251
 #, kde-format
 msgid "Q-Q Plot"
-msgstr "分位数—分位数 (Q-Q) 图"
+msgstr "分位数-分位数 (Q-Q) 图"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:450
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:489
@@ -8349,7 +8349,7 @@ msgid "Error Function"
 msgstr "误差函数 (erf)"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:634
-#: src/frontend/MainWin.cpp:892 src/frontend/notebook/NotebookView.cpp:167
+#: src/frontend/MainWin.cpp:887 src/frontend/notebook/NotebookView.cpp:167
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:293
 #: src/frontend/worksheet/WorksheetView.cpp:432
@@ -8507,7 +8507,7 @@ msgstr ""
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:701
 #, kde-format
 msgid "Reduction of '%1'"
-msgstr ""
+msgstr "'%1' 的规约"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1856
 #, kde-format
@@ -8523,7 +8523,7 @@ msgstr "%1：微分“%2”"
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:704
 #, kde-format
 msgid "Derivative of '%1'"
-msgstr ""
+msgstr "'%1' 的导数"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1875
 #, kde-format
@@ -8539,7 +8539,7 @@ msgstr ""
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:707
 #, kde-format
 msgid "Integral of '%1'"
-msgstr ""
+msgstr "'%1' 的积分"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1894
 #, kde-format
@@ -8555,7 +8555,7 @@ msgstr ""
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:710
 #, kde-format
 msgid "Interpolation of '%1'"
-msgstr ""
+msgstr "'%1' 的插值"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1913
 #, kde-format
@@ -8571,7 +8571,7 @@ msgstr ""
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:713
 #, kde-format
 msgid "Smoothing of '%1'"
-msgstr ""
+msgstr "'%1' 的平滑"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1932
 #, kde-format
@@ -8588,7 +8588,7 @@ msgstr ""
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit to '%1'"
-msgstr ""
+msgstr "'%1' 的拟合"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1973
 #, kde-format
@@ -9493,17 +9493,17 @@ msgstr ""
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit Results"
-msgstr ""
+msgstr "拟合结果"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1847
 #, kde-format
 msgid "Nonlinear Fit to X/Y data"
-msgstr ""
+msgstr "X/Y 数据非线性拟合"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1853
 #, kde-format
 msgid "MODEL"
-msgstr ""
+msgstr "【模型】"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1857
 #, kde-format
@@ -9518,7 +9518,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1881
 #, kde-format
 msgid "PARAMETERS"
-msgstr ""
+msgstr "【参数】"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:145
@@ -9551,14 +9551,14 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1902
 #, kde-format
 msgid "GOODNESS OF FIT"
-msgstr ""
+msgstr "【拟合优度】"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1904
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:968
 #, kde-format
 msgid "Sum of squared residuals"
-msgstr ""
+msgstr "平方残差和"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1905
 #, kde-format
@@ -9602,7 +9602,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1912
 #, kde-format
 msgid "Mean absolute error"
-msgstr ""
+msgstr "平均绝对误差"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1913
 #, kde-format
@@ -9646,7 +9646,7 @@ msgstr ""
 #, kde-format
 msgctxt "Curve Fitting"
 msgid "Fit Results"
-msgstr ""
+msgstr "拟合结果"
 
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:85
 #, kde-format
@@ -9921,6 +9921,339 @@ msgstr ""
 #: src/backend/worksheet/WorksheetElement.cpp:805
 #, kde-format
 msgid "%1: set logical position"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:104
+#, kde-format
+msgid "Release build "
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:106
+#, kde-format
+msgid "Debug build "
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:109 src/frontend/AboutDialog.cpp:112
+#, kde-format
+msgid "Decimal point "
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:110 src/frontend/AboutDialog.cpp:113
+#, kde-format
+msgid "Group separator "
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:114
+#, kde-format
+msgid "Exponential "
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:114
+#, kde-format
+msgid "Zero digit "
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:115
+#, kde-format
+msgid "Percent "
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:116
+#, kde-format
+msgid "Positive/Negative sign "
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:135
+#, kde-format
+msgid "System:"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:136
+#, fuzzy, kde-format
+#| msgid "Scale:"
+msgid "Locale:"
+msgstr "缩放："
+
+#: src/frontend/AboutDialog.cpp:137
+#, kde-format
+msgid "Number Settings:"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:137
+#, kde-format
+msgid "Updated on restart"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:138
+#, kde-format
+msgid "Architecture:"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:139
+#, kde-format
+msgid "Kernel: "
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:140
+#, fuzzy, kde-format
+#| msgid "Executable: %1"
+msgid "Executable Path:"
+msgstr "可执行：%1"
+
+#: src/frontend/AboutDialog.cpp:148
+#, kde-format
+msgid "C++ Compiler: "
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:148
+#, kde-format
+msgid "C++ Compiler Flags: "
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:150
+#, kde-format
+msgid "QADS"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:150
+#, kde-format
+msgid "Qt Advanced Docking System"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:152 src/frontend/AboutDialog.cpp:154
+#, kde-format
+msgid "Cantor"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:152
+#, kde-format
+msgid "Frontend to Mathematical Applications"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:154 src/frontend/AboutDialog.cpp:159
+#: src/frontend/AboutDialog.cpp:164 src/frontend/AboutDialog.cpp:169
+#: src/frontend/AboutDialog.cpp:174 src/frontend/AboutDialog.cpp:179
+#: src/frontend/AboutDialog.cpp:184 src/frontend/AboutDialog.cpp:189
+#: src/frontend/AboutDialog.cpp:196 src/frontend/AboutDialog.cpp:201
+#: src/frontend/AboutDialog.cpp:206 src/frontend/AboutDialog.cpp:212
+#: src/frontend/AboutDialog.cpp:217 src/frontend/AboutDialog.cpp:222
+#: src/frontend/AboutDialog.cpp:227 src/frontend/AboutDialog.cpp:233
+#: src/frontend/AboutDialog.cpp:238 src/frontend/AboutDialog.cpp:243
+#: src/frontend/AboutDialog.cpp:248 src/frontend/AboutDialog.cpp:254
+#: src/frontend/AboutDialog.cpp:259 src/frontend/AboutDialog.cpp:276
+#, kde-format
+msgid "missing"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:157 src/frontend/AboutDialog.cpp:159
+#, kde-format
+msgid "Poppler"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:157
+#, kde-format
+msgid "PDF rendering library"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:162 src/frontend/AboutDialog.cpp:164
+#, kde-format
+msgid "Discount"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:162
+#, kde-format
+msgid "Markdown markup language support"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:167 src/frontend/AboutDialog.cpp:169
+#, kde-format
+msgid "KUserfeedback"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:167
+#, kde-format
+msgid "Support collecting feedback from users"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:172 src/frontend/AboutDialog.cpp:174
+#, kde-format
+msgid "KSyntaxHighlighting"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:172
+#, kde-format
+msgid "Syntax highlighting engine"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:177 src/frontend/AboutDialog.cpp:179
+#, kde-format
+msgid "Purpose"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:177
+#, kde-format
+msgid "Offers available actions for a specific purpose"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:182 src/frontend/AboutDialog.cpp:184
+#, kde-format
+msgid "Qt SerialPort"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:182
+#, kde-format
+msgid "Serial port functionality support"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:187 src/frontend/AboutDialog.cpp:189
+#, kde-format
+msgid "Qt MQTT"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:187
+#, kde-format
+msgid "Support data from MQTT brokers"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:192
+#, kde-format
+msgid "GSL"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:192
+#, kde-format
+msgid "GNU Scientific Library"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:194 src/frontend/AboutDialog.cpp:196
+#, kde-format
+msgid "FFTW3"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:194
+#, kde-format
+msgid "Fastest Fourier Transform in the West"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:199 src/frontend/AboutDialog.cpp:201
+#, kde-format
+msgid "libcerf"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:199
+#, kde-format
+msgid "Complex error and related functions"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:204 src/frontend/AboutDialog.cpp:206
+#, kde-format
+msgid "Eigen3"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:204
+#, kde-format
+msgid "C++ library for linear algebra"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:210 src/frontend/AboutDialog.cpp:212
+#, kde-format
+msgid "liborigin"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:210
+#, kde-format
+msgid "importing Origin OPJ project files"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:215 src/frontend/AboutDialog.cpp:217
+#, kde-format
+msgid "HDF5"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:215
+#, kde-format
+msgid "High-performance data management and storage suite"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:220 src/frontend/AboutDialog.cpp:222
+#, kde-format
+msgid "NetCDF"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:220
+#, kde-format
+msgid "Network Common Data Form"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:225 src/frontend/AboutDialog.cpp:227
+#, kde-format
+msgid "CFITSIO"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:225
+#, kde-format
+msgid ""
+"Support data files in FITS (Flexible Image Transport System) data format"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:231 src/frontend/AboutDialog.cpp:233
+#, kde-format
+msgid "ReadStat"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:231
+#, kde-format
+msgid "Read (and write) data sets from SAS, Stata, and SPSS"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:236 src/frontend/AboutDialog.cpp:238
+#, kde-format
+msgid "Matio"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:236
+#, kde-format
+msgid "Import binary MATLAB MAT files"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:241 src/frontend/AboutDialog.cpp:243
+#, kde-format
+msgid "QXlsx"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:241
+#, kde-format
+msgid "Import Excel xlsx files"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:246 src/frontend/AboutDialog.cpp:248
+#, kde-format
+msgid "ORCUS"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:246
+#, kde-format
+msgid "Import ODS (Open Document Spreadsheet) files"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:251 src/frontend/AboutDialog.cpp:254
+#, kde-format
+msgid "MCAP"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:251
+#, kde-format
+msgid "MCAP file support"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:257 src/frontend/AboutDialog.cpp:259
+#, kde-format
+msgid "Vector BLF"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:257
+#, kde-format
+msgid "Binary Log File (BLF) file support"
 msgstr ""
 
 #: src/frontend/colormaps/ColorMapsDialog.cpp:39
@@ -11463,7 +11796,7 @@ msgid "Open LabPlot Project"
 msgstr ""
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:438
-#: src/frontend/MainWin.cpp:1488
+#: src/frontend/MainWin.cpp:1483
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "LabPlot 工程 (%1)"
@@ -11487,8 +11820,8 @@ msgstr "文件夹名称："
 #. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:71 src/frontend/MainWin.cpp:637
-#: src/frontend/MainWin.cpp:1969 src/frontend/SettingsDialog.cpp:68
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:71 src/frontend/MainWin.cpp:632
+#: src/frontend/MainWin.cpp:1964 src/frontend/SettingsDialog.cpp:68
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:122
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -11723,7 +12056,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2788
+#: src/frontend/MainWin.cpp:2783
 #, kde-format
 msgid "Warning"
 msgstr "警告"
@@ -13259,7 +13592,7 @@ msgstr ""
 msgid ""
 "Variable name can contain letters, digits and '_' only and should start with "
 "a letter"
-msgstr ""
+msgstr "变量名称只能包含字母、 数字和 '_' ，并应以字母开头。"
 
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:219
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:317
@@ -13330,7 +13663,7 @@ msgid ""
 "installation."
 msgstr ""
 
-#: src/frontend/GuiObserver.cpp:195 src/frontend/MainWin.cpp:1395
+#: src/frontend/GuiObserver.cpp:195 src/frontend/MainWin.cpp:1390
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -13880,158 +14213,93 @@ msgstr ""
 msgid "Clear History"
 msgstr "清除历史"
 
-#: src/frontend/LabPlot.cpp:89
+#: src/frontend/LabPlot.cpp:44
 #, kde-format
-msgid "Release build "
+msgid "Visit website:"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:91
+#: src/frontend/LabPlot.cpp:46
 #, kde-format
-msgid "Debug build "
+msgid "Mastodon:"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:94 src/frontend/LabPlot.cpp:97
+#: src/frontend/LabPlot.cpp:47
 #, kde-format
-msgid "Decimal point "
+msgid "Watch video tutorials:"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:95 src/frontend/LabPlot.cpp:98
+#: src/frontend/LabPlot.cpp:48
 #, kde-format
-msgid "Group separator "
+msgid "Please report bugs to:"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:99
-#, kde-format
-msgid "Exponential "
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:99
-#, kde-format
-msgid "Zero digit "
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:100
-#, kde-format
-msgid "Percent "
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:101
-#, kde-format
-msgid "Positive/Negative sign "
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:119
-#, kde-format
-msgid "System: "
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:119
-#, kde-format
-msgid "Locale: "
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:120
-#, kde-format
-msgid "Number Settings:"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:120
-#, kde-format
-msgid "Updated on restart"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:121
-#, kde-format
-msgid "Architecture: "
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:121
-#, kde-format
-msgid "Kernel: "
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:122
-#, kde-format
-msgid "C++ Compiler: "
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:123
-#, kde-format
-msgid "C++ Compiler Flags: "
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:124
-#, kde-format
-msgid "Executable Path: "
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:136
+#: src/frontend/LabPlot.cpp:52
 #, kde-format
 msgid ""
 "LabPlot is a FREE, open-source and cross-platform Data Visualization and "
 "Analysis software accessible to everyone."
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:138
+#: src/frontend/LabPlot.cpp:54
 #, kde-format
-msgid "(c) 2007-2024"
+msgid "(c) 2007-2024 LabPlot authors"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:140
+#: src/frontend/LabPlot.cpp:56
 #, kde-format
 msgid "Stefan Gerlach"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:140 src/frontend/LabPlot.cpp:141
-#: src/frontend/LabPlot.cpp:142 src/frontend/LabPlot.cpp:143
+#: src/frontend/LabPlot.cpp:56 src/frontend/LabPlot.cpp:57
+#: src/frontend/LabPlot.cpp:58 src/frontend/LabPlot.cpp:59
 #, kde-format
 msgctxt "@info:credit"
 msgid "Developer"
 msgstr "开发商"
 
-#: src/frontend/LabPlot.cpp:141
+#: src/frontend/LabPlot.cpp:57
 #, kde-format
 msgid "Alexander Semke"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:142
+#: src/frontend/LabPlot.cpp:58
 #, kde-format
 msgid "Fábián Kristóf-Szabolcs"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:143
+#: src/frontend/LabPlot.cpp:59
 #, kde-format
 msgid "Martin Marmsoler"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:144
+#: src/frontend/LabPlot.cpp:60
 #, kde-format
 msgid "Dariusz Laska"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:145
+#: src/frontend/LabPlot.cpp:61
 #, kde-format
 msgctxt "@info:credit"
 msgid "Conceptual work, documentation, example projects"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:148
+#: src/frontend/LabPlot.cpp:64
 #, kde-format
 msgid "Andreas Kainz"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:148
+#: src/frontend/LabPlot.cpp:64
 #, kde-format
 msgctxt "@info:credit"
 msgid "Icon designer"
 msgstr "图标设计师"
 
-#: src/frontend/LabPlot.cpp:149
+#: src/frontend/LabPlot.cpp:68
 #, kde-format
 msgid "Yuri Chornoivan"
 msgstr "Yuri Chornoivan"
 
-#: src/frontend/LabPlot.cpp:150
+#: src/frontend/LabPlot.cpp:69
 #, kde-format
 msgctxt "@info:credit"
 msgid ""
@@ -14039,302 +14307,51 @@ msgid ""
 "topics"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:153
+#: src/frontend/LabPlot.cpp:72
 #, kde-format
 msgid "Garvit Khatri"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:154
+#: src/frontend/LabPlot.cpp:73
 #, kde-format
 msgctxt "@info:credit"
 msgid "Porting LabPlot to KF5 and Integration with Cantor"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:157
+#: src/frontend/LabPlot.cpp:76
 #, kde-format
 msgid "Christoph Roick"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:158
+#: src/frontend/LabPlot.cpp:77
 #, kde-format
 msgctxt "@info:credit"
 msgid "Support import of ROOT (CERN) TH1 histograms"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:166
-#, kde-format
-msgid "QADS"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:166
-#, kde-format
-msgid "Qt Advanced Docking System"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:169
-#, kde-format
-msgid "Cantor"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:169
-#, fuzzy, kde-format
-#| msgid "Standard Mathematical Functions"
-msgid "Frontend to Mathematical Applications"
-msgstr "标准数学函数"
-
-#: src/frontend/LabPlot.cpp:173
-#, kde-format
-msgid "Poppler"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:173
-#, kde-format
-msgid "PDF rendering library"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:177
-#, fuzzy, kde-format
-#| msgid "Count"
-msgid "Discount"
-msgstr "数量"
-
-#: src/frontend/LabPlot.cpp:177
-#, kde-format
-msgid "Markdown markup language support"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:181
-#, fuzzy, kde-format
-#| msgid "User Feedback"
-msgid "KUserfeedback"
-msgstr "用户反馈"
-
-#: src/frontend/LabPlot.cpp:181
-#, kde-format
-msgid "Support collecting feedback from users"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:185
-#, fuzzy, kde-format
-#| msgid "Syntax Highlighting"
-msgid "KSyntaxHighlighting"
-msgstr "语法高亮"
-
-#: src/frontend/LabPlot.cpp:185
-#, fuzzy, kde-format
-#| msgid "Syntax Highlighting"
-msgid "Syntax highlighting engine"
-msgstr "语法高亮"
-
-#: src/frontend/LabPlot.cpp:189
-#, kde-format
-msgid "Purpose"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:189
-#, kde-format
-msgid "Offers available actions for a specific purpose"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:193
-#, fuzzy, kde-format
-#| msgid "Serial Port"
-msgid "Qt SerialPort"
-msgstr "串口"
-
-#: src/frontend/LabPlot.cpp:193
-#, kde-format
-msgid "Serial port functionality support"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:197
-#, kde-format
-msgid "Qt MQTT"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:197
-#, fuzzy, kde-format
-#| msgid "Import data from a regular file"
-msgid "Support data from MQTT brokers"
-msgstr "从常规文件导入数据"
-
-#: src/frontend/LabPlot.cpp:201
-#, kde-format
-msgid "GSL"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:201
-#, fuzzy, kde-format
-#| msgid "Scientific (e)"
-msgid "GNU Scientific Library"
-msgstr "科学记数法 (e)"
-
-#: src/frontend/LabPlot.cpp:204
-#, kde-format
-msgid "FFTW3"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:204
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Fourier Transform"
-msgid "Fastest Fourier Transform in the West"
-msgstr "属性：傅立叶变换"
-
-#: src/frontend/LabPlot.cpp:208
-#, kde-format
-msgid "libcerf"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:208
-#, fuzzy, kde-format
-#| msgid "Error Functions and Related Functions"
-msgid "Complex error and related functions"
-msgstr "误差函数及其相关函数"
-
-#: src/frontend/LabPlot.cpp:212
-#, kde-format
-msgid "Eigen3"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:212
-#, kde-format
-msgid "C++ library for linear algebra"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:217
-#, kde-format
-msgid "liborigin"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:217
-#, kde-format
-msgid "importing Origin OPJ project files"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:221
-#, kde-format
-msgid "HDF5"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:221
-#, kde-format
-msgid "High-performance data management and storage suite"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:225
-#, kde-format
-msgid "NetCDF"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:225
-#, fuzzy, kde-format
-#| msgid "Network Common Data Format (NetCDF)"
-msgid "Network Common Data Form"
-msgstr "网络通用数据格式 (NetCDF)"
-
-#: src/frontend/LabPlot.cpp:229
-#, kde-format
-msgid "CFITSIO"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:229
-#, fuzzy, kde-format
-#| msgid "Flexible Image Transport System Data Format (FITS)"
-msgid ""
-"Support data files in FITS (Flexible Image Transport System) data format"
-msgstr "普适图像传输系统数据格式 (FITS)"
-
-#: src/frontend/LabPlot.cpp:234
-#, fuzzy, kde-format
-#| msgid "Ready"
-msgid "ReadStat"
-msgstr "就绪"
-
-#: src/frontend/LabPlot.cpp:234
-#, kde-format
-msgid "Read (and write) data sets from SAS, Stata, and SPSS"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:238
-#, fuzzy, kde-format
-#| msgid "Equation"
-msgid "Matio"
-msgstr "方程"
-
-#: src/frontend/LabPlot.cpp:238
-#, fuzzy, kde-format
-#| msgid "MATLAB MAT file"
-msgid "Import binary MATLAB MAT files"
-msgstr "MATLAB MAT 文件"
-
-#: src/frontend/LabPlot.cpp:242
-#, kde-format
-msgid "QXlsx"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:242
-#, kde-format
-msgid "Import Excel xlsx files"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:246
-#, kde-format
-msgid "ORCUS"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:246
-#, fuzzy, kde-format
-#| msgid "OpenDocument Spreadsheet (ODS)"
-msgid "Import ODS (Open Document Spreadsheet) files"
-msgstr "OpenDocument 表格 (ODS)"
-
-#: src/frontend/LabPlot.cpp:250
-#, fuzzy, kde-format
-#| msgid "MCAP Data"
-msgid "MCAP"
-msgstr "MCAP 数据"
-
-#: src/frontend/LabPlot.cpp:250
-#, kde-format
-msgid "MCAP file support"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:254
-#, fuzzy, kde-format
-#| msgid "Vectors:"
-msgid "Vector BLF"
-msgstr "列数："
-
-#: src/frontend/LabPlot.cpp:254
-#, fuzzy, kde-format
-#| msgid "Vector Binary Logfile (BLF)"
-msgid "Binary Log File (BLF) file support"
-msgstr "Vector 二进制日志文件 (BLF)"
-
-#: src/frontend/LabPlot.cpp:269
+#: src/frontend/LabPlot.cpp:100
 #, kde-format
 msgid "Disable splash screen"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:272
+#: src/frontend/LabPlot.cpp:103
 #, kde-format
 msgid "Start in the presenter mode"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:275
+#: src/frontend/LabPlot.cpp:106
 #, kde-format
 msgid "Open a project file."
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:294
+#: src/frontend/LabPlot.cpp:125
 #, kde-format
 msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
 "to exit the application."
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:295
+#: src/frontend/LabPlot.cpp:126
 #, kde-format
 msgid "Failed to Open"
 msgstr ""
@@ -14474,367 +14491,367 @@ msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr "欢迎使用 LabPlot %1"
 
-#: src/frontend/MainWin.cpp:606
+#: src/frontend/MainWin.cpp:601
 #, kde-format
 msgid "&Open Example"
 msgstr "打开示例(&O)"
 
-#: src/frontend/MainWin.cpp:627 src/frontend/MainWin.cpp:1953
+#: src/frontend/MainWin.cpp:622 src/frontend/MainWin.cpp:1948
 #, kde-format
 msgid "Workbook"
 msgstr "工作薄"
 
-#: src/frontend/MainWin.cpp:629
+#: src/frontend/MainWin.cpp:624
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr "创建新的工作簿，用于存放工作表、矩阵"
 
-#: src/frontend/MainWin.cpp:632 src/frontend/MainWin.cpp:1961
+#: src/frontend/MainWin.cpp:627 src/frontend/MainWin.cpp:1956
 #, kde-format
 msgid "Data Extractor"
 msgstr "数据点提取器"
 
-#: src/frontend/MainWin.cpp:633
+#: src/frontend/MainWin.cpp:628
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr "创建新的数据点提取器，用于从图片中获取数据点"
 
-#: src/frontend/MainWin.cpp:639
+#: src/frontend/MainWin.cpp:634
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr "创建新的数据表，用于编辑数据"
 
-#: src/frontend/MainWin.cpp:645
+#: src/frontend/MainWin.cpp:640
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr "创建新的矩阵，用于编辑数据"
 
-#: src/frontend/MainWin.cpp:649 src/frontend/MainWin.cpp:2005
+#: src/frontend/MainWin.cpp:644 src/frontend/MainWin.cpp:2000
 #: src/frontend/SettingsDialog.cpp:63
 #, kde-format
 msgid "Worksheet"
 msgstr "工作表"
 
-#: src/frontend/MainWin.cpp:651
+#: src/frontend/MainWin.cpp:646
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr "创建新的工作表，用于数据绘图"
 
-#: src/frontend/MainWin.cpp:655 src/frontend/MainWin.cpp:2013
+#: src/frontend/MainWin.cpp:650 src/frontend/MainWin.cpp:2008
 #, kde-format
 msgid "Note"
 msgstr "备注"
 
-#: src/frontend/MainWin.cpp:656
+#: src/frontend/MainWin.cpp:651
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr "创建新的备注，用于记录文本"
 
-#: src/frontend/MainWin.cpp:660 src/frontend/MainWin.cpp:1945
+#: src/frontend/MainWin.cpp:655 src/frontend/MainWin.cpp:1940
 #, kde-format
 msgid "Folder"
 msgstr "文件夹"
 
-#: src/frontend/MainWin.cpp:661
+#: src/frontend/MainWin.cpp:656
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr "创建新的文件夹，用于存放工作表等其他元素"
 
-#: src/frontend/MainWin.cpp:666
+#: src/frontend/MainWin.cpp:661
 #, kde-format
 msgid "Live Data Source..."
 msgstr "实时数据源..."
 
-#: src/frontend/MainWin.cpp:667
+#: src/frontend/MainWin.cpp:662
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr "创建实时数据源，用于从实时设备读取数据"
 
-#: src/frontend/MainWin.cpp:674 src/frontend/MainWin.cpp:683
+#: src/frontend/MainWin.cpp:669 src/frontend/MainWin.cpp:678
 #, kde-format
 msgid "Import data from a regular file"
 msgstr "从常规文件导入数据"
 
-#: src/frontend/MainWin.cpp:688
+#: src/frontend/MainWin.cpp:683
 #, kde-format
 msgid "From kaggle.com..."
 msgstr "来自 kaggle.com..."
 
-#: src/frontend/MainWin.cpp:689
+#: src/frontend/MainWin.cpp:684
 #, kde-format
 msgid "Import data from kaggle.com"
 msgstr "从 kaggle.com 导入数据"
 
-#: src/frontend/MainWin.cpp:694
+#: src/frontend/MainWin.cpp:689
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr "从 SQL 数据库导入数据"
 
-#: src/frontend/MainWin.cpp:698
+#: src/frontend/MainWin.cpp:693
 #, kde-format
 msgid "From Dataset Collection..."
 msgstr "来自数据集库..."
 
-#: src/frontend/MainWin.cpp:699
+#: src/frontend/MainWin.cpp:694
 #, kde-format
 msgid "Import data from an online dataset"
 msgstr "从在线数据集导入数据"
 
-#: src/frontend/MainWin.cpp:703
+#: src/frontend/MainWin.cpp:698
 #, kde-format
 msgid "LabPlot Project..."
 msgstr "LabPlot 工程文件..."
 
-#: src/frontend/MainWin.cpp:704
+#: src/frontend/MainWin.cpp:699
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr "从 LabPlot 工程文件 (.lml) 导入到当前工程"
 
-#: src/frontend/MainWin.cpp:709
+#: src/frontend/MainWin.cpp:704
 #, kde-format
 msgid "Origin Project (OPJ)..."
 msgstr "Origin 工程文件 (OPJ)..."
 
-#: src/frontend/MainWin.cpp:710
+#: src/frontend/MainWin.cpp:705
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr "从 OriginLab Origin 工程文件 (.opj) 导入到当前工程"
 
-#: src/frontend/MainWin.cpp:715
+#: src/frontend/MainWin.cpp:710
 #, kde-format
 msgid "Export..."
 msgstr "导出..."
 
-#: src/frontend/MainWin.cpp:716
+#: src/frontend/MainWin.cpp:711
 #, kde-format
 msgid "Export selected element"
 msgstr "导出选中的元素"
 
-#: src/frontend/MainWin.cpp:722 src/frontend/MainWin.cpp:2490
-#: src/frontend/MainWin.cpp:2498
+#: src/frontend/MainWin.cpp:717 src/frontend/MainWin.cpp:2485
+#: src/frontend/MainWin.cpp:2493
 #, kde-format
 msgid "Share"
 msgstr "分享"
 
-#: src/frontend/MainWin.cpp:727
+#: src/frontend/MainWin.cpp:722
 #, kde-format
 msgid "Color Maps Browser"
 msgstr "浏览色阶"
 
-#: src/frontend/MainWin.cpp:728
+#: src/frontend/MainWin.cpp:723
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr "打开对话框以浏览可用的色阶。"
 
-#: src/frontend/MainWin.cpp:737
+#: src/frontend/MainWin.cpp:732
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "FITS 元数据编辑器..."
 
-#: src/frontend/MainWin.cpp:738
+#: src/frontend/MainWin.cpp:733
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr "打开 FITS 元数据编辑器"
 
-#: src/frontend/MainWin.cpp:747
+#: src/frontend/MainWin.cpp:742
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr "撤销/重做历史..."
 
-#: src/frontend/MainWin.cpp:767
+#: src/frontend/MainWin.cpp:762
 #, kde-format
 msgid "Close the active window"
 msgstr "关闭当前窗口"
 
-#: src/frontend/MainWin.cpp:770
+#: src/frontend/MainWin.cpp:765
 #, kde-format
 msgid "Close &All"
 msgstr "全部关闭(&A)"
 
-#: src/frontend/MainWin.cpp:771
+#: src/frontend/MainWin.cpp:766
 #, kde-format
 msgid "Close all the windows"
 msgstr "关闭所有窗口"
 
-#: src/frontend/MainWin.cpp:774
+#: src/frontend/MainWin.cpp:769
 #, kde-format
 msgid "Ne&xt"
 msgstr "下一个(&X)"
 
-#: src/frontend/MainWin.cpp:776
+#: src/frontend/MainWin.cpp:771
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "将焦点移动到下一个窗口"
 
-#: src/frontend/MainWin.cpp:779
+#: src/frontend/MainWin.cpp:774
 #, kde-format
 msgid "Pre&vious"
 msgstr "上一个(&V)"
 
-#: src/frontend/MainWin.cpp:781
+#: src/frontend/MainWin.cpp:776
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "将焦点移动到上一个窗口"
 
-#: src/frontend/MainWin.cpp:788
+#: src/frontend/MainWin.cpp:783
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "仅当前文件夹(&F)"
 
-#: src/frontend/MainWin.cpp:793
+#: src/frontend/MainWin.cpp:788
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "当前文件夹及子文件夹(&S)"
 
-#: src/frontend/MainWin.cpp:797
+#: src/frontend/MainWin.cpp:792
 #, kde-format
 msgid "&All"
 msgstr "全部(&A)"
 
-#: src/frontend/MainWin.cpp:819
+#: src/frontend/MainWin.cpp:814
 #, kde-format
 msgid "Show Memory Usage"
 msgstr "显示内存使用情况"
 
-#: src/frontend/MainWin.cpp:827
+#: src/frontend/MainWin.cpp:822
 #, kde-format
 msgid "Project Explorer"
 msgstr "工程浏览器"
 
-#: src/frontend/MainWin.cpp:832
+#: src/frontend/MainWin.cpp:827
 #, kde-format
 msgid "Properties Explorer"
 msgstr "属性浏览器"
 
-#: src/frontend/MainWin.cpp:837
+#: src/frontend/MainWin.cpp:832
 #, kde-format
 msgid "Worksheet Preview"
 msgstr "工作表预览"
 
-#: src/frontend/MainWin.cpp:860
+#: src/frontend/MainWin.cpp:855
 #, kde-format
 msgid "Configure CAS..."
 msgstr "配置 CAS..."
 
-#: src/frontend/MainWin.cpp:861
+#: src/frontend/MainWin.cpp:856
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
 "systems or to enable new ones"
 msgstr "打开计算机代数系统 (CAS) 的设置，对可用系统做出修改或启用新系统"
 
-#: src/frontend/MainWin.cpp:922
+#: src/frontend/MainWin.cpp:917
 #, kde-format
 msgid "Window Visibility"
 msgstr "窗口可见性"
 
-#: src/frontend/MainWin.cpp:939
+#: src/frontend/MainWin.cpp:934
 #, kde-format
 msgid "Color Scheme"
 msgstr "配色方案"
 
-#: src/frontend/MainWin.cpp:998
+#: src/frontend/MainWin.cpp:993
 #, kde-format
 msgid "The current project %1 has been modified. Do you want to save it?"
 msgstr "当前工程 %1 已被修改。您想要保存吗？"
 
-#: src/frontend/MainWin.cpp:999
+#: src/frontend/MainWin.cpp:994
 #, kde-format
 msgid "Save Project"
 msgstr "保存工程"
 
-#: src/frontend/MainWin.cpp:1356
+#: src/frontend/MainWin.cpp:1351
 #, kde-format
 msgid "%1: created"
 msgstr "%1：创建"
 
-#: src/frontend/MainWin.cpp:1382
+#: src/frontend/MainWin.cpp:1377
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "工程浏览器"
 
-#: src/frontend/MainWin.cpp:1407
+#: src/frontend/MainWin.cpp:1402
 #, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "工作表预览"
 
-#: src/frontend/MainWin.cpp:1416
+#: src/frontend/MainWin.cpp:1411
 #, kde-format
 msgctxt "@title:window"
 msgid "Content"
 msgstr "内容"
 
-#: src/frontend/MainWin.cpp:1493
+#: src/frontend/MainWin.cpp:1488
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr "Origin 工程文件 (%1)"
 
-#: src/frontend/MainWin.cpp:1499
+#: src/frontend/MainWin.cpp:1494
 #, kde-format
 msgid "Cantor Projects (*.cws)"
 msgstr "Cantor 工程文件 (*.cws)"
 
-#: src/frontend/MainWin.cpp:1500
+#: src/frontend/MainWin.cpp:1495
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "Jupyter 笔记本文件 (*.ipynb)"
 
-#: src/frontend/MainWin.cpp:1507
+#: src/frontend/MainWin.cpp:1502
 #, kde-format
 msgid "All supported files (%1)"
 msgstr "所有支持的文件 (%1)"
 
-#: src/frontend/MainWin.cpp:1511
+#: src/frontend/MainWin.cpp:1506
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "打开工程"
 
-#: src/frontend/MainWin.cpp:1528
+#: src/frontend/MainWin.cpp:1523
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "工程文件 %1 已经处于打开状态。"
 
-#: src/frontend/MainWin.cpp:1528 src/frontend/MainWin.cpp:1536
-#: src/frontend/MainWin.cpp:1541
+#: src/frontend/MainWin.cpp:1523 src/frontend/MainWin.cpp:1531
+#: src/frontend/MainWin.cpp:1536
 #, kde-format
 msgid "Open Project"
 msgstr "打开工程"
 
-#: src/frontend/MainWin.cpp:1536
+#: src/frontend/MainWin.cpp:1531
 #, kde-format
 msgid "The project file %1 doesn't exist."
 msgstr "工程文件 %1 不存在。"
 
-#: src/frontend/MainWin.cpp:1541
+#: src/frontend/MainWin.cpp:1536
 #, kde-format
 msgid "Couldn't read the project file %1."
 msgstr "无法读取工程文件 %1。"
 
-#: src/frontend/MainWin.cpp:1549
+#: src/frontend/MainWin.cpp:1544
 #, kde-format
 msgid "Loading %1..."
 msgstr "正在加载 %1..."
 
-#: src/frontend/MainWin.cpp:1603
+#: src/frontend/MainWin.cpp:1598
 #, kde-format
 msgid "%1: opened"
 msgstr "%1：打开"
 
-#: src/frontend/MainWin.cpp:1638
+#: src/frontend/MainWin.cpp:1633
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "工程打开成功 (耗时 %1 秒)。"
 
-#: src/frontend/MainWin.cpp:1726
+#: src/frontend/MainWin.cpp:1721
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "工程另存为"
 
-#: src/frontend/MainWin.cpp:1728
+#: src/frontend/MainWin.cpp:1723
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -14843,70 +14860,70 @@ msgstr ""
 "LabPlot 工程文件 (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 
-#: src/frontend/MainWin.cpp:1754
+#: src/frontend/MainWin.cpp:1749
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "无法打开临时文件进行写入。"
 
-#: src/frontend/MainWin.cpp:1834
+#: src/frontend/MainWin.cpp:1829
 #, kde-format
 msgid "Project saved"
 msgstr "工程已保存"
 
-#: src/frontend/MainWin.cpp:1850
+#: src/frontend/MainWin.cpp:1845
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "无法保存文件“%1”。"
 
-#: src/frontend/MainWin.cpp:1855
+#: src/frontend/MainWin.cpp:1850
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "无法打开文件“%1”进行写入."
 
-#: src/frontend/MainWin.cpp:1905
+#: src/frontend/MainWin.cpp:1900
 #, kde-format
 msgid "Changed"
 msgstr "已更改"
 
-#: src/frontend/MainWin.cpp:1920 src/frontend/MainWin.cpp:1932
+#: src/frontend/MainWin.cpp:1915 src/frontend/MainWin.cpp:1927
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "正在准备打印 %1"
 
-#: src/frontend/MainWin.cpp:1922 src/frontend/MainWin.cpp:1934
+#: src/frontend/MainWin.cpp:1917 src/frontend/MainWin.cpp:1929
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 已打印"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/MainWin.cpp:2454
+#: src/frontend/MainWin.cpp:2449
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1431
 #: src/frontend/worksheet/WorksheetView.cpp:361
 #, kde-format
 msgid "Cursor"
 msgstr "辅助标尺"
 
-#: src/frontend/MainWin.cpp:2490
+#: src/frontend/MainWin.cpp:2485
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "分享工程时出现问题：%1"
 
-#: src/frontend/MainWin.cpp:2494
+#: src/frontend/MainWin.cpp:2489
 #, kde-format
 msgid "Project shared successfully"
 msgstr "工程分享成功"
 
-#: src/frontend/MainWin.cpp:2497
+#: src/frontend/MainWin.cpp:2492
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "您可以在此找到已分享的工程：<a href=\"%1\">%1</a>"
 
-#: src/frontend/MainWin.cpp:2687
+#: src/frontend/MainWin.cpp:2682
 #, kde-format
 msgid "Running Kaggle CLI tool failed"
 msgstr "运行 Kaggle 命令行工具失败"
 
-#: src/frontend/MainWin.cpp:2688
+#: src/frontend/MainWin.cpp:2683
 #, kde-format
 msgid ""
 "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
@@ -14915,32 +14932,32 @@ msgstr ""
 "请按照 <a href=\"https://www.kaggle.com/docs/api\">\"How to Use Kaggle\"</a> "
 "介绍的步骤配置 Kaggle 命令行工具。"
 
-#: src/frontend/MainWin.cpp:2751
+#: src/frontend/MainWin.cpp:2746
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 已导出"
 
-#: src/frontend/MainWin.cpp:2758
+#: src/frontend/MainWin.cpp:2753
 #, kde-format
 msgid "FITS files saved"
 msgstr "FITS 文件已保存"
 
-#: src/frontend/MainWin.cpp:2770
+#: src/frontend/MainWin.cpp:2765
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "MQTT 客户端 %1"
 
-#: src/frontend/MainWin.cpp:2788
+#: src/frontend/MainWin.cpp:2783
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "该主机已有连接的 MQTT 客户端！"
 
-#: src/frontend/MainWin.cpp:2792
+#: src/frontend/MainWin.cpp:2787
 #, kde-format
 msgid "Live data source%1"
 msgstr "实时数据源 %1"
 
-#: src/frontend/MainWin.cpp:2837
+#: src/frontend/MainWin.cpp:2832
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "创建新的 %1 笔记本"
@@ -14971,7 +14988,7 @@ msgstr "生成(&G)"
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:226
 #, kde-format
 msgid "Generate function values"
-msgstr ""
+msgstr "生成函数值"
 
 #: src/frontend/matrix/MatrixFunctionDialog.cpp:196
 #, kde-format
@@ -15424,7 +15441,7 @@ msgstr ""
 #: src/frontend/ProjectExplorer.cpp:69
 #, kde-format
 msgid "Search/Filter"
-msgstr ""
+msgstr "搜索/过滤"
 
 #: src/frontend/ProjectExplorer.cpp:114
 #, kde-format
@@ -15454,7 +15471,7 @@ msgstr "删除选中页面"
 #: src/frontend/ProjectExplorer.cpp:129
 #, kde-format
 msgid "Search/Filter Options"
-msgstr ""
+msgstr "搜索/过滤选项"
 
 #: src/frontend/ProjectExplorer.cpp:197 src/frontend/ProjectExplorer.cpp:346
 #, kde-format
@@ -16205,76 +16222,76 @@ msgstr ""
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:47
 #, kde-format
 msgid "Generate equidistant values"
-msgstr ""
+msgstr "生成等距值"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:59
 #, kde-format
 msgid "Increment"
-msgstr "增加"
+msgstr "增量"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:60
 #, kde-format
 msgid "Number and Increment"
-msgstr ""
+msgstr "数值和增量"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:62
 #, kde-format
 msgid "Years"
-msgstr ""
+msgstr "年"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:63
 #, kde-format
 msgid "Months"
-msgstr ""
+msgstr "月"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:192
 #, kde-format
 msgctxt "@title:window"
 msgid "Equidistant Numeric and Date&Time Values"
-msgstr ""
+msgstr "等距数值与日期时间值"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:197
 #, kde-format
 msgctxt "@title:window"
 msgid "Equidistant Numeric Values"
-msgstr ""
+msgstr "等距数值"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:199
 #, kde-format
 msgctxt "@title:window"
 msgid "Equidistant Date&Time Values"
-msgstr ""
+msgstr "等距日期时间值"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:250
 #, kde-format
 msgid "Invalid start value"
-msgstr ""
+msgstr "起始值无效"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:257
 #, kde-format
 msgid "Invalid end value, must be bigger than the start value"
-msgstr ""
+msgstr "结束值无效，必须大于起始值"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:300
 #, kde-format
 msgid "The number of values to be generated must be bigger than one"
-msgstr ""
+msgstr "要生成的数值数量必须大于一个"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:317
 #, kde-format
 msgid "Invalid numeric increment value, must be bigger than zero"
-msgstr ""
+msgstr "数值增量无效，必须大于零"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:326
 #, kde-format
 msgid "Invalid Date&Time increment value, must be bigger than zero"
-msgstr ""
+msgstr "日期时间增量无效，必须大于零"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:487
 #, kde-format
 msgid "%1: fill column with equidistant numbers"
 msgid_plural "%1: fill columns with equidistant numbers"
-msgstr[0] ""
+msgstr[0] "%1：用等距值填充列"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:585
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:605
@@ -16283,7 +16300,7 @@ msgstr[0] ""
 #: src/frontend/spreadsheet/RandomValuesDialog.cpp:464
 #, kde-format
 msgid "Not enough memory to perform this operation."
-msgstr ""
+msgstr "执行此操作内存不足。"
 
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:82
 #, kde-format
@@ -16453,14 +16470,14 @@ msgstr "添加新变量"
 msgid ""
 "Automatically update the calculated values in the target column on changes "
 "in the variable columns"
-msgstr ""
+msgstr "当自变量值所在列发生变化时，自动更新目标列中的计算值"
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:66
 #, kde-format
 msgid ""
 "Automatically resize the target column to fit the size of the variable "
 "columns"
-msgstr ""
+msgstr "根据自变量列的大小，自动调整目标列的大小"
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:138
 #: src/frontend/widgets/TreeViewComboBox.cpp:358
@@ -16469,60 +16486,60 @@ msgid ""
 "The column \"%1\"\n"
 "is not available anymore. It will be automatically used once it is created "
 "again."
-msgstr ""
+msgstr "列 \"%1\" 不存在。重新创建该列后将自动使用。"
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:156
 #, kde-format
 msgid ""
 "Spreadsheet linking is active. The size of the target spreadsheet is "
 "controlled by the linked spreadsheet."
-msgstr ""
+msgstr "数据表链接处于打开状态。目标数据表的大小将由链接的数据表控制。"
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:166
 #, kde-format
 msgid ""
 "Provided variable name is already reserved for a name of a constant. Please "
 "use another name."
-msgstr ""
+msgstr "输入的变量名与内置常量冲突。请换一个名称。"
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:169
 #, kde-format
 msgid ""
 "Provided variable name is already reserved for a name of a function. Please "
 "use another name."
-msgstr ""
+msgstr "输入的变量名与内置函数冲突。请换一个名称。"
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:172
 #, kde-format
 msgid "The variable name 'i' is reserved for the index of the column row."
-msgstr ""
+msgstr "'i' 用于表示行号，不能用作变量名。"
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:175
 #, kde-format
 msgid ""
 "Provided variable name starts with a digit or contains special character."
-msgstr ""
+msgstr "输入的变量名以数字开头或包含特殊字符。"
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:186
 #, kde-format
 msgid "Empty formula expression"
-msgstr ""
+msgstr "公式表达式为空"
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:193
 #, kde-format
 msgid "Incorrect formula syntax: "
-msgstr ""
+msgstr "公式语法错误："
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:212
 #, kde-format
 msgid "Select a valid column"
-msgstr ""
+msgstr "选择一个有效的列"
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:389
 #, kde-format
 msgid "%1: fill column with function values"
 msgid_plural "%1: fill columns with function values"
-msgstr[0] ""
+msgstr[0] "%1：用函数值填充列"
 
 #: src/frontend/spreadsheet/GoToDialog.cpp:35
 #, kde-format
@@ -16539,12 +16556,12 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Plot Spreadsheet Data"
-msgstr ""
+msgstr "对数据表绘图"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:94
 #, kde-format
 msgid "Plot the selected data"
-msgstr ""
+msgstr "对选中数据绘图"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:95
 #, kde-format
@@ -16554,61 +16571,61 @@ msgstr "绘制(&P)"
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:359
 #, kde-format
 msgid "Y-data"
-msgstr ""
+msgstr "Y 数据"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:369
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:424
 #, kde-format
 msgid "Add Plot to"
-msgstr ""
+msgstr "将绘图添加到"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbPlotPlacement)
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:427
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:180
 #, kde-format
 msgid "Add Plots to"
-msgstr ""
+msgstr "将绘图添加到"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:459
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:470
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:500
 #, kde-format
 msgid "Plot Area - %1"
-msgstr ""
+msgstr "绘图区域 - %1"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:466
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:495
 #, kde-format
 msgid "Worksheet - %1"
-msgstr ""
+msgstr "工作表 - %1"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:494
 #, kde-format
 msgid "Plot data from %1"
-msgstr ""
+msgstr "从 %1 中的数据绘图"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:621
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:640
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:657
 #, kde-format
 msgid "Plot Area %1"
-msgstr ""
+msgstr "绘图区域 %1"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:731
 #, kde-format
 msgid "Fourier Filter of '%1'"
-msgstr ""
+msgstr "'%1' 的傅立叶滤波"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:766
 #, kde-format
 msgid "Probability Density of '%1'"
-msgstr ""
+msgstr "'%1' 的概率密度"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:772
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Distribution Fit to '%1'"
-msgstr ""
+msgstr "'%1' 的分布拟合"
 
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:966
@@ -16622,44 +16639,44 @@ msgstr "密度"
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:381
 #, kde-format
 msgid "Theoretical Quantiles"
-msgstr ""
+msgstr "理论分位数"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:984
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:383
 #, kde-format
 msgid "Sample Quantiles"
-msgstr ""
+msgstr "样本分位数"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1098
 #, kde-format
 msgid "No data selected to plot."
-msgstr ""
+msgstr "没有选择要绘图的数据。"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1103
 #, kde-format
 msgid "An already existing plot area has to be selected."
-msgstr ""
+msgstr "必须选择已有的绘图区域。"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1108
 #, kde-format
 msgid "An already existing worksheet has to be selected."
-msgstr ""
+msgstr "必须选择已有的工作表。"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1114
 #, kde-format
 msgid "Close the dialog and plot the data."
-msgstr ""
+msgstr "关闭对话框并绘制数据。"
 
 #: src/frontend/spreadsheet/RandomValuesDialog.cpp:44
 #, kde-format
 msgctxt "@title:window"
 msgid "Random Values"
-msgstr ""
+msgstr "随机值"
 
 #: src/frontend/spreadsheet/RandomValuesDialog.cpp:53
 #, kde-format
 msgid "Generate random values according to the selected distribution"
-msgstr ""
+msgstr "根据所选的分布生成随机值"
 
 #: src/frontend/spreadsheet/RandomValuesDialog.cpp:85
 #, kde-format
@@ -16670,6 +16687,9 @@ msgid ""
 "If no value is specified, the current timestamp will be used to seed the "
 "generator."
 msgstr ""
+"用于初始化随机数生成器的种子。\n"
+"如果生成器的种子相同，则会生成相同的随机数序列。\n"
+"如果没有指定值，则将当前的时间戳用作生成器的种子。"
 
 #: src/frontend/spreadsheet/RandomValuesDialog.cpp:91
 #, kde-format
@@ -16677,12 +16697,14 @@ msgid ""
 "Random number distributions as defined in <a href=\"https://www.gnu.org/"
 "software/gsl/doc/html/randist.html\">GSL documentation</a>"
 msgstr ""
+"<a href=\"https://www.gnu.org/software/gsl/doc/html/randist.html\">GSL 文档</"
+"a>中定义的随机数分布"
 
 #: src/frontend/spreadsheet/RandomValuesDialog.cpp:485
 #, kde-format
 msgid "%1: fill column with non-uniform random numbers"
 msgid_plural "%1: fill columns with non-uniform random numbers"
-msgstr[0] ""
+msgstr[0] "%1：用非均匀随机值填充列"
 
 #: src/frontend/spreadsheet/RescaleDialog.cpp:31
 #, kde-format
@@ -16941,13 +16963,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Sort All Columns"
-msgstr ""
+msgstr "排序所有列"
 
 #: src/frontend/spreadsheet/SortDialog.cpp:35
 #, kde-format
 msgctxt "@title:window"
 msgid "Sort Selected Columns"
-msgstr ""
+msgstr "排序选中的列"
 
 #: src/frontend/spreadsheet/SortDialog.cpp:39
 #, kde-format
@@ -16967,7 +16989,7 @@ msgstr "反选(&R)"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:316
 #, kde-format
 msgid "Clea&r Content"
-msgstr ""
+msgstr "清除内容(&R)"
 
 #. i18n("Assign &Formula"), this);
 #. action_recalculate = new QAction(QIcon::fromTheme(QString()), i18n("Recalculate"), this);
@@ -17278,7 +17300,7 @@ msgstr "数据规约"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:572
 #, kde-format
 msgid "Log-normal"
-msgstr ""
+msgstr "对数正态分布"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:622
 #, kde-format
@@ -17289,7 +17311,7 @@ msgstr "条件格式"
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit Distribution"
-msgstr ""
+msgstr "拟合分布"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:665
 #, kde-format
@@ -17337,7 +17359,7 @@ msgstr "解冻列"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1737
 #, kde-format
 msgid "%1: cut selected cells"
-msgstr ""
+msgstr "%1：剪切选中的单元格"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2053
 #, kde-format
@@ -17347,33 +17369,33 @@ msgstr ""
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2067
 #, kde-format
 msgid "%1: mask selected cells"
-msgstr ""
+msgstr "%1：屏蔽选中的单元格"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2109
 #, kde-format
 msgid "%1: unmask selected cells"
-msgstr ""
+msgstr "%1：取消屏蔽选中的单元格"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2277
 #, kde-format
 msgid "%1: fill cells with row numbers"
-msgstr ""
+msgstr "%1：用行号填充单元格"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2342
 #, kde-format
 msgid "%1: fill column with row numbers"
 msgid_plural "%1: fill columns with row numbers"
-msgstr[0] ""
+msgstr[0] "%1：用行号填充列"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2386
 #, kde-format
 msgid "%1: fill cells with random values"
-msgstr ""
+msgstr "%1：用随机值填充单元格"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2512
 #, kde-format
 msgid "%1: fill cells with const values"
-msgstr ""
+msgstr "%1：用固定值填充单元格"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2522
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2544
@@ -17381,7 +17403,7 @@ msgstr ""
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2579
 #, kde-format
 msgid "Fill the selection with constant value"
-msgstr ""
+msgstr "使用常数填充选区"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2659
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2693
@@ -17399,12 +17421,12 @@ msgstr ""
 #, kde-format
 msgid "%1: insert empty column"
 msgid_plural "%1: insert empty columns"
-msgstr[0] ""
+msgstr[0] "%1：插入空列"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2782
 #, kde-format
 msgid "%1: remove selected columns"
-msgstr ""
+msgstr "%1：删除选中的列"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2879
 #, kde-format
@@ -17422,7 +17444,7 @@ msgstr ""
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2990
 #, kde-format
 msgid "%1: normalize columns"
-msgstr ""
+msgstr "%1：归一化列"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3010
 #, kde-format
@@ -17495,17 +17517,17 @@ msgstr ""
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3190
 #, kde-format
 msgid "Normalization not possible"
-msgstr ""
+msgstr "无法进行归一化"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3202
 #, kde-format
 msgid "%1: power transform columns"
-msgstr ""
+msgstr "%1：对列取幂"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3320
 #, kde-format
 msgid "%1: column statistics"
-msgstr ""
+msgstr "%1：列统计"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3351
 #, kde-format
@@ -17655,12 +17677,12 @@ msgstr "位置量度"
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:72
 #, kde-format
 msgid "First Quartile"
-msgstr ""
+msgstr "第一四分位数"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:74
 #, kde-format
 msgid "Third Quartile"
-msgstr ""
+msgstr "第三四分位数"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:78
@@ -17691,12 +17713,12 @@ msgstr ""
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:120
 #, kde-format
 msgid "Overview"
-msgstr ""
+msgstr "概览"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:145
 #, kde-format
 msgid "Normal Q-Q Plot"
-msgstr ""
+msgstr "正态 Q-Q 图"
 
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:150
 #, kde-format
@@ -20538,7 +20560,7 @@ msgstr "Y 范围"
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:107
 #, kde-format
 msgid "From:"
-msgstr "来自："
+msgstr "从："
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1126
@@ -20652,7 +20674,7 @@ msgstr "数据类型："
 #: src/frontend/ui/dockwidgets/columndock.ui:315
 #, kde-format
 msgid "Plot Designation:"
-msgstr "绘图意图："
+msgstr "绘图设定："
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbCursor0en)
 #: src/frontend/ui/dockwidgets/cursordock.ui:19
@@ -21642,7 +21664,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:472
 #, kde-format
 msgid "Fit results"
-msgstr ""
+msgstr "拟合结果"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lDegree)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:514
@@ -21894,7 +21916,7 @@ msgstr "函数："
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:119
 #, kde-format
 msgid "f(x) = "
-msgstr ""
+msgstr "f(x) = "
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbAbsolute)
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:171
@@ -22719,7 +22741,7 @@ msgstr "显示列数据类型"
 #: src/frontend/ui/settingsspreadsheetpage.ui:37
 #, kde-format
 msgid "Show plot designation"
-msgstr "显示列绘图意图"
+msgstr "显示绘图设定"
 
 #. i18n: ectx: property (text), widget (QPushButton, bResetLayout)
 #: src/frontend/ui/settingswelcomepage.ui:17
@@ -22841,7 +22863,7 @@ msgstr ""
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:97
 #, kde-format
 msgid "Fix:"
-msgstr "修复:"
+msgstr "确定方式："
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:36
@@ -22962,55 +22984,55 @@ msgstr ""
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:152
 #, kde-format
 msgid "auto update the values"
-msgstr ""
+msgstr "自动更新值"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoResize)
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:162
 #, kde-format
 msgid "auto resize the column"
-msgstr ""
+msgstr "自动调整列大小"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbCurvePlacement)
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:154
 #, kde-format
 msgid "Placement"
-msgstr ""
+msgstr "放置模式"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbCurvePlacementAllInOnePlotArea)
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:160
 #, kde-format
 msgid "All Plots in one Plot Area"
-msgstr ""
+msgstr "在同一绘图区域内绘制所有绘图"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbCurvePlacementAllInOwnPlotArea)
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:170
 #, kde-format
 msgid "One Plot Area per Plot"
-msgstr ""
+msgstr "每个绘图单独使用一个绘图区域"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementExistingPlotArea)
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:186
 #, kde-format
 msgid "Existing Plot Area"
-msgstr ""
+msgstr "现有绘图区域"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementExistingWorksheet)
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:196
 #, kde-format
 msgid "&New Plot Area in an existing Worksheet"
-msgstr ""
+msgstr "现有工作表中的新绘图区域(&N)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacementNewWorksheet)
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:203
 #, kde-format
 msgid "New Plot Area in a new Worksheet"
-msgstr ""
+msgstr "新工作表中的新绘图区域"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCreateDataCurve)
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:226
 #, kde-format
 msgid "Create Plot for original Data"
-msgstr ""
+msgstr "为原始数据绘图"
 
 #. i18n: ectx: property (text), widget (QLabel, lParameter2)
 #: src/frontend/ui/spreadsheet/randomvalueswidget.ui:41
@@ -23173,7 +23195,7 @@ msgstr ""
 #: src/frontend/ui/spreadsheet/sortdialogwidget.ui:17
 #, kde-format
 msgid "Sort by"
-msgstr ""
+msgstr "排序依据"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbOrdering)
 #: src/frontend/ui/spreadsheet/sortdialogwidget.ui:64
@@ -23935,7 +23957,7 @@ msgstr ""
 #: src/frontend/widgets/TreeViewComboBox.cpp:56
 #, kde-format
 msgid "Search/Filter text"
-msgstr ""
+msgstr "搜索/过滤文本"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:53
 #, kde-format
