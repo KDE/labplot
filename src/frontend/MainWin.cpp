@@ -1707,9 +1707,11 @@ bool MainWin::saveProject() {
 	if (fileName.isEmpty())
 		return saveProjectAs();
 	else {
-		// don't overwrite OPJ files
-		if (fileName.endsWith(QLatin1String(".opj"), Qt::CaseInsensitive))
-			fileName.replace(QLatin1String(".opj"), QLatin1String(".lml"));
+		// don't overwrite OPJ files, replace ending
+		if (fileName.endsWith(QLatin1String(".opj"), Qt::CaseInsensitive)) {
+			fileName.replace(QLatin1String(".opj"), QLatin1String(".lml"), Qt::CaseInsensitive);
+			DEBUG(Q_FUNC_INFO << ", renamed file name to " << fileName.toStdString())
+		}
 		return save(fileName);
 	}
 }
@@ -1744,6 +1746,7 @@ bool MainWin::saveProjectAs() {
  * auxiliary function that does the actual saving of the project
  */
 bool MainWin::save(const QString& fileName) {
+	DEBUG(Q_FUNC_INFO << ", file name = " << fileName.toStdString())
 	QTemporaryFile tempFile(QDir::tempPath() + QLatin1Char('/') + QLatin1String("labplot_save_XXXXXX"));
 	if (!tempFile.open()) {
 		KMessageBox::error(this, i18n("Couldn't open the temporary file for writing."));
