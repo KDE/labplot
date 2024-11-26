@@ -9969,10 +9969,9 @@ msgid "System:"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:136
-#, fuzzy, kde-format
-#| msgid "Scale:"
+#, kde-format
 msgid "Locale:"
-msgstr "缩放："
+msgstr ""
 
 #: src/frontend/AboutDialog.cpp:137
 #, kde-format
@@ -9995,10 +9994,9 @@ msgid "Kernel: "
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:140
-#, fuzzy, kde-format
-#| msgid "Executable: %1"
+#, kde-format
 msgid "Executable Path:"
-msgstr "可执行：%1"
+msgstr ""
 
 #: src/frontend/AboutDialog.cpp:148
 #, kde-format

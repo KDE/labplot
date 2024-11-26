@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-25 00:37+0000\n"
-"PO-Revision-Date: 2024-11-24 14:52+0100\n"
+"PO-Revision-Date: 2024-11-25 11:15+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -10044,16 +10044,14 @@ msgid "Positive/Negative sign "
 msgstr "Positief/negatief teken"
 
 #: src/frontend/AboutDialog.cpp:135
-#, fuzzy, kde-format
-#| msgid "System: "
+#, kde-format
 msgid "System:"
-msgstr "Systeem: "
+msgstr "Systeem:"
 
 #: src/frontend/AboutDialog.cpp:136
-#, fuzzy, kde-format
-#| msgid "Locale: "
+#, kde-format
 msgid "Locale:"
-msgstr "Lokaliteit:"
+msgstr "Taalcode:"
 
 #: src/frontend/AboutDialog.cpp:137
 #, kde-format
@@ -10066,10 +10064,9 @@ msgid "Updated on restart"
 msgstr "Updates bij herstart"
 
 #: src/frontend/AboutDialog.cpp:138
-#, fuzzy, kde-format
-#| msgid "Architecture: "
+#, kde-format
 msgid "Architecture:"
-msgstr "Architectuur: "
+msgstr "Architectuur:"
 
 #: src/frontend/AboutDialog.cpp:139
 #, kde-format
@@ -10077,10 +10074,9 @@ msgid "Kernel: "
 msgstr "Kernel: "
 
 #: src/frontend/AboutDialog.cpp:140
-#, fuzzy, kde-format
-#| msgid "Executable Path: "
+#, kde-format
 msgid "Executable Path:"
-msgstr "Pad naar uitvoerbaar bestand: "
+msgstr "Pad naar uitvoerbaar bestand:"
 
 #: src/frontend/AboutDialog.cpp:148
 #, kde-format
@@ -10123,10 +10119,9 @@ msgstr "Frontend naar wiskundige toepassingen"
 #: src/frontend/AboutDialog.cpp:238 src/frontend/AboutDialog.cpp:243
 #: src/frontend/AboutDialog.cpp:248 src/frontend/AboutDialog.cpp:254
 #: src/frontend/AboutDialog.cpp:259 src/frontend/AboutDialog.cpp:276
-#, fuzzy, kde-format
-#| msgid "missing value"
+#, kde-format
 msgid "missing"
-msgstr "ontbrekende waarde"
+msgstr "ontbrekend"
 
 #: src/frontend/AboutDialog.cpp:157 src/frontend/AboutDialog.cpp:159
 #, kde-format
@@ -14502,22 +14497,22 @@ msgstr "Geschiedenis wissen"
 #: src/frontend/LabPlot.cpp:44
 #, kde-format
 msgid "Visit website:"
-msgstr ""
+msgstr "Bezoek website:"
 
 #: src/frontend/LabPlot.cpp:46
 #, kde-format
 msgid "Mastodon:"
-msgstr ""
+msgstr "Mastodon:"
 
 #: src/frontend/LabPlot.cpp:47
 #, kde-format
 msgid "Watch video tutorials:"
-msgstr ""
+msgstr "Videohandleidingen bekijken:"
 
 #: src/frontend/LabPlot.cpp:48
 #, kde-format
 msgid "Please report bugs to:"
-msgstr ""
+msgstr "Bugs rapporteren aan:"
 
 #: src/frontend/LabPlot.cpp:52
 #, kde-format
@@ -14529,10 +14524,9 @@ msgstr ""
 "meerdere soorten computers, die iedereen kan gebruiken."
 
 #: src/frontend/LabPlot.cpp:54
-#, fuzzy, kde-format
-#| msgid "(c) 2007-2024"
+#, kde-format
 msgid "(c) 2007-2024 LabPlot authors"
-msgstr "(c) 2007-2024"
+msgstr "(c) 2007-2024 auteurs van LabPlot"
 
 #: src/frontend/LabPlot.cpp:56
 #, kde-format

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-25 00:37+0000\n"
-"PO-Revision-Date: 2024-11-24 08:17+0100\n"
+"PO-Revision-Date: 2024-11-25 07:08+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -10086,16 +10086,14 @@ msgid "Positive/Negative sign "
 msgstr "Pozitiven/negativen znak "
 
 #: src/frontend/AboutDialog.cpp:135
-#, fuzzy, kde-format
-#| msgid "System: "
+#, kde-format
 msgid "System:"
-msgstr "Sistem: "
+msgstr "Sistem:"
 
 #: src/frontend/AboutDialog.cpp:136
-#, fuzzy, kde-format
-#| msgid "Locale: "
+#, kde-format
 msgid "Locale:"
-msgstr "Krajevna nastavitev: "
+msgstr "Lokalno:"
 
 #: src/frontend/AboutDialog.cpp:137
 #, kde-format
@@ -10108,10 +10106,9 @@ msgid "Updated on restart"
 msgstr "Posodobljeno ob ponovnem zagonu"
 
 #: src/frontend/AboutDialog.cpp:138
-#, fuzzy, kde-format
-#| msgid "Architecture: "
+#, kde-format
 msgid "Architecture:"
-msgstr "Arhitektura: "
+msgstr "Arhitektura:"
 
 #: src/frontend/AboutDialog.cpp:139
 #, kde-format
@@ -10119,10 +10116,9 @@ msgid "Kernel: "
 msgstr "Jedro: "
 
 #: src/frontend/AboutDialog.cpp:140
-#, fuzzy, kde-format
-#| msgid "Executable Path: "
+#, kde-format
 msgid "Executable Path:"
-msgstr "Pot izvršljivih: "
+msgstr "Pot izvršljivih:"
 
 #: src/frontend/AboutDialog.cpp:148
 #, kde-format
@@ -10165,10 +10161,9 @@ msgstr "Začelje za matematične aplikacije"
 #: src/frontend/AboutDialog.cpp:238 src/frontend/AboutDialog.cpp:243
 #: src/frontend/AboutDialog.cpp:248 src/frontend/AboutDialog.cpp:254
 #: src/frontend/AboutDialog.cpp:259 src/frontend/AboutDialog.cpp:276
-#, fuzzy, kde-format
-#| msgid "missing value"
+#, kde-format
 msgid "missing"
-msgstr "manjkajoča vednost"
+msgstr "manjkajoča"
 
 #: src/frontend/AboutDialog.cpp:157 src/frontend/AboutDialog.cpp:159
 #, kde-format
@@ -14527,22 +14522,22 @@ msgstr "Počisti zgodovino"
 #: src/frontend/LabPlot.cpp:44
 #, kde-format
 msgid "Visit website:"
-msgstr ""
+msgstr "Obiščite spletišče:"
 
 #: src/frontend/LabPlot.cpp:46
 #, kde-format
 msgid "Mastodon:"
-msgstr ""
+msgstr "Mastodon:"
 
 #: src/frontend/LabPlot.cpp:47
 #, kde-format
 msgid "Watch video tutorials:"
-msgstr ""
+msgstr "Ogletej si video učbenike:"
 
 #: src/frontend/LabPlot.cpp:48
 #, kde-format
 msgid "Please report bugs to:"
-msgstr ""
+msgstr "Poročajte napake na:"
 
 #: src/frontend/LabPlot.cpp:52
 #, kde-format
@@ -14554,10 +14549,9 @@ msgstr ""
 "vizualizacijo in analizo podatkov, ki je dostopna vsem."
 
 #: src/frontend/LabPlot.cpp:54
-#, fuzzy, kde-format
-#| msgid "(c) 2007-2024"
+#, kde-format
 msgid "(c) 2007-2024 LabPlot authors"
-msgstr "(c) 2007-2024"
+msgstr "(c) 2007-2024 avtorji LabPlota"
 
 #: src/frontend/LabPlot.cpp:56
 #, kde-format

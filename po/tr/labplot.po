@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-25 00:37+0000\n"
-"PO-Revision-Date: 2024-11-24 20:09+0300\n"
+"PO-Revision-Date: 2024-11-25 21:07+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -10039,16 +10039,14 @@ msgid "Positive/Negative sign "
 msgstr "Pozitif/Negatif işareti "
 
 #: src/frontend/AboutDialog.cpp:135
-#, fuzzy, kde-format
-#| msgid "System: "
+#, kde-format
 msgid "System:"
-msgstr "Sistem: "
+msgstr "Sistem:"
 
 #: src/frontend/AboutDialog.cpp:136
-#, fuzzy, kde-format
-#| msgid "Locale: "
+#, kde-format
 msgid "Locale:"
-msgstr "Yerel: "
+msgstr "Yerel:"
 
 #: src/frontend/AboutDialog.cpp:137
 #, kde-format
@@ -10061,10 +10059,9 @@ msgid "Updated on restart"
 msgstr "Yeniden başlatmada güncellenir"
 
 #: src/frontend/AboutDialog.cpp:138
-#, fuzzy, kde-format
-#| msgid "Architecture: "
+#, kde-format
 msgid "Architecture:"
-msgstr "Mimari: "
+msgstr "Mimari:"
 
 #: src/frontend/AboutDialog.cpp:139
 #, kde-format
@@ -10072,10 +10069,9 @@ msgid "Kernel: "
 msgstr "Çekirdek: "
 
 #: src/frontend/AboutDialog.cpp:140
-#, fuzzy, kde-format
-#| msgid "Executable Path: "
+#, kde-format
 msgid "Executable Path:"
-msgstr "Yürütülebilir yolu: "
+msgstr "Yürütülebilir yolu:"
 
 #: src/frontend/AboutDialog.cpp:148
 #, kde-format
@@ -10118,10 +10114,9 @@ msgstr "Matematiksel uygulamalar için ön uç"
 #: src/frontend/AboutDialog.cpp:238 src/frontend/AboutDialog.cpp:243
 #: src/frontend/AboutDialog.cpp:248 src/frontend/AboutDialog.cpp:254
 #: src/frontend/AboutDialog.cpp:259 src/frontend/AboutDialog.cpp:276
-#, fuzzy, kde-format
-#| msgid "missing value"
+#, kde-format
 msgid "missing"
-msgstr "eksik değer"
+msgstr "eksik"
 
 #: src/frontend/AboutDialog.cpp:157 src/frontend/AboutDialog.cpp:159
 #, kde-format
@@ -14471,22 +14466,22 @@ msgstr "Geçmişi Temizle"
 #: src/frontend/LabPlot.cpp:44
 #, kde-format
 msgid "Visit website:"
-msgstr ""
+msgstr "Web sitesini ziyaret et:"
 
 #: src/frontend/LabPlot.cpp:46
 #, kde-format
 msgid "Mastodon:"
-msgstr ""
+msgstr "Mastodon:"
 
 #: src/frontend/LabPlot.cpp:47
 #, kde-format
 msgid "Watch video tutorials:"
-msgstr ""
+msgstr "Video öğreticiler izle:"
 
 #: src/frontend/LabPlot.cpp:48
 #, kde-format
 msgid "Please report bugs to:"
-msgstr ""
+msgstr "Hataları raporlayın:"
 
 #: src/frontend/LabPlot.cpp:52
 #, kde-format
@@ -14498,10 +14493,9 @@ msgstr ""
 "platform veri görselleştirme ve çözümleme yazılımıdır."
 
 #: src/frontend/LabPlot.cpp:54
-#, fuzzy, kde-format
-#| msgid "(c) 2007-2024"
+#, kde-format
 msgid "(c) 2007-2024 LabPlot authors"
-msgstr "© 2007–2024"
+msgstr "© 2007–2024 LabPlot yazarları"
 
 #: src/frontend/LabPlot.cpp:56
 #, kde-format

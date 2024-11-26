@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-25 00:37+0000\n"
-"PO-Revision-Date: 2024-11-24 05:34+0100\n"
+"PO-Revision-Date: 2024-11-25 05:36+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -12670,17 +12670,17 @@ msgstr ""
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:99
 #, kde-format
 msgid "Select to modify the properties of the symbol for the mean value."
-msgstr ""
+msgstr "აირჩიეთ, რომ შეცვალოთ სიმბოლოს თვისებები საშუალო მნიშვნელობისთვის."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:102
 #, kde-format
 msgid "Select to modify the properties of the symbol for the median value."
-msgstr ""
+msgstr "აირჩიეთ, რომ შეცვალოთ სიმბოლოს თვისებები მედიანური მნიშვნელობისთვის."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:105
 #, kde-format
 msgid "Select to modify the properties of the symbol for the outlier values."
-msgstr ""
+msgstr "აირჩიეთ, რომ შეცვალოთ სიმბოლოს თვისებები ამოვარდნილი მნიშვნელობისთვის."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:108
 #, kde-format
@@ -14304,22 +14304,22 @@ msgstr "ისტორიის გაწმენდა"
 #: src/frontend/LabPlot.cpp:44
 #, kde-format
 msgid "Visit website:"
-msgstr ""
+msgstr "საიტზე გადასვლა:"
 
 #: src/frontend/LabPlot.cpp:46
 #, kde-format
 msgid "Mastodon:"
-msgstr ""
+msgstr "Mastodon:"
 
 #: src/frontend/LabPlot.cpp:47
 #, kde-format
 msgid "Watch video tutorials:"
-msgstr ""
+msgstr "ვიდეოგაკვეთილებს ყურება:"
 
 #: src/frontend/LabPlot.cpp:48
 #, kde-format
 msgid "Please report bugs to:"
-msgstr ""
+msgstr "მისწერეთ შეცდომებზე:"
 
 #: src/frontend/LabPlot.cpp:52
 #, kde-format
@@ -14443,6 +14443,8 @@ msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
 "to exit the application."
 msgstr ""
+"ფაილი '%1' ვერ გავხსენი. დააწკაპუნეთ ღილაკზე 'გამეორება' გაშვების "
+"გასაგრძელებლად, ან 'გაუქმებაზე', რომ აპლიკაციიდან გახვიდეთ."
 
 #: src/frontend/LabPlot.cpp:126
 #, kde-format
@@ -14577,6 +14579,8 @@ msgid ""
 "No worksheets are available in the project. The presenter mode will not be "
 "started."
 msgstr ""
+"პროექტისთვის სამუშაო ფურცლები ხელმისაწვდომი არაა. პრეზენტაციის რეჟიმ არ "
+"გაეშვება."
 
 #: src/frontend/MainWin.cpp:215
 #, kde-format
@@ -14598,6 +14602,8 @@ msgstr "სამუშაო წიგნი"
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
+"შექმნის ახალ სამუშაო წიგნს კოლექციის ელცხრილებისთვის, მატრიცებისთვის და "
+"გრაფიკებისთვის"
 
 #: src/frontend/MainWin.cpp:627 src/frontend/MainWin.cpp:1956
 #, kde-format
@@ -14710,7 +14716,7 @@ msgstr "Origin-ის პროექტი (OPJ)..."
 #: src/frontend/MainWin.cpp:705
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
-msgstr ""
+msgstr "პროექტის შემოტანა OriginLab Origin-ის პროექტის ფაილიდან (.opj)"
 
 #: src/frontend/MainWin.cpp:710
 #, kde-format
@@ -14736,7 +14742,7 @@ msgstr "ფერის რუკების ბრაუზერი"
 #: src/frontend/MainWin.cpp:723
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
-msgstr ""
+msgstr "დიალოგის გახსნა ხელმისაწვდომი ფერის რუკების დასათვალიერებლად."
 
 #: src/frontend/MainWin.cpp:732
 #, kde-format
@@ -14834,6 +14840,8 @@ msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
 "systems or to enable new ones"
 msgstr ""
+"გახსნის პარამეტრებს კომპიუტერის ალგებრული სისტემებისთვის, რომ შეცვალოთ "
+"ხელმისაწვდომი სისტემები, ან დაამატოთ ახლები"
 
 #: src/frontend/MainWin.cpp:917
 #, kde-format
@@ -15797,6 +15805,7 @@ msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
 "opened"
 msgstr ""
+"აკონტროლებს ქცევას, როცა დოკის მიწებება ჩაისმება, როცა თავიდან გაიხსნება"
 
 #: src/frontend/SettingsGeneralPage.cpp:244
 #, kde-format
@@ -15806,7 +15815,7 @@ msgstr "საწყისი მდებარეობა"
 #: src/frontend/SettingsGeneralPage.cpp:245
 #, kde-format
 msgid "On top of the last active Dock Widget"
-msgstr ""
+msgstr "ბოლოს აქტიური მიმაგრების ვიჯეტის თავზე"
 
 #: src/frontend/SettingsGeneralPage.cpp:248
 #, kde-format
@@ -15944,28 +15953,30 @@ msgstr "დადასტურების თხოვნა უკანა�
 #, kde-format
 msgid "Default theme for newly created worksheets and worksheet objects"
 msgstr ""
+"ნაგულისხმევი თემა ახლად შექმნილი ელცხრილებისა და ელცხრილის ობიექტებისთვის"
 
 #: src/frontend/SettingsWorksheetPage.cpp:134
 #, kde-format
 msgid ""
 "No LaTeX installation found or selected. LaTeX typesetting not possible."
 msgstr ""
+"დაყენებული LaTeX აღმოჩენილი ან ჩართული არაა. LaTeX-ით გამოტანა შეუძლებელია."
 
 #: src/frontend/SettingsWorksheetPage.cpp:144
 #, kde-format
 msgid "No 'convert' found. LaTeX typesetting not possible."
-msgstr ""
+msgstr "პროგრამა 'convert' აღმოჩენილი არაა. LaTeX-ით გატანა შეუძლებელია."
 
 #: src/frontend/SettingsWorksheetPage.cpp:150
 #, kde-format
 msgid "No 'dvips' found. LaTeX typesetting not possible."
-msgstr ""
+msgstr "პროგრამა 'dvips' აღმოჩენილი არაა. LaTeX-ით გატანა შეუძლებელია."
 
 #: src/frontend/SettingsWorksheetPage.cpp:157
 #: src/frontend/SettingsWorksheetPage.cpp:163
 #, kde-format
 msgid "No Ghostscript found. LaTeX typesetting not possible."
-msgstr ""
+msgstr "Ghostscript აღმოჩენილი არაა. LaTeX-ით გატანა შეუძლებელია."
 
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:101
 #, kde-format
@@ -16052,7 +16063,7 @@ msgstr "საბაზისო (arPLS ალგორითმი)"
 msgid ""
 "Smoothness parameter - the larger the value the smoother the resulting "
 "background."
-msgstr ""
+msgstr "სიგლუვის პარამეტრი - რაც დიდია მნიშვნელობა, მით გლუვია მიღებული ფონი."
 
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:167
 #, kde-format
@@ -16162,7 +16173,7 @@ msgstr "მნიშვნელობის ჭდეები:"
 #: src/frontend/spreadsheet/BatchEditValueLabelsDialog.cpp:154
 #, kde-format
 msgid "Provide the list of value-label pairs like in the following example:"
-msgstr ""
+msgstr "შეიყვანეთ ჭდე-მნიშვნელობის წყვილები, როგორც ეს შემდეგ მაგალითშია:"
 
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:45
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:221
@@ -16368,12 +16379,12 @@ msgstr "გენერირებული მნიშვნელობე�
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:317
 #, kde-format
 msgid "Invalid numeric increment value, must be bigger than zero"
-msgstr ""
+msgstr "არასწორი რიცხვითი ზრდის მნიშვნელობა. ნულზე მეტი უნდა იყოს"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:326
 #, kde-format
 msgid "Invalid Date&Time increment value, must be bigger than zero"
-msgstr ""
+msgstr "არასწორი თარიღისა და დროის ზრდის მნიშვნელობა. ნულზე მეტი უნდა იყოს"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:487
 #, kde-format
@@ -16590,6 +16601,8 @@ msgid ""
 "Provided variable name is already reserved for a name of a constant. Please "
 "use another name."
 msgstr ""
+"შეყვანილი ცვლადის სახელი უკვე დაცულია, როგორც მუდმივის სახელი. გამოიყენეთ "
+"სხვა."
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:169
 #, kde-format
@@ -16597,17 +16610,19 @@ msgid ""
 "Provided variable name is already reserved for a name of a function. Please "
 "use another name."
 msgstr ""
+"შეყვანილი ცვლადის სახელი უკვე დაცულია, როგორც ფუნქციის სახელი. გამოიყენეთ "
+"სხვა."
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:172
 #, kde-format
 msgid "The variable name 'i' is reserved for the index of the column row."
-msgstr ""
+msgstr "ცვლადის სახელი \"i\" დაცულია სვეტის მწკრივის ინდექსისთვის."
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:175
 #, kde-format
 msgid ""
 "Provided variable name starts with a digit or contains special character."
-msgstr ""
+msgstr "მოწოდებული ცვლადი სახელი იწყება ციფრით ან შეიცავს სპეციალურ სიმბოლოს."
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:186
 #, kde-format
@@ -16766,7 +16781,7 @@ msgstr "შემთხვევითი მნიშვნელობებ�
 #: src/frontend/spreadsheet/RandomValuesDialog.cpp:53
 #, kde-format
 msgid "Generate random values according to the selected distribution"
-msgstr ""
+msgstr "შემთხვევით მნიშვნელობების შექმნა არჩეული განაწილების მიხედვით"
 
 #: src/frontend/spreadsheet/RandomValuesDialog.cpp:85
 #, kde-format
@@ -16789,8 +16804,8 @@ msgstr ""
 #, kde-format
 msgid "%1: fill column with non-uniform random numbers"
 msgid_plural "%1: fill columns with non-uniform random numbers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1: სვეტის შევსება არაერთგვაროვანი შემთხვევითი რიცხვებით"
+msgstr[1] "%1: სვეტის შევსება არაერთგვაროვანი შემთხვევითი რიცხვებით"
 
 #: src/frontend/spreadsheet/RescaleDialog.cpp:31
 #, kde-format
@@ -19630,7 +19645,7 @@ msgstr "QoS 2"
 #: src/frontend/ui/datasources/rootoptionswidget.ui:30
 #, kde-format
 msgid "Shows the content of the selected ROOT file"
-msgstr ""
+msgstr "მონიშნული ROOT ფაილის შემცველობის ჩვენება"
 
 #. i18n: ectx: property (text), widget (QLabel, labelFirst)
 #: src/frontend/ui/datasources/rootoptionswidget.ui:72
@@ -22204,6 +22219,8 @@ msgstr "ავტოგამოთვლის შუალედი"
 #, kde-format
 msgid "If selected, the resulting fit parameter are set as new start values."
 msgstr ""
+"თუ ჩართულია, შედეგად მიღებული ჩატევის პარამეტრები ახალ საწყის მნიშვნელობებად "
+"იქნება გამოყენებული."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbUseResults)
 #: src/frontend/ui/fitoptionswidget.ui:170
@@ -22686,7 +22703,7 @@ msgstr "ჯგუფის გამყოფის ამოღება"
 #: src/frontend/ui/settingsgeneralpage.ui:173
 #, kde-format
 msgid "Omit leading zero in exponent"
-msgstr ""
+msgstr "წინ მწერი ნულების ამოღება ხარისხიდან"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
 #: src/frontend/ui/settingsgeneralpage.ui:180
@@ -22866,7 +22883,7 @@ msgstr "ორმაგი ბუფერის ჩართვა"
 #: src/frontend/ui/settingsworksheetpage.ui:154
 #, kde-format
 msgid "Typesetting engine:"
-msgstr "გამოტანი ძრავა:"
+msgstr "გამოტანის ძრავა:"
 
 #. i18n: ectx: property (text), widget (QLabel, lType)
 #: src/frontend/ui/spreadsheet/addsubtractvaluewidget.ui:42
@@ -23323,6 +23340,7 @@ msgstr "გასატანი ადგილი:"
 #, kde-format
 msgid "Check this option if the worksheet background should be exported."
 msgstr ""
+"ჩართეთ ე პარამეტრი, თუ გნებავთ, ელცხრილის ფონის სურათის გატანაც მოხდეს."
 
 #. i18n: ectx: property (text), widget (QLabel, lExportBackground)
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:119
@@ -24315,6 +24333,8 @@ msgid ""
 "If not activated, plots on the worksheet don't react on drag and mouse wheel "
 "events."
 msgstr ""
+"თუ ჩართული არაა, ელცხრილში არსებულ გრაფიკებს გადათრევა/დაგდებაზე რეაქცია არ "
+"ექნება."
 
 #: src/frontend/worksheet/WorksheetView.cpp:302
 #: src/frontend/worksheet/WorksheetView.cpp:316

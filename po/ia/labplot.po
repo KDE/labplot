@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-25 00:37+0000\n"
-"PO-Revision-Date: 2024-11-22 17:19+0100\n"
+"PO-Revision-Date: 2024-11-25 18:10+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -9999,16 +9999,14 @@ msgid "Positive/Negative sign "
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:135
-#, fuzzy, kde-format
-#| msgid "System: "
+#, kde-format
 msgid "System:"
-msgstr "Systema: "
+msgstr "Systema:"
 
 #: src/frontend/AboutDialog.cpp:136
-#, fuzzy, kde-format
-#| msgid "Locale: "
+#, kde-format
 msgid "Locale:"
-msgstr "Local: "
+msgstr "Local:"
 
 #: src/frontend/AboutDialog.cpp:137
 #, kde-format
@@ -10031,10 +10029,9 @@ msgid "Kernel: "
 msgstr "Kernel: "
 
 #: src/frontend/AboutDialog.cpp:140
-#, fuzzy, kde-format
-#| msgid "Executable Path: "
+#, kde-format
 msgid "Executable Path:"
-msgstr "Percurso de Executabile: "
+msgstr "Percurso de Executabile:"
 
 #: src/frontend/AboutDialog.cpp:148
 #, kde-format
@@ -10059,7 +10056,7 @@ msgstr ""
 #: src/frontend/AboutDialog.cpp:152 src/frontend/AboutDialog.cpp:154
 #, kde-format
 msgid "Cantor"
-msgstr ""
+msgstr "Cantor"
 
 #: src/frontend/AboutDialog.cpp:152
 #, kde-format
@@ -10077,15 +10074,14 @@ msgstr ""
 #: src/frontend/AboutDialog.cpp:238 src/frontend/AboutDialog.cpp:243
 #: src/frontend/AboutDialog.cpp:248 src/frontend/AboutDialog.cpp:254
 #: src/frontend/AboutDialog.cpp:259 src/frontend/AboutDialog.cpp:276
-#, fuzzy, kde-format
-#| msgid "missing value"
+#, kde-format
 msgid "missing"
-msgstr "valor mancante"
+msgstr "mancante"
 
 #: src/frontend/AboutDialog.cpp:157 src/frontend/AboutDialog.cpp:159
 #, kde-format
 msgid "Poppler"
-msgstr ""
+msgstr "Poppler"
 
 #: src/frontend/AboutDialog.cpp:157
 #, kde-format
@@ -10093,10 +10089,9 @@ msgid "PDF rendering library"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:162 src/frontend/AboutDialog.cpp:164
-#, fuzzy, kde-format
-#| msgid "Count"
+#, kde-format
 msgid "Discount"
-msgstr "Computo"
+msgstr "Disconto"
 
 #: src/frontend/AboutDialog.cpp:162
 #, kde-format
@@ -10104,10 +10099,9 @@ msgid "Markdown markup language support"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:167 src/frontend/AboutDialog.cpp:169
-#, fuzzy, kde-format
-#| msgid "User Feedback"
+#, kde-format
 msgid "KUserfeedback"
-msgstr "Responsa del usator"
+msgstr "Responsa del usator (KUserfeedback)"
 
 #: src/frontend/AboutDialog.cpp:167
 #, kde-format
@@ -10115,16 +10109,14 @@ msgid "Support collecting feedback from users"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:172 src/frontend/AboutDialog.cpp:174
-#, fuzzy, kde-format
-#| msgid "Syntax Highlighting"
+#, kde-format
 msgid "KSyntaxHighlighting"
-msgstr "Evidentiar syntaxe"
+msgstr "Evidentiar syntaxe (KSyntaxHighlighting)"
 
 #: src/frontend/AboutDialog.cpp:172
-#, fuzzy, kde-format
-#| msgid "Syntax Highlighting"
+#, kde-format
 msgid "Syntax highlighting engine"
-msgstr "Evidentiar syntaxe"
+msgstr "Motor de Evidentiar syntaxe"
 
 #: src/frontend/AboutDialog.cpp:177 src/frontend/AboutDialog.cpp:179
 #, kde-format
@@ -10137,10 +10129,9 @@ msgid "Offers available actions for a specific purpose"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:182 src/frontend/AboutDialog.cpp:184
-#, fuzzy, kde-format
-#| msgid "Serial Port"
+#, kde-format
 msgid "Qt SerialPort"
-msgstr "Porto serial"
+msgstr "Porto serial de Qt "
 
 #: src/frontend/AboutDialog.cpp:182
 #, kde-format
@@ -10203,11 +10194,9 @@ msgid "liborigin"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:210
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Open Origin OPJ Project"
+#, kde-format
 msgid "importing Origin OPJ project files"
-msgstr "Aperi origine de projecto OPJ"
+msgstr "importante files de Origine de projecto OPJ"
 
 #: src/frontend/AboutDialog.cpp:215 src/frontend/AboutDialog.cpp:217
 #, kde-format
@@ -10225,10 +10214,9 @@ msgid "NetCDF"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:220
-#, fuzzy, kde-format
-#| msgid "Network Common Data Format (NetCDF)"
+#, kde-format
 msgid "Network Common Data Form"
-msgstr "Network Common Data Format (NetCDF)"
+msgstr "Forma de datos commun de rete (Network Common Data Form)"
 
 #: src/frontend/AboutDialog.cpp:225 src/frontend/AboutDialog.cpp:227
 #, kde-format
@@ -10236,17 +10224,15 @@ msgid "CFITSIO"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:225
-#, fuzzy, kde-format
-#| msgid "Flexible Image Transport System Data Format (FITS)"
+#, kde-format
 msgid ""
 "Support data files in FITS (Flexible Image Transport System) data format"
-msgstr "Flexible Image Transport System Data Format (FITS)"
+msgstr "Supporta files de datos in formato (Flexible Image Transport System) "
 
 #: src/frontend/AboutDialog.cpp:231 src/frontend/AboutDialog.cpp:233
-#, fuzzy, kde-format
-#| msgid "Ready"
+#, kde-format
 msgid "ReadStat"
-msgstr "Preste"
+msgstr "ReadStat (stato de lectura)"
 
 #: src/frontend/AboutDialog.cpp:231
 #, kde-format
@@ -10254,10 +10240,9 @@ msgid "Read (and write) data sets from SAS, Stata, and SPSS"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:236 src/frontend/AboutDialog.cpp:238
-#, fuzzy, kde-format
-#| msgid "Equation"
+#, kde-format
 msgid "Matio"
-msgstr "Equation"
+msgstr "Matio"
 
 #: src/frontend/AboutDialog.cpp:236
 #, kde-format
@@ -10285,10 +10270,9 @@ msgid "Import ODS (Open Document Spreadsheet) files"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:251 src/frontend/AboutDialog.cpp:254
-#, fuzzy, kde-format
-#| msgid "MCAP Data"
+#, kde-format
 msgid "MCAP"
-msgstr "Datos de MCAP"
+msgstr "MCAP"
 
 #: src/frontend/AboutDialog.cpp:251
 #, kde-format
@@ -10296,10 +10280,9 @@ msgid "MCAP file support"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:257 src/frontend/AboutDialog.cpp:259
-#, fuzzy, kde-format
-#| msgid "Vectors:"
+#, kde-format
 msgid "Vector BLF"
-msgstr "Vectores:"
+msgstr "Vector BLF"
 
 #: src/frontend/AboutDialog.cpp:257
 #, kde-format
@@ -10709,7 +10692,7 @@ msgstr ""
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:138
 #, kde-format
 msgid "%1 or %2"
-msgstr ""
+msgstr "%1 o %2"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:252
 #, kde-format
@@ -14218,7 +14201,7 @@ msgstr "Netta historia"
 #: src/frontend/LabPlot.cpp:44
 #, kde-format
 msgid "Visit website:"
-msgstr ""
+msgstr "Tu visita le sito web:"
 
 #: src/frontend/LabPlot.cpp:46
 #, kde-format
@@ -14233,7 +14216,7 @@ msgstr ""
 #: src/frontend/LabPlot.cpp:48
 #, kde-format
 msgid "Please report bugs to:"
-msgstr ""
+msgstr "Pro favor tu reporta bugs a :"
 
 #: src/frontend/LabPlot.cpp:52
 #, kde-format
@@ -14245,10 +14228,9 @@ msgstr ""
 "platteforma per Visualisation e Analyse de datos accessibile a omnes."
 
 #: src/frontend/LabPlot.cpp:54
-#, fuzzy, kde-format
-#| msgid "(c) 2007-2024"
+#, kde-format
 msgid "(c) 2007-2024 LabPlot authors"
-msgstr "(c) 2007-2024"
+msgstr "(c) 2007-2024 Autores de LabPlot"
 
 #: src/frontend/LabPlot.cpp:56
 #, kde-format
@@ -22638,7 +22620,7 @@ msgstr "Traciar:"
 #: src/frontend/ui/settingsgeneralpage.ui:360
 #, kde-format
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPerfTrace)
 #. i18n: ectx: property (text), widget (QLabel, lPerformance)

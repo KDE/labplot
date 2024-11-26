@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-25 00:37+0000\n"
-"PO-Revision-Date: 2024-11-24 09:36+0200\n"
+"PO-Revision-Date: 2024-11-25 23:54+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -10118,16 +10118,14 @@ msgid "Positive/Negative sign "
 msgstr "Знак "
 
 #: src/frontend/AboutDialog.cpp:135
-#, fuzzy, kde-format
-#| msgid "System: "
+#, kde-format
 msgid "System:"
-msgstr "Система: "
+msgstr "Система:"
 
 #: src/frontend/AboutDialog.cpp:136
-#, fuzzy, kde-format
-#| msgid "Locale: "
+#, kde-format
 msgid "Locale:"
-msgstr "Локаль: "
+msgstr "Локаль:"
 
 #: src/frontend/AboutDialog.cpp:137
 #, kde-format
@@ -10140,10 +10138,9 @@ msgid "Updated on restart"
 msgstr "Оновлення при перезапуску"
 
 #: src/frontend/AboutDialog.cpp:138
-#, fuzzy, kde-format
-#| msgid "Architecture: "
+#, kde-format
 msgid "Architecture:"
-msgstr "Архітектура: "
+msgstr "Архітектура:"
 
 #: src/frontend/AboutDialog.cpp:139
 #, kde-format
@@ -10151,10 +10148,9 @@ msgid "Kernel: "
 msgstr "Ядро: "
 
 #: src/frontend/AboutDialog.cpp:140
-#, fuzzy, kde-format
-#| msgid "Executable Path: "
+#, kde-format
 msgid "Executable Path:"
-msgstr "Шлях до виконуваного файла: "
+msgstr "Шлях до виконуваного файла:"
 
 #: src/frontend/AboutDialog.cpp:148
 #, kde-format
@@ -10197,10 +10193,9 @@ msgstr "Графічна оболонка для математичних про
 #: src/frontend/AboutDialog.cpp:238 src/frontend/AboutDialog.cpp:243
 #: src/frontend/AboutDialog.cpp:248 src/frontend/AboutDialog.cpp:254
 #: src/frontend/AboutDialog.cpp:259 src/frontend/AboutDialog.cpp:276
-#, fuzzy, kde-format
-#| msgid "missing value"
+#, kde-format
 msgid "missing"
-msgstr "не вистачає значення"
+msgstr "немає"
 
 #: src/frontend/AboutDialog.cpp:157 src/frontend/AboutDialog.cpp:159
 #, kde-format
@@ -14584,22 +14579,22 @@ msgstr "Спорожнити журнал"
 #: src/frontend/LabPlot.cpp:44
 #, kde-format
 msgid "Visit website:"
-msgstr ""
+msgstr "Відвідати сайт:"
 
 #: src/frontend/LabPlot.cpp:46
 #, kde-format
 msgid "Mastodon:"
-msgstr ""
+msgstr "Mastodon:"
 
 #: src/frontend/LabPlot.cpp:47
 #, kde-format
 msgid "Watch video tutorials:"
-msgstr ""
+msgstr "Перегляд відеопідручників:"
 
 #: src/frontend/LabPlot.cpp:48
 #, kde-format
 msgid "Please report bugs to:"
-msgstr ""
+msgstr "Про вади, будь ласка, повідомляйте тут:"
 
 #: src/frontend/LabPlot.cpp:52
 #, kde-format
@@ -14612,10 +14607,9 @@ msgstr ""
 "аналіз даних."
 
 #: src/frontend/LabPlot.cpp:54
-#, fuzzy, kde-format
-#| msgid "(c) 2007-2024"
+#, kde-format
 msgid "(c) 2007-2024 LabPlot authors"
-msgstr "© 2007–2024"
+msgstr "© Автори LabPlot, 2007–2024"
 
 #: src/frontend/LabPlot.cpp:56
 #, kde-format
