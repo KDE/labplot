@@ -1360,14 +1360,14 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			WARN(Q_FUNC_INFO << ", using fixed padding")
 #if defined(HAVE_WINDOWS)
 			// TODO: test if min instead of max is relevant
-			plot->setHorizontalPadding(100. + 1.5 * plot->horizontalPadding() * std::min(elementScalingFactor, 1.));
+			plot->setHorizontalPadding(150. + 1.5 * plot->horizontalPadding() * std::min(elementScalingFactor, 1.));
 			plot->setVerticalPadding(100. + 1.5 * plot->verticalPadding() * std::min(elementScalingFactor, 1.));
-			plot->setRightPadding(100. + 1.5 * plot->rightPadding() * std::min(elementScalingFactor, 1.));
+			plot->setRightPadding(150. + 1.5 * plot->rightPadding() * std::min(elementScalingFactor, 1.));
 			plot->setBottomPadding(100. + 1.5 * plot->bottomPadding() * std::min(elementScalingFactor, 1.));
 #else
-			plot->setHorizontalPadding(100. + 1.5 * plot->horizontalPadding() * std::max(elementScalingFactor, 1.));
+			plot->setHorizontalPadding(150. + 1.5 * plot->horizontalPadding() * std::max(elementScalingFactor, 1.));
 			plot->setVerticalPadding(100. + 1.5 * plot->verticalPadding() * std::max(elementScalingFactor, 1.));
-			plot->setRightPadding(100. + 1.5 * plot->rightPadding() * std::max(elementScalingFactor, 1.));
+			plot->setRightPadding(150. + 1.5 * plot->rightPadding() * std::max(elementScalingFactor, 1.));
 			plot->setBottomPadding(100. + 1.5 * plot->bottomPadding() * std::max(elementScalingFactor, 1.));
 #endif
 		}
