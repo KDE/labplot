@@ -41,6 +41,7 @@ Bug fixes:
 	* Fixed add/subtract value functionality in Matrix (BUG 493523)
 	* Fixed wrong font size in the plot legend (BUG 493017)
 	* Fixed wrong font size in the axis title (BUG 472982)
+	* Don't overwrite OPJ files when saving (BUG 496480)
 
 Internal:
 	* use name LabPlot/labplot consistenly (renamed LabPlot2/labplot2)
