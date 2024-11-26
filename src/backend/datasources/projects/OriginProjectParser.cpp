@@ -266,15 +266,19 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	project->setIsLoading(true);
 	if (projectIt.node) { // only opj files from version >= 6.0 have a project tree
 		DEBUG(Q_FUNC_INFO << ", project tree found");
-		QString name(QString::fromLatin1(projectIt->name.c_str()));
-		project->setName(name);
+		// set from file name (not root node)
+		// QString name(QString::fromLatin1(projectIt->name.c_str()));
+		// project->setName(name);
 		project->setCreationTime(creationTime(projectIt));
 		loadFolder(project, projectIt, preview);
-	} else { // for older versions put all windows on rootfolder
-		DEBUG(Q_FUNC_INFO << ", no project tree");
-		int pos = m_projectFileName.lastIndexOf(QLatin1Char('/')) + 1;
-		project->setName(m_projectFileName.mid(pos));
 	}
+	// for older versions put all windows on rootfolder
+
+	// set project name from project file name
+	QFileInfo fi(m_projectFileName);
+	project->setName(fi.completeBaseName());
+	DEBUG(Q_FUNC_INFO << ", set project name: " << project->name().toStdString())
+
 	// imports all loose windows (like prior version 6 which has no project tree)
 	handleLooseWindows(project, preview);
 
