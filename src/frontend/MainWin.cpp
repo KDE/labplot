@@ -1709,7 +1709,9 @@ bool MainWin::saveProject() {
 	else {
 		// don't overwrite OPJ files, replace ending
 		if (fileName.endsWith(QLatin1String(".opj"), Qt::CaseInsensitive)) {
-			fileName.replace(QLatin1String(".opj"), QLatin1String(".lml"), Qt::CaseInsensitive);
+			//fileName.replace(QLatin1String(".opj"), QLatin1String(".lml"), Qt::CaseInsensitive);
+			// better append ending (don't overwrite existing project.lml file)
+			fileName.append(QLatin1String(".lml"));
 			DEBUG(Q_FUNC_INFO << ", renamed file name to " << fileName.toStdString())
 		}
 		return save(fileName);
