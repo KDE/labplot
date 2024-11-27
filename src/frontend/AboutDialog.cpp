@@ -86,7 +86,8 @@ AboutDialog::AboutDialog(const KAboutData& aboutData, QWidget* parent) : KAboutA
 	connect(copyButton, &QPushButton::clicked, this, &AboutDialog::copyConfig);
 
 	auto* donateButton = new QPushButton(i18n("Donate"));
-	donateButton->setIcon(QIcon::fromTheme(QLatin1String("donate")));
+	// no $ icon
+	//donateButton->setIcon(QIcon::fromTheme(QLatin1String("donate")));
 	connect(donateButton, &QPushButton::clicked, this, &AboutDialog::openDonateLink);
 
 	auto* linkCopyLayout = new QHBoxLayout;
@@ -145,7 +146,7 @@ QString AboutDialog::systemInfo() {
 		+ QLatin1String("<tr><td>") + i18n("Architecture:") + QLatin1String("</td><td>") + QSysInfo::buildAbi() + QLatin1String("</td></tr>")
 		+ QLatin1String("<tr><td>") + i18n("Kernel: ") + QLatin1String("</td><td>") + QSysInfo::kernelType() + QLatin1Char(' ') + QSysInfo::kernelVersion() + QLatin1String("</td></tr>")
 //		+ QLatin1String("<tr><td>") +i18n("Executable Path:") + QLatin1String("</td><td>") + path + QLatin1String("</td></tr>")
-		+ QLatin1String("</table>");
+		+ QLatin1String("</table>") + QLatin1Char('\n');
 }
 
 QVector<QStringList> AboutDialog::components() {
