@@ -1032,7 +1032,7 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 }
 
 /*!
- * \brief TextLabelPrivate::mapParentToPlotArea
+ * \brief WorksheetElementPrivate::mapParentToPlotArea
  * Mapping a point from parent coordinates to plotArea coordinates
  * Needed because in some cases the parent is not the PlotArea, but a child of it (Marker/InfoElement)
  * IMPORTANT: function is also used in Custompoint, so when changing anything, change it also there
@@ -1051,7 +1051,7 @@ QPointF WorksheetElementPrivate::mapParentToPlotArea(QPointF point) const {
 }
 
 /*!
- * \brief TextLabelPrivate::mapPlotAreaToParent
+ * \brief WorksheetElementPrivate::mapPlotAreaToParent
  * Mapping a point from the PlotArea (CartesianPlot::plotArea) coordinates to the parent
  * coordinates of this item
  * Needed because in some cases the parent is not the PlotArea, but a child of it (Marker/InfoElement)
