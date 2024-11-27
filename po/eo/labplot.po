@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-25 00:37+0000\n"
+"POT-Creation-Date: 2024-11-27 00:37+0000\n"
 "PO-Revision-Date: 2024-07-27 16:22+0200\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -1926,7 +1926,7 @@ msgid "Unknown"
 msgstr "Nekonata"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/MainWin.cpp:638 src/frontend/MainWin.cpp:1982
+#: src/frontend/MainWin.cpp:638 src/frontend/MainWin.cpp:1987
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -2512,12 +2512,12 @@ msgstr ""
 msgid "Plot data"
 msgstr "Diagramigi datumojn"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1326
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1333
 #, kde-format
 msgid "Plot%1"
 msgstr "Grafiko%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1495
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1502
 #, kde-format
 msgid "legend"
 msgstr "legendo"
@@ -12032,7 +12032,7 @@ msgstr "Nomo de dosierujo:"
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:71 src/frontend/MainWin.cpp:632
-#: src/frontend/MainWin.cpp:1964 src/frontend/SettingsDialog.cpp:68
+#: src/frontend/MainWin.cpp:1969 src/frontend/SettingsDialog.cpp:68
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:122
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -12313,7 +12313,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2783
+#: src/frontend/MainWin.cpp:2788
 #, kde-format
 msgid "Warning"
 msgstr "Averto"
@@ -14813,7 +14813,7 @@ msgstr "Bonvenon al LabPlot %1"
 msgid "&Open Example"
 msgstr "Malfermi Ekzempl&on"
 
-#: src/frontend/MainWin.cpp:622 src/frontend/MainWin.cpp:1948
+#: src/frontend/MainWin.cpp:622 src/frontend/MainWin.cpp:1953
 #, kde-format
 msgid "Workbook"
 msgstr "Laborlibro"
@@ -14824,7 +14824,7 @@ msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 "Kreas novan laborlibron por kolekto-kalkultabeloj, matricoj kaj diagramigoj"
 
-#: src/frontend/MainWin.cpp:627 src/frontend/MainWin.cpp:1956
+#: src/frontend/MainWin.cpp:627 src/frontend/MainWin.cpp:1961
 #, kde-format
 msgid "Data Extractor"
 msgstr "Eltilo de datumoj"
@@ -14844,7 +14844,7 @@ msgstr "Kreas novan kalkultabelon por redaktado de datumoj"
 msgid "Creates a new matrix for data editing"
 msgstr "Kreas novan matricon por redaktado de datumoj"
 
-#: src/frontend/MainWin.cpp:644 src/frontend/MainWin.cpp:2000
+#: src/frontend/MainWin.cpp:644 src/frontend/MainWin.cpp:2005
 #: src/frontend/SettingsDialog.cpp:63
 #, kde-format
 msgid "Worksheet"
@@ -14855,7 +14855,7 @@ msgstr "Laborfolio"
 msgid "Creates a new worksheet for data plotting"
 msgstr "Kreas novan laborfolion por datuma grafikaĵo"
 
-#: src/frontend/MainWin.cpp:650 src/frontend/MainWin.cpp:2008
+#: src/frontend/MainWin.cpp:650 src/frontend/MainWin.cpp:2013
 #, kde-format
 msgid "Note"
 msgstr "Noto"
@@ -14865,7 +14865,7 @@ msgstr "Noto"
 msgid "Creates a new note for arbitrary text"
 msgstr "Kreas novan noton por arbitra teksto"
 
-#: src/frontend/MainWin.cpp:655 src/frontend/MainWin.cpp:1940
+#: src/frontend/MainWin.cpp:655 src/frontend/MainWin.cpp:1945
 #, kde-format
 msgid "Folder"
 msgstr "Dosierujo"
@@ -14945,8 +14945,8 @@ msgstr "Eksporti..."
 msgid "Export selected element"
 msgstr "Eksporti elektitan elementon"
 
-#: src/frontend/MainWin.cpp:717 src/frontend/MainWin.cpp:2485
-#: src/frontend/MainWin.cpp:2493
+#: src/frontend/MainWin.cpp:717 src/frontend/MainWin.cpp:2490
+#: src/frontend/MainWin.cpp:2498
 #, kde-format
 msgid "Share"
 msgstr "Kundividi"
@@ -15071,8 +15071,9 @@ msgid "Color Scheme"
 msgstr "Kolorskemo"
 
 #: src/frontend/MainWin.cpp:993
-#, kde-format
-msgid "The current project %1 has been modified. Do you want to save it?"
+#, fuzzy, kde-format
+#| msgid "The current project %1 has been modified. Do you want to save it?"
+msgid "The current project \"%1\" has been modified. Do you want to save it?"
 msgstr "La nuna projekto %1 estas modifita. Ĉu vi volas konservi ĝin?"
 
 #: src/frontend/MainWin.cpp:994
@@ -15165,13 +15166,13 @@ msgstr "%1: malfermita"
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Projekto sukcese malfermiĝis (en %1 sekundoj)."
 
-#: src/frontend/MainWin.cpp:1721
+#: src/frontend/MainWin.cpp:1725
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Konservi Projekton Kiel"
 
-#: src/frontend/MainWin.cpp:1723
+#: src/frontend/MainWin.cpp:1727
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -15180,70 +15181,70 @@ msgstr ""
 "LabPlot-Projektoj (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML."
 "BZ2 *.LML.XZ)"
 
-#: src/frontend/MainWin.cpp:1749
+#: src/frontend/MainWin.cpp:1754
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "Ne eblis malfermi la provizoran dosieron por skribado."
 
-#: src/frontend/MainWin.cpp:1829
+#: src/frontend/MainWin.cpp:1834
 #, kde-format
 msgid "Project saved"
 msgstr "Projekto konservita"
 
-#: src/frontend/MainWin.cpp:1845
+#: src/frontend/MainWin.cpp:1850
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "Ne eblis konservi la dosieron '%1'."
 
-#: src/frontend/MainWin.cpp:1850
+#: src/frontend/MainWin.cpp:1855
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Ne eblis malfermi la dosieron '%1' por skribado."
 
-#: src/frontend/MainWin.cpp:1900
+#: src/frontend/MainWin.cpp:1905
 #, kde-format
 msgid "Changed"
 msgstr "Ŝanĝita"
 
-#: src/frontend/MainWin.cpp:1915 src/frontend/MainWin.cpp:1927
+#: src/frontend/MainWin.cpp:1920 src/frontend/MainWin.cpp:1932
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Preparante presadon de %1"
 
-#: src/frontend/MainWin.cpp:1917 src/frontend/MainWin.cpp:1929
+#: src/frontend/MainWin.cpp:1922 src/frontend/MainWin.cpp:1934
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 presita"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/MainWin.cpp:2449
+#: src/frontend/MainWin.cpp:2454
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1431
 #: src/frontend/worksheet/WorksheetView.cpp:361
 #, kde-format
 msgid "Cursor"
 msgstr "Kursoro"
 
-#: src/frontend/MainWin.cpp:2485
+#: src/frontend/MainWin.cpp:2490
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "Estis problemo kundividante la projekton: %1"
 
-#: src/frontend/MainWin.cpp:2489
+#: src/frontend/MainWin.cpp:2494
 #, kde-format
 msgid "Project shared successfully"
 msgstr "Projekto kundividita sukcese"
 
-#: src/frontend/MainWin.cpp:2492
+#: src/frontend/MainWin.cpp:2497
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "Vi povas trovi la kundividitan projekton ĉe: <a href=\"%1\">%1</a>"
 
-#: src/frontend/MainWin.cpp:2682
+#: src/frontend/MainWin.cpp:2687
 #, kde-format
 msgid "Running Kaggle CLI tool failed"
 msgstr "Rulo de Kaggle KLI-ilo malsukcesis"
 
-#: src/frontend/MainWin.cpp:2683
+#: src/frontend/MainWin.cpp:2688
 #, kde-format
 msgid ""
 "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
@@ -15253,32 +15254,32 @@ msgstr ""
 "\"\"How to Use Kaggle\"</a> por agordi la KomandLiniInterfacan ilon de "
 "Kaggle."
 
-#: src/frontend/MainWin.cpp:2746
+#: src/frontend/MainWin.cpp:2751
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 eksportita"
 
-#: src/frontend/MainWin.cpp:2753
+#: src/frontend/MainWin.cpp:2758
 #, kde-format
 msgid "FITS files saved"
 msgstr "FITS-dosieroj konservitaj"
 
-#: src/frontend/MainWin.cpp:2765
+#: src/frontend/MainWin.cpp:2770
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "MQTT Kliento%1"
 
-#: src/frontend/MainWin.cpp:2783
+#: src/frontend/MainWin.cpp:2788
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "Jam ekzistas MQTTKliento kun ĉi tiu gastiganto!"
 
-#: src/frontend/MainWin.cpp:2787
+#: src/frontend/MainWin.cpp:2792
 #, kde-format
 msgid "Live data source%1"
 msgstr "Viva datumfonto%1"
 
-#: src/frontend/MainWin.cpp:2832
+#: src/frontend/MainWin.cpp:2837
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Kreas novan %1 notlibron"

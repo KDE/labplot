@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-25 00:37+0000\n"
+"POT-Creation-Date: 2024-11-27 00:37+0000\n"
 "PO-Revision-Date: 2024-11-25 07:08+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -1920,7 +1920,7 @@ msgid "Unknown"
 msgstr "Neznano"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/MainWin.cpp:638 src/frontend/MainWin.cpp:1982
+#: src/frontend/MainWin.cpp:638 src/frontend/MainWin.cpp:1987
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -2498,12 +2498,12 @@ msgstr "%1 %2"
 msgid "Plot data"
 msgstr "Izriši podatke"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1326
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1333
 #, kde-format
 msgid "Plot%1"
 msgstr "Graf%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1495
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1502
 #, kde-format
 msgid "legend"
 msgstr "legenda"
@@ -12022,7 +12022,7 @@ msgstr "Ime mape:"
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:71 src/frontend/MainWin.cpp:632
-#: src/frontend/MainWin.cpp:1964 src/frontend/SettingsDialog.cpp:68
+#: src/frontend/MainWin.cpp:1969 src/frontend/SettingsDialog.cpp:68
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:122
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -12307,7 +12307,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2783
+#: src/frontend/MainWin.cpp:2788
 #, kde-format
 msgid "Warning"
 msgstr "Opozorilo"
@@ -14810,7 +14810,7 @@ msgstr "Dobrodošli v LabPlot %1"
 msgid "&Open Example"
 msgstr "&Odpri primer"
 
-#: src/frontend/MainWin.cpp:622 src/frontend/MainWin.cpp:1948
+#: src/frontend/MainWin.cpp:622 src/frontend/MainWin.cpp:1953
 #, kde-format
 msgid "Workbook"
 msgstr "Delovni zvezek"
@@ -14820,7 +14820,7 @@ msgstr "Delovni zvezek"
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr "Ustvari nov delovni zvezek za preglednice, matrike in grafikone zbirke"
 
-#: src/frontend/MainWin.cpp:627 src/frontend/MainWin.cpp:1956
+#: src/frontend/MainWin.cpp:627 src/frontend/MainWin.cpp:1961
 #, kde-format
 msgid "Data Extractor"
 msgstr "Izvlečnik podatkov"
@@ -14840,7 +14840,7 @@ msgstr "Ustvari novo preglednico za urejanje podatkov"
 msgid "Creates a new matrix for data editing"
 msgstr "Ustvari novo matriko za urejanje podatkov"
 
-#: src/frontend/MainWin.cpp:644 src/frontend/MainWin.cpp:2000
+#: src/frontend/MainWin.cpp:644 src/frontend/MainWin.cpp:2005
 #: src/frontend/SettingsDialog.cpp:63
 #, kde-format
 msgid "Worksheet"
@@ -14851,7 +14851,7 @@ msgstr "Delovni list"
 msgid "Creates a new worksheet for data plotting"
 msgstr "Ustvari nov delovni list za urejanje podatkov"
 
-#: src/frontend/MainWin.cpp:650 src/frontend/MainWin.cpp:2008
+#: src/frontend/MainWin.cpp:650 src/frontend/MainWin.cpp:2013
 #, kde-format
 msgid "Note"
 msgstr "Opomba"
@@ -14861,7 +14861,7 @@ msgstr "Opomba"
 msgid "Creates a new note for arbitrary text"
 msgstr "Ustvari novo opombo za poljubno besedilo"
 
-#: src/frontend/MainWin.cpp:655 src/frontend/MainWin.cpp:1940
+#: src/frontend/MainWin.cpp:655 src/frontend/MainWin.cpp:1945
 #, kde-format
 msgid "Folder"
 msgstr "Mapa"
@@ -14942,8 +14942,8 @@ msgstr "Izvozi ..."
 msgid "Export selected element"
 msgstr "Izvozi izbrani element"
 
-#: src/frontend/MainWin.cpp:717 src/frontend/MainWin.cpp:2485
-#: src/frontend/MainWin.cpp:2493
+#: src/frontend/MainWin.cpp:717 src/frontend/MainWin.cpp:2490
+#: src/frontend/MainWin.cpp:2498
 #, kde-format
 msgid "Share"
 msgstr "Deli"
@@ -15068,8 +15068,9 @@ msgid "Color Scheme"
 msgstr "Barvna shema"
 
 #: src/frontend/MainWin.cpp:993
-#, kde-format
-msgid "The current project %1 has been modified. Do you want to save it?"
+#, fuzzy, kde-format
+#| msgid "The current project %1 has been modified. Do you want to save it?"
+msgid "The current project \"%1\" has been modified. Do you want to save it?"
 msgstr "Trenutni projekt %1 je bil spremenjen. Ali ga želite shraniti?"
 
 #: src/frontend/MainWin.cpp:994
@@ -15162,13 +15163,13 @@ msgstr "%1: odprto"
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Projekt se je uspešno odprl (v %1 s)."
 
-#: src/frontend/MainWin.cpp:1721
+#: src/frontend/MainWin.cpp:1725
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Shrani projekt kot"
 
-#: src/frontend/MainWin.cpp:1723
+#: src/frontend/MainWin.cpp:1727
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -15177,70 +15178,70 @@ msgstr ""
 "Projekti LabPlot (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 
-#: src/frontend/MainWin.cpp:1749
+#: src/frontend/MainWin.cpp:1754
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "Začasne datoteke za pisanje ni bilo mogoče odpreti."
 
-#: src/frontend/MainWin.cpp:1829
+#: src/frontend/MainWin.cpp:1834
 #, kde-format
 msgid "Project saved"
 msgstr "Projekt shranjen"
 
-#: src/frontend/MainWin.cpp:1845
+#: src/frontend/MainWin.cpp:1850
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "Datoteke »%1« ni bilo mogoče shraniti."
 
-#: src/frontend/MainWin.cpp:1850
+#: src/frontend/MainWin.cpp:1855
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Datoteke »%1« ni bilo mogoče odpreti za pisanje."
 
-#: src/frontend/MainWin.cpp:1900
+#: src/frontend/MainWin.cpp:1905
 #, kde-format
 msgid "Changed"
 msgstr "Spremenjeno"
 
-#: src/frontend/MainWin.cpp:1915 src/frontend/MainWin.cpp:1927
+#: src/frontend/MainWin.cpp:1920 src/frontend/MainWin.cpp:1932
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Priprava tiskanja %1"
 
-#: src/frontend/MainWin.cpp:1917 src/frontend/MainWin.cpp:1929
+#: src/frontend/MainWin.cpp:1922 src/frontend/MainWin.cpp:1934
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 natisnjeno"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/MainWin.cpp:2449
+#: src/frontend/MainWin.cpp:2454
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1431
 #: src/frontend/worksheet/WorksheetView.cpp:361
 #, kde-format
 msgid "Cursor"
 msgstr "Kazalec"
 
-#: src/frontend/MainWin.cpp:2485
+#: src/frontend/MainWin.cpp:2490
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "Pri souporabi projekta je prišlo do težave: %1"
 
-#: src/frontend/MainWin.cpp:2489
+#: src/frontend/MainWin.cpp:2494
 #, kde-format
 msgid "Project shared successfully"
 msgstr "Projekt je uspešno deljen"
 
-#: src/frontend/MainWin.cpp:2492
+#: src/frontend/MainWin.cpp:2497
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "Skupni projekt najdete na: <a href=\"%1\">%1</a>"
 
-#: src/frontend/MainWin.cpp:2682
+#: src/frontend/MainWin.cpp:2687
 #, kde-format
 msgid "Running Kaggle CLI tool failed"
 msgstr "Poganjanje orodja Kaggle CLI ni uspelo"
 
-#: src/frontend/MainWin.cpp:2683
+#: src/frontend/MainWin.cpp:2688
 #, kde-format
 msgid ""
 "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
@@ -15249,32 +15250,32 @@ msgstr ""
 "Sledite navodilom v <a href=\"https://www.kaggle.com/docs/api\">\"Kako "
 "uporabljati Kaggle - How to Use Kaggle\"</a> za nastavitev orodja Kaggle CLI."
 
-#: src/frontend/MainWin.cpp:2746
+#: src/frontend/MainWin.cpp:2751
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 izvoženo"
 
-#: src/frontend/MainWin.cpp:2753
+#: src/frontend/MainWin.cpp:2758
 #, kde-format
 msgid "FITS files saved"
 msgstr "Datoteke FITS shranjene"
 
-#: src/frontend/MainWin.cpp:2765
+#: src/frontend/MainWin.cpp:2770
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "Odjemalec MQTT%1"
 
-#: src/frontend/MainWin.cpp:2783
+#: src/frontend/MainWin.cpp:2788
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "S tem gostiteljem že obstaja MQTTClient!"
 
-#: src/frontend/MainWin.cpp:2787
+#: src/frontend/MainWin.cpp:2792
 #, kde-format
 msgid "Live data source%1"
 msgstr "Vir podatkov v živo%1"
 
-#: src/frontend/MainWin.cpp:2832
+#: src/frontend/MainWin.cpp:2837
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Ustvari novo %1 zvezek"
