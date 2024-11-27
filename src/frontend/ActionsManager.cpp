@@ -998,7 +998,6 @@ void ActionsManager::connectWorksheetToolbarActions(const WorksheetView* view) {
 }
 
 void ActionsManager::connectSpreadsheetToolbarActions(const SpreadsheetView* view) {
-	return;
 	if (!m_spreadsheetInsertRowAboveAction)
 		initSpreadsheetToolbarActions();
 	else {
