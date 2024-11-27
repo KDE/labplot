@@ -125,7 +125,8 @@ QString AboutDialog::systemInfo() {
 	if (!usedLocale.isEmpty())
 		locale = QLocale(usedLocale);
 	QString usedLanguage = QLocale::languageToString(locale.language()) + QStringLiteral(",") + QLocale::countryToString(locale.country());
-	QString path = QProcessEnvironment::systemEnvironment().value(QLatin1String("PATH"));
+// not included for privacy
+//	QString path = QProcessEnvironment::systemEnvironment().value(QLatin1String("PATH"));
 
 	return buildType + QLatin1Char('\n')
 #ifndef REPRODUCIBLE_BUILD
@@ -137,7 +138,7 @@ QString AboutDialog::systemInfo() {
 		+ QLatin1String("<tr><td>") + i18n("Number Settings:") + QLatin1String("</td><td>") + numberLocaleInfo + QLatin1String(" (") + i18n("Updated on restart") + QLatin1Char(')') + QLatin1String("</td></tr>")
 		+ QLatin1String("<tr><td>") + i18n("Architecture:") + QLatin1String("</td><td>") + QSysInfo::buildAbi() + QLatin1String("</td></tr>")
 		+ QLatin1String("<tr><td>") + i18n("Kernel: ") + QLatin1String("</td><td>") + QSysInfo::kernelType() + QLatin1Char(' ') + QSysInfo::kernelVersion() + QLatin1String("</td></tr>")
-		+ QLatin1String("<tr><td>") +i18n("Executable Path:") + QLatin1String("</td><td>") + path + QLatin1String("</td></tr>")
+//		+ QLatin1String("<tr><td>") +i18n("Executable Path:") + QLatin1String("</td><td>") + path + QLatin1String("</td></tr>")
 		+ QLatin1String("</table>");
 }
 

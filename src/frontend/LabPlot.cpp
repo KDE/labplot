@@ -43,8 +43,9 @@ int main(int argc, char* argv[]) {
 	QString systemInfo{AboutDialog::systemInfo()};
 	QString links = i18n("Visit website:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("labplot.kde.org")) + QLatin1Char('\n')
 		// Release notes: LINK ?
-		+ i18n("Mastodon:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("floss.social/@LabPlot")) + QLatin1Char('\n')
 		+ i18n("Watch video tutorials:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("tube.kockatoo.org/c/labplot")) + QLatin1Char('\n')
+		+ i18n("Discuss on Mastodon:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("floss.social/@LabPlot")) + QLatin1Char('\n')
+		+ i18n("Development:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://invent.kde.org/education/labplot")) + QLatin1Char('\n')
 		+ i18n("Please report bugs to:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("bugs.kde.org"));
 	KAboutData aboutData(QStringLiteral("labplot"),
 						 QStringLiteral("LabPlot"),
