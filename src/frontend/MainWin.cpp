@@ -110,7 +110,6 @@
 #include <KColorSchemeMenu>
 #include <KCompressionDevice>
 #include <KConfigGroup>
-#include <KHelpMenu>
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KRecentFilesAction>
@@ -390,6 +389,8 @@ void MainWin::initGUI(const QString& fileName) {
 	m_memoryInfoAction->setChecked(memoryInfoShown);
 	if (memoryInfoShown)
 		toggleMemoryInfo();
+
+	//TODO: hide "Donate" in the help menu?
 
 	// custom about dialog
         auto* aboutAction = actionCollection()->action(QStringLiteral("help_about_app"));
@@ -989,11 +990,8 @@ void MainWin::colorSchemeChanged(QAction* action) {
  */
 bool MainWin::warnModified() {
 	if (m_project->hasChanged()) {
-		int option = KMessageBox::warningTwoActionsCancel(this,
-														  i18n("The current project \"%1\" has been modified. Do you want to save it?", m_project->name()),
-														  i18n("Save Project"),
-														  KStandardGuiItem::save(),
-														  KStandardGuiItem::dontSave());
+		int option = KMessageBox::warningTwoActionsCancel(this, i18n("The current project \"%1\" has been modified. Do you want to save it?", m_project->name()),
+				i18n("Save Project"), KStandardGuiItem::save(), KStandardGuiItem::dontSave());
 		switch (option) {
 		case KMessageBox::PrimaryAction:
 			return !saveProject();

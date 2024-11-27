@@ -16,6 +16,7 @@
 #include <kxmlgui_version.h>
 
 #include <QClipboard>
+#include <QDesktopServices>
 #include <QDialogButtonBox>
 #include <QGuiApplication>
 #include <QLabel>
@@ -80,14 +81,19 @@ AboutDialog::AboutDialog(const KAboutData& aboutData, QWidget* parent) : KAboutA
 	linkLabel->setText(text.replace(QLatin1Char('\n'), QStringLiteral("<br />")));
 
 	// button to copy config
-	auto* copyButton = new QPushButton;
+	auto* copyButton = new QPushButton(i18n("Copy Info"));
 	copyButton->setIcon(QIcon::fromTheme(QLatin1String("edit-copy")));
-        connect(copyButton, &QPushButton::clicked, this, &AboutDialog::copyConfig);
+	connect(copyButton, &QPushButton::clicked, this, &AboutDialog::copyConfig);
+
+	auto* donateButton = new QPushButton(i18n("Donate"));
+	donateButton->setIcon(QIcon::fromTheme(QLatin1String("donate")));
+	connect(donateButton, &QPushButton::clicked, this, &AboutDialog::openDonateLink);
 
 	auto* linkCopyLayout = new QHBoxLayout;
 	linkCopyLayout->addWidget(linkLabel);
 	linkCopyLayout->addStretch();
 	linkCopyLayout->addWidget(copyButton);
+	linkCopyLayout->addWidget(donateButton);
 
 	((QVBoxLayout *)layout())->insertLayout(1, linkCopyLayout);
 
@@ -278,6 +284,12 @@ void AboutDialog::copyConfig() {
 			text += c.at(0) + QLatin1Char(' ') + c.at(2) + QLatin1Char('\n');
 
 	QApplication::clipboard()->setText(text);
+}
+
+void AboutDialog::openDonateLink() {
+	const auto donatepage = QStringLiteral("https://liberapay.com/LabPlot/donate");
+
+	QDesktopServices::openUrl(QUrl(donatepage));
 }
 
 /*

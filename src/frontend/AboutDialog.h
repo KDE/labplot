@@ -29,6 +29,7 @@ public:
 
 private Q_SLOTS:
 	void copyConfig();
+	void openDonateLink();
 
 // used only when deriving from QDialog
 /*	void init();
