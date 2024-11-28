@@ -53,7 +53,7 @@ bool Notebook::init(QByteArray* content) {
 																				 QVariantList() << m_backendName << QLatin1String("--noprogress"));
 
 	if (!result) {
-		WARN("Could not find cantorpart part");
+		WARN("Could not find cantorpart Part");
 		return false;
 	} else {
 		m_part = result.plugin;
@@ -92,7 +92,7 @@ bool Notebook::init(QByteArray* content) {
 		connect(m_variableModel, &QAbstractItemModel::modelReset, this, &Notebook::modelReset);
 
 		// default settings
-		const KConfigGroup group = Settings::group(QStringLiteral("Settings_Notebook"));
+		const auto group = Settings::group(QStringLiteral("Settings_Notebook"));
 
 		// TODO: right now we don't have the direct accces to Cantor's worksheet and to all its public methods
 		// and we need to go through the actions provided in cantor_part.

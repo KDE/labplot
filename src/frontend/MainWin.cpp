@@ -954,9 +954,9 @@ void MainWin::initMenus() {
 #ifdef HAVE_CANTOR_LIBS
 	auto backendNames = Cantor::Backend::listAvailableBackends();
 #if !defined(NDEBUG) || defined(Q_OS_WIN) || defined(Q_OS_MACOS)
-	WARN(Q_FUNC_INFO << ", " << backendNames.count() << " Cantor backends available:")
+	INFO(Q_FUNC_INFO << ", " << backendNames.count() << " Cantor backends available:")
 	for (const auto& b : backendNames)
-		WARN("Backend: " << STDSTRING(b))
+		INFO(Q_FUNC_INFO << ", Backend: " << STDSTRING(b))
 #endif
 
 	// sub-menu shown in the main toolbar
