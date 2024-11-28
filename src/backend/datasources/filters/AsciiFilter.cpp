@@ -140,6 +140,11 @@ void AsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* 
 
 	KCompressionDevice file(fileName);
 
+	if (d->isUTF16(file)) {
+		d->setLastError(AsciiFilter::Status::UTF16NotSupported);
+		return;
+	}
+
 	const int lines = d->properties.endRow < 0 ? -1 : d->properties.endRow - d->properties.startRow + 1;
 	auto rowImportMode = ImportMode::Replace;
 	if (columnImportMode != ImportMode::Replace)
@@ -235,6 +240,8 @@ QString AsciiFilter::statusToString(Status e) {
 		return i18n("No columns");
 	case Status::ColumnModeDeterminationFailed:
 		return i18n("Unable to determine column modes. Check if they are correctly written");
+	case Status::UTF16NotSupported:
+		return i18n("UTF16 encoding is not supported");
 	}
 	return i18n("Unhandled case");
 }
@@ -1343,6 +1350,12 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice& device, int lines, b
 	Spreadsheet spreadsheet(QStringLiteral("AsciiFilterPreviewSpreadsheet"));
 	if (reinit)
 		initialized = false;
+
+	if (isUTF16(device)) {
+		setLastError(AsciiFilter::Status::UTF16NotSupported);
+		return {};
+	}
+
 	q->clearLastError();
 	qint64 bytes_read;
 	setDataSource(&spreadsheet);
@@ -1391,6 +1404,33 @@ AsciiFilter::Status AsciiFilterPrivate::setLastError(AsciiFilter::Status status)
 		q->setLastError(s);
 	}
 	return status;
+}
+
+/*!
+ * returns \true if the the data coming from the device is UTF-16 encoded, returns \c false otherwise.
+ * In case the device couldn't be opened or the number of the available bytes is not sufficient to determine the encoding,
+ * \c false is returned and the caller needs to hanlde these error cases properly.
+ */
+bool AsciiFilterPrivate::isUTF16(QIODevice& device) {
+	if (!device.open(QIODevice::ReadOnly))
+		return false;
+
+	// read the first two bytes to check the "byte order mark" (BOM),
+	// UTF-16 encoded files typically start with a BOM to indicate the endianness of the encoding.
+	char buffer[2];
+	if (!device.read(buffer, 2))
+		return false;
+
+	const auto byte1 = static_cast<unsigned char>(buffer[0]);
+	const auto byte2 = static_cast<unsigned char>(buffer[1]);
+
+	device.reset(); // seek to the start
+
+	// Check for UTF-16 BOM (0xFEFF for UTF-16 Big Endian, 0xFFFE for UTF-16 Little Endian)
+	if ((byte1 == 0xFE && byte2 == 0xFF) || (byte1 == 0xFF && byte2 == 0xFE))
+		return true;
+
+	return false;
 }
 
 // #################################################################################################

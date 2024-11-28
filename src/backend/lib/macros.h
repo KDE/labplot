@@ -84,6 +84,7 @@ private:
 #define WAIT_CURSOR QApplication::setOverrideCursor(QCursor(Qt::WaitCursor))
 #define RESET_CURSOR QApplication::restoreOverrideCursor()
 
+#define STRING(x) #x
 #ifdef HAVE_WINDOWS
 #define STDSTRING(qstr) qstr.toUtf8().constData()
 #else

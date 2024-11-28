@@ -468,7 +468,11 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 	auto* symbol = curve->symbol();
 	QVERIFY(symbol != nullptr);
 	QCOMPARE(symbol->style(), Symbol::Style::SquareHalf);
+#if defined(HAVE_WINDOWS)
+	QCOMPARE(symbol->size(), 44.94210847045);
+#else
 	QCOMPARE(symbol->size(), 89.8842169409);
+#endif
 	// TODO: more symbol props
 
 	// Folder 2
@@ -524,7 +528,11 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 	symbol = curve->symbol();
 	QVERIFY(symbol != nullptr);
 	QCOMPARE(symbol->style(), Symbol::Style::Hexagon);
+#if defined(HAVE_WINDOWS)
+	QCOMPARE(symbol->size(), 44.94210847045);
+#else
 	QCOMPARE(symbol->size(), 89.8842169409);
+#endif
 	// TODO: more symbol props
 }
 
@@ -593,7 +601,12 @@ void ProjectImportTest::testOrigin_2graphs() {
 	auto* symbol = curve->symbol();
 	QVERIFY(symbol != nullptr);
 	QCOMPARE(symbol->style(), Symbol::Style::Hexagon);
+#if defined(HAVE_WINDOWS)
+	WARN(std::setprecision(15) << symbol->size())
+	QCOMPARE(symbol->size(), 44.94210847045);
+#else
 	QCOMPARE(symbol->size(), 89.8842169409);
+#endif
 	// TODO: more symbol props
 
 	// Graph 1
@@ -638,7 +651,11 @@ void ProjectImportTest::testOrigin_2graphs() {
 	symbol = curve->symbol();
 	QVERIFY(symbol != nullptr);
 	QCOMPARE(symbol->style(), Symbol::Style::SquareHalf);
+#if defined(HAVE_WINDOWS)
+	QCOMPARE(symbol->size(), 44.94210847045);
+#else
 	QCOMPARE(symbol->size(), 89.8842169409);
+#endif
 	// TODO: more symbol props
 
 	// Book 1

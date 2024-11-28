@@ -7,14 +7,14 @@
 <refentry lang="&language;">
 <refentryinfo>
 <title
->Labplot användarhandbok</title>
+>Användarhandbok Labplot</title>
 <author
 ><firstname
 >Helen</firstname
 ><surname
 >Faulkner</surname
 > <contrib
->LabPlot man page.</contrib
+>LabPlot manualsida.</contrib
 > <email
 >helen_ml_faulkner@yahoo.co.uk</email
 ></author>
@@ -29,7 +29,7 @@
 <refmeta>
 <refentrytitle
 ><command
->labplot2</command
+>labplot</command
 ></refentrytitle>
 <manvolnum
 >1</manvolnum>
@@ -37,15 +37,15 @@
 
 <refnamediv>
 <refname
->labplot2</refname>
+>labplot</refname>
 <refpurpose
->Ett program av KDE för interaktiv grafik och analys av vetenskaplig data.</refpurpose>
+>ett program av KDE för interaktiv datavisualisering och analys av vetenskaplig data.</refpurpose>
 </refnamediv>
 <!-- body begins here -->
 <refsynopsisdiv id='synopsis'>
 <cmdsynopsis
 ><command
->labplot2</command
+>labplot</command
 > <arg choice="opt"
 ><replaceable
 >Labplot-väljare</replaceable
@@ -62,12 +62,12 @@
 ><title
 >Beskrivning</title>
 <para
->Labplot är ett diagram- och analysverktyg av data. </para>
+>Labplot är ett diagramritnings- och dataanalysverktyg. </para>
 <para
->Funktionerna omfattar tvådimensionell och tredimensionell data- och funktionsuppritning, enkel redigering av diagram, analys av data och funktioner, stöd för olika arbetsblad som använder MDI- och Labplot-projektfiler. </para>
+>Dess funktioner inkluderar tvådimensionell och tredimensionell data och funktionsuppritning, enkel redigering av diagram, analys av data och funktioner, stöd för olika kalkylblad med MDI- och LabPlot-projektfiler. </para>
 <para
->Observera att Labplot startas med <command
->labplot2</command
+>Observera att Labplot anropas med <command
+>labplot</command
 >. </para>
 
 </refsect1>
@@ -76,9 +76,9 @@
 ><title
 >Labplot-väljare</title>
 <para
->För en fullständig sammanfattning av allmänna väljare, kör <userinput
+>Förr en fullständig sammanfattning av generella väljare, kör <userinput
 ><command
->labplot2</command
+>labplot</command
 > <parameter
 >--help</parameter
 ></userinput
@@ -120,11 +120,11 @@
 ></term>
   <listitem>
     <para
->Platsen för projektet som ska öppnas, som oftast slutar med <literal role="extension"
+>Platsen för projektet som ska öppnas, som vanligtvis slutar med <literal role="extension"
 >.lml</literal
 >.</para>
     <para
->Projektfilen kan också vara komprimerad, med ett filnamn som slutar med <literal role="extension"
+>Projektfilen kan också vara komprimerad, då dess filnamn slutar med <literal role="extension"
 >.lml.gz</literal
 >, <literal role="extension"
 >.lml.bz2</literal
@@ -138,16 +138,16 @@
 
 <refsect1>
 <title
->Se också</title>
+>Se även</title>
 <simplelist>
 <member
->Fullständig användardokumentation är tillgänglig via KDE:s hjälpcentral. Man kan också ange webbadressen <ulink url="help:/labplot2"
->help:/labplot2</ulink
-> (skriv antingen in webbadressen i &dolphin;, eller kör <userinput
-> <command
+>Fullständig användardokumentation är tillgänglig via KDE:s hjälpcentral.Det går också att mata in webbadressen <ulink url="help:/labplot"
+>help:/labplot</ulink
+> (mata antingen in webbadressen i &dolphin;, eller kör <userinput
+><command
 >khelpcenter</command
 > <parameter
->help:/labplot2</parameter
+>help:/labplot</parameter
 ></userinput
 >).</member>
 <member
@@ -155,7 +155,7 @@
 <member
 >qt5options(7)</member>
 <member
->Ytterligare information finns också tillgänglig på <ulink url="https://labplot.kde.org/"
+>Ytterligare information är också tillgänglig på <ulink url="https://labplot.kde.org/"
 >https://labplot.kde.org/</ulink
 ></member>
 </simplelist>
@@ -165,7 +165,7 @@
 ><title
 >Upphovsmän</title>
 <para
->Labplot2 är skrivet av </para>
+>Labplot är skrivet av </para>
 <simplelist>
     <member
 >Stefan Gerlach &lt;stefan.gerlach@uni.kn&gt;,</member>
@@ -174,10 +174,10 @@
     <member
 >F&aacute;bi&aacute;n Krist&oacute;f-Szabolcs &lt;f-kristof@hotmail.com&gt;</member>
     <member
->och flera ytterligare upphovsmän.</member>
+>och flera andra upphovsmän</member>
 </simplelist>
 <para
->Manualsidan är skriven av Helen Faulkner &lt;helen_ml_faulkner@yahoo.co.uk&gt; för Debian GNU/Linux systemet (men kan användas av andra). </para>
+>Den här manualsidan har utarbetats av Helen Faulkner &lt;helen_ml_faulkner@yahoo.co.uk&gt; för Debian GNU/Linux-systemet (men kan användas av andra). </para>
 <para
 >Licens: GNU General Public Version 2 &lt;<ulink url="http://www.gnu.org/licenses/gpl-2.0.html"
 >http://www.gnu.org/licenses/gpl-2.0.html</ulink

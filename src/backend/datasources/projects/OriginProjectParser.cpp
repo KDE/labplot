@@ -266,15 +266,22 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	project->setIsLoading(true);
 	if (projectIt.node) { // only opj files from version >= 6.0 have a project tree
 		DEBUG(Q_FUNC_INFO << ", project tree found");
-		QString name(QString::fromLatin1(projectIt->name.c_str()));
-		project->setName(name);
+		auto rootName = QString::fromLatin1(projectIt->name.c_str());
+		if (rootName == QLatin1String("UNTITLED")) {
+			// set project name from project file name
+			QFileInfo fi(m_projectFileName);
+			project->setName(fi.completeBaseName());
+		} else
+			project->setName(rootName);
 		project->setCreationTime(creationTime(projectIt));
 		loadFolder(project, projectIt, preview);
 	} else { // for older versions put all windows on rootfolder
-		DEBUG(Q_FUNC_INFO << ", no project tree");
-		int pos = m_projectFileName.lastIndexOf(QLatin1Char('/')) + 1;
-		project->setName(m_projectFileName.mid(pos));
+		// set project name from project file name
+		QFileInfo fi(m_projectFileName);
+		project->setName(fi.completeBaseName());
 	}
+	DEBUG(Q_FUNC_INFO << ", set project name: " << project->name().toStdString())
+
 	// imports all loose windows (like prior version 6 which has no project tree)
 	handleLooseWindows(project, preview);
 
@@ -1250,20 +1257,24 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	// 	worksheet->setPageRect(size);
 	graphSize.rwidth() = graph.width;
 	graphSize.rheight() = graph.height;
-	DEBUG(Q_FUNC_INFO << ", GRAPH width/height (px) = " << graphSize.width() << "/" << graphSize.height())
+	WARN(Q_FUNC_INFO << ", GRAPH width/height (px) = " << graphSize.width() << "/" << graphSize.height())
 	// Graphic elements in Origin are scaled relative to the dimensions of the page (Format->Page) with 600 DPI (>=9.6), 300 DPI (<9.6)
 	double dpi = 600.;
 	if (m_originFile->version() < 9.6)
 		dpi = 300.;
-	DEBUG(Q_FUNC_INFO << ", GRAPH width/height (cm) = " << graphSize.width() * GSL_CONST_CGS_INCH / dpi << "/" << graphSize.height() * GSL_CONST_CGS_INCH / dpi)
+	WARN(Q_FUNC_INFO << ", GRAPH width/height (cm) = " << graphSize.width() * GSL_CONST_CGS_INCH / dpi << "/" << graphSize.height() * GSL_CONST_CGS_INCH / dpi)
 	// Origin scales text and plots with the size of the layer when no fixed size is used (Layer properties->Size)
-	// so we scale all text and plots with a scaling factor to the whole view height (29.5 cm) used as default
+	// so we scale all text and plots with a scaling factor to the whole view height used as default
+#if defined(HAVE_WINDOWS)
+	const double fixedHeight = 14.75; // full height/2 [cm]
+#else
 	const double fixedHeight = 29.5; // full height [cm]
+#endif
 	elementScalingFactor = fixedHeight / (graph.height * GSL_CONST_CGS_INCH / dpi);
 	// not using the full value for scaling text is better in most cases
 	textScalingFactor = 1. + (elementScalingFactor - 1.) / 2.;
-	DEBUG(Q_FUNC_INFO << ", ELEMENT SCALING FACTOR = " << elementScalingFactor)
-	DEBUG(Q_FUNC_INFO << ", TEXT SCALING FACTOR = " << textScalingFactor)
+	WARN(Q_FUNC_INFO << ", ELEMENT SCALING FACTOR = " << elementScalingFactor)
+	WARN(Q_FUNC_INFO << ", TEXT SCALING FACTOR = " << textScalingFactor)
 	// default values (1000/1000)
 	//	DEBUG(Q_FUNC_INFO << ", WORKSHEET width/height = " << worksheet->pageRect().width() << "/" << worksheet->pageRect().height())
 
@@ -1332,9 +1343,9 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	if (plot) {
 		plot->setSymmetricPadding(false);
 		int numberOfLayer = layerIndex + 1;
-		DEBUG(Q_FUNC_INFO << ", number of layer = " << numberOfLayer)
+		WARN(Q_FUNC_INFO << ", number of layer = " << numberOfLayer)
 		if (numberOfLayer == 1 || !m_graphLayerAsPlotArea) { // use layer clientRect for padding
-			DEBUG(Q_FUNC_INFO << ", using layer rect for padding")
+			WARN(Q_FUNC_INFO << ", using layer rect for padding")
 			double aspectRatio = (double)graphSize.width() / graphSize.height();
 
 			const double leftPadding = layerRect.left / (double)graphSize.width() * aspectRatio * fixedHeight;
@@ -1346,13 +1357,22 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			plot->setRightPadding(Worksheet::convertToSceneUnits(rightPadding, Worksheet::Unit::Centimeter));
 			plot->setBottomPadding(Worksheet::convertToSceneUnits(bottomPadding, Worksheet::Unit::Centimeter));
 		} else {
-			plot->setHorizontalPadding(plot->horizontalPadding() * elementScalingFactor);
-			plot->setVerticalPadding(plot->verticalPadding() * elementScalingFactor);
-			plot->setRightPadding(plot->rightPadding() * elementScalingFactor);
-			plot->setBottomPadding(plot->bottomPadding() * elementScalingFactor);
+			WARN(Q_FUNC_INFO << ", using fixed padding")
+#if defined(HAVE_WINDOWS)
+			// TODO: test if min instead of max is relevant
+			plot->setHorizontalPadding(150. + 1.5 * plot->horizontalPadding() * std::min(elementScalingFactor, 1.));
+			plot->setVerticalPadding(100. + 1.5 * plot->verticalPadding() * std::min(elementScalingFactor, 1.));
+			plot->setRightPadding(150. + 1.5 * plot->rightPadding() * std::min(elementScalingFactor, 1.));
+			plot->setBottomPadding(100. + 1.5 * plot->bottomPadding() * std::min(elementScalingFactor, 1.));
+#else
+			plot->setHorizontalPadding(150. + 1.5 * plot->horizontalPadding() * std::max(elementScalingFactor, 1.));
+			plot->setVerticalPadding(100. + 1.5 * plot->verticalPadding() * std::max(elementScalingFactor, 1.));
+			plot->setRightPadding(150. + 1.5 * plot->rightPadding() * std::max(elementScalingFactor, 1.));
+			plot->setBottomPadding(100. + 1.5 * plot->bottomPadding() * std::max(elementScalingFactor, 1.));
+#endif
 		}
-		DEBUG(Q_FUNC_INFO << ", PADDING (H/V) = " << plot->horizontalPadding() << ", " << plot->verticalPadding())
-		DEBUG(Q_FUNC_INFO << ", PADDING (R/B) = " << plot->rightPadding() << ", " << plot->bottomPadding())
+		WARN(Q_FUNC_INFO << ", PADDING (H/V) = " << plot->horizontalPadding() << ", " << plot->verticalPadding())
+		WARN(Q_FUNC_INFO << ", PADDING (R/B) = " << plot->rightPadding() << ", " << plot->bottomPadding())
 	}
 
 	if (!preview) {

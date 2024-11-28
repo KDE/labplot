@@ -2,6 +2,7 @@
 New features:
 	* [general]
 		* Detail info view mode in the Color Maps Browser
+		* Add links and button to copy configuration and show external libraries in the About Dialog
 	* [import]
 		* Download datasets from kaggle.com
 		* Support MCAP file import
@@ -13,6 +14,7 @@ New features:
 		* Improved error message handling
 		* Improved livedata import
 		* Add possibility to specify custom column datatypes (mandatory for livedata)
+		* Notify about the unsupported UTF16 encoding (BUG 496215)
 	* [analysis]
 		* Add possibility to do calculations on curves
 		* Automatically recalculate analysis curves on data change
@@ -39,6 +41,7 @@ Bug fixes:
 	* Fixed add/subtract value functionality in Matrix (BUG 493523)
 	* Fixed wrong font size in the plot legend (BUG 493017)
 	* Fixed wrong font size in the axis title (BUG 472982)
+	* Don't overwrite OPJ files when saving (BUG 496480)
 
 Internal:
 	* use name LabPlot/labplot consistenly (renamed LabPlot2/labplot2)

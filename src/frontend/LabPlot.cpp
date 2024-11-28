@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : main function
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2008-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-FileCopyrightText: 2008-2016 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -12,8 +12,10 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Settings.h"
 #include "backend/lib/macros.h"
+#include "frontend/AboutDialog.h"
 
 #include <KAboutData>
+#include <KAboutComponent>
 #include <KColorSchemeManager>
 #include <KConfigGroup>
 #include <KCrash>
@@ -26,71 +28,32 @@
 #include <QDir>
 #include <QFile>
 #include <QModelIndex>
-#include <QSettings>
 #include <QSplashScreen>
-#include <QStandardPaths>
 #include <QSysInfo>
 
 #ifdef _WIN32
 #include <windows.h>
 #endif
 
-/*
- * collect all system info to show in About dialog
- */
-const QString getSystemInfo() {
-	// build type
-#ifdef NDEBUG
-	const QString buildType(i18n("Release build ") + QLatin1String(GIT_COMMIT));
-#else
-	const QString buildType(i18n("Debug build ") + QLatin1String(GIT_COMMIT));
-#endif
-	QLocale locale;
-	const QString numberSystemInfo{QStringLiteral("(") + i18n("Decimal point ") + QLatin1Char('\'') + QString(locale.decimalPoint()) + QLatin1String("\', ")
-								   + i18n("Group separator ") + QLatin1Char('\'') + QString(locale.groupSeparator()) + QLatin1Char('\'')};
-
-	const QString numberLocaleInfo{QStringLiteral(" ") + i18n("Decimal point ") + QLatin1Char('\'') + QString(QLocale().decimalPoint()) + QLatin1String("\', ")
-								   + i18n("Group separator ") + QLatin1Char('\'') + QString(QLocale().groupSeparator()) + QLatin1String("\', ")
-								   + i18n("Exponential ") + QLatin1Char('\'') + QString(QLocale().exponential()) + QLatin1String("\', ") + i18n("Zero digit ")
-								   + QLatin1Char('\'') + QString(QLocale().zeroDigit()) + QLatin1String("\', ") + i18n("Percent ") + QLatin1Char('\'')
-								   + QString(QLocale().percent()) + QLatin1String("\', ") + i18n("Positive/Negative sign ") + QLatin1Char('\'')
-								   + QString(QLocale().positiveSign()) + QLatin1Char('\'') + QLatin1Char('/') + QLatin1Char('\'')
-								   + QString(QLocale().negativeSign()) + QLatin1Char('\'')};
-
-	// get language set in 'switch language'
-	const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
-	QSettings languageoverride(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat);
-	languageoverride.beginGroup(QStringLiteral("Language"));
-	QString usedLocale = languageoverride.value(qAppName(), QString()).toString(); // something like "en_US"
-	if (!usedLocale.isEmpty())
-		locale = QLocale(usedLocale);
-	QString usedLanguage = QLocale::languageToString(locale.language()) + QStringLiteral(",") + QLocale::countryToString(locale.country());
-
-	return buildType + QLatin1Char('\n')
-#ifndef REPRODUCIBLE_BUILD
-		+ QStringLiteral("%1, %2").arg(QLatin1String(__DATE__), QLatin1String(__TIME__)) + QLatin1Char('\n')
-#endif
-		+ i18n("System: ") + QSysInfo::prettyProductName() + QLatin1Char('\n') + i18n("Locale: ") + usedLanguage + QLatin1Char(' ') + numberSystemInfo
-		+ QLatin1Char('\n') + i18n("Number settings:") + numberLocaleInfo + QLatin1String(" (") + i18n("Updated on restart") + QLatin1Char(')')
-		+ QLatin1Char('\n') + i18n("Architecture: ") + QSysInfo::buildAbi() + QLatin1Char('\n') + i18n("Kernel: ") + QSysInfo::kernelType() + QLatin1Char(' ')
-		+ QSysInfo::kernelVersion() + QLatin1Char('\n') + i18n("C++ Compiler: ") + QLatin1String(CXX_COMPILER) + QLatin1Char('\n')
-		+ i18n("C++ Compiler Flags: ") + QLatin1String(CXX_COMPILER_FLAGS);
-}
-
 int main(int argc, char* argv[]) {
 	QApplication app(argc, argv);
 	KLocalizedString::setApplicationDomain("labplot");
 	MainWin::updateLocale();
 
-	QString systemInfo{getSystemInfo()};
+	QString systemInfo{AboutDialog::systemInfo()};
+	QString links = i18n("Visit website:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("labplot.kde.org")) + QLatin1Char('\n')
+		// Release notes: LINK ?
+		+ i18n("Watch video tutorials:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("tube.kockatoo.org/c/labplot")) + QLatin1Char('\n')
+		+ i18n("Discuss on Mastodon:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("floss.social/@LabPlot")) + QLatin1Char('\n')
+		+ i18n("Development:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://invent.kde.org/education/labplot")) + QLatin1Char('\n')
+		+ i18n("Please report bugs to:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("bugs.kde.org"));
 	KAboutData aboutData(QStringLiteral("labplot"),
 						 QStringLiteral("LabPlot"),
 						 QLatin1String(LVERSION),
 						 i18n("LabPlot is a FREE, open-source and cross-platform Data Visualization and Analysis software accessible to everyone."),
 						 KAboutLicense::GPL,
-						 i18n("(c) 2007-2024"),
-						 systemInfo,
-						 QStringLiteral("https://labplot.kde.org"));
+						 i18n("(c) 2007-2024 LabPlot authors"),
+						 systemInfo + QLatin1Char('\n') + links);
 	aboutData.addAuthor(i18n("Stefan Gerlach"), i18nc("@info:credit", "Developer"), QStringLiteral("stefan.gerlach@uni.kn"), QString());
 	aboutData.addAuthor(i18n("Alexander Semke"), i18nc("@info:credit", "Developer"), QStringLiteral("alexander.semke@web.de"), QString());
 	aboutData.addAuthor(i18n("Fábián Kristóf-Szabolcs"), i18nc("@info:credit", "Developer"), QStringLiteral("f-kristof@hotmail.com"), QString());
@@ -100,6 +63,9 @@ int main(int argc, char* argv[]) {
 						QStringLiteral("dariuszlaska@gmail.com"),
 						QString());
 	aboutData.addAuthor(i18n("Andreas Kainz"), i18nc("@info:credit", "Icon designer"), QStringLiteral("kainz.a@gmail.com"), QString());
+	// no text (link to bugs.kde.org) before authors list
+	aboutData.setCustomAuthorText(QString(), QString());
+
 	aboutData.addCredit(i18n("Yuri Chornoivan"),
 						i18nc("@info:credit", "Help on many questions about the KDE-infrastructure and translation related topics"),
 						QStringLiteral("yurchor@ukr.net"),
@@ -114,14 +80,21 @@ int main(int argc, char* argv[]) {
 						QString());
 	aboutData.setOrganizationDomain(QByteArray("kde.org"));
 	aboutData.setDesktopFileName(QStringLiteral("org.kde.labplot"));
+	aboutData.setProgramLogo(QIcon::fromTheme(QStringLiteral("labplot")));
+
+	// components
+	for (auto c: AboutDialog::components())
+		aboutData.addComponent(c.at(0), c.at(1), c.at(2), c.at(3));
+
+	// no translators set (too many to mention)
 	KAboutData::setApplicationData(aboutData);
+
 	KCrash::initialize();
 
 	const auto& group = Settings::settingsGeneral();
+	enableInfoTrace(group.readEntry<bool>(QLatin1String("InfoTrace"), false));
 	enableDebugTrace(group.readEntry<bool>(QLatin1String("DebugTrace"), false));
 	enablePerfTrace(group.readEntry<bool>(QLatin1String("PerfTrace"), false));
-
-	// TODO: add library information (GSL version, etc.) in about dialog
 
 	QCommandLineParser parser;
 
@@ -137,7 +110,7 @@ int main(int argc, char* argv[]) {
 	parser.process(app);
 	aboutData.processCommandLine(&parser);
 
-	const QStringList args = parser.positionalArguments();
+	const auto args = parser.positionalArguments();
 	QString filename;
 	if (args.count() > 0)
 		filename = args[0];

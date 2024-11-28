@@ -2042,6 +2042,21 @@ void AsciiFilterTest::testUtf8Cyrillic() {
 	QCOMPARE(spreadsheet.column(1)->integerAt(1), 2);
 }
 
+void AsciiFilterTest::testUtf16NotSupported() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/utf16.txt"));
+
+	AsciiFilter filter;
+
+	// preview
+	filter.preview(fileName, 100);
+	QCOMPARE(filter.lastError(), AsciiFilter::statusToString(AsciiFilter::Status::UTF16NotSupported));
+
+	// read
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	QCOMPARE(filter.lastError(), AsciiFilter::statusToString(AsciiFilter::Status::UTF16NotSupported));
+}
+
 // ##############################################################################
 // ###############################  skip comments ###############################
 // ##############################################################################
@@ -2250,8 +2265,56 @@ void AsciiFilterTest::testDateTime00() {
 	QCOMPARE(spreadsheet.column(1)->valueAt(1), 14.8026);
 }
 
+void AsciiFilterTest::testDateTimeDefaultDateTimeFormat() {
+	const QStringList content = {
+		QStringLiteral("Date,Water Pressure"),
+		QStringLiteral("2019-01-01 00:00:00,14.7982"),
+		QStringLiteral("2020-01-01 00:30:00,14.8026"),
+	};
+
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+
+	AsciiFilter filter;
+	auto p = filter.properties();
+	p.automaticSeparatorDetection = false;
+	p.separator = QStringLiteral(",");
+	p.headerEnabled = true;
+	p.headerLine = 1;
+	p.intAsDouble = false;
+	p.dateTimeFormat; // Default Datetime format is used!
+	p.baseYear = 2000;
+	filter.setProperties(p);
+
+	QString savePath;
+	SAVE_FILE("testfile", content);
+	filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	// spreadsheet size
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.rowCount(), 2);
+
+	// column names
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("Date"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("Water Pressure"));
+
+	// data types
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
+
+	// values
+	auto value = QDateTime::fromString(QLatin1String("01/01/2019 00:00:00"), QLatin1String("dd/MM/yyyy hh:mm:ss"));
+	value.setTimeSpec(Qt::UTC);
+	QCOMPARE(spreadsheet.column(0)->dateTimeAt(0), value);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 14.7982);
+
+	value = QDateTime::fromString(QLatin1String("01/01/2020 00:30:00"), QLatin1String("dd/MM/yyyy hh:mm:ss"));
+	value.setTimeSpec(Qt::UTC);
+	QCOMPARE(spreadsheet.column(0)->dateTimeAt(1), value);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 14.8026);
+}
+
 /*!
- * same as in the previous test, but with the auto-detection of the datetime format
+ * same as in the previous test, but with the auto-detection of the datetime format enabled by clearing the datetime format
  */
 void AsciiFilterTest::testDateTimeAutodetect() {
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);

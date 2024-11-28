@@ -1598,19 +1598,6 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	}
 }
 
-void HistogramPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
-	if (plot->mouseMode() == CartesianPlot::MouseMode::Selection && !isSelected())
-		setHover(true);
-}
-
-void HistogramPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
-	if (plot->mouseMode() == CartesianPlot::MouseMode::Selection && m_hovered) {
-		setHover(false);
-	}
-}
-
 /*!
  * checks if the mousePress event was done near the histogram shape
  * and selects the graphics item if it is the case.

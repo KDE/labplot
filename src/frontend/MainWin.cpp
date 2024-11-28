@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Main window of the application
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2008-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-FileCopyrightText: 2009-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -295,6 +295,7 @@ void MainWin::initGUI(const QString& fileName) {
 		restoreGeometry(groupMainWin.readEntry("geometry", QByteArray()));
 
 	m_lastOpenFileFilter = groupMainWin.readEntry(QLatin1String("lastOpenFileFilter"), QString());
+
 }
 
 /**
@@ -467,11 +468,8 @@ void MainWin::dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now) {
  */
 bool MainWin::warnModified() {
 	if (m_project->hasChanged()) {
-		int option = KMessageBox::warningTwoActionsCancel(this,
-														  i18n("The current project %1 has been modified. Do you want to save it?", m_project->name()),
-														  i18n("Save Project"),
-														  KStandardGuiItem::save(),
-														  KStandardGuiItem::dontSave());
+		int option = KMessageBox::warningTwoActionsCancel(this, i18n("The current project \"%1\" has been modified. Do you want to save it?", m_project->name()),
+				i18n("Save Project"), KStandardGuiItem::save(), KStandardGuiItem::dontSave());
 		switch (option) {
 		case KMessageBox::PrimaryAction:
 			return !saveProject();
@@ -924,9 +922,13 @@ bool MainWin::saveProject() {
 	if (fileName.isEmpty())
 		return saveProjectAs();
 	else {
-		// don't overwrite OPJ files
-		if (fileName.endsWith(QLatin1String(".opj"), Qt::CaseInsensitive))
-			fileName.replace(QLatin1String(".opj"), QLatin1String(".lml"));
+		// don't overwrite OPJ files, replace ending
+		if (fileName.endsWith(QLatin1String(".opj"), Qt::CaseInsensitive)) {
+			//fileName.replace(QLatin1String(".opj"), QLatin1String(".lml"), Qt::CaseInsensitive);
+			// better append ending (don't overwrite existing project.lml file)
+			fileName.append(QLatin1String(".lml"));
+			DEBUG(Q_FUNC_INFO << ", renamed file name to " << fileName.toStdString())
+		}
 		return save(fileName);
 	}
 }
@@ -961,6 +963,7 @@ bool MainWin::saveProjectAs() {
  * auxiliary function that does the actual saving of the project
  */
 bool MainWin::save(const QString& fileName) {
+	DEBUG(Q_FUNC_INFO << ", file name = " << fileName.toStdString())
 	QTemporaryFile tempFile(QDir::tempPath() + QLatin1Char('/') + QLatin1String("labplot_save_XXXXXX"));
 	if (!tempFile.open()) {
 		KMessageBox::error(this, i18n("Couldn't open the temporary file for writing."));

@@ -7,6 +7,7 @@
  *	SPDX-License-Identifier: GPL-2.0-or-later
  */
 
+#include "frontend/AboutDialog.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
@@ -147,6 +148,20 @@ void ActionsManager::init() {
 	m_memoryInfoAction->setChecked(memoryInfoShown);
 	if (memoryInfoShown)
 		toggleMemoryInfo();
+
+	//TODO: hide "Donate" in the help menu?
+
+	// custom about dialog
+	auto* aboutAction = m_mainWindow->actionCollection()->action(QStringLiteral("help_about_app"));
+	if (aboutAction) {
+		// disconnect default slot
+		disconnect(aboutAction, nullptr, nullptr, nullptr);
+		connect(aboutAction, &QAction::triggered, this,
+		[=]() {
+			AboutDialog aboutDialog(KAboutData::applicationData(), m_mainWindow);
+			aboutDialog.exec();
+		});
+	}
 
 	// connect(mainWin->m_projectExplorer, &ProjectExplorer::selectedAspectsChanged, this, &ActionsManager::selectedAspectsChanged);
 	// connect(mainWin->m_projectExplorer, &ProjectExplorer::hiddenAspectSelected, this, &ActionsManager::hiddenAspectSelected);
