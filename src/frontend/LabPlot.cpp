@@ -152,32 +152,33 @@ int main(int argc, char* argv[]) {
 		freopen("CONOUT$", "w", stderr);
 	}
 #endif
+	INFO("INFO messages enabled")
 	DEBUG("DEBUG debugging enabled")
 	QDEBUG("QDEBUG debugging enabled")
 
-	DEBUG("Current path: " << STDSTRING(QDir::currentPath()))
+	INFO("Current path: " << STDSTRING(QDir::currentPath()))
 	const QString applicationPath = QCoreApplication::applicationDirPath();
-	DEBUG("Application dir: " << STDSTRING(applicationPath))
+	INFO("Application dir: " << STDSTRING(applicationPath))
 
 #ifdef _WIN32
 	// append application path to PATH to find Cantor backends
 	QString path = qEnvironmentVariable("PATH");
-	DEBUG("OLD PATH = " << STDSTRING(path))
+	INFO("Old PATH = " << STDSTRING(path))
 	path.append(QLatin1String(";") + applicationPath);
 	qputenv("PATH", qPrintable(path));
-	DEBUG("NEW PATH = " << STDSTRING(qEnvironmentVariable("PATH")))
+	INFO("New PATH = " << STDSTRING(qEnvironmentVariable("PATH")))
 #endif
 
 #if !defined(NDEBUG) || defined(Q_OS_WIN) || defined(Q_OS_MACOS)
 	// debugging paths
 	const auto& appdatapaths = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
-	WARN("AppDataLocation paths:")
+	INFO("AppDataLocation paths:")
 	for (const auto& path : appdatapaths)
 		WARN("	" << STDSTRING(path))
-	WARN("Icon theme search paths:")
+	INFO("Icon theme search paths:")
 	for (const auto& path : QIcon::themeSearchPaths())
 		WARN("	" << STDSTRING(path))
-	WARN("Library search paths:")
+	INFO("Library search paths:")
 	for (const auto& path : QCoreApplication::libraryPaths())
 		WARN("	" << STDSTRING(path))
 #endif
