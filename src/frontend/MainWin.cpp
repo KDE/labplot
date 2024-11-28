@@ -390,7 +390,10 @@ void MainWin::initGUI(const QString& fileName) {
 	if (memoryInfoShown)
 		toggleMemoryInfo();
 
-	//TODO: hide "Donate" in the help menu?
+	// hide "Donate" in the help menu
+        auto* donateAction = actionCollection()->action(QStringLiteral("help_donate"));
+	if (donateAction)
+		actionCollection()->removeAction(donateAction);
 
 	// custom about dialog
         auto* aboutAction = actionCollection()->action(QStringLiteral("help_about_app"));
