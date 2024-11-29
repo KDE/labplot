@@ -249,7 +249,14 @@ QList<Cantor::PanelPlugin*> Notebook::getPlugins() {
 	if (!m_pluginsLoaded) {
 		auto* handler = new Cantor::PanelPluginHandler(this);
 		handler->loadPlugins();
-		m_plugins = handler->activePluginsForSession(m_session, Cantor::PanelPluginHandler::PanelStates());
+
+		if (!m_session) {
+			WARN(Q_FUNC_INFO << ", WARNING: no session!")
+		} else {
+			auto states = Cantor::PanelPluginHandler::PanelStates();
+			m_plugins = handler->activePluginsForSession(m_session, states);
+		}
+
 		for (auto* plugin : m_plugins)
 			plugin->connectToShell(m_part);
 
