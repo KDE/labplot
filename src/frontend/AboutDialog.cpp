@@ -155,111 +155,110 @@ QVector<QStringList> AboutDialog::components() {
 	// compiler info
 	components << (QStringList() << i18n("C++ Compiler: ") + QLatin1String(CXX_COMPILER) << i18n("C++ Compiler Flags: ") + QLatin1String(CXX_COMPILER_FLAGS) << QString() << QString());
 
-	components << (QStringList() << QLatin1String("QADS") << i18n("Qt Advanced Docking System") << QString() << QStringLiteral("https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System"));
+	// alphabetically
 #ifdef HAVE_CANTOR_LIBS
 	components << (QStringList() << QLatin1String("Cantor") << i18n("Frontend to Mathematical Applications") << QLatin1String(CANTOR_VERSION_STRING) << QStringLiteral("https://cantor.kde.org/"));
 #else
 	components << (QStringList() << QLatin1String("<em>") + QLatin1String("Cantor") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://cantor.kde.org/"));
-#endif
-#ifdef HAVE_POPPLER
-	components << (QStringList() << QLatin1String("Poppler") << i18n("PDF rendering library") << QLatin1String(POPPLER_VERSION) << QStringLiteral("https://poppler.freedesktop.org/"));
-#else
-	components << (QStringList() << QLatin1String("<em>") + QLatin1String("Poppler") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://poppler.freedesktop.org/"));
-#endif
-#ifdef HAVE_DISCOUNT
-	components << (QStringList() << QLatin1String("Discount") << i18n("Markdown markup language support") << QLatin1String(DISCOUNT_VERSION_STRING) << QStringLiteral("http://www.pell.portland.or.us/~orc/Code/discount/"));
-#else
-	components << (QStringList() << QLatin1String("<em>") + QLatin1String("Discount") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("http://www.pell.portland.or.us/~orc/Code/discount/"));
-#endif
-#ifdef HAVE_KUSERFEEDBACK
-	components << (QStringList() << QLatin1String("KUserfeedback") << i18n("Support collecting feedback from users") << QLatin1String(KUSERFEEDBACK_VERSION_STRING) << QStringLiteral("https://github.com/KDE/kuserfeedback"));
-#else
-	components << (QStringList() << QLatin1String("<em>") + QLatin1String("KUserfeedback") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://github.com/KDE/kuserfeedback"));
-#endif
-#ifdef HAVE_KF_SYNTAX_HIGHLIGHTING
-	components << (QStringList() << QLatin1String("KSyntaxHighlighting") << i18n("Syntax highlighting engine") << QLatin1String(KSYNTAXHIGHLIGHTING_VERSION_STRING) << QStringLiteral("https://api.kde.org/frameworks/syntax-highlighting/html/index.html"));
-#else
-	components << (QStringList() << QLatin1String("<em>") + QLatin1String("KSyntaxHighlighting") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://api.kde.org/frameworks/syntax-highlighting/html/index.html"));
-#endif
-#ifdef HAVE_PURPOSE
-	components << (QStringList() << QLatin1String("Purpose") << i18n("Offers available actions for a specific purpose") << QLatin1String(PURPOSE_VERSION_STRING) << QStringLiteral("https://api.kde.org/frameworks/purpose/html/index.html"));
-#else
-	components << (QStringList() << QLatin1String("<em>") + QLatin1String("Purpose") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://api.kde.org/frameworks/purpose/html/index.html"));
-#endif
-#ifdef HAVE_QTSERIALPORT
-	components << (QStringList() << QLatin1String("Qt SerialPort") << i18n("Serial port functionality support") << QLatin1String(QTSERIALPORT_VERSION_STR) << QStringLiteral("https://doc.qt.io/qt-6/qtserialport-index.html"));
-#else
-	components << (QStringList() << QLatin1String("<em>") + QLatin1String("Qt SerialPort") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://doc.qt.io/qt-6/qtserialport-index.html"));
-#endif
-#ifdef HAVE_MQTT
-	components << (QStringList() << QLatin1String("Qt MQTT") << i18n("Support data from MQTT brokers") << QLatin1String(QTMQTT_VERSION_STR) << QStringLiteral("https://doc.qt.io/qt-6/qtmqtt-index.html"));
-#else
-	components << (QStringList() << QLatin1String("<em>") + QLatin1String("Qt MQTT") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://doc.qt.io/qt-6/qtmqtt-index.html"));
-#endif
-// numerical libraries
-	components << (QStringList() << QLatin1String("GSL") << i18n("GNU Scientific Library") << QStringLiteral(GSL_VERSION) << QStringLiteral("https://www.gnu.org/software/gsl"));
-#ifdef HAVE_FFTW3
-	components << (QStringList() << QLatin1String("FFTW3") << i18n("Fastest Fourier Transform in the West") << QLatin1String(FFTW3_VERSION_STRING) << QStringLiteral("http://fftw.org/"));
-#else
-	components << (QStringList() << QLatin1String("<em>") + QLatin1String("FFTW3") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("http://fftw.org/"));
-#endif
-#ifdef HAVE_LIBCERF
-	components << (QStringList() << QLatin1String("libcerf") << i18n("Complex error and related functions") << QLatin1String(LIBCERF_VERSION_STRING) << QStringLiteral("https://jugit.fz-juelich.de/mlz/libcerf"));
-#else
-	components << (QStringList() << QLatin1String("<em>") + QLatin1String("libcerf") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://jugit.fz-juelich.de/mlz/libcerf"));
-#endif
-#ifdef HAVE_EIGEN3
-	components << (QStringList() << QLatin1String("Eigen3") << i18n("C++ library for linear algebra") << QLatin1String(EIGEN3_VERSION_STRING) << QStringLiteral("https://eigen.tuxfamily.org/index.php?title=Main_Page"));
-#else
-	components << (QStringList() << QLatin1String("<em>") + QLatin1String("Eigen3") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://eigen.tuxfamily.org/index.php?title=Main_Page"));
-#endif
-// data formats
-#ifdef HAVE_LIBORIGIN
-	components << (QStringList() << QLatin1String("liborigin") << i18n("importing Origin OPJ project files") << QLatin1String(liboriginVersionString()) << QStringLiteral("https://sourceforge.net/projects/liborigin"));
-#else
-	components << (QStringList() << QLatin1String("<em>") + QLatin1String("liborigin") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://sourceforge.net/projects/liborigin"));
-#endif
-#ifdef HAVE_HDF5
-	components << (QStringList() << QLatin1String("HDF5") << i18n("High-performance data management and storage suite") << QLatin1String(H5_VERS_INFO) << QStringLiteral("https://www.hdfgroup.org/solutions/hdf5"));
-#else
-	components << (QStringList() << QLatin1String("<em>") + QLatin1String("HDF5") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://www.hdfgroup.org/solutions/hdf5"));
-#endif
-#ifdef HAVE_NETCDF
-	components << (QStringList() << QLatin1String("NetCDF") << i18n("Network Common Data Form") << QLatin1String(NC_VERSION) << QStringLiteral("https://www.unidata.ucar.edu/software/netcdf"));
-#else
-	components << (QStringList() << QLatin1String("<em>") + QLatin1String("NetCDF") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://www.unidata.ucar.edu/software/netcdf"));
 #endif
 #ifdef HAVE_FITS
 	components << (QStringList() << QLatin1String("CFITSIO") << i18n("Support data files in FITS (Flexible Image Transport System) data format") << QLatin1String(CFITSIO_VERSION_STRING) << QStringLiteral("https://heasarc.gsfc.nasa.gov/fitsio"));
 #else
 	components << (QStringList() << QLatin1String("<em>") + QLatin1String("CFITSIO") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://heasarc.gsfc.nasa.gov/fitsio"));
 #endif
-#ifdef HAVE_READSTAT
-        // TODO: version
-	components << (QStringList() << QLatin1String("ReadStat") << i18n("Read (and write) data sets from SAS, Stata, and SPSS") << QString() << QStringLiteral("https://github.com/WizardMac/ReadStat"));
+#ifdef HAVE_DISCOUNT
+	components << (QStringList() << QLatin1String("Discount") << i18n("Markdown markup language support") << QLatin1String(DISCOUNT_VERSION_STRING) << QStringLiteral("http://www.pell.portland.or.us/~orc/Code/discount/"));
 #else
-	components << (QStringList() << QLatin1String("<em>") + QLatin1String("ReadStat") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://github.com/WizardMac/ReadStat"));
+	components << (QStringList() << QLatin1String("<em>") + QLatin1String("Discount") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("http://www.pell.portland.or.us/~orc/Code/discount/"));
+#endif
+#ifdef HAVE_EIGEN3
+	components << (QStringList() << QLatin1String("Eigen3") << i18n("C++ library for linear algebra") << QLatin1String(EIGEN3_VERSION_STRING) << QStringLiteral("https://eigen.tuxfamily.org/index.php?title=Main_Page"));
+#else
+	components << (QStringList() << QLatin1String("<em>") + QLatin1String("Eigen3") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://eigen.tuxfamily.org/index.php?title=Main_Page"));
+#endif
+#ifdef HAVE_FFTW3
+	components << (QStringList() << QLatin1String("FFTW3") << i18n("Fastest Fourier Transform in the West") << QLatin1String(FFTW3_VERSION_STRING) << QStringLiteral("http://fftw.org/"));
+#else
+	components << (QStringList() << QLatin1String("<em>") + QLatin1String("FFTW3") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("http://fftw.org/"));
+#endif
+	components << (QStringList() << QLatin1String("GSL") << i18n("GNU Scientific Library") << QStringLiteral(GSL_VERSION) << QStringLiteral("https://www.gnu.org/software/gsl"));
+#ifdef HAVE_HDF5
+	components << (QStringList() << QLatin1String("HDF5") << i18n("High-performance data management and storage suite") << QLatin1String(H5_VERS_INFO) << QStringLiteral("https://www.hdfgroup.org/solutions/hdf5"));
+#else
+	components << (QStringList() << QLatin1String("<em>") + QLatin1String("HDF5") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://www.hdfgroup.org/solutions/hdf5"));
+#endif
+#ifdef HAVE_KF_SYNTAX_HIGHLIGHTING
+	components << (QStringList() << QLatin1String("KSyntaxHighlighting") << i18n("Syntax highlighting engine") << QLatin1String(KSYNTAXHIGHLIGHTING_VERSION_STRING) << QStringLiteral("https://api.kde.org/frameworks/syntax-highlighting/html/index.html"));
+#else
+	components << (QStringList() << QLatin1String("<em>") + QLatin1String("KSyntaxHighlighting") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://api.kde.org/frameworks/syntax-highlighting/html/index.html"));
+#endif
+#ifdef HAVE_KUSERFEEDBACK
+	components << (QStringList() << QLatin1String("KUserfeedback") << i18n("Support collecting feedback from users") << QLatin1String(KUSERFEEDBACK_VERSION_STRING) << QStringLiteral("https://github.com/KDE/kuserfeedback"));
+#else
+	components << (QStringList() << QLatin1String("<em>") + QLatin1String("KUserfeedback") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://github.com/KDE/kuserfeedback"));
+#endif
+#ifdef HAVE_LIBCERF
+	components << (QStringList() << QLatin1String("libcerf") << i18n("Complex error and related functions") << QLatin1String(LIBCERF_VERSION_STRING) << QStringLiteral("https://jugit.fz-juelich.de/mlz/libcerf"));
+#else
+	components << (QStringList() << QLatin1String("<em>") + QLatin1String("libcerf") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://jugit.fz-juelich.de/mlz/libcerf"));
+#endif
+#ifdef HAVE_LIBORIGIN
+	components << (QStringList() << QLatin1String("liborigin") << i18n("importing Origin OPJ project files") << QLatin1String(liboriginVersionString()) << QStringLiteral("https://sourceforge.net/projects/liborigin"));
+#else
+	components << (QStringList() << QLatin1String("<em>") + QLatin1String("liborigin") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://sourceforge.net/projects/liborigin"));
 #endif
 #ifdef HAVE_MATIO
 	components << (QStringList() << QLatin1String("Matio") << i18n("Import binary MATLAB MAT files") << QLatin1String(MATIO_VERSION_STR) << QStringLiteral("https://github.com/tbeu/matio"));
 #else
 	components << (QStringList() << QLatin1String("<em>") + QLatin1String("Matio") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://github.com/tbeu/matio"));
 #endif
-#ifdef HAVE_QXLSX
-	components << (QStringList() << QLatin1String("QXlsx") << i18n("Import Excel xlsx files") << QString() << QStringLiteral("https://github.com/QtExcel/QXlsx"));
+#ifdef HAVE_MCAP
+	components << (QStringList() << QLatin1String("MCAP") << i18n("MCAP file support") << QString() << QStringLiteral("https://mcap.dev"));
+//TODO	components << (QStringList() << QLatin1String("MCAP") << i18n("MCAP file support") << QLatin1String(MCAP_LIBRARY_VERSION) << QStringLiteral("https://mcap.dev"));
 #else
-	components << (QStringList() << QLatin1String("<em>") + QLatin1String("QXlsx") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://github.com/QtExcel/QXlsx"));
+	components << (QStringList() << QLatin1String("<em>") + QLatin1String("MCAP") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://mcap.dev"));
+#endif
+#ifdef HAVE_NETCDF
+	components << (QStringList() << QLatin1String("NetCDF") << i18n("Network Common Data Form") << QLatin1String(NC_VERSION) << QStringLiteral("https://www.unidata.ucar.edu/software/netcdf"));
+#else
+	components << (QStringList() << QLatin1String("<em>") + QLatin1String("NetCDF") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://www.unidata.ucar.edu/software/netcdf"));
 #endif
 #ifdef HAVE_ORCUS
 	components << (QStringList() << QLatin1String("ORCUS") << i18n("Import ODS (Open Document Spreadsheet) files") << QLatin1String(ORCUS_VERSION_STRING) << QStringLiteral("https://orcus.readthedocs.io/en/stable/index.html"));
 #else
 	components << (QStringList() << QLatin1String("<em>") + QLatin1String("ORCUS") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://orcus.readthedocs.io/en/stable/index.html"));
 #endif
-#ifdef HAVE_MCAP
-	components << (QStringList() << QLatin1String("MCAP") << i18n("MCAP file support") << QString() << QStringLiteral("https://mcap.dev"));
-//TODO	components << (QStringList() << QLatin1String("MCAP") << i18n("MCAP file support") << QLatin1String(MCAP_LIBRARY_VERSION) << QStringLiteral("https://mcap.dev"));
+#ifdef HAVE_POPPLER
+	components << (QStringList() << QLatin1String("Poppler") << i18n("PDF rendering library") << QLatin1String(POPPLER_VERSION) << QStringLiteral("https://poppler.freedesktop.org/"));
 #else
-	components << (QStringList() << QLatin1String("<em>") + QLatin1String("MCAP") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://mcap.dev"));
+	components << (QStringList() << QLatin1String("<em>") + QLatin1String("Poppler") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://poppler.freedesktop.org/"));
+#endif
+#ifdef HAVE_PURPOSE
+	components << (QStringList() << QLatin1String("Purpose") << i18n("Offers available actions for a specific purpose") << QLatin1String(PURPOSE_VERSION_STRING) << QStringLiteral("https://api.kde.org/frameworks/purpose/html/index.html"));
+#else
+	components << (QStringList() << QLatin1String("<em>") + QLatin1String("Purpose") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://api.kde.org/frameworks/purpose/html/index.html"));
+#endif
+	components << (QStringList() << QLatin1String("QADS") << i18n("Qt Advanced Docking System") << QString() << QStringLiteral("https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System"));
+#ifdef HAVE_MQTT
+	components << (QStringList() << QLatin1String("Qt MQTT") << i18n("Support data from MQTT brokers") << QLatin1String(QTMQTT_VERSION_STR) << QStringLiteral("https://doc.qt.io/qt-6/qtmqtt-index.html"));
+#else
+	components << (QStringList() << QLatin1String("<em>") + QLatin1String("Qt MQTT") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://doc.qt.io/qt-6/qtmqtt-index.html"));
+#endif
+#ifdef HAVE_QTSERIALPORT
+	components << (QStringList() << QLatin1String("Qt SerialPort") << i18n("Serial port functionality support") << QLatin1String(QTSERIALPORT_VERSION_STR) << QStringLiteral("https://doc.qt.io/qt-6/qtserialport-index.html"));
+#else
+	components << (QStringList() << QLatin1String("<em>") + QLatin1String("Qt SerialPort") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://doc.qt.io/qt-6/qtserialport-index.html"));
+#endif
+#ifdef HAVE_QXLSX
+	components << (QStringList() << QLatin1String("QXlsx") << i18n("Import Excel xlsx files") << QString() << QStringLiteral("https://github.com/QtExcel/QXlsx"));
+#else
+	components << (QStringList() << QLatin1String("<em>") + QLatin1String("QXlsx") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://github.com/QtExcel/QXlsx"));
+#endif
+#ifdef HAVE_READSTAT
+        // TODO: version
+	components << (QStringList() << QLatin1String("ReadStat") << i18n("Read (and write) data sets from SAS, Stata, and SPSS") << QString() << QStringLiteral("https://github.com/WizardMac/ReadStat"));
+#else
+	components << (QStringList() << QLatin1String("<em>") + QLatin1String("ReadStat") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://github.com/WizardMac/ReadStat"));
 #endif
 #ifdef HAVE_VECTOR_BLF
 	components << (QStringList() << QLatin1String("Vector BLF") << i18n("Binary Log File (BLF) file support") << QString() << QStringLiteral("https://github.com/Technica-Engineering/vector_blf"));
