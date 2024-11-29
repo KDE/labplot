@@ -182,7 +182,6 @@ void MainWin::initGUI(const QString& fileName) {
 		statusBar()->showMessage(i18nc("%1 is the LabPlot version", "Welcome to LabPlot %1", QLatin1String(LVERSION)));
 
 	m_actionsManager = new ActionsManager(this);
-	m_actionsManager->initSpreadsheetToolbarActions();
 	setupGUI();
 	m_actionsManager->init();
 

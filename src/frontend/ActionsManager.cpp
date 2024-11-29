@@ -72,11 +72,13 @@
  */
 
 ActionsManager::ActionsManager(MainWin* mainWin) : m_mainWindow(mainWin) {
+	// actions need to be created and added to the collection prior to calling setupGUI() in MainWin,
+	// create them directly in constructor. everything else will be initialized in init() after setupGUI() was called.
 	initActions();
 }
 
 void ActionsManager::init() {
-		// all toolbars created via the KXMLGUI framework are locked on default:
+	// all toolbars created via the KXMLGUI framework are locked on default:
 	//  * on the very first program start, unlock all toolbars
 	//  * on later program starts, set stored lock status
 	// Furthermore, we want to show icons only after the first program start.
@@ -139,10 +141,10 @@ void ActionsManager::init() {
 	m_recentProjectsAction->loadEntries(Settings::group(QStringLiteral("Recent Files")));
 
 	// read the settings of MainWin
-	const KConfigGroup& groupMainWin = Settings::group(QStringLiteral("MainWin"));
 
 	// show memory info
 	m_memoryInfoAction->setEnabled(m_mainWindow->statusBar()->isEnabled()); // disable/enable menu with statusbar
+	const auto& groupMainWin = Settings::group(QStringLiteral("MainWin"));
 	bool memoryInfoShown = groupMainWin.readEntry(QLatin1String("ShowMemoryInfo"), true);
 	// DEBUG(Q_FUNC_INFO << ", memory info enabled in config: " << memoryInfoShown)
 	m_memoryInfoAction->setChecked(memoryInfoShown);
@@ -150,18 +152,6 @@ void ActionsManager::init() {
 		toggleMemoryInfo();
 
 	//TODO: hide "Donate" in the help menu?
-
-	// custom about dialog
-	auto* aboutAction = m_mainWindow->actionCollection()->action(QStringLiteral("help_about_app"));
-	if (aboutAction) {
-		// disconnect default slot
-		disconnect(aboutAction, nullptr, nullptr, nullptr);
-		connect(aboutAction, &QAction::triggered, this,
-		[=]() {
-			AboutDialog aboutDialog(KAboutData::applicationData(), m_mainWindow);
-			aboutDialog.exec();
-		});
-	}
 
 	// connect(mainWin->m_projectExplorer, &ProjectExplorer::selectedAspectsChanged, this, &ActionsManager::selectedAspectsChanged);
 	// connect(mainWin->m_projectExplorer, &ProjectExplorer::hiddenAspectSelected, this, &ActionsManager::hiddenAspectSelected);
@@ -182,26 +172,26 @@ void ActionsManager::initActions() {
 			m_mainWindow->newProject(true);
 		},
 		collection);
-	m_openProjectAction = KStandardAction::open(this, static_cast<void (MainWin::*)()>(&MainWin::openProject), collection);
-	m_recentProjectsAction = KStandardAction::openRecent(this, &MainWin::openRecentProject, collection);
-	// m_closeAction = KStandardAction::close(this, &MainWin::closeProject, collection);
+	m_openProjectAction = KStandardAction::open(m_mainWindow, static_cast<void (MainWin::*)()>(&MainWin::openProject), collection);
+	m_recentProjectsAction = KStandardAction::openRecent(m_mainWindow, &MainWin::openRecentProject, collection);
+	// m_closeAction = KStandardAction::close(m_mainWindow, &MainWin::closeProject, collection);
 	// collection->setDefaultShortcut(m_closeAction, QKeySequence()); // remove the shortcut, QKeySequence::Close will be used for closing sub-windows
-	m_saveAction = KStandardAction::save(this, &MainWin::saveProject, collection);
-	m_saveAsAction = KStandardAction::saveAs(this, &MainWin::saveProjectAs, collection);
-	m_printAction = KStandardAction::print(this, &MainWin::print, collection);
-	m_printPreviewAction = KStandardAction::printPreview(this, &MainWin::printPreview, collection);
+	m_saveAction = KStandardAction::save(m_mainWindow, &MainWin::saveProject, collection);
+	m_saveAsAction = KStandardAction::saveAs(m_mainWindow, &MainWin::saveProjectAs, collection);
+	m_printAction = KStandardAction::print(m_mainWindow, &MainWin::print, collection);
+	m_printPreviewAction = KStandardAction::printPreview(m_mainWindow, &MainWin::printPreview, collection);
 
 	QAction* openExample = new QAction(i18n("&Open Example"), collection);
 	openExample->setIcon(QIcon::fromTheme(QLatin1String("folder-documents")));
 	collection->addAction(QLatin1String("file_example_open"), openExample);
 	connect(openExample, &QAction::triggered, m_mainWindow, &MainWin::exampleProjectsDialog);
 
-	m_fullScreenAction = KStandardAction::fullScreen(this, &ActionsManager::toggleFullScreen, m_mainWindow, collection);
+	m_fullScreenAction = KStandardAction::fullScreen(m_mainWindow, &ActionsManager::toggleFullScreen, m_mainWindow, collection);
 
 	// QDEBUG(Q_FUNC_INFO << ", preferences action name:" << KStandardAction::name(KStandardAction::Preferences))
-	KStandardAction::preferences(this, &MainWin::settingsDialog, collection);
+	KStandardAction::preferences(m_mainWindow, &MainWin::settingsDialog, collection);
 	// QAction* action = collection->action(KStandardAction::name(KStandardAction::Preferences)));
-	KStandardAction::quit(this, &MainWin::close, collection);
+	KStandardAction::quit(m_mainWindow, &MainWin::close, collection);
 
 	// New Folder/Workbook/Spreadsheet/Matrix/Worksheet/Datasources
 	m_newWorkbookAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-workbook-new")), i18n("Workbook"), this);
@@ -330,10 +320,10 @@ void ActionsManager::initActions() {
 
 #ifdef Q_OS_MAC
 	m_undoIconOnlyAction = new QAction(m_undoAction->icon(), QString());
-	connect(m_undoIconOnlyAction, &QAction::triggered, this, &MainWin::undo);
+	connect(m_undoIconOnlyAction, &QAction::triggered, m_mainWindow, &MainWin::undo);
 
 	m_redoIconOnlyAction = new QAction(m_redoAction->icon(), QString());
-	connect(m_redoIconOnlyAction, &QAction::triggered, this, &MainWin::redo);
+	connect(m_redoIconOnlyAction, &QAction::triggered, m_mainWindow, &MainWin::redo);
 #endif
 	// TODO: more menus
 	//  Appearance
@@ -444,7 +434,21 @@ void ActionsManager::initActions() {
 	connect(m_configureCASAction, &QAction::triggered, m_mainWindow, &MainWin::settingsDialog); // TODO: go to the Notebook page in the settings dialog directly
 #endif
 
-	// initNotebookToolbarActions();
+	// custom about dialog
+	auto* aboutAction = m_mainWindow->actionCollection()->action(QStringLiteral("help_about_app"));
+	if (aboutAction) {
+		// disconnect default slot
+		disconnect(aboutAction, nullptr, nullptr, nullptr);
+		connect(aboutAction, &QAction::triggered, this,
+		[=]() {
+			AboutDialog aboutDialog(KAboutData::applicationData(), m_mainWindow);
+			aboutDialog.exec();
+		});
+	}
+
+	// actions used in the toolbars
+	initNotebookToolbarActions();
+	initSpreadsheetToolbarActions();
 }
 
 /*!
