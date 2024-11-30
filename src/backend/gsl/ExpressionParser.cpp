@@ -498,6 +498,26 @@ double cell(double x, const std::string_view& variable, const std::weak_ptr<Payl
 	return NAN;
 }
 
+double cell_default_value(double x, double defaultValue, const std::string_view& variable, const std::weak_ptr<Payload> payload) {
+	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
+	if (!p) {
+		assert(p); // Debug build
+		return NAN;
+	}
+
+	const int index = (int)x - 1;
+	for (int i = 0; i < p->vars->length(); i++) {
+		if (p->vars->at(i).compare(QLatin1String(variable)) == 0) {
+			if (index >= 0 && index < p->xVectors->at(i)->length())
+				return p->xVectors->at(i)->at(index);
+			else
+				break;
+		}
+	}
+
+	return defaultValue;
+}
+
 double ma(const std::string_view& variable, const std::weak_ptr<Payload> payload) {
 	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
 	if (!p) {
@@ -673,6 +693,7 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 	const auto payloadConst = std::make_shared<PayloadExpressionParser>(&vars, &xVectors, true);
 
 	set_specialfunction2(specialfun_cell, cell, payloadConst);
+	set_specialfunction3(specialfun_cell_default_value, cell_default_value, payloadConst);
 	set_specialfunction1(specialfun_ma, ma, payload);
 	set_specialfunction1(specialfun_mr, mr, payload);
 	set_specialfunction2(specialfun_smmin, smmin, payload);

@@ -164,6 +164,7 @@ extern const char* colfun_quantile;
 extern const char* colfun_percentile;
 
 extern const char* specialfun_cell;
+extern const char* specialfun_cell_default_value;
 extern const char* specialfun_ma;
 extern const char* specialfun_mr;
 extern const char* specialfun_smmin;

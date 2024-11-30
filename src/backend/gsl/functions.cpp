@@ -190,6 +190,7 @@ QString FunctionGroupsToString(FunctionGroups group) {
 }
 
 const char* specialfun_cell = "cell";
+const char* specialfun_cell_default_value = "cell_with_default";
 const char* specialfun_ma = "ma";
 const char* specialfun_mr = "mr";
 const char* specialfun_smmin = "smmin";
@@ -235,7 +236,8 @@ const char* colfun_percentile = "percentile";
 	struct funs _special_functions[] = {
 		// Moving Statistics
 		// Important: when adding new function, implement them in Expressionhandler or somewhere else!
-		{[]() { return i18n("Cell (index, variable)"); }, specialfun_cell, func_t2Payload(), 2, nullptr, FunctionGroups::MovingStatistics},
+		{[]() { return i18n("Cell (index; variable)"); }, specialfun_cell, func_t2Payload(), 2, nullptr, FunctionGroups::MovingStatistics},
+		{[]() { return i18n("Cell (index; default_value; variable)"); }, specialfun_cell_default_value, func_t3Payload(), 3, nullptr, FunctionGroups::MovingStatistics},
 		{[]() { return i18n("Moving Average"); }, specialfun_ma, func_t1Payload(), 1, nullptr, FunctionGroups::MovingStatistics},
 		{[]() { return i18n("Moving Range"); }, specialfun_mr, func_t1Payload(), 1, nullptr, FunctionGroups::MovingStatistics},
 		{[]() { return i18n("Simple Moving Minimum"); }, specialfun_smmin, func_t2Payload(), 2, nullptr, FunctionGroups::MovingStatistics},
