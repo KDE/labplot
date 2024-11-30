@@ -692,16 +692,16 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 	const auto payload = std::make_shared<PayloadExpressionParser>(&vars, &xVectors);
 	const auto payloadConst = std::make_shared<PayloadExpressionParser>(&vars, &xVectors, true);
 
-	set_specialfunction2(specialfun_cell, cell, payloadConst);
-	set_specialfunction3(specialfun_cell_default_value, cell_default_value, payloadConst);
-	set_specialfunction1(specialfun_ma, ma, payload);
-	set_specialfunction1(specialfun_mr, mr, payload);
-	set_specialfunction2(specialfun_smmin, smmin, payload);
-	set_specialfunction2(specialfun_smmax, smmax, payload);
-	set_specialfunction2(specialfun_sma, sma, payload);
-	set_specialfunction2(specialfun_smr, smr, payload);
-	set_specialfunction2(specialfun_psample, psample, payload);
-	set_specialfunction1(specialfun_rsample, rsample, payload);
+	set_specialfunctionValueVariablePayload(specialfun_cell, cell, payloadConst);
+	set_specialfunction2ValueVariablePayload(specialfun_cell_default_value, cell_default_value, payloadConst);
+	set_specialfunctionVariablePayload(specialfun_ma, ma, payload);
+	set_specialfunctionVariablePayload(specialfun_mr, mr, payload);
+	set_specialfunctionValueVariablePayload(specialfun_smmin, smmin, payload);
+	set_specialfunctionValueVariablePayload(specialfun_smmax, smmax, payload);
+	set_specialfunctionValueVariablePayload(specialfun_sma, sma, payload);
+	set_specialfunctionValueVariablePayload(specialfun_smr, smr, payload);
+	set_specialfunctionValueVariablePayload(specialfun_psample, psample, payload);
+	set_specialfunctionVariablePayload(specialfun_rsample, rsample, payload);
 
 	UsedSymbols us = UsedSymbols::No;
 	if (perforanceOptimization)
