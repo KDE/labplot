@@ -1327,7 +1327,7 @@ void ColumnTest::testFormulaCellDefault() {
 	VALUES_EQUAL(c2.valueAt(0), -113.);
 	VALUES_EQUAL(c2.valueAt(1), 1.);
 	VALUES_EQUAL(c2.valueAt(2), 5.);
-	// VALUES_EQUAL(c2.valueAt(3), -1.);
+	VALUES_EQUAL(c2.valueAt(3), NAN); // There are only 3 elements in c1
 	VALUES_EQUAL(c2.valueAt(4), NAN);
 	VALUES_EQUAL(c2.valueAt(5), NAN);
 	VALUES_EQUAL(c2.valueAt(6), NAN);
