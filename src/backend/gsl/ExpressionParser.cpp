@@ -297,7 +297,7 @@ bool ExpressionParser::isValid(const QString& expr, const QStringList& vars) {
 	for (const auto& var : vars)
 		remove_symbol(qPrintable(var));
 
-	return !(Parser::parse_errors() > 0);
+	return Parser::parse_errors() == 0;
 }
 
 QStringList ExpressionParser::getParameter(const QString& expr, const QStringList& vars) {

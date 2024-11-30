@@ -26,7 +26,7 @@ private:
 
 	std::unique_ptr<std::default_random_engine> m_generator;
 	std::unique_ptr<std::normal_distribution<double>> m_distribution;
-	long m_seed{std::chrono::system_clock::now().time_since_epoch().count()};
+	int64_t m_seed{std::chrono::system_clock::now().time_since_epoch().count()};
 	double m_delta{0.25};
 	double m_dt{0.1};
 	int m_pathes{1};
