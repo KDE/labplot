@@ -36,22 +36,22 @@ struct funs0Payload {
 
 struct funs1Payload {
 	const char* name;
-	Parser::func_t1Payload fnct;
+	Parser::func_tVariablePayload fnct;
 };
 
 struct funs2Payload {
 	const char* name;
-	Parser::func_t2Payload fnct;
+	Parser::func_tValueVariablePayload fnct;
 };
 
 struct funs3Payload {
 	const char* name;
-	Parser::func_t3Payload fnct;
+	Parser::func_t2ValueVariablePayload fnct;
 };
 
 struct funs4Payload {
 	const char* name;
-	Parser::func_t4Payload fnct;
+	Parser::func_t3ValueVariablePayload fnct;
 };
 
 extern struct funs _functions[];
