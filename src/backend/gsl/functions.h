@@ -23,7 +23,20 @@ enum class FunctionGroups;
 struct funs {
 	std::function<QString(void)> description;
 	const char* name;
-	std::variant<func_t, func_t1, func_t2, func_t3, func_t4, func_t5, func_tPayload, func_t1Payload, func_t2Payload, func_t3Payload, func_t4Payload> fnct;
+	std::variant<func_t,
+				 func_t1,
+				 func_t2,
+				 func_t3,
+				 func_t4,
+				 func_t5,
+				 func_tPayload,
+				 func_tVariablePayload,
+				 func_tValueVariablePayload,
+				 func_t2ValueVariablePayload,
+				 func_t3ValueVariablePayload,
+				 func_tValuePayload,
+				 func_t2ValuePayload>
+		fnct;
 	int argc;
 	std::function<QString(int)> parameterFunction; // can be also a nullptr. Check needed!
 	FunctionGroups group;
@@ -162,6 +175,8 @@ extern const char* colfun_kurt;
 extern const char* colfun_entropy;
 extern const char* colfun_quantile;
 extern const char* colfun_percentile;
+extern const char* cell_curr_column;
+extern const char* cell_curr_column_default;
 
 extern const char* specialfun_cell;
 extern const char* specialfun_cell_default_value;

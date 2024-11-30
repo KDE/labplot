@@ -2149,11 +2149,13 @@ void ColumnPrivate::setFormulVariableColumn(Column* c) {
 }
 
 struct PayloadColumn : public Parser::Payload {
-	PayloadColumn(const QVector<Column::FormulaData>& data)
+	PayloadColumn(const QVector<Column::FormulaData>& data, const QVector<double>& y)
 		: Parser::Payload(true)
-		, formulaData(data) {
+		, formulaData(data)
+		, y(y) {
 	}
 	const QVector<Column::FormulaData>& formulaData;
+	const QVector<double>& y; // current values
 };
 
 #define COLUMN_FUNCTION(function_name, evaluation_function)                                                                                                    \
@@ -2198,6 +2200,30 @@ COLUMN_FUNCTION(Mediandev, statistics().medianDeviation)
 COLUMN_FUNCTION(Skew, statistics().skewness)
 COLUMN_FUNCTION(Kurt, statistics().kurtosis)
 COLUMN_FUNCTION(Entropy, statistics().entropy)
+
+double cell_curr_column(double row, const std::weak_ptr<Parser::Payload> payload) {
+	const auto pd = std::dynamic_pointer_cast<PayloadColumn>(payload.lock());
+	if (!pd) {
+		assert(pd); // Debug build
+		return NAN;
+	}
+	int index = (int)row - 1;
+	if (index >= 0 && pd->y.length() > index)
+		return pd->y.at(index);
+	return NAN;
+}
+
+double cell_curr_column_defaultvalue(double row, double defaultValue, const std::weak_ptr<Parser::Payload> payload) {
+	const auto pd = std::dynamic_pointer_cast<PayloadColumn>(payload.lock());
+	if (!pd) {
+		assert(pd); // Debug build
+		return NAN;
+	}
+	int index = (int)row - 1;
+	if (index >= 0 && pd->y.length() > index)
+		return pd->y.at(index);
+	return defaultValue;
+}
 
 double columnQuantile(double p, const std::string_view& variable, const std::weak_ptr<Parser::Payload> payload) {
 	const auto pd = std::dynamic_pointer_cast<PayloadColumn>(payload.lock());
@@ -2317,7 +2343,7 @@ void ColumnPrivate::updateFormula() {
 		//->"clean" the result vector first
 		QVector<double> new_data(rowCount(), NAN);
 
-		const auto payload = std::make_shared<PayloadColumn>(m_formulaData);
+		const auto payload = std::make_shared<PayloadColumn>(m_formulaData, new_data);
 
 		// evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.
 		auto* parser = ExpressionParser::getInstance();
@@ -2350,6 +2376,8 @@ void ColumnPrivate::updateFormula() {
 		parser->setSpecialFunctionVariablePayload(Parser::colfun_entropy, columnEntropy, payload);
 		parser->setSpecialFunctionValueVariablePayload(Parser::colfun_percentile, columnPercentile, payload);
 		parser->setSpecialFunctionValueVariablePayload(Parser::colfun_quantile, columnQuantile, payload);
+		parser->setSpecialFunctionValuePayload(Parser::cell_curr_column, cell_curr_column, payload);
+		parser->setSpecialFunction2ValuePayload(Parser::cell_curr_column_default, cell_curr_column_defaultvalue, payload);
 
 		QDEBUG(Q_FUNC_INFO << ", Calling evaluateCartesian(). formula: " << m_formula << ", var names: " << formulaVariableNames)
 		bool valid = parser->tryEvaluateCartesian(m_formula, formulaVariableNames, xVectors, &new_data);

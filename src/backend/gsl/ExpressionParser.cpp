@@ -651,12 +651,20 @@ double rsample(const std::string_view& variable, const std::weak_ptr<Payload> pa
 	return value;
 }
 
-void ExpressionParser::setSpecialFunction1(const char* function_name, func_t1Payload funct, std::shared_ptr<Payload> payload) {
-	set_specialfunction1(function_name, funct, payload);
+void ExpressionParser::setSpecialFunctionValuePayload(const char* function_name, Parser::func_tValuePayload funct, std::shared_ptr<Parser::Payload> payload) {
+	set_specialfunctionValuePayload(function_name, funct, payload);
 }
 
-void ExpressionParser::setSpecialFunction2(const char* function_name, func_t2Payload funct, std::shared_ptr<Payload> payload) {
-	set_specialfunction2(function_name, funct, payload);
+void ExpressionParser::setSpecialFunction2ValuePayload(const char* function_name, Parser::func_t2ValuePayload funct, std::shared_ptr<Parser::Payload> payload) {
+	set_specialfunction2ValuePayload(function_name, funct, payload);
+}
+
+void ExpressionParser::setSpecialFunctionVariablePayload(const char* function_name, func_tVariablePayload funct, std::shared_ptr<Payload> payload) {
+	set_specialfunctionVariablePayload(function_name, funct, payload);
+}
+
+void ExpressionParser::setSpecialFunctionValueVariablePayload(const char* function_name, func_tValueVariablePayload funct, std::shared_ptr<Payload> payload) {
+	set_specialfunctionValueVariablePayload(function_name, funct, payload);
 }
 
 /*!

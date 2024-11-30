@@ -1383,6 +1383,42 @@ void ColumnTest::testFormulaCellMulti() {
 		VALUES_EQUAL(c2.valueAt(i), -6.);
 }
 
+void ColumnTest::testFormulaCurrentColumnCell() {
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
+
+	c2.setFormula(QStringLiteral("cell_curr_column(i - 1)"), {}, QVector<Column*>({}), true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 7);
+	VALUES_EQUAL(c2.valueAt(0), NAN);
+	VALUES_EQUAL(c2.valueAt(1), NAN);
+	VALUES_EQUAL(c2.valueAt(2), NAN);
+	VALUES_EQUAL(c2.valueAt(3), NAN);
+	VALUES_EQUAL(c2.valueAt(4), NAN);
+	VALUES_EQUAL(c2.valueAt(5), NAN);
+	VALUES_EQUAL(c2.valueAt(6), NAN);
+}
+
+/*!
+ * \brief ColumnTest::testFormulaCellDefault
+ * Use default value if the index is smaller than zero
+ */
+void ColumnTest::testFormulaCurrentColumnCellDefaultValue() {
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
+
+	c2.setFormula(QStringLiteral("cell_curr_column_with_default(i - 1; -143) * 2"), {}, QVector<Column*>({}), true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 7);
+	VALUES_EQUAL(c2.valueAt(0), -143. * 2.);
+	VALUES_EQUAL(c2.valueAt(1), c2.valueAt(0) * 2);
+	VALUES_EQUAL(c2.valueAt(2), c2.valueAt(1) * 2);
+	VALUES_EQUAL(c2.valueAt(3), c2.valueAt(2) * 2);
+	VALUES_EQUAL(c2.valueAt(4), c2.valueAt(3) * 2);
+	VALUES_EQUAL(c2.valueAt(5), c2.valueAt(4) * 2);
+	VALUES_EQUAL(c2.valueAt(6), c2.valueAt(5) * 2);
+}
+
 void ColumnTest::testFormulasmmin() {
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
 	c1.replaceValues(-1, {1., -1., 5., 5., 3., 8., 10., -5});
