@@ -229,6 +229,8 @@ const char* colfun_kurt = "kurt";
 const char* colfun_entropy = "entropy";
 const char* colfun_quantile = "quantile";
 const char* colfun_percentile = "percentile";
+const char* cell_curr_column = "cell_curr_column";
+const char* cell_curr_column_default = "cell_curr_column_with_default";
 
 // clang-format off
 
@@ -246,6 +248,9 @@ const char* colfun_percentile = "percentile";
 		{[]() { return i18n("Simple Moving Range"); }, specialfun_smr, func_tValueVariablePayload(), 2, nullptr, FunctionGroups::MovingStatistics},
 		{[]() { return i18n("Period sample"); }, specialfun_psample, func_tValueVariablePayload(), 2, nullptr, FunctionGroups::MovingStatistics},
 		{[]() { return i18n("Random sample"); }, specialfun_rsample, func_tVariablePayload(), 1, nullptr, FunctionGroups::MovingStatistics},
+
+		{[]() { return i18n("Current column cell (index)"); }, cell_curr_column, func_tValuePayload(), 1, nullptr, FunctionGroups::MovingStatistics},
+		{[]() { return i18n("Current column cell (index; default_value)"); }, cell_curr_column_default, func_t2ValuePayload(), 2, nullptr, FunctionGroups::MovingStatistics},
 
 		// Values independent of the row index!!!
 		// Important: When adding function here, implement it somewhere. For example column functions are implemented in ColumnPrivate!

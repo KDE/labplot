@@ -108,6 +108,8 @@ int remove_symbol(const char* symbol_name);
 double parse(const char* string, const char* locale, UsedSymbols usedSymbols = UsedSymbols::No);
 double parse_with_vars(const char[], const parser_var[], int nvars, const char* locale);
 bool set_specialfunction0(const char* function_name, func_tPayload function, std::shared_ptr<Payload> payload);
+bool set_specialfunctionValuePayload(const char* function_name, func_tValuePayload function, std::shared_ptr<Payload> payload);
+bool set_specialfunction2ValuePayload(const char* function_name, func_t2ValuePayload function, std::shared_ptr<Payload> payload);
 bool set_specialfunctionVariablePayload(const char* function_name, func_tVariablePayload function, std::shared_ptr<Payload> payload);
 bool set_specialfunctionValueVariablePayload(const char* function_name, func_tValueVariablePayload function, std::shared_ptr<Payload> payload);
 bool set_specialfunction2ValueVariablePayload(const char* function_name, func_t2ValueVariablePayload function, std::shared_ptr<Payload> payload);
