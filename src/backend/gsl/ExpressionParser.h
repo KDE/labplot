@@ -25,8 +25,8 @@ public:
 	static QString functionArgumentString(const QString& functionName, const XYEquationCurve::EquationType);
 	QString functionDescription(const QString& function);
 	QString constantDescription(const QString& constant);
-	void setSpecialFunction1(const char* function_name, Parser::func_t1Payload funct, std::shared_ptr<Parser::Payload> payload);
-	void setSpecialFunction2(const char* function_name, Parser::func_t2Payload funct, std::shared_ptr<Parser::Payload> payload);
+	void setSpecialFunctionVariablePayload(const char* function_name, Parser::func_tVariablePayload funct, std::shared_ptr<Parser::Payload> payload);
+	void setSpecialFunctionValueVariablePayload(const char* function_name, Parser::func_tValueVariablePayload funct, std::shared_ptr<Parser::Payload> payload);
 
 	static bool isValid(const QString& expr, const QStringList& vars = QStringList());
 	QStringList getParameter(const QString& expr, const QStringList& vars);

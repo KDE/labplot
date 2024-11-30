@@ -160,7 +160,7 @@ expr:      NUM       { $$ = $1;                            }
 								return 1;
 							}
 							try {
-								const auto function = std::get<Parser::func_t1Payload>(special_function.funsptr->fnct);
+                                                                const auto function = std::get<Parser::func_tVariablePayload>(special_function.funsptr->fnct);
                                                                 if (!Parser::skipSpecialFunctionEvaluation) {
 									if (function == nullptr) {
 										notImplementedError($1->name);
@@ -187,7 +187,7 @@ expr:      NUM       { $$ = $1;                            }
 										return 1;
 									}
 									try {
-										const auto function = std::get<Parser::func_t2Payload>(special_function.funsptr->fnct);
+                                                                                const auto function = std::get<Parser::func_tValueVariablePayload>(special_function.funsptr->fnct);
                                                                                 if (!Parser::skipSpecialFunctionEvaluation) {
 											if (function == nullptr) {
 												notImplementedError($1->name);
@@ -214,7 +214,7 @@ expr:      NUM       { $$ = $1;                            }
 												return 1;
 											}
 											try {
-												const auto function = std::get<Parser::func_t3Payload>(special_function.funsptr->fnct);
+                                                                                                const auto function = std::get<Parser::func_t2ValueVariablePayload>(special_function.funsptr->fnct);
                                                                                                 if (!Parser::skipSpecialFunctionEvaluation) {
 													if (function == nullptr) {
 														notImplementedError($1->name);

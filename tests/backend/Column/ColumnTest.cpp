@@ -1311,6 +1311,29 @@ void ColumnTest::testFormulaCell() {
 }
 
 /*!
+ * \brief ColumnTest::testFormulaCellDefault
+ * Use default value if the index is smaller than zero
+ */
+void ColumnTest::testFormulaCellDefault() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.replaceValues(-1, {1., 5., -1.});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
+
+	c2.setFormula(QStringLiteral("cell_with_default(i - 1; -113; x)"), {QStringLiteral("x")}, QVector<Column*>({&c1}), true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 7);
+	VALUES_EQUAL(c2.valueAt(0), -113.);
+	VALUES_EQUAL(c2.valueAt(1), 1.);
+	VALUES_EQUAL(c2.valueAt(2), 5.);
+	// VALUES_EQUAL(c2.valueAt(3), -1.);
+	VALUES_EQUAL(c2.valueAt(4), NAN);
+	VALUES_EQUAL(c2.valueAt(5), NAN);
+	VALUES_EQUAL(c2.valueAt(6), NAN);
+}
+
+/*!
  * index in cell higher than rownumber
  */
 void ColumnTest::testFormulaCellInvalid() {

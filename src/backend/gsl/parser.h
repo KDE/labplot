@@ -108,10 +108,10 @@ int remove_symbol(const char* symbol_name);
 double parse(const char* string, const char* locale, UsedSymbols usedSymbols = UsedSymbols::No);
 double parse_with_vars(const char[], const parser_var[], int nvars, const char* locale);
 bool set_specialfunction0(const char* function_name, func_tPayload function, std::shared_ptr<Payload> payload);
-bool set_specialfunction1(const char* function_name, func_t1Payload function, std::shared_ptr<Payload> payload);
-bool set_specialfunction2(const char* function_name, func_t2Payload function, std::shared_ptr<Payload> payload);
-bool set_specialfunction3(const char* function_name, func_t3Payload function, std::shared_ptr<Payload> payload);
-bool set_specialfunction4(const char* function_name, func_t4Payload function, std::shared_ptr<Payload> payload);
+bool set_specialfunctionVariablePayload(const char* function_name, func_tVariablePayload function, std::shared_ptr<Payload> payload);
+bool set_specialfunctionValueVariablePayload(const char* function_name, func_tValueVariablePayload function, std::shared_ptr<Payload> payload);
+bool set_specialfunction2ValueVariablePayload(const char* function_name, func_t2ValueVariablePayload function, std::shared_ptr<Payload> payload);
+bool set_specialfunction3ValueVariablePayload(const char* function_name, func_t3ValueVariablePayload function, std::shared_ptr<Payload> payload);
 std::string lastErrorMessage();
 std::vector<std::string> get_used_symbols();
 
