@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-29 00:37+0000\n"
-"PO-Revision-Date: 2024-11-28 04:48+0100\n"
+"PO-Revision-Date: 2024-11-29 05:01+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -10551,6 +10551,10 @@ msgid ""
 "ul>For comma as the decimal separator, the valid number representations are:"
 "<ul><li>1234,56</li><li>1.234,56</li><li>etc.</li></ul>"
 msgstr ""
+"როცა წილადის გამომყოფად წერტილის სიმბოლო გამოიყენება, რიცხვის სწორი "
+"წარმოდგენებია:<ul><li>1234.56</li><li>1,234.56</li><li>და ა.შ.</li></"
+"ul>მძიმეს თუ გამოიყენებთ, რიცხვის ჩაწერის სწორი ფორმაა:<ul><li>1234,56</"
+"li><li>1.234,56</li><li> და ა.შ.</li></ul>"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:60
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:74
@@ -11274,6 +11278,9 @@ msgid ""
 "Only needs to be specified for the reading mode \"Continuously Fixed\" and "
 "\"From End\"."
 msgstr ""
+"ყოველი წაკითხვისას დამუშავებული სემპლების (ხაზების) რაოდენობა.\n"
+"მითითება აუცილებელია, მხოლოდ, წაკითხვის რეჟიმში \"უწყვეტად დაფიქსირებული\" "
+"და \"ბოლოდან\"."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:229
 #, kde-format
@@ -16472,6 +16479,7 @@ msgid ""
 "Automatically resize the target column to fit the size of the variable "
 "columns"
 msgstr ""
+"სამიზნე სვეტების ზომის ავტომატური შეცვლა, რომ ცვლადი სვეტების ზომაში ჩაეტიოს"
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:138
 #: src/frontend/widgets/TreeViewComboBox.cpp:358
@@ -16481,6 +16489,9 @@ msgid ""
 "is not available anymore. It will be automatically used once it is created "
 "again."
 msgstr ""
+"სვეტი \"%1\"\n"
+"ხელმისაწვდომი აღარაა. ის ავტომატურად იქნება გამოყენებული, როცა მას თავიდან "
+"შექმნით."
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:156
 #, kde-format
@@ -16488,6 +16499,8 @@ msgid ""
 "Spreadsheet linking is active. The size of the target spreadsheet is "
 "controlled by the linked spreadsheet."
 msgstr ""
+"აქტიურია ელცხრილებს მიბმა. სამიზნე ელცხრილის ზომა მიბმული ელცხრილის მიერ "
+"იმართება."
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:166
 #, kde-format
@@ -16693,6 +16706,8 @@ msgid ""
 "Random number distributions as defined in <a href=\"https://www.gnu.org/"
 "software/gsl/doc/html/randist.html\">GSL documentation</a>"
 msgstr ""
+"შემთხვევითი რიცხვების განაწილება, როგორც ეს განსაზღვრულია <a href=\"https://"
+"www.gnu.org/software/gsl/doc/html/randist.html\">GSL-ის დოკუმენტაციაში</a>"
 
 #: src/frontend/spreadsheet/RandomValuesDialog.cpp:485
 #, kde-format
@@ -16723,6 +16738,8 @@ msgid ""
 "More than one column selected. The same interval will be applied to <i>all</"
 "i> columns."
 msgstr ""
+"ჩასმულია ერთზე მეტი სვეტი. იგივე ინტერვალი <i>ყველა</i> სვეტზე იქნება "
+"გამოყენებული."
 
 #: src/frontend/spreadsheet/SampleValuesDialog.cpp:45
 #, kde-format
@@ -16745,7 +16762,7 @@ msgstr "&მაგალითი"
 #: src/frontend/spreadsheet/SampleValuesDialog.cpp:63
 #, kde-format
 msgid "Sample values in the selected spreadsheet columns"
-msgstr ""
+msgstr "მნიშვნელობის მაგალითები მონიშნული ელცხრილის სვეტებში"
 
 #: src/frontend/spreadsheet/SampleValuesDialog.cpp:64
 #, kde-format
@@ -17440,6 +17457,8 @@ msgid ""
 "The selected columns have different data types and cannot be flattened "
 "because of this. "
 msgstr ""
+"მონიშნულ სვეტებს სხვადასხვა მონაცემის ტიპები აქვს, ამის გამო მათ ვერ "
+"გააბრტყელებთ. "
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2990
 #, kde-format
@@ -18673,7 +18692,7 @@ msgstr "სვეტის გამყოფი:"
 #: src/frontend/ui/datasources/asciioptionswidget.ui:143
 #, kde-format
 msgid "Base year when only 2 digits are provided for the year"
-msgstr ""
+msgstr "საბაზისო წელი, როცა წლისთვის, მხოლოდ, 2 ციფრია მითითებული"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:194
@@ -19205,6 +19224,8 @@ msgstr "სიზუსტე:"
 msgid ""
 "Not all variables might be visible, because of limited number of messages"
 msgstr ""
+"შეიძლება, ყველა ცვლადი ნაჩვენები არაა. მიზეზი შეტყობინებების შეზღუდული "
+"რაოდენობაა"
 
 #. i18n: ectx: property (text), widget (QLabel, lStartRow)
 #: src/frontend/ui/datasources/importfilewidget.ui:588
@@ -22041,6 +22062,8 @@ msgid ""
 "This option can be used to turn on and off the usage of given data "
 "uncertainties when fitting."
 msgstr ""
+"ეს პარამეტრი გამოიყენება შეყვანილი მონაცემის გაურკვევლობის გამოყენების "
+"ჩასართავად ან გამოსართავად მისი ჩატევის მცდელობისას."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbUseDataErrors)
 #: src/frontend/ui/fitoptionswidget.ui:79

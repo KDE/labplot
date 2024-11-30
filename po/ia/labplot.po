@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-29 00:37+0000\n"
-"PO-Revision-Date: 2024-11-25 18:10+0100\n"
+"PO-Revision-Date: 2024-11-29 12:06+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -9959,15 +9959,14 @@ msgid "%1: set logical position"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:84
-#, fuzzy, kde-format
-#| msgid "Info"
+#, kde-format
 msgid "Copy Info"
-msgstr "Info"
+msgstr "Copia info"
 
 #: src/frontend/AboutDialog.cpp:88
 #, kde-format
 msgid "Donate"
-msgstr ""
+msgstr "Dona"
 
 #: src/frontend/AboutDialog.cpp:111
 #, kde-format
@@ -10181,10 +10180,9 @@ msgid "Binary Log File (BLF) file support"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:282
-#, fuzzy, kde-format
-#| msgid "Comments:"
+#, kde-format
 msgid "Components:"
-msgstr "Commentos:"
+msgstr "Componentes:"
 
 #: src/frontend/colormaps/ColorMapsDialog.cpp:39
 #, kde-format
@@ -14111,11 +14109,9 @@ msgid "Discuss on Mastodon:"
 msgstr ""
 
 #: src/frontend/LabPlot.cpp:48
-#, fuzzy, kde-format
-#| msgctxt "@info:credit"
-#| msgid "Developer"
+#, kde-format
 msgid "Development:"
-msgstr "Disveloppator"
+msgstr "Disveloppamento:"
 
 #: src/frontend/LabPlot.cpp:49
 #, kde-format
@@ -14642,8 +14638,7 @@ msgid "Color Scheme"
 msgstr "Schema de color"
 
 #: src/frontend/MainWin.cpp:996
-#, fuzzy, kde-format
-#| msgid "The current project %1 has been modified. Do you want to save it?"
+#, kde-format
 msgid "The current project \"%1\" has been modified. Do you want to save it?"
 msgstr "Le currente projecto %1 ha essite modificate. Tu vole salveguardar lo?"
 

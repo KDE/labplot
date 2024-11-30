@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-29 00:37+0000\n"
-"PO-Revision-Date: 2024-11-27 12:47+0100\n"
+"PO-Revision-Date: 2024-11-28 10:31+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -15075,10 +15075,9 @@ msgid "Color Scheme"
 msgstr "Thème de couleurs"
 
 #: src/frontend/MainWin.cpp:996
-#, fuzzy, kde-format
-#| msgid "The current project %1 has been modified. Do you want to save it?"
+#, kde-format
 msgid "The current project \"%1\" has been modified. Do you want to save it?"
-msgstr "Le projet courant %1 a été modifié. Voulez-vous l'enregistrer ?"
+msgstr "Le projet courant « %1 » a été modifié. Voulez-vous l'enregistrer ?"
 
 #: src/frontend/MainWin.cpp:997
 #, kde-format
