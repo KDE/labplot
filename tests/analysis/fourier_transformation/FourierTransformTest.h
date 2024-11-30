@@ -1,14 +1,14 @@
 /*
-	File                 : DifferentiationTest.h
+	File                 : FourierTransformTest.h
 	Project              : LabPlot
-	Description          : Tests for numerical differentiation
+	Description          : Tests for discrete Fourier transformation
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2024 Martin Marmsoler <martin.marmsoler@gmail.com>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
-#ifndef FOURIERTRANSFORM_TEST
-#define FOURIERTRANSFORM_TEST
+#ifndef FOURIERTRANSFORMTEST_H
+#define FOURIERTRANSFORMTEST_H
 
 #include <../AnalysisTest.h>
 
@@ -18,4 +18,4 @@ class FourierTransformTest : public AnalysisTest {
 private Q_SLOTS:
 	void fft();
 };
-#endif // FOURIERTRANSFORM_TEST
+#endif

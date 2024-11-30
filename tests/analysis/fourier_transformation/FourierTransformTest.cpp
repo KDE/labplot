@@ -1,9 +1,9 @@
 /*
-	File                 : DifferentiationTest.cpp
+	File                 : FourierTransformTest.cpp
 	Project              : LabPlot
-	Description          : Tests for numerical differentiation
+	Description          : Tests for discrete Fourier transformation
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2018-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2024 Martin Marmsoler <martin.marmsoler@gmail.com>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -13,7 +13,7 @@
 #include "backend/worksheet/plots/cartesian/XYFourierTransformCurve.h"
 
 #include <iostream>
-#include <math.h>
+//#include <math.h>
 
 // ##############################################################################
 
@@ -56,8 +56,8 @@ void FourierTransformTest::fft() {
 	QCOMPARE(result.available, true);
 	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = curve.xColumn();
-	const AbstractColumn* resultYDataColumn = curve.yColumn();
+	const auto* resultXDataColumn = curve.xColumn();
+	const auto* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, length_signal / 2);
@@ -78,7 +78,7 @@ void FourierTransformTest::fft() {
 		else if (x == 120)
 			VALUES_EQUAL(y, 1.0);
 		else
-			QVERIFY(qAbs(y) < 1e-12);
+			QVERIFY(std::abs(y) < 1e-12);
 	}
 }
 
