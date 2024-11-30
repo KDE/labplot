@@ -757,6 +757,57 @@ void WorksheetElement::setPosition(const PositionWrapper& pos) {
 		exec(new WorksheetElementSetPositionCmd(d, pos, ki18n("%1: set position")));
 }
 
+/*!
+ * param p relative position to the origin of the parent normalized
+ * values larger than 1 move the element outside of the parent
+ */
+bool WorksheetElement::setXPositionRelative(double p) {
+	Q_D(WorksheetElement);
+	if (d->position.horizontalPosition != HorizontalPosition::Relative)
+		return false;
+
+	if (d->position.point.x() != p) {
+		auto pos = d->position;
+		pos.point.setX(p);
+		exec(new WorksheetElementSetPositionCmd(d, pos, ki18n("%1: set position")));
+	}
+	return true;
+}
+
+/*!
+ * param p relative position to the origin of the parent normalized
+ * values larger than 1 move the element outside of the parent
+ */
+bool WorksheetElement::setYPositionRelative(double p) {
+	Q_D(WorksheetElement);
+	if (d->position.verticalPosition != VerticalPosition::Relative)
+		return false;
+
+	if (d->position.point.y() != p) {
+		auto pos = d->position;
+		pos.point.setY(p);
+		exec(new WorksheetElementSetPositionCmd(d, pos, ki18n("%1: set position")));
+	}
+	return true;
+}
+
+void WorksheetElement::setPositionHorizontal(HorizontalPosition p) {
+	Q_D(WorksheetElement);
+	if (d->position.horizontalPosition != p) {
+		// TODO: convert from relative to
+		auto pos = d->position;
+		exec(new WorksheetElementSetPositionCmd(d, pos, ki18n("%1: set position")));
+	}
+}
+
+void WorksheetElement::setPositionVertical(VerticalPosition p) {
+	Q_D(WorksheetElement);
+	if (d->position.verticalPosition != p) {
+		auto pos = d->position;
+		exec(new WorksheetElementSetPositionCmd(d, pos, ki18n("%1: set position")));
+	}
+}
+
 STD_SETTER_CMD_IMPL_F_S_SC(WorksheetElement,
 						   SetHorizontalAlignment,
 						   WorksheetElement::HorizontalAlignment,

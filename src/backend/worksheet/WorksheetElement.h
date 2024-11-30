@@ -61,6 +61,10 @@ public:
 
 	typedef WorksheetElementPrivate Private;
 
+	void setPositionHorizontal(HorizontalPosition);
+	void setPositionVertical(VerticalPosition);
+	bool setXPositionRelative(double pos);
+	bool setYPositionRelative(double pos);
 	CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position)
 	bool setCoordinateBindingEnabled(bool);
 	bool coordinateBindingEnabled() const;

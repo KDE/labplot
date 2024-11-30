@@ -12,7 +12,7 @@
 #define LABELWIDGET_H
 
 #include "backend/worksheet/TextLabel.h"
-#include "frontend/dockwidgets/BaseDock.h"
+#include "frontend/dockwidgets/WorksheetElementDock.h"
 #include "ui_labelwidget.h"
 #include <KConfigGroup>
 
@@ -30,7 +30,7 @@ class KMessageWidget;
 
 class TextLabelTest;
 
-class LabelWidget : public BaseDock {
+class LabelWidget : public WorksheetElementDock {
 	Q_OBJECT
 
 public:
@@ -57,8 +57,6 @@ private:
 	QMenu* m_dateTimeMenu;
 	bool m_initializing{false};
 	bool m_teXEnabled{false};
-	BaseDock::Units m_units{BaseDock::Units::Metric};
-	Worksheet::Unit m_worksheetUnit{Worksheet::Unit::Centimeter};
 #ifdef HAVE_KF_SYNTAX_HIGHLIGHTING
 	KSyntaxHighlighting::SyntaxHighlighter* m_highlighter;
 	KSyntaxHighlighting::Repository m_repository;
@@ -105,18 +103,6 @@ private Q_SLOTS:
 	void dateTimeMenu();
 	void insertDateTime(QAction*);
 
-	void positionXChanged(int);
-	void positionYChanged(int);
-	void customPositionXChanged(double);
-	void customPositionYChanged(double);
-	void horizontalAlignmentChanged(int);
-	void verticalAlignmentChanged(int);
-
-	void positionXLogicalChanged(double);
-	void positionXLogicalDateTimeChanged(qint64);
-	void positionYLogicalChanged(double);
-
-	void rotationChanged(int);
 	void offsetXChanged(double);
 	void offsetYChanged(double);
 
@@ -126,8 +112,6 @@ private Q_SLOTS:
 	void borderWidthChanged(double);
 	void borderOpacityChanged(int);
 
-	void lockChanged(bool);
-	void bindingChanged(bool checked);
 	void showPlaceholderTextChanged(bool checked);
 
 	// SLOTs for changes triggered in TextLabel
@@ -136,20 +120,13 @@ private Q_SLOTS:
 	void labelTeXFontChanged(const QFont&);
 	void labelFontColorChanged(const QColor&);
 	void labelBackgroundColorChanged(const QColor&);
-	void labelPositionChanged(const TextLabel::PositionWrapper&);
-	void labelHorizontalAlignmentChanged(TextLabel::HorizontalAlignment);
-	void labelVerticalAlignmentChanged(TextLabel::VerticalAlignment);
-	void labelPositionLogicalChanged(QPointF);
-	void labelCoordinateBindingEnabledChanged(bool);
 	void labelOffsetXChanged(qreal);
 	void labelOffsetYChanged(qreal);
-	void labelRotationAngleChanged(qreal);
 
 	void labelBorderShapeChanged(TextLabel::BorderShape);
 	void labelBorderPenChanged(const QPen&);
 	void labelBorderOpacityChanged(float);
 
-	void labelLockChanged(bool);
 	void labelCartesianPlotParent(bool on);
 	void labelModeChanged(TextLabel::Mode);
 

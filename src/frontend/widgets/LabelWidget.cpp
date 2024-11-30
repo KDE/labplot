@@ -17,7 +17,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "frontend/GuiTools.h"
-#include "frontend/dockwidgets/BaseDock.h"
+#include "frontend/dockwidgets/WorksheetElementDock.h"
 #include "tools/TeXRenderer.h"
 
 #include <KCharSelect>
@@ -94,10 +94,21 @@
 	\ingroup frontend
  */
 LabelWidget::LabelWidget(QWidget* parent)
-	: BaseDock(parent)
+	: WorksheetElementDock(parent)
 	, m_dateTimeMenu(new QMenu(this)) {
 	ui.setupUi(this);
 	setBaseWidgets(ui.leName, ui.teComment);
+	setWorksheetElementWidgets(ui.cbPositionX,
+		ui.cbPositionY,
+		ui.sbPositionX,
+		ui.sbPositionY,
+		ui.cbHorizontalAlignment,
+		ui.cbVerticalAlignment,
+		ui.sbPositionXLogical,
+		ui.sbPositionYLogical,
+		ui.sbRotation,
+		ui.chbLock,
+		ui.chbBindLogicalPos);
 	setVisibilityWidgets(ui.chbVisible);
 
 	// set the minimum size of the text edit widget to one row of a QLabel
@@ -110,15 +121,7 @@ LabelWidget::LabelWidget(QWidget* parent)
 		l->setVerticalSpacing(2);
 	}
 
-	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
-	m_units = (BaseDock::Units)group.readEntry("Units", (int)BaseDock::Units::Metric);
-	if (m_units == BaseDock::Units::Imperial)
-		m_worksheetUnit = Worksheet::Unit::Inch;
-
 	m_dateTimeMenu->setSeparatorsCollapsible(false); // we don't want the first separator to be removed
-
-	QString msg = i18n("Use logical instead of absolute coordinates to specify the position on the plot");
-	ui.chbBindLogicalPos->setToolTip(msg);
 
 	ui.sbBorderWidth->setMinimum(0);
 
@@ -148,34 +151,6 @@ LabelWidget::LabelWidget(QWidget* parent)
 	ui.tbAlignJustify->setToolTip(i18n("Justify"));
 	ui.tbSymbols->setToolTip(i18n("Insert Symbol"));
 	ui.tbDateTime->setToolTip(i18n("Insert Date/Time"));
-
-	// Positioning and alignment
-	ui.cbPositionX->addItem(i18n("Left"));
-	ui.cbPositionX->addItem(i18n("Center"));
-	ui.cbPositionX->addItem(i18n("Right"));
-	ui.cbPositionX->addItem(i18n("Relative to plot"));
-
-	ui.cbPositionY->addItem(i18n("Top"));
-	ui.cbPositionY->addItem(i18n("Center"));
-	ui.cbPositionY->addItem(i18n("Bottom"));
-	ui.cbPositionY->addItem(i18n("Relative to plot"));
-
-	QString suffix;
-	if (m_units == BaseDock::Units::Metric)
-		suffix = QLatin1String(" cm");
-	else
-		suffix = QLatin1String(" in");
-
-	ui.sbPositionX->setSuffix(suffix);
-	ui.sbPositionY->setSuffix(suffix);
-
-	ui.cbHorizontalAlignment->addItem(i18n("Left"));
-	ui.cbHorizontalAlignment->addItem(i18n("Center"));
-	ui.cbHorizontalAlignment->addItem(i18n("Right"));
-
-	ui.cbVerticalAlignment->addItem(i18n("Top"));
-	ui.cbVerticalAlignment->addItem(i18n("Center"));
-	ui.cbVerticalAlignment->addItem(i18n("Bottom"));
 
 	ui.cbBorderShape->addItem(i18n("No Border"));
 	ui.cbBorderShape->addItem(i18n("Rectangle"));
@@ -212,7 +187,7 @@ LabelWidget::LabelWidget(QWidget* parent)
 #endif
 
 #ifdef HAVE_DISCOUNT
-	msg = i18n(
+	const auto msg = i18n(
 		"Text setting mode:"
 		"<ul>"
 		"<li>Text - text setting using rich-text formatting</li>"
@@ -220,7 +195,7 @@ LabelWidget::LabelWidget(QWidget* parent)
 		"<li>Markdown - text setting using Markdown markup language</li>"
 		"</ul>");
 #else
-	msg = i18n(
+	const auto msg = i18n(
 		"Text setting mode:"
 		"<ul>"
 		"<li>Text - text setting using rich-text formatting</li>"
@@ -278,23 +253,9 @@ LabelWidget::LabelWidget(QWidget* parent)
 	connect(ui.sbFontSize, QOverload<int>::of(&QSpinBox::valueChanged), this, &LabelWidget::fontSizeChanged);
 
 	// geometry
-	connect(ui.cbPositionX, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::positionXChanged);
-	connect(ui.cbPositionY, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::positionYChanged);
-	connect(ui.sbPositionX, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::customPositionXChanged);
-	connect(ui.sbPositionY, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::customPositionYChanged);
-	connect(ui.cbHorizontalAlignment, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::horizontalAlignmentChanged);
-	connect(ui.cbVerticalAlignment, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::verticalAlignmentChanged);
-
-	connect(ui.sbPositionXLogical, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::positionXLogicalChanged);
-	connect(ui.dtePositionXLogical, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &LabelWidget::positionXLogicalDateTimeChanged);
-	connect(ui.sbPositionYLogical, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::positionYLogicalChanged);
-	// TODO?: connect(ui.dtePositionYLogical, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &LabelWidget::positionYLogicalDateTimeChanged);
-	connect(ui.sbRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &LabelWidget::rotationChanged);
 	connect(ui.sbOffsetX, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::offsetXChanged);
 	connect(ui.sbOffsetY, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::offsetYChanged);
 
-	connect(ui.chbLock, &QCheckBox::clicked, this, &LabelWidget::lockChanged);
-	connect(ui.chbBindLogicalPos, &QCheckBox::clicked, this, &LabelWidget::bindingChanged);
 	connect(ui.chbShowPlaceholderText, &QCheckBox::toggled, this, &LabelWidget::showPlaceholderTextChanged);
 
 	// Border
@@ -347,12 +308,14 @@ void LabelWidget::setLabels(QList<TextLabel*> labels) {
 
 void LabelWidget::setAxes(QList<Axis*> axes) {
 	m_labelsList.clear();
+	// TODO: why the connect is done for all axes and not only for the first?
 	for (const auto* axis : axes) {
 		DEBUG(Q_FUNC_INFO << ", axis TITLE = " << axis->title())
 		m_labelsList.append(axis->title());
 		connect(axis, &Axis::titleOffsetXChanged, this, &LabelWidget::labelOffsetXChanged);
 		connect(axis, &Axis::titleOffsetYChanged, this, &LabelWidget::labelOffsetYChanged);
-		connect(axis->title(), &TextLabel::rotationAngleChanged, this, &LabelWidget::labelRotationAngleChanged);
+		// TODO: enable again
+		//connect(axis->title(), &TextLabel::rotationAngleChanged, this, &WorksheetElementDock::labelRotationAngleChanged);
 	}
 
 	m_axesList = axes;
@@ -425,17 +388,10 @@ void LabelWidget::initConnections() {
 	m_connections << connect(m_label, &TextLabel::teXFontChanged, this, &LabelWidget::labelTeXFontChanged);
 	m_connections << connect(m_label, &TextLabel::fontColorChanged, this, &LabelWidget::labelFontColorChanged);
 	m_connections << connect(m_label, &TextLabel::backgroundColorChanged, this, &LabelWidget::labelBackgroundColorChanged);
-	m_connections << connect(m_label, &TextLabel::positionChanged, this, &LabelWidget::labelPositionChanged);
 
-	m_connections << connect(m_label, &TextLabel::positionLogicalChanged, this, &LabelWidget::labelPositionLogicalChanged);
-	m_connections << connect(m_label, &TextLabel::coordinateBindingEnabledChanged, this, &LabelWidget::labelCoordinateBindingEnabledChanged);
-	m_connections << connect(m_label, &TextLabel::horizontalAlignmentChanged, this, &LabelWidget::labelHorizontalAlignmentChanged);
-	m_connections << connect(m_label, &TextLabel::verticalAlignmentChanged, this, &LabelWidget::labelVerticalAlignmentChanged);
-	m_connections << connect(m_label, &TextLabel::rotationAngleChanged, this, &LabelWidget::labelRotationAngleChanged);
 	m_connections << connect(m_label, &TextLabel::borderShapeChanged, this, &LabelWidget::labelBorderShapeChanged);
 	m_connections << connect(m_label, &TextLabel::borderPenChanged, this, &LabelWidget::labelBorderPenChanged);
 	m_connections << connect(m_label, &TextLabel::borderOpacityChanged, this, &LabelWidget::labelBorderOpacityChanged);
-	m_connections << connect(m_label, &TextLabel::lockChanged, this, &LabelWidget::labelLockChanged);
 
 	if (!m_label->parentAspect()) {
 		QDEBUG(Q_FUNC_INFO << ", LABEL " << m_label << " HAS NO PARENT!")
@@ -969,157 +925,6 @@ void LabelWidget::insertDateTime(QAction* action) {
 	ui.teLabel->insertPlainText(action->text().remove(QLatin1Char('&')));
 }
 
-// positioning using absolute coordinates
-/*!
-	called when label's current horizontal position relative to its parent (left, center, right, relative) is changed.
-*/
-void LabelWidget::positionXChanged(int index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto position = m_label->position();
-	auto oldHorizontalPosition = position.horizontalPosition;
-	position.horizontalPosition = TextLabel::HorizontalPosition(index);
-	double x = 0.;
-	if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Relative) {
-		switch (oldHorizontalPosition) {
-		case WorksheetElement::HorizontalPosition::Left:
-		case WorksheetElement::HorizontalPosition::Relative:
-			break;
-		case WorksheetElement::HorizontalPosition::Center:
-			x = 0.5;
-			break;
-		case WorksheetElement::HorizontalPosition::Right:
-			x = 1.0;
-		}
-		ui.sbPositionX->setSuffix(QStringLiteral(" %"));
-	} else {
-		if (m_units == Units::Metric)
-			ui.sbPositionX->setSuffix(QStringLiteral(" cm"));
-		else
-			ui.sbPositionX->setSuffix(QStringLiteral(" in"));
-	}
-
-	position.point.setX(x);
-	ui.sbPositionX->setValue(100. * x);
-
-	for (auto* label : m_labelsList)
-		label->setPosition(position);
-}
-
-/*!
-	called when label's current horizontal position relative to its parent (top, center, bottom, relative) is changed.
-*/
-void LabelWidget::positionYChanged(int index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto position = m_label->position();
-	auto oldVerticalPosition = position.verticalPosition;
-	position.verticalPosition = TextLabel::VerticalPosition(index);
-	double y = 0.;
-	if (position.verticalPosition == WorksheetElement::VerticalPosition::Relative) {
-		switch (oldVerticalPosition) {
-		case WorksheetElement::VerticalPosition::Top:
-		case WorksheetElement::VerticalPosition::Relative:
-			break;
-		case WorksheetElement::VerticalPosition::Center:
-			y = 0.5;
-			break;
-		case WorksheetElement::VerticalPosition::Bottom:
-			y = 1.0;
-		}
-		ui.sbPositionY->setSuffix(QStringLiteral(" %"));
-	} else {
-		if (m_units == Units::Metric)
-			ui.sbPositionY->setSuffix(QStringLiteral(" cm"));
-		else
-			ui.sbPositionY->setSuffix(QStringLiteral(" in"));
-	}
-
-	position.point.setY(y);
-	ui.sbPositionY->setValue(100. * y);
-
-	for (auto* label : m_labelsList)
-		label->setPosition(position);
-}
-
-void LabelWidget::horizontalAlignmentChanged(int index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* label : m_labelsList)
-		label->setHorizontalAlignment(TextLabel::HorizontalAlignment(index));
-}
-
-void LabelWidget::verticalAlignmentChanged(int index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* label : m_labelsList)
-		label->setVerticalAlignment(TextLabel::VerticalAlignment(index));
-}
-
-void LabelWidget::customPositionXChanged(double value) {
-	CONDITIONAL_RETURN_NO_LOCK;
-
-	for (auto* label : m_labelsList) {
-		auto position = label->position();
-		if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Relative)
-			position.point.setX(value / 100.);
-		else
-			position.point.setX(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
-		label->setPosition(position);
-	}
-}
-
-void LabelWidget::customPositionYChanged(double value) {
-	CONDITIONAL_RETURN_NO_LOCK;
-
-	for (auto* label : m_labelsList) {
-		auto position = label->position();
-		if (position.verticalPosition == WorksheetElement::VerticalPosition::Relative)
-			position.point.setY(value / 100.);
-		else
-			position.point.setY(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
-		label->setPosition(position);
-	}
-}
-
-// positioning using logical plot coordinates
-void LabelWidget::positionXLogicalChanged(double value) {
-	CONDITIONAL_RETURN_NO_LOCK;
-
-	for (auto* label : m_labelsList) {
-		auto pos = label->positionLogical();
-		pos.setX(value);
-		label->setPositionLogical(pos);
-	}
-}
-
-void LabelWidget::positionXLogicalDateTimeChanged(qint64 value) {
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* label : m_labelsList) {
-		auto pos = label->positionLogical();
-		pos.setX(value);
-		label->setPositionLogical(pos);
-	}
-}
-
-void LabelWidget::positionYLogicalChanged(double value) {
-	CONDITIONAL_RETURN_NO_LOCK;
-
-	for (auto* label : m_labelsList) {
-		auto pos = label->positionLogical();
-		pos.setY(value);
-		label->setPositionLogical(pos);
-	}
-}
-
-void LabelWidget::rotationChanged(int value) {
-	CONDITIONAL_LOCK_RETURN;
-
-	for (auto* label : m_labelsList)
-		label->setRotationAngle(value);
-}
-
 void LabelWidget::offsetXChanged(double value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
@@ -1132,12 +937,6 @@ void LabelWidget::offsetYChanged(double value) {
 
 	for (auto* axis : m_axesList)
 		axis->setTitleOffsetY(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
-}
-
-void LabelWidget::lockChanged(bool locked) {
-	CONDITIONAL_LOCK_RETURN;
-	for (auto* label : m_labelsList)
-		label->setLock(locked);
 }
 
 // border
@@ -1200,48 +999,6 @@ void LabelWidget::borderOpacityChanged(int value) {
 	qreal opacity = (float)value / 100.;
 	for (auto* label : m_labelsList)
 		label->setBorderOpacity(opacity);
-}
-
-/*!
- * \brief LabelWidget::bindingChanged
- * Bind TextLabel to the cartesian plot coords or not
- * \param checked
- */
-void LabelWidget::bindingChanged(bool checked) {
-	// widgets for positioning using absolute plot distances
-	ui.lPositionX->setVisible(!checked);
-	ui.cbPositionX->setVisible(!checked);
-	ui.sbPositionX->setVisible(!checked);
-
-	ui.lPositionY->setVisible(!checked);
-	ui.cbPositionY->setVisible(!checked);
-	ui.sbPositionY->setVisible(!checked);
-
-	// widgets for positioning using logical plot coordinates
-	const auto* plot = static_cast<const CartesianPlot*>(m_label->parent(AspectType::CartesianPlot));
-	if (plot && plot->xRangeFormatDefault() == RangeT::Format::DateTime) {
-		ui.lPositionXLogicalDateTime->setVisible(checked);
-		ui.dtePositionXLogical->setVisible(checked);
-
-		ui.lPositionXLogical->setVisible(false);
-		ui.sbPositionXLogical->setVisible(false);
-	} else {
-		ui.lPositionXLogicalDateTime->setVisible(false);
-		ui.dtePositionXLogical->setVisible(false);
-
-		ui.lPositionXLogical->setVisible(checked);
-		ui.sbPositionXLogical->setVisible(checked);
-	}
-
-	ui.lPositionYLogical->setVisible(checked);
-	ui.sbPositionYLogical->setVisible(checked);
-
-	CONDITIONAL_LOCK_RETURN;
-
-	ui.chbBindLogicalPos->setChecked(checked);
-
-	for (auto* label : m_labelsList)
-		label->setCoordinateBindingEnabled(checked);
 }
 
 void LabelWidget::showPlaceholderTextChanged(bool checked) {
@@ -1324,47 +1081,6 @@ void LabelWidget::labelFontColorChanged(const QColor& color) {
 	ui.teLabel->setTextColor(color);
 }
 
-void LabelWidget::labelPositionChanged(const TextLabel::PositionWrapper& position) {
-	CONDITIONAL_LOCK_RETURN;
-
-	ui.cbPositionX->setCurrentIndex(static_cast<int>(position.horizontalPosition));
-	ui.cbPositionY->setCurrentIndex(static_cast<int>(position.verticalPosition));
-	if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Relative) {
-		ui.sbPositionX->setValue(position.point.x() * 100.);
-		ui.sbPositionX->setSuffix(QStringLiteral(" %"));
-	} else
-		ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(position.point.x(), m_worksheetUnit));
-
-	if (position.verticalPosition == WorksheetElement::VerticalPosition::Relative) {
-		ui.sbPositionY->setValue(position.point.y() * 100.);
-		ui.sbPositionY->setSuffix(QStringLiteral(" %"));
-	} else
-		ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(position.point.y(), m_worksheetUnit));
-}
-
-void LabelWidget::labelHorizontalAlignmentChanged(TextLabel::HorizontalAlignment index) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.cbHorizontalAlignment->setCurrentIndex(static_cast<int>(index));
-}
-
-void LabelWidget::labelVerticalAlignmentChanged(TextLabel::VerticalAlignment index) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.cbVerticalAlignment->setCurrentIndex(static_cast<int>(index));
-}
-
-void LabelWidget::labelCoordinateBindingEnabledChanged(bool enabled) {
-	CONDITIONAL_LOCK_RETURN;
-	bindingChanged(enabled);
-}
-
-void LabelWidget::labelPositionLogicalChanged(QPointF pos) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.sbPositionXLogical->setValue(pos.x());
-	ui.dtePositionXLogical->setMSecsSinceEpochUTC(pos.x());
-	ui.sbPositionYLogical->setValue(pos.y());
-	// TODO: why not ui.dtePositionYLogical->setMSecsSinceEpochUTC(pos.y());
-}
-
 // this function is only called when the theme is changed. Otherwise the color is coded in the html text.
 // when the theme changes, the whole text should change color regardless of the color it has
 void LabelWidget::labelBackgroundColorChanged(const QColor& color) {
@@ -1388,16 +1104,6 @@ void LabelWidget::labelOffsetXChanged(qreal offset) {
 void LabelWidget::labelOffsetYChanged(qreal offset) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbOffsetY->setValue(Worksheet::convertFromSceneUnits(offset, Worksheet::Unit::Point));
-}
-
-void LabelWidget::labelRotationAngleChanged(qreal angle) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.sbRotation->setValue(angle);
-}
-
-void LabelWidget::labelLockChanged(bool on) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.chbLock->setChecked(on);
 }
 
 // border

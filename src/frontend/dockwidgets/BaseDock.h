@@ -41,33 +41,25 @@ public:
 	static void spinBoxCalculateMinMax(QDoubleSpinBox* spinbox, Range<double> range, double newValue = NAN);
 
 	template<typename T>
-	void setAspects(QList<T*> aspects) {
+	bool setAspects(QList<T*> aspects) {
 		if (m_aspect)
 			disconnect(m_aspect, nullptr, this, nullptr);
 
 		m_aspects.clear();
 		if (aspects.length() == 0) {
 			m_aspect = nullptr;
-			return;
+			return false;
 		}
 
 		m_aspect = aspects.first();
 		connect(m_aspect, &AbstractAspect::childAspectAboutToBeRemoved, this, &BaseDock::disconnectAspect);
 		connect(m_aspect, &AbstractAspect::aspectDescriptionChanged, this, &BaseDock::aspectDescriptionChanged);
 
-		auto* wse = dynamic_cast<WorksheetElement*>(m_aspect);
-		if (wse) {
-			connect(wse, &WorksheetElement::coordinateSystemIndexChanged, this, &BaseDock::updatePlotRangeList);
-			connect(wse, &WorksheetElement::plotRangeListChanged, this, &BaseDock::updatePlotRangeList);
-			connect(wse, &WorksheetElement::visibleChanged, this, &BaseDock::aspectVisibleChanged);
-			auto* plot = dynamic_cast<Plot*>(wse);
-			if (plot)
-				connect(plot, &Plot::legendVisibleChanged, this, &BaseDock::aspectLegendVisibleChanged);
-		}
-
 		for (auto* aspect : aspects) {
 			if (aspect->inherits(AspectType::AbstractAspect))
 				m_aspects.append(static_cast<AbstractAspect*>(aspect));
+			else
+				assert(false); // Should never happen
 		}
 
 		// delete the potentially available model, will be re-created if needed for the newly set aspects
@@ -75,6 +67,7 @@ public:
 		m_aspectModel = nullptr;
 
 		updateNameDescriptionWidgets();
+		return true;
 	}
 
 	void disconnectAspect(const AbstractAspect* a) {

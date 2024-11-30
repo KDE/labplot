@@ -99,6 +99,7 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/dockwidgets/SpreadsheetDock.cpp
     ${FRONTEND_DIR}/dockwidgets/StatisticsSpreadsheetDock.cpp
     ${FRONTEND_DIR}/dockwidgets/QQPlotDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/WorksheetElementDock.cpp
     ${FRONTEND_DIR}/dockwidgets/XYCurveDock.cpp
     ${FRONTEND_DIR}/dockwidgets/XYAnalysisCurveDock.cpp
     ${FRONTEND_DIR}/dockwidgets/XYEquationCurveDock.cpp

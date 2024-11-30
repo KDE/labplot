@@ -894,6 +894,117 @@ void WorksheetElementTest::moveTreeModelInteraction() {
 	QCOMPARE(lThird->m_moveInFrontOfMenu->actions().count(), 2);
 }
 
+void WorksheetElementTest::mouseMoveRelative() {
+	// WORKSHEETELEMENT_TEST()
+	SETUP_PROJECT
+	auto* element = new TextLabel(QStringLiteral("element"));                                                                                
+	p->addChild(element);                                                                                                                                  
+	auto* dock = new LabelWidget(nullptr);                                                                                                                    
+	//MACRO_NAME(element, dockSetElementsMethodName);
+	dock->setLabels({element});
+
+
+	// #define WORKSHEETELEMENT_MOUSE_MOVE(element, dockSetElementsMethodName)                                                                                        
+	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());                                                                                      
+	auto pp = element->position();                                                                                                                             
+	pp.point = QPointF(0, 0);                                                                                                                                  
+	element->setPosition(pp);                                                                                                                                  
+	element->setCoordinateBindingEnabled(true);                                                                                                                
+                                                                                                                                                               
+	QCOMPARE(element->positionLogical().x(), 0.5);                                                                                                             
+	QCOMPARE(element->positionLogical().y(), 0.5);
+
+	QCOMPARE(element->horizontalAlignment(), HorizontalAlignment::Center);
+	QCOMPARE(element->verticalAlignment(), VerticalAlignment::Center);
+
+	pp = element->position();
+	pp.horizontalPosition = HorizontalPosition::Relative;
+	pp.verticalPosition = VerticalPosition::Relative;
+	element->setPosition(pp);
+
+	QCOMPARE(element->positionLogical().x(), 0.5);                                                                                                             
+	QCOMPARE(element->positionLogical().y(), 0.5);                                                                                                    
+                                                                                                                                                               
+	/* Simulate mouse move */                                                                                                                                  
+	element->d_ptr->setPos(QPointF(25, -10)); /* item change will be called (negative value is up) */                                                          
+	QCOMPARE(element->positionLogical().x(), 0.75); /* 25/50 * 0.5 + 0.5 */                                                                                    
+	QCOMPARE(element->positionLogical().y(), 0.6);
+
+	QCOMPARE(dock->ui.sbPositionX->value(), 0.75 * 100.0);
+	QCOMPARE(dock->ui.sbPositionY->value(), 0.6 * 100.0); 
+}
+
+void WorksheetElementTest::positionRelative() {
+		// WORKSHEETELEMENT_TEST()
+	SETUP_PROJECT
+	auto* element = new TextLabel(QStringLiteral("element"));                                                                                
+	p->addChild(element);                                                                                                                                  
+	auto* dock = new LabelWidget(nullptr);                                                                                                                    
+	//MACRO_NAME(element, dockSetElementsMethodName); 
+	dock->setLabels({element});
+
+	// #define WORKSHEETELEMENT_MOUSE_MOVE(element, dockSetElementsMethodName)                                                                                        
+	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());                                                                                      
+	auto pp = element->position();                                                                                                                             
+	pp.point = QPointF(0, 0);                                                                                                                                  
+	element->setPosition(pp);                                                                                                                                  
+	element->setCoordinateBindingEnabled(true);                                                                                                                
+                                                                                                                                                               
+	QCOMPARE(element->positionLogical().x(), 0.5);                                                                                                             
+	QCOMPARE(element->positionLogical().y(), 0.5);
+
+	QCOMPARE(element->horizontalAlignment(), HorizontalAlignment::Center);
+	QCOMPARE(element->verticalAlignment(), VerticalAlignment::Center);
+
+	pp = element->position();
+	pp.horizontalPosition = HorizontalPosition::Relative;
+	pp.verticalPosition = VerticalPosition::Relative;
+	pp.point = QPointF(0.2, 0.8) // 20% and 80%
+	element->setPosition(pp);
+
+	QCOMPARE(element->positionLogical().x(), 0.2);                                                                                                             
+	QCOMPARE(element->positionLogical().y(), 0.8);
+
+	QCOMPARE(dock->ui.sbPositionX->value(), 0.2 * 100.0);
+	QCOMPARE(dock->ui.sbPositionY->value(), 0.8 * 100.0);                                                                                                 	
+}
+
+void WorksheetElementTest::positionRelativeDock() {
+		// WORKSHEETELEMENT_TEST()
+	SETUP_PROJECT
+	auto* element = new TextLabel(QStringLiteral("element"));                                                                                
+	p->addChild(element);                                                                                                                                  
+	auto* dock = new LabelWidget(nullptr);                                                                                                                    
+	//MACRO_NAME(element, dockSetElementsMethodName); 
+	dock->setLabels({element});
+
+	// #define WORKSHEETELEMENT_MOUSE_MOVE(element, dockSetElementsMethodName)                                                                                        
+	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());                                                                                      
+	auto pp = element->position();                                                                                                                             
+	pp.point = QPointF(0, 0);                                                                                                                                  
+	element->setPosition(pp);                                                                                                                                  
+	element->setCoordinateBindingEnabled(true);                                                                                                                
+                                                                                                                                                               
+	QCOMPARE(element->positionLogical().x(), 0.5);                                                                                                             
+	QCOMPARE(element->positionLogical().y(), 0.5);
+
+	QCOMPARE(element->horizontalAlignment(), WorksheetElement::HorizontalAlignment::Center);
+	QCOMPARE(element->verticalAlignment(), WorksheetElement::VerticalAlignment::Center);
+
+	element->setPositionHorizontal(WorksheetElement::HorizontalAlignment::Relative);
+	element->setPositionVertical(WorksheetElement::VerticalAlignment::Relative);
+
+	// Set values in dock
+	dock->ui.sbPositionX->setValue(20);
+	dock->ui.sbPositionX->setValue(80);
+
+	QCOMPARE(element->positionLogical().x(), 0.2);                                                                                                       
+	QCOMPARE(element->positionLogical().y(), 0.8);
+
+	QCOMPARE(dock->ui.sbPositionX->value(), 0.2 * 100.0);
+	QCOMPARE(dock->ui.sbPositionY->value(), 0.8 * 100.0);       	
+}
+
 // TODO: create test with reference range with nonlinear ranges!
 // Zooming in cartesianplot leads to move the worksheetelement
 // Testing without setCoordinateBindingEnabled
