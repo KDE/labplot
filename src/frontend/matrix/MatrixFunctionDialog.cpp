@@ -29,7 +29,7 @@
 #include <QElapsedTimer>
 #endif
 
-#include "backend/gsl/parser.h"
+#include "backend/gsl/Parser.h"
 #include <cmath>
 
 /*!
@@ -164,11 +164,12 @@ public:
 		DEBUG("FILL col" << m_startCol << "-" << m_endCol << " x/y =" << x << '/' << y << " steps =" << m_xStep << '/' << m_yStep << " rows =" << rows)
 
 		Parser::parser_var vars[] = {{"x", x}, {"y", y}};
+		Parser::Parser parser;
 		for (int col = m_startCol; col < m_endCol; ++col) {
 			vars[0].value = x;
 			for (int row = 0; row < rows; ++row) {
 				vars[1].value = y;
-				double z = Parser::parse_with_vars(m_func, vars, 2, qPrintable(QLocale().name()));
+				double z = parser.parse_with_vars(m_func, vars, 2, qPrintable(QLocale().name()));
 				// DEBUG(" z =" << z);
 				m_matrixData[col][row] = z;
 				y += m_yStep;
@@ -238,11 +239,12 @@ void MatrixFunctionDialog::generate() {
 	double x = m_matrix->xStart();
 	double y = m_matrix->yStart();
 	Parser::parser_var vars[] = {{"x", x}, {"y", y}};
+	Parser::Parser parser;
 	for (int col = 0; col < m_matrix->columnCount(); ++col) {
 		vars[0].value = x;
 		for (int row = 0; row < m_matrix->rowCount(); ++row) {
 			vars[1].value = y;
-			(*new_data)[col][row] = Parser::parse_with_vars(qPrintable(ui.teEquation->toPlainText()), vars, 2, qPrintable(QLocale().name()));
+			(*new_data)[col][row] = parser.parse_with_vars(qPrintable(ui.teEquation->toPlainText()), vars, 2, qPrintable(QLocale().name()));
 			y += yStep;
 		}
 		y = m_matrix->yStart();

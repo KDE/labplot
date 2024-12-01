@@ -1288,6 +1288,21 @@ void ColumnTest::testFormula() {
 	}
 }
 
+void ColumnTest::testFormula2() {
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.replaceValues(-1, {11., 12., 13.});
+	c2.setFormula(QStringLiteral("sin(i)"), {}, QVector<Column*>({}), true);
+	c2.updateFormula();
+
+	auto c3 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c3.replaceValues(-1, {1., 2., 3.});
+	c3.setFormula(QStringLiteral("cell(i; x)"), {QStringLiteral("x")}, QVector<Column*>({&c2}), true);
+	c3.updateFormula();
+
+	c3.setFormula(QStringLiteral("cell(i; x) + sin(x)"), {QStringLiteral("x")}, QVector<Column*>({&c2}), true);
+	c3.updateFormula();
+}
+
 void ColumnTest::testFormulaCell() {
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
 	c1.replaceValues(-1, {1., 5., -1.});

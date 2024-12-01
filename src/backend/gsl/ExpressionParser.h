@@ -58,7 +58,7 @@ public:
 									 const QStringList& vars,
 									 const QVector<QVector<double>*>& xVectors,
 									 QVector<double>* yVector,
-									 bool perforanceOptimization = true);
+									 bool performanceOptimization = true);
 	bool tryEvaluatePolar(const QString& expr, const QString& min, const QString& max, int count, QVector<double>* xVector, QVector<double>* yVector);
 	bool tryEvaluateParametric(const QString& expr1,
 							   const QString& expr2,
@@ -101,5 +101,6 @@ private:
 	QStringList m_constantsValues;
 	QStringList m_constantsUnits;
 	QVector<Parser::ConstantGroups> m_constantsGroupIndex;
+	QString m_lastErrorMessage;
 };
 #endif
