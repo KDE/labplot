@@ -20,6 +20,7 @@ bool debugTraceEnabled();
 void enableDebugTrace(bool);
 bool perfTraceEnabled();
 void enablePerfTrace(bool);
+bool debugParserEnabled();
 
 // show warnings with info
 #define WARN(x) INFO(x)
@@ -43,6 +44,11 @@ void enablePerfTrace(bool);
 	if (debugTraceEnabled()) {                                                                                                                                 \
 		std::cout << std::dec << std::setprecision(std::numeric_limits<double>::digits10 + 1) << std::boolalpha << x                                           \
 				  << std::resetiosflags(std::ios_base::boolalpha) << std::setprecision(-1) << std::endl;                                                       \
+	}
+
+#define DEBUG_PARSER(x) \
+	if (debugParserEnabled()) { \
+		std::cout << x << std::endl; \
 	}
 
 #else

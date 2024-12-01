@@ -10,7 +10,7 @@
 
 #include "ParserTest.h"
 
-#include "backend/gsl/parser.h"
+#include "backend/gsl/Parser.h"
 
 #include <gsl/gsl_const_mksa.h>
 #include <gsl/gsl_errno.h>
@@ -22,6 +22,7 @@ using namespace Parser;
 //**********************************************************
 
 void ParserTest::testBasics() {
+	Parser::Parser parser;
 	const QVector<QPair<QString, double>> tests{{QStringLiteral("42"), 42.},
 												{QStringLiteral("1."), 1.},
 												{QStringLiteral("1+1"), 2.},
@@ -64,15 +65,16 @@ void ParserTest::testBasics() {
 												{QStringLiteral("cos(pi)"), -1.}};
 
 	for (auto& expr : tests)
-		QCOMPARE(parse(qPrintable(expr.first), "C"), expr.second);
+		QCOMPARE(parser.parse(qPrintable(expr.first), "C"), expr.second);
 
 	const QVector<QPair<QString, double>> testsFuzzy{{QStringLiteral("(sin(pi))"), 0.}};
 
 	for (const auto& expr : testsFuzzy)
-		FuzzyCompare(parse(qPrintable(expr.first), "C"), expr.second, 1.e-15);
+		FuzzyCompare(parser.parse(qPrintable(expr.first), "C"), expr.second, 1.e-15);
 }
 
 void ParserTest::testErrors() {
+	Parser::Parser parser;
 	gsl_set_error_handler_off(); // do not crash
 
 	const QVector<QString> testsNan{QString(),
@@ -96,54 +98,56 @@ void ParserTest::testErrors() {
 									QStringLiteral("asin(2)")};
 
 	for (auto& expr : testsNan)
-		QVERIFY(std::isnan(parse(qPrintable(expr), "C")));
+		QVERIFY(std::isnan(parser.parse(qPrintable(expr), "C")));
 
 	const QVector<QString> testsInf{QStringLiteral("1/0"), QStringLiteral("-1/0"), QStringLiteral("1+1/0")};
 
 	for (auto& expr : testsInf)
-		QVERIFY(std::isinf(parse(qPrintable(expr), "C")));
+		QVERIFY(std::isinf(parser.parse(qPrintable(expr), "C")));
 }
 
 void ParserTest::testVariables() {
-	assign_symbol("a", 1.);
+	Parser::Parser parser;
+	parser.assign_symbol("a", 1.);
 	const QVector<QPair<QString, double>> tests{{QStringLiteral("a"), 1.},
 												{QStringLiteral("a+1"), 2.},
 												{QStringLiteral("a+1.5"), 2.5},
 												{QStringLiteral("a!"), 1.}};
 
 	for (auto& expr : tests)
-		QCOMPARE(parse(qPrintable(expr.first), "C"), expr.second);
+		QCOMPARE(parser.parse(qPrintable(expr.first), "C"), expr.second);
 
-	assign_symbol("a", 0.); // only vars set to zero get removed
-	remove_symbol("a");
+	parser.assign_symbol("a", 0.); // only vars set to zero get removed
+	parser.remove_symbol("a");
 	for (auto& expr : tests)
-		QVERIFY(std::isnan(parse(qPrintable(expr.first), "C")));
+		QVERIFY(std::isnan(parser.parse(qPrintable(expr.first), "C")));
 
 	// longer var name
-	assign_symbol("sina", 1.5);
+	parser.assign_symbol("sina", 1.5);
 	const QVector<QPair<QString, double>> tests2{{QStringLiteral("sina"), 1.5},
 												 {QStringLiteral("sina+1"), 2.5},
 												 {QStringLiteral("sina+1.5"), 3.},
 												 {QStringLiteral("2*sina"), 3.}};
 
 	for (auto& expr : tests2)
-		QCOMPARE(parse(qPrintable(expr.first), "C"), expr.second);
+		QCOMPARE(parser.parse(qPrintable(expr.first), "C"), expr.second);
 
 	// parse_with_vars()
 	parser_var vars[] = {{"x", 1.}, {"y", 2.}};
-	QCOMPARE(parse_with_vars("x + y", vars, 2, "C"), 3.);
+	QCOMPARE(parser.parse_with_vars("x + y", vars, 2, "C"), 3.);
 }
 
 void ParserTest::testLocale() {
 // TODO: locale test currently does not work on FreeBSD
 #ifndef __FreeBSD__
+	Parser::Parser parser;
 	const QVector<QPair<QString, double>> tests{{QStringLiteral("1,"), 1.},
 												{QStringLiteral("1,5"), 1.5},
 												{QStringLiteral("1+0,5"), 1.5},
 												{QStringLiteral("2*1,5"), 3.}};
 
 	for (auto& expr : tests)
-		QCOMPARE(parse(qPrintable(expr.first), "de_DE"), expr.second);
+		QCOMPARE(parser.parse(qPrintable(expr.first), "de_DE"), expr.second);
 #endif
 }
 
@@ -153,11 +157,13 @@ void ParserTest::testLocale() {
 void ParserTest::testPerformance1() {
 	const int N = 1e5;
 
+	Parser::Parser parser;
+
 	QBENCHMARK {
 		for (int i = 0; i < N; i++) {
 			const double x = i / 100.;
-			assign_symbol("x", i / 100.);
-			QCOMPARE(parse("x+1.", "C"), x + 1.);
+			parser.assign_symbol("x", i / 100.);
+			QCOMPARE(parser.parse("x+1.", "C"), x + 1.);
 		}
 	}
 }
@@ -165,10 +171,11 @@ void ParserTest::testPerformance1() {
 void ParserTest::testPerformance2() {
 	const int N = 1e5;
 
+	Parser::Parser parser;
 	QBENCHMARK {
 		for (int i = 0; i < N; i++) {
-			assign_symbol("alpha", i / 100.);
-			QCOMPARE(parse("sin(alpha)^2 + cos(alpha)^2", "C"), 1.);
+			parser.assign_symbol("alpha", i / 100.);
+			QCOMPARE(parser.parse("sin(alpha)^2 + cos(alpha)^2", "C"), 1.);
 		}
 	}
 }

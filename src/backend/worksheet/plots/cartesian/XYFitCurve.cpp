@@ -20,7 +20,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/gsl/ExpressionParser.h"
 #include "backend/gsl/errors.h"
-#include "backend/gsl/parser.h"
+#include "backend/gsl/Parser.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
@@ -1022,11 +1022,13 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 	double* min = ((struct data*)params)->paramMin;
 	double* max = ((struct data*)params)->paramMax;
 
+	Parser::Parser parser;
+
 	// set current values of the parameters
 	for (int i = 0; i < paramNames->size(); i++) {
 		double v = gsl_vector_get(paramValues, (size_t)i);
 		// bound values if limits are set
-		Parser::assign_symbol(qPrintable(paramNames->at(i)), nsl_fit_map_bound(v, min[i], max[i]));
+		parser.assign_symbol(qPrintable(paramNames->at(i)), nsl_fit_map_bound(v, min[i], max[i]));
 		QDEBUG(Q_FUNC_INFO << ", Parameter" << i << " (' " << paramNames->at(i) << "')" << '[' << min[i] << ',' << max[i]
 						   << "] free/bound:" << QString::number(v, 'g', 15) << ' ' << QString::number(nsl_fit_map_bound(v, min[i], max[i]), 'g', 15));
 	}
@@ -1043,14 +1045,14 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 				x[i] = 0;
 		}
 
-		Parser::assign_symbol("x", x[i]);
+		parser.assign_symbol("x", x[i]);
 		// DEBUG("evaluate function \"" << STDSTRING(func) << "\" @ x = " << x[i] << ":");
-		double Yi = Parser::parse(qPrintable(func), qPrintable(QLocale().name()));
-		if (Parser::parse_errors() > 0) // fallback to default locale
-			Yi = Parser::parse(qPrintable(func), "en_US");
+		double Yi = parser.parse(qPrintable(func), qPrintable(QLocale().name()));
+		if (parser.parseErrors() > 0) // fallback to default locale
+			Yi = parser.parse(qPrintable(func), "en_US");
 		// DEBUG("	f(x["<< i <<"]) = " << Yi);
 
-		if (Parser::parse_errors() > 0)
+		if (parser.parseErrors() > 0)
 			return GSL_EINVAL;
 
 		// DEBUG("	weight["<< i <<"]) = " << weight[i]);
@@ -1731,32 +1733,33 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		QString func{*(((struct data*)params)->func)};
 
 		const auto numberLocale = QLocale();
+		Parser::Parser parser;
 		for (size_t i = 0; i < n; i++) {
 			x = xVector[i];
-			Parser::assign_symbol("x", x);
+			parser.assign_symbol("x", x);
 
 			for (auto j = 0; j < np; j++) {
 				for (auto k = 0; k < np; k++) {
 					if (k != j) {
 						value = nsl_fit_map_bound(gsl_vector_get(paramValues, k), min[k], max[k]);
-						Parser::assign_symbol(qPrintable(paramNames->at(k)), value);
+						parser.assign_symbol(qPrintable(paramNames->at(k)), value);
 					}
 				}
 
 				value = nsl_fit_map_bound(gsl_vector_get(paramValues, j), min[j], max[j]);
-				Parser::assign_symbol(qPrintable(paramNames->at(j)), value);
-				double f_p = Parser::parse(qPrintable(func), qPrintable(numberLocale.name()));
-				if (Parser::parse_errors() > 0) // fallback to default locale
-					f_p = Parser::parse(qPrintable(func), "en_US");
+				parser.assign_symbol(qPrintable(paramNames->at(j)), value);
+				double f_p = parser.parse(qPrintable(func), qPrintable(numberLocale.name()));
+				if (parser.parseErrors() > 0) // fallback to default locale
+					f_p = parser.parse(qPrintable(func), "en_US");
 
 				double eps = 1.e-9;
 				if (std::abs(f_p) > 0)
 					eps *= std::abs(f_p); // scale step size with function value
 				value += eps;
-				Parser::assign_symbol(qPrintable(paramNames->at(j)), value);
-				double f_pdp = Parser::parse(qPrintable(func), qPrintable(numberLocale.name()));
-				if (Parser::parse_errors() > 0) // fallback to default locale
-					f_pdp = Parser::parse(qPrintable(func), "en_US");
+				parser.assign_symbol(qPrintable(paramNames->at(j)), value);
+				double f_pdp = parser.parse(qPrintable(func), qPrintable(numberLocale.name()));
+				if (parser.parseErrors() > 0) // fallback to default locale
+					f_pdp = parser.parse(qPrintable(func), "en_US");
 
 				//				DEBUG("evaluate deriv"<<func<<": f(x["<<i<<"]) ="<<QString::number(f_p, 'g', 15));
 				//				DEBUG("evaluate deriv"<<func<<": f(x["<<i<<"]+dx) ="<<QString::number(f_pdp, 'g', 15));

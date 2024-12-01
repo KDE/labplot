@@ -1,7 +1,7 @@
 /*
 	File                 : parser.h
 	Project              : LabPlot
-	Description          : Parser for mathematical expressions
+	Description          : parser header for the generated parser. Do not include it directly. Use Parser.h!
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
@@ -17,11 +17,13 @@
 #include <gsl/gsl_version.h>
 #include <memory>
 #include <variant>
-
-// uncomment to enable parser specific debugging
-// #define PDEBUG 1
+#include "backend/lib/Debug.h"
 
 namespace Parser {
+
+class StaticSymbol;
+class Symbol;
+class Parser;
 
 // variables to pass to parser
 #define MAX_VARNAME_LENGTH 10
@@ -29,6 +31,23 @@ typedef struct parser_var {
 	char name[MAX_VARNAME_LENGTH];
 	double value;
 } parser_var;
+
+enum class UsedSymbols {
+	No, // ignore used symbols functionality
+	Initialize,
+	Only // Use only used symbols found previously with Initialize
+};
+
+/* params passed to yylex (and yyerror) */
+typedef struct param {
+	size_t pos;		/* current position in string */
+	std::string_view string;		/* the string to parse */
+	const char* locale;	/* name of locale to convert numbers */
+	Parser* parser;
+	double result;
+	size_t variablesCounter {0};
+	size_t errorCount {0};
+} param;
 
 struct Payload {
 	explicit Payload(bool constant = false)
@@ -91,34 +110,6 @@ struct StaticSymbol : public BaseSymbol {
 		value = fn;
 	}
 };
-
-enum class UsedSymbols {
-	No, // ignore used symbols functionality
-	Initialize,
-	Only // Use only used symbols found previously with Initialize
-};
-
-int variablesCounter();
-
-void init_table(void); // initialize symbol table
-void delete_table(void); // delete symbol table
-int parse_errors(void);
-BaseSymbol* assign_symbol(const char* symbol_name, double value, UsedSymbols usedSymbols = UsedSymbols::No);
-int remove_symbol(const char* symbol_name);
-double parse(const char* string, const char* locale, UsedSymbols usedSymbols = UsedSymbols::No);
-double parse_with_vars(const char[], const parser_var[], int nvars, const char* locale);
-bool set_specialfunction0(const char* function_name, func_tPayload function, std::shared_ptr<Payload> payload);
-bool set_specialfunctionValuePayload(const char* function_name, func_tValuePayload function, std::shared_ptr<Payload> payload);
-bool set_specialfunction2ValuePayload(const char* function_name, func_t2ValuePayload function, std::shared_ptr<Payload> payload);
-bool set_specialfunctionVariablePayload(const char* function_name, func_tVariablePayload function, std::shared_ptr<Payload> payload);
-bool set_specialfunctionValueVariablePayload(const char* function_name, func_tValueVariablePayload function, std::shared_ptr<Payload> payload);
-bool set_specialfunction2ValueVariablePayload(const char* function_name, func_t2ValueVariablePayload function, std::shared_ptr<Payload> payload);
-bool set_specialfunction3ValueVariablePayload(const char* function_name, func_t3ValueVariablePayload function, std::shared_ptr<Payload> payload);
-std::string lastErrorMessage();
-std::vector<std::string> get_used_symbols();
-
-extern bool skipSpecialFunctionEvaluation;
-
 } // namespace Parser
 
 #endif /*PARSER_H*/
