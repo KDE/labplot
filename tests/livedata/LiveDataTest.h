@@ -12,11 +12,18 @@
 
 #include "tests/CommonTest.h"
 
+class QTcpServer;
+class QUdpServer;
+
 class LiveDataTest : public CommonTest {
 	Q_OBJECT
 
 private:
+	void initTestCase() override;
 	void waitForSignal(QObject* sender, const char* signal);
+
+	QTcpServer* m_tcpServer{nullptr};
+	QUdpServer* m_udpServer{nullptr};
 
 private Q_SLOTS:
 	// Continuous fixed - fixed amount of samples is processed starting from the beginning of the newly received data
@@ -42,6 +49,12 @@ private Q_SLOTS:
 	void testReadWholeFileSameContentSize();
 
 	void testPlotting();
+
+	void testTcpReadContinuousFixed00();
+
+	// helper slots
+	void sendDataOverTcp();
+	void sendDataOverUdp();
 };
 
 #endif // LIVEDATATEST_H
