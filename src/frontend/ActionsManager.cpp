@@ -455,7 +455,35 @@ void ActionsManager::initActions() {
  * initializes worksheet related actions shown in the toolbar, called when a worksheet is selected for the first time.
  */
 void ActionsManager::initWorksheetToolbarActions() {
-	// auto* collection = m_mainWindow->actionCollection();
+	auto* collection = m_mainWindow->actionCollection();
+
+	// "add new" actions
+	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("draw-text")), i18n("Text"), m_mainWindow);
+	collection->addAction(QLatin1String("worksheet_new_image"), action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("viewimage")), i18n("Image"), m_mainWindow);
+	collection->addAction(QLatin1String("worksheet_new_text_label"), action);
+
+	// layout actions
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-edithlayout")), i18n("Vertical Layout"), m_mainWindow);
+	action->setData(static_cast<int>(Worksheet::Layout::VerticalLayout));
+	action->setCheckable(true);
+	collection->addAction(QLatin1String("worksheet_vertical_layout"), action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-editvlayout")), i18n("Horizontal Layout"), m_mainWindow);
+	action->setData(static_cast<int>(Worksheet::Layout::HorizontalLayout));
+	action->setCheckable(true);
+	collection->addAction(QLatin1String("worksheet_horizontal_layout"), action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-editgrid")), i18n("Grid Layout"), m_mainWindow);
+	action->setData(static_cast<int>(Worksheet::Layout::GridLayout));
+	action->setCheckable(true);
+	collection->addAction(QLatin1String("worksheet_grid_layout"), action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-editbreaklayout")), i18n("No Layout"), m_mainWindow);
+	action->setData(static_cast<int>(Worksheet::Layout::NoLayout));
+	action->setEnabled(false);
+	collection->addAction(QLatin1String("worksheet_break_layout"), action);
 }
 
 /*!
@@ -1013,7 +1041,18 @@ void ActionsManager::toggleDockWidget(QAction* action) {
 // ################  Connect actions to the actual views ########################
 // ##############################################################################
 void ActionsManager::connectWorksheetToolbarActions(const WorksheetView* view) {
+	auto* collection = m_mainWindow->actionCollection();
 
+	// layout actions
+	auto* action = collection->action(QLatin1String("worksheet_vertical_layout"));
+	if (action) {
+		disconnect(action, &QAction::triggered, nullptr, nullptr);
+		connect(action, &QAction::triggered, view, [view, action]() {
+			view->changeLayout(action);
+		});
+	}
+
+	// TODO
 }
 
 void ActionsManager::connectSpreadsheetToolbarActions(const SpreadsheetView* view) {

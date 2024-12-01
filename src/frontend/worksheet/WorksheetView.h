@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Worksheet view
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -245,6 +245,7 @@ public Q_SLOTS:
 	void cartesianPlotMouseModeChangedSlot(CartesianPlot::MouseMode); // from cartesian plot
 	void childContextMenuRequested(AspectType, QMenu*);
 	void cartesianPlotMouseModeChanged(QAction*);
+	void changeLayout(QAction*) const;
 
 private Q_SLOTS:
 	void addNew(QAction*);
@@ -258,7 +259,6 @@ private Q_SLOTS:
 	void fitChanged(QAction*);
 	void updateFit();
 	void magnificationChanged(QAction*);
-	void changeLayout(QAction*);
 	void changeGrid(QAction*);
 	void changeSnapToGrid();
 	void plotsInteractiveActionChanged(bool checked);

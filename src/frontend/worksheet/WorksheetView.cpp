@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Worksheet view
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2016-2018 Stefan-Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -229,15 +229,19 @@ void WorksheetView::initActions() {
 	// with this, the two objects separated by a vertical line are perceived to be layed out in a _horizontal_ order and the
 	// same for the vertical line. Because of this we change the icons here. We can rename the icons later in the breeze icon set.
 	verticalLayoutAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-edithlayout")), i18n("Vertical Layout"), layoutActionGroup);
+	verticalLayoutAction->setData(static_cast<int>(Worksheet::Layout::VerticalLayout));
 	verticalLayoutAction->setCheckable(true);
 
 	horizontalLayoutAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-editvlayout")), i18n("Horizontal Layout"), layoutActionGroup);
+	horizontalLayoutAction->setData(static_cast<int>(Worksheet::Layout::HorizontalLayout));
 	horizontalLayoutAction->setCheckable(true);
 
 	gridLayoutAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-editgrid")), i18n("Grid Layout"), layoutActionGroup);
+	gridLayoutAction->setData(static_cast<int>(Worksheet::Layout::GridLayout));
 	gridLayoutAction->setCheckable(true);
 
 	breakLayoutAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-editbreaklayout")), i18n("No Layout"), layoutActionGroup);
+	breakLayoutAction->setData(static_cast<int>(Worksheet::Layout::NoLayout));
 	breakLayoutAction->setEnabled(false);
 
 	// Grid actions
@@ -1484,37 +1488,9 @@ void WorksheetView::fadeOut(qreal value) {
  * called when one of the layout-actions in WorkseetView was triggered.
  * sets the layout in Worksheet and enables/disables the layout actions.
  */
-void WorksheetView::changeLayout(QAction* action) {
-	if (action == breakLayoutAction) {
-		verticalLayoutAction->setEnabled(true);
-		verticalLayoutAction->setChecked(false);
-
-		horizontalLayoutAction->setEnabled(true);
-		horizontalLayoutAction->setChecked(false);
-
-		gridLayoutAction->setEnabled(true);
-		gridLayoutAction->setChecked(false);
-
-		breakLayoutAction->setEnabled(false);
-
-		m_worksheet->setLayout(Worksheet::Layout::NoLayout);
-	} else {
-		verticalLayoutAction->setEnabled(false);
-		horizontalLayoutAction->setEnabled(false);
-		gridLayoutAction->setEnabled(false);
-		breakLayoutAction->setEnabled(true);
-
-		if (action == verticalLayoutAction) {
-			verticalLayoutAction->setChecked(true);
-			m_worksheet->setLayout(Worksheet::Layout::VerticalLayout);
-		} else if (action == horizontalLayoutAction) {
-			horizontalLayoutAction->setChecked(true);
-			m_worksheet->setLayout(Worksheet::Layout::HorizontalLayout);
-		} else {
-			gridLayoutAction->setChecked(true);
-			m_worksheet->setLayout(Worksheet::Layout::GridLayout);
-		}
-	}
+void WorksheetView::changeLayout(QAction* action) const {
+	const auto layout = static_cast<Worksheet::Layout>(action->data().toInt());
+	m_worksheet->setLayout(layout);
 }
 
 void WorksheetView::changeGrid(QAction* action) {
@@ -1552,7 +1528,7 @@ void WorksheetView::changeGrid(QAction* action) {
 			dlg->save(m_gridSettings);
 		else
 #endif
-			return;
+		return;
 	}
 
 	if (m_gridSettings.style == GridStyle::NoGrid)
