@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-29 00:37+0000\n"
+"POT-Creation-Date: 2024-12-01 00:37+0000\n"
 "PO-Revision-Date: 2024-11-28 10:29+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -1820,8 +1820,8 @@ msgstr "Nombre de variables: "
 #. i18n: ectx: property (text), widget (QLabel, lDataColumn)
 #: src/backend/datasources/filters/MatioFilter.cpp:335
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:251
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:323
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:343
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:328
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:348
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:58
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:185
 #, kde-format
@@ -10200,11 +10200,6 @@ msgstr "Compilador C++: "
 msgid "C++ Compiler Flags: "
 msgstr "Indicadors del compilador C++: "
 
-#: src/frontend/AboutDialog.cpp:158
-#, kde-format
-msgid "Qt Advanced Docking System"
-msgstr "Sistema d'acoblament avançat de les Qt («Qt Advanced Docking System»)"
-
 #: src/frontend/AboutDialog.cpp:160
 #, kde-format
 msgid "Frontend to Mathematical Applications"
@@ -10212,23 +10207,26 @@ msgstr "Frontal a aplicacions matemàtiques"
 
 #: src/frontend/AboutDialog.cpp:162 src/frontend/AboutDialog.cpp:167
 #: src/frontend/AboutDialog.cpp:172 src/frontend/AboutDialog.cpp:177
-#: src/frontend/AboutDialog.cpp:182 src/frontend/AboutDialog.cpp:187
-#: src/frontend/AboutDialog.cpp:192 src/frontend/AboutDialog.cpp:197
-#: src/frontend/AboutDialog.cpp:204 src/frontend/AboutDialog.cpp:209
-#: src/frontend/AboutDialog.cpp:214 src/frontend/AboutDialog.cpp:220
-#: src/frontend/AboutDialog.cpp:225 src/frontend/AboutDialog.cpp:230
-#: src/frontend/AboutDialog.cpp:235 src/frontend/AboutDialog.cpp:241
-#: src/frontend/AboutDialog.cpp:246 src/frontend/AboutDialog.cpp:251
-#: src/frontend/AboutDialog.cpp:256 src/frontend/AboutDialog.cpp:262
-#: src/frontend/AboutDialog.cpp:267 src/frontend/AboutDialog.cpp:284
+#: src/frontend/AboutDialog.cpp:182 src/frontend/AboutDialog.cpp:188
+#: src/frontend/AboutDialog.cpp:193 src/frontend/AboutDialog.cpp:198
+#: src/frontend/AboutDialog.cpp:203 src/frontend/AboutDialog.cpp:208
+#: src/frontend/AboutDialog.cpp:213 src/frontend/AboutDialog.cpp:219
+#: src/frontend/AboutDialog.cpp:224 src/frontend/AboutDialog.cpp:229
+#: src/frontend/AboutDialog.cpp:234 src/frontend/AboutDialog.cpp:239
+#: src/frontend/AboutDialog.cpp:245 src/frontend/AboutDialog.cpp:250
+#: src/frontend/AboutDialog.cpp:255 src/frontend/AboutDialog.cpp:261
+#: src/frontend/AboutDialog.cpp:266 src/frontend/AboutDialog.cpp:283
 #, kde-format
 msgid "missing"
 msgstr "manca"
 
 #: src/frontend/AboutDialog.cpp:165
 #, kde-format
-msgid "PDF rendering library"
-msgstr "Biblioteca de renderització de PDF"
+msgid ""
+"Support data files in FITS (Flexible Image Transport System) data format"
+msgstr ""
+"Implementació de fitxers de dades en el format de fitxer FITS (Flexible "
+"Image Transport System)"
 
 #: src/frontend/AboutDialog.cpp:170
 #, kde-format
@@ -10237,106 +10235,108 @@ msgstr "Implementació del llenguatge de marcatge Markdown"
 
 #: src/frontend/AboutDialog.cpp:175
 #, kde-format
-msgid "Support collecting feedback from users"
-msgstr "Implementació de recollida de comentaris dels usuaris"
+msgid "C++ library for linear algebra"
+msgstr "Biblioteca C++ per a àlgebra lineal"
 
 #: src/frontend/AboutDialog.cpp:180
-#, kde-format
-msgid "Syntax highlighting engine"
-msgstr "Motor de ressaltat de sintaxi"
-
-#: src/frontend/AboutDialog.cpp:185
-#, kde-format
-msgid "Offers available actions for a specific purpose"
-msgstr "Ofereix accions disponibles per a un propòsit específic"
-
-#: src/frontend/AboutDialog.cpp:190
-#, kde-format
-msgid "Serial port functionality support"
-msgstr "Implementació de la funcionalitat de port en sèrie"
-
-#: src/frontend/AboutDialog.cpp:195
-#, kde-format
-msgid "Support data from MQTT brokers"
-msgstr "Implementa dades a partir d'agents MQTT"
-
-# skip-rule: t-e_sola
-#: src/frontend/AboutDialog.cpp:200
-#, kde-format
-msgid "GNU Scientific Library"
-msgstr "Biblioteca científica de GNU («GNU Scientific Library»)"
-
-#: src/frontend/AboutDialog.cpp:202
 #, kde-format
 msgid "Fastest Fourier Transform in the West"
 msgstr ""
 "Transformada de Fourier més ràpida de l'oest («Fastest Fourier Transform in "
 "the West»)"
 
-#: src/frontend/AboutDialog.cpp:207
+# skip-rule: t-e_sola
+#: src/frontend/AboutDialog.cpp:184
 #, kde-format
-msgid "Complex error and related functions"
-msgstr "Funcions complexes d'error i relacionades"
+msgid "GNU Scientific Library"
+msgstr "Biblioteca científica de GNU («GNU Scientific Library»)"
 
-#: src/frontend/AboutDialog.cpp:212
-#, kde-format
-msgid "C++ library for linear algebra"
-msgstr "Biblioteca C++ per a àlgebra lineal"
-
-#: src/frontend/AboutDialog.cpp:218
-#, kde-format
-msgid "importing Origin OPJ project files"
-msgstr "Importació de fitxers de projecte OPJ de l'Origin"
-
-#: src/frontend/AboutDialog.cpp:223
+#: src/frontend/AboutDialog.cpp:186
 #, kde-format
 msgid "High-performance data management and storage suite"
 msgstr "Paquet de gestió i emmagatzematge de dades d'altes prestacions"
 
-#: src/frontend/AboutDialog.cpp:228
+#: src/frontend/AboutDialog.cpp:191
 #, kde-format
-msgid "Network Common Data Form"
-msgstr "Format de dades comú a la xarxa («Network Common Data Form»)"
+msgid "Syntax highlighting engine"
+msgstr "Motor de ressaltat de sintaxi"
 
-#: src/frontend/AboutDialog.cpp:233
+#: src/frontend/AboutDialog.cpp:196
 #, kde-format
-msgid ""
-"Support data files in FITS (Flexible Image Transport System) data format"
-msgstr ""
-"Implementació de fitxers de dades en el format de fitxer FITS (Flexible "
-"Image Transport System)"
+msgid "Support collecting feedback from users"
+msgstr "Implementació de recollida de comentaris dels usuaris"
 
-#: src/frontend/AboutDialog.cpp:239
+#: src/frontend/AboutDialog.cpp:201
 #, kde-format
-msgid "Read (and write) data sets from SAS, Stata, and SPSS"
-msgstr "Llegeix (i escriu) conjunts de dades de SAS, Stata i SPSS"
+msgid "Complex error and related functions"
+msgstr "Funcions complexes d'error i relacionades"
 
-#: src/frontend/AboutDialog.cpp:244
+#: src/frontend/AboutDialog.cpp:206
+#, kde-format
+msgid "importing Origin OPJ project files"
+msgstr "Importació de fitxers de projecte OPJ de l'Origin"
+
+#: src/frontend/AboutDialog.cpp:211
 #, kde-format
 msgid "Import binary MATLAB MAT files"
 msgstr "Importa fitxers MAT de MATLAB binaris"
 
-#: src/frontend/AboutDialog.cpp:249
-#, kde-format
-msgid "Import Excel xlsx files"
-msgstr "Importa fitxers «xlsx» de l'Excel"
-
-#: src/frontend/AboutDialog.cpp:254
-#, kde-format
-msgid "Import ODS (Open Document Spreadsheet) files"
-msgstr "Importa fitxers ODS (Open Document Spreadsheet)"
-
-#: src/frontend/AboutDialog.cpp:259
+#: src/frontend/AboutDialog.cpp:216
 #, kde-format
 msgid "MCAP file support"
 msgstr "Implementació de fitxers MCAP"
 
-#: src/frontend/AboutDialog.cpp:265
+#: src/frontend/AboutDialog.cpp:222
+#, kde-format
+msgid "Network Common Data Form"
+msgstr "Format de dades comú a la xarxa («Network Common Data Form»)"
+
+#: src/frontend/AboutDialog.cpp:227
+#, kde-format
+msgid "Import ODS (Open Document Spreadsheet) files"
+msgstr "Importa fitxers ODS (Open Document Spreadsheet)"
+
+#: src/frontend/AboutDialog.cpp:232
+#, kde-format
+msgid "PDF rendering library"
+msgstr "Biblioteca de renderització de PDF"
+
+#: src/frontend/AboutDialog.cpp:237
+#, kde-format
+msgid "Offers available actions for a specific purpose"
+msgstr "Ofereix accions disponibles per a un propòsit específic"
+
+#: src/frontend/AboutDialog.cpp:241
+#, kde-format
+msgid "Qt Advanced Docking System"
+msgstr "Sistema d'acoblament avançat de les Qt («Qt Advanced Docking System»)"
+
+#: src/frontend/AboutDialog.cpp:243
+#, kde-format
+msgid "Support data from MQTT brokers"
+msgstr "Implementa dades a partir d'agents MQTT"
+
+#: src/frontend/AboutDialog.cpp:248
+#, kde-format
+msgid "Serial port functionality support"
+msgstr "Implementació de la funcionalitat de port en sèrie"
+
+#: src/frontend/AboutDialog.cpp:253
+#, kde-format
+msgid "Import Excel xlsx files"
+msgstr "Importa fitxers «xlsx» de l'Excel"
+
+#: src/frontend/AboutDialog.cpp:259
+#, kde-format
+msgid "Read (and write) data sets from SAS, Stata, and SPSS"
+msgstr "Llegeix (i escriu) conjunts de dades de SAS, Stata i SPSS"
+
+#: src/frontend/AboutDialog.cpp:264
 #, kde-format
 msgid "Binary Log File (BLF) file support"
 msgstr "Implementació de fitxers Binary Log File (BLF)"
 
-#: src/frontend/AboutDialog.cpp:282
+#: src/frontend/AboutDialog.cpp:281
 #, kde-format
 msgid "Components:"
 msgstr "Components:"
@@ -10781,11 +10781,22 @@ msgid "Custom column modes, comma separated"
 msgstr "Noms de columna personalitzats, separats per comes"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:122
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "If not empty, the number of columns must match the number of column names "
+#| "if provided and it must match the number of columns in the imported "
+#| "fileDatatypes:<table><tr><td>%1</td><td>Integer number with 32bit size "
+#| "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
+#| "number with 64bit size (−9.223.372.036.854.775.808 .. "
+#| "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
+#| "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
+#| "td><td>Datetime with the format from the datetime text box if not empty, "
+#| "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
+#| "td></tr></table>"
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
-"provided and it must match the number of columns in the imported "
-"fileDatatypes:<table><tr><td>%1</td><td>Integer number with 32bit size "
+"provided and it must match the number of columns in the imported file."
+"<br>Datatypes:<table><tr><td>%1</td><td>Integer number with 32bit size "
 "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
 "number with 64bit size (−9.223.372.036.854.775.808 .. "
 "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
@@ -13895,8 +13906,8 @@ msgstr ""
 "ja no està disponible. S'usarà automàticament quan es torni a crear."
 
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:183
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:219
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:273
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:224
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:278
 #, kde-format
 msgid ""
 "Variable name can contain letters, digits and '_' only and should start with "
@@ -13906,14 +13917,14 @@ msgstr ""
 "comenci amb una lletra"
 
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:219
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:317
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:322
 #, kde-format
 msgid "Delete variable"
 msgstr "Suprimeix la variable"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:251
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:343
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:348
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:22
 #, kde-format
 msgid "Variable:"
@@ -15328,7 +15339,7 @@ msgid "&Generate"
 msgstr "&Genera"
 
 #: src/frontend/matrix/MatrixFunctionDialog.cpp:77
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:226
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:231
 #, kde-format
 msgid "Generate function values"
 msgstr "Genera els valors de la funció"
@@ -16865,7 +16876,7 @@ msgstr ""
 "Canvia la mida automàticament de la columna de destinació per a ajustar la "
 "mida de les columnes variables"
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:138
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:143
 #: src/frontend/widgets/TreeViewComboBox.cpp:358
 #, kde-format
 msgid ""
@@ -16876,7 +16887,7 @@ msgstr ""
 "La columna «%1»\n"
 "ja no està disponible. S'usarà automàticament quan es torni a crear."
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:156
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:161
 #, kde-format
 msgid ""
 "Spreadsheet linking is active. The size of the target spreadsheet is "
@@ -16885,7 +16896,7 @@ msgstr ""
 "L'enllaçat del full de càlcul està actiu. La mida del full de càlcul de "
 "destinació està controlada pel full de càlcul enllaçat."
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:166
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:171
 #, kde-format
 msgid ""
 "Provided variable name is already reserved for a name of a constant. Please "
@@ -16894,7 +16905,7 @@ msgstr ""
 "El nom de variable subministrat ja està reservat per al nom d'una funció. "
 "Useu un altre nom."
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:169
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:174
 #, kde-format
 msgid ""
 "Provided variable name is already reserved for a name of a function. Please "
@@ -16903,13 +16914,13 @@ msgstr ""
 "El nom de variable subministrat ja està reservat per al nom d'una constant "
 "Useu un altre nom."
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:172
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:177
 #, kde-format
 msgid "The variable name 'i' is reserved for the index of the column row."
 msgstr ""
 "El nom de variable «i» està reservat per a l'índex de la fila de columnes."
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:175
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:180
 #, kde-format
 msgid ""
 "Provided variable name starts with a digit or contains special character."
@@ -16917,22 +16928,22 @@ msgstr ""
 "El nom proporcionat de la variable comença amb un dígit o conté un caràcter "
 "especial."
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:186
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:191
 #, kde-format
 msgid "Empty formula expression"
 msgstr "Expressió buida de la fórmula"
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:193
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:198
 #, kde-format
 msgid "Incorrect formula syntax: "
 msgstr "Sintaxi incorrecta de la fórmula: "
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:212
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:217
 #, kde-format
 msgid "Select a valid column"
 msgstr "Seleccioneu una columna vàlida"
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:389
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:394
 #, kde-format
 msgid "%1: fill column with function values"
 msgid_plural "%1: fill columns with function values"
