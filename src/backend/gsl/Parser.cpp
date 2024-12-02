@@ -5,7 +5,7 @@
 
 namespace Parsing {
 
-Parser::Parser(bool highPerformance): mUsedSymbolsStateMachine(highPerformance ? UsedSymbols::Initialize : UsedSymbols::No) {
+Parsing::Parser(bool highPerformance): mUsedSymbolsStateMachine(highPerformance ? UsedSymbols::Initialize : UsedSymbols::No) {
 
 }
 

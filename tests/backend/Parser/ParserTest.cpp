@@ -22,7 +22,7 @@ using namespace Parsing;
 //**********************************************************
 
 void ParserTest::testBasics() {
-	Parser::Parser parser;
+	Parsing::Parser parser;
 	const QVector<QPair<QString, double>> tests{{QStringLiteral("42"), 42.},
 												{QStringLiteral("1."), 1.},
 												{QStringLiteral("1+1"), 2.},
@@ -74,7 +74,7 @@ void ParserTest::testBasics() {
 }
 
 void ParserTest::testErrors() {
-	Parser::Parser parser;
+	Parsing::Parser parser;
 	gsl_set_error_handler_off(); // do not crash
 
 	const QVector<QString> testsNan{QString(),
@@ -107,7 +107,7 @@ void ParserTest::testErrors() {
 }
 
 void ParserTest::testVariables() {
-	Parser::Parser parser;
+	Parsing::Parser parser;
 	parser.assign_symbol("a", 1.);
 	const QVector<QPair<QString, double>> tests{{QStringLiteral("a"), 1.},
 												{QStringLiteral("a+1"), 2.},
@@ -140,7 +140,7 @@ void ParserTest::testVariables() {
 void ParserTest::testLocale() {
 // TODO: locale test currently does not work on FreeBSD
 #ifndef __FreeBSD__
-	Parser::Parser parser;
+	Parsing::Parser parser;
 	const QVector<QPair<QString, double>> tests{{QStringLiteral("1,"), 1.},
 												{QStringLiteral("1,5"), 1.5},
 												{QStringLiteral("1+0,5"), 1.5},
@@ -157,7 +157,7 @@ void ParserTest::testLocale() {
 void ParserTest::testPerformance1() {
 	const int N = 1e5;
 
-	Parser::Parser parser;
+	Parsing::Parser parser;
 
 	QBENCHMARK {
 		for (int i = 0; i < N; i++) {
@@ -171,7 +171,7 @@ void ParserTest::testPerformance1() {
 void ParserTest::testPerformance2() {
 	const int N = 1e5;
 
-	Parser::Parser parser;
+	Parsing::Parser parser;
 	QBENCHMARK {
 		for (int i = 0; i < N; i++) {
 			parser.assign_symbol("alpha", i / 100.);

@@ -1022,7 +1022,7 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 	double* min = ((struct data*)params)->paramMin;
 	double* max = ((struct data*)params)->paramMax;
 
-	Parser::Parser parser;
+	Parsing::Parser parser;
 
 	// set current values of the parameters
 	for (int i = 0; i < paramNames->size(); i++) {
@@ -1733,7 +1733,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		QString func{*(((struct data*)params)->func)};
 
 		const auto numberLocale = QLocale();
-		Parser::Parser parser;
+		Parsing::Parser parser;
 		for (size_t i = 0; i < n; i++) {
 			x = xVector[i];
 			parser.assign_symbol("x", x);
