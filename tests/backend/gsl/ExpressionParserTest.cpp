@@ -639,7 +639,7 @@ void ExpressionParserTest::testBenchmark() {
 //	xVectors << new QVector<double>({4., 5., 6., 9.}); // y
 //	QVector<double> yVector({101., 123., 345., 239., 1290., 43290., 238., 342., 823., 239.});
 //	auto* parser = ExpressionParser::getInstance();
-	parser->tryEvaluateCartesian(expr, vars, xVectors, &yVector);
+	//parser->tryEvaluateCartesian(expr, vars, xVectors, &yVector);
 
 //	QVector<double> ref({9, 10, 11, 14}); // 5 + y
 //	QCOMPARE(yVector.size(), 10);
