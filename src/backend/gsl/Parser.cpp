@@ -269,5 +269,5 @@ void clear_variable_symbols() {
 	}
 }
 
-} // namespace Parser
+} // namespace Parsing
 
