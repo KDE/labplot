@@ -5,7 +5,7 @@
 
 extern int yyparse (Parser::param *p);
 
-namespace Parser {
+namespace Parsing {
     class StaticSymbol;
     class Symbol;
 

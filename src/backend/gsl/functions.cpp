@@ -21,7 +21,7 @@
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_sf.h>
 
-namespace Parser {
+namespace Parsing {
 
 #ifdef _MSC_VER
 /* avoid intrinsics */
@@ -1010,4 +1010,4 @@ QString equalEpsilonParameterNames(int parameterIndex) {
 	}
 	return i18n("Invalid");
 }
-} // namespace Parser
+} // namespace Parsing

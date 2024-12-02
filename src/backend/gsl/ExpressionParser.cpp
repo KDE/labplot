@@ -26,7 +26,7 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_version.h>
 
-using namespace Parser;
+using namespace Parsing;
 
 namespace {
 	class ParserLastErrorMessage {

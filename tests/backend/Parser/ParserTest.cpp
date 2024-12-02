@@ -15,7 +15,7 @@
 #include <gsl/gsl_const_mksa.h>
 #include <gsl/gsl_errno.h>
 
-using namespace Parser;
+using namespace Parsing;
 
 //**********************************************************
 //****************** Function tests ************************
