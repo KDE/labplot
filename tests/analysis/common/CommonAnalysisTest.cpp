@@ -16,8 +16,8 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
-#include "backend/worksheet/plots/cartesian/XYIntegrationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
+#include "backend/worksheet/plots/cartesian/XYIntegrationCurve.h"
 
 /*!
  * test save and restore of the columns used as the data source in the analysis curve.
