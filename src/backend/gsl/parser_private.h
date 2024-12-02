@@ -3,7 +3,7 @@
 
 #include <vector>
 
-extern int yyparse (Parser::param *p);
+extern int yyparse (Parsing::param *p);
 
 namespace Parsing {
     class StaticSymbol;
