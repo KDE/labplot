@@ -4,6 +4,7 @@
  Description          : Tests for common analysis tasks
  --------------------------------------------------------------------
  SPDX-FileCopyrightText: 2024 Martin Marmsoler <martin.marmsoler@gmail.com>
+ SPDX-FileCopyrightText: 2024 Alexander Semke <alexander.semke@web.de>
 
  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -14,7 +15,153 @@
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/XYIntegrationCurve.h"
+#include "backend/worksheet/plots/cartesian/XYFitCurve.h"
+
+/*!
+ * test save and restore of the columns used as the data source in the analysis curve.
+ * the logic is centrally handled in Project and in XYAnalysisCurve, it's enough to test one analysis curve type only.
+ */
+void CommonAnalysisTest::saveRestoreSourceColumns() {
+	QString savePath;
+
+	// save
+	{
+		Project project;
+		auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+		project.addChild(ws);
+
+		auto* plot = new CartesianPlot(QStringLiteral("plot"));
+		ws->addChild(plot);
+
+		auto* sheet = new Spreadsheet(QStringLiteral("sheet"));
+		project.addChild(sheet);
+		sheet->setColumnCount(3);
+		sheet->column(0)->setName(QStringLiteral("x"));
+		sheet->column(1)->setName(QStringLiteral("y"));
+		sheet->column(2)->setName(QStringLiteral("y2"));
+
+		auto* fitCurve = new XYFitCurve(QStringLiteral("fit"));
+		plot->addChild(fitCurve);
+		fitCurve->setDataSourceType(XYAnalysisCurve::DataSourceType::Spreadsheet);
+		fitCurve->setXDataColumn(sheet->column(0));
+		fitCurve->setYDataColumn(sheet->column(1));
+		fitCurve->setY2DataColumn(sheet->column(2));
+
+		SAVE_PROJECT("saveRestoreSourceColumns");
+	}
+
+	// restore
+	{
+		Project project;
+		QCOMPARE(project.load(savePath), true);
+
+		const auto* ws = project.child<Worksheet>(0);
+		QVERIFY(ws);
+		const auto* plot = ws->child<CartesianPlot>(0);
+		QVERIFY(plot);
+		const auto* fitCurve = plot->child<XYFitCurve>(0);
+		QVERIFY(fitCurve);
+
+		const auto* xColumn = fitCurve->xDataColumn();
+		const auto* yColumn = fitCurve->yDataColumn();
+		const auto* y2Column = fitCurve->y2DataColumn();
+		QVERIFY(xColumn);
+		QCOMPARE(xColumn->name(), QStringLiteral("x"));
+		QVERIFY(yColumn);
+		QCOMPARE(yColumn->name(), QStringLiteral("y"));
+		QVERIFY(y2Column);
+		QCOMPARE(y2Column->name(), QStringLiteral("y2"));
+	}
+}
+
+/*!
+ * test save and restore of the XYCRuve used as the data source in the analysis curve.
+ * the logic is centrally handled in Project and in XYAnalysisCurve, it's enough to test one analysis curve type only.
+ */
+void CommonAnalysisTest::saveRestoreSourceCurve() {
+	QString savePath;
+
+	// save
+	{
+		Project project;
+		auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+		project.addChild(ws);
+
+		auto* plot = new CartesianPlot(QStringLiteral("plot"));
+		ws->addChild(plot);
+
+		auto* curve = new XYCurve(QStringLiteral("curve"));
+		plot->addChild(curve);
+
+		auto* fitCurve = new XYFitCurve(QStringLiteral("fit"));
+		plot->addChild(fitCurve);
+		fitCurve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
+		fitCurve->setDataSourceCurve(curve);
+
+		SAVE_PROJECT("saveRestoreSourceColumns");
+	}
+
+	// restore
+	{
+		Project project;
+		QCOMPARE(project.load(savePath), true);
+
+		const auto* ws = project.child<Worksheet>(0);
+		QVERIFY(ws);
+		const auto* plot = ws->child<CartesianPlot>(0);
+		QVERIFY(plot);
+		const auto* curve = plot->child<XYCurve>(0);
+		QVERIFY(curve);
+		const auto* fitCurve = plot->child<XYFitCurve>(0);
+		QVERIFY(fitCurve);
+		QCOMPARE(fitCurve->dataSourceCurve(), curve);
+	}
+}
+
+/*!
+ * test save and restore of the histogram used as the data source in the fit curve.
+ */
+void CommonAnalysisTest::saveRestoreSourceHistogram() {
+	QString savePath;
+
+	// save
+	{
+		Project project;
+		auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+		project.addChild(ws);
+
+		auto* plot = new CartesianPlot(QStringLiteral("plot"));
+		ws->addChild(plot);
+
+		auto* hist = new Histogram(QStringLiteral("hist"));
+		plot->addChild(hist);
+
+		auto* fitCurve = new XYFitCurve(QStringLiteral("fit"));
+		plot->addChild(fitCurve);
+		fitCurve->setDataSourceType(XYAnalysisCurve::DataSourceType::Histogram);
+		fitCurve->setDataSourceHistogram(hist);
+
+		SAVE_PROJECT("saveRestoreSourceColumns");
+	}
+
+	// restore
+	{
+		Project project;
+		QCOMPARE(project.load(savePath), true);
+
+		const auto* ws = project.child<Worksheet>(0);
+		QVERIFY(ws);
+		const auto* plot = ws->child<CartesianPlot>(0);
+		QVERIFY(plot);
+		const auto* hist = plot->child<Histogram>(0);
+		QVERIFY(hist);
+		const auto* fitCurve = plot->child<XYFitCurve>(0);
+		QVERIFY(fitCurve);
+		QCOMPARE(fitCurve->dataSourceHistogram(), hist);
+	}
+}
 
 void CommonAnalysisTest::dataImportRecalculationAnalysisCurveColumnDependency() {
 	Project project;
