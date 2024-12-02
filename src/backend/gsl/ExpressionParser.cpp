@@ -31,7 +31,7 @@ using namespace Parsing;
 namespace {
 	class ParserLastErrorMessage {
 	public:
-		ParserLastErrorMessage(const Parsing::Parser& parser, QString& lastErrorMessage): mParser(parser), mLastErrorMessage(lastErrorMessage) {
+		ParserLastErrorMessage(const Parser& parser, QString& lastErrorMessage): mParser(parser), mLastErrorMessage(lastErrorMessage) {
 
 		}
 		~ParserLastErrorMessage() {
@@ -39,7 +39,7 @@ namespace {
 		}
 
 	private:
-		const Parsing::Parser& mParser;
+		const Parser& mParser;
 		QString& mLastErrorMessage;
 	};
 }
@@ -279,7 +279,7 @@ const QStringList& ExpressionParser::constantsUnits() {
 	return m_constantsUnits;
 }
 
-const QVector<Parsing::ConstantGroups>& ExpressionParser::constantsGroupIndices() {
+const QVector<ConstantGroups>& ExpressionParser::constantsGroupIndices() {
 	return m_constantsGroupIndex;
 }
 
@@ -290,7 +290,7 @@ bool ExpressionParser::isValid(const QString& expr, const QStringList& vars) {
 
 	gsl_set_error_handler_off();
 
-	Parsing::Parser parser;
+	Parser parser;
 	parser.setSkipSpecialFunctionEvaluation(true);
 
 	for (const auto& var : vars)
@@ -355,7 +355,7 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 	const double step = range.stepSize(count);
 	DEBUG(Q_FUNC_INFO << ", range = " << range.toStdString() << ", step = " << step)
 
-	Parsing::Parser parser;
+	Parser parser;
 	ParserLastErrorMessage lock(parser, m_lastErrorMessage);
 
 	for (int i = 0; i < paramNames.size(); ++i)
@@ -412,7 +412,7 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 	const Range<double> range{min, max};
 	const double step = range.stepSize(count);
 
-	Parsing::Parser parser;
+	Parser parser;
 	ParserLastErrorMessage lock(parser, m_lastErrorMessage);
 
 	const auto numberLocale = QLocale();
@@ -442,7 +442,7 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr, QVector<double>
 	DEBUG(Q_FUNC_INFO << ", v3")
 	gsl_set_error_handler_off();
 
-	Parsing::Parser parser;
+	Parser parser;
 	ParserLastErrorMessage lock(parser, m_lastErrorMessage);
 
 	const auto numberLocale = QLocale();
@@ -471,7 +471,7 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 	DEBUG(Q_FUNC_INFO << ", v4")
 	gsl_set_error_handler_off();
 
-	Parsing::Parser parser;
+	Parser parser;
 	ParserLastErrorMessage lock(parser, m_lastErrorMessage);
 
 	for (int i = 0; i < paramNames.size(); ++i)
@@ -682,11 +682,11 @@ double rsample(const std::string_view& variable, const std::weak_ptr<Payload> pa
 	return value;
 }
 
-void ExpressionParser::setSpecialFunctionValuePayload(const char* function_name, Parsing::func_tValuePayload funct, std::shared_ptr<Parsing::Payload> payload) {
+void ExpressionParser::setSpecialFunctionValuePayload(const char* function_name, func_tValuePayload funct, std::shared_ptr<Payload> payload) {
 	Parser::set_specialfunctionValuePayload(function_name, funct, payload);
 }
 
-void ExpressionParser::setSpecialFunction2ValuePayload(const char* function_name, Parsing::func_t2ValuePayload funct, std::shared_ptr<Parsing::Payload> payload) {
+void ExpressionParser::setSpecialFunction2ValuePayload(const char* function_name, func_t2ValuePayload funct, std::shared_ptr<Payload> payload) {
 	Parser::set_specialfunction2ValuePayload(function_name, funct, payload);
 }
 
@@ -731,7 +731,7 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 	const auto payload = std::make_shared<PayloadExpressionParser>(&vars, &xVectors);
 	const auto payloadConst = std::make_shared<PayloadExpressionParser>(&vars, &xVectors, true);
 
-	Parsing::Parser parser(performanceOptimization);
+	Parser parser(performanceOptimization);
 
 	parser.set_specialfunctionValueVariablePayload(specialfun_cell, cell, payloadConst);
 	parser.set_specialfunction2ValueVariablePayload(specialfun_cell_default_value, cell_default_value, payloadConst);
@@ -794,7 +794,7 @@ bool ExpressionParser::tryEvaluatePolar(const QString& expr,
 	const Range<double> range{min, max};
 	const double step = range.stepSize(count);
 
-	Parsing::Parser parser;
+	Parser parser;
 	ParserLastErrorMessage lock(parser, m_lastErrorMessage);
 
 	const auto numberLocale = QLocale();
@@ -830,7 +830,7 @@ bool ExpressionParser::tryEvaluateParametric(const QString& xexpr,
 	const Range<double> range{min, max};
 	const double step = range.stepSize(count);
 
-	Parsing::Parser parser;
+	Parser parser;
 	ParserLastErrorMessage lock(parser, m_lastErrorMessage);
 
 	const auto numberLocale = QLocale();
