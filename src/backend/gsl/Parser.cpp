@@ -3,7 +3,7 @@
 #include "parser_private.h"
 #include "backend/lib/Debug.h"
 
-namespace Parser {
+namespace Parsing {
 
 Parser::Parser(bool highPerformance): mUsedSymbolsStateMachine(highPerformance ? UsedSymbols::Initialize : UsedSymbols::No) {
 
