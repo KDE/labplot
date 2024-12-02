@@ -14,7 +14,7 @@
 #include <memory>
 #include <string_view>
 
-namespace Parser {
+namespace Parsing {
 
 struct Payload;
 
@@ -32,6 +32,6 @@ using func_tVariablePayload = std::function<double(const std::string_view&, cons
 using func_tValueVariablePayload = std::function<double(double, const std::string_view&, const std::weak_ptr<Payload>)>;
 using func_t2ValueVariablePayload = std::function<double(double, double, const std::string_view&, const std::weak_ptr<Payload>)>;
 using func_t3ValueVariablePayload = std::function<double(double, double, double, const std::string_view&, const std::weak_ptr<Payload>)>;
-} // namespace Parser
+} // namespace Parsing
 
 #endif /*PARSERFUNCTIONTYPES_H*/

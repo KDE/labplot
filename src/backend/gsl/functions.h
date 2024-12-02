@@ -17,7 +17,7 @@
 #include <gsl/gsl_version.h>
 #include <variant>
 
-namespace Parser {
+namespace Parsing {
 enum class FunctionGroups;
 
 struct funs {
@@ -197,6 +197,6 @@ double greaterEqualThan(const double v1, const double v2);
 double lessThan(const double v1, const double v2);
 double lessEqualThan(const double v1, const double v2);
 
-} // namespace Parser
+} // namespace Parsing
 
 #endif /*FUNCTIONS_H*/

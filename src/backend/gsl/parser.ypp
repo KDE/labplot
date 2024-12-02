@@ -44,7 +44,7 @@ Parser::BaseSymbol* tptr;   /* For returning symbol-table pointers */
 
 %{
 
-namespace Parser {
+namespace Parsing {
 	struct param;
         int yylex(YYSTYPE* yyval, param *p);
 } // Parser
@@ -497,7 +497,7 @@ expr:      NUM       { $$ = $1;                            }
 
 %%
 
-namespace Parser {
+namespace Parsing {
 	/* Static symbols like the functions ans variables in functions.cpp and constants.cpp */
 	std::vector<StaticSymbol*> static_symbols;
 	/* Special functions and others */
@@ -804,4 +804,4 @@ namespace Parser {
                 //pdebug("PARSER: Found single operator '%c'\n", c);
 		return c;
 	}
-} // namespace parser
+} // namespace Parsing

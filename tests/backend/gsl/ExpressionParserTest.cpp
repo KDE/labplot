@@ -2,7 +2,7 @@
 #include "backend/gsl/ExpressionParser.h"
 #include "backend/gsl/functions.h"
 
-using namespace Parser;
+using namespace Parsing;
 
 namespace {
 func_t1 getFunction1(const QString& s) {

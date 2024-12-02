@@ -19,7 +19,7 @@
 #include <variant>
 #include "backend/lib/Debug.h"
 
-namespace Parser {
+namespace Parsing {
 
 	class Parser;
 
@@ -108,6 +108,6 @@ struct StaticSymbol : public BaseSymbol {
 		value = fn;
 	}
 };
-} // namespace Parser
+} // namespace Parsing
 
 #endif /*PARSER_H*/
