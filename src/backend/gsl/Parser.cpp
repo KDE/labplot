@@ -9,7 +9,7 @@ Parsing::Parser(bool highPerformance): mUsedSymbolsStateMachine(highPerformance 
 
 }
 
-double Parser::parse(const char* string, const char* locale) {
+double Parsing::parse(const char* string, const char* locale) {
 	DEBUG_PARSER("PARSER: parse('" << string << "') len = " << (int)strlen(string));
 	DEBUG_PARSER("********************************");
 
@@ -49,7 +49,7 @@ double Parser::parse(const char* string, const char* locale) {
 	return mResult;
 }
 
-double Parser::parse_with_vars(const char *str, const parser_var *vars, int nvars, const char* locale) {
+double Parsing::parse_with_vars(const char *str, const parser_var *vars, int nvars, const char* locale) {
 	DEBUG_PARSER("PARSER: parse_with_var('" << str << "') len = " << (int)strlen(str));
 
 	int i;
@@ -61,23 +61,23 @@ double Parser::parse_with_vars(const char *str, const parser_var *vars, int nvar
 	return parse(str, locale);
 }
 
-int Parser::parseErrors() const {
+int Parsing::parseErrors() const {
 	return mParseErrors;
 }
 
-std::string Parser::lastErrorMessage() const {
+std::string Parsing::lastErrorMessage() const {
 	return mLastErrorMessage;
 }
 
-size_t Parser::variablesCounter() const {
+size_t Parsing::variablesCounter() const {
 	return mVariablesCounter;
 }
 
-void Parser::setSkipSpecialFunctionEvaluation(bool skip) {
+void Parsing::setSkipSpecialFunctionEvaluation(bool skip) {
 	mSkipSpecialFunctionEvaluation = skip;
 }
 
-bool Parser::skipSpecialFunctionEvaluation() const {
+bool Parsing::skipSpecialFunctionEvaluation() const {
 	return mSkipSpecialFunctionEvaluation;
 }
 
@@ -88,7 +88,7 @@ int yyerror(param *p, const char *s) {
 	return 0;
 }
 
-BaseSymbol* Parser::get_used_symbol(const char* symbol_name) {
+BaseSymbol* Parsing::get_used_symbol(const char* symbol_name) {
 	for (auto* s: mUsedSymbols) {
 		if (s->name == symbol_name) {
 			DEBUG_PARSER("PARSER:		USED SYMBOL FOUND\n");
@@ -99,11 +99,11 @@ BaseSymbol* Parser::get_used_symbol(const char* symbol_name) {
 	return nullptr;
 }
 
-int Parser::remove_symbol(const char *symbol_name) {
+int Parsing::remove_symbol(const char *symbol_name) {
 	return remove_symbol_(symbol_name);
 }
 
-bool Parser::set_specialfunctionPayload(const char* function_name, func_tPayload function, std::weak_ptr<Payload> payload) {
+bool Parsing::set_specialfunctionPayload(const char* function_name, func_tPayload function, std::weak_ptr<Payload> payload) {
 	DEBUG_PARSER("PARSER: set_SpecialFunction0()");
 
 
@@ -118,7 +118,7 @@ bool Parser::set_specialfunctionPayload(const char* function_name, func_tPayload
 	return true;
 }
 
-bool Parser::set_specialfunctionValuePayload(const char* function_name, func_tValuePayload function, std::shared_ptr<Payload> payload) {
+bool Parsing::set_specialfunctionValuePayload(const char* function_name, func_tValuePayload function, std::shared_ptr<Payload> payload) {
 	DEBUG_PARSER("PARSER: set_specialfunctionValuePayload()");
 
 
@@ -132,7 +132,7 @@ bool Parser::set_specialfunctionValuePayload(const char* function_name, func_tVa
 	return true;
 }
 
-bool Parser::set_specialfunction2ValuePayload(const char* function_name, func_t2ValuePayload function, std::shared_ptr<Payload> payload) {
+bool Parsing::set_specialfunction2ValuePayload(const char* function_name, func_t2ValuePayload function, std::shared_ptr<Payload> payload) {
 	DEBUG_PARSER("PARSER: set_specialfunction2ValuePayload()");
 
 
@@ -146,7 +146,7 @@ bool Parser::set_specialfunction2ValuePayload(const char* function_name, func_t2
 	return true;
 }
 
-bool Parser::set_specialfunctionVariablePayload(const char* function_name, func_tVariablePayload function, std::shared_ptr<Payload> payload) {
+bool Parsing::set_specialfunctionVariablePayload(const char* function_name, func_tVariablePayload function, std::shared_ptr<Payload> payload) {
 	DEBUG_PARSER("PARSER: set_specialfunctionVariablePayload()");
 
 
@@ -160,7 +160,7 @@ bool Parser::set_specialfunctionVariablePayload(const char* function_name, func_
 	return true;
 }
 
-bool Parser::set_specialfunctionValueVariablePayload(const char* function_name, func_tValueVariablePayload function, std::shared_ptr<Payload> payload) {
+bool Parsing::set_specialfunctionValueVariablePayload(const char* function_name, func_tValueVariablePayload function, std::shared_ptr<Payload> payload) {
 	DEBUG_PARSER("PARSER: set_specialfunctionValueVariablePayload()");
 
 
@@ -175,7 +175,7 @@ bool Parser::set_specialfunctionValueVariablePayload(const char* function_name, 
 	return true;
 }
 
-bool Parser::set_specialfunction2ValueVariablePayload(const char* function_name, func_t2ValueVariablePayload function, std::shared_ptr<Payload> payload) {
+bool Parsing::set_specialfunction2ValueVariablePayload(const char* function_name, func_t2ValueVariablePayload function, std::shared_ptr<Payload> payload) {
 	DEBUG_PARSER("PARSER: set_specialfunction2ValueVariablePayload()");
 
 
@@ -190,7 +190,7 @@ bool Parser::set_specialfunction2ValueVariablePayload(const char* function_name,
 	return true;
 }
 
-bool Parser::set_specialfunction3ValueVariablePayload(const char* function_name, func_t3ValueVariablePayload function, std::shared_ptr<Payload> payload) {
+bool Parsing::set_specialfunction3ValueVariablePayload(const char* function_name, func_t3ValueVariablePayload function, std::shared_ptr<Payload> payload) {
 	DEBUG_PARSER("PARSER: set_specialfunction3ValueVariablePayload()");
 
 
@@ -205,11 +205,11 @@ bool Parser::set_specialfunction3ValueVariablePayload(const char* function_name,
 	return true;
 }
 
-UsedSymbols Parser::usedSymbolsState() const {
+UsedSymbols Parsing::usedSymbolsState() const {
 	return mUsedSymbolsStateMachine;
 }
 
-std::vector<std::string> Parser::get_used_symbols() {
+std::vector<std::string> Parsing::get_used_symbols() {
 	std::vector<std::string> names;
 	for (const auto* s: mUsedSymbols) {
 		names.push_back(std::string(s->name));
@@ -217,7 +217,7 @@ std::vector<std::string> Parser::get_used_symbols() {
 	return names;
 }
 
-void Parser::setLastErrorMessage(const std::string& str) {
+void Parsing::setLastErrorMessage(const std::string& str) {
 	mLastErrorMessage = str;
 }
 

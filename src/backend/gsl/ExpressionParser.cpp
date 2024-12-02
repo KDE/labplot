@@ -279,7 +279,7 @@ const QStringList& ExpressionParser::constantsUnits() {
 	return m_constantsUnits;
 }
 
-const QVector<Parser::ConstantGroups>& ExpressionParser::constantsGroupIndices() {
+const QVector<Parsing::ConstantGroups>& ExpressionParser::constantsGroupIndices() {
 	return m_constantsGroupIndex;
 }
 
@@ -682,20 +682,20 @@ double rsample(const std::string_view& variable, const std::weak_ptr<Payload> pa
 	return value;
 }
 
-void ExpressionParser::setSpecialFunctionValuePayload(const char* function_name, Parser::func_tValuePayload funct, std::shared_ptr<Parser::Payload> payload) {
-	Parsing::Parser::set_specialfunctionValuePayload(function_name, funct, payload);
+void ExpressionParser::setSpecialFunctionValuePayload(const char* function_name, Parsing::func_tValuePayload funct, std::shared_ptr<Parsing::Payload> payload) {
+	Parsing::Parsing::set_specialfunctionValuePayload(function_name, funct, payload);
 }
 
-void ExpressionParser::setSpecialFunction2ValuePayload(const char* function_name, Parser::func_t2ValuePayload funct, std::shared_ptr<Parser::Payload> payload) {
-	Parsing::Parser::set_specialfunction2ValuePayload(function_name, funct, payload);
+void ExpressionParser::setSpecialFunction2ValuePayload(const char* function_name, Parsing::func_t2ValuePayload funct, std::shared_ptr<Parsing::Payload> payload) {
+	Parsing::Parsing::set_specialfunction2ValuePayload(function_name, funct, payload);
 }
 
 void ExpressionParser::setSpecialFunctionVariablePayload(const char* function_name, func_tVariablePayload funct, std::shared_ptr<Payload> payload) {
-	Parsing::Parser::set_specialfunctionVariablePayload(function_name, funct, payload);
+	Parsing::Parsing::set_specialfunctionVariablePayload(function_name, funct, payload);
 }
 
 void ExpressionParser::setSpecialFunctionValueVariablePayload(const char* function_name, func_tValueVariablePayload funct, std::shared_ptr<Payload> payload) {
-	Parsing::Parser::set_specialfunctionValueVariablePayload(function_name, funct, payload);
+	Parsing::Parsing::set_specialfunctionValueVariablePayload(function_name, funct, payload);
 }
 
 /*!
