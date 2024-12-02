@@ -20,7 +20,7 @@
  */
 FunctionsWidget::FunctionsWidget(QWidget* parent)
 	: QWidget(parent) {
-	using Groups = Parser::FunctionGroups;
+	using Groups = Parsing::FunctionGroups;
 
 	ui.setupUi(this);
 	ui.bInsert->setIcon(QIcon::fromTheme(QStringLiteral("edit-paste")));
@@ -30,7 +30,7 @@ FunctionsWidget::FunctionsWidget(QWidget* parent)
 	QVector<int> separators;
 	for (int i = 0; i < (int)Groups::END; i++) {
 		const auto group = static_cast<Groups>(i);
-		ui.cbGroup->addItem(Parser::FunctionGroupsToString(group), (int)i);
+		ui.cbGroup->addItem(Parsing::FunctionGroupsToString(group), (int)i);
 
 		// Add separator before these groups
 		if (group == Groups::ColumnStatistics || group == Groups::AiryFunctionsAndDerivatives || group == Groups::RandomNumberGenerator
@@ -82,15 +82,15 @@ void FunctionsWidget::groupChanged(int index) {
 		return; // separator selected
 
 	bool ok;
-	const auto groupIndex = static_cast<Parser::FunctionGroups>(d.toInt(&ok));
+	const auto groupIndex = static_cast<Parsing::FunctionGroups>(d.toInt(&ok));
 	if (!ok)
 		return;
 
 	static const QStringList& functions = m_expressionParser->functions();
 	static const QStringList& names = m_expressionParser->functionsDescriptions();
-	static const QVector<Parser::FunctionGroups>& indices = m_expressionParser->functionsGroupIndices();
+	static const QVector<Parsing::FunctionGroups>& indices = m_expressionParser->functionsGroupIndices();
 
-	QDEBUG(Q_FUNC_INFO << ", index = " << Parser::FunctionGroupsToString(groupIndex));
+	QDEBUG(Q_FUNC_INFO << ", index = " << Parsing::FunctionGroupsToString(groupIndex));
 
 	ui.lwFunctions->clear();
 	for (int i = 0; i < names.size(); ++i) {
