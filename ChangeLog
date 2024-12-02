@@ -15,6 +15,7 @@ New features:
 		* Improved livedata import
 		* Add possibility to specify custom column datatypes (mandatory for livedata)
 		* Notify about the unsupported UTF16 encoding (BUG 496215)
+		* Read live data with multiple columns also for UDP and local sockets and for Serial Port
 	* [analysis]
 		* Add possibility to do calculations on curves
 		* Automatically recalculate analysis curves on data change

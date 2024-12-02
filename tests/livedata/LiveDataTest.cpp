@@ -18,15 +18,29 @@
 #include <QEventLoop>
 #include <QTcpServer>
 #include <QTimer>
+#include <QUdpSocket>
 
 void LiveDataTest::initTestCase() {
-	qDebug()<<"here";
 	CommonTest::initTestCase();
+
+	// initializet the TCP socket/server
 	m_tcpServer = new QTcpServer(this);
 	if (!m_tcpServer->listen())
 		QFAIL("Failed to start the TCP server. "/* + QString(m_tcpServer->errorString())*/);
 
 	connect(m_tcpServer, &QTcpServer::newConnection, this, &LiveDataTest::sendDataOverTcp);
+
+	// initialize the UDP socket
+	m_udpSocket = new QUdpSocket(this);
+	m_udpSocket->bind(QHostAddress::LocalHost, 1234);
+	auto* timer = new QTimer(this);
+	connect(timer, &QTimer::timeout, this, &LiveDataTest::sendDataOverTcp);
+	timer->start(1000);
+}
+
+void LiveDataTest::cleanupTestCase() {
+	delete m_tcpServer;
+	delete m_udpSocket;
 }
 
 // ##############################################################################
@@ -1406,6 +1420,40 @@ void LiveDataTest::testTcpReadContinuousFixed00() {
 	QCOMPARE(dataSource.column(1)->integerAt(0), 2);
 }
 
+void LiveDataTest::testUdpReadContinuousFixed00() {
+	// initialize the live data source
+	LiveDataSource dataSource(QStringLiteral("test"), false);
+	dataSource.setSourceType(LiveDataSource::SourceType::NetworkUDPSocket);
+	dataSource.setFileType(AbstractFileFilter::FileType::Ascii);
+	dataSource.setHost(QStringLiteral("localhost"));
+	dataSource.setPort(m_tcpServer->serverPort());
+	dataSource.setReadingType(LiveDataSource::ReadingType::ContinuousFixed);
+	dataSource.setSampleSize(100); // big number of samples, more then the new data has, meaning we read all new data
+	dataSource.setUpdateType(LiveDataSource::UpdateType::TimeInterval);
+	dataSource.setUpdateInterval(10000);
+
+	// initialize the ASCII filter
+	auto* filter = new AsciiFilter();
+	auto properties = filter->defaultProperties();
+	properties.headerEnabled = false;
+	properties.automaticSeparatorDetection = false;
+	properties.separator = QStringLiteral(",");
+	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
+	dataSource.setFilter(filter);
+
+	// read the data and perform checks, after the initial read all data is read
+	dataSource.read();
+
+	QCOMPARE(dataSource.columnCount(), 2);
+	QCOMPARE(dataSource.rowCount(), 1);
+
+	QCOMPARE(dataSource.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(dataSource.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	QCOMPARE(dataSource.column(0)->integerAt(0), 1);
+	QCOMPARE(dataSource.column(1)->integerAt(0), 2);
+}
+
 // ##############################################################################
 // ##########################  helper functions #################################
 // ##############################################################################
@@ -1422,9 +1470,11 @@ void LiveDataTest::waitForSignal(QObject* sender, const char* signal) {
 }
 
 void LiveDataTest::sendDataOverTcp() {
+	if (!m_tcpServer)
+		return;
+
 	QByteArray block;
 	QDataStream out(&block, QIODevice::WriteOnly);
-	out.setVersion(QDataStream::Qt_5_15);
 
 	out << "1,2";
 
@@ -1437,8 +1487,10 @@ void LiveDataTest::sendDataOverTcp() {
 }
 
 void LiveDataTest::sendDataOverUdp() {
+	if (!m_udpSocket)
+		return;
 
+	m_udpSocket->writeDatagram("1,2", QHostAddress::LocalHost, 1234);
 }
-
 
 QTEST_MAIN(LiveDataTest)
