@@ -706,12 +706,15 @@ namespace Parsing {
 	#endif
 			double result;
 			if (locale != nullptr) {
-                                auto res = std::from_chars(s.data(), s.data() + s.size(), result);
-                                remain = res.ptr;
+        #if defined(__OpenBSD__) || defined(__HAIKU__)
+				result = strtod(s.data(), &remain);
+	#else
+				result = strtod_l(s.data(), &remain, locale);
+	#endif
+
 				freelocale(locale);
                         } else { // use C locale
-                            auto res = std::from_chars(s.data(), s.data() + s.size(), result);
-                            remain = res.ptr;
+                            result = strtod(s.data(), &remain);
                         }
 
                         DEBUG_PARSER("PARSER:		Remain: '" << remain << "'");
@@ -781,7 +784,7 @@ namespace Parsing {
 				}
 
                                 if (p->parser->usedSymbolsState() == UsedSymbols::Initialize) {
-					bool found = false;
+					// bool found = false;
 //                                        for (const auto* s: p->parser->mUsedSymbols) {
 //							if (s->name == symbol_name) {
 //								found = true;
