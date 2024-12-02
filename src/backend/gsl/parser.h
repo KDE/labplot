@@ -21,10 +21,6 @@
 
 namespace Parser {
 
-class StaticSymbol;
-class Symbol;
-class Parser;
-
 // variables to pass to parser
 #define MAX_VARNAME_LENGTH 10
 typedef struct parser_var {

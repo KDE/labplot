@@ -54,7 +54,7 @@ public:
 							  QVector<double>* yVector,
 							  const QStringList& paramNames,
 							  const QVector<double>& paramValues);
-	static bool tryEvaluateCartesian(const QString& expr,
+	bool tryEvaluateCartesian(const QString& expr,
 									 const QStringList& vars,
 									 const QVector<QVector<double>*>& xVectors,
 									 QVector<double>* yVector,
