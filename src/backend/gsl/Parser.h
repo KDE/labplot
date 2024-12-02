@@ -77,6 +77,6 @@ private:
 	friend class ExpressionParser;
 };
 
-}
+} // namespace Parsing
 
 #endif // PARSERCLASS_H
