@@ -6,8 +6,8 @@
 extern int yyparse (Parsing::param *p);
 
 namespace Parsing {
-    class StaticSymbol;
-    class Symbol;
+    struct StaticSymbol;
+    struct Symbol;
 
     extern std::vector<StaticSymbol*> static_symbols;
     extern std::vector<Symbol*> variable_symbols;
