@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-01 00:37+0000\n"
-"PO-Revision-Date: 2024-11-27 09:25+0100\n"
+"PO-Revision-Date: 2024-12-01 10:01+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -10113,15 +10113,14 @@ msgid "%1: set logical position"
 msgstr "%1: establix la posició lògica"
 
 #: src/frontend/AboutDialog.cpp:84
-#, fuzzy, kde-format
-#| msgid "Info"
+#, kde-format
 msgid "Copy Info"
-msgstr "Informació"
+msgstr "Copia la informació"
 
 #: src/frontend/AboutDialog.cpp:88
 #, kde-format
 msgid "Donate"
-msgstr ""
+msgstr "Donació de diners"
 
 #: src/frontend/AboutDialog.cpp:111
 #, kde-format
@@ -10340,10 +10339,9 @@ msgid "Binary Log File (BLF) file support"
 msgstr "Implementació de fitxers Binary Log File (BLF)"
 
 #: src/frontend/AboutDialog.cpp:281
-#, fuzzy, kde-format
-#| msgid "Comments:"
+#, kde-format
 msgid "Components:"
-msgstr "Comentaris:"
+msgstr "Components:"
 
 #: src/frontend/colormaps/ColorMapsDialog.cpp:39
 #, kde-format
@@ -10784,18 +10782,7 @@ msgid "Custom column modes, comma separated"
 msgstr "Noms de columna personalitzats, separats per comes"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:122
-#, fuzzy, kde-format
-#| msgid ""
-#| "If not empty, the number of columns must match the number of column names "
-#| "if provided and it must match the number of columns in the imported "
-#| "fileDatatypes:<table><tr><td>%1</td><td>Integer number with 32bit size "
-#| "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
-#| "number with 64bit size (−9.223.372.036.854.775.808 .. "
-#| "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
-#| "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
-#| "td><td>Datetime with the format from the datetime text box if not empty, "
-#| "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
-#| "td></tr></table>"
+#, kde-format
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
 "provided and it must match the number of columns in the imported file."
@@ -10810,7 +10797,7 @@ msgid ""
 msgstr ""
 "Si no està buit, el nombre de columnes cal que coincidisca amb el nombre de "
 "noms de columnes si s'han proporcionat i cal que coincidisca amb el nombre "
-"de columnes en els fitxers de tipus de dades importats:<table><tr><td>%1</"
+"de columnes del fitxer importat:<br>Tipus de dades:<table><tr><td>%1</"
 "td><td>Nombre enter de 32 bits de mida (−2.147.483.648 a 2.147.483.647).</"
 "td></tr><tr><td>%2</td><td>Nombre enter de 64 bits de mida "
 "(−9.223.372.036.854.775.808 a 9.223.372.036.854.775.807).</td></tr><tr><td>"
@@ -14559,17 +14546,14 @@ msgid "Watch video tutorials:"
 msgstr "Mireu les guies d'aprenentatge en vídeo:"
 
 #: src/frontend/LabPlot.cpp:47
-#, fuzzy, kde-format
-#| msgid "Mastodon:"
+#, kde-format
 msgid "Discuss on Mastodon:"
-msgstr "Mastodon:"
+msgstr "Debats a Mastodon:"
 
 #: src/frontend/LabPlot.cpp:48
-#, fuzzy, kde-format
-#| msgctxt "@info:credit"
-#| msgid "Developer"
+#, kde-format
 msgid "Development:"
-msgstr "Desenvolupador"
+msgstr "Desenvolupament:"
 
 #: src/frontend/LabPlot.cpp:49
 #, kde-format
@@ -24930,75 +24914,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "Executable Path:"
-#~ msgstr "Camí cap a l'executable:"
-
-#~ msgid "QADS"
-#~ msgstr "QADS"
-
-#~ msgid "Cantor"
-#~ msgstr "Cantor"
-
-#~ msgid "Poppler"
-#~ msgstr "Poppler"
-
-#~ msgid "Discount"
-#~ msgstr "Discount"
-
-#~ msgid "KUserfeedback"
-#~ msgstr "KUserFeedback"
-
-#~ msgid "KSyntaxHighlighting"
-#~ msgstr "KSyntaxHighlighting"
-
-#~ msgid "Purpose"
-#~ msgstr "Purpose"
-
-#~ msgid "Qt SerialPort"
-#~ msgstr "Qt SerialPort"
-
-#~ msgid "Qt MQTT"
-#~ msgstr "Qt MQTT"
-
-#~ msgid "GSL"
-#~ msgstr "GSL"
-
-#~ msgid "FFTW3"
-#~ msgstr "FFTW3"
-
-#~ msgid "libcerf"
-#~ msgstr "libcerf"
-
-#~ msgid "Eigen3"
-#~ msgstr "Eigen3"
-
-#~ msgid "liborigin"
-#~ msgstr "liborigin"
-
-#~ msgid "HDF5"
-#~ msgstr "HDF5"
-
-#~ msgid "NetCDF"
-#~ msgstr "NetCDF"
-
-#~ msgid "CFITSIO"
-#~ msgstr "CFITSIO"
-
-#~ msgid "ReadStat"
-#~ msgstr "ReadStat"
-
-#~ msgid "Matio"
-#~ msgstr "Matio"
-
-#~ msgid "QXlsx"
-#~ msgstr "QXlsx"
-
-#~ msgid "ORCUS"
-#~ msgstr "ORCUS"
-
-#~ msgid "MCAP"
-#~ msgstr "MCAP"
-
-#~ msgid "Vector BLF"
-#~ msgstr "Vector BLF"
