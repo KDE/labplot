@@ -66,7 +66,7 @@ public:
 	Range(const QString& start, const QString& end, const Format format = Format::Numeric, const Scale scale = Scale::Linear) {
 		const auto numberLocale = QLocale();
 
-		Parser::Parser parser;
+		Parsing::Parser parser;
 
 		// min
 		double min = parser.parse(qPrintable(start.simplified()), qPrintable(numberLocale.name()));
