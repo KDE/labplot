@@ -19,7 +19,7 @@
 
 class ExpressionParser;
 
-namespace Parser {
+namespace Parsing {
 
 struct BaseSymbol;
 struct Symbol;
