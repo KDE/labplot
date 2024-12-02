@@ -506,7 +506,7 @@ namespace Parsing {
         void init_static_symbols();
 
         /* add new symbol with value or just set value if symbol is a variable */
-        BaseSymbol* Parsing::assign_symbol(const char* symbol_name, double value) {
+        BaseSymbol* Parser::assign_symbol(const char* symbol_name, double value) {
                 DEBUG_PARSER("PARSER: assign_symbol() : symbol_name = '" << symbol_name << "', value = " << value);
 
                 BaseSymbol* ptr = nullptr;
