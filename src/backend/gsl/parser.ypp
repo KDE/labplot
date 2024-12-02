@@ -687,7 +687,7 @@ namespace Parsing {
                         auto s = p->string.substr(p->pos);
 
 			/* convert to double */
-                        const char *remain;
+                        char *remain;
 	#if defined(_WIN32)
 			locale_t locale = _create_locale(LC_NUMERIC, p->locale);
 			if (locale == NULL) {
