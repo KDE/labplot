@@ -7,7 +7,7 @@
 
 #include <KLocalizedString>
 
-namespace Parser {
+namespace Parsing {
 
 QString constantGroupsToString(ConstantGroups group) {
 	switch (group) {
@@ -202,4 +202,4 @@ struct cons _constants[] = {
 
 const int _number_constants = sizeof(_constants) / sizeof(cons);
 
-} // namespace Parser
+} // namespace Parsing
