@@ -618,8 +618,10 @@ namespace Parsing {
         int getcharstr(param *p) {
                 DEBUG_PARSER(" getcharstr() pos = " << (int)(p->pos));
 
-                if (p->pos >= p->string.size())
+                if (p->pos >= p->string.size()) {
+                        p->pos++;
                         return YYEOF;
+                }
                 DEBUG_PARSER("PARSER: 	char is " << p->string[p->pos]);
                 return p->string[(p->pos)++];
         }
@@ -724,7 +726,7 @@ namespace Parsing {
                         DEBUG_PARSER("PARSER:		Result = " << result);
                         yyval->dval = result;
 
-                                        p->pos += s.size() - strlen(remain);
+                        p->pos += s.size() - strlen(remain);
 
 			return NUM;
 		}

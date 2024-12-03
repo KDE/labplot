@@ -22,7 +22,7 @@ using namespace Parsing;
 //**********************************************************
 
 void ParserTest::testBasics() {
-	Parsing::Parser parser;
+	Parsing::Parser parser(false);
 	const QVector<QPair<QString, double>> tests{{QStringLiteral("42"), 42.},
 												{QStringLiteral("1."), 1.},
 												{QStringLiteral("1+1"), 2.},
@@ -74,7 +74,7 @@ void ParserTest::testBasics() {
 }
 
 void ParserTest::testErrors() {
-	Parsing::Parser parser;
+	Parsing::Parser parser(false);
 	gsl_set_error_handler_off(); // do not crash
 
 	const QVector<QString> testsNan{QString(),
@@ -107,7 +107,7 @@ void ParserTest::testErrors() {
 }
 
 void ParserTest::testVariables() {
-	Parsing::Parser parser;
+	Parsing::Parser parser(false);
 	parser.assign_symbol("a", 1.);
 	const QVector<QPair<QString, double>> tests{{QStringLiteral("a"), 1.},
 												{QStringLiteral("a+1"), 2.},
