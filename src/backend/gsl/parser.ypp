@@ -95,6 +95,8 @@ namespace {
 %token <operator> AND "&&"
 %token <operator> LE "<="
 %token <operator> GE ">="
+/* required for bison < 3.7 (https://cygwin.com/pipermail/cygwin/2021-August/249165.html)*/
+%token T_EOF 0 "end of file"
 %type  <dval>  expr
 
 %right '='
@@ -108,9 +110,9 @@ input:   /* empty */
 	| input line
 ;
 
-line:	YYEOF
-        | expr YYEOF   { p->result = $1; }
-        | error YYEOF { yyerrok; }
+line:	T_EOF
+        | expr T_EOF   { p->result = $1; }
+        | error T_EOF { yyerrok; }
 ;
 
 expr:      NUM       { $$ = $1;                            }
