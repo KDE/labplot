@@ -50,8 +50,6 @@ namespace Parsing {
 } // Parser
 
 namespace {
-	double res;
-
         static void wrongArgumentNumberMessage(Parsing::param* p, const std::string_view& function_name, int provided, int expected) {
                 std::stringstream ss;
                 ss << "Internal parsing Error: Wrong argument count for '" << function_name << "'. Provided: " << provided << ", Expected: " << expected;
@@ -110,9 +108,9 @@ input:   /* empty */
 	| input line
 ;
 
-line:	'\n'
-        | expr '\n'   { p->result = $1; }
-	| error '\n' { yyerrok; }
+line:	YYEOF
+        | expr YYEOF   { p->result = $1; }
+        | error YYEOF { yyerrok; }
 ;
 
 expr:      NUM       { $$ = $1;                            }
@@ -621,8 +619,8 @@ namespace Parsing {
                 DEBUG_PARSER(" getcharstr() pos = " << (int)(p->pos));
 
                 if (p->pos >= p->string.size())
-                        return EOF;
-                /* DEBUG_PARSER("PARSER: 	char is %c\n", p->string[p->pos]); */
+                        return YYEOF;
+                DEBUG_PARSER("PARSER: 	char is " << p->string[p->pos]);
                 return p->string[(p->pos)++];
         }
 
@@ -640,7 +638,7 @@ namespace Parsing {
 		while ((c = getcharstr(p)) == ' ' || c == '\t');
 
 		/* finish if reached EOF */
-		if (c == EOF) {
+                if (c == YYEOF) {
                         DEBUG_PARSER("PARSER: FINISHED\n");
 			return 0;
 		}
@@ -678,7 +676,7 @@ namespace Parsing {
 			ungetcstr(&(p->pos));
 		}
 
-                DEBUG_PARSER("PARSER: PROCESSING character '" << c << "'");
+                DEBUG_PARSER("PARSER: PROCESSING character '" << (char)c << "'");
 
 		/* process numbers */
 		if (isdigit(c)) {
@@ -753,12 +751,12 @@ namespace Parsing {
 				}
 				symbol_name[i++] = c;
 				c = getcharstr(p);
-                                DEBUG_PARSER("PARSER:		got '" << c << "'");
+                                DEBUG_PARSER("PARSER:		got '" << (char)c << "'");
 			}
-			while (c != EOF && (isalnum(c) || c == '_' || c == '.'));
+                        while (c != YYEOF && (isalnum(c) || c == '_' || c == '.'));
                         DEBUG_PARSER("PARSER: Reading SYMBOL DONE");
 
-			if (c != EOF)
+                        if (c != YYEOF)
 				ungetcstr(&(p->pos));
 			symbol_name[i] = '\0';
 
@@ -784,16 +782,9 @@ namespace Parsing {
 				}
 
                                 if (p->parser->usedSymbolsState() == UsedSymbols::Initialize) {
-					// bool found = false;
-//                                        for (const auto* s: p->parser->mUsedSymbols) {
-//							if (s->name == symbol_name) {
-//								found = true;
-//								break;
-//							}
-//					}
                                         if (!p->parser->get_used_symbol(symbol_name)) {
                                                 p->parser->mUsedSymbols.push_back(s);
-                                                std::cout << "New symbol: " << s->name << std::endl;
+                                                DEBUG_PARSER("New symbol: " << s->name);
                                         }
 				}
 			}
