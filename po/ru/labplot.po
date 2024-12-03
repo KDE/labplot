@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-01 00:37+0000\n"
+"POT-Creation-Date: 2024-12-03 00:37+0000\n"
 "PO-Revision-Date: 2023-11-13 14:41+0300\n"
 "Last-Translator: Sergey Kazorin <translation-team@basealt.ru>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -8297,7 +8297,7 @@ msgstr "%1: изменение коэффициента ширины"
 # BUGME: please add ctxt --aspotashev
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:299
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:170
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:355
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:350
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:112
 #, kde-format
 msgid "%1 - Data"
@@ -9787,27 +9787,27 @@ msgstr "%1: задание шрифта значений"
 msgid "%1: set values color"
 msgstr "%1: задание цвета значений"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:207
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:203
 #, kde-format
 msgid "%1: data source type changed"
 msgstr "%1: изменение типа источника данных"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:214
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:210
 #, kde-format
 msgid "%1: data source curve changed"
 msgstr "%1: изменение кривой источника данных"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:223
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:218
 #, kde-format
 msgid "%1: assign x-data"
 msgstr "%1: присваивание данных по X"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:232
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:226
 #, kde-format
 msgid "%1: assign y-data"
 msgstr "%1: присваивание данных по Y"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:241
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:234
 #, kde-format
 msgid "%1: assign second y-data"
 msgstr "%1: присваивание вторых данных по Y"

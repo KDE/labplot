@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-01 00:37+0000\n"
-"PO-Revision-Date: 2024-11-28 16:01+0300\n"
+"POT-Creation-Date: 2024-12-03 00:37+0000\n"
+"PO-Revision-Date: 2024-12-02 19:47+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -7984,7 +7984,7 @@ msgstr "%1: Genişlik çarpanı değişti"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:299
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:170
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:355
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:350
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:112
 #, kde-format
 msgid "%1 - Data"
@@ -9424,27 +9424,27 @@ msgstr "%1: Değerlerin yazıtipini ayarla"
 msgid "%1: set values color"
 msgstr "%1: Değerlerin rengini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:207
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:203
 #, kde-format
 msgid "%1: data source type changed"
 msgstr "%1: Veri kaynağı türü değişti"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:214
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:210
 #, kde-format
 msgid "%1: data source curve changed"
 msgstr "%1: Veri kaynağı eğrisi değişti"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:223
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:218
 #, kde-format
 msgid "%1: assign x-data"
 msgstr "%1: x verisi ata"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:232
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:226
 #, kde-format
 msgid "%1: assign y-data"
 msgstr "%1: y verisi ata"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:241
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:234
 #, kde-format
 msgid "%1: assign second y-data"
 msgstr "%1: y verisi ata"
@@ -10660,18 +10660,7 @@ msgid "Custom column modes, comma separated"
 msgstr "Özel sütun kipleri, virgülle ayrılmış"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:122
-#, fuzzy, kde-format
-#| msgid ""
-#| "If not empty, the number of columns must match the number of column names "
-#| "if provided and it must match the number of columns in the imported "
-#| "fileDatatypes:<table><tr><td>%1</td><td>Integer number with 32bit size "
-#| "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
-#| "number with 64bit size (−9.223.372.036.854.775.808 .. "
-#| "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
-#| "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
-#| "td><td>Datetime with the format from the datetime text box if not empty, "
-#| "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
-#| "td></tr></table>"
+#, kde-format
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
 "provided and it must match the number of columns in the imported file."
@@ -10685,7 +10674,7 @@ msgid ""
 "td></tr></table>"
 msgstr ""
 "Boş değillerse sütunların sayıları, sağlanmışlarsa sütun adlarının sayısıyla "
-"ve içe aktarılan fileDataTypes içindeki sütun sayılarıyla eşleşmelidir:"
+"ve içe aktarılan dosyadaki sütun sayılarıyla eşleşmelidir.<br>Veri türleri:"
 "<table><tr><td>%1</td><td>32 bit boyutlu tamsayı (−2.147.483.648 ‥ "
 "2.147.483.647).</td></tr><tr><td>%2</td><td>64 bit boyutlu tamsayı "
 "(−9.223.372.036.854.775.808 ‥ 9.223.372.036.854.775.807).</td></tr><tr><td>"
