@@ -622,7 +622,7 @@ namespace Parsing {
 
                 if (p->pos >= p->string.size()) {
                         p->pos++;
-                        return YYEOF;
+                        return T_EOF;
                 }
                 DEBUG_PARSER("PARSER: 	char is " << p->string[p->pos]);
                 return p->string[(p->pos)++];
@@ -642,7 +642,7 @@ namespace Parsing {
 		while ((c = getcharstr(p)) == ' ' || c == '\t');
 
 		/* finish if reached EOF */
-                if (c == YYEOF) {
+                if (c == T_EOF) {
                         DEBUG_PARSER("PARSER: FINISHED\n");
 			return 0;
 		}
@@ -757,10 +757,10 @@ namespace Parsing {
 				c = getcharstr(p);
                                 DEBUG_PARSER("PARSER:		got '" << (char)c << "'");
 			}
-                        while (c != YYEOF && (isalnum(c) || c == '_' || c == '.'));
+                        while (c != T_EOF && (isalnum(c) || c == '_' || c == '.'));
                         DEBUG_PARSER("PARSER: Reading SYMBOL DONE");
 
-                        if (c != YYEOF)
+                        if (c != T_EOF)
 				ungetcstr(&(p->pos));
 			symbol_name[i] = '\0';
 
