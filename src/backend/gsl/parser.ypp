@@ -22,7 +22,7 @@
 #ifdef HAVE_XLOCALE
 #include <xlocale.h>
 #endif
-#include "Parser.h"
+#include "ParserClass.h"
 #include "parser.h"
 #include "parser_private.h"
 #include "constants.h"
