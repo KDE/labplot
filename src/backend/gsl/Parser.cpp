@@ -210,6 +210,10 @@ std::vector<std::string> Parser::get_used_symbols() {
 	return names;
 }
 
+void Parser::addUsedSymbol(BaseSymbol* s) {
+	mUsedSymbols.push_back(s);
+}
+
 void Parser::setLastErrorMessage(const std::string& str) {
 	mLastErrorMessage = str;
 }
