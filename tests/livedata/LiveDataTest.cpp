@@ -20,6 +20,10 @@
 #include <QTimer>
 #include <QUdpSocket>
 
+namespace {
+quint16 port = 1234;
+} // anonymous namespace
+
 void LiveDataTest::initTestCase() {
 	CommonTest::initTestCase();
 
@@ -32,7 +36,7 @@ void LiveDataTest::initTestCase() {
 
 	// initialize the UDP socket
 	m_udpSocket = new QUdpSocket(this);
-	m_udpSocket->bind(QHostAddress::LocalHost, 1234);
+	m_udpSocket->bind(QHostAddress::LocalHost, port);
 	auto* timer = new QTimer(this);
 	connect(timer, &QTimer::timeout, this, &LiveDataTest::sendDataOverTcp);
 	timer->start(1000);
@@ -1404,7 +1408,7 @@ void LiveDataTest::testTcpReadContinuousFixed00() {
 	properties.headerEnabled = false;
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
-	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
+	filter->setProperties(properties);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks, after the initial read all data is read
@@ -1426,7 +1430,7 @@ void LiveDataTest::testUdpReadContinuousFixed00() {
 	dataSource.setSourceType(LiveDataSource::SourceType::NetworkUDPSocket);
 	dataSource.setFileType(AbstractFileFilter::FileType::Ascii);
 	dataSource.setHost(QStringLiteral("localhost"));
-	dataSource.setPort(m_tcpServer->serverPort());
+	dataSource.setPort(port);
 	dataSource.setReadingType(LiveDataSource::ReadingType::ContinuousFixed);
 	dataSource.setSampleSize(100); // big number of samples, more then the new data has, meaning we read all new data
 	dataSource.setUpdateType(LiveDataSource::UpdateType::TimeInterval);
@@ -1438,7 +1442,7 @@ void LiveDataTest::testUdpReadContinuousFixed00() {
 	properties.headerEnabled = false;
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
-	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
+	filter->setProperties(properties);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks, after the initial read all data is read
@@ -1479,6 +1483,7 @@ void LiveDataTest::sendDataOverTcp() {
 	out << "1,2";
 
 	auto* clientConnection = m_tcpServer->nextPendingConnection();
+	QVERIFY(clientConnection);
 	connect(clientConnection, &QAbstractSocket::disconnected,
 			clientConnection, &QObject::deleteLater);
 
@@ -1490,7 +1495,7 @@ void LiveDataTest::sendDataOverUdp() {
 	if (!m_udpSocket)
 		return;
 
-	m_udpSocket->writeDatagram("1,2", QHostAddress::LocalHost, 1234);
+	m_udpSocket->writeDatagram("1,2", QHostAddress::LocalHost, port);
 }
 
 QTEST_MAIN(LiveDataTest)
