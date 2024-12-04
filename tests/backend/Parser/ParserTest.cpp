@@ -10,7 +10,7 @@
 
 #include "ParserTest.h"
 
-#include "backend/gsl/Parser.h"
+#include "backend/gsl/ParserClass.h"
 
 #include <gsl/gsl_const_mksa.h>
 #include <gsl/gsl_errno.h>

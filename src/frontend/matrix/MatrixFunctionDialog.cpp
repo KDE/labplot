@@ -29,7 +29,7 @@
 #include <QElapsedTimer>
 #endif
 
-#include "backend/gsl/Parser.h"
+#include "backend/gsl/ParserClass.h"
 #include <cmath>
 
 /*!

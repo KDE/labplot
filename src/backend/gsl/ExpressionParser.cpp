@@ -9,7 +9,7 @@
 */
 
 #include "backend/gsl/ExpressionParser.h"
-#include "backend/gsl/Parser.h"
+#include "backend/gsl/ParserClass.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "parser_private.h"
