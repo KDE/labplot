@@ -22,12 +22,8 @@ double Parser::parse(const char* string, const char* locale) {
 	mLastErrorMessage.clear();
 
 	param p;
-	p.pos = 0;
 	p.locale = locale;
 	p.parser = this;
-	p.result = std::nan("0");
-	p.variablesCounter = 0;
-	p.errorCount = 0;
 
 	/* leave space to terminate string by "\n\0" */
 	p.string = string;
@@ -40,6 +36,7 @@ double Parser::parse(const char* string, const char* locale) {
 
 	mResult = p.result;
 	mVariablesCounter = p.variablesCounter;
+	mParseErrors = p.errorCount;
 	DEBUG_PARSER("PARSER: parse() DONE (result = " << mResult << ", errors = " << parseErrors() << ")");
 	DEBUG_PARSER("*******************************");
 
