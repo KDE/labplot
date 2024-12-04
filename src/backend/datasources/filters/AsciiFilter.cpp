@@ -20,6 +20,9 @@
 #include <QFile>
 
 #include <QDateTime>
+#ifdef HAVE_QTSERIALPORT
+#include <QSerialPort>
+#endif
 
 #if defined(Q_OS_LINUX) || defined(Q_OS_BSD4)
 #include <QProcess>
@@ -446,7 +449,7 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 	const bool skipEmptyParts = properties.skipEmptyParts;
 
 #ifdef HAVE_QTSERIALPORT
-	if (dynamic_cast<QSerialPort&>(device)) {
+	if (dynamic_cast<QSerialPort*>(&device)) {
 		// Initialization not required. Assuming that all parameters are set,
 		// makes no sense for serial port, because you never know if
 		// the line is really the first line and if it is a complete line
