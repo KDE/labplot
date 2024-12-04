@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-03 00:37+0000\n"
-"PO-Revision-Date: 2024-11-27 17:37+0100\n"
+"PO-Revision-Date: 2024-12-03 20:56+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -10002,15 +10002,14 @@ msgid "%1: set logical position"
 msgstr "%1: ställ in logisk position"
 
 #: src/frontend/AboutDialog.cpp:84
-#, fuzzy, kde-format
-#| msgid "Info"
+#, kde-format
 msgid "Copy Info"
-msgstr "Information"
+msgstr "Kopiera information"
 
 #: src/frontend/AboutDialog.cpp:88
 #, kde-format
 msgid "Donate"
-msgstr ""
+msgstr "Ge ett bidrag"
 
 #: src/frontend/AboutDialog.cpp:111
 #, kde-format
@@ -10224,10 +10223,9 @@ msgid "Binary Log File (BLF) file support"
 msgstr "Binär loggfil (BLF) filstöd"
 
 #: src/frontend/AboutDialog.cpp:281
-#, fuzzy, kde-format
-#| msgid "Comments:"
+#, kde-format
 msgid "Components:"
-msgstr "Kommentarer:"
+msgstr "Komponenter:"
 
 #: src/frontend/colormaps/ColorMapsDialog.cpp:39
 #, kde-format
@@ -10663,18 +10661,7 @@ msgid "Custom column modes, comma separated"
 msgstr "Egna kolumnlägen, åtskilda med kommatecken"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:122
-#, fuzzy, kde-format
-#| msgid ""
-#| "If not empty, the number of columns must match the number of column names "
-#| "if provided and it must match the number of columns in the imported "
-#| "fileDatatypes:<table><tr><td>%1</td><td>Integer number with 32bit size "
-#| "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
-#| "number with 64bit size (−9.223.372.036.854.775.808 .. "
-#| "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
-#| "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
-#| "td><td>Datetime with the format from the datetime text box if not empty, "
-#| "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
-#| "td></tr></table>"
+#, kde-format
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
 "provided and it must match the number of columns in the imported file."
@@ -10688,12 +10675,12 @@ msgid ""
 "td></tr></table>"
 msgstr ""
 "Om inte tomt, måste antalet kolumner motsvara antalet kolumnnamn om de anges "
-"och det måste motsvara antalet kolumner i den importerade filens datatyper:"
-"<table><tr><td>%1</td><td>Heltalsnummer med 32 bitars storlek (−2 147 483 "
-"648 .. 2 147 483 647).</td></tr><tr><td>%2</td><td>Heltal med 64 bitars "
-"storlek (−9 223 372 036 854 775 808 .. 9 223 372 036 854 775 807).</td></"
-"tr><tr><td>%3</td><td>Flyttalsnummer med 64 bitars storlek. Upplösning på "
-"cirka 16 siffror.</td></tr><tr><td>%4</td><td>Datumtid med formatet från "
+"och det måste motsvara antalet kolumner i den importerade filen. "
+"<br>Datatyper:<table><tr><td>%1</td><td>Heltalsnummer med 32 bitars storlek "
+"(−2 147 483 648 .. 2 147 483 647).</td></tr><tr><td>%2</td><td>Heltal med 64 "
+"bitars storlek (−9 223 372 036 854 775 808 .. 9 223 372 036 854 775 807).</"
+"td></tr><tr><td>%3</td><td>Flyttalsnummer med 64 bitars storlek. Upplösning "
+"på cirka 16 siffror.</td></tr><tr><td>%4</td><td>Datumtid med formatet från "
 "textrutan datetime om det inte är tomt, annars bestäms det automatiskt.</td> "
 "</tr><tr><td>%5</td><td>En text.</td></tr></table>"
 
@@ -14388,17 +14375,14 @@ msgid "Watch video tutorials:"
 msgstr "Titta på videohandledningar:"
 
 #: src/frontend/LabPlot.cpp:47
-#, fuzzy, kde-format
-#| msgid "Mastodon:"
+#, kde-format
 msgid "Discuss on Mastodon:"
-msgstr "Mastodon:"
+msgstr "Diskussion på Mastodon"
 
 #: src/frontend/LabPlot.cpp:48
-#, fuzzy, kde-format
-#| msgctxt "@info:credit"
-#| msgid "Developer"
+#, kde-format
 msgid "Development:"
-msgstr "Utvecklare"
+msgstr "Utveckling:"
 
 #: src/frontend/LabPlot.cpp:49
 #, kde-format
