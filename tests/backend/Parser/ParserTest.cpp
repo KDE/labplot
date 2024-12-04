@@ -14,6 +14,7 @@
 
 #include <gsl/gsl_const_mksa.h>
 #include <gsl/gsl_errno.h>
+#include <cstdlib>
 
 using namespace Parsing;
 
@@ -71,6 +72,51 @@ void ParserTest::testBasics() {
 
 	for (const auto& expr : testsFuzzy)
 		FuzzyCompare(parser.parse(qPrintable(expr.first), "C"), expr.second, 1.e-15);
+}
+
+void ParserTest::testFunction0Arguments() {
+	// Function with no arguments
+
+	Parsing::Parser parser(false);
+	const auto res1 = parser.parse(qPrintable(QStringLiteral("rand()")), "C");
+	QVERIFY(res1 >= 0. && res1 <= (double)RAND_MAX);
+
+	const auto res2 = parser.parse(qPrintable(QStringLiteral("rand()")), "C");
+	QVERIFY(res2 >= 0. && res2 <= (double)RAND_MAX);
+
+	QVERIFY(res1 != res2); // It is really unlikely that they are equal
+}
+
+void ParserTest::testFunction1Argument() {
+	Parsing::Parser parser(false);
+	FuzzyCompare(parser.parse(qPrintable(QStringLiteral("sin(pi)")), "C"), 0., 1.e-15);
+
+	VALUES_EQUAL(parser.parse(qPrintable(QStringLiteral("fabs(-5.324)")), "C"), 5.324);
+}
+
+void ParserTest::testFunction2Arguments() {
+	Parsing::Parser parser(false);
+
+	VALUES_EQUAL(parser.parse(qPrintable(QStringLiteral("atan2(0.1;0.2)")), "C"), 0.46364761);
+	VALUES_EQUAL(parser.parse(qPrintable(QStringLiteral("atan2(0.1,0.2)")), "C"), 0.46364761);
+}
+
+void ParserTest::testFunction3Arguments() {
+	Parsing::Parser parser(false);
+
+	VALUES_EQUAL(parser.parse(qPrintable(QStringLiteral("if(1;-5.0;3.2)")), "C"), -5.);
+	VALUES_EQUAL(parser.parse(qPrintable(QStringLiteral("if(0;-5.0;3.2)")), "C"), 3.2);
+	// With comma
+	VALUES_EQUAL(parser.parse(qPrintable(QStringLiteral("if(1,-5.2,3.7)")), "C"), -5.2);
+	VALUES_EQUAL(parser.parse(qPrintable(QStringLiteral("if(0,-5.7,3.5)")), "C"), 3.5);
+}
+
+void ParserTest::testFunction4Arguments() {
+
+}
+
+void ParserTest::testFunction5Arguments() {
+
 }
 
 void ParserTest::testErrors() {
