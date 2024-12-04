@@ -38,11 +38,11 @@ enum class UsedSymbols {
 
 /* params passed to yylex (and yyerror) */
 typedef struct param {
-	size_t pos;		/* current position in string */
+	size_t pos{0};		/* current position in string */
 	std::string_view string;		/* the string to parse */
-	const char* locale;	/* name of locale to convert numbers */
-	Parser* parser;
-	double result;
+	const char* locale {nullptr};	/* name of locale to convert numbers */
+	Parser* parser{nullptr};
+	double result{std::nan("0")};
 	size_t variablesCounter {0};
 	size_t errorCount {0};
 } param;

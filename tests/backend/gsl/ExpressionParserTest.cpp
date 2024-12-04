@@ -46,6 +46,20 @@ void ExpressionParserTest::testIsValid() {
 	QCOMPARE(ExpressionParser::isValid(expr, vars), true); // should not crash
 }
 
+void ExpressionParserTest::testIsInValid() {
+	const QString expr = QStringLiteral("cell");
+	const QStringList vars = {};
+
+	QCOMPARE(ExpressionParser::isValid(expr, vars), false); // should not crash and should be invalid
+}
+
+void ExpressionParserTest::testIsInValid2() {
+	const QString expr = QStringLiteral("cell_isdk"); // Not a valid symbol
+	const QStringList vars = {};
+
+	QCOMPARE(ExpressionParser::isValid(expr, vars), false); // should not crash and should be invalid
+}
+
 void ExpressionParserTest::testIsValidStdev() {
 	const QString expr = QStringLiteral("stdev(x)");
 	const QStringList vars = {QStringLiteral("x")};

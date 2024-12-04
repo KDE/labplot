@@ -50,34 +50,44 @@ namespace Parsing {
 } // Parser
 
 namespace {
-        static void wrongArgumentNumberMessage(Parsing::param* p, const std::string_view& function_name, int provided, int expected) {
+        static int wrongArgumentNumberMessage(Parsing::param* p, const std::string_view& function_name, int provided, int expected) {
                 std::stringstream ss;
                 ss << "Internal parsing Error: Wrong argument count for '" << function_name << "'. Provided: " << provided << ", Expected: " << expected;
+                p->errorCount++;
                 p->parser->setLastErrorMessage(ss.str());
+                return 1;
 	}
 
-        static void wrongArgumentInternalErrorMessage(Parsing::param* p, const std::string_view& function_name, int expected) {
+        static int wrongArgumentInternalErrorMessage(Parsing::param* p, const std::string_view& function_name, int expected) {
                 std::stringstream ss;
                 ss << "Internal parsing Error: Wrong argument count for '" << function_name << "'. Expected: " << expected << ", but function does not have this number of arguments";
+                p->errorCount++;
                 p->parser->setLastErrorMessage(ss.str());
+                return 1;
         }
 
-        static void notImplementedError(Parsing::param* p, const std::string_view& function_name) {
+        static int notImplementedError(Parsing::param* p, const std::string_view& function_name) {
                 std::stringstream ss;
                 ss << "Parsing Error: '" << function_name << "' not implemented.";
+                p->errorCount++;
                 p->parser->setLastErrorMessage(ss.str());
+                return 2;
 	}
 
-        static void yyerrorFunction(Parsing::param* p, const std::string_view& function_name, const char* msg) {
+        static int yyerrorFunction(Parsing::param* p, const std::string_view& function_name, const char* msg) {
                 std::stringstream ss;
                 ss << "Parsing Error: In function '" << function_name << "': " << msg;
+                p->errorCount++;
                 p->parser->setLastErrorMessage(ss.str());
+                return 1;
 	}
 
-        void yyerror(Parsing::param* p, const char* msg) {
+        int yyerror(Parsing::param* p, const char* msg) {
                 std::stringstream ss;
                 ss << "Parsing Error: " << msg;
+                p->errorCount++;
                 p->parser->setLastErrorMessage(ss.str());
+                return 0; // must be zero, because it indicates EOF
 	}
 } // anonymous namespace
 
@@ -124,25 +134,19 @@ expr:      NUM       { $$ = $1;                            }
                                                                 p->variablesCounter++;
 							const int argc = special_function.funsptr->argc;
 							if (argc != 0) {
-                                                                wrongArgumentNumberMessage(p, $1->name, argc, 0);
-                                                                p->errorCount++;
-								return 1;
+                                                                return wrongArgumentNumberMessage(p, $1->name, argc, 0);
 							}
 							try {
 								const auto function = std::get<Parsing::func_tPayload>(special_function.funsptr->fnct);
                                                                 if (!p->parser->skipSpecialFunctionEvaluation()) {
 									if (function == nullptr) {
-                                                                                notImplementedError(p, $1->name);
-                                                                                p->errorCount++;
-										return 2;
+                                                                                return notImplementedError(p, $1->name);
 									}
 									$$ = function(special_function.payload);
 								} else
 									$$ = std::nan("0");
 							} catch (const std::bad_variant_access& ex) {
-                                                                wrongArgumentInternalErrorMessage(p, $1->name, 0);
-                                                                p->errorCount++;
-								return 1;
+                                                                return wrongArgumentInternalErrorMessage(p, $1->name, 0);
 							}
 						}
 | SPECFNCT '(' VAR ')'  {
@@ -151,25 +155,19 @@ expr:      NUM       { $$ = $1;                            }
                                                                 p->variablesCounter++;
 							const int argc = special_function.funsptr->argc;
 							if (argc != 1) {
-                                                                wrongArgumentNumberMessage(p, $1->name, argc, 1);
-                                                                p->errorCount++;
-								return 1;
+                                                                return wrongArgumentNumberMessage(p, $1->name, argc, 1);
 							}
 							try {
                                                                 const auto function = std::get<Parsing::func_tVariablePayload>(special_function.funsptr->fnct);
                                                                 if (!p->parser->skipSpecialFunctionEvaluation()) {
 									if (function == nullptr) {
-                                                                                notImplementedError(p, $1->name);
-                                                                                p->errorCount++;
-										return 2;
+                                                                                return notImplementedError(p, $1->name);
 									}
 									$$ = function($3->name, special_function.payload);
 								} else
 									$$ = std::nan("0");
 							} catch (const std::bad_variant_access& ex) {
-                                                                wrongArgumentInternalErrorMessage(p, $1->name, 1);
-                                                                p->errorCount++;
-								return 1;
+                                                                return wrongArgumentInternalErrorMessage(p, $1->name, 1);
 							}
 						}
 | SPECFNCT '(' expr ')'  {
@@ -178,25 +176,19 @@ expr:      NUM       { $$ = $1;                            }
                                                             p->variablesCounter++;
                                                     const int argc = special_function.funsptr->argc;
                                                     if (argc != 1) {
-                                                            wrongArgumentNumberMessage(p, $1->name, argc, 1);
-                                                            p->errorCount++;
-                                                            return 1;
+                                                            return wrongArgumentNumberMessage(p, $1->name, argc, 1);
                                                     }
                                                     try {
                                                             const auto function = std::get<Parsing::func_tValuePayload>(special_function.funsptr->fnct);
                                                             if (!p->parser->skipSpecialFunctionEvaluation()) {
                                                                     if (function == nullptr) {
-                                                                            notImplementedError(p, $1->name);
-                                                                            p->errorCount++;
-                                                                            return 2;
+                                                                            return notImplementedError(p, $1->name);
                                                                     }
                                                                     $$ = function($3, special_function.payload);
                                                             } else
                                                                     $$ = std::nan("0");
                                                     } catch (const std::bad_variant_access& ex) {
-                                                            wrongArgumentInternalErrorMessage(p, $1->name, 1);
-                                                            p->errorCount++;
-                                                            return 1;
+                                                            return wrongArgumentInternalErrorMessage(p, $1->name, 1);
                                                     }
                                             }
 | SPECFNCT '(' expr ';' expr ')'  {
@@ -205,25 +197,19 @@ expr:      NUM       { $$ = $1;                            }
                                                             p->variablesCounter++;
                                                     const int argc = special_function.funsptr->argc;
                                                     if (argc != 2) {
-                                                            wrongArgumentNumberMessage(p, $1->name, argc, 2);
-                                                            p->errorCount++;
-                                                            return 1;
+                                                            return wrongArgumentNumberMessage(p, $1->name, argc, 2);
                                                     }
                                                     try {
                                                             const auto function = std::get<Parsing::func_t2ValuePayload>(special_function.funsptr->fnct);
                                                             if (!p->parser->skipSpecialFunctionEvaluation()) {
                                                                     if (function == nullptr) {
-                                                                            notImplementedError(p, $1->name);
-                                                                            p->errorCount++;
-                                                                            return 2;
+                                                                            return notImplementedError(p, $1->name);
                                                                     }
                                                                     $$ = function($3, $5, special_function.payload);
                                                             } else
                                                                     $$ = std::nan("0");
                                                     } catch (const std::bad_variant_access& ex) {
-                                                            wrongArgumentInternalErrorMessage(p, $1->name, 1);
-                                                            p->errorCount++;
-                                                            return 1;
+                                                            return wrongArgumentInternalErrorMessage(p, $1->name, 1);
                                                     }
                                             }
 | SPECFNCT '(' expr ';' VAR ')'  {
@@ -232,25 +218,19 @@ expr:      NUM       { $$ = $1;                            }
                                                                                 p->variablesCounter++;
                                                                         const int argc = special_function.funsptr->argc;
                                                                         if (argc != 2) {
-                                                                                wrongArgumentNumberMessage(p, $1->name, argc, 2);
-                                                                                p->errorCount++;
-                                                                                return 1;
+                                                                                return wrongArgumentNumberMessage(p, $1->name, argc, 2);
                                                                         }
                                                                         try {
                                                                                 const auto function = std::get<Parsing::func_tValueVariablePayload>(special_function.funsptr->fnct);
                                                                                 if (!p->parser->skipSpecialFunctionEvaluation()) {
                                                                                         if (function == nullptr) {
-                                                                                                notImplementedError(p, $1->name);
-                                                                                                p->errorCount++;
-                                                                                                return 2;
+                                                                                                return notImplementedError(p, $1->name);
                                                                                         }
                                                                                         $$ = function($3 ,$5->name, special_function.payload);
                                                                                 } else
                                                                                         $$ = std::nan("0");
                                                                         } catch (const std::bad_variant_access& ex) {
-                                                                                wrongArgumentInternalErrorMessage(p, $1->name, 2);
-                                                                                p->errorCount++;
-                                                                                return 1;
+                                                                                return wrongArgumentInternalErrorMessage(p, $1->name, 2);
                                                                         }
                                                                   }
 | SPECFNCT '(' expr ';' expr ';' VAR ')'  {
@@ -259,25 +239,19 @@ expr:      NUM       { $$ = $1;                            }
                                                                                                 p->variablesCounter++;
                                                                                         const int argc = special_function.funsptr->argc;
                                                                                         if (argc != 3) {
-                                                                                                wrongArgumentNumberMessage(p, $1->name, argc, 3);
-                                                                                                p->errorCount++;
-                                                                                                return 1;
+                                                                                                return wrongArgumentNumberMessage(p, $1->name, argc, 3);
                                                                                         }
                                                                                         try {
                                                                                                 const auto function = std::get<Parsing::func_t2ValueVariablePayload>(special_function.funsptr->fnct);
                                                                                                 if (!p->parser->skipSpecialFunctionEvaluation()) {
                                                                                                         if (function == nullptr) {
-                                                                                                                notImplementedError(p, $1->name);
-                                                                                                                p->errorCount++;
-                                                                                                                return 2;
+                                                                                                                return notImplementedError(p, $1->name);
                                                                                                         }
                                                                                                         $$ = function($3, $5, $7->name, special_function.payload);
                                                                                                 } else
                                                                                                         $$ = std::nan("0");
                                                                                         } catch (const std::bad_variant_access& ex) {
-                                                                                                wrongArgumentInternalErrorMessage(p, $1->name, 3);
-                                                                                                p->errorCount++;
-                                                                                                return 1;
+                                                                                                return wrongArgumentInternalErrorMessage(p, $1->name, 3);
                                                                                         }
                                                                                   }
 | SPECFNCT '(' expr ';' expr ';' expr ';' VAR ')'  {
@@ -286,66 +260,50 @@ expr:      NUM       { $$ = $1;                            }
                                                                                                                 p->variablesCounter++;
 													const int argc = special_function.funsptr->argc;
 													if (argc != 4) {
-                                                                                                                wrongArgumentNumberMessage(p, $1->name, argc, 4);
-                                                                                                                p->errorCount++;
-														return 1;
+                                                                                                                return wrongArgumentNumberMessage(p, $1->name, argc, 4);
 													}
 													try {
                                                                                                                 const auto function = std::get<Parsing::func_t3ValueVariablePayload>(special_function.funsptr->fnct);
                                                                                                                 if (!p->parser->skipSpecialFunctionEvaluation()) {
 															if (function == nullptr) {
-                                                                                                                                notImplementedError(p, $1->name);
-                                                                                                                                p->errorCount++;
-																return 2;
+                                                                                                                                return notImplementedError(p, $1->name);
 															}
 															$$ = function($3, $5, $7, $9->name, special_function.payload);
 														} else
 															$$ = std::nan("0");
 													} catch (const std::bad_variant_access& ex) {
-                                                                                                                wrongArgumentInternalErrorMessage(p, $1->name, 4);
-                                                                                                                p->errorCount++;
-														return 1;
+                                                                                                                return wrongArgumentInternalErrorMessage(p, $1->name, 4);
 													}
 
 
 												  }
-| SPECFNCT '(' expr ')'  { p->errorCount++; yyerrorFunction(p, $1->name, "Argument must be a variable not an expression");}
-| SPECFNCT '(' expr ';' expr ')'   { p->errorCount++; yyerrorFunction(p, $1->name, "Last argument must be a variable not an expression");}
-| SPECFNCT '(' expr ';' expr ';' expr ')'  { p->errorCount++; yyerrorFunction(p, $1->name, "Last argument must be a variable not an expression");}
-| SPECFNCT '(' expr ';' expr ';' expr ';' expr ')'  { p->errorCount++; yyerrorFunction(p, $1->name, "Last argument must be a variable not an expression");}
+| SPECFNCT '(' expr ';' expr ';' expr ')'  { yyerrorFunction(p, $1->name, "Last argument must be a variable not an expression");}
+| SPECFNCT '(' expr ';' expr ';' expr ';' expr ')'  { yyerrorFunction(p, $1->name, "Last argument must be a variable not an expression");}
 | FNCT '(' ')'       {
-						const auto* function = std::get<Parsing::funs*>($1->value);
-						const int argc = function->argc;
-						if (argc != 0) {
-                                                        wrongArgumentNumberMessage(p, $1->name, argc, 0);
-                                                        p->errorCount++;
-							return 1;
-						} else {
-							try {
-								const auto fnct_ptr = std::get<Parsing::func_t>(function->fnct);
-								$$ = fnct_ptr();
-							} catch (const std::bad_variant_access& ex) {
-                                                                wrongArgumentInternalErrorMessage(p, $1->name, 0);
-                                                                p->errorCount++;
-								return 1;
-							}
-						}
-					}
+					        const auto* function = std::get<Parsing::funs*>($1->value);
+					        const int argc = function->argc;
+					        if (argc != 0) {
+                                                        return wrongArgumentNumberMessage(p, $1->name, argc, 0);
+					        } else {
+						        try {
+							        const auto fnct_ptr = std::get<Parsing::func_t>(function->fnct);
+							        $$ = fnct_ptr();
+						        } catch (const std::bad_variant_access& ex) {
+                                                                return wrongArgumentInternalErrorMessage(p, $1->name, 0);
+						        }
+					        }
+				        }
 | FNCT '(' expr ')'  {
 						const auto* function = std::get<Parsing::funs*>($1->value);
 						const int argc = function->argc;
 						if (argc != 1) {
-                                                        wrongArgumentNumberMessage(p, $1->name, argc, 1);
-                                                        p->errorCount++;
-							return 1;
+                                                        return wrongArgumentNumberMessage(p, $1->name, argc, 1);
 						} else {
 							try {
 								const auto fnct_ptr = std::get<Parsing::func_t1>(function->fnct);
 								$$ = fnct_ptr($3);
 							} catch (const std::bad_variant_access& ex) {
-                                                                wrongArgumentInternalErrorMessage(p, $1->name, 1);
-                                                                p->errorCount++;
-								return 1;
+                                                                return wrongArgumentInternalErrorMessage(p, $1->name, 1);
 							}
 						}
 					}
@@ -353,17 +311,13 @@ expr:      NUM       { $$ = $1;                            }
 								const auto* function = std::get<Parsing::funs*>($1->value);
 								const int argc = function->argc;
 								if (argc != 2) {
-                                                                        wrongArgumentNumberMessage(p, $1->name, argc, 2);
-                                                                        p->errorCount++;
-									return 1;
+                                                                        return wrongArgumentNumberMessage(p, $1->name, argc, 2);
 								} else {
 									try {
 										const auto fnct_ptr = std::get<Parsing::func_t2>(function->fnct);
 										$$ = fnct_ptr($3,$5);
 									} catch (const std::bad_variant_access& ex) {
-                                                                                wrongArgumentInternalErrorMessage(p, $1->name, 2);
-                                                                                p->errorCount++;
-										return 1;
+                                                                                return wrongArgumentInternalErrorMessage(p, $1->name, 2);
 									}
 								}
 							}
@@ -425,17 +379,13 @@ expr:      NUM       { $$ = $1;                            }
 										const auto* function = std::get<Parsing::funs*>($1->value);
 										const int argc = function->argc;
 										if (argc != 3) {
-                                                                                        wrongArgumentNumberMessage(p, $1->name, argc, 3);
-                                                                                        p->errorCount++;
-											return 1;
+                                                                                        return wrongArgumentNumberMessage(p, $1->name, argc, 3);
 										} else {
 											try {
 												const auto fnct_ptr = std::get<Parsing::func_t3>(function->fnct);
 												$$ = fnct_ptr($3,$5,$7);
 											} catch (const std::bad_variant_access& ex) {
-                                                                                                wrongArgumentInternalErrorMessage(p, $1->name, 3);
-                                                                                                p->errorCount++;
-												return 1;
+                                                                                                return wrongArgumentInternalErrorMessage(p, $1->name, 3);
 											}
 										}
 									}
@@ -443,17 +393,13 @@ expr:      NUM       { $$ = $1;                            }
 													const auto* function = std::get<Parsing::funs*>($1->value);
 													const int argc = function->argc;
 													if (argc != 4) {
-                                                                                                                wrongArgumentNumberMessage(p, $1->name, argc, 4);
-                                                                                                                p->errorCount++;
-														return 1;
+                                                                                                                return wrongArgumentNumberMessage(p, $1->name, argc, 4);
 													} else {
 														try {
 															const auto fnct_ptr = std::get<Parsing::func_t4>(function->fnct);
 															$$ = fnct_ptr($3,$5,$7,$9);
 														} catch (const std::bad_variant_access& ex) {
-                                                                                                                        wrongArgumentInternalErrorMessage(p, $1->name, 4);
-                                                                                                                        p->errorCount++;
-															return 1;
+                                                                                                                        return wrongArgumentInternalErrorMessage(p, $1->name, 4);
 														}
 													}
 												}
@@ -461,17 +407,13 @@ expr:      NUM       { $$ = $1;                            }
 													const auto* function = std::get<Parsing::funs*>($1->value);
 													const int argc = function->argc;
 													if (argc != 5) {
-                                                                                                                wrongArgumentNumberMessage(p, $1->name, argc, 5);
-                                                                                                                p->errorCount++;
-														return 1;
+                                                                                                                return wrongArgumentNumberMessage(p, $1->name, argc, 5);
 													} else {
 														try {
 															const auto fnct_ptr = std::get<Parsing::func_t5>(function->fnct);
 															$$ = fnct_ptr($3,$5,$7,$9,$11);
 														} catch (const std::bad_variant_access& ex) {
-                                                                                                                        wrongArgumentInternalErrorMessage(p, $1->name, 5);
-                                                                                                                        p->errorCount++;
-															return 1;
+                                                                                                                        return wrongArgumentInternalErrorMessage(p, $1->name, 5);
 														}
 													}
 }
@@ -601,7 +543,7 @@ namespace Parsing {
                         variable_symbols.push_back(new Symbol(_special_functions[i].name, strlen(_special_functions[i].name), SPECFNCT, sfd));
                 }
 
-//                DEBUG_PARSER("PARSER: init_table() DONE. sym_table = " << ptr);
+                DEBUG_PARSER("PARSER: init_table() DONE");
         }
 
         void init_static_symbols() {
@@ -629,7 +571,7 @@ namespace Parsing {
         }
 
         void ungetcstr(size_t *pos) {
-                /* DEBUG_PARSER("PARSER: ungetcstr()\n"); */
+                DEBUG_PARSER("PARSER: ungetcstr()");
                 if (*pos > 0)
                         (*pos)--;
         }
@@ -649,9 +591,8 @@ namespace Parsing {
 		/* check for non-ASCII chars */
 		if (!isascii(c)) {
                         DEBUG_PARSER(" non-ASCII character found. Giving up\n");
-//			p->errorCount++;
-			return 0;
-		}
+                        return yyerror(p, "non-ASCII character found");
+                }
 		if (c == '\n') {
                         DEBUG_PARSER("PARSER: Reached EOL\n");
 			return c;
@@ -701,19 +642,18 @@ namespace Parsing {
 			if (locale == (locale_t)nullptr) {
                                 //pdebug("PARSER ERROR in newlocale(%s): %s. Trying system locale.\n", p->locale, strerror(errno));
 				locale = newlocale(LC_NUMERIC_MASK, "", (locale_t)nullptr);
-                                //pdebug("PARSER:		Reading: '%s' with system locale\n", s);
+                                DEBUG_PARSER("PARSER:		Reading: '" << s << "' with system locale");
 			} else {
-                                //pdebug("PARSER:		Reading: '%s' with locale %s\n", s, p->locale);
+                                DEBUG_PARSER("PARSER:		Reading: '" << s << "' with locale " << p->locale);
 			}
 	#endif
 			double result;
 			if (locale != nullptr) {
         #if defined(__OpenBSD__) || defined(__HAIKU__)
-				result = strtod(s.data(), &remain);
+			  result = strtod(s.data(), &remain);
 	#else
-				result = strtod_l(s.data(), &remain, locale);
+			  result = strtod_l(s.data(), &remain, locale);
 	#endif
-
 				freelocale(locale);
                         } else { // use C locale
                             result = strtod(s.data(), &remain);
@@ -768,21 +708,18 @@ namespace Parsing {
                         if (p->parser->usedSymbolsState() == UsedSymbols::Only) {
                                 s = p->parser->get_used_symbol(symbol_name);
 				if (s == nullptr) {
-                                        //pdebug("PARSER ERROR: Used Symbol '%s' UNKNOWN\n", symbol_name);
-//					p->errorCount++;
-					return 0;
-				}
+                                        //pdebug("PARSER ERROR: Used Symbol '" << symbol_name << "' UNKNOWN");
+                                        return yyerror(p, "Symbol not found in used symbols");
+                                }
 			} else {
                                 s = get_static_symbol(symbol_name);
 				if(s == nullptr) {	/* symbol unknown */
                                         s = get_variable_symbol(symbol_name);
 					if (s == nullptr) {
-                                                //pdebug("PARSER ERROR: Symbol '%s' UNKNOWN\n", symbol_name);
-//						p->errorCount++;
-						return 0;
-					}
-					/* old behavior: add symbol */
-					/* s = put_symbol(symbol_name, VAR); */
+                                                // During parsing it should not happen that a symbol is not available
+                                                DEBUG_PARSER("PARSER ERROR: Symbol '" << symbol_name << "' UNKNOWN");
+                                                return yyerror(p, "Unknown symbol");
+                                        }
 				}
 
                                 if (p->parser->usedSymbolsState() == UsedSymbols::Initialize) {
@@ -799,7 +736,7 @@ namespace Parsing {
 		}
 
 		/* else: single operator */
-                //pdebug("PARSER: Found single operator '%c'\n", c);
+                DEBUG_PARSER("PARSER: Found single operator '" << (char)c << "'");
 		return c;
 	}
 } // namespace Parsing

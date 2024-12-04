@@ -42,6 +42,8 @@ private Q_SLOTS:
 	void testEvaluateLogicalExpression();
 
 	void testIsValid();
+	void testIsInValid();
+	void testIsInValid2();
 	void testIsValidStdev();
 	void testLog2();
 };
