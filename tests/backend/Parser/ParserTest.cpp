@@ -111,14 +111,6 @@ void ParserTest::testFunction3Arguments() {
 	VALUES_EQUAL(parser.parse(qPrintable(QStringLiteral("if(0,-5.7,3.5)")), "C"), 3.5);
 }
 
-void ParserTest::testFunction4Arguments() {
-
-}
-
-void ParserTest::testFunction5Arguments() {
-
-}
-
 void ParserTest::testErrors() {
 	Parsing::Parser parser(false);
 	gsl_set_error_handler_off(); // do not crash

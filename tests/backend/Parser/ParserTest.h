@@ -22,8 +22,6 @@ private Q_SLOTS:
 	void testFunction1Argument();
 	void testFunction2Arguments();
 	void testFunction3Arguments();
-	void testFunction4Arguments();
-	void testFunction5Arguments();
 	void testErrors();
 	void testVariables();
 	void testLocale();
