@@ -1823,14 +1823,17 @@ void ImportFileWidget::refreshPreview() {
 			udpSocket.connectToHost(host(), 0, QUdpSocket::ReadOnly);
 			if (udpSocket.waitForConnected()) {
 				DEBUG("	connected to UDP socket " << STDSTRING(host()) << ':' << port().toInt());
-				if (!udpSocket.waitForReadyRead(2000))
+				if (!udpSocket.waitForReadyRead(2000)) {
 					DEBUG("	ERROR: not ready for read after 2 sec");
-				if (udpSocket.hasPendingDatagrams()) {
-					DEBUG("	has pending data");
+					errorMessage = i18n("Not ready for read after 2s");
 				} else {
-					DEBUG("	has no pending data");
+					if (udpSocket.hasPendingDatagrams()) {
+						DEBUG("	has pending data");
+					} else {
+						DEBUG("	has no pending data");
+					}
+					importedStrings = filter->preview(udpSocket, lines, true);
 				}
-				importedStrings = filter->preview(udpSocket, lines, true);
 
 				DEBUG("UDP Socket: DISCONNECT PREVIEW, state = " << udpSocket.state());
 				udpSocket.disconnectFromHost();
