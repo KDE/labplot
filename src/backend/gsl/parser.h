@@ -69,8 +69,6 @@ struct BaseSymbol {
 	std::string_view name; // name of symbol
 	int type; // type of symbol: either VAR or FNCT
 	std::variant<double, funs*, special_function_def> value;
-
-	operator std::string_view() const { return name; }
 };
 
 // structure for list of symbols
