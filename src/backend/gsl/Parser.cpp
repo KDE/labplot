@@ -17,15 +17,11 @@ double Parser::parse(const char* string, const char* locale) {
 	if (variable_symbols.empty() || static_symbols.empty()) {
 		init_table();
 	}
-
-
 	mLastErrorMessage.clear();
 
 	param p;
 	p.locale = locale;
 	p.parser = this;
-
-	/* leave space to terminate string by "\n\0" */
 	p.string = string;
 	/* pdebug("PARSER: Call yyparse() for \"%s\" (len = %d)\n", p.string, (int)strlen(p.string)); */
 
