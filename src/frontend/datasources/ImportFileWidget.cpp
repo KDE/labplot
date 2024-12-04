@@ -376,12 +376,10 @@ void ImportFileWidget::loadSettings() {
 	// update the status of the widgets
 	sourceTypeChanged(static_cast<int>(currentSourceType()));
 	fileTypeChanged(); // call it to load the filter templates for the current file type and to select the last used index in cbFilter below
-	if (!m_liveDataSource || currentSourceType() == LiveDataSource::SourceType::FileOrPipe) {
+	if (automaticAllowed(currentSourceType())) {
 		ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", (int)FilterSettingsHandlingIndex::Automatic));
-	} else {
-		ui.cbFilter->setCurrentIndex((int)FilterSettingsHandlingIndex::Custom);
-		ui.cbFilter->setEnabled(false);
 	}
+
 	filterChanged(ui.cbFilter->currentIndex());
 	updateTypeChanged(ui.cbUpdateType->currentIndex());
 	readingTypeChanged(ui.cbReadingType->currentIndex());
@@ -400,8 +398,12 @@ void ImportFileWidget::loadSettings() {
 	});
 }
 
+bool ImportFileWidget::automaticAllowed(LiveDataSource::SourceType sourceType) {
+	return sourceType != LiveDataSource::SourceType::SerialPort;
+}
+
 void ImportFileWidget::updateFilterHandlingSettings(LiveDataSource::SourceType sourceType) {
-	if (!m_liveDataSource || sourceType == LiveDataSource::SourceType::FileOrPipe) {
+	if (automaticAllowed(sourceType)) {
 		// No need to change
 		ui.cbFilter->setEnabled(true);
 	} else {
@@ -1761,7 +1763,7 @@ void ImportFileWidget::refreshPreview() {
 		filter->clearLastWarnings();
 
 		// sequential
-		if (sourceType != LiveDataSource::SourceType::FileOrPipe) {
+		if (!automaticAllowed(sourceType)) {
 			auto p = filter->properties();
 			filter->initialize(p);
 			if (!filter->lastError().isEmpty()) {
@@ -1784,7 +1786,7 @@ void ImportFileWidget::refreshPreview() {
 			if (lsocket.waitForConnected()) {
 				DEBUG("connected to local socket " << STDSTRING(file));
 				if (lsocket.waitForReadyRead())
-					importedStrings = filter->preview(lsocket, lines, false);
+					importedStrings = filter->preview(lsocket, lines, true);
 				DEBUG("Local socket: DISCONNECT PREVIEW");
 				lsocket.disconnectFromServer();
 				// read-only socket is disconnected immediately (no waitForDisconnected())
@@ -1802,7 +1804,7 @@ void ImportFileWidget::refreshPreview() {
 			if (tcpSocket.waitForConnected()) {
 				DEBUG("connected to TCP socket");
 				if (tcpSocket.waitForReadyRead())
-					importedStrings = filter->preview(tcpSocket, lines, false);
+					importedStrings = filter->preview(tcpSocket, lines, true);
 				else {
 					DEBUG("failed connect to TCP socket " << STDSTRING(tcpSocket.errorString()));
 					errorMessage = i18n("Preview: Failed to connect to TCP socket - %1", tcpSocket.errorString());
@@ -1828,7 +1830,7 @@ void ImportFileWidget::refreshPreview() {
 				} else {
 					DEBUG("	has no pending data");
 				}
-				importedStrings = filter->preview(udpSocket, lines, false);
+				importedStrings = filter->preview(udpSocket, lines, true);
 
 				DEBUG("UDP Socket: DISCONNECT PREVIEW, state = " << udpSocket.state());
 				udpSocket.disconnectFromHost();
@@ -2264,6 +2266,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 	// enable/disable "on new data"-option
 	const auto* model = qobject_cast<const QStandardItemModel*>(ui.cbUpdateType->model());
 	auto* item = model->item(static_cast<int>(LiveDataSource::UpdateType::NewData));
+
+	ui.gbOptions->setEnabled(true);
 
 	switch (sourceType) {
 	case LiveDataSource::SourceType::FileOrPipe:

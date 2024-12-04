@@ -228,8 +228,8 @@ QString AsciiFilter::statusToString(Status e) {
 		return i18n("Separator detection not allowed");
 	case Status::InvalidSeparator:
 		return i18n("Invalid separator");
-	case Status::SequentialDeviceUninitialized:
-		return i18n("Filter not initialized");
+	case Status::SerialDeviceUninitialized:
+		return i18n("Serial devices must be initialized before reading data from it");
 	case Status::WrongEndColumn:
 		return i18n("Wrong end column. Is it smaller than start column?");
 	case Status::WrongEndRow:
@@ -445,12 +445,14 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 	const bool simplifyWhiteSpace = properties.simplifyWhitespaces;
 	const bool skipEmptyParts = properties.skipEmptyParts;
 
-	if (device.isSequential()) {
+#ifdef HAVE_QTSERIALPORT
+	if (dynamic_cast<QSerialPort&>(device)) {
 		// Initialization not required. Assuming that all parameters are set,
-		// makes no sense for sequential devices, because you never know if
-		// the line is really the first line
-		return Status::SequentialDeviceUninitialized;
+		// makes no sense for serial port, because you never know if
+		// the line is really the first line and if it is a complete line
+		return Status::SerialDeviceUninitialized;
 	}
+#endif
 
 	if (!device.open(QIODevice::ReadOnly))
 		return Status::UnableToOpenDevice;

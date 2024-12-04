@@ -60,7 +60,7 @@ public:
 		HeaderDetectionNotAllowed,
 		SeparatorDetectionNotAllowed,
 		InvalidSeparator,
-		SequentialDeviceUninitialized,
+		SerialDeviceUninitialized,
 		NoColumns,
 		ColumnModeDeterminationFailed,
 		WrongEndColumn,
