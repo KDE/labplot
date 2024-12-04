@@ -89,6 +89,47 @@ namespace {
                 p->parser->setLastErrorMessage(ss.str());
                 return 0; // must be zero, because it indicates EOF
 	}
+
+    template<typename FunctionType, typename Symbol, typename OutType, typename ...Args>
+    int evaluateFunctionPayload(Parsing::param* p, int numArguments, Symbol* s, OutType& out, Args... args) {
+        const auto& special_function = std::get<Parsing::special_function_def>(s->value);
+        if (!special_function.payload.expired() && !special_function.payload.lock()->constant)
+                p->variablesCounter++;
+        const int argc = special_function.funsptr->argc;
+        if (argc != numArguments) {
+                return wrongArgumentNumberMessage(p, s->name, argc, numArguments);
+        }
+        try {
+                const auto function = std::get<FunctionType>(special_function.funsptr->fnct);
+                if (!p->parser->skipSpecialFunctionEvaluation()) {
+                        if (function == nullptr) {
+                                return notImplementedError(p, s->name);
+                        }
+                        out = function(args..., special_function.payload);
+                } else
+                        out = std::nan("0");
+        } catch (const std::bad_variant_access& ex) {
+                return wrongArgumentInternalErrorMessage(p, s->name, numArguments);
+        }
+        return 0;
+    }
+
+    template<typename FunctionType, typename Symbol, typename OutType, typename ...Args>
+    int evaluateFunction(Parsing::param* p, int numArguments, Symbol* s, OutType& out, Args... args) {
+        const auto* function = std::get<Parsing::funs*>(s->value);
+        const int argc = function->argc;
+        if (argc != numArguments) {
+                return wrongArgumentNumberMessage(p, s->name, argc, numArguments);
+        } else {
+                try {
+                        const auto fnct_ptr = std::get<FunctionType>(function->fnct);
+                        out = fnct_ptr(args...);
+                } catch (const std::bad_variant_access& ex) {
+                        return wrongArgumentInternalErrorMessage(p, s->name, numArguments);
+                }
+        }
+        return 0;
+    }
 } // anonymous namespace
 
 %}
@@ -129,294 +170,91 @@ expr:      NUM       { $$ = $1;                            }
 | VAR                { $$ = std::get<double>($1->value); p->variablesCounter++;}
 | VAR '=' expr       { $$ = std::get<double>($1->value) = $3; p->variablesCounter++;       }
 | SPECFNCT '(' ')'       {
-							const auto& special_function = std::get<Parsing::special_function_def>($1->value);
-							if (!special_function.payload.expired() && !special_function.payload.lock()->constant)
-                                                                p->variablesCounter++;
-							const int argc = special_function.funsptr->argc;
-							if (argc != 0) {
-                                                                return wrongArgumentNumberMessage(p, $1->name, argc, 0);
-							}
-							try {
-								const auto function = std::get<Parsing::func_tPayload>(special_function.funsptr->fnct);
-                                                                if (!p->parser->skipSpecialFunctionEvaluation()) {
-									if (function == nullptr) {
-                                                                                return notImplementedError(p, $1->name);
-									}
-									$$ = function(special_function.payload);
-								} else
-									$$ = std::nan("0");
-							} catch (const std::bad_variant_access& ex) {
-                                                                return wrongArgumentInternalErrorMessage(p, $1->name, 0);
-							}
-						}
+                                const auto res = evaluateFunctionPayload<Parsing::func_tPayload>(p, 0, $1, $$);
+                                if (res != 0)
+                                    return res;
+                        }
+/* Tested in void ColumnTest::testFormularsample(), void ColumnTest::testFormulasSize() */
 | SPECFNCT '(' VAR ')'  {
-							const auto& special_function = std::get<Parsing::special_function_def>($1->value);
-							if (!special_function.payload.expired() && !special_function.payload.lock()->constant)
-                                                                p->variablesCounter++;
-							const int argc = special_function.funsptr->argc;
-							if (argc != 1) {
-                                                                return wrongArgumentNumberMessage(p, $1->name, argc, 1);
-							}
-							try {
-                                                                const auto function = std::get<Parsing::func_tVariablePayload>(special_function.funsptr->fnct);
-                                                                if (!p->parser->skipSpecialFunctionEvaluation()) {
-									if (function == nullptr) {
-                                                                                return notImplementedError(p, $1->name);
-									}
-									$$ = function($3->name, special_function.payload);
-								} else
-									$$ = std::nan("0");
-							} catch (const std::bad_variant_access& ex) {
-                                                                return wrongArgumentInternalErrorMessage(p, $1->name, 1);
-							}
-						}
+                                const auto res = evaluateFunctionPayload<Parsing::func_tVariablePayload>(p, 1, $1, $$, $3);
+                                if (res != 0)
+                                    return res;
+                        }
+/* Tested in void ColumnTest::testFormulaCurrentColumnCell() */
 | SPECFNCT '(' expr ')'  {
-                                                    const auto& special_function = std::get<Parsing::special_function_def>($1->value);
-                                                    if (!special_function.payload.expired() && !special_function.payload.lock()->constant)
-                                                            p->variablesCounter++;
-                                                    const int argc = special_function.funsptr->argc;
-                                                    if (argc != 1) {
-                                                            return wrongArgumentNumberMessage(p, $1->name, argc, 1);
-                                                    }
-                                                    try {
-                                                            const auto function = std::get<Parsing::func_tValuePayload>(special_function.funsptr->fnct);
-                                                            if (!p->parser->skipSpecialFunctionEvaluation()) {
-                                                                    if (function == nullptr) {
-                                                                            return notImplementedError(p, $1->name);
-                                                                    }
-                                                                    $$ = function($3, special_function.payload);
-                                                            } else
-                                                                    $$ = std::nan("0");
-                                                    } catch (const std::bad_variant_access& ex) {
-                                                            return wrongArgumentInternalErrorMessage(p, $1->name, 1);
-                                                    }
-                                            }
+                                const auto res = evaluateFunctionPayload<Parsing::func_tValuePayload>(p, 1, $1, $$, $3);
+                                if (res != 0)
+                                    return res;
+                        }
+/* Tested in void ColumnTest::testFormulaCurrentColumnCellDefaultValue() */
 | SPECFNCT '(' expr ';' expr ')'  {
-                                                    const auto& special_function = std::get<Parsing::special_function_def>($1->value);
-                                                    if (!special_function.payload.expired() && !special_function.payload.lock()->constant)
-                                                            p->variablesCounter++;
-                                                    const int argc = special_function.funsptr->argc;
-                                                    if (argc != 2) {
-                                                            return wrongArgumentNumberMessage(p, $1->name, argc, 2);
-                                                    }
-                                                    try {
-                                                            const auto function = std::get<Parsing::func_t2ValuePayload>(special_function.funsptr->fnct);
-                                                            if (!p->parser->skipSpecialFunctionEvaluation()) {
-                                                                    if (function == nullptr) {
-                                                                            return notImplementedError(p, $1->name);
-                                                                    }
-                                                                    $$ = function($3, $5, special_function.payload);
-                                                            } else
-                                                                    $$ = std::nan("0");
-                                                    } catch (const std::bad_variant_access& ex) {
-                                                            return wrongArgumentInternalErrorMessage(p, $1->name, 1);
-                                                    }
-                                            }
+                                            const auto res = evaluateFunctionPayload<Parsing::func_t2ValuePayload>(p, 2, $1, $$, $3, $5);
+                                            if (res != 0)
+                                                return res;
+                                    }
+/* Tested in void ColumnTest::testFormulaCellMulti() */
 | SPECFNCT '(' expr ';' VAR ')'  {
-                                                                        const auto& special_function = std::get<Parsing::special_function_def>($1->value);
-                                                                        if (!special_function.payload.expired() && !special_function.payload.lock()->constant)
-                                                                                p->variablesCounter++;
-                                                                        const int argc = special_function.funsptr->argc;
-                                                                        if (argc != 2) {
-                                                                                return wrongArgumentNumberMessage(p, $1->name, argc, 2);
-                                                                        }
-                                                                        try {
-                                                                                const auto function = std::get<Parsing::func_tValueVariablePayload>(special_function.funsptr->fnct);
-                                                                                if (!p->parser->skipSpecialFunctionEvaluation()) {
-                                                                                        if (function == nullptr) {
-                                                                                                return notImplementedError(p, $1->name);
-                                                                                        }
-                                                                                        $$ = function($3 ,$5->name, special_function.payload);
-                                                                                } else
-                                                                                        $$ = std::nan("0");
-                                                                        } catch (const std::bad_variant_access& ex) {
-                                                                                return wrongArgumentInternalErrorMessage(p, $1->name, 2);
-                                                                        }
-                                                                  }
+                                    const auto res = evaluateFunctionPayload<Parsing::func_tValueVariablePayload>(p, 2, $1, $$, $3, $5);
+                                    if (res != 0)
+                                        return res;
+                                }
 | SPECFNCT '(' expr ';' expr ';' VAR ')'  {
-                                                                                        const auto& special_function = std::get<Parsing::special_function_def>($1->value);
-                                                                                        if (!special_function.payload.expired() && !special_function.payload.lock()->constant)
-                                                                                                p->variablesCounter++;
-                                                                                        const int argc = special_function.funsptr->argc;
-                                                                                        if (argc != 3) {
-                                                                                                return wrongArgumentNumberMessage(p, $1->name, argc, 3);
-                                                                                        }
-                                                                                        try {
-                                                                                                const auto function = std::get<Parsing::func_t2ValueVariablePayload>(special_function.funsptr->fnct);
-                                                                                                if (!p->parser->skipSpecialFunctionEvaluation()) {
-                                                                                                        if (function == nullptr) {
-                                                                                                                return notImplementedError(p, $1->name);
-                                                                                                        }
-                                                                                                        $$ = function($3, $5, $7->name, special_function.payload);
-                                                                                                } else
-                                                                                                        $$ = std::nan("0");
-                                                                                        } catch (const std::bad_variant_access& ex) {
-                                                                                                return wrongArgumentInternalErrorMessage(p, $1->name, 3);
-                                                                                        }
-                                                                                  }
+                                                const auto res = evaluateFunctionPayload<Parsing::func_t2ValueVariablePayload>(p, 3, $1, $$, $3, $5, $7);
+                                                if (res != 0)
+                                                    return res;
+                                          }
 | SPECFNCT '(' expr ';' expr ';' expr ';' VAR ')'  {
-													const auto& special_function = std::get<Parsing::special_function_def>($1->value);
-													if (!special_function.payload.expired() && !special_function.payload.lock()->constant)
-                                                                                                                p->variablesCounter++;
-													const int argc = special_function.funsptr->argc;
-													if (argc != 4) {
-                                                                                                                return wrongArgumentNumberMessage(p, $1->name, argc, 4);
-													}
-													try {
-                                                                                                                const auto function = std::get<Parsing::func_t3ValueVariablePayload>(special_function.funsptr->fnct);
-                                                                                                                if (!p->parser->skipSpecialFunctionEvaluation()) {
-															if (function == nullptr) {
-                                                                                                                                return notImplementedError(p, $1->name);
-															}
-															$$ = function($3, $5, $7, $9->name, special_function.payload);
-														} else
-															$$ = std::nan("0");
-													} catch (const std::bad_variant_access& ex) {
-                                                                                                                return wrongArgumentInternalErrorMessage(p, $1->name, 4);
-													}
-
-
-												  }
+                                                        const auto res = evaluateFunctionPayload<Parsing::func_t3ValueVariablePayload>(p, 4, $1, $$, $3, $5, $7, $9);
+                                                        if (res != 0)
+                                                            return res;
+                                                    }
 | SPECFNCT '(' expr ';' expr ';' expr ')'  { yyerrorFunction(p, $1->name, "Last argument must be a variable not an expression");}
 | SPECFNCT '(' expr ';' expr ';' expr ';' expr ')'  { yyerrorFunction(p, $1->name, "Last argument must be a variable not an expression");}
-| FNCT '(' ')'       {
-					        const auto* function = std::get<Parsing::funs*>($1->value);
-					        const int argc = function->argc;
-					        if (argc != 0) {
-                                                        return wrongArgumentNumberMessage(p, $1->name, argc, 0);
-					        } else {
-						        try {
-							        const auto fnct_ptr = std::get<Parsing::func_t>(function->fnct);
-							        $$ = fnct_ptr();
-						        } catch (const std::bad_variant_access& ex) {
-                                                                return wrongArgumentInternalErrorMessage(p, $1->name, 0);
-						        }
-					        }
-				        }
+| FNCT '(' ')'      {
+                        const auto res = evaluateFunction<Parsing::func_t>(p, 0, $1, $$);
+                        if (res != 0)
+                            return res;
+                    }
 | FNCT '(' expr ')'  {
-						const auto* function = std::get<Parsing::funs*>($1->value);
-						const int argc = function->argc;
-						if (argc != 1) {
-                                                        return wrongArgumentNumberMessage(p, $1->name, argc, 1);
-						} else {
-							try {
-								const auto fnct_ptr = std::get<Parsing::func_t1>(function->fnct);
-								$$ = fnct_ptr($3);
-							} catch (const std::bad_variant_access& ex) {
-                                                                return wrongArgumentInternalErrorMessage(p, $1->name, 1);
-							}
-						}
-					}
+                        const auto res = evaluateFunction<Parsing::func_t1>(p, 1, $1, $$, $3);
+                        if (res != 0)
+                            return res;
+                    }
 | FNCT '(' expr ',' expr ')'  {
-								const auto* function = std::get<Parsing::funs*>($1->value);
-								const int argc = function->argc;
-								if (argc != 2) {
-                                                                        return wrongArgumentNumberMessage(p, $1->name, argc, 2);
-								} else {
-									try {
-										const auto fnct_ptr = std::get<Parsing::func_t2>(function->fnct);
-										$$ = fnct_ptr($3,$5);
-									} catch (const std::bad_variant_access& ex) {
-                                                                                return wrongArgumentInternalErrorMessage(p, $1->name, 2);
-									}
-								}
-							}
+                                const auto res = evaluateFunction<Parsing::func_t2>(p, 2, $1, $$, $3, $5);
+                                if (res != 0)
+                                    return res;
+                            }
 | FNCT '(' expr ',' expr ',' expr ')'  {
-										const auto* function = std::get<Parsing::funs*>($1->value);
-										const int argc = function->argc;
-										if (argc != 3) {
-                                                                                        wrongArgumentNumberMessage(p, $1->name, argc, 3);
-                                                                                        p->errorCount++;
-											return 1;
-										} else {
-											try {
-												const auto fnct_ptr = std::get<Parsing::func_t3>(function->fnct);
-												$$ = fnct_ptr($3,$5,$7);
-											} catch (const std::bad_variant_access& ex) {
-                                                                                                wrongArgumentInternalErrorMessage(p, $1->name, 3);
-                                                                                                p->errorCount++;
-												return 1;
-											}
-										}
-									}
+                                            const auto res = evaluateFunction<Parsing::func_t3>(p, 3, $1, $$, $3, $5, $7);
+                                            if (res != 0)
+                                                return res;
+                                        }
 | FNCT '(' expr ',' expr ',' expr ',' expr ')'  {
-													const auto* function = std::get<Parsing::funs*>($1->value);
-													const int argc = function->argc;
-													if (argc != 4) {
-                                                                                                                wrongArgumentNumberMessage(p, $1->name, argc, 4);
-                                                                                                                p->errorCount++;
-														return 1;
-													} else {
-														try {
-															const auto fnct_ptr = std::get<Parsing::func_t4>(function->fnct);
-															$$ = fnct_ptr($3,$5,$7,$9);
-														} catch (const std::bad_variant_access& ex) {
-                                                                                                                        wrongArgumentInternalErrorMessage(p, $1->name, 4);
-                                                                                                                        p->errorCount++;
-															return 1;
-														}
-													}
-												}
+                                                const auto res = evaluateFunction<Parsing::func_t4>(p, 4, $1, $$, $3, $5, $7, $9);
+                                                if (res != 0)
+                                                    return res;
+                                                }
 | FNCT '(' expr ';' expr ')'  {
-								const auto* function = std::get<Parsing::funs*>($1->value);
-								const int argc = function->argc;
-								if (argc != 2) {
-                                                                        wrongArgumentNumberMessage(p, $1->name, argc, 2);
-                                                                        p->errorCount++;
-									return 1;
-								} else {
-									try {
-										const auto fnct_ptr = std::get<Parsing::func_t2>(function->fnct);
-										$$ = fnct_ptr($3,$5);
-									} catch (const std::bad_variant_access& ex) {
-                                                                                wrongArgumentInternalErrorMessage(p, $1->name, 2);
-                                                                                p->errorCount++;
-										return 1;
-									}
-								}
-							}
+                                    const auto res = evaluateFunction<Parsing::func_t2>(p, 2, $1, $$, $3, $5);
+                                    if (res != 0)
+                                        return res;
+                                }
 | FNCT '(' expr ';' expr ';' expr ')'  {
-										const auto* function = std::get<Parsing::funs*>($1->value);
-										const int argc = function->argc;
-										if (argc != 3) {
-                                                                                        return wrongArgumentNumberMessage(p, $1->name, argc, 3);
-										} else {
-											try {
-												const auto fnct_ptr = std::get<Parsing::func_t3>(function->fnct);
-												$$ = fnct_ptr($3,$5,$7);
-											} catch (const std::bad_variant_access& ex) {
-                                                                                                return wrongArgumentInternalErrorMessage(p, $1->name, 3);
-											}
-										}
-									}
+                                            const auto res = evaluateFunction<Parsing::func_t3>(p, 3, $1, $$, $3, $5, $7);
+                                            if (res != 0)
+                                                return res;
+                                        }
 | FNCT '(' expr ';' expr ';' expr ';' expr ')'  {
-													const auto* function = std::get<Parsing::funs*>($1->value);
-													const int argc = function->argc;
-													if (argc != 4) {
-                                                                                                                return wrongArgumentNumberMessage(p, $1->name, argc, 4);
-													} else {
-														try {
-															const auto fnct_ptr = std::get<Parsing::func_t4>(function->fnct);
-															$$ = fnct_ptr($3,$5,$7,$9);
-														} catch (const std::bad_variant_access& ex) {
-                                                                                                                        return wrongArgumentInternalErrorMessage(p, $1->name, 4);
-														}
-													}
-												}
+                                                    const auto res = evaluateFunction<Parsing::func_t4>(p, 4, $1, $$, $3, $5, $7, $9);
+                                                    if (res != 0)
+                                                        return res;
+                                                }
 | FNCT '(' expr ';' expr ';' expr ';' expr ';' expr ')'  {
-													const auto* function = std::get<Parsing::funs*>($1->value);
-													const int argc = function->argc;
-													if (argc != 5) {
-                                                                                                                return wrongArgumentNumberMessage(p, $1->name, argc, 5);
-													} else {
-														try {
-															const auto fnct_ptr = std::get<Parsing::func_t5>(function->fnct);
-															$$ = fnct_ptr($3,$5,$7,$9,$11);
-														} catch (const std::bad_variant_access& ex) {
-                                                                                                                        return wrongArgumentInternalErrorMessage(p, $1->name, 5);
-														}
-													}
-}
+                                                            const auto res = evaluateFunction<Parsing::func_t5>(p, 5, $1, $$, $3, $5, $7, $9, $11);
+                                                            if (res != 0)
+                                                                return res;
+                                                        }
 | expr '+' expr      { $$ = $1 + $3;                          }
 | expr '-' expr      { $$ = $1 - $3;                          }
 | expr OR expr       { $$ = Parsing::orFunction($1, $3);       }
