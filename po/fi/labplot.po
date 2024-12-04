@@ -1,14 +1,14 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-# Tommi Nieminen <translator@legisign.org>, 2014, 2015, 2018, 2019, 2022, 2023.
+# SPDX-FileCopyrightText: 2014, 2015, 2018, 2019, 2022, 2023, 2024 Tommi Nieminen <translator@legisign.org>
 # Lasse Liehu <lasse.liehu@gmail.com>, 2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-01 00:37+0000\n"
-"PO-Revision-Date: 2023-10-30 14:32+0200\n"
+"POT-Creation-Date: 2024-12-03 00:37+0000\n"
+"PO-Revision-Date: 2024-11-15 10:08+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -8522,7 +8522,7 @@ msgstr "%1: aseta numeeriseksi muodoksi ”%2”"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:299
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:170
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:355
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:350
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:112
 #, fuzzy, kde-format
 #| msgid "Data:"
@@ -10104,29 +10104,29 @@ msgstr "%1: aseta arvojen fontti"
 msgid "%1: set values color"
 msgstr "%1: aseta arvojen väri"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:207
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:203
 #, fuzzy, kde-format
 #| msgid "%1: line type changed"
 msgid "%1: data source type changed"
 msgstr "%1: viivan tyyppi muuttunut"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:214
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:210
 #, fuzzy, kde-format
 #| msgid "%1: set numeric format to '%2'"
 msgid "%1: data source curve changed"
 msgstr "%1: aseta numeeriseksi muodoksi ”%2”"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:223
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:218
 #, kde-format
 msgid "%1: assign x-data"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:232
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:226
 #, kde-format
 msgid "%1: assign y-data"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:241
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:234
 #, fuzzy, kde-format
 #| msgid "%1: assign y values"
 msgid "%1: assign second y-data"
@@ -22707,10 +22707,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lDropLines)
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:123
-#, fuzzy, kde-format
-#| msgid "Values"
+#, kde-format
 msgid "Drop lines"
-msgstr "Arvot"
+msgstr "Hylkää rivit"
 
 #. i18n: ectx: property (text), widget (QLabel, lLineInterpolationPointsCount)
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:133
@@ -22749,10 +22748,9 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:152
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:503
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:114
-#, fuzzy, kde-format
-#| msgid "x-Data:"
+#, kde-format
 msgid "Y-Data:"
-msgstr "x-Data:"
+msgstr "Y-data:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSimplification)
 #: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:30
@@ -23523,10 +23521,9 @@ msgstr "X-siirtymä:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/labelwidget.ui:494
-#, fuzzy, kde-format
-#| msgid "Model:"
+#, kde-format
 msgid "Mode:"
-msgstr "Malli:"
+msgstr "Tila:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderShape)
 #: src/frontend/ui/labelwidget.ui:586
@@ -23827,17 +23824,15 @@ msgstr "Käynnistys:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNewProject)
 #: src/frontend/ui/settingsgeneralpage.ui:50
-#, fuzzy, kde-format
-#| msgid "Save Project"
+#, kde-format
 msgid "New Project:"
-msgstr "Tallenna projekti"
+msgstr "Uusi projekti:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
 #: src/frontend/ui/settingsgeneralpage.ui:60
-#, fuzzy, kde-format
-#| msgid "Note"
+#, kde-format
 msgid "Notebook:"
-msgstr "Huomautus"
+msgstr "Muistikirja:"
 
 # pmap: =/gen=LabPlot2:n/
 # pmap: =/elat=LabPlot2:sta/
@@ -23913,17 +23908,15 @@ msgstr "Automaattitallennus:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/settingsgeneralpage.ui:298
-#, fuzzy, kde-format
-#| msgid "Save Calculations:"
+#, kde-format
 msgid "Save  Calculations:"
 msgstr "Tallenna laskennat:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
 #: src/frontend/ui/settingsgeneralpage.ui:312
-#, fuzzy, kde-format
-#| msgid "Probability"
+#, kde-format
 msgid "Compatibility:"
-msgstr "Todennäköisyys"
+msgstr "Yhteensopivuus:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
 #: src/frontend/ui/settingsgeneralpage.ui:319
@@ -23941,10 +23934,9 @@ msgstr "Tallenna yhteensopivaan muotoon"
 
 #. i18n: ectx: property (text), widget (QLabel, lTracing)
 #: src/frontend/ui/settingsgeneralpage.ui:329
-#, fuzzy, kde-format
-#| msgid "Spacing:"
+#, kde-format
 msgid "Tracing:"
-msgstr "Välistys:"
+msgstr "Jäljitys:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkInfoTrace)
 #: src/frontend/ui/settingsgeneralpage.ui:360
@@ -24006,10 +23998,9 @@ msgstr "Animoinnit"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/frontend/ui/settingsnotebookpage.ui:90
-#, fuzzy, kde-format
-#| msgid "Equation type"
+#, kde-format
 msgid "Evaluation"
-msgstr "Yhtälötyyppi"
+msgstr "Suoritus"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkReevaluateEntries)
 #: src/frontend/ui/settingsnotebookpage.ui:97
@@ -24104,10 +24095,9 @@ msgstr "Loppuarvo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter1)
 #: src/frontend/ui/spreadsheet/addsubtractvaluewidget.ui:136
-#, fuzzy, kde-format
-#| msgid "Smooth"
+#, kde-format
 msgid "Smoothness (Power of 10):"
-msgstr "Tasoita"
+msgstr "Pehmennys (10:n potenssi):"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter2)
 #: src/frontend/ui/spreadsheet/addsubtractvaluewidget.ui:162
@@ -24211,10 +24201,9 @@ msgstr "Vie pystyotsake:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, compressionGroup)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:192
-#, fuzzy, kde-format
-#| msgid "Show Options"
+#, kde-format
 msgid "Compression"
-msgstr "Näytä asetukset"
+msgstr "Pakkaus"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbLZ4)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:205
@@ -24230,10 +24219,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:222
-#, fuzzy, kde-format
-#| msgid "Show Options"
+#, kde-format
 msgid "Compression Level"
-msgstr "Näytä asetukset"
+msgstr "Pakkaustaso"
 
 #. i18n: ectx: property (text), widget (QLabel, lExportToFITS)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:232
@@ -24298,17 +24286,15 @@ msgstr "Värit"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoUpdate)
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:152
-#, fuzzy, kde-format
-#| msgid "auto-save"
+#, kde-format
 msgid "auto update the values"
-msgstr "Automaattitallenna"
+msgstr "päivitä arvot automaattisesti"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoResize)
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:162
-#, fuzzy, kde-format
-#| msgid "%1: clear selected columns"
+#, kde-format
 msgid "auto resize the column"
-msgstr "%1: tyhjennä valitut sarakkeet"
+msgstr "muuta sarakkeen kokoa automaattisesti"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbCurvePlacement)
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:154
@@ -24410,39 +24396,34 @@ msgstr "b:"
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:80
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:87
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:561
-#, fuzzy, kde-format
-#| msgid "Replace"
+#, kde-format
 msgid "Replace:"
-msgstr "Korvaa"
+msgstr "Korvaa:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFind)
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:97
-#, fuzzy, kde-format
-#| msgid "Find"
+#, kde-format
 msgid "Find:"
-msgstr "Etsi"
+msgstr "Etsi:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbOrder)
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:134
-#, fuzzy, kde-format
-#| msgid "Search region:"
+#, kde-format
 msgid "Search order"
-msgstr "Hakualue:"
+msgstr "Hakujärjestys"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbMatchCase)
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:147
 #: src/frontend/ui/spreadsheet/searchwidget.ui:119
-#, fuzzy, kde-format
-#| msgid "case sensitive"
+#, kde-format
 msgid "Match case sensitive"
-msgstr "erota pien- ja suuraakkoset"
+msgstr "Erota pien- ja suuraakkoset"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbSelectionOnly)
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:164
-#, fuzzy, kde-format
-#| msgid "Current selection"
+#, kde-format
 msgid "Search in the selection only"
-msgstr "Nykyinen valinta"
+msgstr "Etsi vain valinnasta"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFindNext)
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:194
@@ -24472,17 +24453,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bReplaceAll)
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:235
-#, fuzzy, kde-format
-#| msgid "Replace"
+#, kde-format
 msgid "Replace &All"
-msgstr "Korvaa"
+msgstr "Ko&rvaa kaikki"
 
 #. i18n: ectx: property (text), widget (QPushButton, bFindAll)
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:242
-#, fuzzy, kde-format
-#| msgid "expand all"
+#, kde-format
 msgid "&Find All"
-msgstr "laajenna kaikki"
+msgstr "&Etsi kaikki"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbSwitchFindReplace)
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:249
@@ -24518,10 +24497,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lColumns)
 #: src/frontend/ui/spreadsheet/sortdialogwidget.ui:17
-#, fuzzy, kde-format
-#| msgid "Sort"
+#, kde-format
 msgid "Sort by"
-msgstr "Lajittele"
+msgstr "Lajittelutapa"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbOrdering)
 #: src/frontend/ui/spreadsheet/sortdialogwidget.ui:64
@@ -24593,22 +24571,19 @@ msgid "Vertical Gradient"
 msgstr "Pystyliuku"
 
 #: src/frontend/widgets/BackgroundWidget.cpp:130
-#, fuzzy, kde-format
-#| msgid "diagonal linear gradient (start from top left)"
+#, kde-format
 msgid "Diag. Gradient (From Top Left)"
-msgstr "vino lineaarinen liuku (alkaen ylävasemmalta)"
+msgstr "Vino liuku (ylävasemmalta)"
 
 #: src/frontend/widgets/BackgroundWidget.cpp:131
-#, fuzzy, kde-format
-#| msgid "diagonal linear gradient (start from bottom left)"
+#, kde-format
 msgid "Diag. Gradient (From Bottom Left)"
-msgstr "vino lineaarinen liuku (alkaen alavasemmalta)"
+msgstr "Vino liuku (alavasemmalta)"
 
 #: src/frontend/widgets/BackgroundWidget.cpp:132
-#, fuzzy, kde-format
-#| msgid "radial gradient"
+#, kde-format
 msgid "Radial Gradient"
-msgstr "säteittäinen liuku"
+msgstr "Säteittäinen liuku"
 
 #: src/frontend/widgets/BackgroundWidget.cpp:135
 #, kde-format
@@ -24631,10 +24606,9 @@ msgid "Tiled"
 msgstr "Monistettu"
 
 #: src/frontend/widgets/BackgroundWidget.cpp:140
-#, fuzzy, kde-format
-#| msgid "center tiled"
+#, kde-format
 msgid "Center Tiled"
-msgstr "keskittäen monistettu"
+msgstr "Keskittäen monistettu"
 
 #: src/frontend/widgets/BackgroundWidget.cpp:266
 #, kde-format
@@ -24649,10 +24623,9 @@ msgstr "Ei virheitä"
 
 #: src/frontend/widgets/DatapickerCurveWidget.cpp:30
 #: src/frontend/widgets/DatapickerCurveWidget.cpp:34
-#, fuzzy, kde-format
-#| msgid "symmetric"
+#, kde-format
 msgid "Symmetric"
-msgstr "symmetrinen"
+msgstr "Symmetrinen"
 
 #: src/frontend/widgets/DatapickerCurveWidget.cpp:31
 #: src/frontend/widgets/DatapickerCurveWidget.cpp:35
@@ -24783,25 +24756,23 @@ msgid "Invalid image"
 msgstr "Virheellinen kuva"
 
 #: src/frontend/widgets/ErrorBarWidget.cpp:46
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "X Uncertainty"
-msgstr "Epävarmuus"
+msgstr "X-epävarmuus"
 
 #: src/frontend/widgets/ErrorBarWidget.cpp:47
 #: src/frontend/widgets/ErrorBarWidget.cpp:55
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "No Uncertainties"
-msgstr "Epävarmuus"
+msgstr "Ei epävarmuuksia"
 
 #: src/frontend/widgets/ErrorBarWidget.cpp:49
 #: src/frontend/widgets/ErrorBarWidget.cpp:57
 #: src/frontend/widgets/ErrorBarWidget.cpp:64
 #: src/frontend/widgets/ErrorBarWidget.cpp:71
-#, fuzzy, kde-format
+#, kde-format
 msgid "Poisson variance, sqrt(N)"
-msgstr "Poisson (sqrt(Y))"
+msgstr "Poisson-varianssi, sqrt(N)"
 
 #: src/frontend/widgets/ErrorBarWidget.cpp:50
 #: src/frontend/widgets/ErrorBarWidget.cpp:58
@@ -24816,16 +24787,15 @@ msgid "Custom Uncertainty Values, asymmetric"
 msgstr ""
 
 #: src/frontend/widgets/ErrorBarWidget.cpp:54
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "Y Uncertainty"
-msgstr "Epävarmuus"
+msgstr "Y-epävarmuus"
 
 #: src/frontend/widgets/ErrorBarWidget.cpp:62
 #: src/frontend/widgets/ErrorBarWidget.cpp:69
-#, fuzzy, kde-format
+#, kde-format
 msgid "No Errors"
-msgstr "virhe"
+msgstr "Ei virheitä"
 
 #: src/frontend/widgets/ErrorBarWidget.cpp:65
 #: src/frontend/widgets/ErrorBarWidget.cpp:72
@@ -24846,10 +24816,9 @@ msgstr ""
 
 #: src/frontend/widgets/ErrorBarWidget.cpp:254
 #: src/frontend/widgets/ErrorBarWidget.cpp:310
-#, fuzzy, kde-format
-#| msgid "Data, +-"
+#, kde-format
 msgid "Data, +-:"
-msgstr "Data, +-"
+msgstr "Data, +–:"
 
 #: src/frontend/widgets/FitParametersWidget.cpp:39
 #, kde-format
@@ -25063,16 +25032,14 @@ msgid "Sub-Script"
 msgstr "Alaindeksointi"
 
 #: src/frontend/widgets/LabelWidget.cpp:145
-#, fuzzy, kde-format
-#| msgid "Left margin:"
+#, kde-format
 msgid "Left Align"
-msgstr "Vasen reunus:"
+msgstr "Tasaa vasemmalle"
 
 #: src/frontend/widgets/LabelWidget.cpp:147
-#, fuzzy, kde-format
-#| msgid "Right margin:"
+#, kde-format
 msgid "Right Align"
-msgstr "Oikea reunus:"
+msgstr "Tasaa oikealle"
 
 #: src/frontend/widgets/LabelWidget.cpp:148
 #, kde-format
@@ -25210,10 +25177,9 @@ msgid "Date and Time"
 msgstr "Aika ja päiväys"
 
 #: src/frontend/widgets/LineWidget.cpp:51
-#, fuzzy, kde-format
-#| msgid "Values"
+#, kde-format
 msgid "Drop Lines"
-msgstr "Arvot"
+msgstr "Hylkää rivit"
 
 #: src/frontend/widgets/LineWidget.cpp:52
 #, kde-format
@@ -25261,16 +25227,14 @@ msgid "Memory used %1 MB, peak %2 MB"
 msgstr "Muistia käytetty %1 Mt, huippu %2 Mt"
 
 #: src/frontend/widgets/NumberSpinBox.cpp:53
-#, fuzzy, kde-format
-#| msgid "Tolerance"
+#, kde-format
 msgid "Minimum allowed value: %1"
-msgstr "Toleranssi"
+msgstr "Sallittu vähimmäisarvo: %1"
 
 #: src/frontend/widgets/NumberSpinBox.cpp:55
-#, fuzzy, kde-format
-#| msgid "Tolerance"
+#, kde-format
 msgid "Maximum allowed value: %1"
-msgstr "Toleranssi"
+msgstr "Sallittu enimmäisarvo: %1"
 
 #: src/frontend/widgets/NumberSpinBox.cpp:57
 #, kde-format
@@ -25278,10 +25242,9 @@ msgid "The value does not represent a valid number"
 msgstr ""
 
 #: src/frontend/widgets/NumberSpinBox.cpp:59
-#, fuzzy, kde-format
-#| msgid "Random number generator"
+#, kde-format
 msgid "No number entered"
-msgstr "Satunnaislukugeneraattori"
+msgstr "Ei annettu lukua"
 
 #: src/frontend/widgets/NumberSpinBox.cpp:63
 #, kde-format
@@ -25289,10 +25252,9 @@ msgid "Unhandled error"
 msgstr ""
 
 #: src/frontend/widgets/NumberSpinBox.cpp:440
-#, fuzzy, kde-format
-#| msgid "invalid row value"
+#, kde-format
 msgid "Invalid value entered. Valid value: %1"
-msgstr "virheellinen rivin arvo"
+msgstr "Annettiin virheellinen arvo. Kelvollinen arvo: %1"
 
 #: src/frontend/widgets/TreeViewComboBox.cpp:56
 #, kde-format
@@ -25463,22 +25425,19 @@ msgid "Pin the navigation panel"
 msgstr ""
 
 #: src/frontend/worksheet/WorksheetView.cpp:167
-#, fuzzy, kde-format
-#| msgid "Auto fit:"
+#, kde-format
 msgctxt "Zoom"
 msgid "No fit"
-msgstr "Automaattisovitus:"
+msgstr "Ei sovitusta"
 
 #: src/frontend/worksheet/WorksheetView.cpp:177
-#, fuzzy, kde-format
-#| msgid "Fit to Selection"
+#, kde-format
 msgctxt "Zoom"
 msgid "Fit to Selection"
 msgstr "Sovita valintaan"
 
 #: src/frontend/worksheet/WorksheetView.cpp:180
-#, fuzzy, kde-format
-#| msgid "Fit"
+#, kde-format
 msgctxt "Zoom"
 msgid "Fit"
 msgstr "Sovita"
@@ -25553,10 +25512,9 @@ msgid "Snap to Grid"
 msgstr "Kiinnitä ruudukkoon"
 
 #: src/frontend/worksheet/WorksheetView.cpp:284
-#, fuzzy, kde-format
-#| msgid "Interactive"
+#, kde-format
 msgid "Interactive Plots"
-msgstr "Vuorovaikutteinen"
+msgstr "Vuorovaikutteiset kaaviot"
 
 #: src/frontend/worksheet/WorksheetView.cpp:285
 #, kde-format
@@ -25602,16 +25560,14 @@ msgid "Select Region and Zoom In"
 msgstr "Valitse alue ja lähennä"
 
 #: src/frontend/worksheet/WorksheetView.cpp:351
-#, fuzzy, kde-format
-#| msgid "Select x-Region and Zoom In"
+#, kde-format
 msgid "Select X-Region and Zoom In"
-msgstr "Valitse x-alue ja lähennä"
+msgstr "Valitse X-alue ja lähennä"
 
 #: src/frontend/worksheet/WorksheetView.cpp:356
-#, fuzzy, kde-format
-#| msgid "Select x-Region and Zoom In"
+#, kde-format
 msgid "Select Y-Region and Zoom In"
-msgstr "Valitse x-alue ja lähennä"
+msgstr "Valitse Y-alue ja lähennä"
 
 #: src/frontend/worksheet/WorksheetView.cpp:368
 #, kde-format
@@ -25619,40 +25575,34 @@ msgid "Auto Scale"
 msgstr "Automaattinen skaalaus"
 
 #: src/frontend/worksheet/WorksheetView.cpp:372
-#, fuzzy, kde-format
-#| msgid "auto scale"
+#, kde-format
 msgid "Auto Scale X"
-msgstr "automaattiskaalaus"
+msgstr "Automaattiskaalaa X"
 
 #: src/frontend/worksheet/WorksheetView.cpp:376
-#, fuzzy, kde-format
-#| msgid "auto scale"
+#, kde-format
 msgid "Auto Scale Y"
-msgstr "automaattiskaalaus"
+msgstr "Automaattiskaalaa Y"
 
 #: src/frontend/worksheet/WorksheetView.cpp:388
-#, fuzzy, kde-format
-#| msgid "Zoom in"
+#, kde-format
 msgid "Zoom In X"
-msgstr "Lähennä"
+msgstr "Lähennä X"
 
 #: src/frontend/worksheet/WorksheetView.cpp:392
-#, fuzzy, kde-format
-#| msgid "Zoom out"
+#, kde-format
 msgid "Zoom Out X"
-msgstr "Loitonna"
+msgstr "Loitonna X"
 
 #: src/frontend/worksheet/WorksheetView.cpp:396
-#, fuzzy, kde-format
-#| msgid "Zoom in"
+#, kde-format
 msgid "Zoom In Y"
-msgstr "Lähennä"
+msgstr "Lähennä Y"
 
 #: src/frontend/worksheet/WorksheetView.cpp:400
-#, fuzzy, kde-format
-#| msgid "Zoom out"
+#, kde-format
 msgid "Zoom Out Y"
-msgstr "Loitonna"
+msgstr "Loitonna Y"
 
 #: src/frontend/worksheet/WorksheetView.cpp:404
 #, fuzzy, kde-format
@@ -25692,8 +25642,7 @@ msgid "Zoom/Navigate"
 msgstr "Lähennys/liikkuminen"
 
 #: src/frontend/worksheet/WorksheetView.cpp:522
-#, fuzzy, kde-format
-#| msgid "Apply actions to"
+#, kde-format
 msgid "Apply Actions to"
 msgstr "Käytä toimintoja kohteeseen"
 

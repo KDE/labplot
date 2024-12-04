@@ -21,14 +21,10 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
-
-#include <KLocalizedString>
-#include <QDateTime>
 
 XYAnalysisCurve::XYAnalysisCurve(const QString& name, XYAnalysisCurvePrivate* dd, AspectType type)
 	: XYCurve(name, dd, type) {
@@ -210,36 +206,32 @@ void XYAnalysisCurve::setDataSourceType(DataSourceType type) {
 STD_SETTER_CMD_IMPL_F_S(XYAnalysisCurve, SetDataSourceCurve, const XYCurve*, dataSourceCurve, sourceChanged)
 void XYAnalysisCurve::setDataSourceCurve(const XYCurve* curve) {
 	Q_D(XYAnalysisCurve);
-	if (curve != d->dataSourceCurve) {
+	if (curve != d->dataSourceCurve)
 		exec(new XYAnalysisCurveSetDataSourceCurveCmd(d, curve, ki18n("%1: data source curve changed")));
-	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYAnalysisCurve, SetXDataColumn, const AbstractColumn*, xDataColumn, sourceChanged)
 void XYAnalysisCurve::setXDataColumn(const AbstractColumn* column) {
 	DEBUG(Q_FUNC_INFO);
 	Q_D(XYAnalysisCurve);
-	if (column != d->xDataColumn) {
+	if (column != d->xDataColumn)
 		exec(new XYAnalysisCurveSetXDataColumnCmd(d, column, ki18n("%1: assign x-data")));
-	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYAnalysisCurve, SetYDataColumn, const AbstractColumn*, yDataColumn, sourceChanged)
 void XYAnalysisCurve::setYDataColumn(const AbstractColumn* column) {
 	DEBUG(Q_FUNC_INFO);
 	Q_D(XYAnalysisCurve);
-	if (column != d->yDataColumn) {
+	if (column != d->yDataColumn)
 		exec(new XYAnalysisCurveSetYDataColumnCmd(d, column, ki18n("%1: assign y-data")));
-	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYAnalysisCurve, SetY2DataColumn, const AbstractColumn*, y2DataColumn, sourceChanged)
 void XYAnalysisCurve::setY2DataColumn(const AbstractColumn* column) {
 	DEBUG(Q_FUNC_INFO);
 	Q_D(XYAnalysisCurve);
-	if (column != d->y2DataColumn) {
+	if (column != d->y2DataColumn)
 		exec(new XYAnalysisCurveSetY2DataColumnCmd(d, column, ki18n("%1: assign second y-data")));
-	}
 }
 
 void XYAnalysisCurve::setDataSourceCurvePath(const QString& path) {
@@ -266,6 +258,9 @@ void XYAnalysisCurve::setY2DataColumnPath(const QString& path) {
 // #################################  SLOTS  ####################################
 // ##############################################################################
 void XYAnalysisCurve::handleSourceDataChanged() {
+	if (isLoading())
+		return;
+
 	Q_D(XYAnalysisCurve);
 
 	if (d->xDataColumn)

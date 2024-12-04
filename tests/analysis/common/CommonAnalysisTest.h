@@ -4,6 +4,7 @@
 	Description          : Tests for common analysis tasks
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2024 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-FileCopyrightText: 2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -16,6 +17,10 @@ class CommonAnalysisTest : public AnalysisTest {
 	Q_OBJECT
 
 private Q_SLOTS:
+
+	void saveRestoreSourceColumns();
+	void saveRestoreSourceCurve();
+	void saveRestoreSourceHistogram();
 
 	void dataImportRecalculationAnalysisCurveColumnDependency();
 };
