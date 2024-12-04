@@ -53,18 +53,12 @@ public:
 	static bool set_specialfunction3ValueVariablePayload(const char* function_name, func_t3ValueVariablePayload function, std::shared_ptr<Payload> payload);
 
 	UsedSymbols usedSymbolsState() const;
-
+	void addUsedSymbol(BaseSymbol* s);
+	BaseSymbol* get_used_symbol(const char* symbol_name);
+	int remove_symbol(const char *symbol_name);
 	std::vector<std::string> get_used_symbols();
 
 	void setLastErrorMessage(const std::string& str);
-
-	// TODO: make them private!
-	/* initialize symbol table with all known functions and constants */
-	std::vector<BaseSymbol*> mUsedSymbols;
-
-	BaseSymbol* get_used_symbol(const char* symbol_name);
-
-	int remove_symbol(const char *symbol_name);
 
 private:
 	double mResult {std::nan("0")};
@@ -73,6 +67,7 @@ private:
 	size_t mVariablesCounter{0};
 	UsedSymbols mUsedSymbolsStateMachine; /* if Only, only the symbols in the "used_symbols" are used (performance reason) */
 	bool mSkipSpecialFunctionEvaluation {false};
+	std::vector<BaseSymbol*> mUsedSymbols;
 
 	friend class ExpressionParser;
 };

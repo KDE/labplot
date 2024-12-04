@@ -569,7 +569,7 @@ namespace Parsing {
 
                                 if (p->parser->usedSymbolsState() == UsedSymbols::Initialize) {
                                         if (!p->parser->get_used_symbol(symbol_name)) {
-                                                p->parser->mUsedSymbols.push_back(s);
+                                                p->parser->addUsedSymbol(s);
                                                 DEBUG_PARSER("New symbol: " << s->name);
                                         }
 				}
