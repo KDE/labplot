@@ -12,11 +12,12 @@
 #define NOTE_H
 
 #include "backend/core/AbstractPart.h"
+#include "backend/lib/macros.h"
 
 #include <QFont>
 #include <QIcon>
 
-class QColor;
+class NotePrivate;
 class NoteView;
 
 class Note : public AbstractPart {
@@ -32,20 +33,15 @@ public:
 	bool printView() override;
 	bool printPreview() const override;
 
-	void setText(const QString&);
-	const QString& text() const;
-
-	void setBackgroundColor(const QColor&);
-	const QColor& backgroundColor() const;
-
-	void setTextColor(const QColor&);
-	const QColor& textColor() const;
-
-	void setTextFont(const QFont&);
-	const QFont& textFont() const;
+	CLASS_D_ACCESSOR_DECL(QString, text, Text)
+	CLASS_D_ACCESSOR_DECL(QColor, backgroundColor, BackgroundColor)
+	CLASS_D_ACCESSOR_DECL(QColor, textColor, TextColor)
+	CLASS_D_ACCESSOR_DECL(QFont, textFont, TextFont)
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
+
+	typedef NotePrivate Private;
 
 Q_SIGNALS:
 	void textChanged(const QString&);
@@ -54,11 +50,9 @@ Q_SIGNALS:
 	void textFontChanged(const QFont&);
 
 private:
+	Q_DECLARE_PRIVATE(Note)
+	NotePrivate* const d_ptr;
 	mutable NoteView* m_view{nullptr};
-	QColor m_backgroundColor;
-	QColor m_textColor;
-	QFont m_textFont;
-	QString m_text;
 };
 
 #endif // NOTE_H

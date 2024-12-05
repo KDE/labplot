@@ -10,7 +10,6 @@
 
 #include "NoteView.h"
 #include "backend/note/Note.h"
-#include "frontend/dockwidgets/BaseDock.h"
 
 #include <QHBoxLayout>
 #include <QPrinter>
@@ -37,23 +36,46 @@ NoteView::NoteView(Note* note)
 	connect(m_note, &Note::textColorChanged, this, &NoteView::noteTextColorChanged);
 	connect(m_note, &Note::textFontChanged, this, &NoteView::noteTextFontChanged);
 
-	connect(m_textEdit, &QTextEdit::textChanged, this, &NoteView::textChanged);
+	// don't put every single character change onto the undo stack, delay it similarly how it's done in TimedLineEdit
+	connect(m_textEdit, &QTextEdit::textChanged, [&]() {
+		if (m_textChangedTimerId != -1)
+			killTimer(m_textChangedTimerId);
+		m_textChangedTimerId = startTimer(1000);
+	});
 }
 
 void NoteView::print(QPrinter* printer) const {
 	m_textEdit->print(printer);
 }
 
-void NoteView::textChanged() {
-	CONDITIONAL_LOCK_RETURN;
-	m_note->setText(m_textEdit->toPlainText());
+void NoteView::timerEvent(QTimerEvent* event) {
+	if (event->timerId() == m_textChangedTimerId) {
+		killTimer(m_textChangedTimerId);
+		m_textChangedTimerId = -1;
+		CONDITIONAL_LOCK_RETURN;
+		m_note->setText(m_textEdit->toPlainText());
+	}
 }
 
+//*************************************************************
+//************ SLOTs for changes triggered in Note ************
+//*************************************************************
 void NoteView::noteTextChanged(const QString& text) {
+	auto cursor = m_textEdit->textCursor();
+	int cursorAnchor = cursor.anchor();
+	int cursorPos = cursor.position();
+
+	CONDITIONAL_LOCK_RETURN;
 	m_textEdit->setText(text);
+
+	cursor = m_textEdit->textCursor();
+	cursor.setPosition(cursorAnchor);
+	cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, cursorPos - cursorAnchor);
+	m_textEdit->setTextCursor(cursor);
 }
 
 void NoteView::noteBackgroundColorChanged(const QColor& color) {
+	CONDITIONAL_LOCK_RETURN;
 	QString red = QString::number(color.red());
 	QString green = QString::number(color.green());
 	QString blue = QString::number(color.blue());
@@ -61,10 +83,15 @@ void NoteView::noteBackgroundColorChanged(const QColor& color) {
 }
 
 void NoteView::noteTextFontChanged(const QFont& font) {
+	CONDITIONAL_LOCK_RETURN;
 	m_textEdit->setFont(font);
 }
 
 void NoteView::noteTextColorChanged(const QColor& color) {
 	CONDITIONAL_LOCK_RETURN;
+	m_textEdit->selectAll();
 	m_textEdit->setTextColor(color);
+	auto cursor = m_textEdit->textCursor();
+	cursor.clearSelection();
+	m_textEdit->setTextCursor(cursor);
 }

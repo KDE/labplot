@@ -14,7 +14,6 @@
 #include "backend/note/Note.h"
 #include "frontend/dockwidgets/BaseDock.h"
 #include "ui_notedock.h"
-#include <QWidget>
 
 class KConfig;
 
@@ -27,15 +26,21 @@ public:
 
 private:
 	Ui::NoteDock ui;
-	Note* m_notes{nullptr};
+	Note* m_note{nullptr};
 	QList<Note*> m_notesList;
 
 	void init();
 
 private Q_SLOTS:
+	// SLOTs for changes triggered in NoteDock
 	void backgroundColorChanged(const QColor&);
 	void textColorChanged(const QColor&);
 	void textFontChanged(const QFont&);
+
+	// SLOTs for changes triggered in Note
+	void noteBackgroundColorChanged(const QColor&);
+	void noteTextColorChanged(const QColor&);
+	void noteTextFontChanged(const QFont&);
 
 	void loadConfigFromTemplate(KConfig&);
 	void saveConfigAsTemplate(KConfig&);

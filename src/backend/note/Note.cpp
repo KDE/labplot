@@ -4,13 +4,14 @@
 	Description          : Notes Widget for taking notes
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009-2015 Garvit Khatri <garvitdelhi@gmail.com>
-	SPDX-FileCopyrightText: 2016-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "Note.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
+#include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
 #include "frontend/note/NoteView.h"
@@ -27,14 +28,32 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
+class NotePrivate {
+public:
+	explicit NotePrivate(Note* owner): q(owner) {
+	}
+
+	QString name() const {
+		return q->name();
+	}
+
+	QColor backgroundColor;
+	QColor textColor;
+	QFont textFont;
+	QString text;
+	Note* const q{nullptr};
+};
+
 Note::Note(const QString& name)
-	: AbstractPart(name, AspectType::Note) {
+	: AbstractPart(name, AspectType::Note)
+	, d_ptr(new NotePrivate(this)) {
 	KConfig config;
 	KConfigGroup group = config.group(QStringLiteral("Notes"));
 
-	m_backgroundColor = group.readEntry(QStringLiteral("BackgroundColor"), QColor(Qt::yellow));
-	m_textColor = group.readEntry(QStringLiteral("TextColor"), QColor(Qt::black));
-	m_textFont = group.readEntry(QStringLiteral("TextFont"), QFont());
+	Q_D(Note);
+	d->backgroundColor = group.readEntry(QStringLiteral("BackgroundColor"), QColor(Qt::yellow));
+	d->textColor = group.readEntry(QStringLiteral("TextColor"), QColor(Qt::black));
+	d->textFont = group.readEntry(QStringLiteral("TextFont"), QFont());
 }
 
 QIcon Note::icon() const {
@@ -82,48 +101,47 @@ bool Note::exportView() const {
 		return false;
 	}
 
+	Q_D(const Note);
 	QTextStream out(&file);
-	out << m_text;
+	out << d->text;
 	file.close();
 
 	return true;
 }
 
+/* ============================ getter methods ================= */
+BASIC_SHARED_D_READER_IMPL(Note, QString, text, text)
+BASIC_SHARED_D_READER_IMPL(Note, QColor, backgroundColor, backgroundColor)
+BASIC_SHARED_D_READER_IMPL(Note, QColor, textColor, textColor)
+BASIC_SHARED_D_READER_IMPL(Note, QFont, textFont, textFont)
+
+/* ============================ setter methods and undo commands ================= */
+STD_SETTER_CMD_IMPL_S(Note, SetText, QString, text)
 void Note::setText(const QString& text) {
-	m_text = text;
-	setProjectChanged(true);
-	Q_EMIT textChanged(text);
+	Q_D(Note);
+	if (text != d->text)
+		exec(new NoteSetTextCmd(d, text, ki18n("%1: set text")));
 }
 
-const QString& Note::text() const {
-	return m_text;
-}
-
+STD_SETTER_CMD_IMPL_S(Note, SetBackgroundColor, QColor, backgroundColor)
 void Note::setBackgroundColor(const QColor& color) {
-	m_backgroundColor = color;
-	Q_EMIT backgroundColorChanged(color);
+	Q_D(Note);
+	if (color != d->backgroundColor)
+		exec(new NoteSetBackgroundColorCmd(d, color, ki18n("%1: set background color")));
 }
 
-const QColor& Note::backgroundColor() const {
-	return m_backgroundColor;
-}
-
+STD_SETTER_CMD_IMPL_S(Note, SetTextColor, QColor, textColor)
 void Note::setTextColor(const QColor& color) {
-	m_textColor = color;
-	Q_EMIT textColorChanged(color);
+	Q_D(Note);
+	if (color != d->textColor)
+		exec(new NoteSetTextColorCmd(d, color, ki18n("%1: set text color")));
 }
 
-const QColor& Note::textColor() const {
-	return m_textColor;
-}
-
+STD_SETTER_CMD_IMPL_S(Note, SetTextFont, QFont, textFont)
 void Note::setTextFont(const QFont& font) {
-	m_textFont = font;
-	Q_EMIT textFontChanged(font);
-}
-
-const QFont& Note::textFont() const {
-	return m_textFont;
+	Q_D(Note);
+	if (font != d->textFont)
+		exec(new NoteSetTextFontCmd(d, font, ki18n("%1: set text font")));
 }
 
 QWidget* Note::view() const {
@@ -139,24 +157,27 @@ QWidget* Note::view() const {
 // ##############################################################################
 //! Save as XML
 void Note::save(QXmlStreamWriter* writer) const {
+	Q_D(const Note);
 	writer->writeStartElement(QStringLiteral("note"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
 	writer->writeStartElement(QStringLiteral("background"));
-	WRITE_QCOLOR(m_backgroundColor);
+	WRITE_QCOLOR(d->backgroundColor);
 	writer->writeEndElement();
 
 	writer->writeStartElement(QStringLiteral("text"));
-	WRITE_QCOLOR(m_textColor);
-	WRITE_QFONT(m_textFont);
-	writer->writeAttribute(QStringLiteral("text"), m_text);
+	WRITE_QCOLOR(d->textColor);
+	WRITE_QFONT(d->textFont);
+	writer->writeAttribute(QStringLiteral("text"), d->text);
 	writer->writeEndElement();
 
 	writer->writeEndElement(); // close "note" section
 }
 
 bool Note::load(XmlStreamReader* reader, bool preview) {
+	Q_D(Note);
+
 	if (!reader->isStartElement() || reader->name() != QLatin1String("note")) {
 		reader->raiseError(i18n("no note element found"));
 		return false;
@@ -181,12 +202,12 @@ bool Note::load(XmlStreamReader* reader, bool preview) {
 				return false;
 		} else if (!preview && reader->name() == QLatin1String("background")) {
 			attribs = reader->attributes();
-			READ_QCOLOR(m_backgroundColor);
+			READ_QCOLOR(d->backgroundColor);
 		} else if (!preview && reader->name() == QLatin1String("text")) {
 			attribs = reader->attributes();
-			READ_QCOLOR(m_textColor);
-			READ_QFONT(m_textFont);
-			m_text = attribs.value(QStringLiteral("text")).toString();
+			READ_QCOLOR(d->textColor);
+			READ_QFONT(d->textFont);
+			d->text = attribs.value(QStringLiteral("text")).toString();
 		} else { // unknown element
 			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
