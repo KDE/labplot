@@ -134,7 +134,7 @@ void AsciiFilter::setDataSource(AbstractDataSource* dataSource) {
 
 void AsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode columnImportMode) {
 	Q_D(AsciiFilter);
-	d->fileNumberLines = lineNumber(fileName);
+	d->fileNumberLines = lineCount(fileName);
 
 	KCompressionDevice file(fileName);
 
@@ -269,7 +269,7 @@ QStringList AsciiFilter::commentCharacters() {
 QString AsciiFilter::fileInfoString(const QString& fileName) {
 	QString info(i18n("Number of columns: %1", AsciiFilter::columnNumber(fileName)));
 	info += QStringLiteral("<br>");
-	info += i18n("Number of lines: %1", AsciiFilter::lineNumber(fileName));
+	info += i18n("Number of lines: %1", AsciiFilter::lineCount(fileName));
 	return info;
 }
 
@@ -277,7 +277,11 @@ int AsciiFilter::columnNumber(const QString& /*fileName*/, const QString& /*sepa
 	return -1; // TODO: implement
 }
 
-size_t AsciiFilter::lineNumber(const QString& fileName, const size_t maxLines) {
+/*!
+ * returns number of lines in file 'fileName'
+ * optional: only check 'maxLines' (returns minimum of line count and maxLines)
+ */
+size_t AsciiFilter::lineCount(const QString& fileName, const size_t maxLines) {
 	DEBUG(Q_FUNC_INFO << ", max lines = " << maxLines)
 	PERFTRACE(QLatin1String(Q_FUNC_INFO))
 
@@ -288,7 +292,7 @@ size_t AsciiFilter::lineNumber(const QString& fileName, const size_t maxLines) {
 		return 0;
 	}
 
-	if (compressionDevice.compressionType() == KCompressionDevice::None) {	// uncompressed
+	if (device.compressionType() == KCompressionDevice::None) {	// uncompressed
 		device.close();
 
 		std::ifstream file(fileName.toStdString());

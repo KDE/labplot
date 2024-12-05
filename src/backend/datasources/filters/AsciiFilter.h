@@ -89,7 +89,7 @@ public:
 
 	static QString fileInfoString(const QString&);
 	static int columnNumber(const QString& fileName, const QString& separator = QString());
-	static size_t lineNumber(const QString& fileName, size_t maxLines = std::numeric_limits<std::size_t>::max());
+	static size_t lineCount(const QString& fileName, size_t maxLines = std::numeric_limits<std::size_t>::max());
 
 	static QStringList dataTypesString();
 	static QPair<QString, QString> dataTypeString(const AbstractColumn::ColumnMode mode);
