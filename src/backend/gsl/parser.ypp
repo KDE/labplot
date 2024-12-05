@@ -22,8 +22,8 @@
 #ifdef HAVE_XLOCALE
 #include <xlocale.h>
 #endif
-#include "ParserClass.h"
-#include "parser.h"
+#include "Parser.h"
+#include "ParserDeclarations.h"
 #include "parser_private.h"
 #include "constants.h"
 #include "functions.h"
