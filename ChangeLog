@@ -11,10 +11,11 @@ New features:
 		* improve error messages for data import
 		* fix preview of data with header
 		* Ask how to treat multilayer graphs when opening OPJ project
-		* Improved error message handling
-		* Improved livedata import
+		* Improve error message handling
+		* Improve livedata import
 		* Add possibility to specify custom column datatypes (mandatory for livedata)
 		* Notify about the unsupported UTF16 encoding (BUG 496215)
+		* Make counting number of lines in ASCII files faster on Windows
 	* [analysis]
 		* Add possibility to do calculations on curves
 		* Automatically recalculate analysis curves on data change
@@ -38,8 +39,8 @@ Bug fixes:
 	* Fix crash selecting "cell" from function list in function dialog
 	* Properly draw the border line of the symbol in the legend (BUG 491310)
 	* Show Ticks on inverted axes (BUG 491502 & 492475)
-	* Fixed add/subtract value functionality in Matrix (BUG 493523)
-	* Fixed wrong font size in the plot legend (BUG 493017) and in the axis title (BUG 472982)
+	* Fix add/subtract value functionality in Matrix (BUG 493523)
+	* Fix wrong font size in the plot legend (BUG 493017) and in the axis title (BUG 472982)
 	* Don't overwrite OPJ files when saving (BUG 496480)
 
 Internal:
