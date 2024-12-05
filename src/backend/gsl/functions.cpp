@@ -11,7 +11,7 @@
 #include "functions.h"
 #include "backend/nsl/nsl_math.h"
 #include "backend/nsl/nsl_sf_basic.h"
-#include "parser.h"
+#include "ParserDeclarations.h"
 #include "parserFunctionTypes.h"
 
 #include <KLocalizedString>
