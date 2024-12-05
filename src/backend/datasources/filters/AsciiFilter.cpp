@@ -292,7 +292,7 @@ size_t AsciiFilter::lineCount(const QString& fileName, const size_t maxLines) {
 		return 0;
 	}
 
-	if (device.compressionType() == KCompressionDevice::None) {	// uncompressed
+	if (device.compressionType() == KCompressionDevice::None) { // uncompressed
 		device.close();
 
 		std::ifstream file(fileName.toStdString());

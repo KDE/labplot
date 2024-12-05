@@ -18,6 +18,9 @@ class AsciiFilterTest : public CommonMetaTest {
 
 private Q_SLOTS:
 	void initialization();
+	void lineCount();
+
+	// column modes
 	void read_HeaderEnabled_tooLessColumnModes();
 	void read_HeaderEnabled_tooManyColumnModes();
 
@@ -129,7 +132,7 @@ private Q_SLOTS:
 	// benchmarks
 	void benchDoubleImport_data();
 	// this is called multiple times (warm-up of BENCHMARK)
-	// see https://stackoverflow.com/questions/36916962/qtest-executes-test-case-twic
+	// see https://stackoverflow.com/questions/36916962/qtest-executes-test-case-twice
 	void benchDoubleImport();
 	void benchDoubleImport_cleanup(); // delete data
 	void benchMarkCompare_SimplifyWhiteSpace();
