@@ -10,7 +10,7 @@
 #ifndef RANGE_H
 #define RANGE_H
 
-#include "backend/gsl/ParserClass.h"
+#include "backend/gsl/Parser.h"
 #include "backend/nsl/nsl_math.h"
 #include "macros.h" //const auto numberLocale = QLocale();
 

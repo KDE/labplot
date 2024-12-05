@@ -1,5 +1,5 @@
-#include "ParserClass.h"
-#include "parser.h"
+#include "Parser.h"
+#include "ParserDeclarations.h"
 #include "parser_private.h"
 #include "backend/lib/Debug.h"
 

@@ -11,6 +11,7 @@
 #include "MatrixFunctionDialog.h"
 #include "backend/core/Settings.h"
 #include "backend/gsl/ExpressionParser.h"
+#include "backend/gsl/Parser.h"
 #include "backend/lib/macros.h"
 #include "backend/matrix/Matrix.h"
 #include "frontend/widgets/ConstantsWidget.h"
@@ -29,7 +30,6 @@
 #include <QElapsedTimer>
 #endif
 
-#include "backend/gsl/ParserClass.h"
 #include <cmath>
 
 /*!
