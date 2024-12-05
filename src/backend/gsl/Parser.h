@@ -15,7 +15,7 @@
 #include <cmath>
 
 #include "parserFunctionTypes.h"
-#include "parser.h"
+#include "ParserDeclarations.h"
 
 class ExpressionParser;
 
