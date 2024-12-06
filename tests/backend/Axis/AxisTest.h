@@ -36,11 +36,6 @@ private Q_SLOTS:
 
 	void automaticTicNumberUpdateDockMajorTicks();
 	void automaticTicNumberUpdateDockMinorTicks();
-
-	void columnLabelValues();
-	void columnLabelValuesMaxValues();
-
-	void customTextLabels();
 };
 
 #endif // AXISTEST_H
