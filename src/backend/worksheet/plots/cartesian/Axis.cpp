@@ -1541,10 +1541,16 @@ void AxisPrivate::retransformTicks() {
 		return;
 	}
 
+	bool tmpMajorTicksNumberLimited = false;
+	int firstIndexCustomColumn = -1;
 	if (majorTicksType == Axis::TicksType::CustomColumn || majorTicksType == Axis::TicksType::CustomValues) {
 		if (majorTicksColumn) {
 			if (majorTicksAutoNumber) {
-				tmpMajorTicksNumber = qMin(_maxNumberMajorTicksCustomColumn, majorTicksColumn->rowCount(start, end));
+				tmpMajorTicksNumber = majorTicksColumn->rowCount(start, end);
+				if (tmpMajorTicksNumber > _maxNumberMajorTicksCustomColumn) {
+					tmpMajorTicksNumber = _maxNumberMajorTicksCustomColumn;
+					tmpMajorTicksNumberLimited = true;
+				}
 				majorTicksNumber = tmpMajorTicksNumber;
 				Q_EMIT q->majorTicksNumberChanged(tmpMajorTicksNumber);
 			} else
@@ -1558,6 +1564,7 @@ void AxisPrivate::retransformTicks() {
 				end = qMax(end, majorTicksColumn->minimum());
 				start = qMax(start, majorTicksColumn->maximum());
 			}
+			firstIndexCustomColumn = majorTicksColumn->indexForValue(start);
 		} else {
 			retransformTickLabelPositions(); // this calls recalcShapeAndBoundingRect()
 			return;
@@ -1566,11 +1573,20 @@ void AxisPrivate::retransformTicks() {
 		const Column* c = dynamic_cast<const Column*>(majorTicksColumn);
 		if (c && c->valueLabelsInitialized()) {
 			if (majorTicksAutoNumber) {
-				tmpMajorTicksNumber = qMin(_maxNumberMajorTicksCustomColumn, c->valueLabelsCount(start, end));
+				tmpMajorTicksNumber = c->valueLabelsCount(start, end);
+				if (tmpMajorTicksNumber > _maxNumberMajorTicksCustomColumn) {
+					tmpMajorTicksNumber = _maxNumberMajorTicksCustomColumn;
+					tmpMajorTicksNumberLimited = true;
+				}
 				majorTicksNumber = tmpMajorTicksNumber;
 				Q_EMIT q->majorTicksNumberChanged(tmpMajorTicksNumber);
-			} else
+			} else {
 				tmpMajorTicksNumber = c->valueLabelsCount(start, end);
+				if (tmpMajorTicksNumber > majorTicksNumber) {
+					tmpMajorTicksNumber = majorTicksNumber;
+					tmpMajorTicksNumberLimited = true;
+				}
+			}
 			if (start < end) {
 				start = qMax(start, c->valueLabelsMinimum());
 				end = qMin(end, c->valueLabelsMaximum());
@@ -1578,6 +1594,7 @@ void AxisPrivate::retransformTicks() {
 				end = qMax(end, c->valueLabelsMinimum());
 				start = qMax(start, c->valueLabelsMaximum());
 			}
+			firstIndexCustomColumn = c->valueLabelsIndexForValue(start);
 		} else {
 			retransformTickLabelPositions(); // this calls recalcShapeAndBoundingRect()
 			return;
@@ -1748,31 +1765,40 @@ void AxisPrivate::retransformTicks() {
 			break;
 
 		int columnIndex = iMajor; // iMajor used if for the labels a custom column is used.
-		if ((majorTicksType == Axis::TicksType::CustomColumn || majorTicksType == Axis::TicksType::CustomValues)
-			&& (majorTicksColumn->rowCount() >= _maxNumberMajorTicksCustomColumn)) {
-			// Do not use all values of the column, but just a portion of it
-			columnIndex = majorTicksColumn->indexForValue(majorTickPos);
-			Q_ASSERT(columnIndex >= 0);
-			majorTickPos = majorTicksColumn->valueAt(columnIndex);
+		if ((majorTicksType == Axis::TicksType::CustomColumn || majorTicksType == Axis::TicksType::CustomValues)) {
+			if (tmpMajorTicksNumberLimited) {
+				// Do not use all values of the column, but just a portion of it
+				columnIndex = majorTicksColumn->indexForValue(majorTickPos);
+				Q_ASSERT(columnIndex >= 0);
+				majorTickPos = majorTicksColumn->valueAt(columnIndex);
 
-			const auto columnIndexNextMajor = majorTicksColumn->indexForValue(nextMajorTickPos);
-			Q_ASSERT(columnIndexNextMajor >= 0);
-			nextMajorTickPos = majorTicksColumn->valueAt(columnIndexNextMajor);
-			if (majorTickPos == nextMajorTickPos && iMajor + 1 < tmpMajorTicksNumber)
-				continue; // No need to draw majorTicksPos, because NextMajorTicksPos will completely overlap. Only for the last one
-		} else if ((majorTicksType == Axis::TicksType::CustomColumn || majorTicksType == Axis::TicksType::CustomValues)) {
-			majorTickPos = majorTicksColumn->valueAt(columnIndex);
-			if (majorTicksColumn->rowCount() > columnIndex + 1)
-				nextMajorTickPos = majorTicksColumn->valueAt(columnIndex + 1);
-			else
-				nextMajorTickPos = majorTickPos;
+				const auto columnIndexNextMajor = majorTicksColumn->indexForValue(nextMajorTickPos);
+				Q_ASSERT(columnIndexNextMajor >= 0);
+				nextMajorTickPos = majorTicksColumn->valueAt(columnIndexNextMajor);
+				if (majorTickPos == nextMajorTickPos && iMajor + 1 < tmpMajorTicksNumber)
+					continue; // No need to draw majorTicksPos, because NextMajorTicksPos will completely overlap. Only for the last one
+			} else {
+				columnIndex = firstIndexCustomColumn + columnIndex;
+				majorTickPos = majorTicksColumn->valueAt(columnIndex);
+				if (majorTicksColumn->rowCount() > columnIndex + 1)
+					nextMajorTickPos = majorTicksColumn->valueAt(columnIndex + 1);
+				else
+					nextMajorTickPos = majorTickPos;
+			}
 		} else if (majorTicksType == Axis::TicksType::ColumnLabels) {
 			const auto* c = static_cast<const Column*>(majorTicksColumn);
 			Q_ASSERT(tmpMajorTicksNumber > 0);
-			Q_ASSERT(c);
-			columnIndex = c->valueLabelsIndexForValue(majorTickPos);
-			Q_ASSERT(columnIndex >= 0);
-			majorTickPos = c->valueLabelsValueAt(columnIndex);
+			if (tmpMajorTicksNumberLimited) {
+				columnIndex = c->valueLabelsIndexForValue(majorTickPos);
+				Q_ASSERT(columnIndex >= 0);
+				majorTickPos = c->valueLabelsValueAt(columnIndex);
+			} else {
+				if (iMajor < c->valueLabelsCount()) {
+					columnIndex = firstIndexCustomColumn + iMajor;
+					majorTickPos = c->valueLabelsValueAt(columnIndex);
+				} else
+					break;
+			}
 		}
 
 		qreal otherDirAnchorPoint = 0.0;
