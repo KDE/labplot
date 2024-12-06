@@ -16,7 +16,7 @@ New features:
 		* Improve livedata import
 		* Add possibility to specify custom column datatypes (mandatory for livedata)
 		* Notify about the unsupported UTF16 encoding (BUG 496215)
-		* Make counting number of lines in ASCII files faster on Windows
+		* Faster import of big ASCII files on Windows
 	* [analysis]
 		* Add possibility to do calculations on curves
 		* Automatically recalculate analysis curves on data change
