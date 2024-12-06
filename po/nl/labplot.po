@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-03 00:37+0000\n"
+"POT-Creation-Date: 2024-12-06 00:37+0000\n"
 "PO-Revision-Date: 2024-12-01 13:42+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -248,7 +248,7 @@ msgid "Y-Error -"
 msgstr "Y-fout -"
 
 #: src/backend/core/AbstractColumn.cpp:227
-#: src/backend/datasources/filters/AsciiFilter.cpp:614
+#: src/backend/datasources/filters/AsciiFilter.cpp:599
 #: src/backend/datasources/filters/MatioFilter.cpp:382
 #: src/backend/datasources/filters/MatioFilter.cpp:428
 #, kde-format
@@ -269,7 +269,7 @@ msgstr "Groot geheel getal"
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #. i18n: ectx: property (text), widget (QLabel, lValuesText)
 #: src/backend/core/AbstractColumn.cpp:233
-#: src/backend/datasources/filters/AsciiFilter.cpp:615
+#: src/backend/datasources/filters/AsciiFilter.cpp:600
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:472
 #: src/frontend/notebook/NotebookView.cpp:96
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:208
@@ -1060,7 +1060,7 @@ msgstr ""
 "Kon bestand %1 niet openen voor schrijven.\n"
 "%2"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:194
+#: src/backend/datasources/filters/AsciiFilter.cpp:192
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2073
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1220
@@ -1068,151 +1068,151 @@ msgstr ""
 msgid "Success"
 msgstr "Success"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:196
+#: src/backend/datasources/filters/AsciiFilter.cpp:194
 #, kde-format
 msgid "Device at end"
 msgstr "Apparaat aan het einde"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:198
+#: src/backend/datasources/filters/AsciiFilter.cpp:196
 #, kde-format
 msgid "Not enough rows selected. Increase number of rows."
 msgstr "Niet genoeg rijen geselecteerd. Verhoog het aantal rijen."
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:200
+#: src/backend/datasources/filters/AsciiFilter.cpp:198
 #, kde-format
 msgid "Unable to open device"
 msgstr "Kon apparaat niet openen"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:204
+#: src/backend/datasources/filters/AsciiFilter.cpp:202
 #, kde-format
 msgid "Unable to determine the separator"
 msgstr "Kan het scheidingsteken niet bepalen"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:206
+#: src/backend/datasources/filters/AsciiFilter.cpp:204
 #, kde-format
 msgid "Invalid number of data columns"
 msgstr "Ongeldig aantal gegevenskolommen"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:208
+#: src/backend/datasources/filters/AsciiFilter.cpp:206
 #, kde-format
 msgid "Invalid number of column names"
 msgstr "Ongeldig aantal kolomnamen"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:210
+#: src/backend/datasources/filters/AsciiFilter.cpp:208
 #, kde-format
 msgid "Matrix: Unsupported column mode"
 msgstr "Matrix: niet ondersteunde kolommodus"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:212
+#: src/backend/datasources/filters/AsciiFilter.cpp:210
 #, kde-format
 msgid "Insufficient memory (RAM)"
 msgstr "Onvoldoende geheugen (RAM)"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:214
+#: src/backend/datasources/filters/AsciiFilter.cpp:212
 #, kde-format
 msgid "Unable to parse header"
 msgstr "Kon kop niet ontleden"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:216
+#: src/backend/datasources/filters/AsciiFilter.cpp:214
 #, kde-format
 msgid "Unsupported data source"
 msgstr "Niet ondersteunde gegevensbron"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:220
+#: src/backend/datasources/filters/AsciiFilter.cpp:218
 #, kde-format
 msgid "Live: No column separator selected"
 msgstr "Live: geen kolom-scheidingsteken geselecteerd"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:222
+#: src/backend/datasources/filters/AsciiFilter.cpp:220
 #, kde-format
 msgid "Live: No column modes set"
 msgstr "Live: geen kolommodi ingesteld"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:224
+#: src/backend/datasources/filters/AsciiFilter.cpp:222
 #, kde-format
 msgid "Datetime column found, but no Datetime format provided"
 msgstr "Datumtijd kolom gevonden, maar geen datumtijdformaat geleverd"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:226
+#: src/backend/datasources/filters/AsciiFilter.cpp:224
 #, kde-format
 msgid "Header reading from device not allowed"
 msgstr "Lezen van kop uit apparaat is niet toegestaan"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:228
+#: src/backend/datasources/filters/AsciiFilter.cpp:226
 #, kde-format
 msgid "Separator detection not allowed"
 msgstr "Detectie van scheidingsteken is niet toegestaan"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:230
+#: src/backend/datasources/filters/AsciiFilter.cpp:228
 #, kde-format
 msgid "Invalid separator"
 msgstr "Ongeldig scheidingsteken"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:232
+#: src/backend/datasources/filters/AsciiFilter.cpp:230
 #, kde-format
 msgid "Filter not initialized"
 msgstr "Filter niet geïnitialiseerd"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:234
+#: src/backend/datasources/filters/AsciiFilter.cpp:232
 #, kde-format
 msgid "Wrong end column. Is it smaller than start column?"
 msgstr "Verkeerde eindkolom. Is het kleiner dan de beginkolom?"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:236
+#: src/backend/datasources/filters/AsciiFilter.cpp:234
 #, kde-format
 msgid "Wrong end row. Is it smaller than start row?"
 msgstr "Verkeerde eindrij. Is het kleiner dan de beginrij?"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:238
+#: src/backend/datasources/filters/AsciiFilter.cpp:236
 #, kde-format
 msgid "No data destination set"
 msgstr "Geen gegevensbestemming ingesteld"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:240
+#: src/backend/datasources/filters/AsciiFilter.cpp:238
 #, kde-format
 msgid "No columns"
 msgstr "Geen kolommen"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:242
+#: src/backend/datasources/filters/AsciiFilter.cpp:240
 #, kde-format
 msgid "Unable to determine column modes. Check if they are correctly written"
 msgstr "Kan de kolommodi niet bepalen. Controleer of ze juist zijn geschreven"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:244
+#: src/backend/datasources/filters/AsciiFilter.cpp:242
 #, kde-format
 msgid "UTF16 encoding is not supported"
 msgstr "UTF16-codering wordt niet ondersteund"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:246
+#: src/backend/datasources/filters/AsciiFilter.cpp:244
 #, kde-format
 msgid "Unhandled case"
 msgstr "Niet behandeld geval"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:272
+#: src/backend/datasources/filters/AsciiFilter.cpp:270
 #, kde-format
 msgid "Number of columns: %1"
 msgstr "Aantal kolommen: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:274
+#: src/backend/datasources/filters/AsciiFilter.cpp:272
 #, kde-format
 msgid "Number of lines: %1"
 msgstr "Aantal regels: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:529
-#: src/backend/datasources/filters/AsciiFilter.cpp:1300
+#: src/backend/datasources/filters/AsciiFilter.cpp:514
+#: src/backend/datasources/filters/AsciiFilter.cpp:1285
 #: src/backend/datasources/filters/JsonFilter.cpp:284
 #, kde-format
 msgid "Column %1"
 msgstr "Kolom %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:599
-#: src/backend/datasources/filters/AsciiFilter.cpp:1323
+#: src/backend/datasources/filters/AsciiFilter.cpp:584
+#: src/backend/datasources/filters/AsciiFilter.cpp:1308
 #, kde-format
 msgid "Timestamp"
 msgstr "timestamp (tijdstempel)"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:603
-#: src/backend/datasources/filters/AsciiFilter.cpp:1327
+#: src/backend/datasources/filters/AsciiFilter.cpp:588
+#: src/backend/datasources/filters/AsciiFilter.cpp:1312
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1220,17 +1220,17 @@ msgstr "timestamp (tijdstempel)"
 msgid "Index"
 msgstr "Index"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:616
+#: src/backend/datasources/filters/AsciiFilter.cpp:601
 #, kde-format
 msgid "DateTime"
 msgstr "Datum-tijd"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:617
+#: src/backend/datasources/filters/AsciiFilter.cpp:602
 #, kde-format
 msgid "Int"
 msgstr "Int"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:618
+#: src/backend/datasources/filters/AsciiFilter.cpp:603
 #: src/backend/datasources/filters/MatioFilter.cpp:398
 #: src/backend/datasources/filters/MatioFilter.cpp:430
 #, kde-format

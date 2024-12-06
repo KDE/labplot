@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-03 00:37+0000\n"
+"POT-Creation-Date: 2024-12-06 00:37+0000\n"
 "PO-Revision-Date: 2024-12-03 13:21+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -261,7 +261,7 @@ msgid "Y-Error -"
 msgstr "Erreur en Y -"
 
 #: src/backend/core/AbstractColumn.cpp:227
-#: src/backend/datasources/filters/AsciiFilter.cpp:614
+#: src/backend/datasources/filters/AsciiFilter.cpp:599
 #: src/backend/datasources/filters/MatioFilter.cpp:382
 #: src/backend/datasources/filters/MatioFilter.cpp:428
 #, kde-format
@@ -282,7 +282,7 @@ msgstr "Entier long"
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #. i18n: ectx: property (text), widget (QLabel, lValuesText)
 #: src/backend/core/AbstractColumn.cpp:233
-#: src/backend/datasources/filters/AsciiFilter.cpp:615
+#: src/backend/datasources/filters/AsciiFilter.cpp:600
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:472
 #: src/frontend/notebook/NotebookView.cpp:96
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:208
@@ -1079,7 +1079,7 @@ msgstr ""
 "Impossible d'ouvrir le fichier « %1 » en écriture.\n"
 "%2"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:194
+#: src/backend/datasources/filters/AsciiFilter.cpp:192
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2073
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1220
@@ -1087,156 +1087,156 @@ msgstr ""
 msgid "Success"
 msgstr "Succès"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:196
+#: src/backend/datasources/filters/AsciiFilter.cpp:194
 #, kde-format
 msgid "Device at end"
 msgstr "En fin de périphérique"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:198
+#: src/backend/datasources/filters/AsciiFilter.cpp:196
 #, kde-format
 msgid "Not enough rows selected. Increase number of rows."
 msgstr ""
 "Pas assez de lignes sélectionnées. Veuillez augmenter le nombre de lignes."
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:200
+#: src/backend/datasources/filters/AsciiFilter.cpp:198
 #, kde-format
 msgid "Unable to open device"
 msgstr "Impossible d'ouvrir le périphérique"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:204
+#: src/backend/datasources/filters/AsciiFilter.cpp:202
 #, kde-format
 msgid "Unable to determine the separator"
 msgstr "Impossible de déterminer le séparateur"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:206
+#: src/backend/datasources/filters/AsciiFilter.cpp:204
 #, kde-format
 msgid "Invalid number of data columns"
 msgstr "Nombre non valable de colonnes de données"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:208
+#: src/backend/datasources/filters/AsciiFilter.cpp:206
 #, kde-format
 msgid "Invalid number of column names"
 msgstr "Nombre non valable de noms de colonne"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:210
+#: src/backend/datasources/filters/AsciiFilter.cpp:208
 #, kde-format
 msgid "Matrix: Unsupported column mode"
 msgstr "Matrice : mode de colonne non pris en charge"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:212
+#: src/backend/datasources/filters/AsciiFilter.cpp:210
 #, kde-format
 msgid "Insufficient memory (RAM)"
 msgstr "Mémoire insuffisante (RAM)"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:214
+#: src/backend/datasources/filters/AsciiFilter.cpp:212
 #, kde-format
 msgid "Unable to parse header"
 msgstr "Impossible d'analyser l'en-tête"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:216
+#: src/backend/datasources/filters/AsciiFilter.cpp:214
 #, kde-format
 msgid "Unsupported data source"
 msgstr "Source de données non prise en charge"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:220
+#: src/backend/datasources/filters/AsciiFilter.cpp:218
 #, kde-format
 msgid "Live: No column separator selected"
 msgstr "En direct : aucun séparateur de colonne n'a été sélectionné"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:222
+#: src/backend/datasources/filters/AsciiFilter.cpp:220
 #, kde-format
 msgid "Live: No column modes set"
 msgstr "En direct : aucun mode de colonne défini"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:224
+#: src/backend/datasources/filters/AsciiFilter.cpp:222
 #, kde-format
 msgid "Datetime column found, but no Datetime format provided"
 msgstr ""
 "Colonne « Heure et date » trouvée, mais aucun format « Heure et date » fourni"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:226
+#: src/backend/datasources/filters/AsciiFilter.cpp:224
 #, kde-format
 msgid "Header reading from device not allowed"
 msgstr "La lecture d'en-tête à partir d'un périphérique n'est pas autorisée."
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:228
+#: src/backend/datasources/filters/AsciiFilter.cpp:226
 #, kde-format
 msgid "Separator detection not allowed"
 msgstr "Détection de séparateur non autorisée"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:230
+#: src/backend/datasources/filters/AsciiFilter.cpp:228
 #, kde-format
 msgid "Invalid separator"
 msgstr "Séparateur non valable"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:232
+#: src/backend/datasources/filters/AsciiFilter.cpp:230
 #, kde-format
 msgid "Filter not initialized"
 msgstr "Filtre non initialisé"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:234
+#: src/backend/datasources/filters/AsciiFilter.cpp:232
 #, kde-format
 msgid "Wrong end column. Is it smaller than start column?"
 msgstr ""
 "Colonne de fin incorrecte. Est-elle plus petite que la colonne de début ?"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:236
+#: src/backend/datasources/filters/AsciiFilter.cpp:234
 #, kde-format
 msgid "Wrong end row. Is it smaller than start row?"
 msgstr "Mauvaise ligne de fin. Est-elle plus petite que la ligne de début ?"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:238
+#: src/backend/datasources/filters/AsciiFilter.cpp:236
 #, kde-format
 msgid "No data destination set"
 msgstr "Aucun définition de la destination des données"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:240
+#: src/backend/datasources/filters/AsciiFilter.cpp:238
 #, kde-format
 msgid "No columns"
 msgstr "Aucune colonne"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:242
+#: src/backend/datasources/filters/AsciiFilter.cpp:240
 #, kde-format
 msgid "Unable to determine column modes. Check if they are correctly written"
 msgstr ""
 "Impossible de déterminer les modes de colonne. Vérifiez s'ils sont "
 "correctement écrits"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:244
+#: src/backend/datasources/filters/AsciiFilter.cpp:242
 #, kde-format
 msgid "UTF16 encoding is not supported"
 msgstr "L'encodage « UTF16 » n'est pas pris en charge."
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:246
+#: src/backend/datasources/filters/AsciiFilter.cpp:244
 #, kde-format
 msgid "Unhandled case"
 msgstr "Cas non géré"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:272
+#: src/backend/datasources/filters/AsciiFilter.cpp:270
 #, kde-format
 msgid "Number of columns: %1"
 msgstr "Nombre de colonnes : %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:274
+#: src/backend/datasources/filters/AsciiFilter.cpp:272
 #, kde-format
 msgid "Number of lines: %1"
 msgstr "Nombre de lignes : %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:529
-#: src/backend/datasources/filters/AsciiFilter.cpp:1300
+#: src/backend/datasources/filters/AsciiFilter.cpp:514
+#: src/backend/datasources/filters/AsciiFilter.cpp:1285
 #: src/backend/datasources/filters/JsonFilter.cpp:284
 #, kde-format
 msgid "Column %1"
 msgstr "Colonne %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:599
-#: src/backend/datasources/filters/AsciiFilter.cpp:1323
+#: src/backend/datasources/filters/AsciiFilter.cpp:584
+#: src/backend/datasources/filters/AsciiFilter.cpp:1308
 #, kde-format
 msgid "Timestamp"
 msgstr "Horodatage"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:603
-#: src/backend/datasources/filters/AsciiFilter.cpp:1327
+#: src/backend/datasources/filters/AsciiFilter.cpp:588
+#: src/backend/datasources/filters/AsciiFilter.cpp:1312
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1244,17 +1244,17 @@ msgstr "Horodatage"
 msgid "Index"
 msgstr "Index"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:616
+#: src/backend/datasources/filters/AsciiFilter.cpp:601
 #, kde-format
 msgid "DateTime"
 msgstr "Date et heure"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:617
+#: src/backend/datasources/filters/AsciiFilter.cpp:602
 #, kde-format
 msgid "Int"
 msgstr "Entier"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:618
+#: src/backend/datasources/filters/AsciiFilter.cpp:603
 #: src/backend/datasources/filters/MatioFilter.cpp:398
 #: src/backend/datasources/filters/MatioFilter.cpp:430
 #, kde-format
