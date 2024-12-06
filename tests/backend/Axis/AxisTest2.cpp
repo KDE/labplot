@@ -362,7 +362,7 @@ void AxisTest2::columnLabelValues() {
 
 /*!
  * \brief AxisTest2::columnLabelValuesMaxValues
- * Same as columnLabelValuesMaxValues() with the difference
+ * Same as columnLabelValues() with the difference
  * that more columnLabels are available than the maximum number of ticks allowed
  * in the axis. This leads to a limited representation of ticks/labels
  */
@@ -422,6 +422,77 @@ void AxisTest2::columnLabelValuesMaxValues() {
 	}
 }
 
+/*!
+ * \brief AxisTest2::columnLabelValuesMoreTicksThanLabels
+ * Draw all ticks regardsless of their position, because we have only a few
+ */
+void AxisTest2::columnLabelValuesMoreTicksThanLabels() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	Spreadsheet* spreadsheet = new Spreadsheet(QStringLiteral("test"), false);
+	spreadsheet->setColumnCount(2);
+	spreadsheet->setRowCount(3);
+	project.addChild(spreadsheet);
+
+	auto* xCol = spreadsheet->column(0);
+	xCol->replaceValues(0, QVector<double>({1, 2, 3}));
+
+	auto* yCol = spreadsheet->column(1);
+	yCol->replaceValues(0, QVector<double>({3, 5, 10}));
+
+	QCOMPARE(spreadsheet->rowCount(), 3);
+	QCOMPARE(spreadsheet->columnCount(), 2);
+
+	yCol->addValueLabel(0, QStringLiteral("Status 1"));
+	yCol->addValueLabel(1, QStringLiteral("Status 2"));
+	yCol->addValueLabel(2, QStringLiteral("Status 3"));
+	yCol->addValueLabel(3, QStringLiteral("Status 4"));
+	yCol->addValueLabel(4, QStringLiteral("Status 5"));
+	// yCol->addValueLabel(5, QStringLiteral("Status 6")); Gap
+	// yCol->addValueLabel(6, QStringLiteral("Status 7")); Gap
+	yCol->addValueLabel(7, QStringLiteral("Status 8"));
+	yCol->addValueLabel(8, QStringLiteral("Status 9"));
+	yCol->addValueLabel(9, QStringLiteral("Status 10"));
+	yCol->addValueLabel(10, QStringLiteral("Status 11"));
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve = new XYCurve(QStringLiteral("xy-curve"));
+	curve->setXColumn(xCol);
+	curve->setYColumn(yCol);
+	p->addChild(curve);
+
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+	auto* yAxis = static_cast<Axis*>(axes.at(1));
+
+	{
+		yAxis->setMajorTicksType(Axis::TicksType::ColumnLabels);
+		yAxis->setMajorTicksColumn(yCol);
+
+		QStringList expectedStrings{
+			QStringLiteral("Status 4"),
+			QStringLiteral("Status 5"),
+			// QStringLiteral("Status 6"),
+			// QStringLiteral("Status 7"),
+			QStringLiteral("Status 8"),
+			QStringLiteral("Status 9"),
+			QStringLiteral("Status 10"),
+			QStringLiteral("Status 11"),
+		};
+		COMPARE_STRING_VECTORS(yAxis->tickLabelStrings(), expectedStrings);
+	}
+}
+
 void AxisTest2::customTextLabels() {
 	QLocale::setDefault(QLocale::C); // . as decimal separator
 	Project project;
@@ -472,11 +543,95 @@ void AxisTest2::customTextLabels() {
 	xAxis->setLabelsTextColumn(labelsCol);
 
 	{
-		const auto v = xAxis->tickLabelStrings();
 		QStringList expectedStrings{
 			QStringLiteral("A"),
 			QStringLiteral("B"),
 			QStringLiteral("C"),
+		};
+		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
+	}
+}
+
+/*!
+ * \brief AxisTest2::customTextLabelsMoreTicksThanLabels
+ * Draw all ticks regardsless of their position, because we have only a few
+ */
+void AxisTest2::customTextLabelsMoreTicksThanLabels() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	Spreadsheet* spreadsheetData = new Spreadsheet(QStringLiteral("data"), false);
+	spreadsheetData->setColumnCount(2);
+	spreadsheetData->setRowCount(3);
+	project.addChild(spreadsheetData);
+
+	auto* xCol = spreadsheetData->column(0);
+	xCol->replaceValues(0, QVector<double>({3, 5, 10}));
+
+	auto* yCol = spreadsheetData->column(1);
+	yCol->replaceValues(0, QVector<double>({3, 5, 10}));
+
+	QCOMPARE(spreadsheetData->rowCount(), 3);
+	QCOMPARE(spreadsheetData->columnCount(), 2);
+
+	Spreadsheet* spreadsheetLabels = new Spreadsheet(QStringLiteral("data"), false);
+	spreadsheetLabels->setColumnCount(2);
+	spreadsheetLabels->setRowCount(11);
+	project.addChild(spreadsheetLabels);
+	auto* valuesCol = spreadsheetLabels->column(0);
+	valuesCol->setColumnMode(AbstractColumn::ColumnMode::Double);
+	valuesCol->replaceValues(-1, QVector<double>({0., 1., 2., 3., 4., 7., 8., 9., 10.}));
+	VALUES_EQUAL(valuesCol->valueAt(1), 1.);
+
+	auto* labelsCol = spreadsheetLabels->column(1);
+	labelsCol->setColumnMode(AbstractColumn::ColumnMode::Text);
+	labelsCol->replaceTexts(-1,
+							QVector<QString>({QStringLiteral("A"),
+											  QStringLiteral("B"),
+											  QStringLiteral("C"),
+											  QStringLiteral("D"),
+											  QStringLiteral("E"),
+											  QStringLiteral("H"),
+											  QStringLiteral("I"),
+											  QStringLiteral("J"),
+											  QStringLiteral("K")}));
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve = new XYCurve(QStringLiteral("xy-curve"));
+	curve->setXColumn(xCol);
+	curve->setYColumn(yCol);
+	p->addChild(curve);
+
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+
+	auto* xAxis = static_cast<Axis*>(axes.at(0));
+	xAxis->setMajorTicksNumber(100, false);
+	xAxis->setMajorTicksType(Axis::TicksType::CustomColumn);
+	xAxis->setMajorTicksColumn(valuesCol);
+	xAxis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
+	xAxis->setLabelsTextColumn(labelsCol);
+
+	{
+		const auto v = xAxis->tickLabelStrings();
+		QStringList expectedStrings{
+			QStringLiteral("D"),
+			QStringLiteral("E"),
+			// QStringLiteral("F"), gap
+			// QStringLiteral("G"), gap
+			QStringLiteral("H"),
+			QStringLiteral("I"),
+			QStringLiteral("J"),
+			QStringLiteral("K"),
 		};
 		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
 	}
