@@ -151,8 +151,6 @@ void ActionsManager::init() {
 	if (memoryInfoShown)
 		toggleMemoryInfo();
 
-	//TODO: hide "Donate" in the help menu?
-
 	// connect(mainWin->m_projectExplorer, &ProjectExplorer::selectedAspectsChanged, this, &ActionsManager::selectedAspectsChanged);
 	// connect(mainWin->m_projectExplorer, &ProjectExplorer::hiddenAspectSelected, this, &ActionsManager::hiddenAspectSelected);
 }
@@ -433,6 +431,11 @@ void ActionsManager::initActions() {
 	collection->addAction(QLatin1String("configure_cas"), m_configureCASAction);
 	connect(m_configureCASAction, &QAction::triggered, m_mainWindow, &MainWin::settingsDialog); // TODO: go to the Notebook page in the settings dialog directly
 #endif
+
+	// hide "Donate" in the help menu
+	auto* donateAction = collection->action(QStringLiteral("help_donate"));
+	if (donateAction)
+		collection->removeAction(donateAction);
 
 	// custom about dialog
 	auto* aboutAction = m_mainWindow->actionCollection()->action(QStringLiteral("help_about_app"));

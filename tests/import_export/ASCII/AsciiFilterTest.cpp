@@ -101,6 +101,22 @@ void AsciiFilterTest::initialization() {
 	}
 }
 
+void AsciiFilterTest::lineCount() {
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/empty_file.txt"));
+	QCOMPARE(AsciiFilter::lineCount(fileName), 0);
+
+	const QString& fileName2 = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
+	QCOMPARE(AsciiFilter::lineCount(fileName2), 5);
+	QCOMPARE(AsciiFilter::lineCount(fileName2, 3), 3);
+	QCOMPARE(AsciiFilter::lineCount(fileName2, 10), 5);
+
+	const QString& fileName3 = QFINDTESTDATA(QLatin1String("data/numeric_data_no-newline.txt"));
+	QCOMPARE(AsciiFilter::lineCount(fileName3), 5);
+	QCOMPARE(AsciiFilter::lineCount(fileName3, 3), 3);
+	QCOMPARE(AsciiFilter::lineCount(fileName3, 10), 5);
+}
+
+// column modes
 void AsciiFilterTest::read_HeaderEnabled_tooLessColumnModes() {
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
@@ -2281,7 +2297,7 @@ void AsciiFilterTest::testDateTimeDefaultDateTimeFormat() {
 	p.headerEnabled = true;
 	p.headerLine = 1;
 	p.intAsDouble = false;
-	p.dateTimeFormat; // Default Datetime format is used!
+	// p.dateTimeFormat; Default Datetime format is used!
 	p.baseYear = 2000;
 	filter.setProperties(p);
 

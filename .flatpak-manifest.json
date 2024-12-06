@@ -64,8 +64,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://poppler.freedesktop.org/poppler-24.10.0.tar.xz",
-                    "sha256": "58ed1849810f04a10b37c7ff6f3e411845c8a57d731d599d0045acc7a7fff09d"
+                    "url": "https://poppler.freedesktop.org/poppler-24.12.0.tar.xz",
+                    "sha256": "1cf374c3146f3f685d9257701bf0c2866c61d6c202c14d1f5c01a1f3a089028a"
                 }
             ],
             "modules": [
@@ -106,8 +106,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://github.com/KDE/analitza/archive/v24.08.1.tar.gz",
-			    "sha256": "ccd18151c49937c606f5446eb3f821d46066be76e6a9d01e96f6494e59c08c81"
+			    "url": "https://github.com/KDE/analitza/archive/v24.08.3.tar.gz",
+			    "sha256": "e40c563c6387200321e7b903bff2d66ed0454f322d58126761411fccbdaf1467"
 		    }
 	    ]
         },
@@ -118,7 +118,7 @@
 		    {
 			    "type": "git",
 			    "url": "https://github.com/KDE/cantor.git",
-			    "tag": "67ea69d7bde79beffb8ebc2e47312c60356ea869"
+			    "tag": "e43befd7e16638d30756b5abe85685a059e32aca"
 		    }
 	    ]
         },
@@ -179,7 +179,13 @@
             "name": "qtmqtt",
 	    "buildsystem": "cmake-ninja",
 	    "builddir": true,
-	    "sources": [ { "type": "git", "url": "https://github.com/qt/qtmqtt.git", "tag": "v6.7.2" } ]
+	    "sources": [
+		{
+                    "type": "git",
+		    "url": "https://github.com/qt/qtmqtt.git",
+		    "tag": "v6.7.3"
+		}
+	    ]
 	},
         {
             "name": "kuserfeedback",
@@ -189,7 +195,7 @@
                 {
                     "type": "git",
                     "url": "https://github.com/KDE/kuserfeedback.git",
-                    "tag": "v6.6.0"
+                    "tag": "v6.7.0"
                 }
             ]
         },
@@ -233,8 +239,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/Orc/discount/archive/v2.2.7c.tar.gz",
-                    "sha256": "5c5139f1f88e83de86169bee3fde4ebd0e1b0798643dc9065b73dc19dbce07b3"
+                    "url": "https://github.com/Orc/discount/archive/v2.2.7d.tar.gz",
+                    "sha256": "eb9f6629dadddb44c3111267b82e51d5fb8364e228cc3533fe937d8a99e0155b"
                 }
             ]
         },
@@ -243,8 +249,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/tbeu/matio/archive/v1.5.27.tar.gz",
-                    "sha256": "2efe7c4a206885287c0f56128f3a36aa6e453077d03e4c2c42cdce9d332b67eb"
+                    "url": "https://github.com/tbeu/matio/archive/v1.5.28.tar.gz",
+                    "sha256": "04d14160a637ea822593c336b231227372179f650250c98024a8a2b744afef25"
                 }
             ]
         },

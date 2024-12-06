@@ -26,7 +26,7 @@ public:
 	struct TransformData {
 		TransformData(){};
 
-		nsl_dft_result_type type{nsl_dft_result_magnitude};
+		nsl_dft_result_type type{nsl_dft_result_amplitude};
 		bool twoSided{false};
 		bool shifted{false};
 		nsl_dft_xscale xScale{nsl_dft_xscale_frequency};
