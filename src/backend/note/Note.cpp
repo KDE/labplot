@@ -11,8 +11,8 @@
 #include "Note.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
-#include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 #include "frontend/note/NoteView.h"
 
@@ -30,7 +30,8 @@
 
 class NotePrivate {
 public:
-	explicit NotePrivate(Note* owner): q(owner) {
+	explicit NotePrivate(Note* owner)
+		: q(owner) {
 	}
 
 	QString name() const {
