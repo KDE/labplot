@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-06 00:37+0000\n"
+"POT-Creation-Date: 2024-12-07 00:37+0000\n"
 "PO-Revision-Date: 2023-09-19 23:30+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -6352,20 +6352,20 @@ msgstr "%1: ispilatu horizontalki"
 msgid "%1: mirror vertically"
 msgstr "%1: ispilatu bertikalki"
 
-#: src/backend/note/Note.cpp:47
+#: src/backend/note/Note.cpp:67
 #, fuzzy, kde-format
 #| msgid "Print"
 msgctxt "@title:window"
 msgid "Print Note"
 msgstr "Inprimatu"
 
-#: src/backend/note/Note.cpp:65
+#: src/backend/note/Note.cpp:85
 #, fuzzy, kde-format
 #| msgid "LaTeX files (*.tex)"
 msgid "Text file (*.txt)"
 msgstr "LaTeX fitxategiak (*.tex)"
 
-#: src/backend/note/Note.cpp:67
+#: src/backend/note/Note.cpp:87
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:408
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:280
 #, kde-format
@@ -6373,20 +6373,42 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Esportatu fitxategira"
 
-#: src/backend/note/Note.cpp:81
+#: src/backend/note/Note.cpp:101
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Export to File"
 msgid "Export failed"
 msgstr "Esportatu fitxategira"
 
-#: src/backend/note/Note.cpp:81
+#: src/backend/note/Note.cpp:101
 #, fuzzy, kde-format
 #| msgid "Couldn't open the file '%1' for writing."
 msgid "Failed to open '%1' for writing."
 msgstr "Ezin izan du '%1' fitxategia irakurtzeko ireki."
 
-#: src/backend/note/Note.cpp:161
+#: src/backend/note/Note.cpp:124
+#, fuzzy, kde-format
+msgid "%1: set text"
+msgstr "Ezarri letra-tipoa"
+
+#: src/backend/note/Note.cpp:131 src/backend/worksheet/TextLabel.cpp:266
+#: src/backend/worksheet/TextLabel.cpp:305
+#, fuzzy, kde-format
+msgid "%1: set background color"
+msgstr "Ezarri atzeko planoaren kolorea"
+
+#: src/backend/note/Note.cpp:138
+#, fuzzy, kde-format
+#| msgid "%1: set formula"
+msgid "%1: set text color"
+msgstr "%1: ezarri formula"
+
+#: src/backend/note/Note.cpp:145
+#, fuzzy, kde-format
+msgid "%1: set text font"
+msgstr "Ezarri letra-tipoa"
+
+#: src/backend/note/Note.cpp:183
 #, kde-format
 msgid "no note element found"
 msgstr ""
@@ -10034,12 +10056,6 @@ msgstr "%1: txertatu %2 bukaera baino lehen"
 #, kde-format
 msgid "%1: set plot area corner radius"
 msgstr ""
-
-#: src/backend/worksheet/TextLabel.cpp:266
-#: src/backend/worksheet/TextLabel.cpp:305
-#, fuzzy, kde-format
-msgid "%1: set background color"
-msgstr "Ezarri atzeko planoaren kolorea"
 
 #: src/backend/worksheet/TextLabel.cpp:294
 #: src/backend/worksheet/TextLabel.cpp:304

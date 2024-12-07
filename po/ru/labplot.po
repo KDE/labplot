@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-06 00:37+0000\n"
+"POT-Creation-Date: 2024-12-07 00:37+0000\n"
 "PO-Revision-Date: 2023-11-13 14:41+0300\n"
 "Last-Translator: Sergey Kazorin <translation-team@basealt.ru>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -6530,19 +6530,19 @@ msgstr "%1: горизонтальное отражение"
 msgid "%1: mirror vertically"
 msgstr "%1: вертикальное отражение"
 
-#: src/backend/note/Note.cpp:47
+#: src/backend/note/Note.cpp:67
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Print Note"
 msgstr "Печать"
 
-#: src/backend/note/Note.cpp:65
+#: src/backend/note/Note.cpp:85
 #, fuzzy, kde-format
 msgid "Text file (*.txt)"
 msgstr "Файлы LaTeX (*.tex)"
 
 # BUGME: please split strings --aspotashev
-#: src/backend/note/Note.cpp:67
+#: src/backend/note/Note.cpp:87
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:408
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:280
 #, kde-format
@@ -6551,17 +6551,41 @@ msgid "Export to File"
 msgstr "Экспорт в файл"
 
 # BUGME: please split strings --aspotashev
-#: src/backend/note/Note.cpp:81
+#: src/backend/note/Note.cpp:101
 #, fuzzy, kde-format
 msgid "Export failed"
 msgstr "Экспорт в файл"
 
-#: src/backend/note/Note.cpp:81
+#: src/backend/note/Note.cpp:101
 #, fuzzy, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "Не удалось открыть файл «%1» для записи."
 
-#: src/backend/note/Note.cpp:161
+#: src/backend/note/Note.cpp:124
+#, fuzzy, kde-format
+#| msgid "%1: set type"
+msgid "%1: set text"
+msgstr "%1: задание типа"
+
+#: src/backend/note/Note.cpp:131 src/backend/worksheet/TextLabel.cpp:266
+#: src/backend/worksheet/TextLabel.cpp:305
+#, kde-format
+msgid "%1: set background color"
+msgstr "%1: задание цвета фона"
+
+#: src/backend/note/Note.cpp:138
+#, fuzzy, kde-format
+#| msgid "%1: set font color"
+msgid "%1: set text color"
+msgstr "%1: задание цвета шрифта"
+
+#: src/backend/note/Note.cpp:145
+#, fuzzy, kde-format
+#| msgid "%1: set font"
+msgid "%1: set text font"
+msgstr "%1: задание шрифта"
+
+#: src/backend/note/Note.cpp:183
 #, kde-format
 msgid "no note element found"
 msgstr "Не найден элемент «note»"
@@ -10214,12 +10238,6 @@ msgstr "%1: изменение типа границы"
 #, kde-format
 msgid "%1: set plot area corner radius"
 msgstr "%1: задание радиуса cкругления углов области построения"
-
-#: src/backend/worksheet/TextLabel.cpp:266
-#: src/backend/worksheet/TextLabel.cpp:305
-#, kde-format
-msgid "%1: set background color"
-msgstr "%1: задание цвета фона"
 
 #: src/backend/worksheet/TextLabel.cpp:294
 #: src/backend/worksheet/TextLabel.cpp:304

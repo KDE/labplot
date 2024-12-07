@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-06 00:37+0000\n"
+"POT-Creation-Date: 2024-12-07 00:37+0000\n"
 "PO-Revision-Date: 2024-12-01 07:39+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -6290,18 +6290,18 @@ msgstr "%1: zrcaljenje vodoravno"
 msgid "%1: mirror vertically"
 msgstr "%1: zrcaljenje navpično"
 
-#: src/backend/note/Note.cpp:47
+#: src/backend/note/Note.cpp:67
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Note"
 msgstr "Natisni opombo"
 
-#: src/backend/note/Note.cpp:65
+#: src/backend/note/Note.cpp:85
 #, kde-format
 msgid "Text file (*.txt)"
 msgstr "Besedilna datoteka (*.txt)"
 
-#: src/backend/note/Note.cpp:67
+#: src/backend/note/Note.cpp:87
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:408
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:280
 #, kde-format
@@ -6309,17 +6309,41 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Izvozi v datoteko"
 
-#: src/backend/note/Note.cpp:81
+#: src/backend/note/Note.cpp:101
 #, kde-format
 msgid "Export failed"
 msgstr "Izvozi ni uspel"
 
-#: src/backend/note/Note.cpp:81
+#: src/backend/note/Note.cpp:101
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "Datoteke '%1' ni bilo mogoče odpreti za pisanje."
 
-#: src/backend/note/Note.cpp:161
+#: src/backend/note/Note.cpp:124
+#, fuzzy, kde-format
+#| msgid "%1: set type"
+msgid "%1: set text"
+msgstr "%1: nastavi vrsto"
+
+#: src/backend/note/Note.cpp:131 src/backend/worksheet/TextLabel.cpp:266
+#: src/backend/worksheet/TextLabel.cpp:305
+#, kde-format
+msgid "%1: set background color"
+msgstr "%1: nastavite barvo ozadja"
+
+#: src/backend/note/Note.cpp:138
+#, fuzzy, kde-format
+#| msgid "%1: set font color"
+msgid "%1: set text color"
+msgstr "%1: nastavi barvo pisave"
+
+#: src/backend/note/Note.cpp:145
+#, fuzzy, kde-format
+#| msgid "%1: set font"
+msgid "%1: set text font"
+msgstr "%1: nastavi pisavo"
+
+#: src/backend/note/Note.cpp:183
 #, kde-format
 msgid "no note element found"
 msgstr "ni najdenega elementa opombe"
@@ -9877,12 +9901,6 @@ msgstr "%1: spremenjena vrsta obrobe"
 #, kde-format
 msgid "%1: set plot area corner radius"
 msgstr "%1: nastavite polmer kota območja grafa"
-
-#: src/backend/worksheet/TextLabel.cpp:266
-#: src/backend/worksheet/TextLabel.cpp:305
-#, kde-format
-msgid "%1: set background color"
-msgstr "%1: nastavite barvo ozadja"
 
 #: src/backend/worksheet/TextLabel.cpp:294
 #: src/backend/worksheet/TextLabel.cpp:304

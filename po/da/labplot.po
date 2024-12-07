@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-06 00:37+0000\n"
+"POT-Creation-Date: 2024-12-07 00:37+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -6644,19 +6644,19 @@ msgstr ""
 msgid "%1: mirror vertically"
 msgstr ""
 
-#: src/backend/note/Note.cpp:47
+#: src/backend/note/Note.cpp:67
 #, fuzzy, kde-format
 #| msgid "Print"
 msgctxt "@title:window"
 msgid "Print Note"
 msgstr "Udskriv"
 
-#: src/backend/note/Note.cpp:65
+#: src/backend/note/Note.cpp:85
 #, kde-format
 msgid "Text file (*.txt)"
 msgstr ""
 
-#: src/backend/note/Note.cpp:67
+#: src/backend/note/Note.cpp:87
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:408
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:280
 #, fuzzy, kde-format
@@ -6665,19 +6665,44 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Eksportér til fil"
 
-#: src/backend/note/Note.cpp:81
+#: src/backend/note/Note.cpp:101
 #, fuzzy, kde-format
 #| msgid "Export to file"
 msgid "Export failed"
 msgstr "Eksportér til fil"
 
-#: src/backend/note/Note.cpp:81
+#: src/backend/note/Note.cpp:101
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Failed to open '%1' for writing."
 msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 
-#: src/backend/note/Note.cpp:161
+#: src/backend/note/Note.cpp:124
+#, fuzzy, kde-format
+#| msgid "&Insert Empty Rows"
+msgid "%1: set text"
+msgstr "&Indsæt tomme rækker"
+
+#: src/backend/note/Note.cpp:131 src/backend/worksheet/TextLabel.cpp:266
+#: src/backend/worksheet/TextLabel.cpp:305
+#, fuzzy, kde-format
+#| msgid "&Insert Empty Columns"
+msgid "%1: set background color"
+msgstr "&Indsæt tomme kolonner"
+
+#: src/backend/note/Note.cpp:138
+#, fuzzy, kde-format
+#| msgid "&Insert Empty Rows"
+msgid "%1: set text color"
+msgstr "&Indsæt tomme rækker"
+
+#: src/backend/note/Note.cpp:145
+#, fuzzy, kde-format
+#| msgid "&Insert Empty Columns"
+msgid "%1: set text font"
+msgstr "&Indsæt tomme kolonner"
+
+#: src/backend/note/Note.cpp:183
 #, fuzzy, kde-format
 #| msgid "no matrix element found"
 msgid "no note element found"
@@ -10493,13 +10518,6 @@ msgstr "Ændret"
 #, kde-format
 msgid "%1: set plot area corner radius"
 msgstr ""
-
-#: src/backend/worksheet/TextLabel.cpp:266
-#: src/backend/worksheet/TextLabel.cpp:305
-#, fuzzy, kde-format
-#| msgid "&Insert Empty Columns"
-msgid "%1: set background color"
-msgstr "&Indsæt tomme kolonner"
 
 #: src/backend/worksheet/TextLabel.cpp:294
 #: src/backend/worksheet/TextLabel.cpp:304

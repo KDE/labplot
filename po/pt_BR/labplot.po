@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-06 00:37+0000\n"
+"POT-Creation-Date: 2024-12-07 00:37+0000\n"
 "PO-Revision-Date: 2022-07-14 10:06-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -6575,19 +6575,19 @@ msgstr "%1: espelhar horizontalmente"
 msgid "%1: mirror vertically"
 msgstr "%1: espelhar verticalmente"
 
-#: src/backend/note/Note.cpp:47
+#: src/backend/note/Note.cpp:67
 #, fuzzy, kde-format
 #| msgid "Print"
 msgctxt "@title:window"
 msgid "Print Note"
 msgstr "Imprimir"
 
-#: src/backend/note/Note.cpp:65
+#: src/backend/note/Note.cpp:85
 #, kde-format
 msgid "Text file (*.txt)"
 msgstr ""
 
-#: src/backend/note/Note.cpp:67
+#: src/backend/note/Note.cpp:87
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:408
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:280
 #, fuzzy, kde-format
@@ -6596,19 +6596,44 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Exportar para arquivo"
 
-#: src/backend/note/Note.cpp:81
+#: src/backend/note/Note.cpp:101
 #, fuzzy, kde-format
 #| msgid "Export to file"
 msgid "Export failed"
 msgstr "Exportar para arquivo"
 
-#: src/backend/note/Note.cpp:81
+#: src/backend/note/Note.cpp:101
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Failed to open '%1' for writing."
 msgstr "Não foi possível abrir o arquivo %1 para leitura."
 
-#: src/backend/note/Note.cpp:161
+#: src/backend/note/Note.cpp:124
+#, fuzzy, kde-format
+#| msgid "%1: set arrow type"
+msgid "%1: set text"
+msgstr "%1: definir o tipo de seta"
+
+#: src/backend/note/Note.cpp:131 src/backend/worksheet/TextLabel.cpp:266
+#: src/backend/worksheet/TextLabel.cpp:305
+#, fuzzy, kde-format
+#| msgid "%1: set background first color"
+msgid "%1: set background color"
+msgstr "%1: definir a primeira cor de fundo"
+
+#: src/backend/note/Note.cpp:138
+#, fuzzy, kde-format
+#| msgid "%1: set font color"
+msgid "%1: set text color"
+msgstr "%1: definir a cor da fonte"
+
+#: src/backend/note/Note.cpp:145
+#, fuzzy, kde-format
+#| msgid "%1: set font"
+msgid "%1: set text font"
+msgstr "%1: definir a fonte"
+
+#: src/backend/note/Note.cpp:183
 #, kde-format
 msgid "no note element found"
 msgstr "não foi encontrado o elemento de nota"
@@ -10504,13 +10529,6 @@ msgstr "%1: o tipo de linha foi alterado"
 #, kde-format
 msgid "%1: set plot area corner radius"
 msgstr "%1: definir o raio do contorno da área do gráfico"
-
-#: src/backend/worksheet/TextLabel.cpp:266
-#: src/backend/worksheet/TextLabel.cpp:305
-#, fuzzy, kde-format
-#| msgid "%1: set background first color"
-msgid "%1: set background color"
-msgstr "%1: definir a primeira cor de fundo"
 
 #: src/backend/worksheet/TextLabel.cpp:294
 #: src/backend/worksheet/TextLabel.cpp:304
