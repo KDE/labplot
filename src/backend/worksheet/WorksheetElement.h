@@ -61,6 +61,11 @@ public:
 
 	typedef WorksheetElementPrivate Private;
 
+	enum class CoordinateSystemSource {Plot, Custom};
+
+	BASIC_D_ACCESSOR_DEL(CoordinateSystemSource, coordinateSystemSource, CoordinateSystemSource)
+	void setCoordinateSystem(const CartesianCoordinateSystem*, bool undo = true);
+	const CartesianCoordinateSystem* coordinateSystem() const;
 	CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position)
 	bool setCoordinateBindingEnabled(bool);
 	bool coordinateBindingEnabled() const;
@@ -166,6 +171,8 @@ Q_SIGNALS:
 	void coordinateSystemIndexChanged(int) const;
 	void changed();
 	void hoveredChanged(bool) const;
+	void coordinateSystemChanged(const CartesianCoordinateSystem*) const;
+	void coordinateSystemSourceChanged(CoordinateSystemSource) const;
 
 	void objectPositionChanged(); // Position changed, independend of logical or scene, bot are triggering this
 
