@@ -20,6 +20,7 @@ class WorksheetElementPrivate : public QGraphicsItem {
 public:
 	WorksheetElementPrivate(WorksheetElement*);
 
+	WorksheetElement::CoordinateSystemSource coordinateSystemSource{WorksheetElement::CoordinateSystemSource::Plot};
 	// position in parent's coordinate system, the label gets aligned around this point
 	// TODO: try to get away the Worksheet dependency
 	WorksheetElement::PositionWrapper position{

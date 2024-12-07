@@ -748,6 +748,8 @@ BASIC_SHARED_D_READER_IMPL(WorksheetElement,
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, bool, coordinateBindingEnabled, coordinateBindingEnabled)
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, qreal, scale, scale())
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, bool, isLocked, lock)
+BASIC_SHARED_D_READER_IMPL(WorksheetElement, WorksheetElement::CoordinateSystemSource, coordinateSystemSource, coordinateSystemSource)
+BASIC_SHARED_D_READER_IMPL(WorksheetElement, const CartesianCoordinateSystem*, coordinateSystem, coordinateSystem)
 
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_F_S_SC(WorksheetElement, SetPosition, WorksheetElement::PositionWrapper, position, updatePosition, objectPositionChanged)
@@ -805,6 +807,24 @@ void WorksheetElement::setPositionLogical(QPointF pos) {
 	Q_D(WorksheetElement);
 	if (pos != d->positionLogical)
 		exec(new WorksheetElementSetPositionLogicalCmd(d, pos, ki18n("%1: set logical position")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(WorksheetElement, SetCoordinateSystemSource, WorksheetElement::CoordinateSystemSource, coordinateSystemSource, retransform)
+void WorksheetElement::setCoordinateSystemSource(WorksheetElement::CoordinateSystemSource source) {
+	Q_D(WorksheetElement);
+	if (source != d->coordinateSystemSource)
+		exec(new WorksheetElementSetCoordinateSystemSourceCmd(d, source, ki18n("%1: set coordinateSystem source")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(WorksheetElement, SetCoordinateSystem, CartesianCoordinateSystem, coordinateSystem, retransform)
+void WorksheetElement::setCoordinateSystem(const CartesianCoordinateSystem* cSystem, QUndoCommand* parent) {
+	Q_D(WorksheetElement);
+	if (cSystem != d->coordinateSystem) {
+		if (undo)
+			exec(new WorksheetElementSetCoordinateSystemCmd(d, cSystem, ki18n("%1: set coordinateSystem"), parent));
+		else
+			d->coordinateSystem = cSystem;
+	}
 }
 
 /*!
