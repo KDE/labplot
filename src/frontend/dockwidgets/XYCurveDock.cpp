@@ -447,8 +447,8 @@ void XYCurveDock::setSymbols(QList<XYCurve*> curves) {
 
 void XYCurveDock::initGeneralTab() {
 	// show the properties of the first curve
-	cbXColumn->setColumn(m_curve->xColumn(), m_curve->xColumnPath());
-	cbYColumn->setColumn(m_curve->yColumn(), m_curve->yColumnPath());
+	cbXColumn->setAspect(m_curve->xColumn(), m_curve->xColumnPath());
+	cbYColumn->setAspect(m_curve->yColumn(), m_curve->yColumnPath());
 	uiGeneralTab.chkLegendVisible->setChecked(m_curve->legendVisible());
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
@@ -462,7 +462,7 @@ void XYCurveDock::initGeneralTab() {
 void XYCurveDock::initTabs() {
 	// if there are more than one curve in the list, disable the tab "general"
 	if (m_curvesList.size() == 1)
-		cbValuesColumn->setColumn(m_curve->valuesColumn(), m_curve->valuesColumnPath());
+		cbValuesColumn->setAspect(m_curve->valuesColumn(), m_curve->valuesColumnPath());
 	else
 		cbValuesColumn->setCurrentModelIndex(QModelIndex());
 
@@ -883,13 +883,13 @@ void XYCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 void XYCurveDock::curveXColumnChanged(const AbstractColumn* column) {
 	updateValuesWidgets();
 	CONDITIONAL_LOCK_RETURN;
-	cbXColumn->setColumn(column, m_curve->xColumnPath());
+	cbXColumn->setAspect(column, m_curve->xColumnPath());
 }
 
 void XYCurveDock::curveYColumnChanged(const AbstractColumn* column) {
 	updateValuesWidgets();
 	CONDITIONAL_LOCK_RETURN;
-	cbYColumn->setColumn(column, m_curve->yColumnPath());
+	cbYColumn->setAspect(column, m_curve->yColumnPath());
 }
 
 // Line-Tab
@@ -917,7 +917,7 @@ void XYCurveDock::curveValuesTypeChanged(XYCurve::ValuesType type) {
 }
 void XYCurveDock::curveValuesColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbValuesColumn->setColumn(column, m_curve->valuesColumnPath());
+	cbValuesColumn->setAspect(column, m_curve->valuesColumnPath());
 }
 void XYCurveDock::curveValuesPositionChanged(XYCurve::ValuesPosition position) {
 	CONDITIONAL_LOCK_RETURN;

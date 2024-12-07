@@ -139,10 +139,10 @@ void ErrorBarWidget::setErrorBars(const QList<ErrorBar*>& errorBars) {
 
 	// TODO
 	if (m_errorBars.size() == 1) {
-		cbXPlusColumn->setColumn(m_errorBar->xPlusColumn(), m_errorBar->xPlusColumnPath());
-		cbXMinusColumn->setColumn(m_errorBar->xMinusColumn(), m_errorBar->xMinusColumnPath());
-		cbYPlusColumn->setColumn(m_errorBar->yPlusColumn(), m_errorBar->yPlusColumnPath());
-		cbYMinusColumn->setColumn(m_errorBar->yMinusColumn(), m_errorBar->yMinusColumnPath());
+		cbXPlusColumn->setAspect(m_errorBar->xPlusColumn(), m_errorBar->xPlusColumnPath());
+		cbXMinusColumn->setAspect(m_errorBar->xMinusColumn(), m_errorBar->xMinusColumnPath());
+		cbYPlusColumn->setAspect(m_errorBar->yPlusColumn(), m_errorBar->yPlusColumnPath());
+		cbYMinusColumn->setAspect(m_errorBar->yMinusColumn(), m_errorBar->yMinusColumnPath());
 	} else {
 		cbXPlusColumn->setCurrentModelIndex(QModelIndex());
 		cbXMinusColumn->setCurrentModelIndex(QModelIndex());
@@ -378,12 +378,12 @@ void ErrorBarWidget::errorBarXErrorTypeChanged(ErrorBar::ErrorType type) {
 
 void ErrorBarWidget::errorBarXPlusColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbXPlusColumn->setColumn(column, m_errorBar->xPlusColumnPath());
+	cbXPlusColumn->setAspect(column, m_errorBar->xPlusColumnPath());
 }
 
 void ErrorBarWidget::errorBarXMinusColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbXMinusColumn->setColumn(column, m_errorBar->xMinusColumnPath());
+	cbXMinusColumn->setAspect(column, m_errorBar->xMinusColumnPath());
 }
 
 void ErrorBarWidget::errorBarYErrorTypeChanged(ErrorBar::ErrorType type) {
@@ -393,12 +393,12 @@ void ErrorBarWidget::errorBarYErrorTypeChanged(ErrorBar::ErrorType type) {
 
 void ErrorBarWidget::errorBarYPlusColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbYPlusColumn->setColumn(column, m_errorBar->yPlusColumnPath());
+	cbYPlusColumn->setAspect(column, m_errorBar->yPlusColumnPath());
 }
 
 void ErrorBarWidget::errorBarYMinusColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbYMinusColumn->setColumn(column, m_errorBar->yMinusColumnPath());
+	cbYMinusColumn->setAspect(column, m_errorBar->yMinusColumnPath());
 }
 
 // styling

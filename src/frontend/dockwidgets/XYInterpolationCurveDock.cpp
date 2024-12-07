@@ -121,8 +121,8 @@ void XYInterpolationCurveDock::initGeneralTab() {
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_interpolationCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 	cbDataSourceCurve->setAspect(m_interpolationCurve->dataSourceCurve());
-	cbXDataColumn->setColumn(m_interpolationCurve->xDataColumn(), m_interpolationCurve->xDataColumnPath());
-	cbYDataColumn->setColumn(m_interpolationCurve->yDataColumn(), m_interpolationCurve->yDataColumnPath());
+	cbXDataColumn->setAspect(m_interpolationCurve->xDataColumn(), m_interpolationCurve->xDataColumnPath());
+	cbYDataColumn->setAspect(m_interpolationCurve->yDataColumn(), m_interpolationCurve->yDataColumnPath());
 
 	// range widgets
 	const auto* plot = static_cast<const CartesianPlot*>(m_interpolationCurve->parentAspect());

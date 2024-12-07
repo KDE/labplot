@@ -205,7 +205,7 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	// if there are more than one curve in the list, disable the content in the tab "general"
 	if (m_curvesList.size() == 1) {
 		cbDataColumn->setEnabled(true);
-		cbDataColumn->setColumn(m_curve->dataColumn(), m_curve->dataColumnPath());
+		cbDataColumn->setAspect(m_curve->dataColumn(), m_curve->dataColumnPath());
 	} else {
 		cbDataColumn->setEnabled(false);
 		cbDataColumn->setCurrentModelIndex(QModelIndex());
@@ -448,7 +448,7 @@ void HistogramDock::rugOffsetChanged(double value) const {
 // General-Tab
 void HistogramDock::curveDataColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbDataColumn->setColumn(column, m_curve->dataColumnPath());
+	cbDataColumn->setAspect(column, m_curve->dataColumnPath());
 }
 
 void HistogramDock::curveTypeChanged(Histogram::Type type) {

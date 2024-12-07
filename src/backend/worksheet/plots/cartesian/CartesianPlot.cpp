@@ -2569,7 +2569,7 @@ void CartesianPlot::dataChanged(WorksheetElement* element) {
 	called when in one of the curves the data in one direction was changed.
 	Autoscales the coordinate system and the x/y-axes, when "auto-scale" is active.
 */
-void CartesianPlot::dataChanged(XYCurve* curve, const Dimension dim) {
+void CartesianPlot::dataChanged(Plot* curve, const Dimension dim) {
 	DEBUG(Q_FUNC_INFO)
 	if (project() && project()->isLoading())
 		return;
@@ -2620,17 +2620,20 @@ void CartesianPlot::dataChanged(XYCurve* curve, const Dimension dim) {
 		curve->retransform();
 	}
 
-	// in case there is only one curve and its column mode was changed, check whether we start plotting datetime data
-	if (children<XYCurve>().size() == 1) {
-		const auto* col = curve->column(dim);
-		const auto rangeFormat{range(dim, index).format()};
-		if (col && col->columnMode() == AbstractColumn::ColumnMode::DateTime && rangeFormat != RangeT::Format::DateTime) {
-			setUndoAware(false);
-			setRangeFormat(dim, index, RangeT::Format::DateTime);
-			setUndoAware(true);
+	auto* c = dynamic_cast<XYCurve*>(curve);
+	if (c) {
+		// in case there is only one curve and its column mode was changed, check whether we start plotting datetime data
+		if (children<XYCurve>().size() == 1) {
+			const auto* col = c->column(dim);
+			const auto rangeFormat{range(dim, index).format()};
+			if (col && col->columnMode() == AbstractColumn::ColumnMode::DateTime && rangeFormat != RangeT::Format::DateTime) {
+				setUndoAware(false);
+				setRangeFormat(dim, index, RangeT::Format::DateTime);
+				setUndoAware(true);
+			}
 		}
+		Q_EMIT curveDataChanged(c);
 	}
-	Q_EMIT curveDataChanged(curve);
 }
 
 void CartesianPlot::curveVisibilityChanged() {

@@ -1690,7 +1690,7 @@ void AxisDock::axisMajorTicksStartValueChanged(qreal value) {
 }
 void AxisDock::axisMajorTicksColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbMajorTicksColumn->setColumn(column, m_axis->majorTicksColumnPath());
+	cbMajorTicksColumn->setAspect(column, m_axis->majorTicksColumnPath());
 }
 void AxisDock::axisMajorTicksLengthChanged(qreal length) {
 	CONDITIONAL_LOCK_RETURN;
@@ -1723,7 +1723,7 @@ void AxisDock::axisMinorTicksSpacingChanged(qreal increment) {
 }
 void AxisDock::axisMinorTicksColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbMinorTicksColumn->setColumn(column, m_axis->minorTicksColumnPath());
+	cbMinorTicksColumn->setAspect(column, m_axis->minorTicksColumnPath());
 }
 void AxisDock::axisMinorTicksLengthChanged(qreal length) {
 	CONDITIONAL_LOCK_RETURN;
@@ -1770,7 +1770,7 @@ void AxisDock::axisLabelsTextTypeChanged(Axis::LabelsTextType type) {
 }
 void AxisDock::axisLabelsTextColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbLabelsTextColumn->setColumn(column, m_axis->labelsTextColumnPath());
+	cbLabelsTextColumn->setAspect(column, m_axis->labelsTextColumnPath());
 }
 void AxisDock::axisLabelsFontChanged(const QFont& font) {
 	CONDITIONAL_LOCK_RETURN;

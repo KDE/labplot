@@ -137,7 +137,7 @@ void LollipopPlotDock::setPlots(QList<LollipopPlot*> list) {
 	ui.chkLegendVisible->setChecked(m_plot->legendVisible());
 	ui.chkVisible->setChecked(m_plot->isVisible());
 	load();
-	cbXColumn->setColumn(m_plot->xColumn(), m_plot->xColumnPath());
+	cbXColumn->setAspect(m_plot->xColumn(), m_plot->xColumnPath());
 	loadDataColumns();
 
 	updatePlotRangeList();
@@ -407,7 +407,7 @@ void LollipopPlotDock::currentBarSymbolChanged(int index) {
 // general
 void LollipopPlotDock::plotXColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbXColumn->setColumn(column, m_plot->xColumnPath());
+	cbXColumn->setAspect(column, m_plot->xColumnPath());
 }
 void LollipopPlotDock::plotDataColumnsChanged(const QVector<const AbstractColumn*>&) {
 	CONDITIONAL_LOCK_RETURN;

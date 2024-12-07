@@ -225,10 +225,10 @@ void XYFitCurveDock::initGeneralTab() {
 		cbDataSourceCurve->setAspect(nullptr);
 	}
 
-	cbXDataColumn->setColumn(m_fitCurve->xDataColumn(), m_fitCurve->xDataColumnPath());
-	cbYDataColumn->setColumn(m_fitCurve->yDataColumn(), m_fitCurve->yDataColumnPath());
-	cbXErrorColumn->setColumn(m_fitCurve->xErrorColumn(), m_fitCurve->xErrorColumnPath());
-	cbYErrorColumn->setColumn(m_fitCurve->yErrorColumn(), m_fitCurve->yErrorColumnPath());
+	cbXDataColumn->setAspect(m_fitCurve->xDataColumn(), m_fitCurve->xDataColumnPath());
+	cbYDataColumn->setAspect(m_fitCurve->yDataColumn(), m_fitCurve->yDataColumnPath());
+	cbXErrorColumn->setAspect(m_fitCurve->xErrorColumn(), m_fitCurve->xErrorColumnPath());
+	cbYErrorColumn->setAspect(m_fitCurve->yErrorColumn(), m_fitCurve->yErrorColumnPath());
 
 	int tmpModelType = m_fitData.modelType; // save type because it's reset when category changes
 	if (m_fitData.modelCategory == nsl_fit_model_custom)
@@ -1566,22 +1566,22 @@ void XYFitCurveDock::curveDataSourceHistogramChanged(const Histogram* hist) {
 
 void XYFitCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbXDataColumn->setColumn(column, m_fitCurve->xDataColumnPath());
+	cbXDataColumn->setAspect(column, m_fitCurve->xDataColumnPath());
 }
 
 void XYFitCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbYDataColumn->setColumn(column, m_fitCurve->yDataColumnPath());
+	cbYDataColumn->setAspect(column, m_fitCurve->yDataColumnPath());
 }
 
 void XYFitCurveDock::curveXErrorColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbXErrorColumn->setColumn(column, m_fitCurve->xErrorColumnPath());
+	cbXErrorColumn->setAspect(column, m_fitCurve->xErrorColumnPath());
 }
 
 void XYFitCurveDock::curveYErrorColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbYErrorColumn->setColumn(column, m_fitCurve->yErrorColumnPath());
+	cbYErrorColumn->setAspect(column, m_fitCurve->yErrorColumnPath());
 }
 
 /*!
