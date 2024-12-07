@@ -45,6 +45,7 @@ public:
 	 */
 	virtual bool usingColumn(const AbstractColumn*, bool indirect = true) const = 0;
 
+	// TODO: make protected and use friend classes if access required!
 	/*!
 	 * recalculates the internal structures (additional data containers, drawing primitives, etc.) on data changes in the source data colums.
 	 * these structures are used in the plot during the actual drawing of the plot on geometry changes.

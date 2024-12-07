@@ -142,9 +142,9 @@ void ProcessBehaviorChartDock::setPlots(QList<ProcessBehaviorChart*> list) {
 	// if there are more then one curve in the list, disable the content in the tab "general"
 	if (m_plots.size() == 1) {
 		cbDataColumn->setEnabled(true);
-		cbDataColumn->setColumn(m_plot->dataColumn(), m_plot->dataColumnPath());
+		cbDataColumn->setAspect(m_plot->dataColumn(), m_plot->dataColumnPath());
 		cbData2Column->setEnabled(true);
-		cbData2Column->setColumn(m_plot->data2Column(), m_plot->data2ColumnPath());
+		cbData2Column->setAspect(m_plot->data2Column(), m_plot->data2ColumnPath());
 	} else {
 		cbDataColumn->setEnabled(false);
 		cbDataColumn->setCurrentModelIndex(QModelIndex());
@@ -334,12 +334,12 @@ void ProcessBehaviorChartDock::exactLimitsEnabledChanged(bool enabled) {
 // General-Tab
 void ProcessBehaviorChartDock::plotDataColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbDataColumn->setColumn(column, m_plot->dataColumnPath());
+	cbDataColumn->setAspect(column, m_plot->dataColumnPath());
 }
 
 void ProcessBehaviorChartDock::plotData2ColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbData2Column->setColumn(column, m_plot->data2ColumnPath());
+	cbData2Column->setAspect(column, m_plot->data2ColumnPath());
 }
 
 void ProcessBehaviorChartDock::plotTypeChanged(ProcessBehaviorChart::Type type) {
