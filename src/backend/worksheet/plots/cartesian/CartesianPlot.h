@@ -29,6 +29,7 @@ class InfoElementDialog;
 class Line;
 class XYCurve;
 class KConfig;
+class Plot;
 
 using Dimension = CartesianCoordinateSystem::Dimension;
 
@@ -230,6 +231,7 @@ private:
 	QAction* addCurveAction{nullptr};
 	QAction* addEquationCurveAction{nullptr};
 	QAction* addFunctionCurveAction{nullptr};
+	QAction* addHeatmapAction{nullptr};
 
 	// statistical plots
 	QAction* addHistogramAction{nullptr};
@@ -348,7 +350,7 @@ private Q_SLOTS:
 	void childHovered();
 
 	void dataChanged(WorksheetElement*);
-	void dataChanged(XYCurve*, const Dimension);
+	void dataChanged(Plot*, const Dimension);
 	void plotColorChanged();
 	void curveVisibilityChanged();
 	void boxPlotOrientationChanged(WorksheetElement::Orientation);

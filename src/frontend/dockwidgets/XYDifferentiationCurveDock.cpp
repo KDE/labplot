@@ -93,8 +93,8 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_differentiationCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 	cbDataSourceCurve->setAspect(m_differentiationCurve->dataSourceCurve());
-	cbXDataColumn->setColumn(m_differentiationCurve->xDataColumn(), m_differentiationCurve->xDataColumnPath());
-	cbYDataColumn->setColumn(m_differentiationCurve->yDataColumn(), m_differentiationCurve->yDataColumnPath());
+	cbXDataColumn->setAspect(m_differentiationCurve->xDataColumn(), m_differentiationCurve->xDataColumnPath());
+	cbYDataColumn->setAspect(m_differentiationCurve->yDataColumn(), m_differentiationCurve->yDataColumnPath());
 
 	// range widgets
 	const auto* plot = static_cast<const CartesianPlot*>(m_differentiationCurve->parentAspect());

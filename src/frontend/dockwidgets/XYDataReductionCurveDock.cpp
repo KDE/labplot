@@ -97,8 +97,8 @@ void XYDataReductionCurveDock::initGeneralTab() {
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_dataReductionCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 	cbDataSourceCurve->setAspect(m_dataReductionCurve->dataSourceCurve());
-	cbXDataColumn->setColumn(m_dataReductionCurve->xDataColumn(), m_dataReductionCurve->xDataColumnPath());
-	cbYDataColumn->setColumn(m_dataReductionCurve->yDataColumn(), m_dataReductionCurve->yDataColumnPath());
+	cbXDataColumn->setAspect(m_dataReductionCurve->xDataColumn(), m_dataReductionCurve->xDataColumnPath());
+	cbYDataColumn->setAspect(m_dataReductionCurve->yDataColumn(), m_dataReductionCurve->yDataColumnPath());
 
 	// range widgets
 	const auto* plot = static_cast<const CartesianPlot*>(m_dataReductionCurve->parentAspect());

@@ -81,8 +81,8 @@ void XYFourierTransformCurveDock::setupGeneral() {
 
 void XYFourierTransformCurveDock::initGeneralTab() {
 	// show the properties of the first curve
-	cbXDataColumn->setColumn(m_transformCurve->xDataColumn(), m_transformCurve->xDataColumnPath());
-	cbYDataColumn->setColumn(m_transformCurve->yDataColumn(), m_transformCurve->yDataColumnPath());
+	cbXDataColumn->setAspect(m_transformCurve->xDataColumn(), m_transformCurve->xDataColumnPath());
+	cbYDataColumn->setAspect(m_transformCurve->yDataColumn(), m_transformCurve->yDataColumnPath());
 	uiGeneralTab.cbAutoRange->setChecked(m_transformData.autoRange);
 	const auto numberLocale = QLocale();
 	uiGeneralTab.leMin->setText(numberLocale.toString(m_transformData.xRange.first()));

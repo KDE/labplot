@@ -11,6 +11,7 @@
 
 #include "CartesianPlot.h"
 #include "CartesianPlotPrivate.h"
+#include "Heatmap.h"
 #include "Histogram.h"
 #include "XYConvolutionCurve.h"
 #include "XYCorrelationCurve.h"
@@ -517,6 +518,11 @@ void CartesianPlot::initActions() {
 		addChild(new RunChart(i18n("Run Chart")));
 	});
 
+	addHeatmapAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-heatmap")), i18n("Heatmap"), this);
+	connect(addHeatmapAction, &QAction::triggered, this, [=]() {
+		addChild(new Heatmap(i18n("Heatmap")));
+	});
+
 	// analysis curves
 	connect(addDataReductionCurveAction, &QAction::triggered, this, &CartesianPlot::addDataReductionCurve);
 	connect(addDifferentiationCurveAction, &QAction::triggered, this, &CartesianPlot::addDifferentiationCurve);
@@ -636,6 +642,7 @@ void CartesianPlot::initMenus() {
 
 	m_addNewMenu->addAction(addCurveAction);
 	m_addNewMenu->addAction(addEquationCurveAction);
+	m_addNewMenu->addAction(addHeatmapAction);
 	m_addNewMenu->addSeparator();
 
 	// statistical plots
@@ -1410,6 +1417,14 @@ private:
 	Dimension m_dimension;
 	Range<double> m_otherValue; // old value in redo, new value in undo
 };
+
+void CartesianPlot::setXRange(int index, const Range<double>& range) {
+	setRange(Dimension::X, index, range);
+}
+
+void CartesianPlot::setYRange(int index, const Range<double>& range) {
+	setRange(Dimension::Y, index, range);
+}
 
 void CartesianPlot::setRange(const Dimension dim, const int index, const Range<double>& range) {
 	Q_D(CartesianPlot);
@@ -2224,6 +2239,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	const auto* boxPlot = dynamic_cast<const BoxPlot*>(child);
 	const auto* barPlot = dynamic_cast<const BarPlot*>(child);
 	const auto* lollipopPlot = dynamic_cast<const LollipopPlot*>(child);
+	const auto* heatmap = dynamic_cast<const Heatmap*>(child);
 
 	const auto* axis = dynamic_cast<const Axis*>(child);
 
@@ -2298,6 +2314,14 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(lollipopPlot, &LollipopPlot::dataColumnsChanged, this, &CartesianPlot::updateLegend);
 	} else if (axis) {
 		connect(axis, &Axis::shiftSignal, this, &CartesianPlot::axisShiftSignal);
+	} else if (heatmap) {
+		connect(heatmap, &Heatmap::xDataChanged, [this, heatmap]() {
+			this->dataChanged(const_cast<Heatmap*>(heatmap), Dimension::X);
+		});
+		connect(heatmap, &Heatmap::yDataChanged, [this, heatmap]() {
+			this->dataChanged(const_cast<Heatmap*>(heatmap), Dimension::Y);
+		});
+		// Heatmap::dataChanged is handled above
 	} else {
 		// if an element is hovered, the curves which are handled manually in this class
 		// must be unhovered
@@ -2569,7 +2593,7 @@ void CartesianPlot::dataChanged(WorksheetElement* element) {
 	called when in one of the curves the data in one direction was changed.
 	Autoscales the coordinate system and the x/y-axes, when "auto-scale" is active.
 */
-void CartesianPlot::dataChanged(XYCurve* curve, const Dimension dim) {
+void CartesianPlot::dataChanged(Plot* curve, const Dimension dim) {
 	DEBUG(Q_FUNC_INFO)
 	if (project() && project()->isLoading())
 		return;
@@ -2620,17 +2644,20 @@ void CartesianPlot::dataChanged(XYCurve* curve, const Dimension dim) {
 		curve->retransform();
 	}
 
-	// in case there is only one curve and its column mode was changed, check whether we start plotting datetime data
-	if (children<XYCurve>().size() == 1) {
-		const auto* col = curve->column(dim);
-		const auto rangeFormat{range(dim, index).format()};
-		if (col && col->columnMode() == AbstractColumn::ColumnMode::DateTime && rangeFormat != RangeT::Format::DateTime) {
-			setUndoAware(false);
-			setRangeFormat(dim, index, RangeT::Format::DateTime);
-			setUndoAware(true);
+	auto* c = dynamic_cast<XYCurve*>(curve);
+	if (c) {
+		// in case there is only one curve and its column mode was changed, check whether we start plotting datetime data
+		if (children<XYCurve>().size() == 1) {
+			const auto* col = c->column(dim);
+			const auto rangeFormat{range(dim, index).format()};
+			if (col && col->columnMode() == AbstractColumn::ColumnMode::DateTime && rangeFormat != RangeT::Format::DateTime) {
+				setUndoAware(false);
+				setRangeFormat(dim, index, RangeT::Format::DateTime);
+				setUndoAware(true);
+			}
 		}
+		Q_EMIT curveDataChanged(c);
 	}
-	Q_EMIT curveDataChanged(curve);
 }
 
 void CartesianPlot::curveVisibilityChanged() {
@@ -2829,18 +2856,11 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 		if (coordinateSystem(plot->coordinateSystemIndex())->index(dim) != index)
 			continue;
 
-		if (dynamic_cast<const XYCurve*>(plot)) {
-			auto* curve = static_cast<const XYCurve*>(plot);
-			DEBUG("CURVE \"" << STDSTRING(curve->name()) << "\"")
-			auto* column = curve->column(dim);
-			if (!column) {
-				DEBUG(" NO column!")
-				continue;
-			}
-
+		const auto type = plot->type();
+		if (type == AspectType::XYCurve || type == AspectType::Heatmap || type == AspectType::QQPlot) {
 			// range of indices
 			Range<int> indexRange{0, 0};
-			if (!completeRange && d->rangeType == RangeType::Free) {
+			if (!completeRange && d->rangeType == RangeType::Free || type == AspectType::QQPlot) {
 				Dimension dim_other = Dimension::Y;
 				switch (dim) {
 				case Dimension::X:
@@ -2849,23 +2869,24 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 					dim_other = Dimension::X;
 					break;
 				}
-
-				if (curve->column(dim_other)) { // only data within y range
-					const int index = coordinateSystem(curve->coordinateSystemIndex())->index(dim_other);
-					DEBUG(Q_FUNC_INFO << ", free incomplete range with y column. y range = " << d->range(dim_other, index).toStdString())
-					curve->column(dim_other)->indicesMinMax(d->range(dim_other, index).start(),
-															d->range(dim_other, index).end(),
-															indexRange.start(),
-															indexRange.end());
-				}
+				const int index = coordinateSystem(plot->coordinateSystemIndex())->index(dim_other);
+				DEBUG(Q_FUNC_INFO << ", free incomplete range with y column. y range = " << d->range(dim_other, index).toStdString())
+				assert(
+					plot->indicesMinMax(dim_other, d->range(dim_other, index).start(), d->range(dim_other, index).end(), indexRange.start(), indexRange.end()));
 			} else { // all data
+				const int count = plot->dataCount(dim);
+				DEBUG("PLOT \"" << STDSTRING(plot->name()) << "\"")
+				if (count < 0) {
+					DEBUG("Invalid data");
+					continue;
+				}
 				DEBUG(Q_FUNC_INFO << ", else. range type = " << (int)d->rangeType)
 				switch (d->rangeType) {
 				case RangeType::Free:
-					indexRange.setRange(0, column->rowCount() - 1);
+					indexRange.setRange(0, count - 1);
 					break;
 				case RangeType::Last:
-					indexRange.setRange(column->rowCount() - d->rangeLastValues, column->rowCount() - 1);
+					indexRange.setRange(count - d->rangeLastValues, count - 1);
 					break;
 				case RangeType::First:
 					indexRange.setRange(0, d->rangeFirstValues - 1);
@@ -2874,14 +2895,6 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 			}
 			DEBUG(Q_FUNC_INFO << ", index range = " << indexRange.toStdString())
 
-			curve->minMax(dim, indexRange, range, true);
-		} else if (plot->type() == AspectType::KDEPlot) {
-			const int minIndex = 0;
-			const int maxIndex = static_cast<const KDEPlot*>(plot)->gridPointsCount() - 1;
-			Range<int> indexRange{minIndex, maxIndex};
-			plot->minMax(dim, indexRange, range, true);
-		} else if (plot->type() == AspectType::QQPlot) {
-			Range<int> indexRange{0, 99}; // 100 percentile values are calculated, max index is 99
 			plot->minMax(dim, indexRange, range, true);
 		} else if (plot->type() == AspectType::ProcessBehaviorChart) {
 			const int maxIndex = static_cast<const ProcessBehaviorChart*>(plot)->xIndexCount() - 1;
@@ -2892,6 +2905,7 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 			Range<int> indexRange{0, maxIndex};
 			plot->minMax(dim, indexRange, range, true);
 		} else {
+			// TODO: which plots goes in here?
 			range.setStart(plot->minimum(dim));
 			range.setEnd(plot->maximum(dim));
 		}
@@ -5355,6 +5369,15 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				addChildFast(hist);
 			else {
 				delete hist;
+				return false;
+			}
+		} else if (reader->name() == Heatmap::saveName) {
+			auto* heatmap = new Heatmap(QStringLiteral("Heatmap"));
+			heatmap->setIsLoading(true);
+			if (heatmap->load(reader, preview))
+				addChildFast(heatmap);
+			else {
+				removeChild(heatmap);
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("QQPlot")) {

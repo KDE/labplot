@@ -320,7 +320,7 @@ void ValueWidget::valueTypeChanged(Value::Type type) {
 }
 void ValueWidget::valueColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbColumn->setColumn(column, m_value->columnPath());
+	cbColumn->setAspect(column, m_value->columnPath());
 }
 void ValueWidget::valuePositionChanged(Value::Position position) {
 	CONDITIONAL_LOCK_RETURN;
@@ -379,7 +379,7 @@ void ValueWidget::load() {
 	ui.sbDistance->setValue(Worksheet::convertFromSceneUnits(m_value->distance(), Worksheet::Unit::Point));
 	ui.sbRotation->setValue(m_value->rotationAngle());
 	ui.sbOpacity->setValue(round(m_value->opacity()) * 100.0);
-	cbColumn->setColumn(m_value->column(), m_value->columnPath());
+	cbColumn->setAspect(m_value->column(), m_value->columnPath());
 	this->updateWidgets();
 	ui.lePrefix->setText(m_value->prefix());
 	ui.leSuffix->setText(m_value->suffix());

@@ -102,8 +102,8 @@ void XYSmoothCurveDock::initGeneralTab() {
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_smoothCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 	cbDataSourceCurve->setAspect(m_smoothCurve->dataSourceCurve());
-	cbXDataColumn->setColumn(m_smoothCurve->xDataColumn(), m_smoothCurve->xDataColumnPath());
-	cbYDataColumn->setColumn(m_smoothCurve->yDataColumn(), m_smoothCurve->yDataColumnPath());
+	cbXDataColumn->setAspect(m_smoothCurve->xDataColumn(), m_smoothCurve->xDataColumnPath());
+	cbYDataColumn->setAspect(m_smoothCurve->yDataColumn(), m_smoothCurve->yDataColumnPath());
 
 	// range widgets
 	const auto* plot = static_cast<const CartesianPlot*>(m_smoothCurve->parentAspect());
