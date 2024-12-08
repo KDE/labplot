@@ -822,6 +822,13 @@ void HeatmapPrivate::update() {
 	double minValue = std::nan("0");
 	double maxValue = -std::nan("0");
 
+	auto calculateIndex = [](double val, double minValid, double maxValid, double binSize, int numberBinsVisible) {
+		// TODO: make option if the border shall be included, or not
+		if (val == maxValid)
+			return numberBinsVisible - 1; // include Right Border
+		return static_cast<int>((val - minValid) / binSize);
+	};
+
 	switch (dataSource) {
 	case Heatmap::DataSource::Spreadsheet: {
 		// For spreadsheets the values are counts of the occurances
@@ -842,16 +849,8 @@ void HeatmapPrivate::update() {
 			const auto xVal = xColumn->valueAt(i);
 			const auto yVal = yColumn->valueAt(i);
 
-			// TODO: make option if the border shall be included, or not
-			if (xVal == xMaxValid)
-				xIndex = xNumberBinsVisible - 1; // Right Border included
-			else
-				xIndex = static_cast<int>((xVal - xMinValid) / xBinSize);
-
-			if (yVal == yMaxValid)
-				yIndex = yNumberBinsVisible - 1; // Border included, other side automatically included
-			else
-				yIndex = static_cast<int>((yVal - yMinValid) / yBinSize);
+			xIndex = calculateIndex(xVal, xMinValid, xMaxValid, xBinSize, xNumberBinsVisible);
+			yIndex = calculateIndex(yVal, yMinValid, yMaxValid, yBinSize, yNumberBinsVisible);
 
 			if (xIndex >= 0 && xIndex < xNumberBinsVisible && yIndex >= 0 && yIndex < yNumberBinsVisible) {
 				map[xIndex][yIndex] += 1; // Summing up
@@ -866,10 +865,10 @@ void HeatmapPrivate::update() {
 		const double ySteps = (yMax - yMin) * yNumValues;
 		for (int column = 0; column < xNumValues; column++) {
 			const double xVal = xMin + xSteps * column;
-			const int xIndex = static_cast<int>((xVal - xMin) / xBinSize);
+			const int xIndex = calculateIndex(xVal, xMinValid, xMaxValid, xBinSize, xNumberBinsVisible);
 			for (int row = 0; row < yNumValues; row++) {
 				const double yVal = yMin + ySteps * row;
-				const int yIndex = static_cast<int>((yVal - yMin) / yBinSize);
+				const int yIndex = calculateIndex(yVal, yMinValid, yMaxValid, yBinSize, yNumberBinsVisible);
 
 				const double value = matrix->cell<double>(row, column);
 				if (value > maxValue)
