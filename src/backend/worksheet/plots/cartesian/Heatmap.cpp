@@ -460,7 +460,7 @@ bool Heatmap::indicesMinMaxMatrix(const Dimension dim, double v1, double v2, int
 	double numberElements = 0;
 	switch (dim) {
 	case Dimension::X: {
-		start = d->matrix->xEnd();
+		start = d->matrix->xStart();
 		end = d->matrix->xEnd();
 		numberElements = d->matrix->columnCount();
 		break;
