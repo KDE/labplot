@@ -66,7 +66,18 @@ void Heatmap::connectMatrix(const Matrix* matrix) {
 	/* When the matrix is reused with different name, the heatmap should be informed to disconnect */
 	/* connect(matrix, &Matrix::reset, this, &Heatmap::matrixAboutToBeRemoved);   */
 	connect(matrix, &AbstractAspect::aspectDescriptionChanged, this, &Heatmap::matrixNameChanged);
+
+	connect(matrix, &Matrix::dataChanged, this, &Heatmap::recalc);
+	connect(matrix, &Matrix::xStartChanged, this, &Heatmap::recalc);
+	connect(matrix, &Matrix::xEndChanged, this, &Heatmap::recalc);
+	connect(matrix, &Matrix::yStartChanged, this, &Heatmap::recalc);
+	connect(matrix, &Matrix::yEndChanged, this, &Heatmap::recalc);
+
 	connect(matrix, &Matrix::dataChanged, this, &Heatmap::dataChanged);
+	connect(matrix, &Matrix::xStartChanged, this, &Heatmap::xDataChanged);
+	connect(matrix, &Matrix::xEndChanged, this, &Heatmap::xDataChanged);
+	connect(matrix, &Matrix::yStartChanged, this, &Heatmap::yDataChanged);
+	connect(matrix, &Matrix::yEndChanged, this, &Heatmap::yDataChanged);
 }
 
 Heatmap::Heatmap(const QString& name)
@@ -868,14 +879,14 @@ void HeatmapPrivate::update() {
 		break;
 	}
 	case Heatmap::DataSource::Matrix:
-		const double xSteps = (xMax - xMin) * xNumValues;
-		const double ySteps = (yMax - yMin) * yNumValues;
-		for (int column = 0; column < xNumValues; column++) {
-			const double xVal = xMin + xSteps * column;
-			const int xIndex = calculateIndex(xVal, xMinValid, xMaxValid, xBinSize, xNumberBinsVisible);
-			for (int row = 0; row < yNumValues; row++) {
-				const double yVal = yMin + ySteps * row;
-				const int yIndex = calculateIndex(yVal, yMinValid, yMaxValid, yBinSize, yNumberBinsVisible);
+		const double xStepSize = (xMax - xMin) / xNumValues;
+		const double yStepSize = (yMax - yMin) / yNumValues;
+		for (int row = 0; row < yNumValues; row++) {
+			const double yVal = yMin + row * yStepSize + 0.5 * yStepSize; // 0.5 * yStepSize because it is assuming that a cell is in the center
+			const int yIndex = calculateIndex(yVal, yMinValid, yMaxValid, yBinSize, yNumberBinsVisible);
+			for (int column = 0; column < xNumValues; column++) {
+				const double xVal = xMin + column * xStepSize + 0.5 * xStepSize;
+				const int xIndex = calculateIndex(xVal, xMinValid, xMaxValid, xBinSize, xNumberBinsVisible);
 
 				const double value = matrix->cell<double>(row, column);
 				if (value > maxValue)
@@ -883,7 +894,8 @@ void HeatmapPrivate::update() {
 				if (value < minValue)
 					minValue = value;
 
-				map[xIndex][yIndex] = value;
+				if (xIndex >= 0 && xIndex < xNumberBinsVisible && yIndex >= 0 && yIndex < yNumberBinsVisible)
+					map[xIndex][yIndex] = value;
 			}
 		}
 		break;
