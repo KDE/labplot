@@ -2509,6 +2509,9 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(heatmap, &Heatmap::yDataChanged, [this, heatmap]() {
 			this->dataChanged(const_cast<Heatmap*>(heatmap), Dimension::Y);
 		});
+		connect(heatmap, &Heatmap::dataChanged, [this, heatmap]() {
+			this->dataChanged(const_cast<Heatmap*>(heatmap));
+		});
 		// Heatmap::dataChanged is handled above
 	} else {
 		// if an element is hovered, the curves which are handled manually in this class
