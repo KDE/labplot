@@ -65,6 +65,7 @@ public:
 	 * the size of the Bins. The size of the bin is defined as (maxVal - minVal) / numBins
 	 */
 	BASIC_D_ACCESSOR_DECL(bool, numBinsEqual, NumBinsEqual)
+	BASIC_D_ACCESSOR_DECL(bool, matrixNumBins, matrixNumBins)
 	BASIC_D_ACCESSOR_DECL(unsigned int, xNumBins, XNumBins)
 	BASIC_D_ACCESSOR_DECL(unsigned int, yNumBins, YNumBins)
 	/*!

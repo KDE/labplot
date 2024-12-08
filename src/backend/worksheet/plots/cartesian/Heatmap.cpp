@@ -83,6 +83,7 @@ Heatmap::~Heatmap() {
 BASIC_SHARED_D_READER_IMPL(Heatmap, Heatmap::DataSource, dataSource, dataSource)
 BASIC_SHARED_D_READER_IMPL(Heatmap, unsigned int, xNumBins, xNumBins)
 BASIC_SHARED_D_READER_IMPL(Heatmap, unsigned int, yNumBins, yNumBins)
+BASIC_SHARED_D_READER_IMPL(Heatmap, bool, matrixNumBins, matrixNumBins)
 BASIC_SHARED_D_READER_IMPL(Heatmap, bool, drawEmpty, drawEmpty)
 BASIC_SHARED_D_READER_IMPL(Heatmap, Heatmap::Format, format, format)
 BASIC_SHARED_D_READER_IMPL(Heatmap, double, formatMin, format.start)
@@ -762,8 +763,15 @@ void HeatmapPrivate::update() {
 	auto xMax = q->maximum(Dimension::X);
 	auto yMax = q->maximum(Dimension::Y);
 
-	const auto xBinSize = (xMax - xMin) / xNumBins;
-	const auto yBinSize = (yMax - yMin) / yNumBins;
+	auto xBinSize = xMax - xMin;
+	auto yBinSize = yMax - yMin;
+	if (matrixNumBins && dataSource == Heatmap::DataSource::Matrix) {
+		xBinSize /= xNumValues;
+		yBinSize /= yNumValues;
+	} else {
+		xBinSize /= xNumBins;
+		yBinSize /= yNumBins;
+	}
 
 	if (xBinSize <= 0 || yBinSize <= 0)
 		return;

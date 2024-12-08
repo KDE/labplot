@@ -38,6 +38,8 @@ private Q_SLOTS:
 	void minMaxMatrix();
 
 	void indicesMinMaxMatrix();
+
+	void testMatrixNumBins();
 };
 
 #endif // HEATMAPTEST_H
