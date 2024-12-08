@@ -827,7 +827,8 @@ MatrixPrivate::~MatrixPrivate() {
 }
 
 void MatrixPrivate::updateViewHeader() {
-	q->m_view->model()->updateHeader();
+	if (q->m_model)
+		q->m_model->updateHeader();
 }
 
 /*!

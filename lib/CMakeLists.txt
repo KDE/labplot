@@ -119,6 +119,7 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/ErrorBar.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/Histogram.cpp
+    ${BACKEND_DIR}/worksheet/plots/cartesian/Heatmap.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/CustomPoint.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/KDEPlot.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/LollipopPlot.cpp
