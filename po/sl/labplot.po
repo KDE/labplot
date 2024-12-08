@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-07 00:37+0000\n"
-"PO-Revision-Date: 2024-12-01 07:39+0100\n"
+"PO-Revision-Date: 2024-12-07 08:52+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -6320,10 +6320,9 @@ msgid "Failed to open '%1' for writing."
 msgstr "Datoteke '%1' ni bilo mogoče odpreti za pisanje."
 
 #: src/backend/note/Note.cpp:124
-#, fuzzy, kde-format
-#| msgid "%1: set type"
+#, kde-format
 msgid "%1: set text"
-msgstr "%1: nastavi vrsto"
+msgstr "%1: nastavi besedilo"
 
 #: src/backend/note/Note.cpp:131 src/backend/worksheet/TextLabel.cpp:266
 #: src/backend/worksheet/TextLabel.cpp:305
@@ -6332,16 +6331,14 @@ msgid "%1: set background color"
 msgstr "%1: nastavite barvo ozadja"
 
 #: src/backend/note/Note.cpp:138
-#, fuzzy, kde-format
-#| msgid "%1: set font color"
+#, kde-format
 msgid "%1: set text color"
-msgstr "%1: nastavi barvo pisave"
+msgstr "%1: nastavi barvo besedila"
 
 #: src/backend/note/Note.cpp:145
-#, fuzzy, kde-format
-#| msgid "%1: set font"
+#, kde-format
 msgid "%1: set text font"
-msgstr "%1: nastavi pisavo"
+msgstr "%1: nastavi pisavo besedila"
 
 #: src/backend/note/Note.cpp:183
 #, kde-format

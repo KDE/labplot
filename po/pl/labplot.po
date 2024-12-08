@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-07 00:37+0000\n"
-"PO-Revision-Date: 2024-10-26 13:03+0200\n"
+"PO-Revision-Date: 2024-12-07 13:21+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 24.08.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1086,104 +1086,94 @@ msgid "Unable to open device"
 msgstr "Nie można otworzyć urządzenia"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:202
-#, fuzzy, kde-format
-#| msgid "Unable to read the file"
+#, kde-format
 msgid "Unable to determine the separator"
-msgstr "Nie udało się odczytać pliku"
+msgstr "Nie udało się ustalić znaku rozdzielającego"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:204
-#, fuzzy, kde-format
-#| msgid "Number of columns:"
+#, kde-format
 msgid "Invalid number of data columns"
-msgstr "Liczba kolumn:"
+msgstr "Nieprawidłowa liczba kolumn danych"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:206
-#, fuzzy, kde-format
-#| msgid "Number of columns:"
+#, kde-format
 msgid "Invalid number of column names"
-msgstr "Liczba kolumn:"
+msgstr "Nieprawidłowa liczba kolumn nazw"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:208
 #, kde-format
 msgid "Matrix: Unsupported column mode"
-msgstr ""
+msgstr "Macierz: Nieobsługiwany tryb kolumn"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:210
 #, kde-format
 msgid "Insufficient memory (RAM)"
-msgstr ""
+msgstr "Niewystarczająco pamięci (RAM)"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:212
-#, fuzzy, kde-format
-#| msgid "Unable to read the file"
+#, kde-format
 msgid "Unable to parse header"
-msgstr "Nie udało się odczytać pliku"
+msgstr "Nie udało się przetworzyć nagłówka"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:214
-#, fuzzy, kde-format
-#| msgid "Type of data source"
+#, kde-format
 msgid "Unsupported data source"
-msgstr "Rodzaj źródła danych"
+msgstr "Nieobsługiwany rodzaj danych"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:218
 #, kde-format
 msgid "Live: No column separator selected"
-msgstr ""
+msgstr "Na żywo: Nie wybrano rozdzielacza kolumn"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:220
 #, kde-format
 msgid "Live: No column modes set"
-msgstr ""
+msgstr "Na żywo: Nie ustawiono trybu kolumn"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:222
 #, kde-format
 msgid "Datetime column found, but no Datetime format provided"
-msgstr ""
+msgstr "Znaleziono kolumnę daty i czasu, lecz nie podano jej zapisu"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:224
-#, fuzzy, kde-format
-#| msgid "Reading from file %1 failed."
+#, kde-format
 msgid "Header reading from device not allowed"
-msgstr "Nie udało się odczytać z pliku %1."
+msgstr "Odczyt nagłówka z urządzenia jest niedozwolony"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:226
 #, kde-format
 msgid "Separator detection not allowed"
-msgstr ""
+msgstr "Wykrywanie rozdzielacza jest jest niedozwolone"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:228
-#, fuzzy, kde-format
-#| msgid "Invalid sheet."
+#, kde-format
 msgid "Invalid separator"
-msgstr "Nieprawidłowy arkusz."
+msgstr "Nieprawidłowy rozdzielacz"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:230
-#, fuzzy, kde-format
-#| msgid "Failed to initialize %1."
+#, kde-format
 msgid "Filter not initialized"
-msgstr "Nie udało się przygotować %1."
+msgstr "Nie przygotowano filtra"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:232
 #, kde-format
 msgid "Wrong end column. Is it smaller than start column?"
-msgstr ""
+msgstr "Zła kolumna końcowa. Czy nie jest czasami mniejsza niż początkowa?"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:234
 #, kde-format
 msgid "Wrong end row. Is it smaller than start row?"
-msgstr ""
+msgstr "Zły wiersz końcowy. Czy nie jest czasami mniejszy niż początkowy?"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:236
-#, fuzzy, kde-format
-#| msgid "No data set selected."
+#, kde-format
 msgid "No data destination set"
-msgstr "Nie wybrano żadnego zestawu danych."
+msgstr "Nie wybrano docelowego zestawu danych"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:238
-#, fuzzy, kde-format
-#| msgid "Sort columns:"
+#, kde-format
 msgid "No columns"
-msgstr "Uszereguj kolumny:"
+msgstr "Brak kolumn"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:240
 #, kde-format
@@ -1239,10 +1229,9 @@ msgid "DateTime"
 msgstr "Data i czas:"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:602
-#, fuzzy, kde-format
-#| msgid "Int8"
+#, kde-format
 msgid "Int"
-msgstr "Int8"
+msgstr "Int"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:603
 #: src/backend/datasources/filters/MatioFilter.cpp:398
@@ -10072,7 +10061,7 @@ msgstr "%1: ustaw położenie logiczne"
 #: src/frontend/AboutDialog.cpp:84
 #, kde-format
 msgid "Copy Info"
-msgstr ""
+msgstr "Skopiuj szczegóły"
 
 #: src/frontend/AboutDialog.cpp:88
 #, kde-format
@@ -10120,14 +10109,12 @@ msgid "Positive/Negative sign "
 msgstr "Znak licz ujemnych/dodatnich "
 
 #: src/frontend/AboutDialog.cpp:143
-#, fuzzy, kde-format
-#| msgid "System: "
+#, kde-format
 msgid "System:"
-msgstr "System: "
+msgstr "System:"
 
 #: src/frontend/AboutDialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Locale: "
+#, kde-format
 msgid "Locale:"
 msgstr "Język:"
 
@@ -10143,10 +10130,9 @@ msgid "Updated on restart"
 msgstr "Uaktualniono po ponownym uruchomieniu"
 
 #: src/frontend/AboutDialog.cpp:146
-#, fuzzy, kde-format
-#| msgid "Architecture: "
+#, kde-format
 msgid "Architecture:"
-msgstr "Architektura: "
+msgstr "Architektura:"
 
 #: src/frontend/AboutDialog.cpp:147
 #, kde-format
@@ -10310,10 +10296,9 @@ msgid "Binary Log File (BLF) file support"
 msgstr "Dwójkowy plik dziennika wektora (BLF)"
 
 #: src/frontend/AboutDialog.cpp:281
-#, fuzzy, kde-format
-#| msgid "Comments:"
+#, kde-format
 msgid "Components:"
-msgstr "Uwagi:"
+msgstr "Składniki:"
 
 #: src/frontend/colormaps/ColorMapsDialog.cpp:39
 #, kde-format
@@ -10767,7 +10752,7 @@ msgstr ""
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:138
 #, kde-format
 msgid "%1 or %2"
-msgstr ""
+msgstr "%1 lub %2"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:252
 #, fuzzy, kde-format
@@ -11656,10 +11641,9 @@ msgid "Preview: Failed to connect to TCP socket - %1"
 msgstr "Nie udało się połączyć z brokerem '%1:%2'."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1853
-#, fuzzy, kde-format
-#| msgid "area error: %1"
+#, kde-format
 msgid "Parse Error: %1"
-msgstr "błąd powierzchni: %1"
+msgstr "Błąd przetwarzania: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1855
 #, kde-format
