@@ -144,23 +144,24 @@ void WorksheetView::initBasicActions() {
 	connect(backspaceAction, &QAction::triggered, this, &WorksheetView::deleteElement);
 
 	// Zoom actions
-	zoomInViewAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-in")), i18n("Zoom In"), this);
-	zoomOutViewAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-out")), i18n("Zoom Out"), this);
-	zoomOriginAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-original")), i18n("Original Size"), this);
+	zoomActionGroup = new QActionGroup(this);
+	zoomInViewAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-in")), i18n("Zoom In"), zoomInViewAction);
+	zoomInViewAction->setData(static_cast<int>(ZoomMode::ZoomIn));
+
+	zoomOutViewAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-out")), i18n("Zoom Out"), zoomInViewAction);
+	zoomOutViewAction->setData(static_cast<int>(ZoomMode::ZoomOut));
+
+	zoomOriginAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-original")), i18n("Original Size"), zoomOriginAction);
+	zoomOriginAction->setData(static_cast<int>(ZoomMode::ZoomOrigin));
 }
 
 void WorksheetView::initActions() {
 	auto* addNewActionGroup = new QActionGroup(this);
-	auto* zoomActionGroup = new QActionGroup(this);
 	auto* mouseModeActionGroup = new QActionGroup(this);
 	auto* layoutActionGroup = new QActionGroup(this);
 	auto* gridActionGroup = new QActionGroup(this);
 	gridActionGroup->setExclusive(true);
-	auto* magnificationActionGroup = new QActionGroup(this);
-
-	zoomActionGroup->addAction(zoomInViewAction);
-	zoomActionGroup->addAction(zoomOutViewAction);
-	zoomActionGroup->addAction(zoomOriginAction);
+	magnificationActionGroup = new QActionGroup(this);
 
 	auto* fitActionGroup = new QActionGroup(zoomActionGroup);
 	fitActionGroup->setExclusive(true);
@@ -183,12 +184,16 @@ void WorksheetView::initActions() {
 
 	// Mouse mode actions
 	selectionModeAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-cursor-arrow")), i18n("Select and Edit"), mouseModeActionGroup);
+	selectionModeAction->setData(static_cast<int>(WorksheetView::MouseMode::Selection));
 	selectionModeAction->setCheckable(true);
+	selectionModeAction->setChecked(true);
 
 	navigationModeAction = new QAction(QIcon::fromTheme(QStringLiteral("input-mouse")), i18n("Navigate"), mouseModeActionGroup);
+	navigationModeAction->setData(static_cast<int>(WorksheetView::MouseMode::Navigation));
 	navigationModeAction->setCheckable(true);
 
 	zoomSelectionModeAction = new QAction(QIcon::fromTheme(QStringLiteral("page-zoom")), i18n("Select and Zoom"), mouseModeActionGroup);
+	zoomSelectionModeAction->setData(static_cast<int>(WorksheetView::MouseMode::ZoomSelection));
 	zoomSelectionModeAction->setCheckable(true);
 
 	// Magnification actions
@@ -207,10 +212,6 @@ void WorksheetView::initActions() {
 
 	fiveTimesMagnificationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-5x-zoom")), i18n("5x Magnification"), magnificationActionGroup);
 	fiveTimesMagnificationAction->setCheckable(true);
-
-	// TODO implement later "group selection action" where multiple objects can be selected by drawing a rectangular
-	// 	selectionModeAction = new QAction(QIcon::fromTheme(QStringLiteral("select-rectangular")), i18n("Selection"), mouseModeActionGroup);
-	// 	selectionModeAction->setCheckable(true);
 
 	//"Add new" related actions
 	addCartesianPlot1Action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-plot-four-axes")), i18n("Four Axes"), addNewActionGroup);
@@ -275,10 +276,10 @@ void WorksheetView::initActions() {
 	this->layoutChanged(m_worksheet->layout());
 
 	connect(addNewActionGroup, &QActionGroup::triggered, this, &WorksheetView::addNew);
-	connect(mouseModeActionGroup, &QActionGroup::triggered, this, &WorksheetView::mouseModeChanged);
-	connect(fitActionGroup, &QActionGroup::triggered, this, &WorksheetView::fitChanged);
+	connect(mouseModeActionGroup, &QActionGroup::triggered, this, &WorksheetView::changeMouseMode);
+	connect(fitActionGroup, &QActionGroup::triggered, this, &WorksheetView::changeZoomFit);
 	connect(zoomActionGroup, &QActionGroup::triggered, this, &WorksheetView::changeZoom);
-	connect(magnificationActionGroup, &QActionGroup::triggered, this, &WorksheetView::magnificationChanged);
+	connect(magnificationActionGroup, &QActionGroup::triggered, this, &WorksheetView::changeMagnification);
 	connect(layoutActionGroup, &QActionGroup::triggered, this, &WorksheetView::changeLayout);
 	connect(gridActionGroup, &QActionGroup::triggered, this, &WorksheetView::changeGrid);
 	connect(snapToGridAction, &QAction::triggered, this, &WorksheetView::changeSnapToGrid);
@@ -325,13 +326,6 @@ void WorksheetView::initActions() {
 	connect(plotActionCursorGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotCursorModeChanged);
 
 	initPlotNavigationActions();
-
-	// set some default values
-	selectionModeAction->setChecked(true);
-	currentZoomAction = zoomInViewAction;
-	currentMagnificationAction = noMagnificationAction;
-
-	m_actionsInitialized = true;
 }
 
 void WorksheetView::initPlotNavigationActions() {
@@ -452,6 +446,7 @@ void WorksheetView::initMenus() {
 	m_zoomMenu->addAction(zoomInViewAction);
 	m_zoomMenu->addAction(zoomOutViewAction);
 	m_zoomMenu->addAction(zoomOriginAction);
+	m_zoomMenu->addSeparator();
 	m_zoomMenu->addAction(zoomFitNoneAction);
 	m_zoomMenu->addAction(zoomFitAction);
 	m_zoomMenu->addAction(zoomFitPageHeightAction);
@@ -600,40 +595,6 @@ void WorksheetView::createContextMenu(QMenu* menu) {
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, showPresenterMode);
 	menu->insertSeparator(firstAction);
-}
-
-void WorksheetView::fillToolBar(QToolBar* toolBar) {
-	toolBar->addSeparator();
-	tbNewCartesianPlot = new QToolButton(toolBar);
-	tbNewCartesianPlot->setPopupMode(QToolButton::MenuButtonPopup);
-	tbNewCartesianPlot->setMenu(m_addNewCartesianPlotMenu);
-	tbNewCartesianPlot->setDefaultAction(addCartesianPlot1Action);
-	toolBar->addWidget(tbNewCartesianPlot);
-	toolBar->addAction(addTextLabelAction);
-	toolBar->addAction(addImageAction);
-
-	toolBar->addSeparator();
-	toolBar->addAction(verticalLayoutAction);
-	toolBar->addAction(horizontalLayoutAction);
-	toolBar->addAction(gridLayoutAction);
-	toolBar->addAction(breakLayoutAction);
-
-	toolBar->addSeparator();
-	toolBar->addAction(selectionModeAction);
-	toolBar->addAction(navigationModeAction);
-	toolBar->addAction(zoomSelectionModeAction);
-	toolBar->addSeparator();
-	tbZoom = new QToolButton(toolBar);
-	tbZoom->setPopupMode(QToolButton::MenuButtonPopup);
-	tbZoom->setMenu(m_zoomMenu);
-	tbZoom->setDefaultAction(currentZoomAction);
-	toolBar->addWidget(tbZoom);
-
-	tbMagnification = new QToolButton(toolBar);
-	tbMagnification->setPopupMode(QToolButton::MenuButtonPopup);
-	tbMagnification->setMenu(m_magnificationMenu);
-	tbMagnification->setDefaultAction(currentMagnificationAction);
-	toolBar->addWidget(tbMagnification);
 }
 
 #ifdef HAVE_TOUCHBAR
@@ -1154,12 +1115,7 @@ void WorksheetView::useViewSizeChanged(bool useViewSize) {
 	if (useViewSize) {
 		zoomFitPageHeightAction->setVisible(false);
 		zoomFitPageWidthAction->setVisible(false);
-		currentZoomAction = zoomInViewAction;
-		if (tbZoom)
-			tbZoom->setDefaultAction(zoomInViewAction);
-
-		// determine and set the current view size
-		this->processResize();
+		this->processResize(); // determine and set the current view size
 	} else {
 		zoomFitPageHeightAction->setVisible(true);
 		zoomFitPageWidthAction->setVisible(true);
@@ -1179,19 +1135,21 @@ void WorksheetView::processResize() {
 void WorksheetView::changeZoom(QAction* action) {
 	zoomFitNoneAction->setChecked(true);
 	m_worksheet->setZoomFit(Worksheet::ZoomFit::None);
-	if (action == zoomInViewAction)
+
+	const auto mode = static_cast<ZoomMode>(action->data().toInt());
+	switch (mode) {
+	case ZoomMode::ZoomIn:
 		zoom(1);
-	else if (action == zoomOutViewAction)
+		break;
+	case ZoomMode::ZoomOut:
 		zoom(-1);
-	else if (action == zoomOriginAction) {
+		break;
+	case ZoomMode::ZoomOrigin: {
 		static const float hscale = GuiTools::dpi(this).first / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
 		static const float vscale = GuiTools::dpi(this).second / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
 		setTransform(QTransform::fromScale(hscale, vscale));
 	}
-
-	currentZoomAction = action;
-	if (tbZoom)
-		tbZoom->setDefaultAction(action);
+	}
 
 	updateLabelsZoom();
 }
@@ -1236,7 +1194,7 @@ void WorksheetView::updateScrollBarPolicy() {
 	}
 }
 
-void WorksheetView::fitChanged(QAction* action) {
+void WorksheetView::changeZoomFit(QAction* action) {
 	m_worksheet->setZoomFit(static_cast<Worksheet::ZoomFit>(action->data().toInt()));
 	updateScrollBarPolicy();
 	updateFit();
@@ -1255,38 +1213,28 @@ void WorksheetView::updateLabelsZoom() const {
 		label->setZoomFactor(zoom);
 }
 
-void WorksheetView::magnificationChanged(QAction* action) {
-	if (action == noMagnificationAction) {
-		magnificationFactor = 0;
-		if (m_magnificationWindow)
+void WorksheetView::changeMagnification(QAction* action) {
+	magnificationFactor = static_cast<int>(action->data().toInt());
+	if (magnificationFactor == 0 && m_magnificationWindow)
 			m_magnificationWindow->setVisible(false);
-	} else if (action == twoTimesMagnificationAction)
-		magnificationFactor = 2;
-	else if (action == threeTimesMagnificationAction)
-		magnificationFactor = 3;
-	else if (action == fourTimesMagnificationAction)
-		magnificationFactor = 4;
-	else if (action == fiveTimesMagnificationAction)
-		magnificationFactor = 5;
-
-	currentMagnificationAction = action;
-	if (tbMagnification)
-		tbMagnification->setDefaultAction(action);
 }
 
-void WorksheetView::mouseModeChanged(QAction* action) {
-	if (action == selectionModeAction) {
-		m_mouseMode = MouseMode::Selection;
+void WorksheetView::changeMouseMode(QAction* action) {
+	m_mouseMode = static_cast<WorksheetView::MouseMode>(action->data().toInt());
+
+	switch (m_mouseMode) {
+	case MouseMode::Selection:
 		setInteractive(true);
 		setDragMode(QGraphicsView::NoDrag);
-	} else if (action == navigationModeAction) {
-		m_mouseMode = MouseMode::Navigation;
+		break;
+	case MouseMode::Navigation:
 		setInteractive(false);
 		setDragMode(QGraphicsView::ScrollHandDrag);
-	} else {
-		m_mouseMode = MouseMode::ZoomSelection;
+		break;
+	case MouseMode::ZoomSelection:
 		setInteractive(false);
 		setDragMode(QGraphicsView::NoDrag);
+		break;
 	}
 }
 

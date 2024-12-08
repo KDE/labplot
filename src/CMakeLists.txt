@@ -173,6 +173,7 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/widgets/TimedLineEdit.cpp
     ${FRONTEND_DIR}/widgets/TreeViewComboBox.cpp
     ${FRONTEND_DIR}/widgets/qxtspanslider.cpp
+    ${FRONTEND_DIR}/widgets/toggleactionmenu.cpp
     ${FRONTEND_DIR}/widgets/MemoryWidget.cpp
     ${FRONTEND_DIR}/widgets/DateTimeSpinBox.cpp
     ${FRONTEND_DIR}/widgets/NumberSpinBox.cpp

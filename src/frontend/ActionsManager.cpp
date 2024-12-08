@@ -19,6 +19,7 @@
 #include "frontend/datapicker/DatapickerView.h"
 #include "frontend/matrix/MatrixView.h"
 #include "frontend/spreadsheet/SpreadsheetView.h"
+#include "frontend/widgets/toggleactionmenu.h"
 #include "frontend/widgets/MemoryWidget.h"
 #include "frontend/worksheet/WorksheetView.h"
 
@@ -86,8 +87,8 @@ void ActionsManager::init() {
 	if (groupMain.exists()) {
 		// KXMLGUI framework automatically stores "Disabled" for the key "ToolBarsMovable"
 		// in case the toolbars are locked -> load this value
-		const QString& str = groupMain.readEntry(QLatin1String("ToolBarsMovable"), "");
-		bool locked = (str == QLatin1String("Disabled"));
+		const QString& str = groupMain.readEntry(QStringLiteral("ToolBarsMovable"), "");
+		bool locked = (str == QStringLiteral("Disabled"));
 		KToolBar::setToolBarsLocked(locked);
 	}
 
@@ -102,7 +103,7 @@ void ActionsManager::init() {
 		KToolBar::setToolBarsLocked(false);
 
 		// show icons only
-		const auto& toolbars = factory->containers(QLatin1String("ToolBar"));
+		const auto& toolbars = factory->containers(QStringLiteral("ToolBar"));
 		for (auto* container : toolbars) {
 			auto* toolbar = dynamic_cast<QToolBar*>(container);
 			if (toolbar)
@@ -114,7 +115,7 @@ void ActionsManager::init() {
 
 	initMenus();
 
-	auto* mainToolBar = qobject_cast<QToolBar*>(factory->container(QLatin1String("main_toolbar"), m_mainWindow));
+	auto* mainToolBar = qobject_cast<QToolBar*>(factory->container(QStringLiteral("main_toolbar"), m_mainWindow));
 
 #ifdef HAVE_CANTOR_LIBS
 	auto* tbNotebook = new QToolButton(mainToolBar);
@@ -145,7 +146,7 @@ void ActionsManager::init() {
 	// show memory info
 	m_memoryInfoAction->setEnabled(m_mainWindow->statusBar()->isEnabled()); // disable/enable menu with statusbar
 	const auto& groupMainWin = Settings::group(QStringLiteral("MainWin"));
-	bool memoryInfoShown = groupMainWin.readEntry(QLatin1String("ShowMemoryInfo"), true);
+	bool memoryInfoShown = groupMainWin.readEntry(QStringLiteral("ShowMemoryInfo"), true);
 	// DEBUG(Q_FUNC_INFO << ", memory info enabled in config: " << memoryInfoShown)
 	m_memoryInfoAction->setChecked(memoryInfoShown);
 	if (memoryInfoShown)
@@ -180,8 +181,8 @@ void ActionsManager::initActions() {
 	m_printPreviewAction = KStandardAction::printPreview(m_mainWindow, &MainWin::printPreview, collection);
 
 	QAction* openExample = new QAction(i18n("&Open Example"), collection);
-	openExample->setIcon(QIcon::fromTheme(QLatin1String("folder-documents")));
-	collection->addAction(QLatin1String("file_example_open"), openExample);
+	openExample->setIcon(QIcon::fromTheme(QStringLiteral("folder-documents")));
+	collection->addAction(QStringLiteral("file_example_open"), openExample);
 	connect(openExample, &QAction::triggered, m_mainWindow, &MainWin::exampleProjectsDialog);
 
 	m_fullScreenAction = KStandardAction::fullScreen(m_mainWindow, &ActionsManager::toggleFullScreen, m_mainWindow, collection);
@@ -192,52 +193,52 @@ void ActionsManager::initActions() {
 	KStandardAction::quit(m_mainWindow, &MainWin::close, collection);
 
 	// New Folder/Workbook/Spreadsheet/Matrix/Worksheet/Datasources
-	m_newWorkbookAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-workbook-new")), i18n("Workbook"), this);
-	collection->addAction(QLatin1String("new_workbook"), m_newWorkbookAction);
+	m_newWorkbookAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-workbook-new")), i18n("Workbook"), this);
+	collection->addAction(QStringLiteral("new_workbook"), m_newWorkbookAction);
 	m_newWorkbookAction->setWhatsThis(i18n("Creates a new workbook for collection spreadsheets, matrices and plots"));
 	connect(m_newWorkbookAction, &QAction::triggered, m_mainWindow, &MainWin::newWorkbook);
 
-	m_newDatapickerAction = new QAction(QIcon::fromTheme(QLatin1String("color-picker-black")), i18n("Data Extractor"), this);
+	m_newDatapickerAction = new QAction(QIcon::fromTheme(QStringLiteral("color-picker-black")), i18n("Data Extractor"), this);
 	m_newDatapickerAction->setWhatsThis(i18n("Creates a data extractor for getting data from a picture"));
-	collection->addAction(QLatin1String("new_datapicker"), m_newDatapickerAction);
+	collection->addAction(QStringLiteral("new_datapicker"), m_newDatapickerAction);
 	connect(m_newDatapickerAction, &QAction::triggered, m_mainWindow, &MainWin::newDatapicker);
 
-	m_newSpreadsheetAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-spreadsheet-new")), i18n("Spreadsheet"), this);
+	m_newSpreadsheetAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-spreadsheet-new")), i18n("Spreadsheet"), this);
 	// 	m_newSpreadsheetAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
 	m_newSpreadsheetAction->setWhatsThis(i18n("Creates a new spreadsheet for data editing"));
-	collection->addAction(QLatin1String("new_spreadsheet"), m_newSpreadsheetAction);
+	collection->addAction(QStringLiteral("new_spreadsheet"), m_newSpreadsheetAction);
 	connect(m_newSpreadsheetAction, &QAction::triggered, m_mainWindow, &MainWin::newSpreadsheet);
 
-	m_newMatrixAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-matrix-new")), i18n("Matrix"), this);
+	m_newMatrixAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-matrix-new")), i18n("Matrix"), this);
 	// 	m_newMatrixAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
 	m_newMatrixAction->setWhatsThis(i18n("Creates a new matrix for data editing"));
-	collection->addAction(QLatin1String("new_matrix"), m_newMatrixAction);
+	collection->addAction(QStringLiteral("new_matrix"), m_newMatrixAction);
 	connect(m_newMatrixAction, &QAction::triggered, m_mainWindow, &MainWin::newMatrix);
 
-	m_newWorksheetAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-worksheet-new")), i18n("Worksheet"), this);
+	m_newWorksheetAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-worksheet-new")), i18n("Worksheet"), this);
 	// 	m_newWorksheetAction->setShortcut(Qt::ALT+Qt::Key_X);
 	m_newWorksheetAction->setWhatsThis(i18n("Creates a new worksheet for data plotting"));
-	collection->addAction(QLatin1String("new_worksheet"), m_newWorksheetAction);
+	collection->addAction(QStringLiteral("new_worksheet"), m_newWorksheetAction);
 	connect(m_newWorksheetAction, &QAction::triggered, m_mainWindow, &MainWin::newWorksheet);
 
-	m_newNotesAction = new QAction(QIcon::fromTheme(QLatin1String("document-new")), i18n("Note"), this);
+	m_newNotesAction = new QAction(QIcon::fromTheme(QStringLiteral("document-new")), i18n("Note"), this);
 	m_newNotesAction->setWhatsThis(i18n("Creates a new note for arbitrary text"));
-	collection->addAction(QLatin1String("new_notes"), m_newNotesAction);
+	collection->addAction(QStringLiteral("new_notes"), m_newNotesAction);
 	connect(m_newNotesAction, &QAction::triggered, m_mainWindow, &MainWin::newNotes);
 
-	m_newFolderAction = new QAction(QIcon::fromTheme(QLatin1String("folder-new")), i18n("Folder"), this);
+	m_newFolderAction = new QAction(QIcon::fromTheme(QStringLiteral("folder-new")), i18n("Folder"), this);
 	m_newFolderAction->setWhatsThis(i18n("Creates a new folder to collect sheets and other elements"));
-	collection->addAction(QLatin1String("new_folder"), m_newFolderAction);
+	collection->addAction(QStringLiteral("new_folder"), m_newFolderAction);
 	connect(m_newFolderAction, &QAction::triggered, m_mainWindow, &MainWin::newFolder);
 
 	//"New file datasources"
-	m_newLiveDataSourceAction = new QAction(QIcon::fromTheme(QLatin1String("edit-text-frame-update")), i18n("Live Data Source..."), this);
+	m_newLiveDataSourceAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-text-frame-update")), i18n("Live Data Source..."), this);
 	m_newLiveDataSourceAction->setWhatsThis(i18n("Creates a live data source to read data from a real time device"));
-	collection->addAction(QLatin1String("new_live_datasource"), m_newLiveDataSourceAction);
+	collection->addAction(QStringLiteral("new_live_datasource"), m_newLiveDataSourceAction);
 	connect(m_newLiveDataSourceAction, &QAction::triggered, m_mainWindow, &MainWin::newLiveDataSource);
 
 	// Import/Export
-	m_importFileAction = new QAction(QIcon::fromTheme(QLatin1String("document-import")), i18n("From File..."), this);
+	m_importFileAction = new QAction(QIcon::fromTheme(QStringLiteral("document-import")), i18n("From File..."), this);
 	collection->setDefaultShortcut(m_importFileAction, Qt::CTRL | Qt::SHIFT | Qt::Key_I);
 	m_importFileAction->setWhatsThis(i18n("Import data from a regular file"));
 	connect(m_importFileAction, &QAction::triggered, this, [=]() {
@@ -246,55 +247,55 @@ void ActionsManager::initActions() {
 
 	// second "import from file" action, with a shorter name, to be used in the sub-menu of the "Import"-menu.
 	// the first action defined above will be used in the toolbar and touchbar where we need the more detailed name "Import From File".
-	m_importFileAction_2 = new QAction(QIcon::fromTheme(QLatin1String("document-import")), i18n("From File..."), this);
-	collection->addAction(QLatin1String("import_file"), m_importFileAction_2);
+	m_importFileAction_2 = new QAction(QIcon::fromTheme(QStringLiteral("document-import")), i18n("From File..."), this);
+	collection->addAction(QStringLiteral("import_file"), m_importFileAction_2);
 	m_importFileAction_2->setWhatsThis(i18n("Import data from a regular file"));
 	connect(m_importFileAction_2, &QAction::triggered, this, [=]() {
 		m_mainWindow->importFileDialog();
 	});
 
-	m_importKaggleDatasetAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-kaggle")), i18n("From kaggle.com..."), this);
+	m_importKaggleDatasetAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-kaggle")), i18n("From kaggle.com..."), this);
 	m_importKaggleDatasetAction->setWhatsThis(i18n("Import data from kaggle.com"));
-	collection->addAction(QLatin1String("import_dataset_kaggle"), m_importKaggleDatasetAction);
+	collection->addAction(QStringLiteral("import_dataset_kaggle"), m_importKaggleDatasetAction);
 	connect(m_importKaggleDatasetAction, &QAction::triggered, m_mainWindow, &MainWin::importKaggleDatasetDialog);
 
-	m_importSqlAction = new QAction(QIcon::fromTheme(QLatin1String("network-server-database")), i18n("From SQL Database..."), this);
+	m_importSqlAction = new QAction(QIcon::fromTheme(QStringLiteral("network-server-database")), i18n("From SQL Database..."), this);
 	m_importSqlAction->setWhatsThis(i18n("Import data from a SQL database"));
-	collection->addAction(QLatin1String("import_sql"), m_importSqlAction);
+	collection->addAction(QStringLiteral("import_sql"), m_importSqlAction);
 	connect(m_importSqlAction, &QAction::triggered, m_mainWindow, &MainWin::importSqlDialog);
 
-	m_importDatasetAction = new QAction(QIcon::fromTheme(QLatin1String("database-index")), i18n("From Dataset Collection..."), this);
+	m_importDatasetAction = new QAction(QIcon::fromTheme(QStringLiteral("database-index")), i18n("From Dataset Collection..."), this);
 	m_importDatasetAction->setWhatsThis(i18n("Import data from an online dataset"));
-	collection->addAction(QLatin1String("import_dataset_datasource"), m_importDatasetAction);
+	collection->addAction(QStringLiteral("import_dataset_datasource"), m_importDatasetAction);
 	connect(m_importDatasetAction, &QAction::triggered, m_mainWindow, &MainWin::importDatasetDialog);
 
-	m_importLabPlotAction = new QAction(QIcon::fromTheme(QLatin1String("project-open")), i18n("LabPlot Project..."), this);
+	m_importLabPlotAction = new QAction(QIcon::fromTheme(QStringLiteral("project-open")), i18n("LabPlot Project..."), this);
 	m_importLabPlotAction->setWhatsThis(i18n("Import a project from a LabPlot project file (.lml)"));
-	collection->addAction(QLatin1String("import_labplot"), m_importLabPlotAction);
+	collection->addAction(QStringLiteral("import_labplot"), m_importLabPlotAction);
 	connect(m_importLabPlotAction, &QAction::triggered, m_mainWindow, &MainWin::importProjectDialog);
 
 #ifdef HAVE_LIBORIGIN
-	m_importOpjAction = new QAction(QIcon::fromTheme(QLatin1String("project-open")), i18n("Origin Project (OPJ)..."), this);
+	m_importOpjAction = new QAction(QIcon::fromTheme(QStringLiteral("project-open")), i18n("Origin Project (OPJ)..."), this);
 	m_importOpjAction->setWhatsThis(i18n("Import a project from an OriginLab Origin project file (.opj)"));
-	collection->addAction(QLatin1String("import_opj"), m_importOpjAction);
+	collection->addAction(QStringLiteral("import_opj"), m_importOpjAction);
 	connect(m_importOpjAction, &QAction::triggered, m_mainWindow, &MainWin::importProjectDialog);
 #endif
 
-	m_exportAction = new QAction(QIcon::fromTheme(QLatin1String("document-export")), i18n("Export..."), this);
+	m_exportAction = new QAction(QIcon::fromTheme(QStringLiteral("document-export")), i18n("Export..."), this);
 	m_exportAction->setWhatsThis(i18n("Export selected element"));
 	collection->setDefaultShortcut(m_exportAction, Qt::CTRL | Qt::SHIFT | Qt::Key_E);
-	collection->addAction(QLatin1String("export"), m_exportAction);
+	collection->addAction(QStringLiteral("export"), m_exportAction);
 	connect(m_exportAction, &QAction::triggered, m_mainWindow, &MainWin::exportDialog);
 
 #ifdef HAVE_PURPOSE
-	m_shareAction = new QAction(QIcon::fromTheme(QLatin1String("document-share")), i18n("Share"), this);
-	collection->addAction(QLatin1String("share"), m_shareAction);
+	m_shareAction = new QAction(QIcon::fromTheme(QStringLiteral("document-share")), i18n("Share"), this);
+	collection->addAction(QStringLiteral("share"), m_shareAction);
 #endif
 
 	// Tools
-	auto* action = new QAction(QIcon::fromTheme(QLatin1String("color-management")), i18n("Color Maps Browser"), this);
+	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("color-management")), i18n("Color Maps Browser"), this);
 	action->setWhatsThis(i18n("Open dialog to browse through the available color maps."));
-	collection->addAction(QLatin1String("color_maps"), action);
+	collection->addAction(QStringLiteral("color_maps"), action);
 	// connect(action, &QAction::triggered, this, [=]() {
 	// 	auto* dlg = new ColorMapsDialog(this);
 	// 	dlg->exec();
@@ -302,9 +303,9 @@ void ActionsManager::initActions() {
 	// });
 
 #ifdef HAVE_FITS
-	action = new QAction(QIcon::fromTheme(QLatin1String("editor")), i18n("FITS Metadata Editor..."), this);
+	action = new QAction(QIcon::fromTheme(QStringLiteral("editor")), i18n("FITS Metadata Editor..."), this);
 	action->setWhatsThis(i18n("Open editor to edit FITS meta data"));
-	collection->addAction(QLatin1String("edit_fits"), action);
+	collection->addAction(QStringLiteral("edit_fits"), action);
 	connect(action, &QAction::triggered, m_mainWindow, &MainWin::editFitsFileDialog);
 #endif
 
@@ -312,8 +313,8 @@ void ActionsManager::initActions() {
 	// Undo/Redo-stuff
 	m_undoAction = KStandardAction::undo(m_mainWindow, SLOT(undo()), collection);
 	m_redoAction = KStandardAction::redo(m_mainWindow, SLOT(redo()), collection);
-	m_historyAction = new QAction(QIcon::fromTheme(QLatin1String("view-history")), i18n("Undo/Redo History..."), this);
-	collection->addAction(QLatin1String("history"), m_historyAction);
+	m_historyAction = new QAction(QIcon::fromTheme(QStringLiteral("view-history")), i18n("Undo/Redo History..."), this);
+	collection->addAction(QStringLiteral("history"), m_historyAction);
 	connect(m_historyAction, &QAction::triggered, m_mainWindow, &MainWin::historyDialog);
 
 #ifdef Q_OS_MAC
@@ -333,32 +334,32 @@ void ActionsManager::initActions() {
 	m_closeWindowAction = new QAction(i18n("&Close"), this);
 	collection->setDefaultShortcut(m_closeWindowAction, QKeySequence::Close);
 	m_closeWindowAction->setStatusTip(i18n("Close the active window"));
-	collection->addAction(QLatin1String("close window"), m_closeWindowAction);
+	collection->addAction(QStringLiteral("close window"), m_closeWindowAction);
 
 	m_closeAllWindowsAction = new QAction(i18n("Close &All"), this);
 	m_closeAllWindowsAction->setStatusTip(i18n("Close all the windows"));
-	collection->addAction(QLatin1String("close all windows"), m_closeAllWindowsAction);
+	collection->addAction(QStringLiteral("close all windows"), m_closeAllWindowsAction);
 
-	m_nextWindowAction = new QAction(QIcon::fromTheme(QLatin1String("go-next-view")), i18n("Ne&xt"), this);
+	m_nextWindowAction = new QAction(QIcon::fromTheme(QStringLiteral("go-next-view")), i18n("Ne&xt"), this);
 	collection->setDefaultShortcut(m_nextWindowAction, QKeySequence::NextChild);
 	m_nextWindowAction->setStatusTip(i18n("Move the focus to the next window"));
-	collection->addAction(QLatin1String("next window"), m_nextWindowAction);
+	collection->addAction(QStringLiteral("next window"), m_nextWindowAction);
 
-	m_prevWindowAction = new QAction(QIcon::fromTheme(QLatin1String("go-previous-view")), i18n("Pre&vious"), this);
+	m_prevWindowAction = new QAction(QIcon::fromTheme(QStringLiteral("go-previous-view")), i18n("Pre&vious"), this);
 	collection->setDefaultShortcut(m_prevWindowAction, QKeySequence::PreviousChild);
 	m_prevWindowAction->setStatusTip(i18n("Move the focus to the previous window"));
-	collection->addAction(QLatin1String("previous window"), m_prevWindowAction);
+	collection->addAction(QStringLiteral("previous window"), m_prevWindowAction);
 
 	// Actions for window visibility
 	auto* windowVisibilityActions = new QActionGroup(this);
 	windowVisibilityActions->setExclusive(true);
 
-	m_visibilityFolderAction = new QAction(QIcon::fromTheme(QLatin1String("folder")), i18n("Current &Folder Only"), windowVisibilityActions);
+	m_visibilityFolderAction = new QAction(QIcon::fromTheme(QStringLiteral("folder")), i18n("Current &Folder Only"), windowVisibilityActions);
 	m_visibilityFolderAction->setCheckable(true);
 	m_visibilityFolderAction->setData(static_cast<int>(Project::DockVisibility::folderOnly));
 
 	m_visibilitySubfolderAction =
-		new QAction(QIcon::fromTheme(QLatin1String("folder-documents")), i18n("Current Folder and &Subfolders"), windowVisibilityActions);
+		new QAction(QIcon::fromTheme(QStringLiteral("folder-documents")), i18n("Current Folder and &Subfolders"), windowVisibilityActions);
 	m_visibilitySubfolderAction->setCheckable(true);
 	m_visibilitySubfolderAction->setData(static_cast<int>(Project::DockVisibility::folderAndSubfolders));
 
@@ -373,8 +374,8 @@ void ActionsManager::initActions() {
 	//  see https://api.kde.org/frameworks/kxmlgui/html/classKXmlGuiWindow.html#a3d7371171cafabe30cb3bb7355fdfed1
 	// KXMLGUI framework automatically stores "Disabled" for the key "StatusBar"
 	KConfigGroup groupMain = Settings::group(QStringLiteral("MainWindow"));
-	const QString& str = groupMain.readEntry(QLatin1String("StatusBar"), "");
-	bool statusBarDisabled = (str == QLatin1String("Disabled"));
+	const QString& str = groupMain.readEntry(QStringLiteral("StatusBar"), "");
+	bool statusBarDisabled = (str == QStringLiteral("Disabled"));
 	DEBUG(Q_FUNC_INFO << ", statusBar enabled in config: " << !statusBarDisabled)
 	m_mainWindow->createStandardStatusBarAction();
 	m_statusBarAction = KStandardAction::showStatusbar(this, &ActionsManager::toggleStatusBar, collection);
@@ -392,20 +393,20 @@ void ActionsManager::initActions() {
 	auto* docksActions = new QActionGroup(this);
 	docksActions->setExclusive(false);
 
-	m_projectExplorerDockAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-tree")), i18n("Project Explorer"), docksActions);
+	m_projectExplorerDockAction = new QAction(QIcon::fromTheme(QStringLiteral("view-list-tree")), i18n("Project Explorer"), docksActions);
 	m_projectExplorerDockAction->setCheckable(true);
 	m_projectExplorerDockAction->setChecked(true);
-	collection->addAction(QLatin1String("toggle_project_explorer_dock"), m_projectExplorerDockAction);
+	collection->addAction(QStringLiteral("toggle_project_explorer_dock"), m_projectExplorerDockAction);
 
-	m_propertiesDockAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-details")), i18n("Properties Explorer"), docksActions);
+	m_propertiesDockAction = new QAction(QIcon::fromTheme(QStringLiteral("view-list-details")), i18n("Properties Explorer"), docksActions);
 	m_propertiesDockAction->setCheckable(true);
 	m_propertiesDockAction->setChecked(true);
-	collection->addAction(QLatin1String("toggle_properties_explorer_dock"), m_propertiesDockAction);
+	collection->addAction(QStringLiteral("toggle_properties_explorer_dock"), m_propertiesDockAction);
 
-	m_worksheetPreviewAction = new QAction(QIcon::fromTheme(QLatin1String("view-preview")), i18n("Worksheet Preview"), docksActions);
+	m_worksheetPreviewAction = new QAction(QIcon::fromTheme(QStringLiteral("view-preview")), i18n("Worksheet Preview"), docksActions);
 	m_worksheetPreviewAction->setCheckable(true);
 	m_worksheetPreviewAction->setChecked(true);
-	collection->addAction(QLatin1String("toggle_worksheet_preview_dock"), m_worksheetPreviewAction);
+	collection->addAction(QStringLiteral("toggle_worksheet_preview_dock"), m_worksheetPreviewAction);
 
 	connect(docksActions, &QActionGroup::triggered, this, &ActionsManager::toggleDockWidget);
 
@@ -425,10 +426,10 @@ void ActionsManager::initActions() {
 
 #ifdef HAVE_CANTOR_LIBS
 	// configure CAS backends
-	m_configureCASAction = new QAction(QIcon::fromTheme(QLatin1String("cantor")), i18n("Configure CAS..."), this);
+	m_configureCASAction = new QAction(QIcon::fromTheme(QStringLiteral("cantor")), i18n("Configure CAS..."), this);
 	m_configureCASAction->setWhatsThis(i18n("Opens the settings for Computer Algebra Systems to modify the available systems or to enable new ones"));
 	m_configureCASAction->setMenuRole(QAction::NoRole); // prevent macOS Qt heuristics to select this action for preferences
-	collection->addAction(QLatin1String("configure_cas"), m_configureCASAction);
+	collection->addAction(QStringLiteral("configure_cas"), m_configureCASAction);
 	connect(m_configureCASAction, &QAction::triggered, m_mainWindow, &MainWin::settingsDialog); // TODO: go to the Notebook page in the settings dialog directly
 #endif
 
@@ -452,6 +453,7 @@ void ActionsManager::initActions() {
 	// actions used in the toolbars
 	initNotebookToolbarActions();
 	initSpreadsheetToolbarActions();
+	initWorksheetToolbarActions();
 }
 
 /*!
@@ -462,31 +464,136 @@ void ActionsManager::initWorksheetToolbarActions() {
 
 	// "add new" actions
 	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("draw-text")), i18n("Text"), m_mainWindow);
-	collection->addAction(QLatin1String("worksheet_new_image"), action);
+	collection->addAction(QStringLiteral("worksheet_new_image"), action);
 
 	action = new QAction(QIcon::fromTheme(QStringLiteral("viewimage")), i18n("Image"), m_mainWindow);
-	collection->addAction(QLatin1String("worksheet_new_text_label"), action);
+	collection->addAction(QStringLiteral("worksheet_new_text_label"), action);
+
+	// TODO
 
 	// layout actions
-	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-edithlayout")), i18n("Vertical Layout"), m_mainWindow);
+	m_worksheetLayoutActionGroup = new QActionGroup(m_mainWindow);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-edithlayout")), i18n("Vertical Layout"), m_worksheetLayoutActionGroup);
 	action->setData(static_cast<int>(Worksheet::Layout::VerticalLayout));
 	action->setCheckable(true);
-	collection->addAction(QLatin1String("worksheet_vertical_layout"), action);
+	collection->addAction(QStringLiteral("worksheet_vertical_layout"), action);
 
-	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-editvlayout")), i18n("Horizontal Layout"), m_mainWindow);
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-editvlayout")), i18n("Horizontal Layout"), m_worksheetLayoutActionGroup);
 	action->setData(static_cast<int>(Worksheet::Layout::HorizontalLayout));
 	action->setCheckable(true);
-	collection->addAction(QLatin1String("worksheet_horizontal_layout"), action);
+	collection->addAction(QStringLiteral("worksheet_horizontal_layout"), action);
 
-	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-editgrid")), i18n("Grid Layout"), m_mainWindow);
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-editgrid")), i18n("Grid Layout"), m_worksheetLayoutActionGroup);
 	action->setData(static_cast<int>(Worksheet::Layout::GridLayout));
 	action->setCheckable(true);
-	collection->addAction(QLatin1String("worksheet_grid_layout"), action);
+	collection->addAction(QStringLiteral("worksheet_grid_layout"), action);
 
-	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-editbreaklayout")), i18n("No Layout"), m_mainWindow);
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-editbreaklayout")), i18n("No Layout"), m_worksheetLayoutActionGroup);
 	action->setData(static_cast<int>(Worksheet::Layout::NoLayout));
 	action->setEnabled(false);
-	collection->addAction(QLatin1String("worksheet_break_layout"), action);
+	collection->addAction(QStringLiteral("worksheet_break_layout"), action);
+
+	// mouse mode actions
+	m_worksheeMouseModeActionGroup = new QActionGroup(m_mainWindow);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-cursor-arrow")), i18n("Select and Edit"), m_worksheeMouseModeActionGroup);
+	action->setData(static_cast<int>(WorksheetView::MouseMode::Selection));
+	action->setCheckable(true);
+	collection->addAction(QStringLiteral("worksheet_select_mode"), action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("input-mouse")), i18n("Navigate"), m_worksheeMouseModeActionGroup);
+	action->setData(static_cast<int>(WorksheetView::MouseMode::Navigation));
+	action->setCheckable(true);
+	collection->addAction(QStringLiteral("worksheet_navigate_mode"), action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("page-zoom")), i18n("Select and Zoom"), m_worksheeMouseModeActionGroup);
+	action->setData(static_cast<int>(WorksheetView::MouseMode::ZoomSelection));
+	action->setCheckable(true);
+	collection->addAction(QStringLiteral("worksheet_zoom_select_mode"), action);
+
+	// zoom actions
+	auto* zoomMenu = new ToggleActionMenu(i18nc("@action", "Zoom"), this);
+	zoomMenu->setPopupMode(QToolButton::MenuButtonPopup);
+	connect(zoomMenu->menu(), &QMenu::triggered, zoomMenu, &ToggleActionMenu::setDefaultAction);
+	collection->addAction(QStringLiteral("worksheet_zoom"), zoomMenu);
+
+	m_worksheeZoomActionGroup = new QActionGroup(m_mainWindow);
+	action = new QAction(QIcon::fromTheme(QStringLiteral("zoom-in")), i18n("Zoom In"), m_worksheeZoomActionGroup);
+	action->setData(static_cast<int>(WorksheetView::ZoomMode::ZoomIn));
+	zoomMenu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("zoom-out")), i18n("Zoom Out"), m_worksheeZoomActionGroup);
+	action->setData(static_cast<int>(WorksheetView::ZoomMode::ZoomOut));
+	zoomMenu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("zoom-original")), i18n("Original Size"), m_worksheeZoomActionGroup);
+	action->setData(static_cast<int>(WorksheetView::ZoomMode::ZoomOrigin));
+	zoomMenu->addAction(action);
+
+	// zoom fit actions
+	m_worksheeZoomFitActionGroup = new QActionGroup(m_mainWindow);
+	zoomMenu->addSeparator();
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-none")), i18nc("Zoom", "No fit"), m_worksheeZoomFitActionGroup);
+	action->setCheckable(true);
+	action->setChecked(true);
+	action->setData((int)Worksheet::ZoomFit::None);
+	zoomMenu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-height")), i18nc("Zoom", "Fit to Height"), m_worksheeZoomFitActionGroup);
+	action->setCheckable(true);
+	action->setData((int)Worksheet::ZoomFit::FitToHeight);
+	zoomMenu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-width")), i18nc("Zoom", "Fit to Width"), m_worksheeZoomFitActionGroup);
+	action->setCheckable(true);
+	action->setData((int)Worksheet::ZoomFit::FitToWidth);
+	zoomMenu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-selection")), i18nc("Zoom", "Fit to Selection"), m_worksheeZoomFitActionGroup);
+	action->setCheckable(true);
+	action->setData((int)Worksheet::ZoomFit::FitToSelection);
+	zoomMenu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit")), i18nc("Zoom", "Fit"), m_worksheeZoomFitActionGroup);
+	action->setCheckable(true);
+	action->setData((int)Worksheet::ZoomFit::Fit);
+	zoomMenu->addAction(action);
+
+	// magnification actions
+	m_worksheetMagnificationActionGroup = new QActionGroup(m_mainWindow);
+	auto* magnificationMenu = new ToggleActionMenu(i18nc("@action", "Magnification"), this);
+	magnificationMenu->setPopupMode(QToolButton::MenuButtonPopup);
+	connect(magnificationMenu->menu(), &QMenu::triggered, zoomMenu, &ToggleActionMenu::setDefaultAction);
+	collection->addAction(QStringLiteral("worksheet_magnification"), magnificationMenu);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-1x-zoom")), i18n("No Magnification"), m_worksheetMagnificationActionGroup);
+	action->setCheckable(true);
+	action->setData(0);
+	magnificationMenu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-2x-zoom")), i18n("2x Magnification"), m_worksheetMagnificationActionGroup);
+	action->setCheckable(true);
+	action->setData(2);
+	magnificationMenu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-3x-zoom")), i18n("3x Magnification"), m_worksheetMagnificationActionGroup);
+	action->setCheckable(true);
+	action->setData(3);
+	magnificationMenu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-4x-zoom")), i18n("4x Magnification"), m_worksheetMagnificationActionGroup);
+	action->setCheckable(true);
+	action->setData(4);
+	magnificationMenu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-5x-zoom")), i18n("5x Magnification"), m_worksheetMagnificationActionGroup);
+	action->setCheckable(true);
+	action->setData(5);
+	magnificationMenu->addAction(action);
+
+	collection->addAction(QStringLiteral("worksheet_magnification"), magnificationMenu);
 }
 
 /*!
@@ -497,36 +604,36 @@ void ActionsManager::initSpreadsheetToolbarActions() {
 
 	// rows
 	m_spreadsheetInsertRowAboveAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-row-above")), i18n("Insert Row Above"), m_mainWindow);
-	collection->addAction(QLatin1String("spreadsheet_insert_row_above"), m_spreadsheetInsertRowAboveAction);
+	collection->addAction(QStringLiteral("spreadsheet_insert_row_above"), m_spreadsheetInsertRowAboveAction);
 
 	m_spreadsheetInsertRowBelowAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-row-below")), i18n("Insert Row Below"), m_mainWindow);
-	collection->addAction(QLatin1String("spreadsheet_insert_row_below"), m_spreadsheetInsertRowBelowAction);
+	collection->addAction(QStringLiteral("spreadsheet_insert_row_below"), m_spreadsheetInsertRowBelowAction);
 
 	m_spreadsheetRemoveRowsAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-delete-row")), i18n("Remo&ve Selected Row(s)"), m_mainWindow);
-	collection->addAction(QLatin1String("spreadsheet_remove_rows"), m_spreadsheetRemoveRowsAction);
+	collection->addAction(QStringLiteral("spreadsheet_remove_rows"), m_spreadsheetRemoveRowsAction);
 
 	// columns
 	m_spreadsheetInsertColumnLeftAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-left")), i18n("Insert Column Left"), m_mainWindow);
-	collection->addAction(QLatin1String("spreadsheet_insert_column_left"), m_spreadsheetInsertColumnLeftAction);
+	collection->addAction(QStringLiteral("spreadsheet_insert_column_left"), m_spreadsheetInsertColumnLeftAction);
 
 	m_spreadsheetInsertColumnRightAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-right")), i18n("Insert Column Right"), m_mainWindow);
-	collection->addAction(QLatin1String("spreadsheet_insert_column_right"), m_spreadsheetInsertColumnRightAction);
+	collection->addAction(QStringLiteral("spreadsheet_insert_column_right"), m_spreadsheetInsertColumnRightAction);
 
 	m_spreadsheetRemoveColumnsAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-delete-column")), i18n("Delete Selected Column(s)"), m_mainWindow);
-	collection->addAction(QLatin1String("spreadsheet_remove_columns"), m_spreadsheetRemoveColumnsAction);
+	collection->addAction(QStringLiteral("spreadsheet_remove_columns"), m_spreadsheetRemoveColumnsAction);
 
 	// sort
 	m_spreadsheetSortAction = new QAction(QIcon::fromTheme(QStringLiteral("view-sort")), i18n("&Sort..."), m_mainWindow);
 	m_spreadsheetSortAction->setToolTip(i18n("Sort multiple columns together"));
-	collection->addAction(QLatin1String("spreadsheet_sort"), m_spreadsheetSortAction);
+	collection->addAction(QStringLiteral("spreadsheet_sort"), m_spreadsheetSortAction);
 
 	m_spreadsheetSortAscAction = new QAction(QIcon::fromTheme(QStringLiteral("view-sort-ascending")), i18n("Sort &Ascending"), m_mainWindow);
 	m_spreadsheetSortAscAction->setToolTip(i18n("Sort the selected columns separately in ascending order"));
-	collection->addAction(QLatin1String("spreadsheet_sort_asc"), m_spreadsheetSortAscAction);
+	collection->addAction(QStringLiteral("spreadsheet_sort_asc"), m_spreadsheetSortAscAction);
 
 	m_spreadsheetSortDescAction = new QAction(QIcon::fromTheme(QStringLiteral("view-sort-descending")), i18n("Sort &Descending"), m_mainWindow);
 	m_spreadsheetSortDescAction->setToolTip(i18n("Sort the selected columns separately in descending order"));
-	collection->addAction(QLatin1String("spreadsheet_sort_desc"), m_spreadsheetSortDescAction);
+	collection->addAction(QStringLiteral("spreadsheet_sort_desc"), m_spreadsheetSortDescAction);
 }
 
 /*!
@@ -536,20 +643,20 @@ void ActionsManager::initSpreadsheetToolbarActions() {
 void ActionsManager::initNotebookToolbarActions() {
 	auto* collection = m_mainWindow->actionCollection();
 
-	m_notebookZoomInAction = new QAction(QIcon::fromTheme(QLatin1String("zoom-in")), i18n("Zoom In"), m_mainWindow);
-	collection->addAction(QLatin1String("notebook_zoom_in"), m_notebookZoomInAction);
+	m_notebookZoomInAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-in")), i18n("Zoom In"), m_mainWindow);
+	collection->addAction(QStringLiteral("notebook_zoom_in"), m_notebookZoomInAction);
 
-	m_notebookZoomOutAction = new QAction(QIcon::fromTheme(QLatin1String("zoom-out")), i18n("Zoom Out"), m_mainWindow);
-	collection->addAction(QLatin1String("notebook_zoom_out"), m_notebookZoomOutAction);
+	m_notebookZoomOutAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-out")), i18n("Zoom Out"), m_mainWindow);
+	collection->addAction(QStringLiteral("notebook_zoom_out"), m_notebookZoomOutAction);
 
-	m_notebookFindAction = new QAction(QIcon::fromTheme(QLatin1String("edit-find")), i18n("Find"), m_mainWindow);
-	collection->addAction(QLatin1String("notebook_find"), m_notebookFindAction);
+	m_notebookFindAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("Find"), m_mainWindow);
+	collection->addAction(QStringLiteral("notebook_find"), m_notebookFindAction);
 
-	m_notebookRestartAction = new QAction(QIcon::fromTheme(QLatin1String("system-reboot")), i18n("Restart"), m_mainWindow);
-	collection->addAction(QLatin1String("notebook_restart"), m_notebookRestartAction);
+	m_notebookRestartAction = new QAction(QIcon::fromTheme(QStringLiteral("system-reboot")), i18n("Restart"), m_mainWindow);
+	collection->addAction(QStringLiteral("notebook_restart"), m_notebookRestartAction);
 
-	m_notebookEvaluateAction = new QAction(QIcon::fromTheme(QLatin1String("system-run")), i18n("Evaluate Notebook"), m_mainWindow);
-	collection->addAction(QLatin1String("notebook_evaluate"), m_notebookEvaluateAction);
+	m_notebookEvaluateAction = new QAction(QIcon::fromTheme(QStringLiteral("system-run")), i18n("Evaluate Notebook"), m_mainWindow);
+	collection->addAction(QStringLiteral("notebook_evaluate"), m_notebookEvaluateAction);
 }
 #endif
 
@@ -572,7 +679,7 @@ void ActionsManager::initMenus() {
 
 	// add the actions to toggle the status bar and the project and properties explorer widgets to the "View" menu.
 	// this menu is created automatically when the default "full screen" action is created in initActions().
-	auto* menu = dynamic_cast<QMenu*>(factory->container(QLatin1String("view"), m_mainWindow));
+	auto* menu = dynamic_cast<QMenu*>(factory->container(QStringLiteral("view"), m_mainWindow));
 	if (menu) {
 		menu->addSeparator();
 		menu->addAction(m_projectExplorerDockAction);
@@ -581,13 +688,13 @@ void ActionsManager::initMenus() {
 	}
 
 	// menu in the main toolbar for adding new aspects
-	menu = dynamic_cast<QMenu*>(factory->container(QLatin1String("new"), m_mainWindow));
+	menu = dynamic_cast<QMenu*>(factory->container(QStringLiteral("new"), m_mainWindow));
 	if (menu)
-		menu->setIcon(QIcon::fromTheme(QLatin1String("window-new")));
+		menu->setIcon(QIcon::fromTheme(QStringLiteral("window-new")));
 
 	// menu in the project explorer and in the toolbar for adding new aspects
 	m_newMenu = new QMenu(i18n("Add New"), m_mainWindow);
-	m_newMenu->setIcon(QIcon::fromTheme(QLatin1String("window-new")));
+	m_newMenu->setIcon(QIcon::fromTheme(QStringLiteral("window-new")));
 	m_newMenu->addAction(m_newFolderAction);
 	m_newMenu->addAction(m_newWorkbookAction);
 	m_newMenu->addAction(m_newSpreadsheetAction);
@@ -600,7 +707,7 @@ void ActionsManager::initMenus() {
 
 	// import menu
 	m_importMenu = new QMenu(m_mainWindow);
-	m_importMenu->setIcon(QIcon::fromTheme(QLatin1String("document-import")));
+	m_importMenu->setIcon(QIcon::fromTheme(QStringLiteral("document-import")));
 	m_importMenu->addAction(m_importFileAction_2);
 	m_importMenu->addAction(m_importSqlAction);
 	m_importMenu->addAction(m_importDatasetAction);
@@ -612,12 +719,12 @@ void ActionsManager::initMenus() {
 #endif
 
 	// icon for the menu "import" in the main menu created via the rc file
-	menu = qobject_cast<QMenu*>(factory->container(QLatin1String("import"), m_mainWindow));
-	menu->setIcon(QIcon::fromTheme(QLatin1String("document-import")));
+	menu = qobject_cast<QMenu*>(factory->container(QStringLiteral("import"), m_mainWindow));
+	menu->setIcon(QIcon::fromTheme(QStringLiteral("document-import")));
 
 	// menu subwindow visibility policy
 	m_visibilityMenu = new QMenu(i18n("Window Visibility"), m_mainWindow);
-	m_visibilityMenu->setIcon(QIcon::fromTheme(QLatin1String("window-duplicate")));
+	m_visibilityMenu->setIcon(QIcon::fromTheme(QStringLiteral("window-duplicate")));
 	m_visibilityMenu->addAction(m_visibilityFolderAction);
 	m_visibilityMenu->addAction(m_visibilitySubfolderAction);
 	m_visibilityMenu->addAction(m_visibilityAllAction);
@@ -637,7 +744,7 @@ void ActionsManager::initMenus() {
 	schemesMenu->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-color")));
 	connect(schemesMenu->menu(), &QMenu::triggered, m_mainWindow, &MainWin::colorSchemeChanged);
 
-	QMenu* settingsMenu = dynamic_cast<QMenu*>(factory->container(QLatin1String("settings"), m_mainWindow));
+	QMenu* settingsMenu = dynamic_cast<QMenu*>(factory->container(QStringLiteral("settings"), m_mainWindow));
 	if (settingsMenu) {
 		auto* action = settingsMenu->insertSeparator(settingsMenu->actions().constFirst());
 		settingsMenu->insertMenu(action, schemesMenu->menu());
@@ -662,9 +769,9 @@ void ActionsManager::initMenus() {
 
 	if (!backendNames.isEmpty()) {
 		// sub-menu shown in the main menu bar
-		auto* menu = dynamic_cast<QMenu*>(factory->container(QLatin1String("new_notebook"), m_mainWindow));
+		auto* menu = dynamic_cast<QMenu*>(factory->container(QStringLiteral("new_notebook"), m_mainWindow));
 		if (menu) {
-			menu->setIcon(QIcon::fromTheme(QLatin1String("cantor")));
+			menu->setIcon(QIcon::fromTheme(QStringLiteral("cantor")));
 			m_newMenu->addSeparator();
 			m_newMenu->addMenu(menu);
 			updateNotebookActions();
@@ -695,17 +802,17 @@ void ActionsManager::updateGUIOnProjectChanges() {
 
 	auto* factory = m_mainWindow->guiFactory();
 	if (!m_mainWindow->m_dockManagerContent || !m_mainWindow->m_dockManagerContent->focusedDockWidget()) {
-		factory->container(QLatin1String("spreadsheet"), m_mainWindow)->setEnabled(false);
-		factory->container(QLatin1String("matrix"), m_mainWindow)->setEnabled(false);
-		factory->container(QLatin1String("worksheet"), m_mainWindow)->setEnabled(false);
-		factory->container(QLatin1String("datapicker"), m_mainWindow)->setEnabled(false);
-		factory->container(QLatin1String("spreadsheet_toolbar"), m_mainWindow)->hide();
-		factory->container(QLatin1String("worksheet_toolbar"), m_mainWindow)->hide();
-		factory->container(QLatin1String("cartesian_plot_toolbar"), m_mainWindow)->hide();
-		factory->container(QLatin1String("datapicker_toolbar"), m_mainWindow)->hide();
+		factory->container(QStringLiteral("spreadsheet"), m_mainWindow)->setEnabled(false);
+		factory->container(QStringLiteral("matrix"), m_mainWindow)->setEnabled(false);
+		factory->container(QStringLiteral("worksheet"), m_mainWindow)->setEnabled(false);
+		factory->container(QStringLiteral("datapicker"), m_mainWindow)->setEnabled(false);
+		factory->container(QStringLiteral("spreadsheet_toolbar"), m_mainWindow)->hide();
+		factory->container(QStringLiteral("worksheet_toolbar"), m_mainWindow)->hide();
+		factory->container(QStringLiteral("cartesian_plot_toolbar"), m_mainWindow)->hide();
+		factory->container(QStringLiteral("datapicker_toolbar"), m_mainWindow)->hide();
 #ifdef HAVE_CANTOR_LIBS
-		factory->container(QLatin1String("notebook"), m_mainWindow)->setEnabled(false);
-		factory->container(QLatin1String("notebook_toolbar"), m_mainWindow)->hide();
+		factory->container(QStringLiteral("notebook"), m_mainWindow)->setEnabled(false);
+		factory->container(QStringLiteral("notebook_toolbar"), m_mainWindow)->hide();
 #endif
 	}
 
@@ -745,17 +852,17 @@ void ActionsManager::updateGUI() {
 
 	auto* factory = m_mainWindow->guiFactory();
 	if (!m_mainWindow->m_dockManagerContent || !m_mainWindow->m_dockManagerContent->focusedDockWidget()) {
-		factory->container(QLatin1String("spreadsheet"), m_mainWindow)->setEnabled(false);
-		factory->container(QLatin1String("matrix"), m_mainWindow)->setEnabled(false);
-		factory->container(QLatin1String("worksheet"), m_mainWindow)->setEnabled(false);
-		factory->container(QLatin1String("datapicker"), m_mainWindow)->setEnabled(false);
-		factory->container(QLatin1String("spreadsheet_toolbar"), m_mainWindow)->hide();
-		factory->container(QLatin1String("worksheet_toolbar"), m_mainWindow)->hide();
-		factory->container(QLatin1String("cartesian_plot_toolbar"), m_mainWindow)->hide();
-		factory->container(QLatin1String("datapicker_toolbar"), m_mainWindow)->hide();
+		factory->container(QStringLiteral("spreadsheet"), m_mainWindow)->setEnabled(false);
+		factory->container(QStringLiteral("matrix"), m_mainWindow)->setEnabled(false);
+		factory->container(QStringLiteral("worksheet"), m_mainWindow)->setEnabled(false);
+		factory->container(QStringLiteral("datapicker"), m_mainWindow)->setEnabled(false);
+		factory->container(QStringLiteral("spreadsheet_toolbar"), m_mainWindow)->hide();
+		factory->container(QStringLiteral("worksheet_toolbar"), m_mainWindow)->hide();
+		factory->container(QStringLiteral("cartesian_plot_toolbar"), m_mainWindow)->hide();
+		factory->container(QStringLiteral("datapicker_toolbar"), m_mainWindow)->hide();
 #ifdef HAVE_CANTOR_LIBS
-		factory->container(QLatin1String("notebook"), m_mainWindow)->setEnabled(false);
-		factory->container(QLatin1String("notebook_toolbar"), m_mainWindow)->hide();
+		factory->container(QStringLiteral("notebook"), m_mainWindow)->setEnabled(false);
+		factory->container(QStringLiteral("notebook_toolbar"), m_mainWindow)->hide();
 #endif
 		m_printAction->setEnabled(false);
 		m_printPreviewAction->setEnabled(false);
@@ -791,7 +898,7 @@ void ActionsManager::updateGUI() {
 
 		// populate worksheet menu
 		auto* view = qobject_cast<WorksheetView*>(w->view());
-		auto* menu = qobject_cast<QMenu*>(factory->container(QLatin1String("worksheet"), m_mainWindow));
+		auto* menu = qobject_cast<QMenu*>(factory->container(QStringLiteral("worksheet"), m_mainWindow));
 		if (update) {
 			menu->clear();
 			view->createContextMenu(menu);
@@ -802,12 +909,12 @@ void ActionsManager::updateGUI() {
 		// populate worksheet-toolbar
 		if (update)
 			connectWorksheetToolbarActions(view);
-		auto* toolbar = qobject_cast<QToolBar*>(factory->container(QLatin1String("worksheet_toolbar"), m_mainWindow));
+		auto* toolbar = qobject_cast<QToolBar*>(factory->container(QStringLiteral("worksheet_toolbar"), m_mainWindow));
 		toolbar->setVisible(true);
 		toolbar->setEnabled(true);
 
 		// populate the toolbar for cartesian plots
-		toolbar = qobject_cast<QToolBar*>(factory->container(QLatin1String("cartesian_plot_toolbar"), m_mainWindow));
+		toolbar = qobject_cast<QToolBar*>(factory->container(QStringLiteral("cartesian_plot_toolbar"), m_mainWindow));
 		if (update) {
 			toolbar->clear();
 			view->fillCartesianPlotToolBar(toolbar);
@@ -821,12 +928,12 @@ void ActionsManager::updateGUI() {
 		view->fillTouchBar(m_touchBar);
 #endif
 		// hide the spreadsheet toolbar
-		factory->container(QLatin1String("spreadsheet_toolbar"), m_mainWindow)->setVisible(false);
+		factory->container(QStringLiteral("spreadsheet_toolbar"), m_mainWindow)->setVisible(false);
 	} else {
-		factory->container(QLatin1String("worksheet"), m_mainWindow)->setEnabled(false);
-		factory->container(QLatin1String("worksheet_toolbar"), m_mainWindow)->setVisible(false);
-		factory->container(QLatin1String("worksheet_toolbar"), m_mainWindow)->setEnabled(false);
-		factory->container(QLatin1String("cartesian_plot_toolbar"), m_mainWindow)->setEnabled(false);
+		factory->container(QStringLiteral("worksheet"), m_mainWindow)->setEnabled(false);
+		factory->container(QStringLiteral("worksheet_toolbar"), m_mainWindow)->setVisible(false);
+		factory->container(QStringLiteral("worksheet_toolbar"), m_mainWindow)->setEnabled(false);
+		factory->container(QStringLiteral("cartesian_plot_toolbar"), m_mainWindow)->setEnabled(false);
 	}
 
 	// Handle the Spreadsheet-object
@@ -840,7 +947,7 @@ void ActionsManager::updateGUI() {
 
 		// populate spreadsheet-menu
 		auto* view = qobject_cast<SpreadsheetView*>(spreadsheet->view());
-		auto* menu = qobject_cast<QMenu*>(factory->container(QLatin1String("spreadsheet"), m_mainWindow));
+		auto* menu = qobject_cast<QMenu*>(factory->container(QStringLiteral("spreadsheet"), m_mainWindow));
 		if (update) {
 			menu->clear();
 			view->createContextMenu(menu);
@@ -849,7 +956,7 @@ void ActionsManager::updateGUI() {
 		menu->setEnabled(true);
 
 		// spreadsheet-toolbar
-		auto* toolbar = qobject_cast<QToolBar*>(factory->container(QLatin1String("spreadsheet_toolbar"), m_mainWindow));
+		auto* toolbar = qobject_cast<QToolBar*>(factory->container(QStringLiteral("spreadsheet_toolbar"), m_mainWindow));
 		if (!view->isReadOnly()) {
 			if (update)
 				connectSpreadsheetToolbarActions(view);
@@ -867,8 +974,8 @@ void ActionsManager::updateGUI() {
 		// spreadsheet has its own search, unregister the shortcut for the global search here
 		m_searchAction->setShortcut(QKeySequence());
 	} else {
-		factory->container(QLatin1String("spreadsheet"), m_mainWindow)->setEnabled(false);
-		factory->container(QLatin1String("spreadsheet_toolbar"), m_mainWindow)->setVisible(false);
+		factory->container(QStringLiteral("spreadsheet"), m_mainWindow)->setEnabled(false);
+		factory->container(QStringLiteral("spreadsheet_toolbar"), m_mainWindow)->setVisible(false);
 		m_searchAction->setShortcut(QKeySequence::Find);
 	}
 
@@ -879,7 +986,7 @@ void ActionsManager::updateGUI() {
 	if (matrix) {
 		// populate matrix-menu
 		auto* view = qobject_cast<MatrixView*>(matrix->view());
-		auto* menu = qobject_cast<QMenu*>(factory->container(QLatin1String("matrix"), m_mainWindow));
+		auto* menu = qobject_cast<QMenu*>(factory->container(QStringLiteral("matrix"), m_mainWindow));
 		menu->clear();
 		view->createContextMenu(menu);
 		menu->setEnabled(true);
@@ -890,7 +997,7 @@ void ActionsManager::updateGUI() {
 		// view->fillTouchBar(m_touchBar);
 #endif
 	} else
-		factory->container(QLatin1String("matrix"), m_mainWindow)->setEnabled(false);
+		factory->container(QStringLiteral("matrix"), m_mainWindow)->setEnabled(false);
 
 #ifdef HAVE_CANTOR_LIBS
 	const auto* notebook = dynamic_cast<Notebook*>(m_mainWindow->m_currentAspect);
@@ -898,18 +1005,18 @@ void ActionsManager::updateGUI() {
 		notebook = dynamic_cast<Notebook*>(m_mainWindow->m_currentAspect->parent(AspectType::Notebook));
 	if (notebook) {
 		auto* view = qobject_cast<NotebookView*>(notebook->view());
-		auto* menu = qobject_cast<QMenu*>(factory->container(QLatin1String("notebook"), m_mainWindow));
+		auto* menu = qobject_cast<QMenu*>(factory->container(QStringLiteral("notebook"), m_mainWindow));
 		menu->clear();
 		view->createContextMenu(menu);
 		menu->setEnabled(true);
 
 		connectNotebookToolbarActions(view);
-		factory->container(QLatin1String("notebook"), m_mainWindow)->setEnabled(true);
-		factory->container(QLatin1String("notebook_toolbar"), m_mainWindow)->setVisible(true);
+		factory->container(QStringLiteral("notebook"), m_mainWindow)->setEnabled(true);
+		factory->container(QStringLiteral("notebook_toolbar"), m_mainWindow)->setVisible(true);
 	} else {
 		// no notebook selected -> deactivate notebook related menu and toolbar
-		factory->container(QLatin1String("notebook"), m_mainWindow)->setEnabled(false);
-		factory->container(QLatin1String("notebook_toolbar"), m_mainWindow)->setVisible(false);
+		factory->container(QStringLiteral("notebook"), m_mainWindow)->setEnabled(false);
+		factory->container(QStringLiteral("notebook_toolbar"), m_mainWindow)->setVisible(false);
 	}
 #endif
 
@@ -924,26 +1031,26 @@ void ActionsManager::updateGUI() {
 	if (datapicker) {
 		// populate datapicker-menu
 		auto* view = qobject_cast<DatapickerView*>(datapicker->view());
-		auto* menu = qobject_cast<QMenu*>(factory->container(QLatin1String("datapicker"), m_mainWindow));
+		auto* menu = qobject_cast<QMenu*>(factory->container(QStringLiteral("datapicker"), m_mainWindow));
 		menu->clear();
 		view->createContextMenu(menu);
 		menu->setEnabled(true);
 
-		// populate spreadsheet-toolbar
-		auto* toolbar = qobject_cast<QToolBar*>(factory->container(QLatin1String("datapicker_toolbar"), m_mainWindow));
+		// populate datapicker toolbar
+		auto* toolbar = qobject_cast<QToolBar*>(factory->container(QStringLiteral("datapicker_toolbar"), m_mainWindow));
 		toolbar->clear();
 		view->fillToolBar(toolbar);
 		toolbar->setVisible(true);
 	} else {
-		factory->container(QLatin1String("datapicker"), m_mainWindow)->setEnabled(false);
-		factory->container(QLatin1String("datapicker_toolbar"), m_mainWindow)->setVisible(false);
+		factory->container(QStringLiteral("datapicker"), m_mainWindow)->setEnabled(false);
+		factory->container(QStringLiteral("datapicker_toolbar"), m_mainWindow)->setVisible(false);
 	}
 }
 
 #ifdef HAVE_CANTOR_LIBS
 void ActionsManager::updateNotebookActions() {
-	auto* menu = static_cast<QMenu*>(m_mainWindow->factory()->container(QLatin1String("new_notebook"), m_mainWindow));
-	m_mainWindow->unplugActionList(QLatin1String("backends_list"));
+	auto* menu = static_cast<QMenu*>(m_mainWindow->factory()->container(QStringLiteral("new_notebook"), m_mainWindow));
+	m_mainWindow->unplugActionList(QStringLiteral("backends_list"));
 	QList<QAction*> newBackendActions;
 	menu->clear();
 	for (auto* backend : Cantor::Backend::availableBackends()) {
@@ -953,14 +1060,14 @@ void ActionsManager::updateNotebookActions() {
 		auto* action = new QAction(QIcon::fromTheme(backend->icon()), backend->name(), m_mainWindow);
 		action->setData(backend->name());
 		action->setWhatsThis(i18n("Creates a new %1 notebook", backend->name()));
-		m_mainWindow->actionCollection()->addAction(QLatin1String("notebook_") + backend->name(), action);
+		m_mainWindow->actionCollection()->addAction(QStringLiteral("notebook_") + backend->name(), action);
 		connect(action, &QAction::triggered, m_mainWindow, &MainWin::newNotebook);
 		newBackendActions << action;
 		menu->addAction(action);
 		m_newNotebookMenu->addAction(action);
 	}
 
-	m_mainWindow->plugActionList(QLatin1String("backends_list"), newBackendActions);
+	m_mainWindow->plugActionList(QStringLiteral("backends_list"), newBackendActions);
 
 	menu->addSeparator();
 	menu->addAction(m_configureCASAction);
@@ -1026,17 +1133,17 @@ void ActionsManager::toggleFullScreen(bool t) {
 }
 
 void ActionsManager::toggleDockWidget(QAction* action) {
-	if (action->objectName() == QLatin1String("toggle_project_explorer_dock")) {
+	if (action->objectName() == QStringLiteral("toggle_project_explorer_dock")) {
 		if (m_mainWindow->m_projectExplorerDock->isVisible())
 			m_mainWindow->m_projectExplorerDock->toggleView(false);
 		else
 			m_mainWindow->m_projectExplorerDock->toggleView(true);
-	} else if (action->objectName() == QLatin1String("toggle_properties_explorer_dock")) {
+	} else if (action->objectName() == QStringLiteral("toggle_properties_explorer_dock")) {
 		if (m_mainWindow->m_propertiesDock->isVisible())
 			m_mainWindow->m_propertiesDock->toggleView(false);
 		else
 			m_mainWindow->m_propertiesDock->toggleView(true);
-	} else if (action->objectName() == QLatin1String("toggle_worksheet_preview_dock"))
+	} else if (action->objectName() == QStringLiteral("toggle_worksheet_preview_dock"))
 		m_mainWindow->m_worksheetPreviewDock->toggleView(!m_mainWindow->m_worksheetPreviewDock->isVisible());
 }
 
@@ -1044,35 +1151,45 @@ void ActionsManager::toggleDockWidget(QAction* action) {
 // ################  Connect actions to the actual views ########################
 // ##############################################################################
 void ActionsManager::connectWorksheetToolbarActions(const WorksheetView* view) {
-	auto* collection = m_mainWindow->actionCollection();
+	// auto* collection = m_mainWindow->actionCollection();
+
+	// add new actions
+	// TODO
 
 	// layout actions
-	auto* action = collection->action(QLatin1String("worksheet_vertical_layout"));
-	if (action) {
-		disconnect(action, &QAction::triggered, nullptr, nullptr);
-		connect(action, &QAction::triggered, view, [view, action]() {
-			view->changeLayout(action);
-		});
-	}
+	connect(m_worksheetLayoutActionGroup, &QActionGroup::triggered, nullptr, &WorksheetView::changeLayout);
+	connect(m_worksheetLayoutActionGroup, &QActionGroup::triggered, view, &WorksheetView::changeLayout);
 
-	// TODO
+	// mouse mode actions
+	connect(m_worksheeMouseModeActionGroup, &QActionGroup::triggered, nullptr, &WorksheetView::changeMouseMode);
+	connect(m_worksheeMouseModeActionGroup, &QActionGroup::triggered, view, &WorksheetView::changeMouseMode);
+
+	// zoom actions
+	connect(m_worksheeZoomActionGroup, &QActionGroup::triggered, nullptr, &WorksheetView::changeZoom);
+	connect(m_worksheeZoomActionGroup, &QActionGroup::triggered, view, &WorksheetView::changeZoom);
+
+	// zoom fit actions
+	connect(m_worksheeZoomFitActionGroup, &QActionGroup::triggered, nullptr, &WorksheetView::changeZoomFit);
+	connect(m_worksheeZoomFitActionGroup, &QActionGroup::triggered, view, &WorksheetView::changeZoomFit);
+
+	// magnification actions
+	connect(m_worksheetMagnificationActionGroup, &QActionGroup::triggered, nullptr, &WorksheetView::changeMagnification);
+	connect(m_worksheetMagnificationActionGroup, &QActionGroup::triggered, view, &WorksheetView::changeMagnification);
 }
 
 void ActionsManager::connectSpreadsheetToolbarActions(const SpreadsheetView* view) {
-	if (!m_spreadsheetInsertRowAboveAction)
-		initSpreadsheetToolbarActions();
-	else {
-		disconnect(m_spreadsheetInsertRowAboveAction, &QAction::triggered, nullptr, nullptr);
-		disconnect(m_spreadsheetInsertRowBelowAction, &QAction::triggered, nullptr, nullptr);
-		disconnect(m_spreadsheetRemoveRowsAction, &QAction::triggered, nullptr, nullptr);
-		disconnect(m_spreadsheetInsertColumnLeftAction, &QAction::triggered, nullptr, nullptr);
-		disconnect(m_spreadsheetInsertColumnRightAction, &QAction::triggered, nullptr, nullptr);
-		disconnect(m_spreadsheetRemoveColumnsAction, &QAction::triggered, nullptr, nullptr);
-		disconnect(m_spreadsheetSortAction, &QAction::triggered, nullptr, nullptr);
-		disconnect(m_spreadsheetSortAscAction, &QAction::triggered, nullptr, nullptr);
-		disconnect(m_spreadsheetSortDescAction, &QAction::triggered, nullptr, nullptr);
-	}
+	// disconnect from the old view
+	disconnect(m_spreadsheetInsertRowAboveAction, &QAction::triggered, nullptr, nullptr);
+	disconnect(m_spreadsheetInsertRowBelowAction, &QAction::triggered, nullptr, nullptr);
+	disconnect(m_spreadsheetRemoveRowsAction, &QAction::triggered, nullptr, nullptr);
+	disconnect(m_spreadsheetInsertColumnLeftAction, &QAction::triggered, nullptr, nullptr);
+	disconnect(m_spreadsheetInsertColumnRightAction, &QAction::triggered, nullptr, nullptr);
+	disconnect(m_spreadsheetRemoveColumnsAction, &QAction::triggered, nullptr, nullptr);
+	disconnect(m_spreadsheetSortAction, &QAction::triggered, nullptr, nullptr);
+	disconnect(m_spreadsheetSortAscAction, &QAction::triggered, nullptr, nullptr);
+	disconnect(m_spreadsheetSortDescAction, &QAction::triggered, nullptr, nullptr);
 
+	// connect to the new view
 	connect(m_spreadsheetInsertRowAboveAction, &QAction::triggered, view, &SpreadsheetView::insertRowAbove);
 	connect(m_spreadsheetInsertRowBelowAction, &QAction::triggered, view, &SpreadsheetView::insertRowBelow);
 	connect(m_spreadsheetRemoveRowsAction, &QAction::triggered, view, &SpreadsheetView::removeSelectedRows);
@@ -1086,16 +1203,14 @@ void ActionsManager::connectSpreadsheetToolbarActions(const SpreadsheetView* vie
 
 #ifdef HAVE_CANTOR_LIBS
 void ActionsManager::connectNotebookToolbarActions(const NotebookView* view) {
-	if (!m_notebookRestartAction)
-		initNotebookToolbarActions();
-	else {
-		disconnect(m_notebookRestartAction, &QAction::triggered, nullptr, nullptr);
-		disconnect(m_notebookEvaluateAction, &QAction::triggered, nullptr, nullptr);
-		disconnect(m_notebookZoomInAction, &QAction::triggered, nullptr, nullptr);
-		disconnect(m_notebookZoomOutAction, &QAction::triggered, nullptr, nullptr);
-		disconnect(m_notebookFindAction, &QAction::triggered, nullptr, nullptr);
-	}
+	// disconnect from the old view
+	disconnect(m_notebookRestartAction, &QAction::triggered, nullptr, nullptr);
+	disconnect(m_notebookEvaluateAction, &QAction::triggered, nullptr, nullptr);
+	disconnect(m_notebookZoomInAction, &QAction::triggered, nullptr, nullptr);
+	disconnect(m_notebookZoomOutAction, &QAction::triggered, nullptr, nullptr);
+	disconnect(m_notebookFindAction, &QAction::triggered, nullptr, nullptr);
 
+	// connect to the new view
 	connect(m_notebookRestartAction, &QAction::triggered, view, &NotebookView::restart);
 	connect(m_notebookEvaluateAction, &QAction::triggered, view, &NotebookView::evaluate);
 	connect(m_notebookZoomInAction, &QAction::triggered, view, &NotebookView::zoomIn);

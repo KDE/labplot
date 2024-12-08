@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui name="LabPlot" version="1">
+<gui name="LabPlot" version="2">
 
 <ToolBar name="main_toolbar">
 <text>Project Toolbar</text>
@@ -33,6 +33,9 @@
 	<Action name="worksheet_select_mode"/>
 	<Action name="worksheet_navigate_mode"/>
 	<Action name="worksheet_zoom_select_mode"/>
+	<Separator/>
+	<Action name="worksheet_zoom"/>
+	<Action name="worksheet_magnification"/>
 </ToolBar>
 
 <ToolBar name="datapicker_toolbar">
