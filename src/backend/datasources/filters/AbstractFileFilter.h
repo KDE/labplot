@@ -24,12 +24,12 @@ class KConfig;
 
 class AbstractFileFilter : public QObject {
 	Q_OBJECT
-	Q_ENUMS(FileType)
-	Q_ENUMS(ImportMode)
 
 public:
 	enum class FileType { Ascii, Binary, XLSX, Ods, Image, HDF5, NETCDF, FITS, JSON, ROOT, Spice, READSTAT, MATIO, VECTOR_BLF, MCAP };
+	Q_ENUM(FileType)
 	enum class ImportMode { Append, Prepend, Replace };
+	Q_ENUM(ImportMode)
 
 	explicit AbstractFileFilter(FileType type)
 		: m_type(type) {

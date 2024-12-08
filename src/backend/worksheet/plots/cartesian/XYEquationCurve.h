@@ -22,10 +22,10 @@ class LABPLOT_EXPORT XYEquationCurve : public XYCurve {
 class XYEquationCurve : public XYCurve {
 #endif
 	Q_OBJECT
-	Q_ENUMS(EquationType)
 
 public:
 	enum class EquationType { Cartesian, Polar, Parametric, Implicit, Neutral };
+	Q_ENUM(EquationType)
 
 	struct EquationData {
 		EquationData()

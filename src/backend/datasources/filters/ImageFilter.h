@@ -15,10 +15,10 @@ class ImageFilterPrivate;
 
 class ImageFilter : public AbstractFileFilter {
 	Q_OBJECT
-	Q_ENUMS(ImportFormat)
 
 public:
 	enum class ImportFormat { MATRIX, XYZ, XYRGB };
+	Q_ENUM(ImportFormat)
 
 	ImageFilter();
 	~ImageFilter() override;

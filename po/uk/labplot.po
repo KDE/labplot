@@ -9,9 +9,9 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-07 00:37+0000\n"
-"PO-Revision-Date: 2024-12-01 14:48+0200\n"
-"Last-Translator: Fracture dept <yurchor@ukr.net>\n"
-"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"PO-Revision-Date: 2024-12-07 19:38+0200\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -6349,10 +6349,9 @@ msgid "Failed to open '%1' for writing."
 msgstr "Не вдалося відкрити «%1» для читання."
 
 #: src/backend/note/Note.cpp:124
-#, fuzzy, kde-format
-#| msgid "%1: set type"
+#, kde-format
 msgid "%1: set text"
-msgstr "%1: встановити тип"
+msgstr "%1: встановити текст"
 
 #: src/backend/note/Note.cpp:131 src/backend/worksheet/TextLabel.cpp:266
 #: src/backend/worksheet/TextLabel.cpp:305
@@ -6361,16 +6360,14 @@ msgid "%1: set background color"
 msgstr "%1: встановити колір тла"
 
 #: src/backend/note/Note.cpp:138
-#, fuzzy, kde-format
-#| msgid "%1: set font color"
+#, kde-format
 msgid "%1: set text color"
-msgstr "%1: встановити колір шрифту"
+msgstr "%1: встановити колір тексту"
 
 #: src/backend/note/Note.cpp:145
-#, fuzzy, kde-format
-#| msgid "%1: set font"
+#, kde-format
 msgid "%1: set text font"
-msgstr "%1: встановити шрифт"
+msgstr "%1: встановити шрифт тексту"
 
 #: src/backend/note/Note.cpp:183
 #, kde-format

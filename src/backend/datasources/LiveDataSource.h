@@ -31,9 +31,6 @@ class QUdpSocket;
 
 class LiveDataSource : public Spreadsheet {
 	Q_OBJECT
-	Q_ENUMS(SourceType)
-	Q_ENUMS(UpdateType)
-	Q_ENUMS(ReadingType)
 
 public:
 	enum class SourceType {
@@ -44,11 +41,13 @@ public:
 		SerialPort, // serial port
 		MQTT
 	};
+	Q_ENUM(SourceType)
 
 	enum class UpdateType {
 		TimeInterval = 0, // update periodically using given interval
 		NewData // update when new data is available
 	};
+	Q_ENUM(UpdateType)
 
 	enum class ReadingType {
 		ContinuousFixed = 0, // read continuously sampleSize number of samples (lines)
@@ -56,6 +55,7 @@ public:
 		TillEnd, // read until the end
 		WholeFile // reread whole file
 	};
+	Q_ENUM(ReadingType)
 
 	explicit LiveDataSource(const QString& name, bool loading = false);
 	~LiveDataSource() override;

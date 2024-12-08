@@ -26,14 +26,13 @@ class Interval;
 
 class AbstractColumn : public AbstractAspect {
 	Q_OBJECT
-	Q_ENUMS(PlotDesignation)
-	Q_ENUMS(TimeUnit)
-	Q_ENUMS(ColumnMode)
 
 public:
 	enum class PlotDesignation { NoDesignation, X, Y, Z, XError, XErrorPlus, XErrorMinus, YError, YErrorPlus, YErrorMinus };
+	Q_ENUM(PlotDesignation)
 	// how to convert numeric <-> datetime
 	enum class TimeUnit { Milliseconds, Seconds, Minutes, Hours, Days };
+	Q_ENUM(TimeUnit)
 	enum class ColumnMode {
 		// BASIC FORMATS
 		Double = 0, // double
@@ -62,7 +61,7 @@ public:
 		//		UInt16 = 23,	// quint16 (unsigned short)
 		Integer = 24, // qint32 (int)
 		//		UInt32 = 25,	// quint32 (unsigned int)
-		BigInt = 26, // qint64 (long)
+		BigInt = 26 // qint64 (long)
 		//		UInt64 = 27,	// quint64 (unsigned long)
 		// MISC
 		// QBrush = 30
@@ -74,6 +73,8 @@ public:
 		// QMatrix
 		// etc.
 	};
+	// TODO: breaks linking
+	// Q_ENUM(ColumnMode)
 	enum class Properties { // TODO: why bit pattern? Aren't they exclusive?
 		No = 0x00, // invalid values or masked values
 		Constant = 0x01,
@@ -82,6 +83,7 @@ public:
 		NonMonotonic = 0x8,
 		// add new values with next bit set (0x10)
 	};
+	Q_ENUM(Properties)
 
 	// exposed in function dialog (ColumnPrivate::updateFormula(), ExpressionParser::initFunctions(), functions.h)
 	struct ColumnStatistics {

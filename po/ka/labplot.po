@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-07 00:37+0000\n"
-"PO-Revision-Date: 2024-11-30 05:16+0100\n"
+"PO-Revision-Date: 2024-12-07 05:48+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -6302,10 +6302,9 @@ msgid "Failed to open '%1' for writing."
 msgstr "'%1'-ის ჩასაწერად გახსნის შეცდომა."
 
 #: src/backend/note/Note.cpp:124
-#, fuzzy, kde-format
-#| msgid "%1: set type"
+#, kde-format
 msgid "%1: set text"
-msgstr "%1: ტიპის დაყენება"
+msgstr "%1: ტექსტის დაყენება"
 
 #: src/backend/note/Note.cpp:131 src/backend/worksheet/TextLabel.cpp:266
 #: src/backend/worksheet/TextLabel.cpp:305
@@ -6314,16 +6313,14 @@ msgid "%1: set background color"
 msgstr "%1: ფონის ფერის დაყენება"
 
 #: src/backend/note/Note.cpp:138
-#, fuzzy, kde-format
-#| msgid "%1: set font color"
+#, kde-format
 msgid "%1: set text color"
-msgstr "%1: ფონტის ფერის დაყენება"
+msgstr "%1: ტექსტის ფერის დაყენება"
 
 #: src/backend/note/Note.cpp:145
-#, fuzzy, kde-format
-#| msgid "%1: set font"
+#, kde-format
 msgid "%1: set text font"
-msgstr "%1: ფონტის დაყენება"
+msgstr "%1: ტექსტის ფონტის დაყენება"
 
 #: src/backend/note/Note.cpp:183
 #, kde-format

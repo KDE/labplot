@@ -17,10 +17,10 @@ class XYAnalysisCurvePrivate;
 
 class XYAnalysisCurve : public XYCurve {
 	Q_OBJECT
-	Q_ENUMS(DataSourceType)
 
 public:
 	enum class DataSourceType { Spreadsheet, Curve, Histogram };
+	Q_ENUM(DataSourceType)
 	enum class AnalysisAction {
 		DataReduction,
 		Differentiation,
@@ -40,6 +40,7 @@ public:
 		FitCustom,
 		FourierFilter
 	};
+	Q_ENUM(AnalysisAction)
 
 	struct Result {
 		Result() {

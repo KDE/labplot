@@ -18,9 +18,10 @@ class CartesianCoordinateSystemSetScalePropertiesCmd;
 class CartesianPlot;
 
 class CartesianCoordinateSystem : public AbstractCoordinateSystem {
-	Q_ENUMS(Dimension)
+	Q_GADGET
 public:
 	enum class Dimension { X, Y };
+	Q_ENUM(Dimension)
 
 	explicit CartesianCoordinateSystem(CartesianPlot*);
 	~CartesianCoordinateSystem() override;
