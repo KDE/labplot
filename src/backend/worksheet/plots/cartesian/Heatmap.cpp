@@ -44,12 +44,11 @@ bool Heatmap::Format::operator!=(const Format& rhs) const {
 int Heatmap::Format::index(double value) const {
 	if (colors.size() == 0)
 		return -1;
-	const auto index = static_cast<int>((value - start) * (end - start) / colors.size());
-	if (index >= colors.size()) {
-		assert(false); // sure that it cannot happen?
-		return colors.size() - 1;
-	} else if (index < 0)
+	const auto index = static_cast<int>((value - start) / (end - start) * colors.size());
+	if (index < 0)
 		return 0;
+	else if (index >= colors.size())
+		return colors.size() - 1;
 	return index;
 }
 
