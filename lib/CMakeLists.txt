@@ -70,6 +70,7 @@ set(PLOT_AREA_ELEMENT_SOURCES
 set(PLOT_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/BarPlot.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/BoxPlot.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/Heatmap.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/Histogram.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/KDEPlot.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/LollipopPlot.cpp
