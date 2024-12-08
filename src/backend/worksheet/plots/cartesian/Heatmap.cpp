@@ -149,19 +149,7 @@ public:
 		Q_EMIT m_target->q->dataChanged();
 	}
 
-	//	void redo() override {
-	//		const Heatmap::DataSource ds = m_private->dataSource;
-	//		m_private->dataSource = m_dataSource;
-	//		m_dataSource = ds;
-
-	//	}
-	//	void undo() override {
-	//		redo();
-	//	}
-
 private:
-	//	Heatmap::Private* m_private;
-	//	Heatmap::DataSource m_dataSource;
 };
 
 void Heatmap::setDataSource(DataSource dataSource) {
@@ -170,54 +158,73 @@ void Heatmap::setDataSource(DataSource dataSource) {
 		exec(new HeatmapSetDataSourceCmd(d, dataSource, ki18n("%1: Datasource changed")));
 }
 
-// STD_SETTER_CMD_IMPL_F_S_NON_PRIVATE(Heatmap, SetFormatMin, double, Format::start, retransform)
+// STD_SETTER_CMD_IMPL_F_S(Heatmap, SetFormatMin, double, Format::start, retransform)
 
 template<class target_class, typename structType, typename value_type>
-class StructSetterCmd : public QUndoCommand {
+class StructSetterCmd {
 public:
 	StructSetterCmd(target_class* target,
+					structType target_class::*structField,
 					value_type structType::*field,
-					value_type newValue,
-					const KLocalizedString& description,
-					QUndoCommand* parent = nullptr) // use ki18n("%1: ...")
-		: QUndoCommand(parent)
-		, m_target(target)
+					value_type newValue)
+		:
+		m_target(target)
+		, m_structField(structField)
 		, m_field(field)
-		, m_otherValue(newValue) {
-		setText(description.subs(m_target->name()).toString());
+		, m_value(newValue) {
 	}
 
-	virtual void initialize() {
-	}
-	virtual void finalize() {
-	}
-
-	void redo() override {
-		initialize();
-		value_type tmp = m_target->format.*m_field;
-		(m_target->format.*m_field) = m_otherValue;
-		m_otherValue = tmp;
-		QUndoCommand::redo(); // redo all childs
-		finalize();
+	virtual void redo() {
+		const auto oldValue = (m_target->*m_structField).*m_field;
+		(m_target->*m_structField).*m_field = m_value;
+		m_value = oldValue;
 	}
 
-	void undo() override {
+	virtual void undo() {
 		redo();
 	}
 
 protected:
+	structType target_class::*m_structField;
 	target_class* m_target;
 	value_type structType::*m_field;
-	value_type m_otherValue;
+	value_type m_value;  // Store the new value
 };
 
-class HeatmapSetFormatMinCmd : public StructSetterCmd<Heatmap::Private, Heatmap::Format, double> {
+// class HeatmapSetFormatMinCmd : public StructSetterCmd<Heatmap::Private, Heatmap::Format, double> {
+// public:
+// 	HeatmapSetFormatMinCmd(Heatmap::Private* target, double newValue)
+// 		: StructSetterCmd(target, &Heatmap::Private::format, &Heatmap::Format::start, newValue) {
+// 	}
+// 	virtual void finalize() {
+// 		//m_target->retransform();
+// 		// Q_EMIT m_target->q->formatMinChanged(m_target->*m_field);
+// 	}
+// };
+
+// //#define STRUCT_SETTER_CMD_IMPL_F_S
+
+#define STRUCT_SETTER_CMD_IMPL_F_S(class_name, cmd_name, struct_type, struct_name, struct_field_name, value_type, finalize_method)                                                                 \
+class class_name##cmd_name##Cmd : public StructSetterCmd<class_name::Private, class_name::struct_type, value_type> {                                                              \
+		public:                                                                                                                                                    \
+		class_name##cmd_name##Cmd(class_name::Private* target, value_type newValue, const KLocalizedString& description, QUndoCommand* parent = nullptr)       \
+		: StructSetterCmd(target, &class_name::Private::struct_name, &class_name::struct_type::struct_field_name, newValue, description, parent) {                    \
+	}                                                                                                                                                      \
+		virtual void finalize() override {                                                                                                                     \
+			m_target->finalize_method();                                                                                                                       \
+			Q_EMIT m_target->q->struct_name##Changed(m_target->*m_field);                                                                                       \
+	}                                                                                                                                                      \
+};
+
+STRUCT_SETTER_CMD_IMPL_F_S(Heatmap, SetFormatMin, Format, format, start, double, retransform)
+
+class HeatmapSetFormatMaxCmd : public StructSetterCmd<Heatmap::Private, Heatmap::Format, double> {
 public:
-	HeatmapSetFormatMinCmd(Heatmap::Private* target, double newValue, const KLocalizedString& description, QUndoCommand* parent = nullptr)
-		: StructSetterCmd<Heatmap::Private, Heatmap::Format, double>(target, &Heatmap::Format::start, newValue, description, parent) {
+	HeatmapSetFormatMaxCmd(Heatmap::Private* target, double newValue)
+		: StructSetterCmd(target, &Heatmap::Private::format, &Heatmap::Format::end, newValue) {
 	}
-	virtual void finalize() override {
-		m_target->retransform();
+	virtual void finalize() {
+		//m_target->retransform();
 		// Q_EMIT m_target->q->formatMinChanged(m_target->*m_field);
 	}
 };
@@ -229,7 +236,11 @@ void Heatmap::setFormat(const Heatmap::Format& format) {
 		exec(new HeatmapSetFormatCmd(d, format, ki18n("%1: format changed")));
 }
 
-void Heatmap::setAutomaticLimits(const bool value) {
+STD_SETTER_CMD_IMPL_F_S(Heatmap, SetAutomaticLimits, bool, automaticLimits, retransform)
+void Heatmap::setAutomaticLimits(const bool automatic) {
+	Q_D(Heatmap);
+	if (automatic != d->automaticLimits)
+		exec(new HeatmapSetAutomaticLimitsCmd(d, automatic, ki18n("%1: automatic limits changed")));
 }
 
 void Heatmap::setFormatMin(const double min) {

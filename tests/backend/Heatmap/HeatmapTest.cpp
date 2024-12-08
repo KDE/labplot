@@ -1224,6 +1224,8 @@ void HeatmapTest::testColorAutomatic() {
 
 	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
 	QCOMPARE(hm->drawEmpty(), false);
+	hm->setXNumBins(5);
+	hm->setYNumBins(5);
 	QCOMPARE(hm->xNumBins(), 5);
 	QCOMPARE(hm->yNumBins(), 5);
 	QCOMPARE(hm->automaticLimits(), true);
@@ -1315,12 +1317,16 @@ void HeatmapTest::testColorManual() {
 
 	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
 	QCOMPARE(hm->drawEmpty(), false);
+	hm->setXNumBins(5);
+	hm->setYNumBins(5);
 	QCOMPARE(hm->xNumBins(), 5);
 	QCOMPARE(hm->yNumBins(), 5);
 	hm->setAutomaticLimits(false);
 	QCOMPARE(hm->automaticLimits(), false);
 	hm->setFormatMin(-10);
+	QCOMPARE(hm->formatMin(), -10);
 	hm->setFormatMax(10);
+	QCOMPARE(hm->formatMax(), 10);
 
 	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
 	auto columns = spreadsheet->children<Column>();
