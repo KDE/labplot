@@ -45,11 +45,7 @@
 Matrix::Matrix(int rows, int cols, const QString& name, const AbstractColumn::ColumnMode mode)
 	: AbstractDataSource(name, AspectType::Matrix)
 	, d_ptr(new MatrixPrivate(this, mode)) {
-	// set initial number of rows and columns
-	appendColumns(cols);
-	appendRows(rows);
-
-	init();
+	init(rows, cols);
 }
 
 Matrix::Matrix(const QString& name, bool loading, const AbstractColumn::ColumnMode mode)
@@ -63,16 +59,19 @@ Matrix::~Matrix() {
 	delete d_ptr;
 }
 
-void Matrix::init() {
+void Matrix::init(int rowCount, int colCount) {
 	Q_D(Matrix);
 	KConfig config;
 	KConfigGroup group = config.group(QStringLiteral("Matrix"));
 
 	// matrix dimension
-	int rows = group.readEntry(QStringLiteral("RowCount"), 10);
-	int cols = group.readEntry(QStringLiteral("ColumnCount"), 10);
-	appendColumns(cols); // First the columns, otherwise the datacontainer is empty
-	appendRows(rows);
+	if (colCount < 0)
+		colCount = group.readEntry(QStringLiteral("ColumnCount"), 10);
+	appendColumns(colCount); // First the columns, otherwise the datacontainer is empty
+
+	if (rowCount < 0)
+		rowCount = group.readEntry(QStringLiteral("RowCount"), 10);
+	appendRows(rowCount);
 
 	// mapping to logical x- and y-coordinates
 	d->xStart = group.readEntry(QStringLiteral("XStart"), 0.0);
