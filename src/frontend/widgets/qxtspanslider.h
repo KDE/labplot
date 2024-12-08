@@ -52,6 +52,7 @@ class QxtSpanSlider : public QSlider {
 	Q_PROPERTY(int upperPosition READ upperPosition WRITE setUpperPosition)
 	Q_PROPERTY(HandleMovementMode handleMovementMode READ handleMovementMode WRITE setHandleMovementMode)
 	Q_ENUMS(HandleMovementMode)
+	Q_ENUMS(SpanHandle)
 
 public:
 	explicit QxtSpanSlider(QWidget* parent = nullptr);
