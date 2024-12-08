@@ -58,6 +58,15 @@ void Plot::setLegendVisible(bool visible) {
 		exec(new PlotSetLegendVisibleCmd(d, visible, ki18n("%1: legend visibility changed")));
 }
 
+bool Plot::indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const {
+	Q_UNUSED(dim);
+	Q_UNUSED(v1);
+	Q_UNUSED(v2);
+	Q_UNUSED(start);
+	Q_UNUSED(end);
+	return false;
+}
+
 // ##############################################################################
 // ####################### Private implementation ###############################
 // ##############################################################################

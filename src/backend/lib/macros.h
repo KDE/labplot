@@ -283,6 +283,18 @@ private:
 		}                                                                                                                                                      \
 	};
 
+#define STD_SETTER_CMD_IMPL_F_S_NON_PRIVATE(class_name, cmd_name, value_type, field_name, finalize_method)                                                     \
+	class class_name##cmd_name##Cmd : public StandardSetterCmd<class_name::Private, value_type> {                                                              \
+	public:                                                                                                                                                    \
+		class_name##cmd_name##Cmd(class_name::Private* target, value_type newValue, const KLocalizedString& description, QUndoCommand* parent = nullptr)       \
+			: StandardSetterCmd<class_name::Private, value_type>(target, &(class_name::field_name), newValue, description, parent) {                           \
+		}                                                                                                                                                      \
+		virtual void finalize() override {                                                                                                                     \
+			m_target->finalize_method();                                                                                                                       \
+			Q_EMIT m_target->q->field_name##Changed(m_target->*m_field);                                                                                       \
+		}                                                                                                                                                      \
+	};
+
 // setter class with finalize() and signal emitting, one field_name signal and one custom signal.
 #define STD_SETTER_CMD_IMPL_F_S_SC(class_name, cmd_name, value_type, field_name, finalize_method, custom_signal)                                               \
 	class class_name##cmd_name##Cmd : public StandardSetterCmd<class_name::Private, value_type> {                                                              \
@@ -434,6 +446,13 @@ private:
 		writer->writeAttribute(QStringLiteral(label "_b"), QString::number(color.blue()));                                                                     \
 	}
 
+#define WRITE_QCOLOR3(color, label)                                                                                                                            \
+	{                                                                                                                                                          \
+		writer->writeAttribute(label + QStringLiteral("_r"), QString::number(color.red()));                                                                    \
+		writer->writeAttribute(label + QStringLiteral("_g"), QString::number(color.green()));                                                                  \
+		writer->writeAttribute(label + QStringLiteral("_b"), QString::number(color.blue()));                                                                   \
+	}
+
 #define READ_QCOLOR(color)                                                                                                                                     \
 	{                                                                                                                                                          \
 		str = attribs.value(QStringLiteral("color_r")).toString();                                                                                             \
@@ -472,6 +491,29 @@ private:
 		str = attribs.value(QStringLiteral(label "_b")).toString();                                                                                            \
 		if (str.isEmpty())                                                                                                                                     \
 			reader->raiseMissingAttributeWarning(QStringLiteral(label "_b"));                                                                                  \
+		else                                                                                                                                                   \
+			color.setBlue(str.toInt());                                                                                                                        \
+	}
+
+#define READ_QCOLOR3(color, label, found)                                                                                                                      \
+	{                                                                                                                                                          \
+		found = true;                                                                                                                                          \
+		str = attribs.value(label + QStringLiteral("_r")).toString();                                                                                          \
+		if (str.isEmpty()) {                                                                                                                                   \
+			found = false;                                                                                                                                     \
+			reader->raiseMissingAttributeWarning(label + QStringLiteral("_r"));                                                                                \
+		} else                                                                                                                                                 \
+			color.setRed(str.toInt());                                                                                                                         \
+                                                                                                                                                               \
+		str = attribs.value(label + QStringLiteral("_g")).toString();                                                                                          \
+		if (str.isEmpty())                                                                                                                                     \
+			reader->raiseMissingAttributeWarning(label + QStringLiteral("_g"));                                                                                \
+		else                                                                                                                                                   \
+			color.setGreen(str.toInt());                                                                                                                       \
+                                                                                                                                                               \
+		str = attribs.value(label + QStringLiteral("_b")).toString();                                                                                          \
+		if (str.isEmpty())                                                                                                                                     \
+			reader->raiseMissingAttributeWarning(label + QStringLiteral("_b"));                                                                                \
 		else                                                                                                                                                   \
 			color.setBlue(str.toInt());                                                                                                                        \
 	}
@@ -667,6 +709,12 @@ private:
 	{                                                                                                                                                          \
 		str = attribs.value(QStringLiteral(#columnName)).toString();                                                                                           \
 		d->columnName##Path = str;                                                                                                                             \
+	}
+
+#define READ_MATRIX(maxtrixName)                                                                                                                               \
+	{                                                                                                                                                          \
+		str = attribs.value(QStringLiteral(#maxtrixName)).toString();                                                                                          \
+		d->maxtrixName##Path = str;                                                                                                                            \
 	}
 
 #define READ_INT_VALUE_DIRECT(name, var, type)                                                                                                                 \

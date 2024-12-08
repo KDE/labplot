@@ -71,12 +71,21 @@ public:
 	double y(double x, bool& valueFound) const;
 	QDateTime yDateTime(double x, bool& valueFound) const;
 
+	static bool minMax(const AbstractColumn* column1,
+					   const AbstractColumn* column2,
+					   const ErrorBar::ErrorType errorType,
+					   const AbstractColumn* errorPlusColumn,
+					   const AbstractColumn* errorMinusColumn,
+					   const Range<int>& indexRange,
+					   Range<double>& range,
+					   bool includeErrorBars);
 	bool minMax(const CartesianCoordinateSystem::Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const override;
 	double minimum(CartesianCoordinateSystem::Dimension dim) const override;
 	double maximum(CartesianCoordinateSystem::Dimension dim) const override;
 	bool hasData() const override;
 	bool usingColumn(const AbstractColumn*, bool indirect) const override;
 	QColor color() const override;
+	virtual int dataCount(Dimension dim) const override;
 
 	const AbstractColumn* column(CartesianCoordinateSystem::Dimension dim) const;
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
@@ -152,15 +161,14 @@ private:
 	void connectYColumn(const AbstractColumn*);
 	void connectValuesColumn(const AbstractColumn*);
 
-	bool minMax(const AbstractColumn* column1,
-				const AbstractColumn* column2,
-				const ErrorBar::ErrorType errorType,
-				const AbstractColumn* errorPlusColumn,
-				const AbstractColumn* errorMinusColumn,
-				const Range<int>& indexRange,
-				Range<double>& yRange,
-				bool includeErrorBars) const;
-
+	// bool minMax(const AbstractColumn* column1,
+	// 			const AbstractColumn* column2,
+	// 			const ErrorBar::ErrorType errorType,
+	// 			const AbstractColumn* errorPlusColumn,
+	// 			const AbstractColumn* errorMinusColumn,
+	// 			const Range<int>& indexRange,
+	// 			Range<double>& yRange,
+	// 			bool includeErrorBars) const;
 	QAction* navigateToAction{nullptr};
 	bool m_menusInitialized{false};
 

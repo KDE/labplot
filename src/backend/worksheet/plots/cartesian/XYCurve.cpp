@@ -532,6 +532,14 @@ QColor XYCurve::color() const {
 	return QColor();
 }
 
+int XYCurve::dataCount(Dimension dim) const {
+	Q_D(const XYCurve);
+	if (!hasData())
+		return -1; // No valid data
+
+	return column(dim)->rowCount();
+}
+
 // ##############################################################################
 // #################  setter methods and undo commands ##########################
 // ##############################################################################
@@ -2440,9 +2448,9 @@ bool XYCurve::minMax(const AbstractColumn* column1,
 					 const AbstractColumn* errorMinusColumn,
 					 const Range<int>& indexRange,
 					 Range<double>& range,
-					 bool includeErrorBars) const {
+					 bool includeErrorBars) {
 #ifdef PERFTRACE_AUTOSCALE
-	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
+	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 #endif
 	if (!column1)
 		return false;
