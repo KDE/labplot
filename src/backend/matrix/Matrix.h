@@ -144,7 +144,7 @@ Q_SIGNALS:
 	void headerFormatChanged(Matrix::HeaderFormat);
 
 private:
-	void init();
+	void init(int rowCount = -1, int colCount = -1);
 
 	Q_DECLARE_PRIVATE(Matrix)
 	MatrixPrivate* const d_ptr;
