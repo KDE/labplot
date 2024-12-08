@@ -161,17 +161,18 @@ void Heatmap::setDataSource(DataSource dataSource) {
 // STD_SETTER_CMD_IMPL_F_S(Heatmap, SetFormatMin, double, Format::start, retransform)
 
 template<class target_class, typename structType, typename value_type>
-class StructSetterCmd {
+class StructSetterCmd: public QUndoCommand {
 public:
 	StructSetterCmd(target_class* target,
 					structType target_class::*structField,
 					value_type structType::*field,
-					value_type newValue)
-		:
+					value_type newValue, const KLocalizedString& description, QUndoCommand* parent = nullptr)
+		: QUndoCommand(parent),
 		m_target(target)
 		, m_structField(structField)
 		, m_field(field)
 		, m_value(newValue) {
+		setText(description.subs(m_target->name()).toString());
 	}
 
 	virtual void redo() {
@@ -204,30 +205,41 @@ protected:
 
 // //#define STRUCT_SETTER_CMD_IMPL_F_S
 
+/*!
+ * See Heatmap.cpp for an example how to use it
+ *
+ * \param class_name The class name of the public class for which in the Private class a parameter gets changed
+ * \param cmd_name The undo command name used from outside
+ * \param struct_type The struct type which should be modified. The full path must be specified, for example Heatmap::Format
+ * \param struct_name The name of the struct in the Private class
+ * \param struct_field_name The struct entry value which should be changed
+ * \param value_type The datatype of the struct field which should be changed
+ * \param finalize_method The method which should be called at the end
+ */
 #define STRUCT_SETTER_CMD_IMPL_F_S(class_name, cmd_name, struct_type, struct_name, struct_field_name, value_type, finalize_method)                                                                 \
-class class_name##cmd_name##Cmd : public StructSetterCmd<class_name::Private, class_name::struct_type, value_type> {                                                              \
+class class_name##cmd_name##Cmd : public StructSetterCmd<class_name::Private, struct_type, value_type> {                                                              \
 		public:                                                                                                                                                    \
 		class_name##cmd_name##Cmd(class_name::Private* target, value_type newValue, const KLocalizedString& description, QUndoCommand* parent = nullptr)       \
-		: StructSetterCmd(target, &class_name::Private::struct_name, &class_name::struct_type::struct_field_name, newValue, description, parent) {                    \
+		: StructSetterCmd(target, &class_name::Private::struct_name, &struct_type::struct_field_name, newValue, description, parent) {                    \
 	}                                                                                                                                                      \
-		virtual void finalize() override {                                                                                                                     \
-			m_target->finalize_method();                                                                                                                       \
-			Q_EMIT m_target->q->struct_name##Changed(m_target->*m_field);                                                                                       \
-	}                                                                                                                                                      \
-};
-
-STRUCT_SETTER_CMD_IMPL_F_S(Heatmap, SetFormatMin, Format, format, start, double, retransform)
-
-class HeatmapSetFormatMaxCmd : public StructSetterCmd<Heatmap::Private, Heatmap::Format, double> {
-public:
-	HeatmapSetFormatMaxCmd(Heatmap::Private* target, double newValue)
-		: StructSetterCmd(target, &Heatmap::Private::format, &Heatmap::Format::end, newValue) {
-	}
-	virtual void finalize() {
-		//m_target->retransform();
-		// Q_EMIT m_target->q->formatMinChanged(m_target->*m_field);
+	virtual void finalize() override { \
+			m_target->finalize_method(); \
+			Q_EMIT m_target->q->struct_name##Changed(m_target->*m_field);\
 	}
 };
+
+STRUCT_SETTER_CMD_IMPL_F_S(Heatmap, SetFormatMin, Heatmap::Format, format, start, double, retransform)
+
+// class HeatmapSetFormatMaxCmd : public StructSetterCmd<Heatmap::Private, Heatmap::Format, double> {
+// public:
+// 	HeatmapSetFormatMaxCmd(Heatmap::Private* target, double newValue)
+// 		: StructSetterCmd(target, &Heatmap::Private::format, &Heatmap::Format::end, newValue) {
+// 	}
+// 	virtual void finalize() {
+// 		//m_target->retransform();
+// 		// Q_EMIT m_target->q->formatMinChanged(m_target->*m_field);
+// 	}
+// };
 
 STD_SETTER_CMD_IMPL_F_S(Heatmap, SetFormat, Heatmap::Format, format, retransform)
 void Heatmap::setFormat(const Heatmap::Format& format) {
