@@ -61,9 +61,22 @@ public:
 	};
 
 	BASIC_D_ACCESSOR_DECL(bool, legendVisible, LegendVisible)
-	virtual bool minMax(const CartesianCoordinateSystem::Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const;
-	virtual double minimum(CartesianCoordinateSystem::Dimension dim) const = 0;
-	virtual double maximum(CartesianCoordinateSystem::Dimension dim) const = 0;
+	using Dimension = CartesianCoordinateSystem::Dimension;
+	virtual bool minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const;
+	virtual double minimum(Dimension dim) const = 0;
+	virtual double maximum(Dimension dim) const = 0;
+	virtual bool indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const;
+
+	/*!
+	 * \brief dataCount
+	 * Number of elements in a specific direction
+	 * \param dim
+	 * \return Number of data or -1 if the plot is invalid (so it will not be considered for autoscale)
+	 */
+	virtual int dataCount(Dimension dim) const {
+		Q_ASSERT(false);
+		return -1;
+	}
 	virtual bool hasData() const = 0;
 	bool activatePlot(QPointF mouseScenePos, double maxDist = -1);
 	virtual QColor color() const = 0; // Color of the plot. If the plot consists multiple colors, return the main Color (This is used in the cursor dock as

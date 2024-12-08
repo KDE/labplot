@@ -33,7 +33,10 @@
 		connect(column, &AbstractColumn::dataChanged, this, &class_name::prefix##DataChanged); /* triggers a retransform in the plot and in its children */    \
 	}
 
-#define CURVE_COLUMN_CONNECT_CALL(curve, column, Prefix) curve->connect##Prefix##Column(column);
+#define CURVE_COLUMN_CONNECT_CALL(curve, column, Prefix)                                                                                                       \
+	do {                                                                                                                                                       \
+		curve->connect##Prefix##Column(column);                                                                                                                \
+	} while (false);
 
 /*!
  * This macro is used to connect and disconnect the column from the curve
@@ -110,7 +113,51 @@
 		}                                                                                                                                                      \
 		void undo() override {                                                                                                                                 \
 			redo();                                                                                                                                            \
+		}																																					   \
+	};
+
+
+#define HEATMAP_COLUMN_SETTER_CMD_IMPL_S(class_name, Prefix, prefix)                                                                                           \
+	class class_name##Set##Prefix##ColumnCmd : public StandardSetterCmd<class_name::Private, const AbstractColumn*> {                                          \
+	public:                                                                                                                                                    \
+		class_name##Set##Prefix##ColumnCmd(class_name::Private* target, const AbstractColumn* newValue, const KLocalizedString& description)                   \
+			: StandardSetterCmd<class_name::Private, const AbstractColumn*>(target, &class_name::Private::prefix##Column, newValue, description)               \
+			, m_private(target)                                                                                                                                \
+			, m_column(newValue) {                                                                                                                             \
 		}                                                                                                                                                      \
+		virtual void finalize() override {                                                                                                                     \
+			Q_EMIT m_target->q->prefix##ColumnChanged(m_target->*m_field);                                                                                     \
+			Q_EMIT m_private->q->prefix##ColumnChanged(m_private->prefix##Column);                                                                             \
+			if (m_private->dataSource == class_name::DataSource::Spreadsheet) {                                                                                \
+				/* Q_EMIT DataChanged() in order to notify the plot about the changes */                                                                       \
+				Q_EMIT m_private->q->prefix##DataChanged();                                                                                                    \
+			}                                                                                                                                                  \
+		}                                                                                                                                                      \
+		void redo() override {                                                                                                                                 \
+			const AbstractColumn* columnOld = m_private->prefix##Column;                                                                                       \
+			if (columnOld) {                                                                                                                                   \
+				/* disconnect only when column valid, because otherwise all                                                                                    \
+				 * signals are disconnected */                                                                                                                 \
+				QObject::disconnect(columnOld, nullptr, m_private->q, nullptr);                                                                                \
+			}                                                                                                                                                  \
+			m_private->prefix##Column = m_column;                                                                                                              \
+			if (m_column) {                                                                                                                                    \
+				m_private->q->set##Prefix##ColumnPath(m_column->path());                                                                                       \
+				if (m_private->dataSource == class_name::DataSource::Spreadsheet) {                                                                            \
+					CURVE_COLUMN_CONNECT_CALL(m_private->q, m_column, Prefix)                                                                                  \
+				}                                                                                                                                              \
+			} else                                                                                                                                             \
+				m_private->q->set##Prefix##ColumnPath(QStringLiteral(""));                                                                                     \
+			m_column = columnOld;                                                                                                                              \
+			finalize();                                                                                                                                        \
+		}                                                                                                                                                      \
+		void undo() override {                                                                                                                                 \
+			redo();                                                                                                                                            \
+		}                                                                                                                                                      \
+                                                                                                                                                               \
+	private:                                                                                                                                                   \
+		class_name::Private* m_private;                                                                                                                        \
+		const AbstractColumn* m_column{nullptr};                                                                                                               \
 	};
 
 #endif // MACROSXYCURVE_H
