@@ -1308,4 +1308,9 @@ void HeatmapTest::saveLoad() {
 	QVERIFY(false);
 }
 
+void HeatmapTest::testMatrixNumBins() {
+	QVERIFY(false);
+	// Test if the matrixNumBins works as expected
+}
+
 QTEST_MAIN(HeatmapTest)

@@ -25,6 +25,7 @@ public:
 	Heatmap::DataSource dataSource{Heatmap::DataSource::Matrix};
 	bool drawEmpty{false};
 	bool numBinsEqual{true};
+	bool matrixNumBins{true}; // Use number of cells of the matrix as bins
 	unsigned int xNumBins{10};
 	unsigned int yNumBins{10};
 	const AbstractColumn* xColumn{nullptr};
