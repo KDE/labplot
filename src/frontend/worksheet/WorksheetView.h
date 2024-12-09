@@ -70,6 +70,10 @@ public:
 	void initActions();
 	void initPlotNavigationActions();
 
+	MouseMode mouseMode() const;
+	ZoomMode zoomMode() const;
+	int magnification() const;
+
 private:
 	void initBasicActions();
 	void initMenus();
@@ -106,13 +110,14 @@ private:
 
 	Worksheet* m_worksheet{nullptr};
 	MouseMode m_mouseMode{MouseMode::Selection};
+	ZoomMode m_zoomMode{ZoomMode::ZoomIn};
 	CartesianPlot::MouseMode m_cartesianPlotMouseMode{CartesianPlot::MouseMode::Selection};
 	bool m_selectionBandIsShown{false};
 	QPoint m_selectionStart;
 	QPoint m_selectionEnd;
 	QPointF m_cursorPos;
 	bool m_calledFromContextMenu{false};
-	int magnificationFactor{0};
+	int m_magnificationFactor{0};
 	QGraphicsPixmapItem* m_magnificationWindow{nullptr};
 	GridSettings m_gridSettings;
 	QList<QGraphicsItem*> m_selectedItems;

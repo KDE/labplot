@@ -16,6 +16,7 @@ class DatapickerView;
 class NotebookView;
 class MainWin;
 class SpreadsheetView;
+class ToggleActionMenu;
 class WorksheetView;
 
 class QAction;
@@ -71,6 +72,9 @@ private:
 	QAction* m_undoIconOnlyAction;
 	QAction* m_redoIconOnlyAction;
 #endif
+
+	ToggleActionMenu* m_worksheetZoomMenu{nullptr};
+	ToggleActionMenu* m_worksheetMagnificationMenu{nullptr};
 
 	QActionGroup* m_worksheetLayoutActionGroup{nullptr};
 	QActionGroup* m_worksheeMouseModeActionGroup{nullptr};

@@ -931,7 +931,7 @@ void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
 	}
 
 	// show the magnification window
-	if (magnificationFactor /*&& m_mouseMode == SelectAndEditMode*/) {
+	if (m_magnificationFactor /*&& m_mouseMode == SelectAndEditMode*/) {
 		if (!m_magnificationWindow) {
 			m_magnificationWindow = new QGraphicsPixmapItem(nullptr);
 			m_magnificationWindow->setZValue(std::numeric_limits<int>::max());
@@ -954,10 +954,10 @@ void WorksheetView::updateMagnificationWindow(const QPointF& pos) {
 
 	// copy the part of the view to be shown magnified
 	const int size = Worksheet::convertToSceneUnits(2.0, Worksheet::Unit::Centimeter) / transform().m11();
-	const QRectF copyRect(pos.x() - size / (2 * magnificationFactor),
-						  pos.y() - size / (2 * magnificationFactor),
-						  size / magnificationFactor,
-						  size / magnificationFactor);
+	const QRectF copyRect(pos.x() - size / (2 * m_magnificationFactor),
+						  pos.y() - size / (2 * m_magnificationFactor),
+						  size / m_magnificationFactor,
+						  size / m_magnificationFactor);
 	QPixmap px = grab(mapFromScene(copyRect).boundingRect());
 	px = px.scaled(size, size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
@@ -1136,8 +1136,8 @@ void WorksheetView::changeZoom(QAction* action) {
 	zoomFitNoneAction->setChecked(true);
 	m_worksheet->setZoomFit(Worksheet::ZoomFit::None);
 
-	const auto mode = static_cast<ZoomMode>(action->data().toInt());
-	switch (mode) {
+	m_zoomMode = static_cast<ZoomMode>(action->data().toInt());
+	switch (m_zoomMode) {
 	case ZoomMode::ZoomIn:
 		zoom(1);
 		break;
@@ -1152,6 +1152,10 @@ void WorksheetView::changeZoom(QAction* action) {
 	}
 
 	updateLabelsZoom();
+}
+
+WorksheetView::ZoomMode WorksheetView::zoomMode() const {
+	return m_zoomMode;
 }
 
 void WorksheetView::updateFit() {
@@ -1214,13 +1218,17 @@ void WorksheetView::updateLabelsZoom() const {
 }
 
 void WorksheetView::changeMagnification(QAction* action) {
-	magnificationFactor = static_cast<int>(action->data().toInt());
-	if (magnificationFactor == 0 && m_magnificationWindow)
-			m_magnificationWindow->setVisible(false);
+	m_magnificationFactor = action->data().toInt();
+	if (m_magnificationFactor == 0 && m_magnificationWindow)
+		m_magnificationWindow->setVisible(false);
+}
+
+int WorksheetView::magnification() const {
+	return m_magnificationFactor;
 }
 
 void WorksheetView::changeMouseMode(QAction* action) {
-	m_mouseMode = static_cast<WorksheetView::MouseMode>(action->data().toInt());
+	m_mouseMode = static_cast<MouseMode>(action->data().toInt());
 
 	switch (m_mouseMode) {
 	case MouseMode::Selection:
@@ -1236,6 +1244,10 @@ void WorksheetView::changeMouseMode(QAction* action) {
 		setDragMode(QGraphicsView::NoDrag);
 		break;
 	}
+}
+
+WorksheetView::MouseMode WorksheetView::mouseMode() const {
+	return m_mouseMode;
 }
 
 //"Add new" related slots

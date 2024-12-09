@@ -451,7 +451,9 @@ void ActionsManager::initActions() {
 	}
 
 	// actions used in the toolbars
+#ifdef HAVE_CANTOR_LIBS
 	initNotebookToolbarActions();
+#endif
 	initSpreadsheetToolbarActions();
 	initWorksheetToolbarActions();
 }
@@ -513,87 +515,87 @@ void ActionsManager::initWorksheetToolbarActions() {
 	collection->addAction(QStringLiteral("worksheet_zoom_select_mode"), action);
 
 	// zoom actions
-	auto* zoomMenu = new ToggleActionMenu(i18nc("@action", "Zoom"), this);
-	zoomMenu->setPopupMode(QToolButton::MenuButtonPopup);
-	connect(zoomMenu->menu(), &QMenu::triggered, zoomMenu, &ToggleActionMenu::setDefaultAction);
-	collection->addAction(QStringLiteral("worksheet_zoom"), zoomMenu);
+	m_worksheetZoomMenu = new ToggleActionMenu(i18nc("@action", "Zoom"), this);
+	m_worksheetZoomMenu->setPopupMode(QToolButton::MenuButtonPopup);
+	connect(m_worksheetZoomMenu->menu(), &QMenu::triggered, m_worksheetZoomMenu, &ToggleActionMenu::setDefaultAction);
+	collection->addAction(QStringLiteral("worksheet_zoom"), m_worksheetZoomMenu);
 
 	m_worksheeZoomActionGroup = new QActionGroup(m_mainWindow);
 	action = new QAction(QIcon::fromTheme(QStringLiteral("zoom-in")), i18n("Zoom In"), m_worksheeZoomActionGroup);
 	action->setData(static_cast<int>(WorksheetView::ZoomMode::ZoomIn));
-	zoomMenu->addAction(action);
+	m_worksheetZoomMenu->addAction(action);
 
 	action = new QAction(QIcon::fromTheme(QStringLiteral("zoom-out")), i18n("Zoom Out"), m_worksheeZoomActionGroup);
 	action->setData(static_cast<int>(WorksheetView::ZoomMode::ZoomOut));
-	zoomMenu->addAction(action);
+	m_worksheetZoomMenu->addAction(action);
 
 	action = new QAction(QIcon::fromTheme(QStringLiteral("zoom-original")), i18n("Original Size"), m_worksheeZoomActionGroup);
 	action->setData(static_cast<int>(WorksheetView::ZoomMode::ZoomOrigin));
-	zoomMenu->addAction(action);
+	m_worksheetZoomMenu->addAction(action);
 
 	// zoom fit actions
 	m_worksheeZoomFitActionGroup = new QActionGroup(m_mainWindow);
-	zoomMenu->addSeparator();
+	m_worksheetZoomMenu->addSeparator();
 
 	action = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-none")), i18nc("Zoom", "No fit"), m_worksheeZoomFitActionGroup);
 	action->setCheckable(true);
 	action->setChecked(true);
 	action->setData((int)Worksheet::ZoomFit::None);
-	zoomMenu->addAction(action);
+	m_worksheetZoomMenu->addAction(action);
 
 	action = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-height")), i18nc("Zoom", "Fit to Height"), m_worksheeZoomFitActionGroup);
 	action->setCheckable(true);
 	action->setData((int)Worksheet::ZoomFit::FitToHeight);
-	zoomMenu->addAction(action);
+	m_worksheetZoomMenu->addAction(action);
 
 	action = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-width")), i18nc("Zoom", "Fit to Width"), m_worksheeZoomFitActionGroup);
 	action->setCheckable(true);
 	action->setData((int)Worksheet::ZoomFit::FitToWidth);
-	zoomMenu->addAction(action);
+	m_worksheetZoomMenu->addAction(action);
 
 	action = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit-selection")), i18nc("Zoom", "Fit to Selection"), m_worksheeZoomFitActionGroup);
 	action->setCheckable(true);
 	action->setData((int)Worksheet::ZoomFit::FitToSelection);
-	zoomMenu->addAction(action);
+	m_worksheetZoomMenu->addAction(action);
 
 	action = new QAction(QIcon::fromTheme(QStringLiteral("zoom-fit")), i18nc("Zoom", "Fit"), m_worksheeZoomFitActionGroup);
 	action->setCheckable(true);
 	action->setData((int)Worksheet::ZoomFit::Fit);
-	zoomMenu->addAction(action);
+	m_worksheetZoomMenu->addAction(action);
 
 	// magnification actions
 	m_worksheetMagnificationActionGroup = new QActionGroup(m_mainWindow);
-	auto* magnificationMenu = new ToggleActionMenu(i18nc("@action", "Magnification"), this);
-	magnificationMenu->setPopupMode(QToolButton::MenuButtonPopup);
-	connect(magnificationMenu->menu(), &QMenu::triggered, zoomMenu, &ToggleActionMenu::setDefaultAction);
-	collection->addAction(QStringLiteral("worksheet_magnification"), magnificationMenu);
+	m_worksheetMagnificationMenu = new ToggleActionMenu(i18nc("@action", "Magnification"), this);
+	m_worksheetMagnificationMenu->setPopupMode(QToolButton::MenuButtonPopup);
+	connect(m_worksheetMagnificationMenu->menu(), &QMenu::triggered, m_worksheetMagnificationMenu, &ToggleActionMenu::setDefaultAction);
+	collection->addAction(QStringLiteral("worksheet_magnification"), m_worksheetMagnificationMenu);
 
 	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-1x-zoom")), i18n("No Magnification"), m_worksheetMagnificationActionGroup);
 	action->setCheckable(true);
 	action->setData(0);
-	magnificationMenu->addAction(action);
+	m_worksheetMagnificationMenu->addAction(action);
 
 	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-2x-zoom")), i18n("2x Magnification"), m_worksheetMagnificationActionGroup);
 	action->setCheckable(true);
 	action->setData(2);
-	magnificationMenu->addAction(action);
+	m_worksheetMagnificationMenu->addAction(action);
 
 	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-3x-zoom")), i18n("3x Magnification"), m_worksheetMagnificationActionGroup);
 	action->setCheckable(true);
 	action->setData(3);
-	magnificationMenu->addAction(action);
+	m_worksheetMagnificationMenu->addAction(action);
 
 	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-4x-zoom")), i18n("4x Magnification"), m_worksheetMagnificationActionGroup);
 	action->setCheckable(true);
 	action->setData(4);
-	magnificationMenu->addAction(action);
+	m_worksheetMagnificationMenu->addAction(action);
 
 	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-5x-zoom")), i18n("5x Magnification"), m_worksheetMagnificationActionGroup);
 	action->setCheckable(true);
 	action->setData(5);
-	magnificationMenu->addAction(action);
+	m_worksheetMagnificationMenu->addAction(action);
 
-	collection->addAction(QStringLiteral("worksheet_magnification"), magnificationMenu);
+	collection->addAction(QStringLiteral("worksheet_magnification"), m_worksheetMagnificationMenu);
 }
 
 /*!
@@ -1163,10 +1165,20 @@ void ActionsManager::connectWorksheetToolbarActions(const WorksheetView* view) {
 	// mouse mode actions
 	connect(m_worksheeMouseModeActionGroup, &QActionGroup::triggered, nullptr, &WorksheetView::changeMouseMode);
 	connect(m_worksheeMouseModeActionGroup, &QActionGroup::triggered, view, &WorksheetView::changeMouseMode);
+	const auto mouseMode = view->mouseMode();
+	for (auto* action : m_worksheeMouseModeActionGroup->actions()) {
+		if (static_cast<WorksheetView::MouseMode>(action->data().toInt()) == mouseMode)
+			action->setChecked(true);
+	}
 
 	// zoom actions
 	connect(m_worksheeZoomActionGroup, &QActionGroup::triggered, nullptr, &WorksheetView::changeZoom);
 	connect(m_worksheeZoomActionGroup, &QActionGroup::triggered, view, &WorksheetView::changeZoom);
+	const auto zoomMode = view->zoomMode();
+	for (auto* action : m_worksheeZoomActionGroup->actions()) {
+		if (static_cast<WorksheetView::ZoomMode>(action->data().toInt()) == zoomMode)
+			m_worksheetZoomMenu->setDefaultAction(action);
+	}
 
 	// zoom fit actions
 	connect(m_worksheeZoomFitActionGroup, &QActionGroup::triggered, nullptr, &WorksheetView::changeZoomFit);
@@ -1175,6 +1187,11 @@ void ActionsManager::connectWorksheetToolbarActions(const WorksheetView* view) {
 	// magnification actions
 	connect(m_worksheetMagnificationActionGroup, &QActionGroup::triggered, nullptr, &WorksheetView::changeMagnification);
 	connect(m_worksheetMagnificationActionGroup, &QActionGroup::triggered, view, &WorksheetView::changeMagnification);
+	const auto magnification = view->magnification();
+	for (auto* action : m_worksheetMagnificationActionGroup->actions()) {
+		if (action->data().toInt() == magnification)
+			m_worksheetMagnificationMenu->setDefaultAction(action);
+	}
 }
 
 void ActionsManager::connectSpreadsheetToolbarActions(const SpreadsheetView* view) {
