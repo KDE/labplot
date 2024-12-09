@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-07 00:37+0000\n"
-"PO-Revision-Date: 2024-12-03 13:21+0100\n"
+"PO-Revision-Date: 2024-12-08 09:38+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -6354,10 +6354,9 @@ msgid "Failed to open '%1' for writing."
 msgstr "Impossible d'ouvrir « %1 » en écriture."
 
 #: src/backend/note/Note.cpp:124
-#, fuzzy, kde-format
-#| msgid "%1: set type"
+#, kde-format
 msgid "%1: set text"
-msgstr "%1 : définir un type"
+msgstr "%1 : définir un texte"
 
 #: src/backend/note/Note.cpp:131 src/backend/worksheet/TextLabel.cpp:266
 #: src/backend/worksheet/TextLabel.cpp:305
@@ -6366,16 +6365,14 @@ msgid "%1: set background color"
 msgstr "%1 : définir la couleur de l'arrière-plan"
 
 #: src/backend/note/Note.cpp:138
-#, fuzzy, kde-format
-#| msgid "%1: set font color"
+#, kde-format
 msgid "%1: set text color"
-msgstr "%1 : définir la couleur de police"
+msgstr "%1 : définir une couleur de texte"
 
 #: src/backend/note/Note.cpp:145
-#, fuzzy, kde-format
-#| msgid "%1: set font"
+#, kde-format
 msgid "%1: set text font"
-msgstr "%1 : définir la police"
+msgstr "%1 : définir une police de texte"
 
 #: src/backend/note/Note.cpp:183
 #, kde-format
