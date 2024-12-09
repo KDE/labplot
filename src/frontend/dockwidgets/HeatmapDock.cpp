@@ -297,7 +297,7 @@ void HeatmapDock::limitsMinChanged(double value) {
 
 	for (auto* plot : m_plots) {
 		auto format = plot->format();
-		format.start = value;
+		format.min = value;
 		plot->setFormat(format);
 	}
 }
@@ -307,7 +307,7 @@ void HeatmapDock::limitsMaxChanged(double value) {
 
 	for (auto* plot : m_plots) {
 		auto format = plot->format();
-		format.end = value;
+		format.max = value;
 		plot->setFormat(format);
 	}
 }

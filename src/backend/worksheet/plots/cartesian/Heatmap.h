@@ -85,8 +85,8 @@ public:
 
 	BASIC_D_ACCESSOR_DECL(bool, automaticLimits, AutomaticLimits) // If true, the limits of format are automatically determined
 	struct Format {
-		double start = 0.0;
-		double end = 1.0;
+		double min = 0.0;
+		double max = 1.0;
 		QString name;
 		std::vector<QColor> colors;
 		bool operator!=(const Format& rhs) const;
