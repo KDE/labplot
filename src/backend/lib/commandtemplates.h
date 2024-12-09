@@ -205,4 +205,47 @@ protected:
 	value_type m_otherValue;
 };
 
+/*
+ * Setter class for struct fields within private objects. See Heatmap.cpp for an example
+ * Macro: STRUCT_SETTER_CMD_IMPL_F_S(...)
+ */
+template<class target_class, typename structType, typename value_type>
+class StructSetterCmd : public QUndoCommand {
+public:
+	StructSetterCmd(target_class* target,
+					structType target_class::*structField,
+					value_type structType::*field,
+					value_type newValue,
+					const KLocalizedString& description,
+					QUndoCommand* parent = nullptr)
+		: QUndoCommand(parent)
+		, m_target(target)
+		, m_structField(structField)
+		, m_field(field)
+		, m_value(newValue) {
+		setText(description.subs(m_target->name()).toString());
+	}
+
+	virtual void redo() {
+		const auto oldValue = (m_target->*m_structField).*m_field;
+		(m_target->*m_structField).*m_field = m_value;
+		m_value = oldValue;
+
+		finalize();
+	}
+
+	virtual void undo() {
+		redo();
+	}
+
+	virtual void finalize() {
+	}
+
+protected:
+	structType target_class::*m_structField;
+	target_class* m_target;
+	value_type structType::*m_field;
+	value_type m_value;
+};
+
 #endif
