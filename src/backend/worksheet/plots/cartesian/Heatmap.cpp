@@ -27,7 +27,7 @@ QLatin1String Heatmap::saveName = QLatin1String("Heatmap");
 using Dimension = CartesianCoordinateSystem::Dimension;
 
 bool Heatmap::Format::operator!=(const Format& rhs) const {
-	if (start != rhs.start || end != rhs.end || name != rhs.name || colors.size() != rhs.colors.size())
+	if (min != rhs.min || max != rhs.max || name != rhs.name || colors.size() != rhs.colors.size())
 		return true;
 	auto i = colors.begin();
 	auto j = rhs.colors.begin();
@@ -44,7 +44,7 @@ bool Heatmap::Format::operator!=(const Format& rhs) const {
 int Heatmap::Format::index(double value) const {
 	if (colors.size() == 0)
 		return -1;
-	const auto index = static_cast<int>((value - start) / (end - start) * colors.size());
+	const auto index = static_cast<int>((value - min) / (max - min) * colors.size());
 	if (index < 0)
 		return 0;
 	else if (index >= colors.size())
@@ -97,8 +97,8 @@ BASIC_SHARED_D_READER_IMPL(Heatmap, unsigned int, yNumBins, yNumBins)
 BASIC_SHARED_D_READER_IMPL(Heatmap, bool, matrixNumBins, matrixNumBins)
 BASIC_SHARED_D_READER_IMPL(Heatmap, bool, drawEmpty, drawEmpty)
 BASIC_SHARED_D_READER_IMPL(Heatmap, Heatmap::Format, format, format)
-BASIC_SHARED_D_READER_IMPL(Heatmap, double, formatMin, format.start)
-BASIC_SHARED_D_READER_IMPL(Heatmap, double, formatMax, format.end)
+BASIC_SHARED_D_READER_IMPL(Heatmap, double, formatMin, format.min)
+BASIC_SHARED_D_READER_IMPL(Heatmap, double, formatMax, format.max)
 BASIC_SHARED_D_READER_IMPL(Heatmap, QString, formatName, format.name)
 BASIC_SHARED_D_READER_IMPL(Heatmap, std::vector<QColor>, formatColors, format.colors)
 BASIC_SHARED_D_READER_IMPL(Heatmap, const AbstractColumn*, xColumn, xColumn)
@@ -229,52 +229,50 @@ void Heatmap::setFormat(const Heatmap::Format& format) {
 		exec(new HeatmapSetFormatCmd(d, format, ki18n("%1: format changed")));
 }
 
-void Heatmap::setAutomaticLimits(const bool value) {
+STD_SETTER_CMD_IMPL_F_S(Heatmap, SetAutomaticLimits, bool, automaticLimits, retransform)
+void Heatmap::setAutomaticLimits(const bool automatic) {
+	Q_D(Heatmap);
+	if (automatic != d->automaticLimits)
+		exec(new HeatmapSetAutomaticLimitsCmd(d, automatic, ki18n("%1: automatic limits changed")));
 }
 
+STRUCT_SETTER_CMD_IMPL_F_S(Heatmap, SetFormatMin, Heatmap::Format, format, min, double, retransform)
 void Heatmap::setFormatMin(const double min) {
 	Q_D(Heatmap);
-	if (min != d->format.start)
+	if (min != d->format.min)
 		exec(new HeatmapSetFormatMinCmd(d, min, ki18n("%1: format min changed")));
 }
 
-// STD_SETTER_CMD_IMPL_F_S_NON_PRIVATE(Heatmap, SetFormatMax, double, Format::end, retransform)
+STRUCT_SETTER_CMD_IMPL_F_S(Heatmap, SetFormatMax, Heatmap::Format, format, max, double, retransform)
 void Heatmap::setFormatMax(const double max) {
-	//	Q_D(Heatmap);
-	//	if (max != d->format.end)
-	//		exec(new HeatmapSetFormatMaxCmd(d, max, ki18n("%1: format max changed")));
+	Q_D(Heatmap);
+	if (max != d->format.max)
+		exec(new HeatmapSetFormatMaxCmd(d, max, ki18n("%1: format max changed")));
 }
 
-// STD_SETTER_CMD_IMPL_F_S_NON_PRIVATE(Heatmap, SetFormatName, QString, Format::name, retransform)
+STRUCT_SETTER_CMD_IMPL_F_S(Heatmap, SetFormatName, Heatmap::Format, format, name, QString, retransform)
 void Heatmap::setFormatName(const QString& name) {
-	//	Q_D(Heatmap);
-	//	if (name != d->format.name)
-	//		exec(new HeatmapSetFormatNameCmd(d, name, ki18n("%1: format name changed")));
+	Q_D(Heatmap);
+	if (name != d->format.name)
+		exec(new HeatmapSetFormatNameCmd(d, name, ki18n("%1: format name changed")));
 }
 
-// STD_SETTER_CMD_IMPL_F_S_NON_PRIVATE(Heatmap, SetFormatColor, std::vector<QColor>, Format::colors, retransform)
-void Heatmap::setFormatColors(const std::vector<QColor>& colors) {
-	//	Q_D(Heatmap);
-	//	if (colors.size() == d->format.colors.size()) {
-	//		bool equal = true;
-	//		for (int i = 0; i < colors.size(); i++) {
-	//			if (colors.at(i) != d->format.colors.at(i)) {
-	//				equal = false;
-	//				break;
-	//			}
-	//		}
-	//		if (equal)
-	//			return;
-	//	}
-	//	exec(new HeatmapSetFormatColorCmd(d, colors, ki18n("%1: format colors changed")));
+STRUCT_SETTER_CMD_IMPL_F_S(Heatmap, SetFormatColors, Heatmap::Format, format, colors, QVector<QColor>, retransform)
+void Heatmap::setFormatColors(const QVector<QColor>& colors) {
+	Q_D(Heatmap);
+	if (colors.size() == d->format.colors.size()) {
+		bool equal = true;
+		for (int i = 0; i < colors.size(); i++) {
+			if (colors.at(i) != d->format.colors.at(i)) {
+				equal = false;
+				break;
+			}
+		}
+		if (equal)
+			return;
+	}
+	exec(new HeatmapSetFormatColorsCmd(d, colors, ki18n("%1: format colors changed")));
 }
-
-// STD_SETTER_CMD_IMPL_F_S(Heatmap, SetFormat, Heatmap::Format, format, retransform)
-// void Heatmap::setFormat(const Heatmap::Format& format) {
-//	Q_D(Heatmap);
-//	if (format != d->format)
-//		exec(new HeatmapSetFormatCmd(d, format, ki18n("%1: format changed")));
-// }
 
 STD_SETTER_CMD_IMPL_F_S(Heatmap, SetDrawEmpty, bool, drawEmpty, retransform)
 void Heatmap::setDrawEmpty(bool drawEmpty) {
@@ -919,8 +917,8 @@ void HeatmapPrivate::update() {
 
 	// Adjust formatting
 	if (automaticLimits) {
-		format.start = minValue;
-		format.end = maxValue;
+		format.min = minValue;
+		format.max = maxValue;
 	}
 
 	// Calculate rectangles
@@ -1123,8 +1121,8 @@ void Heatmap::save(QXmlStreamWriter* writer) const {
 		WRITE_QCOLOR3(d->format.colors.at(i), i_str);
 	}
 	writer->writeEndElement(); // close color section
-	writer->writeAttribute(XML::formatMin, QString::number(d->format.start));
-	writer->writeAttribute(XML::formatMax, QString::number(d->format.end));
+	writer->writeAttribute(XML::formatMin, QString::number(d->format.min));
+	writer->writeAttribute(XML::formatMax, QString::number(d->format.max));
 	writer->writeEndElement(); // close format section
 
 	writer->writeEndElement(); // close general section
