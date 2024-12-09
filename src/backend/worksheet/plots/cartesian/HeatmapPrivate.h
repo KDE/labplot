@@ -53,7 +53,7 @@ public:
 private:
 	void draw(QPainter*);
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
-	void update();
+	QRectF update();
 	void updatePixmap();
 };
 
