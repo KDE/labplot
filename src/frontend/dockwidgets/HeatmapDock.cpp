@@ -19,6 +19,8 @@
 #include "frontend/widgets/LineWidget.h"
 #include "frontend/widgets/SymbolWidget.h"
 #include "frontend/widgets/ValueWidget.h"
+#include "frontend/colormaps/ColorMapsDialog.h"
+#include "tools/ColorMapsManager.h"
 
 #include <QPushButton>
 
@@ -49,6 +51,9 @@ HeatmapDock::HeatmapDock(QWidget* parent)
 	ui.cbDataSource->addItem(i18n("Matrix"), (int)Heatmap::DataSource::Matrix);
 	ui.cbDataSource->addItem(i18n("Spreadsheet"), (int)Heatmap::DataSource::Spreadsheet);
 
+	ui.bColorMap->setIcon(QIcon::fromTheme(QLatin1String("color-management")));
+	ui.lColorMapPreview->setMaximumHeight(ui.bColorMap->height());
+
 	// SLOTS
 	// Tab "General"
 	connect(ui.leName, &QLineEdit::textChanged, this, &HeatmapDock::nameChanged);
@@ -60,6 +65,8 @@ HeatmapDock::HeatmapDock(QWidget* parent)
 	connect(ui.cbAutomaticLimits, &QCheckBox::clicked, this, &HeatmapDock::automaticLimitsChanged);
 	connect(ui.sbLimitsMin, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &HeatmapDock::limitsMinChanged);
 	connect(ui.sbLimitsMax, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &HeatmapDock::limitsMaxChanged);
+
+	connect(ui.bColorMap, &QPushButton::clicked, this, &HeatmapDock::selectColorMap);
 }
 
 void HeatmapDock::setPlots(QList<Heatmap*> list) {
@@ -233,8 +240,31 @@ void HeatmapDock::setModel() {
 //	m_plot->setDataColumns(columns);
 //}
 
+void HeatmapDock::selectColorMap() {
+	CONDITIONAL_LOCK_RETURN;
+
+	auto* dlg = new ColorMapsDialog(this);
+	if (dlg->exec() == QDialog::Accepted) {
+		const auto& name = dlg->name();
+		ui.lColorMapPreview->setPixmap(dlg->previewPixmap());
+		const auto& colors = dlg->colors(); // fetch the colors _after_ the preview pixmap was fetched to get the proper colors from the color manager
+		ui.lColorMapPreview->setFocus();
+
+		QPixmap pixmap;
+		ColorMapsManager::instance()->render(pixmap, name);
+		ui.lColorMapPreview->setPixmap(pixmap);
+
+		for (auto* plot : m_plots) {
+			auto f = plot->format();
+			f.name = name;
+			f.colors = colors;
+			plot->setFormat(f);
+		}
+	}
+}
+
 ////**********************************************************
-////******* SLOTs for changes triggered in LollipopPlotDock *******
+////******* SLOTs for changes triggered in HeatmapDock *******
 ////**********************************************************
 ////"General"-tab
 void HeatmapDock::xColumnChanged(const QModelIndex& index) {
