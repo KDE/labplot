@@ -71,6 +71,7 @@ public:
 	double y(double x, bool& valueFound) const;
 	QDateTime yDateTime(double x, bool& valueFound) const;
 
+	bool indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const override;
 	static bool minMax(const AbstractColumn* column1,
 					   const AbstractColumn* column2,
 					   const ErrorBar::ErrorType errorType,
