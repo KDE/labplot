@@ -88,7 +88,7 @@ public:
 		double min = 0.0;
 		double max = 1.0;
 		QString name;
-		std::vector<QColor> colors;
+		QVector<QColor> colors;
 		bool operator!=(const Format& rhs) const;
 		int index(double value) const;
 		QColor color(double value) const;
@@ -97,7 +97,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(double, formatMin, FormatMin)
 	BASIC_D_ACCESSOR_DECL(double, formatMax, FormatMax)
 	CLASS_D_ACCESSOR_DECL(QString, formatName, FormatName)
-	CLASS_D_ACCESSOR_DECL(std::vector<QColor>, formatColors, FormatColors)
+	CLASS_D_ACCESSOR_DECL(QVector<QColor>, formatColors, FormatColors)
 
 	void retransform() override;
 

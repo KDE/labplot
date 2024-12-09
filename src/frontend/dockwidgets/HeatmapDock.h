@@ -48,6 +48,9 @@ private:
 	//	void loadDataColumns();
 
 private Q_SLOTS:
+	void selectColorMap();
+
+private Q_SLOTS:
 	// SLOTs for changes triggered in the dock
 	//"General"-tab
 	void matrixChanged(const QModelIndex&);
