@@ -171,6 +171,12 @@ XYCurve* KDEPlot::rugCurve() const {
 	return d->rugCurve;
 }
 
+bool KDEPlot::indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const {
+	start = 0;
+	end = gridPointsCount() - 1;
+	return true;
+}
+
 bool KDEPlot::minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& r, bool /* includeErrorBars */) const {
 	Q_D(const KDEPlot);
 	return d->estimationCurve->minMax(dim, indexRange, r);

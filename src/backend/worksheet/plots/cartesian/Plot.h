@@ -65,6 +65,7 @@ public:
 	virtual bool minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const;
 	virtual double minimum(Dimension dim) const = 0;
 	virtual double maximum(Dimension dim) const = 0;
+	// TODO: make this pure virtual!!!
 	virtual bool indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const;
 
 	/*!

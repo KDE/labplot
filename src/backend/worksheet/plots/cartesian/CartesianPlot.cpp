@@ -3069,8 +3069,8 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 				}
 				const int index = coordinateSystem(plot->coordinateSystemIndex())->index(dim_other);
 				DEBUG(Q_FUNC_INFO << ", free incomplete range with y column. y range = " << d->range(dim_other, index).toStdString())
-				assert(
-					plot->indicesMinMax(dim_other, d->range(dim_other, index).start(), d->range(dim_other, index).end(), indexRange.start(), indexRange.end()));
+				if (!plot->indicesMinMax(dim_other, d->range(dim_other, index).start(), d->range(dim_other, index).end(), indexRange.start(), indexRange.end()))
+					continue;
 			} else { // all data
 				const int count = plot->dataCount(dim);
 				DEBUG("PLOT \"" << STDSTRING(plot->name()) << "\"")
@@ -3095,10 +3095,12 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 
 			plot->minMax(dim, indexRange, range, true);
 		} else if (plot->type() == AspectType::ProcessBehaviorChart) {
+			// TODO: implement indicesMinMax and handle above like QQPlot and XYCurve
 			const int maxIndex = static_cast<const ProcessBehaviorChart*>(plot)->xIndexCount() - 1;
 			Range<int> indexRange{0, maxIndex};
 			plot->minMax(dim, indexRange, range, true);
 		} else if (plot->type() == AspectType::RunChart) {
+			// TODO: implement indicesMinMax and handle above like QQPlot and XYCurve
 			const int maxIndex = static_cast<const RunChart*>(plot)->xIndexCount() - 1;
 			Range<int> indexRange{0, maxIndex};
 			plot->minMax(dim, indexRange, range, true);
