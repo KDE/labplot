@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-16 03:05+0000\n"
-"PO-Revision-Date: 2024-08-31 15:04+0200\n"
+"PO-Revision-Date: 2024-12-08 20:22+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -3107,7 +3107,7 @@ msgstr "Superouse o límite da táboa"
 #: src/backend/gsl/errors.h:76
 #, kde-format
 msgid "Iteration is not making progress towards solution"
-msgstr "A iteración non está progresando cara a solución"
+msgstr "A iteración non está progresando cara á solución"
 
 #: src/backend/gsl/errors.h:78
 #, kde-format
@@ -7375,6 +7375,7 @@ msgstr "Símbolo"
 msgid "%1: set gluepoint index"
 msgstr "%1: definir o índice do punto de unión"
 
+# skip-rule: trasno-attachment2_reverse
 #: src/backend/worksheet/InfoElement.cpp:864
 #, kde-format
 msgid "%1: set connectionline curve name"
@@ -15112,7 +15113,7 @@ msgid ""
 "LabPlot is a FREE, open-source and cross-platform Data Visualization and "
 "Analysis software accessible to everyone."
 msgstr ""
-"LabPlot é software libre, de código aberto e multiplataforma de "
+"LabPlot é un programa libre, de código aberto e multiplataforma de "
 "visualización e análise de datos, a disposición de calquera."
 
 #: src/kdefrontend/LabPlot.cpp:98
@@ -23381,12 +23382,12 @@ msgstr "Rectángulo apuntando cara abaixo"
 #: src/kdefrontend/widgets/LabelWidget.cpp:190
 #, kde-format
 msgid "Left Pointing rectangle"
-msgstr "Rectángulo apuntando cara a esquerda"
+msgstr "Rectángulo apuntando cara á esquerda"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:191
 #, kde-format
 msgid "Right Pointing rectangle"
-msgstr "Rectángulo apuntando cara a dereita"
+msgstr "Rectángulo apuntando cara á dereita"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:193
 #, kde-format
