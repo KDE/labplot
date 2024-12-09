@@ -122,7 +122,7 @@ public:
 	}
 	void connectDisconnect(const Heatmap::DataSource newDataSource) const {
 		switch (newDataSource) {
-		case Heatmap::DataSource::Matrix: { /* disconnect only when column valid, because otherwise all \ signals are disconnected */
+		case Heatmap::DataSource::Matrix: { /* disconnect only when column valid, because otherwise all signals are disconnected */
 			if (m_target->xColumn)
 				QObject::disconnect(m_target->xColumn, nullptr, m_target->q, nullptr);
 			if (m_target->yColumn)
@@ -149,19 +149,7 @@ public:
 		Q_EMIT m_target->q->dataChanged();
 	}
 
-	//	void redo() override {
-	//		const Heatmap::DataSource ds = m_private->dataSource;
-	//		m_private->dataSource = m_dataSource;
-	//		m_dataSource = ds;
-
-	//	}
-	//	void undo() override {
-	//		redo();
-	//	}
-
 private:
-	//	Heatmap::Private* m_private;
-	//	Heatmap::DataSource m_dataSource;
 };
 
 void Heatmap::setDataSource(DataSource dataSource) {
@@ -169,58 +157,6 @@ void Heatmap::setDataSource(DataSource dataSource) {
 	if (dataSource != d->dataSource)
 		exec(new HeatmapSetDataSourceCmd(d, dataSource, ki18n("%1: Datasource changed")));
 }
-
-// STD_SETTER_CMD_IMPL_F_S_NON_PRIVATE(Heatmap, SetFormatMin, double, Format::start, retransform)
-
-template<class target_class, typename structType, typename value_type>
-class StructSetterCmd : public QUndoCommand {
-public:
-	StructSetterCmd(target_class* target,
-					value_type structType::*field,
-					value_type newValue,
-					const KLocalizedString& description,
-					QUndoCommand* parent = nullptr) // use ki18n("%1: ...")
-		: QUndoCommand(parent)
-		, m_target(target)
-		, m_field(field)
-		, m_otherValue(newValue) {
-		setText(description.subs(m_target->name()).toString());
-	}
-
-	virtual void initialize() {
-	}
-	virtual void finalize() {
-	}
-
-	void redo() override {
-		initialize();
-		value_type tmp = m_target->format.*m_field;
-		(m_target->format.*m_field) = m_otherValue;
-		m_otherValue = tmp;
-		QUndoCommand::redo(); // redo all childs
-		finalize();
-	}
-
-	void undo() override {
-		redo();
-	}
-
-protected:
-	target_class* m_target;
-	value_type structType::*m_field;
-	value_type m_otherValue;
-};
-
-class HeatmapSetFormatMinCmd : public StructSetterCmd<Heatmap::Private, Heatmap::Format, double> {
-public:
-	HeatmapSetFormatMinCmd(Heatmap::Private* target, double newValue, const KLocalizedString& description, QUndoCommand* parent = nullptr)
-		: StructSetterCmd<Heatmap::Private, Heatmap::Format, double>(target, &Heatmap::Format::start, newValue, description, parent) {
-	}
-	virtual void finalize() override {
-		m_target->retransform();
-		// Q_EMIT m_target->q->formatMinChanged(m_target->*m_field);
-	}
-};
 
 STD_SETTER_CMD_IMPL_F_S(Heatmap, SetFormat, Heatmap::Format, format, retransform)
 void Heatmap::setFormat(const Heatmap::Format& format) {
