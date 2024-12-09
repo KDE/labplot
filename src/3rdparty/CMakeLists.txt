@@ -31,7 +31,7 @@ if(BUILD_READSTAT)
 #else()
 
     # --prefix=${install_dir} does not work with spaces
-    set(ext_configure ${ext_src}/configure --enable-static --disable-shared)
+    set(ext_configure ${ext_src}/configure CFLAGS="-fPIC" --enable-static --disable-shared)
     set(ext_insource ON)
     #set(ext_make ${CMAKE_MAKE_PROGRAM} CXXFLAGS=-fPIC CFLAGS=-fPIC)
 
