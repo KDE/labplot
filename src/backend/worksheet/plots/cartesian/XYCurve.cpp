@@ -2402,6 +2402,14 @@ QDateTime XYCurve::yDateTime(double x, bool& valueFound) const {
 	return {};
 }
 
+bool XYCurve::indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const {
+	if (column(dim)) {
+		column(dim)->indicesMinMax(v1, v2, start, end);
+		return true;
+	}
+	return false;
+}
+
 bool XYCurve::minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars) const {
 	Q_D(const XYCurve);
 	switch (dim) {

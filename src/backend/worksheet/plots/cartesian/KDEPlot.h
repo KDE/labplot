@@ -55,6 +55,7 @@ public:
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 	void setVisible(bool) override;
 
+	bool indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const override;
 	bool minMax(const CartesianCoordinateSystem::Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const override;
 	double minimum(CartesianCoordinateSystem::Dimension) const override;
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
