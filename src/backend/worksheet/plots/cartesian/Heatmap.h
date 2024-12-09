@@ -117,6 +117,7 @@ Q_SIGNALS:
 	void matrixChanged(const Matrix*);
 	void drawEmptyChanged(bool);
 
+	void automaticLimitsChanged(bool);
 	void xNumBinsChanged(unsigned int);
 	void yNumBinsChanged(unsigned int);
 
