@@ -53,6 +53,7 @@ private Q_SLOTS:
 private Q_SLOTS:
 	// SLOTs for changes triggered in the dock
 	//"General"-tab
+	void dataSourceChanged();
 	void matrixChanged(const QModelIndex&);
 	void xColumnChanged(const QModelIndex&);
 	void yColumnChanged(const QModelIndex&);

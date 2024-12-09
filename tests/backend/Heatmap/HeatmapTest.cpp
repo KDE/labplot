@@ -1204,6 +1204,15 @@ void HeatmapTest::testRepresentationSpreadsheetDrawEmpty() {
 }
 
 void HeatmapTest::testRepresentationSpreadsheetDrawZeroes() {
+	QVERIFY(false);
+}
+
+/*!
+ * \brief HeatmapTest::testRepresentationSpreadsheetCompletelyOutOfRange
+ * Completly outside of the plot so nothing will be drawn
+ */
+void HeatmapTest::testRepresentationSpreadsheetCompletelyOutOfRange() {
+	QVERIFY(false);
 }
 
 /*!

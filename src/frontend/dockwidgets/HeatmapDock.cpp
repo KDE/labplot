@@ -50,6 +50,7 @@ HeatmapDock::HeatmapDock(QWidget* parent)
 
 	ui.cbDataSource->addItem(i18n("Matrix"), (int)Heatmap::DataSource::Matrix);
 	ui.cbDataSource->addItem(i18n("Spreadsheet"), (int)Heatmap::DataSource::Spreadsheet);
+	dataSourceChanged();
 
 	ui.bColorMap->setIcon(QIcon::fromTheme(QLatin1String("color-management")));
 	ui.lColorMapPreview->setMaximumHeight(ui.bColorMap->height());
@@ -58,8 +59,9 @@ HeatmapDock::HeatmapDock(QWidget* parent)
 	// Tab "General"
 	connect(ui.leName, &QLineEdit::textChanged, this, &HeatmapDock::nameChanged);
 	connect(ui.teComment, &QTextEdit::textChanged, this, &HeatmapDock::commentChanged);
+	connect(ui.cbDataSource, &QComboBox::currentIndexChanged, this, &HeatmapDock::dataSourceChanged);
 	connect(cbXColumn, &TreeViewComboBox::currentModelIndexChanged, this, &HeatmapDock::xColumnChanged);
-	connect(cbYColumn, &TreeViewComboBox::currentModelIndexChanged, this, &HeatmapDock::xColumnChanged);
+	connect(cbYColumn, &TreeViewComboBox::currentModelIndexChanged, this, &HeatmapDock::yColumnChanged);
 	connect(cbMatrix, &TreeViewComboBox::currentModelIndexChanged, this, &HeatmapDock::matrixChanged);
 
 	connect(ui.cbAutomaticLimits, &QCheckBox::clicked, this, &HeatmapDock::automaticLimitsChanged);
@@ -267,6 +269,25 @@ void HeatmapDock::selectColorMap() {
 ////******* SLOTs for changes triggered in HeatmapDock *******
 ////**********************************************************
 ////"General"-tab
+
+void HeatmapDock::dataSourceChanged() {
+	CONDITIONAL_LOCK_RETURN;
+
+	const auto datasource = Heatmap::DataSource(ui.cbDataSource->currentData().toInt());
+	bool matrix = datasource == Heatmap::DataSource::Matrix;
+
+	ui.lMatrix->setVisible(matrix);
+	cbMatrix->setVisible(matrix);
+
+	ui.lXColumn->setVisible(!matrix);
+	cbXColumn->setVisible(!matrix);
+	ui.lYColumn->setVisible(!matrix);
+	cbYColumn->setVisible(!matrix);
+
+	for (auto* plot : m_plots)
+		plot->setDataSource(datasource);
+}
+
 void HeatmapDock::xColumnChanged(const QModelIndex& index) {
 	// updateValuesWidgets();
 

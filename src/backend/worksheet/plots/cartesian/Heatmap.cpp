@@ -653,7 +653,7 @@ HeatmapPrivate::HeatmapPrivate(Heatmap* heatmap)
 
 void HeatmapPrivate::retransform() {
 	const QRectF& r = update();
-	recalcShapeAndBoundingRect();
+	recalcShapeAndBoundingRect(r);
 }
 
 void HeatmapPrivate::recalc() {
@@ -884,7 +884,7 @@ QRectF HeatmapPrivate::update() {
 	const auto p2 = QPointF(xEndPoint, yEndPoint);
 	const auto points = cSystem->mapLogicalToScene({p1, p2}, AbstractCoordinateSystem::MappingFlag::Limit);
 
-	return QRectF(p1, p2); // New bounding rectangle
+	return QRectF(points.at(0), points.at(1)); // New bounding rectangle
 }
 
 void HeatmapPrivate::updatePixmap() {
@@ -913,7 +913,7 @@ void HeatmapPrivate::updatePixmap() {
 void HeatmapPrivate::draw(QPainter* painter) {
 	auto pen = painter->pen();
 	for (const auto& d : data) {
-		pen.setColor(d.color);
+		pen.setColor(Qt::red); // d.color);
 		painter->setPen(pen);
 		painter->drawRect(d.rect);
 	}
