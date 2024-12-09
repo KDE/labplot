@@ -257,7 +257,7 @@ public:
 		, m_matrix(newValue) {
 	}
 	virtual void finalize() override {
-		Q_EMIT m_target->q->matrixChanged(m_target->*m_field);
+		Q_EMIT m_target->q->matrixChanged(m_target->*m_field); // TODO: why this works????
 		if (m_private->dataSource == Heatmap::DataSource::Matrix) { /* emit dataChanged() in order to notify the plot about the changes */
 			Q_EMIT m_private->q->dataChanged();
 		}
@@ -652,7 +652,8 @@ HeatmapPrivate::HeatmapPrivate(Heatmap* heatmap)
 }
 
 void HeatmapPrivate::retransform() {
-	/*const QRectF& r = */ update();
+	const QRectF& r = update();
+	recalcShapeAndBoundingRect();
 }
 
 void HeatmapPrivate::recalc() {
@@ -662,7 +663,7 @@ void HeatmapPrivate::recalcShapeAndBoundingRect() {
 	recalcShapeAndBoundingRect(m_boundingRectangle);
 }
 
-void HeatmapPrivate::update() {
+QRectF HeatmapPrivate::update() {
 	// TODO: create CalculateScenePoints
 	data.clear();
 	int xNumValues = 0, yNumValues = 0;
@@ -670,17 +671,17 @@ void HeatmapPrivate::update() {
 	case Heatmap::DataSource::Spreadsheet:
 		if (!xColumn || !yColumn) {
 			DEBUG(Q_FUNC_INFO << ", WARNING: xColumn or yColumn not available");
-			return;
+			return QRectF();
 		}
 
 		if (xColumn->rowCount() != yColumn->rowCount()) {
 			DEBUG(Q_FUNC_INFO << ", WARNING: xColumn and yColumn do not have the same size");
-			return;
+			return QRectF();
 		}
 
 		if (!xColumn->isNumeric() || !yColumn->isNumeric()) {
 			DEBUG(Q_FUNC_INFO << ", WARNING: xColumn or yColumn not numeric");
-			return;
+			return QRectF();
 		}
 		xNumValues = xColumn->rowCount();
 		yNumValues = yColumn->rowCount();
@@ -688,7 +689,7 @@ void HeatmapPrivate::update() {
 	case Heatmap::DataSource::Matrix:
 		if (!matrix) {
 			DEBUG(Q_FUNC_INFO << ", WARNING: matrix not available");
-			return;
+			return QRectF();
 		}
 		xNumValues = matrix->columnCount();
 		yNumValues = matrix->rowCount();
@@ -696,7 +697,7 @@ void HeatmapPrivate::update() {
 	}
 
 	if (xNumValues == 0 || yNumValues == 0)
-		return;
+		return QRectF();
 
 	// Range<double> xRange;
 	// minMax(Dimension::X, Range<int>(0, xColumn->rowCount(), xRange);
@@ -719,7 +720,7 @@ void HeatmapPrivate::update() {
 	}
 
 	if (xBinSize <= 0 || yBinSize <= 0)
-		return;
+		return QRectF();
 
 	// Check which region is visible
 	const auto xPlotRange = q->plot()->range(Dimension::X, q->coordinateSystemIndex());
@@ -759,7 +760,7 @@ void HeatmapPrivate::update() {
 	int xNumberBinsVisible = calculate_numberBinsVisible(xMin, xMax, xMinValid, xMaxValid, xBinSize, xRangeMin, xRangeMax);
 	if (xNumberBinsVisible < 0) {
 		// Can happen if the column does not contain any valid values
-		return;
+		return QRectF();
 	}
 
 	double yMinValid;
@@ -767,7 +768,7 @@ void HeatmapPrivate::update() {
 	int yNumberBinsVisible = calculate_numberBinsVisible(yMin, yMax, yMinValid, yMaxValid, yBinSize, yRangeMin, yRangeMax);
 	if (yNumberBinsVisible < 0) {
 		// Can happen if the column does not contain any valid values
-		return;
+		return QRectF();
 	}
 
 	std::vector<std::vector<double>> map(xNumberBinsVisible, std::vector<double>(yNumberBinsVisible, 0));
@@ -883,7 +884,7 @@ void HeatmapPrivate::update() {
 	const auto p2 = QPointF(xEndPoint, yEndPoint);
 	const auto points = cSystem->mapLogicalToScene({p1, p2}, AbstractCoordinateSystem::MappingFlag::Limit);
 
-	// return QRectF(p1, p2); // New bounding rectangle
+	return QRectF(p1, p2); // New bounding rectangle
 }
 
 void HeatmapPrivate::updatePixmap() {
@@ -907,8 +908,6 @@ void HeatmapPrivate::updatePixmap() {
 	draw(&painter);
 	painter.end();
 	m_pixmap = pixmap;
-
-	update();
 }
 
 void HeatmapPrivate::draw(QPainter* painter) {
@@ -978,7 +977,7 @@ void HeatmapPrivate::recalcShapeAndBoundingRect(const QRectF& rect) {
 
 	prepareGeometryChange();
 	m_boundingRectangle = rect;
-	m_shape.addRect(rect); // Currently share and boundingRectangle are the same
+	m_shape.addRect(rect); // Currently shape and boundingRectangle are the same
 
 	updatePixmap();
 }
