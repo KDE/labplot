@@ -22,6 +22,7 @@
 
 <ToolBar name="worksheet_toolbar">
 	<text>Worksheet Toolbar</text>
+	<Action name="worksheet_new_plot_area"/>
 	<Action name="worksheet_new_image"/>
 	<Action name="worksheet_new_text_label"/>
 	<Separator/>

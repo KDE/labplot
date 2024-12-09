@@ -22,7 +22,7 @@ class QToolButton;
 class QWheelEvent;
 class QTimeLine;
 
-class AbstractAspect;
+class ToggleActionMenu;
 class WorksheetElement;
 
 #ifdef HAVE_TOUCHBAR
@@ -40,6 +40,7 @@ public:
 	enum class ExportArea { BoundingBox, Selection, Worksheet };
 	enum class ZoomMode { ZoomIn, ZoomOut, ZoomOrigin };
 	enum class MouseMode { Selection, Navigation, ZoomSelection };
+	enum class AddNew { PlotAreaFourAxes, PlotAreaTwoAxes, PlotAreaTwoAxesCentered, PlotAreaTwoAxesCenteredZero, PlotAreaFromTemplate, TextLabel, Image};
 
 	struct GridSettings {
 		GridStyle style;
@@ -70,9 +71,14 @@ public:
 	void initActions();
 	void initPlotNavigationActions();
 
+	Worksheet::Layout layout() const;
 	MouseMode mouseMode() const;
 	ZoomMode zoomMode() const;
 	int magnification() const;
+
+	void fillAddNewPlotMenu(ToggleActionMenu*) const;
+	void fillZoomMenu(ToggleActionMenu*) const;
+	void fillMagnificationMenu(ToggleActionMenu*) const;
 
 private:
 	void initBasicActions();
@@ -247,6 +253,7 @@ public Q_SLOTS:
 	void cartesianPlotMouseModeChangedSlot(CartesianPlot::MouseMode); // from cartesian plot
 	void childContextMenuRequested(AspectType, QMenu*);
 
+	void addNew(QAction*);
 	void changeLayout(QAction*) const;
 	void changeMouseMode(QAction*);
 	void cartesianPlotMouseModeChanged(QAction*);
@@ -255,7 +262,6 @@ public Q_SLOTS:
 	void changeMagnification(QAction*);
 
 private Q_SLOTS:
-	void addNew(QAction*);
 	void aspectAboutToBeRemoved(const AbstractAspect*);
 	void selectAllElements();
 	void deleteElement();

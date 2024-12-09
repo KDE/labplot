@@ -25,6 +25,7 @@
 #include "frontend/PlotTemplateDialog.h"
 #include "frontend/core/ContentDockWidget.h"
 #include "frontend/widgets/ThemesWidget.h"
+#include "frontend/widgets/toggleactionmenu.h"
 #include "frontend/worksheet/GridDialog.h"
 #include "frontend/worksheet/PresenterWidget.h"
 #include <gsl/gsl_const_cgs.h>
@@ -145,13 +146,13 @@ void WorksheetView::initBasicActions() {
 
 	// Zoom actions
 	zoomActionGroup = new QActionGroup(this);
-	zoomInViewAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-in")), i18n("Zoom In"), zoomInViewAction);
+	zoomInViewAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-in")), i18n("Zoom In"), zoomActionGroup);
 	zoomInViewAction->setData(static_cast<int>(ZoomMode::ZoomIn));
 
-	zoomOutViewAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-out")), i18n("Zoom Out"), zoomInViewAction);
+	zoomOutViewAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-out")), i18n("Zoom Out"), zoomActionGroup);
 	zoomOutViewAction->setData(static_cast<int>(ZoomMode::ZoomOut));
 
-	zoomOriginAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-original")), i18n("Original Size"), zoomOriginAction);
+	zoomOriginAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-original")), i18n("Original Size"), zoomActionGroup);
 	zoomOriginAction->setData(static_cast<int>(ZoomMode::ZoomOrigin));
 }
 
@@ -198,30 +199,48 @@ void WorksheetView::initActions() {
 
 	// Magnification actions
 	noMagnificationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-1x-zoom")), i18n("No Magnification"), magnificationActionGroup);
+	noMagnificationAction->setData(0);
 	noMagnificationAction->setCheckable(true);
 	noMagnificationAction->setChecked(true);
 
 	twoTimesMagnificationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-2x-zoom")), i18n("2x Magnification"), magnificationActionGroup);
+	twoTimesMagnificationAction->setData(2);
 	twoTimesMagnificationAction->setCheckable(true);
 
 	threeTimesMagnificationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-3x-zoom")), i18n("3x Magnification"), magnificationActionGroup);
+	threeTimesMagnificationAction->setData(3);
 	threeTimesMagnificationAction->setCheckable(true);
 
 	fourTimesMagnificationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-4x-zoom")), i18n("4x Magnification"), magnificationActionGroup);
+	fourTimesMagnificationAction->setData(4);
 	fourTimesMagnificationAction->setCheckable(true);
 
 	fiveTimesMagnificationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-5x-zoom")), i18n("5x Magnification"), magnificationActionGroup);
+	fiveTimesMagnificationAction->setData(5);
 	fiveTimesMagnificationAction->setCheckable(true);
 
 	//"Add new" related actions
 	addCartesianPlot1Action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-plot-four-axes")), i18n("Four Axes"), addNewActionGroup);
+	addCartesianPlot1Action->setData(static_cast<int>(WorksheetView::AddNew::PlotAreaFourAxes));
+
 	addCartesianPlot2Action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes")), i18n("Two Axes"), addNewActionGroup);
+	addCartesianPlot2Action->setData(static_cast<int>(WorksheetView::AddNew::PlotAreaTwoAxes));
+
 	addCartesianPlot3Action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes-centered")), i18n("Two Axes, Centered"), addNewActionGroup);
+	addCartesianPlot3Action->setData(static_cast<int>(WorksheetView::AddNew::PlotAreaTwoAxesCentered));
+
 	addCartesianPlot4Action =
 		new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes-centered-origin")), i18n("Two Axes, Crossing at Origin"), addNewActionGroup);
+	addCartesianPlot4Action->setData(static_cast<int>(WorksheetView::AddNew::PlotAreaTwoAxesCenteredZero));
+
 	addCartesianPlotTemplateAction = new QAction(QIcon::fromTheme(QStringLiteral("document-new-from-template")), i18n("Load from Template"), addNewActionGroup);
+	addCartesianPlotTemplateAction->setData(static_cast<int>(WorksheetView::AddNew::PlotAreaFromTemplate));
+
 	addTextLabelAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-text")), i18n("Text"), addNewActionGroup);
+	addTextLabelAction->setData(static_cast<int>(WorksheetView::AddNew::TextLabel));
+
 	addImageAction = new QAction(QIcon::fromTheme(QStringLiteral("viewimage")), i18n("Image"), addNewActionGroup);
+	addImageAction->setData(static_cast<int>(WorksheetView::AddNew::Image));
 
 	// Layout actions
 	// TODO: the icons labplot-editvlayout and labplot-edithlayout are confusing for the user.
@@ -599,12 +618,40 @@ void WorksheetView::createContextMenu(QMenu* menu) {
 
 #ifdef HAVE_TOUCHBAR
 void WorksheetView::fillTouchBar(KDMacTouchBar* touchBar) {
-	// touchBar->addAction(addCartesianPlot1Action);
 	touchBar->addAction(zoomInViewAction);
 	touchBar->addAction(zoomOutViewAction);
 	touchBar->addAction(showPresenterMode);
 }
 #endif
+
+void WorksheetView::fillAddNewPlotMenu(ToggleActionMenu* menu) const {
+	menu->addAction(addCartesianPlot1Action);
+	menu->addAction(addCartesianPlot2Action);
+	menu->addAction(addCartesianPlot3Action);
+	menu->addAction(addCartesianPlot4Action);
+	menu->addSeparator();
+	menu->addAction(addCartesianPlotTemplateAction);
+}
+
+void WorksheetView::fillZoomMenu(ToggleActionMenu* menu) const {
+	menu->addAction(zoomInViewAction);
+	menu->addAction(zoomOutViewAction);
+	menu->addAction(zoomOriginAction);
+	menu->addSeparator();
+	menu->addAction(zoomFitNoneAction);
+	menu->addAction(zoomFitAction);
+	menu->addAction(zoomFitPageHeightAction);
+	menu->addAction(zoomFitPageWidthAction);
+	menu->addAction(zoomFitSelectionAction);
+}
+
+void WorksheetView::fillMagnificationMenu(ToggleActionMenu* menu) const {
+	menu->addAction(noMagnificationAction);
+	menu->addAction(twoTimesMagnificationAction);
+	menu->addAction(threeTimesMagnificationAction);
+	menu->addAction(fourTimesMagnificationAction);
+	menu->addAction(fiveTimesMagnificationAction);
+}
 
 void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
 	toolBar->addWidget(tbCartesianPlotAddNew);
@@ -1252,37 +1299,47 @@ WorksheetView::MouseMode WorksheetView::mouseMode() const {
 
 //"Add new" related slots
 void WorksheetView::addNew(QAction* action) {
+	const auto addNew = static_cast<WorksheetView::AddNew>(action->data().toInt());
 	bool restorePointers = false;
 	WorksheetElement* aspect = nullptr;
-	if (action == addCartesianPlot1Action) {
+	switch (addNew) {
+	case AddNew::PlotAreaFourAxes:{
 		auto* plot = new CartesianPlot(i18n("Plot Area"));
 		plot->setType(CartesianPlot::Type::FourAxes);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot1Action);
-	} else if (action == addCartesianPlot2Action) {
+		break;
+	}
+	case AddNew::PlotAreaTwoAxes: {
 		auto* plot = new CartesianPlot(i18n("Plot Area"));
 		plot->setType(CartesianPlot::Type::TwoAxes);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot2Action);
-	} else if (action == addCartesianPlot3Action) {
+		break;
+	}
+	case AddNew::PlotAreaTwoAxesCentered: {
 		auto* plot = new CartesianPlot(i18n("Plot Area"));
 		plot->setType(CartesianPlot::Type::TwoAxesCentered);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot3Action);
-	} else if (action == addCartesianPlot4Action) {
+		break;
+	}
+	case AddNew::PlotAreaTwoAxesCenteredZero: {
 		auto* plot = new CartesianPlot(i18n("Plot Area"));
 		plot->setType(CartesianPlot::Type::TwoAxesCenteredZero);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot4Action);
-	} else if (action == addCartesianPlotTemplateAction) {
+		break;
+	}
+	case AddNew::PlotAreaFromTemplate: {
 #ifndef SDK
 		// open dialog
 		PlotTemplateDialog d;
@@ -1298,14 +1355,21 @@ void WorksheetView::addNew(QAction* action) {
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlotTemplateAction);
 #endif
-	} else if (action == addTextLabelAction) {
+		break;
+	}
+	case AddNew::TextLabel: {
 		auto* l = new TextLabel(i18n("Text Label"));
 		l->setText(i18n("Text Label"));
 		aspect = l;
-	} else if (action == addImageAction) {
+		break;
+	}
+	case AddNew::Image: {
 		Image* image = new Image(i18n("Image"));
 		aspect = image;
+		break;
 	}
+	}
+
 	if (!aspect)
 		return;
 
@@ -1451,6 +1515,10 @@ void WorksheetView::fadeOut(qreal value) {
 void WorksheetView::changeLayout(QAction* action) const {
 	const auto layout = static_cast<Worksheet::Layout>(action->data().toInt());
 	m_worksheet->setLayout(layout);
+}
+
+Worksheet::Layout WorksheetView::layout() const {
+	return m_worksheet->layout();
 }
 
 void WorksheetView::changeGrid(QAction* action) {

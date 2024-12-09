@@ -73,14 +73,13 @@ private:
 	QAction* m_redoIconOnlyAction;
 #endif
 
+	ToggleActionMenu* m_worksheetNewPlotMenu{nullptr};
 	ToggleActionMenu* m_worksheetZoomMenu{nullptr};
 	ToggleActionMenu* m_worksheetMagnificationMenu{nullptr};
 
+	QActionGroup* m_worksheetAddNewActionGroup{nullptr};
 	QActionGroup* m_worksheetLayoutActionGroup{nullptr};
 	QActionGroup* m_worksheeMouseModeActionGroup{nullptr};
-	QActionGroup* m_worksheeZoomActionGroup{nullptr};
-	QActionGroup* m_worksheeZoomFitActionGroup{nullptr};
-	QActionGroup* m_worksheetMagnificationActionGroup{nullptr};
 
 	KRecentFilesAction* m_recentProjectsAction;
 	QAction* m_searchAction;
