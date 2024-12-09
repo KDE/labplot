@@ -485,7 +485,7 @@ void HeatmapTest::minMaxMatrix() {
 
 void HeatmapTest::testFormat() {
 	{
-		std::vector<QColor> colorVector;
+		QVector<QColor> colorVector;
 		for (int i = 0; i < 17; i++) {
 			colorVector.push_back(QColor(5, 5, i));
 		}
@@ -500,7 +500,7 @@ void HeatmapTest::testFormat() {
 	}
 
 	{
-		std::vector<QColor> colorVector;
+		QVector<QColor> colorVector;
 		for (int i = 0; i < 17; i++) {
 			colorVector.push_back(QColor(5, 5, i));
 		}
@@ -1224,6 +1224,8 @@ void HeatmapTest::testColorAutomatic() {
 
 	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
 	QCOMPARE(hm->drawEmpty(), false);
+	hm->setXNumBins(5);
+	hm->setYNumBins(5);
 	QCOMPARE(hm->xNumBins(), 5);
 	QCOMPARE(hm->yNumBins(), 5);
 	QCOMPARE(hm->automaticLimits(), true);
@@ -1273,8 +1275,8 @@ void HeatmapTest::testColorAutomatic() {
 	xColumn->setValueAt(11, 6.5); // Testing Duplicates
 	yColumn->setValueAt(11, 65.0); // Testing Duplicates
 
-	QCOMPARE(hm->format().start, 1);
-	QCOMPARE(hm->format().end, 2);
+	QCOMPARE(hm->format().min, 1);
+	QCOMPARE(hm->format().max, 2);
 
 	// 5 Bins X
 	// 0     2     4     6     8     10
@@ -1292,13 +1294,13 @@ void HeatmapTest::testColorAutomatic() {
 	// |   X     |   XX    |   XX    |   100 Y
 	hm->setXNumBins(3);
 	hm->setYNumBins(2);
-	QCOMPARE(hm->format().start, 1.);
-	QCOMPARE(hm->format().end, 3.);
+	QCOMPARE(hm->format().min, 1.);
+	QCOMPARE(hm->format().max, 3.);
 
 	hm->setAutomaticLimits(false);
 
-	QCOMPARE(hm->format().start, 1.);
-	QCOMPARE(hm->format().end, 3.);
+	QCOMPARE(hm->format().min, 1.);
+	QCOMPARE(hm->format().max, 3.);
 }
 
 void HeatmapTest::testColorManual() {
@@ -1315,12 +1317,29 @@ void HeatmapTest::testColorManual() {
 
 	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
 	QCOMPARE(hm->drawEmpty(), false);
+	hm->setXNumBins(5);
+	hm->setYNumBins(5);
 	QCOMPARE(hm->xNumBins(), 5);
 	QCOMPARE(hm->yNumBins(), 5);
 	hm->setAutomaticLimits(false);
 	QCOMPARE(hm->automaticLimits(), false);
-	hm->setFormatMin(-10);
-	hm->setFormatMax(10);
+	double defaultFormatMin = hm->formatMin();
+	double defaultFormatMax = hm->formatMax();
+	QVERIFY(defaultFormatMin != -10.);
+	QVERIFY(defaultFormatMax != 10.);
+	hm->setFormatMin(-10.);
+	QCOMPARE(hm->formatMin(), -10.);
+	hm->setFormatMax(10.);
+	QCOMPARE(hm->formatMax(), 10.);
+
+	hm->undoStack()->undo(); // hm->setFormatMax(10.);
+	QCOMPARE(hm->formatMax(), defaultFormatMax);
+	hm->undoStack()->undo(); // hm->setFormatMin(-10.);
+	QCOMPARE(hm->formatMin(), defaultFormatMin);
+	hm->undoStack()->redo(); // hm->setFormatMin(-10.);
+	QCOMPARE(hm->formatMin(), -10.);
+	hm->undoStack()->redo(); // hm->setFormatMax(10.);
+	QCOMPARE(hm->formatMax(), 10.);
 
 	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
 	auto columns = spreadsheet->children<Column>();
@@ -1372,8 +1391,8 @@ void HeatmapTest::testColorManual() {
 	xColumn->setValueAt(11, 6.5); // Testing Duplicates
 	yColumn->setValueAt(11, 65.0); // Testing Duplicates
 
-	QCOMPARE(hm->format().start, -10);
-	QCOMPARE(hm->format().end, 10);
+	QCOMPARE(hm->format().min, -10);
+	QCOMPARE(hm->format().max, 10);
 
 	// 5 Bins X
 	// 0     2     4     6     8     10
@@ -1402,32 +1421,34 @@ void HeatmapTest::testColorManual() {
 	int valueDrawnCounter = 0;
 	connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
 		switch (valueDrawnCounter) {
+		// Row 0
 		case 0:
-			COMPARE_VALUES(0., 0., 3.3, 50, 2.0);
+			COMPARE_VALUES(0., 0., 10. / 3., 50., 2.);
 			break;
 		case 1:
-			COMPARE_VALUES(3.3, 0., 6.6, 50, 3.0);
+			COMPARE_VALUES(10. / 3., 0., 20. / 3., 50., 3.);
 			break;
 		case 2:
-			COMPARE_VALUES(6.6, 0., 10, 0., 2.0);
+			COMPARE_VALUES(20. / 3., 0., 10., 50., 2.);
 			break;
 
+		// Row 1
 		case 3:
-			COMPARE_VALUES(0., 50.0, 3.3, 100, 1.0);
+			COMPARE_VALUES(0., 50., 10. / 3., 100., 1.);
 			break;
 		case 4:
-			COMPARE_VALUES(3.3, 50.0, 6.6, 100, 2.0);
+			COMPARE_VALUES(10. / 3., 50., 20. / 3., 100., 2.);
 			break;
 		case 5:
-			COMPARE_VALUES(6.6, 50.0, 10, 100, 2.0);
+			COMPARE_VALUES(20. / 3., 50., 10., 100., 2.);
 			break;
 		}
 		valueDrawnCounter++;
 	});
 	hm->setYNumBins(2);
 	QCOMPARE(valueDrawnCounter, 6);
-	QCOMPARE(hm->format().start, -10);
-	QCOMPARE(hm->format().end, 10);
+	QCOMPARE(hm->format().min, -10);
+	QCOMPARE(hm->format().max, 10);
 }
 
 void HeatmapTest::saveLoad() {
