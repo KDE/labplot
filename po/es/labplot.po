@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-07 00:37+0000\n"
+"POT-Creation-Date: 2024-12-10 00:37+0000\n"
 "PO-Revision-Date: 2024-12-07 23:51+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -8135,7 +8135,7 @@ msgstr "no hay información disponible"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:168
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5119
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5122
 #: src/frontend/ui/dockwidgets/axisdock.ui:483
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:548
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:478
@@ -8586,7 +8586,7 @@ msgid "%1: load default theme"
 msgstr "%1: Cargar tema predeterminado"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1751
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5445
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5448
 #: src/backend/worksheet/Worksheet.cpp:848
 #, kde-format
 msgid "%1: set theme"
@@ -8736,24 +8736,24 @@ msgstr "%1: añadir curva de función"
 msgid "Text Label"
 msgstr "Etiqueta de texto"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3812
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3815
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "No está dentro de la recta límite"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4036
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4057
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4039
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4060
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "desde x=%1 hasta x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4044
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4070
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4047
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4073
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "desde y=%1 hasta y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4089
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4092
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
@@ -16770,7 +16770,6 @@ msgstr ""
 "al tamaño de las columnas de variables"
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:143
-#: src/frontend/widgets/TreeViewComboBox.cpp:358
 #, kde-format
 msgid ""
 "The column \"%1\"\n"
@@ -24333,6 +24332,21 @@ msgstr "Se ha introducido un valor no válido. Valor válido: %1"
 #, kde-format
 msgid "Search/Filter text"
 msgstr "Texto a buscar/filtrar"
+
+#: src/frontend/widgets/TreeViewComboBox.cpp:358
+#, fuzzy, kde-format
+#| msgid ""
+#| "The curve \"%1\"\n"
+#| "is not available anymore. It will be automatically used once it is "
+#| "created again."
+msgid ""
+"The aspect \"%1\"\n"
+"is not available anymore. It will be automatically used once it is created "
+"again."
+msgstr ""
+"La curva «%1»\n"
+"ya no está disponible. Se usará automáticamente en cuanto se haya vuelto a "
+"crear."
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:53
 #, kde-format
