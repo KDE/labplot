@@ -11,7 +11,7 @@
 #ifndef EXPRESSIONPARSER_H
 #define EXPRESSIONPARSER_H
 
-#include "backend/gsl/parser.h"
+#include "backend/gsl/ParserDeclarations.h"
 #include "backend/lib/Range.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 
@@ -25,8 +25,11 @@ public:
 	static QString functionArgumentString(const QString& functionName, const XYEquationCurve::EquationType);
 	QString functionDescription(const QString& function);
 	QString constantDescription(const QString& constant);
-	void setSpecialFunction1(const char* function_name, Parser::func_t1Payload funct, std::shared_ptr<Parser::Payload> payload);
-	void setSpecialFunction2(const char* function_name, Parser::func_t2Payload funct, std::shared_ptr<Parser::Payload> payload);
+	void setSpecialFunctionValuePayload(const char* function_name, Parsing::func_tValuePayload, std::shared_ptr<Parsing::Payload> payload);
+	void setSpecialFunction2ValuePayload(const char* function_name, Parsing::func_t2ValuePayload, std::shared_ptr<Parsing::Payload> payload);
+	void setSpecialFunctionVariablePayload(const char* function_name, Parsing::func_tVariablePayload funct, std::shared_ptr<Parsing::Payload> payload);
+	void
+	setSpecialFunctionValueVariablePayload(const char* function_name, Parsing::func_tValueVariablePayload funct, std::shared_ptr<Parsing::Payload> payload);
 
 	static bool isValid(const QString& expr, const QStringList& vars = QStringList());
 	QStringList getParameter(const QString& expr, const QStringList& vars);
@@ -52,11 +55,11 @@ public:
 							  QVector<double>* yVector,
 							  const QStringList& paramNames,
 							  const QVector<double>& paramValues);
-	static bool tryEvaluateCartesian(const QString& expr,
-									 const QStringList& vars,
-									 const QVector<QVector<double>*>& xVectors,
-									 QVector<double>* yVector,
-									 bool perforanceOptimization = true);
+	bool tryEvaluateCartesian(const QString& expr,
+							  const QStringList& vars,
+							  const QVector<QVector<double>*>& xVectors,
+							  QVector<double>* yVector,
+							  bool performanceOptimization = true);
 	bool tryEvaluatePolar(const QString& expr, const QString& min, const QString& max, int count, QVector<double>* xVector, QVector<double>* yVector);
 	bool tryEvaluateParametric(const QString& expr1,
 							   const QString& expr2,
@@ -70,14 +73,14 @@ public:
 	const QStringList& functions();
 	const QStringList& functionsGroups();
 	const QStringList& functionsDescriptions();
-	const QVector<Parser::FunctionGroups>& functionsGroupIndices();
+	const QVector<Parsing::FunctionGroups>& functionsGroupIndices();
 
 	const QStringList& constants();
 	const QStringList& constantsGroups();
 	const QStringList& constantsNames();
 	const QStringList& constantsValues();
 	const QStringList& constantsUnits();
-	const QVector<Parser::ConstantGroups>& constantsGroupIndices();
+	const QVector<Parsing::ConstantGroups>& constantsGroupIndices();
 
 private:
 	ExpressionParser();
@@ -91,13 +94,14 @@ private:
 	QStringList m_functions;
 	QStringList m_functionsGroups;
 	QStringList m_functionsDescription;
-	QVector<Parser::FunctionGroups> m_functionsGroupIndex;
+	QVector<Parsing::FunctionGroups> m_functionsGroupIndex;
 
 	QStringList m_constants;
 	QStringList m_constantsGroups;
 	QStringList m_constantsDescription;
 	QStringList m_constantsValues;
 	QStringList m_constantsUnits;
-	QVector<Parser::ConstantGroups> m_constantsGroupIndex;
+	QVector<Parsing::ConstantGroups> m_constantsGroupIndex;
+	QString m_lastErrorMessage;
 };
 #endif
