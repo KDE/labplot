@@ -1365,10 +1365,10 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			plot->setRightPadding(150. + 1.5 * plot->rightPadding() * std::min(elementScalingFactor, 1.));
 			plot->setBottomPadding(100. + 1.5 * plot->bottomPadding() * std::min(elementScalingFactor, 1.));
 #else
-			plot->setHorizontalPadding(150. + 1.5 * plot->horizontalPadding() * std::max(elementScalingFactor, 1.));
-			plot->setVerticalPadding(100. + 1.5 * plot->verticalPadding() * std::max(elementScalingFactor, 1.));
-			plot->setRightPadding(150. + 1.5 * plot->rightPadding() * std::max(elementScalingFactor, 1.));
-			plot->setBottomPadding(100. + 1.5 * plot->bottomPadding() * std::max(elementScalingFactor, 1.));
+			plot->setHorizontalPadding(200. + 1.5 * plot->horizontalPadding() * std::max(elementScalingFactor, 1.));
+			plot->setVerticalPadding(150. + 1.5 * plot->verticalPadding() * std::max(elementScalingFactor, 1.));
+			plot->setRightPadding(200. + 1.5 * plot->rightPadding() * std::max(elementScalingFactor, 1.));
+			plot->setBottomPadding(150. + 1.5 * plot->bottomPadding() * std::max(elementScalingFactor, 1.));
 #endif
 		}
 		WARN(Q_FUNC_INFO << ", PADDING (H/V) = " << plot->horizontalPadding() << ", " << plot->verticalPadding())
