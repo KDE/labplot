@@ -58,7 +58,6 @@ find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
     ConfigWidgets
     CoreAddons
     Crash
-    DocTools
     I18n
     IconThemes
     KIO
@@ -68,6 +67,7 @@ find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
     NewStuffCore
     NewStuff
 OPTIONAL_COMPONENTS
+    DocTools
     Service
     Parts
     Purpose
@@ -702,7 +702,10 @@ endif()
 add_subdirectory(data)
 add_subdirectory(icons)
 add_subdirectory(src)
-add_subdirectory(doc)
+
+if(KF${KF_MAJOR_VERSION}DocTools_FOUND)
+    add_subdirectory(doc)
+endif()
 
 if(ENABLE_TESTS)
     enable_testing(true)
