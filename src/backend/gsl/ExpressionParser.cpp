@@ -9,8 +9,10 @@
 */
 
 #include "backend/gsl/ExpressionParser.h"
+#include "backend/gsl/Parser.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
+#include "parser_private.h"
 
 #include <KLocalizedString>
 
@@ -24,7 +26,24 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_version.h>
 
-using namespace Parser;
+using namespace Parsing;
+
+namespace {
+class ParserLastErrorMessage {
+public:
+	ParserLastErrorMessage(const Parser& parser, QString& lastErrorMessage)
+		: mParser(parser)
+		, mLastErrorMessage(lastErrorMessage) {
+	}
+	~ParserLastErrorMessage() {
+		mLastErrorMessage = QString::fromStdString(mParser.lastErrorMessage());
+	}
+
+private:
+	const Parser& mParser;
+	QString& mLastErrorMessage;
+};
+}
 
 ExpressionParser* ExpressionParser::m_instance{nullptr};
 
@@ -261,7 +280,7 @@ const QStringList& ExpressionParser::constantsUnits() {
 	return m_constantsUnits;
 }
 
-const QVector<Parser::ConstantGroups>& ExpressionParser::constantsGroupIndices() {
+const QVector<ConstantGroups>& ExpressionParser::constantsGroupIndices() {
 	return m_constantsGroupIndex;
 }
 
@@ -272,32 +291,33 @@ bool ExpressionParser::isValid(const QString& expr, const QStringList& vars) {
 
 	gsl_set_error_handler_off();
 
-	Lock l(skipSpecialFunctionEvaluation);
+	Parser parser;
+	parser.setSkipSpecialFunctionEvaluation(true);
 
 	for (const auto& var : vars)
-		assign_symbol(qPrintable(var), 0);
+		parser.assign_symbol(qPrintable(var), 0);
 
 	// Row index
-	assign_symbol("i", 0);
+	parser.assign_symbol("i", 0);
 
 	const auto numberLocale = QLocale();
 	DEBUG(Q_FUNC_INFO << ", number locale: " << STDSTRING(numberLocale.name()))
-	parse(qPrintable(expr), qPrintable(numberLocale.name()));
+	parser.parse(qPrintable(expr), qPrintable(numberLocale.name()));
 
 	// if parsing with number locale fails, try default locale
-	if (Parser::parse_errors() > 0) {
+	if (parser.parseErrors() > 0) {
 		DEBUG(Q_FUNC_INFO << ", WARNING: failed parsing expr \"" << STDSTRING(expr) << "\" with locale " << numberLocale.name().toStdString()
-						  << ", errors = " << Parser::parse_errors())
-		parse(qPrintable(expr), "en_US");
-		if (Parser::parse_errors() > 0)
-			DEBUG(Q_FUNC_INFO << ", ERROR: parsing FAILED, errors = " << Parser::parse_errors())
+						  << ", errors = " << parser.parseErrors())
+		parser.parse(qPrintable(expr), "en_US");
+		if (parser.parseErrors() > 0)
+			DEBUG(Q_FUNC_INFO << ", ERROR: parsing FAILED, errors = " << parser.parseErrors())
 	}
 
 	/* remove temporarily defined symbols */
 	for (const auto& var : vars)
-		remove_symbol(qPrintable(var));
+		parser.remove_symbol(qPrintable(var));
 
-	return Parser::parse_errors() == 0;
+	return parser.parseErrors() == 0;
 }
 
 QStringList ExpressionParser::getParameter(const QString& expr, const QStringList& vars) {
@@ -336,19 +356,22 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 	const double step = range.stepSize(count);
 	DEBUG(Q_FUNC_INFO << ", range = " << range.toStdString() << ", step = " << step)
 
+	Parser parser;
+	ParserLastErrorMessage lock(parser, m_lastErrorMessage);
+
 	for (int i = 0; i < paramNames.size(); ++i)
-		assign_symbol(qPrintable(paramNames.at(i)), paramValues.at(i));
+		parser.assign_symbol(qPrintable(paramNames.at(i)), paramValues.at(i));
 
 	const auto numberLocale = QLocale();
 	gsl_set_error_handler_off();
 	for (int i = 0; i < count; i++) {
 		const double x{range.start() + step * i};
-		assign_symbol("x", x);
+		parser.assign_symbol("x", x);
 
-		double y = parse(qPrintable(expr), qPrintable(numberLocale.name()));
-		if (Parser::parse_errors() > 0) // try default locale if failing
-			y = parse(qPrintable(expr), "en_US");
-		if (Parser::parse_errors() > 0)
+		double y = parser.parse(qPrintable(expr), qPrintable(numberLocale.name()));
+		if (parser.parseErrors() > 0) // try default locale if failing
+			y = parser.parse(qPrintable(expr), "en_US");
+		if (parser.parseErrors() > 0)
 			return false;
 
 		if (std::isnan(y))
@@ -390,17 +413,20 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 	const Range<double> range{min, max};
 	const double step = range.stepSize(count);
 
+	Parser parser;
+	ParserLastErrorMessage lock(parser, m_lastErrorMessage);
+
 	const auto numberLocale = QLocale();
 	for (int i = 0; i < count; i++) {
 		const double x{range.start() + step * i};
-		assign_symbol("x", x);
+		parser.assign_symbol("x", x);
 
-		double y = parse(qPrintable(expr), qPrintable(numberLocale.name()));
-		if (Parser::parse_errors() > 0) { // try default locale if failing
-			y = parse(qPrintable(expr), "en_US");
+		double y = parser.parse(qPrintable(expr), qPrintable(numberLocale.name()));
+		if (parser.parseErrors() > 0) { // try default locale if failing
+			y = parser.parse(qPrintable(expr), "en_US");
 			// DEBUG(Q_FUNC_INFO << ", WARNING: PARSER failed, trying default locale: y = " << y)
 		}
-		if (Parser::parse_errors() > 0)
+		if (parser.parseErrors() > 0)
 			return false;
 
 		if (std::isnan(y))
@@ -417,13 +443,16 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr, QVector<double>
 	DEBUG(Q_FUNC_INFO << ", v3")
 	gsl_set_error_handler_off();
 
+	Parser parser;
+	ParserLastErrorMessage lock(parser, m_lastErrorMessage);
+
 	const auto numberLocale = QLocale();
 	for (int i = 0; i < xVector->count(); i++) {
-		assign_symbol("x", xVector->at(i));
-		double y = parse(qPrintable(expr), qPrintable(numberLocale.name()));
-		if (Parser::parse_errors() > 0) // try default locale if failing
-			y = parse(qPrintable(expr), "en_US");
-		if (Parser::parse_errors() > 0)
+		parser.assign_symbol("x", xVector->at(i));
+		double y = parser.parse(qPrintable(expr), qPrintable(numberLocale.name()));
+		if (parser.parseErrors() > 0) // try default locale if failing
+			y = parser.parse(qPrintable(expr), "en_US");
+		if (parser.parseErrors() > 0)
 			return false;
 
 		if (std::isnan(y))
@@ -443,17 +472,20 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 	DEBUG(Q_FUNC_INFO << ", v4")
 	gsl_set_error_handler_off();
 
+	Parser parser;
+	ParserLastErrorMessage lock(parser, m_lastErrorMessage);
+
 	for (int i = 0; i < paramNames.size(); ++i)
-		assign_symbol(qPrintable(paramNames.at(i)), paramValues.at(i));
+		parser.assign_symbol(qPrintable(paramNames.at(i)), paramValues.at(i));
 
 	const auto numberLocale = QLocale();
 	for (int i = 0; i < xVector->count(); i++) {
-		assign_symbol("x", xVector->at(i));
+		parser.assign_symbol("x", xVector->at(i));
 
-		double y = parse(qPrintable(expr), qPrintable(numberLocale.name()));
-		if (Parser::parse_errors() > 0) // try default locale if failing
-			y = parse(qPrintable(expr), "en_US");
-		if (Parser::parse_errors() > 0)
+		double y = parser.parse(qPrintable(expr), qPrintable(numberLocale.name()));
+		if (parser.parseErrors() > 0) // try default locale if failing
+			y = parser.parse(qPrintable(expr), "en_US");
+		if (parser.parseErrors() > 0)
 			return false;
 
 		if (std::isnan(y))
@@ -496,6 +528,26 @@ double cell(double x, const std::string_view& variable, const std::weak_ptr<Payl
 	}
 
 	return NAN;
+}
+
+double cell_default_value(double x, double defaultValue, const std::string_view& variable, const std::weak_ptr<Payload> payload) {
+	const auto p = std::dynamic_pointer_cast<PayloadExpressionParser>(payload.lock());
+	if (!p) {
+		assert(p); // Debug build
+		return NAN;
+	}
+
+	const int index = (int)x - 1;
+	for (int i = 0; i < p->vars->length(); i++) {
+		if (p->vars->at(i).compare(QLatin1String(variable)) == 0) {
+			if (index >= 0 && index < p->xVectors->at(i)->length())
+				return p->xVectors->at(i)->at(index);
+			else
+				break;
+		}
+	}
+
+	return defaultValue;
 }
 
 double ma(const std::string_view& variable, const std::weak_ptr<Payload> payload) {
@@ -631,12 +683,20 @@ double rsample(const std::string_view& variable, const std::weak_ptr<Payload> pa
 	return value;
 }
 
-void ExpressionParser::setSpecialFunction1(const char* function_name, func_t1Payload funct, std::shared_ptr<Payload> payload) {
-	set_specialfunction1(function_name, funct, payload);
+void ExpressionParser::setSpecialFunctionValuePayload(const char* function_name, func_tValuePayload funct, std::shared_ptr<Payload> payload) {
+	Parser::set_specialfunctionValuePayload(function_name, funct, payload);
 }
 
-void ExpressionParser::setSpecialFunction2(const char* function_name, func_t2Payload funct, std::shared_ptr<Payload> payload) {
-	set_specialfunction2(function_name, funct, payload);
+void ExpressionParser::setSpecialFunction2ValuePayload(const char* function_name, func_t2ValuePayload funct, std::shared_ptr<Payload> payload) {
+	Parser::set_specialfunction2ValuePayload(function_name, funct, payload);
+}
+
+void ExpressionParser::setSpecialFunctionVariablePayload(const char* function_name, func_tVariablePayload funct, std::shared_ptr<Payload> payload) {
+	Parser::set_specialfunctionVariablePayload(function_name, funct, payload);
+}
+
+void ExpressionParser::setSpecialFunctionValueVariablePayload(const char* function_name, func_tValueVariablePayload funct, std::shared_ptr<Payload> payload) {
+	Parser::set_specialfunctionValueVariablePayload(function_name, funct, payload);
 }
 
 /*!
@@ -648,7 +708,7 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 											const QStringList& vars,
 											const QVector<QVector<double>*>& xVectors,
 											QVector<double>* yVector,
-											bool perforanceOptimization) {
+											bool performanceOptimization) {
 #if PERFTRACE_EXPRESSION_PARSER
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 #endif
@@ -672,44 +732,41 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 	const auto payload = std::make_shared<PayloadExpressionParser>(&vars, &xVectors);
 	const auto payloadConst = std::make_shared<PayloadExpressionParser>(&vars, &xVectors, true);
 
-	set_specialfunction2(specialfun_cell, cell, payloadConst);
-	set_specialfunction1(specialfun_ma, ma, payload);
-	set_specialfunction1(specialfun_mr, mr, payload);
-	set_specialfunction2(specialfun_smmin, smmin, payload);
-	set_specialfunction2(specialfun_smmax, smmax, payload);
-	set_specialfunction2(specialfun_sma, sma, payload);
-	set_specialfunction2(specialfun_smr, smr, payload);
-	set_specialfunction2(specialfun_psample, psample, payload);
-	set_specialfunction1(specialfun_rsample, rsample, payload);
+	Parser parser(performanceOptimization);
 
-	UsedSymbols us = UsedSymbols::No;
-	if (perforanceOptimization)
-		us = UsedSymbols::Initialize;
+	parser.set_specialfunctionValueVariablePayload(specialfun_cell, cell, payloadConst);
+	parser.set_specialfunction2ValueVariablePayload(specialfun_cell_default_value, cell_default_value, payloadConst);
+	parser.set_specialfunctionVariablePayload(specialfun_ma, ma, payload);
+	parser.set_specialfunctionVariablePayload(specialfun_mr, mr, payload);
+	parser.set_specialfunctionValueVariablePayload(specialfun_smmin, smmin, payload);
+	parser.set_specialfunctionValueVariablePayload(specialfun_smmax, smmax, payload);
+	parser.set_specialfunctionValueVariablePayload(specialfun_sma, sma, payload);
+	parser.set_specialfunctionValueVariablePayload(specialfun_smr, smr, payload);
+	parser.set_specialfunctionValueVariablePayload(specialfun_psample, psample, payload);
+	parser.set_specialfunctionVariablePayload(specialfun_rsample, rsample, payload);
 
 	bool constExpression = false;
 	for (int i = 0; i < minSize || (constExpression && i < yVector->size()); i++) {
-		if (i > 0 && perforanceOptimization)
-			us = UsedSymbols::Only;
 		QString tmpExpr = expr;
 
 		payload->row = i; // all special functions contain pointer to payload so they get this information
-		assign_symbol("i", i + 1, us);
+		parser.assign_symbol("i", i + 1);
 
 		for (int n = 0; n < vars.size(); ++n) {
 			if (!constExpression)
-				assign_symbol(qPrintable(vars.at(n)), xVectors.at(n)->at(i), us);
+				parser.assign_symbol(qPrintable(vars.at(n)), xVectors.at(n)->at(i));
 		}
 
-		double y = parse(qPrintable(tmpExpr), qPrintable(numberLocale.name()), us);
-		if (Parser::parse_errors() > 0) { // try default locale if failing
+		double y = parser.parse(qPrintable(tmpExpr), qPrintable(numberLocale.name()));
+		if (parser.parseErrors() > 0) { // try default locale if failing
 			// DEBUG("Parsing with locale failed. Using en_US.")
-			y = parse(qPrintable(tmpExpr), "en_US");
+			y = parser.parse(qPrintable(tmpExpr), "en_US");
 		}
 
-		if (Parser::parse_errors() == 0)
-			constExpression = variablesCounter() == 0;
+		if (parser.parseErrors() == 0)
+			constExpression = parser.variablesCounter() == 0;
 		// continue with next value
-		// if (Parser::parse_errors() > 0)
+		// if (parser.parseErrors() > 0)
 		//	return false;
 
 		if (std::isnan(y))
@@ -738,15 +795,18 @@ bool ExpressionParser::tryEvaluatePolar(const QString& expr,
 	const Range<double> range{min, max};
 	const double step = range.stepSize(count);
 
+	Parser parser;
+	ParserLastErrorMessage lock(parser, m_lastErrorMessage);
+
 	const auto numberLocale = QLocale();
 	for (int i = 0; i < count; i++) {
 		const double phi = range.start() + step * i;
-		assign_symbol("phi", phi);
+		parser.assign_symbol("phi", phi);
 
-		double r = parse(qPrintable(expr), qPrintable(numberLocale.name()));
-		if (Parser::parse_errors() > 0) // try default locale if failing
-			r = parse(qPrintable(expr), "en_US");
-		if (Parser::parse_errors() > 0)
+		double r = parser.parse(qPrintable(expr), qPrintable(numberLocale.name()));
+		if (parser.parseErrors() > 0) // try default locale if failing
+			r = parser.parse(qPrintable(expr), "en_US");
+		if (parser.parseErrors() > 0)
 			return false;
 
 		if (std::isnan(r))
@@ -771,20 +831,23 @@ bool ExpressionParser::tryEvaluateParametric(const QString& xexpr,
 	const Range<double> range{min, max};
 	const double step = range.stepSize(count);
 
+	Parser parser;
+	ParserLastErrorMessage lock(parser, m_lastErrorMessage);
+
 	const auto numberLocale = QLocale();
 	for (int i = 0; i < count; i++) {
-		assign_symbol("t", range.start() + step * i);
+		parser.assign_symbol("t", range.start() + step * i);
 
-		double x = parse(qPrintable(xexpr), qPrintable(numberLocale.name()));
-		if (Parser::parse_errors() > 0) // try default locale if failing
-			x = parse(qPrintable(xexpr), "en_US");
-		if (Parser::parse_errors() > 0)
+		double x = parser.parse(qPrintable(xexpr), qPrintable(numberLocale.name()));
+		if (parser.parseErrors() > 0) // try default locale if failing
+			x = parser.parse(qPrintable(xexpr), "en_US");
+		if (parser.parseErrors() > 0)
 			return false;
 
-		double y = parse(qPrintable(yexpr), qPrintable(numberLocale.name()));
-		if (Parser::parse_errors() > 0) // try default locale if failing
-			y = parse(qPrintable(yexpr), "en_US");
-		if (Parser::parse_errors() > 0)
+		double y = parser.parse(qPrintable(yexpr), qPrintable(numberLocale.name()));
+		if (parser.parseErrors() > 0) // try default locale if failing
+			y = parser.parse(qPrintable(yexpr), "en_US");
+		if (parser.parseErrors() > 0)
 			return false;
 
 		if (std::isnan(x))
@@ -800,5 +863,5 @@ bool ExpressionParser::tryEvaluateParametric(const QString& xexpr,
 }
 
 QString ExpressionParser::errorMessage() const {
-	return QLatin1String(lastErrorMessage());
+	return m_lastErrorMessage;
 }

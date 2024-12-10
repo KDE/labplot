@@ -17,13 +17,26 @@
 #include <gsl/gsl_version.h>
 #include <variant>
 
-namespace Parser {
+namespace Parsing {
 enum class FunctionGroups;
 
 struct funs {
 	std::function<QString(void)> description;
 	const char* name;
-	std::variant<func_t, func_t1, func_t2, func_t3, func_t4, func_t5, func_tPayload, func_t1Payload, func_t2Payload, func_t3Payload, func_t4Payload> fnct;
+	std::variant<func_t,
+				 func_t1,
+				 func_t2,
+				 func_t3,
+				 func_t4,
+				 func_t5,
+				 func_tPayload,
+				 func_tVariablePayload,
+				 func_tValueVariablePayload,
+				 func_t2ValueVariablePayload,
+				 func_t3ValueVariablePayload,
+				 func_tValuePayload,
+				 func_t2ValuePayload>
+		fnct;
 	int argc;
 	std::function<QString(int)> parameterFunction; // can be also a nullptr. Check needed!
 	FunctionGroups group;
@@ -31,27 +44,27 @@ struct funs {
 
 struct funs0Payload {
 	const char* name;
-	Parser::func_tPayload fnct;
+	Parsing::func_tPayload fnct;
 };
 
 struct funs1Payload {
 	const char* name;
-	Parser::func_t1Payload fnct;
+	Parsing::func_tVariablePayload fnct;
 };
 
 struct funs2Payload {
 	const char* name;
-	Parser::func_t2Payload fnct;
+	Parsing::func_tValueVariablePayload fnct;
 };
 
 struct funs3Payload {
 	const char* name;
-	Parser::func_t3Payload fnct;
+	Parsing::func_t2ValueVariablePayload fnct;
 };
 
 struct funs4Payload {
 	const char* name;
-	Parser::func_t4Payload fnct;
+	Parsing::func_t3ValueVariablePayload fnct;
 };
 
 extern struct funs _functions[];
@@ -162,8 +175,11 @@ extern const char* colfun_kurt;
 extern const char* colfun_entropy;
 extern const char* colfun_quantile;
 extern const char* colfun_percentile;
+extern const char* cell_curr_column;
+extern const char* cell_curr_column_default;
 
 extern const char* specialfun_cell;
+extern const char* specialfun_cell_default_value;
 extern const char* specialfun_ma;
 extern const char* specialfun_mr;
 extern const char* specialfun_smmin;
@@ -181,6 +197,6 @@ double greaterEqualThan(const double v1, const double v2);
 double lessThan(const double v1, const double v2);
 double lessEqualThan(const double v1, const double v2);
 
-} // namespace Parser
+} // namespace Parsing
 
 #endif /*FUNCTIONS_H*/

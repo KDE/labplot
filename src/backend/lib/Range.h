@@ -10,7 +10,7 @@
 #ifndef RANGE_H
 #define RANGE_H
 
-#include "backend/gsl/parser.h"
+#include "backend/gsl/Parser.h"
 #include "backend/nsl/nsl_math.h"
 #include "macros.h" //const auto numberLocale = QLocale();
 
@@ -65,18 +65,21 @@ public:
 	// start and end as localized strings like "pi + 1.5" (will be parsed)
 	Range(const QString& start, const QString& end, const Format format = Format::Numeric, const Scale scale = Scale::Linear) {
 		const auto numberLocale = QLocale();
+
+		Parsing::Parser parser;
+
 		// min
-		double min = Parser::parse(qPrintable(start.simplified()), qPrintable(numberLocale.name()));
-		if (Parser::parse_errors() > 0) // if parsing fails, try default locale
-			min = Parser::parse(qPrintable(start.simplified()), "en_US");
-		if (Parser::parse_errors() > 0)
+		double min = parser.parse(qPrintable(start.simplified()), qPrintable(numberLocale.name()));
+		if (parser.parseErrors() > 0) // if parsing fails, try default locale
+			min = parser.parse(qPrintable(start.simplified()), "en_US");
+		if (parser.parseErrors() > 0)
 			min = 0;
 
 		// max
-		double max = Parser::parse(qPrintable(end.simplified()), qPrintable(numberLocale.name()));
-		if (Parser::parse_errors() > 0) // if parsing fails, try default locale
-			max = Parser::parse(qPrintable(end.simplified()), "en_US");
-		if (Parser::parse_errors() > 0)
+		double max = parser.parse(qPrintable(end.simplified()), qPrintable(numberLocale.name()));
+		if (parser.parseErrors() > 0) // if parsing fails, try default locale
+			max = parser.parse(qPrintable(end.simplified()), "en_US");
+		if (parser.parseErrors() > 0)
 			max = 1.;
 
 		// TODO: check for NAN, INF?

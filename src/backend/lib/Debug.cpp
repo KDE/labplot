@@ -14,6 +14,13 @@ namespace {
 bool _infoTraceEnabled = false;
 bool _debugTraceEnabled = false;
 bool _perfTraceEnabled = false;
+
+#define PDEBUG 0
+#if PDEBUG == 1
+bool _debugParser = true;
+#else
+bool _debugParser = false;
+#endif
 }
 
 bool infoTraceEnabled() {
@@ -28,6 +35,9 @@ bool debugTraceEnabled() {
 }
 void enableDebugTrace(bool enabled) {
 	_debugTraceEnabled = enabled;
+}
+bool debugParserEnabled() {
+	return _debugParser;
 }
 
 bool perfTraceEnabled() {
