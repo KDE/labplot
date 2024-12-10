@@ -261,6 +261,10 @@ if(Cantor_FOUND)
     target_link_libraries(liblabplot Cantor::cantorlibs KF${KF_MAJOR_VERSION}::Service KF${KF_MAJOR_VERSION}::Parts)
 endif()
 
+if(Qt${QT_MAJOR_VERSION}Svg_FOUND)
+    target_link_libraries(liblabplot Qt${QT_MAJOR_VERSION}::Svg)
+endif()
+
 if(WIN32)
     target_link_libraries(liblabplot ${PSAPI})
 endif()
