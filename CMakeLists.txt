@@ -117,7 +117,7 @@ if(${ENABLE_COMPILER_OPTIMIZATION})
 else()
     set(COMPILER_OPTIMIZATION_FLAG "-O0")
 endif()
-set (GENERIC_FLAGS "-Wall -Wextra -Wundef -Wpointer-arith -Wunreachable-code -Wunused -Wdeprecated-declarations -fno-omit-frame-pointer -fstack-protector")
+set (GENERIC_FLAGS "-Wall -Wextra -Wundef -Wpointer-arith -Wunreachable-code -Wunused -Wdeprecated-declarations -fno-omit-frame-pointer -fstack-protector-strong")
 set (GENERIC_GNU_FLAGS "${COMPILER_OPTIMIZATION_FLAG} -Wcast-align -Wswitch-enum -fvisibility=default -pedantic")
 set (GENERIC_C_FLAGS "${GENERIC_FLAGS} -fno-exceptions")
 # liborigin needs exceptions
@@ -129,6 +129,9 @@ if("${CMAKE_C_COMPILER_ID}" MATCHES "GNU")
     if(CMAKE_C_COMPILER_VERSION VERSION_GREATER 10.99 AND CMAKE_C_COMPILER_VERSION VERSION_LESS 12)	# GCC 11 fails building readstat 1.1.8
         message(STATUS "Building ReadStat disabled due to GNU C compiler version 11")
         set(DONT_BUILD_READSTAT TRUE)
+    endif()
+    if(CMAKE_C_COMPILER_VERSION VERSION_GREATER_EQUAL 14) # GCC14 enables -fhardened and fails without -fPIC
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
     endif()
 elseif("${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
     message(STATUS "Clang C compiler ${CMAKE_C_COMPILER_VERSION} detected, adding compile flags")
@@ -161,6 +164,9 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
     else()
         message(STATUS "GNU C++ compiler ${CMAKE_CXX_COMPILER_VERSION} detected, adding compile flags")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS} ${GENERIC_GNU_FLAGS} -Wzero-as-null-pointer-constant") # -Wzero-as-null-pointer-constant since version 5
+    endif()
+    if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 14) # GCC14 enables -fhardened and fails without -fPIC
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
     endif()
 elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
     message(STATUS "Clang C++ compiler ${CMAKE_CXX_COMPILER_VERSION} detected, adding compile flags")
