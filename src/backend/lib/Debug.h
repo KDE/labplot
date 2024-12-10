@@ -46,9 +46,9 @@ bool debugParserEnabled();
 				  << std::resetiosflags(std::ios_base::boolalpha) << std::setprecision(-1) << std::endl;                                                       \
 	}
 
-#define DEBUG_PARSER(x) \
-	if (debugParserEnabled()) { \
-		std::cout << x << std::endl; \
+#define DEBUG_PARSER(x)                                                                                                                                        \
+	if (debugParserEnabled()) {                                                                                                                                \
+		std::cout << x << std::endl;                                                                                                                           \
 	}
 
 #else
@@ -56,8 +56,8 @@ bool debugParserEnabled();
 	{ }
 #define DEBUG(x)                                                                                                                                               \
 	{ }
-#define DEBUG_PARSER(x)
-        { }
+#define DEBUG_PARSER(x)                                                                                                                                        \
+	{ }
 #endif
 
 #define DEBUG_TEXTLABEL_BOUNDING_RECT 0
