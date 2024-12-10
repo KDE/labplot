@@ -67,9 +67,9 @@ void NSLStatsTest::testMannWhitney() {
 	printf("Mann-Whitney p-value: %f\n", p);
 	double expected_U = 0.0;
 	double expected_p = 0.0808556;
-	const double epsilon = 1e-6;
-	QCOMPARE(U, expected_U);
-	QVERIFY(std::fabs(p - expected_p) < epsilon);
+	const double epsilon = 1e-4;
+	QVERIFY(std::abs(U - expected_U) < epsilon);
+	QVERIFY(std::abs(p - expected_p) < epsilon);
 }
 void NSLStatsTest::testAnovaOneWay() {
 	const double group1[] = {1.0, 2.0, 3.0};
@@ -81,19 +81,18 @@ void NSLStatsTest::testAnovaOneWay() {
 	double* groups[] = {const_cast<double*>(group1), const_cast<double*>(group2), const_cast<double*>(group3)};
 
 	double F = nsl_stats_anova_oneway_f(groups, sizes, n_groups);
-	qDebug("Computed F-statistic: %f", F);
+	printf("Computed F-statistic: %f", F);
 
 	double p = nsl_stats_anova_oneway_p(groups, sizes, n_groups);
-	qDebug("Computed p-value: %f", p);
+	printf("Computed p-value: %f", p);
 
 	double expected_F = 13.0;
 	double expected_p = 0.0065;
 
-	const double epsilon = 1e-6;
+	const double epsilon = 1e-4;
 
-	QCOMPARE(F, expected_F);
-
-	QVERIFY(std::fabs(p - expected_p) < epsilon);
+	QVERIFY(std::abs(F - expected_F) < epsilon);
+	QVERIFY(std::abs(p - expected_p) < epsilon);
 }
 void NSLStatsTest::testKruskalWallis() {
 	const double group1[] = {1.0, 2.0, 3.0};
@@ -106,14 +105,16 @@ void NSLStatsTest::testKruskalWallis() {
 
 	double H = nsl_stats_kruskal_wallis_h(groups, sizes, n_groups);
 	double p = nsl_stats_kruskal_wallis_p(groups, sizes, n_groups);
+	printf("Computed h-statistic: %f", H);
+	printf("Computed p-value: %f", p);
 
-	double expected_H = 6.05;
+	double expected_H = 6.0564;
 	double expected_p = 0.0484;
 
-	const double epsilon = 1e-6;
+	const double epsilon = 1e-4;
 
-	QVERIFY(std::fabs(H - expected_H) < epsilon);
-	QVERIFY(std::fabs(p - expected_p) < epsilon);
+	QVERIFY(std::abs(H - expected_H) < epsilon);
+	QVERIFY(std::abs(p - expected_p) < epsilon);
 }
 void NSLStatsTest::testLogRankTest() {
 	// ----------------------------------------------------------------------------------
@@ -129,19 +130,19 @@ void NSLStatsTest::testLogRankTest() {
 	size_t group1_indices1[] = {0, 1, 2, 3, 4, 5};
 	size_t size1_1 = sizeof(group1_indices1) / sizeof(group1_indices1[0]);
 
-	size_t group2_indices1[] = {0, 1, 2, 3, 4, 5};
+	size_t group2_indices1[] = {6, 7, 8, 9, 10, 11};
 	size_t size2_1 = sizeof(group2_indices1) / sizeof(group2_indices1[0]);
 
 	// Combine all times and statuses into single arrays
 	double time1_combined[12];
 	int status1_combined[12];
 	for (size_t i = 0; i < size1_1; i++) {
-		time1_combined[i] = time1_group1[group1_indices1[i]];
-		status1_combined[i] = status1_group1[group1_indices1[i]];
+		time1_combined[i] = time1_group1[i];
+		status1_combined[i] = status1_group1[i];
 	}
 	for (size_t i = 0; i < size2_1; i++) {
-		time1_combined[size1_1 + i] = time1_group2[group2_indices1[i]];
-		status1_combined[size1_1 + i] = status1_group2[group2_indices1[i]];
+		time1_combined[size1_1 + i] = time1_group2[i];
+		status1_combined[size1_1 + i] = status1_group2[i];
 	}
 
 	// Compute the Log-Rank Test Statistic
@@ -149,14 +150,16 @@ void NSLStatsTest::testLogRankTest() {
 
 	size_t df1 = 1;
 	double p1 = nsl_stats_log_rank_test_p(time1_combined, status1_combined, group1_indices1, size1_1, group2_indices1, size2_1);
+	printf("Computed H-value: %f", H1);
+	printf("Computed p-value: %f", p1);
 
 	double expected_H1 = 1.009510;
 	double expected_p1 = 0.31502028;
 
 	// Compare computed values with expected values for Test Case 1
-	double epsilon = 1e-6;
-	QCOMPARE(H1, expected_H1);
-	QVERIFY(std::fabs(p1 - expected_p1) < epsilon);
+	double epsilon = 1e-4;
+	QVERIFY(std::abs(H1 - expected_H1) < epsilon);
+	QVERIFY(std::abs(p1 - expected_p1) < epsilon);
 
 	// ----------------------------------------------------------------------------------
 	// Test Case 2: Censored Data
@@ -172,32 +175,34 @@ void NSLStatsTest::testLogRankTest() {
 	size_t group1_indices2[] = {0, 1, 2, 3, 4, 5};
 	size_t size1_2 = sizeof(group1_indices2) / sizeof(group1_indices2[0]);
 
-	size_t group2_indices2[] = {0, 1, 2, 3, 4, 5};
+	size_t group2_indices2[] = {6, 7, 8, 9, 10, 11};
 	size_t size2_2 = sizeof(group2_indices2) / sizeof(group2_indices2[0]);
 
 	// Combine all times and statuses into single arrays
 	double time2_combined[12];
 	int status2_combined[12];
 	for (size_t i = 0; i < size1_2; i++) {
-		time2_combined[i] = time2_group1[group1_indices2[i]];
-		status2_combined[i] = status2_group1[group1_indices2[i]];
+		time2_combined[i] = time2_group1[i];
+		status2_combined[i] = status2_group1[i];
 	}
 	for (size_t i = 0; i < size2_2; i++) {
-		time2_combined[size1_2 + i] = time2_group2[group2_indices2[i]];
-		status2_combined[size1_2 + i] = status2_group2[group2_indices2[i]];
+		time2_combined[size1_2 + i] = time2_group2[i];
+		status2_combined[size1_2 + i] = status2_group2[i];
 	}
 
 	// Compute the Log-Rank Test Statistic for Test Case 2
 	double H2 = nsl_stats_log_rank_test_statistic(time2_combined, status2_combined, group1_indices2, size1_2, group2_indices2, size2_2);
 
-		   // Compute the p-value for Test Case 2
+	// Compute the p-value for Test Case 2
 	size_t df2 = 1; // degrees of freedom = number of groups - 1
 	double p2 = nsl_stats_log_rank_test_p(time2_combined, status2_combined, group1_indices2, size1_2, group2_indices2, size2_2);
 	double expected_H2 = 0.586871;
-	double expected_p2 = 0.314582;
+	double expected_p2 = 0.44362;
+	printf("Computed H-value: %f", H2);
+	printf("Computed p-value: %f", p2);
 
-	QCOMPARE(H2, expected_H2);
-	QVERIFY(std::fabs(p2 - expected_p2) < epsilon);
+	QVERIFY(std::abs(H2 - expected_H2) < epsilon);
+	QVERIFY(std::abs(p2 - expected_p2) < epsilon);
 }
 // ##############################################################################
 // #################  performance

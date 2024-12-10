@@ -529,7 +529,7 @@ double nsl_stats_log_rank_test_statistic(const double* time,
 		return NAN;
 	}
 
-	// Populate observations
+		   // Populate observations
 	for (size_t i = 0; i < size1; i++) {
 		observations[i].time = time[group1_indices[i]];
 		observations[i].status = status[group1_indices[i]];
@@ -541,10 +541,10 @@ double nsl_stats_log_rank_test_statistic(const double* time,
 		observations[size1 + i].group = 2;
 	}
 
-	// Sort observations by time using qsort
+		   // Sort observations by time using qsort
 	qsort(observations, total_size, sizeof(Observation), compare_time);
 
-	// Initialize risk sets
+		   // Initialize risk sets
 	size_t n_risk_1 = size1;
 	size_t n_risk_2 = size2;
 	size_t n_risk_total = total_size;
@@ -558,7 +558,7 @@ double nsl_stats_log_rank_test_statistic(const double* time,
 		double current_time = observations[i].time;
 		size_t j = i;
 
-		// Find the range of events at the current time
+			   // Find the range of events at the current time
 		while (j < total_size && observations[j].time == current_time) {
 			j++;
 		}
@@ -570,7 +570,7 @@ double nsl_stats_log_rank_test_statistic(const double* time,
 		size_t n_risk_at_time_2 = n_risk_2;
 		size_t n_risk_at_time_total = n_risk_total;
 
-		// Count events at current_time
+			   // Count events at current_time
 		for (size_t k = i; k < j; k++) {
 			if (observations[k].status == 1) {
 				d++;
@@ -596,7 +596,7 @@ double nsl_stats_log_rank_test_statistic(const double* time,
 			O1 += (double)d1;
 		}
 
-		// Update risk sets by removing events and censored observations at current_time
+			   // Update risk sets by removing events and censored observations at current_time
 		for (size_t k = i; k < j; k++) {
 			if (observations[k].status == 1) {
 				if (observations[k].group == 1) {
@@ -621,13 +621,12 @@ double nsl_stats_log_rank_test_statistic(const double* time,
 
 	free(observations);
 
-	// Check for variance being zero
+		   // Check for variance being zero
 	if (V1 <= 0.0) {
 		fprintf(stderr, "Error: Variance is zero or negative. Cannot compute test statistic.\n");
 		return NAN;
 	}
-
-	// Calculate test statistic
+		   // Calculate test statistic
 	double H = pow(O1 - E1, 2) / V1;
 	return H;
 }
