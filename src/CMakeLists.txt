@@ -601,7 +601,6 @@ target_link_libraries(labplotbackendlib
     ads::qt${QT_VERSION_MAJOR}advanceddocking
 )
 target_link_libraries(labplotlib
-    Qt${QT_MAJOR_VERSION}::Svg
     Qt${QT_MAJOR_VERSION}::Sql
     Qt${QT_MAJOR_VERSION}::PrintSupport    # QPrinter
 #     Qt${QT_MAJOR_VERSION}::Qml
@@ -624,6 +623,9 @@ target_link_libraries(labplotlib
 if(Qt${QT_MAJOR_VERSION}SerialPort_FOUND)
     target_link_libraries(labplotbackendlib Qt${QT_MAJOR_VERSION}::SerialPort)
     target_link_libraries(labplotlib Qt${QT_MAJOR_VERSION}::SerialPort)
+endif()
+if(Qt${QT_MAJOR_VERSION}Svg_FOUND)
+    target_link_libraries(labplotlib Qt${QT_MAJOR_VERSION}::Svg)
 endif()
 if(Qt${QT_MAJOR_VERSION}Mqtt_FOUND)
     target_link_libraries(labplotbackendlib Qt${QT_MAJOR_VERSION}::Mqtt)
