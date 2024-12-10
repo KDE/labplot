@@ -28,7 +28,8 @@ public:
 	void setSpecialFunctionValuePayload(const char* function_name, Parsing::func_tValuePayload, std::shared_ptr<Parsing::Payload> payload);
 	void setSpecialFunction2ValuePayload(const char* function_name, Parsing::func_t2ValuePayload, std::shared_ptr<Parsing::Payload> payload);
 	void setSpecialFunctionVariablePayload(const char* function_name, Parsing::func_tVariablePayload funct, std::shared_ptr<Parsing::Payload> payload);
-	void setSpecialFunctionValueVariablePayload(const char* function_name, Parsing::func_tValueVariablePayload funct, std::shared_ptr<Parsing::Payload> payload);
+	void
+	setSpecialFunctionValueVariablePayload(const char* function_name, Parsing::func_tValueVariablePayload funct, std::shared_ptr<Parsing::Payload> payload);
 
 	static bool isValid(const QString& expr, const QStringList& vars = QStringList());
 	QStringList getParameter(const QString& expr, const QStringList& vars);
@@ -55,10 +56,10 @@ public:
 							  const QStringList& paramNames,
 							  const QVector<double>& paramValues);
 	bool tryEvaluateCartesian(const QString& expr,
-									 const QStringList& vars,
-									 const QVector<QVector<double>*>& xVectors,
-									 QVector<double>* yVector,
-									 bool performanceOptimization = true);
+							  const QStringList& vars,
+							  const QVector<QVector<double>*>& xVectors,
+							  QVector<double>* yVector,
+							  bool performanceOptimization = true);
 	bool tryEvaluatePolar(const QString& expr, const QString& min, const QString& max, int count, QVector<double>* xVector, QVector<double>* yVector);
 	bool tryEvaluateParametric(const QString& expr1,
 							   const QString& expr2,

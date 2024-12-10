@@ -10,12 +10,12 @@
 #ifndef PARSERCLASS_H
 #define PARSERCLASS_H
 
-#include <string>
-#include <memory>
 #include <cmath>
+#include <memory>
+#include <string>
 
-#include "parserFunctionTypes.h"
 #include "ParserDeclarations.h"
+#include "parserFunctionTypes.h"
 
 class ExpressionParser;
 
@@ -33,7 +33,7 @@ public:
 	Parser(bool highPerformance = true);
 
 	double parse(const char* string, const char* locale);
-	double parse_with_vars(const char *str, const parser_var *vars, int nvars, const char* locale);
+	double parse_with_vars(const char* str, const parser_var* vars, int nvars, const char* locale);
 
 	int parseErrors() const;
 	std::string lastErrorMessage() const;
@@ -55,18 +55,18 @@ public:
 	UsedSymbols usedSymbolsState() const;
 	void addUsedSymbol(BaseSymbol* s);
 	BaseSymbol* get_used_symbol(const char* symbol_name);
-	int remove_symbol(const char *symbol_name);
+	int remove_symbol(const char* symbol_name);
 	std::vector<std::string> get_used_symbols();
 
 	void setLastErrorMessage(const std::string& str);
 
 private:
-	double mResult {std::nan("0")};
-	int mParseErrors {0};
+	double mResult{std::nan("0")};
+	int mParseErrors{0};
 	std::string mLastErrorMessage;
 	size_t mVariablesCounter{0};
 	UsedSymbols mUsedSymbolsStateMachine; /* if Only, only the symbols in the "used_symbols" are used (performance reason) */
-	bool mSkipSpecialFunctionEvaluation {false};
+	bool mSkipSpecialFunctionEvaluation{false};
 	std::vector<BaseSymbol*> mUsedSymbols;
 
 	friend class ExpressionParser;

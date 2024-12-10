@@ -594,8 +594,10 @@ void ExpressionParserTest::testBenchmark() {
 		xVectors << x; // x
 		xVectors << y; // y
 		QVector<double> yVector(values); // random value
-		QBENCHMARK { auto* parser = ExpressionParser::getInstance();
-	parser->tryEvaluateCartesian(expr, vars, xVectors, &yVector, true); }
+		QBENCHMARK {
+			auto* parser = ExpressionParser::getInstance();
+			parser->tryEvaluateCartesian(expr, vars, xVectors, &yVector, true);
+		}
 		// QCOMPARE(QLatin1String(Parsing::lastErrorMessage()), QStringLiteral(""));
 
 		QCOMPARE(yVector.size(), values);
@@ -626,8 +628,10 @@ void ExpressionParserTest::testBenchmark() {
 		xVectors << x; // x
 		xVectors << y; // y
 		QVector<double> yVector(values); // random value
-		QBENCHMARK { auto* parser = ExpressionParser::getInstance();
-	parser->tryEvaluateCartesian(expr, vars, xVectors, &yVector, false); }
+		QBENCHMARK {
+			auto* parser = ExpressionParser::getInstance();
+			parser->tryEvaluateCartesian(expr, vars, xVectors, &yVector, false);
+		}
 		// QCOMPARE(QLatin1String(Parsing::lastErrorMessage()), QStringLiteral(""));
 
 		QCOMPARE(yVector.size(), values);
@@ -653,7 +657,7 @@ void ExpressionParserTest::testBenchmark() {
 //	xVectors << new QVector<double>({4., 5., 6., 9.}); // y
 //	QVector<double> yVector({101., 123., 345., 239., 1290., 43290., 238., 342., 823., 239.});
 //	auto* parser = ExpressionParser::getInstance();
-	//parser->tryEvaluateCartesian(expr, vars, xVectors, &yVector);
+// parser->tryEvaluateCartesian(expr, vars, xVectors, &yVector);
 
 //	QVector<double> ref({9, 10, 11, 14}); // 5 + y
 //	QCOMPARE(yVector.size(), 10);

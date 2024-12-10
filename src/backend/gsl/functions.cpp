@@ -9,9 +9,9 @@
 */
 
 #include "functions.h"
+#include "ParserDeclarations.h"
 #include "backend/nsl/nsl_math.h"
 #include "backend/nsl/nsl_sf_basic.h"
-#include "ParserDeclarations.h"
 #include "parserFunctionTypes.h"
 
 #include <KLocalizedString>

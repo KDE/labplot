@@ -29,19 +29,20 @@
 using namespace Parsing;
 
 namespace {
-	class ParserLastErrorMessage {
-	public:
-		ParserLastErrorMessage(const Parser& parser, QString& lastErrorMessage): mParser(parser), mLastErrorMessage(lastErrorMessage) {
+class ParserLastErrorMessage {
+public:
+	ParserLastErrorMessage(const Parser& parser, QString& lastErrorMessage)
+		: mParser(parser)
+		, mLastErrorMessage(lastErrorMessage) {
+	}
+	~ParserLastErrorMessage() {
+		mLastErrorMessage = QString::fromStdString(mParser.lastErrorMessage());
+	}
 
-		}
-		~ParserLastErrorMessage() {
-			mLastErrorMessage = QString::fromStdString(mParser.lastErrorMessage());
-		}
-
-	private:
-		const Parser& mParser;
-		QString& mLastErrorMessage;
-	};
+private:
+	const Parser& mParser;
+	QString& mLastErrorMessage;
+};
 }
 
 ExpressionParser* ExpressionParser::m_instance{nullptr};

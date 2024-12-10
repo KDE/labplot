@@ -1,12 +1,12 @@
 #include "Parser.h"
 #include "ParserDeclarations.h"
-#include "parser_private.h"
 #include "backend/lib/Debug.h"
+#include "parser_private.h"
 
 namespace Parsing {
 
-Parser::Parser(bool highPerformance): mUsedSymbolsStateMachine(highPerformance ? UsedSymbols::Initialize : UsedSymbols::No) {
-
+Parser::Parser(bool highPerformance)
+	: mUsedSymbolsStateMachine(highPerformance ? UsedSymbols::Initialize : UsedSymbols::No) {
 }
 
 double Parser::parse(const char* string, const char* locale) {
@@ -26,8 +26,8 @@ double Parser::parse(const char* string, const char* locale) {
 	/* pdebug("PARSER: Call yyparse() for \"%s\" (len = %d)\n", p.string, (int)strlen(p.string)); */
 
 	/* parameter for yylex */
-	mResult = NAN;	/* default value */
-	mParseErrors = 0;	/* reset error count */
+	mResult = NAN; /* default value */
+	mParseErrors = 0; /* reset error count */
 	yyparse(&p);
 
 	mResult = p.result;
@@ -42,11 +42,11 @@ double Parser::parse(const char* string, const char* locale) {
 	return mResult;
 }
 
-double Parser::parse_with_vars(const char *str, const parser_var *vars, int nvars, const char* locale) {
+double Parser::parse_with_vars(const char* str, const parser_var* vars, int nvars, const char* locale) {
 	DEBUG_PARSER("PARSER: parse_with_var('" << str << "') len = " << (int)strlen(str));
 
 	int i;
-	for(i = 0; i < nvars; i++) {	/*assign vars */
+	for (i = 0; i < nvars; i++) { /*assign vars */
 		DEBUG_PARSER("PARSER: Assign '" << vars[i].name << "' the value " << vars[i].value);
 		assign_symbol(vars[i].name, vars[i].value);
 	}
@@ -74,7 +74,7 @@ bool Parser::skipSpecialFunctionEvaluation() const {
 	return mSkipSpecialFunctionEvaluation;
 }
 
-int yyerror(param *p, const char *s) {
+int yyerror(param* p, const char* s) {
 	/* remove trailing newline */
 	DEBUG_PARSER("PARSER ERROR: " << s << " @ position " << (int)p->pos << " of string '" << p->string << "'");
 
@@ -82,7 +82,7 @@ int yyerror(param *p, const char *s) {
 }
 
 BaseSymbol* Parser::get_used_symbol(const char* symbol_name) {
-	for (auto* s: mUsedSymbols) {
+	for (auto* s : mUsedSymbols) {
 		if (s->name == symbol_name) {
 			DEBUG_PARSER("PARSER:		USED SYMBOL FOUND\n");
 			return s;
@@ -92,13 +92,12 @@ BaseSymbol* Parser::get_used_symbol(const char* symbol_name) {
 	return nullptr;
 }
 
-int Parser::remove_symbol(const char *symbol_name) {
+int Parser::remove_symbol(const char* symbol_name) {
 	return remove_symbol_(symbol_name);
 }
 
 bool Parser::set_specialfunctionPayload(const char* function_name, func_tPayload function, std::weak_ptr<Payload> payload) {
 	DEBUG_PARSER("PARSER: set_SpecialFunction0()");
-
 
 	auto* ptr = get_variable_symbol(function_name);
 	if (!ptr) // function name not found
@@ -114,7 +113,6 @@ bool Parser::set_specialfunctionPayload(const char* function_name, func_tPayload
 bool Parser::set_specialfunctionValuePayload(const char* function_name, func_tValuePayload function, std::shared_ptr<Payload> payload) {
 	DEBUG_PARSER("PARSER: set_specialfunctionValuePayload()");
 
-
 	auto* ptr = get_variable_symbol(function_name);
 	if (!ptr) // function name not found
 		return false;
@@ -127,7 +125,6 @@ bool Parser::set_specialfunctionValuePayload(const char* function_name, func_tVa
 
 bool Parser::set_specialfunction2ValuePayload(const char* function_name, func_t2ValuePayload function, std::shared_ptr<Payload> payload) {
 	DEBUG_PARSER("PARSER: set_specialfunction2ValuePayload()");
-
 
 	auto* ptr = get_variable_symbol(function_name);
 	if (!ptr) // function name not found
@@ -142,7 +139,6 @@ bool Parser::set_specialfunction2ValuePayload(const char* function_name, func_t2
 bool Parser::set_specialfunctionVariablePayload(const char* function_name, func_tVariablePayload function, std::shared_ptr<Payload> payload) {
 	DEBUG_PARSER("PARSER: set_specialfunctionVariablePayload()");
 
-
 	auto* ptr = get_variable_symbol(function_name);
 	if (!ptr) // function name not found
 		return false;
@@ -155,7 +151,6 @@ bool Parser::set_specialfunctionVariablePayload(const char* function_name, func_
 
 bool Parser::set_specialfunctionValueVariablePayload(const char* function_name, func_tValueVariablePayload function, std::shared_ptr<Payload> payload) {
 	DEBUG_PARSER("PARSER: set_specialfunctionValueVariablePayload()");
-
 
 	auto* ptr = get_variable_symbol(function_name);
 	if (!ptr) // function name not found
@@ -171,7 +166,6 @@ bool Parser::set_specialfunctionValueVariablePayload(const char* function_name, 
 bool Parser::set_specialfunction2ValueVariablePayload(const char* function_name, func_t2ValueVariablePayload function, std::shared_ptr<Payload> payload) {
 	DEBUG_PARSER("PARSER: set_specialfunction2ValueVariablePayload()");
 
-
 	auto* ptr = get_variable_symbol(function_name);
 	if (!ptr) // function name not found
 		return false;
@@ -185,7 +179,6 @@ bool Parser::set_specialfunction2ValueVariablePayload(const char* function_name,
 
 bool Parser::set_specialfunction3ValueVariablePayload(const char* function_name, func_t3ValueVariablePayload function, std::shared_ptr<Payload> payload) {
 	DEBUG_PARSER("PARSER: set_specialfunction3ValueVariablePayload()");
-
 
 	auto* ptr = get_variable_symbol(function_name);
 	if (!ptr) // function name not found
@@ -204,7 +197,7 @@ UsedSymbols Parser::usedSymbolsState() const {
 
 std::vector<std::string> Parser::get_used_symbols() {
 	std::vector<std::string> names;
-	for (const auto* s: mUsedSymbols) {
+	for (const auto* s : mUsedSymbols) {
 		names.push_back(std::string(s->name));
 	}
 	return names;
@@ -221,7 +214,7 @@ void Parser::setLastErrorMessage(const std::string& str) {
 // ######################################################################
 
 Symbol* get_variable_symbol(const char* symbol_name) {
-	for (auto* s: variable_symbols) {
+	for (auto* s : variable_symbols) {
 		if (s->name == symbol_name) {
 			DEBUG_PARSER("PARSER:		SYMBOL FOUND\n");
 			return s;
@@ -232,7 +225,7 @@ Symbol* get_variable_symbol(const char* symbol_name) {
 }
 
 StaticSymbol* get_static_symbol(const char* symbol_name) {
-	for (auto* s: static_symbols) {
+	for (auto* s : static_symbols) {
 		if (s->name == symbol_name) {
 			DEBUG_PARSER("PARSER:		SYMBOL FOUND\n");
 			return s;
@@ -267,4 +260,3 @@ void clear_variable_symbols() {
 }
 
 } // namespace Parsing
-

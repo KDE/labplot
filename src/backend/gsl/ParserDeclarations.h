@@ -11,17 +11,17 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+#include "backend/lib/Debug.h"
 #include "constants.h"
 #include "functions.h"
 #include "parserFunctionTypes.h"
 #include <gsl/gsl_version.h>
 #include <memory>
 #include <variant>
-#include "backend/lib/Debug.h"
 
 namespace Parsing {
 
-	class Parser;
+class Parser;
 
 // variables to pass to parser
 #define MAX_VARNAME_LENGTH 10
@@ -38,13 +38,13 @@ enum class UsedSymbols {
 
 /* params passed to yylex (and yyerror) */
 typedef struct param {
-	size_t pos{0};		/* current position in string */
-	std::string_view string;		/* the string to parse */
-	const char* locale {nullptr};	/* name of locale to convert numbers */
+	size_t pos{0}; /* current position in string */
+	std::string_view string; /* the string to parse */
+	const char* locale{nullptr}; /* name of locale to convert numbers */
 	Parser* parser{nullptr};
 	double result{std::nan("0")};
-	size_t variablesCounter {0};
-	size_t errorCount {0};
+	size_t variablesCounter{0};
+	size_t errorCount{0};
 } param;
 
 struct Payload {

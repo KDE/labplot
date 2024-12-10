@@ -2159,7 +2159,7 @@ struct PayloadColumn : public Parsing::Payload {
 };
 
 #define COLUMN_FUNCTION(function_name, evaluation_function)                                                                                                    \
-	double column##function_name(const std::string_view& variable, const std::weak_ptr<Parsing::Payload> payload) {                                             \
+	double column##function_name(const std::string_view& variable, const std::weak_ptr<Parsing::Payload> payload) {                                            \
 		const auto p = std::dynamic_pointer_cast<PayloadColumn>(payload.lock());                                                                               \
 		if (!p) {                                                                                                                                              \
 			assert(p); /* Debug build */                                                                                                                       \
