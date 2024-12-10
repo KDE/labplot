@@ -16,9 +16,9 @@
 #include "backend/datapicker/Transform.h"
 #include "backend/worksheet/Worksheet.h"
 #include "frontend/datapicker/DatapickerImageView.h"
+#include <frontend/GuiTools.h>
 
-#include <gsl/gsl_const_cgs.h>
-#include <limits>
+#include <KLocalizedString>
 
 #include <QActionGroup>
 #include <QClipboard>
@@ -29,15 +29,17 @@
 #include <QMimeData>
 #include <QPrinter>
 #include <QScreen>
-#include <QSvgGenerator>
 #include <QTimeLine>
 #include <QToolBar>
 #include <QToolButton>
 #include <QWheelEvent>
+#ifdef HAVE_QTSVG
+#include <QSvgGenerator>
+#endif
 
-#include <KLocalizedString>
+#include <limits>
 
-#include <frontend/GuiTools.h>
+#include <gsl/gsl_const_cgs.h>
 
 /**
  * \class DatapickerImageView
@@ -808,6 +810,7 @@ void DatapickerImageView::exportToFile(const QString& path, const WorksheetView:
 		exportPaint(&painter, targetRect, sourceRect);
 		painter.end();
 	} else if (format == WorksheetView::ExportFormat::SVG) {
+#ifdef HAVE_QTSVG
 		QSvgGenerator generator;
 		generator.setFileName(path);
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
@@ -823,6 +826,7 @@ void DatapickerImageView::exportToFile(const QString& path, const WorksheetView:
 		painter.begin(&generator);
 		exportPaint(&painter, targetRect, sourceRect);
 		painter.end();
+#endif
 	} else {
 		// PNG
 		// TODO add all formats supported by Qt in QImage

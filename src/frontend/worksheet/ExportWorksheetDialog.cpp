@@ -60,9 +60,11 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent)
 	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("application-pdf")),
 						  i18n("Portable Data Format (PDF)"),
 						  static_cast<int>(WorksheetView::ExportFormat::PDF));
+#ifdef HAVE_QTSVG
 	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-svg+xml")),
 						  i18n("Scalable Vector Graphics (SVG)"),
 						  static_cast<int>(WorksheetView::ExportFormat::SVG));
+#endif
 	ui->cbFormat->insertSeparator(3);
 	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-png")),
 						  i18n("Portable Network Graphics (PNG)"),

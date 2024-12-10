@@ -25,6 +25,7 @@ optional packages
 	* QXlsx for importing Excel xlsx files (will be build if not available)
 	* Orcus for importing ODS (Open Document Spreadsheet) files (including the devel-packages, liborcus-devel and libixion-devel or similar)
 	* Qt SerialPort to support serial port functionality
+	* Qt Svg to support SVG export
 	* Qt MQTT module (https://github.com/qt/qtmqtt) to support reading and plotting of data from MQTT brokers
 	* KUserFeedback to support collecting feedback from users
 	* Discount to support Markdown markup language text
@@ -57,6 +58,7 @@ To compile LabPlot without optional dependencies even if they are present on the
 -DENABLE_MATIO=OFF
 -DENABLE_MQTT=OFF
 -DENABLE_QTSERIALPORT=OFF
+-DENABLE_QTSVG=OFF
 -DENABLE_DISCOUNT=OFF
 -DENABLE_XLSX=OFF
 -DENABLE_ORCUS=OFF

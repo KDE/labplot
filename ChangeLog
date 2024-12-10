@@ -48,6 +48,7 @@ Bug fixes:
 Internal:
 	* use name LabPlot/labplot consistenly (renamed LabPlot2/labplot2)
 	* switch to Qt6 only
+	* make QtSvg optional
 
 
 -----2.11.1 (16.07.2024) -----

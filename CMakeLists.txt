@@ -44,7 +44,6 @@ find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONEN
 #     QuickWidgets
     PrintSupport
     Sql
-    Svg
     Widgets
     Test
 )
@@ -279,6 +278,7 @@ endif()
 option(ENABLE_MATIO "Build with Matio support" ON)
 option(ENABLE_MQTT "Build with MQTT support" ON)
 option(ENABLE_QTSERIALPORT "Build with QtSerialPort support" ON)
+option(ENABLE_QTSVG "Build with QtSvg support" ON)
 option(ENABLE_DISCOUNT "Build with Discount support" ON)
 option(ENABLE_XLSX "Build with XLSX (Excel) support" ON)
 option(ENABLE_MCAP "Build with MCAP support" ON)
@@ -436,7 +436,7 @@ if(ENABLE_QTSERIALPORT)
     find_package(Qt${QT_MAJOR_VERSION}SerialPort ${QT_MIN_VERSION} NO_MODULE)
     set_package_properties(Qt{QT_MAJOR_VERSION}SerialPort PROPERTIES
         DESCRIPTION "Qt Serial Port library"
-        URL "https://doc.qt.io/qt-5/qtserialport-index.html"
+        URL "https://doc.qt.io/qt-6/qtserialport-index.html"
         PURPOSE "Support basic functionality of serial ports.")
     if(Qt${QT_MAJOR_VERSION}SerialPort_FOUND)
         message(STATUS "Found Qt${QT_MAJOR_VERSION}SerialPort Library")
@@ -446,6 +446,23 @@ if(ENABLE_QTSERIALPORT)
     endif()
 else()
     message(STATUS "Qt${QT_MAJOR_VERSION}SerialPort Library DISABLED")
+endif()
+
+### QtSvg (optional) ###############################
+if(ENABLE_QTSVG)
+    find_package(Qt${QT_MAJOR_VERSION}Svg ${QT_MIN_VERSION} NO_MODULE)
+    set_package_properties(Qt{QT_MAJOR_VERSION}Svg PROPERTIES
+        DESCRIPTION "Qt SVG library"
+        URL "https://doc.qt.io/qt-6/qtsvg-index.html"
+        PURPOSE "Scalable Vector Graphics support.")
+    if(Qt${QT_MAJOR_VERSION}Svg_FOUND)
+        message(STATUS "Found Qt${QT_MAJOR_VERSION}Svg Library")
+        add_definitions(-DHAVE_QTSVG)
+    else()
+        message(STATUS "Qt${QT_MAJOR_VERSION}Svg Library NOT FOUND")
+    endif()
+else()
+    message(STATUS "Qt${QT_MAJOR_VERSION}Svg Library DISABLED")
 endif()
 
 ### FITS (optional) ###############################
