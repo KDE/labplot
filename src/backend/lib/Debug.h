@@ -56,6 +56,8 @@ bool debugParserEnabled();
 	{ }
 #define DEBUG(x)                                                                                                                                               \
 	{ }
+#define DEBUG_PARSER(x)
+        { }
 #endif
 
 #define DEBUG_TEXTLABEL_BOUNDING_RECT 0
