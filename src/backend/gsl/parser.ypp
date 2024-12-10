@@ -77,11 +77,12 @@ namespace {
                 Parser::_lastErrorMessage = ss.str();
 	}
 
-	static void yyerror(const char* msg) {
+/*	static void yyerror(const char* msg) {
                 std::stringstream ss;
                 ss << "Parsing Error: " << msg;
                 Parser::_lastErrorMessage = ss.str();
 	}
+*/
 } // anonymous namespace
 
 %}
