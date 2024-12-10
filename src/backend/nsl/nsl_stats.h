@@ -115,6 +115,12 @@ typedef struct {
 	double value;
 	size_t group;
 } Rank;
+// Observation structure for log rank test
+typedef struct {
+	double time;
+	int status;    // 1 = event occurred, 0 = censored
+	size_t group;  // 1 or 2
+} Observation;
 
 // Function prototypes for Log-Rank Test
 double nsl_stats_log_rank_test_statistic(const double* time,
