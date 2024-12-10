@@ -31,8 +31,8 @@ public:
 	// void setModel(AbstractItemModel*) override;
 	void setCurrentModelIndex(const QModelIndex&);
 	void setAspect(const AbstractAspect*);
+	void setAspect(const AbstractAspect* aspect, const QString& path);
 	AbstractAspect* currentAspect() const;
-	void setColumn(const AbstractColumn*, const QString&);
 	QModelIndex currentModelIndex() const;
 
 	void setTopLevelClasses(const QList<AspectType>&);
