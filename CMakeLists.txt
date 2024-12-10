@@ -116,7 +116,7 @@ if(${ENABLE_COMPILER_OPTIMIZATION})
 else()
     set(COMPILER_OPTIMIZATION_FLAG "-O0")
 endif()
-set (GENERIC_FLAGS "-Wall -Wextra -Wundef -Wpointer-arith -Wunreachable-code -Wunused -Wdeprecated-declarations -fno-omit-frame-pointer -fstack-protector-strong")
+set (GENERIC_FLAGS "-Wall -Wextra -Wundef -Wpointer-arith -Wunreachable-code -Wunused -Wdeprecated-declarations -fno-omit-frame-pointer -fstack-protector-strong -Wno-error=hardened")
 set (GENERIC_GNU_FLAGS "${COMPILER_OPTIMIZATION_FLAG} -Wcast-align -Wswitch-enum -fvisibility=default -pedantic")
 set (GENERIC_C_FLAGS "${GENERIC_FLAGS} -fno-exceptions")
 # liborigin needs exceptions
@@ -155,6 +155,7 @@ else()
     message(STATUS "UNKNOWN C compiler, adding compile flags")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${GENERIC_C_FLAGS}")
 endif()
+message(STATUS "CFLAGS =${CMAKE_C_FLAGS}")
 
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
     if(QT_VERSION VERSION_GREATER_EQUAL 5.7.0 AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "9")
@@ -193,6 +194,7 @@ else()
     message(STATUS "UNKNOWN C++ compiler, adding compile flags")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS}")
 endif()
+message(STATUS "CXXFLAGS =${CMAKE_CXX_FLAGS}")
 
 ##########################################################
 
@@ -218,7 +220,7 @@ if(NOT WIN32)
     add_definitions(-DQT_STRICT_ITERATORS)
 endif()
 
-include_directories(${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
+include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 add_definitions(-DLVERSION=\"${labplot_VERSION}\")
 add_definitions(-DCXX_COMPILER=\"${CMAKE_CXX_COMPILER_ID}\ ${CMAKE_CXX_COMPILER_VERSION}\")
@@ -720,6 +722,11 @@ install(FILES org.kde.labplot.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR}
 # clang format
 #file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES *.cpp *.h *.c)
 #kde_clang_format(${ALL_CLANG_FORMAT_SOURCE_FILES})
+
+get_target_property(COMPILE_DEFINITIONS labplot COMPILE_DEFINITIONS)
+message(STATUS "COMPILE_DEFINITIONS = ${COMPILE_DEFINITIONS}")
+get_directory_property(DIRECTORY_DEFINITIONS COMPILE_DEFINITIONS)
+message(STATUS "DIRECTORY DEFINITIONS = ${DIRECTORY_DEFINITIONS}\n")
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
