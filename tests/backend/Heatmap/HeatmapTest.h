@@ -34,6 +34,10 @@ private Q_SLOTS:
 	void testColorAutomatic();
 	void testColorManual();
 
+	void testClippingBottomLeft();
+	void testClippingBottomRight();
+	void testClippingBottomRight2();
+
 	void saveLoad();
 
 	void minMaxMatrix();
