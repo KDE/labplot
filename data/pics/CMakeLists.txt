@@ -56,5 +56,5 @@ sc-apps-labplot-zoom-select.svg
 sc-apps-labplot-zoom-select-x.svg
 sc-apps-labplot-zoom-select-y.svg
 sc-apps-labplot-zoom.svg
-DESTINATION ${KDE_INSTALL_ICONDIR}/
+DESTINATION ${KDE_INSTALL_ICONDIR}
 THEME hicolor)

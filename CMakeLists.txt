@@ -129,7 +129,7 @@ if("${CMAKE_C_COMPILER_ID}" MATCHES "GNU")
         message(STATUS "Building ReadStat disabled due to GNU C compiler version 11")
         set(DONT_BUILD_READSTAT TRUE)
     endif()
-    if(CMAKE_C_COMPILER_VERSION VERSION_GREATER_EQUAL 14) # GCC14 enables -fhardened and fails without -fPIC
+    if(CMAKE_C_COMPILER_VERSION VERSION_GREATER_EQUAL 14) # overwrite -Werror=hardened to not fail
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-error=hardened")
     endif()
 elseif("${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
@@ -165,7 +165,7 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
         message(STATUS "GNU C++ compiler ${CMAKE_CXX_COMPILER_VERSION} detected, adding compile flags")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS} ${GENERIC_GNU_FLAGS} -Wzero-as-null-pointer-constant") # -Wzero-as-null-pointer-constant since version 5
     endif()
-    if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 14) # GCC14 enables -fhardened and fails without -fPIC
+    if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 14) # overwrite -Werror=hardened to not fail
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=hardened")
     endif()
 elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
