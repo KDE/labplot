@@ -1373,6 +1373,9 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 		}
 		WARN(Q_FUNC_INFO << ", PADDING (H/V) = " << plot->horizontalPadding() << ", " << plot->verticalPadding())
 		WARN(Q_FUNC_INFO << ", PADDING (R/B) = " << plot->rightPadding() << ", " << plot->bottomPadding())
+		// if padding is symmetric, we set it
+		if (plot->horizontalPadding() == plot->rightPadding() && plot->verticalPadding() == plot->bottomPadding())
+			plot->setSymmetricPadding(true);
 	}
 
 	if (!preview) {
