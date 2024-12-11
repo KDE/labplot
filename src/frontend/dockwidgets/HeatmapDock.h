@@ -53,6 +53,7 @@ private Q_SLOTS:
 private Q_SLOTS:
 	// SLOTs for changes triggered in the dock
 	//"General"-tab
+	void dataSourceChanged();
 	void matrixChanged(const QModelIndex&);
 	void xColumnChanged(const QModelIndex&);
 	void yColumnChanged(const QModelIndex&);
@@ -60,6 +61,8 @@ private Q_SLOTS:
 	void limitsMinChanged(double);
 	void limitsMaxChanged(double);
 	void visibilityChanged(bool);
+	void xNumBinsChanged(int);
+	void yNumBinsChanged(int);
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in the Heatmap
@@ -68,6 +71,8 @@ private Q_SLOTS:
 	void plotYColumnChanged(const AbstractColumn*);
 	void plotMatrixChanged(const Matrix*);
 	void plotVisibilityChanged(bool);
+	void plotXNumBinsChanged(unsigned int);
+	void plotYNumBinsChanged(unsigned int);
 
 	void plotAutomaticLimitsChanged(bool);
 	void plotLimitsMinChanged(double);

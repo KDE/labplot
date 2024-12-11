@@ -21,6 +21,7 @@ class AxisDock;
 class InfoElementDock;
 class NoteDock;
 class CartesianPlotDock;
+class HeatmapDock;
 class HistogramDock;
 class BarPlotDock;
 class LollipopPlotDock;
@@ -114,6 +115,7 @@ private:
 	// statistical plots
 	BoxPlotDock* m_boxPlotDock{nullptr};
 	HistogramDock* m_histogramDock{nullptr};
+	HeatmapDock* m_heatmapDock {nullptr};
 	KDEPlotDock* m_kdePlotDock{nullptr};
 	QQPlotDock* m_qqPlotDock{nullptr};
 

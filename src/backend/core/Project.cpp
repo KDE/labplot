@@ -15,6 +15,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #ifndef SDK
 #include "backend/statistics/HypothesisTest.h"
@@ -25,6 +26,7 @@
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/ErrorBar.h"
+#include "backend/worksheet/plots/cartesian/Heatmap.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/LollipopPlot.h"
@@ -975,6 +977,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	const auto& columns = project->children<Column>(ChildIndexFlag::Recursive);
 	const auto& histogramsAll = project->children<Histogram>(ChildIndexFlag::Recursive); // needed for fit curves only.
 	const auto& curvesAll = project->children<XYCurve>(ChildIndexFlag::Recursive);
+	const auto& matrices = aspect->project()->children<Matrix>(ChildIndexFlag::Recursive);
 
 	// xy-curves
 	//  cannot be removed by the column observer, because it does not react
@@ -1071,6 +1074,21 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		RESTORE_COLUMN_POINTER(value, column, Column);
 		RESTORE_COLUMN_POINTER(hist->errorBar(), yPlusColumn, YPlusColumn);
 		RESTORE_COLUMN_POINTER(hist->errorBar(), yMinusColumn, YMinusColumn);
+	}
+
+	// Heatmap
+	QVector<Heatmap*> heatmaps;
+	if (hasChildren)
+		heatmaps = aspect->children<Heatmap>(ChildIndexFlag::Recursive);
+	else if (aspect->type() == AspectType::Histogram)
+		heatmaps << static_cast<Heatmap*>(aspect);
+
+	for (auto* heatmap : heatmaps) {
+		if (!heatmap)
+			continue;
+		RESTORE_COLUMN_POINTER(heatmap, xColumn, XColumn);
+		RESTORE_COLUMN_POINTER(heatmap, yColumn, YColumn);
+		RESTORE_MATRIX_POINTER(heatmap, matrix, Matrix);
 	}
 
 	// QQ-plots

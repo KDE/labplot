@@ -37,9 +37,9 @@ public:
 	bool automaticLimits{true};
 	Heatmap::Format format;
 
-	void retransform() override;
+	void retransform();
 	void recalc();
-	void recalcShapeAndBoundingRect() override;
+	void recalcShapeAndBoundingRect();
 	void recalcShapeAndBoundingRect(const QRectF&);
 
 	struct Data {
@@ -52,7 +52,7 @@ public:
 
 private:
 	void draw(QPainter*);
-	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
+	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr);
 	QRectF update();
 	void updatePixmap();
 };

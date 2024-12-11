@@ -1204,6 +1204,15 @@ void HeatmapTest::testRepresentationSpreadsheetDrawEmpty() {
 }
 
 void HeatmapTest::testRepresentationSpreadsheetDrawZeroes() {
+	QVERIFY(false);
+}
+
+/*!
+ * \brief HeatmapTest::testRepresentationSpreadsheetCompletelyOutOfRange
+ * Completly outside of the plot so nothing will be drawn
+ */
+void HeatmapTest::testRepresentationSpreadsheetCompletelyOutOfRange() {
+	QVERIFY(false);
 }
 
 /*!
@@ -1326,20 +1335,20 @@ void HeatmapTest::testColorManual() {
 	double defaultFormatMin = hm->formatMin();
 	double defaultFormatMax = hm->formatMax();
 	QVERIFY(defaultFormatMin != -10.);
-	QVERIFY(defaultFormatMax != 10.);
+	QVERIFY(defaultFormatMax != 11.);
 	hm->setFormatMin(-10.);
 	QCOMPARE(hm->formatMin(), -10.);
-	hm->setFormatMax(10.);
-	QCOMPARE(hm->formatMax(), 10.);
+	hm->setFormatMax(11.);
+	QCOMPARE(hm->formatMax(), 11.);
 
-	hm->undoStack()->undo(); // hm->setFormatMax(10.);
+	hm->undoStack()->undo(); // hm->setFormatMax(11.);
 	QCOMPARE(hm->formatMax(), defaultFormatMax);
 	hm->undoStack()->undo(); // hm->setFormatMin(-10.);
 	QCOMPARE(hm->formatMin(), defaultFormatMin);
 	hm->undoStack()->redo(); // hm->setFormatMin(-10.);
 	QCOMPARE(hm->formatMin(), -10.);
-	hm->undoStack()->redo(); // hm->setFormatMax(10.);
-	QCOMPARE(hm->formatMax(), 10.);
+	hm->undoStack()->redo(); // hm->setFormatMax(11.);
+	QCOMPARE(hm->formatMax(), 11.);
 
 	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
 	auto columns = spreadsheet->children<Column>();
@@ -1391,8 +1400,8 @@ void HeatmapTest::testColorManual() {
 	xColumn->setValueAt(11, 6.5); // Testing Duplicates
 	yColumn->setValueAt(11, 65.0); // Testing Duplicates
 
-	QCOMPARE(hm->format().min, -10);
-	QCOMPARE(hm->format().max, 10);
+	QCOMPARE(hm->format().min, -10.);
+	QCOMPARE(hm->format().max, 11.);
 
 	// 5 Bins X
 	// 0     2     4     6     8     10
@@ -1447,12 +1456,141 @@ void HeatmapTest::testColorManual() {
 	});
 	hm->setYNumBins(2);
 	QCOMPARE(valueDrawnCounter, 6);
-	QCOMPARE(hm->format().min, -10);
-	QCOMPARE(hm->format().max, 10);
+	QCOMPARE(hm->format().min, -10.);
+	QCOMPARE(hm->format().max, 11.);
 }
 
 void HeatmapTest::saveLoad() {
-	QVERIFY(false);
+	QString savePath;
+	{
+		Project project;
+
+		auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+		project.addChild(ws);
+
+		auto* plot = new CartesianPlot(QStringLiteral("Plot"));
+		ws->addChild(plot);
+
+		Heatmap* hm = new Heatmap(QStringLiteral("HM"));
+		plot->addChild(hm);
+
+		hm->setDataSource(Heatmap::DataSource::Spreadsheet);
+		QCOMPARE(hm->drawEmpty(), false);
+		hm->setXNumBins(5);
+		hm->setYNumBins(5);
+		QCOMPARE(hm->xNumBins(), 5);
+		QCOMPARE(hm->yNumBins(), 5);
+		hm->setAutomaticLimits(false);
+		QCOMPARE(hm->automaticLimits(), false);
+
+		auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+		project.addChild(spreadsheet);
+		auto columns = spreadsheet->children<Column>();
+		QCOMPARE(columns.count(), 2);
+
+		auto* xColumn = columns.at(0);
+		auto* yColumn = columns.at(1);
+
+		int dataChangedCounter = 0;
+		CONNECT_DATA_CHANGED;
+
+		QCOMPARE(dataChangedCounter, 0);
+		hm->setXColumn(xColumn);
+		QCOMPARE(hm->xColumn(), xColumn);
+		QCOMPARE(dataChangedCounter, 1);
+		hm->setYColumn(yColumn);
+		QCOMPARE(hm->yColumn(), yColumn);
+		QCOMPARE(dataChangedCounter, 2);
+
+		spreadsheet->setRowCount(12);
+
+		xColumn->setValueAt(0, 0);
+		yColumn->setValueAt(0, 0);
+		xColumn->setValueAt(1, 0.0);
+		yColumn->setValueAt(1, 100.0);
+
+		xColumn->setValueAt(2, 2.0);
+		yColumn->setValueAt(2, 20.0);
+		xColumn->setValueAt(3, 6.0);
+		yColumn->setValueAt(3, 20.0);
+
+		xColumn->setValueAt(4, 4.0); // center
+		yColumn->setValueAt(4, 40.0); // center
+
+		xColumn->setValueAt(5, 2.0);
+		yColumn->setValueAt(5, 60.0);
+		xColumn->setValueAt(6, 6.0);
+		yColumn->setValueAt(6, 60.0);
+
+		xColumn->setValueAt(7, 10);
+		yColumn->setValueAt(7, 0);
+		xColumn->setValueAt(8, 10.0);
+		yColumn->setValueAt(8, 100.0);
+
+		xColumn->setValueAt(9, 4.5); // Testing Duplicates
+		yColumn->setValueAt(9, 45.0); // Testing Duplicates
+		xColumn->setValueAt(10, 9.0); // Testing Duplicates
+		yColumn->setValueAt(10, 90.0); // Testing Duplicates
+		xColumn->setValueAt(11, 6.5); // Testing Duplicates
+		yColumn->setValueAt(11, 65.0); // Testing Duplicates
+
+		hm->setXNumBins(3);
+		hm->setYNumBins(2);
+		hm->setAutomaticLimits(false);
+		hm->setFormatMin(-2.);
+		hm->setFormatMax(2.67);
+
+		auto format = hm->format();
+		format.name = QStringLiteral("CustomColorTheme13");
+		format.colors = QVector<QColor>{
+			QColor(Qt::blue),
+			QColor(Qt::green),
+			QColor(Qt::gray),
+		};
+		hm->setFormat(format);
+
+		auto* matrix = new Matrix(QStringLiteral("matrix123"));
+		project.addChild(matrix);
+		hm->setMatrix(matrix);
+
+		SAVE_PROJECT("HeatmapSaveLoad");
+	}
+	{
+		Project project;
+		QCOMPARE(project.load(savePath), true);
+
+		const auto* ws = project.child<Worksheet>(0);
+		QVERIFY(ws);
+		const auto* p = ws->child<CartesianPlot>(0);
+		QVERIFY(p);
+		const auto* hm = p->child<Heatmap>(0);
+		QVERIFY(hm);
+
+		const auto* sh = p->child<Spreadsheet>(0);
+
+		QCOMPARE(hm->xNumBins(), 3);
+		QCOMPARE(hm->yNumBins(), 2);
+		QCOMPARE(hm->automaticLimits(), false);
+		QCOMPARE(hm->formatMin(), -2.);
+		QCOMPARE(hm->formatMax(), 2.67);
+		const auto format = hm->format();
+		QCOMPARE(format.name, QStringLiteral("CustomColorTheme13"));
+		QCOMPARE(format.colors.count(), 3);
+		QCOMPARE(format.colors.at(0), QColor(Qt::blue));
+		QCOMPARE(format.colors.at(1), QColor(Qt::green));
+		QCOMPARE(format.colors.at(2), QColor(Qt::gray));
+		QCOMPARE(hm->dataSource(), Heatmap::DataSource::Spreadsheet);
+		QCOMPARE(hm->xColumnPath(), QStringLiteral("Project/Spreadsheet/1"));
+		QVERIFY(hm->xColumn() != nullptr);
+		QCOMPARE(hm->yColumnPath(), QStringLiteral("Project/Spreadsheet/2"));
+		QVERIFY(hm->yColumn() != nullptr);
+		QCOMPARE(hm->matrixPath(), QStringLiteral("Project/matrix123"));
+		QVERIFY(hm->matrix() != nullptr);
+
+		QCOMPARE(hm->isVisible(), true);
+
+		QCOMPARE(hm->coordinateSystemIndex(), 0);
+	}
 }
 
 void HeatmapTest::testMatrixNumBins() {
