@@ -27,6 +27,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
+#include "backend/worksheet/plots/cartesian/Heatmap.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
@@ -57,6 +58,7 @@
 #include "frontend/dockwidgets/ColumnDock.h"
 #include "frontend/dockwidgets/CursorDock.h"
 #include "frontend/dockwidgets/CustomPointDock.h"
+#include "frontend/dockwidgets/HeatmapDock.h"
 #include "frontend/dockwidgets/HistogramDock.h"
 #include "frontend/dockwidgets/ImageDock.h"
 #include "frontend/dockwidgets/InfoElementDock.h"
@@ -361,6 +363,11 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Auto-/Cross-Correlation"));
 		raiseDockSetupConnect(m_xyCorrelationCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_xyCorrelationCurveDock->setCurves(castList<XYCurve>(selectedAspects));
+		break;
+	case AspectType::Heatmap:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Heatmap"));
+		raiseDockConnect(m_heatmapDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_heatmapDock->setPlots(castList<Heatmap>(selectedAspects));
 		break;
 	case AspectType::Histogram:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Histogram"));

@@ -29,6 +29,7 @@ private Q_SLOTS:
 	void testRepresentationSpreadsheet();
 	void testRepresentationSpreadsheetDrawEmpty();
 	void testRepresentationSpreadsheetDrawZeroes();
+	void testRepresentationSpreadsheetCompletelyOutOfRange();
 
 	void testColorAutomatic();
 	void testColorManual();
