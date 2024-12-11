@@ -779,7 +779,10 @@ QRectF HeatmapPrivate::update() {
 		// TODO: make option if the border shall be included, or not
 		if (val == maxValid)
 			return numberBinsVisible - 1; // include Right Border
-		return static_cast<int>((val - minValid) / binSize);
+		const auto index = (val - minValid) / binSize;
+		if (index < 0)
+			return -1;
+		return static_cast<int>(floor(index));
 	};
 
 	switch (dataSource) {
