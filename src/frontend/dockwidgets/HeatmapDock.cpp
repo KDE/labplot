@@ -109,11 +109,13 @@ void HeatmapDock::setPlots(QList<Heatmap*> list) {
 	// show the properties of the first box plot
 	ui.chkVisible->setChecked(m_plot->isVisible());
 	// load();
+	ui.cbDataSource->setCurrentIndex(m_plot->dataSource() == Heatmap::DataSource::Matrix ? 0 : 1);
 	cbXColumn->setAspect(m_plot->xColumn(), m_plot->xColumnPath());
 	cbYColumn->setAspect(m_plot->yColumn(), m_plot->yColumnPath());
 	cbMatrix->setAspect(m_plot->matrix(), m_plot->matrixPath());
 	// loadDataColumns();
 
+	ui.cbAutomaticLimits->setChecked(m_plot->automaticLimits());
 	ui.sbxNumberBins->setValue(m_plot->xNumBins());
 	ui.sbyNumberBins->setValue(m_plot->yNumBins());
 
@@ -137,6 +139,7 @@ void HeatmapDock::setPlots(QList<Heatmap*> list) {
 	connect(m_plot, &Heatmap::matrixChanged, this, &HeatmapDock::plotMatrixChanged);
 	connect(m_plot, &Heatmap::xNumBinsChanged, this, &HeatmapDock::plotXNumBinsChanged);
 	connect(m_plot, &Heatmap::yNumBinsChanged, this, &HeatmapDock::plotYNumBinsChanged);
+	connect(m_plot, &Heatmap::automaticLimitsChanged, this, &HeatmapDock::plotAutomaticLimitsChanged);
 }
 
 void HeatmapDock::setModel() {
