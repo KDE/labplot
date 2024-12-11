@@ -730,21 +730,21 @@ private:
 // the actual pointers to the x- and y-columns are restored in Project::load()
 #define READ_COLUMN(columnName)                                                                                                                                \
 	{                                                                                                                                                          \
-		str = attribs.value(QStringLiteral(#columnName)).toString();                                                                                           \
+		str = attribs.value(QLatin1String(#columnName)).toString();                                                                                            \
 		d->columnName##Path = str;                                                                                                                             \
 	}
 
 #define READ_MATRIX(maxtrixName)                                                                                                                               \
 	{                                                                                                                                                          \
-		str = attribs.value(QStringLiteral(#maxtrixName)).toString();                                                                                          \
+		str = attribs.value(QLatin1String(#maxtrixName)).toString();                                                                                           \
 		d->maxtrixName##Path = str;                                                                                                                            \
 	}
 
 #define READ_INT_VALUE_DIRECT(name, var, type)                                                                                                                 \
 	{                                                                                                                                                          \
-		str = attribs.value(QStringLiteral(name)).toString();                                                                                                  \
+		str = attribs.value(QLatin1String(name)).toString();                                                                                                   \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseMissingAttributeWarning(QStringLiteral(name));                                                                                        \
+			reader->raiseMissingAttributeWarning(QLatin1String(name));                                                                                         \
 		else                                                                                                                                                   \
 			var = static_cast<type>(str.toInt());                                                                                                              \
 	}
@@ -753,18 +753,18 @@ private:
 
 #define READ_DOUBLE_VALUE(name, var)                                                                                                                           \
 	{                                                                                                                                                          \
-		str = attribs.value(QStringLiteral(name)).toString();                                                                                                  \
+		str = attribs.value(QLatin1String(name)).toString();                                                                                                   \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseMissingAttributeWarning(QStringLiteral(name));                                                                                        \
+			reader->raiseMissingAttributeWarning(QLatin1String(name));                                                                                         \
 		else                                                                                                                                                   \
 			d->var = str.toDouble();                                                                                                                           \
 	}
 
 #define QGRAPHICSITEM_READ_DOUBLE_VALUE(name, Var)                                                                                                             \
 	{                                                                                                                                                          \
-		str = attribs.value(QStringLiteral(name)).toString();                                                                                                  \
+		str = attribs.value(QLatin1String(name)).toString();                                                                                                   \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseMissingAttributeWarning(QStringLiteral(name));                                                                                        \
+			reader->raiseMissingAttributeWarning(QLatin1String(name));                                                                                         \
 		else                                                                                                                                                   \
 			d->set##Var(str.toDouble());                                                                                                                       \
 	}
@@ -780,6 +780,18 @@ private:
 				continue;                                                                                                                                      \
 			if (column->path() == obj->col##Path()) {                                                                                                          \
 				obj->set##Col(column);                                                                                                                         \
+				break;                                                                                                                                         \
+			}                                                                                                                                                  \
+		}                                                                                                                                                      \
+	}
+
+#define RESTORE_MATRIX_POINTER(obj, matrix, Matrix)                                                                                                            \
+	if (!obj->matrix##Path().isEmpty()) {                                                                                                                      \
+		for (auto* matrix : matrices) {                                                                                                                        \
+			if (!matrix)                                                                                                                                       \
+				continue;                                                                                                                                      \
+			if (matrix->path() == obj->matrix##Path()) {                                                                                                       \
+				obj->set##Matrix(matrix);                                                                                                                      \
 				break;                                                                                                                                         \
 			}                                                                                                                                                  \
 		}                                                                                                                                                      \

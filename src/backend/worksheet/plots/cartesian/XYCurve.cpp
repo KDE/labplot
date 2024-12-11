@@ -2407,7 +2407,7 @@ bool XYCurve::indicesMinMax(const Dimension dim, double v1, double v2, int& star
 		column(dim)->indicesMinMax(v1, v2, start, end);
 		return true;
 	}
-	return false;
+	return true;
 }
 
 bool XYCurve::minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars) const {
