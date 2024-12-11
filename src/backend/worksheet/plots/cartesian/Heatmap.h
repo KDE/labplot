@@ -86,9 +86,9 @@ public:
 	BASIC_D_ACCESSOR_DECL(bool, automaticLimits, AutomaticLimits) // If true, the limits of format are automatically determined
 	struct Format {
 		double min = 0.0;
-		double max = 1.0;
-		QString name;
-		QVector<QColor> colors;
+		double max = 10.0;
+		QString name{QStringLiteral("Set1_3")};
+		QVector<QColor> colors{QColor(228, 26, 28), QColor(55, 126, 184), QColor(77, 175, 74)};
 		bool operator!=(const Format& rhs) const;
 		int index(double value) const;
 		QColor color(double value) const;

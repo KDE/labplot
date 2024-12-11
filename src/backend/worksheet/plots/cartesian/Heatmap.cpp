@@ -653,7 +653,7 @@ HeatmapPrivate::HeatmapPrivate(Heatmap* heatmap)
 
 void HeatmapPrivate::retransform() {
 	const QRectF& r = update();
-	recalcShapeAndBoundingRect();
+	recalcShapeAndBoundingRect(r);
 }
 
 void HeatmapPrivate::recalc() {
@@ -884,7 +884,7 @@ QRectF HeatmapPrivate::update() {
 	const auto p2 = QPointF(xEndPoint, yEndPoint);
 	const auto points = cSystem->mapLogicalToScene({p1, p2}, AbstractCoordinateSystem::MappingFlag::Limit);
 
-	return QRectF(p1, p2); // New bounding rectangle
+	return QRectF(points.at(0), points.at(1)); // New bounding rectangle
 }
 
 void HeatmapPrivate::updatePixmap() {
@@ -912,12 +912,16 @@ void HeatmapPrivate::updatePixmap() {
 
 void HeatmapPrivate::draw(QPainter* painter) {
 	auto pen = painter->pen();
+	pen.setStyle(Qt::PenStyle::SolidLine);
+	pen.setBrush(Qt::NoBrush);
+
 	for (const auto& d : data) {
-		pen.setColor(d.color);
 		painter->setPen(pen);
-		painter->drawRect(d.rect);
+		painter->fillRect(d.rect, QBrush(d.color));
 	}
 }
+
+#define DEBUG_BOUNDING_RECT 1
 
 void HeatmapPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) {
 	if (!isVisible())
@@ -931,6 +935,17 @@ void HeatmapPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem*, Q
 		painter->drawPixmap(m_boundingRectangle.topLeft(), m_pixmap); // draw the cached pixmap (fast)
 	else
 		draw(painter); // draw directly again (slow)
+
+#if DEBUG_BOUNDING_RECT
+	painter->setPen(QColor(Qt::GlobalColor::red));
+	painter->drawRect(m_boundingRectangle);
+
+	painter->setPen(QColor(Qt::GlobalColor::darkGreen));
+	painter->drawRect(m_boundingRectangle.marginsAdded(QMarginsF(3, 3, 3, 3)));
+
+	painter->setPen(QColor(Qt::GlobalColor::blue));
+	painter->drawEllipse(QRectF(-5, -5, 10, 10));
+#endif
 
 	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		if (m_hoverEffectImageIsDirty) {
@@ -990,12 +1005,14 @@ namespace {
 namespace XML {
 const QLatin1String general("general");
 const QLatin1String dataSource("dataSource");
-const QLatin1String xColumn("general");
+const QLatin1String xColumn("xColumn");
 const QLatin1String yColumn("yColumn");
 const QLatin1String matrix("matrix");
 const QLatin1String xNumBins("xNumBins");
 const QLatin1String yNumBins("yNumBins");
 const QLatin1String drawEmpty("drawEmpty");
+const QLatin1String numBinsEqual("numBinsEqual");
+const QLatin1String automaticLimits("automaticLimits");
 
 const QLatin1String format("Format");
 const QLatin1String formatName("name");
@@ -1023,6 +1040,8 @@ void Heatmap::save(QXmlStreamWriter* writer) const {
 	// general
 	writer->writeStartElement(XML::general);
 
+	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
+
 	// if the data columns are valid, write their current paths.
 	// if not, write the last used paths so the columns can be restored later
 	// when the columns with the same path are added again to the project
@@ -1043,27 +1062,30 @@ void Heatmap::save(QXmlStreamWriter* writer) const {
 		writer->writeAttribute(XML::matrix, d->matrixPath);
 
 	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(m_cSystemIndex));
-	writer->writeAttribute(QStringLiteral("numBinsEqual"), QString::number(d->numBinsEqual));
+	writer->writeAttribute(XML::numBinsEqual, QString::number(d->numBinsEqual));
+	writer->writeAttribute(XML::automaticLimits, QString::number(d->automaticLimits));
 	writer->writeAttribute(XML::xNumBins, QString::number(d->xNumBins));
 	writer->writeAttribute(XML::yNumBins, QString::number(d->yNumBins));
 	writer->writeAttribute(XML::drawEmpty, QString::number(d->drawEmpty));
 
 	writer->writeStartElement(XML::format);
 	writer->writeAttribute(XML::formatName, d->format.name);
+	writer->writeAttribute(XML::formatMin, QString::number(d->format.min));
+	writer->writeAttribute(XML::formatMax, QString::number(d->format.max));
 	writer->writeStartElement(XML::formatColors);
 	for (size_t i = 0; i < d->format.colors.size(); i++) {
-		const auto i_str = QString::number(i);
+		const auto i_str = QStringLiteral("i") + QString::number(i);
 		WRITE_QCOLOR3(d->format.colors.at(i), i_str);
 	}
 	writer->writeEndElement(); // close color section
-	writer->writeAttribute(XML::formatMin, QString::number(d->format.min));
-	writer->writeAttribute(XML::formatMax, QString::number(d->format.max));
 	writer->writeEndElement(); // close format section
 
 	writer->writeEndElement(); // close general section
 
 	writer->writeEndElement(); // close "heatmap" section
 }
+
+#define DEBUG_XML 1
 
 //! Load from XML
 bool Heatmap::load(XmlStreamReader* reader, bool preview) {
@@ -1077,8 +1099,11 @@ bool Heatmap::load(XmlStreamReader* reader, bool preview) {
 	QString str;
 
 	while (!reader->atEnd()) {
+		if (DEBUG_XML)
+			std::cout << reader->tokenString().toStdString() << "; " << reader->text().toString().toStdString() << "; "
+					  << reader->name().toString().toStdString() << std::endl;
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == QLatin1String("heatmap"))
+		if (reader->isEndElement() && reader->name() == saveName)
 			break;
 
 		if (!reader->isStartElement())
@@ -1090,11 +1115,17 @@ bool Heatmap::load(XmlStreamReader* reader, bool preview) {
 		} else if (reader->name() == XML::general) {
 			attribs = reader->attributes();
 
-			str = attribs.value(QStringLiteral("dataSource")).toString();
+			str = attribs.value(XML::dataSource).toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
 			else
 				d->dataSource = static_cast<DataSource>(str.toInt());
+
+			READ_INT_VALUE(XML::automaticLimits, automaticLimits, bool)
+			READ_INT_VALUE(XML::numBinsEqual, numBinsEqual, bool)
+			READ_INT_VALUE(XML::xNumBins, xNumBins, unsigned int)
+			READ_INT_VALUE(XML::yNumBins, yNumBins, unsigned int)
+			READ_INT_VALUE(XML::drawEmpty, drawEmpty, bool)
 
 			READ_COLUMN(xColumn);
 			READ_COLUMN(yColumn);
@@ -1106,80 +1137,24 @@ bool Heatmap::load(XmlStreamReader* reader, bool preview) {
 			else
 				d->setVisible(str.toInt());
 			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
+		} else if (!preview && reader->name() == XML::format) {
+			attribs = reader->attributes();
+			READ_STRING_VALUE(XML::formatName, format.name);
+			READ_DOUBLE_VALUE(XML::formatMin, format.min);
+			READ_DOUBLE_VALUE(XML::formatMax, format.max);
 		} else if (!preview && reader->name() == XML::formatColors) {
 			attribs = reader->attributes();
 			int index = 0;
 			bool found = true;
+			d->format.colors.clear();
 			while (found) {
 				QColor color;
-				READ_QCOLOR3(color, QString::number(index), found);
+				READ_QCOLOR3(color, QStringLiteral("i") + QString::number(index), found);
 				if (found)
 					d->format.colors.push_back(color);
 				index++;
 			}
 		}
-
-		/*else if (!preview && reader->name() == QLatin1String("lines")) {
-			attribs = reader->attributes();
-
-			READ_INT_VALUE("type", lineType, LineType);
-			READ_INT_VALUE("skipGaps", lineSkipGaps, bool);
-			READ_INT_VALUE("increasingXOnly", lineIncreasingXOnly, bool);
-			READ_INT_VALUE("interpolationPointsCount", lineInterpolationPointsCount, int);
-			d->line->load(reader, preview);
-		} else if (!preview && reader->name() == QLatin1String("dropLines")) {
-			d->dropLine->load(reader, preview);
-		} else if (!preview && reader->name() == QLatin1String("symbols")) {
-			d->symbol->load(reader, preview);
-		} else if (!preview && reader->name() == QLatin1String("values")) {
-			attribs = reader->attributes();
-
-			READ_INT_VALUE("type", valuesType, ValuesType);
-			READ_COLUMN(valuesColumn);
-
-			READ_INT_VALUE("position", valuesPosition, ValuesPosition);
-			READ_DOUBLE_VALUE("distance", valuesDistance);
-			READ_DOUBLE_VALUE("rotation", valuesRotationAngle);
-			READ_DOUBLE_VALUE("opacity", valuesOpacity);
-
-			str = attribs.value(QStringLiteral("numericFormat")).toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("numericFormat")).toString());
-			else
-				d->valuesNumericFormat = *(str.toLatin1().data());
-
-			READ_STRING_VALUE("dateTimeFormat", valuesDateTimeFormat);
-			READ_INT_VALUE("precision", valuesPrecision, int);
-
-			// don't produce any warning if no prefix or suffix is set (empty string is allowed here in xml)
-			d->valuesPrefix = attribs.value(QStringLiteral("prefix")).toString();
-			d->valuesSuffix = attribs.value(QStringLiteral("suffix")).toString();
-
-			READ_QCOLOR(d->valuesColor);
-			READ_QFONT(d->valuesFont);
-		} else if (!preview && reader->name() == QLatin1String("filling"))
-			d->background->load(reader, preview);
-		else if (!preview && reader->name() == QLatin1String("errorBars")) {
-			attribs = reader->attributes();
-
-			READ_INT_VALUE("xErrorType", xErrorType, ErrorType);
-			READ_COLUMN(xErrorPlusColumn);
-			READ_COLUMN(xErrorMinusColumn);
-
-			READ_INT_VALUE("yErrorType", yErrorType, ErrorType);
-			READ_COLUMN(yErrorPlusColumn);
-			READ_COLUMN(yErrorMinusColumn);
-
-			d->errorBarsLine->load(reader, preview);
-		} else if (!preview && reader->name() == QLatin1String("margins")) {
-			attribs = reader->attributes();
-
-			READ_INT_VALUE("rugEnabled", rugEnabled, bool);
-			READ_INT_VALUE("rugOrientation", rugOrientation, Orientation);
-			READ_DOUBLE_VALUE("rugLength", rugLength);
-			READ_DOUBLE_VALUE("rugWidth", rugWidth);
-			READ_DOUBLE_VALUE("rugOffset", rugOffset);
-		}*/
 	}
 
 	return true;
