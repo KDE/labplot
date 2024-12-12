@@ -631,12 +631,10 @@ QString ImportFileWidget::selectedObject() const {
 }
 
 QString ImportFileWidget::host() const {
-	std::cout << "Host: " << ui.leHost->text().toStdString() << std::endl;
 	return ui.leHost->text();
 }
 
 QString ImportFileWidget::port() const {
-	std::cout << "Port: " << ui.lePort->text().toStdString() << std::endl;
 	return ui.lePort->text();
 }
 
@@ -1821,82 +1819,27 @@ void ImportFileWidget::refreshPreview() {
 		case LiveDataSource::SourceType::NetworkUDPSocket: {
 			QUdpSocket udpSocket{this};
 			DEBUG("UDP Socket: CONNECT PREVIEW, state = " << udpSocket.state());
-			auto hostd = QHostAddress(host());
-			if (hostd.isNull()) {
-				std::cout << "Invalid host" << std::endl;
-			}
-			bool finish = false;
-			connect(&udpSocket, &QUdpSocket::readyRead,
-					this, [&finish, &importedStrings, &filter, lines, &udpSocket]() {
-						importedStrings = filter->preview(udpSocket, lines, true);
-						finish = true;
-					});
-
-			if (udpSocket.bind(hostd, port().toInt())) {
-				udpSocket.connectToHost(hostd, port().toInt(), QUdpSocket::ReadOnly);
-				if (!udpSocket.waitForConnected(2000)) {
-					std::cout << "Unable to connect" << std::endl;
-
-				}
-				auto s = udpSocket.state();
-				errorMessage = i18n("Unable to bind");
-				if (port().toInt() == 0)
-					break;
-
-
-				char t[100];
-				while (udpSocket.hasPendingDatagrams()) {
-					std::cout << "Read pending datagrams" << std::endl;
-					udpSocket.readDatagram(t, 100);
-					// udpSocket.readDatagram()
-				}
-				// if (!udpSocket.waitForReadyRead(2000)) {
-				// 	std::cout << "Unable to ready read" << std::endl;
-				// }
-			// } else {
-QEventLoop loop;
-				QTimer timeout;
-				timeout.start(20000);  // 5-second timeout
-				connect(&timeout, &QTimer::timeout, &loop, &QEventLoop::quit);
-
-
-
-				loop.exec();
-
-				while (!finish) {
-					int j = 0;
-					for (int i=0; i < 1000000; i++) {
-						j ++;
+			udpSocket.bind(QHostAddress(host()), port().toInt());
+			udpSocket.connectToHost(host(), 0, QUdpSocket::ReadOnly);
+			if (udpSocket.waitForConnected()) {
+				DEBUG("	connected to UDP socket " << STDSTRING(host()) << ':' << port().toInt());
+				if (!udpSocket.waitForReadyRead(2000)) {
+					DEBUG("	ERROR: not ready for read after 2 sec");
+					errorMessage = i18n("Not ready for read after 2s");
+				} else {
+					if (udpSocket.hasPendingDatagrams()) {
+						DEBUG("	has pending data");
+					} else {
+						DEBUG("	has no pending data");
 					}
-					// std::cout << j;
-					QApplication::processEvents(QEventLoop::AllEvents, 0);
+					importedStrings = filter->preview(udpSocket, lines, true);
 				}
 
-
-
-				// const auto state = udpSocket.state();
-				// state == QAbstractSocket::SocketState::ConnectedState;
-				// 	// udpSocket.connectToHost(host(), port().toInt(), QUdpSocket::ReadOnly);
-				// 	// if (udpSocket.waitForConnected()) {
-				// 	DEBUG("	connected to UDP socket " << STDSTRING(host()) << ':' << port().toInt());
-				// if (!udpSocket.waitForReadyRead(2000)) {
-				// 	DEBUG("	ERROR: not ready for read after 2 sec");
-				// 	errorMessage = i18n("Not ready for read after 2s");
-				// 	// } else {
-				// 	// 	if (udpSocket.hasPendingDatagrams()) {
-				// 	// 		DEBUG("	has pending data");
-				// 	// 	} else {
-				// 	// 		DEBUG("	has no pending data");
-				// 	// 	}
-				// 	importedStrings = filter->preview(udpSocket, lines, true);
-				// }
-
-				// DEBUG("UDP Socket: DISCONNECT PREVIEW, state = " << udpSocket.state());
+				DEBUG("UDP Socket: DISCONNECT PREVIEW, state = " << udpSocket.state());
 				udpSocket.disconnectFromHost();
-				// } else
-				// 	DEBUG("failed to connect to UDP socket "
-				// 		  << " - " << STDSTRING(udpSocket.errorString()));
-			}
+			} else
+				DEBUG("failed to connect to UDP socket "
+					  << " - " << STDSTRING(udpSocket.errorString()));
 
 			break;
 		}
@@ -2635,7 +2578,7 @@ void ImportFileWidget::disconnectMqttConnection() {
 		disconnect(m_client, &QMqttClient::disconnected, this, &ImportFileWidget::onMqttDisconnect);
 		QDEBUG("Disconnecting from " << m_client->hostname());
 		m_client->disconnectFromHost();
-		m_client->deleteLater();
+		delete m_client;
 		m_client = nullptr;
 	}
 }
