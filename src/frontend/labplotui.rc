@@ -69,7 +69,31 @@
 </ToolBar>
 
 <ToolBar name="cartesian_plot_toolbar" position="left">
-<text>Plot Area Toolbar</text>
+	<text>Plot Area Toolbar</text>
+	<Action name="plot_area_add_new"/>
+	<Separator/>
+	<Action name="plot_area_select_mode"/>
+	<Action name="plot_area_crosshair_mode"/>
+	<Action name="plot_area_zoom_select_mode"/>
+	<Action name="plot_area_zoom_x_select_mode"/>
+	<Action name="plot_area_zoom_y_select_mode"/>
+	<Action name="plot_area_cursor_mode"/>
+	<Separator/>
+	<Action name="plot_area_scale_auto"/>
+	<Action name="plot_area_scale_auto_x"/>
+	<Action name="plot_area_scale_auto_y"/>
+	<Separator/>
+	<Action name="plot_area_zoom_in"/>
+	<Action name="plot_area_zoom_out"/>
+	<Action name="plot_area_zoom_in_x"/>
+	<Action name="plot_area_zoom_out_x"/>
+	<Action name="plot_area_zoom_in_y"/>
+	<Action name="plot_area_zoom_out_y"/>
+	<Separator/>
+	<Action name="plot_area_shift_left"/>
+	<Action name="plot_area_shift_right"/>
+	<Action name="plot_area_shift_up"/>
+	<Action name="plot_area_shift_down"/>
 </ToolBar>
 
 <MenuBar>

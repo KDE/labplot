@@ -79,6 +79,7 @@ public:
 	void fillAddNewPlotMenu(ToggleActionMenu*) const;
 	void fillZoomMenu(ToggleActionMenu*) const;
 	void fillMagnificationMenu(ToggleActionMenu*) const;
+	void fillPlotAddNewMenu(ToggleActionMenu*) const;
 
 private:
 	void initBasicActions();
@@ -245,7 +246,6 @@ public Q_SLOTS:
 #ifdef HAVE_TOUCHBAR
 	void fillTouchBar(KDMacTouchBar*);
 #endif
-	void fillCartesianPlotToolBar(QToolBar*);
 	void fillCartesianPlotNavigationToolBar(QToolBar*, bool enableCursor = true) const;
 	void print(QPrinter*);
 	void selectItem(QGraphicsItem*);
@@ -256,10 +256,11 @@ public Q_SLOTS:
 	void addNew(QAction*);
 	void changeLayout(QAction*) const;
 	void changeMouseMode(QAction*);
-	void cartesianPlotMouseModeChanged(QAction*);
 	void changeZoom(QAction*);
 	void changeZoomFit(QAction*);
 	void changeMagnification(QAction*);
+	void changePlotMouseMode(QAction*);
+	void changePlotNavigation(QAction*);
 
 private Q_SLOTS:
 	void aspectAboutToBeRemoved(const AbstractAspect*);
@@ -287,7 +288,6 @@ private Q_SLOTS:
 	// SLOTs for cartesian plots
 	void cartesianPlotActionModeChanged(QAction*);
 	void cartesianPlotCursorModeChanged(QAction*);
-	void cartesianPlotNavigationChanged(QAction*);
 	void handleCartesianPlotActions();
 
 Q_SIGNALS:

@@ -51,6 +51,9 @@ private:
 	void initWorksheetToolbarActions();
 	void connectWorksheetToolbarActions(const WorksheetView*);
 
+	void initPlotAreaToolbarActions();
+	void connectPlotAreaToolbarActions(const WorksheetView*);
+
 	void initSpreadsheetToolbarActions();
 	void connectSpreadsheetToolbarActions(const SpreadsheetView*);
 
@@ -73,13 +76,17 @@ private:
 	QAction* m_redoIconOnlyAction;
 #endif
 
-	ToggleActionMenu* m_worksheetNewPlotMenu{nullptr};
+	ToggleActionMenu* m_worksheetAddNewPlotMenu{nullptr};
 	ToggleActionMenu* m_worksheetZoomMenu{nullptr};
 	ToggleActionMenu* m_worksheetMagnificationMenu{nullptr};
+	ToggleActionMenu* m_plotAddNewMenu{nullptr};
 
 	QActionGroup* m_worksheetAddNewActionGroup{nullptr};
 	QActionGroup* m_worksheetLayoutActionGroup{nullptr};
 	QActionGroup* m_worksheeMouseModeActionGroup{nullptr};
+
+	QActionGroup* m_plotMouseModeActionGroup{nullptr};
+	QActionGroup* m_plotNavigationGroup{nullptr};
 
 	KRecentFilesAction* m_recentProjectsAction;
 	QAction* m_searchAction;

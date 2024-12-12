@@ -379,7 +379,7 @@ void WorksheetView::initPlotNavigationActions() {
 	cartesianPlotCursorModeAction->setData(static_cast<int>(CartesianPlot::MouseMode::Cursor));
 	cartesianPlotCursorModeAction->setCheckable(true);
 
-	connect(plotMouseModeActionGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotMouseModeChanged);
+	connect(plotMouseModeActionGroup, &QActionGroup::triggered, this, &WorksheetView::changePlotMouseMode);
 
 	auto* cartesianPlotNavigationGroup = new QActionGroup(this);
 	scaleAutoAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-auto-scale-all")), i18n("Auto Scale"), cartesianPlotNavigationGroup);
@@ -427,7 +427,7 @@ void WorksheetView::initPlotNavigationActions() {
 	shiftDownYAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-shift-down-y")), i18n("Shift Down Y"), cartesianPlotNavigationGroup);
 	shiftDownYAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ShiftDownY));
 
-	connect(cartesianPlotNavigationGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotNavigationChanged);
+	connect(cartesianPlotNavigationGroup, &QActionGroup::triggered, this, &WorksheetView::changePlotNavigation);
 
 	m_plotActionsInitialized = true;
 
@@ -653,15 +653,14 @@ void WorksheetView::fillMagnificationMenu(ToggleActionMenu* menu) const {
 	menu->addAction(fiveTimesMagnificationAction);
 }
 
-void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
-	toolBar->addWidget(tbCartesianPlotAddNew);
-	toolBar->addSeparator();
-	fillCartesianPlotNavigationToolBar(toolBar);
-	toolBar->addSeparator();
+void WorksheetView::fillPlotAddNewMenu(ToggleActionMenu* menu) const {
 
-	handleCartesianPlotActions();
 }
 
+/*!
+ * adds the navigation related actions to the toolbar \c toolbar,
+ * used in the Presenter Widget to populate its own navigation bar.
+ */
 void WorksheetView::fillCartesianPlotNavigationToolBar(QToolBar* toolBar, bool enableCursor) const {
 	toolBar->addAction(cartesianPlotSelectionModeAction);
 	toolBar->addAction(cartesianPlotCrosshairModeAction);
@@ -1096,13 +1095,13 @@ void WorksheetView::keyPressEvent(QKeyEvent* event) {
 		// use the arrow keys to navigate only if a layout is active in the worksheet.
 		// without any layout the arrow keys are used to move the plot within the worksheet
 		if (event->key() == Qt::Key_Left)
-			cartesianPlotNavigationChanged(shiftRightXAction);
+			changePlotNavigation(shiftRightXAction);
 		else if (event->key() == Qt::Key_Right)
-			cartesianPlotNavigationChanged(shiftLeftXAction);
+			changePlotNavigation(shiftLeftXAction);
 		else if (event->key() == Qt::Key_Up)
-			cartesianPlotNavigationChanged(shiftDownYAction);
+			changePlotNavigation(shiftDownYAction);
 		else if (event->key() == Qt::Key_Down)
-			cartesianPlotNavigationChanged(shiftUpYAction);
+			changePlotNavigation(shiftUpYAction);
 	}
 
 	QGraphicsView::keyPressEvent(event);
@@ -1630,7 +1629,7 @@ void WorksheetView::selectionChanged() {
 		// since no plots are selected now.
 		if (m_mouseMode == MouseMode::Selection && m_cartesianPlotMouseMode != CartesianPlot::MouseMode::Selection) {
 			cartesianPlotSelectionModeAction->setChecked(true);
-			cartesianPlotMouseModeChanged(cartesianPlotSelectionModeAction);
+			changePlotMouseMode(cartesianPlotSelectionModeAction);
 		}
 	} else {
 		for (const auto* item : items)
@@ -2417,7 +2416,7 @@ void WorksheetView::plotsInteractiveActionChanged(bool checked) {
 	m_worksheet->setPlotsInteractive(checked);
 }
 
-void WorksheetView::cartesianPlotMouseModeChanged(QAction* action) {
+void WorksheetView::changePlotMouseMode(QAction* action) {
 	if (m_suppressMouseModeChange)
 		return;
 
@@ -2457,7 +2456,7 @@ void WorksheetView::childContextMenuRequested(AspectType t, QMenu* menu) {
 	menu->exec(QCursor::pos());
 }
 
-void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
+void WorksheetView::changePlotNavigation(QAction* action) {
 	// TODO: find out, which element was selected to find out which range should be changed
 	// Project().projectExplorer().currentAspect()
 

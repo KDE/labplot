@@ -65,9 +65,13 @@
 #include <DockManager.h>
 
 /*!
- *  \class ActionsManager
- *  \brief Class managing all actions and their containers (menus and toolbars) in MainWin.
- *  This class is intended to simplify (or not to overload) the code in MainWin.
+ * \class ActionsManager
+ * \brief Class managing all actions and their containers (menus and toolbars) in MainWin.
+ * This class is intended to simplify (or not to overload) the code in MainWin.
+ *
+ * Note, the actions shown in the toolbars are subject of modifications and customizations done by the user via the "Configure Toolbars"-dialog.
+ * In this dialog it's only possible to manage the top-level actions . Because of this, it is sufficient to handle in this class the the top-level actions only.
+ * For the actions used in the sub-menus it is enough to manage their lifecycle in the objects controlled via these toolbars like Worksheet, etc.
  *
  *  \ingroup frontend
  */
@@ -456,20 +460,21 @@ void ActionsManager::initActions() {
 #endif
 	initSpreadsheetToolbarActions();
 	initWorksheetToolbarActions();
+	initPlotAreaToolbarActions();
 }
 
 /*!
- * initializes worksheet related actions shown in the toolbar, called when a worksheet is selected for the first time.
+ * initializes worksheet related actions shown in the toolbar.
  */
 void ActionsManager::initWorksheetToolbarActions() {
 	auto* collection = m_mainWindow->actionCollection();
 
 	// "add new" actions
 	m_worksheetAddNewActionGroup = new QActionGroup(m_mainWindow);
-	m_worksheetNewPlotMenu = new ToggleActionMenu(i18nc("@action", "New Plot Area"), this);
-	m_worksheetNewPlotMenu->setPopupMode(QToolButton::MenuButtonPopup);
-	connect(m_worksheetNewPlotMenu->menu(), &QMenu::triggered, m_worksheetNewPlotMenu, &ToggleActionMenu::setDefaultAction);
-	collection->addAction(QStringLiteral("worksheet_new_plot_area"), m_worksheetNewPlotMenu);
+	m_worksheetAddNewPlotMenu = new ToggleActionMenu(i18nc("@action", "New Plot Area"), this);
+	m_worksheetAddNewPlotMenu->setPopupMode(QToolButton::MenuButtonPopup);
+	connect(m_worksheetAddNewPlotMenu->menu(), &QMenu::triggered, m_worksheetAddNewPlotMenu, &ToggleActionMenu::setDefaultAction);
+	collection->addAction(QStringLiteral("worksheet_new_plot_area"), m_worksheetAddNewPlotMenu);
 
 	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("draw-text")), i18n("Text"), m_worksheetAddNewActionGroup);
 	collection->addAction(QStringLiteral("worksheet_new_text_label"), action);
@@ -534,7 +539,112 @@ void ActionsManager::initWorksheetToolbarActions() {
 }
 
 /*!
- * initializes spreadsheet related actions shown in the toolbar, called when a spreadsheet is selected for the first time.
+ * initializes plot area related actions shown in the toolbar.
+ */
+void ActionsManager::initPlotAreaToolbarActions() {
+	auto* collection = m_mainWindow->actionCollection();
+
+	// "add new" actions
+	// m_worksheetAddNewActionGroup = new QActionGroup(m_mainWindow);
+	m_plotAddNewMenu = new ToggleActionMenu(i18nc("@action", "Add New"), this);
+	m_plotAddNewMenu->setPopupMode(QToolButton::MenuButtonPopup);
+	// connect(m_worksheetAddNewPlotMenu->menu(), &QMenu::triggered, m_worksheetAddNewPlotMenu, &ToggleActionMenu::setDefaultAction);
+	collection->addAction(QStringLiteral("plot_area_add_new"), m_plotAddNewMenu);
+
+	// mouse mode
+	m_plotMouseModeActionGroup = new QActionGroup(this);
+	m_plotMouseModeActionGroup->setExclusive(true);
+	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-cursor-arrow")), i18n("Select and Edit"), m_plotMouseModeActionGroup);
+	action->setData(static_cast<int>(CartesianPlot::MouseMode::Selection));
+	action->setCheckable(true);
+	action->setChecked(true);
+	collection->addAction(QStringLiteral("plot_area_select_mode"), action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("crosshairs")), i18n("Crosshair"), m_plotMouseModeActionGroup);
+	action->setData(static_cast<int>(CartesianPlot::MouseMode::Crosshair));
+	action->setCheckable(true);
+	collection->addAction(QStringLiteral("plot_area_crosshair_mode"), action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-select")), i18n("Select Region and Zoom In"), m_plotMouseModeActionGroup);
+	action->setData(static_cast<int>(CartesianPlot::MouseMode::ZoomSelection));
+	action->setCheckable(true);
+	collection->addAction(QStringLiteral("plot_area_zoom_select_mode"), action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-select-x")), i18n("Select X-Region and Zoom In"), m_plotMouseModeActionGroup);
+	action->setData(static_cast<int>(CartesianPlot::MouseMode::ZoomXSelection));
+	action->setCheckable(true);
+	collection->addAction(QStringLiteral("plot_area_zoom_x_select_mode"), action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-select-y")), i18n("Select Y-Region and Zoom In"), m_plotMouseModeActionGroup);
+	action->setData(static_cast<int>(CartesianPlot::MouseMode::ZoomYSelection));
+	action->setCheckable(true);
+	collection->addAction(QStringLiteral("plot_area_zoom_y_select_mode"), action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("debug-execute-from-cursor")), i18n("Cursor"), m_plotMouseModeActionGroup);
+	action->setData(static_cast<int>(CartesianPlot::MouseMode::Cursor));
+	action->setCheckable(true);
+	collection->addAction(QStringLiteral("plot_area_cursor_mode"), action);
+
+	// scale
+	m_plotNavigationGroup = new QActionGroup(this);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-auto-scale-all")), i18n("Auto Scale"), m_plotNavigationGroup);
+	action->setData(static_cast<int>(CartesianPlot::NavigationOperation::ScaleAuto));
+	collection->addAction(QStringLiteral("plot_area_scale_auto"), action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-auto-scale-x")), i18n("Auto Scale X"), m_plotNavigationGroup);
+	action->setData(static_cast<int>(CartesianPlot::NavigationOperation::ScaleAutoX));
+	collection->addAction(QStringLiteral("plot_area_scale_auto_x"), action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-auto-scale-y")), i18n("Auto Scale Y"), m_plotNavigationGroup);
+	action->setData(static_cast<int>(CartesianPlot::NavigationOperation::ScaleAutoY));
+	collection->addAction(QStringLiteral("plot_area_scale_auto_y"), action);
+
+	// zoom
+	action = new QAction(QIcon::fromTheme(QStringLiteral("zoom-in")), i18n("Zoom In"), m_plotNavigationGroup);
+	action->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomIn));
+	collection->addAction(QStringLiteral("plot_area_zoom_in"), action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("zoom-out")), i18n("Zoom Out"), m_plotNavigationGroup);
+	action->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomOut));
+	collection->addAction(QStringLiteral("plot_area_zoom_out"), action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-in-x")), i18n("Zoom In X"), m_plotNavigationGroup);
+	action->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomInX));
+	collection->addAction(QStringLiteral("plot_area_zoom_in_x"), action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-out-x")), i18n("Zoom Out X"), m_plotNavigationGroup);
+	action->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomOutX));
+	collection->addAction(QStringLiteral("plot_area_zoom_out_x"), action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-in-y")), i18n("Zoom In Y"), m_plotNavigationGroup);
+	action->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomInY));
+	collection->addAction(QStringLiteral("plot_area_zoom_in_y"), action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-out-y")), i18n("Zoom Out Y"), m_plotNavigationGroup);
+	action->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomOutY));
+	collection->addAction(QStringLiteral("plot_area_zoom_out_y"), action);
+
+	// shift
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-shift-left-x")), i18n("Shift Left X"), m_plotNavigationGroup);
+	action->setData(static_cast<int>(CartesianPlot::NavigationOperation::ShiftLeftX));
+	collection->addAction(QStringLiteral("plot_area_shift_left"), action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-shift-right-x")), i18n("Shift Right X"), m_plotNavigationGroup);
+	action->setData(static_cast<int>(CartesianPlot::NavigationOperation::ShiftRightX));
+	collection->addAction(QStringLiteral("plot_area_shift_right"), action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-shift-up-y")), i18n("Shift Up Y"), m_plotNavigationGroup);
+	action->setData(static_cast<int>(CartesianPlot::NavigationOperation::ShiftUpY));
+	collection->addAction(QStringLiteral("plot_area_shift_up"), action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-shift-down-y")), i18n("Shift Down Y"), m_plotNavigationGroup);
+	action->setData(static_cast<int>(CartesianPlot::NavigationOperation::ShiftDownY));
+	collection->addAction(QStringLiteral("plot_area_shift_down"), action);
+}
+
+/*!
+ * initializes spreadsheet related actions shown in the toolbar.
  */
 void ActionsManager::initSpreadsheetToolbarActions() {
 	auto* collection = m_mainWindow->actionCollection();
@@ -574,7 +684,7 @@ void ActionsManager::initSpreadsheetToolbarActions() {
 }
 
 /*!
- * initializes notebook related actions shown in the toolbar, called when a notebook is selected for the first time.
+ * initializes notebook related actions shown in the toolbar.
  */
 #ifdef HAVE_CANTOR_LIBS
 void ActionsManager::initNotebookToolbarActions() {
@@ -598,7 +708,7 @@ void ActionsManager::initNotebookToolbarActions() {
 #endif
 
 /*!
- * initializes data extractor related actions shown in the toolbar, called when a data extractor is selected for the first time.
+ * initializes data extractor related actions shown in the toolbar.
  */
 void ActionsManager::initDataExtractorToolbarActions() {
 	// auto* collection = m_mainWindow->actionCollection();
@@ -851,12 +961,9 @@ void ActionsManager::updateGUI() {
 		toolbar->setEnabled(true);
 
 		// populate the toolbar for cartesian plots
+		if (update)
+			connectPlotAreaToolbarActions(view);
 		toolbar = qobject_cast<QToolBar*>(factory->container(QStringLiteral("cartesian_plot_toolbar"), m_mainWindow));
-		if (update) {
-			toolbar->clear();
-			view->fillCartesianPlotToolBar(toolbar);
-		} else if (!hasAction(toolbar->actions()))
-			view->fillCartesianPlotToolBar(toolbar);
 		toolbar->setVisible(true);
 		toolbar->setEnabled(true);
 
@@ -1089,8 +1196,8 @@ void ActionsManager::toggleDockWidget(QAction* action) {
 // ##############################################################################
 void ActionsManager::connectWorksheetToolbarActions(const WorksheetView* view) {
 	// add new actions
-	m_worksheetNewPlotMenu->menu()->clear();
-	view->fillAddNewPlotMenu(m_worksheetNewPlotMenu);
+	m_worksheetAddNewPlotMenu->menu()->clear();
+	view->fillAddNewPlotMenu(m_worksheetAddNewPlotMenu);
 	disconnect(m_worksheetAddNewActionGroup, &QActionGroup::triggered, nullptr, &WorksheetView::addNew);
 	connect(m_worksheetAddNewActionGroup, &QActionGroup::triggered, view, &WorksheetView::addNew);
 
@@ -1119,6 +1226,20 @@ void ActionsManager::connectWorksheetToolbarActions(const WorksheetView* view) {
 	// magnification actions
 	m_worksheetMagnificationMenu->menu()->clear();
 	view->fillMagnificationMenu(m_worksheetMagnificationMenu);
+}
+
+void ActionsManager::connectPlotAreaToolbarActions(const WorksheetView* view) {
+	// add new actions
+	m_plotAddNewMenu->menu()->clear();
+	view->fillPlotAddNewMenu(m_plotAddNewMenu);
+
+	disconnect(m_plotMouseModeActionGroup, &QActionGroup::triggered, nullptr, &WorksheetView::changePlotMouseMode);
+	connect(m_plotMouseModeActionGroup, &QActionGroup::triggered, view, &WorksheetView::changePlotMouseMode);
+
+	disconnect(m_plotNavigationGroup, &QActionGroup::triggered, nullptr, &WorksheetView::changePlotNavigation);
+	connect(m_plotNavigationGroup, &QActionGroup::triggered, view, &WorksheetView::changePlotNavigation);
+
+	// TODO: we need to call WorksheetView::handleCartesianPlotActions() here somehow!!!
 }
 
 void ActionsManager::connectSpreadsheetToolbarActions(const SpreadsheetView* view) {
@@ -1163,6 +1284,6 @@ void ActionsManager::connectNotebookToolbarActions(const NotebookView* view) {
 }
 #endif
 
-void ActionsManager::connectDataExtractorToolbarActions(const DatapickerView* view) {
+void ActionsManager::connectDataExtractorToolbarActions(const DatapickerView*) {
 
 }
