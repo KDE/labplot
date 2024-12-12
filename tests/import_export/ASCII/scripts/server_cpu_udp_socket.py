@@ -3,8 +3,8 @@
 from socket import *
 import psutil
 
-HOST = 'localhost'
-PORT = 1027
+HOST = '127.0.0.1'
+PORT = 59542
 ADDR = (HOST,PORT)
 
 serv = socket(AF_INET, SOCK_DGRAM)
