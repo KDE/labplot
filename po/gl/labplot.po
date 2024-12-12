@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-11 00:37+0000\n"
-"PO-Revision-Date: 2024-12-08 20:22+0100\n"
+"POT-Creation-Date: 2024-12-12 00:37+0000\n"
+"PO-Revision-Date: 2024-12-11 20:20+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -2501,7 +2501,7 @@ msgstr "Representar os datos"
 msgid "Plot%1"
 msgstr "Gráfica%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1502
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1521
 #, kde-format
 msgid "legend"
 msgstr "lenda"
@@ -3617,16 +3617,14 @@ msgid "Unknown Function"
 msgstr "Función descoñecida"
 
 #: src/backend/gsl/functions.cpp:241
-#, fuzzy, kde-format
-#| msgid "Cell (index, variable)"
+#, kde-format
 msgid "Cell (index; variable)"
-msgstr "Cela (índice, variábel)"
+msgstr "Cela (índice; variábel)"
 
 #: src/backend/gsl/functions.cpp:242
-#, fuzzy, kde-format
-#| msgid "Cell (index, variable)"
+#, kde-format
 msgid "Cell (index; default_value; variable)"
-msgstr "Cela (índice, variábel)"
+msgstr "Cela (índice; valor_predeterminado; variábel)"
 
 #: src/backend/gsl/functions.cpp:243
 #, kde-format
@@ -3671,12 +3669,12 @@ msgstr "Mostra aleatoria"
 #: src/backend/gsl/functions.cpp:252
 #, kde-format
 msgid "Current column cell (index)"
-msgstr ""
+msgstr "Cela da columna actual (índice)"
 
 #: src/backend/gsl/functions.cpp:253
 #, kde-format
 msgid "Current column cell (index; default_value)"
-msgstr ""
+msgstr "Cela da columna actual (índice; valor_predeterminado)"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:257
@@ -10274,7 +10272,7 @@ msgstr "Compatibilidade coa funcionalidade de porto serie."
 #: src/frontend/AboutDialog.cpp:256
 #, kde-format
 msgid "SVG export support"
-msgstr ""
+msgstr "Posibilidade de exportar a SVG."
 
 #: src/frontend/AboutDialog.cpp:261
 #, kde-format
@@ -24330,17 +24328,13 @@ msgid "Search/Filter text"
 msgstr "Texto de busca ou filtro"
 
 #: src/frontend/widgets/TreeViewComboBox.cpp:358
-#, fuzzy, kde-format
-#| msgid ""
-#| "The curve \"%1\"\n"
-#| "is not available anymore. It will be automatically used once it is "
-#| "created again."
+#, kde-format
 msgid ""
 "The aspect \"%1\"\n"
 "is not available anymore. It will be automatically used once it is created "
 "again."
 msgstr ""
-"A curva «%1»\n"
+"O aspecto «%1»\n"
 "xa non está dispoñíbel. Usarase automaticamente cando se cree de novo."
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:53

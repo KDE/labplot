@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-11 00:37+0000\n"
-"PO-Revision-Date: 2024-12-10 12:12+0100\n"
+"POT-Creation-Date: 2024-12-12 00:37+0000\n"
+"PO-Revision-Date: 2024-12-11 11:50+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -2506,7 +2506,7 @@ msgstr "Trazar datos"
 msgid "Plot%1"
 msgstr "Trazar%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1502
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1521
 #, kde-format
 msgid "legend"
 msgstr "leyenda"
@@ -3622,16 +3622,14 @@ msgid "Unknown Function"
 msgstr "Función desconocida"
 
 #: src/backend/gsl/functions.cpp:241
-#, fuzzy, kde-format
-#| msgid "Cell (index, variable)"
+#, kde-format
 msgid "Cell (index; variable)"
-msgstr "Celda (índice, variable)"
+msgstr "Celda (índice; variable)"
 
 #: src/backend/gsl/functions.cpp:242
-#, fuzzy, kde-format
-#| msgid "Cell (index, variable)"
+#, kde-format
 msgid "Cell (index; default_value; variable)"
-msgstr "Celda (índice, variable)"
+msgstr "Celda (índice; valor predeterminado; variable)"
 
 #: src/backend/gsl/functions.cpp:243
 #, kde-format
@@ -3676,12 +3674,12 @@ msgstr "Muestra aleatoria"
 #: src/backend/gsl/functions.cpp:252
 #, kde-format
 msgid "Current column cell (index)"
-msgstr ""
+msgstr "Celda de la columna actual (índice)"
 
 #: src/backend/gsl/functions.cpp:253
 #, kde-format
 msgid "Current column cell (index; default_value)"
-msgstr ""
+msgstr "Celda de la columna actual (índice; valor predeterminado)"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:257
@@ -10260,7 +10258,7 @@ msgstr "Compatibilidad con la funcionalidad del puerto serie"
 #: src/frontend/AboutDialog.cpp:256
 #, kde-format
 msgid "SVG export support"
-msgstr ""
+msgstr "Implementación de exportación SVG"
 
 #: src/frontend/AboutDialog.cpp:261
 #, kde-format

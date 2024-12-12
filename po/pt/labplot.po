@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-11 00:37+0000\n"
+"POT-Creation-Date: 2024-12-12 00:37+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -2637,7 +2637,7 @@ msgstr "Dados do gráfico"
 msgid "Plot%1"
 msgstr "Gráfico%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1502
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1521
 #, kde-format
 msgid "legend"
 msgstr "legenda"

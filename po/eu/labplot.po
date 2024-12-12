@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-11 00:37+0000\n"
+"POT-Creation-Date: 2024-12-12 00:37+0000\n"
 "PO-Revision-Date: 2024-12-10 17:27+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -2553,7 +2553,7 @@ msgstr "Trazatu datuak"
 msgid "Plot%1"
 msgstr "Diagrama%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1502
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1521
 #, kde-format
 msgid "legend"
 msgstr "Legenda"

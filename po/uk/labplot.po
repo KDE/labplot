@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-11 00:37+0000\n"
-"PO-Revision-Date: 2024-12-10 09:49+0200\n"
+"POT-Creation-Date: 2024-12-12 00:37+0000\n"
+"PO-Revision-Date: 2024-12-11 11:01+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -2514,7 +2514,7 @@ msgstr "Накреслити дані"
 msgid "Plot%1"
 msgstr "Креслення%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1502
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1521
 #, kde-format
 msgid "legend"
 msgstr "умовні позначення"
@@ -3630,16 +3630,14 @@ msgid "Unknown Function"
 msgstr "Невідома функція"
 
 #: src/backend/gsl/functions.cpp:241
-#, fuzzy, kde-format
-#| msgid "Cell (index, variable)"
+#, kde-format
 msgid "Cell (index; variable)"
-msgstr "Комірка (індекс, змінна)"
+msgstr "Комірка (індекс; змінна)"
 
 #: src/backend/gsl/functions.cpp:242
-#, fuzzy, kde-format
-#| msgid "Cell (index, variable)"
+#, kde-format
 msgid "Cell (index; default_value; variable)"
-msgstr "Комірка (індекс, змінна)"
+msgstr "Комірка (індекс; типове_значення; змінна)"
 
 #: src/backend/gsl/functions.cpp:243
 #, kde-format
@@ -3684,12 +3682,12 @@ msgstr "Випадкова вибірка"
 #: src/backend/gsl/functions.cpp:252
 #, kde-format
 msgid "Current column cell (index)"
-msgstr ""
+msgstr "Поточна комірка стовпчика (індекс)"
 
 #: src/backend/gsl/functions.cpp:253
 #, kde-format
 msgid "Current column cell (index; default_value)"
-msgstr ""
+msgstr "Поточна комірка стовпчика (індекс; типове_значення)"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:257
@@ -10321,7 +10319,7 @@ msgstr "Підтримка роботи з послідовними портам
 #: src/frontend/AboutDialog.cpp:256
 #, kde-format
 msgid "SVG export support"
-msgstr ""
+msgstr "Підтримка експортування до SVG"
 
 #: src/frontend/AboutDialog.cpp:261
 #, kde-format

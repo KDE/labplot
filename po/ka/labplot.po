@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-11 00:37+0000\n"
-"PO-Revision-Date: 2024-12-10 05:50+0100\n"
+"POT-Creation-Date: 2024-12-12 00:37+0000\n"
+"PO-Revision-Date: 2024-12-11 05:34+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -2499,7 +2499,7 @@ msgstr "გრაფიკის მონაცემები"
 msgid "Plot%1"
 msgstr "გრაფიკი%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1502
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1521
 #, kde-format
 msgid "legend"
 msgstr "შინაარსი"
@@ -3669,12 +3669,12 @@ msgstr "შემთხვევითი სემპლები"
 #: src/backend/gsl/functions.cpp:252
 #, kde-format
 msgid "Current column cell (index)"
-msgstr ""
+msgstr "მიმდინარე სვეტის უჯრედი (ინდექსი)"
 
 #: src/backend/gsl/functions.cpp:253
 #, kde-format
 msgid "Current column cell (index; default_value)"
-msgstr ""
+msgstr "მიმდინარე სვეტის უჯრედი (ინდექსი; ნაგულისხმევი_მნიშვნელობა)"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:257
@@ -10254,7 +10254,7 @@ msgstr "სერიული პორტის ფუნქციონალ�
 #: src/frontend/AboutDialog.cpp:256
 #, kde-format
 msgid "SVG export support"
-msgstr ""
+msgstr "SVG-ში გადატანის მხარდაჭერა"
 
 #: src/frontend/AboutDialog.cpp:261
 #, kde-format
@@ -13153,7 +13153,7 @@ msgstr "%1 მიმართვის ხაზი: ნიმუში \"%2\" �
 #, kde-format
 msgid ""
 "Enable linking to synchronize the number of rows with another spreadsheet"
-msgstr ""
+msgstr "ჩართეთ მიბმა, რომ დაასინქრონოთ მწკრივების რაოდენობა სხვა ელცხრილთან"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:56
 #, kde-format
@@ -19749,6 +19749,8 @@ msgid ""
 "The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is "
 "fully opaque."
 msgstr ""
+"გაუმჭვირვალობა იცვლება 0-დან 100-მდე, სადაც 0 სრულად გამჭვირვალეა, 100 კი "
+"სრულად გაუმჭვირვალე."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTicks)
 #: src/frontend/ui/dockwidgets/axisdock.ui:652
@@ -19833,6 +19835,8 @@ msgid ""
 "<html><head/><body><p>Set offset to start ticks at first data point</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>დააყენეთ წანაცვლება დაყოფის პირველ მონაცემთა წერტილთან "
+"დასაწყებად</p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFirstTickAuto)
 #: src/frontend/ui/dockwidgets/axisdock.ui:944
@@ -19841,6 +19845,8 @@ msgid ""
 "<html><head/><body><p>Set offset to start ticks at round value before first "
 "data point</p></body></html>"
 msgstr ""
+"<html><head/><body><p>დააყენეთ წანაცვლება დაყოფების პირველ მონაცემთა "
+"წერტილამდე, მრგვალ მნიშვნელობასთან დასაწყებად</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lRugLength)
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksLength)
@@ -19868,6 +19874,8 @@ msgid ""
 "<html><head/><body><p>Offset of the first tick from the start of the axis</"
 "p></body></html>"
 msgstr ""
+"<html><head/><body><p>პირველი დაყოფის წანაცვლება ღერძის დასაწყისიდან</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTickStartOffset)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1036
@@ -22086,7 +22094,7 @@ msgstr "ჩატევის ფუნქციის გადახედვ�
 #: src/frontend/ui/fitoptionswidget.ui:66
 #, kde-format
 msgid "Specify the tolerance for the fit algorithm convergence"
-msgstr ""
+msgstr "მიუთითეთ გადახრა ჩატევის ალგორითმის კონვერგენციისთვის"
 
 #. i18n: ectx: property (text), widget (QLabel, lEps)
 #: src/frontend/ui/fitoptionswidget.ui:69
@@ -22636,6 +22644,10 @@ msgid ""
 "decoration: underline; color:#2980b9;\">Guide to the Expression of "
 "Uncertainty in Measurement (GUM)</span></a></p></body></html>"
 msgstr ""
+"<html><head/><body><p>გამოყენების პირობები შეესაბამება <a href=\"http://www."
+"bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf\"><span style=\" "
+"text-decoration: underline; color:#2980b9;\">გაზომბის გაურკვევლობის "
+"გამოსახულების გიდისას (GUM)</span></a></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGUMTerms)
 #: src/frontend/ui/settingsgeneralpage.ui:152
@@ -22692,6 +22704,8 @@ msgid ""
 "<html><head/><body><p>Save projects in a compatible format that can be "
 "opened in LabPlot versions older than 2.9.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>პროექტების შენახვა თავსებად ფორმატში, რომელიც LabPlot-"
+"ის 2.9 ან უფრო ძველშიც გაიხსნება.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
 #: src/frontend/ui/settingsgeneralpage.ui:322
@@ -23768,6 +23782,7 @@ msgid ""
 "Use logical instead of absolute coordinates to specify the position on the "
 "plot"
 msgstr ""
+"ნახაზის მისათითებლად აბსოლუტურის მაგიერ ლოგიკური კოორდინატების გამოყენება"
 
 #: src/frontend/widgets/LabelWidget.cpp:139
 #, kde-format
