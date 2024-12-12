@@ -470,6 +470,6 @@
   </releases>
   <custom>
     <value key="KDE::windows_store">https://www.microsoft.com/store/apps/9ngxfc68925l</value>
-    <value key="KDE::supporters">PJ</value>
+    <value key="KDE::supporters">PJ;CounterFlow;[Jan Andrle](https://fosstodon.org/@jaandrle)</value>
   </custom>
 </component>
