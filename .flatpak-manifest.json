@@ -116,9 +116,9 @@
             "buildsystem": "cmake-ninja",
             "sources": [
 		    {
-			    "type": "git",
-			    "url": "https://github.com/KDE/cantor.git",
-			    "tag": "e43befd7e16638d30756b5abe85685a059e32aca"
+			    "type": "archive",
+			    "url": "https://download.kde.org/stable/release-service/24.12.0/src/cantor-24.12.0.tar.xz",
+			    "sha256": "3c327a33377e0cd6895936b438fb33a1cea274ba394b997fb0002a80d273f337"
 		    }
 	    ]
         },
