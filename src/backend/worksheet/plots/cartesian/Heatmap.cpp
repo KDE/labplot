@@ -775,9 +775,9 @@ QRectF HeatmapPrivate::update() {
 	double minValue = std::nan("0");
 	double maxValue = -std::nan("0");
 
-	auto calculateIndex = [](double val, double minValid, double maxValid, double binSize, int numberBinsVisible) {
+	auto calculateIndex = [](double val, double maxData, double minValid, double maxValid, double binSize, int numberBinsVisible) {
 		// TODO: make option if the border shall be included, or not
-		if (val == maxValid)
+		if (val == maxValid && val == maxData)
 			return numberBinsVisible - 1; // include Right Border
 		const auto index = (val - minValid) / binSize;
 		if (index < 0)
@@ -805,8 +805,8 @@ QRectF HeatmapPrivate::update() {
 			const auto xVal = xColumn->valueAt(i);
 			const auto yVal = yColumn->valueAt(i);
 
-			xIndex = calculateIndex(xVal, xMinValid, xMaxValid, xBinSize, xNumberBinsVisible);
-			yIndex = calculateIndex(yVal, yMinValid, yMaxValid, yBinSize, yNumberBinsVisible);
+			xIndex = calculateIndex(xVal, xMax, xMinValid, xMaxValid, xBinSize, xNumberBinsVisible);
+			yIndex = calculateIndex(yVal, yMax, yMinValid, yMaxValid, yBinSize, yNumberBinsVisible);
 
 			if (xIndex >= 0 && xIndex < xNumberBinsVisible && yIndex >= 0 && yIndex < yNumberBinsVisible) {
 				map[xIndex][yIndex] += 1; // Summing up
@@ -821,10 +821,10 @@ QRectF HeatmapPrivate::update() {
 		const double yStepSize = (yMax - yMin) / yNumValues;
 		for (int row = 0; row < yNumValues; row++) {
 			const double yVal = yMin + row * yStepSize + 0.5 * yStepSize; // 0.5 * yStepSize because it is assuming that a cell is in the center
-			const int yIndex = calculateIndex(yVal, yMinValid, yMaxValid, yBinSize, yNumberBinsVisible);
+			const int yIndex = calculateIndex(yVal, yMax, yMinValid, yMaxValid, yBinSize, yNumberBinsVisible);
 			for (int column = 0; column < xNumValues; column++) {
 				const double xVal = xMin + column * xStepSize + 0.5 * xStepSize;
-				const int xIndex = calculateIndex(xVal, xMinValid, xMaxValid, xBinSize, xNumberBinsVisible);
+				const int xIndex = calculateIndex(xVal, xMax, xMinValid, xMaxValid, xBinSize, xNumberBinsVisible);
 
 				const double value = matrix->cell<double>(row, column);
 				if (value > maxValue)
