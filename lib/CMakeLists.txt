@@ -204,7 +204,7 @@ set(GENERATED_SOURCES
 )
 
 ##############################################################################
-add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
+add_definitions (${QT_DEFINITIONS})
 include_directories(../src/ ${BACKEND_DIR}/gsl ${GSL_INCLUDE_DIR} ../src/3rdparty/liborigin ../src/3rdparty/Qt-Advanced-Docking-System/src/ ../src/3rdparty/QXlsx/header/)
 
 # see also QT_MIN_VERSION
