@@ -1,5 +1,5 @@
 {
-    "id": "org.kde.labplot2",
+    "id": "org.kde.labplot",
     "branch": "master",
     "runtime": "org.kde.Platform",
     "runtime-version": "6.7",
