@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-12 00:37+0000\n"
-"PO-Revision-Date: 2024-12-11 08:52+0100\n"
+"PO-Revision-Date: 2024-12-12 09:00+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -3651,16 +3651,14 @@ msgid "Unknown Function"
 msgstr "Fonction inconnue"
 
 #: src/backend/gsl/functions.cpp:241
-#, fuzzy, kde-format
-#| msgid "Cell (index, variable)"
+#, kde-format
 msgid "Cell (index; variable)"
 msgstr "Cell (index, variable)"
 
 #: src/backend/gsl/functions.cpp:242
-#, fuzzy, kde-format
-#| msgid "Cell (index, variable)"
+#, kde-format
 msgid "Cell (index; default_value; variable)"
-msgstr "Cell (index, variable)"
+msgstr "Cell (index, valeur_par_défaut, variable)"
 
 #: src/backend/gsl/functions.cpp:243
 #, kde-format
@@ -3705,12 +3703,12 @@ msgstr "Échantillonnage aléatoire"
 #: src/backend/gsl/functions.cpp:252
 #, kde-format
 msgid "Current column cell (index)"
-msgstr ""
+msgstr "Cellule de colonne courante (index)"
 
 #: src/backend/gsl/functions.cpp:253
 #, kde-format
 msgid "Current column cell (index; default_value)"
-msgstr ""
+msgstr "Cellule de colonne courante (index ; valeur_par_défaut)"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:257
@@ -10321,7 +10319,7 @@ msgstr "Prise en charge de la fonctionnalité du port série"
 #: src/frontend/AboutDialog.cpp:256
 #, kde-format
 msgid "SVG export support"
-msgstr ""
+msgstr "Prise en charge de l'exportation au format « SVG »"
 
 #: src/frontend/AboutDialog.cpp:261
 #, kde-format
