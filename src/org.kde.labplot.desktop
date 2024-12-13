@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Exec=labplot %f
-Icon=labplot
+Icon=org.kde.labplot
 Name=LabPlot
 Name[ca]=LabPlot
 Name[ca@valencia]=LabPlot
