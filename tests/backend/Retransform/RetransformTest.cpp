@@ -241,7 +241,7 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 
 	QAction a(nullptr);
 	a.setData(static_cast<int>(CartesianPlot::MouseMode::ZoomXSelection));
-	view->cartesianPlotMouseModeChanged(&a);
+	view->changePlotMouseMode(&a);
 
 	QCOMPARE(c.elementLogCount(false), 0);
 	QVERIFY(c.calledExact(0, false));
@@ -291,7 +291,7 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	c.resetRetransformCount();
 	view->selectItem(plot->graphicsItem());
 	a.setData(static_cast<int>(CartesianPlot::NavigationOperation::ScaleAutoX));
-	view->cartesianPlotNavigationChanged(&a);
+	view->changePlotNavigation(&a);
 
 	QCOMPARE(c.elementLogCount(false), list.count());
 	for (auto& s : list)
@@ -396,7 +396,7 @@ void RetransformTest::TestZoomAutoscaleSingleYRange() {
 	auto* view = static_cast<WorksheetView*>(worksheet->view());
 	QVERIFY(view);
 	view->initActions();
-	view->cartesianPlotMouseModeChanged(&a);
+	view->changePlotMouseMode(&a);
 
 	view->setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode::ApplyActionToAllX);
 
@@ -494,7 +494,7 @@ void RetransformTest::TestZoomAutoscaleSingleXRange() {
 	auto* view = static_cast<WorksheetView*>(worksheet->view());
 	QVERIFY(view);
 	view->initActions();
-	view->cartesianPlotMouseModeChanged(&a);
+	view->changePlotMouseMode(&a);
 
 	view->setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode::ApplyActionToAllY);
 
