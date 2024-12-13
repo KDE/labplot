@@ -739,6 +739,5 @@ if(KF${KF_MAJOR_VERSION}I18n_FOUND)
     ki18n_install(po)
 endif()
 if(KF${KF_MAJOR_VERSION}DocTools_FOUND)
-# TODO: disabled until labplot2.1 is created as labplot.1
-	#    kdoctools_install(po)
+    kdoctools_install(po)
 endif()
