@@ -153,12 +153,10 @@ private:
 	QMenu* m_viewMouseModeMenu{nullptr};
 	QMenu* m_cartesianPlotMenu{nullptr};
 	QMenu* m_cartesianPlotMouseModeMenu{nullptr};
-	QMenu* m_cartesianPlotAddNewMenu{nullptr};
 	QMenu* m_cartesianPlotZoomMenu{nullptr};
 	QMenu* m_cartesianPlotActionModeMenu{nullptr};
 	QMenu* m_cartesianPlotCursorModeMenu{nullptr};
 
-	QToolButton* tbCartesianPlotAddNew{nullptr};
 	QToolButton* tbNewCartesianPlot{nullptr};
 
 	// Actions
@@ -213,13 +211,13 @@ private:
 	QAction* showPresenterMode{nullptr};
 
 	// Actions for cartesian plots
-	QAction* cartesianPlotAddNewAction{nullptr};
 	QAction* cartesianPlotApplyToSelectionAction{nullptr};
 	QAction* cartesianPlotApplyToAllAction{nullptr};
 	QAction* cartesianPlotApplyToAllXAction{nullptr};
 	QAction* cartesianPlotApplyToAllYAction{nullptr};
 	QAction* cartesianPlotApplyToAllCursor{nullptr};
 	QAction* cartesianPlotApplyToSelectionCursor{nullptr};
+
 	QAction* cartesianPlotSelectionModeAction{nullptr};
 	QAction* cartesianPlotCrosshairModeAction{nullptr};
 	QAction* cartesianPlotZoomSelectionModeAction{nullptr};

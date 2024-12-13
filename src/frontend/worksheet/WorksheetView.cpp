@@ -312,15 +312,6 @@ void WorksheetView::initActions() {
 	connect(plotsInteractiveAction, &QAction::triggered, this, &WorksheetView::plotsInteractiveActionChanged);
 
 	// actions for cartesian plots
-
-	// "add new"-action shown in the context menu
-	cartesianPlotAddNewAction = new QAction(QIcon::fromTheme(QStringLiteral("list-add")), i18n("Add New"), this);
-
-	// "add new"- toolbutton shown in the toolbar
-	tbCartesianPlotAddNew = new QToolButton(this);
-	tbCartesianPlotAddNew->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
-	tbCartesianPlotAddNew->setPopupMode(QToolButton::InstantPopup);
-
 	auto* cartesianPlotActionModeActionGroup = new QActionGroup(this);
 	cartesianPlotActionModeActionGroup->setExclusive(true);
 	cartesianPlotApplyToSelectionAction = new QAction(i18n("Selected Plot Areas"), cartesianPlotActionModeActionGroup);
@@ -506,6 +497,23 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotMenu = new QMenu(i18n("Plot Area"), this);
 	m_cartesianPlotMenu->setIcon(QIcon::fromTheme(QStringLiteral("office-chart-line")));
 
+	m_cartesianPlotActionModeMenu = new QMenu(i18n("Apply Actions to"), this);
+	m_cartesianPlotActionModeMenu->setIcon(QIcon::fromTheme(QStringLiteral("dialog-ok-apply")));
+	m_cartesianPlotActionModeMenu->addAction(cartesianPlotApplyToSelectionAction);
+	m_cartesianPlotActionModeMenu->addAction(cartesianPlotApplyToAllAction);
+	m_cartesianPlotActionModeMenu->addAction(cartesianPlotApplyToAllXAction);
+	m_cartesianPlotActionModeMenu->addAction(cartesianPlotApplyToAllYAction);
+
+	m_cartesianPlotCursorModeMenu = new QMenu(i18n("Apply Cursor to"), this);
+	m_cartesianPlotCursorModeMenu->setIcon(QIcon::fromTheme(QStringLiteral("debug-execute-from-cursor")));
+	m_cartesianPlotCursorModeMenu->addAction(cartesianPlotApplyToSelectionCursor);
+	m_cartesianPlotCursorModeMenu->addAction(cartesianPlotApplyToAllCursor);
+
+	m_cartesianPlotMenu->addMenu(m_cartesianPlotActionModeMenu);
+	m_cartesianPlotMenu->addMenu(m_cartesianPlotCursorModeMenu);
+
+	// menus with the actions for mouse mode and for scale/zoom/shift that is added to the context menu of a plot,
+	// we need to keep the actions in WorksheetView so we can apply them to all plots on the worksheet if needed.
 	m_cartesianPlotMouseModeMenu = new QMenu(i18n("Mouse Mode"), this);
 	m_cartesianPlotMouseModeMenu->setIcon(QIcon::fromTheme(QStringLiteral("input-mouse")));
 	m_cartesianPlotMouseModeMenu->addAction(cartesianPlotSelectionModeAction);
@@ -514,7 +522,6 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotMouseModeMenu->addAction(cartesianPlotZoomYSelectionModeAction);
 	m_cartesianPlotMouseModeMenu->addSeparator();
 	m_cartesianPlotMouseModeMenu->addAction(cartesianPlotCursorModeAction);
-	m_cartesianPlotMouseModeMenu->addSeparator();
 
 	m_cartesianPlotZoomMenu = new QMenu(i18n("Zoom/Navigate"), this);
 	m_cartesianPlotZoomMenu->setIcon(QIcon::fromTheme(QStringLiteral("zoom-draw")));
@@ -536,26 +543,6 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotZoomMenu->addSeparator();
 	m_cartesianPlotZoomMenu->addAction(shiftUpYAction);
 	m_cartesianPlotZoomMenu->addAction(shiftDownYAction);
-
-	m_cartesianPlotActionModeMenu = new QMenu(i18n("Apply Actions to"), this);
-	m_cartesianPlotActionModeMenu->setIcon(QIcon::fromTheme(QStringLiteral("dialog-ok-apply")));
-	m_cartesianPlotActionModeMenu->addAction(cartesianPlotApplyToSelectionAction);
-	m_cartesianPlotActionModeMenu->addAction(cartesianPlotApplyToAllAction);
-	m_cartesianPlotActionModeMenu->addAction(cartesianPlotApplyToAllXAction);
-	m_cartesianPlotActionModeMenu->addAction(cartesianPlotApplyToAllYAction);
-
-	m_cartesianPlotCursorModeMenu = new QMenu(i18n("Apply Cursor to"), this);
-	m_cartesianPlotCursorModeMenu->setIcon(QIcon::fromTheme(QStringLiteral("debug-execute-from-cursor")));
-	m_cartesianPlotCursorModeMenu->addAction(cartesianPlotApplyToSelectionCursor);
-	m_cartesianPlotCursorModeMenu->addAction(cartesianPlotApplyToAllCursor);
-
-	m_cartesianPlotMenu->addAction(cartesianPlotAddNewAction);
-	m_cartesianPlotMenu->addSeparator();
-	m_cartesianPlotMenu->addMenu(m_cartesianPlotMouseModeMenu);
-	m_cartesianPlotMenu->addMenu(m_cartesianPlotZoomMenu);
-	m_cartesianPlotMenu->addSeparator();
-	m_cartesianPlotMenu->addMenu(m_cartesianPlotActionModeMenu);
-	m_cartesianPlotMenu->addMenu(m_cartesianPlotCursorModeMenu);
 
 	// themes menu
 	m_themeMenu = new QMenu(i18n("Theme"), this);
@@ -1645,11 +1632,6 @@ void WorksheetView::selectionChanged() {
 }
 
 void WorksheetView::handleCartesianPlotSelected(CartesianPlot* plot) {
-	if (tbCartesianPlotAddNew) { // not available in the presenter mode
-		tbCartesianPlotAddNew->setMenu(plot->addNewMenu()); // update the tool button shown in the toolbar
-		cartesianPlotAddNewAction->setMenu(plot->addNewMenu()); // update the action shown in the main menu
-	}
-
 	/* Action to All: action is applied to all ranges
 	 *	- Applied to all plots and all ranges
 	 * Action to X: action is applied to all x ranges
@@ -2065,15 +2047,6 @@ void WorksheetView::handleCartesianPlotActions() {
 		scaleAutoXAction->setEnabled(false);
 		scaleAutoYAction->setEnabled(false);
 	}
-
-	if (cartesianPlotAddNewAction) // not available in the presenter mode
-		cartesianPlotAddNewAction->setEnabled(plot);
-
-	if (m_menusInitialized) { // not available in the presenter mode
-		tbCartesianPlotAddNew->setEnabled(plot);
-		m_cartesianPlotZoomMenu->setEnabled(m_selectedElement);
-		m_cartesianPlotMouseModeMenu->setEnabled(plot);
-	}
 }
 
 void WorksheetView::exportToFile(const QString& path, const ExportFormat format, const ExportArea area, const bool background, const int resolution) {
@@ -2451,7 +2424,10 @@ void WorksheetView::childContextMenuRequested(AspectType t, QMenu* menu) {
 	if (t == AspectType::CartesianPlot) {
 		// actions.at(0) is the menu title
 		// actions.at(1) is the "new" menu
-		menu->insertMenu(menu->actions().at(2), m_cartesianPlotZoomMenu);
+		// actions.at(2) is the separator
+		menu->insertMenu(menu->actions().at(3), m_cartesianPlotMouseModeMenu);
+		menu->insertMenu(menu->actions().at(4), m_cartesianPlotZoomMenu);
+		menu->insertSeparator(menu->actions().at(5));
 	}
 	menu->exec(QCursor::pos());
 }
