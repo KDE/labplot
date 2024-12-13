@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-12 00:37+0000\n"
-"PO-Revision-Date: 2024-12-10 13:13+0100\n"
+"PO-Revision-Date: 2024-12-11 11:27+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -3608,16 +3608,14 @@ msgid "Unknown Function"
 msgstr "Onbekende functie"
 
 #: src/backend/gsl/functions.cpp:241
-#, fuzzy, kde-format
-#| msgid "Cell (index, variable)"
+#, kde-format
 msgid "Cell (index; variable)"
-msgstr "Cel (index, variabele)"
+msgstr "Cel (index; variabele)"
 
 #: src/backend/gsl/functions.cpp:242
-#, fuzzy, kde-format
-#| msgid "Cell (index, variable)"
+#, kde-format
 msgid "Cell (index; default_value; variable)"
-msgstr "Cel (index, variabele)"
+msgstr "Cel (index; standaardwaarde; variabele)"
 
 #: src/backend/gsl/functions.cpp:243
 #, kde-format
@@ -3662,12 +3660,12 @@ msgstr "Willekeurig sample"
 #: src/backend/gsl/functions.cpp:252
 #, kde-format
 msgid "Current column cell (index)"
-msgstr ""
+msgstr "Cel van huidige kolom (index)"
 
 #: src/backend/gsl/functions.cpp:253
 #, kde-format
 msgid "Current column cell (index; default_value)"
-msgstr ""
+msgstr "Cel van huidige kolom (index; standaardwaarde)"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:257
@@ -10247,7 +10245,7 @@ msgstr "Ondersteuning functionaliteit van seriële poort"
 #: src/frontend/AboutDialog.cpp:256
 #, kde-format
 msgid "SVG export support"
-msgstr ""
+msgstr "Ondersteuning van SVG exporteren"
 
 #: src/frontend/AboutDialog.cpp:261
 #, kde-format

@@ -3592,10 +3592,9 @@ msgid "Unknown Function"
 msgstr "未知函数"
 
 #: src/backend/gsl/functions.cpp:241
-#, fuzzy, kde-format
-#| msgid "Delete variable"
+#, kde-format
 msgid "Cell (index; variable)"
-msgstr "删除变量"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:242
 #, kde-format
