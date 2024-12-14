@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-16 03:05+0000\n"
-"PO-Revision-Date: 2024-12-08 20:22+0100\n"
+"PO-Revision-Date: 2024-12-13 22:55+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -1588,7 +1588,7 @@ msgstr "XYRGB"
 #: src/backend/datasources/filters/ImageFilter.cpp:118
 #, kde-format
 msgid "Empty file or invalid or non-supported format."
-msgstr "O ficheiro está baleiro ou o formato é incompatíbel."
+msgstr "O ficheiro está baleiro ou o formato é incorrecto ou incompatíbel."
 
 #: src/backend/datasources/filters/ImageFilter.cpp:219
 #, kde-format
@@ -8282,7 +8282,7 @@ msgstr "%1: definir o intervalo"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1165
 #, kde-format
 msgid "%1: change %2-range %3 format"
-msgstr "%1: definir o formato %3 do intervalo de %2"
+msgstr "%1: cambiar o formato %3 do intervalo de %2"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1255
 #, kde-format
@@ -9537,6 +9537,7 @@ msgstr "%1: definir a cor de fondo"
 msgid "%1: set label text"
 msgstr "%1: definir o texto da etiqueta"
 
+# skip-rule: trasno-bookmark_reverse
 #: src/backend/worksheet/TextLabel.cpp:339
 #, kde-format
 msgid "%1: set label placeholdertext"
@@ -13964,6 +13965,7 @@ msgstr ""
 "Se se marca, este estado das docas da aplicación predeterminada gárdase no "
 "ficheiro de proxecto e restáurase ao cargar o proxecto."
 
+# skip-rule: trasno-change_reverse
 #: src/kdefrontend/dockwidgets/ProjectDock.cpp:33
 #, kde-format
 msgid ""
