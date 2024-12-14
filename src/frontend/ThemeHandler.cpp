@@ -211,12 +211,12 @@ void ThemeHandler::showPanel() {
 // 	leFilename->setFocus();
 // }
 
-// void ThemeHandler::saveNewSelected(const QString& filename) {
-// 	KConfig config(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + '/' + "themes" + '/' + filename, KConfig::SimpleConfig);
+// void ThemeHandler::saveNewSelected(const QString& fileName) {
+// 	KConfig config(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + '/' + "themes" + '/' + fileName, KConfig::SimpleConfig);
 // 	Q_EMIT saveThemeRequested(config);
-// 	Q_EMIT info( i18n("New theme \"%1\" was saved.", filename) );
+// 	Q_EMIT info( i18n("New theme \"%1\" was saved.", fileName) );
 //
-// 	m_currentLocalTheme = filename;
+// 	m_currentLocalTheme = fileName;
 // 	m_themeList.append(config.name());
 //
 // 	//enable the publish button so the newly created theme can be published
