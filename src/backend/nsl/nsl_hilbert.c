@@ -52,7 +52,7 @@ int nsl_hilbert_transform(double data[], size_t stride, size_t n, nsl_hilbert_re
 		/* 3. back transform */
 #ifdef HAVE_FFTW3
 	fftw_complex* o = (fftw_complex*)malloc(N * sizeof(double));
-	fftw_plan pb = fftw_plan_dft_1d(n, o, o, FFTW_BACKWARD, FFTW_ESTIMATE);
+	fftw_plan pb = fftw_plan_dft_1d((int)n, o, o, FFTW_BACKWARD, FFTW_ESTIMATE);
 
 	fftw_execute_dft(pb, (fftw_complex*)result, (fftw_complex*)result);
 	fftw_destroy_plan(pb);
