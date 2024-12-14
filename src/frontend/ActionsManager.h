@@ -21,6 +21,7 @@ class WorksheetView;
 
 class QAction;
 class QMenu;
+class KActionMenu;
 class KHamburgerMenu;
 class KRecentFilesAction;
 class KToggleAction;
@@ -79,7 +80,7 @@ private:
 	ToggleActionMenu* m_worksheetAddNewPlotMenu{nullptr};
 	ToggleActionMenu* m_worksheetZoomMenu{nullptr};
 	ToggleActionMenu* m_worksheetMagnificationMenu{nullptr};
-	ToggleActionMenu* m_plotAddNewMenu{nullptr};
+	KActionMenu* m_plotAddNewMenu{nullptr};
 
 	QActionGroup* m_worksheetAddNewActionGroup{nullptr};
 	QActionGroup* m_worksheetLayoutActionGroup{nullptr};

@@ -83,6 +83,8 @@ public Q_SLOTS:
      */
     void setDefaultAction(QAction *action);
 
+    void setDefaultActionFromData(const QVariant&);
+
 protected:
     /** Can store @c nullptr, which means this menu itself will be the default action. */
     QPointer<QAction> m_defaultAction;

@@ -478,11 +478,11 @@ void ActionsManager::initWorksheetToolbarActions() {
 
 	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("draw-text")), i18n("Text"), m_worksheetAddNewActionGroup);
 	collection->addAction(QStringLiteral("worksheet_new_text_label"), action);
-	action->setData(static_cast<int>(WorksheetView::AddNew::TextLabel));
+	action->setData(static_cast<int>(WorksheetView::AddNewMode::TextLabel));
 
 	action = new QAction(QIcon::fromTheme(QStringLiteral("viewimage")), i18n("Image"), m_worksheetAddNewActionGroup);
 	collection->addAction(QStringLiteral("worksheet_new_image"), action);
-	action->setData(static_cast<int>(WorksheetView::AddNew::Image));
+	action->setData(static_cast<int>(WorksheetView::AddNewMode::Image));
 
 	// layout actions
 	m_worksheetLayoutActionGroup = new QActionGroup(m_mainWindow);
@@ -545,10 +545,7 @@ void ActionsManager::initPlotAreaToolbarActions() {
 	auto* collection = m_mainWindow->actionCollection();
 
 	// "add new" actions
-	// m_worksheetAddNewActionGroup = new QActionGroup(m_mainWindow);
-	m_plotAddNewMenu = new ToggleActionMenu(i18nc("@action", "Add New"), this);
-	m_plotAddNewMenu->setPopupMode(QToolButton::MenuButtonPopup);
-	// connect(m_worksheetAddNewPlotMenu->menu(), &QMenu::triggered, m_worksheetAddNewPlotMenu, &ToggleActionMenu::setDefaultAction);
+	m_plotAddNewMenu = new KActionMenu(QIcon::fromTheme(QStringLiteral("list-add")), i18nc("@action", "Add New"), this);
 	collection->addAction(QStringLiteral("plot_area_add_new"), m_plotAddNewMenu);
 
 	// mouse mode
@@ -1073,7 +1070,7 @@ void ActionsManager::updateGUI() {
 	}
 
 	if (datapicker) {
-		// populate datapicker-menu
+		// populate datapicker menu
 		auto* view = qobject_cast<DatapickerView*>(datapicker->view());
 		auto* menu = qobject_cast<QMenu*>(factory->container(QStringLiteral("datapicker"), m_mainWindow));
 		menu->clear();
@@ -1191,27 +1188,33 @@ void ActionsManager::toggleDockWidget(QAction* action) {
 		m_mainWindow->m_worksheetPreviewDock->toggleView(!m_mainWindow->m_worksheetPreviewDock->isVisible());
 }
 
+
 // ##############################################################################
 // ################  Connect actions to the actual views ########################
 // ##############################################################################
 void ActionsManager::connectWorksheetToolbarActions(const WorksheetView* view) {
 	// add new actions
-	m_worksheetAddNewPlotMenu->menu()->clear();
-	view->fillAddNewPlotMenu(m_worksheetAddNewPlotMenu);
-	disconnect(m_worksheetAddNewActionGroup, &QActionGroup::triggered, nullptr, &WorksheetView::addNew);
+	disconnect(m_worksheetAddNewActionGroup, &QActionGroup::triggered, nullptr, nullptr);
 	connect(m_worksheetAddNewActionGroup, &QActionGroup::triggered, view, &WorksheetView::addNew);
 
+	// add new plot actions
+	m_worksheetAddNewPlotMenu->menu()->clear();
+	view->fillAddNewPlotMenu(m_worksheetAddNewPlotMenu);
+	m_worksheetAddNewPlotMenu->setDefaultActionFromData(static_cast<int>(view->addNewMode()));
+
 	// layout actions
-	disconnect(m_worksheetLayoutActionGroup, &QActionGroup::triggered, nullptr, &WorksheetView::changeLayout);
+	disconnect(m_worksheetLayoutActionGroup, &QActionGroup::triggered, nullptr, nullptr);
 	connect(m_worksheetLayoutActionGroup, &QActionGroup::triggered, view, &WorksheetView::changeLayout);
 	const auto layout = view->layout();
 	for (auto* action : m_worksheetLayoutActionGroup->actions()) {
-		if (static_cast<Worksheet::Layout>(action->data().toInt()) == layout)
+		if (static_cast<Worksheet::Layout>(action->data().toInt()) == layout) {
 			action->setChecked(true);
+			break;
+		}
 	}
 
 	// mouse mode actions
-	disconnect(m_worksheeMouseModeActionGroup, &QActionGroup::triggered, nullptr, &WorksheetView::changeMouseMode);
+	disconnect(m_worksheeMouseModeActionGroup, &QActionGroup::triggered, nullptr, nullptr);
 	connect(m_worksheeMouseModeActionGroup, &QActionGroup::triggered, view, &WorksheetView::changeMouseMode);
 	const auto mouseMode = view->mouseMode();
 	for (auto* action : m_worksheeMouseModeActionGroup->actions()) {
@@ -1222,21 +1225,24 @@ void ActionsManager::connectWorksheetToolbarActions(const WorksheetView* view) {
 	// zoom actions
 	m_worksheetZoomMenu->menu()->clear();
 	view->fillZoomMenu(m_worksheetZoomMenu);
+	m_worksheetZoomMenu->setDefaultActionFromData(static_cast<int>(view->zoomMode()));
 
 	// magnification actions
 	m_worksheetMagnificationMenu->menu()->clear();
 	view->fillMagnificationMenu(m_worksheetMagnificationMenu);
+	m_worksheetMagnificationMenu->setDefaultActionFromData(view->magnification());
 }
 
 void ActionsManager::connectPlotAreaToolbarActions(const WorksheetView* view) {
 	// add new actions
-	m_plotAddNewMenu->menu()->clear();
-	view->fillPlotAddNewMenu(m_plotAddNewMenu);
+	m_plotAddNewMenu->setMenu(view->plotAddNewMenu());
 
-	disconnect(m_plotMouseModeActionGroup, &QActionGroup::triggered, nullptr, &WorksheetView::changePlotMouseMode);
+	// mouse mode actions
+	disconnect(m_plotMouseModeActionGroup, &QActionGroup::triggered, nullptr, nullptr);
 	connect(m_plotMouseModeActionGroup, &QActionGroup::triggered, view, &WorksheetView::changePlotMouseMode);
 
-	disconnect(m_plotNavigationGroup, &QActionGroup::triggered, nullptr, &WorksheetView::changePlotNavigation);
+	// zoom/navigation actions
+	disconnect(m_plotNavigationGroup, &QActionGroup::triggered, nullptr, nullptr);
 	connect(m_plotNavigationGroup, &QActionGroup::triggered, view, &WorksheetView::changePlotNavigation);
 
 	// TODO: we need to call WorksheetView::handleCartesianPlotActions() here somehow!!!

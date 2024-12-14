@@ -40,7 +40,7 @@ public:
 	enum class ExportArea { BoundingBox, Selection, Worksheet };
 	enum class ZoomMode { ZoomIn, ZoomOut, ZoomOrigin };
 	enum class MouseMode { Selection, Navigation, ZoomSelection };
-	enum class AddNew { PlotAreaFourAxes, PlotAreaTwoAxes, PlotAreaTwoAxesCentered, PlotAreaTwoAxesCenteredZero, PlotAreaFromTemplate, TextLabel, Image};
+	enum class AddNewMode { PlotAreaFourAxes, PlotAreaTwoAxes, PlotAreaTwoAxesCentered, PlotAreaTwoAxesCenteredZero, PlotAreaFromTemplate, TextLabel, Image};
 
 	struct GridSettings {
 		GridStyle style;
@@ -74,12 +74,13 @@ public:
 	Worksheet::Layout layout() const;
 	MouseMode mouseMode() const;
 	ZoomMode zoomMode() const;
+	AddNewMode addNewMode() const;
 	int magnification() const;
 
 	void fillAddNewPlotMenu(ToggleActionMenu*) const;
 	void fillZoomMenu(ToggleActionMenu*) const;
 	void fillMagnificationMenu(ToggleActionMenu*) const;
-	void fillPlotAddNewMenu(ToggleActionMenu*) const;
+	QMenu* plotAddNewMenu() const;
 
 private:
 	void initBasicActions();
@@ -118,6 +119,7 @@ private:
 	Worksheet* m_worksheet{nullptr};
 	MouseMode m_mouseMode{MouseMode::Selection};
 	ZoomMode m_zoomMode{ZoomMode::ZoomIn};
+	AddNewMode m_addNewMode{AddNewMode::PlotAreaFourAxes};
 	CartesianPlot::MouseMode m_cartesianPlotMouseMode{CartesianPlot::MouseMode::Selection};
 	bool m_selectionBandIsShown{false};
 	QPoint m_selectionStart;

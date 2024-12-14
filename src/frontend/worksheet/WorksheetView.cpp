@@ -185,16 +185,16 @@ void WorksheetView::initActions() {
 
 	// Mouse mode actions
 	selectionModeAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-cursor-arrow")), i18n("Select and Edit"), mouseModeActionGroup);
-	selectionModeAction->setData(static_cast<int>(WorksheetView::MouseMode::Selection));
+	selectionModeAction->setData(static_cast<int>(MouseMode::Selection));
 	selectionModeAction->setCheckable(true);
 	selectionModeAction->setChecked(true);
 
 	navigationModeAction = new QAction(QIcon::fromTheme(QStringLiteral("input-mouse")), i18n("Navigate"), mouseModeActionGroup);
-	navigationModeAction->setData(static_cast<int>(WorksheetView::MouseMode::Navigation));
+	navigationModeAction->setData(static_cast<int>(MouseMode::Navigation));
 	navigationModeAction->setCheckable(true);
 
 	zoomSelectionModeAction = new QAction(QIcon::fromTheme(QStringLiteral("page-zoom")), i18n("Select and Zoom"), mouseModeActionGroup);
-	zoomSelectionModeAction->setData(static_cast<int>(WorksheetView::MouseMode::ZoomSelection));
+	zoomSelectionModeAction->setData(static_cast<int>(MouseMode::ZoomSelection));
 	zoomSelectionModeAction->setCheckable(true);
 
 	// Magnification actions
@@ -221,26 +221,26 @@ void WorksheetView::initActions() {
 
 	//"Add new" related actions
 	addCartesianPlot1Action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-plot-four-axes")), i18n("Four Axes"), addNewActionGroup);
-	addCartesianPlot1Action->setData(static_cast<int>(WorksheetView::AddNew::PlotAreaFourAxes));
+	addCartesianPlot1Action->setData(static_cast<int>(AddNewMode::PlotAreaFourAxes));
 
 	addCartesianPlot2Action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes")), i18n("Two Axes"), addNewActionGroup);
-	addCartesianPlot2Action->setData(static_cast<int>(WorksheetView::AddNew::PlotAreaTwoAxes));
+	addCartesianPlot2Action->setData(static_cast<int>(AddNewMode::PlotAreaTwoAxes));
 
 	addCartesianPlot3Action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes-centered")), i18n("Two Axes, Centered"), addNewActionGroup);
-	addCartesianPlot3Action->setData(static_cast<int>(WorksheetView::AddNew::PlotAreaTwoAxesCentered));
+	addCartesianPlot3Action->setData(static_cast<int>(AddNewMode::PlotAreaTwoAxesCentered));
 
 	addCartesianPlot4Action =
 		new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes-centered-origin")), i18n("Two Axes, Crossing at Origin"), addNewActionGroup);
-	addCartesianPlot4Action->setData(static_cast<int>(WorksheetView::AddNew::PlotAreaTwoAxesCenteredZero));
+	addCartesianPlot4Action->setData(static_cast<int>(AddNewMode::PlotAreaTwoAxesCenteredZero));
 
 	addCartesianPlotTemplateAction = new QAction(QIcon::fromTheme(QStringLiteral("document-new-from-template")), i18n("Load from Template"), addNewActionGroup);
-	addCartesianPlotTemplateAction->setData(static_cast<int>(WorksheetView::AddNew::PlotAreaFromTemplate));
+	addCartesianPlotTemplateAction->setData(static_cast<int>(AddNewMode::PlotAreaFromTemplate));
 
 	addTextLabelAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-text")), i18n("Text"), addNewActionGroup);
-	addTextLabelAction->setData(static_cast<int>(WorksheetView::AddNew::TextLabel));
+	addTextLabelAction->setData(static_cast<int>(AddNewMode::TextLabel));
 
 	addImageAction = new QAction(QIcon::fromTheme(QStringLiteral("viewimage")), i18n("Image"), addNewActionGroup);
-	addImageAction->setData(static_cast<int>(WorksheetView::AddNew::Image));
+	addImageAction->setData(static_cast<int>(AddNewMode::Image));
 
 	// Layout actions
 	// TODO: the icons labplot-editvlayout and labplot-edithlayout are confusing for the user.
@@ -640,8 +640,16 @@ void WorksheetView::fillMagnificationMenu(ToggleActionMenu* menu) const {
 	menu->addAction(fiveTimesMagnificationAction);
 }
 
-void WorksheetView::fillPlotAddNewMenu(ToggleActionMenu* menu) const {
+QMenu* WorksheetView::plotAddNewMenu() const {
+	for (auto* item : m_selectedItems) {
+		auto* w = static_cast<WorksheetElementPrivate*>(item)->q;
+		if (w->type() == AspectType::CartesianPlot) {
+			auto* menu = static_cast<CartesianPlot*>(w)->addNewMenu();
+			return menu;
+		}
+	}
 
+	return nullptr;
 }
 
 /*!
@@ -1285,11 +1293,11 @@ WorksheetView::MouseMode WorksheetView::mouseMode() const {
 
 //"Add new" related slots
 void WorksheetView::addNew(QAction* action) {
-	const auto addNew = static_cast<WorksheetView::AddNew>(action->data().toInt());
+	m_addNewMode = static_cast<AddNewMode>(action->data().toInt());
 	bool restorePointers = false;
 	WorksheetElement* aspect = nullptr;
-	switch (addNew) {
-	case AddNew::PlotAreaFourAxes:{
+	switch (m_addNewMode) {
+	case AddNewMode::PlotAreaFourAxes:{
 		auto* plot = new CartesianPlot(i18n("Plot Area"));
 		plot->setType(CartesianPlot::Type::FourAxes);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
@@ -1298,7 +1306,7 @@ void WorksheetView::addNew(QAction* action) {
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot1Action);
 		break;
 	}
-	case AddNew::PlotAreaTwoAxes: {
+	case AddNewMode::PlotAreaTwoAxes: {
 		auto* plot = new CartesianPlot(i18n("Plot Area"));
 		plot->setType(CartesianPlot::Type::TwoAxes);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
@@ -1307,7 +1315,7 @@ void WorksheetView::addNew(QAction* action) {
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot2Action);
 		break;
 	}
-	case AddNew::PlotAreaTwoAxesCentered: {
+	case AddNewMode::PlotAreaTwoAxesCentered: {
 		auto* plot = new CartesianPlot(i18n("Plot Area"));
 		plot->setType(CartesianPlot::Type::TwoAxesCentered);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
@@ -1316,7 +1324,7 @@ void WorksheetView::addNew(QAction* action) {
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot3Action);
 		break;
 	}
-	case AddNew::PlotAreaTwoAxesCenteredZero: {
+	case AddNewMode::PlotAreaTwoAxesCenteredZero: {
 		auto* plot = new CartesianPlot(i18n("Plot Area"));
 		plot->setType(CartesianPlot::Type::TwoAxesCenteredZero);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
@@ -1325,7 +1333,7 @@ void WorksheetView::addNew(QAction* action) {
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot4Action);
 		break;
 	}
-	case AddNew::PlotAreaFromTemplate: {
+	case AddNewMode::PlotAreaFromTemplate: {
 #ifndef SDK
 		// open dialog
 		PlotTemplateDialog d;
@@ -1343,13 +1351,13 @@ void WorksheetView::addNew(QAction* action) {
 #endif
 		break;
 	}
-	case AddNew::TextLabel: {
+	case AddNewMode::TextLabel: {
 		auto* l = new TextLabel(i18n("Text Label"));
 		l->setText(i18n("Text Label"));
 		aspect = l;
 		break;
 	}
-	case AddNew::Image: {
+	case AddNewMode::Image: {
 		Image* image = new Image(i18n("Image"));
 		aspect = image;
 		break;
@@ -1414,6 +1422,10 @@ void WorksheetView::addNew(QAction* action) {
 	effect->setOpacity(0);
 	lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
 	m_fadeInTimeLine->start();
+}
+
+WorksheetView::AddNewMode WorksheetView::addNewMode() const {
+	return m_addNewMode;
 }
 
 /*!

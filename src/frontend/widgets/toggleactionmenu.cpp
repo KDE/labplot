@@ -75,6 +75,18 @@ void ToggleActionMenu::setDefaultAction(QAction *action)
     updateButtons();
 }
 
+void ToggleActionMenu::setDefaultActionFromData(const QVariant& data) {
+    m_defaultAction = nullptr;
+    const auto& actions = menu()->actions();
+	for (auto* action : actions) {
+		if (action->data() == data) {
+			m_defaultAction = action;
+			break;
+		}
+	}
+	updateButtons();
+}
+
 Qt::ToolButtonStyle ToggleActionMenu::styleFor(QToolButton *button) const
 {
     Qt::ToolButtonStyle style = m_originalToolButtonStyle[button];
