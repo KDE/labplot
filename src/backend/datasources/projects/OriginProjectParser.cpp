@@ -2888,9 +2888,9 @@ void OriginProjectParser::loadSymbol(const Origin::GraphCurve& originCurve, Symb
 
 	auto brush = symbol->brush();
 	auto pen = symbol->pen();
-	DEBUG(Q_FUNC_INFO << ", SYMBOL THICKNESS = " << (int)originCurve.symbolThickness)
+	DEBUG(Q_FUNC_INFO << ", OPJ symbol thickness = " << (int)originCurve.symbolThickness)
 	// border width (edge thickness in Origin) is given as percentage of the symbol radius
-	const double borderScaleFactor = 5.; // match size
+	const double borderScaleFactor = 0.6; // TUNING: match size
 	if (curve && originCurve.type == Origin::GraphCurve::LineSymbol) {
 		// symbol fill color
 		if (originCurve.symbolFillColor.type == Origin::Color::ColorType::Automatic) {
@@ -2914,7 +2914,7 @@ void OriginProjectParser::loadSymbol(const Origin::GraphCurve& originCurve, Symb
 		} else
 			pen.setColor(color(originCurve.symbolColor));
 
-		DEBUG(Q_FUNC_INFO << ", BORDER THICKNESS = " << borderScaleFactor * originCurve.symbolThickness / 100. * symbol->size())
+		DEBUG(Q_FUNC_INFO << ", using border thickness = " << borderScaleFactor * originCurve.symbolThickness / 100. * symbol->size())
 		pen.setWidthF(borderScaleFactor * originCurve.symbolThickness / 100. * symbol->size());
 	} else if (curve && originCurve.type == Origin::GraphCurve::Scatter) {
 		// symbol color (uses originCurve.symbolColor)
