@@ -12,7 +12,7 @@
 
 #include <QObject>
 
-class DatapickerView;
+class DatapickerImageView;
 class NotebookView;
 class MainWin;
 class SpreadsheetView;
@@ -59,7 +59,7 @@ private:
 	void connectSpreadsheetToolbarActions(const SpreadsheetView*);
 
 	void initDataExtractorToolbarActions();
-	void connectDataExtractorToolbarActions(const DatapickerView*);
+	void connectDataExtractorToolbarActions(const DatapickerImageView*);
 
 #ifdef HAVE_CANTOR_LIBS
 	void initNotebookToolbarActions();
@@ -76,18 +76,6 @@ private:
 	QAction* m_undoIconOnlyAction;
 	QAction* m_redoIconOnlyAction;
 #endif
-
-	ToggleActionMenu* m_worksheetAddNewPlotMenu{nullptr};
-	ToggleActionMenu* m_worksheetZoomMenu{nullptr};
-	ToggleActionMenu* m_worksheetMagnificationMenu{nullptr};
-	KActionMenu* m_plotAddNewMenu{nullptr};
-
-	QActionGroup* m_worksheetAddNewActionGroup{nullptr};
-	QActionGroup* m_worksheetLayoutActionGroup{nullptr};
-	QActionGroup* m_worksheeMouseModeActionGroup{nullptr};
-
-	QActionGroup* m_plotMouseModeActionGroup{nullptr};
-	QActionGroup* m_plotNavigationGroup{nullptr};
 
 	KRecentFilesAction* m_recentProjectsAction;
 	QAction* m_searchAction;
@@ -145,6 +133,26 @@ private:
 	QAction* m_spreadsheetSortAction{nullptr};
 	QAction* m_spreadsheetSortAscAction{nullptr};
 	QAction* m_spreadsheetSortDescAction{nullptr};
+
+	// worksheet
+	ToggleActionMenu* m_worksheetAddNewPlotMenu{nullptr};
+	ToggleActionMenu* m_worksheetZoomMenu{nullptr};
+	ToggleActionMenu* m_worksheetMagnificationMenu{nullptr};
+	KActionMenu* m_plotAddNewMenu{nullptr};
+
+	QActionGroup* m_worksheetAddNewActionGroup{nullptr};
+	QActionGroup* m_worksheetLayoutActionGroup{nullptr};
+	QActionGroup* m_worksheeMouseModeActionGroup{nullptr};
+
+	QActionGroup* m_plotMouseModeActionGroup{nullptr};
+	QActionGroup* m_plotNavigationGroup{nullptr};
+
+	// data extractor
+	QActionGroup* m_dataExtractorMouseModeActionGroup{nullptr};
+	QActionGroup* m_dataExtractorShiftActionGroup{nullptr};
+	QAction* m_dataExtractorAddCurveAction{nullptr};
+	ToggleActionMenu* m_dataExtractorZoomMenu{nullptr};
+	ToggleActionMenu* m_dataExtractorMagnificationMenu{nullptr};
 
 	// notebook
 #ifdef HAVE_CANTOR_LIBS

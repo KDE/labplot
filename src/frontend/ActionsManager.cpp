@@ -17,6 +17,7 @@
 #include "frontend/ActionsManager.h"
 #include "frontend/MainWin.h"
 #include "frontend/datapicker/DatapickerView.h"
+#include "frontend/datapicker/DatapickerImageView.h"
 #include "frontend/matrix/MatrixView.h"
 #include "frontend/spreadsheet/SpreadsheetView.h"
 #include "frontend/widgets/toggleactionmenu.h"
@@ -455,12 +456,13 @@ void ActionsManager::initActions() {
 	}
 
 	// actions used in the toolbars
-#ifdef HAVE_CANTOR_LIBS
-	initNotebookToolbarActions();
-#endif
 	initSpreadsheetToolbarActions();
 	initWorksheetToolbarActions();
 	initPlotAreaToolbarActions();
+	initDataExtractorToolbarActions();
+#ifdef HAVE_CANTOR_LIBS
+	initNotebookToolbarActions();
+#endif
 }
 
 /*!
@@ -708,7 +710,70 @@ void ActionsManager::initNotebookToolbarActions() {
  * initializes data extractor related actions shown in the toolbar.
  */
 void ActionsManager::initDataExtractorToolbarActions() {
-	// auto* collection = m_mainWindow->actionCollection();
+	auto* collection = m_mainWindow->actionCollection();
+
+	// mouse mode actions
+	m_dataExtractorMouseModeActionGroup = new QActionGroup(m_mainWindow);
+
+	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-plot-axis-points")), i18n("Set Axis Points"), m_dataExtractorMouseModeActionGroup);
+	action->setCheckable(true);
+	action->setData(static_cast<int>(DatapickerImageView::MouseMode::ReferencePointsEntry));
+	collection->addAction(QStringLiteral("data_extractor_set_reference_points"), action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve-points")), i18n("Set Curve Points"), m_dataExtractorMouseModeActionGroup);
+	action->setCheckable(true);
+	action->setData(static_cast<int>(DatapickerImageView::MouseMode::CurvePointsEntry));
+	collection->addAction(QStringLiteral("data_extractor_set_curve_points"), action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve-segments")), i18n("Select Curve Segments"), m_dataExtractorMouseModeActionGroup);
+	action->setCheckable(true);
+	action->setData(static_cast<int>(DatapickerImageView::MouseMode::CurveSegmentsEntry));
+	collection->addAction(QStringLiteral("data_extractor_set_segments"), action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("input-mouse")), i18n("Navigate"), m_dataExtractorMouseModeActionGroup);
+	action->setCheckable(true);
+	action->setData(static_cast<int>(DatapickerImageView::MouseMode::Navigation));
+	collection->addAction(QStringLiteral("data_extractor_navigate_mode"), action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("page-zoom")), i18n("Select and Zoom"), m_dataExtractorMouseModeActionGroup);
+	action->setCheckable(true);
+	action->setData(static_cast<int>(DatapickerImageView::MouseMode::ZoomSelection));
+	collection->addAction(QStringLiteral("data_extractor_zoom_select_mode"), action);
+
+	// add curve action
+	m_dataExtractorAddCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("New Curve"), m_mainWindow);
+	collection->addAction(QStringLiteral("data_extractor_add_curve"), m_dataExtractorAddCurveAction);
+
+	// shift actions
+	m_dataExtractorShiftActionGroup = new QActionGroup(m_mainWindow);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-shift-left-x")), i18n("Shift Left"), m_dataExtractorShiftActionGroup);
+	action->setData(static_cast<int>(DatapickerImageView::ShiftOperation::ShiftLeft));
+	collection->addAction(QStringLiteral("data_extractor_shift_right"), action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-shift-right-x")), i18n("Shift Right"), m_dataExtractorShiftActionGroup);
+	action->setData(static_cast<int>(DatapickerImageView::ShiftOperation::ShiftRight));
+	collection->addAction(QStringLiteral("data_extractor_shift_left"), action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-shift-down-y")), i18n("Shift Up"), m_dataExtractorShiftActionGroup);
+	action->setData(static_cast<int>(DatapickerImageView::ShiftOperation::ShiftUp));
+	collection->addAction(QStringLiteral("data_extractor_shift_up"), action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-shift-up-y")), i18n("Shift Down"), m_dataExtractorShiftActionGroup);
+	action->setData(static_cast<int>(DatapickerImageView::ShiftOperation::ShiftDown));
+	collection->addAction(QStringLiteral("data_extractor_shift_down"), action);
+
+	// zoom actions
+	m_dataExtractorZoomMenu = new ToggleActionMenu(i18nc("@action", "Zoom"), this);
+	m_dataExtractorZoomMenu->setPopupMode(QToolButton::MenuButtonPopup);
+	connect(m_dataExtractorZoomMenu->menu(), &QMenu::triggered, m_dataExtractorZoomMenu, &ToggleActionMenu::setDefaultAction);
+	collection->addAction(QStringLiteral("data_extractor_zoom"), m_dataExtractorZoomMenu);
+
+	// magnification actions
+	m_dataExtractorMagnificationMenu = new ToggleActionMenu(i18nc("@action", "Magnification"), this);
+	m_dataExtractorMagnificationMenu->setPopupMode(QToolButton::MenuButtonPopup);
+	connect(m_dataExtractorMagnificationMenu->menu(), &QMenu::triggered, m_dataExtractorMagnificationMenu, &ToggleActionMenu::setDefaultAction);
+	collection->addAction(QStringLiteral("data_extractor_magnification"), m_dataExtractorMagnificationMenu);
 }
 
 void ActionsManager::initMenus() {
@@ -849,11 +914,11 @@ void ActionsManager::updateGUIOnProjectChanges() {
 		factory->container(QStringLiteral("spreadsheet"), m_mainWindow)->setEnabled(false);
 		factory->container(QStringLiteral("matrix"), m_mainWindow)->setEnabled(false);
 		factory->container(QStringLiteral("worksheet"), m_mainWindow)->setEnabled(false);
-		factory->container(QStringLiteral("datapicker"), m_mainWindow)->setEnabled(false);
+		factory->container(QStringLiteral("data_extractor"), m_mainWindow)->setEnabled(false);
 		factory->container(QStringLiteral("spreadsheet_toolbar"), m_mainWindow)->hide();
 		factory->container(QStringLiteral("worksheet_toolbar"), m_mainWindow)->hide();
 		factory->container(QStringLiteral("cartesian_plot_toolbar"), m_mainWindow)->hide();
-		factory->container(QStringLiteral("datapicker_toolbar"), m_mainWindow)->hide();
+		factory->container(QStringLiteral("data_extractor_toolbar"), m_mainWindow)->hide();
 #ifdef HAVE_CANTOR_LIBS
 		factory->container(QStringLiteral("notebook"), m_mainWindow)->setEnabled(false);
 		factory->container(QStringLiteral("notebook_toolbar"), m_mainWindow)->hide();
@@ -899,11 +964,11 @@ void ActionsManager::updateGUI() {
 		factory->container(QStringLiteral("spreadsheet"), m_mainWindow)->setEnabled(false);
 		factory->container(QStringLiteral("matrix"), m_mainWindow)->setEnabled(false);
 		factory->container(QStringLiteral("worksheet"), m_mainWindow)->setEnabled(false);
-		factory->container(QStringLiteral("datapicker"), m_mainWindow)->setEnabled(false);
+		factory->container(QStringLiteral("data_extractor"), m_mainWindow)->setEnabled(false);
 		factory->container(QStringLiteral("spreadsheet_toolbar"), m_mainWindow)->hide();
 		factory->container(QStringLiteral("worksheet_toolbar"), m_mainWindow)->hide();
 		factory->container(QStringLiteral("cartesian_plot_toolbar"), m_mainWindow)->hide();
-		factory->container(QStringLiteral("datapicker_toolbar"), m_mainWindow)->hide();
+		factory->container(QStringLiteral("data_extractor_toolbar"), m_mainWindow)->hide();
 #ifdef HAVE_CANTOR_LIBS
 		factory->container(QStringLiteral("notebook"), m_mainWindow)->setEnabled(false);
 		factory->container(QStringLiteral("notebook_toolbar"), m_mainWindow)->hide();
@@ -1070,21 +1135,19 @@ void ActionsManager::updateGUI() {
 	}
 
 	if (datapicker) {
-		// populate datapicker menu
+		// menu
 		auto* view = qobject_cast<DatapickerView*>(datapicker->view());
-		auto* menu = qobject_cast<QMenu*>(factory->container(QStringLiteral("datapicker"), m_mainWindow));
+		auto* menu = qobject_cast<QMenu*>(factory->container(QStringLiteral("data_extractor"), m_mainWindow));
 		menu->clear();
 		view->createContextMenu(menu);
 		menu->setEnabled(true);
 
-		// populate datapicker toolbar
-		auto* toolbar = qobject_cast<QToolBar*>(factory->container(QStringLiteral("datapicker_toolbar"), m_mainWindow));
-		toolbar->clear();
-		view->fillToolBar(toolbar);
-		toolbar->setVisible(true);
+		// toolbar
+		factory->container(QStringLiteral("data_extractor"), m_mainWindow)->setEnabled(true);
+		factory->container(QStringLiteral("data_extractor_toolbar"), m_mainWindow)->setVisible(true);
 	} else {
-		factory->container(QStringLiteral("datapicker"), m_mainWindow)->setEnabled(false);
-		factory->container(QStringLiteral("datapicker_toolbar"), m_mainWindow)->setVisible(false);
+		factory->container(QStringLiteral("data_extractor"), m_mainWindow)->setEnabled(false);
+		factory->container(QStringLiteral("data_extractor_toolbar"), m_mainWindow)->setVisible(false);
 	}
 }
 
@@ -1290,6 +1353,31 @@ void ActionsManager::connectNotebookToolbarActions(const NotebookView* view) {
 }
 #endif
 
-void ActionsManager::connectDataExtractorToolbarActions(const DatapickerView*) {
+void ActionsManager::connectDataExtractorToolbarActions(const DatapickerImageView* view) {
+	// mouse mode actions
+	disconnect(m_dataExtractorMouseModeActionGroup, &QActionGroup::triggered, nullptr, nullptr);
+	connect(m_dataExtractorMouseModeActionGroup, &QActionGroup::triggered, view, &DatapickerImageView::changeMouseMode);
+	const auto mouseMode = view->mouseMode();
+	for (auto* action : m_worksheeMouseModeActionGroup->actions()) {
+		if (static_cast<DatapickerImageView::MouseMode>(action->data().toInt()) == mouseMode)
+			action->setChecked(true);
+	}
 
+	// add curve action
+	disconnect(m_dataExtractorAddCurveAction, &QAction::triggered, nullptr, nullptr);
+	connect(m_dataExtractorAddCurveAction, &QAction::triggered, view, &DatapickerImageView::addCurve);
+
+	// shift actions
+	disconnect(m_dataExtractorShiftActionGroup, &QActionGroup::triggered, nullptr, nullptr);
+	connect(m_dataExtractorShiftActionGroup, &QActionGroup::triggered, view, &DatapickerImageView::changeSelectedItemsPosition);
+
+	// zoom actions
+	m_dataExtractorZoomMenu->menu()->clear();
+	view->fillZoomMenu(m_dataExtractorZoomMenu);
+	m_dataExtractorZoomMenu->setDefaultActionFromData(static_cast<int>(view->zoomMode()));
+
+	// magnification actions
+	m_dataExtractorMagnificationMenu->menu()->clear();
+	view->fillMagnificationMenu(m_worksheetMagnificationMenu);
+	m_dataExtractorMagnificationMenu->setDefaultActionFromData(view->magnification());
 }

@@ -39,8 +39,23 @@
 	<Action name="worksheet_magnification"/>
 </ToolBar>
 
-<ToolBar name="datapicker_toolbar">
-<text>Data Extractor Toolbar</text>
+<ToolBar name="data_extractor_toolbar">
+	<text>Data Extractor Toolbar</text>
+	<Action name="data_extractor_set_reference_points"/>
+	<Action name="data_extractor_set_curve_points"/>
+	<Action name="data_extractor_set_segments"/>
+	<Action name="data_extractor_navigate_mode"/>
+	<Action name="data_extractor_zoom_select_mode"/>
+	<Separator/>
+	<Action name="data_extractor_add_curve"/>
+	<Separator/>
+	<Action name="data_extractor_shift_right"/>
+	<Action name="data_extractor_shift_left"/>
+	<Action name="data_extractor_shift_up"/>
+	<Action name="data_extractor_shift_down"/>
+	<Separator/>
+	<Action name="data_extractor_zoom"/>
+	<Action name="data_extractor_magnification"/>
 </ToolBar>
 
 <ToolBar name="spreadsheet_toolbar">
@@ -138,7 +153,7 @@
 <Menu name="matrix"><text>&amp;Matrix</text></Menu>
 <Menu name="worksheet"><text>&amp;Worksheet</text></Menu>
 <Menu name="notebook"><text>&amp;Notebook</text></Menu>
-<Menu name="datapicker"><text>&amp;Data Extractor</text></Menu>
+<Menu name="data_extractor"><text>&amp;Data Extractor</text></Menu>
 <!-- <Menu name="drawing"><text>&amp;Drawing</text></Menu> -->
 <!-- <Menu name="script"><text>&amp;Script</text></Menu> -->
 <Menu name="tools"><text>&amp;Tools</text>
