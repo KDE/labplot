@@ -203,11 +203,6 @@ private:
 	QAction* snapToGridAction{nullptr};
 
 	QActionGroup* magnificationActionGroup{nullptr};
-	QAction* noMagnificationAction{nullptr};
-	QAction* twoTimesMagnificationAction{nullptr};
-	QAction* threeTimesMagnificationAction{nullptr};
-	QAction* fourTimesMagnificationAction{nullptr};
-	QAction* fiveTimesMagnificationAction{nullptr};
 
 	QAction* plotsInteractiveAction{nullptr};
 	QAction* showPresenterMode{nullptr};

@@ -170,26 +170,26 @@ void DatapickerImageView::initActions() {
 	shiftDownAction->setShortcut(Qt::Key_Down);
 
 	// magnification actions
-	noMagnificationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-1x-zoom")), i18n("No Magnification"), magnificationActionGroup);
-	noMagnificationAction->setData(0);
-	noMagnificationAction->setCheckable(true);
-	noMagnificationAction->setChecked(true);
+	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-1x-zoom")), i18n("No Magnification"), magnificationActionGroup);
+	action->setData(0);
+	action->setCheckable(true);
+	action->setChecked(true);
 
-	twoTimesMagnificationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-2x-zoom")), i18n("2x Magnification"), magnificationActionGroup);
-	twoTimesMagnificationAction->setData(2);
-	twoTimesMagnificationAction->setCheckable(true);
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-2x-zoom")), i18n("2x Magnification"), magnificationActionGroup);
+	action->setData(2);
+	action->setCheckable(true);
 
-	threeTimesMagnificationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-3x-zoom")), i18n("3x Magnification"), magnificationActionGroup);
-	threeTimesMagnificationAction->setData(3);
-	threeTimesMagnificationAction->setCheckable(true);
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-3x-zoom")), i18n("3x Magnification"), magnificationActionGroup);
+	action->setData(3);
+	action->setCheckable(true);
 
-	fourTimesMagnificationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-4x-zoom")), i18n("4x Magnification"), magnificationActionGroup);
-	fourTimesMagnificationAction->setData(4);
-	fourTimesMagnificationAction->setCheckable(true);
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-4x-zoom")), i18n("4x Magnification"), magnificationActionGroup);
+	action->setData(4);
+	action->setCheckable(true);
 
-	fiveTimesMagnificationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-5x-zoom")), i18n("5x Magnification"), magnificationActionGroup);
-	fiveTimesMagnificationAction->setData(5);
-	fiveTimesMagnificationAction->setCheckable(true);
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-5x-zoom")), i18n("5x Magnification"), magnificationActionGroup);
+	action->setData(5);
+	action->setCheckable(true);
 
 	// // set some default values
 	switch (m_image->plotPointsType()) {
@@ -243,11 +243,8 @@ void DatapickerImageView::initMenus() {
 
 	m_magnificationMenu = new QMenu(i18n("Magnification"), this);
 	m_magnificationMenu->setIcon(QIcon::fromTheme(QStringLiteral("zoom-in")));
-	m_magnificationMenu->addAction(noMagnificationAction);
-	m_magnificationMenu->addAction(twoTimesMagnificationAction);
-	m_magnificationMenu->addAction(threeTimesMagnificationAction);
-	m_magnificationMenu->addAction(fourTimesMagnificationAction);
-	m_magnificationMenu->addAction(fiveTimesMagnificationAction);
+	for (auto* action : magnificationActionGroup->actions())
+		m_magnificationMenu->addAction(action);
 }
 
 /*!
@@ -284,11 +281,8 @@ void DatapickerImageView::fillZoomMenu(ToggleActionMenu* menu) const {
 }
 
 void DatapickerImageView::fillMagnificationMenu(ToggleActionMenu* menu) const {
-	menu->addAction(noMagnificationAction);
-	menu->addAction(twoTimesMagnificationAction);
-	menu->addAction(threeTimesMagnificationAction);
-	menu->addAction(fourTimesMagnificationAction);
-	menu->addAction(fiveTimesMagnificationAction);
+	for (auto* action : magnificationActionGroup->actions())
+		menu->addAction(action);
 }
 
 void DatapickerImageView::setScene(QGraphicsScene* scene) {

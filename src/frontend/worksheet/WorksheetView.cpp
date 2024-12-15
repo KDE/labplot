@@ -198,26 +198,26 @@ void WorksheetView::initActions() {
 	zoomSelectionModeAction->setCheckable(true);
 
 	// Magnification actions
-	noMagnificationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-1x-zoom")), i18n("No Magnification"), magnificationActionGroup);
-	noMagnificationAction->setData(0);
-	noMagnificationAction->setCheckable(true);
-	noMagnificationAction->setChecked(true);
+	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-1x-zoom")), i18n("No Magnification"), magnificationActionGroup);
+	action->setData(0);
+	action->setCheckable(true);
+	action->setChecked(true);
 
-	twoTimesMagnificationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-2x-zoom")), i18n("2x Magnification"), magnificationActionGroup);
-	twoTimesMagnificationAction->setData(2);
-	twoTimesMagnificationAction->setCheckable(true);
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-2x-zoom")), i18n("2x Magnification"), magnificationActionGroup);
+	action->setData(2);
+	action->setCheckable(true);
 
-	threeTimesMagnificationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-3x-zoom")), i18n("3x Magnification"), magnificationActionGroup);
-	threeTimesMagnificationAction->setData(3);
-	threeTimesMagnificationAction->setCheckable(true);
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-3x-zoom")), i18n("3x Magnification"), magnificationActionGroup);
+	action->setData(3);
+	action->setCheckable(true);
 
-	fourTimesMagnificationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-4x-zoom")), i18n("4x Magnification"), magnificationActionGroup);
-	fourTimesMagnificationAction->setData(4);
-	fourTimesMagnificationAction->setCheckable(true);
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-4x-zoom")), i18n("4x Magnification"), magnificationActionGroup);
+	action->setData(4);
+	action->setCheckable(true);
 
-	fiveTimesMagnificationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-5x-zoom")), i18n("5x Magnification"), magnificationActionGroup);
-	fiveTimesMagnificationAction->setData(5);
-	fiveTimesMagnificationAction->setCheckable(true);
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-5x-zoom")), i18n("5x Magnification"), magnificationActionGroup);
+	action->setData(5);
+	action->setCheckable(true);
 
 	//"Add new" related actions
 	addCartesianPlot1Action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-plot-four-axes")), i18n("Four Axes"), addNewActionGroup);
@@ -465,11 +465,8 @@ void WorksheetView::initMenus() {
 
 	m_magnificationMenu = new QMenu(i18n("Magnification"), this);
 	m_magnificationMenu->setIcon(QIcon::fromTheme(QStringLiteral("zoom-in")));
-	m_magnificationMenu->addAction(noMagnificationAction);
-	m_magnificationMenu->addAction(twoTimesMagnificationAction);
-	m_magnificationMenu->addAction(threeTimesMagnificationAction);
-	m_magnificationMenu->addAction(fourTimesMagnificationAction);
-	m_magnificationMenu->addAction(fiveTimesMagnificationAction);
+	for (auto* action : magnificationActionGroup->actions())
+		m_magnificationMenu->addAction(action);
 
 	m_layoutMenu = new QMenu(i18n("Layout"), this);
 	m_layoutMenu->setIcon(QIcon::fromTheme(QStringLiteral("labplot-editbreaklayout")));
@@ -633,11 +630,8 @@ void WorksheetView::fillZoomMenu(ToggleActionMenu* menu) const {
 }
 
 void WorksheetView::fillMagnificationMenu(ToggleActionMenu* menu) const {
-	menu->addAction(noMagnificationAction);
-	menu->addAction(twoTimesMagnificationAction);
-	menu->addAction(threeTimesMagnificationAction);
-	menu->addAction(fourTimesMagnificationAction);
-	menu->addAction(fiveTimesMagnificationAction);
+	for (auto* action : magnificationActionGroup->actions())
+		menu->addAction(action);
 }
 
 QMenu* WorksheetView::plotAddNewMenu() const {

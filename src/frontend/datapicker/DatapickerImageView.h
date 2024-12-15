@@ -104,11 +104,6 @@ private:
 	QAction* shiftUpAction{nullptr};
 
 	QActionGroup* magnificationActionGroup{nullptr};
-	QAction* noMagnificationAction{nullptr};
-	QAction* twoTimesMagnificationAction{nullptr};
-	QAction* threeTimesMagnificationAction{nullptr};
-	QAction* fourTimesMagnificationAction{nullptr};
-	QAction* fiveTimesMagnificationAction{nullptr};
 
 public Q_SLOTS:
 	void createContextMenu(QMenu*) const;
