@@ -2356,20 +2356,23 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 
 	// axis title
 	if (axisFormat.label.shown) {
-		/*for (int i=0; i<axisFormat.label.text.size(); i++)
+		DEBUG(Q_FUNC_INFO << ", label text = \"" << axisFormat.label.text << "\"")
+		// debugging
+		/*
+		const auto length = axisFormat.label.text.size();
+		for (unsigned int i = 0; i < length; i++)
 			printf(" %c ", axisFormat.label.text.at(i));
 		printf("\n");
-		for (int i=0; i<axisFormat.label.text.size(); i++)
+		for (unsigned int i = 0; i < length; i++)
 			printf(" %02hhx", axisFormat.label.text.at(i));
 		printf("\n");
 		*/
-		QString titleText;
-		if (m_originFile->version() < 9.5) // <= 2017 : pre-Unicode
-			titleText = parseOriginText(QString::fromLatin1(axisFormat.label.text.c_str()));
-		else
-			titleText = parseOriginText(QString::fromStdString(axisFormat.label.text));
-		DEBUG(Q_FUNC_INFO << ", axis title string = " << STDSTRING(titleText));
-		DEBUG(Q_FUNC_INFO << ", column info = " << STDSTRING(columnInfo));
+
+		// OPJ axis label are always Latin1 encoded (see Bild_12)
+		// even in m_originFile->version() >= 9.5
+		QString titleText = parseOriginText(QString::fromLatin1(axisFormat.label.text));
+		DEBUG(Q_FUNC_INFO << ", axis title string = \"" << STDSTRING(titleText) << "\"");
+		DEBUG(Q_FUNC_INFO << ", column info = \"" << STDSTRING(columnInfo) << "\"");
 
 		// if long name not defined: columnInfo contains column name (s.a.)
 		QString longName, unit, comments;
@@ -2399,7 +2402,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 		titleText.replace(QLatin1String("%(?X,@LU)"), unit);
 		titleText.replace(QLatin1String("%(?Y,@LU)"), unit);
 
-		DEBUG(Q_FUNC_INFO << ", axis title final = " << STDSTRING(titleText));
+		DEBUG(Q_FUNC_INFO << ", axis title final = \"" << STDSTRING(titleText) << "\"");
 
 		// use axisFormat.fontSize to override the global font size for the hmtl string
 		DEBUG(Q_FUNC_INFO << ", axis font size = " << axisFormat.label.fontSize)
@@ -3002,7 +3005,7 @@ QString OriginProjectParser::parseOriginText(const QString& str) const {
 		text.append(parseOriginTags(lines[i]));
 	}
 
-	DEBUG(Q_FUNC_INFO << ", PARSED TEXT = " << STDSTRING(text));
+	DEBUG(Q_FUNC_INFO << ", PARSED TEXT = \"" << STDSTRING(text) << "\"");
 
 	return text;
 }
@@ -3293,10 +3296,10 @@ QList<QPair<QString, QString>> OriginProjectParser::charReplacementList() const 
 
 QString OriginProjectParser::replaceSpecialChars(const QString& text) const {
 	QString t = text;
-	DEBUG(Q_FUNC_INFO << ", got " << t.toStdString())
+	DEBUG(Q_FUNC_INFO << ", got \"" << STDSTRING(t) << "\"")
 	for (const auto& r : charReplacementList())
 		t.replace(r.first, r.second);
-	DEBUG(Q_FUNC_INFO << ", now " << t.toStdString())
+	DEBUG(Q_FUNC_INFO << ", now \"" << STDSTRING(t) << "\"")
 	return t;
 }
 
@@ -3437,8 +3440,8 @@ QString greekSymbol(const QString& symbol) {
  * https://doc.qt.io/qt-5/richtext-html-subset.html
  */
 QString OriginProjectParser::parseOriginTags(const QString& str) const {
-	DEBUG(Q_FUNC_INFO << ", string = " << STDSTRING(str));
-	QDEBUG("	UTF8 string: " << str.toUtf8());
+	DEBUG(Q_FUNC_INFO << ", string = \"" << STDSTRING(str) << "\"");
+	QDEBUG(Q_FUNC_INFO << ", UTF8 string: " << str.toUtf8());
 	QString line = str;
 
 	// replace %(...) tags
@@ -3515,7 +3518,7 @@ QString OriginProjectParser::parseOriginTags(const QString& str) const {
 	// special characters
 	line.replace(QRegularExpression(QStringLiteral("\\\\\\((\\d+)\\)")), QLatin1String("&#\\1;"));
 
-	DEBUG("	result: " << STDSTRING(line));
+	DEBUG(Q_FUNC_INFO << ", result: \"" << STDSTRING(line) << "\"");
 
 	return line;
 }
