@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-16 03:05+0000\n"
-"PO-Revision-Date: 2024-12-13 22:55+0100\n"
+"PO-Revision-Date: 2024-12-14 11:24+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -10360,7 +10360,7 @@ msgstr "Seguro que quere eliminar os %1 obxectos seleccionados?"
 #: src/commonfrontend/ProjectExplorer.cpp:934
 #, kde-format
 msgid "Do you really want to delete %1?"
-msgstr "Está seguro de que quere borrar «%1»?"
+msgstr "Seguro que quere eliminar «%1»?"
 
 #: src/commonfrontend/ProjectExplorer.cpp:939
 #: src/commonfrontend/ProjectExplorer.cpp:945
