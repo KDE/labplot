@@ -35,13 +35,19 @@ public:
 	~WorksheetElement() override;
 
 	enum class Orientation { Horizontal, Vertical, Both };
+	Q_ENUM(Orientation)
 	enum class HorizontalPosition { Left, Center, Right, Relative }; // Relative: relative to plot area
+	Q_ENUM(HorizontalPosition)
 	enum class VerticalPosition { Top, Center, Bottom, Relative };
+	Q_ENUM(VerticalPosition)
 
 	enum class HorizontalAlignment { Left, Center, Right };
+	Q_ENUM(HorizontalAlignment)
 	enum class VerticalAlignment { Top, Center, Bottom };
+	Q_ENUM(VerticalAlignment)
 
 	enum class PositionLimit { None, X, Y };
+	Q_ENUM(PositionLimit)
 
 	struct PositionWrapper {
 		PositionWrapper() {

@@ -25,8 +25,6 @@ class LABPLOT_EXPORT CartesianPlotLegend : public WorksheetElement {
 class CartesianPlotLegend : public WorksheetElement {
 #endif
 	Q_OBJECT
-	Q_ENUMS(HorizontalPosition)
-	Q_ENUMS(VerticalPosition)
 
 public:
 	explicit CartesianPlotLegend(const QString& name);

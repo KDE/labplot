@@ -32,6 +32,7 @@
   <name xml:lang="pt">LabPlot</name>
   <name xml:lang="pt-BR">LabPlot</name>
   <name xml:lang="ru">LabPlot</name>
+  <name xml:lang="sa">लैबप्लॉट</name>
   <name xml:lang="sk">LabPlot</name>
   <name xml:lang="sl">LabPlot</name>
   <name xml:lang="sv">Labplot</name>
@@ -61,6 +62,7 @@
   <summary xml:lang="pt">Visualização e Análise Interactivas de Dados</summary>
   <summary xml:lang="pt-BR">Visualização e análise de dados interativa</summary>
   <summary xml:lang="ru">Интерактивная визуализация и анализ данных</summary>
+  <summary xml:lang="sa">अन्तरक्रियाशील आँकडा दृश्यीकरण एवं विश्लेषण</summary>
   <summary xml:lang="sl">Interaktivna vizualizacija in analiza podatkov</summary>
   <summary xml:lang="sv">Interaktiv datavisualisering och analys</summary>
   <summary xml:lang="tr">Etkileşimli Veri Görselleştirme ve Çözümleme</summary>
@@ -80,7 +82,7 @@
     <p xml:lang="eu">LabPlot is a FREE, open source and cross-platform Data Visualization and Analysis software accessible to everyone.</p>
     <p xml:lang="fi">LabPlot on VAPAA, kaikkien käytettävissä oleva, avointa lähdekoodia ja monialustainen tiedon visualisointi- ja analyysiohjelma.</p>
     <p xml:lang="fr">LabPlot est un logiciel d'affichage et d'analyse de données, libre, « Open-source » et multi-plate-forme, accessible à tous.</p>
-    <p xml:lang="gl">LabPlot é software libre, de código aberto e multiplataforma de visualización e análise de datos, a disposición de calquera.</p>
+    <p xml:lang="gl">LabPlot é un programa libre, de código aberto e multiplataforma de visualización e análise de datos, a disposición de calquera.</p>
     <p xml:lang="ia">LabPlot es un software LIBERE e gratuite, a fonte aperite e inter-platteforma per Visualisation e Analyse de datos accessibile a omnes.</p>
     <p xml:lang="id">LabPlot adalah perangkat lunak Analisis dan Visualisasi Data open source dan lintas platform GRATIS yang bisa diakses oleh semua orang.</p>
     <p xml:lang="it">LabPlot è un software GRATUITO, open source e multi piattaforma per la visualizzazione e per l'analisi dei dati accessibile da chiunque.</p>
@@ -90,6 +92,7 @@
     <p xml:lang="pt">O LabPlot é uma aplicação GRATUITA, de código aberto e multi-plataforma de Visualização e Análise de Dados acessível para todos.</p>
     <p xml:lang="pt-BR">O LabPlot é um software de visualização e análise de dados GRATUITO, de código aberto e multiplataforma acessível a todos.</p>
     <p xml:lang="ru">LabPlot — бесплатное кросс-платформенное приложение для визуализации и анализа данных с открытым исходным кодом.</p>
+    <p xml:lang="sa">LabPlot इति निःशुल्कं, मुक्तस्रोतं तथा च पार-मञ्चं Data Visualization and Analysis सॉफ्टवेयरं सर्वेषां कृते सुलभम् अस्ति ।</p>
     <p xml:lang="sl">LabPlot je PROSTA, odprtokodna in večplatformska vizualizacija podatkov in programska oprema za analizo dostopna vsem.</p>
     <p xml:lang="sv">Labplot är FRI datavisualiserings- och analysprogramvara med öppen källkod för flera plattformar tillgänglig för vem som helst.</p>
     <p xml:lang="tr">LabPlot herkese açık, ÜCRETSİZ, açık kaynaklı ve çok sayıda platform üzerinde çalışan bir veri görselleştirme ve çözümleme yazılımıdır.</p>
@@ -122,6 +125,7 @@
     <p xml:lang="pt">O LabPlot oferece uma forma simples de criar, gerir e editar os gráficos. Permite-lhe produzir gráficos com base nos dados de uma folha de cálculo ou nos dados importados de ficheiros externos. Os gráficos podem ser exportados para diferentes formatos de imagens rasterizados e vectoriais.</p>
     <p xml:lang="pt-BR">O LabPlot oferece uma forma simples de criar, gerenciar e editar gráficos. Permite-lhe produzir gráficos com base nos dados de uma planilha ou nos dados importados de arquivos externos. Os gráficos podem ser exportados para diferentes formatos de imagens rasterizadas e vetoriais.</p>
     <p xml:lang="ru">LabPlot предоставляет простой способ создания, управления и редактирования графиков. Приложение позволяет создавать графики на основе данных из электронной таблицы или данных, импортированных из внешних файлов. Графики могут быть экспортированы в различные растровые и векторные графические форматы.</p>
+    <p xml:lang="sa">LabPlot प्लॉट् निर्मातुं, प्रबन्धनं कर्तुं, सम्पादयितुं च सुलभं मार्गं प्रदाति । एतत् भवन्तं स्प्रेड्शीट् तः दत्तांशस्य आधारेण अथवा बाह्यसञ्चिकाभ्यः आयातितदत्तांशस्य आधारेण प्लॉट् निर्मातुं शक्नोति । प्लॉट् अनेकपिक्समैप् तथा वेक्टर ग्राफिक प्रारूपेषु निर्यातयितुं शक्यते ।</p>
     <p xml:lang="sk">LabPlot poskytuje jednoduché možnosti na vytváranie, správu a úpravu nákresov. Umožní vám vyrobiť nákresy založené na údajoch z tabuľky alebo z údajov importovaných z externých súborov. Nákresy sa dajú exportovať do niekoľkých rastrových a vektorových grafických formátov.</p>
     <p xml:lang="sl">LabPlot omogoča preprost način ustvarjanja, upravljanja in urejanja grafikonov. Omogoča vamza izdelavo grafikonov na podlagi podatkov iz preglednice ali podatkov uvoženih izzunanje datoteke. Grafikone je mogoče izvoziti v več rastrskih in vektorskih formatov.</p>
     <p xml:lang="sv">Labplot tillhandahåller ett enkelt sätt att skapa, hantera och redigera diagram. Det låter dig skapa diagram baserat på data från ett kalkylark eller data importerad från externa filer. Diagram kan exporteras till flera olika punktavbildnings- och vektorgrafik-format.</p>
@@ -156,6 +160,7 @@
       <caption xml:lang="pt">Visualização básica dos dados</caption>
       <caption xml:lang="pt-BR">Visualização básica de dados</caption>
       <caption xml:lang="ru">Базовая визуализация данных</caption>
+      <caption xml:lang="sa">दत्तांशस्य मूलभूतं दृश्यीकरणं</caption>
       <caption xml:lang="sl">Osnovne vizualizacije podatkov</caption>
       <caption xml:lang="sv">Grundläggande visualisering av data</caption>
       <caption xml:lang="tr">Temel veri görselleştirmesi</caption>
@@ -186,6 +191,7 @@
       <caption xml:lang="pt">Visualização básica dos dados</caption>
       <caption xml:lang="pt-BR">Visualização básica de dados</caption>
       <caption xml:lang="ru">Базовая визуализация данных</caption>
+      <caption xml:lang="sa">दत्तांशस्य मूलभूतं दृश्यीकरणं</caption>
       <caption xml:lang="sl">Osnovne vizualizacije podatkov</caption>
       <caption xml:lang="sv">Grundläggande visualisering av data</caption>
       <caption xml:lang="tr">Temel veri görselleştirmesi</caption>
@@ -215,6 +221,7 @@
       <caption xml:lang="pt">Formatação avançada dos gráficos e imagens</caption>
       <caption xml:lang="pt-BR">Layout avançado de gráficos e imagens</caption>
       <caption xml:lang="ru">Расширенные возможности формирования графиков и изображений</caption>
+      <caption xml:lang="sa">कथानकानाम्, चित्राणां च उन्नतविन्यासः</caption>
       <caption xml:lang="sl">Napredna postavitev grafikonov in slik</caption>
       <caption xml:lang="sv">Avancerad layout av diagram och bilder</caption>
       <caption xml:lang="tr">Çizimlerin ve görsellerin gelişmiş yerleşimi</caption>
@@ -245,6 +252,7 @@
       <caption xml:lang="pt">Suporte para temas</caption>
       <caption xml:lang="pt-BR">Temas</caption>
       <caption xml:lang="ru">Темы</caption>
+      <caption xml:lang="sa">विषयवस्तु</caption>
       <caption xml:lang="sl">Teme</caption>
       <caption xml:lang="sv">Teman</caption>
       <caption xml:lang="tr">Temalama</caption>
@@ -274,6 +282,7 @@
       <caption xml:lang="pt">Visualização das funções matemáticas</caption>
       <caption xml:lang="pt-BR">Visualização de funções matemáticas</caption>
       <caption xml:lang="ru">Построение графиков математических функций</caption>
+      <caption xml:lang="sa">गणितीय फलनानां दृश्यीकरण</caption>
       <caption xml:lang="sl">Vizualizacija matematičnih funkcij</caption>
       <caption xml:lang="sv">Visualisering av matematiska funktioner</caption>
       <caption xml:lang="tr">Matematiksel işlevlerin görselleştirilmesi</caption>
@@ -302,6 +311,7 @@
       <caption xml:lang="pl">Wpasuj uprzednio określone lub własne modele do danych</caption>
       <caption xml:lang="pt">Ajuste de modelos predefinidos ou personalizados aos dados</caption>
       <caption xml:lang="ru">Подбор предопределённых или настраиваемых моделей по данным</caption>
+      <caption xml:lang="sa">पूर्वनिर्धारितं वा कस्टम् मॉडल् दत्तांशं प्रति फिट् कुर्वन्तु</caption>
       <caption xml:lang="sl">Prilagajanje vnaprej določenih modelov ali modelov po meri podatkom</caption>
       <caption xml:lang="sv">Anpassa data till fördefinierade eller egna modeller</caption>
       <caption xml:lang="tr">Veriye önceden tanımlanmış veya özel modelleri uydurun</caption>
@@ -330,6 +340,7 @@
       <caption xml:lang="pl">Wygładzanie danych przy pomocy różnych sposobów</caption>
       <caption xml:lang="pt">Suavização dos dados com a ajuda de vários métodos</caption>
       <caption xml:lang="ru">Сглаживание данных с помощью различных методов сглаживания</caption>
+      <caption xml:lang="sa">विभिन्नानां स्मूथिंग पद्धतीनां साहाय्येन दत्तांशं सुस्पष्टं कुर्वन्तु</caption>
       <caption xml:lang="sl">Zgladite podatke s pomočjo različnih metod glajenja</caption>
       <caption xml:lang="sv">Jämna ut data med hjälp av diverse utjämningsmetoder</caption>
       <caption xml:lang="tr">Çeşitli pürüzsüzleştirme yöntemlerinin yardımıyla veriyi pürüzsüzleştirin</caption>
@@ -358,6 +369,7 @@
       <caption xml:lang="pl">Interfejs zeszytu dla interaktywnych posiedzeń w programach takich jak: Maxima, Octave, R, Sage, Scilab, Python, Julia, itp.</caption>
       <caption xml:lang="pt">Interface de blocos de notas para sessões interactivas no Maxima, Octave, R, Sage, Scilab, Python, Julia, etc</caption>
       <caption xml:lang="ru">Блокнот служит в качестве интерфейса для интерактивного взаимодействия с Maxima, Octave, R, Sage, Scilab, Python, Julia и так далее.</caption>
+      <caption xml:lang="sa">Maxima, Octave, R, Sage, Scilab, Python, Julia इत्यादिषु अन्तरक्रियाशीलसत्रेषु नोटबुक-अन्तरफलकम्</caption>
       <caption xml:lang="sl">Prenosni vmesnik za interaktivne seje v Maxima, Octave, R, Sage, Scilab, Python, Julia itd.</caption>
       <caption xml:lang="sv">Anteckningsbok för interaktiva sessioner i Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="tr">Maxima, Octave, R, Sage, Scilab, Python, Julia vb. içinde etkileşimli oturumlar için defter arayüzü</caption>
@@ -388,6 +400,7 @@
       <caption xml:lang="pt">Análise de sinais</caption>
       <caption xml:lang="pt-BR">Análise de sinais</caption>
       <caption xml:lang="ru">Анализ сигнала</caption>
+      <caption xml:lang="sa">संकेत विश्लेषण</caption>
       <caption xml:lang="sl">Analiza signalov</caption>
       <caption xml:lang="sv">Signalanalys</caption>
       <caption xml:lang="tr">Sinyal çözümlemesi</caption>
@@ -417,6 +430,7 @@
       <caption xml:lang="pt">Diagrama de Herzsprung-Russel no LabPlot</caption>
       <caption xml:lang="pt-BR">Diagrama de Herzsprung-Russel no LabPlot</caption>
       <caption xml:lang="ru">Диаграмма Герцшпрунга-Рассела в LabPlot</caption>
+      <caption xml:lang="sa">LabPlot इत्यस्मिन् Herzsprung-Russel आरेखम्</caption>
       <caption xml:lang="sl">Herzsprung-Russelovi diagrami v LabPlotu</caption>
       <caption xml:lang="sv">Herzsprung-Russel-diagram i Labplot</caption>
       <caption xml:lang="tr">LabPlot’ta Herzsprung-Russel diyagramı</caption>
@@ -445,6 +459,7 @@
       <caption xml:lang="pl">Obrazowanie danych obliczonych w interaktywnym posiedzeniu Maximy</caption>
       <caption xml:lang="pt">Visualização dos dados calculados numa sessão interactiva do Maxima</caption>
       <caption xml:lang="ru">Визаулизация данных, рассчитанных в результате интерактивного взаимодействия с Maxima</caption>
+      <caption xml:lang="sa">एकस्मिन् अन्तरक्रियाशील Maxima सत्रे गणितस्य आँकडानां दृश्यीकरणं</caption>
       <caption xml:lang="sl">Vizualizacija podatkov izračunanih v interaktivni seji Maxima</caption>
       <caption xml:lang="sv">Visualisering av data beräknad i en interaktiv Maxima-session</caption>
       <caption xml:lang="tr">Bir etkileşimli Maxima oturumunda hesaplanan verinin görselleştirilmesi</caption>
@@ -470,6 +485,6 @@
   </releases>
   <custom>
     <value key="KDE::windows_store">https://www.microsoft.com/store/apps/9ngxfc68925l</value>
-    <value key="KDE::supporters">PJ</value>
+    <value key="KDE::supporters">PJ;CounterFlow;[Jan Andrle](https://fosstodon.org/@jaandrle)</value>
   </custom>
 </component>

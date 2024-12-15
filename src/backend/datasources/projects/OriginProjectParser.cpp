@@ -1365,14 +1365,33 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			plot->setRightPadding(150. + 1.5 * plot->rightPadding() * std::min(elementScalingFactor, 1.));
 			plot->setBottomPadding(100. + 1.5 * plot->bottomPadding() * std::min(elementScalingFactor, 1.));
 #else
-			plot->setHorizontalPadding(150. + 1.5 * plot->horizontalPadding() * std::max(elementScalingFactor, 1.));
-			plot->setVerticalPadding(100. + 1.5 * plot->verticalPadding() * std::max(elementScalingFactor, 1.));
-			plot->setRightPadding(150. + 1.5 * plot->rightPadding() * std::max(elementScalingFactor, 1.));
-			plot->setBottomPadding(100. + 1.5 * plot->bottomPadding() * std::max(elementScalingFactor, 1.));
+			plot->setHorizontalPadding(200. + 1.5 * plot->horizontalPadding() * std::max(elementScalingFactor, 1.));
+			plot->setVerticalPadding(150. + 1.5 * plot->verticalPadding() * std::max(elementScalingFactor, 1.));
+			plot->setRightPadding(200. + 1.5 * plot->rightPadding() * std::max(elementScalingFactor, 1.));
+			plot->setBottomPadding(150. + 1.5 * plot->bottomPadding() * std::max(elementScalingFactor, 1.));
 #endif
 		}
+
+		// round padding to 0.1 cm
+		plot->setHorizontalPadding(
+			Worksheet::convertToSceneUnits(std::round(10. * Worksheet::convertFromSceneUnits(plot->horizontalPadding(), Worksheet::Unit::Centimeter)) / 10.,
+										   Worksheet::Unit::Centimeter));
+		plot->setVerticalPadding(
+			Worksheet::convertToSceneUnits(std::round(10. * Worksheet::convertFromSceneUnits(plot->verticalPadding(), Worksheet::Unit::Centimeter)) / 10.,
+										   Worksheet::Unit::Centimeter));
+		plot->setRightPadding(
+			Worksheet::convertToSceneUnits(std::round(10. * Worksheet::convertFromSceneUnits(plot->rightPadding(), Worksheet::Unit::Centimeter)) / 10.,
+										   Worksheet::Unit::Centimeter));
+		plot->setBottomPadding(
+			Worksheet::convertToSceneUnits(std::round(10. * Worksheet::convertFromSceneUnits(plot->bottomPadding(), Worksheet::Unit::Centimeter)) / 10.,
+										   Worksheet::Unit::Centimeter));
+
 		WARN(Q_FUNC_INFO << ", PADDING (H/V) = " << plot->horizontalPadding() << ", " << plot->verticalPadding())
 		WARN(Q_FUNC_INFO << ", PADDING (R/B) = " << plot->rightPadding() << ", " << plot->bottomPadding())
+
+		// if padding is symmetric, we set it
+		if (plot->horizontalPadding() == plot->rightPadding() && plot->verticalPadding() == plot->bottomPadding())
+			plot->setSymmetricPadding(true);
 	}
 
 	if (!preview) {

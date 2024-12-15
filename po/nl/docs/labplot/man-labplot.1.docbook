@@ -29,7 +29,7 @@
 <refmeta>
 <refentrytitle
 ><command
->labplot2</command
+>labplot</command
 ></refentrytitle>
 <manvolnum
 >1</manvolnum>
@@ -37,7 +37,7 @@
 
 <refnamediv>
 <refname
->labplot2</refname>
+>labplot</refname>
 <refpurpose
 >een KDE-toepassing voor het interactief grafieken maken en het analyseren van wetenschappelijke gegevens.</refpurpose>
 </refnamediv>
@@ -45,7 +45,7 @@
 <refsynopsisdiv id='synopsis'>
 <cmdsynopsis
 ><command
->labplot2</command
+>labplot</command
 > <arg choice="opt"
 ><replaceable
 >Opties voor LabPlot </replaceable
@@ -67,7 +67,7 @@
 >Tot de mogelijkheden behoren het plotten van 2D- en 3D-functies, eenvoudige plotbewerking, analyse van gegevens en functies, ondersteuning voor diverse werkbladen met gebruik van MDI- en LabPlot-projectbestanden. </para>
 <para
 >Merk op dat LabPlot wordt aangeroepen met <command
->labplot2</command
+>labplot</command
 >. </para>
 
 </refsect1>
@@ -78,7 +78,7 @@
 <para
 >Een volledige samenvatting van de algemene opties krijgt u met <userinput
 ><command
->labplot2</command
+>labplot</command
 > <parameter
 >--help</parameter
 ></userinput
@@ -141,15 +141,15 @@
 >Zie ook</title>
 <simplelist>
 <member
->Een volledige gebruikersdocumentatie vindt u in de KDE Help Centre. U kunt ookde URL <ulink url="help:/labplot2"
->help:/labplot2</ulink
+>Een volledige gebruikersdocumentatie vindt u in de KDE Help Centre. U kunt ookde URL <ulink url="help:/labplot"
+>help:/labplot</ulink
 > invoeren (of ook <acronym
 >URL</acronym
 > into &dolphin;, of  <userinput
 ><command
 >khelpcenter</command
 > <parameter
->help:/labplot2</parameter
+>help:/labplot</parameter
 ></userinput
 >).</member>
 <member
@@ -167,7 +167,7 @@
 ><title
 >Auteurs</title>
 <para
->LabPlot2 werd geschreven door </para>
+>LabPlot werd geschreven door </para>
 <simplelist>
     <member
 >Stefan Gerlach &lt;stefan.gerlach@uni.kn&gt;,</member>

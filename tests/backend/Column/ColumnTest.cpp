@@ -1288,6 +1288,21 @@ void ColumnTest::testFormula() {
 	}
 }
 
+void ColumnTest::testFormula2() {
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.replaceValues(-1, {11., 12., 13.});
+	c2.setFormula(QStringLiteral("sin(i)"), {}, QVector<Column*>({}), true);
+	c2.updateFormula();
+
+	auto c3 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c3.replaceValues(-1, {1., 2., 3.});
+	c3.setFormula(QStringLiteral("cell(i; x)"), {QStringLiteral("x")}, QVector<Column*>({&c2}), true);
+	c3.updateFormula();
+
+	c3.setFormula(QStringLiteral("cell(i; x) + sin(x)"), {QStringLiteral("x")}, QVector<Column*>({&c2}), true);
+	c3.updateFormula();
+}
+
 void ColumnTest::testFormulaCell() {
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
 	c1.replaceValues(-1, {1., 5., -1.});
@@ -1305,6 +1320,29 @@ void ColumnTest::testFormulaCell() {
 	VALUES_EQUAL(c2.valueAt(1), 5.);
 	VALUES_EQUAL(c2.valueAt(2), 1.);
 	VALUES_EQUAL(c2.valueAt(3), NAN);
+	VALUES_EQUAL(c2.valueAt(4), NAN);
+	VALUES_EQUAL(c2.valueAt(5), NAN);
+	VALUES_EQUAL(c2.valueAt(6), NAN);
+}
+
+/*!
+ * \brief ColumnTest::testFormulaCellDefault
+ * Use default value if the index is smaller than zero
+ */
+void ColumnTest::testFormulaCellDefault() {
+	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);
+	c1.replaceValues(-1, {1., 5., -1.});
+
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
+
+	c2.setFormula(QStringLiteral("cell_with_default(i - 1; -113; x)"), {QStringLiteral("x")}, QVector<Column*>({&c1}), true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 7);
+	VALUES_EQUAL(c2.valueAt(0), -113.);
+	VALUES_EQUAL(c2.valueAt(1), 1.);
+	VALUES_EQUAL(c2.valueAt(2), 5.);
+	VALUES_EQUAL(c2.valueAt(3), NAN); // There are only 3 elements in c1
 	VALUES_EQUAL(c2.valueAt(4), NAN);
 	VALUES_EQUAL(c2.valueAt(5), NAN);
 	VALUES_EQUAL(c2.valueAt(6), NAN);
@@ -1358,6 +1396,42 @@ void ColumnTest::testFormulaCellMulti() {
 	QCOMPARE(c2.rowCount(), 7);
 	for (int i = 0; i < c2.rowCount(); i++)
 		VALUES_EQUAL(c2.valueAt(i), -6.);
+}
+
+void ColumnTest::testFormulaCurrentColumnCell() {
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
+
+	c2.setFormula(QStringLiteral("cell_curr_column(i - 1)"), {}, QVector<Column*>({}), true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 7);
+	VALUES_EQUAL(c2.valueAt(0), NAN);
+	VALUES_EQUAL(c2.valueAt(1), NAN);
+	VALUES_EQUAL(c2.valueAt(2), NAN);
+	VALUES_EQUAL(c2.valueAt(3), NAN);
+	VALUES_EQUAL(c2.valueAt(4), NAN);
+	VALUES_EQUAL(c2.valueAt(5), NAN);
+	VALUES_EQUAL(c2.valueAt(6), NAN);
+}
+
+/*!
+ * \brief ColumnTest::testFormulaCellDefault
+ * Use default value if the index is smaller than zero
+ */
+void ColumnTest::testFormulaCurrentColumnCellDefaultValue() {
+	auto c2 = Column(QStringLiteral("FormulaColumn"), Column::ColumnMode::Double);
+	c2.replaceValues(-1, {11., 12., 13., 14., 15., 16., 17.});
+
+	c2.setFormula(QStringLiteral("cell_curr_column_with_default(i - 1; -143) * 2"), {}, QVector<Column*>({}), true);
+	c2.updateFormula();
+	QCOMPARE(c2.rowCount(), 7);
+	VALUES_EQUAL(c2.valueAt(0), -143. * 2.);
+	VALUES_EQUAL(c2.valueAt(1), c2.valueAt(0) * 2);
+	VALUES_EQUAL(c2.valueAt(2), c2.valueAt(1) * 2);
+	VALUES_EQUAL(c2.valueAt(3), c2.valueAt(2) * 2);
+	VALUES_EQUAL(c2.valueAt(4), c2.valueAt(3) * 2);
+	VALUES_EQUAL(c2.valueAt(5), c2.valueAt(4) * 2);
+	VALUES_EQUAL(c2.valueAt(6), c2.valueAt(5) * 2);
 }
 
 void ColumnTest::testFormulasmmin() {

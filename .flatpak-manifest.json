@@ -1,5 +1,5 @@
 {
-    "id": "org.kde.labplot2",
+    "id": "org.kde.labplot",
     "branch": "master",
     "runtime": "org.kde.Platform",
     "runtime-version": "6.7",
@@ -79,8 +79,8 @@
                     "sources": [
                         {
                             "type": "archive",
-                            "url": "https://boostorg.jfrog.io/artifactory/main/release/1.86.0/source/boost_1_86_0.tar.bz2",
-                            "sha256": "1bed88e40401b2cb7a1f76d4bab499e352fa4d0c5f31c0dbae64e24d34d7513b"
+                            "url": "https://boostorg.jfrog.io/artifactory/main/release/1.87.0/source/boost_1_87_0.tar.bz2",
+                            "sha256": "af57be25cb4c4f4b413ed692fe378affb4352ea50fbe294a11ef548f4d527d89"
                         }
                     ]
                 },
@@ -91,8 +91,8 @@
                     "sources": [
                         {
                             "type": "archive",
-                            "url": "https://github.com/uclouvain/openjpeg/archive/v2.5.2.tar.gz",
-                            "sha256": "90e3896fed910c376aaf79cdd98bdfdaf98c6472efd8e1debf0a854938cbda6a"
+                            "url": "https://github.com/uclouvain/openjpeg/archive/v2.5.3.tar.gz",
+                            "sha256": "368fe0468228e767433c9ebdea82ad9d801a3ad1e4234421f352c8b06e7aa707"
                         }
                     ],
                     "cleanup": [ "/bin", "/include", "/lib/openjpeg-*", "/lib/pkgconfig" ]
@@ -116,9 +116,9 @@
             "buildsystem": "cmake-ninja",
             "sources": [
 		    {
-			    "type": "git",
-			    "url": "https://github.com/KDE/cantor.git",
-			    "tag": "e43befd7e16638d30756b5abe85685a059e32aca"
+			    "type": "archive",
+			    "url": "https://download.kde.org/stable/release-service/24.12.0/src/cantor-24.12.0.tar.xz",
+			    "sha256": "3c327a33377e0cd6895936b438fb33a1cea274ba394b997fb0002a80d273f337"
 		    }
 	    ]
         },

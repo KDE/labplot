@@ -43,6 +43,9 @@
 #ifdef HAVE_QTSERIALPORT
 #include <QtSerialPort/qtserialportversion.h>
 #endif
+#ifdef HAVE_QTSVG
+#include <QtSvg/qtsvgversion.h>
+#endif
 #ifdef HAVE_MQTT
 #include <QtMqtt/qtmqttversion.h>
 #endif
@@ -248,6 +251,11 @@ QVector<QStringList> AboutDialog::components() {
 	components << (QStringList() << QLatin1String("Qt SerialPort") << i18n("Serial port functionality support") << QLatin1String(QTSERIALPORT_VERSION_STR) << QStringLiteral("https://doc.qt.io/qt-6/qtserialport-index.html"));
 #else
 	components << (QStringList() << QLatin1String("<em>") + QLatin1String("Qt SerialPort") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://doc.qt.io/qt-6/qtserialport-index.html"));
+#endif
+#ifdef HAVE_QTSVG
+	components << (QStringList() << QLatin1String("Qt Svg") << i18n("SVG export support") << QLatin1String(QTSVG_VERSION_STR) << QStringLiteral("https://doc.qt.io/qt-6/qtsvg-index.html"));
+#else
+	components << (QStringList() << QLatin1String("<em>") + QLatin1String("Qt Svg") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://doc.qt.io/qt-6/qtsvg-index.html"));
 #endif
 #ifdef HAVE_QXLSX
 	components << (QStringList() << QLatin1String("QXlsx") << i18n("Import Excel xlsx files") << QString() << QStringLiteral("https://github.com/QtExcel/QXlsx"));

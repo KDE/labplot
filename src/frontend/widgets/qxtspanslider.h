@@ -51,7 +51,6 @@ class QxtSpanSlider : public QSlider {
 	Q_PROPERTY(int lowerPosition READ lowerPosition WRITE setLowerPosition)
 	Q_PROPERTY(int upperPosition READ upperPosition WRITE setUpperPosition)
 	Q_PROPERTY(HandleMovementMode handleMovementMode READ handleMovementMode WRITE setHandleMovementMode)
-	Q_ENUMS(HandleMovementMode)
 
 public:
 	explicit QxtSpanSlider(QWidget* parent = nullptr);
@@ -59,7 +58,9 @@ public:
 	~QxtSpanSlider() override;
 
 	enum HandleMovementMode { FreeMovement, NoCrossing, NoOverlapping };
+	Q_ENUM(HandleMovementMode)
 	enum SpanHandle { NoHandle, LowerHandle, UpperHandle };
+	Q_ENUM(SpanHandle)
 
 	HandleMovementMode handleMovementMode() const;
 	void setHandleMovementMode(HandleMovementMode);

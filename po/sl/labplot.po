@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-06 00:37+0000\n"
-"PO-Revision-Date: 2024-12-01 07:39+0100\n"
+"POT-Creation-Date: 2024-12-15 00:37+0000\n"
+"PO-Revision-Date: 2024-12-11 07:28+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -68,7 +68,7 @@ msgstr "Preimenuj"
 #: src/backend/spreadsheet/Spreadsheet.cpp:659
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:493
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:273
-#: src/frontend/worksheet/WorksheetView.cpp:138
+#: src/frontend/worksheet/WorksheetView.cpp:139
 #, kde-format
 msgid "Delete"
 msgstr "Izbriši"
@@ -282,7 +282,7 @@ msgstr "Dolgo celo število"
 #: src/frontend/ui/dockwidgets/valuewidget.ui:269
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:280
 #: src/frontend/widgets/LabelWidget.cpp:208
-#: src/frontend/worksheet/WorksheetView.cpp:222
+#: src/frontend/worksheet/WorksheetView.cpp:223
 #, kde-format
 msgid "Text"
 msgstr "Besedilo"
@@ -373,13 +373,13 @@ msgstr "Vh%1"
 msgid "Import Data"
 msgstr "Uvoz podatkov"
 
-#: src/backend/core/AbstractPart.cpp:116 src/frontend/MainWin.cpp:671
-#: src/frontend/MainWin.cpp:680
+#: src/backend/core/AbstractPart.cpp:116 src/frontend/MainWin.cpp:672
+#: src/frontend/MainWin.cpp:681
 #, kde-format
 msgid "From File..."
 msgstr "Iz datoteke..."
 
-#: src/backend/core/AbstractPart.cpp:118 src/frontend/MainWin.cpp:692
+#: src/backend/core/AbstractPart.cpp:118 src/frontend/MainWin.cpp:693
 #, kde-format
 msgid "From SQL Database..."
 msgstr "Iz zbirke podatkov SQL..."
@@ -389,7 +389,7 @@ msgstr "Iz zbirke podatkov SQL..."
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:335
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:23
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:17
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:209
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:211
 #, kde-format
 msgid "Export"
 msgstr "Izvozi"
@@ -404,7 +404,7 @@ msgstr "Natisni"
 msgid "Print Preview"
 msgstr "Predogled tiskanja"
 
-#: src/backend/core/AbstractPart.cpp:137 src/frontend/MainWin.cpp:764
+#: src/backend/core/AbstractPart.cpp:137 src/frontend/MainWin.cpp:765
 #, kde-format
 msgid "&Close"
 msgstr "Zapri"
@@ -490,7 +490,7 @@ msgid "%1   (no values)"
 msgstr "%1   (brez vrednosti)"
 
 #: src/backend/core/AspectTreeModel.cpp:233
-#: src/frontend/datasources/ImportFileWidget.cpp:1611
+#: src/frontend/datasources/ImportFileWidget.cpp:1619
 #, kde-format
 msgid "Size: %1"
 msgstr "Velikost: %1"
@@ -1070,7 +1070,7 @@ msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:192
 #: src/backend/gsl/errors.h:20
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2073
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2076
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1220
 #, kde-format
 msgid "Success"
@@ -1589,7 +1589,7 @@ msgstr "h5dump ni mogoče najti."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:358
 #: src/backend/datasources/filters/NetCDFFilter.cpp:268
-#: src/frontend/datasources/ImportFileWidget.cpp:1586
+#: src/frontend/datasources/ImportFileWidget.cpp:1594
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr "Branje iz datoteke %1 ni uspelo."
@@ -1920,7 +1920,7 @@ msgid "Unknown"
 msgstr "Neznano"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/MainWin.cpp:642 src/frontend/MainWin.cpp:1988
+#: src/frontend/MainWin.cpp:643 src/frontend/MainWin.cpp:1989
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -2193,7 +2193,7 @@ msgstr "Ključ"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/datasources/filters/QJsonModel.cpp:133
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1888
 #: src/frontend/colormaps/ColorMapsWidget.cpp:195
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:145
 #: src/frontend/matrix/MatrixView.cpp:619
@@ -2503,7 +2503,7 @@ msgstr "Izriši podatke"
 msgid "Plot%1"
 msgstr "Graf%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1502
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1521
 #, kde-format
 msgid "legend"
 msgstr "legenda"
@@ -3618,53 +3618,68 @@ msgstr "Trikotna porazdelitev"
 msgid "Unknown Function"
 msgstr "Neznane funkcije"
 
-#: src/backend/gsl/functions.cpp:238
+#: src/backend/gsl/functions.cpp:241
 #, kde-format
-msgid "Cell (index, variable)"
-msgstr "Cell (index, variable)"
+msgid "Cell (index; variable)"
+msgstr "Cell (index; variable)"
 
-#: src/backend/gsl/functions.cpp:239
+#: src/backend/gsl/functions.cpp:242
+#, kde-format
+msgid "Cell (index; default_value; variable)"
+msgstr "Cell (index; default_value; variable)"
+
+#: src/backend/gsl/functions.cpp:243
 #, kde-format
 msgid "Moving Average"
 msgstr "Drseče povprečje"
 
-#: src/backend/gsl/functions.cpp:240
+#: src/backend/gsl/functions.cpp:244
 #, kde-format
 msgid "Moving Range"
 msgstr "Interval drsenja"
 
-#: src/backend/gsl/functions.cpp:241
+#: src/backend/gsl/functions.cpp:245
 #, kde-format
 msgid "Simple Moving Minimum"
 msgstr "Preprosti drseči minimum"
 
-#: src/backend/gsl/functions.cpp:242
+#: src/backend/gsl/functions.cpp:246
 #, kde-format
 msgid "Simple Moving Maximum"
 msgstr "Preprosti drseči maksimum"
 
-#: src/backend/gsl/functions.cpp:243
+#: src/backend/gsl/functions.cpp:247
 #, kde-format
 msgid "Simple Moving Average"
 msgstr "Preprosto drseče povprečje"
 
-#: src/backend/gsl/functions.cpp:244
+#: src/backend/gsl/functions.cpp:248
 #, kde-format
 msgid "Simple Moving Range"
 msgstr "Preprosto drseči interval"
 
-#: src/backend/gsl/functions.cpp:245
+#: src/backend/gsl/functions.cpp:249
 #, kde-format
 msgid "Period sample"
 msgstr "Periodični vzorec"
 
-#: src/backend/gsl/functions.cpp:246
+#: src/backend/gsl/functions.cpp:250
 #, kde-format
 msgid "Random sample"
 msgstr "Naključni vzorec"
 
+#: src/backend/gsl/functions.cpp:252
+#, kde-format
+msgid "Current column cell (index)"
+msgstr "Trenutni stolpec cell (index)"
+
+#: src/backend/gsl/functions.cpp:253
+#, kde-format
+msgid "Current column cell (index; default_value)"
+msgstr "Trenutni stolpec cell (index; default_value)"
+
 #. i18n: ectx: property (text), widget (QLabel, lSize)
-#: src/backend/gsl/functions.cpp:250
+#: src/backend/gsl/functions.cpp:257
 #: src/frontend/ui/dockwidgets/imagedock.ui:490
 #, kde-format
 msgid "Size"
@@ -3672,7 +3687,7 @@ msgstr "Velikost"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMinimum)
-#: src/backend/gsl/functions.cpp:251
+#: src/backend/gsl/functions.cpp:258
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:62
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:133
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:65
@@ -3685,7 +3700,7 @@ msgstr "Najmanjše"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMaximum)
-#: src/backend/gsl/functions.cpp:252 src/backend/nsl/nsl_conv.c:23
+#: src/backend/gsl/functions.cpp:259 src/backend/nsl/nsl_conv.c:23
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:63
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:134
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:66
@@ -3698,7 +3713,7 @@ msgstr "Največje"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbArithmeticMean)
-#: src/backend/gsl/functions.cpp:253
+#: src/backend/gsl/functions.cpp:260
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:67
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:63
 #: src/frontend/ui/mqttwillsettingswidget.ui:53
@@ -3709,7 +3724,7 @@ msgstr "Aritmetična sredina"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
-#: src/backend/gsl/functions.cpp:254
+#: src/backend/gsl/functions.cpp:261
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:70
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:183
 #: src/frontend/dockwidgets/RunChartDock.cpp:147
@@ -3724,7 +3739,7 @@ msgstr "Mediana"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbStandardDeviation)
-#: src/backend/gsl/functions.cpp:255
+#: src/backend/gsl/functions.cpp:262
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:81
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:175
 #: src/frontend/ui/mqttwillsettingswidget.ui:119
@@ -3734,7 +3749,7 @@ msgstr "Standardni odklon"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbVariance)
-#: src/backend/gsl/functions.cpp:256
+#: src/backend/gsl/functions.cpp:263
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:81
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:80
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:165
@@ -3745,7 +3760,7 @@ msgstr "Varianca"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbGeometricMean)
-#: src/backend/gsl/functions.cpp:257
+#: src/backend/gsl/functions.cpp:264
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:68
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:73
 #: src/frontend/ui/mqttwillsettingswidget.ui:64
@@ -3755,7 +3770,7 @@ msgstr "Geometrična sredina"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbHarmonicMean)
-#: src/backend/gsl/functions.cpp:258
+#: src/backend/gsl/functions.cpp:265
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:69
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:80
 #: src/frontend/ui/mqttwillsettingswidget.ui:75
@@ -3765,7 +3780,7 @@ msgstr "Harmonična srednja vrednost"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbContraharmonicMean)
-#: src/backend/gsl/functions.cpp:259
+#: src/backend/gsl/functions.cpp:266
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:70
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:87
 #: src/frontend/ui/mqttwillsettingswidget.ui:86
@@ -3774,7 +3789,7 @@ msgid "Contraharmonic mean"
 msgstr "Kontraharmonična srednja vrednost"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMode)
-#: src/backend/gsl/functions.cpp:260
+#: src/backend/gsl/functions.cpp:267
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:68
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:71
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:94
@@ -3783,58 +3798,58 @@ msgid "Mode"
 msgstr "Način"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFirstQuartile)
-#: src/backend/gsl/functions.cpp:261
+#: src/backend/gsl/functions.cpp:268
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:101
 #, kde-format
 msgid "First quartile"
 msgstr "Prvi kvartil"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbThirdQuartile)
-#: src/backend/gsl/functions.cpp:262
+#: src/backend/gsl/functions.cpp:269
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:115
 #, kde-format
 msgid "Third quartile"
 msgstr "Tretji kvartil"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbIQR)
-#: src/backend/gsl/functions.cpp:263
+#: src/backend/gsl/functions.cpp:270
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:206
 #, kde-format
 msgid "Interquartile range"
 msgstr "Medkvartilni obseg"
 
-#: src/backend/gsl/functions.cpp:264
+#: src/backend/gsl/functions.cpp:271
 #, kde-format
 msgid "1st percentile"
 msgstr "1. percentil"
 
-#: src/backend/gsl/functions.cpp:265
+#: src/backend/gsl/functions.cpp:272
 #, kde-format
 msgid "5th percentile"
 msgstr "5. percentil"
 
-#: src/backend/gsl/functions.cpp:266
+#: src/backend/gsl/functions.cpp:273
 #, kde-format
 msgid "10th percentile"
 msgstr "10. percentil"
 
-#: src/backend/gsl/functions.cpp:267
+#: src/backend/gsl/functions.cpp:274
 #, kde-format
 msgid "90th percentile"
 msgstr "90. percentil"
 
-#: src/backend/gsl/functions.cpp:268
+#: src/backend/gsl/functions.cpp:275
 #, kde-format
 msgid "95th percentile"
 msgstr "95. percentil"
 
-#: src/backend/gsl/functions.cpp:269
+#: src/backend/gsl/functions.cpp:276
 #, kde-format
 msgid "99th percentile"
 msgstr "99. percentil"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbTrimean)
-#: src/backend/gsl/functions.cpp:270
+#: src/backend/gsl/functions.cpp:277
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:79
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:75
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:122
@@ -3842,13 +3857,13 @@ msgstr "99. percentil"
 msgid "Trimean"
 msgstr "Trimean"
 
-#: src/backend/gsl/functions.cpp:271
+#: src/backend/gsl/functions.cpp:278
 #, kde-format
 msgid "Mean absolute deviation"
 msgstr "Povprečna absolutna deviacija"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMeanDeviationAroundMedian)
-#: src/backend/gsl/functions.cpp:272
+#: src/backend/gsl/functions.cpp:279
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:83
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:192
 #, kde-format
@@ -3856,7 +3871,7 @@ msgid "Mean absolute deviation around median"
 msgstr "Srednji absolutni odklon okoli mediane"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedianDeviation)
-#: src/backend/gsl/functions.cpp:273
+#: src/backend/gsl/functions.cpp:280
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:84
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:199
 #, kde-format
@@ -3865,7 +3880,7 @@ msgstr "Absolutno odstopanje mediane"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbSkewness)
-#: src/backend/gsl/functions.cpp:274
+#: src/backend/gsl/functions.cpp:281
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:86
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:89
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:242
@@ -3876,7 +3891,7 @@ msgstr "Koeficient asimetrije"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbKurtosis)
-#: src/backend/gsl/functions.cpp:275
+#: src/backend/gsl/functions.cpp:282
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:87
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:90
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:249
@@ -3887,7 +3902,7 @@ msgstr "Koeficient sploščenosti"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbEntropy)
-#: src/backend/gsl/functions.cpp:276
+#: src/backend/gsl/functions.cpp:283
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:88
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:91
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:256
@@ -3896,154 +3911,154 @@ msgstr "Koeficient sploščenosti"
 msgid "Entropy"
 msgstr "Entropija"
 
-#: src/backend/gsl/functions.cpp:277
+#: src/backend/gsl/functions.cpp:284
 #, kde-format
 msgid "Quantile"
 msgstr "Kvantil"
 
-#: src/backend/gsl/functions.cpp:278 src/backend/nsl/nsl_smooth.c:21
+#: src/backend/gsl/functions.cpp:285 src/backend/nsl/nsl_smooth.c:21
 #, kde-format
 msgid "Percentile"
 msgstr "Percentil"
 
-#: src/backend/gsl/functions.cpp:285
+#: src/backend/gsl/functions.cpp:292
 #, kde-format
 msgid "pseudo-random integer [0, RAND_MAX]"
 msgstr "psevdonaključno celo število [0,RAND_MAX]"
 
-#: src/backend/gsl/functions.cpp:286
+#: src/backend/gsl/functions.cpp:293
 #, kde-format
 msgid "nonlinear additive feedback rng [0, RAND_MAX]"
 msgstr "nelinearna aditivna povratna zveza rng [0,RAND_MAX]"
 
-#: src/backend/gsl/functions.cpp:287
+#: src/backend/gsl/functions.cpp:294
 #, kde-format
 msgid "nonlinear additive feedback rng [0, 1]"
 msgstr "nelinearna aditivna povratna zveza rng [0,1]"
 
-#: src/backend/gsl/functions.cpp:288
+#: src/backend/gsl/functions.cpp:295
 #, kde-format
 msgid "Smallest integral value not less"
 msgstr "Najmanjša integralna vrednost ni manjša"
 
-#: src/backend/gsl/functions.cpp:289
+#: src/backend/gsl/functions.cpp:296
 #, kde-format
 msgid "Absolute value"
 msgstr "Absolutna vrednost"
 
-#: src/backend/gsl/functions.cpp:291
+#: src/backend/gsl/functions.cpp:298
 #, kde-format
 msgid "Base 10 logarithm"
 msgstr "Naravni logaritem (z osnovo 10)"
 
-#: src/backend/gsl/functions.cpp:292
+#: src/backend/gsl/functions.cpp:299
 #, kde-format
 msgid "Power function [x^y]"
 msgstr "Potenčna funkcija [x^y]"
 
-#: src/backend/gsl/functions.cpp:293
+#: src/backend/gsl/functions.cpp:300
 #, kde-format
 msgid "Nonnegative square root"
 msgstr "Nenegativni kvadratni koren"
 
-#: src/backend/gsl/functions.cpp:294
+#: src/backend/gsl/functions.cpp:301
 #, kde-format
 msgid "Sign function"
 msgstr "Funkcija Sign"
 
-#: src/backend/gsl/functions.cpp:295
+#: src/backend/gsl/functions.cpp:302
 #, kde-format
 msgid "Heavyside theta function"
 msgstr "Heavyside theta funkcija"
 
-#: src/backend/gsl/functions.cpp:296
+#: src/backend/gsl/functions.cpp:303
 #, kde-format
 msgid "Harmonic number function"
 msgstr "Funkcija harmoničnega števila"
 
-#: src/backend/gsl/functions.cpp:298
+#: src/backend/gsl/functions.cpp:305
 #, kde-format
 msgid "Cube root"
 msgstr "Kubični koren"
 
-#: src/backend/gsl/functions.cpp:299
+#: src/backend/gsl/functions.cpp:306
 #, kde-format
 msgid "Extract the exponent"
 msgstr "Izvleci eksponent"
 
-#: src/backend/gsl/functions.cpp:300
+#: src/backend/gsl/functions.cpp:307
 #, kde-format
 msgid "Round to an integer value"
 msgstr "Zaokroži na celoštevilsko vrednost"
 
-#: src/backend/gsl/functions.cpp:301 src/backend/gsl/functions.cpp:302
+#: src/backend/gsl/functions.cpp:308 src/backend/gsl/functions.cpp:309
 #, kde-format
 msgid "Round to the nearest integer"
 msgstr "Zaokroži na najbližje celo število"
 
-#: src/backend/gsl/functions.cpp:303
+#: src/backend/gsl/functions.cpp:310
 #, kde-format
 msgid "Round to y decimal places"
 msgstr "Zaokroži na y decimalnih mest"
 
-#: src/backend/gsl/functions.cpp:317
+#: src/backend/gsl/functions.cpp:324
 #, kde-format
 msgid "greaterThan"
 msgstr "večjeKot"
 
-#: src/backend/gsl/functions.cpp:318
+#: src/backend/gsl/functions.cpp:325
 #, kde-format
 msgid "lessThan"
 msgstr "manjšeKot"
 
-#: src/backend/gsl/functions.cpp:319
+#: src/backend/gsl/functions.cpp:326
 #, kde-format
 msgid "greaterEqualThan"
 msgstr "večjeAliEnakoKot"
 
-#: src/backend/gsl/functions.cpp:320
+#: src/backend/gsl/functions.cpp:327
 #, kde-format
 msgid "lessEqualThan"
 msgstr "manjšeAliEnakoKot"
 
-#: src/backend/gsl/functions.cpp:321
+#: src/backend/gsl/functions.cpp:328
 #, kde-format
 msgid "equal"
 msgstr "enako kot"
 
-#: src/backend/gsl/functions.cpp:322
+#: src/backend/gsl/functions.cpp:329
 #, kde-format
 msgid "equal with epsilon"
 msgstr "enako epsilonu"
 
-#: src/backend/gsl/functions.cpp:323
+#: src/backend/gsl/functions.cpp:330
 #, kde-format
 msgid "between with boundaries included"
 msgstr "med vključno z mejami"
 
-#: src/backend/gsl/functions.cpp:324
+#: src/backend/gsl/functions.cpp:331
 #, kde-format
 msgid "outside with boundaries included"
 msgstr "zunaj z vključenimi mejami"
 
-#: src/backend/gsl/functions.cpp:325
+#: src/backend/gsl/functions.cpp:332
 #, kde-format
 msgid "between with boundaries excluded"
 msgstr "med z izključenimi mejami"
 
-#: src/backend/gsl/functions.cpp:326
+#: src/backend/gsl/functions.cpp:333
 #, kde-format
 msgid "outside with boundaries excluded"
 msgstr "zunaj z izključenimi mejami"
 
-#: src/backend/gsl/functions.cpp:329
+#: src/backend/gsl/functions.cpp:336
 #, kde-format
 msgid "if(condition; ifTrue; ifFalse)"
 msgstr "če(pogoj; čeTrue; čeFalse)"
 
 #. i18n: ectx: property (text), widget (QLabel, lAnd)
 #. i18n: ectx: property (text), widget (QLabel, lAndDateTime)
-#: src/backend/gsl/functions.cpp:330 src/backend/lib/XmlStreamReader.cpp:58
+#: src/backend/gsl/functions.cpp:337 src/backend/lib/XmlStreamReader.cpp:58
 #: src/frontend/ui/spreadsheet/dropvalueswidget.ui:74
 #: src/frontend/ui/spreadsheet/dropvalueswidget.ui:220
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:354
@@ -4053,129 +4068,129 @@ msgid "and"
 msgstr "in"
 
 #. i18n: ectx: property (text), widget (QLabel, l2SamplingInterval)
-#: src/backend/gsl/functions.cpp:331
+#: src/backend/gsl/functions.cpp:338
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:265
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:24
 #, kde-format
 msgid "or"
 msgstr "inkluzivni ali"
 
-#: src/backend/gsl/functions.cpp:332
+#: src/backend/gsl/functions.cpp:339
 #, kde-format
 msgid "xor"
 msgstr "eksluzivni ali"
 
-#: src/backend/gsl/functions.cpp:333
+#: src/backend/gsl/functions.cpp:340
 #, kde-format
 msgid "not"
 msgstr "negacija"
 
-#: src/backend/gsl/functions.cpp:337
+#: src/backend/gsl/functions.cpp:344
 #, kde-format
 msgid "Airy function of the first kind"
 msgstr "Airy funkcija prve vrste"
 
-#: src/backend/gsl/functions.cpp:338
+#: src/backend/gsl/functions.cpp:345
 #, kde-format
 msgid "Airy function of the second kind"
 msgstr "Airy funkcija druge vrste"
 
-#: src/backend/gsl/functions.cpp:339
+#: src/backend/gsl/functions.cpp:346
 #, kde-format
 msgid "Scaled Airy function of the first kind"
 msgstr "Airy funkcija prve vrste"
 
-#: src/backend/gsl/functions.cpp:340
+#: src/backend/gsl/functions.cpp:347
 #, kde-format
 msgid "Scaled Airy function of the second kind"
 msgstr "Airy funkcija druge vrste"
 
-#: src/backend/gsl/functions.cpp:341
+#: src/backend/gsl/functions.cpp:348
 #, kde-format
 msgid "Airy function derivative of the first kind"
 msgstr "Odvod funkcije Airy prve vrste"
 
-#: src/backend/gsl/functions.cpp:342
+#: src/backend/gsl/functions.cpp:349
 #, kde-format
 msgid "Airy function derivative of the second kind"
 msgstr "Odvod funkcije Airy druge vrste"
 
-#: src/backend/gsl/functions.cpp:343
+#: src/backend/gsl/functions.cpp:350
 #, kde-format
 msgid "Scaled Airy function derivative of the first kind"
 msgstr "Odvod utežne Airyjeve funkcije prve vrste"
 
-#: src/backend/gsl/functions.cpp:344
+#: src/backend/gsl/functions.cpp:351
 #, kde-format
 msgid "Scaled Airy function derivative of the second kind"
 msgstr "Odvod utežne Airyjeve funkcije druge vrste"
 
-#: src/backend/gsl/functions.cpp:345
+#: src/backend/gsl/functions.cpp:352
 #, kde-format
 msgid "n-th zero of the Airy function of the first kind"
 msgstr "n-th ničla Airy funkcije prve vrste"
 
-#: src/backend/gsl/functions.cpp:346
+#: src/backend/gsl/functions.cpp:353
 #, kde-format
 msgid "n-th zero of the Airy function of the second kind"
 msgstr "n-th ničla Airy funkcije druge vrste"
 
-#: src/backend/gsl/functions.cpp:347
+#: src/backend/gsl/functions.cpp:354
 #, kde-format
 msgid "n-th zero of the Airy function derivative of the first kind"
 msgstr "n-to ničla odvoda Airy funkcije prve vrste"
 
-#: src/backend/gsl/functions.cpp:348
+#: src/backend/gsl/functions.cpp:355
 #, kde-format
 msgid "n-th zero of the Airy function derivative of the second kind"
 msgstr "n-ta ničla odvoda funkcije Airy druge vrste"
 
-#: src/backend/gsl/functions.cpp:351
+#: src/backend/gsl/functions.cpp:358
 #, kde-format
 msgid "Regular cylindrical Bessel function of zeroth order"
 msgstr "Regularna cilindrična Besselova funkcija ničelnega reda"
 
-#: src/backend/gsl/functions.cpp:352
+#: src/backend/gsl/functions.cpp:359
 #, kde-format
 msgid "Regular cylindrical Bessel function of first order"
 msgstr "Regularna cilindrična Bessel funkcija prvega reda"
 
-#: src/backend/gsl/functions.cpp:353
+#: src/backend/gsl/functions.cpp:360
 #, kde-format
 msgid "Regular cylindrical Bessel function of order n"
 msgstr "Regularna cilindrična Besselova funkcija reda n"
 
-#: src/backend/gsl/functions.cpp:354
+#: src/backend/gsl/functions.cpp:361
 #, kde-format
 msgid "Irregular cylindrical Bessel function of zeroth order"
 msgstr "Neregularna cilindrična Bessel funkcija ničelnega reda"
 
-#: src/backend/gsl/functions.cpp:355
+#: src/backend/gsl/functions.cpp:362
 #, kde-format
 msgid "Irregular cylindrical Bessel function of first order"
 msgstr "Neregularna cilindrična Besselova funkcija prvega reda"
 
-#: src/backend/gsl/functions.cpp:356
+#: src/backend/gsl/functions.cpp:363
 #, kde-format
 msgid "Irregular cylindrical Bessel function of order n"
 msgstr "Neregularna cilindrična Besselova funkcija reda n"
 
-#: src/backend/gsl/functions.cpp:357
+#: src/backend/gsl/functions.cpp:364
 #, kde-format
 msgid "Regular modified cylindrical Bessel function of zeroth order"
 msgstr "Regularna modificirana cilindrična Besselova funkcija ničelnega reda"
 
-#: src/backend/gsl/functions.cpp:358
+#: src/backend/gsl/functions.cpp:365
 #, kde-format
 msgid "Regular modified cylindrical Bessel function of first order"
 msgstr "Regularna modificirana cilindrična Besselova funkcija prvega reda"
 
-#: src/backend/gsl/functions.cpp:359
+#: src/backend/gsl/functions.cpp:366
 #, kde-format
 msgid "Regular modified cylindrical Bessel function of order n"
 msgstr "Regularna modificirana cilindrična Besselova funkcija reda n"
 
-#: src/backend/gsl/functions.cpp:360
+#: src/backend/gsl/functions.cpp:367
 #, kde-format
 msgid ""
 "Scaled regular modified cylindrical Bessel function of zeroth order exp(-|"
@@ -4184,7 +4199,7 @@ msgstr ""
 "Merilna redna modificirana cilindrična Besselova funkcija ničelnega reda "
 "exp(-|x|) I0(x)"
 
-#: src/backend/gsl/functions.cpp:362
+#: src/backend/gsl/functions.cpp:369
 #, kde-format
 msgid ""
 "Scaled regular modified cylindrical Bessel function of first order exp(-|x|) "
@@ -4193,7 +4208,7 @@ msgstr ""
 "Merilna redna modificirana cilindrična Besselova funkcija prvega reda exp(-|"
 "x|) I1(x)"
 
-#: src/backend/gsl/functions.cpp:363
+#: src/backend/gsl/functions.cpp:370
 #, kde-format
 msgid ""
 "Scaled regular modified cylindrical Bessel function of order n exp(-|x|) "
@@ -4202,22 +4217,22 @@ msgstr ""
 "Merilna redna modificirana cilindrična Besselova funkcija n-tega reda exp(-|"
 "x|) V(x)"
 
-#: src/backend/gsl/functions.cpp:364
+#: src/backend/gsl/functions.cpp:371
 #, kde-format
 msgid "Irregular modified cylindrical Bessel function of zeroth order"
 msgstr "Nepravilna spremenjena cilindrična Besselova funkcija ničelnega reda"
 
-#: src/backend/gsl/functions.cpp:365
+#: src/backend/gsl/functions.cpp:372
 #, kde-format
 msgid "Irregular modified cylindrical Bessel function of first order"
 msgstr "Nepravilna spremenjena cilindrična Besselova funkcija prvega reda"
 
-#: src/backend/gsl/functions.cpp:366
+#: src/backend/gsl/functions.cpp:373
 #, kde-format
 msgid "Irregular modified cylindrical Bessel function of order n"
 msgstr "Nepravilna spremenjena cilindrična Besselova funkcija n-tega reda"
 
-#: src/backend/gsl/functions.cpp:367
+#: src/backend/gsl/functions.cpp:374
 #, kde-format
 msgid ""
 "Scaled irregular modified cylindrical Bessel function of zeroth order exp(x) "
@@ -4226,7 +4241,7 @@ msgstr ""
 "Skalirana neregularna prilagojena cilindrična Besselova funkcija ničtega "
 "reda exp(x) K0(x)"
 
-#: src/backend/gsl/functions.cpp:368
+#: src/backend/gsl/functions.cpp:375
 #, kde-format
 msgid ""
 "Scaled irregular modified cylindrical Bessel function of first order exp(x) "
@@ -4235,7 +4250,7 @@ msgstr ""
 "Skalirana neregularna prilagojena cilindrična Besselova funkcija prvega reda "
 "exp(x) K1(x)"
 
-#: src/backend/gsl/functions.cpp:369
+#: src/backend/gsl/functions.cpp:376
 #, kde-format
 msgid ""
 "Scaled irregular modified cylindrical Bessel function of order n exp(x) Kn(x)"
@@ -4243,47 +4258,47 @@ msgstr ""
 "Skalirana neregularna prilagojena cilindrična Besselova funkcija n-tega reda "
 "exp(x) Kn(x)"
 
-#: src/backend/gsl/functions.cpp:370
+#: src/backend/gsl/functions.cpp:377
 #, kde-format
 msgid "Regular spherical Bessel function of zeroth order"
 msgstr "Regularna sferična Besselova funkcija ničelnega reda"
 
-#: src/backend/gsl/functions.cpp:371
+#: src/backend/gsl/functions.cpp:378
 #, kde-format
 msgid "Regular spherical Bessel function of first order"
 msgstr "Regularna sferična Besselova funkcija prvega reda"
 
-#: src/backend/gsl/functions.cpp:373
+#: src/backend/gsl/functions.cpp:380
 #, kde-format
 msgid "Regular spherical Bessel function of second order"
 msgstr "Regularna sferična Besselova funkcija drugega reda"
 
-#: src/backend/gsl/functions.cpp:374
+#: src/backend/gsl/functions.cpp:381
 #, kde-format
 msgid "Regular spherical Bessel function of order l"
 msgstr "Regularna sferična Besselova funkcija reda l"
 
-#: src/backend/gsl/functions.cpp:375
+#: src/backend/gsl/functions.cpp:382
 #, kde-format
 msgid "Irregular spherical Bessel function of zeroth order"
 msgstr "Neregularna sferična Besselova funkcija ničelnega reda"
 
-#: src/backend/gsl/functions.cpp:376
+#: src/backend/gsl/functions.cpp:383
 #, kde-format
 msgid "Irregular spherical Bessel function of first order"
 msgstr "Neregularna sferična Besselova funkcija prvega reda"
 
-#: src/backend/gsl/functions.cpp:377
+#: src/backend/gsl/functions.cpp:384
 #, kde-format
 msgid "Irregular spherical Bessel function of second order"
 msgstr "Neregularna sferična Besselova funkcija drugega reda"
 
-#: src/backend/gsl/functions.cpp:378
+#: src/backend/gsl/functions.cpp:385
 #, kde-format
 msgid "Irregular spherical Bessel function of order l"
 msgstr "Neregularna sferična Besselova funkcija reda l"
 
-#: src/backend/gsl/functions.cpp:379
+#: src/backend/gsl/functions.cpp:386
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of zeroth order, exp(-|x|) "
@@ -4292,7 +4307,7 @@ msgstr ""
 "Skalirana regularna prilagojena sferična Besselova funkcija ničtega reda, "
 "exp(-|x|) i0(x)"
 
-#: src/backend/gsl/functions.cpp:380
+#: src/backend/gsl/functions.cpp:387
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of first order, exp(-|x|) "
@@ -4301,7 +4316,7 @@ msgstr ""
 "Skalirana regularna prilagojena sferična Besselova funkcija prvega reda, "
 "exp(-|x|) i1(x)"
 
-#: src/backend/gsl/functions.cpp:381
+#: src/backend/gsl/functions.cpp:388
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of second order, exp(-|x|) "
@@ -4310,7 +4325,7 @@ msgstr ""
 "Skalirana regularna prilagojena sferična Besselova funkcija drugega reda, "
 "exp(-|x|) i2(x)"
 
-#: src/backend/gsl/functions.cpp:382
+#: src/backend/gsl/functions.cpp:389
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of order l, exp(-|x|) il(x)"
@@ -4318,7 +4333,7 @@ msgstr ""
 "Skalirana regularna prilagojena sferična Besselova funkcija reda l, exp(-|"
 "x|) il(x)"
 
-#: src/backend/gsl/functions.cpp:384
+#: src/backend/gsl/functions.cpp:391
 #, kde-format
 msgid ""
 "Scaled irregular modified spherical Bessel function of zeroth order, exp(x) "
@@ -4327,7 +4342,7 @@ msgstr ""
 "Skalirana neregularna prilagojena sferična Besselova funkcija ničtega reda, "
 "exp(x) k0(x)"
 
-#: src/backend/gsl/functions.cpp:385
+#: src/backend/gsl/functions.cpp:392
 #, kde-format
 msgid ""
 "Scaled irregular modified spherical Bessel function of first order, exp(-|"
@@ -4336,7 +4351,7 @@ msgstr ""
 "Skalirana neregularna prilagojena sferična Besselova funkcija prvega reda, "
 "exp(-|x|) k1(x)"
 
-#: src/backend/gsl/functions.cpp:386
+#: src/backend/gsl/functions.cpp:393
 #, kde-format
 msgid ""
 "Scaled irregular modified spherical Bessel function of second order, exp(-|"
@@ -4345,7 +4360,7 @@ msgstr ""
 "Skalirana neregularna prilagojena sferična Besselova funkcija drugega reda, "
 "exp(-|x|) k2(x)"
 
-#: src/backend/gsl/functions.cpp:387
+#: src/backend/gsl/functions.cpp:394
 #, kde-format
 msgid ""
 "Scaled irregular modified spherical Bessel function of order l, exp(-|x|) "
@@ -4354,209 +4369,209 @@ msgstr ""
 "Skalirana neregularna prilagojena sferična Besselova funkcija reda l, exp(-|"
 "x|) kl(x)"
 
-#: src/backend/gsl/functions.cpp:388
+#: src/backend/gsl/functions.cpp:395
 #, kde-format
 msgid "Regular cylindrical Bessel function of fractional order"
 msgstr "Regularna cilindrična Besselova funkcija ulomljenega reda"
 
-#: src/backend/gsl/functions.cpp:389
+#: src/backend/gsl/functions.cpp:396
 #, kde-format
 msgid "Irregular cylindrical Bessel function of fractional order"
 msgstr "Neregularna cilindrična Besselova funkcija ulomljenega reda"
 
-#: src/backend/gsl/functions.cpp:390
+#: src/backend/gsl/functions.cpp:397
 #, kde-format
 msgid "Regular modified Bessel function of fractional order"
 msgstr "Regularna modificirana Besselova funkcija ulomljenega reda"
 
-#: src/backend/gsl/functions.cpp:391
+#: src/backend/gsl/functions.cpp:398
 #, kde-format
 msgid "Scaled regular modified Bessel function of fractional order"
 msgstr "Skalirana regularna prilagojena Besselova funkcija ulomljenega reda"
 
-#: src/backend/gsl/functions.cpp:392
+#: src/backend/gsl/functions.cpp:399
 #, kde-format
 msgid "Irregular modified Bessel function of fractional order"
 msgstr "Neregularna prilagojena Besselova funkcija ulomljenega reda"
 
-#: src/backend/gsl/functions.cpp:393
+#: src/backend/gsl/functions.cpp:400
 #, kde-format
 msgid "Logarithm of irregular modified Bessel function of fractional order"
 msgstr "Logaritem neregularne prilagojene Besselove funkcije ulomljenega reda"
 
-#: src/backend/gsl/functions.cpp:395
+#: src/backend/gsl/functions.cpp:402
 #, kde-format
 msgid "Scaled irregular modified Bessel function of fractional order"
 msgstr "Skalirana neregularna prilagojena Besselova funkcija ulomljenega reda"
 
-#: src/backend/gsl/functions.cpp:396
+#: src/backend/gsl/functions.cpp:403
 #, kde-format
 msgid "n-th positive zero of the Bessel function J0"
 msgstr "n-ta pozitivna ničla Besselove funkcije J0"
 
-#: src/backend/gsl/functions.cpp:397
+#: src/backend/gsl/functions.cpp:404
 #, kde-format
 msgid "n-th positive zero of the Bessel function J1"
 msgstr "n-ta pozitivna ničla Besselove funkcije J1"
 
-#: src/backend/gsl/functions.cpp:398
+#: src/backend/gsl/functions.cpp:405
 #, kde-format
 msgid "n-th positive zero of the Bessel function Jnu"
 msgstr "n-ta pozitivna ničla Besselove funkcije Jnu"
 
-#: src/backend/gsl/functions.cpp:401
+#: src/backend/gsl/functions.cpp:408
 #, kde-format
 msgid "Clausen function"
 msgstr "Clausenova funkcija"
 
-#: src/backend/gsl/functions.cpp:404
+#: src/backend/gsl/functions.cpp:411
 #, kde-format
 msgid "Lowest-order normalized hydrogenic bound state radial wavefunction"
 msgstr ""
 "Normalizirana radialna valovna funkcija za vodik v vezanem stanju najnižjega "
 "reda"
 
-#: src/backend/gsl/functions.cpp:405
+#: src/backend/gsl/functions.cpp:412
 #, kde-format
 msgid "n-th normalized hydrogenic bound state radial wavefunction"
 msgstr "n-ta normalizirana radialna valovna funkcija za vodik v vezanem stanju"
 
-#: src/backend/gsl/functions.cpp:408 src/backend/gsl/functions.cpp:445
+#: src/backend/gsl/functions.cpp:415 src/backend/gsl/functions.cpp:452
 #, kde-format
 msgid "Dawson's integral D(z) = sqrt(pi)/2 * exp(-z^2) * erfi(z)"
 msgstr "Dawsonov integral D(z) = sqrt(pi)/2 * exp(-z^2) * erfi(z)"
 
-#: src/backend/gsl/functions.cpp:411
+#: src/backend/gsl/functions.cpp:418
 #, kde-format
 msgid "First-order Debye function"
 msgstr "Debyejeva funkcija prvega reda"
 
-#: src/backend/gsl/functions.cpp:412
+#: src/backend/gsl/functions.cpp:419
 #, kde-format
 msgid "Second-order Debye function"
 msgstr "Debyejeva funkcija drugega reda"
 
-#: src/backend/gsl/functions.cpp:413
+#: src/backend/gsl/functions.cpp:420
 #, kde-format
 msgid "Third-order Debye function"
 msgstr "Debyejeva funkcija tretjega reda"
 
-#: src/backend/gsl/functions.cpp:414
+#: src/backend/gsl/functions.cpp:421
 #, kde-format
 msgid "Fourth-order Debye function"
 msgstr "Debyejeva funkcija četrtega reda"
 
-#: src/backend/gsl/functions.cpp:415
+#: src/backend/gsl/functions.cpp:422
 #, kde-format
 msgid "Fifth-order Debye function"
 msgstr "Debyejeva funkcija petega reda"
 
-#: src/backend/gsl/functions.cpp:416
+#: src/backend/gsl/functions.cpp:423
 #, kde-format
 msgid "Sixth-order Debye function"
 msgstr "Debyejeva funkcija šestega reda"
 
-#: src/backend/gsl/functions.cpp:419
+#: src/backend/gsl/functions.cpp:426
 #, kde-format
 msgid "Dilogarithm for a real argument"
 msgstr "Dilogaritem za realni argument"
 
-#: src/backend/gsl/functions.cpp:422
+#: src/backend/gsl/functions.cpp:429
 #, kde-format
 msgid "Legendre form of complete elliptic integral K"
 msgstr "Legendrova oblika popolnega eliptičnega integrala K"
 
-#: src/backend/gsl/functions.cpp:423
+#: src/backend/gsl/functions.cpp:430
 #, kde-format
 msgid "Legendre form of complete elliptic integral E"
 msgstr "Legendrova oblika popolnega eliptičnega integrala E"
 
-#: src/backend/gsl/functions.cpp:424
+#: src/backend/gsl/functions.cpp:431
 #, kde-format
 msgid "Legendre form of complete elliptic integral Pi"
 msgstr "Legendrova oblika popolnega eliptičnega integrala Pi"
 
-#: src/backend/gsl/functions.cpp:425
+#: src/backend/gsl/functions.cpp:432
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral F"
 msgstr "Legendrova oblika nepopolnega eliptičnega integrala F"
 
-#: src/backend/gsl/functions.cpp:426
+#: src/backend/gsl/functions.cpp:433
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral E"
 msgstr "Legendrova oblika nepopolnega eliptičnega integrala E"
 
-#: src/backend/gsl/functions.cpp:427
+#: src/backend/gsl/functions.cpp:434
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral P"
 msgstr "Legendrova oblika nepopolnega eliptičnega integrala P"
 
-#: src/backend/gsl/functions.cpp:428
+#: src/backend/gsl/functions.cpp:435
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral D"
 msgstr "Legendrova oblika nepopolnega eliptičnega integrala D"
 
-#: src/backend/gsl/functions.cpp:429
+#: src/backend/gsl/functions.cpp:436
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RC"
 msgstr "Carlsonova oblika nepopolnega eliptičnega integrala RC"
 
-#: src/backend/gsl/functions.cpp:430
+#: src/backend/gsl/functions.cpp:437
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RD"
 msgstr "Carlsonova oblika nepopolnega eliptičnega integrala RD"
 
-#: src/backend/gsl/functions.cpp:431
+#: src/backend/gsl/functions.cpp:438
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RF"
 msgstr "Carlsonova oblika nepopolnega eliptičnega integrala RF"
 
-#: src/backend/gsl/functions.cpp:432
+#: src/backend/gsl/functions.cpp:439
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RJ"
 msgstr "Carlsonova oblika nepopolnega eliptičnega integrala RJ"
 
-#: src/backend/gsl/functions.cpp:435
+#: src/backend/gsl/functions.cpp:442
 #, kde-format
 msgid "Error function"
 msgstr "Funkcija napake"
 
-#: src/backend/gsl/functions.cpp:436
+#: src/backend/gsl/functions.cpp:443
 #, kde-format
 msgid "Complementary error function"
 msgstr "Komplementarna funkcija napake"
 
-#: src/backend/gsl/functions.cpp:437
+#: src/backend/gsl/functions.cpp:444
 #, kde-format
 msgid "Logarithm of complementary error function"
 msgstr "Logaritem komplementarne funkcije napake"
 
-#: src/backend/gsl/functions.cpp:438
+#: src/backend/gsl/functions.cpp:445
 #, kde-format
 msgid "Gaussian probability density function Z"
 msgstr "Gaussova funkcija gostote verjetnosti Z"
 
-#: src/backend/gsl/functions.cpp:439
+#: src/backend/gsl/functions.cpp:446
 #, kde-format
 msgid "Upper tail of the Gaussian probability function Q"
 msgstr "Zgornji rep Gaussove funkcije verjetnosti Q"
 
-#: src/backend/gsl/functions.cpp:440
+#: src/backend/gsl/functions.cpp:447
 #, kde-format
 msgid "Hazard function for the normal distribution Z/Q"
 msgstr "Funkcija tveganja za navadno porazdelitev Z/Q"
 
-#: src/backend/gsl/functions.cpp:442
+#: src/backend/gsl/functions.cpp:449
 #, kde-format
 msgid "Underflow-compensating function exp(x^2) erfc(x) for real x"
 msgstr "Funkcija za nadomestilo podtoka exp(x^2) erfc(x) za realni x"
 
-#: src/backend/gsl/functions.cpp:443
+#: src/backend/gsl/functions.cpp:450
 #, kde-format
 msgid "Imaginary error function erfi(x) = -i erf(ix) for real x"
 msgstr "Imaginarna funkcija napake erfi(x) = -i erf(ix) za realni x"
 
-#: src/backend/gsl/functions.cpp:444
+#: src/backend/gsl/functions.cpp:451
 #, kde-format
 msgid ""
 "Imaginary part of Faddeeva's scaled complex error function w(x) = exp(-x^2) "
@@ -4565,444 +4580,444 @@ msgstr ""
 "Imaginarni del Faddeevajeve umerjene kompleksne funkcije napake w(x) = exp(-"
 "x^2) erfc(-ix) za realni x"
 
-#: src/backend/gsl/functions.cpp:446
+#: src/backend/gsl/functions.cpp:453
 #, kde-format
 msgid "Voigt profile"
 msgstr "Voigtov profil"
 
-#: src/backend/gsl/functions.cpp:448
+#: src/backend/gsl/functions.cpp:455
 #, kde-format
 msgid "Pseudo-Voigt profile (same width)"
 msgstr "Pseudo-Voigtov profil (ista širina)"
 
-#: src/backend/gsl/functions.cpp:451
+#: src/backend/gsl/functions.cpp:458
 #, kde-format
 msgid "Exponential function"
 msgstr "Eksponentna funkcija"
 
-#: src/backend/gsl/functions.cpp:452
+#: src/backend/gsl/functions.cpp:459
 #, kde-format
 msgid "exponentiate x and multiply by y"
 msgstr "eksponiraj x in pomnoži z y"
 
-#: src/backend/gsl/functions.cpp:456
+#: src/backend/gsl/functions.cpp:463
 #, kde-format
 msgid "n-relative exponential"
 msgstr "n-relativni eksponentni"
 
-#: src/backend/gsl/functions.cpp:459
+#: src/backend/gsl/functions.cpp:466
 #, kde-format
 msgid "Exponential integral"
 msgstr "Eksponentni integral"
 
-#: src/backend/gsl/functions.cpp:460
+#: src/backend/gsl/functions.cpp:467
 #, kde-format
 msgid "Second order exponential integral"
 msgstr "Eksponentni integral drugega reda"
 
-#: src/backend/gsl/functions.cpp:461
+#: src/backend/gsl/functions.cpp:468
 #, kde-format
 msgid "Exponential integral of order n"
 msgstr "Eksponentni integral n-tega reda"
 
-#: src/backend/gsl/functions.cpp:462
+#: src/backend/gsl/functions.cpp:469
 #, kde-format
 msgid "Exponential integral Ei"
 msgstr "Eksponentni integral Ei"
 
-#: src/backend/gsl/functions.cpp:463
+#: src/backend/gsl/functions.cpp:470
 #, kde-format
 msgid "Hyperbolic integral Shi"
 msgstr "Hiperbolični integral Shi"
 
-#: src/backend/gsl/functions.cpp:464
+#: src/backend/gsl/functions.cpp:471
 #, kde-format
 msgid "Hyperbolic integral Chi"
 msgstr "Hiperbolični integral Chi"
 
-#: src/backend/gsl/functions.cpp:465
+#: src/backend/gsl/functions.cpp:472
 #, kde-format
 msgid "Third-order exponential integral"
 msgstr "Eksponentni integral tretjega reda"
 
-#: src/backend/gsl/functions.cpp:466
+#: src/backend/gsl/functions.cpp:473
 #, kde-format
 msgid "Sine integral"
 msgstr "Sinusni integral"
 
-#: src/backend/gsl/functions.cpp:467
+#: src/backend/gsl/functions.cpp:474
 #, kde-format
 msgid "Cosine integral"
 msgstr "Kosinusni integral"
 
-#: src/backend/gsl/functions.cpp:468
+#: src/backend/gsl/functions.cpp:475
 #, kde-format
 msgid "Arctangent integral"
 msgstr "Arkustangensni integral"
 
-#: src/backend/gsl/functions.cpp:471
+#: src/backend/gsl/functions.cpp:478
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index -1"
 msgstr "Popoln Fermi-Diracov integral z indeksom -1"
 
-#: src/backend/gsl/functions.cpp:472
+#: src/backend/gsl/functions.cpp:479
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 0"
 msgstr "Popoln Fermi-Diracov integral z indeksom 0"
 
-#: src/backend/gsl/functions.cpp:473
+#: src/backend/gsl/functions.cpp:480
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 1"
 msgstr "Popoln Fermi-Diracov integral z indeksom 1"
 
-#: src/backend/gsl/functions.cpp:474
+#: src/backend/gsl/functions.cpp:481
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 2"
 msgstr "Popoln Fermi-Diracov integral z indeksom 2"
 
-#: src/backend/gsl/functions.cpp:475
+#: src/backend/gsl/functions.cpp:482
 #, kde-format
 msgid "Complete Fermi-Dirac integral with integer index j"
 msgstr "Popoln Fermi-Diracov integral z celoštevilskim indeksom j"
 
-#: src/backend/gsl/functions.cpp:476
+#: src/backend/gsl/functions.cpp:483
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index -1/2"
 msgstr "Popoln Fermi-Diracov integral z indeksom -1/2"
 
-#: src/backend/gsl/functions.cpp:477
+#: src/backend/gsl/functions.cpp:484
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 1/2"
 msgstr "Popoln Fermi-Diracov integral z indeksom 1/2"
 
-#: src/backend/gsl/functions.cpp:478
+#: src/backend/gsl/functions.cpp:485
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 3/2"
 msgstr "Popoln Fermi-Diracov integral z indeksom 3/2"
 
-#: src/backend/gsl/functions.cpp:479
+#: src/backend/gsl/functions.cpp:486
 #, kde-format
 msgid "Incomplete Fermi-Dirac integral with index zero"
 msgstr "Nepopoln Fermi-Diracov integral z indeksom nič"
 
-#: src/backend/gsl/functions.cpp:482 src/backend/gsl/functions.cpp:483
+#: src/backend/gsl/functions.cpp:489 src/backend/gsl/functions.cpp:490
 #, kde-format
 msgid "Gamma function"
 msgstr "Gama funkcija"
 
-#: src/backend/gsl/functions.cpp:484
+#: src/backend/gsl/functions.cpp:491
 #, kde-format
 msgid "Logarithm of the gamma function"
 msgstr "Naravni logaritem gama funkcije"
 
-#: src/backend/gsl/functions.cpp:485
+#: src/backend/gsl/functions.cpp:492
 #, kde-format
 msgid "Logarithm naturalis of the gamma function"
 msgstr "Naravni logaritem gama funkcije"
 
-#: src/backend/gsl/functions.cpp:486
+#: src/backend/gsl/functions.cpp:493
 #, kde-format
 msgid "Regulated gamma function"
 msgstr "Regulirana funkcija gama"
 
-#: src/backend/gsl/functions.cpp:487
+#: src/backend/gsl/functions.cpp:494
 #, kde-format
 msgid "Reciprocal of the gamma function"
 msgstr "Obratna vrednost funkcije gama"
 
-#: src/backend/gsl/functions.cpp:488
+#: src/backend/gsl/functions.cpp:495
 #, kde-format
 msgid "Factorial n!"
 msgstr "Faktorela n!"
 
-#: src/backend/gsl/functions.cpp:489
+#: src/backend/gsl/functions.cpp:496
 #, kde-format
 msgid "Double factorial n!!"
 msgstr "Dvojna faktorela n!!"
 
-#: src/backend/gsl/functions.cpp:490
+#: src/backend/gsl/functions.cpp:497
 #, kde-format
 msgid "Logarithm of the factorial"
 msgstr "Logaritem faktorele"
 
-#: src/backend/gsl/functions.cpp:491
+#: src/backend/gsl/functions.cpp:498
 #, kde-format
 msgid "Logarithm of the double factorial"
 msgstr "Logaritem dvojne faktorele"
 
-#: src/backend/gsl/functions.cpp:493
+#: src/backend/gsl/functions.cpp:500
 #, kde-format
 msgid "Combinatorial factor"
 msgstr "Kombinatorični faktor"
 
-#: src/backend/gsl/functions.cpp:494
+#: src/backend/gsl/functions.cpp:501
 #, kde-format
 msgid "Logarithm of the combinatorial factor"
 msgstr "Logaritem kombinatoričnega faktorja"
 
-#: src/backend/gsl/functions.cpp:495
+#: src/backend/gsl/functions.cpp:502
 #, kde-format
 msgid "Taylor coefficient"
 msgstr "Taylorjev koeficient"
 
-#: src/backend/gsl/functions.cpp:496
+#: src/backend/gsl/functions.cpp:503
 #, kde-format
 msgid "Pochhammer symbol"
 msgstr "Pochhammerjev simbol"
 
-#: src/backend/gsl/functions.cpp:497
+#: src/backend/gsl/functions.cpp:504
 #, kde-format
 msgid "Logarithm of the Pochhammer symbol"
 msgstr "Logaritem Pochhammerjevega simbola"
 
-#: src/backend/gsl/functions.cpp:498
+#: src/backend/gsl/functions.cpp:505
 #, kde-format
 msgid "Relative Pochhammer symbol"
 msgstr "Relativni Pochhammerjev simbol"
 
-#: src/backend/gsl/functions.cpp:499
+#: src/backend/gsl/functions.cpp:506
 #, kde-format
 msgid "Unnormalized incomplete gamma function"
 msgstr "Nenormalizirana nepopolna gama-funkcija"
 
-#: src/backend/gsl/functions.cpp:500
+#: src/backend/gsl/functions.cpp:507
 #, kde-format
 msgid "Normalized incomplete gamma function"
 msgstr "Normalizirana nepopolna gama-funkcija"
 
-#: src/backend/gsl/functions.cpp:501
+#: src/backend/gsl/functions.cpp:508
 #, kde-format
 msgid "Complementary normalized incomplete gamma function"
 msgstr "Komplementarna normalizirana nepopolna gama-funkcija"
 
-#: src/backend/gsl/functions.cpp:502
+#: src/backend/gsl/functions.cpp:509
 #, kde-format
 msgid "Beta function"
 msgstr "Funkcija beta"
 
-#: src/backend/gsl/functions.cpp:504
+#: src/backend/gsl/functions.cpp:511
 #, kde-format
 msgid "Logarithm of the beta function"
 msgstr "Logaritem funkcije beta"
 
-#: src/backend/gsl/functions.cpp:505
+#: src/backend/gsl/functions.cpp:512
 #, kde-format
 msgid "Normalized incomplete beta function"
 msgstr "Normalizirana nepopolna funkcija beta"
 
-#: src/backend/gsl/functions.cpp:508
+#: src/backend/gsl/functions.cpp:515
 #, kde-format
 msgid "Gegenbauer polynomial C_1"
 msgstr "Gegenbauerjev polinom C_1"
 
-#: src/backend/gsl/functions.cpp:509
+#: src/backend/gsl/functions.cpp:516
 #, kde-format
 msgid "Gegenbauer polynomial C_2"
 msgstr "Gegenbauerjev polinom C_2"
 
-#: src/backend/gsl/functions.cpp:510
+#: src/backend/gsl/functions.cpp:517
 #, kde-format
 msgid "Gegenbauer polynomial C_3"
 msgstr "Gegenbauerjev polinom C_3"
 
-#: src/backend/gsl/functions.cpp:511
+#: src/backend/gsl/functions.cpp:518
 #, kde-format
 msgid "Gegenbauer polynomial C_n"
 msgstr "Gegenbauerjev polinom C_n"
 
-#: src/backend/gsl/functions.cpp:515
+#: src/backend/gsl/functions.cpp:522
 #, kde-format
 msgid "Hermite polynomials physicists version"
 msgstr "Hermiteovi polinomi, različica za fizike"
 
-#: src/backend/gsl/functions.cpp:516
+#: src/backend/gsl/functions.cpp:523
 #, kde-format
 msgid "Hermite polynomials probabilists version"
 msgstr "Hermiteovi polinomi, različica za verjetnostnike"
 
-#: src/backend/gsl/functions.cpp:517
+#: src/backend/gsl/functions.cpp:524
 #, kde-format
 msgid "Hermite functions"
 msgstr "Hermiteove funkcije"
 
-#: src/backend/gsl/functions.cpp:519
+#: src/backend/gsl/functions.cpp:526
 #, kde-format
 msgid "Hermite functions (fast version)"
 msgstr "Hermiteove funkcije (hitra različica)"
 
-#: src/backend/gsl/functions.cpp:521
+#: src/backend/gsl/functions.cpp:528
 #, kde-format
 msgid "Derivatives of Hermite polynomials physicists version"
 msgstr "Odvodi Hermiteovih polinomov, različica za fizike"
 
-#: src/backend/gsl/functions.cpp:522
+#: src/backend/gsl/functions.cpp:529
 #, kde-format
 msgid "Derivatives of Hermite polynomials probabilists version"
 msgstr "Odvodi Hermiteovih polinomov, različica za verjetnostnike"
 
-#: src/backend/gsl/functions.cpp:523
+#: src/backend/gsl/functions.cpp:530
 #, kde-format
 msgid "Derivatives of Hermite functions"
 msgstr "Odvodi Hermiteovih funkcij"
 
-#: src/backend/gsl/functions.cpp:527
+#: src/backend/gsl/functions.cpp:534
 #, kde-format
 msgid "Hypergeometric function 0F1"
 msgstr "Hipergeometrična funkcija 0F1"
 
-#: src/backend/gsl/functions.cpp:528
+#: src/backend/gsl/functions.cpp:535
 #, kde-format
 msgid "Confluent hypergeometric function 1F1 for integer parameters"
 msgstr "Konfluentna hipergeometrična funkcija 1F1 za celoštevilske parametre"
 
-#: src/backend/gsl/functions.cpp:529
+#: src/backend/gsl/functions.cpp:536
 #, kde-format
 msgid "Confluent hypergeometric function 1F1 for general parameters"
 msgstr "Konfluentna hipergeometrična funkcija 1F1 za splošne parametre"
 
-#: src/backend/gsl/functions.cpp:530
+#: src/backend/gsl/functions.cpp:537
 #, kde-format
 msgid "Confluent hypergeometric function U for integer parameters"
 msgstr "Konfluentna hipergeometrična funkcija U za celoštevilske parametre"
 
-#: src/backend/gsl/functions.cpp:531
+#: src/backend/gsl/functions.cpp:538
 #, kde-format
 msgid "Confluent hypergeometric function U"
 msgstr "Konfluentna hipergeometrična funkcija U"
 
-#: src/backend/gsl/functions.cpp:532
+#: src/backend/gsl/functions.cpp:539
 #, kde-format
 msgid "Gauss hypergeometric function 2F1"
 msgstr "Gaussova hipergeometrična funkcija 2F1"
 
-#: src/backend/gsl/functions.cpp:533
+#: src/backend/gsl/functions.cpp:540
 #, kde-format
 msgid "Gauss hypergeometric function 2F1 with complex parameters"
 msgstr "Gaussova hipergeometrična funkcija 2F1 s kompleksnimi parametri"
 
-#: src/backend/gsl/functions.cpp:534
+#: src/backend/gsl/functions.cpp:541
 #, kde-format
 msgid "Renormalized Gauss hypergeometric function 2F1"
 msgstr "Renormalizirana Gaussova hipergeometrična funkcija 2F1"
 
-#: src/backend/gsl/functions.cpp:535
+#: src/backend/gsl/functions.cpp:542
 #, kde-format
 msgid "Renormalized Gauss hypergeometric function 2F1 with complex parameters"
 msgstr ""
 "Renormalizirana Gaussova hipergeometrična funkcija 2F1 s kompleksnimi "
 "parametri"
 
-#: src/backend/gsl/functions.cpp:536
+#: src/backend/gsl/functions.cpp:543
 #, kde-format
 msgid "Hypergeometric function 2F0"
 msgstr "Hipergeometrična funkcija 2F0"
 
-#: src/backend/gsl/functions.cpp:539
+#: src/backend/gsl/functions.cpp:546
 #, kde-format
 msgid "generalized Laguerre polynomials L_1"
 msgstr "posplošeni Laguerrovi polinomi L_1"
 
-#: src/backend/gsl/functions.cpp:540
+#: src/backend/gsl/functions.cpp:547
 #, kde-format
 msgid "generalized Laguerre polynomials L_2"
 msgstr "posplošeni Laguerrovi polinomi L_2"
 
-#: src/backend/gsl/functions.cpp:541
+#: src/backend/gsl/functions.cpp:548
 #, kde-format
 msgid "generalized Laguerre polynomials L_3"
 msgstr "posplošeni Laguerrovi polinomi L_3"
 
-#: src/backend/gsl/functions.cpp:542
+#: src/backend/gsl/functions.cpp:549
 #, kde-format
 msgid "generalized Laguerre polynomials L_n"
 msgstr "posplošeni Laguerrovi polinomi L_n"
 
-#: src/backend/gsl/functions.cpp:545
+#: src/backend/gsl/functions.cpp:552
 #, kde-format
 msgid "Principal branch of the Lambert W function"
 msgstr "Glavna veja Lambertove W-funkcije"
 
-#: src/backend/gsl/functions.cpp:546
+#: src/backend/gsl/functions.cpp:553
 #, kde-format
 msgid "Secondary real-valued branch of the Lambert W function"
 msgstr "Sekundarna realno ovrednotena veja Lambertove W-funkcije"
 
-#: src/backend/gsl/functions.cpp:549
+#: src/backend/gsl/functions.cpp:556
 #, kde-format
 msgid "Legendre polynomial P_1"
 msgstr "Legendrov polinom P_1"
 
-#: src/backend/gsl/functions.cpp:550
+#: src/backend/gsl/functions.cpp:557
 #, kde-format
 msgid "Legendre polynomial P_2"
 msgstr "Legendrov polinom P_2"
 
-#: src/backend/gsl/functions.cpp:551
+#: src/backend/gsl/functions.cpp:558
 #, kde-format
 msgid "Legendre polynomial P_3"
 msgstr "Legendrov polinom P_3"
 
-#: src/backend/gsl/functions.cpp:552
+#: src/backend/gsl/functions.cpp:559
 #, kde-format
 msgid "Legendre polynomial P_l"
 msgstr "Legendrov polinom P_l"
 
-#: src/backend/gsl/functions.cpp:553
+#: src/backend/gsl/functions.cpp:560
 #, kde-format
 msgid "Legendre function Q_0"
 msgstr "Funkcija Legendre Q_0"
 
-#: src/backend/gsl/functions.cpp:554
+#: src/backend/gsl/functions.cpp:561
 #, kde-format
 msgid "Legendre function Q_1"
 msgstr "Funkcija Legendre Q_1"
 
-#: src/backend/gsl/functions.cpp:555
+#: src/backend/gsl/functions.cpp:562
 #, kde-format
 msgid "Legendre function Q_l"
 msgstr "Funkcija Legendre Q_l"
 
-#: src/backend/gsl/functions.cpp:556
+#: src/backend/gsl/functions.cpp:563
 #, kde-format
 msgid "Associated Legendre polynomial"
 msgstr "Povezani polinom Legendre"
 
-#: src/backend/gsl/functions.cpp:557
+#: src/backend/gsl/functions.cpp:564
 #, kde-format
 msgid "Normalized associated Legendre polynomial"
 msgstr "Normalizirani povezani polinom Legendre"
 
-#: src/backend/gsl/functions.cpp:558
+#: src/backend/gsl/functions.cpp:565
 #, kde-format
 msgid "Irregular spherical conical function P^1/2"
 msgstr "Nepravilna krogelna konična funkcija P^1/2"
 
-#: src/backend/gsl/functions.cpp:560
+#: src/backend/gsl/functions.cpp:567
 #, kde-format
 msgid "Regular spherical conical function P^(-1/2)"
 msgstr "Redna krogelna konična funkcija P^(-1/2)"
 
-#: src/backend/gsl/functions.cpp:561
+#: src/backend/gsl/functions.cpp:568
 #, kde-format
 msgid "Conical function P^0"
 msgstr "Konična funkcija P^0"
 
-#: src/backend/gsl/functions.cpp:562
+#: src/backend/gsl/functions.cpp:569
 #, kde-format
 msgid "Conical function P^1"
 msgstr "Konična funkcija P^1"
 
-#: src/backend/gsl/functions.cpp:563
+#: src/backend/gsl/functions.cpp:570
 #, kde-format
 msgid "Regular spherical conical function P^(-1/2-l)"
 msgstr "Regularna sferična konična funkcija P^(-1/2-l)"
 
-#: src/backend/gsl/functions.cpp:564
+#: src/backend/gsl/functions.cpp:571
 #, kde-format
 msgid "Regular cylindrical conical function P^(-m)"
 msgstr "Regularna cilindrična konična funkcija P^(-m)"
 
-#: src/backend/gsl/functions.cpp:565
+#: src/backend/gsl/functions.cpp:572
 #, kde-format
 msgid ""
 "Zeroth radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic "
@@ -5011,7 +5026,7 @@ msgstr ""
 "Ničelna radialna lastna funkcija Laplaceove transformacije na 3-"
 "dimenzionalnem hiperboličnem prostoru"
 
-#: src/backend/gsl/functions.cpp:566
+#: src/backend/gsl/functions.cpp:573
 #, kde-format
 msgid ""
 "First radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic "
@@ -5020,7 +5035,7 @@ msgstr ""
 "Prva radialna lastna funkcija Laplaceove transformacije na 3-dimenzionalnem "
 "hiperboličnem prostoru"
 
-#: src/backend/gsl/functions.cpp:567
+#: src/backend/gsl/functions.cpp:574
 #, kde-format
 msgid ""
 "l-th radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic "
@@ -5029,1061 +5044,1061 @@ msgstr ""
 "l-ta radialna lastna funkcija Laplaceove transformacije na 3-dimenzionalnem "
 "hiperboličnem prostoru"
 
-#: src/backend/gsl/functions.cpp:570
+#: src/backend/gsl/functions.cpp:577
 #, kde-format
 msgid "Logarithm"
 msgstr "Logaritem"
 
-#: src/backend/gsl/functions.cpp:571
+#: src/backend/gsl/functions.cpp:578
 #, kde-format
 msgid "Base 2 logarithm"
 msgstr "Logaritem z osnovo 2"
 
-#: src/backend/gsl/functions.cpp:572
+#: src/backend/gsl/functions.cpp:579
 #, kde-format
 msgid "Logarithm of the magnitude"
 msgstr "Logaritem magnitude"
 
-#: src/backend/gsl/functions.cpp:578
+#: src/backend/gsl/functions.cpp:585
 #, kde-format
 msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q, x)"
 msgstr "Značilne vrednosti a_n(q) Mathieujevih funkcij ce_n(q, x)"
 
-#: src/backend/gsl/functions.cpp:579
+#: src/backend/gsl/functions.cpp:586
 #, kde-format
 msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q, x)"
 msgstr "Značilne vrednosti b_n(q) Mathieujevih funkcij se_n(q, x)"
 
-#: src/backend/gsl/functions.cpp:580
+#: src/backend/gsl/functions.cpp:587
 #, kde-format
 msgid "Angular Mathieu functions ce_n(q, x)"
 msgstr "Kotne Mathieujeve funkcije ce_n(q,x)"
 
-#: src/backend/gsl/functions.cpp:581
+#: src/backend/gsl/functions.cpp:588
 #, kde-format
 msgid "Angular Mathieu functions se_n(q, x)"
 msgstr "Kotne Mathieujeve funkcije se_n(q,x)"
 
-#: src/backend/gsl/functions.cpp:582
+#: src/backend/gsl/functions.cpp:589
 #, kde-format
 msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q, x)"
 msgstr "Radialne Mathieujeve funkcije j-te vrste Mc_n^{(j)}(q,x)"
 
-#: src/backend/gsl/functions.cpp:583
+#: src/backend/gsl/functions.cpp:590
 #, kde-format
 msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q, x)"
 msgstr "Radialne Mathieujeve funkcije j-te vrste Ms_n^{(j)}(q,x)"
 
-#: src/backend/gsl/functions.cpp:587
+#: src/backend/gsl/functions.cpp:594
 #, kde-format
 msgid "x^n for integer n with an error estimate"
 msgstr "x^n za celo število n z oceno napake"
 
-#: src/backend/gsl/functions.cpp:590
+#: src/backend/gsl/functions.cpp:597
 #, kde-format
 msgid "Digamma function for positive integer n"
 msgstr "Funkcija digama za pozitivno celo število n"
 
-#: src/backend/gsl/functions.cpp:591
+#: src/backend/gsl/functions.cpp:598
 #, kde-format
 msgid "Digamma function"
 msgstr "Funkcija digama"
 
-#: src/backend/gsl/functions.cpp:592
+#: src/backend/gsl/functions.cpp:599
 #, kde-format
 msgid "Real part of the digamma function on the line 1+i y"
 msgstr "Realni del digama funkcije na črti 1+i y"
 
-#: src/backend/gsl/functions.cpp:593
+#: src/backend/gsl/functions.cpp:600
 #, kde-format
 msgid "Trigamma function psi' for positive integer n"
 msgstr "Trigama funkcija psi' za pozitivno celo število n"
 
-#: src/backend/gsl/functions.cpp:594
+#: src/backend/gsl/functions.cpp:601
 #, kde-format
 msgid "Trigamma function psi'"
 msgstr "Trigama funkcija psi'"
 
-#: src/backend/gsl/functions.cpp:595
+#: src/backend/gsl/functions.cpp:602
 #, kde-format
 msgid "Polygamma function psi^(n)"
 msgstr "Poligama funkcija psi^(n)"
 
-#: src/backend/gsl/functions.cpp:598
+#: src/backend/gsl/functions.cpp:605
 #, kde-format
 msgid "First synchrotron function"
 msgstr "Prva funkcija sinhrotrona"
 
-#: src/backend/gsl/functions.cpp:599
+#: src/backend/gsl/functions.cpp:606
 #, kde-format
 msgid "Second synchrotron function"
 msgstr "Druga funkcija sinhrotrona"
 
-#: src/backend/gsl/functions.cpp:602
+#: src/backend/gsl/functions.cpp:609
 #, kde-format
 msgid "Transport function J2"
 msgstr "Transportna funkcija J2"
 
-#: src/backend/gsl/functions.cpp:603
+#: src/backend/gsl/functions.cpp:610
 #, kde-format
 msgid "Transport function J3"
 msgstr "Transportna funkcija J3"
 
-#: src/backend/gsl/functions.cpp:604
+#: src/backend/gsl/functions.cpp:611
 #, kde-format
 msgid "Transport function J4"
 msgstr "Transportna funkcija J4"
 
-#: src/backend/gsl/functions.cpp:605
+#: src/backend/gsl/functions.cpp:612
 #, kde-format
 msgid "Transport function J5"
 msgstr "Transportna funkcija J5"
 
-#: src/backend/gsl/functions.cpp:608
+#: src/backend/gsl/functions.cpp:615
 #, kde-format
 msgid "Sine"
 msgstr "Sinus"
 
-#: src/backend/gsl/functions.cpp:609 src/backend/nsl/nsl_interp.c:21
+#: src/backend/gsl/functions.cpp:616 src/backend/nsl/nsl_interp.c:21
 #: src/backend/nsl/nsl_sf_window.c:27 src/backend/nsl/nsl_smooth.c:30
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:165
 #, kde-format
 msgid "Cosine"
 msgstr "Kosinus"
 
-#: src/backend/gsl/functions.cpp:610
+#: src/backend/gsl/functions.cpp:617
 #, kde-format
 msgid "Tangent"
 msgstr "Tangencialno"
 
-#: src/backend/gsl/functions.cpp:611
+#: src/backend/gsl/functions.cpp:618
 #, kde-format
 msgid "Inverse sine"
 msgstr "Inverzni sinus ali arkus sinus"
 
-#: src/backend/gsl/functions.cpp:612
+#: src/backend/gsl/functions.cpp:619
 #, kde-format
 msgid "Inverse cosine"
 msgstr "Inverzni kosinus ali arkus kosinus"
 
-#: src/backend/gsl/functions.cpp:613
+#: src/backend/gsl/functions.cpp:620
 #, kde-format
 msgid "Inverse tangent"
 msgstr "Inverzni tangens ali arkus tangens"
 
-#: src/backend/gsl/functions.cpp:614
+#: src/backend/gsl/functions.cpp:621
 #, kde-format
 msgid "Inverse tangent using sign"
 msgstr "Inverzni tangens ali arkus tangens s predznakom"
 
-#: src/backend/gsl/functions.cpp:615
+#: src/backend/gsl/functions.cpp:622
 #, kde-format
 msgid "Hyperbolic sine"
 msgstr "Hiperbolični sinus"
 
-#: src/backend/gsl/functions.cpp:616
+#: src/backend/gsl/functions.cpp:623
 #, kde-format
 msgid "Hyperbolic cosine"
 msgstr "Hiperbolični kosinus"
 
-#: src/backend/gsl/functions.cpp:617
+#: src/backend/gsl/functions.cpp:624
 #, kde-format
 msgid "Hyperbolic tangent"
 msgstr "Hiperbolični tangens"
 
-#: src/backend/gsl/functions.cpp:618
+#: src/backend/gsl/functions.cpp:625
 #, kde-format
 msgid "Inverse hyperbolic cosine"
 msgstr "Inverzni hiperbolični kosinus"
 
-#: src/backend/gsl/functions.cpp:619
+#: src/backend/gsl/functions.cpp:626
 #, kde-format
 msgid "Inverse hyperbolic sine"
 msgstr "Inverzni hiperbolični sinus"
 
-#: src/backend/gsl/functions.cpp:620
+#: src/backend/gsl/functions.cpp:627
 #, kde-format
 msgid "Inverse hyperbolic tangent"
 msgstr "Inverzni hiperbolični tangens"
 
-#: src/backend/gsl/functions.cpp:621
+#: src/backend/gsl/functions.cpp:628
 #, kde-format
 msgid "Secant"
 msgstr "Sekans"
 
-#: src/backend/gsl/functions.cpp:622
+#: src/backend/gsl/functions.cpp:629
 #, kde-format
 msgid "Cosecant"
 msgstr "Kosekans"
 
-#: src/backend/gsl/functions.cpp:623
+#: src/backend/gsl/functions.cpp:630
 #, kde-format
 msgid "Cotangent"
 msgstr "Kotangens"
 
-#: src/backend/gsl/functions.cpp:624
+#: src/backend/gsl/functions.cpp:631
 #, kde-format
 msgid "Inverse secant"
 msgstr "Inverzni sekans"
 
-#: src/backend/gsl/functions.cpp:625
+#: src/backend/gsl/functions.cpp:632
 #, kde-format
 msgid "Inverse cosecant"
 msgstr "Inverzni kosekans"
 
-#: src/backend/gsl/functions.cpp:626
+#: src/backend/gsl/functions.cpp:633
 #, kde-format
 msgid "Inverse cotangent"
 msgstr "Inverzni kotangens"
 
-#: src/backend/gsl/functions.cpp:627
+#: src/backend/gsl/functions.cpp:634
 #, kde-format
 msgid "Hyperbolic secant"
 msgstr "Hiperbolični sekans"
 
-#: src/backend/gsl/functions.cpp:628
+#: src/backend/gsl/functions.cpp:635
 #, kde-format
 msgid "Hyperbolic cosecant"
 msgstr "Hiperbolični kosekans"
 
-#: src/backend/gsl/functions.cpp:629
+#: src/backend/gsl/functions.cpp:636
 #, kde-format
 msgid "Hyperbolic cotangent"
 msgstr "Hiperbolični kotangens"
 
-#: src/backend/gsl/functions.cpp:630
+#: src/backend/gsl/functions.cpp:637
 #, kde-format
 msgid "Inverse hyperbolic secant"
 msgstr "Inverzni hiperbolični sekans"
 
-#: src/backend/gsl/functions.cpp:631
+#: src/backend/gsl/functions.cpp:638
 #, kde-format
 msgid "Inverse hyperbolic cosecant"
 msgstr "Inverzni hiperbolični kosekans"
 
-#: src/backend/gsl/functions.cpp:632
+#: src/backend/gsl/functions.cpp:639
 #, kde-format
 msgid "Inverse hyperbolic cotangent"
 msgstr "Inverzni hiperbolični kotangens"
 
-#: src/backend/gsl/functions.cpp:633
+#: src/backend/gsl/functions.cpp:640
 #, kde-format
 msgid "Sinc function sin(x)/x"
 msgstr "Funkcija sinc sin(x)/x"
 
-#: src/backend/gsl/functions.cpp:636
+#: src/backend/gsl/functions.cpp:643
 #, kde-format
 msgid "Hypotenuse function"
 msgstr "Funkcija hipotenuze"
 
-#: src/backend/gsl/functions.cpp:637
+#: src/backend/gsl/functions.cpp:644
 #, kde-format
 msgid "Three component hypotenuse function"
 msgstr "Trikomponentna funkcija hipotenuze"
 
-#: src/backend/gsl/functions.cpp:638
+#: src/backend/gsl/functions.cpp:645
 #, kde-format
 msgid "restrict to [-pi, pi]"
 msgstr "omeji na [-pi,pi]"
 
-#: src/backend/gsl/functions.cpp:639
+#: src/backend/gsl/functions.cpp:646
 #, kde-format
 msgid "restrict to [0, 2 pi]"
 msgstr "omeji na [0,2 pi]"
 
-#: src/backend/gsl/functions.cpp:642
+#: src/backend/gsl/functions.cpp:649
 #, kde-format
 msgid "Riemann zeta function for integer n"
 msgstr "Riemannova funkcija zeta za celo število n"
 
-#: src/backend/gsl/functions.cpp:643
+#: src/backend/gsl/functions.cpp:650
 #, kde-format
 msgid "Riemann zeta function"
 msgstr "Riemannova funkcija zeta"
 
-#: src/backend/gsl/functions.cpp:644
+#: src/backend/gsl/functions.cpp:651
 #, kde-format
 msgid "zeta(n)-1 for integer n"
 msgstr "zeta(n)-1 za celo število n"
 
-#: src/backend/gsl/functions.cpp:645
+#: src/backend/gsl/functions.cpp:652
 #, kde-format
 msgid "zeta(x)-1"
 msgstr "zeta(x)-1"
 
-#: src/backend/gsl/functions.cpp:646
+#: src/backend/gsl/functions.cpp:653
 #, kde-format
 msgid "Hurwitz zeta function"
 msgstr "Hurwitzeva funkcija zeta"
 
-#: src/backend/gsl/functions.cpp:647
+#: src/backend/gsl/functions.cpp:654
 #, kde-format
 msgid "Eta function for integer n"
 msgstr "Funkcija Eta za celo število n"
 
-#: src/backend/gsl/functions.cpp:648
+#: src/backend/gsl/functions.cpp:655
 #, kde-format
 msgid "Eta function"
 msgstr "Funkcija Eta"
 
-#: src/backend/gsl/functions.cpp:652
+#: src/backend/gsl/functions.cpp:659
 #, kde-format
 msgid "Gaussian random numbers"
 msgstr "Gaussova naključna števila"
 
-#: src/backend/gsl/functions.cpp:653
+#: src/backend/gsl/functions.cpp:660
 #, kde-format
 msgid "Exponential random numbers"
 msgstr "Eksponentna naključna števila"
 
-#: src/backend/gsl/functions.cpp:654
+#: src/backend/gsl/functions.cpp:661
 #, kde-format
 msgid "Laplacian random numbers"
 msgstr "Laplaceova naključna števila"
 
-#: src/backend/gsl/functions.cpp:655
+#: src/backend/gsl/functions.cpp:662
 #, kde-format
 msgid "Cauchy/Lorentz random numbers"
 msgstr "Cauchy/Lorentzova naključna števila"
 
-#: src/backend/gsl/functions.cpp:656
+#: src/backend/gsl/functions.cpp:663
 #, kde-format
 msgid "Rayleigh random numbers"
 msgstr "Rayleighova naključna števila"
 
-#: src/backend/gsl/functions.cpp:657
+#: src/backend/gsl/functions.cpp:664
 #, kde-format
 msgid "Landau random numbers"
 msgstr "Landauova naključna števila"
 
-#: src/backend/gsl/functions.cpp:658
+#: src/backend/gsl/functions.cpp:665
 #, kde-format
 msgid "Levy alpha-stable random numbers"
 msgstr "Levy alfa-stabilne naključne številke"
 
-#: src/backend/gsl/functions.cpp:659
+#: src/backend/gsl/functions.cpp:666
 #, kde-format
 msgid "Gamma random numbers"
 msgstr "Naključna števila gama"
 
-#: src/backend/gsl/functions.cpp:660
+#: src/backend/gsl/functions.cpp:667
 #, kde-format
 msgid "Flat random numbers"
 msgstr "Navadna naključna števila"
 
-#: src/backend/gsl/functions.cpp:661
+#: src/backend/gsl/functions.cpp:668
 #, kde-format
 msgid "Lognormal random numbers"
 msgstr "Log. navadno porazdeljene naključne vrednosti"
 
-#: src/backend/gsl/functions.cpp:663
+#: src/backend/gsl/functions.cpp:670
 #, kde-format
 msgid "Chi-squared random numbers"
 msgstr "Naključna števila hi-kvadrat"
 
-#: src/backend/gsl/functions.cpp:664
+#: src/backend/gsl/functions.cpp:671
 #, kde-format
 msgid "t-distributed random numbers"
 msgstr "t-porazdeljene naključne številke"
 
-#: src/backend/gsl/functions.cpp:665
+#: src/backend/gsl/functions.cpp:672
 #, kde-format
 msgid "Logistic random numbers"
 msgstr "Logistična naključna števila"
 
-#: src/backend/gsl/functions.cpp:666
+#: src/backend/gsl/functions.cpp:673
 #, kde-format
 msgid "Poisson random numbers"
 msgstr "Poissonova naključna števila"
 
-#: src/backend/gsl/functions.cpp:667
+#: src/backend/gsl/functions.cpp:674
 #, kde-format
 msgid "Bernoulli random numbers"
 msgstr "Bernoullijeva naključna števila"
 
-#: src/backend/gsl/functions.cpp:668
+#: src/backend/gsl/functions.cpp:675
 #, kde-format
 msgid "Binomial random numbers"
 msgstr "Binomska naključna števila"
 
-#: src/backend/gsl/functions.cpp:671
+#: src/backend/gsl/functions.cpp:678
 #, kde-format
 msgid "Triangular random numbers"
 msgstr "Tragularna naključna števila"
 
-#: src/backend/gsl/functions.cpp:675
+#: src/backend/gsl/functions.cpp:682
 #, kde-format
 msgid "Probability density for a Gaussian distribution"
 msgstr "Gostota verjetnosti za Gaussovo porazdelitev"
 
-#: src/backend/gsl/functions.cpp:676
+#: src/backend/gsl/functions.cpp:683
 #, kde-format
 msgid "Probability density for a unit Gaussian distribution"
 msgstr "Gostota verjetnosti za Gaussove porazdelitve enot"
 
-#: src/backend/gsl/functions.cpp:677
+#: src/backend/gsl/functions.cpp:684
 #, kde-format
 msgid "Cumulative distribution function P"
 msgstr "Funkcija kumulativne porazdelitve P"
 
-#: src/backend/gsl/functions.cpp:678
+#: src/backend/gsl/functions.cpp:685
 #, kde-format
 msgid "Cumulative distribution function Q"
 msgstr "Funkcija kumulativne porazdelitve Q"
 
-#: src/backend/gsl/functions.cpp:679
+#: src/backend/gsl/functions.cpp:686
 #, kde-format
 msgid "Inverse cumulative distribution function P"
 msgstr "Funkcija inverzne kumulativne porazdelitve P"
 
-#: src/backend/gsl/functions.cpp:680
+#: src/backend/gsl/functions.cpp:687
 #, kde-format
 msgid "Inverse cumulative distribution function Q"
 msgstr "Funkcija inverzne kumulativne porazdelitve Q"
 
-#: src/backend/gsl/functions.cpp:681
+#: src/backend/gsl/functions.cpp:688
 #, kde-format
 msgid "Cumulative unit distribution function P"
 msgstr "Kumulativna porazdelitvena funkcija enot P"
 
-#: src/backend/gsl/functions.cpp:682
+#: src/backend/gsl/functions.cpp:689
 #, kde-format
 msgid "Cumulative unit distribution function Q"
 msgstr "Kumulativna porazdelitvena funkcija enot Q"
 
-#: src/backend/gsl/functions.cpp:683
+#: src/backend/gsl/functions.cpp:690
 #, kde-format
 msgid "Inverse cumulative unit distribution function P"
 msgstr "Inverzna kumulativna porazdelitvena funkcija enot P"
 
-#: src/backend/gsl/functions.cpp:684
+#: src/backend/gsl/functions.cpp:691
 #, kde-format
 msgid "Inverse cumulative unit distribution function Q"
 msgstr "Inverzna kumulativna porazdelitvena funkcija enot Q"
 
-#: src/backend/gsl/functions.cpp:686
+#: src/backend/gsl/functions.cpp:693
 #, kde-format
 msgid "Probability density for Gaussian tail distribution"
 msgstr "Gostota verjetnosti za Gaussovo porazdelitev repa"
 
-#: src/backend/gsl/functions.cpp:687
+#: src/backend/gsl/functions.cpp:694
 #, kde-format
 msgid "Probability density for unit Gaussian tail distribution"
 msgstr "Gostota verjetnosti za enoto Gaussove porazdelitve repa"
 
-#: src/backend/gsl/functions.cpp:688
+#: src/backend/gsl/functions.cpp:695
 #, kde-format
 msgid "Probability density for a bivariate Gaussian distribution"
 msgstr "Gostota verjetnosti za bivariatno Gaussovo porazdelitev"
 
-#: src/backend/gsl/functions.cpp:691
+#: src/backend/gsl/functions.cpp:698
 #, kde-format
 msgid "Probability density for an exponential distribution"
 msgstr "Gostota verjetnosti za eksponentno porazdelitev"
 
-#: src/backend/gsl/functions.cpp:692
+#: src/backend/gsl/functions.cpp:699
 #, kde-format
 msgid "Cumulative exponential distribution function P"
 msgstr "Kumulativna eksponentna porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:693
+#: src/backend/gsl/functions.cpp:700
 #, kde-format
 msgid "Cumulative exponential distribution function Q"
 msgstr "Kumulativna eksponentna porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:694
+#: src/backend/gsl/functions.cpp:701
 #, kde-format
 msgid "Inverse cumulative exponential distribution function P"
 msgstr "Inverzna kumulativna eksponentna porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:695
+#: src/backend/gsl/functions.cpp:702
 #, kde-format
 msgid "Inverse cumulative exponential distribution function Q"
 msgstr "Inverzna kumulativna eksponentna porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:698
+#: src/backend/gsl/functions.cpp:705
 #, kde-format
 msgid "Probability density for a Laplace distribution"
 msgstr "Gostota verjetnosti za Laplaceovo porazdelitev"
 
-#: src/backend/gsl/functions.cpp:699
+#: src/backend/gsl/functions.cpp:706
 #, kde-format
 msgid "Cumulative Laplace distribution function P"
 msgstr "Kumulativna Laplacova porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:700
+#: src/backend/gsl/functions.cpp:707
 #, kde-format
 msgid "Cumulative Laplace distribution function Q"
 msgstr "Kumulativna Laplacova porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:701
+#: src/backend/gsl/functions.cpp:708
 #, kde-format
 msgid "Inverse cumulative Laplace distribution function P"
 msgstr "Inverzna kumulativna Laplacova porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:702
+#: src/backend/gsl/functions.cpp:709
 #, kde-format
 msgid "Inverse cumulative Laplace distribution function Q"
 msgstr "Inverzna kumulativna Laplacova porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:705
+#: src/backend/gsl/functions.cpp:712
 #, kde-format
 msgid "Probability density for an exponential power distribution"
 msgstr "Gostota verjetnosti za eksponentno potenčno porazdelitev"
 
-#: src/backend/gsl/functions.cpp:706
+#: src/backend/gsl/functions.cpp:713
 #, kde-format
 msgid "cumulative exponential power distribution function P"
 msgstr "kumulativna eksponentna potenčna porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:707
+#: src/backend/gsl/functions.cpp:714
 #, kde-format
 msgid "Cumulative exponential power distribution function Q"
 msgstr "Kumulativna eksponentna potenčna porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:710
+#: src/backend/gsl/functions.cpp:717
 #, kde-format
 msgid "Probability density for a Cauchy distribution"
 msgstr "Gostota verjetnosti za Cauchyjevo porazdelitev"
 
-#: src/backend/gsl/functions.cpp:711
+#: src/backend/gsl/functions.cpp:718
 #, kde-format
 msgid "Cumulative Cauchy distribution function P"
 msgstr "Kumulativna Cauchyjeva porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:712
+#: src/backend/gsl/functions.cpp:719
 #, kde-format
 msgid "Cumulative Cauchy distribution function Q"
 msgstr "Kumulativna Cauchyjeva porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:713
+#: src/backend/gsl/functions.cpp:720
 #, kde-format
 msgid "Inverse cumulative Cauchy distribution function P"
 msgstr "Inverzna kumulativna Cauchyjeva porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:714
+#: src/backend/gsl/functions.cpp:721
 #, kde-format
 msgid "Inverse cumulative Cauchy distribution function Q"
 msgstr "Inverzna kumulativna Cauchyjeva porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:717
+#: src/backend/gsl/functions.cpp:724
 #, kde-format
 msgid "Probability density for a Rayleigh distribution"
 msgstr "Gostota verjetnosti za Rayleighjevo porazdelitev"
 
-#: src/backend/gsl/functions.cpp:718
+#: src/backend/gsl/functions.cpp:725
 #, kde-format
 msgid "Cumulative Rayleigh distribution function P"
 msgstr "Kumulativna Rayleighjeva porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:719
+#: src/backend/gsl/functions.cpp:726
 #, kde-format
 msgid "Cumulative Rayleigh distribution function Q"
 msgstr "Kumulativna Rayleighjeva porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:720
+#: src/backend/gsl/functions.cpp:727
 #, kde-format
 msgid "Inverse cumulative Rayleigh distribution function P"
 msgstr "Inverzna kumulativna Rayleighjeva porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:721
+#: src/backend/gsl/functions.cpp:728
 #, kde-format
 msgid "Inverse cumulative Rayleigh distribution function Q"
 msgstr "Inverzna kumulativna Rayleighjeva porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:722
+#: src/backend/gsl/functions.cpp:729
 #, kde-format
 msgid "Probability density for a Rayleigh tail distribution"
 msgstr "Gostota verjetnosti za Rayleighjevo porazdelitev repa"
 
-#: src/backend/gsl/functions.cpp:725
+#: src/backend/gsl/functions.cpp:732
 #, kde-format
 msgid "Probability density for a Landau distribution"
 msgstr "Gostota verjetnosti za Landauovo porazdelitev"
 
-#: src/backend/gsl/functions.cpp:728
+#: src/backend/gsl/functions.cpp:735
 #, kde-format
 msgid "Probability density for a gamma distribution"
 msgstr "Gostota verjetnosti za gama-porazdelitev"
 
-#: src/backend/gsl/functions.cpp:729
+#: src/backend/gsl/functions.cpp:736
 #, kde-format
 msgid "Cumulative gamma distribution function P"
 msgstr "Kumulativna gama porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:730
+#: src/backend/gsl/functions.cpp:737
 #, kde-format
 msgid "Cumulative gamma distribution function Q"
 msgstr "Kumulativna gama porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:731
+#: src/backend/gsl/functions.cpp:738
 #, kde-format
 msgid "Inverse cumulative gamma distribution function P"
 msgstr "Inverzna kumulativna gama porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:732
+#: src/backend/gsl/functions.cpp:739
 #, kde-format
 msgid "Inverse cumulative gamma distribution function Q"
 msgstr "Inverzna kumulativna gama porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:735
+#: src/backend/gsl/functions.cpp:742
 #, kde-format
 msgid "Probability density for a uniform distribution"
 msgstr "Gostota verjetnosti za enakomerno porazdelitev"
 
-#: src/backend/gsl/functions.cpp:736
+#: src/backend/gsl/functions.cpp:743
 #, kde-format
 msgid "Cumulative uniform distribution function P"
 msgstr "Kumulativna enakomerna porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:737
+#: src/backend/gsl/functions.cpp:744
 #, kde-format
 msgid "Cumulative uniform distribution function Q"
 msgstr "Kumulativna enakomerna porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:738
+#: src/backend/gsl/functions.cpp:745
 #, kde-format
 msgid "Inverse cumulative uniform distribution function P"
 msgstr "Inverzna kumulativna enakomerna porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:739
+#: src/backend/gsl/functions.cpp:746
 #, kde-format
 msgid "Inverse cumulative uniform distribution function Q"
 msgstr "Inverzna kumulativna enakomerna porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:742
+#: src/backend/gsl/functions.cpp:749
 #, kde-format
 msgid "Probability density for a lognormal distribution"
 msgstr "Gostota verjetnosti za lognormalno porazdelitev"
 
-#: src/backend/gsl/functions.cpp:743
+#: src/backend/gsl/functions.cpp:750
 #, kde-format
 msgid "Cumulative lognormal distribution function P"
 msgstr "Kumulativna lognormalna porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:744
+#: src/backend/gsl/functions.cpp:751
 #, kde-format
 msgid "Cumulative lognormal distribution function Q"
 msgstr "Kumulativna lognormalna porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:745
+#: src/backend/gsl/functions.cpp:752
 #, kde-format
 msgid "Inverse cumulative lognormal distribution function P"
 msgstr "Inverzna kumulativna lognormalna porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:746
+#: src/backend/gsl/functions.cpp:753
 #, kde-format
 msgid "Inverse cumulative lognormal distribution function Q"
 msgstr "Inverzna kumulativna lognormalna porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:749
+#: src/backend/gsl/functions.cpp:756
 #, kde-format
 msgid "Probability density for a chi squared distribution"
 msgstr "Gostota verjetnosti za porazdelitev hi-kvadrat"
 
-#: src/backend/gsl/functions.cpp:750
+#: src/backend/gsl/functions.cpp:757
 #, kde-format
 msgid "Cumulative chi squared distribution function P"
 msgstr "Kumulativna hi kvadrat porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:751
+#: src/backend/gsl/functions.cpp:758
 #, kde-format
 msgid "Cumulative chi squared distribution function Q"
 msgstr "Kumulativna hi kvadrat porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:752
+#: src/backend/gsl/functions.cpp:759
 #, kde-format
 msgid "Inverse cumulative chi squared distribution function P"
 msgstr "Inverzna kumulativna hi kvadrat porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:753
+#: src/backend/gsl/functions.cpp:760
 #, kde-format
 msgid "Inverse cumulative chi squared distribution function Q"
 msgstr "Inverzna kumulativna hi kvadrat porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:756
+#: src/backend/gsl/functions.cpp:763
 #, kde-format
 msgid "Probability density for a F-distribution"
 msgstr "Gostota verjetnosti za F-porazdelitev"
 
-#: src/backend/gsl/functions.cpp:757
+#: src/backend/gsl/functions.cpp:764
 #, kde-format
 msgid "Cumulative F-distribution function P"
 msgstr "Kumulativna funkcija F porazdelitve P"
 
-#: src/backend/gsl/functions.cpp:758
+#: src/backend/gsl/functions.cpp:765
 #, kde-format
 msgid "Cumulative F-distribution function Q"
 msgstr "Kumulativna funkcija F porazdelitve Q"
 
-#: src/backend/gsl/functions.cpp:759
+#: src/backend/gsl/functions.cpp:766
 #, kde-format
 msgid "Inverse cumulative F-distribution function P"
 msgstr "Inverzna kumulativna funkcija F porazdelitve P"
 
-#: src/backend/gsl/functions.cpp:760
+#: src/backend/gsl/functions.cpp:767
 #, kde-format
 msgid "Inverse cumulative F-distribution function Q"
 msgstr "Inverzna kumulativna funkcija F porazdelitve Q"
 
-#: src/backend/gsl/functions.cpp:763
+#: src/backend/gsl/functions.cpp:770
 #, kde-format
 msgid "Probability density for a t-distribution"
 msgstr "Gostota verjetnosti za t-porazdelitev"
 
-#: src/backend/gsl/functions.cpp:764
+#: src/backend/gsl/functions.cpp:771
 #, kde-format
 msgid "Cumulative t-distribution function P"
 msgstr "Kumulativna funkcija t-porazdelitve P"
 
-#: src/backend/gsl/functions.cpp:765
+#: src/backend/gsl/functions.cpp:772
 #, kde-format
 msgid "Cumulative t-distribution function Q"
 msgstr "Kumulativna funkcija t-porazdelitve Q"
 
-#: src/backend/gsl/functions.cpp:766
+#: src/backend/gsl/functions.cpp:773
 #, kde-format
 msgid "Inverse cumulative t-distribution function P"
 msgstr "Inverzna kumulativna funkcija t-porazdelitve P"
 
-#: src/backend/gsl/functions.cpp:767
+#: src/backend/gsl/functions.cpp:774
 #, kde-format
 msgid "Inverse cumulative t-distribution function Q"
 msgstr "Inverzna kumulativna funkcija t-porazdelitve Q"
 
-#: src/backend/gsl/functions.cpp:770
+#: src/backend/gsl/functions.cpp:777
 #, kde-format
 msgid "Probability density for a beta distribution"
 msgstr "Gostota verjetnosti za beta-porazdelitev"
 
-#: src/backend/gsl/functions.cpp:771
+#: src/backend/gsl/functions.cpp:778
 #, kde-format
 msgid "Cumulative beta distribution function P"
 msgstr "Kumulativna funkcija beta porazdelitve P"
 
-#: src/backend/gsl/functions.cpp:772
+#: src/backend/gsl/functions.cpp:779
 #, kde-format
 msgid "Cumulative beta distribution function Q"
 msgstr "Kumulativna funkcija beta porazdelitve Q"
 
-#: src/backend/gsl/functions.cpp:773
+#: src/backend/gsl/functions.cpp:780
 #, kde-format
 msgid "Inverse cumulative beta distribution function P"
 msgstr "Inverzna kumulativna funkcija beta porazdelitve P"
 
-#: src/backend/gsl/functions.cpp:774
+#: src/backend/gsl/functions.cpp:781
 #, kde-format
 msgid "Inverse cumulative beta distribution function Q"
 msgstr "Inverzna kumulativna funkcija beta porazdelitve Q"
 
-#: src/backend/gsl/functions.cpp:777
+#: src/backend/gsl/functions.cpp:784
 #, kde-format
 msgid "Probability density for a logistic distribution"
 msgstr "Gostota verjetnosti za logistično porazdelitev"
 
-#: src/backend/gsl/functions.cpp:778
+#: src/backend/gsl/functions.cpp:785
 #, kde-format
 msgid "Cumulative logistic distribution function P"
 msgstr "Kumulativna logistična porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:779
+#: src/backend/gsl/functions.cpp:786
 #, kde-format
 msgid "Cumulative logistic distribution function Q"
 msgstr "Kumulativna logistična porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:780
+#: src/backend/gsl/functions.cpp:787
 #, kde-format
 msgid "Inverse cumulative logistic distribution function P"
 msgstr "Inverzna kumulativna logistična porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:781
+#: src/backend/gsl/functions.cpp:788
 #, kde-format
 msgid "Inverse cumulative logistic distribution function Q"
 msgstr "Inverzna kumulativna logistična porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:784
+#: src/backend/gsl/functions.cpp:791
 #, kde-format
 msgid "Probability density for a Pareto distribution"
 msgstr "Gostota verjetnosti za Paretovo porazdelitev"
 
-#: src/backend/gsl/functions.cpp:785
+#: src/backend/gsl/functions.cpp:792
 #, kde-format
 msgid "Cumulative Pareto distribution function P"
 msgstr "Kumulativna Paretova porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:786
+#: src/backend/gsl/functions.cpp:793
 #, kde-format
 msgid "Cumulative Pareto distribution function Q"
 msgstr "Kumulativna Paretova porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:787
+#: src/backend/gsl/functions.cpp:794
 #, kde-format
 msgid "Inverse cumulative Pareto distribution function P"
 msgstr "Inverzna kumulativna Paretova porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:788
+#: src/backend/gsl/functions.cpp:795
 #, kde-format
 msgid "Inverse cumulative Pareto distribution function Q"
 msgstr "Inverzna kumulativna Paretova porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:791
+#: src/backend/gsl/functions.cpp:798
 #, kde-format
 msgid "Probability density for a Weibull distribution"
 msgstr "Gostota verjetnosti za Weibullovo porazdelitev"
 
-#: src/backend/gsl/functions.cpp:792
+#: src/backend/gsl/functions.cpp:799
 #, kde-format
 msgid "Cumulative Weibull distribution function P"
 msgstr "Kumulativna Weibulova porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:793
+#: src/backend/gsl/functions.cpp:800
 #, kde-format
 msgid "Cumulative Weibull distribution function Q"
 msgstr "Kumulativna Weibulova porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:794
+#: src/backend/gsl/functions.cpp:801
 #, kde-format
 msgid "Inverse cumulative Weibull distribution function P"
 msgstr "Inverzna kumulativna Weibulova porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:795
+#: src/backend/gsl/functions.cpp:802
 #, kde-format
 msgid "Inverse cumulative Weibull distribution function Q"
 msgstr "Inverzna kumulativna Weibulova porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:798
+#: src/backend/gsl/functions.cpp:805
 #, kde-format
 msgid "Probability density for a Type-1 Gumbel distribution"
 msgstr "Gostota verjetnosti za porazdelitev Gumbel tipa 1"
 
-#: src/backend/gsl/functions.cpp:799
+#: src/backend/gsl/functions.cpp:806
 #, kde-format
 msgid "Cumulative Type-1 Gumbel distribution function P"
 msgstr "Kumulativna Gumbelova prve vrste porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:800
+#: src/backend/gsl/functions.cpp:807
 #, kde-format
 msgid "Cumulative Type-1 Gumbel distribution function Q"
 msgstr "Kumulativna Gumbelova prve vrste porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:801
+#: src/backend/gsl/functions.cpp:808
 #, kde-format
 msgid "Inverse cumulative Type-1 Gumbel distribution function P"
 msgstr "Inverzna kumulativna Gumbelova prve vrste porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:802
+#: src/backend/gsl/functions.cpp:809
 #, kde-format
 msgid "Inverse cumulative Type-1 Gumbel distribution function Q"
 msgstr "Inverzna kumulativna Gumbelova prve vrste porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:803
+#: src/backend/gsl/functions.cpp:810
 #, kde-format
 msgid "Probability density for a Type-2 Gumbel distribution"
 msgstr "Gostota verjetnosti Gumbelove porazdelitve druge vrste"
 
-#: src/backend/gsl/functions.cpp:804
+#: src/backend/gsl/functions.cpp:811
 #, kde-format
 msgid "Cumulative Type-2 Gumbel distribution function P"
 msgstr "Kumulativna Gumbelova druge vrste porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:805
+#: src/backend/gsl/functions.cpp:812
 #, kde-format
 msgid "Cumulative Type-2 Gumbel distribution function Q"
 msgstr "Kumulativna Gumbelova druge vrste porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:806
+#: src/backend/gsl/functions.cpp:813
 #, kde-format
 msgid "Inverse cumulative Type-2 Gumbel distribution function P"
 msgstr "Inverzna kumulativna Gumbelova druge vrste porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:807
+#: src/backend/gsl/functions.cpp:814
 #, kde-format
 msgid "Inverse cumulative Type-2 Gumbel distribution function Q"
 msgstr "Inverzna kumulativna Gumbelova druge vrste porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:810
+#: src/backend/gsl/functions.cpp:817
 #, kde-format
 msgid "Probability density for a Poisson distribution"
 msgstr "Gostota verjetnosti za Poissonovo porazdelitev"
 
-#: src/backend/gsl/functions.cpp:811
+#: src/backend/gsl/functions.cpp:818
 #, kde-format
 msgid "Cumulative Poisson distribution function P"
 msgstr "Kumulativna Poissonova porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:812
+#: src/backend/gsl/functions.cpp:819
 #, kde-format
 msgid "Cumulative Poisson distribution function Q"
 msgstr "Kumulativna Poissonova porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:815
+#: src/backend/gsl/functions.cpp:822
 #, kde-format
 msgid "Probability density for a Bernoulli distribution"
 msgstr "Gostota verjetnosti za Bernoullijevo porazdelitev"
 
-#: src/backend/gsl/functions.cpp:818
+#: src/backend/gsl/functions.cpp:825
 #, kde-format
 msgid "Probability density for a binomial distribution"
 msgstr "Gostota verjetnosti za binomsko porazdelitev"
 
-#: src/backend/gsl/functions.cpp:819
+#: src/backend/gsl/functions.cpp:826
 #, kde-format
 msgid "Cumulative binomial distribution function P"
 msgstr "Kumulativna binomska porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:820
+#: src/backend/gsl/functions.cpp:827
 #, kde-format
 msgid "Cumulative binomial distribution function Q"
 msgstr "Kumulativna binomska porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:821
+#: src/backend/gsl/functions.cpp:828
 #, kde-format
 msgid "Probability density for a negative binomial distribution"
 msgstr "Gostota verjetnosti za negativno binomsko porazdelitev"
 
-#: src/backend/gsl/functions.cpp:822
+#: src/backend/gsl/functions.cpp:829
 #, kde-format
 msgid "Cumulative negative binomial distribution function P"
 msgstr "Kumulativna negativna binomska porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:823
+#: src/backend/gsl/functions.cpp:830
 #, kde-format
 msgid "Cumulative negative binomial distribution function Q"
 msgstr "Kumulativna negativna binomska porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:826
+#: src/backend/gsl/functions.cpp:833
 #, kde-format
 msgid "Probability density for a Pascal distribution"
 msgstr "Gostota verjetnosti za Pascalovo porazdelitev"
 
-#: src/backend/gsl/functions.cpp:827
+#: src/backend/gsl/functions.cpp:834
 #, kde-format
 msgid "Cumulative Pascal distribution function P"
 msgstr "Kumulativna Pascalova porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:828
+#: src/backend/gsl/functions.cpp:835
 #, kde-format
 msgid "Cumulative Pascal distribution function Q"
 msgstr "Kumulativna Pascalova porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:831
+#: src/backend/gsl/functions.cpp:838
 #, kde-format
 msgid "Probability density for a geometric distribution"
 msgstr "Gostota verjetnosti za geometrično porazdelitev"
 
-#: src/backend/gsl/functions.cpp:832
+#: src/backend/gsl/functions.cpp:839
 #, kde-format
 msgid "Cumulative geometric distribution function P"
 msgstr "Kumulativna geometrična porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:833
+#: src/backend/gsl/functions.cpp:840
 #, kde-format
 msgid "Cumulative geometric distribution function Q"
 msgstr "Kumulativna geometrična porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:836
+#: src/backend/gsl/functions.cpp:843
 #, kde-format
 msgid "Probability density for a hypergeometric distribution"
 msgstr "Gostota verjetnosti za hipergeometrično porazdelitev"
 
-#: src/backend/gsl/functions.cpp:837
+#: src/backend/gsl/functions.cpp:844
 #, kde-format
 msgid "Cumulative hypergeometric distribution function P"
 msgstr "Kumulativna hipergeometrična porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:838
+#: src/backend/gsl/functions.cpp:845
 #, kde-format
 msgid "Cumulative hypergeometric distribution function Q"
 msgstr "Kumulativna hipergeometrična porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:841
+#: src/backend/gsl/functions.cpp:848
 #, kde-format
 msgid "Probability density for a logarithmic distribution"
 msgstr "Gostota verjetnosti za logaritemsko porazdelitev"
 
-#: src/backend/gsl/functions.cpp:845
+#: src/backend/gsl/functions.cpp:852
 #, kde-format
 msgid "Probability density for a triangular distribution"
 msgstr "Gostota verjetnosti za trikotno porazdelitev"
 
-#: src/backend/gsl/functions.cpp:846
+#: src/backend/gsl/functions.cpp:853
 #, kde-format
 msgid "Cumulative triangular distribution function P"
 msgstr "Kumulativna trikotna porazdelitvena funkcija P"
 
-#: src/backend/gsl/functions.cpp:847
+#: src/backend/gsl/functions.cpp:854
 #, kde-format
 msgid "Cumulative triangular distribution function Q"
 msgstr "Kumulativna trikotna porazdelitvena funkcija Q"
 
-#: src/backend/gsl/functions.cpp:848
+#: src/backend/gsl/functions.cpp:855
 #, kde-format
 msgid "p-th quantile for triangular distribution"
 msgstr "p-ti kvantil trikotne porazdelitve"
 
-#: src/backend/gsl/functions.cpp:954 src/backend/gsl/functions.cpp:966
-#: src/backend/gsl/functions.cpp:980 src/backend/gsl/functions.cpp:992
-#: src/backend/gsl/functions.cpp:1004
+#: src/backend/gsl/functions.cpp:961 src/backend/gsl/functions.cpp:973
+#: src/backend/gsl/functions.cpp:987 src/backend/gsl/functions.cpp:999
+#: src/backend/gsl/functions.cpp:1011
 #, kde-format
 msgid "Invalid"
 msgstr "Neveljavno"
 
-#: src/backend/gsl/functions.cpp:960
+#: src/backend/gsl/functions.cpp:967
 #, kde-format
 msgid "condition"
 msgstr "pogoj"
 
-#: src/backend/gsl/functions.cpp:962
+#: src/backend/gsl/functions.cpp:969
 #, kde-format
 msgid "trueValue"
 msgstr "vrednostTrue"
 
-#: src/backend/gsl/functions.cpp:964
+#: src/backend/gsl/functions.cpp:971
 #, kde-format
 msgid "falseValue"
 msgstr "vrednostFalse"
 
-#: src/backend/gsl/functions.cpp:972
+#: src/backend/gsl/functions.cpp:979
 #, kde-format
 msgid "n"
 msgstr "n"
 
-#: src/backend/gsl/functions.cpp:974
+#: src/backend/gsl/functions.cpp:981
 #, kde-format
 msgid "j"
 msgstr "j"
 
-#: src/backend/gsl/functions.cpp:976
+#: src/backend/gsl/functions.cpp:983
 #, kde-format
 msgid "q"
 msgstr "q"
 
-#: src/backend/gsl/functions.cpp:978 src/backend/gsl/functions.cpp:986
+#: src/backend/gsl/functions.cpp:985 src/backend/gsl/functions.cpp:993
 #, kde-format
 msgid "x"
 msgstr "x"
 
-#: src/backend/gsl/functions.cpp:988
+#: src/backend/gsl/functions.cpp:995
 #, kde-format
 msgid "min"
 msgstr "min"
 
-#: src/backend/gsl/functions.cpp:990
+#: src/backend/gsl/functions.cpp:997
 #, kde-format
 msgid "max"
 msgstr "max"
 
-#: src/backend/gsl/functions.cpp:998
+#: src/backend/gsl/functions.cpp:1005
 #, kde-format
 msgid "v1"
 msgstr "v1"
 
-#: src/backend/gsl/functions.cpp:1000
+#: src/backend/gsl/functions.cpp:1007
 #, kde-format
 msgid "v2"
 msgstr "v2"
 
-#: src/backend/gsl/functions.cpp:1002
+#: src/backend/gsl/functions.cpp:1009
 #, kde-format
 msgid "ep"
 msgstr "ep"
@@ -6290,36 +6305,57 @@ msgstr "%1: zrcaljenje vodoravno"
 msgid "%1: mirror vertically"
 msgstr "%1: zrcaljenje navpično"
 
-#: src/backend/note/Note.cpp:47
+#: src/backend/note/Note.cpp:67
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Note"
 msgstr "Natisni opombo"
 
-#: src/backend/note/Note.cpp:65
+#: src/backend/note/Note.cpp:85
 #, kde-format
 msgid "Text file (*.txt)"
 msgstr "Besedilna datoteka (*.txt)"
 
-#: src/backend/note/Note.cpp:67
+#: src/backend/note/Note.cpp:87
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:408
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:280
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:282
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Izvozi v datoteko"
 
-#: src/backend/note/Note.cpp:81
+#: src/backend/note/Note.cpp:101
 #, kde-format
 msgid "Export failed"
 msgstr "Izvozi ni uspel"
 
-#: src/backend/note/Note.cpp:81
+#: src/backend/note/Note.cpp:101
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "Datoteke '%1' ni bilo mogoče odpreti za pisanje."
 
-#: src/backend/note/Note.cpp:161
+#: src/backend/note/Note.cpp:124
+#, kde-format
+msgid "%1: set text"
+msgstr "%1: nastavi besedilo"
+
+#: src/backend/note/Note.cpp:131 src/backend/worksheet/TextLabel.cpp:266
+#: src/backend/worksheet/TextLabel.cpp:305
+#, kde-format
+msgid "%1: set background color"
+msgstr "%1: nastavite barvo ozadja"
+
+#: src/backend/note/Note.cpp:138
+#, kde-format
+msgid "%1: set text color"
+msgstr "%1: nastavi barvo besedila"
+
+#: src/backend/note/Note.cpp:145
+#, kde-format
+msgid "%1: set text font"
+msgstr "%1: nastavi pisavo besedila"
+
+#: src/backend/note/Note.cpp:183
 #, kde-format
 msgid "no note element found"
 msgstr "ni najdenega elementa opombe"
@@ -6666,8 +6702,8 @@ msgstr "Statistika (porazdelitve)"
 
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:601
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1871
-#: src/frontend/datasources/ImportFileWidget.cpp:1326
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1874
+#: src/frontend/datasources/ImportFileWidget.cpp:1334
 #: src/frontend/dockwidgets/AxisDock.cpp:239
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:170
 #: src/frontend/dockwidgets/WorksheetDock.cpp:277
@@ -8145,7 +8181,7 @@ msgstr "informacije niso na voljo"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:168
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5119
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5122
 #: src/frontend/ui/dockwidgets/axisdock.ui:483
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:548
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:478
@@ -8358,8 +8394,8 @@ msgstr "Navpična os"
 #: src/frontend/matrix/MatrixView.cpp:133
 #: src/frontend/notebook/NotebookView.cpp:109
 #: src/frontend/widgets/BackgroundWidget.cpp:123
-#: src/frontend/worksheet/WorksheetView.cpp:223
-#: src/frontend/worksheet/WorksheetView.cpp:1342
+#: src/frontend/worksheet/WorksheetView.cpp:224
+#: src/frontend/worksheet/WorksheetView.cpp:1343
 #, kde-format
 msgid "Image"
 msgstr "Slika"
@@ -8463,10 +8499,10 @@ msgid "Error Function"
 msgstr "Funkcija napake"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:634
-#: src/frontend/MainWin.cpp:891 src/frontend/notebook/NotebookView.cpp:167
+#: src/frontend/MainWin.cpp:892 src/frontend/notebook/NotebookView.cpp:167
 #: src/frontend/workbook/WorkbookView.cpp:135
-#: src/frontend/worksheet/WorksheetView.cpp:293
-#: src/frontend/worksheet/WorksheetView.cpp:432
+#: src/frontend/worksheet/WorksheetView.cpp:294
+#: src/frontend/worksheet/WorksheetView.cpp:433
 #, kde-format
 msgid "Add New"
 msgstr "Dodaj novo"
@@ -8506,7 +8542,7 @@ msgstr "Analiza"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:747
 #: src/frontend/ThemeHandler.cpp:49 src/frontend/ThemeHandler.cpp:144
-#: src/frontend/worksheet/WorksheetView.cpp:543
+#: src/frontend/worksheet/WorksheetView.cpp:544
 #, kde-format
 msgid "Theme"
 msgstr "Tema"
@@ -8596,7 +8632,7 @@ msgid "%1: load default theme"
 msgstr "%1: naložite privzeto temo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1751
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5445
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5448
 #: src/backend/worksheet/Worksheet.cpp:848
 #, kde-format
 msgid "%1: set theme"
@@ -8740,30 +8776,30 @@ msgid "%1: add function curve"
 msgstr "%1: dodajte funkcijsko krivuljo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2053
-#: src/frontend/worksheet/WorksheetView.cpp:1338
 #: src/frontend/worksheet/WorksheetView.cpp:1339
+#: src/frontend/worksheet/WorksheetView.cpp:1340
 #, kde-format
 msgid "Text Label"
 msgstr "Besedilna oznaka"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3812
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3815
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "Ne znotraj omejevalnega pravok"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4036
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4057
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4039
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4060
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "od x=%1 do x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4044
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4070
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4047
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4073
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "od y=%1 do y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4089
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4092
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
@@ -9605,96 +9641,96 @@ msgstr "%1: dodelite y-napako"
 msgid "%1: set fit options and perform the fit"
 msgstr "%1: nastavite možnosti prileganja in opravite prileganje"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1823
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1826
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit Results"
 msgstr "Prilagodi rezultate"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1847
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1850
 #, kde-format
 msgid "Nonlinear Fit to X/Y data"
 msgstr "Nelinearno prilagajanje podatkov X/Y"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1853
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1856
 #, kde-format
 msgid "MODEL"
 msgstr "MODEL"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1857
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1860
 #, kde-format
 msgid "Degree"
 msgstr "Stopinja"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1862
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1865
 #, kde-format
 msgid "Peaks"
 msgstr "Vrhovi"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1881
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1884
 #, kde-format
 msgid "PARAMETERS"
 msgstr "PARAMETRI"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1888
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:145
 #, kde-format
 msgid "Uncertainty"
 msgstr "Negotovost"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1888
 #, kde-format
 msgid "Uncertainty,%"
 msgstr "Negotovost, %"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1888
 #, kde-format
 msgid "t Statistic"
 msgstr "t-statistika"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1886
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1889
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:146
 #, kde-format
 msgid "Lower"
 msgstr "Spodnji"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1886
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1889
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:146
 #, kde-format
 msgid "Upper"
 msgstr "Zgornja"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1902
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1905
 #, kde-format
 msgid "GOODNESS OF FIT"
 msgstr "PRILEGANJE"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1904
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1907
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:968
 #, kde-format
 msgid "Sum of squared residuals"
 msgstr "Vsota kvadratov ostankov"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1905
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1908
 #, kde-format
 msgid "Residuals mean square"
 msgstr "Kvadrat povprečja ostankov"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1906
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1909
 #, kde-format
 msgid "Root mean square deviation"
 msgstr "Koren srednje kvadratne deviacije"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1907
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1910
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:998
 #, kde-format
 msgid "Coefficient of determination"
 msgstr "Koeficient determinacije"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1908
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1911
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1008
 #, kde-format
 msgid "Adj. coefficient of determination"
@@ -9702,7 +9738,7 @@ msgstr "Pril. koeficient determinacije"
 
 #. i18n: ectx: property (text), widget (QPushButton, bTest)
 #. i18n: ectx: property (text), widget (QPushButton, bTestConnection)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1909
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1912
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:177
 #: src/frontend/ui/datasources/databasemanagerwidget.ui:263
 #: src/frontend/ui/datasources/mqttconnectionmanagerwidget.ui:208
@@ -9710,43 +9746,43 @@ msgstr "Pril. koeficient determinacije"
 msgid "Test"
 msgstr "Preizkusi"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1910
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1913
 #, kde-format
 msgid "F-Test"
 msgstr "F-Test"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1912
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1915
 #, kde-format
 msgid "Mean absolute error"
 msgstr "Srednja absolutna napaka"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1913
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1916
 #, kde-format
 msgid "Akaike information criterion"
 msgstr "Akaikejev informacijski kriterij"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1914
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1917
 #, kde-format
 msgid "Bayesian information criterion"
 msgstr "Bayesov informacijski kriterij"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2259
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2262
 #, kde-format
 msgid "Model has no parameters!"
 msgstr "Model nima parametrov!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2266
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2269
 #, kde-format
 msgid "Not sufficient weight data points provided!"
 msgstr "Ni zagotovljenih dovolj podatkovnih točk o teži!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2343
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2346
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:370
 #, kde-format
 msgid "No X data available!"
 msgstr "Podatkov X ni na voljo!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2350
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2353
 #, kde-format
 msgid ""
 "The number of data points (%1) must be greater than or equal to the number "
@@ -9755,12 +9791,12 @@ msgstr ""
 "Število podatkovnih točk (%1) mora biti večje ali enako številu parametrov "
 "(%2)!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2357
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2360
 #, kde-format
 msgid "Fit model not specified!"
 msgstr "Model za prileganje ni določen!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3100
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3103
 #, kde-format
 msgctxt "Curve Fitting"
 msgid "Fit Results"
@@ -9877,12 +9913,6 @@ msgstr "%1: spremenjena vrsta obrobe"
 #, kde-format
 msgid "%1: set plot area corner radius"
 msgstr "%1: nastavite polmer kota območja grafa"
-
-#: src/backend/worksheet/TextLabel.cpp:266
-#: src/backend/worksheet/TextLabel.cpp:305
-#, kde-format
-msgid "%1: set background color"
-msgstr "%1: nastavite barvo ozadja"
 
 #: src/backend/worksheet/TextLabel.cpp:294
 #: src/backend/worksheet/TextLabel.cpp:304
@@ -10045,229 +10075,235 @@ msgstr "%1: uporabite logične koordinate"
 msgid "%1: set logical position"
 msgstr "%1: določi logični položaj"
 
-#: src/frontend/AboutDialog.cpp:84
+#: src/frontend/AboutDialog.cpp:87
 #, kde-format
 msgid "Copy Info"
 msgstr "Kopiraj informacije"
 
-#: src/frontend/AboutDialog.cpp:88
+#: src/frontend/AboutDialog.cpp:91
 #, kde-format
 msgid "Donate"
 msgstr "Doniraj"
 
-#: src/frontend/AboutDialog.cpp:111
+#: src/frontend/AboutDialog.cpp:114
 #, kde-format
 msgid "Release build "
 msgstr "Gradnja izdaje "
 
-#: src/frontend/AboutDialog.cpp:113
+#: src/frontend/AboutDialog.cpp:116
 #, kde-format
 msgid "Debug build "
 msgstr "Gradnja za razhroščevanje "
 
-#: src/frontend/AboutDialog.cpp:116 src/frontend/AboutDialog.cpp:119
+#: src/frontend/AboutDialog.cpp:119 src/frontend/AboutDialog.cpp:122
 #, kde-format
 msgid "Decimal point "
 msgstr "Decimalna vejica "
 
-#: src/frontend/AboutDialog.cpp:117 src/frontend/AboutDialog.cpp:120
+#: src/frontend/AboutDialog.cpp:120 src/frontend/AboutDialog.cpp:123
 #, kde-format
 msgid "Group separator "
 msgstr "Ločilo skupin "
 
-#: src/frontend/AboutDialog.cpp:121
+#: src/frontend/AboutDialog.cpp:124
 #, kde-format
 msgid "Exponential "
 msgstr "Eksponentno "
 
-#: src/frontend/AboutDialog.cpp:121
+#: src/frontend/AboutDialog.cpp:124
 #, kde-format
 msgid "Zero digit "
 msgstr "Ničelna števika "
 
-#: src/frontend/AboutDialog.cpp:122
+#: src/frontend/AboutDialog.cpp:125
 #, kde-format
 msgid "Percent "
 msgstr "Odstotek "
 
-#: src/frontend/AboutDialog.cpp:123
+#: src/frontend/AboutDialog.cpp:126
 #, kde-format
 msgid "Positive/Negative sign "
 msgstr "Pozitiven/negativen znak "
 
-#: src/frontend/AboutDialog.cpp:143
+#: src/frontend/AboutDialog.cpp:146
 #, kde-format
 msgid "System:"
 msgstr "Sistem:"
 
-#: src/frontend/AboutDialog.cpp:144
+#: src/frontend/AboutDialog.cpp:147
 #, kde-format
 msgid "Locale:"
 msgstr "Lokalno:"
 
-#: src/frontend/AboutDialog.cpp:145
+#: src/frontend/AboutDialog.cpp:148
 #, kde-format
 msgid "Number Settings:"
 msgstr "Nastavitve števil:"
 
-#: src/frontend/AboutDialog.cpp:145
+#: src/frontend/AboutDialog.cpp:148
 #, kde-format
 msgid "Updated on restart"
 msgstr "Posodobljeno ob ponovnem zagonu"
 
-#: src/frontend/AboutDialog.cpp:146
+#: src/frontend/AboutDialog.cpp:149
 #, kde-format
 msgid "Architecture:"
 msgstr "Arhitektura:"
 
-#: src/frontend/AboutDialog.cpp:147
+#: src/frontend/AboutDialog.cpp:150
 #, kde-format
 msgid "Kernel: "
 msgstr "Jedro: "
 
-#: src/frontend/AboutDialog.cpp:156
+#: src/frontend/AboutDialog.cpp:159
 #, kde-format
 msgid "C++ Compiler: "
 msgstr "Prevajalnik C++: "
 
-#: src/frontend/AboutDialog.cpp:156
+#: src/frontend/AboutDialog.cpp:159
 #, kde-format
 msgid "C++ Compiler Flags: "
 msgstr "Zastavice prevajalnika C++: "
 
-#: src/frontend/AboutDialog.cpp:160
+#: src/frontend/AboutDialog.cpp:163
 #, kde-format
 msgid "Frontend to Mathematical Applications"
 msgstr "Začelje za matematične aplikacije"
 
-#: src/frontend/AboutDialog.cpp:162 src/frontend/AboutDialog.cpp:167
-#: src/frontend/AboutDialog.cpp:172 src/frontend/AboutDialog.cpp:177
-#: src/frontend/AboutDialog.cpp:182 src/frontend/AboutDialog.cpp:188
-#: src/frontend/AboutDialog.cpp:193 src/frontend/AboutDialog.cpp:198
-#: src/frontend/AboutDialog.cpp:203 src/frontend/AboutDialog.cpp:208
-#: src/frontend/AboutDialog.cpp:213 src/frontend/AboutDialog.cpp:219
-#: src/frontend/AboutDialog.cpp:224 src/frontend/AboutDialog.cpp:229
-#: src/frontend/AboutDialog.cpp:234 src/frontend/AboutDialog.cpp:239
-#: src/frontend/AboutDialog.cpp:245 src/frontend/AboutDialog.cpp:250
-#: src/frontend/AboutDialog.cpp:255 src/frontend/AboutDialog.cpp:261
-#: src/frontend/AboutDialog.cpp:266 src/frontend/AboutDialog.cpp:283
+#: src/frontend/AboutDialog.cpp:165 src/frontend/AboutDialog.cpp:170
+#: src/frontend/AboutDialog.cpp:175 src/frontend/AboutDialog.cpp:180
+#: src/frontend/AboutDialog.cpp:185 src/frontend/AboutDialog.cpp:191
+#: src/frontend/AboutDialog.cpp:196 src/frontend/AboutDialog.cpp:201
+#: src/frontend/AboutDialog.cpp:206 src/frontend/AboutDialog.cpp:211
+#: src/frontend/AboutDialog.cpp:216 src/frontend/AboutDialog.cpp:222
+#: src/frontend/AboutDialog.cpp:227 src/frontend/AboutDialog.cpp:232
+#: src/frontend/AboutDialog.cpp:237 src/frontend/AboutDialog.cpp:242
+#: src/frontend/AboutDialog.cpp:248 src/frontend/AboutDialog.cpp:253
+#: src/frontend/AboutDialog.cpp:258 src/frontend/AboutDialog.cpp:263
+#: src/frontend/AboutDialog.cpp:269 src/frontend/AboutDialog.cpp:274
+#: src/frontend/AboutDialog.cpp:291
 #, kde-format
 msgid "missing"
 msgstr "manjkajoča"
 
-#: src/frontend/AboutDialog.cpp:165
+#: src/frontend/AboutDialog.cpp:168
 #, kde-format
 msgid ""
 "Support data files in FITS (Flexible Image Transport System) data format"
 msgstr ""
 "Podpora podatkovnim datotekam formata FITS (Flexible Image Transport System)"
 
-#: src/frontend/AboutDialog.cpp:170
+#: src/frontend/AboutDialog.cpp:173
 #, kde-format
 msgid "Markdown markup language support"
 msgstr "Podpora jeziku markdown"
 
-#: src/frontend/AboutDialog.cpp:175
+#: src/frontend/AboutDialog.cpp:178
 #, kde-format
 msgid "C++ library for linear algebra"
 msgstr "Knjižnica C++ za linearno algebro"
 
-#: src/frontend/AboutDialog.cpp:180
+#: src/frontend/AboutDialog.cpp:183
 #, kde-format
 msgid "Fastest Fourier Transform in the West"
 msgstr "Najhitrejša Fourierova transformacija za zahodu"
 
-#: src/frontend/AboutDialog.cpp:184
+#: src/frontend/AboutDialog.cpp:187
 #, kde-format
 msgid "GNU Scientific Library"
 msgstr "GNU znanstvena knjižnica"
 
-#: src/frontend/AboutDialog.cpp:186
+#: src/frontend/AboutDialog.cpp:189
 #, kde-format
 msgid "High-performance data management and storage suite"
 msgstr "Visoko zmogljiva zbirka upravljanja in hrambe podatkov"
 
-#: src/frontend/AboutDialog.cpp:191
+#: src/frontend/AboutDialog.cpp:194
 #, kde-format
 msgid "Syntax highlighting engine"
 msgstr "Motor poudarjanja skladnje"
 
-#: src/frontend/AboutDialog.cpp:196
+#: src/frontend/AboutDialog.cpp:199
 #, kde-format
 msgid "Support collecting feedback from users"
 msgstr "Podpora zbiranja povratnih informacij uporabnikov"
 
-#: src/frontend/AboutDialog.cpp:201
+#: src/frontend/AboutDialog.cpp:204
 #, kde-format
 msgid "Complex error and related functions"
 msgstr "Kompleksne napake in sorodne funkcije"
 
-#: src/frontend/AboutDialog.cpp:206
+#: src/frontend/AboutDialog.cpp:209
 #, kde-format
 msgid "importing Origin OPJ project files"
 msgstr "uvažanje datotek projekta Origin OPJ"
 
-#: src/frontend/AboutDialog.cpp:211
+#: src/frontend/AboutDialog.cpp:214
 #, kde-format
 msgid "Import binary MATLAB MAT files"
 msgstr "Uvoz binarnih datotek MATLAB MAT"
 
-#: src/frontend/AboutDialog.cpp:216
+#: src/frontend/AboutDialog.cpp:219
 #, kde-format
 msgid "MCAP file support"
 msgstr "Podpora datotek MCAP"
 
-#: src/frontend/AboutDialog.cpp:222
+#: src/frontend/AboutDialog.cpp:225
 #, kde-format
 msgid "Network Common Data Form"
 msgstr "Network Common Data Form"
 
-#: src/frontend/AboutDialog.cpp:227
+#: src/frontend/AboutDialog.cpp:230
 #, kde-format
 msgid "Import ODS (Open Document Spreadsheet) files"
 msgstr "Odpri datoteke ODS (Open Document Spreadsheet)"
 
-#: src/frontend/AboutDialog.cpp:232
+#: src/frontend/AboutDialog.cpp:235
 #, kde-format
 msgid "PDF rendering library"
 msgstr "Knjižnica upodobitve PDF"
 
-#: src/frontend/AboutDialog.cpp:237
+#: src/frontend/AboutDialog.cpp:240
 #, kde-format
 msgid "Offers available actions for a specific purpose"
 msgstr "Nudi razpoložljive dejavnosti za določen namen"
 
-#: src/frontend/AboutDialog.cpp:241
+#: src/frontend/AboutDialog.cpp:244
 #, kde-format
 msgid "Qt Advanced Docking System"
 msgstr "Qt Advanced Docking System"
 
-#: src/frontend/AboutDialog.cpp:243
+#: src/frontend/AboutDialog.cpp:246
 #, kde-format
 msgid "Support data from MQTT brokers"
 msgstr "Podpora podatkom brokerjev MQTT"
 
-#: src/frontend/AboutDialog.cpp:248
+#: src/frontend/AboutDialog.cpp:251
 #, kde-format
 msgid "Serial port functionality support"
 msgstr "Podpora funkcionalnosti serijskih vrat"
 
-#: src/frontend/AboutDialog.cpp:253
+#: src/frontend/AboutDialog.cpp:256
+#, kde-format
+msgid "SVG export support"
+msgstr "Podpora izvozu SVG"
+
+#: src/frontend/AboutDialog.cpp:261
 #, kde-format
 msgid "Import Excel xlsx files"
 msgstr "Uvoz datotek Excel xlsx"
 
-#: src/frontend/AboutDialog.cpp:259
+#: src/frontend/AboutDialog.cpp:267
 #, kde-format
 msgid "Read (and write) data sets from SAS, Stata, and SPSS"
 msgstr "Bere (in piše) zbirke podatkov iz SAS-a, Stata in SPSS-a"
 
-#: src/frontend/AboutDialog.cpp:264
+#: src/frontend/AboutDialog.cpp:272
 #, kde-format
 msgid "Binary Log File (BLF) file support"
 msgstr "Podpora datoteke dnevnika (BLF)"
 
-#: src/frontend/AboutDialog.cpp:281
+#: src/frontend/AboutDialog.cpp:289
 #, kde-format
 msgid "Components:"
 msgstr "Komponente:"
@@ -10358,194 +10394,194 @@ msgstr "Kopiraj izbor"
 msgid "Copy All"
 msgstr "Kopiraj vse"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:123
+#: src/frontend/datapicker/DatapickerImageView.cpp:125
 #: src/frontend/matrix/MatrixView.cpp:192
 #: src/frontend/notebook/NotebookView.cpp:53
-#: src/frontend/worksheet/WorksheetView.cpp:147
-#: src/frontend/worksheet/WorksheetView.cpp:380
+#: src/frontend/worksheet/WorksheetView.cpp:148
+#: src/frontend/worksheet/WorksheetView.cpp:381
 #, kde-format
 msgid "Zoom In"
 msgstr "Približaj"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:126
+#: src/frontend/datapicker/DatapickerImageView.cpp:128
 #: src/frontend/matrix/MatrixView.cpp:193
 #: src/frontend/notebook/NotebookView.cpp:57
-#: src/frontend/worksheet/WorksheetView.cpp:148
-#: src/frontend/worksheet/WorksheetView.cpp:384
+#: src/frontend/worksheet/WorksheetView.cpp:149
+#: src/frontend/worksheet/WorksheetView.cpp:385
 #, kde-format
 msgid "Zoom Out"
 msgstr "Oddalji"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:129
+#: src/frontend/datapicker/DatapickerImageView.cpp:131
 #: src/frontend/matrix/MatrixView.cpp:194
-#: src/frontend/worksheet/WorksheetView.cpp:149
+#: src/frontend/worksheet/WorksheetView.cpp:150
 #, kde-format
 msgid "Original Size"
 msgstr "Izvirna velikost"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:132
-#: src/frontend/worksheet/WorksheetView.cpp:171
+#: src/frontend/datapicker/DatapickerImageView.cpp:134
+#: src/frontend/worksheet/WorksheetView.cpp:172
 #, kde-format
 msgctxt "Zoom"
 msgid "Fit to Height"
 msgstr "Prilagodi višini"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:133
-#: src/frontend/worksheet/WorksheetView.cpp:174
+#: src/frontend/datapicker/DatapickerImageView.cpp:135
+#: src/frontend/worksheet/WorksheetView.cpp:175
 #, kde-format
 msgctxt "Zoom"
 msgid "Fit to Width"
 msgstr "Prilagodi širini"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:136
-#: src/frontend/worksheet/WorksheetView.cpp:188
+#: src/frontend/datapicker/DatapickerImageView.cpp:138
+#: src/frontend/worksheet/WorksheetView.cpp:189
 #, kde-format
 msgid "Navigate"
 msgstr "Krmari"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:140
-#: src/frontend/worksheet/WorksheetView.cpp:191
+#: src/frontend/datapicker/DatapickerImageView.cpp:142
+#: src/frontend/worksheet/WorksheetView.cpp:192
 #, kde-format
 msgid "Select and Zoom"
 msgstr "Izberi in povečaj"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:144
+#: src/frontend/datapicker/DatapickerImageView.cpp:146
 #, kde-format
 msgid "Set Axis Points"
 msgstr "Določi točke osi"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:148
+#: src/frontend/datapicker/DatapickerImageView.cpp:150
 #, kde-format
 msgid "Set Curve Points"
 msgstr "Določi točke krivulje"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:152
+#: src/frontend/datapicker/DatapickerImageView.cpp:154
 #, kde-format
 msgid "Select Curve Segments"
 msgstr "Izberi odseke krivulje"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:156
+#: src/frontend/datapicker/DatapickerImageView.cpp:158
 #, kde-format
 msgid "New Curve"
 msgstr "Nova krivunja"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:158
+#: src/frontend/datapicker/DatapickerImageView.cpp:160
 #, kde-format
 msgid "Shift Left"
 msgstr "Premakni levo"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:161
+#: src/frontend/datapicker/DatapickerImageView.cpp:163
 #, kde-format
 msgid "Shift Right"
 msgstr "Premakni desno"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:164
+#: src/frontend/datapicker/DatapickerImageView.cpp:166
 #, kde-format
 msgid "Shift Up"
 msgstr "Premakni navzgor"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:167
+#: src/frontend/datapicker/DatapickerImageView.cpp:169
 #, kde-format
 msgid "Shift Down"
 msgstr "Premakni navzdol"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:170
-#: src/frontend/worksheet/WorksheetView.cpp:195
+#: src/frontend/datapicker/DatapickerImageView.cpp:172
+#: src/frontend/worksheet/WorksheetView.cpp:196
 #, kde-format
 msgid "No Magnification"
 msgstr "Brez povečave"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:174
-#: src/frontend/worksheet/WorksheetView.cpp:199
+#: src/frontend/datapicker/DatapickerImageView.cpp:176
+#: src/frontend/worksheet/WorksheetView.cpp:200
 #, kde-format
 msgid "2x Magnification"
 msgstr "2-kratna povečava"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:177
-#: src/frontend/worksheet/WorksheetView.cpp:202
+#: src/frontend/datapicker/DatapickerImageView.cpp:179
+#: src/frontend/worksheet/WorksheetView.cpp:203
 #, kde-format
 msgid "3x Magnification"
 msgstr "3-kratna povečava"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:180
-#: src/frontend/worksheet/WorksheetView.cpp:205
+#: src/frontend/datapicker/DatapickerImageView.cpp:182
+#: src/frontend/worksheet/WorksheetView.cpp:206
 #, kde-format
 msgid "4x Magnification"
 msgstr "4-kratna povečava"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:183
-#: src/frontend/worksheet/WorksheetView.cpp:208
+#: src/frontend/datapicker/DatapickerImageView.cpp:185
+#: src/frontend/worksheet/WorksheetView.cpp:209
 #, kde-format
 msgid "5x Magnification"
 msgstr "5-kratna povečava"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:216
-#: src/frontend/worksheet/WorksheetView.cpp:440
-#: src/frontend/worksheet/WorksheetView.cpp:491
+#: src/frontend/datapicker/DatapickerImageView.cpp:218
+#: src/frontend/worksheet/WorksheetView.cpp:441
+#: src/frontend/worksheet/WorksheetView.cpp:492
 #, kde-format
 msgid "Mouse Mode"
 msgstr "Način miške"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:225
+#: src/frontend/datapicker/DatapickerImageView.cpp:227
 #, kde-format
 msgid "Zoom View"
 msgstr "Povečava pogleda"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:233
+#: src/frontend/datapicker/DatapickerImageView.cpp:235
 #, kde-format
 msgid "Move Last Point"
 msgstr "Premakni zadnjo točko"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:239
-#: src/frontend/worksheet/WorksheetView.cpp:457
+#: src/frontend/datapicker/DatapickerImageView.cpp:241
+#: src/frontend/worksheet/WorksheetView.cpp:458
 #, kde-format
 msgid "Magnification"
 msgstr "Povečava"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:534
+#: src/frontend/datapicker/DatapickerImageView.cpp:536
 #, kde-format
 msgid "%1, active curve \"%2\": %3=%4, %5=%6"
 msgstr "%1, aktivna krivulja »%2«: %3=%4, %5=%6"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:623
+#: src/frontend/datapicker/DatapickerImageView.cpp:625
 #, kde-format
 msgid "Remove existing reference points?"
 msgstr "Ali želite odstraniti obstoječe referenčne točke?"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:624
+#: src/frontend/datapicker/DatapickerImageView.cpp:626
 #, kde-format
 msgid ""
 "All available reference points will be removed. Do you want to continue?"
 msgstr ""
 "Vse razpoložljive referenčne točke bodo odstranjene. Ali želite nadaljevati?"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:684
+#: src/frontend/datapicker/DatapickerImageView.cpp:686
 #, kde-format
 msgid "%1: change position of selected DatapickerPoints."
 msgstr "%1: spremenite položaj izbranih točk izbirnika podatkov."
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:737
+#: src/frontend/datapicker/DatapickerImageView.cpp:739
 #, kde-format
 msgid "%1: add new curve."
 msgstr "%1: dodaj novo krivuljo."
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:738
+#: src/frontend/datapicker/DatapickerImageView.cpp:740
 #, kde-format
 msgid "Curve"
 msgstr "Krivulja"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:871
+#: src/frontend/datapicker/DatapickerImageView.cpp:875
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4094
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4148
-#: src/frontend/worksheet/WorksheetView.cpp:2182
+#: src/frontend/worksheet/WorksheetView.cpp:2185
 #, kde-format
 msgid "Failed to export"
 msgstr "Izvoz ni uspel"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:871
+#: src/frontend/datapicker/DatapickerImageView.cpp:875
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4094
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4148
-#: src/frontend/worksheet/WorksheetView.cpp:2182
+#: src/frontend/worksheet/WorksheetView.cpp:2185
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "Pisanje v »%1« ni uspelo. Preverite pot."
@@ -11107,8 +11143,8 @@ msgstr "Dodaj nov vir podatkov v živo"
 #: src/frontend/datasources/ImportFileDialog.cpp:349
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:145
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:366
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:114
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:237
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:116
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:239
 #, kde-format
 msgid "Hide Options"
 msgstr "Skrij možnosti"
@@ -11117,8 +11153,8 @@ msgstr "Skrij možnosti"
 #: src/frontend/datasources/ImportFileDialog.cpp:349
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:145
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:366
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:114
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:237
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:116
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:239
 #, kde-format
 msgid "Show Options"
 msgstr "Pokaži možnosti"
@@ -11426,31 +11462,31 @@ msgid ""
 "The number of rows is calculated from the values of the data portion tab"
 msgstr "Število vrstic je izračunano iz vrednosti zavihka podatkovnega dela"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:982
+#: src/frontend/datasources/ImportFileWidget.cpp:990
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr "Izberite vir podatkov datoteke"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1012
+#: src/frontend/datasources/ImportFileWidget.cpp:1020
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr "Izberite datoteko DBC"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1012
+#: src/frontend/datasources/ImportFileWidget.cpp:1020
 #, kde-format
 msgid "DBC file (*.dbc)"
 msgstr "datoteka DBC (*.dbc)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1098
+#: src/frontend/datasources/ImportFileWidget.cpp:1106
 #, kde-format
 msgid ""
 "Origin Project files need to be opened with \"Import -> Origin Project\"!"
 msgstr ""
 "Datoteke Origin Project je treba odpreti z \"Uvozi -> Origin Project\"!"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1104
+#: src/frontend/datasources/ImportFileWidget.cpp:1112
 #, kde-format
 msgid ""
 "LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"
@@ -11458,14 +11494,14 @@ msgstr ""
 "Datoteke LabPlot Project je treba odpreti z \"Uvozi -> LabPlot Project\"!"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/frontend/datasources/ImportFileWidget.cpp:1232
+#: src/frontend/datasources/ImportFileWidget.cpp:1240
 #: src/frontend/ui/datasources/importfilewidget.ui:416
 #, kde-format
 msgid "Data Format"
 msgstr "Oblika podatkov"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/frontend/datasources/ImportFileWidget.cpp:1233
+#: src/frontend/datasources/ImportFileWidget.cpp:1241
 #: src/frontend/ui/datasources/importfilewidget.ui:470
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:158
 #, kde-format
@@ -11473,104 +11509,104 @@ msgid "Preview"
 msgstr "Predogled"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/frontend/datasources/ImportFileWidget.cpp:1235
+#: src/frontend/datasources/ImportFileWidget.cpp:1243
 #: src/frontend/ui/datasources/importfilewidget.ui:582
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
 msgstr "Del podatkov za branje"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1278
+#: src/frontend/datasources/ImportFileWidget.cpp:1286
 #, kde-format
 msgid "Data format && preview"
 msgstr "Oblika podatkov in predogled"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1325
+#: src/frontend/datasources/ImportFileWidget.cpp:1333
 #: src/frontend/SettingsGeneralPage.cpp:258
 #, kde-format
 msgid "Automatic"
 msgstr "Samodejno"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1578
+#: src/frontend/datasources/ImportFileWidget.cpp:1586
 #, kde-format
 msgid "file command not found"
 msgstr "ukaz datoteke ni bil najden"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1589
+#: src/frontend/datasources/ImportFileWidget.cpp:1597
 #, kde-format
 msgid "cannot open"
 msgstr "ni mogoče odpreti"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1594
+#: src/frontend/datasources/ImportFileWidget.cpp:1602
 #, kde-format
 msgid "<b>File type:</b> %1"
 msgstr "<b>Vrsta datoteke:</b> %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1599
+#: src/frontend/datasources/ImportFileWidget.cpp:1607
 #, kde-format
 msgid "General:"
 msgstr "Splošno:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1601
-#: src/frontend/datasources/ImportFileWidget.cpp:1602
-#: src/frontend/datasources/ImportFileWidget.cpp:1603
+#: src/frontend/datasources/ImportFileWidget.cpp:1609
+#: src/frontend/datasources/ImportFileWidget.cpp:1610
+#: src/frontend/datasources/ImportFileWidget.cpp:1611
 #, kde-format
 msgid "yes"
 msgstr "da"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1601
-#: src/frontend/datasources/ImportFileWidget.cpp:1602
-#: src/frontend/datasources/ImportFileWidget.cpp:1603
+#: src/frontend/datasources/ImportFileWidget.cpp:1609
+#: src/frontend/datasources/ImportFileWidget.cpp:1610
+#: src/frontend/datasources/ImportFileWidget.cpp:1611
 #, kde-format
 msgid "no"
 msgstr "ne"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1601
+#: src/frontend/datasources/ImportFileWidget.cpp:1609
 #, kde-format
 msgid "Readable: %1"
 msgstr "Berljivo: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1602
+#: src/frontend/datasources/ImportFileWidget.cpp:1610
 #, kde-format
 msgid "Writable: %1"
 msgstr "Zapisljivo: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1603
+#: src/frontend/datasources/ImportFileWidget.cpp:1611
 #, kde-format
 msgid "Executable: %1"
 msgstr "Izvršljivo: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1605
+#: src/frontend/datasources/ImportFileWidget.cpp:1613
 #, kde-format
 msgid "Birth time: %1"
 msgstr "Čas rojstva: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1606
+#: src/frontend/datasources/ImportFileWidget.cpp:1614
 #, kde-format
 msgid "Last metadata changed: %1"
 msgstr "Zadnja sprememba metapodatkov: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1607
+#: src/frontend/datasources/ImportFileWidget.cpp:1615
 #, kde-format
 msgid "Last modified: %1"
 msgstr "Nazadnje spremenjeno: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1608
+#: src/frontend/datasources/ImportFileWidget.cpp:1616
 #, kde-format
 msgid "Last read: %1"
 msgstr "Zadnje branje: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1609
+#: src/frontend/datasources/ImportFileWidget.cpp:1617
 #, kde-format
 msgid "Owner: %1"
 msgstr "Lastnik: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1610
+#: src/frontend/datasources/ImportFileWidget.cpp:1618
 #, kde-format
 msgid "Group: %1"
 msgstr "Skupina: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1611
+#: src/frontend/datasources/ImportFileWidget.cpp:1619
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
@@ -11579,23 +11615,23 @@ msgstr[1] "%1 cbyta"
 msgstr[2] "%1 cbyti"
 msgstr[3] "%1 cbytov"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1614
+#: src/frontend/datasources/ImportFileWidget.cpp:1622
 #, kde-format
 msgid "Summary:"
 msgstr "Povzetek:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1637
-#: src/frontend/datasources/ImportFileWidget.cpp:1642
+#: src/frontend/datasources/ImportFileWidget.cpp:1645
+#: src/frontend/datasources/ImportFileWidget.cpp:1650
 #, kde-format
 msgid "Content:"
 msgstr "Vsebina:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1673
+#: src/frontend/datasources/ImportFileWidget.cpp:1681
 #, kde-format
 msgid "Could not open file %1 for reading."
 msgstr "Datoteke %1 ni mogoče odpreti za branje."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1757
+#: src/frontend/datasources/ImportFileWidget.cpp:1765
 #, kde-format
 msgid ""
 "Invalid number rows. Please check 'End Row' and 'Start Row'. 'End Row' must "
@@ -11604,98 +11640,98 @@ msgstr ""
 "Neveljavne številske vrstice. Preverite 'Končno vrstico' in 'Začetno "
 "vrstico'. 'Končna vrstica' mora biti večja od 'Začetna vrstica' ali -1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1768
+#: src/frontend/datasources/ImportFileWidget.cpp:1776
 #, kde-format
 msgid "Preview: Initialization failed: %1"
 msgstr "Predogled: Inicializacija ni uspela: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1793
+#: src/frontend/datasources/ImportFileWidget.cpp:1801
 #, kde-format
 msgid "Preview: Failed to connect to local socket %1 - %2"
 msgstr "Predogled: Neuspela povezava z lokalno vtičnico %1 - %2"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1808
+#: src/frontend/datasources/ImportFileWidget.cpp:1816
 #, kde-format
 msgid "Preview: Failed to connect to TCP socket - %1"
 msgstr "Predogled: Neuspela povezava z vtičnico TCP - %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1853
+#: src/frontend/datasources/ImportFileWidget.cpp:1861
 #, kde-format
 msgid "Parse Error: %1"
 msgstr "Napaka pri razčlenjevanju: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1855
+#: src/frontend/datasources/ImportFileWidget.cpp:1863
 #, kde-format
 msgid "ERROR: not ready for read after 2 sec"
 msgstr "NAPAKA: ni pripravljeno za branje po 2 sekundah"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1859
+#: src/frontend/datasources/ImportFileWidget.cpp:1867
 #, kde-format
 msgid "ERROR: failed to open serial port. error: %1"
 msgstr "NAPAKA: serijskih vrat ni bilo mogoče odpreti. napaka: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1878
+#: src/frontend/datasources/ImportFileWidget.cpp:1886
 #, kde-format
 msgid "No data arrived yet for the selected topic"
 msgstr "Za izbrano temo podatki še niso prispeli"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2144
+#: src/frontend/datasources/ImportFileWidget.cpp:2152
 #, kde-format
 msgid "Not a HDF5 file: %1"
 msgstr "Ni datoteka HDF5: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2608
+#: src/frontend/datasources/ImportFileWidget.cpp:2616
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
 msgstr "Ni se možno naročiti na vse teme, ki so na voljo."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2616
+#: src/frontend/datasources/ImportFileWidget.cpp:2624
 #, kde-format
 msgid "Failed to connect to '%1'. Error %2."
 msgstr "Neuspela povezava z '%1'. Napaka %2."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2638
+#: src/frontend/datasources/ImportFileWidget.cpp:2646
 #, kde-format
 msgid "Disconnected from '%1'."
 msgstr "Prekinjena povezava z '%1'."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2704
+#: src/frontend/datasources/ImportFileWidget.cpp:2712
 #, kde-format
 msgid "Available (%1)"
 msgstr "Na voljo (%1)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2808
+#: src/frontend/datasources/ImportFileWidget.cpp:2816
 #, kde-format
 msgid "Wrong username or password"
 msgstr "Napačno uporabniško ime ali geslo"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2811
+#: src/frontend/datasources/ImportFileWidget.cpp:2819
 #, kde-format
 msgid "The client ID wasn't accepted"
 msgstr "ID odjemalca ni bil sprejet"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2815
+#: src/frontend/datasources/ImportFileWidget.cpp:2823
 #, kde-format
 msgid "The broker %1 couldn't be reached."
 msgstr "Posrednika %1 ni mogoče doseči."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2818
+#: src/frontend/datasources/ImportFileWidget.cpp:2826
 #, kde-format
 msgid "The client is not authorized to connect."
 msgstr "Odjemalec ni pooblaščen za povezavo."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2821
+#: src/frontend/datasources/ImportFileWidget.cpp:2829
 #, kde-format
 msgid "An unknown error occurred."
 msgstr "Prišlo je do neznane napake."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2827
-#: src/frontend/datasources/ImportFileWidget.cpp:2830
+#: src/frontend/datasources/ImportFileWidget.cpp:2835
+#: src/frontend/datasources/ImportFileWidget.cpp:2838
 #, kde-format
 msgid "An error occurred."
 msgstr "Prišlo je do napake."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2844
+#: src/frontend/datasources/ImportFileWidget.cpp:2852
 #, kde-format
 msgid "Connecting to '%1:%2' timed out."
 msgstr "Povezava z »%1:%2« je potekla."
@@ -11892,7 +11928,7 @@ msgid "Open LabPlot Project"
 msgstr "Odpri projekt LabPlot"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:438
-#: src/frontend/MainWin.cpp:1484
+#: src/frontend/MainWin.cpp:1485
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "Projekti LabPlot (%1)"
@@ -11916,8 +11952,8 @@ msgstr "Ime mape:"
 #. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:71 src/frontend/MainWin.cpp:636
-#: src/frontend/MainWin.cpp:1970 src/frontend/SettingsDialog.cpp:68
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:71 src/frontend/MainWin.cpp:637
+#: src/frontend/MainWin.cpp:1971 src/frontend/SettingsDialog.cpp:68
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:122
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -12202,7 +12238,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2789
+#: src/frontend/MainWin.cpp:2790
 #, kde-format
 msgid "Warning"
 msgstr "Opozorilo"
@@ -13335,25 +13371,25 @@ msgstr ""
 "velikosti. Drugače spremenite samo velikost platna."
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:46
-#: src/frontend/worksheet/WorksheetView.cpp:240
+#: src/frontend/worksheet/WorksheetView.cpp:241
 #, kde-format
 msgid "No Layout"
 msgstr "Brez postavitve"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:47
-#: src/frontend/worksheet/WorksheetView.cpp:231
+#: src/frontend/worksheet/WorksheetView.cpp:232
 #, kde-format
 msgid "Vertical Layout"
 msgstr "Navpična postavitev"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:48
-#: src/frontend/worksheet/WorksheetView.cpp:234
+#: src/frontend/worksheet/WorksheetView.cpp:235
 #, kde-format
 msgid "Horizontal Layout"
 msgstr "Vodoravna postavitev"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:49
-#: src/frontend/worksheet/WorksheetView.cpp:237
+#: src/frontend/worksheet/WorksheetView.cpp:238
 #, kde-format
 msgid "Grid Layout"
 msgstr "Postavitev mreže"
@@ -13860,7 +13896,7 @@ msgid ""
 msgstr ""
 "Datoteke zbirk primerov %1 ni bilo mogoče odpreti. Preverite namestitev."
 
-#: src/frontend/GuiObserver.cpp:195 src/frontend/MainWin.cpp:1391
+#: src/frontend/GuiObserver.cpp:195 src/frontend/MainWin.cpp:1392
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -14684,13 +14720,13 @@ msgid "&Windows"
 msgstr "Okna"
 
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode)
-#: src/frontend/MainWin.cpp:200 src/frontend/ui/settingsworksheetpage.ui:75
-#: src/frontend/worksheet/WorksheetView.cpp:267
+#: src/frontend/MainWin.cpp:201 src/frontend/ui/settingsworksheetpage.ui:75
+#: src/frontend/worksheet/WorksheetView.cpp:268
 #, kde-format
 msgid "Presenter Mode"
 msgstr "Način predstavitve"
 
-#: src/frontend/MainWin.cpp:200
+#: src/frontend/MainWin.cpp:201
 #, kde-format
 msgid ""
 "No worksheets are available in the project. The presenter mode will not be "
@@ -14699,256 +14735,256 @@ msgstr ""
 "V projektu ni na voljo nobenih delovnih listov. Način predstavitve se ne bo "
 "zagnal."
 
-#: src/frontend/MainWin.cpp:214
+#: src/frontend/MainWin.cpp:215
 #, kde-format
 msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr "Dobrodošli v LabPlot %1"
 
-#: src/frontend/MainWin.cpp:605
+#: src/frontend/MainWin.cpp:606
 #, kde-format
 msgid "&Open Example"
 msgstr "&Odpri primer"
 
-#: src/frontend/MainWin.cpp:626 src/frontend/MainWin.cpp:1954
+#: src/frontend/MainWin.cpp:627 src/frontend/MainWin.cpp:1955
 #, kde-format
 msgid "Workbook"
 msgstr "Delovni zvezek"
 
-#: src/frontend/MainWin.cpp:628
+#: src/frontend/MainWin.cpp:629
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr "Ustvari nov delovni zvezek za preglednice, matrike in grafikone zbirke"
 
-#: src/frontend/MainWin.cpp:631 src/frontend/MainWin.cpp:1962
+#: src/frontend/MainWin.cpp:632 src/frontend/MainWin.cpp:1963
 #, kde-format
 msgid "Data Extractor"
 msgstr "Izvlečnik podatkov"
 
-#: src/frontend/MainWin.cpp:632
+#: src/frontend/MainWin.cpp:633
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr "Ustvari izvlečnik podatkov za pridobivanje podatkov iz slike"
 
-#: src/frontend/MainWin.cpp:638
+#: src/frontend/MainWin.cpp:639
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr "Ustvari novo preglednico za urejanje podatkov"
 
-#: src/frontend/MainWin.cpp:644
+#: src/frontend/MainWin.cpp:645
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr "Ustvari novo matriko za urejanje podatkov"
 
-#: src/frontend/MainWin.cpp:648 src/frontend/MainWin.cpp:2006
+#: src/frontend/MainWin.cpp:649 src/frontend/MainWin.cpp:2007
 #: src/frontend/SettingsDialog.cpp:63
 #, kde-format
 msgid "Worksheet"
 msgstr "Delovni list"
 
-#: src/frontend/MainWin.cpp:650
+#: src/frontend/MainWin.cpp:651
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr "Ustvari nov delovni list za urejanje podatkov"
 
-#: src/frontend/MainWin.cpp:654 src/frontend/MainWin.cpp:2014
+#: src/frontend/MainWin.cpp:655 src/frontend/MainWin.cpp:2015
 #, kde-format
 msgid "Note"
 msgstr "Opomba"
 
-#: src/frontend/MainWin.cpp:655
+#: src/frontend/MainWin.cpp:656
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr "Ustvari novo opombo za poljubno besedilo"
 
-#: src/frontend/MainWin.cpp:659 src/frontend/MainWin.cpp:1946
+#: src/frontend/MainWin.cpp:660 src/frontend/MainWin.cpp:1947
 #, kde-format
 msgid "Folder"
 msgstr "Mapa"
 
-#: src/frontend/MainWin.cpp:660
+#: src/frontend/MainWin.cpp:661
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr "Ustvari novo mapo za zbiranje delovnih listov in drugih elementov"
 
-#: src/frontend/MainWin.cpp:665
+#: src/frontend/MainWin.cpp:666
 #, kde-format
 msgid "Live Data Source..."
 msgstr "Vir podatkov v živo ..."
 
-#: src/frontend/MainWin.cpp:666
+#: src/frontend/MainWin.cpp:667
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr ""
 "Ustvari vir podatkov v živo za branje podatkov iz naprave v realnem času"
 
-#: src/frontend/MainWin.cpp:673 src/frontend/MainWin.cpp:682
+#: src/frontend/MainWin.cpp:674 src/frontend/MainWin.cpp:683
 #, kde-format
 msgid "Import data from a regular file"
 msgstr "Uvozi podatke iz navadne datoteke"
 
-#: src/frontend/MainWin.cpp:687
+#: src/frontend/MainWin.cpp:688
 #, kde-format
 msgid "From kaggle.com..."
 msgstr "Iz kaggle.com..."
 
-#: src/frontend/MainWin.cpp:688
+#: src/frontend/MainWin.cpp:689
 #, kde-format
 msgid "Import data from kaggle.com"
 msgstr "Uvozi podatke iz kaggle.com"
 
-#: src/frontend/MainWin.cpp:693
+#: src/frontend/MainWin.cpp:694
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr "Uvozi podatke iz zbirke podatkov SQL"
 
-#: src/frontend/MainWin.cpp:697
+#: src/frontend/MainWin.cpp:698
 #, kde-format
 msgid "From Dataset Collection..."
 msgstr "Iz množice zbirk podatkov..."
 
-#: src/frontend/MainWin.cpp:698
+#: src/frontend/MainWin.cpp:699
 #, kde-format
 msgid "Import data from an online dataset"
 msgstr "Uvozi podatke iz spletne zbirke podatkov"
 
-#: src/frontend/MainWin.cpp:702
+#: src/frontend/MainWin.cpp:703
 #, kde-format
 msgid "LabPlot Project..."
 msgstr "Projekt LabPlot ..."
 
-#: src/frontend/MainWin.cpp:703
+#: src/frontend/MainWin.cpp:704
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr "Uvozi projekt iz projektne datoteke LabPlot (.lml)"
 
-#: src/frontend/MainWin.cpp:708
+#: src/frontend/MainWin.cpp:709
 #, kde-format
 msgid "Origin Project (OPJ)..."
 msgstr "Projekt Origin (OPJ) ..."
 
-#: src/frontend/MainWin.cpp:709
+#: src/frontend/MainWin.cpp:710
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr "Uvozi projekt iz projektne datoteke OriginLab Origin (.opj)"
 
-#: src/frontend/MainWin.cpp:714
+#: src/frontend/MainWin.cpp:715
 #, kde-format
 msgid "Export..."
 msgstr "Izvozi ..."
 
-#: src/frontend/MainWin.cpp:715
+#: src/frontend/MainWin.cpp:716
 #, kde-format
 msgid "Export selected element"
 msgstr "Izvozi izbrani element"
 
-#: src/frontend/MainWin.cpp:721 src/frontend/MainWin.cpp:2491
-#: src/frontend/MainWin.cpp:2499
+#: src/frontend/MainWin.cpp:722 src/frontend/MainWin.cpp:2492
+#: src/frontend/MainWin.cpp:2500
 #, kde-format
 msgid "Share"
 msgstr "Deli"
 
-#: src/frontend/MainWin.cpp:726
+#: src/frontend/MainWin.cpp:727
 #, kde-format
 msgid "Color Maps Browser"
 msgstr "Brskalnik barvnih palet"
 
-#: src/frontend/MainWin.cpp:727
+#: src/frontend/MainWin.cpp:728
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr "Odprite pogovorno okno za brskanje po razpoložljivih barvnih paletah."
 
-#: src/frontend/MainWin.cpp:736
+#: src/frontend/MainWin.cpp:737
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "Urejevalnik metapodatkov FITS ..."
 
-#: src/frontend/MainWin.cpp:737
+#: src/frontend/MainWin.cpp:738
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr "Odpre urejevalnik za urejanje metapodatkov FITS"
 
-#: src/frontend/MainWin.cpp:746
+#: src/frontend/MainWin.cpp:747
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr "Zgodovina razveljavitev/ponovitev ..."
 
-#: src/frontend/MainWin.cpp:766
+#: src/frontend/MainWin.cpp:767
 #, kde-format
 msgid "Close the active window"
 msgstr "Zapri aktivno okno"
 
-#: src/frontend/MainWin.cpp:769
+#: src/frontend/MainWin.cpp:770
 #, kde-format
 msgid "Close &All"
 msgstr "Zapri vse"
 
-#: src/frontend/MainWin.cpp:770
+#: src/frontend/MainWin.cpp:771
 #, kde-format
 msgid "Close all the windows"
 msgstr "Zaprite vsa okna"
 
-#: src/frontend/MainWin.cpp:773
+#: src/frontend/MainWin.cpp:774
 #, kde-format
 msgid "Ne&xt"
 msgstr "Naslednji"
 
-#: src/frontend/MainWin.cpp:775
+#: src/frontend/MainWin.cpp:776
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "Premakni pozornost na naslednje okno"
 
-#: src/frontend/MainWin.cpp:778
+#: src/frontend/MainWin.cpp:779
 #, kde-format
 msgid "Pre&vious"
 msgstr "Prejšnji"
 
-#: src/frontend/MainWin.cpp:780
+#: src/frontend/MainWin.cpp:781
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "Premakni pozornost na prejšnje okno"
 
-#: src/frontend/MainWin.cpp:787
+#: src/frontend/MainWin.cpp:788
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "Samo trenutna mapa"
 
-#: src/frontend/MainWin.cpp:792
+#: src/frontend/MainWin.cpp:793
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "Trenutna mapa in podmape"
 
-#: src/frontend/MainWin.cpp:796
+#: src/frontend/MainWin.cpp:797
 #, kde-format
 msgid "&All"
 msgstr "Vse"
 
-#: src/frontend/MainWin.cpp:818
+#: src/frontend/MainWin.cpp:819
 #, kde-format
 msgid "Show Memory Usage"
 msgstr "Pokaži uporabo pomnilnika"
 
-#: src/frontend/MainWin.cpp:826
+#: src/frontend/MainWin.cpp:827
 #, kde-format
 msgid "Project Explorer"
 msgstr "Raziskovalec projektov"
 
-#: src/frontend/MainWin.cpp:831
+#: src/frontend/MainWin.cpp:832
 #, kde-format
 msgid "Properties Explorer"
 msgstr "Raziskovalec lastnosti"
 
-#: src/frontend/MainWin.cpp:836
+#: src/frontend/MainWin.cpp:837
 #, kde-format
 msgid "Worksheet Preview"
 msgstr "Predogled delovnega lista"
 
-#: src/frontend/MainWin.cpp:859
+#: src/frontend/MainWin.cpp:860
 #, kde-format
 msgid "Configure CAS..."
 msgstr "Prilagodi CAS ..."
 
-#: src/frontend/MainWin.cpp:860
+#: src/frontend/MainWin.cpp:861
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
@@ -14957,118 +14993,118 @@ msgstr ""
 "Odpre nastavitve sistemov računalniške algebre za spreminjanje "
 "razpoložljivih sistemov ali omogočanje novih"
 
-#: src/frontend/MainWin.cpp:921
+#: src/frontend/MainWin.cpp:922
 #, kde-format
 msgid "Window Visibility"
 msgstr "Vidnost okna"
 
-#: src/frontend/MainWin.cpp:938
+#: src/frontend/MainWin.cpp:939
 #, kde-format
 msgid "Color Scheme"
 msgstr "Barvna shema"
 
-#: src/frontend/MainWin.cpp:996
+#: src/frontend/MainWin.cpp:997
 #, kde-format
 msgid "The current project \"%1\" has been modified. Do you want to save it?"
 msgstr "Trenutni projekt \"%1\" je bil spremenjen. Ali ga želite shraniti?"
 
-#: src/frontend/MainWin.cpp:997
+#: src/frontend/MainWin.cpp:998
 #, kde-format
 msgid "Save Project"
 msgstr "Shrani projekt"
 
-#: src/frontend/MainWin.cpp:1352
+#: src/frontend/MainWin.cpp:1353
 #, kde-format
 msgid "%1: created"
 msgstr "%1: ustvarjeno"
 
-#: src/frontend/MainWin.cpp:1378
+#: src/frontend/MainWin.cpp:1379
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Raziskovalec projektov"
 
-#: src/frontend/MainWin.cpp:1403
+#: src/frontend/MainWin.cpp:1404
 #, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "Predogled delovnega lista"
 
-#: src/frontend/MainWin.cpp:1412
+#: src/frontend/MainWin.cpp:1413
 #, kde-format
 msgctxt "@title:window"
 msgid "Content"
 msgstr "Vsebina"
 
-#: src/frontend/MainWin.cpp:1489
+#: src/frontend/MainWin.cpp:1490
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr "Projekti Origin (%1)"
 
-#: src/frontend/MainWin.cpp:1495
+#: src/frontend/MainWin.cpp:1496
 #, kde-format
 msgid "Cantor Projects (*.cws)"
 msgstr "Projekti Cantor (*.cws)"
 
-#: src/frontend/MainWin.cpp:1496
+#: src/frontend/MainWin.cpp:1497
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "Zvezki Jupyter (*.ipynb)"
 
-#: src/frontend/MainWin.cpp:1503
+#: src/frontend/MainWin.cpp:1504
 #, kde-format
 msgid "All supported files (%1)"
 msgstr "Vse podprte datoteke (%1)"
 
-#: src/frontend/MainWin.cpp:1507
+#: src/frontend/MainWin.cpp:1508
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Odpri projekt"
 
-#: src/frontend/MainWin.cpp:1524
+#: src/frontend/MainWin.cpp:1525
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "Projektna datoteka %1 je že odprta."
 
-#: src/frontend/MainWin.cpp:1524 src/frontend/MainWin.cpp:1532
-#: src/frontend/MainWin.cpp:1537
+#: src/frontend/MainWin.cpp:1525 src/frontend/MainWin.cpp:1533
+#: src/frontend/MainWin.cpp:1538
 #, kde-format
 msgid "Open Project"
 msgstr "Odpri projekt"
 
-#: src/frontend/MainWin.cpp:1532
+#: src/frontend/MainWin.cpp:1533
 #, kde-format
 msgid "The project file %1 doesn't exist."
 msgstr "Projektna datoteka %1 ne obstaja."
 
-#: src/frontend/MainWin.cpp:1537
+#: src/frontend/MainWin.cpp:1538
 #, kde-format
 msgid "Couldn't read the project file %1."
 msgstr "Ni bilo mogoče prebrati projektne datoteka %1."
 
-#: src/frontend/MainWin.cpp:1545
+#: src/frontend/MainWin.cpp:1546
 #, kde-format
 msgid "Loading %1..."
 msgstr "Nalaganje %1 ..."
 
-#: src/frontend/MainWin.cpp:1599
+#: src/frontend/MainWin.cpp:1600
 #, kde-format
 msgid "%1: opened"
 msgstr "%1: odprto"
 
-#: src/frontend/MainWin.cpp:1634
+#: src/frontend/MainWin.cpp:1635
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Projekt se je uspešno odprl (v %1 s)."
 
-#: src/frontend/MainWin.cpp:1726
+#: src/frontend/MainWin.cpp:1727
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Shrani projekt kot"
 
-#: src/frontend/MainWin.cpp:1728
+#: src/frontend/MainWin.cpp:1729
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -15077,70 +15113,70 @@ msgstr ""
 "Projekti LabPlot (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 
-#: src/frontend/MainWin.cpp:1755
+#: src/frontend/MainWin.cpp:1756
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "Začasne datoteke za pisanje ni bilo mogoče odpreti."
 
-#: src/frontend/MainWin.cpp:1835
+#: src/frontend/MainWin.cpp:1836
 #, kde-format
 msgid "Project saved"
 msgstr "Projekt shranjen"
 
-#: src/frontend/MainWin.cpp:1851
+#: src/frontend/MainWin.cpp:1852
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "Datoteke »%1« ni bilo mogoče shraniti."
 
-#: src/frontend/MainWin.cpp:1856
+#: src/frontend/MainWin.cpp:1857
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Datoteke »%1« ni bilo mogoče odpreti za pisanje."
 
-#: src/frontend/MainWin.cpp:1906
+#: src/frontend/MainWin.cpp:1907
 #, kde-format
 msgid "Changed"
 msgstr "Spremenjeno"
 
-#: src/frontend/MainWin.cpp:1921 src/frontend/MainWin.cpp:1933
+#: src/frontend/MainWin.cpp:1922 src/frontend/MainWin.cpp:1934
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Priprava tiskanja %1"
 
-#: src/frontend/MainWin.cpp:1923 src/frontend/MainWin.cpp:1935
+#: src/frontend/MainWin.cpp:1924 src/frontend/MainWin.cpp:1936
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 natisnjeno"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/MainWin.cpp:2455
+#: src/frontend/MainWin.cpp:2456
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1431
-#: src/frontend/worksheet/WorksheetView.cpp:361
+#: src/frontend/worksheet/WorksheetView.cpp:362
 #, kde-format
 msgid "Cursor"
 msgstr "Kazalec"
 
-#: src/frontend/MainWin.cpp:2491
+#: src/frontend/MainWin.cpp:2492
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "Pri souporabi projekta je prišlo do težave: %1"
 
-#: src/frontend/MainWin.cpp:2495
+#: src/frontend/MainWin.cpp:2496
 #, kde-format
 msgid "Project shared successfully"
 msgstr "Projekt je uspešno deljen"
 
-#: src/frontend/MainWin.cpp:2498
+#: src/frontend/MainWin.cpp:2499
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "Skupni projekt najdete na: <a href=\"%1\">%1</a>"
 
-#: src/frontend/MainWin.cpp:2688
+#: src/frontend/MainWin.cpp:2689
 #, kde-format
 msgid "Running Kaggle CLI tool failed"
 msgstr "Poganjanje orodja Kaggle CLI ni uspelo"
 
-#: src/frontend/MainWin.cpp:2689
+#: src/frontend/MainWin.cpp:2690
 #, kde-format
 msgid ""
 "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
@@ -15149,32 +15185,32 @@ msgstr ""
 "Sledite navodilom v <a href=\"https://www.kaggle.com/docs/api\">\"Kako "
 "uporabljati Kaggle - How to Use Kaggle\"</a> za nastavitev orodja Kaggle CLI."
 
-#: src/frontend/MainWin.cpp:2752
+#: src/frontend/MainWin.cpp:2753
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 izvoženo"
 
-#: src/frontend/MainWin.cpp:2759
+#: src/frontend/MainWin.cpp:2760
 #, kde-format
 msgid "FITS files saved"
 msgstr "Datoteke FITS shranjene"
 
-#: src/frontend/MainWin.cpp:2771
+#: src/frontend/MainWin.cpp:2772
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "Odjemalec MQTT%1"
 
-#: src/frontend/MainWin.cpp:2789
+#: src/frontend/MainWin.cpp:2790
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "S tem gostiteljem že obstaja MQTTClient!"
 
-#: src/frontend/MainWin.cpp:2793
+#: src/frontend/MainWin.cpp:2794
 #, kde-format
 msgid "Live data source%1"
 msgstr "Vir podatkov v živo%1"
 
-#: src/frontend/MainWin.cpp:2838
+#: src/frontend/MainWin.cpp:2839
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Ustvari novo %1 zvezek"
@@ -15210,7 +15246,7 @@ msgstr "&Generiraj"
 msgid "Generate function values"
 msgstr "Tvori vrednosti funkcij"
 
-#: src/frontend/matrix/MatrixFunctionDialog.cpp:196
+#: src/frontend/matrix/MatrixFunctionDialog.cpp:197
 #, kde-format
 msgid "%1: fill matrix with function values"
 msgstr "%1: izpolnite matriko z vrednostmi funkcij"
@@ -15242,7 +15278,7 @@ msgstr "Počisti Izbor"
 #: src/frontend/matrix/MatrixView.cpp:125
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:317
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:288
-#: src/frontend/worksheet/WorksheetView.cpp:134
+#: src/frontend/worksheet/WorksheetView.cpp:135
 #, kde-format
 msgid "Select All"
 msgstr "Izberi vse"
@@ -15382,7 +15418,7 @@ msgid "Header Format"
 msgstr "Oblika glave"
 
 #: src/frontend/matrix/MatrixView.cpp:295
-#: src/frontend/worksheet/WorksheetView.cpp:446
+#: src/frontend/worksheet/WorksheetView.cpp:447
 #, kde-format
 msgid "Zoom"
 msgstr "Povečava"
@@ -15748,7 +15784,7 @@ msgid "Do you really want to delete %1?"
 msgstr "Ali res želite izbrisati %1?"
 
 #: src/frontend/ProjectExplorer.cpp:919
-#: src/frontend/worksheet/WorksheetView.cpp:1433
+#: src/frontend/worksheet/WorksheetView.cpp:1434
 #, kde-format
 msgid "Delete selected object"
 msgid_plural "Delete selected objects"
@@ -16581,7 +16617,7 @@ msgid "Export matrix"
 msgstr "Izvozi matriko"
 
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:334
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:208
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:210
 #, kde-format
 msgid "The file already exists. Do you really want to overwrite it?"
 msgstr "Datoteka že obstaja. Ali jo res želite prepisati?"
@@ -16730,7 +16766,6 @@ msgstr ""
 "spremenljivih stolpcev"
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:143
-#: src/frontend/widgets/TreeViewComboBox.cpp:358
 #, kde-format
 msgid ""
 "The column \"%1\"\n"
@@ -20262,7 +20297,7 @@ msgstr "Barva pisave:"
 #. i18n: ectx: property (text), widget (QLabel, lGrid)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1620
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:441
-#: src/frontend/worksheet/WorksheetView.cpp:473
+#: src/frontend/worksheet/WorksheetView.cpp:474
 #, kde-format
 msgid "Grid"
 msgstr "Mreža"
@@ -20696,7 +20731,7 @@ msgstr "Razširi:"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:553
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:620
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:265
-#: src/frontend/worksheet/WorksheetView.cpp:465
+#: src/frontend/worksheet/WorksheetView.cpp:466
 #, kde-format
 msgid "Layout"
 msgstr "Postavitev"
@@ -24298,6 +24333,16 @@ msgstr "Vnesena neveljavna vrednost. Veljavna vrednost: %1"
 msgid "Search/Filter text"
 msgstr "Besedilo za iskanje/filtriranje"
 
+#: src/frontend/widgets/TreeViewComboBox.cpp:358
+#, kde-format
+msgid ""
+"The aspect \"%1\"\n"
+"is not available anymore. It will be automatically used once it is created "
+"again."
+msgstr ""
+"Vidik \"%1\"\n"
+"ni več na voljo. Samodejno se bo uporabljal, ko bo znova ustvarjen."
+
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:53
 #, kde-format
 msgid "Close this dialog without exporting."
@@ -24308,124 +24353,124 @@ msgstr "Zaprite to pogovorno okno brez izvoza."
 msgid "Portable Data Format (PDF)"
 msgstr "PDF (Portable Data Format)"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:64
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:65
 #, kde-format
 msgid "Scalable Vector Graphics (SVG)"
 msgstr "SVG (Scalable Vector Graphics)"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:68
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:70
 #, kde-format
 msgid "Portable Network Graphics (PNG)"
 msgstr "PNG (Portable Network Graphics)"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:71
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:73
 #, kde-format
 msgid "Joint Photographic Experts Group (JPG)"
 msgstr "JPG (Joint Photographic Experts Group)"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:73
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:75
 #, kde-format
 msgid "Windows Bitmap (BMP)"
 msgstr "BMP (Windows Bitmap)"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:75
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:77
 #, kde-format
 msgid "Portable Pixmap (PPM)"
 msgstr "PPM (Portable Pixmap)"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:77
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:79
 #, kde-format
 msgid "X11 Bitmap (XBM)"
 msgstr "Bitna slika X11 (XBM)"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:78
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:80
 #, kde-format
 msgid "X11 Bitmap (XPM)"
 msgstr "Bitna slika X11 (XPM)"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:80
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:82
 #, kde-format
 msgid "File"
 msgstr "Datoteka"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:81
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
 #, kde-format
 msgid "Clipboard"
 msgstr "Odložišče"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:85
 #, kde-format
 msgid "Object's Bounding Box"
 msgstr "Polje za omejevanje predmeta"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:84
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:86
 #, kde-format
 msgid "Current Selection"
 msgstr "Trenutni izbor"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:85
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:87
 #, kde-format
 msgid "Complete Worksheet"
 msgstr "Celoten delovni list"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:88
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:90
 #, kde-format
 msgctxt "%1 is the value of DPI of the current screen"
 msgid "%1 (desktop)"
 msgstr "%1 (namizje)"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:103
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:105
 #, kde-format
 msgctxt "@title:window"
 msgid "Export Worksheet"
 msgstr "Izvozi delovni list"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:255
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:257
 #, kde-format
 msgid "Portable Data Format (*.pdf *.PDF)"
 msgstr "PDF - Portable Data Format (*.pdf *.PDF)"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:258
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:260
 #, kde-format
 msgid "Scalable Vector Graphics (*.svg *.SVG)"
 msgstr "SVG - Scalable Vector Graphics (*.svg *.SVG)"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:261
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:263
 #, kde-format
 msgid "Portable Network Graphics (*.png *.PNG)"
 msgstr "PNG - Portable Network Graphics (*.png *.PNG)"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:264
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:266
 #, kde-format
 msgid "Joint Photographic Experts Group (*.jpg *.jpeg *.JPG *.JPEG)"
 msgstr "JPEG - Joint Photographic Experts Group (*.jpg *.jpeg *.JPG *.JPEG)"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:267
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:269
 #, kde-format
 msgid "Windows Bitmap (*.bmp *.BMP)"
 msgstr "BMP - Windows Bitmap (*.bmp *.BMP)"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:270
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:272
 #, kde-format
 msgid "Portable Pixmap (*.ppm *.PPM)"
 msgstr "PPM - Portable Pixmap (*.ppm *.PPM)"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:273
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:275
 #, kde-format
 msgid "X11 Bitmap (*.xbm *.XBM)"
 msgstr "Bitna slika X11 (*.xbm *. XBM)"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:276
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:278
 #, kde-format
 msgid "X11 Bitmap (*.xpm *.XPM)"
 msgstr "Bitna slika X11 (*.xpm *. XPM)"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:355
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:357
 #, kde-format
 msgid "Export to file and close the dialog."
 msgstr "Izvozi v datoteko in zapre pogovorno okno."
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:358
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:360
 #, kde-format
 msgid "Export to clipboard and close the dialog."
 msgstr "Izvozi v odložišče in zapre pogovorno okno."
@@ -24461,26 +24506,26 @@ msgstr "Zapri predstavitev"
 msgid "Pin the navigation panel"
 msgstr "Pripni krmilno ploščo"
 
-#: src/frontend/worksheet/WorksheetView.cpp:167
+#: src/frontend/worksheet/WorksheetView.cpp:168
 #, kde-format
 msgctxt "Zoom"
 msgid "No fit"
 msgstr "Ni prileganja"
 
-#: src/frontend/worksheet/WorksheetView.cpp:177
+#: src/frontend/worksheet/WorksheetView.cpp:178
 #, kde-format
 msgctxt "Zoom"
 msgid "Fit to Selection"
 msgstr "Prilagodi izboru"
 
-#: src/frontend/worksheet/WorksheetView.cpp:180
+#: src/frontend/worksheet/WorksheetView.cpp:181
 #, kde-format
 msgctxt "Zoom"
 msgid "Fit"
 msgstr "Prilagodi"
 
-#: src/frontend/worksheet/WorksheetView.cpp:185
-#: src/frontend/worksheet/WorksheetView.cpp:336
+#: src/frontend/worksheet/WorksheetView.cpp:186
+#: src/frontend/worksheet/WorksheetView.cpp:337
 #, kde-format
 msgid "Select and Edit"
 msgstr "Izbiranje in urejanje"
@@ -24488,72 +24533,72 @@ msgstr "Izbiranje in urejanje"
 #. i18n("Selection"), mouseModeActionGroup);
 #. selectionModeAction->setCheckable(true);
 #. "Add new" related actions
-#: src/frontend/worksheet/WorksheetView.cpp:216
+#: src/frontend/worksheet/WorksheetView.cpp:217
 #, kde-format
 msgid "Four Axes"
 msgstr "Štiri osi"
 
-#: src/frontend/worksheet/WorksheetView.cpp:217
+#: src/frontend/worksheet/WorksheetView.cpp:218
 #, kde-format
 msgid "Two Axes"
 msgstr "Dve osi"
 
-#: src/frontend/worksheet/WorksheetView.cpp:218
+#: src/frontend/worksheet/WorksheetView.cpp:219
 #, kde-format
 msgid "Two Axes, Centered"
 msgstr "Dve osi, centrirani"
 
-#: src/frontend/worksheet/WorksheetView.cpp:220
+#: src/frontend/worksheet/WorksheetView.cpp:221
 #, kde-format
 msgid "Two Axes, Crossing at Origin"
 msgstr "Dve osi, križani v izhodišču"
 
-#: src/frontend/worksheet/WorksheetView.cpp:221
+#: src/frontend/worksheet/WorksheetView.cpp:222
 #, kde-format
 msgid "Load from Template"
 msgstr "Naloži iz predloge"
 
-#: src/frontend/worksheet/WorksheetView.cpp:244
+#: src/frontend/worksheet/WorksheetView.cpp:245
 #, kde-format
 msgid "No Grid"
 msgstr "Brez mreže"
 
-#: src/frontend/worksheet/WorksheetView.cpp:249
+#: src/frontend/worksheet/WorksheetView.cpp:250
 #, kde-format
 msgid "Dense Line Grid"
 msgstr "Gosta mreža črt"
 
-#: src/frontend/worksheet/WorksheetView.cpp:252
+#: src/frontend/worksheet/WorksheetView.cpp:253
 #, kde-format
 msgid "Sparse Line Grid"
 msgstr "Redka mreža črt"
 
-#: src/frontend/worksheet/WorksheetView.cpp:255
+#: src/frontend/worksheet/WorksheetView.cpp:256
 #, kde-format
 msgid "Dense Dot Grid"
 msgstr "Gosta mreža pik"
 
-#: src/frontend/worksheet/WorksheetView.cpp:258
+#: src/frontend/worksheet/WorksheetView.cpp:259
 #, kde-format
 msgid "Sparse Dot Grid"
 msgstr "Redka mreža pik"
 
-#: src/frontend/worksheet/WorksheetView.cpp:261
+#: src/frontend/worksheet/WorksheetView.cpp:262
 #, kde-format
 msgid "Custom Grid"
 msgstr "Mreža po meri"
 
-#: src/frontend/worksheet/WorksheetView.cpp:264
+#: src/frontend/worksheet/WorksheetView.cpp:265
 #, kde-format
 msgid "Snap to Grid"
 msgstr "Pripni na mrežo"
 
-#: src/frontend/worksheet/WorksheetView.cpp:284
+#: src/frontend/worksheet/WorksheetView.cpp:285
 #, kde-format
 msgid "Interactive Plots"
 msgstr "Interaktivni izrisi"
 
-#: src/frontend/worksheet/WorksheetView.cpp:285
+#: src/frontend/worksheet/WorksheetView.cpp:286
 #, kde-format
 msgid ""
 "If not activated, plots on the worksheet don't react on drag and mouse wheel "
@@ -24562,129 +24607,129 @@ msgstr ""
 "Če ni aktivirano, se izris na delovnem listu ne odziva na dogodke ob "
 "vlečenju in dogodkih koleščka miške."
 
-#: src/frontend/worksheet/WorksheetView.cpp:302
-#: src/frontend/worksheet/WorksheetView.cpp:316
+#: src/frontend/worksheet/WorksheetView.cpp:303
+#: src/frontend/worksheet/WorksheetView.cpp:317
 #, kde-format
 msgid "Selected Plot Areas"
 msgstr "Izbrana področja izrisov"
 
-#: src/frontend/worksheet/WorksheetView.cpp:304
-#: src/frontend/worksheet/WorksheetView.cpp:318
+#: src/frontend/worksheet/WorksheetView.cpp:305
+#: src/frontend/worksheet/WorksheetView.cpp:319
 #, kde-format
 msgid "All Plot Areas"
 msgstr "Vsa območja izrisov"
 
-#: src/frontend/worksheet/WorksheetView.cpp:306
+#: src/frontend/worksheet/WorksheetView.cpp:307
 #, kde-format
 msgid "All Plot Areas X"
 msgstr "Vsa področja izrisov X"
 
-#: src/frontend/worksheet/WorksheetView.cpp:308
+#: src/frontend/worksheet/WorksheetView.cpp:309
 #, kde-format
 msgid "All Plot Areas Y"
 msgstr "Vsa področja izrisov Y"
 
-#: src/frontend/worksheet/WorksheetView.cpp:341
+#: src/frontend/worksheet/WorksheetView.cpp:342
 #, kde-format
 msgid "Crosshair"
 msgstr "Križec"
 
-#: src/frontend/worksheet/WorksheetView.cpp:346
+#: src/frontend/worksheet/WorksheetView.cpp:347
 #, kde-format
 msgid "Select Region and Zoom In"
 msgstr "Izberite območje in ga približajte"
 
-#: src/frontend/worksheet/WorksheetView.cpp:351
+#: src/frontend/worksheet/WorksheetView.cpp:352
 #, kde-format
 msgid "Select X-Region and Zoom In"
 msgstr "Izberite x-področje in ga približajte"
 
-#: src/frontend/worksheet/WorksheetView.cpp:356
+#: src/frontend/worksheet/WorksheetView.cpp:357
 #, kde-format
 msgid "Select Y-Region and Zoom In"
 msgstr "Izberite x-področje in ga približajte"
 
-#: src/frontend/worksheet/WorksheetView.cpp:368
+#: src/frontend/worksheet/WorksheetView.cpp:369
 #, kde-format
 msgid "Auto Scale"
 msgstr "Samodejno merilo"
 
-#: src/frontend/worksheet/WorksheetView.cpp:372
+#: src/frontend/worksheet/WorksheetView.cpp:373
 #, kde-format
 msgid "Auto Scale X"
 msgstr "Samodejno merilo X"
 
-#: src/frontend/worksheet/WorksheetView.cpp:376
+#: src/frontend/worksheet/WorksheetView.cpp:377
 #, kde-format
 msgid "Auto Scale Y"
 msgstr "Samodejno merilo Y"
 
-#: src/frontend/worksheet/WorksheetView.cpp:388
+#: src/frontend/worksheet/WorksheetView.cpp:389
 #, kde-format
 msgid "Zoom In X"
 msgstr "Približaj X"
 
-#: src/frontend/worksheet/WorksheetView.cpp:392
+#: src/frontend/worksheet/WorksheetView.cpp:393
 #, kde-format
 msgid "Zoom Out X"
 msgstr "Oddalji X"
 
-#: src/frontend/worksheet/WorksheetView.cpp:396
+#: src/frontend/worksheet/WorksheetView.cpp:397
 #, kde-format
 msgid "Zoom In Y"
 msgstr "Približaj Y"
 
-#: src/frontend/worksheet/WorksheetView.cpp:400
+#: src/frontend/worksheet/WorksheetView.cpp:401
 #, kde-format
 msgid "Zoom Out Y"
 msgstr "Oddalji Y"
 
-#: src/frontend/worksheet/WorksheetView.cpp:404
+#: src/frontend/worksheet/WorksheetView.cpp:405
 #, kde-format
 msgid "Shift Left X"
 msgstr "Zamakni X levo"
 
-#: src/frontend/worksheet/WorksheetView.cpp:406
+#: src/frontend/worksheet/WorksheetView.cpp:407
 #, kde-format
 msgid "Shift Right X"
 msgstr "Zamakni X desno"
 
-#: src/frontend/worksheet/WorksheetView.cpp:408
+#: src/frontend/worksheet/WorksheetView.cpp:409
 #, kde-format
 msgid "Shift Up Y"
 msgstr "Zamakni Y navzgor"
 
-#: src/frontend/worksheet/WorksheetView.cpp:410
+#: src/frontend/worksheet/WorksheetView.cpp:411
 #, kde-format
 msgid "Shift Down Y"
 msgstr "Zamakni Y navzdol"
 
-#: src/frontend/worksheet/WorksheetView.cpp:424
-#: src/frontend/worksheet/WorksheetView.cpp:488
-#: src/frontend/worksheet/WorksheetView.cpp:1294
-#: src/frontend/worksheet/WorksheetView.cpp:1301
-#: src/frontend/worksheet/WorksheetView.cpp:1308
-#: src/frontend/worksheet/WorksheetView.cpp:1315
+#: src/frontend/worksheet/WorksheetView.cpp:425
+#: src/frontend/worksheet/WorksheetView.cpp:489
+#: src/frontend/worksheet/WorksheetView.cpp:1295
+#: src/frontend/worksheet/WorksheetView.cpp:1302
+#: src/frontend/worksheet/WorksheetView.cpp:1309
+#: src/frontend/worksheet/WorksheetView.cpp:1316
 #, kde-format
 msgid "Plot Area"
 msgstr "Območje izrisa"
 
-#: src/frontend/worksheet/WorksheetView.cpp:501
+#: src/frontend/worksheet/WorksheetView.cpp:502
 #, kde-format
 msgid "Zoom/Navigate"
 msgstr "Povečava/krmarjenje"
 
-#: src/frontend/worksheet/WorksheetView.cpp:522
+#: src/frontend/worksheet/WorksheetView.cpp:523
 #, kde-format
 msgid "Apply Actions to"
 msgstr "Uveljavi dejanja na"
 
-#: src/frontend/worksheet/WorksheetView.cpp:529
+#: src/frontend/worksheet/WorksheetView.cpp:530
 #, kde-format
 msgid "Apply Cursor to"
 msgstr "Uveljavi kazalec na"
 
-#: src/frontend/worksheet/WorksheetView.cpp:1432
+#: src/frontend/worksheet/WorksheetView.cpp:1433
 #, kde-format
 msgid "Do you really want to delete the selected object?"
 msgid_plural "Do you really want to delete the selected %1 objects?"
@@ -24693,7 +24738,7 @@ msgstr[1] "Ali resnično želite izbrisati izbrana %1 predmeta?"
 msgstr[2] "Ali resnično želite izbrisati izbrane %1 predmete?"
 msgstr[3] "Ali resnično želite izbrisati izbranih %1 predmetov?"
 
-#: src/frontend/worksheet/WorksheetView.cpp:1440
+#: src/frontend/worksheet/WorksheetView.cpp:1441
 #, kde-format
 msgid "%1: Remove selected worksheet elements."
 msgstr "%1: odstranite izbrane elemente delovnega lista."

@@ -331,11 +331,11 @@ void TemplateHandler::saveMenu() {
  * Is called when the current properties are going to be saved as a new template.
  * Emits \c saveConfigRequested, the receiver of the signal has to config.sync().
  */
-void TemplateHandler::saveNewSelected(const QString& filename) {
-	QString path = m_dirName + m_className + QLatin1Char('/') + filename;
+void TemplateHandler::saveNewSelected(const QString& fileName) {
+	QString path = m_dirName + m_className + QLatin1Char('/') + fileName;
 	KConfig config(path, KConfig::SimpleConfig);
 	Q_EMIT saveConfigRequested(config);
-	Q_EMIT info(i18n("New template \"%1\" was saved.", filename));
+	Q_EMIT info(i18n("New template \"%1\" was saved.", fileName));
 
 	// we have at least one saved template now -> enable the load button
 	m_tbLoad->setEnabled(true);

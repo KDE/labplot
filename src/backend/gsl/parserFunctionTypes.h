@@ -14,7 +14,7 @@
 #include <memory>
 #include <string_view>
 
-namespace Parser {
+namespace Parsing {
 
 struct Payload;
 
@@ -26,10 +26,12 @@ using func_t3 = std::function<double(double, double, double)>;
 using func_t4 = std::function<double(double, double, double, double)>;
 using func_t5 = std::function<double(double, double, double, double, double)>;
 using func_tPayload = std::function<double(const std::weak_ptr<Payload>)>;
-using func_t1Payload = std::function<double(const std::string_view&, const std::weak_ptr<Payload>)>;
-using func_t2Payload = std::function<double(double, const std::string_view&, const std::weak_ptr<Payload>)>;
-using func_t3Payload = std::function<double(double, double, const std::string_view&, const std::weak_ptr<Payload>)>;
-using func_t4Payload = std::function<double(double, double, double, const std::string_view&, const std::weak_ptr<Payload>)>;
-} // namespace Parser
+using func_tValuePayload = std::function<double(double, const std::weak_ptr<Payload>)>;
+using func_t2ValuePayload = std::function<double(double, double, const std::weak_ptr<Payload>)>;
+using func_tVariablePayload = std::function<double(const std::string_view&, const std::weak_ptr<Payload>)>;
+using func_tValueVariablePayload = std::function<double(double, const std::string_view&, const std::weak_ptr<Payload>)>;
+using func_t2ValueVariablePayload = std::function<double(double, double, const std::string_view&, const std::weak_ptr<Payload>)>;
+using func_t3ValueVariablePayload = std::function<double(double, double, double, const std::string_view&, const std::weak_ptr<Payload>)>;
+} // namespace Parsing
 
 #endif /*PARSERFUNCTIONTYPES_H*/

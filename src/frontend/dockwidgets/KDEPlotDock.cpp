@@ -121,7 +121,7 @@ void KDEPlotDock::setPlots(QList<KDEPlot*> list) {
 	// if there are more then one curve in the list, disable the content in the tab "general"
 	if (m_plots.size() == 1) {
 		cbDataColumn->setEnabled(true);
-		cbDataColumn->setColumn(m_plot->dataColumn(), m_plot->dataColumnPath());
+		cbDataColumn->setAspect(m_plot->dataColumn(), m_plot->dataColumnPath());
 		ui.leName->setText(m_plot->name());
 		ui.teComment->setText(m_plot->comment());
 	} else {
@@ -264,7 +264,7 @@ void KDEPlotDock::rugOffsetChanged(double value) {
 // General-Tab
 void KDEPlotDock::plotDataColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbDataColumn->setColumn(column, m_plot->dataColumnPath());
+	cbDataColumn->setAspect(column, m_plot->dataColumnPath());
 }
 
 void KDEPlotDock::plotKernelTypeChanged(nsl_kernel_type type) {
@@ -307,7 +307,7 @@ void KDEPlotDock::plotRugOffsetChanged(double value) {
 //*************************************************************
 void KDEPlotDock::load() {
 	// general
-	cbDataColumn->setColumn(m_plot->dataColumn(), m_plot->dataColumnPath());
+	cbDataColumn->setAspect(m_plot->dataColumn(), m_plot->dataColumnPath());
 
 	int index = ui.cbKernelType->findData(static_cast<int>(m_plot->kernelType()));
 	ui.cbKernelType->setCurrentIndex(index);

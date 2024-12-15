@@ -402,6 +402,7 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/gsl/ExpressionParser.cpp
     ${BACKEND_DIR}/gsl/constants.cpp
     ${BACKEND_DIR}/gsl/functions.cpp
+    ${BACKEND_DIR}/gsl/Parser.cpp
     ${BACKEND_DIR}/lib/Range.h
     ${BACKEND_DIR}/lib/Debug.cpp
     ${BACKEND_DIR}/lib/XmlStreamReader.cpp
@@ -602,7 +603,6 @@ target_link_libraries(labplotbackendlib
     ads::qt${QT_VERSION_MAJOR}advanceddocking
 )
 target_link_libraries(labplotlib
-    Qt${QT_MAJOR_VERSION}::Svg
     Qt${QT_MAJOR_VERSION}::Sql
     Qt${QT_MAJOR_VERSION}::PrintSupport    # QPrinter
 #     Qt${QT_MAJOR_VERSION}::Qml
@@ -625,6 +625,9 @@ target_link_libraries(labplotlib
 if(Qt${QT_MAJOR_VERSION}SerialPort_FOUND)
     target_link_libraries(labplotbackendlib Qt${QT_MAJOR_VERSION}::SerialPort)
     target_link_libraries(labplotlib Qt${QT_MAJOR_VERSION}::SerialPort)
+endif()
+if(Qt${QT_MAJOR_VERSION}Svg_FOUND)
+    target_link_libraries(labplotlib Qt${QT_MAJOR_VERSION}::Svg)
 endif()
 if(Qt${QT_MAJOR_VERSION}Mqtt_FOUND)
     target_link_libraries(labplotbackendlib Qt${QT_MAJOR_VERSION}::Mqtt)
@@ -779,8 +782,6 @@ endif()
 install(TARGETS labplot ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES ${FRONTEND_DIR}/splash.png ${FRONTEND_DIR}/labplot.ico ${CMAKE_CURRENT_SOURCE_DIR}/../icons/application-x-labplot.ico DESTINATION ${KDE_INSTALL_DATADIR}/${PROJECT_NAME})
 install(FILES org.kde.labplot.desktop DESTINATION ${KDE_INSTALL_APPDIR})
-# Flatpak still uses this one
-install(FILES org.kde.labplot2.desktop DESTINATION ${KDE_INSTALL_APPDIR})
 install(FILES labplot.xml DESTINATION ${KDE_INSTALL_MIMEDIR})
 # if(${ECM_VERSION} VERSION_GREATER "5.58.0")
 #     install(FILES labplot2_themes.knsrc DESTINATION ${KDE_INSTALL_KNSRCDIR})

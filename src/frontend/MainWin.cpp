@@ -104,10 +104,11 @@
 
 \ingroup frontend
 */
-MainWin::MainWin(QWidget* parent, const QString& filename)
+MainWin::MainWin(QWidget* parent, const QString& fileName)
 	: KXmlGuiWindow(parent)
 	, m_schemeManager(new KColorSchemeManager(this)) {
-	initGUI(filename);
+	DEBUG(Q_FUNC_INFO << ", file name = " << fileName.toStdString())
+	initGUI(fileName);
 	setAcceptDrops(true);
 
 #ifdef HAVE_KUSERFEEDBACK
@@ -732,22 +733,22 @@ void MainWin::openProject() {
 	}
 }
 
-void MainWin::openProject(const QString& filename) {
-	if (m_project && filename == m_project->fileName()) {
-		KMessageBox::information(this, i18n("The project file %1 is already opened.", filename), i18n("Open Project"));
+void MainWin::openProject(const QString& fileName) {
+	if (m_project && fileName == m_project->fileName()) {
+		KMessageBox::information(this, i18n("The project file %1 is already opened.", fileName), i18n("Open Project"));
 		return;
 	}
 
 	// check whether the file can be opened for reading at all before closing the current project
 	// and creating a new project and trying to load
-	QFile file(filename);
+	QFile file(fileName);
 	if (!file.exists()) {
-		KMessageBox::error(this, i18n("The project file %1 doesn't exist.", filename), i18n("Open Project"));
+		KMessageBox::error(this, i18n("The project file %1 doesn't exist.", fileName), i18n("Open Project"));
 		return;
 	}
 
 	if (!file.open(QIODevice::ReadOnly)) {
-		KMessageBox::error(this, i18n("Couldn't read the project file %1.", filename), i18n("Open Project"));
+		KMessageBox::error(this, i18n("Couldn't read the project file %1.", fileName), i18n("Open Project"));
 		return;
 	} else
 		file.close();
@@ -755,21 +756,21 @@ void MainWin::openProject(const QString& filename) {
 	if (!newProject(false))
 		return;
 
-	statusBar()->showMessage(i18n("Loading %1...", filename));
+	statusBar()->showMessage(i18n("Loading %1...", fileName));
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
-	m_project->setFileName(filename);
+	m_project->setFileName(fileName);
 	QElapsedTimer timer;
 	timer.start();
 	bool rc = false;
-	if (Project::isLabPlotProject(filename)) {
+	if (Project::isLabPlotProject(fileName)) {
 		WAIT_CURSOR;
-		rc = m_project->load(filename);
+		rc = m_project->load(fileName);
 		RESET_CURSOR;
 	}
 #ifdef HAVE_LIBORIGIN
-	else if (OriginProjectParser::isOriginProject(filename)) {
+	else if (OriginProjectParser::isOriginProject(fileName)) {
 		OriginProjectParser parser;
-		parser.setProjectFileName(filename);
+		parser.setProjectFileName(fileName);
 
 		// check if graphs have multiple layer
 		bool hasUnusedObjects, hasMultiLayerGraphs;
@@ -794,9 +795,9 @@ void MainWin::openProject(const QString& filename) {
 #endif
 
 #ifdef HAVE_CANTOR_LIBS
-	else if (filename.endsWith(QLatin1String(".cws"), Qt::CaseInsensitive) || filename.endsWith(QLatin1String(".ipynb"), Qt::CaseInsensitive)) {
+	else if (fileName.endsWith(QLatin1String(".cws"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String(".ipynb"), Qt::CaseInsensitive)) {
 		WAIT_CURSOR;
-		rc = m_project->loadNotebook(filename);
+		rc = m_project->loadNotebook(fileName);
 		RESET_CURSOR;
 	}
 #endif
@@ -810,7 +811,7 @@ void MainWin::openProject(const QString& filename) {
 
 	m_project->undoStack()->clear();
 	m_undoViewEmptyLabel = i18n("%1: opened", m_project->name());
-	m_actionsManager->m_recentProjectsAction->addUrl(QUrl(filename));
+	m_actionsManager->m_recentProjectsAction->addUrl(QUrl(fileName));
 
 	m_actionsManager->updateGUIOnProjectChanges();
 	m_actionsManager->updateGUI(); // there are most probably worksheets or spreadsheets in the open project -> update the GUI
@@ -847,7 +848,7 @@ void MainWin::openProject(const QString& filename) {
 	statusBar()->showMessage(i18n("Project successfully opened (in %1 seconds).", (float)timer.elapsed() / 1000));
 
 	KConfigGroup group = Settings::group(QStringLiteral("MainWin"));
-	group.writeEntry("LastOpenProject", filename);
+	group.writeEntry("LastOpenProject", fileName);
 
 	if (m_autoSaveActive)
 		m_autoSaveTimer.start();
@@ -939,7 +940,7 @@ bool MainWin::saveProjectAs() {
 												i18nc("@title:window", "Save Project As"),
 												dir + m_project->fileName(),
 												i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"));
-	// The "Automatically select filename extension (.lml)" option does not change anything
+	// The "Automatically select file name extension (.lml)" option does not change anything
 
 	if (path.isEmpty()) // "Cancel" was clicked
 		return false;
@@ -1755,10 +1756,10 @@ void MainWin::historyDialog() {
 }
 
 /*!
-  Opens the dialog to import data to the selected workbook, spreadsheet or matrix
+  Opens the dialog to import data to the selected container
 */
 void MainWin::importFileDialog(const QString& fileName) {
-	DEBUG(Q_FUNC_INFO);
+	DEBUG(Q_FUNC_INFO << ", file name = " << fileName.toStdString());
 	auto* dlg = new ImportFileDialog(this, false, fileName);
 
 	// select existing container

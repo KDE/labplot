@@ -29,7 +29,7 @@
 <refmeta>
 <refentrytitle
 ><command
->labplot2</command
+>labplot</command
 ></refentrytitle>
 <manvolnum
 >1</manvolnum>
@@ -37,7 +37,7 @@
 
 <refnamediv>
 <refname
->labplot2</refname>
+>labplot</refname>
 <refpurpose
 >LabPlot ist eine Anwendung zur interaktiven Erstellung von Grafiken und Analyse wissenschaftlicher Daten.</refpurpose>
 </refnamediv>
@@ -45,7 +45,7 @@
 <refsynopsisdiv id='synopsis'>
 <cmdsynopsis
 ><command
->labplot2</command
+>labplot</command
 > <arg choice="opt"
 ><replaceable
 >LabPlot-Optionen</replaceable
@@ -67,7 +67,7 @@
 >Zu den Funktionen gehören das Plotten von 2D- und 3D-Daten und Funktionen, die einfache Bearbeitung von Plots, Analyse von Daten und Funktionen, Unterstützung für verschiedene Arbeitsblätter mit MDI- und LabPlot-Projektdateien. </para>
 <para
 >Beachten Sie, dass LabPlot mit dem Befehl <command
->labplot2</command
+>labplot</command
 > gestartet wird. </para>
 
 </refsect1>
@@ -78,7 +78,7 @@
 <para
 >Eine vollständige Zusammenstellung der allgemeinen Optionen wird angezeigt, wenn Sie <userinput
 ><command
->labplot2</command
+>labplot</command
 > <parameter
 >--help</parameter
 ></userinput
@@ -142,14 +142,14 @@
 <simplelist>
 <member
 >Die vollständige Dokumentation finden Sie im &khelpcenter-de;.Sie können auch die &URL; <ulink url="help:/kate"
->help:/labplot2</ulink
+>help:/labplot</ulink
 > verwenden (geben Sie entweder diese <acronym
 >URL</acronym
 > in &konqueror; ein, oder starten Sie den Befehl <userinput
 ><command
 >khelpcenter</command
 > <parameter
->help:/labplot2</parameter
+>help:/labplot</parameter
 ></userinput
 >).</member>
 <member
@@ -167,7 +167,7 @@
 ><title
 >Autoren</title>
 <para
->LabPlot2 wurde geschrieben von </para>
+>LabPlot wurde geschrieben von </para>
 <simplelist>
     <member
 >Stefan Gerlach &lt;stefan.gerlach@uni.kn&gt;,</member>

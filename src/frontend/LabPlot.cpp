@@ -111,24 +111,24 @@ int main(int argc, char* argv[]) {
 	aboutData.processCommandLine(&parser);
 
 	const auto args = parser.positionalArguments();
-	QString filename;
+	QString fileName;
 	if (args.count() > 0)
-		filename = args[0];
+		fileName = args[0];
 
-	if (!filename.isEmpty()) {
+	if (!fileName.isEmpty()) {
 		// determine the absolute file path in order to properly save it in MainWin in "Recent Files"
 		QDir dir;
-		filename = dir.absoluteFilePath(filename);
+		fileName = dir.absoluteFilePath(fileName);
 
-		if (!QFile::exists(filename)) {
+		if (!QFile::exists(fileName)) {
 			if (KMessageBox::warningContinueCancel(
 					nullptr,
-					i18n(R"(Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' to exit the application.)", filename),
+					i18n(R"(Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' to exit the application.)", fileName),
 					i18n("Failed to Open"))
 				== KMessageBox::Cancel) {
 				exit(-1); //"Cancel" clicked -> exit the application
 			} else {
-				filename.clear(); // Wrong file -> clear the file name and continue
+				fileName.clear(); // Wrong file -> clear the file name and continue
 			}
 		}
 	}
@@ -191,7 +191,7 @@ int main(int argc, char* argv[]) {
 	QApplication::setStyle(QStringLiteral("breeze"));
 #endif
 
-	auto* window = new MainWin(nullptr, filename);
+	auto* window = new MainWin(nullptr, fileName);
 	window->show();
 
 	if (splash) {

@@ -69,10 +69,14 @@ private Q_SLOTS:
 	void testRemoveRow();
 
 	void testFormula();
+	void testFormula2();
 	void testFormulaCell();
+	void testFormulaCellDefault();
 	void testFormulaCellInvalid();
 	void testFormulaCellConstExpression();
 	void testFormulaCellMulti();
+	void testFormulaCurrentColumnCell();
+	void testFormulaCurrentColumnCellDefaultValue();
 	void testFormulasmmin();
 	void testFormulasmmax();
 	void testFormulasma();

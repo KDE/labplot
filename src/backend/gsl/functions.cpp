@@ -9,9 +9,9 @@
 */
 
 #include "functions.h"
+#include "ParserDeclarations.h"
 #include "backend/nsl/nsl_math.h"
 #include "backend/nsl/nsl_sf_basic.h"
-#include "parser.h"
 #include "parserFunctionTypes.h"
 
 #include <KLocalizedString>
@@ -21,7 +21,7 @@
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_sf.h>
 
-namespace Parser {
+namespace Parsing {
 
 #ifdef _MSC_VER
 /* avoid intrinsics */
@@ -190,6 +190,7 @@ QString FunctionGroupsToString(FunctionGroups group) {
 }
 
 const char* specialfun_cell = "cell";
+const char* specialfun_cell_default_value = "cell_with_default";
 const char* specialfun_ma = "ma";
 const char* specialfun_mr = "mr";
 const char* specialfun_smmin = "smmin";
@@ -228,6 +229,8 @@ const char* colfun_kurt = "kurt";
 const char* colfun_entropy = "entropy";
 const char* colfun_quantile = "quantile";
 const char* colfun_percentile = "percentile";
+const char* cell_curr_column = "cell_curr_column";
+const char* cell_curr_column_default = "cell_curr_column_with_default";
 
 // clang-format off
 
@@ -235,47 +238,51 @@ const char* colfun_percentile = "percentile";
 	struct funs _special_functions[] = {
 		// Moving Statistics
 		// Important: when adding new function, implement them in Expressionhandler or somewhere else!
-		{[]() { return i18n("Cell (index, variable)"); }, specialfun_cell, func_t2Payload(), 2, nullptr, FunctionGroups::MovingStatistics},
-		{[]() { return i18n("Moving Average"); }, specialfun_ma, func_t1Payload(), 1, nullptr, FunctionGroups::MovingStatistics},
-		{[]() { return i18n("Moving Range"); }, specialfun_mr, func_t1Payload(), 1, nullptr, FunctionGroups::MovingStatistics},
-		{[]() { return i18n("Simple Moving Minimum"); }, specialfun_smmin, func_t2Payload(), 2, nullptr, FunctionGroups::MovingStatistics},
-		{[]() { return i18n("Simple Moving Maximum"); }, specialfun_smmax, func_t2Payload(), 2, nullptr, FunctionGroups::MovingStatistics},
-		{[]() { return i18n("Simple Moving Average"); }, specialfun_sma, func_t2Payload(), 2, nullptr, FunctionGroups::MovingStatistics},
-		{[]() { return i18n("Simple Moving Range"); }, specialfun_smr, func_t2Payload(), 2, nullptr, FunctionGroups::MovingStatistics},
-		{[]() { return i18n("Period sample"); }, specialfun_psample, func_t2Payload(), 2, nullptr, FunctionGroups::MovingStatistics},
-		{[]() { return i18n("Random sample"); }, specialfun_rsample, func_t1Payload(), 1, nullptr, FunctionGroups::MovingStatistics},
+		{[]() { return i18n("Cell (index; variable)"); }, specialfun_cell, func_tValueVariablePayload(), 2, nullptr, FunctionGroups::MovingStatistics},
+		{[]() { return i18n("Cell (index; default_value; variable)"); }, specialfun_cell_default_value, func_t2ValueVariablePayload(), 3, nullptr, FunctionGroups::MovingStatistics},
+		{[]() { return i18n("Moving Average"); }, specialfun_ma, func_tVariablePayload(), 1, nullptr, FunctionGroups::MovingStatistics},
+		{[]() { return i18n("Moving Range"); }, specialfun_mr, func_tVariablePayload(), 1, nullptr, FunctionGroups::MovingStatistics},
+		{[]() { return i18n("Simple Moving Minimum"); }, specialfun_smmin, func_tValueVariablePayload(), 2, nullptr, FunctionGroups::MovingStatistics},
+		{[]() { return i18n("Simple Moving Maximum"); }, specialfun_smmax, func_tValueVariablePayload(), 2, nullptr, FunctionGroups::MovingStatistics},
+		{[]() { return i18n("Simple Moving Average"); }, specialfun_sma, func_tValueVariablePayload(), 2, nullptr, FunctionGroups::MovingStatistics},
+		{[]() { return i18n("Simple Moving Range"); }, specialfun_smr, func_tValueVariablePayload(), 2, nullptr, FunctionGroups::MovingStatistics},
+		{[]() { return i18n("Period sample"); }, specialfun_psample, func_tValueVariablePayload(), 2, nullptr, FunctionGroups::MovingStatistics},
+		{[]() { return i18n("Random sample"); }, specialfun_rsample, func_tVariablePayload(), 1, nullptr, FunctionGroups::MovingStatistics},
+
+		{[]() { return i18n("Current column cell (index)"); }, cell_curr_column, func_tValuePayload(), 1, nullptr, FunctionGroups::MovingStatistics},
+		{[]() { return i18n("Current column cell (index; default_value)"); }, cell_curr_column_default, func_t2ValuePayload(), 2, nullptr, FunctionGroups::MovingStatistics},
 
 		// Values independent of the row index!!!
 		// Important: When adding function here, implement it somewhere. For example column functions are implemented in ColumnPrivate!
-		{[]() { return i18n("Size"); }, colfun_size, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
-		{[]() { return i18n("Minimum"); }, colfun_min, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
-		{[]() { return i18n("Maximum"); }, colfun_max, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
-		{[]() { return i18n("Arithmetic mean"); }, colfun_mean, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
-		{[]() { return i18n("Median"); }, colfun_median, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
-		{[]() { return i18n("Standard deviation"); }, colfun_stdev, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
-		{[]() { return i18n("Variance"); }, colfun_var, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
-		{[]() { return i18n("Geometric mean"); }, colfun_gm, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
-		{[]() { return i18n("Harmonic mean"); }, colfun_hm, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
-		{[]() { return i18n("Contraharmonic mean"); }, colfun_chm, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
-		{[]() { return i18n("Mode"); }, colfun_mode, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
-		{[]() { return i18n("First quartile"); }, colfun_quartile1, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
-		{[]() { return i18n("Third quartile"); }, colfun_quartile3, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
-		{[]() { return i18n("Interquartile range"); }, colfun_iqr, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
-		{[]() { return i18n("1st percentile"); }, colfun_percentile1, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
-		{[]() { return i18n("5th percentile"); }, colfun_percentile5, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
-		{[]() { return i18n("10th percentile"); }, colfun_percentile10, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
-		{[]() { return i18n("90th percentile"); }, colfun_percentile90, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
-		{[]() { return i18n("95th percentile"); }, colfun_percentile95, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
-		{[]() { return i18n("99th percentile"); }, colfun_percentile99, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
-		{[]() { return i18n("Trimean"); }, colfun_trimean, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
-		{[]() { return i18n("Mean absolute deviation"); }, colfun_meandev, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
-		{[]() { return i18n("Mean absolute deviation around median"); }, colfun_meandevmedian, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
-		{[]() { return i18n("Median absolute deviation"); }, colfun_mediandev, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
-		{[]() { return i18n("Skewness"); }, colfun_skew, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
-		{[]() { return i18n("Kurtosis"); }, colfun_kurt, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
-		{[]() { return i18n("Entropy"); }, colfun_entropy, func_t1Payload(), 1, nullptr, FunctionGroups::ColumnStatistics},
-		{[]() { return i18n("Quantile"); }, colfun_quantile, func_t2Payload(), 2, nullptr, FunctionGroups::ColumnStatistics},
-		{[]() { return i18n("Percentile"); }, colfun_percentile, func_t2Payload(), 2, nullptr, FunctionGroups::ColumnStatistics},
+		{[]() { return i18n("Size"); }, colfun_size, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
+		{[]() { return i18n("Minimum"); }, colfun_min, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
+		{[]() { return i18n("Maximum"); }, colfun_max, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
+		{[]() { return i18n("Arithmetic mean"); }, colfun_mean, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
+		{[]() { return i18n("Median"); }, colfun_median, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
+		{[]() { return i18n("Standard deviation"); }, colfun_stdev, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
+		{[]() { return i18n("Variance"); }, colfun_var, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
+		{[]() { return i18n("Geometric mean"); }, colfun_gm, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
+		{[]() { return i18n("Harmonic mean"); }, colfun_hm, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
+		{[]() { return i18n("Contraharmonic mean"); }, colfun_chm, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
+		{[]() { return i18n("Mode"); }, colfun_mode, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
+		{[]() { return i18n("First quartile"); }, colfun_quartile1, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
+		{[]() { return i18n("Third quartile"); }, colfun_quartile3, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
+		{[]() { return i18n("Interquartile range"); }, colfun_iqr, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
+		{[]() { return i18n("1st percentile"); }, colfun_percentile1, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
+		{[]() { return i18n("5th percentile"); }, colfun_percentile5, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
+		{[]() { return i18n("10th percentile"); }, colfun_percentile10, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
+		{[]() { return i18n("90th percentile"); }, colfun_percentile90, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
+		{[]() { return i18n("95th percentile"); }, colfun_percentile95, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
+		{[]() { return i18n("99th percentile"); }, colfun_percentile99, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
+		{[]() { return i18n("Trimean"); }, colfun_trimean, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
+		{[]() { return i18n("Mean absolute deviation"); }, colfun_meandev, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
+		{[]() { return i18n("Mean absolute deviation around median"); }, colfun_meandevmedian, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
+		{[]() { return i18n("Median absolute deviation"); }, colfun_mediandev, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
+		{[]() { return i18n("Skewness"); }, colfun_skew, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
+		{[]() { return i18n("Kurtosis"); }, colfun_kurt, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
+		{[]() { return i18n("Entropy"); }, colfun_entropy, func_tVariablePayload(), 1, nullptr, FunctionGroups::ColumnStatistics},
+		{[]() { return i18n("Quantile"); }, colfun_quantile, func_tValueVariablePayload(), 2, nullptr, FunctionGroups::ColumnStatistics},
+		{[]() { return i18n("Percentile"); }, colfun_percentile, func_tValueVariablePayload(), 2, nullptr, FunctionGroups::ColumnStatistics},
 	};
 	const int _number_specialfunctions = sizeof(_special_functions) / sizeof(funs);
 
@@ -1003,4 +1010,4 @@ QString equalEpsilonParameterNames(int parameterIndex) {
 	}
 	return i18n("Invalid");
 }
-} // namespace Parser
+} // namespace Parsing

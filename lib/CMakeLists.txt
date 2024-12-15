@@ -82,6 +82,7 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/gsl/ExpressionParser.cpp
     ${BACKEND_DIR}/gsl/constants.cpp
     ${BACKEND_DIR}/gsl/functions.cpp
+    ${BACKEND_DIR}/gsl/Parser.cpp
     ${BACKEND_DIR}/lib/Range.h
     ${BACKEND_DIR}/lib/Debug.cpp
     ${BACKEND_DIR}/lib/XmlStreamReader.cpp
@@ -203,7 +204,7 @@ set(GENERATED_SOURCES
 )
 
 ##############################################################################
-add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
+add_definitions (${QT_DEFINITIONS})
 include_directories(../src/ ${BACKEND_DIR}/gsl ${GSL_INCLUDE_DIR} ../src/3rdparty/liborigin ../src/3rdparty/Qt-Advanced-Docking-System/src/ ../src/3rdparty/QXlsx/header/)
 
 # see also QT_MIN_VERSION
@@ -231,7 +232,6 @@ target_link_libraries(liblabplot
     KF${KF_MAJOR_VERSION}::I18n
     KF${KF_MAJOR_VERSION}::KIOCore
     KF${KF_MAJOR_VERSION}::XmlGui
-    Qt${QT_MAJOR_VERSION}::Svg
     Qt${QT_MAJOR_VERSION}::Core
     Qt${QT_MAJOR_VERSION}::Gui
     Qt${QT_MAJOR_VERSION}::Widgets
@@ -261,6 +261,10 @@ if(Cantor_FOUND)
     target_link_libraries(liblabplot Cantor::cantorlibs KF${KF_MAJOR_VERSION}::Service KF${KF_MAJOR_VERSION}::Parts)
 endif()
 
+if(Qt${QT_MAJOR_VERSION}Svg_FOUND)
+    target_link_libraries(liblabplot Qt${QT_MAJOR_VERSION}::Svg)
+endif()
+
 if(WIN32)
     target_link_libraries(liblabplot ${PSAPI})
 endif()
@@ -277,7 +281,7 @@ install(FILES ../src/backend/core/AbstractColumn.h DESTINATION ${KDE_INSTALL_INC
 install(FILES ../src/backend/core/AbstractPart.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/core/ COMPONENT Devel)
 install(FILES ../src/backend/core/column/Column.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/core/column/ COMPONENT Devel)
 install(FILES ../src/backend/core/column/ColumnPrivate.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/core/column/ COMPONENT Devel)
-install(FILES ../src/backend/gsl/parser.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/gsl/ COMPONENT Devel)
+install(FILES ../src/backend/gsl/Parser.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/gsl/ COMPONENT Devel)
 install(FILES ../src/backend/lib/Interval.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/lib/ COMPONENT Devel)
 install(FILES ../src/backend/lib/IntervalAttribute.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/lib/ COMPONENT Devel)
 install(FILES ../src/backend/lib/macros.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/lib/ COMPONENT Devel)
