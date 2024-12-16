@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-15 00:37+0000\n"
-"PO-Revision-Date: 2024-12-08 17:18+0100\n"
+"PO-Revision-Date: 2024-12-15 18:52+0100\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 24.08.3\n"
+"X-Generator: Lokalize 24.12.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1084,6 +1084,7 @@ msgstr "Dispositivo alla fine"
 #, kde-format
 msgid "Not enough rows selected. Increase number of rows."
 msgstr ""
+"Non ci sono abbastanza righe selezionate. Incrementa il numero di righe."
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:198
 #, kde-format
@@ -1096,21 +1097,19 @@ msgid "Unable to determine the separator"
 msgstr "Impossibile determinare il separatore"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:204
-#, fuzzy, kde-format
-#| msgid "Invalid numeric value."
+#, kde-format
 msgid "Invalid number of data columns"
-msgstr "Valore numerico non valido."
+msgstr "Numero di colonne dati non valido"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:206
-#, fuzzy, kde-format
-#| msgid "Invalid numeric value."
+#, kde-format
 msgid "Invalid number of column names"
-msgstr "Valore numerico non valido."
+msgstr "Numero di nomi colonne non valido"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:208
 #, kde-format
 msgid "Matrix: Unsupported column mode"
-msgstr ""
+msgstr "Matrice: modalità colonna non supportata"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:210
 #, kde-format
@@ -1165,18 +1164,17 @@ msgstr "Filtro non inizializzato"
 #: src/backend/datasources/filters/AsciiFilter.cpp:232
 #, kde-format
 msgid "Wrong end column. Is it smaller than start column?"
-msgstr ""
+msgstr "Colonna finale errata. È più piccola di quella iniziale?"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:234
 #, kde-format
 msgid "Wrong end row. Is it smaller than start row?"
-msgstr ""
+msgstr "Riga finale errata. È più piccola di quella iniziale?"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:236
-#, fuzzy, kde-format
-#| msgid "No data set selected."
+#, kde-format
 msgid "No data destination set"
-msgstr "Nessun insieme di dati selezionato."
+msgstr "Nessun insieme di dati impostato"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:238
 #, kde-format
@@ -1187,11 +1185,13 @@ msgstr "Nessuna colonna"
 #, kde-format
 msgid "Unable to determine column modes. Check if they are correctly written"
 msgstr ""
+"Impossibile determinare la modalità colonna. Controlla che siano scritte "
+"correttamente"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:242
 #, kde-format
 msgid "UTF16 encoding is not supported"
-msgstr ""
+msgstr "La codifica UTF16 non è supportata"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:244
 #, kde-format
@@ -2620,7 +2620,7 @@ msgstr "Costante sconosciuta"
 #: src/backend/gsl/constants.cpp:63
 #, kde-format
 msgid "RAND_MAX"
-msgstr ""
+msgstr "RAND_MAX"
 
 #. i18n("Mathematical constants"));
 #: src/backend/gsl/constants.cpp:66
@@ -3634,10 +3634,9 @@ msgid "Unknown Function"
 msgstr "Funzione sconosciuta"
 
 #: src/backend/gsl/functions.cpp:241
-#, fuzzy, kde-format
-#| msgid "Cell (index, variable)"
+#, kde-format
 msgid "Cell (index; variable)"
-msgstr "Cella (indice, variabile)"
+msgstr "Cella (indice; variabile)"
 
 #: src/backend/gsl/functions.cpp:242
 #, fuzzy, kde-format
@@ -3693,7 +3692,7 @@ msgstr "Campione casuale"
 #: src/backend/gsl/functions.cpp:252
 #, kde-format
 msgid "Current column cell (index)"
-msgstr ""
+msgstr "Cella della colonna corrente (indice)"
 
 #: src/backend/gsl/functions.cpp:253
 #, kde-format
@@ -8216,6 +8215,8 @@ msgid ""
 "Add a new xy-curve that is defined as a function of other xy-curves (scaled, "
 "shifted, etc.)"
 msgstr ""
+"Aggiungi una nuova curva xy che è definita come funzione di altre curve xy "
+"(ridimensionate, spostate, ecc)"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:444
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:500
@@ -8774,10 +8775,9 @@ msgid "Function of '%1'"
 msgstr "Funzione di «%1»"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2004
-#, fuzzy, kde-format
-#| msgid "%1: add fit curve"
+#, kde-format
 msgid "%1: add function curve"
-msgstr "%1: aggiungi una curva di adattamento."
+msgstr "%1: aggiungi curva funzione"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2053
 #: src/frontend/worksheet/WorksheetView.cpp:1339
@@ -9068,7 +9068,7 @@ msgstr "%1: modifica la geometria del rettangolo"
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:587
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
-msgstr ""
+msgstr "L'ultimo campione è incompleto e verrà omesso."
 
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:264
 #, kde-format
@@ -10224,10 +10224,9 @@ msgid "Fastest Fourier Transform in the West"
 msgstr "Proprietà: trasformata di Fourier"
 
 #: src/frontend/AboutDialog.cpp:187
-#, fuzzy, kde-format
-#| msgid "Scientific (e)"
+#, kde-format
 msgid "GNU Scientific Library"
-msgstr "Scientifico (e)"
+msgstr "GNU Scientific Library"
 
 #: src/frontend/AboutDialog.cpp:189
 #, kde-format
@@ -10245,10 +10244,9 @@ msgid "Support collecting feedback from users"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:204
-#, fuzzy, kde-format
-#| msgid "Error Functions and Related Functions"
+#, kde-format
 msgid "Complex error and related functions"
-msgstr "Funzioni di errore e funzioni correlate"
+msgstr "Errore complesso e funzioni correlate"
 
 #: src/frontend/AboutDialog.cpp:209
 #, fuzzy, kde-format
@@ -10269,16 +10267,14 @@ msgid "MCAP file support"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:225
-#, fuzzy, kde-format
-#| msgid "Network Common Data Format (NetCDF)"
+#, kde-format
 msgid "Network Common Data Form"
-msgstr "Network Common Data Format (NetCDF)"
+msgstr "Network Common Data Form"
 
 #: src/frontend/AboutDialog.cpp:230
-#, fuzzy, kde-format
-#| msgid "OpenDocument Spreadsheet (ODS)"
+#, kde-format
 msgid "Import ODS (Open Document Spreadsheet) files"
-msgstr "OpenDocument Spreadsheet (ODS)"
+msgstr "Importa file ODS (Open Document Spreadsheet)"
 
 #: src/frontend/AboutDialog.cpp:235
 #, kde-format
@@ -10288,7 +10284,7 @@ msgstr "Libreria per la resa PDF"
 #: src/frontend/AboutDialog.cpp:240
 #, kde-format
 msgid "Offers available actions for a specific purpose"
-msgstr ""
+msgstr "Offre le azioni disponibili per uno scopo specifico"
 
 #: src/frontend/AboutDialog.cpp:244
 #, kde-format
@@ -10309,7 +10305,7 @@ msgstr "Supporto alle funzionalità della porta seriale"
 #: src/frontend/AboutDialog.cpp:256
 #, kde-format
 msgid "SVG export support"
-msgstr ""
+msgstr "Supporto all'esportazione SVG"
 
 #: src/frontend/AboutDialog.cpp:261
 #, kde-format
@@ -10398,7 +10394,7 @@ msgstr "Vista ad elenco"
 #: src/frontend/colormaps/ColorMapsWidget.cpp:240
 #, kde-format
 msgid "List View with Details"
-msgstr ""
+msgstr "Visualizza elenco con dettagli"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:314
 #: src/frontend/dockwidgets/CursorDock.cpp:148
@@ -10769,10 +10765,9 @@ msgstr ""
 "Nomi delle colonne personalizzati, separati da virgole, ad esempio «x, y»"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:115
-#, fuzzy, kde-format
-#| msgid "Custom column names, space separated. E.g. \"x y\""
+#, kde-format
 msgid "Custom column modes, comma separated"
-msgstr "Nomi delle colonne personalizzati, separati da spazi, ad esempio «x y»"
+msgstr "Modalità colonna personalizzata, separata da virgole"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:122
 #, kde-format
@@ -11667,6 +11662,8 @@ msgid ""
 "Invalid number rows. Please check 'End Row' and 'Start Row'. 'End Row' must "
 "be larger than 'Start Row' or -1"
 msgstr ""
+"Numero di righe non valido. Controlla «Riga finale» e «Riga iniziale»: «Riga "
+"finale» deve essere più grande di «Riga finale», oppure -1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1776
 #, kde-format
@@ -12808,13 +12805,14 @@ msgstr "Seleziona per modificare le proprietà del simbolo del valore mediano."
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:105
 #, kde-format
 msgid "Select to modify the properties of the symbol for the outlier values."
-msgstr ""
+msgstr "Seleziona per modificare le proprietà del simbolo dei valori anomali."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:108
 #, kde-format
 msgid ""
 "Select to modify the properties of the symbol for the \"far out\" values."
 msgstr ""
+"Seleziona per modificare le proprietà del simbolo dei valori \"lontani\"."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:111
 #, kde-format
@@ -12822,6 +12820,8 @@ msgid ""
 "Select to modify the properties of the symbol for all data values excluding "
 "the outlier and \"far out\" values."
 msgstr ""
+"Seleziona per modificare le proprietà del simbolo di tutti i valori, "
+"escludendo i valori anomali e quelli \"lontani\"."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:114
 #, kde-format
@@ -13021,6 +13021,8 @@ msgid ""
 "Use the main color of the plot (line, symbol, etc.) for the color of the "
 "name in the legend."
 msgstr ""
+"Usa il colore principale del grafico (linea, simbolo, ecc) per il colore del "
+"nome nella legenda."
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:249
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:246
@@ -13981,12 +13983,10 @@ msgid "Properties: XY-Equation"
 msgstr "Proprietà: equazione XY"
 
 #: src/frontend/GuiObserver.cpp:295
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Datapicker Curve"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Function Curve"
-msgstr "Proprietà: curva del raccoglitore di dati"
+msgstr "Proprietà: curva funzione"
 
 #: src/frontend/GuiObserver.cpp:300
 #, kde-format
@@ -20540,7 +20540,7 @@ msgstr "Lontano"
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:557
 #, kde-format
 msgid "Data (excl. Outlier and Far Out)"
-msgstr ""
+msgstr "Dati (escl. valori anomali e lontani)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbWhiskerEnd)
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:564
@@ -21581,10 +21581,9 @@ msgstr "Centro:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCenterLine)
 #: src/frontend/ui/dockwidgets/runchartdock.ui:223
-#, fuzzy, kde-format
-#| msgid "Center Tiled"
+#, kde-format
 msgid "Center Line"
-msgstr "Centrato e ripetuto"
+msgstr "Centra linea"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
@@ -24371,18 +24370,14 @@ msgid "Search/Filter text"
 msgstr "Testo da cercare/filtrare"
 
 #: src/frontend/widgets/TreeViewComboBox.cpp:358
-#, fuzzy, kde-format
-#| msgid ""
-#| "The curve \"%1\"\n"
-#| "is not available anymore. It will be automatically used once it is "
-#| "created again."
+#, kde-format
 msgid ""
 "The aspect \"%1\"\n"
 "is not available anymore. It will be automatically used once it is created "
 "again."
 msgstr ""
-"La curva «%1»\n"
-"non è più disponibile. Verrà usata automaticamente quando verrà ricreata."
+"L'aspetto «%1»\n"
+"non è più disponibile. Verrà usato automaticamente quando verrà ricreato."
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:53
 #, kde-format

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-15 00:37+0000\n"
-"PO-Revision-Date: 2024-12-14 11:24+0100\n"
+"PO-Revision-Date: 2024-12-16 01:08+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.08.3\n"
+"X-Generator: Lokalize 24.12.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2258,7 +2258,7 @@ msgstr "Nome da táboa: %1"
 #: src/backend/datasources/filters/ReadStatFilter.cpp:169
 #, kde-format
 msgid "File label: %1"
-msgstr "Etiqueta do campo: %1"
+msgstr "Etiqueta do ficheiro: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:171
 #, kde-format
@@ -11525,6 +11525,7 @@ msgstr "Formato dos datos e vista previa"
 msgid "Automatic"
 msgstr "Automático"
 
+# skip-rule: trasno-file
 #: src/frontend/datasources/ImportFileWidget.cpp:1586
 #, kde-format
 msgid "file command not found"
