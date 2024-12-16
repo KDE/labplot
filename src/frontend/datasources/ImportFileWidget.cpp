@@ -639,7 +639,10 @@ QString ImportFileWidget::selectedObject() const {
 }
 
 QString ImportFileWidget::host() const {
-	return ui.leHost->text();
+	const auto t = ui.leHost->text();
+	if (t.compare(QStringLiteral("localhost"), Qt::CaseSensitivity::CaseInsensitive))
+		return QStringLiteral("127.0.0.1");
+	return t;
 }
 
 QString ImportFileWidget::port() const {
