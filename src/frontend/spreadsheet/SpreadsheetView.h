@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : View class for Spreadsheet
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -112,6 +112,7 @@ private:
 
 	QTableView* m_tableView{nullptr};
 	QTableView* m_frozenTableView{nullptr};
+	int m_selectedColumnFromContextMenu{-1};
 	bool m_editorEntered{false};
 	Spreadsheet* m_spreadsheet;
 	SpreadsheetModel* m_model;
@@ -122,6 +123,7 @@ private:
 	bool m_suppressSelectionChangedEvent{false};
 	bool m_readOnly;
 	bool m_suppressResizeHeader{false};
+
 	bool eventFilter(QObject*, QEvent*) override;
 	void checkSpreadsheetMenu();
 	void checkSpreadsheetSelectionMenu();
@@ -301,7 +303,6 @@ private Q_SLOTS:
 	void maskColumnValues();
 	void sampleColumnValues();
 	void flattenColumns();
-	// 	void joinColumns();
 	void normalizeSelectedColumns(QAction*);
 	void powerTransformSelectedColumns(QAction*);
 

@@ -18,8 +18,10 @@ New features:
 		* Notify about the unsupported UTF16 encoding (BUG 496215)
 		* Faster import of big ASCII files on Windows
 	* [analysis]
-		* Add possibility to do calculations on curves
-		* Automatically recalculate analysis curves on data change
+		* Add possibility to do calculations on curves (define a new curve as a function of another curve)
+	[live data]
+		* Automatically recalculate analysis curves on data changes
+		* Enabled conditional formatting, statistics spreadsheet, sparklines, plot data dialog, etc. also for live data source spreadsheets
 	* [spreadsheet]
 		* support periodic and random sampling as function: psample(n;x), rsample(x)
 		* save the properties used to generate random values in the column for later re-use
