@@ -13,6 +13,7 @@
 #include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/hostprocess.h"
+#include "backend/lib/trace.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include <KCompressionDevice>
@@ -24,10 +25,7 @@
 #include <QSerialPort>
 #endif
 
-#if defined(Q_OS_LINUX) || defined(Q_OS_BSD4)
-#include <QProcess>
-#include <QStandardPaths>
-#endif
+#include <fstream>
 
 namespace {
 // Simple object to automatically closing a device when this object
@@ -139,7 +137,7 @@ void AsciiFilter::setDataSource(AbstractDataSource* dataSource) {
 
 void AsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode columnImportMode) {
 	Q_D(AsciiFilter);
-	d->fileNumberLines = lineNumber(fileName);
+	d->fileNumberLines = lineCount(fileName);
 
 	KCompressionDevice file(fileName);
 
@@ -274,7 +272,7 @@ QStringList AsciiFilter::commentCharacters() {
 QString AsciiFilter::fileInfoString(const QString& fileName) {
 	QString info(i18n("Number of columns: %1", AsciiFilter::columnNumber(fileName)));
 	info += QStringLiteral("<br>");
-	info += i18n("Number of lines: %1", AsciiFilter::lineNumber(fileName));
+	info += i18n("Number of lines: %1", AsciiFilter::lineCount(fileName));
 	return info;
 }
 
@@ -282,57 +280,44 @@ int AsciiFilter::columnNumber(const QString& /*fileName*/, const QString& /*sepa
 	return -1; // TODO: implement
 }
 
-size_t AsciiFilter::lineNumber(const QString& fileName, const size_t maxLines) {
+/*!
+ * returns number of lines in file 'fileName'
+ * optional: only check 'maxLines' (returns minimum of line count and maxLines)
+ */
+size_t AsciiFilter::lineCount(const QString& fileName, const size_t maxLines) {
 	DEBUG(Q_FUNC_INFO << ", max lines = " << maxLines)
+	PERFTRACE(QLatin1String(Q_FUNC_INFO))
+
 	KCompressionDevice device(fileName);
 
 	if (!device.open(QIODevice::ReadOnly)) {
 		DEBUG(Q_FUNC_INFO << ", Could not open file " << STDSTRING(fileName) << " to determine number of lines");
 		return 0;
 	}
-	// 	if (!device.canReadLine()) // Returns always false
-	// 		return -1;
 
-#if defined(Q_OS_LINUX) || defined(Q_OS_BSD4)
-	if (maxLines == std::numeric_limits<std::size_t>::max()) { // only when reading all lines
-		// on Linux and BSD use grep, if available, which is much faster than counting lines in the file
-		// wc -l does not count last line when not ending in line break!
-		DEBUG(Q_FUNC_INFO << ", using 'grep' or 'sed' to count lines")
-		QString cmdFullPath = safeExecutableName(QStringLiteral("grep"));
-		QStringList options;
-		options << QStringLiteral("-e") << QStringLiteral("^") << QStringLiteral("-c") << fileName;
-		if (cmdFullPath.isEmpty()) { // alternative: sed -n '$='
-			DEBUG(Q_FUNC_INFO << ", 'grep' not found using 'sed' instead")
-			cmdFullPath = safeExecutableName(QStringLiteral("sed"));
-			options.clear();
-			options << QStringLiteral("-n") << QStringLiteral("$=") << fileName;
-		}
-		if (device.compressionType() == KCompressionDevice::None && !cmdFullPath.isEmpty()) {
-			QProcess cmd;
-			startHostProcess(cmd, cmdFullPath, options);
-			size_t lineCount = 0;
-			while (cmd.waitForReadyRead()) {
-				QString line = QLatin1String(cmd.readLine());
-				QDEBUG(Q_FUNC_INFO << ", line count command output: " << line)
-				// wc on macOS has leading spaces: use SkipEmptyParts
-				lineCount = line.split(QLatin1Char(' '), Qt::SkipEmptyParts).at(0).toInt();
-			}
-			return lineCount;
-		} else {
-			DEBUG(Q_FUNC_INFO << ", 'grep' or 'sed' not found using readLine()")
-		}
+	if (device.compressionType() == KCompressionDevice::None) { // uncompressed
+		device.close();
+
+		std::ifstream file(fileName.toStdString());
+
+		size_t count = 0;
+		std::string line;
+		while (std::getline(file, line) && count < maxLines)
+			++count;
+		DEBUG(Q_FUNC_INFO << "Number of lines: " << count)
+		return count;
 	}
-#endif
 
-	size_t lineCount = 0;
+	// fallback for compressed data
+	size_t count = 0;
 	while (!device.atEnd()) {
-		if (lineCount >= maxLines) // stop when maxLines available
-			return lineCount;
+		if (count >= maxLines) // stop when maxLines available
+			return count;
 		device.readLine();
-		lineCount++;
+		count++;
 	}
 
-	return lineCount;
+	return count;
 }
 
 void AsciiFilter::save(QXmlStreamWriter* writer) const {
@@ -424,9 +409,9 @@ bool AsciiFilter::determineColumnModes(const QStringView& s, QVector<AbstractCol
 	return AsciiFilterPrivate::determineColumnModes(s, modes, invalidString);
 }
 
-//########################################################################################################################
-//##  PRIVATE IMPLEMENTATIONS  ###########################################################################################
-//########################################################################################################################
+// ########################################################################################################################
+// ##  PRIVATE IMPLEMENTATIONS  ###########################################################################################
+// ########################################################################################################################
 AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner)
 	: q(owner) {
 }

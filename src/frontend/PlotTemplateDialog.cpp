@@ -322,7 +322,7 @@ QVariant TemplateListModel::data(const QModelIndex& index, int role) const {
 	switch (role) {
 	case FilenameRole: // fall through
 	case Qt::ItemDataRole::DisplayRole:
-		return mFiles.at(row).filename;
+		return mFiles.at(row).fileName;
 	case FilePathRole:
 		return mFiles.at(row).path;
 	}

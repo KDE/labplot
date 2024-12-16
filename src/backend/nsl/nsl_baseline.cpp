@@ -21,11 +21,15 @@
 #endif
 
 #ifdef HAVE_EIGEN3
+#ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
+#endif
 #include <Eigen/Sparse>
 #include <Eigen/SparseCholesky>
+#ifdef __GNUC__
 #pragma GCC diagnostic pop
+#endif
 #else // GSL
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_sort.h>

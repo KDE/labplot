@@ -27,7 +27,7 @@
 #include "frontend/widgets/ThemesWidget.h"
 #include "frontend/worksheet/GridDialog.h"
 #include "frontend/worksheet/PresenterWidget.h"
-#include <gsl/gsl_const_cgs.h>
+#include <frontend/GuiTools.h>
 
 #ifdef Q_OS_MAC
 #include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
@@ -42,24 +42,25 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QGraphicsOpacityEffect>
+#include <QGraphicsPixmapItem>
 #include <QImage>
 #include <QMdiArea>
 #include <QMenu>
 #include <QMimeData>
 #include <QPrinter>
 #include <QScreen>
-#include <QSvgGenerator>
 #include <QTimeLine>
 #include <QToolBar>
 #include <QToolButton>
 #include <QWheelEvent>
 #include <QWidgetAction>
-
-#include <QGraphicsPixmapItem>
+#ifdef HAVE_QTSVG
+#include <QSvgGenerator>
+#endif
 
 #include <limits>
 
-#include <frontend/GuiTools.h>
+#include <gsl/gsl_const_cgs.h>
 
 /**
  * \class WorksheetView
@@ -2111,6 +2112,7 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		break;
 	}
 	case ExportFormat::SVG: {
+#ifdef HAVE_QTSVG
 		QSvgGenerator generator;
 		generator.setFileName(path);
 		// 		if (!generator.isValid()) {
@@ -2130,6 +2132,7 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		painter.begin(&generator);
 		exportPaint(&painter, targetRect, sourceRect, background);
 		painter.end();
+#endif
 		break;
 	}
 	case ExportFormat::PNG:

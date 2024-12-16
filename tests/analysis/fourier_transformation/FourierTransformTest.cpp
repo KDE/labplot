@@ -13,7 +13,7 @@
 #include "backend/worksheet/plots/cartesian/XYFourierTransformCurve.h"
 
 #include <iostream>
-//#include <math.h>
+// #include <math.h>
 
 // ##############################################################################
 

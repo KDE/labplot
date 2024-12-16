@@ -255,9 +255,9 @@ QList<Cantor::PanelPlugin*> Notebook::getPlugins() {
 			INFO(Q_FUNC_INFO << ", no plugins yet.")
 
 		auto states = Cantor::PanelPluginHandler::PanelStates();
-		if (!m_session)
+		if (!m_session) {
 			WARN(Q_FUNC_INFO << ", WARNING: no session!")
-		else
+		} else
 			m_plugins = handler->activePluginsForSession(m_session, states);
 
 		for (auto* plugin : m_plugins) {

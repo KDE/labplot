@@ -1365,14 +1365,33 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			plot->setRightPadding(150. + 1.5 * plot->rightPadding() * std::min(elementScalingFactor, 1.));
 			plot->setBottomPadding(100. + 1.5 * plot->bottomPadding() * std::min(elementScalingFactor, 1.));
 #else
-			plot->setHorizontalPadding(150. + 1.5 * plot->horizontalPadding() * std::max(elementScalingFactor, 1.));
-			plot->setVerticalPadding(100. + 1.5 * plot->verticalPadding() * std::max(elementScalingFactor, 1.));
-			plot->setRightPadding(150. + 1.5 * plot->rightPadding() * std::max(elementScalingFactor, 1.));
-			plot->setBottomPadding(100. + 1.5 * plot->bottomPadding() * std::max(elementScalingFactor, 1.));
+			plot->setHorizontalPadding(200. + 1.5 * plot->horizontalPadding() * std::max(elementScalingFactor, 1.));
+			plot->setVerticalPadding(150. + 1.5 * plot->verticalPadding() * std::max(elementScalingFactor, 1.));
+			plot->setRightPadding(200. + 1.5 * plot->rightPadding() * std::max(elementScalingFactor, 1.));
+			plot->setBottomPadding(150. + 1.5 * plot->bottomPadding() * std::max(elementScalingFactor, 1.));
 #endif
 		}
+
+		// round padding to 0.1 cm
+		plot->setHorizontalPadding(
+			Worksheet::convertToSceneUnits(std::round(10. * Worksheet::convertFromSceneUnits(plot->horizontalPadding(), Worksheet::Unit::Centimeter)) / 10.,
+										   Worksheet::Unit::Centimeter));
+		plot->setVerticalPadding(
+			Worksheet::convertToSceneUnits(std::round(10. * Worksheet::convertFromSceneUnits(plot->verticalPadding(), Worksheet::Unit::Centimeter)) / 10.,
+										   Worksheet::Unit::Centimeter));
+		plot->setRightPadding(
+			Worksheet::convertToSceneUnits(std::round(10. * Worksheet::convertFromSceneUnits(plot->rightPadding(), Worksheet::Unit::Centimeter)) / 10.,
+										   Worksheet::Unit::Centimeter));
+		plot->setBottomPadding(
+			Worksheet::convertToSceneUnits(std::round(10. * Worksheet::convertFromSceneUnits(plot->bottomPadding(), Worksheet::Unit::Centimeter)) / 10.,
+										   Worksheet::Unit::Centimeter));
+
 		WARN(Q_FUNC_INFO << ", PADDING (H/V) = " << plot->horizontalPadding() << ", " << plot->verticalPadding())
 		WARN(Q_FUNC_INFO << ", PADDING (R/B) = " << plot->rightPadding() << ", " << plot->bottomPadding())
+
+		// if padding is symmetric, we set it
+		if (plot->horizontalPadding() == plot->rightPadding() && plot->verticalPadding() == plot->bottomPadding())
+			plot->setSymmetricPadding(true);
 	}
 
 	if (!preview) {
@@ -2337,20 +2356,23 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 
 	// axis title
 	if (axisFormat.label.shown) {
-		/*for (int i=0; i<axisFormat.label.text.size(); i++)
+		DEBUG(Q_FUNC_INFO << ", label text = \"" << axisFormat.label.text << "\"")
+		// debugging
+		/*
+		const auto length = axisFormat.label.text.size();
+		for (unsigned int i = 0; i < length; i++)
 			printf(" %c ", axisFormat.label.text.at(i));
 		printf("\n");
-		for (int i=0; i<axisFormat.label.text.size(); i++)
+		for (unsigned int i = 0; i < length; i++)
 			printf(" %02hhx", axisFormat.label.text.at(i));
 		printf("\n");
 		*/
-		QString titleText;
-		if (m_originFile->version() < 9.5) // <= 2017 : pre-Unicode
-			titleText = parseOriginText(QString::fromLatin1(axisFormat.label.text.c_str()));
-		else
-			titleText = parseOriginText(QString::fromStdString(axisFormat.label.text));
-		DEBUG(Q_FUNC_INFO << ", axis title string = " << STDSTRING(titleText));
-		DEBUG(Q_FUNC_INFO << ", column info = " << STDSTRING(columnInfo));
+
+		// OPJ axis label are always Latin1 encoded (see Bild_12)
+		// even in m_originFile->version() >= 9.5
+		QString titleText = parseOriginText(QString::fromLatin1(axisFormat.label.text));
+		DEBUG(Q_FUNC_INFO << ", axis title string = \"" << STDSTRING(titleText) << "\"");
+		DEBUG(Q_FUNC_INFO << ", column info = \"" << STDSTRING(columnInfo) << "\"");
 
 		// if long name not defined: columnInfo contains column name (s.a.)
 		QString longName, unit, comments;
@@ -2380,7 +2402,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 		titleText.replace(QLatin1String("%(?X,@LU)"), unit);
 		titleText.replace(QLatin1String("%(?Y,@LU)"), unit);
 
-		DEBUG(Q_FUNC_INFO << ", axis title final = " << STDSTRING(titleText));
+		DEBUG(Q_FUNC_INFO << ", axis title final = \"" << STDSTRING(titleText) << "\"");
 
 		// use axisFormat.fontSize to override the global font size for the hmtl string
 		DEBUG(Q_FUNC_INFO << ", axis font size = " << axisFormat.label.fontSize)
@@ -2866,9 +2888,9 @@ void OriginProjectParser::loadSymbol(const Origin::GraphCurve& originCurve, Symb
 
 	auto brush = symbol->brush();
 	auto pen = symbol->pen();
-	DEBUG(Q_FUNC_INFO << ", SYMBOL THICKNESS = " << (int)originCurve.symbolThickness)
+	DEBUG(Q_FUNC_INFO << ", OPJ symbol thickness = " << (int)originCurve.symbolThickness)
 	// border width (edge thickness in Origin) is given as percentage of the symbol radius
-	const double borderScaleFactor = 5.; // match size
+	const double borderScaleFactor = 0.6; // TUNING: match size
 	if (curve && originCurve.type == Origin::GraphCurve::LineSymbol) {
 		// symbol fill color
 		if (originCurve.symbolFillColor.type == Origin::Color::ColorType::Automatic) {
@@ -2892,7 +2914,7 @@ void OriginProjectParser::loadSymbol(const Origin::GraphCurve& originCurve, Symb
 		} else
 			pen.setColor(color(originCurve.symbolColor));
 
-		DEBUG(Q_FUNC_INFO << ", BORDER THICKNESS = " << borderScaleFactor * originCurve.symbolThickness / 100. * symbol->size())
+		DEBUG(Q_FUNC_INFO << ", using border thickness = " << borderScaleFactor * originCurve.symbolThickness / 100. * symbol->size())
 		pen.setWidthF(borderScaleFactor * originCurve.symbolThickness / 100. * symbol->size());
 	} else if (curve && originCurve.type == Origin::GraphCurve::Scatter) {
 		// symbol color (uses originCurve.symbolColor)
@@ -2983,7 +3005,7 @@ QString OriginProjectParser::parseOriginText(const QString& str) const {
 		text.append(parseOriginTags(lines[i]));
 	}
 
-	DEBUG(Q_FUNC_INFO << ", PARSED TEXT = " << STDSTRING(text));
+	DEBUG(Q_FUNC_INFO << ", PARSED TEXT = \"" << STDSTRING(text) << "\"");
 
 	return text;
 }
@@ -3274,10 +3296,10 @@ QList<QPair<QString, QString>> OriginProjectParser::charReplacementList() const 
 
 QString OriginProjectParser::replaceSpecialChars(const QString& text) const {
 	QString t = text;
-	DEBUG(Q_FUNC_INFO << ", got " << t.toStdString())
+	DEBUG(Q_FUNC_INFO << ", got \"" << STDSTRING(t) << "\"")
 	for (const auto& r : charReplacementList())
 		t.replace(r.first, r.second);
-	DEBUG(Q_FUNC_INFO << ", now " << t.toStdString())
+	DEBUG(Q_FUNC_INFO << ", now \"" << STDSTRING(t) << "\"")
 	return t;
 }
 
@@ -3418,8 +3440,8 @@ QString greekSymbol(const QString& symbol) {
  * https://doc.qt.io/qt-5/richtext-html-subset.html
  */
 QString OriginProjectParser::parseOriginTags(const QString& str) const {
-	DEBUG(Q_FUNC_INFO << ", string = " << STDSTRING(str));
-	QDEBUG("	UTF8 string: " << str.toUtf8());
+	DEBUG(Q_FUNC_INFO << ", string = \"" << STDSTRING(str) << "\"");
+	QDEBUG(Q_FUNC_INFO << ", UTF8 string: " << str.toUtf8());
 	QString line = str;
 
 	// replace %(...) tags
@@ -3496,7 +3518,7 @@ QString OriginProjectParser::parseOriginTags(const QString& str) const {
 	// special characters
 	line.replace(QRegularExpression(QStringLiteral("\\\\\\((\\d+)\\)")), QLatin1String("&#\\1;"));
 
-	DEBUG("	result: " << STDSTRING(line));
+	DEBUG(Q_FUNC_INFO << ", result: \"" << STDSTRING(line) << "\"");
 
 	return line;
 }

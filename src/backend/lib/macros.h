@@ -530,6 +530,17 @@ private:
 		writer->writeAttribute(QStringLiteral("fontItalic"), QString::number(font.italic()));                                                                  \
 	}
 
+#define MAP_LEGACY_FONT_WEIGHT(legacyWeight)                                                                                                                   \
+	((legacyWeight) <= 0		? QFont::Thin                                                                                                                  \
+		 : (legacyWeight) <= 12 ? QFont::ExtraLight                                                                                                            \
+		 : (legacyWeight) <= 25 ? QFont::Light                                                                                                                 \
+		 : (legacyWeight) <= 50 ? QFont::Normal                                                                                                                \
+		 : (legacyWeight) <= 63 ? QFont::Medium                                                                                                                \
+		 : (legacyWeight) <= 75 ? QFont::DemiBold                                                                                                              \
+		 : (legacyWeight) <= 87 ? QFont::Bold                                                                                                                  \
+		 : (legacyWeight) <= 95 ? QFont::ExtraBold                                                                                                             \
+								: QFont::Black)
+
 // uses font.setLegacyWeight(int)
 #define READ_QFONT(font)                                                                                                                                       \
 	{                                                                                                                                                          \
@@ -564,7 +575,7 @@ private:
 			reader->raiseMissingAttributeWarning(QStringLiteral("fontWeight"));                                                                                \
 		else {                                                                                                                                                 \
 			if (Project::xmlVersion() < 13)                                                                                                                    \
-				font.setLegacyWeight(str.toInt());                                                                                                             \
+				font.setWeight(MAP_LEGACY_FONT_WEIGHT(str.toInt()));                                                                                           \
 			else                                                                                                                                               \
 				font.setWeight(static_cast<QFont::Weight>(str.toInt()));                                                                                       \
 		}                                                                                                                                                      \

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : View class for Spreadsheet
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2020-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -1270,6 +1270,12 @@ QVector<Column*> SpreadsheetView::selectedColumns(bool full) const {
 		if (isColumnSelected(i, full))
 			columns << m_spreadsheet->column(i);
 
+	// if a column was selected by calling the contenxt menu in the horizontal header and the selection got
+	// lost inbetween because of the modification of the data model (e.g. changing data in the live data source),
+	// add this column to the list of selected columns so the plot data dialog can show it as the column to be plotted.
+	if (columns.isEmpty() && m_selectedColumnFromContextMenu != -1)
+		columns << m_spreadsheet->column(m_selectedColumnFromContextMenu);
+
 	return columns;
 }
 
@@ -1434,6 +1440,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 					sel_model->clearSelection();
 					QItemSelection selection(m_model->index(0, col, QModelIndex()), m_model->index(m_model->rowCount() - 1, col, QModelIndex()));
 					sel_model->select(selection, QItemSelectionModel::Select);
+					m_selectedColumnFromContextMenu = col;
 				}
 			}
 
@@ -1523,6 +1530,7 @@ void SpreadsheetView::checkSpreadsheetMenu() {
 	const bool cellsAvail = m_spreadsheet->columnCount() > 0 && m_spreadsheet->rowCount() > 0;
 	bool hasValues = this->hasValues(columns);
 	m_plotDataMenu->setEnabled(hasValues);
+	m_analyzePlotMenu->setEnabled(hasValues);
 	m_selectionMenu->setEnabled(hasValues);
 	action_select_all->setEnabled(hasValues);
 	action_clear_spreadsheet->setEnabled(hasValues);
@@ -2959,10 +2967,6 @@ void SpreadsheetView::flattenColumns() {
 	dlg->exec();
 }
 
-// void SpreadsheetView::joinColumns() {
-// 	//TODO
-// }
-
 void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 	auto columns = selectedColumns();
 	if (columns.isEmpty())
@@ -3760,6 +3764,9 @@ void SpreadsheetView::selectionChanged(const QItemSelection& /*selected*/, const
 		return;
 
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
+
+	// reset the column that was previosly selected from the context menu, if any
+	m_selectedColumnFromContextMenu = -1;
 
 	// determine the columns that were fully selected or deselected in the spreadsheet to also select/deselect them in the project explorer
 	const auto* selModel = m_tableView->selectionModel();

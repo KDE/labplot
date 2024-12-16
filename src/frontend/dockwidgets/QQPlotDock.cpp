@@ -117,7 +117,7 @@ void QQPlotDock::setPlots(QList<QQPlot*> list) {
 	// if there are more then one curve in the list, disable the content in the tab "general"
 	if (m_plots.size() == 1) {
 		cbDataColumn->setEnabled(true);
-		cbDataColumn->setColumn(m_plot->dataColumn(), m_plot->dataColumnPath());
+		cbDataColumn->setAspect(m_plot->dataColumn(), m_plot->dataColumnPath());
 	} else {
 		cbDataColumn->setEnabled(false);
 		cbDataColumn->setCurrentModelIndex(QModelIndex());
@@ -239,7 +239,7 @@ void QQPlotDock::distributionChanged(int index) {
 // General-Tab
 void QQPlotDock::plotDataColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbDataColumn->setColumn(column, m_plot->dataColumnPath());
+	cbDataColumn->setAspect(column, m_plot->dataColumnPath());
 }
 
 void QQPlotDock::plotDistributionChanged(nsl_sf_stats_distribution distribution) {

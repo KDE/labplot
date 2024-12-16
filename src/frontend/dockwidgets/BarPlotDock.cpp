@@ -161,7 +161,7 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 	// show the properties of the first plot
 	ui.chkLegendVisible->setChecked(m_barPlot->legendVisible());
 	ui.chkVisible->setChecked(m_barPlot->isVisible());
-	cbXColumn->setColumn(m_barPlot->xColumn(), m_barPlot->xColumnPath());
+	cbXColumn->setAspect(m_barPlot->xColumn(), m_barPlot->xColumnPath());
 	loadDataColumns();
 
 	// load the remaining properties
@@ -445,7 +445,7 @@ void BarPlotDock::errorNumberChanged(int index) {
 // general
 void BarPlotDock::plotXColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbXColumn->setColumn(column, m_barPlot->xColumnPath());
+	cbXColumn->setAspect(column, m_barPlot->xColumnPath());
 }
 void BarPlotDock::plotDataColumnsChanged(const QVector<const AbstractColumn*>&) {
 	CONDITIONAL_LOCK_RETURN;

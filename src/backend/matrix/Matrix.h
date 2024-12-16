@@ -22,10 +22,10 @@ class MatrixView;
 
 class Matrix : public AbstractDataSource {
 	Q_OBJECT
-	Q_ENUMS(HeaderFormat)
 
 public:
 	enum class HeaderFormat { HeaderRowsColumns, HeaderValues, HeaderRowsColumnsValues };
+	Q_ENUM(HeaderFormat)
 
 	explicit Matrix(const QString& name, bool loading = false, const AbstractColumn::ColumnMode = AbstractColumn::ColumnMode::Double);
 	Matrix(int rows, int cols, const QString& name, const AbstractColumn::ColumnMode = AbstractColumn::ColumnMode::Double);
