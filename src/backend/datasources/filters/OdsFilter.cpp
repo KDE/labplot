@@ -311,7 +311,7 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 					columnModes[col] = AbstractColumn::ColumnMode::Text;
 					break;
 				case ixion::formula_result::result_type::error:
-				// TODO: not available in ixion 0.17 ?
+				// available with ixion >= 0.18
 				// case ixion::formula_result::result_type::boolean:
 				case ixion::formula_result::result_type::matrix:
 					DEBUG(Q_FUNC_INFO << ", formula type not supported yet.")
