@@ -140,13 +140,8 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent, bool liveData)
 	ui.lColumnMode->setWhatsThis(info);
 	ui.kleColumnMode->setWhatsThis(info);
 
-	if (m_liveData) {
-		headerChanged(false);
-		ui.chbHeader->setVisible(false);
-		ui.sbHeaderLine->setVisible(false);
-		ui.lVectorNames->setVisible(true);
-		ui.kleVectorNames->setVisible(true);
-	}
+	if (m_liveData)
+		showAsciiHeaderOptions(false);
 
 	connect(ui.chbHeader, &QCheckBox::toggled, this, &AsciiOptionsWidget::headerChanged);
 	connect(ui.sbHeaderLine, QOverload<int>::of(&QSpinBox::valueChanged), this, &AsciiOptionsWidget::headerLineChanged);
@@ -156,14 +151,21 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent, bool liveData)
 void AsciiOptionsWidget::showAsciiHeaderOptions(bool visible) {
 	DEBUG(Q_FUNC_INFO);
 
-	ui.chbHeader->setVisible(visible);
-	ui.sbHeaderLine->setVisible(visible);
-	if (visible) {
-		ui.lVectorNames->setVisible(!ui.chbHeader->isChecked());
-		ui.kleVectorNames->setVisible(!ui.chbHeader->isChecked());
+	if (!m_liveData) {
+		ui.chbHeader->setVisible(visible);
+		ui.sbHeaderLine->setVisible(visible);
+		if (visible) {
+			ui.lVectorNames->setVisible(!ui.chbHeader->isChecked());
+			ui.kleVectorNames->setVisible(!ui.chbHeader->isChecked());
+		} else {
+			ui.lVectorNames->setVisible(false);
+			ui.kleVectorNames->setVisible(false);
+		}
 	} else {
-		ui.lVectorNames->setVisible(false);
-		ui.kleVectorNames->setVisible(false);
+		ui.chbHeader->setVisible(false);
+		ui.sbHeaderLine->setVisible(false);
+		ui.lVectorNames->setVisible(true);
+		ui.kleVectorNames->setVisible(true);
 	}
 }
 
