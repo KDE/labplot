@@ -763,7 +763,7 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device,
 	int counter = 0;
 	int startDataRow = 1;
 	int rowIndex = dataContainerStartIndex;
-	const auto columnCountExpected = m_DataContainer.size() - properties.createIndex - properties.createTimestamp;
+	const size_t columnCountExpected = m_DataContainer.size() - properties.createIndex - properties.createTimestamp;
 	QVector<QStringView> columnValues(columnCountExpected);
 	const auto separatorLength = properties.separator.size();
 	bool separatorSingleCharacter = separatorLength == 1;
@@ -806,7 +806,7 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device,
 		// Now we get to the data rows
 		if (properties.simplifyWhitespaces) {
 			const auto& values = determineColumnsSimplifyWhiteSpace(line, properties);
-			if (values.size() < columnCountExpected)
+			if ((size_t)values.size() < columnCountExpected)
 				continue; // return Status::InvalidNumberDataColumns;
 			setValues(values, rowIndex, properties);
 		} else {
