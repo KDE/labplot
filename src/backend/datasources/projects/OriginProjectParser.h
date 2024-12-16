@@ -14,7 +14,9 @@
 #include "backend/datasources/projects/ProjectParser.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+#ifdef HAVE_LIBORIGIN
 #include <OriginFile.h>
+#endif
 
 class Axis;
 class Background;
