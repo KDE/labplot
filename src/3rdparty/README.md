@@ -26,6 +26,11 @@ QXlsx is an excel file(.xlsx) reader/writer MIT-licensed C++ (with Qt) library (
 
 Qt Advanced Docking System lets you create customizable layouts using a full featured window docking system ([link](https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System))
 
+Changes:
+
+src/CMakeLists.txt:
++ target_compile_options(${library_name} PRIVATE -Wno-switch-enum)
+
 ## MCAP
 
 MCAP provides classes for reading and writing the MCAP file format.

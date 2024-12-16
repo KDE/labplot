@@ -81,6 +81,8 @@ endif()
 
 add_library(ads::${library_name} ALIAS ${library_name})
 
+target_compile_options(${library_name} PRIVATE -Wno-switch-enum)
+
 target_link_libraries(${library_name} PUBLIC Qt${QT_VERSION_MAJOR}::Core 
                                                Qt${QT_VERSION_MAJOR}::Gui 
                                                Qt${QT_VERSION_MAJOR}::Widgets)
