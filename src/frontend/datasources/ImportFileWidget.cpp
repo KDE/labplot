@@ -545,13 +545,21 @@ void ImportFileWidget::enableFirstRowAsColNames(bool enable) {
  *  and for some target data containers (Spreadsheet) only
  */
 void ImportFileWidget::updateHeaderOptions() {
+	// disable the header options for non-file sources because:
+	//* for sockets we allow to import one single value only at the moment
+	//* for MQTT topics we don't allow to set the vector names since the different topics can have different number of columns
+	// For files this option still can be useful if the user have to re-read the whole file
+	// and wants to use the header to set the column names or the user provides manually the column names.
+	// TODO: adjust this logic later once we allow to import multiple columns from sockets,
+	// it should be possible to provide the names of the columns
+
 	auto fileType = currentFileType();
 	bool spreadsheet = true; // assume it's spreadsheet on default if no container is selected yet
 	if (m_targetContainer)
 		spreadsheet = m_targetContainer->type() == AspectType::Spreadsheet;
 
 	// handle ASCII
-	bool visible = (fileType == AbstractFileFilter::FileType::Ascii) && spreadsheet;
+	bool visible = (fileType == AbstractFileFilter::FileType::Ascii) && spreadsheet && currentSourceType() == LiveDataSource::SourceType::FileOrPipe;
 	if (m_asciiOptionsWidget)
 		m_asciiOptionsWidget->showAsciiHeaderOptions(visible);
 
@@ -2488,15 +2496,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 
 	updateFilterHandlingSettings(sourceType);
 
-	// disable the header options for non-file sources because:
-	//* for sockets we allow to import one single value only at the moment
-	//* for MQTT topics we don't allow to set the vector names since the different topics can have different number of columns
-	// For files this option still can be useful if the user have to re-read the whole file
-	// and wants to use the header to set the column names or the user provides manually the column names.
-	// TODO: adjust this logic later once we allow to import multiple columns from sockets,
-	// it should be possible to provide the names of the columns
-	if (m_asciiOptionsWidget)
-		m_asciiOptionsWidget->showAsciiHeaderOptions(true);
+	updateHeaderOptions();
 
 	Q_EMIT sourceTypeChanged();
 	refreshPreview();
