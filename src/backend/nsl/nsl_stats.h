@@ -118,8 +118,8 @@ typedef struct {
 // Observation structure for log rank test
 typedef struct {
 	double time;
-	int status;    // 1 = event occurred, 0 = censored
-	size_t group;  // 1 or 2
+	int status; // 1 = event occurred, 0 = censored
+	size_t group; // 1 or 2
 } Observation;
 
 // Function prototypes for Log-Rank Test
@@ -130,6 +130,15 @@ double nsl_stats_log_rank_test_statistic(const double* time,
 										 const size_t* group2_indices,
 										 size_t size2);
 double nsl_stats_log_rank_test_p(const double* time, const int* status, const size_t* group1_indices, size_t size1, const size_t* group2_indices, size_t size2);
+
+/* Independent Sample Student's t-test */
+double nsl_stats_independent_t(const double sample1[], size_t n1, const double sample2[], size_t n2);
+double nsl_stats_independent_t_p(const double sample1[], size_t n1, const double sample2[], size_t n2);
+
+/* One Sample Student's t-test */
+double nsl_stats_one_sample_t(const double sample[], size_t n, double hypothesized_mean);
+double nsl_stats_one_sample_t_p(const double sample[], size_t n, double hypothesized_mean);
+
 __END_DECLS
 
 #endif /* NSL_STATS_H */

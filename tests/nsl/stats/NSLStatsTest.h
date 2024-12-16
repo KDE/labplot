@@ -21,6 +21,8 @@ private Q_SLOTS:
 	void testAnovaOneWay();
 	void testKruskalWallis();
 	void testLogRankTest();
+	void testIndependentT();
+	void testOneSampleT();
 	// performance
 	// void testPerformance();
 };

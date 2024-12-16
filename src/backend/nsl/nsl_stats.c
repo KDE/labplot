@@ -267,11 +267,6 @@ double nsl_stats_bic(double sse, size_t n, size_t np, int version) {
 }
 
 /* Mann-Whitney U test */
-int compare_values(const void* a, const void* b) {
-	double diff = ((double*)a)[0] - ((double*)b)[0]; // Compare based on the first element (value)
-	return (diff > 0) - (diff < 0); // returns 1, 0, or -1
-}
-
 double nsl_stats_mannwhitney_u(const double sample1[], size_t n1, const double sample2[], size_t n2) {
 	size_t n = n1 + n2;
 	Rank combined[1000];
@@ -334,7 +329,7 @@ double nsl_stats_mannwhitney_p(double U, size_t n1, size_t n2) {
 	return p_value;
 }
 
-// Calculate the F-statistic for one-way ANOVA
+// one-way ANOVA
 double nsl_stats_anova_oneway_f(double** groups, size_t* sizes, size_t n_groups) {
 	double grand_total = 0.0;
 	size_t total_samples = 0;
@@ -361,17 +356,14 @@ double nsl_stats_anova_oneway_f(double** groups, size_t* sizes, size_t n_groups)
 }
 
 double nsl_stats_anova_oneway_p(double** groups, size_t* sizes, size_t n_groups) {
-	// Calculate F-statistic
 	double F = nsl_stats_anova_oneway_f(groups, sizes, n_groups);
 
-	// Degrees of freedom
 	size_t df_between = n_groups - 1;
 	size_t df_within = 0;
 	for (size_t i = 0; i < n_groups; i++)
 		df_within += sizes[i];
 	df_within -= n_groups;
 
-	// Calculate p-value using the F-distribution
 	double p = nsl_stats_fdist_p(F, df_between, df_within);
 
 	return p;
@@ -388,7 +380,7 @@ int compare_rank(const void* a, const void* b) {
 	return 0;
 }
 
-// Calculate the Kruskal-Wallis H statistic
+// Kruskal-Wallis
 double nsl_stats_kruskal_wallis_h(double** groups, size_t* sizes, size_t n_groups) {
 	size_t total_samples = 0;
 	size_t i, j;
@@ -417,10 +409,8 @@ double nsl_stats_kruskal_wallis_h(double** groups, size_t* sizes, size_t n_group
 			ranks[idx++] = (Rank){groups[i][j], i};
 	}
 
-	// Sort by value using qsort
 	qsort(ranks, total_samples, sizeof(Rank), compare_rank);
 
-	// Assign ranks and handle ties, collecting tie counts
 	double* rank_sum = (double*)calloc(n_groups, sizeof(double));
 	if (rank_sum == NULL) {
 		fprintf(stderr, "Error: Memory allocation failed.\n");
@@ -437,7 +427,6 @@ double nsl_stats_kruskal_wallis_h(double** groups, size_t* sizes, size_t n_group
 		double sum_ranks = (double)(start + 1); // Ranks start at 1
 		size_t count = 1;
 
-		// Identify tied ranks
 		while (end + 1 < total_samples && ranks[end].value == ranks[end + 1].value) {
 			end++;
 			sum_ranks += (double)(end + 1);
@@ -446,12 +435,10 @@ double nsl_stats_kruskal_wallis_h(double** groups, size_t* sizes, size_t n_group
 
 		double average_rank = sum_ranks / (double)count;
 
-		// Assign average rank to all tied values
 		for (size_t k = start; k <= end; k++) {
 			rank_sum[ranks[k].group] += average_rank;
 		}
 
-		// If there are ties, record the tie count
 		if (count > 1) {
 			if (tie_count_size == tie_count_capacity) {
 				tie_count_capacity = (tie_count_capacity == 0) ? 4 : tie_count_capacity * 2;
@@ -471,15 +458,12 @@ double nsl_stats_kruskal_wallis_h(double** groups, size_t* sizes, size_t n_group
 		start = end + 1;
 	}
 
-	// Calculate H statistic
 	double H_numerator = 0.0;
 	for (i = 0; i < n_groups; i++) {
 		H_numerator += (rank_sum[i] * rank_sum[i]) / (double)sizes[i];
 	}
 
 	double H = (12.0 / ((double)total_samples * ((double)total_samples + 1.0))) * H_numerator - 3.0 * ((double)total_samples + 1.0);
-
-	// Calculate tie correction factor
 	double sum_tj_correction = 0.0;
 	for (i = 0; i < tie_count_size; i++) {
 		double tj = (double)tie_counts[i];
@@ -488,7 +472,6 @@ double nsl_stats_kruskal_wallis_h(double** groups, size_t* sizes, size_t n_group
 	double N_cubed_minus_N = ((double)total_samples * (double)total_samples * (double)total_samples) - ((double)total_samples);
 	double tie_correction_factor = 1.0 - (sum_tj_correction / N_cubed_minus_N);
 
-	// Adjust H with tie correction
 	double H_corrected = H / tie_correction_factor;
 
 	free(ranks);
@@ -497,7 +480,7 @@ double nsl_stats_kruskal_wallis_h(double** groups, size_t* sizes, size_t n_group
 
 	return H_corrected;
 }
-// Calculate the p-value for Kruskal-Wallis test
+
 double nsl_stats_kruskal_wallis_p(double** groups, size_t* sizes, size_t n_groups) {
 	double H = nsl_stats_kruskal_wallis_h(groups, sizes, n_groups);
 	double p = gsl_cdf_chisq_Q(H, n_groups - 1);
@@ -510,12 +493,14 @@ double nsl_stats_kruskal_wallis_p(double** groups, size_t* sizes, size_t n_group
 int compare_time(const void* a, const void* b) {
 	const Observation* obs_a = (const Observation*)a;
 	const Observation* obs_b = (const Observation*)b;
-	if (obs_a->time < obs_b->time) return -1;
-	if (obs_a->time > obs_b->time) return 1;
+	if (obs_a->time < obs_b->time)
+		return -1;
+	if (obs_a->time > obs_b->time)
+		return 1;
 	return 0;
 }
 
-// Calculate the Log-Rank test statistic
+// Log-Rank test
 double nsl_stats_log_rank_test_statistic(const double* time,
 										 const int* status,
 										 const size_t* group1_indices,
@@ -529,7 +514,6 @@ double nsl_stats_log_rank_test_statistic(const double* time,
 		return NAN;
 	}
 
-		   // Populate observations
 	for (size_t i = 0; i < size1; i++) {
 		observations[i].time = time[group1_indices[i]];
 		observations[i].status = status[group1_indices[i]];
@@ -541,36 +525,32 @@ double nsl_stats_log_rank_test_statistic(const double* time,
 		observations[size1 + i].group = 2;
 	}
 
-		   // Sort observations by time using qsort
 	qsort(observations, total_size, sizeof(Observation), compare_time);
 
-		   // Initialize risk sets
 	size_t n_risk_1 = size1;
 	size_t n_risk_2 = size2;
 	size_t n_risk_total = total_size;
 
-	double O1 = 0.0;  // Observed events in group 1
-	double E1 = 0.0;  // Expected events in group 1
-	double V1 = 0.0;  // Variance for group 1
+	double O1 = 0.0;
+	double E1 = 0.0;
+	double V1 = 0.0;
 
 	size_t i = 0;
 	while (i < total_size) {
 		double current_time = observations[i].time;
 		size_t j = i;
 
-			   // Find the range of events at the current time
 		while (j < total_size && observations[j].time == current_time) {
 			j++;
 		}
 
-		size_t d = 0;        // Total events at current_time
-		size_t d1 = 0;       // Events in group 1 at current_time
-		size_t d2 = 0;       // Events in group 2 at current_time
+		size_t d = 0;
+		size_t d1 = 0;
+		size_t d2 = 0;
 		size_t n_risk_at_time_1 = n_risk_1;
 		size_t n_risk_at_time_2 = n_risk_2;
 		size_t n_risk_at_time_total = n_risk_total;
 
-			   // Count events at current_time
 		for (size_t k = i; k < j; k++) {
 			if (observations[k].status == 1) {
 				d++;
@@ -583,20 +563,16 @@ double nsl_stats_log_rank_test_statistic(const double* time,
 		}
 
 		if (d > 0) {
-			// Calculate expected events in group 1
 			double E1_t = ((double)n_risk_at_time_1 * (double)d) / (double)n_risk_at_time_total;
 			E1 += E1_t;
 
-				   // Calculate variance for group 1
-			double V1_t = ((double)n_risk_at_time_1 * (double)n_risk_at_time_2 * (double)d * (double)(n_risk_at_time_total - d)) /
-				(pow((double)n_risk_at_time_total, 2) * ((double)n_risk_at_time_total - 1.0));
+			double V1_t = ((double)n_risk_at_time_1 * (double)n_risk_at_time_2 * (double)d * (double)(n_risk_at_time_total - d))
+				/ (pow((double)n_risk_at_time_total, 2) * ((double)n_risk_at_time_total - 1.0));
 			V1 += V1_t;
 
-				   // Count observed events in group 1
 			O1 += (double)d1;
 		}
 
-			   // Update risk sets by removing events and censored observations at current_time
 		for (size_t k = i; k < j; k++) {
 			if (observations[k].status == 1) {
 				if (observations[k].group == 1) {
@@ -606,7 +582,6 @@ double nsl_stats_log_rank_test_statistic(const double* time,
 				}
 				n_risk_total--;
 			} else {
-				// Censored observations are removed from the risk set
 				if (observations[k].group == 1) {
 					n_risk_1--;
 				} else {
@@ -621,17 +596,14 @@ double nsl_stats_log_rank_test_statistic(const double* time,
 
 	free(observations);
 
-		   // Check for variance being zero
 	if (V1 <= 0.0) {
 		fprintf(stderr, "Error: Variance is zero or negative. Cannot compute test statistic.\n");
 		return NAN;
 	}
-		   // Calculate test statistic
 	double H = pow(O1 - E1, 2) / V1;
 	return H;
 }
 
-// Calculate the p-value for Log-Rank test
 double
 nsl_stats_log_rank_test_p(const double* time, const int* status, const size_t* group1_indices, size_t size1, const size_t* group2_indices, size_t size2) {
 	double log_rank_stat = nsl_stats_log_rank_test_statistic(time, status, group1_indices, size1, group2_indices, size2);
@@ -639,4 +611,60 @@ nsl_stats_log_rank_test_p(const double* time, const int* status, const size_t* g
 	if (p < 1.e-9)
 		p = 0.0;
 	return p;
+}
+
+/* Independent Sample Student's t-test */
+double nsl_stats_independent_t(const double sample1[], size_t n1, const double sample2[], size_t n2) {
+	double mean1 = 0.0, mean2 = 0.0, var1 = 0.0, var2 = 0.0;
+	for (size_t i = 0; i < n1; i++)
+		mean1 += sample1[i];
+	mean1 /= n1;
+
+	for (size_t i = 0; i < n2; i++)
+		mean2 += sample2[i];
+	mean2 /= n2;
+	for (size_t i = 0; i < n1; i++)
+		var1 += (sample1[i] - mean1) * (sample1[i] - mean1);
+	var1 /= (n1 - 1);
+
+	for (size_t i = 0; i < n2; i++)
+		var2 += (sample2[i] - mean2) * (sample2[i] - mean2);
+	var2 /= (n2 - 1);
+	double pooled_variance = ((n1 - 1) * var1 + (n2 - 1) * var2) / (n1 + n2 - 2);
+	double standard_error = sqrt(pooled_variance * (1.0 / n1 + 1.0 / n2));
+	double t_stat = (mean1 - mean2) / standard_error;
+	return t_stat;
+}
+
+double nsl_stats_independent_t_p(const double sample1[], size_t n1, const double sample2[], size_t n2) {
+	size_t df = n1 + n2 - 2;
+	double t_stat = nsl_stats_independent_t(sample1, n1, sample2, n2);
+	double t_abs = fabs(t_stat);
+	double p_value = 2.0 * (1.0 - gsl_cdf_tdist_P(t_abs, df));
+	return p_value;
+}
+
+/* One Sample Student's t-test */
+double nsl_stats_one_sample_t(const double sample[], size_t n, double hypothesized_mean) {
+	double mean = 0.0, variance = 0.0;
+
+	for (size_t i = 0; i < n; i++)
+		mean += sample[i];
+	mean /= n;
+	for (size_t i = 0; i < n; i++)
+		variance += (sample[i] - mean) * (sample[i] - mean);
+	variance /= (n - 1);
+
+	double standard_error = sqrt(variance / n);
+
+	double t_stat = (mean - hypothesized_mean) / standard_error;
+	return t_stat;
+}
+
+double nsl_stats_one_sample_t_p(const double sample[], size_t n, double hypothesized_mean) {
+	size_t df = n - 1;
+	double t_stat = nsl_stats_one_sample_t(sample, n, hypothesized_mean);
+	double t_abs = fabs(t_stat);
+	double p_value = 2.0 * (1.0 - gsl_cdf_tdist_P(t_abs, df));
+	return p_value;
 }
