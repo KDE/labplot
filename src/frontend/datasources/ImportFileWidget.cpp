@@ -1856,9 +1856,11 @@ void ImportFileWidget::refreshPreview() {
 
 					DEBUG("UDP Socket: DISCONNECT PREVIEW, state = " << udpSocket.state());
 					udpSocket.disconnectFromHost();
-				} else
+				} else {
 					DEBUG("failed to connect to UDP socket "
 						  << " - " << STDSTRING(udpSocket.errorString()));
+					errorMessage = i18n("Unable to connect to host: ") + udpSocket.errorString();
+				}
 			} else {
 				DEBUG("Unable to bind" << udpSocket.errorString().toStdString());
 				errorMessage = i18n("Unable to bind: ") + udpSocket.errorString();
