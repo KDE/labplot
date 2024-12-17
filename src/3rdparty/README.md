@@ -29,7 +29,9 @@ Qt Advanced Docking System lets you create customizable layouts using a full fea
 Changes:
 
 src/CMakeLists.txt:
-+ target_compile_options(${library_name} PRIVATE -Wno-switch-enum)
++ if(NOT MSVC_FOUND)
++    target_compile_options(${library_name} PRIVATE -Wno-switch-enum)
++ endif()
 
 ## MCAP
 
