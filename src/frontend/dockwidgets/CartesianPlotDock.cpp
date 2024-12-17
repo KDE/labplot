@@ -4,7 +4,7 @@
 	Description          : widget for cartesian plot properties
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+	SPDX-FileCopyrightText: 2012-2024 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -1846,10 +1846,6 @@ void CartesianPlotDock::loadConfigFromTemplate(KConfig& config) {
 void CartesianPlotDock::load() {
 	// General-tab
 	ui.chkVisible->setChecked(m_plot->isVisible());
-	ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().x(), m_worksheetUnit));
-	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().y(), m_worksheetUnit));
-	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().width(), m_worksheetUnit));
-	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().height(), m_worksheetUnit));
 
 	int index = static_cast<int>(m_plot->rangeType());
 	ui.cbRangeType->setCurrentIndex(index);
@@ -1905,17 +1901,17 @@ void CartesianPlotDock::load() {
 	borderLineWidget->setLines(borderLines);
 	cursorLineWidget->setLines(cursorLines);
 
-	// Padding
-	// round padding to 0.1 cm
-	SET_ROUND_VALUE(m_plot, horizontalPadding, setHorizontalPadding)
-	SET_ROUND_VALUE(m_plot, verticalPadding, setVerticalPadding)
-	SET_ROUND_VALUE(m_plot, rightPadding, setRightPadding)
-	SET_ROUND_VALUE(m_plot, bottomPadding, setBottomPadding)
+	// Layout
+	ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(roundValue(m_plot->rect().x()), m_worksheetUnit));
+	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(roundValue(m_plot->rect().y()), m_worksheetUnit));
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(roundValue(m_plot->rect().width()), m_worksheetUnit));
+	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(roundValue(m_plot->rect().height()), m_worksheetUnit));
 
-	ui.sbPaddingHorizontal->setValue(Worksheet::convertFromSceneUnits(m_plot->horizontalPadding(), m_worksheetUnit));
-	ui.sbPaddingVertical->setValue(Worksheet::convertFromSceneUnits(m_plot->verticalPadding(), m_worksheetUnit));
-	ui.sbPaddingRight->setValue(Worksheet::convertFromSceneUnits(m_plot->rightPadding(), m_worksheetUnit));
-	ui.sbPaddingBottom->setValue(Worksheet::convertFromSceneUnits(m_plot->bottomPadding(), m_worksheetUnit));
+	// Padding
+	ui.sbPaddingHorizontal->setValue(Worksheet::convertFromSceneUnits(roundValue(m_plot->horizontalPadding()), m_worksheetUnit));
+	ui.sbPaddingVertical->setValue(Worksheet::convertFromSceneUnits(roundValue(m_plot->verticalPadding()), m_worksheetUnit));
+	ui.sbPaddingRight->setValue(Worksheet::convertFromSceneUnits(roundValue(m_plot->rightPadding()), m_worksheetUnit));
+	ui.sbPaddingBottom->setValue(Worksheet::convertFromSceneUnits(roundValue(m_plot->bottomPadding()), m_worksheetUnit));
 	ui.cbPaddingSymmetric->setChecked(m_plot->symmetricPadding());
 
 	// Border
