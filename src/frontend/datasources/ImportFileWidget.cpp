@@ -648,7 +648,7 @@ QString ImportFileWidget::selectedObject() const {
 
 QString ImportFileWidget::host() const {
 	const auto t = ui.leHost->text();
-	if (t.compare(QStringLiteral("localhost"), Qt::CaseSensitivity::CaseInsensitive))
+	if (t.compare(QStringLiteral("localhost"), Qt::CaseSensitivity::CaseInsensitive) == 0)
 		return QStringLiteral("127.0.0.1");
 	return t;
 }
