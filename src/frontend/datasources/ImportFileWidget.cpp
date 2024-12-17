@@ -1838,27 +1838,31 @@ void ImportFileWidget::refreshPreview() {
 		case LiveDataSource::SourceType::NetworkUDPSocket: {
 			QUdpSocket udpSocket{this};
 			DEBUG("UDP Socket: CONNECT PREVIEW, state = " << udpSocket.state());
-			udpSocket.bind(QHostAddress(host()), port().toInt());
-			udpSocket.connectToHost(host(), 0, QUdpSocket::ReadOnly);
-			if (udpSocket.waitForConnected()) {
-				DEBUG("	connected to UDP socket " << STDSTRING(host()) << ':' << port().toInt());
-				if (!udpSocket.waitForReadyRead(2000)) {
-					DEBUG("	ERROR: not ready for read after 2 sec");
-					errorMessage = i18n("Not ready for read after 2s");
-				} else {
-					if (udpSocket.hasPendingDatagrams()) {
-						DEBUG("	has pending data");
+			if (udpSocket.bind(QHostAddress(host()), port().toInt())) {
+				udpSocket.connectToHost(host(), 0, QUdpSocket::ReadOnly);
+				if (udpSocket.waitForConnected()) {
+					DEBUG("	connected to UDP socket " << STDSTRING(host()) << ':' << port().toInt());
+					if (!udpSocket.waitForReadyRead(2000)) {
+						DEBUG("	ERROR: not ready for read after 2 sec" << udpSocket.errorString().toStdString());
+						errorMessage = i18n("Not ready for read after 2s:") + udpSocket.errorString();
 					} else {
-						DEBUG("	has no pending data");
+						if (udpSocket.hasPendingDatagrams()) {
+							DEBUG("	has pending data");
+						} else {
+							DEBUG("	has no pending data");
+						}
+						importedStrings = filter->preview(udpSocket, lines, true);
 					}
-					importedStrings = filter->preview(udpSocket, lines, true);
-				}
 
-				DEBUG("UDP Socket: DISCONNECT PREVIEW, state = " << udpSocket.state());
-				udpSocket.disconnectFromHost();
-			} else
-				DEBUG("failed to connect to UDP socket "
-					  << " - " << STDSTRING(udpSocket.errorString()));
+					DEBUG("UDP Socket: DISCONNECT PREVIEW, state = " << udpSocket.state());
+					udpSocket.disconnectFromHost();
+				} else
+					DEBUG("failed to connect to UDP socket "
+						  << " - " << STDSTRING(udpSocket.errorString()));
+			} else {
+				DEBUG("Unable to bind" << udpSocket.errorString().toStdString());
+				errorMessage = i18n("Unable to bind: ") + udpSocket.errorString();
+			}
 
 			break;
 		}
