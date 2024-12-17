@@ -1414,7 +1414,8 @@ bool AsciiFilterPrivate::isUTF16(QIODevice& device) {
 	const auto byte1 = static_cast<unsigned char>(buffer[0]);
 	const auto byte2 = static_cast<unsigned char>(buffer[1]);
 
-	device.reset(); // seek to the start
+	if (!device.isSequential())
+		device.reset(); // seek to the start
 
 	// Check for UTF-16 BOM (0xFEFF for UTF-16 Big Endian, 0xFFFE for UTF-16 Little Endian)
 	if ((byte1 == 0xFE && byte2 == 0xFF) || (byte1 == 0xFF && byte2 == 0xFE))
