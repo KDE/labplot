@@ -1906,6 +1906,12 @@ void CartesianPlotDock::load() {
 	cursorLineWidget->setLines(cursorLines);
 
 	// Padding
+	// round padding to 0.1 cm
+	SET_ROUND_VALUE(m_plot, horizontalPadding, setHorizontalPadding)
+	SET_ROUND_VALUE(m_plot, verticalPadding, setVerticalPadding)
+	SET_ROUND_VALUE(m_plot, rightPadding, setRightPadding)
+	SET_ROUND_VALUE(m_plot, bottomPadding, setBottomPadding)
+
 	ui.sbPaddingHorizontal->setValue(Worksheet::convertFromSceneUnits(m_plot->horizontalPadding(), m_worksheetUnit));
 	ui.sbPaddingVertical->setValue(Worksheet::convertFromSceneUnits(m_plot->verticalPadding(), m_worksheetUnit));
 	ui.sbPaddingRight->setValue(Worksheet::convertFromSceneUnits(m_plot->rightPadding(), m_worksheetUnit));

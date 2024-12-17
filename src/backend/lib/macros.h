@@ -103,6 +103,11 @@ private:
 // check if var is in [min, max)
 #define INRANGE(var, min, max) (var >= min && var < max)
 
+// round plot values to 0.1 cm
+#define SET_ROUND_VALUE(plot, get, set)                                                                                                                        \
+	plot->set(Worksheet::convertToSceneUnits(std::round(10. * Worksheet::convertFromSceneUnits(m_plot->get(), Worksheet::Unit::Centimeter)) / 10.,             \
+											 Worksheet::Unit::Centimeter));
+
 // access enums in Q_OBJECT/Q_GADGET classes
 #define ENUM_TO_STRING(class, enum, index)                                                                                                                     \
 	(class ::staticMetaObject.enumerator(class ::staticMetaObject.indexOfEnumerator(#enum)).valueToKey(static_cast<int>(index)))

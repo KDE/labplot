@@ -1372,20 +1372,6 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 #endif
 		}
 
-		// round padding to 0.1 cm
-		plot->setHorizontalPadding(
-			Worksheet::convertToSceneUnits(std::round(10. * Worksheet::convertFromSceneUnits(plot->horizontalPadding(), Worksheet::Unit::Centimeter)) / 10.,
-										   Worksheet::Unit::Centimeter));
-		plot->setVerticalPadding(
-			Worksheet::convertToSceneUnits(std::round(10. * Worksheet::convertFromSceneUnits(plot->verticalPadding(), Worksheet::Unit::Centimeter)) / 10.,
-										   Worksheet::Unit::Centimeter));
-		plot->setRightPadding(
-			Worksheet::convertToSceneUnits(std::round(10. * Worksheet::convertFromSceneUnits(plot->rightPadding(), Worksheet::Unit::Centimeter)) / 10.,
-										   Worksheet::Unit::Centimeter));
-		plot->setBottomPadding(
-			Worksheet::convertToSceneUnits(std::round(10. * Worksheet::convertFromSceneUnits(plot->bottomPadding(), Worksheet::Unit::Centimeter)) / 10.,
-										   Worksheet::Unit::Centimeter));
-
 		WARN(Q_FUNC_INFO << ", PADDING (H/V) = " << plot->horizontalPadding() << ", " << plot->verticalPadding())
 		WARN(Q_FUNC_INFO << ", PADDING (R/B) = " << plot->rightPadding() << ", " << plot->bottomPadding())
 
