@@ -263,7 +263,7 @@ QStringList AsciiFilter::separatorCharacters() {
 
 /*!
  * returns the list of all predefined comment characters.
-*/
+ */
 QStringList AsciiFilter::commentCharacters() {
 	return (QStringList() << QStringLiteral("#") << QStringLiteral("!") << QStringLiteral("//") << QStringLiteral("+") << QStringLiteral("c")
 						  << QStringLiteral(":") << QStringLiteral(";"));
