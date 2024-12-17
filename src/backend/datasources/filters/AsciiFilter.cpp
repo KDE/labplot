@@ -200,7 +200,7 @@ QString AsciiFilter::statusToString(Status e) {
 	case Status::UnableToOpenDevice:
 		return i18n("Unable to open device");
 	case Status::NoNewLine:
-		return QString();
+		return i18n("No new line detected");
 	case Status::SeparatorDeterminationFailed:
 		return i18n("Unable to determine the separator");
 	case Status::InvalidNumberDataColumns:
