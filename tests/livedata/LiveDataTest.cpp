@@ -30,7 +30,7 @@ void LiveDataTest::initTestCase() {
 	// initializet the TCP socket/server
 	m_tcpServer = new QTcpServer(this);
 	if (!m_tcpServer->listen())
-		QFAIL("Failed to start the TCP server. "/* + QString(m_tcpServer->errorString())*/);
+		QFAIL("Failed to start the TCP server. " /* + QString(m_tcpServer->errorString())*/);
 
 	connect(m_tcpServer, &QTcpServer::newConnection, this, &LiveDataTest::sendDataOverTcp);
 
@@ -1484,8 +1484,7 @@ void LiveDataTest::sendDataOverTcp() {
 
 	auto* clientConnection = m_tcpServer->nextPendingConnection();
 	QVERIFY(clientConnection);
-	connect(clientConnection, &QAbstractSocket::disconnected,
-			clientConnection, &QObject::deleteLater);
+	connect(clientConnection, &QAbstractSocket::disconnected, clientConnection, &QObject::deleteLater);
 
 	clientConnection->write(block);
 	clientConnection->disconnectFromHost();
