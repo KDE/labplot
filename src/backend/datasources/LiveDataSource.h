@@ -192,6 +192,8 @@ private Q_SLOTS:
 
 Q_SIGNALS:
 	void readOnUpdateCalled();
+private:
+	void initDevice();
 };
 
 #endif

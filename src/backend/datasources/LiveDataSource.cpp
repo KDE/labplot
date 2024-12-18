@@ -246,6 +246,7 @@ int LiveDataSource::keepNValues() const {
  */
 void LiveDataSource::setPort(quint16 port) {
 	m_port = port;
+	initDevice();
 }
 
 void LiveDataSource::setBytesRead(qint64 bytes) {
@@ -361,6 +362,7 @@ LiveDataSource::UpdateType LiveDataSource::updateType() const {
  */
 void LiveDataSource::setHost(const QString& host) {
 	m_host = host.simplified();
+	initDevice();
 }
 
 QString LiveDataSource::host() const {
@@ -464,6 +466,76 @@ void LiveDataSource::readOnUpdate() {
 	Q_EMIT readOnUpdateCalled();
 }
 
+void LiveDataSource::initDevice() {
+	DEBUG("	Preparing device: update type = " << ENUM_TO_STRING(LiveDataSource, UpdateType, m_updateType));
+	switch (m_sourceType) {
+	case SourceType::FileOrPipe:
+		delete m_device;
+		m_device = new QFile(m_fileName);
+		break;
+	case SourceType::NetworkTCPSocket:
+		if (!m_tcpSocket)
+			m_tcpSocket = new QTcpSocket(this);
+		m_device = m_tcpSocket;
+		m_tcpSocket->abort();
+		m_tcpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
+
+		connect(m_tcpSocket, &QTcpSocket::readyRead, this, &LiveDataSource::readyRead);
+		connect(m_tcpSocket,
+				static_cast<void (QTcpSocket::*)(QAbstractSocket::SocketError)>(&QTcpSocket::errorOccurred),
+				this,
+				&LiveDataSource::tcpSocketError);
+		break;
+	case SourceType::NetworkUDPSocket:
+		if (!m_udpSocket)
+			m_udpSocket = new QUdpSocket(this);
+		m_device = m_udpSocket;
+		m_udpSocket->abort();
+		m_udpSocket->bind(QHostAddress(m_host), m_port);
+		m_udpSocket->connectToHost(m_host, 0, QUdpSocket::ReadOnly);
+
+			   // only connect to readyRead when update is on new data
+		if (m_updateType == UpdateType::NewData)
+			connect(m_udpSocket, &QUdpSocket::readyRead, this, &LiveDataSource::readyRead);
+		connect(m_udpSocket,
+				static_cast<void (QUdpSocket::*)(QAbstractSocket::SocketError)>(&QUdpSocket::errorOccurred),
+				this,
+				&LiveDataSource::tcpSocketError);
+		break;
+	case SourceType::LocalSocket:
+		if (!m_localSocket)
+			m_localSocket = new QLocalSocket(this);
+		m_device = m_localSocket;
+		m_localSocket->abort();
+		m_localSocket->connectToServer(m_localSocketName, QLocalSocket::ReadOnly);
+
+		connect(m_localSocket, &QLocalSocket::readyRead, this, &LiveDataSource::readyRead);
+		connect(m_localSocket,
+				static_cast<void (QLocalSocket::*)(QLocalSocket::LocalSocketError)>(&QLocalSocket::errorOccurred),
+				this,
+				&LiveDataSource::localSocketError);
+		break;
+	case SourceType::SerialPort:
+#ifdef HAVE_QTSERIALPORT
+		if (!m_serialPort)
+			m_serialPort = new QSerialPort(this);
+		m_device = m_serialPort;
+		DEBUG("	Serial: " << STDSTRING(m_serialPortName) << ", " << m_baudRate);
+		m_serialPort->setBaudRate(m_baudRate);
+		m_serialPort->setPortName(m_serialPortName);
+		// m_serialPort->open(QIODevice::ReadOnly); // Not required
+
+			   // only connect to readyRead when update is on new data
+		if (m_updateType == UpdateType::NewData)
+			connect(m_serialPort, &QSerialPort::readyRead, this, &LiveDataSource::readyRead);
+		connect(m_serialPort, &QSerialPort::errorOccurred, this, &LiveDataSource::serialPortError);
+#endif
+		break;
+	case SourceType::MQTT:
+		break;
+	}
+}
+
 /*
  * called periodically or on new data changes (file changed, new data in the socket, etc.)
  */
@@ -481,66 +553,7 @@ void LiveDataSource::read() {
 
 	// initialize the device (file, socket, serial port) when calling this function for the first time
 	if (!m_prepared) {
-		DEBUG("	Preparing device: update type = " << ENUM_TO_STRING(LiveDataSource, UpdateType, m_updateType));
-		switch (m_sourceType) {
-		case SourceType::FileOrPipe:
-			delete m_device;
-			m_device = new QFile(m_fileName);
-			break;
-		case SourceType::NetworkTCPSocket:
-			m_tcpSocket = new QTcpSocket(this);
-			m_device = m_tcpSocket;
-			m_tcpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
-
-			connect(m_tcpSocket, &QTcpSocket::readyRead, this, &LiveDataSource::readyRead);
-			connect(m_tcpSocket,
-					static_cast<void (QTcpSocket::*)(QAbstractSocket::SocketError)>(&QTcpSocket::errorOccurred),
-					this,
-					&LiveDataSource::tcpSocketError);
-			break;
-		case SourceType::NetworkUDPSocket:
-			m_udpSocket = new QUdpSocket(this);
-			m_device = m_udpSocket;
-			m_udpSocket->bind(QHostAddress(m_host), m_port);
-			m_udpSocket->connectToHost(m_host, 0, QUdpSocket::ReadOnly);
-
-			// only connect to readyRead when update is on new data
-			if (m_updateType == UpdateType::NewData)
-				connect(m_udpSocket, &QUdpSocket::readyRead, this, &LiveDataSource::readyRead);
-			connect(m_udpSocket,
-					static_cast<void (QUdpSocket::*)(QAbstractSocket::SocketError)>(&QUdpSocket::errorOccurred),
-					this,
-					&LiveDataSource::tcpSocketError);
-			break;
-		case SourceType::LocalSocket:
-			m_localSocket = new QLocalSocket(this);
-			m_device = m_localSocket;
-			m_localSocket->connectToServer(m_localSocketName, QLocalSocket::ReadOnly);
-
-			connect(m_localSocket, &QLocalSocket::readyRead, this, &LiveDataSource::readyRead);
-			connect(m_localSocket,
-					static_cast<void (QLocalSocket::*)(QLocalSocket::LocalSocketError)>(&QLocalSocket::errorOccurred),
-					this,
-					&LiveDataSource::localSocketError);
-			break;
-		case SourceType::SerialPort:
-#ifdef HAVE_QTSERIALPORT
-			m_serialPort = new QSerialPort(this);
-			m_device = m_serialPort;
-			DEBUG("	Serial: " << STDSTRING(m_serialPortName) << ", " << m_baudRate);
-			m_serialPort->setBaudRate(m_baudRate);
-			m_serialPort->setPortName(m_serialPortName);
-			// m_serialPort->open(QIODevice::ReadOnly); // Not required
-
-			// only connect to readyRead when update is on new data
-			if (m_updateType == UpdateType::NewData)
-				connect(m_serialPort, &QSerialPort::readyRead, this, &LiveDataSource::readyRead);
-			connect(m_serialPort, &QSerialPort::errorOccurred, this, &LiveDataSource::serialPortError);
-#endif
-			break;
-		case SourceType::MQTT:
-			break;
-		}
+		initDevice();
 		m_prepared = true;
 	}
 
@@ -587,15 +600,8 @@ void LiveDataSource::read() {
 			break;
 		}
 		break;
-	case SourceType::NetworkTCPSocket:
-		DEBUG("reading from TCP socket. state before abort = " << m_tcpSocket->state());
-		m_tcpSocket->abort();
-		m_tcpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
-		DEBUG("reading from TCP socket. state after reconnect = " << m_tcpSocket->state());
-		break;
+	case SourceType::NetworkTCPSocket: // fall through
 	case SourceType::NetworkUDPSocket:
-		DEBUG("	Reading from UDP socket. state = " << m_udpSocket->state());
-
 		// reading data here
 		if (m_fileType == AbstractFileFilter::FileType::Ascii)
 			static_cast<AsciiFilter*>(m_filter)
