@@ -1821,7 +1821,6 @@ void HeatmapTest::testClippingBottomRight2() {
 		switch (valueDrawnCounter) {
 		// Row 0
 		case 0:
-			// Currently fails, because (5,5) is the border and therefore included
 			COMPARE_VALUES(2.5, 10. / 3., 5., 20. / 3., 1.);
 			break;
 		}
