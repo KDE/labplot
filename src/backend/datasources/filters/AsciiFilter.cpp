@@ -24,8 +24,9 @@
 #ifdef HAVE_QTSERIALPORT
 #include <QSerialPort>
 #endif
-#include <QUdpSocket>
 #include <QNetworkDatagram>
+#include <QTimer>
+#include <QUdpSocket>
 
 #include <fstream>
 
@@ -426,7 +427,6 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner)
  */
 AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 	using Status = AsciiFilter::Status;
-
 
 	IODeviceHandler d(device, true); // closes device automatically.
 
@@ -1368,13 +1368,37 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice& device, int lines, b
 	q->clearLastError();
 	qint64 bytes_read;
 	setDataSource(&spreadsheet);
+	CleanupNoArguments cleanup([this]() {
+		this->setDataSource(nullptr);
+	});
 	const auto status =
 		readFromDevice(device, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Replace, 0, lines, 0, bytes_read, skipFirstLine);
-	setDataSource(nullptr);
 	QVector<QStringList> p;
 	if (status != AsciiFilter::Status::Success) {
 		setLastError(status);
 		return p;
+	}
+
+	// If data are coming slowly, wait until filled
+	constexpr int sleep_ms = 500;
+	constexpr int timeout_ms = 3000;
+	int counter = 0;
+	while (device.isSequential() && spreadsheet.rowCount() < 10 && spreadsheet.rowCount() < lines) {
+		QEventLoop loop;
+		QTimer t;
+		t.connect(&t, &QTimer::timeout, &loop, &QEventLoop::quit);
+		t.start(sleep_ms);
+		loop.exec();
+
+		const auto status =
+			readFromDevice(device, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, 0, lines, 0, bytes_read, skipFirstLine);
+		if (status != AsciiFilter::Status::Success) {
+			setLastError(status);
+			return p;
+		}
+		counter++;
+		if (counter * sleep_ms >= timeout_ms)
+			break;
 	}
 
 	for (int row = 0; row < spreadsheet.rowCount(); row++) {
