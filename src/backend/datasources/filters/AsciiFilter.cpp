@@ -1359,10 +1359,10 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice& device, int lines, b
 	if (reinit)
 		initialized = false;
 
-	// if (isUTF16(device)) {
-	// 	setLastError(AsciiFilter::Status::UTF16NotSupported);
-	// 	return {};
-	// }
+	if (isUTF16(device)) {
+		setLastError(AsciiFilter::Status::UTF16NotSupported);
+		return {};
+	}
 
 	q->clearLastError();
 	qint64 bytes_read;
@@ -1444,8 +1444,10 @@ AsciiFilter::Status AsciiFilterPrivate::setLastError(AsciiFilter::Status status)
  * \c false is returned and the caller needs to hanlde these error cases properly.
  */
 bool AsciiFilterPrivate::isUTF16(QIODevice& device) {
-	if (!device.open(QIODevice::ReadOnly))
-		return false;
+	if (!device.isOpen()) {
+		if (!device.open(QIODevice::ReadOnly))
+			return false;
+	}
 
 	// read the first two bytes to check the "byte order mark" (BOM),
 	// UTF-16 encoded files typically start with a BOM to indicate the endianness of the encoding.
