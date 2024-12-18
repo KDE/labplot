@@ -97,11 +97,9 @@ protected:
 	Worksheet::Unit m_worksheetUnit{Worksheet::Unit::Centimeter};
 	// round value in spinboxes to 0.1 cm/in
 	static double roundValue(double value) {
-		DEBUG("VALUE = " << value)
 		return std::round(10. * value) / 10.;
 	}
 	static double roundSceneValue(double value, Units units = Units::Metric) {
-		DEBUG("Scene VALUE = " << value)
 		if (units == Units::Metric)
 			return Worksheet::convertToSceneUnits(std::round(10. * Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Centimeter)) / 10.,
 				Worksheet::Unit::Centimeter);
