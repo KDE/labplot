@@ -696,8 +696,8 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 		break;
 	case LiveDataSource::SourceType::NetworkTCPSocket:
 	case LiveDataSource::SourceType::NetworkUDPSocket:
-		source->setHost(ui.leHost->text());
-		source->setPort((quint16)ui.lePort->text().toInt());
+		source->setHost(host());
+		source->setPort((quint16)port().toInt());
 		break;
 	case LiveDataSource::SourceType::SerialPort:
 		source->setBaudRate(ui.cbBaudRate->currentText().toInt());
