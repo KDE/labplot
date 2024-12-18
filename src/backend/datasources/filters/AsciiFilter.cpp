@@ -1249,8 +1249,7 @@ AsciiFilter::Status AsciiFilterPrivate::getLine(QIODevice& device, QString& line
 			return Status::DeviceAtEnd;
 	}
 
-	auto* tcpSocket = dynamic_cast<QTcpSocket*>(&device);
-	if (device.atEnd() && !tcpSocket) {
+	if (device.atEnd()) {
 		return Status::DeviceAtEnd;
 	}
 
