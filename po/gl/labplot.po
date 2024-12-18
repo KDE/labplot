@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-17 00:37+0000\n"
-"PO-Revision-Date: 2024-12-16 01:08+0100\n"
+"POT-Creation-Date: 2024-12-18 00:37+0000\n"
+"PO-Revision-Date: 2024-12-17 18:27+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -1543,7 +1543,7 @@ msgstr "Número actual de entradas na caché: %1"
 #: src/backend/datasources/filters/HDF5Filter.cpp:307
 #, kde-format
 msgid "Logging enabled: %1"
-msgstr "Historial activado: %1"
+msgstr "Activouse o rexistro: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:309
 #, kde-format
@@ -2501,7 +2501,7 @@ msgstr "Representar os datos"
 msgid "Plot%1"
 msgstr "Gráfica%1"
 
-#: src/backend/datasources/projects/OriginProjectParser.cpp:1521
+#: src/backend/datasources/projects/OriginProjectParser.cpp:1507
 #, kde-format
 msgid "legend"
 msgstr "lenda"
@@ -6410,8 +6410,8 @@ msgstr "Circular"
 #: src/frontend/ui/dockwidgets/axisdock.ui:1212
 #: src/frontend/ui/dockwidgets/axisdock.ui:1606
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:203
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:343
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:384
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:341
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:382
 #: src/frontend/ui/dockwidgets/histogramdock.ui:214
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:350
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:223
@@ -7729,7 +7729,7 @@ msgstr "Orientación"
 #: src/frontend/ui/dockwidgets/axisdock.ui:488
 #: src/frontend/ui/dockwidgets/axisdock.ui:628
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:687
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1442
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1436
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:235
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:233
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:232
@@ -8164,7 +8164,7 @@ msgstr "non hai información dispoñíbel"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:168
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5122
 #: src/frontend/ui/dockwidgets/axisdock.ui:483
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:548
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:542
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:478
 #: src/frontend/ui/dockwidgets/infoelementdock.ui:224
 #, kde-format
@@ -9987,7 +9987,7 @@ msgstr "%1: desbloquear"
 #: src/frontend/ui/datapickerimagewidget.ui:826
 #: src/frontend/ui/dockwidgets/axisdock.ui:58
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:241
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:540
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:534
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:293
 #: src/frontend/ui/dockwidgets/custompointdock.ui:260
 #: src/frontend/ui/dockwidgets/imagedock.ui:113
@@ -11062,8 +11062,8 @@ msgstr "Engadir un novo contedor de datos ao proxecto"
 #: src/frontend/ui/dockwidgets/axisdock.ui:65
 #: src/frontend/ui/dockwidgets/axisdock.ui:616
 #: src/frontend/ui/dockwidgets/axisdock.ui:1272
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1001
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1163
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:995
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1157
 #: src/frontend/ui/dockwidgets/infoelementdock.ui:42
 #: src/frontend/ui/dockwidgets/infoelementdock.ui:180
 #: src/frontend/ui/dockwidgets/valuewidget.ui:88
@@ -12936,7 +12936,7 @@ msgstr "O intervalo de gráfica %1 úsao o elemento «%2». "
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1310
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:566
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:560
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:769
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:342
 #, kde-format
@@ -12946,7 +12946,7 @@ msgstr "Horizontal:"
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVertical)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalSpacing)
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1311
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:867
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:861
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:724
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:428
 #, kde-format
@@ -12956,7 +12956,7 @@ msgstr "Vertical:"
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1313
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:802
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:796
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:717
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:414
 #, kde-format
@@ -12966,7 +12966,7 @@ msgstr "Esquerda:"
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1314
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:809
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:803
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:666
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:407
 #, kde-format
@@ -15157,7 +15157,7 @@ msgstr "%1 impreso"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/frontend/MainWin.cpp:2456
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1431
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1425
 #: src/frontend/worksheet/WorksheetView.cpp:362
 #, kde-format
 msgid "Cursor"
@@ -16250,6 +16250,7 @@ msgid ""
 "background."
 msgstr "Parámetro de suavidade. A maior valor máis suave é o fondo resultante."
 
+# skip-rule: trasno-highlight_reverse
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:167
 #, kde-format
 msgid ""
@@ -16729,7 +16730,7 @@ msgstr "&Formatar"
 #. i18n: ectx: attribute (title), widget (QWidget, tabBackground)
 #: src/frontend/spreadsheet/FormattingHeatmapDialog.cpp:61
 #: src/frontend/ui/dockwidgets/axisdock.ui:1432
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1400
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1394
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:483
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:494
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:219
@@ -18237,7 +18238,7 @@ msgstr "Tipo de erro de Y:"
 #: src/frontend/ui/dockwidgets/axisdock.ui:181
 #: src/frontend/ui/dockwidgets/barplotdock.ui:157
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:185
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:442
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:438
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:280
 #: src/frontend/ui/dockwidgets/columndock.ui:17
 #: src/frontend/ui/dockwidgets/custompointdock.ui:267
@@ -18290,7 +18291,7 @@ msgstr "Comentario:"
 #: src/frontend/ui/dockwidgets/axisdock.ui:341
 #: src/frontend/ui/dockwidgets/barplotdock.ui:101
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:67
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:452
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:448
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:449
 #: src/frontend/ui/dockwidgets/columndock.ui:50
 #: src/frontend/ui/dockwidgets/custompointdock.ui:208
@@ -18371,8 +18372,8 @@ msgstr "Barras de erro"
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:125
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:135
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:145
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1011
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1136
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1005
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1130
 #: src/frontend/ui/dockwidgets/linewidget.ui:78
 #: src/frontend/ui/labelwidget.ui:619 src/frontend/ui/symbolwidget.ui:45
 #: src/frontend/ui/symbolwidget.ui:184 src/frontend/ui/symbolwidget.ui:240
@@ -18523,15 +18524,15 @@ msgstr "Tamaño:"
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:873
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:895
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:920
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:582
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:616
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:671
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:693
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:715
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:773
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:832
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:854
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1350
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:576
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:610
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:665
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:687
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:709
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:767
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:826
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:848
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1344
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:113
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:175
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:235
@@ -18836,7 +18837,7 @@ msgstr "Ruta relativa"
 #: src/frontend/ui/dockwidgets/axisdock.ui:1498
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:59
 #: src/frontend/ui/dockwidgets/barplotdock.ui:111
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1213
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1207
 #: src/frontend/ui/dockwidgets/errorbarwidget.ui:90
 #: src/frontend/ui/dockwidgets/errorbarwidget.ui:228
 #: src/frontend/ui/dockwidgets/errorbarwidget.ui:245
@@ -20261,8 +20262,8 @@ msgstr "Formato:"
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbValuesOpacity)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1396
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:184
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1018
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1153
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1012
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1147
 #: src/frontend/ui/dockwidgets/imagedock.ui:462
 #: src/frontend/ui/dockwidgets/linewidget.ui:108
 #: src/frontend/ui/dockwidgets/valuewidget.ui:153
@@ -20318,8 +20319,8 @@ msgstr "Grade principal"
 #. i18n: ectx: property (text), widget (QLabel, lRugEnabled)
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:42
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:794
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1040
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1047
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1034
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1041
 #: src/frontend/ui/dockwidgets/histogramdock.ui:491
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:336
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:611
@@ -20415,7 +20416,7 @@ msgstr "Barras"
 #. i18n: ectx: attribute (title), widget (QWidget, tabBorder)
 #: src/frontend/ui/dockwidgets/barplotdock.ui:264
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:449
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1334
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1328
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:596
 #: src/frontend/ui/dockwidgets/imagedock.ui:557
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:303
@@ -20570,7 +20571,7 @@ msgstr "Gráfica de alfombra"
 #. i18n: ectx: property (text), widget (QLabel, lRugWidth)
 #. i18n: ectx: property (text), widget (QLabel, lWidth)
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:837
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:559
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:553
 #: src/frontend/ui/dockwidgets/histogramdock.ui:498
 #: src/frontend/ui/dockwidgets/imagedock.ui:69
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:404
@@ -20612,7 +20613,7 @@ msgstr "lista de intervalos en y"
 #. i18n: ectx: property (text), widget (QLabel, lValuesFormat)
 #. i18n: ectx: property (text), widget (QLabel, lFormat_2)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:208
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:348
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:346
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:193
 #: src/frontend/ui/dockwidgets/columndock.ui:201
 #: src/frontend/ui/dockwidgets/errorbarwidget.ui:137
@@ -20626,7 +20627,7 @@ msgstr "Formato"
 #. i18n: ectx: property (text), widget (QTableWidget, twYRanges)
 #. i18n: ectx: property (text), widget (QTableWidget, twXRanges)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:213
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:353
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:351
 #, kde-format
 msgid "Start"
 msgstr "Inicio"
@@ -20634,7 +20635,7 @@ msgstr "Inicio"
 #. i18n: ectx: property (text), widget (QTableWidget, twYRanges)
 #. i18n: ectx: property (text), widget (QTableWidget, twXRanges)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:218
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:358
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:356
 #, kde-format
 msgid "End"
 msgstr "Fin"
@@ -20642,7 +20643,7 @@ msgstr "Fin"
 #. i18n: ectx: property (text), widget (QTableWidget, twYRanges)
 #. i18n: ectx: property (text), widget (QTableWidget, twXRanges)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:223
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:363
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:361
 #, kde-format
 msgid "Scale"
 msgstr "Escala"
@@ -20665,7 +20666,7 @@ msgid "<html><head/><body><p>Add a new x range</p></body></html>"
 msgstr "<html><head/><body><p>Engadir un novo intervalo en x</p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbRemoveXRange)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:283
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:282
 #, kde-format
 msgid "Remove the current selected x range"
 msgstr "Retirar o intervalo en x seleccionado"
@@ -20674,59 +20675,59 @@ msgstr "Retirar o intervalo en x seleccionado"
 #. i18n: ectx: property (text), widget (QToolButton, tbAddPlotRange)
 #. i18n: ectx: property (text), widget (QToolButton, tbRemovePlotRange)
 #. i18n: ectx: property (text), widget (QToolButton, bAddVariable)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:286
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:415
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:429
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:285
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:413
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:426
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:264
 #, kde-format
 msgid "..."
 msgstr "…"
 
 #. i18n: ectx: property (text), widget (QLabel, lRangeType)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:302
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:300
 #, kde-format
 msgid "Data Range:"
 msgstr "Intervalo de datos:"
 
 #. i18n: ectx: property (toolTip), widget (QTableWidget, twXRanges)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:315
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:313
 #, kde-format
 msgid "List of x ranges"
 msgstr "Lista de intervalos en x"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbAddPlotRange)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:412
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:410
 #, kde-format
 msgid "Add new plot range"
 msgstr "Engadir un novo intervalo de gráfica"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbRemovePlotRange)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:426
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:423
 #, kde-format
 msgid "Remove current plot range"
 msgstr "Retirar o intervalo de gráfica actual"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbAddYRange)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:493
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:489
 #, kde-format
 msgid "Add a new y range"
 msgstr "Engadir un novo intervalo en y"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbRemoveYRange)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:504
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:499
 #, kde-format
 msgid "remove the current selected y range"
 msgstr "retirar o intervalo en y seleccionado"
 
 #. i18n: ectx: property (text), widget (QLabel, lNiceExtend)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:517
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:511
 #, kde-format
 msgid "Extend:"
 msgstr "Estender:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLayout_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tabLayout)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:553
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:547
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:620
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:265
 #: src/frontend/worksheet/WorksheetView.cpp:466
@@ -20752,15 +20753,15 @@ msgstr "Disposición"
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbLayoutHorizontalSpacing)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbLayoutTopMargin)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbLayoutVerticalSpacing)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:585
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:619
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:674
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:696
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:718
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:776
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:835
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:857
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1353
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:579
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:613
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:668
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:690
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:712
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:770
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:829
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:851
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1347
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:116
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:178
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:390
@@ -20789,7 +20790,7 @@ msgstr "cm"
 
 #. i18n: ectx: property (text), widget (QLabel, lGeometry)
 #. i18n: ectx: property (text), widget (QLabel, lPosition)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:600
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:594
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:212
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:59
 #: src/frontend/ui/labelwidget.ui:645
@@ -20798,20 +20799,20 @@ msgid "Geometry"
 msgstr "Xeometría"
 
 #. i18n: ectx: property (text), widget (QLabel, lPadding)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:634
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:628
 #, kde-format
 msgid "Padding"
 msgstr "Recheo"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:648
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:642
 #, kde-format
 msgid "Symmetric:"
 msgstr "Simétrica:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVerticalDown)
 #. i18n: ectx: property (text), widget (QLabel, lBottomMargin)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:655
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:649
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:840
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:349
 #, kde-format
@@ -20820,7 +20821,7 @@ msgstr "Abaixo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lRightMargin)
 #. i18n: ectx: property (text), widget (QLabel, lHeight)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:757
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:751
 #: src/frontend/ui/dockwidgets/imagedock.ui:523
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:33
 #, kde-format
@@ -20829,7 +20830,7 @@ msgstr "Altura:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontalRight)
 #. i18n: ectx: property (text), widget (QLabel, lRightMargin)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:816
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:810
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:776
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:369
 #, kde-format
@@ -20837,7 +20838,7 @@ msgid "Right:"
 msgstr "Dereita:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabScales)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:875
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:869
 #, kde-format
 msgid "Range Breaks"
 msgstr "Interrupcións de intervalos"
@@ -20846,8 +20847,8 @@ msgstr "Interrupcións de intervalos"
 #. i18n: ectx: property (text), widget (QLabel, lToDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lYBreakEnd)
 #. i18n: ectx: property (text), widget (QLabel, lXBreakEnd)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:881
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:917
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:875
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:911
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:27
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:144
 #, kde-format
@@ -20856,30 +20857,30 @@ msgstr "Ata:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bAddXBreak)
 #. i18n: ectx: property (toolTip), widget (QPushButton, bAddYBreak)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:971
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1084
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:965
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1078
 #, kde-format
 msgid "Add new scale breaking"
 msgstr "Engadir unha nova interrupción da escala."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bRemoveXBreak)
 #. i18n: ectx: property (toolTip), widget (QPushButton, bRemoveYBreak)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:981
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1094
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:975
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1088
 #, kde-format
 msgid "Remove scale breaking"
 msgstr "Retirar a interrupción da escala."
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbXBreak)
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbYBreak)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:991
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1104
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:985
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1098
 #, kde-format
 msgid "Current scale breaking"
 msgstr "Interrupción actual da escala."
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1033
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1027
 #, kde-format
 msgid "Y-Range"
 msgstr "Intervalo en Y"
@@ -20888,8 +20889,8 @@ msgstr "Intervalo en Y"
 #. i18n: ectx: property (text), widget (QLabel, lFromDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lXBreakStart)
 #. i18n: ectx: property (text), widget (QLabel, lYBreakStart)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1114
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1170
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1108
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1164
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:60
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:107
 #, kde-format
@@ -20897,19 +20898,19 @@ msgid "From:"
 msgstr "De:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1126
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1120
 #, kde-format
 msgid "X-Range"
 msgstr "Intervalo en X"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPlotArea)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1207
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1201
 #, kde-format
 msgid "Area"
 msgstr "Zona"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderCornerRadius)
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1407
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1401
 #, kde-format
 msgid "Corner Radius:"
 msgstr "Raio da esquina:"
