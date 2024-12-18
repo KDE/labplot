@@ -27,6 +27,7 @@
 #include <QNetworkDatagram>
 #include <QTimer>
 #include <QUdpSocket>
+#include <QTcpSocket>
 
 #include <fstream>
 
@@ -451,9 +452,6 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 		if (!device.open(QIODevice::ReadOnly))
 			return Status::UnableToOpenDevice;
 	}
-
-	if (device.atEnd())
-		return Status::DeviceAtEnd;
 
 	if (properties.endColumn > 0 && properties.endColumn < properties.startColumn)
 		return Status::WrongEndColumn;
@@ -1251,7 +1249,8 @@ AsciiFilter::Status AsciiFilterPrivate::getLine(QIODevice& device, QString& line
 			return Status::DeviceAtEnd;
 	}
 
-	if (device.atEnd()) {
+	auto* tcpSocket = dynamic_cast<QTcpSocket*>(&device);
+	if (device.atEnd() && !tcpSocket) {
 		return Status::DeviceAtEnd;
 	}
 
@@ -1360,10 +1359,10 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice& device, int lines, b
 	if (reinit)
 		initialized = false;
 
-	if (isUTF16(device)) {
-		setLastError(AsciiFilter::Status::UTF16NotSupported);
-		return {};
-	}
+	// if (isUTF16(device)) {
+	// 	setLastError(AsciiFilter::Status::UTF16NotSupported);
+	// 	return {};
+	// }
 
 	q->clearLastError();
 	qint64 bytes_read;

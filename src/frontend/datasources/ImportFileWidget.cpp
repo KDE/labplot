@@ -1829,9 +1829,10 @@ void ImportFileWidget::refreshPreview() {
 		case LiveDataSource::SourceType::NetworkTCPSocket: {
 			QTcpSocket tcpSocket{this};
 			tcpSocket.connectToHost(host(), port().toInt(), QTcpSocket::ReadOnly);
-			if (tcpSocket.waitForConnected()) {
+			constexpr auto timeoutTime_ms = 5000;
+			if (tcpSocket.waitForConnected(timeoutTime_ms)) {
 				DEBUG("connected to TCP socket");
-				if (tcpSocket.waitForReadyRead()) {
+				if (tcpSocket.waitForReadyRead(timeoutTime_ms)) {
 					delay(1000); // Wait to collect some data
 					importedStrings = filter->preview(tcpSocket, lines, true);
 				} else {
@@ -1840,7 +1841,7 @@ void ImportFileWidget::refreshPreview() {
 				}
 				tcpSocket.disconnectFromHost();
 			} else
-				DEBUG("failed to connect to TCP socket "
+				DEBUG("failed to connect to TCP socket within " << timeoutTime_ms << "ms"
 					  << " - " << STDSTRING(tcpSocket.errorString()));
 
 			break;

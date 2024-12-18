@@ -12,14 +12,19 @@ serv.bind(ADDR)
 serv.listen(1)
 
 print ('listening ...')
+conn, addr = serv.accept()
 
 while True:
-  conn, addr = serv.accept()
-  print('client connected ... ', addr)
+
   #message = str(psutil.cpu_percent())
   # multiple values
-  message = str(psutil.cpu_percent()) + " " + str(psutil.boot_time()) + " " + str(psutil.cpu_count())
-  conn.send(message.encode())
-  print('written ' + message)
-  conn.close()
-  print('client disconnected')
+  message = str(psutil.cpu_percent()) + " " + str(psutil.boot_time()) + " " + str(psutil.cpu_count()) + "\n"
+  try:
+    conn.send(message.encode())
+    print('written ' + message)
+  except:
+    conn.close()
+    print('client disconnected')
+    print ('listening ...')
+    conn, addr = serv.accept()
+    print('client connected ... ', addr)
