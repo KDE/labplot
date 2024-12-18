@@ -55,9 +55,11 @@ LiveDataSource::LiveDataSource(const QString& name, bool loading)
 	m_watchTimer->setInterval(100); // maximum read frequency is 1/100ms = 10Hz
 
 	// stop reading from the source before removing the child from the project
-	connect(this, &AbstractAspect::childAspectAboutToBeRemoved, [this](const AbstractAspect* aspect) {
-		if (aspect == this)
+	connect(this, &AbstractAspect::aspectAboutToBeRemoved, [this](const AbstractAspect* aspect) {
+		if (aspect == this) {
 			pauseReading();
+			m_device->close();
+		}
 	});
 
 	connect(m_updateTimer, &QTimer::timeout, this, &LiveDataSource::read);

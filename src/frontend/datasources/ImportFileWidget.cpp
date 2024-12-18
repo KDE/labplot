@@ -1724,6 +1724,15 @@ void ImportFileWidget::filterChanged(int index) {
 	}
 }
 
+inline void delay(int millisecondsWait)
+{
+	QEventLoop loop;
+	QTimer t;
+	t.connect(&t, &QTimer::timeout, &loop, &QEventLoop::quit);
+	t.start(millisecondsWait);
+	loop.exec();
+}
+
 void ImportFileWidget::refreshPreview() {
 	DEBUG(Q_FUNC_INFO)
 	// don't generate any preview if it was explicitly suppressed
@@ -1822,9 +1831,10 @@ void ImportFileWidget::refreshPreview() {
 			tcpSocket.connectToHost(host(), port().toInt(), QTcpSocket::ReadOnly);
 			if (tcpSocket.waitForConnected()) {
 				DEBUG("connected to TCP socket");
-				if (tcpSocket.waitForReadyRead())
+				if (tcpSocket.waitForReadyRead()) {
+					delay(1000); // Wait to collect some data
 					importedStrings = filter->preview(tcpSocket, lines, true);
-				else {
+				} else {
 					DEBUG("failed connect to TCP socket " << STDSTRING(tcpSocket.errorString()));
 					errorMessage = i18n("Preview: Failed to connect to TCP socket - %1", tcpSocket.errorString());
 				}
@@ -1851,6 +1861,7 @@ void ImportFileWidget::refreshPreview() {
 						} else {
 							DEBUG("	has no pending data");
 						}
+						delay(1000); // Wait to collect some data
 						importedStrings = filter->preview(udpSocket, lines, true);
 					}
 

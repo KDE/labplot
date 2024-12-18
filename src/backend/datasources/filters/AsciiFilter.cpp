@@ -24,6 +24,8 @@
 #ifdef HAVE_QTSERIALPORT
 #include <QSerialPort>
 #endif
+#include <QUdpSocket>
+#include <QNetworkDatagram>
 
 #include <fstream>
 
@@ -37,10 +39,12 @@ struct IODeviceHandler {
 	}
 
 	~IODeviceHandler() {
-		if (reset && !device.isSequential())
-			device.reset(); // Seek to the start
-		if (device.isOpen())
-			device.close();
+		if (!device.isSequential()) {
+			if (reset)
+				device.reset(); // Seek to the start
+			if (device.isOpen())
+				device.close();
+		}
 	}
 
 private:
@@ -423,7 +427,8 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner)
 AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 	using Status = AsciiFilter::Status;
 
-	IODeviceHandler d(device, true); // closes device automatically. TODO: check that it gets not optimized out
+
+	IODeviceHandler d(device, true); // closes device automatically.
 
 	if (!properties.automaticSeparatorDetection && properties.endColumn > 0
 		&& properties.columnModes.size() == properties.endColumn - properties.startColumn + 1)
@@ -442,8 +447,10 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 	}
 #endif
 
-	if (!device.open(QIODevice::ReadOnly))
-		return Status::UnableToOpenDevice;
+	if (!device.isOpen()) {
+		if (!device.open(QIODevice::ReadOnly))
+			return Status::UnableToOpenDevice;
+	}
 
 	if (device.atEnd())
 		return Status::DeviceAtEnd;
@@ -1233,8 +1240,20 @@ AsciiFilter::Status AsciiFilterPrivate::determineSeparator(const QString& line, 
 AsciiFilter::Status AsciiFilterPrivate::getLine(QIODevice& device, QString& line) {
 	using Status = AsciiFilter::Status;
 
-	if (device.atEnd())
+	auto* udpSocket = dynamic_cast<QUdpSocket*>(&device);
+	if (udpSocket) {
+		if (udpSocket->hasPendingDatagrams()) {
+			// TODO: Maybe using readDatagram and a const size array?
+			const auto& datagram = udpSocket->receiveDatagram();
+			line = QString::fromUtf8(datagram.data());
+			return Status::Success;
+		} else
+			return Status::DeviceAtEnd;
+	}
+
+	if (device.atEnd()) {
 		return Status::DeviceAtEnd;
+	}
 
 	// This is important especially for serial port because readLine reads everything from the buffer
 	// even if it is not a complete line. So without we would get partly lines which get parsed wrongly
