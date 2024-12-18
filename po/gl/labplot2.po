@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-16 03:05+0000\n"
-"PO-Revision-Date: 2024-12-16 01:08+0100\n"
+"PO-Revision-Date: 2024-12-17 18:27+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -1437,7 +1437,7 @@ msgstr "Número actual de entradas na caché: %1"
 #: src/backend/datasources/filters/HDF5Filter.cpp:307
 #, kde-format
 msgid "Logging enabled: %1"
-msgstr "Historial activado: %1"
+msgstr "Activouse o rexistro: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:309
 #, kde-format
@@ -16357,6 +16357,7 @@ msgid ""
 "background."
 msgstr "Parámetro de suavidade. A maior valor máis suave é o fondo resultante."
 
+# skip-rule: trasno-highlight_reverse
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:172
 #, kde-format
 msgid ""
