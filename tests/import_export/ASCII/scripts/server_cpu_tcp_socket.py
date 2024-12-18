@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import socket, psutil
+import socket, psutil, time
 
 HOST = 'localhost'
 PORT = 1027
@@ -22,6 +22,7 @@ while True:
   try:
     conn.send(message.encode())
     print('written ' + message)
+    time.sleep(0.1)
   except:
     conn.close()
     print('client disconnected')
