@@ -5,7 +5,6 @@
 	QObject on redo/undo.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2010 Knut Franke <knut.franke*gmx.de (use @ for *)>
-	SPDX-FileCopyrightText: 2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -82,9 +81,9 @@ SignallingUndoCommand::SignallingUndoCommand(const QString& text,
 	m_argument_data = new void*[m_argument_count];
 	Q_CHECK_PTR(m_argument_data);
 	for (int i = 0; i < m_argument_count; i++) {
-		m_argument_types[i] = QMetaType::fromName(type_names[i]).id();
+		m_argument_types[i] = QMetaType::type(type_names[i]);
 		if (m_argument_types[i]) // type is known to QMetaType
-			m_argument_data[i] = QMetaType(m_argument_types[i]).construct(argument_data[i]);
+			m_argument_data[i] = QMetaType::create(m_argument_types[i], argument_data[i]);
 		else
 			qWarning(
 				"SignallingUndoCommand: failed to copy unknown type %s"
@@ -96,7 +95,7 @@ SignallingUndoCommand::SignallingUndoCommand(const QString& text,
 SignallingUndoCommand::~SignallingUndoCommand() {
 	for (int i = 0; i < m_argument_count; ++i)
 		if (m_argument_types[i] && m_argument_data[i])
-			QMetaType(m_argument_types[i]).destroy(m_argument_data[i]);
+			QMetaType::destroy(m_argument_types[i], m_argument_data[i]);
 	delete[] m_argument_types;
 	delete[] m_argument_data;
 }
@@ -105,17 +104,17 @@ QGenericArgument SignallingUndoCommand::arg(int index) {
 	if (index >= m_argument_count)
 		return QGenericArgument{};
 
-	return QGenericArgument{QMetaType(m_argument_types[index]).name(), m_argument_data[index]};
+	return QGenericArgument{QMetaType::typeName(m_argument_types[index]), m_argument_data[index]};
 }
 
 void SignallingUndoCommand::redo() {
-	const auto* mo = m_receiver->metaObject();
+	const QMetaObject* mo = m_receiver->metaObject();
 	if (!mo->invokeMethod(m_receiver, m_redo.constData(), arg(0), arg(1), arg(2), arg(3)))
 		qWarning("FAILED to invoke %s on %s\n", m_redo.constData(), mo->className());
 }
 
 void SignallingUndoCommand::undo() {
-	const auto* mo = m_receiver->metaObject();
+	const QMetaObject* mo = m_receiver->metaObject();
 	if (!mo->invokeMethod(m_receiver, m_undo.constData(), arg(0), arg(1), arg(2), arg(3)))
 		qWarning("FAILED to invoke %s on %s\n", m_undo.constData(), mo->className());
 }
