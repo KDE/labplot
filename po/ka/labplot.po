@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-18 00:37+0000\n"
-"PO-Revision-Date: 2024-12-16 04:39+0100\n"
+"PO-Revision-Date: 2024-12-18 03:59+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -21847,7 +21847,7 @@ msgstr "ნარჩენი საშუალო კვადრატი"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:988
 #, kde-format
 msgid "Root mean square deviation (RMSD, SD)"
-msgstr ""
+msgstr "ფესვის საშუალო კვადრატის გადახრა (RMSD, SD)"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1028
@@ -23951,6 +23951,10 @@ msgid ""
 "li><li>LaTeX - text setting using LaTeX, installation of LaTeX required</"
 "li><li>Markdown - text setting using Markdown markup language</li></ul>"
 msgstr ""
+"ტექსტის პარამეტრის რეჟიმი:<ul><li>ტექსტი - ტექსტის დაყენება მდიდარი ტექსტის "
+"დაფორმატებით</li><li>LaTeX - ტექსტის დაყენება LaTeX-ით. აუცილებელია LaTeX-ის "
+"დაყენება</li><li>Markdown - ტექსტის დაყენება Markdown ტექსტის მარკირების "
+"ენით</li></ul>"
 
 #: src/frontend/widgets/LabelWidget.cpp:224
 #, kde-format
@@ -23959,6 +23963,9 @@ msgid ""
 "li><li>LaTeX - text setting using LaTeX, installation of LaTeX required</"
 "li></ul>"
 msgstr ""
+"ტექსტის პარამეტრის რეჟიმი:<ul><li>Text - ტექსტის დაყენება მდიდარი ტექსტის "
+"დაფორმატებით</li><li>LaTeX - ტექსტის დაყენება LaTeX-ით. აუცილებელია LaTeX-ის "
+"დაყენება</li></ul>"
 
 #: src/frontend/widgets/LabelWidget.cpp:920
 #: src/frontend/widgets/LabelWidget.cpp:946
