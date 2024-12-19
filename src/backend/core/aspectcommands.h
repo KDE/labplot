@@ -118,12 +118,8 @@ public:
 		else
 			nextSibling = m_target->m_children.at(m_target->indexOfChild(m_child) + 1);
 
-		// emit the "about to be removed" signal also for all children columns so the plots can react.
-		const auto& columns = m_child->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
-		for (auto* col : columns) {
-			Q_EMIT col->parentAspect()->childAspectAboutToBeRemoved(col);
-			Q_EMIT col->aspectAboutToBeRemoved(col);
-		}
+		// emit the "about to be removed" signal also for all children other elements can react.
+		childrenRemovedSignal(m_child);
 
 		// no need to emit signals if the aspect is hidden, the only exceptions is it's a datapicker point
 		// and we need to react on its removal in order to update the data spreadsheet.
@@ -152,6 +148,32 @@ public:
 		m_target->insertChild(m_index, m_child);
 		m_child->finalizeAdd();
 		Q_EMIT m_target->q->childAspectAdded(m_child);
+
+		// Signalize that all children are again here
+		childrenAddedSignal(m_child);
+	}
+
+	void childrenRemovedSignal(AbstractAspect* parent) {
+		const auto& children = m_child->children<AbstractAspect>();
+		for (auto* child : children) {
+			Q_EMIT child->parentAspect()->childAspectAboutToBeRemoved(child);
+			childrenRemovedSignal(child);
+			Q_EMIT child->aspectAboutToBeRemoved(child);
+		}
+	}
+
+	void childrenAddedSignal(AbstractAspect* parent) {
+		const auto& children = m_child->children<AbstractAspect>();
+		AbstractAspect* before = nullptr;
+		int index = 0;
+		for (auto* child : children) {
+			Q_EMIT child->parentAspect()->childAspectAboutToBeAdded(m_child, before, child);
+			Q_EMIT child->parentAspect()->childAspectAboutToBeAdded(m_target->q, index, m_child);
+			Q_EMIT child->parentAspect()->childAspectAdded(child);
+			childrenAddedSignal(child);
+			before = child;
+			index ++;
+		}
 	}
 
 protected:

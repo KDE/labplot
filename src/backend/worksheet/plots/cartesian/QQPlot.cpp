@@ -118,8 +118,8 @@ void QQPlot::init() {
 void QQPlot::finalizeAdd() {
 	Q_D(QQPlot);
 	WorksheetElement::finalizeAdd();
-	addChildFast(d->referenceCurve);
-	addChildFast(d->percentilesCurve);
+	// addChildFast(d->referenceCurve);
+	// addChildFast(d->percentilesCurve);
 }
 
 /*!
