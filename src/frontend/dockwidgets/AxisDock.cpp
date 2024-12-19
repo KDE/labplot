@@ -4,7 +4,7 @@
 	Description          : axes widget class
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+	SPDX-FileCopyrightText: 2012-2024 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -21,13 +21,8 @@
 #include "frontend/widgets/TreeViewComboBox.h"
 
 #include <KConfig>
-#include <KLineEdit>
-#include <KLocalizedString>
-#include <KMessageBox>
 
-#include <QDir>
 #include <QPainter>
-#include <QTimer>
 
 #include "backend/nsl/nsl_math.h"
 #include <gsl/gsl_math.h>
@@ -1694,7 +1689,7 @@ void AxisDock::axisMajorTicksColumnChanged(const AbstractColumn* column) {
 }
 void AxisDock::axisMajorTicksLengthChanged(qreal length) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.sbMajorTicksLength->setValue(Worksheet::convertFromSceneUnits(length, Worksheet::Unit::Point));
+	ui.sbMajorTicksLength->setValue(std::round(Worksheet::convertFromSceneUnits(length, Worksheet::Unit::Point)));
 }
 
 // minor ticks
@@ -1727,7 +1722,7 @@ void AxisDock::axisMinorTicksColumnChanged(const AbstractColumn* column) {
 }
 void AxisDock::axisMinorTicksLengthChanged(qreal length) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.sbMinorTicksLength->setValue(Worksheet::convertFromSceneUnits(length, Worksheet::Unit::Point));
+	ui.sbMinorTicksLength->setValue(std::round(Worksheet::convertFromSceneUnits(length, Worksheet::Unit::Point)));
 }
 
 // labels
@@ -1776,7 +1771,7 @@ void AxisDock::axisLabelsFontChanged(const QFont& font) {
 	CONDITIONAL_LOCK_RETURN;
 	// we need to set the font size in points for KFontRequester
 	QFont newFont(font);
-	newFont.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Unit::Point)));
+	newFont.setPointSizeF(std::round(Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Unit::Point)));
 	ui.kfrLabelsFont->setFont(newFont);
 }
 void AxisDock::axisLabelsFontColorChanged(const QColor& color) {
@@ -1802,7 +1797,7 @@ void AxisDock::axisLabelsSuffixChanged(const QString& suffix) {
 }
 void AxisDock::axisLabelsOpacityChanged(qreal opacity) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.sbLabelsOpacity->setValue(round(opacity * 100.0));
+	ui.sbLabelsOpacity->setValue(std::round(opacity * 100.));
 }
 
 void AxisDock::updateMajorTicksStartType(bool visible) {
@@ -1956,7 +1951,7 @@ void AxisDock::load() {
 	dtsbMajorTicksDateTimeStartOffset->setValue(m_axis->majorTickStartOffset());
 	ui.sbMajorTickStartValue->setValue(m_axis->majorTickStartValue());
 	ui.sbMajorTickStartDateTime->setMSecsSinceEpochUTC(m_axis->majorTickStartValue());
-	ui.sbMajorTicksLength->setValue(Worksheet::convertFromSceneUnits(m_axis->majorTicksLength(), Worksheet::Unit::Point));
+	ui.sbMajorTicksLength->setValue(std::round(Worksheet::convertFromSceneUnits(m_axis->majorTicksLength(), Worksheet::Unit::Point)));
 
 	// Minor ticks
 	ui.cbMinorTicksDirection->setCurrentIndex((int)m_axis->minorTicksDirection());
@@ -1964,7 +1959,7 @@ void AxisDock::load() {
 	ui.cbMinorTicksAutoNumber->setChecked(m_axis->minorTicksAutoNumber());
 	ui.sbMinorTicksNumber->setEnabled(!m_axis->minorTicksAutoNumber());
 	ui.sbMinorTicksNumber->setValue(m_axis->minorTicksNumber());
-	ui.sbMinorTicksLength->setValue(Worksheet::convertFromSceneUnits(m_axis->minorTicksLength(), Worksheet::Unit::Point));
+	ui.sbMinorTicksLength->setValue(std::round(Worksheet::convertFromSceneUnits(m_axis->minorTicksLength(), Worksheet::Unit::Point)));
 
 	// Extra ticks
 	// TODO
@@ -1984,14 +1979,14 @@ void AxisDock::load() {
 
 	// we need to set the font size in points for KFontRequester
 	QFont font = m_axis->labelsFont();
-	font.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Unit::Point)));
+	font.setPointSizeF(std::round(Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Unit::Point)));
 	ui.kfrLabelsFont->setFont(font);
 	ui.kcbLabelsFontColor->setColor(m_axis->labelsColor());
 	ui.cbLabelsBackgroundType->setCurrentIndex((int)m_axis->labelsBackgroundType());
 	ui.kcbLabelsBackgroundColor->setColor(m_axis->labelsBackgroundColor());
 	ui.leLabelsPrefix->setText(m_axis->labelsPrefix());
 	ui.leLabelsSuffix->setText(m_axis->labelsSuffix());
-	ui.sbLabelsOpacity->setValue(round(m_axis->labelsOpacity() * 100.0));
+	ui.sbLabelsOpacity->setValue(std::round(m_axis->labelsOpacity() * 100.));
 
 	majorTicksDirectionChanged(ui.cbMajorTicksDirection->currentIndex());
 	majorTicksTypeChanged(ui.cbMajorTicksType->currentIndex());
@@ -2088,8 +2083,8 @@ void AxisDock::loadConfig(KConfig& config) {
 	const auto majorTickStartValue = group.readEntry(QStringLiteral("MajorTickStartValue"), m_axis->majorTickStartValue());
 	ui.sbMajorTickStartValue->setValue(majorTickStartValue);
 	ui.sbMajorTickStartDateTime->setMSecsSinceEpochUTC(majorTickStartValue);
-	ui.sbMajorTicksLength->setValue(
-		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("MajorTicksLength"), m_axis->majorTicksLength()), Worksheet::Unit::Point));
+	ui.sbMajorTicksLength->setValue(std::round(
+		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("MajorTicksLength"), m_axis->majorTicksLength()), Worksheet::Unit::Point)));
 	majorTicksLineWidget->loadConfig(group);
 
 	// Minor ticks
@@ -2101,7 +2096,7 @@ void AxisDock::loadConfig(KConfig& config) {
 		ui.sbMinorTicksSpacingNumeric->setValue(value);
 	else
 		dtsbMinorTicksIncrement->setValue(value);
-	ui.sbMinorTicksLength->setValue(Worksheet::convertFromSceneUnits(group.readEntry("MinorTicksLength", m_axis->minorTicksLength()), Worksheet::Unit::Point));
+	ui.sbMinorTicksLength->setValue(std::round(Worksheet::convertFromSceneUnits(group.readEntry("MinorTicksLength", m_axis->minorTicksLength()), Worksheet::Unit::Point)));
 	minorTicksLineWidget->loadConfig(group);
 
 	// Extra ticks
@@ -2121,7 +2116,7 @@ void AxisDock::loadConfig(KConfig& config) {
 
 	// we need to set the font size in points for KFontRequester
 	QFont font = m_axis->labelsFont();
-	font.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Unit::Point)));
+	font.setPointSizeF(std::round(Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Unit::Point)));
 	ui.kfrLabelsFont->setFont(group.readEntry(QStringLiteral("LabelsFont"), font));
 
 	ui.kcbLabelsFontColor->setColor(group.readEntry(QStringLiteral("LabelsFontColor"), m_axis->labelsColor()));
@@ -2129,7 +2124,7 @@ void AxisDock::loadConfig(KConfig& config) {
 	ui.kcbLabelsBackgroundColor->setColor(group.readEntry(QStringLiteral("LabelsBackgroundColor"), m_axis->labelsBackgroundColor()));
 	ui.leLabelsPrefix->setText(group.readEntry(QStringLiteral("LabelsPrefix"), m_axis->labelsPrefix()));
 	ui.leLabelsSuffix->setText(group.readEntry(QStringLiteral("LabelsSuffix"), m_axis->labelsSuffix()));
-	ui.sbLabelsOpacity->setValue(round(group.readEntry(QStringLiteral("LabelsOpacity"), m_axis->labelsOpacity()) * 100.0));
+	ui.sbLabelsOpacity->setValue(std::round(group.readEntry(QStringLiteral("LabelsOpacity"), m_axis->labelsOpacity()) * 100.));
 
 	// Grid
 	majorGridLineWidget->loadConfig(group);

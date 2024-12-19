@@ -17,7 +17,6 @@
 #include "frontend/widgets/BackgroundWidget.h"
 
 #include <KConfig>
-#include <KLocalizedString>
 
 #include <QPageSize>
 
