@@ -95,6 +95,7 @@ protected:
 	bool m_initializing{false};
 	Units m_units{Units::Metric};
 	Worksheet::Unit m_worksheetUnit{Worksheet::Unit::Centimeter};
+
 	// round value in spinboxes to 0.1 cm/in
 	static double roundValue(double value) {
 		return std::round(10. * value) / 10.;
@@ -107,6 +108,7 @@ protected:
 			return Worksheet::convertToSceneUnits(std::round(10. * Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Inch)) / 10.,
 				Worksheet::Unit::Inch);
 	}
+
 	virtual void updatePlotRangeList(); // used in worksheet element docks
 
 private:

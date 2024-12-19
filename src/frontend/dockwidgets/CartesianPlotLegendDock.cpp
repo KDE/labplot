@@ -779,15 +779,15 @@ void CartesianPlotLegendDock::load() {
 	borderLineWidget->setLines(borderLines);
 
 	// Border
-	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(m_legend->borderCornerRadius(), m_worksheetUnit));
+	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(m_legend->borderCornerRadius(), m_units), m_worksheetUnit));
 
 	// Layout
-	ui.sbLayoutTopMargin->setValue(Worksheet::convertFromSceneUnits(m_legend->layoutTopMargin(), m_worksheetUnit));
-	ui.sbLayoutBottomMargin->setValue(Worksheet::convertFromSceneUnits(m_legend->layoutBottomMargin(), m_worksheetUnit));
-	ui.sbLayoutLeftMargin->setValue(Worksheet::convertFromSceneUnits(m_legend->layoutLeftMargin(), m_worksheetUnit));
-	ui.sbLayoutRightMargin->setValue(Worksheet::convertFromSceneUnits(m_legend->layoutRightMargin(), m_worksheetUnit));
-	ui.sbLayoutHorizontalSpacing->setValue(Worksheet::convertFromSceneUnits(m_legend->layoutHorizontalSpacing(), m_worksheetUnit));
-	ui.sbLayoutVerticalSpacing->setValue(Worksheet::convertFromSceneUnits(m_legend->layoutVerticalSpacing(), m_worksheetUnit));
+	ui.sbLayoutTopMargin->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(m_legend->layoutTopMargin(), m_units), m_worksheetUnit));
+	ui.sbLayoutBottomMargin->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(m_legend->layoutBottomMargin(), m_units), m_worksheetUnit));
+	ui.sbLayoutLeftMargin->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(m_legend->layoutLeftMargin(), m_units), m_worksheetUnit));
+	ui.sbLayoutRightMargin->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(m_legend->layoutRightMargin(), m_units), m_worksheetUnit));
+	ui.sbLayoutHorizontalSpacing->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(m_legend->layoutHorizontalSpacing(), m_units), m_worksheetUnit));
+	ui.sbLayoutVerticalSpacing->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(m_legend->layoutVerticalSpacing(), m_units), m_worksheetUnit));
 
 	ui.sbLayoutColumnCount->setValue(m_legend->layoutColumnCount());
 }
@@ -827,7 +827,7 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 		ui.cbOrder->setCurrentIndex(1); // row major
 
 	ui.sbLineSymbolWidth->setValue(
-		roundValue(group.readEntry(QStringLiteral("LineSymbolWidth"), Worksheet::convertFromSceneUnits(m_legend->lineSymbolWidth(), m_worksheetUnit))));
+		roundValue(group.readEntry(QStringLiteral("LineSymbolWidth"), Worksheet::convertFromSceneUnits(roundSceneValue(m_legend->lineSymbolWidth(), m_units), m_worksheetUnit))));
 
 	// Geometry
 	ui.cbPositionX->setCurrentIndex(group.readEntry(QStringLiteral("PositionX"), (int)m_legend->position().horizontalPosition));
@@ -836,7 +836,7 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 	ui.cbPositionY->setCurrentIndex(group.readEntry(QStringLiteral("PositionY"), (int)m_legend->position().verticalPosition));
 	ui.sbPositionY->setValue(
 		Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry(QStringLiteral("PositionYValue"), m_legend->position().point.y()), m_units), m_worksheetUnit));
-	ui.sbRotation->setValue(group.readEntry(QStringLiteral("Rotation"), (int)m_legend->rotationAngle()));
+	ui.sbRotation->setValue(group.readEntry(QStringLiteral("Rotation"), std::round(m_legend->rotationAngle())));
 
 	ui.chkVisible->setChecked(group.readEntry(QStringLiteral("Visible"), m_legend->isVisible()));
 
@@ -846,21 +846,21 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 	// Border
 	borderLineWidget->loadConfig(group);
 	ui.sbBorderCornerRadius->setValue(
-		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("BorderCornerRadius"), m_legend->borderCornerRadius()), m_worksheetUnit));
+		Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry(QStringLiteral("BorderCornerRadius"), m_legend->borderCornerRadius()), m_units), m_worksheetUnit));
 
 	// Layout
 	ui.sbLayoutTopMargin->setValue(
-		group.readEntry(QStringLiteral("LayoutTopMargin"), Worksheet::convertFromSceneUnits(m_legend->layoutTopMargin(), m_worksheetUnit)));
+		group.readEntry(QStringLiteral("LayoutTopMargin"), Worksheet::convertFromSceneUnits(roundSceneValue(m_legend->layoutTopMargin(), m_units), m_worksheetUnit)));
 	ui.sbLayoutBottomMargin->setValue(
-		group.readEntry(QStringLiteral("LayoutBottomMargin"), Worksheet::convertFromSceneUnits(m_legend->layoutBottomMargin(), m_worksheetUnit)));
+		group.readEntry(QStringLiteral("LayoutBottomMargin"), Worksheet::convertFromSceneUnits(roundSceneValue(m_legend->layoutBottomMargin(), m_units), m_worksheetUnit)));
 	ui.sbLayoutLeftMargin->setValue(
-		group.readEntry(QStringLiteral("LayoutLeftMargin"), Worksheet::convertFromSceneUnits(m_legend->layoutLeftMargin(), m_worksheetUnit)));
+		group.readEntry(QStringLiteral("LayoutLeftMargin"), Worksheet::convertFromSceneUnits(roundSceneValue(m_legend->layoutLeftMargin(), m_units), m_worksheetUnit)));
 	ui.sbLayoutRightMargin->setValue(
-		group.readEntry(QStringLiteral("LayoutRightMargin"), Worksheet::convertFromSceneUnits(m_legend->layoutRightMargin(), m_worksheetUnit)));
+		group.readEntry(QStringLiteral("LayoutRightMargin"), Worksheet::convertFromSceneUnits(roundSceneValue(m_legend->layoutRightMargin(), m_units), m_worksheetUnit)));
 	ui.sbLayoutHorizontalSpacing->setValue(
-		group.readEntry(QStringLiteral("LayoutHorizontalSpacing"), Worksheet::convertFromSceneUnits(m_legend->layoutHorizontalSpacing(), m_worksheetUnit)));
+		group.readEntry(QStringLiteral("LayoutHorizontalSpacing"), Worksheet::convertFromSceneUnits(roundSceneValue(m_legend->layoutHorizontalSpacing(), m_units), m_worksheetUnit)));
 	ui.sbLayoutVerticalSpacing->setValue(
-		group.readEntry(QStringLiteral("LayoutVerticalSpacing"), Worksheet::convertFromSceneUnits(m_legend->layoutVerticalSpacing(), m_worksheetUnit)));
+		group.readEntry(QStringLiteral("LayoutVerticalSpacing"), Worksheet::convertFromSceneUnits(roundSceneValue(m_legend->layoutVerticalSpacing(), m_units), m_worksheetUnit)));
 	ui.sbLayoutColumnCount->setValue(group.readEntry(QStringLiteral("LayoutColumnCount"), m_legend->layoutColumnCount()));
 
 	// Title
