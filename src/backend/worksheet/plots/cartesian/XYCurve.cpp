@@ -184,6 +184,90 @@ void XYCurve::init(bool loading) {
 	d->rugOffset = group.readEntry(QStringLiteral("RugOffset"), 0.0);
 }
 
+void XYCurve::setPlotType(PlotType type) {
+	Q_D(XYCurve);
+	d->plotType = type;
+
+	d->dropLine->setStyle(Qt::NoPen);
+	d->background->setEnabled(false);;
+
+	switch (type) {
+	case PlotType::Default:
+		break;
+	case PlotType::Line:
+		d->line->setStyle(Qt::SolidLine);
+		d->lineType = LineType::Line;
+		d->symbol->setStyle(Symbol::Style::NoSymbols);
+		d->errorBar->setXErrorType(ErrorBar::ErrorType::NoError);
+		d->errorBar->setYErrorType(ErrorBar::ErrorType::NoError);
+		break;
+	case PlotType::LineHorizontalStep:
+		d->line->setStyle(Qt::SolidLine);
+		d->lineType = LineType::Line;
+		d->symbol->setStyle(Symbol::Style::NoSymbols);
+		d->errorBar->setXErrorType(ErrorBar::ErrorType::NoError);
+		d->errorBar->setYErrorType(ErrorBar::ErrorType::NoError);
+		break;
+	case PlotType::LineVerticalStep:
+		d->line->setStyle(Qt::SolidLine);
+		d->lineType = LineType::Line;
+		d->symbol->setStyle(Symbol::Style::NoSymbols);
+		d->errorBar->setXErrorType(ErrorBar::ErrorType::NoError);
+		d->errorBar->setYErrorType(ErrorBar::ErrorType::NoError);
+		break;
+	case PlotType::LineSpline:
+		d->line->setStyle(Qt::SolidLine);
+		d->lineType = LineType::Line;
+		d->symbol->setStyle(Symbol::Style::NoSymbols);
+		d->errorBar->setXErrorType(ErrorBar::ErrorType::NoError);
+		d->errorBar->setYErrorType(ErrorBar::ErrorType::NoError);
+		break;
+	case PlotType::Scatter:
+		d->lineType = LineType::NoLine;
+		d->symbol->setStyle(Symbol::Style::Circle);
+		d->errorBar->setXErrorType(ErrorBar::ErrorType::NoError);
+		d->errorBar->setYErrorType(ErrorBar::ErrorType::NoError);
+		break;
+	case PlotType::ScatterYError:
+		d->lineType = LineType::NoLine;
+		d->symbol->setStyle(Symbol::Style::Circle);
+		d->errorBar->setXErrorType(ErrorBar::ErrorType::NoError);
+		d->errorBar->setYErrorType(ErrorBar::ErrorType::Symmetric);
+		break;
+	case PlotType::ScatterXYError:
+		d->lineType = LineType::NoLine;
+		d->symbol->setStyle(Symbol::Style::Circle);
+		d->errorBar->setXErrorType(ErrorBar::ErrorType::Symmetric);
+		d->errorBar->setYErrorType(ErrorBar::ErrorType::Symmetric);
+		break;
+	case PlotType::LineSymbol:
+		d->line->setStyle(Qt::SolidLine);
+		d->lineType = LineType::Line;
+		d->symbol->setStyle(Symbol::Style::Circle);
+		d->errorBar->setXErrorType(ErrorBar::ErrorType::NoError);
+		d->errorBar->setYErrorType(ErrorBar::ErrorType::NoError);
+		break;
+	case PlotType::LineSymbol2PointSegment:
+		d->line->setStyle(Qt::SolidLine);
+		d->lineType = LineType::Segments2;
+		d->symbol->setStyle(Symbol::Style::Circle);
+		d->errorBar->setXErrorType(ErrorBar::ErrorType::NoError);
+		d->errorBar->setYErrorType(ErrorBar::ErrorType::NoError);
+		break;
+	case PlotType::LineSymbol3PointSegment:
+		d->line->setStyle(Qt::SolidLine);
+		d->lineType = LineType::Segments3;
+		d->symbol->setStyle(Symbol::Style::Circle);
+		d->errorBar->setXErrorType(ErrorBar::ErrorType::NoError);
+		d->errorBar->setYErrorType(ErrorBar::ErrorType::NoError);
+		break;
+	}
+}
+
+XYCurve::PlotType XYCurve::plotType() const {
+	Q_D(const XYCurve);
+	return d->plotType;
+}
 void XYCurve::initActions() {
 	navigateToAction = new QAction(QIcon::fromTheme(QStringLiteral("go-next-view")), QString(), this);
 	connect(navigateToAction, SIGNAL(triggered(bool)), this, SLOT(navigateTo()));
@@ -228,7 +312,87 @@ QMenu* XYCurve::createContextMenu() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYCurve::icon() const {
-	return QIcon::fromTheme(QStringLiteral("labplot-xy-curve"));
+	Q_D(const XYCurve);
+	return staticIcon(d->plotType);
+}
+
+QIcon XYCurve::staticIcon(XYCurve::PlotType type) {
+	QPainter pa;
+	pa.setRenderHint(QPainter::Antialiasing);
+	static const int iconSize = 20;
+	QPixmap pm(iconSize, iconSize);
+	pm.fill(Qt::transparent);
+
+	QPen pen(Qt::SolidLine);
+	pen.setColor(GuiTools::isDarkMode() ? Qt::white : Qt::black);
+	pen.setWidthF(0.0);
+	pa.begin(&pm);
+	pa.setPen(pen);
+	pa.setBrush(QBrush(pen.color()));
+
+	switch (type) {
+	case PlotType::Default:
+		pa.end();
+		return QIcon::fromTheme(QStringLiteral("labplot-xy-curve"));
+	case PlotType::Line:
+		pa.drawLine(2, 18, 18, 2);
+		break;
+	case PlotType::LineHorizontalStep:
+		pa.drawLine(3, 3, 17, 3);
+		pa.drawLine(17, 3, 17, 17);
+		break;
+	case PlotType::LineVerticalStep:
+		pa.drawLine(3, 3, 3, 17);
+		pa.drawLine(3, 17, 17, 17);
+		break;
+	case PlotType::LineSpline:
+		pa.rotate(45);
+		pa.drawArc(2 * sqrt(2), -4, 17 * sqrt(2), 20, 30 * 16, 120 * 16);
+		break;
+	case PlotType::Scatter:
+		pa.drawEllipse(QPoint(3, 17), 2, 2);
+		pa.drawEllipse(QPoint(10, 10), 2, 2);
+		pa.drawEllipse(QPoint(17, 3), 2, 2);
+		break;
+	case PlotType::ScatterYError:
+		pa.drawEllipse(QPoint(5, 13), 2, 2);
+		pa.drawLine(5, 18, 5, 7);
+		pa.drawEllipse(QPoint(13, 7), 2, 2);
+		pa.drawLine(13, 2, 13, 13);
+		break;
+	case PlotType::ScatterXYError:
+		pa.drawEllipse(QPoint(5, 13), 2, 2);
+		pa.drawLine(5, 18, 5, 7);
+		pa.drawLine(0, 13, 10, 13);
+		pa.drawEllipse(QPoint(13, 7), 2, 2);
+		pa.drawLine(13, 2, 13, 13);
+		pa.drawLine(7, 7, 18, 7);
+		break;
+	case PlotType::LineSymbol:
+		pa.drawLine(3, 17, 17, 3);
+		pa.drawEllipse(QPoint(3, 17), 2, 2);
+		pa.drawEllipse(QPoint(10, 10), 2, 2);
+		pa.drawEllipse(QPoint(17, 3), 2, 2);
+		break;
+	case PlotType::LineSymbol2PointSegment:
+		pa.drawEllipse(QPoint(3, 12), 2, 2);
+		pa.drawEllipse(QPoint(7, 3), 2, 2);
+		pa.drawLine(4, 13, 8, 4);
+		pa.drawEllipse(QPoint(13, 12), 2, 2);
+		pa.drawEllipse(QPoint(17, 3), 2, 2);
+		pa.drawLine(14, 13, 18, 4);
+		break;
+	case PlotType::LineSymbol3PointSegment:
+		pa.drawEllipse(QPoint(3, 17), 2, 2);
+		pa.drawEllipse(QPoint(10, 3), 2, 2);
+		pa.drawEllipse(QPoint(17, 17), 2, 2);
+		pa.drawLine(4, 17, 11, 4);
+		pa.drawLine(11, 4, 18, 18);
+		break;
+	}
+
+	pa.end();
+	return {pm};
 }
 
 // ##############################################################################

@@ -37,6 +37,20 @@ public:
 	friend class XYCurveSetYErrorPlusColumnCmd;
 	friend class XYCurveSetYErrorMinusColumnCmd;
 	friend class XYCurveSetValuesColumnCmd;
+
+	enum class PlotType {
+		Default,
+		Line,
+		LineHorizontalStep,
+		LineVerticalStep,
+		LineSpline,
+		Scatter,
+		ScatterYError,
+		ScatterXYError,
+		LineSymbol,
+		LineSymbol2PointSegment,
+		LineSymbol3PointSegment
+	};
 	enum class LineType {
 		NoLine,
 		Line,
@@ -58,7 +72,11 @@ public:
 	explicit XYCurve(const QString& name, AspectType type = AspectType::XYCurve, bool loading = false);
 	~XYCurve() override;
 
+	void setPlotType(PlotType);
+	PlotType plotType() const;
+
 	QIcon icon() const override;
+	static QIcon staticIcon(XYCurve::PlotType type);
 	QMenu* createContextMenu() override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
