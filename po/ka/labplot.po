@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-18 00:37+0000\n"
+"POT-Creation-Date: 2024-12-20 00:37+0000\n"
 "PO-Revision-Date: 2024-12-18 03:59+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -177,13 +177,13 @@ msgstr "დღე"
 #. i18n: ectx: property (text), widget (QRadioButton, rbNone)
 #: src/backend/core/AbstractColumn.cpp:163 src/backend/nsl/nsl_conv.c:22
 #: src/backend/nsl/nsl_conv.c:23 src/backend/nsl/nsl_corr.c:19
-#: src/backend/nsl/nsl_smooth.c:22 src/frontend/dockwidgets/AxisDock.cpp:272
-#: src/frontend/dockwidgets/AxisDock.cpp:285
+#: src/backend/nsl/nsl_smooth.c:22 src/frontend/dockwidgets/AxisDock.cpp:267
+#: src/frontend/dockwidgets/AxisDock.cpp:280
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:55
 #: src/frontend/dockwidgets/XYCurveDock.cpp:193 src/frontend/GuiTools.cpp:154
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
 #: src/frontend/widgets/BackgroundWidget.cpp:114
-#: src/frontend/widgets/LineWidget.cpp:48
+#: src/frontend/widgets/LineWidget.cpp:47
 #, kde-format
 msgid "None"
 msgstr "არცერთი"
@@ -6386,7 +6386,7 @@ msgstr "წრიული"
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoBinRanges)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAuto2)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAuto)
-#: src/backend/nsl/nsl_conv.c:21 src/frontend/dockwidgets/AxisDock.cpp:237
+#: src/backend/nsl/nsl_conv.c:21 src/frontend/dockwidgets/AxisDock.cpp:232
 #: src/frontend/dockwidgets/InfoElementDock.cpp:130
 #: src/frontend/dockwidgets/InfoElementDock.cpp:276
 #: src/frontend/ui/dockwidgets/axisdock.ui:473
@@ -6687,9 +6687,9 @@ msgstr "სტატისტიკა (გადანაწილებებ�
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:601
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1874
 #: src/frontend/datasources/ImportFileWidget.cpp:1334
-#: src/frontend/dockwidgets/AxisDock.cpp:239
+#: src/frontend/dockwidgets/AxisDock.cpp:234
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:170
-#: src/frontend/dockwidgets/WorksheetDock.cpp:277
+#: src/frontend/dockwidgets/WorksheetDock.cpp:276
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:780
 #: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:81
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:555
@@ -6849,7 +6849,7 @@ msgstr "ოპჰაიმი"
 msgid "Lang"
 msgstr "ენა"
 
-#: src/backend/nsl/nsl_hilbert.c:18 src/frontend/widgets/LineWidget.cpp:50
+#: src/backend/nsl/nsl_hilbert.c:18 src/frontend/widgets/LineWidget.cpp:49
 #, kde-format
 msgid "Envelope"
 msgstr "კონვერტი"
@@ -7659,7 +7659,7 @@ msgstr "%1: ქვედა შევსების დაყენება"
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:102
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:102
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:120
-#: src/frontend/dockwidgets/AxisDock.cpp:255
+#: src/frontend/dockwidgets/AxisDock.cpp:250
 #: src/frontend/dockwidgets/BarPlotDock.cpp:56
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:52
 #: src/frontend/dockwidgets/HistogramDock.cpp:159
@@ -7679,7 +7679,7 @@ msgstr "ჰორიზონტალური"
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:105
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:105
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:123
-#: src/frontend/dockwidgets/AxisDock.cpp:256
+#: src/frontend/dockwidgets/AxisDock.cpp:251
 #: src/frontend/dockwidgets/BarPlotDock.cpp:57
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:53
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:904
@@ -7739,7 +7739,7 @@ msgstr "სტილი"
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:135
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:153
 #: src/frontend/colormaps/ColorMapsWidget.cpp:195
-#: src/frontend/dockwidgets/AxisDock.cpp:315
+#: src/frontend/dockwidgets/AxisDock.cpp:310
 #: src/frontend/widgets/BackgroundWidget.cpp:122
 #, kde-format
 msgid "Color"
@@ -7751,7 +7751,7 @@ msgid "%1: set axis range type"
 msgstr "%1: ღერძის დიაპაზონის ტიპის დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:572
-#: src/frontend/dockwidgets/AxisDock.cpp:609
+#: src/frontend/dockwidgets/AxisDock.cpp:604
 #, kde-format
 msgid "%1: set axis orientation"
 msgstr "%1: ღერძის ორიენტაციის დაყენება"
@@ -9938,7 +9938,7 @@ msgstr "%1: განლაგების მწკრივების რა
 
 #: src/backend/worksheet/Worksheet.cpp:822
 #: src/backend/worksheet/Worksheet.cpp:823
-#: src/frontend/dockwidgets/WorksheetDock.cpp:373
+#: src/frontend/dockwidgets/WorksheetDock.cpp:372
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: გვერდის ზომის დაყენება"
@@ -12166,10 +12166,10 @@ msgid "Data regions"
 msgstr "მონაცემების რეგიონები"
 
 #. i18n("Center") ); // must not updated
-#: src/frontend/dockwidgets/AxisDock.cpp:231
-#: src/frontend/dockwidgets/AxisDock.cpp:297
-#: src/frontend/dockwidgets/AxisDock.cpp:476
-#: src/frontend/dockwidgets/AxisDock.cpp:479
+#: src/frontend/dockwidgets/AxisDock.cpp:226
+#: src/frontend/dockwidgets/AxisDock.cpp:292
+#: src/frontend/dockwidgets/AxisDock.cpp:471
+#: src/frontend/dockwidgets/AxisDock.cpp:474
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:258
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:267
 #: src/frontend/dockwidgets/CustomPointDock.cpp:51
@@ -12181,10 +12181,10 @@ msgstr "მონაცემების რეგიონები"
 msgid "Top"
 msgstr "თავში"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:232
-#: src/frontend/dockwidgets/AxisDock.cpp:298
-#: src/frontend/dockwidgets/AxisDock.cpp:477
-#: src/frontend/dockwidgets/AxisDock.cpp:480
+#: src/frontend/dockwidgets/AxisDock.cpp:227
+#: src/frontend/dockwidgets/AxisDock.cpp:293
+#: src/frontend/dockwidgets/AxisDock.cpp:472
+#: src/frontend/dockwidgets/AxisDock.cpp:475
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:260
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:269
 #: src/frontend/dockwidgets/CustomPointDock.cpp:53
@@ -12196,25 +12196,25 @@ msgstr "თავში"
 msgid "Bottom"
 msgstr "ბოლოში"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:233
+#: src/frontend/dockwidgets/AxisDock.cpp:228
 #: src/frontend/widgets/BackgroundWidget.cpp:138
 #, kde-format
 msgid "Centered"
 msgstr "შუაზე გასწორებული"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twContent)
-#: src/frontend/dockwidgets/AxisDock.cpp:234
+#: src/frontend/dockwidgets/AxisDock.cpp:229
 #: src/frontend/ui/datasources/matiooptionswidget.ui:57
 #, kde-format
 msgid "Logical"
 msgstr "ლოგიკური"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:238
+#: src/frontend/dockwidgets/AxisDock.cpp:233
 #, kde-format
 msgid "Auto Data"
 msgstr "ავტომატურად, მონაცემებით"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:242
+#: src/frontend/dockwidgets/AxisDock.cpp:237
 #, kde-format
 msgid ""
 "Axis range:<ul><li>Auto - automatically set the start and end points of the "
@@ -12224,37 +12224,37 @@ msgid ""
 "points of the axis</li></ul>"
 msgstr ""
 
-#: src/frontend/dockwidgets/AxisDock.cpp:260
+#: src/frontend/dockwidgets/AxisDock.cpp:255
 #, kde-format
 msgid "No arrow"
 msgstr "ისრის გარეშე"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:261
+#: src/frontend/dockwidgets/AxisDock.cpp:256
 #, kde-format
 msgid "Simple, Small"
 msgstr "მარტივი, პატარა"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:262
+#: src/frontend/dockwidgets/AxisDock.cpp:257
 #, kde-format
 msgid "Simple, Big"
 msgstr "მარტივი, დიდი"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:263
+#: src/frontend/dockwidgets/AxisDock.cpp:258
 #, kde-format
 msgid "Filled, Small"
 msgstr "შევსებული, პატარა"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:264
+#: src/frontend/dockwidgets/AxisDock.cpp:259
 #, kde-format
 msgid "Filled, Big"
 msgstr "შევსებული, დიდი"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:265
+#: src/frontend/dockwidgets/AxisDock.cpp:260
 #, kde-format
 msgid "Semi-filled, Small"
 msgstr "ნახევრად-შევსებული, პატარა"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:266
+#: src/frontend/dockwidgets/AxisDock.cpp:261
 #, kde-format
 msgid "Semi-filled, Big"
 msgstr "ნახევრად-შევსებული, დიდი"
@@ -12262,9 +12262,9 @@ msgstr "ნახევრად-შევსებული, დიდი"
 #. i18n("Original"));
 #. i18n("Custom"));
 #. Positioning and alignment
-#: src/frontend/dockwidgets/AxisDock.cpp:268
-#: src/frontend/dockwidgets/AxisDock.cpp:484
-#: src/frontend/dockwidgets/AxisDock.cpp:488
+#: src/frontend/dockwidgets/AxisDock.cpp:263
+#: src/frontend/dockwidgets/AxisDock.cpp:479
+#: src/frontend/dockwidgets/AxisDock.cpp:483
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:253
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:263
 #: src/frontend/dockwidgets/CustomPointDock.cpp:47
@@ -12280,9 +12280,9 @@ msgid "Left"
 msgstr "მარცხნივ"
 
 #. i18n("Center") ); // must not updated
-#: src/frontend/dockwidgets/AxisDock.cpp:269
-#: src/frontend/dockwidgets/AxisDock.cpp:485
-#: src/frontend/dockwidgets/AxisDock.cpp:487
+#: src/frontend/dockwidgets/AxisDock.cpp:264
+#: src/frontend/dockwidgets/AxisDock.cpp:480
+#: src/frontend/dockwidgets/AxisDock.cpp:482
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:255
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:265
 #: src/frontend/dockwidgets/CustomPointDock.cpp:49
@@ -12297,146 +12297,146 @@ msgstr "მარცხნივ"
 msgid "Right"
 msgstr "მარჯვნივ"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:270
+#: src/frontend/dockwidgets/AxisDock.cpp:265
 #: src/frontend/dockwidgets/XYCurveDock.cpp:98
 #, kde-format
 msgid "Both"
 msgstr "ორივე"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:273
-#: src/frontend/dockwidgets/AxisDock.cpp:286
+#: src/frontend/dockwidgets/AxisDock.cpp:268
+#: src/frontend/dockwidgets/AxisDock.cpp:281
 #, kde-format
 msgid "In"
 msgstr "შიგნით"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:274
-#: src/frontend/dockwidgets/AxisDock.cpp:287
+#: src/frontend/dockwidgets/AxisDock.cpp:269
+#: src/frontend/dockwidgets/AxisDock.cpp:282
 #, kde-format
 msgid "Out"
 msgstr "გარე"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:275
-#: src/frontend/dockwidgets/AxisDock.cpp:288
+#: src/frontend/dockwidgets/AxisDock.cpp:270
+#: src/frontend/dockwidgets/AxisDock.cpp:283
 #, kde-format
 msgid "In and Out"
 msgstr "შიგნით და გარეთ"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:277
-#: src/frontend/dockwidgets/AxisDock.cpp:290
+#: src/frontend/dockwidgets/AxisDock.cpp:272
+#: src/frontend/dockwidgets/AxisDock.cpp:285
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:58
 #, kde-format
 msgid "Number"
 msgstr "რიცხვი"
 
 #. i18n: ectx: property (text), widget (QLabel, lSpacing)
-#: src/frontend/dockwidgets/AxisDock.cpp:278
-#: src/frontend/dockwidgets/AxisDock.cpp:291
+#: src/frontend/dockwidgets/AxisDock.cpp:273
+#: src/frontend/dockwidgets/AxisDock.cpp:286
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:659
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:454
 #, kde-format
 msgid "Spacing"
 msgstr "დაშორება"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:279
-#: src/frontend/dockwidgets/AxisDock.cpp:292
-#: src/frontend/dockwidgets/AxisDock.cpp:301
+#: src/frontend/dockwidgets/AxisDock.cpp:274
+#: src/frontend/dockwidgets/AxisDock.cpp:287
+#: src/frontend/dockwidgets/AxisDock.cpp:296
 #, kde-format
 msgid "Custom column"
 msgstr "მორგებული სვეტი"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:280
+#: src/frontend/dockwidgets/AxisDock.cpp:275
 #, kde-format
 msgid "Column labels"
 msgstr "სვეტის ჭდეები"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:282
+#: src/frontend/dockwidgets/AxisDock.cpp:277
 #, kde-format
 msgid "Absolute Value"
 msgstr "აბსოლუტური მნიშვნელობა"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:283
+#: src/frontend/dockwidgets/AxisDock.cpp:278
 #, kde-format
 msgid "Offset"
 msgstr "წანაცვლება"
 
 #. i18n("Column labels"));
 #. labels
-#: src/frontend/dockwidgets/AxisDock.cpp:296
+#: src/frontend/dockwidgets/AxisDock.cpp:291
 #, kde-format
 msgid "No labels"
 msgstr "ჭდის გარეშე"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:300
+#: src/frontend/dockwidgets/AxisDock.cpp:295
 #, kde-format
 msgid "Position values"
 msgstr "მდებარეობის მნიშვნელობები"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:304
+#: src/frontend/dockwidgets/AxisDock.cpp:299
 #, kde-format
 msgid "Decimal notation"
 msgstr "ათობითი ჩანაწერი"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:305
+#: src/frontend/dockwidgets/AxisDock.cpp:300
 #, kde-format
 msgid "Scientific notation"
 msgstr "სამეცნიერო ჩანაწერი"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:306
+#: src/frontend/dockwidgets/AxisDock.cpp:301
 #, kde-format
 msgid "Scientific E notation"
 msgstr "სამეცნიერო E ჩანაწერი"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:307
+#: src/frontend/dockwidgets/AxisDock.cpp:302
 #, kde-format
 msgid "Powers of 10"
 msgstr "10-ის ხარისხი"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:308
+#: src/frontend/dockwidgets/AxisDock.cpp:303
 #, kde-format
 msgid "Powers of 2"
 msgstr "2-ის ხარისხი"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:309
+#: src/frontend/dockwidgets/AxisDock.cpp:304
 #, kde-format
 msgid "Powers of e"
 msgstr "E-ის ხარისხი"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:310
+#: src/frontend/dockwidgets/AxisDock.cpp:305
 #, kde-format
 msgid "Multiples of π"
 msgstr "გამრავლებული π-ზე"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:314
+#: src/frontend/dockwidgets/AxisDock.cpp:309
 #, kde-format
 msgid "Transparent"
 msgstr "გამჭვირვალე"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:564
+#: src/frontend/dockwidgets/AxisDock.cpp:559
 #, kde-format
 msgid "%1: set axis color"
 msgstr "%1: ღერძის ფერის დაყენება"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:566
+#: src/frontend/dockwidgets/AxisDock.cpp:561
 #, kde-format
 msgid "%1 axes: set color"
 msgstr "%1 ღერძი: ფერის დაყენება"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:1573
+#: src/frontend/dockwidgets/AxisDock.cpp:1568
 #, kde-format
 msgid "Scale is in sync with the plot scale"
 msgstr "მასშტაბი სინქრონიზებულია გრაფიკის მასშტაბთან"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:1576
+#: src/frontend/dockwidgets/AxisDock.cpp:1571
 #, kde-format
 msgid "Scale is async with the plot"
 msgstr "მასშტაბი ასინქრონულია მასშტაბთან"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:2028
+#: src/frontend/dockwidgets/AxisDock.cpp:2023
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
 msgstr "%1 ღერძები: ნიმუში \"%2\" ჩაიტვირთა"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:2030
+#: src/frontend/dockwidgets/AxisDock.cpp:2025
 #: src/frontend/dockwidgets/BarPlotDock.cpp:503
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:728
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1839
@@ -12451,7 +12451,7 @@ msgstr "%1 ღერძები: ნიმუში \"%2\" ჩაიტვი�
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:229
 #: src/frontend/dockwidgets/RunChartDock.cpp:224
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:232
-#: src/frontend/dockwidgets/WorksheetDock.cpp:606
+#: src/frontend/dockwidgets/WorksheetDock.cpp:605
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1036
 #, kde-format
 msgid "%1: template \"%2\" loaded"
@@ -13163,58 +13163,58 @@ msgstr "ელცხრილი, რომელთანაც მწკრი
 msgid "%1 spreadsheets: template \"%2\" loaded"
 msgstr "%1 ელცხრილი: ნიმუში \"%2\" ჩაიტვირთა"
 
-#: src/frontend/dockwidgets/WorksheetDock.cpp:44
+#: src/frontend/dockwidgets/WorksheetDock.cpp:43
 #, kde-format
 msgid ""
 "If checked, rescale the content of the worksheet on size changes. Otherwise "
 "resize the canvas only."
 msgstr ""
 
-#: src/frontend/dockwidgets/WorksheetDock.cpp:46
+#: src/frontend/dockwidgets/WorksheetDock.cpp:45
 #: src/frontend/worksheet/WorksheetView.cpp:241
 #, kde-format
 msgid "No Layout"
 msgstr "განლაგების გარეშე"
 
-#: src/frontend/dockwidgets/WorksheetDock.cpp:47
+#: src/frontend/dockwidgets/WorksheetDock.cpp:46
 #: src/frontend/worksheet/WorksheetView.cpp:232
 #, kde-format
 msgid "Vertical Layout"
 msgstr "ვერტიკალური განლაგება"
 
-#: src/frontend/dockwidgets/WorksheetDock.cpp:48
+#: src/frontend/dockwidgets/WorksheetDock.cpp:47
 #: src/frontend/worksheet/WorksheetView.cpp:235
 #, kde-format
 msgid "Horizontal Layout"
 msgstr "ჰორიზონტალური განლაგება"
 
-#: src/frontend/dockwidgets/WorksheetDock.cpp:49
+#: src/frontend/dockwidgets/WorksheetDock.cpp:48
 #: src/frontend/worksheet/WorksheetView.cpp:238
 #, kde-format
 msgid "Grid Layout"
 msgstr "ბადის განლაგება"
 
-#: src/frontend/dockwidgets/WorksheetDock.cpp:256
+#: src/frontend/dockwidgets/WorksheetDock.cpp:255
 #, kde-format
 msgid "Portrait"
 msgstr "პორტრეტი"
 
-#: src/frontend/dockwidgets/WorksheetDock.cpp:257
+#: src/frontend/dockwidgets/WorksheetDock.cpp:256
 #, kde-format
 msgid "Landscape"
 msgstr "ლანდშაფტი"
 
-#: src/frontend/dockwidgets/WorksheetDock.cpp:275
+#: src/frontend/dockwidgets/WorksheetDock.cpp:274
 #, kde-format
 msgid "View Size"
 msgstr "ზომის ნახვა"
 
-#: src/frontend/dockwidgets/WorksheetDock.cpp:276
+#: src/frontend/dockwidgets/WorksheetDock.cpp:275
 #, kde-format
 msgid "Standard Page"
 msgstr "სტანდარტული გვერდი"
 
-#: src/frontend/dockwidgets/WorksheetDock.cpp:604
+#: src/frontend/dockwidgets/WorksheetDock.cpp:603
 #, kde-format
 msgid "%1 worksheets: template \"%2\" loaded"
 msgstr "%1 სამუშაო ფურცელი: ნიმუში \"%2\" ჩაიტვირთა"
@@ -20139,7 +20139,7 @@ msgstr "y:"
 #. i18n: ectx: attribute (title), widget (QWidget, tabBars)
 #: src/frontend/ui/dockwidgets/barplotdock.ui:243
 #: src/frontend/widgets/ErrorBarWidget.cpp:86
-#: src/frontend/widgets/LineWidget.cpp:49
+#: src/frontend/widgets/LineWidget.cpp:48
 #, kde-format
 msgid "Bars"
 msgstr "მართკუთხედები"
@@ -23979,47 +23979,47 @@ msgstr "თარიღი"
 msgid "Date and Time"
 msgstr "თარიღი და დრო"
 
-#: src/frontend/widgets/LineWidget.cpp:51
+#: src/frontend/widgets/LineWidget.cpp:50
 #, kde-format
 msgid "Drop Lines"
 msgstr "ხაზების მოცილება"
 
-#: src/frontend/widgets/LineWidget.cpp:52
+#: src/frontend/widgets/LineWidget.cpp:51
 #, kde-format
 msgid "Half-Bars"
 msgstr "ნახევრადმართკუთხედები"
 
-#: src/frontend/widgets/LineWidget.cpp:59
+#: src/frontend/widgets/LineWidget.cpp:58
 #, kde-format
 msgid "No Drop Lines"
 msgstr "პროექციის გარეშე"
 
-#: src/frontend/widgets/LineWidget.cpp:60
+#: src/frontend/widgets/LineWidget.cpp:59
 #, kde-format
 msgid "Drop Lines, X"
 msgstr "პროექცია, X"
 
-#: src/frontend/widgets/LineWidget.cpp:61
+#: src/frontend/widgets/LineWidget.cpp:60
 #, kde-format
 msgid "Drop Lines, Y"
 msgstr "პროექცია, Y"
 
-#: src/frontend/widgets/LineWidget.cpp:62
+#: src/frontend/widgets/LineWidget.cpp:61
 #, kde-format
 msgid "Drop Lines, XY"
 msgstr "პროექცია, XY"
 
-#: src/frontend/widgets/LineWidget.cpp:63
+#: src/frontend/widgets/LineWidget.cpp:62
 #, kde-format
 msgid "Drop Lines, X, Zero Baseline"
 msgstr "პროექცია, X, საფუძვლამდე"
 
-#: src/frontend/widgets/LineWidget.cpp:64
+#: src/frontend/widgets/LineWidget.cpp:63
 #, kde-format
 msgid "Drop Lines, X, Min Baseline"
 msgstr "პროექცია, X, მინ. საფუძვლამდე"
 
-#: src/frontend/widgets/LineWidget.cpp:65
+#: src/frontend/widgets/LineWidget.cpp:64
 #, kde-format
 msgid "Drop Lines, X, Max Baseline"
 msgstr "პროექცია, X, მაქს. საფუძვლამდე"
@@ -24059,12 +24059,12 @@ msgstr "დაუმუშავებელი შეცდომა"
 msgid "Invalid value entered. Valid value: %1"
 msgstr "არასწორი რიცხვითი მნიშვნელობა. სწორი მნიშვნელობაა: %1"
 
-#: src/frontend/widgets/TreeViewComboBox.cpp:56
+#: src/frontend/widgets/TreeViewComboBox.cpp:54
 #, kde-format
 msgid "Search/Filter text"
 msgstr "ტექსტის ძებნა/ფილტრი"
 
-#: src/frontend/widgets/TreeViewComboBox.cpp:358
+#: src/frontend/widgets/TreeViewComboBox.cpp:366
 #, kde-format
 msgid ""
 "The aspect \"%1\"\n"
