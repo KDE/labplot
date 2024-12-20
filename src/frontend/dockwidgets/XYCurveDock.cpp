@@ -212,12 +212,12 @@ void XYCurveDock::init() {
 	QPen pen(Qt::SolidPattern, 0);
 	const QColor& color = GuiTools::isDarkMode() ? Qt::white : Qt::black;
 	pen.setColor(color);
-	pa.setPen(pen);
 
 	// no line
 	pm.fill(Qt::transparent);
 	pa.begin(&pm);
 	pa.setPen(pen);
+	pa.setBrush(QBrush(pen.color()));
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.drawEllipse(1, 1, 4, 4);
 	pa.drawEllipse(15, 15, 4, 4);
@@ -228,6 +228,7 @@ void XYCurveDock::init() {
 	pm.fill(Qt::transparent);
 	pa.begin(&pm);
 	pa.setPen(pen);
+	pa.setBrush(QBrush(pen.color()));
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.drawEllipse(1, 1, 4, 4);
 	pa.drawEllipse(15, 15, 4, 4);
@@ -235,9 +236,11 @@ void XYCurveDock::init() {
 	pa.end();
 	ui.cbLineType->setItemIcon(1, pm);
 
+	// horizontal start
 	pm.fill(Qt::transparent);
 	pa.begin(&pm);
 	pa.setPen(pen);
+	pa.setBrush(QBrush(pen.color()));
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.drawEllipse(1, 1, 4, 4);
 	pa.drawEllipse(15, 15, 4, 4);
@@ -246,9 +249,11 @@ void XYCurveDock::init() {
 	pa.end();
 	ui.cbLineType->setItemIcon(2, pm);
 
+	// vertical start
 	pm.fill(Qt::transparent);
 	pa.begin(&pm);
 	pa.setPen(pen);
+	pa.setBrush(QBrush(pen.color()));
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.drawEllipse(1, 1, 4, 4);
 	pa.drawEllipse(15, 15, 4, 4);
@@ -261,6 +266,7 @@ void XYCurveDock::init() {
 	pm.fill(Qt::transparent);
 	pa.begin(&pm);
 	pa.setPen(pen);
+	pa.setBrush(QBrush(pen.color()));
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.drawEllipse(1, 1, 4, 4);
 	pa.drawEllipse(15, 15, 4, 4);
@@ -274,6 +280,7 @@ void XYCurveDock::init() {
 	pm.fill(Qt::transparent);
 	pa.begin(&pm);
 	pa.setPen(pen);
+	pa.setBrush(QBrush(pen.color()));
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.drawEllipse(1, 1, 4, 4);
 	pa.drawEllipse(15, 15, 4, 4);
@@ -287,6 +294,7 @@ void XYCurveDock::init() {
 	pm.fill(Qt::transparent);
 	pa.begin(&pm);
 	pa.setPen(pen);
+	pa.setBrush(QBrush(pen.color()));
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.drawEllipse(1, 1, 4, 4);
 	pa.drawEllipse(8, 8, 4, 4);
@@ -299,6 +307,7 @@ void XYCurveDock::init() {
 	pm.fill(Qt::transparent);
 	pa.begin(&pm);
 	pa.setPen(pen);
+	pa.setBrush(QBrush(pen.color()));
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.drawEllipse(1, 1, 4, 4);
 	pa.drawEllipse(8, 8, 4, 4);
@@ -311,6 +320,7 @@ void XYCurveDock::init() {
 	pm.fill(Qt::transparent);
 	pa.begin(&pm);
 	pa.setPen(pen);
+	pa.setBrush(QBrush(pen.color()));
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.drawEllipse(1, 1, 4, 4);
 	pa.drawEllipse(15, 15, 4, 4);
