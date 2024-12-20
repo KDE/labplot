@@ -13,25 +13,11 @@
 
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AspectTreeModel.h"
-#include "backend/datasources/LiveDataSource.h"
-#include "backend/matrix/Matrix.h"
-#include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/spreadsheet/StatisticsSpreadsheet.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/InfoElement.h"
-#include "backend/worksheet/TextLabel.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/Axis.h"
-#include "backend/worksheet/plots/cartesian/BarPlot.h"
-#include "backend/worksheet/plots/cartesian/BoxPlot.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
-#include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
-#include "backend/worksheet/plots/cartesian/ReferenceLine.h"
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
 #ifdef HAVE_CANTOR_LIBS
 #include "backend/notebook/Notebook.h"
 #endif
@@ -40,10 +26,7 @@
 #include "backend/datasources/MQTTSubscription.h"
 #include "backend/datasources/MQTTTopic.h"
 #endif
-#include "backend/core/Project.h"
 #include "backend/datapicker/Datapicker.h"
-#include "backend/datapicker/DatapickerCurve.h"
-#include "backend/datapicker/DatapickerImage.h"
 
 #include "frontend/GuiObserver.h"
 #include "frontend/ProjectExplorer.h"
@@ -99,7 +82,6 @@
 #include <KLocalizedString>
 #include <QStackedWidget>
 #include <QStatusBar>
-#include <QToolBar>
 
 /*!
   \class GuiObserver
