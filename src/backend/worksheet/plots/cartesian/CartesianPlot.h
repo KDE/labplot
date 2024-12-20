@@ -228,10 +228,6 @@ private:
 	bool m_menusInitialized{false};
 
 	//"add new" actions
-	QAction* addCurveAction{nullptr};
-	QAction* addEquationCurveAction{nullptr};
-	QAction* addFunctionCurveAction{nullptr};
-
 	// statistical plots
 	QAction* addHistogramAction{nullptr};
 	QAction* addBoxPlotAction{nullptr};
@@ -258,6 +254,7 @@ private:
 	QAction* addHilbertTransformCurveAction{nullptr};
 	QAction* addConvolutionCurveAction{nullptr};
 	QAction* addCorrelationCurveAction{nullptr};
+	QAction* addFunctionCurveAction{nullptr};
 
 	QAction* addHorizontalAxisAction{nullptr};
 	QAction* addVerticalAxisAction{nullptr};
@@ -401,7 +398,7 @@ Q_SIGNALS:
 	void cursor0EnableChanged(bool enable);
 	void cursor1EnableChanged(bool enable);
 
-	void scaleRetransformed(const CartesianPlot* plot, const Dimension dim, int index);
+	void scaleRetransformed(const CartesianPlot*, const Dimension, int index);
 };
 
 #endif
