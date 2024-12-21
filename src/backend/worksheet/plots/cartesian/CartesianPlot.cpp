@@ -564,7 +564,7 @@ void CartesianPlot::initMenus() {
 
 	// formula plot
 	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve")), i18n("Formula Plot"), actionGroup);
-	action->setToolTip(i18n("Add a new xy-curve that is defined via a mathematical expression."));
+	action->setToolTip(i18n("Add a new xy-plot that is defined via a mathematical expression."));
 	action->setData(static_cast<int>(Plot::PlotType::Formula));
 	m_addNewMenu->addSeparator();
 	m_addNewMenu->addAction(action);

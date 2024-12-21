@@ -68,8 +68,6 @@ public:
 	QString yColumnPath;
 	bool sourceDataChangedSinceLastRecalc{false};
 
-	Plot::PlotType plotType{Plot::PlotType::Line};
-
 	// line
 	XYCurve::LineType lineType{XYCurve::LineType::Line};
 	bool lineSkipGaps{false};

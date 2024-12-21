@@ -186,8 +186,6 @@ void XYCurve::init(bool loading) {
 
 void XYCurve::setPlotType(PlotType type) {
 	Q_D(XYCurve);
-	d->plotType = type;
-
 	d->dropLine->setStyle(Qt::NoPen);
 	d->background->setEnabled(false);
 
@@ -295,8 +293,7 @@ QMenu* XYCurve::createContextMenu() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYCurve::icon() const {
-	Q_D(const XYCurve);
-	return staticIcon(d->plotType);
+	return QIcon::fromTheme(QStringLiteral("labplot-xy-curve"));
 }
 
 QIcon XYCurve::staticIcon(Plot::PlotType type) {
