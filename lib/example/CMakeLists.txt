@@ -9,11 +9,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(QT_MAJOR_VERSION "5")
-set(KF_MAJOR_VERSION "5")
-set(QT_MIN_VERSION "5.10.0")
-set(KF_MIN_VERSION "5.16.0")
-
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core)
 message(STATUS "Found Qt ${QT_VERSION}")
 set(QT_MAJOR_VERSION ${QT_VERSION_MAJOR})
@@ -35,6 +30,16 @@ find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
 )
 
 add_executable(example main.cpp)
+# portable?
 include_directories(/usr/include/labplot/)
 
-target_link_libraries(example labplot Qt${QT_MAJOR_VERSION}::Widgets KF${KF_MAJOR_VERSION}::ConfigCore KF${KF_MAJOR_VERSION}::I18n)
+# Be more relaxed with example code: remove definitions from directory defitions
+#set_directory_properties(PROPERTIES COMPILE_DEFINITIONS "")
+get_directory_property(directory_definitions COMPILE_DEFINITIONS)
+list(REMOVE_ITEM directory_definitions "QT_NO_CAST_FROM_ASCII")
+set_directory_properties(PROPERTIES COMPILE_DEFINITIONS "${directory_definitions}")
+
+get_directory_property(DIRECTORY_DEFINITIONS COMPILE_DEFINITIONS)
+message(STATUS "EXAMPLE DIRECTORY DEFINITIONS = ${DIRECTORY_DEFINITIONS}\n")
+
+target_link_libraries(example liblabplot Qt${QT_MAJOR_VERSION}::Widgets KF${KF_MAJOR_VERSION}::ConfigCore KF${KF_MAJOR_VERSION}::I18n)
