@@ -80,6 +80,8 @@ public:
 	void recalc() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
+	bool indicesMinMax(const Dimension dim, double, double, int& start, int& end) const override;
+	bool minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const;
 	double minimum(CartesianCoordinateSystem::Dimension) const override;
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	bool hasData() const override;

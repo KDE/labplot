@@ -3054,61 +3054,44 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 		if (coordinateSystem(plot->coordinateSystemIndex())->index(dim) != index)
 			continue;
 
-		const auto type = plot->type();
-		if (plot->inherits(AspectType::XYCurve) || type == AspectType::Heatmap || type == AspectType::QQPlot) {
-			// range of indices
-			Range<int> indexRange{0, 0};
-			if (!completeRange && d->rangeType == RangeType::Free || type == AspectType::QQPlot) {
-				Dimension dim_other = Dimension::Y;
-				switch (dim) {
-				case Dimension::X:
-					break;
-				case Dimension::Y:
-					dim_other = Dimension::X;
-					break;
-				}
-				const int index = coordinateSystem(plot->coordinateSystemIndex())->index(dim_other);
-				DEBUG(Q_FUNC_INFO << ", free incomplete range with y column. y range = " << d->range(dim_other, index).toStdString())
-				if (!plot->indicesMinMax(dim_other, d->range(dim_other, index).start(), d->range(dim_other, index).end(), indexRange.start(), indexRange.end()))
-					continue;
-			} else { // all data
-				const int count = plot->dataCount(dim);
-				DEBUG("PLOT \"" << STDSTRING(plot->name()) << "\"")
-				if (count < 0) {
-					DEBUG("Invalid data");
-					continue;
-				}
-				DEBUG(Q_FUNC_INFO << ", else. range type = " << (int)d->rangeType)
-				switch (d->rangeType) {
-				case RangeType::Free:
-					indexRange.setRange(0, count - 1);
-					break;
-				case RangeType::Last:
-					indexRange.setRange(count - d->rangeLastValues, count - 1);
-					break;
-				case RangeType::First:
-					indexRange.setRange(0, d->rangeFirstValues - 1);
-					break;
-				}
+		// range of indices
+		Range<int> indexRange{0, 0};
+		if ((!completeRange && d->rangeType == RangeType::Free) || (!plot->inherits(AspectType::XYCurve) && !plot->inherits(AspectType::Heatmap))) {
+			Dimension dim_other = Dimension::Y;
+			switch (dim) {
+			case Dimension::X:
+				break;
+			case Dimension::Y:
+				dim_other = Dimension::X;
+				break;
 			}
-			DEBUG(Q_FUNC_INFO << ", index range = " << indexRange.toStdString())
-
-			plot->minMax(dim, indexRange, range, true);
-		} else if (plot->type() == AspectType::ProcessBehaviorChart) {
-			// TODO: implement indicesMinMax and handle above like QQPlot and XYCurve
-			const int maxIndex = static_cast<const ProcessBehaviorChart*>(plot)->xIndexCount() - 1;
-			Range<int> indexRange{0, maxIndex};
-			plot->minMax(dim, indexRange, range, true);
-		} else if (plot->type() == AspectType::RunChart) {
-			// TODO: implement indicesMinMax and handle above like QQPlot and XYCurve
-			const int maxIndex = static_cast<const RunChart*>(plot)->xIndexCount() - 1;
-			Range<int> indexRange{0, maxIndex};
-			plot->minMax(dim, indexRange, range, true);
-		} else {
-			// TODO: which plots goes in here?
-			range.setStart(plot->minimum(dim));
-			range.setEnd(plot->maximum(dim));
+			const int index = coordinateSystem(plot->coordinateSystemIndex())->index(dim_other);
+			DEBUG(Q_FUNC_INFO << ", free incomplete range with y column. y range = " << d->range(dim_other, index).toStdString())
+			if (!plot->indicesMinMax(dim_other, d->range(dim_other, index).start(), d->range(dim_other, index).end(), indexRange.start(), indexRange.end()))
+				continue;
+		} else { // all data
+			const int count = plot->dataCount(dim);
+			DEBUG("PLOT \"" << STDSTRING(plot->name()) << "\"")
+			if (count < 0) {
+				DEBUG("Invalid data");
+				continue;
+			}
+			DEBUG(Q_FUNC_INFO << ", else. range type = " << (int)d->rangeType)
+			switch (d->rangeType) {
+			case RangeType::Free:
+				indexRange.setRange(0, count - 1);
+				break;
+			case RangeType::Last:
+				indexRange.setRange(count - d->rangeLastValues, count - 1);
+				break;
+			case RangeType::First:
+				indexRange.setRange(0, d->rangeFirstValues - 1);
+				break;
+			}
 		}
+		DEBUG(Q_FUNC_INFO << ", index range = " << indexRange.toStdString())
+
+		plot->minMax(dim, indexRange, range, true);
 
 		// check ranges for nonlinear scales
 		if (range.scale() != RangeT::Scale::Linear)

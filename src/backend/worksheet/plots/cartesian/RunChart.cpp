@@ -192,6 +192,12 @@ Symbol* RunChart::dataSymbol() const {
 	return d->dataCurve->symbol();
 }
 
+bool RunChart::indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const {
+	start = 0;
+	end = xIndexCount() - 1;
+	return true;
+}
+
 bool RunChart::minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& r, bool /* includeErrorBars */) const {
 	Q_D(const RunChart);
 	return d->dataCurve->minMax(dim, indexRange, r, false);
