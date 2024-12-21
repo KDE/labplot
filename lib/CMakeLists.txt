@@ -269,6 +269,10 @@ if(WIN32)
     target_link_libraries(liblabplot ${PSAPI})
 endif()
 
+if(ENABLE_SDK_EXAMPLES)
+    add_subdirectory(example)
+endif()
+
 ############## installation ################################
 install(TARGETS liblabplot DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 

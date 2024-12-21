@@ -298,7 +298,9 @@ endif()
 option(ENABLE_REPRODUCIBLE "Enable reproducible builds" OFF)
 option(ENABLE_TESTS "Build with tests" ON)
 option(ENABLE_SDK "Build with SDK support" ON)
-
+if(ENABLE_SDK)
+    option(ENABLE_SDK_EXAMPLES "Build SDK examples" ON)
+endif()
 
 ### OS macros ####################################
 if(WIN32)

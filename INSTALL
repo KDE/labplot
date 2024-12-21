@@ -77,6 +77,8 @@ To disable building tests, use
 
 To disable building the SDK, use
 -DENABLE_SDK=OFF
+To only disable building the SDK exampes, use
+-DENABLE_SDK_EXAMPLES=OFF
 
 ================================================================================
 To run the tests execute
