@@ -414,6 +414,16 @@ QVector<QString>& BoxPlot::dataColumnPaths() const {
 	return d->dataColumnPaths;
 }
 
+bool BoxPlot::indicesMinMax(const Dimension dim, double, double, int& start, int& end) const {
+	return true;
+}
+
+bool BoxPlot::minMax(const Dimension dim, const Range<int>&, Range<double>& r, bool) const {
+	r.setStart(minimum(dim));
+	r.setEnd(maximum(dim));
+	return true;
+}
+
 double BoxPlot::minimum(const Dimension dim) const {
 	Q_D(const BoxPlot);
 	switch (dim) {

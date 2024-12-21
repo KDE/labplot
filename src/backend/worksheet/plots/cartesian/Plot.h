@@ -62,11 +62,10 @@ public:
 
 	BASIC_D_ACCESSOR_DECL(bool, legendVisible, LegendVisible)
 	using Dimension = CartesianCoordinateSystem::Dimension;
-	virtual bool minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const;
+	virtual bool minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const = 0;
 	virtual double minimum(Dimension dim) const = 0;
 	virtual double maximum(Dimension dim) const = 0;
-	// TODO: make this pure virtual!!!
-	virtual bool indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const;
+	virtual bool indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const = 0;
 
 	/*!
 	 * \brief dataCount
