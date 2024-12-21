@@ -11,8 +11,8 @@
 #ifndef XYCURVE_H
 #define XYCURVE_H
 
-#include "backend/worksheet/plots/cartesian/Plot.h"
 #include "backend/worksheet/plots/cartesian/ErrorBar.h"
+#include "backend/worksheet/plots/cartesian/Plot.h"
 
 #include <QFont>
 
