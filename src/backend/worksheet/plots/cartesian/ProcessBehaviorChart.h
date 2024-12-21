@@ -86,6 +86,7 @@ public:
 
 	int xIndexCount() const;
 	bool minMax(const CartesianCoordinateSystem::Dimension, const Range<int>& indexRange, Range<double>&, bool includeErrorBars = true) const override;
+	bool indicesMinMax(const Dimension dim, double v1, double v2, int& start, int& end) const override;
 	double minimum(CartesianCoordinateSystem::Dimension) const override;
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	bool hasData() const override;
