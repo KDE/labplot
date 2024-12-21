@@ -4,7 +4,7 @@
 	Description          : View class for Notebook
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
-	SPDX-FileCopyrightText: 2016-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -13,6 +13,7 @@
 #include "backend/notebook/Notebook.h"
 #include "frontend/spreadsheet/PlotDataDialog.h"
 #include "frontend/spreadsheet/StatisticsDialog.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 #include <QActionGroup>
 #include <QHBoxLayout>
@@ -287,7 +288,7 @@ void NotebookView::fillColumnContextMenu(QMenu* menu, Column* column) {
 		auto* plotDataActionGroup = new QActionGroup(this);
 		connect(plotDataActionGroup, &QActionGroup::triggered, this, &NotebookView::plotData);
 		m_plotDataMenu = new QMenu(i18n("Plot Data"), this);
-		PlotDataDialog::fillMenu(m_plotDataMenu, plotDataActionGroup);
+		CartesianPlot::fillAddNewPlotMenu(m_plotDataMenu, plotDataActionGroup);
 
 		m_statisticsAction = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Variable Statistics..."), this);
 		connect(m_statisticsAction, &QAction::triggered, this, &NotebookView::showStatistics);
@@ -350,7 +351,7 @@ void NotebookView::plotData(QAction* action) {
 	if (!m_contextMenuColumn)
 		return;
 
-	auto type = static_cast<PlotDataDialog::PlotType>(action->data().toInt());
+	auto type = static_cast<Plot::PlotType>(action->data().toInt());
 	auto* dlg = new PlotDataDialog(m_notebook, type);
 	dlg->setSelectedColumns(QVector<Column*>({m_contextMenuColumn}));
 	dlg->exec();

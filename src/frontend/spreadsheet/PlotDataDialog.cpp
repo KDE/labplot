@@ -25,15 +25,11 @@
 #include "backend/datasources/MQTTTopic.h"
 #endif
 
-#include <QAction>
-#include <QActionGroup>
 #include <QDialogButtonBox>
-#include <QMenu>
 #include <QPushButton>
 #include <QWindow>
 
 #include <KConfigGroup>
-
 #include <KWindowConfig>
 
 #include "ui_plotdatawidget.h"
@@ -59,7 +55,7 @@ enum class PlotPlacement {
 
 	\ingroup frontend
  */
-PlotDataDialog::PlotDataDialog(AbstractAspect* parentAspect, PlotType type, QWidget* parent)
+PlotDataDialog::PlotDataDialog(AbstractAspect* parentAspect, Plot::PlotType type, QWidget* parent)
 	: QDialog(parent)
 	, ui(new Ui::PlotDataWidget())
 	, m_parentAspect(parentAspect)
@@ -69,6 +65,11 @@ PlotDataDialog::PlotDataDialog(AbstractAspect* parentAspect, PlotType type, QWid
 	setAttribute(Qt::WA_DeleteOnClose);
 	setWindowTitle(i18nc("@title:window", "Plot Spreadsheet Data"));
 	setWindowIcon(QIcon::fromTheme(QStringLiteral("office-chart-line")));
+
+	m_basicPlotType = (m_plotType == Plot::PlotType::Line || m_plotType == Plot::PlotType::LineHorizontalStep || m_plotType == Plot::PlotType::LineVerticalStep
+			|| m_plotType == Plot::PlotType::LineSpline || m_plotType == Plot::PlotType::Scatter || m_plotType == Plot::PlotType::ScatterYError
+			|| m_plotType == Plot::PlotType::ScatterXYError || m_plotType == Plot::PlotType::LineSymbol || m_plotType == Plot::PlotType::LineSymbol2PointSegment
+			|| m_plotType == Plot::PlotType::LineSymbol3PointSegment);
 
 	auto* mainWidget = new QWidget(this);
 	ui->setupUi(mainWidget);
@@ -211,42 +212,7 @@ void PlotDataDialog::setAnalysisAction(XYAnalysisCurve::AnalysisAction action) {
 
 void PlotDataDialog::setFitDistribution(nsl_sf_stats_distribution distribution) {
 	m_fitDistribution = distribution;
-}
-
-void PlotDataDialog::fillMenu(QMenu* menu, QActionGroup* group) {
-	// synchronize with the menu in CartesianPlot
-
-	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("xy-curve"), group);
-	action->setData(static_cast<int>(PlotDataDialog::PlotType::XYCurve));
-	menu->addAction(action);
-
-	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"), menu);
-	action = new QAction(QIcon::fromTheme(QStringLiteral("view-object-histogram-linear")), i18n("Histogram"), group);
-	action->setData(static_cast<int>(PlotDataDialog::PlotType::Histogram));
-	addNewStatisticalPlotsMenu->addAction(action);
-
-	action = new QAction(BoxPlot::staticIcon(), i18n("Box Plot"), group);
-	action->setData(static_cast<int>(PlotDataDialog::PlotType::BoxPlot));
-	addNewStatisticalPlotsMenu->addAction(action);
-
-	action = new QAction(i18n("KDE Plot"), group);
-	action->setData(static_cast<int>(PlotDataDialog::PlotType::KDEPlot));
-	addNewStatisticalPlotsMenu->addAction(action);
-
-	action = new QAction(i18n("Q-Q Plot"), group);
-	action->setData(static_cast<int>(PlotDataDialog::PlotType::QQPlot));
-	addNewStatisticalPlotsMenu->addAction(action);
-	menu->addMenu(addNewStatisticalPlotsMenu);
-
-	auto* addNewBarPlotsMenu = new QMenu(i18n("Bar Plots"), menu);
-	action = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Bar Plot"), group);
-	action->setData(static_cast<int>(PlotDataDialog::PlotType::BarPlot));
-	addNewBarPlotsMenu->addAction(action);
-
-	action = new QAction(LollipopPlot::staticIcon(), i18n("Lollipop Plot"), group);
-	action->setData(static_cast<int>(PlotDataDialog::PlotType::LollipopPlot));
-	addNewBarPlotsMenu->addAction(action);
-	menu->addMenu(addNewBarPlotsMenu);
+	m_fitDistributionMode = true;
 }
 
 void PlotDataDialog::setSelectedColumns(QVector<Column*> selectedColumns) {
@@ -271,11 +237,11 @@ void PlotDataDialog::setSelectedColumns(QVector<Column*> selectedColumns) {
 	QString xColumnName;
 	for (const Column* column : m_columns) {
 		columnNames << column->name();
-		if (m_plotType == PlotType::XYCurve && xColumnName.isEmpty() && column->plotDesignation() == AbstractColumn::PlotDesignation::X)
+		if (m_basicPlotType && xColumnName.isEmpty() && column->plotDesignation() == AbstractColumn::PlotDesignation::X)
 			xColumnName = column->name();
 	}
 
-	if (m_plotType == PlotType::XYCurve && xColumnName.isEmpty()) {
+	if (m_basicPlotType && xColumnName.isEmpty()) {
 		// no X-column was selected -> look for the first non-selected X-column left to the first selected column
 		const auto& columns = m_parentAspect->children<Column>();
 		const int index = columns.indexOf(selectedColumns.first()) - 1;
@@ -304,20 +270,10 @@ void PlotDataDialog::setSelectedColumns(QVector<Column*> selectedColumns) {
 		}
 	}
 
-	switch (m_plotType) {
-	case PlotType::XYCurve:
+	if (m_basicPlotType && !m_fitDistributionMode)
 		processColumnsForXYCurve(columnNames, xColumnName);
-		break;
-	case PlotType::Histogram:
-	case PlotType::KDEPlot:
-	case PlotType::QQPlot:
-	case PlotType::BoxPlot:
-	case PlotType::BarPlot:
-	case PlotType::LollipopPlot:
-	case PlotType::DistributionFit:
+	else
 		processColumnsForHistogram(columnNames);
-		break;
-	}
 
 	// resize the scroll area to show five ComboBoxes at maximum without showing the scroll bars
 	int size = m_columnComboBoxes.size() >= 5 ? 5 : m_columnComboBoxes.size();
@@ -325,7 +281,7 @@ void PlotDataDialog::setSelectedColumns(QVector<Column*> selectedColumns) {
 	auto* layout = dynamic_cast<QGridLayout*>(ui->scrollAreaColumns->widget()->layout());
 	if (layout) {
 		height += (size + 1) * layout->verticalSpacing();
-		if (m_plotType == PlotType::XYCurve)
+		if (m_basicPlotType)
 			height += layout->verticalSpacing(); // one more spacing for the separating line
 	}
 	ui->scrollAreaColumns->setMinimumSize(ui->scrollAreaColumns->width(), height);
@@ -539,7 +495,17 @@ Column* PlotDataDialog::columnFromName(const QString& name) const {
 void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) {
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 	switch (m_plotType) {
-	case PlotType::XYCurve: {
+	case Plot::PlotType::Line:
+	case Plot::PlotType::LineHorizontalStep:
+	case Plot::PlotType::LineVerticalStep:
+	case Plot::PlotType::LineSpline:
+	case Plot::PlotType::Scatter:
+	case Plot::PlotType::ScatterYError:
+	case Plot::PlotType::ScatterXYError:
+	case Plot::PlotType::LineSymbol:
+	case Plot::PlotType::LineSymbol2PointSegment:
+	case Plot::PlotType::LineSymbol3PointSegment:
+	case Plot::PlotType::Formula: {
 		Column* xColumn = columnFromName(ui->cbXColumn->currentText());
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
@@ -559,10 +525,9 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) {
 		}
 		break;
 	}
-	case PlotType::Histogram:
-	case PlotType::KDEPlot:
-	case PlotType::QQPlot:
-	case PlotType::DistributionFit: {
+	case Plot::PlotType::Histogram:
+	case Plot::PlotType::KDEPlot:
+	case Plot::PlotType::QQPlot: {
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
 			Column* column = columnFromName(name);
@@ -570,9 +535,9 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) {
 		}
 		break;
 	}
-	case PlotType::BoxPlot:
-	case PlotType::BarPlot:
-	case PlotType::LollipopPlot: {
+	case Plot::PlotType::BoxPlot:
+	case Plot::PlotType::BarPlot:
+	case Plot::PlotType::LollipopPlot: {
 		QVector<const AbstractColumn*> columns;
 		for (auto* comboBox : m_columnComboBoxes)
 			columns << columnFromName(comboBox->currentText());
@@ -594,7 +559,17 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 	worksheet->setSuppressLayoutUpdate(true);
 
 	switch (m_plotType) {
-	case PlotType::XYCurve: {
+	case Plot::PlotType::Line:
+	case Plot::PlotType::LineHorizontalStep:
+	case Plot::PlotType::LineVerticalStep:
+	case Plot::PlotType::LineSpline:
+	case Plot::PlotType::Scatter:
+	case Plot::PlotType::ScatterYError:
+	case Plot::PlotType::ScatterXYError:
+	case Plot::PlotType::LineSymbol:
+	case Plot::PlotType::LineSymbol2PointSegment:
+	case Plot::PlotType::LineSymbol3PointSegment:
+	case Plot::PlotType::Formula: {
 		const QString& xColumnName = ui->cbXColumn->currentText();
 		Column* xColumn = columnFromName(xColumnName);
 		for (auto* comboBox : m_columnComboBoxes) {
@@ -614,10 +589,9 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 		}
 		break;
 	}
-	case PlotType::Histogram:
-	case PlotType::KDEPlot:
-	case PlotType::QQPlot:
-	case PlotType::DistributionFit: {
+	case Plot::PlotType::Histogram:
+	case Plot::PlotType::KDEPlot:
+	case Plot::PlotType::QQPlot: {
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
 			Column* column = columnFromName(name);
@@ -632,9 +606,9 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 		}
 		break;
 	}
-	case PlotType::BoxPlot:
-	case PlotType::BarPlot:
-	case PlotType::LollipopPlot: {
+	case Plot::PlotType::BoxPlot:
+	case Plot::PlotType::BarPlot:
+	case Plot::PlotType::LollipopPlot: {
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
 			Column* column = columnFromName(name);
@@ -734,39 +708,41 @@ void PlotDataDialog::addSingleSourceColumnPlot(const Column* column, CartesianPl
 	const QString& name = column->name();
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 	Plot* plot{nullptr};
-	if (m_plotType == PlotType::Histogram) {
-		auto* hist = new Histogram(name);
-		hist->setDataColumn(column);
-		plot = hist;
-	} else if (m_plotType == PlotType::KDEPlot) {
+	if (m_plotType == Plot::PlotType::Histogram) {
+		if (!m_fitDistributionMode) {
+			auto* hist = new Histogram(name);
+			hist->setDataColumn(column);
+			plot = hist;
+		} else {
+			// histogram
+			auto* histogram = new Histogram(i18n("Probability Density of '%1'", name));
+			histogram->setNormalization(Histogram::Normalization::ProbabilityDensity);
+			histogram->setDataColumn(column);
+			plotArea->addChild(histogram);
+
+			// set fit model category and type and initialize fit
+			auto* fitCurve = new XYFitCurve(i18nc("Curve fitting", "Distribution Fit to '%1'", name));
+			fitCurve->setDataSourceType(XYAnalysisCurve::DataSourceType::Histogram);
+			fitCurve->setDataSourceHistogram(histogram);
+
+			auto fitData = fitCurve->fitData();
+			fitData.modelCategory = nsl_fit_model_distribution;
+			fitData.modelType = (int)m_fitDistribution;
+			fitData.algorithm = nsl_fit_algorithm_ml; // ML distribution fit
+			XYFitCurve::initFitData(fitData);
+			fitCurve->setFitData(fitData);
+
+			fitCurve->recalculate();
+			plot = fitCurve;
+		}
+	} else if (m_plotType == Plot::PlotType::KDEPlot) {
 		auto* kdePlot = new KDEPlot(name);
 		kdePlot->setDataColumn(column);
 		plot = kdePlot;
-	} else if (m_plotType == PlotType::QQPlot) {
+	} else if (m_plotType == Plot::PlotType::QQPlot) {
 		auto* qqPlot = new QQPlot(name);
 		qqPlot->setDataColumn(column);
 		plot = qqPlot;
-	} else if (m_plotType == PlotType::DistributionFit) {
-		// histogram
-		auto* histogram = new Histogram(i18n("Probability Density of '%1'", name));
-		histogram->setNormalization(Histogram::Normalization::ProbabilityDensity);
-		histogram->setDataColumn(column);
-		plotArea->addChild(histogram);
-
-		// set fit model category and type and initialize fit
-		auto* fitCurve = new XYFitCurve(i18nc("Curve fitting", "Distribution Fit to '%1'", name));
-		fitCurve->setDataSourceType(XYAnalysisCurve::DataSourceType::Histogram);
-		fitCurve->setDataSourceHistogram(histogram);
-
-		auto fitData = fitCurve->fitData();
-		fitData.modelCategory = nsl_fit_model_distribution;
-		fitData.modelType = (int)m_fitDistribution;
-		fitData.algorithm = nsl_fit_algorithm_ml; // ML distribution fit
-		XYFitCurve::initFitData(fitData);
-		fitCurve->setFitData(fitData);
-
-		fitCurve->recalculate();
-		plot = fitCurve;
 	}
 
 	if (plot) {
@@ -778,26 +754,26 @@ void PlotDataDialog::addSingleSourceColumnPlot(const Column* column, CartesianPl
 void PlotDataDialog::addMultiSourceColumnsPlot(const QVector<const AbstractColumn*>& columns, CartesianPlot* plotArea) {
 	QString name;
 	if (columns.size() > 1) {
-		if (m_plotType == PlotType::BoxPlot)
+		if (m_plotType == Plot::PlotType::BoxPlot)
 			name = i18n("Box Plot");
-		else if (m_plotType == PlotType::BarPlot)
+		else if (m_plotType == Plot::PlotType::BarPlot)
 			name = i18n("Bar Plot");
-		else if (m_plotType == PlotType::LollipopPlot)
+		else if (m_plotType == Plot::PlotType::LollipopPlot)
 			name = i18n("Bar Plot");
 	} else
 		name = columns.constFirst()->name();
 
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 	Plot* plot{nullptr};
-	if (m_plotType == PlotType::BoxPlot) {
+	if (m_plotType == Plot::PlotType::BoxPlot) {
 		auto* boxPlot = new BoxPlot(name);
 		boxPlot->setDataColumns(columns);
 		plot = boxPlot;
-	} else if (m_plotType == PlotType::BarPlot) {
+	} else if (m_plotType == Plot::PlotType::BarPlot) {
 		auto* barPlot = new BarPlot(name);
 		barPlot->setDataColumns(columns);
 		plot = barPlot;
-	} else if (m_plotType == PlotType::LollipopPlot) {
+	} else if (m_plotType == Plot::PlotType::LollipopPlot) {
 		auto* lollipopPlot = new LollipopPlot(name);
 		lollipopPlot->setDataColumns(columns);
 		plot = lollipopPlot;
@@ -891,7 +867,17 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 	DEBUG(Q_FUNC_INFO)
 	const auto& axes = plot->children<Axis>();
 	switch (m_plotType) {
-	case PlotType::XYCurve: {
+	case Plot::PlotType::Line:
+	case Plot::PlotType::LineHorizontalStep:
+	case Plot::PlotType::LineVerticalStep:
+	case Plot::PlotType::LineSpline:
+	case Plot::PlotType::Scatter:
+	case Plot::PlotType::ScatterYError:
+	case Plot::PlotType::ScatterXYError:
+	case Plot::PlotType::LineSymbol:
+	case Plot::PlotType::LineSymbol2PointSegment:
+	case Plot::PlotType::LineSymbol3PointSegment:
+	case Plot::PlotType::Formula: {
 		// x-axis title
 		const QString& xColumnName = ui->cbXColumn->currentText();
 		// DEBUG(Q_FUNC_INFO << ", x column name = " << STDSTRING(xColumnName))
@@ -922,9 +908,8 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 		}
 		break;
 	}
-	case PlotType::Histogram:
-	case PlotType::KDEPlot:
-	case PlotType::DistributionFit: {
+	case Plot::PlotType::Histogram:
+	case Plot::PlotType::KDEPlot: {
 		// x-axis title
 		for (auto* axis : axes) {
 			if (axis->orientation() == Axis::Orientation::Horizontal) {
@@ -945,7 +930,7 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 		// y-axis title
 		for (auto* axis : axes) {
 			if (axis->orientation() == Axis::Orientation::Vertical) {
-				if (m_plotType == PlotType::Histogram)
+				if (m_plotType == Plot::PlotType::Histogram)
 					axis->title()->setText(i18n("Frequency"));
 				else
 					axis->title()->setText(i18n("Density"));
@@ -954,7 +939,7 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 		}
 		break;
 	}
-	case PlotType::QQPlot: {
+	case Plot::PlotType::QQPlot: {
 		// x-axis title
 		for (auto* axis : axes) {
 			if (axis->orientation() == Axis::Orientation::Horizontal) {
@@ -972,7 +957,7 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 		}
 		break;
 	}
-	case PlotType::BoxPlot: {
+	case Plot::PlotType::BoxPlot: {
 		auto* boxPlot = static_cast<BoxPlot*>(m_lastAddedCurve);
 		auto orientation = boxPlot->orientation();
 
@@ -1020,10 +1005,10 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 		}
 		break;
 	}
-	case PlotType::BarPlot:
-	case PlotType::LollipopPlot: {
+	case Plot::PlotType::BarPlot:
+	case Plot::PlotType::LollipopPlot: {
 		WorksheetElement::Orientation orientation;
-		if (m_plotType == PlotType::BarPlot) {
+		if (m_plotType == Plot::PlotType::BarPlot) {
 			auto* barPlot = static_cast<BarPlot*>(m_lastAddedCurve);
 			orientation = barPlot->orientation();
 		} else {
@@ -1078,8 +1063,8 @@ void PlotDataDialog::plotPlacementChanged() {
 void PlotDataDialog::checkOkButton() {
 	bool enable = false;
 	QString msg;
-	if ((m_plotType == PlotType::XYCurve && (ui->cbXColumn->currentIndex() == -1 || ui->cbYColumn->currentIndex() == -1))
-		|| (m_plotType == PlotType::Histogram && ui->cbXColumn->currentIndex() == -1))
+	if ((m_basicPlotType && (ui->cbXColumn->currentIndex() == -1 || ui->cbYColumn->currentIndex() == -1))
+		|| (m_plotType == Plot::PlotType::Histogram && ui->cbXColumn->currentIndex() == -1))
 		msg = i18n("No data selected to plot.");
 	else if (ui->rbPlotPlacementExistingPlotArea->isChecked()) {
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbExistingPlots->currentModelIndex().internalPointer());

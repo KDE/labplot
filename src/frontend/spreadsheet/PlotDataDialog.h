@@ -34,15 +34,12 @@ class PlotDataDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	enum class PlotType { XYCurve, Histogram, BoxPlot, KDEPlot, QQPlot, BarPlot, LollipopPlot, DistributionFit };
-
-	explicit PlotDataDialog(AbstractAspect*, PlotType = PlotType::XYCurve, QWidget* parent = nullptr);
+	explicit PlotDataDialog(AbstractAspect*, Plot::PlotType = Plot::PlotType::Line, QWidget* parent = nullptr);
 	~PlotDataDialog() override;
 
 	void setSelectedColumns(QVector<Column*>);
 	void setAnalysisAction(XYAnalysisCurve::AnalysisAction);
 	void setFitDistribution(nsl_sf_stats_distribution);
-	static void fillMenu(QMenu*, QActionGroup*);
 
 private:
 	Ui::PlotDataWidget* ui;
@@ -54,11 +51,16 @@ private:
 	QVector<QComboBox*> m_columnComboBoxes;
 	AspectTreeModel* m_plotsModel;
 	AspectTreeModel* m_worksheetsModel;
-	PlotType m_plotType;
-	XYAnalysisCurve::AnalysisAction m_analysisAction{XYAnalysisCurve::AnalysisAction::Differentiation};
-	nsl_sf_stats_distribution m_fitDistribution{nsl_sf_stats_gaussian};
-	bool m_analysisMode{false};
 	AbstractAspect* m_lastAddedCurve{nullptr};
+	Plot::PlotType m_plotType;
+	bool m_basicPlotType{false};
+
+	XYAnalysisCurve::AnalysisAction m_analysisAction{XYAnalysisCurve::AnalysisAction::Differentiation};
+	bool m_analysisMode{false};
+
+	nsl_sf_stats_distribution m_fitDistribution{nsl_sf_stats_gaussian};
+	bool m_fitDistributionMode{false};
+
 
 	void processColumnsForXYCurve(const QStringList& columnNames, const QString& xColumnName);
 	void processColumnsForHistogram(const QStringList&);

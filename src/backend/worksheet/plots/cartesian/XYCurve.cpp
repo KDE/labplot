@@ -189,7 +189,7 @@ void XYCurve::setPlotType(PlotType type) {
 	d->plotType = type;
 
 	d->dropLine->setStyle(Qt::NoPen);
-	d->background->setEnabled(false);;
+	d->background->setEnabled(false);
 
 	switch (type) {
 	case PlotType::Default:

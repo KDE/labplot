@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Base class for all plots like scatter plot, box plot, etc.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -29,6 +29,36 @@ class Plot : public WorksheetElement {
 
 public:
 	virtual ~Plot();
+
+	enum class PlotType {
+		// basic plots
+		Line,
+		LineHorizontalStep,
+		LineVerticalStep,
+		LineSpline,
+		Scatter,
+		ScatterYError,
+		ScatterXYError,
+		LineSymbol,
+		LineSymbol2PointSegment,
+		LineSymbol3PointSegment,
+
+		Formula,
+
+		// statistical plots
+		Histogram,
+		BoxPlot,
+		KDEPlot,
+		QQPlot,
+
+		// bar plots
+		BarPlot,
+		LollipopPlot,
+
+		// continuous improvement plots
+		ProcessBehaviorChart,
+		RunChart
+	};
 
 	BASIC_D_ACCESSOR_DECL(bool, legendVisible, LegendVisible)
 	virtual bool minMax(const CartesianCoordinateSystem::Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const;

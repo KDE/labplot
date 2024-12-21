@@ -616,7 +616,7 @@ void SpreadsheetView::initMenus() {
 	plotDataActionGroup = new QActionGroup(this);
 	connect(plotDataActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::plotData);
 	m_plotDataMenu = new QMenu(i18n("Plot Data"), this);
-	PlotDataDialog::fillMenu(m_plotDataMenu, plotDataActionGroup);
+	CartesianPlot::fillAddNewPlotMenu(m_plotDataMenu, plotDataActionGroup);
 
 	// conditional formatting
 	m_formattingMenu = new QMenu(i18n("Conditional Formatting"), this);
@@ -2231,7 +2231,7 @@ void SpreadsheetView::reverseSelection() {
 }
 
 void SpreadsheetView::plotData(QAction* action) {
-	auto type = static_cast<PlotDataDialog::PlotType>(action->data().toInt());
+	auto type = static_cast<Plot::PlotType>(action->data().toInt());
 	auto* dlg = new PlotDataDialog(m_spreadsheet, type);
 
 	// use all spreadsheet columns if no columns are selected
@@ -2244,7 +2244,7 @@ void SpreadsheetView::plotData(QAction* action) {
 }
 
 void SpreadsheetView::plotAnalysisData(QAction* action) {
-	auto* dlg = new PlotDataDialog(m_spreadsheet, PlotDataDialog::PlotType::XYCurve);
+	auto* dlg = new PlotDataDialog(m_spreadsheet);
 	const auto analysisAction = static_cast<XYAnalysisCurve::AnalysisAction>(action->data().toInt());
 	dlg->setAnalysisAction(analysisAction);
 
@@ -2258,7 +2258,7 @@ void SpreadsheetView::plotAnalysisData(QAction* action) {
 }
 
 void SpreadsheetView::plotDataDistributionFit(QAction* action) {
-	auto* dlg = new PlotDataDialog(m_spreadsheet, PlotDataDialog::PlotType::DistributionFit);
+	auto* dlg = new PlotDataDialog(m_spreadsheet, Plot::PlotType::Histogram);
 	const auto distribution = static_cast<nsl_sf_stats_distribution>(action->data().toInt());
 	dlg->setFitDistribution(distribution);
 

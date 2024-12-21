@@ -26,13 +26,13 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
-#include "backend/worksheet/plots/cartesian/plots.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/cartesian/ReferenceRange.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "backend/worksheet/plots/cartesian/plots.h"
 #include "frontend/ThemeHandler.h"
 #include "frontend/widgets/ThemesWidget.h"
 
@@ -411,48 +411,6 @@ CartesianPlot::Type CartesianPlot::type() const {
 }
 
 void CartesianPlot::initActions() {
-	//"add new" actions
-	// statistical plots
-	addBoxPlotAction = new QAction(BoxPlot::staticIcon(), i18n("Box Plot"), this);
-	addHistogramAction = new QAction(QIcon::fromTheme(QStringLiteral("view-object-histogram-linear")), i18n("Histogram"), this);
-	addQQPlotAction = new QAction(i18n("Q-Q Plot"), this);
-	addKDEPlotAction = new QAction(i18n("KDE Plot"), this);
-
-	connect(addBoxPlotAction, &QAction::triggered, this, [=]() {
-		addChild(new BoxPlot(i18n("Box Plot")));
-	});
-	connect(addHistogramAction, &QAction::triggered, this, [=]() {
-		addChild(new Histogram(i18n("Histogram")));
-	});
-	connect(addQQPlotAction, &QAction::triggered, this, [=]() {
-		addChild(new QQPlot(i18n("Q-Q Plot")));
-	});
-	connect(addKDEPlotAction, &QAction::triggered, this, [=]() {
-		addChild(new KDEPlot(i18n("KDE Plot")));
-	});
-
-	// bar plots
-	addBarPlotAction = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Bar Plot"), this);
-	addLollipopPlotAction = new QAction(LollipopPlot::staticIcon(), i18n("Lollipop Plot"), this);
-
-	connect(addBarPlotAction, &QAction::triggered, this, [=]() {
-		addChild(new BarPlot(i18n("Bar Plot")));
-	});
-	connect(addLollipopPlotAction, &QAction::triggered, this, [=]() {
-		addChild(new LollipopPlot(i18n("Lollipop Plot")));
-	});
-
-	// continious improvement plots
-	addProcessBehaviorChartAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Process Behavior Chart"), this);
-	addRunChartAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Run Chart"), this);
-
-	connect(addProcessBehaviorChartAction, &QAction::triggered, this, [=]() {
-		addChild(new ProcessBehaviorChart(i18n("Process Behavior Chart")));
-	});
-	connect(addRunChartAction, &QAction::triggered, this, [=]() {
-		addChild(new RunChart(i18n("Run Chart")));
-	});
-
 	// analysis curves, no icons yet
 	addDataReductionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Data Reduction"), this);
 	addDifferentiationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Differentiation"), this);
@@ -598,107 +556,9 @@ void CartesianPlot::initMenus() {
 
 	m_addNewMenu = new QMenu(i18n("Add New"));
 	m_addNewMenu->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
-	auto* basicPlotsActionGroup = new QActionGroup(this);
-
-	// line plots
-	auto* menu = new QMenu(i18n("Line Plots"), m_addNewMenu);
-
-	XYCurve::PlotType type = XYCurve::PlotType::Line;
-	auto* action = new QAction(XYCurve::staticIcon(type), i18n("Line"), basicPlotsActionGroup);
-	action->setData(static_cast<int>(type));
-	menu->addAction(action);
-
-	type = XYCurve::PlotType::LineHorizontalStep;
-	action = new QAction(XYCurve::staticIcon(type), i18n("Horizontal Step"), basicPlotsActionGroup);
-	action->setData(static_cast<int>(type));
-	menu->addAction(action);
-
-	type = XYCurve::PlotType::LineVerticalStep;
-	action = new QAction(XYCurve::staticIcon(type), i18n("Vertical Step"), basicPlotsActionGroup);
-	action->setData(static_cast<int>(type));
-	menu->addAction(action);
-
-	type = XYCurve::PlotType::LineSpline;
-	action = new QAction(XYCurve::staticIcon(type), i18n("Spline Interpolated"), basicPlotsActionGroup);
-	action->setData(static_cast<int>(type));
-	menu->addAction(action);
-
-	m_addNewMenu->addMenu(menu);
-
-	// scatter plots
-	menu = new QMenu(i18n("Scatter Plots"), m_addNewMenu);
-
-	type = XYCurve::PlotType::Scatter;
-	action = new QAction(XYCurve::staticIcon(type), i18n("Scatter"), basicPlotsActionGroup);
-	action->setData(static_cast<int>(type));
-	menu->addAction(action);
-
-	type = XYCurve::PlotType::ScatterYError;
-	action = new QAction(XYCurve::staticIcon(type), i18n("Y Error"), basicPlotsActionGroup);
-	action->setData(static_cast<int>(type));
-	menu->addAction(action);
-
-	type = XYCurve::PlotType::ScatterXYError;
-	action = new QAction(XYCurve::staticIcon(type), i18n("XY Error"), basicPlotsActionGroup);
-	action->setData(static_cast<int>(type));
-	menu->addAction(action);
-
-	m_addNewMenu->addMenu(menu);
-
-	// line + symbol plots
-	menu = new QMenu(i18n("Line and Symbol Plots"), m_addNewMenu);
-
-	type = XYCurve::PlotType::LineSymbol;
-	action = new QAction(XYCurve::staticIcon(type), i18n("Line + Symbol"), basicPlotsActionGroup);
-	action->setData(static_cast<int>(type));
-	menu->addAction(action);
-
-	type = XYCurve::PlotType::LineSymbol2PointSegment;
-	action = new QAction(XYCurve::staticIcon(type), i18n("2 Point Segment"), basicPlotsActionGroup);
-	action->setData(static_cast<int>(type));
-	menu->addAction(action);
-
-	type = XYCurve::PlotType::LineSymbol3PointSegment;
-	action = new QAction(XYCurve::staticIcon(type), i18n("3 Point Segment"), basicPlotsActionGroup);
-	action->setData(static_cast<int>(type));
-	menu->addAction(action);
-	m_addNewMenu->addMenu(menu);
-
-	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve")), i18n("Formula"));
-	action->setToolTip(i18n("Add a new xy-curve that is defined via a mathematical expression."));
-	connect(action, &QAction::triggered, this, [=]() {
-		addChild(new XYEquationCurve(QStringLiteral("f(x)")));
-	});
-	menu->addAction(action);
-
-	connect(basicPlotsActionGroup, &QActionGroup::triggered, this, [=] (QAction* action) {
-		auto* plot = new XYCurve(i18n("Plot"));
-		plot->setPlotType(static_cast<XYCurve::PlotType>(action->data().toInt()));
-		addChild(plot);
-	});
-
-	m_addNewMenu->addMenu(menu);
-	menu->addSeparator();
-
-	// statistical plots
-	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"), m_addNewMenu);
-	addNewStatisticalPlotsMenu->addAction(addHistogramAction);
-	addNewStatisticalPlotsMenu->addAction(addBoxPlotAction);
-	addNewStatisticalPlotsMenu->addAction(addKDEPlotAction);
-	addNewStatisticalPlotsMenu->addAction(addQQPlotAction);
-	m_addNewMenu->addMenu(addNewStatisticalPlotsMenu);
-
-	// bar plots
-	auto* addNewBarPlotsMenu = new QMenu(i18n("Bar Plots"), m_addNewMenu);
-	addNewBarPlotsMenu->addAction(addBarPlotAction);
-	addNewBarPlotsMenu->addAction(addLollipopPlotAction);
-	m_addNewMenu->addMenu(addNewBarPlotsMenu);
-
-	// continuous improvement plots
-	auto* addNewCIPlotsMenu = new QMenu(i18n("Continual Improvement Plots"), m_addNewMenu);
-	addNewCIPlotsMenu->addAction(addProcessBehaviorChartAction);
-	addNewCIPlotsMenu->addAction(addRunChartAction);
-	m_addNewMenu->addMenu(addNewCIPlotsMenu);
+	auto* actionGroup = new QActionGroup(this);
+	CartesianPlot::fillAddNewPlotMenu(m_addNewMenu, actionGroup);
+	connect(actionGroup, &QActionGroup::triggered, this, &CartesianPlot::addPlot);
 
 	m_addNewMenu->addSeparator();
 
@@ -797,6 +657,117 @@ void CartesianPlot::initMenus() {
 #endif
 
 	m_menusInitialized = true;
+}
+
+void CartesianPlot::fillAddNewPlotMenu(QMenu* addNewPlotMenu, QActionGroup* actionGroup) {
+	// line plots
+	auto* menu = new QMenu(i18n("Line Plots"), addNewPlotMenu);
+
+	auto* action = new QAction(XYCurve::staticIcon(XYCurve::PlotType::Line), i18n("Line"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::Line));
+	menu->addAction(action);
+
+	action = new QAction(XYCurve::staticIcon(XYCurve::PlotType::LineHorizontalStep), i18n("Horizontal Step"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::LineHorizontalStep));
+	menu->addAction(action);
+
+	action = new QAction(XYCurve::staticIcon(XYCurve::PlotType::LineVerticalStep), i18n("Vertical Step"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::LineVerticalStep));
+	menu->addAction(action);
+
+	action = new QAction(XYCurve::staticIcon(XYCurve::PlotType::LineSpline), i18n("Spline Interpolated"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::LineSpline));
+	menu->addAction(action);
+
+	addNewPlotMenu->addMenu(menu);
+
+	// scatter plots
+	menu = new QMenu(i18n("Scatter Plots"), addNewPlotMenu);
+
+	action = new QAction(XYCurve::staticIcon(XYCurve::PlotType::Scatter), i18n("Scatter"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::Scatter));
+	menu->addAction(action);
+
+	action = new QAction(XYCurve::staticIcon(XYCurve::PlotType::ScatterYError), i18n("Y Error"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::ScatterYError));
+	menu->addAction(action);
+
+	action = new QAction(XYCurve::staticIcon(XYCurve::PlotType::ScatterXYError), i18n("XY Error"), actionGroup);
+	action->setData(static_cast<int>(XYCurve::PlotType::ScatterXYError));
+	menu->addAction(action);
+
+	addNewPlotMenu->addMenu(menu);
+
+	// line + symbol plots
+	menu = new QMenu(i18n("Line and Symbol Plots"), addNewPlotMenu);
+
+	action = new QAction(XYCurve::staticIcon(XYCurve::PlotType::LineSymbol), i18n("Line + Symbol"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::LineSymbol));
+	menu->addAction(action);
+
+	action = new QAction(XYCurve::staticIcon(XYCurve::PlotType::LineSymbol2PointSegment), i18n("2 Point Segment"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::LineSymbol2PointSegment));
+	menu->addAction(action);
+
+	action = new QAction(XYCurve::staticIcon(XYCurve::PlotType::LineSymbol3PointSegment), i18n("3 Point Segment"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::LineSymbol3PointSegment));
+	menu->addAction(action);
+	addNewPlotMenu->addMenu(menu);
+
+	// formula
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve")), i18n("Formula"));
+	action->setToolTip(i18n("Add a new xy-curve that is defined via a mathematical expression."));
+	menu->addAction(action);
+
+	addNewPlotMenu->addMenu(menu);
+	menu->addSeparator();
+
+	// statistical plots
+	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"), addNewPlotMenu);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("view-object-histogram-linear")), i18n("Histogram"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::Histogram));
+	addNewStatisticalPlotsMenu->addAction(action);
+
+	action = new QAction(BoxPlot::staticIcon(), i18n("Box Plot"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::BoxPlot));
+	addNewStatisticalPlotsMenu->addAction(action);
+
+	action = new QAction(i18n("Q-Q Plot"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::QQPlot));
+	addNewStatisticalPlotsMenu->addAction(action);
+
+	action = new QAction(i18n("KDE Plot"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::KDEPlot));
+	addNewStatisticalPlotsMenu->addAction(action);
+
+	addNewPlotMenu->addMenu(addNewStatisticalPlotsMenu);
+
+	// // bar plots
+	auto* addNewBarPlotsMenu = new QMenu(i18n("Bar Plots"), addNewPlotMenu);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Bar Plot"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::BarPlot));
+	addNewBarPlotsMenu->addAction(action);
+
+	action = new QAction(LollipopPlot::staticIcon(), i18n("Lollipop Plot"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::LollipopPlot));
+	addNewBarPlotsMenu->addAction(action);
+
+	addNewPlotMenu->addMenu(addNewBarPlotsMenu);
+
+	// continuous improvement plots
+	auto* addNewCIPlotsMenu = new QMenu(i18n("Continual Improvement Plots"), addNewPlotMenu);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Process Behavior Chart"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::ProcessBehaviorChart));
+	addNewCIPlotsMenu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Run Chart"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::RunChart));
+	addNewCIPlotsMenu->addAction(action);
+
+	addNewPlotMenu->addMenu(addNewCIPlotsMenu);
 }
 
 QMenu* CartesianPlot::createContextMenu() {
@@ -1796,6 +1767,109 @@ void CartesianPlot::retransform() {
 // ################################################################
 // ########################## Slots ###############################
 // ################################################################
+void CartesianPlot::addPlot(QAction* action) {
+	const auto type = static_cast<Plot::PlotType>(action->data().toInt());
+
+	switch (type) {
+	// basic plots
+	case Plot::PlotType::Line: {
+		auto* plot = new XYCurve(i18n("Plot"));
+		plot->setPlotType(XYCurve::PlotType::Line);
+		addChild(plot);
+		break;
+	}
+	case Plot::PlotType::LineHorizontalStep: {
+		auto* plot = new XYCurve(i18n("Plot"));
+		plot->setPlotType(XYCurve::PlotType::LineHorizontalStep);
+		addChild(plot);
+		break;
+	}
+	case Plot::PlotType::LineVerticalStep: {
+		auto* plot = new XYCurve(i18n("Plot"));
+		plot->setPlotType(XYCurve::PlotType::LineVerticalStep);
+		addChild(plot);
+		break;
+	}
+	case Plot::PlotType::LineSpline: {
+		auto* plot = new XYCurve(i18n("Plot"));
+		plot->setPlotType(XYCurve::PlotType::LineSpline);
+		addChild(plot);
+		break;
+	}
+	case Plot::PlotType::Scatter: {
+		auto* plot = new XYCurve(i18n("Plot"));
+		plot->setPlotType(XYCurve::PlotType::Scatter);
+		addChild(plot);
+		break;
+	}
+	case Plot::PlotType::ScatterYError: {
+		auto* plot = new XYCurve(i18n("Plot"));
+		plot->setPlotType(XYCurve::PlotType::ScatterYError);
+		addChild(plot);
+		break;
+	}
+	case Plot::PlotType::ScatterXYError: {
+		auto* plot = new XYCurve(i18n("Plot"));
+		plot->setPlotType(XYCurve::PlotType::ScatterXYError);
+		addChild(plot);
+		break;
+	}
+	case Plot::PlotType::LineSymbol: {
+		auto* plot = new XYCurve(i18n("Plot"));
+		plot->setPlotType(XYCurve::PlotType::LineSymbol);
+		addChild(plot);
+		break;
+	}
+	case Plot::PlotType::LineSymbol2PointSegment: {
+		auto* plot = new XYCurve(i18n("Plot"));
+		plot->setPlotType(XYCurve::PlotType::LineSymbol2PointSegment);
+		addChild(plot);
+		break;
+	}
+	case Plot::PlotType::LineSymbol3PointSegment: {
+		auto* plot = new XYCurve(i18n("Plot"));
+		plot->setPlotType(XYCurve::PlotType::LineSymbol3PointSegment);
+		addChild(plot);
+		break;
+	}
+
+	// formula
+	case Plot::PlotType::Formula:
+		addChild(new XYEquationCurve(QStringLiteral("f(x)")));
+		break;
+
+	// statistical plots
+	case Plot::PlotType::BoxPlot:
+		addChild(new BoxPlot(i18n("Box Plot")));
+		break;
+	case Plot::PlotType::Histogram:
+		addChild(new Histogram(i18n("Histogram")));
+		break;
+	case Plot::PlotType::QQPlot:
+		addChild(new QQPlot(i18n("Q-Q Plot")));
+		break;
+	case Plot::PlotType::KDEPlot:
+		addChild(new KDEPlot(i18n("KDE Plot")));
+		break;
+
+	// bar plots
+	case Plot::PlotType::BarPlot:
+		addChild(new BarPlot(i18n("Bar Plot")));
+		break;
+	case Plot::PlotType::LollipopPlot:
+		addChild(new LollipopPlot(i18n("Lollipop Plot")));
+		break;
+
+	// continious improvement plots
+	case Plot::PlotType::ProcessBehaviorChart:
+		addChild(new ProcessBehaviorChart(i18n("Process Behavior Chart")));
+		break;
+	case Plot::PlotType::RunChart:
+		addChild(new RunChart(i18n("Run Chart")));
+		break;
+	}
+}
+
 void CartesianPlot::addHorizontalAxis() {
 	DEBUG(Q_FUNC_INFO)
 	Axis* axis = new Axis(QStringLiteral("x-axis"), Axis::Orientation::Horizontal);
