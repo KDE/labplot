@@ -148,24 +148,10 @@ void HeatmapDock::setModel() {
 
 	QList<AspectType> list{AspectType::Column};
 	m_aspectTreeModelColumn->setSelectableAspects(list);
-
-	list = {AspectType::Folder,
-			AspectType::Workbook,
-			AspectType::Datapicker,
-			AspectType::DatapickerCurve,
-			AspectType::Spreadsheet,
-			AspectType::LiveDataSource,
-			AspectType::Column,
-			AspectType::Worksheet,
-			AspectType::CartesianPlot,
-			AspectType::XYFitCurve,
-			AspectType::XYSmoothCurve,
-			AspectType::Notebook};
-
-	cbXColumn->setTopLevelClasses(list);
+	cbXColumn->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
 	cbXColumn->setModel(m_aspectTreeModelColumn);
 
-	cbYColumn->setTopLevelClasses(list);
+	cbYColumn->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
 	cbYColumn->setModel(m_aspectTreeModelColumn);
 
 	list = {AspectType::Matrix};
@@ -173,14 +159,7 @@ void HeatmapDock::setModel() {
 	list = {AspectType::Folder,
 			AspectType::Workbook,
 			AspectType::Datapicker,
-			AspectType::DatapickerCurve,
-			AspectType::Spreadsheet,
-			AspectType::LiveDataSource,
-			AspectType::Column,
-			AspectType::Worksheet,
-			AspectType::CartesianPlot,
-			AspectType::XYFitCurve,
-			AspectType::XYSmoothCurve,
+			AspectType::Matrix,
 			AspectType::Notebook};
 
 	cbMatrix->setTopLevelClasses(list);
