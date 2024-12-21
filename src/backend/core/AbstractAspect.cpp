@@ -435,6 +435,8 @@ AspectType AbstractAspect::type() const {
 }
 
 bool AbstractAspect::inherits(AspectType type) const {
+	if (type == AspectType::XYCurve && inherits(AspectType::XYAnalysisCurve))
+		return true;
 	return (static_cast<quint64>(m_type) & static_cast<quint64>(type)) == static_cast<quint64>(type);
 }
 
