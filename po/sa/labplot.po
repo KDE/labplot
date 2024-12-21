@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-20 00:37+0000\n"
-"PO-Revision-Date: 2024-12-19 21:41+0530\n"
+"PO-Revision-Date: 2024-12-20 22:01+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
@@ -211,12 +211,12 @@ msgstr "X-दोषः +"
 #: src/backend/core/AbstractColumn.cpp:188
 #, kde-format
 msgid "X-Uncertainty -"
-msgstr "X-अनिश्चितता - ९."
+msgstr "X-अनिश्चितता -"
 
 #: src/backend/core/AbstractColumn.cpp:190
 #, kde-format
 msgid "X-Error -"
-msgstr "X-त्रुटिः - ९."
+msgstr "X-त्रुटिः -"
 
 #: src/backend/core/AbstractColumn.cpp:194
 #, kde-format
@@ -241,12 +241,12 @@ msgstr "य-दोष +"
 #: src/backend/core/AbstractColumn.cpp:206
 #, kde-format
 msgid "Y-Uncertainty -"
-msgstr "य-अनिश्चितता - ९."
+msgstr "य-अनिश्चितता -"
 
 #: src/backend/core/AbstractColumn.cpp:208
 #, kde-format
 msgid "Y-Error -"
-msgstr "य-दोषः - ९."
+msgstr "य-दोषः -"
 
 #: src/backend/core/AbstractColumn.cpp:227
 #: src/backend/datasources/filters/AsciiFilter.cpp:599
@@ -474,7 +474,7 @@ msgstr "%1 (अ-प्लॉटेबल-दत्तांशः)"
 #: src/backend/core/AspectTreeModel.cpp:195
 #, kde-format
 msgid "%1   (non-numeric data)"
-msgstr "%1 (असंख्याकदत्तांशः) २."
+msgstr "%1 (असंख्याकदत्तांशः)"
 
 #: src/backend/core/AspectTreeModel.cpp:197
 #, kde-format
@@ -501,7 +501,7 @@ msgstr "प्लॉट् पदनाम: %1"
 #: src/backend/core/AspectTreeModel.cpp:242
 #, kde-format
 msgid "Formula:"
-msgstr "सूत्रम् : १."
+msgstr "सूत्रम् :"
 
 #: src/backend/core/AspectTreeModel.cpp:264
 #, kde-format
@@ -1106,7 +1106,7 @@ msgstr "मैट्रिक्सः असमर्थितः स्तम�
 #: src/backend/datasources/filters/AsciiFilter.cpp:210
 #, kde-format
 msgid "Insufficient memory (RAM)"
-msgstr "अपर्याप्तस्मृतिः (RAM) २."
+msgstr "अपर्याप्तस्मृतिः (RAM)"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:212
 #, kde-format
@@ -1671,12 +1671,12 @@ msgstr "%2 प्रकारस्य कृते %1 इति क्रमः
 #: src/backend/datasources/filters/ImageFilter.cpp:36
 #, kde-format
 msgid "Matrix (grayscale)"
-msgstr "आकृतिः (ग्रेस्केल) २."
+msgstr "आकृतिः (ग्रेस्केल)"
 
 #: src/backend/datasources/filters/ImageFilter.cpp:36
 #, kde-format
 msgid "XYZ (grayscale)"
-msgstr "XYZ (ग्रेस्केल) २."
+msgstr "XYZ (ग्रेस्केल)"
 
 #: src/backend/datasources/filters/ImageFilter.cpp:36
 #, kde-format
@@ -1799,7 +1799,7 @@ msgstr "चरानाम् संख्या : "
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:185
 #, kde-format
 msgid "Variables:"
-msgstr "चराः : १."
+msgstr "चराः :"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:370
 #: src/backend/datasources/filters/MatioFilter.cpp:740
@@ -2405,7 +2405,7 @@ msgstr "अमान्य DBC सञ्चिका ।"
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:201
 #, kde-format
 msgid "Unknown error,"
-msgstr "अज्ञातदोषः, २."
+msgstr "अज्ञातदोषः,"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:443
 #, kde-format
@@ -3149,7 +3149,7 @@ msgstr "इनपुट डोमेन त्रुटि, यथा sqrt(-1) .
 #: src/backend/gsl/errors.h:28
 #, kde-format
 msgid "Output range error, e.g. exp(1e100)"
-msgstr "उत्पादनपरिधिदोषः, उदा. exp(१e१००) २."
+msgstr "उत्पादनपरिधिदोषः, उदा. exp(१e१००)"
 
 #: src/backend/gsl/errors.h:30
 #, kde-format
@@ -3610,7 +3610,7 @@ msgstr "अज्ञात कार्य"
 #: src/backend/gsl/functions.cpp:241
 #, kde-format
 msgid "Cell (index; variable)"
-msgstr "कोष्ठक (सूचकाङ्कः; चरः) २."
+msgstr "कोष्ठक (सूचकाङ्कः; चरः)"
 
 #: src/backend/gsl/functions.cpp:242
 #, kde-format
@@ -3660,7 +3660,7 @@ msgstr "यादृच्छिक नमूना"
 #: src/backend/gsl/functions.cpp:252
 #, kde-format
 msgid "Current column cell (index)"
-msgstr "वर्तमान स्तम्भकोष्ठकः (सूचकाङ्कः) २."
+msgstr "वर्तमान स्तम्भकोष्ठकः (सूचकाङ्कः)"
 
 #: src/backend/gsl/functions.cpp:253
 #, kde-format
@@ -4802,7 +4802,7 @@ msgstr "हर्मिट् कार्यम्"
 #: src/backend/gsl/functions.cpp:526
 #, kde-format
 msgid "Hermite functions (fast version)"
-msgstr "हर्माइट कार्याणि (द्रुत संस्करणम्) २."
+msgstr "हर्माइट कार्याणि (द्रुत संस्करणम्)"
 
 #: src/backend/gsl/functions.cpp:528
 #, kde-format
@@ -6253,7 +6253,7 @@ msgstr "मुद्रण टिप्पणी"
 #: src/backend/note/Note.cpp:85
 #, kde-format
 msgid "Text file (*.txt)"
-msgstr "पाठसञ्चिका (*.txt) २."
+msgstr "पाठसञ्चिका (*.txt)"
 
 #: src/backend/note/Note.cpp:87
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:408
@@ -6312,17 +6312,17 @@ msgstr "%1 कृते सत्राणि निर्मातुं न �
 #: src/backend/nsl/nsl_conv.c:19
 #, kde-format
 msgid "Forward (Convolution)"
-msgstr "अग्रे (Convolution) ९."
+msgstr "अग्रे (Convolution)"
 
 #: src/backend/nsl/nsl_conv.c:19
 #, kde-format
 msgid "Backward (Deconvolution)"
-msgstr "पिछड़ा (Deconvolution) २."
+msgstr "पिछड़ा (Deconvolution)"
 
 #: src/backend/nsl/nsl_conv.c:20 src/backend/nsl/nsl_corr.c:18
 #, kde-format
 msgid "Linear (Zero-padded)"
-msgstr "रेखीय (शून्य-गद्दी) २."
+msgstr "रेखीय (शून्य-गद्दी)"
 
 #: src/backend/nsl/nsl_conv.c:20 src/backend/nsl/nsl_corr.c:18
 #, kde-format
@@ -6394,7 +6394,7 @@ msgstr "यूक्लिडियन"
 #: src/backend/nsl/nsl_conv.c:23
 #, kde-format
 msgid "Center (Acausal)"
-msgstr "केन्द्र (Acausal) ९."
+msgstr "केन्द्र (Acausal)"
 
 #: src/backend/nsl/nsl_conv.c:24
 #, kde-format
@@ -6607,12 +6607,12 @@ msgstr "चेबिशेव प्रकार द्वितीय"
 #: src/backend/nsl/nsl_filter.c:22
 #, kde-format
 msgid "Legendre (Optimum L)"
-msgstr "लेजेण्ड्रे (बेस्ट एल) ९."
+msgstr "लेजेण्ड्रे (बेस्ट एल)"
 
 #: src/backend/nsl/nsl_filter.c:22
 #, kde-format
 msgid "Bessel (Thomson)"
-msgstr "बेसेल् (थॉम्सन) ९."
+msgstr "बेसेल् (थॉम्सन)"
 
 #: src/backend/nsl/nsl_filter.c:23
 #, kde-format
@@ -6632,12 +6632,12 @@ msgstr "शिखर कार्यम्"
 #: src/backend/nsl/nsl_fit.c:22
 #, kde-format
 msgid "Growth (Sigmoidal)"
-msgstr "वृद्धि (सिग्मोइडल) २."
+msgstr "वृद्धि (सिग्मोइडल)"
 
 #: src/backend/nsl/nsl_fit.c:23
 #, kde-format
 msgid "Statistics (Distributions)"
-msgstr "सांख्यिकी (वितरण) ९."
+msgstr "सांख्यिकी (वितरण)"
 
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:601
@@ -6679,7 +6679,7 @@ msgstr "फूरियर"
 #: src/backend/nsl/nsl_fit.c:30
 #, kde-format
 msgid "Gaussian (normal)"
-msgstr "गाउसीयन (सामान्य) २."
+msgstr "गाउसीयन (सामान्य)"
 
 #: src/backend/nsl/nsl_fit.c:31
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:585
@@ -6692,12 +6692,12 @@ msgstr "कौची-लोरेन्ट्ज"
 #: src/backend/nsl/nsl_fit.c:32 src/backend/nsl/nsl_sf_stats.c:45
 #, kde-format
 msgid "Hyperbolic Secant (sech)"
-msgstr "अतिपरवलयिक सेकेन्ट (स्वयं) २."
+msgstr "अतिपरवलयिक सेकेन्ट (स्वयं)"
 
 #: src/backend/nsl/nsl_fit.c:33
 #, kde-format
 msgid "Logistic (sech squared)"
-msgstr "लॉजिस्टिक (sech squared) ९."
+msgstr "लॉजिस्टिक (sech squared)"
 
 #: src/backend/nsl/nsl_fit.c:34
 #, kde-format
@@ -6707,7 +6707,7 @@ msgstr "Voigt प्रोफाइल"
 #: src/backend/nsl/nsl_fit.c:35
 #, kde-format
 msgid "Pseudo-Voigt (same width)"
-msgstr "छद्म-वोइग्ट (समान विस्तार) २."
+msgstr "छद्म-वोइग्ट (समान विस्तार)"
 
 #: src/backend/nsl/nsl_fit.c:44
 #, kde-format
@@ -6749,7 +6749,7 @@ msgstr "गोम्पर्ट्ज"
 #: src/backend/nsl/nsl_fit.c:51
 #, kde-format
 msgid "Gudermann (gd)"
-msgstr "गुडरमैन् (gd) ९."
+msgstr "गुडरमैन् (gd)"
 
 #: src/backend/nsl/nsl_geom_linesim.c:16
 #, kde-format
@@ -6759,7 +6759,7 @@ msgstr "डग्लस्-प्यूकर (संख्या) ."
 #: src/backend/nsl/nsl_geom_linesim.c:17
 #, kde-format
 msgid "Douglas-Peucker (Tolerance)"
-msgstr "डग्लस्-प्यूकर (सहिष्णुता) ९."
+msgstr "डग्लस्-प्यूकर (सहिष्णुता)"
 
 #: src/backend/nsl/nsl_geom_linesim.c:18
 #, kde-format
@@ -6813,42 +6813,42 @@ msgstr "पिहितपत्र"
 #: src/backend/nsl/nsl_int.c:19
 #, kde-format
 msgid "Rectangle (1-point)"
-msgstr "आयत (१-बिन्दु) २."
+msgstr "आयत (१-बिन्दु)"
 
 #: src/backend/nsl/nsl_int.c:19
 #, kde-format
 msgid "Trapezoid (2-point)"
-msgstr "समलम्ब (२-बिन्दु) २."
+msgstr "समलम्ब (२-बिन्दु)"
 
 #: src/backend/nsl/nsl_int.c:19
 #, kde-format
 msgid "Simpson's (3-point)"
-msgstr "सिम्पसनस्य (३-बिन्दुः) २."
+msgstr "सिम्पसनस्य (३-बिन्दुः)"
 
 #: src/backend/nsl/nsl_int.c:19
 #, kde-format
 msgid "Simpson's 3/8 (4-point)"
-msgstr "सिम्पसनस्य ३/८ (४-बिन्दुः) २."
+msgstr "सिम्पसनस्य ३/८ (४-बिन्दुः)"
 
 #: src/backend/nsl/nsl_interp.c:16 src/frontend/dockwidgets/XYCurveDock.cpp:201
 #, kde-format
 msgid "Cubic Spline (Natural)"
-msgstr "घन स्प्लाइन (प्राकृतिक) २."
+msgstr "घन स्प्लाइन (प्राकृतिक)"
 
 #: src/backend/nsl/nsl_interp.c:17 src/frontend/dockwidgets/XYCurveDock.cpp:202
 #, kde-format
 msgid "Cubic Spline (Periodic)"
-msgstr "घन स्प्लाइन (आवधिक) २."
+msgstr "घन स्प्लाइन (आवधिक)"
 
 #: src/backend/nsl/nsl_interp.c:18
 #, kde-format
 msgid "Akima-Spline (Natural)"
-msgstr "अकिमा-स्प्लाइन (प्राकृतिक) २."
+msgstr "अकिमा-स्प्लाइन (प्राकृतिक)"
 
 #: src/backend/nsl/nsl_interp.c:19
 #, kde-format
 msgid "Akima-Spline (Periodic)"
-msgstr "अकिमा-स्प्लाइन (आवधिक) २."
+msgstr "अकिमा-स्प्लाइन (आवधिक)"
 
 #: src/backend/nsl/nsl_interp.c:20
 #, kde-format
@@ -6899,7 +6899,7 @@ msgstr "अभिन्न"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:560
 #, kde-format
 msgid "Gaussian (Normal)"
-msgstr "गाउसीयन (सामान्य) २."
+msgstr "गाउसीयन (सामान्य)"
 
 #: src/backend/nsl/nsl_sf_stats.c:14
 #, kde-format
@@ -6920,7 +6920,7 @@ msgstr "घातीय शक्ति"
 #: src/backend/nsl/nsl_sf_stats.c:18
 #, kde-format
 msgid "Cauchy-Lorentz (Breit-Wigner)"
-msgstr "कौची-लोरेन्ट्ज (Breit-Wigner) ९."
+msgstr "कौची-लोरेन्ट्ज (Breit-Wigner)"
 
 #: src/backend/nsl/nsl_sf_stats.c:19
 #, kde-format
@@ -6955,12 +6955,12 @@ msgstr "गाम्मा"
 #: src/backend/nsl/nsl_sf_stats.c:25
 #, kde-format
 msgid "Flat (Uniform)"
-msgstr "सपाट (एकरूप) ९."
+msgstr "सपाट (एकरूप)"
 
 #: src/backend/nsl/nsl_sf_stats.c:26
 #, kde-format
 msgid "Log-Normal (Galton)"
-msgstr "लॉग-सामान्य (Galton) ९."
+msgstr "लॉग-सामान्य (Galton)"
 
 #: src/backend/nsl/nsl_sf_stats.c:27
 #, kde-format
@@ -6970,7 +6970,7 @@ msgstr "चि-वर्गः"
 #: src/backend/nsl/nsl_sf_stats.c:28
 #, kde-format
 msgid "F (Fisher-Snedecor)"
-msgstr "च (मत्स्यपाल-स्नेडेकोर) ९."
+msgstr "च (मत्स्यपाल-स्नेडेकोर)"
 
 #: src/backend/nsl/nsl_sf_stats.c:29
 #, kde-format
@@ -6985,7 +6985,7 @@ msgstr "बीटा"
 #: src/backend/nsl/nsl_sf_stats.c:31
 #, kde-format
 msgid "Logistic (Sech-Squared)"
-msgstr "लॉजिस्टिक (सेच-वर्ग) २."
+msgstr "लॉजिस्टिक (सेच-वर्ग)"
 
 #: src/backend/nsl/nsl_sf_stats.c:32
 #, kde-format
@@ -7062,7 +7062,7 @@ msgstr "लेवी"
 #: src/backend/nsl/nsl_sf_stats.c:47
 #, kde-format
 msgid "Frechet (Inverse Weibull)"
-msgstr "फ्रेचेट् (विलोम वेइबुल) २."
+msgstr "फ्रेचेट् (विलोम वेइबुल)"
 
 #: src/backend/nsl/nsl_sf_stats.c:48 src/backend/nsl/nsl_sf_window.c:16
 #: src/backend/nsl/nsl_smooth.c:24 src/frontend/dockwidgets/KDEPlotDock.cpp:160
@@ -7073,27 +7073,27 @@ msgstr "त्रिकोणीय"
 #: src/backend/nsl/nsl_sf_window.c:15
 #, kde-format
 msgid "Rectangular (Uniform)"
-msgstr "आयताकार (एकरूप) २."
+msgstr "आयताकार (एकरूप)"
 
 #: src/backend/nsl/nsl_sf_window.c:17
 #, kde-format
 msgid "Triangular II (Bartlett)"
-msgstr "त्रिकोणीय द्वितीय (बार्टलेट) २."
+msgstr "त्रिकोणीय द्वितीय (बार्टलेट)"
 
 #: src/backend/nsl/nsl_sf_window.c:18
 #, kde-format
 msgid "Triangular III (Parzen)"
-msgstr "त्रिकोणीय तृतीय (पार्जेन) ९."
+msgstr "त्रिकोणीय तृतीय (पार्जेन)"
 
 #: src/backend/nsl/nsl_sf_window.c:19
 #, kde-format
 msgid "Welch (Parabolic)"
-msgstr "वेल्च् (पराबोलिक) २."
+msgstr "वेल्च् (पराबोलिक)"
 
 #: src/backend/nsl/nsl_sf_window.c:20
 #, kde-format
 msgid "Hann (Raised Cosine)"
-msgstr "हन् (उद्धृत कोसाइन) २."
+msgstr "हन् (उद्धृत कोसाइन)"
 
 #: src/backend/nsl/nsl_sf_window.c:21
 #, kde-format
@@ -7138,12 +7138,12 @@ msgstr "लन्क्जोस्"
 #: src/backend/nsl/nsl_smooth.c:21
 #, kde-format
 msgid "Moving Average (Central)"
-msgstr "चल औसत (केन्द्रीय) ९."
+msgstr "चल औसत (केन्द्रीय)"
 
 #: src/backend/nsl/nsl_smooth.c:21
 #, kde-format
 msgid "Moving Average (Lagged)"
-msgstr "चल औसत (Lagged) ९."
+msgstr "चल औसत (Lagged)"
 
 #: src/backend/nsl/nsl_smooth.c:21
 #, kde-format
@@ -7179,17 +7179,17 @@ msgstr "आवधिक"
 #: src/backend/nsl/nsl_smooth.c:23 src/frontend/dockwidgets/KDEPlotDock.cpp:159
 #, kde-format
 msgid "Uniform (Rectangular)"
-msgstr "एकरूप (आयताकार) २."
+msgstr "एकरूप (आयताकार)"
 
 #: src/backend/nsl/nsl_smooth.c:26 src/frontend/dockwidgets/KDEPlotDock.cpp:161
 #, kde-format
 msgid "Parabolic (Epanechnikov)"
-msgstr "परवलयिक (Epanechnikov) २."
+msgstr "परवलयिक (Epanechnikov)"
 
 #: src/backend/nsl/nsl_smooth.c:27 src/frontend/dockwidgets/KDEPlotDock.cpp:162
 #, kde-format
 msgid "Quartic (Biweight)"
-msgstr "क्वार्टिक (द्विभार) २."
+msgstr "क्वार्टिक (द्विभार)"
 
 #: src/backend/nsl/nsl_smooth.c:28 src/frontend/dockwidgets/KDEPlotDock.cpp:163
 #, kde-format
@@ -8393,13 +8393,13 @@ msgstr "Convolute/Deconvolute इति"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:531
 #, kde-format
 msgid "Exponential (degree 1)"
-msgstr "घातीय (उपाधि १) २."
+msgstr "घातीय (उपाधि १)"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:573
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:534
 #, kde-format
 msgid "Exponential (degree 2)"
-msgstr "घातीय (उपाधि २) २."
+msgstr "घातीय (उपाधि २)"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:577
 #, kde-format
@@ -9599,7 +9599,7 @@ msgstr "अनिश्चितता"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1888
 #, kde-format
 msgid "Uncertainty,%"
-msgstr "अनिश्चितता,% ९."
+msgstr "अनिश्चितता,%"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1888
 #, kde-format
@@ -10050,7 +10050,7 @@ msgstr "स्थानिक:"
 #: src/frontend/AboutDialog.cpp:148
 #, kde-format
 msgid "Number Settings:"
-msgstr "संख्यासेटिंग्स् : १."
+msgstr "संख्यासेटिंग्स् :"
 
 #: src/frontend/AboutDialog.cpp:148
 #, kde-format
@@ -10218,7 +10218,7 @@ msgstr "द्विचक्रीयलॉगसञ्चिका (BLF) स�
 #: src/frontend/AboutDialog.cpp:289
 #, kde-format
 msgid "Components:"
-msgstr "घटकाः : १."
+msgstr "घटकाः :"
 
 #: src/frontend/colormaps/ColorMapsDialog.cpp:39
 #, kde-format
@@ -10763,12 +10763,12 @@ msgstr "चयनितं दत्तांशकोशसंयोजनं �
 #: src/frontend/ui/datasources/databasemanagerwidget.ui:110
 #, kde-format
 msgid "Database:"
-msgstr "दत्तांशकोशः : १."
+msgstr "दत्तांशकोशः :"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:170
 #, kde-format
 msgid "Data Source Name:"
-msgstr "दत्तांशस्रोतनाम : १."
+msgstr "दत्तांशस्रोतनाम :"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:211
 #, kde-format
@@ -10941,7 +10941,7 @@ msgstr "आयातं कुर्वन्तु"
 #: src/frontend/datasources/ImportDialog.cpp:76
 #, kde-format
 msgid "Data container:"
-msgstr "दत्तांशपात्रम् : १."
+msgstr "दत्तांशपात्रम् :"
 
 #: src/frontend/datasources/ImportDialog.cpp:77
 #: src/frontend/datasources/ImportDialog.cpp:83
@@ -11004,7 +11004,7 @@ msgstr "नूतनं कार्यपुस्तिकां योजय�
 #: src/frontend/datasources/ImportDialog.cpp:146
 #, kde-format
 msgid "Workbook name:"
-msgstr "कार्यपुस्तिकानाम : १."
+msgstr "कार्यपुस्तिकानाम :"
 
 #: src/frontend/datasources/ImportDialog.cpp:148
 #, kde-format
@@ -11014,7 +11014,7 @@ msgstr "नूतनं Spreadsheet योजयन्तु"
 #: src/frontend/datasources/ImportDialog.cpp:149
 #, kde-format
 msgid "Spreadsheet name:"
-msgstr "स्प्रेडशीट् नाम : १."
+msgstr "स्प्रेडशीट् नाम :"
 
 #: src/frontend/datasources/ImportDialog.cpp:151
 #, kde-format
@@ -11024,7 +11024,7 @@ msgstr "नूतनं Matrix योजयन्तु"
 #: src/frontend/datasources/ImportDialog.cpp:152
 #, kde-format
 msgid "Matrix name:"
-msgstr "मैट्रिक्स नाम : १."
+msgstr "मैट्रिक्स नाम :"
 
 #: src/frontend/datasources/ImportFileDialog.cpp:73
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:40
@@ -11160,7 +11160,7 @@ msgstr "द्विचक्रीय दत्तांश"
 #: src/frontend/datasources/ImportFileWidget.cpp:114
 #, kde-format
 msgid "Excel 2007+ (XSLX)"
-msgstr "एक्सेल २००७+ (XSLX) २."
+msgstr "एक्सेल २००७+ (XSLX)"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:117
 #, kde-format
@@ -11170,12 +11170,12 @@ msgstr "OpenDocument स्प्रेडशीट् (ODS) 1.1."
 #: src/frontend/datasources/ImportFileWidget.cpp:120
 #, kde-format
 msgid "Hierarchical Data Format 5 (HDF5)"
-msgstr "श्रेणीबद्धदत्तांशस्वरूपः ५ (HDF5) २."
+msgstr "श्रेणीबद्धदत्तांशस्वरूपः ५ (HDF5)"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:123
 #, kde-format
 msgid "Network Common Data Format (NetCDF)"
-msgstr "संजालसामान्यदत्तांशस्वरूपम् (NetCDF) २."
+msgstr "संजालसामान्यदत्तांशस्वरूपम् (NetCDF)"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:126
 #, kde-format
@@ -11185,7 +11185,7 @@ msgstr "सदिश द्विचक्रीय लॉगफाइल (BLF) 
 #: src/frontend/datasources/ImportFileWidget.cpp:129
 #, kde-format
 msgid "Flexible Image Transport System Data Format (FITS)"
-msgstr "लचीला चित्रपरिवहनप्रणाली आँकडा प्रारूपः (FITS) २."
+msgstr "लचीला चित्रपरिवहनप्रणाली आँकडा प्रारूपः (FITS)"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:131
 #, kde-format
@@ -11196,7 +11196,7 @@ msgstr "JSON Data"
 #: src/frontend/datasources/ImportFileWidget.cpp:155
 #, kde-format
 msgid "ROOT (CERN)"
-msgstr "मूल (CERN) ९."
+msgstr "मूल (CERN)"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:135
 #: src/frontend/datasources/ImportFileWidget.cpp:157
@@ -11370,7 +11370,7 @@ msgstr "DBC सञ्चिकां चिनोतु"
 #: src/frontend/datasources/ImportFileWidget.cpp:1020
 #, kde-format
 msgid "DBC file (*.dbc)"
-msgstr "DBC सञ्चिका (*.dbc) २."
+msgstr "DBC सञ्चिका (*.dbc)"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1106
 #, kde-format
@@ -11660,7 +11660,7 @@ msgstr "पूर्वावलोकनार्थं आयातार्�
 #: src/frontend/ui/datasources/importdatasetwidget.ui:86
 #, kde-format
 msgid "Dataset:"
-msgstr "दत्तांशसमूहः : १."
+msgstr "दत्तांशसमूहः :"
 
 #: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:241
 #, kde-format
@@ -11831,7 +11831,7 @@ msgstr "उत्पत्ति ओपीजे परियोजना (%1) .
 #: src/frontend/datasources/ImportProjectDialog.cpp:512
 #, kde-format
 msgid "Folder name:"
-msgstr "पुटस्य नाम : १."
+msgstr "पुटस्य नाम :"
 
 #. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
@@ -12546,7 +12546,7 @@ msgstr "अनिश्चितता बार"
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:421
 #, kde-format
 msgid "Columns:"
-msgstr "स्तम्भाः : १."
+msgstr "स्तम्भाः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lDataColumn)
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksColumn)
@@ -12697,7 +12697,7 @@ msgstr "वर्तमान प्लॉट् क्षेत्रपरि�
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:608
 #, kde-format
 msgid "%1-Ranges:"
-msgstr "%1-परिधिः : १."
+msgstr "%1-परिधिः :"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:610
 #, kde-format
@@ -12715,7 +12715,7 @@ msgstr "संख्यात्मकः"
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:780
 #, kde-format
 msgid "Plot Ranges:"
-msgstr "भूखण्ड श्रेणियाँ : १."
+msgstr "भूखण्ड श्रेणियाँ :"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:782
@@ -12743,7 +12743,7 @@ msgstr "भूखण्ड श्रेणियाँ : १."
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:106
 #, kde-format
 msgid "Plot Range:"
-msgstr "भूखण्ड परिधिः : १."
+msgstr "भूखण्ड परिधिः :"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:884
 #, kde-format
@@ -12930,7 +12930,7 @@ msgstr "दशमलवः"
 #: src/frontend/widgets/ValueWidget.cpp:42
 #, kde-format
 msgid "Scientific (e)"
-msgstr "वैज्ञानिक (ङ) ९."
+msgstr "वैज्ञानिक (ङ)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:39
 #: src/frontend/dockwidgets/MatrixDock.cpp:33
@@ -12938,21 +12938,21 @@ msgstr "वैज्ञानिक (ङ) ९."
 #: src/frontend/widgets/ValueWidget.cpp:43
 #, kde-format
 msgid "Scientific (E)"
-msgstr "वैज्ञानिक (ई) ९."
+msgstr "वैज्ञानिक (ई)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:40
 #: src/frontend/dockwidgets/XYCurveDock.cpp:72
 #: src/frontend/widgets/ValueWidget.cpp:44
 #, kde-format
 msgid "Automatic (e)"
-msgstr "स्वतः (ङ) २."
+msgstr "स्वतः (ङ)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:41
 #: src/frontend/dockwidgets/XYCurveDock.cpp:73
 #: src/frontend/widgets/ValueWidget.cpp:45
 #, kde-format
 msgid "Automatic (E)"
-msgstr "स्वचालित (ई) ९."
+msgstr "स्वचालित (ई)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:314
 #, kde-format
@@ -13109,12 +13109,12 @@ msgstr "%1 lollipop plots: टेम्पलेट् \"%2\" लोड् अ�
 #: src/frontend/dockwidgets/MatrixDock.cpp:34
 #, kde-format
 msgid "Automatic (g)"
-msgstr "स्वतः (छ) ९."
+msgstr "स्वतः (छ)"
 
 #: src/frontend/dockwidgets/MatrixDock.cpp:35
 #, kde-format
 msgid "Automatic (G)"
-msgstr "स्वचालित (G) ९."
+msgstr "स्वचालित (G)"
 
 #: src/frontend/dockwidgets/MatrixDock.cpp:37
 #: src/frontend/matrix/MatrixView.cpp:162
@@ -13312,7 +13312,7 @@ msgstr "XY-वक्रम्"
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:20
 #, kde-format
 msgid "or Kernel/Size:"
-msgstr "अथवा कर्नेल/आकार: १."
+msgstr "अथवा कर्नेल/आकार:"
 
 #: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:203
 #, kde-format
@@ -13373,12 +13373,12 @@ msgstr "३-खण्डाः"
 #: src/frontend/dockwidgets/XYCurveDock.cpp:203
 #, kde-format
 msgid "Akima-spline (Natural)"
-msgstr "अकिमा-स्प्लाइन (प्राकृतिक) २."
+msgstr "अकिमा-स्प्लाइन (प्राकृतिक)"
 
 #: src/frontend/dockwidgets/XYCurveDock.cpp:204
 #, kde-format
 msgid "Akima-spline (Periodic)"
-msgstr "अकिमा-स्प्लाइन (आवधिक) २."
+msgstr "अकिमा-स्प्लाइन (आवधिक)"
 
 #: src/frontend/dockwidgets/XYCurveDock.cpp:329
 #: src/frontend/widgets/ValueWidget.cpp:31
@@ -13433,42 +13433,42 @@ msgstr "एषः विधिः अन्येभ्यः अपेक्ष
 #: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:434
 #, kde-format
 msgid "Tolerance (distance):"
-msgstr "सहिष्णुता (दूरी) : १."
+msgstr "सहिष्णुता (दूरी) :"
 
 #: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:368
 #, kde-format
 msgid "Number of points:"
-msgstr "बिन्दुसङ्ख्या : १."
+msgstr "बिन्दुसङ्ख्या :"
 
 #: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:379
 #, kde-format
 msgid "Step size:"
-msgstr "चरणस्य आकारः : १."
+msgstr "चरणस्य आकारः :"
 
 #: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:396
 #, kde-format
 msgid "Repeats:"
-msgstr "पुनरावृत्तिः : १."
+msgstr "पुनरावृत्तिः :"
 
 #: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:406
 #, kde-format
 msgid "Tolerance (area):"
-msgstr "सहिष्णुता (क्षेत्र) : १."
+msgstr "सहिष्णुता (क्षेत्र) :"
 
 #: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:417
 #, kde-format
 msgid "Minimum tolerance:"
-msgstr "न्यूनतम सहिष्णुता : १."
+msgstr "न्यूनतम सहिष्णुता :"
 
 #: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:421
 #, kde-format
 msgid "Maximum tolerance:"
-msgstr "अधिकतम सहिष्णुता : १."
+msgstr "अधिकतम सहिष्णुता :"
 
 #: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:438
 #, kde-format
 msgid "Search region:"
-msgstr "अन्वेषणक्षेत्रम् : १."
+msgstr "अन्वेषणक्षेत्रम् :"
 
 #: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:504
 #, kde-format
@@ -13587,12 +13587,12 @@ msgstr "कोऽपि Y आँकडा उपलब्धः नास्त�
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:510
 #, kde-format
 msgid "Curve:"
-msgstr "वक्रः : १."
+msgstr "वक्रः :"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:448
 #, kde-format
 msgid "Histogram:"
-msgstr "हिस्टोग्राम : १."
+msgstr "हिस्टोग्राम :"
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:828
@@ -13604,7 +13604,7 @@ msgstr "उपाधि:"
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:891
 #, kde-format
 msgid "Number of peaks:"
-msgstr "शिखरानाम् संख्या : १."
+msgstr "शिखरानाम् संख्या :"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1221
 #, kde-format
@@ -13632,17 +13632,17 @@ msgstr "%1 % उच्चविश्वासस्तरः"
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:24
 #, kde-format
 msgid "Cutoff:"
-msgstr "कटऑफः : १."
+msgstr "कटऑफः :"
 
 #: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:297
 #, kde-format
 msgid "Lower cutoff:"
-msgstr "निम्नकटऑफः : १."
+msgstr "निम्नकटऑफः :"
 
 #: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:298
 #, kde-format
 msgid "Upper cutoff:"
-msgstr "उपरितनच्छेदः : १."
+msgstr "उपरितनच्छेदः :"
 
 #: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:432
 #, kde-format
@@ -13699,7 +13699,7 @@ msgstr "चरं विलोपयन्तु"
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:22
 #, kde-format
 msgid "Variable:"
-msgstr "चर : १."
+msgstr "चर :"
 
 #: src/frontend/dockwidgets/XYHilbertTransformCurveDock.cpp:184
 #, kde-format
@@ -13719,7 +13719,7 @@ msgstr "मूल्यम् : %1"
 #: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:79
 #, kde-format
 msgid "Auto (5x data points)"
-msgstr "स्वतः (5x दत्तांशबिन्दवः) २."
+msgstr "स्वतः (5x दत्तांशबिन्दवः)"
 
 #: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:80
 #, kde-format
@@ -14313,7 +14313,7 @@ msgstr "इतिहासं स्पष्टं कुरुत"
 #: src/frontend/LabPlot.cpp:44
 #, kde-format
 msgid "Visit website:"
-msgstr "वेबसाइट् पश्यन्तु : १."
+msgstr "वेबसाइट् पश्यन्तु :"
 
 #: src/frontend/LabPlot.cpp:46
 #, kde-format
@@ -14323,7 +14323,7 @@ msgstr "विडियो पाठ्यक्रमं पश्यन्त�
 #: src/frontend/LabPlot.cpp:47
 #, kde-format
 msgid "Discuss on Mastodon:"
-msgstr "मस्टोडन् विषये चर्चां कुर्वन्तु : १."
+msgstr "मस्टोडन् विषये चर्चां कुर्वन्तु :"
 
 #: src/frontend/LabPlot.cpp:48
 #, kde-format
@@ -15849,17 +15849,17 @@ msgstr "शाही"
 #: src/frontend/SettingsGeneralPage.cpp:255
 #, kde-format
 msgid "Dot (.)"
-msgstr "बिन्दु (.) २."
+msgstr "बिन्दु (.)"
 
 #: src/frontend/SettingsGeneralPage.cpp:256
 #, kde-format
 msgid "Comma (,)"
-msgstr "अल्पविराम (,) २."
+msgstr "अल्पविराम (,)"
 
 #: src/frontend/SettingsGeneralPage.cpp:257
 #, kde-format
 msgid "Arabic (٫)"
-msgstr "अरबी (٫) ९."
+msgstr "अरबी (٫)"
 
 #: src/frontend/SettingsGeneralPage.cpp:261
 #, kde-format
@@ -16016,7 +16016,7 @@ msgstr "मूल्यं घटयतु"
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:111
 #, kde-format
 msgid "Subtract:"
-msgstr "घटावः : १."
+msgstr "घटावः :"
 
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:107
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:112
@@ -16072,7 +16072,7 @@ msgstr "अंतरण"
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:156
 #, kde-format
 msgid "Baseline (arPLS Algorithm)"
-msgstr "आधाररेखा (arPLS एल्गोरिदम्) २."
+msgstr "आधाररेखा (arPLS एल्गोरिदम्)"
 
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:163
 #, kde-format
@@ -16187,7 +16187,7 @@ msgstr "मूल्य लेबल सम्पादयतु"
 #: src/frontend/spreadsheet/BatchEditValueLabelsDialog.cpp:40
 #, kde-format
 msgid "Value Labels:"
-msgstr "मूल्य लेबलाः : १."
+msgstr "मूल्य लेबलाः :"
 
 #: src/frontend/spreadsheet/BatchEditValueLabelsDialog.cpp:154
 #, kde-format
@@ -16213,14 +16213,14 @@ msgstr "न समः"
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:232
 #, kde-format
 msgid "Between (Incl. End Points)"
-msgstr "मध्ये (Incl. End Points) २."
+msgstr "मध्ये (Incl. End Points)"
 
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:48
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:224
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:233
 #, kde-format
 msgid "Between (Excl. End Points)"
-msgstr "मध्ये (अन्तबिन्दून् विहाय) २."
+msgstr "मध्ये (अन्तबिन्दून् विहाय)"
 
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:49
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:225
@@ -16478,7 +16478,7 @@ msgstr "FITS सञ्चिकाः (*.fits *.fit *.fts)"
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:398
 #, kde-format
 msgid "Excel 2007+ (*.xlsx)"
-msgstr "एक्सेल २००७+ (*.xlsx) २."
+msgstr "एक्सेल २००७+ (*.xlsx)"
 
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
 #, kde-format
@@ -16847,7 +16847,7 @@ msgstr "पुनः स्केल करें"
 #: src/frontend/spreadsheet/RescaleDialog.cpp:37
 #, kde-format
 msgid "Interval [a, b]:"
-msgstr "अन्तराल [क, ख]: १."
+msgstr "अन्तराल [क, ख]:"
 
 #: src/frontend/spreadsheet/RescaleDialog.cpp:38
 #, kde-format
@@ -16899,7 +16899,7 @@ msgstr "कालांशः:"
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:159
 #, kde-format
 msgid "Sample Size:"
-msgstr "नमूना आकारः : १."
+msgstr "नमूना आकारः :"
 
 #: src/frontend/spreadsheet/SampleValuesDialog.cpp:205
 #, kde-format
@@ -17033,7 +17033,7 @@ msgstr "अङ्कीयः"
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:1577
 #, kde-format
 msgid "Whitespace (excluding line breaks)"
-msgstr "श्वेतस्थानम् (रेखाविच्छेदं विहाय) २."
+msgstr "श्वेतस्थानम् (रेखाविच्छेदं विहाय)"
 
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:1578
 #, kde-format
@@ -17043,7 +17043,7 @@ msgstr "अश्वेतस्थानम्"
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:1579
 #, kde-format
 msgid "Word character (alphanumerics plus '_')"
-msgstr "शब्दवर्णः (वर्णसंख्या प्लस् '_') २."
+msgstr "शब्दवर्णः (वर्णसंख्या प्लस् '_')"
 
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:1580
 #, kde-format
@@ -18010,7 +18010,7 @@ msgstr "सङ्ग्रह:"
 #: src/frontend/ui/colormapswidget.ui:73
 #, kde-format
 msgid "Colormaps:"
-msgstr "वर्णनक्शाः : १."
+msgstr "वर्णनक्शाः :"
 
 #. i18n: ectx: property (text), widget (QPushButton, bInsert)
 #: src/frontend/ui/constantswidget.ui:90 src/frontend/ui/functionswidget.ui:56
@@ -18043,7 +18043,7 @@ msgstr "अत्र अन्वेषणपदं प्रविशतु"
 #: src/frontend/ui/datapickercurvewidget.ui:39
 #, kde-format
 msgid "Y-error type:"
-msgstr "Y-त्रुटिप्रकारः : १."
+msgstr "Y-त्रुटिप्रकारः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
@@ -18156,7 +18156,7 @@ msgstr "त्रुटिप्रकारः"
 #: src/frontend/ui/datapickercurvewidget.ui:113
 #, kde-format
 msgid "X-error type:"
-msgstr "X-त्रुटिप्रकारः : १."
+msgstr "X-त्रुटिप्रकारः :"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabSymbol)
 #: src/frontend/ui/datapickercurvewidget.ui:186
@@ -18522,7 +18522,7 @@ msgstr "x+y+z="
 #: src/frontend/ui/labelwidget.ui:662 src/frontend/ui/symbolwidget.ui:85
 #, kde-format
 msgid "Rotation:"
-msgstr "परिभ्रमणम् : १."
+msgstr "परिभ्रमणम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSegments)
 #: src/frontend/ui/datapickerimagewidget.ui:200
@@ -18681,7 +18681,7 @@ msgstr "प्रकारः:"
 #: src/frontend/ui/datapickerimagewidget.ui:782
 #, kde-format
 msgid "Separation:"
-msgstr "वियोगः : १."
+msgstr "वियोगः :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/frontend/ui/datapickerimagewidget.ui:812
@@ -18705,7 +18705,7 @@ msgstr "चित्रं सम्पादयतु"
 #: src/frontend/ui/datapickerimagewidget.ui:862
 #, kde-format
 msgid "Intensity:"
-msgstr "तीव्रता : १."
+msgstr "तीव्रता :"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, cbPositionY)
 #. i18n: ectx: property (toolTip), widget (QLabel, lPositionY)
@@ -18724,31 +18724,31 @@ msgstr "लेबलस्य मातापितुः सापेक्ष�
 #: src/frontend/ui/datapickerimagewidget.ui:917
 #, kde-format
 msgid "Hue:"
-msgstr "ह्युः : १."
+msgstr "ह्युः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotImageType)
 #: src/frontend/ui/datapickerimagewidget.ui:937
 #, kde-format
 msgid "Current Image:"
-msgstr "वर्तमान चित्रम् : १."
+msgstr "वर्तमान चित्रम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaturation)
 #: src/frontend/ui/datapickerimagewidget.ui:950
 #, kde-format
 msgid "Saturation:"
-msgstr "संतृप्ति : १."
+msgstr "संतृप्ति :"
 
 #. i18n: ectx: property (text), widget (QLabel, lForeground)
 #: src/frontend/ui/datapickerimagewidget.ui:957
 #, kde-format
 msgid "Foreground:"
-msgstr "अग्रभूमिः : १."
+msgstr "अग्रभूमिः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:36
 #, kde-format
 msgid "DateTime Format:"
-msgstr "तिथिसमय प्रारूपः : १."
+msgstr "तिथिसमय प्रारूपः :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbSkipEmptyParts)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:43
@@ -18768,19 +18768,19 @@ msgstr "NaN इत्येतत् 0 इति परिवर्तयन्�
 #: src/frontend/ui/datasources/asciioptionswidget.ui:73
 #, kde-format
 msgid "Column Datatypes:"
-msgstr "स्तम्भदत्तांशप्रकाराः : १."
+msgstr "स्तम्भदत्तांशप्रकाराः :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:80
 #, kde-format
 msgid "Comment Character:"
-msgstr "टिप्पणी चरित्रम् : १."
+msgstr "टिप्पणी चरित्रम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:87
 #, kde-format
 msgid "Decimal Separator:"
-msgstr "दशमलव विभाजक : १."
+msgstr "दशमलव विभाजक :"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chbSimplifyWhitespaces)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:94
@@ -18803,7 +18803,7 @@ msgstr "श्वेतस्थानानि सरलीकरोतु"
 #: src/frontend/ui/datasources/asciioptionswidget.ui:133
 #, kde-format
 msgid "Column Separator:"
-msgstr "स्तम्भ विभाजक : १."
+msgstr "स्तम्भ विभाजक :"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbYearBase)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:143
@@ -18815,13 +18815,13 @@ msgstr "आधारवर्षं यदा वर्षस्य कृते
 #: src/frontend/ui/datasources/asciioptionswidget.ui:194
 #, kde-format
 msgid "Year Base:"
-msgstr "वर्षाधारः : १."
+msgstr "वर्षाधारः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lVectorNames)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:201
 #, kde-format
 msgid "Custom Names:"
-msgstr "कस्टम् नाम : १."
+msgstr "कस्टम् नाम :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbRemoveQuotes)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:208
@@ -18833,7 +18833,7 @@ msgstr "उद्धरणं निष्कासयन्तु"
 #: src/frontend/ui/datasources/asciioptionswidget.ui:222
 #, kde-format
 msgid "Names at Line:"
-msgstr "रेखायां नामानि : १."
+msgstr "रेखायां नामानि :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbCreateTimestamp)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:239
@@ -18857,7 +18857,7 @@ msgstr "Integer इत्येतत् Double इति आयातयन्�
 #: src/frontend/ui/datasources/binaryoptionswidget.ui:17
 #, kde-format
 msgid "Skip Bytes:"
-msgstr "बाइट्स् त्यजन्तु : १."
+msgstr "बाइट्स् त्यजन्तु :"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, niVectors)
 #: src/frontend/ui/datasources/binaryoptionswidget.ui:24
@@ -18869,7 +18869,7 @@ msgstr "सञ्चिकायां सदिशानां संख्य�
 #: src/frontend/ui/datasources/binaryoptionswidget.ui:50
 #, kde-format
 msgid "Data type:"
-msgstr "दत्तांशप्रकारः : १."
+msgstr "दत्तांशप्रकारः :"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbSkipStartBytes)
 #: src/frontend/ui/datasources/binaryoptionswidget.ui:60
@@ -18887,19 +18887,19 @@ msgstr "प्रत्येकं मूल्यस्य अनन्तर�
 #: src/frontend/ui/datasources/binaryoptionswidget.ui:80
 #, kde-format
 msgid "Vectors:"
-msgstr "सदिशः : १."
+msgstr "सदिशः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSkipStartBytes)
 #: src/frontend/ui/datasources/binaryoptionswidget.ui:90
 #, kde-format
 msgid "Skip start bytes:"
-msgstr "प्रारम्भबाइट्स् त्यजन्तु : १."
+msgstr "प्रारम्भबाइट्स् त्यजन्तु :"
 
 #. i18n: ectx: property (text), widget (QLabel, lByteOrder)
 #: src/frontend/ui/datasources/binaryoptionswidget.ui:97
 #, kde-format
 msgid "Byte order:"
-msgstr "बाइट् क्रमः : १."
+msgstr "बाइट् क्रमः :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbCreateIndex)
 #: src/frontend/ui/datasources/binaryoptionswidget.ui:120
@@ -18952,7 +18952,7 @@ msgstr "आवेदनपत्रं"
 #: src/frontend/ui/datasources/CANOptionsWidget.ui:25
 #, kde-format
 msgid "Import mode:"
-msgstr "आयातविधिः : १."
+msgstr "आयातविधिः :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbConvertSeconds)
 #: src/frontend/ui/datasources/CANOptionsWidget.ui:32
@@ -18977,13 +18977,13 @@ msgstr "सक्रियं करोतु"
 #: src/frontend/ui/datasources/databasemanagerwidget.ui:46
 #, kde-format
 msgid "Connection String:"
-msgstr "संयोजन स्ट्रिंग् : १."
+msgstr "संयोजन स्ट्रिंग् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lDriver)
 #: src/frontend/ui/datasources/databasemanagerwidget.ui:66
 #, kde-format
 msgid "Driver:"
-msgstr "चालकः : १."
+msgstr "चालकः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lHost)
 #: src/frontend/ui/datasources/databasemanagerwidget.ui:76
@@ -19013,7 +19013,7 @@ msgstr "प्रमाणीकरणम्"
 #: src/frontend/ui/datasources/databasemanagerwidget.ui:162
 #, kde-format
 msgid "User:"
-msgstr "उपयोक्ता : १."
+msgstr "उपयोक्ता :"
 
 #. i18n: ectx: property (text), widget (QLabel, lPassword)
 #: src/frontend/ui/datasources/databasemanagerwidget.ui:176
@@ -19051,7 +19051,7 @@ msgstr "फ़िल्टर विकल्पाः"
 #: src/frontend/ui/datasources/datasetmetadatamanagerwidget.ui:79
 #, kde-format
 msgid "Comment character:"
-msgstr "टिप्पणी चरित्रम् : १."
+msgstr "टिप्पणी चरित्रम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSeparator)
 #. i18n: ectx: property (text), widget (QLabel, lSeparatingCharacter)
@@ -19059,13 +19059,13 @@ msgstr "टिप्पणी चरित्रम् : १."
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:176
 #, kde-format
 msgid "Separating string:"
-msgstr "तारं पृथक् कुर्वन् : १."
+msgstr "तारं पृथक् कुर्वन् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberFormat)
 #: src/frontend/ui/datasources/datasetmetadatamanagerwidget.ui:93
 #, kde-format
 msgid "Number format:"
-msgstr "संख्यास्वरूपम् : १."
+msgstr "संख्यास्वरूपम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
 #: src/frontend/ui/datasources/datasetmetadatamanagerwidget.ui:100
@@ -19074,7 +19074,7 @@ msgstr "संख्यास्वरूपम् : १."
 #: src/frontend/ui/datasources/mcapoptionswidget.ui:75
 #, kde-format
 msgid "DateTime format:"
-msgstr "DateTime प्रारूपः : १."
+msgstr "DateTime प्रारूपः :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbHeader)
 #: src/frontend/ui/datasources/datasetmetadatamanagerwidget.ui:107
@@ -19145,7 +19145,7 @@ msgstr "सङ्ग्रह"
 #: src/frontend/ui/datasources/xlsxoptionswidget.ui:40
 #, kde-format
 msgid "Number of rows to preview:"
-msgstr "पूर्वावलोकनार्थं पङ्क्तयः संख्या : १."
+msgstr "पूर्वावलोकनार्थं पङ्क्तयः संख्या :"
 
 #. i18n: ectx: property (text), widget (QPushButton, bRefreshPreview)
 #: src/frontend/ui/datasources/fitsoptionswidget.ui:49
@@ -19171,7 +19171,7 @@ msgstr "चयनितस्य HDF5 सञ्चिकायाः साम�
 #: src/frontend/ui/datasources/imageoptionswidget.ui:30
 #, kde-format
 msgid "Import as:"
-msgstr "आयातं यथा : १."
+msgstr "आयातं यथा :"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbImportFormat)
 #: src/frontend/ui/datasources/imageoptionswidget.ui:50
@@ -19195,7 +19195,7 @@ msgstr "दत्तांशस्रोत"
 #: src/frontend/ui/datasources/importfilewidget.ui:50
 #, kde-format
 msgid "Baud rate:"
-msgstr "बौड दरः : १."
+msgstr "बौड दरः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lConnection)
 #. i18n: ectx: property (text), widget (QLabel, lConnections)
@@ -19203,7 +19203,7 @@ msgstr "बौड दरः : १."
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:35
 #, kde-format
 msgid "Connection:"
-msgstr "संयोजनम् : १."
+msgstr "संयोजनम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lField)
 #: src/frontend/ui/datasources/importfilewidget.ui:71
@@ -19215,7 +19215,7 @@ msgstr "क्षेत्रम्‌:"
 #: src/frontend/ui/datasources/importfilewidget.ui:81
 #, kde-format
 msgid "First row as column names:"
-msgstr "प्रथमपङ्क्तिः स्तम्भनामरूपेण : १."
+msgstr "प्रथमपङ्क्तिः स्तम्भनामरूपेण :"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbSourceType)
 #: src/frontend/ui/datasources/importfilewidget.ui:89
@@ -19252,7 +19252,7 @@ msgstr "सीरियल पोर्ट"
 #: src/frontend/ui/dockwidgets/livedatadock.ui:334
 #, kde-format
 msgid "LWT:"
-msgstr "एल डब्ल्यू टी : १."
+msgstr "एल डब्ल्यू टी :"
 
 #. i18n: ectx: property (text), widget (QLabel, lDBCDatabase)
 #: src/frontend/ui/datasources/importfilewidget.ui:161
@@ -19299,13 +19299,13 @@ msgstr "स्रोतः:"
 #: src/frontend/ui/datasources/importfilewidget.ui:287
 #, kde-format
 msgid "Relative Path:"
-msgstr "सापेक्षमार्गः १."
+msgstr "सापेक्षमार्गः"
 
 #. i18n: ectx: property (text), widget (QLabel, lFilter)
 #: src/frontend/ui/datasources/importfilewidget.ui:310
 #, kde-format
 msgid "Filter:"
-msgstr "फ़िल्टर : १."
+msgstr "फ़िल्टर :"
 
 #. i18n: ectx: property (text), widget (QLabel, lWillTopic)
 #. i18n: ectx: property (text), widget (QLabel, lMcapTopics)
@@ -19319,7 +19319,7 @@ msgstr "विषय:"
 #: src/frontend/ui/datasources/importfilewidget.ui:347
 #, kde-format
 msgid "Topics:"
-msgstr "विषयाः : १."
+msgstr "विषयाः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lPrecision)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsPrecision)
@@ -19333,7 +19333,7 @@ msgstr "विषयाः : १."
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:238
 #, kde-format
 msgid "Precision:"
-msgstr "सटीकता : १."
+msgstr "सटीकता :"
 
 #. i18n: ectx: property (text), widget (QLabel, lWarningLimitedMessages)
 #: src/frontend/ui/datasources/importfilewidget.ui:529
@@ -19347,7 +19347,7 @@ msgstr "सर्वे चराः दृश्यन्ते न भवे�
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:245
 #, kde-format
 msgid "Start row:"
-msgstr "प्रारम्भ पङ्क्तिः : १."
+msgstr "प्रारम्भ पङ्क्तिः :"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbEndRow)
 #: src/frontend/ui/datasources/importfilewidget.ui:595
@@ -19361,7 +19361,7 @@ msgstr "आयातार्थं अन्त्यपङ्क्तिं �
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:320
 #, kde-format
 msgid "Start column:"
-msgstr "स्तम्भः आरभ्यताम् : १."
+msgstr "स्तम्भः आरभ्यताम् :"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbStartColumn)
 #: src/frontend/ui/datasources/importfilewidget.ui:618
@@ -19382,7 +19382,7 @@ msgstr "आयातार्थं आरम्भपङ्क्तिं न�
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:356
 #, kde-format
 msgid "End column:"
-msgstr "अन्त्यस्तम्भः : १."
+msgstr "अन्त्यस्तम्भः :"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbEndColumn)
 #: src/frontend/ui/datasources/importfilewidget.ui:699
@@ -19396,7 +19396,7 @@ msgstr "आयातार्थं अन्त्यस्तम्भं न�
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:284
 #, kde-format
 msgid "End row:"
-msgstr "अन्त्यपङ्क्तिः : १."
+msgstr "अन्त्यपङ्क्तिः :"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbUpdateOptions)
 #: src/frontend/ui/datasources/importfilewidget.ui:755
@@ -19421,7 +19421,7 @@ msgstr "पठतु:"
 #: src/frontend/ui/datasources/importfilewidget.ui:778
 #, kde-format
 msgid "Update interval:"
-msgstr "अद्यतनान्तरम् : १."
+msgstr "अद्यतनान्तरम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lKeepNvalues)
 #. i18n: ectx: property (text), widget (QLabel, lKeepLastValues)
@@ -19429,14 +19429,14 @@ msgstr "अद्यतनान्तरम् : १."
 #: src/frontend/ui/dockwidgets/livedatadock.ui:120
 #, kde-format
 msgid "Keep last values:"
-msgstr "अन्तिममूल्यानि रक्षन्तु : १."
+msgstr "अन्तिममूल्यानि रक्षन्तु :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSampleSize)
 #: src/frontend/ui/datasources/importfilewidget.ui:808
 #: src/frontend/ui/dockwidgets/livedatadock.ui:127
 #, kde-format
 msgid "Sample size:"
-msgstr "नमूना आकारः : १."
+msgstr "नमूना आकारः :"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbUpdateType)
 #: src/frontend/ui/datasources/importfilewidget.ui:835
@@ -19486,7 +19486,7 @@ msgstr "आयातम् As"
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:29
 #, kde-format
 msgid "File name:"
-msgstr "सञ्चिकानाम : १."
+msgstr "सञ्चिकानाम :"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbObjects)
 #: src/frontend/ui/datasources/importprojectwidget.ui:49
@@ -19498,13 +19498,13 @@ msgstr "आयातार्थं वस्तुनि"
 #: src/frontend/ui/datasources/importprojectwidget.ui:58
 #, kde-format
 msgid "Graph Layers:"
-msgstr "आलेखस्तराः : १."
+msgstr "आलेखस्तराः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lUnusedObjects)
 #: src/frontend/ui/datasources/importprojectwidget.ui:82
 #, kde-format
 msgid "Unused Objects:"
-msgstr "अप्रयुक्तवस्तूनि : १."
+msgstr "अप्रयुक्तवस्तूनि :"
 
 #. i18n: ectx: property (text), widget (QLabel, lCustomFolder)
 #. i18n: ectx: property (text), widget (QLabel, lFolder)
@@ -19512,13 +19512,13 @@ msgstr "अप्रयुक्तवस्तूनि : १."
 #: src/frontend/ui/PlotTemplateDialog.ui:115
 #, kde-format
 msgid "Folder:"
-msgstr "पुटम् : १."
+msgstr "पुटम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lImportFrom)
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:65
 #, kde-format
 msgid "Import from:"
-msgstr "आयातम् तः : १."
+msgstr "आयातम् तः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:91
@@ -19527,7 +19527,7 @@ msgstr "आयातम् तः : १."
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:239
 #, kde-format
 msgid "Decimal separator:"
-msgstr "दशमलव विभाजकः : १."
+msgstr "दशमलव विभाजकः :"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbQuery)
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:137
@@ -19595,7 +19595,7 @@ msgstr "जटिल"
 #: src/frontend/ui/datasources/mqttconnectionmanagerwidget.ui:23
 #, kde-format
 msgid "Manage connections:"
-msgstr "संयोजनानि प्रबन्धयन्तु : १."
+msgstr "संयोजनानि प्रबन्धयन्तु :"
 
 #. i18n: ectx: property (text), widget (QLabel, lID)
 #. i18n: ectx: property (text), widget (QLabel, lId)
@@ -19603,13 +19603,13 @@ msgstr "संयोजनानि प्रबन्धयन्तु : १."
 #: src/frontend/ui/datasources/mqtterrorwidget.ui:67
 #, kde-format
 msgid "Client ID:"
-msgstr "ग्राहकपरिचयः : १."
+msgstr "ग्राहकपरिचयः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lUsername)
 #: src/frontend/ui/datasources/mqttconnectionmanagerwidget.ui:108
 #, kde-format
 msgid "Username:"
-msgstr "उपयोक्तृनाम : १."
+msgstr "उपयोक्तृनाम :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbID)
 #: src/frontend/ui/datasources/mqttconnectionmanagerwidget.ui:115
@@ -19639,7 +19639,7 @@ msgstr "MQTT त्रुटि विजेट"
 #: src/frontend/ui/datasources/mqtterrorwidget.ui:33
 #, kde-format
 msgid "User name:"
-msgstr "उपयोक्तृनाम : १."
+msgstr "उपयोक्तृनाम :"
 
 #. i18n: ectx: property (text), widget (QPushButton, bChange)
 #: src/frontend/ui/datasources/mqtterrorwidget.ui:53
@@ -19681,13 +19681,13 @@ msgstr "चयनितस्य ROOT सञ्चिकायाः साम�
 #: src/frontend/ui/datasources/rootoptionswidget.ui:72
 #, kde-format
 msgid "First row:"
-msgstr "प्रथमा पङ्क्तिः : १."
+msgstr "प्रथमा पङ्क्तिः :"
 
 #. i18n: ectx: property (text), widget (QLabel, labelLast)
 #: src/frontend/ui/datasources/rootoptionswidget.ui:89
 #, kde-format
 msgid "Last row:"
-msgstr "अन्तिमपङ्क्तिः : १."
+msgstr "अन्तिमपङ्क्तिः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lStartDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lStart)
@@ -19745,7 +19745,7 @@ msgstr "मापन:"
 #: src/frontend/ui/dockwidgets/axisdock.ui:174
 #, kde-format
 msgid "Zero Offset:"
-msgstr "शून्य ऑफसेट् : १."
+msgstr "शून्य ऑफसेट् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lEndDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lEnd)
@@ -19777,7 +19777,7 @@ msgstr "शून्ये समाप्तुं offset सेट् कु�
 #: src/frontend/ui/dockwidgets/axisdock.ui:372
 #, kde-format
 msgid "Scaling Factor:"
-msgstr "स्केलिंग कारकः : १."
+msgstr "स्केलिंग कारकः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lAutoScale)
 #. i18n: ectx: property (text), widget (QLabel, lRangeType)
@@ -19850,7 +19850,7 @@ msgstr "संख्या:"
 #: src/frontend/ui/dockwidgets/axisdock.ui:1148
 #, kde-format
 msgid "1st Tick Value:"
-msgstr "प्रथमः टिक मूल्यः : १."
+msgstr "प्रथमः टिक मूल्यः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksSpacingNumeric)
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksSpacingNumeric)
@@ -19858,7 +19858,7 @@ msgstr "प्रथमः टिक मूल्यः : १."
 #: src/frontend/ui/dockwidgets/axisdock.ui:1000
 #, kde-format
 msgid "Spacing:"
-msgstr "अन्तरालः : १."
+msgstr "अन्तरालः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicks)
 #: src/frontend/ui/dockwidgets/axisdock.ui:760
@@ -19876,19 +19876,19 @@ msgstr "प्रमुख टिक्स"
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:137
 #, kde-format
 msgid "Increment:"
-msgstr "वृद्धिः : १."
+msgstr "वृद्धिः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsTextType)
 #: src/frontend/ui/dockwidgets/axisdock.ui:774
 #, kde-format
 msgid "Label Type:"
-msgstr "लेबल प्रकारः : १."
+msgstr "लेबल प्रकारः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsTextColumn)
 #: src/frontend/ui/dockwidgets/axisdock.ui:781
 #, kde-format
 msgid "Label Column:"
-msgstr "लेबल स्तम्भः १."
+msgstr "लेबल स्तम्भः"
 
 #. i18n: ectx: property (text), widget (QLabel, lPosition)
 #. i18n: ectx: property (text), widget (QLabel, lOrientation)
@@ -19955,7 +19955,7 @@ msgstr "<html><head/><body><p>अक्षस्य आरम्भात् प
 #: src/frontend/ui/dockwidgets/axisdock.ui:1036
 #, kde-format
 msgid "1st Tick Offset:"
-msgstr "प्रथमः टिक-अफसेट् : १."
+msgstr "प्रथमः टिक-अफसेट् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksStartType)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1105
@@ -20009,7 +20009,7 @@ msgstr "स्थितिः"
 #: src/frontend/ui/labelwidget.ui:652
 #, kde-format
 msgid "Font:"
-msgstr "फन्ट् : १."
+msgstr "फन्ट् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsSuffix)
 #. i18n: ectx: property (text), widget (QLabel, lSuffix)
@@ -20019,7 +20019,7 @@ msgstr "फन्ट् : १."
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:287
 #, kde-format
 msgid "Suffix:"
-msgstr "प्रत्ययः : १."
+msgstr "प्रत्ययः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lRugOffset)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsOffset)
@@ -20030,7 +20030,7 @@ msgstr "प्रत्ययः : १."
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:641
 #, kde-format
 msgid "Offset:"
-msgstr "ऑफसेट् : १."
+msgstr "ऑफसेट् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lOpacity)
 #. i18n: ectx: property (text), widget (QLabel, lBorderOpacity)
@@ -20046,7 +20046,7 @@ msgstr "ऑफसेट् : १."
 #: src/frontend/worksheet/GridDialog.cpp:73
 #, kde-format
 msgid "Opacity:"
-msgstr "अस्पष्टता : १."
+msgstr "अस्पष्टता :"
 
 #. i18n: ectx: property (text), widget (QLabel, lOutputFormat)
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
@@ -20058,7 +20058,7 @@ msgstr "अस्पष्टता : १."
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:56
 #, kde-format
 msgid "Format:"
-msgstr "प्रारूपः : १."
+msgstr "प्रारूपः :"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbOpacity)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbBorderOpacity)
@@ -20088,7 +20088,7 @@ msgstr " % ."
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:428
 #, kde-format
 msgid "Prefix:"
-msgstr "उपसर्गः : १."
+msgstr "उपसर्गः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lFontColor)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsColor)
@@ -20096,7 +20096,7 @@ msgstr "उपसर्गः : १."
 #: src/frontend/ui/labelwidget.ui:530
 #, kde-format
 msgid "Font Color:"
-msgstr "फ़ॉन्ट् रङ्गः : १."
+msgstr "फ़ॉन्ट् रङ्गः :"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabGrid)
 #. i18n: ectx: property (text), widget (QLabel, lGrid)
@@ -20133,7 +20133,7 @@ msgstr "प्रमुख जाल"
 #: src/frontend/ui/mqttwillsettingswidget.ui:346
 #, kde-format
 msgid "Enabled:"
-msgstr "सक्षमम् : १."
+msgstr "सक्षमम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lFirstColor)
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:155
@@ -20141,13 +20141,13 @@ msgstr "सक्षमम् : १."
 #: src/frontend/widgets/BackgroundWidget.cpp:257
 #, kde-format
 msgid "First color:"
-msgstr "प्रथमः वर्णः : १."
+msgstr "प्रथमः वर्णः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSecondColor)
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:213
 #, kde-format
 msgid "Second color:"
-msgstr "द्वितीयः वर्णः : १."
+msgstr "द्वितीयः वर्णः :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkVisible)
 #: src/frontend/ui/dockwidgets/barplotdock.ui:61
@@ -20269,25 +20269,25 @@ msgstr "खाचः"
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:37
 #, kde-format
 msgid "Ordering:"
-msgstr "आदेशः : १."
+msgstr "आदेशः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersType)
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:113
 #, kde-format
 msgid "Whiskers:"
-msgstr "मूंछः : १."
+msgstr "मूंछः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersRangeParameter)
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:120
 #, kde-format
 msgid "k:"
-msgstr "क: १."
+msgstr "क:"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariableWidth)
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:227
 #, kde-format
 msgid "Variable Width:"
-msgstr "चर चौड़ाई : १."
+msgstr "चर चौड़ाई :"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabBox)
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:256
@@ -20463,7 +20463,7 @@ msgstr "मापन"
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:496
 #, kde-format
 msgid "Points:"
-msgstr "बिन्दवः : १."
+msgstr "बिन्दवः :"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbAddXRange)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:272
@@ -20493,7 +20493,7 @@ msgstr "..."
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:300
 #, kde-format
 msgid "Data Range:"
-msgstr "दत्तांशपरिधिः : १."
+msgstr "दत्तांशपरिधिः :"
 
 #. i18n: ectx: property (toolTip), widget (QTableWidget, twXRanges)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:313
@@ -20614,7 +20614,7 @@ msgstr "गद्दी"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:642
 #, kde-format
 msgid "Symmetric:"
-msgstr "सममित : १."
+msgstr "सममित :"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVerticalDown)
 #. i18n: ectx: property (text), widget (QLabel, lBottomMargin)
@@ -20719,7 +20719,7 @@ msgstr "क्षेत्र"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1401
 #, kde-format
 msgid "Corner Radius:"
-msgstr "कोणत्रिज्या : १."
+msgstr "कोणत्रिज्या :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:87
@@ -20738,7 +20738,7 @@ msgstr "तार्किक निर्देशांक"
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:307
 #, kde-format
 msgid "Line+Symbol Width:"
-msgstr "रेखा+चिह्न चौड़ाई : १."
+msgstr "रेखा+चिह्न चौड़ाई :"
 
 #. i18n: ectx: property (text), widget (QLabel, lOrdering)
 #. i18n: ectx: property (text), widget (QLabel, lOrder)
@@ -20773,13 +20773,13 @@ msgstr "होर् । align.: संरेखित करें।"
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:463
 #, kde-format
 msgid "Plot's Color:"
-msgstr "कथानकस्य वर्णः : १."
+msgstr "कथानकस्य वर्णः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderCornerRadius)
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:552
 #, kde-format
 msgid "Corner radius:"
-msgstr "कोणत्रिज्या : १."
+msgstr "कोणत्रिज्या :"
 
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
 #. i18n: ectx: property (text), widget (QLabel, lValuesDateTimeFormat)
@@ -20788,13 +20788,13 @@ msgstr "कोणत्रिज्या : १."
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:529
 #, kde-format
 msgid "DateTime:"
-msgstr "तिथिसमयः १."
+msgstr "तिथिसमयः"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabels)
 #: src/frontend/ui/dockwidgets/columndock.ui:153
 #, kde-format
 msgid "Labels:"
-msgstr "लेबल्स् : १."
+msgstr "लेबल्स् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumericFormat)
 #. i18n: ectx: property (text), widget (QLabel, lValuesNumericFormat)
@@ -20803,19 +20803,19 @@ msgstr "लेबल्स् : १."
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:506
 #, kde-format
 msgid "Numeric:"
-msgstr "संख्यात्मकः : १."
+msgstr "संख्यात्मकः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lType)
 #: src/frontend/ui/dockwidgets/columndock.ui:241
 #, kde-format
 msgid "Data Type:"
-msgstr "दत्तांशप्रकारः : १."
+msgstr "दत्तांशप्रकारः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotDesignation)
 #: src/frontend/ui/dockwidgets/columndock.ui:315
 #, kde-format
 msgid "Plot Designation:"
-msgstr "भूखण्ड पदनाम : १."
+msgstr "भूखण्ड पदनाम :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbCursor0en)
 #: src/frontend/ui/dockwidgets/cursordock.ui:19
@@ -20874,7 +20874,7 @@ msgstr "दत्तांश, -:"
 #: src/frontend/ui/dockwidgets/errorbarwidget.ui:150
 #, kde-format
 msgid "Cap size:"
-msgstr "टोपी आकारः : १."
+msgstr "टोपी आकारः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lYError)
 #: src/frontend/ui/dockwidgets/errorbarwidget.ui:221
@@ -20908,7 +20908,7 @@ msgstr "तथा त्रुटिः"
 #: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:94
 #, kde-format
 msgid "Minimum:"
-msgstr "न्यूनतमम् : १."
+msgstr "न्यूनतमम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lBinning)
 #: src/frontend/ui/dockwidgets/histogramdock.ui:115
@@ -20951,19 +20951,19 @@ msgstr "प्रक्रिया:"
 #: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:17
 #, kde-format
 msgid "Maximum:"
-msgstr "अधिकतमम् : १."
+msgstr "अधिकतमम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lBinWidth)
 #: src/frontend/ui/dockwidgets/histogramdock.ui:221
 #, kde-format
 msgid "Bin Width:"
-msgstr "बिन चौड़ाई : १."
+msgstr "बिन चौड़ाई :"
 
 #. i18n: ectx: property (text), widget (QLabel, lNormalization)
 #: src/frontend/ui/dockwidgets/histogramdock.ui:235
 #, kde-format
 msgid "Normalization:"
-msgstr "सामान्यीकरणम् : १."
+msgstr "सामान्यीकरणम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lBinRanges)
 #: src/frontend/ui/dockwidgets/histogramdock.ui:283
@@ -20975,7 +20975,7 @@ msgstr "बिन श्रेणियाँ"
 #: src/frontend/ui/dockwidgets/histogramdock.ui:348
 #, kde-format
 msgid "Bin Count:"
-msgstr "बिन गणना : १."
+msgstr "बिन गणना :"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLine)
 #: src/frontend/ui/dockwidgets/histogramdock.ui:393
@@ -21014,13 +21014,13 @@ msgstr "तार्किक निर्देशांक"
 #: src/frontend/ui/dockwidgets/imagedock.ui:229
 #, kde-format
 msgid "Position X:"
-msgstr "दशम् स्थानम् : १."
+msgstr "दशम् स्थानम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lEmbedded)
 #: src/frontend/ui/dockwidgets/imagedock.ui:341
 #, kde-format
 msgid "Embedded:"
-msgstr "एम्बेडेड् : १."
+msgstr "एम्बेडेड् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lVerticalAlignment)
 #: src/frontend/ui/dockwidgets/imagedock.ui:361
@@ -21038,13 +21038,13 @@ msgstr "चित्रसञ्चिकायाः नाम निर्द�
 #: src/frontend/ui/dockwidgets/imagedock.ui:446
 #, kde-format
 msgid "Keep Ratio:"
-msgstr "अनुपातः रक्षतु : १."
+msgstr "अनुपातः रक्षतु :"
 
 #. i18n: ectx: property (text), widget (QLabel, lCurves)
 #: src/frontend/ui/dockwidgets/infoelementdock.ui:32
 #, kde-format
 msgid "Curves:"
-msgstr "वक्राः : १."
+msgstr "वक्राः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lConnectToCurve)
 #: src/frontend/ui/dockwidgets/infoelementdock.ui:62
@@ -21081,13 +21081,13 @@ msgstr "संयोजन रेखा"
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:91
 #, kde-format
 msgid "Kernel:"
-msgstr "कर्नेलः : १."
+msgstr "कर्नेलः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lBandwidthType)
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:111
 #, kde-format
 msgid "Bandwidth:"
-msgstr "बैण्डविड्थः : १."
+msgstr "बैण्डविड्थः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:160
@@ -21097,7 +21097,7 @@ msgstr "बैण्डविड्थः : १."
 #: src/frontend/ui/dockwidgets/runchartdock.ui:89
 #, kde-format
 msgid "Plot range:"
-msgstr "भूखण्डपरिधिः : १."
+msgstr "भूखण्डपरिधिः :"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabKDE)
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:211
@@ -21123,7 +21123,7 @@ msgstr "विषयाः"
 #: src/frontend/ui/settingsgeneralpage.ui:251
 #, kde-format
 msgid "Interval:"
-msgstr "अन्तरालः : १."
+msgstr "अन्तरालः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpdate)
 #: src/frontend/ui/dockwidgets/livedatadock.ui:140
@@ -21155,7 +21155,7 @@ msgstr "सम्पूर्णं सञ्चिकां पठन्तु"
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:400
 #, kde-format
 msgid "Rows:"
-msgstr "पङ्क्तयः : १."
+msgstr "पङ्क्तयः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lMapping)
 #: src/frontend/ui/dockwidgets/matrixdock.ui:160
@@ -21167,31 +21167,31 @@ msgstr "मानचित्रणम्"
 #: src/frontend/ui/dockwidgets/matrixdock.ui:167
 #, kde-format
 msgid "X-Start:"
-msgstr "X-प्रारम्भः : १."
+msgstr "X-प्रारम्भः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lXMax)
 #: src/frontend/ui/dockwidgets/matrixdock.ui:181
 #, kde-format
 msgid "X-End:"
-msgstr "X-अन्तः : १."
+msgstr "X-अन्तः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lYStart)
 #: src/frontend/ui/dockwidgets/matrixdock.ui:211
 #, kde-format
 msgid "Y-Start:"
-msgstr "य-प्रारम्भः : १."
+msgstr "य-प्रारम्भः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lYEnd)
 #: src/frontend/ui/dockwidgets/matrixdock.ui:225
 #, kde-format
 msgid "Y-End:"
-msgstr "य-अन्तम् : १."
+msgstr "य-अन्तम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lHeader)
 #: src/frontend/ui/dockwidgets/matrixdock.ui:305
 #, kde-format
 msgid "Header:"
-msgstr "शीर्षकम् : १."
+msgstr "शीर्षकम् :"
 
 #. i18n: ectx: property (text), widget (QPushButton, bEvaluate)
 #: src/frontend/ui/dockwidgets/notebookdock.ui:100
@@ -21209,19 +21209,19 @@ msgstr "पुनः आरभत"
 #: src/frontend/ui/dockwidgets/notedock.ui:72
 #, kde-format
 msgid "Background color:"
-msgstr "पृष्ठभूमिवर्णः : १."
+msgstr "पृष्ठभूमिवर्णः :"
 
 #. i18n: ectx: property (text), widget (QLabel, textcolor)
 #: src/frontend/ui/dockwidgets/notedock.ui:82
 #, kde-format
 msgid "Text color:"
-msgstr "पाठवर्णः : १."
+msgstr "पाठवर्णः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lData2Column)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:81
 #, kde-format
 msgid "Sample Sizes:"
-msgstr "नमूना आकारः : १."
+msgstr "नमूना आकारः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lNegativeLowerLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:95
@@ -21233,13 +21233,13 @@ msgstr "निम्नसीमा < 0: ."
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:139
 #, kde-format
 msgid "Limits based on:"
-msgstr "आधारेण सीमाः : १."
+msgstr "आधारेण सीमाः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lExactLimits)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:206
 #, kde-format
 msgid "Exact Limits:"
-msgstr "सटीक सीमाः : १."
+msgstr "सटीक सीमाः :"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataLine)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:221
@@ -21276,7 +21276,7 @@ msgstr "संस्करण:"
 #: src/frontend/ui/dockwidgets/projectdock.ui:73
 #, kde-format
 msgid "Created:"
-msgstr "निर्मितः : १."
+msgstr "निर्मितः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveDockStates)
 #: src/frontend/ui/dockwidgets/projectdock.ui:80
@@ -21289,7 +21289,7 @@ msgstr "गोदी राज्यानि रक्षन्तु:"
 #: src/frontend/ui/dockwidgets/projectdock.ui:100
 #, kde-format
 msgid "Modified:"
-msgstr "परिवर्तितः : १."
+msgstr "परिवर्तितः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -21297,13 +21297,13 @@ msgstr "परिवर्तितः : १."
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:49
 #, kde-format
 msgid "File Name:"
-msgstr "सञ्चिकानाम : १."
+msgstr "सञ्चिकानाम :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSettings)
 #: src/frontend/ui/dockwidgets/projectdock.ui:202
 #, kde-format
 msgid "Settings:"
-msgstr "सेटिंग्स् : १."
+msgstr "सेटिंग्स् :"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/frontend/ui/dockwidgets/projectdock.ui:209
@@ -21315,7 +21315,7 @@ msgstr "लेखकः:"
 #: src/frontend/ui/dockwidgets/projectdock.ui:253
 #, kde-format
 msgid "Save Calculations:"
-msgstr "गणनाः रक्षन्तु : १."
+msgstr "गणनाः रक्षन्तु :"
 
 #. i18n: ectx: property (text), widget (QLabel, lDistribution)
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:109
@@ -21350,7 +21350,7 @@ msgstr "अन्त x: ."
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:313
 #, kde-format
 msgid "Start x:"
-msgstr "प्रारम्भ x : १."
+msgstr "प्रारम्भ x :"
 
 #. i18n: ectx: property (text), widget (QLabel, lCenterMetric)
 #: src/frontend/ui/dockwidgets/runchartdock.ui:148
@@ -21380,7 +21380,7 @@ msgstr "सक्षमम्"
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:175
 #, kde-format
 msgid "Sparklines:"
-msgstr "स्पार्कलाइन्स् : १."
+msgstr "स्पार्कलाइन्स् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:198
@@ -21392,7 +21392,7 @@ msgstr "स्तम्भशीर्षकम्"
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:222
 #, kde-format
 msgid "Comments:"
-msgstr "टिप्पणियाँ : १."
+msgstr "टिप्पणियाँ :"
 
 #. i18n: ectx: property (text), widget (QLabel, lLinking)
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:235
@@ -21418,26 +21418,26 @@ msgstr "दूरी:"
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:66
 #, kde-format
 msgid "Page:"
-msgstr "पृष्ठम् : १."
+msgstr "पृष्ठम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lScaleContent)
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:164
 #, kde-format
 msgid "Scale content:"
-msgstr "स्केल सामग्रीः : १."
+msgstr "स्केल सामग्रीः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSamplingInterval)
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:62
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:312
 #, kde-format
 msgid "Sampling Interval:"
-msgstr "नमूनाकरणान्तरम् : १."
+msgstr "नमूनाकरणान्तरम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lWrap)
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:117
 #, kde-format
 msgid "Wrap Response:"
-msgstr "लपेट प्रतिक्रिया : १."
+msgstr "लपेट प्रतिक्रिया :"
 
 #. i18n: ectx: property (text), widget (QLabel, lXColumn)
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:131
@@ -21455,7 +21455,7 @@ msgstr "लपेट प्रतिक्रिया : १."
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:74
 #, kde-format
 msgid "X-Data:"
-msgstr "एक्स-दत्तांशः : १."
+msgstr "एक्स-दत्तांशः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lXRange)
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:138
@@ -21470,13 +21470,13 @@ msgstr "एक्स-दत्तांशः : १."
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:463
 #, kde-format
 msgid "X-Range:"
-msgstr "एक्स-रेन्ज : १."
+msgstr "एक्स-रेन्ज :"
 
 #. i18n: ectx: property (text), widget (QLabel, lY2Column)
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:145
 #, kde-format
 msgid "Y-Data Response:"
-msgstr "Y-दत्तांशप्रतिक्रिया : १."
+msgstr "Y-दत्तांशप्रतिक्रिया :"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbRecalculate)
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:241
@@ -21499,7 +21499,7 @@ msgstr "पुनर्गणना कुरुत"
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:248
 #, kde-format
 msgid "Y-Data Signal:"
-msgstr "Y-दत्तांशसंकेतः : १."
+msgstr "Y-दत्तांशसंकेतः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lResults)
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -21537,19 +21537,19 @@ msgstr "सहसंबन्धः"
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:154
 #, kde-format
 msgid "Y-Data Signal 2:"
-msgstr "Y-दत्तांशसंकेतः २: १."
+msgstr "Y-दत्तांशसंकेतः २:"
 
 #. i18n: ectx: property (text), widget (QLabel, lYColumn)
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:202
 #, kde-format
 msgid "Y-Data Signal 1:"
-msgstr "Y-दत्तांशसंकेतः १: १."
+msgstr "Y-दत्तांशसंकेतः १:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNormalize)
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:209
 #, kde-format
 msgid "Normalize:"
-msgstr "सामान्यं कुरुत : १."
+msgstr "सामान्यं कुरुत :"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbLineInterpolationPointsCount)
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:78
@@ -21567,13 +21567,13 @@ msgstr "रेखाः पातयन्तु"
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:133
 #, kde-format
 msgid "Interm. points:"
-msgstr "अन्तरिम. बिन्दवः : १."
+msgstr "अन्तरिम. बिन्दवः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lLineSkipGaps)
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:140
 #, kde-format
 msgid "Ignore Gaps:"
-msgstr "अन्तरालम् अवहेलयन्तु : १."
+msgstr "अन्तरालम् अवहेलयन्तु :"
 
 #. i18n: ectx: property (text), widget (QLabel, lValuesGeneral_2)
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:153
@@ -21601,7 +21601,7 @@ msgstr "मोनोटन inc. X: 1 ."
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:114
 #, kde-format
 msgid "Y-Data:"
-msgstr "य-दत्तांशः : १."
+msgstr "य-दत्तांशः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSimplification)
 #: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:30
@@ -21621,19 +21621,19 @@ msgstr "विकल्प:"
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:292
 #, kde-format
 msgid "Derivative:"
-msgstr "व्युत्पन्नः : १."
+msgstr "व्युत्पन्नः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lAccuracyOrder)
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:384
 #, kde-format
 msgid "Accuracy Order:"
-msgstr "सटीकता क्रमः : १."
+msgstr "सटीकता क्रमः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lEquation1)
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:108
 #, kde-format
 msgid "x=f(t)"
-msgstr "x=च(त) ९."
+msgstr "x=च(त)"
 
 #. i18n: ectx: property (text), widget (QLabel, lEquation)
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:121
@@ -21671,7 +21671,7 @@ msgstr "नित्याः"
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:302
 #, kde-format
 msgid "y=g(t)"
-msgstr "य=ग(त) २."
+msgstr "य=ग(त)"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbOptions)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:67
@@ -21721,7 +21721,7 @@ msgstr "y दत्तांशस्य कृते भारः"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:155
 #, kde-format
 msgid "Y-Weight:"
-msgstr "य-भारः : १."
+msgstr "य-भारः :"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lXWeight)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:162
@@ -21733,7 +21733,7 @@ msgstr "x दत्तांशस्य कृते भारः"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:165
 #, kde-format
 msgid "X-Weight:"
-msgstr "X-भारः : १."
+msgstr "X-भारः :"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lCategory)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:195
@@ -21763,7 +21763,7 @@ msgstr "वैकल्पिक टिप्पणी"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:291
 #, kde-format
 msgid "Algorithm:"
-msgstr "एल्गोरिदम् : १."
+msgstr "एल्गोरिदम् :"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lDataSourceType)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:298
@@ -21793,7 +21793,7 @@ msgstr "दत्तांशबिन्दून् कथं भारं क
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:404
 #, kde-format
 msgid "Weights:"
-msgstr "भाराः : १."
+msgstr "भाराः :"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkVisible)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:427
@@ -21859,7 +21859,7 @@ msgstr "पैरामीटर्स् तथा तेषां गुणा
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:765
 #, kde-format
 msgid "Parameters:"
-msgstr "मापदण्डः : १."
+msgstr "मापदण्डः :"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lModel)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:788
@@ -22019,7 +22019,7 @@ msgstr "फ़िल्टर"
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:149
 #, kde-format
 msgid "Output:"
-msgstr "उत्पादनम् : १."
+msgstr "उत्पादनम् :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbTwoSided)
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:68
@@ -22037,7 +22037,7 @@ msgstr "शिफ्ट्ड्"
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:127
 #, kde-format
 msgid "X-Axis Scale:"
-msgstr "एक्स-अक्ष स्केल : १."
+msgstr "एक्स-अक्ष स्केल :"
 
 #. i18n: ectx: property (text), widget (QLabel, lWindow)
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:193
@@ -22069,13 +22069,13 @@ msgstr "निरपेक्ष क्षेत्रफलम्"
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:93
 #, kde-format
 msgid "Variant:"
-msgstr "रूपान्तरम् : १."
+msgstr "रूपान्तरम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lParameter)
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:159
 #, kde-format
 msgid "Parameter:"
-msgstr "पैरामीटर् : १."
+msgstr "पैरामीटर् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lEval)
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:189
@@ -22093,7 +22093,7 @@ msgstr "तनावं:"
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:469
 #, kde-format
 msgid "Continuity:"
-msgstr "निरन्तरता : १."
+msgstr "निरन्तरता :"
 
 #. i18n: ectx: property (text), widget (QLabel, lBias)
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:498
@@ -22105,25 +22105,25 @@ msgstr "पूर्वाग्रहं:"
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:17
 #, kde-format
 msgid "Percentile:"
-msgstr "प्रतिशतं : १."
+msgstr "प्रतिशतं :"
 
 #. i18n: ectx: property (text), widget (QLabel, lMode)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:50
 #, kde-format
 msgid "Padding Mode:"
-msgstr "गद्दी मोडः : १."
+msgstr "गद्दी मोडः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftValue)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:180
 #, kde-format
 msgid "Left value:"
-msgstr "वाममूल्यम् : १."
+msgstr "वाममूल्यम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lRightValue)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:187
 #, kde-format
 msgid "Right value:"
-msgstr "सम्यक् मूल्यम् : १."
+msgstr "सम्यक् मूल्यम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lWeight)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:233
@@ -22135,13 +22135,13 @@ msgstr "भारः:"
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:489
 #, kde-format
 msgid "Polynom Order:"
-msgstr "बहुपदक्रमः : १."
+msgstr "बहुपदक्रमः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lColormap)
 #: src/frontend/ui/exampleswidget.ui:73
 #, kde-format
 msgid "Examples:"
-msgstr "उदाहरणानि : १."
+msgstr "उदाहरणानि :"
 
 #. i18n: ectx: property (text), widget (QPushButton, bApply)
 #. i18n: ectx: property (text), widget (QPushButton, pbApply)
@@ -22201,7 +22201,7 @@ msgstr "अन्तिम-फिट्-कार्यस्य मूल्य
 #: src/frontend/ui/fitoptionswidget.ui:98
 #, kde-format
 msgid "Evaluated points:"
-msgstr "मूल्याङ्किताः बिन्दवः : १."
+msgstr "मूल्याङ्किताः बिन्दवः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lEvalRange)
 #. i18n: ectx: property (text), widget (QLabel, lXRange)
@@ -22225,7 +22225,7 @@ msgstr "फिट् एल्गोरिदम् कृते अधिकत
 #: src/frontend/ui/fitoptionswidget.ui:115
 #, kde-format
 msgid "Max. iterations:"
-msgstr "मैक्स। पुनरावृत्तयः : १."
+msgstr "मैक्स। पुनरावृत्तयः :"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbAutoRange)
 #: src/frontend/ui/fitoptionswidget.ui:141
@@ -22268,7 +22268,7 @@ msgstr "परिणामानां उपयोगं नूतनप्र�
 #: src/frontend/ui/fitoptionswidget.ui:183
 #, kde-format
 msgid "Robust fit:"
-msgstr "दृढः फिटः : १."
+msgstr "दृढः फिटः :"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/fitoptionswidget.ui:235
@@ -22310,19 +22310,19 @@ msgstr "स्थानधारक पाठं दर्शयतु (सम�
 #: src/frontend/ui/labelwidget.ui:77
 #, kde-format
 msgid "Hor. Alignment:"
-msgstr "होर् । संरेखणम् : १."
+msgstr "होर् । संरेखणम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lVerticalAlignment)
 #: src/frontend/ui/labelwidget.ui:84
 #, kde-format
 msgid "Vert. Alignment:"
-msgstr "Vert. संरेखणम् : १."
+msgstr "Vert. संरेखणम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lFontTeX)
 #: src/frontend/ui/labelwidget.ui:111
 #, kde-format
 msgid "Main font:"
-msgstr "मुख्य फ़ॉन्ट् : १."
+msgstr "मुख्य फ़ॉन्ट् :"
 
 #. i18n: ectx: property (html), widget (ResizableTextEdit, teLabel)
 #: src/frontend/ui/labelwidget.ui:160
@@ -22354,7 +22354,7 @@ msgstr ""
 #: src/frontend/ui/labelwidget.ui:231
 #, kde-format
 msgid "Background Color:"
-msgstr "पृष्ठभूमि रंगः : १."
+msgstr "पृष्ठभूमि रंगः :"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lOffsetX)
 #. i18n: ectx: property (toolTip), widget (QLabel, lOffsetY)
@@ -22373,7 +22373,7 @@ msgstr "ऑफसेट् X: 1.1."
 #: src/frontend/ui/labelwidget.ui:494
 #, kde-format
 msgid "Mode:"
-msgstr "मोडः : १."
+msgstr "मोडः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderShape)
 #: src/frontend/ui/labelwidget.ui:586
@@ -22451,13 +22451,13 @@ msgstr "२"
 #: src/frontend/ui/mqttwillsettingswidget.ui:224
 #, kde-format
 msgid "Own message:"
-msgstr "स्वकीयः सन्देशः : १."
+msgstr "स्वकीयः सन्देशः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lWillMessageType)
 #: src/frontend/ui/mqttwillsettingswidget.ui:231
 #, kde-format
 msgid "Message type:"
-msgstr "सन्देशप्रकारः : १."
+msgstr "सन्देशप्रकारः :"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbWillUpdate)
 #: src/frontend/ui/mqttwillsettingswidget.ui:239
@@ -22475,7 +22475,7 @@ msgstr "On Click इति"
 #: src/frontend/ui/mqttwillsettingswidget.ui:255
 #, kde-format
 msgid "Time interval:"
-msgstr "कालान्तरम् : १."
+msgstr "कालान्तरम् :"
 
 #. i18n: ectx: property (text), widget (QLineEdit, leWillUpdateInterval)
 #: src/frontend/ui/mqttwillsettingswidget.ui:262
@@ -22511,13 +22511,13 @@ msgstr "हृ:"
 #: src/frontend/ui/mqttwillsettingswidget.ui:308
 #, kde-format
 msgid "Will statistics:"
-msgstr "विलस्य आँकडा: १."
+msgstr "विलस्य आँकडा:"
 
 #. i18n: ectx: property (text), widget (QLabel, lWillUpdateType)
 #: src/frontend/ui/mqttwillsettingswidget.ui:315
 #, kde-format
 msgid "Update type:"
-msgstr "अद्यतनप्रकारः : १."
+msgstr "अद्यतनप्रकारः :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbDensityEnabled)
 #. i18n: ectx: property (text), widget (QCheckBox, chbLevelsEnabled)
@@ -22531,7 +22531,7 @@ msgstr "सक्रियं कुर्वन्तु"
 #: src/frontend/ui/plotsurfacestylewidget.ui:40
 #, kde-format
 msgid "Color map:"
-msgstr "रङ्ग मानचित्र : १."
+msgstr "रङ्ग मानचित्र :"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bCreateColorMap)
 #: src/frontend/ui/plotsurfacestylewidget.ui:86
@@ -22589,19 +22589,19 @@ msgstr "स्तराः"
 #: src/frontend/ui/plotsurfacestylewidget.ui:284
 #, kde-format
 msgid "Number of levels:"
-msgstr "स्तरानाम् संख्या : १."
+msgstr "स्तरानाम् संख्या :"
 
 #. i18n: ectx: property (text), widget (QLabel, lLevelsLineWidth)
 #: src/frontend/ui/plotsurfacestylewidget.ui:314
 #, kde-format
 msgid "Line width:"
-msgstr "रेखाविस्तारः : १."
+msgstr "रेखाविस्तारः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lLevelsLineColor)
 #: src/frontend/ui/plotsurfacestylewidget.ui:331
 #, kde-format
 msgid "Line color:"
-msgstr "रेखावर्णः : १."
+msgstr "रेखावर्णः :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbLevelsMultiColoring)
 #: src/frontend/ui/plotsurfacestylewidget.ui:341
@@ -22621,7 +22621,7 @@ msgstr "संस्थापिताः टेम्पलेट्:"
 #: src/frontend/ui/spreadsheet/addsubtractvaluewidget.ui:149
 #, kde-format
 msgid "Preview:"
-msgstr "पूर्वावलोकनम् : १."
+msgstr "पूर्वावलोकनम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lLocation)
 #: src/frontend/ui/PlotTemplateDialog.ui:102
@@ -22633,7 +22633,7 @@ msgstr "स्थानीय:"
 #: src/frontend/ui/settingsdatasetspage.ui:26
 #, kde-format
 msgid "Cache:"
-msgstr "संग्रहणम् : १."
+msgstr "संग्रहणम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lKaggle)
 #: src/frontend/ui/settingsdatasetspage.ui:39
@@ -22645,7 +22645,7 @@ msgstr "कग्गले"
 #: src/frontend/ui/settingsdatasetspage.ui:46
 #, kde-format
 msgid "CLI Path:"
-msgstr "सीएलआई मार्गः : १."
+msgstr "सीएलआई मार्गः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/frontend/ui/settingsdatasetspage.ui:66
@@ -22669,37 +22669,37 @@ msgstr "स्पष्टः"
 #: src/frontend/ui/settingsgeneralpage.ui:17
 #, kde-format
 msgid "Startup:"
-msgstr "प्रारम्भः : १."
+msgstr "प्रारम्भः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lNewProject)
 #: src/frontend/ui/settingsgeneralpage.ui:50
 #, kde-format
 msgid "New Project:"
-msgstr "नवीन परियोजना : १."
+msgstr "नवीन परियोजना :"
 
 #. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
 #: src/frontend/ui/settingsgeneralpage.ui:60
 #, kde-format
 msgid "Notebook:"
-msgstr "नोटबुकः १."
+msgstr "नोटबुकः"
 
 #. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
 #: src/frontend/ui/settingsgeneralpage.ui:86
 #, kde-format
 msgid "Dock widget placement:"
-msgstr "डॉक विजेट् स्थापनम् : १."
+msgstr "डॉक विजेट् स्थापनम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lTitleBar)
 #: src/frontend/ui/settingsgeneralpage.ui:96
 #, kde-format
 msgid "Title Bar:"
-msgstr "शीर्षक पट्टी : १."
+msgstr "शीर्षक पट्टी :"
 
 #. i18n: ectx: property (text), widget (QLabel, lUnits)
 #: src/frontend/ui/settingsgeneralpage.ui:122
 #, kde-format
 msgid "Units:"
-msgstr "एककाः : १."
+msgstr "एककाः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
 #: src/frontend/ui/settingsgeneralpage.ui:142
@@ -22731,7 +22731,7 @@ msgstr "गुम अनुरूप"
 #: src/frontend/ui/settingsgeneralpage.ui:159
 #, kde-format
 msgid "Number options:"
-msgstr "संख्याविकल्पाः : १."
+msgstr "संख्याविकल्पाः :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
 #: src/frontend/ui/settingsgeneralpage.ui:166
@@ -22755,19 +22755,19 @@ msgstr "बिन्दुस्य अनन्तरं अनुवर्त�
 #: src/frontend/ui/settingsgeneralpage.ui:203
 #, kde-format
 msgid "Auto-save:"
-msgstr "स्वतः रक्षतु : १."
+msgstr "स्वतः रक्षतु :"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/settingsgeneralpage.ui:298
 #, kde-format
 msgid "Save  Calculations:"
-msgstr "गणनाः रक्षन्तु : १."
+msgstr "गणनाः रक्षन्तु :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
 #: src/frontend/ui/settingsgeneralpage.ui:312
 #, kde-format
 msgid "Compatibility:"
-msgstr "संगतता : १."
+msgstr "संगतता :"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
 #: src/frontend/ui/settingsgeneralpage.ui:319
@@ -22789,7 +22789,7 @@ msgstr "संगतस्वरूपेण रक्षन्तु"
 #: src/frontend/ui/settingsgeneralpage.ui:329
 #, kde-format
 msgid "Tracing:"
-msgstr "अनुसन्धानम् : १."
+msgstr "अनुसन्धानम् :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkInfoTrace)
 #: src/frontend/ui/settingsgeneralpage.ui:360
@@ -22925,7 +22925,7 @@ msgstr "द्विगुणं बफरिंग् सक्षमं कु
 #: src/frontend/ui/settingsworksheetpage.ui:154
 #, kde-format
 msgid "Typesetting engine:"
-msgstr "टङ्कनसेटिंग् इञ्जिनम् : १."
+msgstr "टङ्कनसेटिंग् इञ्जिनम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lType)
 #: src/frontend/ui/spreadsheet/addsubtractvaluewidget.ui:42
@@ -22937,13 +22937,13 @@ msgstr "संयोजयति:"
 #: src/frontend/ui/spreadsheet/addsubtractvaluewidget.ui:78
 #, kde-format
 msgid "Start Time:"
-msgstr "प्रारम्भसमयः : १."
+msgstr "प्रारम्भसमयः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lValueEnd)
 #: src/frontend/ui/spreadsheet/addsubtractvaluewidget.ui:91
 #, kde-format
 msgid "End Value:"
-msgstr "अन्त्यमूल्यम् : १."
+msgstr "अन्त्यमूल्यम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter1)
 #: src/frontend/ui/spreadsheet/addsubtractvaluewidget.ui:136
@@ -22955,25 +22955,25 @@ msgstr "स्निग्धता (10 की शक्ति): 1.1."
 #: src/frontend/ui/spreadsheet/addsubtractvaluewidget.ui:162
 #, kde-format
 msgid "Termination Ratio:"
-msgstr "समाप्ति अनुपातः : १."
+msgstr "समाप्ति अनुपातः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lValueStart)
 #: src/frontend/ui/spreadsheet/addsubtractvaluewidget.ui:175
 #, kde-format
 msgid "Start Value:"
-msgstr "प्रारम्भमूल्यम् : १."
+msgstr "प्रारम्भमूल्यम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter3)
 #: src/frontend/ui/spreadsheet/addsubtractvaluewidget.ui:257
 #, kde-format
 msgid "Iterations:"
-msgstr "पुनरावृत्तयः : १."
+msgstr "पुनरावृत्तयः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lTimeValueEnd)
 #: src/frontend/ui/spreadsheet/addsubtractvaluewidget.ui:308
 #, kde-format
 msgid "End Time:"
-msgstr "समाप्तिसमयः : १."
+msgstr "समाप्तिसमयः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
 #: src/frontend/ui/spreadsheet/dropvalueswidget.ui:47
@@ -23030,25 +23030,25 @@ msgstr "निर्यातार्थं सञ्चिकायाः न�
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:135
 #, kde-format
 msgid "Area to export:"
-msgstr "निर्यातार्थं क्षेत्रम् : १."
+msgstr "निर्यातार्थं क्षेत्रम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lMatrixHHeader)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:142
 #, kde-format
 msgid "Export horizontal header:"
-msgstr "क्षैतिजशीर्षकं निर्यातयन्तु : १."
+msgstr "क्षैतिजशीर्षकं निर्यातयन्तु :"
 
 #. i18n: ectx: property (text), widget (QLabel, lEmptyRows)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:149
 #, kde-format
 msgid "Skip empty rows:"
-msgstr "रिक्तपङ्क्तयः त्यजन्तु : १."
+msgstr "रिक्तपङ्क्तयः त्यजन्तु :"
 
 #. i18n: ectx: property (text), widget (QLabel, lMatrixVHeader)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:156
 #, kde-format
 msgid "Export vertical header:"
-msgstr "ऊर्ध्वाधरशीर्षकं निर्यातयन्तु : १."
+msgstr "ऊर्ध्वाधरशीर्षकं निर्यातयन्तु :"
 
 #. i18n: ectx: property (title), widget (QGroupBox, compressionGroup)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:192
@@ -23084,31 +23084,31 @@ msgstr "निर्यातं कुर्वन्तु :"
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:253
 #, kde-format
 msgid "Grid lines:"
-msgstr "जालरेखाः : १."
+msgstr "जालरेखाः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lHeader)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:270
 #, kde-format
 msgid "Headers:"
-msgstr "शीर्षकम् : १."
+msgstr "शीर्षकम् :"
 
 #. i18n: ectx: property (text), widget (QLabel, lCaptions)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:277
 #, kde-format
 msgid "Table captions:"
-msgstr "सारणी-शीर्षकाणि : १."
+msgstr "सारणी-शीर्षकाणि :"
 
 #. i18n: ectx: property (text), widget (QLabel, lExportHeader)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:284
 #, kde-format
 msgid "Export header:"
-msgstr "निर्यातशीर्षकं : १."
+msgstr "निर्यातशीर्षकं :"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnAsUnits)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:307
 #, kde-format
 msgid "Comments as column units:"
-msgstr "स्तम्भ-एककरूपेण टिप्पण्याः : १."
+msgstr "स्तम्भ-एककरूपेण टिप्पण्याः :"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/spreadsheet/flattencolumnswidget.ui:26
@@ -23126,7 +23126,7 @@ msgstr "प्रमुखाकृष्टि:"
 #: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:38
 #, kde-format
 msgid "Color Map:"
-msgstr "रङ्ग मानचित्रः १."
+msgstr "रङ्ग मानचित्रः"
 
 #. i18n: ectx: property (text), widget (QLabel, lColors)
 #: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:117
@@ -23192,25 +23192,25 @@ msgstr "मूल Data कृते Plot रचयन्तु"
 #: src/frontend/ui/spreadsheet/randomvalueswidget.ui:41
 #, kde-format
 msgid "2:"
-msgstr "२: १."
+msgstr "२:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunc)
 #: src/frontend/ui/spreadsheet/randomvalueswidget.ui:56
 #, kde-format
 msgid "p(x)"
-msgstr "प(x) ९."
+msgstr "प(x)"
 
 #. i18n: ectx: property (text), widget (QLabel, lParameter1)
 #: src/frontend/ui/spreadsheet/randomvalueswidget.ui:87
 #, kde-format
 msgid "1:"
-msgstr "१: १."
+msgstr "१:"
 
 #. i18n: ectx: property (text), widget (QLabel, lParameter3)
 #: src/frontend/ui/spreadsheet/randomvalueswidget.ui:109
 #, kde-format
 msgid "3:"
-msgstr "३: १."
+msgstr "३:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbDistribution)
 #: src/frontend/ui/spreadsheet/randomvalueswidget.ui:145
@@ -23242,7 +23242,7 @@ msgstr "एकः:"
 #: src/frontend/ui/spreadsheet/rescalewidget.ui:79
 #, kde-format
 msgid "b:"
-msgstr "ख: १."
+msgstr "ख:"
 
 #. i18n: ectx: property (text), widget (QLabel, lReplaceDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lReplace)
@@ -23377,7 +23377,7 @@ msgstr "लक्ष्य:"
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:99
 #, kde-format
 msgid "Area to Export:"
-msgstr "निर्यातार्थं क्षेत्रम् : १."
+msgstr "निर्यातार्थं क्षेत्रम् :"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lExportBackground)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkExportBackground)
@@ -23391,7 +23391,7 @@ msgstr "यदि कार्यपत्रकपृष्ठभूमिः �
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:119
 #, kde-format
 msgid "Export Background:"
-msgstr "निर्यात पृष्ठभूमिः : १."
+msgstr "निर्यात पृष्ठभूमिः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lResolution)
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:139
@@ -23427,12 +23427,12 @@ msgstr "ऊर्ध्वाधर ढाल"
 #: src/frontend/widgets/BackgroundWidget.cpp:130
 #, kde-format
 msgid "Diag. Gradient (From Top Left)"
-msgstr "डायग्. ढाल (ऊर्ध्ववामतः) २."
+msgstr "डायग्. ढाल (ऊर्ध्ववामतः)"
 
 #: src/frontend/widgets/BackgroundWidget.cpp:131
 #, kde-format
 msgid "Diag. Gradient (From Bottom Left)"
-msgstr "डायग्. ढाल (अधः वामतः) २."
+msgstr "डायग्. ढाल (अधः वामतः)"
 
 #: src/frontend/widgets/BackgroundWidget.cpp:132
 #, kde-format
@@ -23549,52 +23549,52 @@ msgstr ""
 #: src/frontend/widgets/DatapickerImageWidget.cpp:156
 #, kde-format
 msgid "Cartesian (x, y)"
-msgstr "कार्टेशियन (x, y) ९."
+msgstr "कार्टेशियन (x, y)"
 
 #: src/frontend/widgets/DatapickerImageWidget.cpp:157
 #, kde-format
 msgid "Polar (x, y°)"
-msgstr "ध्रुवीय (x, y°) २."
+msgstr "ध्रुवीय (x, y°)"
 
 #: src/frontend/widgets/DatapickerImageWidget.cpp:158
 #, kde-format
 msgid "Polar (x, y(rad))"
-msgstr "ध्रुवीय (x, y(rad)) २."
+msgstr "ध्रुवीय (x, y(rad))"
 
 #: src/frontend/widgets/DatapickerImageWidget.cpp:159
 #, kde-format
 msgid "Logarithmic (ln(x), ln(y))"
-msgstr "लघुगणकीय (ln(x), ln(y)) २."
+msgstr "लघुगणकीय (ln(x), ln(y))"
 
 #: src/frontend/widgets/DatapickerImageWidget.cpp:160
 #, kde-format
 msgid "Logarithmic (ln(x), y)"
-msgstr "लघुगणकीय (ln(x), y) ९."
+msgstr "लघुगणकीय (ln(x), y)"
 
 #: src/frontend/widgets/DatapickerImageWidget.cpp:161
 #, kde-format
 msgid "Logarithmic (x, ln(y))"
-msgstr "लघुगणकीय (x, ln(y)) २."
+msgstr "लघुगणकीय (x, ln(y))"
 
 #: src/frontend/widgets/DatapickerImageWidget.cpp:162
 #, kde-format
 msgid "Logarithmic (log(x), log(y))"
-msgstr "लघुगणकीय (log(x), log(y)) २."
+msgstr "लघुगणकीय (log(x), log(y))"
 
 #: src/frontend/widgets/DatapickerImageWidget.cpp:163
 #, kde-format
 msgid "Logarithmic (log(x), y)"
-msgstr "लघुगणकीय (log(x), y) २."
+msgstr "लघुगणकीय (log(x), y)"
 
 #: src/frontend/widgets/DatapickerImageWidget.cpp:164
 #, kde-format
 msgid "Logarithmic (x, log(y))"
-msgstr "लघुगणकीय (x, log(y)) २."
+msgstr "लघुगणकीय (x, log(y))"
 
 #: src/frontend/widgets/DatapickerImageWidget.cpp:165
 #, kde-format
 msgid "Ternary (x, y, z)"
-msgstr "त्रिगुणी (x, y, z) ९."
+msgstr "त्रिगुणी (x, y, z)"
 
 #: src/frontend/widgets/DatapickerImageWidget.cpp:176
 #, kde-format
@@ -24163,12 +24163,12 @@ msgstr "पोर्टेबल नेटवर्क ग्राफिक्�
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:73
 #, kde-format
 msgid "Joint Photographic Experts Group (JPG)"
-msgstr "संयुक्त छायाचित्रविशेषज्ञसमूहः (JPG) २."
+msgstr "संयुक्त छायाचित्रविशेषज्ञसमूहः (JPG)"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:75
 #, kde-format
 msgid "Windows Bitmap (BMP)"
-msgstr "विण्डोज बिटमैप् (BMP) २."
+msgstr "विण्डोज बिटमैप् (BMP)"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:77
 #, kde-format
@@ -24214,7 +24214,7 @@ msgstr "सम्पूर्ण कार्यपत्रक"
 #, kde-format
 msgctxt "%1 is the value of DPI of the current screen"
 msgid "%1 (desktop)"
-msgstr "%1 (डेस्कटॉप) २."
+msgstr "%1 (डेस्कटॉप)"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:105
 #, kde-format
@@ -24245,7 +24245,7 @@ msgstr "संयुक्त छायाचित्रविशेषज्�
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:269
 #, kde-format
 msgid "Windows Bitmap (*.bmp *.BMP)"
-msgstr "विण्डोज बिटमैप (*.bmp *.BMP) २."
+msgstr "विण्डोज बिटमैप (*.bmp *.BMP)"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:272
 #, kde-format
@@ -24286,12 +24286,12 @@ msgstr "बिन्दवः"
 #: src/frontend/worksheet/GridDialog.cpp:50
 #, kde-format
 msgid "Horizontal spacing:"
-msgstr "क्षैतिज अन्तराल : १."
+msgstr "क्षैतिज अन्तराल :"
 
 #: src/frontend/worksheet/GridDialog.cpp:58
 #, kde-format
 msgid "Vertical spacing:"
-msgstr "ऊर्ध्वाधरान्तरम् : १."
+msgstr "ऊर्ध्वाधरान्तरम् :"
 
 #: src/frontend/worksheet/SlidingPanel.cpp:86
 #, kde-format
