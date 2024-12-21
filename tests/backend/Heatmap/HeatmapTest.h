@@ -26,6 +26,7 @@ private Q_SLOTS:
 	void testFormat();
 
 	void testRepresentationMatrix();
+	void testRepresentationMatrixMinMax();
 	void testRepresentationSpreadsheet();
 	void testRepresentationSpreadsheetDrawEmpty();
 	void testRepresentationSpreadsheetDrawZeroes();

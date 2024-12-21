@@ -772,8 +772,8 @@ QRectF HeatmapPrivate::update() {
 	}
 
 	std::vector<std::vector<double>> map(xNumberBinsVisible, std::vector<double>(yNumberBinsVisible, 0));
-	double minValue = std::nan("0");
-	double maxValue = -std::nan("0");
+	double minValue = INFINITY;
+	double maxValue = -INFINITY;
 
 	auto calculateIndex = [](double val, double maxData, double minValid, double maxValid, double binSize, int numberBinsVisible) {
 		// TODO: make option if the border shall be included, or not
