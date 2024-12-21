@@ -3055,7 +3055,7 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 			continue;
 
 		const auto type = plot->type();
-		if (type == AspectType::XYCurve || type == AspectType::Heatmap || type == AspectType::QQPlot) {
+		if (plot->inherits(AspectType::XYCurve) || type == AspectType::Heatmap || type == AspectType::QQPlot) {
 			// range of indices
 			Range<int> indexRange{0, 0};
 			if (!completeRange && d->rangeType == RangeType::Free || type == AspectType::QQPlot) {

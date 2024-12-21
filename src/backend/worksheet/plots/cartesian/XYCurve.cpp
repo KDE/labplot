@@ -459,7 +459,7 @@ double XYCurve::maximum(const Dimension) const {
 
 bool XYCurve::hasData() const {
 	Q_D(const XYCurve);
-	return (d->xColumn != nullptr || d->yColumn != nullptr);
+	return (d->xColumn != nullptr && d->yColumn != nullptr);
 }
 
 bool XYCurve::usingColumn(const AbstractColumn* column, bool) const {
@@ -534,8 +534,8 @@ QColor XYCurve::color() const {
 
 int XYCurve::dataCount(Dimension dim) const {
 	Q_D(const XYCurve);
-	if (!hasData())
-		return -1; // No valid data
+	if (!column(dim))
+		return -1;
 
 	return column(dim)->rowCount();
 }
