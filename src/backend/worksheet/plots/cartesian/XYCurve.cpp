@@ -2744,7 +2744,6 @@ void XYCurvePrivate::updatePixmap() {
 	painter.translate(-m_boundingRectangle.topLeft());
 
 	draw(&painter);
-	painter.end();
 
 	update();
 	Q_EMIT q->changed();
