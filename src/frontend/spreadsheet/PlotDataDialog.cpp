@@ -527,7 +527,9 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) {
 	}
 	case Plot::PlotType::Histogram:
 	case Plot::PlotType::KDEPlot:
-	case Plot::PlotType::QQPlot: {
+	case Plot::PlotType::QQPlot:
+	case Plot::PlotType::ProcessBehaviorChart:
+	case Plot::PlotType::RunChart: {
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
 			Column* column = columnFromName(name);
@@ -591,7 +593,9 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 	}
 	case Plot::PlotType::Histogram:
 	case Plot::PlotType::KDEPlot:
-	case Plot::PlotType::QQPlot: {
+	case Plot::PlotType::QQPlot:
+	case Plot::PlotType::ProcessBehaviorChart:
+	case Plot::PlotType::RunChart: {
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
 			Column* column = columnFromName(name);
@@ -638,6 +642,7 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 		curve->setSuppressRetransform(true);
 		curve->setXColumn(xColumn);
 		curve->setYColumn(yColumn);
+		curve->setPlotType(m_plotType);
 		curve->setSuppressRetransform(false);
 		plot->addChild(curve);
 		m_lastAddedCurve = curve;
@@ -649,6 +654,7 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 			curve->setSuppressRetransform(true);
 			curve->setXColumn(xColumn);
 			curve->setYColumn(yColumn);
+			curve->setPlotType(Plot::PlotType::Line);
 			curve->setSuppressRetransform(false);
 			plot->addChild(curve);
 			m_lastAddedCurve = curve;

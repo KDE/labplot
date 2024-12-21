@@ -1774,61 +1774,61 @@ void CartesianPlot::addPlot(QAction* action) {
 	// basic plots
 	case Plot::PlotType::Line: {
 		auto* plot = new XYCurve(i18n("Plot"));
-		plot->setPlotType(XYCurve::PlotType::Line);
+		plot->setPlotType(Plot::PlotType::Line);
 		addChild(plot);
 		break;
 	}
 	case Plot::PlotType::LineHorizontalStep: {
 		auto* plot = new XYCurve(i18n("Plot"));
-		plot->setPlotType(XYCurve::PlotType::LineHorizontalStep);
+		plot->setPlotType(Plot::PlotType::LineHorizontalStep);
 		addChild(plot);
 		break;
 	}
 	case Plot::PlotType::LineVerticalStep: {
 		auto* plot = new XYCurve(i18n("Plot"));
-		plot->setPlotType(XYCurve::PlotType::LineVerticalStep);
+		plot->setPlotType(Plot::PlotType::LineVerticalStep);
 		addChild(plot);
 		break;
 	}
 	case Plot::PlotType::LineSpline: {
 		auto* plot = new XYCurve(i18n("Plot"));
-		plot->setPlotType(XYCurve::PlotType::LineSpline);
+		plot->setPlotType(Plot::PlotType::LineSpline);
 		addChild(plot);
 		break;
 	}
 	case Plot::PlotType::Scatter: {
 		auto* plot = new XYCurve(i18n("Plot"));
-		plot->setPlotType(XYCurve::PlotType::Scatter);
+		plot->setPlotType(Plot::PlotType::Scatter);
 		addChild(plot);
 		break;
 	}
 	case Plot::PlotType::ScatterYError: {
 		auto* plot = new XYCurve(i18n("Plot"));
-		plot->setPlotType(XYCurve::PlotType::ScatterYError);
+		plot->setPlotType(Plot::PlotType::ScatterYError);
 		addChild(plot);
 		break;
 	}
 	case Plot::PlotType::ScatterXYError: {
 		auto* plot = new XYCurve(i18n("Plot"));
-		plot->setPlotType(XYCurve::PlotType::ScatterXYError);
+		plot->setPlotType(Plot::PlotType::ScatterXYError);
 		addChild(plot);
 		break;
 	}
 	case Plot::PlotType::LineSymbol: {
 		auto* plot = new XYCurve(i18n("Plot"));
-		plot->setPlotType(XYCurve::PlotType::LineSymbol);
+		plot->setPlotType(Plot::PlotType::LineSymbol);
 		addChild(plot);
 		break;
 	}
 	case Plot::PlotType::LineSymbol2PointSegment: {
 		auto* plot = new XYCurve(i18n("Plot"));
-		plot->setPlotType(XYCurve::PlotType::LineSymbol2PointSegment);
+		plot->setPlotType(Plot::PlotType::LineSymbol2PointSegment);
 		addChild(plot);
 		break;
 	}
 	case Plot::PlotType::LineSymbol3PointSegment: {
 		auto* plot = new XYCurve(i18n("Plot"));
-		plot->setPlotType(XYCurve::PlotType::LineSymbol3PointSegment);
+		plot->setPlotType(Plot::PlotType::LineSymbol3PointSegment);
 		addChild(plot);
 		break;
 	}

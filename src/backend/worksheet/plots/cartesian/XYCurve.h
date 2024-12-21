@@ -38,19 +38,6 @@ public:
 	friend class XYCurveSetYErrorMinusColumnCmd;
 	friend class XYCurveSetValuesColumnCmd;
 
-	enum class PlotType {
-		Default,
-		Line,
-		LineHorizontalStep,
-		LineVerticalStep,
-		LineSpline,
-		Scatter,
-		ScatterYError,
-		ScatterXYError,
-		LineSymbol,
-		LineSymbol2PointSegment,
-		LineSymbol3PointSegment
-	};
 	enum class LineType {
 		NoLine,
 		Line,
@@ -72,8 +59,7 @@ public:
 	explicit XYCurve(const QString& name, AspectType type = AspectType::XYCurve, bool loading = false);
 	~XYCurve() override;
 
-	void setPlotType(PlotType);
-	PlotType plotType() const;
+	void setPlotType(Plot::PlotType);
 
 	QIcon icon() const override;
 	static QIcon staticIcon(XYCurve::PlotType type);
