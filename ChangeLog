@@ -34,6 +34,7 @@ New features:
 		* allow to provide names for plot ranges for easier lookup and assignemnt in the plot elements
 		* new option to use plot's main color (line, symbol, etc.) for the color of the name text shown in the legend
 		* fix inverse axis scale for Arrhenius plots
+		* show more plot sub-types (scatter, line, etc.) in the context menu for faster creation of these visualizations
 
 Performance improvements:
 	* Made big spreadsheet (millions of cells) more responsive when selecting columns via the spreadsheet header
