@@ -1364,6 +1364,13 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 		}
 	}
 
+	// For some reason, some projects do not have any row_heights
+	if (rowCount() != d->rowHeights.count()) {
+		d->rowHeights.resize(rowCount());
+		for (int i = 0; i < d->rowHeights.count(); i++)
+			d->rowHeights[i] = 0;
+	}
+
 	return true;
 }
 
