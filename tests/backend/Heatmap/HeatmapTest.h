@@ -46,6 +46,8 @@ private Q_SLOTS:
 	void indicesMinMaxMatrix();
 
 	void testMatrixNumBins();
+
+	void rangeInverted();
 };
 
 #endif // HEATMAPTEST_H
