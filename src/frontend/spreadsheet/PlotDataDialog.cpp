@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dialog for generating plots for the spreadsheet data
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2017-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -13,7 +13,6 @@
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
-#include "backend/lib/Range.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
@@ -749,6 +748,14 @@ void PlotDataDialog::addSingleSourceColumnPlot(const Column* column, CartesianPl
 		auto* qqPlot = new QQPlot(name);
 		qqPlot->setDataColumn(column);
 		plot = qqPlot;
+	} else if (m_plotType == Plot::PlotType::ProcessBehaviorChart) {
+		auto* chart = new ProcessBehaviorChart(name);
+		chart->setDataColumn(column);
+		plot = chart;
+	} else if (m_plotType == Plot::PlotType::RunChart) {
+		auto* chart = new RunChart(name);
+		chart->setDataColumn(column);
+		plot = chart;
 	}
 
 	if (plot) {
@@ -1035,6 +1042,10 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 			axis->title()->setText(QString()); // no title
 		}
 	}
+	case Plot::PlotType::ProcessBehaviorChart:
+	case Plot::PlotType::RunChart:
+		// TODO:
+		break;
 	}
 }
 
