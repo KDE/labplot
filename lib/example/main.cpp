@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
 
 	for (int i = 0; i < count; ++i) {
 		x->setValueAt(i, i);
-		double rand_value = 10*double(qrand())/double(RAND_MAX);
+		double rand_value = 10*double(rand())/double(RAND_MAX);
 		double value = a*pow(i, 2) + b*i + c + rand_value;
 		y->setValueAt(i, value);
 	}
@@ -41,7 +41,6 @@ int main(int argc, char **argv) {
 // 	curve->setLineStyle(XYCurve::LineStyle::NoLine);
 // 	curve->symbol()->setStyle(Symbol::Circle);
 	plot->addChild(curve);
-	plot->autoScale();
 
 	//perform a fit to the raw data and show it
 	auto* fitCurve = new XYFitCurve("fit ");
@@ -72,7 +71,7 @@ int main(int argc, char **argv) {
 	auto* random_data = new Column("x");
 
 	for (int i = 0; i < 1000; ++i)
-		random_data->setValueAt(i, double(100*qrand())/double(RAND_MAX));
+		random_data->setValueAt(i, double(100*rand())/double(RAND_MAX));
 
 	hist->setDataColumn(random_data);
 	plot2->addChild(hist);
