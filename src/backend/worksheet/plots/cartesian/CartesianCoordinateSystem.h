@@ -34,6 +34,9 @@ public:
 	static QString dimensionToString(Dimension);
 
 	// TODO: document the 5 versions
+	// Prefer this function instead of Points mapLogicalToScene(const Points&, MappingFlags flags = MappingFlag::DefaultMapping) const
+	// Because it needs no additional reallocation
+	void mapLogicalToSceneFast(Points& points, MappingFlags flags = MappingFlag::DefaultMapping) const;
 	Points mapLogicalToScene(const Points&, MappingFlags flags = MappingFlag::DefaultMapping) const override;
 	bool mapXLogicalToScene(double& x, MappingFlags flags = MappingFlag::DefaultMapping) const;
 	bool mapYLogicalToScene(double& y, MappingFlags flags = MappingFlag::DefaultMapping) const;
