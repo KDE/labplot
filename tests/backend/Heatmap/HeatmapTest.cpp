@@ -2077,4 +2077,9 @@ void HeatmapTest::testMatrixNumBins() {
 	// Test if the matrixNumBins works as expected
 }
 
+void HeatmapTest::rangeInverted() {
+	QVERIFY(false);
+	// start > end
+}
+
 QTEST_MAIN(HeatmapTest)
