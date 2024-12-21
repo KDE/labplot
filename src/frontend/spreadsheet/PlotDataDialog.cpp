@@ -1041,11 +1041,37 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 			}
 			axis->title()->setText(QString()); // no title
 		}
+		break;
 	}
 	case Plot::PlotType::ProcessBehaviorChart:
-	case Plot::PlotType::RunChart:
-		// TODO:
+	case Plot::PlotType::RunChart: {
+		plot->setNiceExtend(false);
+		// x-axis title
+		for (auto* axis : axes) {
+			if (axis->orientation() == Axis::Orientation::Horizontal) {
+				axis->title()->setText(i18n("Sample"));
+				break;
+			}
+		}
+
+		// y-axis title
+		for (auto* axis : axes) {
+			if (axis->orientation() == Axis::Orientation::Vertical) {
+				if (!name.isEmpty()) {
+					// multiple columns are plotted with "one curve per plot",
+					// the function is called with the column name.
+					// use it for the x-axis title
+					axis->title()->setText(name);
+				} else if (m_columnComboBoxes.size() == 1) {
+					const QString& yColumnName = m_columnComboBoxes.constFirst()->currentText();
+					axis->title()->setText(yColumnName);
+				}
+
+				break;
+			}
+		}
 		break;
+	}
 	}
 }
 

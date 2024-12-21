@@ -714,15 +714,8 @@ void CartesianPlot::fillAddNewPlotMenu(QMenu* addNewPlotMenu, QActionGroup* acti
 	menu->addAction(action);
 	addNewPlotMenu->addMenu(menu);
 
-	// formula
-	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve")), i18n("Formula"));
-	action->setToolTip(i18n("Add a new xy-curve that is defined via a mathematical expression."));
-	menu->addAction(action);
-
-	addNewPlotMenu->addMenu(menu);
-	menu->addSeparator();
-
 	// statistical plots
+	menu->addSeparator();
 	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"), addNewPlotMenu);
 
 	action = new QAction(QIcon::fromTheme(QStringLiteral("view-object-histogram-linear")), i18n("Histogram"), actionGroup);
@@ -759,15 +752,21 @@ void CartesianPlot::fillAddNewPlotMenu(QMenu* addNewPlotMenu, QActionGroup* acti
 	// continuous improvement plots
 	auto* addNewCIPlotsMenu = new QMenu(i18n("Continual Improvement Plots"), addNewPlotMenu);
 
-	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Process Behavior Chart"), actionGroup);
-	action->setData(static_cast<int>(Plot::PlotType::ProcessBehaviorChart));
-	addNewCIPlotsMenu->addAction(action);
-
 	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Run Chart"), actionGroup);
 	action->setData(static_cast<int>(Plot::PlotType::RunChart));
 	addNewCIPlotsMenu->addAction(action);
 
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Process Behavior Chart"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::ProcessBehaviorChart));
+	addNewCIPlotsMenu->addAction(action);
+
 	addNewPlotMenu->addMenu(addNewCIPlotsMenu);
+
+	// formula plot
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve")), i18n("Formula Plot"));
+	action->setToolTip(i18n("Add a new xy-curve that is defined via a mathematical expression."));
+	addNewPlotMenu->addSeparator();
+	addNewPlotMenu->addAction(action);
 }
 
 QMenu* CartesianPlot::createContextMenu() {
