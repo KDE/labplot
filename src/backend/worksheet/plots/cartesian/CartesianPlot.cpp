@@ -557,11 +557,20 @@ void CartesianPlot::initMenus() {
 	m_addNewMenu = new QMenu(i18n("Add New"));
 	m_addNewMenu->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 	auto* actionGroup = new QActionGroup(this);
-	CartesianPlot::fillAddNewPlotMenu(m_addNewMenu, actionGroup);
 	connect(actionGroup, &QActionGroup::triggered, this, &CartesianPlot::addPlot);
 
+	// add all available plot types
+	CartesianPlot::fillAddNewPlotMenu(m_addNewMenu, actionGroup);
+
+	// formula plot
+	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve")), i18n("Formula Plot"), actionGroup);
+	action->setToolTip(i18n("Add a new xy-curve that is defined via a mathematical expression."));
+	action->setData(static_cast<int>(Plot::PlotType::Formula));
+	m_addNewMenu->addSeparator();
+	m_addNewMenu->addAction(action);
 	m_addNewMenu->addSeparator();
 
+	// analysis curves
 	addNewAnalysisMenu = new QMenu(i18n("Analysis Plots"), m_addNewMenu);
 	addNewAnalysisMenu->addAction(addFitCurveAction);
 	addNewAnalysisMenu->addSeparator();
@@ -761,12 +770,6 @@ void CartesianPlot::fillAddNewPlotMenu(QMenu* addNewPlotMenu, QActionGroup* acti
 	addNewCIPlotsMenu->addAction(action);
 
 	addNewPlotMenu->addMenu(addNewCIPlotsMenu);
-
-	// formula plot
-	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve")), i18n("Formula Plot"));
-	action->setToolTip(i18n("Add a new xy-curve that is defined via a mathematical expression."));
-	addNewPlotMenu->addSeparator();
-	addNewPlotMenu->addAction(action);
 }
 
 QMenu* CartesianPlot::createContextMenu() {
