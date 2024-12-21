@@ -1053,7 +1053,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<Heatmap*> heatmaps;
 	if (hasChildren)
 		heatmaps = aspect->children<Heatmap>(ChildIndexFlag::Recursive);
-	else if (aspect->type() == AspectType::Histogram)
+	else if (aspect->type() == AspectType::Heatmap)
 		heatmaps << static_cast<Heatmap*>(aspect);
 
 	for (auto* heatmap : heatmaps) {
