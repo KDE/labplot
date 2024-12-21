@@ -279,6 +279,7 @@ private:
 	Q_DECLARE_PRIVATE(CartesianPlot)
 
 	friend CartesianPlotDock;
+	friend class AxisTest;
 	friend class CartesianPlotTest;
 	friend class MultiRangeTest2;
 
