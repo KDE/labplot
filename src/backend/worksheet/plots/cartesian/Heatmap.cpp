@@ -887,7 +887,10 @@ QRectF HeatmapPrivate::update() {
 	const auto p2 = QPointF(xEndPoint, yEndPoint);
 	const auto points = cSystem->mapLogicalToScene({p1, p2}, AbstractCoordinateSystem::MappingFlag::Limit);
 
-	return QRectF(points.at(0), points.at(1)); // New bounding rectangle
+	return QRectF(qMin(points.at(0).x(), points.at(1).x()),
+				  qMin(points.at(0).y(), points.at(1).y()),
+				  qAbs(points.at(0).x() - points.at(1).x()),
+				  qAbs(points.at(0).y() - points.at(1).y())); // New bounding rectangle
 }
 
 void HeatmapPrivate::updatePixmap() {
@@ -902,15 +905,13 @@ void HeatmapPrivate::updatePixmap() {
 		m_pixmap = QPixmap();
 		return;
 	}
-	QPixmap pixmap(ceil(m_boundingRectangle.width()), ceil(m_boundingRectangle.height()));
-	pixmap.fill(Qt::transparent);
-	QPainter painter(&pixmap);
+	m_pixmap = QPixmap(ceil(m_boundingRectangle.width()), ceil(m_boundingRectangle.height()));
+	m_pixmap.fill(Qt::transparent);
+	QPainter painter(&m_pixmap);
 	painter.setRenderHint(QPainter::Antialiasing, true);
 	painter.translate(-m_boundingRectangle.topLeft());
 
 	draw(&painter);
-	painter.end();
-	m_pixmap = pixmap;
 }
 
 void HeatmapPrivate::draw(QPainter* painter) {
