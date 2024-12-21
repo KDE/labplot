@@ -863,6 +863,7 @@ QRectF HeatmapPrivate::update() {
 
 	// Calculate rectangles
 	const auto* cSystem = q->plot()->coordinateSystem(q->coordinateSystemIndex());
+	Points points(2);
 	for (int yIndex = 0; yIndex < yNumberBinsVisible; yIndex++) {
 		for (int xIndex = 0; xIndex < xNumberBinsVisible; xIndex++) {
 			const double value = map[xIndex][yIndex];
@@ -872,8 +873,9 @@ QRectF HeatmapPrivate::update() {
 			const double yPosStart = yMinValid + yIndex * yBinSize;
 			const double xPosEnd = xPosStart + xBinSize;
 			const double yPosEnd = yPosStart + yBinSize;
-			const auto points =
-				cSystem->mapLogicalToScene({QPointF(xPosStart, yPosStart), QPointF(xPosEnd, yPosEnd)}, AbstractCoordinateSystem::MappingFlag::Limit);
+			points[0] = QPointF(xPosStart, yPosStart);
+			points[1] = QPointF(xPosEnd, yPosEnd);
+			cSystem->mapLogicalToSceneFast(points, AbstractCoordinateSystem::MappingFlag::Limit);
 			assert(points.size() == 2);
 			data.push_back({QRectF(points.at(0), points.at(1)), format.color(value)}); // TODO: storing QColor or just value and convertering every time
 			// TODO: sort and cluster the rectangles?
@@ -883,9 +885,9 @@ QRectF HeatmapPrivate::update() {
 	const auto xEndPoint = xMinValid + xNumberBinsVisible * xBinSize;
 	const auto yEndPoint = yMinValid + yNumberBinsVisible * yBinSize;
 
-	const auto p1 = QPointF(xMinValid, yMinValid);
-	const auto p2 = QPointF(xEndPoint, yEndPoint);
-	const auto points = cSystem->mapLogicalToScene({p1, p2}, AbstractCoordinateSystem::MappingFlag::Limit);
+	points[0] = QPointF(xMinValid, yMinValid);
+	points[1] = QPointF(xEndPoint, yEndPoint);
+	cSystem->mapLogicalToSceneFast(points, AbstractCoordinateSystem::MappingFlag::Limit);
 
 	return QRectF(qMin(points.at(0).x(), points.at(1).x()),
 				  qMin(points.at(0).y(), points.at(1).y()),
