@@ -398,7 +398,7 @@ void InfoElementTest::columnValueChanged() {
 	QCOMPARE(labels.at(0)->isVisible(), true);
 	QCOMPARE(points.at(0)->isVisible(), true);
 
-	yColumn->setValueAt(4, 10);
+	yColumn->setValueAt(5, 10.);
 
 	QCOMPARE(ie->isValid(), true);
 	QCOMPARE(labels.at(0)->isVisible(), true);
