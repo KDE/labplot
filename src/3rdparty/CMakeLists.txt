@@ -150,7 +150,7 @@ if(LOCAL_QT_ADVANCED_DOCK_DOWNLOAD)
     FetchContent_Declare(
         qt_advanced_dock
         GIT_REPOSITORY https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System.git
-        GIT_TAG a940fc29c6d1fbcb5ee1e2fecf86f20bb86a7fb6
+        GIT_TAG 04f6d9168e159f07de565c5159ecd4ea16ab5be1
     )
     set(CMAKE_PROJECT_QtADS_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/QtADS_config.cmake")
     # don't install qt_advanced_dock

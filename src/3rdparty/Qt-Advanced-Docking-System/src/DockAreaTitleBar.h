@@ -152,6 +152,11 @@ protected:
 	 */
 	virtual void contextMenuEvent(QContextMenuEvent *event) override;
 
+	/**
+	 * Handle resize events
+	 */
+	virtual void resizeEvent(QResizeEvent *event) override;
+
 public Q_SLOTS:
 	/**
 	 * Call this slot to tell the title bar that it should update the tabs menu

@@ -199,13 +199,13 @@ void DockManagerPrivate::loadStylesheet()
 {
 	initResource();
 	QString Result;
-	QString FileName = QStringLiteral(":ads/stylesheets/");
+	QString FileName = ":ads/stylesheets/";
 	FileName += CDockManager::testConfigFlag(CDockManager::FocusHighlighting)
-		? QStringLiteral("focus_highlighting") : QStringLiteral("default");
+		? "focus_highlighting" : "default";
 #if defined(Q_OS_UNIX) && !defined(Q_OS_MACOS)
-    FileName += QStringLiteral("_linux");
+    FileName += "_linux";
 #endif
-    FileName += QStringLiteral(".css");
+    FileName += ".css";
 	QFile StyleSheetFile(FileName);
 	StyleSheetFile.open(QIODevice::ReadOnly);
 	QTextStream StyleSheetStream(&StyleSheetFile);

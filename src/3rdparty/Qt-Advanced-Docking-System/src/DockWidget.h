@@ -288,7 +288,7 @@ public:
      * provide the InsertMode ForceNoScrollArea
      */
     void setWidget(QWidget* widget, eInsertMode InsertMode = AutoScrollArea);
-
+	
 	/**
 	 * Only used when the feature flag DeleteContentOnClose is set.
 	 * Using the flag and setting a widget factory allows to free the resources
@@ -300,7 +300,7 @@ public:
 	 */
 	using FactoryFunc = std::function<QWidget*(QWidget*)>;
 	void setWidgetFactory(FactoryFunc createWidget, eInsertMode InsertMode = AutoScrollArea);
-
+	
     /**
      * Remove the widget from the dock and give ownership back to the caller
      */

@@ -153,6 +153,12 @@ public:
 	 */
 	virtual QSize sizeHint() const override;
 
+	/**
+	 * This function returns true, if the tabs need more space than the size
+	 * of the tab bar.
+	 */
+	bool areTabsOverflowing() const;
+
 public Q_SLOTS:
 	/**
 	 * This property sets the index of the tab bar's visible tab

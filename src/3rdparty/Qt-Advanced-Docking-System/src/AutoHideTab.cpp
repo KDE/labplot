@@ -158,7 +158,7 @@ void AutoHideTabPrivate::updateOrientation()
 	bool IconOnly = CDockManager::testAutoHideConfigFlag(CDockManager::AutoHideSideBarsIconOnly);
 	if (IconOnly && !_this->icon().isNull())
 	{
-		_this->setText(QStringLiteral(""));
+		_this->setText("");
 		_this->setOrientation(Qt::Horizontal);
 	}
 	else

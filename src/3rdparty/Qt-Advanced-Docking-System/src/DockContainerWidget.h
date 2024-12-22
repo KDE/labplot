@@ -62,7 +62,7 @@ struct AutoHideDockContainerPrivate;
  * Container that manages a number of dock areas with single dock widgets
  * or tabyfied dock widgets in each area.
  * Each window that support docking has a DockContainerWidget. That means
- * the main application window and all floating windows contain a
+ * the main application window and all floating windows contain a 
  * DockContainerWidget instance.
  */
 class ADS_EXPORT CDockContainerWidget : public QFrame
@@ -214,7 +214,7 @@ public:
 	/**
 	 * Default Constructor
 	 */
-	CDockContainerWidget(CDockManager* DockManager, QWidget* parent = nullptr);
+	CDockContainerWidget(CDockManager* DockManager, QWidget* parent = 0);
 
 	/**
 	 * Virtual Destructor

@@ -4,7 +4,7 @@
  **
  ** This library is free software; you can redistribute it and/or
  ** modify it under the terms of the GNU Lesser General Public
- ** License as published by the Free Software Foundation;
+ ** License as published by the Free Software Foundation; either
  ** version 2.1 of the License, or (at your option) any later version.
  **
  ** This library is distributed in the hope that it will be useful,
@@ -688,16 +688,16 @@ CFloatingDockContainer::CFloatingDockContainer(CDockManager *DockManager) :
 	else
 	{
 		// KDE doesn't seem to fire MoveEvents while moving windows, so for now no native titlebar for everything using KWin.
-		QString window_manager = internal::windowManager().toUpper().split(QStringLiteral(" "))[0];
-                native_window = window_manager != QStringLiteral("KWIN");
+		QString window_manager = internal::windowManager().toUpper().split(" ")[0];
+                native_window = window_manager != "KWIN";
 	}
 
     if (native_window)
     {
         // Native windows do not work if wayland is used. Ubuntu 22.04 uses wayland by default. To use
         // native windows, switch to Xorg
-        QString XdgSessionType = QString::fromLocal8Bit(qgetenv("XDG_SESSION_TYPE").toLower());
-        if (QStringLiteral("wayland") == XdgSessionType)
+        QString XdgSessionType = qgetenv("XDG_SESSION_TYPE").toLower();
+        if ("wayland" == XdgSessionType)
         {
             native_window = false;
         }
@@ -1175,7 +1175,7 @@ QList<CDockWidget*> CFloatingDockContainer::dockWidgets() const
 //============================================================================
 void CFloatingDockContainer::finishDropOperation()
 {
-	// Widget has been redocked, so it must be hidden right way (see
+	// Widget has been redocked, so it must be hidden right way (see 
 	// https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System/issues/351)
 	// but AutoHideChildren must be set to false because "this" still contains
 	// dock widgets that shall not be toggled hidden.
@@ -1331,7 +1331,8 @@ void CFloatingDockContainer::onMaximizeRequest()
 //============================================================================
 void CFloatingDockContainer::showNormal(bool fixGeometry)
 {
-	if (windowState() == Qt::WindowMaximized)
+    if ( (windowState() & Qt::WindowMaximized) != 0 ||
+         (windowState() & Qt::WindowFullScreen) != 0)
 	{
 		QRect oldNormal = normalGeometry();
 		Super::showNormal();
