@@ -35,9 +35,7 @@ class WorksheetView : public QGraphicsView {
 public:
 	explicit WorksheetView(Worksheet* worksheet);
 
-	enum class ExportFormat { PDF, SVG, PNG, JPG, BMP, PPM, XBM, XPM };
 	enum class GridStyle { NoGrid, Line, Dot };
-	enum class ExportArea { BoundingBox, Selection, Worksheet };
 
 	struct GridSettings {
 		GridStyle style;
@@ -50,7 +48,7 @@ public:
 	enum class MouseMode { Selection, Navigation, ZoomSelection };
 
 	void setScene(QGraphicsScene*);
-	void exportToFile(const QString&, const ExportFormat, const ExportArea, const bool, const int);
+	bool exportToFile(const QString&, const Worksheet::ExportFormat, const Worksheet::ExportArea, const bool, const int);
 	void exportToClipboard();
 	void exportToPixmap(QPixmap& pixmap);
 	void setIsClosing();

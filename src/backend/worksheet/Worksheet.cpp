@@ -200,6 +200,10 @@ QVector<AspectType> Worksheet::pasteTypes() const {
 	return QVector<AspectType>{AspectType::CartesianPlot, AspectType::TextLabel, AspectType::Image};
 }
 
+bool Worksheet::exportToFile(const QString& path, const ExportFormat format, const ExportArea area, const bool background, int resolution) const {
+	return static_cast<WorksheetView*>(view())->exportToFile(path, format, area, background, resolution);
+}
+
 bool Worksheet::exportView() const {
 #ifndef SDK
 	setPrinting(true);
@@ -212,8 +216,8 @@ bool Worksheet::exportView() const {
 	bool ret;
 	if ((ret = (dlg->exec() == QDialog::Accepted))) {
 		QString path = dlg->path();
-		const WorksheetView::ExportFormat format = dlg->exportFormat();
-		const WorksheetView::ExportArea area = dlg->exportArea();
+		const auto format = dlg->exportFormat();
+		const auto area = dlg->exportArea();
 		const bool background = dlg->exportBackground();
 		const int resolution = dlg->exportResolution();
 

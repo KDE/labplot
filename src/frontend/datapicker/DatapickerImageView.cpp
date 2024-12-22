@@ -4,7 +4,7 @@
 	Description          : DatapickerImage view for datapicker
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-	SPDX-FileCopyrightText: 2015-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -788,11 +788,12 @@ void DatapickerImageView::handleImageActions() {
 	}
 }
 
-void DatapickerImageView::exportToFile(const QString& path, const WorksheetView::ExportFormat format, const int resolution) {
+bool DatapickerImageView::exportToFile(const QString& path, const Worksheet::ExportFormat format, const int resolution) {
 	QRectF sourceRect = scene()->sceneRect();
+	bool rc = false;
 
 	// print
-	if (format == WorksheetView::ExportFormat::PDF) {
+	if (format == Worksheet::ExportFormat::PDF) {
 		QPrinter printer(QPrinter::HighResolution);
 		printer.setOutputFormat(QPrinter::PdfFormat);
 		printer.setOutputFileName(path);
@@ -806,10 +807,12 @@ void DatapickerImageView::exportToFile(const QString& path, const WorksheetView:
 		QPainter painter(&printer);
 		painter.setRenderHint(QPainter::Antialiasing);
 		QRectF targetRect(0, 0, painter.device()->width(), painter.device()->height());
-		painter.begin(&printer);
+		rc = painter.begin(&printer);
+		if (!rc)
+			return false;
 		exportPaint(&painter, targetRect, sourceRect);
 		painter.end();
-	} else if (format == WorksheetView::ExportFormat::SVG) {
+	} else if (format == Worksheet::ExportFormat::SVG) {
 #ifdef HAVE_QTSVG
 		QSvgGenerator generator;
 		generator.setFileName(path);
@@ -823,7 +826,9 @@ void DatapickerImageView::exportToFile(const QString& path, const WorksheetView:
 		generator.setViewBox(targetRect);
 
 		QPainter painter;
-		painter.begin(&generator);
+		rc = painter.begin(&generator);
+		if (!rc)
+			return false;
 		exportPaint(&painter, targetRect, sourceRect);
 		painter.end();
 #endif
@@ -845,37 +850,38 @@ void DatapickerImageView::exportToFile(const QString& path, const WorksheetView:
 		painter.end();
 
 		if (!path.isEmpty()) {
-			bool rc{false};
 			switch (format) {
-			case WorksheetView::ExportFormat::PNG:
+			case Worksheet::ExportFormat::PNG:
 				rc = image.save(path, "PNG");
 				break;
-			case WorksheetView::ExportFormat::JPG:
+			case Worksheet::ExportFormat::JPG:
 				rc = image.save(path, "JPG");
 				break;
-			case WorksheetView::ExportFormat::BMP:
+			case Worksheet::ExportFormat::BMP:
 				rc = image.save(path, "BMP");
 				break;
-			case WorksheetView::ExportFormat::PPM:
+			case Worksheet::ExportFormat::PPM:
 				rc = image.save(path, "PPM");
 				break;
-			case WorksheetView::ExportFormat::XBM:
+			case Worksheet::ExportFormat::XBM:
 				rc = image.save(path, "XBM");
 				break;
-			case WorksheetView::ExportFormat::XPM:
+			case Worksheet::ExportFormat::XPM:
 				rc = image.save(path, "XPM");
 				break;
-			case WorksheetView::ExportFormat::PDF:
-			case WorksheetView::ExportFormat::SVG:
+			case Worksheet::ExportFormat::PDF:
+			case Worksheet::ExportFormat::SVG:
 				break;
-			}
-
-			if (!rc) {
-				RESET_CURSOR;
-				QMessageBox::critical(nullptr, i18n("Failed to export"), i18n("Failed to write to '%1'. Please check the path.", path));
 			}
 		}
 	}
+
+	if (!rc) {
+		RESET_CURSOR;
+		QMessageBox::critical(nullptr, i18n("Failed to export"), i18n("Failed to write to '%1'. Please check the path.", path));
+	}
+
+	return rc;
 }
 
 void DatapickerImageView::exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect) {

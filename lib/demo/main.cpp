@@ -42,5 +42,5 @@ int main(int argc, char **argv) {
 	worksheet->loadTheme("Dracula");
 
 	// export the worksheet to PDF
-	// TODO:
+	worksheet->exportToFile("result.pdf", Worksheet::ExportFormat::PDF);
 }

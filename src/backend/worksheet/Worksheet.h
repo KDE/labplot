@@ -42,6 +42,8 @@ public:
 	enum class Layout { NoLayout, VerticalLayout, HorizontalLayout, GridLayout };
 	enum class CartesianPlotActionMode { ApplyActionToSelection, ApplyActionToAll, ApplyActionToAllX, ApplyActionToAllY };
 	enum class ZoomFit { None, Fit, FitToHeight, FitToWidth, FitToSelection };
+	enum class ExportFormat { PDF, SVG, PNG, JPG, BMP, PPM, XBM, XPM };
+	enum class ExportArea { BoundingBox, Selection, Worksheet };
 
 	static double convertToSceneUnits(const double value, const Worksheet::Unit unit);
 	static double convertFromSceneUnits(const double value, const Worksheet::Unit unit);
@@ -54,6 +56,7 @@ public:
 	WorksheetElement* currentSelection();
 	QVector<AspectType> pasteTypes() const override;
 
+	bool exportToFile(const QString&, const ExportFormat, const ExportArea area = ExportArea::Worksheet, const bool background = true, const int resolution = 100) const;
 	bool exportView() const override;
 	bool exportView(QPixmap&) const;
 	bool printView() override;

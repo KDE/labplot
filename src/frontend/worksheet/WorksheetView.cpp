@@ -2074,13 +2074,14 @@ void WorksheetView::handleCartesianPlotActions() {
 	}
 }
 
-void WorksheetView::exportToFile(const QString& path, const ExportFormat format, const ExportArea area, const bool background, const int resolution) {
+bool WorksheetView::exportToFile(const QString& path, const Worksheet::ExportFormat format, const Worksheet::ExportArea area, const bool background, const int resolution) {
+	bool rc = false;
 	QRectF sourceRect;
 
 	// determine the rectangular to print
-	if (area == ExportArea::BoundingBox)
+	if (area == Worksheet::ExportArea::BoundingBox)
 		sourceRect = scene()->itemsBoundingRect();
-	else if (area == ExportArea::Selection) {
+	else if (area == Worksheet::ExportArea::Selection) {
 		if (!m_selectedItems.isEmpty()) {
 			// TODO doesn't work: rect = scene()->selectionArea().boundingRect();
 			for (const auto* item : m_selectedItems)
@@ -2092,7 +2093,7 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 
 	// save
 	switch (format) {
-	case ExportFormat::PDF: {
+	case Worksheet::ExportFormat::PDF: {
 		QPrinter printer;
 		printer.setOutputFormat(QPrinter::PdfFormat);
 		printer.setOutputFileName(path);
@@ -2106,12 +2107,14 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		QPainter painter(&printer);
 		painter.setRenderHint(QPainter::Antialiasing);
 		QRectF targetRect(0, 0, painter.device()->width(), painter.device()->height());
-		painter.begin(&printer);
+		rc = painter.begin(&printer);
+		if (!rc)
+			return false;
 		exportPaint(&painter, targetRect, sourceRect, background);
 		painter.end();
 		break;
 	}
-	case ExportFormat::SVG: {
+	case Worksheet::ExportFormat::SVG: {
 #ifdef HAVE_QTSVG
 		QSvgGenerator generator;
 		generator.setFileName(path);
@@ -2129,18 +2132,20 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		generator.setViewBox(targetRect);
 
 		QPainter painter;
-		painter.begin(&generator);
+		rc = painter.begin(&generator);
+		if (!rc)
+			return false;
 		exportPaint(&painter, targetRect, sourceRect, background);
 		painter.end();
 #endif
 		break;
 	}
-	case ExportFormat::PNG:
-	case ExportFormat::JPG:
-	case ExportFormat::BMP:
-	case ExportFormat::PPM:
-	case ExportFormat::XBM:
-	case ExportFormat::XPM: {
+	case Worksheet::ExportFormat::PNG:
+	case Worksheet::ExportFormat::JPG:
+	case Worksheet::ExportFormat::BMP:
+	case Worksheet::ExportFormat::PPM:
+	case Worksheet::ExportFormat::XBM:
+	case Worksheet::ExportFormat::XPM: {
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
 		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
 		w = w * resolution / (GSL_CONST_CGS_INCH * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
@@ -2156,38 +2161,42 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		painter.end();
 
 		if (!path.isEmpty()) {
-			bool rc{false};
 			switch (format) {
-			case ExportFormat::PNG:
+			case Worksheet::ExportFormat::PNG:
 				rc = image.save(path, "PNG");
 				break;
-			case ExportFormat::JPG:
+			case Worksheet::ExportFormat::JPG:
 				rc = image.save(path, "JPG");
 				break;
-			case ExportFormat::BMP:
+			case Worksheet::ExportFormat::BMP:
 				rc = image.save(path, "BMP");
 				break;
-			case ExportFormat::PPM:
+			case Worksheet::ExportFormat::PPM:
 				rc = image.save(path, "PPM");
 				break;
-			case ExportFormat::XBM:
+			case Worksheet::ExportFormat::XBM:
 				rc = image.save(path, "XBM");
 				break;
-			case ExportFormat::XPM:
+			case Worksheet::ExportFormat::XPM:
 				rc = image.save(path, "XPM");
 				break;
-			case ExportFormat::PDF:
-			case ExportFormat::SVG:
+			case Worksheet::ExportFormat::PDF:
+			case Worksheet::ExportFormat::SVG:
 				break;
-			}
-			if (!rc) {
-				RESET_CURSOR;
-				QMessageBox::critical(nullptr, i18n("Failed to export"), i18n("Failed to write to '%1'. Please check the path.", path));
 			}
 		} else
 			QApplication::clipboard()->setImage(image, QClipboard::Clipboard);
 	}
 	}
+
+#ifndef SDK
+	if (!rc) {
+		RESET_CURSOR;
+		QMessageBox::critical(nullptr, i18n("Failed to export"), i18n("Failed to write to '%1'. Please check the path.", path));
+	}
+#endif
+
+	return rc;
 }
 
 void WorksheetView::exportToPixmap(QPixmap& pixmap) {
