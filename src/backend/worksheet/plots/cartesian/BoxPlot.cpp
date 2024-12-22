@@ -507,10 +507,14 @@ void BoxPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 	if (columns != d->dataColumns) {
 		exec(new BoxPlotSetDataColumnsCmd(d, columns, ki18n("%1: set data columns")));
 
+		d->dataColumnPaths.clear(); // TODO: make undo/redo-able!!!
 		for (auto* column : columns) {
-			if (!column)
+			if (!column) {
+				d->dataColumnPaths << QString();
 				continue;
+			}
 
+			d->dataColumnPaths << column->path();
 			connect(column, &AbstractColumn::dataChanged, this, &BoxPlot::dataChanged);
 
 			// update the curve itself on changes
@@ -1758,11 +1762,7 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("yMax"), QString::number(d->yMax));
 	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
-	for (auto* column : d->dataColumns) {
-		writer->writeStartElement(QStringLiteral("column"));
-		writer->writeAttribute(QStringLiteral("path"), column->path());
-		writer->writeEndElement();
-	}
+	WRITE_COLUMNS(d->dataColumns, d->dataColumnPaths);
 	writer->writeEndElement();
 
 	// box
@@ -1858,7 +1858,6 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 			str = attribs.value(QStringLiteral("path")).toString();
 			if (!str.isEmpty())
 				d->dataColumnPaths << str;
-			// 			READ_COLUMN(dataColumn);
 		} else if (!preview && reader->name() == QLatin1String("filling"))
 			if (!firstBackgroundRead) {
 				auto* background = d->backgrounds.at(0);

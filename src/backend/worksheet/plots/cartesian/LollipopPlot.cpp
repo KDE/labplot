@@ -300,9 +300,14 @@ void LollipopPlot::setDataColumns(const QVector<const AbstractColumn*> columns) 
 	if (columns != d->dataColumns) {
 		exec(new LollipopPlotSetDataColumnsCmd(d, columns, ki18n("%1: set data columns")));
 
+		d->dataColumnPaths.clear(); // TODO: make undo/redo-able!!!
 		for (auto* column : columns) {
-			if (!column)
+			if (!column) {
+				d->dataColumnPaths << QString();
 				continue;
+			}
+
+			d->dataColumnPaths << column->path();
 
 			// update the curve itself on changes
 			connect(column, &AbstractColumn::dataChanged, this, &LollipopPlot::recalc);
@@ -996,15 +1001,8 @@ void LollipopPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("yMax"), QString::number(d->yMax));
 	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
-
-	if (d->xColumn)
-		writer->writeAttribute(QStringLiteral("xColumn"), d->xColumn->path());
-
-	for (auto* column : d->dataColumns) {
-		writer->writeStartElement(QStringLiteral("column"));
-		writer->writeAttribute(QStringLiteral("path"), column->path());
-		writer->writeEndElement();
-	}
+	WRITE_COLUMN(d->xColumn, xColumn);
+	WRITE_COLUMNS(d->dataColumns, d->dataColumnPaths);
 	writer->writeEndElement();
 
 	// lines
@@ -1068,7 +1066,6 @@ bool LollipopPlot::load(XmlStreamReader* reader, bool preview) {
 			str = attribs.value(QStringLiteral("path")).toString();
 			if (!str.isEmpty())
 				d->dataColumnPaths << str;
-			// 			READ_COLUMN(dataColumn);
 		} else if (!preview && reader->name() == QLatin1String("line")) {
 			if (!firstLineRead) {
 				auto* line = d->lines.at(0);
