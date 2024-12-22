@@ -637,7 +637,7 @@ private:
 		writer->writeAttribute(QStringLiteral(#columnName), column##Path);                                                                                     \
 	}
 
-#define WRITE_COLUMNS(columns, paths)                                                                                                                                 \
+#define WRITE_COLUMNS(columns, paths)                                                                                                                          \
 	int index = 0;                                                                                                                                             \
 	for (auto* column : columns) {                                                                                                                             \
 		writer->writeStartElement(QStringLiteral("column"));                                                                                                   \
