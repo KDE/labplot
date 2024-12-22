@@ -2,7 +2,7 @@
 #include <QHBoxLayout>
 #include <QWidget>
 
-#include <labplot/labplot.h>
+#include <labplot.h>
 
 int main(int argc, char **argv) {
 	QApplication app (argc, argv);
