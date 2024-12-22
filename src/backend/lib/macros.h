@@ -647,7 +647,7 @@ private:
 			writer->writeAttribute(QStringLiteral("path"), paths.at(index));                                                                                   \
 		writer->writeEndElement();                                                                                                                             \
 		++index;                                                                                                                                               \
-	}                                                                                                                                                          \
+	}
 
 // column names can be empty in case no columns were used before save
 // the actual pointers to the x- and y-columns are restored in Project::load()

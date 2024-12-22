@@ -1499,7 +1499,7 @@ void CartesianPlotTest::columnRemoveSaveLoadRestore() {
 		plot->addChild(qqPlot);
 		qqPlot->setDataColumn(column);
 
-		auto* runChart= new RunChart(QStringLiteral("run"));
+		auto* runChart = new RunChart(QStringLiteral("run"));
 		plot->addChild(runChart);
 		runChart->setDataColumn(column);
 
