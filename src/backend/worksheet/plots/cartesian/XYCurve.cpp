@@ -2312,6 +2312,10 @@ double XYCurve::y(double x, bool& valueFound) const {
  * @return y value from x value
  */
 double XYCurve::y(double x, double& x_new, bool& valueFound) const {
+	if (!xColumn() || !yColumn()) {
+		valueFound = false;
+		return std::nan("0");
+	}
 	int index = xColumn()->indexForValue(x);
 	if (index < 0) {
 		valueFound = false;

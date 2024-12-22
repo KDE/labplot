@@ -99,6 +99,7 @@ private:
 	void init(bool loading = false);
 	void initActions();
 	void initMenus();
+	void connectDataColumn(const AbstractColumn*);
 
 	QAction* orientationHorizontalAction{nullptr};
 	QAction* orientationVerticalAction{nullptr};
@@ -116,6 +117,7 @@ private Q_SLOTS:
 Q_SIGNALS:
 	// General-Tab
 	void dataColumnsChanged(const QVector<const AbstractColumn*>&);
+	void dataDataChanged();
 	void orderingChanged(BoxPlot::Ordering);
 	void orientationChanged(BoxPlot::Orientation);
 	void variableWidthChanged(bool);
@@ -135,6 +137,8 @@ Q_SIGNALS:
 	void rugLengthChanged(double);
 	void rugWidthChanged(double);
 	void rugOffsetChanged(double);
+
+	friend class BoxPlotSetDataColumnsCmd;
 };
 
 #endif

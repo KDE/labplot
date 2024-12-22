@@ -17,6 +17,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
+#include "backend/lib/macrosCurve.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
@@ -500,11 +501,13 @@ QColor BoxPlot::colorAt(int index) const {
 
 /* ============================ setter methods and undo commands ================= */
 
+CURVE_COLUMN_CONNECT(BoxPlot, Data, data, recalc)
+
 // General
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetDataColumns, QVector<const AbstractColumn*>, dataColumns, recalc)
+CURVE_COLUMN_LIST_SETTER_CMD_IMPL_F_S(BoxPlot, Data, data, recalc)
 void BoxPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 	Q_D(BoxPlot);
-	if (columns != d->dataColumns) {
+	if (columns != d->dataColumns)
 		exec(new BoxPlotSetDataColumnsCmd(d, columns, ki18n("%1: set data columns")));
 
 		d->dataColumnPaths.clear(); // TODO: make undo/redo-able!!!

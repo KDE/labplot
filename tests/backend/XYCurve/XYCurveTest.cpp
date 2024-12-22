@@ -12,11 +12,13 @@
 
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
+#include "backend/core/column/Column.h"
 
 #include "backend/core/Project.h"
 #include "backend/lib/trace.h"
 
 #include <QFile>
+#include <QUndoStack>
 
 #define GET_CURVE_PRIVATE(plot, child_index, column_name, curve_variable_name)                                                                                 \
 	auto* curve_variable_name = plot->child<XYCurve>(child_index);                                                                                             \
@@ -120,6 +122,36 @@ void addUniqueLine_double_vector_last_point_vector_lines_vector_add4_dont_copy_l
 
 #define doublesToString(v1, v2, v3, v4) QString::number(v1) + "," + QString::number(v2) + "," + QString::number(v3) + "," + QString::number(v4)
 #define lineToString(line) doublesToString(line.p1().x(), line.p1().y(), line.p2().x(), line.p2().y())
+
+void XYCurveTest::setColumn() {
+	Project project;
+	auto* curve = new XYCurve(QStringLiteral("Curve"));
+	project.addChild(curve);
+
+	auto* c1 = new Column(QStringLiteral("C1"));
+	project.addChild(c1);
+	auto* c2 = new Column(QStringLiteral("C2"));
+	project.addChild(c2);
+
+	int counter = 0;
+	connect(curve, &XYCurve::xColumnChanged, [&counter] {
+		counter ++;
+	});
+	curve->setXColumn(c1);
+	QCOMPARE(curve->xColumn(), c1);
+	QCOMPARE(counter, 1);
+	curve->setXColumn(c2);
+	QCOMPARE(curve->xColumn(), c2);
+	QCOMPARE(counter, 2);
+
+	curve->undoStack()->undo();
+	QCOMPARE(curve->xColumn(), c1);
+	QCOMPARE(counter, 3);
+
+	curve->undoStack()->redo();
+	QCOMPARE(curve->xColumn(), c2);
+	QCOMPARE(counter, 4);
+}
 
 void XYCurveTest::addUniqueLineTest01() {
 	//	// For performance Testing only

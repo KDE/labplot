@@ -18,6 +18,8 @@ class XYCurveTest : public CommonTest {
 
 private Q_SLOTS:
 
+	void setColumn();
+
 	void addUniqueLineTest01();
 
 	// lineSkipGaps = false
