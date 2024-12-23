@@ -16,6 +16,7 @@ class FourierTest : public AnalysisTest {
 	Q_OBJECT
 
 private Q_SLOTS:
+	void addCurve();
 	void lowPassButterWorth();
 };
 #endif // FOURIERTEST_H

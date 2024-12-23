@@ -505,11 +505,15 @@ void XYAnalysisCurvePrivate::sourceChanged() {
 }
 
 void XYAnalysisCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) const {
+	*tmpXDataColumn = nullptr;
+	*tmpYDataColumn = nullptr;
 	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		// spreadsheet columns as data source
 		*tmpXDataColumn = xDataColumn;
 		*tmpYDataColumn = yDataColumn;
 	} else {
+		if (!dataSourceCurve)
+			return;
 		// curve columns as data source
 		*tmpXDataColumn = dataSourceCurve->xColumn();
 		*tmpYDataColumn = dataSourceCurve->yColumn();
