@@ -10,15 +10,13 @@
 
 #include "FourierTest.h"
 #include "backend/core/Project.h"
-#include "backend/worksheet/Worksheet.h"
 #include "backend/core/column/Column.h"
+#include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
-// #include "backend/worksheet/plots/cartesian/XYFourierFilterCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
-#include "backend/worksheet/plots/cartesian/XYAnalysisCurvePrivate.h"
-#include "backend/spreadsheet/Spreadsheet.h"
 
 // ##############################################################################
 
