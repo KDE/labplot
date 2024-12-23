@@ -509,24 +509,6 @@ void BoxPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 	Q_D(BoxPlot);
 	if (columns != d->dataColumns)
 		exec(new BoxPlotSetDataColumnsCmd(d, columns, ki18n("%1: set data columns")));
-
-		d->dataColumnPaths.clear(); // TODO: make undo/redo-able!!!
-		for (auto* column : columns) {
-			if (!column) {
-				d->dataColumnPaths << QString();
-				continue;
-			}
-
-			d->dataColumnPaths << column->path();
-			connect(column, &AbstractColumn::dataChanged, this, &BoxPlot::dataChanged);
-
-			// update the curve itself on changes
-			connect(column, &AbstractColumn::dataChanged, this, &BoxPlot::recalc);
-			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &Plot::appearanceChanged);
-			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &BoxPlot::dataColumnAboutToBeRemoved);
-			// TODO: add disconnect in the undo-function
-		}
-	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetOrdering, BoxPlot::Ordering, ordering, recalc)
