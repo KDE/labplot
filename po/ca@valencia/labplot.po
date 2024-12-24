@@ -4,14 +4,14 @@
 # version 3 or later versions approved by the membership of KDE e.V.
 #
 # SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Antoni Bella Pérez <antonibella5@yahoo.com>
-# SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Josep M. Ferrer <txemaq@gmail.com>
 # Orestes Mas <orestes@tsc.upc.edu>, 2018.
+# Josep M. Ferrer <txemaq@gmail.com>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-23 00:37+0000\n"
-"PO-Revision-Date: 2024-12-11 09:45+0100\n"
+"PO-Revision-Date: 2024-12-22 10:26+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -8495,23 +8495,20 @@ msgid "Add New"
 msgstr "Afig un nou"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:566
-#, fuzzy, kde-format
-#| msgid "Formula:"
+#, kde-format
 msgid "Formula Plot"
-msgstr "Fórmula:"
+msgstr "Diagrama de fórmula"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:567
-#, fuzzy, kde-format
-#| msgid "Add a new xy-curve that is defined via a mathematical expression."
+#, kde-format
 msgid "Add a new xy-plot that is defined via a mathematical expression."
 msgstr ""
-"Afig una corba XY nova que es definix mitjançant una expressió matemàtica."
+"Afig un diagrama XY nou que es definix mitjançant una expressió matemàtica."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:574
-#, fuzzy, kde-format
-#| msgid "Analysis"
+#, kde-format
 msgid "Analysis Plots"
-msgstr "Anàlisi"
+msgstr "Diagrames d'anàlisi"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:610
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:196
@@ -8527,41 +8524,35 @@ msgid "Theme"
 msgstr "Tema"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:673
-#, fuzzy, kde-format
-#| msgid "Plots"
+#, kde-format
 msgid "Line Plots"
-msgstr "Diagrames"
+msgstr "Diagrames de línies"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:679
-#, fuzzy, kde-format
-#| msgid "Horizontal"
+#, kde-format
 msgid "Horizontal Step"
-msgstr "Horitzontal"
+msgstr "Pas horitzontal"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:683
-#, fuzzy, kde-format
-#| msgid "Vertical Line"
+#, kde-format
 msgid "Vertical Step"
-msgstr "Línia vertical"
+msgstr "Pas vertical"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:687
-#, fuzzy, kde-format
-#| msgid "Interpolate"
+#, kde-format
 msgid "Spline Interpolated"
-msgstr "Interpola"
+msgstr "Spline interpolada"
 
 # skip-rule: kct-box
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:694
-#, fuzzy, kde-format
-#| msgid "Bar Plots"
+#, kde-format
 msgid "Scatter Plots"
-msgstr "Diagrama de barres"
+msgstr "Diagrames de dispersió"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:696
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgid "Scatter"
-msgstr "Patró"
+msgstr "Dispersió"
 
 #. i18n: ectx: property (text), widget (QLabel, lYError)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:700
@@ -8571,34 +8562,29 @@ msgid "Y Error"
 msgstr "S'ha produït un error de Y"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:704
-#, fuzzy, kde-format
-#| msgid "Y Error"
+#, kde-format
 msgid "XY Error"
-msgstr "S'ha produït un error de Y"
+msgstr "S'ha produït un error de XY"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:711
-#, fuzzy, kde-format
-#| msgid "Line+Symbol Width:"
+#, kde-format
 msgid "Line and Symbol Plots"
-msgstr "Amplària de línia+símbol:"
+msgstr "Diagrames de línies i símbols"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:713
-#, fuzzy, kde-format
-#| msgid "Line+Symbol Width:"
+#, kde-format
 msgid "Line + Symbol"
-msgstr "Amplària de línia+símbol:"
+msgstr "Línia + símbol"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:717
-#, fuzzy, kde-format
-#| msgid "Segments"
+#, kde-format
 msgid "2 Point Segment"
-msgstr "Segments"
+msgstr "Segment de 2 punts"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:721
-#, fuzzy, kde-format
-#| msgid "Segments"
+#, kde-format
 msgid "3 Point Segment"
-msgstr "Segments"
+msgstr "Segment de 3 punts"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:728
 #, kde-format
@@ -17155,10 +17141,9 @@ msgid "Sample Quantiles"
 msgstr "Quantils de la mostra"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1052
-#, fuzzy, kde-format
-#| msgid "&Sample"
+#, kde-format
 msgid "Sample"
-msgstr "Mo&stra"
+msgstr "Mostra"
 
 # skip-rule: t-sc-plot
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1111
@@ -25027,12 +25012,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "xy-curve"
-#~ msgstr "Corba XY"
-
-#~ msgid "xy-curve from a Formula"
-#~ msgstr "Corba XY des d'una fórmula"
-
-#~ msgid "Analysis Curve"
-#~ msgstr "Corba d'anàlisi"

@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-23 00:37+0000\n"
-"PO-Revision-Date: 2024-12-12 09:00+0100\n"
+"PO-Revision-Date: 2024-12-23 09:26+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 24.11.90\n"
+"X-Generator: Lokalize 24.12.0\n"
 "X-Text-Markup: kde4\n"
 
 #, kde-format
@@ -8462,24 +8462,20 @@ msgid "Add New"
 msgstr "Ajouter un nouveau"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:566
-#, fuzzy, kde-format
-#| msgid "Formula:"
+#, kde-format
 msgid "Formula Plot"
-msgstr "Formule :"
+msgstr "Tracé de formule"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:567
-#, fuzzy, kde-format
-#| msgid "Add a new xy-curve that is defined via a mathematical expression."
+#, kde-format
 msgid "Add a new xy-plot that is defined via a mathematical expression."
 msgstr ""
-"Ajouter une nouvelle courbe en x / y définie comme une expression "
-"mathématique"
+"Ajouter un nouveau tracé en x / y définie par une expression mathématique."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:574
-#, fuzzy, kde-format
-#| msgid "Analysis"
+#, kde-format
 msgid "Analysis Plots"
-msgstr "Analyse"
+msgstr "Tracés d'analyse"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:610
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:196
@@ -8495,40 +8491,34 @@ msgid "Theme"
 msgstr "Thème"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:673
-#, fuzzy, kde-format
-#| msgid "Plots"
+#, kde-format
 msgid "Line Plots"
-msgstr "Tracés"
+msgstr "Tracés en lignes"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:679
-#, fuzzy, kde-format
-#| msgid "Horizontal"
+#, kde-format
 msgid "Horizontal Step"
-msgstr "Horizontal"
+msgstr "Pas horizontal"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:683
-#, fuzzy, kde-format
-#| msgid "Vertical Line"
+#, kde-format
 msgid "Vertical Step"
-msgstr "Ligne verticale"
+msgstr "Pas vertical"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:687
-#, fuzzy, kde-format
-#| msgid "Interpolate"
+#, kde-format
 msgid "Spline Interpolated"
-msgstr "Interpoler"
+msgstr "Spline interpolée"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:694
-#, fuzzy, kde-format
-#| msgid "Bar Plots"
+#, kde-format
 msgid "Scatter Plots"
-msgstr "Tracé en barres"
+msgstr "Tracés en barres"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:696
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgid "Scatter"
-msgstr "Motif"
+msgstr "Disperser"
 
 #. i18n: ectx: property (text), widget (QLabel, lYError)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:700
@@ -8538,34 +8528,29 @@ msgid "Y Error"
 msgstr "Erreur en Y"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:704
-#, fuzzy, kde-format
-#| msgid "Y Error"
+#, kde-format
 msgid "XY Error"
-msgstr "Erreur en Y"
+msgstr "Erreur en X / Y"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:711
-#, fuzzy, kde-format
-#| msgid "Line+Symbol Width:"
+#, kde-format
 msgid "Line and Symbol Plots"
-msgstr "Largeur de ligne+symbole :"
+msgstr "Tracés avec lignes et de symboles"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:713
-#, fuzzy, kde-format
-#| msgid "Line+Symbol Width:"
+#, kde-format
 msgid "Line + Symbol"
-msgstr "Largeur de ligne+symbole :"
+msgstr "Ligne et symbole"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:717
-#, fuzzy, kde-format
-#| msgid "Segments"
+#, kde-format
 msgid "2 Point Segment"
-msgstr "Segments"
+msgstr "Segment à 2 points"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:721
-#, fuzzy, kde-format
-#| msgid "Segments"
+#, kde-format
 msgid "3 Point Segment"
-msgstr "Segments"
+msgstr "Segment à trois points"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:728
 #, kde-format
@@ -17132,8 +17117,7 @@ msgid "Sample Quantiles"
 msgstr "Échantillonner les quantiles"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1052
-#, fuzzy, kde-format
-#| msgid "Sample"
+#, kde-format
 msgid "Sample"
 msgstr "Échantillon"
 

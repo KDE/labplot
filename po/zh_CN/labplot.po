@@ -8326,19 +8326,19 @@ msgid "Add New"
 msgstr "添加"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:566
-#, fuzzy, kde-format
+#, kde-format
 msgid "Formula Plot"
-msgstr "正态 Q-Q 图"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:567
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add a new xy-plot that is defined via a mathematical expression."
-msgstr "添加一个通过数学表达式定义的 XY 曲线。"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:574
-#, fuzzy, kde-format
+#, kde-format
 msgid "Analysis Plots"
-msgstr "分析"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:610
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:196
@@ -8354,34 +8354,34 @@ msgid "Theme"
 msgstr "主题"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:673
-#, fuzzy, kde-format
+#, kde-format
 msgid "Line Plots"
-msgstr "线条颜色:"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:679
-#, fuzzy, kde-format
+#, kde-format
 msgid "Horizontal Step"
-msgstr "水平"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:683
-#, fuzzy, kde-format
+#, kde-format
 msgid "Vertical Step"
-msgstr "垂直"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:687
-#, fuzzy, kde-format
+#, kde-format
 msgid "Spline Interpolated"
-msgstr "插值"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:694
-#, fuzzy, kde-format
+#, kde-format
 msgid "Scatter Plots"
-msgstr "柱状图类"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:696
-#, fuzzy, kde-format
+#, kde-format
 msgid "Scatter"
-msgstr "图案"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lYError)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:700
@@ -8391,29 +8391,29 @@ msgid "Y Error"
 msgstr "Y 误差"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:704
-#, fuzzy, kde-format
+#, kde-format
 msgid "XY Error"
-msgstr "Y 误差"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:711
-#, fuzzy, kde-format
+#, kde-format
 msgid "Line and Symbol Plots"
-msgstr "点+线宽度："
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:713
-#, fuzzy, kde-format
+#, kde-format
 msgid "Line + Symbol"
-msgstr "点+线宽度："
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:717
-#, fuzzy, kde-format
+#, kde-format
 msgid "2 Point Segment"
-msgstr "片断"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:721
-#, fuzzy, kde-format
+#, kde-format
 msgid "3 Point Segment"
-msgstr "片断"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:728
 #, kde-format
@@ -16634,9 +16634,9 @@ msgid "Sample Quantiles"
 msgstr "样本分位数"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1052
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sample"
-msgstr "简单"
+msgstr ""
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1111
 #, kde-format
@@ -24403,12 +24403,3 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr ""
-
-#~ msgid "xy-curve"
-#~ msgstr "XY 曲线"
-
-#~ msgid "xy-curve from a Formula"
-#~ msgstr "基于表达式的 XY 曲线"
-
-#~ msgid "Analysis Curve"
-#~ msgstr "分析曲线"

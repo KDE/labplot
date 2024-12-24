@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-23 00:37+0000\n"
-"PO-Revision-Date: 2024-12-17 12:36+0100\n"
+"PO-Revision-Date: 2024-12-23 17:07+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -8361,10 +8361,9 @@ msgid "Add New"
 msgstr "Adde nove"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:566
-#, fuzzy, kde-format
-#| msgid "Formula:"
+#, kde-format
 msgid "Formula Plot"
-msgstr "Formula:"
+msgstr "Tracia (Plot) Formula"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:567
 #, kde-format
@@ -8372,10 +8371,9 @@ msgid "Add a new xy-plot that is defined via a mathematical expression."
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:574
-#, fuzzy, kde-format
-#| msgid "Analysis"
+#, kde-format
 msgid "Analysis Plots"
-msgstr "Analyse"
+msgstr "Tracias (plots)  de Analyse"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:610
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:196
@@ -8391,41 +8389,34 @@ msgid "Theme"
 msgstr "Thema"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:673
-#, fuzzy, kde-format
-#| msgid "Plots"
+#, kde-format
 msgid "Line Plots"
-msgstr "Plots (Tracias)"
+msgstr "Plots (Tracias) de linea"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:679
-#, fuzzy, kde-format
-#| msgid "Horizontal"
+#, kde-format
 msgid "Horizontal Step"
-msgstr "Horizontal"
+msgstr "Passo Horizontal"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:683
-#, fuzzy, kde-format
-#| msgid "Vertical Line"
+#, kde-format
 msgid "Vertical Step"
-msgstr "Linea vertical"
+msgstr "Passo vertical"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:687
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Interpolation"
+#, kde-format
 msgid "Spline Interpolated"
-msgstr "Proprietates: Interpolation"
+msgstr "Spline Interpolate"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:694
-#, fuzzy, kde-format
-#| msgid "Bar Plots"
+#, kde-format
 msgid "Scatter Plots"
-msgstr "Plots (Tracias) de barra"
+msgstr "Plots (Tracias) dispersate"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:696
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgid "Scatter"
-msgstr "Patrono"
+msgstr "Dispersar"
 
 #. i18n: ectx: property (text), widget (QLabel, lYError)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:700
@@ -8435,10 +8426,9 @@ msgid "Y Error"
 msgstr "Y-Error"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:704
-#, fuzzy, kde-format
-#| msgid "Y Error"
+#, kde-format
 msgid "XY Error"
-msgstr "Y-Error"
+msgstr "XY-Error"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:711
 #, kde-format
@@ -8446,22 +8436,19 @@ msgid "Line and Symbol Plots"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:713
-#, fuzzy, kde-format
-#| msgid "Symbol"
+#, kde-format
 msgid "Line + Symbol"
-msgstr "Symbolo"
+msgstr "Linea+Symbolo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:717
-#, fuzzy, kde-format
-#| msgid "Segments"
+#, kde-format
 msgid "2 Point Segment"
-msgstr "Segmentos"
+msgstr "Segmentos de 2 Punctos"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:721
-#, fuzzy, kde-format
-#| msgid "Segments"
+#, kde-format
 msgid "3 Point Segment"
-msgstr "Segmentos"
+msgstr "Segmento de 3 punctos"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:728
 #, kde-format
@@ -16624,10 +16611,9 @@ msgid "Sample Quantiles"
 msgstr ""
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1052
-#, fuzzy, kde-format
-#| msgid "&Sample"
+#, kde-format
 msgid "Sample"
-msgstr "E&xemplo"
+msgstr "Exemplo"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1111
 #, kde-format
@@ -22349,7 +22335,7 @@ msgstr ""
 #: src/frontend/ui/mqttwillsettingswidget.ui:315
 #, kde-format
 msgid "Update type:"
-msgstr ""
+msgstr "Typo de actualisation:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbDensityEnabled)
 #. i18n: ectx: property (text), widget (QCheckBox, chbLevelsEnabled)
