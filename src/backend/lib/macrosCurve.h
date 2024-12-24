@@ -79,23 +79,23 @@
 	Q_EMIT prefix##DataChanged();
 
 #define CURVE_COLUMN_LIST_SETTER_CMD_IMPL_F_S(class_name, Prefix, prefix, finalize_method)                                                                     \
-class class_name##Set##Prefix##ColumnsCmd : public StandardSetterCmd<class_name::Private, QVector<const AbstractColumn*>> {                                    \
-		public:                                                                                                                                                \
+	class class_name##Set##Prefix##ColumnsCmd : public StandardSetterCmd<class_name::Private, QVector<const AbstractColumn*>> {                                \
+	public:                                                                                                                                                    \
 		class_name##Set##Prefix##ColumnsCmd(class_name::Private* target, const QVector<const AbstractColumn*> newValue, const KLocalizedString& description)   \
-		: StandardSetterCmd<class_name::Private, QVector<const AbstractColumn*>>(target, &class_name::Private::prefix##Columns, newValue, description)         \
-	{	}                                                                                                                                                      \
+			: StandardSetterCmd<class_name::Private, QVector<const AbstractColumn*>>(target, &class_name::Private::prefix##Columns, newValue, description) {   \
+		}                                                                                                                                                      \
 		virtual void finalize() override {                                                                                                                     \
 			m_target->finalize_method();                                                                                                                       \
-		}                                                                                                                                                      \
+			}                                                                                                                                                  \
 		void redo() override {                                                                                                                                 \
 			const auto columns_old = m_target->prefix##Columns;                                                                                                \
 			for (auto col: columns_old) {                                                                                                                      \
 				if (col) {                                                                                                                                     \
 					/* disconnect only when column valid, because otherwise all                                                                                \
-					 * signals are disconnected */                                                                                                             \
+						* signals are disconnected */                                                                                                          \
 					QObject::disconnect(col, nullptr, m_target->q, nullptr);                                                                                   \
+				}                                                                                                                                              \
 			}                                                                                                                                                  \
-		}                                                                                                                                                      \
 			m_target->prefix##Columns = m_otherValue;                                                                                                          \
 			m_otherValue = columns_old;                                                                                                                        \
 			m_target->prefix##ColumnPaths.clear();                                                                                                             \
@@ -103,16 +103,16 @@ class class_name##Set##Prefix##ColumnsCmd : public StandardSetterCmd<class_name:
 				if (col) {                                                                                                                                     \
 					m_target->prefix##ColumnPaths.append(col->path());                                                                                         \
 					CURVE_COLUMN_CONNECT_CALL(m_target->q, col, Prefix)                                                                                        \
-			} else                                                                                                                                             \
-				m_target->prefix##ColumnPaths.append(QStringLiteral(""));                                                                                      \
-		}                                                                                                                                                      \
+				} else                                                                                                                                         \
+					m_target->prefix##ColumnPaths.append(QStringLiteral(""));                                                                                  \
+			}                                                                                                                                                  \
 			finalize();                                                                                                                                        \
 			Q_EMIT m_target->q->prefix##ColumnsChanged(m_target->*m_field);                                                                                    \
 			/* emit DataChanged() in order to notify the plot about the changes */                                                                             \
 		}                                                                                                                                                      \
 		void undo() override {                                                                                                                                 \
 			redo();                                                                                                                                            \
-	}                                                                                                                                                          \
+		}                                                                                                                                                      \
 };
 
 #endif // MACROSXYCURVE_H

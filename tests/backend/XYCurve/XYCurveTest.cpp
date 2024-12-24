@@ -10,8 +10,8 @@
 
 #include "XYCurveTest.h"
 
-#include "backend/core/column/Column.h"
 #include "backend/core/Project.h"
+#include "backend/core/column/Column.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
