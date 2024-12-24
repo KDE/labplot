@@ -52,8 +52,7 @@
 		void redo() override {                                                                                                                                 \
 			const auto columnOld = m_target->prefix##Column;                                                                                                   \
 			if (columnOld) {                                                                                                                                   \
-				/* disconnect only when column valid, because otherwise all                                                                                    \
-				 * signals are disconnected */                                                                                                                 \
+				/* disconnect only when column valid, because otherwise all signals are disconnected */                                                        \
 				QObject::disconnect(columnOld, nullptr, m_target->q, nullptr);                                                                                 \
 			}                                                                                                                                                  \
 			m_target->prefix##Column = m_otherValue;                                                                                                           \
@@ -86,20 +85,19 @@
 		}                                                                                                                                                      \
 		virtual void finalize() override {                                                                                                                     \
 			m_target->finalize_method();                                                                                                                       \
-			}                                                                                                                                                  \
+		}                                                                                                                                                      \
 		void redo() override {                                                                                                                                 \
 			const auto columns_old = m_target->prefix##Columns;                                                                                                \
-			for (auto col: columns_old) {                                                                                                                      \
+			for (auto col : columns_old) {                                                                                                                     \
 				if (col) {                                                                                                                                     \
-					/* disconnect only when column valid, because otherwise all                                                                                \
-						* signals are disconnected */                                                                                                          \
+					/* disconnect only when column valid, because otherwise all signals are disconnected */                                                    \
 					QObject::disconnect(col, nullptr, m_target->q, nullptr);                                                                                   \
 				}                                                                                                                                              \
 			}                                                                                                                                                  \
 			m_target->prefix##Columns = m_otherValue;                                                                                                          \
 			m_otherValue = columns_old;                                                                                                                        \
 			m_target->prefix##ColumnPaths.clear();                                                                                                             \
-			for (auto col: m_target->prefix##Columns) {                                                                                                        \
+			for (auto col : m_target->prefix##Columns) {                                                                                                       \
 				if (col) {                                                                                                                                     \
 					m_target->prefix##ColumnPaths.append(col->path());                                                                                         \
 					CURVE_COLUMN_CONNECT_CALL(m_target->q, col, Prefix)                                                                                        \
@@ -113,6 +111,6 @@
 		void undo() override {                                                                                                                                 \
 			redo();                                                                                                                                            \
 		}                                                                                                                                                      \
-};
+	};
 
 #endif // MACROSXYCURVE_H
