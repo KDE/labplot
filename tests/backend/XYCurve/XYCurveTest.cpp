@@ -10,12 +10,11 @@
 
 #include "XYCurveTest.h"
 
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
-#include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 #include "backend/core/column/Column.h"
-
 #include "backend/core/Project.h"
 #include "backend/lib/trace.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 
 #include <QFile>
 #include <QUndoStack>
@@ -135,7 +134,7 @@ void XYCurveTest::setColumn() {
 
 	int counter = 0;
 	connect(curve, &XYCurve::xColumnChanged, [&counter] {
-		counter ++;
+		++counter;
 	});
 	curve->setXColumn(c1);
 	QCOMPARE(curve->xColumn(), c1);

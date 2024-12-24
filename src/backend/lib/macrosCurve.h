@@ -30,7 +30,7 @@
 		connect(column, &AbstractColumn::aboutToReset, this, &class_name::prefix##ColumnAboutToBeRemoved);                                                     \
 		/* after the curve was updated, emit the signal to update the plot ranges */                                                                           \
 		connect(column, &AbstractColumn::dataChanged, this, &class_name::recalc_func); /* must be before DataChanged*/                                         \
-		connect(column, &AbstractColumn::dataChanged, this, &class_name::prefix##DataChanged); /* triggers a retransform in the plot and also of its children */                                                                \
+		connect(column, &AbstractColumn::dataChanged, this, &class_name::prefix##DataChanged); /* triggers a retransform in the plot and in its children */    \
 	}
 
 #define CURVE_COLUMN_CONNECT_CALL(curve, column, Prefix) curve->connect##Prefix##Column(column);
@@ -44,32 +44,32 @@
 	class class_name##Set##Prefix##ColumnCmd : public StandardSetterCmd<class_name::Private, const AbstractColumn*> {                                          \
 	public:                                                                                                                                                    \
 		class_name##Set##Prefix##ColumnCmd(class_name::Private* target, const AbstractColumn* newValue, const KLocalizedString& description)                   \
-			: StandardSetterCmd<class_name::Private, const AbstractColumn*>(target, &class_name::Private::prefix##Column, newValue, description)               \
-		 { }                                                                                                                                                      \
+			: StandardSetterCmd<class_name::Private, const AbstractColumn*>(target, &class_name::Private::prefix##Column, newValue, description) {             \
+		}                                                                                                                                                      \
 		virtual void finalize() override {                                                                                                                     \
 			m_target->finalize_method();                                                                                                                       \
 		}                                                                                                                                                      \
 		void redo() override {                                                                                                                                 \
-			const auto columnOld = m_target->prefix##Column;                                                                                                           \
-			if (columnOld) {                                                                                                                                 \
+			const auto columnOld = m_target->prefix##Column;                                                                                                   \
+			if (columnOld) {                                                                                                                                   \
 				/* disconnect only when column valid, because otherwise all                                                                                    \
 				 * signals are disconnected */                                                                                                                 \
-				QObject::disconnect(columnOld, nullptr, m_target->q, nullptr);                                                                              \
+				QObject::disconnect(columnOld, nullptr, m_target->q, nullptr);                                                                                 \
 			}                                                                                                                                                  \
-			m_target->prefix##Column = m_otherValue;                                                                                                              \
-			m_otherValue = columnOld; \
-			if (m_target->prefix##Column) {                                                                                                                                    \
-				m_target->q->set##Prefix##ColumnPath(m_target->prefix##Column->path());                                                                                       \
-				CURVE_COLUMN_CONNECT_CALL(m_target->q, m_target->prefix##Column, Prefix)                                                                                      \
+			m_target->prefix##Column = m_otherValue;                                                                                                           \
+			m_otherValue = columnOld;                                                                                                                          \
+			if (m_target->prefix##Column) {                                                                                                                    \
+				m_target->q->set##Prefix##ColumnPath(m_target->prefix##Column->pa                                                                              \
+				CURVE_COLUMN_CONNECT_CALL(m_target->q, m_target->prefix##Column, Prefix)                                                                       \
 			} else                                                                                                                                             \
-				m_target->q->set##Prefix##ColumnPath(QStringLiteral(""));                                                                                     \
+				m_target->q->set##Prefix##ColumnPath(QStringLiteral(""));                                                                                      \
 			finalize();                                                                                                                                        \
 			/* emit DataChanged() in order to notify the plot about the changes */                                                                             \
 			Q_EMIT m_target->q->prefix##ColumnChanged(m_target->*m_field);                                                                                     \
-			Q_EMIT m_target->q->prefix##DataChanged();                                                                                                      \
+			Q_EMIT m_target->q->prefix##DataChanged();                                                                                                         \
 		}                                                                                                                                                      \
 		void undo() override {                                                                                                                                 \
-			redo(); \
+			redo();                                                                                                                                            \
 		}                                                                                                                                                      \
 	};
 
@@ -78,41 +78,41 @@
 	/* emit DataChanged() in order to notify the plot about the changes */                                                                                     \
 	Q_EMIT prefix##DataChanged();
 
-#define CURVE_COLUMN_LIST_SETTER_CMD_IMPL_F_S(class_name, Prefix, prefix, finalize_method)                                                                          \
-class class_name##Set##Prefix##ColumnsCmd : public StandardSetterCmd<class_name::Private, QVector<const AbstractColumn*>> {                                          \
-		public:                                                                                                                                                    \
-		class_name##Set##Prefix##ColumnsCmd(class_name::Private* target, const QVector<const AbstractColumn*> newValue, const KLocalizedString& description)                   \
-		: StandardSetterCmd<class_name::Private, QVector<const AbstractColumn*>>(target, &class_name::Private::prefix##Columns, newValue, description)               \
+#define CURVE_COLUMN_LIST_SETTER_CMD_IMPL_F_S(class_name, Prefix, prefix, finalize_method)                                                                     \
+class class_name##Set##Prefix##ColumnsCmd : public StandardSetterCmd<class_name::Private, QVector<const AbstractColumn*>> {                                    \
+		public:                                                                                                                                                \
+		class_name##Set##Prefix##ColumnsCmd(class_name::Private* target, const QVector<const AbstractColumn*> newValue, const KLocalizedString& description)   \
+		: StandardSetterCmd<class_name::Private, QVector<const AbstractColumn*>>(target, &class_name::Private::prefix##Columns, newValue, description)         \
 	{	}                                                                                                                                                      \
 		virtual void finalize() override {                                                                                                                     \
 			m_target->finalize_method();                                                                                                                       \
 		}                                                                                                                                                      \
 		void redo() override {                                                                                                                                 \
-			const auto columns_old = m_target->prefix##Columns;                                                                                                           \
-			for (auto col: columns_old) {\
-				if (col) {                                                                                                                                 \
-					/* disconnect only when column valid, because otherwise all                                                                                    \
-					 * signals are disconnected */                                                                                                                 \
-					QObject::disconnect(col, nullptr, m_target->q, nullptr);                                                                              \
+			const auto columns_old = m_target->prefix##Columns;                                                                                                \
+			for (auto col: columns_old) {                                                                                                                      \
+				if (col) {                                                                                                                                     \
+					/* disconnect only when column valid, because otherwise all                                                                                \
+					 * signals are disconnected */                                                                                                             \
+					QObject::disconnect(col, nullptr, m_target->q, nullptr);                                                                                   \
 			}                                                                                                                                                  \
-		} \
-			m_target->prefix##Columns = m_otherValue;                                                                                                              \
-			m_otherValue = columns_old; \
-			m_target->prefix##ColumnPaths.clear(); \
-			for (auto col: m_target->prefix##Columns) {\
-				if (col) {                                                                                                                                    \
-					m_target->prefix##ColumnPaths.append(col->path());                                                                                       \
-					CURVE_COLUMN_CONNECT_CALL(m_target->q, col, Prefix)                                                                                      \
+		}                                                                                                                                                      \
+			m_target->prefix##Columns = m_otherValue;                                                                                                          \
+			m_otherValue = columns_old;                                                                                                                        \
+			m_target->prefix##ColumnPaths.clear();                                                                                                             \
+			for (auto col: m_target->prefix##Columns) {                                                                                                        \
+				if (col) {                                                                                                                                     \
+					m_target->prefix##ColumnPaths.append(col->path());                                                                                         \
+					CURVE_COLUMN_CONNECT_CALL(m_target->q, col, Prefix)                                                                                        \
 			} else                                                                                                                                             \
-				m_target->prefix##ColumnPaths.append(QStringLiteral(""));                                                                                     \
-		} \
+				m_target->prefix##ColumnPaths.append(QStringLiteral(""));                                                                                      \
+		}                                                                                                                                                      \
 			finalize();                                                                                                                                        \
-			Q_EMIT m_target->q->prefix##ColumnsChanged(m_target->*m_field);                                                                                     \
+			Q_EMIT m_target->q->prefix##ColumnsChanged(m_target->*m_field);                                                                                    \
 			/* emit DataChanged() in order to notify the plot about the changes */                                                                             \
 		}                                                                                                                                                      \
 		void undo() override {                                                                                                                                 \
-			redo(); \
-	}                                                                                                                                                      \
+			redo();                                                                                                                                            \
+	}                                                                                                                                                          \
 };
 
 #endif // MACROSXYCURVE_H

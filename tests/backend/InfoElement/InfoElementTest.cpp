@@ -388,7 +388,7 @@ void InfoElementTest::columnValueChanged() {
 	}
 	QCOMPARE(ie->connectionLineCurveName(), curve->name());
 
-		   // InfoElement is invalid
+	// InfoElement is invalid
 	const auto& labels = ie->children<TextLabel>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 	const auto& points = ie->children<CustomPoint>();
 	QCOMPARE(labels.count(), 1);
