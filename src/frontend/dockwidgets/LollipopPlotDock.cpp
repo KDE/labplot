@@ -191,7 +191,7 @@ void LollipopPlotDock::loadDataColumns() {
 		// show the columns in the comboboxes
 		for (int i = 0; i < count; ++i) {
 			m_dataComboBoxes.at(i)->setModel(model); // the model might have changed in-between, re-set the current model
-			m_dataComboBoxes.at(i)->setAspect(m_plot->dataColumns().at(i));
+			m_dataComboBoxes.at(i)->setAspect(m_plot->dataColumns().at(i), m_plot->dataColumnPaths().at(i));
 		}
 
 		// show columns names in the combobox for the selection of the bar to be modified

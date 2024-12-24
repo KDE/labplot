@@ -59,7 +59,7 @@
 			m_target->prefix##Column = m_otherValue;                                                                                                           \
 			m_otherValue = columnOld;                                                                                                                          \
 			if (m_target->prefix##Column) {                                                                                                                    \
-				m_target->q->set##Prefix##ColumnPath(m_target->prefix##Column->pa                                                                              \
+				m_target->q->set##Prefix##ColumnPath(m_target->prefix##Column->path());                                                                        \
 				CURVE_COLUMN_CONNECT_CALL(m_target->q, m_target->prefix##Column, Prefix)                                                                       \
 			} else                                                                                                                                             \
 				m_target->q->set##Prefix##ColumnPath(QStringLiteral(""));                                                                                      \
