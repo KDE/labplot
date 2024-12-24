@@ -37,6 +37,7 @@ public:
 	friend class XYCurveSetYErrorPlusColumnCmd;
 	friend class XYCurveSetYErrorMinusColumnCmd;
 	friend class XYCurveSetValuesColumnCmd;
+
 	enum class LineType {
 		NoLine,
 		Line,
@@ -58,7 +59,10 @@ public:
 	explicit XYCurve(const QString& name, AspectType type = AspectType::XYCurve, bool loading = false);
 	~XYCurve() override;
 
+	void setPlotType(Plot::PlotType);
+
 	QIcon icon() const override;
+	static QIcon staticIcon(XYCurve::PlotType type);
 	QMenu* createContextMenu() override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
@@ -201,6 +205,8 @@ Q_SIGNALS:
 
 	friend class RetransformTest;
 	friend class XYCurveTest;
+	friend class FourierTest;
+	friend class FitTest;
 };
 
 #endif

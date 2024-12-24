@@ -42,7 +42,7 @@ public:
 
 	// general
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
-	QString& xColumnPath() const;
+	CLASS_D_ACCESSOR_DECL(QString, xColumnPath, XColumnPath)
 	BASIC_D_ACCESSOR_DECL(QVector<const AbstractColumn*>, dataColumns, DataColumns)
 	CLASS_D_ACCESSOR_DECL(QVector<QString>, dataColumnPaths, DataColumnPaths)
 	BASIC_D_ACCESSOR_DECL(BarPlot::Type, type, Type)
@@ -76,6 +76,8 @@ private:
 	void init();
 	void initActions();
 	void initMenus();
+	void connectXColumn(const AbstractColumn*);
+	void connectDataColumn(const AbstractColumn*);
 
 	QAction* orientationHorizontalAction{nullptr};
 	QAction* orientationVerticalAction{nullptr};
@@ -84,12 +86,15 @@ private:
 private Q_SLOTS:
 	// SLOTs for changes triggered via QActions in the context menu
 	void orientationChangedSlot(QAction*);
+	void xColumnAboutToBeRemoved(const AbstractAspect*);
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
 
 Q_SIGNALS:
 	// General-Tab
 	void xColumnChanged(const AbstractColumn*);
+	void xDataChanged();
 	void dataColumnsChanged(const QVector<const AbstractColumn*>&);
+	void dataDataChanged();
 	void typeChanged(BarPlot::Type);
 	void orientationChanged(BarPlot::Orientation);
 	void widthFactorChanged(double);
@@ -97,6 +102,9 @@ Q_SIGNALS:
 	// box border
 	void borderPenChanged(QPen&);
 	void borderOpacityChanged(float);
+
+	friend class BarPlotSetXColumnCmd;
+	friend class BarPlotSetDataColumnsCmd;
 };
 
 #endif

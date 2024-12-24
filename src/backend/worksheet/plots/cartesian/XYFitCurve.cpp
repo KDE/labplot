@@ -1926,20 +1926,15 @@ void XYFitCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColu
 	DEBUG(Q_FUNC_INFO << ", data source: " << ENUM_TO_STRING(XYAnalysisCurve, DataSourceType, dataSourceType))
 	switch (dataSourceType) {
 	case XYAnalysisCurve::DataSourceType::Spreadsheet:
-		if (!xDataColumn || !yDataColumn)
-			break;
-		*tmpXDataColumn = xDataColumn;
-		*tmpYDataColumn = yDataColumn;
-		break;
-	case XYAnalysisCurve::DataSourceType::Curve:
-		if (!dataSourceCurve)
-			break;
-		*tmpXDataColumn = dataSourceCurve->xColumn();
-		*tmpYDataColumn = dataSourceCurve->yColumn();
+	case XYAnalysisCurve::DataSourceType::Curve: // Fall through
+		XYAnalysisCurvePrivate::prepareTmpDataColumn(tmpXDataColumn, tmpYDataColumn);
 		break;
 	case XYAnalysisCurve::DataSourceType::Histogram:
-		if (!dataSourceHistogram)
+		if (!dataSourceHistogram) {
+			*tmpXDataColumn = nullptr;
+			*tmpYDataColumn = nullptr;
 			break;
+		}
 		switch (fitData.algorithm) {
 		case nsl_fit_algorithm_lm:
 			*tmpXDataColumn = dataSourceHistogram->bins(); // bins

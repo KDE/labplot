@@ -28,7 +28,7 @@ public:
 	explicit TreeViewComboBox(QWidget* parent = nullptr);
 
 	void setModel(AspectTreeModel*);
-	// void setModel(AbstractItemModel*) override;
+	void setModel(QAbstractItemModel*) override;
 	void setCurrentModelIndex(const QModelIndex&);
 	void setAspect(const AbstractAspect*);
 	void setAspect(const AbstractAspect* aspect, const QString& path);

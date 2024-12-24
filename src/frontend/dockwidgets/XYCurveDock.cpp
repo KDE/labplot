@@ -212,12 +212,12 @@ void XYCurveDock::init() {
 	QPen pen(Qt::SolidPattern, 0);
 	const QColor& color = GuiTools::isDarkMode() ? Qt::white : Qt::black;
 	pen.setColor(color);
-	pa.setPen(pen);
 
 	// no line
 	pm.fill(Qt::transparent);
 	pa.begin(&pm);
 	pa.setPen(pen);
+	pa.setBrush(QBrush(pen.color()));
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.drawEllipse(1, 1, 4, 4);
 	pa.drawEllipse(15, 15, 4, 4);
@@ -228,6 +228,7 @@ void XYCurveDock::init() {
 	pm.fill(Qt::transparent);
 	pa.begin(&pm);
 	pa.setPen(pen);
+	pa.setBrush(QBrush(pen.color()));
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.drawEllipse(1, 1, 4, 4);
 	pa.drawEllipse(15, 15, 4, 4);
@@ -235,9 +236,11 @@ void XYCurveDock::init() {
 	pa.end();
 	ui.cbLineType->setItemIcon(1, pm);
 
+	// horizontal start
 	pm.fill(Qt::transparent);
 	pa.begin(&pm);
 	pa.setPen(pen);
+	pa.setBrush(QBrush(pen.color()));
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.drawEllipse(1, 1, 4, 4);
 	pa.drawEllipse(15, 15, 4, 4);
@@ -246,9 +249,11 @@ void XYCurveDock::init() {
 	pa.end();
 	ui.cbLineType->setItemIcon(2, pm);
 
+	// vertical start
 	pm.fill(Qt::transparent);
 	pa.begin(&pm);
 	pa.setPen(pen);
+	pa.setBrush(QBrush(pen.color()));
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.drawEllipse(1, 1, 4, 4);
 	pa.drawEllipse(15, 15, 4, 4);
@@ -261,6 +266,7 @@ void XYCurveDock::init() {
 	pm.fill(Qt::transparent);
 	pa.begin(&pm);
 	pa.setPen(pen);
+	pa.setBrush(QBrush(pen.color()));
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.drawEllipse(1, 1, 4, 4);
 	pa.drawEllipse(15, 15, 4, 4);
@@ -274,6 +280,7 @@ void XYCurveDock::init() {
 	pm.fill(Qt::transparent);
 	pa.begin(&pm);
 	pa.setPen(pen);
+	pa.setBrush(QBrush(pen.color()));
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.drawEllipse(1, 1, 4, 4);
 	pa.drawEllipse(15, 15, 4, 4);
@@ -287,6 +294,7 @@ void XYCurveDock::init() {
 	pm.fill(Qt::transparent);
 	pa.begin(&pm);
 	pa.setPen(pen);
+	pa.setBrush(QBrush(pen.color()));
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.drawEllipse(1, 1, 4, 4);
 	pa.drawEllipse(8, 8, 4, 4);
@@ -299,6 +307,7 @@ void XYCurveDock::init() {
 	pm.fill(Qt::transparent);
 	pa.begin(&pm);
 	pa.setPen(pen);
+	pa.setBrush(QBrush(pen.color()));
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.drawEllipse(1, 1, 4, 4);
 	pa.drawEllipse(8, 8, 4, 4);
@@ -311,6 +320,7 @@ void XYCurveDock::init() {
 	pm.fill(Qt::transparent);
 	pa.begin(&pm);
 	pa.setPen(pen);
+	pa.setBrush(QBrush(pen.color()));
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.drawEllipse(1, 1, 4, 4);
 	pa.drawEllipse(15, 15, 4, 4);
@@ -957,7 +967,7 @@ void XYCurveDock::curveValuesSuffixChanged(const QString& suffix) {
 }
 void XYCurveDock::curveValuesFontChanged(QFont font) {
 	CONDITIONAL_LOCK_RETURN;
-	font.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Unit::Point)));
+	font.setPointSizeF(std::round(Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Unit::Point)));
 	ui.kfrValuesFont->setFont(font);
 }
 void XYCurveDock::curveValuesColorChanged(QColor color) {
@@ -1007,14 +1017,14 @@ void XYCurveDock::load() {
 	ui.cbValuesPosition->setCurrentIndex((int)m_curve->valuesPosition());
 	ui.sbValuesDistance->setValue(Worksheet::convertFromSceneUnits(m_curve->valuesDistance(), Worksheet::Unit::Point));
 	ui.sbValuesRotation->setValue(m_curve->valuesRotationAngle());
-	ui.sbValuesOpacity->setValue(round(m_curve->valuesOpacity() * 100.0));
+	ui.sbValuesOpacity->setValue(std::round(m_curve->valuesOpacity() * 100.0));
 	ui.sbValuesPrecision->setValue(m_curve->valuesPrecision());
 	ui.cbValuesNumericFormat->setCurrentIndex(ui.cbValuesNumericFormat->findData(m_curve->valuesNumericFormat()));
 	ui.cbValuesDateTimeFormat->setCurrentText(m_curve->valuesDateTimeFormat());
 	ui.leValuesPrefix->setText(m_curve->valuesPrefix());
 	ui.leValuesSuffix->setText(m_curve->valuesSuffix());
 	QFont valuesFont = m_curve->valuesFont();
-	valuesFont.setPointSizeF(round(Worksheet::convertFromSceneUnits(valuesFont.pointSizeF(), Worksheet::Unit::Point)));
+	valuesFont.setPointSizeF(std::round(Worksheet::convertFromSceneUnits(valuesFont.pointSizeF(), Worksheet::Unit::Point)));
 	ui.kfrValuesFont->setFont(valuesFont);
 	ui.kcbValuesColor->setColor(m_curve->valuesColor());
 	this->updateValuesWidgets();
@@ -1067,11 +1077,11 @@ void XYCurveDock::loadConfig(KConfig& config) {
 	ui.sbValuesDistance->setValue(
 		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("ValuesDistance"), m_curve->valuesDistance()), Worksheet::Unit::Point));
 	ui.sbValuesRotation->setValue(group.readEntry(QStringLiteral("ValuesRotation"), m_curve->valuesRotationAngle()));
-	ui.sbValuesOpacity->setValue(round(group.readEntry(QStringLiteral("ValuesOpacity"), m_curve->valuesOpacity()) * 100.0));
+	ui.sbValuesOpacity->setValue(std::round(group.readEntry(QStringLiteral("ValuesOpacity"), m_curve->valuesOpacity()) * 100.0));
 	ui.leValuesPrefix->setText(group.readEntry(QStringLiteral("ValuesPrefix"), m_curve->valuesPrefix()));
 	ui.leValuesSuffix->setText(group.readEntry(QStringLiteral("ValuesSuffix"), m_curve->valuesSuffix()));
 	QFont valuesFont = m_curve->valuesFont();
-	valuesFont.setPointSizeF(round(Worksheet::convertFromSceneUnits(valuesFont.pointSizeF(), Worksheet::Unit::Point)));
+	valuesFont.setPointSizeF(std::round(Worksheet::convertFromSceneUnits(valuesFont.pointSizeF(), Worksheet::Unit::Point)));
 	ui.kfrValuesFont->setFont(group.readEntry(QStringLiteral("ValuesFont"), valuesFont));
 	ui.kcbValuesColor->setColor(group.readEntry(QStringLiteral("ValuesColor"), m_curve->valuesColor()));
 

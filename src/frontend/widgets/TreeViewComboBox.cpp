@@ -14,6 +14,8 @@
 #include "backend/lib/macros.h"
 #include "frontend/widgets/TreeViewComboBox.h"
 
+#include <KLocalizedString>
+
 #include <QEvent>
 #include <QGroupBox>
 #include <QHeaderView>
@@ -21,10 +23,6 @@
 #include <QStylePainter>
 #include <QTreeView>
 #include <QVBoxLayout>
-
-#include <KLocalizedString>
-
-#include <cstring> // strcmp()
 
 /*!
 	\class TreeViewComboBox
@@ -89,6 +87,16 @@ void TreeViewComboBox::setModel(AspectTreeModel* model) {
 	m_treeView->expandAll();
 
 	setEditText(m_currentText);
+}
+
+/*!
+	overload to handle base class setModel()
+ */
+void TreeViewComboBox::setModel(QAbstractItemModel* model) {
+    if (auto* aspectModel = qobject_cast<AspectTreeModel*>(model))
+        setModel(aspectModel);
+    else
+        QComboBox::setModel(model);
 }
 
 /*!

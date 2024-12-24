@@ -81,10 +81,11 @@ SignallingUndoCommand::SignallingUndoCommand(const QString& text,
 	m_argument_data = new void*[m_argument_count];
 	Q_CHECK_PTR(m_argument_data);
 	for (int i = 0; i < m_argument_count; i++) {
-		m_argument_types[i] = QMetaType::type(type_names[i]);
-		if (m_argument_types[i]) // type is known to QMetaType
-			m_argument_data[i] = QMetaType::create(m_argument_types[i], argument_data[i]);
-		else
+		m_argument_types[i] = QMetaType::fromName(type_names[i]).id();
+		if (m_argument_types[i]) { // type is known to QMetaType
+			QMetaType metaType(m_argument_types[i]);
+			m_argument_data[i] = metaType.create(argument_data[i]);
+		} else
 			qWarning(
 				"SignallingUndoCommand: failed to copy unknown type %s"
 				" (needs to be registered with qRegisterMetaType())!\n",
@@ -93,9 +94,12 @@ SignallingUndoCommand::SignallingUndoCommand(const QString& text,
 }
 
 SignallingUndoCommand::~SignallingUndoCommand() {
-	for (int i = 0; i < m_argument_count; ++i)
-		if (m_argument_types[i] && m_argument_data[i])
-			QMetaType::destroy(m_argument_types[i], m_argument_data[i]);
+	for (int i = 0; i < m_argument_count; ++i) {
+		if (m_argument_types[i] && m_argument_data[i]) {
+			QMetaType metaType(m_argument_types[i]);
+			metaType.destroy(m_argument_data[i]);
+		}
+	}
 	delete[] m_argument_types;
 	delete[] m_argument_data;
 }
@@ -104,7 +108,7 @@ QGenericArgument SignallingUndoCommand::arg(int index) {
 	if (index >= m_argument_count)
 		return QGenericArgument{};
 
-	return QGenericArgument{QMetaType::typeName(m_argument_types[index]), m_argument_data[index]};
+	return QGenericArgument{QMetaType(m_argument_types[index]).name(), m_argument_data[index]};
 }
 
 void SignallingUndoCommand::redo() {

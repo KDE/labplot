@@ -184,6 +184,71 @@ void XYCurve::init(bool loading) {
 	d->rugOffset = group.readEntry(QStringLiteral("RugOffset"), 0.0);
 }
 
+void XYCurve::setPlotType(PlotType type) {
+	Q_D(XYCurve);
+	d->dropLine->setStyle(Qt::NoPen);
+	d->background->setEnabled(false);
+
+	if (type == PlotType::Line) {
+		d->line->setStyle(Qt::SolidLine);
+		d->lineType = LineType::Line;
+		d->symbol->setStyle(Symbol::Style::NoSymbols);
+		d->errorBar->setXErrorType(ErrorBar::ErrorType::NoError);
+		d->errorBar->setYErrorType(ErrorBar::ErrorType::NoError);
+	} else if (type == PlotType::LineHorizontalStep) {
+		d->line->setStyle(Qt::SolidLine);
+		d->lineType = LineType::StartHorizontal;
+		d->symbol->setStyle(Symbol::Style::NoSymbols);
+		d->errorBar->setXErrorType(ErrorBar::ErrorType::NoError);
+		d->errorBar->setYErrorType(ErrorBar::ErrorType::NoError);
+	} else if (type == PlotType::LineVerticalStep) {
+		d->line->setStyle(Qt::SolidLine);
+		d->lineType = LineType::StartVertical;
+		d->symbol->setStyle(Symbol::Style::NoSymbols);
+		d->errorBar->setXErrorType(ErrorBar::ErrorType::NoError);
+		d->errorBar->setYErrorType(ErrorBar::ErrorType::NoError);
+	} else if (type == PlotType::LineSpline) {
+		d->line->setStyle(Qt::SolidLine);
+		d->lineType = LineType::SplineCubicNatural;
+		d->symbol->setStyle(Symbol::Style::NoSymbols);
+		d->errorBar->setXErrorType(ErrorBar::ErrorType::NoError);
+		d->errorBar->setYErrorType(ErrorBar::ErrorType::NoError);
+	} else if (type == PlotType::Scatter) {
+		d->lineType = LineType::NoLine;
+		d->symbol->setStyle(Symbol::Style::Circle);
+		d->errorBar->setXErrorType(ErrorBar::ErrorType::NoError);
+		d->errorBar->setYErrorType(ErrorBar::ErrorType::NoError);
+	} else if (type == PlotType::ScatterYError) {
+		d->lineType = LineType::NoLine;
+		d->symbol->setStyle(Symbol::Style::Circle);
+		d->errorBar->setXErrorType(ErrorBar::ErrorType::NoError);
+		d->errorBar->setYErrorType(ErrorBar::ErrorType::Symmetric);
+	} else if (type == PlotType::ScatterXYError) {
+		d->lineType = LineType::NoLine;
+		d->symbol->setStyle(Symbol::Style::Circle);
+		d->errorBar->setXErrorType(ErrorBar::ErrorType::Symmetric);
+		d->errorBar->setYErrorType(ErrorBar::ErrorType::Symmetric);
+	} else if (type == PlotType::LineSymbol) {
+		d->line->setStyle(Qt::SolidLine);
+		d->lineType = LineType::Line;
+		d->symbol->setStyle(Symbol::Style::Circle);
+		d->errorBar->setXErrorType(ErrorBar::ErrorType::NoError);
+		d->errorBar->setYErrorType(ErrorBar::ErrorType::NoError);
+	} else if (type == PlotType::LineSymbol2PointSegment) {
+		d->line->setStyle(Qt::SolidLine);
+		d->lineType = LineType::Segments2;
+		d->symbol->setStyle(Symbol::Style::Circle);
+		d->errorBar->setXErrorType(ErrorBar::ErrorType::NoError);
+		d->errorBar->setYErrorType(ErrorBar::ErrorType::NoError);
+	} else if (type == PlotType::LineSymbol3PointSegment) {
+		d->line->setStyle(Qt::SolidLine);
+		d->lineType = LineType::Segments3;
+		d->symbol->setStyle(Symbol::Style::Circle);
+		d->errorBar->setXErrorType(ErrorBar::ErrorType::NoError);
+		d->errorBar->setYErrorType(ErrorBar::ErrorType::NoError);
+	}
+}
+
 void XYCurve::initActions() {
 	navigateToAction = new QAction(QIcon::fromTheme(QStringLiteral("go-next-view")), QString(), this);
 	connect(navigateToAction, SIGNAL(triggered(bool)), this, SLOT(navigateTo()));
@@ -229,6 +294,74 @@ QMenu* XYCurve::createContextMenu() {
 */
 QIcon XYCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-curve"));
+}
+
+QIcon XYCurve::staticIcon(Plot::PlotType type) {
+	QPainter pa;
+	pa.setRenderHint(QPainter::Antialiasing);
+	static const int iconSize = 20;
+	QPixmap pm(iconSize, iconSize);
+	pm.fill(Qt::transparent);
+
+	QPen pen(Qt::SolidLine);
+	pen.setColor(GuiTools::isDarkMode() ? Qt::white : Qt::black);
+	pen.setWidthF(0.0);
+	pa.begin(&pm);
+	pa.setPen(pen);
+	pa.setBrush(QBrush(pen.color()));
+
+	if (type == PlotType::Line)
+		pa.drawLine(2, 18, 18, 2);
+	else if (type == PlotType::LineHorizontalStep) {
+		pa.drawLine(3, 3, 17, 3);
+		pa.drawLine(17, 3, 17, 17);
+	} else if (type == PlotType::LineVerticalStep) {
+		pa.drawLine(3, 3, 3, 17);
+		pa.drawLine(3, 17, 17, 17);
+	} else if (type == PlotType::LineSpline) {
+		pa.rotate(45);
+		pa.drawArc(2 * sqrt(2), -4, 17 * sqrt(2), 20, 30 * 16, 120 * 16);
+	} else if (type == PlotType::Scatter) {
+		pa.drawEllipse(QPoint(3, 17), 2, 2);
+		pa.drawEllipse(QPoint(10, 10), 2, 2);
+		pa.drawEllipse(QPoint(17, 3), 2, 2);
+	} else if (type == PlotType::ScatterYError) {
+		pa.drawEllipse(QPoint(5, 13), 2, 2);
+		pa.drawLine(5, 18, 5, 7);
+		pa.drawEllipse(QPoint(13, 7), 2, 2);
+		pa.drawLine(13, 2, 13, 13);
+	} else if (type == PlotType::ScatterXYError) {
+		pa.drawEllipse(QPoint(5, 13), 2, 2);
+		pa.drawLine(5, 18, 5, 7);
+		pa.drawLine(0, 13, 10, 13);
+		pa.drawEllipse(QPoint(13, 7), 2, 2);
+		pa.drawLine(13, 2, 13, 13);
+		pa.drawLine(7, 7, 18, 7);
+	} else if (type == PlotType::LineSymbol) {
+		pa.drawLine(3, 17, 17, 3);
+		pa.drawEllipse(QPoint(3, 17), 2, 2);
+		pa.drawEllipse(QPoint(10, 10), 2, 2);
+		pa.drawEllipse(QPoint(17, 3), 2, 2);
+	} else if (type == PlotType::LineSymbol2PointSegment) {
+		pa.drawEllipse(QPoint(3, 12), 2, 2);
+		pa.drawEllipse(QPoint(7, 3), 2, 2);
+		pa.drawLine(4, 13, 8, 4);
+		pa.drawEllipse(QPoint(13, 12), 2, 2);
+		pa.drawEllipse(QPoint(17, 3), 2, 2);
+		pa.drawLine(14, 13, 18, 4);
+	} else if (type == PlotType::LineSymbol3PointSegment) {
+		pa.drawEllipse(QPoint(3, 17), 2, 2);
+		pa.drawEllipse(QPoint(10, 3), 2, 2);
+		pa.drawEllipse(QPoint(17, 17), 2, 2);
+		pa.drawLine(4, 17, 11, 4);
+		pa.drawLine(11, 4, 18, 18);
+	} else {
+		pa.end();
+		return QIcon::fromTheme(QStringLiteral("labplot-xy-curve"));
+	}
+
+	pa.end();
+	return {pm};
 }
 
 // ##############################################################################
@@ -2179,6 +2312,10 @@ double XYCurve::y(double x, bool& valueFound) const {
  * @return y value from x value
  */
 double XYCurve::y(double x, double& x_new, bool& valueFound) const {
+	if (!xColumn() || !yColumn()) {
+		valueFound = false;
+		return std::nan("0");
+	}
 	int index = xColumn()->indexForValue(x);
 	if (index < 0) {
 		valueFound = false;
@@ -2844,20 +2981,8 @@ void XYCurve::save(QXmlStreamWriter* writer) const {
 
 	// general
 	writer->writeStartElement(QStringLiteral("general"));
-
-	// if the data columns are valid, write their current paths.
-	// if not, write the last used paths so the columns can be restored later
-	// when the columns with the same path are added again to the project
-	if (d->xColumn)
-		writer->writeAttribute(QStringLiteral("xColumn"), d->xColumn->path());
-	else
-		writer->writeAttribute(QStringLiteral("xColumn"), d->xColumnPath);
-
-	if (d->yColumn)
-		writer->writeAttribute(QStringLiteral("yColumn"), d->yColumn->path());
-	else
-		writer->writeAttribute(QStringLiteral("yColumn"), d->yColumnPath);
-
+	WRITE_COLUMN(d->xColumn, xColumn);
+	WRITE_COLUMN(d->yColumn, yColumn);
 	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(m_cSystemIndex));
 	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));

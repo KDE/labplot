@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
 	MainWin::updateLocale();
 
 	QString systemInfo{AboutDialog::systemInfo()};
-	QString links = i18n("Visit website:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://labplot.kde.org")) + QLatin1Char('\n')
+	QString links = i18n("Visit website:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://labplot.org")) + QLatin1Char('\n')
 		// Release notes: LINK ?
 		+ i18n("Watch video tutorials:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://tube.kockatoo.org/c/labplot")) + QLatin1Char('\n')
 		+ i18n("Discuss on Mastodon:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://floss.social/@LabPlot")) + QLatin1Char('\n')

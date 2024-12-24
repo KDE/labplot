@@ -626,11 +626,27 @@ private:
 	}
 
 // Column
+
+// if the data columns are valid, write their current paths.
+// if not, write the last used paths so the columns can be restored later
+// when the columns with the same path are added again to the project
 #define WRITE_COLUMN(column, columnName)                                                                                                                       \
 	if (column) {                                                                                                                                              \
 		writer->writeAttribute(QStringLiteral(#columnName), column->path());                                                                                   \
 	} else {                                                                                                                                                   \
-		writer->writeAttribute(QStringLiteral(#columnName), QString());                                                                                        \
+		writer->writeAttribute(QStringLiteral(#columnName), column##Path);                                                                                     \
+	}
+
+#define WRITE_COLUMNS(columns, paths)                                                                                                                          \
+	int index = 0;                                                                                                                                             \
+	for (auto* column : columns) {                                                                                                                             \
+		writer->writeStartElement(QStringLiteral("column"));                                                                                                   \
+		if (column)                                                                                                                                            \
+			writer->writeAttribute(QStringLiteral("path"), column->path());                                                                                    \
+		else                                                                                                                                                   \
+			writer->writeAttribute(QStringLiteral("path"), paths.at(index));                                                                                   \
+		writer->writeEndElement();                                                                                                                             \
+		++index;                                                                                                                                               \
 	}
 
 // column names can be empty in case no columns were used before save

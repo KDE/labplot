@@ -18,6 +18,8 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurvePrivate.h"
+#include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 
 #include "backend/nsl/nsl_sf_stats.h"
@@ -26,6 +28,35 @@
 // ##############################################################################
 // #################  linear regression with NIST datasets ######################
 // ##############################################################################
+void FitTest::addCurve() {
+	Project project;
+
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(plot);
+
+	auto* sheet = new Spreadsheet(QStringLiteral("sheet"));
+	project.addChild(sheet);
+	sheet->setColumnCount(2);
+	sheet->column(0)->setName(QStringLiteral("x"));
+	sheet->column(1)->setName(QStringLiteral("y"));
+
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	plot->addChild(curve);
+
+	curve->d_func()->setSelected(true);
+	QCOMPARE(plot->currentCurve(), curve);
+
+	plot->addFitCurve(); // Should not crash and curve should be assigned accordingly
+
+	const auto& analysisCurves = plot->children<XYAnalysisCurve>();
+	QCOMPARE(analysisCurves.count(), 1);
+
+	QCOMPARE(analysisCurves.at(0)->d_func()->dataSourceCurve, curve);
+}
+
 void FitTest::testLinearNorris() {
 	// NIST data for Norris dataset
 	QVector<double> xData = {0.2,	337.4, 118.2, 884.6, 10.1,	226.5, 666.3, 996.3, 448.6, 777.0, 558.2, 0.4,	 0.6,  775.5, 666.9, 338.0, 447.5, 11.6,

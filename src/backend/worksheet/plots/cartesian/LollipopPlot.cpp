@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Lollipop Plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -13,6 +13,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/lib/macrosCurve.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
@@ -35,6 +36,8 @@
  * \class LollipopPlot
  * \brief Lollipop Plot
  */
+
+CURVE_COLUMN_CONNECT(LollipopPlot, X, x, recalc)
 
 LollipopPlot::LollipopPlot(const QString& name)
 	: Plot(name, new LollipopPlotPrivate(this), AspectType::LollipopPlot) {
@@ -153,11 +156,7 @@ void LollipopPlot::handleResize(double /*horizontalRatio*/, double /*verticalRat
 BASIC_SHARED_D_READER_IMPL(LollipopPlot, QVector<const AbstractColumn*>, dataColumns, dataColumns)
 BASIC_SHARED_D_READER_IMPL(LollipopPlot, LollipopPlot::Orientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(LollipopPlot, const AbstractColumn*, xColumn, xColumn)
-
-QString& LollipopPlot::xColumnPath() const {
-	D(LollipopPlot);
-	return d->xColumnPath;
-}
+BASIC_SHARED_D_READER_IMPL(LollipopPlot, QString, xColumnPath, xColumnPath)
 
 Line* LollipopPlot::lineAt(int index) const {
 	Q_D(const LollipopPlot);
@@ -274,46 +273,26 @@ Value* LollipopPlot::value() const {
 }
 
 /* ============================ setter methods and undo commands ================= */
+CURVE_COLUMN_CONNECT(LollipopPlot, Data, data, recalc)
 
 // General
-STD_SETTER_CMD_IMPL_F_S(LollipopPlot, SetXColumn, const AbstractColumn*, xColumn, recalc)
+CURVE_COLUMN_SETTER_CMD_IMPL_F_S(LollipopPlot, X, x, recalc)
 void LollipopPlot::setXColumn(const AbstractColumn* column) {
 	Q_D(LollipopPlot);
-	if (column != d->xColumn) {
+	if (column != d->xColumn)
 		exec(new LollipopPlotSetXColumnCmd(d, column, ki18n("%1: set x column")));
-
-		if (column) {
-			// update the curve itself on changes
-			connect(column, &AbstractColumn::dataChanged, this, &LollipopPlot::recalc);
-			if (column->parentAspect())
-				connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &LollipopPlot::dataColumnAboutToBeRemoved);
-
-			connect(column, &AbstractColumn::dataChanged, this, &LollipopPlot::dataChanged);
-			// TODO: add disconnect in the undo-function
-		}
-	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(LollipopPlot, SetDataColumns, QVector<const AbstractColumn*>, dataColumns, recalc)
+void LollipopPlot::setXColumnPath(const QString& path) {
+	Q_D(LollipopPlot);
+	d->xColumnPath = path;
+}
+
+CURVE_COLUMN_LIST_SETTER_CMD_IMPL_F_S(LollipopPlot, Data, data, recalc)
 void LollipopPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 	Q_D(LollipopPlot);
-	if (columns != d->dataColumns) {
+	if (columns != d->dataColumns)
 		exec(new LollipopPlotSetDataColumnsCmd(d, columns, ki18n("%1: set data columns")));
-
-		for (auto* column : columns) {
-			if (!column)
-				continue;
-
-			// update the curve itself on changes
-			connect(column, &AbstractColumn::dataChanged, this, &LollipopPlot::recalc);
-			if (column->parentAspect())
-				connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &LollipopPlot::dataColumnAboutToBeRemoved);
-			// TODO: add disconnect in the undo-function
-
-			connect(column, &AbstractColumn::dataChanged, this, &LollipopPlot::dataChanged);
-			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &Plot::appearanceChanged);
-		}
-	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(LollipopPlot, SetOrientation, LollipopPlot::Orientation, orientation, recalc)
@@ -326,6 +305,13 @@ void LollipopPlot::setOrientation(LollipopPlot::Orientation orientation) {
 // ##############################################################################
 // #################################  SLOTS  ####################################
 // ##############################################################################
+void LollipopPlot::xColumnAboutToBeRemoved(const AbstractAspect* aspect) {
+	Q_D(LollipopPlot);
+	if (aspect == d->xColumn) {
+		d->xColumn = nullptr;
+		CURVE_COLUMN_REMOVED(x);
+	}
+}
 
 void LollipopPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(LollipopPlot);
@@ -996,15 +982,8 @@ void LollipopPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("yMax"), QString::number(d->yMax));
 	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
-
-	if (d->xColumn)
-		writer->writeAttribute(QStringLiteral("xColumn"), d->xColumn->path());
-
-	for (auto* column : d->dataColumns) {
-		writer->writeStartElement(QStringLiteral("column"));
-		writer->writeAttribute(QStringLiteral("path"), column->path());
-		writer->writeEndElement();
-	}
+	WRITE_COLUMN(d->xColumn, xColumn);
+	WRITE_COLUMNS(d->dataColumns, d->dataColumnPaths);
 	writer->writeEndElement();
 
 	// lines
@@ -1068,7 +1047,6 @@ bool LollipopPlot::load(XmlStreamReader* reader, bool preview) {
 			str = attribs.value(QStringLiteral("path")).toString();
 			if (!str.isEmpty())
 				d->dataColumnPaths << str;
-			// 			READ_COLUMN(dataColumn);
 		} else if (!preview && reader->name() == QLatin1String("line")) {
 			if (!firstLineRead) {
 				auto* line = d->lines.at(0);
