@@ -15,6 +15,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
+#include "backend/lib/macrosCurve.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
@@ -269,6 +270,7 @@ Value* BarPlot::value() const {
 }
 
 /* ============================ setter methods and undo commands ================= */
+CURVE_COLUMN_CONNECT(BarPlot, Data, data, recalc)
 
 // General
 STD_SETTER_CMD_IMPL_F_S(BarPlot, SetXColumn, const AbstractColumn*, xColumn, recalc)
@@ -289,31 +291,11 @@ void BarPlot::setXColumn(const AbstractColumn* column) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(BarPlot, SetDataColumns, QVector<const AbstractColumn*>, dataColumns, recalc)
+CURVE_COLUMN_LIST_SETTER_CMD_IMPL_F_S(BarPlot, Data, data, recalc)
 void BarPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 	Q_D(BarPlot);
-	if (columns != d->dataColumns) {
+	if (columns != d->dataColumns)
 		exec(new BarPlotSetDataColumnsCmd(d, columns, ki18n("%1: set data columns")));
-
-		d->dataColumnPaths.clear(); // TODO: make undo/redo-able!!!
-		for (auto* column : columns) {
-			if (!column) {
-				d->dataColumnPaths << QString();
-				continue;
-			}
-
-			d->dataColumnPaths << column->path();
-
-			// update the curve itself on changes
-			connect(column, &AbstractColumn::dataChanged, this, &BarPlot::recalc);
-			if (column->parentAspect())
-				connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &BarPlot::dataColumnAboutToBeRemoved);
-			// TODO: add disconnect in the undo-function
-
-			connect(column, &AbstractColumn::dataChanged, this, &BarPlot::dataChanged);
-			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &Plot::appearanceChanged);
-		}
-	}
 }
 
 void BarPlot::setDataColumnPaths(const QVector<QString>& paths) {

@@ -14,6 +14,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
+#include "backend/lib/macrosCurve.h"
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -274,6 +275,7 @@ Value* LollipopPlot::value() const {
 }
 
 /* ============================ setter methods and undo commands ================= */
+CURVE_COLUMN_CONNECT(LollipopPlot, Data, data, recalc)
 
 // General
 STD_SETTER_CMD_IMPL_F_S(LollipopPlot, SetXColumn, const AbstractColumn*, xColumn, recalc)
@@ -294,31 +296,11 @@ void LollipopPlot::setXColumn(const AbstractColumn* column) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(LollipopPlot, SetDataColumns, QVector<const AbstractColumn*>, dataColumns, recalc)
+CURVE_COLUMN_LIST_SETTER_CMD_IMPL_F_S(LollipopPlot, Data, data, recalc)
 void LollipopPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 	Q_D(LollipopPlot);
-	if (columns != d->dataColumns) {
+	if (columns != d->dataColumns)
 		exec(new LollipopPlotSetDataColumnsCmd(d, columns, ki18n("%1: set data columns")));
-
-		d->dataColumnPaths.clear(); // TODO: make undo/redo-able!!!
-		for (auto* column : columns) {
-			if (!column) {
-				d->dataColumnPaths << QString();
-				continue;
-			}
-
-			d->dataColumnPaths << column->path();
-
-			// update the curve itself on changes
-			connect(column, &AbstractColumn::dataChanged, this, &LollipopPlot::recalc);
-			if (column->parentAspect())
-				connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &LollipopPlot::dataColumnAboutToBeRemoved);
-			// TODO: add disconnect in the undo-function
-
-			connect(column, &AbstractColumn::dataChanged, this, &LollipopPlot::dataChanged);
-			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &Plot::appearanceChanged);
-		}
-	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(LollipopPlot, SetOrientation, LollipopPlot::Orientation, orientation, recalc)

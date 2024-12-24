@@ -76,6 +76,7 @@ private:
 	void init();
 	void initActions();
 	void initMenus();
+	void connectDataColumn(const AbstractColumn*);
 
 	QAction* orientationHorizontalAction{nullptr};
 	QAction* orientationVerticalAction{nullptr};
@@ -90,6 +91,7 @@ Q_SIGNALS:
 	// General-Tab
 	void xColumnChanged(const AbstractColumn*);
 	void dataColumnsChanged(const QVector<const AbstractColumn*>&);
+	void dataDataChanged();
 	void typeChanged(BarPlot::Type);
 	void orientationChanged(BarPlot::Orientation);
 	void widthFactorChanged(double);
@@ -97,6 +99,8 @@ Q_SIGNALS:
 	// box border
 	void borderPenChanged(QPen&);
 	void borderOpacityChanged(float);
+
+	friend class BarPlotSetDataColumnsCmd;
 };
 
 #endif

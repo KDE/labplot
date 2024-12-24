@@ -71,6 +71,7 @@ private:
 	void init();
 	void initActions();
 	void initMenus();
+	void connectDataColumn(const AbstractColumn*);
 
 	QAction* orientationHorizontalAction{nullptr};
 	QAction* orientationVerticalAction{nullptr};
@@ -85,7 +86,10 @@ Q_SIGNALS:
 	// General-Tab
 	void xColumnChanged(const AbstractColumn*);
 	void dataColumnsChanged(const QVector<const AbstractColumn*>&);
+	void dataDataChanged();
 	void orientationChanged(LollipopPlot::Orientation);
+
+	friend class LollipopPlotSetDataColumnsCmd;
 };
 
 #endif
