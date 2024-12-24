@@ -5,7 +5,6 @@ set(BACKEND_DIR ../src/backend)
 set(TOOLS_DIR ../src/tools)
 set(CMAKE_AUTOMOC ON)
 set(SRC_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
-add_definitions(-DSDK)
 
 include(GenerateExportHeader)
 
@@ -220,6 +219,7 @@ add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50500)
 
 # dynamic library
 add_library(liblabplot ${GUI_SOURCES} ${BACKEND_SOURCES} ${NSL_SOURCES} ${TOOLS_SOURCES} ${GENERATED_SOURCES} ${QTMOC_HDRS})
+target_compile_definitions(liblabplot PRIVATE -DSDK)
 # name it liblabplot, not libliblabplot
 set_property(TARGET liblabplot PROPERTY OUTPUT_NAME labplot)
 # generate labplot_export.h + LABPLOT_EXPORT
