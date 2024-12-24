@@ -70,7 +70,7 @@
 	\class AboutDialog
 	\brief Custom about dialog (not used at the moment)
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 //AboutDialog::AboutDialog(const KAboutData& aboutData, QWidget* parent) : QDialog(parent), aboutData(aboutData) {
 AboutDialog::AboutDialog(const KAboutData& aboutData, QWidget* parent) : KAboutApplicationDialog(aboutData, parent) {
