@@ -40,6 +40,8 @@
  * \brief Box Plot
  */
 
+CURVE_COLUMN_CONNECT(BarPlot, X, x, recalc)
+
 BarPlot::BarPlot(const QString& name)
 	: Plot(name, new BarPlotPrivate(this), AspectType::BarPlot) {
 	init();
@@ -142,11 +144,7 @@ BASIC_SHARED_D_READER_IMPL(BarPlot, BarPlot::Type, type, type)
 BASIC_SHARED_D_READER_IMPL(BarPlot, BarPlot::Orientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(BarPlot, double, widthFactor, widthFactor)
 BASIC_SHARED_D_READER_IMPL(BarPlot, const AbstractColumn*, xColumn, xColumn)
-
-QString& BarPlot::xColumnPath() const {
-	D(BarPlot);
-	return d->xColumnPath;
-}
+BASIC_SHARED_D_READER_IMPL(BarPlot, QString, xColumnPath, xColumnPath)
 
 // box filling
 Background* BarPlot::backgroundAt(int index) const {
@@ -273,22 +271,16 @@ Value* BarPlot::value() const {
 CURVE_COLUMN_CONNECT(BarPlot, Data, data, recalc)
 
 // General
-STD_SETTER_CMD_IMPL_F_S(BarPlot, SetXColumn, const AbstractColumn*, xColumn, recalc)
+CURVE_COLUMN_SETTER_CMD_IMPL_F_S(BarPlot, X, x, recalc)
 void BarPlot::setXColumn(const AbstractColumn* column) {
 	Q_D(BarPlot);
-	if (column != d->xColumn) {
+	if (column != d->xColumn)
 		exec(new BarPlotSetXColumnCmd(d, column, ki18n("%1: set x column")));
+}
 
-		if (column) {
-			// update the curve itself on changes
-			connect(column, &AbstractColumn::dataChanged, this, &BarPlot::recalc);
-			if (column->parentAspect())
-				connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &BarPlot::dataColumnAboutToBeRemoved);
-
-			connect(column, &AbstractColumn::dataChanged, this, &BarPlot::dataChanged);
-			// TODO: add disconnect in the undo-function
-		}
-	}
+void BarPlot::setXColumnPath(const QString& path) {
+	Q_D(BarPlot);
+	d->xColumnPath = path;
 }
 
 CURVE_COLUMN_LIST_SETTER_CMD_IMPL_F_S(BarPlot, Data, data, recalc)
@@ -327,6 +319,13 @@ void BarPlot::setWidthFactor(double widthFactor) {
 // ##############################################################################
 // #################################  SLOTS  ####################################
 // ##############################################################################
+void BarPlot::xColumnAboutToBeRemoved(const AbstractAspect* aspect) {
+	Q_D(BarPlot);
+	if (aspect == d->xColumn) {
+		d->xColumn = nullptr;
+		CURVE_COLUMN_REMOVED(x);
+	}
+}
 
 void BarPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(BarPlot);
