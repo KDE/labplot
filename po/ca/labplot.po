@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-23 00:37+0000\n"
+"POT-Creation-Date: 2024-12-25 00:37+0000\n"
 "PO-Revision-Date: 2024-12-22 10:26+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -424,7 +424,7 @@ msgstr "tipus de filtre incompatible"
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:272
 #: src/backend/lib/XmlStreamReader.cpp:104
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1919
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1904
 #, kde-format
 msgid "unknown element '%1'"
 msgstr "element «%1» desconegut"
@@ -926,7 +926,7 @@ msgstr "%1: estableix l'estil del contorn de la barra d'errors"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:392
 #: src/backend/datapicker/DatapickerImage.cpp:417
-#: src/backend/worksheet/InfoElement.cpp:871
+#: src/backend/worksheet/InfoElement.cpp:867
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:193
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
@@ -940,7 +940,7 @@ msgstr "%1: estableix com a visible"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:392
 #: src/backend/datapicker/DatapickerImage.cpp:417
-#: src/backend/worksheet/InfoElement.cpp:871
+#: src/backend/worksheet/InfoElement.cpp:867
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:126
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:193
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:138
@@ -1003,7 +1003,7 @@ msgid "Failed to read image data"
 msgstr "Ha fallat en llegir les dades de la imatge"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:218
-#: src/backend/worksheet/InfoElement.cpp:841
+#: src/backend/worksheet/InfoElement.cpp:837
 #: src/backend/worksheet/WorksheetElement.cpp:757
 #, kde-format
 msgid "%1: set position"
@@ -1082,7 +1082,7 @@ msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:192
 #: src/backend/gsl/errors.h:20
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2076
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2071
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1220
 #, kde-format
 msgid "Success"
@@ -1754,7 +1754,7 @@ msgstr "Document JSON vàlid"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:261
 #: src/backend/datasources/filters/McapFilter.cpp:287
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:304
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:305
 #, kde-format
 msgid "index"
 msgstr "Índex"
@@ -7661,7 +7661,7 @@ msgstr "%1: canvia mantenir les proporcions"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/worksheet/InfoElement.cpp:146
-#: src/backend/worksheet/InfoElement.cpp:1340
+#: src/backend/worksheet/InfoElement.cpp:1336
 #: src/frontend/ui/dockwidgets/columndock.ui:187
 #, kde-format
 msgid "Label"
@@ -7669,7 +7669,7 @@ msgstr "Etiqueta"
 
 #. i18n: ectx: property (text), widget (QLabel, lGeneral)
 #. i18n: ectx: attribute (title), widget (QWidget, tabSymbol)
-#: src/backend/worksheet/InfoElement.cpp:312
+#: src/backend/worksheet/InfoElement.cpp:308
 #: src/frontend/ui/dockwidgets/custompointdock.ui:331
 #: src/frontend/ui/dockwidgets/histogramdock.ui:413
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:318
@@ -7679,12 +7679,12 @@ msgstr "Etiqueta"
 msgid "Symbol"
 msgstr "Símbol"
 
-#: src/backend/worksheet/InfoElement.cpp:857
+#: src/backend/worksheet/InfoElement.cpp:853
 #, kde-format
 msgid "%1: set gluepoint index"
 msgstr "%1: estableix l'índex dels punts d'adhesió"
 
-#: src/backend/worksheet/InfoElement.cpp:864
+#: src/backend/worksheet/InfoElement.cpp:860
 #, kde-format
 msgid "%1: set connectionline curve name"
 msgstr "%1: estableix el nom de la corba de la línia de connexió"
@@ -7744,9 +7744,9 @@ msgid "%1: set bottom padding"
 msgstr "%1: estableix un farciment a la part inferior"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:286
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:87
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:231
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:102
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:90
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:232
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:105
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:102
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:120
 #: src/frontend/dockwidgets/AxisDock.cpp:250
@@ -7764,9 +7764,9 @@ msgstr "Horitzontal"
 #. i18n("AvgShifted Histogram"));
 #. Orientation
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:289
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:90
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:234
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:105
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:93
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:235
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:108
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:105
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:123
 #: src/frontend/dockwidgets/AxisDock.cpp:251
@@ -7784,9 +7784,9 @@ msgid "Vertical"
 msgstr "Vertical"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:309
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:98
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:242
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:113
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:101
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:243
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:116
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:122
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:140
 #, kde-format
@@ -8094,35 +8094,35 @@ msgstr "%1: estableix l'opacitat de les etiquetes"
 msgid "%1: set x column"
 msgstr "%1: estableix la columna X"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:296
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:508
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:301
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:290
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:511
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:295
 #, kde-format
 msgid "%1: set data columns"
 msgstr "%1: estableix les columnes de dades"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:328
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:302
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:407
 #, kde-format
 msgid "%1: set type"
 msgstr "%1: estableix el tipus"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:335
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:540
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:328
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:309
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:525
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:302
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:190
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:215
 #, kde-format
 msgid "%1: set orientation"
 msgstr "%1: estableix l'orientació"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:342
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:554
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:316
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:539
 #, kde-format
 msgid "%1: width factor changed"
 msgstr "%1: s'ha canviat el factor d'amplada"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:299
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:300
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:170
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:350
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:112
@@ -8130,108 +8130,108 @@ msgstr "%1: s'ha canviat el factor d'amplada"
 msgid "%1 - Data"
 msgstr "%1 - Dades"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:305
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:306
 #, kde-format
 msgid "1st quartile"
 msgstr "1r quartil"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:306
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:307
 #, kde-format
 msgid "3rd quartile"
 msgstr "3r quartil"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:307
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:308
 #, kde-format
 msgid "median"
 msgstr "mediana"
 
 # https://ca.wikipedia.org/wiki/Diagrama_de_caixa
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:308
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:309
 #, kde-format
 msgid "whiskers min"
 msgstr "mín. bigotis"
 
 # https://ca.wikipedia.org/wiki/Diagrama_de_caixa
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:309
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:310
 #, kde-format
 msgid "whiskers max"
 msgstr "màx. bigotis"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:310
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:311
 #, kde-format
 msgid "data points count"
 msgstr "comptador de punts de dades"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:311
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:312
 #, kde-format
 msgid "outliers count"
 msgstr "comptador de valors atípics"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:312
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:313
 #, kde-format
 msgid "far out points count"
 msgstr "comptador de punts molt llunyans"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:533
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:518
 #, kde-format
 msgid "%1: set ordering"
 msgstr "%1: estableix l'ordenació"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:547
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:532
 #, kde-format
 msgid "%1: variable width changed"
 msgstr "%1: s'ha canviat l'amplada variable"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:561
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:546
 #, kde-format
 msgid "%1: changed notches"
 msgstr "%1: s'han canviat els nivells"
 
 # skip-rule: da-pel
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:569
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:554
 #, kde-format
 msgid "%1: set whiskers type"
 msgstr "%1: estableix el tipus de bigotis"
 
 # skip-rule: da-pel
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:576
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:561
 #, kde-format
 msgid "%1: set whiskers range parameter"
 msgstr "%1: estableix el paràmetre d'interval dels bigotis"
 
 # skip-rule: da-pel
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:583
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:568
 #, kde-format
 msgid "%1: set whiskers cap size"
 msgstr "%1: estableix la mida de l'extrem dels bigotis"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:591
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:576
 #, kde-format
 msgid "%1: jitterring changed"
 msgstr "%1: s'ha canviat el «jitter»"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:599
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:584
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:522
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:705
 #, kde-format
 msgid "%1: change rug enabled"
 msgstr "%1: s'ha habilitat el canvi d'estora"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:606
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:591
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:529
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:719
 #, kde-format
 msgid "%1: change rug width"
 msgstr "%1: canvia l'amplada d'estora"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:613
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:598
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:536
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:726
 #, kde-format
 msgid "%1: change rug length"
 msgstr "%1: canvia la longitud d'estora"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:620
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:605
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:543
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:733
 #, kde-format
@@ -8245,7 +8245,7 @@ msgstr "sense informació disponible"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:146
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5233
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5239
 #: src/frontend/ui/dockwidgets/axisdock.ui:483
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:542
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:478
@@ -8744,7 +8744,7 @@ msgid "%1: load default theme"
 msgstr "%1: carrega el tema predeterminat"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1759
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5559
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5565
 #: src/backend/worksheet/Worksheet.cpp:848
 #, kde-format
 msgid "%1: set theme"
@@ -8894,24 +8894,24 @@ msgstr "%1: afegeix una corba de funció"
 msgid "Text Label"
 msgstr "Etiqueta de text"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3926
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3932
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "No està a dins del rectangle contenidor"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4150
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4171
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4156
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4177
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "des de x=%1 a x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4158
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4184
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4164
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4190
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "des de y=%1 a y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4203
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4209
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
@@ -9883,23 +9883,23 @@ msgstr "Criteri d'informació d'Akaike"
 msgid "Bayesian information criterion"
 msgstr "Criteri d'informació bayesiana"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2262
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2257
 #, kde-format
 msgid "Model has no parameters!"
 msgstr "El model no té paràmetres!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2269
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2264
 #, kde-format
 msgid "Not sufficient weight data points provided!"
 msgstr "No s'han proporcionat punts suficients de les dades de ponderació!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2346
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2341
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:370
 #, kde-format
 msgid "No X data available!"
 msgstr "No hi ha cap dada X disponible!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2353
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2348
 #, kde-format
 msgid ""
 "The number of data points (%1) must be greater than or equal to the number "
@@ -9908,12 +9908,12 @@ msgstr ""
 "El nombre de punts de les dades (%1) ha de ser més gran o igual que el "
 "nombre de paràmetres (%2)!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2360
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2355
 #, kde-format
 msgid "Fit model not specified!"
 msgstr "Model d'ajust sense especificar!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3103
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3098
 #, kde-format
 msgctxt "Curve Fitting"
 msgid "Fit Results"
