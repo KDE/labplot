@@ -62,6 +62,7 @@ private Q_SLOTS:
 	void spreadsheetRemoveRows();
 	void spreadsheetInsertRows();
 	void columnRemove();
+	void columnRemoveSaveLoadRestore();
 	void spreadsheetRemove();
 
 	// handling of z-values on changes in the child hierarchy

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Lollipop Plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -40,7 +40,7 @@ public:
 
 	// general
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
-	QString& xColumnPath() const;
+	CLASS_D_ACCESSOR_DECL(QString, xColumnPath, XColumnPath)
 	BASIC_D_ACCESSOR_DECL(QVector<const AbstractColumn*>, dataColumns, DataColumns)
 	QVector<QString>& dataColumnPaths() const;
 	BASIC_D_ACCESSOR_DECL(LollipopPlot::Orientation, orientation, Orientation)
@@ -71,6 +71,8 @@ private:
 	void init();
 	void initActions();
 	void initMenus();
+	void connectXColumn(const AbstractColumn*);
+	void connectDataColumn(const AbstractColumn*);
 
 	QAction* orientationHorizontalAction{nullptr};
 	QAction* orientationVerticalAction{nullptr};
@@ -79,13 +81,19 @@ private:
 private Q_SLOTS:
 	// SLOTs for changes triggered via QActions in the context menu
 	void orientationChangedSlot(QAction*);
+	void xColumnAboutToBeRemoved(const AbstractAspect*);
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
 
 Q_SIGNALS:
 	// General-Tab
 	void xColumnChanged(const AbstractColumn*);
+	void xDataChanged();
 	void dataColumnsChanged(const QVector<const AbstractColumn*>&);
+	void dataDataChanged();
 	void orientationChanged(LollipopPlot::Orientation);
+
+	friend class LollipopPlotSetXColumnCmd;
+	friend class LollipopPlotSetDataColumnsCmd;
 };
 
 #endif

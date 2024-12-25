@@ -116,6 +116,9 @@ Q_SIGNALS:
 	void xDataColumnChanged(const AbstractColumn*);
 	void yDataColumnChanged(const AbstractColumn*);
 	void y2DataColumnChanged(const AbstractColumn*);
+
+	friend class FourierTest;
+	friend class FitTest;
 };
 
 #endif

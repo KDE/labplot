@@ -16,6 +16,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/lib/macrosCurve.h"
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Background.h"
@@ -500,26 +501,14 @@ QColor BoxPlot::colorAt(int index) const {
 
 /* ============================ setter methods and undo commands ================= */
 
+CURVE_COLUMN_CONNECT(BoxPlot, Data, data, recalc)
+
 // General
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetDataColumns, QVector<const AbstractColumn*>, dataColumns, recalc)
+CURVE_COLUMN_LIST_SETTER_CMD_IMPL_F_S(BoxPlot, Data, data, recalc)
 void BoxPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 	Q_D(BoxPlot);
-	if (columns != d->dataColumns) {
+	if (columns != d->dataColumns)
 		exec(new BoxPlotSetDataColumnsCmd(d, columns, ki18n("%1: set data columns")));
-
-		for (auto* column : columns) {
-			if (!column)
-				continue;
-
-			connect(column, &AbstractColumn::dataChanged, this, &BoxPlot::dataChanged);
-
-			// update the curve itself on changes
-			connect(column, &AbstractColumn::dataChanged, this, &BoxPlot::recalc);
-			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &Plot::appearanceChanged);
-			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &BoxPlot::dataColumnAboutToBeRemoved);
-			// TODO: add disconnect in the undo-function
-		}
-	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetOrdering, BoxPlot::Ordering, ordering, recalc)
@@ -1758,11 +1747,7 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("yMax"), QString::number(d->yMax));
 	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
-	for (auto* column : d->dataColumns) {
-		writer->writeStartElement(QStringLiteral("column"));
-		writer->writeAttribute(QStringLiteral("path"), column->path());
-		writer->writeEndElement();
-	}
+	WRITE_COLUMNS(d->dataColumns, d->dataColumnPaths);
 	writer->writeEndElement();
 
 	// box
@@ -1858,7 +1843,6 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 			str = attribs.value(QStringLiteral("path")).toString();
 			if (!str.isEmpty())
 				d->dataColumnPaths << str;
-			// 			READ_COLUMN(dataColumn);
 		} else if (!preview && reader->name() == QLatin1String("filling"))
 			if (!firstBackgroundRead) {
 				auto* background = d->backgrounds.at(0);

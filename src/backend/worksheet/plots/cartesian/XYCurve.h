@@ -206,6 +206,8 @@ Q_SIGNALS:
 
 	friend class RetransformTest;
 	friend class XYCurveTest;
+	friend class FourierTest;
+	friend class FitTest;
 };
 
 #endif

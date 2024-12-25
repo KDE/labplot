@@ -2404,9 +2404,15 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	} else if (barPlot) {
 		DEBUG(Q_FUNC_INFO << ", BAR PLOT")
 		connect(barPlot, &BarPlot::dataColumnsChanged, this, &CartesianPlot::updateLegend);
+		connect(barPlot, &BarPlot::xDataChanged, [this, barPlot]() {
+			this->dataChanged(const_cast<BarPlot*>(barPlot), Dimension::X);
+		});
 	} else if (lollipopPlot) {
 		DEBUG(Q_FUNC_INFO << ", LOLLIPOP PLOT")
 		connect(lollipopPlot, &LollipopPlot::dataColumnsChanged, this, &CartesianPlot::updateLegend);
+		connect(lollipopPlot, &LollipopPlot::xDataChanged, [this, lollipopPlot]() {
+			this->dataChanged(const_cast<LollipopPlot*>(lollipopPlot), Dimension::X);
+		});
 	} else if (axis) {
 		connect(axis, &Axis::shiftSignal, this, &CartesianPlot::axisShiftSignal);
 	} else {

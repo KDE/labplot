@@ -14,6 +14,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/lib/macrosCurve.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
@@ -38,6 +39,8 @@
  * \class BarPlot
  * \brief Box Plot
  */
+
+CURVE_COLUMN_CONNECT(BarPlot, X, x, recalc)
 
 BarPlot::BarPlot(const QString& name)
 	: Plot(name, new BarPlotPrivate(this), AspectType::BarPlot) {
@@ -141,11 +144,7 @@ BASIC_SHARED_D_READER_IMPL(BarPlot, BarPlot::Type, type, type)
 BASIC_SHARED_D_READER_IMPL(BarPlot, BarPlot::Orientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(BarPlot, double, widthFactor, widthFactor)
 BASIC_SHARED_D_READER_IMPL(BarPlot, const AbstractColumn*, xColumn, xColumn)
-
-QString& BarPlot::xColumnPath() const {
-	D(BarPlot);
-	return d->xColumnPath;
-}
+BASIC_SHARED_D_READER_IMPL(BarPlot, QString, xColumnPath, xColumnPath)
 
 // box filling
 Background* BarPlot::backgroundAt(int index) const {
@@ -269,46 +268,26 @@ Value* BarPlot::value() const {
 }
 
 /* ============================ setter methods and undo commands ================= */
+CURVE_COLUMN_CONNECT(BarPlot, Data, data, recalc)
 
 // General
-STD_SETTER_CMD_IMPL_F_S(BarPlot, SetXColumn, const AbstractColumn*, xColumn, recalc)
+CURVE_COLUMN_SETTER_CMD_IMPL_F_S(BarPlot, X, x, recalc)
 void BarPlot::setXColumn(const AbstractColumn* column) {
 	Q_D(BarPlot);
-	if (column != d->xColumn) {
+	if (column != d->xColumn)
 		exec(new BarPlotSetXColumnCmd(d, column, ki18n("%1: set x column")));
-
-		if (column) {
-			// update the curve itself on changes
-			connect(column, &AbstractColumn::dataChanged, this, &BarPlot::recalc);
-			if (column->parentAspect())
-				connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &BarPlot::dataColumnAboutToBeRemoved);
-
-			connect(column, &AbstractColumn::dataChanged, this, &BarPlot::dataChanged);
-			// TODO: add disconnect in the undo-function
-		}
-	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(BarPlot, SetDataColumns, QVector<const AbstractColumn*>, dataColumns, recalc)
+void BarPlot::setXColumnPath(const QString& path) {
+	Q_D(BarPlot);
+	d->xColumnPath = path;
+}
+
+CURVE_COLUMN_LIST_SETTER_CMD_IMPL_F_S(BarPlot, Data, data, recalc)
 void BarPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 	Q_D(BarPlot);
-	if (columns != d->dataColumns) {
+	if (columns != d->dataColumns)
 		exec(new BarPlotSetDataColumnsCmd(d, columns, ki18n("%1: set data columns")));
-
-		for (auto* column : columns) {
-			if (!column)
-				continue;
-
-			// update the curve itself on changes
-			connect(column, &AbstractColumn::dataChanged, this, &BarPlot::recalc);
-			if (column->parentAspect())
-				connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &BarPlot::dataColumnAboutToBeRemoved);
-			// TODO: add disconnect in the undo-function
-
-			connect(column, &AbstractColumn::dataChanged, this, &BarPlot::dataChanged);
-			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &Plot::appearanceChanged);
-		}
-	}
 }
 
 void BarPlot::setDataColumnPaths(const QVector<QString>& paths) {
@@ -340,6 +319,13 @@ void BarPlot::setWidthFactor(double widthFactor) {
 // ##############################################################################
 // #################################  SLOTS  ####################################
 // ##############################################################################
+void BarPlot::xColumnAboutToBeRemoved(const AbstractAspect* aspect) {
+	Q_D(BarPlot);
+	if (aspect == d->xColumn) {
+		d->xColumn = nullptr;
+		CURVE_COLUMN_REMOVED(x);
+	}
+}
 
 void BarPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(BarPlot);
@@ -1401,15 +1387,8 @@ void BarPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("yMax"), QString::number(d->yMax));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
-
-	if (d->xColumn)
-		writer->writeAttribute(QStringLiteral("xColumn"), d->xColumn->path());
-
-	for (auto* column : d->dataColumns) {
-		writer->writeStartElement(QStringLiteral("column"));
-		writer->writeAttribute(QStringLiteral("path"), column->path());
-		writer->writeEndElement();
-	}
+	WRITE_COLUMN(d->xColumn, xColumn);
+	WRITE_COLUMNS(d->dataColumns, d->dataColumnPaths);
 	writer->writeEndElement();
 
 	// box filling

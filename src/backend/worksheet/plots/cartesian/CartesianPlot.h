@@ -388,6 +388,9 @@ Q_SIGNALS:
 	void cursor1EnableChanged(bool enable);
 
 	void scaleRetransformed(const CartesianPlot*, const Dimension, int index);
+
+	friend class FitTest;
+	friend class FourierTest;
 };
 
 #endif

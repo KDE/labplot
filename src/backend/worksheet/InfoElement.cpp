@@ -195,12 +195,8 @@ void InfoElement::initCurveConnections(const XYCurve* curve) {
 	connect(curve, &XYCurve::visibleChanged, this, &InfoElement::curveVisibilityChanged);
 	connect(curve, &XYCurve::coordinateSystemIndexChanged, this, &InfoElement::curveCoordinateSystemIndexChanged);
 	connect(curve, &XYCurve::dataChanged, this, &InfoElement::curveDataChanged);
-	connect(curve, &XYCurve::xColumnChanged, [this](const AbstractColumn*) {
-		retransform();
-	});
-	connect(curve, &XYCurve::yColumnChanged, [this](const AbstractColumn*) {
-		retransform();
-	});
+	connect(curve, &XYCurve::xDataChanged, this, &InfoElement::curveDataChanged);
+	connect(curve, &XYCurve::yDataChanged, this, &InfoElement::curveDataChanged);
 	connect(curve, &XYCurve::aspectAboutToBeRemoved, this, &InfoElement::curveDeleted);
 }
 

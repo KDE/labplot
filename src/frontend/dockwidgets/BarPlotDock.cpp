@@ -221,7 +221,7 @@ void BarPlotDock::loadDataColumns() {
 		// show the columns in the comboboxes
 		for (int i = 0; i < count; ++i) {
 			m_dataComboBoxes.at(i)->setModel(model); // the model might have changed in-between, reset the current model
-			m_dataComboBoxes.at(i)->setAspect(m_barPlot->dataColumns().at(i));
+			m_dataComboBoxes.at(i)->setAspect(m_barPlot->dataColumns().at(i), m_barPlot->dataColumnPaths().at(i));
 		}
 
 		// show columns names in the combobox for the selection of the bar to be modified

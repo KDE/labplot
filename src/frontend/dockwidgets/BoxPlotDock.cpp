@@ -287,7 +287,7 @@ void BoxPlotDock::loadDataColumns() {
 		// show the columns in the comboboxes
 		for (int i = 0; i < count; ++i) {
 			m_dataComboBoxes.at(i)->setModel(model); // the model might have changed in-between, reset the current model
-			m_dataComboBoxes.at(i)->setAspect(m_boxPlot->dataColumns().at(i));
+			m_dataComboBoxes.at(i)->setAspect(m_boxPlot->dataColumns().at(i), m_boxPlot->dataColumnPaths().at(i));
 		}
 
 		// show columns names in the combobox for the selection of the box to be modified

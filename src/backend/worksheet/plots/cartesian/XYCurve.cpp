@@ -2312,6 +2312,10 @@ double XYCurve::y(double x, bool& valueFound) const {
  * @return y value from x value
  */
 double XYCurve::y(double x, double& x_new, bool& valueFound) const {
+	if (!xColumn() || !yColumn()) {
+		valueFound = false;
+		return std::nan("0");
+	}
 	int index = xColumn()->indexForValue(x);
 	if (index < 0) {
 		valueFound = false;
@@ -2977,20 +2981,8 @@ void XYCurve::save(QXmlStreamWriter* writer) const {
 
 	// general
 	writer->writeStartElement(QStringLiteral("general"));
-
-	// if the data columns are valid, write their current paths.
-	// if not, write the last used paths so the columns can be restored later
-	// when the columns with the same path are added again to the project
-	if (d->xColumn)
-		writer->writeAttribute(QStringLiteral("xColumn"), d->xColumn->path());
-	else
-		writer->writeAttribute(QStringLiteral("xColumn"), d->xColumnPath);
-
-	if (d->yColumn)
-		writer->writeAttribute(QStringLiteral("yColumn"), d->yColumn->path());
-	else
-		writer->writeAttribute(QStringLiteral("yColumn"), d->yColumnPath);
-
+	WRITE_COLUMN(d->xColumn, xColumn);
+	WRITE_COLUMN(d->yColumn, yColumn);
 	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(m_cSystemIndex));
 	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
