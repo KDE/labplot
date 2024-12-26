@@ -27,19 +27,19 @@ quint16 port = 1234;
 void LiveDataTest::initTestCase() {
 	CommonTest::initTestCase();
 
-	// initializet the TCP socket/server
+	// initialize the TCP socket/server
 	m_tcpServer = new QTcpServer(this);
 	if (!m_tcpServer->listen())
 		QFAIL("Failed to start the TCP server. " /* + QString(m_tcpServer->errorString())*/);
 
 	connect(m_tcpServer, &QTcpServer::newConnection, this, &LiveDataTest::sendDataOverTcp);
 
-	// initialize the UDP socket
+	// // initialize the UDP socket
 	m_udpSocket = new QUdpSocket(this);
 	m_udpSocket->bind(QHostAddress::LocalHost, port);
 	auto* timer = new QTimer(this);
-	connect(timer, &QTimer::timeout, this, &LiveDataTest::sendDataOverTcp);
-	timer->start(1000);
+	connect(timer, &QTimer::timeout, this, &LiveDataTest::sendDataOverUdp);
+	timer->start(10);
 }
 
 void LiveDataTest::cleanupTestCase() {
@@ -1413,6 +1413,7 @@ void LiveDataTest::testTcpReadContinuousFixed00() {
 
 	// read the data and perform checks, after the initial read all data is read
 	dataSource.read();
+	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
 
 	QCOMPARE(dataSource.columnCount(), 2);
 	QCOMPARE(dataSource.rowCount(), 1);
@@ -1447,6 +1448,7 @@ void LiveDataTest::testUdpReadContinuousFixed00() {
 
 	// read the data and perform checks, after the initial read all data is read
 	dataSource.read();
+	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
 
 	QCOMPARE(dataSource.columnCount(), 2);
 	QCOMPARE(dataSource.rowCount(), 1);
