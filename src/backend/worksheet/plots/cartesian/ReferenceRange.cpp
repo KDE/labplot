@@ -14,9 +14,6 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "frontend/GuiTools.h"
 
 #include <QActionGroup>

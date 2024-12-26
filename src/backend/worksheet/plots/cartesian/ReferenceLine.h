@@ -3,17 +3,15 @@
 	Project              : LabPlot
 	Description          : Reference line on the plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef REFERENCELINE_H
 #define REFERENCELINE_H
 
-#include "backend/lib/macros.h"
 #include "backend/worksheet/WorksheetElement.h"
 
-class CartesianPlot;
 class Line;
 class ReferenceLinePrivate;
 class QActionGroup;

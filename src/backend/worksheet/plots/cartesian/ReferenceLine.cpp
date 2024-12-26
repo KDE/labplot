@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Custom user-defined point on the plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -14,9 +14,6 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/Line.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "frontend/GuiTools.h"
 
 #include <QActionGroup>
@@ -142,8 +139,8 @@ QMenu* ReferenceLine::createContextMenu() {
 	if (!orientationMenu)
 		initMenus();
 
-	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* visibilityAction = this->visibilityAction();
+	auto* menu = WorksheetElement::createContextMenu();
+	auto* visibilityAction = this->visibilityAction();
 
 	Q_D(const ReferenceLine);
 
@@ -230,9 +227,8 @@ void ReferenceLinePrivate::retransform() {
 	if (suppressRetransform || !q->cSystem || q->isLoading())
 		return;
 
-	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
-	const auto& xRange = m_plot->range(Dimension::X, cs->index(Dimension::X));
-	const auto& yRange = m_plot->range(Dimension::Y, cs->index(Dimension::Y));
+	const auto& xRange = m_plot->range(Dimension::X, q->cSystem->index(Dimension::X));
+	const auto& yRange = m_plot->range(Dimension::Y, q->cSystem->index(Dimension::Y));
 
 	// calculate the position in the scene coordinates
 	if (orientation == ReferenceLine::Orientation::Vertical)
