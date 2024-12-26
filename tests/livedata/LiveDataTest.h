@@ -45,8 +45,10 @@ private:
 		return timeout;
 	}
 
+	QUdpSocket* m_udpSocket{nullptr};
 	QTcpServer* m_tcpServer{nullptr};
-	QProcess m_process;
+	QTcpSocket* m_tcpSocket{nullptr};
+	QTimer* m_tcpSendTimer{nullptr};
 
 private Q_SLOTS:
 	// Reading from files:

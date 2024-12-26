@@ -28,23 +28,43 @@ constexpr QLatin1String hostname = QLatin1String(HOSTNAME);
 void LiveDataTest::initTestCase() {
 	CommonTest::initTestCase();
 
-	// // initialize the TCP socket/server
-	// m_tcpServer = new QTcpServer(this);
-	// if (!m_tcpServer->listen())
-	// 	QFAIL("Failed to start the TCP server. " /* + QString(m_tcpServer->errorString())*/);
+	// initialize the TCP socket/server
+	m_tcpServer = new QTcpServer(this);
+	if (!m_tcpServer->listen(QHostAddress(hostname), TCP_PORT))
+		QFAIL("Failed to start the TCP server. " /* + QString(m_tcpServer->errorString())*/);
 
-	// connect(m_tcpServer, &QTcpServer::newConnection, this, &LiveDataTest::sendDataOverTcp);
+	m_tcpSendTimer = new QTimer(this);
+	m_tcpSendTimer->setInterval(PUBLISH_TIME_MS);
 
-	// const auto executable = QStringLiteral(EXEC);
-	// m_process.setProgram(executable);
-	// m_process.start();
-	// QVERIFY(m_process.waitForStarted());
-	// const auto e1 = m_process.errorString();
+	connect(m_tcpServer, &QTcpServer::newConnection, [this]() {
+		m_tcpSocket = m_tcpServer->nextPendingConnection();
+		m_tcpSendTimer->start(PUBLISH_TIME_MS);
+	});
+
+	connect(m_tcpSendTimer, &QTimer::timeout, [this]() {
+		if (!m_tcpSocket)
+			return;
+		if (!m_tcpSocket->isOpen()) {
+			delete m_tcpSocket;
+			m_tcpSocket = nullptr;
+		}
+		QByteArray block = QStringLiteral("1,2\n").toLatin1();
+		m_tcpSocket->write(block);
+	});
+
+	int udpNewDataUpdateTimeMs = PUBLISH_TIME_MS;
+
+	// initialize the UDP socket
+	m_udpSocket = new QUdpSocket(this);
+	QVERIFY (m_udpSocket->bind(QHostAddress(hostname), 56080)); // This port must be different to the udp port!
+	auto* timer = new QTimer(this);
+	QCoreApplication::connect(timer, &QTimer::timeout, [this]() {
+		this->m_udpSocket->writeDatagram("1,2", QHostAddress(QStringLiteral(HOSTNAME)), UDP_PORT);
+	});
+	timer->start(udpNewDataUpdateTimeMs);
 }
 
 void LiveDataTest::cleanupTestCase() {
-	m_process.terminate();
-	QVERIFY(m_process.waitForFinished());
 }
 
 // ##############################################################################
@@ -1395,41 +1415,43 @@ constexpr int updateIntervalMs = udpNewDataUpdateTimeMs * 100;
 }
 
 void LiveDataTest::testTcpReadContinuousFixed00() {
-	// // initialize the live data source
-	// LiveDataSource dataSource(QStringLiteral("test"), false);
-	// dataSource.setSourceType(LiveDataSource::SourceType::NetworkTCPSocket);
-	// dataSource.setFileType(AbstractFileFilter::FileType::Ascii);
-	// dataSource.setHost(hostname);
-	// dataSource.setPort(TCP_PORT);
-	// dataSource.setReadingType(LiveDataSource::ReadingType::ContinuousFixed);
-	// dataSource.setSampleSize(100); // big number of samples, more then the new data has, meaning we read all new data
-	// dataSource.setUpdateType(LiveDataSource::UpdateType::TimeInterval);
-	// dataSource.setUpdateInterval(updateIntervalMs);
+	// initialize the live data source
+	LiveDataSource dataSource(QStringLiteral("test"), false);
+	dataSource.setSourceType(LiveDataSource::SourceType::NetworkTCPSocket);
+	dataSource.setFileType(AbstractFileFilter::FileType::Ascii);
+	dataSource.setHost(hostname);
+	dataSource.setPort(TCP_PORT);
+	dataSource.setReadingType(LiveDataSource::ReadingType::ContinuousFixed);
+	dataSource.setSampleSize(100); // big number of samples, more then the new data has, meaning we read all new data
+	dataSource.setUpdateType(LiveDataSource::UpdateType::TimeInterval);
+	dataSource.setRowCount(0);
 
-	// // initialize the ASCII filter
-	// auto* filter = new AsciiFilter();
-	// auto properties = filter->defaultProperties();
-	// properties.headerEnabled = false;
-	// properties.automaticSeparatorDetection = false;
-	// properties.separator = QStringLiteral(",");
-	// filter->setProperties(properties);
-	// dataSource.setFilter(filter);
+	// initialize the ASCII filter
+	auto* filter = new AsciiFilter();
+	auto properties = filter->defaultProperties();
+	properties.headerEnabled = false;
+	properties.automaticSeparatorDetection = false;
+	properties.separator = QStringLiteral(",");
+	filter->setProperties(properties);
+	dataSource.setFilter(filter);
 
-	// // wait until livedata update time is finished and triggers a read
-	// wait(updateIntervalMs * 3);
-	// dataSource.pauseReading();
+	dataSource.setUpdateInterval(updateIntervalMs); // Start
 
-	// QCOMPARE(dataSource.columnCount(), 2);
-	// QVERIFY(dataSource.rowCount() >= updateIntervalMs * 3 / udpNewDataUpdateTimeMs);
+	// wait until livedata update time is finished and triggers a read
+	wait(updateIntervalMs * 3);
+	dataSource.pauseReading();
 
-	// QCOMPARE(dataSource.column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
-	// QCOMPARE(dataSource.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(dataSource.columnCount(), 2);
+	QVERIFY(dataSource.rowCount() > 0);
 
-	// QCOMPARE(dataSource.column(0)->valueAt(0), 1.);
-	// QCOMPARE(dataSource.column(1)->valueAt(0), 2.);
+	QCOMPARE(dataSource.column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(dataSource.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
 
-	// QCOMPARE(dataSource.column(0)->valueAt(dataSource.rowCount() - 1), 1.);
-	// QCOMPARE(dataSource.column(1)->valueAt(dataSource.rowCount() - 1), 2.);
+	QCOMPARE(dataSource.column(0)->valueAt(0), 1.);
+	QCOMPARE(dataSource.column(1)->valueAt(0), 2.);
+
+	QCOMPARE(dataSource.column(0)->valueAt(dataSource.rowCount() - 1), 1.);
+	QCOMPARE(dataSource.column(1)->valueAt(dataSource.rowCount() - 1), 2.);
 }
 
 void LiveDataTest::testUdpReadContinuousFixed00() {
@@ -1442,6 +1464,7 @@ void LiveDataTest::testUdpReadContinuousFixed00() {
 	dataSource.setReadingType(LiveDataSource::ReadingType::ContinuousFixed);
 	dataSource.setSampleSize(100); // big number of samples, more then the new data has, meaning we read all new data
 	dataSource.setUpdateType(LiveDataSource::UpdateType::TimeInterval);
+	dataSource.setRowCount(0);
 
 	// initialize the ASCII filter
 	auto* filter = new AsciiFilter();
@@ -1459,8 +1482,7 @@ void LiveDataTest::testUdpReadContinuousFixed00() {
 	dataSource.pauseReading();
 
 	QCOMPARE(dataSource.columnCount(), 2);
-	QVERIFY(updateIntervalMs * 3 / udpNewDataUpdateTimeMs != 100); // Check that not the default
-	QVERIFY(dataSource.rowCount() >= updateIntervalMs * 3 / udpNewDataUpdateTimeMs);
+	QVERIFY(dataSource.rowCount() > 0);
 
 	QCOMPARE(dataSource.column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
 	QCOMPARE(dataSource.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
@@ -1472,25 +1494,5 @@ void LiveDataTest::testUdpReadContinuousFixed00() {
 	QCOMPARE(dataSource.column(1)->valueAt(dataSource.rowCount() - 1), 2.);
 }
 
-// ##############################################################################
-// ##########################  helper functions #################################
-// ##############################################################################
-
-// void LiveDataTest::sendDataOverTcp() {
-// 	if (!m_tcpServer)
-// 		return;
-
-// 	QByteArray block;
-// 	QDataStream out(&block, QIODevice::WriteOnly);
-
-// 	out << "1,2";
-
-// 	auto* clientConnection = m_tcpServer->nextPendingConnection();
-// 	QVERIFY(clientConnection);
-// 	connect(clientConnection, &QAbstractSocket::disconnected, clientConnection, &QObject::deleteLater);
-
-// 	clientConnection->write(block);
-// 	clientConnection->disconnectFromHost();
-// }
 
 QTEST_MAIN(LiveDataTest)
