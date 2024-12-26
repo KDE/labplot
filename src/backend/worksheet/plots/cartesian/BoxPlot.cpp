@@ -10,10 +10,8 @@
 
 #include "BoxPlot.h"
 #include "BoxPlotPrivate.h"
-#include "backend/core/AbstractColumn.h"
 #include "backend/core/Folder.h"
 #include "backend/core/Settings.h"
-#include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macrosCurve.h"
@@ -21,15 +19,11 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "frontend/GuiTools.h"
 #include "tools/ImageTools.h"
 
 #include <QActionGroup>
-#include <QApplication>
 #include <QGraphicsSceneMouseEvent>
 #include <QMenu>
 #include <QPainter>
