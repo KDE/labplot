@@ -13,7 +13,7 @@ int main(int argc, char* argv[]) {
 
 	// initialize the UDP socket
 	QUdpSocket udpSocket(&a);
-	if (!udpSocket.bind(QHostAddress(hostname), udpPort)) {
+	if (!udpSocket.bind(QHostAddress(hostname), 56080)) {
 		exit(-3);
 		return -3;
 	}
