@@ -105,6 +105,14 @@ void KDEPlot::init() {
 	// propage the visual changes to the parent
 	connect(d->estimationCurve, &XYCurve::changed, this, &KDEPlot::changed);
 	connect(d->rugCurve, &XYCurve::changed, this, &KDEPlot::changed);
+
+	// synchronize the color of the data curve with the color of the rug curve (symbol color is used)
+	connect(d->estimationCurve->line(), &Line::colorChanged, [=] (const QColor& color) {
+		auto* symbol = d->rugCurve->symbol();
+		symbol->setUndoAware(false);
+		symbol->setColor(color);
+		symbol->setUndoAware(true);
+	});
 }
 
 void KDEPlot::finalizeAdd() {
@@ -555,7 +563,10 @@ void KDEPlot::loadThemeConfig(const KConfig& config) {
 
 	d->estimationCurve->line()->loadThemeConfig(group, themeColor);
 	d->estimationCurve->background()->loadThemeConfig(group, themeColor);
+
 	d->rugCurve->symbol()->loadThemeConfig(group, themeColor);
+	d->rugCurve->line()->setStyle(Qt::NoPen);
+	d->rugCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 
 	d->suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
