@@ -8,18 +8,18 @@ int main(int argc, char* argv[]) {
 	QCoreApplication a(argc, argv);
 
 	int udpNewDataUpdateTimeMs = PUBLISH_TIME_MS;
-	int port = PORT;
+	int udpPort = UDP_PORT;
 	QString hostname = QStringLiteral(HOSTNAME);
 
 	// initialize the UDP socket
 	QUdpSocket udpSocket(&a);
-	if (!udpSocket.bind(QHostAddress(hostname), port)) {
+	if (!udpSocket.bind(QHostAddress(hostname), udpPort)) {
 		exit(-3);
 		return -3;
 	}
 	QTimer timer(&a);
-	QCoreApplication::connect(&timer, &QTimer::timeout, [&udpSocket, port, hostname]() {
-		udpSocket.writeDatagram("1,2", QHostAddress(hostname), port);
+	QCoreApplication::connect(&timer, &QTimer::timeout, [&udpSocket, udpPort, hostname]() {
+		udpSocket.writeDatagram("1,2", QHostAddress(hostname), udpPort);
 	});
 	timer.start(udpNewDataUpdateTimeMs);
 
