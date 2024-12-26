@@ -575,6 +575,9 @@ void BarPlotPrivate::recalc() {
 	QVector<double> barMaxs(barGroupsCount);
 	if (type == BarPlot::Type::Stacked) {
 		for (auto* column : dataColumns) {
+			if (!column)
+				continue;
+
 			int valueIndex = 0;
 			for (int i = 0; i < column->rowCount(); ++i) {
 				if (!column->isValid(i) || column->isMasked(i))
@@ -591,6 +594,9 @@ void BarPlotPrivate::recalc() {
 		}
 	} else if (type == BarPlot::Type::Stacked_100_Percent) {
 		for (auto* column : dataColumns) {
+			if (!column)
+				continue;
+
 			int valueIndex = 0;
 			for (int i = 0; i < column->rowCount(); ++i) {
 				if (!column->isValid(i) || column->isMasked(i))
@@ -655,6 +661,8 @@ void BarPlotPrivate::recalc() {
 		switch (type) {
 		case BarPlot::Type::Grouped: {
 			for (auto* column : dataColumns) {
+				if (!column)
+					continue;
 				double max = column->maximum();
 				if (max > xMax)
 					xMax = max;
@@ -705,6 +713,9 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	const auto* column = static_cast<const Column*>(dataColumns.at(columnIndex));
+	if (!column)
+		return;
+
 	QVector<QLineF> lines; // four lines for one bar in logical coordinates
 	QVector<QVector<QLineF>> barLines; // lines for all bars for one colum in scene coordinates
 	QVector<QPointF> valuesPointsLogical;
@@ -850,6 +861,9 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	const auto* column = static_cast<const Column*>(dataColumns.at(columnIndex));
+	if (!column)
+		return;
+
 	QVector<QLineF> lines; // four lines for one bar in logical coordinates
 	QVector<QVector<QLineF>> barLines; // lines for all bars for one colum in scene coordinates
 	QVector<QPointF> valuesPointsLogical;

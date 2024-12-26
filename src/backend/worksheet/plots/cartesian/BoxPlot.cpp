@@ -874,6 +874,8 @@ void BoxPlotPrivate::recalc() {
 	if (variableWidth) {
 		m_widthScaleFactor = -INFINITY;
 		for (const auto* col : dataColumns) {
+			if (!col)
+				continue;
 			auto* column = static_cast<const Column*>(col);
 			if (column->statistics().size > m_widthScaleFactor)
 				m_widthScaleFactor = column->statistics().size;
@@ -889,12 +891,14 @@ void BoxPlotPrivate::recalc() {
 		if (ordering == BoxPlot::Ordering::MedianAscending || ordering == BoxPlot::Ordering::MedianDescending) {
 			for (int i = 0; i < count; ++i) {
 				auto* column = static_cast<const Column*>(dataColumns.at(i));
-				newOrdering.push_back(std::make_pair(column->statistics().median, i));
+				if (column)
+					newOrdering.push_back(std::make_pair(column->statistics().median, i));
 			}
 		} else {
 			for (int i = 0; i < count; ++i) {
 				auto* column = static_cast<const Column*>(dataColumns.at(i));
-				newOrdering.push_back(std::make_pair(column->statistics().arithmeticMean, i));
+				if (column)
+					newOrdering.push_back(std::make_pair(column->statistics().arithmeticMean, i));
 			}
 		}
 

@@ -496,6 +496,8 @@ void LollipopPlotPrivate::recalc() {
 	int barGroupsCount = 0;
 	int columnIndex = 0;
 	for (auto* column : std::as_const(dataColumns)) {
+		if (!column)
+			continue;
 		int size = static_cast<const Column*>(column)->statistics().size;
 		m_barLines[columnIndex].resize(size);
 		m_symbolPoints[columnIndex].resize(size);
@@ -529,6 +531,9 @@ void LollipopPlotPrivate::recalc() {
 		yMin = 0;
 		yMax = -INFINITY;
 		for (auto* column : dataColumns) {
+			if (!column)
+				continue;
+
 			double max = column->maximum();
 			if (max > yMax)
 				yMax = max;
@@ -593,6 +598,9 @@ void LollipopPlotPrivate::verticalPlot(int columnIndex) {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	const auto* column = static_cast<const Column*>(dataColumns.at(columnIndex));
+	if (!column)
+		return;
+
 	QVector<QLineF> barLines; // lines for all bars for one colum in scene coordinates
 	QVector<QPointF> symbolPoints;
 
@@ -630,6 +638,9 @@ void LollipopPlotPrivate::horizontalPlot(int columnIndex) {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	const auto* column = static_cast<const Column*>(dataColumns.at(columnIndex));
+	if (!column)
+		return;
+
 	QVector<QLineF> barLines; // lines for all bars for one colum in scene coordinates
 	QVector<QPointF> symbolPoints;
 
