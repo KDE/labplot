@@ -98,7 +98,7 @@ public:
 	int baudRate() const;
 	void setBaudRate(int);
 
-	void setUpdateInterval(int);
+	void setUpdateInterval(int interval_ms);
 	int updateInterval() const;
 
 	void setKeepNValues(int);
@@ -155,7 +155,7 @@ private:
 
 	int m_sampleSize{1000}; // Samples to read during a simple read trigger
 	int m_keepNValues{0}; // number of values to keep (0 -> all)
-	int m_updateInterval{1000};
+	int m_updateInterval_ms{1000};
 	quint16 m_port{1027};
 	int m_baudRate{9600};
 

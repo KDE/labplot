@@ -158,5 +158,7 @@ protected:
 		}
 	}
 	static void listStack(QUndoStack* stack);
+
+	void wait(int milliseconds);
 };
 #endif

@@ -128,7 +128,7 @@ QStringList LiveDataSource::supportedBaudRates() {
  * \brief Updates this data source at this moment
  */
 void LiveDataSource::updateNow() {
-	DEBUG("LiveDataSource::updateNow() update interval = " << m_updateInterval);
+	DEBUG("LiveDataSource::updateNow() update interval = " << m_updateInterval_ms << "ms");
 	if (m_updateType == UpdateType::TimeInterval)
 		m_updateTimer->stop();
 	else
@@ -137,7 +137,7 @@ void LiveDataSource::updateNow() {
 
 	// restart the timer after update
 	if (m_updateType == UpdateType::TimeInterval && !m_paused)
-		m_updateTimer->start(m_updateInterval);
+		m_updateTimer->start(m_updateInterval_ms);
 }
 
 /*!
@@ -218,14 +218,19 @@ int LiveDataSource::baudRate() const {
  * \brief Sets the source's update interval to \c interval
  * \param interval
  */
-void LiveDataSource::setUpdateInterval(int interval) {
-	m_updateInterval = interval;
+void LiveDataSource::setUpdateInterval(int interval_ms) {
+	m_updateInterval_ms = interval_ms;
 	if (!m_paused)
-		m_updateTimer->start(m_updateInterval);
+		m_updateTimer->start(m_updateInterval_ms);
 }
 
+/*!
+ * \brief LiveDataSource::updateInterval
+ * Get update interval in ms
+ * \return
+ */
 int LiveDataSource::updateInterval() const {
-	return m_updateInterval;
+	return m_updateInterval_ms;
 }
 
 /*!
@@ -361,7 +366,10 @@ LiveDataSource::UpdateType LiveDataSource::updateType() const {
  * \param host
  */
 void LiveDataSource::setHost(const QString& host) {
-	m_host = host.simplified();
+	if (host.compare(QStringLiteral("localhost"), Qt::CaseSensitivity::CaseInsensitive) == 0)
+		m_host = QStringLiteral("127.0.0.1");
+	else
+		m_host = host.simplified();
 	initDevice();
 }
 
@@ -486,22 +494,30 @@ void LiveDataSource::initDevice() {
 				this,
 				&LiveDataSource::tcpSocketError);
 		break;
-	case SourceType::NetworkUDPSocket:
+	case SourceType::NetworkUDPSocket: {
 		if (!m_udpSocket)
 			m_udpSocket = new QUdpSocket(this);
 		m_device = m_udpSocket;
 		m_udpSocket->abort();
-		m_udpSocket->bind(QHostAddress(m_host), m_port);
-		m_udpSocket->connectToHost(m_host, 0, QUdpSocket::ReadOnly);
-
-			   // only connect to readyRead when update is on new data
-		if (m_updateType == UpdateType::NewData)
-			connect(m_udpSocket, &QUdpSocket::readyRead, this, &LiveDataSource::readyRead);
-		connect(m_udpSocket,
-				static_cast<void (QUdpSocket::*)(QAbstractSocket::SocketError)>(&QUdpSocket::errorOccurred),
-				this,
-				&LiveDataSource::tcpSocketError);
+		if (m_udpSocket->bind(QHostAddress(m_host), m_port)) {
+			if (m_updateType == UpdateType::NewData)
+				connect(m_udpSocket, &QUdpSocket::readyRead, this, &LiveDataSource::readyRead);
+			m_udpSocket->connectToHost(m_host, 0, QUdpSocket::ReadOnly);
+			if (m_udpSocket->waitForConnected()) {
+				// only connect to readyRead when update is on new data
+				connect(m_udpSocket,
+						static_cast<void (QUdpSocket::*)(QAbstractSocket::SocketError)>(&QUdpSocket::errorOccurred),
+						this,
+						&LiveDataSource::tcpSocketError);
+			} else {
+				DEBUG("failed to connect to UDP socket - "
+					  << STDSTRING(m_udpSocket->errorString()));
+			}
+		} else {
+			DEBUG("Unable to bind - " << m_udpSocket->errorString().toStdString());
+		}
 		break;
+	}
 	case SourceType::LocalSocket:
 		if (!m_localSocket)
 			m_localSocket = new QLocalSocket(this);
@@ -805,7 +821,7 @@ void LiveDataSource::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("keepNValues"), QString::number(m_keepNValues));
 
 	if (m_updateType == UpdateType::TimeInterval)
-		writer->writeAttribute(QStringLiteral("updateInterval"), QString::number(m_updateInterval));
+		writer->writeAttribute(QStringLiteral("updateInterval"), QString::number(m_updateInterval_ms));
 
 	if (m_readingType != ReadingType::TillEnd)
 		writer->writeAttribute(QStringLiteral("sampleSize"), QString::number(m_sampleSize));
@@ -900,7 +916,7 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 				if (str.isEmpty())
 					reader->raiseMissingAttributeWarning(QStringLiteral("updateInterval"));
 				else
-					m_updateInterval = str.toInt();
+					m_updateInterval_ms = str.toInt();
 			}
 
 			if (m_readingType != ReadingType::TillEnd) {

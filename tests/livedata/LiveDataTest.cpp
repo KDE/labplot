@@ -21,30 +21,31 @@
 #include <QUdpSocket>
 
 namespace {
-quint16 port = 1234;
+quint16 port = PORT;
+constexpr int udpNewDataUpdateTimeMs = PUBLISH_TIME_MS;
+constexpr QLatin1String hostname = QLatin1String(HOSTNAME);
 } // anonymous namespace
 
 void LiveDataTest::initTestCase() {
 	CommonTest::initTestCase();
 
-	// initialize the TCP socket/server
-	m_tcpServer = new QTcpServer(this);
-	if (!m_tcpServer->listen())
-		QFAIL("Failed to start the TCP server. " /* + QString(m_tcpServer->errorString())*/);
+	// // initialize the TCP socket/server
+	// m_tcpServer = new QTcpServer(this);
+	// if (!m_tcpServer->listen())
+	// 	QFAIL("Failed to start the TCP server. " /* + QString(m_tcpServer->errorString())*/);
 
-	connect(m_tcpServer, &QTcpServer::newConnection, this, &LiveDataTest::sendDataOverTcp);
+	// connect(m_tcpServer, &QTcpServer::newConnection, this, &LiveDataTest::sendDataOverTcp);
 
-	// // initialize the UDP socket
-	m_udpSocket = new QUdpSocket(this);
-	m_udpSocket->bind(QHostAddress::LocalHost, port);
-	auto* timer = new QTimer(this);
-	connect(timer, &QTimer::timeout, this, &LiveDataTest::sendDataOverUdp);
-	timer->start(10);
+	const auto executable = QStringLiteral(EXEC);
+	m_process.setProgram(executable);
+	m_process.start();
+	QVERIFY(m_process.waitForStarted());
+	// const auto e1 = m_process.errorString();
 }
 
 void LiveDataTest::cleanupTestCase() {
-	delete m_tcpServer;
-	delete m_udpSocket;
+	m_process.terminate();
+	QVERIFY(m_process.waitForFinished());
 }
 
 // ##############################################################################
@@ -112,7 +113,7 @@ void LiveDataTest::testReadContinuousFixed00() {
 	file.write("5,6\n7,8\n");
 	file.close();
 	// Watch timer of the LiveDataSource triggered
-	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
+	waitForSignal(&dataSource, &LiveDataSource::readOnUpdateCalled);
 
 	// all new data (2 new lines) was added, check
 	QCOMPARE(dataSource.columnCount(), 2);
@@ -201,7 +202,7 @@ void LiveDataTest::testReadContinuousFixed01() {
 	file.write("5,6\n7,8\n");
 	file.close();
 	// Watch timer of the LiveDataSource triggered
-	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
+	waitForSignal(&dataSource, &LiveDataSource::readOnUpdateCalled);
 
 // currently fails on Windows (waitForSignal()?)
 #ifdef HAVE_WINDOWS
@@ -295,7 +296,7 @@ void LiveDataTest::testReadContinuousFixed02() {
 	// write out more data to the file
 	file.write("5,6\n7,8\n");
 	file.close();
-	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
+	waitForSignal(&dataSource, &LiveDataSource::readOnUpdateCalled);
 
 	// the first line of the new data (sample size = 1) was added, check
 	QCOMPARE(dataSource.columnCount(), 2);
@@ -374,7 +375,7 @@ void LiveDataTest::testReadContinuousFixedWithIndex() {
 	// write out more data to the file
 	file.write("5,6\n7,8\n");
 	file.close();
-	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
+	waitForSignal(&dataSource, &LiveDataSource::readOnUpdateCalled);
 
 	// all new data (2 new lines) was added, check
 	QCOMPARE(dataSource.columnCount(), 3);
@@ -464,7 +465,7 @@ void LiveDataTest::testReadContinuousFixedWithTimestamp() {
 	// write out more data to the file
 	file.write("5,6\n7,8\n");
 	file.close();
-	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
+	waitForSignal(&dataSource, &LiveDataSource::readOnUpdateCalled);
 
 	// all new data (2 new lines) was added, check
 	QCOMPARE(dataSource.columnCount(), 3);
@@ -558,7 +559,7 @@ void LiveDataTest::testReadContinuousFixedWithIndexTimestamp() {
 	// write out more data to the file
 	file.write("5,6\n7,8\n");
 	file.close();
-	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
+	waitForSignal(&dataSource, &LiveDataSource::readOnUpdateCalled);
 
 	// all new data (2 new lines) was added, check
 	QCOMPARE(dataSource.columnCount(), 4);
@@ -653,7 +654,7 @@ void LiveDataTest::testReadFromEnd00() {
 	// write out more data to the file
 	file.write("5,6\n7,8\n");
 	file.close();
-	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
+	waitForSignal(&dataSource, &LiveDataSource::readOnUpdateCalled);
 
 	// the first line of the new data (sample size = 1) was added, check
 	QCOMPARE(dataSource.columnCount(), 2);
@@ -745,7 +746,7 @@ void LiveDataTest::testReadFromEnd01() {
 	// write out more data to the file
 	file.write("5,6\n7,8\n");
 	file.close();
-	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
+	waitForSignal(&dataSource, &LiveDataSource::readOnUpdateCalled);
 
 	// the first line of the new data (sample size = 1) was added, check
 	QCOMPARE(dataSource.columnCount(), 2);
@@ -856,7 +857,7 @@ void LiveDataTest::testReadFromEnd02() {
 	// write out more data to the file
 	file.write("5,6\n7,8\n");
 	file.close();
-	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
+	waitForSignal(&dataSource, &LiveDataSource::readOnUpdateCalled);
 
 	// the first line of the new data (sample size = 1) was added, check
 	QCOMPARE(dataSource.columnCount(), 2);
@@ -941,7 +942,7 @@ void LiveDataTest::testReadTillEnd00() {
 	// write out more data to the file
 	file.write("5,6\n7,8\n");
 	file.close();
-	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
+	waitForSignal(&dataSource, &LiveDataSource::readOnUpdateCalled);
 
 	// checks
 	QCOMPARE(dataSource.columnCount(), 2);
@@ -1022,7 +1023,7 @@ void LiveDataTest::testReadTillEnd01() {
 	// write out more data to the file
 	file.write("5,6\n7,8\n");
 	file.close();
-	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
+	waitForSignal(&dataSource, &LiveDataSource::readOnUpdateCalled);
 
 	// checks
 	QCOMPARE(dataSource.columnCount(), 2);
@@ -1097,7 +1098,7 @@ void LiveDataTest::testReadWholeFile00() {
 	// write out more data to the file
 	file.write("3,4\n");
 	file.close();
-	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
+	waitForSignal(&dataSource, &LiveDataSource::readOnUpdateCalled);
 
 	// checks
 	QCOMPARE(dataSource.columnCount(), 2);
@@ -1171,7 +1172,7 @@ void LiveDataTest::testReadWholeFile01() {
 		QFAIL("failed to open the temp file for writing");
 	file.write("3,4\n5,6\n");
 	file.close();
-	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
+	waitForSignal(&dataSource, &LiveDataSource::readOnUpdateCalled);
 
 	// checks
 	QCOMPARE(dataSource.columnCount(), 2);
@@ -1242,7 +1243,7 @@ void LiveDataTest::testReadWholeFileSameContentSize() {
 		QFAIL("failed to open the temp file for writing");
 	file.write("3,4\n"); // The exact same number of lines are used!
 	file.close();
-	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
+	waitForSignal(&dataSource, &LiveDataSource::readOnUpdateCalled);
 
 	// checks
 	QCOMPARE(dataSource.columnCount(), 2);
@@ -1358,7 +1359,7 @@ void LiveDataTest::testPlotting() {
 		QFAIL("failed to open the temp file for writing");
 	file.write("1000,3000\n2000,4000\n3000,8000\n4000,10000\n");
 	file.close();
-	waitForSignal(dataSource, SIGNAL(readOnUpdateCalled()));
+	QCOMPARE(waitForSignal(dataSource, &LiveDataSource::readOnUpdateCalled), false);
 
 	QCOMPARE(dataSource->columnCount(), 2);
 	QCOMPARE(dataSource->rowCount(), 4);
@@ -1390,17 +1391,21 @@ void LiveDataTest::testPlotting() {
 // ##############################################################################
 // ##################################  TCP ######################################
 // ##############################################################################
+namespace {
+constexpr int updateIntervalMs = udpNewDataUpdateTimeMs * 100;
+}
+
 void LiveDataTest::testTcpReadContinuousFixed00() {
 	// initialize the live data source
 	LiveDataSource dataSource(QStringLiteral("test"), false);
 	dataSource.setSourceType(LiveDataSource::SourceType::NetworkTCPSocket);
 	dataSource.setFileType(AbstractFileFilter::FileType::Ascii);
-	dataSource.setHost(QStringLiteral("localhost"));
-	dataSource.setPort(m_tcpServer->serverPort());
+	dataSource.setHost(hostname);
+	dataSource.setPort(port);
 	dataSource.setReadingType(LiveDataSource::ReadingType::ContinuousFixed);
 	dataSource.setSampleSize(100); // big number of samples, more then the new data has, meaning we read all new data
 	dataSource.setUpdateType(LiveDataSource::UpdateType::TimeInterval);
-	dataSource.setUpdateInterval(10000);
+	dataSource.setUpdateInterval(updateIntervalMs);
 
 	// initialize the ASCII filter
 	auto* filter = new AsciiFilter();
@@ -1411,18 +1416,21 @@ void LiveDataTest::testTcpReadContinuousFixed00() {
 	filter->setProperties(properties);
 	dataSource.setFilter(filter);
 
-	// read the data and perform checks, after the initial read all data is read
-	dataSource.read();
-	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
+	// wait until livedata update time is finished and triggers a read
+	wait(updateIntervalMs * 3);
+	dataSource.pauseReading();
 
 	QCOMPARE(dataSource.columnCount(), 2);
-	QCOMPARE(dataSource.rowCount(), 1);
+	QVERIFY(dataSource.rowCount() >= updateIntervalMs * 3 / udpNewDataUpdateTimeMs);
 
-	QCOMPARE(dataSource.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
-	QCOMPARE(dataSource.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(dataSource.column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(dataSource.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
 
-	QCOMPARE(dataSource.column(0)->integerAt(0), 1);
-	QCOMPARE(dataSource.column(1)->integerAt(0), 2);
+	QCOMPARE(dataSource.column(0)->valueAt(0), 1.);
+	QCOMPARE(dataSource.column(1)->valueAt(0), 2.);
+
+	QCOMPARE(dataSource.column(0)->valueAt(dataSource.rowCount() - 1), 1.);
+	QCOMPARE(dataSource.column(1)->valueAt(dataSource.rowCount() - 1), 2.);
 }
 
 void LiveDataTest::testUdpReadContinuousFixed00() {
@@ -1430,12 +1438,11 @@ void LiveDataTest::testUdpReadContinuousFixed00() {
 	LiveDataSource dataSource(QStringLiteral("test"), false);
 	dataSource.setSourceType(LiveDataSource::SourceType::NetworkUDPSocket);
 	dataSource.setFileType(AbstractFileFilter::FileType::Ascii);
-	dataSource.setHost(QStringLiteral("localhost"));
+	dataSource.setHost(hostname);
 	dataSource.setPort(port);
 	dataSource.setReadingType(LiveDataSource::ReadingType::ContinuousFixed);
 	dataSource.setSampleSize(100); // big number of samples, more then the new data has, meaning we read all new data
 	dataSource.setUpdateType(LiveDataSource::UpdateType::TimeInterval);
-	dataSource.setUpdateInterval(10000);
 
 	// initialize the ASCII filter
 	auto* filter = new AsciiFilter();
@@ -1446,57 +1453,45 @@ void LiveDataTest::testUdpReadContinuousFixed00() {
 	filter->setProperties(properties);
 	dataSource.setFilter(filter);
 
-	// read the data and perform checks, after the initial read all data is read
-	dataSource.read();
-	waitForSignal(&dataSource, SIGNAL(readOnUpdateCalled()));
+	dataSource.setUpdateInterval(updateIntervalMs); // Start livedata
+
+	// wait until livedata update time is finished and triggers a read
+	wait(updateIntervalMs * 10);
+	dataSource.pauseReading();
 
 	QCOMPARE(dataSource.columnCount(), 2);
-	QCOMPARE(dataSource.rowCount(), 1);
+	QVERIFY(updateIntervalMs * 3 / udpNewDataUpdateTimeMs != 100); // Check that not the default
+	QVERIFY(dataSource.rowCount() >= updateIntervalMs * 3 / udpNewDataUpdateTimeMs);
 
-	QCOMPARE(dataSource.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
-	QCOMPARE(dataSource.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(dataSource.column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(dataSource.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
 
-	QCOMPARE(dataSource.column(0)->integerAt(0), 1);
-	QCOMPARE(dataSource.column(1)->integerAt(0), 2);
+	QCOMPARE(dataSource.column(0)->valueAt(0), 1.);
+	QCOMPARE(dataSource.column(1)->valueAt(0), 2.);
+
+	QCOMPARE(dataSource.column(0)->valueAt(dataSource.rowCount() - 1), 1.);
+	QCOMPARE(dataSource.column(1)->valueAt(dataSource.rowCount() - 1), 2.);
 }
 
 // ##############################################################################
 // ##########################  helper functions #################################
 // ##############################################################################
 
-void LiveDataTest::waitForSignal(QObject* sender, const char* signal) {
-	QTimer timer(this);
-	timer.setSingleShot(true);
+// void LiveDataTest::sendDataOverTcp() {
+// 	if (!m_tcpServer)
+// 		return;
 
-	QEventLoop loop;
-	QTimer::connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
-	QObject::connect(sender, signal, &loop, SLOT(quit()));
-	timer.start(1000);
-	loop.exec();
-}
+// 	QByteArray block;
+// 	QDataStream out(&block, QIODevice::WriteOnly);
 
-void LiveDataTest::sendDataOverTcp() {
-	if (!m_tcpServer)
-		return;
+// 	out << "1,2";
 
-	QByteArray block;
-	QDataStream out(&block, QIODevice::WriteOnly);
+// 	auto* clientConnection = m_tcpServer->nextPendingConnection();
+// 	QVERIFY(clientConnection);
+// 	connect(clientConnection, &QAbstractSocket::disconnected, clientConnection, &QObject::deleteLater);
 
-	out << "1,2";
-
-	auto* clientConnection = m_tcpServer->nextPendingConnection();
-	QVERIFY(clientConnection);
-	connect(clientConnection, &QAbstractSocket::disconnected, clientConnection, &QObject::deleteLater);
-
-	clientConnection->write(block);
-	clientConnection->disconnectFromHost();
-}
-
-void LiveDataTest::sendDataOverUdp() {
-	if (!m_udpSocket)
-		return;
-
-	m_udpSocket->writeDatagram("1,2", QHostAddress::LocalHost, port);
-}
+// 	clientConnection->write(block);
+// 	clientConnection->disconnectFromHost();
+// }
 
 QTEST_MAIN(LiveDataTest)

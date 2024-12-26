@@ -21,10 +21,32 @@ class LiveDataTest : public CommonTest {
 private:
 	void initTestCase() override;
 	void cleanupTestCase();
-	void waitForSignal(QObject* sender, const char* signal);
+
+	template <typename T1, typename T2>
+	bool waitForSignal(T1* sender, T2 signal) {
+		QTimer timer(this);
+		timer.setSingleShot(true);
+
+		bool timeout = false;
+
+		QEventLoop loop;
+		QTimer::connect(&timer, &QTimer::timeout, [&loop, &timeout] {
+			timeout = true;
+			loop.quit();
+		});
+
+		connect(sender, signal, [&loop, &timer] {
+			timer.stop();
+			loop.quit();
+		});
+		timer.start(2000);
+		loop.exec();
+
+		return timeout;
+	}
 
 	QTcpServer* m_tcpServer{nullptr};
-	QUdpSocket* m_udpSocket{nullptr};
+	QProcess m_process;
 
 private Q_SLOTS:
 	// Reading from files:
@@ -58,10 +80,6 @@ private Q_SLOTS:
 
 	// reading from UDP sockets:
 	void testUdpReadContinuousFixed00();
-
-	// helper slots
-	void sendDataOverTcp();
-	void sendDataOverUdp();
 };
 
 #endif // LIVEDATATEST_H
