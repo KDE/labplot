@@ -107,7 +107,7 @@ void KDEPlot::init() {
 	connect(d->rugCurve, &XYCurve::changed, this, &KDEPlot::changed);
 
 	// synchronize the color of the data curve with the color of the rug curve (symbol color is used)
-	connect(d->estimationCurve->line(), &Line::colorChanged, [=] (const QColor& color) {
+	connect(d->estimationCurve->line(), &Line::colorChanged, [=](const QColor& color) {
 		auto* symbol = d->rugCurve->symbol();
 		symbol->setUndoAware(false);
 		symbol->setColor(color);
