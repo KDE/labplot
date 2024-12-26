@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-25 00:37+0000\n"
-"PO-Revision-Date: 2024-12-24 20:39+0530\n"
+"POT-Creation-Date: 2024-12-26 00:38+0000\n"
+"PO-Revision-Date: 2024-12-25 19:45+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
@@ -8593,20 +8593,20 @@ msgid "%1: Cursor1 enable"
 msgstr "%1: कर्सर1 सक्षमं कुर्वन्तु"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1755
-#: src/backend/worksheet/Worksheet.cpp:844
+#: src/backend/worksheet/Worksheet.cpp:848
 #, kde-format
 msgid "%1: load theme %2"
 msgstr "%1: विषयवस्तु %2 लोडयन्तु"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1757
-#: src/backend/worksheet/Worksheet.cpp:846
+#: src/backend/worksheet/Worksheet.cpp:850
 #, kde-format
 msgid "%1: load default theme"
 msgstr "%1: पूर्वनिर्धारितं विषयं लोड् कुर्वन्तु"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1759
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5565
-#: src/backend/worksheet/Worksheet.cpp:848
+#: src/backend/worksheet/Worksheet.cpp:852
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1: विषयः सेट् कुर्वन्तु"
@@ -8809,50 +8809,50 @@ msgid "%1: set border corner radius"
 msgstr "%1: सीमाकोणत्रिज्या सेट् कुर्वन्तु"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:253
-#: src/backend/worksheet/Worksheet.cpp:721
-#: src/backend/worksheet/Worksheet.cpp:722
+#: src/backend/worksheet/Worksheet.cpp:725
+#: src/backend/worksheet/Worksheet.cpp:726
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: विन्यासस्य शीर्षमार्जिनं सेट् कुर्वन्तु"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:260
-#: src/backend/worksheet/Worksheet.cpp:731
-#: src/backend/worksheet/Worksheet.cpp:732
+#: src/backend/worksheet/Worksheet.cpp:735
+#: src/backend/worksheet/Worksheet.cpp:736
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: विन्यासस्य अधः मार्जिनं सेट् कुर्वन्तु"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:267
-#: src/backend/worksheet/Worksheet.cpp:741
-#: src/backend/worksheet/Worksheet.cpp:742
+#: src/backend/worksheet/Worksheet.cpp:745
+#: src/backend/worksheet/Worksheet.cpp:746
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: विन्यासं वाममार्जिनं सेट् कुर्वन्तु"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:274
-#: src/backend/worksheet/Worksheet.cpp:751
-#: src/backend/worksheet/Worksheet.cpp:752
+#: src/backend/worksheet/Worksheet.cpp:755
+#: src/backend/worksheet/Worksheet.cpp:756
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: विन्यासः दक्षिणमार्जिनं सेट् कुर्वन्तु"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:281
-#: src/backend/worksheet/Worksheet.cpp:761
-#: src/backend/worksheet/Worksheet.cpp:762
+#: src/backend/worksheet/Worksheet.cpp:765
+#: src/backend/worksheet/Worksheet.cpp:766
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: विन्यासस्य ऊर्ध्वाधरान्तरं सेट् कुर्वन्तु"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:288
-#: src/backend/worksheet/Worksheet.cpp:771
-#: src/backend/worksheet/Worksheet.cpp:772
+#: src/backend/worksheet/Worksheet.cpp:775
+#: src/backend/worksheet/Worksheet.cpp:776
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: विन्यासस्य क्षैतिजं अन्तरं सेट् कुर्वन्तु"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:295
-#: src/backend/worksheet/Worksheet.cpp:791
-#: src/backend/worksheet/Worksheet.cpp:792
+#: src/backend/worksheet/Worksheet.cpp:795
+#: src/backend/worksheet/Worksheet.cpp:796
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: विन्यासस्तम्भगणना सेट् कुर्वन्तु"
@@ -9908,42 +9908,42 @@ msgstr "%1: सीमारूपं सेट् कुर्वन्तु"
 msgid "%1: set border"
 msgstr "%1: सीमां सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/Worksheet.cpp:249
+#: src/backend/worksheet/Worksheet.cpp:253
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "कार्यपत्रकं मुद्रयन्तु"
 
-#: src/backend/worksheet/Worksheet.cpp:691
+#: src/backend/worksheet/Worksheet.cpp:695
 #, kde-format
 msgid "%1: change size type"
 msgstr "%1: आकारप्रकारं परिवर्तयतु"
 
-#: src/backend/worksheet/Worksheet.cpp:703
+#: src/backend/worksheet/Worksheet.cpp:707
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr "%1: \"सामग्री पुनः स्केल कुर्वन्तु\" गुणं परिवर्तयन्तु"
 
-#: src/backend/worksheet/Worksheet.cpp:711
-#: src/backend/worksheet/Worksheet.cpp:712
+#: src/backend/worksheet/Worksheet.cpp:715
+#: src/backend/worksheet/Worksheet.cpp:716
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: विन्यासं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/Worksheet.cpp:781
-#: src/backend/worksheet/Worksheet.cpp:782
+#: src/backend/worksheet/Worksheet.cpp:785
+#: src/backend/worksheet/Worksheet.cpp:786
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: विन्यासपङ्क्तिगणना सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/Worksheet.cpp:822
-#: src/backend/worksheet/Worksheet.cpp:823
+#: src/backend/worksheet/Worksheet.cpp:826
+#: src/backend/worksheet/Worksheet.cpp:827
 #: src/frontend/dockwidgets/WorksheetDock.cpp:372
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: पृष्ठस्य आकारं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/Worksheet.cpp:1569
+#: src/backend/worksheet/Worksheet.cpp:1573
 #, kde-format
 msgid "Curves"
 msgstr "वक्रता"
@@ -10534,18 +10534,18 @@ msgstr "%1: नूतनं वक्रं योजयन्तु।"
 msgid "Curve"
 msgstr "वक्रम्"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:875
+#: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4101
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4155
-#: src/frontend/worksheet/WorksheetView.cpp:2185
+#: src/frontend/worksheet/WorksheetView.cpp:2195
 #, kde-format
 msgid "Failed to export"
 msgstr "निर्यातं कर्तुं असफलम्"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:875
+#: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4101
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4155
-#: src/frontend/worksheet/WorksheetView.cpp:2185
+#: src/frontend/worksheet/WorksheetView.cpp:2195
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "'%1' इत्यत्र लिखितुं असफलम् । कृपया मार्गं पश्यतु।"
@@ -14709,7 +14709,7 @@ msgstr "मनमाना पाठस्य कृते नूतनं ट�
 #: src/frontend/MainWin.cpp:660 src/frontend/MainWin.cpp:1947
 #, kde-format
 msgid "Folder"
-msgstr "फोल्डर"
+msgstr "समुच्चय"
 
 #: src/frontend/MainWin.cpp:661
 #, kde-format
@@ -14860,7 +14860,7 @@ msgstr "वर्तमान &Folder Only"
 #: src/frontend/MainWin.cpp:793
 #, kde-format
 msgid "Current Folder and &Subfolders"
-msgstr "वर्तमान फोल्डर् तथा &Subfolders"
+msgstr "वर्तमान समुच्चय तथा &Subfolders"
 
 #: src/frontend/MainWin.cpp:797
 #, kde-format
@@ -15557,12 +15557,12 @@ msgstr "भूखण्ड क्षेत्र टेम्पलेट्स 
 #: src/frontend/PlotTemplateDialog.cpp:52
 #, kde-format
 msgid "Custom folder for the location of plot area templates"
-msgstr "प्लॉट् एरिया टेम्पलेट् इत्यस्य स्थानस्य कृते कस्टम् फोल्डर्"
+msgstr "प्लॉट् एरिया टेम्पलेट् इत्यस्य स्थानस्य कृते कस्टम् समुच्चय"
 
 #: src/frontend/PlotTemplateDialog.cpp:56
 #, kde-format
 msgid "Open the folder for the location of plot area templates"
-msgstr "प्लॉट् एरिया टेम्पलेट् इत्यस्य स्थानस्य कृते फोल्डर् उद्घाटयन्तु"
+msgstr "प्लॉट् एरिया टेम्पलेट् इत्यस्य स्थानस्य कृते समुच्चय उद्घाटयन्तु"
 
 #: src/frontend/PlotTemplateDialog.cpp:135
 #, kde-format
@@ -24240,7 +24240,7 @@ msgstr "X11 बिटमैप (XPM) 1.1."
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:82
 #, kde-format
 msgid "File"
-msgstr "संचिका"
+msgstr "सञ्चिका"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
 #, kde-format

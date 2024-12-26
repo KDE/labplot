@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-25 00:37+0000\n"
+"POT-Creation-Date: 2024-12-26 00:38+0000\n"
 "PO-Revision-Date: 2024-04-22 16:05\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -8559,20 +8559,20 @@ msgid "%1: Cursor1 enable"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1755
-#: src/backend/worksheet/Worksheet.cpp:844
+#: src/backend/worksheet/Worksheet.cpp:848
 #, kde-format
 msgid "%1: load theme %2"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1757
-#: src/backend/worksheet/Worksheet.cpp:846
+#: src/backend/worksheet/Worksheet.cpp:850
 #, kde-format
 msgid "%1: load default theme"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1759
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5565
-#: src/backend/worksheet/Worksheet.cpp:848
+#: src/backend/worksheet/Worksheet.cpp:852
 #, kde-format
 msgid "%1: set theme"
 msgstr ""
@@ -8775,50 +8775,50 @@ msgid "%1: set border corner radius"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:253
-#: src/backend/worksheet/Worksheet.cpp:721
-#: src/backend/worksheet/Worksheet.cpp:722
+#: src/backend/worksheet/Worksheet.cpp:725
+#: src/backend/worksheet/Worksheet.cpp:726
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:260
-#: src/backend/worksheet/Worksheet.cpp:731
-#: src/backend/worksheet/Worksheet.cpp:732
+#: src/backend/worksheet/Worksheet.cpp:735
+#: src/backend/worksheet/Worksheet.cpp:736
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:267
-#: src/backend/worksheet/Worksheet.cpp:741
-#: src/backend/worksheet/Worksheet.cpp:742
+#: src/backend/worksheet/Worksheet.cpp:745
+#: src/backend/worksheet/Worksheet.cpp:746
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:274
-#: src/backend/worksheet/Worksheet.cpp:751
-#: src/backend/worksheet/Worksheet.cpp:752
+#: src/backend/worksheet/Worksheet.cpp:755
+#: src/backend/worksheet/Worksheet.cpp:756
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:281
-#: src/backend/worksheet/Worksheet.cpp:761
-#: src/backend/worksheet/Worksheet.cpp:762
+#: src/backend/worksheet/Worksheet.cpp:765
+#: src/backend/worksheet/Worksheet.cpp:766
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:288
-#: src/backend/worksheet/Worksheet.cpp:771
-#: src/backend/worksheet/Worksheet.cpp:772
+#: src/backend/worksheet/Worksheet.cpp:775
+#: src/backend/worksheet/Worksheet.cpp:776
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:295
-#: src/backend/worksheet/Worksheet.cpp:791
-#: src/backend/worksheet/Worksheet.cpp:792
+#: src/backend/worksheet/Worksheet.cpp:795
+#: src/backend/worksheet/Worksheet.cpp:796
 #, kde-format
 msgid "%1: set layout column count"
 msgstr ""
@@ -9874,42 +9874,42 @@ msgstr ""
 msgid "%1: set border"
 msgstr ""
 
-#: src/backend/worksheet/Worksheet.cpp:249
+#: src/backend/worksheet/Worksheet.cpp:253
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "打印工作表"
 
-#: src/backend/worksheet/Worksheet.cpp:691
+#: src/backend/worksheet/Worksheet.cpp:695
 #, kde-format
 msgid "%1: change size type"
 msgstr ""
 
-#: src/backend/worksheet/Worksheet.cpp:703
+#: src/backend/worksheet/Worksheet.cpp:707
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr ""
 
-#: src/backend/worksheet/Worksheet.cpp:711
-#: src/backend/worksheet/Worksheet.cpp:712
+#: src/backend/worksheet/Worksheet.cpp:715
+#: src/backend/worksheet/Worksheet.cpp:716
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1：设定布局"
 
-#: src/backend/worksheet/Worksheet.cpp:781
-#: src/backend/worksheet/Worksheet.cpp:782
+#: src/backend/worksheet/Worksheet.cpp:785
+#: src/backend/worksheet/Worksheet.cpp:786
 #, kde-format
 msgid "%1: set layout row count"
 msgstr ""
 
-#: src/backend/worksheet/Worksheet.cpp:822
-#: src/backend/worksheet/Worksheet.cpp:823
+#: src/backend/worksheet/Worksheet.cpp:826
+#: src/backend/worksheet/Worksheet.cpp:827
 #: src/frontend/dockwidgets/WorksheetDock.cpp:372
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1：设置页面大小"
 
-#: src/backend/worksheet/Worksheet.cpp:1569
+#: src/backend/worksheet/Worksheet.cpp:1573
 #, kde-format
 msgid "Curves"
 msgstr ""
@@ -10499,18 +10499,18 @@ msgstr ""
 msgid "Curve"
 msgstr "曲线"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:875
+#: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4101
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4155
-#: src/frontend/worksheet/WorksheetView.cpp:2185
+#: src/frontend/worksheet/WorksheetView.cpp:2195
 #, kde-format
 msgid "Failed to export"
 msgstr "导出失败"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:875
+#: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4101
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4155
-#: src/frontend/worksheet/WorksheetView.cpp:2185
+#: src/frontend/worksheet/WorksheetView.cpp:2195
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "无法写入“%1”。请检查路径。"

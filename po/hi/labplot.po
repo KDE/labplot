@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-25 00:37+0000\n"
+"POT-Creation-Date: 2024-12-26 00:38+0000\n"
 "PO-Revision-Date: 2024-12-15 19:44+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -8607,20 +8607,20 @@ msgid "%1: Cursor1 enable"
 msgstr "%1: कर्सर1 सक्षम"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1755
-#: src/backend/worksheet/Worksheet.cpp:844
+#: src/backend/worksheet/Worksheet.cpp:848
 #, kde-format
 msgid "%1: load theme %2"
 msgstr "%1: थीम लोड करें %2"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1757
-#: src/backend/worksheet/Worksheet.cpp:846
+#: src/backend/worksheet/Worksheet.cpp:850
 #, kde-format
 msgid "%1: load default theme"
 msgstr "%1: डिफ़ॉल्ट थीम लोड करें"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1759
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5565
-#: src/backend/worksheet/Worksheet.cpp:848
+#: src/backend/worksheet/Worksheet.cpp:852
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1: थीम सेट करें"
@@ -8823,50 +8823,50 @@ msgid "%1: set border corner radius"
 msgstr "%1: बॉर्डर कोने की त्रिज्या सेट करें"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:253
-#: src/backend/worksheet/Worksheet.cpp:721
-#: src/backend/worksheet/Worksheet.cpp:722
+#: src/backend/worksheet/Worksheet.cpp:725
+#: src/backend/worksheet/Worksheet.cpp:726
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: लेआउट शीर्ष मार्जिन सेट करें"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:260
-#: src/backend/worksheet/Worksheet.cpp:731
-#: src/backend/worksheet/Worksheet.cpp:732
+#: src/backend/worksheet/Worksheet.cpp:735
+#: src/backend/worksheet/Worksheet.cpp:736
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: लेआउट निचला मार्जिन सेट करें"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:267
-#: src/backend/worksheet/Worksheet.cpp:741
-#: src/backend/worksheet/Worksheet.cpp:742
+#: src/backend/worksheet/Worksheet.cpp:745
+#: src/backend/worksheet/Worksheet.cpp:746
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: लेआउट बायां मार्जिन सेट करें"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:274
-#: src/backend/worksheet/Worksheet.cpp:751
-#: src/backend/worksheet/Worksheet.cpp:752
+#: src/backend/worksheet/Worksheet.cpp:755
+#: src/backend/worksheet/Worksheet.cpp:756
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: लेआउट दायाँ मार्जिन सेट करें"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:281
-#: src/backend/worksheet/Worksheet.cpp:761
-#: src/backend/worksheet/Worksheet.cpp:762
+#: src/backend/worksheet/Worksheet.cpp:765
+#: src/backend/worksheet/Worksheet.cpp:766
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: लेआउट ऊर्ध्वाधर रिक्ति सेट करें"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:288
-#: src/backend/worksheet/Worksheet.cpp:771
-#: src/backend/worksheet/Worksheet.cpp:772
+#: src/backend/worksheet/Worksheet.cpp:775
+#: src/backend/worksheet/Worksheet.cpp:776
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: लेआउट क्षैतिज रिक्ति सेट करें"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:295
-#: src/backend/worksheet/Worksheet.cpp:791
-#: src/backend/worksheet/Worksheet.cpp:792
+#: src/backend/worksheet/Worksheet.cpp:795
+#: src/backend/worksheet/Worksheet.cpp:796
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: लेआउट कॉलम गिनती सेट करें"
@@ -9923,42 +9923,42 @@ msgstr "%1: बॉर्डर आकार सेट करें"
 msgid "%1: set border"
 msgstr "%1: बॉर्डर सेट करें"
 
-#: src/backend/worksheet/Worksheet.cpp:249
+#: src/backend/worksheet/Worksheet.cpp:253
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "वर्कशीट प्रिंट करें"
 
-#: src/backend/worksheet/Worksheet.cpp:691
+#: src/backend/worksheet/Worksheet.cpp:695
 #, kde-format
 msgid "%1: change size type"
 msgstr "%1: आकार प्रकार बदलें"
 
-#: src/backend/worksheet/Worksheet.cpp:703
+#: src/backend/worksheet/Worksheet.cpp:707
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr "%1: \"सामग्री को पुनः स्केल करें\" गुण बदलें"
 
-#: src/backend/worksheet/Worksheet.cpp:711
-#: src/backend/worksheet/Worksheet.cpp:712
+#: src/backend/worksheet/Worksheet.cpp:715
+#: src/backend/worksheet/Worksheet.cpp:716
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: लेआउट सेट करें"
 
-#: src/backend/worksheet/Worksheet.cpp:781
-#: src/backend/worksheet/Worksheet.cpp:782
+#: src/backend/worksheet/Worksheet.cpp:785
+#: src/backend/worksheet/Worksheet.cpp:786
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: लेआउट पंक्ति संख्या सेट करें"
 
-#: src/backend/worksheet/Worksheet.cpp:822
-#: src/backend/worksheet/Worksheet.cpp:823
+#: src/backend/worksheet/Worksheet.cpp:826
+#: src/backend/worksheet/Worksheet.cpp:827
 #: src/frontend/dockwidgets/WorksheetDock.cpp:372
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: पृष्ठ आकार निर्धारित करें"
 
-#: src/backend/worksheet/Worksheet.cpp:1569
+#: src/backend/worksheet/Worksheet.cpp:1573
 #, kde-format
 msgid "Curves"
 msgstr "घटता"
@@ -10548,18 +10548,18 @@ msgstr "%1: नया वक्र जोड़ें."
 msgid "Curve"
 msgstr "वक्र"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:875
+#: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4101
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4155
-#: src/frontend/worksheet/WorksheetView.cpp:2185
+#: src/frontend/worksheet/WorksheetView.cpp:2195
 #, kde-format
 msgid "Failed to export"
 msgstr "निर्यात करने में विफल"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:875
+#: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4101
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4155
-#: src/frontend/worksheet/WorksheetView.cpp:2185
+#: src/frontend/worksheet/WorksheetView.cpp:2195
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "'%1' पर लिखने में विफल। कृपया पथ जाँचें।"
