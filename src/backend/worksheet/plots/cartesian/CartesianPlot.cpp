@@ -788,7 +788,7 @@ QMenu* CartesianPlot::createContextMenu() {
 
 	if (children<XYCurve>().isEmpty()) {
 		addInfoElementAction->setEnabled(false);
-		addInfoElementAction->setToolTip(QStringLiteral("No curve inside plot."));
+		addInfoElementAction->setToolTip(i18n("No curves inside the plot area."));
 	} else {
 		addInfoElementAction->setEnabled(true);
 		addInfoElementAction->setToolTip(QString());
@@ -834,6 +834,7 @@ QVector<AbstractAspect*> CartesianPlot::dependsOn() const {
 	// aspects which the plotted data in the worksheet depends on (spreadsheets and later matrices)
 	QVector<AbstractAspect*> aspects;
 
+	// TODO: handle other plot types
 	for (const auto* curve : children<XYCurve>()) {
 		if (curve->xColumn() && curve->xColumn()->parentAspect()->type() == AspectType::Spreadsheet)
 			aspects << curve->xColumn()->parentAspect();
@@ -853,6 +854,8 @@ QVector<AspectType> CartesianPlot::pasteTypes() const {
 							  AspectType::BoxPlot,
 							  AspectType::KDEPlot,
 							  AspectType::QQPlot,
+							  AspectType::RunChart,
+							  AspectType::ProcessBehaviorChart,
 							  AspectType::Axis,
 							  AspectType::XYEquationCurve,
 							  AspectType::XYFunctionCurve,
