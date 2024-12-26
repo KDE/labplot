@@ -14,10 +14,6 @@
 #include "frontend/dockwidgets/BaseDock.h"
 #include "ui_aspectdock.h"
 
-class AbstractAspect;
-template<class T>
-class QList;
-
 class AspectDock : public BaseDock {
 	Q_OBJECT
 
