@@ -18,15 +18,12 @@
 #include "backend/lib/trace.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "frontend/GuiTools.h"
 #include "tools/ImageTools.h"
 
 #include <QActionGroup>
-#include <QApplication>
 #include <QGraphicsSceneMouseEvent>
 #include <QMenu>
 #include <QPainter>
@@ -323,7 +320,9 @@ void BarPlot::xColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(BarPlot);
 	if (aspect == d->xColumn) {
 		d->xColumn = nullptr;
-		CURVE_COLUMN_REMOVED(x);
+		d->recalc();
+		Q_EMIT dataChanged();
+		Q_EMIT changed();
 	}
 }
 
@@ -332,7 +331,7 @@ void BarPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	for (int i = 0; i < d->dataColumns.size(); ++i) {
 		if (aspect == d->dataColumns.at(i)) {
 			d->dataColumns[i] = nullptr;
-			d->retransform();
+			d->recalc();
 			Q_EMIT dataChanged();
 			Q_EMIT changed();
 			break;

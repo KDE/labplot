@@ -101,6 +101,10 @@ void RunChart::init() {
 	// synchronize the names of the internal XYCurves with the name of the current plot
 	// so we have the same name shown on the undo stack
 	connect(this, &AbstractAspect::aspectDescriptionChanged, this, &RunChart::renameInternalCurves);
+
+	// propage the visual changes to the parent
+	connect(d->centerCurve, &XYCurve::changed, this, &RunChart::changed);
+	connect(d->dataCurve, &XYCurve::changed, this, &RunChart::changed);
 }
 
 void RunChart::finalizeAdd() {
@@ -270,7 +274,9 @@ void RunChart::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(RunChart);
 	if (aspect == d->dataColumn) {
 		d->dataColumn = nullptr;
-		CURVE_COLUMN_REMOVED(data);
+		d->recalc();
+		Q_EMIT dataChanged();
+		Q_EMIT changed();
 	}
 }
 
@@ -313,6 +319,7 @@ void RunChartPrivate::recalc() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 	if (!dataColumn) {
 		center = 0.;
+		xColumn->clear();
 		xCenterColumn->clear();
 		yCenterColumn->clear();
 		Q_EMIT q->dataChanged();

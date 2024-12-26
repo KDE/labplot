@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : QQPlot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-204 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -113,6 +113,10 @@ void QQPlot::init() {
 		d->referenceCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 		d->percentilesCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	});
+
+	// propage the visual changes to the parent
+	connect(d->referenceCurve, &XYCurve::changed, this, &QQPlot::changed);
+	connect(d->percentilesCurve, &XYCurve::changed, this, &QQPlot::changed);
 }
 
 void QQPlot::finalizeAdd() {
@@ -281,7 +285,7 @@ void QQPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(QQPlot);
 	if (aspect == d->dataColumn) {
 		d->dataColumn = nullptr;
-		d->retransform();
+		d->recalc();
 		Q_EMIT dataChanged();
 		Q_EMIT changed();
 	}
@@ -326,6 +330,7 @@ void QQPlotPrivate::recalc() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	if (!dataColumn) {
+		yReferenceColumn->clear();
 		yPercentilesColumn->clear();
 		Q_EMIT q->dataChanged();
 		return;

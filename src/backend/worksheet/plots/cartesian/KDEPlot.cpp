@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : KDE Plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -101,6 +101,10 @@ void KDEPlot::init() {
 		d->estimationCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 		d->rugCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	});
+
+	// propage the visual changes to the parent
+	connect(d->estimationCurve, &XYCurve::changed, this, &KDEPlot::changed);
+	connect(d->rugCurve, &XYCurve::changed, this, &KDEPlot::changed);
 }
 
 void KDEPlot::finalizeAdd() {
@@ -269,7 +273,7 @@ void KDEPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(KDEPlot);
 	if (aspect == d->dataColumn) {
 		d->dataColumn = nullptr;
-		d->retransform();
+		d->recalc();
 		Q_EMIT dataChanged();
 		Q_EMIT changed();
 	}
