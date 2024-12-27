@@ -38,6 +38,7 @@ New features:
 
 Performance improvements:
 	* Made big spreadsheet (millions of cells) more responsive when selecting columns via the spreadsheet header
+	* Faster redraw of plots and recalculation of analysis curves when masking/unmasking multiple cells in the spreadsheet
 
 Bug fixes:
 	* Fix crash selecting "cell" from function list in function dialog
