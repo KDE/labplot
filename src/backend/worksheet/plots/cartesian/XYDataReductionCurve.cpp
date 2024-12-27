@@ -23,7 +23,7 @@
  * \class XYDataReductionCurve
  * \brief A xy-curve defined by a data reduction.
  * \ingroup CartesianAnalysisPlots
-*/
+ */
 XYDataReductionCurve::XYDataReductionCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYDataReductionCurvePrivate(this), AspectType::XYDataReductionCurve) {
 }

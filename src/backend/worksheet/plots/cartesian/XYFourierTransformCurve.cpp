@@ -31,7 +31,7 @@ extern "C" {
  * \class XYFourierTransformCurve
  * \brief A xy-curve defined by a Fourier transform.
  * \ingroup CartesianAnalysisPlots
-*/
+ */
 XYFourierTransformCurve::XYFourierTransformCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYFourierTransformCurvePrivate(this), AspectType::XYFourierTransformCurve) {
 }

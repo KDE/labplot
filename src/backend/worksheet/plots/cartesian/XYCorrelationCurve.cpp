@@ -24,7 +24,7 @@
  * \class XYCorrelationCurve
  * \brief A xy-curve defined by a correlation.
  * \ingroup CartesianAnalysisPlots
-*/
+ */
 XYCorrelationCurve::XYCorrelationCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYCorrelationCurvePrivate(this), AspectType::XYCorrelationCurve) {
 }

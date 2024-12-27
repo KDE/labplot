@@ -16,10 +16,10 @@
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
-#include "backend/worksheet/plots/cartesian/plots.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegendPrivate.h"
 #include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "backend/worksheet/plots/cartesian/plots.h"
 
 #include <QMenu>
 #include <QPainter>
@@ -34,7 +34,7 @@
  * \brief Legend for the cartesian plot.
  *
  * \ingroup CartesianPlotArea
-*/
+ */
 CartesianPlotLegend::CartesianPlotLegend(const QString& name)
 	: WorksheetElement(name, new CartesianPlotLegendPrivate(this), AspectType::CartesianPlotLegend) {
 	init();

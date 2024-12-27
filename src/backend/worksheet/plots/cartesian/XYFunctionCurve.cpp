@@ -24,7 +24,7 @@
  * \class XYFunctionCurve
  * \brief A xy-curve that is calculated as a function of other curves
  * \ingroup CartesianPlots
-*/
+ */
 XYFunctionCurve::XYFunctionCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYFunctionCurvePrivate(this), AspectType::XYFunctionCurve) {
 	init();

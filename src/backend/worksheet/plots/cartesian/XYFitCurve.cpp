@@ -39,7 +39,7 @@
  * \class XYFitCurve
  * \brief A xy-curve defined by a fit model.
  * \ingroup CartesianAnalysisPlots
-*/
+ */
 XYFitCurve::XYFitCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYFitCurvePrivate(this), AspectType::XYFitCurve) {
 }

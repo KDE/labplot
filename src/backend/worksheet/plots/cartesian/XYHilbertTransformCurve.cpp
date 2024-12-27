@@ -24,7 +24,7 @@
  * \class XYHilbertTransformCurve
  * \brief A xy-curve defined by a Hilbert transform
  * \ingroup CartesianAnalysisPlots
-*/
+ */
 XYHilbertTransformCurve::XYHilbertTransformCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYHilbertTransformCurvePrivate(this), AspectType::XYHilbertTransformCurve) {
 }

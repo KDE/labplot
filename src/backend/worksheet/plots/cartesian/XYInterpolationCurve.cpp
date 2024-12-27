@@ -30,7 +30,7 @@ extern "C" {
  * \class XYInterpolationCurve
  * \brief A xy-curve defined by an interpolation.
  * \ingroup CartesianAnalysisPlots
-*/
+ */
 XYInterpolationCurve::XYInterpolationCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYInterpolationCurvePrivate(this), AspectType::XYInterpolationCurve) {
 }

@@ -24,7 +24,7 @@
  * \class XYConvolutionCurve
  * \brief A xy-curve defined by a convolution.
  * \ingroup CartesianAnalysisPlots
-*/
+ */
 XYConvolutionCurve::XYConvolutionCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYConvolutionCurvePrivate(this), AspectType::XYConvolutionCurve) {
 }

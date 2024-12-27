@@ -30,7 +30,7 @@ extern "C" {
  * \class XYSmoothCurve
  * \brief A xy-curve defined by a smooth.
  * \ingroup CartesianAnalysisPlots
-*/
+ */
 XYSmoothCurve::XYSmoothCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYSmoothCurvePrivate(this), AspectType::XYSmoothCurve) {
 }

@@ -32,7 +32,7 @@ extern "C" {
  * \class XYFourierFilterCurve
  * \brief A xy-curve defined by a Fourier filter.
  * \ingroup CartesianAnalysisPlots
-*/
+ */
 XYFourierFilterCurve::XYFourierFilterCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYFourierFilterCurvePrivate(this), AspectType::XYFourierFilterCurve) {
 }

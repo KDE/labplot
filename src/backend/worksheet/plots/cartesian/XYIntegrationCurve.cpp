@@ -25,7 +25,7 @@
  * \class XYIntegrationCurve
  * \brief A xy-curve defined by an integration.
  * \ingroup CartesianAnalysisPlots
-*/
+ */
 XYIntegrationCurve::XYIntegrationCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYIntegrationCurvePrivate(this), AspectType::XYIntegrationCurve) {
 }

@@ -23,7 +23,7 @@
  * \class XYAnalysisCurve
  * \brief Base class for all analysis curves.
  * \ingroup CartesianAnalysisPlots
-*/
+ */
 XYAnalysisCurve::XYAnalysisCurve(const QString& name, XYAnalysisCurvePrivate* dd, AspectType type)
 	: XYCurve(name, dd, type) {
 	init();

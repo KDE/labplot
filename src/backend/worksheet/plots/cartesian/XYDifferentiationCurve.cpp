@@ -22,7 +22,7 @@
  * \class XYDifferentiationCurve
  * \brief A xy-curve defined by a differentiation.
  * \ingroup CartesianAnalysisPlots
-*/
+ */
 XYDifferentiationCurve::XYDifferentiationCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYDifferentiationCurvePrivate(this), AspectType::XYDifferentiationCurve) {
 }

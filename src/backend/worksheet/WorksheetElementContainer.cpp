@@ -9,10 +9,10 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
+#include "backend/worksheet/WorksheetElementContainer.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/ResizeItem.h"
-#include "backend/worksheet/WorksheetElementContainer.h"
 #include "backend/worksheet/WorksheetElementContainerPrivate.h"
 #include "backend/worksheet/plots/cartesian/Plot.h"
 
