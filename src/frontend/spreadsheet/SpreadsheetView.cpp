@@ -52,11 +52,8 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 
-#include <QAbstractSlider>
 #include <QActionGroup>
-#include <QApplication>
 #include <QClipboard>
-#include <QDate>
 #include <QFile>
 #include <QInputDialog>
 #include <QKeyEvent>
@@ -67,9 +64,7 @@
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include <QPrinter>
-#include <QProcess>
 #include <QRandomGenerator>
-#include <QRegularExpression>
 #include <QScrollBar>
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -78,7 +73,6 @@
 #include <QTextStream>
 #include <QTimer>
 #include <QToolBar>
-#include <QUndoCommand>
 #include <QVBoxLayout>
 
 #include <algorithm> //for std::reverse
@@ -2074,16 +2068,10 @@ void SpreadsheetView::maskSelection() {
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: mask selected cells", m_spreadsheet->name()));
 
+	// suppress the data changed signal in all selected columns, will be emitted once per column at the end
 	const auto& columns = selectedColumns(false);
-	QVector<CartesianPlot*> plots;
-
-	// determine the dependent plots
 	for (auto* column : columns)
-		column->addUsedInPlots(plots);
-
-	// suppress retransform in the dependent plots
-	for (auto* plot : plots)
-		plot->setSuppressRetransform(true);
+		column->setSuppressDataChangedSignal(true);
 
 	// mask the selected cells
 	for (auto* column : columns) {
@@ -2091,13 +2079,9 @@ void SpreadsheetView::maskSelection() {
 		for (int row = first; row <= last; row++)
 			if (isCellSelected(row, col))
 				column->setMasked(row);
-	}
 
-	// retransform the dependent plots
-	for (auto* plot : plots) {
-		plot->setSuppressRetransform(false);
-		// TODO: check which ranges must be updated
-		plot->dataChanged(-1, -1);
+		column->setSuppressDataChangedSignal(false);
+		column->setChanged();
 	}
 
 	// some cells were masked, enable the "clear masks" action
@@ -2116,16 +2100,10 @@ void SpreadsheetView::unmaskSelection() {
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: unmask selected cells", m_spreadsheet->name()));
 
+	// suppress the data changed signal in all selected columns, will be emitted once per column at the end
 	const auto& columns = selectedColumns(false);
-	QVector<CartesianPlot*> plots;
-
-	// determine the dependent plots
 	for (auto* column : columns)
-		column->addUsedInPlots(plots);
-
-	// suppress retransform in the dependent plots
-	for (auto* plot : plots)
-		plot->setSuppressRetransform(true);
+		column->setSuppressDataChangedSignal(true);
 
 	// unmask the selected cells
 	for (auto* column : columns) {
@@ -2133,13 +2111,9 @@ void SpreadsheetView::unmaskSelection() {
 		for (int row = first; row <= last; row++)
 			if (isCellSelected(row, col))
 				column->setMasked(row, false);
-	}
 
-	// retransform the dependent plots
-	for (auto* plot : plots) {
-		plot->setSuppressRetransform(false);
-		// TODO: check which ranges must be updated
-		plot->dataChanged(-1, -1);
+		column->setSuppressDataChangedSignal(false);
+		column->setChanged();
 	}
 
 	m_spreadsheet->endMacro();

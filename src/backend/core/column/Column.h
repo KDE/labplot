@@ -206,8 +206,6 @@ public:
 	int indexForValue(double x) const override;
 	bool indicesMinMax(double v1, double v2, int& start, int& end) const override;
 
-	void setChanged();
-	void setSuppressDataChangedSignal(const bool);
 	void addUsedInPlots(QVector<CartesianPlot*>&);
 
 	// Value Labels
@@ -257,7 +255,6 @@ private:
 	void handleRowInsertion(int before, int count, QUndoCommand* parent) override;
 	void handleRowRemoval(int first, int count, QUndoCommand* parent) override;
 
-	bool m_suppressDataChangedSignal{false};
 	QAction* m_copyDataAction{nullptr};
 	QAction* m_pasteDataAction{nullptr};
 	QActionGroup* m_usedInActionGroup{nullptr};

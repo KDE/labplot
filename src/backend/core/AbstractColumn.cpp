@@ -580,6 +580,29 @@ void AbstractColumn::reset() {
 	disconnect(this, &AbstractColumn::dataChanged, nullptr, nullptr);
 }
 
+/*!
+ * invalidates the internal properties of the columns and emits the signal \c dataChanged().
+ *
+ * call this function if the data of the column was changed directly via the data()-pointer
+ * and not via the setValueAt() or when multiple cells are being notified and the signal \c dataChanged()
+ * is suppressed for performance reaasons and this function needs to be called after all cells were modified.
+ */
+void AbstractColumn::setChanged() {
+	invalidateProperties();
+	if (!d->m_suppressDataChangedSignal)
+		Q_EMIT dataChanged(this);
+}
+
+/*!
+ * suppresses the \c dataChanged signal if \c value is \c true, enables it otherwise.
+ *
+ * used when multiple cells are being modified and the signal needs to be supressed for performance reaasons,
+ * \sa setChanged().
+ */
+void AbstractColumn::setSuppressDataChangedSignal(bool value) {
+	d->m_suppressDataChangedSignal = value;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //@}
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -389,7 +389,7 @@ ColumnInsertRowsCmd::ColumnInsertRowsCmd(ColumnPrivate* col, int before, int cou
 void ColumnInsertRowsCmd::redo() {
 	m_col->insertRows(m_before, m_count);
 	m_col->q->updateFormula(); // only needed in redo
-	finalize();
+	m_col->owner()->setChanged();
 }
 
 /**
@@ -397,12 +397,7 @@ void ColumnInsertRowsCmd::redo() {
  */
 void ColumnInsertRowsCmd::undo() {
 	m_col->removeRows(m_before, m_count);
-	finalize();
-}
-
-void ColumnInsertRowsCmd::finalize() const {
-	if (!m_col->q->m_suppressDataChangedSignal)
-		Q_EMIT m_col->q->dataChanged(m_col->q);
+	m_col->owner()->setChanged();
 }
 
 /** ***************************************************************************
@@ -482,7 +477,7 @@ void ColumnRemoveRowsCmd::redo() {
 		m_formulas = m_col->formulaAttribute();
 	}
 	m_col->removeRows(m_first, m_count);
-	finalize();
+	m_col->owner()->setChanged();
 }
 
 /**
@@ -493,12 +488,7 @@ void ColumnRemoveRowsCmd::undo() {
 	m_col->copy(m_backup, 0, m_first, m_data_row_count);
 	m_col->resizeTo(m_old_size);
 	m_col->replaceFormulas(m_formulas);
-	finalize();
-}
-
-void ColumnRemoveRowsCmd::finalize() const {
-	if (!m_col->q->m_suppressDataChangedSignal)
-		Q_EMIT m_col->q->dataChanged(m_col->q);
+	m_col->owner()->setChanged();
 }
 
 /** ***************************************************************************
