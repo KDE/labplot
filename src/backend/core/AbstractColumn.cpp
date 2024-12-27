@@ -585,7 +585,7 @@ void AbstractColumn::reset() {
  *
  * call this function if the data of the column was changed directly via the data()-pointer
  * and not via the setValueAt() or when multiple cells are being notified and the signal \c dataChanged()
- * is suppressed for performance reaasons and this function needs to be called after all cells were modified.
+ * is suppressed for performance reasons and this function needs to be called after all cells were modified.
  */
 void AbstractColumn::setChanged() {
 	invalidateProperties();
@@ -596,7 +596,7 @@ void AbstractColumn::setChanged() {
 /*!
  * suppresses the \c dataChanged signal if \c value is \c true, enables it otherwise.
  *
- * used when multiple cells are being modified and the signal needs to be supressed for performance reaasons,
+ * used when multiple cells are being modified and the signal needs to be supressed for performance reasons,
  * \sa setChanged().
  */
 void AbstractColumn::setSuppressDataChangedSignal(bool value) {
