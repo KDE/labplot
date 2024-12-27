@@ -751,7 +751,8 @@ const QVector<Column::ValueLabel<qint64>>* ColumnPrivate::ValueLabels::bigIntVal
 // ######################################################################################################
 // ######################################################################################################
 
-ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode) : AbstractColumnPrivate(owner)
+ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode)
+	: AbstractColumnPrivate(owner)
 	, q(owner)
 	, m_columnMode(mode) {
 	initIOFilters();
@@ -760,7 +761,8 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode) : A
 /**
  * \brief Special ctor (to be called from Column only!)
  */
-ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode, void* data) : AbstractColumnPrivate(owner)
+ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode, void* data)
+	: AbstractColumnPrivate(owner)
 	, q(owner)
 	, m_columnMode(mode)
 	, m_data(data) {
