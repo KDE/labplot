@@ -7,12 +7,6 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class RunChart
-  \brief
-
-  \ingroup worksheet
-  */
 #include "RunChart.h"
 #include "RunChartPrivate.h"
 #include "backend/core/column/Column.h"
@@ -39,6 +33,18 @@ extern "C" {
 
 CURVE_COLUMN_CONNECT(RunChart, Data, data, recalc)
 
+/*!
+ * \class RunChart
+ * \brief This class implements the run chart (or run sequency plot) - a visualization showing
+ * the provided data points together with the median/average of the data, commonly used to identify trends
+ * or changes in the observation.
+ *
+ * To define the reference and to compare with, either median or the average values can be used.
+ * The visual properties of the plotted line for the reference value and for the actual data can be modified
+ * independently of each other.
+ *
+ * \ingroup CartesianPlots
+ */
 RunChart::RunChart(const QString& name)
 	: Plot(name, new RunChartPrivate(this), AspectType::RunChart) {
 	init();

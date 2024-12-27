@@ -8,21 +8,12 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYFourierFilterCurve
-  \brief A xy-curve defined by a Fourier filter
-
-  \ingroup worksheet
-*/
-
 #include "XYFourierFilterCurve.h"
 #include "XYFourierFilterCurvePrivate.h"
-#include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
 #include "backend/gsl/errors.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 
 #include <gsl/gsl_sf_pow_int.h>
 extern "C" {
@@ -37,6 +28,11 @@ extern "C" {
 #include <QIcon>
 #include <QThreadPool>
 
+/*!
+ * \class XYFourierFilterCurve
+ * \brief A xy-curve defined by a Fourier filter.
+ * \ingroup CartesianAnalysisPlots
+*/
 XYFourierFilterCurve::XYFourierFilterCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYFourierFilterCurvePrivate(this), AspectType::XYFourierFilterCurve) {
 }

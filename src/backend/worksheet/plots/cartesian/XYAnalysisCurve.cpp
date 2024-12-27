@@ -8,13 +8,6 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYAnalysisCurve
-  \brief Base class for all analysis curves
-
-  \ingroup worksheet
-*/
-
 #include "XYAnalysisCurve.h"
 #include "XYAnalysisCurvePrivate.h"
 #include "backend/core/Project.h"
@@ -26,6 +19,11 @@
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
 
+/*!
+ * \class XYAnalysisCurve
+ * \brief Base class for all analysis curves.
+ * \ingroup CartesianAnalysisPlots
+*/
 XYAnalysisCurve::XYAnalysisCurve(const QString& name, XYAnalysisCurvePrivate* dd, AspectType type)
 	: XYCurve(name, dd, type) {
 	init();

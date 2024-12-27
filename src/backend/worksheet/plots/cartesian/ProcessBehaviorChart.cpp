@@ -7,12 +7,6 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class ProcessBehaviorChart
-  \brief
-
-  \ingroup worksheet
-  */
 #include "ProcessBehaviorChart.h"
 #include "ProcessBehaviorChartPrivate.h"
 #include "backend/core/column/Column.h"
@@ -40,6 +34,17 @@ extern "C" {
 CURVE_COLUMN_CONNECT(ProcessBehaviorChart, Data, data, recalc)
 CURVE_COLUMN_CONNECT(ProcessBehaviorChart, Data2, data2, recalc)
 
+/*!
+ * \class ProcessBehaviorChart
+ * \brief This class implements the process behavior chart.
+ *
+ * The sub-types XmR, mR, XbarR, R, XbarS, S, P, NP, C, U are implemented and the implementation follows
+ * the conventions used in the book "Making Sense of Data", Donald J. Wheeler.
+ * The visual properties of the plotted line for the controll limits and for the actual data can be modified
+ * independently of each other.
+ *
+ * \ingroup CartesianPlots
+ */
 ProcessBehaviorChart::ProcessBehaviorChart(const QString& name)
 	: Plot(name, new ProcessBehaviorChartPrivate(this), AspectType::ProcessBehaviorChart) {
 	init();

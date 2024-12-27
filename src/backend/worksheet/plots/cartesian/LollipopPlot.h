@@ -12,7 +12,6 @@
 
 #include "backend/worksheet/plots/cartesian/Plot.h"
 
-class AbstractColumn;
 class Line;
 class LollipopPlotPrivate;
 class Symbol;

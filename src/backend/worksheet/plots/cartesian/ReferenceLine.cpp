@@ -29,12 +29,13 @@ using Dimension = CartesianCoordinateSystem::Dimension;
 
 /**
  * \class ReferenceLine
- * \brief A customizable point.
+ * \brief This class implements line that can be placed at a custom reference position on the plot
+ * to highlight certain aspects of the visualized data.
  *
- * The position can be either specified by mouse events or by providing the
- * x- and y- coordinates in parent's coordinate system
+ * The custom position can be either specified by moving the line with the mouse or by manually providing
+ * the x- or y- coordinate for the vertical or horizontal orientations, respectively.
+ * The coordinates are provided relatively to plot's coordinate system.
  */
-
 ReferenceLine::ReferenceLine(CartesianPlot* plot, const QString& name, bool loading)
 	: WorksheetElement(name, new ReferenceLinePrivate(this), AspectType::ReferenceLine) {
 	Q_D(ReferenceLine);

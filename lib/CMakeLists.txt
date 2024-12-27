@@ -103,7 +103,6 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/worksheet/InfoElement.cpp
     ${BACKEND_DIR}/worksheet/Worksheet.cpp
     ${BACKEND_DIR}/worksheet/WorksheetElementContainer.cpp
-    ${BACKEND_DIR}/worksheet/WorksheetElementGroup.cpp
     ${BACKEND_DIR}/worksheet/TreeModel.cpp
     ${BACKEND_DIR}/worksheet/plots/AbstractPlot.cpp
     ${BACKEND_DIR}/worksheet/plots/AbstractCoordinateSystem.cpp

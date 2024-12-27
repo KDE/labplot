@@ -7,12 +7,6 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class QQPlot
-  \brief
-
-  \ingroup worksheet
-  */
 #include "QQPlot.h"
 #include "QQPlotPrivate.h"
 #include "backend/core/column/Column.h"
@@ -37,6 +31,16 @@
 
 CURVE_COLUMN_CONNECT(QQPlot, Data, data, recalc)
 
+/*!
+ * \class QQPlot
+ * \brief This class implements the Q-Q plot - a visualization of that is used to compare
+ * two probability distributions by plotting their quantiles against each other.
+ *
+ * The provided data set can be compared with one of the distributions implemented in \c NSL.
+ * The visual properties of the plotted reference line and the percentile values can be modified
+ * independently of each other.
+ * \ingroup CartesianPlots
+ */
 QQPlot::QQPlot(const QString& name)
 	: Plot(name, new QQPlotPrivate(this), AspectType::QQPlot) {
 	init();

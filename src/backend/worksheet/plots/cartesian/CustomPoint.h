@@ -48,7 +48,6 @@ protected:
 private:
 	Q_DECLARE_PRIVATE(CustomPoint)
 	void init(bool loading);
-	void initActions();
 
 Q_SIGNALS:
 	friend class CustomPointSetPositionCmd;

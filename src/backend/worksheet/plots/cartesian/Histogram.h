@@ -13,7 +13,6 @@
 
 #include "backend/worksheet/plots/cartesian/Plot.h"
 
-class AbstractColumn;
 class HistogramPrivate;
 class Background;
 class ErrorBar;
@@ -107,7 +106,6 @@ protected:
 private:
 	Q_DECLARE_PRIVATE(Histogram)
 	void init(bool loading = false);
-	void initActions();
 	void connectDataColumn(const AbstractColumn*);
 
 Q_SIGNALS:

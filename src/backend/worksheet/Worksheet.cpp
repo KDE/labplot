@@ -21,8 +21,6 @@
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/TreeModel.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "frontend/ThemeHandler.h"
 #include "frontend/worksheet/ExportWorksheetDialog.h"
 #include "frontend/worksheet/WorksheetView.h"
@@ -49,7 +47,7 @@
  * The worksheet is, besides the data containers \c Spreadsheet and \c Matrix, another central part of the application
  * and provides an area for showing and grouping together different kinds of worksheet objects - plots, labels &etc;
  *
- * * \ingroup worksheet
+ * \ingroup worksheet
  */
 Worksheet::Worksheet(const QString& name, bool loading)
 	: AbstractPart(name, AspectType::Worksheet)

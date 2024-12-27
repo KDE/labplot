@@ -3,17 +3,11 @@
 	Project              : LabPlot
 	Description          : Legend for the cartesian plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2013-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class CartesianPlotLegend
-  \brief Legend for the cartesian plot.
-
-  \ingroup frontend
-*/
 #include "CartesianPlotLegend.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
@@ -22,20 +16,11 @@
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/BarPlot.h"
-#include "backend/worksheet/plots/cartesian/BoxPlot.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/plots.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegendPrivate.h"
 #include "backend/worksheet/plots/cartesian/ErrorBar.h"
-#include "backend/worksheet/plots/cartesian/Histogram.h"
-#include "backend/worksheet/plots/cartesian/KDEPlot.h"
-#include "backend/worksheet/plots/cartesian/LollipopPlot.h"
-#include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
 
-#include <QKeyEvent>
 #include <QMenu>
 #include <QPainter>
 #include <QPainterPath>
@@ -44,6 +29,12 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
+/*!
+ * \class CartesianPlotLegend
+ * \brief Legend for the cartesian plot.
+ *
+ * \ingroup CartesianPlotArea
+*/
 CartesianPlotLegend::CartesianPlotLegend(const QString& name)
 	: WorksheetElement(name, new CartesianPlotLegendPrivate(this), AspectType::CartesianPlotLegend) {
 	init();

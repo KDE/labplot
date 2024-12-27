@@ -7,26 +7,22 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYDifferentiationCurve
-  \brief A xy-curve defined by an differentiation
-
-  \ingroup worksheet
-*/
-
 #include "XYDifferentiationCurve.h"
-#include "CartesianCoordinateSystem.h"
 #include "XYDifferentiationCurvePrivate.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 
 #include <KLocalizedString>
 #include <QElapsedTimer>
 #include <QIcon>
 #include <QThreadPool>
 
+/*!
+ * \class XYDifferentiationCurve
+ * \brief A xy-curve defined by a differentiation.
+ * \ingroup CartesianAnalysisPlots
+*/
 XYDifferentiationCurve::XYDifferentiationCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYDifferentiationCurvePrivate(this), AspectType::XYDifferentiationCurve) {
 }

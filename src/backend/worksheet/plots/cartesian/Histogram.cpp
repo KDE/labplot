@@ -9,15 +9,8 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class Histogram
-  \brief A 2D-curve, provides an interface for editing many properties of the curve.
-
-  \ingroup worksheet
-  */
 #include "Histogram.h"
 #include "HistogramPrivate.h"
-#include "backend/core/Folder.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -27,25 +20,30 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
-#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "tools/ImageTools.h"
 
+#include <QGraphicsSceneMouseEvent>
 #include <QMenu>
 #include <QPainter>
 
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <QGraphicsSceneMouseEvent>
-
-#include <backend/worksheet/WorksheetElement.h>
 
 CURVE_COLUMN_CONNECT(Histogram, Data, data, recalc)
 static constexpr double zero = std::numeric_limits<double>::epsilon(); // zero baseline, don't use the exact 0.0 since it breaks the histrogram with log-scaling
 
+/*!
+ * \class Histogram
+ * \brief This class implements the histogram - a visualization of the distribution of numerical data.
+ *
+ * Ordinary, cumulative and average shifted histograms are supported as well as
+ * different normalization and binning methods.
+ * \ingroup CartesianPlots
+ */
 Histogram::Histogram(const QString& name, bool loading)
 	: Plot(name, new HistogramPrivate(this), AspectType::Histogram) {
 	init(loading);
@@ -151,10 +149,6 @@ void Histogram::init(bool loading) {
 	d->rugLength = group.readEntry(QStringLiteral("RugLength"), Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
 	d->rugWidth = group.readEntry(QStringLiteral("RugWidth"), 0.0);
 	d->rugOffset = group.readEntry(QStringLiteral("RugOffset"), 0.0);
-	this->initActions();
-}
-
-void Histogram::initActions() {
 }
 
 /*!

@@ -9,17 +9,14 @@
 */
 
 #include "AxisPrivate.h"
-#include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
 #include "backend/core/Time.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
-#include "backend/worksheet/Worksheet.h"
 #include "frontend/GuiTools.h"
 
 #include "backend/nsl/nsl_math.h"
@@ -53,7 +50,7 @@ constexpr int hoverSelectionEffectPenWidth = 2;
  * This allows to use a different z-values for the grid lines (z=0, drawn below all other objects )
  * and for the axis (z=FLT_MAX, drawn on top of all other objects)
  *
- *  \ingroup worksheet
+ *  \ingroup CartesianPlotArea
  */
 class AxisGrid : public QGraphicsItem {
 public:
@@ -99,9 +96,13 @@ private:
 
 /**
  * \class Axis
- * \brief Axis for cartesian coordinate systems.
+ * \brief Axis for a cartesian coordinate system.
  *
- *  \ingroup worksheet
+ * Note, this class doesn't define the acttualy coordinate system and the data range to be plotted - this is
+ * done in \c CartesianPlot. In this class only the properties and the drawing of the visual object "axis" is
+ * handled.
+ *
+ * \ingroup CartesianPlotArea
  */
 Axis::Axis(const QString& name, Orientation orientation, bool loading)
 	: WorksheetElement(name, new AxisPrivate(this), AspectType::Axis) {

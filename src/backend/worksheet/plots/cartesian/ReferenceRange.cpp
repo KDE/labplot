@@ -27,12 +27,14 @@
 
 /**
  * \class ReferenceRange
- * \brief A customizable point.
+ * \brief This class implements a rectangular that can be placed at a custom reference position on the plot
+ * to highlight certain range of the visualized data.
  *
- * The position can be either specified by mouse events or by providing the
- * x- and y- coordinates in parent's coordinate system
+ *
+ * The custom position can be either specified by moving the line with the mouse or by manually providing
+ * the start and end values for x or y for the vertical or horizontal orientations, respectively.
+ * The coordinates are provided relatively to plot's coordinate system.
  */
-
 ReferenceRange::ReferenceRange(CartesianPlot* plot, const QString& name, bool loading)
 	: WorksheetElement(name, new ReferenceRangePrivate(this), AspectType::ReferenceRange) {
 	Q_D(ReferenceRange);

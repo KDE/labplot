@@ -8,20 +8,11 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYIntegrationCurve
-  \brief A xy-curve defined by an integration
-
-  \ingroup worksheet
-*/
-
 #include "XYIntegrationCurve.h"
-#include "CartesianCoordinateSystem.h"
 #include "XYIntegrationCurvePrivate.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 
 #include <gsl/gsl_errno.h>
 
@@ -30,6 +21,11 @@
 #include <QIcon>
 #include <QThreadPool>
 
+/*!
+ * \class XYIntegrationCurve
+ * \brief A xy-curve defined by an integration.
+ * \ingroup CartesianAnalysisPlots
+*/
 XYIntegrationCurve::XYIntegrationCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYIntegrationCurvePrivate(this), AspectType::XYIntegrationCurve) {
 }

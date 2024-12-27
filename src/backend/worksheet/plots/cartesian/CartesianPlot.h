@@ -19,10 +19,8 @@
 
 #include "backend/nsl/nsl_sf_stats.h"
 
-class AbstractColumn;
 class CartesianPlotPrivate;
 class CartesianPlotLegend;
-class CartesianCoordinateSystem;
 class CartesianPlotDock;
 class Histogram;
 class InfoElementDialog;

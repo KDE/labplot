@@ -17,15 +17,12 @@
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
-#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
-#include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/plots/cartesian/ErrorBar.h"
@@ -105,7 +102,11 @@ Action evaluateKeys(int key, Qt::KeyboardModifiers) {
 
 /**
  * \class CartesianPlot
- * \brief A xy-plot.
+ * \brief This class implements the cartesian plot and the actual plot area that is visualized on the \c Worksheet.
+ *
+ * The definition of the cartesian coordinate systems as well as of the to be plotted data ranges is done in this class.
+ *
+ * \ingroup CartesianPlotArea
  */
 CartesianPlot::CartesianPlot(const QString& name, bool loading)
 	: AbstractPlot(name, new CartesianPlotPrivate(this), AspectType::CartesianPlot) {

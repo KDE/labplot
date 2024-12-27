@@ -13,7 +13,6 @@
 #include "backend/worksheet/plots/cartesian/Plot.h"
 
 class BarPlotPrivate;
-class AbstractColumn;
 class Background;
 class ErrorBar;
 class Line;

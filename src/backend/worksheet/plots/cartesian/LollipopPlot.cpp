@@ -30,11 +30,16 @@
 #include <QMenu>
 #include <QPainter>
 
-/**
+/*!
  * \class LollipopPlot
- * \brief Lollipop Plot
- */
+ * \brief This class implements the lollipop plot that is used to visualize categorical data.
 
+ * This visualization type is very similar to the bar plot with the difference that lines and symbols instead of baras are used.
+ * The implementation supports the visualization of multiple data sets (column) at the same time with different ways to order them
+ * and to modify their properties separately.
+ *
+ * \ingroup CartesianPlots
+ */
 CURVE_COLUMN_CONNECT(LollipopPlot, X, x, recalc)
 
 LollipopPlot::LollipopPlot(const QString& name)

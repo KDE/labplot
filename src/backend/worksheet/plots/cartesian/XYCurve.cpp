@@ -8,19 +8,10 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYCurve
-  \brief A 2D-curve, provides an interface for editing many properties of the curve.
-
-  \ingroup worksheet
-*/
-
 #include "XYCurve.h"
 #include "XYCurvePrivate.h"
-#include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
-#include "backend/core/column/Column.h"
 #include "backend/gsl/errors.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
@@ -29,9 +20,6 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "tools/ImageTools.h"
 
@@ -58,6 +46,16 @@ CURVE_COLUMN_CONNECT(XYCurve, X, x, recalc)
 CURVE_COLUMN_CONNECT(XYCurve, Y, y, recalc)
 CURVE_COLUMN_CONNECT(XYCurve, Values, values, recalc)
 
+/*!
+ * \class XYCurve
+ * \brief This class implements the visualization of a 2D/xy curve.
+ *
+ * The visualization of the curve can be parametrized via varios parameters and can be used
+ * to achieve the visualizations that are commonly named as line plot, scatter plot, error bar plot,
+ * line+symbol plot, rug plot, etc. or any combinations of them.
+ *
+ * \ingroup CartesianPlots
+ */
 XYCurve::XYCurve(const QString& name, AspectType type, bool loading)
 	: Plot(name, new XYCurvePrivate(this), type) {
 	init(loading);

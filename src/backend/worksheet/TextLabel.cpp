@@ -12,18 +12,13 @@
 
 #include "TextLabel.h"
 #include "TextLabelPrivate.h"
-#include "Worksheet.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
-#include "backend/worksheet/plots/PlotArea.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "frontend/GuiTools.h"
 
-#include <QApplication>
 #include <QBuffer>
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
@@ -38,7 +33,6 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <QIcon>
 
 #ifdef HAVE_DISCOUNT
 extern "C" {
@@ -85,7 +79,7 @@ private:
 
 /**
  * \class TextLabel
- * \brief A label supporting rendering of html- and tex-formatted texts.
+ * \brief A label supporting rendering of HTML, Markdown and LaTeX formatted texts.
  *
  * The label is aligned relative to the specified position.
  * The position can be either specified by providing the x- and y- coordinates

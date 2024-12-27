@@ -7,12 +7,6 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class KDEPlot
-  \brief
-
-  \ingroup worksheet
-  */
 #include "KDEPlot.h"
 #include "KDEPlotPrivate.h"
 #include "backend/core/column/Column.h"
@@ -37,6 +31,17 @@
 
 CURVE_COLUMN_CONNECT(KDEPlot, Data, data, recalc)
 
+/*!
+ * \class KDEPlot
+ * \brief This class implements the kernel density estimation plot - a visualization of the estimated probability density
+ * of one-dimensional numerical data.
+ *
+ * The estimation can be performed based on one of the supported kernels types (\sa nsl_kernel_type) and based on the
+ * different methods to define the bandwidth (\sa nsl_kde_bandwidth_type). A rug plot to visualize the provided data points
+ * can be enabled additionally to the the visualization of the curve for the estimated dencity.
+ *
+ * \ingroup CartesianPlots
+ */
 KDEPlot::KDEPlot(const QString& name)
 	: Plot(name, new KDEPlotPrivate(this), AspectType::KDEPlot) {
 	init();

@@ -16,7 +16,6 @@
 
 #include <QFont>
 
-class AbstractColumn;
 class Background;
 class Line;
 class Symbol;

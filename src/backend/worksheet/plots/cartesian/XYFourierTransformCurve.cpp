@@ -8,13 +8,6 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYFourierTransformCurve
-  \brief A xy-curve defined by a Fourier transform
-
-  \ingroup worksheet
-*/
-
 #include "XYFourierTransformCurve.h"
 #include "XYFourierTransformCurvePrivate.h"
 #include "backend/core/AbstractColumn.h"
@@ -34,6 +27,11 @@ extern "C" {
 #include <QIcon>
 #include <QThreadPool>
 
+/*!
+ * \class XYFourierTransformCurve
+ * \brief A xy-curve defined by a Fourier transform.
+ * \ingroup CartesianAnalysisPlots
+*/
 XYFourierTransformCurve::XYFourierTransformCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYFourierTransformCurvePrivate(this), AspectType::XYFourierTransformCurve) {
 }

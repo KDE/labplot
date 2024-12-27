@@ -8,19 +8,11 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYSmoothCurve
-  \brief A xy-curve defined by a smooth
-
-  \ingroup worksheet
-*/
-
 #include "XYSmoothCurve.h"
 #include "XYSmoothCurvePrivate.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 
 #include <KLocalizedString>
 
@@ -34,6 +26,11 @@ extern "C" {
 #include "backend/nsl/nsl_stats.h"
 #include <gsl/gsl_math.h> // gsl_pow_*
 
+/*!
+ * \class XYSmoothCurve
+ * \brief A xy-curve defined by a smooth.
+ * \ingroup CartesianAnalysisPlots
+*/
 XYSmoothCurve::XYSmoothCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYSmoothCurvePrivate(this), AspectType::XYSmoothCurve) {
 }

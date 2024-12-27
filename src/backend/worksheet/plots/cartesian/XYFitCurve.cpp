@@ -9,13 +9,6 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYFitCurve
-  \brief A xy-curve defined by a fit model
-
-  \ingroup worksheet
-*/
-
 #include "XYFitCurvePrivate.h"
 #include "backend/core/column/Column.h"
 #include "backend/gsl/ExpressionParser.h"
@@ -23,7 +16,6 @@
 #include "backend/gsl/errors.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 #include "backend/nsl/nsl_sf_stats.h"
 #include "backend/nsl/nsl_stats.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
@@ -43,6 +35,11 @@
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_version.h>
 
+/*!
+ * \class XYFitCurve
+ * \brief A xy-curve defined by a fit model.
+ * \ingroup CartesianAnalysisPlots
+*/
 XYFitCurve::XYFitCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYFitCurvePrivate(this), AspectType::XYFitCurve) {
 }

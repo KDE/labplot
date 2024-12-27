@@ -9,12 +9,10 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "backend/worksheet/WorksheetElementContainer.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/ResizeItem.h"
-#include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/WorksheetElementContainer.h"
 #include "backend/worksheet/WorksheetElementContainerPrivate.h"
 #include "backend/worksheet/plots/cartesian/Plot.h"
 
@@ -27,10 +25,12 @@
 
 /**
  * \class WorksheetElementContainer
- * \ingroup worksheet
- * \brief Worksheet element container - parent of multiple elements
+ * \brief Worksheet element container - parent of multiple elements.
+ *
  * This class provides the functionality for a containers of multiple
  * worksheet elements. Such a container can be a plot or group of elements.
+ *
+ * \ingroup worksheet
  */
 
 WorksheetElementContainer::WorksheetElementContainer(const QString& name, AspectType type)

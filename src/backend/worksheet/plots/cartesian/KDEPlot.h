@@ -14,7 +14,6 @@
 #include "backend/nsl/nsl_kde.h"
 #include "backend/nsl/nsl_sf_kernel.h"
 
-class AbstractColumn;
 class KDEPlotPrivate;
 class XYCurve;
 

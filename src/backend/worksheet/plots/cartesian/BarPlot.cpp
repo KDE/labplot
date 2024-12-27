@@ -34,9 +34,13 @@
 
 /**
  * \class BarPlot
- * \brief Box Plot
- */
+ * \brief This class implements the bar plot that is used to visualize categorical data.
 
+ * The implementation supports the visualization of multiple data sets (column) at the same time with different ways to order them
+ * and to modify their properties separately.
+ *
+ * \ingroup CartesianPlots
+ */
 CURVE_COLUMN_CONNECT(BarPlot, X, x, recalc)
 
 BarPlot::BarPlot(const QString& name)

@@ -34,9 +34,15 @@
 
 /**
  * \class BoxPlot
- * \brief Box Plot
+ * \brief This class implements the box plot that is used to visualize the spread of numerical data
+ * with the help of their quartiles.
+ *
+ * The implementation supports the visualization of multiple data sets (column) at the same time with different ways to order them
+ * and to modify their properties separately. Notches, jittering of the data as well as the rug plot are possible to get more insights
+ * into the structure of the visualized data.
+ *
+ * \ingroup CartesianPlots
  */
-
 BoxPlot::BoxPlot(const QString& name, bool loading)
 	: Plot(name, new BoxPlotPrivate(this), AspectType::BoxPlot) {
 	init(loading);

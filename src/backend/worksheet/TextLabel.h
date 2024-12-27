@@ -11,7 +11,6 @@
 #ifndef TEXTLABEL_H
 #define TEXTLABEL_H
 
-#include "backend/lib/macros.h"
 #include "backend/worksheet/WorksheetElement.h"
 #include "tools/TeXRenderer.h"
 

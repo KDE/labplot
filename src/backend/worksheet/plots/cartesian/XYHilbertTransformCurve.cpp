@@ -7,21 +7,12 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYHilbertTransformCurve
-  \brief A xy-curve defined by a Hilbert transform
-
-  \ingroup worksheet
-*/
-
 #include "XYHilbertTransformCurve.h"
 #include "XYHilbertTransformCurvePrivate.h"
-#include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
 #include "backend/gsl/errors.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 
 #include <KLocalizedString>
 #include <QDebug> // qWarning()
@@ -29,6 +20,11 @@
 #include <QIcon>
 #include <QThreadPool>
 
+/*!
+ * \class XYHilbertTransformCurve
+ * \brief A xy-curve defined by a Hilbert transform
+ * \ingroup CartesianAnalysisPlots
+*/
 XYHilbertTransformCurve::XYHilbertTransformCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYHilbertTransformCurvePrivate(this), AspectType::XYHilbertTransformCurve) {
 }

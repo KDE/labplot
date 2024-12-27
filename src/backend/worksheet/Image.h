@@ -10,7 +10,6 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 
-#include "backend/lib/macros.h"
 #include "backend/worksheet/WorksheetElement.h"
 
 #include <QPen>
