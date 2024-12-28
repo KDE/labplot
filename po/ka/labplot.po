@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-27 00:38+0000\n"
-"PO-Revision-Date: 2024-12-22 05:59+0100\n"
+"PO-Revision-Date: 2024-12-27 03:41+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -84,8 +84,7 @@ msgstr "მაღლა"
 msgid "Down"
 msgstr "ქვემოთ"
 
-#: src/backend/core/AbstractAspect.cpp:524
-#: src/backend/core/aspectcommands.h:167
+#: src/backend/core/AbstractAspect.cpp:524 src/backend/core/aspectcommands.h:167
 #: src/backend/datapicker/Datapicker.cpp:220
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2207
 #, kde-format
@@ -108,8 +107,7 @@ msgstr "%1: ჩასვით %2 %3-მდე"
 msgid "%1: insert %2 before end"
 msgstr "%1: ჩასვით %2 ბოლომდე"
 
-#: src/backend/core/AbstractAspect.cpp:612
-#: src/backend/core/aspectcommands.h:103
+#: src/backend/core/AbstractAspect.cpp:612 src/backend/core/aspectcommands.h:103
 #, kde-format
 msgid "%1: remove %2"
 msgstr "%1: წაშალეთ %2"
@@ -411,9 +409,8 @@ msgstr "ჩვენება"
 msgid "incompatible filter type"
 msgstr "ფილტრის შეუთავსებელი ტიპი"
 
-#: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:708
-#: src/backend/datasources/MQTTClient.cpp:1366
+#: src/backend/core/AbstractSimpleFilter.cpp:366 src/backend/core/Folder.cpp:151
+#: src/backend/core/Project.cpp:708 src/backend/datasources/MQTTClient.cpp:1366
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:272
 #: src/backend/lib/XmlStreamReader.cpp:104
@@ -736,13 +733,13 @@ msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
 "the support for it.\n"
 "\n"
-" You won't be able to see this part of the project. If you modify and save "
-"the project, the CAS content will be lost.\n"
+" You won't be able to see this part of the project. If you modify and save the "
+"project, the CAS content will be lost.\n"
 "\n"
 "Do you want to continue?"
 msgstr ""
-"პროექტს აქვს შემცველობა, რომელიც %1-ით ჩაიწერა. LabPlot-ის თქვენს ვერსიას "
-"მისი მხარდაჭერა არ გააჩნა.\n"
+"პროექტს აქვს შემცველობა, რომელიც %1-ით ჩაიწერა. LabPlot-ის თქვენს ვერსიას მისი "
+"მხარდაჭერა არ გააჩნა.\n"
 "\n"
 "პროექტის ამ ნაწილს ვერ დაინახავთ. თუ შეცვლით და შეინახავთ პროექტს, CAS-ის "
 "შემცველობა დაიკარგება.\n"
@@ -3685,8 +3682,7 @@ msgid "Current column cell (index; default_value)"
 msgstr "მიმდინარე სვეტის უჯრედი (ინდექსი; ნაგულისხმევი_მნიშვნელობა)"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
-#: src/backend/gsl/functions.cpp:257
-#: src/frontend/ui/dockwidgets/imagedock.ui:490
+#: src/backend/gsl/functions.cpp:257 src/frontend/ui/dockwidgets/imagedock.ui:490
 #, kde-format
 msgid "Size"
 msgstr "ზომა"
@@ -4199,8 +4195,8 @@ msgstr "მე-n გვარის არარეგულარული შ�
 #: src/backend/gsl/functions.cpp:367
 #, kde-format
 msgid ""
-"Scaled regular modified cylindrical Bessel function of zeroth order exp(-|"
-"x|) I0(x)"
+"Scaled regular modified cylindrical Bessel function of zeroth order exp(-|x|) "
+"I0(x)"
 msgstr ""
 "დამასშტაბებული რეგულარული შეცვლილი ცილინფრული ბესელის ფუნქცია მენულე რიგით "
 "exp(-|x|) I0(x)"
@@ -4217,11 +4213,10 @@ msgstr ""
 #: src/backend/gsl/functions.cpp:370
 #, kde-format
 msgid ""
-"Scaled regular modified cylindrical Bessel function of order n exp(-|x|) "
-"In(x)"
+"Scaled regular modified cylindrical Bessel function of order n exp(-|x|) In(x)"
 msgstr ""
-"დამასშტაბებული რეგულარული შეცვლილი ცილინფრული ბესელის ფუნქცია მე-n რიგით "
-"exp(-|x|) In(x)"
+"დამასშტაბებული რეგულარული შეცვლილი ცილინფრული ბესელის ფუნქცია მე-n რიგით exp(-|"
+"x|) In(x)"
 
 #: src/backend/gsl/functions.cpp:371
 #, kde-format
@@ -4244,8 +4239,8 @@ msgid ""
 "Scaled irregular modified cylindrical Bessel function of zeroth order exp(x) "
 "K0(x)"
 msgstr ""
-"დამასშტაბებული არარეგულარული შეცვლილი ცილინდრული ბესელის ფუნქცია მენულე "
-"რიგით exp(x) K0(x)"
+"დამასშტაბებული არარეგულარული შეცვლილი ცილინდრული ბესელის ფუნქცია მენულე რიგით "
+"exp(x) K0(x)"
 
 #: src/backend/gsl/functions.cpp:375
 #, kde-format
@@ -4253,8 +4248,8 @@ msgid ""
 "Scaled irregular modified cylindrical Bessel function of first order exp(x) "
 "K1(x)"
 msgstr ""
-"დამასშტაბებული არარეგულარული შეცვლილი ცილინდრული ბესელის ფუნქცია პირველი "
-"რიგით exp(x) K1(x)"
+"დამასშტაბებული არარეგულარული შეცვლილი ცილინდრული ბესელის ფუნქცია პირველი რიგით "
+"exp(x) K1(x)"
 
 #: src/backend/gsl/functions.cpp:376
 #, kde-format
@@ -4310,8 +4305,8 @@ msgid ""
 "Scaled regular modified spherical Bessel function of zeroth order, exp(-|x|) "
 "i0(x)"
 msgstr ""
-"დამასშტაბებული რეგულარული შეცვლილი სფერული ბესელის ფუნქცია მენულე რიგით. "
-"exp(-|x|) i0(x)"
+"დამასშტაბებული რეგულარული შეცვლილი სფერული ბესელის ფუნქცია მენულე რიგით. exp(-|"
+"x|) i0(x)"
 
 #: src/backend/gsl/functions.cpp:387
 #, kde-format
@@ -4328,16 +4323,16 @@ msgid ""
 "Scaled regular modified spherical Bessel function of second order, exp(-|x|) "
 "i2(x)"
 msgstr ""
-"დამასშტაბებული რეგულარული შეცვლილი სფერული ბესელის ფუნქცია მეორე რიგით. "
-"exp(-|x|) i2(x)"
+"დამასშტაბებული რეგულარული შეცვლილი სფერული ბესელის ფუნქცია მეორე რიგით. exp(-|"
+"x|) i2(x)"
 
 #: src/backend/gsl/functions.cpp:389
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of order l, exp(-|x|) il(x)"
 msgstr ""
-"დამასშტაბებული რეგულარული შეცვლილი სფერული ბესელის ფუნქცია რიგით l. exp(-|"
-"x|) il(x)"
+"დამასშტაბებული რეგულარული შეცვლილი სფერული ბესელის ფუნქცია რიგით l. exp(-|x|) "
+"il(x)"
 
 #: src/backend/gsl/functions.cpp:391
 #, kde-format
@@ -4351,8 +4346,8 @@ msgstr ""
 #: src/backend/gsl/functions.cpp:392
 #, kde-format
 msgid ""
-"Scaled irregular modified spherical Bessel function of first order, exp(-|"
-"x|) k1(x)"
+"Scaled irregular modified spherical Bessel function of first order, exp(-|x|) "
+"k1(x)"
 msgstr ""
 "დამასშტაბებული არარეგულარული შეცვლილი სფერული ბესელის ფუნქცია პირველი რიგით. "
 "exp(-|x|) k1(x)"
@@ -4360,8 +4355,8 @@ msgstr ""
 #: src/backend/gsl/functions.cpp:393
 #, kde-format
 msgid ""
-"Scaled irregular modified spherical Bessel function of second order, exp(-|"
-"x|) k2(x)"
+"Scaled irregular modified spherical Bessel function of second order, exp(-|x|) "
+"k2(x)"
 msgstr ""
 "დამასშტაბებული არარეგულარული შეცვლილი სფერული ბესელის ფუნქცია მეორე რიგით. "
 "exp(-|x|) k2(x)"
@@ -4369,8 +4364,7 @@ msgstr ""
 #: src/backend/gsl/functions.cpp:394
 #, kde-format
 msgid ""
-"Scaled irregular modified spherical Bessel function of order l, exp(-|x|) "
-"kl(x)"
+"Scaled irregular modified spherical Bessel function of order l, exp(-|x|) kl(x)"
 msgstr ""
 "დამასშტაბებული არარეგულარული შეცვლილი სფერული ბესელის ფუნქცია რიგით l. exp(-|"
 "x|) kl(x)"
@@ -4408,8 +4402,7 @@ msgstr "ნაწილობრივი რიგის არარეგუ�
 #: src/backend/gsl/functions.cpp:402
 #, kde-format
 msgid "Scaled irregular modified Bessel function of fractional order"
-msgstr ""
-"დამასშტაბებული არარეგულარული შეცვლილი ბესელის ფუნქცია ნაწილობრივი რიგით"
+msgstr "დამასშტაბებული არარეგულარული შეცვლილი ბესელის ფუნქცია ნაწილობრივი რიგით"
 
 #: src/backend/gsl/functions.cpp:403
 #, kde-format
@@ -4434,8 +4427,7 @@ msgstr "კლაუზენის ფუნქცია"
 #: src/backend/gsl/functions.cpp:411
 #, kde-format
 msgid "Lowest-order normalized hydrogenic bound state radial wavefunction"
-msgstr ""
-"წყალბადის ძირითადი მდგომარეობის ნორმალიზებული რადიალური ტალღური ფუნქცია"
+msgstr "წყალბადის ძირითადი მდგომარეობის ნორმალიზებული რადიალური ტალღური ფუნქცია"
 
 #: src/backend/gsl/functions.cpp:412
 #, kde-format
@@ -5045,8 +5037,7 @@ msgid ""
 "l-th radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic "
 "space"
 msgstr ""
-"ლაპლასიანის მე-l რადიალური საკუთარი ფუნქცია 3-განზომილებიან ჰიპერბოლურ "
-"სივრცეზე"
+"ლაპლასიანის მე-l რადიალური საკუთარი ფუნქცია 3-განზომილებიან ჰიპერბოლურ სივრცეზე"
 
 #: src/backend/gsl/functions.cpp:577
 #, kde-format
@@ -6144,8 +6135,7 @@ msgstr "კვადრატი"
 msgid "Inverse"
 msgstr "ინვერსია"
 
-#: src/backend/lib/XmlStreamReader.cpp:91
-#: src/backend/lib/XmlStreamReader.cpp:95
+#: src/backend/lib/XmlStreamReader.cpp:91 src/backend/lib/XmlStreamReader.cpp:95
 #: src/backend/lib/XmlStreamReader.cpp:100
 #: src/backend/lib/XmlStreamReader.cpp:105
 #, kde-format
@@ -6355,8 +6345,7 @@ msgstr "ელემენტი note აღმოჩენილი არა�
 #: src/backend/notebook/Notebook.cpp:62
 #, kde-format
 msgid "Couldn't find the plugin for %1. Please check your installation."
-msgstr ""
-"%1-სთვის დამატების პოვნა შეუძლებელია. შეამოწმეთ პროგრამის თქვენი პაკეტი."
+msgstr "%1-სთვის დამატების პოვნა შეუძლებელია. შეამოწმეთ პროგრამის თქვენი პაკეტი."
 
 #: src/backend/notebook/Notebook.cpp:81
 #, kde-format
@@ -6719,8 +6708,7 @@ msgstr "ექსპოტენციალური"
 msgid "Polynomial"
 msgstr "პოლინომური"
 
-#: src/backend/nsl/nsl_fit.c:26
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:537
+#: src/backend/nsl/nsl_fit.c:26 src/frontend/spreadsheet/SpreadsheetView.cpp:537
 #, kde-format
 msgid "Inverse Exponential"
 msgstr "ინვერსიული ექსპოტენციალი"
@@ -8265,8 +8253,8 @@ msgid ""
 "Add a new xy-curve that is defined as a function of other xy-curves (scaled, "
 "shifted, etc.)"
 msgstr ""
-"ახალი xy-მრუდის დამატება, რომელიც აღწერილია, როგორც სხვა xy-მრუდების "
-"ფუნქციით (გადიდებული, წანაცვლებული და ა.შ.)"
+"ახალი xy-მრუდის დამატება, რომელიც აღწერილია, როგორც სხვა xy-მრუდების ფუნქციით "
+"(გადიდებული, წანაცვლებული და ა.შ.)"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:453
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:510
@@ -8571,7 +8559,7 @@ msgstr "ქცევის გრაფიკის დამუშავებ�
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:791
 #, kde-format
 msgid "No curves inside the plot area."
-msgstr ""
+msgstr "რკალების გარეშე გრაფიკის ალაგის შიგნით."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1116
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1150
@@ -9811,11 +9799,11 @@ msgstr "X მონაცემები ხელმიუწვდომელ
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2348
 #, kde-format
 msgid ""
-"The number of data points (%1) must be greater than or equal to the number "
-"of parameters (%2)!"
+"The number of data points (%1) must be greater than or equal to the number of "
+"parameters (%2)!"
 msgstr ""
-"მონაცემის წერტილების რაოდენობა (%1) პარამეტრების რაოდენობაზე (%2) მეტი ან "
-"ტოლი უნდა იყოს!"
+"მონაცემის წერტილების რაოდენობა (%1) პარამეტრების რაოდენობაზე (%2) მეტი ან ტოლი "
+"უნდა იყოს!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2355
 #, kde-format
@@ -9914,8 +9902,7 @@ msgstr "რაოდენობა x და y მონაცემის წ�
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:151
 #, kde-format
 msgid "interpolation failed since x data is not strictly monotonic increasing!"
-msgstr ""
-"ინტერპოლაცია ჩავარდა, რადგან x მონაცემები ზუსტად მონოტონურად არ იზრდება!"
+msgstr "ინტერპოლაცია ჩავარდა, რადგან x მონაცემები ზუსტად მონოტონურად არ იზრდება!"
 
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:82
 #, kde-format
@@ -10211,8 +10198,7 @@ msgstr "აკლია"
 
 #: src/frontend/AboutDialog.cpp:168
 #, kde-format
-msgid ""
-"Support data files in FITS (Flexible Image Transport System) data format"
+msgid "Support data files in FITS (Flexible Image Transport System) data format"
 msgstr ""
 "FITS (მოქნილი გამოსახულების ტრანსპორტის სისტემის მონაცემთა ფორმატი) "
 "მონაცემების ფაილების მხარდაჭერა"
@@ -10574,8 +10560,7 @@ msgstr "წავშალო არსებული მიმართვი�
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:626
 #, kde-format
-msgid ""
-"All available reference points will be removed. Do you want to continue?"
+msgid "All available reference points will be removed. Do you want to continue?"
 msgstr "ყველა მიმართვის წერტილი წაიშლება. გნებავთ, გააგრძელოთ?"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:686
@@ -10641,14 +10626,14 @@ msgstr ""
 #, kde-format
 msgid ""
 "When point character is used for the decimal separator, the valid number "
-"representations are:<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></"
-"ul>For comma as the decimal separator, the valid number representations are:"
+"representations are:<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></ul>For "
+"comma as the decimal separator, the valid number representations are:"
 "<ul><li>1234,56</li><li>1.234,56</li><li>etc.</li></ul>"
 msgstr ""
 "როცა წილადის გამომყოფად წერტილის სიმბოლო გამოიყენება, რიცხვის სწორი "
-"წარმოდგენებია:<ul><li>1234.56</li><li>1,234.56</li><li>და ა.შ.</li></"
-"ul>მძიმეს თუ გამოიყენებთ, რიცხვის ჩაწერის სწორი ფორმაა:<ul><li>1234,56</"
-"li><li>1.234,56</li><li> და ა.შ.</li></ul>"
+"წარმოდგენებია:<ul><li>1234.56</li><li>1,234.56</li><li>და ა.შ.</li></ul>მძიმეს "
+"თუ გამოიყენებთ, რიცხვის ჩაწერის სწორი ფორმაა:<ul><li>1234,56</li><li>1.234,56</"
+"li><li> და ა.შ.</li></ul>"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:60
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:74
@@ -10656,8 +10641,8 @@ msgstr ""
 #, kde-format
 msgid ""
 "This option determines how the imported strings have to be converted to "
-"calendar date, i.e. year, month, and day numbers in the Gregorian calendar "
-"and to time."
+"calendar date, i.e. year, month, and day numbers in the Gregorian calendar and "
+"to time."
 msgstr ""
 "ეს პარამეტრი განსაზღვრავს, როგორ ხდება შემოტანილი სტრიქონების გადაყვანა "
 "კალენდრის თარიღში, ანუ წლის, თვის და დღის ნომრების გრეგორიანულ კალენდარში და "
@@ -10668,40 +10653,39 @@ msgstr ""
 #, kde-format
 msgid ""
 "Expressions that may be used for the date part of format string:"
-"<table><tr><td>d</td><td>the day as number without a leading zero (1 to 31)."
-"</td></tr><tr><td>dd</td><td>the day as number with a leading zero (01 to "
-"31).</td></tr><tr><td>ddd</td><td>the abbreviated localized day name (e.g. "
-"'Mon' to 'Sun'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' to "
-"'Sunday'). Uses the system locale to localize the name.</td></tr><tr><td>M</"
-"td><td>the month as number without a leading zero (1 to 12).</td></"
-"tr><tr><td>MM</td><td>the month as number with a leading zero (01 to 12).</"
-"td></tr><tr><td>MMM</td><td>the abbreviated localized month name (e.g. 'Jan' "
-"to 'Dec'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to "
-"'December'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>yy</td><td>the year as two digit number (00 to 99).</td></"
-"tr><tr><td>yyyy</td><td>the year as four digit number. If the year is "
+"<table><tr><td>d</td><td>the day as number without a leading zero (1 to 31).</"
+"td></tr><tr><td>dd</td><td>the day as number with a leading zero (01 to 31).</"
+"td></tr><tr><td>ddd</td><td>the abbreviated localized day name (e.g. 'Mon' to "
+"'Sun'). Uses the system locale to localize the name.</td></tr><tr><td>dddd</"
+"td><td>the long localized day name (e.g. 'Monday' to 'Sunday'). Uses the "
+"system locale to localize the name.</td></tr><tr><td>M</td><td>the month as "
+"number without a leading zero (1 to 12).</td></tr><tr><td>MM</td><td>the month "
+"as number with a leading zero (01 to 12).</td></tr><tr><td>MMM</td><td>the "
+"abbreviated localized month name (e.g. 'Jan' to 'Dec'). Uses the system locale "
+"to localize the name.</td></tr><tr><td>MMMM</td><td>the long localized month "
+"name (e.g. 'January' to 'December'). Uses the system locale to localize the "
+"name.</td></tr><tr><td>yy</td><td>the year as two digit number (00 to 99).</"
+"td></tr><tr><td>yyyy</td><td>the year as four digit number. If the year is "
 "negative, a minus sign is prepended in addition.</td></tr></"
 "table><br><br>Expressions that may be used for the time part of the format "
-"string:<table><tr><td>h</td><td>the hour without a leading zero (0 to 23 or "
-"1 to 12 if AM/PM display)</td></tr><tr><td>hh</td><td>the hour with a "
-"leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></tr><tr><td>H</"
-"td><td>the hour without a leading zero (0 to 23, even with AM/PM display)</"
-"td></tr><tr><td>HH</td><td>the hour with a leading zero (00 to 23, even with "
-"AM/PM display)</td></tr><tr><td>m</td><td>the minute without a leading zero "
-"(0 to 59)</td></tr><tr><td>mm</td><td>the minute with a leading zero (00 to "
-"59)</td></tr><tr><td>s</td><td>the second without a leading zero (0 to 59)</"
-"td></tr><tr><td>ss</td><td>the second with a leading zero (00 to 59)</td></"
-"tr><tr><td>z</td><td>the milliseconds without leading zeroes (0 to 999)</"
-"td></tr><tr><td>zzz</td><td>the milliseconds with leading zeroes (000 to "
-"999)</td></tr><tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be "
-"either 'AM' or 'PM'.</td></tr><tr><td>ap or a</td><td>Interpret as an AM/PM "
-"time. ap must be either 'am' or 'pm'.</td></tr></table><br><br>Examples are:"
+"string:<table><tr><td>h</td><td>the hour without a leading zero (0 to 23 or 1 "
+"to 12 if AM/PM display)</td></tr><tr><td>hh</td><td>the hour with a leading "
+"zero (00 to 23 or 01 to 12 if AM/PM display)</td></tr><tr><td>H</td><td>the "
+"hour without a leading zero (0 to 23, even with AM/PM display)</td></"
+"tr><tr><td>HH</td><td>the hour with a leading zero (00 to 23, even with AM/PM "
+"display)</td></tr><tr><td>m</td><td>the minute without a leading zero (0 to "
+"59)</td></tr><tr><td>mm</td><td>the minute with a leading zero (00 to 59)</"
+"td></tr><tr><td>s</td><td>the second without a leading zero (0 to 59)</td></"
+"tr><tr><td>ss</td><td>the second with a leading zero (00 to 59)</td></"
+"tr><tr><td>z</td><td>the milliseconds without leading zeroes (0 to 999)</td></"
+"tr><tr><td>zzz</td><td>the milliseconds with leading zeroes (000 to 999)</td></"
+"tr><tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be either 'AM' "
+"or 'PM'.</td></tr><tr><td>ap or a</td><td>Interpret as an AM/PM time. ap must "
+"be either 'am' or 'pm'.</td></tr></table><br><br>Examples are:"
 "<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</"
 "td><td>Sun July 20 69</td></tr><tr><td>'The day is' dddd</td><td>The day is "
-"Sunday</td></tr></table><br><br>In case the provided expression is empty, "
-"the format will be auto-detected."
+"Sunday</td></tr></table><br><br>In case the provided expression is empty, the "
+"format will be auto-detected."
 msgstr ""
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:105
@@ -10734,13 +10718,12 @@ msgid ""
 "If not empty, the number of columns must match the number of column names if "
 "provided and it must match the number of columns in the imported file."
 "<br>Datatypes:<table><tr><td>%1</td><td>Integer number with 32bit size "
-"(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
-"number with 64bit size (−9.223.372.036.854.775.808 .. "
-"9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
-"number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
-"td><td>Datetime with the format from the datetime text box if not empty, "
-"otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
-"td></tr></table>"
+"(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer number "
+"with 64bit size (−9.223.372.036.854.775.808 .. 9.223.372.036.854.775.807).</"
+"td></tr><tr><td>%3</td><td>Floating point number 64bit size. Resolution of "
+"around 16 digits.</td></tr><tr><td>%4</td><td>Datetime with the format from "
+"the datetime text box if not empty, otherwise automatically determined.</td></"
+"tr><tr><td>%5</td><td>A text.</td></tr></table>"
 msgstr ""
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:138
@@ -10769,29 +10752,29 @@ msgid ""
 "This option determines the data type that the imported data while converting "
 "to numbers."
 msgstr ""
-"ეს პარამეტრი განსაზღვრავს მონაცემების ტიპს, რომელიც აქვს შემოტანილ "
-"მონაცემებს რიცხვებში გადაყვანისას."
+"ეს პარამეტრი განსაზღვრავს მონაცემების ტიპს, რომელიც აქვს შემოტანილ მონაცემებს "
+"რიცხვებში გადაყვანისას."
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:39
 #, kde-format
 msgid ""
-"This option determines the byte order of the imported data when converting "
-"to numbers."
+"This option determines the byte order of the imported data when converting to "
+"numbers."
 msgstr ""
-"ეს პარამეტრი განსაზღვრავს ბაიტების მიმდევრობას შემოტანილ მონაცემებში "
-"რიცხვებში გადაყვანისას."
+"ეს პარამეტრი განსაზღვრავს ბაიტების მიმდევრობას შემოტანილ მონაცემებში რიცხვებში "
+"გადაყვანისას."
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:41
 #, kde-format
 msgid ""
-"<table><tr><td>little endian</td><td>typical byte order (endianness) on "
-"Intel x86 processors.</td></tr><tr><td>big endian</td><td>typical byte order "
-"on Mainframes (IBM) and SPARC/PowerPC/Motorola processors.</td></tr></table>"
+"<table><tr><td>little endian</td><td>typical byte order (endianness) on Intel "
+"x86 processors.</td></tr><tr><td>big endian</td><td>typical byte order on "
+"Mainframes (IBM) and SPARC/PowerPC/Motorola processors.</td></tr></table>"
 msgstr ""
 "<table><tr><td>წვრილბოლოიანი</td><td>ტიპური ბაიტების მიმდევრობა Intel x86 "
 "პროცესორებისთვის.</td></tr><tr><td>მსხვილბოლოიანი</td><td>ტიპური ბაიტების "
-"მიმდევრობა Mainframes-ებზე (IBM) და SPARC/PowerPC/Motorola პროცესორებზე.</"
-"td></tr></table>"
+"მიმდევრობა Mainframes-ებზე (IBM) და SPARC/PowerPC/Motorola პროცესორებზე.</td></"
+"tr></table>"
 
 #: src/frontend/datasources/CANOptionsWidget.cpp:13
 #, kde-format
@@ -10980,8 +10963,7 @@ msgstr "ფაილი ვერ მოიძებნა"
 #: src/frontend/datasources/ImportDatasetWidget.cpp:169
 #, kde-format
 msgid ""
-"Couldn't open the dataset collections file %1. Please check your "
-"installation."
+"Couldn't open the dataset collections file %1. Please check your installation."
 msgstr ""
 "მონაცემთა ნაკრების კოლექციების ფაილი %1 ვერ გავხსენი. შეამოწმეთ თქვენი "
 "პროგრამის ფაილები."
@@ -11230,8 +11212,7 @@ msgid ""
 "Either there is no connection, or no subscriptions were made, or the file "
 "filter is not ASCII."
 msgstr ""
-"რადგან მიერთება არ არსებობს, გამოწერა არ შექმნილა ან ფაილის ფილტრი ASCII "
-"არაა."
+"რადგან მიერთება არ არსებობს, გამოწერა არ შექმნილა ან ფაილის ფილტრი ASCII არაა."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:110
 #, kde-format
@@ -11318,8 +11299,8 @@ msgstr "ბინარული მონაცემები"
 #: src/frontend/datasources/ImportFileWidget.cpp:165
 #, kde-format
 msgid ""
-"If this option is checked, only the link to the file is stored in the "
-"project file but not its content."
+"If this option is checked, only the link to the file is stored in the project "
+"file but not its content."
 msgstr ""
 "თუ ეს პარამეტრი ჩართულია, პროექტის ფაილში შენახული იქნება ბმული ფაილამდე, "
 "მაგრამ არა მისი შემცველობა."
@@ -11362,11 +11343,11 @@ msgstr "მთლიანი ფაილი"
 msgid ""
 "Specify how the data source has to be processed on every read:"
 "<ul><li>Continuously fixed - fixed amount of samples is processed starting "
-"from the beginning of the newly received data.</li><li>From End - fixed "
-"amount of samples is processed starting from the end of the newly received "
-"data.</li><li>Till the End - all newly received data is processed.</"
-"li><li>Whole file - on every read the whole file is re-read completely and "
-"processed. Only available for \"File Or Named Pipe\" data sources.</li></ul>"
+"from the beginning of the newly received data.</li><li>From End - fixed amount "
+"of samples is processed starting from the end of the newly received data.</"
+"li><li>Till the End - all newly received data is processed.</li><li>Whole file "
+"- on every read the whole file is re-read completely and processed. Only "
+"available for \"File Or Named Pipe\" data sources.</li></ul>"
 msgstr ""
 
 #: src/frontend/datasources/ImportFileWidget.cpp:223
@@ -11377,8 +11358,8 @@ msgid ""
 "\"From End\"."
 msgstr ""
 "ყოველი წაკითხვისას დამუშავებული სემპლების (ხაზების) რაოდენობა.\n"
-"მითითება აუცილებელია, მხოლოდ, წაკითხვის რეჟიმში \"უწყვეტად დაფიქსირებული\" "
-"და \"ბოლოდან\"."
+"მითითება აუცილებელია, მხოლოდ, წაკითხვის რეჟიმში \"უწყვეტად დაფიქსირებული\" და "
+"\"ბოლოდან\"."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:229
 #, kde-format
@@ -11419,19 +11400,17 @@ msgstr "MQTT კავშირების მართვა"
 #: src/frontend/dockwidgets/LiveDataDock.cpp:63
 #, kde-format
 msgid ""
-"Specify the 'Last Will and Testament' message (LWT). At least one topic has "
-"to be subscribed."
+"Specify the 'Last Will and Testament' message (LWT). At least one topic has to "
+"be subscribed."
 msgstr ""
 "მიუთითეთ 'ბოლო სურვილისა და აღსარების' შეტყობინება (LWT). საჭიროა, ერთი თემა "
 "მაინც გქონდეთ გამოწერილი."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:281
 #, kde-format
-msgid ""
-"The number of rows is calculated from the values of the data portion tab"
+msgid "The number of rows is calculated from the values of the data portion tab"
 msgstr ""
-"მწკრივების რაოდენობა გამოითვლება მონაცემების ნაწილის ჩანართის "
-"მნიშვნელობებიდან"
+"მწკრივების რაოდენობა გამოითვლება მონაცემების ნაწილის ჩანართის მნიშვნელობებიდან"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:990
 #, kde-format
@@ -11452,11 +11431,10 @@ msgstr "DBC ფაილი (*.dbc)"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1106
 #, kde-format
-msgid ""
-"Origin Project files need to be opened with \"Import -> Origin Project\"!"
+msgid "Origin Project files need to be opened with \"Import -> Origin Project\"!"
 msgstr ""
-"Origin-ის პროექტის ფაილების გახსნა შეგიძლიათ მენიუდან \"შემოტანა -> Origin-"
-"ის პროექტი\"!"
+"Origin-ის პროექტის ფაილების გახსნა შეგიძლიათ მენიუდან \"შემოტანა -> Origin-ის "
+"პროექტი\"!"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1112
 #, kde-format
@@ -11605,8 +11583,8 @@ msgstr "ფაილის (\"%1\") წასაკითხად გახს�
 #: src/frontend/datasources/ImportFileWidget.cpp:1765
 #, kde-format
 msgid ""
-"Invalid number rows. Please check 'End Row' and 'Start Row'. 'End Row' must "
-"be larger than 'Start Row' or -1"
+"Invalid number rows. Please check 'End Row' and 'Start Row'. 'End Row' must be "
+"larger than 'Start Row' or -1"
 msgstr ""
 "მწკრივების არასწორი რაოდენობა. შეამოწმეთ 'დასასრულის მწკრივი' და 'დასაწყისი "
 "მწკრივი'. 'დასასრულის მწკრივი' 'დასასრულის მწკრივზე' დიდი უნდა იყოს, ან -1"
@@ -11732,8 +11710,7 @@ msgstr "შემდეგი მონაცემების ნაკრე�
 #, kde-format
 msgid "Download the current dataset for preview and import"
 msgstr ""
-"მიმდინარე მონაცემების ნაკრების გადმოწერა მინიატურის შესაქმნელად და "
-"შემოსატანად"
+"მიმდინარე მონაცემების ნაკრების გადმოწერა მინიატურის შესაქმნელად და შემოსატანად"
 
 #. i18n: ectx: property (text), widget (QLabel, lCategories)
 #: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:130
@@ -11775,11 +11752,11 @@ msgid ""
 "Multiple layers are used in Origin to either implement multiple plots or "
 "multiple axes on the same plot (see <a href=\"https://www.originlab.com/doc/"
 "Origin-Help/MultiLayer-Graph\">Origin's Documentation</a> for more details)."
-"<br>LabPlot can process only one type at the same time.<br><br>Specify how "
-"to import multi-layered graphs in the selected project:<ul><li>As Plot Area "
-"- a new plot area is created for every layer.</li><li>As Coordinate System - "
-"a new coordinate system (data range) on the same plot area is created for "
-"every layer.</li></ul>"
+"<br>LabPlot can process only one type at the same time.<br><br>Specify how to "
+"import multi-layered graphs in the selected project:<ul><li>As Plot Area - a "
+"new plot area is created for every layer.</li><li>As Coordinate System - a new "
+"coordinate system (data range) on the same plot area is created for every "
+"layer.</li></ul>"
 msgstr ""
 
 #: src/frontend/datasources/ImportOriginLayersDialog.cpp:38
@@ -11935,8 +11912,8 @@ msgid ""
 "Select a valid database object (table or query result set) that has to be "
 "imported."
 msgstr ""
-"აირჩიეთ სწორი მონაცემთა ბაზის ობიექტი (ცხრილი ან მოთხოვნის შედეგების "
-"ნაკრები), რომლის შემოტანაც გნებავთ."
+"აირჩიეთ სწორი მონაცემთა ბაზის ობიექტი (ცხრილი ან მოთხოვნის შედეგების ნაკრები), "
+"რომლის შემოტანაც გნებავთ."
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:42
 #, kde-format
@@ -11992,48 +11969,47 @@ msgstr "მოთხოვნის შესრულება ჩავარ�
 #: src/frontend/datasources/JsonOptionsWidget.cpp:120
 #, kde-format
 msgid ""
-"For 'C Format', a period is used for the decimal point character and comma "
-"is used for the thousands group separator. Valid number representations are:"
+"For 'C Format', a period is used for the decimal point character and comma is "
+"used for the thousands group separator. Valid number representations are:"
 "<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></ul>When using 'System "
 "locale', the system settings will be used. E.g., for the German local the "
-"valid number representations are:<ul><li>1234,56</li><li>1.234,56</"
-"li><li>etc.</li></ul>"
+"valid number representations are:<ul><li>1234,56</li><li>1.234,56</li><li>etc."
+"</li></ul>"
 msgstr ""
 
 #: src/frontend/datasources/JsonOptionsWidget.cpp:144
 #, kde-format
 msgid ""
 "Expressions that may be used for the date part of format string:"
-"<table><tr><td>d</td><td>the day as number without a leading zero (1 to 31)."
-"</td></tr><tr><td>dd</td><td>the day as number with a leading zero (01 to "
-"31).</td></tr><tr><td>ddd</td><td>the abbreviated localized day name (e.g. "
-"'Mon' to 'Sun'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' to "
-"'Sunday'). Uses the system locale to localize the name.</td></tr><tr><td>M</"
-"td><td>the month as number without a leading zero (1 to 12).</td></"
-"tr><tr><td>MM</td><td>the month as number with a leading zero (01 to 12).</"
-"td></tr><tr><td>MMM</td><td>the abbreviated localized month name (e.g. 'Jan' "
-"to 'Dec'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to "
-"'December'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>yy</td><td>the year as two digit number (00 to 99).</td></"
-"tr><tr><td>yyyy</td><td>the year as four digit number. If the year is "
+"<table><tr><td>d</td><td>the day as number without a leading zero (1 to 31).</"
+"td></tr><tr><td>dd</td><td>the day as number with a leading zero (01 to 31).</"
+"td></tr><tr><td>ddd</td><td>the abbreviated localized day name (e.g. 'Mon' to "
+"'Sun'). Uses the system locale to localize the name.</td></tr><tr><td>dddd</"
+"td><td>the long localized day name (e.g. 'Monday' to 'Sunday'). Uses the "
+"system locale to localize the name.</td></tr><tr><td>M</td><td>the month as "
+"number without a leading zero (1 to 12).</td></tr><tr><td>MM</td><td>the month "
+"as number with a leading zero (01 to 12).</td></tr><tr><td>MMM</td><td>the "
+"abbreviated localized month name (e.g. 'Jan' to 'Dec'). Uses the system locale "
+"to localize the name.</td></tr><tr><td>MMMM</td><td>the long localized month "
+"name (e.g. 'January' to 'December'). Uses the system locale to localize the "
+"name.</td></tr><tr><td>yy</td><td>the year as two digit number (00 to 99).</"
+"td></tr><tr><td>yyyy</td><td>the year as four digit number. If the year is "
 "negative, a minus sign is prepended in addition.</td></tr></"
 "table><br><br>Expressions that may be used for the time part of the format "
-"string:<table><tr><td>h</td><td>the hour without a leading zero (0 to 23 or "
-"1 to 12 if AM/PM display)</td></tr><tr><td>hh</td><td>the hour with a "
-"leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></tr><tr><td>H</"
-"td><td>the hour without a leading zero (0 to 23, even with AM/PM display)</"
-"td></tr><tr><td>HH</td><td>the hour with a leading zero (00 to 23, even with "
-"AM/PM display)</td></tr><tr><td>m</td><td>the minute without a leading zero "
-"(0 to 59)</td></tr><tr><td>mm</td><td>the minute with a leading zero (00 to "
-"59)</td></tr><tr><td>s</td><td>the second without a leading zero (0 to 59)</"
-"td></tr><tr><td>ss</td><td>the second with a leading zero (00 to 59)</td></"
-"tr><tr><td>z</td><td>the milliseconds without leading zeroes (0 to 999)</"
-"td></tr><tr><td>zzz</td><td>the milliseconds with leading zeroes (000 to "
-"999)</td></tr><tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be "
-"either 'AM' or 'PM'.</td></tr><tr><td>ap or a</td><td>Interpret as an AM/PM "
-"time. ap must be either 'am' or 'pm'.</td></tr></table><br><br>Examples are:"
+"string:<table><tr><td>h</td><td>the hour without a leading zero (0 to 23 or 1 "
+"to 12 if AM/PM display)</td></tr><tr><td>hh</td><td>the hour with a leading "
+"zero (00 to 23 or 01 to 12 if AM/PM display)</td></tr><tr><td>H</td><td>the "
+"hour without a leading zero (0 to 23, even with AM/PM display)</td></"
+"tr><tr><td>HH</td><td>the hour with a leading zero (00 to 23, even with AM/PM "
+"display)</td></tr><tr><td>m</td><td>the minute without a leading zero (0 to "
+"59)</td></tr><tr><td>mm</td><td>the minute with a leading zero (00 to 59)</"
+"td></tr><tr><td>s</td><td>the second without a leading zero (0 to 59)</td></"
+"tr><tr><td>ss</td><td>the second with a leading zero (00 to 59)</td></"
+"tr><tr><td>z</td><td>the milliseconds without leading zeroes (0 to 999)</td></"
+"tr><tr><td>zzz</td><td>the milliseconds with leading zeroes (000 to 999)</td></"
+"tr><tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be either 'AM' "
+"or 'PM'.</td></tr><tr><td>ap or a</td><td>Interpret as an AM/PM time. ap must "
+"be either 'am' or 'pm'.</td></tr></table><br><br>Examples are:"
 "<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</"
 "td><td>Sun July 20 69</td></tr><tr><td>'The day is' dddd</td><td>The day is "
 "Sunday</td></tr></table>"
@@ -12148,9 +12124,9 @@ msgstr "შეიყვანეთ თემის სახელი"
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:57
 #, kde-format
 msgid ""
-"Set the Quality of Service (QoS) for the subscription to define the "
-"guarantee of the message delivery:<ul><li>0 - deliver at most once</li><li>1 "
-"- deliver at least once</li><li>2 - deliver exactly once</li></ul>"
+"Set the Quality of Service (QoS) for the subscription to define the guarantee "
+"of the message delivery:<ul><li>0 - deliver at most once</li><li>1 - deliver "
+"at least once</li><li>2 - deliver exactly once</li></ul>"
 msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
@@ -12557,8 +12533,8 @@ msgstr ""
 #: src/frontend/dockwidgets/BarPlotDock.cpp:66
 #, kde-format
 msgid ""
-"Specify the factor in percent to control the width of the bar relative to "
-"its default value, applying to all bars"
+"Specify the factor in percent to control the width of the bar relative to its "
+"default value, applying to all bars"
 msgstr ""
 
 #: src/frontend/dockwidgets/BarPlotDock.cpp:89
@@ -12670,8 +12646,8 @@ msgstr ""
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:78
 #, kde-format
 msgid ""
-"Specify the factor in percent to control the width of the box relative to "
-"its default value."
+"Specify the factor in percent to control the width of the box relative to its "
+"default value."
 msgstr ""
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:99
@@ -12691,8 +12667,7 @@ msgstr "აირჩიეთ, რომ შეცვალოთ სიმბ�
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:108
 #, kde-format
-msgid ""
-"Select to modify the properties of the symbol for the \"far out\" values."
+msgid "Select to modify the properties of the symbol for the \"far out\" values."
 msgstr ""
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:111
@@ -12891,8 +12866,8 @@ msgstr "გრაფიკები დეკარტულ კოორდი�
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:245
 #, kde-format
 msgid ""
-"Use the main color of the plot (line, symbol, etc.) for the color of the "
-"name in the legend."
+"Use the main color of the plot (line, symbol, etc.) for the color of the name "
+"in the legend."
 msgstr ""
 "გრაფიკის (ხაზი, სიმბოლო, ა.შ.) მთავარი ფერის გამოყენება ლეგენდის სახელის "
 "ფერისთვის."
@@ -13182,19 +13157,18 @@ msgstr "საშუალო"
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:199
 #, kde-format
 msgid ""
-"The supported chart types are grouped according to the plotted statistics "
-"and to the metric defining the limits.<br><br>Individual Values and Moving "
-"Ranges, Limits Based on the Average or Median Moving Range:<ul><li>X (XmR) - "
-"plot the <b>individual values</b>.</li><li>mR - plot the <b>moving ranges</"
-"b>.</li></ul>Averages and Ranges, Limits based on the Average or Median "
-"Range:<ul><li>X̅  (X̅R) - plot the <b>averages for each sample</b> .</li><li>R "
-"(X̅R) - plot the <b>ranges for each sample</b>.</li></ul>Averages and "
-"Standard Deviations, Limits Based on the Standard Deviations:<ul><li>X̅  (X̅S) "
-"- plot the <b>averages for each sample</b>.</li><li>S (X̅S) - plot the "
-"<b>standard deviations for each sample</b>.</li></ul>Attributes:<ul><li>P - "
-"plot <b>binomial proportions</b>.</li><li>NP - plot <b>binomial counts</b>.</"
-"li><li>C - plot <b>Poisson counts</b>.</li><li>U - plot <b>Poisson rates</b>."
-"</li></ul>"
+"The supported chart types are grouped according to the plotted statistics and "
+"to the metric defining the limits.<br><br>Individual Values and Moving Ranges, "
+"Limits Based on the Average or Median Moving Range:<ul><li>X (XmR) - plot the "
+"<b>individual values</b>.</li><li>mR - plot the <b>moving ranges</b>.</li></"
+"ul>Averages and Ranges, Limits based on the Average or Median Range:<ul><li>X̅  "
+"(X̅R) - plot the <b>averages for each sample</b> .</li><li>R (X̅R) - plot the "
+"<b>ranges for each sample</b>.</li></ul>Averages and Standard Deviations, "
+"Limits Based on the Standard Deviations:<ul><li>X̅  (X̅S) - plot the <b>averages "
+"for each sample</b>.</li><li>S (X̅S) - plot the <b>standard deviations for each "
+"sample</b>.</li></ul>Attributes:<ul><li>P - plot <b>binomial proportions</b>.</"
+"li><li>NP - plot <b>binomial counts</b>.</li><li>C - plot <b>Poisson counts</"
+"b>.</li><li>U - plot <b>Poisson rates</b>.</li></ul>"
 msgstr ""
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:225
@@ -13205,8 +13179,8 @@ msgstr "უარყოფითი მნიშვნელობის და�
 #: src/frontend/dockwidgets/ProjectDock.cpp:28
 #, kde-format
 msgid ""
-"If checked, the state of the default application docks is saved in the "
-"project file and restored on project load."
+"If checked, the state of the default application docks is saved in the project "
+"file and restored on project load."
 msgstr ""
 "თუ ჩართულია, ნაგულისხმევი აპლიკაციის მიმაგრებების მდგომარეობა შეინახება "
 "პროექტის ფაილში და აღდგენა პროექტის ჩატვირთვისას."
@@ -13227,8 +13201,7 @@ msgstr "%1 მიმართვის ხაზი: ნიმუში \"%2\" �
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:52
 #, kde-format
-msgid ""
-"Enable linking to synchronize the number of rows with another spreadsheet"
+msgid "Enable linking to synchronize the number of rows with another spreadsheet"
 msgstr "ჩართეთ მიბმა, რომ დაასინქრონოთ მწკრივების რაოდენობა სხვა ელცხრილთან"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:56
@@ -13428,8 +13401,7 @@ msgstr ""
 #: src/frontend/dockwidgets/XYCurveDock.cpp:527
 #: src/frontend/dockwidgets/XYCurveDock.cpp:528
 #, kde-format
-msgid ""
-"If checked, connect data points only for strictly increasing values of X"
+msgid "If checked, connect data points only for strictly increasing values of X"
 msgstr ""
 "თუ ჩართულია, მონაცემთა წერტილების, მხოლოდ, X-ის ზრდად მნიშვნელობებზე მიერთება"
 
@@ -13683,17 +13655,19 @@ msgid ""
 "is not available anymore. It will be automatically used once it is created "
 "again."
 msgstr ""
+"რკალი \"%1\"\n"
+"ხელმისაწვდომი აღარაა. ის ავტომატურად იქნება გამოყენებული, როცა მას შექმნით."
 
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:183
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:224
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:278
 #, kde-format
 msgid ""
-"Variable name can contain letters, digits and '_' only and should start with "
-"a letter"
+"Variable name can contain letters, digits and '_' only and should start with a "
+"letter"
 msgstr ""
-"ცვლადის სახელი, შეიძლება, ასოებს, ციფრებს და სიმბოლო '_'-ს შეიცავდეს, "
-"მაგრამ, მხოლოდ, ასოთი შეიძლება, იწყებოდეს"
+"ცვლადის სახელი, შეიძლება, ასოებს, ციფრებს და სიმბოლო '_'-ს შეიცავდეს, მაგრამ, "
+"მხოლოდ, ასოთი შეიძლება, იწყებოდეს"
 
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:219
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:322
@@ -13737,8 +13711,8 @@ msgstr "რამდენიმე მონაცემის წერტი�
 #: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:91
 #, kde-format
 msgid ""
-"The number of the interpolation points should be bigger than the total "
-"number of points in the data source."
+"The number of the interpolation points should be bigger than the total number "
+"of points in the data source."
 msgstr ""
 
 #: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:540
@@ -13760,8 +13734,7 @@ msgstr "მაგალითი პროექტები"
 #: src/frontend/examples/ExamplesManager.cpp:176
 #, kde-format
 msgid ""
-"Couldn't open the examples collections file %1. Please check your "
-"installation."
+"Couldn't open the examples collections file %1. Please check your installation."
 msgstr ""
 "ვერ გავხსენი მაგალითი კოლექციის ფაილი %1. შეამოწმეთ თქვენი პროგრამის ფაილები."
 
@@ -14458,8 +14431,8 @@ msgstr "პროექტის ფაილის გახსნა."
 #: src/frontend/LabPlot.cpp:126
 #, kde-format
 msgid ""
-"Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
-"to exit the application."
+"Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' to "
+"exit the application."
 msgstr ""
 "ფაილი '%1' ვერ გავხსენი. დააწკაპუნეთ ღილაკზე 'გამეორება' გაშვების "
 "გასაგრძელებლად, ან 'გაუქმებაზე', რომ აპლიკაციიდან გახვიდეთ."
@@ -14975,11 +14948,11 @@ msgstr "პროექტის შენახვა, როგორც"
 #: src/frontend/MainWin.cpp:1729
 #, kde-format
 msgid ""
-"LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
-"*.LML.XZ)"
+"LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *."
+"LML.XZ)"
 msgstr ""
-"LabPlot -ის პროექტები (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *."
-"LML.BZ2 *.LML.XZ)"
+"LabPlot -ის პროექტები (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML."
+"BZ2 *.LML.XZ)"
 
 #: src/frontend/MainWin.cpp:1756
 #, kde-format
@@ -15047,8 +15020,8 @@ msgstr "პროგრამის Kaggle CLI გაშვება ჩავ�
 #: src/frontend/MainWin.cpp:2690
 #, kde-format
 msgid ""
-"Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
-"\">\"How to Use Kaggle\"</a> to setup the Kaggle CLI tool."
+"Please follow the instructions on <a href=\"https://www.kaggle.com/docs/"
+"api\">\"How to Use Kaggle\"</a> to setup the Kaggle CLI tool."
 msgstr ""
 "Kaggle CLI-ის მოსარგებად გაჰყევით ინსტრუქციებს ბმულზე <a href=\"https://www."
 "kaggle.com/docs/api\">\"როგორ გამოვიყენოთ Kaggle\"</a>."
@@ -15228,8 +15201,7 @@ msgstr "&სვეტების წაშლა"
 msgid "Clea&r Columns"
 msgstr "სვეტების &გასუფთავება"
 
-#: src/frontend/matrix/MatrixView.cpp:182
-#: src/frontend/matrix/MatrixView.cpp:189
+#: src/frontend/matrix/MatrixView.cpp:182 src/frontend/matrix/MatrixView.cpp:189
 #, kde-format
 msgid "Statisti&cs"
 msgstr "&სტატისტიკა"
@@ -15289,8 +15261,7 @@ msgstr "თავსართის ფორმატი"
 msgid "Zoom"
 msgstr "გადიდება"
 
-#: src/frontend/matrix/MatrixView.cpp:585
-#: src/frontend/matrix/MatrixView.cpp:589
+#: src/frontend/matrix/MatrixView.cpp:585 src/frontend/matrix/MatrixView.cpp:589
 #, kde-format
 msgid "Go to Cell"
 msgstr "უჯრედზე გადასვლა"
@@ -15613,8 +15584,7 @@ msgstr "'%1'-ს ვერ ჩასვამთ '%2'-ში."
 #: src/frontend/ProjectExplorer.cpp:512
 #, kde-format
 msgid ""
-"Data cannot be pasted into '%1' directly. Select a spreadsheet column for "
-"this."
+"Data cannot be pasted into '%1' directly. Select a spreadsheet column for this."
 msgstr ""
 "მონაცემებს, პირდაპირ, '%1'-ში ვერ ჩასვამთ. ამისთვის აირჩიეთ ელცხრილის სვეტი."
 
@@ -15822,8 +15792,7 @@ msgstr "ბლოკნოტის ტიპი, რომელიც გა�
 msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
 "opened"
-msgstr ""
-"აკონტროლებს ქცევას, როცა დოკის მიწებება ჩაისმება, როცა თავიდან გაიხსნება"
+msgstr "აკონტროლებს ქცევას, როცა დოკის მიწებება ჩაისმება, როცა თავიდან გაიხსნება"
 
 #: src/frontend/SettingsGeneralPage.cpp:244
 #, kde-format
@@ -15879,8 +15848,8 @@ msgstr "არაბული (٫)"
 #, kde-format
 msgid ""
 "Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/"
-"documents/jcgm/JCGM_100_2008_E.pdf\">Guide to the Expression of Uncertainty "
-"in Measurement (GUM)</a>"
+"documents/jcgm/JCGM_100_2008_E.pdf\">Guide to the Expression of Uncertainty in "
+"Measurement (GUM)</a>"
 msgstr ""
 
 #: src/frontend/SettingsGeneralPage.cpp:266
@@ -15915,13 +15884,17 @@ msgid ""
 "Info trace - helpful to get information and warnings when running the "
 "application."
 msgstr ""
+"ინფორმაციის დატრეისება - სასარგებლოა, რომ მიიღოთ ინფორმაცია და გაფრთხილებები, "
+"როცა აპლიკაცია გაშვებულია."
 
 #: src/frontend/SettingsGeneralPage.cpp:282
 #, kde-format
 msgid ""
-"Debug trace - helpful to diagnose the application, can have a negative "
-"impact on the performance."
+"Debug trace - helpful to diagnose the application, can have a negative impact "
+"on the performance."
 msgstr ""
+"გამართვის ტრეისი - სასარგებლოა აპლიკაციის დიაგნოსტიკისთვის. შეიძლება, "
+"უარყოფითი გავლენა ჰქონდეს წარმადობაზე."
 
 #: src/frontend/SettingsGeneralPage.cpp:283
 #, kde-format
@@ -15929,6 +15902,8 @@ msgid ""
 "Performance trace - helpful to analyze performance relevant aspects and "
 "bottlenecks."
 msgstr ""
+"წარმადობის ტრეისი - სასარგებლოა წარმადობის ასპექტებისა და სუსტი წერტილების "
+"ანალიზისას."
 
 #: src/frontend/SettingsNotebookPage.cpp:32
 #, kde-format
@@ -15975,8 +15950,7 @@ msgstr ""
 
 #: src/frontend/SettingsWorksheetPage.cpp:134
 #, kde-format
-msgid ""
-"No LaTeX installation found or selected. LaTeX typesetting not possible."
+msgid "No LaTeX installation found or selected. LaTeX typesetting not possible."
 msgstr ""
 "დაყენებული LaTeX აღმოჩენილი ან ჩართული არაა. LaTeX-ით გამოტანა შეუძლებელია."
 
@@ -16086,8 +16060,8 @@ msgstr "სიგლუვის პარამეტრი - რაც დი�
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:167
 #, kde-format
 msgid ""
-"Weighting termination ratio - value between 0 and 1, smaller values allow "
-"less negative values."
+"Weighting termination ratio - value between 0 and 1, smaller values allow less "
+"negative values."
 msgstr ""
 
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:171
@@ -16586,15 +16560,14 @@ msgstr "ახალი ცვლადის დამატება"
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:65
 #, kde-format
 msgid ""
-"Automatically update the calculated values in the target column on changes "
-"in the variable columns"
+"Automatically update the calculated values in the target column on changes in "
+"the variable columns"
 msgstr ""
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:66
 #, kde-format
 msgid ""
-"Automatically resize the target column to fit the size of the variable "
-"columns"
+"Automatically resize the target column to fit the size of the variable columns"
 msgstr ""
 "სამიზნე სვეტების ზომის ავტომატური შეცვლა, რომ ცვლადი სვეტების ზომაში ჩაეტიოს"
 
@@ -16624,8 +16597,7 @@ msgid ""
 "Provided variable name is already reserved for a name of a constant. Please "
 "use another name."
 msgstr ""
-"შეყვანილი ცვლადის სახელი უკვე დაცულია, როგორც მუდმივის სახელი. გამოიყენეთ "
-"სხვა."
+"შეყვანილი ცვლადის სახელი უკვე დაცულია, როგორც მუდმივის სახელი. გამოიყენეთ სხვა."
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:174
 #, kde-format
@@ -16633,8 +16605,7 @@ msgid ""
 "Provided variable name is already reserved for a name of a function. Please "
 "use another name."
 msgstr ""
-"შეყვანილი ცვლადის სახელი უკვე დაცულია, როგორც ფუნქციის სახელი. გამოიყენეთ "
-"სხვა."
+"შეყვანილი ცვლადის სახელი უკვე დაცულია, როგორც ფუნქციის სახელი. გამოიყენეთ სხვა."
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:177
 #, kde-format
@@ -16643,8 +16614,7 @@ msgstr "ცვლადის სახელი \"i\" დაცულია ს
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:180
 #, kde-format
-msgid ""
-"Provided variable name starts with a digit or contains special character."
+msgid "Provided variable name starts with a digit or contains special character."
 msgstr "მოწოდებული ცვლადი სახელი იწყება ციფრით ან შეიცავს სპეციალურ სიმბოლოს."
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:191
@@ -16856,8 +16826,8 @@ msgstr "ინტერვალი [a, b]:"
 #: src/frontend/spreadsheet/RescaleDialog.cpp:38
 #, kde-format
 msgid ""
-"More than one column selected. The same interval will be applied to <i>all</"
-"i> columns."
+"More than one column selected. The same interval will be applied to <i>all</i> "
+"columns."
 msgstr ""
 "ჩასმულია ერთზე მეტი სვეტი. იგივე ინტერვალი <i>ყველა</i> სვეტზე იქნება "
 "გამოყენებული."
@@ -16871,8 +16841,8 @@ msgstr "შემთხვევითი"
 #, kde-format
 msgid ""
 "Sampling method:<ul><li>Periodic - samples are created according to the "
-"specified interval.</li><li>Random - samples are created randomly based on "
-"the uniform distribution. </li></ul>"
+"specified interval.</li><li>Random - samples are created randomly based on the "
+"uniform distribution. </li></ul>"
 msgstr ""
 
 #: src/frontend/spreadsheet/SampleValuesDialog.cpp:62
@@ -17575,8 +17545,8 @@ msgstr[1] "%1: სვეტების შებრუნება"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2960
 #, kde-format
 msgid ""
-"The selected columns have different data types and cannot be flattened "
-"because of this. "
+"The selected columns have different data types and cannot be flattened because "
+"of this. "
 msgstr ""
 "მონიშნულ სვეტებს სხვადასხვა მონაცემის ტიპები აქვს, ამის გამო მათ ვერ "
 "გააბრტყელებთ. "
@@ -18793,8 +18763,8 @@ msgstr "ათობითის გამყოფი:"
 #: src/frontend/ui/datasources/datasetmetadatamanagerwidget.ui:124
 #, kde-format
 msgid ""
-"Removes the whitespaces from the start and the end, and replaces each "
-"sequence of internal whitespaces with a single space."
+"Removes the whitespaces from the start and the end, and replaces each sequence "
+"of internal whitespaces with a single space."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbSimplifyWhitespaces)
@@ -19342,8 +19312,7 @@ msgstr "სიზუსტე:"
 #. i18n: ectx: property (text), widget (QLabel, lWarningLimitedMessages)
 #: src/frontend/ui/datasources/importfilewidget.ui:529
 #, kde-format
-msgid ""
-"Not all variables might be visible, because of limited number of messages"
+msgid "Not all variables might be visible, because of limited number of messages"
 msgstr ""
 "შეიძლება, ყველა ცვლადი ნაჩვენები არაა. მიზეზი შეტყობინებების შეზღუდული "
 "რაოდენობაა"
@@ -19953,8 +19922,8 @@ msgstr "დამხმარე ტიკები"
 #: src/frontend/ui/dockwidgets/axisdock.ui:1033
 #, kde-format
 msgid ""
-"<html><head/><body><p>Offset of the first tick from the start of the axis</"
-"p></body></html>"
+"<html><head/><body><p>Offset of the first tick from the start of the axis</p></"
+"body></html>"
 msgstr ""
 "<html><head/><body><p>პირველი დაყოფის წანაცვლება ღერძის დასაწყისიდან</p></"
 "body></html>"
@@ -21007,8 +20976,7 @@ msgid "X:"
 msgstr "X:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbBindLogicalPos)
-#: src/frontend/ui/dockwidgets/imagedock.ui:219
-#: src/frontend/ui/labelwidget.ui:40
+#: src/frontend/ui/dockwidgets/imagedock.ui:219 src/frontend/ui/labelwidget.ui:40
 #, kde-format
 msgid "Logical Coordinates"
 msgstr "ლოგიკური კოორდინატები"
@@ -22332,27 +22300,27 @@ msgstr "მთავარი ფონტი:"
 #: src/frontend/ui/labelwidget.ui:160
 #, kde-format
 msgid ""
-"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-"REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
-"\">\n"
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-"
+"html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+"css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; font-"
 "weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
-"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
-"\"><br /></p></body></html>"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></"
+"body></html>"
 msgstr ""
-"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-"REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
-"\">\n"
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-"
+"html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+"css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; font-"
 "weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
-"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
-"\"><br /></p></body></html>"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-"
+"left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lBackgroundColor)
 #: src/frontend/ui/labelwidget.ui:231
@@ -22717,13 +22685,13 @@ msgstr "პირობები:"
 msgid ""
 "<html><head/><body><p>Use terms compliant with the <a href=\"http://www.bipm."
 "org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf\"><span style=\" text-"
-"decoration: underline; color:#2980b9;\">Guide to the Expression of "
-"Uncertainty in Measurement (GUM)</span></a></p></body></html>"
+"decoration: underline; color:#2980b9;\">Guide to the Expression of Uncertainty "
+"in Measurement (GUM)</span></a></p></body></html>"
 msgstr ""
 "<html><head/><body><p>გამოყენების პირობები შეესაბამება <a href=\"http://www."
-"bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf\"><span style=\" "
-"text-decoration: underline; color:#2980b9;\">გაზომბის გაურკვევლობის "
-"გამოსახულების გიდისას (GUM)</span></a></p></body></html>"
+"bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf\"><span style=\" text-"
+"decoration: underline; color:#2980b9;\">გაზომბის გაურკვევლობის გამოსახულების "
+"გიდისას (GUM)</span></a></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGUMTerms)
 #: src/frontend/ui/settingsgeneralpage.ui:152
@@ -22777,11 +22745,11 @@ msgstr "თავსებადობა:"
 #: src/frontend/ui/settingsgeneralpage.ui:319
 #, kde-format
 msgid ""
-"<html><head/><body><p>Save projects in a compatible format that can be "
-"opened in LabPlot versions older than 2.9.</p></body></html>"
+"<html><head/><body><p>Save projects in a compatible format that can be opened "
+"in LabPlot versions older than 2.9.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>პროექტების შენახვა თავსებად ფორმატში, რომელიც LabPlot-"
-"ის 2.9 ან უფრო ძველშიც გაიხსნება.</p></body></html>"
+"<html><head/><body><p>პროექტების შენახვა თავსებად ფორმატში, რომელიც LabPlot-ის "
+"2.9 ან უფრო ძველშიც გაიხსნება.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
 #: src/frontend/ui/settingsgeneralpage.ui:322
@@ -23220,15 +23188,15 @@ msgstr "3:"
 #: src/frontend/ui/spreadsheet/randomvalueswidget.ui:145
 #, kde-format
 msgid ""
-"<html><head/><body><p>Random number distributions as defined in <a href="
-"\"https://www.gnu.org/software/gsl/doc/html/randist.html\"><span style=\" "
-"text-decoration: underline; color:#2980b9;\">GSL documentation</span></a></"
-"p></body></html>"
+"<html><head/><body><p>Random number distributions as defined in <a "
+"href=\"https://www.gnu.org/software/gsl/doc/html/randist.html\"><span style=\" "
+"text-decoration: underline; color:#2980b9;\">GSL documentation</span></a></p></"
+"body></html>"
 msgstr ""
 "<html><head/><body><p>შემთხვევითი რიცხვის განაწილება, როგორც აღწერილია <a "
-"href=\"https://www.gnu.org/software/gsl/doc/html/randist.html\"><span style="
-"\" text-decoration: underline; color:#2980b9;\">GSL-ის დოკუმენტაციაში</"
-"span></a></p></body></html>"
+"href=\"https://www.gnu.org/software/gsl/doc/html/randist.html\"><span style=\" "
+"text-decoration: underline; color:#2980b9;\">GSL-ის დოკუმენტაციაში</span></a></"
+"p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lSeed)
 #: src/frontend/ui/spreadsheet/randomvalueswidget.ui:152
@@ -23389,8 +23357,7 @@ msgstr "გასატანი ადგილი:"
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:126
 #, kde-format
 msgid "Check this option if the worksheet background should be exported."
-msgstr ""
-"ჩართეთ ე პარამეტრი, თუ გნებავთ, ელცხრილის ფონის სურათის გატანაც მოხდეს."
+msgstr "ჩართეთ ე პარამეტრი, თუ გნებავთ, ელცხრილის ფონის სურათის გატანაც მოხდეს."
 
 #. i18n: ectx: property (text), widget (QLabel, lExportBackground)
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:119
@@ -23770,8 +23737,7 @@ msgstr "მიუთიეთ კომენტარი"
 #, kde-format
 msgid "Cannot add new keyword without key, would you like to try again?"
 msgstr ""
-"ახალ საკვანძო სიტყვას გასაღების გარეშე ვერ დაამატებთ. გნებავთ, სცადოთ "
-"თავიდან?"
+"ახალ საკვანძო სიტყვას გასაღების გარეშე ვერ დაამატებთ. გნებავთ, სცადოთ თავიდან?"
 
 #: src/frontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:88
 #, kde-format
@@ -23833,8 +23799,7 @@ msgstr "ერთეულის დამატება"
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:329
 #, kde-format
 msgid "Cannot add keyword, keyword already added"
-msgstr ""
-"საკვანძო სიტყვის დამატება შეუძლებელია, საკვანძო სიტყვა უკვე დამატებულია"
+msgstr "საკვანძო სიტყვის დამატება შეუძლებელია, საკვანძო სიტყვა უკვე დამატებულია"
 
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:322
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:329
@@ -23871,8 +23836,7 @@ msgstr "საკვანძო სიტყვის წაშლა"
 #: src/frontend/widgets/LabelWidget.cpp:120
 #, kde-format
 msgid ""
-"Use logical instead of absolute coordinates to specify the position on the "
-"plot"
+"Use logical instead of absolute coordinates to specify the position on the plot"
 msgstr ""
 "ნახაზის მისათითებლად აბსოლუტურის მაგიერ ლოგიკური კოორდინატების გამოყენება"
 
@@ -24030,15 +23994,15 @@ msgid ""
 msgstr ""
 "ტექსტის პარამეტრის რეჟიმი:<ul><li>ტექსტი - ტექსტის დაყენება მდიდარი ტექსტის "
 "დაფორმატებით</li><li>LaTeX - ტექსტის დაყენება LaTeX-ით. აუცილებელია LaTeX-ის "
-"დაყენება</li><li>Markdown - ტექსტის დაყენება Markdown ტექსტის მარკირების "
-"ენით</li></ul>"
+"დაყენება</li><li>Markdown - ტექსტის დაყენება Markdown ტექსტის მარკირების ენით</"
+"li></ul>"
 
 #: src/frontend/widgets/LabelWidget.cpp:224
 #, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
-"li><li>LaTeX - text setting using LaTeX, installation of LaTeX required</"
-"li></ul>"
+"li><li>LaTeX - text setting using LaTeX, installation of LaTeX required</li></"
+"ul>"
 msgstr ""
 "ტექსტის პარამეტრის რეჟიმი:<ul><li>Text - ტექსტის დაყენება მდიდარი ტექსტის "
 "დაფორმატებით</li><li>LaTeX - ტექსტის დაყენება LaTeX-ით. აუცილებელია LaTeX-ის "
@@ -24252,8 +24216,7 @@ msgstr "პორტატული ქსელური გრაფიკა 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:266
 #, kde-format
 msgid "Joint Photographic Experts Group (*.jpg *.jpeg *.JPG *.JPEG)"
-msgstr ""
-"ფოტოგრაფების ექსპერტების გაერთიანებული ჯგუფი (*.jpg *.jpeg *.JPG *.JPEG)"
+msgstr "ფოტოგრაფების ექსპერტების გაერთიანებული ჯგუფი (*.jpg *.jpeg *.JPG *.JPEG)"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:269
 #, kde-format
@@ -24726,8 +24689,8 @@ msgstr "ფაილის გახსნა შეუძლებელია:
 #~ "Couldn't find the dynamic library 'cantorpart'. Please check your "
 #~ "installation."
 #~ msgstr ""
-#~ "დინამიკური ბიბლიოთეკა \"cantorpart\" ვერ ვიპოვე. შეამოწმეთ პროგრამის "
-#~ "თქვენი პაკეტი."
+#~ "დინამიკური ბიბლიოთეკა \"cantorpart\" ვერ ვიპოვე. შეამოწმეთ პროგრამის თქვენი "
+#~ "პაკეტი."
 
 #~ msgid "Failed to open the device."
 #~ msgstr "მოწყობილობის გახსნის შეცდომა."
