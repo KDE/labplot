@@ -292,7 +292,7 @@ void TextLabel::setText(const TextWrapper& textWrapper) {
 				QTextEdit te;
 				te.setHtml(textWrapper.text);
 				te.selectAll();
-				if (textWrapper.text.indexOf(QStringLiteral("background-color:#")) != -1) {
+				if (textWrapper.text.indexOf(QStringLiteral("background-color:")) != -1) {
 					const auto& bgColor = te.textBackgroundColor();
 					if (bgColor != d->backgroundColor) {
 						parent = new QUndoCommand(ki18n("%1: set label text").subs(name()).toString());

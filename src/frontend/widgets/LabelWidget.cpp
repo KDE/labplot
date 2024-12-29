@@ -11,10 +11,7 @@
 #include "LabelWidget.h"
 #include "backend/core/Settings.h"
 #include "backend/worksheet/Background.h"
-#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
-#include "backend/worksheet/plots/cartesian/Axis.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "frontend/GuiTools.h"
 #include "frontend/dockwidgets/BaseDock.h"
@@ -22,19 +19,18 @@
 
 #include <KCharSelect>
 #include <KLocalizedString>
+#include <KMessageWidget>
+
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 #include <KSyntaxHighlighting/Definition>
 #include <KSyntaxHighlighting/SyntaxHighlighter>
 #include <KSyntaxHighlighting/Theme>
 #endif
-#include <KMessageWidget>
 
 #include <QFile>
 #include <QMenu>
 #include <QSettings>
-#include <QSplitter>
 #include <QStandardItemModel>
-#include <QTextDocumentFragment>
 #include <QWidgetAction>
 
 #include <gsl/gsl_const_cgs.h>
@@ -757,21 +753,14 @@ void LabelWidget::backgroundColorChanged(const QColor& color) {
 	QDEBUG(Q_FUNC_INFO << ", color = " << color)
 	CONDITIONAL_LOCK_RETURN;
 
-	// remove the transparency if it was set initially before
-	auto newColor(color);
-	if (color.alpha() == 0) {
-		newColor.setAlpha(255);
-		ui.kcbBackgroundColor->setColor(newColor);
-	}
-
 	const auto mode = m_label->text().mode;
 	if (mode == TextLabel::Mode::Text || (mode == TextLabel::Mode::LaTeX && !m_teXEnabled)) {
-		SETLABELTEXTPROPERTY(setTextBackgroundColor, newColor);
+		SETLABELTEXTPROPERTY(setTextBackgroundColor, color);
 	} else { // LaTeX (enabled) or Markup mode
 		// Latex text does not support html code. For this the backgroundColor variable is used
 		// Only single color background is supported
 		for (auto* label : m_labelsList)
-			label->setBackgroundColor(newColor);
+			label->setBackgroundColor(color);
 	}
 }
 
