@@ -490,7 +490,7 @@ double nsl_stats_kruskal_wallis_p(double** groups, size_t* sizes, size_t n_group
 }
 
 // Compare function for sorting indices by time
-int compare_time(const void* a, const void* b) {
+int compare_time_log_test(const void* a, const void* b) {
 	const Observation* obs_a = (const Observation*)a;
 	const Observation* obs_b = (const Observation*)b;
 	if (obs_a->time < obs_b->time)
@@ -525,7 +525,7 @@ double nsl_stats_log_rank_test_statistic(const double* time,
 		observations[size1 + i].group = 2;
 	}
 
-	qsort(observations, total_size, sizeof(Observation), compare_time);
+	qsort(observations, total_size, sizeof(Observation), compare_time_log_test);
 
 	size_t n_risk_1 = size1;
 	size_t n_risk_2 = size2;
@@ -667,4 +667,81 @@ double nsl_stats_one_sample_t_p(const double sample[], size_t n, double hypothes
 	double t_abs = fabs(t_stat);
 	double p_value = 2.0 * (1.0 - gsl_cdf_tdist_P(t_abs, df));
 	return p_value;
+}
+
+// Logistic Regression Function for Binary Classification
+double* nsl_stats_logistic_regression(double** x, int* y, int N, int n_in, int iterations, double lr) {
+	int i, j, epoch;
+	double* result;
+	double* W;
+	double b = 0.0;
+	double y_pred, gradient;
+
+	result = (double*)malloc(sizeof(double) * (n_in + 1));
+
+	for (i = 0; i < n_in; i++) {
+		W[i] = 0.0;
+	}
+	result[0] = b;
+
+	for (epoch = 0; epoch < iterations; epoch++) {
+		for (i = 0; i < N; i++) {
+			y_pred = b;
+			for (j = 0; j < n_in; j++) {
+				y_pred += W[j] * x[i][j];
+			}
+			y_pred = 1.0 / (1.0 + exp(-y_pred));
+
+			gradient = y[i] - y_pred; // Error term
+			for (j = 0; j < n_in; j++) {
+				W[j] += lr * gradient * x[i][j];
+			}
+			b += lr * gradient;
+		}
+	}
+	result[0] = b;
+	return result;
+}
+
+static int compare_time_univariate_cox(const void* a, const void* b) {
+	double t1 = ((const double*)a)[0];
+	double t2 = ((const double*)b)[0];
+	if (t1 < t2)
+		return -1;
+	if (t1 > t2)
+		return 1;
+	return 0;
+}
+
+double nsl_univariate_cox_regression(double* x, double* time, int* event, int N, int iterations, double lr) {
+	double* time_idx = (double*)malloc(2 * N * sizeof(double));
+	for (int i = 0; i < N; i++) {
+		time_idx[2 * i] = time[i]; /* time */
+		time_idx[2 * i + 1] = (double)i; /* original index */
+	}
+	qsort(time_idx, N, 2 * sizeof(double), compare_time_univariate_cox);
+	double beta = 0.0;
+	double* exp_bx = (double*)malloc(N * sizeof(double));
+
+	for (int iter = 0; iter < iterations; iter++) {
+		for (int i = 0; i < N; i++)
+			exp_bx[i] = exp(beta * x[i]);
+
+		double grad = 0.0;
+		double S0 = 0.0;
+		double S1 = 0.0;
+		for (int k = N - 1; k >= 0; k--) {
+			int i = (int)time_idx[2 * k + 1];
+			S0 += exp_bx[i];
+			S1 += x[i] * exp_bx[i];
+
+			if (event[i] == 1)
+				grad += x[i] - (S1 / S0);
+		}
+		beta += lr * grad;
+	}
+	double hr = exp(beta);
+	free(exp_bx);
+	free(time_idx);
+	return hr;
 }
