@@ -11,15 +11,15 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-28 00:38+0000\n"
-"PO-Revision-Date: 2024-12-22 10:26+0100\n"
-"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"PO-Revision-Date: 2024-12-28 23:26+0100\n"
+"Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 "X-Accelerator-Marker: &\n"
 
 #, kde-format
@@ -8663,7 +8663,7 @@ msgstr "Diagrama de comportament de procés"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:792
 #, kde-format
 msgid "No curves inside the plot area."
-msgstr ""
+msgstr "No hi ha corbes dins de l'àrea del diagrama."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1117
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1151
