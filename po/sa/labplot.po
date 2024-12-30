@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-28 00:38+0000\n"
-"PO-Revision-Date: 2024-12-25 19:45+0530\n"
+"PO-Revision-Date: 2024-12-29 23:07+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
@@ -8523,7 +8523,7 @@ msgstr "प्रक्रिया व्यवहार चार्ट"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:792
 #, kde-format
 msgid "No curves inside the plot area."
-msgstr ""
+msgstr "भूखण्डक्षेत्रस्य अन्तः वक्राणि नास्ति।"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1117
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1151

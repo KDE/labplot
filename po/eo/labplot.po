@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-28 00:38+0000\n"
-"PO-Revision-Date: 2024-07-27 16:22+0200\n"
+"PO-Revision-Date: 2024-12-29 12:41+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -574,10 +574,9 @@ msgid "%1: clear column"
 msgstr "%1: malplenigi kolumnon"
 
 #: src/backend/core/column/Column.cpp:582
-#, fuzzy, kde-format
-#| msgid "%1: set cell values"
+#, kde-format
 msgid "%1: set random values"
-msgstr "%1: starigis ĉelvalorojn"
+msgstr "%1: starigis hazardajn valorojn"
 
 #: src/backend/core/column/Column.cpp:1603
 #, kde-format
@@ -1080,10 +1079,9 @@ msgid "Success"
 msgstr "Sukceso"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:194
-#, fuzzy, kde-format
-#| msgid "The device is not opened."
+#, kde-format
 msgid "Device at end"
-msgstr "La aparato ne estas malfermita."
+msgstr "Aparato ĉe la fino"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:196
 #, kde-format
@@ -1091,28 +1089,24 @@ msgid "Not enough rows selected. Increase number of rows."
 msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:198
-#, fuzzy, kde-format
-#| msgid "Unable to open file:"
+#, kde-format
 msgid "Unable to open device"
-msgstr "Ne eblas malfermi dosieron:"
+msgstr "Ne eblas malfermi aparaton"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:202
-#, fuzzy, kde-format
-#| msgid "Unable to read the file"
+#, kde-format
 msgid "Unable to determine the separator"
-msgstr "Ne eblas legi la dosieron"
+msgstr "Ne eblas determini la apartigilon"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:204
-#, fuzzy, kde-format
-#| msgid "Invalid numeric value."
+#, kde-format
 msgid "Invalid number of data columns"
-msgstr "Nevalida nombra valoro."
+msgstr "Nevalida nombro da datumkolumnoj"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:206
-#, fuzzy, kde-format
-#| msgid "Invalid numeric value."
+#, kde-format
 msgid "Invalid number of column names"
-msgstr "Nevalida nombra valoro."
+msgstr "Nevalida nombro da kolonnomoj"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:208
 #, kde-format
@@ -1125,16 +1119,14 @@ msgid "Insufficient memory (RAM)"
 msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:212
-#, fuzzy, kde-format
-#| msgid "Unable to read the file"
+#, kde-format
 msgid "Unable to parse header"
-msgstr "Ne eblas legi la dosieron"
+msgstr "Ne eblas analizi kaplinion"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:214
-#, fuzzy, kde-format
-#| msgid "Type of data source"
+#, kde-format
 msgid "Unsupported data source"
-msgstr "Tipo de datumfonto"
+msgstr "Nesubtenata datumfonto"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:218
 #, kde-format
@@ -1152,10 +1144,9 @@ msgid "Datetime column found, but no Datetime format provided"
 msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:224
-#, fuzzy, kde-format
-#| msgid "Reading from file %1 failed."
+#, kde-format
 msgid "Header reading from device not allowed"
-msgstr "Legado el dosiero %1 malsukcesis."
+msgstr "Legado de kaplinio de aparato ne estas permesita"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:226
 #, kde-format
@@ -1163,16 +1154,14 @@ msgid "Separator detection not allowed"
 msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:228
-#, fuzzy, kde-format
-#| msgid "Invalid sheet."
+#, kde-format
 msgid "Invalid separator"
-msgstr "Nevalida folio."
+msgstr "Nevalida apartigilo"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:230
-#, fuzzy, kde-format
-#| msgid "Failed to initialize %1."
+#, kde-format
 msgid "Filter not initialized"
-msgstr "Malsukcesis pravalorigi %1."
+msgstr "Filtrilo ne pravigita"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:232
 #, kde-format
@@ -1185,17 +1174,14 @@ msgid "Wrong end row. Is it smaller than start row?"
 msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:236
-#, fuzzy, kde-format
-#| msgid "No data set selected."
+#, kde-format
 msgid "No data destination set"
-msgstr "Neniu datumaro elektiĝis."
+msgstr "Neniu datuma celaro"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:238
-#, fuzzy, kde-format
-#| msgid "column"
-#| msgid_plural "columns"
+#, kde-format
 msgid "No columns"
-msgstr "kolumno"
+msgstr "Neniuj kolumnoj"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:240
 #, kde-format
@@ -1208,10 +1194,9 @@ msgid "UTF16 encoding is not supported"
 msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:244
-#, fuzzy, kde-format
-#| msgid "Unhandled error"
+#, kde-format
 msgid "Unhandled case"
-msgstr "Netraktita eraro"
+msgstr "Netraktita kazo"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:270
 #, kde-format
@@ -1246,16 +1231,14 @@ msgid "Index"
 msgstr "Indekso"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:601
-#, fuzzy, kde-format
-#| msgid "DateTime:"
+#, kde-format
 msgid "DateTime"
-msgstr "Dato Tempo:"
+msgstr "DatoTempo"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:602
-#, fuzzy, kde-format
-#| msgid "Int8"
+#, kde-format
 msgid "Int"
-msgstr "Int8"
+msgstr "Int"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:603
 #: src/backend/datasources/filters/MatioFilter.cpp:398
@@ -2460,19 +2443,14 @@ msgid "Invalid region specified."
 msgstr "Nevalida regiono specifita."
 
 #: src/backend/datasources/LiveDataSource.cpp:708
-#, fuzzy, kde-format
-#| msgid "File does not exist."
+#, kde-format
 msgid "Device doesn't exist."
-msgstr "Dosiero ne ekzistas."
+msgstr "Aparato ne ekzistas."
 
 #: src/backend/datasources/LiveDataSource.cpp:711
-#, fuzzy, kde-format
-#| msgid ""
-#| "Failed to open the device. Please check your permissions on this device."
+#, kde-format
 msgid "User doesn't have enough permissions to open the device."
-msgstr ""
-"Malsukcesis malfermi la aparaton. Bonvolu kontroli viajn permesojn sur ĉi "
-"tiu aparato."
+msgstr "Uzanto ne havas sufiĉajn permesojn por malfermi la aparaton."
 
 #: src/backend/datasources/LiveDataSource.cpp:714
 #, kde-format
@@ -2480,8 +2458,7 @@ msgid "Device already opened."
 msgstr "Aparato jam malfermita."
 
 #: src/backend/datasources/LiveDataSource.cpp:717
-#, fuzzy, kde-format
-#| msgid "The device is not opened."
+#, kde-format
 msgid "Device is not open."
 msgstr "La aparato ne estas malfermita."
 
@@ -2491,16 +2468,14 @@ msgid "Failed to read data."
 msgstr "Malsukcesis legi datumojn."
 
 #: src/backend/datasources/LiveDataSource.cpp:723
-#, fuzzy, kde-format
-#| msgid "no info available"
+#, kde-format
 msgid "Device not available."
-msgstr "neniu informo havebla"
+msgstr "Aparato ne havebla."
 
 #: src/backend/datasources/LiveDataSource.cpp:726
-#, fuzzy, kde-format
-#| msgid "An error occurred."
+#, kde-format
 msgid "Timeout occured."
-msgstr "Eraro okazis."
+msgstr "Okazis tempotempo."
 
 #: src/backend/datasources/LiveDataSource.cpp:731
 #, kde-format
@@ -2538,10 +2513,9 @@ msgid "%1: Import from %2"
 msgstr "%1: Importi el %2"
 
 #: src/backend/gsl/constants.cpp:15
-#, fuzzy, kde-format
-#| msgid "Planck constant"
+#, kde-format
 msgid "Programming constants"
-msgstr "Konstanto de Planck"
+msgstr "Programado de konstantoj"
 
 #: src/backend/gsl/constants.cpp:17
 #, kde-format
@@ -3644,16 +3618,14 @@ msgid "Unknown Function"
 msgstr "Nekonata Funkcio"
 
 #: src/backend/gsl/functions.cpp:241
-#, fuzzy, kde-format
-#| msgid "Cell (index, variable)"
+#, kde-format
 msgid "Cell (index; variable)"
-msgstr "Ĉelo (indekso, variablo)"
+msgstr "Ĉelo (indekso; variablo)"
 
 #: src/backend/gsl/functions.cpp:242
-#, fuzzy, kde-format
-#| msgid "Cell (index, variable)"
+#, kde-format
 msgid "Cell (index; default_value; variable)"
-msgstr "Ĉelo (indekso, variablo)"
+msgstr "Ĉelo (indekso; defaŭlta_valoro; variablo)"
 
 #: src/backend/gsl/functions.cpp:243
 #, kde-format
@@ -6333,10 +6305,9 @@ msgid "Failed to open '%1' for writing."
 msgstr "Malsukcesis malfermi la dosieron '%1' por skribado."
 
 #: src/backend/note/Note.cpp:124
-#, fuzzy, kde-format
-#| msgid "%1: set type"
+#, kde-format
 msgid "%1: set text"
-msgstr "%1: agordi tipon"
+msgstr "%1: agordi tekston"
 
 #: src/backend/note/Note.cpp:131 src/backend/worksheet/TextLabel.cpp:260
 #: src/backend/worksheet/TextLabel.cpp:299
@@ -6345,16 +6316,14 @@ msgid "%1: set background color"
 msgstr "%1: agordi fonkoloron"
 
 #: src/backend/note/Note.cpp:138
-#, fuzzy, kde-format
-#| msgid "%1: set font color"
+#, kde-format
 msgid "%1: set text color"
-msgstr "%1: agordi tiparkoloron"
+msgstr "%1: agordi tekstokoloron"
 
 #: src/backend/note/Note.cpp:145
-#, fuzzy, kde-format
-#| msgid "%1: set font"
+#, kde-format
 msgid "%1: set text font"
-msgstr "%1: agordi tiparon"
+msgstr "%1: agordi tekstan tiparon"
 
 #: src/backend/note/Note.cpp:183
 #, kde-format
@@ -8214,8 +8183,7 @@ msgstr "Glata"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:613
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2055
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:626
-#, fuzzy, kde-format
-#| msgid "Fit"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit"
 msgstr "Fit"
@@ -8413,10 +8381,9 @@ msgid "Add New"
 msgstr "Aldoni Novan"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:567
-#, fuzzy, kde-format
-#| msgid "Formula:"
+#, kde-format
 msgid "Formula Plot"
-msgstr "Formulo:"
+msgstr "Formula Diagramo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:568
 #, kde-format
@@ -8424,10 +8391,9 @@ msgid "Add a new xy-plot that is defined via a mathematical expression."
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:575
-#, fuzzy, kde-format
-#| msgid "Analysis"
+#, kde-format
 msgid "Analysis Plots"
-msgstr "Analizo"
+msgstr "Analizaj Diagramoj"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:611
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:188
@@ -8443,40 +8409,34 @@ msgid "Theme"
 msgstr "Etoso"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:674
-#, fuzzy, kde-format
-#| msgid "Plots"
+#, kde-format
 msgid "Line Plots"
-msgstr "Grafikoj"
+msgstr "Liniaj Diagramoj"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:680
-#, fuzzy, kde-format
-#| msgid "Horizontal"
+#, kde-format
 msgid "Horizontal Step"
-msgstr "Horizontala"
+msgstr "Horizontala Paŝo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:684
-#, fuzzy, kde-format
-#| msgid "Vertical Line"
+#, kde-format
 msgid "Vertical Step"
-msgstr "Vertikala Linio"
+msgstr "Vertikala Paŝo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:688
-#, fuzzy, kde-format
-#| msgid "Interpolate"
+#, kde-format
 msgid "Spline Interpolated"
-msgstr "Interpoli"
+msgstr "Spline Interpolata"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:695
-#, fuzzy, kde-format
-#| msgid "Bar Plots"
+#, kde-format
 msgid "Scatter Plots"
-msgstr "Bastonaj diagramoj"
+msgstr "Diskaj Diagramoj"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:697
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgid "Scatter"
-msgstr "Ŝablono"
+msgstr "Disigi"
 
 #. i18n: ectx: property (text), widget (QLabel, lYError)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:701
@@ -8486,34 +8446,29 @@ msgid "Y Error"
 msgstr "Y Eraro"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:705
-#, fuzzy, kde-format
-#| msgid "Y Error"
+#, kde-format
 msgid "XY Error"
-msgstr "Y Eraro"
+msgstr "XY-Eraro"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:712
-#, fuzzy, kde-format
-#| msgid "Line+Symbol Width:"
+#, kde-format
 msgid "Line and Symbol Plots"
-msgstr "Linio+Simbola Larĝo:"
+msgstr "Liniaj kaj Simbolaj Diagramoj"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:714
-#, fuzzy, kde-format
-#| msgid "Line+Symbol Width:"
+#, kde-format
 msgid "Line + Symbol"
-msgstr "Linio+Simbola Larĝo:"
+msgstr "Linio + Simbolo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:718
-#, fuzzy, kde-format
-#| msgid "Segments"
+#, kde-format
 msgid "2 Point Segment"
-msgstr "Segmentoj"
+msgstr "2 Punkta Segmento"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:722
-#, fuzzy, kde-format
-#| msgid "Segments"
+#, kde-format
 msgid "3 Point Segment"
-msgstr "Segmentoj"
+msgstr "3 Punkta Segmento"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:729
 #, kde-format
@@ -8576,10 +8531,9 @@ msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:765
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1874
-#, fuzzy, kde-format
-#| msgid "Run fit"
+#, kde-format
 msgid "Run Chart"
-msgstr "Ruli kongruigon"
+msgstr "Run Chart"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:769
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1871
@@ -8780,8 +8734,7 @@ msgstr "%1: taŭgas al '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2059
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:690
-#, fuzzy, kde-format
-#| msgid "Fit to '%1'"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit to '%1'"
 msgstr "Kongruigi al '%1'"
@@ -8807,22 +8760,19 @@ msgid "%1: add Fourier filter curve"
 msgstr "%1: aldoni kurbon de Fourier-filtrilo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2115
-#, fuzzy, kde-format
-#| msgid "Reduction of '%1'"
+#, kde-format
 msgid "%1: add function of '%2'"
-msgstr "Redukto de '%1'"
+msgstr "%1: aldoni funkcion de '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2116
-#, fuzzy, kde-format
-#| msgid "Reduction of '%1'"
+#, kde-format
 msgid "Function of '%1'"
-msgstr "Redukto de '%1'"
+msgstr "Funkcio de '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2119
-#, fuzzy, kde-format
-#| msgid "%1: add fit curve"
+#, kde-format
 msgid "%1: add function curve"
-msgstr "%1: aldoni konvenan kurbon"
+msgstr "%1: aldoni funkcian kurbon"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2168
 #: src/frontend/worksheet/WorksheetView.cpp:1339
@@ -8859,10 +8809,9 @@ msgid "%1: set font"
 msgstr "%1: agordi tiparon"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:207
-#, fuzzy, kde-format
-#| msgid "%1: set font color"
+#, kde-format
 msgid "%1: use plot's color"
-msgstr "%1: agordi tiparkoloron"
+msgstr "%1: uzi la koloron de la diagramo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:214
 #: src/backend/worksheet/TextLabel.cpp:347
@@ -9088,28 +9037,24 @@ msgid "%1: legend visibility changed"
 msgstr "%1: legendovidebleco ŝanĝiĝis"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:425
-#, fuzzy, kde-format
-#| msgid "%1: set binning method"
+#, kde-format
 msgid "%1: set limits metric"
-msgstr "%1: agordi la metodon de binding"
+msgstr "%1: starigi metrikon pri limoj"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:432
-#, fuzzy, kde-format
-#| msgid "%1: set symbol size"
+#, kde-format
 msgid "%1: set sample size"
-msgstr "%1: agordi simbolograndon"
+msgstr "%1: agordi specimenan grandecon"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:439
-#, fuzzy, kde-format
-#| msgid "%1: change geometry rect"
+#, kde-format
 msgid "%1: change negative lower limit"
-msgstr "%1: ŝanĝi geometrion rekta"
+msgstr "%1: ŝanĝi negativan malsuperan limon"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:446
-#, fuzzy, kde-format
-#| msgid "%1: change geometry rect"
+#, kde-format
 msgid "%1: change exact limits"
-msgstr "%1: ŝanĝi geometrion rekta"
+msgstr "%1: ŝanĝi precizajn limojn"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:604
 #, kde-format
@@ -9137,10 +9082,9 @@ msgid "%1: set end logical position"
 msgstr "%1: meti finan logikan pozicion"
 
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:263
-#, fuzzy, kde-format
-#| msgid "%1: set binning method"
+#, kde-format
 msgid "%1: set center metric"
-msgstr "%1: agordi la metodon de binding"
+msgstr "%1: starigis centran metrpiktogram"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:150
 #, kde-format
@@ -9697,8 +9641,7 @@ msgid "%1: set fit options and perform the fit"
 msgstr "%1: starigi konvenajn opciojn kaj plenumi la konvenon"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1823
-#, fuzzy, kde-format
-#| msgid "Fit Results"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit Results"
 msgstr "Konvenaj rezultoj"
@@ -9853,8 +9796,7 @@ msgid "Fit model not specified!"
 msgstr "Taŭga modelo ne specifita!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3095
-#, fuzzy, kde-format
-#| msgid "Fit Results"
+#, kde-format
 msgctxt "Curve Fitting"
 msgid "Fit Results"
 msgstr "Konvenaj rezultoj"
@@ -9877,10 +9819,9 @@ msgid "%1: set transform options and perform the Fourier transform"
 msgstr "%1: starigi transformopciojn kaj plenumi la transformon de Fourier"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:99
-#, fuzzy, kde-format
-#| msgid "%1: set equation"
+#, kde-format
 msgid "%1: set function"
-msgstr "%1: starigis ekvacion"
+msgstr "%1: agordi funkcion"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:323
 #, kde-format
@@ -9918,10 +9859,9 @@ msgid "yColumn of curve '%1' not valid"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:348
-#, fuzzy, kde-format
-#| msgid "Number of x and y data points must be equal."
+#, kde-format
 msgid "Number of x and y values do not match for curve '%1'"
-msgstr "Nombro de x kaj y datenpunktoj devas esti egala."
+msgstr "Nombro de x kaj y valoroj ne kongruas por kurbo '%1'"
 
 #: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:68
 #, kde-format
@@ -10182,22 +10122,19 @@ msgid "Positive/Negative sign "
 msgstr "Pozitiva/Negativa signo"
 
 #: src/frontend/AboutDialog.cpp:146
-#, fuzzy, kde-format
-#| msgid "System: "
+#, kde-format
 msgid "System:"
 msgstr "Sistemo:"
 
 #: src/frontend/AboutDialog.cpp:147
-#, fuzzy, kde-format
-#| msgid "Locale: "
+#, kde-format
 msgid "Locale:"
-msgstr "Loko:"
+msgstr "Lokaĵaro:"
 
 #: src/frontend/AboutDialog.cpp:148
-#, fuzzy, kde-format
-#| msgid "Number settings:"
+#, kde-format
 msgid "Number Settings:"
-msgstr "Nombraj agordoj:"
+msgstr "Nombraj Agordoj:"
 
 #: src/frontend/AboutDialog.cpp:148
 #, kde-format
@@ -10205,8 +10142,7 @@ msgid "Updated on restart"
 msgstr "Ĝisdatigita ĉe rekomenco"
 
 #: src/frontend/AboutDialog.cpp:149
-#, fuzzy, kde-format
-#| msgid "Architecture: "
+#, kde-format
 msgid "Architecture:"
 msgstr "Arkitekturo:"
 
@@ -10226,10 +10162,9 @@ msgid "C++ Compiler Flags: "
 msgstr "C++ Kompililo Flagoj:"
 
 #: src/frontend/AboutDialog.cpp:163
-#, fuzzy, kde-format
-#| msgid "Standard Mathematical Functions"
+#, kde-format
 msgid "Frontend to Mathematical Applications"
-msgstr "Normaj Matematikaj Funkcioj"
+msgstr "Frontend al Matematikaj Aplikoj"
 
 #: src/frontend/AboutDialog.cpp:165 src/frontend/AboutDialog.cpp:170
 #: src/frontend/AboutDialog.cpp:175 src/frontend/AboutDialog.cpp:180
@@ -10243,17 +10178,17 @@ msgstr "Normaj Matematikaj Funkcioj"
 #: src/frontend/AboutDialog.cpp:258 src/frontend/AboutDialog.cpp:263
 #: src/frontend/AboutDialog.cpp:269 src/frontend/AboutDialog.cpp:274
 #: src/frontend/AboutDialog.cpp:291
-#, fuzzy, kde-format
-#| msgid "missing value"
+#, kde-format
 msgid "missing"
-msgstr "mankanta valoro"
+msgstr "mankas"
 
 #: src/frontend/AboutDialog.cpp:168
-#, fuzzy, kde-format
-#| msgid "Flexible Image Transport System Data Format (FITS)"
+#, kde-format
 msgid ""
 "Support data files in FITS (Flexible Image Transport System) data format"
-msgstr "Fleksebla Bilda Transporta Sistemo-Datumformato (FITS)"
+msgstr ""
+"Subteni datumdosierojn en formato de datumoj FITS (Flexible Image Transport "
+"System)."
 
 #: src/frontend/AboutDialog.cpp:173
 #, kde-format
@@ -10266,17 +10201,14 @@ msgid "C++ library for linear algebra"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:183
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Fourier Transform"
+#, kde-format
 msgid "Fastest Fourier Transform in the West"
-msgstr "Proprecoj: Fourier-Transformo"
+msgstr "Plej Rapida Transformo de Fourier en la Okcidento"
 
 #: src/frontend/AboutDialog.cpp:187
-#, fuzzy, kde-format
-#| msgid "Scientific (e)"
+#, kde-format
 msgid "GNU Scientific Library"
-msgstr "Scienca (e)"
+msgstr "GNU-Scienca Biblioteko"
 
 #: src/frontend/AboutDialog.cpp:189
 #, kde-format
@@ -10284,10 +10216,9 @@ msgid "High-performance data management and storage suite"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:194
-#, fuzzy, kde-format
-#| msgid "Syntax Highlighting"
+#, kde-format
 msgid "Syntax highlighting engine"
-msgstr "Sintaks-Reliefigo"
+msgstr "Sintakso reliefiganta motoron"
 
 #: src/frontend/AboutDialog.cpp:199
 #, kde-format
@@ -10295,23 +10226,19 @@ msgid "Support collecting feedback from users"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:204
-#, fuzzy, kde-format
-#| msgid "Error Functions and Related Functions"
+#, kde-format
 msgid "Complex error and related functions"
-msgstr "Eraraj Funkcioj kaj Rilataj Funkcioj"
+msgstr "Kompleksa eraro kaj rilataj funkcioj"
 
 #: src/frontend/AboutDialog.cpp:209
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Import Origin Project"
+#, kde-format
 msgid "importing Origin OPJ project files"
-msgstr "Import Origin Project"
+msgstr "importado de Originaj OPJ-projektdosieroj"
 
 #: src/frontend/AboutDialog.cpp:214
-#, fuzzy, kde-format
-#| msgid "MATLAB MAT file"
+#, kde-format
 msgid "Import binary MATLAB MAT files"
-msgstr "MATLAB MAT-dosiero"
+msgstr "Importi duumajn dosierojn MATLAB MAT"
 
 #: src/frontend/AboutDialog.cpp:219
 #, kde-format
@@ -10319,16 +10246,14 @@ msgid "MCAP file support"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:225
-#, fuzzy, kde-format
-#| msgid "Network Common Data Format (NetCDF)"
+#, kde-format
 msgid "Network Common Data Form"
-msgstr "Reta Komuna Datuma Formato (NetCDF)"
+msgstr "Formularo de Komuna Datumo de Reto"
 
 #: src/frontend/AboutDialog.cpp:230
-#, fuzzy, kde-format
-#| msgid "OpenDocument Spreadsheet (ODS)"
+#, kde-format
 msgid "Import ODS (Open Document Spreadsheet) files"
-msgstr "OpenDocument-Tabelfolio (ODS)"
+msgstr "Importi dosierojn ODS (Open Document Spreadsheet)."
 
 #: src/frontend/AboutDialog.cpp:235
 #, kde-format
@@ -10346,10 +10271,9 @@ msgid "Qt Advanced Docking System"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:246
-#, fuzzy, kde-format
-#| msgid "Import data from a regular file"
+#, kde-format
 msgid "Support data from MQTT brokers"
-msgstr "Importi datumojn de regula dosiero"
+msgstr "Subtenaj datumoj de MQTT-makleristoj"
 
 #: src/frontend/AboutDialog.cpp:251
 #, kde-format
@@ -10372,16 +10296,14 @@ msgid "Read (and write) data sets from SAS, Stata, and SPSS"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:272
-#, fuzzy, kde-format
-#| msgid "Vector Binary Logfile (BLF)"
+#, kde-format
 msgid "Binary Log File (BLF) file support"
-msgstr "Vektora Binara Protokoldosiero (BLF)"
+msgstr "Subteno de dosieroj de Binary Log File (BLF)."
 
 #: src/frontend/AboutDialog.cpp:289
-#, fuzzy, kde-format
-#| msgid "Comments:"
+#, kde-format
 msgid "Components:"
-msgstr "Komentoj:"
+msgstr "Komponantoj:"
 
 #: src/frontend/colormaps/ColorMapsDialog.cpp:39
 #, kde-format
@@ -10427,28 +10349,24 @@ msgid "Blue"
 msgstr "Blua"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:195
-#, fuzzy, kde-format
-#| msgid "Hue:"
+#, kde-format
 msgid "Hue"
-msgstr "Nuanco:"
+msgstr "Hue"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:195
-#, fuzzy, kde-format
-#| msgid "Saturation:"
+#, kde-format
 msgid "Saturation"
-msgstr "Saturiĝo:"
+msgstr "Saturiĝo"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:224
-#, fuzzy, kde-format
-#| msgid "Zoom View"
+#, kde-format
 msgid "Icon View"
-msgstr "Zoom Vido"
+msgstr "Piktogramo Vido"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:232
-#, fuzzy, kde-format
-#| msgid "View"
+#, kde-format
 msgid "List View"
-msgstr "Vido"
+msgstr "Listo Vido"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:240
 #, kde-format
@@ -10500,16 +10418,14 @@ msgstr "Originala Grandeco"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:134
 #: src/frontend/worksheet/WorksheetView.cpp:172
-#, fuzzy, kde-format
-#| msgid "Fit to Height"
+#, kde-format
 msgctxt "Zoom"
 msgid "Fit to Height"
 msgstr "Fit al Alteco"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:175
-#, fuzzy, kde-format
-#| msgid "Fit to Width"
+#, kde-format
 msgctxt "Zoom"
 msgid "Fit to Width"
 msgstr "Fit al Larĝo"
@@ -10811,16 +10727,14 @@ msgstr ""
 "Linio en la dosiero, kiu devus esti uzata por determini la kolonnomojn."
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:111
-#, fuzzy, kde-format
-#| msgid "Custom column names, space separated. E.g. \"x y\""
+#, kde-format
 msgid "Custom column names, comma separated. E.g. \"x, y\""
-msgstr "Propraj kolonnomoj, spaco apartigita. ekz. \"x y\""
+msgstr "Propraj kolonnomoj, komoj apartigitaj. ekz. \"x, y\""
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:115
-#, fuzzy, kde-format
-#| msgid "Custom column names, space separated. E.g. \"x y\""
+#, kde-format
 msgid "Custom column modes, comma separated"
-msgstr "Propraj kolonnomoj, spaco apartigita. ekz. \"x y\""
+msgstr "Propraj kolumnoreĝimoj, komo apartigita"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:122
 #, kde-format
@@ -10843,10 +10757,9 @@ msgid "%1 or %2"
 msgstr ""
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:252
-#, fuzzy, kde-format
-#| msgid "Data type not supported yet."
+#, kde-format
 msgid "Datatype not found: %1"
-msgstr "Datumtipo ankoraŭ ne subtenatas."
+msgstr "Datumtipo ne trovita: %1"
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:29
 #, kde-format
@@ -11713,22 +11626,19 @@ msgid "Preview: Initialization failed: %1"
 msgstr ""
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1801
-#, fuzzy, kde-format
-#| msgid "Failed to connect to the broker '%1:%2'."
+#, kde-format
 msgid "Preview: Failed to connect to local socket %1 - %2"
-msgstr "Malsukcesis konekti al la makleristo '%1:%2'."
+msgstr "Antaŭrigardo: Malsukcesis konekti al loka ingo %1 - %2"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1816
-#, fuzzy, kde-format
-#| msgid "Failed to connect to the broker '%1:%2'."
+#, kde-format
 msgid "Preview: Failed to connect to TCP socket - %1"
-msgstr "Malsukcesis konekti al la makleristo '%1:%2'."
+msgstr "Antaŭrigardo: Malsukcesis konekti al TCP-soko - %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1861
-#, fuzzy, kde-format
-#| msgid "area error: %1"
+#, kde-format
 msgid "Parse Error: %1"
-msgstr "area eraro: %1"
+msgstr "Analiza eraro: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1863
 #, kde-format
@@ -11756,10 +11666,9 @@ msgid "Couldn't subscribe to all available topics."
 msgstr "Ne eblis aboni ĉiujn disponeblajn temojn."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2624
-#, fuzzy, kde-format
-#| msgid "Failed to connect to the broker '%1:%2'."
+#, kde-format
 msgid "Failed to connect to '%1'. Error %2."
-msgstr "Malsukcesis konekti al la makleristo '%1:%2'."
+msgstr "Malsukcesis konekti al '%1'. Eraro %2."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2646
 #, kde-format
@@ -11868,16 +11777,7 @@ msgstr ""
 
 #: src/frontend/datasources/ImportOriginLayersDialog.cpp:26
 #: src/frontend/datasources/ImportProjectDialog.cpp:169
-#, fuzzy, kde-format
-#| msgid ""
-#| "Multiple layers are used in Origin to either implement multiple plots or "
-#| "multiple axes on the same plot (see <a href=\"https://www.originlab.com/"
-#| "doc/Origin-Help/MultiLayer-Graph\">Origin's Documentation</a> for more "
-#| "details).LabPlot can process only one type at the same time."
-#| "<br><br>Specify how to import multi-layered graphs in the selected "
-#| "project:<ul><li>As Plot Area - a new plot area is created for every layer."
-#| "</li><li>As Coordinate System - a new coordinate system (data range) on "
-#| "the same plot area is created for every layer</li></ul>"
+#, kde-format
 msgid ""
 "Multiple layers are used in Origin to either implement multiple plots or "
 "multiple axes on the same plot (see <a href=\"https://www.originlab.com/doc/"
@@ -11888,14 +11788,15 @@ msgid ""
 "a new coordinate system (data range) on the same plot area is created for "
 "every layer.</li></ul>"
 msgstr ""
-"Multoblaj tavoloj estas uzataj en Origin por aŭ efektivigi plurajn grafikojn "
-"aŭ multoblajn aksojn sur la sama grafiko (vidu <a href=\"https://www."
-"originlab.com/doc/Origin-Help/MultiLayer-Graph\">Dokumentadon de Origin</a> "
-"por pliaj detaloj). LabPlot povas procezi nur unu tipon samtempe."
-"<br><br>Specifu kiel importi plurtavolajn grafikaĵojn en la elektita "
-"projekto:<ul><li>Kiel Grafika Areo - nova grafika areo estas kreita por ĉiu "
-"tavolo.</li><li>Kiel Koordinatsistemo - nova koordinatsistemo (datuma gamo) "
-"sur la sama grafikejo estas kreita por ĉiu tavolo</li></ul>"
+"Multoblaj tavoloj estas uzataj en Origin por aŭ efektivigi plurajn "
+"diagramojn aŭ plurajn aksojn sur la sama diagramo (vidu <a href=\"https://"
+"www.originlab.com/doc/Origin-Help/MultiLayer-Graph\">Dokumentadon de Origin</"
+"a> por pliaj detaloj).<br>LabPlot povas procesi nur unu tipon samtempe."
+"<br><br>Specifiku kiel importi plurtavolajn grafikaĵojn en la elektita. "
+"projekto:<ul><li>Kiel Plot Area - nova grafika areo estas kreita por ĉiu "
+"tavolo.</li><li>Kiel Koordinata Sistemo - nova koordinatsistemo "
+"(datumintervalo) sur la sama grafika areo estas kreita por ĉiu tavolo.</li></"
+"ul>"
 
 #: src/frontend/datasources/ImportOriginLayersDialog.cpp:38
 #: src/frontend/datasources/ImportProjectDialog.cpp:159
@@ -13351,10 +13252,9 @@ msgstr "Dosiera Retumilo"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:182
 #: src/frontend/dockwidgets/RunChartDock.cpp:146
-#, fuzzy, kde-format
-#| msgid "Moving Average"
+#, kde-format
 msgid "Average"
-msgstr "Mova mezumo"
+msgstr "Mezumo"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:199
 #, kde-format
@@ -13803,8 +13703,7 @@ msgid "Number of peaks:"
 msgstr "Nombro da pintoj:"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1221
-#, fuzzy, kde-format
-#| msgid "Fit status: %1"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit status: %1"
 msgstr "Konvena stato: %1"
@@ -13866,17 +13765,13 @@ msgid "Fourier transformation status: %1"
 msgstr "Statuso de transformo de Fourier: %1"
 
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:128
-#, fuzzy, kde-format
-#| msgid ""
-#| "The column \"%1\"\n"
-#| "is not available anymore. It will be automatically used once it is "
-#| "created again."
+#, kde-format
 msgid ""
 "The curve \"%1\"\n"
 "is not available anymore. It will be automatically used once it is created "
 "again."
 msgstr ""
-"La kolumno \"%1\"\n"
+"La kurbo \"%1\"\n"
 "ne disponeblas plu. Ĝi estos aŭtomate uzata post kiam ĝi estas kreita denove."
 
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:183
@@ -14036,12 +13931,10 @@ msgid "Properties: XY-Equation"
 msgstr "Proprecoj: XY-ekvacio"
 
 #: src/frontend/GuiObserver.cpp:277
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Datapicker Curve"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Function Curve"
-msgstr "Proprecoj: Datapicker-Kurbo"
+msgstr "Proprecoj: Funkcia Kurbo"
 
 #: src/frontend/GuiObserver.cpp:282
 #, kde-format
@@ -14152,11 +14045,10 @@ msgid "Process Behavior Chart"
 msgstr ""
 
 #: src/frontend/GuiObserver.cpp:386
-#, fuzzy, kde-format
-#| msgid "Run fit"
+#, kde-format
 msgctxt "@title:window"
 msgid "Run Chart"
-msgstr "Ruli kongruigon"
+msgstr "Run Chart"
 
 #: src/frontend/GuiObserver.cpp:391
 #, kde-format
@@ -14536,11 +14428,9 @@ msgid "Discuss on Mastodon:"
 msgstr ""
 
 #: src/frontend/LabPlot.cpp:48
-#, fuzzy, kde-format
-#| msgctxt "@info:credit"
-#| msgid "Developer"
+#, kde-format
 msgid "Development:"
-msgstr "Ellaboranto"
+msgstr "Evoluo:"
 
 #: src/frontend/LabPlot.cpp:49
 #, kde-format
@@ -14557,10 +14447,9 @@ msgstr ""
 "kaj Analizo de Datumoj alirebla por ĉiuj."
 
 #: src/frontend/LabPlot.cpp:55
-#, fuzzy, kde-format
-#| msgid "(c) 2007-2024"
+#, kde-format
 msgid "(c) 2007-2024 LabPlot authors"
-msgstr "(c) 2007-2024"
+msgstr "(c) 2007-2024 LabPlot-aŭtoroj"
 
 #: src/frontend/LabPlot.cpp:57
 #, kde-format
@@ -14630,12 +14519,10 @@ msgid "Garvit Khatri"
 msgstr "Garvit Khatri"
 
 #: src/frontend/LabPlot.cpp:74
-#, fuzzy, kde-format
-#| msgctxt "@info:credit"
-#| msgid "Porting LabPlot2 to KF5 and Integration with Cantor"
+#, kde-format
 msgctxt "@info:credit"
 msgid "Porting LabPlot to KF5 and Integration with Cantor"
-msgstr "Porting LabPlot2 al KF5 kaj Integriĝo kun Cantor"
+msgstr "Porting LabPlot al KF5 kaj Integriĝo kun Cantor"
 
 #: src/frontend/LabPlot.cpp:77
 #, kde-format
@@ -15077,10 +14964,9 @@ msgid "Color Scheme"
 msgstr "Kolorskemo"
 
 #: src/frontend/MainWin.cpp:997
-#, fuzzy, kde-format
-#| msgid "The current project %1 has been modified. Do you want to save it?"
+#, kde-format
 msgid "The current project \"%1\" has been modified. Do you want to save it?"
-msgstr "La nuna projekto %1 estas modifita. Ĉu vi volas konservi ĝin?"
+msgstr "La nuna projekto \"%1\" estas modifita. Ĉu vi volas konservi ĝin?"
 
 #: src/frontend/MainWin.cpp:998
 #, kde-format
@@ -16981,14 +16867,12 @@ msgid "Fourier Filter of '%1'"
 msgstr "Fourier-filtrilo de '%1'"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:723
-#, fuzzy, kde-format
-#| msgid "Probability Density"
+#, kde-format
 msgid "Probability Density of '%1'"
-msgstr "Probableca Denso"
+msgstr "Probabla denseco de '%1'"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:729
-#, fuzzy, kde-format
-#| msgid "Distribution Fit to '%1'"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Distribution Fit to '%1'"
 msgstr "Distribuo konvenas al '%1'"
@@ -17014,10 +16898,9 @@ msgid "Sample Quantiles"
 msgstr "Specimenaj Kvantiloj"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1052
-#, fuzzy, kde-format
-#| msgid "&Sample"
+#, kde-format
 msgid "Sample"
-msgstr "&Provo"
+msgstr "Specimeno"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1111
 #, kde-format
@@ -17680,10 +17563,9 @@ msgid "Reduce Data"
 msgstr "Redukti Datumojn"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:566
-#, fuzzy, kde-format
-#| msgid "Log-Normal (Galton)"
+#, kde-format
 msgid "Log-normal"
-msgstr "Log-Normala (Galton)"
+msgstr "Log-normala"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:616
 #, kde-format
@@ -17691,11 +17573,10 @@ msgid "Conditional Formatting"
 msgstr "Kondiĉa Formatado"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:645
-#, fuzzy, kde-format
-#| msgid "Beta Distribution"
+#, kde-format
 msgctxt "Curve fitting"
 msgid "Fit Distribution"
-msgstr "Beta-Dissendo"
+msgstr "Fit Distribution"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:659
 #, kde-format
@@ -17969,10 +17850,9 @@ msgid "Selected 1: %1 rows, %2 columns"
 msgstr ""
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3772
-#, fuzzy, kde-format
-#| msgid "%1: cut selected cells"
+#, kde-format
 msgid "Selected: %1 cells"
-msgstr "%1: tranĉi elektitajn ĉelojn"
+msgstr "Elektitaj: %1 ĉeloj"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3791
 #, kde-format
@@ -18030,10 +17910,9 @@ msgid ", "
 msgstr ", "
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3801
-#, fuzzy, kde-format
-#| msgid "Selected: %1 %2 , %3 %4%5 %6 %7 %8"
+#, kde-format
 msgid "Selected: %1 %2, %3 %4%5 %6 %7 %8"
-msgstr "Elektite: %1 %2 , %3 %4%5 %6 %7 %8"
+msgstr "Elektitaj: %1 %2, %3 %4%5 %6 %7 %8"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3811
 #, kde-format
@@ -19009,10 +18888,9 @@ msgstr "DateTime Formato:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbSkipEmptyParts)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:43
-#, fuzzy, kde-format
-#| msgid "Skip empty parts"
+#, kde-format
 msgid "Skip empty Parts"
-msgstr "Salti malplenajn partojn"
+msgstr "Preterpasi malplenajn Partojn"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbConvertNaNToZero)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:50
@@ -19024,10 +18902,9 @@ msgstr "Konverti NaN al 0"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnMode)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:73
-#, fuzzy, kde-format
-#| msgid "Column labels"
+#, kde-format
 msgid "Column Datatypes:"
-msgstr "Kolumnaj etikedoj"
+msgstr "Kolumnaj Datumoj:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:80
@@ -19072,10 +18949,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:194
-#, fuzzy, kde-format
-#| msgid "Years"
+#, kde-format
 msgid "Year Base:"
-msgstr "Jaroj"
+msgstr "Jara Bazo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lVectorNames)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:201
@@ -19735,10 +19611,9 @@ msgstr "Dialogo"
 
 #. i18n: ectx: property (text), widget (QLabel, lGraphLayer)
 #: src/frontend/ui/datasources/importoriginlayersdialog.ui:27
-#, fuzzy, kde-format
-#| msgid "Import as:"
+#, kde-format
 msgid "Import As"
-msgstr "Importi kiel:"
+msgstr "Importi Kiel"
 
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #: src/frontend/ui/datasources/importprojectwidget.ui:23
@@ -21035,10 +20910,9 @@ msgstr "Hor. vicigi.:"
 
 #. i18n: ectx: property (text), widget (QLabel, lUsePlotColor)
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:463
-#, fuzzy, kde-format
-#| msgid "Font Color:"
+#, kde-format
 msgid "Plot's Color:"
-msgstr "Tiparo Koloro:"
+msgstr "Koloro de Diagramo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderCornerRadius)
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:552
@@ -21454,17 +21328,15 @@ msgstr "Kapo:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bEvaluate)
 #: src/frontend/ui/dockwidgets/notebookdock.ui:100
-#, fuzzy, kde-format
-#| msgid "Evaluate:"
+#, kde-format
 msgid "Evaluate"
-msgstr "Taksi:"
+msgstr "Taksi"
 
 #. i18n: ectx: property (text), widget (QPushButton, bRestart)
 #: src/frontend/ui/dockwidgets/notebookdock.ui:110
-#, fuzzy, kde-format
-#| msgid "star"
+#, kde-format
 msgid "Restart"
-msgstr "stelo"
+msgstr "Rekomenci"
 
 #. i18n: ectx: property (text), widget (QLabel, bgcolor)
 #: src/frontend/ui/dockwidgets/notedock.ui:72
@@ -21480,17 +21352,15 @@ msgstr "Teksta koloro:"
 
 #. i18n: ectx: property (text), widget (QLabel, lData2Column)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:81
-#, fuzzy, kde-format
-#| msgid "Sample Size:"
+#, kde-format
 msgid "Sample Sizes:"
-msgstr "Specimena Grandeco:"
+msgstr "Specimena grandeco:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNegativeLowerLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:95
-#, fuzzy, kde-format
-#| msgid "Lower limit"
+#, kde-format
 msgid "Lower Limit < 0:"
-msgstr "Malsupra limo"
+msgstr "Malsupra Limo < 0:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLimitsMetric)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:139
@@ -21507,31 +21377,27 @@ msgstr ""
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataLine)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:221
 #: src/frontend/ui/dockwidgets/runchartdock.ui:159
-#, fuzzy, kde-format
-#| msgid "Dot Line"
+#, kde-format
 msgid "Data Line"
-msgstr "Punkta Linio"
+msgstr "Datumlinio"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabControlLimitLines)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:285
-#, fuzzy, kde-format
-#| msgid "Crossing Lines"
+#, kde-format
 msgid "Center/Limits Lines"
-msgstr "Transirante Liniojn"
+msgstr "Centraj/Limigaj Linioj"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpperLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:340
-#, fuzzy, kde-format
-#| msgid "Upper limit"
+#, kde-format
 msgid "Upper Limit"
-msgstr "Supra limo"
+msgstr "Supra Limo"
 
 #. i18n: ectx: property (text), widget (QLabel, lLowerLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:384
-#, fuzzy, kde-format
-#| msgid "Lower limit"
+#, kde-format
 msgid "Lower Limit"
-msgstr "Malsupra limo"
+msgstr "Malsupra Limo"
 
 #. i18n: ectx: property (text), widget (QLabel, lVersion_2)
 #: src/frontend/ui/dockwidgets/projectdock.ui:66
@@ -21621,17 +21487,15 @@ msgstr "Komenca x:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCenterMetric)
 #: src/frontend/ui/dockwidgets/runchartdock.ui:148
-#, fuzzy, kde-format
-#| msgid "Center"
+#, kde-format
 msgid "Center:"
-msgstr "Centro"
+msgstr "Centro:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCenterLine)
 #: src/frontend/ui/dockwidgets/runchartdock.ui:223
-#, fuzzy, kde-format
-#| msgid "Center Tiled"
+#, kde-format
 msgid "Center Line"
-msgstr "Centro Kahelita"
+msgstr "Centra Linio"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
@@ -24404,17 +24268,13 @@ msgid "Search/Filter text"
 msgstr "Serĉu/Filtril tekston"
 
 #: src/frontend/widgets/TreeViewComboBox.cpp:366
-#, fuzzy, kde-format
-#| msgid ""
-#| "The column \"%1\"\n"
-#| "is not available anymore. It will be automatically used once it is "
-#| "created again."
+#, kde-format
 msgid ""
 "The aspect \"%1\"\n"
 "is not available anymore. It will be automatically used once it is created "
 "again."
 msgstr ""
-"La kolumno \"%1\"\n"
+"La aspekto \"%1\"\n"
 "ne disponeblas plu. Ĝi estos aŭtomate uzata post kiam ĝi estas kreita denove."
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:53
@@ -24581,22 +24441,19 @@ msgid "Pin the navigation panel"
 msgstr "Pingli la navigadan panelon"
 
 #: src/frontend/worksheet/WorksheetView.cpp:168
-#, fuzzy, kde-format
-#| msgid "No fit"
+#, kde-format
 msgctxt "Zoom"
 msgid "No fit"
 msgstr "Neniu kongruo"
 
 #: src/frontend/worksheet/WorksheetView.cpp:178
-#, fuzzy, kde-format
-#| msgid "Fit to Selection"
+#, kde-format
 msgctxt "Zoom"
 msgid "Fit to Selection"
 msgstr "Adapti al Elekto"
 
 #: src/frontend/worksheet/WorksheetView.cpp:181
-#, fuzzy, kde-format
-#| msgid "Fit"
+#, kde-format
 msgctxt "Zoom"
 msgid "Fit"
 msgstr "Fit"
@@ -24876,121 +24733,3 @@ msgstr "konvertprocezo malsukcesis, elirkodo ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ne eblas malfermi dosieron:"
-
-#~ msgid "xy-curve"
-#~ msgstr "xy-kurbo"
-
-#~ msgid "xy-curve from a Formula"
-#~ msgstr "xy-kurbo de Formulo"
-
-#~ msgid "Analysis Curve"
-#~ msgstr "Analiza Kurbo"
-
-#, fuzzy
-#~| msgid "Executable: %1"
-#~ msgid "Executable Path:"
-#~ msgstr "Efektivigebla: %1"
-
-#, fuzzy
-#~| msgid "outliers count"
-#~ msgid "Discount"
-#~ msgstr "eksteruloj kalkulas"
-
-#, fuzzy
-#~| msgid "User Feedback"
-#~ msgid "KUserfeedback"
-#~ msgstr "Uzanto-Reago"
-
-#, fuzzy
-#~| msgid "Syntax Highlighting"
-#~ msgid "KSyntaxHighlighting"
-#~ msgstr "Sintaks-Reliefigo"
-
-#, fuzzy
-#~| msgid "Serial Port"
-#~ msgid "Qt SerialPort"
-#~ msgstr "Seria Pordo"
-
-#, fuzzy
-#~| msgid "Ready"
-#~ msgid "ReadStat"
-#~ msgstr "Preta"
-
-#, fuzzy
-#~| msgid "Equation"
-#~ msgid "Matio"
-#~ msgstr "Ekvacio"
-
-#, fuzzy
-#~| msgid "MCAP Data"
-#~ msgid "MCAP"
-#~ msgstr "MCAP-Datumoj"
-
-#, fuzzy
-#~| msgid "Vectors:"
-#~ msgid "Vector BLF"
-#~ msgstr "Vektoroj:"
-
-#, fuzzy
-#~| msgid "Number of seconds in 1 hour"
-#~ msgid "Number of elements in vector x"
-#~ msgstr "Nombro da sekundoj en 1 horo"
-
-#~ msgid "Value %1"
-#~ msgstr "Valoro %1"
-
-#, fuzzy
-#~| msgid "Failed to open the device/file."
-#~ msgid "Failed to prepare device/file: %1"
-#~ msgstr "Malsukcesis malfermi la aparaton/dosieron."
-
-#~ msgid "Continue reading"
-#~ msgstr "Daŭrigi legadon"
-
-#~ msgid "Pause reading"
-#~ msgstr "Paŭzi legadon"
-
-#, fuzzy
-#~| msgid "%1: set symbol size"
-#~ msgid "%1: set subgroup size"
-#~ msgstr "%1: agordi simbolograndon"
-
-#, fuzzy
-#~| msgid "Sample Size:"
-#~ msgid "Subgroup Size:"
-#~ msgstr "Specimena Grandeco:"
-
-#~ msgid "Evaluate Worksheet"
-#~ msgstr "Taksi Laborfolion"
-
-#~ msgid "Couldn't find panel plugins. Please check your installation."
-#~ msgstr ""
-#~ "Ne eblis trovi panelajn kromaĵojn. Bonvolu kontroli vian instaladon."
-
-#~ msgid ""
-#~ "Couldn't find the dynamic library 'cantorpart'. Please check your "
-#~ "installation."
-#~ msgstr ""
-#~ "Ne eblis trovi la dinamikan bibliotekon 'cantorpart'. Bonvolu kontroli "
-#~ "vian instaladon."
-
-#~ msgid "Failed to open the device."
-#~ msgstr "Malsukcesis malfermi la aparaton."
-
-#~ msgid "Failed to read data. The device is removed."
-#~ msgstr "Malsukcesis legi datumojn. La aparato estas forigita."
-
-#~ msgid "The device timed out."
-#~ msgstr "La aparato elĉerpiĝis."
-
-#~ msgid "Could not connect to the provided serial port."
-#~ msgstr "Ne eblis konekti al la provizita seria pordo."
-
-#~ msgctxt "@title:window"
-#~ msgid "CAS Preferences"
-#~ msgstr "CAS-Preferoj"
-
-#~ msgid "No Cantor backends found. Please install the ones you want to use."
-#~ msgstr ""
-#~ "Neniuj funkcioj de Cantor trovitaj. Bonvolu instali tiujn, kiujn vi volas "
-#~ "uzi."
