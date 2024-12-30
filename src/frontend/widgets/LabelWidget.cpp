@@ -407,10 +407,9 @@ void LabelWidget::updateBackground() const {
 	else
 		DEBUG(Q_FUNC_INFO << ", Not handled type:" << static_cast<int>(type));
 
-	auto p = ui.teLabel->palette();
-	// QDEBUG(Q_FUNC_INFO << ", color = " << color)
-	p.setColor(QPalette::Base, color);
-	ui.teLabel->setPalette(p);
+	QString style;
+	style = QString(QLatin1String("QTextEdit{background-color: rgb(%1, %2, %3);}")).arg(color.red()).arg(color.green()).arg(color.blue());
+	ui.teLabel->setStyleSheet(style);
 }
 
 void LabelWidget::initConnections() {
