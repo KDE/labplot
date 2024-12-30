@@ -168,6 +168,27 @@ void KDEPlotDock::retranslateUi() {
 	ui.cbBandwidthType->addItem(i18n("Silverman"), static_cast<int>(nsl_kde_bandwidth_silverman));
 	ui.cbBandwidthType->addItem(i18n("Scott"), static_cast<int>(nsl_kde_bandwidth_scott));
 	ui.cbBandwidthType->addItem(i18n("Custom"), static_cast<int>(nsl_kde_bandwidth_custom));
+
+	// tooltip texts
+	QString info = i18n("The window function (\"kernel\") used to estimate the probability density");
+	ui.lKernelType->setToolTip(info);
+	ui.cbKernelType->setToolTip(info);
+
+	// note to translators:
+	// here, Silverman and Scott and the names of the authors who introduced these formulas,
+	// the strings "min", "sigma", "IRQ" and "n" are part of the formula expressions.
+	info = i18n("Method to select the bandwith of the kernel:"
+		"<ul>"
+		"<li>Silverman -  0.9 * min(sigma, IQR / 1.34) * n^(-0.2)</li>"
+		"<li>Scott -  1.059 * sigma * n^(-0.2)</li>"
+		"<li>Custom - custom value for the kernel bandwidth</li>"
+		"</ul>");
+	ui.lBandwidthType->setToolTip(info);
+	ui.cbBandwidthType->setToolTip(info);
+
+	info = i18n("Custom value for the kernel bandwidth");
+	ui.lBandwidth->setToolTip(info);
+	ui.sbBandwidth->setToolTip(info);
 }
 
 /*

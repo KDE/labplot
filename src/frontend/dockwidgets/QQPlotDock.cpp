@@ -158,6 +158,11 @@ void QQPlotDock::retranslateUi() {
 
 		ui.cbDistribution->addItem(d.first, d.second);
 	}
+
+	// tooltip texts
+	QString info = i18n("Distribution used to calculate the percentiles to be compared with the percentiles of the provided data");
+	ui.lDistribution->setToolTip(info);
+	ui.cbDistribution->setToolTip(info);
 }
 
 /*
