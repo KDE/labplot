@@ -104,7 +104,7 @@ void TextLabelTest::addPlot() {
 	QCOMPARE(l->text().mode, TextLabel::Mode::Text);
 	VERIFYLABELCOLORS(l, Qt::black, Qt::transparent);
 	QCOMPARE(l->fontColor(), Qt::black);
-	QCOMPARE(l->backgroundColor(), Qt::transparent);
+	QCOMPARE(l->backgroundColor(), QColor(1, 1, 1, 0));
 
 	// add title?
 
