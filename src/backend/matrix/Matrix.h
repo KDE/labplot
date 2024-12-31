@@ -18,8 +18,9 @@
 
 class MatrixPrivate;
 class MatrixModel;
+#ifndef SDK
 class MatrixView;
-
+#endif
 class Matrix : public AbstractDataSource {
 	Q_OBJECT
 
@@ -150,8 +151,9 @@ private:
 	MatrixPrivate* const d_ptr;
 
 	mutable MatrixModel* m_model{nullptr};
+#ifndef SDK
 	mutable MatrixView* m_view{nullptr};
-
+#endif
 	friend class MatrixPrivate;
 };
 

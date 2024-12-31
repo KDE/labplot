@@ -18,7 +18,9 @@
 #include <QIcon>
 
 class NotePrivate;
+#ifndef SDK
 class NoteView;
+#endif
 
 class Note : public AbstractPart {
 	Q_OBJECT
@@ -52,7 +54,9 @@ Q_SIGNALS:
 private:
 	Q_DECLARE_PRIVATE(Note)
 	NotePrivate* const d_ptr;
+#ifndef SDK
 	mutable NoteView* m_view{nullptr};
+#endif
 };
 
 #endif // NOTE_H

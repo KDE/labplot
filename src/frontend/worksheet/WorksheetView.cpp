@@ -22,13 +22,14 @@
 #include "backend/worksheet/plots/cartesian/BoxPlot.h" //TODO: needed for the icon only, remove later once we have a breeze icon
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/cartesian/ReferenceRange.h"
+#ifndef SDK
 #include "frontend/PlotTemplateDialog.h"
 #include "frontend/core/ContentDockWidget.h"
 #include "frontend/widgets/ThemesWidget.h"
 #include "frontend/worksheet/GridDialog.h"
 #include "frontend/worksheet/PresenterWidget.h"
+#endif
 #include <frontend/GuiTools.h>
-
 #ifdef Q_OS_MAC
 #include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
 #endif

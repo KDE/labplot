@@ -12,10 +12,10 @@ int main(int argc, char **argv) {
 	mainWidget->setLayout(layout);
 
 	//create a worksheet and a plot
-	auto* worksheet = new Worksheet("test");
+	auto* worksheet = new Worksheet(QStringLiteral("test"));
 
 	//create a plot
-	auto* plot = new CartesianPlot("plot");
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
 	plot->setType(CartesianPlot::Type::FourAxes);
 	worksheet->addChild(plot);
 
@@ -25,8 +25,8 @@ int main(int argc, char **argv) {
 	double b = 4.375;
 	double c = -6.692;
 
-	auto* x = new Column("x");
-	auto* y = new Column("y");
+	auto* x = new Column(QStringLiteral("x"));
+	auto* y = new Column(QStringLiteral("y"));
 
 	for (int i = 0; i < count; ++i) {
 		x->setValueAt(i, i);
@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
 		y->setValueAt(i, value);
 	}
 
-	auto* curve = new XYCurve("raw data");
+	auto* curve = new XYCurve(QStringLiteral("raw data"));
 	curve->setXColumn(x);
 	curve->setYColumn(y);
 // 	curve->setLineStyle(XYCurve::LineStyle::NoLine);
@@ -43,18 +43,18 @@ int main(int argc, char **argv) {
 	plot->addChild(curve);
 
 	//perform a fit to the raw data and show it
-	auto* fitCurve = new XYFitCurve("fit ");
+	auto* fitCurve = new XYFitCurve(QStringLiteral("fit"));
 	//TODO:
 	fitCurve->recalculate();
 	plot->addChild(fitCurve);
 
 	//add a curve defined via a mathematical equation
-	auto* eqCurve = new XYEquationCurve("eq");
+	auto* eqCurve = new XYEquationCurve(QStringLiteral("eq"));
 	plot->addChild(eqCurve);
 	auto data = XYEquationCurve::EquationData();
-	data.expression1 = "50*sin(x)";
-	data.min = "0.0";
-	data.max = "10.0";
+	data.expression1 = QStringLiteral("50*sin(x)");
+	data.min = QStringLiteral("0.0");
+	data.max = QStringLiteral("10.0");
 	eqCurve->setEquationData(data);
 	eqCurve->recalculate();
 
@@ -62,13 +62,13 @@ int main(int argc, char **argv) {
 	plot->addLegend();
 
 	//create another plot
-	auto* plot2 = new CartesianPlot("plot 2");
+	auto* plot2 = new CartesianPlot(QStringLiteral("plot 2"));
 	plot2->setType(CartesianPlot::Type::FourAxes);
 	worksheet->addChild(plot2);
 
 	//create some random data and plot a histogram for them
-	auto* hist = new Histogram("histogram");
-	auto* random_data = new Column("x");
+	auto* hist = new Histogram(QStringLiteral("histogram"));
+	auto* random_data = new Column(QStringLiteral("x"));
 
 	for (int i = 0; i < 1000; ++i)
 		random_data->setValueAt(i, double(100*rand())/double(RAND_MAX));
@@ -77,12 +77,12 @@ int main(int argc, char **argv) {
 	plot2->addChild(hist);
 
 	//create one more plot
-	auto* plot3 = new CartesianPlot("plot 3");
+	auto* plot3 = new CartesianPlot(QStringLiteral("plot 3"));
 	plot3->setType(CartesianPlot::Type::FourAxes);
 	worksheet->addChild(plot3);
 
 	//add box plot
-	auto* boxPlot = new BoxPlot("boxplot");
+	auto* boxPlot = new BoxPlot(QStringLiteral("boxplot"));
 	QVector<const AbstractColumn*> columns{random_data};
 	boxPlot->setDataColumns(columns);
 	plot3->addChild(boxPlot);

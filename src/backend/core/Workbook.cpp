@@ -12,7 +12,9 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#ifndef SDK
 #include "frontend/workbook/WorkbookView.h"
+#endif
 
 #include <KLocalizedString>
 #include <QIcon>
@@ -41,6 +43,7 @@ QMenu* Workbook::createContextMenu() {
 }
 
 QWidget* Workbook::view() const {
+#ifndef SDK
 	if (!m_partView) {
 		m_view = new WorkbookView(const_cast<Workbook*>(this));
 		m_partView = m_view;
@@ -49,6 +52,9 @@ QWidget* Workbook::view() const {
 		});
 	}
 	return m_partView;
+#else
+	return nullptr;
+#endif
 }
 
 bool Workbook::exportView() const {
@@ -91,6 +97,7 @@ bool Workbook::printPreview() const {
 }
 
 Spreadsheet* Workbook::currentSpreadsheet() const {
+#ifndef SDK
 	if (!m_view)
 		return nullptr;
 
@@ -100,9 +107,13 @@ Spreadsheet* Workbook::currentSpreadsheet() const {
 		return dynamic_cast<Spreadsheet*>(aspect);
 	}
 	return nullptr;
+#else
+	return nullptr;
+#endif
 }
 
 Matrix* Workbook::currentMatrix() const {
+#ifndef SDK
 	if (!m_view)
 		return nullptr;
 
@@ -112,6 +123,9 @@ Matrix* Workbook::currentMatrix() const {
 		return dynamic_cast<Matrix*>(aspect);
 	}
 	return nullptr;
+#else
+	return nullptr;
+#endif
 }
 
 /*!
