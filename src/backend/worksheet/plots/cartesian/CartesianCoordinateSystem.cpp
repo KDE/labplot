@@ -7,11 +7,11 @@
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystemPrivate.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include <KLocalizedString>
 
 #include "backend/nsl/nsl_math.h"
 
