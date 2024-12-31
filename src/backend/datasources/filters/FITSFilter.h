@@ -11,14 +11,9 @@
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
-#include <KLocalizedString>
-
-#include <QTableWidget>
-#include <QTreeWidget>
-
-class QXmlStreamReader;
+class QTableWidget;
+class QTreeWidget;
 class FITSFilterPrivate;
-class FITSHeaderEditWidget;
 
 class FITSFilter : public AbstractFileFilter {
 	Q_OBJECT

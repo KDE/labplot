@@ -20,9 +20,12 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "frontend/matrix/MatrixView.h"
 
-#include <QDebug>
+#include <KLocalizedString>
+
 #include <QFile>
 #include <QMultiMap>
+#include <QTableWidget>
+#include <QTreeWidget>
 
 /*! \class FITSFilter
  * \brief Manages the import/export of data from/to a FITS file.
