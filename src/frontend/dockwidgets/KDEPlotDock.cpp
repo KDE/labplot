@@ -177,7 +177,7 @@ void KDEPlotDock::retranslateUi() {
 	// note to translators:
 	// here, Silverman and Scott and the names of the authors who introduced these formulas,
 	// the strings "min", "sigma", "IRQ" and "n" are part of the formula expressions.
-	info = i18n("Method to select the bandwith of the kernel:"
+	info = i18n("Method to select the bandwidth of the kernel:"
 		"<ul>"
 		"<li>Silverman -  0.9 * min(sigma, IQR / 1.34) * n^(-0.2)</li>"
 		"<li>Scott -  1.059 * sigma * n^(-0.2)</li>"
