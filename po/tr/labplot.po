@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-31 00:37+0000\n"
-"PO-Revision-Date: 2024-12-27 13:01+0300\n"
+"POT-Creation-Date: 2025-01-01 00:37+0000\n"
+"PO-Revision-Date: 2024-12-31 11:54+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -1270,9 +1270,9 @@ msgstr "Aygıt/dosya açılamadı veya boş."
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:444
 #: src/backend/datasources/filters/CANFilter.cpp:301
-#: src/backend/datasources/filters/FITSFilter.cpp:329
-#: src/backend/datasources/filters/FITSFilter.cpp:339
-#: src/backend/datasources/filters/FITSFilter.cpp:534
+#: src/backend/datasources/filters/FITSFilter.cpp:332
+#: src/backend/datasources/filters/FITSFilter.cpp:342
+#: src/backend/datasources/filters/FITSFilter.cpp:537
 #: src/backend/datasources/filters/HDF5Filter.cpp:1631
 #: src/backend/datasources/filters/HDF5Filter.cpp:1748
 #: src/backend/datasources/filters/HDF5Filter.cpp:1798
@@ -1307,35 +1307,35 @@ msgstr "Geçersiz dosya."
 msgid "No messages read."
 msgstr "Okunan ileti yok."
 
-#: src/backend/datasources/filters/FITSFilter.cpp:224
+#: src/backend/datasources/filters/FITSFilter.cpp:227
 #, kde-format
 msgid "Images: %1"
 msgstr "Görsel: %1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:229
+#: src/backend/datasources/filters/FITSFilter.cpp:232
 #, kde-format
 msgid "Tables: %1"
 msgstr "Tablo: %1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:259
+#: src/backend/datasources/filters/FITSFilter.cpp:262
 #: src/backend/datasources/filters/MatioFilter.cpp:647
 #, kde-format
 msgid "Failed to open the file."
 msgstr "Dosya açılamadı."
 
-#: src/backend/datasources/filters/FITSFilter.cpp:267
-#: src/backend/datasources/filters/FITSFilter.cpp:346
+#: src/backend/datasources/filters/FITSFilter.cpp:270
+#: src/backend/datasources/filters/FITSFilter.cpp:349
 #, kde-format
 msgid "Failed to read the file."
 msgstr "Dosya okunamadı."
 
-#: src/backend/datasources/filters/FITSFilter.cpp:288
+#: src/backend/datasources/filters/FITSFilter.cpp:291
 #, kde-format
 msgid "Zero dimensions."
 msgstr "Sıfır boyutlu."
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1026
-#: src/backend/datasources/filters/FITSFilter.cpp:1546
+#: src/backend/datasources/filters/FITSFilter.cpp:1029
+#: src/backend/datasources/filters/FITSFilter.cpp:1549
 #: src/frontend/datasources/FITSOptionsWidget.cpp:42
 #: src/frontend/datasources/FITSOptionsWidget.cpp:75
 #: src/frontend/datasources/FITSOptionsWidget.cpp:144
@@ -1343,27 +1343,27 @@ msgstr "Sıfır boyutlu."
 msgid "Primary header"
 msgstr "Birincil üstbilgi"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1028
+#: src/backend/datasources/filters/FITSFilter.cpp:1031
 #, kde-format
 msgid "IMAGE #%1"
 msgstr "IMAGE #%1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1031
+#: src/backend/datasources/filters/FITSFilter.cpp:1034
 #, kde-format
 msgid "ASCII_TBL #%1"
 msgstr "ASCII_TBL #%1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1034
+#: src/backend/datasources/filters/FITSFilter.cpp:1037
 #, kde-format
 msgid "BINARY_TBL #%1"
 msgstr "BINARY_TBL #%1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1539
+#: src/backend/datasources/filters/FITSFilter.cpp:1542
 #, kde-format
 msgid "Images"
 msgstr "Görseller"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1565
+#: src/backend/datasources/filters/FITSFilter.cpp:1568
 #, kde-format
 msgid "Tables"
 msgstr "Tablolar"
@@ -6098,39 +6098,39 @@ msgstr "v2"
 msgid "ep"
 msgstr "ep"
 
-#: src/backend/lib/Range.h:49 src/backend/nsl/nsl_interp.c:14
+#: src/backend/lib/Range.h:52 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:461
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:519
 #, kde-format
 msgid "Linear"
 msgstr "Doğrusal"
 
-#: src/backend/lib/Range.h:49
+#: src/backend/lib/Range.h:52
 #, kde-format
 msgid "Log10"
 msgstr "Log10"
 
-#: src/backend/lib/Range.h:49
+#: src/backend/lib/Range.h:52
 #, kde-format
 msgid "Log2"
 msgstr "Log2"
 
-#: src/backend/lib/Range.h:49
+#: src/backend/lib/Range.h:52
 #, kde-format
 msgid "Ln"
 msgstr "Ln"
 
-#: src/backend/lib/Range.h:49
+#: src/backend/lib/Range.h:52
 #, kde-format
 msgid "Sqrt"
 msgstr "Sqrt"
 
-#: src/backend/lib/Range.h:49
+#: src/backend/lib/Range.h:52
 #, kde-format
 msgid "Square"
 msgstr "Kare"
 
-#: src/backend/lib/Range.h:49
+#: src/backend/lib/Range.h:52
 #, kde-format
 msgid "Inverse"
 msgstr "Ters"
@@ -13204,19 +13204,28 @@ msgstr "Silverman"
 msgid ""
 "The window function (\"kernel\") used to estimate the probability density"
 msgstr ""
+"Pencere işlevi (“çekirdek”), olasılık yoğunluğunu hesaplamak için kullanıldı"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:180
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Method to select the bandwith of the kernel:<ul><li>Silverman -  0.9 * "
+#| "min(sigma, IQR / 1.34) * n^(-0.2)</li><li>Scott -  1.059 * sigma * "
+#| "n^(-0.2)</li><li>Custom - custom value for the kernel bandwidth</li></ul>"
 msgid ""
-"Method to select the bandwith of the kernel:<ul><li>Silverman -  0.9 * "
+"Method to select the bandwidth of the kernel:<ul><li>Silverman -  0.9 * "
 "min(sigma, IQR / 1.34) * n^(-0.2)</li><li>Scott -  1.059 * sigma * n^(-0.2)</"
 "li><li>Custom - custom value for the kernel bandwidth</li></ul>"
 msgstr ""
+"Çekirdeğin bant genişliğini hesaplamak için kullanılan yöntem:"
+"<ul><li>Silverman —  0,9 * min(sigma, IQR / 1,34) * n^(−0,2)</li><li>Scott "
+"—  1,059 * sigma * n^(−0,2)</li><li>Özel — Çekirdek bant genişliği için özel "
+"değer</li></ul>"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:189
 #, kde-format
 msgid "Custom value for the kernel bandwidth"
-msgstr ""
+msgstr "Çekirdek bant genişliği için özel değer"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:371
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:452
@@ -13345,6 +13354,9 @@ msgid ""
 "If checked, exact limits are calculated for every individual sample (\"stair-"
 "step limits\"), straight lines are drawn for the limits otherwise."
 msgstr ""
+"İşaretlenmişse kesin sınırlar her bir bireysel örneklem için hesaplanır "
+"(“başlangıç ve adım sınırları”), aksi takdirde düz çizgiler sınırlar için "
+"çizilir."
 
 #: src/frontend/dockwidgets/ProjectDock.cpp:28
 #, kde-format
@@ -13374,6 +13386,8 @@ msgid ""
 "Distribution used to calculate the percentiles to be compared with the "
 "percentiles of the provided data"
 msgstr ""
+"Sağlanan verilerin yüzdelikleri ile karşılaştırılacak yüzdelikleri "
+"hesaplamakta kullanılan dağılım"
 
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:227
 #, kde-format
@@ -13386,6 +13400,8 @@ msgid ""
 "Metric of the dataset used to determine where the center line should be "
 "placed at"
 msgstr ""
+"Merkez çizgisinin nereye yerleştirilmesi gerektiğini belirlemek için "
+"kullanılan veri kümesinin metrikleri"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:52
 #, kde-format
@@ -21315,10 +21331,9 @@ msgstr "Çizim erimi:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabKDE)
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:210
-#, fuzzy, kde-format
-#| msgid "Estimation"
+#, kde-format
 msgid "Estimation Line"
-msgstr "Tahmin"
+msgstr "Tahmin Çizgisi"
 
 #. i18n: ectx: property (text), widget (QPushButton, bUpdateNow)
 #: src/frontend/ui/dockwidgets/livedatadock.ui:67
@@ -23937,19 +23952,19 @@ msgstr "Yeni Birim Ekle"
 msgid "Enter unit name here"
 msgstr "Birim adını buraya gir"
 
-#: src/frontend/widgets/FITSHeaderEditDialog.cpp:38
+#: src/frontend/widgets/FITSHeaderEditDialog.cpp:39
 #, kde-format
 msgid "&Save"
 msgstr "&Kaydet"
 
-#: src/frontend/widgets/FITSHeaderEditDialog.cpp:45
-#: src/frontend/widgets/FITSHeaderEditDialog.cpp:77
+#: src/frontend/widgets/FITSHeaderEditDialog.cpp:46
+#: src/frontend/widgets/FITSHeaderEditDialog.cpp:78
 #, kde-format
 msgctxt "@title:window"
 msgid "FITS Metadata Editor"
 msgstr "FITS Üst Veri Düzenleyicisi"
 
-#: src/frontend/widgets/FITSHeaderEditDialog.cpp:74
+#: src/frontend/widgets/FITSHeaderEditDialog.cpp:75
 #, kde-format
 msgctxt "@title:window"
 msgid "FITS Metadata Editor  [Changed]"

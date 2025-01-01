@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-31 00:37+0000\n"
+"POT-Creation-Date: 2025-01-01 00:37+0000\n"
 "PO-Revision-Date: 2022-07-14 10:06-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -1304,9 +1304,9 @@ msgstr "Falha ao abrir"
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:444
 #: src/backend/datasources/filters/CANFilter.cpp:301
-#: src/backend/datasources/filters/FITSFilter.cpp:329
-#: src/backend/datasources/filters/FITSFilter.cpp:339
-#: src/backend/datasources/filters/FITSFilter.cpp:534
+#: src/backend/datasources/filters/FITSFilter.cpp:332
+#: src/backend/datasources/filters/FITSFilter.cpp:342
+#: src/backend/datasources/filters/FITSFilter.cpp:537
 #: src/backend/datasources/filters/HDF5Filter.cpp:1631
 #: src/backend/datasources/filters/HDF5Filter.cpp:1748
 #: src/backend/datasources/filters/HDF5Filter.cpp:1798
@@ -1343,38 +1343,38 @@ msgstr "Exportar para arquivo"
 msgid "No messages read."
 msgstr ""
 
-#: src/backend/datasources/filters/FITSFilter.cpp:224
+#: src/backend/datasources/filters/FITSFilter.cpp:227
 #, kde-format
 msgid "Images: %1"
 msgstr "Imagens: %1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:229
+#: src/backend/datasources/filters/FITSFilter.cpp:232
 #, kde-format
 msgid "Tables: %1"
 msgstr "Tabelas: %1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:259
+#: src/backend/datasources/filters/FITSFilter.cpp:262
 #: src/backend/datasources/filters/MatioFilter.cpp:647
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to open the file."
 msgstr "Falha ao abrir"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:267
-#: src/backend/datasources/filters/FITSFilter.cpp:346
+#: src/backend/datasources/filters/FITSFilter.cpp:270
+#: src/backend/datasources/filters/FITSFilter.cpp:349
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to read the file."
 msgstr "Falha ao abrir"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:288
+#: src/backend/datasources/filters/FITSFilter.cpp:291
 #, fuzzy, kde-format
 #| msgid "Dimensions"
 msgid "Zero dimensions."
 msgstr "Dimensões"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1026
-#: src/backend/datasources/filters/FITSFilter.cpp:1546
+#: src/backend/datasources/filters/FITSFilter.cpp:1029
+#: src/backend/datasources/filters/FITSFilter.cpp:1549
 #: src/frontend/datasources/FITSOptionsWidget.cpp:42
 #: src/frontend/datasources/FITSOptionsWidget.cpp:75
 #: src/frontend/datasources/FITSOptionsWidget.cpp:144
@@ -1382,27 +1382,27 @@ msgstr "Dimensões"
 msgid "Primary header"
 msgstr ""
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1028
+#: src/backend/datasources/filters/FITSFilter.cpp:1031
 #, kde-format
 msgid "IMAGE #%1"
 msgstr ""
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1031
+#: src/backend/datasources/filters/FITSFilter.cpp:1034
 #, kde-format
 msgid "ASCII_TBL #%1"
 msgstr ""
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1034
+#: src/backend/datasources/filters/FITSFilter.cpp:1037
 #, kde-format
 msgid "BINARY_TBL #%1"
 msgstr ""
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1539
+#: src/backend/datasources/filters/FITSFilter.cpp:1542
 #, kde-format
 msgid "Images"
 msgstr "Imagens"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1565
+#: src/backend/datasources/filters/FITSFilter.cpp:1568
 #, kde-format
 msgid "Tables"
 msgstr "Tabelas"
@@ -6407,40 +6407,40 @@ msgstr "2."
 msgid "ep"
 msgstr ""
 
-#: src/backend/lib/Range.h:49 src/backend/nsl/nsl_interp.c:14
+#: src/backend/lib/Range.h:52 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:461
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:519
 #, kde-format
 msgid "Linear"
 msgstr "Linear"
 
-#: src/backend/lib/Range.h:49
+#: src/backend/lib/Range.h:52
 #, kde-format
 msgid "Log10"
 msgstr "Log10"
 
-#: src/backend/lib/Range.h:49
+#: src/backend/lib/Range.h:52
 #, kde-format
 msgid "Log2"
 msgstr "Log2"
 
-#: src/backend/lib/Range.h:49
+#: src/backend/lib/Range.h:52
 #, kde-format
 msgid "Ln"
 msgstr "Ln"
 
-#: src/backend/lib/Range.h:49
+#: src/backend/lib/Range.h:52
 #, kde-format
 msgid "Sqrt"
 msgstr ""
 
-#: src/backend/lib/Range.h:49
+#: src/backend/lib/Range.h:52
 #, fuzzy, kde-format
 #| msgid "square"
 msgid "Square"
 msgstr "quadrado"
 
-#: src/backend/lib/Range.h:49
+#: src/backend/lib/Range.h:52
 #, fuzzy, kde-format
 #| msgid "Inverse hyperbolic sine"
 msgid "Inverse"
@@ -13949,7 +13949,7 @@ msgstr ""
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:180
 #, kde-format
 msgid ""
-"Method to select the bandwith of the kernel:<ul><li>Silverman -  0.9 * "
+"Method to select the bandwidth of the kernel:<ul><li>Silverman -  0.9 * "
 "min(sigma, IQR / 1.34) * n^(-0.2)</li><li>Scott -  1.059 * sigma * n^(-0.2)</"
 "li><li>Custom - custom value for the kernel bandwidth</li></ul>"
 msgstr ""
@@ -25482,20 +25482,20 @@ msgstr "Adicionar novo"
 msgid "Enter unit name here"
 msgstr "Nome do filtro:"
 
-#: src/frontend/widgets/FITSHeaderEditDialog.cpp:38
+#: src/frontend/widgets/FITSHeaderEditDialog.cpp:39
 #, fuzzy, kde-format
 #| msgid "Save as"
 msgid "&Save"
 msgstr "Salvar como"
 
-#: src/frontend/widgets/FITSHeaderEditDialog.cpp:45
-#: src/frontend/widgets/FITSHeaderEditDialog.cpp:77
+#: src/frontend/widgets/FITSHeaderEditDialog.cpp:46
+#: src/frontend/widgets/FITSHeaderEditDialog.cpp:78
 #, kde-format
 msgctxt "@title:window"
 msgid "FITS Metadata Editor"
 msgstr ""
 
-#: src/frontend/widgets/FITSHeaderEditDialog.cpp:74
+#: src/frontend/widgets/FITSHeaderEditDialog.cpp:75
 #, kde-format
 msgctxt "@title:window"
 msgid "FITS Metadata Editor  [Changed]"
