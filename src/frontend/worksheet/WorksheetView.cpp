@@ -2104,12 +2104,12 @@ bool WorksheetView::exportToFile(const QString& path, const Worksheet::ExportFor
 		printer.setPrintRange(QPrinter::PageRange);
 		printer.setCreator(QStringLiteral("LabPlot ") + QLatin1String(LVERSION));
 
-		QPainter painter(&printer);
-		painter.setRenderHint(QPainter::Antialiasing);
-		QRectF targetRect(0, 0, painter.device()->width(), painter.device()->height());
+		QPainter painter;
 		rc = painter.begin(&printer);
 		if (!rc)
 			return false;
+		painter.setRenderHint(QPainter::Antialiasing);
+		QRectF targetRect(0, 0, painter.device()->width(), painter.device()->height());
 		exportPaint(&painter, targetRect, sourceRect, background);
 		painter.end();
 		break;
