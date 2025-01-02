@@ -1,25 +1,25 @@
 # Translation of labplot.po to Catalan
-# Copyright (C) 2015-2024 This_file_is_part_of_KDE
+# Copyright (C) 2015-2025 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
 # SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Antoni Bella Pérez <antonibella5@yahoo.com>
 # Orestes Mas <orestes@tsc.upc.edu>, 2018.
-# SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Josep M. Ferrer <txemaq@gmail.com>
+# SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-01 00:37+0000\n"
-"PO-Revision-Date: 2024-12-31 15:20+0100\n"
-"Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
+"POT-Creation-Date: 2025-01-02 00:37+0000\n"
+"PO-Revision-Date: 2025-01-01 09:28+0100\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 24.12.0\n"
 "X-Accelerator-Marker: &\n"
 
 #, kde-format
@@ -10199,118 +10199,119 @@ msgstr "%1: usa coordenades lògiques"
 msgid "%1: set logical position"
 msgstr "%1: estableix la posició lògica"
 
-#: src/frontend/AboutDialog.cpp:87
+#: src/frontend/AboutDialog.cpp:89
 #, kde-format
 msgid "Copy Info"
 msgstr "Copia la informació"
 
-#: src/frontend/AboutDialog.cpp:91
+#: src/frontend/AboutDialog.cpp:93
 #, kde-format
 msgid "Donate"
 msgstr "Donació de diners"
 
-#: src/frontend/AboutDialog.cpp:114
+#: src/frontend/AboutDialog.cpp:131
 #, kde-format
 msgid "Release build "
 msgstr "Compilació de llançament "
 
-#: src/frontend/AboutDialog.cpp:116
+#: src/frontend/AboutDialog.cpp:133
 #, kde-format
 msgid "Debug build "
 msgstr "Compilació de depuració "
 
-#: src/frontend/AboutDialog.cpp:119 src/frontend/AboutDialog.cpp:122
+#: src/frontend/AboutDialog.cpp:136 src/frontend/AboutDialog.cpp:139
 #, kde-format
 msgid "Decimal point "
 msgstr "Coma decimal"
 
-#: src/frontend/AboutDialog.cpp:120 src/frontend/AboutDialog.cpp:123
+#: src/frontend/AboutDialog.cpp:137 src/frontend/AboutDialog.cpp:140
 #, kde-format
 msgid "Group separator "
 msgstr "Separador de grups"
 
-#: src/frontend/AboutDialog.cpp:124
+#: src/frontend/AboutDialog.cpp:141
 #, kde-format
 msgid "Exponential "
 msgstr "Exponencial "
 
-#: src/frontend/AboutDialog.cpp:124
+#: src/frontend/AboutDialog.cpp:141
 #, kde-format
 msgid "Zero digit "
 msgstr "Dígit zero "
 
-#: src/frontend/AboutDialog.cpp:125
+#: src/frontend/AboutDialog.cpp:142
 #, kde-format
 msgid "Percent "
 msgstr "Percentatge "
 
-#: src/frontend/AboutDialog.cpp:126
+#: src/frontend/AboutDialog.cpp:143
 #, kde-format
 msgid "Positive/Negative sign "
 msgstr "Signe positiu/negatiu "
 
-#: src/frontend/AboutDialog.cpp:146
+#: src/frontend/AboutDialog.cpp:163
 #, kde-format
 msgid "System:"
 msgstr "Sistema:"
 
-#: src/frontend/AboutDialog.cpp:147
+#: src/frontend/AboutDialog.cpp:164
 #, kde-format
 msgid "Locale:"
 msgstr "Configuració regional:"
 
-#: src/frontend/AboutDialog.cpp:148
+#: src/frontend/AboutDialog.cpp:165
 #, kde-format
 msgid "Number Settings:"
 msgstr "Configuració dels nombres:"
 
-#: src/frontend/AboutDialog.cpp:148
+#: src/frontend/AboutDialog.cpp:165
 #, kde-format
 msgid "Updated on restart"
 msgstr "Actualitzat en reiniciar"
 
-#: src/frontend/AboutDialog.cpp:149
+#: src/frontend/AboutDialog.cpp:166
 #, kde-format
 msgid "Architecture:"
 msgstr "Arquitectura:"
 
-#: src/frontend/AboutDialog.cpp:150
+#: src/frontend/AboutDialog.cpp:167
 #, kde-format
 msgid "Kernel: "
 msgstr "Nucli: "
 
-#: src/frontend/AboutDialog.cpp:159
+#: src/frontend/AboutDialog.cpp:176
 #, kde-format
 msgid "C++ Compiler: "
 msgstr "Compilador C++: "
 
-#: src/frontend/AboutDialog.cpp:159
-#, kde-format
-msgid "C++ Compiler Flags: "
+#: src/frontend/AboutDialog.cpp:181
+#, fuzzy, kde-format
+#| msgid "C++ Compiler Flags: "
+msgid "C++ Compiler Flags:"
 msgstr "Indicadors del compilador C++: "
 
-#: src/frontend/AboutDialog.cpp:163
+#: src/frontend/AboutDialog.cpp:185
 #, kde-format
 msgid "Frontend to Mathematical Applications"
 msgstr "Frontal a aplicacions matemàtiques"
 
-#: src/frontend/AboutDialog.cpp:165 src/frontend/AboutDialog.cpp:170
-#: src/frontend/AboutDialog.cpp:175 src/frontend/AboutDialog.cpp:180
-#: src/frontend/AboutDialog.cpp:185 src/frontend/AboutDialog.cpp:191
-#: src/frontend/AboutDialog.cpp:196 src/frontend/AboutDialog.cpp:201
-#: src/frontend/AboutDialog.cpp:206 src/frontend/AboutDialog.cpp:211
-#: src/frontend/AboutDialog.cpp:216 src/frontend/AboutDialog.cpp:222
-#: src/frontend/AboutDialog.cpp:227 src/frontend/AboutDialog.cpp:232
-#: src/frontend/AboutDialog.cpp:237 src/frontend/AboutDialog.cpp:242
-#: src/frontend/AboutDialog.cpp:248 src/frontend/AboutDialog.cpp:253
-#: src/frontend/AboutDialog.cpp:258 src/frontend/AboutDialog.cpp:263
-#: src/frontend/AboutDialog.cpp:269 src/frontend/AboutDialog.cpp:274
-#: src/frontend/AboutDialog.cpp:291
+#: src/frontend/AboutDialog.cpp:187 src/frontend/AboutDialog.cpp:192
+#: src/frontend/AboutDialog.cpp:197 src/frontend/AboutDialog.cpp:202
+#: src/frontend/AboutDialog.cpp:207 src/frontend/AboutDialog.cpp:213
+#: src/frontend/AboutDialog.cpp:218 src/frontend/AboutDialog.cpp:223
+#: src/frontend/AboutDialog.cpp:228 src/frontend/AboutDialog.cpp:233
+#: src/frontend/AboutDialog.cpp:238 src/frontend/AboutDialog.cpp:244
+#: src/frontend/AboutDialog.cpp:249 src/frontend/AboutDialog.cpp:254
+#: src/frontend/AboutDialog.cpp:259 src/frontend/AboutDialog.cpp:264
+#: src/frontend/AboutDialog.cpp:270 src/frontend/AboutDialog.cpp:275
+#: src/frontend/AboutDialog.cpp:280 src/frontend/AboutDialog.cpp:285
+#: src/frontend/AboutDialog.cpp:291 src/frontend/AboutDialog.cpp:296
+#: src/frontend/AboutDialog.cpp:313
 #, kde-format
 msgid "missing"
 msgstr "manca"
 
-#: src/frontend/AboutDialog.cpp:168
+#: src/frontend/AboutDialog.cpp:190
 #, kde-format
 msgid ""
 "Support data files in FITS (Flexible Image Transport System) data format"
@@ -10318,17 +10319,17 @@ msgstr ""
 "Implementació de fitxers de dades en el format de fitxer FITS (Flexible "
 "Image Transport System)"
 
-#: src/frontend/AboutDialog.cpp:173
+#: src/frontend/AboutDialog.cpp:195
 #, kde-format
 msgid "Markdown markup language support"
 msgstr "Implementació del llenguatge de marcatge Markdown"
 
-#: src/frontend/AboutDialog.cpp:178
+#: src/frontend/AboutDialog.cpp:200
 #, kde-format
 msgid "C++ library for linear algebra"
 msgstr "Biblioteca C++ per a àlgebra lineal"
 
-#: src/frontend/AboutDialog.cpp:183
+#: src/frontend/AboutDialog.cpp:205
 #, kde-format
 msgid "Fastest Fourier Transform in the West"
 msgstr ""
@@ -10336,102 +10337,102 @@ msgstr ""
 "the West»)"
 
 # skip-rule: t-e_sola
-#: src/frontend/AboutDialog.cpp:187
+#: src/frontend/AboutDialog.cpp:209
 #, kde-format
 msgid "GNU Scientific Library"
 msgstr "Biblioteca científica de GNU («GNU Scientific Library»)"
 
-#: src/frontend/AboutDialog.cpp:189
+#: src/frontend/AboutDialog.cpp:211
 #, kde-format
 msgid "High-performance data management and storage suite"
 msgstr "Paquet de gestió i emmagatzematge de dades d'altes prestacions"
 
-#: src/frontend/AboutDialog.cpp:194
+#: src/frontend/AboutDialog.cpp:216
 #, kde-format
 msgid "Syntax highlighting engine"
 msgstr "Motor de ressaltat de sintaxi"
 
-#: src/frontend/AboutDialog.cpp:199
+#: src/frontend/AboutDialog.cpp:221
 #, kde-format
 msgid "Support collecting feedback from users"
 msgstr "Implementació de recollida de comentaris dels usuaris"
 
-#: src/frontend/AboutDialog.cpp:204
+#: src/frontend/AboutDialog.cpp:226
 #, kde-format
 msgid "Complex error and related functions"
 msgstr "Funcions complexes d'error i relacionades"
 
-#: src/frontend/AboutDialog.cpp:209
+#: src/frontend/AboutDialog.cpp:231
 #, kde-format
 msgid "importing Origin OPJ project files"
 msgstr "Importació de fitxers de projecte OPJ de l'Origin"
 
-#: src/frontend/AboutDialog.cpp:214
+#: src/frontend/AboutDialog.cpp:236
 #, kde-format
 msgid "Import binary MATLAB MAT files"
 msgstr "Importa fitxers MAT de MATLAB binaris"
 
-#: src/frontend/AboutDialog.cpp:219
+#: src/frontend/AboutDialog.cpp:241
 #, kde-format
 msgid "MCAP file support"
 msgstr "Implementació de fitxers MCAP"
 
-#: src/frontend/AboutDialog.cpp:225
+#: src/frontend/AboutDialog.cpp:247
 #, kde-format
 msgid "Network Common Data Form"
 msgstr "Format de dades comú a la xarxa («Network Common Data Form»)"
 
-#: src/frontend/AboutDialog.cpp:230
+#: src/frontend/AboutDialog.cpp:252
 #, kde-format
 msgid "Import ODS (Open Document Spreadsheet) files"
 msgstr "Importa fitxers ODS (Open Document Spreadsheet)"
 
-#: src/frontend/AboutDialog.cpp:235
+#: src/frontend/AboutDialog.cpp:257
 #, kde-format
 msgid "PDF rendering library"
 msgstr "Biblioteca de renderització de PDF"
 
-#: src/frontend/AboutDialog.cpp:240
+#: src/frontend/AboutDialog.cpp:262
 #, kde-format
 msgid "Offers available actions for a specific purpose"
 msgstr "Ofereix accions disponibles per a un propòsit específic"
 
-#: src/frontend/AboutDialog.cpp:244
+#: src/frontend/AboutDialog.cpp:266
 #, kde-format
 msgid "Qt Advanced Docking System"
 msgstr "Sistema d'acoblament avançat de les Qt («Qt Advanced Docking System»)"
 
-#: src/frontend/AboutDialog.cpp:246
+#: src/frontend/AboutDialog.cpp:268
 #, kde-format
 msgid "Support data from MQTT brokers"
 msgstr "Implementa dades a partir d'agents MQTT"
 
-#: src/frontend/AboutDialog.cpp:251
+#: src/frontend/AboutDialog.cpp:273
 #, kde-format
 msgid "Serial port functionality support"
 msgstr "Implementació de la funcionalitat de port en sèrie"
 
-#: src/frontend/AboutDialog.cpp:256
+#: src/frontend/AboutDialog.cpp:278
 #, kde-format
 msgid "SVG export support"
 msgstr "Implementació de l'exportació de SVG"
 
-#: src/frontend/AboutDialog.cpp:261
+#: src/frontend/AboutDialog.cpp:283
 #, kde-format
 msgid "Import Excel xlsx files"
 msgstr "Importa fitxers «xlsx» de l'Excel"
 
-#: src/frontend/AboutDialog.cpp:267
+#: src/frontend/AboutDialog.cpp:289
 #, kde-format
 msgid "Read (and write) data sets from SAS, Stata, and SPSS"
 msgstr "Llegeix (i escriu) conjunts de dades de SAS, Stata i SPSS"
 
-#: src/frontend/AboutDialog.cpp:272
+#: src/frontend/AboutDialog.cpp:294
 #, kde-format
 msgid "Binary Log File (BLF) file support"
 msgstr "Implementació de fitxers Binary Log File (BLF)"
 
-#: src/frontend/AboutDialog.cpp:289
+#: src/frontend/AboutDialog.cpp:311
 #, kde-format
 msgid "Components:"
 msgstr "Components:"
@@ -13376,11 +13377,7 @@ msgstr ""
 "probabilitat"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:180
-#, fuzzy, kde-format
-#| msgid ""
-#| "Method to select the bandwith of the kernel:<ul><li>Silverman -  0.9 * "
-#| "min(sigma, IQR / 1.34) * n^(-0.2)</li><li>Scott -  1.059 * sigma * "
-#| "n^(-0.2)</li><li>Custom - custom value for the kernel bandwidth</li></ul>"
+#, kde-format
 msgid ""
 "Method to select the bandwidth of the kernel:<ul><li>Silverman -  0.9 * "
 "min(sigma, IQR / 1.34) * n^(-0.2)</li><li>Scott -  1.059 * sigma * n^(-0.2)</"
@@ -14720,8 +14717,9 @@ msgstr ""
 "codi obert i multiplataforma, accessible a tothom."
 
 #: src/frontend/LabPlot.cpp:55
-#, kde-format
-msgid "(c) 2007-2024 LabPlot authors"
+#, fuzzy, kde-format
+#| msgid "(c) 2007-2024 LabPlot authors"
+msgid "(c) 2007-2025 LabPlot authors"
 msgstr "(c) 2007-2024 LabPlot authors"
 
 #: src/frontend/LabPlot.cpp:57

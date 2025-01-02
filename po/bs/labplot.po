@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-01 00:37+0000\n"
+"POT-Creation-Date: 2025-01-02 00:37+0000\n"
 "PO-Revision-Date: 2015-02-25 20:16+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -10923,249 +10923,249 @@ msgstr "%1: postavi koordinate matrice"
 msgid "%1: set logical position"
 msgstr "%1: postavi poziciju oznake"
 
-#: src/frontend/AboutDialog.cpp:87
+#: src/frontend/AboutDialog.cpp:89
 #, kde-format
 msgid "Copy Info"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:91
+#: src/frontend/AboutDialog.cpp:93
 #, kde-format
 msgid "Donate"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:114
+#: src/frontend/AboutDialog.cpp:131
 #, fuzzy, kde-format
 #| msgid "Labplot version"
 msgid "Release build "
 msgstr "Labplot verzija"
 
-#: src/frontend/AboutDialog.cpp:116
+#: src/frontend/AboutDialog.cpp:133
 #, kde-format
 msgid "Debug build "
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:119 src/frontend/AboutDialog.cpp:122
+#: src/frontend/AboutDialog.cpp:136 src/frontend/AboutDialog.cpp:139
 #, fuzzy, kde-format
 #| msgid "Decimal notation"
 msgid "Decimal point "
 msgstr "Decimalni zapis"
 
-#: src/frontend/AboutDialog.cpp:120 src/frontend/AboutDialog.cpp:123
+#: src/frontend/AboutDialog.cpp:137 src/frontend/AboutDialog.cpp:140
 #, fuzzy, kde-format
 #| msgid "Max. iterations"
 msgid "Group separator "
 msgstr "Max. iteracije"
 
-#: src/frontend/AboutDialog.cpp:124
+#: src/frontend/AboutDialog.cpp:141
 #, fuzzy, kde-format
 #| msgid "Exponential"
 msgid "Exponential "
 msgstr "Eksponencijalno"
 
-#: src/frontend/AboutDialog.cpp:124
+#: src/frontend/AboutDialog.cpp:141
 #, kde-format
 msgid "Zero digit "
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:125
+#: src/frontend/AboutDialog.cpp:142
 #, fuzzy, kde-format
 #| msgid "center tiled"
 msgid "Percent "
 msgstr "centrirano popločan"
 
-#: src/frontend/AboutDialog.cpp:126
+#: src/frontend/AboutDialog.cpp:143
 #, kde-format
 msgid "Positive/Negative sign "
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:146
+#: src/frontend/AboutDialog.cpp:163
 #, kde-format
 msgid "System:"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:147
+#: src/frontend/AboutDialog.cpp:164
 #, fuzzy, kde-format
 #| msgid "Scale"
 msgid "Locale:"
 msgstr "Skala"
 
-#: src/frontend/AboutDialog.cpp:148
+#: src/frontend/AboutDialog.cpp:165
 #, fuzzy, kde-format
 #| msgid "Number of points"
 msgid "Number Settings:"
 msgstr "Broj tačaka"
 
-#: src/frontend/AboutDialog.cpp:148
+#: src/frontend/AboutDialog.cpp:165
 #, fuzzy, kde-format
 #| msgid "Hide Options"
 msgid "Updated on restart"
 msgstr "Sakrij Opcije"
 
-#: src/frontend/AboutDialog.cpp:149
+#: src/frontend/AboutDialog.cpp:166
 #, kde-format
 msgid "Architecture:"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:150
+#: src/frontend/AboutDialog.cpp:167
 #, kde-format
 msgid "Kernel: "
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:159
+#: src/frontend/AboutDialog.cpp:176
 #, kde-format
 msgid "C++ Compiler: "
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:159
+#: src/frontend/AboutDialog.cpp:181
 #, kde-format
-msgid "C++ Compiler Flags: "
+msgid "C++ Compiler Flags:"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:163
+#: src/frontend/AboutDialog.cpp:185
 #, fuzzy, kde-format
 #| msgid "residual standard deviation"
 msgid "Frontend to Mathematical Applications"
 msgstr "rezidualna standardna devijacija"
 
-#: src/frontend/AboutDialog.cpp:165 src/frontend/AboutDialog.cpp:170
-#: src/frontend/AboutDialog.cpp:175 src/frontend/AboutDialog.cpp:180
-#: src/frontend/AboutDialog.cpp:185 src/frontend/AboutDialog.cpp:191
-#: src/frontend/AboutDialog.cpp:196 src/frontend/AboutDialog.cpp:201
-#: src/frontend/AboutDialog.cpp:206 src/frontend/AboutDialog.cpp:211
-#: src/frontend/AboutDialog.cpp:216 src/frontend/AboutDialog.cpp:222
-#: src/frontend/AboutDialog.cpp:227 src/frontend/AboutDialog.cpp:232
-#: src/frontend/AboutDialog.cpp:237 src/frontend/AboutDialog.cpp:242
-#: src/frontend/AboutDialog.cpp:248 src/frontend/AboutDialog.cpp:253
-#: src/frontend/AboutDialog.cpp:258 src/frontend/AboutDialog.cpp:263
-#: src/frontend/AboutDialog.cpp:269 src/frontend/AboutDialog.cpp:274
-#: src/frontend/AboutDialog.cpp:291
+#: src/frontend/AboutDialog.cpp:187 src/frontend/AboutDialog.cpp:192
+#: src/frontend/AboutDialog.cpp:197 src/frontend/AboutDialog.cpp:202
+#: src/frontend/AboutDialog.cpp:207 src/frontend/AboutDialog.cpp:213
+#: src/frontend/AboutDialog.cpp:218 src/frontend/AboutDialog.cpp:223
+#: src/frontend/AboutDialog.cpp:228 src/frontend/AboutDialog.cpp:233
+#: src/frontend/AboutDialog.cpp:238 src/frontend/AboutDialog.cpp:244
+#: src/frontend/AboutDialog.cpp:249 src/frontend/AboutDialog.cpp:254
+#: src/frontend/AboutDialog.cpp:259 src/frontend/AboutDialog.cpp:264
+#: src/frontend/AboutDialog.cpp:270 src/frontend/AboutDialog.cpp:275
+#: src/frontend/AboutDialog.cpp:280 src/frontend/AboutDialog.cpp:285
+#: src/frontend/AboutDialog.cpp:291 src/frontend/AboutDialog.cpp:296
+#: src/frontend/AboutDialog.cpp:313
 #, fuzzy, kde-format
 #| msgid "no values"
 msgid "missing"
 msgstr "nema vrijednosti"
 
-#: src/frontend/AboutDialog.cpp:168
+#: src/frontend/AboutDialog.cpp:190
 #, kde-format
 msgid ""
 "Support data files in FITS (Flexible Image Transport System) data format"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:173
+#: src/frontend/AboutDialog.cpp:195
 #, kde-format
 msgid "Markdown markup language support"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:178
+#: src/frontend/AboutDialog.cpp:200
 #, kde-format
 msgid "C++ library for linear algebra"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:183
+#: src/frontend/AboutDialog.cpp:205
 #, fuzzy, kde-format
 #| msgid "new filter"
 msgid "Fastest Fourier Transform in the West"
 msgstr "novi filter"
 
-#: src/frontend/AboutDialog.cpp:187
+#: src/frontend/AboutDialog.cpp:209
 #, fuzzy, kde-format
 #| msgid "Scientific (e)"
 msgid "GNU Scientific Library"
 msgstr "Naučni (3)"
 
-#: src/frontend/AboutDialog.cpp:189
+#: src/frontend/AboutDialog.cpp:211
 #, kde-format
 msgid "High-performance data management and storage suite"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:194
+#: src/frontend/AboutDialog.cpp:216
 #, fuzzy, kde-format
 #| msgid "Height"
 msgid "Syntax highlighting engine"
 msgstr "Visina"
 
-#: src/frontend/AboutDialog.cpp:199
+#: src/frontend/AboutDialog.cpp:221
 #, kde-format
 msgid "Support collecting feedback from users"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:204
+#: src/frontend/AboutDialog.cpp:226
 #, kde-format
 msgid "Complex error and related functions"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:209
+#: src/frontend/AboutDialog.cpp:231
 #, fuzzy, kde-format
 #| msgid "Import image from file"
 msgid "importing Origin OPJ project files"
 msgstr "Uvezi sliku iz fajla"
 
-#: src/frontend/AboutDialog.cpp:214
+#: src/frontend/AboutDialog.cpp:236
 #, kde-format
 msgid "Import binary MATLAB MAT files"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:219
+#: src/frontend/AboutDialog.cpp:241
 #, kde-format
 msgid "MCAP file support"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:225
+#: src/frontend/AboutDialog.cpp:247
 #, kde-format
 msgid "Network Common Data Form"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:230
+#: src/frontend/AboutDialog.cpp:252
 #, fuzzy, kde-format
 #| msgid "Export spreadsheet"
 msgid "Import ODS (Open Document Spreadsheet) files"
 msgstr "Izvezi tabelarni prikaz"
 
-#: src/frontend/AboutDialog.cpp:235
+#: src/frontend/AboutDialog.cpp:257
 #, kde-format
 msgid "PDF rendering library"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:240
+#: src/frontend/AboutDialog.cpp:262
 #, kde-format
 msgid "Offers available actions for a specific purpose"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:244
+#: src/frontend/AboutDialog.cpp:266
 #, kde-format
 msgid "Qt Advanced Docking System"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:246
+#: src/frontend/AboutDialog.cpp:268
 #, kde-format
 msgid "Support data from MQTT brokers"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:251
+#: src/frontend/AboutDialog.cpp:273
 #, kde-format
 msgid "Serial port functionality support"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:256
+#: src/frontend/AboutDialog.cpp:278
 #, kde-format
 msgid "SVG export support"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:261
+#: src/frontend/AboutDialog.cpp:283
 #, kde-format
 msgid "Import Excel xlsx files"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:267
+#: src/frontend/AboutDialog.cpp:289
 #, kde-format
 msgid "Read (and write) data sets from SAS, Stata, and SPSS"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:272
+#: src/frontend/AboutDialog.cpp:294
 #, kde-format
 msgid "Binary Log File (BLF) file support"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:289
+#: src/frontend/AboutDialog.cpp:311
 #, fuzzy, kde-format
 #| msgid "Comment:"
 msgid "Components:"
@@ -15551,7 +15551,7 @@ msgstr ""
 #: src/frontend/LabPlot.cpp:55
 #, fuzzy, kde-format
 #| msgid "(c) 2007-2014"
-msgid "(c) 2007-2024 LabPlot authors"
+msgid "(c) 2007-2025 LabPlot authors"
 msgstr "(c) 2007-2014"
 
 #: src/frontend/LabPlot.cpp:57
