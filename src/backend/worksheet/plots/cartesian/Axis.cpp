@@ -798,6 +798,8 @@ void Axis::setMajorTicksSpacing(qreal majorTicksSpacing) {
 		if (range / majorTicksSpacing > maxNumberMajorTicks)
 			majorTicksSpacing = range / maxNumberMajorTicks;
 
+		Q_D(Axis);
+		d->majorTicksSpacing = majorTicksSpacing;
 		Q_EMIT majorTicksSpacingChanged(majorTicksSpacing);
 		return;
 	}
@@ -888,6 +890,8 @@ void Axis::setMinorTicksSpacing(qreal minorTicksSpacing) {
 		if (numberTicks > 100) // maximum 100 minor ticks
 			minorTicksSpacing = range / (majorTicks - 1) / (100 + 1);
 
+		Q_D(Axis);
+		d->minorTicksIncrement = minorTicksSpacing;
 		Q_EMIT minorTicksIncrementChanged(minorTicksSpacing);
 		return;
 	}
