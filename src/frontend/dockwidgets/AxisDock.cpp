@@ -282,10 +282,10 @@ void AxisDock::init() {
 	ui.cbMinorTicksDirection->addItem(i18n("Out"));
 	ui.cbMinorTicksDirection->addItem(i18n("In and Out"));
 
-	ui.cbMinorTicksType->addItem(i18n("Number"));
-	ui.cbMinorTicksType->addItem(i18n("Spacing"));
-	ui.cbMinorTicksType->addItem(i18n("Custom column"));
-	// ui.cbMinorTicksType->addItem(i18n("Column labels"));
+	ui.cbMinorTicksType->addItem(i18n("Number"), (int)Axis::TicksType::TotalNumber);
+	ui.cbMinorTicksType->addItem(i18n("Spacing"), (int)Axis::TicksType::Spacing);
+	ui.cbMinorTicksType->addItem(i18n("Custom column"), (int)Axis::TicksType::CustomColumn);
+	// ui.cbMinorTicksType->addItem(i18n("Column labels"), (int)Axis::TicksType::ColumnLabels);
 
 	// labels
 	ui.cbLabelsPosition->addItem(i18n("No labels"));
@@ -1652,7 +1652,7 @@ void AxisDock::axisMajorTicksDirectionChanged(Axis::TicksDirection direction) {
 void AxisDock::axisMajorTicksTypeChanged(Axis::TicksType type) {
 	CONDITIONAL_LOCK_RETURN;
 	const int index = ui.cbMajorTicksType->findData((int)type);
-	ui.cbMajorTicksType->itemData(index);
+	ui.cbMajorTicksType->setCurrentIndex(index);
 }
 void AxisDock::axisMajorTicksAutoNumberChanged(bool automatic) {
 	CONDITIONAL_LOCK_RETURN;
@@ -1699,7 +1699,8 @@ void AxisDock::axisMinorTicksDirectionChanged(Axis::TicksDirection direction) {
 }
 void AxisDock::axisMinorTicksTypeChanged(Axis::TicksType type) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.cbMinorTicksType->setCurrentIndex(static_cast<int>(type));
+	const int index = ui.cbMinorTicksType->findData((int)type);
+	ui.cbMinorTicksType->setCurrentIndex(index);
 }
 void AxisDock::axisMinorTicksAutoNumberChanged(bool automatic) {
 	CONDITIONAL_LOCK_RETURN;
@@ -2089,7 +2090,7 @@ void AxisDock::loadConfig(KConfig& config) {
 
 	// Minor ticks
 	ui.cbMinorTicksDirection->setCurrentIndex(group.readEntry(QStringLiteral("MinorTicksDirection"), (int)m_axis->minorTicksDirection()));
-	ui.cbMinorTicksType->setCurrentIndex(group.readEntry(QStringLiteral("MinorTicksType"), (int)m_axis->minorTicksType()));
+	ui.cbMinorTicksType->setCurrentIndex(ui.cbMinorTicksType->findData(group.readEntry(QStringLiteral("MajorTicksType"), (int)m_axis->minorTicksType())));
 	ui.sbMinorTicksNumber->setValue(group.readEntry(QStringLiteral("MinorTicksNumber"), m_axis->minorTicksNumber()));
 	value = group.readEntry(QStringLiteral("MinorTicksIncrement"), m_axis->minorTicksSpacing());
 	if (numeric)

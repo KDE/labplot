@@ -925,6 +925,7 @@ void AxisTest::tickSpacingUpdateDockMajorTicks() {
 	AxisDock dock(nullptr);
 	dock.setAxes({xAxis});
 	dock.ui.cbMajorTicksType->setCurrentIndex(dock.ui.cbMajorTicksType->findData((int)Axis::TicksType::Spacing));
+	dock.ui.cbMinorTicksType->setCurrentIndex(dock.ui.cbMinorTicksType->findData((int)Axis::TicksType::Spacing));
 
 	// initially, the spacing is not set (equal to zero) and after the switch to "spacing"
 	// it's adjusted to the current spacing determined by the total number of the ticks:
