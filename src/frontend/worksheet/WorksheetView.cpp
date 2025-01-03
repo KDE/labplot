@@ -436,7 +436,6 @@ void WorksheetView::initMenus() {
 	m_addNewMenu->addSeparator();
 	m_addNewMenu->addAction(addTextLabelAction);
 	m_addNewMenu->addAction(addImageAction);
-	m_addNewMenu->addAction(addGlobalInfoElementAction);
 
 	m_viewMouseModeMenu = new QMenu(i18n("Mouse Mode"), this);
 	m_viewMouseModeMenu->setIcon(QIcon::fromTheme(QStringLiteral("input-mouse")));

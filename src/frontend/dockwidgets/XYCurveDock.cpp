@@ -326,7 +326,6 @@ void XYCurveDock::init() {
 	pa.drawEllipse(15, 15, 4, 4);
 	pa.rotate(45);
 	pa.drawArc(2 * sqrt(2), -4, 17 * sqrt(2), 20, 30 * 16, 120 * 16);
-
 	pa.end();
 	ui.cbLineType->setItemIcon(8, pm);
 	ui.cbLineType->setItemIcon(9, pm);

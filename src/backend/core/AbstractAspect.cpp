@@ -837,7 +837,7 @@ void AbstractAspect::paste(bool duplicate) {
 		if (aspect->type() != AspectType::CartesianPlotLegend)
 			addChild(aspect);
 		else {
-			// spectial handling for the legend since only one single
+			// special handling for the legend since only one single
 			// legend object is allowed per plot
 			auto* plot = static_cast<CartesianPlot*>(this);
 			auto* legend = static_cast<CartesianPlotLegend*>(aspect);

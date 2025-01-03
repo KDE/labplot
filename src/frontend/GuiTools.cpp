@@ -148,9 +148,6 @@ void GuiTools::updateBrushStyles(QComboBox* comboBox, const QColor& color) {
 	QPixmap pm(w, h);
 	comboBox->setIconSize(QSize(w, h));
 
-	QPen pen(Qt::SolidPattern, 1);
-	pa.setPen(pen);
-
 	static std::array<QString, 15> list = {i18n("None"),
 										   i18n("Uniform"),
 										   i18n("Extremely Dense"),
@@ -167,10 +164,12 @@ void GuiTools::updateBrushStyles(QComboBox* comboBox, const QColor& color) {
 										   i18n("Forward Diag. Lines"),
 										   i18n("Crossing Diag. Lines")};
 	const QColor& borderColor = GuiTools::isDarkMode() ? Qt::white : Qt::black;
+	QPen pen(Qt::SolidPattern, 1);
+	pen.setColor(borderColor);
 	for (int i = 0; i < 15; i++) {
 		pm.fill(Qt::transparent);
 		pa.begin(&pm);
-		pa.setPen(borderColor);
+		pa.setPen(pen);
 		pa.setRenderHint(QPainter::Antialiasing);
 		pa.setBrush(QBrush(color, (Qt::BrushStyle)i));
 		pa.drawRect(offset, offset, w - 2 * offset, h - 2 * offset);
@@ -271,7 +270,6 @@ void GuiTools::addSymbolStyles(QComboBox* cb) {
 	QPen pen(Qt::SolidPattern, 0);
 	const QColor& color = GuiTools::isDarkMode() ? Qt::white : Qt::black;
 	pen.setColor(color);
-	pa.setPen(pen);
 
 	int iconSize = 20;
 	QPixmap pm(iconSize, iconSize);

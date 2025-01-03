@@ -243,7 +243,6 @@ void CartesianPlotDock::init() {
 
 	// draw the icons for the border sides
 	QPainter pa;
-	pa.setRenderHint(QPainter::Antialiasing);
 	int iconSize = 20;
 	QPixmap pm(iconSize, iconSize);
 
@@ -254,6 +253,7 @@ void CartesianPlotDock::init() {
 	// left
 	pm.fill(Qt::transparent);
 	pa.begin(&pm);
+	pa.setRenderHint(QPainter::Antialiasing); // must be set after every QPainter::begin()
 	pen.setStyle(Qt::SolidLine);
 	pen.setWidthF(1.0);
 	pa.setPen(pen);
@@ -264,11 +264,13 @@ void CartesianPlotDock::init() {
 	pa.drawLine(1, 19, 19, 19);
 	pa.drawLine(19, 19, 19, 1);
 	pa.drawLine(19, 1, 1, 1);
+	pa.end();
 	ui.tbBorderTypeLeft->setIcon(pm);
 
 	// top
 	pm.fill(Qt::transparent);
 	pa.begin(&pm);
+	pa.setRenderHint(QPainter::Antialiasing);
 	pen.setStyle(Qt::SolidLine);
 	pen.setWidthF(1.0);
 	pa.setPen(pen);
@@ -285,6 +287,7 @@ void CartesianPlotDock::init() {
 	// right
 	pm.fill(Qt::transparent);
 	pa.begin(&pm);
+	pa.setRenderHint(QPainter::Antialiasing);
 	pen.setStyle(Qt::SolidLine);
 	pen.setWidthF(1.0);
 	pa.setPen(pen);
@@ -301,6 +304,7 @@ void CartesianPlotDock::init() {
 	// bottom
 	pm.fill(Qt::transparent);
 	pa.begin(&pm);
+	pa.setRenderHint(QPainter::Antialiasing);
 	pen.setStyle(Qt::SolidLine);
 	pen.setWidthF(1.0);
 	pa.setPen(pen);

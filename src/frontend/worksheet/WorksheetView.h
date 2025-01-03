@@ -176,7 +176,6 @@ private:
 	QAction* addCartesianPlotTemplateAction{nullptr};
 	QAction* addTextLabelAction{nullptr};
 	QAction* addImageAction{nullptr};
-	QAction* addGlobalInfoElementAction{nullptr};
 
 	QAction* verticalLayoutAction{nullptr};
 	QAction* horizontalLayoutAction{nullptr};

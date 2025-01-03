@@ -944,6 +944,10 @@ void LollipopPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIte
 	else
 		draw(painter); // draw directly again (slow)
 
+	// no need to handle the selection/hover effect if the cached pixmap is empty
+	if (m_pixmap.isNull())
+		return;
+
 	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		if (m_hoverEffectImageIsDirty) {
 			QPixmap pix = m_pixmap;

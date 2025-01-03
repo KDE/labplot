@@ -868,7 +868,6 @@ void MainWin::initActions() {
 void MainWin::initMenus() {
 #ifdef HAVE_PURPOSE
 	m_shareMenu = new Purpose::Menu(this);
-	m_shareMenu->model()->setPluginType(QStringLiteral("Export"));
 	connect(m_shareMenu, &Purpose::Menu::finished, this, &MainWin::shareActionFinished);
 	m_shareAction->setMenu(m_shareMenu);
 #endif
@@ -2484,6 +2483,7 @@ void MainWin::fillShareMenu() {
 	QMimeType mime;
 	m_shareMenu->model()->setInputData(
 		QJsonObject{{QStringLiteral("mimeType"), mime.name()}, {QStringLiteral("urls"), QJsonArray{QUrl::fromLocalFile(m_project->fileName()).toString()}}});
+	m_shareMenu->model()->setPluginType(QStringLiteral("Export"));
 	m_shareMenu->reload();
 }
 
