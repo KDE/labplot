@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-02 00:37+0000\n"
+"POT-Creation-Date: 2025-01-03 00:38+0000\n"
 "PO-Revision-Date: 2015-02-25 20:16+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -8450,147 +8450,147 @@ msgid "%1: set the total number of the major ticks"
 msgstr "%1: postavi ukupan broj glavnih podioka"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:784
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:866
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:868
 #, kde-format
 msgid "%1: disable major automatic tick numbers"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:807
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:809
 #, fuzzy, kde-format
 #| msgid "%1: set the total number of the major ticks"
 msgid "%1: set the spacing of the major ticks"
 msgstr "%1: postavi ukupan broj glavnih podioka"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:814
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:816
 #, kde-format
 msgid "%1: assign major ticks' values"
 msgstr "%1: dodijeli vrijednost glavnih podioka"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:828
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:830
 #, kde-format
 msgid "%1: set major ticks length"
 msgstr "%1: postavi dužinu glavnih podioka"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:836
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:838
 #, kde-format
 msgid "%1: set minor ticks direction"
 msgstr "%1: postavi smijer sporednih podioka"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:843
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:845
 #, kde-format
 msgid "%1: set minor ticks type"
 msgstr "%1: postavi tip sporednih podioka"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:851
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:853
 #, kde-format
 msgid "%1: enable/disable minor automatic tick numbers"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:854
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:865
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:856
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:867
 #, kde-format
 msgid "%1: set the total number of the minor ticks"
 msgstr "%1: postavi ukupan broj sporednih podioka"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:896
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:900
 #, fuzzy, kde-format
 #| msgid "%1: set the total number of the minor ticks"
 msgid "%1: set the spacing of the minor ticks"
 msgstr "%1: postavi ukupan broj sporednih podioka"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:903
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:907
 #, kde-format
 msgid "%1: assign minor ticks' values"
 msgstr "%1: dodijeli sporednim podiocima vrijednost"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:917
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:921
 #, kde-format
 msgid "%1: set minor ticks length"
 msgstr "%1: postavi dužinu sporednih podioka"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:926
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:930
 #, kde-format
 msgid "%1: set labels format"
 msgstr "%1: postavi format oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:933
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:937
 #, fuzzy, kde-format
 #| msgid "%1: set labels format"
 msgid "%1: set labels format automatic"
 msgstr "%1: postavi format oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:940
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:947
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:944
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:951
 #, kde-format
 msgid "%1: set labels precision"
 msgstr "%1: postavi preciznost oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:954
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:958
 #, fuzzy, kde-format
 #| msgid "%1: set labels format"
 msgid "%1: set labels datetime format"
 msgstr "%1: postavi format oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:961
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:965
 #, kde-format
 msgid "%1: set labels position"
 msgstr "%1: postavi poziciju oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:968
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:972
 #, kde-format
 msgid "%1: set label offset"
 msgstr "%1: postavi poziciju oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:975
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:979
 #, kde-format
 msgid "%1: set label rotation angle"
 msgstr "%1: postavi ugao rotacije za oznaku"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:982
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:986
 #, fuzzy, kde-format
 #| msgid "%1: set label text"
 msgid "%1: set labels text type"
 msgstr "%1: postavi tekst oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:989
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:993
 #, fuzzy, kde-format
 #| msgid "%1: set label text"
 msgid "%1: set labels text column"
 msgstr "%1: postavi tekst oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1003
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1007
 #, kde-format
 msgid "%1: set label color"
 msgstr "%1: postavi boju oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1010
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1014
 #, kde-format
 msgid "%1: set label font"
 msgstr "%1: postavi font oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1017
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1021
 #, fuzzy, kde-format
 #| msgid "%1: set background image"
 msgid "%1: set labels background type"
 msgstr "%1: postavi pozadinsku sliku"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1024
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1028
 #, fuzzy, kde-format
 #| msgid "%1: set background first color"
 msgid "%1: set label background color"
 msgstr "%1: postavi prvu pozadinsku boju"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1031
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1035
 #, kde-format
 msgid "%1: set label prefix"
 msgstr "%1: postavi prefiks oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1038
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1042
 #, kde-format
 msgid "%1: set label suffix"
 msgstr "%1: postavi sufiks oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1045
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1049
 #, kde-format
 msgid "%1: set labels opacity"
 msgstr "%1: postavi prozirnost oznake"
@@ -13381,7 +13381,7 @@ msgstr "nema vrijednosti"
 msgid "Offset"
 msgstr "Pomak"
 
-#. i18n("Column labels"));
+#. i18n("Column labels"), (int)Axis::TicksType::ColumnLabels);
 #. labels
 #: src/frontend/dockwidgets/AxisDock.cpp:291
 #, fuzzy, kde-format
@@ -13460,12 +13460,12 @@ msgstr ""
 msgid "Scale is async with the plot"
 msgstr ""
 
-#: src/frontend/dockwidgets/AxisDock.cpp:2023
+#: src/frontend/dockwidgets/AxisDock.cpp:2024
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
 msgstr "%1: ose: predložak \"%2\" učitan"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:2025
+#: src/frontend/dockwidgets/AxisDock.cpp:2026
 #: src/frontend/dockwidgets/BarPlotDock.cpp:503
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:728
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1839

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-02 00:37+0000\n"
+"POT-Creation-Date: 2025-01-03 00:38+0000\n"
 "PO-Revision-Date: 2023-11-13 14:41+0300\n"
 "Last-Translator: Sergey Kazorin <translation-team@basealt.ru>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -8173,140 +8173,140 @@ msgid "%1: set the total number of the major ticks"
 msgstr "%1: задание общего числа основных делений"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:784
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:866
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:868
 #, kde-format
 msgid "%1: disable major automatic tick numbers"
 msgstr "%1: отключение автоматического отображения чисел основных делений"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:807
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:809
 #, kde-format
 msgid "%1: set the spacing of the major ticks"
 msgstr "%1: задание интервала основных делений"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:814
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:816
 #, kde-format
 msgid "%1: assign major ticks' values"
 msgstr "%1: присваивание значений основным делениям"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:828
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:830
 #, kde-format
 msgid "%1: set major ticks length"
 msgstr "%1: задание длины основных делений"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:836
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:838
 #, kde-format
 msgid "%1: set minor ticks direction"
 msgstr "%1: задание направления малых делений"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:843
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:845
 #, kde-format
 msgid "%1: set minor ticks type"
 msgstr "%1: задание типа малых делений"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:851
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:853
 #, kde-format
 msgid "%1: enable/disable minor automatic tick numbers"
 msgstr ""
 "%1: включение/выключение автоматического отображения чисел малых делений"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:854
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:865
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:856
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:867
 #, kde-format
 msgid "%1: set the total number of the minor ticks"
 msgstr "%1: задание общего числа малых делений"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:896
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:900
 #, kde-format
 msgid "%1: set the spacing of the minor ticks"
 msgstr "%1: задание интервала малых делений"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:903
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:907
 #, kde-format
 msgid "%1: assign minor ticks' values"
 msgstr "%1: присваивание значений малым делениям"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:917
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:921
 #, kde-format
 msgid "%1: set minor ticks length"
 msgstr "%1: задание длины малых делений"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:926
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:930
 #, kde-format
 msgid "%1: set labels format"
 msgstr "%1: задание формата подписей"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:933
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:937
 #, kde-format
 msgid "%1: set labels format automatic"
 msgstr "%1: задание автоматического формата подписей"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:940
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:947
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:944
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:951
 #, kde-format
 msgid "%1: set labels precision"
 msgstr "%1: задание точности подписей"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:954
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:958
 #, kde-format
 msgid "%1: set labels datetime format"
 msgstr "%1: задание формата даты и времени подписей"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:961
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:965
 #, kde-format
 msgid "%1: set labels position"
 msgstr "%1: задание позиции подписей"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:968
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:972
 #, kde-format
 msgid "%1: set label offset"
 msgstr "%1: задание смещения подписи"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:975
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:979
 #, kde-format
 msgid "%1: set label rotation angle"
 msgstr "%1: задание угла поворота подписи"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:982
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:986
 #, kde-format
 msgid "%1: set labels text type"
 msgstr "%1: задание типа текста подписей"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:989
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:993
 #, kde-format
 msgid "%1: set labels text column"
 msgstr "%1: задание текстового столбца подписей"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1003
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1007
 #, kde-format
 msgid "%1: set label color"
 msgstr "%1: задание цвета подписи"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1010
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1014
 #, kde-format
 msgid "%1: set label font"
 msgstr "%1: задание шрифта подписи"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1017
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1021
 #, kde-format
 msgid "%1: set labels background type"
 msgstr "%1: задание типа фона подписей"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1024
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1028
 #, kde-format
 msgid "%1: set label background color"
 msgstr "%1: задание цвета фона подписи"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1031
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1035
 #, kde-format
 msgid "%1: set label prefix"
 msgstr "%1: задание префикса подписи"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1038
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1042
 #, kde-format
 msgid "%1: set label suffix"
 msgstr "%1: задание суффикса подписи"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1045
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1049
 #, kde-format
 msgid "%1: set labels opacity"
 msgstr "%1: задание степени непрозрачности подписей"
@@ -13020,7 +13020,7 @@ msgstr "Абсолютная величина"
 msgid "Offset"
 msgstr "Смещение"
 
-#. i18n("Column labels"));
+#. i18n("Column labels"), (int)Axis::TicksType::ColumnLabels);
 #. labels
 #: src/frontend/dockwidgets/AxisDock.cpp:291
 #, kde-format
@@ -13093,12 +13093,12 @@ msgstr ""
 msgid "Scale is async with the plot"
 msgstr ""
 
-#: src/frontend/dockwidgets/AxisDock.cpp:2023
+#: src/frontend/dockwidgets/AxisDock.cpp:2024
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
 msgstr "Оси (%1): загрузка шаблона «%2»"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:2025
+#: src/frontend/dockwidgets/AxisDock.cpp:2026
 #: src/frontend/dockwidgets/BarPlotDock.cpp:503
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:728
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1839

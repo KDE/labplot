@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-02 00:37+0000\n"
-"PO-Revision-Date: 2025-01-01 09:51+0100\n"
+"POT-Creation-Date: 2025-01-03 00:38+0000\n"
+"PO-Revision-Date: 2025-01-02 05:17+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -7870,139 +7870,139 @@ msgid "%1: set the total number of the major ticks"
 msgstr "%1: ძირითადი გაყოფების სრული რაოდენობის დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:784
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:866
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:868
 #, kde-format
 msgid "%1: disable major automatic tick numbers"
 msgstr "%1: ძირითადი ავტომატური გაყოფის ნომრების გამორთვა"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:807
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:809
 #, kde-format
 msgid "%1: set the spacing of the major ticks"
 msgstr "%1: ძირითადი გაყოფების გამოტოვების დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:814
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:816
 #, kde-format
 msgid "%1: assign major ticks' values"
 msgstr "%1: ძირითადი გაყოფის მნიშვნელობების მინიჭება"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:828
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:830
 #, kde-format
 msgid "%1: set major ticks length"
 msgstr "%1: ძირითადი გაყოფის სიგრძის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:836
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:838
 #, kde-format
 msgid "%1: set minor ticks direction"
 msgstr "%1: მცირე გაყოფების მიმართულების დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:843
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:845
 #, kde-format
 msgid "%1: set minor ticks type"
 msgstr "%1: მცირე გაყოფის ტიპის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:851
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:853
 #, kde-format
 msgid "%1: enable/disable minor automatic tick numbers"
 msgstr "%1: მცირე ავტომატური გაყოფის ნომრების ჩართვა/გამორთვა"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:854
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:865
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:856
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:867
 #, kde-format
 msgid "%1: set the total number of the minor ticks"
 msgstr "%1: მცირე გაყოფების სრული რაოდენობის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:896
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:900
 #, kde-format
 msgid "%1: set the spacing of the minor ticks"
 msgstr "%1: მცირე გაყოფებს შორის გამოტოვების დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:903
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:907
 #, kde-format
 msgid "%1: assign minor ticks' values"
 msgstr "%1: მცირე გაყოფის მნიშვნელობების დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:917
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:921
 #, kde-format
 msgid "%1: set minor ticks length"
 msgstr "%1: მცირე გაყოფის სიგრძის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:926
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:930
 #, kde-format
 msgid "%1: set labels format"
 msgstr "%1: ჭდის ფორმატის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:933
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:937
 #, kde-format
 msgid "%1: set labels format automatic"
 msgstr "%1; უჯრედის ფორმულის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:940
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:947
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:944
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:951
 #, kde-format
 msgid "%1: set labels precision"
 msgstr "%1: ჭდის სიზუსტის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:954
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:958
 #, kde-format
 msgid "%1: set labels datetime format"
 msgstr "%1: ჭდის თარიღისა და დროის ფორმატის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:961
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:965
 #, kde-format
 msgid "%1: set labels position"
 msgstr "%1: ჭდის მდებარეობის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:968
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:972
 #, kde-format
 msgid "%1: set label offset"
 msgstr "%1: ჭდის წანაცვლების დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:975
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:979
 #, kde-format
 msgid "%1: set label rotation angle"
 msgstr "%1: ჭდის მობრუნების კუთხის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:982
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:986
 #, kde-format
 msgid "%1: set labels text type"
 msgstr "%1: ჭდის ტექსტის ტიპის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:989
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:993
 #, kde-format
 msgid "%1: set labels text column"
 msgstr "%1: ჭდის ტექსტის სვეტის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1003
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1007
 #, kde-format
 msgid "%1: set label color"
 msgstr "%1: ჭდის ფერის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1010
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1014
 #, kde-format
 msgid "%1: set label font"
 msgstr "%1: ჭდის ფონტის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1017
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1021
 #, kde-format
 msgid "%1: set labels background type"
 msgstr "%1: ჭდის ფონის ტიპის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1024
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1028
 #, kde-format
 msgid "%1: set label background color"
 msgstr "%1: ჭდის ფონის ფერის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1031
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1035
 #, kde-format
 msgid "%1: set label prefix"
 msgstr "%1: ჭდის პრეფიქსის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1038
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1042
 #, kde-format
 msgid "%1: set label suffix"
 msgstr "%1: ჭდის სუფიქსის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1045
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1049
 #, kde-format
 msgid "%1: set labels opacity"
 msgstr "%1: ჭდის გაუმჭვირვალობის დაყენება"
@@ -10184,10 +10184,9 @@ msgid "C++ Compiler: "
 msgstr "C++ კომპილატორი: "
 
 #: src/frontend/AboutDialog.cpp:181
-#, fuzzy, kde-format
-#| msgid "C++ Compiler Flags: "
+#, kde-format
 msgid "C++ Compiler Flags:"
-msgstr "C++ კომპილატორის ალმები: "
+msgstr "C++ კომპილატორის ალმები:"
 
 #: src/frontend/AboutDialog.cpp:185
 #, kde-format
@@ -12434,7 +12433,7 @@ msgstr "აბსოლუტური მნიშვნელობა"
 msgid "Offset"
 msgstr "წანაცვლება"
 
-#. i18n("Column labels"));
+#. i18n("Column labels"), (int)Axis::TicksType::ColumnLabels);
 #. labels
 #: src/frontend/dockwidgets/AxisDock.cpp:291
 #, kde-format
@@ -12506,12 +12505,12 @@ msgstr "მასშტაბი სინქრონიზებულია �
 msgid "Scale is async with the plot"
 msgstr "მასშტაბი ასინქრონულია მასშტაბთან"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:2023
+#: src/frontend/dockwidgets/AxisDock.cpp:2024
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
 msgstr "%1 ღერძები: ნიმუში \"%2\" ჩაიტვირთა"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:2025
+#: src/frontend/dockwidgets/AxisDock.cpp:2026
 #: src/frontend/dockwidgets/BarPlotDock.cpp:503
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:728
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1839
@@ -14411,10 +14410,9 @@ msgstr ""
 "მონაცემების ვიზუალიზაციისა და ანალიზის პროგრამაა."
 
 #: src/frontend/LabPlot.cpp:55
-#, fuzzy, kde-format
-#| msgid "(c) 2007-2024 LabPlot authors"
+#, kde-format
 msgid "(c) 2007-2025 LabPlot authors"
-msgstr "(c) 2007-2024 LabPlot-ის ავტორები"
+msgstr "(c) 2007-2025 LabPlot-ის ავტორები"
 
 #: src/frontend/LabPlot.cpp:57
 #, kde-format

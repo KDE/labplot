@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-02 00:37+0000\n"
+"POT-Creation-Date: 2025-01-03 00:38+0000\n"
 "PO-Revision-Date: 2014-06-30 02:02+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: lt\n"
@@ -7836,139 +7836,139 @@ msgid "%1: set the total number of the major ticks"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:784
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:866
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:868
 #, kde-format
 msgid "%1: disable major automatic tick numbers"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:807
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:809
 #, kde-format
 msgid "%1: set the spacing of the major ticks"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:814
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:816
 #, kde-format
 msgid "%1: assign major ticks' values"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:828
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:830
 #, kde-format
 msgid "%1: set major ticks length"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:836
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:838
 #, kde-format
 msgid "%1: set minor ticks direction"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:843
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:845
 #, kde-format
 msgid "%1: set minor ticks type"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:851
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:853
 #, kde-format
 msgid "%1: enable/disable minor automatic tick numbers"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:854
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:865
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:856
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:867
 #, kde-format
 msgid "%1: set the total number of the minor ticks"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:896
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:900
 #, kde-format
 msgid "%1: set the spacing of the minor ticks"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:903
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:907
 #, kde-format
 msgid "%1: assign minor ticks' values"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:917
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:921
 #, kde-format
 msgid "%1: set minor ticks length"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:926
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:930
 #, kde-format
 msgid "%1: set labels format"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:933
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:937
 #, kde-format
 msgid "%1: set labels format automatic"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:940
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:947
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:944
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:951
 #, kde-format
 msgid "%1: set labels precision"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:954
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:958
 #, kde-format
 msgid "%1: set labels datetime format"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:961
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:965
 #, kde-format
 msgid "%1: set labels position"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:968
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:972
 #, kde-format
 msgid "%1: set label offset"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:975
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:979
 #, kde-format
 msgid "%1: set label rotation angle"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:982
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:986
 #, kde-format
 msgid "%1: set labels text type"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:989
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:993
 #, kde-format
 msgid "%1: set labels text column"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1003
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1007
 #, kde-format
 msgid "%1: set label color"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1010
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1014
 #, kde-format
 msgid "%1: set label font"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1017
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1021
 #, kde-format
 msgid "%1: set labels background type"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1024
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1028
 #, kde-format
 msgid "%1: set label background color"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1031
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1035
 #, kde-format
 msgid "%1: set label prefix"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1038
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1042
 #, kde-format
 msgid "%1: set label suffix"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1045
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1049
 #, kde-format
 msgid "%1: set labels opacity"
 msgstr ""
@@ -12328,7 +12328,7 @@ msgstr ""
 msgid "Offset"
 msgstr ""
 
-#. i18n("Column labels"));
+#. i18n("Column labels"), (int)Axis::TicksType::ColumnLabels);
 #. labels
 #: src/frontend/dockwidgets/AxisDock.cpp:291
 #, kde-format
@@ -12400,12 +12400,12 @@ msgstr ""
 msgid "Scale is async with the plot"
 msgstr ""
 
-#: src/frontend/dockwidgets/AxisDock.cpp:2023
+#: src/frontend/dockwidgets/AxisDock.cpp:2024
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
 msgstr ""
 
-#: src/frontend/dockwidgets/AxisDock.cpp:2025
+#: src/frontend/dockwidgets/AxisDock.cpp:2026
 #: src/frontend/dockwidgets/BarPlotDock.cpp:503
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:728
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1839

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-02 00:37+0000\n"
-"PO-Revision-Date: 2024-12-27 07:18+0100\n"
+"POT-Creation-Date: 2025-01-03 00:38+0000\n"
+"PO-Revision-Date: 2025-01-02 21:24+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -7903,139 +7903,139 @@ msgid "%1: set the total number of the major ticks"
 msgstr "%1: nastavi skupno število glavnih oznak"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:784
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:866
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:868
 #, kde-format
 msgid "%1: disable major automatic tick numbers"
 msgstr "%1: onemogoči glavne samodejne oštevilčene črtice na osi"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:807
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:809
 #, kde-format
 msgid "%1: set the spacing of the major ticks"
 msgstr "%1: nastavi razmik glavnih oznak"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:814
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:816
 #, kde-format
 msgid "%1: assign major ticks' values"
 msgstr "%1: dodeli vrednosti glavnih oznak"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:828
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:830
 #, kde-format
 msgid "%1: set major ticks length"
 msgstr "%1: nastavi dolžino glavnih oznak"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:836
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:838
 #, kde-format
 msgid "%1: set minor ticks direction"
 msgstr "%1: nastavi smer sekundarnih oznak"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:843
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:845
 #, kde-format
 msgid "%1: set minor ticks type"
 msgstr "%1: nastavi vrsto sekundarnih oznak"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:851
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:853
 #, kde-format
 msgid "%1: enable/disable minor automatic tick numbers"
 msgstr "%1: omogoči/onemogoči manjše samodejne oštevilčene črtice na osi"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:854
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:865
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:856
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:867
 #, kde-format
 msgid "%1: set the total number of the minor ticks"
 msgstr "%1: nastavi skupno število sekundarnih oznak"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:896
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:900
 #, kde-format
 msgid "%1: set the spacing of the minor ticks"
 msgstr "%1: nastavi razmik med sekundarnimi oznakami"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:903
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:907
 #, kde-format
 msgid "%1: assign minor ticks' values"
 msgstr "%1: dodeli vrednosti sekundarnih oznak"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:917
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:921
 #, kde-format
 msgid "%1: set minor ticks length"
 msgstr "%1: nastavi dolžino sekundarnih oznak"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:926
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:930
 #, kde-format
 msgid "%1: set labels format"
 msgstr "%1: določi obliko oznak"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:933
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:937
 #, kde-format
 msgid "%1: set labels format automatic"
 msgstr "%1: samodejno določi obliko oznak"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:940
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:947
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:944
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:951
 #, kde-format
 msgid "%1: set labels precision"
 msgstr "%1: določi natančnost oznak"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:954
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:958
 #, kde-format
 msgid "%1: set labels datetime format"
 msgstr "%1: določi obliko datuma/časa oznak"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:961
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:965
 #, kde-format
 msgid "%1: set labels position"
 msgstr "%1: določi položaj oznak"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:968
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:972
 #, kde-format
 msgid "%1: set label offset"
 msgstr "%1: določi odmik oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:975
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:979
 #, kde-format
 msgid "%1: set label rotation angle"
 msgstr "%1: določi kot vrtenja oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:982
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:986
 #, kde-format
 msgid "%1: set labels text type"
 msgstr "%1: nastavi vrsto besedila oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:989
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:993
 #, kde-format
 msgid "%1: set labels text column"
 msgstr "%1: nastavi stolpec besedila oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1003
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1007
 #, kde-format
 msgid "%1: set label color"
 msgstr "%1: določi barvo oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1010
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1014
 #, kde-format
 msgid "%1: set label font"
 msgstr "%1: določi pisavo oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1017
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1021
 #, kde-format
 msgid "%1: set labels background type"
 msgstr "%1: določi vrsto ozadja oznak"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1024
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1028
 #, kde-format
 msgid "%1: set label background color"
 msgstr "%1: določi barvo ozadja oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1031
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1035
 #, kde-format
 msgid "%1: set label prefix"
 msgstr "%1: določi predpono oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1038
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1042
 #, kde-format
 msgid "%1: set label suffix"
 msgstr "%1: določi pripono oznake"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1045
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1049
 #, kde-format
 msgid "%1: set labels opacity"
 msgstr "%1: določi prekrivnost oznak"
@@ -10219,10 +10219,9 @@ msgid "C++ Compiler: "
 msgstr "Prevajalnik C++: "
 
 #: src/frontend/AboutDialog.cpp:181
-#, fuzzy, kde-format
-#| msgid "C++ Compiler Flags: "
+#, kde-format
 msgid "C++ Compiler Flags:"
-msgstr "Zastavice prevajalnika C++: "
+msgstr "Zastavice prevajalnika C++:"
 
 #: src/frontend/AboutDialog.cpp:185
 #, kde-format
@@ -12578,7 +12577,7 @@ msgstr "Absolutna vrednost"
 msgid "Offset"
 msgstr "Zamik"
 
-#. i18n("Column labels"));
+#. i18n("Column labels"), (int)Axis::TicksType::ColumnLabels);
 #. labels
 #: src/frontend/dockwidgets/AxisDock.cpp:291
 #, kde-format
@@ -12650,12 +12649,12 @@ msgstr "Merilo je v skladu z merilom slike"
 msgid "Scale is async with the plot"
 msgstr "Merilo ni v skladu s sliko"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:2023
+#: src/frontend/dockwidgets/AxisDock.cpp:2024
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
 msgstr "%1 osi: naložena predloga »%2«"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:2025
+#: src/frontend/dockwidgets/AxisDock.cpp:2026
 #: src/frontend/dockwidgets/BarPlotDock.cpp:503
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:728
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1839
@@ -13260,6 +13259,7 @@ msgstr "Silverman"
 msgid ""
 "The window function (\"kernel\") used to estimate the probability density"
 msgstr ""
+"Okenska funkcija (\"kernel\"), ki se uporablja za oceno gostote verjetnosti"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:180
 #, kde-format
@@ -13268,11 +13268,14 @@ msgid ""
 "min(sigma, IQR / 1.34) * n^(-0.2)</li><li>Scott -  1.059 * sigma * n^(-0.2)</"
 "li><li>Custom - custom value for the kernel bandwidth</li></ul>"
 msgstr ""
+"Metoda za izbiro pasovne širine jedra:<ul><li>Silverman -  0,9 * min(sigma, "
+"IQR / 1,34) * n^(-0,2)</li><li>Scott -  1,059 * sigma * n^( -0,2)</li><li>Po "
+"meri – vrednost po meri za pasovno širino jedra</li></ul>"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:189
 #, kde-format
 msgid "Custom value for the kernel bandwidth"
-msgstr ""
+msgstr "Vrednost po meri za pasovno širino jedra"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:371
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:452
@@ -13401,6 +13404,9 @@ msgid ""
 "If checked, exact limits are calculated for every individual sample (\"stair-"
 "step limits\"), straight lines are drawn for the limits otherwise."
 msgstr ""
+"Če je odkljukano, se natančne meje izračunajo za vsak posamezen vzorec "
+"(\"mejne stopničaste vrednosti\"), sicer pa so za mejne vrednosti narisane "
+"ravne črte."
 
 #: src/frontend/dockwidgets/ProjectDock.cpp:28
 #, kde-format
@@ -13430,6 +13436,8 @@ msgid ""
 "Distribution used to calculate the percentiles to be compared with the "
 "percentiles of the provided data"
 msgstr ""
+"Porazdelitev, uporabljena za izračun percentilov, ki jih je treba primerjati "
+"s percentili posredovanih podatkov"
 
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:227
 #, kde-format
@@ -13442,6 +13450,8 @@ msgid ""
 "Metric of the dataset used to determine where the center line should be "
 "placed at"
 msgstr ""
+"Metrika nabora podatkov, ki se uporablja za določanje, kje naj bo središčna "
+"črta"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:52
 #, kde-format
@@ -14584,10 +14594,9 @@ msgstr ""
 "vizualizacijo in analizo podatkov, ki je dostopna vsem."
 
 #: src/frontend/LabPlot.cpp:55
-#, fuzzy, kde-format
-#| msgid "(c) 2007-2024 LabPlot authors"
+#, kde-format
 msgid "(c) 2007-2025 LabPlot authors"
-msgstr "(c) 2007-2024 avtorji LabPlota"
+msgstr "(c) 2007-2025 avtorji LabPlota"
 
 #: src/frontend/LabPlot.cpp:57
 #, kde-format
@@ -21395,10 +21404,9 @@ msgstr "Obseg izrisa:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabKDE)
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:210
-#, fuzzy, kde-format
-#| msgid "Estimation"
+#, kde-format
 msgid "Estimation Line"
-msgstr "Ocena"
+msgstr "Krivulja ocene"
 
 #. i18n: ectx: property (text), widget (QPushButton, bUpdateNow)
 #: src/frontend/ui/dockwidgets/livedatadock.ui:67
