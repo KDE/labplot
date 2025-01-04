@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-03 00:38+0000\n"
+"POT-Creation-Date: 2025-01-04 00:38+0000\n"
 "PO-Revision-Date: 2024-04-22 16:05\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -178,7 +178,7 @@ msgstr "天"
 #: src/backend/nsl/nsl_smooth.c:22 src/frontend/dockwidgets/AxisDock.cpp:267
 #: src/frontend/dockwidgets/AxisDock.cpp:280
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:55
-#: src/frontend/dockwidgets/XYCurveDock.cpp:193 src/frontend/GuiTools.cpp:154
+#: src/frontend/dockwidgets/XYCurveDock.cpp:193 src/frontend/GuiTools.cpp:151
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
 #: src/frontend/widgets/BackgroundWidget.cpp:114
 #: src/frontend/widgets/LineWidget.cpp:47
@@ -413,7 +413,7 @@ msgstr ""
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:272
 #: src/backend/lib/XmlStreamReader.cpp:104
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1908
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1912
 #, kde-format
 msgid "unknown element '%1'"
 msgstr ""
@@ -1903,7 +1903,7 @@ msgid "Unknown"
 msgstr ""
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/MainWin.cpp:643 src/frontend/MainWin.cpp:1989
+#: src/frontend/MainWin.cpp:643 src/frontend/MainWin.cpp:1988
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -7563,13 +7563,13 @@ msgstr ""
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:100
 #: src/backend/worksheet/plots/AbstractPlot.cpp:128
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1338
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1342
 #, kde-format
 msgid "%1: set horizontal padding"
 msgstr "%1：设置水平边距"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:107
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1364
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1368
 #, kde-format
 msgid "%1: set vertical padding"
 msgstr "%1：设置垂直边距"
@@ -7613,8 +7613,8 @@ msgstr "水平"
 #: src/frontend/dockwidgets/AxisDock.cpp:251
 #: src/frontend/dockwidgets/BarPlotDock.cpp:57
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:53
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:904
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:908
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:912
 #: src/frontend/dockwidgets/HistogramDock.cpp:158
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:52
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:28
@@ -8285,7 +8285,7 @@ msgstr "垂直坐标轴"
 #: src/frontend/notebook/NotebookView.cpp:110
 #: src/frontend/widgets/BackgroundWidget.cpp:123
 #: src/frontend/worksheet/WorksheetView.cpp:224
-#: src/frontend/worksheet/WorksheetView.cpp:1343
+#: src/frontend/worksheet/WorksheetView.cpp:1342
 #, kde-format
 msgid "Image"
 msgstr "图像"
@@ -8317,7 +8317,7 @@ msgid "Reference Range"
 msgstr "参照区间"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:558
-#: src/frontend/MainWin.cpp:892 src/frontend/notebook/NotebookView.cpp:168
+#: src/frontend/MainWin.cpp:891 src/frontend/notebook/NotebookView.cpp:168
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:294
 #: src/frontend/worksheet/WorksheetView.cpp:433
@@ -8348,7 +8348,7 @@ msgstr "分析"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:652
 #: src/frontend/ThemeHandler.cpp:49 src/frontend/ThemeHandler.cpp:144
-#: src/frontend/worksheet/WorksheetView.cpp:544
+#: src/frontend/worksheet/WorksheetView.cpp:543
 #, kde-format
 msgid "Theme"
 msgstr "主题"
@@ -8720,8 +8720,8 @@ msgid "%1: add function curve"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2168
+#: src/frontend/worksheet/WorksheetView.cpp:1338
 #: src/frontend/worksheet/WorksheetView.cpp:1339
-#: src/frontend/worksheet/WorksheetView.cpp:1340
 #, kde-format
 msgid "Text Label"
 msgstr "文本标签"
@@ -10271,17 +10271,17 @@ msgstr "输入您要搜索的关键字"
 msgid "Search..."
 msgstr "搜索..."
 
-#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:186
+#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:185
 #, kde-format
 msgid "Red"
 msgstr "红色"
 
-#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:186
+#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:185
 #, kde-format
 msgid "Green"
 msgstr "绿色"
 
-#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:187
+#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:186
 #, kde-format
 msgid "Blue"
 msgstr "蓝色"
@@ -10451,8 +10451,8 @@ msgid "5x Magnification"
 msgstr "放大 5 倍"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:218
-#: src/frontend/worksheet/WorksheetView.cpp:441
-#: src/frontend/worksheet/WorksheetView.cpp:492
+#: src/frontend/worksheet/WorksheetView.cpp:440
+#: src/frontend/worksheet/WorksheetView.cpp:491
 #, kde-format
 msgid "Mouse Mode"
 msgstr "鼠标模式"
@@ -10468,7 +10468,7 @@ msgid "Move Last Point"
 msgstr "移动最后一个点"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:241
-#: src/frontend/worksheet/WorksheetView.cpp:458
+#: src/frontend/worksheet/WorksheetView.cpp:457
 #, kde-format
 msgid "Magnification"
 msgstr "放大镜"
@@ -10507,7 +10507,7 @@ msgstr "曲线"
 #: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4075
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4129
-#: src/frontend/worksheet/WorksheetView.cpp:2195
+#: src/frontend/worksheet/WorksheetView.cpp:2194
 #, kde-format
 msgid "Failed to export"
 msgstr "导出失败"
@@ -10515,7 +10515,7 @@ msgstr "导出失败"
 #: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4075
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4129
-#: src/frontend/worksheet/WorksheetView.cpp:2195
+#: src/frontend/worksheet/WorksheetView.cpp:2194
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "无法写入“%1”。请检查路径。"
@@ -11783,7 +11783,7 @@ msgid "Open LabPlot Project"
 msgstr ""
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:438
-#: src/frontend/MainWin.cpp:1485
+#: src/frontend/MainWin.cpp:1484
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "LabPlot 工程 (%1)"
@@ -11808,7 +11808,7 @@ msgstr "文件夹名称："
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:71 src/frontend/MainWin.cpp:637
-#: src/frontend/MainWin.cpp:1971 src/frontend/SettingsDialog.cpp:68
+#: src/frontend/MainWin.cpp:1970 src/frontend/SettingsDialog.cpp:68
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:122
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -12233,7 +12233,7 @@ msgstr "半填充大型"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:47
 #: src/frontend/dockwidgets/ImageDock.cpp:50
 #: src/frontend/dockwidgets/ImageDock.cpp:58
-#: src/frontend/dockwidgets/XYCurveDock.cpp:348
+#: src/frontend/dockwidgets/XYCurveDock.cpp:347
 #: src/frontend/widgets/BackgroundWidget.cpp:118
 #: src/frontend/widgets/LabelWidget.cpp:149
 #: src/frontend/widgets/LabelWidget.cpp:168
@@ -12251,7 +12251,7 @@ msgstr "左侧"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:49
 #: src/frontend/dockwidgets/ImageDock.cpp:52
 #: src/frontend/dockwidgets/ImageDock.cpp:60
-#: src/frontend/dockwidgets/XYCurveDock.cpp:349
+#: src/frontend/dockwidgets/XYCurveDock.cpp:348
 #: src/frontend/widgets/BackgroundWidget.cpp:119
 #: src/frontend/widgets/LabelWidget.cpp:151
 #: src/frontend/widgets/LabelWidget.cpp:170
@@ -12402,7 +12402,7 @@ msgstr "坐标轴 %1：加载模板“%2”"
 #: src/frontend/dockwidgets/AxisDock.cpp:2026
 #: src/frontend/dockwidgets/BarPlotDock.cpp:503
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:728
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1839
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1843
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:801
 #: src/frontend/dockwidgets/CustomPointDock.cpp:378
 #: src/frontend/dockwidgets/HistogramDock.cpp:562
@@ -12415,7 +12415,7 @@ msgstr "坐标轴 %1：加载模板“%2”"
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:232
 #: src/frontend/dockwidgets/WorksheetDock.cpp:605
-#: src/frontend/dockwidgets/XYCurveDock.cpp:1046
+#: src/frontend/dockwidgets/XYCurveDock.cpp:1045
 #, kde-format
 msgid "%1: template \"%2\" loaded"
 msgstr "%1：加载模板“%2”"
@@ -12612,31 +12612,31 @@ msgstr ""
 msgid "Save current plot area definition as template"
 msgstr "将当前绘图区域定义保存为模板"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:608
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:612
 #, kde-format
 msgid "%1-Ranges:"
 msgstr "%1 范围："
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:610
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:614
 #, kde-format
 msgid "%1-Range:"
 msgstr "%1 范围："
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:634
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:638
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:209
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:53
 #, kde-format
 msgid "Numeric"
 msgstr "数值"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:780
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:784
 #, kde-format
 msgid "Plot Ranges:"
 msgstr "绘图范围："
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:782
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:786
 #: src/frontend/ui/dockwidgets/axisdock.ui:262
 #: src/frontend/ui/dockwidgets/barplotdock.ui:186
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:90
@@ -12663,22 +12663,22 @@ msgstr "绘图范围："
 msgid "Plot Range:"
 msgstr "绘图范围："
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:884
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:888
 #, kde-format
 msgid "Free"
 msgstr "全部点"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:885
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:889
 #, kde-format
 msgid "Last Points"
 msgstr "后若干个点"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:886
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:890
 #, kde-format
 msgid "First Points"
 msgstr "前若干个点"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:889
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:893
 #, kde-format
 msgid ""
 "Data Range:<ul><li>Free - full data range is plotted</li><li>Last Points - "
@@ -12688,42 +12688,42 @@ msgstr ""
 "数据范围：<ul><li>全部点 - 绘制全部点</li><li>后若干个点 - 仅绘制指定数量的后"
 "若干个点</li><li>前若干个点 - 仅绘制指定数量的前若干个点</li></ul>"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:898
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:902
 #, kde-format
 msgid "If checked, automatically extend the plot range to nice values"
 msgstr "如果选中，自动将绘图范围扩展到比较规整的值"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:903
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:907
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:911
 #, kde-format
 msgid "Simple"
 msgstr "简单"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:905
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:909
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:913
 #, kde-format
 msgid "Sloped"
 msgstr ""
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1163
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1167
 #, kde-format
 msgid "%1 range %2 is used in plot range %3. "
 msgstr "%1 范围 %2 正在被绘图范围 %3 使用。"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1164
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1217
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1168
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1221
 #, kde-format
 msgid "Really remove it?"
 msgstr "确定要删除吗？"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1217
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1221
 #, kde-format
 msgid "Plot range %1 is used by element \"%2\". "
 msgstr "绘图范围 %1 正在被元素“%2”使用。"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1310
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1314
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:560
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:769
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:342
@@ -12733,7 +12733,7 @@ msgstr "水平："
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVertical)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalSpacing)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1311
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1315
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:861
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:724
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:428
@@ -12743,7 +12743,7 @@ msgstr "垂直："
 
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1313
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1317
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:796
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:717
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:414
@@ -12753,7 +12753,7 @@ msgstr "左："
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1314
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1318
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:803
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:666
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:407
@@ -12761,18 +12761,18 @@ msgstr "左："
 msgid "Top:"
 msgstr "上："
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1646
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1650
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
 msgstr "选择模板保存文件"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1648
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1652
 #, kde-format
 msgid "Labplot Plot Templates (*%1)"
 msgstr "LabPlot 绘图模板 (*%1)"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1837
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1841
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr "直角坐标绘图 %1：加载模板“%2”"
@@ -13004,7 +13004,7 @@ msgstr ""
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:452
 #: src/frontend/dockwidgets/QQPlotDock.cpp:282
 #: src/frontend/dockwidgets/RunChartDock.cpp:227
-#: src/frontend/dockwidgets/XYCurveDock.cpp:1044
+#: src/frontend/dockwidgets/XYCurveDock.cpp:1043
 #, kde-format
 msgid "%1 xy-curves: template \"%2\" loaded"
 msgstr ""
@@ -13320,42 +13320,42 @@ msgstr "Akima 样条曲线 (自然)"
 msgid "Akima-spline (Periodic)"
 msgstr "Akima 样条曲线 (封闭)"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:339
+#: src/frontend/dockwidgets/XYCurveDock.cpp:338
 #: src/frontend/widgets/ValueWidget.cpp:31
 #, kde-format
 msgid "No Values"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:344
+#: src/frontend/dockwidgets/XYCurveDock.cpp:343
 #: src/frontend/widgets/ValueWidget.cpp:33
 #, kde-format
 msgid "Custom Column"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:346
+#: src/frontend/dockwidgets/XYCurveDock.cpp:345
 #: src/frontend/widgets/BackgroundWidget.cpp:115
 #: src/frontend/widgets/ValueWidget.cpp:35
 #, kde-format
 msgid "Above"
 msgstr "上"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:347
+#: src/frontend/dockwidgets/XYCurveDock.cpp:346
 #: src/frontend/widgets/BackgroundWidget.cpp:116
 #: src/frontend/widgets/ValueWidget.cpp:36
 #, kde-format
 msgid "Below"
 msgstr "下"
 
+#: src/frontend/dockwidgets/XYCurveDock.cpp:524
 #: src/frontend/dockwidgets/XYCurveDock.cpp:525
-#: src/frontend/dockwidgets/XYCurveDock.cpp:526
 #, kde-format
 msgid ""
 "If checked, connect neighbour points with lines even if there are gaps "
 "(invalid or masked values) between them"
 msgstr "如果选中，即使相邻点之间存在空隙 (无效值或屏蔽值)，也将它们连接起来"
 
+#: src/frontend/dockwidgets/XYCurveDock.cpp:526
 #: src/frontend/dockwidgets/XYCurveDock.cpp:527
-#: src/frontend/dockwidgets/XYCurveDock.cpp:528
 #, kde-format
 msgid ""
 "If checked, connect data points only for strictly increasing values of X"
@@ -13690,7 +13690,7 @@ msgid ""
 "installation."
 msgstr ""
 
-#: src/frontend/GuiObserver.cpp:177 src/frontend/MainWin.cpp:1392
+#: src/frontend/GuiObserver.cpp:177 src/frontend/MainWin.cpp:1391
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -14009,198 +14009,198 @@ msgstr "点虚相间线"
 msgid "Dash-dot-dot Line"
 msgstr "双点虚相间线"
 
-#: src/frontend/GuiTools.cpp:155
+#: src/frontend/GuiTools.cpp:152
 #, kde-format
 msgid "Uniform"
 msgstr "均匀"
 
-#: src/frontend/GuiTools.cpp:156
+#: src/frontend/GuiTools.cpp:153
 #, kde-format
 msgid "Extremely Dense"
 msgstr "极度稠密"
 
-#: src/frontend/GuiTools.cpp:157
+#: src/frontend/GuiTools.cpp:154
 #, kde-format
 msgid "Very Dense"
 msgstr "非常稠密"
 
-#: src/frontend/GuiTools.cpp:158
+#: src/frontend/GuiTools.cpp:155
 #, kde-format
 msgid "Somewhat Dense"
 msgstr "有些稠密"
 
-#: src/frontend/GuiTools.cpp:159
+#: src/frontend/GuiTools.cpp:156
 #, kde-format
 msgid "Half Dense"
 msgstr "半稠半疏"
 
-#: src/frontend/GuiTools.cpp:160
+#: src/frontend/GuiTools.cpp:157
 #, kde-format
 msgid "Somewhat Sparse"
 msgstr "有些稀疏"
 
-#: src/frontend/GuiTools.cpp:161
+#: src/frontend/GuiTools.cpp:158
 #, kde-format
 msgid "Very Sparse"
 msgstr "非常稀疏"
 
-#: src/frontend/GuiTools.cpp:162
+#: src/frontend/GuiTools.cpp:159
 #, kde-format
 msgid "Extremely Sparse"
 msgstr "极度稀疏"
 
-#: src/frontend/GuiTools.cpp:163
+#: src/frontend/GuiTools.cpp:160
 #, kde-format
 msgid "Horiz. Lines"
 msgstr "水平线"
 
-#: src/frontend/GuiTools.cpp:164
+#: src/frontend/GuiTools.cpp:161
 #, kde-format
 msgid "Vert. Lines"
 msgstr "垂直线"
 
-#: src/frontend/GuiTools.cpp:165
+#: src/frontend/GuiTools.cpp:162
 #, kde-format
 msgid "Crossing Lines"
 msgstr "十字线"
 
-#: src/frontend/GuiTools.cpp:166
+#: src/frontend/GuiTools.cpp:163
 #, kde-format
 msgid "Backward Diag. Lines"
 msgstr "反斜对角线"
 
-#: src/frontend/GuiTools.cpp:167
+#: src/frontend/GuiTools.cpp:164
 #, kde-format
 msgid "Forward Diag. Lines"
 msgstr "正斜对角线"
 
-#: src/frontend/GuiTools.cpp:168
+#: src/frontend/GuiTools.cpp:165
 #, kde-format
 msgid "Crossing Diag. Lines"
 msgstr "交叉对角线"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:185
 #, kde-format
 msgid "White"
 msgstr "白色"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:185
 #, kde-format
 msgid "Black"
 msgstr "黑色"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:185
 #, kde-format
 msgid "Dark Red"
 msgstr "暗红"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:185
 #, kde-format
 msgid "Light Red"
 msgstr "浅红色"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:185
 #, kde-format
 msgid "Dark Green"
 msgstr "暗绿"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:186
 #, kde-format
 msgid "Light Green"
 msgstr "浅绿色"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:186
 #, kde-format
 msgid "Dark Blue"
 msgstr "暗蓝"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:186
 #, kde-format
 msgid "Light Blue"
 msgstr "浅蓝"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:186
 #, kde-format
 msgid "Dark Yellow"
 msgstr "深黄色"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:186
 #, kde-format
 msgid "Yellow"
 msgstr "黄色"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:186
 #, kde-format
 msgid "Light Yellow"
 msgstr "淡黄色"
 
-#: src/frontend/GuiTools.cpp:188
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Dark Cyan"
 msgstr "暗青"
 
-#: src/frontend/GuiTools.cpp:188
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Cyan"
 msgstr "青色"
 
-#: src/frontend/GuiTools.cpp:188
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Light Cyan"
 msgstr "浅青色"
 
-#: src/frontend/GuiTools.cpp:188
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Dark Magenta"
 msgstr "深洋红"
 
-#: src/frontend/GuiTools.cpp:188
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Magenta"
 msgstr "洋红"
 
-#: src/frontend/GuiTools.cpp:188
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Light Magenta"
 msgstr "浅洋红色"
 
-#: src/frontend/GuiTools.cpp:188
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Dark Orange"
 msgstr "深橙色"
 
-#: src/frontend/GuiTools.cpp:189
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Orange"
 msgstr "橙色"
 
-#: src/frontend/GuiTools.cpp:189
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Light Orange"
 msgstr "浅橙色"
 
-#: src/frontend/GuiTools.cpp:189
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Dark Grey"
 msgstr "暗灰色"
 
-#: src/frontend/GuiTools.cpp:189
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Grey"
 msgstr "灰"
 
-#: src/frontend/GuiTools.cpp:189
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Light Grey"
 msgstr "浅灰色"
 
-#: src/frontend/GuiTools.cpp:308
+#: src/frontend/GuiTools.cpp:306
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image File"
 msgstr "打开图像文件"
 
-#: src/frontend/GuiTools.cpp:308
+#: src/frontend/GuiTools.cpp:306
 #, kde-format
 msgid "Images (%1)"
 msgstr "图像 (%1)"
@@ -14528,7 +14528,7 @@ msgstr "欢迎使用 LabPlot %1"
 msgid "&Open Example"
 msgstr "打开示例(&O)"
 
-#: src/frontend/MainWin.cpp:627 src/frontend/MainWin.cpp:1955
+#: src/frontend/MainWin.cpp:627 src/frontend/MainWin.cpp:1954
 #, kde-format
 msgid "Workbook"
 msgstr "工作薄"
@@ -14538,7 +14538,7 @@ msgstr "工作薄"
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr "创建新的工作簿，用于存放工作表、矩阵"
 
-#: src/frontend/MainWin.cpp:632 src/frontend/MainWin.cpp:1963
+#: src/frontend/MainWin.cpp:632 src/frontend/MainWin.cpp:1962
 #, kde-format
 msgid "Data Extractor"
 msgstr "数据点提取器"
@@ -14558,7 +14558,7 @@ msgstr "创建新的数据表，用于编辑数据"
 msgid "Creates a new matrix for data editing"
 msgstr "创建新的矩阵，用于编辑数据"
 
-#: src/frontend/MainWin.cpp:649 src/frontend/MainWin.cpp:2007
+#: src/frontend/MainWin.cpp:649 src/frontend/MainWin.cpp:2006
 #: src/frontend/SettingsDialog.cpp:63
 #, kde-format
 msgid "Worksheet"
@@ -14569,7 +14569,7 @@ msgstr "工作表"
 msgid "Creates a new worksheet for data plotting"
 msgstr "创建新的工作表，用于数据绘图"
 
-#: src/frontend/MainWin.cpp:655 src/frontend/MainWin.cpp:2015
+#: src/frontend/MainWin.cpp:655 src/frontend/MainWin.cpp:2014
 #, kde-format
 msgid "Note"
 msgstr "备注"
@@ -14579,7 +14579,7 @@ msgstr "备注"
 msgid "Creates a new note for arbitrary text"
 msgstr "创建新的备注，用于记录文本"
 
-#: src/frontend/MainWin.cpp:660 src/frontend/MainWin.cpp:1947
+#: src/frontend/MainWin.cpp:660 src/frontend/MainWin.cpp:1946
 #, kde-format
 msgid "Folder"
 msgstr "文件夹"
@@ -14772,118 +14772,118 @@ msgid ""
 "systems or to enable new ones"
 msgstr "打开计算机代数系统 (CAS) 的设置，对可用系统做出修改或启用新系统"
 
-#: src/frontend/MainWin.cpp:922
+#: src/frontend/MainWin.cpp:921
 #, kde-format
 msgid "Window Visibility"
 msgstr "窗口可见性"
 
-#: src/frontend/MainWin.cpp:939
+#: src/frontend/MainWin.cpp:938
 #, kde-format
 msgid "Color Scheme"
 msgstr "配色方案"
 
-#: src/frontend/MainWin.cpp:997
+#: src/frontend/MainWin.cpp:996
 #, kde-format
 msgid "The current project \"%1\" has been modified. Do you want to save it?"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:998
+#: src/frontend/MainWin.cpp:997
 #, kde-format
 msgid "Save Project"
 msgstr "保存工程"
 
-#: src/frontend/MainWin.cpp:1353
+#: src/frontend/MainWin.cpp:1352
 #, kde-format
 msgid "%1: created"
 msgstr "%1：创建"
 
-#: src/frontend/MainWin.cpp:1379
+#: src/frontend/MainWin.cpp:1378
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "工程浏览器"
 
-#: src/frontend/MainWin.cpp:1404
+#: src/frontend/MainWin.cpp:1403
 #, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "工作表预览"
 
-#: src/frontend/MainWin.cpp:1413
+#: src/frontend/MainWin.cpp:1412
 #, kde-format
 msgctxt "@title:window"
 msgid "Content"
 msgstr "内容"
 
-#: src/frontend/MainWin.cpp:1490
+#: src/frontend/MainWin.cpp:1489
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr "Origin 工程文件 (%1)"
 
-#: src/frontend/MainWin.cpp:1496
+#: src/frontend/MainWin.cpp:1495
 #, kde-format
 msgid "Cantor Projects (*.cws)"
 msgstr "Cantor 工程文件 (*.cws)"
 
-#: src/frontend/MainWin.cpp:1497
+#: src/frontend/MainWin.cpp:1496
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "Jupyter 笔记本文件 (*.ipynb)"
 
-#: src/frontend/MainWin.cpp:1504
+#: src/frontend/MainWin.cpp:1503
 #, kde-format
 msgid "All supported files (%1)"
 msgstr "所有支持的文件 (%1)"
 
-#: src/frontend/MainWin.cpp:1508
+#: src/frontend/MainWin.cpp:1507
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "打开工程"
 
-#: src/frontend/MainWin.cpp:1525
+#: src/frontend/MainWin.cpp:1524
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "工程文件 %1 已经处于打开状态。"
 
-#: src/frontend/MainWin.cpp:1525 src/frontend/MainWin.cpp:1533
-#: src/frontend/MainWin.cpp:1538
+#: src/frontend/MainWin.cpp:1524 src/frontend/MainWin.cpp:1532
+#: src/frontend/MainWin.cpp:1537
 #, kde-format
 msgid "Open Project"
 msgstr "打开工程"
 
-#: src/frontend/MainWin.cpp:1533
+#: src/frontend/MainWin.cpp:1532
 #, kde-format
 msgid "The project file %1 doesn't exist."
 msgstr "工程文件 %1 不存在。"
 
-#: src/frontend/MainWin.cpp:1538
+#: src/frontend/MainWin.cpp:1537
 #, kde-format
 msgid "Couldn't read the project file %1."
 msgstr "无法读取工程文件 %1。"
 
-#: src/frontend/MainWin.cpp:1546
+#: src/frontend/MainWin.cpp:1545
 #, kde-format
 msgid "Loading %1..."
 msgstr "正在加载 %1..."
 
-#: src/frontend/MainWin.cpp:1600
+#: src/frontend/MainWin.cpp:1599
 #, kde-format
 msgid "%1: opened"
 msgstr "%1：打开"
 
-#: src/frontend/MainWin.cpp:1635
+#: src/frontend/MainWin.cpp:1634
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "工程打开成功 (耗时 %1 秒)。"
 
-#: src/frontend/MainWin.cpp:1727
+#: src/frontend/MainWin.cpp:1726
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "工程另存为"
 
-#: src/frontend/MainWin.cpp:1729
+#: src/frontend/MainWin.cpp:1728
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -14892,43 +14892,43 @@ msgstr ""
 "LabPlot 工程文件 (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 
-#: src/frontend/MainWin.cpp:1756
+#: src/frontend/MainWin.cpp:1755
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "无法打开临时文件进行写入。"
 
-#: src/frontend/MainWin.cpp:1836
+#: src/frontend/MainWin.cpp:1835
 #, kde-format
 msgid "Project saved"
 msgstr "工程已保存"
 
-#: src/frontend/MainWin.cpp:1852
+#: src/frontend/MainWin.cpp:1851
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "无法保存文件“%1”。"
 
-#: src/frontend/MainWin.cpp:1857
+#: src/frontend/MainWin.cpp:1856
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "无法打开文件“%1”进行写入."
 
-#: src/frontend/MainWin.cpp:1907
+#: src/frontend/MainWin.cpp:1906
 #, kde-format
 msgid "Changed"
 msgstr "已更改"
 
-#: src/frontend/MainWin.cpp:1922 src/frontend/MainWin.cpp:1934
+#: src/frontend/MainWin.cpp:1921 src/frontend/MainWin.cpp:1933
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "正在准备打印 %1"
 
-#: src/frontend/MainWin.cpp:1924 src/frontend/MainWin.cpp:1936
+#: src/frontend/MainWin.cpp:1923 src/frontend/MainWin.cpp:1935
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 已打印"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/MainWin.cpp:2456
+#: src/frontend/MainWin.cpp:2455
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1425
 #: src/frontend/worksheet/WorksheetView.cpp:362
 #, kde-format
@@ -15194,7 +15194,7 @@ msgid "Header Format"
 msgstr "表头格式"
 
 #: src/frontend/matrix/MatrixView.cpp:295
-#: src/frontend/worksheet/WorksheetView.cpp:447
+#: src/frontend/worksheet/WorksheetView.cpp:446
 #, kde-format
 msgid "Zoom"
 msgstr "缩放"
@@ -15558,7 +15558,7 @@ msgid "Do you really want to delete %1?"
 msgstr ""
 
 #: src/frontend/ProjectExplorer.cpp:919
-#: src/frontend/worksheet/WorksheetView.cpp:1434
+#: src/frontend/worksheet/WorksheetView.cpp:1433
 #, kde-format
 msgid "Delete selected object"
 msgid_plural "Delete selected objects"
@@ -19997,7 +19997,7 @@ msgstr "字体颜色："
 #. i18n: ectx: property (text), widget (QLabel, lGrid)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1620
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:441
-#: src/frontend/worksheet/WorksheetView.cpp:474
+#: src/frontend/worksheet/WorksheetView.cpp:473
 #, kde-format
 msgid "Grid"
 msgstr "网格"
@@ -20431,7 +20431,7 @@ msgstr "扩展："
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:547
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:620
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:265
-#: src/frontend/worksheet/WorksheetView.cpp:466
+#: src/frontend/worksheet/WorksheetView.cpp:465
 #, kde-format
 msgid "Layout"
 msgstr "布局"
@@ -24357,37 +24357,37 @@ msgid "Shift Down Y"
 msgstr "Y 方向下移"
 
 #: src/frontend/worksheet/WorksheetView.cpp:425
-#: src/frontend/worksheet/WorksheetView.cpp:489
-#: src/frontend/worksheet/WorksheetView.cpp:1295
-#: src/frontend/worksheet/WorksheetView.cpp:1302
-#: src/frontend/worksheet/WorksheetView.cpp:1309
-#: src/frontend/worksheet/WorksheetView.cpp:1316
+#: src/frontend/worksheet/WorksheetView.cpp:488
+#: src/frontend/worksheet/WorksheetView.cpp:1294
+#: src/frontend/worksheet/WorksheetView.cpp:1301
+#: src/frontend/worksheet/WorksheetView.cpp:1308
+#: src/frontend/worksheet/WorksheetView.cpp:1315
 #, kde-format
 msgid "Plot Area"
 msgstr "绘制区域"
 
-#: src/frontend/worksheet/WorksheetView.cpp:502
+#: src/frontend/worksheet/WorksheetView.cpp:501
 #, kde-format
 msgid "Zoom/Navigate"
 msgstr "缩放/导航"
 
-#: src/frontend/worksheet/WorksheetView.cpp:523
+#: src/frontend/worksheet/WorksheetView.cpp:522
 #, kde-format
 msgid "Apply Actions to"
 msgstr "将操作应用到"
 
-#: src/frontend/worksheet/WorksheetView.cpp:530
+#: src/frontend/worksheet/WorksheetView.cpp:529
 #, kde-format
 msgid "Apply Cursor to"
 msgstr "将辅助标尺应用到"
 
-#: src/frontend/worksheet/WorksheetView.cpp:1433
+#: src/frontend/worksheet/WorksheetView.cpp:1432
 #, kde-format
 msgid "Do you really want to delete the selected object?"
 msgid_plural "Do you really want to delete the selected %1 objects?"
 msgstr[0] "您确定要删除选中的 %1 个对象吗？"
 
-#: src/frontend/worksheet/WorksheetView.cpp:1441
+#: src/frontend/worksheet/WorksheetView.cpp:1440
 #, kde-format
 msgid "%1: Remove selected worksheet elements."
 msgstr ""

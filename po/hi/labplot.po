@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-03 00:38+0000\n"
+"POT-Creation-Date: 2025-01-04 00:38+0000\n"
 "PO-Revision-Date: 2024-12-15 19:44+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -179,7 +179,7 @@ msgstr "दिन"
 #: src/backend/nsl/nsl_smooth.c:22 src/frontend/dockwidgets/AxisDock.cpp:267
 #: src/frontend/dockwidgets/AxisDock.cpp:280
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:55
-#: src/frontend/dockwidgets/XYCurveDock.cpp:193 src/frontend/GuiTools.cpp:154
+#: src/frontend/dockwidgets/XYCurveDock.cpp:193 src/frontend/GuiTools.cpp:151
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
 #: src/frontend/widgets/BackgroundWidget.cpp:114
 #: src/frontend/widgets/LineWidget.cpp:47
@@ -416,7 +416,7 @@ msgstr "असंगत फ़िल्टर प्रकार"
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:272
 #: src/backend/lib/XmlStreamReader.cpp:104
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1908
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1912
 #, kde-format
 msgid "unknown element '%1'"
 msgstr "अज्ञात तत्व '%1'"
@@ -1918,7 +1918,7 @@ msgid "Unknown"
 msgstr "अज्ञात"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/MainWin.cpp:643 src/frontend/MainWin.cpp:1989
+#: src/frontend/MainWin.cpp:643 src/frontend/MainWin.cpp:1988
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -7595,13 +7595,13 @@ msgstr "%1: लाइन अपारदर्शिता सेट करे�
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:100
 #: src/backend/worksheet/plots/AbstractPlot.cpp:128
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1338
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1342
 #, kde-format
 msgid "%1: set horizontal padding"
 msgstr "%1: क्षैतिज पैडिंग सेट करें"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:107
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1364
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1368
 #, kde-format
 msgid "%1: set vertical padding"
 msgstr "%1: ऊर्ध्वाधर पैडिंग सेट करें"
@@ -7645,8 +7645,8 @@ msgstr "क्षैतिज"
 #: src/frontend/dockwidgets/AxisDock.cpp:251
 #: src/frontend/dockwidgets/BarPlotDock.cpp:57
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:53
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:904
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:908
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:912
 #: src/frontend/dockwidgets/HistogramDock.cpp:158
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:52
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:28
@@ -8319,7 +8319,7 @@ msgstr "ऊर्ध्वाधर अक्ष"
 #: src/frontend/notebook/NotebookView.cpp:110
 #: src/frontend/widgets/BackgroundWidget.cpp:123
 #: src/frontend/worksheet/WorksheetView.cpp:224
-#: src/frontend/worksheet/WorksheetView.cpp:1343
+#: src/frontend/worksheet/WorksheetView.cpp:1342
 #, kde-format
 msgid "Image"
 msgstr "छवि"
@@ -8351,7 +8351,7 @@ msgid "Reference Range"
 msgstr "संदर्भ सीमा"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:558
-#: src/frontend/MainWin.cpp:892 src/frontend/notebook/NotebookView.cpp:168
+#: src/frontend/MainWin.cpp:891 src/frontend/notebook/NotebookView.cpp:168
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:294
 #: src/frontend/worksheet/WorksheetView.cpp:433
@@ -8385,7 +8385,7 @@ msgstr "विश्लेषण"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:652
 #: src/frontend/ThemeHandler.cpp:49 src/frontend/ThemeHandler.cpp:144
-#: src/frontend/worksheet/WorksheetView.cpp:544
+#: src/frontend/worksheet/WorksheetView.cpp:543
 #, kde-format
 msgid "Theme"
 msgstr "विषय"
@@ -8768,8 +8768,8 @@ msgid "%1: add function curve"
 msgstr "%1: फ़ंक्शन वक्र जोड़ें"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2168
+#: src/frontend/worksheet/WorksheetView.cpp:1338
 #: src/frontend/worksheet/WorksheetView.cpp:1339
-#: src/frontend/worksheet/WorksheetView.cpp:1340
 #, kde-format
 msgid "Text Label"
 msgstr "पाठ लेबल"
@@ -10321,17 +10321,17 @@ msgstr "वह कीवर्ड दर्ज करें जिसे आप 
 msgid "Search..."
 msgstr "खोज..."
 
-#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:186
+#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:185
 #, kde-format
 msgid "Red"
 msgstr "लाल"
 
-#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:186
+#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:185
 #, kde-format
 msgid "Green"
 msgstr "हरा"
 
-#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:187
+#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:186
 #, kde-format
 msgid "Blue"
 msgstr "नीला"
@@ -10501,8 +10501,8 @@ msgid "5x Magnification"
 msgstr "5x आवर्धन"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:218
-#: src/frontend/worksheet/WorksheetView.cpp:441
-#: src/frontend/worksheet/WorksheetView.cpp:492
+#: src/frontend/worksheet/WorksheetView.cpp:440
+#: src/frontend/worksheet/WorksheetView.cpp:491
 #, kde-format
 msgid "Mouse Mode"
 msgstr "माउस मोड"
@@ -10518,7 +10518,7 @@ msgid "Move Last Point"
 msgstr "अंतिम बिंदु ले जाएँ"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:241
-#: src/frontend/worksheet/WorksheetView.cpp:458
+#: src/frontend/worksheet/WorksheetView.cpp:457
 #, kde-format
 msgid "Magnification"
 msgstr "बढ़ाई"
@@ -10557,7 +10557,7 @@ msgstr "वक्र"
 #: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4075
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4129
-#: src/frontend/worksheet/WorksheetView.cpp:2195
+#: src/frontend/worksheet/WorksheetView.cpp:2194
 #, kde-format
 msgid "Failed to export"
 msgstr "निर्यात करने में विफल"
@@ -10565,7 +10565,7 @@ msgstr "निर्यात करने में विफल"
 #: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4075
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4129
-#: src/frontend/worksheet/WorksheetView.cpp:2195
+#: src/frontend/worksheet/WorksheetView.cpp:2194
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "'%1' पर लिखने में विफल। कृपया पथ जाँचें।"
@@ -11895,7 +11895,7 @@ msgid "Open LabPlot Project"
 msgstr "लैबप्लॉट प्रोजेक्ट खोलें"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:438
-#: src/frontend/MainWin.cpp:1485
+#: src/frontend/MainWin.cpp:1484
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "लैबप्लॉट प्रोजेक्ट्स (%1)"
@@ -11920,7 +11920,7 @@ msgstr "फ़ोल्डर का नाम:"
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:71 src/frontend/MainWin.cpp:637
-#: src/frontend/MainWin.cpp:1971 src/frontend/SettingsDialog.cpp:68
+#: src/frontend/MainWin.cpp:1970 src/frontend/SettingsDialog.cpp:68
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:122
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -12390,7 +12390,7 @@ msgstr "अर्द्ध-भरा, बड़ा"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:47
 #: src/frontend/dockwidgets/ImageDock.cpp:50
 #: src/frontend/dockwidgets/ImageDock.cpp:58
-#: src/frontend/dockwidgets/XYCurveDock.cpp:348
+#: src/frontend/dockwidgets/XYCurveDock.cpp:347
 #: src/frontend/widgets/BackgroundWidget.cpp:118
 #: src/frontend/widgets/LabelWidget.cpp:149
 #: src/frontend/widgets/LabelWidget.cpp:168
@@ -12408,7 +12408,7 @@ msgstr "बाएं"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:49
 #: src/frontend/dockwidgets/ImageDock.cpp:52
 #: src/frontend/dockwidgets/ImageDock.cpp:60
-#: src/frontend/dockwidgets/XYCurveDock.cpp:349
+#: src/frontend/dockwidgets/XYCurveDock.cpp:348
 #: src/frontend/widgets/BackgroundWidget.cpp:119
 #: src/frontend/widgets/LabelWidget.cpp:151
 #: src/frontend/widgets/LabelWidget.cpp:170
@@ -12559,7 +12559,7 @@ msgstr "%1 अक्ष: टेम्पलेट \"%2\" लोड किया 
 #: src/frontend/dockwidgets/AxisDock.cpp:2026
 #: src/frontend/dockwidgets/BarPlotDock.cpp:503
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:728
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1839
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1843
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:801
 #: src/frontend/dockwidgets/CustomPointDock.cpp:378
 #: src/frontend/dockwidgets/HistogramDock.cpp:562
@@ -12572,7 +12572,7 @@ msgstr "%1 अक्ष: टेम्पलेट \"%2\" लोड किया 
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:232
 #: src/frontend/dockwidgets/WorksheetDock.cpp:605
-#: src/frontend/dockwidgets/XYCurveDock.cpp:1046
+#: src/frontend/dockwidgets/XYCurveDock.cpp:1045
 #, kde-format
 msgid "%1: template \"%2\" loaded"
 msgstr "%1: टेम्पलेट \"%2\" लोड किया गया"
@@ -12781,31 +12781,31 @@ msgstr "%1 बॉक्स प्लॉट: टेम्पलेट \"%2\" ल�
 msgid "Save current plot area definition as template"
 msgstr "वर्तमान प्लॉट क्षेत्र परिभाषा को टेम्पलेट के रूप में सहेजें"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:608
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:612
 #, kde-format
 msgid "%1-Ranges:"
 msgstr "%1-रेंज:"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:610
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:614
 #, kde-format
 msgid "%1-Range:"
 msgstr "%1-रेंज:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:634
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:638
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:209
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:53
 #, kde-format
 msgid "Numeric"
 msgstr "संख्यात्मक"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:780
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:784
 #, kde-format
 msgid "Plot Ranges:"
 msgstr "प्लॉट रेंज:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:782
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:786
 #: src/frontend/ui/dockwidgets/axisdock.ui:262
 #: src/frontend/ui/dockwidgets/barplotdock.ui:186
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:90
@@ -12832,22 +12832,22 @@ msgstr "प्लॉट रेंज:"
 msgid "Plot Range:"
 msgstr "प्लॉट रेंज:"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:884
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:888
 #, kde-format
 msgid "Free"
 msgstr "मुक्त"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:885
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:889
 #, kde-format
 msgid "Last Points"
 msgstr "अंतिम अंक"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:886
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:890
 #, kde-format
 msgid "First Points"
 msgstr "प्रथम अंक"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:889
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:893
 #, kde-format
 msgid ""
 "Data Range:<ul><li>Free - full data range is plotted</li><li>Last Points - "
@@ -12858,42 +12858,42 @@ msgstr ""
 "की निर्दिष्ट संख्या अंकित की जाती है</li><li> प्रथम बिंदु - निर्दिष्ट संख्या में प्रथम बिंदुओं "
 "को प्लॉट किया जाता है</li></ul>"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:898
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:902
 #, kde-format
 msgid "If checked, automatically extend the plot range to nice values"
 msgstr "यदि चेक किया गया है, तो प्लॉट रेंज को स्वचालित रूप से अच्छे मानों तक विस्तारित करें"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:903
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:907
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:911
 #, kde-format
 msgid "Simple"
 msgstr "सरल"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:905
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:909
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:913
 #, kde-format
 msgid "Sloped"
 msgstr "sloped"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1163
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1167
 #, kde-format
 msgid "%1 range %2 is used in plot range %3. "
 msgstr "%1 श्रेणी %2 का उपयोग प्लॉट श्रेणी %3 में किया जाता है।"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1164
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1217
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1168
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1221
 #, kde-format
 msgid "Really remove it?"
 msgstr "सचमुच इसे हटाओ?"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1217
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1221
 #, kde-format
 msgid "Plot range %1 is used by element \"%2\". "
 msgstr "प्लॉट श्रेणी %1 का उपयोग तत्व \"%2\" द्वारा किया जाता है।"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1310
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1314
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:560
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:769
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:342
@@ -12903,7 +12903,7 @@ msgstr "क्षैतिज:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVertical)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalSpacing)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1311
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1315
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:861
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:724
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:428
@@ -12913,7 +12913,7 @@ msgstr "खड़ा:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1313
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1317
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:796
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:717
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:414
@@ -12923,7 +12923,7 @@ msgstr "बाएं:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1314
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1318
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:803
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:666
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:407
@@ -12931,18 +12931,18 @@ msgstr "बाएं:"
 msgid "Top:"
 msgstr "शीर्ष:"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1646
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1650
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
 msgstr "टेम्पलेट सहेजें फ़ाइल चुनें"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1648
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1652
 #, kde-format
 msgid "Labplot Plot Templates (*%1)"
 msgstr "लैबप्लॉट प्लॉट टेम्पलेट्स (*%1)"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1837
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1841
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr "%1 कार्टेशियन प्लॉट: टेम्पलेट \"%2\" लोड किया गया"
@@ -13174,7 +13174,7 @@ msgstr ""
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:452
 #: src/frontend/dockwidgets/QQPlotDock.cpp:282
 #: src/frontend/dockwidgets/RunChartDock.cpp:227
-#: src/frontend/dockwidgets/XYCurveDock.cpp:1044
+#: src/frontend/dockwidgets/XYCurveDock.cpp:1043
 #, kde-format
 msgid "%1 xy-curves: template \"%2\" loaded"
 msgstr "%1 xy-curves: टेम्पलेट \"%2\" लोड किया गया"
@@ -13505,34 +13505,34 @@ msgstr "अकीमा-तख़्ता (प्राकृतिक)"
 msgid "Akima-spline (Periodic)"
 msgstr "अकिमा-स्पलाइन (आवधिक)"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:339
+#: src/frontend/dockwidgets/XYCurveDock.cpp:338
 #: src/frontend/widgets/ValueWidget.cpp:31
 #, kde-format
 msgid "No Values"
 msgstr "कोई मान नहीं"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:344
+#: src/frontend/dockwidgets/XYCurveDock.cpp:343
 #: src/frontend/widgets/ValueWidget.cpp:33
 #, kde-format
 msgid "Custom Column"
 msgstr "कस्टम कॉलम"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:346
+#: src/frontend/dockwidgets/XYCurveDock.cpp:345
 #: src/frontend/widgets/BackgroundWidget.cpp:115
 #: src/frontend/widgets/ValueWidget.cpp:35
 #, kde-format
 msgid "Above"
 msgstr "ऊपर"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:347
+#: src/frontend/dockwidgets/XYCurveDock.cpp:346
 #: src/frontend/widgets/BackgroundWidget.cpp:116
 #: src/frontend/widgets/ValueWidget.cpp:36
 #, kde-format
 msgid "Below"
 msgstr "नीचे"
 
+#: src/frontend/dockwidgets/XYCurveDock.cpp:524
 #: src/frontend/dockwidgets/XYCurveDock.cpp:525
-#: src/frontend/dockwidgets/XYCurveDock.cpp:526
 #, kde-format
 msgid ""
 "If checked, connect neighbour points with lines even if there are gaps "
@@ -13541,8 +13541,8 @@ msgstr ""
 "यदि चेक किया गया है, तो पड़ोसी बिंदुओं को लाइनों से जोड़ें, भले ही उनके बीच अंतराल (अमान्य "
 "या छिपे हुए मान) हों"
 
+#: src/frontend/dockwidgets/XYCurveDock.cpp:526
 #: src/frontend/dockwidgets/XYCurveDock.cpp:527
-#: src/frontend/dockwidgets/XYCurveDock.cpp:528
 #, kde-format
 msgid ""
 "If checked, connect data points only for strictly increasing values of X"
@@ -13881,7 +13881,7 @@ msgid ""
 "installation."
 msgstr "उदाहरण संग्रह फ़ाइल %1 नहीं खोली जा सकी। कृपया अपनी स्थापना की जाँच करें।"
 
-#: src/frontend/GuiObserver.cpp:177 src/frontend/MainWin.cpp:1392
+#: src/frontend/GuiObserver.cpp:177 src/frontend/MainWin.cpp:1391
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -14200,198 +14200,198 @@ msgstr "डैश-डॉट लाइन"
 msgid "Dash-dot-dot Line"
 msgstr "डैश-डॉट-डॉट लाइन"
 
-#: src/frontend/GuiTools.cpp:155
+#: src/frontend/GuiTools.cpp:152
 #, kde-format
 msgid "Uniform"
 msgstr "वर्दी"
 
-#: src/frontend/GuiTools.cpp:156
+#: src/frontend/GuiTools.cpp:153
 #, kde-format
 msgid "Extremely Dense"
 msgstr "अत्यंत सघन"
 
-#: src/frontend/GuiTools.cpp:157
+#: src/frontend/GuiTools.cpp:154
 #, kde-format
 msgid "Very Dense"
 msgstr "बहुत घना"
 
-#: src/frontend/GuiTools.cpp:158
+#: src/frontend/GuiTools.cpp:155
 #, kde-format
 msgid "Somewhat Dense"
 msgstr "कुछ हद तक घना"
 
-#: src/frontend/GuiTools.cpp:159
+#: src/frontend/GuiTools.cpp:156
 #, kde-format
 msgid "Half Dense"
 msgstr "अर्ध घना"
 
-#: src/frontend/GuiTools.cpp:160
+#: src/frontend/GuiTools.cpp:157
 #, kde-format
 msgid "Somewhat Sparse"
 msgstr "कुछ हद तक विरल"
 
-#: src/frontend/GuiTools.cpp:161
+#: src/frontend/GuiTools.cpp:158
 #, kde-format
 msgid "Very Sparse"
 msgstr "बहुत विरल"
 
-#: src/frontend/GuiTools.cpp:162
+#: src/frontend/GuiTools.cpp:159
 #, kde-format
 msgid "Extremely Sparse"
 msgstr "अत्यंत विरल"
 
-#: src/frontend/GuiTools.cpp:163
+#: src/frontend/GuiTools.cpp:160
 #, kde-format
 msgid "Horiz. Lines"
 msgstr "पीले रंग में पंक्तियां"
 
-#: src/frontend/GuiTools.cpp:164
+#: src/frontend/GuiTools.cpp:161
 #, kde-format
 msgid "Vert. Lines"
 msgstr "ऊर्ध्वाधर रेखाएँ"
 
-#: src/frontend/GuiTools.cpp:165
+#: src/frontend/GuiTools.cpp:162
 #, kde-format
 msgid "Crossing Lines"
 msgstr "पार लाइनों"
 
-#: src/frontend/GuiTools.cpp:166
+#: src/frontend/GuiTools.cpp:163
 #, kde-format
 msgid "Backward Diag. Lines"
 msgstr "पिछड़ी डायग्न. रेखाएँ"
 
-#: src/frontend/GuiTools.cpp:167
+#: src/frontend/GuiTools.cpp:164
 #, kde-format
 msgid "Forward Diag. Lines"
 msgstr "आगे की डायग्नोसिस लाइनें"
 
-#: src/frontend/GuiTools.cpp:168
+#: src/frontend/GuiTools.cpp:165
 #, kde-format
 msgid "Crossing Diag. Lines"
 msgstr "विकर्ण रेखाएँ पार करना"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:185
 #, kde-format
 msgid "White"
 msgstr "सफ़ेद"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:185
 #, kde-format
 msgid "Black"
 msgstr "काला"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:185
 #, kde-format
 msgid "Dark Red"
 msgstr "गहरा लाल"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:185
 #, kde-format
 msgid "Light Red"
 msgstr "हलका लाल"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:185
 #, kde-format
 msgid "Dark Green"
 msgstr "गहरा हरा"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:186
 #, kde-format
 msgid "Light Green"
 msgstr "हल्का हरा"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:186
 #, kde-format
 msgid "Dark Blue"
 msgstr "गहरा नीला"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:186
 #, kde-format
 msgid "Light Blue"
 msgstr "हल्का नीला रंग"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:186
 #, kde-format
 msgid "Dark Yellow"
 msgstr "गहरा पीला"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:186
 #, kde-format
 msgid "Yellow"
 msgstr "पीला"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:186
 #, kde-format
 msgid "Light Yellow"
 msgstr "पीली रोशनी"
 
-#: src/frontend/GuiTools.cpp:188
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Dark Cyan"
 msgstr "गहरा सियान"
 
-#: src/frontend/GuiTools.cpp:188
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Cyan"
 msgstr "सियान"
 
-#: src/frontend/GuiTools.cpp:188
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Light Cyan"
 msgstr "हल्का सियान"
 
-#: src/frontend/GuiTools.cpp:188
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Dark Magenta"
 msgstr "गहरा मैजेंटा"
 
-#: src/frontend/GuiTools.cpp:188
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Magenta"
 msgstr "मैजेंटा"
 
-#: src/frontend/GuiTools.cpp:188
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Light Magenta"
 msgstr "हल्का मैजंटा"
 
-#: src/frontend/GuiTools.cpp:188
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Dark Orange"
 msgstr "गहरा नारंगी"
 
-#: src/frontend/GuiTools.cpp:189
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Orange"
 msgstr "नारंगी"
 
-#: src/frontend/GuiTools.cpp:189
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Light Orange"
 msgstr "हल्का नारंगी"
 
-#: src/frontend/GuiTools.cpp:189
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Dark Grey"
 msgstr "गहरा भूरा"
 
-#: src/frontend/GuiTools.cpp:189
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Grey"
 msgstr "स्लेटी"
 
-#: src/frontend/GuiTools.cpp:189
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Light Grey"
 msgstr "हल्का भूरा रंग"
 
-#: src/frontend/GuiTools.cpp:308
+#: src/frontend/GuiTools.cpp:306
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image File"
 msgstr "छवि फ़ाइल खोलें"
 
-#: src/frontend/GuiTools.cpp:308
+#: src/frontend/GuiTools.cpp:306
 #, kde-format
 msgid "Images (%1)"
 msgstr "छवियाँ (%1)"
@@ -14728,7 +14728,7 @@ msgstr "लैबप्लॉट%1 में आपका स्वागत ह
 msgid "&Open Example"
 msgstr "&उदाहरण खोलें"
 
-#: src/frontend/MainWin.cpp:627 src/frontend/MainWin.cpp:1955
+#: src/frontend/MainWin.cpp:627 src/frontend/MainWin.cpp:1954
 #, kde-format
 msgid "Workbook"
 msgstr "वर्कबुक"
@@ -14738,7 +14738,7 @@ msgstr "वर्कबुक"
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr "संग्रह स्प्रेडशीट, मैट्रिसेस और प्लॉट के लिए एक नई कार्यपुस्तिका बनाता है"
 
-#: src/frontend/MainWin.cpp:632 src/frontend/MainWin.cpp:1963
+#: src/frontend/MainWin.cpp:632 src/frontend/MainWin.cpp:1962
 #, kde-format
 msgid "Data Extractor"
 msgstr "डेटा एक्सट्रैक्टर"
@@ -14758,7 +14758,7 @@ msgstr "डेटा संपादन के लिए एक नई स्प
 msgid "Creates a new matrix for data editing"
 msgstr "डेटा संपादन के लिए एक नया मैट्रिक्स बनाता है"
 
-#: src/frontend/MainWin.cpp:649 src/frontend/MainWin.cpp:2007
+#: src/frontend/MainWin.cpp:649 src/frontend/MainWin.cpp:2006
 #: src/frontend/SettingsDialog.cpp:63
 #, kde-format
 msgid "Worksheet"
@@ -14769,7 +14769,7 @@ msgstr "कार्यपत्रक"
 msgid "Creates a new worksheet for data plotting"
 msgstr "डेटा प्लॉटिंग के लिए एक नई वर्कशीट बनाता है"
 
-#: src/frontend/MainWin.cpp:655 src/frontend/MainWin.cpp:2015
+#: src/frontend/MainWin.cpp:655 src/frontend/MainWin.cpp:2014
 #, kde-format
 msgid "Note"
 msgstr "टिप्पणी"
@@ -14779,7 +14779,7 @@ msgstr "टिप्पणी"
 msgid "Creates a new note for arbitrary text"
 msgstr "मनमाने पाठ के लिए एक नया नोट बनाता है"
 
-#: src/frontend/MainWin.cpp:660 src/frontend/MainWin.cpp:1947
+#: src/frontend/MainWin.cpp:660 src/frontend/MainWin.cpp:1946
 #, kde-format
 msgid "Folder"
 msgstr "फ़ोल्डर"
@@ -14974,118 +14974,118 @@ msgstr ""
 "उपलब्ध प्रणालियों को संशोधित करने या नई प्रणालियों को सक्षम करने के लिए कंप्यूटर बीजगणित "
 "प्रणालियों की सेटिंग्स खोलता है"
 
-#: src/frontend/MainWin.cpp:922
+#: src/frontend/MainWin.cpp:921
 #, kde-format
 msgid "Window Visibility"
 msgstr "विंडो दृश्यता"
 
-#: src/frontend/MainWin.cpp:939
+#: src/frontend/MainWin.cpp:938
 #, kde-format
 msgid "Color Scheme"
 msgstr "रंग योजना"
 
-#: src/frontend/MainWin.cpp:997
+#: src/frontend/MainWin.cpp:996
 #, kde-format
 msgid "The current project \"%1\" has been modified. Do you want to save it?"
 msgstr "वर्तमान प्रोजेक्ट \"%1\" को संशोधित किया गया है। क्या आप इसे सहेजना चाहते हैं?"
 
-#: src/frontend/MainWin.cpp:998
+#: src/frontend/MainWin.cpp:997
 #, kde-format
 msgid "Save Project"
 msgstr "प्रोजेक्ट सहेजें"
 
-#: src/frontend/MainWin.cpp:1353
+#: src/frontend/MainWin.cpp:1352
 #, kde-format
 msgid "%1: created"
 msgstr "%1: बनाया गया"
 
-#: src/frontend/MainWin.cpp:1379
+#: src/frontend/MainWin.cpp:1378
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "प्रोजेक्ट एक्सप्लोरर"
 
-#: src/frontend/MainWin.cpp:1404
+#: src/frontend/MainWin.cpp:1403
 #, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "वर्कशीट पूर्वावलोकन"
 
-#: src/frontend/MainWin.cpp:1413
+#: src/frontend/MainWin.cpp:1412
 #, kde-format
 msgctxt "@title:window"
 msgid "Content"
 msgstr "सामग्री"
 
-#: src/frontend/MainWin.cpp:1490
+#: src/frontend/MainWin.cpp:1489
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr "मूल परियोजनाएँ (%1)"
 
-#: src/frontend/MainWin.cpp:1496
+#: src/frontend/MainWin.cpp:1495
 #, kde-format
 msgid "Cantor Projects (*.cws)"
 msgstr "कैंटर प्रोजेक्ट्स (*.cws)"
 
-#: src/frontend/MainWin.cpp:1497
+#: src/frontend/MainWin.cpp:1496
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "ज्यूपिटर नोटबुक (*.ipynb)"
 
-#: src/frontend/MainWin.cpp:1504
+#: src/frontend/MainWin.cpp:1503
 #, kde-format
 msgid "All supported files (%1)"
 msgstr "सभी समर्थित फ़ाइलें (%1)"
 
-#: src/frontend/MainWin.cpp:1508
+#: src/frontend/MainWin.cpp:1507
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "ओपन प्रोजेक्ट"
 
-#: src/frontend/MainWin.cpp:1525
+#: src/frontend/MainWin.cpp:1524
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "प्रोजेक्ट फ़ाइल %1 पहले से ही खुली हुई है."
 
-#: src/frontend/MainWin.cpp:1525 src/frontend/MainWin.cpp:1533
-#: src/frontend/MainWin.cpp:1538
+#: src/frontend/MainWin.cpp:1524 src/frontend/MainWin.cpp:1532
+#: src/frontend/MainWin.cpp:1537
 #, kde-format
 msgid "Open Project"
 msgstr "ओपन प्रोजेक्ट"
 
-#: src/frontend/MainWin.cpp:1533
+#: src/frontend/MainWin.cpp:1532
 #, kde-format
 msgid "The project file %1 doesn't exist."
 msgstr "प्रोजेक्ट फ़ाइल %1 मौजूद नहीं है."
 
-#: src/frontend/MainWin.cpp:1538
+#: src/frontend/MainWin.cpp:1537
 #, kde-format
 msgid "Couldn't read the project file %1."
 msgstr "प्रोजेक्ट फ़ाइल %1 को पढ़ा नहीं जा सका."
 
-#: src/frontend/MainWin.cpp:1546
+#: src/frontend/MainWin.cpp:1545
 #, kde-format
 msgid "Loading %1..."
 msgstr "%1 लोड हो रहा है..."
 
-#: src/frontend/MainWin.cpp:1600
+#: src/frontend/MainWin.cpp:1599
 #, kde-format
 msgid "%1: opened"
 msgstr "%1: खोला गया"
 
-#: src/frontend/MainWin.cpp:1635
+#: src/frontend/MainWin.cpp:1634
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "प्रोजेक्ट सफलतापूर्वक खोला गया (%1 सेकंड में)."
 
-#: src/frontend/MainWin.cpp:1727
+#: src/frontend/MainWin.cpp:1726
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "के रूप में इस परियोजना को बचाओ"
 
-#: src/frontend/MainWin.cpp:1729
+#: src/frontend/MainWin.cpp:1728
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -15094,43 +15094,43 @@ msgstr ""
 "लैबप्लॉट प्रोजेक्ट्स (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *."
 "LML.XZ)"
 
-#: src/frontend/MainWin.cpp:1756
+#: src/frontend/MainWin.cpp:1755
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "अस्थायी फ़ाइल को लिखने के लिए नहीं खोला जा सका."
 
-#: src/frontend/MainWin.cpp:1836
+#: src/frontend/MainWin.cpp:1835
 #, kde-format
 msgid "Project saved"
 msgstr "प्रोजेक्ट सहेजा गया"
 
-#: src/frontend/MainWin.cpp:1852
+#: src/frontend/MainWin.cpp:1851
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "फ़ाइल '%1' को सहेजा नहीं जा सका."
 
-#: src/frontend/MainWin.cpp:1857
+#: src/frontend/MainWin.cpp:1856
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "फ़ाइल '%1' को लिखने के लिए नहीं खोला जा सका."
 
-#: src/frontend/MainWin.cpp:1907
+#: src/frontend/MainWin.cpp:1906
 #, kde-format
 msgid "Changed"
 msgstr "परिवर्तित"
 
-#: src/frontend/MainWin.cpp:1922 src/frontend/MainWin.cpp:1934
+#: src/frontend/MainWin.cpp:1921 src/frontend/MainWin.cpp:1933
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "%1 की छपाई की तैयारी"
 
-#: src/frontend/MainWin.cpp:1924 src/frontend/MainWin.cpp:1936
+#: src/frontend/MainWin.cpp:1923 src/frontend/MainWin.cpp:1935
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 मुद्रित"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/MainWin.cpp:2456
+#: src/frontend/MainWin.cpp:2455
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1425
 #: src/frontend/worksheet/WorksheetView.cpp:362
 #, kde-format
@@ -15397,7 +15397,7 @@ msgid "Header Format"
 msgstr "हेडर प्रारूप"
 
 #: src/frontend/matrix/MatrixView.cpp:295
-#: src/frontend/worksheet/WorksheetView.cpp:447
+#: src/frontend/worksheet/WorksheetView.cpp:446
 #, kde-format
 msgid "Zoom"
 msgstr "ज़ूम"
@@ -15761,7 +15761,7 @@ msgid "Do you really want to delete %1?"
 msgstr "क्या आप सचमुच %1 को हटाना चाहते हैं?"
 
 #: src/frontend/ProjectExplorer.cpp:919
-#: src/frontend/worksheet/WorksheetView.cpp:1434
+#: src/frontend/worksheet/WorksheetView.cpp:1433
 #, kde-format
 msgid "Delete selected object"
 msgid_plural "Delete selected objects"
@@ -20240,7 +20240,7 @@ msgstr "फ़ॉन्ट रंग:"
 #. i18n: ectx: property (text), widget (QLabel, lGrid)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1620
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:441
-#: src/frontend/worksheet/WorksheetView.cpp:474
+#: src/frontend/worksheet/WorksheetView.cpp:473
 #, kde-format
 msgid "Grid"
 msgstr "ग्रिड"
@@ -20674,7 +20674,7 @@ msgstr "बढ़ाना:"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:547
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:620
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:265
-#: src/frontend/worksheet/WorksheetView.cpp:466
+#: src/frontend/worksheet/WorksheetView.cpp:465
 #, kde-format
 msgid "Layout"
 msgstr "लेआउट"
@@ -24634,38 +24634,38 @@ msgid "Shift Down Y"
 msgstr "नीचे शिफ्ट Y"
 
 #: src/frontend/worksheet/WorksheetView.cpp:425
-#: src/frontend/worksheet/WorksheetView.cpp:489
-#: src/frontend/worksheet/WorksheetView.cpp:1295
-#: src/frontend/worksheet/WorksheetView.cpp:1302
-#: src/frontend/worksheet/WorksheetView.cpp:1309
-#: src/frontend/worksheet/WorksheetView.cpp:1316
+#: src/frontend/worksheet/WorksheetView.cpp:488
+#: src/frontend/worksheet/WorksheetView.cpp:1294
+#: src/frontend/worksheet/WorksheetView.cpp:1301
+#: src/frontend/worksheet/WorksheetView.cpp:1308
+#: src/frontend/worksheet/WorksheetView.cpp:1315
 #, kde-format
 msgid "Plot Area"
 msgstr "निश्चित भूभाग का क्षेत्रफल"
 
-#: src/frontend/worksheet/WorksheetView.cpp:502
+#: src/frontend/worksheet/WorksheetView.cpp:501
 #, kde-format
 msgid "Zoom/Navigate"
 msgstr "ज़ूम/नेविगेट"
 
-#: src/frontend/worksheet/WorksheetView.cpp:523
+#: src/frontend/worksheet/WorksheetView.cpp:522
 #, kde-format
 msgid "Apply Actions to"
 msgstr "क्रियाएँ लागू करें"
 
-#: src/frontend/worksheet/WorksheetView.cpp:530
+#: src/frontend/worksheet/WorksheetView.cpp:529
 #, kde-format
 msgid "Apply Cursor to"
 msgstr "कर्सर को यहां लागू करें"
 
-#: src/frontend/worksheet/WorksheetView.cpp:1433
+#: src/frontend/worksheet/WorksheetView.cpp:1432
 #, kde-format
 msgid "Do you really want to delete the selected object?"
 msgid_plural "Do you really want to delete the selected %1 objects?"
 msgstr[0] "क्या आप सचमुच चयनित %1 ऑब्जेक्ट्स को हटाना चाहते हैं?"
 msgstr[1] "क्या आप सचमुच चयनित %1 ऑब्जेक्ट्स को हटाना चाहते हैं?"
 
-#: src/frontend/worksheet/WorksheetView.cpp:1441
+#: src/frontend/worksheet/WorksheetView.cpp:1440
 #, kde-format
 msgid "%1: Remove selected worksheet elements."
 msgstr "%1: चयनित वर्कशीट तत्व हटाएं."
