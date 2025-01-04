@@ -8,9 +8,15 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "backend/datasources/filters/XLSXFilter.h"
+#ifdef HAVE_QXLSX
+#include "xlsxcellrange.h"
+#include "xlsxcellreference.h"
+#include "xlsxdocument.h"
+#endif
+
 #include "backend/core/column/Column.h"
 #include "backend/datasources/AbstractDataSource.h"
+#include "backend/datasources/filters/XLSXFilter.h"
 #include "backend/datasources/filters/XLSXFilterPrivate.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -34,7 +40,7 @@ QString XLSXFilter::fileInfoString(const QString& fileName) {
 
 	QVector<int> rangesPerSheet;
 	for (const auto& sheet : doc.sheetNames())
-		rangesPerSheet.push_back(filter.dataRegions(fileName, sheet).size());
+		rangesPerSheet.push_back(filter.d->dataRegions(fileName, sheet).size());
 
 	const QStringList& sheetNames = doc.sheetNames();
 	const int nrSheets = sheetNames.size();
@@ -94,7 +100,7 @@ void XLSXFilter::write(const QString& fileName, AbstractDataSource* dataSource) 
 }
 
 #ifdef HAVE_QXLSX
-QVector<QStringList> XLSXFilter::previewForDataRegion(const QString& sheet, const QXlsx::CellRange& region, bool* okToMatrix, int lines) {
+QVector<QStringList> XLSXFilter::previewForDataRegion(const QString& sheet, const QString& region, bool* okToMatrix, int lines) {
 	return d->previewForDataRegion(sheet, region, okToMatrix, lines);
 }
 #endif
@@ -140,21 +146,9 @@ void XLSXFilter::setDataExportStartPos(const QString& dataStartPos) {
 #endif
 }
 
-#ifdef HAVE_QXLSX
-QVector<QXlsx::CellRange> XLSXFilter::dataRegions(const QString& fileName, const QString& sheetName) {
-	return d->dataRegions(fileName, sheetName);
-}
-#endif
-
 void XLSXFilter::parse(const QString& fileName, QTreeWidgetItem* root) {
 	d->parse(fileName, root);
 }
-
-#ifdef HAVE_QXLSX
-QXlsx::CellRange XLSXFilter::dimension() const {
-	return d->dimension();
-}
-#endif
 
 /*!
  * \brief Sets the startColumn to \a column

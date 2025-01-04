@@ -16,12 +16,6 @@
 
 #include <memory>
 
-#ifdef HAVE_QXLSX
-#include "xlsxcellrange.h"
-#include "xlsxcellreference.h"
-#include "xlsxdocument.h"
-#endif
-
 class XLSXFilterPrivate;
 class QTreeWidgetItem;
 
@@ -35,7 +29,7 @@ public:
 	static bool isValidCellReference(const QString& cellRefString);
 
 #ifdef HAVE_QXLSX
-	QVector<QStringList> previewForDataRegion(const QString& sheet, const QXlsx::CellRange& region, bool* okToMatrix, int lines);
+	QVector<QStringList> previewForDataRegion(const QString& sheet, const QString& region, bool* okToMatrix, int lines);
 #endif
 	QVector<QStringList> previewForCurrentDataRegion(int lines, bool* okToMatrix);
 	QStringList sheets() const;
@@ -49,10 +43,6 @@ public:
 
 	void parse(const QString& fileName, QTreeWidgetItem* root);
 
-#ifdef HAVE_QXLSX
-	QVector<QXlsx::CellRange> dataRegions(const QString& fileName, const QString& sheetName);
-	QXlsx::CellRange dimension() const;
-#endif
 	void setCurrentRange(const QString&);
 
 	void setCurrentSheet(const QString&);
