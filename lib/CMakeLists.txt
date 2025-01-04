@@ -481,30 +481,6 @@ install(FILES ../src/backend/nsl/nsl_sf_kernel.h DESTINATION ${KDE_INSTALL_INCLU
 install(FILES ../src/backend/nsl/nsl_dft.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/nsl/ COMPONENT Devel)
 install(FILES ../src/backend/nsl/nsl_sf_window.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/nsl/ COMPONENT Devel)
 
-# will be removed as soon as xlsxfilter.h and readstatfilter.h are reworked
-if(ENABLE_XLSX)
-if(BUILD_QXLSX)
-    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/../src/3rdparty/QXlsx/header/xlsxcellrange.h" DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/datasources/filters/ COMPONENT Devel)
-    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/../src/3rdparty/QXlsx/header/xlsxglobal.h" DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/datasources/filters/ COMPONENT Devel)
-    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/../src/3rdparty/QXlsx/header/xlsxcellreference.h" DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/datasources/filters/ COMPONENT Devel)
-endif()
-
-if(QXLSX_FOUND)
-    install(FILES "${QXLSX_INCLUDE_DIR}/xlsxcellrange.h" DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/datasources/filters/ COMPONENT Devel)
-    install(FILES "${QXLSX_INCLUDE_DIR}/xlsxglobal.h" DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/datasources/filters/ COMPONENT Devel)
-    install(FILES "${QXLSX_INCLUDE_DIR}/xlsxcellreference.h" DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/datasources/filters/ COMPONENT Devel)
-endif()
-endif()
-
-if(ENABLE_READSTAT)
-if(READSTAT_FOUND OR BUILD_READSTAT)
-    install(FILES "${CMAKE_BINARY_DIR}/src/3rdparty/install/include/readstat.h" DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/datasources/filters/ COMPONENT Devel)
-    if(EXISTS ${CMAKE_BINARY_DIR}/src/3rdparty/readstat/src/readstat/src)
-    install(FILES "${CMAKE_BINARY_DIR}/src/3rdparty/readstat/src/readstat/src/readstat.h" DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/datasources/filters/ COMPONENT Devel)
-    endif()
-endif()
-endif()
-
 install(EXPORT LabPlotTargets
     DESTINATION ${KDE_INSTALL_CMAKEPACKAGEDIR}/labplot
     FILE LabPlotTargets.cmake
