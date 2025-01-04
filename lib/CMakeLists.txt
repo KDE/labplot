@@ -265,6 +265,14 @@ list(APPEND GSL_SOURCES ${BISON_GslParser_OUTPUTS})
 
 # dynamic library
 add_library(liblabplot SHARED ${SDK_SOURCES} ${NSL_SOURCES} ${GSL_SOURCES} ${QTMOC_HDRS} ${SDK_DEPENDENCY_SOURCES})
+add_library(LabPlot::SDK ALIAS liblabplot)
+
+set_target_properties(liblabplot PROPERTIES
+    VERSION ${PROJECT_VERSION}
+    SOVERSION ${PROJECT_VERSION}
+    EXPORT_NAME SDK # the name that consumers will refer to this target (on namespace LabPlot)
+)
+
 target_include_directories(liblabplot
     PRIVATE ${BACKEND_DIR}/gsl/ ${GSL_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../src/3rdparty/liborigin
     # any dependent building me directly
@@ -414,9 +422,9 @@ endif()
 # endif()
 
 ############## installation ################################
-install(TARGETS liblabplot DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} COMPONENT Devel)
+install(TARGETS liblabplot EXPORT LabPlotTargets DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} COMPONENT Devel)
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/labplot_export.h  DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot COMPONENT Devel)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/labplot_export.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot COMPONENT Devel)
 
 configure_file(labplot.h.in ${CMAKE_CURRENT_BINARY_DIR}/labplot.h @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/labplot.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/ COMPONENT Devel)
@@ -496,3 +504,26 @@ if(READSTAT_FOUND OR BUILD_READSTAT)
     endif()
 endif()
 endif()
+
+install(EXPORT LabPlotTargets
+    DESTINATION ${KDE_INSTALL_CMAKEPACKAGEDIR}/labplot
+    FILE LabPlotTargets.cmake
+    NAMESPACE LabPlot:: # namespace all targets in this export
+    COMPONENT Devel
+)
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/labplot-config.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/LabPlotConfig.cmake
+    @ONLY
+)
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/labplot-config-version.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/LabPlotConfigVersion.cmake
+    @ONLY
+)
+
+install(
+    FILES ${CMAKE_CURRENT_BINARY_DIR}/LabPlotConfig.cmake ${CMAKE_CURRENT_BINARY_DIR}/LabPlotConfigVersion.cmake
+    DESTINATION ${KDE_INSTALL_CMAKEPACKAGEDIR}/labplot
+    COMPONENT Devel
+)

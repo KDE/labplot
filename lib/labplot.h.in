@@ -5,73 +5,73 @@
 
 #define SDK
 
-#include <labplot/backend/datasources/filters/AsciiFilter.h>
-#include <labplot/backend/datasources/filters/BinaryFilter.h>
-#include <labplot/backend/datasources/filters/CANFilter.h>
-#include <labplot/backend/datasources/filters/FITSFilter.h>
-#include <labplot/backend/datasources/filters/ImageFilter.h>
-#include <labplot/backend/datasources/filters/JsonFilter.h>
-#include <labplot/backend/datasources/filters/MatioFilter.h>
-#include <labplot/backend/datasources/filters/NetCDFFilter.h>
-#include <labplot/backend/datasources/filters/OdsFilter.h>
-#include <labplot/backend/datasources/filters/ROOTFilter.h>
-#include <labplot/backend/datasources/filters/SpiceFilter.h>
-#include <labplot/backend/datasources/filters/VectorBLFFilter.h>
+#include "./backend/datasources/filters/AsciiFilter.h"
+#include "./backend/datasources/filters/BinaryFilter.h"
+#include "./backend/datasources/filters/CANFilter.h"
+#include "./backend/datasources/filters/FITSFilter.h"
+#include "./backend/datasources/filters/ImageFilter.h"
+#include "./backend/datasources/filters/JsonFilter.h"
+#include "./backend/datasources/filters/MatioFilter.h"
+#include "./backend/datasources/filters/NetCDFFilter.h"
+#include "./backend/datasources/filters/OdsFilter.h"
+#include "./backend/datasources/filters/ROOTFilter.h"
+#include "./backend/datasources/filters/SpiceFilter.h"
+#include "./backend/datasources/filters/VectorBLFFilter.h"
 #ifdef HAVE_QXLSX
-#include <labplot/backend/datasources/filters/XLSXFilter.h>
+#include "./backend/datasources/filters/XLSXFilter.h"
 #endif
 #ifdef HAVE_MCAP
-#include <labplot/backend/datasources/filters/McapFilter.h>
+#include "./backend/datasources/filters/McapFilter.h"
 #endif
 #ifdef HAVE_HDF5
-#include <labplot/backend/datasources/filters/HDF5Filter.h>
+#include "./backend/datasources/filters/HDF5Filter.h"
 #endif
 #ifdef HAVE_READSTAT
-#include <labplot/backend/datasources/filters/ReadStatFilter.h>
+#include "./backend/datasources/filters/ReadStatFilter.h"
 #endif
 
-#include <labplot/backend/matrix/Matrix.h>
-#include <labplot/backend/spreadsheet/Spreadsheet.h>
+#include "./backend/matrix/Matrix.h"
+#include "./backend/spreadsheet/Spreadsheet.h"
 
-#include <labplot/backend/core/Folder.h>
-#include <labplot/backend/core/Project.h>
+#include "./backend/core/Folder.h"
+#include "./backend/core/Project.h"
 
-#include <labplot/backend/core/column/Column.h>
+#include "./backend/core/column/Column.h"
 
-#include <labplot/backend/worksheet/Worksheet.h>
-#include <labplot/frontend/worksheet/WorksheetView.h>
+#include "./backend/worksheet/Worksheet.h"
+#include "./frontend/worksheet/WorksheetView.h"
 
-#include <labplot/backend/worksheet/TextLabel.h>
-#include <labplot/backend/worksheet/InfoElement.h>
-#include <labplot/backend/worksheet/Image.h>
+#include "./backend/worksheet/Image.h"
+#include "./backend/worksheet/InfoElement.h"
+#include "./backend/worksheet/TextLabel.h"
 
-#include <labplot/backend/worksheet/plots/cartesian/CartesianPlot.h>
+#include "./backend/worksheet/plots/cartesian/CartesianPlot.h"
 
-#include <labplot/backend/worksheet/plots/cartesian/Axis.h>
-#include <labplot/backend/worksheet/plots/cartesian/CartesianPlotLegend.h>
-#include <labplot/backend/worksheet/plots/cartesian/CustomPoint.h>
-#include <labplot/backend/worksheet/plots/cartesian/ReferenceLine.h>
-#include <labplot/backend/worksheet/plots/cartesian/ReferenceRange.h>
+#include "./backend/worksheet/plots/cartesian/Axis.h"
+#include "./backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
+#include "./backend/worksheet/plots/cartesian/CustomPoint.h"
+#include "./backend/worksheet/plots/cartesian/ReferenceLine.h"
+#include "./backend/worksheet/plots/cartesian/ReferenceRange.h"
 
-#include <labplot/backend/worksheet/plots/cartesian/BarPlot.h>
-#include <labplot/backend/worksheet/plots/cartesian/BoxPlot.h>
-#include <labplot/backend/worksheet/plots/cartesian/Histogram.h>
-#include <labplot/backend/worksheet/plots/cartesian/KDEPlot.h>
-#include <labplot/backend/worksheet/plots/cartesian/LollipopPlot.h>
-#include <labplot/backend/worksheet/plots/cartesian/ProcessBehaviorChart.h>
-#include <labplot/backend/worksheet/plots/cartesian/QQPlot.h>
-#include <labplot/backend/worksheet/plots/cartesian/RunChart.h>
-#include <labplot/backend/worksheet/plots/cartesian/XYConvolutionCurve.h>
-#include <labplot/backend/worksheet/plots/cartesian/XYCorrelationCurve.h>
-#include <labplot/backend/worksheet/plots/cartesian/XYCurve.h>
-#include <labplot/backend/worksheet/plots/cartesian/XYDataReductionCurve.h>
-#include <labplot/backend/worksheet/plots/cartesian/XYDifferentiationCurve.h>
-#include <labplot/backend/worksheet/plots/cartesian/XYEquationCurve.h>
-#include <labplot/backend/worksheet/plots/cartesian/XYFitCurve.h>
-#include <labplot/backend/worksheet/plots/cartesian/XYFourierFilterCurve.h>
-#include <labplot/backend/worksheet/plots/cartesian/XYFourierTransformCurve.h>
-#include <labplot/backend/worksheet/plots/cartesian/XYFunctionCurve.h>
-#include <labplot/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.h>
-#include <labplot/backend/worksheet/plots/cartesian/XYIntegrationCurve.h>
-#include <labplot/backend/worksheet/plots/cartesian/XYInterpolationCurve.h>
-#include <labplot/backend/worksheet/plots/cartesian/XYSmoothCurve.h>
+#include "./backend/worksheet/plots/cartesian/BarPlot.h"
+#include "./backend/worksheet/plots/cartesian/BoxPlot.h"
+#include "./backend/worksheet/plots/cartesian/Histogram.h"
+#include "./backend/worksheet/plots/cartesian/KDEPlot.h"
+#include "./backend/worksheet/plots/cartesian/LollipopPlot.h"
+#include "./backend/worksheet/plots/cartesian/ProcessBehaviorChart.h"
+#include "./backend/worksheet/plots/cartesian/QQPlot.h"
+#include "./backend/worksheet/plots/cartesian/RunChart.h"
+#include "./backend/worksheet/plots/cartesian/XYConvolutionCurve.h"
+#include "./backend/worksheet/plots/cartesian/XYCorrelationCurve.h"
+#include "./backend/worksheet/plots/cartesian/XYCurve.h"
+#include "./backend/worksheet/plots/cartesian/XYDataReductionCurve.h"
+#include "./backend/worksheet/plots/cartesian/XYDifferentiationCurve.h"
+#include "./backend/worksheet/plots/cartesian/XYEquationCurve.h"
+#include "./backend/worksheet/plots/cartesian/XYFitCurve.h"
+#include "./backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
+#include "./backend/worksheet/plots/cartesian/XYFourierTransformCurve.h"
+#include "./backend/worksheet/plots/cartesian/XYFunctionCurve.h"
+#include "./backend/worksheet/plots/cartesian/XYHilbertTransformCurve.h"
+#include "./backend/worksheet/plots/cartesian/XYIntegrationCurve.h"
+#include "./backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
+#include "./backend/worksheet/plots/cartesian/XYSmoothCurve.h"
