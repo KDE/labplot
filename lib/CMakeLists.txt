@@ -264,8 +264,14 @@ bison_target(GslParser
 list(APPEND GSL_SOURCES ${BISON_GslParser_OUTPUTS})
 
 # dynamic library
-add_library(liblabplot STATIC ${SDK_SOURCES} ${NSL_SOURCES} ${GSL_SOURCES} ${QTMOC_HDRS} ${SDK_DEPENDENCY_SOURCES})
-target_include_directories(liblabplot PRIVATE ../src/ ${BACKEND_DIR}/gsl ${GSL_INCLUDE_DIR} ../src/3rdparty/liborigin)
+add_library(liblabplot SHARED ${SDK_SOURCES} ${NSL_SOURCES} ${GSL_SOURCES} ${QTMOC_HDRS} ${SDK_DEPENDENCY_SOURCES})
+target_include_directories(liblabplot
+    PRIVATE ${BACKEND_DIR}/gsl/ ${GSL_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../src/3rdparty/liborigin
+    # any dependent building me directly
+    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../src/>
+    # any dependent not building me directly
+    INTERFACE $<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/labplot>
+)
 
 if(ENABLE_XLSX)
 if(BUILD_QXLSX)
@@ -310,16 +316,15 @@ set_property(TARGET liblabplot PROPERTY OUTPUT_NAME labplot)
 generate_export_header(liblabplot BASE_NAME labplot)
 
 # trim linked libraries later
+# how can we declare the shared libs needed by dependents with cmake?
 target_link_libraries(liblabplot
+    PRIVATE
     KF${KF_MAJOR_VERSION}::Archive
     KF${KF_MAJOR_VERSION}::ConfigCore
     KF${KF_MAJOR_VERSION}::ConfigWidgets
     KF${KF_MAJOR_VERSION}::I18n
     KF${KF_MAJOR_VERSION}::KIOCore
     KF${KF_MAJOR_VERSION}::XmlGui
-    Qt${QT_MAJOR_VERSION}::Core
-    Qt${QT_MAJOR_VERSION}::Gui
-    Qt${QT_MAJOR_VERSION}::Widgets
     Qt${QT_MAJOR_VERSION}::PrintSupport
     Qt${QT_MAJOR_VERSION}::Sql
     ${GSL_LIBRARIES}
@@ -333,78 +338,88 @@ target_link_libraries(liblabplot
     ${netCDF_LIBRARIES}
     ${CFITSIO_LIBRARIES}
     ${MATIO_LIBRARIES}
+    PUBLIC
+    # ideally any project depending on us should link these qt libs, not because we rely on qt in our public api
+    # but for cohesion and proper functioning of the library 
+    Qt${QT_MAJOR_VERSION}::Core
+    Qt${QT_MAJOR_VERSION}::Gui
+    Qt${QT_MAJOR_VERSION}::Widgets
 )
 
 if(ENABLE_XLSX)
 if(QXLSX_FOUND OR BUILD_QXLSX)
-    target_link_libraries(liblabplot QXlsx)
+    target_link_libraries(liblabplot PRIVATE QXlsx)
 endif()
 endif()
 
 if(ENABLE_MCAP)
 IF(LZ4_FOUND)
-    target_link_libraries(liblabplot ${LZ4_LIBRARIES})
+    target_link_libraries(liblabplot PRIVATE ${LZ4_LIBRARIES})
 endif()
 
 if(ZSTD_FOUND)
-    target_link_libraries(liblabplot ${ZSTD_LIBRARIES})
+    target_link_libraries(liblabplot PRIVATE ${ZSTD_LIBRARIES})
 endif()
 endif()
 
 if(ENABLE_HDF5)
 if(HDF5_FOUND)
-    target_link_libraries(liblabplot ${HDF5_LIBRARIES})
+    target_link_libraries(liblabplot PRIVATE ${HDF5_LIBRARIES})
 endif()
 endif()
 
 if(ENABLE_READSTAT)
 if(READSTAT_FOUND OR BUILD_READSTAT)
     if(READSTAT_FOUND AND ICONV_LIBRARIES)
-        target_link_libraries (labplotbackendlib ${ICONV_LIBRARIES})
+        target_link_libraries (liblabplot PRIVATE ${ICONV_LIBRARIES})
     endif()
-    target_link_libraries(liblabplot ${READSTAT_LIBRARIES} ${ZLIB_LIBRARIES})
+    target_link_libraries(liblabplot PRIVATE ${READSTAT_LIBRARIES} ${ZLIB_LIBRARIES})
 endif()
 endif()
 
 if(Discount_FOUND)
-    target_link_libraries(liblabplot Discount::Lib)
+    target_link_libraries(liblabplot PRIVATE Discount::Lib)
 endif()
 
 if(ENABLE_LIBORIGIN)
     target_include_directories(liblabplot PRIVATE ../src/3rdparty/liborigin)
     if(LIBORIGIN_FOUND)
-        target_link_libraries(liblabplot ${LIBORIGIN_LIBRARIES})
+        target_link_libraries(liblabplot PRIVATE ${LIBORIGIN_LIBRARIES})
     else()
-        target_link_libraries(liblabplot liborigin-static)
+        target_link_libraries(liblabplot PRIVATE liborigin-static)
     endif()
 endif()
 
 if(Cantor_FOUND)
     # KFX::Service, KFX::Parts is optional but probably required by Cantor
-    target_link_libraries(liblabplot Cantor::cantorlibs KF${KF_MAJOR_VERSION}::Service KF${KF_MAJOR_VERSION}::Parts)
+    target_link_libraries(liblabplot PRIVATE Cantor::cantorlibs KF${KF_MAJOR_VERSION}::Service KF${KF_MAJOR_VERSION}::Parts)
 endif()
 
 # required by worksheetview
 if(ENABLE_QTSVG)
 if(Qt${QT_MAJOR_VERSION}Svg_FOUND)
-    target_link_libraries(liblabplot Qt${QT_MAJOR_VERSION}::Svg)
+    target_link_libraries(liblabplot PRIVATE Qt${QT_MAJOR_VERSION}::Svg)
 endif()
 endif()
 
 if(WIN32)
 if(PSAPI)
-    target_link_libraries(liblabplot ${PSAPI})
+    target_link_libraries(liblabplot PRIVATE ${PSAPI})
 endif()
 endif()
 
-if(ENABLE_SDK_EXAMPLES)
-    add_subdirectory(example)
-endif()
+# commented for now, will be moved to sdk tests
+# if(ENABLE_SDK_EXAMPLES)
+#     add_subdirectory(example)
+# endif()
 
 ############## installation ################################
-install(TARGETS liblabplot DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS liblabplot DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} COMPONENT Devel)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/labplot_export.h  DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot COMPONENT Devel)
+
+configure_file(labplot.h.in ${CMAKE_CURRENT_BINARY_DIR}/labplot.h @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/labplot.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/ COMPONENT Devel)
 
 # top-level includes
 foreach(SDK_SOURCE IN LISTS SDK_SOURCES)
@@ -458,6 +473,7 @@ install(FILES ../src/backend/nsl/nsl_sf_kernel.h DESTINATION ${KDE_INSTALL_INCLU
 install(FILES ../src/backend/nsl/nsl_dft.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/nsl/ COMPONENT Devel)
 install(FILES ../src/backend/nsl/nsl_sf_window.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/nsl/ COMPONENT Devel)
 
+# will be removed as soon as xlsxfilter.h and readstatfilter.h are reworked
 if(ENABLE_XLSX)
 if(BUILD_QXLSX)
     install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/../src/3rdparty/QXlsx/header/xlsxcellrange.h" DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/datasources/filters/ COMPONENT Devel)
