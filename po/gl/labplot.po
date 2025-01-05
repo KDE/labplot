@@ -1,14 +1,14 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2015, 2016, 2017.
-# SPDX-FileCopyrightText: 2023, 2024 Adrián Chaves (Gallaecio)
+# SPDX-FileCopyrightText: 2023, 2024, 2025 Adrián Chaves (Gallaecio)
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-04 00:38+0000\n"
-"PO-Revision-Date: 2024-12-27 18:39+0100\n"
+"POT-Creation-Date: 2025-01-05 00:38+0000\n"
+"PO-Revision-Date: 2025-01-04 15:24+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -1292,7 +1292,7 @@ msgstr "Non foi posíbel abrir o dispositivo ou ficheiro, ou está baleiro."
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:332
-#: src/backend/datasources/filters/XLSXFilter.cpp:515
+#: src/backend/datasources/filters/XLSXFilter.cpp:509
 #, kde-format
 msgid "Not enough memory."
 msgstr "Non hai memoria dabondo."
@@ -2156,13 +2156,13 @@ msgid "%1 dimensional data of type %2 not supported yet"
 msgstr "Aínda non se permiten os datos de dimensións %1 de tipo %2"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:53
-#: src/backend/datasources/filters/XLSXFilter.cpp:41
+#: src/backend/datasources/filters/XLSXFilter.cpp:47
 #, kde-format
 msgid "Sheet count: %1"
 msgstr "Número de follas: %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:215
-#: src/backend/datasources/filters/XLSXFilter.cpp:632
+#: src/backend/datasources/filters/XLSXFilter.cpp:626
 #, kde-format
 msgid "No sheet selected."
 msgstr "Non seleccionou ningunha folla."
@@ -2440,12 +2440,12 @@ msgstr "Tempo_ns"
 msgid "Time_10µs"
 msgstr "Tempo_10µs"
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:43
+#: src/backend/datasources/filters/XLSXFilter.cpp:49
 #, kde-format
 msgid "Sheets: "
 msgstr "Follas: "
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:636
+#: src/backend/datasources/filters/XLSXFilter.cpp:630
 #, kde-format
 msgid "Invalid region specified."
 msgstr "A rexión indicada non é válida."
@@ -10205,10 +10205,9 @@ msgid "C++ Compiler: "
 msgstr "Compilador de C++: "
 
 #: src/frontend/AboutDialog.cpp:181
-#, fuzzy, kde-format
-#| msgid "C++ Compiler Flags: "
+#, kde-format
 msgid "C++ Compiler Flags:"
-msgstr "Opcións do compilador de C++: "
+msgstr "Opcións do compilador de C++:"
 
 #: src/frontend/AboutDialog.cpp:185
 #, kde-format
@@ -13259,6 +13258,8 @@ msgstr "Silverman"
 msgid ""
 "The window function (\"kernel\") used to estimate the probability density"
 msgstr ""
+"A función de xanela («núcleo») que se usa para estibar a densidade da "
+"probabilidade."
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:180
 #, kde-format
@@ -13267,11 +13268,15 @@ msgid ""
 "min(sigma, IQR / 1.34) * n^(-0.2)</li><li>Scott -  1.059 * sigma * n^(-0.2)</"
 "li><li>Custom - custom value for the kernel bandwidth</li></ul>"
 msgstr ""
+"Método para seleccionar o largo de banda do núcleo:<ul><li>Silverman: 0,9 * "
+"mínimo(sigma, IQR / 1,34) * n^(-0,2)</li><li>Scott: 1,059 * sigma * "
+"n^(-0,2)</li><li>Personalizado: valor personalizado para o largo de banda do "
+"núcleo.</li></ul>"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:189
 #, kde-format
 msgid "Custom value for the kernel bandwidth"
-msgstr ""
+msgstr "Valor personalizado para o largo de banda do núcleo."
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:371
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:452
@@ -13401,6 +13406,8 @@ msgid ""
 "If checked, exact limits are calculated for every individual sample (\"stair-"
 "step limits\"), straight lines are drawn for the limits otherwise."
 msgstr ""
+"Se se marca, calcúlanse os límites exactos para cada mostra individual "
+"(«límites de banzo»), senón debúxanse liñas rectas para os límites."
 
 #: src/frontend/dockwidgets/ProjectDock.cpp:28
 #, kde-format
@@ -13431,6 +13438,8 @@ msgid ""
 "Distribution used to calculate the percentiles to be compared with the "
 "percentiles of the provided data"
 msgstr ""
+"Distribución que se usa para calcular os percentís para comprara cos dos "
+"datos fornecidos."
 
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:227
 #, kde-format
@@ -13443,6 +13452,7 @@ msgid ""
 "Metric of the dataset used to determine where the center line should be "
 "placed at"
 msgstr ""
+"Métrica do conxunto de datos para determinar onde colocar a liña central."
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:52
 #, kde-format
@@ -14587,10 +14597,9 @@ msgstr ""
 "visualización e análise de datos, a disposición de calquera."
 
 #: src/frontend/LabPlot.cpp:55
-#, fuzzy, kde-format
-#| msgid "(c) 2007-2024 LabPlot authors"
+#, kde-format
 msgid "(c) 2007-2025 LabPlot authors"
-msgstr "© 2007-2024 Persoas autoras de LabPlot"
+msgstr "© 2007-2025 Persoas autoras de LabPlot"
 
 #: src/frontend/LabPlot.cpp:57
 #, kde-format
@@ -21394,10 +21403,9 @@ msgstr "Intervalo da gráfica:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabKDE)
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:210
-#, fuzzy, kde-format
-#| msgid "Estimation"
+#, kde-format
 msgid "Estimation Line"
-msgstr "Estimación"
+msgstr "Liña de estimación"
 
 #. i18n: ectx: property (text), widget (QPushButton, bUpdateNow)
 #: src/frontend/ui/dockwidgets/livedatadock.ui:67

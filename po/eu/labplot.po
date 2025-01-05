@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-04 00:38+0000\n"
+"POT-Creation-Date: 2025-01-05 00:38+0000\n"
 "PO-Revision-Date: 2024-12-14 04:19+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -1296,7 +1296,7 @@ msgstr "Gailua irekitzea huts egin du."
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:332
-#: src/backend/datasources/filters/XLSXFilter.cpp:515
+#: src/backend/datasources/filters/XLSXFilter.cpp:509
 #, fuzzy, kde-format
 msgid "Not enough memory."
 msgstr "Zenbakia"
@@ -2179,13 +2179,13 @@ msgid "%1 dimensional data of type %2 not supported yet"
 msgstr "%2 motako %1 dimentsio-datuak oraindik ez dira onartzen"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:53
-#: src/backend/datasources/filters/XLSXFilter.cpp:41
+#: src/backend/datasources/filters/XLSXFilter.cpp:47
 #, kde-format
 msgid "Sheet count: %1"
 msgstr "Orri kopurua: %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:215
-#: src/backend/datasources/filters/XLSXFilter.cpp:632
+#: src/backend/datasources/filters/XLSXFilter.cpp:626
 #, fuzzy, kde-format
 #| msgid "No data set selected"
 msgid "No sheet selected."
@@ -2486,12 +2486,12 @@ msgstr "Ordua_ns"
 msgid "Time_10µs"
 msgstr "Ordua_10µs"
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:43
+#: src/backend/datasources/filters/XLSXFilter.cpp:49
 #, kde-format
 msgid "Sheets: "
 msgstr "Orriak: "
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:636
+#: src/backend/datasources/filters/XLSXFilter.cpp:630
 #, fuzzy, kde-format
 #| msgid "Invalid tolerance specified"
 msgid "Invalid region specified."

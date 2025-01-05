@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-04 00:38+0000\n"
+"POT-Creation-Date: 2025-01-05 00:38+0000\n"
 "PO-Revision-Date: 2025-01-02 08:35+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -1303,7 +1303,7 @@ msgstr "No s'ha pogut obrir el dispositiu/fitxer o està buit."
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:332
-#: src/backend/datasources/filters/XLSXFilter.cpp:515
+#: src/backend/datasources/filters/XLSXFilter.cpp:509
 #, kde-format
 msgid "Not enough memory."
 msgstr "No hi ha memòria suficient."
@@ -2177,13 +2177,13 @@ msgid "%1 dimensional data of type %2 not supported yet"
 msgstr "les dades dimensionals %1 de tipus %2 encara no estan admeses"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:53
-#: src/backend/datasources/filters/XLSXFilter.cpp:41
+#: src/backend/datasources/filters/XLSXFilter.cpp:47
 #, kde-format
 msgid "Sheet count: %1"
 msgstr "Comptador de fulls: %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:215
-#: src/backend/datasources/filters/XLSXFilter.cpp:632
+#: src/backend/datasources/filters/XLSXFilter.cpp:626
 #, kde-format
 msgid "No sheet selected."
 msgstr "No s'ha seleccionat cap full."
@@ -2461,12 +2461,12 @@ msgstr "Hora_ns"
 msgid "Time_10µs"
 msgstr "Hora_10µs"
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:43
+#: src/backend/datasources/filters/XLSXFilter.cpp:49
 #, kde-format
 msgid "Sheets: "
 msgstr "Fulls: "
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:636
+#: src/backend/datasources/filters/XLSXFilter.cpp:630
 #, kde-format
 msgid "Invalid region specified."
 msgstr "Regió especificada no vàlida."

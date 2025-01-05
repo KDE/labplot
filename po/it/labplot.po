@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-04 00:38+0000\n"
-"PO-Revision-Date: 2024-12-15 18:52+0100\n"
+"POT-Creation-Date: 2025-01-05 00:38+0000\n"
+"PO-Revision-Date: 2024-12-28 16:06+0100\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -1297,7 +1297,7 @@ msgstr "Impossibile aprire il dispositivo o il file, oppure è vuoto."
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:332
-#: src/backend/datasources/filters/XLSXFilter.cpp:515
+#: src/backend/datasources/filters/XLSXFilter.cpp:509
 #, kde-format
 msgid "Not enough memory."
 msgstr "Memoria insufficiente."
@@ -2172,13 +2172,13 @@ msgid "%1 dimensional data of type %2 not supported yet"
 msgstr "dati a %1 dimensioni di tipo %2 non ancora supportati"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:53
-#: src/backend/datasources/filters/XLSXFilter.cpp:41
+#: src/backend/datasources/filters/XLSXFilter.cpp:47
 #, kde-format
 msgid "Sheet count: %1"
 msgstr "Conteggio dei fogli: %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:215
-#: src/backend/datasources/filters/XLSXFilter.cpp:632
+#: src/backend/datasources/filters/XLSXFilter.cpp:626
 #, kde-format
 msgid "No sheet selected."
 msgstr "Nessun foglio selezionato."
@@ -2456,12 +2456,12 @@ msgstr "Tempo_ns"
 msgid "Time_10µs"
 msgstr "Tempo_10µs"
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:43
+#: src/backend/datasources/filters/XLSXFilter.cpp:49
 #, kde-format
 msgid "Sheets: "
 msgstr "Fogli: "
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:636
+#: src/backend/datasources/filters/XLSXFilter.cpp:630
 #, kde-format
 msgid "Invalid region specified."
 msgstr "Regione specificata non valida."
@@ -3649,10 +3649,9 @@ msgid "Cell (index; variable)"
 msgstr "Cella (indice; variabile)"
 
 #: src/backend/gsl/functions.cpp:242
-#, fuzzy, kde-format
-#| msgid "Cell (index, variable)"
+#, kde-format
 msgid "Cell (index; default_value; variable)"
-msgstr "Cella (indice, variabile)"
+msgstr "Cella (indice; valore_predefinito; variabile)"
 
 #: src/backend/gsl/functions.cpp:243
 #, kde-format
@@ -3707,7 +3706,7 @@ msgstr "Cella della colonna corrente (indice)"
 #: src/backend/gsl/functions.cpp:253
 #, kde-format
 msgid "Current column cell (index; default_value)"
-msgstr ""
+msgstr "Cella della colonna corrente (indice; valore_predefinito)"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:257
@@ -6074,10 +6073,9 @@ msgid "Cumulative triangular distribution function Q"
 msgstr "Funzione di distribuzione triangolare cumulata Q"
 
 #: src/backend/gsl/functions.cpp:855
-#, fuzzy, kde-format
-#| msgid "Probability density for a Landau distribution"
+#, kde-format
 msgid "p-th quantile for triangular distribution"
-msgstr "Densità di probabilità per una distribuzione di Landau"
+msgstr "p-esimo quantile di una distribuzione triangolare"
 
 #: src/backend/gsl/functions.cpp:961 src/backend/gsl/functions.cpp:973
 #: src/backend/gsl/functions.cpp:987 src/backend/gsl/functions.cpp:999
@@ -8492,10 +8490,9 @@ msgid "Vertical Step"
 msgstr "Linea verticale"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:688
-#, fuzzy, kde-format
-#| msgid "Interpolate"
+#, kde-format
 msgid "Spline Interpolated"
-msgstr "Interpola"
+msgstr "Spline interpolata"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:695
 #, fuzzy, kde-format
@@ -8517,10 +8514,9 @@ msgid "Y Error"
 msgstr "Errore Y"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:705
-#, fuzzy, kde-format
-#| msgid "Y Error"
+#, kde-format
 msgid "XY Error"
-msgstr "Errore Y"
+msgstr "Errore XY"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:712
 #, fuzzy, kde-format
@@ -8529,22 +8525,19 @@ msgid "Line and Symbol Plots"
 msgstr "Larghezza di linea+simbolo:"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:714
-#, fuzzy, kde-format
-#| msgid "Line+Symbol Width:"
+#, kde-format
 msgid "Line + Symbol"
-msgstr "Larghezza di linea+simbolo:"
+msgstr "Linea + simbolo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:718
-#, fuzzy, kde-format
-#| msgid "Segments"
+#, kde-format
 msgid "2 Point Segment"
-msgstr "Segmenti"
+msgstr "Segmento a 2 punti"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:722
-#, fuzzy, kde-format
-#| msgid "Segments"
+#, kde-format
 msgid "3 Point Segment"
-msgstr "Segmenti"
+msgstr "Segmento a 3 punti"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:729
 #, kde-format
@@ -9803,10 +9796,9 @@ msgid "Residuals mean square"
 msgstr "Residuo quadratico medio"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1906
-#, fuzzy, kde-format
-#| msgid "Root mean square deviation (RMSD, SD)"
+#, kde-format
 msgid "Root mean square deviation"
-msgstr "Radice dell'errore quadratico medio (RMSD, SD)"
+msgstr "Deviazione dell'errore quadratico medio"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1907
@@ -10274,11 +10266,12 @@ msgid "missing"
 msgstr "mancante"
 
 #: src/frontend/AboutDialog.cpp:190
-#, fuzzy, kde-format
-#| msgid "Flexible Image Transport System Data Format (FITS)"
+#, kde-format
 msgid ""
 "Support data files in FITS (Flexible Image Transport System) data format"
-msgstr "Flexible Image Transport System Data Format (FITS)"
+msgstr ""
+"Supporta file di dati in formato FITS (Flexible Image Transport System Data "
+"Format)"
 
 #: src/frontend/AboutDialog.cpp:195
 #, kde-format
@@ -10323,17 +10316,14 @@ msgid "Complex error and related functions"
 msgstr "Errore complesso e funzioni correlate"
 
 #: src/frontend/AboutDialog.cpp:231
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Import Origin Project"
+#, kde-format
 msgid "importing Origin OPJ project files"
-msgstr "Importa progetto di Origin"
+msgstr "Importa file di progetto OPJ di Origin"
 
 #: src/frontend/AboutDialog.cpp:236
-#, fuzzy, kde-format
-#| msgid "MATLAB MAT file"
+#, kde-format
 msgid "Import binary MATLAB MAT files"
-msgstr "File MAT di MATLAB"
+msgstr "Importa file binari MAT di MATLAB"
 
 #: src/frontend/AboutDialog.cpp:241
 #, kde-format
@@ -13294,7 +13284,7 @@ msgstr "%1: curva «%2» rimossa"
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:168
 #, kde-format
 msgid "Silverman"
-msgstr ""
+msgstr "Silverman"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:173
 #, kde-format
@@ -16084,7 +16074,7 @@ msgstr "Con Notebook"
 #: src/frontend/SettingsGeneralPage.cpp:236
 #, kde-format
 msgid "Notebook type to create automatically on startup"
-msgstr ""
+msgstr "Tipo notebook da creare automaticamente all'avvio"
 
 #: src/frontend/SettingsGeneralPage.cpp:240
 #, kde-format
@@ -16215,6 +16205,8 @@ msgid ""
 "Debug trace - helpful to diagnose the application, can have a negative "
 "impact on the performance."
 msgstr ""
+"Tracciatura di debug, utile per diagnosticare l'applicazione ma può avere un "
+"impatto negativo sulle prestazioni."
 
 #: src/frontend/SettingsGeneralPage.cpp:283
 #, kde-format
@@ -17485,10 +17477,9 @@ msgid "Show Comments"
 msgstr "Mostra i commenti"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:328
-#, fuzzy, kde-format
-#| msgid "Show Options"
+#, kde-format
 msgid "Show SparkLines"
-msgstr "Mostra le opzioni"
+msgstr "Mostra sparkline"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:330
 #, kde-format
@@ -17797,17 +17788,15 @@ msgstr "Nascondi i commenti"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1186
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1565
-#, fuzzy, kde-format
-#| msgid "Hide Options"
+#, kde-format
 msgid "Hide Sparklines"
-msgstr "Nascondi le opzioni"
+msgstr "Nascondi sparkline"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1188
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1567
-#, fuzzy, kde-format
-#| msgid "Show Options"
+#, kde-format
 msgid "Show Sparklines"
-msgstr "Mostra le opzioni"
+msgstr "Mostra sparkline"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1656
 #, kde-format
@@ -21714,10 +21703,9 @@ msgstr "Abilitato"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowSparklines)
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:175
-#, fuzzy, kde-format
-#| msgid "Column Separator:"
+#, kde-format
 msgid "Sparklines:"
-msgstr "Separatore colonna:"
+msgstr "Sparkline:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:198

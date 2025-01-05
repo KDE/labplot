@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-04 00:38+0000\n"
+"POT-Creation-Date: 2025-01-05 00:38+0000\n"
 "PO-Revision-Date: 2017-04-20 14:04+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -1338,7 +1338,7 @@ msgstr "Σύνδεση:"
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:332
-#: src/backend/datasources/filters/XLSXFilter.cpp:515
+#: src/backend/datasources/filters/XLSXFilter.cpp:509
 #, fuzzy, kde-format
 #| msgid "Number of levels"
 msgid "Not enough memory."
@@ -2245,13 +2245,13 @@ msgid "%1 dimensional data of type %2 not supported yet"
 msgstr ""
 
 #: src/backend/datasources/filters/OdsFilter.cpp:53
-#: src/backend/datasources/filters/XLSXFilter.cpp:41
+#: src/backend/datasources/filters/XLSXFilter.cpp:47
 #, kde-format
 msgid "Sheet count: %1"
 msgstr ""
 
 #: src/backend/datasources/filters/OdsFilter.cpp:215
-#: src/backend/datasources/filters/XLSXFilter.cpp:632
+#: src/backend/datasources/filters/XLSXFilter.cpp:626
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgid "No sheet selected."
@@ -2556,12 +2556,12 @@ msgstr ""
 msgid "Time_10µs"
 msgstr ""
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:43
+#: src/backend/datasources/filters/XLSXFilter.cpp:49
 #, kde-format
 msgid "Sheets: "
 msgstr ""
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:636
+#: src/backend/datasources/filters/XLSXFilter.cpp:630
 #, kde-format
 msgid "Invalid region specified."
 msgstr ""

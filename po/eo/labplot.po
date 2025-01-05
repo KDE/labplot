@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-04 00:38+0000\n"
+"POT-Creation-Date: 2025-01-05 00:38+0000\n"
 "PO-Revision-Date: 2024-12-31 11:42+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -1288,7 +1288,7 @@ msgstr "Malsukcesis malfermi la aparatondosieron aŭ ĝi malplenas."
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:332
-#: src/backend/datasources/filters/XLSXFilter.cpp:515
+#: src/backend/datasources/filters/XLSXFilter.cpp:509
 #, kde-format
 msgid "Not enough memory."
 msgstr "Ne sufiĉa memoro."
@@ -2149,13 +2149,13 @@ msgid "%1 dimensional data of type %2 not supported yet"
 msgstr "%1 dimensiaj datumoj de tipo %2 ankoraŭ ne subtenataj"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:53
-#: src/backend/datasources/filters/XLSXFilter.cpp:41
+#: src/backend/datasources/filters/XLSXFilter.cpp:47
 #, kde-format
 msgid "Sheet count: %1"
 msgstr "Folikalkulo: %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:215
-#: src/backend/datasources/filters/XLSXFilter.cpp:632
+#: src/backend/datasources/filters/XLSXFilter.cpp:626
 #, kde-format
 msgid "No sheet selected."
 msgstr "Neniu folio elektitiĝis."
@@ -2433,12 +2433,12 @@ msgstr "Tempo_ns"
 msgid "Time_10µs"
 msgstr "Tempo_10µs"
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:43
+#: src/backend/datasources/filters/XLSXFilter.cpp:49
 #, kde-format
 msgid "Sheets: "
 msgstr "Folikoj:"
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:636
+#: src/backend/datasources/filters/XLSXFilter.cpp:630
 #, kde-format
 msgid "Invalid region specified."
 msgstr "Nevalida regiono specifita."

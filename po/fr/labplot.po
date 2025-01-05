@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-04 00:38+0000\n"
-"PO-Revision-Date: 2025-01-02 09:07+0100\n"
+"POT-Creation-Date: 2025-01-05 00:38+0000\n"
+"PO-Revision-Date: 2025-01-03 09:04+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -1311,7 +1311,7 @@ msgstr "Impossible d'ouvrir le périphérique / fichier ou celui-ci est vide."
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:332
-#: src/backend/datasources/filters/XLSXFilter.cpp:515
+#: src/backend/datasources/filters/XLSXFilter.cpp:509
 #, kde-format
 msgid "Not enough memory."
 msgstr "Mémoire insuffisante. "
@@ -2186,13 +2186,13 @@ msgstr ""
 "Les données dimensionnelles %1 de type %2 ne sont pas encore prises en charge"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:53
-#: src/backend/datasources/filters/XLSXFilter.cpp:41
+#: src/backend/datasources/filters/XLSXFilter.cpp:47
 #, kde-format
 msgid "Sheet count: %1"
 msgstr "Compteur de feuilles : %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:215
-#: src/backend/datasources/filters/XLSXFilter.cpp:632
+#: src/backend/datasources/filters/XLSXFilter.cpp:626
 #, kde-format
 msgid "No sheet selected."
 msgstr "Aucune feuille sélectionnée."
@@ -2472,12 +2472,12 @@ msgstr "Durée_ns"
 msgid "Time_10µs"
 msgstr "Durée_10_µs"
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:43
+#: src/backend/datasources/filters/XLSXFilter.cpp:49
 #, kde-format
 msgid "Sheets: "
 msgstr "Feuilles :"
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:636
+#: src/backend/datasources/filters/XLSXFilter.cpp:630
 #, kde-format
 msgid "Invalid region specified."
 msgstr "Zone spécifiée non valable."
@@ -10249,10 +10249,9 @@ msgid "C++ Compiler: "
 msgstr "Compilateurs C++ :"
 
 #: src/frontend/AboutDialog.cpp:181
-#, fuzzy, kde-format
-#| msgid "C++ Compiler Flags: "
+#, kde-format
 msgid "C++ Compiler Flags:"
-msgstr "Drapeaux pour le compilateur C++ :"
+msgstr "Options pour le compilateur C++ :"
 
 #: src/frontend/AboutDialog.cpp:185
 #, kde-format
@@ -14691,10 +14690,9 @@ msgstr ""
 "source » et multi-plate-forme, accessible à tous."
 
 #: src/frontend/LabPlot.cpp:55
-#, fuzzy, kde-format
-#| msgid "(c) 2007-2024 LabPlot authors"
+#, kde-format
 msgid "(c) 2007-2025 LabPlot authors"
-msgstr "(c) 2007 - 2024 L'équipe de développement de LabPlot"
+msgstr "(c) 2007 - 2025, l'équipe de développement de LabPlot"
 
 #: src/frontend/LabPlot.cpp:57
 #, kde-format
