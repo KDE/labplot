@@ -4,6 +4,7 @@
 	Description          : Tests for AbstractAspect
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2023 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -14,7 +15,9 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
+#include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 
 #include <QUndoStack>
 
@@ -137,7 +140,6 @@ void AbstractAspectTest::copyPaste() {
 	equationCurve->recalculate();
 
 	worksheet->copy();
-
 	project.paste();
 
 	const auto& worksheets = project.children(AspectType::Worksheet);
@@ -159,6 +161,104 @@ void AbstractAspectTest::copyPaste() {
 		QVERIFY(childrenWorksheet1.at(i)->name() == childrenWorksheet2.at(i)->name());
 		QVERIFY(childrenWorksheet1.at(i)->uuid() != childrenWorksheet2.at(i)->uuid());
 	}
+}
+
+/*!
+ * check copy&paste (duplicate) of a XYFitCurve with the data source type "Spreadsheet",
+ * the pointers to the data source columns must be properly restored after the duplication.
+ */
+void AbstractAspectTest::pasteFitCurveSourceSpreadsheet() {
+	Project project;
+
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+	spreadsheet->setColumnCount(2);
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+
+	auto* fitCurve = new XYFitCurve(QStringLiteral("fit"));
+	fitCurve->setDataSourceType(XYAnalysisCurve::DataSourceType::Spreadsheet);
+	fitCurve->setXDataColumn(spreadsheet->column(0));
+	fitCurve->setXDataColumn(spreadsheet->column(1));
+	plot->addChild(fitCurve);
+
+	fitCurve->copy();
+	plot->paste();
+
+	// checks
+	const auto& fitCurves = project.children<XYFitCurve>(AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(fitCurves.count(), 2);
+	auto* fitCurveCopy = fitCurves.at(1);
+	QCOMPARE(fitCurveCopy->dataSourceType(), XYAnalysisCurve::DataSourceType::Spreadsheet);
+	QCOMPARE(fitCurveCopy->xDataColumn(), spreadsheet->column(0));
+	QCOMPARE(fitCurveCopy->yDataColumn(), spreadsheet->column(1));
+}
+
+/*!
+ * check copy&paste (duplicate) of a XYFitCurve with the data source type "Curve",
+ * the pointer to the data source curve must be properly restored after the duplication.
+ */
+void AbstractAspectTest::pasteFitCurveSourceCurve() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+
+	auto* xyCurve = new XYCurve(QStringLiteral("xy-curve"));
+	plot->addChild(xyCurve);
+
+	auto* fitCurve = new XYFitCurve(QStringLiteral("fit"));
+	fitCurve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
+	fitCurve->setDataSourceCurve(xyCurve);
+	plot->addChild(fitCurve);
+
+	fitCurve->copy();
+	plot->paste();
+
+	// checks
+	const auto& fitCurves = project.children<XYFitCurve>(AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(fitCurves.count(), 2);
+	auto* fitCurveCopy = fitCurves.at(1);
+	QCOMPARE(fitCurveCopy->dataSourceType(), XYAnalysisCurve::DataSourceType::Curve);
+	QCOMPARE(fitCurveCopy->dataSourceCurve(), xyCurve);
+}
+
+/*!
+ * check copy&paste (duplicate) of a XYFitCurve with the data source type "Histogram",
+ * the pointer to the data source histogram must be properly restored after the duplication.
+ */
+void AbstractAspectTest::pasteFitCurveSourceHistogram() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+
+	auto* histogram = new Histogram(QStringLiteral("histogram"));
+	plot->addChild(histogram);
+
+	auto* fitCurve = new XYFitCurve(QStringLiteral("fit"));
+	fitCurve->setDataSourceType(XYAnalysisCurve::DataSourceType::Histogram);
+	fitCurve->setDataSourceHistogram(histogram);
+	plot->addChild(fitCurve);
+
+	fitCurve->copy();
+	plot->paste();
+
+	// checks
+	const auto& fitCurves = project.children<XYFitCurve>(AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(fitCurves.count(), 2);
+	auto* fitCurveCopy = fitCurves.at(1);
+	QCOMPARE(fitCurveCopy->dataSourceType(), XYAnalysisCurve::DataSourceType::Histogram);
+	QCOMPARE(fitCurveCopy->dataSourceHistogram(), histogram);
 }
 
 void AbstractAspectTest::saveLoad() {

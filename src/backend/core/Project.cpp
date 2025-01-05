@@ -934,9 +934,17 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	// wait until all columns are decoded from base64-encoded data
 	QThreadPool::globalInstance()->waitForDone();
 
-	bool hasChildren = aspect->childCount<AbstractAspect>();
-	const auto& columns = aspect->project()->children<Column>(ChildIndexFlag::Recursive);
-	const auto& histograms = aspect->project()->children<Histogram>(ChildIndexFlag::Recursive); // needed for fit curves only. why a better implementation?
+	// when restoring pointers for an aspect having children, for example a Folder, we need to recursively traverse
+	// all its children and restore the pointers for all of them. Analysis curves, for example XYFitCurve, can also
+	// children (residuals column, note) but there is no need to check the children, the pointers need to be restored
+	// for the analysis curve itself.
+	bool hasChildren = (aspect->childCount<AbstractAspect>() > 0 && !aspect->inherits(AspectType::XYAnalysisCurve));
+
+	// aspects in the project that can be used as sources/references:
+	auto* project = aspect->project();
+	const auto& columns = project->children<Column>(ChildIndexFlag::Recursive);
+	const auto& histogramsAll = project->children<Histogram>(ChildIndexFlag::Recursive); // needed for fit curves only. why a better implementation?
+	const auto& curvesAll = project->children<XYCurve>(ChildIndexFlag::Recursive);
 
 #ifndef SDK
 	// LiveDataSource:
@@ -975,7 +983,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 			if (fitCurve) {
 				RESTORE_COLUMN_POINTER(fitCurve, xErrorColumn, XErrorColumn);
 				RESTORE_COLUMN_POINTER(fitCurve, yErrorColumn, YErrorColumn);
-				RESTORE_POINTER(fitCurve, dataSourceHistogram, DataSourceHistogram, Histogram, histograms);
+				RESTORE_POINTER(fitCurve, dataSourceHistogram, DataSourceHistogram, Histogram, histogramsAll);
 			}
 		} else {
 			RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
@@ -988,7 +996,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		}
 
 		if (analysisCurve)
-			RESTORE_POINTER(analysisCurve, dataSourceCurve, DataSourceCurve, XYCurve, curves);
+			RESTORE_POINTER(analysisCurve, dataSourceCurve, DataSourceCurve, XYCurve, curvesAll);
 
 		curve->setSuppressRetransform(false);
 	}
