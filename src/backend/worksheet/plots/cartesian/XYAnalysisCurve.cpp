@@ -263,28 +263,6 @@ void XYAnalysisCurve::handleSourceDataChanged() {
 		return;
 
 	Q_D(XYAnalysisCurve);
-
-	// TODO: why do we need to update the pathes on data changes?
-	if (d->xDataColumn)
-		setXDataColumnPath(d->xDataColumn->path());
-	else
-		setXDataColumnPath(QString());
-
-	if (d->yDataColumn)
-		setYDataColumnPath(d->yDataColumn->path());
-	else
-		setYDataColumnPath(QString());
-
-	if (d->y2DataColumn)
-		setY2DataColumnPath(d->y2DataColumn->path());
-	else
-		setY2DataColumnPath(QString());
-
-	if (d->dataSourceCurve)
-		setDataSourceCurvePath(d->dataSourceCurve->path());
-	else
-		setDataSourceCurvePath(QString());
-
 	d->sourceDataChangedSinceLastRecalc = true;
 	Q_EMIT sourceDataChanged();
 }
@@ -482,7 +460,30 @@ void XYAnalysisCurvePrivate::connectColumn(const AbstractColumn* column, Dimensi
  */
 void XYAnalysisCurvePrivate::sourceChanged() {
 	updateConnections();
-	q->handleSourceDataChanged();
+
+	if (q->isLoading())
+		return;
+
+	if (xDataColumn)
+		q->setXDataColumnPath(xDataColumn->path());
+	else
+		q->setXDataColumnPath(QString());
+
+	if (yDataColumn)
+		q->setYDataColumnPath(yDataColumn->path());
+	else
+		q->setYDataColumnPath(QString());
+
+	if (y2DataColumn)
+		q->setY2DataColumnPath(y2DataColumn->path());
+	else
+		q->setY2DataColumnPath(QString());
+
+	if (dataSourceCurve)
+		q->setDataSourceCurvePath(dataSourceCurve->path());
+	else
+		q->setDataSourceCurvePath(QString());
+
 	if (!q->isLoading())
 		recalculate();
 }
