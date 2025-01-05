@@ -943,7 +943,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	// aspects in the project that can be used as sources/references:
 	auto* project = aspect->project();
 	const auto& columns = project->children<Column>(ChildIndexFlag::Recursive);
-	const auto& histogramsAll = project->children<Histogram>(ChildIndexFlag::Recursive); // needed for fit curves only. why a better implementation?
+	const auto& histogramsAll = project->children<Histogram>(ChildIndexFlag::Recursive); // needed for fit curves only.
 	const auto& curvesAll = project->children<XYCurve>(ChildIndexFlag::Recursive);
 
 #ifndef SDK
