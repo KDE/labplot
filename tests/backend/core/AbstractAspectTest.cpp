@@ -182,7 +182,7 @@ void AbstractAspectTest::pasteFitCurveSourceSpreadsheet() {
 	auto* fitCurve = new XYFitCurve(QStringLiteral("fit"));
 	fitCurve->setDataSourceType(XYAnalysisCurve::DataSourceType::Spreadsheet);
 	fitCurve->setXDataColumn(spreadsheet->column(0));
-	fitCurve->setXDataColumn(spreadsheet->column(1));
+	fitCurve->setYDataColumn(spreadsheet->column(1));
 	plot->addChild(fitCurve);
 
 	fitCurve->copy();

@@ -820,6 +820,7 @@ void AbstractAspect::paste(bool duplicate) {
 		} else {
 			if (aspect) {
 				aspect->setPasted(true);
+				aspect->setIsLoading(true);
 				aspect->load(&reader, false);
 				break;
 			}
@@ -847,6 +848,7 @@ void AbstractAspect::paste(bool duplicate) {
 		project()->restorePointers(aspect);
 		project()->retransformElements(aspect);
 		aspect->setPasted(false);
+		aspect->setIsLoading(false);
 		endMacro();
 	}
 	RESET_CURSOR;
