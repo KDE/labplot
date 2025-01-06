@@ -846,9 +846,9 @@ void AbstractAspect::paste(bool duplicate) {
 		}
 
 		project()->restorePointers(aspect);
+		aspect->setIsLoading(false);
 		project()->retransformElements(aspect);
 		aspect->setPasted(false);
-		aspect->setIsLoading(false);
 		endMacro();
 	}
 	RESET_CURSOR;
