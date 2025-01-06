@@ -80,7 +80,7 @@ void HistogramView::drawBackground(QPainter* painter, const QRectF& rect) {
 		return;
 
 	painter->save();
-	painter->setRenderHint(QPainter::Antialiasing, true);
+	painter->setRenderHint(QPainter::Antialiasing);
 	int max = 1;
 	for (int i = 0; i <= m_range; i++)
 		if (bins[i] > max)
