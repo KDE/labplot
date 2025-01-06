@@ -3,11 +3,10 @@
 #ifndef XLSXTHEME_H
 #define XLSXTHEME_H
 
-#include <QtGlobal>
-#include <QString>
-#include <QIODevice>
-
 #include "xlsxabstractooxmlfile.h"
+
+#include <QIODevice>
+#include <QString>
 
 QT_BEGIN_NAMESPACE_XLSX
 

@@ -1,18 +1,18 @@
 // xlsxdrawing.cpp
 
-#include <QtGlobal>
-#include <QXmlStreamWriter>
-#include <QXmlStreamReader>
-#include <QBuffer>
-
+#include "xlsxabstractsheet.h"
 #include "xlsxdrawing_p.h"
 #include "xlsxdrawinganchor_p.h"
-#include "xlsxabstractsheet.h"
+
+#include <QBuffer>
+#include <QXmlStreamReader>
+#include <QXmlStreamWriter>
 
 QT_BEGIN_NAMESPACE_XLSX
 
 Drawing::Drawing(AbstractSheet *sheet, CreateFlag flag)
-    :AbstractOOXmlFile(flag), sheet(sheet)
+    : AbstractOOXmlFile(flag)
+    , sheet(sheet)
 {
     workbook = sheet->workbook();
 }
@@ -30,13 +30,16 @@ void Drawing::saveToXmlFile(QIODevice *device) const
 
     writer.writeStartDocument(QStringLiteral("1.0"), true);
     writer.writeStartElement(QStringLiteral("xdr:wsDr"));
-    writer.writeAttribute(QStringLiteral("xmlns:xdr"), QStringLiteral("http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing"));
-    writer.writeAttribute(QStringLiteral("xmlns:a"), QStringLiteral("http://schemas.openxmlformats.org/drawingml/2006/main"));
+    writer.writeAttribute(
+        QStringLiteral("xmlns:xdr"),
+        QStringLiteral("http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing"));
+    writer.writeAttribute(QStringLiteral("xmlns:a"),
+                          QStringLiteral("http://schemas.openxmlformats.org/drawingml/2006/main"));
 
     for (DrawingAnchor *anchor : anchors)
         anchor->saveToXml(writer);
 
-    writer.writeEndElement();//xdr:wsDr
+    writer.writeEndElement(); // xdr:wsDr
     writer.writeEndDocument();
 }
 
@@ -55,24 +58,20 @@ bool Drawing::loadFromXmlFile(QIODevice *device)
 
     QXmlStreamReader reader(device);
 
-    while (!reader.atEnd())
-    {
+    while (!reader.atEnd()) {
         reader.readNextStartElement();
-        if (reader.tokenType() == QXmlStreamReader::StartElement)
-        {
+        if (reader.tokenType() == QXmlStreamReader::StartElement) {
             if (reader.name() == QLatin1String("absoluteAnchor")) // CT_AbsoluteAnchor
             {
-                DrawingAbsoluteAnchor * anchor = new DrawingAbsoluteAnchor(this);
+                auto *anchor = new DrawingAbsoluteAnchor(this);
                 anchor->loadFromXml(reader);
-            }
-            else if (reader.name() == QLatin1String("oneCellAnchor")) // CT_OneCellAnchor
+            } else if (reader.name() == QLatin1String("oneCellAnchor")) // CT_OneCellAnchor
             {
-                DrawingOneCellAnchor * anchor = new DrawingOneCellAnchor(this);
+                auto *anchor = new DrawingOneCellAnchor(this);
                 anchor->loadFromXml(reader);
-            }
-            else if (reader.name() == QLatin1String("twoCellAnchor")) // CT_TwoCellAnchor
+            } else if (reader.name() == QLatin1String("twoCellAnchor")) // CT_TwoCellAnchor
             {
-                DrawingTwoCellAnchor * anchor = new DrawingTwoCellAnchor(this);
+                auto *anchor = new DrawingTwoCellAnchor(this);
                 anchor->loadFromXml(reader);
             }
         }

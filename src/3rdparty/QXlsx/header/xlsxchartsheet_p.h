@@ -3,11 +3,9 @@
 #ifndef XLSXCHARTSHEET_P_H
 #define XLSXCHARTSHEET_P_H
 
-#include <QtGlobal>
-
-#include "xlsxglobal.h"
-#include "xlsxchartsheet.h"
 #include "xlsxabstractsheet_p.h"
+#include "xlsxchartsheet.h"
+#include "xlsxglobal.h"
 
 QT_BEGIN_NAMESPACE_XLSX
 

@@ -1,14 +1,14 @@
 // xlsxcelllocation.cpp
 
-#include <QtGlobal>
+#include "xlsxcelllocation.h"
+
+#include "xlsxcell.h"
+#include "xlsxglobal.h"
+
+#include <QList>
 #include <QObject>
 #include <QString>
 #include <QVector>
-#include <QList>
-
-#include "xlsxglobal.h"
-#include "xlsxcell.h"
-#include "xlsxcelllocation.h"
 
 QT_BEGIN_NAMESPACE_XLSX
 

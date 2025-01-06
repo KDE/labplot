@@ -2,7 +2,6 @@
 
 #include "xlsxnumformatparser_p.h"
 
-#include <QtGlobal>
 #include <QString>
 
 QT_BEGIN_NAMESPACE_XLSX
@@ -15,11 +14,11 @@ bool NumFormatParser::isDateTime(const QString &formatCode)
         switch (c.unicode()) {
         case '[':
             // [h], [m], [s] are valid format for time
-            if (i < formatCode.length()-2 && formatCode[i+2] == QLatin1Char(']')) {
-                const QChar cc = formatCode[i+1].toLower();
+            if (i < formatCode.length() - 2 && formatCode[i + 2] == QLatin1Char(']')) {
+                const QChar cc = formatCode[i + 1].toLower();
                 if (cc == QLatin1Char('h') || cc == QLatin1Char('m') || cc == QLatin1Char('s'))
                     return true;
-                i+=2;
+                i += 2;
                 break;
             } else {
                 // condition or color: don't care, ignore
@@ -30,8 +29,12 @@ bool NumFormatParser::isDateTime(const QString &formatCode)
 
         // quoted plain text block: don't care, ignore
         case '"':
-            while (i < formatCode.length()-1 && formatCode[++i] != QLatin1Char('"'))
-                ;
+            while (i < formatCode.length() - 1) {
+                ++i;
+                if (formatCode[i] == QLatin1Char('"')) {
+                    break;
+                }
+            }
             break;
 
         // escaped char: don't care, ignore
