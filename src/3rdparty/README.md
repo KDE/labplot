@@ -17,7 +17,7 @@ A library for reading OriginLab project files (.OPJ) ([link](https://sourceforge
 
 QXlsx is an excel file(.xlsx) reader/writer MIT-licensed C++ (with Qt) library ([link](https://github.com/QtExcel/QXlsx))
 
-    # git clone -b v1.4.6 https://github.com/QtExcel/QXlsx.git tmp
+    # git clone -b v1.5.0 https://github.com/QtExcel/QXlsx.git tmp
     # mv tmp/QXlsx .
     # mv tmp/{LICENSE,README.md} QXlsx
     # rm -rf tmp
