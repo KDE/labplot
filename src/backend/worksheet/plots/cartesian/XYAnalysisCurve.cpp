@@ -255,32 +255,14 @@ void XYAnalysisCurve::setY2DataColumnPath(const QString& path) {
 // ##############################################################################
 // #################################  SLOTS  ####################################
 // ##############################################################################
+/*!
+ * called when the data in the data source aspects was changed.
+ */
 void XYAnalysisCurve::handleSourceDataChanged() {
 	if (isLoading())
 		return;
 
 	Q_D(XYAnalysisCurve);
-
-	if (d->xDataColumn)
-		setXDataColumnPath(d->xDataColumn->path());
-	else
-		setXDataColumnPath(QString());
-
-	if (d->yDataColumn)
-		setYDataColumnPath(d->yDataColumn->path());
-	else
-		setYDataColumnPath(QString());
-
-	if (d->y2DataColumn)
-		setY2DataColumnPath(d->y2DataColumn->path());
-	else
-		setY2DataColumnPath(QString());
-
-	if (d->dataSourceCurve)
-		setDataSourceCurvePath(d->dataSourceCurve->path());
-	else
-		setDataSourceCurvePath(QString());
-
 	d->sourceDataChangedSinceLastRecalc = true;
 	Q_EMIT sourceDataChanged();
 }
@@ -432,12 +414,12 @@ void XYAnalysisCurvePrivate::connectCurve(const XYCurve* curve) {
 	m_connections << q->connect(curve, &AbstractAspect::aspectAboutToBeRemoved, q, &XYAnalysisCurve::dataSourceCurveAboutToBeRemoved);
 	m_connections << q->connect(curve, &AbstractAspect::aspectAboutToBeRemoved, q, &XYAnalysisCurve::recalculate);
 
-	// // handle the changes when different columns were provided for the source curve
+	// handle the changes when different columns were provided for the source curve
 	m_connections << q->connect(curve, &XYCurve::xColumnChanged, q, &XYAnalysisCurve::handleSourceDataChanged);
 	m_connections << q->connect(curve, &XYCurve::yColumnChanged, q, &XYAnalysisCurve::handleSourceDataChanged);
 	// // TODO? connect(curve, SIGNAL(y2ColumnChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 
-	// 	   // handle the changes when the data inside of the source curve columns
+	// handle the changes when the data inside of the source curve columns
 	m_connections << q->connect(curve, &XYCurve::xDataChanged, q, &XYAnalysisCurve::handleSourceDataChanged);
 	m_connections << q->connect(curve, &XYCurve::yDataChanged, q, &XYAnalysisCurve::handleSourceDataChanged);
 	if (curve->parentAspect())
@@ -472,6 +454,40 @@ void XYAnalysisCurvePrivate::connectColumn(const AbstractColumn* column, Dimensi
 	}
 }
 
+/*!
+ * called when one of the source objects was changed,
+ * updates the path and triggers the recalculate.
+ */
+void XYAnalysisCurvePrivate::sourceChanged() {
+	updateConnections();
+
+	if (q->isLoading())
+		return;
+
+	if (xDataColumn)
+		q->setXDataColumnPath(xDataColumn->path());
+	else
+		q->setXDataColumnPath(QString());
+
+	if (yDataColumn)
+		q->setYDataColumnPath(yDataColumn->path());
+	else
+		q->setYDataColumnPath(QString());
+
+	if (y2DataColumn)
+		q->setY2DataColumnPath(y2DataColumn->path());
+	else
+		q->setY2DataColumnPath(QString());
+
+	if (dataSourceCurve)
+		q->setDataSourceCurvePath(dataSourceCurve->path());
+	else
+		q->setDataSourceCurvePath(QString());
+
+	if (!q->isLoading())
+		recalculate();
+}
+
 void XYAnalysisCurvePrivate::updateConnections() {
 	for (auto c : m_connections)
 		q->disconnect(c);
@@ -493,13 +509,6 @@ void XYAnalysisCurvePrivate::updateConnections() {
 		// TODO
 		break;
 	}
-}
-
-void XYAnalysisCurvePrivate::sourceChanged() {
-	updateConnections();
-	q->handleSourceDataChanged();
-	if (!q->isLoading())
-		recalculate();
 }
 
 void XYAnalysisCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) const {
