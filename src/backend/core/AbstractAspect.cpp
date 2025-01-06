@@ -349,7 +349,9 @@ QMenu* AbstractAspect::createContextMenu() {
 			menu->insertAction(actionDuplicate, action);
 		else
 			menu->addAction(action);
-		connect(action, &QAction::triggered, this, &AbstractAspect::paste);
+		connect(action, &QAction::triggered, [=]() {
+			paste();
+		});
 	}
 	menu->addSeparator();
 
@@ -785,7 +787,9 @@ void AbstractAspect::copy() {
 
 void AbstractAspect::duplicate() {
 	copy();
-	parentAspect()->paste(true);
+	auto* parent = parentAspect();
+	const int index = parent->indexOfChild<AbstractAspect>(this) + 1;
+	parent->paste(true, index);
 }
 
 /*!
@@ -793,7 +797,7 @@ void AbstractAspect::duplicate() {
  * this function deserializes the XML string and adds the created aspect as
  * a child to the current aspect ("paste").
  */
-void AbstractAspect::paste(bool duplicate) {
+void AbstractAspect::paste(bool duplicate, int index) {
 	const QClipboard* clipboard = QApplication::clipboard();
 	const QMimeData* mimeData = clipboard->mimeData();
 	if (!mimeData->hasText())
@@ -836,7 +840,7 @@ void AbstractAspect::paste(bool duplicate) {
 		}
 
 		if (aspect->type() != AspectType::CartesianPlotLegend)
-			addChild(aspect);
+			insertChild(aspect, index);
 		else {
 			// special handling for the legend since only one single
 			// legend object is allowed per plot
