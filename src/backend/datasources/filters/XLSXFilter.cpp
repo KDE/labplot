@@ -751,7 +751,7 @@ void XLSXFilterPrivate::parse(const QString& fileName, QTreeWidgetItem* parentIt
 bool XLSXFilterPrivate::dataRangeCanBeExportedToMatrix(const QXlsx::CellRange& range) const {
 	for (int i = range.firstRow(); i <= range.lastRow(); ++i) {
 		for (int j = range.firstColumn(); j <= range.lastColumn(); ++j) {
-			const auto* cell = m_document->cellAt(i, j);
+			const auto cell = m_document->cellAt(i, j);
 			if (cell && cell->cellType() != QXlsx::Cell::CellType::NumberType) {
 				if (cell->cellType() == QXlsx::Cell::CellType::CustomType) {
 					bool ok = false;
@@ -786,7 +786,7 @@ QXlsx::Cell::CellType XLSXFilterPrivate::columnTypeInRange(const int column, con
 	bool numeric = false, datetime = false;
 	if (column >= range.firstColumn() && column <= range.lastColumn()) {
 		for (int row = range.firstRow(); row <= range.lastRow(); ++row) {
-			const auto* cell = m_document->cellAt(row, column);
+			const auto cell = m_document->cellAt(row, column);
 			if (!cell)
 				continue;
 
