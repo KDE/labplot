@@ -172,6 +172,7 @@ void AbstractAspectTest::pasteFitCurveSourceSpreadsheet() {
 
 	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
 	spreadsheet->setColumnCount(2);
+	project.addChild(spreadsheet);
 
 	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
 	project.addChild(worksheet);
