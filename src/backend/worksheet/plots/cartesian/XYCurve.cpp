@@ -2967,7 +2967,6 @@ void XYCurvePrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 
 	event->ignore();
 	setSelected(false);
-	QGraphicsItem::mousePressEvent(event);
 }
 
 // ##############################################################################
