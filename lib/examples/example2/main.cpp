@@ -1,28 +1,28 @@
-#include <labplot/labplot.h>
+#include <labplot.h>
 
 int main(int argc, char **argv) {
 	// create a spreadsheet and import the data into it
-	auto* spreadsheet = new Spreadsheet("data");
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("data"));
 	AsciiFilter filter;
-	filter.readDataFromFile("data.txt", spreadsheet);
+	filter.readDataFromFile(QStringLiteral("data.txt"), spreadsheet);
 
 	// create a worksheet
-	auto* worksheet = new Worksheet("worksheet");
+	auto* worksheet = new Worksheet(QStringLiteral("worksheet"));
 
 	//create a plot area and add it to the worksheet
-	auto* plotArea = new CartesianPlot("plot area");
+	auto* plotArea = new CartesianPlot(QStringLiteral("plot area"));
 	plotArea->setType(CartesianPlot::Type::FourAxes);
 	plotArea->addLegend();
 	worksheet->addChild(plotArea);
 
 	// create a histogram for the imported data and add it to the plot area
-	auto* histogram = new Histogram("histogram");
+	auto* histogram = new Histogram(QStringLiteral("histogram"));
 	histogram->setNormalization(Histogram::Normalization::ProbabilityDensity);
 	histogram->setDataColumn(spreadsheet->column(0));
 	plotArea->addChild(histogram);
 
 	//perform a fit to the raw data and show it
-	auto* fitCurve = new XYFitCurve("fit");
+	auto* fitCurve = new XYFitCurve(QStringLiteral("fit"));
 	fitCurve->setDataSourceType(XYAnalysisCurve::DataSourceType::Histogram);
 	fitCurve->setDataSourceHistogram(histogram);
 	plotArea->addChild(histogram);
@@ -39,8 +39,8 @@ int main(int argc, char **argv) {
 	fitCurve->recalculate();
 
 	// apply the theme "Dracula"
-	worksheet->loadTheme("Dracula");
+	worksheet->setTheme(QStringLiteral("Dracula"));
 
 	// export the worksheet to PDF
-	worksheet->exportToFile("result.pdf", Worksheet::ExportFormat::PDF);
+	worksheet->exportToFile(QStringLiteral("result.pdf"), Worksheet::ExportFormat::PDF);
 }

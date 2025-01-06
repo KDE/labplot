@@ -276,7 +276,7 @@ set_target_properties(liblabplot PROPERTIES
 target_include_directories(liblabplot
     PRIVATE ${BACKEND_DIR}/gsl/ ${GSL_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../src/3rdparty/liborigin
     # any dependent building me directly
-    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../src/>
+    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../src/>
     # any dependent not building me directly
     INTERFACE $<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/labplot>
 )
@@ -426,7 +426,7 @@ install(TARGETS liblabplot EXPORT LabPlotTargets DESTINATION ${KDE_INSTALL_TARGE
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/labplot_export.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot COMPONENT Devel)
 
-configure_file(labplot.h.in ${CMAKE_CURRENT_BINARY_DIR}/labplot.h @ONLY)
+configure_file(cmake/labplot.h.in ${CMAKE_CURRENT_BINARY_DIR}/labplot.h @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/labplot.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/ COMPONENT Devel)
 
 # top-level includes
@@ -488,12 +488,12 @@ install(EXPORT LabPlotTargets
     COMPONENT Devel
 )
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/labplot-config.cmake.in
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/labplot-config.cmake.in
     ${CMAKE_CURRENT_BINARY_DIR}/LabPlotConfig.cmake
     @ONLY
 )
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/labplot-config-version.cmake.in
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/labplot-config-version.cmake.in
     ${CMAKE_CURRENT_BINARY_DIR}/LabPlotConfigVersion.cmake
     @ONLY
 )

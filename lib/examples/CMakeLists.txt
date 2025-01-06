@@ -1,0 +1,18 @@
+cmake_minimum_required(VERSION 3.17.0 FATAL_ERROR)
+
+project(examples)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+cmake_path(SET CI_INSTALL_PATH NORMALIZE $ENV{CI_PROJECT_DIR}/_staging/$ENV{CI_PROJECT_DIR}/_install)
+
+list(PREPEND CMAKE_SYSTEM_PREFIX_PATH ${CI_INSTALL_PATH})
+
+find_package(LabPlot REQUIRED COMPONENTS SDK)
+
+file(GLOB EXAMPLE_FOLDERS *example*)
+foreach(DIR ${EXAMPLE_FOLDERS})
+    add_subdirectory(${DIR})
+endforeach()
