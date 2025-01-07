@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : ProcessBehaviorChart
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -19,6 +19,8 @@ extern "C" {
 }
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
+#include "backend/worksheet/TextLabel.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
 #include <QMenu>
@@ -159,11 +161,33 @@ void ProcessBehaviorChart::init() {
 	addChildFast(d->yLowerLimitColumn);
 	d->lowerLimitCurve->setYColumn(d->yLowerLimitColumn);
 
+	// text labels for the values
+	d->upperLimitValueLabel = new TextLabel(QStringLiteral("upper"));
+	d->upperLimitValueLabel->setHidden(true);
+	d->upperLimitValueLabel->setCoordinateBindingEnabled(true);
+	d->upperLimitValueLabel->setBorderShape(TextLabel::BorderShape::LeftPointingRectangle);
+	addChild(d->upperLimitValueLabel);
+	d->upperLimitValueLabel->setParentGraphicsItem(graphicsItem());
+
+	d->centerValueLabel = new TextLabel(QStringLiteral("center"));
+	d->centerValueLabel->setHidden(true);
+	d->centerValueLabel->setCoordinateBindingEnabled(true);
+	d->centerValueLabel->setBorderShape(TextLabel::BorderShape::LeftPointingRectangle);
+	addChild(d->centerValueLabel);
+	d->centerValueLabel->setParentGraphicsItem(graphicsItem());
+
+	d->lowerLimitValueLabel = new TextLabel(QStringLiteral("lower"));
+	d->lowerLimitValueLabel->setHidden(true);
+	d->lowerLimitValueLabel->setCoordinateBindingEnabled(true);
+	d->lowerLimitValueLabel->setBorderShape(TextLabel::BorderShape::LeftPointingRectangle);
+	addChild(d->lowerLimitValueLabel);
+	d->lowerLimitValueLabel->setParentGraphicsItem(graphicsItem());
+
 	// synchronize the names of the internal XYCurves with the name of the current plot
 	// so we have the same name shown on the undo stack
 	connect(this, &AbstractAspect::aspectDescriptionChanged, this, &ProcessBehaviorChart::renameInternalCurves);
 
-	// propage the visual changes to the parent
+	// propagate the visual changes to the parent
 	connect(d->centerCurve, &XYCurve::changed, this, &ProcessBehaviorChart::changed);
 	connect(d->dataCurve, &XYCurve::changed, this, &ProcessBehaviorChart::changed);
 	connect(d->upperLimitCurve, &XYCurve::changed, this, &ProcessBehaviorChart::changed);
@@ -522,6 +546,18 @@ void ProcessBehaviorChartPrivate::retransform() {
 	centerCurve->retransform();
 	upperLimitCurve->retransform();
 	lowerLimitCurve->retransform();
+	centerValueLabel->retransform();
+	upperLimitValueLabel->retransform();
+	lowerLimitValueLabel->retransform();
+
+	// update the position of the value labels
+	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
+	const auto& xRange = q->plot()->range(Dimension::X, cs->index(Dimension::X));
+	double x = xRange.end();
+	centerValueLabel->setPositionLogical(QPointF(x, center));
+	upperLimitValueLabel->setPositionLogical(QPointF(x, upperLimit));
+	lowerLimitValueLabel->setPositionLogical(QPointF(x, lowerLimit));
+
 	recalcShapeAndBoundingRect();
 }
 
@@ -542,6 +578,9 @@ void ProcessBehaviorChartPrivate::recalc() {
 		yUpperLimitColumn->clear();
 		xLowerLimitColumn->clear();
 		yLowerLimitColumn->clear();
+		centerValueLabel->setText(QString());
+		upperLimitValueLabel->setText(QString());
+		lowerLimitValueLabel->setText(QString());
 		Q_EMIT q->dataChanged();
 		return;
 	}
@@ -1001,6 +1040,12 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		yLowerLimitColumn->setValueAt(0, lowerLimit);
 		yLowerLimitColumn->setValueAt(1, lowerLimit);
 	}
+
+	// update the texts in the value labels
+	// TODO: use QLocale
+	centerValueLabel->setText(QString::number(center));
+	upperLimitValueLabel->setText(QString::number(upperLimit));
+	lowerLimitValueLabel->setText(QString::number(lowerLimit));
 }
 
 /*!
@@ -1016,6 +1061,9 @@ void ProcessBehaviorChartPrivate::recalcShapeAndBoundingRect() {
 	m_shape.addPath(centerCurve->graphicsItem()->shape());
 	m_shape.addPath(upperLimitCurve->graphicsItem()->shape());
 	m_shape.addPath(lowerLimitCurve->graphicsItem()->shape());
+	m_shape.addPath(centerValueLabel->graphicsItem()->shape());
+	m_shape.addPath(upperLimitValueLabel->graphicsItem()->shape());
+	m_shape.addPath(lowerLimitValueLabel->graphicsItem()->shape());
 
 	m_boundingRectangle = m_shape.boundingRect();
 }
