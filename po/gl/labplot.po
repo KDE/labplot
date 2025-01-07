@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-05 00:38+0000\n"
+"POT-Creation-Date: 2025-01-07 00:38+0000\n"
 "PO-Revision-Date: 2025-01-04 15:24+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -119,27 +119,27 @@ msgstr "%1: retirar %2."
 msgid "%1: remove all children"
 msgstr "%1: eliminar todos os fillos"
 
-#: src/backend/core/AbstractAspect.cpp:831
+#: src/backend/core/AbstractAspect.cpp:832
 #, kde-format
 msgid "%1: pasted '%2'"
 msgstr "%1: pegouse «%2»"
 
-#: src/backend/core/AbstractAspect.cpp:833
+#: src/backend/core/AbstractAspect.cpp:834
 #, kde-format
 msgid "%1: duplicated '%2'"
 msgstr "%1: duplicouse «%2»"
 
-#: src/backend/core/AbstractAspect.cpp:834
+#: src/backend/core/AbstractAspect.cpp:835
 #, kde-format
 msgid "Copy of '%1'"
 msgstr "Copia de «%1»"
 
-#: src/backend/core/AbstractAspect.cpp:966
+#: src/backend/core/AbstractAspect.cpp:968
 #, kde-format
 msgid "Attribute 'name' is missing or empty."
 msgstr "O atributo «name» ou falta ou está baleiro."
 
-#: src/backend/core/AbstractAspect.cpp:973
+#: src/backend/core/AbstractAspect.cpp:975
 #, kde-format
 msgid "Invalid creation time for '%1'. Using current time."
 msgstr "A hora de creación de «%1» é incorrecta. Usarase a hora actual."
@@ -180,7 +180,7 @@ msgstr "Días"
 #: src/backend/nsl/nsl_smooth.c:22 src/frontend/dockwidgets/AxisDock.cpp:267
 #: src/frontend/dockwidgets/AxisDock.cpp:280
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:55
-#: src/frontend/dockwidgets/XYCurveDock.cpp:193 src/frontend/GuiTools.cpp:151
+#: src/frontend/dockwidgets/XYCurveDock.cpp:193 src/frontend/GuiTools.cpp:150
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
 #: src/frontend/widgets/BackgroundWidget.cpp:114
 #: src/frontend/widgets/LineWidget.cpp:47
@@ -785,7 +785,7 @@ msgstr "Non foi posíbel procesar o contido do ficheiro «%1»."
 msgid "Failed to open project"
 msgstr "Non foi posíbel abrir o proxecto"
 
-#: src/backend/core/Project.cpp:1288
+#: src/backend/core/Project.cpp:1296
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr ""
@@ -7624,7 +7624,7 @@ msgid "%1: set connectionline curve name"
 msgstr "%1: definir o nome da curva da liña de conexión"
 
 #: src/backend/worksheet/Line.cpp:100
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:570
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:571
 #, kde-format
 msgid "%1: line type changed"
 msgstr "%1: cambiou o tipo das liñas"
@@ -8057,7 +8057,7 @@ msgstr "%1: cambiouse o factor de anchura"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:300
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:162
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:348
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:330
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:109
 #, kde-format
 msgid "%1 - Data"
@@ -8140,28 +8140,28 @@ msgstr "%1: cambiou a axitación"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:584
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:514
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:703
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:704
 #, kde-format
 msgid "%1: change rug enabled"
 msgstr "%1: cambiar a activación da alfombra"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:591
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:521
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:717
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:718
 #, kde-format
 msgid "%1: change rug width"
 msgstr "%1: cambiar a anchura da alfombra"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:598
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:528
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:724
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:725
 #, kde-format
 msgid "%1: change rug length"
 msgstr "%1: cambiar a lonxitude da alfombra"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:605
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:535
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:731
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:732
 #, kde-format
 msgid "%1: change rug offset"
 msgstr "%1: cambiar o desprazamento da alfombra"
@@ -9468,79 +9468,79 @@ msgid "club"
 msgstr "maza"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:114
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:599
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:600
 #, kde-format
 msgid "%1: set values type"
 msgstr "%1: definir o tipo dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:125
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:606
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:607
 #, kde-format
 msgid "%1: set values column"
 msgstr "%1: definir a columna dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:137
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:625
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:626
 #, kde-format
 msgid "%1: set values position"
 msgstr "%1: definir a posición dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:144
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:632
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:633
 #, kde-format
 msgid "%1: set values distance"
 msgstr "%1: definir a distancia dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:151
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:639
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:640
 #, kde-format
 msgid "%1: rotate values"
 msgstr "%1: rotar os valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:158
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:646
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:647
 #, kde-format
 msgid "%1: set values opacity"
 msgstr "%1: definir a opacidade dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:165
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:653
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:654
 #, kde-format
 msgid "%1: set values numeric format"
 msgstr "%1: definir o formato numérico dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:172
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:660
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:661
 #, kde-format
 msgid "%1: set values precision"
 msgstr "%1: definir a precisión dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:179
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:667
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:668
 #, kde-format
 msgid "%1: set values datetime format"
 msgstr "%1: definir o formato de data e hora dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:186
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:674
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:675
 #, kde-format
 msgid "%1: set values prefix"
 msgstr "%1: definir o prefixo dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:193
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:681
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:682
 #, kde-format
 msgid "%1: set values suffix"
 msgstr "%1: definir o sufixo dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:200
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:688
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:689
 #, kde-format
 msgid "%1: set values font"
 msgstr "%1: definir o tipo de letra dos valores"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:207
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:695
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:696
 #, kde-format
 msgid "%1: set values color"
 msgstr "%1: definir a cor dos valores"
@@ -9596,53 +9596,53 @@ msgstr "%1: definir as opcións e aplicar a correlación"
 msgid "Navigate to \"%1\""
 msgstr "Navegar ata «%1»"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:545
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:546
 #, kde-format
 msgid "%1: x-data source changed"
 msgstr "%1: a fonte dos datos de x cambiou"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:552
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:553
 #, kde-format
 msgid "%1: y-data source changed"
 msgstr "%1: a fonte dos datos de y cambiou"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:577
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:578
 #, kde-format
 msgid "%1: set skip line gaps"
 msgstr "%1: definir o salto de espazos entre liñas"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:584
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:585
 #, kde-format
 msgid "%1: set increasing X"
 msgstr "%1: definir X en aumento"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:591
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:592
 #, kde-format
 msgid "%1: set the number of interpolation points"
 msgstr "%1: definir o número de puntos de interpolación"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:710
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:711
 #, kde-format
 msgid "%1: set rug orientation"
 msgstr "%1: definir a orientación da alfombra"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1550
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1551
 #, kde-format
 msgid "Error: Akima spline interpolation requires a minimum of 5 points."
 msgstr ""
 "Erro: a interpolación de eixe nervado de Akima require polo menos 5 puntos."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1552
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1553
 #, kde-format
 msgid "Error: Could not initialize the spline function."
 msgstr "Erro: Non se puido preparar a función de eixe nervado."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1565
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1566
 #, kde-format
 msgid "x values must be monotonically increasing."
 msgstr "os valores de x deben aumentar de maneira monotónica."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1568
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1569
 #, kde-format
 msgid "Error: %1"
 msgstr "Erro: %1"
@@ -10381,17 +10381,17 @@ msgstr "Escriba a palabra clave que quere buscar"
 msgid "Search..."
 msgstr "Buscar…"
 
-#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:185
+#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Red"
 msgstr "Vermello"
 
-#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:185
+#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Green"
 msgstr "Verde"
 
-#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:186
+#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Blue"
 msgstr "Azul"
@@ -14327,198 +14327,198 @@ msgstr "Liña de puntos e guións"
 msgid "Dash-dot-dot Line"
 msgstr "Liña de puntos duplos e guións"
 
-#: src/frontend/GuiTools.cpp:152
+#: src/frontend/GuiTools.cpp:151
 #, kde-format
 msgid "Uniform"
 msgstr "Uniforme"
 
-#: src/frontend/GuiTools.cpp:153
+#: src/frontend/GuiTools.cpp:152
 #, kde-format
 msgid "Extremely Dense"
 msgstr "Extremadamente densa"
 
-#: src/frontend/GuiTools.cpp:154
+#: src/frontend/GuiTools.cpp:153
 #, kde-format
 msgid "Very Dense"
 msgstr "Moi densa"
 
-#: src/frontend/GuiTools.cpp:155
+#: src/frontend/GuiTools.cpp:154
 #, kde-format
 msgid "Somewhat Dense"
 msgstr "Algo densa"
 
-#: src/frontend/GuiTools.cpp:156
+#: src/frontend/GuiTools.cpp:155
 #, kde-format
 msgid "Half Dense"
 msgstr "Medio densa"
 
-#: src/frontend/GuiTools.cpp:157
+#: src/frontend/GuiTools.cpp:156
 #, kde-format
 msgid "Somewhat Sparse"
 msgstr "Algo escasa"
 
-#: src/frontend/GuiTools.cpp:158
+#: src/frontend/GuiTools.cpp:157
 #, kde-format
 msgid "Very Sparse"
 msgstr "Moi escasa"
 
-#: src/frontend/GuiTools.cpp:159
+#: src/frontend/GuiTools.cpp:158
 #, kde-format
 msgid "Extremely Sparse"
 msgstr "Extremadamente escasa"
 
-#: src/frontend/GuiTools.cpp:160
+#: src/frontend/GuiTools.cpp:159
 #, kde-format
 msgid "Horiz. Lines"
 msgstr "Liñas horiz."
 
-#: src/frontend/GuiTools.cpp:161
+#: src/frontend/GuiTools.cpp:160
 #, kde-format
 msgid "Vert. Lines"
 msgstr "Liñas vert."
 
-#: src/frontend/GuiTools.cpp:162
+#: src/frontend/GuiTools.cpp:161
 #, kde-format
 msgid "Crossing Lines"
 msgstr "Liñas cruzadas"
 
-#: src/frontend/GuiTools.cpp:163
+#: src/frontend/GuiTools.cpp:162
 #, kde-format
 msgid "Backward Diag. Lines"
 msgstr "Liñas diag. cara atrás"
 
-#: src/frontend/GuiTools.cpp:164
+#: src/frontend/GuiTools.cpp:163
 #, kde-format
 msgid "Forward Diag. Lines"
 msgstr "Liñas diag. cara adiante"
 
-#: src/frontend/GuiTools.cpp:165
+#: src/frontend/GuiTools.cpp:164
 #, kde-format
 msgid "Crossing Diag. Lines"
 msgstr "Liñas diag. cruzadas"
 
-#: src/frontend/GuiTools.cpp:185
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "White"
 msgstr "Branco"
 
-#: src/frontend/GuiTools.cpp:185
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Black"
 msgstr "Negro"
 
-#: src/frontend/GuiTools.cpp:185
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Dark Red"
 msgstr "Vermello escuro"
 
-#: src/frontend/GuiTools.cpp:185
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Light Red"
 msgstr "Vermello claro"
 
-#: src/frontend/GuiTools.cpp:185
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Dark Green"
 msgstr "Verde escuro"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Light Green"
 msgstr "Verde claro"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Dark Blue"
 msgstr "Azul escuro"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Light Blue"
 msgstr "Azul claro"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Dark Yellow"
 msgstr "Amarelo escuro"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Yellow"
 msgstr "Amarelo"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Light Yellow"
 msgstr "Amarelo claro"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:189
 #, kde-format
 msgid "Dark Cyan"
 msgstr "Cian escuro"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:189
 #, kde-format
 msgid "Cyan"
 msgstr "Ciano"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:189
 #, kde-format
 msgid "Light Cyan"
 msgstr "Ciano claro"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:189
 #, kde-format
 msgid "Dark Magenta"
 msgstr "Maxenta escuro"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:189
 #, kde-format
 msgid "Magenta"
 msgstr "Maxenta"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:189
 #, kde-format
 msgid "Light Magenta"
 msgstr "Maxenta claro"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:189
 #, kde-format
 msgid "Dark Orange"
 msgstr "Laranxa escuro"
 
-#: src/frontend/GuiTools.cpp:188
+#: src/frontend/GuiTools.cpp:190
 #, kde-format
 msgid "Orange"
 msgstr "Laranxa"
 
-#: src/frontend/GuiTools.cpp:188
+#: src/frontend/GuiTools.cpp:190
 #, kde-format
 msgid "Light Orange"
 msgstr "Laranxa claro"
 
-#: src/frontend/GuiTools.cpp:188
+#: src/frontend/GuiTools.cpp:190
 #, kde-format
 msgid "Dark Grey"
 msgstr "Gris escuro"
 
-#: src/frontend/GuiTools.cpp:188
+#: src/frontend/GuiTools.cpp:190
 #, kde-format
 msgid "Grey"
 msgstr "Gris"
 
-#: src/frontend/GuiTools.cpp:188
+#: src/frontend/GuiTools.cpp:190
 #, kde-format
 msgid "Light Grey"
 msgstr "Gris claro"
 
-#: src/frontend/GuiTools.cpp:306
+#: src/frontend/GuiTools.cpp:309
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image File"
 msgstr "Abrir un ficheiro de imaxe"
 
-#: src/frontend/GuiTools.cpp:306
+#: src/frontend/GuiTools.cpp:309
 #, kde-format
 msgid "Images (%1)"
 msgstr "Imaxes (%1)"
