@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Private members of ProcessBehaviorChart
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -14,6 +14,7 @@
 
 class Column;
 class ProcessBehaviorChart;
+class TextLabel;
 
 class ProcessBehaviorChartPrivate : public PlotPrivate {
 public:
@@ -62,6 +63,11 @@ public:
 	QString xLowerLimitColumnPath;
 	Column* yLowerLimitColumn{nullptr};
 	QString yLowerLimitColumnPath;
+
+	// text labels for control limit values
+	TextLabel* upperLimitValueLabel{nullptr};
+	TextLabel* centerValueLabel{nullptr};
+	TextLabel* lowerLimitValueLabel{nullptr};
 
 	int sampleSize{5};
 	bool negativeLowerLimitEnabled{false};
