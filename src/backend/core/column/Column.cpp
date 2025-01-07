@@ -244,8 +244,11 @@ QMenu* Column::createContextMenu() {
 	// pasting of data is only possible for spreadsheet columns
 	if (parentAspect()->type() == AspectType::Spreadsheet) {
 		const auto* mimeData = QApplication::clipboard()->mimeData();
-		if (mimeData->hasFormat(QStringLiteral("text/plain")))
-			menu->insertAction(firstAction, m_pasteDataAction);
+		if (mimeData->hasFormat(QStringLiteral("text/plain"))) {
+			const QString& text = QApplication::clipboard()->text();
+			if (!text.startsWith(QLatin1String("<?xml version=\"1.0\"?><!DOCTYPE LabPlotCopyPasteXML>")))
+				menu->insertAction(firstAction, m_pasteDataAction);
+		}
 	}
 
 	menu->insertSeparator(firstAction);
