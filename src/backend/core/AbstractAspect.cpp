@@ -785,10 +785,14 @@ void AbstractAspect::copy() {
 	QApplication::clipboard()->setText(output);
 }
 
+/*!
+ * duplicates the aspect in the project hierarchy, the copy of the duplicated aspect is
+ * added below the current aspect at the same level in the hierarchy.
+ */
 void AbstractAspect::duplicate() {
 	copy();
 	auto* parent = parentAspect();
-	const int index = parent->indexOfChild<AbstractAspect>(this) + 1;
+	const int index = parent->indexOfChild<AbstractAspect>(this, ChildIndexFlag::IncludeHidden) + 1;
 	parent->paste(true, index);
 }
 
@@ -1223,6 +1227,11 @@ AbstractAspectPrivate::~AbstractAspectPrivate() {
 		delete child;
 }
 
+/*!
+ * inserts the child \child at the index \index in the list of children.
+ * note, the index needs to take the hidden aspects into account when calling
+ * this function since the private list includes all children, also the hidden ones.
+ */
 void AbstractAspectPrivate::insertChild(int index, AbstractAspect* child) {
 	m_children.insert(index, child);
 
