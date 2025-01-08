@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-07 00:38+0000\n"
+"POT-Creation-Date: 2025-01-08 00:38+0000\n"
 "PO-Revision-Date: 2025-01-02 08:35+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -54,17 +54,17 @@ msgstr "Duplica aquí"
 msgid "Paste '%1'"
 msgstr "Enganxa «%1»"
 
-#: src/backend/core/AbstractAspect.cpp:357
+#: src/backend/core/AbstractAspect.cpp:359
 #, kde-format
 msgid "Create Data Spreadsheet"
 msgstr "Crea un full de treball de dades"
 
-#: src/backend/core/AbstractAspect.cpp:405
+#: src/backend/core/AbstractAspect.cpp:407
 #, kde-format
 msgid "Rename"
 msgstr "Reanomena"
 
-#: src/backend/core/AbstractAspect.cpp:407
+#: src/backend/core/AbstractAspect.cpp:409
 #: src/backend/spreadsheet/Spreadsheet.cpp:733
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:487
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:273
@@ -73,22 +73,22 @@ msgstr "Reanomena"
 msgid "Delete"
 msgstr "Suprimeix"
 
-#: src/backend/core/AbstractAspect.cpp:415
+#: src/backend/core/AbstractAspect.cpp:417
 #, kde-format
 msgid "Move"
 msgstr "Mou"
 
-#: src/backend/core/AbstractAspect.cpp:418
+#: src/backend/core/AbstractAspect.cpp:420
 #, kde-format
 msgid "Up"
 msgstr "Amunt"
 
-#: src/backend/core/AbstractAspect.cpp:421
+#: src/backend/core/AbstractAspect.cpp:423
 #, kde-format
 msgid "Down"
 msgstr "Avall"
 
-#: src/backend/core/AbstractAspect.cpp:524
+#: src/backend/core/AbstractAspect.cpp:526
 #: src/backend/core/aspectcommands.h:167
 #: src/backend/datapicker/Datapicker.cpp:220
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2208
@@ -96,55 +96,55 @@ msgstr "Avall"
 msgid "%1: add %2"
 msgstr "%1: afegeix %2"
 
-#: src/backend/core/AbstractAspect.cpp:527
-#: src/backend/core/AbstractAspect.cpp:572
+#: src/backend/core/AbstractAspect.cpp:529
+#: src/backend/core/AbstractAspect.cpp:574
 #, kde-format
 msgid "Renaming \"%1\" to \"%2\" in order to avoid name collision."
 msgstr ""
 "S'està canviant el nom de «%1» a «%2» per a evitar un conflicte de noms."
 
-#: src/backend/core/AbstractAspect.cpp:568
+#: src/backend/core/AbstractAspect.cpp:570
 #, kde-format
 msgid "%1: insert %2 before %3"
 msgstr "%1: insereix %2 al davant de %3"
 
-#: src/backend/core/AbstractAspect.cpp:568
+#: src/backend/core/AbstractAspect.cpp:570
 #, kde-format
 msgid "%1: insert %2 before end"
 msgstr "%1: insereix %2 al final"
 
-#: src/backend/core/AbstractAspect.cpp:612
+#: src/backend/core/AbstractAspect.cpp:614
 #: src/backend/core/aspectcommands.h:103
 #, kde-format
 msgid "%1: remove %2"
 msgstr "%1: elimina %2"
 
-#: src/backend/core/AbstractAspect.cpp:632
+#: src/backend/core/AbstractAspect.cpp:634
 #, kde-format
 msgid "%1: remove all children"
 msgstr "%1: elimina tots els fills"
 
-#: src/backend/core/AbstractAspect.cpp:832
+#: src/backend/core/AbstractAspect.cpp:840
 #, kde-format
 msgid "%1: pasted '%2'"
 msgstr "%1: s'ha enganxat «%2»"
 
-#: src/backend/core/AbstractAspect.cpp:834
+#: src/backend/core/AbstractAspect.cpp:842
 #, kde-format
 msgid "%1: duplicated '%2'"
 msgstr "%1: s'ha duplicat «%2»"
 
-#: src/backend/core/AbstractAspect.cpp:835
+#: src/backend/core/AbstractAspect.cpp:843
 #, kde-format
 msgid "Copy of '%1'"
 msgstr "Còpia de «%1»"
 
-#: src/backend/core/AbstractAspect.cpp:968
+#: src/backend/core/AbstractAspect.cpp:976
 #, kde-format
 msgid "Attribute 'name' is missing or empty."
 msgstr "Manca l'atribut «nom» o està buit."
 
-#: src/backend/core/AbstractAspect.cpp:975
+#: src/backend/core/AbstractAspect.cpp:983
 #, kde-format
 msgid "Invalid creation time for '%1'. Using current time."
 msgstr "Hora de creació no vàlida per a «%1». S'usarà l'hora actual."
@@ -566,7 +566,7 @@ msgstr "Càlculs"
 #. else	// Cancel
 #. return;
 #. }
-#: src/backend/core/column/Column.cpp:344
+#: src/backend/core/column/Column.cpp:347
 #: src/backend/core/column/columncommands.cpp:89
 #: src/frontend/dockwidgets/ColumnDock.cpp:333
 #: src/frontend/dockwidgets/ColumnDock.cpp:357
@@ -575,25 +575,25 @@ msgstr "Càlculs"
 msgid "%1: change column type"
 msgstr "%1: canvia el tipus de la columna"
 
-#: src/backend/core/column/Column.cpp:482
+#: src/backend/core/column/Column.cpp:485
 #: src/backend/core/column/columncommands.cpp:570
 #, kde-format
 msgid "%1: clear column"
 msgstr "%1: neteja la columna"
 
-#: src/backend/core/column/Column.cpp:582
+#: src/backend/core/column/Column.cpp:585
 #, kde-format
 msgid "%1: set random values"
 msgstr "%1: estableix valors aleatoris"
 
-#: src/backend/core/column/Column.cpp:1603
+#: src/backend/core/column/Column.cpp:1606
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "manca l'índex de la fila, o no és vàlid"
 
-#: src/backend/core/column/Column.cpp:1612
-#: src/backend/core/column/Column.cpp:1621
-#: src/backend/core/column/Column.cpp:1630
+#: src/backend/core/column/Column.cpp:1615
+#: src/backend/core/column/Column.cpp:1624
+#: src/backend/core/column/Column.cpp:1633
 #, kde-format
 msgid "invalid row value"
 msgstr "valor de la fila no vàlid"

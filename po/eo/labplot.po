@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-07 00:38+0000\n"
+"POT-Creation-Date: 2025-01-08 00:38+0000\n"
 "PO-Revision-Date: 2025-01-06 18:58+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -50,17 +50,17 @@ msgstr "Dupliki Ĉi tie"
 msgid "Paste '%1'"
 msgstr "Alglui '%1'"
 
-#: src/backend/core/AbstractAspect.cpp:357
+#: src/backend/core/AbstractAspect.cpp:359
 #, kde-format
 msgid "Create Data Spreadsheet"
 msgstr "Krei Datumtabulfolion"
 
-#: src/backend/core/AbstractAspect.cpp:405
+#: src/backend/core/AbstractAspect.cpp:407
 #, kde-format
 msgid "Rename"
 msgstr "Alinomi"
 
-#: src/backend/core/AbstractAspect.cpp:407
+#: src/backend/core/AbstractAspect.cpp:409
 #: src/backend/spreadsheet/Spreadsheet.cpp:733
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:487
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:273
@@ -69,22 +69,22 @@ msgstr "Alinomi"
 msgid "Delete"
 msgstr "Forigi"
 
-#: src/backend/core/AbstractAspect.cpp:415
+#: src/backend/core/AbstractAspect.cpp:417
 #, kde-format
 msgid "Move"
 msgstr "Movi"
 
-#: src/backend/core/AbstractAspect.cpp:418
+#: src/backend/core/AbstractAspect.cpp:420
 #, kde-format
 msgid "Up"
 msgstr "Supren"
 
-#: src/backend/core/AbstractAspect.cpp:421
+#: src/backend/core/AbstractAspect.cpp:423
 #, kde-format
 msgid "Down"
 msgstr "Malsupren"
 
-#: src/backend/core/AbstractAspect.cpp:524
+#: src/backend/core/AbstractAspect.cpp:526
 #: src/backend/core/aspectcommands.h:167
 #: src/backend/datapicker/Datapicker.cpp:220
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2208
@@ -92,54 +92,54 @@ msgstr "Malsupren"
 msgid "%1: add %2"
 msgstr "%1: aldoni %2"
 
-#: src/backend/core/AbstractAspect.cpp:527
-#: src/backend/core/AbstractAspect.cpp:572
+#: src/backend/core/AbstractAspect.cpp:529
+#: src/backend/core/AbstractAspect.cpp:574
 #, kde-format
 msgid "Renaming \"%1\" to \"%2\" in order to avoid name collision."
 msgstr "Alinomante \"%1\" al \"%2\" por eviti nomkolizion."
 
-#: src/backend/core/AbstractAspect.cpp:568
+#: src/backend/core/AbstractAspect.cpp:570
 #, kde-format
 msgid "%1: insert %2 before %3"
 msgstr "%1: enigi %2 antaŭ %3"
 
-#: src/backend/core/AbstractAspect.cpp:568
+#: src/backend/core/AbstractAspect.cpp:570
 #, kde-format
 msgid "%1: insert %2 before end"
 msgstr "%1: enigi %2 antaŭ fino"
 
-#: src/backend/core/AbstractAspect.cpp:612
+#: src/backend/core/AbstractAspect.cpp:614
 #: src/backend/core/aspectcommands.h:103
 #, kde-format
 msgid "%1: remove %2"
 msgstr "%1: forigi %2"
 
-#: src/backend/core/AbstractAspect.cpp:632
+#: src/backend/core/AbstractAspect.cpp:634
 #, kde-format
 msgid "%1: remove all children"
 msgstr "%1: forigi ĉiujn infanojn"
 
-#: src/backend/core/AbstractAspect.cpp:832
+#: src/backend/core/AbstractAspect.cpp:840
 #, kde-format
 msgid "%1: pasted '%2'"
 msgstr "%1: algluita '%2'"
 
-#: src/backend/core/AbstractAspect.cpp:834
+#: src/backend/core/AbstractAspect.cpp:842
 #, kde-format
 msgid "%1: duplicated '%2'"
 msgstr "%1: duobligita '%2'"
 
-#: src/backend/core/AbstractAspect.cpp:835
+#: src/backend/core/AbstractAspect.cpp:843
 #, kde-format
 msgid "Copy of '%1'"
 msgstr "Kopio de '%1'"
 
-#: src/backend/core/AbstractAspect.cpp:968
+#: src/backend/core/AbstractAspect.cpp:976
 #, kde-format
 msgid "Attribute 'name' is missing or empty."
 msgstr "Atributo 'nomo' mankas aŭ estas malplena."
 
-#: src/backend/core/AbstractAspect.cpp:975
+#: src/backend/core/AbstractAspect.cpp:983
 #, kde-format
 msgid "Invalid creation time for '%1'. Using current time."
 msgstr "Nevalida krea tempo por '%1'. Uzante aktualan tempon."
@@ -558,7 +558,7 @@ msgstr "Kalkuloj"
 #. else	// Cancel
 #. return;
 #. }
-#: src/backend/core/column/Column.cpp:344
+#: src/backend/core/column/Column.cpp:347
 #: src/backend/core/column/columncommands.cpp:89
 #: src/frontend/dockwidgets/ColumnDock.cpp:333
 #: src/frontend/dockwidgets/ColumnDock.cpp:357
@@ -567,25 +567,25 @@ msgstr "Kalkuloj"
 msgid "%1: change column type"
 msgstr "%1: ŝanĝi kolumnan tipon"
 
-#: src/backend/core/column/Column.cpp:482
+#: src/backend/core/column/Column.cpp:485
 #: src/backend/core/column/columncommands.cpp:570
 #, kde-format
 msgid "%1: clear column"
 msgstr "%1: malplenigi kolumnon"
 
-#: src/backend/core/column/Column.cpp:582
+#: src/backend/core/column/Column.cpp:585
 #, kde-format
 msgid "%1: set random values"
 msgstr "%1: starigis hazardajn valorojn"
 
-#: src/backend/core/column/Column.cpp:1603
+#: src/backend/core/column/Column.cpp:1606
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "nevalida aŭ mankanta vicindekso"
 
-#: src/backend/core/column/Column.cpp:1612
-#: src/backend/core/column/Column.cpp:1621
-#: src/backend/core/column/Column.cpp:1630
+#: src/backend/core/column/Column.cpp:1615
+#: src/backend/core/column/Column.cpp:1624
+#: src/backend/core/column/Column.cpp:1633
 #, kde-format
 msgid "invalid row value"
 msgstr "nevalida vicvaloro"
