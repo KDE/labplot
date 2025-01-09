@@ -67,6 +67,7 @@ void ProcessBehaviorChart::init() {
 	KConfig config;
 	KConfigGroup group = config.group(QStringLiteral("ProcessBehaviorChart"));
 
+	// general properties
 	d->type = static_cast<ProcessBehaviorChart::Type>(group.readEntry(QStringLiteral("Type"), static_cast<int>(ProcessBehaviorChart::Type::XmR)));
 	d->sampleSize = group.readEntry(QStringLiteral("SampleSize"), 5);
 	d->limitsMetric = static_cast<ProcessBehaviorChart::LimitsMetric>(
@@ -162,12 +163,15 @@ void ProcessBehaviorChart::init() {
 	d->lowerLimitCurve->setYColumn(d->yLowerLimitColumn);
 
 	// text labels for the values
+	d->valuesEnabled = group.readEntry(QStringLiteral("ValuesEnabled"), true);
+
 	d->upperLimitValueLabel = new TextLabel(QStringLiteral("upper"));
 	d->upperLimitValueLabel->setHidden(true);
 	d->upperLimitValueLabel->setCoordinateBindingEnabled(true);
 	d->upperLimitValueLabel->setBorderShape(TextLabel::BorderShape::LeftPointingRectangle);
 	addChild(d->upperLimitValueLabel);
 	d->upperLimitValueLabel->setParentGraphicsItem(graphicsItem());
+	d->upperLimitValueLabel->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 
 	d->centerValueLabel = new TextLabel(QStringLiteral("center"));
 	d->centerValueLabel->setHidden(true);
@@ -175,6 +179,7 @@ void ProcessBehaviorChart::init() {
 	d->centerValueLabel->setBorderShape(TextLabel::BorderShape::LeftPointingRectangle);
 	addChild(d->centerValueLabel);
 	d->centerValueLabel->setParentGraphicsItem(graphicsItem());
+	d->centerValueLabel->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 
 	d->lowerLimitValueLabel = new TextLabel(QStringLiteral("lower"));
 	d->lowerLimitValueLabel->setHidden(true);
@@ -182,6 +187,7 @@ void ProcessBehaviorChart::init() {
 	d->lowerLimitValueLabel->setBorderShape(TextLabel::BorderShape::LeftPointingRectangle);
 	addChild(d->lowerLimitValueLabel);
 	d->lowerLimitValueLabel->setParentGraphicsItem(graphicsItem());
+	d->lowerLimitValueLabel->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 
 	// synchronize the names of the internal XYCurves with the name of the current plot
 	// so we have the same name shown on the undo stack
@@ -201,6 +207,7 @@ void ProcessBehaviorChart::finalizeAdd() {
 	addChildFast(d->upperLimitCurve);
 	addChildFast(d->lowerLimitCurve);
 	addChildFast(d->dataCurve);
+	d->centerValueLabel->setCoordinateSystemIndex(plot()->coordinateSystemIndex());
 }
 
 void ProcessBehaviorChart::renameInternalCurves() {
@@ -259,6 +266,7 @@ BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, const AbstractColumn*, dataColu
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, QString, dataColumnPath, dataColumnPath)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, const AbstractColumn*, data2Column, data2Column)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, QString, data2ColumnPath, data2ColumnPath)
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, bool, valuesEnabled, valuesEnabled)
 
 /*!
  * returns the number of index values used for x.
@@ -480,6 +488,14 @@ void ProcessBehaviorChart::setExactLimitsEnabled(bool enabled) {
 	Q_D(ProcessBehaviorChart);
 	if (enabled != d->exactLimitsEnabled)
 		exec(new ProcessBehaviorChartSetExactLimitsEnabledCmd(d, enabled, ki18n("%1: change exact limits")));
+}
+
+// values
+STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetValuesEnabled, bool, valuesEnabled, recalc)
+void ProcessBehaviorChart::setValuesEnabled(bool enabled) {
+	Q_D(ProcessBehaviorChart);
+	if (enabled != d->valuesEnabled)
+		exec(new ProcessBehaviorChartSetValuesEnabledCmd(d, enabled, ki18n("%1: enable control values")));
 }
 
 // ##############################################################################

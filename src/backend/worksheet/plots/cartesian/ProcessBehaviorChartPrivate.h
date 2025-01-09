@@ -65,6 +65,7 @@ public:
 	QString yLowerLimitColumnPath;
 
 	// text labels for control limit values
+	bool valuesEnabled{true};
 	TextLabel* upperLimitValueLabel{nullptr};
 	TextLabel* centerValueLabel{nullptr};
 	TextLabel* lowerLimitValueLabel{nullptr};
