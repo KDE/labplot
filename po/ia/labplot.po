@@ -1,14 +1,14 @@
 # Copyright (C) 2023 This file is copyright:
 # This file is distributed under the same license as the labplot package.
 #
-# SPDX-FileCopyrightText: 2023, 2024 giovanni <g.sora@tiscali.it>
+# SPDX-FileCopyrightText: 2023, 2024, 2025 giovanni <g.sora@tiscali.it>
 # giovanni <g.sora@tiscali.it>, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-08 00:38+0000\n"
-"PO-Revision-Date: 2024-12-23 17:07+0100\n"
+"PO-Revision-Date: 2025-01-08 15:20+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -14262,10 +14262,9 @@ msgstr ""
 "platteforma per Visualisation e Analyse de datos accessibile a omnes."
 
 #: src/frontend/LabPlot.cpp:55
-#, fuzzy, kde-format
-#| msgid "(c) 2007-2024 LabPlot authors"
+#, kde-format
 msgid "(c) 2007-2025 LabPlot authors"
-msgstr "(c) 2007-2024 Autores de LabPlot"
+msgstr "(c) 2007-2025 Autores de LabPlot"
 
 #: src/frontend/LabPlot.cpp:57
 #, kde-format
@@ -20968,10 +20967,9 @@ msgstr "Extension de Traciar (Plot):"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabKDE)
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:210
-#, fuzzy, kde-format
-#| msgid "Estimation"
+#, kde-format
 msgid "Estimation Line"
-msgstr "Estimation"
+msgstr "Linea de Estimation"
 
 #. i18n: ectx: property (text), widget (QPushButton, bUpdateNow)
 #: src/frontend/ui/dockwidgets/livedatadock.ui:67
