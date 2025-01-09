@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for properties of the process behavior chart
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -64,6 +64,7 @@ private Q_SLOTS:
 	void sampleSizeChanged(int);
 	void negativeLowerLimitEnabledChanged(bool);
 	void exactLimitsEnabledChanged(bool);
+	void valuesEnabledChanged(bool);
 
 	// SLOTs for changes triggered in ProcessBehaviorChart
 	// General-Tab
@@ -74,6 +75,9 @@ private Q_SLOTS:
 	void plotSampleSizeChanged(int);
 	void plotNegativeLowerLimitEnabledChanged(bool);
 	void plotExactLimitsEnabledChanged(bool);
+
+	// Values-tab
+	void plotValuesEnabledChanged(bool);
 
 	void showStatusInfo(const QString&);
 

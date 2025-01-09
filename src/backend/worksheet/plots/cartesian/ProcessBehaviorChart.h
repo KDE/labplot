@@ -54,6 +54,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, sampleSize, SampleSize)
 	BASIC_D_ACCESSOR_DECL(bool, negativeLowerLimitEnabled, NegativeLowerLimitEnabled)
 	BASIC_D_ACCESSOR_DECL(bool, exactLimitsEnabled, ExactLimitsEnabled)
+	BASIC_D_ACCESSOR_DECL(bool, valuesEnabled, ValuesEnabled)
 
 	Symbol* dataSymbol() const;
 	Line* dataLine() const;
@@ -112,6 +113,7 @@ Q_SIGNALS:
 	void sampleSizeChanged(int);
 	void negativeLowerLimitEnabledChanged(bool);
 	void exactLimitsEnabledChanged(bool);
+	void valuesEnabledChanged(bool);
 };
 
 #endif
