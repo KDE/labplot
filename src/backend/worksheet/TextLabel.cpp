@@ -668,10 +668,10 @@ void TextLabelPrivate::updateBoundingRect() {
 	}
 
 	// DEBUG(Q_FUNC_INFO << ", scale factor = " << scaleFactor << ", w/h = " << w << " / " << h)
-	m_boundingRectangle.setX(-w / 2);
-	m_boundingRectangle.setY(-h / 2);
-	m_boundingRectangle.setWidth(w);
-	m_boundingRectangle.setHeight(h);
+	boundingRectangleText.setX(-w / 2);
+	boundingRectangleText.setY(-h / 2);
+	boundingRectangleText.setWidth(w);
+	boundingRectangleText.setHeight(h);
 
 	updatePosition();
 	updateBorder();
@@ -697,7 +697,7 @@ void TextLabelPrivate::updateBorder() {
 	using GluePoint = TextLabel::GluePoint;
 
 	borderShapePath = QPainterPath();
-	const auto& br = m_boundingRectangle;
+	const auto& br = boundingRectangleText;
 	switch (borderShape) {
 	case (TextLabel::BorderShape::NoBorder): {
 		m_gluePoints.clear();
@@ -958,8 +958,10 @@ void TextLabelPrivate::recalcShapeAndBoundingRect() {
 	if (borderShape != TextLabel::BorderShape::NoBorder) {
 		labelShape.addPath(WorksheetElement::shapeFromPath(borderShapePath, borderPen));
 		m_boundingRectangle = labelShape.boundingRect();
-	} else
-		labelShape.addRect(m_boundingRectangle);
+	} else {
+		labelShape.addRect(boundingRectangleText);
+		m_boundingRectangle = boundingRectangleText;
+	}
 
 	Q_EMIT q->changed();
 }
