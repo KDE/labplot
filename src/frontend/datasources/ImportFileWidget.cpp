@@ -2497,9 +2497,6 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		// Activate the groupbox when switching from "file and pipe" to a different source type.
 		ui.gbUpdateOptions->setEnabled(true);
 	} else {
-		for (int i = 2; i < ui.cbFileType->count(); ++i)
-			typeModel->item(i)->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-
 		// enable "whole file" item for file or pipe
 		typeModel = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
 		auto* item = typeModel->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
