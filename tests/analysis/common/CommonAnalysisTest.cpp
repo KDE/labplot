@@ -227,7 +227,7 @@ void CommonAnalysisTest::saveRestoreWithCalculations() {
 		const auto* fitCurve = plot->child<XYFitCurve>(0);
 		QVERIFY(fitCurve);
 
-		//TODO: check to make sure no recalculate() was called.
+		// TODO: check to make sure no recalculate() was called.
 
 		// the number of valid (non-empty) values should be greater than 0
 		QVERIFY(fitCurve->xColumn());
@@ -298,7 +298,7 @@ void CommonAnalysisTest::saveRestoreWithoutCalculations() {
 		const auto* fitCurve = plot->child<XYFitCurve>(0);
 		QVERIFY(fitCurve);
 
-		//TODO: check to make sure recalculate() was called.
+		// TODO: check to make sure recalculate() was called.
 
 		// the number of valid (non-empty) values should be greater than 0
 		QVERIFY(fitCurve->xColumn());
