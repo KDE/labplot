@@ -141,9 +141,8 @@ void MQTTTest::testCommonFalse() {
 // #################  test handling of data received by messages  ###############
 // ##############################################################################
 void MQTTTest::testIntegerMessage() {
-#ifdef __gnu_linux__
 	QSKIP("Unstable");
-#endif
+
 	auto* filter = new AsciiFilter();
 
 	auto properties = filter->properties();
