@@ -35,11 +35,6 @@ XYDifferentiationCurve::XYDifferentiationCurve(const QString& name, XYDifferenti
 // and is deleted during the cleanup in QGraphicsScene
 XYDifferentiationCurve::~XYDifferentiationCurve() = default;
 
-void XYDifferentiationCurve::recalculate() {
-	Q_D(XYDifferentiationCurve);
-	d->recalculate();
-}
-
 const XYAnalysisCurve::Result& XYDifferentiationCurve::result() const {
 	return differentiationResult();
 }

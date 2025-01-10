@@ -41,7 +41,6 @@ public:
 	explicit XYSmoothCurve(const QString& name);
 	~XYSmoothCurve() override;
 
-	void recalculate() override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

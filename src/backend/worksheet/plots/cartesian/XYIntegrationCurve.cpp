@@ -38,11 +38,6 @@ XYIntegrationCurve::XYIntegrationCurve(const QString& name, XYIntegrationCurvePr
 // and is deleted during the cleanup in QGraphicsScene
 XYIntegrationCurve::~XYIntegrationCurve() = default;
 
-void XYIntegrationCurve::recalculate() {
-	Q_D(XYIntegrationCurve);
-	d->recalculate();
-}
-
 const XYAnalysisCurve::Result& XYIntegrationCurve::result() const {
 	Q_D(const XYIntegrationCurve);
 	return d->integrationResult;

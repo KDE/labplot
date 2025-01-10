@@ -176,11 +176,6 @@ void XYFunctionCurve::functionVariableCurveAdded(const AbstractAspect* aspect) {
 	d->functionVariableCurveAdded(aspect);
 }
 
-void XYFunctionCurve::recalculate() {
-	Q_D(XYFunctionCurve);
-	d->recalculate();
-}
-
 // ##############################################################################
 // ######################### Private implementation #############################
 // ##############################################################################

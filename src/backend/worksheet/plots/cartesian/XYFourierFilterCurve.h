@@ -43,7 +43,6 @@ public:
 	explicit XYFourierFilterCurve(const QString& name);
 	~XYFourierFilterCurve() override;
 
-	void recalculate() override;
 	virtual const XYAnalysisCurve::Result& result() const override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;

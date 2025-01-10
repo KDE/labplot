@@ -39,6 +39,11 @@ void XYAnalysisCurve::init() {
 	d->symbol->setStyle(Symbol::Style::NoSymbols);
 }
 
+void XYAnalysisCurve::recalculate() {
+	Q_D(XYAnalysisCurve);
+	d->recalculate();
+}
+
 bool XYAnalysisCurve::resultAvailable() const {
 	return result().available;
 }

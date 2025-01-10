@@ -44,11 +44,6 @@ XYFourierTransformCurve::XYFourierTransformCurve(const QString& name, XYFourierT
 // and is deleted during the cleanup in QGraphicsScene
 XYFourierTransformCurve::~XYFourierTransformCurve() = default;
 
-void XYFourierTransformCurve::recalculate() {
-	Q_D(XYFourierTransformCurve);
-	d->recalculate();
-}
-
 /*!
 	Returns an icon to be used in the project explorer.
 */

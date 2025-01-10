@@ -52,11 +52,6 @@ XYFitCurve::XYFitCurve(const QString& name, XYFitCurvePrivate* dd)
 // and is deleted during the cleanup in QGraphicsScene
 XYFitCurve::~XYFitCurve() = default;
 
-void XYFitCurve::recalculate() {
-	Q_D(XYFitCurve);
-	d->recalculate();
-}
-
 void XYFitCurve::evaluate(bool preview) {
 	Q_D(XYFitCurve);
 	if (d->evaluate(preview)) {

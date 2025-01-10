@@ -39,7 +39,6 @@ public:
 	typedef XYAnalysisCurve::Result CorrelationResult;
 	virtual const XYAnalysisCurve::Result& result() const override;
 
-	void recalculate() override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

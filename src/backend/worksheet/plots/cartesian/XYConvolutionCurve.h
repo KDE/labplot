@@ -43,7 +43,6 @@ public:
 	explicit XYConvolutionCurve(const QString& name);
 	~XYConvolutionCurve() override;
 
-	void recalculate() override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

@@ -62,7 +62,7 @@ public:
 						 double xMax,
 						 bool avgUniqueX = false);
 
-	virtual void recalculate() = 0;
+	void recalculate();
 	bool resultAvailable() const;
 	virtual const Result& result() const = 0;
 	bool usingColumn(const AbstractColumn*, bool indirect = true) const override;
