@@ -45,6 +45,7 @@ public:
 												 int baseYear = QLocale::DefaultTwoDigitBaseYear);
 	static QString dateTimeFormat(const QString& valueString);
 	static QStringList numberFormats();
+	static bool exclusiveFileType(FileType);
 	static FileType fileType(const QString&);
 	// static QStringList fileTypes();
 	static QString convertFromNumberToColumn(int n);
