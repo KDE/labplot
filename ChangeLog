@@ -6,6 +6,7 @@ New features:
 		* Make the changes in Note undo/redo-able
 	* [import]
 		* Download datasets from kaggle.com
+		* Only allow selecting matching import filter
 		* Support MCAP file import
 		* show error messages for the serial port in when creating a live data source to notify directly about missing device permissions, etc.
 		* add warning when importing projects in file import dialog
