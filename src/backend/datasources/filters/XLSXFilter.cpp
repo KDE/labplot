@@ -431,7 +431,7 @@ void XLSXFilterPrivate::readDataRegion(const QXlsx::CellRange& region, AbstractD
 		for (int col = regionToRead.firstColumn(); col <= regionToRead.lastColumn(); ++col) {
 			columnNumericTypes.push_back(columnTypeInRange(col, regionToRead));
 			if (firstRowAsColumnNames)
-				columnNames.push_back(m_document->read(regionToRead.firstRow() - 1, col).toString());
+				columnNames.push_back(read(regionToRead.firstRow() - 1, col).toString());
 			else
 				columnNames.push_back(AbstractFileFilter::convertFromNumberToColumn(col));
 		}
@@ -476,12 +476,12 @@ void XLSXFilterPrivate::readDataRegion(const QXlsx::CellRange& region, AbstractD
 			int datetimeidx = 0;
 			int stringidx = 0;
 			for (int col = regionToRead.firstColumn(); col <= regionToRead.lastColumn(); ++col) {
-				const auto val = m_document->read(row, col);
+				const auto val = read(row, col);
 				if (columnNumericTypes.at(j) == QXlsx::Cell::CellType::NumberType) {
 					if (numericidx < numericDataPointers.size())
 						static_cast<QVector<double>*>(numericDataPointers[numericidx++])->push_back(val.toDouble());
 				} else if (columnNumericTypes.at(j) == QXlsx::Cell::CellType::DateType) {
-					// QDEBUG("DATETIME:" << m_document->read(row, col).toDateTime())
+					// QDEBUG("DATETIME:" << read(row, col).toDateTime())
 					if (datetimeidx < datetimeDataPointers.size()) {
 						if (val.toDateTime().time() != QTime(0, 0))
 							isDateOnly = false;
@@ -514,7 +514,7 @@ void XLSXFilterPrivate::readDataRegion(const QXlsx::CellRange& region, AbstractD
 		for (int row = region.firstRow(); row <= region.lastRow(); ++row) {
 			int j = 0;
 			for (int col = region.firstColumn(); col <= region.lastColumn(); ++col)
-				static_cast<QVector<double>*>(dataContainer[j++])->operator[](i) = m_document->read(row, col).toDouble();
+				static_cast<QVector<double>*>(dataContainer[j++])->operator[](i) = read(row, col).toDouble();
 			++i;
 		}
 	}
@@ -556,7 +556,7 @@ QVector<QXlsx::CellRange> XLSXFilterPrivate::dataRegions(const QString& fileName
 				continue;
 			}
 
-			auto cellData = m_document->read(row, col);
+			auto cellData = read(row, col);
 
 			// if a cell with data was found
 			if (!cellData.isNull()) {
@@ -566,14 +566,14 @@ QVector<QXlsx::CellRange> XLSXFilterPrivate::dataRegions(const QString& fileName
 				// find the last column of this data region
 				do {
 					++_col;
-					cellData = m_document->read(row, _col);
+					cellData = read(row, _col);
 
 				} while (!cellData.isNull());
 
 				// find the last row of this data region
 				do {
 					++_row;
-					cellData = m_document->read(_row, col);
+					cellData = read(_row, col);
 				} while (!cellData.isNull());
 
 				// _col and _row will be incremented even at the last cell of the region (which was empty)
@@ -661,7 +661,7 @@ QVector<QStringList> XLSXFilterPrivate::previewForDataRegion(const QString& shee
 			QStringList line;
 			for (int col = region.firstColumn() + startColumn - 1; col < region.firstColumn() + cols; ++col) {
 				// see https://github.com/QtExcel/QXlsx/wiki for read() vs. cellAt()->value()
-				const auto val = m_document->read(row, col);
+				const auto val = read(row, col);
 				if (val.isValid())
 					QDEBUG("value =" << val)
 
@@ -814,5 +814,18 @@ QXlsx::Cell::CellType XLSXFilterPrivate::columnTypeInRange(const int column, con
 
 	// numeric and datetime
 	return QXlsx::Cell::CellType::StringType;
+}
+#endif
+
+#ifdef HAVE_QXLSX
+QVariant XLSXFilterPrivate::read(int row, int column) const {
+	auto cell = m_document->cellAt(row, column);
+	if (!cell)
+		return QVariant();
+
+	if (cell->isDateTime())
+		return cell->dateTime();
+
+	return cell->value();
 }
 #endif
