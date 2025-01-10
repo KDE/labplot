@@ -4,7 +4,7 @@
  Description          : Tests for common analysis tasks
  --------------------------------------------------------------------
  SPDX-FileCopyrightText: 2024 Martin Marmsoler <martin.marmsoler@gmail.com>
- SPDX-FileCopyrightText: 2024 Alexander Semke <alexander.semke@web.de>
+ SPDX-FileCopyrightText: 2024-2025 Alexander Semke <alexander.semke@web.de>
 
  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -20,8 +20,15 @@
 #include "backend/worksheet/plots/cartesian/XYIntegrationCurve.h"
 
 /*!
+ * \class CommonAnalysisTest
+ * \brief Tests that are common to all anaylysis curves.
+ * The common logic is handled centrally in Project and in XYAnalysisCurve,
+ * it's enough to test one analysis curve type only in every test.
+ * \ingroup tests
+ */
+
+/*!
  * test save and restore of the columns used as the data source in the analysis curve.
- * the logic is centrally handled in Project and in XYAnalysisCurve, it's enough to test one analysis curve type only.
  */
 void CommonAnalysisTest::saveRestoreSourceColumns() {
 	QString savePath;
@@ -77,8 +84,7 @@ void CommonAnalysisTest::saveRestoreSourceColumns() {
 }
 
 /*!
- * test save and restore of the XYCRuve used as the data source in the analysis curve.
- * the logic is centrally handled in Project and in XYAnalysisCurve, it's enough to test one analysis curve type only.
+ * test save and restore of the XYCurve used as the data source in the analysis curve.
  */
 void CommonAnalysisTest::saveRestoreSourceCurve() {
 	QString savePath;
@@ -160,6 +166,148 @@ void CommonAnalysisTest::saveRestoreSourceHistogram() {
 		const auto* fitCurve = plot->child<XYFitCurve>(0);
 		QVERIFY(fitCurve);
 		QCOMPARE(fitCurve->dataSourceHistogram(), hist);
+	}
+}
+
+/*!
+ * test save and restore of the project with the activated option "save calculations",
+ * the results of calculations are saved into and read from project's XML.'
+ */
+void CommonAnalysisTest::saveRestoreWithCalculations() {
+	QString savePath;
+
+	// save
+	{
+		Project project;
+		project.setSaveCalculations(true);
+		auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+		project.addChild(ws);
+
+		auto* plot = new CartesianPlot(QStringLiteral("plot"));
+		ws->addChild(plot);
+
+		auto* sheet = new Spreadsheet(QStringLiteral("sheet"));
+		project.addChild(sheet);
+		sheet->setColumnCount(2);
+		sheet->setRowCount(2);
+		sheet->column(0)->setValueAt(0, 1);
+		sheet->column(0)->setValueAt(1, 2);
+		sheet->column(1)->setValueAt(0, 1);
+		sheet->column(1)->setValueAt(1, 2);
+
+		auto* fitCurve = new XYFitCurve(QStringLiteral("fit"));
+		plot->addChild(fitCurve);
+		fitCurve->setDataSourceType(XYAnalysisCurve::DataSourceType::Spreadsheet);
+		fitCurve->setXDataColumn(sheet->column(0));
+		fitCurve->setYDataColumn(sheet->column(1));
+
+		// perform the fit
+		XYFitCurve::FitData fitData = fitCurve->fitData();
+		fitData.modelCategory = nsl_fit_model_basic;
+		fitData.modelType = nsl_fit_model_polynomial;
+		fitData.degree = 1;
+		XYFitCurve::initFitData(fitData);
+		fitCurve->setFitData(fitData);
+		fitCurve->recalculate();
+
+		SAVE_PROJECT("saveRestoreWithCalculations");
+	}
+
+	// load the project and verify the columns in the analysis curve have valid data
+	{
+		Project project;
+		QCOMPARE(project.load(savePath), true);
+
+		const auto* ws = project.child<Worksheet>(0);
+		QVERIFY(ws);
+		const auto* plot = ws->child<CartesianPlot>(0);
+		QVERIFY(plot);
+		const auto* curve = plot->child<XYCurve>(0);
+		QVERIFY(curve);
+		const auto* fitCurve = plot->child<XYFitCurve>(0);
+		QVERIFY(fitCurve);
+
+		//TODO: check to make sure no recalculate() was called.
+
+		// the number of valid (non-empty) values should be greater than 0
+		QVERIFY(fitCurve->xColumn());
+		const auto& xStatistics = static_cast<const Column*>(fitCurve->xColumn())->statistics();
+		QCOMPARE_GT(xStatistics.size, 0);
+
+		QVERIFY(fitCurve->yColumn());
+		const auto& yStatistics = static_cast<const Column*>(fitCurve->yColumn())->statistics();
+		QCOMPARE_GT(yStatistics.size, 0);
+	}
+}
+
+/*!
+ * test save and restore of the project with the deactivated option "save calculations",
+ * the results are recalculated after the project was loaded.
+ */
+void CommonAnalysisTest::saveRestoreWithoutCalculations() {
+	QString savePath;
+
+	// save
+	{
+		Project project;
+		project.setSaveCalculations(false);
+		auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+		project.addChild(ws);
+
+		auto* plot = new CartesianPlot(QStringLiteral("plot"));
+		ws->addChild(plot);
+
+		auto* sheet = new Spreadsheet(QStringLiteral("sheet"));
+		project.addChild(sheet);
+		sheet->setColumnCount(2);
+		sheet->setRowCount(2);
+		sheet->column(0)->setValueAt(0, 1);
+		sheet->column(0)->setValueAt(1, 2);
+		sheet->column(1)->setValueAt(0, 1);
+		sheet->column(1)->setValueAt(1, 2);
+
+		auto* fitCurve = new XYFitCurve(QStringLiteral("fit"));
+		plot->addChild(fitCurve);
+		fitCurve->setDataSourceType(XYAnalysisCurve::DataSourceType::Spreadsheet);
+		fitCurve->setXDataColumn(sheet->column(0));
+		fitCurve->setYDataColumn(sheet->column(1));
+
+		// perform the fit
+		XYFitCurve::FitData fitData = fitCurve->fitData();
+		fitData.modelCategory = nsl_fit_model_basic;
+		fitData.modelType = nsl_fit_model_polynomial;
+		fitData.degree = 1;
+		XYFitCurve::initFitData(fitData);
+		fitCurve->setFitData(fitData);
+		fitCurve->recalculate();
+
+		SAVE_PROJECT("saveRestoreWithoutCalculations");
+	}
+
+	// load the project and verify the columns in the analysis curve have valid data
+	{
+		Project project;
+		QCOMPARE(project.load(savePath), true);
+
+		const auto* ws = project.child<Worksheet>(0);
+		QVERIFY(ws);
+		const auto* plot = ws->child<CartesianPlot>(0);
+		QVERIFY(plot);
+		const auto* curve = plot->child<XYCurve>(0);
+		QVERIFY(curve);
+		const auto* fitCurve = plot->child<XYFitCurve>(0);
+		QVERIFY(fitCurve);
+
+		//TODO: check to make sure recalculate() was called.
+
+		// the number of valid (non-empty) values should be greater than 0
+		QVERIFY(fitCurve->xColumn());
+		const auto& xStatistics = static_cast<const Column*>(fitCurve->xColumn())->statistics();
+		QCOMPARE_GT(xStatistics.size, 0);
+
+		QVERIFY(fitCurve->yColumn());
+		const auto& yStatistics = static_cast<const Column*>(fitCurve->yColumn())->statistics();
+		QCOMPARE_GT(yStatistics.size, 0);
 	}
 }
 

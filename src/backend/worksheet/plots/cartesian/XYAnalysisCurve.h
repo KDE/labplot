@@ -117,6 +117,7 @@ Q_SIGNALS:
 	void yDataColumnChanged(const AbstractColumn*);
 	void y2DataColumnChanged(const AbstractColumn*);
 
+	friend class CommonAnalysisTest;
 	friend class FourierTest;
 	friend class FitTest;
 };
