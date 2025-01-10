@@ -24,7 +24,7 @@ public:
 	static QString fileInfoString(const QString& fileName);
 	QVector<QStringList> preview(const QString& sheetName, int lines);
 	void setFirstRowAsColumnNames(const bool);
-	void parse(const QString& fileName, QTreeWidgetItem* root);
+	bool parse(const QString& fileName, QTreeWidgetItem* root);
 	void setCurrentSheetName(const QString&);
 	virtual void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) override;
 	virtual void write(const QString& fileName, AbstractDataSource*) override;

@@ -37,11 +37,6 @@ XYConvolutionCurve::XYConvolutionCurve(const QString& name, XYConvolutionCurvePr
 // and is deleted during the cleanup in QGraphicsScene
 XYConvolutionCurve::~XYConvolutionCurve() = default;
 
-void XYConvolutionCurve::recalculate() {
-	Q_D(XYConvolutionCurve);
-	d->recalculate();
-}
-
 const XYAnalysisCurve::Result& XYConvolutionCurve::result() const {
 	Q_D(const XYConvolutionCurve);
 	return d->convolutionResult;

@@ -349,7 +349,9 @@ QMenu* AbstractAspect::createContextMenu() {
 			menu->insertAction(actionDuplicate, action);
 		else
 			menu->addAction(action);
-		connect(action, &QAction::triggered, this, &AbstractAspect::paste);
+		connect(action, &QAction::triggered, [=]() {
+			paste();
+		});
 	}
 	menu->addSeparator();
 
@@ -783,9 +785,15 @@ void AbstractAspect::copy() {
 	QApplication::clipboard()->setText(output);
 }
 
+/*!
+ * duplicates the aspect in the project hierarchy, the copy of the duplicated aspect is
+ * added below the current aspect at the same level in the hierarchy.
+ */
 void AbstractAspect::duplicate() {
 	copy();
-	parentAspect()->paste(true);
+	auto* parent = parentAspect();
+	const int index = parent->indexOfChild<AbstractAspect>(this, ChildIndexFlag::IncludeHidden) + 1;
+	parent->paste(true, index);
 }
 
 /*!
@@ -793,7 +801,7 @@ void AbstractAspect::duplicate() {
  * this function deserializes the XML string and adds the created aspect as
  * a child to the current aspect ("paste").
  */
-void AbstractAspect::paste(bool duplicate) {
+void AbstractAspect::paste(bool duplicate, int index) {
 	const QClipboard* clipboard = QApplication::clipboard();
 	const QMimeData* mimeData = clipboard->mimeData();
 	if (!mimeData->hasText())
@@ -820,6 +828,7 @@ void AbstractAspect::paste(bool duplicate) {
 		} else {
 			if (aspect) {
 				aspect->setPasted(true);
+				aspect->setIsLoading(true);
 				aspect->load(&reader, false);
 				break;
 			}
@@ -835,7 +844,7 @@ void AbstractAspect::paste(bool duplicate) {
 		}
 
 		if (aspect->type() != AspectType::CartesianPlotLegend)
-			addChild(aspect);
+			insertChild(aspect, index);
 		else {
 			// special handling for the legend since only one single
 			// legend object is allowed per plot
@@ -845,6 +854,7 @@ void AbstractAspect::paste(bool duplicate) {
 		}
 
 		project()->restorePointers(aspect);
+		aspect->setIsLoading(false);
 		project()->retransformElements(aspect);
 		aspect->setPasted(false);
 		endMacro();
@@ -1217,6 +1227,11 @@ AbstractAspectPrivate::~AbstractAspectPrivate() {
 		delete child;
 }
 
+/*!
+ * inserts the child \child at the index \index in the list of children.
+ * note, the index needs to take the hidden aspects into account when calling
+ * this function since the private list includes all children, also the hidden ones.
+ */
 void AbstractAspectPrivate::insertChild(int index, AbstractAspect* child) {
 	m_children.insert(index, child);
 

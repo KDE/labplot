@@ -2183,8 +2183,10 @@ bool WorksheetView::exportToFile(const QString& path, const Worksheet::ExportFor
 			case Worksheet::ExportFormat::SVG:
 				break;
 			}
-		} else
+		} else {
 			QApplication::clipboard()->setImage(image, QClipboard::Clipboard);
+			rc = true;
+		}
 	}
 	}
 

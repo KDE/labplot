@@ -28,7 +28,7 @@ public:
 	void readCurrentSheet(const QString& fileName, AbstractDataSource*, AbstractFileFilter::ImportMode);
 	void write(const QString& fileName, AbstractDataSource*);
 	QVector<QStringList> preview(const QString& sheetName, int lines);
-	void parse(const QString& fileName, QTreeWidgetItem* root);
+	bool parse(const QString& fileName, QTreeWidgetItem* root);
 	QString currentSheetName;
 	QStringList selectedSheetNames;
 	bool firstRowAsColumnNames{false};

@@ -4,7 +4,7 @@
 	Description          : file I/O-filter related interface
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009-2017 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2017-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -149,6 +149,34 @@ void AbstractFileFilter::addWarning(const QString& warning) {
 
 void AbstractFileFilter::clearLastWarnings() {
 	m_lastWarnings.clear();
+}
+
+/*!
+ * which file types are exclusive (filter can only open files of this type)
+ * used to deactivate selection if of other type
+ */
+bool AbstractFileFilter::exclusiveFileType(const AbstractFileFilter::FileType type) {
+	switch (type) {
+	case FileType::Ods:
+	case FileType::HDF5:
+	case FileType::NETCDF:
+	case FileType::XLSX:
+	case FileType::FITS:
+	case FileType::ROOT:
+	case FileType::Spice:
+	case FileType::MATIO:
+	case FileType::VECTOR_BLF:
+	case FileType::MCAP:
+		return true;
+	case FileType::Ascii:
+	case FileType::Binary:
+	case FileType::Image:
+	case FileType::JSON:
+	case FileType::READSTAT:
+		break;
+	}
+
+	return false;
 }
 
 AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileName) {

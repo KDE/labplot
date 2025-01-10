@@ -98,8 +98,8 @@ QVector<QStringList> OdsFilter::preview(const QString& sheetName, int lines) {
 	return d->preview(sheetName, lines);
 }
 
-void OdsFilter::parse(const QString& fileName, QTreeWidgetItem* root) {
-	d->parse(fileName, root);
+bool OdsFilter::parse(const QString& fileName, QTreeWidgetItem* root) {
+	return d->parse(fileName, root);
 }
 
 /*!
@@ -554,14 +554,19 @@ QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lin
 	return dataString;
 }
 
-void OdsFilterPrivate::parse(const QString& fileName, QTreeWidgetItem* parentItem) {
+bool OdsFilterPrivate::parse(const QString& fileName, QTreeWidgetItem* parentItem) {
 	DEBUG(Q_FUNC_INFO)
 #ifdef HAVE_ORCUS
 	m_document.clear();
 	spreadsheet::import_factory factory{m_document};
 	orcus_ods loader(&factory);
 
-	loader.read_file(fileName.toStdString());
+	try {
+		loader.read_file(fileName.toStdString());
+	} catch (const std::exception& e) {
+		DEBUG(Q_FUNC_INFO << ", not a valid ODS file: " << fileName.toStdString())
+		return false;
+	}
 
 	auto* fileNameItem = new QTreeWidgetItem(QStringList() << fileName);
 	parentItem->addChild(fileNameItem);
@@ -575,8 +580,12 @@ void OdsFilterPrivate::parse(const QString& fileName, QTreeWidgetItem* parentIte
 
 		fileNameItem->addChild(sheetItem);
 	}
+
+	return true;
 #else
 	Q_UNUSED(fileName)
 	Q_UNUSED(parentItem)
+
+	return false;
 #endif
 }

@@ -32,11 +32,17 @@ OdsOptionsWidget::OdsOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget
 OdsOptionsWidget::~OdsOptionsWidget() {
 }
 
-void OdsOptionsWidget::updateContent(OdsFilter* filter, const QString& fileName) {
+/*!
+ * update the content of the preview using the filename
+ * returns false when parsing fails (not an ODS file)
+ */
+bool OdsOptionsWidget::updateContent(OdsFilter* filter, const QString& fileName) {
 	DEBUG(Q_FUNC_INFO)
 	ui.twDataRegions->clear();
 	auto* rootItem = ui.twDataRegions->invisibleRootItem();
-	filter->parse(fileName, rootItem);
+
+	if (! filter->parse(fileName, rootItem))
+		return false;
 
 	ui.twDataRegions->insertTopLevelItem(0, rootItem);
 	ui.twDataRegions->expandAll();
@@ -48,10 +54,12 @@ void OdsOptionsWidget::updateContent(OdsFilter* filter, const QString& fileName)
 			auto* sheet = tli->child(i);
 			if (sheet) {
 				ui.twDataRegions->setCurrentItem(sheet);
-				return;
+				return true;
 			}
 		}
 	}
+
+	return true;
 }
 
 void OdsOptionsWidget::sheetSelectionChanged() {

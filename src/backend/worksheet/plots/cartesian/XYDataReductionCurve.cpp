@@ -36,11 +36,6 @@ XYDataReductionCurve::XYDataReductionCurve(const QString& name, XYDataReductionC
 // and is deleted during the cleanup in QGraphicsScene
 XYDataReductionCurve::~XYDataReductionCurve() = default;
 
-void XYDataReductionCurve::recalculate() {
-	Q_D(XYDataReductionCurve);
-	d->recalculate();
-}
-
 const XYAnalysisCurve::Result& XYDataReductionCurve::result() const {
 	Q_D(const XYDataReductionCurve);
 	return d->dataReductionResult;

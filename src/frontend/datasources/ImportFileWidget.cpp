@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : import file data widget
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2009-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-FileCopyrightText: 2009-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2018 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2018-2019 Kovacs Ferencz <kferike98@gmail.com>
@@ -910,6 +910,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		break;
 	}
 	case AbstractFileFilter::FileType::MCAP: {
+		DEBUG(Q_FUNC_INFO << ", MCAP");
 		if (!m_currentFilter)
 			m_currentFilter.reset(new McapFilter);
 		auto filter = static_cast<McapFilter*>(m_currentFilter.get());
@@ -1101,15 +1102,16 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		return;
 	}
 
-	// warn about files with special extensions
+	// warn about opening project files
+	bool isProjectFile = false;
 	if (name.toLower().endsWith(QLatin1String(".opj"))) {
 		Q_EMIT error(i18n("Origin Project files need to be opened with \"Import -> Origin Project\"!"));
-		ui.tePreview->clear();
-		m_twPreview->clear();
-		Q_EMIT fileNameChanged();
-		return;
+		isProjectFile = true;
 	} else if (name.toLower().endsWith(QLatin1String(".lml"))) {
 		Q_EMIT error(i18n("LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"));
+		isProjectFile = true;
+	}
+	if (isProjectFile) {
 		ui.tePreview->clear();
 		m_twPreview->clear();
 		Q_EMIT fileNameChanged();
@@ -1118,8 +1120,25 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 
 	if (currentSourceType() == LiveDataSource::SourceType::FileOrPipe) {
 		const auto fileType = AbstractFileFilter::fileType(fileName);
+		const auto* model = qobject_cast<const QStandardItemModel*>(ui.cbFileType->model());
+		for (int i = 0; i < ui.cbFileType->count(); ++i) {
+			const auto type = static_cast<AbstractFileFilter::FileType>(ui.cbFileType->itemData(i).toInt());
+			// disable item if exclusive
+			if (AbstractFileFilter::exclusiveFileType(type)) {
+				auto* item = model->item(i);
+				if (item)
+					item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+			}
+		}
 		for (int i = 0; i < ui.cbFileType->count(); ++i) {
 			if (static_cast<AbstractFileFilter::FileType>(ui.cbFileType->itemData(i).toInt()) == fileType) {
+				// enable item if exlusive
+				if (AbstractFileFilter::exclusiveFileType(fileType)) {
+					auto* item = model->item(i);
+					if (item)
+						item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+				}
+
 				// automatically select a new file type
 				if (ui.cbFileType->currentIndex() != i) {
 					ui.cbFileType->setCurrentIndex(i); // will call the slot fileTypeChanged which updates content and preview
@@ -2154,6 +2173,7 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 			break;
 		}
 		case AbstractFileFilter::FileType::NETCDF:
+			// TODO: check status (see HDF5)
 			m_netcdfOptionsWidget->updateContent(static_cast<NetCDFFilter*>(filter), fileName);
 			break;
 			//		case AbstractFileFilter::FileType::VECTOR_BLF:
@@ -2161,10 +2181,12 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 			//			break;
 		case AbstractFileFilter::FileType::FITS:
 #ifdef HAVE_FITS
+			// TODO: check status (see HDF5)
 			m_fitsOptionsWidget->updateContent(static_cast<FITSFilter*>(filter), fileName);
 #endif
 			break;
 		case AbstractFileFilter::FileType::ROOT:
+			// TODO: check status (see HDF5)
 			m_rootOptionsWidget->updateContent(static_cast<ROOTFilter*>(filter), fileName);
 			break;
 		case AbstractFileFilter::FileType::JSON:
@@ -2191,18 +2213,24 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 			break;
 		}
 		case AbstractFileFilter::FileType::MATIO:
+			// TODO: check status (see HDF5)
 			m_matioOptionsWidget->updateContent(static_cast<MatioFilter*>(filter), fileName);
 			break;
 		case AbstractFileFilter::FileType::XLSX:
 #ifdef HAVE_QXLSX
-			m_xlsxOptionsWidget->updateContent(reinterpret_cast<XLSXFilter*>(filter), fileName);
+			// TODO: check status (see HDF5)
+			m_xlsxOptionsWidget->updateContent(static_cast<XLSXFilter*>(filter), fileName);
 #endif
 			break;
-		case AbstractFileFilter::FileType::Ods:
+		case AbstractFileFilter::FileType::Ods: {
 #ifdef HAVE_ORCUS
-			m_odsOptionsWidget->updateContent(reinterpret_cast<OdsFilter*>(filter), fileName);
+			bool status = m_odsOptionsWidget->updateContent(static_cast<OdsFilter*>(filter), fileName);
+			if (!status)
+				Q_EMIT error(i18n("Parsing ODS file %1 failed.", fileName));
+
 #endif
 			break;
+		}
 		case AbstractFileFilter::FileType::Ascii:
 		case AbstractFileFilter::FileType::Binary:
 		case AbstractFileFilter::FileType::Image:
@@ -2478,9 +2506,6 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		// Activate the groupbox when switching from "file and pipe" to a different source type.
 		ui.gbUpdateOptions->setEnabled(true);
 	} else {
-		for (int i = 2; i < ui.cbFileType->count(); ++i)
-			typeModel->item(i)->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-
 		// enable "whole file" item for file or pipe
 		typeModel = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
 		auto* item = typeModel->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));

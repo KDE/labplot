@@ -37,11 +37,6 @@ XYCorrelationCurve::XYCorrelationCurve(const QString& name, XYCorrelationCurvePr
 // and is deleted during the cleanup in QGraphicsScene
 XYCorrelationCurve::~XYCorrelationCurve() = default;
 
-void XYCorrelationCurve::recalculate() {
-	Q_D(XYCorrelationCurve);
-	d->recalculate();
-}
-
 const XYAnalysisCurve::Result& XYCorrelationCurve::result() const {
 	Q_D(const XYCorrelationCurve);
 	return d->correlationResult;

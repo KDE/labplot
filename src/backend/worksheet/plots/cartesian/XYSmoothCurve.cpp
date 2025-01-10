@@ -43,11 +43,6 @@ XYSmoothCurve::XYSmoothCurve(const QString& name, XYSmoothCurvePrivate* dd)
 // and is deleted during the cleanup in QGraphicsScene
 XYSmoothCurve::~XYSmoothCurve() = default;
 
-void XYSmoothCurve::recalculate() {
-	Q_D(XYSmoothCurve);
-	d->recalculate();
-}
-
 /*!
 	Returns an icon to be used in the project explorer.
 */

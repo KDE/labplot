@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-05 00:38+0000\n"
+"POT-Creation-Date: 2025-01-10 09:25+0000\n"
 "PO-Revision-Date: 2024-12-15 19:44+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -49,17 +49,17 @@ msgstr "यहां डुप्लिकेट करें"
 msgid "Paste '%1'"
 msgstr "'%1' चिपकाएँ"
 
-#: src/backend/core/AbstractAspect.cpp:357
+#: src/backend/core/AbstractAspect.cpp:359
 #, kde-format
 msgid "Create Data Spreadsheet"
 msgstr "डेटा स्प्रेडशीट बनाएं"
 
-#: src/backend/core/AbstractAspect.cpp:405
+#: src/backend/core/AbstractAspect.cpp:407
 #, kde-format
 msgid "Rename"
 msgstr "नाम बदलें"
 
-#: src/backend/core/AbstractAspect.cpp:407
+#: src/backend/core/AbstractAspect.cpp:409
 #: src/backend/spreadsheet/Spreadsheet.cpp:733
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:487
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:273
@@ -68,22 +68,22 @@ msgstr "नाम बदलें"
 msgid "Delete"
 msgstr "मिटाना"
 
-#: src/backend/core/AbstractAspect.cpp:415
+#: src/backend/core/AbstractAspect.cpp:417
 #, kde-format
 msgid "Move"
 msgstr "कदम"
 
-#: src/backend/core/AbstractAspect.cpp:418
+#: src/backend/core/AbstractAspect.cpp:420
 #, kde-format
 msgid "Up"
 msgstr "ऊपर"
 
-#: src/backend/core/AbstractAspect.cpp:421
+#: src/backend/core/AbstractAspect.cpp:423
 #, kde-format
 msgid "Down"
 msgstr "नीचे"
 
-#: src/backend/core/AbstractAspect.cpp:524
+#: src/backend/core/AbstractAspect.cpp:526
 #: src/backend/core/aspectcommands.h:167
 #: src/backend/datapicker/Datapicker.cpp:220
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2208
@@ -91,54 +91,54 @@ msgstr "नीचे"
 msgid "%1: add %2"
 msgstr "%1: %2जोड़ें"
 
-#: src/backend/core/AbstractAspect.cpp:527
-#: src/backend/core/AbstractAspect.cpp:572
+#: src/backend/core/AbstractAspect.cpp:529
+#: src/backend/core/AbstractAspect.cpp:574
 #, kde-format
 msgid "Renaming \"%1\" to \"%2\" in order to avoid name collision."
 msgstr "नाम टकराव से बचने के लिए \"%1\" का नाम बदलकर \"%2\" किया जा रहा है।"
 
-#: src/backend/core/AbstractAspect.cpp:568
+#: src/backend/core/AbstractAspect.cpp:570
 #, kde-format
 msgid "%1: insert %2 before %3"
 msgstr "%1: %3 से पहले %2 डालें"
 
-#: src/backend/core/AbstractAspect.cpp:568
+#: src/backend/core/AbstractAspect.cpp:570
 #, kde-format
 msgid "%1: insert %2 before end"
 msgstr "%1: अंत से पहले %2 डालें"
 
-#: src/backend/core/AbstractAspect.cpp:612
+#: src/backend/core/AbstractAspect.cpp:614
 #: src/backend/core/aspectcommands.h:103
 #, kde-format
 msgid "%1: remove %2"
 msgstr "%1: %2 हटाएँ"
 
-#: src/backend/core/AbstractAspect.cpp:632
+#: src/backend/core/AbstractAspect.cpp:634
 #, kde-format
 msgid "%1: remove all children"
 msgstr "%1: सभी संतानों को हटाएँ"
 
-#: src/backend/core/AbstractAspect.cpp:831
+#: src/backend/core/AbstractAspect.cpp:840
 #, kde-format
 msgid "%1: pasted '%2'"
 msgstr "%1: '%2' चिपकाया गया"
 
-#: src/backend/core/AbstractAspect.cpp:833
+#: src/backend/core/AbstractAspect.cpp:842
 #, kde-format
 msgid "%1: duplicated '%2'"
 msgstr "%1: '%2' की प्रतिलिपि बनाई गई"
 
-#: src/backend/core/AbstractAspect.cpp:834
+#: src/backend/core/AbstractAspect.cpp:843
 #, kde-format
 msgid "Copy of '%1'"
 msgstr "'%1' की प्रतिलिपि"
 
-#: src/backend/core/AbstractAspect.cpp:966
+#: src/backend/core/AbstractAspect.cpp:976
 #, kde-format
 msgid "Attribute 'name' is missing or empty."
 msgstr "विशेषता 'नाम' गायब या रिक्त है."
 
-#: src/backend/core/AbstractAspect.cpp:973
+#: src/backend/core/AbstractAspect.cpp:983
 #, kde-format
 msgid "Invalid creation time for '%1'. Using current time."
 msgstr "'%1' के लिए निर्माण समय अमान्य है। वर्तमान समय का उपयोग किया जा रहा है।"
@@ -179,7 +179,7 @@ msgstr "दिन"
 #: src/backend/nsl/nsl_smooth.c:22 src/frontend/dockwidgets/AxisDock.cpp:267
 #: src/frontend/dockwidgets/AxisDock.cpp:280
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:55
-#: src/frontend/dockwidgets/XYCurveDock.cpp:193 src/frontend/GuiTools.cpp:151
+#: src/frontend/dockwidgets/XYCurveDock.cpp:193 src/frontend/GuiTools.cpp:150
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
 #: src/frontend/widgets/BackgroundWidget.cpp:114
 #: src/frontend/widgets/LineWidget.cpp:47
@@ -557,7 +557,7 @@ msgstr "गणना"
 #. else	// Cancel
 #. return;
 #. }
-#: src/backend/core/column/Column.cpp:344
+#: src/backend/core/column/Column.cpp:347
 #: src/backend/core/column/columncommands.cpp:89
 #: src/frontend/dockwidgets/ColumnDock.cpp:333
 #: src/frontend/dockwidgets/ColumnDock.cpp:357
@@ -566,25 +566,25 @@ msgstr "गणना"
 msgid "%1: change column type"
 msgstr "%1: कॉलम प्रकार बदलें"
 
-#: src/backend/core/column/Column.cpp:482
+#: src/backend/core/column/Column.cpp:485
 #: src/backend/core/column/columncommands.cpp:570
 #, kde-format
 msgid "%1: clear column"
 msgstr "%1: कॉलम साफ़ करें"
 
-#: src/backend/core/column/Column.cpp:582
+#: src/backend/core/column/Column.cpp:585
 #, kde-format
 msgid "%1: set random values"
 msgstr "%1: यादृच्छिक मान सेट करें"
 
-#: src/backend/core/column/Column.cpp:1603
+#: src/backend/core/column/Column.cpp:1606
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "अमान्य या अनुपलब्ध पंक्ति अनुक्रमणिका"
 
-#: src/backend/core/column/Column.cpp:1612
-#: src/backend/core/column/Column.cpp:1621
-#: src/backend/core/column/Column.cpp:1630
+#: src/backend/core/column/Column.cpp:1615
+#: src/backend/core/column/Column.cpp:1624
+#: src/backend/core/column/Column.cpp:1633
 #, kde-format
 msgid "invalid row value"
 msgstr "अमान्य पंक्ति मान"
@@ -784,7 +784,7 @@ msgstr "फ़ाइल '%1' की सामग्री को संसाध
 msgid "Failed to open project"
 msgstr "प्रोजेक्ट खोलने में विफल"
 
-#: src/backend/core/Project.cpp:1288
+#: src/backend/core/Project.cpp:1296
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "परियोजना संशोधन समय अमान्य है। वर्तमान समय का उपयोग किया जा रहा है।"
@@ -7563,7 +7563,7 @@ msgid "%1: set connectionline curve name"
 msgstr "%1: कनेक्शनलाइन वक्र नाम सेट करें"
 
 #: src/backend/worksheet/Line.cpp:100
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:570
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:571
 #, kde-format
 msgid "%1: line type changed"
 msgstr "%1: पंक्ति प्रकार परिवर्तित"
@@ -7996,7 +7996,7 @@ msgstr "%1: चौड़ाई कारक परिवर्तित"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:300
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:162
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:348
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:330
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:109
 #, kde-format
 msgid "%1 - Data"
@@ -8079,28 +8079,28 @@ msgstr "%1: जिटरिंग परिवर्तित"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:584
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:514
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:703
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:704
 #, kde-format
 msgid "%1: change rug enabled"
 msgstr "%1: परिवर्तन गलीचा सक्षम"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:591
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:521
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:717
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:718
 #, kde-format
 msgid "%1: change rug width"
 msgstr "%1: गलीचे की चौड़ाई बदलें"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:598
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:528
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:724
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:725
 #, kde-format
 msgid "%1: change rug length"
 msgstr "%1: गलीचे की लंबाई बदलें"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:605
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:535
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:731
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:732
 #, kde-format
 msgid "%1: change rug offset"
 msgstr "%1: रग ऑफसेट बदलें"
@@ -9418,79 +9418,79 @@ msgid "club"
 msgstr "क्लब"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:114
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:599
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:600
 #, kde-format
 msgid "%1: set values type"
 msgstr "%1: मान प्रकार सेट करें"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:125
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:606
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:607
 #, kde-format
 msgid "%1: set values column"
 msgstr "%1: मान स्तंभ सेट करें"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:137
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:625
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:626
 #, kde-format
 msgid "%1: set values position"
 msgstr "%1: मान स्थिति निर्धारित करें"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:144
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:632
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:633
 #, kde-format
 msgid "%1: set values distance"
 msgstr "%1: दूरी मान सेट करें"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:151
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:639
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:640
 #, kde-format
 msgid "%1: rotate values"
 msgstr "%1: मान घुमाएँ"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:158
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:646
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:647
 #, kde-format
 msgid "%1: set values opacity"
 msgstr "%1: अपारदर्शिता मान सेट करें"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:165
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:653
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:654
 #, kde-format
 msgid "%1: set values numeric format"
 msgstr "%1: मान संख्यात्मक प्रारूप में सेट करें"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:172
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:660
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:661
 #, kde-format
 msgid "%1: set values precision"
 msgstr "%1: सेट मान परिशुद्धता"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:179
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:667
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:668
 #, kde-format
 msgid "%1: set values datetime format"
 msgstr "%1: मान दिनांकसमय प्रारूप सेट करें"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:186
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:674
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:675
 #, kde-format
 msgid "%1: set values prefix"
 msgstr "%1: मान उपसर्ग सेट करें"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:193
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:681
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:682
 #, kde-format
 msgid "%1: set values suffix"
 msgstr "%1: मान प्रत्यय सेट करें"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:200
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:688
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:689
 #, kde-format
 msgid "%1: set values font"
 msgstr "%1: फ़ॉन्ट मान सेट करें"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:207
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:695
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:696
 #, kde-format
 msgid "%1: set values color"
 msgstr "%1: मान रंग सेट करें"
@@ -9546,52 +9546,52 @@ msgstr "%1: विकल्प सेट करें और सहसंबं�
 msgid "Navigate to \"%1\""
 msgstr "\"%1\" पर नेविगेट करें"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:545
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:546
 #, kde-format
 msgid "%1: x-data source changed"
 msgstr "%1: x-डेटा स्रोत परिवर्तित"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:552
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:553
 #, kde-format
 msgid "%1: y-data source changed"
 msgstr "%1: y-डेटा स्रोत परिवर्तित"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:577
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:578
 #, kde-format
 msgid "%1: set skip line gaps"
 msgstr "%1: स्किप लाइन गैप सेट करें"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:584
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:585
 #, kde-format
 msgid "%1: set increasing X"
 msgstr "%1: बढ़ते हुए X को सेट करें"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:591
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:592
 #, kde-format
 msgid "%1: set the number of interpolation points"
 msgstr "%1: इंटरपोलेशन बिंदुओं की संख्या निर्धारित करें"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:710
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:711
 #, kde-format
 msgid "%1: set rug orientation"
 msgstr "%1: गलीचा अभिविन्यास सेट करें"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1550
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1551
 #, kde-format
 msgid "Error: Akima spline interpolation requires a minimum of 5 points."
 msgstr "त्रुटि: अकिमा स्पलाइन इंटरपोलेशन के लिए न्यूनतम 5 अंक की आवश्यकता होती है।"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1552
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1553
 #, kde-format
 msgid "Error: Could not initialize the spline function."
 msgstr "त्रुटि: स्पलाइन फ़ंक्शन आरंभ नहीं किया जा सका."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1565
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1566
 #, kde-format
 msgid "x values must be monotonically increasing."
 msgstr "x का मान एकसमान रूप से बढ़ना चाहिए।"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1568
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1569
 #, kde-format
 msgid "Error: %1"
 msgstr "त्रुटि: %1"
@@ -10321,17 +10321,17 @@ msgstr "वह कीवर्ड दर्ज करें जिसे आप 
 msgid "Search..."
 msgstr "खोज..."
 
-#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:185
+#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Red"
 msgstr "लाल"
 
-#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:185
+#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Green"
 msgstr "हरा"
 
-#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:186
+#: src/frontend/colormaps/ColorMapsWidget.cpp:195 src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Blue"
 msgstr "नीला"
@@ -10557,7 +10557,7 @@ msgstr "वक्र"
 #: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4075
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4129
-#: src/frontend/worksheet/WorksheetView.cpp:2194
+#: src/frontend/worksheet/WorksheetView.cpp:2196
 #, kde-format
 msgid "Failed to export"
 msgstr "निर्यात करने में विफल"
@@ -10565,7 +10565,7 @@ msgstr "निर्यात करने में विफल"
 #: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4075
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4129
-#: src/frontend/worksheet/WorksheetView.cpp:2194
+#: src/frontend/worksheet/WorksheetView.cpp:2196
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "'%1' पर लिखने में विफल। कृपया पथ जाँचें।"
@@ -14200,198 +14200,198 @@ msgstr "डैश-डॉट लाइन"
 msgid "Dash-dot-dot Line"
 msgstr "डैश-डॉट-डॉट लाइन"
 
-#: src/frontend/GuiTools.cpp:152
+#: src/frontend/GuiTools.cpp:151
 #, kde-format
 msgid "Uniform"
 msgstr "वर्दी"
 
-#: src/frontend/GuiTools.cpp:153
+#: src/frontend/GuiTools.cpp:152
 #, kde-format
 msgid "Extremely Dense"
 msgstr "अत्यंत सघन"
 
-#: src/frontend/GuiTools.cpp:154
+#: src/frontend/GuiTools.cpp:153
 #, kde-format
 msgid "Very Dense"
 msgstr "बहुत घना"
 
-#: src/frontend/GuiTools.cpp:155
+#: src/frontend/GuiTools.cpp:154
 #, kde-format
 msgid "Somewhat Dense"
 msgstr "कुछ हद तक घना"
 
-#: src/frontend/GuiTools.cpp:156
+#: src/frontend/GuiTools.cpp:155
 #, kde-format
 msgid "Half Dense"
 msgstr "अर्ध घना"
 
-#: src/frontend/GuiTools.cpp:157
+#: src/frontend/GuiTools.cpp:156
 #, kde-format
 msgid "Somewhat Sparse"
 msgstr "कुछ हद तक विरल"
 
-#: src/frontend/GuiTools.cpp:158
+#: src/frontend/GuiTools.cpp:157
 #, kde-format
 msgid "Very Sparse"
 msgstr "बहुत विरल"
 
-#: src/frontend/GuiTools.cpp:159
+#: src/frontend/GuiTools.cpp:158
 #, kde-format
 msgid "Extremely Sparse"
 msgstr "अत्यंत विरल"
 
-#: src/frontend/GuiTools.cpp:160
+#: src/frontend/GuiTools.cpp:159
 #, kde-format
 msgid "Horiz. Lines"
 msgstr "पीले रंग में पंक्तियां"
 
-#: src/frontend/GuiTools.cpp:161
+#: src/frontend/GuiTools.cpp:160
 #, kde-format
 msgid "Vert. Lines"
 msgstr "ऊर्ध्वाधर रेखाएँ"
 
-#: src/frontend/GuiTools.cpp:162
+#: src/frontend/GuiTools.cpp:161
 #, kde-format
 msgid "Crossing Lines"
 msgstr "पार लाइनों"
 
-#: src/frontend/GuiTools.cpp:163
+#: src/frontend/GuiTools.cpp:162
 #, kde-format
 msgid "Backward Diag. Lines"
 msgstr "पिछड़ी डायग्न. रेखाएँ"
 
-#: src/frontend/GuiTools.cpp:164
+#: src/frontend/GuiTools.cpp:163
 #, kde-format
 msgid "Forward Diag. Lines"
 msgstr "आगे की डायग्नोसिस लाइनें"
 
-#: src/frontend/GuiTools.cpp:165
+#: src/frontend/GuiTools.cpp:164
 #, kde-format
 msgid "Crossing Diag. Lines"
 msgstr "विकर्ण रेखाएँ पार करना"
 
-#: src/frontend/GuiTools.cpp:185
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "White"
 msgstr "सफ़ेद"
 
-#: src/frontend/GuiTools.cpp:185
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Black"
 msgstr "काला"
 
-#: src/frontend/GuiTools.cpp:185
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Dark Red"
 msgstr "गहरा लाल"
 
-#: src/frontend/GuiTools.cpp:185
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Light Red"
 msgstr "हलका लाल"
 
-#: src/frontend/GuiTools.cpp:185
+#: src/frontend/GuiTools.cpp:187
 #, kde-format
 msgid "Dark Green"
 msgstr "गहरा हरा"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Light Green"
 msgstr "हल्का हरा"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Dark Blue"
 msgstr "गहरा नीला"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Light Blue"
 msgstr "हल्का नीला रंग"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Dark Yellow"
 msgstr "गहरा पीला"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Yellow"
 msgstr "पीला"
 
-#: src/frontend/GuiTools.cpp:186
+#: src/frontend/GuiTools.cpp:188
 #, kde-format
 msgid "Light Yellow"
 msgstr "पीली रोशनी"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:189
 #, kde-format
 msgid "Dark Cyan"
 msgstr "गहरा सियान"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:189
 #, kde-format
 msgid "Cyan"
 msgstr "सियान"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:189
 #, kde-format
 msgid "Light Cyan"
 msgstr "हल्का सियान"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:189
 #, kde-format
 msgid "Dark Magenta"
 msgstr "गहरा मैजेंटा"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:189
 #, kde-format
 msgid "Magenta"
 msgstr "मैजेंटा"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:189
 #, kde-format
 msgid "Light Magenta"
 msgstr "हल्का मैजंटा"
 
-#: src/frontend/GuiTools.cpp:187
+#: src/frontend/GuiTools.cpp:189
 #, kde-format
 msgid "Dark Orange"
 msgstr "गहरा नारंगी"
 
-#: src/frontend/GuiTools.cpp:188
+#: src/frontend/GuiTools.cpp:190
 #, kde-format
 msgid "Orange"
 msgstr "नारंगी"
 
-#: src/frontend/GuiTools.cpp:188
+#: src/frontend/GuiTools.cpp:190
 #, kde-format
 msgid "Light Orange"
 msgstr "हल्का नारंगी"
 
-#: src/frontend/GuiTools.cpp:188
+#: src/frontend/GuiTools.cpp:190
 #, kde-format
 msgid "Dark Grey"
 msgstr "गहरा भूरा"
 
-#: src/frontend/GuiTools.cpp:188
+#: src/frontend/GuiTools.cpp:190
 #, kde-format
 msgid "Grey"
 msgstr "स्लेटी"
 
-#: src/frontend/GuiTools.cpp:188
+#: src/frontend/GuiTools.cpp:190
 #, kde-format
 msgid "Light Grey"
 msgstr "हल्का भूरा रंग"
 
-#: src/frontend/GuiTools.cpp:306
+#: src/frontend/GuiTools.cpp:309
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image File"
 msgstr "छवि फ़ाइल खोलें"
 
-#: src/frontend/GuiTools.cpp:306
+#: src/frontend/GuiTools.cpp:309
 #, kde-format
 msgid "Images (%1)"
 msgstr "छवियाँ (%1)"

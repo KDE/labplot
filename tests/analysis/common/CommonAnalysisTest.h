@@ -17,10 +17,12 @@ class CommonAnalysisTest : public AnalysisTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-
 	void saveRestoreSourceColumns();
 	void saveRestoreSourceCurve();
 	void saveRestoreSourceHistogram();
+
+	void saveRestoreWithCalculations();
+	void saveRestoreWithoutCalculations();
 
 	void dataImportRecalculationAnalysisCurveColumnDependency();
 };

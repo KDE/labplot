@@ -46,7 +46,6 @@ public:
 	explicit XYDataReductionCurve(const QString& name);
 	~XYDataReductionCurve() override;
 
-	void recalculate() override;
 	const XYAnalysisCurve::Result& result() const override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;

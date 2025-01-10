@@ -203,17 +203,17 @@ QIcon BoxPlot::icon() const {
 }
 
 QIcon BoxPlot::staticIcon() {
-	QPainter pa;
-	pa.setRenderHint(QPainter::Antialiasing);
 	int iconSize = 20;
 	QPixmap pm(iconSize, iconSize);
+	pm.fill(Qt::transparent);
 
 	QPen pen(Qt::SolidLine);
 	pen.setColor(GuiTools::isDarkMode() ? Qt::white : Qt::black);
 	pen.setWidthF(0.0);
 
-	pm.fill(Qt::transparent);
+	QPainter pa;
 	pa.begin(&pm);
+	pa.setRenderHint(QPainter::Antialiasing);
 	pa.setPen(pen);
 	pa.drawRect(6, 6, 8, 8); // box
 	pa.drawLine(10, 6, 10, 0); // upper whisker
@@ -1577,7 +1577,7 @@ void BoxPlotPrivate::updatePixmap() {
 	}
 	m_pixmap.fill(Qt::transparent);
 	QPainter painter(&m_pixmap);
-	painter.setRenderHint(QPainter::Antialiasing, true);
+	painter.setRenderHint(QPainter::Antialiasing);
 	painter.translate(-m_boundingRectangle.topLeft());
 
 	draw(&painter);
@@ -1685,7 +1685,7 @@ void BoxPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 
 	painter->setPen(Qt::NoPen);
 	painter->setBrush(Qt::NoBrush);
-	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
+	painter->setRenderHint(QPainter::SmoothPixmapTransform);
 
 	if (!q->isPrinting() && Settings::group(QStringLiteral("Settings_Worksheet")).readEntry<bool>("DoubleBuffering", true))
 		painter->drawPixmap(m_boundingRectangle.topLeft(), m_pixmap); // draw the cached pixmap (fast)

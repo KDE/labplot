@@ -295,8 +295,6 @@ QIcon XYCurve::icon() const {
 }
 
 QIcon XYCurve::staticIcon(Plot::PlotType type) {
-	QPainter pa;
-	pa.setRenderHint(QPainter::Antialiasing);
 	static const int iconSize = 20;
 	QPixmap pm(iconSize, iconSize);
 	pm.fill(Qt::transparent);
@@ -304,7 +302,10 @@ QIcon XYCurve::staticIcon(Plot::PlotType type) {
 	QPen pen(Qt::SolidLine);
 	pen.setColor(GuiTools::isDarkMode() ? Qt::white : Qt::black);
 	pen.setWidthF(0.0);
+
+	QPainter pa;
 	pa.begin(&pm);
+	pa.setRenderHint(QPainter::Antialiasing);
 	pa.setPen(pen);
 	pa.setBrush(QBrush(pen.color()));
 
@@ -2859,7 +2860,7 @@ void XYCurvePrivate::updatePixmap() {
 	m_pixmap = QPixmap(ceil(m_boundingRectangle.width()), ceil(m_boundingRectangle.height()));
 	m_pixmap.fill(Qt::transparent);
 	QPainter painter(&m_pixmap);
-	painter.setRenderHint(QPainter::Antialiasing, true);
+	painter.setRenderHint(QPainter::Antialiasing);
 	painter.translate(-m_boundingRectangle.topLeft());
 
 	draw(&painter);
@@ -2889,7 +2890,7 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 
 	painter->setPen(Qt::NoPen);
 	painter->setBrush(Qt::NoBrush);
-	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
+	painter->setRenderHint(QPainter::SmoothPixmapTransform);
 
 	if (!q->isPrinting() && Settings::group(QStringLiteral("Settings_Worksheet")).readEntry<bool>("DoubleBuffering", true))
 		painter->drawPixmap(m_boundingRectangle.topLeft(), m_pixmap); // draw the cached pixmap (fast)

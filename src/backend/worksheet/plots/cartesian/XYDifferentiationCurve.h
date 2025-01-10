@@ -36,7 +36,6 @@ public:
 	explicit XYDifferentiationCurve(const QString& name);
 	~XYDifferentiationCurve() override;
 
-	void recalculate() override;
 	virtual const Result& result() const override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;

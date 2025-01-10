@@ -141,7 +141,6 @@ void GuiTools::updateBrushStyles(QComboBox* comboBox, const QColor& color) {
 	int index = comboBox->currentIndex();
 	comboBox->clear();
 
-	QPainter pa;
 	int offset = 2;
 	int w = 50;
 	int h = 20;
@@ -166,7 +165,10 @@ void GuiTools::updateBrushStyles(QComboBox* comboBox, const QColor& color) {
 	const QColor& borderColor = GuiTools::isDarkMode() ? Qt::white : Qt::black;
 	QPen pen(Qt::SolidPattern, 1);
 	pen.setColor(borderColor);
+
 	for (int i = 0; i < 15; i++) {
+		QPainter pa;
+
 		pm.fill(Qt::transparent);
 		pa.begin(&pm);
 		pa.setPen(pen);
@@ -266,7 +268,6 @@ void GuiTools::highlight(QWidget* widget, bool invalid) {
 }
 
 void GuiTools::addSymbolStyles(QComboBox* cb) {
-	QPainter pa;
 	QPen pen(Qt::SolidPattern, 0);
 	const QColor& color = GuiTools::isDarkMode() ? Qt::white : Qt::black;
 	pen.setColor(color);
@@ -278,8 +279,10 @@ void GuiTools::addSymbolStyles(QComboBox* cb) {
 	trafo.scale(15, 15);
 
 	for (int i = 0; i < Symbol::stylesCount(); ++i) {
+		QPainter pa;
 		// get styles in order
 		const auto style = Symbol::indexToStyle(i);
+
 		pm.fill(Qt::transparent);
 		pa.begin(&pm);
 		pa.setPen(pen);
