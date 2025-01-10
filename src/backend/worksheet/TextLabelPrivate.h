@@ -60,6 +60,7 @@ public:
 
 	ScaledTextItem* m_textItem{nullptr};
 
+	QRectF boundingRectangleText; // bounding rectangle of the text, doesn't include the border shape
 	QPainterPath borderShapePath;
 	QPainterPath labelShape;
 
