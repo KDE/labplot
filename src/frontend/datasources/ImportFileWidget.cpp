@@ -2173,6 +2173,7 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 			break;
 		}
 		case AbstractFileFilter::FileType::NETCDF:
+			// TODO: check status (see HDF5)
 			m_netcdfOptionsWidget->updateContent(static_cast<NetCDFFilter*>(filter), fileName);
 			break;
 			//		case AbstractFileFilter::FileType::VECTOR_BLF:
@@ -2180,10 +2181,12 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 			//			break;
 		case AbstractFileFilter::FileType::FITS:
 #ifdef HAVE_FITS
+			// TODO: check status (see HDF5)
 			m_fitsOptionsWidget->updateContent(static_cast<FITSFilter*>(filter), fileName);
 #endif
 			break;
 		case AbstractFileFilter::FileType::ROOT:
+			// TODO: check status (see HDF5)
 			m_rootOptionsWidget->updateContent(static_cast<ROOTFilter*>(filter), fileName);
 			break;
 		case AbstractFileFilter::FileType::JSON:
@@ -2210,18 +2213,24 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 			break;
 		}
 		case AbstractFileFilter::FileType::MATIO:
+			// TODO: check status (see HDF5)
 			m_matioOptionsWidget->updateContent(static_cast<MatioFilter*>(filter), fileName);
 			break;
 		case AbstractFileFilter::FileType::XLSX:
 #ifdef HAVE_QXLSX
-			m_xlsxOptionsWidget->updateContent(reinterpret_cast<XLSXFilter*>(filter), fileName);
+			// TODO: check status (see HDF5)
+			m_xlsxOptionsWidget->updateContent(static_cast<XLSXFilter*>(filter), fileName);
 #endif
 			break;
-		case AbstractFileFilter::FileType::Ods:
+		case AbstractFileFilter::FileType::Ods: {
 #ifdef HAVE_ORCUS
-			m_odsOptionsWidget->updateContent(reinterpret_cast<OdsFilter*>(filter), fileName);
+			bool status = m_odsOptionsWidget->updateContent(static_cast<OdsFilter*>(filter), fileName);
+			if (!status)
+				Q_EMIT error(i18n("Parsing ODS file %1 failed.", fileName));
+
 #endif
 			break;
+		}
 		case AbstractFileFilter::FileType::Ascii:
 		case AbstractFileFilter::FileType::Binary:
 		case AbstractFileFilter::FileType::Image:

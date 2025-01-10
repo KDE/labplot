@@ -25,7 +25,7 @@ public:
 	explicit OdsOptionsWidget(QWidget*, ImportFileWidget*);
 	~OdsOptionsWidget();
 
-	void updateContent(OdsFilter* filter, const QString& fileName);
+	bool updateContent(OdsFilter* filter, const QString& fileName);
 	QTableWidget* previewWidget() const {
 		return ui.twPreview;
 	}
