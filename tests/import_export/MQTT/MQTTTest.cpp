@@ -261,9 +261,8 @@ void MQTTTest::testIntegerMessage() {
 }
 
 void MQTTTest::testNumericMessage() {
-#ifdef __gnu_linux__
 	QSKIP("Unstable");
-#endif
+
 	auto* filter = new AsciiFilter();
 
 	auto properties = filter->properties();
@@ -393,9 +392,8 @@ void MQTTTest::testNumericMessage() {
 }
 
 void MQTTTest::testTextMessage() {
-#ifdef __gnu_linux__
 	QSKIP("Unstable");
-#endif
+
 	auto* filter = new AsciiFilter();
 
 	auto properties = filter->properties();
