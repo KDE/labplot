@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-08 00:38+0000\n"
+"POT-Creation-Date: 2025-01-10 09:25+0000\n"
 "PO-Revision-Date: 2024-10-18 15:55+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -1230,16 +1230,14 @@ msgid "Index"
 msgstr "Rejstřík"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:601
-#, fuzzy, kde-format
-#| msgid "DateTime:"
+#, kde-format
 msgid "DateTime"
-msgstr "Datum/čas:"
+msgstr "Datum/čas"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:602
-#, fuzzy, kde-format
-#| msgid "Int8"
+#, kde-format
 msgid "Int"
-msgstr "Int8"
+msgstr "Int"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:603
 #: src/backend/datasources/filters/MatioFilter.cpp:398
@@ -2492,7 +2490,7 @@ msgstr ""
 #: src/backend/datasources/MQTTTopic.cpp:44
 #, kde-format
 msgid "%1 %2"
-msgstr ""
+msgstr "%1 %2"
 
 #: src/backend/datasources/MQTTTopic.cpp:129
 #, kde-format
@@ -10088,7 +10086,7 @@ msgstr ""
 #: src/frontend/AboutDialog.cpp:93
 #, kde-format
 msgid "Donate"
-msgstr ""
+msgstr "Přispět"
 
 #: src/frontend/AboutDialog.cpp:131
 #, kde-format
@@ -10131,10 +10129,9 @@ msgid "Positive/Negative sign "
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:163
-#, fuzzy, kde-format
-#| msgid "System: "
+#, kde-format
 msgid "System:"
-msgstr "Systém: "
+msgstr "Systém:"
 
 #: src/frontend/AboutDialog.cpp:164
 #, fuzzy, kde-format
@@ -10154,10 +10151,9 @@ msgid "Updated on restart"
 msgstr "Aktualizován při restartu"
 
 #: src/frontend/AboutDialog.cpp:166
-#, fuzzy, kde-format
-#| msgid "Architecture: "
+#, kde-format
 msgid "Architecture:"
-msgstr "Architektura: "
+msgstr "Architektura:"
 
 #: src/frontend/AboutDialog.cpp:167
 #, kde-format
@@ -10317,10 +10313,9 @@ msgid "Binary Log File (BLF) file support"
 msgstr "Vector Binary Logfile (BLF)"
 
 #: src/frontend/AboutDialog.cpp:311
-#, fuzzy, kde-format
-#| msgid "Comments:"
+#, kde-format
 msgid "Components:"
-msgstr "Komentáře:"
+msgstr "Komponenty:"
 
 #: src/frontend/colormaps/ColorMapsDialog.cpp:39
 #, kde-format
@@ -10587,7 +10582,7 @@ msgstr "Křivka"
 #: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4075
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4129
-#: src/frontend/worksheet/WorksheetView.cpp:2194
+#: src/frontend/worksheet/WorksheetView.cpp:2196
 #, kde-format
 msgid "Failed to export"
 msgstr "Export selhal"
@@ -10595,7 +10590,7 @@ msgstr "Export selhal"
 #: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4075
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4129
-#: src/frontend/worksheet/WorksheetView.cpp:2194
+#: src/frontend/worksheet/WorksheetView.cpp:2196
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr ""
@@ -10726,7 +10721,7 @@ msgstr ""
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:138
 #, kde-format
 msgid "%1 or %2"
-msgstr ""
+msgstr "%1 nebo %2"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:252
 #, fuzzy, kde-format
@@ -16713,10 +16708,9 @@ msgid "Sample Quantiles"
 msgstr ""
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1052
-#, fuzzy, kde-format
-#| msgid "&Sample"
+#, kde-format
 msgid "Sample"
-msgstr "&Vzorek"
+msgstr "Vzorek"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1111
 #, kde-format
@@ -22728,7 +22722,7 @@ msgstr ""
 #: src/frontend/ui/settingsgeneralpage.ui:360
 #, kde-format
 msgid "Info"
-msgstr ""
+msgstr "Informace"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPerfTrace)
 #. i18n: ectx: property (text), widget (QLabel, lPerformance)
