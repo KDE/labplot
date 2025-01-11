@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for spreadsheet properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2013 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -33,6 +33,8 @@ SpreadsheetDock::SpreadsheetDock(QWidget* parent)
 	ui.setupUi(this);
 	setBaseWidgets(ui.leName, ui.teComment);
 
+	retranslateUi();
+
 	connect(ui.sbColumnCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &SpreadsheetDock::columnCountChanged);
 	connect(ui.sbRowCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &SpreadsheetDock::rowCountChanged);
 	connect(ui.cbShowComments, &QCheckBox::toggled, this, &SpreadsheetDock::commentsShownChanged);
@@ -47,7 +49,10 @@ SpreadsheetDock::SpreadsheetDock(QWidget* parent)
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &SpreadsheetDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &SpreadsheetDock::saveConfigAsTemplate);
 	connect(templateHandler, &TemplateHandler::info, this, &SpreadsheetDock::info);
+}
 
+
+void SpreadsheetDock::retranslateUi() {
 	// tooltip texts
 	QString info = i18n("Enable linking to synchronize the number of rows with another spreadsheet");
 	ui.lLinkingEnabled->setToolTip(info);
