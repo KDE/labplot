@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-10 09:25+0000\n"
+"POT-Creation-Date: 2025-01-11 00:37+0000\n"
 "PO-Revision-Date: 2019-07-11 18:46+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -439,7 +439,7 @@ msgid "incompatible filter type"
 msgstr ""
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:708
+#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:706
 #: src/backend/datasources/MQTTClient.cpp:1366
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:272
@@ -511,7 +511,7 @@ msgid "%1   (no values)"
 msgstr "Hodnoty"
 
 #: src/backend/core/AspectTreeModel.cpp:235
-#: src/frontend/datasources/ImportFileWidget.cpp:1619
+#: src/frontend/datasources/ImportFileWidget.cpp:1638
 #, kde-format
 msgid "Size: %1"
 msgstr "Veľkosť: %1"
@@ -752,35 +752,35 @@ msgstr "%1: nastaviť obrázok pozadia"
 msgid "%1: save calculation changed"
 msgstr "%1: nastaviť obrázok pozadia"
 
-#: src/backend/core/Project.cpp:552 src/backend/core/Project.cpp:582
+#: src/backend/core/Project.cpp:550 src/backend/core/Project.cpp:580
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Sorry. Could not open file for reading."
 msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
 
-#: src/backend/core/Project.cpp:563 src/backend/core/Project.cpp:589
+#: src/backend/core/Project.cpp:561 src/backend/core/Project.cpp:587
 #, kde-format
 msgid "The project file is empty."
 msgstr ""
 
-#: src/backend/core/Project.cpp:563 src/backend/core/Project.cpp:589
+#: src/backend/core/Project.cpp:561 src/backend/core/Project.cpp:587
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Error opening project"
 msgstr "Otvoriť projekt"
 
-#: src/backend/core/Project.cpp:608
+#: src/backend/core/Project.cpp:606
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Unknown error when opening the project %1."
 msgstr "Otvoriť projekt"
 
-#: src/backend/core/Project.cpp:609
+#: src/backend/core/Project.cpp:607
 #, kde-format
 msgid "Error when opening the project"
 msgstr ""
 
-#: src/backend/core/Project.cpp:629
+#: src/backend/core/Project.cpp:627
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -792,46 +792,46 @@ msgid ""
 "Do you want to continue?"
 msgstr ""
 
-#: src/backend/core/Project.cpp:635
+#: src/backend/core/Project.cpp:633
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr ""
 
-#: src/backend/core/Project.cpp:665
+#: src/backend/core/Project.cpp:663
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr ""
 
-#: src/backend/core/Project.cpp:715
+#: src/backend/core/Project.cpp:713
 #, kde-format
 msgid "no project element found"
 msgstr ""
 
-#: src/backend/core/Project.cpp:717
+#: src/backend/core/Project.cpp:715
 #, kde-format
 msgid "no valid XML document found"
 msgstr ""
 
-#: src/backend/core/Project.cpp:766 src/backend/core/Project.cpp:772
-#: src/backend/core/Project.cpp:823
+#: src/backend/core/Project.cpp:764 src/backend/core/Project.cpp:770
+#: src/backend/core/Project.cpp:821
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to open the file '%1'."
 msgstr "Nepodarilo sa otvoriť"
 
-#: src/backend/core/Project.cpp:829
+#: src/backend/core/Project.cpp:827
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to process the content of the file '%1'."
 msgstr "Nepodarilo sa otvoriť"
 
-#: src/backend/core/Project.cpp:832
+#: src/backend/core/Project.cpp:830
 #, fuzzy, kde-format
 #| msgid "Failed to Open"
 msgid "Failed to open project"
 msgstr "Nepodarilo sa otvoriť"
 
-#: src/backend/core/Project.cpp:1296
+#: src/backend/core/Project.cpp:1294
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr ""
@@ -1144,7 +1144,7 @@ msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:192
 #: src/backend/gsl/errors.h:20
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2068
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2063
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1220
 #, kde-format
 msgid "Success"
@@ -1696,7 +1696,7 @@ msgstr "Informácia o súbore"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:358
 #: src/backend/datasources/filters/NetCDFFilter.cpp:268
-#: src/frontend/datasources/ImportFileWidget.cpp:1594
+#: src/frontend/datasources/ImportFileWidget.cpp:1613
 #, fuzzy, kde-format
 msgid "Reading from file %1 failed."
 msgstr "<p>Čítanie zo súboru <b>%1</b> zlyhalo:</p><p><tt>%2</tt></p>"
@@ -2354,7 +2354,7 @@ msgstr "Kľúč"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/datasources/filters/QJsonModel.cpp:133
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
 #: src/frontend/colormaps/ColorMapsWidget.cpp:195
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:145
 #: src/frontend/matrix/MatrixView.cpp:619
@@ -7107,8 +7107,8 @@ msgstr "Smer"
 
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:501
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1871
-#: src/frontend/datasources/ImportFileWidget.cpp:1334
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1866
+#: src/frontend/datasources/ImportFileWidget.cpp:1353
 #: src/frontend/dockwidgets/AxisDock.cpp:234
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:170
 #: src/frontend/dockwidgets/WorksheetDock.cpp:276
@@ -8553,7 +8553,7 @@ msgstr "%1    [zmenené]"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:300
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:162
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:330
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:335
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:109
 #, fuzzy, kde-format
 #| msgid "No Data"
@@ -10202,51 +10202,51 @@ msgstr ""
 msgid "%1: set values color"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:201
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:206
 #, fuzzy, kde-format
 #| msgid "%1    [Changed]"
 msgid "%1: data source type changed"
 msgstr "%1    [zmenené]"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:208
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:213
 #, fuzzy, kde-format
 #| msgid "%1    [Changed]"
 msgid "%1: data source curve changed"
 msgstr "%1    [zmenené]"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:216
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:221
 #, kde-format
 msgid "%1: assign x-data"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:224
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:229
 #, kde-format
 msgid "%1: assign y-data"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:232
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:237
 #, fuzzy, kde-format
 #| msgid "%1: set layout"
 msgid "%1: assign second y-data"
 msgstr "%1: nastaviť rozloženie"
 
-#: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:74
+#: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:69
 #, kde-format
 msgid "%1: set options and perform the convolution"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:163
-#: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:156
-#: src/backend/worksheet/plots/cartesian/XYDataReductionCurve.cpp:119
-#: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:116
-#: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:117
-#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:137
-#: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:142
+#: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:158
+#: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:151
+#: src/backend/worksheet/plots/cartesian/XYDataReductionCurve.cpp:114
+#: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:111
+#: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:112
+#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:132
+#: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:137
 #, kde-format
 msgid "Not enough data points available."
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:74
+#: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:69
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: set options and perform the correlation"
@@ -10314,12 +10314,12 @@ msgstr ""
 msgid "Error: %1"
 msgstr "Chyba: %1"
 
-#: src/backend/worksheet/plots/cartesian/XYDataReductionCurve.cpp:71
+#: src/backend/worksheet/plots/cartesian/XYDataReductionCurve.cpp:66
 #, kde-format
 msgid "%1: set options and perform the data reduction"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:70
+#: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:65
 #, kde-format
 msgid "%1: set options and perform the differentiation"
 msgstr ""
@@ -10330,123 +10330,123 @@ msgstr ""
 msgid "%1: set equation"
 msgstr "%1: nastaviť písmo"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:931
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:926
 #, fuzzy, kde-format
 #| msgid "%1    [Changed]"
 msgid "%1: data source histogram changed"
 msgstr "%1    [zmenené]"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:943
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:938
 #, fuzzy, kde-format
 #| msgid "%1: set layout"
 msgid "%1: assign x-error"
 msgstr "%1: nastaviť rozloženie"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:958
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:953
 #, fuzzy, kde-format
 #| msgid "%1: set layout"
 msgid "%1: assign y-error"
 msgstr "%1: nastaviť rozloženie"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:974
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:969
 #, kde-format
 msgid "%1: set fit options and perform the fit"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1823
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1818
 #, fuzzy, kde-format
 #| msgid "Results:"
 msgctxt "Curve fitting"
 msgid "Fit Results"
 msgstr "Výsledky:"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1847
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1842
 #, kde-format
 msgid "Nonlinear Fit to X/Y data"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1853
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1848
 #, kde-format
 msgid "MODEL"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1857
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1852
 #, kde-format
 msgid "Degree"
 msgstr "Stupeň"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1862
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1857
 #, kde-format
 msgid "Peaks"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1881
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1876
 #, kde-format
 msgid "PARAMETERS"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:145
 #, kde-format
 msgid "Uncertainty"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
 #, kde-format
 msgid "Uncertainty,%"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "t Statistic"
 msgstr "Štatistika"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1886
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1881
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:146
 #, fuzzy, kde-format
 #| msgid "Power"
 msgid "Lower"
 msgstr "Sila"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1886
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1881
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:146
 #, fuzzy, kde-format
 #| msgid "Upper limit"
 msgid "Upper"
 msgstr "Horný limit"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1902
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1897
 #, kde-format
 msgid "GOODNESS OF FIT"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1904
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1899
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:968
 #, kde-format
 msgid "Sum of squared residuals"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1905
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1900
 #, kde-format
 msgid "Residuals mean square"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1906
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1901
 #, fuzzy, kde-format
 msgid "Root mean square deviation"
 msgstr "Smerodajná odchýlka"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1907
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1902
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:998
 #, kde-format
 msgid "Coefficient of determination"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1908
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1903
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1008
 #, kde-format
 msgid "Adj. coefficient of determination"
@@ -10454,7 +10454,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bTest)
 #. i18n: ectx: property (text), widget (QPushButton, bTestConnection)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1909
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1904
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:177
 #: src/frontend/ui/datasources/databasemanagerwidget.ui:263
 #: src/frontend/ui/datasources/mqttconnectionmanagerwidget.ui:208
@@ -10462,77 +10462,77 @@ msgstr ""
 msgid "Test"
 msgstr "Test"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1910
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1905
 #, fuzzy, kde-format
 msgid "F-Test"
 msgstr "Test"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1912
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1907
 #, fuzzy, kde-format
 msgid "Mean absolute error"
 msgstr "Smerodajná odchýlka"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1913
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1908
 #, kde-format
 msgid "Akaike information criterion"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1914
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1909
 #, kde-format
 msgid "Bayesian information criterion"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2254
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2249
 #, fuzzy, kde-format
 #| msgid "Number of points"
 msgid "Model has no parameters!"
 msgstr "Počet bodov"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2261
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2256
 #, fuzzy, kde-format
 #| msgid "Number of points"
 msgid "Not sufficient weight data points provided!"
 msgstr "Počet bodov"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2338
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2333
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:370
 #, fuzzy, kde-format
 #| msgid "Select all"
 msgid "No X data available!"
 msgstr "Vymazať premennú"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2345
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2340
 #, kde-format
 msgid ""
 "The number of data points (%1) must be greater than or equal to the number "
 "of parameters (%2)!"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2352
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2347
 #, kde-format
 msgid "Fit model not specified!"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3095
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3090
 #, fuzzy, kde-format
 #| msgid "Results:"
 msgctxt "Curve Fitting"
 msgid "Fit Results"
 msgstr "Výsledky:"
 
-#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:81
+#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:76
 #, kde-format
 msgid "%1: set filter options and perform the Fourier filter"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:171
-#: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:127
-#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:128
+#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:166
+#: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:122
+#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:123
 #, kde-format
 msgid "No data points available."
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:75
+#: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:70
 #, kde-format
 msgid "%1: set transform options and perform the Fourier transform"
 msgstr ""
@@ -10543,74 +10543,74 @@ msgstr ""
 msgid "%1: set function"
 msgstr "%1: nastaviť písmo"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:323
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:318
 #, kde-format
 msgid "First curve not valid"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:325
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:320
 #, kde-format
 msgid "xColumn of first curve not valid"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:327
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:322
 #, kde-format
 msgid "yColumn of first curve not valid"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:329
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:324
 #, kde-format
 msgid "Number of x and y values do not match for the first curve"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:342
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:337
 #, kde-format
 msgid "Curve '%1' not valid"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:344
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:339
 #, kde-format
 msgid "xColumn of curve '%1' not valid"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:346
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:341
 #, kde-format
 msgid "yColumn of curve '%1' not valid"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:348
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:343
 #, kde-format
 msgid "Number of x and y values do not match for curve '%1'"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:68
+#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:63
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: set transform options and perform the Hilbert transform"
 msgstr "%1: nastaviť písmo"
 
-#: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:74
+#: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:69
 #, kde-format
 msgid "%1: set options and perform the integration"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:74
+#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:69
 #, kde-format
 msgid "%1: set options and perform the interpolation"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:101
-#: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:117
+#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:96
+#: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:112
 #, kde-format
 msgid "Number of x and y data points must be equal."
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:147
+#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:142
 #, kde-format
 msgid "interpolation failed since x data is not strictly monotonic increasing!"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:79
+#: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:74
 #, kde-format
 msgid "%1: set options and perform the smooth"
 msgstr ""
@@ -12170,39 +12170,39 @@ msgid ""
 "The number of rows is calculated from the values of the data portion tab"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:990
+#: src/frontend/datasources/ImportFileWidget.cpp:991
 #, fuzzy, kde-format
 #| msgid "Add new variable"
 msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr "Pridať novú premennú"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1020
+#: src/frontend/datasources/ImportFileWidget.cpp:1021
 #, fuzzy, kde-format
 #| msgid "Select all"
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr "Vybrať všetko"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1020
+#: src/frontend/datasources/ImportFileWidget.cpp:1021
 #, kde-format
 msgid "DBC file (*.dbc)"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1106
+#: src/frontend/datasources/ImportFileWidget.cpp:1108
 #, kde-format
 msgid ""
 "Origin Project files need to be opened with \"Import -> Origin Project\"!"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1112
+#: src/frontend/datasources/ImportFileWidget.cpp:1111
 #, kde-format
 msgid ""
 "LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/frontend/datasources/ImportFileWidget.cpp:1240
+#: src/frontend/datasources/ImportFileWidget.cpp:1259
 #: src/frontend/ui/datasources/importfilewidget.ui:416
 #, fuzzy, kde-format
 #| msgid "Data format"
@@ -12210,7 +12210,7 @@ msgid "Data Format"
 msgstr "Dátový formát"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/frontend/datasources/ImportFileWidget.cpp:1241
+#: src/frontend/datasources/ImportFileWidget.cpp:1260
 #: src/frontend/ui/datasources/importfilewidget.ui:470
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:158
 #, kde-format
@@ -12218,109 +12218,109 @@ msgid "Preview"
 msgstr "Náhľad"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/frontend/datasources/ImportFileWidget.cpp:1243
+#: src/frontend/datasources/ImportFileWidget.cpp:1262
 #: src/frontend/ui/datasources/importfilewidget.ui:582
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1286
+#: src/frontend/datasources/ImportFileWidget.cpp:1305
 #, fuzzy, kde-format
 #| msgid "Data format"
 msgid "Data format && preview"
 msgstr "Dátový formát"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1333
+#: src/frontend/datasources/ImportFileWidget.cpp:1352
 #: src/frontend/SettingsGeneralPage.cpp:258
 #, kde-format
 msgid "Automatic"
 msgstr "Automaticky"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1586
+#: src/frontend/datasources/ImportFileWidget.cpp:1605
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "File Information"
 msgid "file command not found"
 msgstr "Informácia o súbore"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1597
+#: src/frontend/datasources/ImportFileWidget.cpp:1616
 #, kde-format
 msgid "cannot open"
 msgstr "nemôžem otvoriť"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1602
+#: src/frontend/datasources/ImportFileWidget.cpp:1621
 #, fuzzy, kde-format
 #| msgid "File type: %1"
 msgid "<b>File type:</b> %1"
 msgstr "Typ súboru: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1607
+#: src/frontend/datasources/ImportFileWidget.cpp:1626
 #, kde-format
 msgid "General:"
 msgstr "Všeobecné:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1609
-#: src/frontend/datasources/ImportFileWidget.cpp:1610
-#: src/frontend/datasources/ImportFileWidget.cpp:1611
+#: src/frontend/datasources/ImportFileWidget.cpp:1628
+#: src/frontend/datasources/ImportFileWidget.cpp:1629
+#: src/frontend/datasources/ImportFileWidget.cpp:1630
 #, kde-format
 msgid "yes"
 msgstr "áno"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1609
-#: src/frontend/datasources/ImportFileWidget.cpp:1610
-#: src/frontend/datasources/ImportFileWidget.cpp:1611
+#: src/frontend/datasources/ImportFileWidget.cpp:1628
+#: src/frontend/datasources/ImportFileWidget.cpp:1629
+#: src/frontend/datasources/ImportFileWidget.cpp:1630
 #, kde-format
 msgid "no"
 msgstr "nie"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1609
+#: src/frontend/datasources/ImportFileWidget.cpp:1628
 #, kde-format
 msgid "Readable: %1"
 msgstr "Na čítanie: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1610
+#: src/frontend/datasources/ImportFileWidget.cpp:1629
 #, kde-format
 msgid "Writable: %1"
 msgstr "Zapisovateľné: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1611
+#: src/frontend/datasources/ImportFileWidget.cpp:1630
 #, kde-format
 msgid "Executable: %1"
 msgstr "Spustiteľný súbor: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1613
+#: src/frontend/datasources/ImportFileWidget.cpp:1632
 #, kde-format
 msgid "Birth time: %1"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1614
+#: src/frontend/datasources/ImportFileWidget.cpp:1633
 #, fuzzy, kde-format
 #| msgid "Last modified: %1"
 msgid "Last metadata changed: %1"
 msgstr "Posledná zmena: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1615
+#: src/frontend/datasources/ImportFileWidget.cpp:1634
 #, kde-format
 msgid "Last modified: %1"
 msgstr "Posledná zmena: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1616
+#: src/frontend/datasources/ImportFileWidget.cpp:1635
 #, kde-format
 msgid "Last read: %1"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1617
+#: src/frontend/datasources/ImportFileWidget.cpp:1636
 #, kde-format
 msgid "Owner: %1"
 msgstr "Vlastník: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1618
+#: src/frontend/datasources/ImportFileWidget.cpp:1637
 #, kde-format
 msgid "Group: %1"
 msgstr "Skupina: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1619
+#: src/frontend/datasources/ImportFileWidget.cpp:1638
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
@@ -12328,129 +12328,134 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1622
+#: src/frontend/datasources/ImportFileWidget.cpp:1641
 #, fuzzy, kde-format
 msgid "Summary:"
 msgstr "Súhrn:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1645
-#: src/frontend/datasources/ImportFileWidget.cpp:1650
+#: src/frontend/datasources/ImportFileWidget.cpp:1664
+#: src/frontend/datasources/ImportFileWidget.cpp:1669
 #, kde-format
 msgid "Content:"
 msgstr "Obsah:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1681
+#: src/frontend/datasources/ImportFileWidget.cpp:1700
 #, kde-format
 msgid "Could not open file %1 for reading."
 msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1765
+#: src/frontend/datasources/ImportFileWidget.cpp:1784
 #, kde-format
 msgid ""
 "Invalid number rows. Please check 'End Row' and 'Start Row'. 'End Row' must "
 "be larger than 'Start Row' or -1"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1776
+#: src/frontend/datasources/ImportFileWidget.cpp:1795
 #, kde-format
 msgid "Preview: Initialization failed: %1"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1801
+#: src/frontend/datasources/ImportFileWidget.cpp:1820
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Preview: Failed to connect to local socket %1 - %2"
 msgstr "Nepodarilo sa otvoriť"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1816
+#: src/frontend/datasources/ImportFileWidget.cpp:1835
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Preview: Failed to connect to TCP socket - %1"
 msgstr "Nepodarilo sa otvoriť"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1861
+#: src/frontend/datasources/ImportFileWidget.cpp:1880
 #, fuzzy, kde-format
 #| msgid "Created: %1"
 msgid "Parse Error: %1"
 msgstr "Vytvorené: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1863
+#: src/frontend/datasources/ImportFileWidget.cpp:1882
 #, kde-format
 msgid "ERROR: not ready for read after 2 sec"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1867
+#: src/frontend/datasources/ImportFileWidget.cpp:1886
 #, kde-format
 msgid "ERROR: failed to open serial port. error: %1"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1886
+#: src/frontend/datasources/ImportFileWidget.cpp:1905
 #, fuzzy, kde-format
 #| msgid "Clea&r Selection"
 msgid "No data arrived yet for the selected topic"
 msgstr "Vyčistiť výber"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2152
+#: src/frontend/datasources/ImportFileWidget.cpp:2171
 #, kde-format
 msgid "Not a HDF5 file: %1"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2616
+#: src/frontend/datasources/ImportFileWidget.cpp:2229
+#, fuzzy, kde-format
+msgid "Parsing ODS file %1 failed."
+msgstr "<p>Čítanie zo súboru <b>%1</b> zlyhalo:</p><p><tt>%2</tt></p>"
+
+#: src/frontend/datasources/ImportFileWidget.cpp:2641
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2624
+#: src/frontend/datasources/ImportFileWidget.cpp:2649
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to connect to '%1'. Error %2."
 msgstr "Nepodarilo sa otvoriť"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2646
+#: src/frontend/datasources/ImportFileWidget.cpp:2671
 #, fuzzy, kde-format
 msgid "Disconnected from '%1'."
 msgstr "Odpojený"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2712
+#: src/frontend/datasources/ImportFileWidget.cpp:2737
 #, fuzzy, kde-format
 #| msgid "variable"
 msgid "Available (%1)"
 msgstr "Dostupný"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2816
+#: src/frontend/datasources/ImportFileWidget.cpp:2841
 #, kde-format
 msgid "Wrong username or password"
 msgstr "Zlý používateľ alebo heslo"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2819
+#: src/frontend/datasources/ImportFileWidget.cpp:2844
 #, kde-format
 msgid "The client ID wasn't accepted"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2823
+#: src/frontend/datasources/ImportFileWidget.cpp:2848
 #, kde-format
 msgid "The broker %1 couldn't be reached."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2826
+#: src/frontend/datasources/ImportFileWidget.cpp:2851
 #, fuzzy, kde-format
 #| msgid "Select all"
 msgid "The client is not authorized to connect."
 msgstr "Vybrať všetko"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2829
+#: src/frontend/datasources/ImportFileWidget.cpp:2854
 #, kde-format
 msgid "An unknown error occurred."
 msgstr "Nastala neznáma chyba."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2835
-#: src/frontend/datasources/ImportFileWidget.cpp:2838
+#: src/frontend/datasources/ImportFileWidget.cpp:2860
+#: src/frontend/datasources/ImportFileWidget.cpp:2863
 #, fuzzy, kde-format
 #| msgid "An unknown error occurred."
 msgid "An error occurred."
 msgstr "Nastala neznáma chyba."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2852
+#: src/frontend/datasources/ImportFileWidget.cpp:2877
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgid "Connecting to '%1:%2' timed out."

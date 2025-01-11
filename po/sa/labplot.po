@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-10 09:25+0000\n"
+"POT-Creation-Date: 2025-01-11 00:37+0000\n"
 "PO-Revision-Date: 2024-12-29 23:07+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -412,7 +412,7 @@ msgid "incompatible filter type"
 msgstr "असङ्गत फ़िल्टर प्रकार"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:708
+#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:706
 #: src/backend/datasources/MQTTClient.cpp:1366
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:272
@@ -482,7 +482,7 @@ msgid "%1   (no values)"
 msgstr "%1 (मूल्यानि नास्ति)"
 
 #: src/backend/core/AspectTreeModel.cpp:235
-#: src/frontend/datasources/ImportFileWidget.cpp:1619
+#: src/frontend/datasources/ImportFileWidget.cpp:1638
 #, kde-format
 msgid "Size: %1"
 msgstr "आकारः %1"
@@ -705,32 +705,32 @@ msgstr "%1: save dock स्थितिः परिवर्तिता"
 msgid "%1: save calculation changed"
 msgstr "%1: रक्षणगणना परिवर्तिता"
 
-#: src/backend/core/Project.cpp:552 src/backend/core/Project.cpp:582
+#: src/backend/core/Project.cpp:550 src/backend/core/Project.cpp:580
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "क्षम्यताम्‌। पठनार्थं सञ्चिकां उद्घाटयितुं न शक्तवान्।"
 
-#: src/backend/core/Project.cpp:563 src/backend/core/Project.cpp:589
+#: src/backend/core/Project.cpp:561 src/backend/core/Project.cpp:587
 #, kde-format
 msgid "The project file is empty."
 msgstr "परियोजनासञ्चिका रिक्तम् अस्ति ।"
 
-#: src/backend/core/Project.cpp:563 src/backend/core/Project.cpp:589
+#: src/backend/core/Project.cpp:561 src/backend/core/Project.cpp:587
 #, kde-format
 msgid "Error opening project"
 msgstr "परियोजना उद्घाटने त्रुटि"
 
-#: src/backend/core/Project.cpp:608
+#: src/backend/core/Project.cpp:606
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr "परियोजना %1 उद्घाटयति समये अज्ञातदोषः ।"
 
-#: src/backend/core/Project.cpp:609
+#: src/backend/core/Project.cpp:607
 #, kde-format
 msgid "Error when opening the project"
 msgstr "परियोजनां उद्घाटयति समये त्रुटिः"
 
-#: src/backend/core/Project.cpp:629
+#: src/backend/core/Project.cpp:627
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -749,43 +749,43 @@ msgstr ""
 "\n"
 "किं त्वं निरन्तरं कर्तुम् इच्छसि ?"
 
-#: src/backend/core/Project.cpp:635
+#: src/backend/core/Project.cpp:633
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr "CAS कृते समर्थनं गम्यते"
 
-#: src/backend/core/Project.cpp:665
+#: src/backend/core/Project.cpp:663
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr "'संस्करणम्' इति विशेषता लुप्तम् अस्ति ।"
 
-#: src/backend/core/Project.cpp:715
+#: src/backend/core/Project.cpp:713
 #, kde-format
 msgid "no project element found"
 msgstr "कोऽपि परियोजनातत्त्वः न प्राप्तः"
 
-#: src/backend/core/Project.cpp:717
+#: src/backend/core/Project.cpp:715
 #, kde-format
 msgid "no valid XML document found"
 msgstr "कोऽपि वैधः XML दस्तावेजः न प्राप्तः"
 
-#: src/backend/core/Project.cpp:766 src/backend/core/Project.cpp:772
-#: src/backend/core/Project.cpp:823
+#: src/backend/core/Project.cpp:764 src/backend/core/Project.cpp:770
+#: src/backend/core/Project.cpp:821
 #, kde-format
 msgid "Failed to open the file '%1'."
 msgstr "'%1' सञ्चिकां उद्घाटयितुं असफलम् ।"
 
-#: src/backend/core/Project.cpp:829
+#: src/backend/core/Project.cpp:827
 #, kde-format
 msgid "Failed to process the content of the file '%1'."
 msgstr "'%1' सञ्चिकायाः सामग्रीं संसाधितुं असफलम् ।"
 
-#: src/backend/core/Project.cpp:832
+#: src/backend/core/Project.cpp:830
 #, kde-format
 msgid "Failed to open project"
 msgstr "परियोजनां उद्घाटयितुं असफलम्"
 
-#: src/backend/core/Project.cpp:1296
+#: src/backend/core/Project.cpp:1294
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "अमान्य परियोजना परिवर्तन समय। वर्तमानसमयस्य उपयोगेन।"
@@ -1072,7 +1072,7 @@ msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:192
 #: src/backend/gsl/errors.h:20
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2068
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2063
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1220
 #, kde-format
 msgid "Success"
@@ -1590,7 +1590,7 @@ msgstr "h5dump न लब्ध।"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:358
 #: src/backend/datasources/filters/NetCDFFilter.cpp:268
-#: src/frontend/datasources/ImportFileWidget.cpp:1594
+#: src/frontend/datasources/ImportFileWidget.cpp:1613
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr "%1 सञ्चिकातः पठनं विफलम् ।"
@@ -2192,7 +2192,7 @@ msgstr "कुंजी"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/datasources/filters/QJsonModel.cpp:133
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
 #: src/frontend/colormaps/ColorMapsWidget.cpp:195
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:145
 #: src/frontend/matrix/MatrixView.cpp:619
@@ -6651,8 +6651,8 @@ msgstr "सांख्यिकी (वितरण)"
 
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:501
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1871
-#: src/frontend/datasources/ImportFileWidget.cpp:1334
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1866
+#: src/frontend/datasources/ImportFileWidget.cpp:1353
 #: src/frontend/dockwidgets/AxisDock.cpp:234
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:170
 #: src/frontend/dockwidgets/WorksheetDock.cpp:276
@@ -7997,7 +7997,7 @@ msgstr "%1: विस्तारकारकं परिवर्तितम�
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:300
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:162
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:330
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:335
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:109
 #, kde-format
 msgid "%1 - Data"
@@ -9481,48 +9481,48 @@ msgstr "%1: मूल्यानि font सेट् कुर्वन्त�
 msgid "%1: set values color"
 msgstr "%1: मूल्यानि वर्णं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:201
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:206
 #, kde-format
 msgid "%1: data source type changed"
 msgstr "%1: दत्तांशस्रोतप्रकारः परिवर्तितः"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:208
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:213
 #, kde-format
 msgid "%1: data source curve changed"
 msgstr "%1: दत्तांशस्रोतवक्रं परिवर्तितम्"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:216
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:221
 #, kde-format
 msgid "%1: assign x-data"
 msgstr "%1: x-दत्तांशं नियुक्तं कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:224
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:229
 #, kde-format
 msgid "%1: assign y-data"
 msgstr "%1: y-दत्तांशं नियुक्तं कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:232
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:237
 #, kde-format
 msgid "%1: assign second y-data"
 msgstr "%1: द्वितीयं y-दत्तांशं नियुक्तं कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:74
+#: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:69
 #, kde-format
 msgid "%1: set options and perform the convolution"
 msgstr "%1: विकल्पान् सेट् कृत्वा कन्वोल्यूशनं कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:163
-#: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:156
-#: src/backend/worksheet/plots/cartesian/XYDataReductionCurve.cpp:119
-#: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:116
-#: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:117
-#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:137
-#: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:142
+#: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:158
+#: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:151
+#: src/backend/worksheet/plots/cartesian/XYDataReductionCurve.cpp:114
+#: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:111
+#: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:112
+#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:132
+#: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:137
 #, kde-format
 msgid "Not enough data points available."
 msgstr "पर्याप्तं दत्तांशबिन्दवः उपलब्धाः न सन्ति।"
 
-#: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:74
+#: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:69
 #, kde-format
 msgid "%1: set options and perform the correlation"
 msgstr "%1: विकल्पान् सेट् कृत्वा सहसंबन्धं कुर्वन्तु"
@@ -9582,12 +9582,12 @@ msgstr "x मूल्यानि एकरसरूपेण वर्धम�
 msgid "Error: %1"
 msgstr "त्रुटिः %1"
 
-#: src/backend/worksheet/plots/cartesian/XYDataReductionCurve.cpp:71
+#: src/backend/worksheet/plots/cartesian/XYDataReductionCurve.cpp:66
 #, kde-format
 msgid "%1: set options and perform the data reduction"
 msgstr "%1: विकल्पान् सेट् कृत्वा दत्तांशनिवृत्तिं कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:70
+#: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:65
 #, kde-format
 msgid "%1: set options and perform the differentiation"
 msgstr "%1: विकल्पान् सेट् कृत्वा भेदं कुर्वन्तु"
@@ -9597,116 +9597,116 @@ msgstr "%1: विकल्पान् सेट् कृत्वा भे�
 msgid "%1: set equation"
 msgstr "%1: समीकरणं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:931
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:926
 #, kde-format
 msgid "%1: data source histogram changed"
 msgstr "%1: दत्तांशस्रोतहिस्टोग्रामः परिवर्तितः"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:943
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:938
 #, kde-format
 msgid "%1: assign x-error"
 msgstr "%1: x-त्रुटिं नियुक्तं कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:958
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:953
 #, kde-format
 msgid "%1: assign y-error"
 msgstr "%1: y-त्रुटिं नियुक्तं कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:974
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:969
 #, kde-format
 msgid "%1: set fit options and perform the fit"
 msgstr "%1: fit विकल्पान् सेट् कृत्वा फिट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1823
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1818
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit Results"
 msgstr "फिट रिजल्ट"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1847
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1842
 #, kde-format
 msgid "Nonlinear Fit to X/Y data"
 msgstr "अरैखिकः X/Y आँकडानां कृते फिट्"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1853
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1848
 #, kde-format
 msgid "MODEL"
 msgstr "प्रतिकृति"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1857
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1852
 #, kde-format
 msgid "Degree"
 msgstr "उपाधि"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1862
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1857
 #, kde-format
 msgid "Peaks"
 msgstr "शिखराः"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1881
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1876
 #, kde-format
 msgid "PARAMETERS"
 msgstr "पैरामीटर्स्"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:145
 #, kde-format
 msgid "Uncertainty"
 msgstr "अनिश्चितता"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
 #, kde-format
 msgid "Uncertainty,%"
 msgstr "अनिश्चितता,%"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
 #, kde-format
 msgid "t Statistic"
 msgstr "t सांख्यिकी"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1886
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1881
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:146
 #, kde-format
 msgid "Lower"
 msgstr "अवच"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1886
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1881
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:146
 #, kde-format
 msgid "Upper"
 msgstr "ऊर्ध्वम्"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1902
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1897
 #, kde-format
 msgid "GOODNESS OF FIT"
 msgstr "GOODNESS OF FIT इति"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1904
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1899
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:968
 #, kde-format
 msgid "Sum of squared residuals"
 msgstr "वर्गावशेषाणां योगः"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1905
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1900
 #, kde-format
 msgid "Residuals mean square"
 msgstr "अवशेषाणां अर्थः वर्गः"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1906
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1901
 #, kde-format
 msgid "Root mean square deviation"
 msgstr "मूल माध्य वर्गविचलन"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1907
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1902
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:998
 #, kde-format
 msgid "Coefficient of determination"
 msgstr "निर्धारणस्य गुणांकः"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1908
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1903
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1008
 #, kde-format
 msgid "Adj. coefficient of determination"
@@ -9714,7 +9714,7 @@ msgstr "Adj. निर्धारणस्य गुणांकः"
 
 #. i18n: ectx: property (text), widget (QPushButton, bTest)
 #. i18n: ectx: property (text), widget (QPushButton, bTestConnection)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1909
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1904
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:177
 #: src/frontend/ui/datasources/databasemanagerwidget.ui:263
 #: src/frontend/ui/datasources/mqttconnectionmanagerwidget.ui:208
@@ -9722,73 +9722,73 @@ msgstr "Adj. निर्धारणस्य गुणांकः"
 msgid "Test"
 msgstr "परीक्षा"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1910
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1905
 #, kde-format
 msgid "F-Test"
 msgstr "च-परीक्षा"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1912
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1907
 #, kde-format
 msgid "Mean absolute error"
 msgstr "निरपेक्षदोषः इति अर्थः"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1913
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1908
 #, kde-format
 msgid "Akaike information criterion"
 msgstr "अकाइके सूचना मानदण्ड"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1914
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1909
 #, kde-format
 msgid "Bayesian information criterion"
 msgstr "बेयसियन सूचना मानदंड"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2254
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2249
 #, kde-format
 msgid "Model has no parameters!"
 msgstr "मॉडलस्य कोऽपि पैरामीटर् नास्ति!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2261
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2256
 #, kde-format
 msgid "Not sufficient weight data points provided!"
 msgstr "पर्याप्तं भारदत्तांशबिन्दवः न प्रदत्ताः!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2338
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2333
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:370
 #, kde-format
 msgid "No X data available!"
 msgstr "कोऽपि X आँकडा उपलब्धः नास्ति!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2345
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2340
 #, kde-format
 msgid ""
 "The number of data points (%1) must be greater than or equal to the number "
 "of parameters (%2)!"
 msgstr "दत्तांशबिन्दुसङ्ख्या (%1) पैरामीटर्-सङ्ख्यायाः (%2) अधिका वा समाना वा भवितुमर्हति!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2352
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2347
 #, kde-format
 msgid "Fit model not specified!"
 msgstr "फिट् मॉडल् निर्दिष्टं नास्ति!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3095
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3090
 #, kde-format
 msgctxt "Curve Fitting"
 msgid "Fit Results"
 msgstr "फिट रिजल्ट"
 
-#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:81
+#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:76
 #, kde-format
 msgid "%1: set filter options and perform the Fourier filter"
 msgstr "%1: फ़िल्टर विकल्पान् सेट् कृत्वा Fourier फ़िल्टरं कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:171
-#: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:127
-#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:128
+#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:166
+#: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:122
+#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:123
 #, kde-format
 msgid "No data points available."
 msgstr "न कोऽपि दत्तांशबिन्दवः उपलब्धाः।"
 
-#: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:75
+#: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:70
 #, kde-format
 msgid "%1: set transform options and perform the Fourier transform"
 msgstr "%1: परिवर्तनविकल्पान् सेट् कृत्वा फूरियर परिवर्तनं कुर्वन्तु"
@@ -9798,73 +9798,73 @@ msgstr "%1: परिवर्तनविकल्पान् सेट् क
 msgid "%1: set function"
 msgstr "%1: सेट् फंक्शन्"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:323
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:318
 #, kde-format
 msgid "First curve not valid"
 msgstr "प्रथमं वक्रं न मान्यम्"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:325
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:320
 #, kde-format
 msgid "xColumn of first curve not valid"
 msgstr "xप्रथमवक्रस्य स्तम्भः वैधः नास्ति"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:327
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:322
 #, kde-format
 msgid "yColumn of first curve not valid"
 msgstr "yप्रथमवक्रस्य स्तम्भः वैधः नास्ति"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:329
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:324
 #, kde-format
 msgid "Number of x and y values do not match for the first curve"
 msgstr "प्रथमवक्रस्य कृते x तथा y मूल्यानां संख्या न मेलति"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:342
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:337
 #, kde-format
 msgid "Curve '%1' not valid"
 msgstr "वक्रं '%1' मान्यं नास्ति"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:344
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:339
 #, kde-format
 msgid "xColumn of curve '%1' not valid"
 msgstr "xवक्रस्य '%1' स्तम्भः वैधः नास्ति"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:346
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:341
 #, kde-format
 msgid "yColumn of curve '%1' not valid"
 msgstr "yवक्रस्य '%1' स्तम्भः वैधः नास्ति"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:348
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:343
 #, kde-format
 msgid "Number of x and y values do not match for curve '%1'"
 msgstr "x तथा y मूल्ययोः संख्या '%1' वक्रस्य कृते न मेलति ।"
 
-#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:68
+#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:63
 #, kde-format
 msgid "%1: set transform options and perform the Hilbert transform"
 msgstr "%1: परिवर्तनविकल्पान् सेट् कृत्वा हिल्बर्ट् परिवर्तनं कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:74
+#: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:69
 #, kde-format
 msgid "%1: set options and perform the integration"
 msgstr "%1: विकल्पान् सेट् कृत्वा एकीकरणं कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:74
+#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:69
 #, kde-format
 msgid "%1: set options and perform the interpolation"
 msgstr "%1: विकल्पान् सेट् कृत्वा प्रक्षेपं कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:101
-#: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:117
+#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:96
+#: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:112
 #, kde-format
 msgid "Number of x and y data points must be equal."
 msgstr "x तथा y दत्तांशबिन्दून् संख्या समाना भवितुमर्हति ।"
 
-#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:147
+#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:142
 #, kde-format
 msgid "interpolation failed since x data is not strictly monotonic increasing!"
 msgstr "प्रक्षेपणं विफलं यतः x आँकडा सख्यं एकरसः वर्धमानः नास्ति!"
 
-#: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:79
+#: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:74
 #, kde-format
 msgid "%1: set options and perform the smooth"
 msgstr "%1: विकल्पान् सेट् कृत्वा स्मूदं कुर्वन्तु"
@@ -11414,24 +11414,24 @@ msgid ""
 "The number of rows is calculated from the values of the data portion tab"
 msgstr "पङ्क्तिसङ्ख्या दत्तांशभागस्य ट्याब् इत्यस्य मूल्यात् गण्यते"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:990
+#: src/frontend/datasources/ImportFileWidget.cpp:991
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr "File Data Source इति चिनोतु"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1020
+#: src/frontend/datasources/ImportFileWidget.cpp:1021
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr "DBC सञ्चिकां चिनोतु"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1020
+#: src/frontend/datasources/ImportFileWidget.cpp:1021
 #, kde-format
 msgid "DBC file (*.dbc)"
 msgstr "DBC सञ्चिका (*.dbc)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1106
+#: src/frontend/datasources/ImportFileWidget.cpp:1108
 #, kde-format
 msgid ""
 "Origin Project files need to be opened with \"Import -> Origin Project\"!"
@@ -11439,7 +11439,7 @@ msgstr ""
 "Origin Project सञ्चिकाः \"Import -> Origin Project\" इत्यनेन उद्घाटयितुं आवश्यकाः "
 "सन्ति!"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1112
+#: src/frontend/datasources/ImportFileWidget.cpp:1111
 #, kde-format
 msgid ""
 "LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"
@@ -11448,14 +11448,14 @@ msgstr ""
 "सन्ति!"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/frontend/datasources/ImportFileWidget.cpp:1240
+#: src/frontend/datasources/ImportFileWidget.cpp:1259
 #: src/frontend/ui/datasources/importfilewidget.ui:416
 #, kde-format
 msgid "Data Format"
 msgstr "दत्तांश प्रारूप"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/frontend/datasources/ImportFileWidget.cpp:1241
+#: src/frontend/datasources/ImportFileWidget.cpp:1260
 #: src/frontend/ui/datasources/importfilewidget.ui:470
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:158
 #, kde-format
@@ -11463,127 +11463,127 @@ msgid "Preview"
 msgstr "पूर्वावलोकनम्"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/frontend/datasources/ImportFileWidget.cpp:1243
+#: src/frontend/datasources/ImportFileWidget.cpp:1262
 #: src/frontend/ui/datasources/importfilewidget.ui:582
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
 msgstr "पठनीयः दत्तांशभागः"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1286
+#: src/frontend/datasources/ImportFileWidget.cpp:1305
 #, kde-format
 msgid "Data format && preview"
 msgstr "डेटा प्रारूप && पूर्वावलोकन"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1333
+#: src/frontend/datasources/ImportFileWidget.cpp:1352
 #: src/frontend/SettingsGeneralPage.cpp:258
 #, kde-format
 msgid "Automatic"
 msgstr "स्वतः"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1586
+#: src/frontend/datasources/ImportFileWidget.cpp:1605
 #, kde-format
 msgid "file command not found"
 msgstr "file आदेशः न प्राप्तः"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1597
+#: src/frontend/datasources/ImportFileWidget.cpp:1616
 #, kde-format
 msgid "cannot open"
 msgstr "उद्घाटयितुं न शक्नोति"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1602
+#: src/frontend/datasources/ImportFileWidget.cpp:1621
 #, kde-format
 msgid "<b>File type:</b> %1"
 msgstr "<b>सञ्चिकाप्रकारः</b> %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1607
+#: src/frontend/datasources/ImportFileWidget.cpp:1626
 #, kde-format
 msgid "General:"
 msgstr "सामान्य:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1609
-#: src/frontend/datasources/ImportFileWidget.cpp:1610
-#: src/frontend/datasources/ImportFileWidget.cpp:1611
+#: src/frontend/datasources/ImportFileWidget.cpp:1628
+#: src/frontend/datasources/ImportFileWidget.cpp:1629
+#: src/frontend/datasources/ImportFileWidget.cpp:1630
 #, kde-format
 msgid "yes"
 msgstr "आम्‌"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1609
-#: src/frontend/datasources/ImportFileWidget.cpp:1610
-#: src/frontend/datasources/ImportFileWidget.cpp:1611
+#: src/frontend/datasources/ImportFileWidget.cpp:1628
+#: src/frontend/datasources/ImportFileWidget.cpp:1629
+#: src/frontend/datasources/ImportFileWidget.cpp:1630
 #, kde-format
 msgid "no"
 msgstr "नहि"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1609
+#: src/frontend/datasources/ImportFileWidget.cpp:1628
 #, kde-format
 msgid "Readable: %1"
 msgstr "पठनीयः %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1610
+#: src/frontend/datasources/ImportFileWidget.cpp:1629
 #, kde-format
 msgid "Writable: %1"
 msgstr "लेखनीयः %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1611
+#: src/frontend/datasources/ImportFileWidget.cpp:1630
 #, kde-format
 msgid "Executable: %1"
 msgstr "कार्यान्वयनीयम् : %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1613
+#: src/frontend/datasources/ImportFileWidget.cpp:1632
 #, kde-format
 msgid "Birth time: %1"
 msgstr "जन्मकालः %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1614
+#: src/frontend/datasources/ImportFileWidget.cpp:1633
 #, kde-format
 msgid "Last metadata changed: %1"
 msgstr "अन्तिमः मेटाडाटा परिवर्तितः: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1615
+#: src/frontend/datasources/ImportFileWidget.cpp:1634
 #, kde-format
 msgid "Last modified: %1"
 msgstr "अन्तिम परिवर्तनं कृतम्: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1616
+#: src/frontend/datasources/ImportFileWidget.cpp:1635
 #, kde-format
 msgid "Last read: %1"
 msgstr "अन्तिमपठनं: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1617
+#: src/frontend/datasources/ImportFileWidget.cpp:1636
 #, kde-format
 msgid "Owner: %1"
 msgstr "स्वामी : %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1618
+#: src/frontend/datasources/ImportFileWidget.cpp:1637
 #, kde-format
 msgid "Group: %1"
 msgstr "समूहः %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1619
+#: src/frontend/datasources/ImportFileWidget.cpp:1638
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
 msgstr[0] "%1 cByte"
 msgstr[1] "%1 cBytes"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1622
+#: src/frontend/datasources/ImportFileWidget.cpp:1641
 #, kde-format
 msgid "Summary:"
 msgstr "संक्षेपः:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1645
-#: src/frontend/datasources/ImportFileWidget.cpp:1650
+#: src/frontend/datasources/ImportFileWidget.cpp:1664
+#: src/frontend/datasources/ImportFileWidget.cpp:1669
 #, kde-format
 msgid "Content:"
 msgstr "विषयः:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1681
+#: src/frontend/datasources/ImportFileWidget.cpp:1700
 #, kde-format
 msgid "Could not open file %1 for reading."
 msgstr "पठनार्थं %1 सञ्चिकां उद्घाटयितुं न शक्तम् ।"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1765
+#: src/frontend/datasources/ImportFileWidget.cpp:1784
 #, kde-format
 msgid ""
 "Invalid number rows. Please check 'End Row' and 'Start Row'. 'End Row' must "
@@ -11592,98 +11592,104 @@ msgstr ""
 "अमान्य संख्यापङ्क्तयः। कृपया 'End Row' तथा 'Start Row' इति चिनोतु । 'End Row' "
 "'Start Row' अथवा -1 इत्यस्मात् बृहत्तरं भवितुमर्हति"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1776
+#: src/frontend/datasources/ImportFileWidget.cpp:1795
 #, kde-format
 msgid "Preview: Initialization failed: %1"
 msgstr "पूर्वावलोकनम्: आरम्भः विफलः: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1801
+#: src/frontend/datasources/ImportFileWidget.cpp:1820
 #, kde-format
 msgid "Preview: Failed to connect to local socket %1 - %2"
 msgstr "पूर्वावलोकनम्: स्थानीयसॉकेट् %1 - %2 इत्यनेन सह संयोजितुं असफलम्"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1816
+#: src/frontend/datasources/ImportFileWidget.cpp:1835
 #, kde-format
 msgid "Preview: Failed to connect to TCP socket - %1"
 msgstr "पूर्वावलोकनम्: TCP सॉकेट् - %1 - मध्ये संयोजितुं असफलम्"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1861
+#: src/frontend/datasources/ImportFileWidget.cpp:1880
 #, kde-format
 msgid "Parse Error: %1"
 msgstr "विश्लेषणदोषः %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1863
+#: src/frontend/datasources/ImportFileWidget.cpp:1882
 #, kde-format
 msgid "ERROR: not ready for read after 2 sec"
 msgstr "त्रुटिः : २ सेकण्डस्य अनन्तरं पठनार्थं सज्जः नास्ति"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1867
+#: src/frontend/datasources/ImportFileWidget.cpp:1886
 #, kde-format
 msgid "ERROR: failed to open serial port. error: %1"
 msgstr "त्रुटिः: क्रमिक-पोर्ट् उद्घाटयितुं असफलम्। त्रुटिः %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1886
+#: src/frontend/datasources/ImportFileWidget.cpp:1905
 #, kde-format
 msgid "No data arrived yet for the selected topic"
 msgstr "चयनितविषयस्य कृते अद्यापि कोऽपि दत्तांशः न आगतः"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2152
+#: src/frontend/datasources/ImportFileWidget.cpp:2171
 #, kde-format
 msgid "Not a HDF5 file: %1"
 msgstr "HDF5 सञ्चिका नास्ति: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2616
+#: src/frontend/datasources/ImportFileWidget.cpp:2229
+#, fuzzy, kde-format
+#| msgid "Reading from file %1 failed."
+msgid "Parsing ODS file %1 failed."
+msgstr "%1 सञ्चिकातः पठनं विफलम् ।"
+
+#: src/frontend/datasources/ImportFileWidget.cpp:2641
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
 msgstr "सर्वेषां उपलब्धविषयाणां सदस्यतां ग्रहीतुं न शक्तवान्।"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2624
+#: src/frontend/datasources/ImportFileWidget.cpp:2649
 #, kde-format
 msgid "Failed to connect to '%1'. Error %2."
 msgstr "'%1' इत्यनेन सह संयोजितुं असफलम् । त्रुटिः %2."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2646
+#: src/frontend/datasources/ImportFileWidget.cpp:2671
 #, kde-format
 msgid "Disconnected from '%1'."
 msgstr "'%1' तः विच्छिन्नम् ।"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2712
+#: src/frontend/datasources/ImportFileWidget.cpp:2737
 #, kde-format
 msgid "Available (%1)"
 msgstr "उपलब्धम् (%1) ."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2816
+#: src/frontend/datasources/ImportFileWidget.cpp:2841
 #, kde-format
 msgid "Wrong username or password"
 msgstr "गलत उपयोक्तृनाम वा गुप्तशब्दः वा"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2819
+#: src/frontend/datasources/ImportFileWidget.cpp:2844
 #, kde-format
 msgid "The client ID wasn't accepted"
 msgstr "क्लायन्ट्-ID स्वीकृतं नासीत्"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2823
+#: src/frontend/datasources/ImportFileWidget.cpp:2848
 #, kde-format
 msgid "The broker %1 couldn't be reached."
 msgstr "दलाल %1 प्राप्तुं न शक्यते स्म।"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2826
+#: src/frontend/datasources/ImportFileWidget.cpp:2851
 #, kde-format
 msgid "The client is not authorized to connect."
 msgstr "ग्राहकः संयोजितुं अधिकृतः नास्ति ।"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2829
+#: src/frontend/datasources/ImportFileWidget.cpp:2854
 #, kde-format
 msgid "An unknown error occurred."
 msgstr "अज्ञातदोषः अभवत् ।"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2835
-#: src/frontend/datasources/ImportFileWidget.cpp:2838
+#: src/frontend/datasources/ImportFileWidget.cpp:2860
+#: src/frontend/datasources/ImportFileWidget.cpp:2863
 #, kde-format
 msgid "An error occurred."
 msgstr "एकः दोषः अभवत् ।"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2852
+#: src/frontend/datasources/ImportFileWidget.cpp:2877
 #, kde-format
 msgid "Connecting to '%1:%2' timed out."
 msgstr "'%1:%2' इत्यनेन सह संयोजनस्य समयः समाप्तः ।"
