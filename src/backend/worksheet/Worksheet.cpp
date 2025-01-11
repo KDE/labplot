@@ -204,10 +204,6 @@ bool Worksheet::exportToFile(const QString& path, const ExportFormat format, con
 
 bool Worksheet::exportView() const {
 #ifndef SDK
-	setPrinting(true);
-	// Retransform all elements with print enabled
-	for (auto* child : children<WorksheetElement>())
-		child->retransform();
 	auto* dlg = new ExportWorksheetDialog(m_view);
 	dlg->setProjectFileName(const_cast<Worksheet*>(this)->project()->fileName());
 	dlg->setFileName(name());
@@ -224,7 +220,6 @@ bool Worksheet::exportView() const {
 		RESET_CURSOR;
 	}
 	delete dlg;
-	setPrinting(false);
 	return ret;
 #else
 	return true;
@@ -836,6 +831,11 @@ void Worksheet::setPrinting(bool on) const {
 	const auto& elements = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 	for (auto* elem : elements)
 		elem->setPrinting(on);
+
+	// disable the line optimization in XYCurve to get a better result, re-enable it after printing
+	const auto& curves = children<XYCurve>((AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden));
+	for (auto* child : curves)
+		child->enableLineOptimization(!on);
 }
 
 STD_SETTER_CMD_IMPL_S(Worksheet, SetTheme, QString, theme)

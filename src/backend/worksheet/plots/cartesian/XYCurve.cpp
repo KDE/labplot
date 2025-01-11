@@ -745,6 +745,20 @@ void XYCurve::recalc() {
 	d->recalc();
 }
 
+/*!
+ * if \c enable is set to true, enables the line optimization to reduce the total number of lines to be drawn,
+ * disables it otherwise. On default, the line optimization is activated.
+ * Used when exporting/printing the parent worksheet to disable the line optimization to get better result.
+ */
+void XYCurve::enableLineOptimization(bool enable) {
+	Q_D(XYCurve);
+	if (d->line->style() != Qt::NoPen) {
+		d->suppressRecalc = true;
+		d->updateLines(enable);
+		d->suppressRecalc = false;
+	}
+}
+
 void XYCurve::updateValues() {
 	Q_D(XYCurve);
 	d->updateValues();
@@ -961,7 +975,6 @@ void XYCurvePrivate::calculateScenePoints() {
   triggers the update of lines, drop lines, symbols etc.
 */
 void XYCurvePrivate::retransform() {
-	const bool performanceOptimization = !q->isPrinting();
 	const bool suppressed = !isVisible() || q->isLoading() || suppressRetransform || !plot();
 	DEBUG("\n" << Q_FUNC_INFO << ", name = " << STDSTRING(name()) << ", suppressRetransform = " << suppressRetransform);
 	trackRetransformCalled(suppressed);
@@ -991,7 +1004,7 @@ void XYCurvePrivate::retransform() {
 	}
 
 	suppressRecalc = true;
-	updateLines(performanceOptimization);
+	updateLines();
 	updateDropLines();
 	updateSymbols();
 	updateRug();
@@ -2803,9 +2816,8 @@ void XYCurvePrivate::draw(QPainter* painter) {
 			// would like to have one complete path for a curve not many paths
 			for (auto& line : m_lines)
 				painter->drawLine(line);
-		} else {
+		} else
 			painter->drawPath(linePath);
-		}
 	}
 
 	// draw drop lines
