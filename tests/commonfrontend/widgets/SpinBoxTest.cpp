@@ -1247,7 +1247,7 @@ void SpinBoxTest::thousandSeparatorScrolling2() {
 }
 
 void SpinBoxTest::thousandSeparatorScrollingSeparatorPosition() {
-	QSKIP("Undecided what to do");
+	QSKIP("Undecided what to do", QTest::SkipSingle);
 	NumberSpinBox sb;
 	sb.setLocale(QLocale(QLocale::German));
 	QCOMPARE(sb.locale().decimalPoint(), QLatin1Char(','));
