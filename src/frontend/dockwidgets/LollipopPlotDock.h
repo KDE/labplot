@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dock widget for the lollipop plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -29,7 +29,6 @@ public:
 	explicit LollipopPlotDock(QWidget*);
 	void setPlots(QList<LollipopPlot*>);
 	void updateLocale() override;
-	void retranslateUi() override;
 
 private:
 	Ui::LollipopPlotDock ui;

@@ -6,7 +6,7 @@
 	SPDX-FileCopyrightText: 2017 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2018-2019 Kovacs Ferencz <kferike98@gmail.com>
 	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2017-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2020 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -40,9 +40,6 @@ LiveDataDock::LiveDataDock(QWidget* parent)
 
 	ui.bUpdateNow->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
 
-	retranslateUi();
-
-	//SLOTs
 	connect(ui.bPausePlayReading, &QPushButton::clicked, this, &LiveDataDock::pauseContinueReading);
 	connect(ui.bUpdateNow, &QPushButton::clicked, this, &LiveDataDock::updateNow);
 	connect(ui.sbUpdateInterval, QOverload<int>::of(&QSpinBox::valueChanged), this, &LiveDataDock::updateIntervalChanged);
@@ -60,7 +57,12 @@ LiveDataDock::LiveDataDock(QWidget* parent)
 	ui.swSubscriptions->addWidget(m_subscriptionWidget);
 	ui.swSubscriptions->setCurrentWidget(m_subscriptionWidget);
 
+	ui.bLWT->setToolTip(i18n("Manage MQTT connection's will settings"));
 	ui.bLWT->setIcon(ui.bLWT->style()->standardIcon(QStyle::SP_FileDialogDetailedView));
+
+	QString info = i18n("Specify the 'Last Will and Testament' message (LWT). At least one topic has to be subscribed.");
+	ui.lLWT->setToolTip(info);
+	ui.bLWT->setToolTip(info);
 	ui.bLWT->setEnabled(false);
 	ui.bLWT->setIcon(ui.bLWT->style()->standardIcon(QStyle::SP_FileDialogDetailedView));
 #endif
@@ -76,16 +78,6 @@ LiveDataDock::~LiveDataDock() {
 #else
 LiveDataDock::~LiveDataDock() = default;
 #endif
-
-void LiveDataDock::retranslateUi() {
-#ifdef HAVE_MQTT
-	ui.bLWT->setToolTip(i18n("Manage MQTT connection's will settings"));
-
-	QString info = i18n("Specify the 'Last Will and Testament' message (LWT). At least one topic has to be subscribed.");
-	ui.lLWT->setToolTip(info);
-	ui.bLWT->setToolTip(info);
-#endif
-}
 
 #ifdef HAVE_MQTT
 /*!

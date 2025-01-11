@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for QQ-plot properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -28,7 +28,6 @@ public:
 
 	void setPlots(QList<QQPlot*>);
 	void updateLocale() override;
-	void retranslateUi() override;
 
 private:
 	TreeViewComboBox* cbDataColumn;
@@ -47,7 +46,10 @@ protected:
 	virtual void setModel();
 
 private Q_SLOTS:
+	void retranslateUi();
+
 	// SLOTs for changes triggered in QQPlotDock
+
 	// General-Tab
 	void dataColumnChanged(const QModelIndex&);
 	void distributionChanged(int);

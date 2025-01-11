@@ -4,7 +4,7 @@
 	Description          : widget for project properties
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2012-2013 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
-	SPDX-FileCopyrightText: 2013-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -25,7 +25,15 @@ ProjectDock::ProjectDock(QWidget* parent)
 	ui.setupUi(this);
 	setBaseWidgets(ui.leName, ui.teComment);
 
-	retranslateUi();
+	QString msg = i18n("If checked, the state of the default application docks is saved in the project file and restored on project load.");
+	ui.lSaveDockStates->setToolTip(msg);
+	ui.chkSaveDockStates->setToolTip(msg);
+
+	msg = i18n(
+		"If checked, the results of the calculations in the analysis curves will be saved in the project file.\n"
+		"Uncheck this option to reduce the size of the project file at costs of the longer project load times.");
+	ui.lSaveCalculations->setToolTip(msg);
+	ui.chkSaveCalculations->setToolTip(msg);
 
 	// SLOTS
 	connect(ui.leAuthor, &QLineEdit::textChanged, this, &ProjectDock::authorChanged);
@@ -63,18 +71,6 @@ void ProjectDock::setProject(Project* project) {
 	connect(m_project, &Project::authorChanged, this, &ProjectDock::projectAuthorChanged);
 	connect(m_project, &Project::saveDefaultDockWidgetStateChanged, this, &ProjectDock::projectSaveDockStatesChanged);
 	connect(m_project, &Project::saveCalculationsChanged, this, &ProjectDock::projectSaveCalculationsChanged);
-}
-
-void ProjectDock::retranslateUi() {
-	QString msg = i18n("If checked, the state of the default application docks is saved in the project file and restored on project load.");
-	ui.lSaveDockStates->setToolTip(msg);
-	ui.chkSaveDockStates->setToolTip(msg);
-
-	msg = i18n(
-		"If checked, the results of the calculations in the analysis curves will be saved in the project file.\n"
-		"Uncheck this option to reduce the size of the project file at costs of the longer project load times.");
-	ui.lSaveCalculations->setToolTip(msg);
-	ui.chkSaveCalculations->setToolTip(msg);
 }
 
 //************************************************************

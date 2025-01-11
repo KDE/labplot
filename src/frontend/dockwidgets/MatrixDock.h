@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for matrix properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2015-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -24,7 +24,6 @@ class MatrixDock : public BaseDock {
 public:
 	explicit MatrixDock(QWidget*);
 	void setMatrices(QList<Matrix*>);
-	void retranslateUi() override;
 
 private:
 	Ui::MatrixDock ui;

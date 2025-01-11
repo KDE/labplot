@@ -157,9 +157,6 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 	connect(m_element, &InfoElement::curveRemoved, this, &InfoElementDock::elementCurveRemoved);
 }
 
-void InfoElementDock::retranslateUi() {
-}
-
 //*************************************************************
 //******* SLOTs for changes triggered in InfoElementDock ******
 //*************************************************************

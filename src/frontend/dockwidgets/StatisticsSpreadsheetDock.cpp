@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for statistics spreadsheet properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -130,9 +130,6 @@ void StatisticsSpreadsheetDock::selectNone() {
 		spreadsheet->setMetrics(metrics);
 
 	load();
-}
-
-void StatisticsSpreadsheetDock::retranslateUi() {
 }
 
 //*************************************************************

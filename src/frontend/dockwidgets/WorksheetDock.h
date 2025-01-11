@@ -4,7 +4,7 @@
 	Description          : widget for worksheet properties
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2008 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
-	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2022 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -29,7 +29,6 @@ public:
 	void setWorksheets(QList<Worksheet*>);
 	void updateLocale() override;
 	void updateUnits() override;
-	void retranslateUi() override;
 
 	enum class SizeType {
 		ViewSize = 0,
@@ -50,6 +49,8 @@ private:
 	void loadConfig(KConfig&);
 
 private Q_SLOTS:
+	void retranslateUi();
+
 	// SLOTs for changes triggered in WorksheetDock
 	//"General"-tab
 	void scaleContentChanged(bool);

@@ -4,7 +4,7 @@
 	Description          : widget for Notebook properties
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
-	SPDX-FileCopyrightText: 2015-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -23,7 +23,6 @@ class NotebookDock : public BaseDock {
 public:
 	explicit NotebookDock(QWidget*);
 	void setNotebooks(QList<Notebook*>);
-	void retranslateUi() override;
 
 private:
 	Ui::NotebookDock ui;

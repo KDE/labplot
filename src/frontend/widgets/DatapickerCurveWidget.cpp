@@ -4,7 +4,7 @@
 	Description          : widget for datapicker properties
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-	SPDX-FileCopyrightText: 2015-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2019 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -17,10 +17,30 @@
 
 #include <KLocalizedString>
 
+#include <QPainter>
+
+#include <cmath>
+
 DatapickerCurveWidget::DatapickerCurveWidget(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
 	setBaseWidgets(ui.leName, ui.teComment);
+
+	ui.cbXErrorType->addItem(i18n("No Error"));
+	ui.cbXErrorType->addItem(i18n("Symmetric"));
+	ui.cbXErrorType->addItem(i18n("Asymmetric"));
+
+	ui.cbYErrorType->addItem(i18n("No Error"));
+	ui.cbYErrorType->addItem(i18n("Symmetric"));
+	ui.cbYErrorType->addItem(i18n("Asymmetric"));
+
+	QString info = i18n(
+		"Specify whether the data points have errors and of which type.\n"
+		"Note, changing this type is not possible once at least one point was read.");
+	ui.lXErrorType->setToolTip(info);
+	ui.cbXErrorType->setToolTip(info);
+	ui.lYErrorType->setToolTip(info);
+	ui.cbYErrorType->setToolTip(info);
 
 	//"Symbol"-tab
 	auto* hboxLayout = new QHBoxLayout(ui.tabSymbol);
@@ -30,9 +50,7 @@ DatapickerCurveWidget::DatapickerCurveWidget(QWidget* parent)
 	hboxLayout->setSpacing(2);
 
 	GuiTools::updateBrushStyles(ui.cbErrorBarFillingStyle, Qt::black);
-
-	updateLocale();
-	retranslateUi();
+	DatapickerCurveWidget::updateLocale();
 
 	// General
 	connect(ui.cbXErrorType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DatapickerCurveWidget::xErrorTypeChanged);
@@ -85,28 +103,6 @@ void DatapickerCurveWidget::hideErrorBarWidgets(bool on) {
 
 void DatapickerCurveWidget::updateLocale() {
 	ui.sbErrorBarSize->setLocale(QLocale());
-}
-
-void DatapickerCurveWidget::retranslateUi() {
-	CONDITIONAL_LOCK_RETURN;
-
-	ui.cbXErrorType->clear();
-	ui.cbXErrorType->addItem(i18n("No Error"));
-	ui.cbXErrorType->addItem(i18n("Symmetric"));
-	ui.cbXErrorType->addItem(i18n("Asymmetric"));
-
-	ui.cbYErrorType->clear();
-	ui.cbYErrorType->addItem(i18n("No Error"));
-	ui.cbYErrorType->addItem(i18n("Symmetric"));
-	ui.cbYErrorType->addItem(i18n("Asymmetric"));
-
-	QString info = i18n(
-		"Specify whether the data points have errors and of which type.\n"
-		"Note, changing this type is not possible once at least one point was read.");
-	ui.lXErrorType->setToolTip(info);
-	ui.cbXErrorType->setToolTip(info);
-	ui.lYErrorType->setToolTip(info);
-	ui.cbYErrorType->setToolTip(info);
 }
 
 //*************************************************************

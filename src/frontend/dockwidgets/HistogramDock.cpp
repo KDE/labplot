@@ -97,9 +97,6 @@ HistogramDock::HistogramDock(QWidget* parent)
 		layout->setVerticalSpacing(2);
 	}
 
-	updateLocale();
-	retranslateUi();
-
 	// Slots
 	// General
 	connect(cbDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &HistogramDock::dataColumnChanged);
@@ -133,9 +130,40 @@ HistogramDock::HistogramDock(QWidget* parent)
 	connect(templateHandler, &TemplateHandler::info, this, &HistogramDock::info);
 
 	ui.verticalLayout->addWidget(frame);
+
+	updateLocale();
+	retranslateUi();
+	init();
 }
 
 HistogramDock::~HistogramDock() = default;
+
+void HistogramDock::init() {
+	// General
+	// bins option
+	ui.cbBinningMethod->addItem(i18n("By Number"));
+	ui.cbBinningMethod->addItem(i18n("By Width"));
+	ui.cbBinningMethod->addItem(i18n("Square-root"));
+	ui.cbBinningMethod->addItem(i18n("Rice"));
+	ui.cbBinningMethod->addItem(i18n("Sturges"));
+	ui.cbBinningMethod->addItem(i18n("Doane"));
+	ui.cbBinningMethod->addItem(i18n("Scott"));
+
+	// histogram type
+	ui.cbType->addItem(i18n("Ordinary Histogram"));
+	ui.cbType->addItem(i18n("Cumulative Histogram"));
+	// 	ui.cbType->addItem(i18n("AvgShifted Histogram"));
+
+	// Orientation
+	ui.cbOrientation->addItem(i18n("Vertical"));
+	ui.cbOrientation->addItem(i18n("Horizontal"));
+
+	// Normalization
+	ui.cbNormalization->addItem(i18n("Count"));
+	ui.cbNormalization->addItem(i18n("Probability"));
+	ui.cbNormalization->addItem(i18n("Count Density"));
+	ui.cbNormalization->addItem(i18n("Probability Density"));
+}
 
 void HistogramDock::setModel() {
 	auto* model = aspectModel();
@@ -244,38 +272,14 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 }
 
 void HistogramDock::retranslateUi() {
-	CONDITIONAL_LOCK_RETURN;
+	// TODO:
+	// 	ui.lName->setText(i18n("Name"));
+	// 	ui.lComment->setText(i18n("Comment"));
+	// 	ui.chkVisible->setText(i18n("Visible"));
+	// 	ui.lXColumn->setText(i18n("x-data"));
+	// 	ui.lYColumn->setText(i18n("y-data"));
 
-	// General
-	// bins option
-	ui.cbBinningMethod->clear();
-	ui.cbBinningMethod->addItem(i18n("By Number"));
-	ui.cbBinningMethod->addItem(i18n("By Width"));
-	ui.cbBinningMethod->addItem(i18n("Square-root"));
-	ui.cbBinningMethod->addItem(i18n("Rice"));
-	ui.cbBinningMethod->addItem(i18n("Sturges"));
-	ui.cbBinningMethod->addItem(i18n("Doane"));
-	ui.cbBinningMethod->addItem(i18n("Scott"));
-
-	// histogram type
-	ui.cbType->clear();
-	ui.cbType->addItem(i18n("Ordinary Histogram"));
-	ui.cbType->addItem(i18n("Cumulative Histogram"));
-	// 	ui.cbType->addItem(i18n("AvgShifted Histogram"));
-
-	// Orientation
-	ui.cbOrientation->clear();
-	ui.cbOrientation->addItem(i18n("Vertical"));
-	ui.cbOrientation->addItem(i18n("Horizontal"));
-
-	// Normalization
-	ui.cbNormalization->clear();
-	ui.cbNormalization->addItem(i18n("Count"));
-	ui.cbNormalization->addItem(i18n("Probability"));
-	ui.cbNormalization->addItem(i18n("Count Density"));
-	ui.cbNormalization->addItem(i18n("Probability Density"));
-
-	// TODO lineWidget
+	// TODO updatePenStyles, updateBrushStyles for all comboboxes
 }
 
 void HistogramDock::updateLocale() {

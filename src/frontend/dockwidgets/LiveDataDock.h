@@ -5,7 +5,6 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2017 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2018-2019 Kovacs Ferencz <kferike98@gmail.com>
-	SPDX-FileCopyrightText: 2017-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -27,9 +26,8 @@ class LiveDataDock : public BaseDock {
 
 public:
 	explicit LiveDataDock(QWidget* parent = nullptr);
-	~LiveDataDock() override;
 	void setLiveDataSource(LiveDataSource* const source);
-	void retranslateUi() override;
+	~LiveDataDock() override;
 
 private:
 	Ui::LiveDataDock ui;

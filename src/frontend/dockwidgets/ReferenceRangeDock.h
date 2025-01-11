@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dock widget for the reference range on the plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -25,7 +25,6 @@ public:
 	explicit ReferenceRangeDock(QWidget*);
 	void setReferenceRanges(QList<ReferenceRange*>);
 	void updateLocale() override;
-	void retranslateUi() override;
 
 private:
 	Ui::ReferenceRangeDock ui;

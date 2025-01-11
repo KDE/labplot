@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dock widget for the lolliplot plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -48,12 +48,20 @@ LollipopPlotDock::LollipopPlotDock(QWidget* parent)
 	m_gridLayout->setVerticalSpacing(2);
 	ui.frameDataColumns->setLayout(m_gridLayout);
 
+	ui.cbOrientation->addItem(i18n("Horizontal"));
+	ui.cbOrientation->addItem(i18n("Vertical"));
+
 	// Tab "Line"
+	QString msg = i18n("Select the data column for which the properties should be shown and edited");
+	ui.lNumberLine->setToolTip(msg);
+	ui.cbNumberLine->setToolTip(msg);
 	lineWidget = new LineWidget(ui.tabLine);
 	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabLine->layout());
 	gridLayout->addWidget(lineWidget, 2, 0, 1, 3);
 
 	// Tab "Symbol"
+	ui.lNumberSymbol->setToolTip(msg);
+	ui.cbNumberSymbol->setToolTip(msg);
 	symbolWidget = new SymbolWidget(ui.tabSymbol);
 	gridLayout = qobject_cast<QGridLayout*>(ui.tabSymbol->layout());
 	gridLayout->addWidget(symbolWidget, 2, 0, 1, 3);
@@ -75,9 +83,6 @@ LollipopPlotDock::LollipopPlotDock(QWidget* parent)
 		layout->setHorizontalSpacing(2);
 		layout->setVerticalSpacing(2);
 	}
-
-	updateLocale();
-	retranslateUi();
 
 	// SLOTS
 	// Tab "General"
@@ -137,6 +142,9 @@ void LollipopPlotDock::setPlots(QList<LollipopPlot*> list) {
 
 	updatePlotRangeList();
 
+	// set the current locale
+	updateLocale();
+
 	// SIGNALs/SLOTs
 	// general
 	connect(m_plot, &LollipopPlot::xColumnChanged, this, &LollipopPlotDock::plotXColumnChanged);
@@ -150,6 +158,13 @@ void LollipopPlotDock::setModel() {
 	model->setSelectableAspects({AspectType::Column});
 	cbXColumn->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
 	cbXColumn->setModel(model);
+}
+
+/*
+ * updates the locale in the widgets. called when the application settins are changed.
+ */
+void LollipopPlotDock::updateLocale() {
+	lineWidget->updateLocale();
 }
 
 void LollipopPlotDock::loadDataColumns() {
@@ -229,27 +244,6 @@ void LollipopPlotDock::setDataColumns() const {
 	}
 
 	m_plot->setDataColumns(columns);
-}
-
-/*
- * updates the locale in the widgets. called when the application settins are changed.
- */
-void LollipopPlotDock::updateLocale() {
-	lineWidget->updateLocale();
-}
-
-void LollipopPlotDock::retranslateUi() {
-	CONDITIONAL_LOCK_RETURN;
-
-	ui.cbOrientation->clear();
-	ui.cbOrientation->addItem(i18n("Horizontal"));
-	ui.cbOrientation->addItem(i18n("Vertical"));
-
-	QString msg = i18n("Select the data column for which the properties should be shown and edited");
-	ui.lNumberLine->setToolTip(msg);
-	ui.cbNumberLine->setToolTip(msg);
-	ui.lNumberSymbol->setToolTip(msg);
-	ui.cbNumberSymbol->setToolTip(msg);
 }
 
 //**********************************************************

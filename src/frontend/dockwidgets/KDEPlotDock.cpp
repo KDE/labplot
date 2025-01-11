@@ -57,9 +57,6 @@ KDEPlotDock::KDEPlotDock(QWidget* parent)
 		layout->setVerticalSpacing(2);
 	}
 
-	updateLocale();
-	retranslateUi();
-
 	// Slots
 	// General
 	connect(cbDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &KDEPlotDock::dataColumnChanged);
@@ -85,6 +82,9 @@ KDEPlotDock::KDEPlotDock(QWidget* parent)
 	connect(templateHandler, &TemplateHandler::info, this, &KDEPlotDock::info);
 
 	ui.verticalLayout->addWidget(frame);
+
+	updateLocale();
+	retranslateUi();
 }
 
 KDEPlotDock::~KDEPlotDock() = default;
@@ -153,8 +153,6 @@ void KDEPlotDock::setPlots(QList<KDEPlot*> list) {
 }
 
 void KDEPlotDock::retranslateUi() {
-	CONDITIONAL_LOCK_RETURN;
-
 	// TODO unify with nsl_smooth_weight_type_name in nsl_smooth.c.
 	ui.cbKernelType->clear();
 	ui.cbKernelType->addItem(i18n("Gauss"), static_cast<int>(nsl_kernel_gauss));

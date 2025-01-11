@@ -3,7 +3,7 @@
 	Project          : LabPlot
 	Description      : widget for curve properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -36,7 +36,6 @@ public:
 	void setCurves(QList<XYCurve*>);
 	virtual void setupGeneral();
 	void updateLocale() override;
-	void retranslateUi() override;
 
 private:
 	virtual void initGeneralTab();
@@ -69,6 +68,7 @@ protected:
 
 private Q_SLOTS:
 	void init();
+	void retranslateUi();
 
 	// SLOTs for changes triggered in XYCurveDock
 	void xColumnChanged(const QModelIndex&);

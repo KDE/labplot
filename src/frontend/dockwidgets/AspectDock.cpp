@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for aspect properties showing name and comments only
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -43,9 +43,6 @@ void AspectDock::setAspects(QList<AbstractAspect*> list) {
 	}
 
 	// slots
-}
-
-void AspectDock::retranslateUi() {
 }
 
 //*************************************************************

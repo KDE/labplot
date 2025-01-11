@@ -4,7 +4,7 @@
 	Description          : Dock widget for InfoElemnt
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2020 Martin Marmsoler <martin.marmsoler@gmail.com>
-	SPDX-FileCopyrightText: 2020-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -28,7 +28,6 @@ public:
 	explicit InfoElementDock(QWidget* parent = nullptr);
 	~InfoElementDock();
 	void setInfoElements(QList<InfoElement*>);
-	void retranslateUi() override;
 
 public Q_SLOTS:
 	void elementCurveRemoved(const QString&);
