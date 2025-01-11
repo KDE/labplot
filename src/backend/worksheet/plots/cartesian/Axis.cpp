@@ -1523,7 +1523,7 @@ void AxisPrivate::retransformTicks() {
 			start += majorTickStartOffset;
 		else {
 			auto startDt = QDateTime::fromMSecsSinceEpoch(start, QTimeZone::UTC);
-			startDt.setTimeSpec(Qt::TimeSpec::UTC);
+			startDt.setTimeZone(QTimeZone::utc());
 			const auto& dt = DateTime::dateTime(majorTickStartOffset);
 			startDt = startDt.addYears(dt.year);
 			startDt = startDt.addMonths(dt.month);
