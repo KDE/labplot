@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-10 09:25+0000\n"
+"POT-Creation-Date: 2025-01-11 00:37+0000\n"
 "PO-Revision-Date: 2024-11-23 12:07+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -411,7 +411,7 @@ msgid "incompatible filter type"
 msgstr "incompatible filter type"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:708
+#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:706
 #: src/backend/datasources/MQTTClient.cpp:1366
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:272
@@ -481,7 +481,7 @@ msgid "%1   (no values)"
 msgstr "%1   (no values)"
 
 #: src/backend/core/AspectTreeModel.cpp:235
-#: src/frontend/datasources/ImportFileWidget.cpp:1619
+#: src/frontend/datasources/ImportFileWidget.cpp:1638
 #, kde-format
 msgid "Size: %1"
 msgstr "Size: %1"
@@ -704,32 +704,32 @@ msgstr "%1: save dock state changed"
 msgid "%1: save calculation changed"
 msgstr "%1: save calculation changed"
 
-#: src/backend/core/Project.cpp:552 src/backend/core/Project.cpp:582
+#: src/backend/core/Project.cpp:550 src/backend/core/Project.cpp:580
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "Sorry. Could not open file for reading."
 
-#: src/backend/core/Project.cpp:563 src/backend/core/Project.cpp:589
+#: src/backend/core/Project.cpp:561 src/backend/core/Project.cpp:587
 #, kde-format
 msgid "The project file is empty."
 msgstr "The project file is empty."
 
-#: src/backend/core/Project.cpp:563 src/backend/core/Project.cpp:589
+#: src/backend/core/Project.cpp:561 src/backend/core/Project.cpp:587
 #, kde-format
 msgid "Error opening project"
 msgstr "Error opening project"
 
-#: src/backend/core/Project.cpp:608
+#: src/backend/core/Project.cpp:606
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr "Unknown error when opening the project %1."
 
-#: src/backend/core/Project.cpp:609
+#: src/backend/core/Project.cpp:607
 #, kde-format
 msgid "Error when opening the project"
 msgstr "Error when opening the project"
 
-#: src/backend/core/Project.cpp:629
+#: src/backend/core/Project.cpp:627
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -748,43 +748,43 @@ msgstr ""
 "\n"
 "Do you want to continue?"
 
-#: src/backend/core/Project.cpp:635
+#: src/backend/core/Project.cpp:633
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr "Missing Support for CAS"
 
-#: src/backend/core/Project.cpp:665
+#: src/backend/core/Project.cpp:663
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr "Attribute 'version' is missing."
 
-#: src/backend/core/Project.cpp:715
+#: src/backend/core/Project.cpp:713
 #, kde-format
 msgid "no project element found"
 msgstr "no project element found"
 
-#: src/backend/core/Project.cpp:717
+#: src/backend/core/Project.cpp:715
 #, kde-format
 msgid "no valid XML document found"
 msgstr "no valid XML document found"
 
-#: src/backend/core/Project.cpp:766 src/backend/core/Project.cpp:772
-#: src/backend/core/Project.cpp:823
+#: src/backend/core/Project.cpp:764 src/backend/core/Project.cpp:770
+#: src/backend/core/Project.cpp:821
 #, kde-format
 msgid "Failed to open the file '%1'."
 msgstr "Failed to open the file '%1'."
 
-#: src/backend/core/Project.cpp:829
+#: src/backend/core/Project.cpp:827
 #, kde-format
 msgid "Failed to process the content of the file '%1'."
 msgstr "Failed to process the content of the file '%1'."
 
-#: src/backend/core/Project.cpp:832
+#: src/backend/core/Project.cpp:830
 #, kde-format
 msgid "Failed to open project"
 msgstr "Failed to open project"
 
-#: src/backend/core/Project.cpp:1296
+#: src/backend/core/Project.cpp:1294
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Invalid project modification time. Using current time."
@@ -1071,7 +1071,7 @@ msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:192
 #: src/backend/gsl/errors.h:20
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2068
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2063
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1220
 #, kde-format
 msgid "Success"
@@ -1589,7 +1589,7 @@ msgstr "h5dump not found."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:358
 #: src/backend/datasources/filters/NetCDFFilter.cpp:268
-#: src/frontend/datasources/ImportFileWidget.cpp:1594
+#: src/frontend/datasources/ImportFileWidget.cpp:1613
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr "Reading from file %1 failed."
@@ -2191,7 +2191,7 @@ msgstr "Key"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/datasources/filters/QJsonModel.cpp:133
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
 #: src/frontend/colormaps/ColorMapsWidget.cpp:195
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:145
 #: src/frontend/matrix/MatrixView.cpp:619
@@ -6687,8 +6687,8 @@ msgstr "Statistics (Distributions)"
 
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:501
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1871
-#: src/frontend/datasources/ImportFileWidget.cpp:1334
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1866
+#: src/frontend/datasources/ImportFileWidget.cpp:1353
 #: src/frontend/dockwidgets/AxisDock.cpp:234
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:170
 #: src/frontend/dockwidgets/WorksheetDock.cpp:276
@@ -8033,7 +8033,7 @@ msgstr "%1: width factor changed"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:300
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:162
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:330
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:335
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:109
 #, kde-format
 msgid "%1 - Data"
@@ -9535,48 +9535,48 @@ msgstr "%1: set values font"
 msgid "%1: set values color"
 msgstr "%1: set values colour"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:201
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:206
 #, kde-format
 msgid "%1: data source type changed"
 msgstr "%1: data source type changed"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:208
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:213
 #, kde-format
 msgid "%1: data source curve changed"
 msgstr "%1: data source curve changed"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:216
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:221
 #, kde-format
 msgid "%1: assign x-data"
 msgstr "%1: assign x-data"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:224
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:229
 #, kde-format
 msgid "%1: assign y-data"
 msgstr "%1: assign y-data"
 
-#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:232
+#: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:237
 #, kde-format
 msgid "%1: assign second y-data"
 msgstr "%1: assign second y-data"
 
-#: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:74
+#: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:69
 #, kde-format
 msgid "%1: set options and perform the convolution"
 msgstr "%1: set options and perform the convolution"
 
-#: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:163
-#: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:156
-#: src/backend/worksheet/plots/cartesian/XYDataReductionCurve.cpp:119
-#: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:116
-#: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:117
-#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:137
-#: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:142
+#: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:158
+#: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:151
+#: src/backend/worksheet/plots/cartesian/XYDataReductionCurve.cpp:114
+#: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:111
+#: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:112
+#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:132
+#: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:137
 #, kde-format
 msgid "Not enough data points available."
 msgstr "Not enough data points available."
 
-#: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:74
+#: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:69
 #, kde-format
 msgid "%1: set options and perform the correlation"
 msgstr "%1: set options and perform the correlation"
@@ -9636,12 +9636,12 @@ msgstr "x values must be monotonically increasing."
 msgid "Error: %1"
 msgstr "Error: %1"
 
-#: src/backend/worksheet/plots/cartesian/XYDataReductionCurve.cpp:71
+#: src/backend/worksheet/plots/cartesian/XYDataReductionCurve.cpp:66
 #, kde-format
 msgid "%1: set options and perform the data reduction"
 msgstr "%1: set options and perform the data reduction"
 
-#: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:70
+#: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:65
 #, kde-format
 msgid "%1: set options and perform the differentiation"
 msgstr "%1: set options and perform the differentiation"
@@ -9651,116 +9651,116 @@ msgstr "%1: set options and perform the differentiation"
 msgid "%1: set equation"
 msgstr "%1: set equation"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:931
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:926
 #, kde-format
 msgid "%1: data source histogram changed"
 msgstr "%1: data source histogram changed"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:943
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:938
 #, kde-format
 msgid "%1: assign x-error"
 msgstr "%1: assign x-error"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:958
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:953
 #, kde-format
 msgid "%1: assign y-error"
 msgstr "%1: assign y-error"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:974
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:969
 #, kde-format
 msgid "%1: set fit options and perform the fit"
 msgstr "%1: set fit options and perform the fit"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1823
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1818
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit Results"
 msgstr "Fit Results"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1847
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1842
 #, kde-format
 msgid "Nonlinear Fit to X/Y data"
 msgstr "Nonlinear Fit to X/Y data"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1853
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1848
 #, kde-format
 msgid "MODEL"
 msgstr "MODEL"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1857
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1852
 #, kde-format
 msgid "Degree"
 msgstr "Degree"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1862
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1857
 #, kde-format
 msgid "Peaks"
 msgstr "Peaks"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1881
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1876
 #, kde-format
 msgid "PARAMETERS"
 msgstr "PARAMETERS"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:145
 #, kde-format
 msgid "Uncertainty"
 msgstr "Uncertainty"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
 #, kde-format
 msgid "Uncertainty,%"
 msgstr "Uncertainty,%"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
 #, kde-format
 msgid "t Statistic"
 msgstr "t Statistic"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1886
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1881
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:146
 #, kde-format
 msgid "Lower"
 msgstr "Lower"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1886
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1881
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:146
 #, kde-format
 msgid "Upper"
 msgstr "Upper"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1902
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1897
 #, kde-format
 msgid "GOODNESS OF FIT"
 msgstr "GOODNESS OF FIT"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1904
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1899
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:968
 #, kde-format
 msgid "Sum of squared residuals"
 msgstr "Sum of squared residuals"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1905
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1900
 #, kde-format
 msgid "Residuals mean square"
 msgstr "Residuals mean square"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1906
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1901
 #, kde-format
 msgid "Root mean square deviation"
 msgstr "Root mean square deviation"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1907
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1902
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:998
 #, kde-format
 msgid "Coefficient of determination"
 msgstr "Coefficient of determination"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1908
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1903
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1008
 #, kde-format
 msgid "Adj. coefficient of determination"
@@ -9768,7 +9768,7 @@ msgstr "Adj. coefficient of determination"
 
 #. i18n: ectx: property (text), widget (QPushButton, bTest)
 #. i18n: ectx: property (text), widget (QPushButton, bTestConnection)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1909
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1904
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:177
 #: src/frontend/ui/datasources/databasemanagerwidget.ui:263
 #: src/frontend/ui/datasources/mqttconnectionmanagerwidget.ui:208
@@ -9776,43 +9776,43 @@ msgstr "Adj. coefficient of determination"
 msgid "Test"
 msgstr "Test"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1910
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1905
 #, kde-format
 msgid "F-Test"
 msgstr "F-Test"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1912
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1907
 #, kde-format
 msgid "Mean absolute error"
 msgstr "Mean absolute error"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1913
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1908
 #, kde-format
 msgid "Akaike information criterion"
 msgstr "Akaike information criterion"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1914
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1909
 #, kde-format
 msgid "Bayesian information criterion"
 msgstr "Bayesian information criterion"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2254
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2249
 #, kde-format
 msgid "Model has no parameters!"
 msgstr "Model has no parameters!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2261
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2256
 #, kde-format
 msgid "Not sufficient weight data points provided!"
 msgstr "Not sufficient weight data points provided!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2338
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2333
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:370
 #, kde-format
 msgid "No X data available!"
 msgstr "No X data available!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2345
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2340
 #, kde-format
 msgid ""
 "The number of data points (%1) must be greater than or equal to the number "
@@ -9821,30 +9821,30 @@ msgstr ""
 "The number of data points (%1) must be greater than or equal to the number "
 "of parameters (%2)!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2352
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2347
 #, kde-format
 msgid "Fit model not specified!"
 msgstr "Fit model not specified!"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3095
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3090
 #, kde-format
 msgctxt "Curve Fitting"
 msgid "Fit Results"
 msgstr "Fit Results"
 
-#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:81
+#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:76
 #, kde-format
 msgid "%1: set filter options and perform the Fourier filter"
 msgstr "%1: set filter options and perform the Fourier filter"
 
-#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:171
-#: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:127
-#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:128
+#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:166
+#: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:122
+#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:123
 #, kde-format
 msgid "No data points available."
 msgstr "No data points available."
 
-#: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:75
+#: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:70
 #, kde-format
 msgid "%1: set transform options and perform the Fourier transform"
 msgstr "%1: set transform options and perform the Fourier transform"
@@ -9854,74 +9854,74 @@ msgstr "%1: set transform options and perform the Fourier transform"
 msgid "%1: set function"
 msgstr "%1: set function"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:323
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:318
 #, kde-format
 msgid "First curve not valid"
 msgstr "First curve not valid"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:325
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:320
 #, kde-format
 msgid "xColumn of first curve not valid"
 msgstr "xColumn of first curve not valid"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:327
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:322
 #, kde-format
 msgid "yColumn of first curve not valid"
 msgstr "yColumn of first curve not valid"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:329
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:324
 #, kde-format
 msgid "Number of x and y values do not match for the first curve"
 msgstr "Number of x and y values do not match for the first curve"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:342
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:337
 #, kde-format
 msgid "Curve '%1' not valid"
 msgstr "Curve '%1' not valid"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:344
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:339
 #, kde-format
 msgid "xColumn of curve '%1' not valid"
 msgstr "xColumn of curve '%1' not valid"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:346
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:341
 #, kde-format
 msgid "yColumn of curve '%1' not valid"
 msgstr "yColumn of curve '%1' not valid"
 
-#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:348
+#: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:343
 #, kde-format
 msgid "Number of x and y values do not match for curve '%1'"
 msgstr "Number of x and y values do not match for curve '%1'"
 
-#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:68
+#: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:63
 #, kde-format
 msgid "%1: set transform options and perform the Hilbert transform"
 msgstr "%1: set transform options and perform the Hilbert transform"
 
-#: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:74
+#: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:69
 #, kde-format
 msgid "%1: set options and perform the integration"
 msgstr "%1: set options and perform the integration"
 
-#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:74
+#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:69
 #, kde-format
 msgid "%1: set options and perform the interpolation"
 msgstr "%1: set options and perform the interpolation"
 
-#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:101
-#: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:117
+#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:96
+#: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:112
 #, kde-format
 msgid "Number of x and y data points must be equal."
 msgstr "Number of x and y data points must be equal."
 
-#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:147
+#: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:142
 #, kde-format
 msgid "interpolation failed since x data is not strictly monotonic increasing!"
 msgstr ""
 "interpolation failed since x data is not strictly monotonic increasing!"
 
-#: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:79
+#: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:74
 #, kde-format
 msgid "%1: set options and perform the smooth"
 msgstr "%1: set options and perform the smooth"
@@ -11522,31 +11522,31 @@ msgid ""
 msgstr ""
 "The number of rows is calculated from the values of the data portion tab"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:990
+#: src/frontend/datasources/ImportFileWidget.cpp:991
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr "Select the File Data Source"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1020
+#: src/frontend/datasources/ImportFileWidget.cpp:1021
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr "Select the DBC file"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1020
+#: src/frontend/datasources/ImportFileWidget.cpp:1021
 #, kde-format
 msgid "DBC file (*.dbc)"
 msgstr "DBC file (*.dbc)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1106
+#: src/frontend/datasources/ImportFileWidget.cpp:1108
 #, kde-format
 msgid ""
 "Origin Project files need to be opened with \"Import -> Origin Project\"!"
 msgstr ""
 "Origin Project files need to be opened with \"Import -> Origin Project\"!"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1112
+#: src/frontend/datasources/ImportFileWidget.cpp:1111
 #, kde-format
 msgid ""
 "LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"
@@ -11554,14 +11554,14 @@ msgstr ""
 "LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/frontend/datasources/ImportFileWidget.cpp:1240
+#: src/frontend/datasources/ImportFileWidget.cpp:1259
 #: src/frontend/ui/datasources/importfilewidget.ui:416
 #, kde-format
 msgid "Data Format"
 msgstr "Data Format"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/frontend/datasources/ImportFileWidget.cpp:1241
+#: src/frontend/datasources/ImportFileWidget.cpp:1260
 #: src/frontend/ui/datasources/importfilewidget.ui:470
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:158
 #, kde-format
@@ -11569,127 +11569,127 @@ msgid "Preview"
 msgstr "Preview"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/frontend/datasources/ImportFileWidget.cpp:1243
+#: src/frontend/datasources/ImportFileWidget.cpp:1262
 #: src/frontend/ui/datasources/importfilewidget.ui:582
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
 msgstr "Data Portion to Read"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1286
+#: src/frontend/datasources/ImportFileWidget.cpp:1305
 #, kde-format
 msgid "Data format && preview"
 msgstr "Data format && preview"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1333
+#: src/frontend/datasources/ImportFileWidget.cpp:1352
 #: src/frontend/SettingsGeneralPage.cpp:258
 #, kde-format
 msgid "Automatic"
 msgstr "Automatic"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1586
+#: src/frontend/datasources/ImportFileWidget.cpp:1605
 #, kde-format
 msgid "file command not found"
 msgstr "file command not found"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1597
+#: src/frontend/datasources/ImportFileWidget.cpp:1616
 #, kde-format
 msgid "cannot open"
 msgstr "cannot open"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1602
+#: src/frontend/datasources/ImportFileWidget.cpp:1621
 #, kde-format
 msgid "<b>File type:</b> %1"
 msgstr "<b>File type:</b> %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1607
+#: src/frontend/datasources/ImportFileWidget.cpp:1626
 #, kde-format
 msgid "General:"
 msgstr "General:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1609
-#: src/frontend/datasources/ImportFileWidget.cpp:1610
-#: src/frontend/datasources/ImportFileWidget.cpp:1611
+#: src/frontend/datasources/ImportFileWidget.cpp:1628
+#: src/frontend/datasources/ImportFileWidget.cpp:1629
+#: src/frontend/datasources/ImportFileWidget.cpp:1630
 #, kde-format
 msgid "yes"
 msgstr "yes"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1609
-#: src/frontend/datasources/ImportFileWidget.cpp:1610
-#: src/frontend/datasources/ImportFileWidget.cpp:1611
+#: src/frontend/datasources/ImportFileWidget.cpp:1628
+#: src/frontend/datasources/ImportFileWidget.cpp:1629
+#: src/frontend/datasources/ImportFileWidget.cpp:1630
 #, kde-format
 msgid "no"
 msgstr "no"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1609
+#: src/frontend/datasources/ImportFileWidget.cpp:1628
 #, kde-format
 msgid "Readable: %1"
 msgstr "Readable: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1610
+#: src/frontend/datasources/ImportFileWidget.cpp:1629
 #, kde-format
 msgid "Writable: %1"
 msgstr "Writable: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1611
+#: src/frontend/datasources/ImportFileWidget.cpp:1630
 #, kde-format
 msgid "Executable: %1"
 msgstr "Executable: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1613
+#: src/frontend/datasources/ImportFileWidget.cpp:1632
 #, kde-format
 msgid "Birth time: %1"
 msgstr "Birth time: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1614
+#: src/frontend/datasources/ImportFileWidget.cpp:1633
 #, kde-format
 msgid "Last metadata changed: %1"
 msgstr "Last metadata changed: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1615
+#: src/frontend/datasources/ImportFileWidget.cpp:1634
 #, kde-format
 msgid "Last modified: %1"
 msgstr "Last modified: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1616
+#: src/frontend/datasources/ImportFileWidget.cpp:1635
 #, kde-format
 msgid "Last read: %1"
 msgstr "Last read: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1617
+#: src/frontend/datasources/ImportFileWidget.cpp:1636
 #, kde-format
 msgid "Owner: %1"
 msgstr "Owner: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1618
+#: src/frontend/datasources/ImportFileWidget.cpp:1637
 #, kde-format
 msgid "Group: %1"
 msgstr "Group: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1619
+#: src/frontend/datasources/ImportFileWidget.cpp:1638
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
 msgstr[0] "%1 cByte"
 msgstr[1] "%1 cBytes"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1622
+#: src/frontend/datasources/ImportFileWidget.cpp:1641
 #, kde-format
 msgid "Summary:"
 msgstr "Summary:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1645
-#: src/frontend/datasources/ImportFileWidget.cpp:1650
+#: src/frontend/datasources/ImportFileWidget.cpp:1664
+#: src/frontend/datasources/ImportFileWidget.cpp:1669
 #, kde-format
 msgid "Content:"
 msgstr "Content:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1681
+#: src/frontend/datasources/ImportFileWidget.cpp:1700
 #, kde-format
 msgid "Could not open file %1 for reading."
 msgstr "Could not open file %1 for reading."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1765
+#: src/frontend/datasources/ImportFileWidget.cpp:1784
 #, kde-format
 msgid ""
 "Invalid number rows. Please check 'End Row' and 'Start Row'. 'End Row' must "
@@ -11698,98 +11698,104 @@ msgstr ""
 "Invalid number rows. Please check 'End Row' and 'Start Row'. 'End Row' must "
 "be larger than 'Start Row' or -1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1776
+#: src/frontend/datasources/ImportFileWidget.cpp:1795
 #, kde-format
 msgid "Preview: Initialization failed: %1"
 msgstr "Preview: Initialisation failed: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1801
+#: src/frontend/datasources/ImportFileWidget.cpp:1820
 #, kde-format
 msgid "Preview: Failed to connect to local socket %1 - %2"
 msgstr "Preview: Failed to connect to local socket %1 - %2"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1816
+#: src/frontend/datasources/ImportFileWidget.cpp:1835
 #, kde-format
 msgid "Preview: Failed to connect to TCP socket - %1"
 msgstr "Preview: Failed to connect to TCP socket - %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1861
+#: src/frontend/datasources/ImportFileWidget.cpp:1880
 #, kde-format
 msgid "Parse Error: %1"
 msgstr "Parse Error: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1863
+#: src/frontend/datasources/ImportFileWidget.cpp:1882
 #, kde-format
 msgid "ERROR: not ready for read after 2 sec"
 msgstr "ERROR: not ready for read after 2 sec"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1867
+#: src/frontend/datasources/ImportFileWidget.cpp:1886
 #, kde-format
 msgid "ERROR: failed to open serial port. error: %1"
 msgstr "ERROR: failed to open serial port. error: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1886
+#: src/frontend/datasources/ImportFileWidget.cpp:1905
 #, kde-format
 msgid "No data arrived yet for the selected topic"
 msgstr "No data arrived yet for the selected topic"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2152
+#: src/frontend/datasources/ImportFileWidget.cpp:2171
 #, kde-format
 msgid "Not a HDF5 file: %1"
 msgstr "Not a HDF5 file: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2616
+#: src/frontend/datasources/ImportFileWidget.cpp:2229
+#, fuzzy, kde-format
+#| msgid "Reading from file %1 failed."
+msgid "Parsing ODS file %1 failed."
+msgstr "Reading from file %1 failed."
+
+#: src/frontend/datasources/ImportFileWidget.cpp:2641
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
 msgstr "Could not subscribe to all available topics."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2624
+#: src/frontend/datasources/ImportFileWidget.cpp:2649
 #, kde-format
 msgid "Failed to connect to '%1'. Error %2."
 msgstr "Failed to connect to '%1'. Error %2."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2646
+#: src/frontend/datasources/ImportFileWidget.cpp:2671
 #, kde-format
 msgid "Disconnected from '%1'."
 msgstr "Disconnected from '%1'."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2712
+#: src/frontend/datasources/ImportFileWidget.cpp:2737
 #, kde-format
 msgid "Available (%1)"
 msgstr "Available (%1)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2816
+#: src/frontend/datasources/ImportFileWidget.cpp:2841
 #, kde-format
 msgid "Wrong username or password"
 msgstr "Wrong username or password"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2819
+#: src/frontend/datasources/ImportFileWidget.cpp:2844
 #, kde-format
 msgid "The client ID wasn't accepted"
 msgstr "The client ID was not accepted"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2823
+#: src/frontend/datasources/ImportFileWidget.cpp:2848
 #, kde-format
 msgid "The broker %1 couldn't be reached."
 msgstr "The broker %1 could not be reached."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2826
+#: src/frontend/datasources/ImportFileWidget.cpp:2851
 #, kde-format
 msgid "The client is not authorized to connect."
 msgstr "The client is not authorised to connect."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2829
+#: src/frontend/datasources/ImportFileWidget.cpp:2854
 #, kde-format
 msgid "An unknown error occurred."
 msgstr "An unknown error occurred."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2835
-#: src/frontend/datasources/ImportFileWidget.cpp:2838
+#: src/frontend/datasources/ImportFileWidget.cpp:2860
+#: src/frontend/datasources/ImportFileWidget.cpp:2863
 #, kde-format
 msgid "An error occurred."
 msgstr "An error occurred."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2852
+#: src/frontend/datasources/ImportFileWidget.cpp:2877
 #, kde-format
 msgid "Connecting to '%1:%2' timed out."
 msgstr "Connecting to '%1:%2' timed out."
