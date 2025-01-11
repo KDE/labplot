@@ -99,17 +99,19 @@ LabelWidget::LabelWidget(QWidget* parent)
 	// set the minimum size of the text edit widget to one row of a QLabel
 	ui.teLabel->setMinimumHeight(ui.lName->height());
 
-	// adjust the layout margins
-	if (auto* l = dynamic_cast<QGridLayout*>(layout())) {
-		l->setContentsMargins(2, 2, 2, 2);
-		l->setHorizontalSpacing(2);
-		l->setVerticalSpacing(2);
-	}
-
 	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	m_units = (BaseDock::Units)group.readEntry("Units", (int)BaseDock::Units::Metric);
 	if (m_units == BaseDock::Units::Imperial)
 		m_worksheetUnit = Worksheet::Unit::Inch;
+
+	QString suffix;
+	if (m_units == BaseDock::Units::Metric)
+		suffix = QLatin1String(" cm");
+	else
+		suffix = QLatin1String(" in");
+
+	ui.sbPositionX->setSuffix(suffix);
+	ui.sbPositionY->setSuffix(suffix);
 
 	m_dateTimeMenu->setSeparatorsCollapsible(false); // we don't want the first separator to be removed
 	ui.sbBorderWidth->setMinimum(0);
@@ -157,6 +159,16 @@ LabelWidget::LabelWidget(QWidget* parent)
 	auto* gridLayout = qobject_cast<QGridLayout*>(layout());
 	gridLayout->addWidget(m_messageWidget, 6, 3);
 	m_messageWidget->hide(); // will be shown later once there is a latex render result
+
+	// adjust the layout margins
+	if (auto* l = dynamic_cast<QGridLayout*>(layout())) {
+		l->setContentsMargins(2, 2, 2, 2);
+		l->setHorizontalSpacing(2);
+		l->setVerticalSpacing(2);
+	}
+
+	updateLocale();
+	retranslateUi();
 
 	// SLOTS
 	// text properties
@@ -212,9 +224,6 @@ LabelWidget::LabelWidget(QWidget* parent)
 	// TODO: https://bugreports.qt.io/browse/QTBUG-25420
 	ui.tbFontUnderline->hide();
 	ui.tbFontStrikeOut->hide();
-
-	updateLocale();
-	retranslateUi();
 }
 
 void LabelWidget::setLabels(QList<TextLabel*> labels) {
@@ -495,15 +504,6 @@ void LabelWidget::retranslateUi() {
 	ui.cbPositionY->addItem(i18n("Center"));
 	ui.cbPositionY->addItem(i18n("Bottom"));
 	ui.cbPositionY->addItem(i18n("Relative to plot"));
-
-	QString suffix;
-	if (m_units == BaseDock::Units::Metric)
-		suffix = QLatin1String(" cm");
-	else
-		suffix = QLatin1String(" in");
-
-	ui.sbPositionX->setSuffix(suffix);
-	ui.sbPositionY->setSuffix(suffix);
 
 	ui.cbHorizontalAlignment->clear();
 	ui.cbHorizontalAlignment->addItem(i18n("Left"));
