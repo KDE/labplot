@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : label settings widget
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2022 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -112,10 +112,6 @@ LabelWidget::LabelWidget(QWidget* parent)
 		m_worksheetUnit = Worksheet::Unit::Inch;
 
 	m_dateTimeMenu->setSeparatorsCollapsible(false); // we don't want the first separator to be removed
-
-	QString msg = i18n("Use logical instead of absolute coordinates to specify the position on the plot");
-	ui.chbBindLogicalPos->setToolTip(msg);
-
 	ui.sbBorderWidth->setMinimum(0);
 
 	// Icons
@@ -132,98 +128,12 @@ LabelWidget::LabelWidget(QWidget* parent)
 	ui.tbSymbols->setIcon(QIcon::fromTheme(QStringLiteral("labplot-format-text-symbol")));
 	ui.tbDateTime->setIcon(QIcon::fromTheme(QStringLiteral("chronometer")));
 
-	ui.tbFontBold->setToolTip(i18n("Bold"));
-	ui.tbFontItalic->setToolTip(i18n("Italic"));
-	ui.tbFontUnderline->setToolTip(i18n("Underline"));
-	ui.tbFontStrikeOut->setToolTip(i18n("Strike Out"));
-	ui.tbFontSuperScript->setToolTip(i18n("Super Script"));
-	ui.tbFontSubScript->setToolTip(i18n("Sub-Script"));
-	ui.tbAlignLeft->setToolTip(i18n("Left Align"));
-	ui.tbAlignCenter->setToolTip(i18n("Center"));
-	ui.tbAlignRight->setToolTip(i18n("Right Align"));
-	ui.tbAlignJustify->setToolTip(i18n("Justify"));
-	ui.tbSymbols->setToolTip(i18n("Insert Symbol"));
-	ui.tbDateTime->setToolTip(i18n("Insert Date/Time"));
-
-	// Positioning and alignment
-	ui.cbPositionX->addItem(i18n("Left"));
-	ui.cbPositionX->addItem(i18n("Center"));
-	ui.cbPositionX->addItem(i18n("Right"));
-	ui.cbPositionX->addItem(i18n("Relative to plot"));
-
-	ui.cbPositionY->addItem(i18n("Top"));
-	ui.cbPositionY->addItem(i18n("Center"));
-	ui.cbPositionY->addItem(i18n("Bottom"));
-	ui.cbPositionY->addItem(i18n("Relative to plot"));
-
-	QString suffix;
-	if (m_units == BaseDock::Units::Metric)
-		suffix = QLatin1String(" cm");
-	else
-		suffix = QLatin1String(" in");
-
-	ui.sbPositionX->setSuffix(suffix);
-	ui.sbPositionY->setSuffix(suffix);
-
-	ui.cbHorizontalAlignment->addItem(i18n("Left"));
-	ui.cbHorizontalAlignment->addItem(i18n("Center"));
-	ui.cbHorizontalAlignment->addItem(i18n("Right"));
-
-	ui.cbVerticalAlignment->addItem(i18n("Top"));
-	ui.cbVerticalAlignment->addItem(i18n("Center"));
-	ui.cbVerticalAlignment->addItem(i18n("Bottom"));
-
-	ui.cbBorderShape->addItem(i18n("No Border"));
-	ui.cbBorderShape->addItem(i18n("Rectangle"));
-	ui.cbBorderShape->addItem(i18n("Ellipse"));
-	ui.cbBorderShape->addItem(i18n("Round sided rectangle"));
-	ui.cbBorderShape->addItem(i18n("Round corner rectangle"));
-	ui.cbBorderShape->addItem(i18n("Inwards round corner rectangle"));
-	ui.cbBorderShape->addItem(i18n("Dented border rectangle"));
-	ui.cbBorderShape->addItem(i18n("Cuboid"));
-	ui.cbBorderShape->addItem(i18n("Up Pointing rectangle"));
-	ui.cbBorderShape->addItem(i18n("Down Pointing rectangle"));
-	ui.cbBorderShape->addItem(i18n("Left Pointing rectangle"));
-	ui.cbBorderShape->addItem(i18n("Right Pointing rectangle"));
-
-	ui.cbBorderStyle->addItem(i18n("No line"));
-	ui.cbBorderStyle->addItem(i18n("Solid line"));
-	ui.cbBorderStyle->addItem(i18n("Dash line"));
-	ui.cbBorderStyle->addItem(i18n("Dot line"));
-	ui.cbBorderStyle->addItem(i18n("Dash dot line"));
-	ui.cbBorderStyle->addItem(i18n("Dash dot dot line"));
-
 	ui.kcbBackgroundColor->setAlphaChannelEnabled(true);
 	ui.kcbBackgroundColor->setColor(QColor(0, 0, 0, 0)); // transparent
 	ui.kcbFontColor->setAlphaChannelEnabled(true);
 	ui.kcbFontColor->setColor(QColor(255, 255, 255, 255)); // black
 	ui.kcbBorderColor->setAlphaChannelEnabled(true);
 	ui.kcbBorderColor->setColor(QColor(255, 255, 255, 255)); // black
-
-	// Text mode
-	ui.cbMode->addItem(QIcon::fromTheme(QLatin1String("text-x-plain")), i18n("Text"));
-	ui.cbMode->addItem(QIcon::fromTheme(QLatin1String("text-x-tex")), i18n("LaTeX"));
-#ifdef HAVE_DISCOUNT
-	ui.cbMode->addItem(QIcon::fromTheme(QLatin1String("text-x-markdown")), i18n("Markdown"));
-#endif
-
-#ifdef HAVE_DISCOUNT
-	msg = i18n(
-		"Text setting mode:"
-		"<ul>"
-		"<li>Text - text setting using rich-text formatting</li>"
-		"<li>LaTeX - text setting using LaTeX, installation of LaTeX required</li>"
-		"<li>Markdown - text setting using Markdown markup language</li>"
-		"</ul>");
-#else
-	msg = i18n(
-		"Text setting mode:"
-		"<ul>"
-		"<li>Text - text setting using rich-text formatting</li>"
-		"<li>LaTeX - text setting using LaTeX, installation of LaTeX required</li>"
-		"</ul>");
-#endif
-	ui.cbMode->setToolTip(msg);
 
 	// check whether LaTeX is available and deactivate the item in the combobox, if not.
 	// in case LaTeX was used to generate the text label in the stored project
@@ -249,7 +159,6 @@ LabelWidget::LabelWidget(QWidget* parent)
 	m_messageWidget->hide(); // will be shown later once there is a latex render result
 
 	// SLOTS
-
 	// text properties
 	connect(ui.cbMode, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::modeChanged);
 	connect(ui.teLabel, &ResizableTextEdit::textChanged, this, &LabelWidget::textChanged);
@@ -303,6 +212,9 @@ LabelWidget::LabelWidget(QWidget* parent)
 	// TODO: https://bugreports.qt.io/browse/QTBUG-25420
 	ui.tbFontUnderline->hide();
 	ui.tbFontStrikeOut->hide();
+
+	updateLocale();
+	retranslateUi();
 }
 
 void LabelWidget::setLabels(QList<TextLabel*> labels) {
@@ -327,7 +239,6 @@ void LabelWidget::setLabels(QList<TextLabel*> labels) {
 	this->load();
 	initConnections();
 	updateBackground();
-	updateLocale();
 
 	// hide the option "Visible" if the label is child of a InfoElement,
 	// the label is what the user identifies with the info element itself
@@ -366,7 +277,6 @@ void LabelWidget::setAxes(QList<Axis*> axes) {
 	this->load();
 	initConnections();
 	updateBackground();
-	updateLocale();
 
 	// resize the widget to take the minimal height
 	layout()->activate();
@@ -562,6 +472,108 @@ void LabelWidget::updateLocale() {
 	ui.sbBorderWidth->setLocale(numberLocale);
 }
 
+void LabelWidget::retranslateUi() {
+	CONDITIONAL_LOCK_RETURN;
+
+	// Text mode
+	ui.cbMode->clear();
+	ui.cbMode->addItem(QIcon::fromTheme(QLatin1String("text-x-plain")), i18n("Text"));
+	ui.cbMode->addItem(QIcon::fromTheme(QLatin1String("text-x-tex")), i18n("LaTeX"));
+#ifdef HAVE_DISCOUNT
+	ui.cbMode->addItem(QIcon::fromTheme(QLatin1String("text-x-markdown")), i18n("Markdown"));
+#endif
+
+	// Positioning and alignment
+	ui.cbPositionX->clear();
+	ui.cbPositionX->addItem(i18n("Left"));
+	ui.cbPositionX->addItem(i18n("Center"));
+	ui.cbPositionX->addItem(i18n("Right"));
+	ui.cbPositionX->addItem(i18n("Relative to plot"));
+
+	ui.cbPositionY->clear();
+	ui.cbPositionY->addItem(i18n("Top"));
+	ui.cbPositionY->addItem(i18n("Center"));
+	ui.cbPositionY->addItem(i18n("Bottom"));
+	ui.cbPositionY->addItem(i18n("Relative to plot"));
+
+	QString suffix;
+	if (m_units == BaseDock::Units::Metric)
+		suffix = QLatin1String(" cm");
+	else
+		suffix = QLatin1String(" in");
+
+	ui.sbPositionX->setSuffix(suffix);
+	ui.sbPositionY->setSuffix(suffix);
+
+	ui.cbHorizontalAlignment->clear();
+	ui.cbHorizontalAlignment->addItem(i18n("Left"));
+	ui.cbHorizontalAlignment->addItem(i18n("Center"));
+	ui.cbHorizontalAlignment->addItem(i18n("Right"));
+
+	ui.cbVerticalAlignment->clear();
+	ui.cbVerticalAlignment->addItem(i18n("Top"));
+	ui.cbVerticalAlignment->addItem(i18n("Center"));
+	ui.cbVerticalAlignment->addItem(i18n("Bottom"));
+
+	// Border
+	ui.cbBorderShape->clear();
+	ui.cbBorderShape->addItem(i18n("No Border"), static_cast<int>(TextLabel::BorderShape::NoBorder));
+	ui.cbBorderShape->addItem(i18n("Rectangle"), static_cast<int>(TextLabel::BorderShape::Rect));
+	ui.cbBorderShape->addItem(i18n("Ellipse"), static_cast<int>(TextLabel::BorderShape::Ellipse));
+	ui.cbBorderShape->addItem(i18n("Round sided rectangle"), static_cast<int>(TextLabel::BorderShape::RoundSideRect));
+	ui.cbBorderShape->addItem(i18n("Round corner rectangle"), static_cast<int>(TextLabel::BorderShape::RoundCornerRect));
+	ui.cbBorderShape->addItem(i18n("Inwards round corner rectangle"), static_cast<int>(TextLabel::BorderShape::InwardsRoundCornerRect));
+	ui.cbBorderShape->addItem(i18n("Dented border rectangle"), static_cast<int>(TextLabel::BorderShape::DentedBorderRect));
+	ui.cbBorderShape->addItem(i18n("Cuboid"), static_cast<int>(TextLabel::BorderShape::Cuboid));
+	ui.cbBorderShape->addItem(i18n("Up Pointing rectangle"), static_cast<int>(TextLabel::BorderShape::UpPointingRectangle));
+	ui.cbBorderShape->addItem(i18n("Down Pointing rectangle"), static_cast<int>(TextLabel::BorderShape::DownPointingRectangle));
+	ui.cbBorderShape->addItem(i18n("Left Pointing rectangle"), static_cast<int>(TextLabel::BorderShape::LeftPointingRectangle));
+	ui.cbBorderShape->addItem(i18n("Right Pointing rectangle"), static_cast<int>(TextLabel::BorderShape::RightPointingRectangle));
+
+	ui.cbBorderStyle->clear();
+	ui.cbBorderStyle->addItem(i18n("No line"));
+	ui.cbBorderStyle->addItem(i18n("Solid line"));
+	ui.cbBorderStyle->addItem(i18n("Dash line"));
+	ui.cbBorderStyle->addItem(i18n("Dot line"));
+	ui.cbBorderStyle->addItem(i18n("Dash dot line"));
+	ui.cbBorderStyle->addItem(i18n("Dash dot dot line"));
+
+	// tooltip texts
+	QString msg = i18n("Use logical instead of absolute coordinates to specify the position on the plot");
+	ui.chbBindLogicalPos->setToolTip(msg);
+
+#ifdef HAVE_DISCOUNT
+	msg = i18n(
+		"Text setting mode:"
+		"<ul>"
+		"<li>Text - text setting using rich-text formatting</li>"
+		"<li>LaTeX - text setting using LaTeX, installation of LaTeX required</li>"
+		"<li>Markdown - text setting using Markdown markup language</li>"
+		"</ul>");
+#else
+	msg = i18n(
+		"Text setting mode:"
+		"<ul>"
+		"<li>Text - text setting using rich-text formatting</li>"
+		"<li>LaTeX - text setting using LaTeX, installation of LaTeX required</li>"
+		"</ul>");
+#endif
+	ui.cbMode->setToolTip(msg);
+
+	ui.tbFontBold->setToolTip(i18n("Bold"));
+	ui.tbFontItalic->setToolTip(i18n("Italic"));
+	ui.tbFontUnderline->setToolTip(i18n("Underline"));
+	ui.tbFontStrikeOut->setToolTip(i18n("Strike Out"));
+	ui.tbFontSuperScript->setToolTip(i18n("Super Script"));
+	ui.tbFontSubScript->setToolTip(i18n("Sub-Script"));
+	ui.tbAlignLeft->setToolTip(i18n("Left Align"));
+	ui.tbAlignCenter->setToolTip(i18n("Center"));
+	ui.tbAlignRight->setToolTip(i18n("Right Align"));
+	ui.tbAlignJustify->setToolTip(i18n("Justify"));
+	ui.tbSymbols->setToolTip(i18n("Insert Symbol"));
+	ui.tbDateTime->setToolTip(i18n("Insert Date/Time"));
+}
+
 //**********************************************************
 //****** SLOTs for changes triggered in LabelWidget ********
 //**********************************************************
@@ -712,7 +724,6 @@ void LabelWidget::charFormatChanged(const QTextCharFormat& format) {
 // called when textlabel mode is changed
 void LabelWidget::labelModeChanged(TextLabel::Mode mode) {
 	CONDITIONAL_LOCK_RETURN;
-
 	updateMode(mode);
 }
 
@@ -1129,8 +1140,8 @@ void LabelWidget::lockChanged(bool locked) {
 }
 
 // border
-void LabelWidget::borderShapeChanged(int index) {
-	auto shape = (TextLabel::BorderShape)index;
+void LabelWidget::borderShapeChanged(int) {
+	const auto shape = static_cast<TextLabel::BorderShape>(ui.cbBorderShape->currentData().toInt());
 	bool b = (shape != TextLabel::BorderShape::NoBorder);
 	ui.lBorderStyle->setVisible(b);
 	ui.cbBorderStyle->setVisible(b);
@@ -1553,8 +1564,9 @@ void LabelWidget::load() {
 
 	// don't show if binding not enabled. example: axis titles
 	// Border
-	ui.cbBorderShape->setCurrentIndex(static_cast<int>(m_label->borderShape()));
-	borderShapeChanged(ui.cbBorderShape->currentIndex());
+	const int index = ui.cbBorderShape->findData(static_cast<int>(m_label->borderShape()));
+	ui.cbBorderShape->setCurrentIndex(index);
+	borderShapeChanged(index);
 	ui.kcbBorderColor->setColor(m_label->borderPen().color());
 	ui.cbBorderStyle->setCurrentIndex((int)m_label->borderPen().style());
 	ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(m_label->borderPen().widthF(), Worksheet::Unit::Point));
@@ -1664,7 +1676,7 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 	ui.sbRotation->setValue(group.readEntry("Rotation", m_label->rotationAngle()));
 
 	// Border
-	ui.cbBorderShape->setCurrentIndex(group.readEntry("BorderShape").toInt());
+	ui.cbBorderShape->setCurrentIndex(ui.cbBorderShape->findData(group.readEntry("BorderShape").toInt()));
 	ui.kcbBorderColor->setColor(group.readEntry("BorderColor", m_label->borderPen().color()));
 	ui.cbBorderStyle->setCurrentIndex(group.readEntry("BorderStyle", (int)m_label->borderPen().style()));
 	ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", m_label->borderPen().widthF()), Worksheet::Unit::Point));
@@ -1693,7 +1705,7 @@ void LabelWidget::saveConfig(KConfigGroup& group) {
 	group.writeEntry("Rotation", ui.sbRotation->value());
 
 	// Border
-	group.writeEntry("BorderShape", ui.cbBorderShape->currentIndex());
+	group.writeEntry("BorderShape", ui.cbBorderShape->currentData().toInt());
 	group.writeEntry("BorderStyle", ui.cbBorderStyle->currentIndex());
 	group.writeEntry("BorderColor", ui.kcbBorderColor->color());
 	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Unit::Point));

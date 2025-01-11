@@ -79,6 +79,8 @@ Q_SIGNALS:
 	void labelFontColorChangedSignal(const QColor&);
 
 private Q_SLOTS:
+	void retranslateUi();
+
 	// SLOTs for changes triggered in LabelWidget
 	void textChanged();
 	void charFormatChanged(const QTextCharFormat&);
