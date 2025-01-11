@@ -4,6 +4,7 @@
 	Description          : Dock for configuring notes
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Garvit Khatri <garvitdelhi@gmail.com>
+	SPDX-FileCopyrightText: 2016-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -23,6 +24,7 @@ class NoteDock : public BaseDock {
 public:
 	explicit NoteDock(QWidget* parent);
 	void setNotesList(QList<Note*>);
+	void retranslateUi() override;
 
 private:
 	Ui::NoteDock ui;

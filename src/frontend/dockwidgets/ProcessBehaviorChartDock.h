@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for properties of the process behavior chart
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -30,6 +30,7 @@ public:
 
 	void setPlots(QList<ProcessBehaviorChart*>);
 	void updateLocale() override;
+	void retranslateUi() override;
 
 private:
 	TreeViewComboBox* cbDataColumn{nullptr};
@@ -53,8 +54,6 @@ protected:
 	virtual void setModel();
 
 private Q_SLOTS:
-	void retranslateUi();
-
 	// SLOTs for changes triggered in ProcessBehaviorChartDock
 	// General-Tab
 	void dataColumnChanged(const QModelIndex&);

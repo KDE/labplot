@@ -120,7 +120,7 @@ SpreadsheetView::SpreadsheetView(Spreadsheet* spreadsheet, bool readOnly)
 
 	init();
 
-	// resize the view to show alls columns and the first 10 rows.
+	// resize the view to show all columns and the first 10 rows.
 	// no need to resize the view when the project is being opened,
 	// all views will be resized to the stored values at the end
 	if (!m_spreadsheet->isLoading()) {

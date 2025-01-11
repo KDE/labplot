@@ -40,12 +40,20 @@ WorksheetDock::WorksheetDock(QWidget* parent)
 	layout->insertWidget(0, backgroundWidget);
 
 	// Layout-tab
-	ui.chScaleContent->setToolTip(i18n("If checked, rescale the content of the worksheet on size changes. Otherwise resize the canvas only."));
+	QString suffix;
+	if (m_units == Units::Metric)
+		suffix = QLatin1String(" cm");
+	else
+		suffix = QLatin1String(" in");
 
-	ui.cbLayout->addItem(QIcon::fromTheme(QStringLiteral("labplot-editbreaklayout")), i18n("No Layout"));
-	ui.cbLayout->addItem(QIcon::fromTheme(QStringLiteral("labplot-edithlayout")), i18n("Vertical Layout"));
-	ui.cbLayout->addItem(QIcon::fromTheme(QStringLiteral("labplot-editvlayout")), i18n("Horizontal Layout"));
-	ui.cbLayout->addItem(QIcon::fromTheme(QStringLiteral("labplot-editgrid")), i18n("Grid Layout"));
+	ui.sbWidth->setSuffix(suffix);
+	ui.sbHeight->setSuffix(suffix);
+	ui.sbLayoutTopMargin->setSuffix(suffix);
+	ui.sbLayoutBottomMargin->setSuffix(suffix);
+	ui.sbLayoutLeftMargin->setSuffix(suffix);
+	ui.sbLayoutRightMargin->setSuffix(suffix);
+	ui.sbLayoutHorizontalSpacing->setSuffix(suffix);
+	ui.sbLayoutVerticalSpacing->setSuffix(suffix);
 
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
@@ -58,7 +66,8 @@ WorksheetDock::WorksheetDock(QWidget* parent)
 		layout->setVerticalSpacing(2);
 	}
 
-	WorksheetDock::updateLocale();
+	updateLocale();
+	retranslateUi();
 
 	// SLOTs
 	// General
@@ -97,8 +106,6 @@ WorksheetDock::WorksheetDock(QWidget* parent)
 	connect(templateHandler, &TemplateHandler::info, this, &WorksheetDock::info);
 
 	ui.verticalLayout->addWidget(frame);
-
-	this->retranslateUi();
 }
 
 void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
@@ -244,9 +251,6 @@ void WorksheetDock::updatePaperSize() {
 		ui.cbSizeType->setCurrentIndex(ui.cbSizeType->findData((int)SizeType::StandardPage));
 }
 
-//*************************************************************
-//****** SLOTs for changes triggered in WorksheetDock *********
-//*************************************************************
 void WorksheetDock::retranslateUi() {
 	CONDITIONAL_LOCK_RETURN;
 
@@ -254,21 +258,6 @@ void WorksheetDock::retranslateUi() {
 	ui.cbOrientation->clear();
 	ui.cbOrientation->addItem(i18n("Portrait"));
 	ui.cbOrientation->addItem(i18n("Landscape"));
-
-	QString suffix;
-	if (m_units == Units::Metric)
-		suffix = QLatin1String(" cm");
-	else
-		suffix = QLatin1String(" in");
-
-	ui.sbWidth->setSuffix(suffix);
-	ui.sbHeight->setSuffix(suffix);
-	ui.sbLayoutTopMargin->setSuffix(suffix);
-	ui.sbLayoutBottomMargin->setSuffix(suffix);
-	ui.sbLayoutLeftMargin->setSuffix(suffix);
-	ui.sbLayoutRightMargin->setSuffix(suffix);
-	ui.sbLayoutHorizontalSpacing->setSuffix(suffix);
-	ui.sbLayoutVerticalSpacing->setSuffix(suffix);
 
 	ui.cbSizeType->clear();
 	ui.cbSizeType->addItem(i18n("View Size"), (int)SizeType::ViewSize);
@@ -283,8 +272,23 @@ void WorksheetDock::retranslateUi() {
 	ui.cbPage->clear();
 	for (auto id : pageSizeIds)
 		ui.cbPage->addItem(QPageSize::name(id), id);
+
+	// Layout-tab
+	ui.chScaleContent->setToolTip(i18n("If checked, rescale the content of the worksheet on size changes. Otherwise resize the canvas only."));
+
+	ui.cbLayout->clear();
+	ui.cbLayout->addItem(QIcon::fromTheme(QStringLiteral("labplot-editbreaklayout")), i18n("No Layout"));
+	ui.cbLayout->addItem(QIcon::fromTheme(QStringLiteral("labplot-edithlayout")), i18n("Vertical Layout"));
+	ui.cbLayout->addItem(QIcon::fromTheme(QStringLiteral("labplot-editvlayout")), i18n("Horizontal Layout"));
+	ui.cbLayout->addItem(QIcon::fromTheme(QStringLiteral("labplot-editgrid")), i18n("Grid Layout"));
+
+	//Background
+	backgroundWidget->retranslateUi();
 }
 
+//*************************************************************
+//****** SLOTs for changes triggered in WorksheetDock *********
+//*************************************************************
 // "General"-tab
 void WorksheetDock::scaleContentChanged(bool scaled) {
 	CONDITIONAL_LOCK_RETURN;

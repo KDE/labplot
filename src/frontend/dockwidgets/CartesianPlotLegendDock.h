@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for cartesian legend properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2013-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -29,6 +29,7 @@ public:
 	void setLegends(QList<CartesianPlotLegend*>);
 	void activateTitleTab() const;
 	void updateLocale() override;
+	void retranslateUi() override;
 	void updateUnits() override;
 
 private:
@@ -43,9 +44,6 @@ private:
 	void loadConfig(KConfig&);
 
 private Q_SLOTS:
-	void init();
-	void retranslateUi();
-
 	// SLOTs for changes triggered in CartesianPlotLegendDock
 	//"General"-tab
 	void lockChanged(bool);

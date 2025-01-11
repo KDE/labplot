@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for CustomPoint properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2015-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -41,16 +41,8 @@ CustomPointDock::CustomPointDock(QWidget* parent)
 		layout->setVerticalSpacing(2);
 	}
 
-	CustomPointDock::updateLocale();
-
-	// Positioning and alignment
-	ui.cbPositionX->addItem(i18n("Left"));
-	ui.cbPositionX->addItem(i18n("Center"));
-	ui.cbPositionX->addItem(i18n("Right"));
-
-	ui.cbPositionY->addItem(i18n("Top"));
-	ui.cbPositionY->addItem(i18n("Center"));
-	ui.cbPositionY->addItem(i18n("Bottom"));
+	updateLocale();
+	retranslateUi();
 
 	// SLOTS
 	// General
@@ -127,6 +119,21 @@ void CustomPointDock::updateLocale() {
 	ui.sbPositionXLogical->setLocale(numberLocale);
 	ui.sbPositionYLogical->setLocale(numberLocale);
 	symbolWidget->updateLocale();
+}
+
+void CustomPointDock::retranslateUi() {
+	CONDITIONAL_LOCK_RETURN;
+
+	// Positioning and alignment
+	ui.cbPositionX->clear();
+	ui.cbPositionX->addItem(i18n("Left"));
+	ui.cbPositionX->addItem(i18n("Center"));
+	ui.cbPositionX->addItem(i18n("Right"));
+
+	ui.cbPositionY->clear();
+	ui.cbPositionY->addItem(i18n("Top"));
+	ui.cbPositionY->addItem(i18n("Center"));
+	ui.cbPositionY->addItem(i18n("Bottom"));
 }
 
 //**********************************************************

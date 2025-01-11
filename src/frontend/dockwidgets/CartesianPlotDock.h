@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for cartesian plot properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -33,8 +33,11 @@ public:
 	explicit CartesianPlotDock(QWidget*);
 	void setPlots(QList<CartesianPlot*>);
 	void activateTitleTab();
+
 	void updateLocale() override;
+	void retranslateUi() override;
 	void updateUnits() override;
+
 	void updateRangeList(const Dimension dim);
 	void updatePlotRangeList() override;
 	void updatePlotRangeListValues(const Dimension dim, int rangeIndex);
@@ -58,7 +61,6 @@ private:
 
 private Q_SLOTS:
 	void init();
-	void retranslateUi();
 
 	// SLOTs for changes triggered in CartesianPlotDock
 	//"General"-tab

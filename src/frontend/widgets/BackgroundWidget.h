@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : background settings widget
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -24,6 +24,7 @@ public:
 
 	void setBackgrounds(const QList<Background*>&);
 	void setEnabled(bool);
+	void retranslateUi();
 
 	void load();
 	void loadConfig(const KConfigGroup&);
@@ -36,7 +37,6 @@ private:
 	bool m_initializing{false};
 	QString m_prefix;
 
-	void retranslateUi();
 	void showEvent(QShowEvent*) override;
 	void adjustLayout();
 
