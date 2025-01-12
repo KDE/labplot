@@ -36,8 +36,6 @@ enum PositionAlignmentComboBoxIndex {
 };
 }
 
-using Dimension = CartesianCoordinateSystem::Dimension;
-
 /*!
  \class AxisDock
  \brief Provides a widget for editing the properties of the axes currently selected in the project explorer.

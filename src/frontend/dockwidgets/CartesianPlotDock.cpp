@@ -62,8 +62,6 @@ protected:
 };
 }
 
-using Dimension = CartesianCoordinateSystem::Dimension;
-
 #define CELLWIDGET(dim, rangeIndex, Column, castObject, function)                                                                                              \
 	{                                                                                                                                                          \
 		QTableWidget* treewidget = nullptr;                                                                                                                    \

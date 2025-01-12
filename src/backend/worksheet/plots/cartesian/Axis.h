@@ -4,7 +4,7 @@
 	Description          : Axis for cartesian coordinate systems.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -13,18 +13,14 @@
 #ifndef AXISNEW_H
 #define AXISNEW_H
 
-#include "backend/lib/Range.h"
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 
-class CartesianPlot;
+class AbstractColumn;
+class AxisPrivate;
 class Line;
 class TextLabel;
-class AxisPrivate;
-class AbstractColumn;
 class QActionGroup;
-
-using Dimension = CartesianCoordinateSystem::Dimension;
 
 class Axis : public WorksheetElement {
 	Q_OBJECT

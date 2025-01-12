@@ -4,7 +4,7 @@
 	Description          : Custom user-defined point on the plot
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-	SPDX-FileCopyrightText: 2015-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2020 Martin Marmsoler <martin.marmsoler@gmail.com>
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -24,8 +24,6 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
-
-using Dimension = CartesianCoordinateSystem::Dimension;
 
 namespace {
 namespace XML {

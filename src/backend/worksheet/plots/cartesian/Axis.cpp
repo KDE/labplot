@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Axis for cartesian coordinate systems.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2018 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -33,8 +33,6 @@
 #include <QPainter>
 #include <QTextDocument>
 #include <QtMath>
-
-using Dimension = CartesianCoordinateSystem::Dimension;
 
 namespace {
 constexpr int maxNumberMajorTicks = 100;
