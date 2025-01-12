@@ -54,12 +54,11 @@ public:
 
 	QString info() const override;
 
-
 private:
 	void init();
 	bool rectContainsPoint(const QRectF&, QPointF) const;
 	CartesianCoordinateSystemPrivate* d;
 };
 
-	using Dimension = CartesianCoordinateSystem::Dimension;
+using Dimension = CartesianCoordinateSystem::Dimension;
 #endif
