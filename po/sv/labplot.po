@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# SPDX-FileCopyrightText: 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Stefan Asserhäll <stefan.asserhall@gmail.com>
+# SPDX-FileCopyrightText: 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Stefan Asserhäll <stefan.asserhall@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-11 00:37+0000\n"
-"PO-Revision-Date: 2024-12-03 20:56+0100\n"
+"POT-Creation-Date: 2025-01-12 00:38+0000\n"
+"PO-Revision-Date: 2025-01-11 21:48+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.08.3\n"
+"X-Generator: Lokalize 24.12.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -275,7 +275,7 @@ msgstr "Stora heltal"
 #: src/frontend/ui/dockwidgets/axisdock.ui:1524
 #: src/frontend/ui/dockwidgets/valuewidget.ui:269
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:280
-#: src/frontend/widgets/LabelWidget.cpp:204
+#: src/frontend/widgets/LabelWidget.cpp:480
 #: src/frontend/worksheet/WorksheetView.cpp:223
 #, kde-format
 msgid "Text"
@@ -3618,16 +3618,14 @@ msgid "Unknown Function"
 msgstr "Okänd funktion"
 
 #: src/backend/gsl/functions.cpp:241
-#, fuzzy, kde-format
-#| msgid "Cell (index, variable)"
+#, kde-format
 msgid "Cell (index; variable)"
 msgstr "Cell (index, variabel)"
 
 #: src/backend/gsl/functions.cpp:242
-#, fuzzy, kde-format
-#| msgid "Cell (index, variable)"
+#, kde-format
 msgid "Cell (index; default_value; variable)"
-msgstr "Cell (index, variabel)"
+msgstr "Cell (index, standardvärde, variabel)"
 
 #: src/backend/gsl/functions.cpp:243
 #, kde-format
@@ -3672,12 +3670,12 @@ msgstr "Slumpmässing sampling"
 #: src/backend/gsl/functions.cpp:252
 #, kde-format
 msgid "Current column cell (index)"
-msgstr ""
+msgstr "Nuvarande kolumncell (index)"
 
 #: src/backend/gsl/functions.cpp:253
 #, kde-format
 msgid "Current column cell (index; default_value)"
-msgstr ""
+msgstr "Nuvarande kolumncell (index, standardvärde)"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:257
@@ -6323,10 +6321,9 @@ msgid "Failed to open '%1' for writing."
 msgstr "Misslyckades öppna '%1' för skrivning."
 
 #: src/backend/note/Note.cpp:124
-#, fuzzy, kde-format
-#| msgid "%1: set type"
+#, kde-format
 msgid "%1: set text"
-msgstr "%1: ställ in typ"
+msgstr "%1: ställ in text"
 
 #: src/backend/note/Note.cpp:131 src/backend/worksheet/TextLabel.cpp:260
 #: src/backend/worksheet/TextLabel.cpp:299
@@ -6335,16 +6332,14 @@ msgid "%1: set background color"
 msgstr "%1: ställ in bakgrundsfärg"
 
 #: src/backend/note/Note.cpp:138
-#, fuzzy, kde-format
-#| msgid "%1: set font color"
+#, kde-format
 msgid "%1: set text color"
-msgstr "%1: ställ in teckensnittsfärg"
+msgstr "%1: ställ in textfärg"
 
 #: src/backend/note/Note.cpp:145
-#, fuzzy, kde-format
-#| msgid "%1: set font"
+#, kde-format
 msgid "%1: set text font"
-msgstr "%1: ställ in teckensnitt"
+msgstr "%1: ställ in textteckensnitt"
 
 #: src/backend/note/Note.cpp:183
 #, kde-format
@@ -8404,22 +8399,20 @@ msgid "Add New"
 msgstr "Lägg till ny"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:567
-#, fuzzy, kde-format
-#| msgid "Formula:"
+#, kde-format
 msgid "Formula Plot"
-msgstr "Formel:"
+msgstr "Formeldiagram"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:568
-#, fuzzy, kde-format
-#| msgid "Add a new xy-curve that is defined via a mathematical expression."
+#, kde-format
 msgid "Add a new xy-plot that is defined via a mathematical expression."
-msgstr "Lägg till ny xy-kurva som definieras via ett matematiskt uttryck."
+msgstr ""
+"Lägg till ett nytt xy-diagram som definieras via ett matematiskt uttryck."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:575
-#, fuzzy, kde-format
-#| msgid "Analysis"
+#, kde-format
 msgid "Analysis Plots"
-msgstr "Analys"
+msgstr "Analysdiagram"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:611
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:188
@@ -8435,40 +8428,34 @@ msgid "Theme"
 msgstr "Tema"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:674
-#, fuzzy, kde-format
-#| msgid "Plots"
+#, kde-format
 msgid "Line Plots"
-msgstr "Diagram"
+msgstr "Linjediagram"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:680
-#, fuzzy, kde-format
-#| msgid "Horizontal"
+#, kde-format
 msgid "Horizontal Step"
-msgstr "Horisontell"
+msgstr "Horisontellt steg"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:684
-#, fuzzy, kde-format
-#| msgid "Vertical Line"
+#, kde-format
 msgid "Vertical Step"
-msgstr "Vertikal linje"
+msgstr "Vertikalt steg"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:688
-#, fuzzy, kde-format
-#| msgid "Interpolate"
+#, kde-format
 msgid "Spline Interpolated"
-msgstr "Interpolera"
+msgstr "Spline-interpolerad"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:695
-#, fuzzy, kde-format
-#| msgid "Bar Plots"
+#, kde-format
 msgid "Scatter Plots"
-msgstr "Stapeldiagram"
+msgstr "Spridningsdiagram"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:697
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgid "Scatter"
-msgstr "Mönster"
+msgstr "Spridning"
 
 #. i18n: ectx: property (text), widget (QLabel, lYError)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:701
@@ -8478,34 +8465,29 @@ msgid "Y Error"
 msgstr "Y-fel"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:705
-#, fuzzy, kde-format
-#| msgid "Y Error"
+#, kde-format
 msgid "XY Error"
-msgstr "Y-fel"
+msgstr "XY-fel"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:712
-#, fuzzy, kde-format
-#| msgid "Line+Symbol Width:"
+#, kde-format
 msgid "Line and Symbol Plots"
-msgstr "Linje+symbolbredd:"
+msgstr "Linje- och symboldiagram"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:714
-#, fuzzy, kde-format
-#| msgid "Line+Symbol Width:"
+#, kde-format
 msgid "Line + Symbol"
-msgstr "Linje+symbolbredd:"
+msgstr "Linje + symbol"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:718
-#, fuzzy, kde-format
-#| msgid "Segments"
+#, kde-format
 msgid "2 Point Segment"
-msgstr "Segment"
+msgstr "Tvåpunktssegment"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:722
-#, fuzzy, kde-format
-#| msgid "Segments"
+#, kde-format
 msgid "3 Point Segment"
-msgstr "Segment"
+msgstr "Trepunktssegment"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:729
 #, kde-format
@@ -8579,10 +8561,9 @@ msgid "Process Behavior Chart"
 msgstr "Processbeteendediagram"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:792
-#, fuzzy, kde-format
-#| msgid "&All curves in one plot"
+#, kde-format
 msgid "No curves inside the plot area."
-msgstr "&Alla kurvor i ett diagram"
+msgstr "Inga kurvor inne i diagramområdet."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1117
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1151
@@ -10195,10 +10176,9 @@ msgid "C++ Compiler: "
 msgstr "C++ kompilator: "
 
 #: src/frontend/AboutDialog.cpp:181
-#, fuzzy, kde-format
-#| msgid "C++ Compiler Flags: "
+#, kde-format
 msgid "C++ Compiler Flags:"
-msgstr "C++ kompileringsväljare: "
+msgstr "C++ kompilatorväljare:"
 
 #: src/frontend/AboutDialog.cpp:185
 #, kde-format
@@ -10320,7 +10300,7 @@ msgstr "Stöd för serieportfunktioner"
 #: src/frontend/AboutDialog.cpp:278
 #, kde-format
 msgid "SVG export support"
-msgstr ""
+msgstr "SVG-exportstöd"
 
 #: src/frontend/AboutDialog.cpp:283
 #, kde-format
@@ -11712,10 +11692,9 @@ msgid "Not a HDF5 file: %1"
 msgstr "Inte en HDF5-fil: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2229
-#, fuzzy, kde-format
-#| msgid "Reading from file %1 failed."
+#, kde-format
 msgid "Parsing ODS file %1 failed."
-msgstr "Läsning från filen %1 misslyckades."
+msgstr "Tolkning av ODS-fil %1 misslyckades."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2641
 #, kde-format
@@ -12365,8 +12344,8 @@ msgstr "Dataområden"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:51
 #: src/frontend/dockwidgets/ImageDock.cpp:54
 #: src/frontend/dockwidgets/ImageDock.cpp:62
-#: src/frontend/widgets/LabelWidget.cpp:154
-#: src/frontend/widgets/LabelWidget.cpp:172
+#: src/frontend/widgets/LabelWidget.cpp:494
+#: src/frontend/widgets/LabelWidget.cpp:514
 #, kde-format
 msgid "Top"
 msgstr "Överst"
@@ -12380,8 +12359,8 @@ msgstr "Överst"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:53
 #: src/frontend/dockwidgets/ImageDock.cpp:56
 #: src/frontend/dockwidgets/ImageDock.cpp:64
-#: src/frontend/widgets/LabelWidget.cpp:156
-#: src/frontend/widgets/LabelWidget.cpp:174
+#: src/frontend/widgets/LabelWidget.cpp:496
+#: src/frontend/widgets/LabelWidget.cpp:516
 #, kde-format
 msgid "Bottom"
 msgstr "Underst"
@@ -12467,8 +12446,8 @@ msgstr "Halvfylld, stor"
 #: src/frontend/dockwidgets/ImageDock.cpp:58
 #: src/frontend/dockwidgets/XYCurveDock.cpp:347
 #: src/frontend/widgets/BackgroundWidget.cpp:118
-#: src/frontend/widgets/LabelWidget.cpp:149
-#: src/frontend/widgets/LabelWidget.cpp:168
+#: src/frontend/widgets/LabelWidget.cpp:488
+#: src/frontend/widgets/LabelWidget.cpp:509
 #: src/frontend/widgets/ValueWidget.cpp:37
 #, kde-format
 msgid "Left"
@@ -12485,8 +12464,8 @@ msgstr "Till vänster"
 #: src/frontend/dockwidgets/ImageDock.cpp:60
 #: src/frontend/dockwidgets/XYCurveDock.cpp:348
 #: src/frontend/widgets/BackgroundWidget.cpp:119
-#: src/frontend/widgets/LabelWidget.cpp:151
-#: src/frontend/widgets/LabelWidget.cpp:170
+#: src/frontend/widgets/LabelWidget.cpp:490
+#: src/frontend/widgets/LabelWidget.cpp:511
 #: src/frontend/widgets/ValueWidget.cpp:38
 #, kde-format
 msgid "Right"
@@ -13059,11 +13038,11 @@ msgstr "Huvudrad"
 #: src/frontend/dockwidgets/ImageDock.cpp:59
 #: src/frontend/dockwidgets/ImageDock.cpp:63
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:296
-#: src/frontend/widgets/LabelWidget.cpp:142
-#: src/frontend/widgets/LabelWidget.cpp:150
-#: src/frontend/widgets/LabelWidget.cpp:155
-#: src/frontend/widgets/LabelWidget.cpp:169
-#: src/frontend/widgets/LabelWidget.cpp:173
+#: src/frontend/widgets/LabelWidget.cpp:489
+#: src/frontend/widgets/LabelWidget.cpp:495
+#: src/frontend/widgets/LabelWidget.cpp:510
+#: src/frontend/widgets/LabelWidget.cpp:515
+#: src/frontend/widgets/LabelWidget.cpp:570
 #: src/frontend/widgets/ValueWidget.cpp:94
 #: src/frontend/widgets/ValueWidget.cpp:95
 #, kde-format
@@ -13072,8 +13051,8 @@ msgstr "Centrera"
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:256
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:261
-#: src/frontend/widgets/LabelWidget.cpp:152
-#: src/frontend/widgets/LabelWidget.cpp:157
+#: src/frontend/widgets/LabelWidget.cpp:491
+#: src/frontend/widgets/LabelWidget.cpp:497
 #, kde-format
 msgid "Relative to plot"
 msgstr "Relativt till diagram"
@@ -13237,6 +13216,7 @@ msgstr "Silverman"
 msgid ""
 "The window function (\"kernel\") used to estimate the probability density"
 msgstr ""
+"Fönsterfunktionen (\"kärnan\") använd för att uppskatta täthetsfunktionen"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:180
 #, kde-format
@@ -13245,11 +13225,14 @@ msgid ""
 "min(sigma, IQR / 1.34) * n^(-0.2)</li><li>Scott -  1.059 * sigma * n^(-0.2)</"
 "li><li>Custom - custom value for the kernel bandwidth</li></ul>"
 msgstr ""
+"Metod för att välja kärnans bandbredd:<ul><li>Silverman:  0.9 * min(sigma, "
+"IQR / 1.34) * n^(-0.2)</li><li>Scott: 1.059 * sigma * n^(-0.2)</li><li>Egen: "
+"eget värde på kärnans bandbredd</li></ul>"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:189
 #, kde-format
 msgid "Custom value for the kernel bandwidth"
-msgstr ""
+msgstr "Eget värde på kärnans bandbredd"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:371
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:452
@@ -13379,6 +13362,8 @@ msgid ""
 "If checked, exact limits are calculated for every individual sample (\"stair-"
 "step limits\"), straight lines are drawn for the limits otherwise."
 msgstr ""
+"Om markerad, beräknas exakta gränser för varje enskilt prov "
+"(\"trappstegsgränser\"), räta linjer dras för gränserna i övrigt."
 
 #: src/frontend/dockwidgets/ProjectDock.cpp:28
 #, kde-format
@@ -13408,6 +13393,8 @@ msgid ""
 "Distribution used to calculate the percentiles to be compared with the "
 "percentiles of the provided data"
 msgstr ""
+"Fördelning som används för att beräkna de percentiler som ska jämföras med "
+"percentilerna för tillhandahållen data"
 
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:227
 #, kde-format
@@ -13420,6 +13407,8 @@ msgid ""
 "Metric of the dataset used to determine where the center line should be "
 "placed at"
 msgstr ""
+"Datauppsättningens mått som används för att bestämma var mittlinjen ska "
+"placeras"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:52
 #, kde-format
@@ -14560,10 +14549,9 @@ msgstr ""
 "för flera plattformar tillgänglig för vem som helst."
 
 #: src/frontend/LabPlot.cpp:55
-#, fuzzy, kde-format
-#| msgid "(c) 2007-2024 LabPlot authors"
+#, kde-format
 msgid "(c) 2007-2025 LabPlot authors"
-msgstr "© 2007-2024 LabPlot-upphovsmännen"
+msgstr "© 2007-2025 LabPlot-upphovsmännen"
 
 #: src/frontend/LabPlot.cpp:57
 #, kde-format
@@ -15600,7 +15588,7 @@ msgid "Command"
 msgstr "Kommando"
 
 #: src/frontend/notebook/NotebookView.cpp:103
-#: src/frontend/widgets/LabelWidget.cpp:207
+#: src/frontend/widgets/LabelWidget.cpp:483
 #, kde-format
 msgid "Markdown"
 msgstr "Markdown"
@@ -15608,7 +15596,7 @@ msgstr "Markdown"
 #. i18n: ectx: property (text), widget (QLabel, lTex)
 #: src/frontend/notebook/NotebookView.cpp:107
 #: src/frontend/ui/settingsworksheetpage.ui:147
-#: src/frontend/widgets/LabelWidget.cpp:205
+#: src/frontend/widgets/LabelWidget.cpp:481
 #, kde-format
 msgid "LaTeX"
 msgstr "Latex"
@@ -17015,10 +17003,9 @@ msgid "Sample Quantiles"
 msgstr "Samplingskvantiler"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1052
-#, fuzzy, kde-format
-#| msgid "&Sample"
+#, kde-format
 msgid "Sample"
-msgstr "&Sampla"
+msgstr "Sampla"
 
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:1111
 #, kde-format
@@ -21352,10 +21339,9 @@ msgstr "Diagramintervall:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabKDE)
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:210
-#, fuzzy, kde-format
-#| msgid "Estimation"
+#, kde-format
 msgid "Estimation Line"
-msgstr "Uppskattning"
+msgstr "Uppskattningslinje"
 
 #. i18n: ectx: property (text), widget (QPushButton, bUpdateNow)
 #: src/frontend/ui/dockwidgets/livedatadock.ui:67
@@ -24115,7 +24101,97 @@ msgstr "Kan inte ta bort obligatoriskt nyckelord."
 msgid "Removing Keyword"
 msgstr "Tar bort nyckelord"
 
-#: src/frontend/widgets/LabelWidget.cpp:116
+#: src/frontend/widgets/LabelWidget.cpp:520
+#, kde-format
+msgid "No Border"
+msgstr "Utan kant"
+
+#: src/frontend/widgets/LabelWidget.cpp:521
+#, kde-format
+msgid "Rectangle"
+msgstr "Rektangel"
+
+#: src/frontend/widgets/LabelWidget.cpp:522
+#, kde-format
+msgid "Ellipse"
+msgstr "Ellips"
+
+#: src/frontend/widgets/LabelWidget.cpp:523
+#, kde-format
+msgid "Round sided rectangle"
+msgstr "Rektangel med runda sidor"
+
+#: src/frontend/widgets/LabelWidget.cpp:524
+#, kde-format
+msgid "Round corner rectangle"
+msgstr "Rektangel med runda hörn"
+
+#: src/frontend/widgets/LabelWidget.cpp:525
+#, kde-format
+msgid "Inwards round corner rectangle"
+msgstr "Rektangel med inåtriktade runda hörn"
+
+#: src/frontend/widgets/LabelWidget.cpp:526
+#, kde-format
+msgid "Dented border rectangle"
+msgstr "Rektangel med bucklig kant"
+
+#: src/frontend/widgets/LabelWidget.cpp:527
+#, kde-format
+msgid "Cuboid"
+msgstr "Rätblock"
+
+#: src/frontend/widgets/LabelWidget.cpp:528
+#, kde-format
+msgid "Up Pointing rectangle"
+msgstr "Uppåtpekande rektangel"
+
+#: src/frontend/widgets/LabelWidget.cpp:529
+#, kde-format
+msgid "Down Pointing rectangle"
+msgstr "Neråtpekande rektangel"
+
+#: src/frontend/widgets/LabelWidget.cpp:530
+#, kde-format
+msgid "Left Pointing rectangle"
+msgstr "Vänsterpekande rektangel"
+
+#: src/frontend/widgets/LabelWidget.cpp:531
+#, kde-format
+msgid "Right Pointing rectangle"
+msgstr "Högerpekande rektangel"
+
+#: src/frontend/widgets/LabelWidget.cpp:534
+#, kde-format
+msgid "No line"
+msgstr "Ingen linje"
+
+#: src/frontend/widgets/LabelWidget.cpp:535
+#, kde-format
+msgid "Solid line"
+msgstr "Heldragen linje"
+
+#: src/frontend/widgets/LabelWidget.cpp:536
+#, kde-format
+msgid "Dash line"
+msgstr "Streckad linje"
+
+#: src/frontend/widgets/LabelWidget.cpp:537
+#, kde-format
+msgid "Dot line"
+msgstr "Punktlinje"
+
+#: src/frontend/widgets/LabelWidget.cpp:538
+#, kde-format
+msgid "Dash dot line"
+msgstr "Streck-punktlinje"
+
+#: src/frontend/widgets/LabelWidget.cpp:539
+#, kde-format
+msgid "Dash dot dot line"
+msgstr "Streck-punkt-punktlinje"
+
+#: src/frontend/widgets/LabelWidget.cpp:542
 #, kde-format
 msgid ""
 "Use logical instead of absolute coordinates to specify the position on the "
@@ -24124,152 +24200,7 @@ msgstr ""
 "Använd logiska istället för absoluta koordinater för att ange position i "
 "diagrammet"
 
-#: src/frontend/widgets/LabelWidget.cpp:135
-#, kde-format
-msgid "Bold"
-msgstr "Fetstil"
-
-#: src/frontend/widgets/LabelWidget.cpp:136
-#, kde-format
-msgid "Italic"
-msgstr "Kursiv"
-
-#: src/frontend/widgets/LabelWidget.cpp:137
-#, kde-format
-msgid "Underline"
-msgstr "Understruken"
-
-#: src/frontend/widgets/LabelWidget.cpp:138
-#, kde-format
-msgid "Strike Out"
-msgstr "Överstruken"
-
-#: src/frontend/widgets/LabelWidget.cpp:139
-#, kde-format
-msgid "Super Script"
-msgstr "Upphöjt"
-
-#: src/frontend/widgets/LabelWidget.cpp:140
-#, kde-format
-msgid "Sub-Script"
-msgstr "Nedsänkt"
-
-#: src/frontend/widgets/LabelWidget.cpp:141
-#, kde-format
-msgid "Left Align"
-msgstr "Vänsterjustera"
-
-#: src/frontend/widgets/LabelWidget.cpp:143
-#, kde-format
-msgid "Right Align"
-msgstr "Högerjustera"
-
-#: src/frontend/widgets/LabelWidget.cpp:144
-#, kde-format
-msgid "Justify"
-msgstr "Anpassa"
-
-#: src/frontend/widgets/LabelWidget.cpp:145
-#, kde-format
-msgid "Insert Symbol"
-msgstr "Infoga symbol"
-
-#: src/frontend/widgets/LabelWidget.cpp:146
-#, kde-format
-msgid "Insert Date/Time"
-msgstr "Infoga datum och tid"
-
-#: src/frontend/widgets/LabelWidget.cpp:176
-#, kde-format
-msgid "No Border"
-msgstr "Utan kant"
-
-#: src/frontend/widgets/LabelWidget.cpp:177
-#, kde-format
-msgid "Rectangle"
-msgstr "Rektangel"
-
-#: src/frontend/widgets/LabelWidget.cpp:178
-#, kde-format
-msgid "Ellipse"
-msgstr "Ellips"
-
-#: src/frontend/widgets/LabelWidget.cpp:179
-#, kde-format
-msgid "Round sided rectangle"
-msgstr "Rektangel med runda sidor"
-
-#: src/frontend/widgets/LabelWidget.cpp:180
-#, kde-format
-msgid "Round corner rectangle"
-msgstr "Rektangel med runda hörn"
-
-#: src/frontend/widgets/LabelWidget.cpp:181
-#, kde-format
-msgid "Inwards round corner rectangle"
-msgstr "Rektangel med inåtriktade runda hörn"
-
-#: src/frontend/widgets/LabelWidget.cpp:182
-#, kde-format
-msgid "Dented border rectangle"
-msgstr "Rektangel med bucklig kant"
-
-#: src/frontend/widgets/LabelWidget.cpp:183
-#, kde-format
-msgid "Cuboid"
-msgstr "Rätblock"
-
-#: src/frontend/widgets/LabelWidget.cpp:184
-#, kde-format
-msgid "Up Pointing rectangle"
-msgstr "Uppåtpekande rektangel"
-
-#: src/frontend/widgets/LabelWidget.cpp:185
-#, kde-format
-msgid "Down Pointing rectangle"
-msgstr "Neråtpekande rektangel"
-
-#: src/frontend/widgets/LabelWidget.cpp:186
-#, kde-format
-msgid "Left Pointing rectangle"
-msgstr "Vänsterpekande rektangel"
-
-#: src/frontend/widgets/LabelWidget.cpp:187
-#, kde-format
-msgid "Right Pointing rectangle"
-msgstr "Högerpekande rektangel"
-
-#: src/frontend/widgets/LabelWidget.cpp:189
-#, kde-format
-msgid "No line"
-msgstr "Ingen linje"
-
-#: src/frontend/widgets/LabelWidget.cpp:190
-#, kde-format
-msgid "Solid line"
-msgstr "Heldragen linje"
-
-#: src/frontend/widgets/LabelWidget.cpp:191
-#, kde-format
-msgid "Dash line"
-msgstr "Streckad linje"
-
-#: src/frontend/widgets/LabelWidget.cpp:192
-#, kde-format
-msgid "Dot line"
-msgstr "Punktlinje"
-
-#: src/frontend/widgets/LabelWidget.cpp:193
-#, kde-format
-msgid "Dash dot line"
-msgstr "Streck-punktlinje"
-
-#: src/frontend/widgets/LabelWidget.cpp:194
-#, kde-format
-msgid "Dash dot dot line"
-msgstr "Streck-punkt-punktlinje"
-
-#: src/frontend/widgets/LabelWidget.cpp:212
+#: src/frontend/widgets/LabelWidget.cpp:547
 #, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
@@ -24281,7 +24212,7 @@ msgstr ""
 "installation av Latex krävs</li><li>Markdown - textinställning som använder "
 "markörspråket Markdown</li></ul>"
 
-#: src/frontend/widgets/LabelWidget.cpp:220
+#: src/frontend/widgets/LabelWidget.cpp:555
 #, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
@@ -24292,14 +24223,69 @@ msgstr ""
 "formatering</li><li>Latex - textinställning som använder Latex, installation "
 "av Latex krävs</li></ul>"
 
-#: src/frontend/widgets/LabelWidget.cpp:908
-#: src/frontend/widgets/LabelWidget.cpp:934
+#: src/frontend/widgets/LabelWidget.cpp:563
+#, kde-format
+msgid "Bold"
+msgstr "Fetstil"
+
+#: src/frontend/widgets/LabelWidget.cpp:564
+#, kde-format
+msgid "Italic"
+msgstr "Kursiv"
+
+#: src/frontend/widgets/LabelWidget.cpp:565
+#, kde-format
+msgid "Underline"
+msgstr "Understruken"
+
+#: src/frontend/widgets/LabelWidget.cpp:566
+#, kde-format
+msgid "Strike Out"
+msgstr "Överstruken"
+
+#: src/frontend/widgets/LabelWidget.cpp:567
+#, kde-format
+msgid "Super Script"
+msgstr "Upphöjt"
+
+#: src/frontend/widgets/LabelWidget.cpp:568
+#, kde-format
+msgid "Sub-Script"
+msgstr "Nedsänkt"
+
+#: src/frontend/widgets/LabelWidget.cpp:569
+#, kde-format
+msgid "Left Align"
+msgstr "Vänsterjustera"
+
+#: src/frontend/widgets/LabelWidget.cpp:571
+#, kde-format
+msgid "Right Align"
+msgstr "Högerjustera"
+
+#: src/frontend/widgets/LabelWidget.cpp:572
+#, kde-format
+msgid "Justify"
+msgstr "Anpassa"
+
+#: src/frontend/widgets/LabelWidget.cpp:573
+#, kde-format
+msgid "Insert Symbol"
+msgstr "Infoga symbol"
+
+#: src/frontend/widgets/LabelWidget.cpp:574
+#, kde-format
+msgid "Insert Date/Time"
+msgstr "Infoga datum och tid"
+
+#: src/frontend/widgets/LabelWidget.cpp:919
+#: src/frontend/widgets/LabelWidget.cpp:945
 #, kde-format
 msgid "Date"
 msgstr "Datum"
 
-#: src/frontend/widgets/LabelWidget.cpp:916
-#: src/frontend/widgets/LabelWidget.cpp:942
+#: src/frontend/widgets/LabelWidget.cpp:927
+#: src/frontend/widgets/LabelWidget.cpp:953
 #, kde-format
 msgid "Date and Time"
 msgstr "Datum och tid"
@@ -24390,17 +24376,13 @@ msgid "Search/Filter text"
 msgstr "Sök, filtrera text"
 
 #: src/frontend/widgets/TreeViewComboBox.cpp:366
-#, fuzzy, kde-format
-#| msgid ""
-#| "The curve \"%1\"\n"
-#| "is not available anymore. It will be automatically used once it is "
-#| "created again."
+#, kde-format
 msgid ""
 "The aspect \"%1\"\n"
 "is not available anymore. It will be automatically used once it is created "
 "again."
 msgstr ""
-"Kurvan \"%1\"\n"
+"Aspekten \"%1\"\n"
 "är inte längre tillgänglig. Den används automatiskt när den väl har skapats "
 "igen."
 

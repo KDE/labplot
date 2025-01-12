@@ -1,7 +1,7 @@
 # Translation for labplot2.po to Euskara/Basque (eu).
 # Copyright (C) 2019-2023 This file is copyright:
 # This file is distributed under the same license as the labplot package.
-# SPDX-FileCopyrightText: 2023, 2024 KDE euskaratzeko proiektuaren arduraduna <xalba@ni.eus>
+# SPDX-FileCopyrightText: 2023, 2024, 2025 KDE euskaratzeko proiektuaren arduraduna <xalba@ni.eus>
 #
 # Translators:
 # Iñigo Salvador Azurmendi <xalba@ni.eus>, 2019, 2022, 2023.
@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-11 00:37+0000\n"
-"PO-Revision-Date: 2024-12-14 04:19+0100\n"
+"POT-Creation-Date: 2025-01-12 00:38+0000\n"
+"PO-Revision-Date: 2025-01-11 12:04+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
@@ -280,7 +280,7 @@ msgstr "Oso handia"
 #: src/frontend/ui/dockwidgets/axisdock.ui:1524
 #: src/frontend/ui/dockwidgets/valuewidget.ui:269
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:280
-#: src/frontend/widgets/LabelWidget.cpp:204
+#: src/frontend/widgets/LabelWidget.cpp:480
 #: src/frontend/worksheet/WorksheetView.cpp:223
 #, kde-format
 msgid "Text"
@@ -699,14 +699,14 @@ msgid "%1: set author"
 msgstr "%1: ezarri egilea"
 
 #: src/backend/core/Project.cpp:308
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: save dock state changed"
-msgstr "%1: gorde aldatutako kalkulua"
+msgstr "%1: gorde nasa egoera aldatu da"
 
 #: src/backend/core/Project.cpp:315
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: save calculation changed"
-msgstr "%1: gorde aldatutako kalkulua"
+msgstr "%1: gorde kalkulua aldatu egin da"
 
 #: src/backend/core/Project.cpp:550 src/backend/core/Project.cpp:580
 #, kde-format
@@ -1082,10 +1082,9 @@ msgid "Success"
 msgstr "Arrakasta"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:194
-#, fuzzy, kde-format
-#| msgid "The device is not opened."
+#, kde-format
 msgid "Device at end"
-msgstr "Gailua ez dago irekita."
+msgstr "Bukaerako gailua"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:196
 #, kde-format
@@ -1113,9 +1112,9 @@ msgid "Invalid number of column names"
 msgstr "Zutabe-izen kopuru baliogabea"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:208
-#, fuzzy, kde-format
+#, kde-format
 msgid "Matrix: Unsupported column mode"
-msgstr "Matrizea: "
+msgstr "Matrizea: zutabe-modu onartu gabea"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:210
 #, kde-format
@@ -1241,10 +1240,9 @@ msgid "DateTime"
 msgstr "DataOrdua"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:602
-#, fuzzy, kde-format
-#| msgid "Int8"
+#, kde-format
 msgid "Int"
-msgstr "Int8"
+msgstr "Int"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:603
 #: src/backend/datasources/filters/MatioFilter.cpp:398
@@ -1257,23 +1255,20 @@ msgstr "Int64"
 #: src/backend/datasources/filters/JsonFilter.cpp:386
 #: src/backend/datasources/filters/SpiceFilter.cpp:127
 #: src/backend/datasources/filters/SpiceFilter.cpp:183
-#, fuzzy, kde-format
-#| msgid "Failed to open the device."
+#, kde-format
 msgid "Failed to open the device/file."
-msgstr "Gailua irekitzea huts egin du."
+msgstr "Gailua/fitxategia irekitzea huts egin du."
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:283
-#, fuzzy, kde-format
-#| msgid "data selection empty"
+#, kde-format
 msgid "Data selection empty."
-msgstr "datu hautapena hutsik"
+msgstr "Datu hautapena hutsik."
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:404
 #: src/backend/datasources/filters/McapFilter.cpp:188
-#, fuzzy, kde-format
-#| msgid "Failed to open the device."
+#, kde-format
 msgid "Failed to open the device/file or it's empty."
-msgstr "Gailua irekitzea huts egin du."
+msgstr "Gailua/fitxategia irekitzea huts egin du edo hutsik dago."
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:444
 #: src/backend/datasources/filters/CANFilter.cpp:301
@@ -1297,23 +1292,22 @@ msgstr "Gailua irekitzea huts egin du."
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:332
 #: src/backend/datasources/filters/XLSXFilter.cpp:509
-#, fuzzy, kde-format
+#, kde-format
 msgid "Not enough memory."
-msgstr "Zenbakia"
+msgstr "Ez dago memoria nahikorik."
 
 #: src/backend/datasources/filters/CANFilter.cpp:220
 #: src/backend/datasources/filters/SpiceFilter.cpp:131
 #: src/backend/datasources/filters/SpiceFilter.cpp:187
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:261
-#, fuzzy, kde-format
-#| msgid "Invalid blf file"
+#, kde-format
 msgid "Invalid file."
-msgstr "«blf» fitxategi baliogabea"
+msgstr "Fitxategi baliogabea."
 
 #: src/backend/datasources/filters/CANFilter.cpp:226
 #, kde-format
 msgid "No messages read."
-msgstr ""
+msgstr "Mezuak ez dira irakurri."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:227
 #, kde-format
@@ -1327,23 +1321,20 @@ msgstr "Taulak: %1"
 
 #: src/backend/datasources/filters/FITSFilter.cpp:262
 #: src/backend/datasources/filters/MatioFilter.cpp:647
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open the file."
-msgstr "'%1' fitxategia irekitzea huts egin du."
+msgstr "Fitxategia irekitzea huts egin du."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:270
 #: src/backend/datasources/filters/FITSFilter.cpp:349
-#, fuzzy, kde-format
-#| msgid "Unable to read the file"
+#, kde-format
 msgid "Failed to read the file."
-msgstr "Ezin izan du fitxategia irakurri"
+msgstr "Fitxategia irakurtzea huts egin du."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:291
-#, fuzzy, kde-format
-#| msgid "dimension"
+#, kde-format
 msgid "Zero dimensions."
-msgstr "dimentsioa"
+msgstr "Zero dimentsio."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:1029
 #: src/backend/datasources/filters/FITSFilter.cpp:1549
@@ -1646,10 +1637,9 @@ msgstr "ezezaguna"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1513
 #: src/backend/datasources/filters/HDF5Filter.cpp:2140
-#, fuzzy, kde-format
-#| msgid "No data set selected"
+#, kde-format
 msgid "No data set selected."
-msgstr "Ez da datu-multzorik hautatu"
+msgstr "Ez da datu-multzorik hautatu."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1582
 #, kde-format
@@ -1710,7 +1700,7 @@ msgstr "XYRGB"
 #: src/backend/datasources/filters/ImageFilter.cpp:118
 #, kde-format
 msgid "Empty file or invalid or non-supported format."
-msgstr ""
+msgstr "Fitxategia hutsik edo baliogabea edo onartu gabeko formatua."
 
 #: src/backend/datasources/filters/ImageFilter.cpp:219
 #, kde-format
@@ -1767,28 +1757,26 @@ msgid "name"
 msgstr "izena"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:391
-#, fuzzy, kde-format
-#| msgid "The project file is empty."
+#, kde-format
 msgid "Device/file is empty."
-msgstr "Proiektuaren fitxategia hutsik dago."
+msgstr "Gailua/fitxategia hutsik dago."
 
 #: src/backend/datasources/filters/JsonFilter.cpp:399
 #, kde-format
 msgid "JSON format error or document empty."
-msgstr ""
+msgstr "JSON formatuaren errorea edo dokumentua hutsik dago."
 
 #: src/backend/datasources/filters/JsonFilter.cpp:522
-#, fuzzy, kde-format
-#| msgid "Valid JSON document"
+#, kde-format
 msgid "Empty file or invalid JSON document."
-msgstr "JSON dokumentu balioduna"
+msgstr "Fitxategia hutsik edo JSON dokumentu baliogabea."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:308
 #: src/backend/datasources/filters/NetCDFFilter.cpp:237
 #: src/backend/datasources/filters/ReadStatFilter.cpp:176
 #, kde-format
 msgid "Error getting file info"
-msgstr "Errorea fitxategiaren informazioa eskuratzean"
+msgstr "Fitxategiaren informazioa eskuratzeko errorea"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:317
 #, kde-format
@@ -1975,26 +1963,24 @@ msgstr "Taula"
 #: src/backend/datasources/filters/MatioFilter.cpp:602
 #: src/backend/datasources/filters/MatioFilter.cpp:634
 #: src/backend/datasources/filters/MatioFilter.cpp:663
-#, fuzzy, kde-format
-#| msgid "No variable selected"
+#, kde-format
 msgid "No valid variable selected."
-msgstr "Aldagai hautaturik gabe"
+msgstr "Ez da aldagai baliodunik hautatu."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:658
-#, fuzzy, kde-format
-#| msgid "Variable not found"
+#, kde-format
 msgid "Selected variable not found."
-msgstr "Aldagaia ez du aurkitu"
+msgstr "Hautatutako aldagaia ez da aurkitu."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:799
 #, kde-format
 msgid "Struct contains no fields"
-msgstr "Egiturak ez dauka eremurik"
+msgstr "Egiturak ez du eremurik"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:881
 #, kde-format
 msgid "Support for this variable type not implemented yet."
-msgstr ""
+msgstr "Aldagai mota honetarako euskarria ez da oraindik inplementatu."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:1228
 #, kde-format
@@ -2002,65 +1988,55 @@ msgid "Variables with rank greater than 2 not supported yet."
 msgstr ""
 
 #: src/backend/datasources/filters/McapFilter.cpp:196
-#, fuzzy, kde-format
-#| msgid "Invalid blf file"
+#, kde-format
 msgid "Valid MCAP file"
-msgstr "«blf» fitxategi baliogabea"
+msgstr "MCAP fitxategi balioduna"
 
 #: src/backend/datasources/filters/McapFilter.cpp:201
-#, fuzzy, kde-format
-#| msgid "Message type:"
+#, kde-format
 msgid "Message count: "
-msgstr "Mezu-mota:"
+msgstr "Mezu kopurua: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:203
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Schema count: "
-msgstr "Orri kopurua: %1"
+msgstr "Eskema kopurua: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:205
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Channel count: "
-msgstr "Orri kopurua: %1"
+msgstr "Kanal kopurua: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:207
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Attachment count: "
-msgstr "Orri kopurua: %1"
+msgstr "Eranskin kopurua: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:209
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Metadata count: "
-msgstr "Orri kopurua: %1"
+msgstr "Metadatu kopurua: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:211
-#, fuzzy, kde-format
-#| msgid "Start Time:"
+#, kde-format
 msgid "Message Start Time: "
-msgstr "Hasierako ordua: "
+msgstr "Mezuaren hasierako ordua: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:213
-#, fuzzy, kde-format
-#| msgid "End Time:"
+#, kde-format
 msgid "Message End Time: "
-msgstr "Amaierako ordua: "
+msgstr "Mezuaren bukaerako ordua: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:215
-#, fuzzy, kde-format
-#| msgid "No templates found."
+#, kde-format
 msgid "No Statistics found."
-msgstr "Ez da txantiloirik aurkitu."
+msgstr "Ez da estatistikarik aurkitu."
 
 #: src/backend/datasources/filters/McapFilter.cpp:469
 #: src/backend/datasources/filters/McapFilter.cpp:962
-#, fuzzy, kde-format
-#| msgid "Unable to read the file"
+#, kde-format
 msgid "Failed to read the file. Reason: %1"
-msgstr "Ezin izan du fitxategia irakurri"
+msgstr "Fitxategia irakurtzea huts egin du. Arrazoia: %1"
 
 #: src/backend/datasources/filters/McapFilter.cpp:477
 #, kde-format
@@ -2155,23 +2131,20 @@ msgstr "Aldagaiak"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:689
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1114
-#, fuzzy, kde-format
-#| msgid "No variable selected"
+#, kde-format
 msgid "No variable selected."
-msgstr "Aldagai hautaturik gabe"
+msgstr "Ez da aldagairik hautatu."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:700
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open the file or it's empty."
-msgstr "'%1' fitxategia irekitzea huts egin du."
+msgstr "Fitxategia irekitzea huts egin du edo hutsik dago."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:938
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1078
-#, fuzzy, kde-format
-#| msgid "rank %1 not supported yet"
+#, kde-format
 msgid "Data type not supported yet."
-msgstr "%1 maila oraindik ez da onartzen"
+msgstr "Datu mota oraindik ez da onartzen."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1083
 #, kde-format
@@ -2186,40 +2159,34 @@ msgstr "Orri kopurua: %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:215
 #: src/backend/datasources/filters/XLSXFilter.cpp:626
-#, fuzzy, kde-format
-#| msgid "No data set selected"
+#, kde-format
 msgid "No sheet selected."
-msgstr "Ez da datu-multzorik hautatu"
+msgstr "Ez da orririk hautatu."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:250
-#, fuzzy, kde-format
-#| msgid "latex not found"
+#, kde-format
 msgid "Selected sheet not found."
-msgstr "latex ez du aurkitu"
+msgstr "Hautatutako orriak ez ditu aurkitu."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:257
-#, fuzzy, kde-format
-#| msgid "Invalid image"
+#, kde-format
 msgid "Invalid sheet."
-msgstr "Irudi baliogabea"
+msgstr "Orri baliogabeak."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:318
-#, fuzzy, kde-format
-#| msgid "rank %1 not supported yet"
+#, kde-format
 msgid "Formulas not supported yet."
-msgstr "%1 maila oraindik ez da onartzen"
+msgstr "Formulak oraindik ez dira onartzen."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:473
-#, fuzzy, kde-format
-#| msgid "File not found"
+#, kde-format
 msgid "Sheet not found."
-msgstr "Fitxategia ez du aurkitu"
+msgstr "Orria ez du aurkitu."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:480
-#, fuzzy, kde-format
-#| msgid "Invalid metadata file"
+#, kde-format
 msgid "Invalid sheet index."
-msgstr "Metadatu fitxategi baliogabea"
+msgstr "Orri indize baliogabea."
 
 #: src/backend/datasources/filters/QJsonModel.cpp:132
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:64
@@ -2250,10 +2217,9 @@ msgid "Size in Bytes"
 msgstr "Neurria Bytetan"
 
 #: src/backend/datasources/filters/QJsonModel.cpp:200
-#, fuzzy, kde-format
-#| msgid "Failed to load JSON document"
+#, kde-format
 msgid "Failed to load the JSON file. Empty JSON document."
-msgstr "JSON dokumentua zamatzea huts egin du"
+msgstr "JSON fitxategia zamatzea huts egin du. JSON dokumentua hutsik."
 
 #: src/backend/datasources/filters/QJsonModel.cpp:206
 #, kde-format
@@ -2311,17 +2277,15 @@ msgid "64bit: %1"
 msgstr "64 bit: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:482
-#, fuzzy, kde-format
-#| msgid "Error opening file"
+#, kde-format
 msgid "Error reading file."
-msgstr "Errorea fitxategia irekitzean"
+msgstr "Fitxategi irakurtzeko errorea."
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:512
 #: src/backend/datasources/filters/ReadStatFilter.cpp:535
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to parse the file."
-msgstr "'%1' fitxategia irekitzea huts egin du."
+msgstr "Fitxategi prozesatzea huts egin du."
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:113
 #: src/backend/datasources/MQTTClient.cpp:1190
@@ -2338,10 +2302,10 @@ msgid "No column available"
 msgstr "Ez dago zutaberik erabilgarri"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:163
-#, fuzzy, kde-format
-#| msgid "unsupported float type for rank 1"
+#, kde-format
 msgid "Unsupported file type, neither histogram no tree."
-msgstr "1 mailarako euskarririk ez duen koma higikorreko mota"
+msgstr ""
+"Euskarririk gabeko fitxategi mota, ez da histograma ez eta zuhaitza ere."
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:1501
 #, kde-format
@@ -2384,46 +2348,39 @@ msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr "«TStreamerInfo» erregistroaren neurria: %1 byte"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:103
-#, fuzzy, kde-format
-#| msgid "Rotation:"
+#, kde-format
 msgid "Application: %1"
-msgstr "Biraketa:"
+msgstr "Aplikazioa: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:105
-#, fuzzy, kde-format
-#| msgid "Format version: %1"
+#, kde-format
 msgid "Application version: %1.%2.%3"
-msgstr "Formatuaren bertsioa: %1"
+msgstr "Aplikazioaren bertsioa: %1.%2.%3"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:107
-#, fuzzy, kde-format
-#| msgid "Number of all objects: %1"
+#, kde-format
 msgid "Number of Objects: %1"
-msgstr "Objektu guztien kopurua: %1"
+msgstr "Objektu kopurua: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:115
-#, fuzzy, kde-format
-#| msgid "Start Time:"
+#, kde-format
 msgid "Start Time: %1"
-msgstr "Hasierako ordua: "
+msgstr "Hasierako ordua: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:123
-#, fuzzy, kde-format
-#| msgid "End Time:"
+#, kde-format
 msgid "End Time: %1"
-msgstr "Amaierako ordua: "
+msgstr "Bukaerako ordua: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:127
-#, fuzzy, kde-format
-#| msgid "Compression: %1"
+#, kde-format
 msgid "Compression Level: %1"
-msgstr "Konpresioa: %1"
+msgstr "Konpresioa maila: %1"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:129
-#, fuzzy, kde-format
-#| msgid "File size: %1 bytes"
+#, kde-format
 msgid "Uncompressed File Size: %1 Bytes"
-msgstr "Fitxategiaren neurria: %1 byte"
+msgstr "Konprimatu gabeko fitxategiaren neurria: %1 Byte"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:180
 #, kde-format
@@ -2431,28 +2388,24 @@ msgid "Big Endian not supported. CAN id: %1."
 msgstr ""
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:183
-#, fuzzy, kde-format
-#| msgid "Message too long. CAN id: %1"
+#, kde-format
 msgid "Message too long. CAN id: %1."
-msgstr "Mezu luzeegia. CAN ID: %1"
+msgstr "Mezu luzeegia. CAN ID: %1."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:186
-#, fuzzy, kde-format
-#| msgid "Unknown id: %1"
+#, kde-format
 msgid "Unknown id: %1."
-msgstr "ID ezezaguna: %1"
+msgstr "ID ezezaguna: %1."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:189
-#, fuzzy, kde-format
-#| msgid "Invalid blf file"
+#, kde-format
 msgid "Invalid BLF file"
-msgstr "«blf» fitxategi baliogabea"
+msgstr "BLF fitxategi baliogabea"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:192
-#, fuzzy, kde-format
-#| msgid "Unable to calculate conversion: %1"
+#, kde-format
 msgid "Unable to calculate conversion: %1."
-msgstr "Ez da bihurketa kalkulatzeko gai: %1"
+msgstr "Ez da bihurketa kalkulatzeko gai: %1."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:195
 #, kde-format
@@ -2460,16 +2413,14 @@ msgid "No DBC parser installed."
 msgstr ""
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:198
-#, fuzzy, kde-format
-#| msgid "Invalid blf file"
+#, kde-format
 msgid "Invalid DBC file."
-msgstr "«blf» fitxategi baliogabea"
+msgstr "DBC fitxategi baliogabea."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:201
-#, fuzzy, kde-format
-#| msgid "Unknown error"
+#, kde-format
 msgid "Unknown error,"
-msgstr "Errore ezezaguna"
+msgstr "Errore ezezaguna,"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:443
 #, kde-format
@@ -2492,25 +2443,19 @@ msgid "Sheets: "
 msgstr "Orriak: "
 
 #: src/backend/datasources/filters/XLSXFilter.cpp:630
-#, fuzzy, kde-format
-#| msgid "Invalid tolerance specified"
+#, kde-format
 msgid "Invalid region specified."
-msgstr "Zehaztutako perdoia baliogabea da"
+msgstr "Eskualde baliogabea zehaztu da."
 
 #: src/backend/datasources/LiveDataSource.cpp:708
-#, fuzzy, kde-format
-#| msgid "File does not exist."
+#, kde-format
 msgid "Device doesn't exist."
-msgstr "Fitxategia ez dago."
+msgstr "Gailua ez da existitzen."
 
 #: src/backend/datasources/LiveDataSource.cpp:711
-#, fuzzy, kde-format
-#| msgid ""
-#| "Failed to open the device. Please check your permissions on this device."
+#, kde-format
 msgid "User doesn't have enough permissions to open the device."
-msgstr ""
-"Gailua irekitzea huts egin du. Mesedez, egiaztatu gailu horretan dituzun "
-"baimenak."
+msgstr "Erabiltzaileak ez du gailua irekitzeko behar adina baimen."
 
 #: src/backend/datasources/LiveDataSource.cpp:714
 #, kde-format
@@ -2518,8 +2463,7 @@ msgid "Device already opened."
 msgstr "Gailua dagoeneko irekita."
 
 #: src/backend/datasources/LiveDataSource.cpp:717
-#, fuzzy, kde-format
-#| msgid "The device is not opened."
+#, kde-format
 msgid "Device is not open."
 msgstr "Gailua ez dago irekita."
 
@@ -2529,14 +2473,14 @@ msgid "Failed to read data."
 msgstr "Datuak irakurtzea huts egin du."
 
 #: src/backend/datasources/LiveDataSource.cpp:723
-#, fuzzy, kde-format
+#, kde-format
 msgid "Device not available."
-msgstr "Erabilgarri"
+msgstr "Gailua ez dago erabilgarri."
 
 #: src/backend/datasources/LiveDataSource.cpp:726
-#, fuzzy, kde-format
+#, kde-format
 msgid "Timeout occured."
-msgstr "Errorea gertatu da txertatu erregistroa egiterakoan."
+msgstr "Denbora-muga gertatu da."
 
 #: src/backend/datasources/LiveDataSource.cpp:731
 #, kde-format
@@ -2551,7 +2495,7 @@ msgstr "Serieko atakaren errorea"
 #: src/backend/datasources/MQTTTopic.cpp:44
 #, kde-format
 msgid "%1 %2"
-msgstr ""
+msgstr "%1 %2"
 
 #: src/backend/datasources/MQTTTopic.cpp:129
 #, kde-format
@@ -2574,10 +2518,9 @@ msgid "%1: Import from %2"
 msgstr "%1: Inportatu %2(e)tik"
 
 #: src/backend/gsl/constants.cpp:15
-#, fuzzy, kde-format
-#| msgid "Planck constant"
+#, kde-format
 msgid "Programming constants"
-msgstr "«Planck»en konstantea"
+msgstr "Programatzeko konstanteak"
 
 #: src/backend/gsl/constants.cpp:17
 #, kde-format
@@ -2667,7 +2610,7 @@ msgstr "Konstantea ezezaguna"
 #: src/backend/gsl/constants.cpp:63
 #, kde-format
 msgid "RAND_MAX"
-msgstr ""
+msgstr "RAND_MAX"
 
 #. i18n("Mathematical constants"));
 #: src/backend/gsl/constants.cpp:66
@@ -2686,9 +2629,9 @@ msgid "Euler's constant"
 msgstr "Eulerren konstantea"
 
 #: src/backend/gsl/constants.cpp:69
-#, fuzzy, kde-format
+#, kde-format
 msgid "Not a number"
-msgstr "Zenbakia"
+msgstr "Ez da zenbakia"
 
 #. i18n("Fundamental constants"));
 #: src/backend/gsl/constants.cpp:72
@@ -2984,140 +2927,140 @@ msgstr "Litro 1eko bolumena"
 #: src/backend/gsl/constants.cpp:142
 #, kde-format
 msgid "Volume of 1 US gallon"
-msgstr "AEBko galoi 1en bolumena"
+msgstr "AEBko galoi 1eko bolumena"
 
 #: src/backend/gsl/constants.cpp:143
 #, kde-format
 msgid "Volume of 1 Canadian gallon"
-msgstr "Kanadako galoi 1en bolumena"
+msgstr "Kanadako galoi 1eko bolumena"
 
 #: src/backend/gsl/constants.cpp:144
 #, kde-format
 msgid "Volume of 1 UK gallon"
-msgstr "Erresuma Batuko galoi 1en bolumena"
+msgstr "Erresuma Batuko galoi 1eko bolumena"
 
 #: src/backend/gsl/constants.cpp:145
 #, kde-format
 msgid "Volume of 1 quart"
-msgstr ""
+msgstr "Galoi-laurden 1eko bolumena"
 
 #: src/backend/gsl/constants.cpp:146
 #, kde-format
 msgid "Volume of 1 pint"
-msgstr ""
+msgstr "Pinta 1eko bolumena"
 
 #. i18n("Mass and Weight"));
 #: src/backend/gsl/constants.cpp:149
 #, kde-format
 msgid "Mass of 1 pound"
-msgstr ""
+msgstr "Libera 1eko masa"
 
 #: src/backend/gsl/constants.cpp:150
 #, kde-format
 msgid "Mass of 1 ounce"
-msgstr ""
+msgstr "Ontza 1eko masa"
 
 #: src/backend/gsl/constants.cpp:151
 #, kde-format
 msgid "Mass of 1 ton"
-msgstr ""
+msgstr "Tona 1eko masa"
 
 #: src/backend/gsl/constants.cpp:152
 #, kde-format
 msgid "Mass of 1 metric ton [1000 kg]"
-msgstr ""
+msgstr "Tona metriko 1eko masa [1000 kg]"
 
 #: src/backend/gsl/constants.cpp:153
 #, kde-format
 msgid "Mass of 1 UK ton"
-msgstr ""
+msgstr "Erresuma Batuko tona 1eko masa"
 
 #: src/backend/gsl/constants.cpp:154
 #, kde-format
 msgid "Mass of 1 troy ounce"
-msgstr ""
+msgstr "Troy ontza 1eko masa"
 
 #: src/backend/gsl/constants.cpp:155
 #, kde-format
 msgid "Mass of 1 carat"
-msgstr ""
+msgstr "1 kilateko masa"
 
 #: src/backend/gsl/constants.cpp:156
 #, kde-format
 msgid "Force of 1 gram weight"
-msgstr "Gramo 1eko pisuaren indarra"
+msgstr "1 gramoko pisuaren indarra"
 
 #: src/backend/gsl/constants.cpp:157
 #, kde-format
 msgid "Force of 1 pound weight"
-msgstr "Libra 1eko pisuaren indarra"
+msgstr "1 librako pisuaren indarra"
 
 #: src/backend/gsl/constants.cpp:158
 #, kde-format
 msgid "Force of 1 kilopound weight"
-msgstr "Kilolibra 1keko pisuaren indarra"
+msgstr "1 kilolibrako pisuaren indarra"
 
 #: src/backend/gsl/constants.cpp:159
 #, kde-format
 msgid "Force of 1 poundal"
-msgstr ""
+msgstr "1 poundaleko indarra"
 
 #. i18n("Thermal Energy and Power"));
 #: src/backend/gsl/constants.cpp:162
 #, kde-format
 msgid "Energy of 1 calorie"
-msgstr ""
+msgstr "1 kaloriako energia"
 
 #: src/backend/gsl/constants.cpp:163
 #, kde-format
 msgid "Energy of 1 British Thermal Unit"
-msgstr ""
+msgstr "1 unitate termiko britainiarreko energia"
 
 #: src/backend/gsl/constants.cpp:164
 #, kde-format
 msgid "Energy of 1 Therm"
-msgstr ""
+msgstr "1 termiako energia"
 
 #: src/backend/gsl/constants.cpp:165
 #, kde-format
 msgid "Power of 1 horsepower"
-msgstr ""
+msgstr "Zaldi-potentzia 1eko potentzia"
 
 #. i18n("Pressure"));
 #: src/backend/gsl/constants.cpp:168
 #, kde-format
 msgid "Pressure of 1 bar"
-msgstr ""
+msgstr "1 bareko presioa"
 
 #: src/backend/gsl/constants.cpp:169
 #, kde-format
 msgid "Pressure of 1 standard atmosphere"
-msgstr ""
+msgstr "Atmosfera estandar 1eko presioa"
 
 #: src/backend/gsl/constants.cpp:170
 #, kde-format
 msgid "Pressure of 1 torr"
-msgstr ""
+msgstr "Torr 1eko presioa"
 
 #: src/backend/gsl/constants.cpp:171
 #, kde-format
 msgid "Pressure of 1 meter of mercury"
-msgstr ""
+msgstr "Merkurio metro 1eko presioa"
 
 #: src/backend/gsl/constants.cpp:172
 #, kde-format
 msgid "Pressure of 1 inch of mercury"
-msgstr ""
+msgstr "Merkurio hazbete 1eko presioa"
 
 #: src/backend/gsl/constants.cpp:173
 #, kde-format
 msgid "Pressure of 1 inch of water"
-msgstr ""
+msgstr "Ur hazbete 1eko presioa"
 
 #: src/backend/gsl/constants.cpp:174
 #, kde-format
 msgid "Pressure of 1 pound per square inch"
-msgstr ""
+msgstr "Hazbete karratuko libra 1eko presioa"
 
 #. i18n("Viscosity"));
 #: src/backend/gsl/constants.cpp:177
@@ -3186,22 +3129,22 @@ msgstr ""
 #: src/backend/gsl/constants.cpp:195
 #, kde-format
 msgid "SI unit of force"
-msgstr ""
+msgstr "Indarraren SI unitatea"
 
 #: src/backend/gsl/constants.cpp:196
 #, kde-format
 msgid "Force of 1 Dyne"
-msgstr ""
+msgstr "Dina 1eko indarra"
 
 #: src/backend/gsl/constants.cpp:197
 #, kde-format
 msgid "SI unit of energy"
-msgstr ""
+msgstr "Energiaren SI unitatea"
 
 #: src/backend/gsl/constants.cpp:198
 #, kde-format
 msgid "Energy 1 erg"
-msgstr ""
+msgstr "Erg 1eko energia"
 
 #: src/backend/gsl/errors.h:22
 #, kde-format
@@ -3379,16 +3322,14 @@ msgid "Standard Mathematical Functions"
 msgstr "Matematika funtzio estandarrak"
 
 #: src/backend/gsl/functions.cpp:61
-#, fuzzy, kde-format
-#| msgid "Clausen Functions"
+#, kde-format
 msgid "Comparison Functions"
-msgstr "Clausen-en funtzioak"
+msgstr "Konparazio-funtzioak"
 
 #: src/backend/gsl/functions.cpp:63
-#, fuzzy, kde-format
-#| msgid "Logistic Distribution"
+#, kde-format
 msgid "Logical Functions"
-msgstr "Banaketa logistikoa"
+msgstr "Logika-funtzioak"
 
 #: src/backend/gsl/functions.cpp:65
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:28
@@ -3434,7 +3375,7 @@ msgstr "Debye-ren funtzioak"
 #: src/backend/gsl/functions.cpp:81
 #, kde-format
 msgid "Dilogarithm"
-msgstr ""
+msgstr "Dilogaritmo"
 
 #: src/backend/gsl/functions.cpp:83
 #, kde-format
@@ -3564,7 +3505,7 @@ msgstr "Laplace-n banaketa"
 #: src/backend/gsl/functions.cpp:141
 #, kde-format
 msgid "Exponential Power Distribution"
-msgstr ""
+msgstr "Potentziaren banaketa esponentziala"
 
 #: src/backend/gsl/functions.cpp:143
 #, kde-format
@@ -3589,17 +3530,17 @@ msgstr "Gamma banaketa"
 #: src/backend/gsl/functions.cpp:151
 #, kde-format
 msgid "Flat (Uniform) Distribution"
-msgstr ""
+msgstr "Banaketa laua (uniformea)"
 
 #: src/backend/gsl/functions.cpp:153
 #, kde-format
 msgid "Lognormal Distribution"
-msgstr ""
+msgstr "Banaketa Log-normala"
 
 #: src/backend/gsl/functions.cpp:155
 #, kde-format
 msgid "Chi-squared Distribution"
-msgstr ""
+msgstr "Banaketa Khi-karratu"
 
 #: src/backend/gsl/functions.cpp:157
 #, kde-format
@@ -3672,28 +3613,26 @@ msgid "Logarithmic Distribution"
 msgstr "Banaketa logaritmikoa"
 
 #: src/backend/gsl/functions.cpp:185
-#, fuzzy, kde-format
-#| msgid "Landau Distribution"
+#, kde-format
 msgid "Triangular Distribution"
-msgstr "Landau-ren banaketa"
+msgstr "Banaketa triangeluarra"
 
 #: src/backend/gsl/functions.cpp:189
-#, fuzzy, kde-format
-#| msgid "Power Function"
+#, kde-format
 msgid "Unknown Function"
-msgstr "Berretura funtzioa"
+msgstr "Funtzio ezezaguna"
 
 #: src/backend/gsl/functions.cpp:241
 #, fuzzy, kde-format
 #| msgid "Delete variable"
 msgid "Cell (index; variable)"
-msgstr "Ezabatu aldagaia"
+msgstr "Gela (indizea; aldagaia)"
 
 #: src/backend/gsl/functions.cpp:242
 #, fuzzy, kde-format
 #| msgid "Delete variable"
 msgid "Cell (index; default_value; variable)"
-msgstr "Ezabatu aldagaia"
+msgstr "Gela (indizea; lehenetsitako_balioa; aldagaia)"
 
 #: src/backend/gsl/functions.cpp:243
 #, kde-format
@@ -5085,10 +5024,9 @@ msgid "Logarithm"
 msgstr "Logaritmoa"
 
 #: src/backend/gsl/functions.cpp:578
-#, fuzzy, kde-format
-#| msgid "Logarithm"
+#, kde-format
 msgid "Base 2 logarithm"
-msgstr "Logaritmoa"
+msgstr "2 oinarriko logaritmoa"
 
 #: src/backend/gsl/functions.cpp:579
 #, kde-format
@@ -6124,55 +6062,49 @@ msgid "falseValue"
 msgstr "Lagin-neurria"
 
 #: src/backend/gsl/functions.cpp:979
-#, fuzzy, kde-format
-#| msgid "Ln"
+#, kde-format
 msgid "n"
-msgstr "Ln"
+msgstr "n"
 
 #: src/backend/gsl/functions.cpp:981
 #, kde-format
 msgid "j"
-msgstr ""
+msgstr "j"
 
 #: src/backend/gsl/functions.cpp:983
 #, kde-format
 msgid "q"
-msgstr ""
+msgstr "q"
 
 #: src/backend/gsl/functions.cpp:985 src/backend/gsl/functions.cpp:993
-#, fuzzy, kde-format
-#| msgid "x="
+#, kde-format
 msgid "x"
-msgstr "x="
+msgstr "x"
 
 #: src/backend/gsl/functions.cpp:995
-#, fuzzy, kde-format
-#| msgid "min."
+#, kde-format
 msgid "min"
-msgstr "min."
+msgstr "min"
 
 #: src/backend/gsl/functions.cpp:997
-#, fuzzy, kde-format
-#| msgid "max."
+#, kde-format
 msgid "max"
-msgstr "max."
+msgstr "max"
 
 #: src/backend/gsl/functions.cpp:1005
-#, fuzzy, kde-format
-#| msgid "1"
+#, kde-format
 msgid "v1"
-msgstr "1"
+msgstr "v1"
 
 #: src/backend/gsl/functions.cpp:1007
-#, fuzzy, kde-format
-#| msgid "2"
+#, kde-format
 msgid "v2"
-msgstr "2"
+msgstr "v2"
 
 #: src/backend/gsl/functions.cpp:1009
 #, kde-format
 msgid "ep"
-msgstr ""
+msgstr "ep"
 
 #: src/backend/lib/Range.h:52 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:461
@@ -6281,9 +6213,7 @@ msgid "%1: set matrix size to %2x%3"
 msgstr "%1: ezarri matrizearen neurria %2x%3"
 
 #: src/backend/matrix/Matrix.cpp:537
-#, fuzzy, kde-format
-#| msgid "%1: add %2 rows"
-#| msgid_plural "%1: add %2 rows"
+#, kde-format
 msgid "%1: add %2 row"
 msgid_plural "%1: add %2 rows"
 msgstr[0] "%1: gehitu errenkada %2"
@@ -6367,17 +6297,15 @@ msgid "%1: mirror vertically"
 msgstr "%1: ispilatu bertikalki"
 
 #: src/backend/note/Note.cpp:67
-#, fuzzy, kde-format
-#| msgid "Print"
+#, kde-format
 msgctxt "@title:window"
 msgid "Print Note"
-msgstr "Inprimatu"
+msgstr "Inprimatu oharra"
 
 #: src/backend/note/Note.cpp:85
-#, fuzzy, kde-format
-#| msgid "LaTeX files (*.tex)"
+#, kde-format
 msgid "Text file (*.txt)"
-msgstr "LaTeX fitxategiak (*.tex)"
+msgstr "Testu fitxategia (*.txt)"
 
 #: src/backend/note/Note.cpp:87
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:408
@@ -6388,44 +6316,40 @@ msgid "Export to File"
 msgstr "Esportatu fitxategira"
 
 #: src/backend/note/Note.cpp:101
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Export to File"
+#, kde-format
 msgid "Export failed"
-msgstr "Esportatu fitxategira"
+msgstr "Esportatzea huts egin du"
 
 #: src/backend/note/Note.cpp:101
-#, fuzzy, kde-format
-#| msgid "Couldn't open the file '%1' for writing."
+#, kde-format
 msgid "Failed to open '%1' for writing."
-msgstr "Ezin izan du '%1' fitxategia irakurtzeko ireki."
+msgstr "'%1' irakurtzeko irekitzea huts egin du."
 
 #: src/backend/note/Note.cpp:124
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: set text"
-msgstr "Ezarri letra-tipoa"
+msgstr "%1: ezarri testua"
 
 #: src/backend/note/Note.cpp:131 src/backend/worksheet/TextLabel.cpp:260
 #: src/backend/worksheet/TextLabel.cpp:299
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: set background color"
-msgstr "Ezarri atzeko planoaren kolorea"
+msgstr "%1: ezarri atzeko planoaren kolorea"
 
 #: src/backend/note/Note.cpp:138
-#, fuzzy, kde-format
-#| msgid "%1: set formula"
+#, kde-format
 msgid "%1: set text color"
-msgstr "%1: ezarri formula"
+msgstr "%1: ezarri testuaren kolorea"
 
 #: src/backend/note/Note.cpp:145
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: set text font"
-msgstr "Ezarri letra-tipoa"
+msgstr "%1: ezarri testuaren letra-tipoa"
 
 #: src/backend/note/Note.cpp:183
 #, kde-format
 msgid "no note element found"
-msgstr ""
+msgstr "ez da ohar elementurik aurkitu"
 
 #: src/backend/notebook/Notebook.cpp:62
 #, kde-format
@@ -6455,7 +6379,7 @@ msgid "Linear (Zero-padded)"
 msgstr ""
 
 #: src/backend/nsl/nsl_conv.c:20 src/backend/nsl/nsl_corr.c:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "Circular"
 msgstr "Zirkularra"
 
@@ -6497,30 +6421,29 @@ msgstr "Zirkularra"
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:196
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:113
 #: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:61
-#, fuzzy, kde-format
+#, kde-format
 msgid "Auto"
 msgstr "Automatikoa"
 
 #: src/backend/nsl/nsl_conv.c:21
-#, fuzzy, kde-format
-#| msgid "Direction:"
+#, kde-format
 msgid "Direct"
-msgstr "Noranzkoa:"
+msgstr "Zuzenekoa"
 
 #: src/backend/nsl/nsl_conv.c:21
 #, kde-format
 msgid "FFT"
-msgstr ""
+msgstr "FFT"
 
 #: src/backend/nsl/nsl_conv.c:22
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sum"
-msgstr "batura"
+msgstr "Batura"
 
 #: src/backend/nsl/nsl_conv.c:22
-#, fuzzy, kde-format
+#, kde-format
 msgid "Euclidean"
-msgstr "&Euklidearra"
+msgstr "Euklidearra"
 
 #: src/backend/nsl/nsl_conv.c:23
 #, kde-format
@@ -6570,14 +6493,14 @@ msgid "Fourth Derivative"
 msgstr ""
 
 #: src/backend/nsl/nsl_conv.c:32
-#, fuzzy, kde-format
+#, kde-format
 msgid "Gaussian"
-msgstr "Gaussen lausotzea"
+msgstr "Gaussiarra"
 
 #: src/backend/nsl/nsl_conv.c:33
 #, kde-format
 msgid "Lorentzian"
-msgstr ""
+msgstr "Lorentztarra"
 
 #: src/backend/nsl/nsl_corr.c:19
 #, fuzzy, kde-format
@@ -6595,26 +6518,24 @@ msgid "Coeff"
 msgstr ""
 
 #: src/backend/nsl/nsl_dft.c:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "Magnitude"
 msgstr "Magnitudea"
 
 #: src/backend/nsl/nsl_dft.c:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "Amplitude"
 msgstr "Anplitudea"
 
 #: src/backend/nsl/nsl_dft.c:20
-#, fuzzy, kde-format
-#| msgid "Serial Port"
+#, kde-format
 msgid "Real Part"
-msgstr "Serieko ataka"
+msgstr "Atal erreala"
 
 #: src/backend/nsl/nsl_dft.c:21 src/backend/nsl/nsl_hilbert.c:18
-#, fuzzy, kde-format
-#| msgid "Imaginary part"
+#, kde-format
 msgid "Imaginary Part"
-msgstr "Zati irudikaria"
+msgstr "Atal irudikaria"
 
 #: src/backend/nsl/nsl_dft.c:22 src/backend/nsl/nsl_fit.c:26
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:465
@@ -6670,60 +6591,54 @@ msgid "Period"
 msgstr "Periodoa"
 
 #: src/backend/nsl/nsl_diff.c:19
-#, fuzzy, kde-format
-#| msgid "first"
+#, kde-format
 msgid "First"
-msgstr "lehena"
+msgstr "Lehenengoa"
 
 #: src/backend/nsl/nsl_diff.c:19
-#, fuzzy, kde-format
-#| msgid "second"
+#, kde-format
 msgid "Second"
-msgstr "bigarrena"
+msgstr "Bigarrena"
 
 #: src/backend/nsl/nsl_diff.c:19
-#, fuzzy, kde-format
-#| msgid "third"
+#, kde-format
 msgid "Third"
-msgstr "hirugarrena"
+msgstr "Hirugarrena"
 
 #: src/backend/nsl/nsl_diff.c:19
-#, fuzzy, kde-format
-#| msgid "fourth"
+#, kde-format
 msgid "Fourth"
-msgstr "laugarrena"
+msgstr "Laugarrena"
 
 #: src/backend/nsl/nsl_diff.c:19
-#, fuzzy, kde-format
-#| msgid "fifth"
+#, kde-format
 msgid "Fifth"
-msgstr "bosgarrena"
+msgstr "Bosgarrena"
 
 #: src/backend/nsl/nsl_diff.c:19
-#, fuzzy, kde-format
-#| msgid "sixth"
+#, kde-format
 msgid "Sixth"
-msgstr "seigarrena"
+msgstr "Seigarrena"
 
 #: src/backend/nsl/nsl_filter.c:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "Low Pass"
 msgstr "Behe-igarotzea"
 
 #: src/backend/nsl/nsl_filter.c:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "High Pass"
-msgstr "High Prairie"
+msgstr "Goi-igarotzea"
 
 #: src/backend/nsl/nsl_filter.c:20
-#, fuzzy, kde-format
+#, kde-format
 msgid "Band Pass"
 msgstr "Banda-igarotzea"
 
 #: src/backend/nsl/nsl_filter.c:20
 #, kde-format
 msgid "Band Reject"
-msgstr ""
+msgstr "Banda baztertzea"
 
 #: src/backend/nsl/nsl_filter.c:22
 #, kde-format
@@ -6731,29 +6646,29 @@ msgid "Ideal"
 msgstr "Ideala"
 
 #: src/backend/nsl/nsl_filter.c:22
-#, fuzzy, kde-format
+#, kde-format
 msgid "Butterworth"
 msgstr "Butterworth"
 
 #: src/backend/nsl/nsl_filter.c:22
 #, kde-format
 msgid "Chebyshev Type I"
-msgstr ""
+msgstr "Chebyshev I motakoa"
 
 #: src/backend/nsl/nsl_filter.c:22
 #, kde-format
 msgid "Chebyshev Type II"
-msgstr ""
+msgstr "Chebyshev II motakoa"
 
 #: src/backend/nsl/nsl_filter.c:22
 #, kde-format
 msgid "Legendre (Optimum L)"
-msgstr ""
+msgstr "Legendre (Optimum L)"
 
 #: src/backend/nsl/nsl_filter.c:22
 #, kde-format
 msgid "Bessel (Thomson)"
-msgstr ""
+msgstr "Bessel (Thomson)"
 
 #: src/backend/nsl/nsl_filter.c:23
 #, kde-format
@@ -6761,27 +6676,24 @@ msgid "Fraction"
 msgstr "Zatikia"
 
 #: src/backend/nsl/nsl_fit.c:20
-#, fuzzy, kde-format
-#| msgid "Basic functions"
+#, kde-format
 msgid "Basic Functions"
 msgstr "Oinarrizko funtzioak"
 
 #: src/backend/nsl/nsl_fit.c:21
-#, fuzzy, kde-format
-#| msgid "Zeta Functions"
+#, kde-format
 msgid "Peak Functions"
-msgstr "Zeta funtzioak"
+msgstr "Gailur-funtzioak"
 
 #: src/backend/nsl/nsl_fit.c:22
 #, kde-format
 msgid "Growth (Sigmoidal)"
-msgstr ""
+msgstr "Hazkundea (sigmoidala)"
 
 #: src/backend/nsl/nsl_fit.c:23
-#, fuzzy, kde-format
-#| msgid "Logistic Distribution"
+#, kde-format
 msgid "Statistics (Distributions)"
-msgstr "Banaketa logistikoa"
+msgstr "Estatistika (banaketak)"
 
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:501
@@ -6793,37 +6705,37 @@ msgstr "Banaketa logistikoa"
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:780
 #: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:81
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:549
-#, fuzzy, kde-format
+#, kde-format
 msgid "Custom"
-msgstr "Pertsonalizatua"
+msgstr "Neurrira"
 
 #: src/backend/nsl/nsl_fit.c:26 src/backend/nsl/nsl_interp.c:22
 #: src/backend/nsl/nsl_sf_stats.c:15
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:557
-#, fuzzy, kde-format
+#, kde-format
 msgid "Exponential"
-msgstr "Esponentziala:"
+msgstr "Esponentziala"
 
 #: src/backend/nsl/nsl_fit.c:26 src/backend/nsl/nsl_interp.c:15
-#, fuzzy, kde-format
+#, kde-format
 msgid "Polynomial"
-msgstr "Polinesiarra"
+msgstr "Polinomiala"
 
 #: src/backend/nsl/nsl_fit.c:26
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:531
 #, kde-format
 msgid "Inverse Exponential"
-msgstr ""
+msgstr "Alderantzizko esponentziala"
 
 #: src/backend/nsl/nsl_fit.c:26
 #, kde-format
 msgid "Fourier"
-msgstr ""
+msgstr "Fourier"
 
 #: src/backend/nsl/nsl_fit.c:30
 #, kde-format
 msgid "Gaussian (normal)"
-msgstr ""
+msgstr "Gaussiarra (normala)"
 
 #: src/backend/nsl/nsl_fit.c:31
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:485
@@ -6831,13 +6743,12 @@ msgstr ""
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:563
 #, kde-format
 msgid "Cauchy-Lorentz"
-msgstr ""
+msgstr "Cauchy-Lorentz"
 
 #: src/backend/nsl/nsl_fit.c:32 src/backend/nsl/nsl_sf_stats.c:45
-#, fuzzy, kde-format
-#| msgid "Hyperbolic cosine"
+#, kde-format
 msgid "Hyperbolic Secant (sech)"
-msgstr "Kosinu hiperbolikoa"
+msgstr "Sekante hiperbolikoa (sech)"
 
 #: src/backend/nsl/nsl_fit.c:33
 #, kde-format
@@ -6847,12 +6758,12 @@ msgstr ""
 #: src/backend/nsl/nsl_fit.c:34
 #, kde-format
 msgid "Voigt Profile"
-msgstr ""
+msgstr "Voigt profila"
 
 #: src/backend/nsl/nsl_fit.c:35
 #, kde-format
 msgid "Pseudo-Voigt (same width)"
-msgstr ""
+msgstr "Sasi-Voigt (zabalera bera)"
 
 #: src/backend/nsl/nsl_fit.c:44
 #, fuzzy, kde-format
@@ -12436,8 +12347,8 @@ msgstr "Bilaketa-barrutia"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:51
 #: src/frontend/dockwidgets/ImageDock.cpp:54
 #: src/frontend/dockwidgets/ImageDock.cpp:62
-#: src/frontend/widgets/LabelWidget.cpp:154
-#: src/frontend/widgets/LabelWidget.cpp:172
+#: src/frontend/widgets/LabelWidget.cpp:494
+#: src/frontend/widgets/LabelWidget.cpp:514
 #, fuzzy, kde-format
 msgid "Top"
 msgstr "Goian"
@@ -12451,8 +12362,8 @@ msgstr "Goian"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:53
 #: src/frontend/dockwidgets/ImageDock.cpp:56
 #: src/frontend/dockwidgets/ImageDock.cpp:64
-#: src/frontend/widgets/LabelWidget.cpp:156
-#: src/frontend/widgets/LabelWidget.cpp:174
+#: src/frontend/widgets/LabelWidget.cpp:496
+#: src/frontend/widgets/LabelWidget.cpp:516
 #, fuzzy, kde-format
 msgid "Bottom"
 msgstr "Behean"
@@ -12533,8 +12444,8 @@ msgstr ""
 #: src/frontend/dockwidgets/ImageDock.cpp:58
 #: src/frontend/dockwidgets/XYCurveDock.cpp:347
 #: src/frontend/widgets/BackgroundWidget.cpp:118
-#: src/frontend/widgets/LabelWidget.cpp:149
-#: src/frontend/widgets/LabelWidget.cpp:168
+#: src/frontend/widgets/LabelWidget.cpp:488
+#: src/frontend/widgets/LabelWidget.cpp:509
 #: src/frontend/widgets/ValueWidget.cpp:37
 #, fuzzy, kde-format
 msgid "Left"
@@ -12551,8 +12462,8 @@ msgstr "Ezkerrean"
 #: src/frontend/dockwidgets/ImageDock.cpp:60
 #: src/frontend/dockwidgets/XYCurveDock.cpp:348
 #: src/frontend/widgets/BackgroundWidget.cpp:119
-#: src/frontend/widgets/LabelWidget.cpp:151
-#: src/frontend/widgets/LabelWidget.cpp:170
+#: src/frontend/widgets/LabelWidget.cpp:490
+#: src/frontend/widgets/LabelWidget.cpp:511
 #: src/frontend/widgets/ValueWidget.cpp:38
 #, fuzzy, kde-format
 msgid "Right"
@@ -13110,11 +13021,11 @@ msgstr ""
 #: src/frontend/dockwidgets/ImageDock.cpp:59
 #: src/frontend/dockwidgets/ImageDock.cpp:63
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:296
-#: src/frontend/widgets/LabelWidget.cpp:142
-#: src/frontend/widgets/LabelWidget.cpp:150
-#: src/frontend/widgets/LabelWidget.cpp:155
-#: src/frontend/widgets/LabelWidget.cpp:169
-#: src/frontend/widgets/LabelWidget.cpp:173
+#: src/frontend/widgets/LabelWidget.cpp:489
+#: src/frontend/widgets/LabelWidget.cpp:495
+#: src/frontend/widgets/LabelWidget.cpp:510
+#: src/frontend/widgets/LabelWidget.cpp:515
+#: src/frontend/widgets/LabelWidget.cpp:570
 #: src/frontend/widgets/ValueWidget.cpp:94
 #: src/frontend/widgets/ValueWidget.cpp:95
 #, fuzzy, kde-format
@@ -13123,8 +13034,8 @@ msgstr "Erdian"
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:256
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:261
-#: src/frontend/widgets/LabelWidget.cpp:152
-#: src/frontend/widgets/LabelWidget.cpp:157
+#: src/frontend/widgets/LabelWidget.cpp:491
+#: src/frontend/widgets/LabelWidget.cpp:497
 #, fuzzy, kde-format
 #| msgid "Relative Path"
 msgid "Relative to plot"
@@ -15669,7 +15580,7 @@ msgid "Command"
 msgstr "Komandoa"
 
 #: src/frontend/notebook/NotebookView.cpp:103
-#: src/frontend/widgets/LabelWidget.cpp:207
+#: src/frontend/widgets/LabelWidget.cpp:483
 #, fuzzy, kde-format
 msgid "Markdown"
 msgstr "Markdown"
@@ -15677,7 +15588,7 @@ msgstr "Markdown"
 #. i18n: ectx: property (text), widget (QLabel, lTex)
 #: src/frontend/notebook/NotebookView.cpp:107
 #: src/frontend/ui/settingsworksheetpage.ui:147
-#: src/frontend/widgets/LabelWidget.cpp:205
+#: src/frontend/widgets/LabelWidget.cpp:481
 #, fuzzy, kde-format
 msgid "LaTeX"
 msgstr "LaTeX"
@@ -17687,22 +17598,19 @@ msgid "Rescale to [a, b]"
 msgstr "Denbora-tartea:"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:477
-#, fuzzy, kde-format
-#| msgid "Export..."
+#, kde-format
 msgid "&Sort..."
-msgstr "Esportatu..."
+msgstr "&Sailkatu..."
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:478
-#, fuzzy, kde-format
-#| msgid "Insert Multiple Columns Left"
+#, kde-format
 msgid "Sort multiple columns together"
-msgstr "Txertatu hainbat zutabe ezkerrean"
+msgstr "Sailkatu hainbat zutabe batera"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:479
-#, fuzzy, kde-format
-#| msgid "&Ascending"
+#, kde-format
 msgid "Sort &Ascending"
-msgstr "&Gorakorra"
+msgstr "Sailkatze &gorakorra"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:480
 #, fuzzy, kde-format
@@ -17711,10 +17619,9 @@ msgid "Sort the selected columns separately in ascending order"
 msgstr "Hautatutako zutabeak hauen arabera lautu:"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:481
-#, fuzzy, kde-format
-#| msgid "&Descending"
+#, kde-format
 msgid "Sort &Descending"
-msgstr "&Beherakorra"
+msgstr "Sailkatze &beherakorra"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:482
 #, fuzzy, kde-format
@@ -18025,9 +17932,9 @@ msgid "%1: row statistics"
 msgstr "%1: errenkada-estatistikak"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3382
-#, fuzzy, kde-format
+#, kde-format
 msgid "Row %1"
-msgstr "%1 errendaka"
+msgstr "%1. errenkada"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3407
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3446
@@ -18065,45 +17972,38 @@ msgid "Selected 1: %1 rows, %2 columns"
 msgstr ""
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3772
-#, fuzzy, kde-format
-#| msgid "%1: cut selected cells"
+#, kde-format
 msgid "Selected: %1 cells"
-msgstr "%1: ebaki hautatutako gelaxkak"
+msgstr "Hautatuta: %1 gelaxka"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3791
-#, fuzzy, kde-format
-#| msgid "Arrow"
+#, kde-format
 msgid "row"
 msgid_plural "rows"
-msgstr[0] "Gezia"
-msgstr[1] "Gezia"
+msgstr[0] "errenkada"
+msgstr[1] "errenkada"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3792
-#, fuzzy, kde-format
-#| msgid "Column"
+#, kde-format
 msgid "column"
 msgid_plural "columns"
-msgstr[0] "Zutabea"
-msgstr[1] "Zutabea"
+msgstr[0] "zutabe"
+msgstr[1] "zutabe"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3793
 #, kde-format
 msgid "cells"
-msgstr ""
+msgstr "gelaxkak"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3794
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Mask Values"
+#, kde-format
 msgid "masked value"
-msgstr "Maskaratu balioak"
+msgstr "Maskaratutako balioa"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3794
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Mask Values"
+#, kde-format
 msgid "masked values"
-msgstr "Maskaratu balioak"
+msgstr "Maskaratutako balioak"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3795
 #, fuzzy, kde-format
@@ -18118,35 +18018,34 @@ msgstr "Posizioa"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3796
 #, kde-format
 msgid " , "
-msgstr ""
+msgstr " , "
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3796
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3797
-#, fuzzy, kde-format
-#| msgid "1"
+#, kde-format
 msgid "%1"
-msgstr "1"
+msgstr "%1"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3797
 #, kde-format
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3801
 #, kde-format
 msgid "Selected: %1 %2, %3 %4%5 %6 %7 %8"
-msgstr ""
+msgstr "Hautatuta: %1 %2, %3 %4%5 %6 %7 %8"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3811
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
-msgstr ""
+msgstr "Hautatuta: %1 %2%3 %4 %5 %6"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3892
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
-msgstr ""
+msgstr "Inprimatu kalkulu-orria"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4504
 #, kde-format
@@ -19213,7 +19112,7 @@ msgstr "Sortu indizea"
 #: src/frontend/ui/datasources/asciioptionswidget.ui:253
 #, kde-format
 msgid "Import Integer as Double"
-msgstr ""
+msgstr "Inportatu Osoa Bikoitz gisa"
 
 #. i18n: ectx: property (text), widget (QLabel, lSkipBytes)
 #: src/frontend/ui/datasources/binaryoptionswidget.ui:17
@@ -19583,7 +19482,7 @@ msgstr "Aurreneko errenkada zutabe-izen gisa:"
 #: src/frontend/ui/datasources/importfilewidget.ui:89
 #, kde-format
 msgid "File or Named Pipe"
-msgstr ""
+msgstr "Fitxategia edo izendatutako hodia"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbSourceType)
 #: src/frontend/ui/datasources/importfilewidget.ui:94
@@ -19841,10 +19740,9 @@ msgstr "Elkarrizketa-koadroa"
 
 #. i18n: ectx: property (text), widget (QLabel, lGraphLayer)
 #: src/frontend/ui/datasources/importoriginlayersdialog.ui:27
-#, fuzzy, kde-format
-#| msgid "Import as:"
+#, kde-format
 msgid "Import As"
-msgstr "Inportatu honela:"
+msgstr "Inportatu honela"
 
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #: src/frontend/ui/datasources/importprojectwidget.ui:23
@@ -19865,7 +19763,7 @@ msgstr "Inportatu beharreko objektuak"
 #: src/frontend/ui/datasources/importprojectwidget.ui:58
 #, kde-format
 msgid "Graph Layers:"
-msgstr ""
+msgstr "Grafikoaren geruzak:"
 
 #. i18n: ectx: property (text), widget (QLabel, lUnusedObjects)
 #: src/frontend/ui/datasources/importprojectwidget.ui:82
@@ -20469,7 +20367,7 @@ msgstr "Letra-tipoaren kolorea:"
 #: src/frontend/ui/dockwidgets/axisdock.ui:1620
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:441
 #: src/frontend/worksheet/WorksheetView.cpp:473
-#, fuzzy, kde-format
+#, kde-format
 msgid "Grid"
 msgstr "Sareta"
 
@@ -20904,9 +20802,9 @@ msgstr "Hedatu:"
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:620
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:265
 #: src/frontend/worksheet/WorksheetView.cpp:465
-#, fuzzy, kde-format
+#, kde-format
 msgid "Layout"
-msgstr "Diseinua"
+msgstr "Antolaera"
 
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbTop)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbPaddingHorizontal)
@@ -21710,18 +21608,17 @@ msgstr "Pertzentilak"
 #. i18n: ectx: property (text), widget (QLabel, lPositionEnd)
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:49
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:105
-#, fuzzy, kde-format
-#| msgid "End row:"
+#, kde-format
 msgid "End x:"
-msgstr "Amaierako errenkada:"
+msgstr "Bukaerako x:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionDateTimeStart)
 #. i18n: ectx: property (text), widget (QLabel, lPositionStart)
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:290
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:313
-#, fuzzy, kde-format
+#, kde-format
 msgid "Start x:"
-msgstr "Hasi"
+msgstr "Hasierako x:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCenterMetric)
 #: src/frontend/ui/dockwidgets/runchartdock.ui:148
@@ -21757,16 +21654,15 @@ msgstr "Zutabe bereizlea:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:198
-#, fuzzy, kde-format
+#, kde-format
 msgid "Column Header"
-msgstr "Konexioa"
+msgstr "Zutabearen goiburua"
 
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:222
-#, fuzzy, kde-format
-#| msgid "Comment:"
+#, kde-format
 msgid "Comments:"
-msgstr "Iruzkina:"
+msgstr "Iruzkinak:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLinking)
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:235
@@ -22711,6 +22607,16 @@ msgid ""
 "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
 "\"><br /></p></body></html>"
 msgstr ""
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+"REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
+"\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; font-"
+"weight:400; font-style:normal;\">\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
+"\"><br /></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lBackgroundColor)
 #: src/frontend/ui/labelwidget.ui:231
@@ -22733,10 +22639,9 @@ msgstr "X jatorri-aldaketa:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/labelwidget.ui:494
-#, fuzzy, kde-format
-#| msgid "Model:"
+#, kde-format
 msgid "Mode:"
-msgstr "Eredua:"
+msgstr "Modua:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderShape)
 #: src/frontend/ui/labelwidget.ui:586
@@ -23002,13 +22907,13 @@ msgstr "Cachea:"
 #: src/frontend/ui/settingsdatasetspage.ui:39
 #, kde-format
 msgid "Kaggle"
-msgstr ""
+msgstr "Kaggle"
 
 #. i18n: ectx: property (text), widget (QLabel, lKagglePath)
 #: src/frontend/ui/settingsdatasetspage.ui:46
 #, kde-format
 msgid "CLI Path:"
-msgstr ""
+msgstr "CLI bide-izena:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/frontend/ui/settingsdatasetspage.ui:66
@@ -23036,17 +22941,15 @@ msgstr "Abioa:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNewProject)
 #: src/frontend/ui/settingsgeneralpage.ui:50
-#, fuzzy, kde-format
-#| msgid "Save Project"
+#, kde-format
 msgid "New Project:"
-msgstr "Gorde proiektua"
+msgstr "Proiektu berria:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
 #: src/frontend/ui/settingsgeneralpage.ui:60
-#, fuzzy, kde-format
-#| msgid "Notebook"
+#, kde-format
 msgid "Notebook:"
-msgstr "Koadernoa"
+msgstr "Koadernoa:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
 #: src/frontend/ui/settingsgeneralpage.ui:86
@@ -23125,17 +23028,15 @@ msgstr "Gorde automatikoki:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/settingsgeneralpage.ui:298
-#, fuzzy, kde-format
-#| msgid "Save Calculations:"
+#, kde-format
 msgid "Save  Calculations:"
 msgstr "Gorde kalkuluak:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
 #: src/frontend/ui/settingsgeneralpage.ui:312
-#, fuzzy, kde-format
-#| msgid "Probability"
+#, kde-format
 msgid "Compatibility:"
-msgstr "Probabilitatea"
+msgstr "Bateragarritasuna:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
 #: src/frontend/ui/settingsgeneralpage.ui:319
@@ -23165,7 +23066,7 @@ msgstr "Tartea:"
 #: src/frontend/ui/settingsgeneralpage.ui:360
 #, kde-format
 msgid "Info"
-msgstr ""
+msgstr "Informazioa"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPerfTrace)
 #. i18n: ectx: property (text), widget (QLabel, lPerformance)
@@ -23179,7 +23080,7 @@ msgstr "Errendimendua"
 #: src/frontend/ui/settingsgeneralpage.ui:416
 #, kde-format
 msgid "Debug"
-msgstr ""
+msgstr "Araztea"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -23423,29 +23324,27 @@ msgstr "Esportatu goiburu bertikala:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, compressionGroup)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:192
-#, fuzzy, kde-format
-#| msgid "Compression: %1"
+#, kde-format
 msgid "Compression"
-msgstr "Konpresioa: %1"
+msgstr "Konpresioa"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbLZ4)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:205
 #, kde-format
 msgid "LZ4"
-msgstr ""
+msgstr "LZ4"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbZSTD)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:212
 #, kde-format
 msgid "ZSTD"
-msgstr ""
+msgstr "ZSTD"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:222
-#, fuzzy, kde-format
-#| msgid "Compression: %1"
+#, kde-format
 msgid "Compression Level"
-msgstr "Konpresioa: %1"
+msgstr "Konpresioa maila"
 
 #. i18n: ectx: property (text), widget (QLabel, lExportToFITS)
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:232
@@ -23509,17 +23408,15 @@ msgstr "Koloreak"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoUpdate)
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:152
-#, fuzzy, kde-format
-#| msgid "auto update: true"
+#, kde-format
 msgid "auto update the values"
-msgstr "automatikoki eguneratzea: egia"
+msgstr "balioak automatikoki eguneratu"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoResize)
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:162
-#, fuzzy, kde-format
-#| msgid "Flatten selected columns"
+#, kde-format
 msgid "auto resize the column"
-msgstr "Lautu hautatutako zutabeak"
+msgstr "zutabearen neurria automatikoki egokitu"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbCurvePlacement)
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:154
@@ -23854,11 +23751,11 @@ msgstr "Errorerik ez"
 #: src/frontend/widgets/DatapickerCurveWidget.cpp:34
 #, kde-format
 msgid "Symmetric"
-msgstr ""
+msgstr "Simetrikoa"
 
 #: src/frontend/widgets/DatapickerCurveWidget.cpp:31
 #: src/frontend/widgets/DatapickerCurveWidget.cpp:35
-#, fuzzy, kde-format
+#, kde-format
 msgid "Asymmetric"
 msgstr "Asimetrikoa"
 
@@ -23999,13 +23896,13 @@ msgstr "Irudi baliogabea"
 #: src/frontend/widgets/ErrorBarWidget.cpp:46
 #, kde-format
 msgid "X Uncertainty"
-msgstr ""
+msgstr "X ziurgabetasuna"
 
 #: src/frontend/widgets/ErrorBarWidget.cpp:47
 #: src/frontend/widgets/ErrorBarWidget.cpp:55
 #, kde-format
 msgid "No Uncertainties"
-msgstr ""
+msgstr "Ziurgabetasunik ez"
 
 #: src/frontend/widgets/ErrorBarWidget.cpp:49
 #: src/frontend/widgets/ErrorBarWidget.cpp:57
@@ -24013,7 +23910,7 @@ msgstr ""
 #: src/frontend/widgets/ErrorBarWidget.cpp:71
 #, kde-format
 msgid "Poisson variance, sqrt(N)"
-msgstr "Poisson bariantza, sqrt(N)"
+msgstr "Poissonen bariantza, sqrt(N)"
 
 #: src/frontend/widgets/ErrorBarWidget.cpp:50
 #: src/frontend/widgets/ErrorBarWidget.cpp:58
@@ -24236,7 +24133,97 @@ msgstr "Derrigorrezko gako-hitza ezin da kendu."
 msgid "Removing Keyword"
 msgstr "Gako-hitza kentzen"
 
-#: src/frontend/widgets/LabelWidget.cpp:116
+#: src/frontend/widgets/LabelWidget.cpp:520
+#, kde-format
+msgid "No Border"
+msgstr "Ertzik gabe"
+
+#: src/frontend/widgets/LabelWidget.cpp:521
+#, kde-format
+msgid "Rectangle"
+msgstr "Laukizuzena"
+
+#: src/frontend/widgets/LabelWidget.cpp:522
+#, kde-format
+msgid "Ellipse"
+msgstr "Elipsea"
+
+#: src/frontend/widgets/LabelWidget.cpp:523
+#, kde-format
+msgid "Round sided rectangle"
+msgstr "Alde biribilduko laukizuzena"
+
+#: src/frontend/widgets/LabelWidget.cpp:524
+#, kde-format
+msgid "Round corner rectangle"
+msgstr "Izkina biribilduko laukizuzena"
+
+#: src/frontend/widgets/LabelWidget.cpp:525
+#, kde-format
+msgid "Inwards round corner rectangle"
+msgstr "Barrurantz biribildutako izkinako laukizuzena"
+
+#: src/frontend/widgets/LabelWidget.cpp:526
+#, kde-format
+msgid "Dented border rectangle"
+msgstr "Ertz koskaduneko laukizuzena"
+
+#: src/frontend/widgets/LabelWidget.cpp:527
+#, kde-format
+msgid "Cuboid"
+msgstr "Kuboidea"
+
+#: src/frontend/widgets/LabelWidget.cpp:528
+#, kde-format
+msgid "Up Pointing rectangle"
+msgstr "Gorantz seinalatzen duen laukizuzena"
+
+#: src/frontend/widgets/LabelWidget.cpp:529
+#, kde-format
+msgid "Down Pointing rectangle"
+msgstr "Beherantz seinalatzen duen laukizuzena"
+
+#: src/frontend/widgets/LabelWidget.cpp:530
+#, kde-format
+msgid "Left Pointing rectangle"
+msgstr "Ezkerrerantz seinalatzen duen laukizuzena"
+
+#: src/frontend/widgets/LabelWidget.cpp:531
+#, kde-format
+msgid "Right Pointing rectangle"
+msgstr "Eskuinerantz seinalatzen duen laukizuzena"
+
+#: src/frontend/widgets/LabelWidget.cpp:534
+#, kde-format
+msgid "No line"
+msgstr "Lerrorik ez"
+
+#: src/frontend/widgets/LabelWidget.cpp:535
+#, kde-format
+msgid "Solid line"
+msgstr "Lerro solidoa"
+
+#: src/frontend/widgets/LabelWidget.cpp:536
+#, kde-format
+msgid "Dash line"
+msgstr "Marratxo lerroa"
+
+#: src/frontend/widgets/LabelWidget.cpp:537
+#, kde-format
+msgid "Dot line"
+msgstr "Puntu lerroa"
+
+#: src/frontend/widgets/LabelWidget.cpp:538
+#, kde-format
+msgid "Dash dot line"
+msgstr "Marratxo-puntu lerroa"
+
+#: src/frontend/widgets/LabelWidget.cpp:539
+#, kde-format
+msgid "Dash dot dot line"
+msgstr "marratxo-puntu-puntu lerroa"
+
+#: src/frontend/widgets/LabelWidget.cpp:542
 #, kde-format
 msgid ""
 "Use logical instead of absolute coordinates to specify the position on the "
@@ -24244,152 +24231,7 @@ msgid ""
 msgstr ""
 "Erabili koordenatu logikoak absolutuen ordez, diagramako kokapena zehazteko"
 
-#: src/frontend/widgets/LabelWidget.cpp:135
-#, kde-format
-msgid "Bold"
-msgstr "Lodia"
-
-#: src/frontend/widgets/LabelWidget.cpp:136
-#, kde-format
-msgid "Italic"
-msgstr "Etzana"
-
-#: src/frontend/widgets/LabelWidget.cpp:137
-#, kde-format
-msgid "Underline"
-msgstr "Azpimarra"
-
-#: src/frontend/widgets/LabelWidget.cpp:138
-#, kde-format
-msgid "Strike Out"
-msgstr "Marratua"
-
-#: src/frontend/widgets/LabelWidget.cpp:139
-#, kde-format
-msgid "Super Script"
-msgstr "Goi-indizea"
-
-#: src/frontend/widgets/LabelWidget.cpp:140
-#, kde-format
-msgid "Sub-Script"
-msgstr "Azpi-indizea"
-
-#: src/frontend/widgets/LabelWidget.cpp:141
-#, fuzzy, kde-format
-msgid "Left Align"
-msgstr "Ezkerreko marjina"
-
-#: src/frontend/widgets/LabelWidget.cpp:143
-#, fuzzy, kde-format
-msgid "Right Align"
-msgstr "Eskuineko marjina"
-
-#: src/frontend/widgets/LabelWidget.cpp:144
-#, kde-format
-msgid "Justify"
-msgstr ""
-
-#: src/frontend/widgets/LabelWidget.cpp:145
-#, kde-format
-msgid "Insert Symbol"
-msgstr "Txertatu ikurra"
-
-#: src/frontend/widgets/LabelWidget.cpp:146
-#, kde-format
-msgid "Insert Date/Time"
-msgstr "Txertatu Data/Ordua"
-
-#: src/frontend/widgets/LabelWidget.cpp:176
-#, kde-format
-msgid "No Border"
-msgstr "Ertzik gabe"
-
-#: src/frontend/widgets/LabelWidget.cpp:177
-#, kde-format
-msgid "Rectangle"
-msgstr "Laukizuzena"
-
-#: src/frontend/widgets/LabelWidget.cpp:178
-#, kde-format
-msgid "Ellipse"
-msgstr "Elipsea"
-
-#: src/frontend/widgets/LabelWidget.cpp:179
-#, kde-format
-msgid "Round sided rectangle"
-msgstr "Alde biribilduko laukizuzena"
-
-#: src/frontend/widgets/LabelWidget.cpp:180
-#, kde-format
-msgid "Round corner rectangle"
-msgstr "Izkina biribilduko laukizuzena"
-
-#: src/frontend/widgets/LabelWidget.cpp:181
-#, kde-format
-msgid "Inwards round corner rectangle"
-msgstr "Barrurantz biribildutako izkinako laukizuzena"
-
-#: src/frontend/widgets/LabelWidget.cpp:182
-#, kde-format
-msgid "Dented border rectangle"
-msgstr "Ertz koskaduneko laukizuzena"
-
-#: src/frontend/widgets/LabelWidget.cpp:183
-#, kde-format
-msgid "Cuboid"
-msgstr "Kuboidea"
-
-#: src/frontend/widgets/LabelWidget.cpp:184
-#, kde-format
-msgid "Up Pointing rectangle"
-msgstr "Gorantz seinalatzen duen laukizuzena"
-
-#: src/frontend/widgets/LabelWidget.cpp:185
-#, kde-format
-msgid "Down Pointing rectangle"
-msgstr "Beherantz seinalatzen duen laukizuzena"
-
-#: src/frontend/widgets/LabelWidget.cpp:186
-#, kde-format
-msgid "Left Pointing rectangle"
-msgstr "Ezkerrerantz seinalatzen duen laukizuzena"
-
-#: src/frontend/widgets/LabelWidget.cpp:187
-#, kde-format
-msgid "Right Pointing rectangle"
-msgstr "Eskuinerantz seinalatzen duen laukizuzena"
-
-#: src/frontend/widgets/LabelWidget.cpp:189
-#, kde-format
-msgid "No line"
-msgstr "Lerrorik ez"
-
-#: src/frontend/widgets/LabelWidget.cpp:190
-#, kde-format
-msgid "Solid line"
-msgstr "Lerro solidoa"
-
-#: src/frontend/widgets/LabelWidget.cpp:191
-#, kde-format
-msgid "Dash line"
-msgstr "Marratxo lerroa"
-
-#: src/frontend/widgets/LabelWidget.cpp:192
-#, kde-format
-msgid "Dot line"
-msgstr "Puntu lerroa"
-
-#: src/frontend/widgets/LabelWidget.cpp:193
-#, kde-format
-msgid "Dash dot line"
-msgstr "Marratxo-puntu lerroa"
-
-#: src/frontend/widgets/LabelWidget.cpp:194
-#, kde-format
-msgid "Dash dot dot line"
-msgstr "marratxo-puntu-puntu lerroa"
-
-#: src/frontend/widgets/LabelWidget.cpp:212
+#: src/frontend/widgets/LabelWidget.cpp:547
 #, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
@@ -24401,7 +24243,7 @@ msgstr ""
 "LaTeX instalatu beharra dago</li><li>Markdown - Markdown markatzeko lengoaia "
 "erabiltzen duen testu-ezarpena</li></ul>"
 
-#: src/frontend/widgets/LabelWidget.cpp:220
+#: src/frontend/widgets/LabelWidget.cpp:555
 #, fuzzy, kde-format
 #| msgid ""
 #| "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
@@ -24417,14 +24259,69 @@ msgstr ""
 "LaTeX instalatu beharra dago</li><li>Markdown - Markdown markatzeko lengoaia "
 "erabiltzen duen testu-ezarpena</li></ul>"
 
-#: src/frontend/widgets/LabelWidget.cpp:908
-#: src/frontend/widgets/LabelWidget.cpp:934
+#: src/frontend/widgets/LabelWidget.cpp:563
+#, kde-format
+msgid "Bold"
+msgstr "Lodia"
+
+#: src/frontend/widgets/LabelWidget.cpp:564
+#, kde-format
+msgid "Italic"
+msgstr "Etzana"
+
+#: src/frontend/widgets/LabelWidget.cpp:565
+#, kde-format
+msgid "Underline"
+msgstr "Azpimarra"
+
+#: src/frontend/widgets/LabelWidget.cpp:566
+#, kde-format
+msgid "Strike Out"
+msgstr "Marratua"
+
+#: src/frontend/widgets/LabelWidget.cpp:567
+#, kde-format
+msgid "Super Script"
+msgstr "Goi-indizea"
+
+#: src/frontend/widgets/LabelWidget.cpp:568
+#, kde-format
+msgid "Sub-Script"
+msgstr "Azpi-indizea"
+
+#: src/frontend/widgets/LabelWidget.cpp:569
+#, fuzzy, kde-format
+msgid "Left Align"
+msgstr "Ezkerreko marjina"
+
+#: src/frontend/widgets/LabelWidget.cpp:571
+#, fuzzy, kde-format
+msgid "Right Align"
+msgstr "Eskuineko marjina"
+
+#: src/frontend/widgets/LabelWidget.cpp:572
+#, kde-format
+msgid "Justify"
+msgstr ""
+
+#: src/frontend/widgets/LabelWidget.cpp:573
+#, kde-format
+msgid "Insert Symbol"
+msgstr "Txertatu ikurra"
+
+#: src/frontend/widgets/LabelWidget.cpp:574
+#, kde-format
+msgid "Insert Date/Time"
+msgstr "Txertatu Data/Ordua"
+
+#: src/frontend/widgets/LabelWidget.cpp:919
+#: src/frontend/widgets/LabelWidget.cpp:945
 #, kde-format
 msgid "Date"
 msgstr "Data"
 
-#: src/frontend/widgets/LabelWidget.cpp:916
-#: src/frontend/widgets/LabelWidget.cpp:942
+#: src/frontend/widgets/LabelWidget.cpp:927
+#: src/frontend/widgets/LabelWidget.cpp:953
 #, kde-format
 msgid "Date and Time"
 msgstr "Data eta ordua"
@@ -24898,9 +24795,9 @@ msgstr ""
 #: src/frontend/worksheet/WorksheetView.cpp:1301
 #: src/frontend/worksheet/WorksheetView.cpp:1308
 #: src/frontend/worksheet/WorksheetView.cpp:1315
-#, fuzzy, kde-format
+#, kde-format
 msgid "Plot Area"
-msgstr "Diagrama-azalera"
+msgstr "Trazuaren azalera"
 
 #: src/frontend/worksheet/WorksheetView.cpp:501
 #, kde-format

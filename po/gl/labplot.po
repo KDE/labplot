@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-11 00:37+0000\n"
+"POT-Creation-Date: 2025-01-12 00:38+0000\n"
 "PO-Revision-Date: 2025-01-04 15:24+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -277,7 +277,7 @@ msgstr "Enteiro grande"
 #: src/frontend/ui/dockwidgets/axisdock.ui:1524
 #: src/frontend/ui/dockwidgets/valuewidget.ui:269
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:280
-#: src/frontend/widgets/LabelWidget.cpp:204
+#: src/frontend/widgets/LabelWidget.cpp:480
 #: src/frontend/worksheet/WorksheetView.cpp:223
 #, kde-format
 msgid "Text"
@@ -12392,8 +12392,8 @@ msgstr "Zonas de datos"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:51
 #: src/frontend/dockwidgets/ImageDock.cpp:54
 #: src/frontend/dockwidgets/ImageDock.cpp:62
-#: src/frontend/widgets/LabelWidget.cpp:154
-#: src/frontend/widgets/LabelWidget.cpp:172
+#: src/frontend/widgets/LabelWidget.cpp:494
+#: src/frontend/widgets/LabelWidget.cpp:514
 #, kde-format
 msgid "Top"
 msgstr "Arriba"
@@ -12407,8 +12407,8 @@ msgstr "Arriba"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:53
 #: src/frontend/dockwidgets/ImageDock.cpp:56
 #: src/frontend/dockwidgets/ImageDock.cpp:64
-#: src/frontend/widgets/LabelWidget.cpp:156
-#: src/frontend/widgets/LabelWidget.cpp:174
+#: src/frontend/widgets/LabelWidget.cpp:496
+#: src/frontend/widgets/LabelWidget.cpp:516
 #, kde-format
 msgid "Bottom"
 msgstr "Abaixo"
@@ -12494,8 +12494,8 @@ msgstr "Medio cheo, grande"
 #: src/frontend/dockwidgets/ImageDock.cpp:58
 #: src/frontend/dockwidgets/XYCurveDock.cpp:347
 #: src/frontend/widgets/BackgroundWidget.cpp:118
-#: src/frontend/widgets/LabelWidget.cpp:149
-#: src/frontend/widgets/LabelWidget.cpp:168
+#: src/frontend/widgets/LabelWidget.cpp:488
+#: src/frontend/widgets/LabelWidget.cpp:509
 #: src/frontend/widgets/ValueWidget.cpp:37
 #, kde-format
 msgid "Left"
@@ -12512,8 +12512,8 @@ msgstr "Esquerda"
 #: src/frontend/dockwidgets/ImageDock.cpp:60
 #: src/frontend/dockwidgets/XYCurveDock.cpp:348
 #: src/frontend/widgets/BackgroundWidget.cpp:119
-#: src/frontend/widgets/LabelWidget.cpp:151
-#: src/frontend/widgets/LabelWidget.cpp:170
+#: src/frontend/widgets/LabelWidget.cpp:490
+#: src/frontend/widgets/LabelWidget.cpp:511
 #: src/frontend/widgets/ValueWidget.cpp:38
 #, kde-format
 msgid "Right"
@@ -13086,11 +13086,11 @@ msgstr "Por filas"
 #: src/frontend/dockwidgets/ImageDock.cpp:59
 #: src/frontend/dockwidgets/ImageDock.cpp:63
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:296
-#: src/frontend/widgets/LabelWidget.cpp:142
-#: src/frontend/widgets/LabelWidget.cpp:150
-#: src/frontend/widgets/LabelWidget.cpp:155
-#: src/frontend/widgets/LabelWidget.cpp:169
-#: src/frontend/widgets/LabelWidget.cpp:173
+#: src/frontend/widgets/LabelWidget.cpp:489
+#: src/frontend/widgets/LabelWidget.cpp:495
+#: src/frontend/widgets/LabelWidget.cpp:510
+#: src/frontend/widgets/LabelWidget.cpp:515
+#: src/frontend/widgets/LabelWidget.cpp:570
 #: src/frontend/widgets/ValueWidget.cpp:94
 #: src/frontend/widgets/ValueWidget.cpp:95
 #, kde-format
@@ -13099,8 +13099,8 @@ msgstr "Centro"
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:256
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:261
-#: src/frontend/widgets/LabelWidget.cpp:152
-#: src/frontend/widgets/LabelWidget.cpp:157
+#: src/frontend/widgets/LabelWidget.cpp:491
+#: src/frontend/widgets/LabelWidget.cpp:497
 #, kde-format
 msgid "Relative to plot"
 msgstr "En relación á gráfica"
@@ -15647,7 +15647,7 @@ msgid "Command"
 msgstr "Orde"
 
 #: src/frontend/notebook/NotebookView.cpp:103
-#: src/frontend/widgets/LabelWidget.cpp:207
+#: src/frontend/widgets/LabelWidget.cpp:483
 #, kde-format
 msgid "Markdown"
 msgstr "Markdown"
@@ -15655,7 +15655,7 @@ msgstr "Markdown"
 #. i18n: ectx: property (text), widget (QLabel, lTex)
 #: src/frontend/notebook/NotebookView.cpp:107
 #: src/frontend/ui/settingsworksheetpage.ui:147
-#: src/frontend/widgets/LabelWidget.cpp:205
+#: src/frontend/widgets/LabelWidget.cpp:481
 #, kde-format
 msgid "LaTeX"
 msgstr "LaTeX"
@@ -24171,7 +24171,97 @@ msgstr "Non é posíbel retirar a palabra clave obrigatoria."
 msgid "Removing Keyword"
 msgstr "Retirando a palabra clave"
 
-#: src/frontend/widgets/LabelWidget.cpp:116
+#: src/frontend/widgets/LabelWidget.cpp:520
+#, kde-format
+msgid "No Border"
+msgstr "Sen bordo"
+
+#: src/frontend/widgets/LabelWidget.cpp:521
+#, kde-format
+msgid "Rectangle"
+msgstr "Rectángulo"
+
+#: src/frontend/widgets/LabelWidget.cpp:522
+#, kde-format
+msgid "Ellipse"
+msgstr "Elipse"
+
+#: src/frontend/widgets/LabelWidget.cpp:523
+#, kde-format
+msgid "Round sided rectangle"
+msgstr "Rectángulo de lados arredondados"
+
+#: src/frontend/widgets/LabelWidget.cpp:524
+#, kde-format
+msgid "Round corner rectangle"
+msgstr "Rectángulo de esquinas arredondadas"
+
+#: src/frontend/widgets/LabelWidget.cpp:525
+#, kde-format
+msgid "Inwards round corner rectangle"
+msgstr "Rectángulo de esquinas arredondadas cara dentro"
+
+#: src/frontend/widgets/LabelWidget.cpp:526
+#, kde-format
+msgid "Dented border rectangle"
+msgstr "Rectángulo de bordos dentados"
+
+#: src/frontend/widgets/LabelWidget.cpp:527
+#, kde-format
+msgid "Cuboid"
+msgstr "Cuboide"
+
+#: src/frontend/widgets/LabelWidget.cpp:528
+#, kde-format
+msgid "Up Pointing rectangle"
+msgstr "Rectángulo apuntando cara arriba"
+
+#: src/frontend/widgets/LabelWidget.cpp:529
+#, kde-format
+msgid "Down Pointing rectangle"
+msgstr "Rectángulo apuntando cara abaixo"
+
+#: src/frontend/widgets/LabelWidget.cpp:530
+#, kde-format
+msgid "Left Pointing rectangle"
+msgstr "Rectángulo apuntando cara á esquerda"
+
+#: src/frontend/widgets/LabelWidget.cpp:531
+#, kde-format
+msgid "Right Pointing rectangle"
+msgstr "Rectángulo apuntando cara á dereita"
+
+#: src/frontend/widgets/LabelWidget.cpp:534
+#, kde-format
+msgid "No line"
+msgstr "Sen liña"
+
+#: src/frontend/widgets/LabelWidget.cpp:535
+#, kde-format
+msgid "Solid line"
+msgstr "Liña sólida"
+
+#: src/frontend/widgets/LabelWidget.cpp:536
+#, kde-format
+msgid "Dash line"
+msgstr "Liña de guións"
+
+#: src/frontend/widgets/LabelWidget.cpp:537
+#, kde-format
+msgid "Dot line"
+msgstr "Liña de puntos"
+
+#: src/frontend/widgets/LabelWidget.cpp:538
+#, kde-format
+msgid "Dash dot line"
+msgstr "Liña de puntos e guións"
+
+#: src/frontend/widgets/LabelWidget.cpp:539
+#, kde-format
+msgid "Dash dot dot line"
+msgstr "Liña de puntos duplos e guións"
+
+#: src/frontend/widgets/LabelWidget.cpp:542
 #, kde-format
 msgid ""
 "Use logical instead of absolute coordinates to specify the position on the "
@@ -24180,152 +24270,7 @@ msgstr ""
 "Usar coordenadas lóxicas en vez de absolutas para indicar a posición na "
 "gráfica"
 
-#: src/frontend/widgets/LabelWidget.cpp:135
-#, kde-format
-msgid "Bold"
-msgstr "Grosa"
-
-#: src/frontend/widgets/LabelWidget.cpp:136
-#, kde-format
-msgid "Italic"
-msgstr "Cursiva"
-
-#: src/frontend/widgets/LabelWidget.cpp:137
-#, kde-format
-msgid "Underline"
-msgstr "Subliñado"
-
-#: src/frontend/widgets/LabelWidget.cpp:138
-#, kde-format
-msgid "Strike Out"
-msgstr "Riscado"
-
-#: src/frontend/widgets/LabelWidget.cpp:139
-#, kde-format
-msgid "Super Script"
-msgstr "Superíndice"
-
-#: src/frontend/widgets/LabelWidget.cpp:140
-#, kde-format
-msgid "Sub-Script"
-msgstr "Subíndice"
-
-#: src/frontend/widgets/LabelWidget.cpp:141
-#, kde-format
-msgid "Left Align"
-msgstr "Aliñar á esquerda"
-
-#: src/frontend/widgets/LabelWidget.cpp:143
-#, kde-format
-msgid "Right Align"
-msgstr "Aliñar á dereita"
-
-#: src/frontend/widgets/LabelWidget.cpp:144
-#, kde-format
-msgid "Justify"
-msgstr "Xustificar"
-
-#: src/frontend/widgets/LabelWidget.cpp:145
-#, kde-format
-msgid "Insert Symbol"
-msgstr "Inserir un símbolo"
-
-#: src/frontend/widgets/LabelWidget.cpp:146
-#, kde-format
-msgid "Insert Date/Time"
-msgstr "Inserir a data e hora"
-
-#: src/frontend/widgets/LabelWidget.cpp:176
-#, kde-format
-msgid "No Border"
-msgstr "Sen bordo"
-
-#: src/frontend/widgets/LabelWidget.cpp:177
-#, kde-format
-msgid "Rectangle"
-msgstr "Rectángulo"
-
-#: src/frontend/widgets/LabelWidget.cpp:178
-#, kde-format
-msgid "Ellipse"
-msgstr "Elipse"
-
-#: src/frontend/widgets/LabelWidget.cpp:179
-#, kde-format
-msgid "Round sided rectangle"
-msgstr "Rectángulo de lados arredondados"
-
-#: src/frontend/widgets/LabelWidget.cpp:180
-#, kde-format
-msgid "Round corner rectangle"
-msgstr "Rectángulo de esquinas arredondadas"
-
-#: src/frontend/widgets/LabelWidget.cpp:181
-#, kde-format
-msgid "Inwards round corner rectangle"
-msgstr "Rectángulo de esquinas arredondadas cara dentro"
-
-#: src/frontend/widgets/LabelWidget.cpp:182
-#, kde-format
-msgid "Dented border rectangle"
-msgstr "Rectángulo de bordos dentados"
-
-#: src/frontend/widgets/LabelWidget.cpp:183
-#, kde-format
-msgid "Cuboid"
-msgstr "Cuboide"
-
-#: src/frontend/widgets/LabelWidget.cpp:184
-#, kde-format
-msgid "Up Pointing rectangle"
-msgstr "Rectángulo apuntando cara arriba"
-
-#: src/frontend/widgets/LabelWidget.cpp:185
-#, kde-format
-msgid "Down Pointing rectangle"
-msgstr "Rectángulo apuntando cara abaixo"
-
-#: src/frontend/widgets/LabelWidget.cpp:186
-#, kde-format
-msgid "Left Pointing rectangle"
-msgstr "Rectángulo apuntando cara á esquerda"
-
-#: src/frontend/widgets/LabelWidget.cpp:187
-#, kde-format
-msgid "Right Pointing rectangle"
-msgstr "Rectángulo apuntando cara á dereita"
-
-#: src/frontend/widgets/LabelWidget.cpp:189
-#, kde-format
-msgid "No line"
-msgstr "Sen liña"
-
-#: src/frontend/widgets/LabelWidget.cpp:190
-#, kde-format
-msgid "Solid line"
-msgstr "Liña sólida"
-
-#: src/frontend/widgets/LabelWidget.cpp:191
-#, kde-format
-msgid "Dash line"
-msgstr "Liña de guións"
-
-#: src/frontend/widgets/LabelWidget.cpp:192
-#, kde-format
-msgid "Dot line"
-msgstr "Liña de puntos"
-
-#: src/frontend/widgets/LabelWidget.cpp:193
-#, kde-format
-msgid "Dash dot line"
-msgstr "Liña de puntos e guións"
-
-#: src/frontend/widgets/LabelWidget.cpp:194
-#, kde-format
-msgid "Dash dot dot line"
-msgstr "Liña de puntos duplos e guións"
-
-#: src/frontend/widgets/LabelWidget.cpp:212
+#: src/frontend/widgets/LabelWidget.cpp:547
 #, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
@@ -24337,7 +24282,7 @@ msgstr ""
 "LaTeX.</li><li>Markdown: definición de texto coa linguaxe de marcado "
 "Markdown.</li></ul>"
 
-#: src/frontend/widgets/LabelWidget.cpp:220
+#: src/frontend/widgets/LabelWidget.cpp:555
 #, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
@@ -24348,14 +24293,69 @@ msgstr ""
 "enriquecido.</li><li>LaTeX: definición de texto con LaTeX, require instalar "
 "LaTeX.</li></ul>"
 
-#: src/frontend/widgets/LabelWidget.cpp:908
-#: src/frontend/widgets/LabelWidget.cpp:934
+#: src/frontend/widgets/LabelWidget.cpp:563
+#, kde-format
+msgid "Bold"
+msgstr "Grosa"
+
+#: src/frontend/widgets/LabelWidget.cpp:564
+#, kde-format
+msgid "Italic"
+msgstr "Cursiva"
+
+#: src/frontend/widgets/LabelWidget.cpp:565
+#, kde-format
+msgid "Underline"
+msgstr "Subliñado"
+
+#: src/frontend/widgets/LabelWidget.cpp:566
+#, kde-format
+msgid "Strike Out"
+msgstr "Riscado"
+
+#: src/frontend/widgets/LabelWidget.cpp:567
+#, kde-format
+msgid "Super Script"
+msgstr "Superíndice"
+
+#: src/frontend/widgets/LabelWidget.cpp:568
+#, kde-format
+msgid "Sub-Script"
+msgstr "Subíndice"
+
+#: src/frontend/widgets/LabelWidget.cpp:569
+#, kde-format
+msgid "Left Align"
+msgstr "Aliñar á esquerda"
+
+#: src/frontend/widgets/LabelWidget.cpp:571
+#, kde-format
+msgid "Right Align"
+msgstr "Aliñar á dereita"
+
+#: src/frontend/widgets/LabelWidget.cpp:572
+#, kde-format
+msgid "Justify"
+msgstr "Xustificar"
+
+#: src/frontend/widgets/LabelWidget.cpp:573
+#, kde-format
+msgid "Insert Symbol"
+msgstr "Inserir un símbolo"
+
+#: src/frontend/widgets/LabelWidget.cpp:574
+#, kde-format
+msgid "Insert Date/Time"
+msgstr "Inserir a data e hora"
+
+#: src/frontend/widgets/LabelWidget.cpp:919
+#: src/frontend/widgets/LabelWidget.cpp:945
 #, kde-format
 msgid "Date"
 msgstr "Data"
 
-#: src/frontend/widgets/LabelWidget.cpp:916
-#: src/frontend/widgets/LabelWidget.cpp:942
+#: src/frontend/widgets/LabelWidget.cpp:927
+#: src/frontend/widgets/LabelWidget.cpp:953
 #, kde-format
 msgid "Date and Time"
 msgstr "Data e hora"

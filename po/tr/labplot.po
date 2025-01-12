@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-11 00:37+0000\n"
-"PO-Revision-Date: 2025-01-02 12:27+0300\n"
+"POT-Creation-Date: 2025-01-12 00:38+0000\n"
+"PO-Revision-Date: 2025-01-11 17:07+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -278,7 +278,7 @@ msgstr "Büyük Tamsayı"
 #: src/frontend/ui/dockwidgets/axisdock.ui:1524
 #: src/frontend/ui/dockwidgets/valuewidget.ui:269
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:280
-#: src/frontend/widgets/LabelWidget.cpp:204
+#: src/frontend/widgets/LabelWidget.cpp:480
 #: src/frontend/worksheet/WorksheetView.cpp:223
 #, kde-format
 msgid "Text"
@@ -11694,10 +11694,9 @@ msgid "Not a HDF5 file: %1"
 msgstr "Bir HDF5 dosyası değil: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2229
-#, fuzzy, kde-format
-#| msgid "Reading from file %1 failed."
+#, kde-format
 msgid "Parsing ODS file %1 failed."
-msgstr "%1 dosyasından okuma başarısız."
+msgstr "%1 ODS dosyası ayrıştırılamadı."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2641
 #, kde-format
@@ -12342,8 +12341,8 @@ msgstr "Veri bölgeleri"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:51
 #: src/frontend/dockwidgets/ImageDock.cpp:54
 #: src/frontend/dockwidgets/ImageDock.cpp:62
-#: src/frontend/widgets/LabelWidget.cpp:154
-#: src/frontend/widgets/LabelWidget.cpp:172
+#: src/frontend/widgets/LabelWidget.cpp:494
+#: src/frontend/widgets/LabelWidget.cpp:514
 #, kde-format
 msgid "Top"
 msgstr "Üst"
@@ -12357,8 +12356,8 @@ msgstr "Üst"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:53
 #: src/frontend/dockwidgets/ImageDock.cpp:56
 #: src/frontend/dockwidgets/ImageDock.cpp:64
-#: src/frontend/widgets/LabelWidget.cpp:156
-#: src/frontend/widgets/LabelWidget.cpp:174
+#: src/frontend/widgets/LabelWidget.cpp:496
+#: src/frontend/widgets/LabelWidget.cpp:516
 #, kde-format
 msgid "Bottom"
 msgstr "Alt"
@@ -12444,8 +12443,8 @@ msgstr "Yarı Dolu, Büyük"
 #: src/frontend/dockwidgets/ImageDock.cpp:58
 #: src/frontend/dockwidgets/XYCurveDock.cpp:347
 #: src/frontend/widgets/BackgroundWidget.cpp:118
-#: src/frontend/widgets/LabelWidget.cpp:149
-#: src/frontend/widgets/LabelWidget.cpp:168
+#: src/frontend/widgets/LabelWidget.cpp:488
+#: src/frontend/widgets/LabelWidget.cpp:509
 #: src/frontend/widgets/ValueWidget.cpp:37
 #, kde-format
 msgid "Left"
@@ -12462,8 +12461,8 @@ msgstr "Sol"
 #: src/frontend/dockwidgets/ImageDock.cpp:60
 #: src/frontend/dockwidgets/XYCurveDock.cpp:348
 #: src/frontend/widgets/BackgroundWidget.cpp:119
-#: src/frontend/widgets/LabelWidget.cpp:151
-#: src/frontend/widgets/LabelWidget.cpp:170
+#: src/frontend/widgets/LabelWidget.cpp:490
+#: src/frontend/widgets/LabelWidget.cpp:511
 #: src/frontend/widgets/ValueWidget.cpp:38
 #, kde-format
 msgid "Right"
@@ -13032,11 +13031,11 @@ msgstr "Ana Satır"
 #: src/frontend/dockwidgets/ImageDock.cpp:59
 #: src/frontend/dockwidgets/ImageDock.cpp:63
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:296
-#: src/frontend/widgets/LabelWidget.cpp:142
-#: src/frontend/widgets/LabelWidget.cpp:150
-#: src/frontend/widgets/LabelWidget.cpp:155
-#: src/frontend/widgets/LabelWidget.cpp:169
-#: src/frontend/widgets/LabelWidget.cpp:173
+#: src/frontend/widgets/LabelWidget.cpp:489
+#: src/frontend/widgets/LabelWidget.cpp:495
+#: src/frontend/widgets/LabelWidget.cpp:510
+#: src/frontend/widgets/LabelWidget.cpp:515
+#: src/frontend/widgets/LabelWidget.cpp:570
 #: src/frontend/widgets/ValueWidget.cpp:94
 #: src/frontend/widgets/ValueWidget.cpp:95
 #, kde-format
@@ -13045,8 +13044,8 @@ msgstr "Merkez"
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:256
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:261
-#: src/frontend/widgets/LabelWidget.cpp:152
-#: src/frontend/widgets/LabelWidget.cpp:157
+#: src/frontend/widgets/LabelWidget.cpp:491
+#: src/frontend/widgets/LabelWidget.cpp:497
 #, kde-format
 msgid "Relative to plot"
 msgstr "Çizime Göreceli"
@@ -15586,7 +15585,7 @@ msgid "Command"
 msgstr "Komut"
 
 #: src/frontend/notebook/NotebookView.cpp:103
-#: src/frontend/widgets/LabelWidget.cpp:207
+#: src/frontend/widgets/LabelWidget.cpp:483
 #, kde-format
 msgid "Markdown"
 msgstr "Markdown"
@@ -15594,7 +15593,7 @@ msgstr "Markdown"
 #. i18n: ectx: property (text), widget (QLabel, lTex)
 #: src/frontend/notebook/NotebookView.cpp:107
 #: src/frontend/ui/settingsworksheetpage.ui:147
-#: src/frontend/widgets/LabelWidget.cpp:205
+#: src/frontend/widgets/LabelWidget.cpp:481
 #, kde-format
 msgid "LaTeX"
 msgstr "LaTeX"
@@ -24099,7 +24098,97 @@ msgstr "Zorunlu anahtar sözcük kaldırılamıyor."
 msgid "Removing Keyword"
 msgstr "Anahtar Sözcük Kaldırılıyor"
 
-#: src/frontend/widgets/LabelWidget.cpp:116
+#: src/frontend/widgets/LabelWidget.cpp:520
+#, kde-format
+msgid "No Border"
+msgstr "Kenarlıksız"
+
+#: src/frontend/widgets/LabelWidget.cpp:521
+#, kde-format
+msgid "Rectangle"
+msgstr "Dikdörtgen"
+
+#: src/frontend/widgets/LabelWidget.cpp:522
+#, kde-format
+msgid "Ellipse"
+msgstr "Elips"
+
+#: src/frontend/widgets/LabelWidget.cpp:523
+#, kde-format
+msgid "Round sided rectangle"
+msgstr "Yuvarlak kenarlı dörtgen"
+
+#: src/frontend/widgets/LabelWidget.cpp:524
+#, kde-format
+msgid "Round corner rectangle"
+msgstr "Yuvarlak köşeli dörtgen"
+
+#: src/frontend/widgets/LabelWidget.cpp:525
+#, kde-format
+msgid "Inwards round corner rectangle"
+msgstr "İçe doğru yuvarlak köşeli dörtgen"
+
+#: src/frontend/widgets/LabelWidget.cpp:526
+#, kde-format
+msgid "Dented border rectangle"
+msgstr "Vuruk kenarlı dörtgen"
+
+#: src/frontend/widgets/LabelWidget.cpp:527
+#, kde-format
+msgid "Cuboid"
+msgstr "Küp"
+
+#: src/frontend/widgets/LabelWidget.cpp:528
+#, kde-format
+msgid "Up Pointing rectangle"
+msgstr "Yukarı işaret eden dörtgen"
+
+#: src/frontend/widgets/LabelWidget.cpp:529
+#, kde-format
+msgid "Down Pointing rectangle"
+msgstr "Aşağı işaret eden dörtgen"
+
+#: src/frontend/widgets/LabelWidget.cpp:530
+#, kde-format
+msgid "Left Pointing rectangle"
+msgstr "Sola işaret eden dörtgen"
+
+#: src/frontend/widgets/LabelWidget.cpp:531
+#, kde-format
+msgid "Right Pointing rectangle"
+msgstr "Sağa işaret eden dörtgen"
+
+#: src/frontend/widgets/LabelWidget.cpp:534
+#, kde-format
+msgid "No line"
+msgstr "Satır yok"
+
+#: src/frontend/widgets/LabelWidget.cpp:535
+#, kde-format
+msgid "Solid line"
+msgstr "Düz çizgi"
+
+#: src/frontend/widgets/LabelWidget.cpp:536
+#, kde-format
+msgid "Dash line"
+msgstr "Kısa çizgi"
+
+#: src/frontend/widgets/LabelWidget.cpp:537
+#, kde-format
+msgid "Dot line"
+msgstr "Nokta çizgi"
+
+#: src/frontend/widgets/LabelWidget.cpp:538
+#, kde-format
+msgid "Dash dot line"
+msgstr "Tire nokta çizgisi"
+
+#: src/frontend/widgets/LabelWidget.cpp:539
+#, kde-format
+msgid "Dash dot dot line"
+msgstr "Tire nokta nokta çizgisi"
+
+#: src/frontend/widgets/LabelWidget.cpp:542
 #, kde-format
 msgid ""
 "Use logical instead of absolute coordinates to specify the position on the "
@@ -24108,152 +24197,7 @@ msgstr ""
 "Çizimdeki konumu belirtmek için mutlak koordinatlar yerine mantıksal "
 "koordinatlar kullan"
 
-#: src/frontend/widgets/LabelWidget.cpp:135
-#, kde-format
-msgid "Bold"
-msgstr "Kalın"
-
-#: src/frontend/widgets/LabelWidget.cpp:136
-#, kde-format
-msgid "Italic"
-msgstr "Yatık"
-
-#: src/frontend/widgets/LabelWidget.cpp:137
-#, kde-format
-msgid "Underline"
-msgstr "Altı Çizili"
-
-#: src/frontend/widgets/LabelWidget.cpp:138
-#, kde-format
-msgid "Strike Out"
-msgstr "Üzeri Çizili"
-
-#: src/frontend/widgets/LabelWidget.cpp:139
-#, kde-format
-msgid "Super Script"
-msgstr "Üst Simge"
-
-#: src/frontend/widgets/LabelWidget.cpp:140
-#, kde-format
-msgid "Sub-Script"
-msgstr "Alt Simge"
-
-#: src/frontend/widgets/LabelWidget.cpp:141
-#, kde-format
-msgid "Left Align"
-msgstr "Sola hizala"
-
-#: src/frontend/widgets/LabelWidget.cpp:143
-#, kde-format
-msgid "Right Align"
-msgstr "Sağa hizala"
-
-#: src/frontend/widgets/LabelWidget.cpp:144
-#, kde-format
-msgid "Justify"
-msgstr "İki yana hizala"
-
-#: src/frontend/widgets/LabelWidget.cpp:145
-#, kde-format
-msgid "Insert Symbol"
-msgstr "Sembol Ekle"
-
-#: src/frontend/widgets/LabelWidget.cpp:146
-#, kde-format
-msgid "Insert Date/Time"
-msgstr "Tarih ve Zaman Ekle"
-
-#: src/frontend/widgets/LabelWidget.cpp:176
-#, kde-format
-msgid "No Border"
-msgstr "Kenarlıksız"
-
-#: src/frontend/widgets/LabelWidget.cpp:177
-#, kde-format
-msgid "Rectangle"
-msgstr "Dikdörtgen"
-
-#: src/frontend/widgets/LabelWidget.cpp:178
-#, kde-format
-msgid "Ellipse"
-msgstr "Elips"
-
-#: src/frontend/widgets/LabelWidget.cpp:179
-#, kde-format
-msgid "Round sided rectangle"
-msgstr "Yuvarlak kenarlı dörtgen"
-
-#: src/frontend/widgets/LabelWidget.cpp:180
-#, kde-format
-msgid "Round corner rectangle"
-msgstr "Yuvarlak köşeli dörtgen"
-
-#: src/frontend/widgets/LabelWidget.cpp:181
-#, kde-format
-msgid "Inwards round corner rectangle"
-msgstr "İçe doğru yuvarlak köşeli dörtgen"
-
-#: src/frontend/widgets/LabelWidget.cpp:182
-#, kde-format
-msgid "Dented border rectangle"
-msgstr "Vuruk kenarlı dörtgen"
-
-#: src/frontend/widgets/LabelWidget.cpp:183
-#, kde-format
-msgid "Cuboid"
-msgstr "Küp"
-
-#: src/frontend/widgets/LabelWidget.cpp:184
-#, kde-format
-msgid "Up Pointing rectangle"
-msgstr "Yukarı işaret eden dörtgen"
-
-#: src/frontend/widgets/LabelWidget.cpp:185
-#, kde-format
-msgid "Down Pointing rectangle"
-msgstr "Aşağı işaret eden dörtgen"
-
-#: src/frontend/widgets/LabelWidget.cpp:186
-#, kde-format
-msgid "Left Pointing rectangle"
-msgstr "Sola işaret eden dörtgen"
-
-#: src/frontend/widgets/LabelWidget.cpp:187
-#, kde-format
-msgid "Right Pointing rectangle"
-msgstr "Sağa işaret eden dörtgen"
-
-#: src/frontend/widgets/LabelWidget.cpp:189
-#, kde-format
-msgid "No line"
-msgstr "Satır yok"
-
-#: src/frontend/widgets/LabelWidget.cpp:190
-#, kde-format
-msgid "Solid line"
-msgstr "Düz çizgi"
-
-#: src/frontend/widgets/LabelWidget.cpp:191
-#, kde-format
-msgid "Dash line"
-msgstr "Kısa çizgi"
-
-#: src/frontend/widgets/LabelWidget.cpp:192
-#, kde-format
-msgid "Dot line"
-msgstr "Nokta çizgi"
-
-#: src/frontend/widgets/LabelWidget.cpp:193
-#, kde-format
-msgid "Dash dot line"
-msgstr "Tire nokta çizgisi"
-
-#: src/frontend/widgets/LabelWidget.cpp:194
-#, kde-format
-msgid "Dash dot dot line"
-msgstr "Tire nokta nokta çizgisi"
-
-#: src/frontend/widgets/LabelWidget.cpp:212
+#: src/frontend/widgets/LabelWidget.cpp:547
 #, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
@@ -24265,7 +24209,7 @@ msgstr ""
 "li><li>Markdown — Markdown biçimlendirmesi kullanarak metin ayarları</li></"
 "ul>"
 
-#: src/frontend/widgets/LabelWidget.cpp:220
+#: src/frontend/widgets/LabelWidget.cpp:555
 #, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
@@ -24276,14 +24220,69 @@ msgstr ""
 "li><li>LaTeX — LaTeX kullanarak metin ayarları, LaTeX kurulumu zorunlu</li></"
 "ul>"
 
-#: src/frontend/widgets/LabelWidget.cpp:908
-#: src/frontend/widgets/LabelWidget.cpp:934
+#: src/frontend/widgets/LabelWidget.cpp:563
+#, kde-format
+msgid "Bold"
+msgstr "Kalın"
+
+#: src/frontend/widgets/LabelWidget.cpp:564
+#, kde-format
+msgid "Italic"
+msgstr "Yatık"
+
+#: src/frontend/widgets/LabelWidget.cpp:565
+#, kde-format
+msgid "Underline"
+msgstr "Altı Çizili"
+
+#: src/frontend/widgets/LabelWidget.cpp:566
+#, kde-format
+msgid "Strike Out"
+msgstr "Üzeri Çizili"
+
+#: src/frontend/widgets/LabelWidget.cpp:567
+#, kde-format
+msgid "Super Script"
+msgstr "Üst Simge"
+
+#: src/frontend/widgets/LabelWidget.cpp:568
+#, kde-format
+msgid "Sub-Script"
+msgstr "Alt Simge"
+
+#: src/frontend/widgets/LabelWidget.cpp:569
+#, kde-format
+msgid "Left Align"
+msgstr "Sola hizala"
+
+#: src/frontend/widgets/LabelWidget.cpp:571
+#, kde-format
+msgid "Right Align"
+msgstr "Sağa hizala"
+
+#: src/frontend/widgets/LabelWidget.cpp:572
+#, kde-format
+msgid "Justify"
+msgstr "İki yana hizala"
+
+#: src/frontend/widgets/LabelWidget.cpp:573
+#, kde-format
+msgid "Insert Symbol"
+msgstr "Sembol Ekle"
+
+#: src/frontend/widgets/LabelWidget.cpp:574
+#, kde-format
+msgid "Insert Date/Time"
+msgstr "Tarih ve Zaman Ekle"
+
+#: src/frontend/widgets/LabelWidget.cpp:919
+#: src/frontend/widgets/LabelWidget.cpp:945
 #, kde-format
 msgid "Date"
 msgstr "Tarih"
 
-#: src/frontend/widgets/LabelWidget.cpp:916
-#: src/frontend/widgets/LabelWidget.cpp:942
+#: src/frontend/widgets/LabelWidget.cpp:927
+#: src/frontend/widgets/LabelWidget.cpp:953
 #, kde-format
 msgid "Date and Time"
 msgstr "Tarih ve Zaman"

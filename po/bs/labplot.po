@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-11 00:37+0000\n"
+"POT-Creation-Date: 2025-01-12 00:38+0000\n"
 "PO-Revision-Date: 2015-02-25 20:16+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -301,7 +301,7 @@ msgstr "iteracije"
 #: src/frontend/ui/dockwidgets/axisdock.ui:1524
 #: src/frontend/ui/dockwidgets/valuewidget.ui:269
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:280
-#: src/frontend/widgets/LabelWidget.cpp:204
+#: src/frontend/widgets/LabelWidget.cpp:480
 #: src/frontend/worksheet/WorksheetView.cpp:223
 #, kde-format
 msgid "Text"
@@ -13185,8 +13185,8 @@ msgstr "Smjer"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:51
 #: src/frontend/dockwidgets/ImageDock.cpp:54
 #: src/frontend/dockwidgets/ImageDock.cpp:62
-#: src/frontend/widgets/LabelWidget.cpp:154
-#: src/frontend/widgets/LabelWidget.cpp:172
+#: src/frontend/widgets/LabelWidget.cpp:494
+#: src/frontend/widgets/LabelWidget.cpp:514
 #, kde-format
 msgid "Top"
 msgstr "Vrh"
@@ -13200,8 +13200,8 @@ msgstr "Vrh"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:53
 #: src/frontend/dockwidgets/ImageDock.cpp:56
 #: src/frontend/dockwidgets/ImageDock.cpp:64
-#: src/frontend/widgets/LabelWidget.cpp:156
-#: src/frontend/widgets/LabelWidget.cpp:174
+#: src/frontend/widgets/LabelWidget.cpp:496
+#: src/frontend/widgets/LabelWidget.cpp:516
 #, kde-format
 msgid "Bottom"
 msgstr "Dno"
@@ -13292,8 +13292,8 @@ msgstr "polu-popunjen, veliki"
 #: src/frontend/dockwidgets/ImageDock.cpp:58
 #: src/frontend/dockwidgets/XYCurveDock.cpp:347
 #: src/frontend/widgets/BackgroundWidget.cpp:118
-#: src/frontend/widgets/LabelWidget.cpp:149
-#: src/frontend/widgets/LabelWidget.cpp:168
+#: src/frontend/widgets/LabelWidget.cpp:488
+#: src/frontend/widgets/LabelWidget.cpp:509
 #: src/frontend/widgets/ValueWidget.cpp:37
 #, kde-format
 msgid "Left"
@@ -13310,8 +13310,8 @@ msgstr "Lijevo"
 #: src/frontend/dockwidgets/ImageDock.cpp:60
 #: src/frontend/dockwidgets/XYCurveDock.cpp:348
 #: src/frontend/widgets/BackgroundWidget.cpp:119
-#: src/frontend/widgets/LabelWidget.cpp:151
-#: src/frontend/widgets/LabelWidget.cpp:170
+#: src/frontend/widgets/LabelWidget.cpp:490
+#: src/frontend/widgets/LabelWidget.cpp:511
 #: src/frontend/widgets/ValueWidget.cpp:38
 #, kde-format
 msgid "Right"
@@ -13905,11 +13905,11 @@ msgstr "najveći u redu"
 #: src/frontend/dockwidgets/ImageDock.cpp:59
 #: src/frontend/dockwidgets/ImageDock.cpp:63
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:296
-#: src/frontend/widgets/LabelWidget.cpp:142
-#: src/frontend/widgets/LabelWidget.cpp:150
-#: src/frontend/widgets/LabelWidget.cpp:155
-#: src/frontend/widgets/LabelWidget.cpp:169
-#: src/frontend/widgets/LabelWidget.cpp:173
+#: src/frontend/widgets/LabelWidget.cpp:489
+#: src/frontend/widgets/LabelWidget.cpp:495
+#: src/frontend/widgets/LabelWidget.cpp:510
+#: src/frontend/widgets/LabelWidget.cpp:515
+#: src/frontend/widgets/LabelWidget.cpp:570
 #: src/frontend/widgets/ValueWidget.cpp:94
 #: src/frontend/widgets/ValueWidget.cpp:95
 #, fuzzy, kde-format
@@ -13919,8 +13919,8 @@ msgstr "centar"
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:256
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:261
-#: src/frontend/widgets/LabelWidget.cpp:152
-#: src/frontend/widgets/LabelWidget.cpp:157
+#: src/frontend/widgets/LabelWidget.cpp:491
+#: src/frontend/widgets/LabelWidget.cpp:497
 #, fuzzy, kde-format
 #| msgid "Relative scale"
 msgid "Relative to plot"
@@ -16656,7 +16656,7 @@ msgid "Command"
 msgstr "Komentar"
 
 #: src/frontend/notebook/NotebookView.cpp:103
-#: src/frontend/widgets/LabelWidget.cpp:207
+#: src/frontend/widgets/LabelWidget.cpp:483
 #, kde-format
 msgid "Markdown"
 msgstr ""
@@ -16664,7 +16664,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lTex)
 #: src/frontend/notebook/NotebookView.cpp:107
 #: src/frontend/ui/settingsworksheetpage.ui:147
-#: src/frontend/widgets/LabelWidget.cpp:205
+#: src/frontend/widgets/LabelWidget.cpp:481
 #, kde-format
 msgid "LaTeX"
 msgstr ""
@@ -25838,175 +25838,113 @@ msgstr ""
 msgid "Removing Keyword"
 msgstr "&Ukloni redove"
 
-#: src/frontend/widgets/LabelWidget.cpp:116
+#: src/frontend/widgets/LabelWidget.cpp:520
+#, fuzzy, kde-format
+#| msgid "Border"
+msgid "No Border"
+msgstr "Ivica"
+
+#: src/frontend/widgets/LabelWidget.cpp:521
+#, kde-format
+msgid "Rectangle"
+msgstr ""
+
+#: src/frontend/widgets/LabelWidget.cpp:522
+#, kde-format
+msgid "Ellipse"
+msgstr ""
+
+#: src/frontend/widgets/LabelWidget.cpp:523
+#, kde-format
+msgid "Round sided rectangle"
+msgstr ""
+
+#: src/frontend/widgets/LabelWidget.cpp:524
+#, kde-format
+msgid "Round corner rectangle"
+msgstr ""
+
+#: src/frontend/widgets/LabelWidget.cpp:525
+#, kde-format
+msgid "Inwards round corner rectangle"
+msgstr ""
+
+#: src/frontend/widgets/LabelWidget.cpp:526
+#, fuzzy, kde-format
+#| msgid "%1: set border style"
+msgid "Dented border rectangle"
+msgstr "%1: postavi stil inije"
+
+#: src/frontend/widgets/LabelWidget.cpp:527
+#, kde-format
+msgid "Cuboid"
+msgstr ""
+
+#: src/frontend/widgets/LabelWidget.cpp:528
+#, kde-format
+msgid "Up Pointing rectangle"
+msgstr ""
+
+#: src/frontend/widgets/LabelWidget.cpp:529
+#, kde-format
+msgid "Down Pointing rectangle"
+msgstr ""
+
+#: src/frontend/widgets/LabelWidget.cpp:530
+#, kde-format
+msgid "Left Pointing rectangle"
+msgstr ""
+
+#: src/frontend/widgets/LabelWidget.cpp:531
+#, fuzzy, kde-format
+#| msgid "light orange"
+msgid "Right Pointing rectangle"
+msgstr "svetlonarandžasta"
+
+#: src/frontend/widgets/LabelWidget.cpp:534
+#, fuzzy, kde-format
+#| msgid "no line"
+msgid "No line"
+msgstr "bez linije"
+
+#: src/frontend/widgets/LabelWidget.cpp:535
+#, fuzzy, kde-format
+#| msgid "solid line"
+msgid "Solid line"
+msgstr "puna linija"
+
+#: src/frontend/widgets/LabelWidget.cpp:536
+#, fuzzy, kde-format
+#| msgid "dash line"
+msgid "Dash line"
+msgstr "crtkasta linija"
+
+#: src/frontend/widgets/LabelWidget.cpp:537
+#, fuzzy, kde-format
+#| msgid "dot line"
+msgid "Dot line"
+msgstr "tačkasta linija"
+
+#: src/frontend/widgets/LabelWidget.cpp:538
+#, fuzzy, kde-format
+#| msgid "dash-dot line"
+msgid "Dash dot line"
+msgstr "crta-tačka lnija"
+
+#: src/frontend/widgets/LabelWidget.cpp:539
+#, fuzzy, kde-format
+#| msgid "dash-dot-dot line"
+msgid "Dash dot dot line"
+msgstr "crta-tačka-tačka linija"
+
+#: src/frontend/widgets/LabelWidget.cpp:542
 #, kde-format
 msgid ""
 "Use logical instead of absolute coordinates to specify the position on the "
 "plot"
 msgstr ""
 
-#: src/frontend/widgets/LabelWidget.cpp:135
-#, kde-format
-msgid "Bold"
-msgstr ""
-
-#: src/frontend/widgets/LabelWidget.cpp:136
-#, kde-format
-msgid "Italic"
-msgstr ""
-
-#: src/frontend/widgets/LabelWidget.cpp:137
-#, fuzzy, kde-format
-#| msgid "line"
-msgid "Underline"
-msgstr "linija"
-
-#: src/frontend/widgets/LabelWidget.cpp:138
-#, kde-format
-msgid "Strike Out"
-msgstr ""
-
-#: src/frontend/widgets/LabelWidget.cpp:139
-#, fuzzy, kde-format
-#| msgid "&Script"
-msgid "Super Script"
-msgstr "&Skripta"
-
-#: src/frontend/widgets/LabelWidget.cpp:140
-#, fuzzy, kde-format
-#| msgid "&Script"
-msgid "Sub-Script"
-msgstr "&Skripta"
-
-#: src/frontend/widgets/LabelWidget.cpp:141
-#, fuzzy, kde-format
-#| msgid "Left margin"
-msgid "Left Align"
-msgstr "Lijeva margina"
-
-#: src/frontend/widgets/LabelWidget.cpp:143
-#, fuzzy, kde-format
-#| msgid "Right margin"
-msgid "Right Align"
-msgstr "Desna margina"
-
-#: src/frontend/widgets/LabelWidget.cpp:144
-#, kde-format
-msgid "Justify"
-msgstr ""
-
-#: src/frontend/widgets/LabelWidget.cpp:145
-#, fuzzy, kde-format
-#| msgid "Insert"
-msgid "Insert Symbol"
-msgstr "Umetni"
-
-#: src/frontend/widgets/LabelWidget.cpp:146
-#, fuzzy, kde-format
-#| msgid "Date and Time"
-msgid "Insert Date/Time"
-msgstr "Datum i vrijeme"
-
-#: src/frontend/widgets/LabelWidget.cpp:176
-#, fuzzy, kde-format
-#| msgid "Border"
-msgid "No Border"
-msgstr "Ivica"
-
-#: src/frontend/widgets/LabelWidget.cpp:177
-#, kde-format
-msgid "Rectangle"
-msgstr ""
-
-#: src/frontend/widgets/LabelWidget.cpp:178
-#, kde-format
-msgid "Ellipse"
-msgstr ""
-
-#: src/frontend/widgets/LabelWidget.cpp:179
-#, kde-format
-msgid "Round sided rectangle"
-msgstr ""
-
-#: src/frontend/widgets/LabelWidget.cpp:180
-#, kde-format
-msgid "Round corner rectangle"
-msgstr ""
-
-#: src/frontend/widgets/LabelWidget.cpp:181
-#, kde-format
-msgid "Inwards round corner rectangle"
-msgstr ""
-
-#: src/frontend/widgets/LabelWidget.cpp:182
-#, fuzzy, kde-format
-#| msgid "%1: set border style"
-msgid "Dented border rectangle"
-msgstr "%1: postavi stil inije"
-
-#: src/frontend/widgets/LabelWidget.cpp:183
-#, kde-format
-msgid "Cuboid"
-msgstr ""
-
-#: src/frontend/widgets/LabelWidget.cpp:184
-#, kde-format
-msgid "Up Pointing rectangle"
-msgstr ""
-
-#: src/frontend/widgets/LabelWidget.cpp:185
-#, kde-format
-msgid "Down Pointing rectangle"
-msgstr ""
-
-#: src/frontend/widgets/LabelWidget.cpp:186
-#, kde-format
-msgid "Left Pointing rectangle"
-msgstr ""
-
-#: src/frontend/widgets/LabelWidget.cpp:187
-#, fuzzy, kde-format
-#| msgid "light orange"
-msgid "Right Pointing rectangle"
-msgstr "svetlonarandžasta"
-
-#: src/frontend/widgets/LabelWidget.cpp:189
-#, fuzzy, kde-format
-#| msgid "no line"
-msgid "No line"
-msgstr "bez linije"
-
-#: src/frontend/widgets/LabelWidget.cpp:190
-#, fuzzy, kde-format
-#| msgid "solid line"
-msgid "Solid line"
-msgstr "puna linija"
-
-#: src/frontend/widgets/LabelWidget.cpp:191
-#, fuzzy, kde-format
-#| msgid "dash line"
-msgid "Dash line"
-msgstr "crtkasta linija"
-
-#: src/frontend/widgets/LabelWidget.cpp:192
-#, fuzzy, kde-format
-#| msgid "dot line"
-msgid "Dot line"
-msgstr "tačkasta linija"
-
-#: src/frontend/widgets/LabelWidget.cpp:193
-#, fuzzy, kde-format
-#| msgid "dash-dot line"
-msgid "Dash dot line"
-msgstr "crta-tačka lnija"
-
-#: src/frontend/widgets/LabelWidget.cpp:194
-#, fuzzy, kde-format
-#| msgid "dash-dot-dot line"
-msgid "Dash dot dot line"
-msgstr "crta-tačka-tačka linija"
-
-#: src/frontend/widgets/LabelWidget.cpp:212
+#: src/frontend/widgets/LabelWidget.cpp:547
 #, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
@@ -26014,7 +25952,7 @@ msgid ""
 "li><li>Markdown - text setting using Markdown markup language</li></ul>"
 msgstr ""
 
-#: src/frontend/widgets/LabelWidget.cpp:220
+#: src/frontend/widgets/LabelWidget.cpp:555
 #, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
@@ -26022,14 +25960,76 @@ msgid ""
 "li></ul>"
 msgstr ""
 
-#: src/frontend/widgets/LabelWidget.cpp:908
-#: src/frontend/widgets/LabelWidget.cpp:934
+#: src/frontend/widgets/LabelWidget.cpp:563
+#, kde-format
+msgid "Bold"
+msgstr ""
+
+#: src/frontend/widgets/LabelWidget.cpp:564
+#, kde-format
+msgid "Italic"
+msgstr ""
+
+#: src/frontend/widgets/LabelWidget.cpp:565
+#, fuzzy, kde-format
+#| msgid "line"
+msgid "Underline"
+msgstr "linija"
+
+#: src/frontend/widgets/LabelWidget.cpp:566
+#, kde-format
+msgid "Strike Out"
+msgstr ""
+
+#: src/frontend/widgets/LabelWidget.cpp:567
+#, fuzzy, kde-format
+#| msgid "&Script"
+msgid "Super Script"
+msgstr "&Skripta"
+
+#: src/frontend/widgets/LabelWidget.cpp:568
+#, fuzzy, kde-format
+#| msgid "&Script"
+msgid "Sub-Script"
+msgstr "&Skripta"
+
+#: src/frontend/widgets/LabelWidget.cpp:569
+#, fuzzy, kde-format
+#| msgid "Left margin"
+msgid "Left Align"
+msgstr "Lijeva margina"
+
+#: src/frontend/widgets/LabelWidget.cpp:571
+#, fuzzy, kde-format
+#| msgid "Right margin"
+msgid "Right Align"
+msgstr "Desna margina"
+
+#: src/frontend/widgets/LabelWidget.cpp:572
+#, kde-format
+msgid "Justify"
+msgstr ""
+
+#: src/frontend/widgets/LabelWidget.cpp:573
+#, fuzzy, kde-format
+#| msgid "Insert"
+msgid "Insert Symbol"
+msgstr "Umetni"
+
+#: src/frontend/widgets/LabelWidget.cpp:574
+#, fuzzy, kde-format
+#| msgid "Date and Time"
+msgid "Insert Date/Time"
+msgstr "Datum i vrijeme"
+
+#: src/frontend/widgets/LabelWidget.cpp:919
+#: src/frontend/widgets/LabelWidget.cpp:945
 #, kde-format
 msgid "Date"
 msgstr "Datum"
 
-#: src/frontend/widgets/LabelWidget.cpp:916
-#: src/frontend/widgets/LabelWidget.cpp:942
+#: src/frontend/widgets/LabelWidget.cpp:927
+#: src/frontend/widgets/LabelWidget.cpp:953
 #, kde-format
 msgid "Date and Time"
 msgstr "Datum i vrijeme"

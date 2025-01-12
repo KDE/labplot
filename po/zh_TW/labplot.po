@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-11 00:37+0000\n"
+"POT-Creation-Date: 2025-01-12 00:38+0000\n"
 "PO-Revision-Date: 2024-04-17 05:07+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -282,7 +282,7 @@ msgstr "方向"
 #: src/frontend/ui/dockwidgets/axisdock.ui:1524
 #: src/frontend/ui/dockwidgets/valuewidget.ui:269
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:280
-#: src/frontend/widgets/LabelWidget.cpp:204
+#: src/frontend/widgets/LabelWidget.cpp:480
 #: src/frontend/worksheet/WorksheetView.cpp:223
 #, fuzzy, kde-format
 msgid "Text"
@@ -12567,8 +12567,8 @@ msgstr "方向"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:51
 #: src/frontend/dockwidgets/ImageDock.cpp:54
 #: src/frontend/dockwidgets/ImageDock.cpp:62
-#: src/frontend/widgets/LabelWidget.cpp:154
-#: src/frontend/widgets/LabelWidget.cpp:172
+#: src/frontend/widgets/LabelWidget.cpp:494
+#: src/frontend/widgets/LabelWidget.cpp:514
 #, fuzzy, kde-format
 msgid "Top"
 msgstr "頂端"
@@ -12582,8 +12582,8 @@ msgstr "頂端"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:53
 #: src/frontend/dockwidgets/ImageDock.cpp:56
 #: src/frontend/dockwidgets/ImageDock.cpp:64
-#: src/frontend/widgets/LabelWidget.cpp:156
-#: src/frontend/widgets/LabelWidget.cpp:174
+#: src/frontend/widgets/LabelWidget.cpp:496
+#: src/frontend/widgets/LabelWidget.cpp:516
 #, fuzzy, kde-format
 msgid "Bottom"
 msgstr "底端"
@@ -12665,8 +12665,8 @@ msgstr ""
 #: src/frontend/dockwidgets/ImageDock.cpp:58
 #: src/frontend/dockwidgets/XYCurveDock.cpp:347
 #: src/frontend/widgets/BackgroundWidget.cpp:118
-#: src/frontend/widgets/LabelWidget.cpp:149
-#: src/frontend/widgets/LabelWidget.cpp:168
+#: src/frontend/widgets/LabelWidget.cpp:488
+#: src/frontend/widgets/LabelWidget.cpp:509
 #: src/frontend/widgets/ValueWidget.cpp:37
 #, fuzzy, kde-format
 msgid "Left"
@@ -12683,8 +12683,8 @@ msgstr "左"
 #: src/frontend/dockwidgets/ImageDock.cpp:60
 #: src/frontend/dockwidgets/XYCurveDock.cpp:348
 #: src/frontend/widgets/BackgroundWidget.cpp:119
-#: src/frontend/widgets/LabelWidget.cpp:151
-#: src/frontend/widgets/LabelWidget.cpp:170
+#: src/frontend/widgets/LabelWidget.cpp:490
+#: src/frontend/widgets/LabelWidget.cpp:511
 #: src/frontend/widgets/ValueWidget.cpp:38
 #, fuzzy, kde-format
 msgid "Right"
@@ -13255,11 +13255,11 @@ msgstr "欄"
 #: src/frontend/dockwidgets/ImageDock.cpp:59
 #: src/frontend/dockwidgets/ImageDock.cpp:63
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:296
-#: src/frontend/widgets/LabelWidget.cpp:142
-#: src/frontend/widgets/LabelWidget.cpp:150
-#: src/frontend/widgets/LabelWidget.cpp:155
-#: src/frontend/widgets/LabelWidget.cpp:169
-#: src/frontend/widgets/LabelWidget.cpp:173
+#: src/frontend/widgets/LabelWidget.cpp:489
+#: src/frontend/widgets/LabelWidget.cpp:495
+#: src/frontend/widgets/LabelWidget.cpp:510
+#: src/frontend/widgets/LabelWidget.cpp:515
+#: src/frontend/widgets/LabelWidget.cpp:570
 #: src/frontend/widgets/ValueWidget.cpp:94
 #: src/frontend/widgets/ValueWidget.cpp:95
 #, fuzzy, kde-format
@@ -13268,8 +13268,8 @@ msgstr "圓心"
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:256
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:261
-#: src/frontend/widgets/LabelWidget.cpp:152
-#: src/frontend/widgets/LabelWidget.cpp:157
+#: src/frontend/widgets/LabelWidget.cpp:491
+#: src/frontend/widgets/LabelWidget.cpp:497
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Relative to plot"
@@ -15815,7 +15815,7 @@ msgid "Command"
 msgstr "註解"
 
 #: src/frontend/notebook/NotebookView.cpp:103
-#: src/frontend/widgets/LabelWidget.cpp:207
+#: src/frontend/widgets/LabelWidget.cpp:483
 #, kde-format
 msgid "Markdown"
 msgstr ""
@@ -15823,7 +15823,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lTex)
 #: src/frontend/notebook/NotebookView.cpp:107
 #: src/frontend/ui/settingsworksheetpage.ui:147
-#: src/frontend/widgets/LabelWidget.cpp:205
+#: src/frontend/widgets/LabelWidget.cpp:481
 #, kde-format
 msgid "LaTeX"
 msgstr ""
@@ -24475,163 +24475,106 @@ msgstr ""
 msgid "Removing Keyword"
 msgstr "移除列"
 
-#: src/frontend/widgets/LabelWidget.cpp:116
+#: src/frontend/widgets/LabelWidget.cpp:520
+#, fuzzy, kde-format
+msgid "No Border"
+msgstr "邊界"
+
+#: src/frontend/widgets/LabelWidget.cpp:521
+#, kde-format
+msgid "Rectangle"
+msgstr "矩形"
+
+#: src/frontend/widgets/LabelWidget.cpp:522
+#, kde-format
+msgid "Ellipse"
+msgstr "橢圓形"
+
+#: src/frontend/widgets/LabelWidget.cpp:523
+#, kde-format
+msgid "Round sided rectangle"
+msgstr ""
+
+#: src/frontend/widgets/LabelWidget.cpp:524
+#, kde-format
+msgid "Round corner rectangle"
+msgstr "圓角矩形"
+
+#: src/frontend/widgets/LabelWidget.cpp:525
+#, kde-format
+msgid "Inwards round corner rectangle"
+msgstr ""
+
+#: src/frontend/widgets/LabelWidget.cpp:526
+#, kde-format
+msgid "Dented border rectangle"
+msgstr ""
+
+#: src/frontend/widgets/LabelWidget.cpp:527
+#, kde-format
+msgid "Cuboid"
+msgstr ""
+
+#: src/frontend/widgets/LabelWidget.cpp:528
+#, kde-format
+msgid "Up Pointing rectangle"
+msgstr ""
+
+#: src/frontend/widgets/LabelWidget.cpp:529
+#, kde-format
+msgid "Down Pointing rectangle"
+msgstr ""
+
+#: src/frontend/widgets/LabelWidget.cpp:530
+#, kde-format
+msgid "Left Pointing rectangle"
+msgstr ""
+
+#: src/frontend/widgets/LabelWidget.cpp:531
+#, fuzzy, kde-format
+msgid "Right Pointing rectangle"
+msgstr "右邊界"
+
+#: src/frontend/widgets/LabelWidget.cpp:534
+#, fuzzy, kde-format
+msgid "No line"
+msgstr "線條"
+
+#: src/frontend/widgets/LabelWidget.cpp:535
+#, fuzzy, kde-format
+#| msgid "solid line"
+msgid "Solid line"
+msgstr "實線"
+
+#: src/frontend/widgets/LabelWidget.cpp:536
+#, fuzzy, kde-format
+#| msgid "dash line"
+msgid "Dash line"
+msgstr "虛線"
+
+#: src/frontend/widgets/LabelWidget.cpp:537
+#, fuzzy, kde-format
+msgid "Dot line"
+msgstr "線條"
+
+#: src/frontend/widgets/LabelWidget.cpp:538
+#, fuzzy, kde-format
+msgid "Dash dot line"
+msgstr "線點交錯"
+
+#: src/frontend/widgets/LabelWidget.cpp:539
+#, fuzzy, kde-format
+msgid "Dash dot dot line"
+msgstr "線點交錯"
+
+#: src/frontend/widgets/LabelWidget.cpp:542
 #, kde-format
 msgid ""
 "Use logical instead of absolute coordinates to specify the position on the "
 "plot"
 msgstr ""
 
-#: src/frontend/widgets/LabelWidget.cpp:135
-#, kde-format
-msgid "Bold"
-msgstr "粗體"
-
-#: src/frontend/widgets/LabelWidget.cpp:136
-#, kde-format
-msgid "Italic"
-msgstr "斜體"
-
-#: src/frontend/widgets/LabelWidget.cpp:137
-#, fuzzy, kde-format
-msgid "Underline"
-msgstr "線條"
-
-#: src/frontend/widgets/LabelWidget.cpp:138
-#, kde-format
-msgid "Strike Out"
-msgstr "刪除線"
-
-#: src/frontend/widgets/LabelWidget.cpp:139
-#, fuzzy, kde-format
-msgid "Super Script"
-msgstr "文稿"
-
-#: src/frontend/widgets/LabelWidget.cpp:140
-#, fuzzy, kde-format
-msgid "Sub-Script"
-msgstr "文稿"
-
-#: src/frontend/widgets/LabelWidget.cpp:141
-#, fuzzy, kde-format
-msgid "Left Align"
-msgstr "左邊界"
-
-#: src/frontend/widgets/LabelWidget.cpp:143
-#, fuzzy, kde-format
-msgid "Right Align"
-msgstr "右邊界"
-
-#: src/frontend/widgets/LabelWidget.cpp:144
-#, kde-format
-msgid "Justify"
-msgstr "兩邊對齊"
-
-#: src/frontend/widgets/LabelWidget.cpp:145
-#, fuzzy, kde-format
-#| msgid "Symbol"
-msgid "Insert Symbol"
-msgstr "符號"
-
-#: src/frontend/widgets/LabelWidget.cpp:146
-#, fuzzy, kde-format
-#| msgid "Date and time"
-msgid "Insert Date/Time"
-msgstr "日期和時間"
-
-#: src/frontend/widgets/LabelWidget.cpp:176
-#, fuzzy, kde-format
-msgid "No Border"
-msgstr "邊界"
-
-#: src/frontend/widgets/LabelWidget.cpp:177
-#, kde-format
-msgid "Rectangle"
-msgstr "矩形"
-
-#: src/frontend/widgets/LabelWidget.cpp:178
-#, kde-format
-msgid "Ellipse"
-msgstr "橢圓形"
-
-#: src/frontend/widgets/LabelWidget.cpp:179
-#, kde-format
-msgid "Round sided rectangle"
-msgstr ""
-
-#: src/frontend/widgets/LabelWidget.cpp:180
-#, kde-format
-msgid "Round corner rectangle"
-msgstr "圓角矩形"
-
-#: src/frontend/widgets/LabelWidget.cpp:181
-#, kde-format
-msgid "Inwards round corner rectangle"
-msgstr ""
-
-#: src/frontend/widgets/LabelWidget.cpp:182
-#, kde-format
-msgid "Dented border rectangle"
-msgstr ""
-
-#: src/frontend/widgets/LabelWidget.cpp:183
-#, kde-format
-msgid "Cuboid"
-msgstr ""
-
-#: src/frontend/widgets/LabelWidget.cpp:184
-#, kde-format
-msgid "Up Pointing rectangle"
-msgstr ""
-
-#: src/frontend/widgets/LabelWidget.cpp:185
-#, kde-format
-msgid "Down Pointing rectangle"
-msgstr ""
-
-#: src/frontend/widgets/LabelWidget.cpp:186
-#, kde-format
-msgid "Left Pointing rectangle"
-msgstr ""
-
-#: src/frontend/widgets/LabelWidget.cpp:187
-#, fuzzy, kde-format
-msgid "Right Pointing rectangle"
-msgstr "右邊界"
-
-#: src/frontend/widgets/LabelWidget.cpp:189
-#, fuzzy, kde-format
-msgid "No line"
-msgstr "線條"
-
-#: src/frontend/widgets/LabelWidget.cpp:190
-#, fuzzy, kde-format
-#| msgid "solid line"
-msgid "Solid line"
-msgstr "實線"
-
-#: src/frontend/widgets/LabelWidget.cpp:191
-#, fuzzy, kde-format
-#| msgid "dash line"
-msgid "Dash line"
-msgstr "虛線"
-
-#: src/frontend/widgets/LabelWidget.cpp:192
-#, fuzzy, kde-format
-msgid "Dot line"
-msgstr "線條"
-
-#: src/frontend/widgets/LabelWidget.cpp:193
-#, fuzzy, kde-format
-msgid "Dash dot line"
-msgstr "線點交錯"
-
-#: src/frontend/widgets/LabelWidget.cpp:194
-#, fuzzy, kde-format
-msgid "Dash dot dot line"
-msgstr "線點交錯"
-
-#: src/frontend/widgets/LabelWidget.cpp:212
+#: src/frontend/widgets/LabelWidget.cpp:547
 #, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
@@ -24639,7 +24582,7 @@ msgid ""
 "li><li>Markdown - text setting using Markdown markup language</li></ul>"
 msgstr ""
 
-#: src/frontend/widgets/LabelWidget.cpp:220
+#: src/frontend/widgets/LabelWidget.cpp:555
 #, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
@@ -24647,14 +24590,71 @@ msgid ""
 "li></ul>"
 msgstr ""
 
-#: src/frontend/widgets/LabelWidget.cpp:908
-#: src/frontend/widgets/LabelWidget.cpp:934
+#: src/frontend/widgets/LabelWidget.cpp:563
+#, kde-format
+msgid "Bold"
+msgstr "粗體"
+
+#: src/frontend/widgets/LabelWidget.cpp:564
+#, kde-format
+msgid "Italic"
+msgstr "斜體"
+
+#: src/frontend/widgets/LabelWidget.cpp:565
+#, fuzzy, kde-format
+msgid "Underline"
+msgstr "線條"
+
+#: src/frontend/widgets/LabelWidget.cpp:566
+#, kde-format
+msgid "Strike Out"
+msgstr "刪除線"
+
+#: src/frontend/widgets/LabelWidget.cpp:567
+#, fuzzy, kde-format
+msgid "Super Script"
+msgstr "文稿"
+
+#: src/frontend/widgets/LabelWidget.cpp:568
+#, fuzzy, kde-format
+msgid "Sub-Script"
+msgstr "文稿"
+
+#: src/frontend/widgets/LabelWidget.cpp:569
+#, fuzzy, kde-format
+msgid "Left Align"
+msgstr "左邊界"
+
+#: src/frontend/widgets/LabelWidget.cpp:571
+#, fuzzy, kde-format
+msgid "Right Align"
+msgstr "右邊界"
+
+#: src/frontend/widgets/LabelWidget.cpp:572
+#, kde-format
+msgid "Justify"
+msgstr "兩邊對齊"
+
+#: src/frontend/widgets/LabelWidget.cpp:573
+#, fuzzy, kde-format
+#| msgid "Symbol"
+msgid "Insert Symbol"
+msgstr "符號"
+
+#: src/frontend/widgets/LabelWidget.cpp:574
+#, fuzzy, kde-format
+#| msgid "Date and time"
+msgid "Insert Date/Time"
+msgstr "日期和時間"
+
+#: src/frontend/widgets/LabelWidget.cpp:919
+#: src/frontend/widgets/LabelWidget.cpp:945
 #, kde-format
 msgid "Date"
 msgstr ""
 
-#: src/frontend/widgets/LabelWidget.cpp:916
-#: src/frontend/widgets/LabelWidget.cpp:942
+#: src/frontend/widgets/LabelWidget.cpp:927
+#: src/frontend/widgets/LabelWidget.cpp:953
 #, fuzzy, kde-format
 #| msgid "Date and time"
 msgid "Date and Time"
