@@ -16,7 +16,12 @@ class ContentDockWidget;
 #endif
 class QMenu;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT AbstractPart : public AbstractAspect {
+#else
 class AbstractPart : public AbstractAspect {
+#endif
 	Q_OBJECT
 
 public:

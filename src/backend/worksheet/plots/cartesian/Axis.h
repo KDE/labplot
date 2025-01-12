@@ -22,7 +22,12 @@ class Line;
 class TextLabel;
 class QActionGroup;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT Axis : public WorksheetElement {
+#else
 class Axis : public WorksheetElement {
+#endif
 	Q_OBJECT
 
 public:

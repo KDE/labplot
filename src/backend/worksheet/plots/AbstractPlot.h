@@ -19,7 +19,12 @@ class PlotArea;
 class TextLabel;
 class AbstractPlotPrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT AbstractPlot : public WorksheetElementContainer {
+#else
 class AbstractPlot : public WorksheetElementContainer {
+#endif
 	Q_OBJECT
 
 public:

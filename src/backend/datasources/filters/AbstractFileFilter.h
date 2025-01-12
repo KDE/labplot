@@ -22,7 +22,12 @@ class XmlStreamReader;
 class QXmlStreamWriter;
 class KConfig;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT AbstractFileFilter : public QObject {
+#else
 class AbstractFileFilter : public QObject {
+#endif
 	Q_OBJECT
 
 public:

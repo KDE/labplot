@@ -18,7 +18,12 @@ extern "C" {
 
 class XYConvolutionCurvePrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT XYConvolutionCurve : public XYAnalysisCurve {
+#else
 class XYConvolutionCurve : public XYAnalysisCurve {
+#endif
 	Q_OBJECT
 
 public:

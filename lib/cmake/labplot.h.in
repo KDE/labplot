@@ -39,7 +39,6 @@
 #include "./backend/core/column/Column.h"
 
 #include "./backend/worksheet/Worksheet.h"
-#include "./frontend/worksheet/WorksheetView.h"
 
 #include "./backend/worksheet/Image.h"
 #include "./backend/worksheet/InfoElement.h"

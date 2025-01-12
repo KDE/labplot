@@ -15,7 +15,12 @@
 
 class XYAnalysisCurvePrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT XYAnalysisCurve : public XYCurve {
+#else
 class XYAnalysisCurve : public XYCurve {
+#endif
 	Q_OBJECT
 
 public:

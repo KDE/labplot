@@ -14,7 +14,12 @@
 
 class NetCDFFilterPrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT NetCDFFilter : public AbstractFileFilter {
+#else
 class NetCDFFilter : public AbstractFileFilter {
+#endif
 	Q_OBJECT
 
 public:

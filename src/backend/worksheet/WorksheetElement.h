@@ -27,7 +27,12 @@ class QAction;
 class QGraphicsItem;
 class QPen;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT WorksheetElement : public AbstractAspect {
+#else
 class WorksheetElement : public AbstractAspect {
+#endif
 	Q_OBJECT
 
 public:

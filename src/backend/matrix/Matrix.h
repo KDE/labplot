@@ -21,7 +21,13 @@ class MatrixModel;
 #ifndef SDK
 class MatrixView;
 #endif
+
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT Matrix : public AbstractDataSource {
+#else
 class Matrix : public AbstractDataSource {
+#endif
 	Q_OBJECT
 
 public:

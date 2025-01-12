@@ -16,7 +16,12 @@
 
 class QString;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT XmlStreamReader : public QXmlStreamReader {
+#else
 class XmlStreamReader : public QXmlStreamReader {
+#endif
 public:
 	XmlStreamReader();
 	explicit XmlStreamReader(QIODevice* device);

@@ -17,7 +17,12 @@ class Background;
 class Line;
 class QActionGroup;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT ReferenceRange : public WorksheetElement {
+#else
 class ReferenceRange : public WorksheetElement {
+#endif
 	Q_OBJECT
 
 public:

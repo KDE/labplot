@@ -18,7 +18,12 @@ extern "C" {
 
 class XYIntegrationCurvePrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT XYIntegrationCurve : public XYAnalysisCurve {
+#else
 class XYIntegrationCurve : public XYAnalysisCurve {
+#endif
 	Q_OBJECT
 
 public:

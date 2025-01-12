@@ -64,7 +64,6 @@ set(COLUMN_SOURCES
 
 set(WORKSHEET_SOURCES
     ${BACKEND_DIR}/worksheet/Worksheet.cpp
-    ${FRONTEND_DIR}/worksheet/WorksheetView.cpp
 )
 
 set(WORKSHEET_ELEMENT_SOURCES
@@ -154,6 +153,13 @@ set(GSL_SOURCES
     ${BACKEND_DIR}/gsl/ExpressionParser.cpp
 )
 
+bison_target(GslParser
+    ${BACKEND_DIR}/gsl/parser.ypp
+    ${CMAKE_CURRENT_BINARY_DIR}/gsl_parser.cpp
+)
+
+list(APPEND GSL_SOURCES ${BISON_GslParser_OUTPUTS})
+
 # need to separate into internal classes and public classes
 set(SDK_DEPENDENCY_SOURCES
     ${BACKEND_DIR}/core/AbstractAspect.cpp
@@ -165,40 +171,24 @@ set(SDK_DEPENDENCY_SOURCES
     ${BACKEND_DIR}/worksheet/plots/AbstractPlot.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYAnalysisCurve.cpp
     ${BACKEND_DIR}/datasources/filters/AbstractFileFilter.cpp
-    ${BACKEND_DIR}/datasources/projects/ProjectParser.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/CartesianCoordinateSystem.cpp
-    ${BACKEND_DIR}/lib/Range.h
     ${BACKEND_DIR}/worksheet/WorksheetElementContainer.cpp
     ${BACKEND_DIR}/worksheet/plots/AbstractCoordinateSystem.cpp
-    ${BACKEND_DIR}/lib/XmlStreamReader.cpp
-    ${BACKEND_DIR}/lib/Debug.cpp
-    ${BACKEND_DIR}/datasources/filters/DBCParser.cpp
-    ${BACKEND_DIR}/datasources/filters/QJsonModel.cpp
-    ${BACKEND_DIR}/lib/hostprocess.cpp
-    ${BACKEND_DIR}/datasources/filters/SpiceReader.cpp
-    ${BACKEND_DIR}/matrix/matrixcommands.cpp
-    ${BACKEND_DIR}/matrix/MatrixModel.cpp
-    ${BACKEND_DIR}/spreadsheet/StatisticsSpreadsheet.cpp
-    ${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
-    ${BACKEND_DIR}/worksheet/ResizeItem.cpp
-    ${BACKEND_DIR}/core/AspectTreeModel.cpp
-    ${BACKEND_DIR}/worksheet/plots/cartesian/Symbol.cpp
-    ${BACKEND_DIR}/core/abstractcolumncommands.cpp
-    ${BACKEND_DIR}/core/AbstractColumnPrivate.cpp
-    ${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
-    ${BACKEND_DIR}/core/AbstractSimpleFilter.cpp
     ${BACKEND_DIR}/worksheet/Background.cpp
     ${BACKEND_DIR}/worksheet/Line.cpp
     ${BACKEND_DIR}/worksheet/plots/PlotArea.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/ErrorBar.cpp
-    ${BACKEND_DIR}/core/column/ColumnPrivate.cpp
-    ${BACKEND_DIR}/core/AbstractFilter.cpp
+    ${BACKEND_DIR}/spreadsheet/StatisticsSpreadsheet.cpp
+    ${BACKEND_DIR}/worksheet/plots/cartesian/Symbol.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/Value.cpp
     ${BACKEND_DIR}/core/column/ColumnStringIO.cpp
-    ${BACKEND_DIR}/core/column/columncommands.cpp
-    ${BACKEND_DIR}/worksheet/TreeModel.cpp
+    ${BACKEND_DIR}/lib/Range.h
+    ${BACKEND_DIR}/lib/XmlStreamReader.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/CartesianScale.cpp
-    ${BACKEND_DIR}/core/Time.cpp
+)
+
+set(SDK_INTERNAL_SOURCES
+    ${FRONTEND_DIR}/worksheet/WorksheetView.cpp
     ${BACKEND_DIR}/core/datatypes/Double2DateTimeFilter.h
     ${BACKEND_DIR}/core/datatypes/Double2DayOfWeekFilter.h
     ${BACKEND_DIR}/core/datatypes/Double2IntegerFilter.h
@@ -234,6 +224,20 @@ set(SDK_DEPENDENCY_SOURCES
     ${BACKEND_DIR}/core/datatypes/DayOfWeek2IntegerFilter.h
     ${BACKEND_DIR}/core/datatypes/DayOfWeek2BigIntFilter.h
     ${BACKEND_DIR}/core/datatypes/SimpleCopyThroughFilter.h
+    ${BACKEND_DIR}/core/AbstractFilter.cpp
+    ${BACKEND_DIR}/core/AbstractSimpleFilter.cpp
+    ${BACKEND_DIR}/core/column/ColumnPrivate.cpp
+    ${BACKEND_DIR}/core/AbstractColumnPrivate.cpp
+    ${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
+    ${BACKEND_DIR}/lib/Debug.cpp
+    ${BACKEND_DIR}/datasources/filters/DBCParser.cpp
+    ${BACKEND_DIR}/matrix/MatrixModel.cpp
+    ${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
+    ${BACKEND_DIR}/lib/hostprocess.cpp
+    ${BACKEND_DIR}/datasources/filters/SpiceReader.cpp
+    ${BACKEND_DIR}/core/AspectTreeModel.cpp
+    ${BACKEND_DIR}/matrix/matrixcommands.cpp
+    ${BACKEND_DIR}/datasources/filters/QJsonModel.cpp
     ${BACKEND_DIR}/gsl/Parser.cpp
     ${BACKEND_DIR}/gsl/functions.cpp
     ${BACKEND_DIR}/gsl/constants.cpp
@@ -242,12 +246,18 @@ set(SDK_DEPENDENCY_SOURCES
     ${FRONTEND_DIR}/ThemeHandler.cpp
     ${TOOLS_DIR}/ImageTools.cpp
     ${TOOLS_DIR}/TeXRenderer.cpp
+    ${BACKEND_DIR}/core/abstractcolumncommands.cpp
+    ${BACKEND_DIR}/core/column/columncommands.cpp
+    ${BACKEND_DIR}/worksheet/TreeModel.cpp
+    ${BACKEND_DIR}/core/Time.cpp
     ${BACKEND_DIR}/note/Note.cpp
+    ${BACKEND_DIR}/datasources/projects/ProjectParser.cpp
+    ${BACKEND_DIR}/worksheet/ResizeItem.cpp
 )
 
 if(ENABLE_LIBORIGIN)
-    list(APPEND SDK_DEPENDENCY_SOURCES ${BACKEND_DIR}/datasources/projects/OriginProjectParser.cpp)
-    list(APPEND SDK_DEPENDENCY_SOURCES ${BACKEND_DIR}/core/Workbook.cpp)
+    list(APPEND SDK_INTERNAL_SOURCES ${BACKEND_DIR}/datasources/projects/OriginProjectParser.cpp)
+    list(APPEND SDK_INTERNAL_SOURCES ${BACKEND_DIR}/core/Workbook.cpp)
 endif()
 
 if(NOT MSVC_FOUND)
@@ -256,21 +266,16 @@ if(NOT LIBCERF_FOUND)
 endif()
 endif()
 
-bison_target(GslParser
-    ${BACKEND_DIR}/gsl/parser.ypp
-    ${CMAKE_CURRENT_BINARY_DIR}/gsl_parser.cpp
-)
-
-list(APPEND GSL_SOURCES ${BISON_GslParser_OUTPUTS})
-
 # dynamic library
-add_library(liblabplot SHARED ${SDK_SOURCES} ${NSL_SOURCES} ${GSL_SOURCES} ${QTMOC_HDRS} ${SDK_DEPENDENCY_SOURCES})
+add_library(liblabplot SHARED ${SDK_SOURCES} ${NSL_SOURCES} ${GSL_SOURCES} ${QTMOC_HDRS} ${SDK_DEPENDENCY_SOURCES} ${SDK_INTERNAL_SOURCES})
 add_library(LabPlot::SDK ALIAS liblabplot)
 
 set_target_properties(liblabplot PROPERTIES
     VERSION ${PROJECT_VERSION}
     SOVERSION ${PROJECT_VERSION}
     EXPORT_NAME SDK # the name that consumers will refer to this target (on namespace LabPlot)
+    CXX_VISIBILITY_PRESET hidden
+    VISIBILITY_INLINES_HIDDEN 1
 )
 
 target_include_directories(liblabplot
