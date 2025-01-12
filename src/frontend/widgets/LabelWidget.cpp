@@ -137,16 +137,6 @@ LabelWidget::LabelWidget(QWidget* parent)
 	ui.kcbBorderColor->setAlphaChannelEnabled(true);
 	ui.kcbBorderColor->setColor(QColor(255, 255, 255, 255)); // black
 
-	// check whether LaTeX is available and deactivate the item in the combobox, if not.
-	// in case LaTeX was used to generate the text label in the stored project
-	// and no LaTeX is available on the target system, the disabled LaTeX item is selected
-	// in the combobox in load() and the user still can switch to the non-latex mode.
-	m_teXEnabled = TeXRenderer::enabled();
-	if (!m_teXEnabled) {
-		const auto* model = qobject_cast<QStandardItemModel*>(ui.cbMode->model());
-		model->item(1)->setEnabled(false);
-	}
-
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 	m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(ui.teLabel->document());
 	m_highlighter->setTheme(GuiTools::isDarkMode() ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
@@ -169,6 +159,16 @@ LabelWidget::LabelWidget(QWidget* parent)
 
 	updateLocale();
 	retranslateUi();
+
+	// check whether LaTeX is available and deactivate the item in the combobox, if not.
+	// in case LaTeX was used to generate the text label in the stored project
+	// and no LaTeX is available on the target system, the disabled LaTeX item is selected
+	// in the combobox in load() and the user still can switch to the non-latex mode.
+	m_teXEnabled = TeXRenderer::enabled();
+	if (!m_teXEnabled) {
+		const auto* model = qobject_cast<QStandardItemModel*>(ui.cbMode->model());
+		model->item(1)->setEnabled(false);
+	}
 
 	// SLOTS
 	// text properties
