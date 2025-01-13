@@ -106,10 +106,8 @@ Spreadsheet* Workbook::currentSpreadsheet() const {
 		auto* aspect = child<AbstractAspect>(index);
 		return dynamic_cast<Spreadsheet*>(aspect);
 	}
-	return nullptr;
-#else
-	return nullptr;
 #endif
+	return nullptr;
 }
 
 Matrix* Workbook::currentMatrix() const {
@@ -122,10 +120,8 @@ Matrix* Workbook::currentMatrix() const {
 		auto* aspect = child<AbstractAspect>(index);
 		return dynamic_cast<Matrix*>(aspect);
 	}
-	return nullptr;
-#else
-	return nullptr;
 #endif
+	return nullptr;
 }
 
 /*!

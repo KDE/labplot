@@ -202,7 +202,7 @@ public:
 	virtual void replaceBigInt(int first, const QVector<qint64>& new_values);
 
 	virtual Properties properties() const;
-	virtual void invalidateProperties(){};
+	virtual void invalidateProperties() {};
 
 	// conditional formatting
 	enum class Formatting { Background, Foreground, Icon };

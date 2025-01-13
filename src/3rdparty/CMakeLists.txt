@@ -56,6 +56,7 @@ endif()
 if(BUILD_QXLSX)
     set(BUILD_SHARED_LIBS OFF)
     add_subdirectory(QXlsx EXCLUDE_FROM_ALL)
+    set_property(TARGET QXlsx PROPERTY POSITION_INDEPENDENT_CODE ON)
 endif()
 
 # preview.sty

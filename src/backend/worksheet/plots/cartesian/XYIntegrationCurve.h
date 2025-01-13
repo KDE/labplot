@@ -28,7 +28,7 @@ class XYIntegrationCurve : public XYAnalysisCurve {
 
 public:
 	struct IntegrationData {
-		IntegrationData(){};
+		IntegrationData() {};
 
 		nsl_int_method_type method{nsl_int_method_trapezoid}; // method for integration
 		bool absolute{false}; // absolute area?
@@ -37,7 +37,7 @@ public:
 		QVector<double> xRange{0, 0}; // x range for integration
 	};
 	struct IntegrationResult : public XYAnalysisCurve::Result {
-		IntegrationResult(){};
+		IntegrationResult() {};
 
 		double value{0.0}; // final result of integration
 	};

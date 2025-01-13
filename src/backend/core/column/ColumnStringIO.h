@@ -34,7 +34,7 @@ public:
 	bool copy(const AbstractColumn*) override;
 	bool copy(const AbstractColumn* source, int source_start, int dest_start, int num_rows) override;
 	void replaceTexts(int start_row, const QVector<QString>& texts) override;
-	void save(QXmlStreamWriter*) const override{};
+	void save(QXmlStreamWriter*) const override {};
 	bool load(XmlStreamReader*, bool preview) override {
 		Q_UNUSED(preview);
 		return true;

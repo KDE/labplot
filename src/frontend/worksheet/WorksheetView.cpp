@@ -2074,7 +2074,11 @@ void WorksheetView::handleCartesianPlotActions() {
 	}
 }
 
-bool WorksheetView::exportToFile(const QString& path, const Worksheet::ExportFormat format, const Worksheet::ExportArea area, const bool background, const int resolution) {
+bool WorksheetView::exportToFile(const QString& path,
+								 const Worksheet::ExportFormat format,
+								 const Worksheet::ExportArea area,
+								 const bool background,
+								 const int resolution) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	bool rc = false;
 	QRectF sourceRect;

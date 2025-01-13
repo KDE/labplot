@@ -24,29 +24,11 @@ set(FILTER_SOURCES
     ${BACKEND_DIR}/datasources/filters/ROOTFilter.cpp
     ${BACKEND_DIR}/datasources/filters/SpiceFilter.cpp
     ${BACKEND_DIR}/datasources/filters/VectorBLFFilter.cpp
+    ${BACKEND_DIR}/datasources/filters/XLSXFilter.cpp
+    ${BACKEND_DIR}/datasources/filters/McapFilter.cpp
+    ${BACKEND_DIR}/datasources/filters/HDF5Filter.cpp
+    ${BACKEND_DIR}/datasources/filters/ReadStatFilter.cpp
 )
-
-if(ENABLE_XLSX)
-if(QXLSX_FOUND OR BUILD_QXLSX)
-    list(APPEND FILTER_SOURCES ${BACKEND_DIR}/datasources/filters/XLSXFilter.cpp)
-endif()
-endif()
-
-if(ENABLE_MCAP)
-    list(APPEND FILTER_SOURCES ${BACKEND_DIR}/datasources/filters/McapFilter.cpp)
-endif()
-
-if(ENABLE_HDF5)
-if(HDF5_FOUND)
-    list(APPEND FILTER_SOURCES ${BACKEND_DIR}/datasources/filters/HDF5Filter.cpp)
-endif()
-endif()
-
-if(ENABLE_READSTAT)
-if(READSTAT_FOUND OR BUILD_READSTAT)
-    list(APPEND FILTER_SOURCES ${BACKEND_DIR}/datasources/filters/ReadStatFilter.cpp)
-endif()
-endif()
 
 set(DATA_CONTAINER_SOURCES
     ${BACKEND_DIR}/matrix/Matrix.cpp
@@ -149,16 +131,15 @@ set(NSL_SOURCES
     ${BACKEND_DIR}/nsl/nsl_stats.c
 )
 
-set(GSL_SOURCES
-    ${BACKEND_DIR}/gsl/ExpressionParser.cpp
-)
-
 bison_target(GslParser
     ${BACKEND_DIR}/gsl/parser.ypp
     ${CMAKE_CURRENT_BINARY_DIR}/gsl_parser.cpp
 )
 
-list(APPEND GSL_SOURCES ${BISON_GslParser_OUTPUTS})
+set(GSL_SOURCES
+    ${BISON_GslParser_OUTPUTS}
+    ${BACKEND_DIR}/gsl/ExpressionParser.cpp
+)
 
 # need to separate into internal classes and public classes
 set(SDK_DEPENDENCY_SOURCES
@@ -269,6 +250,7 @@ endif()
 # dynamic library
 add_library(liblabplot SHARED ${SDK_SOURCES} ${NSL_SOURCES} ${GSL_SOURCES} ${QTMOC_HDRS} ${SDK_DEPENDENCY_SOURCES} ${SDK_INTERNAL_SOURCES})
 add_library(LabPlot::SDK ALIAS liblabplot)
+target_compile_definitions(liblabplot PRIVATE -DSDK ${LABPLOT_COMPILE_DEFINITIONS})
 
 set_target_properties(liblabplot PROPERTIES
     VERSION ${PROJECT_VERSION}
@@ -276,6 +258,7 @@ set_target_properties(liblabplot PROPERTIES
     EXPORT_NAME SDK # the name that consumers will refer to this target (on namespace LabPlot)
     CXX_VISIBILITY_PRESET hidden
     VISIBILITY_INLINES_HIDDEN 1
+    OUTPUT_NAME labplot # name it liblabplot, not libliblabplot
 )
 
 target_include_directories(liblabplot
@@ -321,12 +304,6 @@ if(READSTAT_FOUND OR BUILD_READSTAT)
     endif()
 endif()
 endif()
-
-target_compile_definitions(liblabplot PRIVATE -DSDK ${LABPLOT_COMPILE_DEFINITIONS})
-# name it liblabplot, not libliblabplot
-set_property(TARGET liblabplot PROPERTY OUTPUT_NAME labplot)
-# generate labplot_export.h + LABPLOT_EXPORT
-generate_export_header(liblabplot BASE_NAME labplot)
 
 # trim linked libraries later
 # how can we declare the shared libs needed by dependents with cmake?
@@ -421,18 +398,14 @@ if(PSAPI)
 endif()
 endif()
 
-# commented for now, will be moved to sdk tests
-# if(ENABLE_SDK_EXAMPLES)
-#     add_subdirectory(example)
-# endif()
-
 ############## installation ################################
 install(TARGETS liblabplot EXPORT LabPlotTargets DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} COMPONENT Devel)
 
+# generate labplot_export.h + LABPLOT_EXPORT
+generate_export_header(liblabplot BASE_NAME labplot)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/labplot_export.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot COMPONENT Devel)
 
-configure_file(cmake/labplot.h.in ${CMAKE_CURRENT_BINARY_DIR}/labplot.h @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/labplot.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/ COMPONENT Devel)
+install(FILES labplot.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/ COMPONENT Devel)
 
 # top-level includes
 foreach(SDK_SOURCE IN LISTS SDK_SOURCES)
@@ -485,6 +458,8 @@ install(FILES ../src/backend/nsl/nsl_kde.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}
 install(FILES ../src/backend/nsl/nsl_sf_kernel.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/nsl/ COMPONENT Devel)
 install(FILES ../src/backend/nsl/nsl_dft.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/nsl/ COMPONENT Devel)
 install(FILES ../src/backend/nsl/nsl_sf_window.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/nsl/ COMPONENT Devel)
+install(FILES ../src/backend/datasources/filters/filters.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/datasources/filters/ COMPONENT Devel)
+install(FILES ../src/backend/worksheet/plots/cartesian/plots.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/cartesian/ COMPONENT Devel)
 
 install(EXPORT LabPlotTargets
     DESTINATION ${KDE_INSTALL_CMAKEPACKAGEDIR}/labplot

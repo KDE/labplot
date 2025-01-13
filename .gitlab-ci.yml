@@ -82,6 +82,7 @@ windows_qt68_t:
   script:
     - !reference [windows_qt68, script]
     - mkdir -p build_examples && cd build_examples
+    - $env:Path = 'C:\Craft\windows-msvc2022_64-cl\bin;C:\Craft\windows-msvc2022_64-cl\lib;C:\Craft\windows-msvc2022_64-cl\dev-utils\bin;' + $env:Path
     - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ../lib/examples
     - ninja
   only:

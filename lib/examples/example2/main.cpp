@@ -1,6 +1,6 @@
 #include <labplot.h>
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
 	// create a spreadsheet and import the data into it
 	auto* spreadsheet = new Spreadsheet(QStringLiteral("data"));
 	AsciiFilter filter;
@@ -9,7 +9,7 @@ int main(int argc, char **argv) {
 	// create a worksheet
 	auto* worksheet = new Worksheet(QStringLiteral("worksheet"));
 
-	//create a plot area and add it to the worksheet
+	// create a plot area and add it to the worksheet
 	auto* plotArea = new CartesianPlot(QStringLiteral("plot area"));
 	plotArea->setType(CartesianPlot::Type::FourAxes);
 	plotArea->addLegend();
@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
 	histogram->setDataColumn(spreadsheet->column(0));
 	plotArea->addChild(histogram);
 
-	//perform a fit to the raw data and show it
+	// perform a fit to the raw data and show it
 	auto* fitCurve = new XYFitCurve(QStringLiteral("fit"));
 	fitCurve->setDataSourceType(XYAnalysisCurve::DataSourceType::Histogram);
 	fitCurve->setDataSourceHistogram(histogram);

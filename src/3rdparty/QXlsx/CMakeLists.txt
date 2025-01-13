@@ -144,8 +144,6 @@ add_library(QXlsx
 
 add_library(QXlsx::QXlsx ALIAS QXlsx)
 
-set_property(TARGET QXlsx PROPERTY POSITION_INDEPENDENT_CODE ON)
-
 target_compile_definitions(QXlsx PRIVATE
     QT_NO_KEYWORDS
     QT_NO_CAST_TO_ASCII
