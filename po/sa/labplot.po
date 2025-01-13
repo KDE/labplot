@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-12 00:38+0000\n"
+"POT-Creation-Date: 2025-01-13 00:37+0000\n"
 "PO-Revision-Date: 2024-12-29 23:07+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -87,7 +87,7 @@ msgstr "अधः"
 #: src/backend/core/AbstractAspect.cpp:526
 #: src/backend/core/aspectcommands.h:167
 #: src/backend/datapicker/Datapicker.cpp:220
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2208
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2206
 #, kde-format
 msgid "%1: add %2"
 msgstr "%1: %2 योजयतु"
@@ -177,10 +177,10 @@ msgstr "दिवसाः"
 #. i18n: ectx: property (text), widget (QRadioButton, rbNone)
 #: src/backend/core/AbstractColumn.cpp:163 src/backend/nsl/nsl_conv.c:22
 #: src/backend/nsl/nsl_conv.c:23 src/backend/nsl/nsl_corr.c:19
-#: src/backend/nsl/nsl_smooth.c:22 src/frontend/dockwidgets/AxisDock.cpp:267
-#: src/frontend/dockwidgets/AxisDock.cpp:280
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:55
-#: src/frontend/dockwidgets/XYCurveDock.cpp:193 src/frontend/GuiTools.cpp:150
+#: src/backend/nsl/nsl_smooth.c:22 src/frontend/dockwidgets/AxisDock.cpp:276
+#: src/frontend/dockwidgets/AxisDock.cpp:292
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:287
+#: src/frontend/dockwidgets/XYCurveDock.cpp:484 src/frontend/GuiTools.cpp:150
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
 #: src/frontend/widgets/BackgroundWidget.cpp:114
 #: src/frontend/widgets/LineWidget.cpp:47
@@ -271,13 +271,13 @@ msgstr "बृहत् पूर्णाङ्कः"
 #. i18n: ectx: property (text), widget (QLabel, lValuesText)
 #: src/backend/core/AbstractColumn.cpp:233
 #: src/backend/datasources/filters/AsciiFilter.cpp:600
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:537
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:535
 #: src/frontend/notebook/NotebookView.cpp:97
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:208
 #: src/frontend/ui/dockwidgets/axisdock.ui:1524
 #: src/frontend/ui/dockwidgets/valuewidget.ui:269
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:280
-#: src/frontend/widgets/LabelWidget.cpp:480
+#: src/frontend/widgets/LabelWidget.cpp:489
 #: src/frontend/worksheet/WorksheetView.cpp:223
 #, kde-format
 msgid "Text"
@@ -803,16 +803,16 @@ msgstr "अज्ञात कार्यपुस्तिका तत्व 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/backend/datapicker/Datapicker.cpp:45
 #: src/backend/datapicker/Datapicker.cpp:356
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1782
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1788
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1794
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1800
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1806
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1812
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1818
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1824
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1830
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1836
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1780
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1786
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1792
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1798
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1804
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1810
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1816
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1822
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1828
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1834
 #: src/frontend/ui/datapickerimagewidget.ui:260
 #, kde-format
 msgid "Plot"
@@ -1895,8 +1895,8 @@ msgstr "UInt64"
 #: src/backend/datasources/filters/MatioFilter.cpp:402
 #: src/backend/datasources/filters/MatioFilter.cpp:452
 #: src/backend/nsl/nsl_interp.c:26
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:448
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2112
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:446
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2110
 #, kde-format
 msgid "Function"
 msgstr "नियोग"
@@ -2685,8 +2685,8 @@ msgid "Stefan-Boltzmann constant"
 msgstr "स्टीफन्-बोल्ट्जमैन नित्य"
 
 #: src/backend/gsl/constants.cpp:83
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:481
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:158
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:479
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:160
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:534
 #, kde-format
 msgid "Gauss"
@@ -5122,7 +5122,7 @@ msgstr "तस्य"
 
 #: src/backend/gsl/functions.cpp:616 src/backend/nsl/nsl_interp.c:21
 #: src/backend/nsl/nsl_sf_window.c:27 src/backend/nsl/nsl_smooth.c:30
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:165
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:167
 #, kde-format
 msgid "Cosine"
 msgstr "कोसाइन"
@@ -6065,7 +6065,7 @@ msgid "ep"
 msgstr "ep"
 
 #: src/backend/lib/Range.h:52 src/backend/nsl/nsl_interp.c:14
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:461
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:459
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:519
 #, kde-format
 msgid "Linear"
@@ -6352,9 +6352,9 @@ msgstr "परिपत्रम्"
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoBinRanges)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAuto2)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAuto)
-#: src/backend/nsl/nsl_conv.c:21 src/frontend/dockwidgets/AxisDock.cpp:232
+#: src/backend/nsl/nsl_conv.c:21 src/frontend/dockwidgets/AxisDock.cpp:235
 #: src/frontend/dockwidgets/InfoElementDock.cpp:130
-#: src/frontend/dockwidgets/InfoElementDock.cpp:276
+#: src/frontend/dockwidgets/InfoElementDock.cpp:279
 #: src/frontend/ui/dockwidgets/axisdock.ui:473
 #: src/frontend/ui/dockwidgets/axisdock.ui:670
 #: src/frontend/ui/dockwidgets/axisdock.ui:904
@@ -6492,7 +6492,7 @@ msgid "Imaginary Part"
 msgstr "काल्पनिक भाग"
 
 #: src/backend/nsl/nsl_dft.c:22 src/backend/nsl/nsl_fit.c:26
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:465
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:463
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:522
 #, kde-format
 msgid "Power"
@@ -6650,12 +6650,12 @@ msgid "Statistics (Distributions)"
 msgstr "सांख्यिकी (वितरण)"
 
 #: src/backend/nsl/nsl_fit.c:24
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:501
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:499
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1866
 #: src/frontend/datasources/ImportFileWidget.cpp:1353
-#: src/frontend/dockwidgets/AxisDock.cpp:234
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:170
-#: src/frontend/dockwidgets/WorksheetDock.cpp:276
+#: src/frontend/dockwidgets/AxisDock.cpp:237
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:172
+#: src/frontend/dockwidgets/WorksheetDock.cpp:265
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:780
 #: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:81
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:549
@@ -6692,7 +6692,7 @@ msgid "Gaussian (normal)"
 msgstr "गाउसीयन (सामान्य)"
 
 #: src/backend/nsl/nsl_fit.c:31
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:485
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:483
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:537
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:563
 #, kde-format
@@ -6725,7 +6725,7 @@ msgid "Inverse Tangent"
 msgstr "विलोम स्पर्शरेखा"
 
 #: src/backend/nsl/nsl_fit.c:45
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:493
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:491
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:543
 #, kde-format
 msgid "Hyperbolic Tangent"
@@ -6798,8 +6798,8 @@ msgstr "त्रिज्या दूरी"
 
 #. i18n: ectx: property (text), widget (QLabel, lInterpolation)
 #: src/backend/nsl/nsl_geom_linesim.c:23
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:419
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2017
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:417
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2015
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:270
 #, kde-format
 msgid "Interpolation"
@@ -6840,12 +6840,12 @@ msgstr "सिम्पसनस्य (३-बिन्दुः)"
 msgid "Simpson's 3/8 (4-point)"
 msgstr "सिम्पसनस्य ३/८ (४-बिन्दुः)"
 
-#: src/backend/nsl/nsl_interp.c:16 src/frontend/dockwidgets/XYCurveDock.cpp:201
+#: src/backend/nsl/nsl_interp.c:16 src/frontend/dockwidgets/XYCurveDock.cpp:492
 #, kde-format
 msgid "Cubic Spline (Natural)"
 msgstr "घन स्प्लाइन (प्राकृतिक)"
 
-#: src/backend/nsl/nsl_interp.c:17 src/frontend/dockwidgets/XYCurveDock.cpp:202
+#: src/backend/nsl/nsl_interp.c:17 src/frontend/dockwidgets/XYCurveDock.cpp:493
 #, kde-format
 msgid "Cubic Spline (Periodic)"
 msgstr "घन स्प्लाइन (आवधिक)"
@@ -7075,7 +7075,7 @@ msgid "Frechet (Inverse Weibull)"
 msgstr "फ्रेचेट् (विलोम वेइबुल)"
 
 #: src/backend/nsl/nsl_sf_stats.c:48 src/backend/nsl/nsl_sf_window.c:16
-#: src/backend/nsl/nsl_smooth.c:24 src/frontend/dockwidgets/KDEPlotDock.cpp:160
+#: src/backend/nsl/nsl_smooth.c:24 src/frontend/dockwidgets/KDEPlotDock.cpp:162
 #, kde-format
 msgid "Triangular"
 msgstr "त्रिकोणीय"
@@ -7186,27 +7186,27 @@ msgstr "नियत"
 msgid "Periodic"
 msgstr "आवधिक"
 
-#: src/backend/nsl/nsl_smooth.c:23 src/frontend/dockwidgets/KDEPlotDock.cpp:159
+#: src/backend/nsl/nsl_smooth.c:23 src/frontend/dockwidgets/KDEPlotDock.cpp:161
 #, kde-format
 msgid "Uniform (Rectangular)"
 msgstr "एकरूप (आयताकार)"
 
-#: src/backend/nsl/nsl_smooth.c:26 src/frontend/dockwidgets/KDEPlotDock.cpp:161
+#: src/backend/nsl/nsl_smooth.c:26 src/frontend/dockwidgets/KDEPlotDock.cpp:163
 #, kde-format
 msgid "Parabolic (Epanechnikov)"
 msgstr "परवलयिक (Epanechnikov)"
 
-#: src/backend/nsl/nsl_smooth.c:27 src/frontend/dockwidgets/KDEPlotDock.cpp:162
+#: src/backend/nsl/nsl_smooth.c:27 src/frontend/dockwidgets/KDEPlotDock.cpp:164
 #, kde-format
 msgid "Quartic (Biweight)"
 msgstr "क्वार्टिक (द्विभार)"
 
-#: src/backend/nsl/nsl_smooth.c:28 src/frontend/dockwidgets/KDEPlotDock.cpp:163
+#: src/backend/nsl/nsl_smooth.c:28 src/frontend/dockwidgets/KDEPlotDock.cpp:165
 #, kde-format
 msgid "Triweight"
 msgstr "त्रिभारः"
 
-#: src/backend/nsl/nsl_smooth.c:29 src/frontend/dockwidgets/KDEPlotDock.cpp:164
+#: src/backend/nsl/nsl_smooth.c:29 src/frontend/dockwidgets/KDEPlotDock.cpp:166
 #, kde-format
 msgid "Tricube"
 msgstr "त्रिकुबे"
@@ -7336,7 +7336,7 @@ msgstr "अमान्य कोष्ठकं (सर्वक्रिया
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbCount)
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:61
-#: src/frontend/dockwidgets/HistogramDock.cpp:162
+#: src/frontend/dockwidgets/HistogramDock.cpp:273
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:64
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:96
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:102
@@ -7564,7 +7564,7 @@ msgid "%1: set connectionline curve name"
 msgstr "%1: संयोजनरेखावक्रनाम सेट् कुर्वन्तु"
 
 #: src/backend/worksheet/Line.cpp:100
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:571
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:569
 #, kde-format
 msgid "%1: line type changed"
 msgstr "%1: रेखाप्रकारः परिवर्तितः"
@@ -7596,13 +7596,13 @@ msgstr "%1: रेखा अस्पष्टतां सेट् कुर�
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:100
 #: src/backend/worksheet/plots/AbstractPlot.cpp:128
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1342
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1339
 #, kde-format
 msgid "%1: set horizontal padding"
 msgstr "%1: क्षैतिजपैडिंग् सेट् कुर्वन्तु"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:107
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1368
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1365
 #, kde-format
 msgid "%1: set vertical padding"
 msgstr "%1: ऊर्ध्वाधरपैडिंग् सेट् कुर्वन्तु"
@@ -7617,51 +7617,49 @@ msgstr "%1: सम्यक् पैडिंग् सेट् कुर्�
 msgid "%1: set bottom padding"
 msgstr "%1: अधः गद्दी सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:287
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:285
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:91
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:232
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:108
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:100
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:98
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:119
-#: src/frontend/dockwidgets/AxisDock.cpp:250
-#: src/frontend/dockwidgets/BarPlotDock.cpp:56
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:52
-#: src/frontend/dockwidgets/HistogramDock.cpp:159
-#: src/frontend/dockwidgets/LollipopPlotDock.cpp:51
-#: src/frontend/dockwidgets/ReferenceLineDock.cpp:27
-#: src/frontend/dockwidgets/ReferenceRangeDock.cpp:24
-#: src/frontend/dockwidgets/XYCurveDock.cpp:97
+#: src/frontend/dockwidgets/AxisDock.cpp:255
+#: src/frontend/dockwidgets/BarPlotDock.cpp:271
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:283
+#: src/frontend/dockwidgets/HistogramDock.cpp:269
+#: src/frontend/dockwidgets/LollipopPlotDock.cpp:245
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:99
+#: src/frontend/dockwidgets/ReferenceRangeDock.cpp:88
+#: src/frontend/dockwidgets/XYCurveDock.cpp:524
 #, kde-format
 msgid "Horizontal"
 msgstr "क्षैतिज"
 
-#. i18n("AvgShifted Histogram"));
-#. Orientation
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:290
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:288
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:94
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:235
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:111
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:103
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:101
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:122
-#: src/frontend/dockwidgets/AxisDock.cpp:251
-#: src/frontend/dockwidgets/BarPlotDock.cpp:57
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:53
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:908
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:912
-#: src/frontend/dockwidgets/HistogramDock.cpp:158
-#: src/frontend/dockwidgets/LollipopPlotDock.cpp:52
-#: src/frontend/dockwidgets/ReferenceLineDock.cpp:28
-#: src/frontend/dockwidgets/ReferenceRangeDock.cpp:25
-#: src/frontend/dockwidgets/XYCurveDock.cpp:96
+#: src/frontend/dockwidgets/AxisDock.cpp:256
+#: src/frontend/dockwidgets/BarPlotDock.cpp:272
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:284
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:903
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:907
+#: src/frontend/dockwidgets/HistogramDock.cpp:268
+#: src/frontend/dockwidgets/LollipopPlotDock.cpp:246
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:100
+#: src/frontend/dockwidgets/ReferenceRangeDock.cpp:89
+#: src/frontend/dockwidgets/XYCurveDock.cpp:523
 #, kde-format
 msgid "Vertical"
 msgstr "ऊर्ध्वाधर"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:310
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:308
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:102
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:243
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:119
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:120
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:118
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:139
 #, kde-format
 msgid "Orientation"
@@ -7673,10 +7671,10 @@ msgstr "आभिमुख्य"
 #. i18n: ectx: property (text), widget (QLabel, lLine)
 #. i18n: ectx: property (text), widget (QLabel, lCenter)
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersFormat)
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:316
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:676
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:126
-#: src/frontend/dockwidgets/XYCurveDock.cpp:194
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:314
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:674
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:124
+#: src/frontend/dockwidgets/XYCurveDock.cpp:485
 #: src/frontend/ui/dockwidgets/axisdock.ui:488
 #: src/frontend/ui/dockwidgets/axisdock.ui:628
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:687
@@ -7693,270 +7691,270 @@ msgstr "आभिमुख्य"
 msgid "Line"
 msgstr "पंक्ति"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:318
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:128
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:316
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:126
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:147
 #, kde-format
 msgid "Style"
 msgstr "शैली"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:323
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:133
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:321
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:131
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:152
 #: src/frontend/colormaps/ColorMapsWidget.cpp:195
-#: src/frontend/dockwidgets/AxisDock.cpp:310
+#: src/frontend/dockwidgets/AxisDock.cpp:325
 #: src/frontend/widgets/BackgroundWidget.cpp:122
 #, kde-format
 msgid "Color"
 msgstr "वर्ण"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:548
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:546
 #, kde-format
 msgid "%1: set axis range type"
 msgstr "%1: अक्षपरिधिप्रकारं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:573
-#: src/frontend/dockwidgets/AxisDock.cpp:604
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:571
+#: src/frontend/dockwidgets/AxisDock.cpp:622
 #, kde-format
 msgid "%1: set axis orientation"
 msgstr "%1: अक्ष-अभिमुखीकरणं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:580
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:578
 #, kde-format
 msgid "%1: set axis position"
 msgstr "%1: अक्षस्थानं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:588
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:586
 #, kde-format
 msgid "%1: set axis offset"
 msgstr "%1: अक्ष-अफसेट् सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:603
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:601
 #, kde-format
 msgid "%1: set axis range"
 msgstr "%1: अक्षपरिधिं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:642
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:640
 #, kde-format
 msgid "%1: set range scale"
 msgstr "%1: परिधिमापदण्डं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:649
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:647
 #, kde-format
 msgid "%1: set scale"
 msgstr "%1: स्केलं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:656
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:654
 #, kde-format
 msgid "%1: set major tick start type"
 msgstr "%1: प्रमुखं टिकप्रारम्भप्रकारं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:663
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:661
 #, kde-format
 msgid "%1: set major tick start offset"
 msgstr "%1: प्रमुखं टिकप्रारम्भ-अफसेट् सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:671
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:669
 #, kde-format
 msgid "%1: set major tick start value"
 msgstr "%1: प्रमुखं टिकप्रारम्भमूल्यं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:683
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:681
 #, kde-format
 msgid "%1: set axis scaling factor"
 msgstr "%1: अक्षमापनकारकं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:692
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:690
 #, kde-format
 msgid "%1: set axis zero offset"
 msgstr "%1: अक्षं शून्यं ऑफसेट् सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:698
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:696
 #, kde-format
 msgid "%1: show scale and offset"
 msgstr "%1: स्केलम् अपि च ऑफसेट् दर्शयतु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:705
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:703
 #, kde-format
 msgid "%1: set axis logical position"
 msgstr "%1: अक्षस्य तार्किकस्थानं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:713
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:720
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:711
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:718
 #, kde-format
 msgid "%1: set title offset"
 msgstr "%1: शीर्षक-अफसेट् सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:728
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:726
 #, kde-format
 msgid "%1: set arrow type"
 msgstr "%1: बाणप्रकारं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:735
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:733
 #, kde-format
 msgid "%1: set arrow position"
 msgstr "%1: बाणस्थानं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:742
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:740
 #, kde-format
 msgid "%1: set arrow size"
 msgstr "%1: बाणस्य आकारं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:750
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:748
 #, kde-format
 msgid "%1: set major ticks direction"
 msgstr "%1: प्रमुखटिक्स् दिशां सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:757
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:755
 #, kde-format
 msgid "%1: set major ticks type"
 msgstr "%1: प्रमुखटिक्स् प्रकारं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:765
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:763
 #, kde-format
 msgid "%1: enable/disable major automatic tick numbers"
 msgstr "%1: प्रमुखस्वचालितटिकसङ्ख्याः सक्षम/अक्षमम्"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:767
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:782
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:765
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:780
 #, kde-format
 msgid "%1: set the total number of the major ticks"
 msgstr "%1: प्रमुखटिक्स् इत्यस्य कुलसङ्ख्यां सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:784
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:868
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:782
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:866
 #, kde-format
 msgid "%1: disable major automatic tick numbers"
 msgstr "%1: प्रमुखस्वचालितटिकसङ्ख्याः निष्क्रियं कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:809
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:807
 #, kde-format
 msgid "%1: set the spacing of the major ticks"
 msgstr "%1: प्रमुखटिक्स् इत्यस्य अन्तरं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:816
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:814
 #, kde-format
 msgid "%1: assign major ticks' values"
 msgstr "%1: प्रमुखटिक्स् इत्यस्य मूल्यानि नियुक्तं कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:830
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:828
 #, kde-format
 msgid "%1: set major ticks length"
 msgstr "%1: प्रमुखटिक्स् दीर्घतां सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:838
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:836
 #, kde-format
 msgid "%1: set minor ticks direction"
 msgstr "%1: लघुटिक्स् दिशां सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:845
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:843
 #, kde-format
 msgid "%1: set minor ticks type"
 msgstr "%1: लघुटिक्स् प्रकारं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:853
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:851
 #, kde-format
 msgid "%1: enable/disable minor automatic tick numbers"
 msgstr "%1: लघुस्वचालितटिकसङ्ख्याः सक्षम/अक्षमम्"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:856
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:867
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:854
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:865
 #, kde-format
 msgid "%1: set the total number of the minor ticks"
 msgstr "%1: लघुटिक्स् इत्यस्य कुलसङ्ख्यां सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:900
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:898
 #, kde-format
 msgid "%1: set the spacing of the minor ticks"
 msgstr "%1: लघुटिक्स् इत्यस्य अन्तरं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:907
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:905
 #, kde-format
 msgid "%1: assign minor ticks' values"
 msgstr "%1: लघुटिक्स् इत्यस्य मूल्यानि नियुक्तं कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:921
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:919
 #, kde-format
 msgid "%1: set minor ticks length"
 msgstr "%1: लघुटिक्स् दीर्घतां सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:930
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:928
 #, kde-format
 msgid "%1: set labels format"
 msgstr "%1: लेबल्स् प्रारूपं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:937
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:935
 #, kde-format
 msgid "%1: set labels format automatic"
 msgstr "%1: लेबल्स् प्रारूपं स्वचालितरूपेण सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:944
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:951
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:942
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:949
 #, kde-format
 msgid "%1: set labels precision"
 msgstr "%1: लेबल् परिशुद्धतां सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:958
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:956
 #, kde-format
 msgid "%1: set labels datetime format"
 msgstr "%1: लेबल् तिथिसमयस्वरूपं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:965
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:963
 #, kde-format
 msgid "%1: set labels position"
 msgstr "%1: लेबल् स्थानं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:972
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:970
 #, kde-format
 msgid "%1: set label offset"
 msgstr "%1: लेबल-अफसेट् सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:979
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:977
 #, kde-format
 msgid "%1: set label rotation angle"
 msgstr "%1: लेबल घूर्णनकोणं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:986
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:984
 #, kde-format
 msgid "%1: set labels text type"
 msgstr "%1: लेबल् पाठप्रकारं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:993
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:991
 #, kde-format
 msgid "%1: set labels text column"
 msgstr "%1: लेबल्स् पाठस्तम्भं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1007
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1005
 #, kde-format
 msgid "%1: set label color"
 msgstr "%1: लेबलवर्णं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1014
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1012
 #, kde-format
 msgid "%1: set label font"
 msgstr "%1: लेबल font सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1021
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1019
 #, kde-format
 msgid "%1: set labels background type"
 msgstr "%1: लेबल् पृष्ठभूमिप्रकारं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1028
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1026
 #, kde-format
 msgid "%1: set label background color"
 msgstr "%1: लेबलपृष्ठभूमिवर्णं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1035
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1033
 #, kde-format
 msgid "%1: set label prefix"
 msgstr "%1: लेबल उपसर्गं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1042
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1040
 #, kde-format
 msgid "%1: set label suffix"
 msgstr "%1: लेबल प्रत्ययः सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1049
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1047
 #, kde-format
 msgid "%1: set labels opacity"
 msgstr "%1: लेबल् अपारदर्शिता सेट् कुर्वन्तु"
@@ -7983,7 +7981,7 @@ msgstr "%1: प्रकारं सेट् कुर्वन्तु"
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:310
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:525
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:305
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:188
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:186
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:214
 #, kde-format
 msgid "%1: set orientation"
@@ -8080,40 +8078,40 @@ msgstr "%1: jitterring परिवर्तितम्"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:584
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:514
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:704
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:702
 #, kde-format
 msgid "%1: change rug enabled"
 msgstr "%1: परिवर्तनं गलीचां सक्षमम्"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:591
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:521
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:718
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:716
 #, kde-format
 msgid "%1: change rug width"
 msgstr "%1: गलीचायाः विस्तारं परिवर्तयन्तु"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:598
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:528
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:725
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:723
 #, kde-format
 msgid "%1: change rug length"
 msgstr "%1: गलीचायाः दीर्घतां परिवर्तयन्तु"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:605
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:535
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:732
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:730
 #, kde-format
 msgid "%1: change rug offset"
 msgstr "%1: गलीचा ऑफसेटं परिवर्तयन्तु"
 
-#: src/backend/worksheet/plots/cartesian/CartesianCoordinateSystem.cpp:57
+#: src/backend/worksheet/plots/cartesian/CartesianCoordinateSystem.cpp:55
 #, kde-format
 msgid "no info available"
 msgstr "कोऽपि info उपलब्धः नास्ति"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:147
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5243
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:145
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5241
 #: src/frontend/ui/dockwidgets/axisdock.ui:483
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:542
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:478
@@ -8122,16 +8120,16 @@ msgstr "कोऽपि info उपलब्धः नास्ति"
 msgid "Title"
 msgstr "शीर्षक"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:416
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:453
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1960
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:414
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:451
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1958
 #, kde-format
 msgid "Data Reduction"
 msgstr "दत्तांशनिवृत्तिः"
 
 #. i18n: ectx: property (text), widget (QLabel, lDifferentiation)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:417
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1979
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:415
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1977
 #: src/frontend/notebook/NotebookView.cpp:149
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:269
 #, kde-format
@@ -8139,8 +8137,8 @@ msgid "Differentiation"
 msgstr "भेदः"
 
 #. i18n: ectx: property (text), widget (QLabel, lIntegration)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:418
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1998
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:416
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1996
 #: src/frontend/notebook/NotebookView.cpp:155
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:157
 #, kde-format
@@ -8148,72 +8146,72 @@ msgid "Integration"
 msgstr "एकीकरणम्"
 
 #. i18n: ectx: property (text), widget (QLabel, lSmooth)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:420
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:457
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2036
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:418
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:455
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2034
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:512
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:73
 #, kde-format
 msgid "Smooth"
 msgstr "मसृणः"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:421
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:613
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2055
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:419
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:611
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2053
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:626
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit"
 msgstr "योग्यः"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:422
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:505
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2096
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:420
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:503
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2094
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:514
 #, kde-format
 msgid "Fourier Filter"
 msgstr "फूरियर फ़िल्टर"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:423
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:436
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:506
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:524
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:421
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:434
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:504
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:522
 #, kde-format
 msgid "Fourier Transform"
 msgstr "फूरियर परिवर्तन"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:424
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:439
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:507
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:527
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:422
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:437
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:505
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:525
 #, kde-format
 msgid "Hilbert Transform"
 msgstr "हिल्बर्ट परिवर्तन"
 
 #. i18n: ectx: property (text), widget (QLabel, lConvolution)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:425
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:423
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:311
 #, kde-format
 msgid "(De-)Convolution"
 msgstr "(दे-)विवर्तनम्"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:426
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:445
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:459
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:518
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:424
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:443
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:457
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:516
 #, kde-format
 msgid "Auto-/Cross-Correlation"
 msgstr "स्वतः-/क्रॉस-सहसंबंध"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:442
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:515
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:440
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:513
 #: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:342
 #: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:347
 #, kde-format
 msgid "Convolution"
 msgstr "परिभ्रमणम्"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:449
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:447
 #, kde-format
 msgid ""
 "Add a new xy-curve that is defined as a function of other xy-curves (scaled, "
@@ -8221,61 +8219,61 @@ msgid ""
 msgstr ""
 "अन्येषां xy-वक्राणां (स्केल, शिफ्ट् इत्यादीनां) कार्यरूपेण परिभाषितं नूतनं xy-वक्रं योजयन्तु ।"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:454
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:452
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:504
 #, kde-format
 msgid "Differentiate"
 msgstr "भेदं कुरुत"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:455
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:453
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:507
 #, kde-format
 msgid "Integrate"
 msgstr "एकीकृत करें"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:456
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:454
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:510
 #, kde-format
 msgid "Interpolate"
 msgstr "अन्तरक्षेपं कुरुत"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:458
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:456
 #, kde-format
 msgid "Convolute/Deconvolute"
 msgstr "Convolute/Deconvolute इति"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:469
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:467
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:525
 #, kde-format
 msgid "Exponential (degree 1)"
 msgstr "घातीय (उपाधि १)"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:473
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:471
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:528
 #, kde-format
 msgid "Exponential (degree 2)"
 msgstr "घातीय (उपाधि २)"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:477
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:475
 #, kde-format
 msgid "Inverse exponential"
 msgstr "विलोम घातीय"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:489
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:487
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:540
 #, kde-format
 msgid "Arc Tangent"
 msgstr "चाप स्पर्शरेखा"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:497
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:495
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:546
 #, kde-format
 msgid "Error Function"
 msgstr "त्रुटिः कार्यम्"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLegendVisible)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:531
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2138
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:529
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2136
 #: src/frontend/ui/dockwidgets/barplotdock.ui:235
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:248
 #: src/frontend/ui/dockwidgets/histogramdock.ui:385
@@ -8302,18 +8300,18 @@ msgstr "त्रुटिः कार्यम्"
 msgid "Legend"
 msgstr "आख्यान"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:535
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:533
 #, kde-format
 msgid "Horizontal Axis"
 msgstr "क्षैतिज अक्ष"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:536
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:534
 #, kde-format
 msgid "Vertical Axis"
 msgstr "ऊर्ध्वाधर अक्ष"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:538
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2185
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:536
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2183
 #: src/frontend/datasources/ImportFileWidget.cpp:112
 #: src/frontend/matrix/MatrixView.cpp:133
 #: src/frontend/notebook/NotebookView.cpp:110
@@ -8324,33 +8322,33 @@ msgstr "ऊर्ध्वाधर अक्ष"
 msgid "Image"
 msgstr "छवि"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:539
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2161
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:537
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2159
 #, kde-format
 msgid "Info Element"
 msgstr "इन्फो तत्व"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:540
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2205
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:538
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2203
 #, kde-format
 msgid "Custom Point"
 msgstr "कस्टम बिन्दु"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabReferenceLine)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:541
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2230
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:539
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2228
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:176
 #, kde-format
 msgid "Reference Line"
 msgstr "सन्दर्भ रेखा"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:542
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2243
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:540
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2241
 #, kde-format
 msgid "Reference Range"
 msgstr "सन्दर्भ श्रेणी"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:558
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:556
 #: src/frontend/MainWin.cpp:891 src/frontend/notebook/NotebookView.cpp:168
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:294
@@ -8359,137 +8357,137 @@ msgstr "सन्दर्भ श्रेणी"
 msgid "Add New"
 msgstr "New योजयतु"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:567
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:565
 #, kde-format
 msgid "Formula Plot"
 msgstr "सूत्र प्लॉट"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:568
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:566
 #, kde-format
 msgid "Add a new xy-plot that is defined via a mathematical expression."
 msgstr "गणितीयव्यञ्जनस्य माध्यमेन परिभाषितं नूतनं xy-plot योजयन्तु ।"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:575
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:573
 #, kde-format
 msgid "Analysis Plots"
 msgstr "विश्लेषण प्लॉट्स"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:611
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:609
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:188
 #, kde-format
 msgid "Analysis"
 msgstr "आँकलन"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:652
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:650
 #: src/frontend/ThemeHandler.cpp:49 src/frontend/ThemeHandler.cpp:144
 #: src/frontend/worksheet/WorksheetView.cpp:543
 #, kde-format
 msgid "Theme"
 msgstr "विषयवस्तु"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:674
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:672
 #, kde-format
 msgid "Line Plots"
 msgstr "रेखा प्लॉट्स"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:680
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:678
 #, kde-format
 msgid "Horizontal Step"
 msgstr "क्षैतिज चरण"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:684
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:682
 #, kde-format
 msgid "Vertical Step"
 msgstr "ऊर्ध्वाधर चरण"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:688
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:686
 #, kde-format
 msgid "Spline Interpolated"
 msgstr "स्प्लाइन इन्टरपोलेटेड"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:695
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:693
 #, kde-format
 msgid "Scatter Plots"
 msgstr "स्कैटर प्लॉट्स"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:697
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:695
 #, kde-format
 msgid "Scatter"
 msgstr "प्रकीर्णनम्"
 
 #. i18n: ectx: property (text), widget (QLabel, lYError)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:701
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:699
 #: src/frontend/ui/dockwidgets/errorbarwidget.ui:221
 #, kde-format
 msgid "Y Error"
 msgstr "तथा त्रुटिः"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:705
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:703
 #, kde-format
 msgid "XY Error"
 msgstr "XY त्रुटिः"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:712
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:710
 #, kde-format
 msgid "Line and Symbol Plots"
 msgstr "रेखा तथा प्रतीक प्लॉट"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:714
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:712
 #, kde-format
 msgid "Line + Symbol"
 msgstr "रेखा + चिह्न"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:718
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:716
 #, kde-format
 msgid "2 Point Segment"
 msgstr "२ बिन्दुखण्डः"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:722
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:720
 #, kde-format
 msgid "3 Point Segment"
 msgstr "३ बिन्दुखण्डः"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:729
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:727
 #, kde-format
 msgid "Statistical Plots"
 msgstr "सांख्यिकीय प्लॉट्स"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:731
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1852
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:729
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1850
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:73
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:143
 #, kde-format
 msgid "Histogram"
 msgstr "हिस्टोग्राम"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:735
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1849
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:733
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1847
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:771
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:146
 #, kde-format
 msgid "Box Plot"
 msgstr "बक्सा प्लॉट"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:739
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1855
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:737
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1853
 #, kde-format
 msgid "Q-Q Plot"
 msgstr "प्र-प्र प्लॉट"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:743
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1858
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:741
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1856
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:144
 #, kde-format
 msgid "KDE Plot"
 msgstr "WHERE वेष्टनम्"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:750
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:748
 #, kde-format
 msgid "Bar Plots"
 msgstr "बार प्लॉट्स"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:752
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1863
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:750
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1861
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:773
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:775
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:149
@@ -8497,287 +8495,287 @@ msgstr "बार प्लॉट्स"
 msgid "Bar Plot"
 msgstr "बार प्लॉट"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:756
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1866
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:754
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1864
 #, kde-format
 msgid "Lollipop Plot"
 msgstr "लॉलीपॉप प्लॉट"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:763
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:761
 #, kde-format
 msgid "Continual Improvement Plots"
 msgstr "निरन्तर सुधार भूखण्ड"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:765
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1874
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:763
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1872
 #, kde-format
 msgid "Run Chart"
 msgstr "चार्टं चालयन्तु"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:769
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1871
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:767
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1869
 #, kde-format
 msgid "Process Behavior Chart"
 msgstr "प्रक्रिया व्यवहार चार्ट"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:792
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:790
 #, kde-format
 msgid "No curves inside the plot area."
 msgstr "भूखण्डक्षेत्रस्य अन्तः वक्राणि नास्ति।"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1117
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1151
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1115
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1149
 #, kde-format
 msgid "%1: change geometry rect"
 msgstr "%1: ज्यामिति परिवर्तनं rect"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1186
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1184
 #, kde-format
 msgid "%1: set range type"
 msgstr "%1: परिधिप्रकारं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1193
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1191
 #, kde-format
 msgid "%1: set nice extend"
 msgstr "%1: सुन्दरं विस्तारं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1200
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1207
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1198
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1205
 #, kde-format
 msgid "%1: set range"
 msgstr "%1: परिधिं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1218
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1216
 #, kde-format
 msgid "%1: change %2-range %3 format"
 msgstr "%1: %2-परिधि %3 प्रारूपं परिवर्तयन्तु"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1308
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1306
 #, kde-format
 msgid "%1: change %2-range %3 auto scaling"
 msgstr "%1: %2-परिधि %3 स्वतः स्केलिंग् परिवर्तयन्तु"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1549
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1547
 #, kde-format
 msgid "%1: change x-range %2 scale"
 msgstr "%1: x-परिधि %2 स्केल परिवर्तयन्तु"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1677
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1675
 #, kde-format
 msgid "%1: set default plot range"
 msgstr "%1: पूर्वनिर्धारितं प्लॉट् परिधिं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1695
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1693
 #, kde-format
 msgid "%1: x-range breaking enabled"
 msgstr "%1: x-परिधिभङ्गः सक्षमः"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1704
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1702
 #, kde-format
 msgid "%1: x-range breaks changed"
 msgstr "%1: x-परिधिविरामाः परिवर्तिताः"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1713
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1711
 #, kde-format
 msgid "%1: y-range breaking enabled"
 msgstr "%1: y-परिधिभङ्गः सक्षमः"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1722
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1720
 #, kde-format
 msgid "%1: y-range breaks changed"
 msgstr "%1: y-परिधिविरामाः परिवर्तिताः"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1736
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1734
 #, kde-format
 msgid "%1: Cursor0 enable"
 msgstr "%1: कर्सर0 सक्षमं कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1748
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1746
 #, kde-format
 msgid "%1: Cursor1 enable"
 msgstr "%1: कर्सर1 सक्षमं कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1759
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1757
 #: src/backend/worksheet/Worksheet.cpp:846
 #, kde-format
 msgid "%1: load theme %2"
 msgstr "%1: विषयवस्तु %2 लोडयन्तु"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1761
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1759
 #: src/backend/worksheet/Worksheet.cpp:848
 #, kde-format
 msgid "%1: load default theme"
 msgstr "%1: पूर्वनिर्धारितं विषयं लोड् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1763
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5569
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1761
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5567
 #: src/backend/worksheet/Worksheet.cpp:850
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1: विषयः सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1916
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1914
 #, kde-format
 msgid "%1: distribution fit to '%2'"
 msgstr "%1: वितरणं '%2' कृते उपयुक्तम्।"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1917
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1915
 #, kde-format
 msgid "Distribution Fit to '%1'"
 msgstr "वितरणं '%1' कृते उपयुक्तम्।"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1963
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1961
 #, kde-format
 msgid "%1: reduce '%2'"
 msgstr "%1: '%2' न्यूनीकरोतु।"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1964
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1962
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:665
 #, kde-format
 msgid "Reduction of '%1'"
 msgstr "'%1' इत्यस्य न्यूनीकरणम् ।"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1971
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1969
 #, kde-format
 msgid "%1: add data reduction curve"
 msgstr "%1: दत्तांशनिवृत्तिवक्रं योजयन्तु"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1982
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1980
 #, kde-format
 msgid "%1: differentiate '%2'"
 msgstr "%1: '%2' इति भेदं कुर्वन्तु।"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1983
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1981
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:668
 #, kde-format
 msgid "Derivative of '%1'"
 msgstr "'%1' इत्यस्य व्युत्पन्नम् ।"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1990
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1988
 #, kde-format
 msgid "%1: add differentiation curve"
 msgstr "%1: भेदवक्रं योजयन्तु"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2001
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1999
 #, kde-format
 msgid "%1: integrate '%2'"
 msgstr "%1: '%2' एकीकृत्य।"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2002
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2000
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:671
 #, kde-format
 msgid "Integral of '%1'"
 msgstr "'%1' इत्यस्य अभिन्नम् ।"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2009
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2007
 #, kde-format
 msgid "%1: add integration curve"
 msgstr "%1: एकीकरणवक्रं योजयन्तु"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2020
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2018
 #, kde-format
 msgid "%1: interpolate '%2'"
 msgstr "%1: '%2' इति प्रक्षेपणं कुर्वन्तु।"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2021
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2019
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:674
 #, kde-format
 msgid "Interpolation of '%1'"
 msgstr "'%1' इत्यस्य प्रक्षेपः ।"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2028
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2026
 #, kde-format
 msgid "%1: add interpolation curve"
 msgstr "%1: प्रक्षेपवक्रं योजयन्तु"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2039
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2037
 #, kde-format
 msgid "%1: smooth '%2'"
 msgstr "%1: स्निग्ध '%2'."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2040
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2038
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:677
 #, kde-format
 msgid "Smoothing of '%1'"
 msgstr "'%1' इत्यस्य स्निग्धीकरणम् ।"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2047
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2045
 #, kde-format
 msgid "%1: add smoothing curve"
 msgstr "%1: स्मूथिंग् वक्रं योजयन्तु"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2058
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2056
 #, kde-format
 msgid "%1: fit to '%2'"
 msgstr "%1: '%2' कृते उपयुक्तम्।"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2059
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2057
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:690
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit to '%1'"
 msgstr "'%1' कृते उपयुक्तम्।"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2088
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2086
 #, kde-format
 msgid "%1: add fit curve"
 msgstr "%1: फिट वक्रं योजयन्तु"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2099
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2097
 #, kde-format
 msgid "%1: Fourier filtering of '%2'"
 msgstr "%1: '%2' इत्यस्य फूरियर-छननम् ।"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2100
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2098
 #, kde-format
 msgid "Fourier filtering of '%1'"
 msgstr "'%1' इत्यस्य फूरियर-छननम् ।"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2104
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2102
 #, kde-format
 msgid "%1: add Fourier filter curve"
 msgstr "%1: फूरियर फ़िल्टर वक्रं योजयन्तु"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2115
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2113
 #, kde-format
 msgid "%1: add function of '%2'"
 msgstr "%1: '%2' इत्यस्य कार्यं योजयतु।"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2116
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2114
 #, kde-format
 msgid "Function of '%1'"
 msgstr "'%1' इत्यस्य कार्यम् ।"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2119
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2117
 #, kde-format
 msgid "%1: add function curve"
 msgstr "%1: कार्यवक्रं योजयतु"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2168
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2166
 #: src/frontend/worksheet/WorksheetView.cpp:1338
 #: src/frontend/worksheet/WorksheetView.cpp:1339
 #, kde-format
 msgid "Text Label"
 msgstr "पाठ लेबल"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3936
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3934
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "न तु बाउंडिंग रेक्ट् इत्यस्य अन्तः"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4160
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4181
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4158
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4179
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "x=%1 तः x=%2 पर्यन्तम्"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4168
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4194
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4166
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4192
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "य=%1 तः य=%2 पर्यन्तम्"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4213
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4211
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
@@ -8814,50 +8812,50 @@ msgid "%1: set border corner radius"
 msgstr "%1: सीमाकोणत्रिज्या सेट् कुर्वन्तु"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:244
-#: src/backend/worksheet/Worksheet.cpp:723
-#: src/backend/worksheet/Worksheet.cpp:724
+#: src/backend/worksheet/Worksheet.cpp:718
+#: src/backend/worksheet/Worksheet.cpp:719
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: विन्यासस्य शीर्षमार्जिनं सेट् कुर्वन्तु"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:251
-#: src/backend/worksheet/Worksheet.cpp:733
-#: src/backend/worksheet/Worksheet.cpp:734
+#: src/backend/worksheet/Worksheet.cpp:728
+#: src/backend/worksheet/Worksheet.cpp:729
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: विन्यासस्य अधः मार्जिनं सेट् कुर्वन्तु"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:258
-#: src/backend/worksheet/Worksheet.cpp:743
-#: src/backend/worksheet/Worksheet.cpp:744
+#: src/backend/worksheet/Worksheet.cpp:738
+#: src/backend/worksheet/Worksheet.cpp:739
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: विन्यासं वाममार्जिनं सेट् कुर्वन्तु"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:265
-#: src/backend/worksheet/Worksheet.cpp:753
-#: src/backend/worksheet/Worksheet.cpp:754
+#: src/backend/worksheet/Worksheet.cpp:748
+#: src/backend/worksheet/Worksheet.cpp:749
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: विन्यासः दक्षिणमार्जिनं सेट् कुर्वन्तु"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:272
-#: src/backend/worksheet/Worksheet.cpp:763
-#: src/backend/worksheet/Worksheet.cpp:764
+#: src/backend/worksheet/Worksheet.cpp:758
+#: src/backend/worksheet/Worksheet.cpp:759
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: विन्यासस्य ऊर्ध्वाधरान्तरं सेट् कुर्वन्तु"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:279
-#: src/backend/worksheet/Worksheet.cpp:773
-#: src/backend/worksheet/Worksheet.cpp:774
+#: src/backend/worksheet/Worksheet.cpp:768
+#: src/backend/worksheet/Worksheet.cpp:769
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: विन्यासस्य क्षैतिजं अन्तरं सेट् कुर्वन्तु"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:286
-#: src/backend/worksheet/Worksheet.cpp:793
-#: src/backend/worksheet/Worksheet.cpp:794
+#: src/backend/worksheet/Worksheet.cpp:788
+#: src/backend/worksheet/Worksheet.cpp:789
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: विन्यासस्तम्भगणना सेट् कुर्वन्तु"
@@ -9404,79 +9402,79 @@ msgid "club"
 msgstr "गदा"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:114
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:600
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:598
 #, kde-format
 msgid "%1: set values type"
 msgstr "%1: मूल्यानि प्रकारं सेट् कुर्वन्तु"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:125
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:607
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:605
 #, kde-format
 msgid "%1: set values column"
 msgstr "%1: मूल्यानि स्तम्भं सेट् कुर्वन्तु"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:137
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:626
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:624
 #, kde-format
 msgid "%1: set values position"
 msgstr "%1: मूल्यानि स्थानं सेट् कुर्वन्तु"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:144
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:633
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:631
 #, kde-format
 msgid "%1: set values distance"
 msgstr "%1: मूल्यानि दूरं सेट् कुर्वन्तु"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:151
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:640
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:638
 #, kde-format
 msgid "%1: rotate values"
 msgstr "%1: मूल्यानि परिभ्रमन्तु"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:158
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:647
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:645
 #, kde-format
 msgid "%1: set values opacity"
 msgstr "%1: मूल्यानि अस्पष्टतां सेट् कुर्वन्तु"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:165
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:654
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:652
 #, kde-format
 msgid "%1: set values numeric format"
 msgstr "%1: मूल्यानि संख्यात्मकस्वरूपं सेट् कुर्वन्तु"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:172
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:661
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:659
 #, kde-format
 msgid "%1: set values precision"
 msgstr "%1: मूल्यानि परिशुद्धतां सेट् कुर्वन्तु"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:179
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:668
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:666
 #, kde-format
 msgid "%1: set values datetime format"
 msgstr "%1: मूल्यानि datetime प्रारूपं सेट् कुर्वन्तु"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:186
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:675
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:673
 #, kde-format
 msgid "%1: set values prefix"
 msgstr "%1: मूल्यानि उपसर्गं सेट् कुर्वन्तु"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:193
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:682
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:680
 #, kde-format
 msgid "%1: set values suffix"
 msgstr "%1: मूल्यानि प्रत्ययः सेट् कुर्वन्तु"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:200
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:689
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:687
 #, kde-format
 msgid "%1: set values font"
 msgstr "%1: मूल्यानि font सेट् कुर्वन्तु"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:207
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:696
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:694
 #, kde-format
 msgid "%1: set values color"
 msgstr "%1: मूल्यानि वर्णं सेट् कुर्वन्तु"
@@ -9527,57 +9525,57 @@ msgstr "पर्याप्तं दत्तांशबिन्दवः �
 msgid "%1: set options and perform the correlation"
 msgstr "%1: विकल्पान् सेट् कृत्वा सहसंबन्धं कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:277
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:275
 #, kde-format
 msgid "Navigate to \"%1\""
 msgstr "\"%1\" इत्यत्र गच्छन्तु ।"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:546
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:544
 #, kde-format
 msgid "%1: x-data source changed"
 msgstr "%1: x-दत्तांशस्रोतः परिवर्तितः"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:553
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:551
 #, kde-format
 msgid "%1: y-data source changed"
 msgstr "%1: y-दत्तांशस्रोतः परिवर्तितः"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:578
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:576
 #, kde-format
 msgid "%1: set skip line gaps"
 msgstr "%1: skip line gaps सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:585
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:583
 #, kde-format
 msgid "%1: set increasing X"
 msgstr "%1: वर्धमानं X सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:592
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:590
 #, kde-format
 msgid "%1: set the number of interpolation points"
 msgstr "%1: प्रक्षेपबिन्दुसङ्ख्यां सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:711
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:709
 #, kde-format
 msgid "%1: set rug orientation"
 msgstr "%1: गलीचा अभिविन्यासं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1551
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1562
 #, kde-format
 msgid "Error: Akima spline interpolation requires a minimum of 5 points."
 msgstr "त्रुटिः - अकिमा स्प्लाइन् प्रक्षेपणार्थं न्यूनातिन्यूनं ५ बिन्दवः आवश्यकाः सन्ति ।"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1553
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1564
 #, kde-format
 msgid "Error: Could not initialize the spline function."
 msgstr "त्रुटिः: स्प्लाइन्-कार्यं प्रारम्भं कर्तुं न शक्तम् ।"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1566
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1577
 #, kde-format
 msgid "x values must be monotonically increasing."
 msgstr "x मूल्यानि एकरसरूपेण वर्धमानाः भवितुमर्हन्ति।"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1569
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1580
 #, kde-format
 msgid "Error: %1"
 msgstr "त्रुटिः %1"
@@ -9913,37 +9911,37 @@ msgstr "%1: सीमारूपं सेट् कुर्वन्तु"
 msgid "%1: set border"
 msgstr "%1: सीमां सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/Worksheet.cpp:251
+#: src/backend/worksheet/Worksheet.cpp:246
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "कार्यपत्रकं मुद्रयन्तु"
 
-#: src/backend/worksheet/Worksheet.cpp:693
+#: src/backend/worksheet/Worksheet.cpp:688
 #, kde-format
 msgid "%1: change size type"
 msgstr "%1: आकारप्रकारं परिवर्तयतु"
 
-#: src/backend/worksheet/Worksheet.cpp:705
+#: src/backend/worksheet/Worksheet.cpp:700
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr "%1: \"सामग्री पुनः स्केल कुर्वन्तु\" गुणं परिवर्तयन्तु"
 
-#: src/backend/worksheet/Worksheet.cpp:713
-#: src/backend/worksheet/Worksheet.cpp:714
+#: src/backend/worksheet/Worksheet.cpp:708
+#: src/backend/worksheet/Worksheet.cpp:709
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: विन्यासं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/Worksheet.cpp:783
-#: src/backend/worksheet/Worksheet.cpp:784
+#: src/backend/worksheet/Worksheet.cpp:778
+#: src/backend/worksheet/Worksheet.cpp:779
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: विन्यासपङ्क्तिगणना सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/Worksheet.cpp:824
-#: src/backend/worksheet/Worksheet.cpp:825
-#: src/frontend/dockwidgets/WorksheetDock.cpp:372
+#: src/backend/worksheet/Worksheet.cpp:819
+#: src/backend/worksheet/Worksheet.cpp:820
+#: src/frontend/dockwidgets/WorksheetDock.cpp:376
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: पृष्ठस्य आकारं सेट् कुर्वन्तु"
@@ -10543,7 +10541,7 @@ msgstr "वक्रम्"
 #: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4075
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4129
-#: src/frontend/worksheet/WorksheetView.cpp:2196
+#: src/frontend/worksheet/WorksheetView.cpp:2197
 #, kde-format
 msgid "Failed to export"
 msgstr "निर्यातं कर्तुं असफलम्"
@@ -10551,7 +10549,7 @@ msgstr "निर्यातं कर्तुं असफलम्"
 #: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4075
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4129
-#: src/frontend/worksheet/WorksheetView.cpp:2196
+#: src/frontend/worksheet/WorksheetView.cpp:2197
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "'%1' इत्यत्र लिखितुं असफलम् । कृपया मार्गं पश्यतु।"
@@ -11399,7 +11397,7 @@ msgid "Manage MQTT connections"
 msgstr "MQTT संयोजनानि प्रबन्धयन्तु"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:264
-#: src/frontend/dockwidgets/LiveDataDock.cpp:63
+#: src/frontend/dockwidgets/LiveDataDock.cpp:84
 #, kde-format
 msgid ""
 "Specify the 'Last Will and Testament' message (LWT). At least one topic has "
@@ -12264,55 +12262,55 @@ msgid "Data regions"
 msgstr "दत्तांशप्रदेशाः"
 
 #. i18n("Center") ); // must not updated
-#: src/frontend/dockwidgets/AxisDock.cpp:226
-#: src/frontend/dockwidgets/AxisDock.cpp:292
-#: src/frontend/dockwidgets/AxisDock.cpp:471
-#: src/frontend/dockwidgets/AxisDock.cpp:474
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:258
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:267
-#: src/frontend/dockwidgets/CustomPointDock.cpp:51
-#: src/frontend/dockwidgets/ImageDock.cpp:54
-#: src/frontend/dockwidgets/ImageDock.cpp:62
-#: src/frontend/widgets/LabelWidget.cpp:494
+#: src/frontend/dockwidgets/AxisDock.cpp:228
+#: src/frontend/dockwidgets/AxisDock.cpp:306
+#: src/frontend/dockwidgets/AxisDock.cpp:489
+#: src/frontend/dockwidgets/AxisDock.cpp:492
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:270
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:281
+#: src/frontend/dockwidgets/CustomPointDock.cpp:134
+#: src/frontend/dockwidgets/ImageDock.cpp:187
+#: src/frontend/dockwidgets/ImageDock.cpp:197
+#: src/frontend/widgets/LabelWidget.cpp:503
 #: src/frontend/widgets/LabelWidget.cpp:514
 #, kde-format
 msgid "Top"
 msgstr "उपरितन"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:227
-#: src/frontend/dockwidgets/AxisDock.cpp:293
-#: src/frontend/dockwidgets/AxisDock.cpp:472
-#: src/frontend/dockwidgets/AxisDock.cpp:475
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:260
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:269
-#: src/frontend/dockwidgets/CustomPointDock.cpp:53
-#: src/frontend/dockwidgets/ImageDock.cpp:56
-#: src/frontend/dockwidgets/ImageDock.cpp:64
-#: src/frontend/widgets/LabelWidget.cpp:496
+#: src/frontend/dockwidgets/AxisDock.cpp:229
+#: src/frontend/dockwidgets/AxisDock.cpp:307
+#: src/frontend/dockwidgets/AxisDock.cpp:490
+#: src/frontend/dockwidgets/AxisDock.cpp:493
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:272
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:283
+#: src/frontend/dockwidgets/CustomPointDock.cpp:136
+#: src/frontend/dockwidgets/ImageDock.cpp:189
+#: src/frontend/dockwidgets/ImageDock.cpp:199
+#: src/frontend/widgets/LabelWidget.cpp:505
 #: src/frontend/widgets/LabelWidget.cpp:516
 #, kde-format
 msgid "Bottom"
 msgstr "अधः"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:228
+#: src/frontend/dockwidgets/AxisDock.cpp:230
 #: src/frontend/widgets/BackgroundWidget.cpp:138
 #, kde-format
 msgid "Centered"
 msgstr "केन्द्रित"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twContent)
-#: src/frontend/dockwidgets/AxisDock.cpp:229
+#: src/frontend/dockwidgets/AxisDock.cpp:231
 #: src/frontend/ui/datasources/matiooptionswidget.ui:57
 #, kde-format
 msgid "Logical"
 msgstr "तार्किकम्"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:233
+#: src/frontend/dockwidgets/AxisDock.cpp:236
 #, kde-format
 msgid "Auto Data"
 msgstr "स्वतः तिथि"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:237
+#: src/frontend/dockwidgets/AxisDock.cpp:240
 #, kde-format
 msgid ""
 "Axis range:<ul><li>Auto - automatically set the start and end points of the "
@@ -12326,55 +12324,52 @@ msgstr ""
 "कृतं दत्तांशबिन्दून् सेट् कुर्वन्तु</li><li> कस्टम् - अक्षस्य आरम्भबिन्दून् अन्त्यबिन्दून् च मैन्युअल् रूपेण "
 "निर्दिशन्तु</li></ul>"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:255
+#: src/frontend/dockwidgets/AxisDock.cpp:260
 #, kde-format
 msgid "No arrow"
 msgstr "न बाणः"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:256
+#: src/frontend/dockwidgets/AxisDock.cpp:261
 #, kde-format
 msgid "Simple, Small"
 msgstr "सरल, लघु"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:257
+#: src/frontend/dockwidgets/AxisDock.cpp:262
 #, kde-format
 msgid "Simple, Big"
 msgstr "सरलं, बृहत्"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:258
+#: src/frontend/dockwidgets/AxisDock.cpp:263
 #, kde-format
 msgid "Filled, Small"
 msgstr "पूरितः, लघु"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:259
+#: src/frontend/dockwidgets/AxisDock.cpp:264
 #, kde-format
 msgid "Filled, Big"
 msgstr "पूरितः, बृहत्"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:260
+#: src/frontend/dockwidgets/AxisDock.cpp:265
 #, kde-format
 msgid "Semi-filled, Small"
 msgstr "अर्धपूरित, लघु"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:261
+#: src/frontend/dockwidgets/AxisDock.cpp:266
 #, kde-format
 msgid "Semi-filled, Big"
 msgstr "अर्धपूरितः, बृहत्"
 
-#. i18n("Original"));
-#. i18n("Custom"));
-#. Positioning and alignment
-#: src/frontend/dockwidgets/AxisDock.cpp:263
-#: src/frontend/dockwidgets/AxisDock.cpp:479
-#: src/frontend/dockwidgets/AxisDock.cpp:483
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:253
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:263
-#: src/frontend/dockwidgets/CustomPointDock.cpp:47
-#: src/frontend/dockwidgets/ImageDock.cpp:50
-#: src/frontend/dockwidgets/ImageDock.cpp:58
-#: src/frontend/dockwidgets/XYCurveDock.cpp:347
+#: src/frontend/dockwidgets/AxisDock.cpp:271
+#: src/frontend/dockwidgets/AxisDock.cpp:497
+#: src/frontend/dockwidgets/AxisDock.cpp:501
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:264
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:276
+#: src/frontend/dockwidgets/CustomPointDock.cpp:129
+#: src/frontend/dockwidgets/ImageDock.cpp:182
+#: src/frontend/dockwidgets/ImageDock.cpp:192
+#: src/frontend/dockwidgets/XYCurveDock.cpp:518
 #: src/frontend/widgets/BackgroundWidget.cpp:118
-#: src/frontend/widgets/LabelWidget.cpp:488
+#: src/frontend/widgets/LabelWidget.cpp:497
 #: src/frontend/widgets/LabelWidget.cpp:509
 #: src/frontend/widgets/ValueWidget.cpp:37
 #, kde-format
@@ -12382,207 +12377,212 @@ msgid "Left"
 msgstr "वामः"
 
 #. i18n("Center") ); // must not updated
-#: src/frontend/dockwidgets/AxisDock.cpp:264
-#: src/frontend/dockwidgets/AxisDock.cpp:480
-#: src/frontend/dockwidgets/AxisDock.cpp:482
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:255
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:265
-#: src/frontend/dockwidgets/CustomPointDock.cpp:49
-#: src/frontend/dockwidgets/ImageDock.cpp:52
-#: src/frontend/dockwidgets/ImageDock.cpp:60
-#: src/frontend/dockwidgets/XYCurveDock.cpp:348
+#: src/frontend/dockwidgets/AxisDock.cpp:272
+#: src/frontend/dockwidgets/AxisDock.cpp:498
+#: src/frontend/dockwidgets/AxisDock.cpp:500
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:266
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:278
+#: src/frontend/dockwidgets/CustomPointDock.cpp:131
+#: src/frontend/dockwidgets/ImageDock.cpp:184
+#: src/frontend/dockwidgets/ImageDock.cpp:194
+#: src/frontend/dockwidgets/XYCurveDock.cpp:519
 #: src/frontend/widgets/BackgroundWidget.cpp:119
-#: src/frontend/widgets/LabelWidget.cpp:490
+#: src/frontend/widgets/LabelWidget.cpp:499
 #: src/frontend/widgets/LabelWidget.cpp:511
 #: src/frontend/widgets/ValueWidget.cpp:38
 #, kde-format
 msgid "Right"
 msgstr "दक्षिणः"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:265
-#: src/frontend/dockwidgets/XYCurveDock.cpp:98
+#: src/frontend/dockwidgets/AxisDock.cpp:273
+#: src/frontend/dockwidgets/XYCurveDock.cpp:525
 #, kde-format
 msgid "Both"
 msgstr "उभौ"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:268
-#: src/frontend/dockwidgets/AxisDock.cpp:281
+#: src/frontend/dockwidgets/AxisDock.cpp:277
+#: src/frontend/dockwidgets/AxisDock.cpp:293
 #, kde-format
 msgid "In"
 msgstr "इत्यस्मिन्‌"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:269
-#: src/frontend/dockwidgets/AxisDock.cpp:282
+#: src/frontend/dockwidgets/AxisDock.cpp:278
+#: src/frontend/dockwidgets/AxisDock.cpp:294
 #, kde-format
 msgid "Out"
 msgstr "बहिः"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:270
-#: src/frontend/dockwidgets/AxisDock.cpp:283
+#: src/frontend/dockwidgets/AxisDock.cpp:279
+#: src/frontend/dockwidgets/AxisDock.cpp:295
 #, kde-format
 msgid "In and Out"
 msgstr "In and Out इति"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:272
-#: src/frontend/dockwidgets/AxisDock.cpp:285
+#: src/frontend/dockwidgets/AxisDock.cpp:282
+#: src/frontend/dockwidgets/AxisDock.cpp:298
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:58
 #, kde-format
 msgid "Number"
 msgstr "संख्या"
 
 #. i18n: ectx: property (text), widget (QLabel, lSpacing)
-#: src/frontend/dockwidgets/AxisDock.cpp:273
-#: src/frontend/dockwidgets/AxisDock.cpp:286
+#: src/frontend/dockwidgets/AxisDock.cpp:283
+#: src/frontend/dockwidgets/AxisDock.cpp:299
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:659
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:454
 #, kde-format
 msgid "Spacing"
 msgstr "अन्तरालम्"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:274
-#: src/frontend/dockwidgets/AxisDock.cpp:287
-#: src/frontend/dockwidgets/AxisDock.cpp:296
+#: src/frontend/dockwidgets/AxisDock.cpp:284
+#: src/frontend/dockwidgets/AxisDock.cpp:300
+#: src/frontend/dockwidgets/AxisDock.cpp:311
 #, kde-format
 msgid "Custom column"
 msgstr "कस्टम स्तम्भ"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:275
+#: src/frontend/dockwidgets/AxisDock.cpp:285
 #, kde-format
 msgid "Column labels"
 msgstr "स्तम्भलेबलम्"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:277
+#: src/frontend/dockwidgets/AxisDock.cpp:288
 #, kde-format
 msgid "Absolute Value"
 msgstr "निरपेक्ष मूल्य"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:278
+#: src/frontend/dockwidgets/AxisDock.cpp:289
 #, kde-format
 msgid "Offset"
 msgstr "ऑफसेट्"
 
-#. i18n("Column labels"), (int)Axis::TicksType::ColumnLabels);
-#. labels
-#: src/frontend/dockwidgets/AxisDock.cpp:291
+#: src/frontend/dockwidgets/AxisDock.cpp:305
 #, kde-format
 msgid "No labels"
 msgstr "लेबल् नास्ति"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:295
+#: src/frontend/dockwidgets/AxisDock.cpp:310
 #, kde-format
 msgid "Position values"
 msgstr "स्थितिमूल्यानि"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:299
+#: src/frontend/dockwidgets/AxisDock.cpp:315
 #, kde-format
 msgid "Decimal notation"
 msgstr "दशमलव संकेतनम्"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:300
+#: src/frontend/dockwidgets/AxisDock.cpp:316
 #, kde-format
 msgid "Scientific notation"
 msgstr "वैज्ञानिक संकेतन"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:301
+#: src/frontend/dockwidgets/AxisDock.cpp:317
 #, kde-format
 msgid "Scientific E notation"
 msgstr "वैज्ञानिक ई संकेतन"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:302
+#: src/frontend/dockwidgets/AxisDock.cpp:318
 #, kde-format
 msgid "Powers of 10"
 msgstr "10 के शक्ति"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:303
+#: src/frontend/dockwidgets/AxisDock.cpp:319
 #, kde-format
 msgid "Powers of 2"
 msgstr "शक्तिः २"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:304
+#: src/frontend/dockwidgets/AxisDock.cpp:320
 #, kde-format
 msgid "Powers of e"
 msgstr "शक्तयः ङ"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:305
+#: src/frontend/dockwidgets/AxisDock.cpp:321
 #, kde-format
 msgid "Multiples of π"
 msgstr "पृ के बहुल"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:309
+#: src/frontend/dockwidgets/AxisDock.cpp:324
 #, kde-format
 msgid "Transparent"
 msgstr "पारदर्शी"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:559
+#: src/frontend/dockwidgets/AxisDock.cpp:577
 #, kde-format
 msgid "%1: set axis color"
 msgstr "%1: अक्षवर्णं सेट् कुर्वन्तु"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:561
+#: src/frontend/dockwidgets/AxisDock.cpp:579
 #, kde-format
 msgid "%1 axes: set color"
 msgstr "%1 अक्षाः: वर्णं सेट् कुर्वन्तु"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:1568
+#: src/frontend/dockwidgets/AxisDock.cpp:1584
 #, kde-format
 msgid "Scale is in sync with the plot scale"
 msgstr "स्केलः प्लॉट् स्केल इत्यनेन सह समन्वयेन भवति"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:1571
+#: src/frontend/dockwidgets/AxisDock.cpp:1587
 #, kde-format
 msgid "Scale is async with the plot"
 msgstr "स्केलः कथानकेन सह असममितः अस्ति"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:2024
+#: src/frontend/dockwidgets/AxisDock.cpp:2040
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
 msgstr "%1 अक्षाः: टेम्पलेट् \"%2\" लोड् कृतम्"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:2026
-#: src/frontend/dockwidgets/BarPlotDock.cpp:503
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:728
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1843
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:801
-#: src/frontend/dockwidgets/CustomPointDock.cpp:378
-#: src/frontend/dockwidgets/HistogramDock.cpp:562
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:373
-#: src/frontend/dockwidgets/LollipopPlotDock.cpp:446
-#: src/frontend/dockwidgets/MatrixDock.cpp:271
+#: src/frontend/dockwidgets/AxisDock.cpp:2042
+#: src/frontend/dockwidgets/BarPlotDock.cpp:509
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:735
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1840
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:803
+#: src/frontend/dockwidgets/CustomPointDock.cpp:385
+#: src/frontend/dockwidgets/HistogramDock.cpp:558
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:375
+#: src/frontend/dockwidgets/LollipopPlotDock.cpp:452
+#: src/frontend/dockwidgets/MatrixDock.cpp:275
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:454
-#: src/frontend/dockwidgets/QQPlotDock.cpp:284
-#: src/frontend/dockwidgets/ReferenceLineDock.cpp:229
+#: src/frontend/dockwidgets/QQPlotDock.cpp:286
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:237
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:232
-#: src/frontend/dockwidgets/WorksheetDock.cpp:605
-#: src/frontend/dockwidgets/XYCurveDock.cpp:1045
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:237
+#: src/frontend/dockwidgets/WorksheetDock.cpp:609
+#: src/frontend/dockwidgets/XYCurveDock.cpp:1043
 #, kde-format
 msgid "%1: template \"%2\" loaded"
 msgstr "%1: टेम्पलेट् \"%2\" लोड् कृतम्"
 
-#: src/frontend/dockwidgets/BarPlotDock.cpp:52
+#: src/frontend/dockwidgets/BarPlotDock.cpp:71
+#: src/frontend/dockwidgets/HistogramDock.cpp:83
+#: src/frontend/dockwidgets/XYCurveDock.cpp:82
+#, kde-format
+msgid "Uncertainty Bars"
+msgstr "अनिश्चितता बार"
+
+#: src/frontend/dockwidgets/BarPlotDock.cpp:266
 #, kde-format
 msgid "Grouped"
 msgstr "समूहीकृतः"
 
-#: src/frontend/dockwidgets/BarPlotDock.cpp:53
+#: src/frontend/dockwidgets/BarPlotDock.cpp:267
 #, kde-format
 msgid "Stacked"
 msgstr "स्तम्भितम्"
 
-#: src/frontend/dockwidgets/BarPlotDock.cpp:54
+#: src/frontend/dockwidgets/BarPlotDock.cpp:268
 #, kde-format
 msgid "Stacked 100%"
 msgstr "स्तम्भित 100% ."
 
-#: src/frontend/dockwidgets/BarPlotDock.cpp:60
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:74
-#: src/frontend/dockwidgets/LollipopPlotDock.cpp:55
+#: src/frontend/dockwidgets/BarPlotDock.cpp:275
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:307
+#: src/frontend/dockwidgets/LollipopPlotDock.cpp:248
 #, kde-format
 msgid ""
 "Select the data column for which the properties should be shown and edited"
 msgstr "यस्य कृते गुणाः दर्शयितव्याः सम्पादयितव्याः च दत्तांशस्तम्भं चिनोतु"
 
-#: src/frontend/dockwidgets/BarPlotDock.cpp:66
+#: src/frontend/dockwidgets/BarPlotDock.cpp:281
 #, kde-format
 msgid ""
 "Specify the factor in percent to control the width of the bar relative to "
@@ -12591,20 +12591,13 @@ msgstr ""
 "सर्वेषु पट्टिकासु प्रयोज्य तस्य पूर्वनिर्धारितमूल्यापेक्षया पट्टिकायाः विस्तारं नियन्त्रयितुं कारकं "
 "प्रतिशतरूपेण निर्दिशन्तु"
 
-#: src/frontend/dockwidgets/BarPlotDock.cpp:89
-#: src/frontend/dockwidgets/HistogramDock.cpp:83
-#: src/frontend/dockwidgets/XYCurveDock.cpp:89
-#, kde-format
-msgid "Uncertainty Bars"
-msgstr "अनिश्चितता बार"
-
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
-#: src/frontend/dockwidgets/BarPlotDock.cpp:333
-#: src/frontend/dockwidgets/BarPlotDock.cpp:359
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:361
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:386
-#: src/frontend/dockwidgets/LollipopPlotDock.cpp:315
-#: src/frontend/dockwidgets/LollipopPlotDock.cpp:341
+#: src/frontend/dockwidgets/BarPlotDock.cpp:339
+#: src/frontend/dockwidgets/BarPlotDock.cpp:365
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:369
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:394
+#: src/frontend/dockwidgets/LollipopPlotDock.cpp:321
+#: src/frontend/dockwidgets/LollipopPlotDock.cpp:347
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:420
 #: src/frontend/ui/dockwidgets/matrixdock.ui:115
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:145
@@ -12618,9 +12611,9 @@ msgstr "स्तम्भाः :"
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksColumn)
 #. i18n: ectx: property (text), widget (QLabel, lColumn)
 #. i18n: ectx: property (text), widget (QLabel, lValuesColumn)
-#: src/frontend/dockwidgets/BarPlotDock.cpp:361
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:390
-#: src/frontend/dockwidgets/LollipopPlotDock.cpp:343
+#: src/frontend/dockwidgets/BarPlotDock.cpp:367
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:398
+#: src/frontend/dockwidgets/LollipopPlotDock.cpp:349
 #: src/frontend/spreadsheet/GoToDialog.cpp:49
 #: src/frontend/ui/dockwidgets/axisdock.ui:804
 #: src/frontend/ui/dockwidgets/axisdock.ui:1112
@@ -12631,7 +12624,7 @@ msgstr "स्तम्भाः :"
 msgid "Column:"
 msgstr "स्तम्भ:"
 
-#: src/frontend/dockwidgets/BarPlotDock.cpp:501
+#: src/frontend/dockwidgets/BarPlotDock.cpp:507
 #, kde-format
 msgid "%1 bar plots: template \"%2\" loaded"
 msgstr "%1 बार प्लॉट्: टेम्पलेट् \"%2\" लोड् कृतम्"
@@ -12641,42 +12634,42 @@ msgstr "%1 बार प्लॉट्: टेम्पलेट् \"%2\" ल�
 msgid "Please choose another name, because this is already in use."
 msgstr "अन्यत् नाम चिनुत, यतः एतत् पूर्वमेव प्रचलति ।"
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:48
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:278
 #, kde-format
 msgid "10/90 percentiles"
 msgstr "१०/९० प्रतिशताः"
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:49
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:279
 #, kde-format
 msgid "5/95 percentiles"
 msgstr "५/९५ प्रतिशताः"
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:50
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:280
 #, kde-format
 msgid "1/99 percentiles"
 msgstr "१/९९ प्रतिशताः"
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:56
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:288
 #, kde-format
 msgid "By Median, Ascending"
 msgstr "मध्यमेन, आरोहणेन"
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:57
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:289
 #, kde-format
 msgid "By Median, Descending"
 msgstr "मध्यमेन, अवरोहणेन"
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:58
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:290
 #, kde-format
 msgid "By Mean, Ascending"
 msgstr "साधनेन आरोहणम्"
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:59
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:291
 #, kde-format
 msgid "By Mean, Descending"
 msgstr "अर्थेन अवरोहणम्"
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:61
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:294
 #, kde-format
 msgid ""
 "If multiple data sets are provided, define how they should be ordered or use "
@@ -12685,47 +12678,47 @@ msgstr ""
 "यदि बहुविधदत्तांशसमूहाः प्रदत्ताः सन्ति तर्हि तेषां क्रमः कथं भवितव्यः इति परिभाषयन्तु अथवा "
 "मूलक्रमं स्थापयितुं 'None' इत्यस्य उपयोगं कुर्वन्तु ।"
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:65
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:298
 #, kde-format
 msgid ""
 "If checked, the box width is made proportional to the square root of the "
 "number of data points."
 msgstr "यदि चेक् क्रियते तर्हि पेटीविस्तारः दत्तांशबिन्दुसङ्ख्यायाः वर्गमूलस्य आनुपातिकः भवति ।"
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:69
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:302
 #, kde-format
 msgid "Parameter controlling the range of the inner fences of the box plot."
 msgstr "पेटी-प्लॉटस्य आन्तरिक-वेष्टनानां परिधिं नियन्त्रयति पैरामीटर् ।"
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:78
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:311
 #, kde-format
 msgid ""
 "Specify the factor in percent to control the width of the box relative to "
 "its default value."
 msgstr "तस्य पूर्वनिर्धारितमूल्यापेक्षया पेटीविस्तारं नियन्त्रयितुं प्रतिशतरूपेण कारकं निर्दिशन्तु ।"
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:99
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:315
 #, kde-format
 msgid "Select to modify the properties of the symbol for the mean value."
 msgstr "मध्यममूल्यानां कृते चिह्नस्य गुणाः परिवर्तयितुं चिनोतु ।"
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:102
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:318
 #, kde-format
 msgid "Select to modify the properties of the symbol for the median value."
 msgstr "मध्यममूल्यानां कृते चिह्नस्य गुणाः परिवर्तयितुं चिनोतु ।"
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:105
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:321
 #, kde-format
 msgid "Select to modify the properties of the symbol for the outlier values."
 msgstr "आउटलाइर् मूल्यानां कृते चिह्नस्य गुणं परिवर्तयितुं चिनोतु ।"
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:108
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:324
 #, kde-format
 msgid ""
 "Select to modify the properties of the symbol for the \"far out\" values."
 msgstr "\"far out\" मूल्यानां कृते चिह्नस्य गुणं परिवर्तयितुं चिनोतु ।"
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:111
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:327
 #, kde-format
 msgid ""
 "Select to modify the properties of the symbol for all data values excluding "
@@ -12734,13 +12727,13 @@ msgstr ""
 "बहिःस्थं \"दूरतः बहिः\" मूल्यं च विहाय सर्वेषां दत्तांशमूल्यानां कृते चिह्नस्य गुणं परिवर्तयितुं "
 "चिनोतु ।"
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:114
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:330
 #, kde-format
 msgid ""
 "Select to modify the properties of the symbol for the ends of the whiskers."
 msgstr "मूंछस्य अन्तानां कृते चिह्नस्य गुणं परिवर्तयितुं चिनोतु ।"
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:117
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:333
 #, kde-format
 msgid ""
 "Activate to randomize the positions of the symbols (\"jittering\"), helpful "
@@ -12749,41 +12742,41 @@ msgstr ""
 "प्रतीकानाम् (\"jittering\") स्थानानि यादृच्छिकं कर्तुं सक्रियं कुर्वन्तु, सघनानाम् "
 "आच्छादितानां च दत्तांशबिन्दूनां कृते सहायकम् ।"
 
-#: src/frontend/dockwidgets/BoxPlotDock.cpp:726
+#: src/frontend/dockwidgets/BoxPlotDock.cpp:733
 #, kde-format
 msgid "%1 box plots: template \"%2\" loaded"
 msgstr "%1 पेटी प्लॉट्: टेम्पलेट् \"%2\" लोड् अभवत्"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:229
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:248
 #, kde-format
 msgid "Save current plot area definition as template"
 msgstr "वर्तमान प्लॉट् क्षेत्रपरिभाषां टेम्पलेट् इत्यस्य रूपेण रक्षन्तु"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:612
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:623
 #, kde-format
 msgid "%1-Ranges:"
 msgstr "%1-परिधिः :"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:614
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:625
 #, kde-format
 msgid "%1-Range:"
 msgstr "%1-परिधिः ."
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:638
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:649
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:209
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:53
 #, kde-format
 msgid "Numeric"
 msgstr "संख्यात्मकः"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:784
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:795
 #, kde-format
 msgid "Plot Ranges:"
 msgstr "भूखण्ड श्रेणियाँ :"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:786
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:797
 #: src/frontend/ui/dockwidgets/axisdock.ui:262
 #: src/frontend/ui/dockwidgets/barplotdock.ui:186
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:90
@@ -12810,22 +12803,34 @@ msgstr "भूखण्ड श्रेणियाँ :"
 msgid "Plot Range:"
 msgstr "भूखण्ड परिधिः :"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:888
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:896
 #, kde-format
 msgid "Free"
 msgstr "निःशुल्कः"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:889
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:897
 #, kde-format
 msgid "Last Points"
 msgstr "अन्तिमबिन्दवः"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:890
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:898
 #, kde-format
 msgid "First Points"
 msgstr "प्रथम बिन्दु"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:893
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:902
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:906
+#, kde-format
+msgid "Simple"
+msgstr "सरलं"
+
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:904
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:908
+#, kde-format
+msgid "Sloped"
+msgstr "प्रवणः"
+
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:912
 #, kde-format
 msgid ""
 "Data Range:<ul><li>Free - full data range is plotted</li><li>Last Points - "
@@ -12836,42 +12841,30 @@ msgstr ""
 "- अन्तिमबिन्दवः निर्दिष्टा संख्या प्लॉट् भवति</li><li> प्रथमबिन्दवः - प्रथमबिन्दवः "
 "निर्दिष्टा संख्या प्लॉट् भवति</li></ul>"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:902
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:921
 #, kde-format
 msgid "If checked, automatically extend the plot range to nice values"
 msgstr "यदि जाँचितम् अस्ति तर्हि स्वयमेव प्लॉट्-परिधिं सुन्दरमूल्यानां कृते विस्तारयन्तु"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:907
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:911
-#, kde-format
-msgid "Simple"
-msgstr "सरलं"
-
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:909
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:913
-#, kde-format
-msgid "Sloped"
-msgstr "प्रवणः"
-
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1167
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1164
 #, kde-format
 msgid "%1 range %2 is used in plot range %3. "
 msgstr "%1 परिधिः %2 प्लॉटपरिधि %3 मध्ये उपयुज्यते । "
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1168
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1221
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1165
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1218
 #, kde-format
 msgid "Really remove it?"
 msgstr "वास्तवमेव तत् निष्कासयन्तु ?"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1221
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1218
 #, kde-format
 msgid "Plot range %1 is used by element \"%2\". "
 msgstr "प्लॉट्-परिधिः %1 \"%2\" इति तत्त्वेन उपयुज्यते । "
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1314
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1311
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:560
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:769
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:342
@@ -12881,7 +12874,7 @@ msgstr "क्षैतिज:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVertical)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalSpacing)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1315
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1312
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:861
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:724
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:428
@@ -12891,7 +12884,7 @@ msgstr "ऊर्ध्वाधर:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1317
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1314
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:796
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:717
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:414
@@ -12901,7 +12894,7 @@ msgstr "वामः:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1318
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1315
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:803
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:666
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:407
@@ -12909,56 +12902,48 @@ msgstr "वामः:"
 msgid "Top:"
 msgstr "उपरितन:"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1650
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1647
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
 msgstr "टेम्पलेट् Save File इति चिनोतु"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1652
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1649
 #, kde-format
 msgid "Labplot Plot Templates (*%1)"
 msgstr "Labplot प्लॉट टेम्पलेट्स (*%1)"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1841
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1838
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr "%1 cartesian plots: टेम्पलेट् \"%2\" लोड् कृतम्"
 
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:245
-#, kde-format
-msgid ""
-"Use the main color of the plot (line, symbol, etc.) for the color of the "
-"name in the legend."
-msgstr ""
-"आख्यायिकायां नामस्य वर्णस्य कृते कथानकस्य मुख्यवर्णस्य (रेखा, चिह्नम् इत्यादयः) उपयोगं कुर्वन्तु ।"
-
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:249
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:259
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:246
 #, kde-format
 msgid "Column Major"
 msgstr "स्तम्भ प्रमुख"
 
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:250
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:260
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:247
 #, kde-format
 msgid "Row Major"
 msgstr "पंक्ति प्रमुख"
 
 #. i18n: ectx: property (text), widget (QLabel, lCenter)
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:254
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:259
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:264
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:268
-#: src/frontend/dockwidgets/CustomPointDock.cpp:48
-#: src/frontend/dockwidgets/CustomPointDock.cpp:52
-#: src/frontend/dockwidgets/ImageDock.cpp:51
-#: src/frontend/dockwidgets/ImageDock.cpp:55
-#: src/frontend/dockwidgets/ImageDock.cpp:59
-#: src/frontend/dockwidgets/ImageDock.cpp:63
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:265
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:271
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:277
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:282
+#: src/frontend/dockwidgets/CustomPointDock.cpp:130
+#: src/frontend/dockwidgets/CustomPointDock.cpp:135
+#: src/frontend/dockwidgets/ImageDock.cpp:183
+#: src/frontend/dockwidgets/ImageDock.cpp:188
+#: src/frontend/dockwidgets/ImageDock.cpp:193
+#: src/frontend/dockwidgets/ImageDock.cpp:198
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:296
-#: src/frontend/widgets/LabelWidget.cpp:489
-#: src/frontend/widgets/LabelWidget.cpp:495
+#: src/frontend/widgets/LabelWidget.cpp:498
+#: src/frontend/widgets/LabelWidget.cpp:504
 #: src/frontend/widgets/LabelWidget.cpp:510
 #: src/frontend/widgets/LabelWidget.cpp:515
 #: src/frontend/widgets/LabelWidget.cpp:570
@@ -12968,52 +12953,60 @@ msgstr "पंक्ति प्रमुख"
 msgid "Center"
 msgstr "केंद्र"
 
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:256
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:261
-#: src/frontend/widgets/LabelWidget.cpp:491
-#: src/frontend/widgets/LabelWidget.cpp:497
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:267
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:273
+#: src/frontend/widgets/LabelWidget.cpp:500
+#: src/frontend/widgets/LabelWidget.cpp:506
 #, kde-format
 msgid "Relative to plot"
 msgstr "कथानकस्य सापेक्षः"
 
-#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:799
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:286
+#, kde-format
+msgid ""
+"Use the main color of the plot (line, symbol, etc.) for the color of the "
+"name in the legend."
+msgstr ""
+"आख्यायिकायां नामस्य वर्णस्य कृते कथानकस्य मुख्यवर्णस्य (रेखा, चिह्नम् इत्यादयः) उपयोगं कुर्वन्तु ।"
+
+#: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:801
 #, kde-format
 msgid "%1 cartesian plot legends: template \"%2\" loaded"
 msgstr "%1 cartesian plot legends: टेम्पलेट \"%2\" लोड् अभवत्"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:37
-#: src/frontend/dockwidgets/MatrixDock.cpp:31
-#: src/frontend/dockwidgets/XYCurveDock.cpp:69
+#: src/frontend/dockwidgets/MatrixDock.cpp:81
+#: src/frontend/dockwidgets/XYCurveDock.cpp:500
 #: src/frontend/widgets/ValueWidget.cpp:41
 #, kde-format
 msgid "Decimal"
 msgstr "दशमलवः"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:38
-#: src/frontend/dockwidgets/MatrixDock.cpp:32
-#: src/frontend/dockwidgets/XYCurveDock.cpp:70
+#: src/frontend/dockwidgets/MatrixDock.cpp:82
+#: src/frontend/dockwidgets/XYCurveDock.cpp:501
 #: src/frontend/widgets/ValueWidget.cpp:42
 #, kde-format
 msgid "Scientific (e)"
 msgstr "वैज्ञानिक (ङ)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:39
-#: src/frontend/dockwidgets/MatrixDock.cpp:33
-#: src/frontend/dockwidgets/XYCurveDock.cpp:71
+#: src/frontend/dockwidgets/MatrixDock.cpp:83
+#: src/frontend/dockwidgets/XYCurveDock.cpp:502
 #: src/frontend/widgets/ValueWidget.cpp:43
 #, kde-format
 msgid "Scientific (E)"
 msgstr "वैज्ञानिक (ई)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:40
-#: src/frontend/dockwidgets/XYCurveDock.cpp:72
+#: src/frontend/dockwidgets/XYCurveDock.cpp:503
 #: src/frontend/widgets/ValueWidget.cpp:44
 #, kde-format
 msgid "Automatic (e)"
 msgstr "स्वतः (ङ)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:41
-#: src/frontend/dockwidgets/XYCurveDock.cpp:73
+#: src/frontend/dockwidgets/XYCurveDock.cpp:504
 #: src/frontend/widgets/ValueWidget.cpp:45
 #, kde-format
 msgid "Automatic (E)"
@@ -13044,99 +13037,99 @@ msgstr "सर्वाणि वक्राणि संकुचयन्त�
 msgid "Expand all curves"
 msgstr "सर्वाणि वक्राणि विस्तारयन्तु"
 
-#: src/frontend/dockwidgets/CustomPointDock.cpp:376
+#: src/frontend/dockwidgets/CustomPointDock.cpp:383
 #, kde-format
 msgid "%1 custom points: template \"%2\" loaded"
 msgstr "%1 कस्टम् बिन्दवः: टेम्पलेट् \"%2\" लोड् कृतम्"
 
-#: src/frontend/dockwidgets/HistogramDock.cpp:144
+#: src/frontend/dockwidgets/HistogramDock.cpp:252
 #, kde-format
 msgid "By Number"
 msgstr "संख्याद्वारा"
 
-#: src/frontend/dockwidgets/HistogramDock.cpp:145
+#: src/frontend/dockwidgets/HistogramDock.cpp:253
 #, kde-format
 msgid "By Width"
 msgstr "विस्तारेण"
 
-#: src/frontend/dockwidgets/HistogramDock.cpp:146
+#: src/frontend/dockwidgets/HistogramDock.cpp:254
 #, kde-format
 msgid "Square-root"
 msgstr "वर्गमूलः"
 
-#: src/frontend/dockwidgets/HistogramDock.cpp:147
+#: src/frontend/dockwidgets/HistogramDock.cpp:255
 #, kde-format
 msgid "Rice"
 msgstr "तांडुलः"
 
-#: src/frontend/dockwidgets/HistogramDock.cpp:148
+#: src/frontend/dockwidgets/HistogramDock.cpp:256
 #, kde-format
 msgid "Sturges"
 msgstr "स्टर्जेस्"
 
-#: src/frontend/dockwidgets/HistogramDock.cpp:149
+#: src/frontend/dockwidgets/HistogramDock.cpp:257
 #, kde-format
 msgid "Doane"
 msgstr "दोआने"
 
-#: src/frontend/dockwidgets/HistogramDock.cpp:150
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:169
+#: src/frontend/dockwidgets/HistogramDock.cpp:258
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:171
 #, kde-format
 msgid "Scott"
 msgstr "स्कॉट्"
 
-#: src/frontend/dockwidgets/HistogramDock.cpp:153
+#: src/frontend/dockwidgets/HistogramDock.cpp:262
 #, kde-format
 msgid "Ordinary Histogram"
 msgstr "साधारण हिस्टोग्राम"
 
-#: src/frontend/dockwidgets/HistogramDock.cpp:154
+#: src/frontend/dockwidgets/HistogramDock.cpp:263
 #, kde-format
 msgid "Cumulative Histogram"
 msgstr "संचयी हिस्टोग्राम"
 
-#: src/frontend/dockwidgets/HistogramDock.cpp:163
+#: src/frontend/dockwidgets/HistogramDock.cpp:274
 #, kde-format
 msgid "Probability"
 msgstr "संभाव्यता"
 
-#: src/frontend/dockwidgets/HistogramDock.cpp:164
+#: src/frontend/dockwidgets/HistogramDock.cpp:275
 #, kde-format
 msgid "Count Density"
 msgstr "गणना घनत्व"
 
-#: src/frontend/dockwidgets/HistogramDock.cpp:165
+#: src/frontend/dockwidgets/HistogramDock.cpp:276
 #, kde-format
 msgid "Probability Density"
 msgstr "संभाव्यता घनत्व"
 
-#: src/frontend/dockwidgets/HistogramDock.cpp:560
+#: src/frontend/dockwidgets/HistogramDock.cpp:556
 #, kde-format
 msgid "%1 histograms: template \"%2\" loaded"
 msgstr "%1 हिस्टोग्रामाः: टेम्पलेट् \"%2\" लोड् अभवत्"
 
-#: src/frontend/dockwidgets/InfoElementDock.cpp:218
+#: src/frontend/dockwidgets/InfoElementDock.cpp:221
 #, kde-format
 msgid "%1 info elements: curve \"%2\" removed"
 msgstr "%1 info elements: वक्रं \"%2\" निष्कासितम्"
 
-#: src/frontend/dockwidgets/InfoElementDock.cpp:220
+#: src/frontend/dockwidgets/InfoElementDock.cpp:223
 #, kde-format
 msgid "%1: curve \"%2\" removed"
 msgstr "%1: वक्रं \"%2\" निष्कासितम्"
 
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:168
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:170
 #, kde-format
 msgid "Silverman"
 msgstr "सिल्वरमैन"
 
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:173
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:175
 #, kde-format
 msgid ""
 "The window function (\"kernel\") used to estimate the probability density"
 msgstr ""
 
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:180
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:182
 #, kde-format
 msgid ""
 "Method to select the bandwidth of the kernel:<ul><li>Silverman -  0.9 * "
@@ -13144,81 +13137,81 @@ msgid ""
 "li><li>Custom - custom value for the kernel bandwidth</li></ul>"
 msgstr ""
 
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:189
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:191
 #, kde-format
 msgid "Custom value for the kernel bandwidth"
 msgstr ""
 
-#: src/frontend/dockwidgets/KDEPlotDock.cpp:371
+#: src/frontend/dockwidgets/KDEPlotDock.cpp:373
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:452
-#: src/frontend/dockwidgets/QQPlotDock.cpp:282
+#: src/frontend/dockwidgets/QQPlotDock.cpp:284
 #: src/frontend/dockwidgets/RunChartDock.cpp:227
-#: src/frontend/dockwidgets/XYCurveDock.cpp:1043
+#: src/frontend/dockwidgets/XYCurveDock.cpp:1041
 #, kde-format
 msgid "%1 xy-curves: template \"%2\" loaded"
 msgstr "%1 xy-curves: टेम्पलेट् \"%2\" लोड् कृतम्"
 
-#: src/frontend/dockwidgets/LiveDataDock.cpp:60
+#: src/frontend/dockwidgets/LiveDataDock.cpp:82
 #, kde-format
 msgid "Manage MQTT connection's will settings"
 msgstr "MQTT संयोजनस्य इच्छा सेटिंग्स् प्रबन्धयन्तु"
 
-#: src/frontend/dockwidgets/LiveDataDock.cpp:227
+#: src/frontend/dockwidgets/LiveDataDock.cpp:235
 #, kde-format
 msgid "Continue Reading"
 msgstr "Continue Reading"
 
 #. i18n: ectx: property (text), widget (QPushButton, bPausePlayReading)
-#: src/frontend/dockwidgets/LiveDataDock.cpp:230
+#: src/frontend/dockwidgets/LiveDataDock.cpp:238
 #: src/frontend/ui/dockwidgets/livedatadock.ui:240
 #, kde-format
 msgid "Pause Reading"
 msgstr "पठनं विरामयतु"
 
-#: src/frontend/dockwidgets/LiveDataDock.cpp:656
+#: src/frontend/dockwidgets/LiveDataDock.cpp:664
 #, kde-format
 msgid "Couldn't subscribe"
 msgstr "सदस्यतां ग्रहीतुं न शक्तवान्"
 
-#: src/frontend/dockwidgets/LiveDataDock.cpp:656
+#: src/frontend/dockwidgets/LiveDataDock.cpp:664
 #, kde-format
 msgid "Couldn't subscribe to all available topics. Something went wrong"
 msgstr "सर्वेषां उपलब्धविषयाणां सदस्यतां ग्रहीतुं न शक्तवान्। किमपि भ्रष्टं जातम्"
 
-#: src/frontend/dockwidgets/LollipopPlotDock.cpp:444
+#: src/frontend/dockwidgets/LollipopPlotDock.cpp:450
 #, kde-format
 msgid "%1 lollipop plots: template \"%2\" loaded"
 msgstr "%1 lollipop plots: टेम्पलेट् \"%2\" लोड् अभवत्"
 
-#: src/frontend/dockwidgets/MatrixDock.cpp:34
+#: src/frontend/dockwidgets/MatrixDock.cpp:84
 #, kde-format
 msgid "Automatic (g)"
 msgstr "स्वतः (छ)"
 
-#: src/frontend/dockwidgets/MatrixDock.cpp:35
+#: src/frontend/dockwidgets/MatrixDock.cpp:85
 #, kde-format
 msgid "Automatic (G)"
 msgstr "स्वचालित (G)"
 
-#: src/frontend/dockwidgets/MatrixDock.cpp:37
+#: src/frontend/dockwidgets/MatrixDock.cpp:88
 #: src/frontend/matrix/MatrixView.cpp:162
 #, kde-format
 msgid "Rows and Columns"
 msgstr "पङ्क्तयः स्तम्भाः च"
 
-#: src/frontend/dockwidgets/MatrixDock.cpp:38
+#: src/frontend/dockwidgets/MatrixDock.cpp:89
 #: src/frontend/matrix/MatrixView.cpp:164
 #, kde-format
 msgid "xy-Values"
 msgstr "xy-मूल्यानि"
 
-#: src/frontend/dockwidgets/MatrixDock.cpp:39
+#: src/frontend/dockwidgets/MatrixDock.cpp:90
 #: src/frontend/matrix/MatrixView.cpp:166
 #, kde-format
 msgid "Rows, Columns and xy-Values"
 msgstr "पङ्क्तयः, स्तम्भाः, xy-मूल्यानि च"
 
-#: src/frontend/dockwidgets/MatrixDock.cpp:269
+#: src/frontend/dockwidgets/MatrixDock.cpp:273
 #, kde-format
 msgid "%1 matrices: template \"%2\" loaded"
 msgstr "%1 मैट्रिक्सः: टेम्पलेट् \"%2\" लोड् कृतम्"
@@ -13276,7 +13269,7 @@ msgid ""
 "step limits\"), straight lines are drawn for the limits otherwise."
 msgstr ""
 
-#: src/frontend/dockwidgets/ProjectDock.cpp:28
+#: src/frontend/dockwidgets/ProjectDock.cpp:69
 #, kde-format
 msgid ""
 "If checked, the state of the default application docks is saved in the "
@@ -13285,7 +13278,7 @@ msgstr ""
 "यदि जाँचितम् अस्ति तर्हि पूर्वनिर्धारित-अनुप्रयोग-डॉक्स्-स्थितिः परियोजना-सञ्चिकायां "
 "रक्षिता भवति, परियोजना-भारे पुनः स्थापिता च भवति ।"
 
-#: src/frontend/dockwidgets/ProjectDock.cpp:33
+#: src/frontend/dockwidgets/ProjectDock.cpp:74
 #, kde-format
 msgid ""
 "If checked, the results of the calculations in the analysis curves will be "
@@ -13298,14 +13291,14 @@ msgstr ""
 "दीर्घतरप्रकल्पभारसमयानां व्ययेन परियोजनासञ्चिकायाः आकारं न्यूनीकर्तुं एतत् विकल्पं अनचेक् "
 "कुर्वन्तु ।"
 
-#: src/frontend/dockwidgets/QQPlotDock.cpp:163
+#: src/frontend/dockwidgets/QQPlotDock.cpp:173
 #, kde-format
 msgid ""
 "Distribution used to calculate the percentiles to be compared with the "
 "percentiles of the provided data"
 msgstr ""
 
-#: src/frontend/dockwidgets/ReferenceLineDock.cpp:227
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:235
 #, kde-format
 msgid "%1 reference lines: template \"%2\" loaded"
 msgstr "%1 सन्दर्भपङ्क्तयः: टेम्पलेट् \"%2\" लोड् कृतम्"
@@ -13317,23 +13310,43 @@ msgid ""
 "placed at"
 msgstr ""
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:52
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:57
 #, kde-format
 msgid ""
 "Enable linking to synchronize the number of rows with another spreadsheet"
 msgstr "अन्येन स्प्रेड्शीट् इत्यनेन सह पङ्क्तिसङ्ख्यां समन्वययितुं लिङ्किंग् सक्षमं कुर्वन्तु"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:56
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:61
 #, kde-format
 msgid "Spreadsheet to synchronize the number of rows with"
 msgstr "पङ्क्तिसङ्ख्यां समन्वययितुं स्प्रेड्शीट्"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:230
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:235
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
 msgstr "%1 स्प्रेड्शीट्: टेम्पलेट् \"%2\" लोड् कृतम्"
 
-#: src/frontend/dockwidgets/WorksheetDock.cpp:43
+#: src/frontend/dockwidgets/WorksheetDock.cpp:259
+#, kde-format
+msgid "Portrait"
+msgstr "चित्रम्"
+
+#: src/frontend/dockwidgets/WorksheetDock.cpp:260
+#, kde-format
+msgid "Landscape"
+msgstr "भूप्रदेश"
+
+#: src/frontend/dockwidgets/WorksheetDock.cpp:263
+#, kde-format
+msgid "View Size"
+msgstr "दृश्य आकार"
+
+#: src/frontend/dockwidgets/WorksheetDock.cpp:264
+#, kde-format
+msgid "Standard Page"
+msgstr "मानक पृष्ठ"
+
+#: src/frontend/dockwidgets/WorksheetDock.cpp:277
 #, kde-format
 msgid ""
 "If checked, rescale the content of the worksheet on size changes. Otherwise "
@@ -13342,51 +13355,31 @@ msgstr ""
 "यदि परीक्षितं तर्हि आकारपरिवर्तने कार्यपत्रकस्य सामग्रीं पुनः स्केल कुर्वन्तु । अन्यथा केवलं "
 "कैनवासस्य आकारं परिवर्तयन्तु ।"
 
-#: src/frontend/dockwidgets/WorksheetDock.cpp:45
+#: src/frontend/dockwidgets/WorksheetDock.cpp:280
 #: src/frontend/worksheet/WorksheetView.cpp:241
 #, kde-format
 msgid "No Layout"
 msgstr "न विन्यासः"
 
-#: src/frontend/dockwidgets/WorksheetDock.cpp:46
+#: src/frontend/dockwidgets/WorksheetDock.cpp:281
 #: src/frontend/worksheet/WorksheetView.cpp:232
 #, kde-format
 msgid "Vertical Layout"
 msgstr "ऊर्ध्वाधर विन्यास"
 
-#: src/frontend/dockwidgets/WorksheetDock.cpp:47
+#: src/frontend/dockwidgets/WorksheetDock.cpp:282
 #: src/frontend/worksheet/WorksheetView.cpp:235
 #, kde-format
 msgid "Horizontal Layout"
 msgstr "क्षैतिज विन्यास"
 
-#: src/frontend/dockwidgets/WorksheetDock.cpp:48
+#: src/frontend/dockwidgets/WorksheetDock.cpp:283
 #: src/frontend/worksheet/WorksheetView.cpp:238
 #, kde-format
 msgid "Grid Layout"
 msgstr "जालविन्यासः"
 
-#: src/frontend/dockwidgets/WorksheetDock.cpp:255
-#, kde-format
-msgid "Portrait"
-msgstr "चित्रम्"
-
-#: src/frontend/dockwidgets/WorksheetDock.cpp:256
-#, kde-format
-msgid "Landscape"
-msgstr "भूप्रदेश"
-
-#: src/frontend/dockwidgets/WorksheetDock.cpp:274
-#, kde-format
-msgid "View Size"
-msgstr "दृश्य आकार"
-
-#: src/frontend/dockwidgets/WorksheetDock.cpp:275
-#, kde-format
-msgid "Standard Page"
-msgstr "मानक पृष्ठ"
-
-#: src/frontend/dockwidgets/WorksheetDock.cpp:603
+#: src/frontend/dockwidgets/WorksheetDock.cpp:607
 #, kde-format
 msgid "%1 worksheets: template \"%2\" loaded"
 msgstr "%1 कार्यपत्रकाणि: टेम्पलेट् \"%2\" लोड् कृतम्"
@@ -13445,74 +13438,74 @@ msgstr "विक्षेपस्य स्थितिः %1"
 msgid "Correlation status: %1"
 msgstr "सहसंबन्धस्य स्थितिः %1"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:195
+#: src/frontend/dockwidgets/XYCurveDock.cpp:486
 #, kde-format
 msgid "Horiz. Start"
 msgstr "पीतवर्णे प्रारंभः"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:196
+#: src/frontend/dockwidgets/XYCurveDock.cpp:487
 #, kde-format
 msgid "Vert. Start"
 msgstr "एड. गच्छ"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:197
+#: src/frontend/dockwidgets/XYCurveDock.cpp:488
 #, kde-format
 msgid "Horiz. Midpoint"
 msgstr "पीतवर्णे मध्यबिन्दु"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:198
+#: src/frontend/dockwidgets/XYCurveDock.cpp:489
 #, kde-format
 msgid "Vert. Midpoint"
 msgstr "Vert. मध्यबिन्दु"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:199
+#: src/frontend/dockwidgets/XYCurveDock.cpp:490
 #, kde-format
 msgid "2-segments"
 msgstr "२-खण्डाः"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:200
+#: src/frontend/dockwidgets/XYCurveDock.cpp:491
 #, kde-format
 msgid "3-segments"
 msgstr "३-खण्डाः"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:203
+#: src/frontend/dockwidgets/XYCurveDock.cpp:494
 #, kde-format
 msgid "Akima-spline (Natural)"
 msgstr "अकिमा-स्प्लाइन (प्राकृतिक)"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:204
+#: src/frontend/dockwidgets/XYCurveDock.cpp:495
 #, kde-format
 msgid "Akima-spline (Periodic)"
 msgstr "अकिमा-स्प्लाइन (आवधिक)"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:338
+#: src/frontend/dockwidgets/XYCurveDock.cpp:508
 #: src/frontend/widgets/ValueWidget.cpp:31
 #, kde-format
 msgid "No Values"
 msgstr "न मूल्यानि"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:343
+#: src/frontend/dockwidgets/XYCurveDock.cpp:513
 #: src/frontend/widgets/ValueWidget.cpp:33
 #, kde-format
 msgid "Custom Column"
 msgstr "कस्टम स्तम्भ"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:345
+#: src/frontend/dockwidgets/XYCurveDock.cpp:516
 #: src/frontend/widgets/BackgroundWidget.cpp:115
 #: src/frontend/widgets/ValueWidget.cpp:35
 #, kde-format
 msgid "Above"
 msgstr "उपरि"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:346
+#: src/frontend/dockwidgets/XYCurveDock.cpp:517
 #: src/frontend/widgets/BackgroundWidget.cpp:116
 #: src/frontend/widgets/ValueWidget.cpp:36
 #, kde-format
 msgid "Below"
 msgstr "अधः"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:524
-#: src/frontend/dockwidgets/XYCurveDock.cpp:525
+#: src/frontend/dockwidgets/XYCurveDock.cpp:528
+#: src/frontend/dockwidgets/XYCurveDock.cpp:529
 #, kde-format
 msgid ""
 "If checked, connect neighbour points with lines even if there are gaps "
@@ -13521,8 +13514,8 @@ msgstr ""
 "यदि परीक्षितं तर्हि प्रतिवेशिनः बिन्दून् रेखाभिः सह संयोजयन्तु यद्यपि तयोः मध्ये अन्तरालाः "
 "(अवैधानि अथवा मुखौटितानि मूल्यानि) सन्ति"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:526
-#: src/frontend/dockwidgets/XYCurveDock.cpp:527
+#: src/frontend/dockwidgets/XYCurveDock.cpp:530
+#: src/frontend/dockwidgets/XYCurveDock.cpp:531
 #, kde-format
 msgid ""
 "If checked, connect data points only for strictly increasing values of X"
@@ -15486,7 +15479,7 @@ msgid "Command"
 msgstr "आदेश"
 
 #: src/frontend/notebook/NotebookView.cpp:103
-#: src/frontend/widgets/LabelWidget.cpp:483
+#: src/frontend/widgets/LabelWidget.cpp:492
 #, kde-format
 msgid "Markdown"
 msgstr "मार्कडाउन"
@@ -15494,7 +15487,7 @@ msgstr "मार्कडाउन"
 #. i18n: ectx: property (text), widget (QLabel, lTex)
 #: src/frontend/notebook/NotebookView.cpp:107
 #: src/frontend/ui/settingsworksheetpage.ui:147
-#: src/frontend/widgets/LabelWidget.cpp:481
+#: src/frontend/widgets/LabelWidget.cpp:490
 #, kde-format
 msgid "LaTeX"
 msgstr "LaTeX"
@@ -23575,25 +23568,25 @@ msgstr "केन्द्र टाइल्"
 msgid "%1 elements: background color style changed"
 msgstr "%1 तत्त्वानि: पृष्ठभूमिवर्णशैली परिवर्तिता"
 
-#: src/frontend/widgets/DatapickerCurveWidget.cpp:29
-#: src/frontend/widgets/DatapickerCurveWidget.cpp:33
+#: src/frontend/widgets/DatapickerCurveWidget.cpp:94
+#: src/frontend/widgets/DatapickerCurveWidget.cpp:99
 #, kde-format
 msgid "No Error"
 msgstr "No Error इति"
 
-#: src/frontend/widgets/DatapickerCurveWidget.cpp:30
-#: src/frontend/widgets/DatapickerCurveWidget.cpp:34
+#: src/frontend/widgets/DatapickerCurveWidget.cpp:95
+#: src/frontend/widgets/DatapickerCurveWidget.cpp:100
 #, kde-format
 msgid "Symmetric"
 msgstr "सममित"
 
-#: src/frontend/widgets/DatapickerCurveWidget.cpp:31
-#: src/frontend/widgets/DatapickerCurveWidget.cpp:35
+#: src/frontend/widgets/DatapickerCurveWidget.cpp:96
+#: src/frontend/widgets/DatapickerCurveWidget.cpp:101
 #, kde-format
 msgid "Asymmetric"
 msgstr "असममित"
 
-#: src/frontend/widgets/DatapickerCurveWidget.cpp:38
+#: src/frontend/widgets/DatapickerCurveWidget.cpp:104
 #, kde-format
 msgid ""
 "Specify whether the data points have errors and of which type.\n"
@@ -23602,28 +23595,73 @@ msgstr ""
 "दत्तांशबिन्दुषु दोषाः सन्ति वा, कस्य प्रकारस्य च इति निर्दिशन्तु ।\n"
 "ध्यानं कुर्वन्तु, एकवारं न्यूनातिन्यूनम् एकः बिन्दुः पठितः चेत् एतत् प्रकारं परिवर्तयितुं न शक्यते ।"
 
-#: src/frontend/widgets/DatapickerImageWidget.cpp:131
-#: src/frontend/widgets/DatapickerImageWidget.cpp:185
+#: src/frontend/widgets/DatapickerImageWidget.cpp:333
 #, kde-format
-msgid ""
-"Select the range for the hue.\n"
-"Everything outside of this range will be set to white."
-msgstr ""
-"वर्णस्य कृते श्रेणीं चिनोतु ।\n"
-"अस्य परिधितः बहिः सर्वं श्वेतवर्णे सेट् भविष्यति ।"
+msgid "Cartesian (x, y)"
+msgstr "कार्टेशियन (x, y)"
 
-#: src/frontend/widgets/DatapickerImageWidget.cpp:136
-#: src/frontend/widgets/DatapickerImageWidget.cpp:190
+#: src/frontend/widgets/DatapickerImageWidget.cpp:334
 #, kde-format
-msgid ""
-"Select the range for the saturation.\n"
-"Everything outside of this range will be set to white."
-msgstr ""
-"संतृप्त्यर्थं परिधिं चिनोतु ।\n"
-"अस्य परिधितः बहिः सर्वं श्वेतवर्णे सेट् भविष्यति ।"
+msgid "Polar (x, y°)"
+msgstr "ध्रुवीय (x, y°)"
 
-#: src/frontend/widgets/DatapickerImageWidget.cpp:141
-#: src/frontend/widgets/DatapickerImageWidget.cpp:195
+#: src/frontend/widgets/DatapickerImageWidget.cpp:335
+#, kde-format
+msgid "Polar (x, y(rad))"
+msgstr "ध्रुवीय (x, y(rad))"
+
+#: src/frontend/widgets/DatapickerImageWidget.cpp:336
+#, kde-format
+msgid "Logarithmic (ln(x), ln(y))"
+msgstr "लघुगणकीय (ln(x), ln(y))"
+
+#: src/frontend/widgets/DatapickerImageWidget.cpp:337
+#, kde-format
+msgid "Logarithmic (ln(x), y)"
+msgstr "लघुगणकीय (ln(x), y)"
+
+#: src/frontend/widgets/DatapickerImageWidget.cpp:338
+#, kde-format
+msgid "Logarithmic (x, ln(y))"
+msgstr "लघुगणकीय (x, ln(y))"
+
+#: src/frontend/widgets/DatapickerImageWidget.cpp:339
+#, kde-format
+msgid "Logarithmic (log(x), log(y))"
+msgstr "लघुगणकीय (log(x), log(y))"
+
+#: src/frontend/widgets/DatapickerImageWidget.cpp:340
+#, kde-format
+msgid "Logarithmic (log(x), y)"
+msgstr "लघुगणकीय (log(x), y)"
+
+#: src/frontend/widgets/DatapickerImageWidget.cpp:341
+#, kde-format
+msgid "Logarithmic (x, log(y))"
+msgstr "लघुगणकीय (x, log(y))"
+
+#: src/frontend/widgets/DatapickerImageWidget.cpp:342
+#, kde-format
+msgid "Ternary (x, y, z)"
+msgstr "त्रिगुणी (x, y, z)"
+
+#: src/frontend/widgets/DatapickerImageWidget.cpp:345
+#, kde-format
+msgid "No Image"
+msgstr "न बिम्बम्"
+
+#: src/frontend/widgets/DatapickerImageWidget.cpp:346
+#, kde-format
+msgid "Original Image"
+msgstr "मूल छवि"
+
+#: src/frontend/widgets/DatapickerImageWidget.cpp:347
+#, kde-format
+msgid "Processed Image"
+msgstr "संसाधितप्रतिमा"
+
+#: src/frontend/widgets/DatapickerImageWidget.cpp:350
+#: src/frontend/widgets/DatapickerImageWidget.cpp:358
 #, kde-format
 msgid ""
 "Select the range for the value, the degree of lightness of the color.\n"
@@ -23632,8 +23670,8 @@ msgstr ""
 "मूल्यस्य कृते परिधिं चिनोतु, वर्णस्य लघुतायाः डिग्री ।\n"
 "अस्य परिधितः बहिः सर्वं श्वेतवर्णे सेट् भविष्यति ।"
 
-#: src/frontend/widgets/DatapickerImageWidget.cpp:146
-#: src/frontend/widgets/DatapickerImageWidget.cpp:200
+#: src/frontend/widgets/DatapickerImageWidget.cpp:351
+#: src/frontend/widgets/DatapickerImageWidget.cpp:359
 #, kde-format
 msgid ""
 "Select the range for the intensity.\n"
@@ -23642,8 +23680,8 @@ msgstr ""
 "तीव्रतायां परिधिं चिनोतु ।\n"
 "अस्य परिधितः बहिः सर्वं श्वेतवर्णे सेट् भविष्यति ।"
 
-#: src/frontend/widgets/DatapickerImageWidget.cpp:152
-#: src/frontend/widgets/DatapickerImageWidget.cpp:206
+#: src/frontend/widgets/DatapickerImageWidget.cpp:353
+#: src/frontend/widgets/DatapickerImageWidget.cpp:360
 #, kde-format
 msgid ""
 "Select the range for the colors that are not part of the background color.\n"
@@ -23652,77 +23690,32 @@ msgstr ""
 "ये वर्णाः पृष्ठभूमिवर्णस्य भागाः न सन्ति तेषां कृते श्रेणीं चिनोतु ।\n"
 "अस्य परिधितः बहिः सर्वं श्वेतवर्णे सेट् भविष्यति ।"
 
-#: src/frontend/widgets/DatapickerImageWidget.cpp:156
+#: src/frontend/widgets/DatapickerImageWidget.cpp:354
+#: src/frontend/widgets/DatapickerImageWidget.cpp:356
 #, kde-format
-msgid "Cartesian (x, y)"
-msgstr "कार्टेशियन (x, y)"
+msgid ""
+"Select the range for the hue.\n"
+"Everything outside of this range will be set to white."
+msgstr ""
+"वर्णस्य कृते श्रेणीं चिनोतु ।\n"
+"अस्य परिधितः बहिः सर्वं श्वेतवर्णे सेट् भविष्यति ।"
 
-#: src/frontend/widgets/DatapickerImageWidget.cpp:157
+#: src/frontend/widgets/DatapickerImageWidget.cpp:355
+#: src/frontend/widgets/DatapickerImageWidget.cpp:357
 #, kde-format
-msgid "Polar (x, y°)"
-msgstr "ध्रुवीय (x, y°)"
+msgid ""
+"Select the range for the saturation.\n"
+"Everything outside of this range will be set to white."
+msgstr ""
+"संतृप्त्यर्थं परिधिं चिनोतु ।\n"
+"अस्य परिधितः बहिः सर्वं श्वेतवर्णे सेट् भविष्यति ।"
 
-#: src/frontend/widgets/DatapickerImageWidget.cpp:158
-#, kde-format
-msgid "Polar (x, y(rad))"
-msgstr "ध्रुवीय (x, y(rad))"
-
-#: src/frontend/widgets/DatapickerImageWidget.cpp:159
-#, kde-format
-msgid "Logarithmic (ln(x), ln(y))"
-msgstr "लघुगणकीय (ln(x), ln(y))"
-
-#: src/frontend/widgets/DatapickerImageWidget.cpp:160
-#, kde-format
-msgid "Logarithmic (ln(x), y)"
-msgstr "लघुगणकीय (ln(x), y)"
-
-#: src/frontend/widgets/DatapickerImageWidget.cpp:161
-#, kde-format
-msgid "Logarithmic (x, ln(y))"
-msgstr "लघुगणकीय (x, ln(y))"
-
-#: src/frontend/widgets/DatapickerImageWidget.cpp:162
-#, kde-format
-msgid "Logarithmic (log(x), log(y))"
-msgstr "लघुगणकीय (log(x), log(y))"
-
-#: src/frontend/widgets/DatapickerImageWidget.cpp:163
-#, kde-format
-msgid "Logarithmic (log(x), y)"
-msgstr "लघुगणकीय (log(x), y)"
-
-#: src/frontend/widgets/DatapickerImageWidget.cpp:164
-#, kde-format
-msgid "Logarithmic (x, log(y))"
-msgstr "लघुगणकीय (x, log(y))"
-
-#: src/frontend/widgets/DatapickerImageWidget.cpp:165
-#, kde-format
-msgid "Ternary (x, y, z)"
-msgstr "त्रिगुणी (x, y, z)"
-
-#: src/frontend/widgets/DatapickerImageWidget.cpp:176
-#, kde-format
-msgid "No Image"
-msgstr "न बिम्बम्"
-
-#: src/frontend/widgets/DatapickerImageWidget.cpp:177
-#, kde-format
-msgid "Original Image"
-msgstr "मूल छवि"
-
-#: src/frontend/widgets/DatapickerImageWidget.cpp:178
-#, kde-format
-msgid "Processed Image"
-msgstr "संसाधितप्रतिमा"
-
-#: src/frontend/widgets/DatapickerImageWidget.cpp:363
+#: src/frontend/widgets/DatapickerImageWidget.cpp:367
 #, kde-format
 msgid "Save project before using this option"
 msgstr "एतस्य विकल्पस्य उपयोगात् पूर्वं परियोजनां रक्षन्तु"
 
-#: src/frontend/widgets/DatapickerImageWidget.cpp:372
+#: src/frontend/widgets/DatapickerImageWidget.cpp:376
 #, kde-format
 msgid "Invalid image"
 msgstr "अमान्यप्रतिबिम्बम्"
