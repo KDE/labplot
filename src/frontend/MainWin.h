@@ -76,7 +76,6 @@ public:
 	AspectTreeModel* model() const;
 	Project* project() const;
 	void addAspectToProject(AbstractAspect*);
-	static void updateLocale();
 
 	enum class LoadOnStart { NewProject, LastProject, WelcomeScreen };
 	enum class NewProject { WithSpreadsheet, WithWorksheet, WithSpreadsheetWorksheet, WithNotebook };
@@ -209,11 +208,14 @@ private:
 	// 	void resetWelcomeScreen();
 	void initDocks();
 	void restoreDefaultDockState() const;
+	void updateLocale();
+	void migrateSettings();
 
 	Spreadsheet* activeSpreadsheet() const;
 
 	friend class GuiObserver;
 	GuiObserver* m_guiObserver{nullptr};
+	QLocale m_defaultSystemLocale; // default system locale, might be different from the default locale set at runtime
 
 protected:
 	void closeEvent(QCloseEvent*) override;

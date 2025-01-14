@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : application settings dialog
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -43,7 +43,7 @@
  * Contains the pages for general settings and view settings.
  *
  */
-SettingsDialog::SettingsDialog(QWidget* parent)
+SettingsDialog::SettingsDialog(QWidget* parent, const QLocale& locale)
 	: KPageDialog(parent) {
 	setFaceType(Tree);
 	setWindowTitle(i18nc("@title:window", "Preferences"));
@@ -54,7 +54,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 	buttonBox()->addButton(QDialogButtonBox::RestoreDefaults);
 	connect(buttonBox(), &QDialogButtonBox::clicked, this, &SettingsDialog::slotButtonClicked);
 
-	m_generalPage = new SettingsGeneralPage(this);
+	m_generalPage = new SettingsGeneralPage(this, locale);
 	KPageWidgetItem* generalFrame = addPage(m_generalPage, i18n("General"));
 	generalFrame->setIcon(QIcon::fromTheme(QLatin1String("settings-configure")));
 	connect(m_generalPage, &SettingsGeneralPage::settingsChanged, this, &SettingsDialog::changed);

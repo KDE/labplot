@@ -3,13 +3,14 @@
 	Project              : LabPlot
 	Description          : application settings dialog
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef SETTINGSDIALOG_H
 #define SETTINGSDIALOG_H
 
+#include <QLocale>
 #include <KPageDialog>
 
 class QAbstractButton;
@@ -30,7 +31,7 @@ class SettingsDialog : public KPageDialog {
 	Q_OBJECT
 
 public:
-	explicit SettingsDialog(QWidget*);
+	explicit SettingsDialog(QWidget*, const QLocale&);
 	~SettingsDialog() override;
 
 	enum class SettingsType {

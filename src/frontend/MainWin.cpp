@@ -135,6 +135,9 @@
 MainWin::MainWin(QWidget* parent, const QString& fileName)
 	: KXmlGuiWindow(parent)
 	, m_schemeManager(new KColorSchemeManager(this)) {
+	migrateSettings(); // call this at the very beginning to migrate the application settings first
+	updateLocale();
+
 	DEBUG(Q_FUNC_INFO << ", file name = " << fileName.toStdString())
 	initGUI(fileName);
 	setAcceptDrops(true);
@@ -2549,12 +2552,37 @@ void MainWin::updateLocale() {
 	// language used for the number format
 	const auto group = Settings::group(QStringLiteral("Settings_General"));
 	auto language = static_cast<QLocale::Language>(group.readEntry(QLatin1String("NumberFormat"), static_cast<int>(QLocale::Language::AnyLanguage)));
-	QLocale l(language == QLocale::AnyLanguage ? QLocale() : language);
+	QLocale newLocale(language == QLocale::AnyLanguage ? m_defaultSystemLocale : language);
 
 	// number options
 	auto numberOptions = static_cast<QLocale::NumberOptions>(group.readEntry(QLatin1String("NumberOptions"), static_cast<int>(QLocale::DefaultNumberOptions)));
-	l.setNumberOptions(numberOptions);
-	QLocale::setDefault(l);
+	newLocale.setNumberOptions(numberOptions);
+	QLocale::setDefault(newLocale);
+}
+
+/*!
+ * used to migrate application settings if there were changes between the releases.
+ */
+void MainWin::migrateSettings() {
+	// migrate the settings for the number format for versions older than 2.12 that had the decimal separator only:
+	auto group = Settings::group(QStringLiteral("Settings_General"));
+	if (group.hasKey(QLatin1String("DecimalSeparatorLocale"))) {
+		// map from the old enum values for the decimal separator to new values of the used languages for the number format,
+		// use languages that don't use any group separator for this.
+		// old enum class DecimalSeparator { Dot, Comma, Arabic, Automatic };
+		QLocale::Language language(QLocale::AnyLanguage); // AnyLanguage was used for 'Automatic'
+		int decimalSeparator = group.readEntry(QLatin1String("DecimalSeparatorLocale"), 0);
+		if (decimalSeparator == 0) // Dot
+			language = QLocale::English;
+		else if (decimalSeparator == 1) // Comma
+			language = QLocale::German;
+		else if (decimalSeparator == 2) // Arabic
+			language = QLocale::Arabic;
+
+		// delete the old entry and write the new one
+		group.deleteEntry(QLatin1String("DecimalSeparatorLocale"));
+		group.writeEntry(QLatin1String("NumberFormat"), static_cast<int>(language));
+	}
 }
 
 void MainWin::handleSettingsChanges(QList<SettingsDialog::SettingsType> changes) {
@@ -2819,7 +2847,7 @@ void MainWin::addAspectToProject(AbstractAspect* aspect) {
 }
 
 void MainWin::settingsDialog() {
-	auto* dlg = new SettingsDialog(this);
+	auto* dlg = new SettingsDialog(this, m_defaultSystemLocale);
 	connect(dlg, &SettingsDialog::settingsChanged, this, &MainWin::handleSettingsChanges);
 	// 	connect (dlg, &SettingsDialog::resetWelcomeScreen, this, &MainWin::resetWelcomeScreen);
 	dlg->exec();

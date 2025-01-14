@@ -23,8 +23,9 @@
 /**
  * \brief Page for the 'General' settings of the Labplot settings dialog.
  */
-SettingsGeneralPage::SettingsGeneralPage(QWidget* parent)
-	: SettingsPage(parent) {
+SettingsGeneralPage::SettingsGeneralPage(QWidget* parent, const QLocale& locale)
+	: SettingsPage(parent)
+	, m_defaultSystemLocale(locale) {
 	ui.setupUi(this);
 	ui.sbAutoSaveInterval->setSuffix(i18n("min."));
 #ifdef NDEBUG
@@ -157,25 +158,9 @@ void SettingsGeneralPage::loadSettings() {
 	ui.cbUnits->setCurrentIndex(group.readEntry(QLatin1String("Units"), 0));
 	ui.chkGUMTerms->setChecked(group.readEntry<bool>(QLatin1String("GUMTerms"), false));
 
-	// nubmer format
-	if (group.hasKey(QLatin1String("DecimalSeparatorLocale"))) {
-		// migrate from the versions older than 2.12 that had the decimal separator only:
-		// map from the old enum values for the decimal separator to new values of the used languages for the number format,
-		// use languages that don't use any group separator for this.
-		// old enum class DecimalSeparator { Dot, Comma, Arabic, Automatic };
-		int decimalSeparator = group.readEntry(QLatin1String("DecimalSeparatorLocale"), 0);
-		if (decimalSeparator == 0) // Dot
-			ui.cbNumberFormat->setCurrentIndex(ui.cbNumberFormat->findData(QLocale::C));
-		else if (decimalSeparator == 1) // Comma
-			ui.cbNumberFormat->setCurrentIndex(ui.cbNumberFormat->findData(QLocale::Estonian));
-		else if (decimalSeparator == 2) // Arabic
-			ui.cbNumberFormat->setCurrentIndex(ui.cbNumberFormat->findData(QLocale::Arabic));
-		else if (decimalSeparator == 3) // Automatic
-			ui.cbNumberFormat->setCurrentIndex(ui.cbNumberFormat->findData(QLocale::AnyLanguage));
-	} else {
-		const auto language = group.readEntry(QLatin1String("NumberFormat"), static_cast<int>(QLocale::AnyLanguage));
-		ui.cbNumberFormat->setCurrentIndex(ui.cbNumberFormat->findData(language));
-	}
+	// number format
+	const auto language = group.readEntry(QLatin1String("NumberFormat"), static_cast<int>(QLocale::AnyLanguage));
+	ui.cbNumberFormat->setCurrentIndex(ui.cbNumberFormat->findData(language));
 
 	// number options
 	QLocale::NumberOptions numberOptions{
@@ -235,13 +220,11 @@ void SettingsGeneralPage::retranslateUi() {
 	ui.lNumberFormat->setToolTip(msg);
 	ui.cbNumberFormat->setToolTip(msg);
 	ui.cbNumberFormat->clear();
-	ui.cbNumberFormat->addItem(i18n("%1 (System)", QLocale().toString(1000.01)), static_cast<int>(QLocale::Language::AnyLanguage));
+	ui.cbNumberFormat->addItem(i18n("%1 (System, %2)", m_defaultSystemLocale.toString(1000.01), QLocale::languageToString(m_defaultSystemLocale.language())), static_cast<int>(QLocale::Language::AnyLanguage));
 	ui.cbNumberFormat->insertSeparator(1);
-	ui.cbNumberFormat->addItem(QLatin1String("1000.01"), static_cast<int>(QLocale::Language::C));
-	ui.cbNumberFormat->addItem(QLatin1String("1000,01"), static_cast<int>(QLocale::Language::Estonian));
-	ui.cbNumberFormat->addItem(QLatin1String("1 000,01"), static_cast<int>(QLocale::Language::Ukrainian));
 	ui.cbNumberFormat->addItem(QLatin1String("1,000.01"), static_cast<int>(QLocale::Language::English));
 	ui.cbNumberFormat->addItem(QLatin1String("1.000,01"), static_cast<int>(QLocale::Language::German));
+	ui.cbNumberFormat->addItem(QLatin1String("1 000,01"), static_cast<int>(QLocale::Language::Ukrainian));
 	ui.cbNumberFormat->addItem(QString::fromUtf8("1’000,01"), static_cast<int>(QLocale::Language::SwissGerman));
 	ui.cbNumberFormat->addItem(QString::fromUtf8("١٬٠٠٠٫٠١"), static_cast<int>(QLocale::Language::Arabic));
 

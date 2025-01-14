@@ -38,7 +38,6 @@
 int main(int argc, char* argv[]) {
 	QApplication app(argc, argv);
 	KLocalizedString::setApplicationDomain("labplot");
-	MainWin::updateLocale();
 
 	QString systemInfo{AboutDialog::systemInfo()};
 	QString links = i18n("Visit website:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://labplot.org")) + QLatin1Char('\n')
