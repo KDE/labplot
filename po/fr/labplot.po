@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-13 00:37+0000\n"
-"PO-Revision-Date: 2025-01-03 09:04+0100\n"
+"PO-Revision-Date: 2025-01-12 09:38+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -11795,10 +11795,9 @@ msgid "Not a HDF5 file: %1"
 msgstr "Pas un fichier « HDF5 » : %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2229
-#, fuzzy, kde-format
-#| msgid "Reading from file %1 failed."
+#, kde-format
 msgid "Parsing ODS file %1 failed."
-msgstr "La lecture depuis le fichier %1 a échoué."
+msgstr "L'analyse du fichier %1 a échoué."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2641
 #, kde-format

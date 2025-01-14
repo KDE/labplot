@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-13 00:37+0000\n"
-"PO-Revision-Date: 2025-01-11 14:15+0100\n"
+"PO-Revision-Date: 2025-01-13 05:30+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -12567,6 +12567,8 @@ msgid ""
 "Specify the factor in percent to control the width of the bar relative to "
 "its default value, applying to all bars"
 msgstr ""
+"მიუთითეთ კოეფიციენტი პროცენტებში, რომ აკონტროლოთ ზოლის სიგანე მის "
+"ნაგულისხმევ მნიშვნელობასთან შედარებით. ეხება ყველა ზოლს"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
 #: src/frontend/dockwidgets/BarPlotDock.cpp:339
@@ -12665,7 +12667,7 @@ msgstr ""
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:302
 #, kde-format
 msgid "Parameter controlling the range of the inner fences of the box plot."
-msgstr ""
+msgstr "პარამეტრი, რომელიც ყუთი გრაფიკის შიდა ღობის შუალედს აკონტროლებს."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:311
 #, kde-format
@@ -12673,6 +12675,8 @@ msgid ""
 "Specify the factor in percent to control the width of the box relative to "
 "its default value."
 msgstr ""
+"მიუთითეთ კოეფიციენტი პროცენტებში, რომელიც ყუთის სიგანეს აკონტროლებს მის "
+"ნაგულისხმევ მნიშვნელობასთან შეფარდებით."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:315
 #, kde-format
@@ -12694,6 +12698,7 @@ msgstr "აირჩიეთ, რომ შეცვალოთ სიმბ�
 msgid ""
 "Select to modify the properties of the symbol for the \"far out\" values."
 msgstr ""
+"აირჩიეთ, რომ შეცვალოთ სიმბოლოს თვისებები \"შორს გარეთ\" მნიშვნელობებისთვის."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:327
 #, kde-format
@@ -12701,12 +12706,14 @@ msgid ""
 "Select to modify the properties of the symbol for all data values excluding "
 "the outlier and \"far out\" values."
 msgstr ""
+"აირჩიეთ, რომ შეცვალოთ სიმბოლოს თვისებები ყველა მონაცემთა მნიშვნელობისთვის, "
+"ამოვარდნილი და \"შორი გარე\" მნიშვნელობების გარდა."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:330
 #, kde-format
 msgid ""
 "Select to modify the properties of the symbol for the ends of the whiskers."
-msgstr ""
+msgstr "აირჩიეთ, რომ შეცვალოთ თვისებები სიმბოლოსი, რომელიც ულვაშის ბოლოებშია."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:333
 #, kde-format

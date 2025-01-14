@@ -5,13 +5,13 @@
 #
 # SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Antoni Bella Pérez <antonibella5@yahoo.com>
 # Orestes Mas <orestes@tsc.upc.edu>, 2018.
-# SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Josep M. Ferrer <txemaq@gmail.com>
+# Josep M. Ferrer <txemaq@gmail.com>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-13 00:37+0000\n"
-"PO-Revision-Date: 2025-01-02 08:35+0100\n"
+"PO-Revision-Date: 2025-01-11 10:32+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.12.0\n"
+"X-Generator: Lokalize 22.12.3\n"
 "X-Accelerator-Marker: &\n"
 
 #, kde-format
@@ -11824,10 +11824,9 @@ msgid "Not a HDF5 file: %1"
 msgstr "No és cap fitxer HDF5: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2229
-#, fuzzy, kde-format
-#| msgid "Reading from file %1 failed."
+#, kde-format
 msgid "Parsing ODS file %1 failed."
-msgstr "No s'ha pogut llegir des del fitxer %1."
+msgstr "No s'ha pogut analitzar el fitxer ODS %1."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2641
 #, kde-format
